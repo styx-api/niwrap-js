@@ -12,33 +12,33 @@ const AMP2SH_METADATA: Metadata = {
 
 
 interface Amp2shFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.amp2sh.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface Amp2shVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.amp2sh.VariousString";
     "obj": string;
 }
 
 
 interface Amp2shVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.amp2sh.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface Amp2shConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.amp2sh.config";
     "key": string;
     "value": string;
 }
 
 
 interface Amp2shParameters {
-    "__STYXTYPE__": "amp2sh";
+    "@type": "mrtrix.amp2sh";
     "lmax"?: number | null | undefined;
     "normalise": boolean;
     "directions"?: InputPathType | null | undefined;
@@ -60,58 +60,58 @@ interface Amp2shParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "amp2sh": amp2sh_cargs,
-        "fslgrad": amp2sh_fslgrad_cargs,
-        "VariousString": amp2sh_various_string_cargs,
-        "VariousFile": amp2sh_various_file_cargs,
-        "config": amp2sh_config_cargs,
+        "mrtrix.amp2sh": amp2sh_cargs,
+        "mrtrix.amp2sh.fslgrad": amp2sh_fslgrad_cargs,
+        "mrtrix.amp2sh.VariousString": amp2sh_various_string_cargs,
+        "mrtrix.amp2sh.VariousFile": amp2sh_various_file_cargs,
+        "mrtrix.amp2sh.config": amp2sh_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "amp2sh": amp2sh_outputs,
+        "mrtrix.amp2sh": amp2sh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2sh_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): Amp2shFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.amp2sh.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -119,18 +119,18 @@ function amp2sh_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2sh_fslgrad_cargs(
     params: Amp2shFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -139,92 +139,92 @@ function amp2sh_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2sh_various_string_params(
     obj: string,
 ): Amp2shVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.amp2sh.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2sh_various_string_cargs(
     params: Amp2shVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2sh_various_file_params(
     obj: InputPathType,
 ): Amp2shVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.amp2sh.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2sh_various_file_cargs(
     params: Amp2shVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2sh_config_params(
     key: string,
     value: string,
 ): Amp2shConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.amp2sh.config" as const,
         "key": key,
         "value": value,
     };
@@ -232,18 +232,18 @@ function amp2sh_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2sh_config_cargs(
     params: Amp2shConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -269,6 +269,31 @@ interface Amp2shOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param amp the input amplitude image.
+ * @param sh the output spherical harmonics coefficients image.
+ * @param lmax set the maximum harmonic order for the output series. By default, the program will use the highest possible lmax given the number of diffusion-weighted images, up to a maximum of 8.
+ * @param normalise normalise the DW signal to the b=0 image
+ * @param directions the directions corresponding to the input amplitude image used to sample AFD. By default this option is not required providing the direction set is supplied in the amplitude image. This should be supplied as a list of directions [az el], as generated using the dirgen command, or as a list of [ x y z ] Cartesian coordinates.
+ * @param rician correct for Rician noise induced bias, using noise map supplied
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2sh_params(
     amp: InputPathType,
     sh: string,
@@ -289,33 +314,8 @@ function amp2sh_params(
     help: boolean = false,
     version: boolean = false,
 ): Amp2shParameters {
-    /**
-     * Build parameters.
-    
-     * @param amp the input amplitude image.
-     * @param sh the output spherical harmonics coefficients image.
-     * @param lmax set the maximum harmonic order for the output series. By default, the program will use the highest possible lmax given the number of diffusion-weighted images, up to a maximum of 8.
-     * @param normalise normalise the DW signal to the b=0 image
-     * @param directions the directions corresponding to the input amplitude image used to sample AFD. By default this option is not required providing the direction set is supplied in the amplitude image. This should be supplied as a list of directions [az el], as generated using the dirgen command, or as a list of [ x y z ] Cartesian coordinates.
-     * @param rician correct for Rician noise induced bias, using noise map supplied
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "amp2sh" as const,
+        "@type": "mrtrix.amp2sh" as const,
         "normalise": normalise,
         "info": info,
         "quiet": quiet,
@@ -357,18 +357,18 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2sh_cargs(
     params: Amp2shParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("amp2sh");
     if ((params["lmax"] ?? null) !== null) {
@@ -399,7 +399,7 @@ function amp2sh_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -410,7 +410,7 @@ function amp2sh_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -432,7 +432,7 @@ function amp2sh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -446,18 +446,18 @@ function amp2sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function amp2sh_outputs(
     params: Amp2shParameters,
     execution: Execution,
 ): Amp2shOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Amp2shOutputs = {
         root: execution.outputFile("."),
         sh: execution.outputFile([(params["SH"] ?? null)].join('')),
@@ -466,33 +466,33 @@ function amp2sh_outputs(
 }
 
 
+/**
+ * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
+ *
+ * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.
+ *
+ * The directions can be defined either as a DW gradient scheme (for example to compute the SH representation of the DW signal), a set of [az el] pairs as output by the dirgen command, or a set of [ x y z ] directions in Cartesian coordinates. The DW gradient scheme or direction set can be supplied within the input image header or using the -gradient or -directions option. Note that if a direction set and DW gradient scheme can be found, the direction set will be used by default.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
+ */
 function amp2sh_execute(
     params: Amp2shParameters,
     execution: Execution,
 ): Amp2shOutputs {
-    /**
-     * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
-     * 
-     * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.
-     * 
-     * The directions can be defined either as a DW gradient scheme (for example to compute the SH representation of the DW signal), a set of [az el] pairs as output by the dirgen command, or a set of [ x y z ] directions in Cartesian coordinates. The DW gradient scheme or direction set can be supplied within the input image header or using the -gradient or -directions option. Note that if a direction set and DW gradient scheme can be found, the direction set will be used by default.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
-     */
     params = execution.params(params)
     const cargs = amp2sh_cargs(params, execution)
     const ret = amp2sh_outputs(params, execution)
@@ -501,6 +501,47 @@ function amp2sh_execute(
 }
 
 
+/**
+ * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
+ *
+ * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.
+ *
+ * The directions can be defined either as a DW gradient scheme (for example to compute the SH representation of the DW signal), a set of [az el] pairs as output by the dirgen command, or a set of [ x y z ] directions in Cartesian coordinates. The DW gradient scheme or direction set can be supplied within the input image header or using the -gradient or -directions option. Note that if a direction set and DW gradient scheme can be found, the direction set will be used by default.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param amp the input amplitude image.
+ * @param sh the output spherical harmonics coefficients image.
+ * @param lmax set the maximum harmonic order for the output series. By default, the program will use the highest possible lmax given the number of diffusion-weighted images, up to a maximum of 8.
+ * @param normalise normalise the DW signal to the b=0 image
+ * @param directions the directions corresponding to the input amplitude image used to sample AFD. By default this option is not required providing the direction set is supplied in the amplitude image. This should be supplied as a list of directions [az el], as generated using the dirgen command, or as a list of [ x y z ] Cartesian coordinates.
+ * @param rician correct for Rician noise induced bias, using noise map supplied
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
+ */
 function amp2sh(
     amp: InputPathType,
     sh: string,
@@ -522,47 +563,6 @@ function amp2sh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Amp2shOutputs {
-    /**
-     * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
-     * 
-     * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.
-     * 
-     * The directions can be defined either as a DW gradient scheme (for example to compute the SH representation of the DW signal), a set of [az el] pairs as output by the dirgen command, or a set of [ x y z ] directions in Cartesian coordinates. The DW gradient scheme or direction set can be supplied within the input image header or using the -gradient or -directions option. Note that if a direction set and DW gradient scheme can be found, the direction set will be used by default.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param amp the input amplitude image.
-     * @param sh the output spherical harmonics coefficients image.
-     * @param lmax set the maximum harmonic order for the output series. By default, the program will use the highest possible lmax given the number of diffusion-weighted images, up to a maximum of 8.
-     * @param normalise normalise the DW signal to the b=0 image
-     * @param directions the directions corresponding to the input amplitude image used to sample AFD. By default this option is not required providing the direction set is supplied in the amplitude image. This should be supplied as a list of directions [az el], as generated using the dirgen command, or as a list of [ x y z ] Cartesian coordinates.
-     * @param rician correct for Rician noise induced bias, using noise map supplied
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AMP2SH_METADATA);
     const params = amp2sh_params(amp, sh, lmax, normalise, directions, rician, grad, fslgrad, shells, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -579,9 +579,16 @@ export {
       Amp2shVariousFileParameters,
       Amp2shVariousStringParameters,
       amp2sh,
+      amp2sh_cargs,
+      amp2sh_config_cargs,
       amp2sh_config_params,
+      amp2sh_execute,
+      amp2sh_fslgrad_cargs,
       amp2sh_fslgrad_params,
+      amp2sh_outputs,
       amp2sh_params,
+      amp2sh_various_file_cargs,
       amp2sh_various_file_params,
+      amp2sh_various_string_cargs,
       amp2sh_various_string_params,
 };

@@ -12,7 +12,7 @@ const FSLINTERLEAVE_METADATA: Metadata = {
 
 
 interface FslinterleaveParameters {
-    "__STYXTYPE__": "fslinterleave";
+    "@type": "fsl.fslinterleave";
     "infile1": InputPathType;
     "infile2": InputPathType;
     "outfile": string;
@@ -20,35 +20,35 @@ interface FslinterleaveParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslinterleave": fslinterleave_cargs,
+        "fsl.fslinterleave": fslinterleave_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslinterleave": fslinterleave_outputs,
+        "fsl.fslinterleave": fslinterleave_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface FslinterleaveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile1 First input image
+ * @param infile2 Second input image
+ * @param outfile Output interleaved image
+ * @param reverse_slice_order_flag Reverse slice order
+ *
+ * @returns Parameter dictionary
+ */
 function fslinterleave_params(
     infile1: InputPathType,
     infile2: InputPathType,
     outfile: string,
     reverse_slice_order_flag: boolean = false,
 ): FslinterleaveParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile1 First input image
-     * @param infile2 Second input image
-     * @param outfile Output interleaved image
-     * @param reverse_slice_order_flag Reverse slice order
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslinterleave" as const,
+        "@type": "fsl.fslinterleave" as const,
         "infile1": infile1,
         "infile2": infile2,
         "outfile": outfile,
@@ -98,18 +98,18 @@ function fslinterleave_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslinterleave_cargs(
     params: FslinterleaveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslinterleave");
     cargs.push(execution.inputFile((params["infile1"] ?? null)));
@@ -122,18 +122,18 @@ function fslinterleave_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslinterleave_outputs(
     params: FslinterleaveParameters,
     execution: Execution,
 ): FslinterleaveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslinterleaveOutputs = {
         root: execution.outputFile("."),
         interleaved_output: execution.outputFile([(params["outfile"] ?? null), ".nii.gz"].join('')),
@@ -142,22 +142,22 @@ function fslinterleave_outputs(
 }
 
 
+/**
+ * Interleaves two input images slice-by-slice to produce an output image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
+ */
 function fslinterleave_execute(
     params: FslinterleaveParameters,
     execution: Execution,
 ): FslinterleaveOutputs {
-    /**
-     * Interleaves two input images slice-by-slice to produce an output image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslinterleave_cargs(params, execution)
     const ret = fslinterleave_outputs(params, execution)
@@ -166,6 +166,21 @@ function fslinterleave_execute(
 }
 
 
+/**
+ * Interleaves two input images slice-by-slice to produce an output image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile1 First input image
+ * @param infile2 Second input image
+ * @param outfile Output interleaved image
+ * @param reverse_slice_order_flag Reverse slice order
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
+ */
 function fslinterleave(
     infile1: InputPathType,
     infile2: InputPathType,
@@ -173,21 +188,6 @@ function fslinterleave(
     reverse_slice_order_flag: boolean = false,
     runner: Runner | null = null,
 ): FslinterleaveOutputs {
-    /**
-     * Interleaves two input images slice-by-slice to produce an output image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile1 First input image
-     * @param infile2 Second input image
-     * @param outfile Output interleaved image
-     * @param reverse_slice_order_flag Reverse slice order
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLINTERLEAVE_METADATA);
     const params = fslinterleave_params(infile1, infile2, outfile, reverse_slice_order_flag)
@@ -200,5 +200,8 @@ export {
       FslinterleaveOutputs,
       FslinterleaveParameters,
       fslinterleave,
+      fslinterleave_cargs,
+      fslinterleave_execute,
+      fslinterleave_outputs,
       fslinterleave_params,
 };

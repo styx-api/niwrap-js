@@ -12,38 +12,38 @@ const CHECK_SUBJECT_METADATA: Metadata = {
 
 
 interface CheckSubjectParameters {
-    "__STYXTYPE__": "check_subject";
+    "@type": "freesurfer.check_subject";
     "subject_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "check_subject": check_subject_cargs,
+        "freesurfer.check_subject": check_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface CheckSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Path to the subject directory to check.
+ *
+ * @returns Parameter dictionary
+ */
 function check_subject_params(
     subject_dir: string,
 ): CheckSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Path to the subject directory to check.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "check_subject" as const,
+        "@type": "freesurfer.check_subject" as const,
         "subject_dir": subject_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function check_subject_cargs(
     params: CheckSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("check_subject");
     cargs.push((params["subject_dir"] ?? null));
@@ -100,18 +100,18 @@ function check_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function check_subject_outputs(
     params: CheckSubjectParameters,
     execution: Execution,
 ): CheckSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CheckSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function check_subject_outputs(
 }
 
 
+/**
+ * Checks a subject directory for the existence of a surf directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
+ */
 function check_subject_execute(
     params: CheckSubjectParameters,
     execution: Execution,
 ): CheckSubjectOutputs {
-    /**
-     * Checks a subject directory for the existence of a surf directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = check_subject_cargs(params, execution)
     const ret = check_subject_outputs(params, execution)
@@ -143,22 +143,22 @@ function check_subject_execute(
 }
 
 
+/**
+ * Checks a subject directory for the existence of a surf directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Path to the subject directory to check.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
+ */
 function check_subject(
     subject_dir: string,
     runner: Runner | null = null,
 ): CheckSubjectOutputs {
-    /**
-     * Checks a subject directory for the existence of a surf directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Path to the subject directory to check.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CHECK_SUBJECT_METADATA);
     const params = check_subject_params(subject_dir)
@@ -171,5 +171,8 @@ export {
       CheckSubjectOutputs,
       CheckSubjectParameters,
       check_subject,
+      check_subject_cargs,
+      check_subject_execute,
+      check_subject_outputs,
       check_subject_params,
 };

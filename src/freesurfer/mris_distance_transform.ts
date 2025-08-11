@@ -12,7 +12,7 @@ const MRIS_DISTANCE_TRANSFORM_METADATA: Metadata = {
 
 
 interface MrisDistanceTransformParameters {
-    "__STYXTYPE__": "mris_distance_transform";
+    "@type": "freesurfer.mris_distance_transform";
     "surface": InputPathType;
     "label": InputPathType;
     "mode": "signed" | "unsigned" | "outside";
@@ -24,35 +24,35 @@ interface MrisDistanceTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_distance_transform": mris_distance_transform_cargs,
+        "freesurfer.mris_distance_transform": mris_distance_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_distance_transform": mris_distance_transform_outputs,
+        "freesurfer.mris_distance_transform": mris_distance_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MrisDistanceTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface file for processing.
+ * @param label Label file to apply distance transform.
+ * @param mode Mode of the distance transform, can be 'signed', 'unsigned', or 'outside'.
+ * @param output_file Output file for the distance transform results.
+ * @param anterior Only use anteriormost <dist> portion of the label.
+ * @param posterior Only use posteriormost <dist> portion of the label.
+ * @param divide Divide label into <n> units along primary eigendirection.
+ * @param olabel Output label subdivisions.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_distance_transform_params(
     surface: InputPathType,
     label: InputPathType,
@@ -85,22 +99,8 @@ function mris_distance_transform_params(
     divide: number | null = null,
     olabel: boolean = false,
 ): MrisDistanceTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface file for processing.
-     * @param label Label file to apply distance transform.
-     * @param mode Mode of the distance transform, can be 'signed', 'unsigned', or 'outside'.
-     * @param output_file Output file for the distance transform results.
-     * @param anterior Only use anteriormost <dist> portion of the label.
-     * @param posterior Only use posteriormost <dist> portion of the label.
-     * @param divide Divide label into <n> units along primary eigendirection.
-     * @param olabel Output label subdivisions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_distance_transform" as const,
+        "@type": "freesurfer.mris_distance_transform" as const,
         "surface": surface,
         "label": label,
         "mode": mode,
@@ -120,18 +120,18 @@ function mris_distance_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_distance_transform_cargs(
     params: MrisDistanceTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_distance_transform");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -163,18 +163,18 @@ function mris_distance_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_distance_transform_outputs(
     params: MrisDistanceTransformParameters,
     execution: Execution,
 ): MrisDistanceTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisDistanceTransformOutputs = {
         root: execution.outputFile("."),
         result_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -183,22 +183,22 @@ function mris_distance_transform_outputs(
 }
 
 
+/**
+ * Computes the distance transform of a label on the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
+ */
 function mris_distance_transform_execute(
     params: MrisDistanceTransformParameters,
     execution: Execution,
 ): MrisDistanceTransformOutputs {
-    /**
-     * Computes the distance transform of a label on the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_distance_transform_cargs(params, execution)
     const ret = mris_distance_transform_outputs(params, execution)
@@ -207,6 +207,25 @@ function mris_distance_transform_execute(
 }
 
 
+/**
+ * Computes the distance transform of a label on the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Surface file for processing.
+ * @param label Label file to apply distance transform.
+ * @param mode Mode of the distance transform, can be 'signed', 'unsigned', or 'outside'.
+ * @param output_file Output file for the distance transform results.
+ * @param anterior Only use anteriormost <dist> portion of the label.
+ * @param posterior Only use posteriormost <dist> portion of the label.
+ * @param divide Divide label into <n> units along primary eigendirection.
+ * @param olabel Output label subdivisions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
+ */
 function mris_distance_transform(
     surface: InputPathType,
     label: InputPathType,
@@ -218,25 +237,6 @@ function mris_distance_transform(
     olabel: boolean = false,
     runner: Runner | null = null,
 ): MrisDistanceTransformOutputs {
-    /**
-     * Computes the distance transform of a label on the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Surface file for processing.
-     * @param label Label file to apply distance transform.
-     * @param mode Mode of the distance transform, can be 'signed', 'unsigned', or 'outside'.
-     * @param output_file Output file for the distance transform results.
-     * @param anterior Only use anteriormost <dist> portion of the label.
-     * @param posterior Only use posteriormost <dist> portion of the label.
-     * @param divide Divide label into <n> units along primary eigendirection.
-     * @param olabel Output label subdivisions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_DISTANCE_TRANSFORM_METADATA);
     const params = mris_distance_transform_params(surface, label, mode, output_file, anterior, posterior, divide, olabel)
@@ -249,5 +249,8 @@ export {
       MrisDistanceTransformOutputs,
       MrisDistanceTransformParameters,
       mris_distance_transform,
+      mris_distance_transform_cargs,
+      mris_distance_transform_execute,
+      mris_distance_transform_outputs,
       mris_distance_transform_params,
 };

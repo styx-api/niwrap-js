@@ -12,40 +12,40 @@ const UPDATE_NEEDED_METADATA: Metadata = {
 
 
 interface UpdateNeededParameters {
-    "__STYXTYPE__": "UpdateNeeded";
+    "@type": "freesurfer.UpdateNeeded";
     "target_file": InputPathType;
     "source_file": InputPathType;
     "additional_source_files"?: Array<InputPathType> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "UpdateNeeded": update_needed_cargs,
+        "freesurfer.UpdateNeeded": update_needed_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface UpdateNeededOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param target_file The target file that needs to be updated.
+ * @param source_file The primary source file for updating the target file.
+ * @param additional_source_files Additional source files for updating the target file.
+ *
+ * @returns Parameter dictionary
+ */
 function update_needed_params(
     target_file: InputPathType,
     source_file: InputPathType,
     additional_source_files: Array<InputPathType> | null = null,
 ): UpdateNeededParameters {
-    /**
-     * Build parameters.
-    
-     * @param target_file The target file that needs to be updated.
-     * @param source_file The primary source file for updating the target file.
-     * @param additional_source_files Additional source files for updating the target file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "UpdateNeeded" as const,
+        "@type": "freesurfer.UpdateNeeded" as const,
         "target_file": target_file,
         "source_file": source_file,
     };
@@ -91,18 +91,18 @@ function update_needed_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function update_needed_cargs(
     params: UpdateNeededParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("UpdateNeeded");
     cargs.push(execution.inputFile((params["target_file"] ?? null)));
@@ -114,18 +114,18 @@ function update_needed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function update_needed_outputs(
     params: UpdateNeededParameters,
     execution: Execution,
 ): UpdateNeededOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UpdateNeededOutputs = {
         root: execution.outputFile("."),
     };
@@ -133,22 +133,22 @@ function update_needed_outputs(
 }
 
 
+/**
+ * A command-line tool to update a target file based on one or more source files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
+ */
 function update_needed_execute(
     params: UpdateNeededParameters,
     execution: Execution,
 ): UpdateNeededOutputs {
-    /**
-     * A command-line tool to update a target file based on one or more source files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
-     */
     params = execution.params(params)
     const cargs = update_needed_cargs(params, execution)
     const ret = update_needed_outputs(params, execution)
@@ -157,26 +157,26 @@ function update_needed_execute(
 }
 
 
+/**
+ * A command-line tool to update a target file based on one or more source files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param target_file The target file that needs to be updated.
+ * @param source_file The primary source file for updating the target file.
+ * @param additional_source_files Additional source files for updating the target file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
+ */
 function update_needed(
     target_file: InputPathType,
     source_file: InputPathType,
     additional_source_files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): UpdateNeededOutputs {
-    /**
-     * A command-line tool to update a target file based on one or more source files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param target_file The target file that needs to be updated.
-     * @param source_file The primary source file for updating the target file.
-     * @param additional_source_files Additional source files for updating the target file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UPDATE_NEEDED_METADATA);
     const params = update_needed_params(target_file, source_file, additional_source_files)
@@ -189,5 +189,8 @@ export {
       UpdateNeededOutputs,
       UpdateNeededParameters,
       update_needed,
+      update_needed_cargs,
+      update_needed_execute,
+      update_needed_outputs,
       update_needed_params,
 };

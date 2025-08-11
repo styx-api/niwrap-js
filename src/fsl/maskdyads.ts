@@ -12,40 +12,40 @@ const MASKDYADS_METADATA: Metadata = {
 
 
 interface MaskdyadsParameters {
-    "__STYXTYPE__": "maskdyads";
+    "@type": "fsl.maskdyads";
     "dyads": InputPathType;
     "fsamples": InputPathType;
     "threshold"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "maskdyads": maskdyads_cargs,
+        "fsl.maskdyads": maskdyads_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MaskdyadsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dyads Input dyads file
+ * @param fsamples Input fsamples file
+ * @param threshold Threshold (default is 0.05)
+ *
+ * @returns Parameter dictionary
+ */
 function maskdyads_params(
     dyads: InputPathType,
     fsamples: InputPathType,
     threshold: number | null = 0.05,
 ): MaskdyadsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dyads Input dyads file
-     * @param fsamples Input fsamples file
-     * @param threshold Threshold (default is 0.05)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "maskdyads" as const,
+        "@type": "fsl.maskdyads" as const,
         "dyads": dyads,
         "fsamples": fsamples,
     };
@@ -91,18 +91,18 @@ function maskdyads_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskdyads_cargs(
     params: MaskdyadsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("maskdyads");
     cargs.push(execution.inputFile((params["dyads"] ?? null)));
@@ -117,18 +117,18 @@ function maskdyads_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function maskdyads_outputs(
     params: MaskdyadsParameters,
     execution: Execution,
 ): MaskdyadsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MaskdyadsOutputs = {
         root: execution.outputFile("."),
     };
@@ -136,22 +136,22 @@ function maskdyads_outputs(
 }
 
 
+/**
+ * Tool to mask dyads with threshold.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
+ */
 function maskdyads_execute(
     params: MaskdyadsParameters,
     execution: Execution,
 ): MaskdyadsOutputs {
-    /**
-     * Tool to mask dyads with threshold.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
-     */
     params = execution.params(params)
     const cargs = maskdyads_cargs(params, execution)
     const ret = maskdyads_outputs(params, execution)
@@ -160,26 +160,26 @@ function maskdyads_execute(
 }
 
 
+/**
+ * Tool to mask dyads with threshold.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param dyads Input dyads file
+ * @param fsamples Input fsamples file
+ * @param threshold Threshold (default is 0.05)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
+ */
 function maskdyads(
     dyads: InputPathType,
     fsamples: InputPathType,
     threshold: number | null = 0.05,
     runner: Runner | null = null,
 ): MaskdyadsOutputs {
-    /**
-     * Tool to mask dyads with threshold.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param dyads Input dyads file
-     * @param fsamples Input fsamples file
-     * @param threshold Threshold (default is 0.05)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MASKDYADS_METADATA);
     const params = maskdyads_params(dyads, fsamples, threshold)
@@ -192,5 +192,8 @@ export {
       MaskdyadsOutputs,
       MaskdyadsParameters,
       maskdyads,
+      maskdyads_cargs,
+      maskdyads_execute,
+      maskdyads_outputs,
       maskdyads_params,
 };

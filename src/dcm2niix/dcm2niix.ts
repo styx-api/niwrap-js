@@ -12,7 +12,7 @@ const DCM2NIIX_METADATA: Metadata = {
 
 
 interface Dcm2niixParameters {
-    "__STYXTYPE__": "dcm2niix";
+    "@type": "dcm2niix.dcm2niix";
     "compression_level"?: number | null | undefined;
     "adjacent"?: "y" | "n" | null | undefined;
     "bids"?: "y" | "n" | "o" | null | undefined;
@@ -45,33 +45,33 @@ interface Dcm2niixParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcm2niix": dcm2niix_cargs,
+        "dcm2niix.dcm2niix": dcm2niix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -91,6 +91,41 @@ interface Dcm2niixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dir Input folder containing DICOM files. Will be searched recursively based on depth parameter.
+ * @param compression_level gz compression level (1=fastest..9=smallest)
+ * @param adjacent Adjacent DICOMs (images from same series always in same folder) for faster conversion
+ * @param bids Generate BIDS sidecar JSON files (o=only: no NIfTI)
+ * @param bids_anon Anonymize BIDS sidecar files by removing personal information
+ * @param comment Comment stored in NIfTI aux_file (up to 24 characters)
+ * @param depth Directory search depth for DICOM files in sub-folders
+ * @param export_format Export format: NRRD (y), MGH (o), JSON/JNIfTI (j), or BJNIfTI (b)
+ * @param filename Output filename template (%a=antenna, %b=basename, %c=comments, %d=description, %e=echo number, %f=folder name, %g=accession number, %i=ID of patient, %j=seriesInstanceUID, %k=studyInstanceUID, %m=manufacturer, %n=name of patient, %o=mediaObjectInstanceUID, %p=protocol, %r=instance number, %s=series number, %t=time, %u=acquisition number, %v=vendor, %x=study ID; %z=sequence name)
+ * @param defaults Generate defaults file (o=only: reset and write defaults; i=ignore: reset defaults)
+ * @param ignore_derived Ignore derived, localizer and 2D images
+ * @param scaling Losslessly scale 16-bit integers (y=scale, n=no but uint16->int16, o=original)
+ * @param merge_2d Merge 2D slices from same series regardless of echo, exposure, etc. (0=no, 1=yes, 2=auto)
+ * @param series_number Only convert specified series CRC number (can be used up to 16 times)
+ * @param output_dir Output directory (omit to save to input folder)
+ * @param philips_scaling Use Philips precise float (not display) scaling
+ * @param search_mode Search mode (y=show number of DICOMs, l=list DICOMs, n=no)
+ * @param rename Rename instead of convert DICOMs
+ * @param single_file Single file mode, do not convert other images in folder
+ * @param update_check Check for newer versions
+ * @param verbose Verbose output (0=no, 1=yes, 2=logorrheic)
+ * @param conflict_behavior Write behavior for name conflicts (0=skip, 1=overwrite, 2=add suffix)
+ * @param crop_3d Crop 3D acquisitions (i=ignore: neither crop nor rotate)
+ * @param compression gz compress images (y=pigz, o=optimal pigz, i=internal:zlib, n=no, 3=no,3D)
+ * @param endian Byte order (y=big-end, n=little-end, o=optimal/native)
+ * @param progress Slicer format progress information
+ * @param ignore_trigger Disregard values in 0018,1060 and 0020,9153
+ * @param terse Omit filename post-fixes (can cause overwrites)
+ * @param xml Output Slicer format features
+ *
+ * @returns Parameter dictionary
+ */
 function dcm2niix_params(
     input_dir: InputPathType,
     compression_level: number | null = null,
@@ -122,43 +157,8 @@ function dcm2niix_params(
     terse: boolean = false,
     xml: boolean = false,
 ): Dcm2niixParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dir Input folder containing DICOM files. Will be searched recursively based on depth parameter.
-     * @param compression_level gz compression level (1=fastest..9=smallest)
-     * @param adjacent Adjacent DICOMs (images from same series always in same folder) for faster conversion
-     * @param bids Generate BIDS sidecar JSON files (o=only: no NIfTI)
-     * @param bids_anon Anonymize BIDS sidecar files by removing personal information
-     * @param comment Comment stored in NIfTI aux_file (up to 24 characters)
-     * @param depth Directory search depth for DICOM files in sub-folders
-     * @param export_format Export format: NRRD (y), MGH (o), JSON/JNIfTI (j), or BJNIfTI (b)
-     * @param filename Output filename template (%a=antenna, %b=basename, %c=comments, %d=description, %e=echo number, %f=folder name, %g=accession number, %i=ID of patient, %j=seriesInstanceUID, %k=studyInstanceUID, %m=manufacturer, %n=name of patient, %o=mediaObjectInstanceUID, %p=protocol, %r=instance number, %s=series number, %t=time, %u=acquisition number, %v=vendor, %x=study ID; %z=sequence name)
-     * @param defaults Generate defaults file (o=only: reset and write defaults; i=ignore: reset defaults)
-     * @param ignore_derived Ignore derived, localizer and 2D images
-     * @param scaling Losslessly scale 16-bit integers (y=scale, n=no but uint16->int16, o=original)
-     * @param merge_2d Merge 2D slices from same series regardless of echo, exposure, etc. (0=no, 1=yes, 2=auto)
-     * @param series_number Only convert specified series CRC number (can be used up to 16 times)
-     * @param output_dir Output directory (omit to save to input folder)
-     * @param philips_scaling Use Philips precise float (not display) scaling
-     * @param search_mode Search mode (y=show number of DICOMs, l=list DICOMs, n=no)
-     * @param rename Rename instead of convert DICOMs
-     * @param single_file Single file mode, do not convert other images in folder
-     * @param update_check Check for newer versions
-     * @param verbose Verbose output (0=no, 1=yes, 2=logorrheic)
-     * @param conflict_behavior Write behavior for name conflicts (0=skip, 1=overwrite, 2=add suffix)
-     * @param crop_3d Crop 3D acquisitions (i=ignore: neither crop nor rotate)
-     * @param compression gz compress images (y=pigz, o=optimal pigz, i=internal:zlib, n=no, 3=no,3D)
-     * @param endian Byte order (y=big-end, n=little-end, o=optimal/native)
-     * @param progress Slicer format progress information
-     * @param ignore_trigger Disregard values in 0018,1060 and 0020,9153
-     * @param terse Omit filename post-fixes (can cause overwrites)
-     * @param xml Output Slicer format features
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcm2niix" as const,
+        "@type": "dcm2niix.dcm2niix" as const,
         "update_check": update_check,
         "ignore_trigger": ignore_trigger,
         "terse": terse,
@@ -241,18 +241,18 @@ function dcm2niix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcm2niix_cargs(
     params: Dcm2niixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcm2niix");
     if ((params["compression_level"] ?? null) !== null) {
@@ -413,18 +413,18 @@ function dcm2niix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcm2niix_outputs(
     params: Dcm2niixParameters,
     execution: Execution,
 ): Dcm2niixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dcm2niixOutputs = {
         root: execution.outputFile("."),
     };
@@ -432,20 +432,20 @@ function dcm2niix_outputs(
 }
 
 
+/**
+ * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
+ *
+ * Author: Chris Rorden
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
+ */
 function dcm2niix_execute(
     params: Dcm2niixParameters,
     execution: Execution,
 ): Dcm2niixOutputs {
-    /**
-     * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
-     * 
-     * Author: Chris Rorden
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcm2niix_cargs(params, execution)
     const ret = dcm2niix_outputs(params, execution)
@@ -454,6 +454,44 @@ function dcm2niix_execute(
 }
 
 
+/**
+ * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
+ *
+ * Author: Chris Rorden
+ *
+ * @param input_dir Input folder containing DICOM files. Will be searched recursively based on depth parameter.
+ * @param compression_level gz compression level (1=fastest..9=smallest)
+ * @param adjacent Adjacent DICOMs (images from same series always in same folder) for faster conversion
+ * @param bids Generate BIDS sidecar JSON files (o=only: no NIfTI)
+ * @param bids_anon Anonymize BIDS sidecar files by removing personal information
+ * @param comment Comment stored in NIfTI aux_file (up to 24 characters)
+ * @param depth Directory search depth for DICOM files in sub-folders
+ * @param export_format Export format: NRRD (y), MGH (o), JSON/JNIfTI (j), or BJNIfTI (b)
+ * @param filename Output filename template (%a=antenna, %b=basename, %c=comments, %d=description, %e=echo number, %f=folder name, %g=accession number, %i=ID of patient, %j=seriesInstanceUID, %k=studyInstanceUID, %m=manufacturer, %n=name of patient, %o=mediaObjectInstanceUID, %p=protocol, %r=instance number, %s=series number, %t=time, %u=acquisition number, %v=vendor, %x=study ID; %z=sequence name)
+ * @param defaults Generate defaults file (o=only: reset and write defaults; i=ignore: reset defaults)
+ * @param ignore_derived Ignore derived, localizer and 2D images
+ * @param scaling Losslessly scale 16-bit integers (y=scale, n=no but uint16->int16, o=original)
+ * @param merge_2d Merge 2D slices from same series regardless of echo, exposure, etc. (0=no, 1=yes, 2=auto)
+ * @param series_number Only convert specified series CRC number (can be used up to 16 times)
+ * @param output_dir Output directory (omit to save to input folder)
+ * @param philips_scaling Use Philips precise float (not display) scaling
+ * @param search_mode Search mode (y=show number of DICOMs, l=list DICOMs, n=no)
+ * @param rename Rename instead of convert DICOMs
+ * @param single_file Single file mode, do not convert other images in folder
+ * @param update_check Check for newer versions
+ * @param verbose Verbose output (0=no, 1=yes, 2=logorrheic)
+ * @param conflict_behavior Write behavior for name conflicts (0=skip, 1=overwrite, 2=add suffix)
+ * @param crop_3d Crop 3D acquisitions (i=ignore: neither crop nor rotate)
+ * @param compression gz compress images (y=pigz, o=optimal pigz, i=internal:zlib, n=no, 3=no,3D)
+ * @param endian Byte order (y=big-end, n=little-end, o=optimal/native)
+ * @param progress Slicer format progress information
+ * @param ignore_trigger Disregard values in 0018,1060 and 0020,9153
+ * @param terse Omit filename post-fixes (can cause overwrites)
+ * @param xml Output Slicer format features
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
+ */
 function dcm2niix_(
     input_dir: InputPathType,
     compression_level: number | null = null,
@@ -486,44 +524,6 @@ function dcm2niix_(
     xml: boolean = false,
     runner: Runner | null = null,
 ): Dcm2niixOutputs {
-    /**
-     * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
-     * 
-     * Author: Chris Rorden
-    
-     * @param input_dir Input folder containing DICOM files. Will be searched recursively based on depth parameter.
-     * @param compression_level gz compression level (1=fastest..9=smallest)
-     * @param adjacent Adjacent DICOMs (images from same series always in same folder) for faster conversion
-     * @param bids Generate BIDS sidecar JSON files (o=only: no NIfTI)
-     * @param bids_anon Anonymize BIDS sidecar files by removing personal information
-     * @param comment Comment stored in NIfTI aux_file (up to 24 characters)
-     * @param depth Directory search depth for DICOM files in sub-folders
-     * @param export_format Export format: NRRD (y), MGH (o), JSON/JNIfTI (j), or BJNIfTI (b)
-     * @param filename Output filename template (%a=antenna, %b=basename, %c=comments, %d=description, %e=echo number, %f=folder name, %g=accession number, %i=ID of patient, %j=seriesInstanceUID, %k=studyInstanceUID, %m=manufacturer, %n=name of patient, %o=mediaObjectInstanceUID, %p=protocol, %r=instance number, %s=series number, %t=time, %u=acquisition number, %v=vendor, %x=study ID; %z=sequence name)
-     * @param defaults Generate defaults file (o=only: reset and write defaults; i=ignore: reset defaults)
-     * @param ignore_derived Ignore derived, localizer and 2D images
-     * @param scaling Losslessly scale 16-bit integers (y=scale, n=no but uint16->int16, o=original)
-     * @param merge_2d Merge 2D slices from same series regardless of echo, exposure, etc. (0=no, 1=yes, 2=auto)
-     * @param series_number Only convert specified series CRC number (can be used up to 16 times)
-     * @param output_dir Output directory (omit to save to input folder)
-     * @param philips_scaling Use Philips precise float (not display) scaling
-     * @param search_mode Search mode (y=show number of DICOMs, l=list DICOMs, n=no)
-     * @param rename Rename instead of convert DICOMs
-     * @param single_file Single file mode, do not convert other images in folder
-     * @param update_check Check for newer versions
-     * @param verbose Verbose output (0=no, 1=yes, 2=logorrheic)
-     * @param conflict_behavior Write behavior for name conflicts (0=skip, 1=overwrite, 2=add suffix)
-     * @param crop_3d Crop 3D acquisitions (i=ignore: neither crop nor rotate)
-     * @param compression gz compress images (y=pigz, o=optimal pigz, i=internal:zlib, n=no, 3=no,3D)
-     * @param endian Byte order (y=big-end, n=little-end, o=optimal/native)
-     * @param progress Slicer format progress information
-     * @param ignore_trigger Disregard values in 0018,1060 and 0020,9153
-     * @param terse Omit filename post-fixes (can cause overwrites)
-     * @param xml Output Slicer format features
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCM2NIIX_METADATA);
     const params = dcm2niix_params(input_dir, compression_level, adjacent, bids, bids_anon, comment, depth, export_format, filename, defaults, ignore_derived, scaling, merge_2d, series_number, output_dir, philips_scaling, search_mode, rename, single_file, update_check, verbose, conflict_behavior, crop_3d, compression, endian, progress, ignore_trigger, terse, xml)
@@ -536,5 +536,8 @@ export {
       Dcm2niixOutputs,
       Dcm2niixParameters,
       dcm2niix_,
+      dcm2niix_cargs,
+      dcm2niix_execute,
+      dcm2niix_outputs,
       dcm2niix_params,
 };

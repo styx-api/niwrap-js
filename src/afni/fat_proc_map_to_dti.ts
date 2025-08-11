@@ -12,7 +12,7 @@ const FAT_PROC_MAP_TO_DTI_METADATA: Metadata = {
 
 
 interface FatProcMapToDtiParameters {
-    "__STYXTYPE__": "fat_proc_map_to_dti";
+    "@type": "afni.fat_proc_map_to_dti";
     "source": InputPathType;
     "base": InputPathType;
     "prefix": string;
@@ -28,33 +28,33 @@ interface FatProcMapToDtiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_map_to_dti": fat_proc_map_to_dti_cargs,
+        "afni.fat_proc_map_to_dti": fat_proc_map_to_dti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface FatProcMapToDtiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source T1w volume file (source volume)
+ * @param base DWI reference volume file
+ * @param prefix Output prefix for files and snapshots
+ * @param followers_nn Follower data sets with NN interpolation
+ * @param followers_wsinc5 Follower data sets with wsinc5 interpolation
+ * @param followers_surf Surface follower data sets
+ * @param followers_ndset NIML follower data sets
+ * @param followers_spec Spec follower data sets
+ * @param matrix Pre-made matrix file for transformation
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Don't save the command line call of this program
+ * @param no_clean Do not delete temporary working directory
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_map_to_dti_params(
     source: InputPathType,
     base: InputPathType,
@@ -88,26 +106,8 @@ function fat_proc_map_to_dti_params(
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
 ): FatProcMapToDtiParameters {
-    /**
-     * Build parameters.
-    
-     * @param source T1w volume file (source volume)
-     * @param base DWI reference volume file
-     * @param prefix Output prefix for files and snapshots
-     * @param followers_nn Follower data sets with NN interpolation
-     * @param followers_wsinc5 Follower data sets with wsinc5 interpolation
-     * @param followers_surf Surface follower data sets
-     * @param followers_ndset NIML follower data sets
-     * @param followers_spec Spec follower data sets
-     * @param matrix Pre-made matrix file for transformation
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Don't save the command line call of this program
-     * @param no_clean Do not delete temporary working directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_map_to_dti" as const,
+        "@type": "afni.fat_proc_map_to_dti" as const,
         "source": source,
         "base": base,
         "prefix": prefix,
@@ -139,18 +139,18 @@ function fat_proc_map_to_dti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_map_to_dti_cargs(
     params: FatProcMapToDtiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_map_to_dti");
     cargs.push(
@@ -217,18 +217,18 @@ function fat_proc_map_to_dti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_map_to_dti_outputs(
     params: FatProcMapToDtiParameters,
     execution: Execution,
 ): FatProcMapToDtiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcMapToDtiOutputs = {
         root: execution.outputFile("."),
     };
@@ -236,22 +236,22 @@ function fat_proc_map_to_dti_outputs(
 }
 
 
+/**
+ * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
+ */
 function fat_proc_map_to_dti_execute(
     params: FatProcMapToDtiParameters,
     execution: Execution,
 ): FatProcMapToDtiOutputs {
-    /**
-     * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_map_to_dti_cargs(params, execution)
     const ret = fat_proc_map_to_dti_outputs(params, execution)
@@ -260,6 +260,29 @@ function fat_proc_map_to_dti_execute(
 }
 
 
+/**
+ * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param source T1w volume file (source volume)
+ * @param base DWI reference volume file
+ * @param prefix Output prefix for files and snapshots
+ * @param followers_nn Follower data sets with NN interpolation
+ * @param followers_wsinc5 Follower data sets with wsinc5 interpolation
+ * @param followers_surf Surface follower data sets
+ * @param followers_ndset NIML follower data sets
+ * @param followers_spec Spec follower data sets
+ * @param matrix Pre-made matrix file for transformation
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Don't save the command line call of this program
+ * @param no_clean Do not delete temporary working directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
+ */
 function fat_proc_map_to_dti(
     source: InputPathType,
     base: InputPathType,
@@ -275,29 +298,6 @@ function fat_proc_map_to_dti(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcMapToDtiOutputs {
-    /**
-     * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param source T1w volume file (source volume)
-     * @param base DWI reference volume file
-     * @param prefix Output prefix for files and snapshots
-     * @param followers_nn Follower data sets with NN interpolation
-     * @param followers_wsinc5 Follower data sets with wsinc5 interpolation
-     * @param followers_surf Surface follower data sets
-     * @param followers_ndset NIML follower data sets
-     * @param followers_spec Spec follower data sets
-     * @param matrix Pre-made matrix file for transformation
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Don't save the command line call of this program
-     * @param no_clean Do not delete temporary working directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_MAP_TO_DTI_METADATA);
     const params = fat_proc_map_to_dti_params(source, base, prefix, followers_nn, followers_wsinc5, followers_surf, followers_ndset, followers_spec, matrix, workdir, no_cmd_out, no_clean)
@@ -310,5 +310,8 @@ export {
       FatProcMapToDtiOutputs,
       FatProcMapToDtiParameters,
       fat_proc_map_to_dti,
+      fat_proc_map_to_dti_cargs,
+      fat_proc_map_to_dti_execute,
+      fat_proc_map_to_dti_outputs,
       fat_proc_map_to_dti_params,
 };

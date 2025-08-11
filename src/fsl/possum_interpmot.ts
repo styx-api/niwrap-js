@@ -12,7 +12,7 @@ const POSSUM_INTERPMOT_METADATA: Metadata = {
 
 
 interface PossumInterpmotParameters {
-    "__STYXTYPE__": "possum_interpmot";
+    "@type": "fsl.possum_interpmot";
     "motion_type": number;
     "tr": number;
     "tr_slice": number;
@@ -23,35 +23,35 @@ interface PossumInterpmotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "possum_interpmot": possum_interpmot_cargs,
+        "fsl.possum_interpmot": possum_interpmot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "possum_interpmot": possum_interpmot_outputs,
+        "fsl.possum_interpmot": possum_interpmot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface PossumInterpmotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param motion_type Type of motion: 0 for continuous, 1 for between slices, 2 for between volumes
+ * @param tr Repetition time in seconds
+ * @param tr_slice Slice repetition time in seconds
+ * @param nslices Number of slices
+ * @param nvols Number of volumes
+ * @param custom_motion_file Custom motion file
+ * @param output_file Output file
+ *
+ * @returns Parameter dictionary
+ */
 function possum_interpmot_params(
     motion_type: number,
     tr: number,
@@ -83,21 +96,8 @@ function possum_interpmot_params(
     custom_motion_file: InputPathType,
     output_file: string,
 ): PossumInterpmotParameters {
-    /**
-     * Build parameters.
-    
-     * @param motion_type Type of motion: 0 for continuous, 1 for between slices, 2 for between volumes
-     * @param tr Repetition time in seconds
-     * @param tr_slice Slice repetition time in seconds
-     * @param nslices Number of slices
-     * @param nvols Number of volumes
-     * @param custom_motion_file Custom motion file
-     * @param output_file Output file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "possum_interpmot" as const,
+        "@type": "fsl.possum_interpmot" as const,
         "motion_type": motion_type,
         "tr": tr,
         "tr_slice": tr_slice,
@@ -110,18 +110,18 @@ function possum_interpmot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function possum_interpmot_cargs(
     params: PossumInterpmotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("possum_interpmot.py");
     cargs.push(String((params["motion_type"] ?? null)));
@@ -135,18 +135,18 @@ function possum_interpmot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function possum_interpmot_outputs(
     params: PossumInterpmotParameters,
     execution: Execution,
 ): PossumInterpmotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PossumInterpmotOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -155,22 +155,22 @@ function possum_interpmot_outputs(
 }
 
 
+/**
+ * Position Interpolation for Movers and Shakers.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
+ */
 function possum_interpmot_execute(
     params: PossumInterpmotParameters,
     execution: Execution,
 ): PossumInterpmotOutputs {
-    /**
-     * Position Interpolation for Movers and Shakers.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
-     */
     params = execution.params(params)
     const cargs = possum_interpmot_cargs(params, execution)
     const ret = possum_interpmot_outputs(params, execution)
@@ -179,6 +179,24 @@ function possum_interpmot_execute(
 }
 
 
+/**
+ * Position Interpolation for Movers and Shakers.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param motion_type Type of motion: 0 for continuous, 1 for between slices, 2 for between volumes
+ * @param tr Repetition time in seconds
+ * @param tr_slice Slice repetition time in seconds
+ * @param nslices Number of slices
+ * @param nvols Number of volumes
+ * @param custom_motion_file Custom motion file
+ * @param output_file Output file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
+ */
 function possum_interpmot(
     motion_type: number,
     tr: number,
@@ -189,24 +207,6 @@ function possum_interpmot(
     output_file: string,
     runner: Runner | null = null,
 ): PossumInterpmotOutputs {
-    /**
-     * Position Interpolation for Movers and Shakers.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param motion_type Type of motion: 0 for continuous, 1 for between slices, 2 for between volumes
-     * @param tr Repetition time in seconds
-     * @param tr_slice Slice repetition time in seconds
-     * @param nslices Number of slices
-     * @param nvols Number of volumes
-     * @param custom_motion_file Custom motion file
-     * @param output_file Output file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POSSUM_INTERPMOT_METADATA);
     const params = possum_interpmot_params(motion_type, tr, tr_slice, nslices, nvols, custom_motion_file, output_file)
@@ -219,5 +219,8 @@ export {
       PossumInterpmotOutputs,
       PossumInterpmotParameters,
       possum_interpmot,
+      possum_interpmot_cargs,
+      possum_interpmot_execute,
+      possum_interpmot_outputs,
       possum_interpmot_params,
 };

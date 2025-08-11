@@ -12,7 +12,7 @@ const MRI_MORPHOLOGY_METADATA: Metadata = {
 
 
 interface MriMorphologyParameters {
-    "__STYXTYPE__": "mri_morphology";
+    "@type": "freesurfer.mri_morphology";
     "input_volume": InputPathType;
     "operation": "open" | "close" | "dilate" | "erode" | "mode" | "fill_holes" | "erode_bottom" | "dilate_thresh" | "erode_thresh";
     "number_iter": number;
@@ -21,35 +21,35 @@ interface MriMorphologyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_morphology": mri_morphology_cargs,
+        "freesurfer.mri_morphology": mri_morphology_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_morphology": mri_morphology_outputs,
+        "freesurfer.mri_morphology": mri_morphology_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriMorphologyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file on which operations are to be applied.
+ * @param operation Morphological operation to be performed. Options include: open, close, dilate, erode, mode, fill_holes, erode_bottom, dilate_thresh, erode_thresh.
+ * @param number_iter Number of iterations to apply the operation.
+ * @param output_volume Output volume file to store the results of the operation.
+ * @param label_option Only apply operations to the specified label instead of all nonzero voxels.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_morphology_params(
     input_volume: InputPathType,
     operation: "open" | "close" | "dilate" | "erode" | "mode" | "fill_holes" | "erode_bottom" | "dilate_thresh" | "erode_thresh",
@@ -79,19 +90,8 @@ function mri_morphology_params(
     output_volume: string,
     label_option: number | null = null,
 ): MriMorphologyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file on which operations are to be applied.
-     * @param operation Morphological operation to be performed. Options include: open, close, dilate, erode, mode, fill_holes, erode_bottom, dilate_thresh, erode_thresh.
-     * @param number_iter Number of iterations to apply the operation.
-     * @param output_volume Output volume file to store the results of the operation.
-     * @param label_option Only apply operations to the specified label instead of all nonzero voxels.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_morphology" as const,
+        "@type": "freesurfer.mri_morphology" as const,
         "input_volume": input_volume,
         "operation": operation,
         "number_iter": number_iter,
@@ -104,18 +104,18 @@ function mri_morphology_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_morphology_cargs(
     params: MriMorphologyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_morphology");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -132,18 +132,18 @@ function mri_morphology_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_morphology_outputs(
     params: MriMorphologyParameters,
     execution: Execution,
 ): MriMorphologyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMorphologyOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -152,22 +152,22 @@ function mri_morphology_outputs(
 }
 
 
+/**
+ * MRI Morphology Tool - performs various morphological operations on a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
+ */
 function mri_morphology_execute(
     params: MriMorphologyParameters,
     execution: Execution,
 ): MriMorphologyOutputs {
-    /**
-     * MRI Morphology Tool - performs various morphological operations on a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_morphology_cargs(params, execution)
     const ret = mri_morphology_outputs(params, execution)
@@ -176,6 +176,22 @@ function mri_morphology_execute(
 }
 
 
+/**
+ * MRI Morphology Tool - performs various morphological operations on a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file on which operations are to be applied.
+ * @param operation Morphological operation to be performed. Options include: open, close, dilate, erode, mode, fill_holes, erode_bottom, dilate_thresh, erode_thresh.
+ * @param number_iter Number of iterations to apply the operation.
+ * @param output_volume Output volume file to store the results of the operation.
+ * @param label_option Only apply operations to the specified label instead of all nonzero voxels.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
+ */
 function mri_morphology(
     input_volume: InputPathType,
     operation: "open" | "close" | "dilate" | "erode" | "mode" | "fill_holes" | "erode_bottom" | "dilate_thresh" | "erode_thresh",
@@ -184,22 +200,6 @@ function mri_morphology(
     label_option: number | null = null,
     runner: Runner | null = null,
 ): MriMorphologyOutputs {
-    /**
-     * MRI Morphology Tool - performs various morphological operations on a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file on which operations are to be applied.
-     * @param operation Morphological operation to be performed. Options include: open, close, dilate, erode, mode, fill_holes, erode_bottom, dilate_thresh, erode_thresh.
-     * @param number_iter Number of iterations to apply the operation.
-     * @param output_volume Output volume file to store the results of the operation.
-     * @param label_option Only apply operations to the specified label instead of all nonzero voxels.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MORPHOLOGY_METADATA);
     const params = mri_morphology_params(input_volume, operation, number_iter, output_volume, label_option)
@@ -212,5 +212,8 @@ export {
       MriMorphologyOutputs,
       MriMorphologyParameters,
       mri_morphology,
+      mri_morphology_cargs,
+      mri_morphology_execute,
+      mri_morphology_outputs,
       mri_morphology_params,
 };

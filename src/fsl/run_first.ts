@@ -12,7 +12,7 @@ const RUN_FIRST_METADATA: Metadata = {
 
 
 interface RunFirstParameters {
-    "__STYXTYPE__": "run_first";
+    "@type": "fsl.run_first";
     "input_image": InputPathType;
     "transformation_matrix": InputPathType;
     "n_modes": number;
@@ -25,35 +25,35 @@ interface RunFirstParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_first": run_first_cargs,
+        "fsl.run_first": run_first_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "run_first": run_first_outputs,
+        "fsl.run_first": run_first_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface RunFirstOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image file (e.g. img.nii.gz)
+ * @param transformation_matrix Input transformation matrix file (e.g. input_to_mni.mat)
+ * @param n_modes Number of modes
+ * @param output_basename Output basename
+ * @param model_name Model name
+ * @param verbose_flag Verbose mode
+ * @param intref_model_name Reference structure for the local intensity normalization
+ * @param load_bvars Initializes FIRST with a previous estimate of the structure
+ * @param multiple_images_flag Run FIRST on multiple images; provide a list of images, transformation matrices, and output names
+ *
+ * @returns Parameter dictionary
+ */
 function run_first_params(
     input_image: InputPathType,
     transformation_matrix: InputPathType,
@@ -87,23 +102,8 @@ function run_first_params(
     load_bvars: InputPathType | null = null,
     multiple_images_flag: boolean = false,
 ): RunFirstParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image file (e.g. img.nii.gz)
-     * @param transformation_matrix Input transformation matrix file (e.g. input_to_mni.mat)
-     * @param n_modes Number of modes
-     * @param output_basename Output basename
-     * @param model_name Model name
-     * @param verbose_flag Verbose mode
-     * @param intref_model_name Reference structure for the local intensity normalization
-     * @param load_bvars Initializes FIRST with a previous estimate of the structure
-     * @param multiple_images_flag Run FIRST on multiple images; provide a list of images, transformation matrices, and output names
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_first" as const,
+        "@type": "fsl.run_first" as const,
         "input_image": input_image,
         "transformation_matrix": transformation_matrix,
         "n_modes": n_modes,
@@ -122,18 +122,18 @@ function run_first_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_first_cargs(
     params: RunFirstParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_first");
     cargs.push(
@@ -178,18 +178,18 @@ function run_first_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_first_outputs(
     params: RunFirstParameters,
     execution: Execution,
 ): RunFirstOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunFirstOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["output_basename"] ?? null), "*"].join('')),
@@ -198,22 +198,22 @@ function run_first_outputs(
 }
 
 
+/**
+ * A tool to run FSL's FIRST for subcortical segmentation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
+ */
 function run_first_execute(
     params: RunFirstParameters,
     execution: Execution,
 ): RunFirstOutputs {
-    /**
-     * A tool to run FSL's FIRST for subcortical segmentation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_first_cargs(params, execution)
     const ret = run_first_outputs(params, execution)
@@ -222,6 +222,26 @@ function run_first_execute(
 }
 
 
+/**
+ * A tool to run FSL's FIRST for subcortical segmentation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image file (e.g. img.nii.gz)
+ * @param transformation_matrix Input transformation matrix file (e.g. input_to_mni.mat)
+ * @param n_modes Number of modes
+ * @param output_basename Output basename
+ * @param model_name Model name
+ * @param verbose_flag Verbose mode
+ * @param intref_model_name Reference structure for the local intensity normalization
+ * @param load_bvars Initializes FIRST with a previous estimate of the structure
+ * @param multiple_images_flag Run FIRST on multiple images; provide a list of images, transformation matrices, and output names
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
+ */
 function run_first(
     input_image: InputPathType,
     transformation_matrix: InputPathType,
@@ -234,26 +254,6 @@ function run_first(
     multiple_images_flag: boolean = false,
     runner: Runner | null = null,
 ): RunFirstOutputs {
-    /**
-     * A tool to run FSL's FIRST for subcortical segmentation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image file (e.g. img.nii.gz)
-     * @param transformation_matrix Input transformation matrix file (e.g. input_to_mni.mat)
-     * @param n_modes Number of modes
-     * @param output_basename Output basename
-     * @param model_name Model name
-     * @param verbose_flag Verbose mode
-     * @param intref_model_name Reference structure for the local intensity normalization
-     * @param load_bvars Initializes FIRST with a previous estimate of the structure
-     * @param multiple_images_flag Run FIRST on multiple images; provide a list of images, transformation matrices, and output names
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_FIRST_METADATA);
     const params = run_first_params(input_image, transformation_matrix, n_modes, output_basename, model_name, verbose_flag, intref_model_name, load_bvars, multiple_images_flag)
@@ -266,5 +266,8 @@ export {
       RunFirstOutputs,
       RunFirstParameters,
       run_first,
+      run_first_cargs,
+      run_first_execute,
+      run_first_outputs,
       run_first_params,
 };

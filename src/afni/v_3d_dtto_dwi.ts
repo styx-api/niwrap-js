@@ -12,7 +12,7 @@ const V_3D_DTTO_DWI_METADATA: Metadata = {
 
 
 interface V3dDttoDwiParameters {
-    "__STYXTYPE__": "3dDTtoDWI";
+    "@type": "afni.3dDTtoDWI";
     "gradient_file": InputPathType;
     "i0_dataset": InputPathType;
     "dt_dataset": InputPathType;
@@ -24,35 +24,35 @@ interface V3dDttoDwiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDTtoDWI": v_3d_dtto_dwi_cargs,
+        "afni.3dDTtoDWI": v_3d_dtto_dwi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDTtoDWI": v_3d_dtto_dwi_outputs,
+        "afni.3dDTtoDWI": v_3d_dtto_dwi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dDttoDwiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
+ * @param i0_dataset Volume without any gradient applied.
+ * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
+ * @param prefix Prefix for the output dataset name.
+ * @param automask Compute gradient images only for high-intensity (brain) voxels.
+ * @param datum_type Type of the output dataset (float, short, or byte).
+ * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
+ * @param help Show help message.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_dtto_dwi_params(
     gradient_file: InputPathType,
     i0_dataset: InputPathType,
@@ -85,22 +99,8 @@ function v_3d_dtto_dwi_params(
     scale_out_1000: boolean = false,
     help: boolean = false,
 ): V3dDttoDwiParameters {
-    /**
-     * Build parameters.
-    
-     * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
-     * @param i0_dataset Volume without any gradient applied.
-     * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
-     * @param prefix Prefix for the output dataset name.
-     * @param automask Compute gradient images only for high-intensity (brain) voxels.
-     * @param datum_type Type of the output dataset (float, short, or byte).
-     * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
-     * @param help Show help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDTtoDWI" as const,
+        "@type": "afni.3dDTtoDWI" as const,
         "gradient_file": gradient_file,
         "i0_dataset": i0_dataset,
         "dt_dataset": dt_dataset,
@@ -118,18 +118,18 @@ function v_3d_dtto_dwi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_dtto_dwi_cargs(
     params: V3dDttoDwiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDTtoDWI");
     cargs.push(execution.inputFile((params["gradient_file"] ?? null)));
@@ -160,18 +160,18 @@ function v_3d_dtto_dwi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_dtto_dwi_outputs(
     params: V3dDttoDwiParameters,
     execution: Execution,
 ): V3dDttoDwiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDttoDwiOutputs = {
         root: execution.outputFile("."),
         output_dwi: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "*.HEAD"].join('')) : null,
@@ -180,22 +180,22 @@ function v_3d_dtto_dwi_outputs(
 }
 
 
+/**
+ * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
+ */
 function v_3d_dtto_dwi_execute(
     params: V3dDttoDwiParameters,
     execution: Execution,
 ): V3dDttoDwiOutputs {
-    /**
-     * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_dtto_dwi_cargs(params, execution)
     const ret = v_3d_dtto_dwi_outputs(params, execution)
@@ -204,6 +204,25 @@ function v_3d_dtto_dwi_execute(
 }
 
 
+/**
+ * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
+ * @param i0_dataset Volume without any gradient applied.
+ * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
+ * @param prefix Prefix for the output dataset name.
+ * @param automask Compute gradient images only for high-intensity (brain) voxels.
+ * @param datum_type Type of the output dataset (float, short, or byte).
+ * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
+ * @param help Show help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
+ */
 function v_3d_dtto_dwi(
     gradient_file: InputPathType,
     i0_dataset: InputPathType,
@@ -215,25 +234,6 @@ function v_3d_dtto_dwi(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dDttoDwiOutputs {
-    /**
-     * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param gradient_file 1D file containing the gradient vectors (ASCII floats) for non-zero gradients.
-     * @param i0_dataset Volume without any gradient applied.
-     * @param dt_dataset 6-sub-brick dataset containing the diffusion tensor data (Dxx, Dxy, Dyy, Dxz, Dyz, Dzz).
-     * @param prefix Prefix for the output dataset name.
-     * @param automask Compute gradient images only for high-intensity (brain) voxels.
-     * @param datum_type Type of the output dataset (float, short, or byte).
-     * @param scale_out_1000 Match with 3dDWItoDT's '-scale_out_1000' functionality.
-     * @param help Show help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DTTO_DWI_METADATA);
     const params = v_3d_dtto_dwi_params(gradient_file, i0_dataset, dt_dataset, prefix, automask, datum_type, scale_out_1000, help)
@@ -246,5 +246,8 @@ export {
       V3dDttoDwiParameters,
       V_3D_DTTO_DWI_METADATA,
       v_3d_dtto_dwi,
+      v_3d_dtto_dwi_cargs,
+      v_3d_dtto_dwi_execute,
+      v_3d_dtto_dwi_outputs,
       v_3d_dtto_dwi_params,
 };

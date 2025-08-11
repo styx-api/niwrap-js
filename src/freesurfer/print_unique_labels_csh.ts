@@ -12,7 +12,7 @@ const PRINT_UNIQUE_LABELS_CSH_METADATA: Metadata = {
 
 
 interface PrintUniqueLabelsCshParameters {
-    "__STYXTYPE__": "print_unique_labels.csh";
+    "@type": "freesurfer.print_unique_labels.csh";
     "label_volume": InputPathType;
     "output_file"?: string | null | undefined;
     "list_only": boolean;
@@ -21,35 +21,35 @@ interface PrintUniqueLabelsCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "print_unique_labels.csh": print_unique_labels_csh_cargs,
+        "freesurfer.print_unique_labels.csh": print_unique_labels_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "print_unique_labels.csh": print_unique_labels_csh_outputs,
+        "freesurfer.print_unique_labels.csh": print_unique_labels_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface PrintUniqueLabelsCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_volume Label volume to be analyzed
+ * @param output_file Text file where the results are written
+ * @param list_only Only list the labels
+ * @param version Print version and exit
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function print_unique_labels_csh_params(
     label_volume: InputPathType,
     output_file: string | null = null,
@@ -79,19 +90,8 @@ function print_unique_labels_csh_params(
     version: boolean = false,
     help: boolean = false,
 ): PrintUniqueLabelsCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_volume Label volume to be analyzed
-     * @param output_file Text file where the results are written
-     * @param list_only Only list the labels
-     * @param version Print version and exit
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "print_unique_labels.csh" as const,
+        "@type": "freesurfer.print_unique_labels.csh" as const,
         "label_volume": label_volume,
         "list_only": list_only,
         "version": version,
@@ -104,18 +104,18 @@ function print_unique_labels_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function print_unique_labels_csh_cargs(
     params: PrintUniqueLabelsCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("print_unique_labels.csh");
     cargs.push(
@@ -141,18 +141,18 @@ function print_unique_labels_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function print_unique_labels_csh_outputs(
     params: PrintUniqueLabelsCshParameters,
     execution: Execution,
 ): PrintUniqueLabelsCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PrintUniqueLabelsCshOutputs = {
         root: execution.outputFile("."),
         results_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -161,22 +161,22 @@ function print_unique_labels_csh_outputs(
 }
 
 
+/**
+ * Prints the list of unique labels (with structure name) in the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
+ */
 function print_unique_labels_csh_execute(
     params: PrintUniqueLabelsCshParameters,
     execution: Execution,
 ): PrintUniqueLabelsCshOutputs {
-    /**
-     * Prints the list of unique labels (with structure name) in the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = print_unique_labels_csh_cargs(params, execution)
     const ret = print_unique_labels_csh_outputs(params, execution)
@@ -185,6 +185,22 @@ function print_unique_labels_csh_execute(
 }
 
 
+/**
+ * Prints the list of unique labels (with structure name) in the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label_volume Label volume to be analyzed
+ * @param output_file Text file where the results are written
+ * @param list_only Only list the labels
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
+ */
 function print_unique_labels_csh(
     label_volume: InputPathType,
     output_file: string | null = null,
@@ -193,22 +209,6 @@ function print_unique_labels_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): PrintUniqueLabelsCshOutputs {
-    /**
-     * Prints the list of unique labels (with structure name) in the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label_volume Label volume to be analyzed
-     * @param output_file Text file where the results are written
-     * @param list_only Only list the labels
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PRINT_UNIQUE_LABELS_CSH_METADATA);
     const params = print_unique_labels_csh_params(label_volume, output_file, list_only, version, help)
@@ -221,5 +221,8 @@ export {
       PrintUniqueLabelsCshOutputs,
       PrintUniqueLabelsCshParameters,
       print_unique_labels_csh,
+      print_unique_labels_csh_cargs,
+      print_unique_labels_csh_execute,
+      print_unique_labels_csh_outputs,
       print_unique_labels_csh_params,
 };

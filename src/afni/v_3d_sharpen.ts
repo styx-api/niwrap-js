@@ -12,42 +12,42 @@ const V_3D_SHARPEN_METADATA: Metadata = {
 
 
 interface V3dSharpenParameters {
-    "__STYXTYPE__": "3dSharpen";
+    "@type": "afni.3dSharpen";
     "sharpening_factor"?: number | null | undefined;
     "input_dataset": InputPathType;
     "output_prefix": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSharpen": v_3d_sharpen_cargs,
+        "afni.3dSharpen": v_3d_sharpen_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSharpen": v_3d_sharpen_outputs,
+        "afni.3dSharpen": v_3d_sharpen_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dSharpenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g., input.nii.gz)
+ * @param output_prefix Name of the output dataset (e.g., output.nii.gz) which will be in floating point format.
+ * @param sharpening_factor Sharpening factor, between 0.1 and 0.9 (inclusive). Larger values mean more sharpening.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_sharpen_params(
     input_dataset: InputPathType,
     output_prefix: string,
     sharpening_factor: number | null = null,
 ): V3dSharpenParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g., input.nii.gz)
-     * @param output_prefix Name of the output dataset (e.g., output.nii.gz) which will be in floating point format.
-     * @param sharpening_factor Sharpening factor, between 0.1 and 0.9 (inclusive). Larger values mean more sharpening.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSharpen" as const,
+        "@type": "afni.3dSharpen" as const,
         "input_dataset": input_dataset,
         "output_prefix": output_prefix,
     };
@@ -96,18 +96,18 @@ function v_3d_sharpen_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_sharpen_cargs(
     params: V3dSharpenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSharpen");
     if ((params["sharpening_factor"] ?? null) !== null) {
@@ -125,18 +125,18 @@ function v_3d_sharpen_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_sharpen_outputs(
     params: V3dSharpenParameters,
     execution: Execution,
 ): V3dSharpenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSharpenOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["output_prefix"] ?? null), ".nii.gz"].join('')),
@@ -145,22 +145,22 @@ function v_3d_sharpen_outputs(
 }
 
 
+/**
+ * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
+ */
 function v_3d_sharpen_execute(
     params: V3dSharpenParameters,
     execution: Execution,
 ): V3dSharpenOutputs {
-    /**
-     * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_sharpen_cargs(params, execution)
     const ret = v_3d_sharpen_outputs(params, execution)
@@ -169,26 +169,26 @@ function v_3d_sharpen_execute(
 }
 
 
+/**
+ * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g., input.nii.gz)
+ * @param output_prefix Name of the output dataset (e.g., output.nii.gz) which will be in floating point format.
+ * @param sharpening_factor Sharpening factor, between 0.1 and 0.9 (inclusive). Larger values mean more sharpening.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
+ */
 function v_3d_sharpen(
     input_dataset: InputPathType,
     output_prefix: string,
     sharpening_factor: number | null = null,
     runner: Runner | null = null,
 ): V3dSharpenOutputs {
-    /**
-     * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g., input.nii.gz)
-     * @param output_prefix Name of the output dataset (e.g., output.nii.gz) which will be in floating point format.
-     * @param sharpening_factor Sharpening factor, between 0.1 and 0.9 (inclusive). Larger values mean more sharpening.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SHARPEN_METADATA);
     const params = v_3d_sharpen_params(input_dataset, output_prefix, sharpening_factor)
@@ -201,5 +201,8 @@ export {
       V3dSharpenParameters,
       V_3D_SHARPEN_METADATA,
       v_3d_sharpen,
+      v_3d_sharpen_cargs,
+      v_3d_sharpen_execute,
+      v_3d_sharpen_outputs,
       v_3d_sharpen_params,
 };

@@ -12,7 +12,7 @@ const COMPARE_SURFACES_METADATA: Metadata = {
 
 
 interface CompareSurfacesParameters {
-    "__STYXTYPE__": "CompareSurfaces";
+    "@type": "afni.CompareSurfaces";
     "spec_file": InputPathType;
     "hemisphere": "L" | "R";
     "volume_parent_1": InputPathType;
@@ -31,35 +31,35 @@ interface CompareSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "CompareSurfaces": compare_surfaces_cargs,
+        "afni.CompareSurfaces": compare_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "CompareSurfaces": compare_surfaces_outputs,
+        "afni.CompareSurfaces": compare_surfaces_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,27 @@ interface CompareSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file File containing surface specification.
+ * @param hemisphere Specify the hemisphere being processed (left or right).
+ * @param volume_parent_1 Volume parent BRIK for first surface.
+ * @param volume_parent_2 Volume parent BRIK for second surface.
+ * @param file_prefix Prefix for distance and node color output files. Existing file will not be overwritten.
+ * @param one_node Output results for node index only. This option is for debugging.
+ * @param node_range Output results from node istart to node istop only. This option is for debugging.
+ * @param no_consistency_check Skip mesh orientation consistency check. This speeds up the start time so it is useful for debugging runs.
+ * @param no_volreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param no_transform Same as -novolreg.
+ * @param set_environment_variable Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param no_memory_trace Turn off memory tracing.
+ * @param yes_memory_trace Turn on memory tracing (default).
+ *
+ * @returns Parameter dictionary
+ */
 function compare_surfaces_params(
     spec_file: InputPathType,
     hemisphere: "L" | "R",
@@ -103,29 +124,8 @@ function compare_surfaces_params(
     no_memory_trace: boolean = false,
     yes_memory_trace: boolean = false,
 ): CompareSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file File containing surface specification.
-     * @param hemisphere Specify the hemisphere being processed (left or right).
-     * @param volume_parent_1 Volume parent BRIK for first surface.
-     * @param volume_parent_2 Volume parent BRIK for second surface.
-     * @param file_prefix Prefix for distance and node color output files. Existing file will not be overwritten.
-     * @param one_node Output results for node index only. This option is for debugging.
-     * @param node_range Output results from node istart to node istop only. This option is for debugging.
-     * @param no_consistency_check Skip mesh orientation consistency check. This speeds up the start time so it is useful for debugging runs.
-     * @param no_volreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param no_transform Same as -novolreg.
-     * @param set_environment_variable Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param no_memory_trace Turn off memory tracing.
-     * @param yes_memory_trace Turn on memory tracing (default).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "CompareSurfaces" as const,
+        "@type": "afni.CompareSurfaces" as const,
         "spec_file": spec_file,
         "hemisphere": hemisphere,
         "volume_parent_1": volume_parent_1,
@@ -154,18 +154,18 @@ function compare_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function compare_surfaces_cargs(
     params: CompareSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CompareSurfaces");
     cargs.push(
@@ -233,18 +233,18 @@ function compare_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function compare_surfaces_outputs(
     params: CompareSurfacesParameters,
     execution: Execution,
 ): CompareSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CompareSurfacesOutputs = {
         root: execution.outputFile("."),
         distance_output_file: ((params["file_prefix"] ?? null) !== null) ? execution.outputFile([(params["file_prefix"] ?? null), "_distance.txt"].join('')) : null,
@@ -254,22 +254,22 @@ function compare_surfaces_outputs(
 }
 
 
+/**
+ * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
+ */
 function compare_surfaces_execute(
     params: CompareSurfacesParameters,
     execution: Execution,
 ): CompareSurfacesOutputs {
-    /**
-     * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = compare_surfaces_cargs(params, execution)
     const ret = compare_surfaces_outputs(params, execution)
@@ -278,6 +278,32 @@ function compare_surfaces_execute(
 }
 
 
+/**
+ * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file File containing surface specification.
+ * @param hemisphere Specify the hemisphere being processed (left or right).
+ * @param volume_parent_1 Volume parent BRIK for first surface.
+ * @param volume_parent_2 Volume parent BRIK for second surface.
+ * @param file_prefix Prefix for distance and node color output files. Existing file will not be overwritten.
+ * @param one_node Output results for node index only. This option is for debugging.
+ * @param node_range Output results from node istart to node istop only. This option is for debugging.
+ * @param no_consistency_check Skip mesh orientation consistency check. This speeds up the start time so it is useful for debugging runs.
+ * @param no_volreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param no_transform Same as -novolreg.
+ * @param set_environment_variable Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param no_memory_trace Turn off memory tracing.
+ * @param yes_memory_trace Turn on memory tracing (default).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
+ */
 function compare_surfaces(
     spec_file: InputPathType,
     hemisphere: "L" | "R",
@@ -296,32 +322,6 @@ function compare_surfaces(
     yes_memory_trace: boolean = false,
     runner: Runner | null = null,
 ): CompareSurfacesOutputs {
-    /**
-     * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file File containing surface specification.
-     * @param hemisphere Specify the hemisphere being processed (left or right).
-     * @param volume_parent_1 Volume parent BRIK for first surface.
-     * @param volume_parent_2 Volume parent BRIK for second surface.
-     * @param file_prefix Prefix for distance and node color output files. Existing file will not be overwritten.
-     * @param one_node Output results for node index only. This option is for debugging.
-     * @param node_range Output results from node istart to node istop only. This option is for debugging.
-     * @param no_consistency_check Skip mesh orientation consistency check. This speeds up the start time so it is useful for debugging runs.
-     * @param no_volreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param no_transform Same as -novolreg.
-     * @param set_environment_variable Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param no_memory_trace Turn off memory tracing.
-     * @param yes_memory_trace Turn on memory tracing (default).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPARE_SURFACES_METADATA);
     const params = compare_surfaces_params(spec_file, hemisphere, volume_parent_1, volume_parent_2, file_prefix, one_node, node_range, no_consistency_check, no_volreg, no_transform, set_environment_variable, trace, extreme_trace, no_memory_trace, yes_memory_trace)
@@ -334,5 +334,8 @@ export {
       CompareSurfacesOutputs,
       CompareSurfacesParameters,
       compare_surfaces,
+      compare_surfaces_cargs,
+      compare_surfaces_execute,
+      compare_surfaces_outputs,
       compare_surfaces_params,
 };

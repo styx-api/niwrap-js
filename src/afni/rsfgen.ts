@@ -12,7 +12,7 @@ const RSFGEN_METADATA: Metadata = {
 
 
 interface RsfgenParameters {
-    "__STYXTYPE__": "RSFgen";
+    "@type": "afni.RSFgen";
     "length": number;
     "num_experimental_conditions": number;
     "block_length"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface RsfgenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "RSFgen": rsfgen_cargs,
+        "afni.RSFgen": rsfgen_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "RSFgen": rsfgen_outputs,
+        "afni.RSFgen": rsfgen_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface RsfgenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param length Length of time series.
+ * @param num_experimental_conditions Number of input stimuli (experimental conditions).
+ * @param block_length Block length for stimulus. Must specify stimulus index and length. Example: -nblock 1 5
+ * @param random_seed Random number seed.
+ * @param suppress_output_flag Flag to suppress screen output.
+ * @param single_file_flag Place stimulus functions into a single .1D file.
+ * @param single_column_flag Write stimulus functions as a single column of decimal integers.
+ * @param output_prefix Prefix for output .1D stimulus functions.
+ * @param num_reps Number of repetitions for stimulus.
+ * @param permutation_seed Stim label permutation random number seed.
+ * @param markov_file File containing the transition probability matrix.
+ * @param prob_zero Probability of a zero (i.e., null) state (default: 0).
+ * @param input_table Filename of column or table of numbers. All other input options (except -seed and -prefix) are ignored with this option.
+ *
+ * @returns Parameter dictionary
+ */
 function rsfgen_params(
     length: number,
     num_experimental_conditions: number,
@@ -95,27 +114,8 @@ function rsfgen_params(
     prob_zero: number | null = null,
     input_table: InputPathType | null = null,
 ): RsfgenParameters {
-    /**
-     * Build parameters.
-    
-     * @param length Length of time series.
-     * @param num_experimental_conditions Number of input stimuli (experimental conditions).
-     * @param block_length Block length for stimulus. Must specify stimulus index and length. Example: -nblock 1 5
-     * @param random_seed Random number seed.
-     * @param suppress_output_flag Flag to suppress screen output.
-     * @param single_file_flag Place stimulus functions into a single .1D file.
-     * @param single_column_flag Write stimulus functions as a single column of decimal integers.
-     * @param output_prefix Prefix for output .1D stimulus functions.
-     * @param num_reps Number of repetitions for stimulus.
-     * @param permutation_seed Stim label permutation random number seed.
-     * @param markov_file File containing the transition probability matrix.
-     * @param prob_zero Probability of a zero (i.e., null) state (default: 0).
-     * @param input_table Filename of column or table of numbers. All other input options (except -seed and -prefix) are ignored with this option.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "RSFgen" as const,
+        "@type": "afni.RSFgen" as const,
         "length": length,
         "num_experimental_conditions": num_experimental_conditions,
         "suppress_output_flag": suppress_output_flag,
@@ -150,18 +150,18 @@ function rsfgen_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rsfgen_cargs(
     params: RsfgenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("RSFgen");
     cargs.push(
@@ -233,18 +233,18 @@ function rsfgen_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rsfgen_outputs(
     params: RsfgenParameters,
     execution: Execution,
 ): RsfgenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RsfgenOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "1.1D"].join('')) : null,
@@ -253,22 +253,22 @@ function rsfgen_outputs(
 }
 
 
+/**
+ * Program to generate random stimulus functions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
+ */
 function rsfgen_execute(
     params: RsfgenParameters,
     execution: Execution,
 ): RsfgenOutputs {
-    /**
-     * Program to generate random stimulus functions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
-     */
     params = execution.params(params)
     const cargs = rsfgen_cargs(params, execution)
     const ret = rsfgen_outputs(params, execution)
@@ -277,6 +277,30 @@ function rsfgen_execute(
 }
 
 
+/**
+ * Program to generate random stimulus functions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param length Length of time series.
+ * @param num_experimental_conditions Number of input stimuli (experimental conditions).
+ * @param block_length Block length for stimulus. Must specify stimulus index and length. Example: -nblock 1 5
+ * @param random_seed Random number seed.
+ * @param suppress_output_flag Flag to suppress screen output.
+ * @param single_file_flag Place stimulus functions into a single .1D file.
+ * @param single_column_flag Write stimulus functions as a single column of decimal integers.
+ * @param output_prefix Prefix for output .1D stimulus functions.
+ * @param num_reps Number of repetitions for stimulus.
+ * @param permutation_seed Stim label permutation random number seed.
+ * @param markov_file File containing the transition probability matrix.
+ * @param prob_zero Probability of a zero (i.e., null) state (default: 0).
+ * @param input_table Filename of column or table of numbers. All other input options (except -seed and -prefix) are ignored with this option.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
+ */
 function rsfgen(
     length: number,
     num_experimental_conditions: number,
@@ -293,30 +317,6 @@ function rsfgen(
     input_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): RsfgenOutputs {
-    /**
-     * Program to generate random stimulus functions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param length Length of time series.
-     * @param num_experimental_conditions Number of input stimuli (experimental conditions).
-     * @param block_length Block length for stimulus. Must specify stimulus index and length. Example: -nblock 1 5
-     * @param random_seed Random number seed.
-     * @param suppress_output_flag Flag to suppress screen output.
-     * @param single_file_flag Place stimulus functions into a single .1D file.
-     * @param single_column_flag Write stimulus functions as a single column of decimal integers.
-     * @param output_prefix Prefix for output .1D stimulus functions.
-     * @param num_reps Number of repetitions for stimulus.
-     * @param permutation_seed Stim label permutation random number seed.
-     * @param markov_file File containing the transition probability matrix.
-     * @param prob_zero Probability of a zero (i.e., null) state (default: 0).
-     * @param input_table Filename of column or table of numbers. All other input options (except -seed and -prefix) are ignored with this option.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RSFGEN_METADATA);
     const params = rsfgen_params(length, num_experimental_conditions, block_length, random_seed, suppress_output_flag, single_file_flag, single_column_flag, output_prefix, num_reps, permutation_seed, markov_file, prob_zero, input_table)
@@ -329,5 +329,8 @@ export {
       RsfgenOutputs,
       RsfgenParameters,
       rsfgen,
+      rsfgen_cargs,
+      rsfgen_execute,
+      rsfgen_outputs,
       rsfgen_params,
 };

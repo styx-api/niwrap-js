@@ -12,7 +12,7 @@ const V__DIFF_TREE_METADATA: Metadata = {
 
 
 interface VDiffTreeParameters {
-    "__STYXTYPE__": "@diff.tree";
+    "@type": "afni.@diff.tree";
     "new_dir": string;
     "old_dir": string;
     "diff_opts"?: string | null | undefined;
@@ -34,33 +34,33 @@ interface VDiffTreeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@diff.tree": v__diff_tree_cargs,
+        "afni.@diff.tree": v__diff_tree_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -80,6 +80,30 @@ interface VDiffTreeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param new_dir New directory to compare
+ * @param old_dir Old directory to compare
+ * @param diff_opts Apply OPTS as options in diff commands
+ * @param ignore_append Append to ignore_list (list in quotes)
+ * @param ia Short for -ignore_append
+ * @param ignore_list Create new ignore_list (list in quotes)
+ * @param il Short for -ignore_list
+ * @param ignore_missing Only compare overlapping files, if different files, fail.
+ * @param no_diffs Only compare existence of files
+ * @param quiet Only list files with diffs
+ * @param save Save actual file differences (txt and pdf)
+ * @param show Show actual file differences
+ * @param show_list_comp Show any pairwise differences in file lists (terminate after showing comparison)
+ * @param skip_data Skip binary diff of select data files (.BRIK, .dcm, .BRIK.gz)
+ * @param verb Set verbosity level (0,1,2) (default 1)
+ * @param diff_prog Use PROG to show diffs (e.g. xxdiff, meld)
+ * @param xxdiff Use xxdiff to show diffs
+ * @param x_option Implies -xxdiff -ignore_missing
+ *
+ * @returns Parameter dictionary
+ */
 function v__diff_tree_params(
     new_dir: string,
     old_dir: string,
@@ -100,32 +124,8 @@ function v__diff_tree_params(
     xxdiff: boolean = false,
     x_option: boolean = false,
 ): VDiffTreeParameters {
-    /**
-     * Build parameters.
-    
-     * @param new_dir New directory to compare
-     * @param old_dir Old directory to compare
-     * @param diff_opts Apply OPTS as options in diff commands
-     * @param ignore_append Append to ignore_list (list in quotes)
-     * @param ia Short for -ignore_append
-     * @param ignore_list Create new ignore_list (list in quotes)
-     * @param il Short for -ignore_list
-     * @param ignore_missing Only compare overlapping files, if different files, fail.
-     * @param no_diffs Only compare existence of files
-     * @param quiet Only list files with diffs
-     * @param save Save actual file differences (txt and pdf)
-     * @param show Show actual file differences
-     * @param show_list_comp Show any pairwise differences in file lists (terminate after showing comparison)
-     * @param skip_data Skip binary diff of select data files (.BRIK, .dcm, .BRIK.gz)
-     * @param verb Set verbosity level (0,1,2) (default 1)
-     * @param diff_prog Use PROG to show diffs (e.g. xxdiff, meld)
-     * @param xxdiff Use xxdiff to show diffs
-     * @param x_option Implies -xxdiff -ignore_missing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@diff.tree" as const,
+        "@type": "afni.@diff.tree" as const,
         "new_dir": new_dir,
         "old_dir": old_dir,
         "ignore_missing": ignore_missing,
@@ -163,18 +163,18 @@ function v__diff_tree_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__diff_tree_cargs(
     params: VDiffTreeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@diff.tree");
     cargs.push((params["new_dir"] ?? null));
@@ -252,18 +252,18 @@ function v__diff_tree_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__diff_tree_outputs(
     params: VDiffTreeParameters,
     execution: Execution,
 ): VDiffTreeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDiffTreeOutputs = {
         root: execution.outputFile("."),
     };
@@ -271,22 +271,22 @@ function v__diff_tree_outputs(
 }
 
 
+/**
+ * Show file differences between 2 directories.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
+ */
 function v__diff_tree_execute(
     params: VDiffTreeParameters,
     execution: Execution,
 ): VDiffTreeOutputs {
-    /**
-     * Show file differences between 2 directories.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__diff_tree_cargs(params, execution)
     const ret = v__diff_tree_outputs(params, execution)
@@ -295,6 +295,35 @@ function v__diff_tree_execute(
 }
 
 
+/**
+ * Show file differences between 2 directories.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param new_dir New directory to compare
+ * @param old_dir Old directory to compare
+ * @param diff_opts Apply OPTS as options in diff commands
+ * @param ignore_append Append to ignore_list (list in quotes)
+ * @param ia Short for -ignore_append
+ * @param ignore_list Create new ignore_list (list in quotes)
+ * @param il Short for -ignore_list
+ * @param ignore_missing Only compare overlapping files, if different files, fail.
+ * @param no_diffs Only compare existence of files
+ * @param quiet Only list files with diffs
+ * @param save Save actual file differences (txt and pdf)
+ * @param show Show actual file differences
+ * @param show_list_comp Show any pairwise differences in file lists (terminate after showing comparison)
+ * @param skip_data Skip binary diff of select data files (.BRIK, .dcm, .BRIK.gz)
+ * @param verb Set verbosity level (0,1,2) (default 1)
+ * @param diff_prog Use PROG to show diffs (e.g. xxdiff, meld)
+ * @param xxdiff Use xxdiff to show diffs
+ * @param x_option Implies -xxdiff -ignore_missing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
+ */
 function v__diff_tree(
     new_dir: string,
     old_dir: string,
@@ -316,35 +345,6 @@ function v__diff_tree(
     x_option: boolean = false,
     runner: Runner | null = null,
 ): VDiffTreeOutputs {
-    /**
-     * Show file differences between 2 directories.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param new_dir New directory to compare
-     * @param old_dir Old directory to compare
-     * @param diff_opts Apply OPTS as options in diff commands
-     * @param ignore_append Append to ignore_list (list in quotes)
-     * @param ia Short for -ignore_append
-     * @param ignore_list Create new ignore_list (list in quotes)
-     * @param il Short for -ignore_list
-     * @param ignore_missing Only compare overlapping files, if different files, fail.
-     * @param no_diffs Only compare existence of files
-     * @param quiet Only list files with diffs
-     * @param save Save actual file differences (txt and pdf)
-     * @param show Show actual file differences
-     * @param show_list_comp Show any pairwise differences in file lists (terminate after showing comparison)
-     * @param skip_data Skip binary diff of select data files (.BRIK, .dcm, .BRIK.gz)
-     * @param verb Set verbosity level (0,1,2) (default 1)
-     * @param diff_prog Use PROG to show diffs (e.g. xxdiff, meld)
-     * @param xxdiff Use xxdiff to show diffs
-     * @param x_option Implies -xxdiff -ignore_missing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DIFF_TREE_METADATA);
     const params = v__diff_tree_params(new_dir, old_dir, diff_opts, ignore_append, ia, ignore_list, il, ignore_missing, no_diffs, quiet, save, show, show_list_comp, skip_data, verb, diff_prog, xxdiff, x_option)
@@ -357,5 +357,8 @@ export {
       VDiffTreeParameters,
       V__DIFF_TREE_METADATA,
       v__diff_tree,
+      v__diff_tree_cargs,
+      v__diff_tree_execute,
+      v__diff_tree_outputs,
       v__diff_tree_params,
 };

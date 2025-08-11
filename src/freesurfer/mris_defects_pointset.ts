@@ -12,7 +12,7 @@ const MRIS_DEFECTS_POINTSET_METADATA: Metadata = {
 
 
 interface MrisDefectsPointsetParameters {
-    "__STYXTYPE__": "mris_defects_pointset";
+    "@type": "freesurfer.mris_defects_pointset";
     "surface": InputPathType;
     "defects": InputPathType;
     "out": string;
@@ -21,35 +21,35 @@ interface MrisDefectsPointsetParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_defects_pointset": mris_defects_pointset_cargs,
+        "freesurfer.mris_defects_pointset": mris_defects_pointset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_defects_pointset": mris_defects_pointset_outputs,
+        "freesurfer.mris_defects_pointset": mris_defects_pointset_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MrisDefectsPointsetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Input surface
+ * @param defects Input defect label (must match the surface dimensions)
+ * @param out Output pointset file (json)
+ * @param label Restrict pointset to this label (must be in input surface space)
+ * @param control Save output in old control point format (v6 compatible)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_defects_pointset_params(
     surface: InputPathType,
     defects: InputPathType,
@@ -79,19 +90,8 @@ function mris_defects_pointset_params(
     label: InputPathType | null = null,
     control: boolean = false,
 ): MrisDefectsPointsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Input surface
-     * @param defects Input defect label (must match the surface dimensions)
-     * @param out Output pointset file (json)
-     * @param label Restrict pointset to this label (must be in input surface space)
-     * @param control Save output in old control point format (v6 compatible)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_defects_pointset" as const,
+        "@type": "freesurfer.mris_defects_pointset" as const,
         "surface": surface,
         "defects": defects,
         "out": out,
@@ -104,18 +104,18 @@ function mris_defects_pointset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_defects_pointset_cargs(
     params: MrisDefectsPointsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_defects_pointset");
     cargs.push(
@@ -143,18 +143,18 @@ function mris_defects_pointset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_defects_pointset_outputs(
     params: MrisDefectsPointsetParameters,
     execution: Execution,
 ): MrisDefectsPointsetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisDefectsPointsetOutputs = {
         root: execution.outputFile("."),
         pointset_output: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -163,22 +163,22 @@ function mris_defects_pointset_outputs(
 }
 
 
+/**
+ * Produces a pointset file containing the locations of each topological defect in a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
+ */
 function mris_defects_pointset_execute(
     params: MrisDefectsPointsetParameters,
     execution: Execution,
 ): MrisDefectsPointsetOutputs {
-    /**
-     * Produces a pointset file containing the locations of each topological defect in a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_defects_pointset_cargs(params, execution)
     const ret = mris_defects_pointset_outputs(params, execution)
@@ -187,6 +187,22 @@ function mris_defects_pointset_execute(
 }
 
 
+/**
+ * Produces a pointset file containing the locations of each topological defect in a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Input surface
+ * @param defects Input defect label (must match the surface dimensions)
+ * @param out Output pointset file (json)
+ * @param label Restrict pointset to this label (must be in input surface space)
+ * @param control Save output in old control point format (v6 compatible)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
+ */
 function mris_defects_pointset(
     surface: InputPathType,
     defects: InputPathType,
@@ -195,22 +211,6 @@ function mris_defects_pointset(
     control: boolean = false,
     runner: Runner | null = null,
 ): MrisDefectsPointsetOutputs {
-    /**
-     * Produces a pointset file containing the locations of each topological defect in a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Input surface
-     * @param defects Input defect label (must match the surface dimensions)
-     * @param out Output pointset file (json)
-     * @param label Restrict pointset to this label (must be in input surface space)
-     * @param control Save output in old control point format (v6 compatible)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_DEFECTS_POINTSET_METADATA);
     const params = mris_defects_pointset_params(surface, defects, out, label, control)
@@ -223,5 +223,8 @@ export {
       MrisDefectsPointsetOutputs,
       MrisDefectsPointsetParameters,
       mris_defects_pointset,
+      mris_defects_pointset_cargs,
+      mris_defects_pointset_execute,
+      mris_defects_pointset_outputs,
       mris_defects_pointset_params,
 };

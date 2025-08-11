@@ -12,7 +12,7 @@ const KELLY_KAPOWSKI_METADATA: Metadata = {
 
 
 interface KellyKapowskiParameters {
-    "__STYXTYPE__": "KellyKapowski";
+    "@type": "ants.KellyKapowski";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "segmentation_image"?: InputPathType | null | undefined;
     "gray_matter_probability_image"?: InputPathType | null | undefined;
@@ -34,35 +34,35 @@ interface KellyKapowskiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "KellyKapowski": kelly_kapowski_cargs,
+        "ants.KellyKapowski": kelly_kapowski_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "KellyKapowski": kelly_kapowski_outputs,
+        "ants.KellyKapowski": kelly_kapowski_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface KellyKapowskiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output The output consists of a thickness map defined in the segmented gray matter.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, DiReCT tries to infer the dimensionality from the input image.
+ * @param segmentation_image A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
+ * @param gray_matter_probability_image In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+ * @param white_matter_probability_image In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+ * @param convergence Convergence is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold.
+ * @param thickness_prior_estimate Provides a prior constraint on the final thickness measurement. Default = 10 mm.
+ * @param thickness_prior_image An image containing spatially varying prior thickness values.
+ * @param gradient_step Gradient step size for the optimization. Default = 0.025.
+ * @param smoothing_variance Defines the Gaussian smoothing of the hit and total images. Default = 1.0 mm.
+ * @param smoothing_velocity_field_parameter Defines the Gaussian smoothing of the velocity field (default = 1.5 voxels). If the b-spline smoothing option is chosen, then this defines the isotropic mesh spacing for the smoothing spline (default = 15 mm).
+ * @param use_bspline_smoothing Sets the option for B-spline smoothing of the velocity field. Default = false.
+ * @param use_masked_smoothing Sets the option for masked-based smoothing of the velocity field. Default = false.
+ * @param time_points Time points for irregularly spaced time samples and time-variance with which to compute distance metric.
+ * @param restrict_deformation Restrict the last dimension's deformation. Meant for use with multiple time points. Default = false.
+ * @param number_of_integration_points Number of compositions of the diffeomorphism per iteration. Default = 10.
+ * @param maximum_number_of_invert_displacement_field_iterations Maximum number of iterations for estimating the invert displacement field. Default = 20.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function kelly_kapowski_params(
     output: string,
     image_dimensionality: 2 | 3 | null = null,
@@ -105,32 +129,8 @@ function kelly_kapowski_params(
     maximum_number_of_invert_displacement_field_iterations: number | null = null,
     verbose: 0 | 1 | null = null,
 ): KellyKapowskiParameters {
-    /**
-     * Build parameters.
-    
-     * @param output The output consists of a thickness map defined in the segmented gray matter.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, DiReCT tries to infer the dimensionality from the input image.
-     * @param segmentation_image A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
-     * @param gray_matter_probability_image In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-     * @param white_matter_probability_image In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-     * @param convergence Convergence is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold.
-     * @param thickness_prior_estimate Provides a prior constraint on the final thickness measurement. Default = 10 mm.
-     * @param thickness_prior_image An image containing spatially varying prior thickness values.
-     * @param gradient_step Gradient step size for the optimization. Default = 0.025.
-     * @param smoothing_variance Defines the Gaussian smoothing of the hit and total images. Default = 1.0 mm.
-     * @param smoothing_velocity_field_parameter Defines the Gaussian smoothing of the velocity field (default = 1.5 voxels). If the b-spline smoothing option is chosen, then this defines the isotropic mesh spacing for the smoothing spline (default = 15 mm).
-     * @param use_bspline_smoothing Sets the option for B-spline smoothing of the velocity field. Default = false.
-     * @param use_masked_smoothing Sets the option for masked-based smoothing of the velocity field. Default = false.
-     * @param time_points Time points for irregularly spaced time samples and time-variance with which to compute distance metric.
-     * @param restrict_deformation Restrict the last dimension's deformation. Meant for use with multiple time points. Default = false.
-     * @param number_of_integration_points Number of compositions of the diffeomorphism per iteration. Default = 10.
-     * @param maximum_number_of_invert_displacement_field_iterations Maximum number of iterations for estimating the invert displacement field. Default = 20.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "KellyKapowski" as const,
+        "@type": "ants.KellyKapowski" as const,
         "output": output,
     };
     if (image_dimensionality !== null) {
@@ -188,18 +188,18 @@ function kelly_kapowski_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function kelly_kapowski_cargs(
     params: KellyKapowskiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("KellyKapowski");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -312,18 +312,18 @@ function kelly_kapowski_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function kelly_kapowski_outputs(
     params: KellyKapowskiParameters,
     execution: Execution,
 ): KellyKapowskiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: KellyKapowskiOutputs = {
         root: execution.outputFile("."),
         thickness_map: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -332,22 +332,22 @@ function kelly_kapowski_outputs(
 }
 
 
+/**
+ * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
+ */
 function kelly_kapowski_execute(
     params: KellyKapowskiParameters,
     execution: Execution,
 ): KellyKapowskiOutputs {
-    /**
-     * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
-     */
     params = execution.params(params)
     const cargs = kelly_kapowski_cargs(params, execution)
     const ret = kelly_kapowski_outputs(params, execution)
@@ -356,6 +356,35 @@ function kelly_kapowski_execute(
 }
 
 
+/**
+ * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param output The output consists of a thickness map defined in the segmented gray matter.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, DiReCT tries to infer the dimensionality from the input image.
+ * @param segmentation_image A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
+ * @param gray_matter_probability_image In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+ * @param white_matter_probability_image In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
+ * @param convergence Convergence is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold.
+ * @param thickness_prior_estimate Provides a prior constraint on the final thickness measurement. Default = 10 mm.
+ * @param thickness_prior_image An image containing spatially varying prior thickness values.
+ * @param gradient_step Gradient step size for the optimization. Default = 0.025.
+ * @param smoothing_variance Defines the Gaussian smoothing of the hit and total images. Default = 1.0 mm.
+ * @param smoothing_velocity_field_parameter Defines the Gaussian smoothing of the velocity field (default = 1.5 voxels). If the b-spline smoothing option is chosen, then this defines the isotropic mesh spacing for the smoothing spline (default = 15 mm).
+ * @param use_bspline_smoothing Sets the option for B-spline smoothing of the velocity field. Default = false.
+ * @param use_masked_smoothing Sets the option for masked-based smoothing of the velocity field. Default = false.
+ * @param time_points Time points for irregularly spaced time samples and time-variance with which to compute distance metric.
+ * @param restrict_deformation Restrict the last dimension's deformation. Meant for use with multiple time points. Default = false.
+ * @param number_of_integration_points Number of compositions of the diffeomorphism per iteration. Default = 10.
+ * @param maximum_number_of_invert_displacement_field_iterations Maximum number of iterations for estimating the invert displacement field. Default = 20.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
+ */
 function kelly_kapowski(
     output: string,
     image_dimensionality: 2 | 3 | null = null,
@@ -377,35 +406,6 @@ function kelly_kapowski(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): KellyKapowskiOutputs {
-    /**
-     * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param output The output consists of a thickness map defined in the segmented gray matter.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, DiReCT tries to infer the dimensionality from the input image.
-     * @param segmentation_image A segmentation image must be supplied labeling the gray and white matters. Default values = 2 and 3, respectively.
-     * @param gray_matter_probability_image In addition to the segmentation image, a gray matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-     * @param white_matter_probability_image In addition to the segmentation image, a white matter probability image can be used. If no such image is supplied, one is created using the segmentation image and a variance of 1.0 mm.
-     * @param convergence Convergence is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold.
-     * @param thickness_prior_estimate Provides a prior constraint on the final thickness measurement. Default = 10 mm.
-     * @param thickness_prior_image An image containing spatially varying prior thickness values.
-     * @param gradient_step Gradient step size for the optimization. Default = 0.025.
-     * @param smoothing_variance Defines the Gaussian smoothing of the hit and total images. Default = 1.0 mm.
-     * @param smoothing_velocity_field_parameter Defines the Gaussian smoothing of the velocity field (default = 1.5 voxels). If the b-spline smoothing option is chosen, then this defines the isotropic mesh spacing for the smoothing spline (default = 15 mm).
-     * @param use_bspline_smoothing Sets the option for B-spline smoothing of the velocity field. Default = false.
-     * @param use_masked_smoothing Sets the option for masked-based smoothing of the velocity field. Default = false.
-     * @param time_points Time points for irregularly spaced time samples and time-variance with which to compute distance metric.
-     * @param restrict_deformation Restrict the last dimension's deformation. Meant for use with multiple time points. Default = false.
-     * @param number_of_integration_points Number of compositions of the diffeomorphism per iteration. Default = 10.
-     * @param maximum_number_of_invert_displacement_field_iterations Maximum number of iterations for estimating the invert displacement field. Default = 20.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(KELLY_KAPOWSKI_METADATA);
     const params = kelly_kapowski_params(output, image_dimensionality, segmentation_image, gray_matter_probability_image, white_matter_probability_image, convergence, thickness_prior_estimate, thickness_prior_image, gradient_step, smoothing_variance, smoothing_velocity_field_parameter, use_bspline_smoothing, use_masked_smoothing, time_points, restrict_deformation, number_of_integration_points, maximum_number_of_invert_displacement_field_iterations, verbose)
@@ -418,5 +418,8 @@ export {
       KellyKapowskiOutputs,
       KellyKapowskiParameters,
       kelly_kapowski,
+      kelly_kapowski_cargs,
+      kelly_kapowski_execute,
+      kelly_kapowski_outputs,
       kelly_kapowski_params,
 };

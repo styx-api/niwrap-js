@@ -12,7 +12,7 @@ const CUTOFFCALC_METADATA: Metadata = {
 
 
 interface CutoffcalcParameters {
-    "__STYXTYPE__": "cutoffcalc";
+    "@type": "fsl.cutoffcalc";
     "input_design": InputPathType;
     "threshold"?: number | null | undefined;
     "tr"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface CutoffcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cutoffcalc": cutoffcalc_cargs,
+        "fsl.cutoffcalc": cutoffcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cutoffcalc": cutoffcalc_outputs,
+        "fsl.cutoffcalc": cutoffcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface CutoffcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_design Input design matrix (e.g. design.mat)
+ * @param threshold Threshold for retained variance (default=0.9)
+ * @param tr Time between successive data points (default=3.0s)
+ * @param lower_limit Lower limit on period due to autocorr estimation (default=90s)
+ * @param example_sigma Example sigma (in sec) to produce output called example_filt.mtx
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_flag Switch on debugging messages
+ *
+ * @returns Parameter dictionary
+ */
 function cutoffcalc_params(
     input_design: InputPathType,
     threshold: number | null = 0.9,
@@ -83,21 +96,8 @@ function cutoffcalc_params(
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
 ): CutoffcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_design Input design matrix (e.g. design.mat)
-     * @param threshold Threshold for retained variance (default=0.9)
-     * @param tr Time between successive data points (default=3.0s)
-     * @param lower_limit Lower limit on period due to autocorr estimation (default=90s)
-     * @param example_sigma Example sigma (in sec) to produce output called example_filt.mtx
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_flag Switch on debugging messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cutoffcalc" as const,
+        "@type": "fsl.cutoffcalc" as const,
         "input_design": input_design,
         "verbose_flag": verbose_flag,
         "debug_flag": debug_flag,
@@ -118,18 +118,18 @@ function cutoffcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cutoffcalc_cargs(
     params: CutoffcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cutoffcalc");
     cargs.push(["-i ", execution.inputFile((params["input_design"] ?? null))].join(''));
@@ -155,18 +155,18 @@ function cutoffcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cutoffcalc_outputs(
     params: CutoffcalcParameters,
     execution: Execution,
 ): CutoffcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CutoffcalcOutputs = {
         root: execution.outputFile("."),
         example_output: execution.outputFile(["example_filt.mtx"].join('')),
@@ -175,22 +175,22 @@ function cutoffcalc_outputs(
 }
 
 
+/**
+ * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
+ */
 function cutoffcalc_execute(
     params: CutoffcalcParameters,
     execution: Execution,
 ): CutoffcalcOutputs {
-    /**
-     * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = cutoffcalc_cargs(params, execution)
     const ret = cutoffcalc_outputs(params, execution)
@@ -199,6 +199,24 @@ function cutoffcalc_execute(
 }
 
 
+/**
+ * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_design Input design matrix (e.g. design.mat)
+ * @param threshold Threshold for retained variance (default=0.9)
+ * @param tr Time between successive data points (default=3.0s)
+ * @param lower_limit Lower limit on period due to autocorr estimation (default=90s)
+ * @param example_sigma Example sigma (in sec) to produce output called example_filt.mtx
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_flag Switch on debugging messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
+ */
 function cutoffcalc(
     input_design: InputPathType,
     threshold: number | null = 0.9,
@@ -209,24 +227,6 @@ function cutoffcalc(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): CutoffcalcOutputs {
-    /**
-     * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_design Input design matrix (e.g. design.mat)
-     * @param threshold Threshold for retained variance (default=0.9)
-     * @param tr Time between successive data points (default=3.0s)
-     * @param lower_limit Lower limit on period due to autocorr estimation (default=90s)
-     * @param example_sigma Example sigma (in sec) to produce output called example_filt.mtx
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_flag Switch on debugging messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CUTOFFCALC_METADATA);
     const params = cutoffcalc_params(input_design, threshold, tr, lower_limit, example_sigma, verbose_flag, debug_flag)
@@ -239,5 +239,8 @@ export {
       CutoffcalcOutputs,
       CutoffcalcParameters,
       cutoffcalc,
+      cutoffcalc_cargs,
+      cutoffcalc_execute,
+      cutoffcalc_outputs,
       cutoffcalc_params,
 };

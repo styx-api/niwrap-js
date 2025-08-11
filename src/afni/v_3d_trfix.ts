@@ -12,7 +12,7 @@ const V_3D_TRFIX_METADATA: Metadata = {
 
 
 interface V3dTrfixParameters {
-    "__STYXTYPE__": "3dTRfix";
+    "@type": "afni.3dTRfix";
     "input_file": InputPathType;
     "tr_list"?: InputPathType | null | undefined;
     "time_list"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface V3dTrfixParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTRfix": v_3d_trfix_cargs,
+        "afni.3dTRfix": v_3d_trfix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTRfix": v_3d_trfix_outputs,
+        "afni.3dTRfix": v_3d_trfix_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface V3dTrfixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input dataset
+ * @param prefix Prefix name for output dataset
+ * @param tr_list File of time gaps between sub-bricks in input dataset
+ * @param time_list File with times at each sub-brick in the input dataset
+ * @param output_tr TR value for output dataset (in seconds)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_trfix_params(
     input_file: InputPathType,
     prefix: string,
@@ -83,19 +94,8 @@ function v_3d_trfix_params(
     time_list: InputPathType | null = null,
     output_tr: number | null = null,
 ): V3dTrfixParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input dataset
-     * @param prefix Prefix name for output dataset
-     * @param tr_list File of time gaps between sub-bricks in input dataset
-     * @param time_list File with times at each sub-brick in the input dataset
-     * @param output_tr TR value for output dataset (in seconds)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTRfix" as const,
+        "@type": "afni.3dTRfix" as const,
         "input_file": input_file,
         "prefix": prefix,
     };
@@ -112,18 +112,18 @@ function v_3d_trfix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_trfix_cargs(
     params: V3dTrfixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTRfix");
     cargs.push(
@@ -156,18 +156,18 @@ function v_3d_trfix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_trfix_outputs(
     params: V3dTrfixParameters,
     execution: Execution,
 ): V3dTrfixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTrfixOutputs = {
         root: execution.outputFile("."),
         output_file_head: execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')),
@@ -177,22 +177,22 @@ function v_3d_trfix_outputs(
 }
 
 
+/**
+ * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
+ */
 function v_3d_trfix_execute(
     params: V3dTrfixParameters,
     execution: Execution,
 ): V3dTrfixOutputs {
-    /**
-     * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_trfix_cargs(params, execution)
     const ret = v_3d_trfix_outputs(params, execution)
@@ -201,6 +201,22 @@ function v_3d_trfix_execute(
 }
 
 
+/**
+ * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input dataset
+ * @param prefix Prefix name for output dataset
+ * @param tr_list File of time gaps between sub-bricks in input dataset
+ * @param time_list File with times at each sub-brick in the input dataset
+ * @param output_tr TR value for output dataset (in seconds)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
+ */
 function v_3d_trfix(
     input_file: InputPathType,
     prefix: string,
@@ -209,22 +225,6 @@ function v_3d_trfix(
     output_tr: number | null = null,
     runner: Runner | null = null,
 ): V3dTrfixOutputs {
-    /**
-     * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input dataset
-     * @param prefix Prefix name for output dataset
-     * @param tr_list File of time gaps between sub-bricks in input dataset
-     * @param time_list File with times at each sub-brick in the input dataset
-     * @param output_tr TR value for output dataset (in seconds)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TRFIX_METADATA);
     const params = v_3d_trfix_params(input_file, prefix, tr_list, time_list, output_tr)
@@ -237,5 +237,8 @@ export {
       V3dTrfixParameters,
       V_3D_TRFIX_METADATA,
       v_3d_trfix,
+      v_3d_trfix_cargs,
+      v_3d_trfix_execute,
+      v_3d_trfix_outputs,
       v_3d_trfix_params,
 };

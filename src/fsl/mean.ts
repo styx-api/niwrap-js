@@ -12,7 +12,7 @@ const MEAN_METADATA: Metadata = {
 
 
 interface MeanParameters {
-    "__STYXTYPE__": "mean";
+    "@type": "fsl.mean";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "verbose_flag": boolean;
@@ -35,35 +35,35 @@ interface MeanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mean": mean_cargs,
+        "fsl.mean": mean_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mean": mean_outputs,
+        "fsl.mean": mean_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,31 @@ interface MeanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile Regressor data file
+ * @param maskfile Mask file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param timing_flag Turn timing on
+ * @param log_dir Log directory (default is logdir)
+ * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param inference_tech Inference technique: mcmc or laplace (default is mcmc)
+ * @param num_jumps Number of jumps to be made by MCMC (default is 5000)
+ * @param num_burnin Number of jumps at start of MCMC to be discarded (default is 500)
+ * @param num_sample_every Number of jumps for each sample (MCMC) (default is 1)
+ * @param num_update_proposalevery Number of jumps for each update to the proposal density std (MCMC) (default is 40)
+ * @param acceptance_rate Acceptance rate to aim for (MCMC) (default is 0.6)
+ * @param seed Seed for pseudo random number generator
+ * @param error_precision Value to fix error precision to (default is -1, which means error precision is not fixed)
+ * @param noamp_flag Turn off Analytical Marginalisation of error Precision
+ * @param prior_mean Prior mean
+ * @param prior_std Prior standard deviation
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function mean_params(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -107,33 +132,8 @@ function mean_params(
     prior_std: number | null = null,
     help_flag: boolean = false,
 ): MeanParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile Regressor data file
-     * @param maskfile Mask file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param timing_flag Turn timing on
-     * @param log_dir Log directory (default is logdir)
-     * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param inference_tech Inference technique: mcmc or laplace (default is mcmc)
-     * @param num_jumps Number of jumps to be made by MCMC (default is 5000)
-     * @param num_burnin Number of jumps at start of MCMC to be discarded (default is 500)
-     * @param num_sample_every Number of jumps for each sample (MCMC) (default is 1)
-     * @param num_update_proposalevery Number of jumps for each update to the proposal density std (MCMC) (default is 40)
-     * @param acceptance_rate Acceptance rate to aim for (MCMC) (default is 0.6)
-     * @param seed Seed for pseudo random number generator
-     * @param error_precision Value to fix error precision to (default is -1, which means error precision is not fixed)
-     * @param noamp_flag Turn off Analytical Marginalisation of error Precision
-     * @param prior_mean Prior mean
-     * @param prior_std Prior standard deviation
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mean" as const,
+        "@type": "fsl.mean" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "verbose_flag": verbose_flag,
@@ -182,18 +182,18 @@ function mean_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mean_cargs(
     params: MeanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mean");
     cargs.push(
@@ -295,18 +295,18 @@ function mean_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mean_outputs(
     params: MeanParameters,
     execution: Execution,
 ): MeanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MeanOutputs = {
         root: execution.outputFile("."),
         output_log: execution.outputFile(["logdir/mean_output.txt"].join('')),
@@ -315,22 +315,22 @@ function mean_outputs(
 }
 
 
+/**
+ * Diagnostic tool for analyzing and computing mean values for FSL data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MeanOutputs`).
+ */
 function mean_execute(
     params: MeanParameters,
     execution: Execution,
 ): MeanOutputs {
-    /**
-     * Diagnostic tool for analyzing and computing mean values for FSL data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MeanOutputs`).
-     */
     params = execution.params(params)
     const cargs = mean_cargs(params, execution)
     const ret = mean_outputs(params, execution)
@@ -339,6 +339,36 @@ function mean_execute(
 }
 
 
+/**
+ * Diagnostic tool for analyzing and computing mean values for FSL data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile Regressor data file
+ * @param maskfile Mask file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param timing_flag Turn timing on
+ * @param log_dir Log directory (default is logdir)
+ * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param inference_tech Inference technique: mcmc or laplace (default is mcmc)
+ * @param num_jumps Number of jumps to be made by MCMC (default is 5000)
+ * @param num_burnin Number of jumps at start of MCMC to be discarded (default is 500)
+ * @param num_sample_every Number of jumps for each sample (MCMC) (default is 1)
+ * @param num_update_proposalevery Number of jumps for each update to the proposal density std (MCMC) (default is 40)
+ * @param acceptance_rate Acceptance rate to aim for (MCMC) (default is 0.6)
+ * @param seed Seed for pseudo random number generator
+ * @param error_precision Value to fix error precision to (default is -1, which means error precision is not fixed)
+ * @param noamp_flag Turn off Analytical Marginalisation of error Precision
+ * @param prior_mean Prior mean
+ * @param prior_std Prior standard deviation
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MeanOutputs`).
+ */
 function mean(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -361,36 +391,6 @@ function mean(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MeanOutputs {
-    /**
-     * Diagnostic tool for analyzing and computing mean values for FSL data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile Regressor data file
-     * @param maskfile Mask file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param timing_flag Turn timing on
-     * @param log_dir Log directory (default is logdir)
-     * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param inference_tech Inference technique: mcmc or laplace (default is mcmc)
-     * @param num_jumps Number of jumps to be made by MCMC (default is 5000)
-     * @param num_burnin Number of jumps at start of MCMC to be discarded (default is 500)
-     * @param num_sample_every Number of jumps for each sample (MCMC) (default is 1)
-     * @param num_update_proposalevery Number of jumps for each update to the proposal density std (MCMC) (default is 40)
-     * @param acceptance_rate Acceptance rate to aim for (MCMC) (default is 0.6)
-     * @param seed Seed for pseudo random number generator
-     * @param error_precision Value to fix error precision to (default is -1, which means error precision is not fixed)
-     * @param noamp_flag Turn off Analytical Marginalisation of error Precision
-     * @param prior_mean Prior mean
-     * @param prior_std Prior standard deviation
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MeanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MEAN_METADATA);
     const params = mean_params(datafile, maskfile, verbose_flag, debug_level, timing_flag, log_dir, forcedir_flag, inference_tech, num_jumps, num_burnin, num_sample_every, num_update_proposalevery, acceptance_rate, seed, error_precision, noamp_flag, prior_mean, prior_std, help_flag)
@@ -403,5 +403,8 @@ export {
       MeanOutputs,
       MeanParameters,
       mean,
+      mean_cargs,
+      mean_execute,
+      mean_outputs,
       mean_params,
 };

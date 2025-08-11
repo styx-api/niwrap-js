@@ -12,7 +12,7 @@ const V_3D_NWARP_CAT_METADATA: Metadata = {
 
 
 interface V3dNwarpCatParameters {
-    "__STYXTYPE__": "3dNwarpCat";
+    "@type": "afni.3dNwarpCat";
     "interpolation"?: string | null | undefined;
     "verbosity": boolean;
     "output_prefix": string;
@@ -25,35 +25,35 @@ interface V3dNwarpCatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNwarpCat": v_3d_nwarp_cat_cargs,
+        "afni.3dNwarpCat": v_3d_nwarp_cat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNwarpCat": v_3d_nwarp_cat_outputs,
+        "afni.3dNwarpCat": v_3d_nwarp_cat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dNwarpCatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_prefix Prefix name for the output dataset that holds the warp.
+ * @param warp1 Specify the first warp.
+ * @param warp2 Specify the second warp.
+ * @param interpolation Interpolation mode: linear, quintic, or wsinc5 (default).
+ * @param verbosity Print various fun messages during execution.
+ * @param space_marker Attach string 'sss' to the output dataset as its atlas space marker.
+ * @param additional_warps Additional warp files.
+ * @param invert_final_warp Invert the final warp before output.
+ * @param extra_padding Pad the nonlinear warps by 'PP' voxels in all directions.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nwarp_cat_params(
     output_prefix: string,
     warp1: InputPathType,
@@ -91,23 +106,8 @@ function v_3d_nwarp_cat_params(
     invert_final_warp: boolean = false,
     extra_padding: number | null = null,
 ): V3dNwarpCatParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_prefix Prefix name for the output dataset that holds the warp.
-     * @param warp1 Specify the first warp.
-     * @param warp2 Specify the second warp.
-     * @param interpolation Interpolation mode: linear, quintic, or wsinc5 (default).
-     * @param verbosity Print various fun messages during execution.
-     * @param space_marker Attach string 'sss' to the output dataset as its atlas space marker.
-     * @param additional_warps Additional warp files.
-     * @param invert_final_warp Invert the final warp before output.
-     * @param extra_padding Pad the nonlinear warps by 'PP' voxels in all directions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNwarpCat" as const,
+        "@type": "afni.3dNwarpCat" as const,
         "verbosity": verbosity,
         "output_prefix": output_prefix,
         "warp1": warp1,
@@ -130,18 +130,18 @@ function v_3d_nwarp_cat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nwarp_cat_cargs(
     params: V3dNwarpCatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNwarpCat");
     if ((params["interpolation"] ?? null) !== null) {
@@ -187,18 +187,18 @@ function v_3d_nwarp_cat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nwarp_cat_outputs(
     params: V3dNwarpCatParameters,
     execution: Execution,
 ): V3dNwarpCatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNwarpCatOutputs = {
         root: execution.outputFile("."),
         output_matrix: execution.outputFile([(params["output_prefix"] ?? null), ".aff12.1D"].join('')),
@@ -208,22 +208,22 @@ function v_3d_nwarp_cat_outputs(
 }
 
 
+/**
+ * Catenates (composes) 3D warps defined on a grid or via a matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
+ */
 function v_3d_nwarp_cat_execute(
     params: V3dNwarpCatParameters,
     execution: Execution,
 ): V3dNwarpCatOutputs {
-    /**
-     * Catenates (composes) 3D warps defined on a grid or via a matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nwarp_cat_cargs(params, execution)
     const ret = v_3d_nwarp_cat_outputs(params, execution)
@@ -232,6 +232,26 @@ function v_3d_nwarp_cat_execute(
 }
 
 
+/**
+ * Catenates (composes) 3D warps defined on a grid or via a matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param output_prefix Prefix name for the output dataset that holds the warp.
+ * @param warp1 Specify the first warp.
+ * @param warp2 Specify the second warp.
+ * @param interpolation Interpolation mode: linear, quintic, or wsinc5 (default).
+ * @param verbosity Print various fun messages during execution.
+ * @param space_marker Attach string 'sss' to the output dataset as its atlas space marker.
+ * @param additional_warps Additional warp files.
+ * @param invert_final_warp Invert the final warp before output.
+ * @param extra_padding Pad the nonlinear warps by 'PP' voxels in all directions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
+ */
 function v_3d_nwarp_cat(
     output_prefix: string,
     warp1: InputPathType,
@@ -244,26 +264,6 @@ function v_3d_nwarp_cat(
     extra_padding: number | null = null,
     runner: Runner | null = null,
 ): V3dNwarpCatOutputs {
-    /**
-     * Catenates (composes) 3D warps defined on a grid or via a matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param output_prefix Prefix name for the output dataset that holds the warp.
-     * @param warp1 Specify the first warp.
-     * @param warp2 Specify the second warp.
-     * @param interpolation Interpolation mode: linear, quintic, or wsinc5 (default).
-     * @param verbosity Print various fun messages during execution.
-     * @param space_marker Attach string 'sss' to the output dataset as its atlas space marker.
-     * @param additional_warps Additional warp files.
-     * @param invert_final_warp Invert the final warp before output.
-     * @param extra_padding Pad the nonlinear warps by 'PP' voxels in all directions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NWARP_CAT_METADATA);
     const params = v_3d_nwarp_cat_params(output_prefix, warp1, warp2, interpolation, verbosity, space_marker, additional_warps, invert_final_warp, extra_padding)
@@ -276,5 +276,8 @@ export {
       V3dNwarpCatParameters,
       V_3D_NWARP_CAT_METADATA,
       v_3d_nwarp_cat,
+      v_3d_nwarp_cat_cargs,
+      v_3d_nwarp_cat_execute,
+      v_3d_nwarp_cat_outputs,
       v_3d_nwarp_cat_params,
 };

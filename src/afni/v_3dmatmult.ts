@@ -12,7 +12,7 @@ const V_3DMATMULT_METADATA: Metadata = {
 
 
 interface V3dmatmultParameters {
-    "__STYXTYPE__": "3dmatmult";
+    "@type": "afni.3dmatmult";
     "inputA": InputPathType;
     "inputB": InputPathType;
     "prefix": string;
@@ -21,35 +21,35 @@ interface V3dmatmultParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmatmult": v_3dmatmult_cargs,
+        "afni.3dmatmult": v_3dmatmult_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmatmult": v_3dmatmult_outputs,
+        "afni.3dmatmult": v_3dmatmult_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dmatmultOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_a Specify first (matrix) dataset
+ * @param input_b Specify second (matrix) dataset
+ * @param prefix Specify output dataset prefix
+ * @param datum Specify output data type ('byte', 'short', 'float')
+ * @param verb Specify verbosity level
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmatmult_params(
     input_a: InputPathType,
     input_b: InputPathType,
@@ -79,19 +90,8 @@ function v_3dmatmult_params(
     datum: string | null = null,
     verb: number | null = null,
 ): V3dmatmultParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_a Specify first (matrix) dataset
-     * @param input_b Specify second (matrix) dataset
-     * @param prefix Specify output dataset prefix
-     * @param datum Specify output data type ('byte', 'short', 'float')
-     * @param verb Specify verbosity level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmatmult" as const,
+        "@type": "afni.3dmatmult" as const,
         "inputA": input_a,
         "inputB": input_b,
         "prefix": prefix,
@@ -106,18 +106,18 @@ function v_3dmatmult_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmatmult_cargs(
     params: V3dmatmultParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmatmult");
     cargs.push(
@@ -148,18 +148,18 @@ function v_3dmatmult_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmatmult_outputs(
     params: V3dmatmultParameters,
     execution: Execution,
 ): V3dmatmultOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmatmultOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -168,22 +168,22 @@ function v_3dmatmult_outputs(
 }
 
 
+/**
+ * Multiply AFNI datasets slice-by-slice as matrices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
+ */
 function v_3dmatmult_execute(
     params: V3dmatmultParameters,
     execution: Execution,
 ): V3dmatmultOutputs {
-    /**
-     * Multiply AFNI datasets slice-by-slice as matrices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmatmult_cargs(params, execution)
     const ret = v_3dmatmult_outputs(params, execution)
@@ -192,6 +192,22 @@ function v_3dmatmult_execute(
 }
 
 
+/**
+ * Multiply AFNI datasets slice-by-slice as matrices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_a Specify first (matrix) dataset
+ * @param input_b Specify second (matrix) dataset
+ * @param prefix Specify output dataset prefix
+ * @param datum Specify output data type ('byte', 'short', 'float')
+ * @param verb Specify verbosity level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
+ */
 function v_3dmatmult(
     input_a: InputPathType,
     input_b: InputPathType,
@@ -200,22 +216,6 @@ function v_3dmatmult(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dmatmultOutputs {
-    /**
-     * Multiply AFNI datasets slice-by-slice as matrices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_a Specify first (matrix) dataset
-     * @param input_b Specify second (matrix) dataset
-     * @param prefix Specify output dataset prefix
-     * @param datum Specify output data type ('byte', 'short', 'float')
-     * @param verb Specify verbosity level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMATMULT_METADATA);
     const params = v_3dmatmult_params(input_a, input_b, prefix, datum, verb)
@@ -228,5 +228,8 @@ export {
       V3dmatmultParameters,
       V_3DMATMULT_METADATA,
       v_3dmatmult,
+      v_3dmatmult_cargs,
+      v_3dmatmult_execute,
+      v_3dmatmult_outputs,
       v_3dmatmult_params,
 };

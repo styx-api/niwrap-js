@@ -12,7 +12,7 @@ const ADJUNCT_SUMA_FS_ROI_INFO_METADATA: Metadata = {
 
 
 interface AdjunctSumaFsRoiInfoParameters {
-    "__STYXTYPE__": "adjunct_suma_fs_roi_info";
+    "@type": "afni.adjunct_suma_fs_roi_info";
     "subject_id": string;
     "suma_directory": string;
     "help": boolean;
@@ -21,35 +21,35 @@ interface AdjunctSumaFsRoiInfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_cargs,
+        "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_outputs,
+        "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,17 @@ interface AdjunctSumaFsRoiInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID
+ * @param suma_directory SUMA directory output by AFNI's @SUMA_Make_Spec_FS
+ * @param help Show help
+ * @param hview Show help in text editor
+ * @param version Show version
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_suma_fs_roi_info_params(
     subject_id: string,
     suma_directory: string,
@@ -91,19 +102,8 @@ function adjunct_suma_fs_roi_info_params(
     hview: boolean = false,
     version: boolean = false,
 ): AdjunctSumaFsRoiInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID
-     * @param suma_directory SUMA directory output by AFNI's @SUMA_Make_Spec_FS
-     * @param help Show help
-     * @param hview Show help in text editor
-     * @param version Show version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_suma_fs_roi_info" as const,
+        "@type": "afni.adjunct_suma_fs_roi_info" as const,
         "subject_id": subject_id,
         "suma_directory": suma_directory,
         "help": help,
@@ -114,18 +114,18 @@ function adjunct_suma_fs_roi_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_suma_fs_roi_info_cargs(
     params: AdjunctSumaFsRoiInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_suma_fs_roi_info");
     cargs.push(
@@ -149,18 +149,18 @@ function adjunct_suma_fs_roi_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_suma_fs_roi_info_outputs(
     params: AdjunctSumaFsRoiInfoParameters,
     execution: Execution,
 ): AdjunctSumaFsRoiInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctSumaFsRoiInfoOutputs = {
         root: execution.outputFile("."),
         rois_2000_ft: execution.outputFile(["stats_fs_rois_2000_FT.1D"].join('')),
@@ -172,22 +172,22 @@ function adjunct_suma_fs_roi_info_outputs(
 }
 
 
+/**
+ * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
+ */
 function adjunct_suma_fs_roi_info_execute(
     params: AdjunctSumaFsRoiInfoParameters,
     execution: Execution,
 ): AdjunctSumaFsRoiInfoOutputs {
-    /**
-     * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_suma_fs_roi_info_cargs(params, execution)
     const ret = adjunct_suma_fs_roi_info_outputs(params, execution)
@@ -196,6 +196,22 @@ function adjunct_suma_fs_roi_info_execute(
 }
 
 
+/**
+ * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param subject_id Subject ID
+ * @param suma_directory SUMA directory output by AFNI's @SUMA_Make_Spec_FS
+ * @param help Show help
+ * @param hview Show help in text editor
+ * @param version Show version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
+ */
 function adjunct_suma_fs_roi_info(
     subject_id: string,
     suma_directory: string,
@@ -204,22 +220,6 @@ function adjunct_suma_fs_roi_info(
     version: boolean = false,
     runner: Runner | null = null,
 ): AdjunctSumaFsRoiInfoOutputs {
-    /**
-     * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param subject_id Subject ID
-     * @param suma_directory SUMA directory output by AFNI's @SUMA_Make_Spec_FS
-     * @param help Show help
-     * @param hview Show help in text editor
-     * @param version Show version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_SUMA_FS_ROI_INFO_METADATA);
     const params = adjunct_suma_fs_roi_info_params(subject_id, suma_directory, help, hview, version)
@@ -232,5 +232,8 @@ export {
       AdjunctSumaFsRoiInfoOutputs,
       AdjunctSumaFsRoiInfoParameters,
       adjunct_suma_fs_roi_info,
+      adjunct_suma_fs_roi_info_cargs,
+      adjunct_suma_fs_roi_info_execute,
+      adjunct_suma_fs_roi_info_outputs,
       adjunct_suma_fs_roi_info_params,
 };

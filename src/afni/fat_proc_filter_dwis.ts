@@ -12,7 +12,7 @@ const FAT_PROC_FILTER_DWIS_METADATA: Metadata = {
 
 
 interface FatProcFilterDwisParameters {
-    "__STYXTYPE__": "fat_proc_filter_dwis";
+    "@type": "afni.fat_proc_filter_dwis";
     "input_dwi": InputPathType;
     "input_gradient": InputPathType;
     "select_string": string;
@@ -27,35 +27,35 @@ interface FatProcFilterDwisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_filter_dwis": fat_proc_filter_dwis_cargs,
+        "afni.fat_proc_filter_dwis": fat_proc_filter_dwis_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_filter_dwis": fat_proc_filter_dwis_outputs,
+        "afni.fat_proc_filter_dwis": fat_proc_filter_dwis_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface FatProcFilterDwisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dwi Name of a 4D file of DWIs (required).
+ * @param input_gradient Bvec/bmat file from the gradients. Required. One of these options must be used: -in_col_matA, -in_col_matT, -in_col_vec, -in_row_vec
+ * @param select_string A string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select_file is required.
+ * @param output_prefix Output prefix for all the volumes and text files. Required.
+ * @param select_file A file containing a string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select is required.
+ * @param input_bvals If the bvec/bmat is a file of unit-magnitude values, then the bvalues can be input.
+ * @param unit_mag_out Ensure that the output grad information is unit magnitude.
+ * @param qc_prefix Set the prefix of the QC image files separately.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
+ * @param do_movie Output a movie of the newly created dataset (AGIF or MPEG).
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_filter_dwis_params(
     input_dwi: InputPathType,
     input_gradient: InputPathType,
@@ -99,25 +116,8 @@ function fat_proc_filter_dwis_params(
     no_cmd_out: boolean = false,
     do_movie: "AGIF" | "MPEG" | null = null,
 ): FatProcFilterDwisParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dwi Name of a 4D file of DWIs (required).
-     * @param input_gradient Bvec/bmat file from the gradients. Required. One of these options must be used: -in_col_matA, -in_col_matT, -in_col_vec, -in_row_vec
-     * @param select_string A string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select_file is required.
-     * @param output_prefix Output prefix for all the volumes and text files. Required.
-     * @param select_file A file containing a string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select is required.
-     * @param input_bvals If the bvec/bmat is a file of unit-magnitude values, then the bvalues can be input.
-     * @param unit_mag_out Ensure that the output grad information is unit magnitude.
-     * @param qc_prefix Set the prefix of the QC image files separately.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
-     * @param do_movie Output a movie of the newly created dataset (AGIF or MPEG).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_filter_dwis" as const,
+        "@type": "afni.fat_proc_filter_dwis" as const,
         "input_dwi": input_dwi,
         "input_gradient": input_gradient,
         "select_string": select_string,
@@ -142,18 +142,18 @@ function fat_proc_filter_dwis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_filter_dwis_cargs(
     params: FatProcFilterDwisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_filter_dwis");
     cargs.push(
@@ -209,18 +209,18 @@ function fat_proc_filter_dwis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_filter_dwis_outputs(
     params: FatProcFilterDwisParameters,
     execution: Execution,
 ): FatProcFilterDwisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcFilterDwisOutputs = {
         root: execution.outputFile("."),
         filtered_dwi: execution.outputFile([(params["output_prefix"] ?? null), "_filtered.nii.gz"].join('')),
@@ -231,22 +231,22 @@ function fat_proc_filter_dwis_outputs(
 }
 
 
+/**
+ * Filter out user-found and user-defined bad volumes from DWI data sets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
+ */
 function fat_proc_filter_dwis_execute(
     params: FatProcFilterDwisParameters,
     execution: Execution,
 ): FatProcFilterDwisOutputs {
-    /**
-     * Filter out user-found and user-defined bad volumes from DWI data sets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_filter_dwis_cargs(params, execution)
     const ret = fat_proc_filter_dwis_outputs(params, execution)
@@ -255,6 +255,28 @@ function fat_proc_filter_dwis_execute(
 }
 
 
+/**
+ * Filter out user-found and user-defined bad volumes from DWI data sets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dwi Name of a 4D file of DWIs (required).
+ * @param input_gradient Bvec/bmat file from the gradients. Required. One of these options must be used: -in_col_matA, -in_col_matT, -in_col_vec, -in_row_vec
+ * @param select_string A string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select_file is required.
+ * @param output_prefix Output prefix for all the volumes and text files. Required.
+ * @param select_file A file containing a string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select is required.
+ * @param input_bvals If the bvec/bmat is a file of unit-magnitude values, then the bvalues can be input.
+ * @param unit_mag_out Ensure that the output grad information is unit magnitude.
+ * @param qc_prefix Set the prefix of the QC image files separately.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
+ * @param do_movie Output a movie of the newly created dataset (AGIF or MPEG).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
+ */
 function fat_proc_filter_dwis(
     input_dwi: InputPathType,
     input_gradient: InputPathType,
@@ -269,28 +291,6 @@ function fat_proc_filter_dwis(
     do_movie: "AGIF" | "MPEG" | null = null,
     runner: Runner | null = null,
 ): FatProcFilterDwisOutputs {
-    /**
-     * Filter out user-found and user-defined bad volumes from DWI data sets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dwi Name of a 4D file of DWIs (required).
-     * @param input_gradient Bvec/bmat file from the gradients. Required. One of these options must be used: -in_col_matA, -in_col_matT, -in_col_vec, -in_row_vec
-     * @param select_string A string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select_file is required.
-     * @param output_prefix Output prefix for all the volumes and text files. Required.
-     * @param select_file A file containing a string of indices and index ranges for selecting which volumes/grads/bvals to keep. This string gets applied to the volume, bval|bvec|bmat files for an input set. Either this or -select is required.
-     * @param input_bvals If the bvec/bmat is a file of unit-magnitude values, then the bvalues can be input.
-     * @param unit_mag_out Ensure that the output grad information is unit magnitude.
-     * @param qc_prefix Set the prefix of the QC image files separately.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
-     * @param do_movie Output a movie of the newly created dataset (AGIF or MPEG).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_FILTER_DWIS_METADATA);
     const params = fat_proc_filter_dwis_params(input_dwi, input_gradient, select_string, output_prefix, select_file, input_bvals, unit_mag_out, qc_prefix, no_qc_view, no_cmd_out, do_movie)
@@ -303,5 +303,8 @@ export {
       FatProcFilterDwisOutputs,
       FatProcFilterDwisParameters,
       fat_proc_filter_dwis,
+      fat_proc_filter_dwis_cargs,
+      fat_proc_filter_dwis_execute,
+      fat_proc_filter_dwis_outputs,
       fat_proc_filter_dwis_params,
 };

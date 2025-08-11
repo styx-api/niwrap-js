@@ -12,7 +12,7 @@ const FABBER_QBOLD_METADATA: Metadata = {
 
 
 interface FabberQboldParameters {
-    "__STYXTYPE__": "fabber_qbold";
+    "@type": "fsl.fabber_qbold";
     "output_dir": string;
     "method": string;
     "model": string;
@@ -51,35 +51,35 @@ interface FabberQboldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fabber_qbold": fabber_qbold_cargs,
+        "fsl.fabber_qbold": fabber_qbold_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fabber_qbold": fabber_qbold_outputs,
+        "fsl.fabber_qbold": fabber_qbold_outputs,
     };
     return outputsFuncs[t];
 }
@@ -150,6 +150,47 @@ interface FabberQboldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_dir Directory for output files (including logfile)
+ * @param method Use this inference method
+ * @param model Use this forward model
+ * @param data Specify a single input data file
+ * @param data_n Specify multiple data files for n=1, 2, 3...
+ * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other,  interleave = first record from each file, then  second, etc.
+ * @param mask Mask file. Inference will only be performed where mask value > 0
+ * @param mt_n List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param suppdata 'Supplemental' timeseries data, required for some models
+ * @param listmethods List all known inference methods
+ * @param listmodels List all known forward models
+ * @param listparams List model parameters (requires model configuration options to be given)
+ * @param descparams Descript model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
+ * @param listoutputs List additional model outputs (requires model configuration options to be given)
+ * @param evaluate Evaluate model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param simple_output Instead of usual standard output, simply output series of lines each giving progress as percentage
+ * @param overwrite If set will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_latest Try to create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output any additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions.
+ * @param save_mean Output the parameter means.
+ * @param save_std Output the parameter standard deviations.
+ * @param save_var Output the parameter variances.
+ * @param save_zstat Output the parameter Zstats.
+ * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std Output the noise standard deviations.
+ * @param save_free_energy Output the free energy, if calculated.
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ *
+ * @returns Parameter dictionary
+ */
 function fabber_qbold_params(
     output_dir: string,
     method: string,
@@ -187,49 +228,8 @@ function fabber_qbold_params(
     optfile: InputPathType | null = null,
     debug: boolean = false,
 ): FabberQboldParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_dir Directory for output files (including logfile)
-     * @param method Use this inference method
-     * @param model Use this forward model
-     * @param data Specify a single input data file
-     * @param data_n Specify multiple data files for n=1, 2, 3...
-     * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other,  interleave = first record from each file, then  second, etc.
-     * @param mask Mask file. Inference will only be performed where mask value > 0
-     * @param mt_n List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param suppdata 'Supplemental' timeseries data, required for some models
-     * @param listmethods List all known inference methods
-     * @param listmodels List all known forward models
-     * @param listparams List model parameters (requires model configuration options to be given)
-     * @param descparams Descript model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
-     * @param listoutputs List additional model outputs (requires model configuration options to be given)
-     * @param evaluate Evaluate model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param simple_output Instead of usual standard output, simply output series of lines each giving progress as percentage
-     * @param overwrite If set will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_latest Try to create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output any additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions.
-     * @param save_mean Output the parameter means.
-     * @param save_std Output the parameter standard deviations.
-     * @param save_var Output the parameter variances.
-     * @param save_zstat Output the parameter Zstats.
-     * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std Output the noise standard deviations.
-     * @param save_free_energy Output the free energy, if calculated.
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fabber_qbold" as const,
+        "@type": "fsl.fabber_qbold" as const,
         "output_dir": output_dir,
         "method": method,
         "model": model,
@@ -290,18 +290,18 @@ function fabber_qbold_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fabber_qbold_cargs(
     params: FabberQboldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fabber_qbold");
     cargs.push(
@@ -447,18 +447,18 @@ function fabber_qbold_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fabber_qbold_outputs(
     params: FabberQboldParameters,
     execution: Execution,
 ): FabberQboldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FabberQboldOutputs = {
         root: execution.outputFile("."),
         paramnames_file: execution.outputFile([(params["output_dir"] ?? null), "/paramnames.txt"].join('')),
@@ -479,22 +479,22 @@ function fabber_qbold_outputs(
 }
 
 
+/**
+ * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
+ */
 function fabber_qbold_execute(
     params: FabberQboldParameters,
     execution: Execution,
 ): FabberQboldOutputs {
-    /**
-     * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
-     */
     params = execution.params(params)
     const cargs = fabber_qbold_cargs(params, execution)
     const ret = fabber_qbold_outputs(params, execution)
@@ -503,6 +503,52 @@ function fabber_qbold_execute(
 }
 
 
+/**
+ * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_dir Directory for output files (including logfile)
+ * @param method Use this inference method
+ * @param model Use this forward model
+ * @param data Specify a single input data file
+ * @param data_n Specify multiple data files for n=1, 2, 3...
+ * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other,  interleave = first record from each file, then  second, etc.
+ * @param mask Mask file. Inference will only be performed where mask value > 0
+ * @param mt_n List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param suppdata 'Supplemental' timeseries data, required for some models
+ * @param listmethods List all known inference methods
+ * @param listmodels List all known forward models
+ * @param listparams List model parameters (requires model configuration options to be given)
+ * @param descparams Descript model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
+ * @param listoutputs List additional model outputs (requires model configuration options to be given)
+ * @param evaluate Evaluate model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param simple_output Instead of usual standard output, simply output series of lines each giving progress as percentage
+ * @param overwrite If set will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_latest Try to create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output any additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions.
+ * @param save_mean Output the parameter means.
+ * @param save_std Output the parameter standard deviations.
+ * @param save_var Output the parameter variances.
+ * @param save_zstat Output the parameter Zstats.
+ * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std Output the noise standard deviations.
+ * @param save_free_energy Output the free energy, if calculated.
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
+ */
 function fabber_qbold(
     output_dir: string,
     method: string,
@@ -541,52 +587,6 @@ function fabber_qbold(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberQboldOutputs {
-    /**
-     * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_dir Directory for output files (including logfile)
-     * @param method Use this inference method
-     * @param model Use this forward model
-     * @param data Specify a single input data file
-     * @param data_n Specify multiple data files for n=1, 2, 3...
-     * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other,  interleave = first record from each file, then  second, etc.
-     * @param mask Mask file. Inference will only be performed where mask value > 0
-     * @param mt_n List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param suppdata 'Supplemental' timeseries data, required for some models
-     * @param listmethods List all known inference methods
-     * @param listmodels List all known forward models
-     * @param listparams List model parameters (requires model configuration options to be given)
-     * @param descparams Descript model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
-     * @param listoutputs List additional model outputs (requires model configuration options to be given)
-     * @param evaluate Evaluate model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param simple_output Instead of usual standard output, simply output series of lines each giving progress as percentage
-     * @param overwrite If set will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_latest Try to create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output any additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions.
-     * @param save_mean Output the parameter means.
-     * @param save_std Output the parameter standard deviations.
-     * @param save_var Output the parameter variances.
-     * @param save_zstat Output the parameter Zstats.
-     * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std Output the noise standard deviations.
-     * @param save_free_energy Output the free energy, if calculated.
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_QBOLD_METADATA);
     const params = fabber_qbold_params(output_dir, method, model, data, data_n, data_order, mask, mt_n, suppdata, listmethods, listmodels, listparams, descparams, listoutputs, evaluate, evaluate_params, evaluate_nt, simple_output, overwrite, link_latest, loadmodels, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
@@ -599,5 +599,8 @@ export {
       FabberQboldOutputs,
       FabberQboldParameters,
       fabber_qbold,
+      fabber_qbold_cargs,
+      fabber_qbold_execute,
+      fabber_qbold_outputs,
       fabber_qbold_params,
 };

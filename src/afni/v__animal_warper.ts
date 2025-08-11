@@ -12,7 +12,7 @@ const V__ANIMAL_WARPER_METADATA: Metadata = {
 
 
 interface VAnimalWarperParameters {
-    "__STYXTYPE__": "@animal_warper";
+    "@type": "afni.@animal_warper";
     "input_file": InputPathType;
     "base_template": InputPathType;
     "output_dir": string;
@@ -50,35 +50,35 @@ interface VAnimalWarperParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@animal_warper": v__animal_warper_cargs,
+        "afni.@animal_warper": v__animal_warper_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@animal_warper": v__animal_warper_outputs,
+        "afni.@animal_warper": v__animal_warper_outputs,
     };
     return outputsFuncs[t];
 }
@@ -121,6 +121,46 @@ interface VAnimalWarperOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file input dataset to align to base template
+ * @param base_template base dataset (template) to align with
+ * @param output_dir output directory where all processing will be performed
+ * @param brainmask provide a brainmask in the base template space
+ * @param atlases one or more atlas datasets in the base volume space
+ * @param atlas_followers one or more atlas datasets in the base volume space
+ * @param seg_followers one or more segmentation datasets in the base volume space
+ * @param template_followers one or more datasets in the template volume space
+ * @param dset_followers one or more datasets in the input volume space
+ * @param roidset_followers one or more (int-valued) datasets in the input volume space
+ * @param input_abbrev specify abbreviation for input dataset
+ * @param base_abbrev specify abbreviation for base dataset
+ * @param atlas_abbrevs specify an abbreviation for each atlas follower dataset
+ * @param template_abbrevs specify an abbreviation for each template follower dataset
+ * @param seg_abbrevs specify an abbreviation for each segmentation follower dataset
+ * @param dset_abbrevs specify an abbreviation for each dataset follower dataset
+ * @param roidset_abbrevs specify an abbreviation for each ROI dataset follower dataset
+ * @param align_centers_meth center alignment method to use
+ * @param aff_move_opt alignment movement options for affine alignment step
+ * @param cost cost function for affine and nonlinear alignment
+ * @param maxlev Max level for nonlinear warping. Final patch size is determined based on this value.
+ * @param no_surfaces Do not make surfaces for atlas regions in native space.
+ * @param feature_size Set feature size for affine alignment (in mm)
+ * @param supersize Allow up to 50% size difference between subject and template
+ * @param init_scale Approximate length ratio of input to template for initial scaling
+ * @param mode_smooth_size Modal smoothing kernel size in voxels
+ * @param mode_smooth_replacement_off Turn off replacement in modal smoothing
+ * @param center_out Center native-space output to native original space or template space center-shifted
+ * @param align_type Specify level of alignment
+ * @param extra_qw_opts Additional options to add to existing options for 3dQwarp
+ * @param keep_temp Keep temporary files including awpy directory and other intermediate datasets
+ * @param version Display the program version
+ * @param ok_to_exist Reuse and do not overwrite existing datasets
+ * @param echo Copy all commands being run into the terminal
+ *
+ * @returns Parameter dictionary
+ */
 function v__animal_warper_params(
     input_file: InputPathType,
     base_template: InputPathType,
@@ -157,48 +197,8 @@ function v__animal_warper_params(
     ok_to_exist: boolean = false,
     echo: boolean = false,
 ): VAnimalWarperParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file input dataset to align to base template
-     * @param base_template base dataset (template) to align with
-     * @param output_dir output directory where all processing will be performed
-     * @param brainmask provide a brainmask in the base template space
-     * @param atlases one or more atlas datasets in the base volume space
-     * @param atlas_followers one or more atlas datasets in the base volume space
-     * @param seg_followers one or more segmentation datasets in the base volume space
-     * @param template_followers one or more datasets in the template volume space
-     * @param dset_followers one or more datasets in the input volume space
-     * @param roidset_followers one or more (int-valued) datasets in the input volume space
-     * @param input_abbrev specify abbreviation for input dataset
-     * @param base_abbrev specify abbreviation for base dataset
-     * @param atlas_abbrevs specify an abbreviation for each atlas follower dataset
-     * @param template_abbrevs specify an abbreviation for each template follower dataset
-     * @param seg_abbrevs specify an abbreviation for each segmentation follower dataset
-     * @param dset_abbrevs specify an abbreviation for each dataset follower dataset
-     * @param roidset_abbrevs specify an abbreviation for each ROI dataset follower dataset
-     * @param align_centers_meth center alignment method to use
-     * @param aff_move_opt alignment movement options for affine alignment step
-     * @param cost cost function for affine and nonlinear alignment
-     * @param maxlev Max level for nonlinear warping. Final patch size is determined based on this value.
-     * @param no_surfaces Do not make surfaces for atlas regions in native space.
-     * @param feature_size Set feature size for affine alignment (in mm)
-     * @param supersize Allow up to 50% size difference between subject and template
-     * @param init_scale Approximate length ratio of input to template for initial scaling
-     * @param mode_smooth_size Modal smoothing kernel size in voxels
-     * @param mode_smooth_replacement_off Turn off replacement in modal smoothing
-     * @param center_out Center native-space output to native original space or template space center-shifted
-     * @param align_type Specify level of alignment
-     * @param extra_qw_opts Additional options to add to existing options for 3dQwarp
-     * @param keep_temp Keep temporary files including awpy directory and other intermediate datasets
-     * @param version Display the program version
-     * @param ok_to_exist Reuse and do not overwrite existing datasets
-     * @param echo Copy all commands being run into the terminal
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@animal_warper" as const,
+        "@type": "afni.@animal_warper" as const,
         "input_file": input_file,
         "base_template": base_template,
         "output_dir": output_dir,
@@ -286,18 +286,18 @@ function v__animal_warper_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__animal_warper_cargs(
     params: VAnimalWarperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@animal_warper");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -469,18 +469,18 @@ function v__animal_warper_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__animal_warper_outputs(
     params: VAnimalWarperParameters,
     execution: Execution,
 ): VAnimalWarperOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAnimalWarperOutputs = {
         root: execution.outputFile("."),
         warp2std: execution.outputFile(["aw_results/", path.basename((params["input_file"] ?? null)), "_warp2std.nii.gz"].join('')),
@@ -494,22 +494,22 @@ function v__animal_warper_outputs(
 }
 
 
+/**
+ * Align a subject structural dataset to a template and perform several post-alignment operations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
+ */
 function v__animal_warper_execute(
     params: VAnimalWarperParameters,
     execution: Execution,
 ): VAnimalWarperOutputs {
-    /**
-     * Align a subject structural dataset to a template and perform several post-alignment operations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__animal_warper_cargs(params, execution)
     const ret = v__animal_warper_outputs(params, execution)
@@ -518,6 +518,51 @@ function v__animal_warper_execute(
 }
 
 
+/**
+ * Align a subject structural dataset to a template and perform several post-alignment operations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file input dataset to align to base template
+ * @param base_template base dataset (template) to align with
+ * @param output_dir output directory where all processing will be performed
+ * @param brainmask provide a brainmask in the base template space
+ * @param atlases one or more atlas datasets in the base volume space
+ * @param atlas_followers one or more atlas datasets in the base volume space
+ * @param seg_followers one or more segmentation datasets in the base volume space
+ * @param template_followers one or more datasets in the template volume space
+ * @param dset_followers one or more datasets in the input volume space
+ * @param roidset_followers one or more (int-valued) datasets in the input volume space
+ * @param input_abbrev specify abbreviation for input dataset
+ * @param base_abbrev specify abbreviation for base dataset
+ * @param atlas_abbrevs specify an abbreviation for each atlas follower dataset
+ * @param template_abbrevs specify an abbreviation for each template follower dataset
+ * @param seg_abbrevs specify an abbreviation for each segmentation follower dataset
+ * @param dset_abbrevs specify an abbreviation for each dataset follower dataset
+ * @param roidset_abbrevs specify an abbreviation for each ROI dataset follower dataset
+ * @param align_centers_meth center alignment method to use
+ * @param aff_move_opt alignment movement options for affine alignment step
+ * @param cost cost function for affine and nonlinear alignment
+ * @param maxlev Max level for nonlinear warping. Final patch size is determined based on this value.
+ * @param no_surfaces Do not make surfaces for atlas regions in native space.
+ * @param feature_size Set feature size for affine alignment (in mm)
+ * @param supersize Allow up to 50% size difference between subject and template
+ * @param init_scale Approximate length ratio of input to template for initial scaling
+ * @param mode_smooth_size Modal smoothing kernel size in voxels
+ * @param mode_smooth_replacement_off Turn off replacement in modal smoothing
+ * @param center_out Center native-space output to native original space or template space center-shifted
+ * @param align_type Specify level of alignment
+ * @param extra_qw_opts Additional options to add to existing options for 3dQwarp
+ * @param keep_temp Keep temporary files including awpy directory and other intermediate datasets
+ * @param version Display the program version
+ * @param ok_to_exist Reuse and do not overwrite existing datasets
+ * @param echo Copy all commands being run into the terminal
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
+ */
 function v__animal_warper(
     input_file: InputPathType,
     base_template: InputPathType,
@@ -555,51 +600,6 @@ function v__animal_warper(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VAnimalWarperOutputs {
-    /**
-     * Align a subject structural dataset to a template and perform several post-alignment operations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file input dataset to align to base template
-     * @param base_template base dataset (template) to align with
-     * @param output_dir output directory where all processing will be performed
-     * @param brainmask provide a brainmask in the base template space
-     * @param atlases one or more atlas datasets in the base volume space
-     * @param atlas_followers one or more atlas datasets in the base volume space
-     * @param seg_followers one or more segmentation datasets in the base volume space
-     * @param template_followers one or more datasets in the template volume space
-     * @param dset_followers one or more datasets in the input volume space
-     * @param roidset_followers one or more (int-valued) datasets in the input volume space
-     * @param input_abbrev specify abbreviation for input dataset
-     * @param base_abbrev specify abbreviation for base dataset
-     * @param atlas_abbrevs specify an abbreviation for each atlas follower dataset
-     * @param template_abbrevs specify an abbreviation for each template follower dataset
-     * @param seg_abbrevs specify an abbreviation for each segmentation follower dataset
-     * @param dset_abbrevs specify an abbreviation for each dataset follower dataset
-     * @param roidset_abbrevs specify an abbreviation for each ROI dataset follower dataset
-     * @param align_centers_meth center alignment method to use
-     * @param aff_move_opt alignment movement options for affine alignment step
-     * @param cost cost function for affine and nonlinear alignment
-     * @param maxlev Max level for nonlinear warping. Final patch size is determined based on this value.
-     * @param no_surfaces Do not make surfaces for atlas regions in native space.
-     * @param feature_size Set feature size for affine alignment (in mm)
-     * @param supersize Allow up to 50% size difference between subject and template
-     * @param init_scale Approximate length ratio of input to template for initial scaling
-     * @param mode_smooth_size Modal smoothing kernel size in voxels
-     * @param mode_smooth_replacement_off Turn off replacement in modal smoothing
-     * @param center_out Center native-space output to native original space or template space center-shifted
-     * @param align_type Specify level of alignment
-     * @param extra_qw_opts Additional options to add to existing options for 3dQwarp
-     * @param keep_temp Keep temporary files including awpy directory and other intermediate datasets
-     * @param version Display the program version
-     * @param ok_to_exist Reuse and do not overwrite existing datasets
-     * @param echo Copy all commands being run into the terminal
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ANIMAL_WARPER_METADATA);
     const params = v__animal_warper_params(input_file, base_template, output_dir, brainmask, atlases, atlas_followers, seg_followers, template_followers, dset_followers, roidset_followers, input_abbrev, base_abbrev, atlas_abbrevs, template_abbrevs, seg_abbrevs, dset_abbrevs, roidset_abbrevs, align_centers_meth, aff_move_opt, cost, maxlev, no_surfaces, feature_size, supersize, init_scale, mode_smooth_size, mode_smooth_replacement_off, center_out, align_type, extra_qw_opts, keep_temp, version, ok_to_exist, echo)
@@ -612,5 +612,8 @@ export {
       VAnimalWarperParameters,
       V__ANIMAL_WARPER_METADATA,
       v__animal_warper,
+      v__animal_warper_cargs,
+      v__animal_warper_execute,
+      v__animal_warper_outputs,
       v__animal_warper_params,
 };

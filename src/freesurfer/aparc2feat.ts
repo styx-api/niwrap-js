@@ -12,7 +12,7 @@ const APARC2FEAT_METADATA: Metadata = {
 
 
 interface Aparc2featParameters {
-    "__STYXTYPE__": "aparc2feat";
+    "@type": "freesurfer.aparc2feat";
     "feat_directories": string;
     "featdirfile"?: InputPathType | null | undefined;
     "hemi"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface Aparc2featParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aparc2feat": aparc2feat_cargs,
+        "freesurfer.aparc2feat": aparc2feat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "aparc2feat": aparc2feat_outputs,
+        "freesurfer.aparc2feat": aparc2feat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface Aparc2featOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_directories FEAT output directory. Multiple --feat arguments can be supplied.
+ * @param featdirfile File with a list of FEAT directories. Multiple --featdirfile flags are allowed.
+ * @param hemi Resample hemisphere only (default is both rh and lh).
+ * @param annot Specify something other than aparc.
+ * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
+ * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
+ * @param debug_flag Turn on debugging.
+ * @param help_flag Print help and exit.
+ * @param version_flag Print version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function aparc2feat_params(
     feat_directories: string,
     featdirfile: InputPathType | null = null,
@@ -91,23 +106,8 @@ function aparc2feat_params(
     help_flag: boolean = false,
     version_flag: boolean = false,
 ): Aparc2featParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_directories FEAT output directory. Multiple --feat arguments can be supplied.
-     * @param featdirfile File with a list of FEAT directories. Multiple --featdirfile flags are allowed.
-     * @param hemi Resample hemisphere only (default is both rh and lh).
-     * @param annot Specify something other than aparc.
-     * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
-     * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
-     * @param debug_flag Turn on debugging.
-     * @param help_flag Print help and exit.
-     * @param version_flag Print version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aparc2feat" as const,
+        "@type": "freesurfer.aparc2feat" as const,
         "feat_directories": feat_directories,
         "annot_a2005s_flag": annot_a2005s_flag,
         "annot_a2009s_flag": annot_a2009s_flag,
@@ -128,18 +128,18 @@ function aparc2feat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aparc2feat_cargs(
     params: Aparc2featParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aparc2feat");
     cargs.push(
@@ -183,18 +183,18 @@ function aparc2feat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aparc2feat_outputs(
     params: Aparc2featParameters,
     execution: Execution,
 ): Aparc2featOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Aparc2featOutputs = {
         root: execution.outputFile("."),
         lh_aparc_output: execution.outputFile([(params["feat_directories"] ?? null), "/reg/freesurfer/lh.aparc.nii.gz"].join('')),
@@ -204,22 +204,22 @@ function aparc2feat_outputs(
 }
 
 
+/**
+ * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
+ */
 function aparc2feat_execute(
     params: Aparc2featParameters,
     execution: Execution,
 ): Aparc2featOutputs {
-    /**
-     * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
-     */
     params = execution.params(params)
     const cargs = aparc2feat_cargs(params, execution)
     const ret = aparc2feat_outputs(params, execution)
@@ -228,6 +228,26 @@ function aparc2feat_execute(
 }
 
 
+/**
+ * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param feat_directories FEAT output directory. Multiple --feat arguments can be supplied.
+ * @param featdirfile File with a list of FEAT directories. Multiple --featdirfile flags are allowed.
+ * @param hemi Resample hemisphere only (default is both rh and lh).
+ * @param annot Specify something other than aparc.
+ * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
+ * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
+ * @param debug_flag Turn on debugging.
+ * @param help_flag Print help and exit.
+ * @param version_flag Print version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
+ */
 function aparc2feat(
     feat_directories: string,
     featdirfile: InputPathType | null = null,
@@ -240,26 +260,6 @@ function aparc2feat(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): Aparc2featOutputs {
-    /**
-     * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param feat_directories FEAT output directory. Multiple --feat arguments can be supplied.
-     * @param featdirfile File with a list of FEAT directories. Multiple --featdirfile flags are allowed.
-     * @param hemi Resample hemisphere only (default is both rh and lh).
-     * @param annot Specify something other than aparc.
-     * @param annot_a2005s_flag Specify annotation = aparc.a2005s.
-     * @param annot_a2009s_flag Specify annotation = aparc.a2009s.
-     * @param debug_flag Turn on debugging.
-     * @param help_flag Print help and exit.
-     * @param version_flag Print version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APARC2FEAT_METADATA);
     const params = aparc2feat_params(feat_directories, featdirfile, hemi, annot, annot_a2005s_flag, annot_a2009s_flag, debug_flag, help_flag, version_flag)
@@ -272,5 +272,8 @@ export {
       Aparc2featOutputs,
       Aparc2featParameters,
       aparc2feat,
+      aparc2feat_cargs,
+      aparc2feat_execute,
+      aparc2feat_outputs,
       aparc2feat_params,
 };

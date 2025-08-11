@@ -12,7 +12,7 @@ const MRIS_PARCELLATE_CONNECTIVITY_METADATA: Metadata = {
 
 
 interface MrisParcellateConnectivityParameters {
-    "__STYXTYPE__": "mris_parcellate_connectivity";
+    "@type": "freesurfer.mris_parcellate_connectivity";
     "smooth_iterations"?: number | null | undefined;
     "input_surface": InputPathType;
     "input_correlations": InputPathType;
@@ -20,35 +20,35 @@ interface MrisParcellateConnectivityParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_parcellate_connectivity": mris_parcellate_connectivity_cargs,
+        "freesurfer.mris_parcellate_connectivity": mris_parcellate_connectivity_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_parcellate_connectivity": mris_parcellate_connectivity_outputs,
+        "freesurfer.mris_parcellate_connectivity": mris_parcellate_connectivity_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisParcellateConnectivityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file.
+ * @param input_correlations Input correlations file.
+ * @param output_parcellation Output parcellation file.
+ * @param smooth_iterations Number of averaging iterations for smoothing correlation matrix.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_parcellate_connectivity_params(
     input_surface: InputPathType,
     input_correlations: InputPathType,
     output_parcellation: string,
     smooth_iterations: number | null = null,
 ): MrisParcellateConnectivityParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file.
-     * @param input_correlations Input correlations file.
-     * @param output_parcellation Output parcellation file.
-     * @param smooth_iterations Number of averaging iterations for smoothing correlation matrix.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_parcellate_connectivity" as const,
+        "@type": "freesurfer.mris_parcellate_connectivity" as const,
         "input_surface": input_surface,
         "input_correlations": input_correlations,
         "output_parcellation": output_parcellation,
@@ -100,18 +100,18 @@ function mris_parcellate_connectivity_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_parcellate_connectivity_cargs(
     params: MrisParcellateConnectivityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_parcellate_connectivity");
     if ((params["smooth_iterations"] ?? null) !== null) {
@@ -127,18 +127,18 @@ function mris_parcellate_connectivity_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_parcellate_connectivity_outputs(
     params: MrisParcellateConnectivityParameters,
     execution: Execution,
 ): MrisParcellateConnectivityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisParcellateConnectivityOutputs = {
         root: execution.outputFile("."),
         parcellation_output: execution.outputFile([(params["output_parcellation"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function mris_parcellate_connectivity_outputs(
 }
 
 
+/**
+ * A tool to parcellate brain connectivity using surface and correlation data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
+ */
 function mris_parcellate_connectivity_execute(
     params: MrisParcellateConnectivityParameters,
     execution: Execution,
 ): MrisParcellateConnectivityOutputs {
-    /**
-     * A tool to parcellate brain connectivity using surface and correlation data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_parcellate_connectivity_cargs(params, execution)
     const ret = mris_parcellate_connectivity_outputs(params, execution)
@@ -171,6 +171,21 @@ function mris_parcellate_connectivity_execute(
 }
 
 
+/**
+ * A tool to parcellate brain connectivity using surface and correlation data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file.
+ * @param input_correlations Input correlations file.
+ * @param output_parcellation Output parcellation file.
+ * @param smooth_iterations Number of averaging iterations for smoothing correlation matrix.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
+ */
 function mris_parcellate_connectivity(
     input_surface: InputPathType,
     input_correlations: InputPathType,
@@ -178,21 +193,6 @@ function mris_parcellate_connectivity(
     smooth_iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisParcellateConnectivityOutputs {
-    /**
-     * A tool to parcellate brain connectivity using surface and correlation data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file.
-     * @param input_correlations Input correlations file.
-     * @param output_parcellation Output parcellation file.
-     * @param smooth_iterations Number of averaging iterations for smoothing correlation matrix.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PARCELLATE_CONNECTIVITY_METADATA);
     const params = mris_parcellate_connectivity_params(input_surface, input_correlations, output_parcellation, smooth_iterations)
@@ -205,5 +205,8 @@ export {
       MrisParcellateConnectivityOutputs,
       MrisParcellateConnectivityParameters,
       mris_parcellate_connectivity,
+      mris_parcellate_connectivity_cargs,
+      mris_parcellate_connectivity_execute,
+      mris_parcellate_connectivity_outputs,
       mris_parcellate_connectivity_params,
 };

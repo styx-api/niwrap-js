@@ -12,7 +12,7 @@ const V_3D_VEC_RGB_TO_HSL_METADATA: Metadata = {
 
 
 interface V3dVecRgbToHslParameters {
-    "__STYXTYPE__": "3dVecRGB_to_HSL";
+    "@type": "afni.3dVecRGB_to_HSL";
     "prefix": string;
     "in_vec": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -20,35 +20,35 @@ interface V3dVecRgbToHslParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_cargs,
+        "afni.3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_outputs,
+        "afni.3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3dVecRgbToHslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file name part.
+ * @param in_vec Input RGB vector file of three bricks, presumably each having values in the interval [0,1].
+ * @param mask Whole brain mask within which to calculate things. Otherwise, data should be masked already.
+ * @param in_scal Scalar file (single brick) which will be appended to the output file, mainly aimed at loading in an FA data set for tract volume coloration.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_vec_rgb_to_hsl_params(
     prefix: string,
     in_vec: InputPathType,
     mask: InputPathType | null = null,
     in_scal: InputPathType | null = null,
 ): V3dVecRgbToHslParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file name part.
-     * @param in_vec Input RGB vector file of three bricks, presumably each having values in the interval [0,1].
-     * @param mask Whole brain mask within which to calculate things. Otherwise, data should be masked already.
-     * @param in_scal Scalar file (single brick) which will be appended to the output file, mainly aimed at loading in an FA data set for tract volume coloration.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dVecRGB_to_HSL" as const,
+        "@type": "afni.3dVecRGB_to_HSL" as const,
         "prefix": prefix,
         "in_vec": in_vec,
     };
@@ -102,18 +102,18 @@ function v_3d_vec_rgb_to_hsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_vec_rgb_to_hsl_cargs(
     params: V3dVecRgbToHslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dVecRGB_to_HSL");
     cargs.push(
@@ -140,18 +140,18 @@ function v_3d_vec_rgb_to_hsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_vec_rgb_to_hsl_outputs(
     params: V3dVecRgbToHslParameters,
     execution: Execution,
 ): V3dVecRgbToHslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dVecRgbToHslOutputs = {
         root: execution.outputFile("."),
         output_hsl_dataset: execution.outputFile([(params["prefix"] ?? null), "_HSL+*.HEAD"].join('')),
@@ -160,22 +160,22 @@ function v_3d_vec_rgb_to_hsl_outputs(
 }
 
 
+/**
+ * Convert a 3-brick RGB (red, green, blue) data set to an HSL (hue, saturation, luminance) one.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dVecRgbToHslOutputs`).
+ */
 function v_3d_vec_rgb_to_hsl_execute(
     params: V3dVecRgbToHslParameters,
     execution: Execution,
 ): V3dVecRgbToHslOutputs {
-    /**
-     * Convert a 3-brick RGB (red, green, blue) data set to an HSL (hue, saturation, luminance) one.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dVecRgbToHslOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_vec_rgb_to_hsl_cargs(params, execution)
     const ret = v_3d_vec_rgb_to_hsl_outputs(params, execution)
@@ -184,6 +184,21 @@ function v_3d_vec_rgb_to_hsl_execute(
 }
 
 
+/**
+ * Convert a 3-brick RGB (red, green, blue) data set to an HSL (hue, saturation, luminance) one.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file name part.
+ * @param in_vec Input RGB vector file of three bricks, presumably each having values in the interval [0,1].
+ * @param mask Whole brain mask within which to calculate things. Otherwise, data should be masked already.
+ * @param in_scal Scalar file (single brick) which will be appended to the output file, mainly aimed at loading in an FA data set for tract volume coloration.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dVecRgbToHslOutputs`).
+ */
 function v_3d_vec_rgb_to_hsl(
     prefix: string,
     in_vec: InputPathType,
@@ -191,21 +206,6 @@ function v_3d_vec_rgb_to_hsl(
     in_scal: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dVecRgbToHslOutputs {
-    /**
-     * Convert a 3-brick RGB (red, green, blue) data set to an HSL (hue, saturation, luminance) one.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file name part.
-     * @param in_vec Input RGB vector file of three bricks, presumably each having values in the interval [0,1].
-     * @param mask Whole brain mask within which to calculate things. Otherwise, data should be masked already.
-     * @param in_scal Scalar file (single brick) which will be appended to the output file, mainly aimed at loading in an FA data set for tract volume coloration.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dVecRgbToHslOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_VEC_RGB_TO_HSL_METADATA);
     const params = v_3d_vec_rgb_to_hsl_params(prefix, in_vec, mask, in_scal)
@@ -218,5 +218,8 @@ export {
       V3dVecRgbToHslParameters,
       V_3D_VEC_RGB_TO_HSL_METADATA,
       v_3d_vec_rgb_to_hsl,
+      v_3d_vec_rgb_to_hsl_cargs,
+      v_3d_vec_rgb_to_hsl_execute,
+      v_3d_vec_rgb_to_hsl_outputs,
       v_3d_vec_rgb_to_hsl_params,
 };

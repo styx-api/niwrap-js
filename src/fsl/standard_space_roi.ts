@@ -12,7 +12,7 @@ const STANDARD_SPACE_ROI_METADATA: Metadata = {
 
 
 interface StandardSpaceRoiParameters {
-    "__STYXTYPE__": "standard_space_roi";
+    "@type": "fsl.standard_space_roi";
     "infile": InputPathType;
     "outfile": string;
     "mask_fov_flag": boolean;
@@ -28,35 +28,35 @@ interface StandardSpaceRoiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "standard_space_roi": standard_space_roi_cargs,
+        "fsl.standard_space_roi": standard_space_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "standard_space_roi": standard_space_roi_outputs,
+        "fsl.standard_space_roi": standard_space_roi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface StandardSpaceRoiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image
+ * @param outfile Output image
+ * @param mask_fov_flag Mask output using transformed standard space FOV
+ * @param mask_mask Mask output using transformed standard space mask
+ * @param mask_none_flag Do not mask output
+ * @param roi_fov_flag Cut down input FOV using bounding box of the transformed standard space FOV
+ * @param roi_mask Cut down input FOV using nonbackground bounding box of the transformed standard space mask
+ * @param roi_none_flag Do not cut down input FOV
+ * @param ss_ref Standard space reference image to use (default: /usr/local/fsl/data/standard/MNI152_T1)
+ * @param alt_input Alternative input image to apply the ROI to (instead of the one used to register to the reference)
+ * @param debug_flag Debug mode (don't delete intermediate files)
+ * @param bet_premask_flag Equivalent to: -maskMASK /usr/local/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil -roiNONE
+ *
+ * @returns Parameter dictionary
+ */
 function standard_space_roi_params(
     infile: InputPathType,
     outfile: string,
@@ -93,26 +111,8 @@ function standard_space_roi_params(
     debug_flag: boolean = false,
     bet_premask_flag: boolean = false,
 ): StandardSpaceRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image
-     * @param outfile Output image
-     * @param mask_fov_flag Mask output using transformed standard space FOV
-     * @param mask_mask Mask output using transformed standard space mask
-     * @param mask_none_flag Do not mask output
-     * @param roi_fov_flag Cut down input FOV using bounding box of the transformed standard space FOV
-     * @param roi_mask Cut down input FOV using nonbackground bounding box of the transformed standard space mask
-     * @param roi_none_flag Do not cut down input FOV
-     * @param ss_ref Standard space reference image to use (default: /usr/local/fsl/data/standard/MNI152_T1)
-     * @param alt_input Alternative input image to apply the ROI to (instead of the one used to register to the reference)
-     * @param debug_flag Debug mode (don't delete intermediate files)
-     * @param bet_premask_flag Equivalent to: -maskMASK /usr/local/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil -roiNONE
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "standard_space_roi" as const,
+        "@type": "fsl.standard_space_roi" as const,
         "infile": infile,
         "outfile": outfile,
         "mask_fov_flag": mask_fov_flag,
@@ -138,18 +138,18 @@ function standard_space_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function standard_space_roi_cargs(
     params: StandardSpaceRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("standard_space_roi");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -200,18 +200,18 @@ function standard_space_roi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function standard_space_roi_outputs(
     params: StandardSpaceRoiParameters,
     execution: Execution,
 ): StandardSpaceRoiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: StandardSpaceRoiOutputs = {
         root: execution.outputFile("."),
         out_image: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -220,22 +220,22 @@ function standard_space_roi_outputs(
 }
 
 
+/**
+ * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
+ */
 function standard_space_roi_execute(
     params: StandardSpaceRoiParameters,
     execution: Execution,
 ): StandardSpaceRoiOutputs {
-    /**
-     * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
-     */
     params = execution.params(params)
     const cargs = standard_space_roi_cargs(params, execution)
     const ret = standard_space_roi_outputs(params, execution)
@@ -244,6 +244,29 @@ function standard_space_roi_execute(
 }
 
 
+/**
+ * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image
+ * @param outfile Output image
+ * @param mask_fov_flag Mask output using transformed standard space FOV
+ * @param mask_mask Mask output using transformed standard space mask
+ * @param mask_none_flag Do not mask output
+ * @param roi_fov_flag Cut down input FOV using bounding box of the transformed standard space FOV
+ * @param roi_mask Cut down input FOV using nonbackground bounding box of the transformed standard space mask
+ * @param roi_none_flag Do not cut down input FOV
+ * @param ss_ref Standard space reference image to use (default: /usr/local/fsl/data/standard/MNI152_T1)
+ * @param alt_input Alternative input image to apply the ROI to (instead of the one used to register to the reference)
+ * @param debug_flag Debug mode (don't delete intermediate files)
+ * @param bet_premask_flag Equivalent to: -maskMASK /usr/local/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil -roiNONE
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
+ */
 function standard_space_roi(
     infile: InputPathType,
     outfile: string,
@@ -259,29 +282,6 @@ function standard_space_roi(
     bet_premask_flag: boolean = false,
     runner: Runner | null = null,
 ): StandardSpaceRoiOutputs {
-    /**
-     * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image
-     * @param outfile Output image
-     * @param mask_fov_flag Mask output using transformed standard space FOV
-     * @param mask_mask Mask output using transformed standard space mask
-     * @param mask_none_flag Do not mask output
-     * @param roi_fov_flag Cut down input FOV using bounding box of the transformed standard space FOV
-     * @param roi_mask Cut down input FOV using nonbackground bounding box of the transformed standard space mask
-     * @param roi_none_flag Do not cut down input FOV
-     * @param ss_ref Standard space reference image to use (default: /usr/local/fsl/data/standard/MNI152_T1)
-     * @param alt_input Alternative input image to apply the ROI to (instead of the one used to register to the reference)
-     * @param debug_flag Debug mode (don't delete intermediate files)
-     * @param bet_premask_flag Equivalent to: -maskMASK /usr/local/fsl/data/standard/MNI152_T1_2mm_brain_mask_dil -roiNONE
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STANDARD_SPACE_ROI_METADATA);
     const params = standard_space_roi_params(infile, outfile, mask_fov_flag, mask_mask, mask_none_flag, roi_fov_flag, roi_mask, roi_none_flag, ss_ref, alt_input, debug_flag, bet_premask_flag)
@@ -294,5 +294,8 @@ export {
       StandardSpaceRoiOutputs,
       StandardSpaceRoiParameters,
       standard_space_roi,
+      standard_space_roi_cargs,
+      standard_space_roi_execute,
+      standard_space_roi_outputs,
       standard_space_roi_params,
 };

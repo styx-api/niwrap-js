@@ -12,40 +12,40 @@ const SURFACE_MATCH_METADATA: Metadata = {
 
 
 interface SurfaceMatchParameters {
-    "__STYXTYPE__": "surface-match";
+    "@type": "workbench.surface-match";
     "match_surface_file": InputPathType;
     "input_surface_file": InputPathType;
     "output_surface_name": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-match": surface_match_cargs,
+        "workbench.surface-match": surface_match_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface SurfaceMatchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param match_surface_file Match (Reference) Surface
+ * @param input_surface_file File containing surface that will be transformed
+ * @param output_surface_name Surface File after transformation
+ *
+ * @returns Parameter dictionary
+ */
 function surface_match_params(
     match_surface_file: InputPathType,
     input_surface_file: InputPathType,
     output_surface_name: string,
 ): SurfaceMatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param match_surface_file Match (Reference) Surface
-     * @param input_surface_file File containing surface that will be transformed
-     * @param output_surface_name Surface File after transformation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-match" as const,
+        "@type": "workbench.surface-match" as const,
         "match_surface_file": match_surface_file,
         "input_surface_file": input_surface_file,
         "output_surface_name": output_surface_name,
@@ -89,18 +89,18 @@ function surface_match_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_match_cargs(
     params: SurfaceMatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-match");
@@ -111,18 +111,18 @@ function surface_match_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_match_outputs(
     params: SurfaceMatchParameters,
     execution: Execution,
 ): SurfaceMatchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceMatchOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function surface_match_outputs(
 }
 
 
+/**
+ * Surface match.
+ *
+ * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
+ */
 function surface_match_execute(
     params: SurfaceMatchParameters,
     execution: Execution,
 ): SurfaceMatchOutputs {
-    /**
-     * Surface match.
-     * 
-     * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_match_cargs(params, execution)
     const ret = surface_match_outputs(params, execution)
@@ -156,28 +156,28 @@ function surface_match_execute(
 }
 
 
+/**
+ * Surface match.
+ *
+ * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param match_surface_file Match (Reference) Surface
+ * @param input_surface_file File containing surface that will be transformed
+ * @param output_surface_name Surface File after transformation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
+ */
 function surface_match(
     match_surface_file: InputPathType,
     input_surface_file: InputPathType,
     output_surface_name: string,
     runner: Runner | null = null,
 ): SurfaceMatchOutputs {
-    /**
-     * Surface match.
-     * 
-     * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param match_surface_file Match (Reference) Surface
-     * @param input_surface_file File containing surface that will be transformed
-     * @param output_surface_name Surface File after transformation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_MATCH_METADATA);
     const params = surface_match_params(match_surface_file, input_surface_file, output_surface_name)
@@ -190,5 +190,8 @@ export {
       SurfaceMatchOutputs,
       SurfaceMatchParameters,
       surface_match,
+      surface_match_cargs,
+      surface_match_execute,
+      surface_match_outputs,
       surface_match_params,
 };

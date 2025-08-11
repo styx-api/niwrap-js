@@ -12,7 +12,7 @@ const V_3D_QWARP_METADATA: Metadata = {
 
 
 interface V3dQwarpParameters {
-    "__STYXTYPE__": "3dQwarp";
+    "@type": "afni.3dQwarp";
     "base_dataset": InputPathType;
     "source_dataset": InputPathType;
     "prefix": string;
@@ -36,35 +36,35 @@ interface V3dQwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dQwarp": v_3d_qwarp_cargs,
+        "afni.3dQwarp": v_3d_qwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dQwarp": v_3d_qwarp_outputs,
+        "afni.3dQwarp": v_3d_qwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,32 @@ interface V3dQwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_dataset Base dataset
+ * @param source_dataset Source dataset
+ * @param prefix Prefix for the output datasets
+ * @param no_warp Do not save the _WARP file
+ * @param inverse_warp Compute and save the _WARPINV file
+ * @param no_dataset Do not save the warped source dataset
+ * @param a_warp Output the nonlinear warp when -allineate is used
+ * @param pcl Clipped Pearson correlation (default method)
+ * @param pear Use strict Pearson correlation for matching
+ * @param hel Use Hellinger metric for matching
+ * @param mi Use Mutual Information for matching
+ * @param nmi Use Normalized Mutual Information for matching
+ * @param lpc Use Local Pearson correlation (signed) for matching
+ * @param lpa Use Local Pearson correlation (absolute value) for matching
+ * @param noneg Replace negative values in either input volume with 0
+ * @param nopenalty Don't use a penalty on the cost functional
+ * @param minpatch Set the minimum patch size for warp searching
+ * @param maxlev Set the maximum refinement level
+ * @param verbose Print out very verbose progress messages
+ * @param quiet Cut out most progress messages
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_qwarp_params(
     base_dataset: InputPathType,
     source_dataset: InputPathType,
@@ -117,34 +143,8 @@ function v_3d_qwarp_params(
     verbose: boolean = false,
     quiet: boolean = false,
 ): V3dQwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_dataset Base dataset
-     * @param source_dataset Source dataset
-     * @param prefix Prefix for the output datasets
-     * @param no_warp Do not save the _WARP file
-     * @param inverse_warp Compute and save the _WARPINV file
-     * @param no_dataset Do not save the warped source dataset
-     * @param a_warp Output the nonlinear warp when -allineate is used
-     * @param pcl Clipped Pearson correlation (default method)
-     * @param pear Use strict Pearson correlation for matching
-     * @param hel Use Hellinger metric for matching
-     * @param mi Use Mutual Information for matching
-     * @param nmi Use Normalized Mutual Information for matching
-     * @param lpc Use Local Pearson correlation (signed) for matching
-     * @param lpa Use Local Pearson correlation (absolute value) for matching
-     * @param noneg Replace negative values in either input volume with 0
-     * @param nopenalty Don't use a penalty on the cost functional
-     * @param minpatch Set the minimum patch size for warp searching
-     * @param maxlev Set the maximum refinement level
-     * @param verbose Print out very verbose progress messages
-     * @param quiet Cut out most progress messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dQwarp" as const,
+        "@type": "afni.3dQwarp" as const,
         "base_dataset": base_dataset,
         "source_dataset": source_dataset,
         "prefix": prefix,
@@ -174,18 +174,18 @@ function v_3d_qwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_qwarp_cargs(
     params: V3dQwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dQwarp");
     cargs.push(execution.inputFile((params["base_dataset"] ?? null)));
@@ -252,18 +252,18 @@ function v_3d_qwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_qwarp_outputs(
     params: V3dQwarpParameters,
     execution: Execution,
 ): V3dQwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dQwarpOutputs = {
         root: execution.outputFile("."),
         warped_dataset: execution.outputFile(["{PREFIX}+tlrc"].join('')),
@@ -274,22 +274,22 @@ function v_3d_qwarp_outputs(
 }
 
 
+/**
+ * Computes a nonlinearly warped version of source_dataset to match base_dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
+ */
 function v_3d_qwarp_execute(
     params: V3dQwarpParameters,
     execution: Execution,
 ): V3dQwarpOutputs {
-    /**
-     * Computes a nonlinearly warped version of source_dataset to match base_dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_qwarp_cargs(params, execution)
     const ret = v_3d_qwarp_outputs(params, execution)
@@ -298,6 +298,37 @@ function v_3d_qwarp_execute(
 }
 
 
+/**
+ * Computes a nonlinearly warped version of source_dataset to match base_dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base_dataset Base dataset
+ * @param source_dataset Source dataset
+ * @param prefix Prefix for the output datasets
+ * @param no_warp Do not save the _WARP file
+ * @param inverse_warp Compute and save the _WARPINV file
+ * @param no_dataset Do not save the warped source dataset
+ * @param a_warp Output the nonlinear warp when -allineate is used
+ * @param pcl Clipped Pearson correlation (default method)
+ * @param pear Use strict Pearson correlation for matching
+ * @param hel Use Hellinger metric for matching
+ * @param mi Use Mutual Information for matching
+ * @param nmi Use Normalized Mutual Information for matching
+ * @param lpc Use Local Pearson correlation (signed) for matching
+ * @param lpa Use Local Pearson correlation (absolute value) for matching
+ * @param noneg Replace negative values in either input volume with 0
+ * @param nopenalty Don't use a penalty on the cost functional
+ * @param minpatch Set the minimum patch size for warp searching
+ * @param maxlev Set the maximum refinement level
+ * @param verbose Print out very verbose progress messages
+ * @param quiet Cut out most progress messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
+ */
 function v_3d_qwarp(
     base_dataset: InputPathType,
     source_dataset: InputPathType,
@@ -321,37 +352,6 @@ function v_3d_qwarp(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dQwarpOutputs {
-    /**
-     * Computes a nonlinearly warped version of source_dataset to match base_dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base_dataset Base dataset
-     * @param source_dataset Source dataset
-     * @param prefix Prefix for the output datasets
-     * @param no_warp Do not save the _WARP file
-     * @param inverse_warp Compute and save the _WARPINV file
-     * @param no_dataset Do not save the warped source dataset
-     * @param a_warp Output the nonlinear warp when -allineate is used
-     * @param pcl Clipped Pearson correlation (default method)
-     * @param pear Use strict Pearson correlation for matching
-     * @param hel Use Hellinger metric for matching
-     * @param mi Use Mutual Information for matching
-     * @param nmi Use Normalized Mutual Information for matching
-     * @param lpc Use Local Pearson correlation (signed) for matching
-     * @param lpa Use Local Pearson correlation (absolute value) for matching
-     * @param noneg Replace negative values in either input volume with 0
-     * @param nopenalty Don't use a penalty on the cost functional
-     * @param minpatch Set the minimum patch size for warp searching
-     * @param maxlev Set the maximum refinement level
-     * @param verbose Print out very verbose progress messages
-     * @param quiet Cut out most progress messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_QWARP_METADATA);
     const params = v_3d_qwarp_params(base_dataset, source_dataset, prefix, no_warp, inverse_warp, no_dataset, a_warp, pcl, pear, hel, mi, nmi, lpc, lpa, noneg, nopenalty, minpatch, maxlev, verbose, quiet)
@@ -364,5 +364,8 @@ export {
       V3dQwarpParameters,
       V_3D_QWARP_METADATA,
       v_3d_qwarp,
+      v_3d_qwarp_cargs,
+      v_3d_qwarp_execute,
+      v_3d_qwarp_outputs,
       v_3d_qwarp_params,
 };

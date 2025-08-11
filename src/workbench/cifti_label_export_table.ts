@@ -12,40 +12,40 @@ const CIFTI_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 
 interface CiftiLabelExportTableParameters {
-    "__STYXTYPE__": "cifti-label-export-table";
+    "@type": "workbench.cifti-label-export-table";
     "label_in": InputPathType;
     "map": string;
     "table_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-label-export-table": cifti_label_export_table_cargs,
+        "workbench.cifti-label-export-table": cifti_label_export_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface CiftiLabelExportTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input cifti label file
+ * @param map the number or name of the label map to use
+ * @param table_out output - the output text file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
 ): CiftiLabelExportTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input cifti label file
-     * @param map the number or name of the label map to use
-     * @param table_out output - the output text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-label-export-table" as const,
+        "@type": "workbench.cifti-label-export-table" as const,
         "label_in": label_in,
         "map": map,
         "table_out": table_out,
@@ -89,18 +89,18 @@ function cifti_label_export_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_label_export_table_cargs(
     params: CiftiLabelExportTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-label-export-table");
@@ -111,18 +111,18 @@ function cifti_label_export_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_label_export_table_outputs(
     params: CiftiLabelExportTableParameters,
     execution: Execution,
 ): CiftiLabelExportTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiLabelExportTableOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function cifti_label_export_table_outputs(
 }
 
 
+/**
+ * Export label table from cifti as text.
+ *
+ * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
+ */
 function cifti_label_export_table_execute(
     params: CiftiLabelExportTableParameters,
     execution: Execution,
 ): CiftiLabelExportTableOutputs {
-    /**
-     * Export label table from cifti as text.
-     * 
-     * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_label_export_table_cargs(params, execution)
     const ret = cifti_label_export_table_outputs(params, execution)
@@ -156,28 +156,28 @@ function cifti_label_export_table_execute(
 }
 
 
+/**
+ * Export label table from cifti as text.
+ *
+ * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input cifti label file
+ * @param map the number or name of the label map to use
+ * @param table_out output - the output text file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
+ */
 function cifti_label_export_table(
     label_in: InputPathType,
     map: string,
     table_out: string,
     runner: Runner | null = null,
 ): CiftiLabelExportTableOutputs {
-    /**
-     * Export label table from cifti as text.
-     * 
-     * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input cifti label file
-     * @param map the number or name of the label map to use
-     * @param table_out output - the output text file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_LABEL_EXPORT_TABLE_METADATA);
     const params = cifti_label_export_table_params(label_in, map, table_out)
@@ -190,5 +190,8 @@ export {
       CiftiLabelExportTableOutputs,
       CiftiLabelExportTableParameters,
       cifti_label_export_table,
+      cifti_label_export_table_cargs,
+      cifti_label_export_table_execute,
+      cifti_label_export_table_outputs,
       cifti_label_export_table_params,
 };

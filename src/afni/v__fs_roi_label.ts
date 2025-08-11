@@ -12,7 +12,7 @@ const V__FS_ROI_LABEL_METADATA: Metadata = {
 
 
 interface VFsRoiLabelParameters {
-    "__STYXTYPE__": "@FS_roi_label";
+    "@type": "afni.@FS_roi_label";
     "label_int"?: number | null | undefined;
     "lab_flag"?: number | null | undefined;
     "rank_int"?: number | null | undefined;
@@ -25,33 +25,33 @@ interface VFsRoiLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@FS_roi_label": v__fs_roi_label_cargs,
+        "afni.@FS_roi_label": v__fs_roi_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface VFsRoiLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_int Integer labeled area in FreeSurfer's parcellation.
+ * @param lab_flag Return the name of an integer labeled area in FreeSurfer's parcellation.
+ * @param rank_int Return the name of ranked integer labeled area from the output of 3dRank or 3dmerge -1rank.
+ * @param rankmap_file Path to the rank map file.
+ * @param name Return entries matching NAME (case insensitive, partial match) from FreeSurfer's FreeSurferColorLUT.txt.
+ * @param labeltable_file Path to the label table file.
+ * @param surf_annot_cmap CMAP file output by FSread_annot's -roi_1D option.
+ * @param slab_int Return the name of an integer labeled area in FreeSurfer's surface-based annotation.
+ * @param sname_name Return the entries matching NAME (case insensitive, partial match) from the CMAP file.
+ *
+ * @returns Parameter dictionary
+ */
 function v__fs_roi_label_params(
     label_int: number | null = null,
     lab_flag: number | null = null,
@@ -82,23 +97,8 @@ function v__fs_roi_label_params(
     slab_int: number | null = null,
     sname_name: string | null = null,
 ): VFsRoiLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_int Integer labeled area in FreeSurfer's parcellation.
-     * @param lab_flag Return the name of an integer labeled area in FreeSurfer's parcellation.
-     * @param rank_int Return the name of ranked integer labeled area from the output of 3dRank or 3dmerge -1rank.
-     * @param rankmap_file Path to the rank map file.
-     * @param name Return entries matching NAME (case insensitive, partial match) from FreeSurfer's FreeSurferColorLUT.txt.
-     * @param labeltable_file Path to the label table file.
-     * @param surf_annot_cmap CMAP file output by FSread_annot's -roi_1D option.
-     * @param slab_int Return the name of an integer labeled area in FreeSurfer's surface-based annotation.
-     * @param sname_name Return the entries matching NAME (case insensitive, partial match) from the CMAP file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@FS_roi_label" as const,
+        "@type": "afni.@FS_roi_label" as const,
     };
     if (label_int !== null) {
         params["label_int"] = label_int;
@@ -131,18 +131,18 @@ function v__fs_roi_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__fs_roi_label_cargs(
     params: VFsRoiLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@FS_roi_label");
     if ((params["label_int"] ?? null) !== null) {
@@ -200,18 +200,18 @@ function v__fs_roi_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__fs_roi_label_outputs(
     params: VFsRoiLabelParameters,
     execution: Execution,
 ): VFsRoiLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFsRoiLabelOutputs = {
         root: execution.outputFile("."),
     };
@@ -219,22 +219,22 @@ function v__fs_roi_label_outputs(
 }
 
 
+/**
+ * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
+ */
 function v__fs_roi_label_execute(
     params: VFsRoiLabelParameters,
     execution: Execution,
 ): VFsRoiLabelOutputs {
-    /**
-     * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__fs_roi_label_cargs(params, execution)
     const ret = v__fs_roi_label_outputs(params, execution)
@@ -243,6 +243,26 @@ function v__fs_roi_label_execute(
 }
 
 
+/**
+ * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param label_int Integer labeled area in FreeSurfer's parcellation.
+ * @param lab_flag Return the name of an integer labeled area in FreeSurfer's parcellation.
+ * @param rank_int Return the name of ranked integer labeled area from the output of 3dRank or 3dmerge -1rank.
+ * @param rankmap_file Path to the rank map file.
+ * @param name Return entries matching NAME (case insensitive, partial match) from FreeSurfer's FreeSurferColorLUT.txt.
+ * @param labeltable_file Path to the label table file.
+ * @param surf_annot_cmap CMAP file output by FSread_annot's -roi_1D option.
+ * @param slab_int Return the name of an integer labeled area in FreeSurfer's surface-based annotation.
+ * @param sname_name Return the entries matching NAME (case insensitive, partial match) from the CMAP file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
+ */
 function v__fs_roi_label(
     label_int: number | null = null,
     lab_flag: number | null = null,
@@ -255,26 +275,6 @@ function v__fs_roi_label(
     sname_name: string | null = null,
     runner: Runner | null = null,
 ): VFsRoiLabelOutputs {
-    /**
-     * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param label_int Integer labeled area in FreeSurfer's parcellation.
-     * @param lab_flag Return the name of an integer labeled area in FreeSurfer's parcellation.
-     * @param rank_int Return the name of ranked integer labeled area from the output of 3dRank or 3dmerge -1rank.
-     * @param rankmap_file Path to the rank map file.
-     * @param name Return entries matching NAME (case insensitive, partial match) from FreeSurfer's FreeSurferColorLUT.txt.
-     * @param labeltable_file Path to the label table file.
-     * @param surf_annot_cmap CMAP file output by FSread_annot's -roi_1D option.
-     * @param slab_int Return the name of an integer labeled area in FreeSurfer's surface-based annotation.
-     * @param sname_name Return the entries matching NAME (case insensitive, partial match) from the CMAP file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FS_ROI_LABEL_METADATA);
     const params = v__fs_roi_label_params(label_int, lab_flag, rank_int, rankmap_file, name, labeltable_file, surf_annot_cmap, slab_int, sname_name)
@@ -287,5 +287,8 @@ export {
       VFsRoiLabelParameters,
       V__FS_ROI_LABEL_METADATA,
       v__fs_roi_label,
+      v__fs_roi_label_cargs,
+      v__fs_roi_label_execute,
+      v__fs_roi_label_outputs,
       v__fs_roi_label_params,
 };

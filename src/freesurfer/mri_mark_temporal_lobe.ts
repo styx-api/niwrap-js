@@ -12,7 +12,7 @@ const MRI_MARK_TEMPORAL_LOBE_METADATA: Metadata = {
 
 
 interface MriMarkTemporalLobeParameters {
-    "__STYXTYPE__": "mri_mark_temporal_lobe";
+    "@type": "freesurfer.mri_mark_temporal_lobe";
     "spacing"?: string | null | undefined;
     "use_gradient": boolean;
     "subjects": Array<InputPathType>;
@@ -20,35 +20,35 @@ interface MriMarkTemporalLobeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mark_temporal_lobe": mri_mark_temporal_lobe_cargs,
+        "freesurfer.mri_mark_temporal_lobe": mri_mark_temporal_lobe_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_mark_temporal_lobe": mri_mark_temporal_lobe_outputs,
+        "freesurfer.mri_mark_temporal_lobe": mri_mark_temporal_lobe_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriMarkTemporalLobeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects Subject MRI images
+ * @param output_file Output file for marked temporal lobes
+ * @param spacing The spacing of classifiers in canonical space
+ * @param use_gradient Flag to use intensity gradient as input to classifier
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mark_temporal_lobe_params(
     subjects: Array<InputPathType>,
     output_file: string,
     spacing: string | null = null,
     use_gradient: boolean = false,
 ): MriMarkTemporalLobeParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects Subject MRI images
-     * @param output_file Output file for marked temporal lobes
-     * @param spacing The spacing of classifiers in canonical space
-     * @param use_gradient Flag to use intensity gradient as input to classifier
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mark_temporal_lobe" as const,
+        "@type": "freesurfer.mri_mark_temporal_lobe" as const,
         "use_gradient": use_gradient,
         "subjects": subjects,
         "output_file": output_file,
@@ -100,18 +100,18 @@ function mri_mark_temporal_lobe_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mark_temporal_lobe_cargs(
     params: MriMarkTemporalLobeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mark_temporal_lobe");
     if ((params["spacing"] ?? null) !== null) {
@@ -127,18 +127,18 @@ function mri_mark_temporal_lobe_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mark_temporal_lobe_outputs(
     params: MriMarkTemporalLobeParameters,
     execution: Execution,
 ): MriMarkTemporalLobeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMarkTemporalLobeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function mri_mark_temporal_lobe_outputs(
 }
 
 
+/**
+ * A tool for marking the temporal lobe in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
+ */
 function mri_mark_temporal_lobe_execute(
     params: MriMarkTemporalLobeParameters,
     execution: Execution,
 ): MriMarkTemporalLobeOutputs {
-    /**
-     * A tool for marking the temporal lobe in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mark_temporal_lobe_cargs(params, execution)
     const ret = mri_mark_temporal_lobe_outputs(params, execution)
@@ -171,6 +171,21 @@ function mri_mark_temporal_lobe_execute(
 }
 
 
+/**
+ * A tool for marking the temporal lobe in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects Subject MRI images
+ * @param output_file Output file for marked temporal lobes
+ * @param spacing The spacing of classifiers in canonical space
+ * @param use_gradient Flag to use intensity gradient as input to classifier
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
+ */
 function mri_mark_temporal_lobe(
     subjects: Array<InputPathType>,
     output_file: string,
@@ -178,21 +193,6 @@ function mri_mark_temporal_lobe(
     use_gradient: boolean = false,
     runner: Runner | null = null,
 ): MriMarkTemporalLobeOutputs {
-    /**
-     * A tool for marking the temporal lobe in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects Subject MRI images
-     * @param output_file Output file for marked temporal lobes
-     * @param spacing The spacing of classifiers in canonical space
-     * @param use_gradient Flag to use intensity gradient as input to classifier
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MARK_TEMPORAL_LOBE_METADATA);
     const params = mri_mark_temporal_lobe_params(subjects, output_file, spacing, use_gradient)
@@ -205,5 +205,8 @@ export {
       MriMarkTemporalLobeOutputs,
       MriMarkTemporalLobeParameters,
       mri_mark_temporal_lobe,
+      mri_mark_temporal_lobe_cargs,
+      mri_mark_temporal_lobe_execute,
+      mri_mark_temporal_lobe_outputs,
       mri_mark_temporal_lobe_params,
 };

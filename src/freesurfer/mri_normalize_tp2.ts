@@ -12,7 +12,7 @@ const MRI_NORMALIZE_TP2_METADATA: Metadata = {
 
 
 interface MriNormalizeTp2Parameters {
-    "__STYXTYPE__": "mri_normalize_tp2";
+    "@type": "freesurfer.mri_normalize_tp2";
     "input_vol": InputPathType;
     "normalized_vol": string;
     "t1_volume"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface MriNormalizeTp2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_normalize_tp2": mri_normalize_tp2_cargs,
+        "freesurfer.mri_normalize_tp2": mri_normalize_tp2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_normalize_tp2": mri_normalize_tp2_outputs,
+        "freesurfer.mri_normalize_tp2": mri_normalize_tp2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface MriNormalizeTp2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input volume to be normalized
+ * @param normalized_vol Output normalized volume
+ * @param t1_volume T1 volume for tp1 where normalization is applied
+ * @param mask1 Brain mask for tp1, mapped to tp2 via the xform
+ * @param mask2 Brain mask for tp2, mapped to tp1 via the inverse xform
+ * @param threshold Threshold for background (default = 1.0)
+ * @param ctrl Control point volume for tp1
+ * @param xform LTA transform that aligns tp1 to tp2
+ * @param invert_flag Reversely apply -xform
+ * @param lta_src Source volume for -xform if not available from the xform file
+ * @param lta_dst Target volume for -xform if not available from the xform file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_normalize_tp2_params(
     input_vol: InputPathType,
     normalized_vol: string,
@@ -91,25 +108,8 @@ function mri_normalize_tp2_params(
     lta_src: InputPathType | null = null,
     lta_dst: InputPathType | null = null,
 ): MriNormalizeTp2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input volume to be normalized
-     * @param normalized_vol Output normalized volume
-     * @param t1_volume T1 volume for tp1 where normalization is applied
-     * @param mask1 Brain mask for tp1, mapped to tp2 via the xform
-     * @param mask2 Brain mask for tp2, mapped to tp1 via the inverse xform
-     * @param threshold Threshold for background (default = 1.0)
-     * @param ctrl Control point volume for tp1
-     * @param xform LTA transform that aligns tp1 to tp2
-     * @param invert_flag Reversely apply -xform
-     * @param lta_src Source volume for -xform if not available from the xform file
-     * @param lta_dst Target volume for -xform if not available from the xform file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_normalize_tp2" as const,
+        "@type": "freesurfer.mri_normalize_tp2" as const,
         "input_vol": input_vol,
         "normalized_vol": normalized_vol,
         "invert_flag": invert_flag,
@@ -142,18 +142,18 @@ function mri_normalize_tp2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_normalize_tp2_cargs(
     params: MriNormalizeTp2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_normalize_tp2");
     cargs.push(execution.inputFile((params["input_vol"] ?? null)));
@@ -213,18 +213,18 @@ function mri_normalize_tp2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_normalize_tp2_outputs(
     params: MriNormalizeTp2Parameters,
     execution: Execution,
 ): MriNormalizeTp2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNormalizeTp2Outputs = {
         root: execution.outputFile("."),
         output_normalized_vol: execution.outputFile([(params["normalized_vol"] ?? null)].join('')),
@@ -233,22 +233,22 @@ function mri_normalize_tp2_outputs(
 }
 
 
+/**
+ * Normalize the input volume using control points of tp1 to help normalize tp2.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
+ */
 function mri_normalize_tp2_execute(
     params: MriNormalizeTp2Parameters,
     execution: Execution,
 ): MriNormalizeTp2Outputs {
-    /**
-     * Normalize the input volume using control points of tp1 to help normalize tp2.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
-     */
     params = execution.params(params)
     const cargs = mri_normalize_tp2_cargs(params, execution)
     const ret = mri_normalize_tp2_outputs(params, execution)
@@ -257,6 +257,28 @@ function mri_normalize_tp2_execute(
 }
 
 
+/**
+ * Normalize the input volume using control points of tp1 to help normalize tp2.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input volume to be normalized
+ * @param normalized_vol Output normalized volume
+ * @param t1_volume T1 volume for tp1 where normalization is applied
+ * @param mask1 Brain mask for tp1, mapped to tp2 via the xform
+ * @param mask2 Brain mask for tp2, mapped to tp1 via the inverse xform
+ * @param threshold Threshold for background (default = 1.0)
+ * @param ctrl Control point volume for tp1
+ * @param xform LTA transform that aligns tp1 to tp2
+ * @param invert_flag Reversely apply -xform
+ * @param lta_src Source volume for -xform if not available from the xform file
+ * @param lta_dst Target volume for -xform if not available from the xform file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
+ */
 function mri_normalize_tp2(
     input_vol: InputPathType,
     normalized_vol: string,
@@ -271,28 +293,6 @@ function mri_normalize_tp2(
     lta_dst: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriNormalizeTp2Outputs {
-    /**
-     * Normalize the input volume using control points of tp1 to help normalize tp2.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input volume to be normalized
-     * @param normalized_vol Output normalized volume
-     * @param t1_volume T1 volume for tp1 where normalization is applied
-     * @param mask1 Brain mask for tp1, mapped to tp2 via the xform
-     * @param mask2 Brain mask for tp2, mapped to tp1 via the inverse xform
-     * @param threshold Threshold for background (default = 1.0)
-     * @param ctrl Control point volume for tp1
-     * @param xform LTA transform that aligns tp1 to tp2
-     * @param invert_flag Reversely apply -xform
-     * @param lta_src Source volume for -xform if not available from the xform file
-     * @param lta_dst Target volume for -xform if not available from the xform file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NORMALIZE_TP2_METADATA);
     const params = mri_normalize_tp2_params(input_vol, normalized_vol, t1_volume, mask1, mask2, threshold, ctrl, xform, invert_flag, lta_src, lta_dst)
@@ -305,5 +305,8 @@ export {
       MriNormalizeTp2Outputs,
       MriNormalizeTp2Parameters,
       mri_normalize_tp2,
+      mri_normalize_tp2_cargs,
+      mri_normalize_tp2_execute,
+      mri_normalize_tp2_outputs,
       mri_normalize_tp2_params,
 };

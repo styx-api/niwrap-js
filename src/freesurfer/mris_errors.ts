@@ -12,38 +12,38 @@ const MRIS_ERRORS_METADATA: Metadata = {
 
 
 interface MrisErrorsParameters {
-    "__STYXTYPE__": "mris_errors";
+    "@type": "freesurfer.mris_errors";
     "input_image_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_errors": mris_errors_cargs,
+        "freesurfer.mris_errors": mris_errors_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MrisErrorsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image_file Input image file.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_errors_params(
     input_image_file: InputPathType,
 ): MrisErrorsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image_file Input image file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_errors" as const,
+        "@type": "freesurfer.mris_errors" as const,
         "input_image_file": input_image_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_errors_cargs(
     params: MrisErrorsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_errors");
     cargs.push(execution.inputFile((params["input_image_file"] ?? null)));
@@ -100,18 +100,18 @@ function mris_errors_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_errors_outputs(
     params: MrisErrorsParameters,
     execution: Execution,
 ): MrisErrorsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisErrorsOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function mris_errors_outputs(
 }
 
 
+/**
+ * This program will unfold an MRI on the surface of an ellipsoid.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
+ */
 function mris_errors_execute(
     params: MrisErrorsParameters,
     execution: Execution,
 ): MrisErrorsOutputs {
-    /**
-     * This program will unfold an MRI on the surface of an ellipsoid.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_errors_cargs(params, execution)
     const ret = mris_errors_outputs(params, execution)
@@ -143,22 +143,22 @@ function mris_errors_execute(
 }
 
 
+/**
+ * This program will unfold an MRI on the surface of an ellipsoid.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image_file Input image file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
+ */
 function mris_errors(
     input_image_file: InputPathType,
     runner: Runner | null = null,
 ): MrisErrorsOutputs {
-    /**
-     * This program will unfold an MRI on the surface of an ellipsoid.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image_file Input image file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ERRORS_METADATA);
     const params = mris_errors_params(input_image_file)
@@ -171,5 +171,8 @@ export {
       MrisErrorsOutputs,
       MrisErrorsParameters,
       mris_errors,
+      mris_errors_cargs,
+      mris_errors_execute,
+      mris_errors_outputs,
       mris_errors_params,
 };

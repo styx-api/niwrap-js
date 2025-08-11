@@ -12,7 +12,7 @@ const MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 
 
 interface MrisComputeVolumeFractionsParameters {
-    "__STYXTYPE__": "mris_compute_volume_fractions";
+    "@type": "freesurfer.mris_compute_volume_fractions";
     "volume_file": InputPathType;
     "surface_file": InputPathType;
     "accuracy": number;
@@ -22,35 +22,35 @@ interface MrisComputeVolumeFractionsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_volume_fractions": mris_compute_volume_fractions_cargs,
+        "freesurfer.mris_compute_volume_fractions": mris_compute_volume_fractions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_compute_volume_fractions": mris_compute_volume_fractions_outputs,
+        "freesurfer.mris_compute_volume_fractions": mris_compute_volume_fractions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisComputeVolumeFractionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_file Input volume file.
+ * @param surface_file Input surface file.
+ * @param accuracy Required accuracy.
+ * @param output_file Output volume file for the fractions.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_volume_fractions_params(
     volume_file: InputPathType,
     surface_file: InputPathType,
@@ -81,20 +93,8 @@ function mris_compute_volume_fractions_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MrisComputeVolumeFractionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_file Input volume file.
-     * @param surface_file Input surface file.
-     * @param accuracy Required accuracy.
-     * @param output_file Output volume file for the fractions.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_volume_fractions" as const,
+        "@type": "freesurfer.mris_compute_volume_fractions" as const,
         "volume_file": volume_file,
         "surface_file": surface_file,
         "accuracy": accuracy,
@@ -106,18 +106,18 @@ function mris_compute_volume_fractions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_volume_fractions_cargs(
     params: MrisComputeVolumeFractionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_volume_fractions");
     cargs.push(
@@ -146,18 +146,18 @@ function mris_compute_volume_fractions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_volume_fractions_outputs(
     params: MrisComputeVolumeFractionsParameters,
     execution: Execution,
 ): MrisComputeVolumeFractionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeVolumeFractionsOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -166,22 +166,22 @@ function mris_compute_volume_fractions_outputs(
 }
 
 
+/**
+ * Computes volume fractions based on a given surface and volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
+ */
 function mris_compute_volume_fractions_execute(
     params: MrisComputeVolumeFractionsParameters,
     execution: Execution,
 ): MrisComputeVolumeFractionsOutputs {
-    /**
-     * Computes volume fractions based on a given surface and volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_volume_fractions_cargs(params, execution)
     const ret = mris_compute_volume_fractions_outputs(params, execution)
@@ -190,6 +190,23 @@ function mris_compute_volume_fractions_execute(
 }
 
 
+/**
+ * Computes volume fractions based on a given surface and volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume_file Input volume file.
+ * @param surface_file Input surface file.
+ * @param accuracy Required accuracy.
+ * @param output_file Output volume file for the fractions.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
+ */
 function mris_compute_volume_fractions(
     volume_file: InputPathType,
     surface_file: InputPathType,
@@ -199,23 +216,6 @@ function mris_compute_volume_fractions(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeVolumeFractionsOutputs {
-    /**
-     * Computes volume fractions based on a given surface and volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume_file Input volume file.
-     * @param surface_file Input surface file.
-     * @param accuracy Required accuracy.
-     * @param output_file Output volume file for the fractions.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA);
     const params = mris_compute_volume_fractions_params(volume_file, surface_file, accuracy, output_file, debug, checkopts)
@@ -228,5 +228,8 @@ export {
       MrisComputeVolumeFractionsOutputs,
       MrisComputeVolumeFractionsParameters,
       mris_compute_volume_fractions,
+      mris_compute_volume_fractions_cargs,
+      mris_compute_volume_fractions_execute,
+      mris_compute_volume_fractions_outputs,
       mris_compute_volume_fractions_params,
 };

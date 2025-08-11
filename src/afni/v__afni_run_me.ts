@@ -12,40 +12,40 @@ const V__AFNI_RUN_ME_METADATA: Metadata = {
 
 
 interface VAfniRunMeParameters {
-    "__STYXTYPE__": "@afni.run.me";
+    "@type": "afni.@afni.run.me";
     "go": boolean;
     "curl": boolean;
     "help": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@afni.run.me": v__afni_run_me_cargs,
+        "afni.@afni.run.me": v__afni_run_me_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface VAfniRunMeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param go Execute the work
+ * @param curl Default to curl instead of wget
+ * @param help Show help message
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_run_me_params(
     go: boolean = false,
     curl: boolean = false,
     help: boolean = false,
 ): VAfniRunMeParameters {
-    /**
-     * Build parameters.
-    
-     * @param go Execute the work
-     * @param curl Default to curl instead of wget
-     * @param help Show help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@afni.run.me" as const,
+        "@type": "afni.@afni.run.me" as const,
         "go": go,
         "curl": curl,
         "help": help,
@@ -89,18 +89,18 @@ function v__afni_run_me_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_run_me_cargs(
     params: VAfniRunMeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@afni.run.me");
     if ((params["go"] ?? null)) {
@@ -116,18 +116,18 @@ function v__afni_run_me_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_run_me_outputs(
     params: VAfniRunMeParameters,
     execution: Execution,
 ): VAfniRunMeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniRunMeOutputs = {
         root: execution.outputFile("."),
     };
@@ -135,22 +135,22 @@ function v__afni_run_me_outputs(
 }
 
 
+/**
+ * A tool to execute a specific command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRunMeOutputs`).
+ */
 function v__afni_run_me_execute(
     params: VAfniRunMeParameters,
     execution: Execution,
 ): VAfniRunMeOutputs {
-    /**
-     * A tool to execute a specific command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniRunMeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_run_me_cargs(params, execution)
     const ret = v__afni_run_me_outputs(params, execution)
@@ -159,26 +159,26 @@ function v__afni_run_me_execute(
 }
 
 
+/**
+ * A tool to execute a specific command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param go Execute the work
+ * @param curl Default to curl instead of wget
+ * @param help Show help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRunMeOutputs`).
+ */
 function v__afni_run_me(
     go: boolean = false,
     curl: boolean = false,
     help: boolean = false,
     runner: Runner | null = null,
 ): VAfniRunMeOutputs {
-    /**
-     * A tool to execute a specific command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param go Execute the work
-     * @param curl Default to curl instead of wget
-     * @param help Show help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniRunMeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_RUN_ME_METADATA);
     const params = v__afni_run_me_params(go, curl, help)
@@ -191,5 +191,8 @@ export {
       VAfniRunMeParameters,
       V__AFNI_RUN_ME_METADATA,
       v__afni_run_me,
+      v__afni_run_me_cargs,
+      v__afni_run_me_execute,
+      v__afni_run_me_outputs,
       v__afni_run_me_params,
 };

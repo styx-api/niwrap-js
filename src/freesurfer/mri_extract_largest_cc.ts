@@ -12,7 +12,7 @@ const MRI_EXTRACT_LARGEST_CC_METADATA: Metadata = {
 
 
 interface MriExtractLargestCcParameters {
-    "__STYXTYPE__": "mri_extract_largest_CC";
+    "@type": "freesurfer.mri_extract_largest_CC";
     "input_volume": InputPathType;
     "output_volume": string;
     "threshold"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface MriExtractLargestCcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_extract_largest_CC": mri_extract_largest_cc_cargs,
+        "freesurfer.mri_extract_largest_CC": mri_extract_largest_cc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_extract_largest_CC": mri_extract_largest_cc_outputs,
+        "freesurfer.mri_extract_largest_CC": mri_extract_largest_cc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriExtractLargestCcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume.
+ * @param output_volume Output volume.
+ * @param threshold Threshold for object.
+ * @param hemisphere Set the target value corresponding to lh (255) or rh (127).
+ * @param largest_cc_in_bg Find the largest CC in the background.
+ * @param original_volume Clone values from original volume into output (used with -I).
+ * @param label_value Perform connected components on voxels with specified label value.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_extract_largest_cc_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -83,21 +96,8 @@ function mri_extract_largest_cc_params(
     original_volume: InputPathType | null = null,
     label_value: number | null = null,
 ): MriExtractLargestCcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume.
-     * @param output_volume Output volume.
-     * @param threshold Threshold for object.
-     * @param hemisphere Set the target value corresponding to lh (255) or rh (127).
-     * @param largest_cc_in_bg Find the largest CC in the background.
-     * @param original_volume Clone values from original volume into output (used with -I).
-     * @param label_value Perform connected components on voxels with specified label value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_extract_largest_CC" as const,
+        "@type": "freesurfer.mri_extract_largest_CC" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "largest_cc_in_bg": largest_cc_in_bg,
@@ -118,18 +118,18 @@ function mri_extract_largest_cc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_extract_largest_cc_cargs(
     params: MriExtractLargestCcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_extract_largest_CC");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -165,18 +165,18 @@ function mri_extract_largest_cc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_extract_largest_cc_outputs(
     params: MriExtractLargestCcParameters,
     execution: Execution,
 ): MriExtractLargestCcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExtractLargestCcOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -185,22 +185,22 @@ function mri_extract_largest_cc_outputs(
 }
 
 
+/**
+ * This program extracts the largest connected component of the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
+ */
 function mri_extract_largest_cc_execute(
     params: MriExtractLargestCcParameters,
     execution: Execution,
 ): MriExtractLargestCcOutputs {
-    /**
-     * This program extracts the largest connected component of the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_extract_largest_cc_cargs(params, execution)
     const ret = mri_extract_largest_cc_outputs(params, execution)
@@ -209,6 +209,24 @@ function mri_extract_largest_cc_execute(
 }
 
 
+/**
+ * This program extracts the largest connected component of the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume.
+ * @param output_volume Output volume.
+ * @param threshold Threshold for object.
+ * @param hemisphere Set the target value corresponding to lh (255) or rh (127).
+ * @param largest_cc_in_bg Find the largest CC in the background.
+ * @param original_volume Clone values from original volume into output (used with -I).
+ * @param label_value Perform connected components on voxels with specified label value.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
+ */
 function mri_extract_largest_cc(
     input_volume: InputPathType,
     output_volume: string,
@@ -219,24 +237,6 @@ function mri_extract_largest_cc(
     label_value: number | null = null,
     runner: Runner | null = null,
 ): MriExtractLargestCcOutputs {
-    /**
-     * This program extracts the largest connected component of the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume.
-     * @param output_volume Output volume.
-     * @param threshold Threshold for object.
-     * @param hemisphere Set the target value corresponding to lh (255) or rh (127).
-     * @param largest_cc_in_bg Find the largest CC in the background.
-     * @param original_volume Clone values from original volume into output (used with -I).
-     * @param label_value Perform connected components on voxels with specified label value.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXTRACT_LARGEST_CC_METADATA);
     const params = mri_extract_largest_cc_params(input_volume, output_volume, threshold, hemisphere, largest_cc_in_bg, original_volume, label_value)
@@ -249,5 +249,8 @@ export {
       MriExtractLargestCcOutputs,
       MriExtractLargestCcParameters,
       mri_extract_largest_cc,
+      mri_extract_largest_cc_cargs,
+      mri_extract_largest_cc_execute,
+      mri_extract_largest_cc_outputs,
       mri_extract_largest_cc_params,
 };

@@ -12,7 +12,7 @@ const LONGMC_METADATA: Metadata = {
 
 
 interface LongmcParameters {
-    "__STYXTYPE__": "longmc";
+    "@type": "freesurfer.longmc";
     "cross_tp_name": string;
     "base_name": string;
     "conform_to_hires": boolean;
@@ -23,33 +23,33 @@ interface LongmcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "longmc": longmc_cargs,
+        "freesurfer.longmc": longmc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface LongmcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cross_tp_name Cross time point name for the longitudinal analysis
+ * @param base_name Base name for the longitudinal analysis
+ * @param subjects_dir Set the SUBJECTS_DIR directory
+ * @param conform_to_hires Option to conform input to high-resolution
+ * @param no_conform_to_hires Option to not conform input to high-resolution
+ * @param subject_name Subject name override, must be declared after -long
+ * @param no_force_update Do not force update
+ *
+ * @returns Parameter dictionary
+ */
 function longmc_params(
     cross_tp_name: string,
     base_name: string,
@@ -78,21 +91,8 @@ function longmc_params(
     subject_name: string | null = null,
     no_force_update: boolean = false,
 ): LongmcParameters {
-    /**
-     * Build parameters.
-    
-     * @param cross_tp_name Cross time point name for the longitudinal analysis
-     * @param base_name Base name for the longitudinal analysis
-     * @param subjects_dir Set the SUBJECTS_DIR directory
-     * @param conform_to_hires Option to conform input to high-resolution
-     * @param no_conform_to_hires Option to not conform input to high-resolution
-     * @param subject_name Subject name override, must be declared after -long
-     * @param no_force_update Do not force update
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "longmc" as const,
+        "@type": "freesurfer.longmc" as const,
         "cross_tp_name": cross_tp_name,
         "base_name": base_name,
         "conform_to_hires": conform_to_hires,
@@ -107,18 +107,18 @@ function longmc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function longmc_cargs(
     params: LongmcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("longmc");
     cargs.push(
@@ -149,18 +149,18 @@ function longmc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function longmc_outputs(
     params: LongmcParameters,
     execution: Execution,
 ): LongmcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongmcOutputs = {
         root: execution.outputFile("."),
     };
@@ -168,22 +168,22 @@ function longmc_outputs(
 }
 
 
+/**
+ * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongmcOutputs`).
+ */
 function longmc_execute(
     params: LongmcParameters,
     execution: Execution,
 ): LongmcOutputs {
-    /**
-     * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongmcOutputs`).
-     */
     params = execution.params(params)
     const cargs = longmc_cargs(params, execution)
     const ret = longmc_outputs(params, execution)
@@ -192,6 +192,24 @@ function longmc_execute(
 }
 
 
+/**
+ * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param cross_tp_name Cross time point name for the longitudinal analysis
+ * @param base_name Base name for the longitudinal analysis
+ * @param subjects_dir Set the SUBJECTS_DIR directory
+ * @param conform_to_hires Option to conform input to high-resolution
+ * @param no_conform_to_hires Option to not conform input to high-resolution
+ * @param subject_name Subject name override, must be declared after -long
+ * @param no_force_update Do not force update
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongmcOutputs`).
+ */
 function longmc(
     cross_tp_name: string,
     base_name: string,
@@ -202,24 +220,6 @@ function longmc(
     no_force_update: boolean = false,
     runner: Runner | null = null,
 ): LongmcOutputs {
-    /**
-     * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param cross_tp_name Cross time point name for the longitudinal analysis
-     * @param base_name Base name for the longitudinal analysis
-     * @param subjects_dir Set the SUBJECTS_DIR directory
-     * @param conform_to_hires Option to conform input to high-resolution
-     * @param no_conform_to_hires Option to not conform input to high-resolution
-     * @param subject_name Subject name override, must be declared after -long
-     * @param no_force_update Do not force update
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongmcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONGMC_METADATA);
     const params = longmc_params(cross_tp_name, base_name, subjects_dir, conform_to_hires, no_conform_to_hires, subject_name, no_force_update)
@@ -232,5 +232,8 @@ export {
       LongmcOutputs,
       LongmcParameters,
       longmc,
+      longmc_cargs,
+      longmc_execute,
+      longmc_outputs,
       longmc_params,
 };

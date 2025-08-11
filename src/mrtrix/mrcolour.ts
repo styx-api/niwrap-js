@@ -12,14 +12,14 @@ const MRCOLOUR_METADATA: Metadata = {
 
 
 interface MrcolourConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrcolour.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrcolourParameters {
-    "__STYXTYPE__": "mrcolour";
+    "@type": "mrtrix.mrcolour";
     "upper"?: number | null | undefined;
     "lower"?: number | null | undefined;
     "colour"?: Array<number> | null | undefined;
@@ -37,55 +37,55 @@ interface MrcolourParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrcolour": mrcolour_cargs,
-        "config": mrcolour_config_cargs,
+        "mrtrix.mrcolour": mrcolour_cargs,
+        "mrtrix.mrcolour.config": mrcolour_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrcolour": mrcolour_outputs,
+        "mrtrix.mrcolour": mrcolour_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcolour_config_params(
     key: string,
     value: string,
 ): MrcolourConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrcolour.config" as const,
         "key": key,
         "value": value,
     };
@@ -93,18 +93,18 @@ function mrcolour_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcolour_config_cargs(
     params: MrcolourConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -130,6 +130,26 @@ interface MrcolourOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image
+ * @param map the colourmap to apply; choices are: gray,hot,cool,jet,inferno,viridis,pet,colour,rgb
+ * @param output the output image
+ * @param upper manually set the upper intensity of the colour mapping
+ * @param lower manually set the lower intensity of the colour mapping
+ * @param colour set the target colour for use of the 'colour' map (three comma-separated floating-point values)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcolour_params(
     input: InputPathType,
     map: string,
@@ -146,28 +166,8 @@ function mrcolour_params(
     help: boolean = false,
     version: boolean = false,
 ): MrcolourParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image
-     * @param map the colourmap to apply; choices are: gray,hot,cool,jet,inferno,viridis,pet,colour,rgb
-     * @param output the output image
-     * @param upper manually set the upper intensity of the colour mapping
-     * @param lower manually set the lower intensity of the colour mapping
-     * @param colour set the target colour for use of the 'colour' map (three comma-separated floating-point values)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrcolour" as const,
+        "@type": "mrtrix.mrcolour" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -197,18 +197,18 @@ function mrcolour_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcolour_cargs(
     params: MrcolourParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrcolour");
     if ((params["upper"] ?? null) !== null) {
@@ -248,7 +248,7 @@ function mrcolour_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -263,18 +263,18 @@ function mrcolour_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrcolour_outputs(
     params: MrcolourParameters,
     execution: Execution,
 ): MrcolourOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrcolourOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -283,30 +283,30 @@ function mrcolour_outputs(
 }
 
 
+/**
+ * Apply a colour map to an image.
+ *
+ * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.
+ *
+ * By default, the command will automatically determine the maximum and minimum intensities of the input image, and use that information to set the upper and lower bounds of the applied colourmap. This behaviour can be overridden by manually specifying these bounds using the -upper and -lower options respectively.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
+ */
 function mrcolour_execute(
     params: MrcolourParameters,
     execution: Execution,
 ): MrcolourOutputs {
-    /**
-     * Apply a colour map to an image.
-     * 
-     * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.
-     * 
-     * By default, the command will automatically determine the maximum and minimum intensities of the input image, and use that information to set the upper and lower bounds of the applied colourmap. This behaviour can be overridden by manually specifying these bounds using the -upper and -lower options respectively.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrcolour_cargs(params, execution)
     const ret = mrcolour_outputs(params, execution)
@@ -315,6 +315,39 @@ function mrcolour_execute(
 }
 
 
+/**
+ * Apply a colour map to an image.
+ *
+ * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.
+ *
+ * By default, the command will automatically determine the maximum and minimum intensities of the input image, and use that information to set the upper and lower bounds of the applied colourmap. This behaviour can be overridden by manually specifying these bounds using the -upper and -lower options respectively.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image
+ * @param map the colourmap to apply; choices are: gray,hot,cool,jet,inferno,viridis,pet,colour,rgb
+ * @param output the output image
+ * @param upper manually set the upper intensity of the colour mapping
+ * @param lower manually set the lower intensity of the colour mapping
+ * @param colour set the target colour for use of the 'colour' map (three comma-separated floating-point values)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
+ */
 function mrcolour(
     input: InputPathType,
     map: string,
@@ -332,39 +365,6 @@ function mrcolour(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcolourOutputs {
-    /**
-     * Apply a colour map to an image.
-     * 
-     * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.
-     * 
-     * By default, the command will automatically determine the maximum and minimum intensities of the input image, and use that information to set the upper and lower bounds of the applied colourmap. This behaviour can be overridden by manually specifying these bounds using the -upper and -lower options respectively.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image
-     * @param map the colourmap to apply; choices are: gray,hot,cool,jet,inferno,viridis,pet,colour,rgb
-     * @param output the output image
-     * @param upper manually set the upper intensity of the colour mapping
-     * @param lower manually set the lower intensity of the colour mapping
-     * @param colour set the target colour for use of the 'colour' map (three comma-separated floating-point values)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRCOLOUR_METADATA);
     const params = mrcolour_params(input, map, output, upper, lower, colour, info, quiet, debug, force, nthreads, config, help, version)
@@ -378,6 +378,10 @@ export {
       MrcolourOutputs,
       MrcolourParameters,
       mrcolour,
+      mrcolour_cargs,
+      mrcolour_config_cargs,
       mrcolour_config_params,
+      mrcolour_execute,
+      mrcolour_outputs,
       mrcolour_params,
 };

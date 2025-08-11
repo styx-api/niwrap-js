@@ -12,41 +12,41 @@ const VENTFIX_METADATA: Metadata = {
 
 
 interface VentfixParameters {
-    "__STYXTYPE__": "ventfix";
+    "@type": "freesurfer.ventfix";
     "subject_dir": string;
     "option1"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ventfix": ventfix_cargs,
+        "freesurfer.ventfix": ventfix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ventfix": ventfix_outputs,
+        "freesurfer.ventfix": ventfix_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VentfixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Path to the subject's directory containing MRI scans.
+ * @param option1 Description of option 1
+ *
+ * @returns Parameter dictionary
+ */
 function ventfix_params(
     subject_dir: string,
     option1: string | null = null,
 ): VentfixParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Path to the subject's directory containing MRI scans.
-     * @param option1 Description of option 1
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ventfix" as const,
+        "@type": "freesurfer.ventfix" as const,
         "subject_dir": subject_dir,
     };
     if (option1 !== null) {
@@ -92,18 +92,18 @@ function ventfix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ventfix_cargs(
     params: VentfixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ventfix");
     cargs.push((params["subject_dir"] ?? null));
@@ -117,18 +117,18 @@ function ventfix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ventfix_outputs(
     params: VentfixParameters,
     execution: Execution,
 ): VentfixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VentfixOutputs = {
         root: execution.outputFile("."),
         fixed_ventricles: execution.outputFile([(params["subject_dir"] ?? null), "/fixed_ventricles.nii.gz"].join('')),
@@ -137,22 +137,22 @@ function ventfix_outputs(
 }
 
 
+/**
+ * Tool for fixing ventricles in MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VentfixOutputs`).
+ */
 function ventfix_execute(
     params: VentfixParameters,
     execution: Execution,
 ): VentfixOutputs {
-    /**
-     * Tool for fixing ventricles in MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VentfixOutputs`).
-     */
     params = execution.params(params)
     const cargs = ventfix_cargs(params, execution)
     const ret = ventfix_outputs(params, execution)
@@ -161,24 +161,24 @@ function ventfix_execute(
 }
 
 
+/**
+ * Tool for fixing ventricles in MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Path to the subject's directory containing MRI scans.
+ * @param option1 Description of option 1
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VentfixOutputs`).
+ */
 function ventfix(
     subject_dir: string,
     option1: string | null = null,
     runner: Runner | null = null,
 ): VentfixOutputs {
-    /**
-     * Tool for fixing ventricles in MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Path to the subject's directory containing MRI scans.
-     * @param option1 Description of option 1
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VentfixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VENTFIX_METADATA);
     const params = ventfix_params(subject_dir, option1)
@@ -191,5 +191,8 @@ export {
       VentfixOutputs,
       VentfixParameters,
       ventfix,
+      ventfix_cargs,
+      ventfix_execute,
+      ventfix_outputs,
       ventfix_params,
 };

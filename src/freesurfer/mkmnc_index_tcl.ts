@@ -12,41 +12,41 @@ const MKMNC_INDEX_TCL_METADATA: Metadata = {
 
 
 interface MkmncIndexTclParameters {
-    "__STYXTYPE__": "mkmnc_index.tcl";
+    "@type": "freesurfer.mkmnc_index.tcl";
     "infile": InputPathType;
     "outfile": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mkmnc_index.tcl": mkmnc_index_tcl_cargs,
+        "freesurfer.mkmnc_index.tcl": mkmnc_index_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mkmnc_index.tcl": mkmnc_index_tcl_outputs,
+        "freesurfer.mkmnc_index.tcl": mkmnc_index_tcl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MkmncIndexTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input MINC file
+ * @param outfile Output index file
+ *
+ * @returns Parameter dictionary
+ */
 function mkmnc_index_tcl_params(
     infile: InputPathType,
     outfile: string,
 ): MkmncIndexTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input MINC file
-     * @param outfile Output index file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mkmnc_index.tcl" as const,
+        "@type": "freesurfer.mkmnc_index.tcl" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -90,18 +90,18 @@ function mkmnc_index_tcl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mkmnc_index_tcl_cargs(
     params: MkmncIndexTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mkmnc_index.tcl");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -110,18 +110,18 @@ function mkmnc_index_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mkmnc_index_tcl_outputs(
     params: MkmncIndexTclParameters,
     execution: Execution,
 ): MkmncIndexTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MkmncIndexTclOutputs = {
         root: execution.outputFile("."),
         indexfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mkmnc_index_tcl_outputs(
 }
 
 
+/**
+ * A tool for creating MINC indices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
+ */
 function mkmnc_index_tcl_execute(
     params: MkmncIndexTclParameters,
     execution: Execution,
 ): MkmncIndexTclOutputs {
-    /**
-     * A tool for creating MINC indices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = mkmnc_index_tcl_cargs(params, execution)
     const ret = mkmnc_index_tcl_outputs(params, execution)
@@ -154,24 +154,24 @@ function mkmnc_index_tcl_execute(
 }
 
 
+/**
+ * A tool for creating MINC indices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input MINC file
+ * @param outfile Output index file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
+ */
 function mkmnc_index_tcl(
     infile: InputPathType,
     outfile: string,
     runner: Runner | null = null,
 ): MkmncIndexTclOutputs {
-    /**
-     * A tool for creating MINC indices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input MINC file
-     * @param outfile Output index file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKMNC_INDEX_TCL_METADATA);
     const params = mkmnc_index_tcl_params(infile, outfile)
@@ -184,5 +184,8 @@ export {
       MkmncIndexTclOutputs,
       MkmncIndexTclParameters,
       mkmnc_index_tcl,
+      mkmnc_index_tcl_cargs,
+      mkmnc_index_tcl_execute,
+      mkmnc_index_tcl_outputs,
       mkmnc_index_tcl_params,
 };

@@ -12,7 +12,7 @@ const V__COMMAND_GLOBB_METADATA: Metadata = {
 
 
 interface VCommandGlobbParameters {
-    "__STYXTYPE__": "@CommandGlobb";
+    "@type": "afni.@CommandGlobb";
     "program_command": string;
     "output_dir": string;
     "extension"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface VCommandGlobbParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@CommandGlobb": v__command_globb_cargs,
+        "afni.@CommandGlobb": v__command_globb_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@CommandGlobb": v__command_globb_outputs,
+        "afni.@CommandGlobb": v__command_globb_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface VCommandGlobbOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param program_command The entire command line for the program desired. The command is best put between single quotes, do not use the \ to break a long line within the quotes.
+ * @param output_dir The output directory where the results will be saved.
+ * @param brick_list A list of bricks (or anything) on which the program command will be executed.
+ * @param extension If the program requires a -prefix option, then you can specify the extension which will get appended to the Brick names before +orig.
+ *
+ * @returns Parameter dictionary
+ */
 function v__command_globb_params(
     program_command: string,
     output_dir: string,
     brick_list: Array<string>,
     extension: string | null = null,
 ): VCommandGlobbParameters {
-    /**
-     * Build parameters.
-    
-     * @param program_command The entire command line for the program desired. The command is best put between single quotes, do not use the \ to break a long line within the quotes.
-     * @param output_dir The output directory where the results will be saved.
-     * @param brick_list A list of bricks (or anything) on which the program command will be executed.
-     * @param extension If the program requires a -prefix option, then you can specify the extension which will get appended to the Brick names before +orig.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@CommandGlobb" as const,
+        "@type": "afni.@CommandGlobb" as const,
         "program_command": program_command,
         "output_dir": output_dir,
         "brick_list": brick_list,
@@ -100,18 +100,18 @@ function v__command_globb_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__command_globb_cargs(
     params: VCommandGlobbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@CommandGlobb");
     cargs.push(
@@ -136,18 +136,18 @@ function v__command_globb_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__command_globb_outputs(
     params: VCommandGlobbParameters,
     execution: Execution,
 ): VCommandGlobbOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VCommandGlobbOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["output_dir"] ?? null), "/*"].join('')),
@@ -156,22 +156,22 @@ function v__command_globb_outputs(
 }
 
 
+/**
+ * A command-line tool to execute a specified program command line on a list of input bricks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
+ */
 function v__command_globb_execute(
     params: VCommandGlobbParameters,
     execution: Execution,
 ): VCommandGlobbOutputs {
-    /**
-     * A command-line tool to execute a specified program command line on a list of input bricks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__command_globb_cargs(params, execution)
     const ret = v__command_globb_outputs(params, execution)
@@ -180,6 +180,21 @@ function v__command_globb_execute(
 }
 
 
+/**
+ * A command-line tool to execute a specified program command line on a list of input bricks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param program_command The entire command line for the program desired. The command is best put between single quotes, do not use the \ to break a long line within the quotes.
+ * @param output_dir The output directory where the results will be saved.
+ * @param brick_list A list of bricks (or anything) on which the program command will be executed.
+ * @param extension If the program requires a -prefix option, then you can specify the extension which will get appended to the Brick names before +orig.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
+ */
 function v__command_globb(
     program_command: string,
     output_dir: string,
@@ -187,21 +202,6 @@ function v__command_globb(
     extension: string | null = null,
     runner: Runner | null = null,
 ): VCommandGlobbOutputs {
-    /**
-     * A command-line tool to execute a specified program command line on a list of input bricks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param program_command The entire command line for the program desired. The command is best put between single quotes, do not use the \ to break a long line within the quotes.
-     * @param output_dir The output directory where the results will be saved.
-     * @param brick_list A list of bricks (or anything) on which the program command will be executed.
-     * @param extension If the program requires a -prefix option, then you can specify the extension which will get appended to the Brick names before +orig.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__COMMAND_GLOBB_METADATA);
     const params = v__command_globb_params(program_command, output_dir, brick_list, extension)
@@ -214,5 +214,8 @@ export {
       VCommandGlobbParameters,
       V__COMMAND_GLOBB_METADATA,
       v__command_globb,
+      v__command_globb_cargs,
+      v__command_globb_execute,
+      v__command_globb_outputs,
       v__command_globb_params,
 };

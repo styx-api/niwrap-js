@@ -12,41 +12,41 @@ const NSIZE_METADATA: Metadata = {
 
 
 interface NsizeParameters {
-    "__STYXTYPE__": "nsize";
+    "@type": "afni.nsize";
     "image_in": InputPathType;
     "image_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "nsize": nsize_cargs,
+        "afni.nsize": nsize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "nsize": nsize_outputs,
+        "afni.nsize": nsize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface NsizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_in Input image file
+ * @param image_out Output padded image file
+ *
+ * @returns Parameter dictionary
+ */
 function nsize_params(
     image_in: InputPathType,
     image_out: string,
 ): NsizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_in Input image file
-     * @param image_out Output padded image file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nsize" as const,
+        "@type": "afni.nsize" as const,
         "image_in": image_in,
         "image_out": image_out,
     };
@@ -90,18 +90,18 @@ function nsize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function nsize_cargs(
     params: NsizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("nsize");
     cargs.push(execution.inputFile((params["image_in"] ?? null)));
@@ -110,18 +110,18 @@ function nsize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function nsize_outputs(
     params: NsizeParameters,
     execution: Execution,
 ): NsizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NsizeOutputs = {
         root: execution.outputFile("."),
         image_out_file: execution.outputFile([(params["image_out"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function nsize_outputs(
 }
 
 
+/**
+ * Zero pads an input image to the nearest larger NxN dimensions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NsizeOutputs`).
+ */
 function nsize_execute(
     params: NsizeParameters,
     execution: Execution,
 ): NsizeOutputs {
-    /**
-     * Zero pads an input image to the nearest larger NxN dimensions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NsizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = nsize_cargs(params, execution)
     const ret = nsize_outputs(params, execution)
@@ -154,24 +154,24 @@ function nsize_execute(
 }
 
 
+/**
+ * Zero pads an input image to the nearest larger NxN dimensions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param image_in Input image file
+ * @param image_out Output padded image file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NsizeOutputs`).
+ */
 function nsize(
     image_in: InputPathType,
     image_out: string,
     runner: Runner | null = null,
 ): NsizeOutputs {
-    /**
-     * Zero pads an input image to the nearest larger NxN dimensions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param image_in Input image file
-     * @param image_out Output padded image file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NsizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NSIZE_METADATA);
     const params = nsize_params(image_in, image_out)
@@ -184,5 +184,8 @@ export {
       NsizeOutputs,
       NsizeParameters,
       nsize,
+      nsize_cargs,
+      nsize_execute,
+      nsize_outputs,
       nsize_params,
 };

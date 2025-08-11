@@ -12,7 +12,7 @@ const V__DJUNCT_OVERLAP_CHECK_METADATA: Metadata = {
 
 
 interface VDjunctOverlapCheckParameters {
-    "__STYXTYPE__": "@djunct_overlap_check";
+    "@type": "afni.@djunct_overlap_check";
     "ulay": InputPathType;
     "olay": InputPathType;
     "prefix": string;
@@ -40,33 +40,33 @@ interface VDjunctOverlapCheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_overlap_check": v__djunct_overlap_check_cargs,
+        "afni.@djunct_overlap_check": v__djunct_overlap_check_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface VDjunctOverlapCheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ulay Dataset to use as the underlay (background)
+ * @param olay Dataset to use as the overlay (foreground)
+ * @param prefix Prefix for the output files
+ * @param box_focus_slices Dataset for box focus slices
+ * @param montgap Gap between montage slices
+ * @param montcolor Color of the montage gap
+ * @param cbar Colorbar for the overlay
+ * @param opacity Opacity of the overlay
+ * @param zerocolor Color for zero values
+ * @param set_dicom_xyz Set DICOM coordinates for slice location
+ * @param ulay_range Range for underlay values
+ * @param ulay_range_nz Range for non-zero underlay values
+ * @param montx Number of panels in X direction in montage
+ * @param monty Number of panels in Y direction in montage
+ * @param montx_cat Number of X panes per image in montage
+ * @param monty_cat Number of Y panes per image in montage
+ * @param label_mode Label mode
+ * @param pbar_posonly_off Turn off position-only p-bar
+ * @param edgy_ulay Edgify the underlay
+ * @param set_dicom_xyz_off Turn off DICOM coordinates setting
+ * @param no_cor Skip coronal slices
+ * @param no_axi Skip axial slices
+ * @param no_sag Skip sagittal slices
+ * @param no_clean Do not clean up temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_overlap_check_params(
     ulay: InputPathType,
     olay: InputPathType,
@@ -112,38 +142,8 @@ function v__djunct_overlap_check_params(
     no_sag: boolean = false,
     no_clean: boolean = false,
 ): VDjunctOverlapCheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param ulay Dataset to use as the underlay (background)
-     * @param olay Dataset to use as the overlay (foreground)
-     * @param prefix Prefix for the output files
-     * @param box_focus_slices Dataset for box focus slices
-     * @param montgap Gap between montage slices
-     * @param montcolor Color of the montage gap
-     * @param cbar Colorbar for the overlay
-     * @param opacity Opacity of the overlay
-     * @param zerocolor Color for zero values
-     * @param set_dicom_xyz Set DICOM coordinates for slice location
-     * @param ulay_range Range for underlay values
-     * @param ulay_range_nz Range for non-zero underlay values
-     * @param montx Number of panels in X direction in montage
-     * @param monty Number of panels in Y direction in montage
-     * @param montx_cat Number of X panes per image in montage
-     * @param monty_cat Number of Y panes per image in montage
-     * @param label_mode Label mode
-     * @param pbar_posonly_off Turn off position-only p-bar
-     * @param edgy_ulay Edgify the underlay
-     * @param set_dicom_xyz_off Turn off DICOM coordinates setting
-     * @param no_cor Skip coronal slices
-     * @param no_axi Skip axial slices
-     * @param no_sag Skip sagittal slices
-     * @param no_clean Do not clean up temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_overlap_check" as const,
+        "@type": "afni.@djunct_overlap_check" as const,
         "ulay": ulay,
         "olay": olay,
         "prefix": prefix,
@@ -201,18 +201,18 @@ function v__djunct_overlap_check_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_overlap_check_cargs(
     params: VDjunctOverlapCheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_overlap_check");
     cargs.push(execution.inputFile((params["ulay"] ?? null)));
@@ -324,18 +324,18 @@ function v__djunct_overlap_check_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_overlap_check_outputs(
     params: VDjunctOverlapCheckParameters,
     execution: Execution,
 ): VDjunctOverlapCheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctOverlapCheckOutputs = {
         root: execution.outputFile("."),
     };
@@ -343,22 +343,22 @@ function v__djunct_overlap_check_outputs(
 }
 
 
+/**
+ * A helper script for visualizing overlap between datasets in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
+ */
 function v__djunct_overlap_check_execute(
     params: VDjunctOverlapCheckParameters,
     execution: Execution,
 ): VDjunctOverlapCheckOutputs {
-    /**
-     * A helper script for visualizing overlap between datasets in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_overlap_check_cargs(params, execution)
     const ret = v__djunct_overlap_check_outputs(params, execution)
@@ -367,6 +367,41 @@ function v__djunct_overlap_check_execute(
 }
 
 
+/**
+ * A helper script for visualizing overlap between datasets in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param ulay Dataset to use as the underlay (background)
+ * @param olay Dataset to use as the overlay (foreground)
+ * @param prefix Prefix for the output files
+ * @param box_focus_slices Dataset for box focus slices
+ * @param montgap Gap between montage slices
+ * @param montcolor Color of the montage gap
+ * @param cbar Colorbar for the overlay
+ * @param opacity Opacity of the overlay
+ * @param zerocolor Color for zero values
+ * @param set_dicom_xyz Set DICOM coordinates for slice location
+ * @param ulay_range Range for underlay values
+ * @param ulay_range_nz Range for non-zero underlay values
+ * @param montx Number of panels in X direction in montage
+ * @param monty Number of panels in Y direction in montage
+ * @param montx_cat Number of X panes per image in montage
+ * @param monty_cat Number of Y panes per image in montage
+ * @param label_mode Label mode
+ * @param pbar_posonly_off Turn off position-only p-bar
+ * @param edgy_ulay Edgify the underlay
+ * @param set_dicom_xyz_off Turn off DICOM coordinates setting
+ * @param no_cor Skip coronal slices
+ * @param no_axi Skip axial slices
+ * @param no_sag Skip sagittal slices
+ * @param no_clean Do not clean up temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
+ */
 function v__djunct_overlap_check(
     ulay: InputPathType,
     olay: InputPathType,
@@ -394,41 +429,6 @@ function v__djunct_overlap_check(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctOverlapCheckOutputs {
-    /**
-     * A helper script for visualizing overlap between datasets in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param ulay Dataset to use as the underlay (background)
-     * @param olay Dataset to use as the overlay (foreground)
-     * @param prefix Prefix for the output files
-     * @param box_focus_slices Dataset for box focus slices
-     * @param montgap Gap between montage slices
-     * @param montcolor Color of the montage gap
-     * @param cbar Colorbar for the overlay
-     * @param opacity Opacity of the overlay
-     * @param zerocolor Color for zero values
-     * @param set_dicom_xyz Set DICOM coordinates for slice location
-     * @param ulay_range Range for underlay values
-     * @param ulay_range_nz Range for non-zero underlay values
-     * @param montx Number of panels in X direction in montage
-     * @param monty Number of panels in Y direction in montage
-     * @param montx_cat Number of X panes per image in montage
-     * @param monty_cat Number of Y panes per image in montage
-     * @param label_mode Label mode
-     * @param pbar_posonly_off Turn off position-only p-bar
-     * @param edgy_ulay Edgify the underlay
-     * @param set_dicom_xyz_off Turn off DICOM coordinates setting
-     * @param no_cor Skip coronal slices
-     * @param no_axi Skip axial slices
-     * @param no_sag Skip sagittal slices
-     * @param no_clean Do not clean up temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_OVERLAP_CHECK_METADATA);
     const params = v__djunct_overlap_check_params(ulay, olay, prefix, box_focus_slices, montgap, montcolor, cbar, opacity, zerocolor, set_dicom_xyz, ulay_range, ulay_range_nz, montx, monty, montx_cat, monty_cat, label_mode, pbar_posonly_off, edgy_ulay, set_dicom_xyz_off, no_cor, no_axi, no_sag, no_clean)
@@ -441,5 +441,8 @@ export {
       VDjunctOverlapCheckParameters,
       V__DJUNCT_OVERLAP_CHECK_METADATA,
       v__djunct_overlap_check,
+      v__djunct_overlap_check_cargs,
+      v__djunct_overlap_check_execute,
+      v__djunct_overlap_check_outputs,
       v__djunct_overlap_check_params,
 };

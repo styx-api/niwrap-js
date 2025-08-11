@@ -12,7 +12,7 @@ const MRIS_CA_LABEL_METADATA: Metadata = {
 
 
 interface MrisCaLabelParameters {
-    "__STYXTYPE__": "mris_ca_label";
+    "@type": "freesurfer.mris_ca_label";
     "subject": string;
     "hemi": string;
     "canonsurf": InputPathType;
@@ -35,35 +35,35 @@ interface MrisCaLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_ca_label": mris_ca_label_cargs,
+        "freesurfer.mris_ca_label": mris_ca_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_ca_label": mris_ca_label_outputs,
+        "freesurfer.mris_ca_label": mris_ca_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,31 @@ interface MrisCaLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject ID for labeling
+ * @param hemi Hemisphere (rh or lh)
+ * @param canonsurf Name of the spherical surface file that describes the registration of a subject's vertices to the average surface
+ * @param classifier Specify classifier array input file
+ * @param outputfile Output annotated surface file listing the region label for each vertex
+ * @param seed Specify the seed for the random number generator
+ * @param sdir Specify a subjects directory (default=$SUBJECTS_DIR)
+ * @param orig Specify filename of original surface (default=smoothwm)
+ * @param long_flag Refines the initial labeling read-in from -r (default: disabled)
+ * @param r File containing precomputed parcellation
+ * @param novar_flag Sets all covariance matrices to the identity (default: disabled)
+ * @param nbrs Neighborhood size (default=2)
+ * @param f Applies mode filter <number> times before writing output (default=10)
+ * @param t Specify parcellation table input file (default: none)
+ * @param p Output file containing label probability for each vertex.
+ * @param v Diagnostic level (default=0)
+ * @param w Writes-out snapshots of gibbs process every <number> iterations to <filename> (default=disabled)
+ * @param help_flag Print help information
+ * @param version_flag Print version information
+ *
+ * @returns Parameter dictionary
+ */
 function mris_ca_label_params(
     subject: string,
     hemi: string,
@@ -107,33 +132,8 @@ function mris_ca_label_params(
     help_flag: boolean = false,
     version_flag: boolean = false,
 ): MrisCaLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject ID for labeling
-     * @param hemi Hemisphere (rh or lh)
-     * @param canonsurf Name of the spherical surface file that describes the registration of a subject's vertices to the average surface
-     * @param classifier Specify classifier array input file
-     * @param outputfile Output annotated surface file listing the region label for each vertex
-     * @param seed Specify the seed for the random number generator
-     * @param sdir Specify a subjects directory (default=$SUBJECTS_DIR)
-     * @param orig Specify filename of original surface (default=smoothwm)
-     * @param long_flag Refines the initial labeling read-in from -r (default: disabled)
-     * @param r File containing precomputed parcellation
-     * @param novar_flag Sets all covariance matrices to the identity (default: disabled)
-     * @param nbrs Neighborhood size (default=2)
-     * @param f Applies mode filter <number> times before writing output (default=10)
-     * @param t Specify parcellation table input file (default: none)
-     * @param p Output file containing label probability for each vertex.
-     * @param v Diagnostic level (default=0)
-     * @param w Writes-out snapshots of gibbs process every <number> iterations to <filename> (default=disabled)
-     * @param help_flag Print help information
-     * @param version_flag Print version information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_ca_label" as const,
+        "@type": "freesurfer.mris_ca_label" as const,
         "subject": subject,
         "hemi": hemi,
         "canonsurf": canonsurf,
@@ -178,18 +178,18 @@ function mris_ca_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_ca_label_cargs(
     params: MrisCaLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_ca_label");
     cargs.push((params["subject"] ?? null));
@@ -273,18 +273,18 @@ function mris_ca_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_ca_label_outputs(
     params: MrisCaLabelParameters,
     execution: Execution,
 ): MrisCaLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisCaLabelOutputs = {
         root: execution.outputFile("."),
         labeled_surface: execution.outputFile([(params["outputfile"] ?? null)].join('')),
@@ -293,22 +293,22 @@ function mris_ca_label_outputs(
 }
 
 
+/**
+ * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
+ */
 function mris_ca_label_execute(
     params: MrisCaLabelParameters,
     execution: Execution,
 ): MrisCaLabelOutputs {
-    /**
-     * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_ca_label_cargs(params, execution)
     const ret = mris_ca_label_outputs(params, execution)
@@ -317,6 +317,36 @@ function mris_ca_label_execute(
 }
 
 
+/**
+ * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject ID for labeling
+ * @param hemi Hemisphere (rh or lh)
+ * @param canonsurf Name of the spherical surface file that describes the registration of a subject's vertices to the average surface
+ * @param classifier Specify classifier array input file
+ * @param outputfile Output annotated surface file listing the region label for each vertex
+ * @param seed Specify the seed for the random number generator
+ * @param sdir Specify a subjects directory (default=$SUBJECTS_DIR)
+ * @param orig Specify filename of original surface (default=smoothwm)
+ * @param long_flag Refines the initial labeling read-in from -r (default: disabled)
+ * @param r File containing precomputed parcellation
+ * @param novar_flag Sets all covariance matrices to the identity (default: disabled)
+ * @param nbrs Neighborhood size (default=2)
+ * @param f Applies mode filter <number> times before writing output (default=10)
+ * @param t Specify parcellation table input file (default: none)
+ * @param p Output file containing label probability for each vertex.
+ * @param v Diagnostic level (default=0)
+ * @param w Writes-out snapshots of gibbs process every <number> iterations to <filename> (default=disabled)
+ * @param help_flag Print help information
+ * @param version_flag Print version information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
+ */
 function mris_ca_label(
     subject: string,
     hemi: string,
@@ -339,36 +369,6 @@ function mris_ca_label(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisCaLabelOutputs {
-    /**
-     * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject ID for labeling
-     * @param hemi Hemisphere (rh or lh)
-     * @param canonsurf Name of the spherical surface file that describes the registration of a subject's vertices to the average surface
-     * @param classifier Specify classifier array input file
-     * @param outputfile Output annotated surface file listing the region label for each vertex
-     * @param seed Specify the seed for the random number generator
-     * @param sdir Specify a subjects directory (default=$SUBJECTS_DIR)
-     * @param orig Specify filename of original surface (default=smoothwm)
-     * @param long_flag Refines the initial labeling read-in from -r (default: disabled)
-     * @param r File containing precomputed parcellation
-     * @param novar_flag Sets all covariance matrices to the identity (default: disabled)
-     * @param nbrs Neighborhood size (default=2)
-     * @param f Applies mode filter <number> times before writing output (default=10)
-     * @param t Specify parcellation table input file (default: none)
-     * @param p Output file containing label probability for each vertex.
-     * @param v Diagnostic level (default=0)
-     * @param w Writes-out snapshots of gibbs process every <number> iterations to <filename> (default=disabled)
-     * @param help_flag Print help information
-     * @param version_flag Print version information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CA_LABEL_METADATA);
     const params = mris_ca_label_params(subject, hemi, canonsurf, classifier, outputfile, seed, sdir, orig, long_flag, r, novar_flag, nbrs, f, t, p, v, w, help_flag, version_flag)
@@ -381,5 +381,8 @@ export {
       MrisCaLabelOutputs,
       MrisCaLabelParameters,
       mris_ca_label,
+      mris_ca_label_cargs,
+      mris_ca_label_execute,
+      mris_ca_label_outputs,
       mris_ca_label_params,
 };

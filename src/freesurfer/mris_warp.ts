@@ -12,7 +12,7 @@ const MRIS_WARP_METADATA: Metadata = {
 
 
 interface MrisWarpParameters {
-    "__STYXTYPE__": "mris_warp";
+    "@type": "freesurfer.mris_warp";
     "deformvol"?: string | null | undefined;
     "m3z"?: string | null | undefined;
     "regfile"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface MrisWarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_warp": mris_warp_cargs,
+        "freesurfer.mris_warp": mris_warp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_warp": mris_warp_outputs,
+        "freesurfer.mris_warp": mris_warp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MrisWarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param deformvol Volume containing deformation
+ * @param m3z M3Z file containing deformation
+ * @param regfile register.dat file between surface and volume
+ * @param surf Surface file to warp
+ * @param out Name for output surface (if does not contain '/', outputs to same directory as input surface)
+ * @param abs Absolute coordinate displacement convention (default)
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mris_warp_params(
     deformvol: string | null = null,
     m3z: string | null = null,
@@ -85,22 +99,8 @@ function mris_warp_params(
     help: boolean = false,
     version: boolean = false,
 ): MrisWarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param deformvol Volume containing deformation
-     * @param m3z M3Z file containing deformation
-     * @param regfile register.dat file between surface and volume
-     * @param surf Surface file to warp
-     * @param out Name for output surface (if does not contain '/', outputs to same directory as input surface)
-     * @param abs Absolute coordinate displacement convention (default)
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_warp" as const,
+        "@type": "freesurfer.mris_warp" as const,
         "abs": abs,
         "help": help,
         "version": version,
@@ -124,18 +124,18 @@ function mris_warp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_warp_cargs(
     params: MrisWarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_warp");
     if ((params["deformvol"] ?? null) !== null) {
@@ -181,18 +181,18 @@ function mris_warp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_warp_outputs(
     params: MrisWarpParameters,
     execution: Execution,
 ): MrisWarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisWarpOutputs = {
         root: execution.outputFile("."),
         output_surface: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null)].join('')) : null,
@@ -201,22 +201,22 @@ function mris_warp_outputs(
 }
 
 
+/**
+ * This program will warp a surface using a specified deformation field.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
+ */
 function mris_warp_execute(
     params: MrisWarpParameters,
     execution: Execution,
 ): MrisWarpOutputs {
-    /**
-     * This program will warp a surface using a specified deformation field.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_warp_cargs(params, execution)
     const ret = mris_warp_outputs(params, execution)
@@ -225,6 +225,25 @@ function mris_warp_execute(
 }
 
 
+/**
+ * This program will warp a surface using a specified deformation field.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param deformvol Volume containing deformation
+ * @param m3z M3Z file containing deformation
+ * @param regfile register.dat file between surface and volume
+ * @param surf Surface file to warp
+ * @param out Name for output surface (if does not contain '/', outputs to same directory as input surface)
+ * @param abs Absolute coordinate displacement convention (default)
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
+ */
 function mris_warp(
     deformvol: string | null = null,
     m3z: string | null = null,
@@ -236,25 +255,6 @@ function mris_warp(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisWarpOutputs {
-    /**
-     * This program will warp a surface using a specified deformation field.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param deformvol Volume containing deformation
-     * @param m3z M3Z file containing deformation
-     * @param regfile register.dat file between surface and volume
-     * @param surf Surface file to warp
-     * @param out Name for output surface (if does not contain '/', outputs to same directory as input surface)
-     * @param abs Absolute coordinate displacement convention (default)
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_WARP_METADATA);
     const params = mris_warp_params(deformvol, m3z, regfile, surf, out, abs, help, version)
@@ -267,5 +267,8 @@ export {
       MrisWarpOutputs,
       MrisWarpParameters,
       mris_warp,
+      mris_warp_cargs,
+      mris_warp_execute,
+      mris_warp_outputs,
       mris_warp_params,
 };

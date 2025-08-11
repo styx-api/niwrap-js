@@ -12,26 +12,26 @@ const TRANSFORMCOMPOSE_METADATA: Metadata = {
 
 
 interface TransformcomposeConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.transformcompose.config";
     "key": string;
     "value": string;
 }
 
 
 interface TransformcomposeVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.transformcompose.VariousString";
     "obj": string;
 }
 
 
 interface TransformcomposeVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.transformcompose.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface TransformcomposeParameters {
-    "__STYXTYPE__": "transformcompose";
+    "@type": "mrtrix.transformcompose";
     "template"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -46,56 +46,56 @@ interface TransformcomposeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "transformcompose": transformcompose_cargs,
-        "config": transformcompose_config_cargs,
-        "VariousString": transformcompose_various_string_cargs,
-        "VariousFile": transformcompose_various_file_cargs,
+        "mrtrix.transformcompose": transformcompose_cargs,
+        "mrtrix.transformcompose.config": transformcompose_config_cargs,
+        "mrtrix.transformcompose.VariousString": transformcompose_various_string_cargs,
+        "mrtrix.transformcompose.VariousFile": transformcompose_various_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcompose_config_params(
     key: string,
     value: string,
 ): TransformcomposeConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.transformcompose.config" as const,
         "key": key,
         "value": value,
     };
@@ -103,18 +103,18 @@ function transformcompose_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcompose_config_cargs(
     params: TransformcomposeConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -123,72 +123,72 @@ function transformcompose_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcompose_various_string_params(
     obj: string,
 ): TransformcomposeVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.transformcompose.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcompose_various_string_cargs(
     params: TransformcomposeVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcompose_various_file_params(
     obj: InputPathType,
 ): TransformcomposeVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.transformcompose.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcompose_various_file_cargs(
     params: TransformcomposeVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -208,6 +208,23 @@ interface TransformcomposeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input transforms (either linear or non-linear warps).
+ * @param output the output file (may be a linear transformation text file, or a deformation warp field image, depending on usage)
+ * @param template define the output grid defined by a template image
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcompose_params(
     input: Array<InputPathType>,
     output: TransformcomposeVariousStringParameters | TransformcomposeVariousFileParameters,
@@ -221,25 +238,8 @@ function transformcompose_params(
     help: boolean = false,
     version: boolean = false,
 ): TransformcomposeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input transforms (either linear or non-linear warps).
-     * @param output the output file (may be a linear transformation text file, or a deformation warp field image, depending on usage)
-     * @param template define the output grid defined by a template image
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformcompose" as const,
+        "@type": "mrtrix.transformcompose" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -262,18 +262,18 @@ function transformcompose_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcompose_cargs(
     params: TransformcomposeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("transformcompose");
     if ((params["template"] ?? null) !== null) {
@@ -301,7 +301,7 @@ function transformcompose_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -310,23 +310,23 @@ function transformcompose_cargs(
         cargs.push("-version");
     }
     cargs.push(...(params["input"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(...dynCargs((params["output"] ?? null).__STYXTYPE__)((params["output"] ?? null), execution));
+    cargs.push(...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function transformcompose_outputs(
     params: TransformcomposeParameters,
     execution: Execution,
 ): TransformcomposeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TransformcomposeOutputs = {
         root: execution.outputFile("."),
     };
@@ -334,32 +334,32 @@ function transformcompose_outputs(
 }
 
 
+/**
+ * Compose any number of linear transformations and/or warps into a single transformation.
+ *
+ * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).
+ *
+ * Input transformations should be provided to the command in the order in which they would be applied to an image if they were to be applied individually.
+ *
+ * If all input transformations are linear, and the -template option is not provided, then the file output by the command will also be a linear transformation saved as a 4x4 matrix in a text file. If a template image is supplied, then the output will always be a deformation field. If at least one of the inputs is a warp field, then the output will be a deformation field, which will be defined on the grid of the last input warp image supplied if the -template option is not used.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
+ */
 function transformcompose_execute(
     params: TransformcomposeParameters,
     execution: Execution,
 ): TransformcomposeOutputs {
-    /**
-     * Compose any number of linear transformations and/or warps into a single transformation.
-     * 
-     * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).
-     * 
-     * Input transformations should be provided to the command in the order in which they would be applied to an image if they were to be applied individually.
-     * 
-     * If all input transformations are linear, and the -template option is not provided, then the file output by the command will also be a linear transformation saved as a 4x4 matrix in a text file. If a template image is supplied, then the output will always be a deformation field. If at least one of the inputs is a warp field, then the output will be a deformation field, which will be defined on the grid of the last input warp image supplied if the -template option is not used.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
-     */
     params = execution.params(params)
     const cargs = transformcompose_cargs(params, execution)
     const ret = transformcompose_outputs(params, execution)
@@ -368,6 +368,38 @@ function transformcompose_execute(
 }
 
 
+/**
+ * Compose any number of linear transformations and/or warps into a single transformation.
+ *
+ * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).
+ *
+ * Input transformations should be provided to the command in the order in which they would be applied to an image if they were to be applied individually.
+ *
+ * If all input transformations are linear, and the -template option is not provided, then the file output by the command will also be a linear transformation saved as a 4x4 matrix in a text file. If a template image is supplied, then the output will always be a deformation field. If at least one of the inputs is a warp field, then the output will be a deformation field, which will be defined on the grid of the last input warp image supplied if the -template option is not used.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input transforms (either linear or non-linear warps).
+ * @param output the output file (may be a linear transformation text file, or a deformation warp field image, depending on usage)
+ * @param template define the output grid defined by a template image
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
+ */
 function transformcompose(
     input: Array<InputPathType>,
     output: TransformcomposeVariousStringParameters | TransformcomposeVariousFileParameters,
@@ -382,38 +414,6 @@ function transformcompose(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformcomposeOutputs {
-    /**
-     * Compose any number of linear transformations and/or warps into a single transformation.
-     * 
-     * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).
-     * 
-     * Input transformations should be provided to the command in the order in which they would be applied to an image if they were to be applied individually.
-     * 
-     * If all input transformations are linear, and the -template option is not provided, then the file output by the command will also be a linear transformation saved as a 4x4 matrix in a text file. If a template image is supplied, then the output will always be a deformation field. If at least one of the inputs is a warp field, then the output will be a deformation field, which will be defined on the grid of the last input warp image supplied if the -template option is not used.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input transforms (either linear or non-linear warps).
-     * @param output the output file (may be a linear transformation text file, or a deformation warp field image, depending on usage)
-     * @param template define the output grid defined by a template image
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRANSFORMCOMPOSE_METADATA);
     const params = transformcompose_params(input, output, template, info, quiet, debug, force, nthreads, config, help, version)
@@ -429,8 +429,14 @@ export {
       TransformcomposeVariousFileParameters,
       TransformcomposeVariousStringParameters,
       transformcompose,
+      transformcompose_cargs,
+      transformcompose_config_cargs,
       transformcompose_config_params,
+      transformcompose_execute,
+      transformcompose_outputs,
       transformcompose_params,
+      transformcompose_various_file_cargs,
       transformcompose_various_file_params,
+      transformcompose_various_string_cargs,
       transformcompose_various_string_params,
 };

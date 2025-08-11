@@ -12,39 +12,39 @@ const V_2SWAP_METADATA: Metadata = {
 
 
 interface V2swapParameters {
-    "__STYXTYPE__": "2swap";
+    "@type": "afni.2swap";
     "quiet": boolean;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "2swap": v_2swap_cargs,
+        "afni.2swap": v_2swap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface V2swapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input files
+ * @param quiet Work quietly
+ *
+ * @returns Parameter dictionary
+ */
 function v_2swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
 ): V2swapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input files
-     * @param quiet Work quietly
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "2swap" as const,
+        "@type": "afni.2swap" as const,
         "quiet": quiet,
         "input_files": input_files,
     };
@@ -85,18 +85,18 @@ function v_2swap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_2swap_cargs(
     params: V2swapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("2swap");
     if ((params["quiet"] ?? null)) {
@@ -107,18 +107,18 @@ function v_2swap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_2swap_outputs(
     params: V2swapParameters,
     execution: Execution,
 ): V2swapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2swapOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function v_2swap_outputs(
 }
 
 
+/**
+ * Swaps byte pairs on the files listed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2swapOutputs`).
+ */
 function v_2swap_execute(
     params: V2swapParameters,
     execution: Execution,
 ): V2swapOutputs {
-    /**
-     * Swaps byte pairs on the files listed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2swapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_2swap_cargs(params, execution)
     const ret = v_2swap_outputs(params, execution)
@@ -150,24 +150,24 @@ function v_2swap_execute(
 }
 
 
+/**
+ * Swaps byte pairs on the files listed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input files
+ * @param quiet Work quietly
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2swapOutputs`).
+ */
 function v_2swap(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V2swapOutputs {
-    /**
-     * Swaps byte pairs on the files listed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input files
-     * @param quiet Work quietly
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2swapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_2SWAP_METADATA);
     const params = v_2swap_params(input_files, quiet)
@@ -180,5 +180,8 @@ export {
       V2swapParameters,
       V_2SWAP_METADATA,
       v_2swap,
+      v_2swap_cargs,
+      v_2swap_execute,
+      v_2swap_outputs,
       v_2swap_params,
 };

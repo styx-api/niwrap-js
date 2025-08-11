@@ -12,38 +12,38 @@ const FIX_SUBJECT_METADATA: Metadata = {
 
 
 interface FixSubjectParameters {
-    "__STYXTYPE__": "fix_subject";
+    "@type": "freesurfer.fix_subject";
     "arguments"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fix_subject": fix_subject_cargs,
+        "freesurfer.fix_subject": fix_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface FixSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param arguments_ Arguments for fix_subject command. Currently, help output shows directory errors. Ensure the correct paths are used.
+ *
+ * @returns Parameter dictionary
+ */
 function fix_subject_params(
     arguments_: string | null = null,
 ): FixSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param arguments_ Arguments for fix_subject command. Currently, help output shows directory errors. Ensure the correct paths are used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fix_subject" as const,
+        "@type": "freesurfer.fix_subject" as const,
     };
     if (arguments_ !== null) {
         params["arguments"] = arguments_;
@@ -83,18 +83,18 @@ function fix_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fix_subject_cargs(
     params: FixSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fix_subject");
     if ((params["arguments"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function fix_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fix_subject_outputs(
     params: FixSubjectParameters,
     execution: Execution,
 ): FixSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function fix_subject_outputs(
 }
 
 
+/**
+ * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
+ */
 function fix_subject_execute(
     params: FixSubjectParameters,
     execution: Execution,
 ): FixSubjectOutputs {
-    /**
-     * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = fix_subject_cargs(params, execution)
     const ret = fix_subject_outputs(params, execution)
@@ -147,22 +147,22 @@ function fix_subject_execute(
 }
 
 
+/**
+ * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param arguments_ Arguments for fix_subject command. Currently, help output shows directory errors. Ensure the correct paths are used.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
+ */
 function fix_subject(
     arguments_: string | null = null,
     runner: Runner | null = null,
 ): FixSubjectOutputs {
-    /**
-     * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param arguments_ Arguments for fix_subject command. Currently, help output shows directory errors. Ensure the correct paths are used.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIX_SUBJECT_METADATA);
     const params = fix_subject_params(arguments_)
@@ -175,5 +175,8 @@ export {
       FixSubjectOutputs,
       FixSubjectParameters,
       fix_subject,
+      fix_subject_cargs,
+      fix_subject_execute,
+      fix_subject_outputs,
       fix_subject_params,
 };

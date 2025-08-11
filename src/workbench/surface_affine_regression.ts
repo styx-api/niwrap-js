@@ -12,40 +12,40 @@ const SURFACE_AFFINE_REGRESSION_METADATA: Metadata = {
 
 
 interface SurfaceAffineRegressionParameters {
-    "__STYXTYPE__": "surface-affine-regression";
+    "@type": "workbench.surface-affine-regression";
     "source": InputPathType;
     "target": InputPathType;
     "affine_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-affine-regression": surface_affine_regression_cargs,
+        "workbench.surface-affine-regression": surface_affine_regression_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface SurfaceAffineRegressionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source the surface to warp
+ * @param target the surface to match the coordinates of
+ * @param affine_out output - the output affine file
+ *
+ * @returns Parameter dictionary
+ */
 function surface_affine_regression_params(
     source: InputPathType,
     target: InputPathType,
     affine_out: string,
 ): SurfaceAffineRegressionParameters {
-    /**
-     * Build parameters.
-    
-     * @param source the surface to warp
-     * @param target the surface to match the coordinates of
-     * @param affine_out output - the output affine file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-affine-regression" as const,
+        "@type": "workbench.surface-affine-regression" as const,
         "source": source,
         "target": target,
         "affine_out": affine_out,
@@ -89,18 +89,18 @@ function surface_affine_regression_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_affine_regression_cargs(
     params: SurfaceAffineRegressionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-affine-regression");
@@ -111,18 +111,18 @@ function surface_affine_regression_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_affine_regression_outputs(
     params: SurfaceAffineRegressionParameters,
     execution: Execution,
 ): SurfaceAffineRegressionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceAffineRegressionOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function surface_affine_regression_outputs(
 }
 
 
+/**
+ * Regress the affine transform between surfaces on the same mesh.
+ *
+ * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
+ */
 function surface_affine_regression_execute(
     params: SurfaceAffineRegressionParameters,
     execution: Execution,
 ): SurfaceAffineRegressionOutputs {
-    /**
-     * Regress the affine transform between surfaces on the same mesh.
-     * 
-     * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_affine_regression_cargs(params, execution)
     const ret = surface_affine_regression_outputs(params, execution)
@@ -156,28 +156,28 @@ function surface_affine_regression_execute(
 }
 
 
+/**
+ * Regress the affine transform between surfaces on the same mesh.
+ *
+ * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param source the surface to warp
+ * @param target the surface to match the coordinates of
+ * @param affine_out output - the output affine file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
+ */
 function surface_affine_regression(
     source: InputPathType,
     target: InputPathType,
     affine_out: string,
     runner: Runner | null = null,
 ): SurfaceAffineRegressionOutputs {
-    /**
-     * Regress the affine transform between surfaces on the same mesh.
-     * 
-     * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param source the surface to warp
-     * @param target the surface to match the coordinates of
-     * @param affine_out output - the output affine file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_AFFINE_REGRESSION_METADATA);
     const params = surface_affine_regression_params(source, target, affine_out)
@@ -190,5 +190,8 @@ export {
       SurfaceAffineRegressionOutputs,
       SurfaceAffineRegressionParameters,
       surface_affine_regression,
+      surface_affine_regression_cargs,
+      surface_affine_regression_execute,
+      surface_affine_regression_outputs,
       surface_affine_regression_params,
 };

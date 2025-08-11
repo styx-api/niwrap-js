@@ -12,38 +12,38 @@ const APQC_MAKE_HTML_METADATA: Metadata = {
 
 
 interface ApqcMakeHtmlParameters {
-    "__STYXTYPE__": "apqc_make_html";
+    "@type": "afni.apqc_make_html";
     "qc_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "apqc_make_html": apqc_make_html_cargs,
+        "afni.apqc_make_html": apqc_make_html_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface ApqcMakeHtmlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qc_dir Directory where QC files will be saved
+ *
+ * @returns Parameter dictionary
+ */
 function apqc_make_html_params(
     qc_dir: string,
 ): ApqcMakeHtmlParameters {
-    /**
-     * Build parameters.
-    
-     * @param qc_dir Directory where QC files will be saved
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "apqc_make_html" as const,
+        "@type": "afni.apqc_make_html" as const,
         "qc_dir": qc_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function apqc_make_html_cargs(
     params: ApqcMakeHtmlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("apqc_make_html.py");
     cargs.push(
@@ -103,18 +103,18 @@ function apqc_make_html_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function apqc_make_html_outputs(
     params: ApqcMakeHtmlParameters,
     execution: Execution,
 ): ApqcMakeHtmlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApqcMakeHtmlOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function apqc_make_html_outputs(
 }
 
 
+/**
+ * Tool to generate HTML reports.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
+ */
 function apqc_make_html_execute(
     params: ApqcMakeHtmlParameters,
     execution: Execution,
 ): ApqcMakeHtmlOutputs {
-    /**
-     * Tool to generate HTML reports.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
-     */
     params = execution.params(params)
     const cargs = apqc_make_html_cargs(params, execution)
     const ret = apqc_make_html_outputs(params, execution)
@@ -146,22 +146,22 @@ function apqc_make_html_execute(
 }
 
 
+/**
+ * Tool to generate HTML reports.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param qc_dir Directory where QC files will be saved
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
+ */
 function apqc_make_html(
     qc_dir: string,
     runner: Runner | null = null,
 ): ApqcMakeHtmlOutputs {
-    /**
-     * Tool to generate HTML reports.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param qc_dir Directory where QC files will be saved
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APQC_MAKE_HTML_METADATA);
     const params = apqc_make_html_params(qc_dir)
@@ -174,5 +174,8 @@ export {
       ApqcMakeHtmlOutputs,
       ApqcMakeHtmlParameters,
       apqc_make_html,
+      apqc_make_html_cargs,
+      apqc_make_html_execute,
+      apqc_make_html_outputs,
       apqc_make_html_params,
 };

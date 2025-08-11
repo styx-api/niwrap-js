@@ -12,7 +12,7 @@ const FABBER_T1_METADATA: Metadata = {
 
 
 interface FabberT1Parameters {
-    "__STYXTYPE__": "fabber_t1";
+    "@type": "fsl.fabber_t1";
     "output": string;
     "method": string;
     "model": string;
@@ -46,35 +46,35 @@ interface FabberT1Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fabber_t1": fabber_t1_cargs,
+        "fsl.fabber_t1": fabber_t1_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fabber_t1": fabber_t1_outputs,
+        "fsl.fabber_t1": fabber_t1_outputs,
     };
     return outputsFuncs[t];
 }
@@ -141,6 +141,42 @@ interface FabberT1Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output Directory for output files (including logfile)
+ * @param method Inference method to use
+ * @param model Forward model to use
+ * @param data Specify a single input data file
+ * @param data_mult Specify multiple data files for n=1, 2, 3...
+ * @param data_order How multiple data files are handled: concatenate or interleave
+ * @param mask Mask file. Inference will only be performed where mask value > 0
+ * @param masked_time_points List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param supp_data Supplemental timeseries data, required for some models
+ * @param overwrite Overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
+ * @param simple_output Simple output format: progress as percentage
+ * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param evaluate Evaluate model. Set to name of output required or blank for default output
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output any additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions
+ * @param save_mean Output the parameter means
+ * @param save_std Output the parameter standard deviations
+ * @param save_var Output the parameter variances
+ * @param save_zstat Output the parameter Zstats
+ * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std Output the noise standard deviations
+ * @param save_free_energy Output the free energy, if calculated
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information
+ *
+ * @returns Parameter dictionary
+ */
 function fabber_t1_params(
     output: string,
     method: string,
@@ -173,44 +209,8 @@ function fabber_t1_params(
     optfile: InputPathType | null = null,
     debug: boolean = false,
 ): FabberT1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param output Directory for output files (including logfile)
-     * @param method Inference method to use
-     * @param model Forward model to use
-     * @param data Specify a single input data file
-     * @param data_mult Specify multiple data files for n=1, 2, 3...
-     * @param data_order How multiple data files are handled: concatenate or interleave
-     * @param mask Mask file. Inference will only be performed where mask value > 0
-     * @param masked_time_points List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param supp_data Supplemental timeseries data, required for some models
-     * @param overwrite Overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
-     * @param simple_output Simple output format: progress as percentage
-     * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param evaluate Evaluate model. Set to name of output required or blank for default output
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output any additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions
-     * @param save_mean Output the parameter means
-     * @param save_std Output the parameter standard deviations
-     * @param save_var Output the parameter variances
-     * @param save_zstat Output the parameter Zstats
-     * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std Output the noise standard deviations
-     * @param save_free_energy Output the free energy, if calculated
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fabber_t1" as const,
+        "@type": "fsl.fabber_t1" as const,
         "output": output,
         "method": method,
         "model": model,
@@ -266,18 +266,18 @@ function fabber_t1_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fabber_t1_cargs(
     params: FabberT1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fabber_t1");
     cargs.push(
@@ -408,18 +408,18 @@ function fabber_t1_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fabber_t1_outputs(
     params: FabberT1Parameters,
     execution: Execution,
 ): FabberT1Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FabberT1Outputs = {
         root: execution.outputFile("."),
         param_names: execution.outputFile([(params["output"] ?? null), "/paramnames.txt"].join('')),
@@ -439,22 +439,22 @@ function fabber_t1_outputs(
 }
 
 
+/**
+ * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
+ */
 function fabber_t1_execute(
     params: FabberT1Parameters,
     execution: Execution,
 ): FabberT1Outputs {
-    /**
-     * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
-     */
     params = execution.params(params)
     const cargs = fabber_t1_cargs(params, execution)
     const ret = fabber_t1_outputs(params, execution)
@@ -463,6 +463,47 @@ function fabber_t1_execute(
 }
 
 
+/**
+ * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output Directory for output files (including logfile)
+ * @param method Inference method to use
+ * @param model Forward model to use
+ * @param data Specify a single input data file
+ * @param data_mult Specify multiple data files for n=1, 2, 3...
+ * @param data_order How multiple data files are handled: concatenate or interleave
+ * @param mask Mask file. Inference will only be performed where mask value > 0
+ * @param masked_time_points List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param supp_data Supplemental timeseries data, required for some models
+ * @param overwrite Overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
+ * @param simple_output Simple output format: progress as percentage
+ * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param evaluate Evaluate model. Set to name of output required or blank for default output
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output any additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions
+ * @param save_mean Output the parameter means
+ * @param save_std Output the parameter standard deviations
+ * @param save_var Output the parameter variances
+ * @param save_zstat Output the parameter Zstats
+ * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std Output the noise standard deviations
+ * @param save_free_energy Output the free energy, if calculated
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
+ */
 function fabber_t1(
     output: string,
     method: string,
@@ -496,47 +537,6 @@ function fabber_t1(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberT1Outputs {
-    /**
-     * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output Directory for output files (including logfile)
-     * @param method Inference method to use
-     * @param model Forward model to use
-     * @param data Specify a single input data file
-     * @param data_mult Specify multiple data files for n=1, 2, 3...
-     * @param data_order How multiple data files are handled: concatenate or interleave
-     * @param mask Mask file. Inference will only be performed where mask value > 0
-     * @param masked_time_points List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param supp_data Supplemental timeseries data, required for some models
-     * @param overwrite Overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_to_latest Try to create a link to the most recent output directory with the prefix _latest
-     * @param simple_output Simple output format: progress as percentage
-     * @param load_models Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param evaluate Evaluate model. Set to name of output required or blank for default output
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output any additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions
-     * @param save_mean Output the parameter means
-     * @param save_std Output the parameter standard deviations
-     * @param save_var Output the parameter variances
-     * @param save_zstat Output the parameter Zstats
-     * @param save_noise_mean Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std Output the noise standard deviations
-     * @param save_free_energy Output the free energy, if calculated
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_T1_METADATA);
     const params = fabber_t1_params(output, method, model, data, data_mult, data_order, mask, masked_time_points, supp_data, overwrite, link_to_latest, simple_output, load_models, evaluate, evaluate_params, evaluate_nt, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
@@ -549,5 +549,8 @@ export {
       FabberT1Outputs,
       FabberT1Parameters,
       fabber_t1,
+      fabber_t1_cargs,
+      fabber_t1_execute,
+      fabber_t1_outputs,
       fabber_t1_params,
 };

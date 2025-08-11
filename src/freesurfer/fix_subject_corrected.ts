@@ -12,39 +12,39 @@ const FIX_SUBJECT_CORRECTED_METADATA: Metadata = {
 
 
 interface FixSubjectCorrectedParameters {
-    "__STYXTYPE__": "fix_subject_corrected";
+    "@type": "freesurfer.fix_subject_corrected";
     "subject_directory": string;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fix_subject_corrected": fix_subject_corrected_cargs,
+        "freesurfer.fix_subject_corrected": fix_subject_corrected_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FixSubjectCorrectedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_directory Path to the subject's directory
+ * @param output_directory Path to the output directory
+ *
+ * @returns Parameter dictionary
+ */
 function fix_subject_corrected_params(
     subject_directory: string,
     output_directory: string,
 ): FixSubjectCorrectedParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_directory Path to the subject's directory
-     * @param output_directory Path to the output directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fix_subject_corrected" as const,
+        "@type": "freesurfer.fix_subject_corrected" as const,
         "subject_directory": subject_directory,
         "output_directory": output_directory,
     };
@@ -85,18 +85,18 @@ function fix_subject_corrected_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fix_subject_corrected_cargs(
     params: FixSubjectCorrectedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fix_subject_corrected");
     cargs.push((params["subject_directory"] ?? null));
@@ -105,18 +105,18 @@ function fix_subject_corrected_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fix_subject_corrected_outputs(
     params: FixSubjectCorrectedParameters,
     execution: Execution,
 ): FixSubjectCorrectedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixSubjectCorrectedOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function fix_subject_corrected_outputs(
 }
 
 
+/**
+ * Corrects subject data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectCorrectedOutputs`).
+ */
 function fix_subject_corrected_execute(
     params: FixSubjectCorrectedParameters,
     execution: Execution,
 ): FixSubjectCorrectedOutputs {
-    /**
-     * Corrects subject data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectCorrectedOutputs`).
-     */
     params = execution.params(params)
     const cargs = fix_subject_corrected_cargs(params, execution)
     const ret = fix_subject_corrected_outputs(params, execution)
@@ -148,24 +148,24 @@ function fix_subject_corrected_execute(
 }
 
 
+/**
+ * Corrects subject data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_directory Path to the subject's directory
+ * @param output_directory Path to the output directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectCorrectedOutputs`).
+ */
 function fix_subject_corrected(
     subject_directory: string,
     output_directory: string,
     runner: Runner | null = null,
 ): FixSubjectCorrectedOutputs {
-    /**
-     * Corrects subject data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_directory Path to the subject's directory
-     * @param output_directory Path to the output directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectCorrectedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIX_SUBJECT_CORRECTED_METADATA);
     const params = fix_subject_corrected_params(subject_directory, output_directory)
@@ -178,5 +178,8 @@ export {
       FixSubjectCorrectedOutputs,
       FixSubjectCorrectedParameters,
       fix_subject_corrected,
+      fix_subject_corrected_cargs,
+      fix_subject_corrected_execute,
+      fix_subject_corrected_outputs,
       fix_subject_corrected_params,
 };

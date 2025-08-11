@@ -12,7 +12,7 @@ const V__AUTO_TLRC_METADATA: Metadata = {
 
 
 interface VAutoTlrcParameters {
-    "__STYXTYPE__": "@auto_tlrc";
+    "@type": "afni.@auto_tlrc";
     "base_template": InputPathType;
     "input_anat": InputPathType;
     "no_ss": boolean;
@@ -55,35 +55,35 @@ interface VAutoTlrcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@auto_tlrc": v__auto_tlrc_cargs,
+        "afni.@auto_tlrc": v__auto_tlrc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@auto_tlrc": v__auto_tlrc_outputs,
+        "afni.@auto_tlrc": v__auto_tlrc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -110,6 +110,51 @@ interface VAutoTlrcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_template Reference anatomical volume. Usually this volume is in some standard space like TLRC or MNI space.
+ * @param input_anat Original anatomical volume (+orig). The skull is removed by this script unless instructed otherwise (-no_ss).
+ * @param apar An anatomical dataset in TLRC space created using Usage 1 of @auto_tlrc.
+ * @param input_dataset Dataset (typically EPI time series or statistical dataset) to transform to TLRC space per the transform in TLRC_parent
+ * @param no_ss Do not strip skull of input data set because the skull has already been removed or because the template still has the skull.
+ * @param warp_orig_vol Produce a TLRC version of the input volume, rather than a TLRC version of the skull-stripped input.
+ * @param dxyz Cubic voxel size of output DSET in TLRC space. Default is the resolution of the template.
+ * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
+ * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
+ * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
+ * @param pad_base Pad the base dataset by MM mm in each direction. Default is 15 mm.
+ * @param keep_tmp Keep temporary files.
+ * @param clean Clean all temporary files, likely left from -keep_tmp option then exit.
+ * @param xform Transform to use for warping: Choose from affine_general or shift_rotate_scale. Default is affine_general.
+ * @param no_avoid_eyes An option that gets passed to 3dSkullStrip. Use it when parts of the frontal lobes get clipped.
+ * @param ncr Do not use -coarserot option for 3dWarpDrive, which is a default.
+ * @param onepass Turns off -twopass option for 3dWarpDrive. This will speed up the registration but might fail if the datasets are far apart.
+ * @param twopass Opposite of -onepass, default.
+ * @param maxite Maximum number of iterations for 3dWarpDrive. Default is 50 for first pass and then doubled to 100 in second pass.
+ * @param not_ok_maxite Continue running even if maximum iterations is reached.
+ * @param inweight Apply -weight INPUT (in 3dWarpDrive). By default, 3dWarpDrive uses the BASE dataset to weight the alignment cost.
+ * @param rigid_equiv Output the rigid-body version of the alignment. Resultant volume is NOT in TLRC space.
+ * @param init_xform Apply affine transform in XFORM0.1D before beginning registration and then include XFORM0.1D in the final transform.
+ * @param no_pre Delete temporary dataset created by -init_xform
+ * @param out_space Set the output to a particular space.
+ * @param v_3d_allineate Use 3dAllineate with the lpa+ZZ cost function instead of 3dWarpDrive.
+ * @param v_3d_alcost Use another cost function like nmi for 3dAllineate.
+ * @param overwrite Overwrite existing output.
+ * @param pad_input Pad the input dataset by MM mm in each direction.
+ * @param onewarp Create follower data with one interpolation step, instead of two. This option reduces blurring of the output data.
+ * @param twowarp Create follower data with two interpolations step, instead of one. This option is for backward compatibility.
+ * @param rmode Resampling mode. Choose from: linear, cubic, NN or quintic. Default for 'Usage 1' is cubic.
+ * @param prefix Name of the output dataset.
+ * @param suffix Name the output dataset by appending this suffix to the prefix of the input data.
+ * @param keep_view Do not mark output dataset as +tlrc.
+ * @param base_copy Copy base (template) dataset into COPY_PREFIX.
+ * @param base_list List the full path of the base dataset.
+ * @param use_gz When using '-suffix ..', behave as if you had provided a prefix with '*.gz' at the end.
+ * @param verb Increase verbosity of the script.
+ *
+ * @returns Parameter dictionary
+ */
 function v__auto_tlrc_params(
     base_template: InputPathType,
     input_anat: InputPathType,
@@ -151,53 +196,8 @@ function v__auto_tlrc_params(
     use_gz: boolean = false,
     verb: boolean = false,
 ): VAutoTlrcParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_template Reference anatomical volume. Usually this volume is in some standard space like TLRC or MNI space.
-     * @param input_anat Original anatomical volume (+orig). The skull is removed by this script unless instructed otherwise (-no_ss).
-     * @param apar An anatomical dataset in TLRC space created using Usage 1 of @auto_tlrc.
-     * @param input_dataset Dataset (typically EPI time series or statistical dataset) to transform to TLRC space per the transform in TLRC_parent
-     * @param no_ss Do not strip skull of input data set because the skull has already been removed or because the template still has the skull.
-     * @param warp_orig_vol Produce a TLRC version of the input volume, rather than a TLRC version of the skull-stripped input.
-     * @param dxyz Cubic voxel size of output DSET in TLRC space. Default is the resolution of the template.
-     * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
-     * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
-     * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
-     * @param pad_base Pad the base dataset by MM mm in each direction. Default is 15 mm.
-     * @param keep_tmp Keep temporary files.
-     * @param clean Clean all temporary files, likely left from -keep_tmp option then exit.
-     * @param xform Transform to use for warping: Choose from affine_general or shift_rotate_scale. Default is affine_general.
-     * @param no_avoid_eyes An option that gets passed to 3dSkullStrip. Use it when parts of the frontal lobes get clipped.
-     * @param ncr Do not use -coarserot option for 3dWarpDrive, which is a default.
-     * @param onepass Turns off -twopass option for 3dWarpDrive. This will speed up the registration but might fail if the datasets are far apart.
-     * @param twopass Opposite of -onepass, default.
-     * @param maxite Maximum number of iterations for 3dWarpDrive. Default is 50 for first pass and then doubled to 100 in second pass.
-     * @param not_ok_maxite Continue running even if maximum iterations is reached.
-     * @param inweight Apply -weight INPUT (in 3dWarpDrive). By default, 3dWarpDrive uses the BASE dataset to weight the alignment cost.
-     * @param rigid_equiv Output the rigid-body version of the alignment. Resultant volume is NOT in TLRC space.
-     * @param init_xform Apply affine transform in XFORM0.1D before beginning registration and then include XFORM0.1D in the final transform.
-     * @param no_pre Delete temporary dataset created by -init_xform
-     * @param out_space Set the output to a particular space.
-     * @param v_3d_allineate Use 3dAllineate with the lpa+ZZ cost function instead of 3dWarpDrive.
-     * @param v_3d_alcost Use another cost function like nmi for 3dAllineate.
-     * @param overwrite Overwrite existing output.
-     * @param pad_input Pad the input dataset by MM mm in each direction.
-     * @param onewarp Create follower data with one interpolation step, instead of two. This option reduces blurring of the output data.
-     * @param twowarp Create follower data with two interpolations step, instead of one. This option is for backward compatibility.
-     * @param rmode Resampling mode. Choose from: linear, cubic, NN or quintic. Default for 'Usage 1' is cubic.
-     * @param prefix Name of the output dataset.
-     * @param suffix Name the output dataset by appending this suffix to the prefix of the input data.
-     * @param keep_view Do not mark output dataset as +tlrc.
-     * @param base_copy Copy base (template) dataset into COPY_PREFIX.
-     * @param base_list List the full path of the base dataset.
-     * @param use_gz When using '-suffix ..', behave as if you had provided a prefix with '*.gz' at the end.
-     * @param verb Increase verbosity of the script.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@auto_tlrc" as const,
+        "@type": "afni.@auto_tlrc" as const,
         "base_template": base_template,
         "input_anat": input_anat,
         "no_ss": no_ss,
@@ -272,18 +272,18 @@ function v__auto_tlrc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__auto_tlrc_cargs(
     params: VAutoTlrcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@auto_tlrc");
     cargs.push(
@@ -456,18 +456,18 @@ function v__auto_tlrc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__auto_tlrc_outputs(
     params: VAutoTlrcParameters,
     execution: Execution,
 ): VAutoTlrcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAutoTlrcOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -477,22 +477,22 @@ function v__auto_tlrc_outputs(
 }
 
 
+/**
+ * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
+ */
 function v__auto_tlrc_execute(
     params: VAutoTlrcParameters,
     execution: Execution,
 ): VAutoTlrcOutputs {
-    /**
-     * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__auto_tlrc_cargs(params, execution)
     const ret = v__auto_tlrc_outputs(params, execution)
@@ -501,6 +501,56 @@ function v__auto_tlrc_execute(
 }
 
 
+/**
+ * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base_template Reference anatomical volume. Usually this volume is in some standard space like TLRC or MNI space.
+ * @param input_anat Original anatomical volume (+orig). The skull is removed by this script unless instructed otherwise (-no_ss).
+ * @param apar An anatomical dataset in TLRC space created using Usage 1 of @auto_tlrc.
+ * @param input_dataset Dataset (typically EPI time series or statistical dataset) to transform to TLRC space per the transform in TLRC_parent
+ * @param no_ss Do not strip skull of input data set because the skull has already been removed or because the template still has the skull.
+ * @param warp_orig_vol Produce a TLRC version of the input volume, rather than a TLRC version of the skull-stripped input.
+ * @param dxyz Cubic voxel size of output DSET in TLRC space. Default is the resolution of the template.
+ * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
+ * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
+ * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
+ * @param pad_base Pad the base dataset by MM mm in each direction. Default is 15 mm.
+ * @param keep_tmp Keep temporary files.
+ * @param clean Clean all temporary files, likely left from -keep_tmp option then exit.
+ * @param xform Transform to use for warping: Choose from affine_general or shift_rotate_scale. Default is affine_general.
+ * @param no_avoid_eyes An option that gets passed to 3dSkullStrip. Use it when parts of the frontal lobes get clipped.
+ * @param ncr Do not use -coarserot option for 3dWarpDrive, which is a default.
+ * @param onepass Turns off -twopass option for 3dWarpDrive. This will speed up the registration but might fail if the datasets are far apart.
+ * @param twopass Opposite of -onepass, default.
+ * @param maxite Maximum number of iterations for 3dWarpDrive. Default is 50 for first pass and then doubled to 100 in second pass.
+ * @param not_ok_maxite Continue running even if maximum iterations is reached.
+ * @param inweight Apply -weight INPUT (in 3dWarpDrive). By default, 3dWarpDrive uses the BASE dataset to weight the alignment cost.
+ * @param rigid_equiv Output the rigid-body version of the alignment. Resultant volume is NOT in TLRC space.
+ * @param init_xform Apply affine transform in XFORM0.1D before beginning registration and then include XFORM0.1D in the final transform.
+ * @param no_pre Delete temporary dataset created by -init_xform
+ * @param out_space Set the output to a particular space.
+ * @param v_3d_allineate Use 3dAllineate with the lpa+ZZ cost function instead of 3dWarpDrive.
+ * @param v_3d_alcost Use another cost function like nmi for 3dAllineate.
+ * @param overwrite Overwrite existing output.
+ * @param pad_input Pad the input dataset by MM mm in each direction.
+ * @param onewarp Create follower data with one interpolation step, instead of two. This option reduces blurring of the output data.
+ * @param twowarp Create follower data with two interpolations step, instead of one. This option is for backward compatibility.
+ * @param rmode Resampling mode. Choose from: linear, cubic, NN or quintic. Default for 'Usage 1' is cubic.
+ * @param prefix Name of the output dataset.
+ * @param suffix Name the output dataset by appending this suffix to the prefix of the input data.
+ * @param keep_view Do not mark output dataset as +tlrc.
+ * @param base_copy Copy base (template) dataset into COPY_PREFIX.
+ * @param base_list List the full path of the base dataset.
+ * @param use_gz When using '-suffix ..', behave as if you had provided a prefix with '*.gz' at the end.
+ * @param verb Increase verbosity of the script.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
+ */
 function v__auto_tlrc(
     base_template: InputPathType,
     input_anat: InputPathType,
@@ -543,56 +593,6 @@ function v__auto_tlrc(
     verb: boolean = false,
     runner: Runner | null = null,
 ): VAutoTlrcOutputs {
-    /**
-     * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base_template Reference anatomical volume. Usually this volume is in some standard space like TLRC or MNI space.
-     * @param input_anat Original anatomical volume (+orig). The skull is removed by this script unless instructed otherwise (-no_ss).
-     * @param apar An anatomical dataset in TLRC space created using Usage 1 of @auto_tlrc.
-     * @param input_dataset Dataset (typically EPI time series or statistical dataset) to transform to TLRC space per the transform in TLRC_parent
-     * @param no_ss Do not strip skull of input data set because the skull has already been removed or because the template still has the skull.
-     * @param warp_orig_vol Produce a TLRC version of the input volume, rather than a TLRC version of the skull-stripped input.
-     * @param dxyz Cubic voxel size of output DSET in TLRC space. Default is the resolution of the template.
-     * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
-     * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
-     * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
-     * @param pad_base Pad the base dataset by MM mm in each direction. Default is 15 mm.
-     * @param keep_tmp Keep temporary files.
-     * @param clean Clean all temporary files, likely left from -keep_tmp option then exit.
-     * @param xform Transform to use for warping: Choose from affine_general or shift_rotate_scale. Default is affine_general.
-     * @param no_avoid_eyes An option that gets passed to 3dSkullStrip. Use it when parts of the frontal lobes get clipped.
-     * @param ncr Do not use -coarserot option for 3dWarpDrive, which is a default.
-     * @param onepass Turns off -twopass option for 3dWarpDrive. This will speed up the registration but might fail if the datasets are far apart.
-     * @param twopass Opposite of -onepass, default.
-     * @param maxite Maximum number of iterations for 3dWarpDrive. Default is 50 for first pass and then doubled to 100 in second pass.
-     * @param not_ok_maxite Continue running even if maximum iterations is reached.
-     * @param inweight Apply -weight INPUT (in 3dWarpDrive). By default, 3dWarpDrive uses the BASE dataset to weight the alignment cost.
-     * @param rigid_equiv Output the rigid-body version of the alignment. Resultant volume is NOT in TLRC space.
-     * @param init_xform Apply affine transform in XFORM0.1D before beginning registration and then include XFORM0.1D in the final transform.
-     * @param no_pre Delete temporary dataset created by -init_xform
-     * @param out_space Set the output to a particular space.
-     * @param v_3d_allineate Use 3dAllineate with the lpa+ZZ cost function instead of 3dWarpDrive.
-     * @param v_3d_alcost Use another cost function like nmi for 3dAllineate.
-     * @param overwrite Overwrite existing output.
-     * @param pad_input Pad the input dataset by MM mm in each direction.
-     * @param onewarp Create follower data with one interpolation step, instead of two. This option reduces blurring of the output data.
-     * @param twowarp Create follower data with two interpolations step, instead of one. This option is for backward compatibility.
-     * @param rmode Resampling mode. Choose from: linear, cubic, NN or quintic. Default for 'Usage 1' is cubic.
-     * @param prefix Name of the output dataset.
-     * @param suffix Name the output dataset by appending this suffix to the prefix of the input data.
-     * @param keep_view Do not mark output dataset as +tlrc.
-     * @param base_copy Copy base (template) dataset into COPY_PREFIX.
-     * @param base_list List the full path of the base dataset.
-     * @param use_gz When using '-suffix ..', behave as if you had provided a prefix with '*.gz' at the end.
-     * @param verb Increase verbosity of the script.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AUTO_TLRC_METADATA);
     const params = v__auto_tlrc_params(base_template, input_anat, apar, input_dataset, no_ss, warp_orig_vol, dxyz, dx, dy, dz, pad_base, keep_tmp, clean, xform, no_avoid_eyes, ncr, onepass, twopass, maxite, not_ok_maxite, inweight, rigid_equiv, init_xform, no_pre, out_space, v_3d_allineate, v_3d_alcost, overwrite, pad_input, onewarp, twowarp, rmode, prefix, suffix, keep_view, base_copy, base_list, use_gz, verb)
@@ -605,5 +605,8 @@ export {
       VAutoTlrcParameters,
       V__AUTO_TLRC_METADATA,
       v__auto_tlrc,
+      v__auto_tlrc_cargs,
+      v__auto_tlrc_execute,
+      v__auto_tlrc_outputs,
       v__auto_tlrc_params,
 };

@@ -12,7 +12,7 @@ const GTMSEG_METADATA: Metadata = {
 
 
 interface GtmsegParameters {
-    "__STYXTYPE__": "gtmseg";
+    "@type": "freesurfer.gtmseg";
     "subject": string;
     "outvol"?: string | null | undefined;
     "usf"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface GtmsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gtmseg": gtmseg_cargs,
+        "freesurfer.gtmseg": gtmseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gtmseg": gtmseg_outputs,
+        "freesurfer.gtmseg": gtmseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,30 @@ interface GtmsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject to analyze
+ * @param outvol Output volume relative to subject/mri
+ * @param usf Upsampling factor for segmentation resolution
+ * @param subsegwm Subsegment white matter into lobes
+ * @param keep_hypo Do not relabel hypointensities as white matter when subsegmenting WM
+ * @param keep_cc Do not relabel corpus callosum as white matter
+ * @param dmax Distance threshold for subsegmenting WM
+ * @param ctx_annot Annotation for cortical segmentation
+ * @param wm_annot Annotation for WM segmentation with --subsegwm
+ * @param output_usf Set output upsampling factor different from input USF for debugging
+ * @param head Use alternative head segmentation file
+ * @param subseg_cbwm Subsegment cerebellum WM into core and gyri
+ * @param no_pons Do not add pons segmentation when running xcerebralseg
+ * @param no_vermis Do not add vermis segmentation when running xcerebralseg
+ * @param ctab Color table for custom segmentation
+ * @param no_seg_stats Do not compute segmentation statistics
+ * @param xcerseg Run xcerebralseg to create apas+head.mgz
+ * @param debug Enable debugging mode
+ *
+ * @returns Parameter dictionary
+ */
 function gtmseg_params(
     subject: string,
     outvol: string | null = "gtmseg.mgz",
@@ -109,32 +133,8 @@ function gtmseg_params(
     xcerseg: boolean = false,
     debug: boolean = false,
 ): GtmsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject to analyze
-     * @param outvol Output volume relative to subject/mri
-     * @param usf Upsampling factor for segmentation resolution
-     * @param subsegwm Subsegment white matter into lobes
-     * @param keep_hypo Do not relabel hypointensities as white matter when subsegmenting WM
-     * @param keep_cc Do not relabel corpus callosum as white matter
-     * @param dmax Distance threshold for subsegmenting WM
-     * @param ctx_annot Annotation for cortical segmentation
-     * @param wm_annot Annotation for WM segmentation with --subsegwm
-     * @param output_usf Set output upsampling factor different from input USF for debugging
-     * @param head Use alternative head segmentation file
-     * @param subseg_cbwm Subsegment cerebellum WM into core and gyri
-     * @param no_pons Do not add pons segmentation when running xcerebralseg
-     * @param no_vermis Do not add vermis segmentation when running xcerebralseg
-     * @param ctab Color table for custom segmentation
-     * @param no_seg_stats Do not compute segmentation statistics
-     * @param xcerseg Run xcerebralseg to create apas+head.mgz
-     * @param debug Enable debugging mode
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gtmseg" as const,
+        "@type": "freesurfer.gtmseg" as const,
         "subject": subject,
         "subsegwm": subsegwm,
         "keep_hypo": keep_hypo,
@@ -174,18 +174,18 @@ function gtmseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gtmseg_cargs(
     params: GtmsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gtmseg");
     cargs.push(
@@ -271,18 +271,18 @@ function gtmseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gtmseg_outputs(
     params: GtmsegParameters,
     execution: Execution,
 ): GtmsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GtmsegOutputs = {
         root: execution.outputFile("."),
         output_volume: ((params["outvol"] ?? null) !== null) ? execution.outputFile(["$SUBJECTS_DIR/", (params["subject"] ?? null), "/mri/", (params["outvol"] ?? null)].join('')) : null,
@@ -292,22 +292,22 @@ function gtmseg_outputs(
 }
 
 
+/**
+ * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
+ */
 function gtmseg_execute(
     params: GtmsegParameters,
     execution: Execution,
 ): GtmsegOutputs {
-    /**
-     * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = gtmseg_cargs(params, execution)
     const ret = gtmseg_outputs(params, execution)
@@ -316,6 +316,35 @@ function gtmseg_execute(
 }
 
 
+/**
+ * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject to analyze
+ * @param outvol Output volume relative to subject/mri
+ * @param usf Upsampling factor for segmentation resolution
+ * @param subsegwm Subsegment white matter into lobes
+ * @param keep_hypo Do not relabel hypointensities as white matter when subsegmenting WM
+ * @param keep_cc Do not relabel corpus callosum as white matter
+ * @param dmax Distance threshold for subsegmenting WM
+ * @param ctx_annot Annotation for cortical segmentation
+ * @param wm_annot Annotation for WM segmentation with --subsegwm
+ * @param output_usf Set output upsampling factor different from input USF for debugging
+ * @param head Use alternative head segmentation file
+ * @param subseg_cbwm Subsegment cerebellum WM into core and gyri
+ * @param no_pons Do not add pons segmentation when running xcerebralseg
+ * @param no_vermis Do not add vermis segmentation when running xcerebralseg
+ * @param ctab Color table for custom segmentation
+ * @param no_seg_stats Do not compute segmentation statistics
+ * @param xcerseg Run xcerebralseg to create apas+head.mgz
+ * @param debug Enable debugging mode
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
+ */
 function gtmseg(
     subject: string,
     outvol: string | null = "gtmseg.mgz",
@@ -337,35 +366,6 @@ function gtmseg(
     debug: boolean = false,
     runner: Runner | null = null,
 ): GtmsegOutputs {
-    /**
-     * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject to analyze
-     * @param outvol Output volume relative to subject/mri
-     * @param usf Upsampling factor for segmentation resolution
-     * @param subsegwm Subsegment white matter into lobes
-     * @param keep_hypo Do not relabel hypointensities as white matter when subsegmenting WM
-     * @param keep_cc Do not relabel corpus callosum as white matter
-     * @param dmax Distance threshold for subsegmenting WM
-     * @param ctx_annot Annotation for cortical segmentation
-     * @param wm_annot Annotation for WM segmentation with --subsegwm
-     * @param output_usf Set output upsampling factor different from input USF for debugging
-     * @param head Use alternative head segmentation file
-     * @param subseg_cbwm Subsegment cerebellum WM into core and gyri
-     * @param no_pons Do not add pons segmentation when running xcerebralseg
-     * @param no_vermis Do not add vermis segmentation when running xcerebralseg
-     * @param ctab Color table for custom segmentation
-     * @param no_seg_stats Do not compute segmentation statistics
-     * @param xcerseg Run xcerebralseg to create apas+head.mgz
-     * @param debug Enable debugging mode
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GTMSEG_METADATA);
     const params = gtmseg_params(subject, outvol, usf, subsegwm, keep_hypo, keep_cc, dmax, ctx_annot, wm_annot, output_usf, head, subseg_cbwm, no_pons, no_vermis, ctab, no_seg_stats, xcerseg, debug)
@@ -378,5 +378,8 @@ export {
       GtmsegOutputs,
       GtmsegParameters,
       gtmseg,
+      gtmseg_cargs,
+      gtmseg_execute,
+      gtmseg_outputs,
       gtmseg_params,
 };

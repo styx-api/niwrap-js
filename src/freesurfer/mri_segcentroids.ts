@@ -12,7 +12,7 @@ const MRI_SEGCENTROIDS_METADATA: Metadata = {
 
 
 interface MriSegcentroidsParameters {
-    "__STYXTYPE__": "mri_segcentroids";
+    "@type": "freesurfer.mri_segcentroids";
     "input_segmentation": InputPathType;
     "output_file": string;
     "pointset_flag": boolean;
@@ -23,35 +23,35 @@ interface MriSegcentroidsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segcentroids": mri_segcentroids_cargs,
+        "freesurfer.mri_segcentroids": mri_segcentroids_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segcentroids": mri_segcentroids_outputs,
+        "freesurfer.mri_segcentroids": mri_segcentroids_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriSegcentroidsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_segmentation Input segmentation volume file.
+ * @param output_file Output text file for centroids.
+ * @param pointset_flag Save centroids as a Freeview pointset (json).
+ * @param registration_file Apply a linear registration (lta).
+ * @param weights_file Compute weighted centroids with provided voxel weights.
+ * @param lut_file Specify label lookup table.
+ * @param default_lut_flag Use default FreeSurferColorLUT.txt for lookup table.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segcentroids_params(
     input_segmentation: InputPathType,
     output_file: string,
@@ -83,21 +96,8 @@ function mri_segcentroids_params(
     lut_file: InputPathType | null = null,
     default_lut_flag: boolean = false,
 ): MriSegcentroidsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_segmentation Input segmentation volume file.
-     * @param output_file Output text file for centroids.
-     * @param pointset_flag Save centroids as a Freeview pointset (json).
-     * @param registration_file Apply a linear registration (lta).
-     * @param weights_file Compute weighted centroids with provided voxel weights.
-     * @param lut_file Specify label lookup table.
-     * @param default_lut_flag Use default FreeSurferColorLUT.txt for lookup table.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segcentroids" as const,
+        "@type": "freesurfer.mri_segcentroids" as const,
         "input_segmentation": input_segmentation,
         "output_file": output_file,
         "pointset_flag": pointset_flag,
@@ -116,18 +116,18 @@ function mri_segcentroids_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segcentroids_cargs(
     params: MriSegcentroidsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segcentroids");
     cargs.push(
@@ -166,18 +166,18 @@ function mri_segcentroids_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segcentroids_outputs(
     params: MriSegcentroidsParameters,
     execution: Execution,
 ): MriSegcentroidsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegcentroidsOutputs = {
         root: execution.outputFile("."),
         output_centroids: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -186,22 +186,22 @@ function mri_segcentroids_outputs(
 }
 
 
+/**
+ * Computes the center of mass for individual structures in a segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
+ */
 function mri_segcentroids_execute(
     params: MriSegcentroidsParameters,
     execution: Execution,
 ): MriSegcentroidsOutputs {
-    /**
-     * Computes the center of mass for individual structures in a segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segcentroids_cargs(params, execution)
     const ret = mri_segcentroids_outputs(params, execution)
@@ -210,6 +210,24 @@ function mri_segcentroids_execute(
 }
 
 
+/**
+ * Computes the center of mass for individual structures in a segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_segmentation Input segmentation volume file.
+ * @param output_file Output text file for centroids.
+ * @param pointset_flag Save centroids as a Freeview pointset (json).
+ * @param registration_file Apply a linear registration (lta).
+ * @param weights_file Compute weighted centroids with provided voxel weights.
+ * @param lut_file Specify label lookup table.
+ * @param default_lut_flag Use default FreeSurferColorLUT.txt for lookup table.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
+ */
 function mri_segcentroids(
     input_segmentation: InputPathType,
     output_file: string,
@@ -220,24 +238,6 @@ function mri_segcentroids(
     default_lut_flag: boolean = false,
     runner: Runner | null = null,
 ): MriSegcentroidsOutputs {
-    /**
-     * Computes the center of mass for individual structures in a segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_segmentation Input segmentation volume file.
-     * @param output_file Output text file for centroids.
-     * @param pointset_flag Save centroids as a Freeview pointset (json).
-     * @param registration_file Apply a linear registration (lta).
-     * @param weights_file Compute weighted centroids with provided voxel weights.
-     * @param lut_file Specify label lookup table.
-     * @param default_lut_flag Use default FreeSurferColorLUT.txt for lookup table.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGCENTROIDS_METADATA);
     const params = mri_segcentroids_params(input_segmentation, output_file, pointset_flag, registration_file, weights_file, lut_file, default_lut_flag)
@@ -250,5 +250,8 @@ export {
       MriSegcentroidsOutputs,
       MriSegcentroidsParameters,
       mri_segcentroids,
+      mri_segcentroids_cargs,
+      mri_segcentroids_execute,
+      mri_segcentroids_outputs,
       mri_segcentroids_params,
 };

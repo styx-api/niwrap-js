@@ -12,7 +12,7 @@ const TALAIRACH_AVI_METADATA: Metadata = {
 
 
 interface TalairachAviParameters {
-    "__STYXTYPE__": "talairach_avi";
+    "@type": "freesurfer.talairach_avi";
     "input_file": InputPathType;
     "output_xfm": string;
     "atlas"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface TalairachAviParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talairach_avi": talairach_avi_cargs,
+        "freesurfer.talairach_avi": talairach_avi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "talairach_avi": talairach_avi_outputs,
+        "freesurfer.talairach_avi": talairach_avi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface TalairachAviOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume
+ * @param output_xfm Output transform file
+ * @param atlas Alternate target atlas (in freesurfer/average dir)
+ * @param log Log file. Default is outdir/talairach_avi.log
+ * @param debug Turn on debugging
+ *
+ * @returns Parameter dictionary
+ */
 function talairach_avi_params(
     input_file: InputPathType,
     output_xfm: string,
@@ -79,19 +90,8 @@ function talairach_avi_params(
     log: string | null = null,
     debug: boolean = false,
 ): TalairachAviParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume
-     * @param output_xfm Output transform file
-     * @param atlas Alternate target atlas (in freesurfer/average dir)
-     * @param log Log file. Default is outdir/talairach_avi.log
-     * @param debug Turn on debugging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talairach_avi" as const,
+        "@type": "freesurfer.talairach_avi" as const,
         "input_file": input_file,
         "output_xfm": output_xfm,
         "debug": debug,
@@ -106,18 +106,18 @@ function talairach_avi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talairach_avi_cargs(
     params: TalairachAviParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talairach_avi");
     cargs.push(
@@ -147,18 +147,18 @@ function talairach_avi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talairach_avi_outputs(
     params: TalairachAviParameters,
     execution: Execution,
 ): TalairachAviOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalairachAviOutputs = {
         root: execution.outputFile("."),
         output_xfm_file: execution.outputFile([(params["output_xfm"] ?? null)].join('')),
@@ -167,22 +167,22 @@ function talairach_avi_outputs(
 }
 
 
+/**
+ * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
+ */
 function talairach_avi_execute(
     params: TalairachAviParameters,
     execution: Execution,
 ): TalairachAviOutputs {
-    /**
-     * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
-     */
     params = execution.params(params)
     const cargs = talairach_avi_cargs(params, execution)
     const ret = talairach_avi_outputs(params, execution)
@@ -191,6 +191,22 @@ function talairach_avi_execute(
 }
 
 
+/**
+ * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume
+ * @param output_xfm Output transform file
+ * @param atlas Alternate target atlas (in freesurfer/average dir)
+ * @param log Log file. Default is outdir/talairach_avi.log
+ * @param debug Turn on debugging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
+ */
 function talairach_avi(
     input_file: InputPathType,
     output_xfm: string,
@@ -199,22 +215,6 @@ function talairach_avi(
     debug: boolean = false,
     runner: Runner | null = null,
 ): TalairachAviOutputs {
-    /**
-     * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume
-     * @param output_xfm Output transform file
-     * @param atlas Alternate target atlas (in freesurfer/average dir)
-     * @param log Log file. Default is outdir/talairach_avi.log
-     * @param debug Turn on debugging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALAIRACH_AVI_METADATA);
     const params = talairach_avi_params(input_file, output_xfm, atlas, log, debug)
@@ -227,5 +227,8 @@ export {
       TalairachAviOutputs,
       TalairachAviParameters,
       talairach_avi,
+      talairach_avi_cargs,
+      talairach_avi_execute,
+      talairach_avi_outputs,
       talairach_avi_params,
 };

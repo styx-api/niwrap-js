@@ -12,7 +12,7 @@ const V__SNAPSHOT_VOLREG_METADATA: Metadata = {
 
 
 interface VSnapshotVolregParameters {
-    "__STYXTYPE__": "@snapshot_volreg";
+    "@type": "afni.@snapshot_volreg";
     "anatdataset": InputPathType;
     "epidataset": InputPathType;
     "jname"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface VSnapshotVolregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@snapshot_volreg": v__snapshot_volreg_cargs,
+        "afni.@snapshot_volreg": v__snapshot_volreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@snapshot_volreg": v__snapshot_volreg_outputs,
+        "afni.@snapshot_volreg": v__snapshot_volreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface VSnapshotVolregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param anatdataset Anatomical dataset file
+ * @param epidataset EPI dataset file
+ * @param jname Name for the output JPEG file
+ * @param xdisplay Display number of an already running Xvfb instance
+ *
+ * @returns Parameter dictionary
+ */
 function v__snapshot_volreg_params(
     anatdataset: InputPathType,
     epidataset: InputPathType,
     jname: string | null = null,
     xdisplay: string | null = null,
 ): VSnapshotVolregParameters {
-    /**
-     * Build parameters.
-    
-     * @param anatdataset Anatomical dataset file
-     * @param epidataset EPI dataset file
-     * @param jname Name for the output JPEG file
-     * @param xdisplay Display number of an already running Xvfb instance
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@snapshot_volreg" as const,
+        "@type": "afni.@snapshot_volreg" as const,
         "anatdataset": anatdataset,
         "epidataset": epidataset,
     };
@@ -102,18 +102,18 @@ function v__snapshot_volreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__snapshot_volreg_cargs(
     params: VSnapshotVolregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@snapshot_volreg");
     cargs.push(execution.inputFile((params["anatdataset"] ?? null)));
@@ -128,18 +128,18 @@ function v__snapshot_volreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__snapshot_volreg_outputs(
     params: VSnapshotVolregParameters,
     execution: Execution,
 ): VSnapshotVolregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSnapshotVolregOutputs = {
         root: execution.outputFile("."),
         output_jpeg: ((params["jname"] ?? null) !== null) ? execution.outputFile([(params["jname"] ?? null), ".jpg"].join('')) : null,
@@ -148,22 +148,22 @@ function v__snapshot_volreg_outputs(
 }
 
 
+/**
+ * Create a JPEG image showing the edges of an EPI dataset overlayed on an anatomical dataset to judge 3D registration quality.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
+ */
 function v__snapshot_volreg_execute(
     params: VSnapshotVolregParameters,
     execution: Execution,
 ): VSnapshotVolregOutputs {
-    /**
-     * Create a JPEG image showing the edges of an EPI dataset overlayed on an anatomical dataset to judge 3D registration quality.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__snapshot_volreg_cargs(params, execution)
     const ret = v__snapshot_volreg_outputs(params, execution)
@@ -172,6 +172,21 @@ function v__snapshot_volreg_execute(
 }
 
 
+/**
+ * Create a JPEG image showing the edges of an EPI dataset overlayed on an anatomical dataset to judge 3D registration quality.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param anatdataset Anatomical dataset file
+ * @param epidataset EPI dataset file
+ * @param jname Name for the output JPEG file
+ * @param xdisplay Display number of an already running Xvfb instance
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
+ */
 function v__snapshot_volreg(
     anatdataset: InputPathType,
     epidataset: InputPathType,
@@ -179,21 +194,6 @@ function v__snapshot_volreg(
     xdisplay: string | null = null,
     runner: Runner | null = null,
 ): VSnapshotVolregOutputs {
-    /**
-     * Create a JPEG image showing the edges of an EPI dataset overlayed on an anatomical dataset to judge 3D registration quality.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param anatdataset Anatomical dataset file
-     * @param epidataset EPI dataset file
-     * @param jname Name for the output JPEG file
-     * @param xdisplay Display number of an already running Xvfb instance
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SNAPSHOT_VOLREG_METADATA);
     const params = v__snapshot_volreg_params(anatdataset, epidataset, jname, xdisplay)
@@ -206,5 +206,8 @@ export {
       VSnapshotVolregParameters,
       V__SNAPSHOT_VOLREG_METADATA,
       v__snapshot_volreg,
+      v__snapshot_volreg_cargs,
+      v__snapshot_volreg_execute,
+      v__snapshot_volreg_outputs,
       v__snapshot_volreg_params,
 };

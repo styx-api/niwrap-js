@@ -12,7 +12,7 @@ const MRI_FIT_BIAS_METADATA: Metadata = {
 
 
 interface MriFitBiasParameters {
-    "__STYXTYPE__": "mri_fit_bias";
+    "@type": "freesurfer.mri_fit_bias";
     "inputvol": InputPathType;
     "lpf_cutoff"?: number | null | undefined;
     "segvol": InputPathType;
@@ -28,35 +28,35 @@ interface MriFitBiasParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fit_bias": mri_fit_bias_cargs,
+        "freesurfer.mri_fit_bias": mri_fit_bias_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fit_bias": mri_fit_bias_outputs,
+        "freesurfer.mri_fit_bias": mri_fit_bias_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,24 @@ interface MriFitBiasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputvol Input volume for intensity normalization
+ * @param segvol Segmentation volume to define WM and Cortex (e.g., aseg.presurf.mgz)
+ * @param maskvol Mask volume; zero everything outside of the mask (e.g., brainmask.mgz)
+ * @param outvol Bias corrected output volume
+ * @param biasfield Output bias field
+ * @param lpf_cutoff Low-pass filter cutoff in mm (default is 23.000000)
+ * @param dctvol DCT fields file for debugging
+ * @param threshold Mask out anything <= threshold value
+ * @param nerode 3D erode segmentation by n steps (default is 1)
+ * @param nthreads Number of threads to use
+ * @param debug Turn on debugging mode
+ * @param checkopts Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fit_bias_params(
     inputvol: InputPathType,
     segvol: InputPathType,
@@ -97,26 +115,8 @@ function mri_fit_bias_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriFitBiasParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputvol Input volume for intensity normalization
-     * @param segvol Segmentation volume to define WM and Cortex (e.g., aseg.presurf.mgz)
-     * @param maskvol Mask volume; zero everything outside of the mask (e.g., brainmask.mgz)
-     * @param outvol Bias corrected output volume
-     * @param biasfield Output bias field
-     * @param lpf_cutoff Low-pass filter cutoff in mm (default is 23.000000)
-     * @param dctvol DCT fields file for debugging
-     * @param threshold Mask out anything <= threshold value
-     * @param nerode 3D erode segmentation by n steps (default is 1)
-     * @param nthreads Number of threads to use
-     * @param debug Turn on debugging mode
-     * @param checkopts Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fit_bias" as const,
+        "@type": "freesurfer.mri_fit_bias" as const,
         "inputvol": inputvol,
         "segvol": segvol,
         "maskvol": maskvol,
@@ -144,18 +144,18 @@ function mri_fit_bias_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fit_bias_cargs(
     params: MriFitBiasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fit_bias");
     cargs.push(
@@ -218,18 +218,18 @@ function mri_fit_bias_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fit_bias_outputs(
     params: MriFitBiasParameters,
     execution: Execution,
 ): MriFitBiasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFitBiasOutputs = {
         root: execution.outputFile("."),
         corrected_output: execution.outputFile([(params["outvol"] ?? null)].join('')),
@@ -239,22 +239,22 @@ function mri_fit_bias_outputs(
 }
 
 
+/**
+ * A tool for intensity normalization and bias correction in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
+ */
 function mri_fit_bias_execute(
     params: MriFitBiasParameters,
     execution: Execution,
 ): MriFitBiasOutputs {
-    /**
-     * A tool for intensity normalization and bias correction in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fit_bias_cargs(params, execution)
     const ret = mri_fit_bias_outputs(params, execution)
@@ -263,6 +263,29 @@ function mri_fit_bias_execute(
 }
 
 
+/**
+ * A tool for intensity normalization and bias correction in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputvol Input volume for intensity normalization
+ * @param segvol Segmentation volume to define WM and Cortex (e.g., aseg.presurf.mgz)
+ * @param maskvol Mask volume; zero everything outside of the mask (e.g., brainmask.mgz)
+ * @param outvol Bias corrected output volume
+ * @param biasfield Output bias field
+ * @param lpf_cutoff Low-pass filter cutoff in mm (default is 23.000000)
+ * @param dctvol DCT fields file for debugging
+ * @param threshold Mask out anything <= threshold value
+ * @param nerode 3D erode segmentation by n steps (default is 1)
+ * @param nthreads Number of threads to use
+ * @param debug Turn on debugging mode
+ * @param checkopts Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
+ */
 function mri_fit_bias(
     inputvol: InputPathType,
     segvol: InputPathType,
@@ -278,29 +301,6 @@ function mri_fit_bias(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriFitBiasOutputs {
-    /**
-     * A tool for intensity normalization and bias correction in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputvol Input volume for intensity normalization
-     * @param segvol Segmentation volume to define WM and Cortex (e.g., aseg.presurf.mgz)
-     * @param maskvol Mask volume; zero everything outside of the mask (e.g., brainmask.mgz)
-     * @param outvol Bias corrected output volume
-     * @param biasfield Output bias field
-     * @param lpf_cutoff Low-pass filter cutoff in mm (default is 23.000000)
-     * @param dctvol DCT fields file for debugging
-     * @param threshold Mask out anything <= threshold value
-     * @param nerode 3D erode segmentation by n steps (default is 1)
-     * @param nthreads Number of threads to use
-     * @param debug Turn on debugging mode
-     * @param checkopts Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FIT_BIAS_METADATA);
     const params = mri_fit_bias_params(inputvol, segvol, maskvol, outvol, biasfield, lpf_cutoff, dctvol, threshold, nerode, nthreads, debug, checkopts)
@@ -313,5 +313,8 @@ export {
       MriFitBiasOutputs,
       MriFitBiasParameters,
       mri_fit_bias,
+      mri_fit_bias_cargs,
+      mri_fit_bias_execute,
+      mri_fit_bias_outputs,
       mri_fit_bias_params,
 };

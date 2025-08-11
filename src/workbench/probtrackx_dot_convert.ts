@@ -12,35 +12,35 @@ const PROBTRACKX_DOT_CONVERT_METADATA: Metadata = {
 
 
 interface ProbtrackxDotConvertRowVoxelsParameters {
-    "__STYXTYPE__": "row_voxels";
+    "@type": "workbench.probtrackx-dot-convert.row_voxels";
     "voxel_list_file": string;
     "label_vol": InputPathType;
 }
 
 
 interface ProbtrackxDotConvertRowCiftiParameters {
-    "__STYXTYPE__": "row_cifti";
+    "@type": "workbench.probtrackx-dot-convert.row_cifti";
     "cifti": InputPathType;
     "direction": string;
 }
 
 
 interface ProbtrackxDotConvertColVoxelsParameters {
-    "__STYXTYPE__": "col_voxels";
+    "@type": "workbench.probtrackx-dot-convert.col_voxels";
     "voxel_list_file": string;
     "label_vol": InputPathType;
 }
 
 
 interface ProbtrackxDotConvertColCiftiParameters {
-    "__STYXTYPE__": "col_cifti";
+    "@type": "workbench.probtrackx-dot-convert.col_cifti";
     "cifti": InputPathType;
     "direction": string;
 }
 
 
 interface ProbtrackxDotConvertParameters {
-    "__STYXTYPE__": "probtrackx-dot-convert";
+    "@type": "workbench.probtrackx-dot-convert";
     "dot_file": string;
     "cifti_out": string;
     "row_voxels"?: ProbtrackxDotConvertRowVoxelsParameters | null | undefined;
@@ -54,58 +54,58 @@ interface ProbtrackxDotConvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "probtrackx-dot-convert": probtrackx_dot_convert_cargs,
-        "row_voxels": probtrackx_dot_convert_row_voxels_cargs,
-        "row_cifti": probtrackx_dot_convert_row_cifti_cargs,
-        "col_voxels": probtrackx_dot_convert_col_voxels_cargs,
-        "col_cifti": probtrackx_dot_convert_col_cifti_cargs,
+        "workbench.probtrackx-dot-convert": probtrackx_dot_convert_cargs,
+        "workbench.probtrackx-dot-convert.row_voxels": probtrackx_dot_convert_row_voxels_cargs,
+        "workbench.probtrackx-dot-convert.row_cifti": probtrackx_dot_convert_row_cifti_cargs,
+        "workbench.probtrackx-dot-convert.col_voxels": probtrackx_dot_convert_col_voxels_cargs,
+        "workbench.probtrackx-dot-convert.col_cifti": probtrackx_dot_convert_col_cifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "probtrackx-dot-convert": probtrackx_dot_convert_outputs,
+        "workbench.probtrackx-dot-convert": probtrackx_dot_convert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param voxel_list_file a text file containing IJK indices for the voxels used
+ * @param label_vol a label volume with the dimensions and sform used, with structure labels
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_dot_convert_row_voxels_params(
     voxel_list_file: string,
     label_vol: InputPathType,
 ): ProbtrackxDotConvertRowVoxelsParameters {
-    /**
-     * Build parameters.
-    
-     * @param voxel_list_file a text file containing IJK indices for the voxels used
-     * @param label_vol a label volume with the dimensions and sform used, with structure labels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "row_voxels" as const,
+        "@type": "workbench.probtrackx-dot-convert.row_voxels" as const,
         "voxel_list_file": voxel_list_file,
         "label_vol": label_vol,
     };
@@ -113,18 +113,18 @@ function probtrackx_dot_convert_row_voxels_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_dot_convert_row_voxels_cargs(
     params: ProbtrackxDotConvertRowVoxelsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-row-voxels");
     cargs.push((params["voxel_list_file"] ?? null));
@@ -133,20 +133,20 @@ function probtrackx_dot_convert_row_voxels_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the cifti file to take the mapping from
+ * @param direction which dimension to take the mapping along, ROW or COLUMN
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_dot_convert_row_cifti_params(
     cifti: InputPathType,
     direction: string,
 ): ProbtrackxDotConvertRowCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the cifti file to take the mapping from
-     * @param direction which dimension to take the mapping along, ROW or COLUMN
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "row_cifti" as const,
+        "@type": "workbench.probtrackx-dot-convert.row_cifti" as const,
         "cifti": cifti,
         "direction": direction,
     };
@@ -154,18 +154,18 @@ function probtrackx_dot_convert_row_cifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_dot_convert_row_cifti_cargs(
     params: ProbtrackxDotConvertRowCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-row-cifti");
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
@@ -174,20 +174,20 @@ function probtrackx_dot_convert_row_cifti_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param voxel_list_file a text file containing IJK indices for the voxels used
+ * @param label_vol a label volume with the dimensions and sform used, with structure labels
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_dot_convert_col_voxels_params(
     voxel_list_file: string,
     label_vol: InputPathType,
 ): ProbtrackxDotConvertColVoxelsParameters {
-    /**
-     * Build parameters.
-    
-     * @param voxel_list_file a text file containing IJK indices for the voxels used
-     * @param label_vol a label volume with the dimensions and sform used, with structure labels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "col_voxels" as const,
+        "@type": "workbench.probtrackx-dot-convert.col_voxels" as const,
         "voxel_list_file": voxel_list_file,
         "label_vol": label_vol,
     };
@@ -195,18 +195,18 @@ function probtrackx_dot_convert_col_voxels_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_dot_convert_col_voxels_cargs(
     params: ProbtrackxDotConvertColVoxelsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-col-voxels");
     cargs.push((params["voxel_list_file"] ?? null));
@@ -215,20 +215,20 @@ function probtrackx_dot_convert_col_voxels_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the cifti file to take the mapping from
+ * @param direction which dimension to take the mapping along, ROW or COLUMN
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_dot_convert_col_cifti_params(
     cifti: InputPathType,
     direction: string,
 ): ProbtrackxDotConvertColCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the cifti file to take the mapping from
-     * @param direction which dimension to take the mapping along, ROW or COLUMN
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "col_cifti" as const,
+        "@type": "workbench.probtrackx-dot-convert.col_cifti" as const,
         "cifti": cifti,
         "direction": direction,
     };
@@ -236,18 +236,18 @@ function probtrackx_dot_convert_col_cifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_dot_convert_col_cifti_cargs(
     params: ProbtrackxDotConvertColCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-col-cifti");
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
@@ -273,6 +273,22 @@ interface ProbtrackxDotConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dot_file input .dot file
+ * @param cifti_out output cifti file
+ * @param row_voxels the output mapping along a row will be voxels
+ * @param opt_row_surface_roi_metric the output mapping along a row will be surface vertices: a metric file with positive values on all vertices used
+ * @param row_cifti take the mapping along a row from a cifti file
+ * @param col_voxels the output mapping along a column will be voxels
+ * @param opt_col_surface_roi_metric the output mapping along a column will be surface vertices: a metric file with positive values on all vertices used
+ * @param col_cifti take the mapping along a column from a cifti file
+ * @param opt_transpose transpose the input matrix
+ * @param opt_make_symmetric transform half-square input into full matrix output
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_dot_convert_params(
     dot_file: string,
     cifti_out: string,
@@ -285,24 +301,8 @@ function probtrackx_dot_convert_params(
     opt_transpose: boolean = false,
     opt_make_symmetric: boolean = false,
 ): ProbtrackxDotConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param dot_file input .dot file
-     * @param cifti_out output cifti file
-     * @param row_voxels the output mapping along a row will be voxels
-     * @param opt_row_surface_roi_metric the output mapping along a row will be surface vertices: a metric file with positive values on all vertices used
-     * @param row_cifti take the mapping along a row from a cifti file
-     * @param col_voxels the output mapping along a column will be voxels
-     * @param opt_col_surface_roi_metric the output mapping along a column will be surface vertices: a metric file with positive values on all vertices used
-     * @param col_cifti take the mapping along a column from a cifti file
-     * @param opt_transpose transpose the input matrix
-     * @param opt_make_symmetric transform half-square input into full matrix output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "probtrackx-dot-convert" as const,
+        "@type": "workbench.probtrackx-dot-convert" as const,
         "dot_file": dot_file,
         "cifti_out": cifti_out,
         "opt_transpose": opt_transpose,
@@ -330,25 +330,25 @@ function probtrackx_dot_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_dot_convert_cargs(
     params: ProbtrackxDotConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-probtrackx-dot-convert");
     cargs.push((params["dot_file"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["row_voxels"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["row_voxels"] ?? null).__STYXTYPE__)((params["row_voxels"] ?? null), execution));
+        cargs.push(...dynCargs((params["row_voxels"] ?? null)["@type"])((params["row_voxels"] ?? null), execution));
     }
     if ((params["opt_row_surface_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -357,10 +357,10 @@ function probtrackx_dot_convert_cargs(
         );
     }
     if ((params["row_cifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["row_cifti"] ?? null).__STYXTYPE__)((params["row_cifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["row_cifti"] ?? null)["@type"])((params["row_cifti"] ?? null), execution));
     }
     if ((params["col_voxels"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["col_voxels"] ?? null).__STYXTYPE__)((params["col_voxels"] ?? null), execution));
+        cargs.push(...dynCargs((params["col_voxels"] ?? null)["@type"])((params["col_voxels"] ?? null), execution));
     }
     if ((params["opt_col_surface_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -369,7 +369,7 @@ function probtrackx_dot_convert_cargs(
         );
     }
     if ((params["col_cifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["col_cifti"] ?? null).__STYXTYPE__)((params["col_cifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["col_cifti"] ?? null)["@type"])((params["col_cifti"] ?? null), execution));
     }
     if ((params["opt_transpose"] ?? null)) {
         cargs.push("-transpose");
@@ -381,18 +381,18 @@ function probtrackx_dot_convert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function probtrackx_dot_convert_outputs(
     params: ProbtrackxDotConvertParameters,
     execution: Execution,
 ): ProbtrackxDotConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ProbtrackxDotConvertOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -401,61 +401,61 @@ function probtrackx_dot_convert_outputs(
 }
 
 
+/**
+ * Convert a .dot file from probtrackx to cifti.
+ *
+ * NOTE: exactly one -row option and one -col option must be used.
+ *
+ * If the input file does not have its indexes sorted in the correct ordering, this command may take longer than expected.  Specifying -transpose will transpose the input matrix before trying to put its values into the cifti file, which is currently needed for at least matrix2 in order to display it as intended.  How the cifti file is displayed is based on which -row option is specified: if -row-voxels is specified, then it will display data on volume slices.  The label names in the label volume(s) must have the following names, other names are ignored:
+ *
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
+ */
 function probtrackx_dot_convert_execute(
     params: ProbtrackxDotConvertParameters,
     execution: Execution,
 ): ProbtrackxDotConvertOutputs {
-    /**
-     * Convert a .dot file from probtrackx to cifti.
-     * 
-     * NOTE: exactly one -row option and one -col option must be used.
-     * 
-     * If the input file does not have its indexes sorted in the correct ordering, this command may take longer than expected.  Specifying -transpose will transpose the input matrix before trying to put its values into the cifti file, which is currently needed for at least matrix2 in order to display it as intended.  How the cifti file is displayed is based on which -row option is specified: if -row-voxels is specified, then it will display data on volume slices.  The label names in the label volume(s) must have the following names, other names are ignored:
-     * 
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = probtrackx_dot_convert_cargs(params, execution)
     const ret = probtrackx_dot_convert_outputs(params, execution)
@@ -464,6 +464,66 @@ function probtrackx_dot_convert_execute(
 }
 
 
+/**
+ * Convert a .dot file from probtrackx to cifti.
+ *
+ * NOTE: exactly one -row option and one -col option must be used.
+ *
+ * If the input file does not have its indexes sorted in the correct ordering, this command may take longer than expected.  Specifying -transpose will transpose the input matrix before trying to put its values into the cifti file, which is currently needed for at least matrix2 in order to display it as intended.  How the cifti file is displayed is based on which -row option is specified: if -row-voxels is specified, then it will display data on volume slices.  The label names in the label volume(s) must have the following names, other names are ignored:
+ *
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param dot_file input .dot file
+ * @param cifti_out output cifti file
+ * @param row_voxels the output mapping along a row will be voxels
+ * @param opt_row_surface_roi_metric the output mapping along a row will be surface vertices: a metric file with positive values on all vertices used
+ * @param row_cifti take the mapping along a row from a cifti file
+ * @param col_voxels the output mapping along a column will be voxels
+ * @param opt_col_surface_roi_metric the output mapping along a column will be surface vertices: a metric file with positive values on all vertices used
+ * @param col_cifti take the mapping along a column from a cifti file
+ * @param opt_transpose transpose the input matrix
+ * @param opt_make_symmetric transform half-square input into full matrix output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
+ */
 function probtrackx_dot_convert(
     dot_file: string,
     cifti_out: string,
@@ -477,66 +537,6 @@ function probtrackx_dot_convert(
     opt_make_symmetric: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
-    /**
-     * Convert a .dot file from probtrackx to cifti.
-     * 
-     * NOTE: exactly one -row option and one -col option must be used.
-     * 
-     * If the input file does not have its indexes sorted in the correct ordering, this command may take longer than expected.  Specifying -transpose will transpose the input matrix before trying to put its values into the cifti file, which is currently needed for at least matrix2 in order to display it as intended.  How the cifti file is displayed is based on which -row option is specified: if -row-voxels is specified, then it will display data on volume slices.  The label names in the label volume(s) must have the following names, other names are ignored:
-     * 
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param dot_file input .dot file
-     * @param cifti_out output cifti file
-     * @param row_voxels the output mapping along a row will be voxels
-     * @param opt_row_surface_roi_metric the output mapping along a row will be surface vertices: a metric file with positive values on all vertices used
-     * @param row_cifti take the mapping along a row from a cifti file
-     * @param col_voxels the output mapping along a column will be voxels
-     * @param opt_col_surface_roi_metric the output mapping along a column will be surface vertices: a metric file with positive values on all vertices used
-     * @param col_cifti take the mapping along a column from a cifti file
-     * @param opt_transpose transpose the input matrix
-     * @param opt_make_symmetric transform half-square input into full matrix output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROBTRACKX_DOT_CONVERT_METADATA);
     const params = probtrackx_dot_convert_params(dot_file, cifti_out, row_voxels, opt_row_surface_roi_metric, row_cifti, col_voxels, opt_col_surface_roi_metric, col_cifti, opt_transpose, opt_make_symmetric)
@@ -553,9 +553,16 @@ export {
       ProbtrackxDotConvertRowCiftiParameters,
       ProbtrackxDotConvertRowVoxelsParameters,
       probtrackx_dot_convert,
+      probtrackx_dot_convert_cargs,
+      probtrackx_dot_convert_col_cifti_cargs,
       probtrackx_dot_convert_col_cifti_params,
+      probtrackx_dot_convert_col_voxels_cargs,
       probtrackx_dot_convert_col_voxels_params,
+      probtrackx_dot_convert_execute,
+      probtrackx_dot_convert_outputs,
       probtrackx_dot_convert_params,
+      probtrackx_dot_convert_row_cifti_cargs,
       probtrackx_dot_convert_row_cifti_params,
+      probtrackx_dot_convert_row_voxels_cargs,
       probtrackx_dot_convert_row_voxels_params,
 };

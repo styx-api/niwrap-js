@@ -12,7 +12,7 @@ const MAKEROT_METADATA: Metadata = {
 
 
 interface MakerotParameters {
-    "__STYXTYPE__": "makerot";
+    "@type": "fsl.makerot";
     "axis"?: string | null | undefined;
     "cov"?: InputPathType | null | undefined;
     "center"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface MakerotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "makerot": makerot_cargs,
+        "fsl.makerot": makerot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "makerot": makerot_outputs,
+        "fsl.makerot": makerot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MakerotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param theta Angle of rotation (in degrees)
+ * @param axis Unnormalized axis vector (comma separated)
+ * @param cov Image filename used for center of volume
+ * @param center Center of rotation in mm (comma separated)
+ * @param output_file Output filename for matrix
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function makerot_params(
     theta: number,
     axis: string | null = null,
@@ -83,21 +96,8 @@ function makerot_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): MakerotParameters {
-    /**
-     * Build parameters.
-    
-     * @param theta Angle of rotation (in degrees)
-     * @param axis Unnormalized axis vector (comma separated)
-     * @param cov Image filename used for center of volume
-     * @param center Center of rotation in mm (comma separated)
-     * @param output_file Output filename for matrix
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "makerot" as const,
+        "@type": "fsl.makerot" as const,
         "verbose_flag": verbose_flag,
         "help_flag": help_flag,
         "theta": theta,
@@ -118,18 +118,18 @@ function makerot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function makerot_cargs(
     params: MakerotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("makerot");
     if ((params["axis"] ?? null) !== null) {
@@ -170,18 +170,18 @@ function makerot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function makerot_outputs(
     params: MakerotParameters,
     execution: Execution,
 ): MakerotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakerotOutputs = {
         root: execution.outputFile("."),
         matrix_output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -190,22 +190,22 @@ function makerot_outputs(
 }
 
 
+/**
+ * Tool to create a rotation matrix for a given angle and axis of rotation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakerotOutputs`).
+ */
 function makerot_execute(
     params: MakerotParameters,
     execution: Execution,
 ): MakerotOutputs {
-    /**
-     * Tool to create a rotation matrix for a given angle and axis of rotation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakerotOutputs`).
-     */
     params = execution.params(params)
     const cargs = makerot_cargs(params, execution)
     const ret = makerot_outputs(params, execution)
@@ -214,6 +214,24 @@ function makerot_execute(
 }
 
 
+/**
+ * Tool to create a rotation matrix for a given angle and axis of rotation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param theta Angle of rotation (in degrees)
+ * @param axis Unnormalized axis vector (comma separated)
+ * @param cov Image filename used for center of volume
+ * @param center Center of rotation in mm (comma separated)
+ * @param output_file Output filename for matrix
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakerotOutputs`).
+ */
 function makerot(
     theta: number,
     axis: string | null = null,
@@ -224,24 +242,6 @@ function makerot(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MakerotOutputs {
-    /**
-     * Tool to create a rotation matrix for a given angle and axis of rotation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param theta Angle of rotation (in degrees)
-     * @param axis Unnormalized axis vector (comma separated)
-     * @param cov Image filename used for center of volume
-     * @param center Center of rotation in mm (comma separated)
-     * @param output_file Output filename for matrix
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakerotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKEROT_METADATA);
     const params = makerot_params(theta, axis, cov, center, output_file, verbose_flag, help_flag)
@@ -254,5 +254,8 @@ export {
       MakerotOutputs,
       MakerotParameters,
       makerot,
+      makerot_cargs,
+      makerot_execute,
+      makerot_outputs,
       makerot_params,
 };

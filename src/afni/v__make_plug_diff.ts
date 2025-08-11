@@ -12,7 +12,7 @@ const V__MAKE_PLUG_DIFF_METADATA: Metadata = {
 
 
 interface VMakePlugDiffParameters {
-    "__STYXTYPE__": "@make_plug_diff";
+    "@type": "afni.@make_plug_diff";
     "vtk_dir": string;
     "xm_dir": string;
     "afni_src_dir": string;
@@ -23,33 +23,33 @@ interface VMakePlugDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@make_plug_diff": v__make_plug_diff_cargs,
+        "afni.@make_plug_diff": v__make_plug_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface VMakePlugDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vtk_dir Directory where vtk is installed
+ * @param xm_dir Directory where motif is installed
+ * @param afni_src_dir Full path to AFNI's src/ directory
+ * @param afni_bin_dir Path, relative to ASRCDIR, to abin
+ * @param diff_dir Name of directory containing diffusion code
+ * @param comments Output comments only
+ * @param linux Flag for doing linuxy things
+ *
+ * @returns Parameter dictionary
+ */
 function v__make_plug_diff_params(
     vtk_dir: string,
     xm_dir: string,
@@ -78,21 +91,8 @@ function v__make_plug_diff_params(
     comments: boolean = false,
     linux: boolean = false,
 ): VMakePlugDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param vtk_dir Directory where vtk is installed
-     * @param xm_dir Directory where motif is installed
-     * @param afni_src_dir Full path to AFNI's src/ directory
-     * @param afni_bin_dir Path, relative to ASRCDIR, to abin
-     * @param diff_dir Name of directory containing diffusion code
-     * @param comments Output comments only
-     * @param linux Flag for doing linuxy things
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@make_plug_diff" as const,
+        "@type": "afni.@make_plug_diff" as const,
         "vtk_dir": vtk_dir,
         "xm_dir": xm_dir,
         "afni_src_dir": afni_src_dir,
@@ -105,18 +105,18 @@ function v__make_plug_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__make_plug_diff_cargs(
     params: VMakePlugDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@make_plug_diff");
     cargs.push(
@@ -149,18 +149,18 @@ function v__make_plug_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__make_plug_diff_outputs(
     params: VMakePlugDiffParameters,
     execution: Execution,
 ): VMakePlugDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMakePlugDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -168,22 +168,22 @@ function v__make_plug_diff_outputs(
 }
 
 
+/**
+ * Compiles AFNI's diffusion plugin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
+ */
 function v__make_plug_diff_execute(
     params: VMakePlugDiffParameters,
     execution: Execution,
 ): VMakePlugDiffOutputs {
-    /**
-     * Compiles AFNI's diffusion plugin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__make_plug_diff_cargs(params, execution)
     const ret = v__make_plug_diff_outputs(params, execution)
@@ -192,6 +192,24 @@ function v__make_plug_diff_execute(
 }
 
 
+/**
+ * Compiles AFNI's diffusion plugin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param vtk_dir Directory where vtk is installed
+ * @param xm_dir Directory where motif is installed
+ * @param afni_src_dir Full path to AFNI's src/ directory
+ * @param afni_bin_dir Path, relative to ASRCDIR, to abin
+ * @param diff_dir Name of directory containing diffusion code
+ * @param comments Output comments only
+ * @param linux Flag for doing linuxy things
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
+ */
 function v__make_plug_diff(
     vtk_dir: string,
     xm_dir: string,
@@ -202,24 +220,6 @@ function v__make_plug_diff(
     linux: boolean = false,
     runner: Runner | null = null,
 ): VMakePlugDiffOutputs {
-    /**
-     * Compiles AFNI's diffusion plugin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param vtk_dir Directory where vtk is installed
-     * @param xm_dir Directory where motif is installed
-     * @param afni_src_dir Full path to AFNI's src/ directory
-     * @param afni_bin_dir Path, relative to ASRCDIR, to abin
-     * @param diff_dir Name of directory containing diffusion code
-     * @param comments Output comments only
-     * @param linux Flag for doing linuxy things
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MAKE_PLUG_DIFF_METADATA);
     const params = v__make_plug_diff_params(vtk_dir, xm_dir, afni_src_dir, afni_bin_dir, diff_dir, comments, linux)
@@ -232,5 +232,8 @@ export {
       VMakePlugDiffParameters,
       V__MAKE_PLUG_DIFF_METADATA,
       v__make_plug_diff,
+      v__make_plug_diff_cargs,
+      v__make_plug_diff_execute,
+      v__make_plug_diff_outputs,
       v__make_plug_diff_params,
 };

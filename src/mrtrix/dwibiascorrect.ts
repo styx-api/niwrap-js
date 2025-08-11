@@ -12,21 +12,21 @@ const DWIBIASCORRECT_METADATA: Metadata = {
 
 
 interface DwibiascorrectFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwibiascorrect.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface DwibiascorrectConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dwibiascorrect.config";
     "key": string;
     "value": string;
 }
 
 
 interface DwibiascorrectParameters {
-    "__STYXTYPE__": "dwibiascorrect";
+    "@type": "mrtrix.dwibiascorrect";
     "algorithm": string;
     "input_image": InputPathType;
     "output_image": string;
@@ -51,56 +51,56 @@ interface DwibiascorrectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwibiascorrect": dwibiascorrect_cargs,
-        "fslgrad": dwibiascorrect_fslgrad_cargs,
-        "config": dwibiascorrect_config_cargs,
+        "mrtrix.dwibiascorrect": dwibiascorrect_cargs,
+        "mrtrix.dwibiascorrect.fslgrad": dwibiascorrect_fslgrad_cargs,
+        "mrtrix.dwibiascorrect.config": dwibiascorrect_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwibiascorrect": dwibiascorrect_outputs,
+        "mrtrix.dwibiascorrect": dwibiascorrect_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwibiascorrect_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): DwibiascorrectFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwibiascorrect.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -108,18 +108,18 @@ function dwibiascorrect_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwibiascorrect_fslgrad_cargs(
     params: DwibiascorrectFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -128,20 +128,20 @@ function dwibiascorrect_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dwibiascorrect_config_params(
     key: string,
     value: string,
 ): DwibiascorrectConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dwibiascorrect.config" as const,
         "key": key,
         "value": value,
     };
@@ -149,18 +149,18 @@ function dwibiascorrect_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwibiascorrect_config_cargs(
     params: DwibiascorrectConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -190,6 +190,33 @@ interface DwibiascorrectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param algorithm Select the algorithm to be used for bias correction. Options are: ants, fsl
+ * @param input_image The input image series to be corrected
+ * @param output_image The output corrected image series
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param mask_image Manually provide a mask image for bias field estimation
+ * @param bias_image Output the estimated bias field
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
+ * @param ants_c N4BiasFieldCorrection option -c (number of iterations, convergence threshold)
+ * @param ants_s N4BiasFieldCorrection option -s (shrink-factor applied to spatial dimensions)
+ *
+ * @returns Parameter dictionary
+ */
 function dwibiascorrect_params(
     algorithm: string,
     input_image: InputPathType,
@@ -213,35 +240,8 @@ function dwibiascorrect_params(
     ants_c: string | null = null,
     ants_s: string | null = null,
 ): DwibiascorrectParameters {
-    /**
-     * Build parameters.
-    
-     * @param algorithm Select the algorithm to be used for bias correction. Options are: ants, fsl
-     * @param input_image The input image series to be corrected
-     * @param output_image The output corrected image series
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param mask_image Manually provide a mask image for bias field estimation
-     * @param bias_image Output the estimated bias field
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-     * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
-     * @param ants_c N4BiasFieldCorrection option -c (number of iterations, convergence threshold)
-     * @param ants_s N4BiasFieldCorrection option -s (shrink-factor applied to spatial dimensions)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwibiascorrect" as const,
+        "@type": "mrtrix.dwibiascorrect" as const,
         "algorithm": algorithm,
         "input_image": input_image,
         "output_image": output_image,
@@ -290,18 +290,18 @@ function dwibiascorrect_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwibiascorrect_cargs(
     params: DwibiascorrectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwibiascorrect");
     cargs.push((params["algorithm"] ?? null));
@@ -314,7 +314,7 @@ function dwibiascorrect_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask_image"] ?? null) !== null) {
         cargs.push(
@@ -362,7 +362,7 @@ function dwibiascorrect_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -392,18 +392,18 @@ function dwibiascorrect_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwibiascorrect_outputs(
     params: DwibiascorrectParameters,
     execution: Execution,
 ): DwibiascorrectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DwibiascorrectOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -413,22 +413,22 @@ function dwibiascorrect_outputs(
 }
 
 
+/**
+ * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
+ */
 function dwibiascorrect_execute(
     params: DwibiascorrectParameters,
     execution: Execution,
 ): DwibiascorrectOutputs {
-    /**
-     * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwibiascorrect_cargs(params, execution)
     const ret = dwibiascorrect_outputs(params, execution)
@@ -437,6 +437,38 @@ function dwibiascorrect_execute(
 }
 
 
+/**
+ * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param algorithm Select the algorithm to be used for bias correction. Options are: ants, fsl
+ * @param input_image The input image series to be corrected
+ * @param output_image The output corrected image series
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param mask_image Manually provide a mask image for bias field estimation
+ * @param bias_image Output the estimated bias field
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
+ * @param ants_c N4BiasFieldCorrection option -c (number of iterations, convergence threshold)
+ * @param ants_s N4BiasFieldCorrection option -s (shrink-factor applied to spatial dimensions)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
+ */
 function dwibiascorrect(
     algorithm: string,
     input_image: InputPathType,
@@ -461,38 +493,6 @@ function dwibiascorrect(
     ants_s: string | null = null,
     runner: Runner | null = null,
 ): DwibiascorrectOutputs {
-    /**
-     * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param algorithm Select the algorithm to be used for bias correction. Options are: ants, fsl
-     * @param input_image The input image series to be corrected
-     * @param output_image The output corrected image series
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param mask_image Manually provide a mask image for bias field estimation
-     * @param bias_image Output the estimated bias field
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-     * @param ants_b N4BiasFieldCorrection option -b (initial mesh resolution in mm, spline order)
-     * @param ants_c N4BiasFieldCorrection option -c (number of iterations, convergence threshold)
-     * @param ants_s N4BiasFieldCorrection option -s (shrink-factor applied to spatial dimensions)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWIBIASCORRECT_METADATA);
     const params = dwibiascorrect_params(algorithm, input_image, output_image, grad, fslgrad, mask_image, bias_image, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version, ants_b, ants_c, ants_s)
@@ -507,7 +507,12 @@ export {
       DwibiascorrectOutputs,
       DwibiascorrectParameters,
       dwibiascorrect,
+      dwibiascorrect_cargs,
+      dwibiascorrect_config_cargs,
       dwibiascorrect_config_params,
+      dwibiascorrect_execute,
+      dwibiascorrect_fslgrad_cargs,
       dwibiascorrect_fslgrad_params,
+      dwibiascorrect_outputs,
       dwibiascorrect_params,
 };

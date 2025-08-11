@@ -12,39 +12,39 @@ const FIX_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface FixSubjectRhParameters {
-    "__STYXTYPE__": "fix_subject-rh";
+    "@type": "freesurfer.fix_subject-rh";
     "input_directory": string;
     "help_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fix_subject-rh": fix_subject_rh_cargs,
+        "freesurfer.fix_subject-rh": fix_subject_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FixSubjectRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory Directory where the subject's right hemisphere data is located.
+ * @param help_flag Displays help information for fix_subject-rh.
+ *
+ * @returns Parameter dictionary
+ */
 function fix_subject_rh_params(
     input_directory: string,
     help_flag: boolean = false,
 ): FixSubjectRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory Directory where the subject's right hemisphere data is located.
-     * @param help_flag Displays help information for fix_subject-rh.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fix_subject-rh" as const,
+        "@type": "freesurfer.fix_subject-rh" as const,
         "input_directory": input_directory,
         "help_flag": help_flag,
     };
@@ -85,18 +85,18 @@ function fix_subject_rh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fix_subject_rh_cargs(
     params: FixSubjectRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fix_subject-rh");
     cargs.push(
@@ -110,18 +110,18 @@ function fix_subject_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fix_subject_rh_outputs(
     params: FixSubjectRhParameters,
     execution: Execution,
 ): FixSubjectRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixSubjectRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function fix_subject_rh_outputs(
 }
 
 
+/**
+ * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
+ */
 function fix_subject_rh_execute(
     params: FixSubjectRhParameters,
     execution: Execution,
 ): FixSubjectRhOutputs {
-    /**
-     * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = fix_subject_rh_cargs(params, execution)
     const ret = fix_subject_rh_outputs(params, execution)
@@ -153,24 +153,24 @@ function fix_subject_rh_execute(
 }
 
 
+/**
+ * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_directory Directory where the subject's right hemisphere data is located.
+ * @param help_flag Displays help information for fix_subject-rh.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
+ */
 function fix_subject_rh(
     input_directory: string,
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FixSubjectRhOutputs {
-    /**
-     * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_directory Directory where the subject's right hemisphere data is located.
-     * @param help_flag Displays help information for fix_subject-rh.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIX_SUBJECT_RH_METADATA);
     const params = fix_subject_rh_params(input_directory, help_flag)
@@ -183,5 +183,8 @@ export {
       FixSubjectRhOutputs,
       FixSubjectRhParameters,
       fix_subject_rh,
+      fix_subject_rh_cargs,
+      fix_subject_rh_execute,
+      fix_subject_rh_outputs,
       fix_subject_rh_params,
 };

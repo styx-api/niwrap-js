@@ -12,7 +12,7 @@ const FSL_HISTOGRAM_METADATA: Metadata = {
 
 
 interface FslHistogramParameters {
-    "__STYXTYPE__": "fsl_histogram";
+    "@type": "fsl.fsl_histogram";
     "input_file": InputPathType;
     "input_file_duplicate": InputPathType;
     "output_file": string;
@@ -41,35 +41,35 @@ interface FslHistogramParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_histogram": fsl_histogram_cargs,
+        "fsl.fsl_histogram": fsl_histogram_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_histogram": fsl_histogram_outputs,
+        "fsl.fsl_histogram": fsl_histogram_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface FslHistogramOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file name
+ * @param input_file_duplicate Input file name
+ * @param output_file Output filename for the PNG file
+ * @param output_file_duplicate Output filename for the PNG file
+ * @param mask_file Mask file name
+ * @param mask_file_duplicate Mask file name
+ * @param gmmfit_file File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
+ * @param gmmfit_file_duplicate File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
+ * @param plot_title Plot title
+ * @param plot_title_duplicate Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param legend_file_duplicate File name of ASCII text file, one row per legend entry
+ * @param xlabel X-axis label
+ * @param xlabel_duplicate X-axis label
+ * @param ylabel Y-axis label
+ * @param ylabel_duplicate Y-axis label
+ * @param plot_height Plot height in pixels (default 400)
+ * @param plot_height_duplicate Plot height in pixels (default 400)
+ * @param plot_width Plot width in pixels (default 600)
+ * @param plot_width_duplicate Plot width in pixels (default 600)
+ * @param num_bins Number of histogram bins
+ * @param num_bins_duplicate Number of histogram bins
+ * @param zoom_factor Zoom factor for y-range (e.g. 2.0)
+ * @param zoom_factor_duplicate Zoom factor for y-range (e.g. 2.0)
+ * @param use_gmm_flag Use Gaussian mixture model instead of Gaussian/Gamma mixture model
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_histogram_params(
     input_file: InputPathType,
     input_file_duplicate: InputPathType,
@@ -119,39 +150,8 @@ function fsl_histogram_params(
     zoom_factor_duplicate: number | null = null,
     use_gmm_flag: boolean = false,
 ): FslHistogramParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file name
-     * @param input_file_duplicate Input file name
-     * @param output_file Output filename for the PNG file
-     * @param output_file_duplicate Output filename for the PNG file
-     * @param mask_file Mask file name
-     * @param mask_file_duplicate Mask file name
-     * @param gmmfit_file File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
-     * @param gmmfit_file_duplicate File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
-     * @param plot_title Plot title
-     * @param plot_title_duplicate Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param legend_file_duplicate File name of ASCII text file, one row per legend entry
-     * @param xlabel X-axis label
-     * @param xlabel_duplicate X-axis label
-     * @param ylabel Y-axis label
-     * @param ylabel_duplicate Y-axis label
-     * @param plot_height Plot height in pixels (default 400)
-     * @param plot_height_duplicate Plot height in pixels (default 400)
-     * @param plot_width Plot width in pixels (default 600)
-     * @param plot_width_duplicate Plot width in pixels (default 600)
-     * @param num_bins Number of histogram bins
-     * @param num_bins_duplicate Number of histogram bins
-     * @param zoom_factor Zoom factor for y-range (e.g. 2.0)
-     * @param zoom_factor_duplicate Zoom factor for y-range (e.g. 2.0)
-     * @param use_gmm_flag Use Gaussian mixture model instead of Gaussian/Gamma mixture model
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_histogram" as const,
+        "@type": "fsl.fsl_histogram" as const,
         "input_file": input_file,
         "input_file_duplicate": input_file_duplicate,
         "output_file": output_file,
@@ -222,18 +222,18 @@ function fsl_histogram_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_histogram_cargs(
     params: FslHistogramParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_histogram");
     cargs.push(
@@ -379,18 +379,18 @@ function fsl_histogram_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_histogram_outputs(
     params: FslHistogramParameters,
     execution: Execution,
 ): FslHistogramOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslHistogramOutputs = {
         root: execution.outputFile("."),
         png_file: execution.outputFile([(params["output_file_duplicate"] ?? null)].join('')),
@@ -399,22 +399,22 @@ function fsl_histogram_outputs(
 }
 
 
+/**
+ * Histogram plotting tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
+ */
 function fsl_histogram_execute(
     params: FslHistogramParameters,
     execution: Execution,
 ): FslHistogramOutputs {
-    /**
-     * Histogram plotting tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_histogram_cargs(params, execution)
     const ret = fsl_histogram_outputs(params, execution)
@@ -423,6 +423,42 @@ function fsl_histogram_execute(
 }
 
 
+/**
+ * Histogram plotting tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file name
+ * @param input_file_duplicate Input file name
+ * @param output_file Output filename for the PNG file
+ * @param output_file_duplicate Output filename for the PNG file
+ * @param mask_file Mask file name
+ * @param mask_file_duplicate Mask file name
+ * @param gmmfit_file File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
+ * @param gmmfit_file_duplicate File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
+ * @param plot_title Plot title
+ * @param plot_title_duplicate Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param legend_file_duplicate File name of ASCII text file, one row per legend entry
+ * @param xlabel X-axis label
+ * @param xlabel_duplicate X-axis label
+ * @param ylabel Y-axis label
+ * @param ylabel_duplicate Y-axis label
+ * @param plot_height Plot height in pixels (default 400)
+ * @param plot_height_duplicate Plot height in pixels (default 400)
+ * @param plot_width Plot width in pixels (default 600)
+ * @param plot_width_duplicate Plot width in pixels (default 600)
+ * @param num_bins Number of histogram bins
+ * @param num_bins_duplicate Number of histogram bins
+ * @param zoom_factor Zoom factor for y-range (e.g. 2.0)
+ * @param zoom_factor_duplicate Zoom factor for y-range (e.g. 2.0)
+ * @param use_gmm_flag Use Gaussian mixture model instead of Gaussian/Gamma mixture model
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
+ */
 function fsl_histogram(
     input_file: InputPathType,
     input_file_duplicate: InputPathType,
@@ -451,42 +487,6 @@ function fsl_histogram(
     use_gmm_flag: boolean = false,
     runner: Runner | null = null,
 ): FslHistogramOutputs {
-    /**
-     * Histogram plotting tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file name
-     * @param input_file_duplicate Input file name
-     * @param output_file Output filename for the PNG file
-     * @param output_file_duplicate Output filename for the PNG file
-     * @param mask_file Mask file name
-     * @param mask_file_duplicate Mask file name
-     * @param gmmfit_file File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
-     * @param gmmfit_file_duplicate File name of matrix with parameter estimates of Gaussian/Gamma mixture model (means, variances and proportions per row)
-     * @param plot_title Plot title
-     * @param plot_title_duplicate Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param legend_file_duplicate File name of ASCII text file, one row per legend entry
-     * @param xlabel X-axis label
-     * @param xlabel_duplicate X-axis label
-     * @param ylabel Y-axis label
-     * @param ylabel_duplicate Y-axis label
-     * @param plot_height Plot height in pixels (default 400)
-     * @param plot_height_duplicate Plot height in pixels (default 400)
-     * @param plot_width Plot width in pixels (default 600)
-     * @param plot_width_duplicate Plot width in pixels (default 600)
-     * @param num_bins Number of histogram bins
-     * @param num_bins_duplicate Number of histogram bins
-     * @param zoom_factor Zoom factor for y-range (e.g. 2.0)
-     * @param zoom_factor_duplicate Zoom factor for y-range (e.g. 2.0)
-     * @param use_gmm_flag Use Gaussian mixture model instead of Gaussian/Gamma mixture model
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_HISTOGRAM_METADATA);
     const params = fsl_histogram_params(input_file, input_file_duplicate, output_file, output_file_duplicate, mask_file, mask_file_duplicate, gmmfit_file, gmmfit_file_duplicate, plot_title, plot_title_duplicate, legend_file, legend_file_duplicate, xlabel, xlabel_duplicate, ylabel, ylabel_duplicate, plot_height, plot_height_duplicate, plot_width, plot_width_duplicate, num_bins, num_bins_duplicate, zoom_factor, zoom_factor_duplicate, use_gmm_flag)
@@ -499,5 +499,8 @@ export {
       FslHistogramOutputs,
       FslHistogramParameters,
       fsl_histogram,
+      fsl_histogram_cargs,
+      fsl_histogram_execute,
+      fsl_histogram_outputs,
       fsl_histogram_params,
 };

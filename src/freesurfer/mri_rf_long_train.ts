@@ -12,7 +12,7 @@ const MRI_RF_LONG_TRAIN_METADATA: Metadata = {
 
 
 interface MriRfLongTrainParameters {
-    "__STYXTYPE__": "mri_rf_long_train";
+    "@type": "freesurfer.mri_rf_long_train";
     "seg_dir": string;
     "xform": string;
     "mask"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface MriRfLongTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_rf_long_train": mri_rf_long_train_cargs,
+        "freesurfer.mri_rf_long_train": mri_rf_long_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_rf_long_train": mri_rf_long_train_outputs,
+        "freesurfer.mri_rf_long_train": mri_rf_long_train_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MriRfLongTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param seg_dir Path to the segmentation volume directory, relative to $subject/mri.
+ * @param xform Atlas transform path relative to $subject/mri/transforms.
+ * @param subjects List of subjects for training.
+ * @param output_rfa Output RFA filename.
+ * @param mask Volume name to use as a mask, path relative to $subject/mri.
+ * @param node_spacing Spacing of classifiers in canonical space.
+ * @param prior_spacing Spacing of class priors in canonical space.
+ * @param input_data Specify training data, path relative to $subject/mri. Can specify multiple inputs. Defaults to 'orig' if not specified.
+ * @param check Conduct sanity-check of labels for obvious edit errors.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_rf_long_train_params(
     seg_dir: string,
     xform: string,
@@ -87,23 +102,8 @@ function mri_rf_long_train_params(
     input_data: Array<string> | null = null,
     check: boolean = false,
 ): MriRfLongTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param seg_dir Path to the segmentation volume directory, relative to $subject/mri.
-     * @param xform Atlas transform path relative to $subject/mri/transforms.
-     * @param subjects List of subjects for training.
-     * @param output_rfa Output RFA filename.
-     * @param mask Volume name to use as a mask, path relative to $subject/mri.
-     * @param node_spacing Spacing of classifiers in canonical space.
-     * @param prior_spacing Spacing of class priors in canonical space.
-     * @param input_data Specify training data, path relative to $subject/mri. Can specify multiple inputs. Defaults to 'orig' if not specified.
-     * @param check Conduct sanity-check of labels for obvious edit errors.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_rf_long_train" as const,
+        "@type": "freesurfer.mri_rf_long_train" as const,
         "seg_dir": seg_dir,
         "xform": xform,
         "check": check,
@@ -126,18 +126,18 @@ function mri_rf_long_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_rf_long_train_cargs(
     params: MriRfLongTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_rf_long_train");
     cargs.push(
@@ -181,18 +181,18 @@ function mri_rf_long_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_rf_long_train_outputs(
     params: MriRfLongTrainParameters,
     execution: Execution,
 ): MriRfLongTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRfLongTrainOutputs = {
         root: execution.outputFile("."),
         output_rfa_file: execution.outputFile([(params["output_rfa"] ?? null), ".rfa"].join('')),
@@ -201,22 +201,22 @@ function mri_rf_long_train_outputs(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
+ */
 function mri_rf_long_train_execute(
     params: MriRfLongTrainParameters,
     execution: Execution,
 ): MriRfLongTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_rf_long_train_cargs(params, execution)
     const ret = mri_rf_long_train_outputs(params, execution)
@@ -225,6 +225,26 @@ function mri_rf_long_train_execute(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param seg_dir Path to the segmentation volume directory, relative to $subject/mri.
+ * @param xform Atlas transform path relative to $subject/mri/transforms.
+ * @param subjects List of subjects for training.
+ * @param output_rfa Output RFA filename.
+ * @param mask Volume name to use as a mask, path relative to $subject/mri.
+ * @param node_spacing Spacing of classifiers in canonical space.
+ * @param prior_spacing Spacing of class priors in canonical space.
+ * @param input_data Specify training data, path relative to $subject/mri. Can specify multiple inputs. Defaults to 'orig' if not specified.
+ * @param check Conduct sanity-check of labels for obvious edit errors.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
+ */
 function mri_rf_long_train(
     seg_dir: string,
     xform: string,
@@ -237,26 +257,6 @@ function mri_rf_long_train(
     check: boolean = false,
     runner: Runner | null = null,
 ): MriRfLongTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param seg_dir Path to the segmentation volume directory, relative to $subject/mri.
-     * @param xform Atlas transform path relative to $subject/mri/transforms.
-     * @param subjects List of subjects for training.
-     * @param output_rfa Output RFA filename.
-     * @param mask Volume name to use as a mask, path relative to $subject/mri.
-     * @param node_spacing Spacing of classifiers in canonical space.
-     * @param prior_spacing Spacing of class priors in canonical space.
-     * @param input_data Specify training data, path relative to $subject/mri. Can specify multiple inputs. Defaults to 'orig' if not specified.
-     * @param check Conduct sanity-check of labels for obvious edit errors.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RF_LONG_TRAIN_METADATA);
     const params = mri_rf_long_train_params(seg_dir, xform, subjects, output_rfa, mask, node_spacing, prior_spacing, input_data, check)
@@ -269,5 +269,8 @@ export {
       MriRfLongTrainOutputs,
       MriRfLongTrainParameters,
       mri_rf_long_train,
+      mri_rf_long_train_cargs,
+      mri_rf_long_train_execute,
+      mri_rf_long_train_outputs,
       mri_rf_long_train_params,
 };

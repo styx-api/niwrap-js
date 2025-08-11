@@ -12,74 +12,74 @@ const TCKEDIT_METADATA: Metadata = {
 
 
 interface TckeditVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.tckedit.include.VariousString";
     "obj": string;
 }
 
 
 interface TckeditVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.tckedit.include.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface TckeditIncludeParameters {
-    "__STYXTYPE__": "include";
+    "@type": "mrtrix.tckedit.include";
     "spec": TckeditVariousStringParameters | TckeditVariousFileParameters;
 }
 
 
 interface TckeditIncludeOrderedParameters {
-    "__STYXTYPE__": "include_ordered";
+    "@type": "mrtrix.tckedit.include_ordered";
     "image": string;
 }
 
 
 interface TckeditVariousString1Parameters {
-    "__STYXTYPE__": "VariousString_1";
+    "@type": "mrtrix.tckedit.exclude.VariousString";
     "obj": string;
 }
 
 
 interface TckeditVariousFile1Parameters {
-    "__STYXTYPE__": "VariousFile_1";
+    "@type": "mrtrix.tckedit.exclude.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface TckeditExcludeParameters {
-    "__STYXTYPE__": "exclude";
+    "@type": "mrtrix.tckedit.exclude";
     "spec": TckeditVariousString1Parameters | TckeditVariousFile1Parameters;
 }
 
 
 interface TckeditVariousString2Parameters {
-    "__STYXTYPE__": "VariousString_2";
+    "@type": "mrtrix.tckedit.mask.VariousString";
     "obj": string;
 }
 
 
 interface TckeditVariousFile2Parameters {
-    "__STYXTYPE__": "VariousFile_2";
+    "@type": "mrtrix.tckedit.mask.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface TckeditMaskParameters {
-    "__STYXTYPE__": "mask";
+    "@type": "mrtrix.tckedit.mask";
     "spec": TckeditVariousString2Parameters | TckeditVariousFile2Parameters;
 }
 
 
 interface TckeditConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckedit.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckeditParameters {
-    "__STYXTYPE__": "tckedit";
+    "@type": "mrtrix.tckedit";
     "include"?: Array<TckeditIncludeParameters> | null | undefined;
     "include_ordered"?: Array<TckeditIncludeOrderedParameters> | null | undefined;
     "exclude"?: Array<TckeditExcludeParameters> | null | undefined;
@@ -107,190 +107,190 @@ interface TckeditParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckedit": tckedit_cargs,
-        "include": tckedit_include_cargs,
-        "VariousString": tckedit_various_string_cargs,
-        "VariousFile": tckedit_various_file_cargs,
-        "include_ordered": tckedit_include_ordered_cargs,
-        "exclude": tckedit_exclude_cargs,
-        "VariousString_1": tckedit_various_string_1_cargs,
-        "VariousFile_1": tckedit_various_file_1_cargs,
-        "mask": tckedit_mask_cargs,
-        "VariousString_2": tckedit_various_string_2_cargs,
-        "VariousFile_2": tckedit_various_file_2_cargs,
-        "config": tckedit_config_cargs,
+        "mrtrix.tckedit": tckedit_cargs,
+        "mrtrix.tckedit.include": tckedit_include_cargs,
+        "mrtrix.tckedit.include.VariousString": tckedit_various_string_cargs,
+        "mrtrix.tckedit.include.VariousFile": tckedit_various_file_cargs,
+        "mrtrix.tckedit.include_ordered": tckedit_include_ordered_cargs,
+        "mrtrix.tckedit.exclude": tckedit_exclude_cargs,
+        "mrtrix.tckedit.exclude.VariousString": tckedit_various_string_1_cargs,
+        "mrtrix.tckedit.exclude.VariousFile": tckedit_various_file_1_cargs,
+        "mrtrix.tckedit.mask": tckedit_mask_cargs,
+        "mrtrix.tckedit.mask.VariousString": tckedit_various_string_2_cargs,
+        "mrtrix.tckedit.mask.VariousFile": tckedit_various_file_2_cargs,
+        "mrtrix.tckedit.config": tckedit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tckedit": tckedit_outputs,
+        "mrtrix.tckedit": tckedit_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_string_params(
     obj: string,
 ): TckeditVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.tckedit.include.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_string_cargs(
     params: TckeditVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_file_params(
     obj: InputPathType,
 ): TckeditVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.tckedit.include.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_file_cargs(
     params: TckeditVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_include_params(
     spec: TckeditVariousStringParameters | TckeditVariousFileParameters,
 ): TckeditIncludeParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "include" as const,
+        "@type": "mrtrix.tckedit.include" as const,
         "spec": spec,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_include_cargs(
     params: TckeditIncludeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-include");
-    cargs.push(...dynCargs((params["spec"] ?? null).__STYXTYPE__)((params["spec"] ?? null), execution));
+    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_include_ordered_params(
     image: string,
 ): TckeditIncludeOrderedParameters {
-    /**
-     * Build parameters.
-    
-     * @param image specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "include_ordered" as const,
+        "@type": "mrtrix.tckedit.include_ordered" as const,
         "image": image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_include_ordered_cargs(
     params: TckeditIncludeOrderedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-include_ordered");
     cargs.push((params["image"] ?? null));
@@ -298,238 +298,238 @@ function tckedit_include_ordered_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_string_1_params(
     obj: string,
 ): TckeditVariousString1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString_1" as const,
+        "@type": "mrtrix.tckedit.exclude.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_string_1_cargs(
     params: TckeditVariousString1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_file_1_params(
     obj: InputPathType,
 ): TckeditVariousFile1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile_1" as const,
+        "@type": "mrtrix.tckedit.exclude.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_file_1_cargs(
     params: TckeditVariousFile1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_exclude_params(
     spec: TckeditVariousString1Parameters | TckeditVariousFile1Parameters,
 ): TckeditExcludeParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exclude" as const,
+        "@type": "mrtrix.tckedit.exclude" as const,
         "spec": spec,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_exclude_cargs(
     params: TckeditExcludeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exclude");
-    cargs.push(...dynCargs((params["spec"] ?? null).__STYXTYPE__)((params["spec"] ?? null), execution));
+    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_string_2_params(
     obj: string,
 ): TckeditVariousString2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString_2" as const,
+        "@type": "mrtrix.tckedit.mask.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_string_2_cargs(
     params: TckeditVariousString2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_various_file_2_params(
     obj: InputPathType,
 ): TckeditVariousFile2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile_2" as const,
+        "@type": "mrtrix.tckedit.mask.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_various_file_2_cargs(
     params: TckeditVariousFile2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_mask_params(
     spec: TckeditVariousString2Parameters | TckeditVariousFile2Parameters,
 ): TckeditMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mask" as const,
+        "@type": "mrtrix.tckedit.mask" as const,
         "spec": spec,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_mask_cargs(
     params: TckeditMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-mask");
-    cargs.push(...dynCargs((params["spec"] ?? null).__STYXTYPE__)((params["spec"] ?? null), execution));
+    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_config_params(
     key: string,
     value: string,
 ): TckeditConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckedit.config" as const,
         "key": key,
         "value": value,
     };
@@ -537,18 +537,18 @@ function tckedit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_config_cargs(
     params: TckeditConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -578,6 +578,36 @@ interface TckeditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks_in the input track file(s)
+ * @param tracks_out the output track file
+ * @param include specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
+ * @param include_ordered specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
+ * @param exclude specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
+ * @param mask specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
+ * @param maxlength set the maximum length of any streamline in mm
+ * @param minlength set the minimum length of any streamline in mm
+ * @param number_ set the desired number of selected streamlines to be propagated to the output file
+ * @param skip omit this number of selected streamlines before commencing writing to the output file
+ * @param maxweight set the maximum weight of any streamline
+ * @param minweight set the minimum weight of any streamline
+ * @param inverse output the inverse selection of streamlines based on the criteria provided; i.e. only those streamlines that fail at least one selection criterion, and/or vertices that are outside masks if provided, will be written to file
+ * @param ends_only only test the ends of each streamline against the provided include/exclude ROIs
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param tck_weights_out specify the path for an output text scalar file containing streamline weights
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckedit_params(
     tracks_in: Array<InputPathType>,
     tracks_out: string,
@@ -604,38 +634,8 @@ function tckedit_params(
     help: boolean = false,
     version: boolean = false,
 ): TckeditParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks_in the input track file(s)
-     * @param tracks_out the output track file
-     * @param include specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
-     * @param include_ordered specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
-     * @param exclude specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
-     * @param mask specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
-     * @param maxlength set the maximum length of any streamline in mm
-     * @param minlength set the minimum length of any streamline in mm
-     * @param number_ set the desired number of selected streamlines to be propagated to the output file
-     * @param skip omit this number of selected streamlines before commencing writing to the output file
-     * @param maxweight set the maximum weight of any streamline
-     * @param minweight set the minimum weight of any streamline
-     * @param inverse output the inverse selection of streamlines based on the criteria provided; i.e. only those streamlines that fail at least one selection criterion, and/or vertices that are outside masks if provided, will be written to file
-     * @param ends_only only test the ends of each streamline against the provided include/exclude ROIs
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param tck_weights_out specify the path for an output text scalar file containing streamline weights
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckedit" as const,
+        "@type": "mrtrix.tckedit" as const,
         "inverse": inverse,
         "ends_only": ends_only,
         "info": info,
@@ -693,31 +693,31 @@ function tckedit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckedit_cargs(
     params: TckeditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckedit");
     if ((params["include"] ?? null) !== null) {
-        cargs.push(...(params["include"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["include"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["include_ordered"] ?? null) !== null) {
-        cargs.push(...(params["include_ordered"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["include_ordered"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["exclude"] ?? null) !== null) {
-        cargs.push(...(params["exclude"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["exclude"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["mask"] ?? null) !== null) {
-        cargs.push(...(params["mask"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["mask"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["maxlength"] ?? null) !== null) {
         cargs.push(
@@ -792,7 +792,7 @@ function tckedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -806,18 +806,18 @@ function tckedit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckedit_outputs(
     params: TckeditParameters,
     execution: Execution,
 ): TckeditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckeditOutputs = {
         root: execution.outputFile("."),
         tracks_out: execution.outputFile([(params["tracks_out"] ?? null)].join('')),
@@ -827,28 +827,28 @@ function tckedit_outputs(
 }
 
 
+/**
+ * Perform various editing operations on track files.
+ *
+ * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckeditOutputs`).
+ */
 function tckedit_execute(
     params: TckeditParameters,
     execution: Execution,
 ): TckeditOutputs {
-    /**
-     * Perform various editing operations on track files.
-     * 
-     * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckeditOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckedit_cargs(params, execution)
     const ret = tckedit_outputs(params, execution)
@@ -857,6 +857,47 @@ function tckedit_execute(
 }
 
 
+/**
+ * Perform various editing operations on track files.
+ *
+ * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks_in the input track file(s)
+ * @param tracks_out the output track file
+ * @param include specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
+ * @param include_ordered specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
+ * @param exclude specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
+ * @param mask specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
+ * @param maxlength set the maximum length of any streamline in mm
+ * @param minlength set the minimum length of any streamline in mm
+ * @param number_ set the desired number of selected streamlines to be propagated to the output file
+ * @param skip omit this number of selected streamlines before commencing writing to the output file
+ * @param maxweight set the maximum weight of any streamline
+ * @param minweight set the minimum weight of any streamline
+ * @param inverse output the inverse selection of streamlines based on the criteria provided; i.e. only those streamlines that fail at least one selection criterion, and/or vertices that are outside masks if provided, will be written to file
+ * @param ends_only only test the ends of each streamline against the provided include/exclude ROIs
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param tck_weights_out specify the path for an output text scalar file containing streamline weights
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckeditOutputs`).
+ */
 function tckedit(
     tracks_in: Array<InputPathType>,
     tracks_out: string,
@@ -884,47 +925,6 @@ function tckedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckeditOutputs {
-    /**
-     * Perform various editing operations on track files.
-     * 
-     * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks_in the input track file(s)
-     * @param tracks_out the output track file
-     * @param include specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion regions to be accepted.
-     * @param include_ordered specify an inclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines must traverse ALL inclusion_ordered regions in the order they are specified in order to be accepted.
-     * @param exclude specify an exclusion region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). Streamlines that enter ANY exclude region will be discarded.
-     * @param mask specify a masking region of interest, as either a binary mask image, or as a sphere using 4 comma-separared values (x,y,z,radius). If defined, streamlines exiting the mask will be truncated.
-     * @param maxlength set the maximum length of any streamline in mm
-     * @param minlength set the minimum length of any streamline in mm
-     * @param number_ set the desired number of selected streamlines to be propagated to the output file
-     * @param skip omit this number of selected streamlines before commencing writing to the output file
-     * @param maxweight set the maximum weight of any streamline
-     * @param minweight set the minimum weight of any streamline
-     * @param inverse output the inverse selection of streamlines based on the criteria provided; i.e. only those streamlines that fail at least one selection criterion, and/or vertices that are outside masks if provided, will be written to file
-     * @param ends_only only test the ends of each streamline against the provided include/exclude ROIs
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param tck_weights_out specify the path for an output text scalar file containing streamline weights
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckeditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKEDIT_METADATA);
     const params = tckedit_params(tracks_in, tracks_out, include, include_ordered, exclude, mask, maxlength, minlength, number_, skip, maxweight, minweight, inverse, ends_only, tck_weights_in, tck_weights_out, info, quiet, debug, force, nthreads, config, help, version)
@@ -948,16 +948,30 @@ export {
       TckeditVariousString2Parameters,
       TckeditVariousStringParameters,
       tckedit,
+      tckedit_cargs,
+      tckedit_config_cargs,
       tckedit_config_params,
+      tckedit_exclude_cargs,
       tckedit_exclude_params,
+      tckedit_execute,
+      tckedit_include_cargs,
+      tckedit_include_ordered_cargs,
       tckedit_include_ordered_params,
       tckedit_include_params,
+      tckedit_mask_cargs,
       tckedit_mask_params,
+      tckedit_outputs,
       tckedit_params,
+      tckedit_various_file_1_cargs,
       tckedit_various_file_1_params,
+      tckedit_various_file_2_cargs,
       tckedit_various_file_2_params,
+      tckedit_various_file_cargs,
       tckedit_various_file_params,
+      tckedit_various_string_1_cargs,
       tckedit_various_string_1_params,
+      tckedit_various_string_2_cargs,
       tckedit_various_string_2_params,
+      tckedit_various_string_cargs,
       tckedit_various_string_params,
 };

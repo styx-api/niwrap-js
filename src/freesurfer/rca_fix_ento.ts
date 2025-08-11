@@ -12,7 +12,7 @@ const RCA_FIX_ENTO_METADATA: Metadata = {
 
 
 interface RcaFixEntoParameters {
-    "__STYXTYPE__": "rca-fix-ento";
+    "@type": "freesurfer.rca-fix-ento";
     "subject": string;
     "threads"?: number | null | undefined;
     "submit": boolean;
@@ -21,35 +21,35 @@ interface RcaFixEntoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rca-fix-ento": rca_fix_ento_cargs,
+        "freesurfer.rca-fix-ento": rca_fix_ento_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "rca-fix-ento": rca_fix_ento_outputs,
+        "freesurfer.rca-fix-ento": rca_fix_ento_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,17 @@ interface RcaFixEntoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject identifier for processing.
+ * @param threads Number of threads to use for processing.
+ * @param submit Submit the task to sbatch with 1 thread and 14GB of memory.
+ * @param account Specify the account to use when submitting to sbatch; default is 'fhs'.
+ * @param brain_mask Apply the ento fix to the brain.finalsurfs; this is turned off due to a conflict with 255.
+ *
+ * @returns Parameter dictionary
+ */
 function rca_fix_ento_params(
     subject: string,
     threads: number | null = null,
@@ -87,19 +98,8 @@ function rca_fix_ento_params(
     account: string | null = null,
     brain_mask: boolean = false,
 ): RcaFixEntoParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject identifier for processing.
-     * @param threads Number of threads to use for processing.
-     * @param submit Submit the task to sbatch with 1 thread and 14GB of memory.
-     * @param account Specify the account to use when submitting to sbatch; default is 'fhs'.
-     * @param brain_mask Apply the ento fix to the brain.finalsurfs; this is turned off due to a conflict with 255.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rca-fix-ento" as const,
+        "@type": "freesurfer.rca-fix-ento" as const,
         "subject": subject,
         "submit": submit,
         "brain_mask": brain_mask,
@@ -114,18 +114,18 @@ function rca_fix_ento_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rca_fix_ento_cargs(
     params: RcaFixEntoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rca-fix-ento");
     cargs.push(
@@ -154,18 +154,18 @@ function rca_fix_ento_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rca_fix_ento_outputs(
     params: RcaFixEntoParameters,
     execution: Execution,
 ): RcaFixEntoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcaFixEntoOutputs = {
         root: execution.outputFile("."),
         entowm_output: execution.outputFile([(params["subject"] ?? null), "/mri/entowm.mgz"].join('')),
@@ -176,22 +176,22 @@ function rca_fix_ento_outputs(
 }
 
 
+/**
+ * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
+ */
 function rca_fix_ento_execute(
     params: RcaFixEntoParameters,
     execution: Execution,
 ): RcaFixEntoOutputs {
-    /**
-     * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
-     */
     params = execution.params(params)
     const cargs = rca_fix_ento_cargs(params, execution)
     const ret = rca_fix_ento_outputs(params, execution)
@@ -200,6 +200,22 @@ function rca_fix_ento_execute(
 }
 
 
+/**
+ * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject identifier for processing.
+ * @param threads Number of threads to use for processing.
+ * @param submit Submit the task to sbatch with 1 thread and 14GB of memory.
+ * @param account Specify the account to use when submitting to sbatch; default is 'fhs'.
+ * @param brain_mask Apply the ento fix to the brain.finalsurfs; this is turned off due to a conflict with 255.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
+ */
 function rca_fix_ento(
     subject: string,
     threads: number | null = null,
@@ -208,22 +224,6 @@ function rca_fix_ento(
     brain_mask: boolean = false,
     runner: Runner | null = null,
 ): RcaFixEntoOutputs {
-    /**
-     * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject identifier for processing.
-     * @param threads Number of threads to use for processing.
-     * @param submit Submit the task to sbatch with 1 thread and 14GB of memory.
-     * @param account Specify the account to use when submitting to sbatch; default is 'fhs'.
-     * @param brain_mask Apply the ento fix to the brain.finalsurfs; this is turned off due to a conflict with 255.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCA_FIX_ENTO_METADATA);
     const params = rca_fix_ento_params(subject, threads, submit, account, brain_mask)
@@ -236,5 +236,8 @@ export {
       RcaFixEntoOutputs,
       RcaFixEntoParameters,
       rca_fix_ento,
+      rca_fix_ento_cargs,
+      rca_fix_ento_execute,
+      rca_fix_ento_outputs,
       rca_fix_ento_params,
 };

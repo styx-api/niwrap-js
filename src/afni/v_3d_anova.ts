@@ -12,7 +12,7 @@ const V_3D_ANOVA_METADATA: Metadata = {
 
 
 interface V3dAnovaParameters {
-    "__STYXTYPE__": "3dANOVA";
+    "@type": "afni.3dANOVA";
     "levels": number;
     "datasets": Array<string>;
     "voxel"?: number | null | undefined;
@@ -30,35 +30,35 @@ interface V3dAnovaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dANOVA": v_3d_anova_cargs,
+        "afni.3dANOVA": v_3d_anova_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dANOVA": v_3d_anova_outputs,
+        "afni.3dANOVA": v_3d_anova_outputs,
     };
     return outputsFuncs[t];
 }
@@ -117,6 +117,26 @@ interface V3dAnovaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param levels Number of factor levels
+ * @param datasets Datasets for each factor level
+ * @param voxel Screen output for the specified voxel number
+ * @param diskspace Print out the required disk space for program execution
+ * @param mask Use sub-brick #0 of dataset to define which voxels to process
+ * @param debug Request extra output verbosity
+ * @param ftr F-statistic for treatment effect
+ * @param mean Estimate of factor level mean
+ * @param diff Difference between factor levels
+ * @param contr Contrast in factor levels
+ * @param old_method Perform ANOVA using the previous functionality
+ * @param ok Confirm understanding of t-stats and sphericity assumptions with old method
+ * @param assume_sph Assume sphericity (zero-sum contrasts only)
+ * @param bucket Create one AFNI 'bucket' dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anova_params(
     levels: number,
     datasets: Array<string>,
@@ -133,28 +153,8 @@ function v_3d_anova_params(
     assume_sph: boolean = false,
     bucket: string | null = null,
 ): V3dAnovaParameters {
-    /**
-     * Build parameters.
-    
-     * @param levels Number of factor levels
-     * @param datasets Datasets for each factor level
-     * @param voxel Screen output for the specified voxel number
-     * @param diskspace Print out the required disk space for program execution
-     * @param mask Use sub-brick #0 of dataset to define which voxels to process
-     * @param debug Request extra output verbosity
-     * @param ftr F-statistic for treatment effect
-     * @param mean Estimate of factor level mean
-     * @param diff Difference between factor levels
-     * @param contr Contrast in factor levels
-     * @param old_method Perform ANOVA using the previous functionality
-     * @param ok Confirm understanding of t-stats and sphericity assumptions with old method
-     * @param assume_sph Assume sphericity (zero-sum contrasts only)
-     * @param bucket Create one AFNI 'bucket' dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dANOVA" as const,
+        "@type": "afni.3dANOVA" as const,
         "levels": levels,
         "datasets": datasets,
         "diskspace": diskspace,
@@ -190,18 +190,18 @@ function v_3d_anova_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anova_cargs(
     params: V3dAnovaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dANOVA");
     cargs.push(
@@ -276,18 +276,18 @@ function v_3d_anova_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_anova_outputs(
     params: V3dAnovaParameters,
     execution: Execution,
 ): V3dAnovaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAnovaOutputs = {
         root: execution.outputFile("."),
         ftr_output: ((params["ftr"] ?? null) !== null) ? execution.outputFile([(params["ftr"] ?? null), ".HEAD"].join('')) : null,
@@ -305,22 +305,22 @@ function v_3d_anova_outputs(
 }
 
 
+/**
+ * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
+ */
 function v_3d_anova_execute(
     params: V3dAnovaParameters,
     execution: Execution,
 ): V3dAnovaOutputs {
-    /**
-     * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_anova_cargs(params, execution)
     const ret = v_3d_anova_outputs(params, execution)
@@ -329,6 +329,31 @@ function v_3d_anova_execute(
 }
 
 
+/**
+ * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param levels Number of factor levels
+ * @param datasets Datasets for each factor level
+ * @param voxel Screen output for the specified voxel number
+ * @param diskspace Print out the required disk space for program execution
+ * @param mask Use sub-brick #0 of dataset to define which voxels to process
+ * @param debug Request extra output verbosity
+ * @param ftr F-statistic for treatment effect
+ * @param mean Estimate of factor level mean
+ * @param diff Difference between factor levels
+ * @param contr Contrast in factor levels
+ * @param old_method Perform ANOVA using the previous functionality
+ * @param ok Confirm understanding of t-stats and sphericity assumptions with old method
+ * @param assume_sph Assume sphericity (zero-sum contrasts only)
+ * @param bucket Create one AFNI 'bucket' dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
+ */
 function v_3d_anova(
     levels: number,
     datasets: Array<string>,
@@ -346,31 +371,6 @@ function v_3d_anova(
     bucket: string | null = null,
     runner: Runner | null = null,
 ): V3dAnovaOutputs {
-    /**
-     * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param levels Number of factor levels
-     * @param datasets Datasets for each factor level
-     * @param voxel Screen output for the specified voxel number
-     * @param diskspace Print out the required disk space for program execution
-     * @param mask Use sub-brick #0 of dataset to define which voxels to process
-     * @param debug Request extra output verbosity
-     * @param ftr F-statistic for treatment effect
-     * @param mean Estimate of factor level mean
-     * @param diff Difference between factor levels
-     * @param contr Contrast in factor levels
-     * @param old_method Perform ANOVA using the previous functionality
-     * @param ok Confirm understanding of t-stats and sphericity assumptions with old method
-     * @param assume_sph Assume sphericity (zero-sum contrasts only)
-     * @param bucket Create one AFNI 'bucket' dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ANOVA_METADATA);
     const params = v_3d_anova_params(levels, datasets, voxel, diskspace, mask, debug, ftr, mean, diff, contr, old_method, ok, assume_sph, bucket)
@@ -383,5 +383,8 @@ export {
       V3dAnovaParameters,
       V_3D_ANOVA_METADATA,
       v_3d_anova,
+      v_3d_anova_cargs,
+      v_3d_anova_execute,
+      v_3d_anova_outputs,
       v_3d_anova_params,
 };

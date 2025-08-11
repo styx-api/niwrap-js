@@ -12,7 +12,7 @@ const MRI_GCUT_METADATA: Metadata = {
 
 
 interface MriGcutParameters {
-    "__STYXTYPE__": "mri_gcut";
+    "@type": "freesurfer.mri_gcut";
     "wmmask_110": boolean;
     "mult_file"?: InputPathType | null | undefined;
     "threshold_value"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface MriGcutParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gcut": mri_gcut_cargs,
+        "freesurfer.mri_gcut": mri_gcut_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gcut": mri_gcut_outputs,
+        "freesurfer.mri_gcut": mri_gcut_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriGcutOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input brain volume file, e.g. T1.mgz
+ * @param outfile Output file name, e.g. brainmask.auto.mgz
+ * @param wmmask_110 Use voxels with intensity 110 as white matter mask (when applied on T1.mgz, FreeSurfer only)
+ * @param mult_file Intersect the skull-stripped 'in_filename' and an existing skull-stripped volume specified by 'filename', storing the result in 'out_filename'.
+ * @param threshold_value Set threshold to value (%) of WM intensity, where the value should be >0 and <1; defaults to 0.40.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gcut_params(
     infile: InputPathType,
     outfile: string,
@@ -79,19 +90,8 @@ function mri_gcut_params(
     mult_file: InputPathType | null = null,
     threshold_value: number | null = null,
 ): MriGcutParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input brain volume file, e.g. T1.mgz
-     * @param outfile Output file name, e.g. brainmask.auto.mgz
-     * @param wmmask_110 Use voxels with intensity 110 as white matter mask (when applied on T1.mgz, FreeSurfer only)
-     * @param mult_file Intersect the skull-stripped 'in_filename' and an existing skull-stripped volume specified by 'filename', storing the result in 'out_filename'.
-     * @param threshold_value Set threshold to value (%) of WM intensity, where the value should be >0 and <1; defaults to 0.40.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gcut" as const,
+        "@type": "freesurfer.mri_gcut" as const,
         "wmmask_110": wmmask_110,
         "infile": infile,
         "outfile": outfile,
@@ -106,18 +106,18 @@ function mri_gcut_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gcut_cargs(
     params: MriGcutParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gcut");
     if ((params["wmmask_110"] ?? null)) {
@@ -141,18 +141,18 @@ function mri_gcut_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gcut_outputs(
     params: MriGcutParameters,
     execution: Execution,
 ): MriGcutOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGcutOutputs = {
         root: execution.outputFile("."),
         output_mask_file: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -161,22 +161,22 @@ function mri_gcut_outputs(
 }
 
 
+/**
+ * Skull stripping algorithm based on graph cuts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
+ */
 function mri_gcut_execute(
     params: MriGcutParameters,
     execution: Execution,
 ): MriGcutOutputs {
-    /**
-     * Skull stripping algorithm based on graph cuts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gcut_cargs(params, execution)
     const ret = mri_gcut_outputs(params, execution)
@@ -185,6 +185,22 @@ function mri_gcut_execute(
 }
 
 
+/**
+ * Skull stripping algorithm based on graph cuts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input brain volume file, e.g. T1.mgz
+ * @param outfile Output file name, e.g. brainmask.auto.mgz
+ * @param wmmask_110 Use voxels with intensity 110 as white matter mask (when applied on T1.mgz, FreeSurfer only)
+ * @param mult_file Intersect the skull-stripped 'in_filename' and an existing skull-stripped volume specified by 'filename', storing the result in 'out_filename'.
+ * @param threshold_value Set threshold to value (%) of WM intensity, where the value should be >0 and <1; defaults to 0.40.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
+ */
 function mri_gcut(
     infile: InputPathType,
     outfile: string,
@@ -193,22 +209,6 @@ function mri_gcut(
     threshold_value: number | null = null,
     runner: Runner | null = null,
 ): MriGcutOutputs {
-    /**
-     * Skull stripping algorithm based on graph cuts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input brain volume file, e.g. T1.mgz
-     * @param outfile Output file name, e.g. brainmask.auto.mgz
-     * @param wmmask_110 Use voxels with intensity 110 as white matter mask (when applied on T1.mgz, FreeSurfer only)
-     * @param mult_file Intersect the skull-stripped 'in_filename' and an existing skull-stripped volume specified by 'filename', storing the result in 'out_filename'.
-     * @param threshold_value Set threshold to value (%) of WM intensity, where the value should be >0 and <1; defaults to 0.40.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GCUT_METADATA);
     const params = mri_gcut_params(infile, outfile, wmmask_110, mult_file, threshold_value)
@@ -221,5 +221,8 @@ export {
       MriGcutOutputs,
       MriGcutParameters,
       mri_gcut,
+      mri_gcut_cargs,
+      mri_gcut_execute,
+      mri_gcut_outputs,
       mri_gcut_params,
 };

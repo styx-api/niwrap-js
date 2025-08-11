@@ -12,7 +12,7 @@ const ANTS_INTRODUCTION_SH_METADATA: Metadata = {
 
 
 interface AntsIntroductionShParameters {
-    "__STYXTYPE__": "antsIntroduction.sh";
+    "@type": "ants.antsIntroduction.sh";
     "image_dimension": 2 | 3;
     "reference_image": InputPathType;
     "input_image": InputPathType;
@@ -27,33 +27,33 @@ interface AntsIntroductionShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsIntroduction.sh": ants_introduction_sh_cargs,
+        "ants.antsIntroduction.sh": ants_introduction_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface AntsIntroductionShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Image dimension for registration: 2 or 3.
+ * @param reference_image Reference image for registration.
+ * @param input_image Input image to be registered.
+ * @param force Force script to proceed even if headers may be incompatible.
+ * @param labels_in_fixed_image_space Labels in fixed image space to deform to moving image.
+ * @param max_iterations Maximum number of iterations.
+ * @param n4_bias_field_correction N4 Bias Field Correction of moving image: 0 for off, 1 for on.
+ * @param outprefix A prefix that is prepended to all output files.
+ * @param quality_check Perform a Quality Check (QC) of the result: 0 for off, 1 for on.
+ * @param similarity_metric Type of similarity metric used for registration.
+ * @param transformation_model Type of transformation model used for registration.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_introduction_sh_params(
     image_dimension: 2 | 3,
     reference_image: InputPathType,
@@ -86,25 +103,8 @@ function ants_introduction_sh_params(
     similarity_metric: string | null = null,
     transformation_model: string | null = null,
 ): AntsIntroductionShParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Image dimension for registration: 2 or 3.
-     * @param reference_image Reference image for registration.
-     * @param input_image Input image to be registered.
-     * @param force Force script to proceed even if headers may be incompatible.
-     * @param labels_in_fixed_image_space Labels in fixed image space to deform to moving image.
-     * @param max_iterations Maximum number of iterations.
-     * @param n4_bias_field_correction N4 Bias Field Correction of moving image: 0 for off, 1 for on.
-     * @param outprefix A prefix that is prepended to all output files.
-     * @param quality_check Perform a Quality Check (QC) of the result: 0 for off, 1 for on.
-     * @param similarity_metric Type of similarity metric used for registration.
-     * @param transformation_model Type of transformation model used for registration.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsIntroduction.sh" as const,
+        "@type": "ants.antsIntroduction.sh" as const,
         "image_dimension": image_dimension,
         "reference_image": reference_image,
         "input_image": input_image,
@@ -137,18 +137,18 @@ function ants_introduction_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_introduction_sh_cargs(
     params: AntsIntroductionShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsIntroduction.sh");
     cargs.push(
@@ -215,18 +215,18 @@ function ants_introduction_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_introduction_sh_outputs(
     params: AntsIntroductionShParameters,
     execution: Execution,
 ): AntsIntroductionShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsIntroductionShOutputs = {
         root: execution.outputFile("."),
     };
@@ -234,22 +234,22 @@ function ants_introduction_sh_outputs(
 }
 
 
+/**
+ * Script for registration using ANTS with compulsory and optional arguments.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
+ */
 function ants_introduction_sh_execute(
     params: AntsIntroductionShParameters,
     execution: Execution,
 ): AntsIntroductionShOutputs {
-    /**
-     * Script for registration using ANTS with compulsory and optional arguments.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_introduction_sh_cargs(params, execution)
     const ret = ants_introduction_sh_outputs(params, execution)
@@ -258,6 +258,28 @@ function ants_introduction_sh_execute(
 }
 
 
+/**
+ * Script for registration using ANTS with compulsory and optional arguments.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Image dimension for registration: 2 or 3.
+ * @param reference_image Reference image for registration.
+ * @param input_image Input image to be registered.
+ * @param force Force script to proceed even if headers may be incompatible.
+ * @param labels_in_fixed_image_space Labels in fixed image space to deform to moving image.
+ * @param max_iterations Maximum number of iterations.
+ * @param n4_bias_field_correction N4 Bias Field Correction of moving image: 0 for off, 1 for on.
+ * @param outprefix A prefix that is prepended to all output files.
+ * @param quality_check Perform a Quality Check (QC) of the result: 0 for off, 1 for on.
+ * @param similarity_metric Type of similarity metric used for registration.
+ * @param transformation_model Type of transformation model used for registration.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
+ */
 function ants_introduction_sh(
     image_dimension: 2 | 3,
     reference_image: InputPathType,
@@ -272,28 +294,6 @@ function ants_introduction_sh(
     transformation_model: string | null = null,
     runner: Runner | null = null,
 ): AntsIntroductionShOutputs {
-    /**
-     * Script for registration using ANTS with compulsory and optional arguments.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Image dimension for registration: 2 or 3.
-     * @param reference_image Reference image for registration.
-     * @param input_image Input image to be registered.
-     * @param force Force script to proceed even if headers may be incompatible.
-     * @param labels_in_fixed_image_space Labels in fixed image space to deform to moving image.
-     * @param max_iterations Maximum number of iterations.
-     * @param n4_bias_field_correction N4 Bias Field Correction of moving image: 0 for off, 1 for on.
-     * @param outprefix A prefix that is prepended to all output files.
-     * @param quality_check Perform a Quality Check (QC) of the result: 0 for off, 1 for on.
-     * @param similarity_metric Type of similarity metric used for registration.
-     * @param transformation_model Type of transformation model used for registration.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_INTRODUCTION_SH_METADATA);
     const params = ants_introduction_sh_params(image_dimension, reference_image, input_image, force, labels_in_fixed_image_space, max_iterations, n4_bias_field_correction, outprefix, quality_check, similarity_metric, transformation_model)
@@ -306,5 +306,8 @@ export {
       AntsIntroductionShOutputs,
       AntsIntroductionShParameters,
       ants_introduction_sh,
+      ants_introduction_sh_cargs,
+      ants_introduction_sh_execute,
+      ants_introduction_sh_outputs,
       ants_introduction_sh_params,
 };

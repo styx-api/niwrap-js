@@ -12,7 +12,7 @@ const MRI_MAPS2CSD_METADATA: Metadata = {
 
 
 interface MriMaps2csdParameters {
-    "__STYXTYPE__": "mri_maps2csd";
+    "@type": "freesurfer.mri_maps2csd";
     "input_files": Array<string>;
     "csd_file"?: string | null | undefined;
     "pdf_file"?: string | null | undefined;
@@ -27,33 +27,33 @@ interface MriMaps2csdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_maps2csd": mri_maps2csd_cargs,
+        "freesurfer.mri_maps2csd": mri_maps2csd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,22 @@ interface MriMaps2csdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input file(s) or specify them directly on the command line
+ * @param csd_file Output CSD file
+ * @param pdf_file PDF file created from CSD
+ * @param subject_hemi_surf Subject name, hemisphere, and surface specification
+ * @param thresh Threshold for cluster-forming (-log10 scale)
+ * @param sign Sign adjustment for threshold (+1, -1 or 0)
+ * @param csd_apply_file Apply a CSD file to inputs, return p-value of max cluster
+ * @param subjects_dir Subjects directory
+ * @param debug Turn on debugging
+ * @param checkopts Don't run, just check options then exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_maps2csd_params(
     input_files: Array<string>,
     csd_file: string | null = null,
@@ -86,24 +102,8 @@ function mri_maps2csd_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriMaps2csdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input file(s) or specify them directly on the command line
-     * @param csd_file Output CSD file
-     * @param pdf_file PDF file created from CSD
-     * @param subject_hemi_surf Subject name, hemisphere, and surface specification
-     * @param thresh Threshold for cluster-forming (-log10 scale)
-     * @param sign Sign adjustment for threshold (+1, -1 or 0)
-     * @param csd_apply_file Apply a CSD file to inputs, return p-value of max cluster
-     * @param subjects_dir Subjects directory
-     * @param debug Turn on debugging
-     * @param checkopts Don't run, just check options then exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_maps2csd" as const,
+        "@type": "freesurfer.mri_maps2csd" as const,
         "input_files": input_files,
         "debug": debug,
         "checkopts": checkopts,
@@ -136,18 +136,18 @@ function mri_maps2csd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_maps2csd_cargs(
     params: MriMaps2csdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_maps2csd");
     cargs.push(
@@ -209,18 +209,18 @@ function mri_maps2csd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_maps2csd_outputs(
     params: MriMaps2csdParameters,
     execution: Execution,
 ): MriMaps2csdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMaps2csdOutputs = {
         root: execution.outputFile("."),
     };
@@ -228,22 +228,22 @@ function mri_maps2csd_outputs(
 }
 
 
+/**
+ * Tool to create CSD files and PDFs from input maps and apply them.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
+ */
 function mri_maps2csd_execute(
     params: MriMaps2csdParameters,
     execution: Execution,
 ): MriMaps2csdOutputs {
-    /**
-     * Tool to create CSD files and PDFs from input maps and apply them.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_maps2csd_cargs(params, execution)
     const ret = mri_maps2csd_outputs(params, execution)
@@ -252,6 +252,27 @@ function mri_maps2csd_execute(
 }
 
 
+/**
+ * Tool to create CSD files and PDFs from input maps and apply them.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input file(s) or specify them directly on the command line
+ * @param csd_file Output CSD file
+ * @param pdf_file PDF file created from CSD
+ * @param subject_hemi_surf Subject name, hemisphere, and surface specification
+ * @param thresh Threshold for cluster-forming (-log10 scale)
+ * @param sign Sign adjustment for threshold (+1, -1 or 0)
+ * @param csd_apply_file Apply a CSD file to inputs, return p-value of max cluster
+ * @param subjects_dir Subjects directory
+ * @param debug Turn on debugging
+ * @param checkopts Don't run, just check options then exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
+ */
 function mri_maps2csd(
     input_files: Array<string>,
     csd_file: string | null = null,
@@ -266,27 +287,6 @@ function mri_maps2csd(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriMaps2csdOutputs {
-    /**
-     * Tool to create CSD files and PDFs from input maps and apply them.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input file(s) or specify them directly on the command line
-     * @param csd_file Output CSD file
-     * @param pdf_file PDF file created from CSD
-     * @param subject_hemi_surf Subject name, hemisphere, and surface specification
-     * @param thresh Threshold for cluster-forming (-log10 scale)
-     * @param sign Sign adjustment for threshold (+1, -1 or 0)
-     * @param csd_apply_file Apply a CSD file to inputs, return p-value of max cluster
-     * @param subjects_dir Subjects directory
-     * @param debug Turn on debugging
-     * @param checkopts Don't run, just check options then exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MAPS2CSD_METADATA);
     const params = mri_maps2csd_params(input_files, csd_file, pdf_file, subject_hemi_surf, thresh, sign, csd_apply_file, apply_out, subjects_dir, debug, checkopts)
@@ -299,5 +299,8 @@ export {
       MriMaps2csdOutputs,
       MriMaps2csdParameters,
       mri_maps2csd,
+      mri_maps2csd_cargs,
+      mri_maps2csd_execute,
+      mri_maps2csd_outputs,
       mri_maps2csd_params,
 };

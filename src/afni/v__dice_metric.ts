@@ -12,7 +12,7 @@ const V__DICE_METRIC_METADATA: Metadata = {
 
 
 interface VDiceMetricParameters {
-    "__STYXTYPE__": "@DiceMetric";
+    "@type": "afni.@DiceMetric";
     "base": InputPathType;
     "dsets": Array<InputPathType>;
     "max_roi"?: number | null | undefined;
@@ -29,33 +29,33 @@ interface VDiceMetricParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@DiceMetric": v__dice_metric_cargs,
+        "afni.@DiceMetric": v__dice_metric_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface VDiceMetricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base Name of base (reference) segmentation
+ * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
+ * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
+ * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
+ * @param forceoutput If given, force output for each class in LTFILE.
+ * @param echo Set echo.
+ * @param save_match Save volume showing BASE*equals(BASE,DSET).
+ * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
+ * @param do_not_mask_by_base Do not mask dset by step(base) before computing Dice coefficient.
+ * @param mask_by_base Mask dset by the step(base) before computing Dice coefficient.
+ * @param prefix Use PREFIX for the output table. Default is separate results for each dset to stdout.
+ * @param ignore_bad Warn if encountering bad scenarios, but do not create a zero entry.
+ * @param keep_tmp Keep temporary files for debugging. Note that you should delete temporary files before rerunning the script.
+ *
+ * @returns Parameter dictionary
+ */
 function v__dice_metric_params(
     base: InputPathType,
     dsets: Array<InputPathType>,
@@ -90,27 +109,8 @@ function v__dice_metric_params(
     ignore_bad: boolean = false,
     keep_tmp: boolean = false,
 ): VDiceMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param base Name of base (reference) segmentation
-     * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
-     * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
-     * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
-     * @param forceoutput If given, force output for each class in LTFILE.
-     * @param echo Set echo.
-     * @param save_match Save volume showing BASE*equals(BASE,DSET).
-     * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
-     * @param do_not_mask_by_base Do not mask dset by step(base) before computing Dice coefficient.
-     * @param mask_by_base Mask dset by the step(base) before computing Dice coefficient.
-     * @param prefix Use PREFIX for the output table. Default is separate results for each dset to stdout.
-     * @param ignore_bad Warn if encountering bad scenarios, but do not create a zero entry.
-     * @param keep_tmp Keep temporary files for debugging. Note that you should delete temporary files before rerunning the script.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@DiceMetric" as const,
+        "@type": "afni.@DiceMetric" as const,
         "base": base,
         "dsets": dsets,
         "echo": echo,
@@ -137,18 +137,18 @@ function v__dice_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__dice_metric_cargs(
     params: VDiceMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@DiceMetric");
     cargs.push(
@@ -208,18 +208,18 @@ function v__dice_metric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__dice_metric_outputs(
     params: VDiceMetricParameters,
     execution: Execution,
 ): VDiceMetricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDiceMetricOutputs = {
         root: execution.outputFile("."),
     };
@@ -227,22 +227,22 @@ function v__dice_metric_outputs(
 }
 
 
+/**
+ * Computes Dice Metric between BASE and each of the DSET volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
+ */
 function v__dice_metric_execute(
     params: VDiceMetricParameters,
     execution: Execution,
 ): VDiceMetricOutputs {
-    /**
-     * Computes Dice Metric between BASE and each of the DSET volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__dice_metric_cargs(params, execution)
     const ret = v__dice_metric_outputs(params, execution)
@@ -251,6 +251,30 @@ function v__dice_metric_execute(
 }
 
 
+/**
+ * Computes Dice Metric between BASE and each of the DSET volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base Name of base (reference) segmentation
+ * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
+ * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
+ * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
+ * @param forceoutput If given, force output for each class in LTFILE.
+ * @param echo Set echo.
+ * @param save_match Save volume showing BASE*equals(BASE,DSET).
+ * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
+ * @param do_not_mask_by_base Do not mask dset by step(base) before computing Dice coefficient.
+ * @param mask_by_base Mask dset by the step(base) before computing Dice coefficient.
+ * @param prefix Use PREFIX for the output table. Default is separate results for each dset to stdout.
+ * @param ignore_bad Warn if encountering bad scenarios, but do not create a zero entry.
+ * @param keep_tmp Keep temporary files for debugging. Note that you should delete temporary files before rerunning the script.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
+ */
 function v__dice_metric(
     base: InputPathType,
     dsets: Array<InputPathType>,
@@ -267,30 +291,6 @@ function v__dice_metric(
     keep_tmp: boolean = false,
     runner: Runner | null = null,
 ): VDiceMetricOutputs {
-    /**
-     * Computes Dice Metric between BASE and each of the DSET volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base Name of base (reference) segmentation
-     * @param dsets Data sets for which the Dice Metric with BASE is computed. This should be the last option on the command line.
-     * @param max_roi The maximum possible ROI index. Default is 12 or based on LTFILE if specified.
-     * @param labeltable If given, the labeltable is used to set the default MAX_ROI parameter. Also, this option forces an output for each key in the LTFILE.
-     * @param forceoutput If given, force output for each class in LTFILE.
-     * @param echo Set echo.
-     * @param save_match Save volume showing BASE*equals(BASE,DSET).
-     * @param save_diff Save volume showing BASE*(1-equals(BASE,DSET)).
-     * @param do_not_mask_by_base Do not mask dset by step(base) before computing Dice coefficient.
-     * @param mask_by_base Mask dset by the step(base) before computing Dice coefficient.
-     * @param prefix Use PREFIX for the output table. Default is separate results for each dset to stdout.
-     * @param ignore_bad Warn if encountering bad scenarios, but do not create a zero entry.
-     * @param keep_tmp Keep temporary files for debugging. Note that you should delete temporary files before rerunning the script.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DICE_METRIC_METADATA);
     const params = v__dice_metric_params(base, dsets, max_roi, labeltable, forceoutput, echo, save_match, save_diff, do_not_mask_by_base, mask_by_base, prefix, ignore_bad, keep_tmp)
@@ -303,5 +303,8 @@ export {
       VDiceMetricParameters,
       V__DICE_METRIC_METADATA,
       v__dice_metric,
+      v__dice_metric_cargs,
+      v__dice_metric_execute,
+      v__dice_metric_outputs,
       v__dice_metric_params,
 };

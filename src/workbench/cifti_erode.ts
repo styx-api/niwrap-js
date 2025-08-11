@@ -12,28 +12,28 @@ const CIFTI_ERODE_METADATA: Metadata = {
 
 
 interface CiftiErodeLeftSurfaceParameters {
-    "__STYXTYPE__": "left_surface";
+    "@type": "workbench.cifti-erode.left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiErodeRightSurfaceParameters {
-    "__STYXTYPE__": "right_surface";
+    "@type": "workbench.cifti-erode.right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiErodeCerebellumSurfaceParameters {
-    "__STYXTYPE__": "cerebellum_surface";
+    "@type": "workbench.cifti-erode.cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiErodeParameters {
-    "__STYXTYPE__": "cifti-erode";
+    "@type": "workbench.cifti-erode";
     "cifti_in": InputPathType;
     "direction": string;
     "surface_distance": number;
@@ -46,57 +46,57 @@ interface CiftiErodeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-erode": cifti_erode_cargs,
-        "left_surface": cifti_erode_left_surface_cargs,
-        "right_surface": cifti_erode_right_surface_cargs,
-        "cerebellum_surface": cifti_erode_cerebellum_surface_cargs,
+        "workbench.cifti-erode": cifti_erode_cargs,
+        "workbench.cifti-erode.left_surface": cifti_erode_left_surface_cargs,
+        "workbench.cifti-erode.right_surface": cifti_erode_right_surface_cargs,
+        "workbench.cifti-erode.cerebellum_surface": cifti_erode_cerebellum_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-erode": cifti_erode_outputs,
+        "workbench.cifti-erode": cifti_erode_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the left surface file
+ * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_erode_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiErodeLeftSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the left surface file
-     * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_surface" as const,
+        "@type": "workbench.cifti-erode.left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -106,18 +106,18 @@ function cifti_erode_left_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_erode_left_surface_cargs(
     params: CiftiErodeLeftSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -131,20 +131,20 @@ function cifti_erode_left_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the right surface file
+ * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_erode_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiErodeRightSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the right surface file
-     * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_surface" as const,
+        "@type": "workbench.cifti-erode.right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -154,18 +154,18 @@ function cifti_erode_right_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_erode_right_surface_cargs(
     params: CiftiErodeRightSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -179,20 +179,20 @@ function cifti_erode_right_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the cerebellum surface file
+ * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_erode_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiErodeCerebellumSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the cerebellum surface file
-     * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_surface" as const,
+        "@type": "workbench.cifti-erode.cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -202,18 +202,18 @@ function cifti_erode_cerebellum_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_erode_cerebellum_surface_cargs(
     params: CiftiErodeCerebellumSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -244,6 +244,21 @@ interface CiftiErodeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param direction which dimension to dilate along, ROW or COLUMN
+ * @param surface_distance the distance to dilate on surfaces, in mm
+ * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_merged_volume treat volume components as if they were a single component
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_erode_params(
     cifti_in: InputPathType,
     direction: string,
@@ -255,23 +270,8 @@ function cifti_erode_params(
     cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
     opt_merged_volume: boolean = false,
 ): CiftiErodeParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param direction which dimension to dilate along, ROW or COLUMN
-     * @param surface_distance the distance to dilate on surfaces, in mm
-     * @param volume_distance the distance to dilate in the volume, in mm
-     * @param cifti_out the output cifti file
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_merged_volume treat volume components as if they were a single component
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-erode" as const,
+        "@type": "workbench.cifti-erode" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "surface_distance": surface_distance,
@@ -292,18 +292,18 @@ function cifti_erode_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_erode_cargs(
     params: CiftiErodeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-erode");
@@ -313,13 +313,13 @@ function cifti_erode_cargs(
     cargs.push(String((params["volume_distance"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null).__STYXTYPE__)((params["left_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null).__STYXTYPE__)((params["right_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null).__STYXTYPE__)((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_merged_volume"] ?? null)) {
         cargs.push("-merged-volume");
@@ -328,18 +328,18 @@ function cifti_erode_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_erode_outputs(
     params: CiftiErodeParameters,
     execution: Execution,
 ): CiftiErodeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiErodeOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -348,26 +348,26 @@ function cifti_erode_outputs(
 }
 
 
+/**
+ * Erode a cifti file.
+ *
+ * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
+ *
+ * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
+ */
 function cifti_erode_execute(
     params: CiftiErodeParameters,
     execution: Execution,
 ): CiftiErodeOutputs {
-    /**
-     * Erode a cifti file.
-     * 
-     * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
-     * 
-     * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_erode_cargs(params, execution)
     const ret = cifti_erode_outputs(params, execution)
@@ -376,6 +376,30 @@ function cifti_erode_execute(
 }
 
 
+/**
+ * Erode a cifti file.
+ *
+ * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
+ *
+ * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the input cifti file
+ * @param direction which dimension to dilate along, ROW or COLUMN
+ * @param surface_distance the distance to dilate on surfaces, in mm
+ * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
+ */
 function cifti_erode(
     cifti_in: InputPathType,
     direction: string,
@@ -388,30 +412,6 @@ function cifti_erode(
     opt_merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiErodeOutputs {
-    /**
-     * Erode a cifti file.
-     * 
-     * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
-     * 
-     * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the input cifti file
-     * @param direction which dimension to dilate along, ROW or COLUMN
-     * @param surface_distance the distance to dilate on surfaces, in mm
-     * @param volume_distance the distance to dilate in the volume, in mm
-     * @param cifti_out the output cifti file
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_ERODE_METADATA);
     const params = cifti_erode_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, opt_merged_volume)
@@ -427,8 +427,14 @@ export {
       CiftiErodeParameters,
       CiftiErodeRightSurfaceParameters,
       cifti_erode,
+      cifti_erode_cargs,
+      cifti_erode_cerebellum_surface_cargs,
       cifti_erode_cerebellum_surface_params,
+      cifti_erode_execute,
+      cifti_erode_left_surface_cargs,
       cifti_erode_left_surface_params,
+      cifti_erode_outputs,
       cifti_erode_params,
+      cifti_erode_right_surface_cargs,
       cifti_erode_right_surface_params,
 };

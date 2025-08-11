@@ -12,41 +12,41 @@ const SURFACE_FLIP_NORMALS_METADATA: Metadata = {
 
 
 interface SurfaceFlipNormalsParameters {
-    "__STYXTYPE__": "surface-flip-normals";
+    "@type": "workbench.surface-flip-normals";
     "surface": InputPathType;
     "surface_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-flip-normals": surface_flip_normals_cargs,
+        "workbench.surface-flip-normals": surface_flip_normals_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-flip-normals": surface_flip_normals_outputs,
+        "workbench.surface-flip-normals": surface_flip_normals_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SurfaceFlipNormalsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to flip the normals of
+ * @param surface_out the output surface
+ *
+ * @returns Parameter dictionary
+ */
 function surface_flip_normals_params(
     surface: InputPathType,
     surface_out: string,
 ): SurfaceFlipNormalsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to flip the normals of
-     * @param surface_out the output surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-flip-normals" as const,
+        "@type": "workbench.surface-flip-normals" as const,
         "surface": surface,
         "surface_out": surface_out,
     };
@@ -90,18 +90,18 @@ function surface_flip_normals_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_flip_normals_cargs(
     params: SurfaceFlipNormalsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-flip-normals");
@@ -111,18 +111,18 @@ function surface_flip_normals_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_flip_normals_outputs(
     params: SurfaceFlipNormalsParameters,
     execution: Execution,
 ): SurfaceFlipNormalsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceFlipNormalsOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -131,24 +131,24 @@ function surface_flip_normals_outputs(
 }
 
 
+/**
+ * Flip all tiles on a surface.
+ *
+ * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
+ */
 function surface_flip_normals_execute(
     params: SurfaceFlipNormalsParameters,
     execution: Execution,
 ): SurfaceFlipNormalsOutputs {
-    /**
-     * Flip all tiles on a surface.
-     * 
-     * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_flip_normals_cargs(params, execution)
     const ret = surface_flip_normals_outputs(params, execution)
@@ -157,26 +157,26 @@ function surface_flip_normals_execute(
 }
 
 
+/**
+ * Flip all tiles on a surface.
+ *
+ * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to flip the normals of
+ * @param surface_out the output surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
+ */
 function surface_flip_normals(
     surface: InputPathType,
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
-    /**
-     * Flip all tiles on a surface.
-     * 
-     * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to flip the normals of
-     * @param surface_out the output surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_FLIP_NORMALS_METADATA);
     const params = surface_flip_normals_params(surface, surface_out)
@@ -189,5 +189,8 @@ export {
       SurfaceFlipNormalsOutputs,
       SurfaceFlipNormalsParameters,
       surface_flip_normals,
+      surface_flip_normals_cargs,
+      surface_flip_normals_execute,
+      surface_flip_normals_outputs,
       surface_flip_normals_params,
 };

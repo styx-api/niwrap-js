@@ -12,41 +12,41 @@ const MRI_GCA_AMBIGUOUS_METADATA: Metadata = {
 
 
 interface MriGcaAmbiguousParameters {
-    "__STYXTYPE__": "mri_gca_ambiguous";
+    "@type": "freesurfer.mri_gca_ambiguous";
     "gca_file": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gca_ambiguous": mri_gca_ambiguous_cargs,
+        "freesurfer.mri_gca_ambiguous": mri_gca_ambiguous_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gca_ambiguous": mri_gca_ambiguous_outputs,
+        "freesurfer.mri_gca_ambiguous": mri_gca_ambiguous_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriGcaAmbiguousOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gca_file The input GCA file
+ * @param output_volume The output MR image file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gca_ambiguous_params(
     gca_file: InputPathType,
     output_volume: string,
 ): MriGcaAmbiguousParameters {
-    /**
-     * Build parameters.
-    
-     * @param gca_file The input GCA file
-     * @param output_volume The output MR image file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gca_ambiguous" as const,
+        "@type": "freesurfer.mri_gca_ambiguous" as const,
         "gca_file": gca_file,
         "output_volume": output_volume,
     };
@@ -90,18 +90,18 @@ function mri_gca_ambiguous_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gca_ambiguous_cargs(
     params: MriGcaAmbiguousParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gca_ambiguous");
     cargs.push(execution.inputFile((params["gca_file"] ?? null)));
@@ -110,18 +110,18 @@ function mri_gca_ambiguous_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gca_ambiguous_outputs(
     params: MriGcaAmbiguousParameters,
     execution: Execution,
 ): MriGcaAmbiguousOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGcaAmbiguousOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_gca_ambiguous_outputs(
 }
 
 
+/**
+ * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
+ */
 function mri_gca_ambiguous_execute(
     params: MriGcaAmbiguousParameters,
     execution: Execution,
 ): MriGcaAmbiguousOutputs {
-    /**
-     * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gca_ambiguous_cargs(params, execution)
     const ret = mri_gca_ambiguous_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_gca_ambiguous_execute(
 }
 
 
+/**
+ * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gca_file The input GCA file
+ * @param output_volume The output MR image file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
+ */
 function mri_gca_ambiguous(
     gca_file: InputPathType,
     output_volume: string,
     runner: Runner | null = null,
 ): MriGcaAmbiguousOutputs {
-    /**
-     * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gca_file The input GCA file
-     * @param output_volume The output MR image file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GCA_AMBIGUOUS_METADATA);
     const params = mri_gca_ambiguous_params(gca_file, output_volume)
@@ -184,5 +184,8 @@ export {
       MriGcaAmbiguousOutputs,
       MriGcaAmbiguousParameters,
       mri_gca_ambiguous,
+      mri_gca_ambiguous_cargs,
+      mri_gca_ambiguous_execute,
+      mri_gca_ambiguous_outputs,
       mri_gca_ambiguous_params,
 };

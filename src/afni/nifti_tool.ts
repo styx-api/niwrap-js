@@ -12,7 +12,7 @@ const NIFTI_TOOL_METADATA: Metadata = {
 
 
 interface NiftiToolParameters {
-    "__STYXTYPE__": "nifti_tool";
+    "@type": "afni.nifti_tool";
     "action": string;
     "input_files"?: Array<InputPathType> | null | undefined;
     "field"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface NiftiToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "nifti_tool": nifti_tool_cargs,
+        "afni.nifti_tool": nifti_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "nifti_tool": nifti_tool_outputs,
+        "afni.nifti_tool": nifti_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface NiftiToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param action Action type that defines what nifti_tool will do.
+ * @param input_files One or more input nifti files.
+ * @param field Field name to display, modify, or compare.
+ * @param mod_field Field name and new value to modify.
+ * @param prefix Prefix for the output file.
+ * @param debug Debugging level (0-3).
+ * @param overwrite Overwrite input files with modifications.
+ * @param convert2dtype Convert data to a new datatype.
+ * @param convert_fail_choice Action on conversion failure (ignore, warn, fail).
+ * @param convert_verify Verify datatype conversion exactness.
+ * @param add_comment_ext Add COMMENT-type extension to dataset.
+ * @param rm_ext Remove extension by index or ALL.
+ *
+ * @returns Parameter dictionary
+ */
 function nifti_tool_params(
     action: string,
     input_files: Array<InputPathType> | null = null,
@@ -93,26 +111,8 @@ function nifti_tool_params(
     add_comment_ext: string | null = null,
     rm_ext: string | null = null,
 ): NiftiToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param action Action type that defines what nifti_tool will do.
-     * @param input_files One or more input nifti files.
-     * @param field Field name to display, modify, or compare.
-     * @param mod_field Field name and new value to modify.
-     * @param prefix Prefix for the output file.
-     * @param debug Debugging level (0-3).
-     * @param overwrite Overwrite input files with modifications.
-     * @param convert2dtype Convert data to a new datatype.
-     * @param convert_fail_choice Action on conversion failure (ignore, warn, fail).
-     * @param convert_verify Verify datatype conversion exactness.
-     * @param add_comment_ext Add COMMENT-type extension to dataset.
-     * @param rm_ext Remove extension by index or ALL.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nifti_tool" as const,
+        "@type": "afni.nifti_tool" as const,
         "action": action,
         "overwrite": overwrite,
         "convert_verify": convert_verify,
@@ -148,18 +148,18 @@ function nifti_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function nifti_tool_cargs(
     params: NiftiToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("nifti_tool");
     cargs.push((params["action"] ?? null));
@@ -227,18 +227,18 @@ function nifti_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function nifti_tool_outputs(
     params: NiftiToolParameters,
     execution: Execution,
 ): NiftiToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NiftiToolOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')) : null,
@@ -247,22 +247,22 @@ function nifti_tool_outputs(
 }
 
 
+/**
+ * Display, modify, or compare nifti headers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
+ */
 function nifti_tool_execute(
     params: NiftiToolParameters,
     execution: Execution,
 ): NiftiToolOutputs {
-    /**
-     * Display, modify, or compare nifti headers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = nifti_tool_cargs(params, execution)
     const ret = nifti_tool_outputs(params, execution)
@@ -271,6 +271,29 @@ function nifti_tool_execute(
 }
 
 
+/**
+ * Display, modify, or compare nifti headers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param action Action type that defines what nifti_tool will do.
+ * @param input_files One or more input nifti files.
+ * @param field Field name to display, modify, or compare.
+ * @param mod_field Field name and new value to modify.
+ * @param prefix Prefix for the output file.
+ * @param debug Debugging level (0-3).
+ * @param overwrite Overwrite input files with modifications.
+ * @param convert2dtype Convert data to a new datatype.
+ * @param convert_fail_choice Action on conversion failure (ignore, warn, fail).
+ * @param convert_verify Verify datatype conversion exactness.
+ * @param add_comment_ext Add COMMENT-type extension to dataset.
+ * @param rm_ext Remove extension by index or ALL.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
+ */
 function nifti_tool(
     action: string,
     input_files: Array<InputPathType> | null = null,
@@ -286,29 +309,6 @@ function nifti_tool(
     rm_ext: string | null = null,
     runner: Runner | null = null,
 ): NiftiToolOutputs {
-    /**
-     * Display, modify, or compare nifti headers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param action Action type that defines what nifti_tool will do.
-     * @param input_files One or more input nifti files.
-     * @param field Field name to display, modify, or compare.
-     * @param mod_field Field name and new value to modify.
-     * @param prefix Prefix for the output file.
-     * @param debug Debugging level (0-3).
-     * @param overwrite Overwrite input files with modifications.
-     * @param convert2dtype Convert data to a new datatype.
-     * @param convert_fail_choice Action on conversion failure (ignore, warn, fail).
-     * @param convert_verify Verify datatype conversion exactness.
-     * @param add_comment_ext Add COMMENT-type extension to dataset.
-     * @param rm_ext Remove extension by index or ALL.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NIFTI_TOOL_METADATA);
     const params = nifti_tool_params(action, input_files, field, mod_field, prefix, debug, overwrite, convert2dtype, convert_fail_choice, convert_verify, add_comment_ext, rm_ext)
@@ -321,5 +321,8 @@ export {
       NiftiToolOutputs,
       NiftiToolParameters,
       nifti_tool,
+      nifti_tool_cargs,
+      nifti_tool_execute,
+      nifti_tool_outputs,
       nifti_tool_params,
 };

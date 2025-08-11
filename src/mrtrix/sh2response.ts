@@ -12,14 +12,14 @@ const SH2RESPONSE_METADATA: Metadata = {
 
 
 interface Sh2responseConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.sh2response.config";
     "key": string;
     "value": string;
 }
 
 
 interface Sh2responseParameters {
-    "__STYXTYPE__": "sh2response";
+    "@type": "mrtrix.sh2response";
     "lmax"?: number | null | undefined;
     "dump"?: string | null | undefined;
     "info": boolean;
@@ -37,55 +37,55 @@ interface Sh2responseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sh2response": sh2response_cargs,
-        "config": sh2response_config_cargs,
+        "mrtrix.sh2response": sh2response_cargs,
+        "mrtrix.sh2response.config": sh2response_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sh2response": sh2response_outputs,
+        "mrtrix.sh2response": sh2response_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function sh2response_config_params(
     key: string,
     value: string,
 ): Sh2responseConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.sh2response.config" as const,
         "key": key,
         "value": value,
     };
@@ -93,18 +93,18 @@ function sh2response_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sh2response_config_cargs(
     params: Sh2responseConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -134,6 +134,26 @@ interface Sh2responseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sh the spherical harmonic decomposition of the diffusion-weighted images
+ * @param mask the mask containing the voxels from which to estimate the response function
+ * @param directions a 4D image containing the direction vectors along which to estimate the response function
+ * @param response the output axially-symmetric spherical harmonic coefficients
+ * @param lmax specify the maximum harmonic degree of the response function to estimate
+ * @param dump dump the m=0 SH coefficients from all voxels in the mask to the output file, rather than their mean
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function sh2response_params(
     sh: InputPathType,
     mask: InputPathType,
@@ -150,28 +170,8 @@ function sh2response_params(
     help: boolean = false,
     version: boolean = false,
 ): Sh2responseParameters {
-    /**
-     * Build parameters.
-    
-     * @param sh the spherical harmonic decomposition of the diffusion-weighted images
-     * @param mask the mask containing the voxels from which to estimate the response function
-     * @param directions a 4D image containing the direction vectors along which to estimate the response function
-     * @param response the output axially-symmetric spherical harmonic coefficients
-     * @param lmax specify the maximum harmonic degree of the response function to estimate
-     * @param dump dump the m=0 SH coefficients from all voxels in the mask to the output file, rather than their mean
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sh2response" as const,
+        "@type": "mrtrix.sh2response" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -199,18 +199,18 @@ function sh2response_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sh2response_cargs(
     params: Sh2responseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sh2response");
     if ((params["lmax"] ?? null) !== null) {
@@ -244,7 +244,7 @@ function sh2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -260,18 +260,18 @@ function sh2response_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sh2response_outputs(
     params: Sh2responseParameters,
     execution: Execution,
 ): Sh2responseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Sh2responseOutputs = {
         root: execution.outputFile("."),
         response: execution.outputFile([(params["response"] ?? null)].join('')),
@@ -281,29 +281,29 @@ function sh2response_outputs(
 }
 
 
+/**
+ * Generate an appropriate response function from the image data for spherical deconvolution.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
+ */
 function sh2response_execute(
     params: Sh2responseParameters,
     execution: Execution,
 ): Sh2responseOutputs {
-    /**
-     * Generate an appropriate response function from the image data for spherical deconvolution.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
-     */
     params = execution.params(params)
     const cargs = sh2response_cargs(params, execution)
     const ret = sh2response_outputs(params, execution)
@@ -312,6 +312,38 @@ function sh2response_execute(
 }
 
 
+/**
+ * Generate an appropriate response function from the image data for spherical deconvolution.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param sh the spherical harmonic decomposition of the diffusion-weighted images
+ * @param mask the mask containing the voxels from which to estimate the response function
+ * @param directions a 4D image containing the direction vectors along which to estimate the response function
+ * @param response the output axially-symmetric spherical harmonic coefficients
+ * @param lmax specify the maximum harmonic degree of the response function to estimate
+ * @param dump dump the m=0 SH coefficients from all voxels in the mask to the output file, rather than their mean
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
+ */
 function sh2response(
     sh: InputPathType,
     mask: InputPathType,
@@ -329,38 +361,6 @@ function sh2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2responseOutputs {
-    /**
-     * Generate an appropriate response function from the image data for spherical deconvolution.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param sh the spherical harmonic decomposition of the diffusion-weighted images
-     * @param mask the mask containing the voxels from which to estimate the response function
-     * @param directions a 4D image containing the direction vectors along which to estimate the response function
-     * @param response the output axially-symmetric spherical harmonic coefficients
-     * @param lmax specify the maximum harmonic degree of the response function to estimate
-     * @param dump dump the m=0 SH coefficients from all voxels in the mask to the output file, rather than their mean
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SH2RESPONSE_METADATA);
     const params = sh2response_params(sh, mask, directions, response, lmax, dump, info, quiet, debug, force, nthreads, config, help, version)
@@ -374,6 +374,10 @@ export {
       Sh2responseOutputs,
       Sh2responseParameters,
       sh2response,
+      sh2response_cargs,
+      sh2response_config_cargs,
       sh2response_config_params,
+      sh2response_execute,
+      sh2response_outputs,
       sh2response_params,
 };

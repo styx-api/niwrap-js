@@ -12,7 +12,7 @@ const ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA: Metadata = {
 
 
 interface AdjunctAwTableizeRoiInfoPyParameters {
-    "__STYXTYPE__": "adjunct_aw_tableize_roi_info.py";
+    "@type": "afni.adjunct_aw_tableize_roi_info.py";
     "output_file": string;
     "warped_atlas": InputPathType;
     "warped_mask": InputPathType;
@@ -22,35 +22,35 @@ interface AdjunctAwTableizeRoiInfoPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_cargs,
+        "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_outputs,
+        "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface AdjunctAwTableizeRoiInfoPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output file name
+ * @param warped_atlas Warped atlas of interest, with subbrick selector if necessary
+ * @param warped_mask Mask for the warped atlas (same grid)
+ * @param reference_atlas Reference atlas (unwarped), with subbrick selector if necessary
+ * @param reference_mask Mask for the reference atlas (same grid)
+ * @param modesmooth_value Modesmooth value, from modal smoothing used after warping
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_aw_tableize_roi_info_py_params(
     output_file: string,
     warped_atlas: InputPathType,
@@ -81,20 +93,8 @@ function adjunct_aw_tableize_roi_info_py_params(
     reference_mask: InputPathType,
     modesmooth_value: number,
 ): AdjunctAwTableizeRoiInfoPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output file name
-     * @param warped_atlas Warped atlas of interest, with subbrick selector if necessary
-     * @param warped_mask Mask for the warped atlas (same grid)
-     * @param reference_atlas Reference atlas (unwarped), with subbrick selector if necessary
-     * @param reference_mask Mask for the reference atlas (same grid)
-     * @param modesmooth_value Modesmooth value, from modal smoothing used after warping
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_aw_tableize_roi_info.py" as const,
+        "@type": "afni.adjunct_aw_tableize_roi_info.py" as const,
         "output_file": output_file,
         "warped_atlas": warped_atlas,
         "warped_mask": warped_mask,
@@ -106,18 +106,18 @@ function adjunct_aw_tableize_roi_info_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_aw_tableize_roi_info_py_cargs(
     params: AdjunctAwTableizeRoiInfoPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_aw_tableize_roi_info.py");
     cargs.push((params["output_file"] ?? null));
@@ -130,18 +130,18 @@ function adjunct_aw_tableize_roi_info_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_aw_tableize_roi_info_py_outputs(
     params: AdjunctAwTableizeRoiInfoPyParameters,
     execution: Execution,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctAwTableizeRoiInfoPyOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -150,22 +150,22 @@ function adjunct_aw_tableize_roi_info_py_outputs(
 }
 
 
+/**
+ * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
+ */
 function adjunct_aw_tableize_roi_info_py_execute(
     params: AdjunctAwTableizeRoiInfoPyParameters,
     execution: Execution,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
-    /**
-     * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_aw_tableize_roi_info_py_cargs(params, execution)
     const ret = adjunct_aw_tableize_roi_info_py_outputs(params, execution)
@@ -174,6 +174,23 @@ function adjunct_aw_tableize_roi_info_py_execute(
 }
 
 
+/**
+ * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param output_file Output file name
+ * @param warped_atlas Warped atlas of interest, with subbrick selector if necessary
+ * @param warped_mask Mask for the warped atlas (same grid)
+ * @param reference_atlas Reference atlas (unwarped), with subbrick selector if necessary
+ * @param reference_mask Mask for the reference atlas (same grid)
+ * @param modesmooth_value Modesmooth value, from modal smoothing used after warping
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
+ */
 function adjunct_aw_tableize_roi_info_py(
     output_file: string,
     warped_atlas: InputPathType,
@@ -183,23 +200,6 @@ function adjunct_aw_tableize_roi_info_py(
     modesmooth_value: number,
     runner: Runner | null = null,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
-    /**
-     * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param output_file Output file name
-     * @param warped_atlas Warped atlas of interest, with subbrick selector if necessary
-     * @param warped_mask Mask for the warped atlas (same grid)
-     * @param reference_atlas Reference atlas (unwarped), with subbrick selector if necessary
-     * @param reference_mask Mask for the reference atlas (same grid)
-     * @param modesmooth_value Modesmooth value, from modal smoothing used after warping
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA);
     const params = adjunct_aw_tableize_roi_info_py_params(output_file, warped_atlas, warped_mask, reference_atlas, reference_mask, modesmooth_value)
@@ -212,5 +212,8 @@ export {
       AdjunctAwTableizeRoiInfoPyOutputs,
       AdjunctAwTableizeRoiInfoPyParameters,
       adjunct_aw_tableize_roi_info_py,
+      adjunct_aw_tableize_roi_info_py_cargs,
+      adjunct_aw_tableize_roi_info_py_execute,
+      adjunct_aw_tableize_roi_info_py_outputs,
       adjunct_aw_tableize_roi_info_py_params,
 };

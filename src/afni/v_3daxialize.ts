@@ -12,7 +12,7 @@ const V_3DAXIALIZE_METADATA: Metadata = {
 
 
 interface V3daxializeParameters {
-    "__STYXTYPE__": "3daxialize";
+    "@type": "afni.3daxialize";
     "infile": InputPathType;
     "prefix"?: string | null | undefined;
     "verb": boolean;
@@ -24,35 +24,35 @@ interface V3daxializeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3daxialize": v_3daxialize_cargs,
+        "afni.3daxialize": v_3daxialize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3daxialize": v_3daxialize_outputs,
+        "afni.3daxialize": v_3daxialize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3daxializeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Dataset to be axially oriented
+ * @param prefix Use specified prefix for the new dataset. Default is 'axialize'.
+ * @param verb Print out a progress report.
+ * @param sagittal Write dataset in sagittal slice order.
+ * @param coronal Write dataset in coronal slice order.
+ * @param axial Write dataset in axial slice order, the default orientation.
+ * @param orient_code Orientation code for output. 3 letters: one from {R,L}, {A,P}, {I,S}.
+ * @param frugal Write data as it is rotated, saving memory. Not available with NIFTI datasets.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3daxialize_params(
     infile: InputPathType,
     prefix: string | null = null,
@@ -85,22 +99,8 @@ function v_3daxialize_params(
     orient_code: string | null = null,
     frugal: boolean = false,
 ): V3daxializeParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Dataset to be axially oriented
-     * @param prefix Use specified prefix for the new dataset. Default is 'axialize'.
-     * @param verb Print out a progress report.
-     * @param sagittal Write dataset in sagittal slice order.
-     * @param coronal Write dataset in coronal slice order.
-     * @param axial Write dataset in axial slice order, the default orientation.
-     * @param orient_code Orientation code for output. 3 letters: one from {R,L}, {A,P}, {I,S}.
-     * @param frugal Write data as it is rotated, saving memory. Not available with NIFTI datasets.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3daxialize" as const,
+        "@type": "afni.3daxialize" as const,
         "infile": infile,
         "verb": verb,
         "sagittal": sagittal,
@@ -118,18 +118,18 @@ function v_3daxialize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3daxialize_cargs(
     params: V3daxializeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3daxialize");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -164,18 +164,18 @@ function v_3daxialize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3daxialize_outputs(
     params: V3daxializeParameters,
     execution: Execution,
 ): V3daxializeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3daxializeOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig"].join('')) : null,
@@ -184,22 +184,22 @@ function v_3daxialize_outputs(
 }
 
 
+/**
+ * Read and write dataset as new dataset with data brick oriented as axial slices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
+ */
 function v_3daxialize_execute(
     params: V3daxializeParameters,
     execution: Execution,
 ): V3daxializeOutputs {
-    /**
-     * Read and write dataset as new dataset with data brick oriented as axial slices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3daxialize_cargs(params, execution)
     const ret = v_3daxialize_outputs(params, execution)
@@ -208,6 +208,25 @@ function v_3daxialize_execute(
 }
 
 
+/**
+ * Read and write dataset as new dataset with data brick oriented as axial slices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Dataset to be axially oriented
+ * @param prefix Use specified prefix for the new dataset. Default is 'axialize'.
+ * @param verb Print out a progress report.
+ * @param sagittal Write dataset in sagittal slice order.
+ * @param coronal Write dataset in coronal slice order.
+ * @param axial Write dataset in axial slice order, the default orientation.
+ * @param orient_code Orientation code for output. 3 letters: one from {R,L}, {A,P}, {I,S}.
+ * @param frugal Write data as it is rotated, saving memory. Not available with NIFTI datasets.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
+ */
 function v_3daxialize(
     infile: InputPathType,
     prefix: string | null = null,
@@ -219,25 +238,6 @@ function v_3daxialize(
     frugal: boolean = false,
     runner: Runner | null = null,
 ): V3daxializeOutputs {
-    /**
-     * Read and write dataset as new dataset with data brick oriented as axial slices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Dataset to be axially oriented
-     * @param prefix Use specified prefix for the new dataset. Default is 'axialize'.
-     * @param verb Print out a progress report.
-     * @param sagittal Write dataset in sagittal slice order.
-     * @param coronal Write dataset in coronal slice order.
-     * @param axial Write dataset in axial slice order, the default orientation.
-     * @param orient_code Orientation code for output. 3 letters: one from {R,L}, {A,P}, {I,S}.
-     * @param frugal Write data as it is rotated, saving memory. Not available with NIFTI datasets.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DAXIALIZE_METADATA);
     const params = v_3daxialize_params(infile, prefix, verb, sagittal, coronal, axial, orient_code, frugal)
@@ -250,5 +250,8 @@ export {
       V3daxializeParameters,
       V_3DAXIALIZE_METADATA,
       v_3daxialize,
+      v_3daxialize_cargs,
+      v_3daxialize_execute,
+      v_3daxialize_outputs,
       v_3daxialize_params,
 };

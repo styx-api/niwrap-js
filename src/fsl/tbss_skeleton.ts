@@ -12,7 +12,7 @@ const TBSS_SKELETON_METADATA: Metadata = {
 
 
 interface TbssSkeletonParameters {
-    "__STYXTYPE__": "tbss_skeleton";
+    "@type": "fsl.tbss_skeleton";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "skeleton_params"?: Array<string> | null | undefined;
@@ -23,35 +23,35 @@ interface TbssSkeletonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_skeleton": tbss_skeleton_cargs,
+        "fsl.tbss_skeleton": tbss_skeleton_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tbss_skeleton": tbss_skeleton_outputs,
+        "fsl.tbss_skeleton": tbss_skeleton_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,19 @@ interface TbssSkeletonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image
+ * @param output_image Output skeleton image
+ * @param skeleton_params Skeletonization parameters: <skel_thresh> <distancemap> <search_rule_mask> <4Ddata> <projected_4Ddata>
+ * @param alt_4d Alternative 4D data (e.g., L1)
+ * @param alt_skeleton Alternative skeleton
+ * @param debug_flag Switch on debugging image outputs
+ * @param debug2_flag De-project skelpoints points on skeleton back to all_FA space
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_skeleton_params(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -99,21 +112,8 @@ function tbss_skeleton_params(
     debug_flag: boolean = false,
     debug2_flag: InputPathType | null = null,
 ): TbssSkeletonParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image
-     * @param output_image Output skeleton image
-     * @param skeleton_params Skeletonization parameters: <skel_thresh> <distancemap> <search_rule_mask> <4Ddata> <projected_4Ddata>
-     * @param alt_4d Alternative 4D data (e.g., L1)
-     * @param alt_skeleton Alternative skeleton
-     * @param debug_flag Switch on debugging image outputs
-     * @param debug2_flag De-project skelpoints points on skeleton back to all_FA space
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_skeleton" as const,
+        "@type": "fsl.tbss_skeleton" as const,
         "input_image": input_image,
         "debug_flag": debug_flag,
     };
@@ -136,18 +136,18 @@ function tbss_skeleton_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_skeleton_cargs(
     params: TbssSkeletonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_skeleton");
     cargs.push(
@@ -191,18 +191,18 @@ function tbss_skeleton_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_skeleton_outputs(
     params: TbssSkeletonParameters,
     execution: Execution,
 ): TbssSkeletonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TbssSkeletonOutputs = {
         root: execution.outputFile("."),
         output_image_file: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
@@ -215,22 +215,22 @@ function tbss_skeleton_outputs(
 }
 
 
+/**
+ * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
+ */
 function tbss_skeleton_execute(
     params: TbssSkeletonParameters,
     execution: Execution,
 ): TbssSkeletonOutputs {
-    /**
-     * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_skeleton_cargs(params, execution)
     const ret = tbss_skeleton_outputs(params, execution)
@@ -239,6 +239,24 @@ function tbss_skeleton_execute(
 }
 
 
+/**
+ * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image
+ * @param output_image Output skeleton image
+ * @param skeleton_params Skeletonization parameters: <skel_thresh> <distancemap> <search_rule_mask> <4Ddata> <projected_4Ddata>
+ * @param alt_4d Alternative 4D data (e.g., L1)
+ * @param alt_skeleton Alternative skeleton
+ * @param debug_flag Switch on debugging image outputs
+ * @param debug2_flag De-project skelpoints points on skeleton back to all_FA space
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
+ */
 function tbss_skeleton(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -249,24 +267,6 @@ function tbss_skeleton(
     debug2_flag: InputPathType | null = null,
     runner: Runner | null = null,
 ): TbssSkeletonOutputs {
-    /**
-     * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image
-     * @param output_image Output skeleton image
-     * @param skeleton_params Skeletonization parameters: <skel_thresh> <distancemap> <search_rule_mask> <4Ddata> <projected_4Ddata>
-     * @param alt_4d Alternative 4D data (e.g., L1)
-     * @param alt_skeleton Alternative skeleton
-     * @param debug_flag Switch on debugging image outputs
-     * @param debug2_flag De-project skelpoints points on skeleton back to all_FA space
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_SKELETON_METADATA);
     const params = tbss_skeleton_params(input_image, output_image, skeleton_params, alt_4d, alt_skeleton, debug_flag, debug2_flag)
@@ -279,5 +279,8 @@ export {
       TbssSkeletonOutputs,
       TbssSkeletonParameters,
       tbss_skeleton,
+      tbss_skeleton_cargs,
+      tbss_skeleton_execute,
+      tbss_skeleton_outputs,
       tbss_skeleton_params,
 };

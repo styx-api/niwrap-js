@@ -12,26 +12,26 @@ const SHCONV_METADATA: Metadata = {
 
 
 interface ShconvVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.shconv.VariousString";
     "obj": string;
 }
 
 
 interface ShconvVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.shconv.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface ShconvConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.shconv.config";
     "key": string;
     "value": string;
 }
 
 
 interface ShconvParameters {
-    "__STYXTYPE__": "shconv";
+    "@type": "mrtrix.shconv";
     "datatype"?: string | null | undefined;
     "strides"?: ShconvVariousStringParameters | ShconvVariousFileParameters | null | undefined;
     "info": boolean;
@@ -47,129 +47,129 @@ interface ShconvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "shconv": shconv_cargs,
-        "VariousString": shconv_various_string_cargs,
-        "VariousFile": shconv_various_file_cargs,
-        "config": shconv_config_cargs,
+        "mrtrix.shconv": shconv_cargs,
+        "mrtrix.shconv.VariousString": shconv_various_string_cargs,
+        "mrtrix.shconv.VariousFile": shconv_various_file_cargs,
+        "mrtrix.shconv.config": shconv_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "shconv": shconv_outputs,
+        "mrtrix.shconv": shconv_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function shconv_various_string_params(
     obj: string,
 ): ShconvVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.shconv.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shconv_various_string_cargs(
     params: ShconvVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function shconv_various_file_params(
     obj: InputPathType,
 ): ShconvVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.shconv.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shconv_various_file_cargs(
     params: ShconvVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function shconv_config_params(
     key: string,
     value: string,
 ): ShconvConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.shconv.config" as const,
         "key": key,
         "value": value,
     };
@@ -177,18 +177,18 @@ function shconv_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shconv_config_cargs(
     params: ShconvConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -214,6 +214,24 @@ interface ShconvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param odf_response pairs of input ODF image and corresponding responses
+ * @param sh_out the output spherical harmonics coefficients image.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function shconv_params(
     odf_response: Array<string>,
     sh_out: string,
@@ -228,26 +246,8 @@ function shconv_params(
     help: boolean = false,
     version: boolean = false,
 ): ShconvParameters {
-    /**
-     * Build parameters.
-    
-     * @param odf_response pairs of input ODF image and corresponding responses
-     * @param sh_out the output spherical harmonics coefficients image.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "shconv" as const,
+        "@type": "mrtrix.shconv" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -273,18 +273,18 @@ function shconv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shconv_cargs(
     params: ShconvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("shconv");
     if ((params["datatype"] ?? null) !== null) {
@@ -296,7 +296,7 @@ function shconv_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -318,7 +318,7 @@ function shconv_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -332,18 +332,18 @@ function shconv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function shconv_outputs(
     params: ShconvParameters,
     execution: Execution,
 ): ShconvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ShconvOutputs = {
         root: execution.outputFile("."),
         sh_out: execution.outputFile([(params["SH_out"] ?? null)].join('')),
@@ -352,38 +352,38 @@ function shconv_outputs(
 }
 
 
+/**
+ * Perform spherical convolution.
+ *
+ * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.
+ *
+ * If multiple pairs of inputs are provided, their contributions will be summed into a single output.
+ *
+ * If the responses are multi-shell (with one line of coefficients per shell), the output will be a 5-dimensional image, with the SH coefficients of the signal in each shell stored at different indices along the 5th dimension.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ShconvOutputs`).
+ */
 function shconv_execute(
     params: ShconvParameters,
     execution: Execution,
 ): ShconvOutputs {
-    /**
-     * Perform spherical convolution.
-     * 
-     * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.
-     * 
-     * If multiple pairs of inputs are provided, their contributions will be summed into a single output.
-     * 
-     * If the responses are multi-shell (with one line of coefficients per shell), the output will be a 5-dimensional image, with the SH coefficients of the signal in each shell stored at different indices along the 5th dimension.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ShconvOutputs`).
-     */
     params = execution.params(params)
     const cargs = shconv_cargs(params, execution)
     const ret = shconv_outputs(params, execution)
@@ -392,6 +392,45 @@ function shconv_execute(
 }
 
 
+/**
+ * Perform spherical convolution.
+ *
+ * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.
+ *
+ * If multiple pairs of inputs are provided, their contributions will be summed into a single output.
+ *
+ * If the responses are multi-shell (with one line of coefficients per shell), the output will be a 5-dimensional image, with the SH coefficients of the signal in each shell stored at different indices along the 5th dimension.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param odf_response pairs of input ODF image and corresponding responses
+ * @param sh_out the output spherical harmonics coefficients image.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ShconvOutputs`).
+ */
 function shconv(
     odf_response: Array<string>,
     sh_out: string,
@@ -407,45 +446,6 @@ function shconv(
     version: boolean = false,
     runner: Runner | null = null,
 ): ShconvOutputs {
-    /**
-     * Perform spherical convolution.
-     * 
-     * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.
-     * 
-     * If multiple pairs of inputs are provided, their contributions will be summed into a single output.
-     * 
-     * If the responses are multi-shell (with one line of coefficients per shell), the output will be a 5-dimensional image, with the SH coefficients of the signal in each shell stored at different indices along the 5th dimension.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param odf_response pairs of input ODF image and corresponding responses
-     * @param sh_out the output spherical harmonics coefficients image.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ShconvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SHCONV_METADATA);
     const params = shconv_params(odf_response, sh_out, datatype, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -461,8 +461,14 @@ export {
       ShconvVariousFileParameters,
       ShconvVariousStringParameters,
       shconv,
+      shconv_cargs,
+      shconv_config_cargs,
       shconv_config_params,
+      shconv_execute,
+      shconv_outputs,
       shconv_params,
+      shconv_various_file_cargs,
       shconv_various_file_params,
+      shconv_various_string_cargs,
       shconv_various_string_params,
 };

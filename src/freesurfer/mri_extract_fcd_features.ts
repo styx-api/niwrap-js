@@ -12,7 +12,7 @@ const MRI_EXTRACT_FCD_FEATURES_METADATA: Metadata = {
 
 
 interface MriExtractFcdFeaturesParameters {
-    "__STYXTYPE__": "mri_extract_fcd_features";
+    "@type": "freesurfer.mri_extract_fcd_features";
     "subject": string;
     "hemi": string;
     "output_file": InputPathType;
@@ -20,33 +20,33 @@ interface MriExtractFcdFeaturesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_extract_fcd_features": mri_extract_fcd_features_cargs,
+        "freesurfer.mri_extract_fcd_features": mri_extract_fcd_features_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MriExtractFcdFeaturesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject identifier.
+ * @param hemi The hemisphere (e.g., lh or rh).
+ * @param output_file Output file path.
+ * @param subjects_dir Specify SUBJECTS_DIR on the command line instead of in the environment.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_extract_fcd_features_params(
     subject: string,
     hemi: string,
     output_file: InputPathType,
     subjects_dir: string | null = null,
 ): MriExtractFcdFeaturesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject identifier.
-     * @param hemi The hemisphere (e.g., lh or rh).
-     * @param output_file Output file path.
-     * @param subjects_dir Specify SUBJECTS_DIR on the command line instead of in the environment.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_extract_fcd_features" as const,
+        "@type": "freesurfer.mri_extract_fcd_features" as const,
         "subject": subject,
         "hemi": hemi,
         "output_file": output_file,
@@ -95,18 +95,18 @@ function mri_extract_fcd_features_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_extract_fcd_features_cargs(
     params: MriExtractFcdFeaturesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_extract_fcd_features");
     cargs.push((params["subject"] ?? null));
@@ -122,18 +122,18 @@ function mri_extract_fcd_features_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_extract_fcd_features_outputs(
     params: MriExtractFcdFeaturesParameters,
     execution: Execution,
 ): MriExtractFcdFeaturesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExtractFcdFeaturesOutputs = {
         root: execution.outputFile("."),
     };
@@ -141,22 +141,22 @@ function mri_extract_fcd_features_outputs(
 }
 
 
+/**
+ * A tool for extracting focal cortical dysplasia features.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
+ */
 function mri_extract_fcd_features_execute(
     params: MriExtractFcdFeaturesParameters,
     execution: Execution,
 ): MriExtractFcdFeaturesOutputs {
-    /**
-     * A tool for extracting focal cortical dysplasia features.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_extract_fcd_features_cargs(params, execution)
     const ret = mri_extract_fcd_features_outputs(params, execution)
@@ -165,6 +165,21 @@ function mri_extract_fcd_features_execute(
 }
 
 
+/**
+ * A tool for extracting focal cortical dysplasia features.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject identifier.
+ * @param hemi The hemisphere (e.g., lh or rh).
+ * @param output_file Output file path.
+ * @param subjects_dir Specify SUBJECTS_DIR on the command line instead of in the environment.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
+ */
 function mri_extract_fcd_features(
     subject: string,
     hemi: string,
@@ -172,21 +187,6 @@ function mri_extract_fcd_features(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MriExtractFcdFeaturesOutputs {
-    /**
-     * A tool for extracting focal cortical dysplasia features.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject identifier.
-     * @param hemi The hemisphere (e.g., lh or rh).
-     * @param output_file Output file path.
-     * @param subjects_dir Specify SUBJECTS_DIR on the command line instead of in the environment.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXTRACT_FCD_FEATURES_METADATA);
     const params = mri_extract_fcd_features_params(subject, hemi, output_file, subjects_dir)
@@ -199,5 +199,8 @@ export {
       MriExtractFcdFeaturesOutputs,
       MriExtractFcdFeaturesParameters,
       mri_extract_fcd_features,
+      mri_extract_fcd_features_cargs,
+      mri_extract_fcd_features_execute,
+      mri_extract_fcd_features_outputs,
       mri_extract_fcd_features_params,
 };

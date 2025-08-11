@@ -12,7 +12,7 @@ const V__SKULL_STRIP_TOUCH_UP_METADATA: Metadata = {
 
 
 interface VSkullStripTouchUpParameters {
-    "__STYXTYPE__": "@SkullStrip_TouchUp";
+    "@type": "afni.@SkullStrip_TouchUp";
     "prefix": string;
     "brain_dataset": InputPathType;
     "head_dataset": InputPathType;
@@ -22,35 +22,35 @@ interface VSkullStripTouchUpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SkullStrip_TouchUp": v__skull_strip_touch_up_cargs,
+        "afni.@SkullStrip_TouchUp": v__skull_strip_touch_up_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SkullStrip_TouchUp": v__skull_strip_touch_up_outputs,
+        "afni.@SkullStrip_TouchUp": v__skull_strip_touch_up_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface VSkullStripTouchUpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file and folder name
+ * @param brain_dataset Skull stripped data set to touch up
+ * @param head_dataset Whole head anatomical data set
+ * @param mask_out Output a binary mask in addition to actual data
+ * @param orig_dim Edit in the original image dimensions
+ * @param help Show this help message
+ *
+ * @returns Parameter dictionary
+ */
 function v__skull_strip_touch_up_params(
     prefix: string,
     brain_dataset: InputPathType,
@@ -85,20 +97,8 @@ function v__skull_strip_touch_up_params(
     orig_dim: boolean = false,
     help: boolean = false,
 ): VSkullStripTouchUpParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file and folder name
-     * @param brain_dataset Skull stripped data set to touch up
-     * @param head_dataset Whole head anatomical data set
-     * @param mask_out Output a binary mask in addition to actual data
-     * @param orig_dim Edit in the original image dimensions
-     * @param help Show this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SkullStrip_TouchUp" as const,
+        "@type": "afni.@SkullStrip_TouchUp" as const,
         "prefix": prefix,
         "brain_dataset": brain_dataset,
         "head_dataset": head_dataset,
@@ -110,18 +110,18 @@ function v__skull_strip_touch_up_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__skull_strip_touch_up_cargs(
     params: VSkullStripTouchUpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SkullStrip_TouchUp");
     cargs.push(
@@ -149,18 +149,18 @@ function v__skull_strip_touch_up_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__skull_strip_touch_up_outputs(
     params: VSkullStripTouchUpParameters,
     execution: Execution,
 ): VSkullStripTouchUpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSkullStripTouchUpOutputs = {
         root: execution.outputFile("."),
         output_folder: execution.outputFile([(params["prefix"] ?? null), "_SS_touch_up"].join('')),
@@ -170,22 +170,22 @@ function v__skull_strip_touch_up_outputs(
 }
 
 
+/**
+ * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
+ */
 function v__skull_strip_touch_up_execute(
     params: VSkullStripTouchUpParameters,
     execution: Execution,
 ): VSkullStripTouchUpOutputs {
-    /**
-     * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__skull_strip_touch_up_cargs(params, execution)
     const ret = v__skull_strip_touch_up_outputs(params, execution)
@@ -194,6 +194,23 @@ function v__skull_strip_touch_up_execute(
 }
 
 
+/**
+ * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file and folder name
+ * @param brain_dataset Skull stripped data set to touch up
+ * @param head_dataset Whole head anatomical data set
+ * @param mask_out Output a binary mask in addition to actual data
+ * @param orig_dim Edit in the original image dimensions
+ * @param help Show this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
+ */
 function v__skull_strip_touch_up(
     prefix: string,
     brain_dataset: InputPathType,
@@ -203,23 +220,6 @@ function v__skull_strip_touch_up(
     help: boolean = false,
     runner: Runner | null = null,
 ): VSkullStripTouchUpOutputs {
-    /**
-     * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file and folder name
-     * @param brain_dataset Skull stripped data set to touch up
-     * @param head_dataset Whole head anatomical data set
-     * @param mask_out Output a binary mask in addition to actual data
-     * @param orig_dim Edit in the original image dimensions
-     * @param help Show this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SKULL_STRIP_TOUCH_UP_METADATA);
     const params = v__skull_strip_touch_up_params(prefix, brain_dataset, head_dataset, mask_out, orig_dim, help)
@@ -232,5 +232,8 @@ export {
       VSkullStripTouchUpParameters,
       V__SKULL_STRIP_TOUCH_UP_METADATA,
       v__skull_strip_touch_up,
+      v__skull_strip_touch_up_cargs,
+      v__skull_strip_touch_up_execute,
+      v__skull_strip_touch_up_outputs,
       v__skull_strip_touch_up_params,
 };

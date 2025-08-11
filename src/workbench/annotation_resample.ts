@@ -12,68 +12,68 @@ const ANNOTATION_RESAMPLE_METADATA: Metadata = {
 
 
 interface AnnotationResampleSurfacePairParameters {
-    "__STYXTYPE__": "surface_pair";
+    "@type": "workbench.annotation-resample.surface_pair";
     "source_surface": InputPathType;
     "target_surface": InputPathType;
 }
 
 
 interface AnnotationResampleParameters {
-    "__STYXTYPE__": "annotation-resample";
+    "@type": "workbench.annotation-resample";
     "annotation_in": InputPathType;
     "annotation_out": string;
     "surface_pair"?: Array<AnnotationResampleSurfacePairParameters> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "annotation-resample": annotation_resample_cargs,
-        "surface_pair": annotation_resample_surface_pair_cargs,
+        "workbench.annotation-resample": annotation_resample_cargs,
+        "workbench.annotation-resample.surface_pair": annotation_resample_surface_pair_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_surface the midthickness surface of the current mesh the annotations use
+ * @param target_surface the midthickness surface of the mesh the annotations should be transferred to
+ *
+ * @returns Parameter dictionary
+ */
 function annotation_resample_surface_pair_params(
     source_surface: InputPathType,
     target_surface: InputPathType,
 ): AnnotationResampleSurfacePairParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_surface the midthickness surface of the current mesh the annotations use
-     * @param target_surface the midthickness surface of the mesh the annotations should be transferred to
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface_pair" as const,
+        "@type": "workbench.annotation-resample.surface_pair" as const,
         "source_surface": source_surface,
         "target_surface": target_surface,
     };
@@ -81,18 +81,18 @@ function annotation_resample_surface_pair_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function annotation_resample_surface_pair_cargs(
     params: AnnotationResampleSurfacePairParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-surface-pair");
     cargs.push(execution.inputFile((params["source_surface"] ?? null)));
@@ -114,22 +114,22 @@ interface AnnotationResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param annotation_in the annotation file to resample
+ * @param annotation_out name of resampled annotation file
+ * @param surface_pair pair of surfaces for resampling surface annotations for one structure
+ *
+ * @returns Parameter dictionary
+ */
 function annotation_resample_params(
     annotation_in: InputPathType,
     annotation_out: string,
     surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
 ): AnnotationResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param annotation_in the annotation file to resample
-     * @param annotation_out name of resampled annotation file
-     * @param surface_pair pair of surfaces for resampling surface annotations for one structure
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "annotation-resample" as const,
+        "@type": "workbench.annotation-resample" as const,
         "annotation_in": annotation_in,
         "annotation_out": annotation_out,
     };
@@ -140,42 +140,42 @@ function annotation_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function annotation_resample_cargs(
     params: AnnotationResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-annotation-resample");
     cargs.push(execution.inputFile((params["annotation_in"] ?? null)));
     cargs.push((params["annotation_out"] ?? null));
     if ((params["surface_pair"] ?? null) !== null) {
-        cargs.push(...(params["surface_pair"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["surface_pair"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function annotation_resample_outputs(
     params: AnnotationResampleParameters,
     execution: Execution,
 ): AnnotationResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AnnotationResampleOutputs = {
         root: execution.outputFile("."),
     };
@@ -183,26 +183,26 @@ function annotation_resample_outputs(
 }
 
 
+/**
+ * Resample an annotation file to different meshes.
+ *
+ * Resample an annotation file from the source mesh to the target mesh.
+ *
+ * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
+ */
 function annotation_resample_execute(
     params: AnnotationResampleParameters,
     execution: Execution,
 ): AnnotationResampleOutputs {
-    /**
-     * Resample an annotation file to different meshes.
-     * 
-     * Resample an annotation file from the source mesh to the target mesh.
-     * 
-     * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = annotation_resample_cargs(params, execution)
     const ret = annotation_resample_outputs(params, execution)
@@ -211,30 +211,30 @@ function annotation_resample_execute(
 }
 
 
+/**
+ * Resample an annotation file to different meshes.
+ *
+ * Resample an annotation file from the source mesh to the target mesh.
+ *
+ * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param annotation_in the annotation file to resample
+ * @param annotation_out name of resampled annotation file
+ * @param surface_pair pair of surfaces for resampling surface annotations for one structure
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
+ */
 function annotation_resample(
     annotation_in: InputPathType,
     annotation_out: string,
     surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
     runner: Runner | null = null,
 ): AnnotationResampleOutputs {
-    /**
-     * Resample an annotation file to different meshes.
-     * 
-     * Resample an annotation file from the source mesh to the target mesh.
-     * 
-     * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param annotation_in the annotation file to resample
-     * @param annotation_out name of resampled annotation file
-     * @param surface_pair pair of surfaces for resampling surface annotations for one structure
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANNOTATION_RESAMPLE_METADATA);
     const params = annotation_resample_params(annotation_in, annotation_out, surface_pair)
@@ -248,6 +248,10 @@ export {
       AnnotationResampleParameters,
       AnnotationResampleSurfacePairParameters,
       annotation_resample,
+      annotation_resample_cargs,
+      annotation_resample_execute,
+      annotation_resample_outputs,
       annotation_resample_params,
+      annotation_resample_surface_pair_cargs,
       annotation_resample_surface_pair_params,
 };

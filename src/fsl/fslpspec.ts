@@ -12,41 +12,41 @@ const FSLPSPEC_METADATA: Metadata = {
 
 
 interface FslpspecParameters {
-    "__STYXTYPE__": "fslpspec";
+    "@type": "fsl.fslpspec";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslpspec": fslpspec_cargs,
+        "fsl.fslpspec": fslpspec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslpspec": fslpspec_outputs,
+        "fsl.fslpspec": fslpspec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FslpspecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input 4D fMRI time series image (e.g. fMRI_data.nii.gz)
+ * @param outfile Output power spectrum image (e.g. pspec_data.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function fslpspec_params(
     infile: InputPathType,
     outfile: string | null = null,
 ): FslpspecParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input 4D fMRI time series image (e.g. fMRI_data.nii.gz)
-     * @param outfile Output power spectrum image (e.g. pspec_data.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslpspec" as const,
+        "@type": "fsl.fslpspec" as const,
         "infile": infile,
     };
     if (outfile !== null) {
@@ -92,18 +92,18 @@ function fslpspec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslpspec_cargs(
     params: FslpspecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslpspec");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -114,18 +114,18 @@ function fslpspec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslpspec_outputs(
     params: FslpspecParameters,
     execution: Execution,
 ): FslpspecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslpspecOutputs = {
         root: execution.outputFile("."),
         output_pspec: ((params["outfile"] ?? null) !== null) ? execution.outputFile([(params["outfile"] ?? null)].join('')) : null,
@@ -134,22 +134,22 @@ function fslpspec_outputs(
 }
 
 
+/**
+ * Estimate the power spectrum of 4D fMRI time series data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
+ */
 function fslpspec_execute(
     params: FslpspecParameters,
     execution: Execution,
 ): FslpspecOutputs {
-    /**
-     * Estimate the power spectrum of 4D fMRI time series data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslpspec_cargs(params, execution)
     const ret = fslpspec_outputs(params, execution)
@@ -158,24 +158,24 @@ function fslpspec_execute(
 }
 
 
+/**
+ * Estimate the power spectrum of 4D fMRI time series data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input 4D fMRI time series image (e.g. fMRI_data.nii.gz)
+ * @param outfile Output power spectrum image (e.g. pspec_data.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
+ */
 function fslpspec(
     infile: InputPathType,
     outfile: string | null = null,
     runner: Runner | null = null,
 ): FslpspecOutputs {
-    /**
-     * Estimate the power spectrum of 4D fMRI time series data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input 4D fMRI time series image (e.g. fMRI_data.nii.gz)
-     * @param outfile Output power spectrum image (e.g. pspec_data.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLPSPEC_METADATA);
     const params = fslpspec_params(infile, outfile)
@@ -188,5 +188,8 @@ export {
       FslpspecOutputs,
       FslpspecParameters,
       fslpspec,
+      fslpspec_cargs,
+      fslpspec_execute,
+      fslpspec_outputs,
       fslpspec_params,
 };

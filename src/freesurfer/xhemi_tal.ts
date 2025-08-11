@@ -12,38 +12,38 @@ const XHEMI_TAL_METADATA: Metadata = {
 
 
 interface XhemiTalParameters {
-    "__STYXTYPE__": "xhemi-tal";
+    "@type": "freesurfer.xhemi-tal";
     "subject": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xhemi-tal": xhemi_tal_cargs,
+        "freesurfer.xhemi-tal": xhemi_tal_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface XhemiTalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject for which to compute the talairach.xfm
+ *
+ * @returns Parameter dictionary
+ */
 function xhemi_tal_params(
     subject: string,
 ): XhemiTalParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject for which to compute the talairach.xfm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xhemi-tal" as const,
+        "@type": "freesurfer.xhemi-tal" as const,
         "subject": subject,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xhemi_tal_cargs(
     params: XhemiTalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xhemi-tal");
     cargs.push(
@@ -103,18 +103,18 @@ function xhemi_tal_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xhemi_tal_outputs(
     params: XhemiTalParameters,
     execution: Execution,
 ): XhemiTalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XhemiTalOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function xhemi_tal_outputs(
 }
 
 
+/**
+ * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
+ */
 function xhemi_tal_execute(
     params: XhemiTalParameters,
     execution: Execution,
 ): XhemiTalOutputs {
-    /**
-     * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
-     */
     params = execution.params(params)
     const cargs = xhemi_tal_cargs(params, execution)
     const ret = xhemi_tal_outputs(params, execution)
@@ -146,22 +146,22 @@ function xhemi_tal_execute(
 }
 
 
+/**
+ * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject for which to compute the talairach.xfm
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
+ */
 function xhemi_tal(
     subject: string,
     runner: Runner | null = null,
 ): XhemiTalOutputs {
-    /**
-     * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject for which to compute the talairach.xfm
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XHEMI_TAL_METADATA);
     const params = xhemi_tal_params(subject)
@@ -174,5 +174,8 @@ export {
       XhemiTalOutputs,
       XhemiTalParameters,
       xhemi_tal,
+      xhemi_tal_cargs,
+      xhemi_tal_execute,
+      xhemi_tal_outputs,
       xhemi_tal_params,
 };

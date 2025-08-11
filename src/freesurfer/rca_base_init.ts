@@ -12,40 +12,40 @@ const RCA_BASE_INIT_METADATA: Metadata = {
 
 
 interface RcaBaseInitParameters {
-    "__STYXTYPE__": "rca-base-init";
+    "@type": "freesurfer.rca-base-init";
     "log_file"?: string | null | undefined;
     "status_file"?: string | null | undefined;
     "cmd_file"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rca-base-init": rca_base_init_cargs,
+        "freesurfer.rca-base-init": rca_base_init_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface RcaBaseInitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param log_file Path to the local log file for output.
+ * @param status_file Path to the status file to append logs.
+ * @param cmd_file Path to the command file to append execution commands.
+ *
+ * @returns Parameter dictionary
+ */
 function rca_base_init_params(
     log_file: string | null = null,
     status_file: string | null = null,
     cmd_file: string | null = null,
 ): RcaBaseInitParameters {
-    /**
-     * Build parameters.
-    
-     * @param log_file Path to the local log file for output.
-     * @param status_file Path to the status file to append logs.
-     * @param cmd_file Path to the command file to append execution commands.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rca-base-init" as const,
+        "@type": "freesurfer.rca-base-init" as const,
     };
     if (log_file !== null) {
         params["log_file"] = log_file;
@@ -95,18 +95,18 @@ function rca_base_init_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rca_base_init_cargs(
     params: RcaBaseInitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rca-base-init");
     if ((params["log_file"] ?? null) !== null) {
@@ -125,18 +125,18 @@ function rca_base_init_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rca_base_init_outputs(
     params: RcaBaseInitParameters,
     execution: Execution,
 ): RcaBaseInitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcaBaseInitOutputs = {
         root: execution.outputFile("."),
     };
@@ -144,22 +144,22 @@ function rca_base_init_outputs(
 }
 
 
+/**
+ * Initialize base subject for recon-all processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
+ */
 function rca_base_init_execute(
     params: RcaBaseInitParameters,
     execution: Execution,
 ): RcaBaseInitOutputs {
-    /**
-     * Initialize base subject for recon-all processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
-     */
     params = execution.params(params)
     const cargs = rca_base_init_cargs(params, execution)
     const ret = rca_base_init_outputs(params, execution)
@@ -168,26 +168,26 @@ function rca_base_init_execute(
 }
 
 
+/**
+ * Initialize base subject for recon-all processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param log_file Path to the local log file for output.
+ * @param status_file Path to the status file to append logs.
+ * @param cmd_file Path to the command file to append execution commands.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
+ */
 function rca_base_init(
     log_file: string | null = null,
     status_file: string | null = null,
     cmd_file: string | null = null,
     runner: Runner | null = null,
 ): RcaBaseInitOutputs {
-    /**
-     * Initialize base subject for recon-all processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param log_file Path to the local log file for output.
-     * @param status_file Path to the status file to append logs.
-     * @param cmd_file Path to the command file to append execution commands.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCA_BASE_INIT_METADATA);
     const params = rca_base_init_params(log_file, status_file, cmd_file)
@@ -200,5 +200,8 @@ export {
       RcaBaseInitOutputs,
       RcaBaseInitParameters,
       rca_base_init,
+      rca_base_init_cargs,
+      rca_base_init_execute,
+      rca_base_init_outputs,
       rca_base_init_params,
 };

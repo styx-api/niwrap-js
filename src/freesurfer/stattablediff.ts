@@ -12,7 +12,7 @@ const STATTABLEDIFF_METADATA: Metadata = {
 
 
 interface StattablediffParameters {
-    "__STYXTYPE__": "stattablediff";
+    "@type": "freesurfer.stattablediff";
     "t1": InputPathType;
     "t2": InputPathType;
     "output": string;
@@ -28,35 +28,35 @@ interface StattablediffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "stattablediff": stattablediff_cargs,
+        "freesurfer.stattablediff": stattablediff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "stattablediff": stattablediff_outputs,
+        "freesurfer.stattablediff": stattablediff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface StattablediffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1 Input table 1 (output of asegstats2table or aparcstats2table)
+ * @param t2 Input table 2 (output of asegstats2table or aparcstats2table)
+ * @param output Output file for the table of differences
+ * @param percent_diff Compute percent difference with respect to mean of tables
+ * @param percent_diff_t1 Compute percent difference with respect to table 1
+ * @param percent_diff_t2 Compute percent difference with respect to table 2
+ * @param multiply Multiply by mulval
+ * @param divide Divide by divval
+ * @param common Compute difference on common segments (may reorder)
+ * @param remove_exvivo Remove the string '_exvivo' from the column header
+ * @param diff_subjects Compare subjects with different names
+ * @param noreplace53 Do not replace 5.3 structure names with later names
+ *
+ * @returns Parameter dictionary
+ */
 function stattablediff_params(
     t1: InputPathType,
     t2: InputPathType,
@@ -93,26 +111,8 @@ function stattablediff_params(
     diff_subjects: boolean = false,
     noreplace53: boolean = false,
 ): StattablediffParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1 Input table 1 (output of asegstats2table or aparcstats2table)
-     * @param t2 Input table 2 (output of asegstats2table or aparcstats2table)
-     * @param output Output file for the table of differences
-     * @param percent_diff Compute percent difference with respect to mean of tables
-     * @param percent_diff_t1 Compute percent difference with respect to table 1
-     * @param percent_diff_t2 Compute percent difference with respect to table 2
-     * @param multiply Multiply by mulval
-     * @param divide Divide by divval
-     * @param common Compute difference on common segments (may reorder)
-     * @param remove_exvivo Remove the string '_exvivo' from the column header
-     * @param diff_subjects Compare subjects with different names
-     * @param noreplace53 Do not replace 5.3 structure names with later names
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stattablediff" as const,
+        "@type": "freesurfer.stattablediff" as const,
         "t1": t1,
         "t2": t2,
         "output": output,
@@ -134,18 +134,18 @@ function stattablediff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function stattablediff_cargs(
     params: StattablediffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("stattablediff");
     cargs.push(execution.inputFile((params["t1"] ?? null)));
@@ -188,18 +188,18 @@ function stattablediff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function stattablediff_outputs(
     params: StattablediffParameters,
     execution: Execution,
 ): StattablediffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: StattablediffOutputs = {
         root: execution.outputFile("."),
         output_diff_table: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -208,22 +208,22 @@ function stattablediff_outputs(
 }
 
 
+/**
+ * Creates a table of the differences between two stats tables.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
+ */
 function stattablediff_execute(
     params: StattablediffParameters,
     execution: Execution,
 ): StattablediffOutputs {
-    /**
-     * Creates a table of the differences between two stats tables.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
-     */
     params = execution.params(params)
     const cargs = stattablediff_cargs(params, execution)
     const ret = stattablediff_outputs(params, execution)
@@ -232,6 +232,29 @@ function stattablediff_execute(
 }
 
 
+/**
+ * Creates a table of the differences between two stats tables.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1 Input table 1 (output of asegstats2table or aparcstats2table)
+ * @param t2 Input table 2 (output of asegstats2table or aparcstats2table)
+ * @param output Output file for the table of differences
+ * @param percent_diff Compute percent difference with respect to mean of tables
+ * @param percent_diff_t1 Compute percent difference with respect to table 1
+ * @param percent_diff_t2 Compute percent difference with respect to table 2
+ * @param multiply Multiply by mulval
+ * @param divide Divide by divval
+ * @param common Compute difference on common segments (may reorder)
+ * @param remove_exvivo Remove the string '_exvivo' from the column header
+ * @param diff_subjects Compare subjects with different names
+ * @param noreplace53 Do not replace 5.3 structure names with later names
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
+ */
 function stattablediff(
     t1: InputPathType,
     t2: InputPathType,
@@ -247,29 +270,6 @@ function stattablediff(
     noreplace53: boolean = false,
     runner: Runner | null = null,
 ): StattablediffOutputs {
-    /**
-     * Creates a table of the differences between two stats tables.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1 Input table 1 (output of asegstats2table or aparcstats2table)
-     * @param t2 Input table 2 (output of asegstats2table or aparcstats2table)
-     * @param output Output file for the table of differences
-     * @param percent_diff Compute percent difference with respect to mean of tables
-     * @param percent_diff_t1 Compute percent difference with respect to table 1
-     * @param percent_diff_t2 Compute percent difference with respect to table 2
-     * @param multiply Multiply by mulval
-     * @param divide Divide by divval
-     * @param common Compute difference on common segments (may reorder)
-     * @param remove_exvivo Remove the string '_exvivo' from the column header
-     * @param diff_subjects Compare subjects with different names
-     * @param noreplace53 Do not replace 5.3 structure names with later names
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STATTABLEDIFF_METADATA);
     const params = stattablediff_params(t1, t2, output, percent_diff, percent_diff_t1, percent_diff_t2, multiply, divide, common, remove_exvivo, diff_subjects, noreplace53)
@@ -282,5 +282,8 @@ export {
       StattablediffOutputs,
       StattablediffParameters,
       stattablediff,
+      stattablediff_cargs,
+      stattablediff_execute,
+      stattablediff_outputs,
       stattablediff_params,
 };

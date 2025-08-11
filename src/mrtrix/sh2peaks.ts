@@ -12,21 +12,21 @@ const SH2PEAKS_METADATA: Metadata = {
 
 
 interface Sh2peaksDirectionParameters {
-    "__STYXTYPE__": "direction";
+    "@type": "mrtrix.sh2peaks.direction";
     "phi": number;
     "theta": number;
 }
 
 
 interface Sh2peaksConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.sh2peaks.config";
     "key": string;
     "value": string;
 }
 
 
 interface Sh2peaksParameters {
-    "__STYXTYPE__": "sh2peaks";
+    "@type": "mrtrix.sh2peaks";
     "num"?: number | null | undefined;
     "direction"?: Array<Sh2peaksDirectionParameters> | null | undefined;
     "peaks"?: InputPathType | null | undefined;
@@ -47,56 +47,56 @@ interface Sh2peaksParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sh2peaks": sh2peaks_cargs,
-        "direction": sh2peaks_direction_cargs,
-        "config": sh2peaks_config_cargs,
+        "mrtrix.sh2peaks": sh2peaks_cargs,
+        "mrtrix.sh2peaks.direction": sh2peaks_direction_cargs,
+        "mrtrix.sh2peaks.config": sh2peaks_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sh2peaks": sh2peaks_outputs,
+        "mrtrix.sh2peaks": sh2peaks_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param phi the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
+ * @param theta the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
+ *
+ * @returns Parameter dictionary
+ */
 function sh2peaks_direction_params(
     phi: number,
     theta: number,
 ): Sh2peaksDirectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param phi the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
-     * @param theta the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "direction" as const,
+        "@type": "mrtrix.sh2peaks.direction" as const,
         "phi": phi,
         "theta": theta,
     };
@@ -104,18 +104,18 @@ function sh2peaks_direction_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sh2peaks_direction_cargs(
     params: Sh2peaksDirectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-direction");
     cargs.push(String((params["phi"] ?? null)));
@@ -124,20 +124,20 @@ function sh2peaks_direction_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function sh2peaks_config_params(
     key: string,
     value: string,
 ): Sh2peaksConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.sh2peaks.config" as const,
         "key": key,
         "value": value,
     };
@@ -145,18 +145,18 @@ function sh2peaks_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sh2peaks_config_cargs(
     params: Sh2peaksConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -182,6 +182,29 @@ interface Sh2peaksOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sh the input image of SH coefficients.
+ * @param output the output image. Each volume corresponds to the x, y & z component of each peak direction vector in turn.
+ * @param num the number of peaks to extract (default: 3).
+ * @param direction the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
+ * @param peaks the program will try to find the peaks that most closely match those in the image provided.
+ * @param threshold only peak amplitudes greater than the threshold will be considered.
+ * @param seeds specify a set of directions from which to start the multiple restarts of the optimisation (by default, the built-in 60 direction set is used)
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param fast use lookup table to compute associated Legendre polynomials (faster, but approximate).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function sh2peaks_params(
     sh: InputPathType,
     output: string,
@@ -201,31 +224,8 @@ function sh2peaks_params(
     help: boolean = false,
     version: boolean = false,
 ): Sh2peaksParameters {
-    /**
-     * Build parameters.
-    
-     * @param sh the input image of SH coefficients.
-     * @param output the output image. Each volume corresponds to the x, y & z component of each peak direction vector in turn.
-     * @param num the number of peaks to extract (default: 3).
-     * @param direction the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
-     * @param peaks the program will try to find the peaks that most closely match those in the image provided.
-     * @param threshold only peak amplitudes greater than the threshold will be considered.
-     * @param seeds specify a set of directions from which to start the multiple restarts of the optimisation (by default, the built-in 60 direction set is used)
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param fast use lookup table to compute associated Legendre polynomials (faster, but approximate).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sh2peaks" as const,
+        "@type": "mrtrix.sh2peaks" as const,
         "fast": fast,
         "info": info,
         "quiet": quiet,
@@ -264,18 +264,18 @@ function sh2peaks_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sh2peaks_cargs(
     params: Sh2peaksParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sh2peaks");
     if ((params["num"] ?? null) !== null) {
@@ -285,7 +285,7 @@ function sh2peaks_cargs(
         );
     }
     if ((params["direction"] ?? null) !== null) {
-        cargs.push(...(params["direction"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["direction"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["peaks"] ?? null) !== null) {
         cargs.push(
@@ -333,7 +333,7 @@ function sh2peaks_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -347,18 +347,18 @@ function sh2peaks_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sh2peaks_outputs(
     params: Sh2peaksParameters,
     execution: Execution,
 ): Sh2peaksOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Sh2peaksOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -367,31 +367,31 @@ function sh2peaks_outputs(
 }
 
 
+/**
+ * Extract the peaks of a spherical harmonic function in each voxel.
+ *
+ * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * Jeurissen, B.; Leemans, A.; Tournier, J.-D.; Jones, D.K.; Sijbers, J. Investigating the prevalence of complex fiber configurations in white matter tissue with diffusion magnetic resonance imaging. Human Brain Mapping, 2013, 34(11), 2747-2766.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
+ */
 function sh2peaks_execute(
     params: Sh2peaksParameters,
     execution: Execution,
 ): Sh2peaksOutputs {
-    /**
-     * Extract the peaks of a spherical harmonic function in each voxel.
-     * 
-     * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * Jeurissen, B.; Leemans, A.; Tournier, J.-D.; Jones, D.K.; Sijbers, J. Investigating the prevalence of complex fiber configurations in white matter tissue with diffusion magnetic resonance imaging. Human Brain Mapping, 2013, 34(11), 2747-2766.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
-     */
     params = execution.params(params)
     const cargs = sh2peaks_cargs(params, execution)
     const ret = sh2peaks_outputs(params, execution)
@@ -400,6 +400,43 @@ function sh2peaks_execute(
 }
 
 
+/**
+ * Extract the peaks of a spherical harmonic function in each voxel.
+ *
+ * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * Jeurissen, B.; Leemans, A.; Tournier, J.-D.; Jones, D.K.; Sijbers, J. Investigating the prevalence of complex fiber configurations in white matter tissue with diffusion magnetic resonance imaging. Human Brain Mapping, 2013, 34(11), 2747-2766.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param sh the input image of SH coefficients.
+ * @param output the output image. Each volume corresponds to the x, y & z component of each peak direction vector in turn.
+ * @param num the number of peaks to extract (default: 3).
+ * @param direction the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
+ * @param peaks the program will try to find the peaks that most closely match those in the image provided.
+ * @param threshold only peak amplitudes greater than the threshold will be considered.
+ * @param seeds specify a set of directions from which to start the multiple restarts of the optimisation (by default, the built-in 60 direction set is used)
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param fast use lookup table to compute associated Legendre polynomials (faster, but approximate).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
+ */
 function sh2peaks(
     sh: InputPathType,
     output: string,
@@ -420,43 +457,6 @@ function sh2peaks(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2peaksOutputs {
-    /**
-     * Extract the peaks of a spherical harmonic function in each voxel.
-     * 
-     * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * Jeurissen, B.; Leemans, A.; Tournier, J.-D.; Jones, D.K.; Sijbers, J. Investigating the prevalence of complex fiber configurations in white matter tissue with diffusion magnetic resonance imaging. Human Brain Mapping, 2013, 34(11), 2747-2766.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param sh the input image of SH coefficients.
-     * @param output the output image. Each volume corresponds to the x, y & z component of each peak direction vector in turn.
-     * @param num the number of peaks to extract (default: 3).
-     * @param direction the direction of a peak to estimate. The algorithm will attempt to find the same number of peaks as have been specified using this option.
-     * @param peaks the program will try to find the peaks that most closely match those in the image provided.
-     * @param threshold only peak amplitudes greater than the threshold will be considered.
-     * @param seeds specify a set of directions from which to start the multiple restarts of the optimisation (by default, the built-in 60 direction set is used)
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param fast use lookup table to compute associated Legendre polynomials (faster, but approximate).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SH2PEAKS_METADATA);
     const params = sh2peaks_params(sh, output, num, direction, peaks, threshold, seeds, mask, fast, info, quiet, debug, force, nthreads, config, help, version)
@@ -471,7 +471,12 @@ export {
       Sh2peaksOutputs,
       Sh2peaksParameters,
       sh2peaks,
+      sh2peaks_cargs,
+      sh2peaks_config_cargs,
       sh2peaks_config_params,
+      sh2peaks_direction_cargs,
       sh2peaks_direction_params,
+      sh2peaks_execute,
+      sh2peaks_outputs,
       sh2peaks_params,
 };

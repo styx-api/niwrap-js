@@ -12,7 +12,7 @@ const AVW2FSL_METADATA: Metadata = {
 
 
 interface Avw2fslParameters {
-    "__STYXTYPE__": "avw2fsl";
+    "@type": "fsl.avw2fsl";
     "source": Array<string>;
     "destination": string;
     "archive": boolean;
@@ -52,35 +52,35 @@ interface Avw2fslParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "avw2fsl": avw2fsl_cargs,
+        "fsl.avw2fsl": avw2fsl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "avw2fsl": avw2fsl_outputs,
+        "fsl.avw2fsl": avw2fsl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -103,6 +103,48 @@ interface Avw2fslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Source file(s) or directory to copy.
+ * @param destination Destination file or directory where the source is to be copied.
+ * @param archive Archive mode; same as -dR --preserve=all.
+ * @param attributes_only Don't copy the file data, just the attributes.
+ * @param backup Make a backup of each existing destination file.
+ * @param backup_noarg Like --backup but does not accept an argument.
+ * @param copy_contents Copy contents of special files when recursive.
+ * @param no_dereference_preserve_links Same as --no-dereference --preserve=links.
+ * @param force If an existing destination file cannot be opened, remove it and try again.
+ * @param interactive Prompt before overwrite.
+ * @param follow_symlinks_cmdline Follow command-line symbolic links in SOURCE.
+ * @param hard_link Hard link files instead of copying.
+ * @param dereference Always follow symbolic links in SOURCE.
+ * @param no_clobber Do not overwrite an existing file.
+ * @param no_dereference Never follow symbolic links in SOURCE.
+ * @param preserve Preserve mode, ownership, and timestamps.
+ * @param preserve_attr Preserve the specified attributes (default: mode,ownership,timestamps).
+ * @param preserve_context Deprecated, same as --preserve=context.
+ * @param no_preserve Don't preserve the specified attributes.
+ * @param parents Use full source file name under DIRECTORY.
+ * @param recursive Copy directories recursively.
+ * @param reflink Control clone/CoW copies.
+ * @param remove_destination Remove each existing destination file before attempting to open it.
+ * @param sparse Control creation of sparse files.
+ * @param strip_trailing_slashes Remove any trailing slashes from each SOURCE argument.
+ * @param symbolic_link Make symbolic links instead of copying.
+ * @param suffix Override the usual backup suffix.
+ * @param target_directory Specify the target directory.
+ * @param no_target_directory Treat DEST as a normal file.
+ * @param update Copy only when the SOURCE file is newer than the destination file or when the destination file is missing.
+ * @param verbose Explain what is being done.
+ * @param one_file_system Stay on this file system.
+ * @param selinux_context Set SELinux security context of destination file to default type.
+ * @param context Like -Z, or if CTX is specified set the SELinux or SMACK security context to CTX.
+ * @param help Display this help and exit.
+ * @param version Output version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function avw2fsl_params(
     source: Array<string>,
     destination: string,
@@ -141,50 +183,8 @@ function avw2fsl_params(
     help: boolean = false,
     version: boolean = false,
 ): Avw2fslParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Source file(s) or directory to copy.
-     * @param destination Destination file or directory where the source is to be copied.
-     * @param archive Archive mode; same as -dR --preserve=all.
-     * @param attributes_only Don't copy the file data, just the attributes.
-     * @param backup Make a backup of each existing destination file.
-     * @param backup_noarg Like --backup but does not accept an argument.
-     * @param copy_contents Copy contents of special files when recursive.
-     * @param no_dereference_preserve_links Same as --no-dereference --preserve=links.
-     * @param force If an existing destination file cannot be opened, remove it and try again.
-     * @param interactive Prompt before overwrite.
-     * @param follow_symlinks_cmdline Follow command-line symbolic links in SOURCE.
-     * @param hard_link Hard link files instead of copying.
-     * @param dereference Always follow symbolic links in SOURCE.
-     * @param no_clobber Do not overwrite an existing file.
-     * @param no_dereference Never follow symbolic links in SOURCE.
-     * @param preserve Preserve mode, ownership, and timestamps.
-     * @param preserve_attr Preserve the specified attributes (default: mode,ownership,timestamps).
-     * @param preserve_context Deprecated, same as --preserve=context.
-     * @param no_preserve Don't preserve the specified attributes.
-     * @param parents Use full source file name under DIRECTORY.
-     * @param recursive Copy directories recursively.
-     * @param reflink Control clone/CoW copies.
-     * @param remove_destination Remove each existing destination file before attempting to open it.
-     * @param sparse Control creation of sparse files.
-     * @param strip_trailing_slashes Remove any trailing slashes from each SOURCE argument.
-     * @param symbolic_link Make symbolic links instead of copying.
-     * @param suffix Override the usual backup suffix.
-     * @param target_directory Specify the target directory.
-     * @param no_target_directory Treat DEST as a normal file.
-     * @param update Copy only when the SOURCE file is newer than the destination file or when the destination file is missing.
-     * @param verbose Explain what is being done.
-     * @param one_file_system Stay on this file system.
-     * @param selinux_context Set SELinux security context of destination file to default type.
-     * @param context Like -Z, or if CTX is specified set the SELinux or SMACK security context to CTX.
-     * @param help Display this help and exit.
-     * @param version Output version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "avw2fsl" as const,
+        "@type": "fsl.avw2fsl" as const,
         "source": source,
         "destination": destination,
         "archive": archive,
@@ -242,18 +242,18 @@ function avw2fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function avw2fsl_cargs(
     params: Avw2fslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("avw2fsl");
     cargs.push(...(params["source"] ?? null));
@@ -364,18 +364,18 @@ function avw2fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function avw2fsl_outputs(
     params: Avw2fslParameters,
     execution: Execution,
 ): Avw2fslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Avw2fslOutputs = {
         root: execution.outputFile("."),
         output_dest: execution.outputFile([(params["destination"] ?? null)].join('')),
@@ -384,22 +384,22 @@ function avw2fsl_outputs(
 }
 
 
+/**
+ * Processing script to copy files and directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
+ */
 function avw2fsl_execute(
     params: Avw2fslParameters,
     execution: Execution,
 ): Avw2fslOutputs {
-    /**
-     * Processing script to copy files and directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
-     */
     params = execution.params(params)
     const cargs = avw2fsl_cargs(params, execution)
     const ret = avw2fsl_outputs(params, execution)
@@ -408,6 +408,53 @@ function avw2fsl_execute(
 }
 
 
+/**
+ * Processing script to copy files and directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param source Source file(s) or directory to copy.
+ * @param destination Destination file or directory where the source is to be copied.
+ * @param archive Archive mode; same as -dR --preserve=all.
+ * @param attributes_only Don't copy the file data, just the attributes.
+ * @param backup Make a backup of each existing destination file.
+ * @param backup_noarg Like --backup but does not accept an argument.
+ * @param copy_contents Copy contents of special files when recursive.
+ * @param no_dereference_preserve_links Same as --no-dereference --preserve=links.
+ * @param force If an existing destination file cannot be opened, remove it and try again.
+ * @param interactive Prompt before overwrite.
+ * @param follow_symlinks_cmdline Follow command-line symbolic links in SOURCE.
+ * @param hard_link Hard link files instead of copying.
+ * @param dereference Always follow symbolic links in SOURCE.
+ * @param no_clobber Do not overwrite an existing file.
+ * @param no_dereference Never follow symbolic links in SOURCE.
+ * @param preserve Preserve mode, ownership, and timestamps.
+ * @param preserve_attr Preserve the specified attributes (default: mode,ownership,timestamps).
+ * @param preserve_context Deprecated, same as --preserve=context.
+ * @param no_preserve Don't preserve the specified attributes.
+ * @param parents Use full source file name under DIRECTORY.
+ * @param recursive Copy directories recursively.
+ * @param reflink Control clone/CoW copies.
+ * @param remove_destination Remove each existing destination file before attempting to open it.
+ * @param sparse Control creation of sparse files.
+ * @param strip_trailing_slashes Remove any trailing slashes from each SOURCE argument.
+ * @param symbolic_link Make symbolic links instead of copying.
+ * @param suffix Override the usual backup suffix.
+ * @param target_directory Specify the target directory.
+ * @param no_target_directory Treat DEST as a normal file.
+ * @param update Copy only when the SOURCE file is newer than the destination file or when the destination file is missing.
+ * @param verbose Explain what is being done.
+ * @param one_file_system Stay on this file system.
+ * @param selinux_context Set SELinux security context of destination file to default type.
+ * @param context Like -Z, or if CTX is specified set the SELinux or SMACK security context to CTX.
+ * @param help Display this help and exit.
+ * @param version Output version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
+ */
 function avw2fsl(
     source: Array<string>,
     destination: string,
@@ -447,53 +494,6 @@ function avw2fsl(
     version: boolean = false,
     runner: Runner | null = null,
 ): Avw2fslOutputs {
-    /**
-     * Processing script to copy files and directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param source Source file(s) or directory to copy.
-     * @param destination Destination file or directory where the source is to be copied.
-     * @param archive Archive mode; same as -dR --preserve=all.
-     * @param attributes_only Don't copy the file data, just the attributes.
-     * @param backup Make a backup of each existing destination file.
-     * @param backup_noarg Like --backup but does not accept an argument.
-     * @param copy_contents Copy contents of special files when recursive.
-     * @param no_dereference_preserve_links Same as --no-dereference --preserve=links.
-     * @param force If an existing destination file cannot be opened, remove it and try again.
-     * @param interactive Prompt before overwrite.
-     * @param follow_symlinks_cmdline Follow command-line symbolic links in SOURCE.
-     * @param hard_link Hard link files instead of copying.
-     * @param dereference Always follow symbolic links in SOURCE.
-     * @param no_clobber Do not overwrite an existing file.
-     * @param no_dereference Never follow symbolic links in SOURCE.
-     * @param preserve Preserve mode, ownership, and timestamps.
-     * @param preserve_attr Preserve the specified attributes (default: mode,ownership,timestamps).
-     * @param preserve_context Deprecated, same as --preserve=context.
-     * @param no_preserve Don't preserve the specified attributes.
-     * @param parents Use full source file name under DIRECTORY.
-     * @param recursive Copy directories recursively.
-     * @param reflink Control clone/CoW copies.
-     * @param remove_destination Remove each existing destination file before attempting to open it.
-     * @param sparse Control creation of sparse files.
-     * @param strip_trailing_slashes Remove any trailing slashes from each SOURCE argument.
-     * @param symbolic_link Make symbolic links instead of copying.
-     * @param suffix Override the usual backup suffix.
-     * @param target_directory Specify the target directory.
-     * @param no_target_directory Treat DEST as a normal file.
-     * @param update Copy only when the SOURCE file is newer than the destination file or when the destination file is missing.
-     * @param verbose Explain what is being done.
-     * @param one_file_system Stay on this file system.
-     * @param selinux_context Set SELinux security context of destination file to default type.
-     * @param context Like -Z, or if CTX is specified set the SELinux or SMACK security context to CTX.
-     * @param help Display this help and exit.
-     * @param version Output version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AVW2FSL_METADATA);
     const params = avw2fsl_params(source, destination, archive, attributes_only, backup, backup_noarg, copy_contents, no_dereference_preserve_links, force, interactive, follow_symlinks_cmdline, hard_link, dereference, no_clobber, no_dereference, preserve, preserve_attr, preserve_context, no_preserve, parents, recursive, reflink, remove_destination, sparse, strip_trailing_slashes, symbolic_link, suffix, target_directory, no_target_directory, update, verbose, one_file_system, selinux_context, context, help, version)
@@ -506,5 +506,8 @@ export {
       Avw2fslOutputs,
       Avw2fslParameters,
       avw2fsl,
+      avw2fsl_cargs,
+      avw2fsl_execute,
+      avw2fsl_outputs,
       avw2fsl_params,
 };

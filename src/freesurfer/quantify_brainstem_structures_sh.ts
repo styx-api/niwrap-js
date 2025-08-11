@@ -12,41 +12,41 @@ const QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA: Metadata = {
 
 
 interface QuantifyBrainstemStructuresShParameters {
-    "__STYXTYPE__": "quantifyBrainstemStructures.sh";
+    "@type": "freesurfer.quantifyBrainstemStructures.sh";
     "output_file": string;
     "subjects_directory"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_cargs,
+        "freesurfer.quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_outputs,
+        "freesurfer.quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface QuantifyBrainstemStructuresShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file The path to the output file where results should be written.
+ * @param subjects_directory The directory containing subject data. Defaults to '/usr/local/freesurfer/subjects' if not provided.
+ *
+ * @returns Parameter dictionary
+ */
 function quantify_brainstem_structures_sh_params(
     output_file: string,
     subjects_directory: string | null = "/usr/local/freesurfer/subjects",
 ): QuantifyBrainstemStructuresShParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file The path to the output file where results should be written.
-     * @param subjects_directory The directory containing subject data. Defaults to '/usr/local/freesurfer/subjects' if not provided.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quantifyBrainstemStructures.sh" as const,
+        "@type": "freesurfer.quantifyBrainstemStructures.sh" as const,
         "output_file": output_file,
     };
     if (subjects_directory !== null) {
@@ -92,18 +92,18 @@ function quantify_brainstem_structures_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quantify_brainstem_structures_sh_cargs(
     params: QuantifyBrainstemStructuresShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quantifyBrainstemStructures.sh");
     cargs.push((params["output_file"] ?? null));
@@ -114,18 +114,18 @@ function quantify_brainstem_structures_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quantify_brainstem_structures_sh_outputs(
     params: QuantifyBrainstemStructuresShParameters,
     execution: Execution,
 ): QuantifyBrainstemStructuresShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuantifyBrainstemStructuresShOutputs = {
         root: execution.outputFile("."),
         results_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -134,22 +134,22 @@ function quantify_brainstem_structures_sh_outputs(
 }
 
 
+/**
+ * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
+ */
 function quantify_brainstem_structures_sh_execute(
     params: QuantifyBrainstemStructuresShParameters,
     execution: Execution,
 ): QuantifyBrainstemStructuresShOutputs {
-    /**
-     * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
-     */
     params = execution.params(params)
     const cargs = quantify_brainstem_structures_sh_cargs(params, execution)
     const ret = quantify_brainstem_structures_sh_outputs(params, execution)
@@ -158,24 +158,24 @@ function quantify_brainstem_structures_sh_execute(
 }
 
 
+/**
+ * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_file The path to the output file where results should be written.
+ * @param subjects_directory The directory containing subject data. Defaults to '/usr/local/freesurfer/subjects' if not provided.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
+ */
 function quantify_brainstem_structures_sh(
     output_file: string,
     subjects_directory: string | null = "/usr/local/freesurfer/subjects",
     runner: Runner | null = null,
 ): QuantifyBrainstemStructuresShOutputs {
-    /**
-     * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_file The path to the output file where results should be written.
-     * @param subjects_directory The directory containing subject data. Defaults to '/usr/local/freesurfer/subjects' if not provided.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA);
     const params = quantify_brainstem_structures_sh_params(output_file, subjects_directory)
@@ -188,5 +188,8 @@ export {
       QuantifyBrainstemStructuresShOutputs,
       QuantifyBrainstemStructuresShParameters,
       quantify_brainstem_structures_sh,
+      quantify_brainstem_structures_sh_cargs,
+      quantify_brainstem_structures_sh_execute,
+      quantify_brainstem_structures_sh_outputs,
       quantify_brainstem_structures_sh_params,
 };

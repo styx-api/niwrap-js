@@ -12,41 +12,41 @@ const SIENA_FLIRT_METADATA: Metadata = {
 
 
 interface SienaFlirtParameters {
-    "__STYXTYPE__": "siena_flirt";
+    "@type": "fsl.siena_flirt";
     "input1_fileroot": string;
     "input2_fileroot": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "siena_flirt": siena_flirt_cargs,
+        "fsl.siena_flirt": siena_flirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "siena_flirt": siena_flirt_outputs,
+        "fsl.siena_flirt": siena_flirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface SienaFlirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1_fileroot First input file root (e.g. first time-point image root, without file extension)
+ * @param input2_fileroot Second input file root (e.g. second time-point image root, without file extension)
+ *
+ * @returns Parameter dictionary
+ */
 function siena_flirt_params(
     input1_fileroot: string,
     input2_fileroot: string,
 ): SienaFlirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1_fileroot First input file root (e.g. first time-point image root, without file extension)
-     * @param input2_fileroot Second input file root (e.g. second time-point image root, without file extension)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "siena_flirt" as const,
+        "@type": "fsl.siena_flirt" as const,
         "input1_fileroot": input1_fileroot,
         "input2_fileroot": input2_fileroot,
     };
@@ -94,18 +94,18 @@ function siena_flirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function siena_flirt_cargs(
     params: SienaFlirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("siena_flirt");
     cargs.push((params["input1_fileroot"] ?? null));
@@ -114,18 +114,18 @@ function siena_flirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function siena_flirt_outputs(
     params: SienaFlirtParameters,
     execution: Execution,
 ): SienaFlirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SienaFlirtOutputs = {
         root: execution.outputFile("."),
         output_transform_matrix: execution.outputFile([(params["input1_fileroot"] ?? null), "_to_", (params["input2_fileroot"] ?? null), "_flirt.mat"].join('')),
@@ -135,22 +135,22 @@ function siena_flirt_outputs(
 }
 
 
+/**
+ * Wrapper for FLIRT image registration within the SIENA framework.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
+ */
 function siena_flirt_execute(
     params: SienaFlirtParameters,
     execution: Execution,
 ): SienaFlirtOutputs {
-    /**
-     * Wrapper for FLIRT image registration within the SIENA framework.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = siena_flirt_cargs(params, execution)
     const ret = siena_flirt_outputs(params, execution)
@@ -159,24 +159,24 @@ function siena_flirt_execute(
 }
 
 
+/**
+ * Wrapper for FLIRT image registration within the SIENA framework.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input1_fileroot First input file root (e.g. first time-point image root, without file extension)
+ * @param input2_fileroot Second input file root (e.g. second time-point image root, without file extension)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
+ */
 function siena_flirt(
     input1_fileroot: string,
     input2_fileroot: string,
     runner: Runner | null = null,
 ): SienaFlirtOutputs {
-    /**
-     * Wrapper for FLIRT image registration within the SIENA framework.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input1_fileroot First input file root (e.g. first time-point image root, without file extension)
-     * @param input2_fileroot Second input file root (e.g. second time-point image root, without file extension)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIENA_FLIRT_METADATA);
     const params = siena_flirt_params(input1_fileroot, input2_fileroot)
@@ -189,5 +189,8 @@ export {
       SienaFlirtOutputs,
       SienaFlirtParameters,
       siena_flirt,
+      siena_flirt_cargs,
+      siena_flirt_execute,
+      siena_flirt_outputs,
       siena_flirt_params,
 };

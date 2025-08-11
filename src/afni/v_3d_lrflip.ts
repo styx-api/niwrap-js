@@ -12,7 +12,7 @@ const V_3D_LRFLIP_METADATA: Metadata = {
 
 
 interface V3dLrflipParameters {
-    "__STYXTYPE__": "3dLRflip";
+    "@type": "afni.3dLRflip";
     "flip_lr": boolean;
     "flip_ap": boolean;
     "flip_is": boolean;
@@ -24,35 +24,35 @@ interface V3dLrflipParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLRflip": v_3d_lrflip_cargs,
+        "afni.3dLRflip": v_3d_lrflip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLRflip": v_3d_lrflip_outputs,
+        "afni.3dLRflip": v_3d_lrflip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dLrflipOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Datasets to flip
+ * @param flip_lr Flip about Left-Right axis
+ * @param flip_ap Flip about Anterior-Posterior axis
+ * @param flip_is Flip about Inferior-Superior axis
+ * @param flip_x Flip about the 1st direction
+ * @param flip_y Flip about the 2nd direction
+ * @param flip_z Flip about the 3rd direction
+ * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lrflip_params(
     datasets: Array<InputPathType>,
     flip_lr: boolean = false,
@@ -85,22 +99,8 @@ function v_3d_lrflip_params(
     flip_z: boolean = false,
     output_prefix: string | null = null,
 ): V3dLrflipParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Datasets to flip
-     * @param flip_lr Flip about Left-Right axis
-     * @param flip_ap Flip about Anterior-Posterior axis
-     * @param flip_is Flip about Inferior-Superior axis
-     * @param flip_x Flip about the 1st direction
-     * @param flip_y Flip about the 2nd direction
-     * @param flip_z Flip about the 3rd direction
-     * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLRflip" as const,
+        "@type": "afni.3dLRflip" as const,
         "flip_lr": flip_lr,
         "flip_ap": flip_ap,
         "flip_is": flip_is,
@@ -116,18 +116,18 @@ function v_3d_lrflip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lrflip_cargs(
     params: V3dLrflipParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLRflip");
     if ((params["flip_lr"] ?? null)) {
@@ -159,18 +159,18 @@ function v_3d_lrflip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lrflip_outputs(
     params: V3dLrflipParameters,
     execution: Execution,
 ): V3dLrflipOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLrflipOutputs = {
         root: execution.outputFile("."),
         flipped_output: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')) : null,
@@ -179,22 +179,22 @@ function v_3d_lrflip_outputs(
 }
 
 
+/**
+ * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
+ */
 function v_3d_lrflip_execute(
     params: V3dLrflipParameters,
     execution: Execution,
 ): V3dLrflipOutputs {
-    /**
-     * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lrflip_cargs(params, execution)
     const ret = v_3d_lrflip_outputs(params, execution)
@@ -203,6 +203,25 @@ function v_3d_lrflip_execute(
 }
 
 
+/**
+ * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Datasets to flip
+ * @param flip_lr Flip about Left-Right axis
+ * @param flip_ap Flip about Anterior-Posterior axis
+ * @param flip_is Flip about Inferior-Superior axis
+ * @param flip_x Flip about the 1st direction
+ * @param flip_y Flip about the 2nd direction
+ * @param flip_z Flip about the 3rd direction
+ * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
+ */
 function v_3d_lrflip(
     datasets: Array<InputPathType>,
     flip_lr: boolean = false,
@@ -214,25 +233,6 @@ function v_3d_lrflip(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dLrflipOutputs {
-    /**
-     * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Datasets to flip
-     * @param flip_lr Flip about Left-Right axis
-     * @param flip_ap Flip about Anterior-Posterior axis
-     * @param flip_is Flip about Inferior-Superior axis
-     * @param flip_x Flip about the 1st direction
-     * @param flip_y Flip about the 2nd direction
-     * @param flip_z Flip about the 3rd direction
-     * @param output_prefix Prefix to use for output. If multiple datasets are input, the program will choose a prefix for each output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LRFLIP_METADATA);
     const params = v_3d_lrflip_params(datasets, flip_lr, flip_ap, flip_is, flip_x, flip_y, flip_z, output_prefix)
@@ -245,5 +245,8 @@ export {
       V3dLrflipParameters,
       V_3D_LRFLIP_METADATA,
       v_3d_lrflip,
+      v_3d_lrflip_cargs,
+      v_3d_lrflip_execute,
+      v_3d_lrflip_outputs,
       v_3d_lrflip_params,
 };

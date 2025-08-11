@@ -12,7 +12,7 @@ const MRI_COREG_METADATA: Metadata = {
 
 
 interface MriCoregParameters {
-    "__STYXTYPE__": "mri_coreg";
+    "@type": "freesurfer.mri_coreg";
     "movvol": InputPathType;
     "refvol": InputPathType;
     "reg": string;
@@ -69,35 +69,35 @@ interface MriCoregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_coreg": mri_coreg_cargs,
+        "freesurfer.mri_coreg": mri_coreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_coreg": mri_coreg_outputs,
+        "freesurfer.mri_coreg": mri_coreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -144,6 +144,65 @@ interface MriCoregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param movvol Source volume (mov)
+ * @param refvol Target volume (ref or targ)
+ * @param reg Output registration file
+ * @param subject Subject ID, forces --ref-mask aparc+aseg.mgz
+ * @param dof Degrees of freedom. Default is 6.
+ * @param zscale Enable 7 dof registration with scaling in Z.
+ * @param xztrans_yrot For 2D images: uses shifts in x and z and rotation about y (no scale).
+ * @param xytrans_zrot For 2D images: uses shifts in x and y and rotation about z (no scale).
+ * @param xytrans_zrot_xyscale_xyshear For 2D images: uses shifts in x and y, rotation about z, scale in xy, and xy shear.
+ * @param ref_maskvol Mask reference volume with specified mask volume.
+ * @param no_ref_mask Do not mask reference volume.
+ * @param mov_maskvol Mask moving volume with specified mask volume.
+ * @param threads Number of threads to use.
+ * @param subjects_dir Freesurfer SUBJECTS_DIR.
+ * @param regdat Specify registration data file.
+ * @param no_coord_dither Turn off coordinate dithering.
+ * @param no_intensity_dither Turn off intensity dithering.
+ * @param spatial_scales Set spatial scales.
+ * @param trans Initial translation in mm.
+ * @param rot Initial rotation in degrees.
+ * @param scale Initial scale.
+ * @param shear Initial shear.
+ * @param init_reg Initialize with given registration file.
+ * @param out_param_file Save parameters in specified file.
+ * @param out_cost_file Save final cost value in specified file.
+ * @param no_cras0 Do not set translation parameters to align centers of mov and ref.
+ * @param centroid Initialize by aligning centroids of mov and ref.
+ * @param ras2ras Save output LTA as RAS2RAS.
+ * @param nitersmax Set maximum number of iterations.
+ * @param ftol Set function tolerance.
+ * @param linmintol Set line minimum tolerance.
+ * @param seed Set random seed for dithering.
+ * @param sat Set saturation threshold.
+ * @param conf_ref Conform the reference without rescaling.
+ * @param no_bf Do not perform brute force search.
+ * @param bf_lim Set constraint limits for brute force search.
+ * @param bf_nsamp Set number of samples for brute force search.
+ * @param no_smooth Do not apply smoothing to either ref or mov.
+ * @param ref_fwhm Apply smoothing to ref with specified FWHM.
+ * @param mov_oob Count mov voxels that are out-of-bounds as 0.
+ * @param init_reg_save Save initial registration.
+ * @param init_reg_save_only Save initial registration and exit.
+ * @param mat2par Extract parameters out of registration.
+ * @param mat2rot Convert registration to a pure rotation.
+ * @param par2mat Convert parameters to a registration.
+ * @param lrrev Approximate registration if you were to left-right reverse the pixels of the input image.
+ * @param landmarks Convert landmarks to a registration.
+ * @param rms Compute RMS difference between two registrations.
+ * @param movout Save the mov after all preprocessing steps.
+ * @param mov_idither Save the mov intensity dither volume.
+ * @param debug Enable debugging mode.
+ * @param checkopts Check options and exit without running.
+ * @param version Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_coreg_params(
     movvol: InputPathType,
     refvol: InputPathType,
@@ -199,67 +258,8 @@ function mri_coreg_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): MriCoregParameters {
-    /**
-     * Build parameters.
-    
-     * @param movvol Source volume (mov)
-     * @param refvol Target volume (ref or targ)
-     * @param reg Output registration file
-     * @param subject Subject ID, forces --ref-mask aparc+aseg.mgz
-     * @param dof Degrees of freedom. Default is 6.
-     * @param zscale Enable 7 dof registration with scaling in Z.
-     * @param xztrans_yrot For 2D images: uses shifts in x and z and rotation about y (no scale).
-     * @param xytrans_zrot For 2D images: uses shifts in x and y and rotation about z (no scale).
-     * @param xytrans_zrot_xyscale_xyshear For 2D images: uses shifts in x and y, rotation about z, scale in xy, and xy shear.
-     * @param ref_maskvol Mask reference volume with specified mask volume.
-     * @param no_ref_mask Do not mask reference volume.
-     * @param mov_maskvol Mask moving volume with specified mask volume.
-     * @param threads Number of threads to use.
-     * @param subjects_dir Freesurfer SUBJECTS_DIR.
-     * @param regdat Specify registration data file.
-     * @param no_coord_dither Turn off coordinate dithering.
-     * @param no_intensity_dither Turn off intensity dithering.
-     * @param spatial_scales Set spatial scales.
-     * @param trans Initial translation in mm.
-     * @param rot Initial rotation in degrees.
-     * @param scale Initial scale.
-     * @param shear Initial shear.
-     * @param init_reg Initialize with given registration file.
-     * @param out_param_file Save parameters in specified file.
-     * @param out_cost_file Save final cost value in specified file.
-     * @param no_cras0 Do not set translation parameters to align centers of mov and ref.
-     * @param centroid Initialize by aligning centroids of mov and ref.
-     * @param ras2ras Save output LTA as RAS2RAS.
-     * @param nitersmax Set maximum number of iterations.
-     * @param ftol Set function tolerance.
-     * @param linmintol Set line minimum tolerance.
-     * @param seed Set random seed for dithering.
-     * @param sat Set saturation threshold.
-     * @param conf_ref Conform the reference without rescaling.
-     * @param no_bf Do not perform brute force search.
-     * @param bf_lim Set constraint limits for brute force search.
-     * @param bf_nsamp Set number of samples for brute force search.
-     * @param no_smooth Do not apply smoothing to either ref or mov.
-     * @param ref_fwhm Apply smoothing to ref with specified FWHM.
-     * @param mov_oob Count mov voxels that are out-of-bounds as 0.
-     * @param init_reg_save Save initial registration.
-     * @param init_reg_save_only Save initial registration and exit.
-     * @param mat2par Extract parameters out of registration.
-     * @param mat2rot Convert registration to a pure rotation.
-     * @param par2mat Convert parameters to a registration.
-     * @param lrrev Approximate registration if you were to left-right reverse the pixels of the input image.
-     * @param landmarks Convert landmarks to a registration.
-     * @param rms Compute RMS difference between two registrations.
-     * @param movout Save the mov after all preprocessing steps.
-     * @param mov_idither Save the mov intensity dither volume.
-     * @param debug Enable debugging mode.
-     * @param checkopts Check options and exit without running.
-     * @param version Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_coreg" as const,
+        "@type": "freesurfer.mri_coreg" as const,
         "movvol": movvol,
         "refvol": refvol,
         "reg": reg,
@@ -384,18 +384,18 @@ function mri_coreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_coreg_cargs(
     params: MriCoregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_coreg");
     cargs.push(
@@ -663,18 +663,18 @@ function mri_coreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_coreg_outputs(
     params: MriCoregParameters,
     execution: Execution,
 ): MriCoregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCoregOutputs = {
         root: execution.outputFile("."),
         out_registration: execution.outputFile([(params["reg"] ?? null)].join('')),
@@ -689,22 +689,22 @@ function mri_coreg_outputs(
 }
 
 
+/**
+ * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
+ */
 function mri_coreg_execute(
     params: MriCoregParameters,
     execution: Execution,
 ): MriCoregOutputs {
-    /**
-     * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_coreg_cargs(params, execution)
     const ret = mri_coreg_outputs(params, execution)
@@ -713,6 +713,70 @@ function mri_coreg_execute(
 }
 
 
+/**
+ * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param movvol Source volume (mov)
+ * @param refvol Target volume (ref or targ)
+ * @param reg Output registration file
+ * @param subject Subject ID, forces --ref-mask aparc+aseg.mgz
+ * @param dof Degrees of freedom. Default is 6.
+ * @param zscale Enable 7 dof registration with scaling in Z.
+ * @param xztrans_yrot For 2D images: uses shifts in x and z and rotation about y (no scale).
+ * @param xytrans_zrot For 2D images: uses shifts in x and y and rotation about z (no scale).
+ * @param xytrans_zrot_xyscale_xyshear For 2D images: uses shifts in x and y, rotation about z, scale in xy, and xy shear.
+ * @param ref_maskvol Mask reference volume with specified mask volume.
+ * @param no_ref_mask Do not mask reference volume.
+ * @param mov_maskvol Mask moving volume with specified mask volume.
+ * @param threads Number of threads to use.
+ * @param subjects_dir Freesurfer SUBJECTS_DIR.
+ * @param regdat Specify registration data file.
+ * @param no_coord_dither Turn off coordinate dithering.
+ * @param no_intensity_dither Turn off intensity dithering.
+ * @param spatial_scales Set spatial scales.
+ * @param trans Initial translation in mm.
+ * @param rot Initial rotation in degrees.
+ * @param scale Initial scale.
+ * @param shear Initial shear.
+ * @param init_reg Initialize with given registration file.
+ * @param out_param_file Save parameters in specified file.
+ * @param out_cost_file Save final cost value in specified file.
+ * @param no_cras0 Do not set translation parameters to align centers of mov and ref.
+ * @param centroid Initialize by aligning centroids of mov and ref.
+ * @param ras2ras Save output LTA as RAS2RAS.
+ * @param nitersmax Set maximum number of iterations.
+ * @param ftol Set function tolerance.
+ * @param linmintol Set line minimum tolerance.
+ * @param seed Set random seed for dithering.
+ * @param sat Set saturation threshold.
+ * @param conf_ref Conform the reference without rescaling.
+ * @param no_bf Do not perform brute force search.
+ * @param bf_lim Set constraint limits for brute force search.
+ * @param bf_nsamp Set number of samples for brute force search.
+ * @param no_smooth Do not apply smoothing to either ref or mov.
+ * @param ref_fwhm Apply smoothing to ref with specified FWHM.
+ * @param mov_oob Count mov voxels that are out-of-bounds as 0.
+ * @param init_reg_save Save initial registration.
+ * @param init_reg_save_only Save initial registration and exit.
+ * @param mat2par Extract parameters out of registration.
+ * @param mat2rot Convert registration to a pure rotation.
+ * @param par2mat Convert parameters to a registration.
+ * @param lrrev Approximate registration if you were to left-right reverse the pixels of the input image.
+ * @param landmarks Convert landmarks to a registration.
+ * @param rms Compute RMS difference between two registrations.
+ * @param movout Save the mov after all preprocessing steps.
+ * @param mov_idither Save the mov intensity dither volume.
+ * @param debug Enable debugging mode.
+ * @param checkopts Check options and exit without running.
+ * @param version Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
+ */
 function mri_coreg(
     movvol: InputPathType,
     refvol: InputPathType,
@@ -769,70 +833,6 @@ function mri_coreg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriCoregOutputs {
-    /**
-     * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param movvol Source volume (mov)
-     * @param refvol Target volume (ref or targ)
-     * @param reg Output registration file
-     * @param subject Subject ID, forces --ref-mask aparc+aseg.mgz
-     * @param dof Degrees of freedom. Default is 6.
-     * @param zscale Enable 7 dof registration with scaling in Z.
-     * @param xztrans_yrot For 2D images: uses shifts in x and z and rotation about y (no scale).
-     * @param xytrans_zrot For 2D images: uses shifts in x and y and rotation about z (no scale).
-     * @param xytrans_zrot_xyscale_xyshear For 2D images: uses shifts in x and y, rotation about z, scale in xy, and xy shear.
-     * @param ref_maskvol Mask reference volume with specified mask volume.
-     * @param no_ref_mask Do not mask reference volume.
-     * @param mov_maskvol Mask moving volume with specified mask volume.
-     * @param threads Number of threads to use.
-     * @param subjects_dir Freesurfer SUBJECTS_DIR.
-     * @param regdat Specify registration data file.
-     * @param no_coord_dither Turn off coordinate dithering.
-     * @param no_intensity_dither Turn off intensity dithering.
-     * @param spatial_scales Set spatial scales.
-     * @param trans Initial translation in mm.
-     * @param rot Initial rotation in degrees.
-     * @param scale Initial scale.
-     * @param shear Initial shear.
-     * @param init_reg Initialize with given registration file.
-     * @param out_param_file Save parameters in specified file.
-     * @param out_cost_file Save final cost value in specified file.
-     * @param no_cras0 Do not set translation parameters to align centers of mov and ref.
-     * @param centroid Initialize by aligning centroids of mov and ref.
-     * @param ras2ras Save output LTA as RAS2RAS.
-     * @param nitersmax Set maximum number of iterations.
-     * @param ftol Set function tolerance.
-     * @param linmintol Set line minimum tolerance.
-     * @param seed Set random seed for dithering.
-     * @param sat Set saturation threshold.
-     * @param conf_ref Conform the reference without rescaling.
-     * @param no_bf Do not perform brute force search.
-     * @param bf_lim Set constraint limits for brute force search.
-     * @param bf_nsamp Set number of samples for brute force search.
-     * @param no_smooth Do not apply smoothing to either ref or mov.
-     * @param ref_fwhm Apply smoothing to ref with specified FWHM.
-     * @param mov_oob Count mov voxels that are out-of-bounds as 0.
-     * @param init_reg_save Save initial registration.
-     * @param init_reg_save_only Save initial registration and exit.
-     * @param mat2par Extract parameters out of registration.
-     * @param mat2rot Convert registration to a pure rotation.
-     * @param par2mat Convert parameters to a registration.
-     * @param lrrev Approximate registration if you were to left-right reverse the pixels of the input image.
-     * @param landmarks Convert landmarks to a registration.
-     * @param rms Compute RMS difference between two registrations.
-     * @param movout Save the mov after all preprocessing steps.
-     * @param mov_idither Save the mov intensity dither volume.
-     * @param debug Enable debugging mode.
-     * @param checkopts Check options and exit without running.
-     * @param version Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COREG_METADATA);
     const params = mri_coreg_params(movvol, refvol, reg, subject, dof, zscale, xztrans_yrot, xytrans_zrot, xytrans_zrot_xyscale_xyshear, ref_maskvol, no_ref_mask, mov_maskvol, threads, subjects_dir, regdat, no_coord_dither, no_intensity_dither, spatial_scales, trans, rot, scale, shear, init_reg, out_param_file, out_cost_file, no_cras0, centroid, ras2ras, nitersmax, ftol, linmintol, seed, sat, conf_ref, no_bf, bf_lim, bf_nsamp, no_smooth, ref_fwhm, mov_oob, init_reg_save, init_reg_save_only, mat2par, mat2rot, par2mat, lrrev, landmarks, rms, movout, mov_idither, debug, checkopts, version)
@@ -845,5 +845,8 @@ export {
       MriCoregOutputs,
       MriCoregParameters,
       mri_coreg,
+      mri_coreg_cargs,
+      mri_coreg_execute,
+      mri_coreg_outputs,
       mri_coreg_params,
 };

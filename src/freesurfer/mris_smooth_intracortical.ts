@@ -12,7 +12,7 @@ const MRIS_SMOOTH_INTRACORTICAL_METADATA: Metadata = {
 
 
 interface MrisSmoothIntracorticalParameters {
-    "__STYXTYPE__": "mris_smooth_intracortical";
+    "@type": "freesurfer.mris_smooth_intracortical";
     "surf_dir": string;
     "surf_name": string;
     "overlay_dir": string;
@@ -26,35 +26,35 @@ interface MrisSmoothIntracorticalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_smooth_intracortical": mris_smooth_intracortical_cargs,
+        "freesurfer.mris_smooth_intracortical": mris_smooth_intracortical_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_smooth_intracortical": mris_smooth_intracortical_outputs,
+        "freesurfer.mris_smooth_intracortical": mris_smooth_intracortical_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface MrisSmoothIntracorticalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_dir Directory with surface meshes.
+ * @param surf_name Name of a surface file(s). Use * and ? to pass multiple names (max 20).
+ * @param overlay_dir Directory with surface mesh overlays.
+ * @param overlay_name Name of an overlay file(s). Use * and ? to pass multiple names (max 20).
+ * @param output_dir Path to the output directory. Default is same as overlay directory.
+ * @param output_name Name of the output overlay file.
+ * @param tan_size Tangential extent of the smoothing kernel. Default = 0, Max = 6.
+ * @param rad_size Radial extent of the intracortical smoothing kernel.
+ * @param rad_start Starting surface mesh of the intracortical smoothing kernel in the radial direction.
+ * @param tan_weights Weighting function for tangential smoothing. 'gauss' or 'distance'.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_smooth_intracortical_params(
     surf_dir: string,
     surf_name: string,
@@ -89,24 +105,8 @@ function mris_smooth_intracortical_params(
     rad_start: number | null = null,
     tan_weights: string | null = null,
 ): MrisSmoothIntracorticalParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_dir Directory with surface meshes.
-     * @param surf_name Name of a surface file(s). Use * and ? to pass multiple names (max 20).
-     * @param overlay_dir Directory with surface mesh overlays.
-     * @param overlay_name Name of an overlay file(s). Use * and ? to pass multiple names (max 20).
-     * @param output_dir Path to the output directory. Default is same as overlay directory.
-     * @param output_name Name of the output overlay file.
-     * @param tan_size Tangential extent of the smoothing kernel. Default = 0, Max = 6.
-     * @param rad_size Radial extent of the intracortical smoothing kernel.
-     * @param rad_start Starting surface mesh of the intracortical smoothing kernel in the radial direction.
-     * @param tan_weights Weighting function for tangential smoothing. 'gauss' or 'distance'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_smooth_intracortical" as const,
+        "@type": "freesurfer.mris_smooth_intracortical" as const,
         "surf_dir": surf_dir,
         "surf_name": surf_name,
         "overlay_dir": overlay_dir,
@@ -134,18 +134,18 @@ function mris_smooth_intracortical_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_smooth_intracortical_cargs(
     params: MrisSmoothIntracorticalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_smooth_intracortical");
     cargs.push(
@@ -204,18 +204,18 @@ function mris_smooth_intracortical_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_smooth_intracortical_outputs(
     params: MrisSmoothIntracorticalParameters,
     execution: Execution,
 ): MrisSmoothIntracorticalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSmoothIntracorticalOutputs = {
         root: execution.outputFile("."),
         output_overlay: ((params["output_dir"] ?? null) !== null && (params["output_name"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/", (params["output_name"] ?? null)].join('')) : null,
@@ -224,22 +224,22 @@ function mris_smooth_intracortical_outputs(
 }
 
 
+/**
+ * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
+ */
 function mris_smooth_intracortical_execute(
     params: MrisSmoothIntracorticalParameters,
     execution: Execution,
 ): MrisSmoothIntracorticalOutputs {
-    /**
-     * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_smooth_intracortical_cargs(params, execution)
     const ret = mris_smooth_intracortical_outputs(params, execution)
@@ -248,6 +248,27 @@ function mris_smooth_intracortical_execute(
 }
 
 
+/**
+ * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surf_dir Directory with surface meshes.
+ * @param surf_name Name of a surface file(s). Use * and ? to pass multiple names (max 20).
+ * @param overlay_dir Directory with surface mesh overlays.
+ * @param overlay_name Name of an overlay file(s). Use * and ? to pass multiple names (max 20).
+ * @param output_dir Path to the output directory. Default is same as overlay directory.
+ * @param output_name Name of the output overlay file.
+ * @param tan_size Tangential extent of the smoothing kernel. Default = 0, Max = 6.
+ * @param rad_size Radial extent of the intracortical smoothing kernel.
+ * @param rad_start Starting surface mesh of the intracortical smoothing kernel in the radial direction.
+ * @param tan_weights Weighting function for tangential smoothing. 'gauss' or 'distance'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
+ */
 function mris_smooth_intracortical(
     surf_dir: string,
     surf_name: string,
@@ -261,27 +282,6 @@ function mris_smooth_intracortical(
     tan_weights: string | null = null,
     runner: Runner | null = null,
 ): MrisSmoothIntracorticalOutputs {
-    /**
-     * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surf_dir Directory with surface meshes.
-     * @param surf_name Name of a surface file(s). Use * and ? to pass multiple names (max 20).
-     * @param overlay_dir Directory with surface mesh overlays.
-     * @param overlay_name Name of an overlay file(s). Use * and ? to pass multiple names (max 20).
-     * @param output_dir Path to the output directory. Default is same as overlay directory.
-     * @param output_name Name of the output overlay file.
-     * @param tan_size Tangential extent of the smoothing kernel. Default = 0, Max = 6.
-     * @param rad_size Radial extent of the intracortical smoothing kernel.
-     * @param rad_start Starting surface mesh of the intracortical smoothing kernel in the radial direction.
-     * @param tan_weights Weighting function for tangential smoothing. 'gauss' or 'distance'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SMOOTH_INTRACORTICAL_METADATA);
     const params = mris_smooth_intracortical_params(surf_dir, surf_name, overlay_dir, overlay_name, output_dir, output_name, tan_size, rad_size, rad_start, tan_weights)
@@ -294,5 +294,8 @@ export {
       MrisSmoothIntracorticalOutputs,
       MrisSmoothIntracorticalParameters,
       mris_smooth_intracortical,
+      mris_smooth_intracortical_cargs,
+      mris_smooth_intracortical_execute,
+      mris_smooth_intracortical_outputs,
       mris_smooth_intracortical_params,
 };

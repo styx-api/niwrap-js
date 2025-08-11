@@ -12,7 +12,7 @@ const CONVERT_XFM_METADATA: Metadata = {
 
 
 interface ConvertXfmParameters {
-    "__STYXTYPE__": "convert_xfm";
+    "@type": "fsl.convert_xfm";
     "out_file"?: string | null | undefined;
     "invert_xfm": boolean;
     "concat_xfm"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface ConvertXfmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "convert_xfm": convert_xfm_cargs,
+        "fsl.convert_xfm": convert_xfm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "convert_xfm": convert_xfm_outputs,
+        "fsl.convert_xfm": convert_xfm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface ConvertXfmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input transformation matrix.
+ * @param out_file Final transformation matrix.
+ * @param invert_xfm Invert input transformation.
+ * @param concat_xfm A File. Write joint transformation of two input matrices.
+ * @param fix_scale_skew A File. Use secondary matrix to fix scale and skew.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_xfm_params(
     in_file: InputPathType,
     out_file: string | null = null,
@@ -79,19 +90,8 @@ function convert_xfm_params(
     concat_xfm: InputPathType | null = null,
     fix_scale_skew: InputPathType | null = null,
 ): ConvertXfmParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input transformation matrix.
-     * @param out_file Final transformation matrix.
-     * @param invert_xfm Invert input transformation.
-     * @param concat_xfm A File. Write joint transformation of two input matrices.
-     * @param fix_scale_skew A File. Use secondary matrix to fix scale and skew.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convert_xfm" as const,
+        "@type": "fsl.convert_xfm" as const,
         "invert_xfm": invert_xfm,
         "in_file": in_file,
     };
@@ -108,18 +108,18 @@ function convert_xfm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_xfm_cargs(
     params: ConvertXfmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("convert_xfm");
     if ((params["out_file"] ?? null) !== null) {
@@ -148,18 +148,18 @@ function convert_xfm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_xfm_outputs(
     params: ConvertXfmParameters,
     execution: Execution,
 ): ConvertXfmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertXfmOutputs = {
         root: execution.outputFile("."),
         output_transformation: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null)].join('')) : null,
@@ -168,22 +168,22 @@ function convert_xfm_outputs(
 }
 
 
+/**
+ * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
+ */
 function convert_xfm_execute(
     params: ConvertXfmParameters,
     execution: Execution,
 ): ConvertXfmOutputs {
-    /**
-     * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_xfm_cargs(params, execution)
     const ret = convert_xfm_outputs(params, execution)
@@ -192,6 +192,22 @@ function convert_xfm_execute(
 }
 
 
+/**
+ * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Input transformation matrix.
+ * @param out_file Final transformation matrix.
+ * @param invert_xfm Invert input transformation.
+ * @param concat_xfm A File. Write joint transformation of two input matrices.
+ * @param fix_scale_skew A File. Use secondary matrix to fix scale and skew.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
+ */
 function convert_xfm(
     in_file: InputPathType,
     out_file: string | null = null,
@@ -200,22 +216,6 @@ function convert_xfm(
     fix_scale_skew: InputPathType | null = null,
     runner: Runner | null = null,
 ): ConvertXfmOutputs {
-    /**
-     * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Input transformation matrix.
-     * @param out_file Final transformation matrix.
-     * @param invert_xfm Invert input transformation.
-     * @param concat_xfm A File. Write joint transformation of two input matrices.
-     * @param fix_scale_skew A File. Use secondary matrix to fix scale and skew.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_XFM_METADATA);
     const params = convert_xfm_params(in_file, out_file, invert_xfm, concat_xfm, fix_scale_skew)
@@ -228,5 +228,8 @@ export {
       ConvertXfmOutputs,
       ConvertXfmParameters,
       convert_xfm,
+      convert_xfm_cargs,
+      convert_xfm_execute,
+      convert_xfm_outputs,
       convert_xfm_params,
 };

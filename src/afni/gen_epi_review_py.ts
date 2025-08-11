@@ -12,7 +12,7 @@ const GEN_EPI_REVIEW_PY_METADATA: Metadata = {
 
 
 interface GenEpiReviewPyParameters {
-    "__STYXTYPE__": "gen_epi_review.py";
+    "@type": "afni.gen_epi_review.py";
     "datasets": Array<string>;
     "script_name"?: string | null | undefined;
     "windows"?: Array<string> | null | undefined;
@@ -26,33 +26,33 @@ interface GenEpiReviewPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gen_epi_review.py": gen_epi_review_py_cargs,
+        "afni.gen_epi_review.py": gen_epi_review_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface GenEpiReviewPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Specify input datasets for processing
+ * @param script_name Specify the name of the generated script
+ * @param windows Specify the image windows to open
+ * @param verbosity Specify a verbosity level
+ * @param image_size Set image dimensions, in pixels
+ * @param image_xoffset Set the X-offset for the image, in pixels
+ * @param image_yoffset Set the Y-offset for the image, in pixels
+ * @param graph_size Set graph dimensions, in pixels
+ * @param graph_xoffset Set the X-offset for the graph, in pixels
+ * @param graph_yoffset Set the Y-offset for the graph, in pixels
+ *
+ * @returns Parameter dictionary
+ */
 function gen_epi_review_py_params(
     datasets: Array<string>,
     script_name: string | null = null,
@@ -84,24 +100,8 @@ function gen_epi_review_py_params(
     graph_xoffset: number | null = null,
     graph_yoffset: number | null = null,
 ): GenEpiReviewPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Specify input datasets for processing
-     * @param script_name Specify the name of the generated script
-     * @param windows Specify the image windows to open
-     * @param verbosity Specify a verbosity level
-     * @param image_size Set image dimensions, in pixels
-     * @param image_xoffset Set the X-offset for the image, in pixels
-     * @param image_yoffset Set the Y-offset for the image, in pixels
-     * @param graph_size Set graph dimensions, in pixels
-     * @param graph_xoffset Set the X-offset for the graph, in pixels
-     * @param graph_yoffset Set the Y-offset for the graph, in pixels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gen_epi_review.py" as const,
+        "@type": "afni.gen_epi_review.py" as const,
         "datasets": datasets,
     };
     if (script_name !== null) {
@@ -135,18 +135,18 @@ function gen_epi_review_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gen_epi_review_py_cargs(
     params: GenEpiReviewPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gen_epi_review.py");
     cargs.push(
@@ -211,18 +211,18 @@ function gen_epi_review_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gen_epi_review_py_outputs(
     params: GenEpiReviewPyParameters,
     execution: Execution,
 ): GenEpiReviewPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GenEpiReviewPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -230,22 +230,22 @@ function gen_epi_review_py_outputs(
 }
 
 
+/**
+ * Generate an AFNI processing script to review EPI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
+ */
 function gen_epi_review_py_execute(
     params: GenEpiReviewPyParameters,
     execution: Execution,
 ): GenEpiReviewPyOutputs {
-    /**
-     * Generate an AFNI processing script to review EPI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = gen_epi_review_py_cargs(params, execution)
     const ret = gen_epi_review_py_outputs(params, execution)
@@ -254,6 +254,27 @@ function gen_epi_review_py_execute(
 }
 
 
+/**
+ * Generate an AFNI processing script to review EPI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Specify input datasets for processing
+ * @param script_name Specify the name of the generated script
+ * @param windows Specify the image windows to open
+ * @param verbosity Specify a verbosity level
+ * @param image_size Set image dimensions, in pixels
+ * @param image_xoffset Set the X-offset for the image, in pixels
+ * @param image_yoffset Set the Y-offset for the image, in pixels
+ * @param graph_size Set graph dimensions, in pixels
+ * @param graph_xoffset Set the X-offset for the graph, in pixels
+ * @param graph_yoffset Set the Y-offset for the graph, in pixels
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
+ */
 function gen_epi_review_py(
     datasets: Array<string>,
     script_name: string | null = null,
@@ -267,27 +288,6 @@ function gen_epi_review_py(
     graph_yoffset: number | null = null,
     runner: Runner | null = null,
 ): GenEpiReviewPyOutputs {
-    /**
-     * Generate an AFNI processing script to review EPI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Specify input datasets for processing
-     * @param script_name Specify the name of the generated script
-     * @param windows Specify the image windows to open
-     * @param verbosity Specify a verbosity level
-     * @param image_size Set image dimensions, in pixels
-     * @param image_xoffset Set the X-offset for the image, in pixels
-     * @param image_yoffset Set the Y-offset for the image, in pixels
-     * @param graph_size Set graph dimensions, in pixels
-     * @param graph_xoffset Set the X-offset for the graph, in pixels
-     * @param graph_yoffset Set the Y-offset for the graph, in pixels
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GEN_EPI_REVIEW_PY_METADATA);
     const params = gen_epi_review_py_params(datasets, script_name, windows, verbosity, image_size, image_xoffset, image_yoffset, graph_size, graph_xoffset, graph_yoffset)
@@ -300,5 +300,8 @@ export {
       GenEpiReviewPyOutputs,
       GenEpiReviewPyParameters,
       gen_epi_review_py,
+      gen_epi_review_py_cargs,
+      gen_epi_review_py_execute,
+      gen_epi_review_py_outputs,
       gen_epi_review_py_params,
 };

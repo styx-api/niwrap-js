@@ -12,14 +12,14 @@ const TSFMULT_METADATA: Metadata = {
 
 
 interface TsfmultConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tsfmult.config";
     "key": string;
     "value": string;
 }
 
 
 interface TsfmultParameters {
-    "__STYXTYPE__": "tsfmult";
+    "@type": "mrtrix.tsfmult";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -33,55 +33,55 @@ interface TsfmultParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tsfmult": tsfmult_cargs,
-        "config": tsfmult_config_cargs,
+        "mrtrix.tsfmult": tsfmult_cargs,
+        "mrtrix.tsfmult.config": tsfmult_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tsfmult": tsfmult_outputs,
+        "mrtrix.tsfmult": tsfmult_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfmult_config_params(
     key: string,
     value: string,
 ): TsfmultConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tsfmult.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function tsfmult_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfmult_config_cargs(
     params: TsfmultConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -126,6 +126,22 @@ interface TsfmultOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 the second input track scalar file.
+ * @param output the output track scalar file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfmult_params(
     input1: InputPathType,
     output: string,
@@ -138,24 +154,8 @@ function tsfmult_params(
     help: boolean = false,
     version: boolean = false,
 ): TsfmultParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 the second input track scalar file.
-     * @param output the output track scalar file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tsfmult" as const,
+        "@type": "mrtrix.tsfmult" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -175,18 +175,18 @@ function tsfmult_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfmult_cargs(
     params: TsfmultParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tsfmult");
     if ((params["info"] ?? null)) {
@@ -208,7 +208,7 @@ function tsfmult_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -222,18 +222,18 @@ function tsfmult_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tsfmult_outputs(
     params: TsfmultParameters,
     execution: Execution,
 ): TsfmultOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TsfmultOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -242,28 +242,28 @@ function tsfmult_outputs(
 }
 
 
+/**
+ * Multiply corresponding values in track scalar files.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
+ */
 function tsfmult_execute(
     params: TsfmultParameters,
     execution: Execution,
 ): TsfmultOutputs {
-    /**
-     * Multiply corresponding values in track scalar files.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
-     */
     params = execution.params(params)
     const cargs = tsfmult_cargs(params, execution)
     const ret = tsfmult_outputs(params, execution)
@@ -272,6 +272,33 @@ function tsfmult_execute(
 }
 
 
+/**
+ * Multiply corresponding values in track scalar files.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input1 the second input track scalar file.
+ * @param output the output track scalar file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
+ */
 function tsfmult(
     input1: InputPathType,
     output: string,
@@ -285,33 +312,6 @@ function tsfmult(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfmultOutputs {
-    /**
-     * Multiply corresponding values in track scalar files.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input1 the second input track scalar file.
-     * @param output the output track scalar file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSFMULT_METADATA);
     const params = tsfmult_params(input1, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -325,6 +325,10 @@ export {
       TsfmultOutputs,
       TsfmultParameters,
       tsfmult,
+      tsfmult_cargs,
+      tsfmult_config_cargs,
       tsfmult_config_params,
+      tsfmult_execute,
+      tsfmult_outputs,
       tsfmult_params,
 };

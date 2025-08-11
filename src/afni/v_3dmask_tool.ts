@@ -12,7 +12,7 @@ const V_3DMASK_TOOL_METADATA: Metadata = {
 
 
 interface V3dmaskToolParameters {
-    "__STYXTYPE__": "3dmask_tool";
+    "@type": "afni.3dmask_tool";
     "count": boolean;
     "datum"?: "byte" | "short" | "float" | null | undefined;
     "dilate_inputs"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface V3dmaskToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmask_tool": v_3dmask_tool_cargs,
+        "afni.3dmask_tool": v_3dmask_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmask_tool": v_3dmask_tool_outputs,
+        "afni.3dmask_tool": v_3dmask_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface V3dmaskToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dmask_tool.
+ * @param count Instead of created a binary 0/1 mask dataset, create one with counts of voxel overlap, i.e., each voxel will contain the number of masks that it is set in.
+ * @param datum 'byte' or 'short' or 'float'. Specify data type for output.
+ * @param dilate_inputs Use this option to dilate and/or erode datasets as they are read. ex. '5 -5' to dilate and erode 5 times.
+ * @param dilate_results Dilate and/or erode combined mask at the given levels.
+ * @param fill_dirs Fill holes only in the given directions. this option is for use with -fill holes. should be a single string that specifies 1-3 of the axes using {x,y,z} labels (i.e. dataset axis order), or using the labels in {r,l,a,p,i,s}.
+ * @param fill_holes This option can be used to fill holes in the resulting mask, i.e. after all other processing has been done.
+ * @param frac When combining masks (across datasets and sub-bricks), use this option to restrict the result to a certain fraction of the set of volumes.
+ * @param inter Intersection, this means -frac 1.0.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param union Union, this means -frac 0.
+ * @param verbose Specify verbosity level, for 0 to 3.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmask_tool_params(
     in_file: InputPathType,
     count: boolean = false,
@@ -99,27 +118,8 @@ function v_3dmask_tool_params(
     union: boolean = false,
     verbose: number | null = null,
 ): V3dmaskToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dmask_tool.
-     * @param count Instead of created a binary 0/1 mask dataset, create one with counts of voxel overlap, i.e., each voxel will contain the number of masks that it is set in.
-     * @param datum 'byte' or 'short' or 'float'. Specify data type for output.
-     * @param dilate_inputs Use this option to dilate and/or erode datasets as they are read. ex. '5 -5' to dilate and erode 5 times.
-     * @param dilate_results Dilate and/or erode combined mask at the given levels.
-     * @param fill_dirs Fill holes only in the given directions. this option is for use with -fill holes. should be a single string that specifies 1-3 of the axes using {x,y,z} labels (i.e. dataset axis order), or using the labels in {r,l,a,p,i,s}.
-     * @param fill_holes This option can be used to fill holes in the resulting mask, i.e. after all other processing has been done.
-     * @param frac When combining masks (across datasets and sub-bricks), use this option to restrict the result to a certain fraction of the set of volumes.
-     * @param inter Intersection, this means -frac 1.0.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param union Union, this means -frac 0.
-     * @param verbose Specify verbosity level, for 0 to 3.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmask_tool" as const,
+        "@type": "afni.3dmask_tool" as const,
         "count": count,
         "fill_holes": fill_holes,
         "in_file": in_file,
@@ -154,18 +154,18 @@ function v_3dmask_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmask_tool_cargs(
     params: V3dmaskToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmask_tool");
     if ((params["count"] ?? null)) {
@@ -230,18 +230,18 @@ function v_3dmask_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmask_tool_outputs(
     params: V3dmaskToolParameters,
     execution: Execution,
 ): V3dmaskToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaskToolOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_mask"].join('')),
@@ -251,22 +251,22 @@ function v_3dmask_tool_outputs(
 }
 
 
+/**
+ * 3dmask_tool - for combining/dilating/eroding/filling masks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
+ */
 function v_3dmask_tool_execute(
     params: V3dmaskToolParameters,
     execution: Execution,
 ): V3dmaskToolOutputs {
-    /**
-     * 3dmask_tool - for combining/dilating/eroding/filling masks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmask_tool_cargs(params, execution)
     const ret = v_3dmask_tool_outputs(params, execution)
@@ -275,6 +275,30 @@ function v_3dmask_tool_execute(
 }
 
 
+/**
+ * 3dmask_tool - for combining/dilating/eroding/filling masks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dmask_tool.
+ * @param count Instead of created a binary 0/1 mask dataset, create one with counts of voxel overlap, i.e., each voxel will contain the number of masks that it is set in.
+ * @param datum 'byte' or 'short' or 'float'. Specify data type for output.
+ * @param dilate_inputs Use this option to dilate and/or erode datasets as they are read. ex. '5 -5' to dilate and erode 5 times.
+ * @param dilate_results Dilate and/or erode combined mask at the given levels.
+ * @param fill_dirs Fill holes only in the given directions. this option is for use with -fill holes. should be a single string that specifies 1-3 of the axes using {x,y,z} labels (i.e. dataset axis order), or using the labels in {r,l,a,p,i,s}.
+ * @param fill_holes This option can be used to fill holes in the resulting mask, i.e. after all other processing has been done.
+ * @param frac When combining masks (across datasets and sub-bricks), use this option to restrict the result to a certain fraction of the set of volumes.
+ * @param inter Intersection, this means -frac 1.0.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param union Union, this means -frac 0.
+ * @param verbose Specify verbosity level, for 0 to 3.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
+ */
 function v_3dmask_tool(
     in_file: InputPathType,
     count: boolean = false,
@@ -291,30 +315,6 @@ function v_3dmask_tool(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): V3dmaskToolOutputs {
-    /**
-     * 3dmask_tool - for combining/dilating/eroding/filling masks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dmask_tool.
-     * @param count Instead of created a binary 0/1 mask dataset, create one with counts of voxel overlap, i.e., each voxel will contain the number of masks that it is set in.
-     * @param datum 'byte' or 'short' or 'float'. Specify data type for output.
-     * @param dilate_inputs Use this option to dilate and/or erode datasets as they are read. ex. '5 -5' to dilate and erode 5 times.
-     * @param dilate_results Dilate and/or erode combined mask at the given levels.
-     * @param fill_dirs Fill holes only in the given directions. this option is for use with -fill holes. should be a single string that specifies 1-3 of the axes using {x,y,z} labels (i.e. dataset axis order), or using the labels in {r,l,a,p,i,s}.
-     * @param fill_holes This option can be used to fill holes in the resulting mask, i.e. after all other processing has been done.
-     * @param frac When combining masks (across datasets and sub-bricks), use this option to restrict the result to a certain fraction of the set of volumes.
-     * @param inter Intersection, this means -frac 1.0.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param union Union, this means -frac 0.
-     * @param verbose Specify verbosity level, for 0 to 3.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMASK_TOOL_METADATA);
     const params = v_3dmask_tool_params(in_file, count, datum, dilate_inputs, dilate_results, fill_dirs, fill_holes, frac, inter, num_threads, outputtype, union, verbose)
@@ -327,5 +327,8 @@ export {
       V3dmaskToolParameters,
       V_3DMASK_TOOL_METADATA,
       v_3dmask_tool,
+      v_3dmask_tool_cargs,
+      v_3dmask_tool_execute,
+      v_3dmask_tool_outputs,
       v_3dmask_tool_params,
 };

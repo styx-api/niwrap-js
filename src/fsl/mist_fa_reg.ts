@@ -12,7 +12,7 @@ const MIST_FA_REG_METADATA: Metadata = {
 
 
 interface MistFaRegParameters {
-    "__STYXTYPE__": "mist_FA_reg";
+    "@type": "fsl.mist_FA_reg";
     "fa_volume": InputPathType;
     "s0_volume": InputPathType;
     "reference_t1_volume": InputPathType;
@@ -20,35 +20,35 @@ interface MistFaRegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mist_FA_reg": mist_fa_reg_cargs,
+        "fsl.mist_FA_reg": mist_fa_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mist_FA_reg": mist_fa_reg_outputs,
+        "fsl.mist_FA_reg": mist_fa_reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MistFaRegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fa_volume The FA volume to be registered.
+ * @param s0_volume The S0 volume corresponding to the FA volume.
+ * @param reference_t1_volume The reference T1 volume to register against.
+ * @param output_filename The output filename for the registered volume.
+ *
+ * @returns Parameter dictionary
+ */
 function mist_fa_reg_params(
     fa_volume: InputPathType,
     s0_volume: InputPathType,
     reference_t1_volume: InputPathType,
     output_filename: string,
 ): MistFaRegParameters {
-    /**
-     * Build parameters.
-    
-     * @param fa_volume The FA volume to be registered.
-     * @param s0_volume The S0 volume corresponding to the FA volume.
-     * @param reference_t1_volume The reference T1 volume to register against.
-     * @param output_filename The output filename for the registered volume.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mist_FA_reg" as const,
+        "@type": "fsl.mist_FA_reg" as const,
         "fa_volume": fa_volume,
         "s0_volume": s0_volume,
         "reference_t1_volume": reference_t1_volume,
@@ -98,18 +98,18 @@ function mist_fa_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mist_fa_reg_cargs(
     params: MistFaRegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mist_FA_reg");
     cargs.push(execution.inputFile((params["fa_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mist_fa_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mist_fa_reg_outputs(
     params: MistFaRegParameters,
     execution: Execution,
 ): MistFaRegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MistFaRegOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_filename"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mist_fa_reg_outputs(
 }
 
 
+/**
+ * Tool for registering FA volumes to a reference T1 volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
+ */
 function mist_fa_reg_execute(
     params: MistFaRegParameters,
     execution: Execution,
 ): MistFaRegOutputs {
-    /**
-     * Tool for registering FA volumes to a reference T1 volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mist_fa_reg_cargs(params, execution)
     const ret = mist_fa_reg_outputs(params, execution)
@@ -164,6 +164,21 @@ function mist_fa_reg_execute(
 }
 
 
+/**
+ * Tool for registering FA volumes to a reference T1 volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param fa_volume The FA volume to be registered.
+ * @param s0_volume The S0 volume corresponding to the FA volume.
+ * @param reference_t1_volume The reference T1 volume to register against.
+ * @param output_filename The output filename for the registered volume.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
+ */
 function mist_fa_reg(
     fa_volume: InputPathType,
     s0_volume: InputPathType,
@@ -171,21 +186,6 @@ function mist_fa_reg(
     output_filename: string,
     runner: Runner | null = null,
 ): MistFaRegOutputs {
-    /**
-     * Tool for registering FA volumes to a reference T1 volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param fa_volume The FA volume to be registered.
-     * @param s0_volume The S0 volume corresponding to the FA volume.
-     * @param reference_t1_volume The reference T1 volume to register against.
-     * @param output_filename The output filename for the registered volume.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MIST_FA_REG_METADATA);
     const params = mist_fa_reg_params(fa_volume, s0_volume, reference_t1_volume, output_filename)
@@ -198,5 +198,8 @@ export {
       MistFaRegOutputs,
       MistFaRegParameters,
       mist_fa_reg,
+      mist_fa_reg_cargs,
+      mist_fa_reg_execute,
+      mist_fa_reg_outputs,
       mist_fa_reg_params,
 };

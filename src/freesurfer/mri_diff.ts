@@ -12,7 +12,7 @@ const MRI_DIFF_METADATA: Metadata = {
 
 
 interface MriDiffParameters {
-    "__STYXTYPE__": "mri_diff";
+    "@type": "freesurfer.mri_diff";
     "vol1file": InputPathType;
     "vol2file": InputPathType;
     "resolution_check": boolean;
@@ -47,35 +47,35 @@ interface MriDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_diff": mri_diff_cargs,
+        "freesurfer.mri_diff": mri_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_diff": mri_diff_outputs,
+        "freesurfer.mri_diff": mri_diff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,43 @@ interface MriDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol1file First volume to compare (e.g., vol1.mgz)
+ * @param vol2file Second volume to compare (e.g., vol2.mgz)
+ * @param resolution_check Do not check for resolution differences.
+ * @param acquisition_param_check Do not check for acquisition parameter differences.
+ * @param geometry_check Do not check for geometry differences.
+ * @param precision_check Do not check for precision differences.
+ * @param pixel_check Do not check for pixel differences.
+ * @param orientation_check Do not check for orientation differences.
+ * @param file_type_diff_check Do not check for file type differences.
+ * @param no_exit_on_diff Do not exit on difference; run through everything.
+ * @param quality_assurance Check resolution, acquisition, precision, and orientation only.
+ * @param pixel_only Only check pixel data.
+ * @param abs_difference Take absolute value of difference (default).
+ * @param no_abs_difference Do not take absolute value of difference.
+ * @param difference_abs Take absolute value before computing difference.
+ * @param percentage_difference Compute percentage difference: 100*(v1-v2)/((v1+v2)/2).
+ * @param rss_save Save square root sum squares with --diff.
+ * @param ssd_print Print sum squared differences over all voxels.
+ * @param rms_print Print root mean squared difference over all non-zero voxels.
+ * @param count_diff_voxels Print number of differing voxels.
+ * @param pixel_threshold Pixel differences must be greater than this value to be considered different.
+ * @param count_thresh_voxels There must be at least this many voxels that are different.
+ * @param log_file Store difference information in this log file.
+ * @param difference_image Save difference image to specified volume.
+ * @param suspicious_diff_volume Differing voxels replaced with label SUSPICIOUS in the specified volume.
+ * @param segmentation_diff Perform diff on voxels with specific label index.
+ * @param merge_edits Merge edits from newauto, oldauto, and manedit volumes into merged volume.
+ * @param average_difference Save average difference to specified file.
+ * @param debug_mode Enable debugging mode.
+ * @param verbose_mode Print information on all differences found.
+ * @param check_options Check options and exit without running anything.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_diff_params(
     vol1file: InputPathType,
     vol2file: InputPathType,
@@ -139,45 +176,8 @@ function mri_diff_params(
     verbose_mode: boolean = false,
     check_options: boolean = false,
 ): MriDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol1file First volume to compare (e.g., vol1.mgz)
-     * @param vol2file Second volume to compare (e.g., vol2.mgz)
-     * @param resolution_check Do not check for resolution differences.
-     * @param acquisition_param_check Do not check for acquisition parameter differences.
-     * @param geometry_check Do not check for geometry differences.
-     * @param precision_check Do not check for precision differences.
-     * @param pixel_check Do not check for pixel differences.
-     * @param orientation_check Do not check for orientation differences.
-     * @param file_type_diff_check Do not check for file type differences.
-     * @param no_exit_on_diff Do not exit on difference; run through everything.
-     * @param quality_assurance Check resolution, acquisition, precision, and orientation only.
-     * @param pixel_only Only check pixel data.
-     * @param abs_difference Take absolute value of difference (default).
-     * @param no_abs_difference Do not take absolute value of difference.
-     * @param difference_abs Take absolute value before computing difference.
-     * @param percentage_difference Compute percentage difference: 100*(v1-v2)/((v1+v2)/2).
-     * @param rss_save Save square root sum squares with --diff.
-     * @param ssd_print Print sum squared differences over all voxels.
-     * @param rms_print Print root mean squared difference over all non-zero voxels.
-     * @param count_diff_voxels Print number of differing voxels.
-     * @param pixel_threshold Pixel differences must be greater than this value to be considered different.
-     * @param count_thresh_voxels There must be at least this many voxels that are different.
-     * @param log_file Store difference information in this log file.
-     * @param difference_image Save difference image to specified volume.
-     * @param suspicious_diff_volume Differing voxels replaced with label SUSPICIOUS in the specified volume.
-     * @param segmentation_diff Perform diff on voxels with specific label index.
-     * @param merge_edits Merge edits from newauto, oldauto, and manedit volumes into merged volume.
-     * @param average_difference Save average difference to specified file.
-     * @param debug_mode Enable debugging mode.
-     * @param verbose_mode Print information on all differences found.
-     * @param check_options Check options and exit without running anything.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_diff" as const,
+        "@type": "freesurfer.mri_diff" as const,
         "vol1file": vol1file,
         "vol2file": vol2file,
         "resolution_check": resolution_check,
@@ -230,18 +230,18 @@ function mri_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_diff_cargs(
     params: MriDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_diff");
     cargs.push(execution.inputFile((params["vol1file"] ?? null)));
@@ -361,18 +361,18 @@ function mri_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_diff_outputs(
     params: MriDiffParameters,
     execution: Execution,
 ): MriDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDiffOutputs = {
         root: execution.outputFile("."),
         log_output: ((params["log_file"] ?? null) !== null) ? execution.outputFile([(params["log_file"] ?? null)].join('')) : null,
@@ -383,22 +383,22 @@ function mri_diff_outputs(
 }
 
 
+/**
+ * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
+ */
 function mri_diff_execute(
     params: MriDiffParameters,
     execution: Execution,
 ): MriDiffOutputs {
-    /**
-     * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_diff_cargs(params, execution)
     const ret = mri_diff_outputs(params, execution)
@@ -407,6 +407,48 @@ function mri_diff_execute(
 }
 
 
+/**
+ * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param vol1file First volume to compare (e.g., vol1.mgz)
+ * @param vol2file Second volume to compare (e.g., vol2.mgz)
+ * @param resolution_check Do not check for resolution differences.
+ * @param acquisition_param_check Do not check for acquisition parameter differences.
+ * @param geometry_check Do not check for geometry differences.
+ * @param precision_check Do not check for precision differences.
+ * @param pixel_check Do not check for pixel differences.
+ * @param orientation_check Do not check for orientation differences.
+ * @param file_type_diff_check Do not check for file type differences.
+ * @param no_exit_on_diff Do not exit on difference; run through everything.
+ * @param quality_assurance Check resolution, acquisition, precision, and orientation only.
+ * @param pixel_only Only check pixel data.
+ * @param abs_difference Take absolute value of difference (default).
+ * @param no_abs_difference Do not take absolute value of difference.
+ * @param difference_abs Take absolute value before computing difference.
+ * @param percentage_difference Compute percentage difference: 100*(v1-v2)/((v1+v2)/2).
+ * @param rss_save Save square root sum squares with --diff.
+ * @param ssd_print Print sum squared differences over all voxels.
+ * @param rms_print Print root mean squared difference over all non-zero voxels.
+ * @param count_diff_voxels Print number of differing voxels.
+ * @param pixel_threshold Pixel differences must be greater than this value to be considered different.
+ * @param count_thresh_voxels There must be at least this many voxels that are different.
+ * @param log_file Store difference information in this log file.
+ * @param difference_image Save difference image to specified volume.
+ * @param suspicious_diff_volume Differing voxels replaced with label SUSPICIOUS in the specified volume.
+ * @param segmentation_diff Perform diff on voxels with specific label index.
+ * @param merge_edits Merge edits from newauto, oldauto, and manedit volumes into merged volume.
+ * @param average_difference Save average difference to specified file.
+ * @param debug_mode Enable debugging mode.
+ * @param verbose_mode Print information on all differences found.
+ * @param check_options Check options and exit without running anything.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
+ */
 function mri_diff(
     vol1file: InputPathType,
     vol2file: InputPathType,
@@ -441,48 +483,6 @@ function mri_diff(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriDiffOutputs {
-    /**
-     * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param vol1file First volume to compare (e.g., vol1.mgz)
-     * @param vol2file Second volume to compare (e.g., vol2.mgz)
-     * @param resolution_check Do not check for resolution differences.
-     * @param acquisition_param_check Do not check for acquisition parameter differences.
-     * @param geometry_check Do not check for geometry differences.
-     * @param precision_check Do not check for precision differences.
-     * @param pixel_check Do not check for pixel differences.
-     * @param orientation_check Do not check for orientation differences.
-     * @param file_type_diff_check Do not check for file type differences.
-     * @param no_exit_on_diff Do not exit on difference; run through everything.
-     * @param quality_assurance Check resolution, acquisition, precision, and orientation only.
-     * @param pixel_only Only check pixel data.
-     * @param abs_difference Take absolute value of difference (default).
-     * @param no_abs_difference Do not take absolute value of difference.
-     * @param difference_abs Take absolute value before computing difference.
-     * @param percentage_difference Compute percentage difference: 100*(v1-v2)/((v1+v2)/2).
-     * @param rss_save Save square root sum squares with --diff.
-     * @param ssd_print Print sum squared differences over all voxels.
-     * @param rms_print Print root mean squared difference over all non-zero voxels.
-     * @param count_diff_voxels Print number of differing voxels.
-     * @param pixel_threshold Pixel differences must be greater than this value to be considered different.
-     * @param count_thresh_voxels There must be at least this many voxels that are different.
-     * @param log_file Store difference information in this log file.
-     * @param difference_image Save difference image to specified volume.
-     * @param suspicious_diff_volume Differing voxels replaced with label SUSPICIOUS in the specified volume.
-     * @param segmentation_diff Perform diff on voxels with specific label index.
-     * @param merge_edits Merge edits from newauto, oldauto, and manedit volumes into merged volume.
-     * @param average_difference Save average difference to specified file.
-     * @param debug_mode Enable debugging mode.
-     * @param verbose_mode Print information on all differences found.
-     * @param check_options Check options and exit without running anything.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DIFF_METADATA);
     const params = mri_diff_params(vol1file, vol2file, resolution_check, acquisition_param_check, geometry_check, precision_check, pixel_check, orientation_check, file_type_diff_check, no_exit_on_diff, quality_assurance, pixel_only, abs_difference, no_abs_difference, difference_abs, percentage_difference, rss_save, ssd_print, rms_print, count_diff_voxels, pixel_threshold, count_thresh_voxels, log_file, difference_image, suspicious_diff_volume, segmentation_diff, merge_edits, average_difference, debug_mode, verbose_mode, check_options)
@@ -495,5 +495,8 @@ export {
       MriDiffOutputs,
       MriDiffParameters,
       mri_diff,
+      mri_diff_cargs,
+      mri_diff_execute,
+      mri_diff_outputs,
       mri_diff_params,
 };

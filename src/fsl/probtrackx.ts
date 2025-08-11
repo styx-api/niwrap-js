@@ -12,7 +12,7 @@ const PROBTRACKX_METADATA: Metadata = {
 
 
 interface ProbtrackxParameters {
-    "__STYXTYPE__": "probtrackx";
+    "@type": "fsl.probtrackx";
     "samples": InputPathType;
     "mask": InputPathType;
     "seed": InputPathType;
@@ -50,33 +50,33 @@ interface ProbtrackxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "probtrackx": probtrackx_cargs,
+        "fsl.probtrackx": probtrackx_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -96,6 +96,46 @@ interface ProbtrackxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param samples Basename for samples files
+ * @param mask Bet binary mask file in diffusion space
+ * @param seed Seed volume, or voxel, or ascii file with multiple volumes, or freesurfer label file
+ * @param out Output file (default='fdt_paths')
+ * @param verbose Verbose level, [0-2]
+ * @param targetmasks File containing a list of target masks - required for seeds_to_targets classification
+ * @param mask2 Second mask in twomask_symm mode.
+ * @param waypoints Waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks
+ * @param network Activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)
+ * @param mesh Freesurfer-type surface descriptor (in ascii format)
+ * @param seedref Reference vol to define seed space in simple mode - diffusion space assumed if absent
+ * @param dir Directory to put the final volumes in - code makes this directory - default='logdir'
+ * @param forcedir Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param opd Output path distribution
+ * @param pd Correct path distribution for the length of the pathways
+ * @param os2t Output seeds to targets
+ * @param avoid Reject pathways passing through locations given by this mask
+ * @param stop Stop tracking at locations given by this mask file
+ * @param xfm Transform taking seed space to DTI space (either FLIRT matrix or FNIRT warpfield) - default is identity
+ * @param invxfm Transform taking DTI space to seed space (compulsory when using a warpfield for seeds_to_dti)
+ * @param nsamples Number of samples - default=5000
+ * @param nsteps Number of steps per sample - default=2000
+ * @param distthresh Discards samples shorter than this threshold (in mm - default=0)
+ * @param cthr Curvature threshold - default=0.2
+ * @param fibthresh Volume fraction before subsidary fibre orientations are considered - default=0.01
+ * @param sampvox Sample random points within seed voxels
+ * @param steplength Steplength in mm - default=0.5
+ * @param loopcheck Perform loopchecks on paths - slower, but allows lower curvature threshold
+ * @param usef Use anisotropy to constrain tracking
+ * @param randfib Default 0. Set to 1 to randomly sample initial fibres (with f > fibthresh). Set to 2 to sample in proportion fibres (with f>fibthresh) to f. Set to 3 to sample ALL populations at random (even if f<fibthresh)
+ * @param fibst Force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0
+ * @param modeuler Use modified euler streamlining
+ * @param rseed Random seed
+ * @param s2tastext Output seed-to-target counts as a text file (useful when seeding from a mesh)
+ *
+ * @returns Parameter dictionary
+ */
 function probtrackx_params(
     samples: InputPathType,
     mask: InputPathType,
@@ -132,48 +172,8 @@ function probtrackx_params(
     rseed: number | null = null,
     s2tastext: boolean = false,
 ): ProbtrackxParameters {
-    /**
-     * Build parameters.
-    
-     * @param samples Basename for samples files
-     * @param mask Bet binary mask file in diffusion space
-     * @param seed Seed volume, or voxel, or ascii file with multiple volumes, or freesurfer label file
-     * @param out Output file (default='fdt_paths')
-     * @param verbose Verbose level, [0-2]
-     * @param targetmasks File containing a list of target masks - required for seeds_to_targets classification
-     * @param mask2 Second mask in twomask_symm mode.
-     * @param waypoints Waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks
-     * @param network Activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)
-     * @param mesh Freesurfer-type surface descriptor (in ascii format)
-     * @param seedref Reference vol to define seed space in simple mode - diffusion space assumed if absent
-     * @param dir Directory to put the final volumes in - code makes this directory - default='logdir'
-     * @param forcedir Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param opd Output path distribution
-     * @param pd Correct path distribution for the length of the pathways
-     * @param os2t Output seeds to targets
-     * @param avoid Reject pathways passing through locations given by this mask
-     * @param stop Stop tracking at locations given by this mask file
-     * @param xfm Transform taking seed space to DTI space (either FLIRT matrix or FNIRT warpfield) - default is identity
-     * @param invxfm Transform taking DTI space to seed space (compulsory when using a warpfield for seeds_to_dti)
-     * @param nsamples Number of samples - default=5000
-     * @param nsteps Number of steps per sample - default=2000
-     * @param distthresh Discards samples shorter than this threshold (in mm - default=0)
-     * @param cthr Curvature threshold - default=0.2
-     * @param fibthresh Volume fraction before subsidary fibre orientations are considered - default=0.01
-     * @param sampvox Sample random points within seed voxels
-     * @param steplength Steplength in mm - default=0.5
-     * @param loopcheck Perform loopchecks on paths - slower, but allows lower curvature threshold
-     * @param usef Use anisotropy to constrain tracking
-     * @param randfib Default 0. Set to 1 to randomly sample initial fibres (with f > fibthresh). Set to 2 to sample in proportion fibres (with f>fibthresh) to f. Set to 3 to sample ALL populations at random (even if f<fibthresh)
-     * @param fibst Force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0
-     * @param modeuler Use modified euler streamlining
-     * @param rseed Random seed
-     * @param s2tastext Output seed-to-target counts as a text file (useful when seeding from a mesh)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "probtrackx" as const,
+        "@type": "fsl.probtrackx" as const,
         "samples": samples,
         "mask": mask,
         "seed": seed,
@@ -253,18 +253,18 @@ function probtrackx_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function probtrackx_cargs(
     params: ProbtrackxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("probtrackx");
     cargs.push(
@@ -437,18 +437,18 @@ function probtrackx_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function probtrackx_outputs(
     params: ProbtrackxParameters,
     execution: Execution,
 ): ProbtrackxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ProbtrackxOutputs = {
         root: execution.outputFile("."),
     };
@@ -456,22 +456,22 @@ function probtrackx_outputs(
 }
 
 
+/**
+ * Streamlines tracking algorithm for probabilistic tractography.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
+ */
 function probtrackx_execute(
     params: ProbtrackxParameters,
     execution: Execution,
 ): ProbtrackxOutputs {
-    /**
-     * Streamlines tracking algorithm for probabilistic tractography.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
-     */
     params = execution.params(params)
     const cargs = probtrackx_cargs(params, execution)
     const ret = probtrackx_outputs(params, execution)
@@ -480,6 +480,51 @@ function probtrackx_execute(
 }
 
 
+/**
+ * Streamlines tracking algorithm for probabilistic tractography.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param samples Basename for samples files
+ * @param mask Bet binary mask file in diffusion space
+ * @param seed Seed volume, or voxel, or ascii file with multiple volumes, or freesurfer label file
+ * @param out Output file (default='fdt_paths')
+ * @param verbose Verbose level, [0-2]
+ * @param targetmasks File containing a list of target masks - required for seeds_to_targets classification
+ * @param mask2 Second mask in twomask_symm mode.
+ * @param waypoints Waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks
+ * @param network Activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)
+ * @param mesh Freesurfer-type surface descriptor (in ascii format)
+ * @param seedref Reference vol to define seed space in simple mode - diffusion space assumed if absent
+ * @param dir Directory to put the final volumes in - code makes this directory - default='logdir'
+ * @param forcedir Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param opd Output path distribution
+ * @param pd Correct path distribution for the length of the pathways
+ * @param os2t Output seeds to targets
+ * @param avoid Reject pathways passing through locations given by this mask
+ * @param stop Stop tracking at locations given by this mask file
+ * @param xfm Transform taking seed space to DTI space (either FLIRT matrix or FNIRT warpfield) - default is identity
+ * @param invxfm Transform taking DTI space to seed space (compulsory when using a warpfield for seeds_to_dti)
+ * @param nsamples Number of samples - default=5000
+ * @param nsteps Number of steps per sample - default=2000
+ * @param distthresh Discards samples shorter than this threshold (in mm - default=0)
+ * @param cthr Curvature threshold - default=0.2
+ * @param fibthresh Volume fraction before subsidary fibre orientations are considered - default=0.01
+ * @param sampvox Sample random points within seed voxels
+ * @param steplength Steplength in mm - default=0.5
+ * @param loopcheck Perform loopchecks on paths - slower, but allows lower curvature threshold
+ * @param usef Use anisotropy to constrain tracking
+ * @param randfib Default 0. Set to 1 to randomly sample initial fibres (with f > fibthresh). Set to 2 to sample in proportion fibres (with f>fibthresh) to f. Set to 3 to sample ALL populations at random (even if f<fibthresh)
+ * @param fibst Force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0
+ * @param modeuler Use modified euler streamlining
+ * @param rseed Random seed
+ * @param s2tastext Output seed-to-target counts as a text file (useful when seeding from a mesh)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
+ */
 function probtrackx(
     samples: InputPathType,
     mask: InputPathType,
@@ -517,51 +562,6 @@ function probtrackx(
     s2tastext: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxOutputs {
-    /**
-     * Streamlines tracking algorithm for probabilistic tractography.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param samples Basename for samples files
-     * @param mask Bet binary mask file in diffusion space
-     * @param seed Seed volume, or voxel, or ascii file with multiple volumes, or freesurfer label file
-     * @param out Output file (default='fdt_paths')
-     * @param verbose Verbose level, [0-2]
-     * @param targetmasks File containing a list of target masks - required for seeds_to_targets classification
-     * @param mask2 Second mask in twomask_symm mode.
-     * @param waypoints Waypoint mask or ascii list of waypoint masks - only keep paths going through ALL the masks
-     * @param network Activate network mode - only keep paths going through at least one seed mask (required if multiple seed masks)
-     * @param mesh Freesurfer-type surface descriptor (in ascii format)
-     * @param seedref Reference vol to define seed space in simple mode - diffusion space assumed if absent
-     * @param dir Directory to put the final volumes in - code makes this directory - default='logdir'
-     * @param forcedir Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param opd Output path distribution
-     * @param pd Correct path distribution for the length of the pathways
-     * @param os2t Output seeds to targets
-     * @param avoid Reject pathways passing through locations given by this mask
-     * @param stop Stop tracking at locations given by this mask file
-     * @param xfm Transform taking seed space to DTI space (either FLIRT matrix or FNIRT warpfield) - default is identity
-     * @param invxfm Transform taking DTI space to seed space (compulsory when using a warpfield for seeds_to_dti)
-     * @param nsamples Number of samples - default=5000
-     * @param nsteps Number of steps per sample - default=2000
-     * @param distthresh Discards samples shorter than this threshold (in mm - default=0)
-     * @param cthr Curvature threshold - default=0.2
-     * @param fibthresh Volume fraction before subsidary fibre orientations are considered - default=0.01
-     * @param sampvox Sample random points within seed voxels
-     * @param steplength Steplength in mm - default=0.5
-     * @param loopcheck Perform loopchecks on paths - slower, but allows lower curvature threshold
-     * @param usef Use anisotropy to constrain tracking
-     * @param randfib Default 0. Set to 1 to randomly sample initial fibres (with f > fibthresh). Set to 2 to sample in proportion fibres (with f>fibthresh) to f. Set to 3 to sample ALL populations at random (even if f<fibthresh)
-     * @param fibst Force a starting fibre for tracking - default=1, i.e. first fibre orientation. Only works if randfib==0
-     * @param modeuler Use modified euler streamlining
-     * @param rseed Random seed
-     * @param s2tastext Output seed-to-target counts as a text file (useful when seeding from a mesh)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROBTRACKX_METADATA);
     const params = probtrackx_params(samples, mask, seed, out, verbose, targetmasks, mask2, waypoints, network, mesh, seedref, dir, forcedir, opd, pd, os2t, avoid, stop, xfm, invxfm, nsamples, nsteps, distthresh, cthr, fibthresh, sampvox, steplength, loopcheck, usef, randfib, fibst, modeuler, rseed, s2tastext)
@@ -574,5 +574,8 @@ export {
       ProbtrackxOutputs,
       ProbtrackxParameters,
       probtrackx,
+      probtrackx_cargs,
+      probtrackx_execute,
+      probtrackx_outputs,
       probtrackx_params,
 };

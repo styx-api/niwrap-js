@@ -12,42 +12,42 @@ const MRI_RIGID_REGISTER_METADATA: Metadata = {
 
 
 interface MriRigidRegisterParameters {
-    "__STYXTYPE__": "mri_rigid_register";
+    "@type": "freesurfer.mri_rigid_register";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "transform_output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_rigid_register": mri_rigid_register_cargs,
+        "freesurfer.mri_rigid_register": mri_rigid_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_rigid_register": mri_rigid_register_outputs,
+        "freesurfer.mri_rigid_register": mri_rigid_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriRigidRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_volume Source volume file for registration
+ * @param target_volume Target volume file for registration
+ * @param transform_output Output file name for the transform
+ *
+ * @returns Parameter dictionary
+ */
 function mri_rigid_register_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     transform_output: string,
 ): MriRigidRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_volume Source volume file for registration
-     * @param target_volume Target volume file for registration
-     * @param transform_output Output file name for the transform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_rigid_register" as const,
+        "@type": "freesurfer.mri_rigid_register" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
         "transform_output": transform_output,
@@ -94,18 +94,18 @@ function mri_rigid_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_rigid_register_cargs(
     params: MriRigidRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_rigid_register");
     cargs.push(execution.inputFile((params["source_volume"] ?? null)));
@@ -115,18 +115,18 @@ function mri_rigid_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_rigid_register_outputs(
     params: MriRigidRegisterParameters,
     execution: Execution,
 ): MriRigidRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRigidRegisterOutputs = {
         root: execution.outputFile("."),
         transform_file: execution.outputFile([(params["transform_output"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_rigid_register_outputs(
 }
 
 
+/**
+ * Rigid registration tool for MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
+ */
 function mri_rigid_register_execute(
     params: MriRigidRegisterParameters,
     execution: Execution,
 ): MriRigidRegisterOutputs {
-    /**
-     * Rigid registration tool for MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_rigid_register_cargs(params, execution)
     const ret = mri_rigid_register_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_rigid_register_execute(
 }
 
 
+/**
+ * Rigid registration tool for MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_volume Source volume file for registration
+ * @param target_volume Target volume file for registration
+ * @param transform_output Output file name for the transform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
+ */
 function mri_rigid_register(
     source_volume: InputPathType,
     target_volume: InputPathType,
     transform_output: string,
     runner: Runner | null = null,
 ): MriRigidRegisterOutputs {
-    /**
-     * Rigid registration tool for MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_volume Source volume file for registration
-     * @param target_volume Target volume file for registration
-     * @param transform_output Output file name for the transform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RIGID_REGISTER_METADATA);
     const params = mri_rigid_register_params(source_volume, target_volume, transform_output)
@@ -191,5 +191,8 @@ export {
       MriRigidRegisterOutputs,
       MriRigidRegisterParameters,
       mri_rigid_register,
+      mri_rigid_register_cargs,
+      mri_rigid_register_execute,
+      mri_rigid_register_outputs,
       mri_rigid_register_params,
 };

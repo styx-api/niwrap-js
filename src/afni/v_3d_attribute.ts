@@ -12,7 +12,7 @@ const V_3D_ATTRIBUTE_METADATA: Metadata = {
 
 
 interface V3dAttributeParameters {
-    "__STYXTYPE__": "3dAttribute";
+    "@type": "afni.3dAttribute";
     "all": boolean;
     "name": boolean;
     "center": boolean;
@@ -24,35 +24,35 @@ interface V3dAttributeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAttribute": v_3d_attribute_cargs,
+        "afni.3dAttribute": v_3d_attribute_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAttribute": v_3d_attribute_outputs,
+        "afni.3dAttribute": v_3d_attribute_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dAttributeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param aname Attribute name to be printed from the dataset
+ * @param dset Dataset from which the attribute value will be printed
+ * @param all Print all attributes from the dataset
+ * @param name Include attribute name in the output
+ * @param center Print the center of volume in RAI coordinates
+ * @param ssep Use string SSEP as a separator between strings for multiple sub-bricks
+ * @param sprep Use string SPREP to replace blank space in string attributes
+ * @param quote Use single quote around each string
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_attribute_params(
     aname: string,
     dset: InputPathType,
@@ -85,22 +99,8 @@ function v_3d_attribute_params(
     sprep: string | null = null,
     quote: boolean = false,
 ): V3dAttributeParameters {
-    /**
-     * Build parameters.
-    
-     * @param aname Attribute name to be printed from the dataset
-     * @param dset Dataset from which the attribute value will be printed
-     * @param all Print all attributes from the dataset
-     * @param name Include attribute name in the output
-     * @param center Print the center of volume in RAI coordinates
-     * @param ssep Use string SSEP as a separator between strings for multiple sub-bricks
-     * @param sprep Use string SPREP to replace blank space in string attributes
-     * @param quote Use single quote around each string
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAttribute" as const,
+        "@type": "afni.3dAttribute" as const,
         "all": all,
         "name": name,
         "center": center,
@@ -118,18 +118,18 @@ function v_3d_attribute_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_attribute_cargs(
     params: V3dAttributeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAttribute");
     if ((params["all"] ?? null)) {
@@ -162,18 +162,18 @@ function v_3d_attribute_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_attribute_outputs(
     params: V3dAttributeParameters,
     execution: Execution,
 ): V3dAttributeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAttributeOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout"].join('')),
@@ -182,22 +182,22 @@ function v_3d_attribute_outputs(
 }
 
 
+/**
+ * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
+ */
 function v_3d_attribute_execute(
     params: V3dAttributeParameters,
     execution: Execution,
 ): V3dAttributeOutputs {
-    /**
-     * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_attribute_cargs(params, execution)
     const ret = v_3d_attribute_outputs(params, execution)
@@ -206,6 +206,25 @@ function v_3d_attribute_execute(
 }
 
 
+/**
+ * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param aname Attribute name to be printed from the dataset
+ * @param dset Dataset from which the attribute value will be printed
+ * @param all Print all attributes from the dataset
+ * @param name Include attribute name in the output
+ * @param center Print the center of volume in RAI coordinates
+ * @param ssep Use string SSEP as a separator between strings for multiple sub-bricks
+ * @param sprep Use string SPREP to replace blank space in string attributes
+ * @param quote Use single quote around each string
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
+ */
 function v_3d_attribute(
     aname: string,
     dset: InputPathType,
@@ -217,25 +236,6 @@ function v_3d_attribute(
     quote: boolean = false,
     runner: Runner | null = null,
 ): V3dAttributeOutputs {
-    /**
-     * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param aname Attribute name to be printed from the dataset
-     * @param dset Dataset from which the attribute value will be printed
-     * @param all Print all attributes from the dataset
-     * @param name Include attribute name in the output
-     * @param center Print the center of volume in RAI coordinates
-     * @param ssep Use string SSEP as a separator between strings for multiple sub-bricks
-     * @param sprep Use string SPREP to replace blank space in string attributes
-     * @param quote Use single quote around each string
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ATTRIBUTE_METADATA);
     const params = v_3d_attribute_params(aname, dset, all, name, center, ssep, sprep, quote)
@@ -248,5 +248,8 @@ export {
       V3dAttributeParameters,
       V_3D_ATTRIBUTE_METADATA,
       v_3d_attribute,
+      v_3d_attribute_cargs,
+      v_3d_attribute_execute,
+      v_3d_attribute_outputs,
       v_3d_attribute_params,
 };

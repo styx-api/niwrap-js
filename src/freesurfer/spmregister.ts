@@ -12,7 +12,7 @@ const SPMREGISTER_METADATA: Metadata = {
 
 
 interface SpmregisterParameters {
-    "__STYXTYPE__": "spmregister";
+    "@type": "freesurfer.spmregister";
     "subjid": string;
     "mov": string;
     "reg": string;
@@ -29,35 +29,35 @@ interface SpmregisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "spmregister": spmregister_cargs,
+        "freesurfer.spmregister": spmregister_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "spmregister": spmregister_outputs,
+        "freesurfer.spmregister": spmregister_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface SpmregisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Id of the subject as found in SUBJECTS_DIR. This is converted to analyze using mri_convert.
+ * @param mov Volume identifier of the movable volume. Must be specified in a way suitable for mri_convert.
+ * @param reg Output registration file. Maps RAS in the reference to RAS in the movable.
+ * @param frame Use something other than the first frame. Specify the frame number you want.
+ * @param mid_frame Use the middle frame of the mov volume as the template.
+ * @param template_out Save the mov template when template is something other than the first frame.
+ * @param fsvol Use FreeSurfer volid (default brainmask).
+ * @param force_ras Force input geometry to be RAS.
+ * @param outvol Resample mov and save as outvol.
+ * @param tmpdir Temporary directory (implies --nocleanup).
+ * @param nocleanup Do not delete temporary files.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function spmregister_params(
     subjid: string,
     mov: string,
@@ -99,27 +118,8 @@ function spmregister_params(
     version: boolean = false,
     help: boolean = false,
 ): SpmregisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Id of the subject as found in SUBJECTS_DIR. This is converted to analyze using mri_convert.
-     * @param mov Volume identifier of the movable volume. Must be specified in a way suitable for mri_convert.
-     * @param reg Output registration file. Maps RAS in the reference to RAS in the movable.
-     * @param frame Use something other than the first frame. Specify the frame number you want.
-     * @param mid_frame Use the middle frame of the mov volume as the template.
-     * @param template_out Save the mov template when template is something other than the first frame.
-     * @param fsvol Use FreeSurfer volid (default brainmask).
-     * @param force_ras Force input geometry to be RAS.
-     * @param outvol Resample mov and save as outvol.
-     * @param tmpdir Temporary directory (implies --nocleanup).
-     * @param nocleanup Do not delete temporary files.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spmregister" as const,
+        "@type": "freesurfer.spmregister" as const,
         "subjid": subjid,
         "mov": mov,
         "reg": reg,
@@ -148,18 +148,18 @@ function spmregister_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spmregister_cargs(
     params: SpmregisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("spmregister");
     cargs.push(
@@ -223,18 +223,18 @@ function spmregister_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spmregister_outputs(
     params: SpmregisterParameters,
     execution: Execution,
 ): SpmregisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpmregisterOutputs = {
         root: execution.outputFile("."),
         registration_file: execution.outputFile(["register.dat"].join('')),
@@ -244,22 +244,22 @@ function spmregister_outputs(
 }
 
 
+/**
+ * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
+ */
 function spmregister_execute(
     params: SpmregisterParameters,
     execution: Execution,
 ): SpmregisterOutputs {
-    /**
-     * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = spmregister_cargs(params, execution)
     const ret = spmregister_outputs(params, execution)
@@ -268,6 +268,30 @@ function spmregister_execute(
 }
 
 
+/**
+ * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Id of the subject as found in SUBJECTS_DIR. This is converted to analyze using mri_convert.
+ * @param mov Volume identifier of the movable volume. Must be specified in a way suitable for mri_convert.
+ * @param reg Output registration file. Maps RAS in the reference to RAS in the movable.
+ * @param frame Use something other than the first frame. Specify the frame number you want.
+ * @param mid_frame Use the middle frame of the mov volume as the template.
+ * @param template_out Save the mov template when template is something other than the first frame.
+ * @param fsvol Use FreeSurfer volid (default brainmask).
+ * @param force_ras Force input geometry to be RAS.
+ * @param outvol Resample mov and save as outvol.
+ * @param tmpdir Temporary directory (implies --nocleanup).
+ * @param nocleanup Do not delete temporary files.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
+ */
 function spmregister(
     subjid: string,
     mov: string,
@@ -284,30 +308,6 @@ function spmregister(
     help: boolean = false,
     runner: Runner | null = null,
 ): SpmregisterOutputs {
-    /**
-     * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Id of the subject as found in SUBJECTS_DIR. This is converted to analyze using mri_convert.
-     * @param mov Volume identifier of the movable volume. Must be specified in a way suitable for mri_convert.
-     * @param reg Output registration file. Maps RAS in the reference to RAS in the movable.
-     * @param frame Use something other than the first frame. Specify the frame number you want.
-     * @param mid_frame Use the middle frame of the mov volume as the template.
-     * @param template_out Save the mov template when template is something other than the first frame.
-     * @param fsvol Use FreeSurfer volid (default brainmask).
-     * @param force_ras Force input geometry to be RAS.
-     * @param outvol Resample mov and save as outvol.
-     * @param tmpdir Temporary directory (implies --nocleanup).
-     * @param nocleanup Do not delete temporary files.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPMREGISTER_METADATA);
     const params = spmregister_params(subjid, mov, reg, frame, mid_frame, template_out, fsvol, force_ras, outvol, tmpdir, nocleanup, version, help)
@@ -320,5 +320,8 @@ export {
       SpmregisterOutputs,
       SpmregisterParameters,
       spmregister,
+      spmregister_cargs,
+      spmregister_execute,
+      spmregister_outputs,
       spmregister_params,
 };

@@ -12,7 +12,7 @@ const MRI_GRADUNWARP_METADATA: Metadata = {
 
 
 interface MriGradunwarpParameters {
-    "__STYXTYPE__": "mri_gradunwarp";
+    "@type": "freesurfer.mri_gradunwarp";
     "gradient_coeff"?: InputPathType | null | undefined;
     "load_transtbl"?: InputPathType | null | undefined;
     "input_file": InputPathType;
@@ -27,35 +27,35 @@ interface MriGradunwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gradunwarp": mri_gradunwarp_cargs,
+        "freesurfer.mri_gradunwarp": mri_gradunwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gradunwarp": mri_gradunwarp_outputs,
+        "freesurfer.mri_gradunwarp": mri_gradunwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,23 @@ interface MriGradunwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input warped volume or surface
+ * @param gradient_coeff Gradient coefficient input file (not to be used with --load_transtbl)
+ * @param load_transtbl Load unwarp transform table in m3z format (not to be used with --gradcoeff)
+ * @param output_file Output unwarped volume or surface
+ * @param out_transtbl Save unwarp transform table in m3z format
+ * @param save_transtbl_only Just save unwarp transform table in m3z format, requires --gradcoeff
+ * @param interpolation_type Interpolation method: nearest | trilinear | cubic (default is trilinear)
+ * @param nthreads Number of threads to run
+ * @param checkopts Don't run anything, just check options and exit
+ * @param version Print out version and exit
+ * @param help Print out information on how to use this program
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gradunwarp_params(
     input_file: InputPathType,
     gradient_coeff: InputPathType | null = null,
@@ -95,25 +112,8 @@ function mri_gradunwarp_params(
     version: boolean = false,
     help: boolean = false,
 ): MriGradunwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input warped volume or surface
-     * @param gradient_coeff Gradient coefficient input file (not to be used with --load_transtbl)
-     * @param load_transtbl Load unwarp transform table in m3z format (not to be used with --gradcoeff)
-     * @param output_file Output unwarped volume or surface
-     * @param out_transtbl Save unwarp transform table in m3z format
-     * @param save_transtbl_only Just save unwarp transform table in m3z format, requires --gradcoeff
-     * @param interpolation_type Interpolation method: nearest | trilinear | cubic (default is trilinear)
-     * @param nthreads Number of threads to run
-     * @param checkopts Don't run anything, just check options and exit
-     * @param version Print out version and exit
-     * @param help Print out information on how to use this program
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gradunwarp" as const,
+        "@type": "freesurfer.mri_gradunwarp" as const,
         "input_file": input_file,
         "save_transtbl_only": save_transtbl_only,
         "checkopts": checkopts,
@@ -142,18 +142,18 @@ function mri_gradunwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gradunwarp_cargs(
     params: MriGradunwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gradunwarp");
     if ((params["gradient_coeff"] ?? null) !== null) {
@@ -212,18 +212,18 @@ function mri_gradunwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gradunwarp_outputs(
     params: MriGradunwarpParameters,
     execution: Execution,
 ): MriGradunwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGradunwarpOutputs = {
         root: execution.outputFile("."),
         unwarped_output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -233,22 +233,22 @@ function mri_gradunwarp_outputs(
 }
 
 
+/**
+ * Tool to correct gradient non-linearity distortions in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
+ */
 function mri_gradunwarp_execute(
     params: MriGradunwarpParameters,
     execution: Execution,
 ): MriGradunwarpOutputs {
-    /**
-     * Tool to correct gradient non-linearity distortions in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gradunwarp_cargs(params, execution)
     const ret = mri_gradunwarp_outputs(params, execution)
@@ -257,6 +257,28 @@ function mri_gradunwarp_execute(
 }
 
 
+/**
+ * Tool to correct gradient non-linearity distortions in MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input warped volume or surface
+ * @param gradient_coeff Gradient coefficient input file (not to be used with --load_transtbl)
+ * @param load_transtbl Load unwarp transform table in m3z format (not to be used with --gradcoeff)
+ * @param output_file Output unwarped volume or surface
+ * @param out_transtbl Save unwarp transform table in m3z format
+ * @param save_transtbl_only Just save unwarp transform table in m3z format, requires --gradcoeff
+ * @param interpolation_type Interpolation method: nearest | trilinear | cubic (default is trilinear)
+ * @param nthreads Number of threads to run
+ * @param checkopts Don't run anything, just check options and exit
+ * @param version Print out version and exit
+ * @param help Print out information on how to use this program
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
+ */
 function mri_gradunwarp(
     input_file: InputPathType,
     gradient_coeff: InputPathType | null = null,
@@ -271,28 +293,6 @@ function mri_gradunwarp(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriGradunwarpOutputs {
-    /**
-     * Tool to correct gradient non-linearity distortions in MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input warped volume or surface
-     * @param gradient_coeff Gradient coefficient input file (not to be used with --load_transtbl)
-     * @param load_transtbl Load unwarp transform table in m3z format (not to be used with --gradcoeff)
-     * @param output_file Output unwarped volume or surface
-     * @param out_transtbl Save unwarp transform table in m3z format
-     * @param save_transtbl_only Just save unwarp transform table in m3z format, requires --gradcoeff
-     * @param interpolation_type Interpolation method: nearest | trilinear | cubic (default is trilinear)
-     * @param nthreads Number of threads to run
-     * @param checkopts Don't run anything, just check options and exit
-     * @param version Print out version and exit
-     * @param help Print out information on how to use this program
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GRADUNWARP_METADATA);
     const params = mri_gradunwarp_params(input_file, gradient_coeff, load_transtbl, output_file, out_transtbl, save_transtbl_only, interpolation_type, nthreads, checkopts, version, help)
@@ -305,5 +305,8 @@ export {
       MriGradunwarpOutputs,
       MriGradunwarpParameters,
       mri_gradunwarp,
+      mri_gradunwarp_cargs,
+      mri_gradunwarp_execute,
+      mri_gradunwarp_outputs,
       mri_gradunwarp_params,
 };

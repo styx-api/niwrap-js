@@ -12,28 +12,28 @@ const CIFTI_DILATE_METADATA: Metadata = {
 
 
 interface CiftiDilateLeftSurfaceParameters {
-    "__STYXTYPE__": "left_surface";
+    "@type": "workbench.cifti-dilate.left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiDilateRightSurfaceParameters {
-    "__STYXTYPE__": "right_surface";
+    "@type": "workbench.cifti-dilate.right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiDilateCerebellumSurfaceParameters {
-    "__STYXTYPE__": "cerebellum_surface";
+    "@type": "workbench.cifti-dilate.cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiDilateParameters {
-    "__STYXTYPE__": "cifti-dilate";
+    "@type": "workbench.cifti-dilate";
     "cifti_in": InputPathType;
     "direction": string;
     "surface_distance": number;
@@ -49,57 +49,57 @@ interface CiftiDilateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-dilate": cifti_dilate_cargs,
-        "left_surface": cifti_dilate_left_surface_cargs,
-        "right_surface": cifti_dilate_right_surface_cargs,
-        "cerebellum_surface": cifti_dilate_cerebellum_surface_cargs,
+        "workbench.cifti-dilate": cifti_dilate_cargs,
+        "workbench.cifti-dilate.left_surface": cifti_dilate_left_surface_cargs,
+        "workbench.cifti-dilate.right_surface": cifti_dilate_right_surface_cargs,
+        "workbench.cifti-dilate.cerebellum_surface": cifti_dilate_cerebellum_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-dilate": cifti_dilate_outputs,
+        "workbench.cifti-dilate": cifti_dilate_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the left surface file
+ * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_dilate_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiDilateLeftSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the left surface file
-     * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_surface" as const,
+        "@type": "workbench.cifti-dilate.left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -109,18 +109,18 @@ function cifti_dilate_left_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_dilate_left_surface_cargs(
     params: CiftiDilateLeftSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -134,20 +134,20 @@ function cifti_dilate_left_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the right surface file
+ * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_dilate_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiDilateRightSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the right surface file
-     * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_surface" as const,
+        "@type": "workbench.cifti-dilate.right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -157,18 +157,18 @@ function cifti_dilate_right_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_dilate_right_surface_cargs(
     params: CiftiDilateRightSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -182,20 +182,20 @@ function cifti_dilate_right_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the cerebellum surface file
+ * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_dilate_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiDilateCerebellumSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the cerebellum surface file
-     * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_surface" as const,
+        "@type": "workbench.cifti-dilate.cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -205,18 +205,18 @@ function cifti_dilate_cerebellum_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_dilate_cerebellum_surface_cargs(
     params: CiftiDilateCerebellumSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -247,6 +247,24 @@ interface CiftiDilateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param direction which dimension to dilate along, ROW or COLUMN
+ * @param surface_distance the distance to dilate on surfaces, in mm
+ * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_bad_brainordinate_roi_roi_cifti specify an roi of brainordinates to overwrite, rather than zeros: cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
+ * @param opt_nearest use nearest good value instead of a weighted average
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_legacy_mode use the math from v1.3.2 and earlier for weighted dilation
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_dilate_params(
     cifti_in: InputPathType,
     direction: string,
@@ -261,26 +279,8 @@ function cifti_dilate_params(
     opt_merged_volume: boolean = false,
     opt_legacy_mode: boolean = false,
 ): CiftiDilateParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param direction which dimension to dilate along, ROW or COLUMN
-     * @param surface_distance the distance to dilate on surfaces, in mm
-     * @param volume_distance the distance to dilate in the volume, in mm
-     * @param cifti_out the output cifti file
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_bad_brainordinate_roi_roi_cifti specify an roi of brainordinates to overwrite, rather than zeros: cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
-     * @param opt_nearest use nearest good value instead of a weighted average
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_legacy_mode use the math from v1.3.2 and earlier for weighted dilation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-dilate" as const,
+        "@type": "workbench.cifti-dilate" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "surface_distance": surface_distance,
@@ -306,18 +306,18 @@ function cifti_dilate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_dilate_cargs(
     params: CiftiDilateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-dilate");
@@ -327,13 +327,13 @@ function cifti_dilate_cargs(
     cargs.push(String((params["volume_distance"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null).__STYXTYPE__)((params["left_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null).__STYXTYPE__)((params["right_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null).__STYXTYPE__)((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_bad_brainordinate_roi_roi_cifti"] ?? null) !== null) {
         cargs.push(
@@ -354,18 +354,18 @@ function cifti_dilate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_dilate_outputs(
     params: CiftiDilateParameters,
     execution: Execution,
 ): CiftiDilateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiDilateOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -374,28 +374,28 @@ function cifti_dilate_outputs(
 }
 
 
+/**
+ * Dilate a cifti file.
+ *
+ * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.
+ *
+ * The -*-corrected-areas options are intended for dilating on group average surfaces, but it is only an approximate correction for the reduction of structure in a group average surface.
+ *
+ * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
+ */
 function cifti_dilate_execute(
     params: CiftiDilateParameters,
     execution: Execution,
 ): CiftiDilateOutputs {
-    /**
-     * Dilate a cifti file.
-     * 
-     * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.
-     * 
-     * The -*-corrected-areas options are intended for dilating on group average surfaces, but it is only an approximate correction for the reduction of structure in a group average surface.
-     * 
-     * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_dilate_cargs(params, execution)
     const ret = cifti_dilate_outputs(params, execution)
@@ -404,6 +404,35 @@ function cifti_dilate_execute(
 }
 
 
+/**
+ * Dilate a cifti file.
+ *
+ * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.
+ *
+ * The -*-corrected-areas options are intended for dilating on group average surfaces, but it is only an approximate correction for the reduction of structure in a group average surface.
+ *
+ * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the input cifti file
+ * @param direction which dimension to dilate along, ROW or COLUMN
+ * @param surface_distance the distance to dilate on surfaces, in mm
+ * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_bad_brainordinate_roi_roi_cifti specify an roi of brainordinates to overwrite, rather than zeros: cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
+ * @param opt_nearest use nearest good value instead of a weighted average
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_legacy_mode use the math from v1.3.2 and earlier for weighted dilation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
+ */
 function cifti_dilate(
     cifti_in: InputPathType,
     direction: string,
@@ -419,35 +448,6 @@ function cifti_dilate(
     opt_legacy_mode: boolean = false,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
-    /**
-     * Dilate a cifti file.
-     * 
-     * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.
-     * 
-     * The -*-corrected-areas options are intended for dilating on group average surfaces, but it is only an approximate correction for the reduction of structure in a group average surface.
-     * 
-     * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the input cifti file
-     * @param direction which dimension to dilate along, ROW or COLUMN
-     * @param surface_distance the distance to dilate on surfaces, in mm
-     * @param volume_distance the distance to dilate in the volume, in mm
-     * @param cifti_out the output cifti file
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_bad_brainordinate_roi_roi_cifti specify an roi of brainordinates to overwrite, rather than zeros: cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
-     * @param opt_nearest use nearest good value instead of a weighted average
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_legacy_mode use the math from v1.3.2 and earlier for weighted dilation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_DILATE_METADATA);
     const params = cifti_dilate_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, opt_bad_brainordinate_roi_roi_cifti, opt_nearest, opt_merged_volume, opt_legacy_mode)
@@ -463,8 +463,14 @@ export {
       CiftiDilateParameters,
       CiftiDilateRightSurfaceParameters,
       cifti_dilate,
+      cifti_dilate_cargs,
+      cifti_dilate_cerebellum_surface_cargs,
       cifti_dilate_cerebellum_surface_params,
+      cifti_dilate_execute,
+      cifti_dilate_left_surface_cargs,
       cifti_dilate_left_surface_params,
+      cifti_dilate_outputs,
       cifti_dilate_params,
+      cifti_dilate_right_surface_cargs,
       cifti_dilate_right_surface_params,
 };

@@ -12,7 +12,7 @@ const BALLOON_METADATA: Metadata = {
 
 
 interface BalloonParameters {
-    "__STYXTYPE__": "balloon";
+    "@type": "afni.balloon";
     "tr": number;
     "num_scans": number;
     "event_times": InputPathType;
@@ -22,33 +22,33 @@ interface BalloonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "balloon": balloon_cargs,
+        "afni.balloon": balloon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface BalloonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
+ * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
+ * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
+ * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
+ * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
+ * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
+ *
+ * @returns Parameter dictionary
+ */
 function balloon_params(
     tr: number,
     num_scans: number,
@@ -76,20 +88,8 @@ function balloon_params(
     t_fall: Array<number> | null = null,
     t_sustain: Array<number> | null = null,
 ): BalloonParameters {
-    /**
-     * Build parameters.
-    
-     * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
-     * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
-     * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
-     * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
-     * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
-     * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "balloon" as const,
+        "@type": "afni.balloon" as const,
         "tr": tr,
         "num_scans": num_scans,
         "event_times": event_times,
@@ -107,18 +107,18 @@ function balloon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function balloon_cargs(
     params: BalloonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("balloon");
     cargs.push(String((params["tr"] ?? null)));
@@ -137,18 +137,18 @@ function balloon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function balloon_outputs(
     params: BalloonParameters,
     execution: Execution,
 ): BalloonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BalloonOutputs = {
         root: execution.outputFile("."),
     };
@@ -156,22 +156,22 @@ function balloon_outputs(
 }
 
 
+/**
+ * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BalloonOutputs`).
+ */
 function balloon_execute(
     params: BalloonParameters,
     execution: Execution,
 ): BalloonOutputs {
-    /**
-     * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BalloonOutputs`).
-     */
     params = execution.params(params)
     const cargs = balloon_cargs(params, execution)
     const ret = balloon_outputs(params, execution)
@@ -180,6 +180,23 @@ function balloon_execute(
 }
 
 
+/**
+ * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
+ * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
+ * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
+ * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
+ * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
+ * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BalloonOutputs`).
+ */
 function balloon(
     tr: number,
     num_scans: number,
@@ -189,23 +206,6 @@ function balloon(
     t_sustain: Array<number> | null = null,
     runner: Runner | null = null,
 ): BalloonOutputs {
-    /**
-     * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tr Scan repetition time in seconds (TR), the interval at which the output curve will be sampled.
-     * @param num_scans Number of scans (N), the output curve will comprise this number of samples.
-     * @param event_times The name of a file containing the event timings, in seconds, as ASCII strings separated by white space, with time 0 being the time at which the initial scan occurred.
-     * @param t_rise Haemodynamic rise time in seconds (typically between 4s and 6s).
-     * @param t_fall Haemodynamic fall time in seconds (typically between 4s and 6s).
-     * @param t_sustain Haemodynamic sustain time in seconds (typically between 0s and 4s).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BalloonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BALLOON_METADATA);
     const params = balloon_params(tr, num_scans, event_times, t_rise, t_fall, t_sustain)
@@ -218,5 +218,8 @@ export {
       BalloonOutputs,
       BalloonParameters,
       balloon,
+      balloon_cargs,
+      balloon_execute,
+      balloon_outputs,
       balloon_params,
 };

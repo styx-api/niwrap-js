@@ -12,7 +12,7 @@ const V_3D_FDR_METADATA: Metadata = {
 
 
 interface V3dFdrParameters {
-    "__STYXTYPE__": "3dFDR";
+    "@type": "afni.3dFDR";
     "input_file": InputPathType;
     "input1d_file"?: InputPathType | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface V3dFdrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dFDR": v_3d_fdr_cargs,
+        "afni.3dFDR": v_3d_fdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dFDR": v_3d_fdr_outputs,
+        "afni.3dFDR": v_3d_fdr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface V3dFdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 3D functional dataset filename
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param input1d_file .1D file containing column of p-values
+ * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
+ * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
+ * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
+ * @param quiet Suppress screen output.
+ * @param list Write sorted list of voxel q-values to screen.
+ * @param mode_option Use the old or new mode of operation. 'new' is now the default.
+ * @param pmask Ignore p=1 voxels (default in new mode).
+ * @param nopmask Count p=1 voxels (default in old mode).
+ * @param force Force conversion of all sub-bricks, treating them as p-values.
+ * @param float Force the output of z-scores in floating point format.
+ * @param qval Force the output of q-values rather than z-scores.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_fdr_params(
     input_file: InputPathType,
     prefix: string,
@@ -105,28 +125,8 @@ function v_3d_fdr_params(
     float: boolean = false,
     qval: boolean = false,
 ): V3dFdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 3D functional dataset filename
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param input1d_file .1D file containing column of p-values
-     * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
-     * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
-     * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
-     * @param quiet Suppress screen output.
-     * @param list Write sorted list of voxel q-values to screen.
-     * @param mode_option Use the old or new mode of operation. 'new' is now the default.
-     * @param pmask Ignore p=1 voxels (default in new mode).
-     * @param nopmask Count p=1 voxels (default in old mode).
-     * @param force Force conversion of all sub-bricks, treating them as p-values.
-     * @param float Force the output of z-scores in floating point format.
-     * @param qval Force the output of q-values rather than z-scores.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dFDR" as const,
+        "@type": "afni.3dFDR" as const,
         "input_file": input_file,
         "quiet": quiet,
         "list": list,
@@ -156,18 +156,18 @@ function v_3d_fdr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_fdr_cargs(
     params: V3dFdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dFDR");
     cargs.push(
@@ -233,18 +233,18 @@ function v_3d_fdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_fdr_outputs(
     params: V3dFdrParameters,
     execution: Execution,
 ): V3dFdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dFdrOutputs = {
         root: execution.outputFile("."),
         output_brik: execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')),
@@ -255,22 +255,22 @@ function v_3d_fdr_outputs(
 }
 
 
+/**
+ * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
+ */
 function v_3d_fdr_execute(
     params: V3dFdrParameters,
     execution: Execution,
 ): V3dFdrOutputs {
-    /**
-     * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_fdr_cargs(params, execution)
     const ret = v_3d_fdr_outputs(params, execution)
@@ -279,6 +279,31 @@ function v_3d_fdr_execute(
 }
 
 
+/**
+ * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input 3D functional dataset filename
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param input1d_file .1D file containing column of p-values
+ * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
+ * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
+ * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
+ * @param quiet Suppress screen output.
+ * @param list Write sorted list of voxel q-values to screen.
+ * @param mode_option Use the old or new mode of operation. 'new' is now the default.
+ * @param pmask Ignore p=1 voxels (default in new mode).
+ * @param nopmask Count p=1 voxels (default in old mode).
+ * @param force Force conversion of all sub-bricks, treating them as p-values.
+ * @param float Force the output of z-scores in floating point format.
+ * @param qval Force the output of q-values rather than z-scores.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
+ */
 function v_3d_fdr(
     input_file: InputPathType,
     prefix: string,
@@ -296,31 +321,6 @@ function v_3d_fdr(
     qval: boolean = false,
     runner: Runner | null = null,
 ): V3dFdrOutputs {
-    /**
-     * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input 3D functional dataset filename
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param input1d_file .1D file containing column of p-values
-     * @param mask_file Use mask values from file mname. If file mname contains more than 1 sub-brick, the mask sub-brick must be specified. Generally should be used to avoid counting non-brain voxels.
-     * @param mask_threshold Only voxels whose corresponding mask value is greater than or equal to the specified value in absolute terms will be considered. Default is 1.
-     * @param constant_type Set constant c(N): 1 for independent p-values (default) or sum(1/i, i=1,...,N) for any joint distribution.
-     * @param quiet Suppress screen output.
-     * @param list Write sorted list of voxel q-values to screen.
-     * @param mode_option Use the old or new mode of operation. 'new' is now the default.
-     * @param pmask Ignore p=1 voxels (default in new mode).
-     * @param nopmask Count p=1 voxels (default in old mode).
-     * @param force Force conversion of all sub-bricks, treating them as p-values.
-     * @param float Force the output of z-scores in floating point format.
-     * @param qval Force the output of q-values rather than z-scores.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_FDR_METADATA);
     const params = v_3d_fdr_params(input_file, prefix, input1d_file, mask_file, mask_threshold, constant_type, quiet, list, mode_option, pmask, nopmask, force, float, qval)
@@ -333,5 +333,8 @@ export {
       V3dFdrParameters,
       V_3D_FDR_METADATA,
       v_3d_fdr,
+      v_3d_fdr_cargs,
+      v_3d_fdr_execute,
+      v_3d_fdr_outputs,
       v_3d_fdr_params,
 };

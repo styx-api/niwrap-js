@@ -12,7 +12,7 @@ const MRI_LABEL_HISTO_METADATA: Metadata = {
 
 
 interface MriLabelHistoParameters {
-    "__STYXTYPE__": "mri_label_histo";
+    "@type": "freesurfer.mri_label_histo";
     "t1_volume": InputPathType;
     "labeled_volume": InputPathType;
     "label": number;
@@ -20,35 +20,35 @@ interface MriLabelHistoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_label_histo": mri_label_histo_cargs,
+        "freesurfer.mri_label_histo": mri_label_histo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_label_histo": mri_label_histo_outputs,
+        "freesurfer.mri_label_histo": mri_label_histo_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriLabelHistoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_volume Input T1-weighted anatomical volume.
+ * @param labeled_volume Input volume with labeled regions.
+ * @param label Label of the region of interest.
+ * @param output Output file for histogram.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_label_histo_params(
     t1_volume: InputPathType,
     labeled_volume: InputPathType,
     label: number,
     output: string,
 ): MriLabelHistoParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_volume Input T1-weighted anatomical volume.
-     * @param labeled_volume Input volume with labeled regions.
-     * @param label Label of the region of interest.
-     * @param output Output file for histogram.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_label_histo" as const,
+        "@type": "freesurfer.mri_label_histo" as const,
         "t1_volume": t1_volume,
         "labeled_volume": labeled_volume,
         "label": label,
@@ -98,18 +98,18 @@ function mri_label_histo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_label_histo_cargs(
     params: MriLabelHistoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_label_histo");
     cargs.push(execution.inputFile((params["t1_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mri_label_histo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_label_histo_outputs(
     params: MriLabelHistoParameters,
     execution: Execution,
 ): MriLabelHistoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLabelHistoOutputs = {
         root: execution.outputFile("."),
         histogram_output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_label_histo_outputs(
 }
 
 
+/**
+ * Tool for creating a histogram of voxel values within a specified label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
+ */
 function mri_label_histo_execute(
     params: MriLabelHistoParameters,
     execution: Execution,
 ): MriLabelHistoOutputs {
-    /**
-     * Tool for creating a histogram of voxel values within a specified label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_label_histo_cargs(params, execution)
     const ret = mri_label_histo_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_label_histo_execute(
 }
 
 
+/**
+ * Tool for creating a histogram of voxel values within a specified label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_volume Input T1-weighted anatomical volume.
+ * @param labeled_volume Input volume with labeled regions.
+ * @param label Label of the region of interest.
+ * @param output Output file for histogram.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
+ */
 function mri_label_histo(
     t1_volume: InputPathType,
     labeled_volume: InputPathType,
@@ -171,21 +186,6 @@ function mri_label_histo(
     output: string,
     runner: Runner | null = null,
 ): MriLabelHistoOutputs {
-    /**
-     * Tool for creating a histogram of voxel values within a specified label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_volume Input T1-weighted anatomical volume.
-     * @param labeled_volume Input volume with labeled regions.
-     * @param label Label of the region of interest.
-     * @param output Output file for histogram.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LABEL_HISTO_METADATA);
     const params = mri_label_histo_params(t1_volume, labeled_volume, label, output)
@@ -198,5 +198,8 @@ export {
       MriLabelHistoOutputs,
       MriLabelHistoParameters,
       mri_label_histo,
+      mri_label_histo_cargs,
+      mri_label_histo_execute,
+      mri_label_histo_outputs,
       mri_label_histo_params,
 };

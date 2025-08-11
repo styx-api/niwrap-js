@@ -12,7 +12,7 @@ const V_3D_SETUP_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dSetupGroupInCorrParameters {
-    "__STYXTYPE__": "3dSetupGroupInCorr";
+    "@type": "afni.3dSetupGroupInCorr";
     "datasets": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
     "prefix": string;
@@ -25,35 +25,35 @@ interface V3dSetupGroupInCorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSetupGroupInCorr": v_3d_setup_group_in_corr_cargs,
+        "afni.3dSetupGroupInCorr": v_3d_setup_group_in_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSetupGroupInCorr": v_3d_setup_group_in_corr_outputs,
+        "afni.3dSetupGroupInCorr": v_3d_setup_group_in_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dSetupGroupInCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets AFNI 3D+time datasets to be processed.
+ * @param prefix Prefix for output dataset names.
+ * @param mask_dataset Mask dataset for voxel selection.
+ * @param short_flag Store data as 16-bit shorts.
+ * @param byte_flag Store data as 8-bit bytes.
+ * @param labels_file File containing a list of labels for each dataset.
+ * @param delete_flag Delete input datasets from disk after processing.
+ * @param prep_method Preprocess each data time series with the specified method.
+ * @param lr_pairs Set the domains for left and right hemisphere surfaces and indicate that the datasets are arranged in (Left, Right) pairs.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_setup_group_in_corr_params(
     datasets: Array<InputPathType>,
     prefix: string,
@@ -91,23 +106,8 @@ function v_3d_setup_group_in_corr_params(
     prep_method: string | null = null,
     lr_pairs: Array<string> | null = null,
 ): V3dSetupGroupInCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets AFNI 3D+time datasets to be processed.
-     * @param prefix Prefix for output dataset names.
-     * @param mask_dataset Mask dataset for voxel selection.
-     * @param short_flag Store data as 16-bit shorts.
-     * @param byte_flag Store data as 8-bit bytes.
-     * @param labels_file File containing a list of labels for each dataset.
-     * @param delete_flag Delete input datasets from disk after processing.
-     * @param prep_method Preprocess each data time series with the specified method.
-     * @param lr_pairs Set the domains for left and right hemisphere surfaces and indicate that the datasets are arranged in (Left, Right) pairs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSetupGroupInCorr" as const,
+        "@type": "afni.3dSetupGroupInCorr" as const,
         "datasets": datasets,
         "prefix": prefix,
         "short_flag": short_flag,
@@ -130,18 +130,18 @@ function v_3d_setup_group_in_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_setup_group_in_corr_cargs(
     params: V3dSetupGroupInCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSetupGroupInCorr");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -186,18 +186,18 @@ function v_3d_setup_group_in_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_setup_group_in_corr_outputs(
     params: V3dSetupGroupInCorrParameters,
     execution: Execution,
 ): V3dSetupGroupInCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSetupGroupInCorrOutputs = {
         root: execution.outputFile("."),
         niml_file: execution.outputFile([(params["prefix"] ?? null), ".grpincorr.niml"].join('')),
@@ -207,22 +207,22 @@ function v_3d_setup_group_in_corr_outputs(
 }
 
 
+/**
+ * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
+ */
 function v_3d_setup_group_in_corr_execute(
     params: V3dSetupGroupInCorrParameters,
     execution: Execution,
 ): V3dSetupGroupInCorrOutputs {
-    /**
-     * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_setup_group_in_corr_cargs(params, execution)
     const ret = v_3d_setup_group_in_corr_outputs(params, execution)
@@ -231,6 +231,26 @@ function v_3d_setup_group_in_corr_execute(
 }
 
 
+/**
+ * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets AFNI 3D+time datasets to be processed.
+ * @param prefix Prefix for output dataset names.
+ * @param mask_dataset Mask dataset for voxel selection.
+ * @param short_flag Store data as 16-bit shorts.
+ * @param byte_flag Store data as 8-bit bytes.
+ * @param labels_file File containing a list of labels for each dataset.
+ * @param delete_flag Delete input datasets from disk after processing.
+ * @param prep_method Preprocess each data time series with the specified method.
+ * @param lr_pairs Set the domains for left and right hemisphere surfaces and indicate that the datasets are arranged in (Left, Right) pairs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
+ */
 function v_3d_setup_group_in_corr(
     datasets: Array<InputPathType>,
     prefix: string,
@@ -243,26 +263,6 @@ function v_3d_setup_group_in_corr(
     lr_pairs: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dSetupGroupInCorrOutputs {
-    /**
-     * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets AFNI 3D+time datasets to be processed.
-     * @param prefix Prefix for output dataset names.
-     * @param mask_dataset Mask dataset for voxel selection.
-     * @param short_flag Store data as 16-bit shorts.
-     * @param byte_flag Store data as 8-bit bytes.
-     * @param labels_file File containing a list of labels for each dataset.
-     * @param delete_flag Delete input datasets from disk after processing.
-     * @param prep_method Preprocess each data time series with the specified method.
-     * @param lr_pairs Set the domains for left and right hemisphere surfaces and indicate that the datasets are arranged in (Left, Right) pairs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SETUP_GROUP_IN_CORR_METADATA);
     const params = v_3d_setup_group_in_corr_params(datasets, prefix, mask_dataset, short_flag, byte_flag, labels_file, delete_flag, prep_method, lr_pairs)
@@ -275,5 +275,8 @@ export {
       V3dSetupGroupInCorrParameters,
       V_3D_SETUP_GROUP_IN_CORR_METADATA,
       v_3d_setup_group_in_corr,
+      v_3d_setup_group_in_corr_cargs,
+      v_3d_setup_group_in_corr_execute,
+      v_3d_setup_group_in_corr_outputs,
       v_3d_setup_group_in_corr_params,
 };

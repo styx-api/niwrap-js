@@ -12,7 +12,7 @@ const APARCSTATS2TABLE_METADATA: Metadata = {
 
 
 interface Aparcstats2tableParameters {
-    "__STYXTYPE__": "aparcstats2table";
+    "@type": "freesurfer.aparcstats2table";
     "subjects"?: Array<string> | null | undefined;
     "subjectsfile"?: InputPathType | null | undefined;
     "qdec"?: InputPathType | null | undefined;
@@ -34,35 +34,35 @@ interface Aparcstats2tableParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aparcstats2table": aparcstats2table_cargs,
+        "freesurfer.aparcstats2table": aparcstats2table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "aparcstats2table": aparcstats2table_outputs,
+        "freesurfer.aparcstats2table": aparcstats2table_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface Aparcstats2tableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere being analyzed (lh or rh required).
+ * @param tablefile Output table file.
+ * @param subjects List of subject IDs.
+ * @param subjectsfile File containing list of subjects (one per line).
+ * @param qdec QDEC table file with subject IDs.
+ * @param qdec_long Longitudinal QDEC table with subject templates.
+ * @param parcellation Parcellation atlas (default: aparc).
+ * @param measure Measure type (e.g., area, volume, thickness).
+ * @param delimiter Delimiter between measures in the table (default: tab).
+ * @param skip_missing Skip subjects if input is not found.
+ * @param parcid_only Write only ROI names without pre/appended hemi/measure.
+ * @param common_parcs Output only common parcellations across all subjects.
+ * @param parcs_file File specifying which parcellations to output.
+ * @param report_rois Print ROI information for each subject.
+ * @param transpose Transpose the table (subjects in columns).
+ * @param debug Increase verbosity.
+ * @param etiv Report volume as percent estimated total intracranial volume.
+ * @param scale Scale factor for output values.
+ *
+ * @returns Parameter dictionary
+ */
 function aparcstats2table_params(
     hemi: string,
     tablefile: InputPathType,
@@ -105,32 +129,8 @@ function aparcstats2table_params(
     etiv: boolean = false,
     scale: number | null = 1,
 ): Aparcstats2tableParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere being analyzed (lh or rh required).
-     * @param tablefile Output table file.
-     * @param subjects List of subject IDs.
-     * @param subjectsfile File containing list of subjects (one per line).
-     * @param qdec QDEC table file with subject IDs.
-     * @param qdec_long Longitudinal QDEC table with subject templates.
-     * @param parcellation Parcellation atlas (default: aparc).
-     * @param measure Measure type (e.g., area, volume, thickness).
-     * @param delimiter Delimiter between measures in the table (default: tab).
-     * @param skip_missing Skip subjects if input is not found.
-     * @param parcid_only Write only ROI names without pre/appended hemi/measure.
-     * @param common_parcs Output only common parcellations across all subjects.
-     * @param parcs_file File specifying which parcellations to output.
-     * @param report_rois Print ROI information for each subject.
-     * @param transpose Transpose the table (subjects in columns).
-     * @param debug Increase verbosity.
-     * @param etiv Report volume as percent estimated total intracranial volume.
-     * @param scale Scale factor for output values.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aparcstats2table" as const,
+        "@type": "freesurfer.aparcstats2table" as const,
         "hemi": hemi,
         "tablefile": tablefile,
         "skip_missing": skip_missing,
@@ -172,18 +172,18 @@ function aparcstats2table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aparcstats2table_cargs(
     params: Aparcstats2tableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aparcstats2table");
     if ((params["subjects"] ?? null) !== null) {
@@ -273,18 +273,18 @@ function aparcstats2table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aparcstats2table_outputs(
     params: Aparcstats2tableParameters,
     execution: Execution,
 ): Aparcstats2tableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Aparcstats2tableOutputs = {
         root: execution.outputFile("."),
         output_table: execution.outputFile([path.basename((params["tablefile"] ?? null))].join('')),
@@ -293,22 +293,22 @@ function aparcstats2table_outputs(
 }
 
 
+/**
+ * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
+ */
 function aparcstats2table_execute(
     params: Aparcstats2tableParameters,
     execution: Execution,
 ): Aparcstats2tableOutputs {
-    /**
-     * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
-     */
     params = execution.params(params)
     const cargs = aparcstats2table_cargs(params, execution)
     const ret = aparcstats2table_outputs(params, execution)
@@ -317,6 +317,35 @@ function aparcstats2table_execute(
 }
 
 
+/**
+ * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere being analyzed (lh or rh required).
+ * @param tablefile Output table file.
+ * @param subjects List of subject IDs.
+ * @param subjectsfile File containing list of subjects (one per line).
+ * @param qdec QDEC table file with subject IDs.
+ * @param qdec_long Longitudinal QDEC table with subject templates.
+ * @param parcellation Parcellation atlas (default: aparc).
+ * @param measure Measure type (e.g., area, volume, thickness).
+ * @param delimiter Delimiter between measures in the table (default: tab).
+ * @param skip_missing Skip subjects if input is not found.
+ * @param parcid_only Write only ROI names without pre/appended hemi/measure.
+ * @param common_parcs Output only common parcellations across all subjects.
+ * @param parcs_file File specifying which parcellations to output.
+ * @param report_rois Print ROI information for each subject.
+ * @param transpose Transpose the table (subjects in columns).
+ * @param debug Increase verbosity.
+ * @param etiv Report volume as percent estimated total intracranial volume.
+ * @param scale Scale factor for output values.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
+ */
 function aparcstats2table(
     hemi: string,
     tablefile: InputPathType,
@@ -338,35 +367,6 @@ function aparcstats2table(
     scale: number | null = 1,
     runner: Runner | null = null,
 ): Aparcstats2tableOutputs {
-    /**
-     * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere being analyzed (lh or rh required).
-     * @param tablefile Output table file.
-     * @param subjects List of subject IDs.
-     * @param subjectsfile File containing list of subjects (one per line).
-     * @param qdec QDEC table file with subject IDs.
-     * @param qdec_long Longitudinal QDEC table with subject templates.
-     * @param parcellation Parcellation atlas (default: aparc).
-     * @param measure Measure type (e.g., area, volume, thickness).
-     * @param delimiter Delimiter between measures in the table (default: tab).
-     * @param skip_missing Skip subjects if input is not found.
-     * @param parcid_only Write only ROI names without pre/appended hemi/measure.
-     * @param common_parcs Output only common parcellations across all subjects.
-     * @param parcs_file File specifying which parcellations to output.
-     * @param report_rois Print ROI information for each subject.
-     * @param transpose Transpose the table (subjects in columns).
-     * @param debug Increase verbosity.
-     * @param etiv Report volume as percent estimated total intracranial volume.
-     * @param scale Scale factor for output values.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APARCSTATS2TABLE_METADATA);
     const params = aparcstats2table_params(hemi, tablefile, subjects, subjectsfile, qdec, qdec_long, parcellation, measure, delimiter, skip_missing, parcid_only, common_parcs, parcs_file, report_rois, transpose, debug, etiv, scale)
@@ -379,5 +379,8 @@ export {
       Aparcstats2tableOutputs,
       Aparcstats2tableParameters,
       aparcstats2table,
+      aparcstats2table_cargs,
+      aparcstats2table_execute,
+      aparcstats2table_outputs,
       aparcstats2table_params,
 };

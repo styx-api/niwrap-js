@@ -12,7 +12,7 @@ const MRIS_CA_TRAIN_METADATA: Metadata = {
 
 
 interface MrisCaTrainParameters {
-    "__STYXTYPE__": "mris_ca_train";
+    "@type": "freesurfer.mris_ca_train";
     "hemi": string;
     "canonsurf": InputPathType;
     "annot_file": InputPathType;
@@ -42,35 +42,35 @@ interface MrisCaTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_ca_train": mris_ca_train_cargs,
+        "freesurfer.mris_ca_train": mris_ca_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_ca_train": mris_ca_train_outputs,
+        "freesurfer.mris_ca_train": mris_ca_train_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,38 @@ interface MrisCaTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere: rh or lh
+ * @param canonsurf Canonical surface filename
+ * @param annot_file Annotation filename
+ * @param subjects List of subject ids
+ * @param output_file Classifier array output file
+ * @param sdir Directory as subjects directory (default: $SUBJECTS_DIR)
+ * @param nbrs Neighborhood size (default=2)
+ * @param orig Filename of original surface (default=smoothwm)
+ * @param norm1 GCSA normalize input #1 after reading (default: disabled)
+ * @param norm2 GCSA normalize input #2 after reading (default: disabled)
+ * @param norm3 GCSA normalize input #3 after reading (default: disabled)
+ * @param ic Parameters passed to the classifier routine (default: -ic 7 4)
+ * @param sulc Specify sulc as only input (default: sulcus and curvature)
+ * @param sulconly Same as -sulc
+ * @param a Number of nearest neighbor smoothing iterations to apply to input 1 (default=5)
+ * @param parcellation_table Parcellation table input file (default: none)
+ * @param n Number of inputs (default=1,max=3)
+ * @param verbose Diagnostic level (default=0)
+ * @param debug_vertex Debug diagnostic level for a specific vertex (default=0)
+ * @param gcs_means Extract likelihood means for all classes for given input
+ * @param gcs_priors Extract priors for all classes for given input
+ * @param gcs_diff Determine whether GCSAs are different
+ * @param nfill Set the max number of iterations for filling empty vertices
+ * @param no_fill Do not fill at all
+ * @param help Print help info
+ * @param version Print version info
+ *
+ * @returns Parameter dictionary
+ */
 function mris_ca_train_params(
     hemi: string,
     canonsurf: InputPathType,
@@ -121,40 +153,8 @@ function mris_ca_train_params(
     help: boolean = false,
     version: boolean = false,
 ): MrisCaTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere: rh or lh
-     * @param canonsurf Canonical surface filename
-     * @param annot_file Annotation filename
-     * @param subjects List of subject ids
-     * @param output_file Classifier array output file
-     * @param sdir Directory as subjects directory (default: $SUBJECTS_DIR)
-     * @param nbrs Neighborhood size (default=2)
-     * @param orig Filename of original surface (default=smoothwm)
-     * @param norm1 GCSA normalize input #1 after reading (default: disabled)
-     * @param norm2 GCSA normalize input #2 after reading (default: disabled)
-     * @param norm3 GCSA normalize input #3 after reading (default: disabled)
-     * @param ic Parameters passed to the classifier routine (default: -ic 7 4)
-     * @param sulc Specify sulc as only input (default: sulcus and curvature)
-     * @param sulconly Same as -sulc
-     * @param a Number of nearest neighbor smoothing iterations to apply to input 1 (default=5)
-     * @param parcellation_table Parcellation table input file (default: none)
-     * @param n Number of inputs (default=1,max=3)
-     * @param verbose Diagnostic level (default=0)
-     * @param debug_vertex Debug diagnostic level for a specific vertex (default=0)
-     * @param gcs_means Extract likelihood means for all classes for given input
-     * @param gcs_priors Extract priors for all classes for given input
-     * @param gcs_diff Determine whether GCSAs are different
-     * @param nfill Set the max number of iterations for filling empty vertices
-     * @param no_fill Do not fill at all
-     * @param help Print help info
-     * @param version Print version info
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_ca_train" as const,
+        "@type": "freesurfer.mris_ca_train" as const,
         "hemi": hemi,
         "canonsurf": canonsurf,
         "annot_file": annot_file,
@@ -212,18 +212,18 @@ function mris_ca_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_ca_train_cargs(
     params: MrisCaTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_ca_train");
     cargs.push((params["hemi"] ?? null));
@@ -337,18 +337,18 @@ function mris_ca_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_ca_train_outputs(
     params: MrisCaTrainParameters,
     execution: Execution,
 ): MrisCaTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisCaTrainOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -357,22 +357,22 @@ function mris_ca_train_outputs(
 }
 
 
+/**
+ * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
+ */
 function mris_ca_train_execute(
     params: MrisCaTrainParameters,
     execution: Execution,
 ): MrisCaTrainOutputs {
-    /**
-     * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_ca_train_cargs(params, execution)
     const ret = mris_ca_train_outputs(params, execution)
@@ -381,6 +381,43 @@ function mris_ca_train_execute(
 }
 
 
+/**
+ * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere: rh or lh
+ * @param canonsurf Canonical surface filename
+ * @param annot_file Annotation filename
+ * @param subjects List of subject ids
+ * @param output_file Classifier array output file
+ * @param sdir Directory as subjects directory (default: $SUBJECTS_DIR)
+ * @param nbrs Neighborhood size (default=2)
+ * @param orig Filename of original surface (default=smoothwm)
+ * @param norm1 GCSA normalize input #1 after reading (default: disabled)
+ * @param norm2 GCSA normalize input #2 after reading (default: disabled)
+ * @param norm3 GCSA normalize input #3 after reading (default: disabled)
+ * @param ic Parameters passed to the classifier routine (default: -ic 7 4)
+ * @param sulc Specify sulc as only input (default: sulcus and curvature)
+ * @param sulconly Same as -sulc
+ * @param a Number of nearest neighbor smoothing iterations to apply to input 1 (default=5)
+ * @param parcellation_table Parcellation table input file (default: none)
+ * @param n Number of inputs (default=1,max=3)
+ * @param verbose Diagnostic level (default=0)
+ * @param debug_vertex Debug diagnostic level for a specific vertex (default=0)
+ * @param gcs_means Extract likelihood means for all classes for given input
+ * @param gcs_priors Extract priors for all classes for given input
+ * @param gcs_diff Determine whether GCSAs are different
+ * @param nfill Set the max number of iterations for filling empty vertices
+ * @param no_fill Do not fill at all
+ * @param help Print help info
+ * @param version Print version info
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
+ */
 function mris_ca_train(
     hemi: string,
     canonsurf: InputPathType,
@@ -410,43 +447,6 @@ function mris_ca_train(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisCaTrainOutputs {
-    /**
-     * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere: rh or lh
-     * @param canonsurf Canonical surface filename
-     * @param annot_file Annotation filename
-     * @param subjects List of subject ids
-     * @param output_file Classifier array output file
-     * @param sdir Directory as subjects directory (default: $SUBJECTS_DIR)
-     * @param nbrs Neighborhood size (default=2)
-     * @param orig Filename of original surface (default=smoothwm)
-     * @param norm1 GCSA normalize input #1 after reading (default: disabled)
-     * @param norm2 GCSA normalize input #2 after reading (default: disabled)
-     * @param norm3 GCSA normalize input #3 after reading (default: disabled)
-     * @param ic Parameters passed to the classifier routine (default: -ic 7 4)
-     * @param sulc Specify sulc as only input (default: sulcus and curvature)
-     * @param sulconly Same as -sulc
-     * @param a Number of nearest neighbor smoothing iterations to apply to input 1 (default=5)
-     * @param parcellation_table Parcellation table input file (default: none)
-     * @param n Number of inputs (default=1,max=3)
-     * @param verbose Diagnostic level (default=0)
-     * @param debug_vertex Debug diagnostic level for a specific vertex (default=0)
-     * @param gcs_means Extract likelihood means for all classes for given input
-     * @param gcs_priors Extract priors for all classes for given input
-     * @param gcs_diff Determine whether GCSAs are different
-     * @param nfill Set the max number of iterations for filling empty vertices
-     * @param no_fill Do not fill at all
-     * @param help Print help info
-     * @param version Print version info
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CA_TRAIN_METADATA);
     const params = mris_ca_train_params(hemi, canonsurf, annot_file, subjects, output_file, sdir, nbrs, orig, norm1, norm2, norm3, ic, sulc, sulconly, a, parcellation_table, n, verbose, debug_vertex, gcs_means, gcs_priors, gcs_diff, nfill, no_fill, help, version)
@@ -459,5 +459,8 @@ export {
       MrisCaTrainOutputs,
       MrisCaTrainParameters,
       mris_ca_train,
+      mris_ca_train_cargs,
+      mris_ca_train_execute,
+      mris_ca_train_outputs,
       mris_ca_train_params,
 };

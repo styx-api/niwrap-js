@@ -12,7 +12,7 @@ const XHEMIREG_METADATA: Metadata = {
 
 
 interface XhemiregParameters {
-    "__STYXTYPE__": "xhemireg";
+    "@type": "freesurfer.xhemireg";
     "subject": string;
     "output_dir"?: string | null | undefined;
     "map_lh": boolean;
@@ -29,33 +29,33 @@ interface XhemiregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xhemireg": xhemireg_cargs,
+        "freesurfer.xhemireg": xhemireg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface XhemiregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject ID for the hemisphere registration process
+ * @param output_dir Output directory for the hemisphere registration
+ * @param map_lh Map from left hemisphere to right hemisphere
+ * @param map_rh Map from right hemisphere to left hemisphere
+ * @param perform_reg Perform registration to create sphere.reg
+ * @param tal_compute Recompute Talairach registration
+ * @param no_tal_compute Do not perform Talairach registration
+ * @param tal_estimate Compute estimate of Talairach registration from unflipped registration
+ * @param no_tal_estimate Do not perform estimation of Talairach registration
+ * @param gcaprep Prepare GCA for training symmetrical GCA atlases
+ * @param threads Number of threads used, applicable with --gcaprep option
+ * @param version Print version and exit
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function xhemireg_params(
     subject: string,
     output_dir: string | null = null,
@@ -90,27 +109,8 @@ function xhemireg_params(
     version: boolean = false,
     help: boolean = false,
 ): XhemiregParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject ID for the hemisphere registration process
-     * @param output_dir Output directory for the hemisphere registration
-     * @param map_lh Map from left hemisphere to right hemisphere
-     * @param map_rh Map from right hemisphere to left hemisphere
-     * @param perform_reg Perform registration to create sphere.reg
-     * @param tal_compute Recompute Talairach registration
-     * @param no_tal_compute Do not perform Talairach registration
-     * @param tal_estimate Compute estimate of Talairach registration from unflipped registration
-     * @param no_tal_estimate Do not perform estimation of Talairach registration
-     * @param gcaprep Prepare GCA for training symmetrical GCA atlases
-     * @param threads Number of threads used, applicable with --gcaprep option
-     * @param version Print version and exit
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xhemireg" as const,
+        "@type": "freesurfer.xhemireg" as const,
         "subject": subject,
         "map_lh": map_lh,
         "map_rh": map_rh,
@@ -135,18 +135,18 @@ function xhemireg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xhemireg_cargs(
     params: XhemiregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xhemireg");
     cargs.push(
@@ -202,18 +202,18 @@ function xhemireg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xhemireg_outputs(
     params: XhemiregParameters,
     execution: Execution,
 ): XhemiregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XhemiregOutputs = {
         root: execution.outputFile("."),
     };
@@ -221,22 +221,22 @@ function xhemireg_outputs(
 }
 
 
+/**
+ * Tool for hemisphere registration in neuroimaging.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
+ */
 function xhemireg_execute(
     params: XhemiregParameters,
     execution: Execution,
 ): XhemiregOutputs {
-    /**
-     * Tool for hemisphere registration in neuroimaging.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
-     */
     params = execution.params(params)
     const cargs = xhemireg_cargs(params, execution)
     const ret = xhemireg_outputs(params, execution)
@@ -245,6 +245,30 @@ function xhemireg_execute(
 }
 
 
+/**
+ * Tool for hemisphere registration in neuroimaging.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject ID for the hemisphere registration process
+ * @param output_dir Output directory for the hemisphere registration
+ * @param map_lh Map from left hemisphere to right hemisphere
+ * @param map_rh Map from right hemisphere to left hemisphere
+ * @param perform_reg Perform registration to create sphere.reg
+ * @param tal_compute Recompute Talairach registration
+ * @param no_tal_compute Do not perform Talairach registration
+ * @param tal_estimate Compute estimate of Talairach registration from unflipped registration
+ * @param no_tal_estimate Do not perform estimation of Talairach registration
+ * @param gcaprep Prepare GCA for training symmetrical GCA atlases
+ * @param threads Number of threads used, applicable with --gcaprep option
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
+ */
 function xhemireg(
     subject: string,
     output_dir: string | null = null,
@@ -261,30 +285,6 @@ function xhemireg(
     help: boolean = false,
     runner: Runner | null = null,
 ): XhemiregOutputs {
-    /**
-     * Tool for hemisphere registration in neuroimaging.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject ID for the hemisphere registration process
-     * @param output_dir Output directory for the hemisphere registration
-     * @param map_lh Map from left hemisphere to right hemisphere
-     * @param map_rh Map from right hemisphere to left hemisphere
-     * @param perform_reg Perform registration to create sphere.reg
-     * @param tal_compute Recompute Talairach registration
-     * @param no_tal_compute Do not perform Talairach registration
-     * @param tal_estimate Compute estimate of Talairach registration from unflipped registration
-     * @param no_tal_estimate Do not perform estimation of Talairach registration
-     * @param gcaprep Prepare GCA for training symmetrical GCA atlases
-     * @param threads Number of threads used, applicable with --gcaprep option
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XHEMIREG_METADATA);
     const params = xhemireg_params(subject, output_dir, map_lh, map_rh, perform_reg, tal_compute, no_tal_compute, tal_estimate, no_tal_estimate, gcaprep, threads, version, help)
@@ -297,5 +297,8 @@ export {
       XhemiregOutputs,
       XhemiregParameters,
       xhemireg,
+      xhemireg_cargs,
+      xhemireg_execute,
+      xhemireg_outputs,
       xhemireg_params,
 };

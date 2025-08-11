@@ -12,21 +12,21 @@ const GREEDY_METADATA: Metadata = {
 
 
 interface GreedyInputImagesParameters {
-    "__STYXTYPE__": "input_images";
+    "@type": "greedy.greedy.input_images";
     "fixed": InputPathType;
     "moving": InputPathType;
 }
 
 
 interface GreedyInvertParameters {
-    "__STYXTYPE__": "invert";
+    "@type": "greedy.greedy.invert";
     "inwarp": InputPathType;
     "outwarp": string;
 }
 
 
 interface GreedyRootParameters {
-    "__STYXTYPE__": "root";
+    "@type": "greedy.greedy.root";
     "inwarp": InputPathType;
     "outwarp": string;
     "n": number;
@@ -34,28 +34,28 @@ interface GreedyRootParameters {
 
 
 interface GreedyJacobianParameters {
-    "__STYXTYPE__": "jacobian";
+    "@type": "greedy.greedy.jacobian";
     "inwarp": InputPathType;
     "outjac": string;
 }
 
 
 interface GreedyMetricParameters {
-    "__STYXTYPE__": "metric";
+    "@type": "greedy.greedy.metric";
     "metric_type": "SSD" | "MI" | "NMI" | "NCC" | "MAHAL";
     "metric_param"?: number | null | undefined;
 }
 
 
 interface GreedyTjrParameters {
-    "__STYXTYPE__": "tjr";
+    "@type": "greedy.greedy.tjr";
     "mesh": InputPathType;
     "weight": number;
 }
 
 
 interface GreedySearchParameters {
-    "__STYXTYPE__": "search";
+    "@type": "greedy.greedy.search";
     "n": number;
     "rot": string;
     "tran": number;
@@ -63,28 +63,28 @@ interface GreedySearchParameters {
 
 
 interface GreedyResliceMovingImageParameters {
-    "__STYXTYPE__": "reslice_moving_image";
+    "@type": "greedy.greedy.reslice_moving_image";
     "moving": InputPathType;
     "output": string;
 }
 
 
 interface GreedyResliceSurfaceParameters {
-    "__STYXTYPE__": "reslice_surface";
+    "@type": "greedy.greedy.reslice_surface";
     "inmesh": InputPathType;
     "outmesh": string;
 }
 
 
 interface GreedyResliceSimplexJacobianParameters {
-    "__STYXTYPE__": "reslice_simplex_jacobian";
+    "@type": "greedy.greedy.reslice_simplex_jacobian";
     "inmesh": InputPathType;
     "outmesh": string;
 }
 
 
 interface GreedyParameters {
-    "__STYXTYPE__": "greedy";
+    "@type": "greedy.greedy";
     "dimensions": number;
     "input_images"?: GreedyInputImagesParameters | null | undefined;
     "output"?: string | null | undefined;
@@ -160,70 +160,70 @@ interface GreedyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "greedy": greedy_cargs,
-        "input_images": greedy_input_images_cargs,
-        "invert": greedy_invert_cargs,
-        "root": greedy_root_cargs,
-        "jacobian": greedy_jacobian_cargs,
-        "metric": greedy_metric_cargs,
-        "tjr": greedy_tjr_cargs,
-        "search": greedy_search_cargs,
-        "reslice_moving_image": greedy_reslice_moving_image_cargs,
-        "reslice_surface": greedy_reslice_surface_cargs,
-        "reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_cargs,
+        "greedy.greedy": greedy_cargs,
+        "greedy.greedy.input_images": greedy_input_images_cargs,
+        "greedy.greedy.invert": greedy_invert_cargs,
+        "greedy.greedy.root": greedy_root_cargs,
+        "greedy.greedy.jacobian": greedy_jacobian_cargs,
+        "greedy.greedy.metric": greedy_metric_cargs,
+        "greedy.greedy.tjr": greedy_tjr_cargs,
+        "greedy.greedy.search": greedy_search_cargs,
+        "greedy.greedy.reslice_moving_image": greedy_reslice_moving_image_cargs,
+        "greedy.greedy.reslice_surface": greedy_reslice_surface_cargs,
+        "greedy.greedy.reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "greedy": greedy_outputs,
-        "invert": greedy_invert_outputs,
-        "root": greedy_root_outputs,
-        "jacobian": greedy_jacobian_outputs,
-        "reslice_moving_image": greedy_reslice_moving_image_outputs,
-        "reslice_surface": greedy_reslice_surface_outputs,
-        "reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_outputs,
+        "greedy.greedy": greedy_outputs,
+        "greedy.greedy.invert": greedy_invert_outputs,
+        "greedy.greedy.root": greedy_root_outputs,
+        "greedy.greedy.jacobian": greedy_jacobian_outputs,
+        "greedy.greedy.reslice_moving_image": greedy_reslice_moving_image_outputs,
+        "greedy.greedy.reslice_surface": greedy_reslice_surface_outputs,
+        "greedy.greedy.reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed The fixed image
+ * @param moving The moving image
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_input_images_params(
     fixed: InputPathType,
     moving: InputPathType,
 ): GreedyInputImagesParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed The fixed image
-     * @param moving The moving image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "input_images" as const,
+        "@type": "greedy.greedy.input_images" as const,
         "fixed": fixed,
         "moving": moving,
     };
@@ -231,18 +231,18 @@ function greedy_input_images_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_input_images_cargs(
     params: GreedyInputImagesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["fixed"] ?? null)));
     cargs.push(execution.inputFile((params["moving"] ?? null)));
@@ -267,20 +267,20 @@ interface GreedyInvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inwarp The input warp to be inverted
+ * @param outwarp The filename for the inverted warp output
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_invert_params(
     inwarp: InputPathType,
     outwarp: string,
 ): GreedyInvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param inwarp The input warp to be inverted
-     * @param outwarp The filename for the inverted warp output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "invert" as const,
+        "@type": "greedy.greedy.invert" as const,
         "inwarp": inwarp,
         "outwarp": outwarp,
     };
@@ -288,18 +288,18 @@ function greedy_invert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_invert_cargs(
     params: GreedyInvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["inwarp"] ?? null)));
     cargs.push((params["outwarp"] ?? null));
@@ -307,18 +307,18 @@ function greedy_invert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_invert_outputs(
     params: GreedyInvertParameters,
     execution: Execution,
 ): GreedyInvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyInvertOutputs = {
         root: execution.outputFile("."),
         inverted_warp: execution.outputFile([(params["outwarp"] ?? null)].join('')),
@@ -344,22 +344,22 @@ interface GreedyRootOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inwarp The input warp
+ * @param outwarp The filename for the root warp output
+ * @param n The value of N for 2^N-th root
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_root_params(
     inwarp: InputPathType,
     outwarp: string,
     n: number,
 ): GreedyRootParameters {
-    /**
-     * Build parameters.
-    
-     * @param inwarp The input warp
-     * @param outwarp The filename for the root warp output
-     * @param n The value of N for 2^N-th root
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "root" as const,
+        "@type": "greedy.greedy.root" as const,
         "inwarp": inwarp,
         "outwarp": outwarp,
         "n": n,
@@ -368,18 +368,18 @@ function greedy_root_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_root_cargs(
     params: GreedyRootParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["inwarp"] ?? null)));
     cargs.push((params["outwarp"] ?? null));
@@ -388,18 +388,18 @@ function greedy_root_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_root_outputs(
     params: GreedyRootParameters,
     execution: Execution,
 ): GreedyRootOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyRootOutputs = {
         root: execution.outputFile("."),
         root_warp: execution.outputFile([(params["outwarp"] ?? null)].join('')),
@@ -425,20 +425,20 @@ interface GreedyJacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inwarp The input warp
+ * @param outjac The filename for the Jacobian determinant output
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_jacobian_params(
     inwarp: InputPathType,
     outjac: string,
 ): GreedyJacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param inwarp The input warp
-     * @param outjac The filename for the Jacobian determinant output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "jacobian" as const,
+        "@type": "greedy.greedy.jacobian" as const,
         "inwarp": inwarp,
         "outjac": outjac,
     };
@@ -446,18 +446,18 @@ function greedy_jacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_jacobian_cargs(
     params: GreedyJacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["inwarp"] ?? null)));
     cargs.push((params["outjac"] ?? null));
@@ -465,18 +465,18 @@ function greedy_jacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_jacobian_outputs(
     params: GreedyJacobianParameters,
     execution: Execution,
 ): GreedyJacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyJacobianOutputs = {
         root: execution.outputFile("."),
         jacobian_determinant: execution.outputFile([(params["outjac"] ?? null)].join('')),
@@ -485,20 +485,20 @@ function greedy_jacobian_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_type Type of metric to use
+ * @param metric_param Parameter for the metric (e.g., radius for NCC)
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_metric_params(
     metric_type: "SSD" | "MI" | "NMI" | "NCC" | "MAHAL",
     metric_param: number | null = null,
 ): GreedyMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_type Type of metric to use
-     * @param metric_param Parameter for the metric (e.g., radius for NCC)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric" as const,
+        "@type": "greedy.greedy.metric" as const,
         "metric_type": metric_type,
     };
     if (metric_param !== null) {
@@ -508,18 +508,18 @@ function greedy_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_metric_cargs(
     params: GreedyMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["metric_type"] ?? null));
     if ((params["metric_param"] ?? null) !== null) {
@@ -529,20 +529,20 @@ function greedy_metric_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mesh The tetrahedral mesh file
+ * @param weight The weight of the penalty term
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_tjr_params(
     mesh: InputPathType,
     weight: number,
 ): GreedyTjrParameters {
-    /**
-     * Build parameters.
-    
-     * @param mesh The tetrahedral mesh file
-     * @param weight The weight of the penalty term
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tjr" as const,
+        "@type": "greedy.greedy.tjr" as const,
         "mesh": mesh,
         "weight": weight,
     };
@@ -550,18 +550,18 @@ function greedy_tjr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_tjr_cargs(
     params: GreedyTjrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["mesh"] ?? null)));
     cargs.push(String((params["weight"] ?? null)));
@@ -569,22 +569,22 @@ function greedy_tjr_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param n Number of iterations for random search
+ * @param rot Standard deviation of random rotation angle (degrees) or 'any' or 'flip'
+ * @param tran Standard deviation of random offset in physical units
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_search_params(
     n: number,
     rot: string,
     tran: number,
 ): GreedySearchParameters {
-    /**
-     * Build parameters.
-    
-     * @param n Number of iterations for random search
-     * @param rot Standard deviation of random rotation angle (degrees) or 'any' or 'flip'
-     * @param tran Standard deviation of random offset in physical units
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "search" as const,
+        "@type": "greedy.greedy.search" as const,
         "n": n,
         "rot": rot,
         "tran": tran,
@@ -593,18 +593,18 @@ function greedy_search_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_search_cargs(
     params: GreedySearchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(String((params["n"] ?? null)));
     cargs.push((params["rot"] ?? null));
@@ -630,20 +630,20 @@ interface GreedyResliceMovingImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param moving The moving image to be resliced
+ * @param output The filename for the resliced output image
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_reslice_moving_image_params(
     moving: InputPathType,
     output: string,
 ): GreedyResliceMovingImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param moving The moving image to be resliced
-     * @param output The filename for the resliced output image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reslice_moving_image" as const,
+        "@type": "greedy.greedy.reslice_moving_image" as const,
         "moving": moving,
         "output": output,
     };
@@ -651,18 +651,18 @@ function greedy_reslice_moving_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_reslice_moving_image_cargs(
     params: GreedyResliceMovingImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["moving"] ?? null)));
     cargs.push((params["output"] ?? null));
@@ -670,18 +670,18 @@ function greedy_reslice_moving_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_reslice_moving_image_outputs(
     params: GreedyResliceMovingImageParameters,
     execution: Execution,
 ): GreedyResliceMovingImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyResliceMovingImageOutputs = {
         root: execution.outputFile("."),
         resliced_image: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -707,20 +707,20 @@ interface GreedyResliceSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inmesh The input mesh file
+ * @param outmesh The filename for the output warped mesh
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_reslice_surface_params(
     inmesh: InputPathType,
     outmesh: string,
 ): GreedyResliceSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param inmesh The input mesh file
-     * @param outmesh The filename for the output warped mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reslice_surface" as const,
+        "@type": "greedy.greedy.reslice_surface" as const,
         "inmesh": inmesh,
         "outmesh": outmesh,
     };
@@ -728,18 +728,18 @@ function greedy_reslice_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_reslice_surface_cargs(
     params: GreedyResliceSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["inmesh"] ?? null)));
     cargs.push((params["outmesh"] ?? null));
@@ -747,18 +747,18 @@ function greedy_reslice_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_reslice_surface_outputs(
     params: GreedyResliceSurfaceParameters,
     execution: Execution,
 ): GreedyResliceSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyResliceSurfaceOutputs = {
         root: execution.outputFile("."),
         warped_mesh: execution.outputFile([(params["outmesh"] ?? null)].join('')),
@@ -784,20 +784,20 @@ interface GreedyResliceSimplexJacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inmesh The input simplex mesh file
+ * @param outmesh The filename for the output mesh with Jacobian determinants
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_reslice_simplex_jacobian_params(
     inmesh: InputPathType,
     outmesh: string,
 ): GreedyResliceSimplexJacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param inmesh The input simplex mesh file
-     * @param outmesh The filename for the output mesh with Jacobian determinants
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reslice_simplex_jacobian" as const,
+        "@type": "greedy.greedy.reslice_simplex_jacobian" as const,
         "inmesh": inmesh,
         "outmesh": outmesh,
     };
@@ -805,18 +805,18 @@ function greedy_reslice_simplex_jacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_reslice_simplex_jacobian_cargs(
     params: GreedyResliceSimplexJacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["inmesh"] ?? null)));
     cargs.push((params["outmesh"] ?? null));
@@ -824,18 +824,18 @@ function greedy_reslice_simplex_jacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_reslice_simplex_jacobian_outputs(
     params: GreedyResliceSimplexJacobianParameters,
     execution: Execution,
 ): GreedyResliceSimplexJacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyResliceSimplexJacobianOutputs = {
         root: execution.outputFile("."),
         jacobian_mesh: execution.outputFile([(params["outmesh"] ?? null)].join('')),
@@ -885,6 +885,84 @@ interface GreedyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimensions Number of image dimensions
+ * @param input_images Image pair (may be repeated)
+ * @param output Output file (matrix in affine mode; image in deformable mode, metric computation mode; ignored in reslicing mode)
+ * @param affine Perform affine registration and save to output (-o)
+ * @param brute Perform a brute force search around each voxel
+ * @param moments Perform moments of inertia rigid alignment of given order (1 or 2)
+ * @param reslice Reslice images instead of doing registration
+ * @param invert Invert previously computed warp
+ * @param root Convert 2^N-th root of a warp
+ * @param jacobian Compute the Jacobian determinant of the warp
+ * @param metric_mode Compute metric between images
+ * @param defopt Deformable optimization mode (experimental)
+ * @param weight Weight of the next -i pair
+ * @param metric Metric for the entire registration
+ * @param step_size Step size for optimization (default = 1.0), may also be specified per level (e.g. 0.3x0.1)
+ * @param iterations Number of iterations per level of multi-res
+ * @param threads Number of allowed concurrent threads
+ * @param fixed_mask Fixed image mask (metric gradients computed only over the mask)
+ * @param gm_trim Generate the fixed image mask by trimming the extent of the fixed image by given radius
+ * @param moving_mask Moving image mask (pixels outside are excluded from metric computation)
+ * @param wncc_mask_dilate Specifies that fixed and moving masks should be dilated by the radius of the WNCC metric during registration
+ * @param reference_image Use supplied image, rather than fixed image to define the reference space
+ * @param ref_pad Define the reference space by padding the fixed image by radius
+ * @param background Value to fill missing values when mapping fixed and moving images to reference space
+ * @param input_transform Specify transforms (matrices, warps) that map moving image to reference space
+ * @param zero_last_dimension Sets sigmas and NCC radius to zero in the last dimension for 2D/3D registration
+ * @param time_step_mode Time step behavior mode
+ * @param smoothing Smoothing for the greedy update step (e.g., '1.732vox 0.7071vox')
+ * @param inverse_warp Compute and write the inverse of the warp field
+ * @param root_warp Compute and write the (2^N-th) root of the warp field
+ * @param warp_precision Saved warp precision in voxels (default=0.1; 0 for no compression)
+ * @param noise Standard deviation of white noise added to moving/fixed images when using NCC metric
+ * @param exponent The exponent used for warp inversion, root computation, and in stationary velocity field mode
+ * @param svf_mode Perform registration using the stationary velocity model
+ * @param svlb Use more accurate but expensive update of v in stationary velocity field mode
+ * @param sv_incompr Incompressibility mode, implements Mansi et al. 2011 iLogDemons
+ * @param initial_warp Specifies the initial warp to start iteration from
+ * @param tjr Apply a regularization penalty based on the Jacobian of a tetrahedral mesh
+ * @param wr Weight of SVF smoothness regularization term (default: 1000)
+ * @param initial_affine Initial affine matrix for optimization
+ * @param ia_identity Initialize affine matrix based on NIFTI headers
+ * @param ia_voxel_grid Initialize affine matrix so that voxels with corresponding indices align
+ * @param ia_image_centers Initialize affine matrix based on matching image centers
+ * @param ia_image_side Initialize affine matrix based on matching center of one image side
+ * @param ia_moments Initialize affine matrix based on matching moments of inertia
+ * @param affine_dof Degrees of freedom for affine registration. 6=rigid, 7=similarity, 12=affine
+ * @param jitter Jitter (in voxel units) applied to sample points (default: 0.5)
+ * @param search Random search over rigid transforms before starting optimization
+ * @param det Force the determinant of transform to be either 1 (no flip) or -1 (flip)
+ * @param cov_id Assume identity covariance (match centers and do flips only, no rotation)
+ * @param fixed_reslicing_image Fixed image for reslicing
+ * @param reslice_moving_image Moving/output image pair for reslicing
+ * @param reslice_surface Fixed/output surface pair (vertices are warped from fixed space to moving)
+ * @param interpolation Interpolation for the next pair (NN, LINEAR*, LABEL sigma)
+ * @param reslice_background Background (i.e. outside) intensity for the next pair (default 0)
+ * @param reslice_datatype Data type for the next pair
+ * @param reslice_composite Write composed transforms to outwarp
+ * @param reslice_jacobian Write Jacobian determinant image to outjacobian
+ * @param reslice_simplex_jacobian Compute Jacobian determinant for a simplex mesh in fixed space
+ * @param reslice_mask A binary mask for the fixed image; zero values will be overwritten with background
+ * @param metric_gradient Write the gradient of the metric to file
+ * @param debug_deriv Enable periodic checks of derivatives (debug)
+ * @param debug_deriv_eps Epsilon for derivative debugging
+ * @param debug_aff_obj Plot affine objective in neighborhood of -ia matrix
+ * @param dump_pyramid Dump the image pyramid at the start of the registration
+ * @param dump_moving Dump moving image at each iter
+ * @param dump_frequency Dump frequency
+ * @param dump_prefix Prefix for dump files (may be a path)
+ * @param powell Use Powell's method instead of LGBFS
+ * @param float Use single precision floating point (off by default)
+ * @param version Print version info
+ * @param verbosity Verbosity level (0: none, 1: default, 2: verbose)
+ *
+ * @returns Parameter dictionary
+ */
 function greedy_params(
     dimensions: number,
     input_images: GreedyInputImagesParameters | null = null,
@@ -959,86 +1037,8 @@ function greedy_params(
     version: boolean = false,
     verbosity: 0 | 1 | 2 | null = null,
 ): GreedyParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimensions Number of image dimensions
-     * @param input_images Image pair (may be repeated)
-     * @param output Output file (matrix in affine mode; image in deformable mode, metric computation mode; ignored in reslicing mode)
-     * @param affine Perform affine registration and save to output (-o)
-     * @param brute Perform a brute force search around each voxel
-     * @param moments Perform moments of inertia rigid alignment of given order (1 or 2)
-     * @param reslice Reslice images instead of doing registration
-     * @param invert Invert previously computed warp
-     * @param root Convert 2^N-th root of a warp
-     * @param jacobian Compute the Jacobian determinant of the warp
-     * @param metric_mode Compute metric between images
-     * @param defopt Deformable optimization mode (experimental)
-     * @param weight Weight of the next -i pair
-     * @param metric Metric for the entire registration
-     * @param step_size Step size for optimization (default = 1.0), may also be specified per level (e.g. 0.3x0.1)
-     * @param iterations Number of iterations per level of multi-res
-     * @param threads Number of allowed concurrent threads
-     * @param fixed_mask Fixed image mask (metric gradients computed only over the mask)
-     * @param gm_trim Generate the fixed image mask by trimming the extent of the fixed image by given radius
-     * @param moving_mask Moving image mask (pixels outside are excluded from metric computation)
-     * @param wncc_mask_dilate Specifies that fixed and moving masks should be dilated by the radius of the WNCC metric during registration
-     * @param reference_image Use supplied image, rather than fixed image to define the reference space
-     * @param ref_pad Define the reference space by padding the fixed image by radius
-     * @param background Value to fill missing values when mapping fixed and moving images to reference space
-     * @param input_transform Specify transforms (matrices, warps) that map moving image to reference space
-     * @param zero_last_dimension Sets sigmas and NCC radius to zero in the last dimension for 2D/3D registration
-     * @param time_step_mode Time step behavior mode
-     * @param smoothing Smoothing for the greedy update step (e.g., '1.732vox 0.7071vox')
-     * @param inverse_warp Compute and write the inverse of the warp field
-     * @param root_warp Compute and write the (2^N-th) root of the warp field
-     * @param warp_precision Saved warp precision in voxels (default=0.1; 0 for no compression)
-     * @param noise Standard deviation of white noise added to moving/fixed images when using NCC metric
-     * @param exponent The exponent used for warp inversion, root computation, and in stationary velocity field mode
-     * @param svf_mode Perform registration using the stationary velocity model
-     * @param svlb Use more accurate but expensive update of v in stationary velocity field mode
-     * @param sv_incompr Incompressibility mode, implements Mansi et al. 2011 iLogDemons
-     * @param initial_warp Specifies the initial warp to start iteration from
-     * @param tjr Apply a regularization penalty based on the Jacobian of a tetrahedral mesh
-     * @param wr Weight of SVF smoothness regularization term (default: 1000)
-     * @param initial_affine Initial affine matrix for optimization
-     * @param ia_identity Initialize affine matrix based on NIFTI headers
-     * @param ia_voxel_grid Initialize affine matrix so that voxels with corresponding indices align
-     * @param ia_image_centers Initialize affine matrix based on matching image centers
-     * @param ia_image_side Initialize affine matrix based on matching center of one image side
-     * @param ia_moments Initialize affine matrix based on matching moments of inertia
-     * @param affine_dof Degrees of freedom for affine registration. 6=rigid, 7=similarity, 12=affine
-     * @param jitter Jitter (in voxel units) applied to sample points (default: 0.5)
-     * @param search Random search over rigid transforms before starting optimization
-     * @param det Force the determinant of transform to be either 1 (no flip) or -1 (flip)
-     * @param cov_id Assume identity covariance (match centers and do flips only, no rotation)
-     * @param fixed_reslicing_image Fixed image for reslicing
-     * @param reslice_moving_image Moving/output image pair for reslicing
-     * @param reslice_surface Fixed/output surface pair (vertices are warped from fixed space to moving)
-     * @param interpolation Interpolation for the next pair (NN, LINEAR*, LABEL sigma)
-     * @param reslice_background Background (i.e. outside) intensity for the next pair (default 0)
-     * @param reslice_datatype Data type for the next pair
-     * @param reslice_composite Write composed transforms to outwarp
-     * @param reslice_jacobian Write Jacobian determinant image to outjacobian
-     * @param reslice_simplex_jacobian Compute Jacobian determinant for a simplex mesh in fixed space
-     * @param reslice_mask A binary mask for the fixed image; zero values will be overwritten with background
-     * @param metric_gradient Write the gradient of the metric to file
-     * @param debug_deriv Enable periodic checks of derivatives (debug)
-     * @param debug_deriv_eps Epsilon for derivative debugging
-     * @param debug_aff_obj Plot affine objective in neighborhood of -ia matrix
-     * @param dump_pyramid Dump the image pyramid at the start of the registration
-     * @param dump_moving Dump moving image at each iter
-     * @param dump_frequency Dump frequency
-     * @param dump_prefix Prefix for dump files (may be a path)
-     * @param powell Use Powell's method instead of LGBFS
-     * @param float Use single precision floating point (off by default)
-     * @param version Print version info
-     * @param verbosity Verbosity level (0: none, 1: default, 2: verbose)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "greedy" as const,
+        "@type": "greedy.greedy" as const,
         "dimensions": dimensions,
         "affine": affine,
         "metric_mode": metric_mode,
@@ -1220,18 +1220,18 @@ function greedy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function greedy_cargs(
     params: GreedyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("greedy");
     cargs.push(
@@ -1241,7 +1241,7 @@ function greedy_cargs(
     if ((params["input_images"] ?? null) !== null) {
         cargs.push(
             "-i",
-            ...dynCargs((params["input_images"] ?? null).__STYXTYPE__)((params["input_images"] ?? null), execution)
+            ...dynCargs((params["input_images"] ?? null)["@type"])((params["input_images"] ?? null), execution)
         );
     }
     if ((params["output"] ?? null) !== null) {
@@ -1274,19 +1274,19 @@ function greedy_cargs(
     if ((params["invert"] ?? null) !== null) {
         cargs.push(
             "-iw",
-            ...dynCargs((params["invert"] ?? null).__STYXTYPE__)((params["invert"] ?? null), execution)
+            ...dynCargs((params["invert"] ?? null)["@type"])((params["invert"] ?? null), execution)
         );
     }
     if ((params["root"] ?? null) !== null) {
         cargs.push(
             "-root",
-            ...dynCargs((params["root"] ?? null).__STYXTYPE__)((params["root"] ?? null), execution)
+            ...dynCargs((params["root"] ?? null)["@type"])((params["root"] ?? null), execution)
         );
     }
     if ((params["jacobian"] ?? null) !== null) {
         cargs.push(
             "-jac",
-            ...dynCargs((params["jacobian"] ?? null).__STYXTYPE__)((params["jacobian"] ?? null), execution)
+            ...dynCargs((params["jacobian"] ?? null)["@type"])((params["jacobian"] ?? null), execution)
         );
     }
     if ((params["metric_mode"] ?? null)) {
@@ -1304,7 +1304,7 @@ function greedy_cargs(
     if ((params["metric"] ?? null) !== null) {
         cargs.push(
             "-m",
-            ...dynCargs((params["metric"] ?? null).__STYXTYPE__)((params["metric"] ?? null), execution)
+            ...dynCargs((params["metric"] ?? null)["@type"])((params["metric"] ?? null), execution)
         );
     }
     if ((params["step_size"] ?? null) !== null) {
@@ -1433,7 +1433,7 @@ function greedy_cargs(
     if ((params["tjr"] ?? null) !== null) {
         cargs.push(
             "-tjr",
-            ...dynCargs((params["tjr"] ?? null).__STYXTYPE__)((params["tjr"] ?? null), execution)
+            ...dynCargs((params["tjr"] ?? null)["@type"])((params["tjr"] ?? null), execution)
         );
     }
     if ((params["wr"] ?? null) !== null) {
@@ -1484,7 +1484,7 @@ function greedy_cargs(
     if ((params["search"] ?? null) !== null) {
         cargs.push(
             "-search",
-            ...dynCargs((params["search"] ?? null).__STYXTYPE__)((params["search"] ?? null), execution)
+            ...dynCargs((params["search"] ?? null)["@type"])((params["search"] ?? null), execution)
         );
     }
     if ((params["det"] ?? null) !== null) {
@@ -1505,13 +1505,13 @@ function greedy_cargs(
     if ((params["reslice_moving_image"] ?? null) !== null) {
         cargs.push(
             "-rm",
-            ...dynCargs((params["reslice_moving_image"] ?? null).__STYXTYPE__)((params["reslice_moving_image"] ?? null), execution)
+            ...dynCargs((params["reslice_moving_image"] ?? null)["@type"])((params["reslice_moving_image"] ?? null), execution)
         );
     }
     if ((params["reslice_surface"] ?? null) !== null) {
         cargs.push(
             "-rs",
-            ...dynCargs((params["reslice_surface"] ?? null).__STYXTYPE__)((params["reslice_surface"] ?? null), execution)
+            ...dynCargs((params["reslice_surface"] ?? null)["@type"])((params["reslice_surface"] ?? null), execution)
         );
     }
     if ((params["interpolation"] ?? null) !== null) {
@@ -1547,7 +1547,7 @@ function greedy_cargs(
     if ((params["reslice_simplex_jacobian"] ?? null) !== null) {
         cargs.push(
             "-rsj",
-            ...dynCargs((params["reslice_simplex_jacobian"] ?? null).__STYXTYPE__)((params["reslice_simplex_jacobian"] ?? null), execution)
+            ...dynCargs((params["reslice_simplex_jacobian"] ?? null)["@type"])((params["reslice_simplex_jacobian"] ?? null), execution)
         );
     }
     if ((params["reslice_mask"] ?? null) !== null) {
@@ -1611,48 +1611,48 @@ function greedy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function greedy_outputs(
     params: GreedyParameters,
     execution: Execution,
 ): GreedyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GreedyOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
-        invert: (dynOutputs((params["invert"] ?? null).__STYXTYPE__)?.((params["invert"] ?? null), execution) ?? null),
-        root_: (dynOutputs((params["root"] ?? null).__STYXTYPE__)?.((params["root"] ?? null), execution) ?? null),
-        jacobian: (dynOutputs((params["jacobian"] ?? null).__STYXTYPE__)?.((params["jacobian"] ?? null), execution) ?? null),
-        reslice_moving_image: (dynOutputs((params["reslice_moving_image"] ?? null).__STYXTYPE__)?.((params["reslice_moving_image"] ?? null), execution) ?? null),
-        reslice_surface: (dynOutputs((params["reslice_surface"] ?? null).__STYXTYPE__)?.((params["reslice_surface"] ?? null), execution) ?? null),
-        reslice_simplex_jacobian: (dynOutputs((params["reslice_simplex_jacobian"] ?? null).__STYXTYPE__)?.((params["reslice_simplex_jacobian"] ?? null), execution) ?? null),
+        invert: (dynOutputs((params["invert"] ?? null)["@type"])?.((params["invert"] ?? null), execution) ?? null),
+        root_: (dynOutputs((params["root"] ?? null)["@type"])?.((params["root"] ?? null), execution) ?? null),
+        jacobian: (dynOutputs((params["jacobian"] ?? null)["@type"])?.((params["jacobian"] ?? null), execution) ?? null),
+        reslice_moving_image: (dynOutputs((params["reslice_moving_image"] ?? null)["@type"])?.((params["reslice_moving_image"] ?? null), execution) ?? null),
+        reslice_surface: (dynOutputs((params["reslice_surface"] ?? null)["@type"])?.((params["reslice_surface"] ?? null), execution) ?? null),
+        reslice_simplex_jacobian: (dynOutputs((params["reslice_simplex_jacobian"] ?? null)["@type"])?.((params["reslice_simplex_jacobian"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Paul's greedy diffeomorphic registration implementation.
+ *
+ * Author: Greedy Developers
+ *
+ * URL: https://sites.google.com/view/greedyreg/about
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GreedyOutputs`).
+ */
 function greedy_execute(
     params: GreedyParameters,
     execution: Execution,
 ): GreedyOutputs {
-    /**
-     * Paul's greedy diffeomorphic registration implementation.
-     * 
-     * Author: Greedy Developers
-     * 
-     * URL: https://sites.google.com/view/greedyreg/about
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GreedyOutputs`).
-     */
     params = execution.params(params)
     const cargs = greedy_cargs(params, execution)
     const ret = greedy_outputs(params, execution)
@@ -1661,6 +1661,89 @@ function greedy_execute(
 }
 
 
+/**
+ * Paul's greedy diffeomorphic registration implementation.
+ *
+ * Author: Greedy Developers
+ *
+ * URL: https://sites.google.com/view/greedyreg/about
+ *
+ * @param dimensions Number of image dimensions
+ * @param input_images Image pair (may be repeated)
+ * @param output Output file (matrix in affine mode; image in deformable mode, metric computation mode; ignored in reslicing mode)
+ * @param affine Perform affine registration and save to output (-o)
+ * @param brute Perform a brute force search around each voxel
+ * @param moments Perform moments of inertia rigid alignment of given order (1 or 2)
+ * @param reslice Reslice images instead of doing registration
+ * @param invert Invert previously computed warp
+ * @param root Convert 2^N-th root of a warp
+ * @param jacobian Compute the Jacobian determinant of the warp
+ * @param metric_mode Compute metric between images
+ * @param defopt Deformable optimization mode (experimental)
+ * @param weight Weight of the next -i pair
+ * @param metric Metric for the entire registration
+ * @param step_size Step size for optimization (default = 1.0), may also be specified per level (e.g. 0.3x0.1)
+ * @param iterations Number of iterations per level of multi-res
+ * @param threads Number of allowed concurrent threads
+ * @param fixed_mask Fixed image mask (metric gradients computed only over the mask)
+ * @param gm_trim Generate the fixed image mask by trimming the extent of the fixed image by given radius
+ * @param moving_mask Moving image mask (pixels outside are excluded from metric computation)
+ * @param wncc_mask_dilate Specifies that fixed and moving masks should be dilated by the radius of the WNCC metric during registration
+ * @param reference_image Use supplied image, rather than fixed image to define the reference space
+ * @param ref_pad Define the reference space by padding the fixed image by radius
+ * @param background Value to fill missing values when mapping fixed and moving images to reference space
+ * @param input_transform Specify transforms (matrices, warps) that map moving image to reference space
+ * @param zero_last_dimension Sets sigmas and NCC radius to zero in the last dimension for 2D/3D registration
+ * @param time_step_mode Time step behavior mode
+ * @param smoothing Smoothing for the greedy update step (e.g., '1.732vox 0.7071vox')
+ * @param inverse_warp Compute and write the inverse of the warp field
+ * @param root_warp Compute and write the (2^N-th) root of the warp field
+ * @param warp_precision Saved warp precision in voxels (default=0.1; 0 for no compression)
+ * @param noise Standard deviation of white noise added to moving/fixed images when using NCC metric
+ * @param exponent The exponent used for warp inversion, root computation, and in stationary velocity field mode
+ * @param svf_mode Perform registration using the stationary velocity model
+ * @param svlb Use more accurate but expensive update of v in stationary velocity field mode
+ * @param sv_incompr Incompressibility mode, implements Mansi et al. 2011 iLogDemons
+ * @param initial_warp Specifies the initial warp to start iteration from
+ * @param tjr Apply a regularization penalty based on the Jacobian of a tetrahedral mesh
+ * @param wr Weight of SVF smoothness regularization term (default: 1000)
+ * @param initial_affine Initial affine matrix for optimization
+ * @param ia_identity Initialize affine matrix based on NIFTI headers
+ * @param ia_voxel_grid Initialize affine matrix so that voxels with corresponding indices align
+ * @param ia_image_centers Initialize affine matrix based on matching image centers
+ * @param ia_image_side Initialize affine matrix based on matching center of one image side
+ * @param ia_moments Initialize affine matrix based on matching moments of inertia
+ * @param affine_dof Degrees of freedom for affine registration. 6=rigid, 7=similarity, 12=affine
+ * @param jitter Jitter (in voxel units) applied to sample points (default: 0.5)
+ * @param search Random search over rigid transforms before starting optimization
+ * @param det Force the determinant of transform to be either 1 (no flip) or -1 (flip)
+ * @param cov_id Assume identity covariance (match centers and do flips only, no rotation)
+ * @param fixed_reslicing_image Fixed image for reslicing
+ * @param reslice_moving_image Moving/output image pair for reslicing
+ * @param reslice_surface Fixed/output surface pair (vertices are warped from fixed space to moving)
+ * @param interpolation Interpolation for the next pair (NN, LINEAR*, LABEL sigma)
+ * @param reslice_background Background (i.e. outside) intensity for the next pair (default 0)
+ * @param reslice_datatype Data type for the next pair
+ * @param reslice_composite Write composed transforms to outwarp
+ * @param reslice_jacobian Write Jacobian determinant image to outjacobian
+ * @param reslice_simplex_jacobian Compute Jacobian determinant for a simplex mesh in fixed space
+ * @param reslice_mask A binary mask for the fixed image; zero values will be overwritten with background
+ * @param metric_gradient Write the gradient of the metric to file
+ * @param debug_deriv Enable periodic checks of derivatives (debug)
+ * @param debug_deriv_eps Epsilon for derivative debugging
+ * @param debug_aff_obj Plot affine objective in neighborhood of -ia matrix
+ * @param dump_pyramid Dump the image pyramid at the start of the registration
+ * @param dump_moving Dump moving image at each iter
+ * @param dump_frequency Dump frequency
+ * @param dump_prefix Prefix for dump files (may be a path)
+ * @param powell Use Powell's method instead of LGBFS
+ * @param float Use single precision floating point (off by default)
+ * @param version Print version info
+ * @param verbosity Verbosity level (0: none, 1: default, 2: verbose)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GreedyOutputs`).
+ */
 function greedy_(
     dimensions: number,
     input_images: GreedyInputImagesParameters | null = null,
@@ -1736,89 +1819,6 @@ function greedy_(
     verbosity: 0 | 1 | 2 | null = null,
     runner: Runner | null = null,
 ): GreedyOutputs {
-    /**
-     * Paul's greedy diffeomorphic registration implementation.
-     * 
-     * Author: Greedy Developers
-     * 
-     * URL: https://sites.google.com/view/greedyreg/about
-    
-     * @param dimensions Number of image dimensions
-     * @param input_images Image pair (may be repeated)
-     * @param output Output file (matrix in affine mode; image in deformable mode, metric computation mode; ignored in reslicing mode)
-     * @param affine Perform affine registration and save to output (-o)
-     * @param brute Perform a brute force search around each voxel
-     * @param moments Perform moments of inertia rigid alignment of given order (1 or 2)
-     * @param reslice Reslice images instead of doing registration
-     * @param invert Invert previously computed warp
-     * @param root Convert 2^N-th root of a warp
-     * @param jacobian Compute the Jacobian determinant of the warp
-     * @param metric_mode Compute metric between images
-     * @param defopt Deformable optimization mode (experimental)
-     * @param weight Weight of the next -i pair
-     * @param metric Metric for the entire registration
-     * @param step_size Step size for optimization (default = 1.0), may also be specified per level (e.g. 0.3x0.1)
-     * @param iterations Number of iterations per level of multi-res
-     * @param threads Number of allowed concurrent threads
-     * @param fixed_mask Fixed image mask (metric gradients computed only over the mask)
-     * @param gm_trim Generate the fixed image mask by trimming the extent of the fixed image by given radius
-     * @param moving_mask Moving image mask (pixels outside are excluded from metric computation)
-     * @param wncc_mask_dilate Specifies that fixed and moving masks should be dilated by the radius of the WNCC metric during registration
-     * @param reference_image Use supplied image, rather than fixed image to define the reference space
-     * @param ref_pad Define the reference space by padding the fixed image by radius
-     * @param background Value to fill missing values when mapping fixed and moving images to reference space
-     * @param input_transform Specify transforms (matrices, warps) that map moving image to reference space
-     * @param zero_last_dimension Sets sigmas and NCC radius to zero in the last dimension for 2D/3D registration
-     * @param time_step_mode Time step behavior mode
-     * @param smoothing Smoothing for the greedy update step (e.g., '1.732vox 0.7071vox')
-     * @param inverse_warp Compute and write the inverse of the warp field
-     * @param root_warp Compute and write the (2^N-th) root of the warp field
-     * @param warp_precision Saved warp precision in voxels (default=0.1; 0 for no compression)
-     * @param noise Standard deviation of white noise added to moving/fixed images when using NCC metric
-     * @param exponent The exponent used for warp inversion, root computation, and in stationary velocity field mode
-     * @param svf_mode Perform registration using the stationary velocity model
-     * @param svlb Use more accurate but expensive update of v in stationary velocity field mode
-     * @param sv_incompr Incompressibility mode, implements Mansi et al. 2011 iLogDemons
-     * @param initial_warp Specifies the initial warp to start iteration from
-     * @param tjr Apply a regularization penalty based on the Jacobian of a tetrahedral mesh
-     * @param wr Weight of SVF smoothness regularization term (default: 1000)
-     * @param initial_affine Initial affine matrix for optimization
-     * @param ia_identity Initialize affine matrix based on NIFTI headers
-     * @param ia_voxel_grid Initialize affine matrix so that voxels with corresponding indices align
-     * @param ia_image_centers Initialize affine matrix based on matching image centers
-     * @param ia_image_side Initialize affine matrix based on matching center of one image side
-     * @param ia_moments Initialize affine matrix based on matching moments of inertia
-     * @param affine_dof Degrees of freedom for affine registration. 6=rigid, 7=similarity, 12=affine
-     * @param jitter Jitter (in voxel units) applied to sample points (default: 0.5)
-     * @param search Random search over rigid transforms before starting optimization
-     * @param det Force the determinant of transform to be either 1 (no flip) or -1 (flip)
-     * @param cov_id Assume identity covariance (match centers and do flips only, no rotation)
-     * @param fixed_reslicing_image Fixed image for reslicing
-     * @param reslice_moving_image Moving/output image pair for reslicing
-     * @param reslice_surface Fixed/output surface pair (vertices are warped from fixed space to moving)
-     * @param interpolation Interpolation for the next pair (NN, LINEAR*, LABEL sigma)
-     * @param reslice_background Background (i.e. outside) intensity for the next pair (default 0)
-     * @param reslice_datatype Data type for the next pair
-     * @param reslice_composite Write composed transforms to outwarp
-     * @param reslice_jacobian Write Jacobian determinant image to outjacobian
-     * @param reslice_simplex_jacobian Compute Jacobian determinant for a simplex mesh in fixed space
-     * @param reslice_mask A binary mask for the fixed image; zero values will be overwritten with background
-     * @param metric_gradient Write the gradient of the metric to file
-     * @param debug_deriv Enable periodic checks of derivatives (debug)
-     * @param debug_deriv_eps Epsilon for derivative debugging
-     * @param debug_aff_obj Plot affine objective in neighborhood of -ia matrix
-     * @param dump_pyramid Dump the image pyramid at the start of the registration
-     * @param dump_moving Dump moving image at each iter
-     * @param dump_frequency Dump frequency
-     * @param dump_prefix Prefix for dump files (may be a path)
-     * @param powell Use Powell's method instead of LGBFS
-     * @param float Use single precision floating point (off by default)
-     * @param version Print version info
-     * @param verbosity Verbosity level (0: none, 1: default, 2: verbose)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GreedyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GREEDY_METADATA);
     const params = greedy_params(dimensions, input_images, output, affine, brute, moments, reslice, invert, root, jacobian, metric_mode, defopt, weight, metric, step_size, iterations, threads, fixed_mask, gm_trim, moving_mask, wncc_mask_dilate, reference_image, ref_pad, background, input_transform, zero_last_dimension, time_step_mode, smoothing, inverse_warp, root_warp, warp_precision, noise, exponent, svf_mode, svlb, sv_incompr, initial_warp, tjr, wr, initial_affine, ia_identity, ia_voxel_grid, ia_image_centers, ia_image_side, ia_moments, affine_dof, jitter, search, det, cov_id, fixed_reslicing_image, reslice_moving_image, reslice_surface, interpolation, reslice_background, reslice_datatype, reslice_composite, reslice_jacobian, reslice_simplex_jacobian, reslice_mask, metric_gradient, debug_deriv, debug_deriv_eps, debug_aff_obj, dump_pyramid, dump_moving, dump_frequency, dump_prefix, powell, float, version, verbosity)
@@ -1847,15 +1847,34 @@ export {
       GreedySearchParameters,
       GreedyTjrParameters,
       greedy_,
+      greedy_cargs,
+      greedy_execute,
+      greedy_input_images_cargs,
       greedy_input_images_params,
+      greedy_invert_cargs,
+      greedy_invert_outputs,
       greedy_invert_params,
+      greedy_jacobian_cargs,
+      greedy_jacobian_outputs,
       greedy_jacobian_params,
+      greedy_metric_cargs,
       greedy_metric_params,
+      greedy_outputs,
       greedy_params,
+      greedy_reslice_moving_image_cargs,
+      greedy_reslice_moving_image_outputs,
       greedy_reslice_moving_image_params,
+      greedy_reslice_simplex_jacobian_cargs,
+      greedy_reslice_simplex_jacobian_outputs,
       greedy_reslice_simplex_jacobian_params,
+      greedy_reslice_surface_cargs,
+      greedy_reslice_surface_outputs,
       greedy_reslice_surface_params,
+      greedy_root_cargs,
+      greedy_root_outputs,
       greedy_root_params,
+      greedy_search_cargs,
       greedy_search_params,
+      greedy_tjr_cargs,
       greedy_tjr_params,
 };

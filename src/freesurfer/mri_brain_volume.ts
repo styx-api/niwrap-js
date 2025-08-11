@@ -12,7 +12,7 @@ const MRI_BRAIN_VOLUME_METADATA: Metadata = {
 
 
 interface MriBrainVolumeParameters {
-    "__STYXTYPE__": "mri_brain_volume";
+    "@type": "freesurfer.mri_brain_volume";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "force_param"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface MriBrainVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_brain_volume": mri_brain_volume_cargs,
+        "freesurfer.mri_brain_volume": mri_brain_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_brain_volume": mri_brain_volume_outputs,
+        "freesurfer.mri_brain_volume": mri_brain_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriBrainVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input MRI file
+ * @param output_file Output file for brain volume
+ * @param force_param Change pushout force (default 1.0)
+ * @param version Show the current version
+ *
+ * @returns Parameter dictionary
+ */
 function mri_brain_volume_params(
     input_file: InputPathType,
     output_file: string | null = null,
     force_param: number | null = null,
     version: boolean = false,
 ): MriBrainVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input MRI file
-     * @param output_file Output file for brain volume
-     * @param force_param Change pushout force (default 1.0)
-     * @param version Show the current version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_brain_volume" as const,
+        "@type": "freesurfer.mri_brain_volume" as const,
         "input_file": input_file,
         "version": version,
     };
@@ -102,18 +102,18 @@ function mri_brain_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_brain_volume_cargs(
     params: MriBrainVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_brain_volume");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -133,18 +133,18 @@ function mri_brain_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_brain_volume_outputs(
     params: MriBrainVolumeParameters,
     execution: Execution,
 ): MriBrainVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriBrainVolumeOutputs = {
         root: execution.outputFile("."),
         output_volume_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -153,22 +153,22 @@ function mri_brain_volume_outputs(
 }
 
 
+/**
+ * Tool to calculate brain volume from MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
+ */
 function mri_brain_volume_execute(
     params: MriBrainVolumeParameters,
     execution: Execution,
 ): MriBrainVolumeOutputs {
-    /**
-     * Tool to calculate brain volume from MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_brain_volume_cargs(params, execution)
     const ret = mri_brain_volume_outputs(params, execution)
@@ -177,6 +177,21 @@ function mri_brain_volume_execute(
 }
 
 
+/**
+ * Tool to calculate brain volume from MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input MRI file
+ * @param output_file Output file for brain volume
+ * @param force_param Change pushout force (default 1.0)
+ * @param version Show the current version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
+ */
 function mri_brain_volume(
     input_file: InputPathType,
     output_file: string | null = null,
@@ -184,21 +199,6 @@ function mri_brain_volume(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriBrainVolumeOutputs {
-    /**
-     * Tool to calculate brain volume from MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input MRI file
-     * @param output_file Output file for brain volume
-     * @param force_param Change pushout force (default 1.0)
-     * @param version Show the current version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_BRAIN_VOLUME_METADATA);
     const params = mri_brain_volume_params(input_file, output_file, force_param, version)
@@ -211,5 +211,8 @@ export {
       MriBrainVolumeOutputs,
       MriBrainVolumeParameters,
       mri_brain_volume,
+      mri_brain_volume_cargs,
+      mri_brain_volume_execute,
+      mri_brain_volume_outputs,
       mri_brain_volume_params,
 };

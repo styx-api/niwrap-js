@@ -12,39 +12,39 @@ const LONG_CREATE_BASE_SIGMA_METADATA: Metadata = {
 
 
 interface LongCreateBaseSigmaParameters {
-    "__STYXTYPE__": "long_create_base_sigma";
+    "@type": "freesurfer.long_create_base_sigma";
     "base_id": string;
     "sigma": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_create_base_sigma": long_create_base_sigma_cargs,
+        "freesurfer.long_create_base_sigma": long_create_base_sigma_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface LongCreateBaseSigmaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_id Subject ID of the base
+ * @param sigma Integer value of sigma smoothing (usually 2..6)
+ *
+ * @returns Parameter dictionary
+ */
 function long_create_base_sigma_params(
     base_id: string,
     sigma: number,
 ): LongCreateBaseSigmaParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_id Subject ID of the base
-     * @param sigma Integer value of sigma smoothing (usually 2..6)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_create_base_sigma" as const,
+        "@type": "freesurfer.long_create_base_sigma" as const,
         "base_id": base_id,
         "sigma": sigma,
     };
@@ -85,18 +85,18 @@ function long_create_base_sigma_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_create_base_sigma_cargs(
     params: LongCreateBaseSigmaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_create_base_sigma");
     cargs.push((params["base_id"] ?? null));
@@ -105,18 +105,18 @@ function long_create_base_sigma_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_create_base_sigma_outputs(
     params: LongCreateBaseSigmaParameters,
     execution: Execution,
 ): LongCreateBaseSigmaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongCreateBaseSigmaOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function long_create_base_sigma_outputs(
 }
 
 
+/**
+ * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
+ */
 function long_create_base_sigma_execute(
     params: LongCreateBaseSigmaParameters,
     execution: Execution,
 ): LongCreateBaseSigmaOutputs {
-    /**
-     * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_create_base_sigma_cargs(params, execution)
     const ret = long_create_base_sigma_outputs(params, execution)
@@ -148,24 +148,24 @@ function long_create_base_sigma_execute(
 }
 
 
+/**
+ * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_id Subject ID of the base
+ * @param sigma Integer value of sigma smoothing (usually 2..6)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
+ */
 function long_create_base_sigma(
     base_id: string,
     sigma: number,
     runner: Runner | null = null,
 ): LongCreateBaseSigmaOutputs {
-    /**
-     * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_id Subject ID of the base
-     * @param sigma Integer value of sigma smoothing (usually 2..6)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_CREATE_BASE_SIGMA_METADATA);
     const params = long_create_base_sigma_params(base_id, sigma)
@@ -178,5 +178,8 @@ export {
       LongCreateBaseSigmaOutputs,
       LongCreateBaseSigmaParameters,
       long_create_base_sigma,
+      long_create_base_sigma_cargs,
+      long_create_base_sigma_execute,
+      long_create_base_sigma_outputs,
       long_create_base_sigma_params,
 };

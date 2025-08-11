@@ -12,42 +12,42 @@ const MRI_MERGELABELS_METADATA: Metadata = {
 
 
 interface MriMergelabelsParameters {
-    "__STYXTYPE__": "mri_mergelabels";
+    "@type": "freesurfer.mri_mergelabels";
     "input_labels": Array<InputPathType>;
     "output_label": string;
     "input_directory"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mergelabels": mri_mergelabels_cargs,
+        "freesurfer.mri_mergelabels": mri_mergelabels_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_mergelabels": mri_mergelabels_outputs,
+        "freesurfer.mri_mergelabels": mri_mergelabels_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriMergelabelsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_labels Input label files to be merged.
+ * @param output_label Output file for the merged label.
+ * @param input_directory Directory containing label files to be merged.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mergelabels_params(
     input_labels: Array<InputPathType>,
     output_label: string,
     input_directory: string | null = null,
 ): MriMergelabelsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_labels Input label files to be merged.
-     * @param output_label Output file for the merged label.
-     * @param input_directory Directory containing label files to be merged.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mergelabels" as const,
+        "@type": "freesurfer.mri_mergelabels" as const,
         "input_labels": input_labels,
         "output_label": output_label,
     };
@@ -96,18 +96,18 @@ function mri_mergelabels_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mergelabels_cargs(
     params: MriMergelabelsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mergelabels");
     cargs.push(
@@ -128,18 +128,18 @@ function mri_mergelabels_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mergelabels_outputs(
     params: MriMergelabelsParameters,
     execution: Execution,
 ): MriMergelabelsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMergelabelsOutputs = {
         root: execution.outputFile("."),
         merged_label_file: execution.outputFile([(params["output_label"] ?? null)].join('')),
@@ -148,22 +148,22 @@ function mri_mergelabels_outputs(
 }
 
 
+/**
+ * A tool to merge two or more label files by concatenating them together.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
+ */
 function mri_mergelabels_execute(
     params: MriMergelabelsParameters,
     execution: Execution,
 ): MriMergelabelsOutputs {
-    /**
-     * A tool to merge two or more label files by concatenating them together.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mergelabels_cargs(params, execution)
     const ret = mri_mergelabels_outputs(params, execution)
@@ -172,26 +172,26 @@ function mri_mergelabels_execute(
 }
 
 
+/**
+ * A tool to merge two or more label files by concatenating them together.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_labels Input label files to be merged.
+ * @param output_label Output file for the merged label.
+ * @param input_directory Directory containing label files to be merged.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
+ */
 function mri_mergelabels(
     input_labels: Array<InputPathType>,
     output_label: string,
     input_directory: string | null = null,
     runner: Runner | null = null,
 ): MriMergelabelsOutputs {
-    /**
-     * A tool to merge two or more label files by concatenating them together.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_labels Input label files to be merged.
-     * @param output_label Output file for the merged label.
-     * @param input_directory Directory containing label files to be merged.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MERGELABELS_METADATA);
     const params = mri_mergelabels_params(input_labels, output_label, input_directory)
@@ -204,5 +204,8 @@ export {
       MriMergelabelsOutputs,
       MriMergelabelsParameters,
       mri_mergelabels,
+      mri_mergelabels_cargs,
+      mri_mergelabels_execute,
+      mri_mergelabels_outputs,
       mri_mergelabels_params,
 };

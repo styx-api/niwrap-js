@@ -12,7 +12,7 @@ const METRIC_ERODE_METADATA: Metadata = {
 
 
 interface MetricErodeParameters {
-    "__STYXTYPE__": "metric-erode";
+    "@type": "workbench.metric-erode";
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
@@ -23,35 +23,35 @@ interface MetricErodeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-erode": metric_erode_cargs,
+        "workbench.metric-erode": metric_erode_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-erode": metric_erode_outputs,
+        "workbench.metric-erode": metric_erode_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MetricErodeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the metric file to erode
+ * @param surface the surface to compute on
+ * @param distance distance in mm to erode
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric assume values outside this roi are nonzero: metric file, positive values denote vertices that have data
+ * @param opt_column_column select a single column to erode: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function metric_erode_params(
     metric: InputPathType,
     surface: InputPathType,
@@ -83,21 +96,8 @@ function metric_erode_params(
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): MetricErodeParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the metric file to erode
-     * @param surface the surface to compute on
-     * @param distance distance in mm to erode
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric assume values outside this roi are nonzero: metric file, positive values denote vertices that have data
-     * @param opt_column_column select a single column to erode: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-erode" as const,
+        "@type": "workbench.metric-erode" as const,
         "metric": metric,
         "surface": surface,
         "distance": distance,
@@ -116,18 +116,18 @@ function metric_erode_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_erode_cargs(
     params: MetricErodeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-erode");
@@ -157,18 +157,18 @@ function metric_erode_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_erode_outputs(
     params: MetricErodeParameters,
     execution: Execution,
 ): MetricErodeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricErodeOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -177,26 +177,26 @@ function metric_erode_outputs(
 }
 
 
+/**
+ * Erode a metric file.
+ *
+ * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
+ *
+ * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
+ */
 function metric_erode_execute(
     params: MetricErodeParameters,
     execution: Execution,
 ): MetricErodeOutputs {
-    /**
-     * Erode a metric file.
-     * 
-     * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
-     * 
-     * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_erode_cargs(params, execution)
     const ret = metric_erode_outputs(params, execution)
@@ -205,6 +205,28 @@ function metric_erode_execute(
 }
 
 
+/**
+ * Erode a metric file.
+ *
+ * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
+ *
+ * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric the metric file to erode
+ * @param surface the surface to compute on
+ * @param distance distance in mm to erode
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric assume values outside this roi are nonzero: metric file, positive values denote vertices that have data
+ * @param opt_column_column select a single column to erode: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
+ */
 function metric_erode(
     metric: InputPathType,
     surface: InputPathType,
@@ -215,28 +237,6 @@ function metric_erode(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
-    /**
-     * Erode a metric file.
-     * 
-     * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
-     * 
-     * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric the metric file to erode
-     * @param surface the surface to compute on
-     * @param distance distance in mm to erode
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric assume values outside this roi are nonzero: metric file, positive values denote vertices that have data
-     * @param opt_column_column select a single column to erode: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_ERODE_METADATA);
     const params = metric_erode_params(metric, surface, distance, metric_out, opt_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
@@ -249,5 +249,8 @@ export {
       MetricErodeOutputs,
       MetricErodeParameters,
       metric_erode,
+      metric_erode_cargs,
+      metric_erode_execute,
+      metric_erode_outputs,
       metric_erode_params,
 };

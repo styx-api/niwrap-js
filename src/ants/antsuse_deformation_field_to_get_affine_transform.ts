@@ -12,7 +12,7 @@ const ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 
 
 interface AntsuseDeformationFieldToGetAffineTransformParameters {
-    "__STYXTYPE__": "ANTSUseDeformationFieldToGetAffineTransform";
+    "@type": "ants.ANTSUseDeformationFieldToGetAffineTransform";
     "deformation_field": InputPathType;
     "load_ratio": number;
     "transform_type": "rigid" | "affine";
@@ -21,35 +21,35 @@ interface AntsuseDeformationFieldToGetAffineTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_cargs,
+        "ants.ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_outputs,
+        "ants.ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface AntsuseDeformationFieldToGetAffineTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param deformation_field The input deformation field in NIfTI format (e.g., zzzWarp.nii.gz).
+ * @param load_ratio Ratio of points to be loaded from deformation field to save memory (ex: 0.01).
+ * @param transform_type Type of transform to be extracted. Can be 'rigid' or 'affine'.
+ * @param output_affine The output file where the affine transform will be saved (e.g., OutAffine.txt).
+ * @param mask Optional mask file defining the region from which points will be selected.
+ *
+ * @returns Parameter dictionary
+ */
 function antsuse_deformation_field_to_get_affine_transform_params(
     deformation_field: InputPathType,
     load_ratio: number,
@@ -79,19 +90,8 @@ function antsuse_deformation_field_to_get_affine_transform_params(
     output_affine: string,
     mask: InputPathType | null = null,
 ): AntsuseDeformationFieldToGetAffineTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param deformation_field The input deformation field in NIfTI format (e.g., zzzWarp.nii.gz).
-     * @param load_ratio Ratio of points to be loaded from deformation field to save memory (ex: 0.01).
-     * @param transform_type Type of transform to be extracted. Can be 'rigid' or 'affine'.
-     * @param output_affine The output file where the affine transform will be saved (e.g., OutAffine.txt).
-     * @param mask Optional mask file defining the region from which points will be selected.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ANTSUseDeformationFieldToGetAffineTransform" as const,
+        "@type": "ants.ANTSUseDeformationFieldToGetAffineTransform" as const,
         "deformation_field": deformation_field,
         "load_ratio": load_ratio,
         "transform_type": transform_type,
@@ -104,18 +104,18 @@ function antsuse_deformation_field_to_get_affine_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function antsuse_deformation_field_to_get_affine_transform_cargs(
     params: AntsuseDeformationFieldToGetAffineTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ANTSUseDeformationFieldToGetAffineTransform");
     cargs.push(execution.inputFile((params["deformation_field"] ?? null)));
@@ -129,18 +129,18 @@ function antsuse_deformation_field_to_get_affine_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function antsuse_deformation_field_to_get_affine_transform_outputs(
     params: AntsuseDeformationFieldToGetAffineTransformParameters,
     execution: Execution,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsuseDeformationFieldToGetAffineTransformOutputs = {
         root: execution.outputFile("."),
         out_affine_txt: execution.outputFile([(params["output_affine"] ?? null)].join('')),
@@ -149,22 +149,22 @@ function antsuse_deformation_field_to_get_affine_transform_outputs(
 }
 
 
+/**
+ * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
+ */
 function antsuse_deformation_field_to_get_affine_transform_execute(
     params: AntsuseDeformationFieldToGetAffineTransformParameters,
     execution: Execution,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
-    /**
-     * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = antsuse_deformation_field_to_get_affine_transform_cargs(params, execution)
     const ret = antsuse_deformation_field_to_get_affine_transform_outputs(params, execution)
@@ -173,6 +173,22 @@ function antsuse_deformation_field_to_get_affine_transform_execute(
 }
 
 
+/**
+ * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param deformation_field The input deformation field in NIfTI format (e.g., zzzWarp.nii.gz).
+ * @param load_ratio Ratio of points to be loaded from deformation field to save memory (ex: 0.01).
+ * @param transform_type Type of transform to be extracted. Can be 'rigid' or 'affine'.
+ * @param output_affine The output file where the affine transform will be saved (e.g., OutAffine.txt).
+ * @param mask Optional mask file defining the region from which points will be selected.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
+ */
 function antsuse_deformation_field_to_get_affine_transform(
     deformation_field: InputPathType,
     load_ratio: number,
@@ -181,22 +197,6 @@ function antsuse_deformation_field_to_get_affine_transform(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
-    /**
-     * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param deformation_field The input deformation field in NIfTI format (e.g., zzzWarp.nii.gz).
-     * @param load_ratio Ratio of points to be loaded from deformation field to save memory (ex: 0.01).
-     * @param transform_type Type of transform to be extracted. Can be 'rigid' or 'affine'.
-     * @param output_affine The output file where the affine transform will be saved (e.g., OutAffine.txt).
-     * @param mask Optional mask file defining the region from which points will be selected.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA);
     const params = antsuse_deformation_field_to_get_affine_transform_params(deformation_field, load_ratio, transform_type, output_affine, mask)
@@ -209,5 +209,8 @@ export {
       AntsuseDeformationFieldToGetAffineTransformOutputs,
       AntsuseDeformationFieldToGetAffineTransformParameters,
       antsuse_deformation_field_to_get_affine_transform,
+      antsuse_deformation_field_to_get_affine_transform_cargs,
+      antsuse_deformation_field_to_get_affine_transform_execute,
+      antsuse_deformation_field_to_get_affine_transform_outputs,
       antsuse_deformation_field_to_get_affine_transform_params,
 };

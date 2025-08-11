@@ -12,40 +12,40 @@ const FOCI_LIST_COORDS_METADATA: Metadata = {
 
 
 interface FociListCoordsParameters {
-    "__STYXTYPE__": "foci-list-coords";
+    "@type": "workbench.foci-list-coords";
     "foci_file": InputPathType;
     "coord_file_out": string;
     "opt_names_out_names_file_out"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "foci-list-coords": foci_list_coords_cargs,
+        "workbench.foci-list-coords": foci_list_coords_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface FociListCoordsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param foci_file input foci file
+ * @param coord_file_out output - the output coordinate text file
+ * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
+ *
+ * @returns Parameter dictionary
+ */
 function foci_list_coords_params(
     foci_file: InputPathType,
     coord_file_out: string,
     opt_names_out_names_file_out: string | null = null,
 ): FociListCoordsParameters {
-    /**
-     * Build parameters.
-    
-     * @param foci_file input foci file
-     * @param coord_file_out output - the output coordinate text file
-     * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "foci-list-coords" as const,
+        "@type": "workbench.foci-list-coords" as const,
         "foci_file": foci_file,
         "coord_file_out": coord_file_out,
     };
@@ -91,18 +91,18 @@ function foci_list_coords_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function foci_list_coords_cargs(
     params: FociListCoordsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-foci-list-coords");
@@ -118,18 +118,18 @@ function foci_list_coords_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function foci_list_coords_outputs(
     params: FociListCoordsParameters,
     execution: Execution,
 ): FociListCoordsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FociListCoordsOutputs = {
         root: execution.outputFile("."),
     };
@@ -137,24 +137,24 @@ function foci_list_coords_outputs(
 }
 
 
+/**
+ * Output foci coordinates in a text file.
+ *
+ * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
+ */
 function foci_list_coords_execute(
     params: FociListCoordsParameters,
     execution: Execution,
 ): FociListCoordsOutputs {
-    /**
-     * Output foci coordinates in a text file.
-     * 
-     * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
-     */
     params = execution.params(params)
     const cargs = foci_list_coords_cargs(params, execution)
     const ret = foci_list_coords_outputs(params, execution)
@@ -163,28 +163,28 @@ function foci_list_coords_execute(
 }
 
 
+/**
+ * Output foci coordinates in a text file.
+ *
+ * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param foci_file input foci file
+ * @param coord_file_out output - the output coordinate text file
+ * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
+ */
 function foci_list_coords(
     foci_file: InputPathType,
     coord_file_out: string,
     opt_names_out_names_file_out: string | null = null,
     runner: Runner | null = null,
 ): FociListCoordsOutputs {
-    /**
-     * Output foci coordinates in a text file.
-     * 
-     * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param foci_file input foci file
-     * @param coord_file_out output - the output coordinate text file
-     * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FOCI_LIST_COORDS_METADATA);
     const params = foci_list_coords_params(foci_file, coord_file_out, opt_names_out_names_file_out)
@@ -197,5 +197,8 @@ export {
       FociListCoordsOutputs,
       FociListCoordsParameters,
       foci_list_coords,
+      foci_list_coords_cargs,
+      foci_list_coords_execute,
+      foci_list_coords_outputs,
       foci_list_coords_params,
 };

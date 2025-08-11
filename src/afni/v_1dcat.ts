@@ -12,7 +12,7 @@ const V_1DCAT_METADATA: Metadata = {
 
 
 interface V1dcatParameters {
-    "__STYXTYPE__": "1dcat";
+    "@type": "afni.1dcat";
     "input_files": Array<InputPathType>;
     "tsv_output": boolean;
     "csv_output": boolean;
@@ -25,35 +25,35 @@ interface V1dcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dcat": v_1dcat_cargs,
+        "afni.1dcat": v_1dcat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dcat": v_1dcat_outputs,
+        "afni.1dcat": v_1dcat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V1dcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 1D or TSV/CSV files to concatenate
+ * @param tsv_output Output in TSV format with tabs as separators and a header line
+ * @param csv_output Output in CSV format with commas as separators and a header line
+ * @param nonconst_output Omit columns that are identically constant from the output
+ * @param nonfixed_output Keep only columns marked as 'free' in the 3dAllineate header
+ * @param number_format Specify the format of the numbers to be output
+ * @param stack_output Stack the columns of the resulting matrix in the output
+ * @param column_row_selection Apply the same column/row selection string to all filenames on the command line
+ * @param ok_empty Exit quietly when encountering an empty file on disk
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dcat_params(
     input_files: Array<InputPathType>,
     tsv_output: boolean = false,
@@ -87,23 +102,8 @@ function v_1dcat_params(
     column_row_selection: string | null = null,
     ok_empty: boolean = false,
 ): V1dcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 1D or TSV/CSV files to concatenate
-     * @param tsv_output Output in TSV format with tabs as separators and a header line
-     * @param csv_output Output in CSV format with commas as separators and a header line
-     * @param nonconst_output Omit columns that are identically constant from the output
-     * @param nonfixed_output Keep only columns marked as 'free' in the 3dAllineate header
-     * @param number_format Specify the format of the numbers to be output
-     * @param stack_output Stack the columns of the resulting matrix in the output
-     * @param column_row_selection Apply the same column/row selection string to all filenames on the command line
-     * @param ok_empty Exit quietly when encountering an empty file on disk
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dcat" as const,
+        "@type": "afni.1dcat" as const,
         "input_files": input_files,
         "tsv_output": tsv_output,
         "csv_output": csv_output,
@@ -122,18 +122,18 @@ function v_1dcat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dcat_cargs(
     params: V1dcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dcat");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -171,18 +171,18 @@ function v_1dcat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dcat_outputs(
     params: V1dcatParameters,
     execution: Execution,
 ): V1dcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dcatOutputs = {
         root: execution.outputFile("."),
         concatenated_output: execution.outputFile(["stdout"].join('')),
@@ -191,22 +191,22 @@ function v_1dcat_outputs(
 }
 
 
+/**
+ * Concatenates columns of multiple 1D or TSV/CSV files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
+ */
 function v_1dcat_execute(
     params: V1dcatParameters,
     execution: Execution,
 ): V1dcatOutputs {
-    /**
-     * Concatenates columns of multiple 1D or TSV/CSV files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dcat_cargs(params, execution)
     const ret = v_1dcat_outputs(params, execution)
@@ -215,6 +215,26 @@ function v_1dcat_execute(
 }
 
 
+/**
+ * Concatenates columns of multiple 1D or TSV/CSV files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 1D or TSV/CSV files to concatenate
+ * @param tsv_output Output in TSV format with tabs as separators and a header line
+ * @param csv_output Output in CSV format with commas as separators and a header line
+ * @param nonconst_output Omit columns that are identically constant from the output
+ * @param nonfixed_output Keep only columns marked as 'free' in the 3dAllineate header
+ * @param number_format Specify the format of the numbers to be output
+ * @param stack_output Stack the columns of the resulting matrix in the output
+ * @param column_row_selection Apply the same column/row selection string to all filenames on the command line
+ * @param ok_empty Exit quietly when encountering an empty file on disk
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
+ */
 function v_1dcat(
     input_files: Array<InputPathType>,
     tsv_output: boolean = false,
@@ -227,26 +247,6 @@ function v_1dcat(
     ok_empty: boolean = false,
     runner: Runner | null = null,
 ): V1dcatOutputs {
-    /**
-     * Concatenates columns of multiple 1D or TSV/CSV files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 1D or TSV/CSV files to concatenate
-     * @param tsv_output Output in TSV format with tabs as separators and a header line
-     * @param csv_output Output in CSV format with commas as separators and a header line
-     * @param nonconst_output Omit columns that are identically constant from the output
-     * @param nonfixed_output Keep only columns marked as 'free' in the 3dAllineate header
-     * @param number_format Specify the format of the numbers to be output
-     * @param stack_output Stack the columns of the resulting matrix in the output
-     * @param column_row_selection Apply the same column/row selection string to all filenames on the command line
-     * @param ok_empty Exit quietly when encountering an empty file on disk
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DCAT_METADATA);
     const params = v_1dcat_params(input_files, tsv_output, csv_output, nonconst_output, nonfixed_output, number_format, stack_output, column_row_selection, ok_empty)
@@ -259,5 +259,8 @@ export {
       V1dcatParameters,
       V_1DCAT_METADATA,
       v_1dcat,
+      v_1dcat_cargs,
+      v_1dcat_execute,
+      v_1dcat_outputs,
       v_1dcat_params,
 };

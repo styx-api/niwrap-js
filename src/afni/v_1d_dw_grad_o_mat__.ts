@@ -12,7 +12,7 @@ const V_1D_DW_GRAD_O_MAT___METADATA: Metadata = {
 
 
 interface V1dDwGradOMatParameters {
-    "__STYXTYPE__": "1dDW_Grad_o_Mat++";
+    "@type": "afni.1dDW_Grad_o_Mat++";
     "in_row_vec": InputPathType;
     "in_col_vec": InputPathType;
     "in_col_matA": InputPathType;
@@ -37,35 +37,35 @@ interface V1dDwGradOMatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___cargs,
+        "afni.1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___outputs,
+        "afni.1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,33 @@ interface V1dDwGradOMatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_row_vec Input file of 3 rows of gradients (e.g., dcm2nii-format output)
+ * @param in_col_vec Input file of 3 columns of gradients
+ * @param in_col_mat_a Input file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
+ * @param in_col_mat_t Input file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
+ * @param out_row_vec Output file of 3 rows of gradients
+ * @param out_col_vec Output file of 3 columns of gradients
+ * @param out_col_mat_a Output file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
+ * @param out_col_mat_t Output file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
+ * @param flip_x Change sign of first column of gradients (or of the x-component parts of the matrix)
+ * @param flip_y Change sign of second column of gradients (or of the y-component parts of the matrix)
+ * @param flip_z Change sign of third column of gradients (or of the z-component parts of the matrix)
+ * @param no_flip Don't change any gradient/matrix signs (default behavior)
+ * @param in_bvals BVAL_FILE is a file of b-values either in a single row or a single column
+ * @param out_col_bval Switch to put a column of the bvalues as the first column in the output data
+ * @param out_row_bval_sep Output a file of bvalues in a single row
+ * @param out_col_bval_sep Output a file of bvalues in a single column
+ * @param unit_mag_out Switch to scale each vector/matrix from the INFILE to either unit or zero magnitude
+ * @param check_abs_min Specify the threshold to replace small negative diagonal elements with zero in the input matrix
+ * @param bref_mean_top When averaging the reference 'b0' values, represent the mean of X values in the top row
+ * @param put_zeros_top Add a row at the top with all zeros in the output format
+ * @param bmax_ref THRESH is a scalar number below which b-values are considered zero or reference
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_dw_grad_o_mat___params(
     in_row_vec: InputPathType,
     in_col_vec: InputPathType,
@@ -119,35 +146,8 @@ function v_1d_dw_grad_o_mat___params(
     put_zeros_top: boolean = false,
     bmax_ref: number | null = null,
 ): V1dDwGradOMatParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_row_vec Input file of 3 rows of gradients (e.g., dcm2nii-format output)
-     * @param in_col_vec Input file of 3 columns of gradients
-     * @param in_col_mat_a Input file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
-     * @param in_col_mat_t Input file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
-     * @param out_row_vec Output file of 3 rows of gradients
-     * @param out_col_vec Output file of 3 columns of gradients
-     * @param out_col_mat_a Output file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
-     * @param out_col_mat_t Output file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
-     * @param flip_x Change sign of first column of gradients (or of the x-component parts of the matrix)
-     * @param flip_y Change sign of second column of gradients (or of the y-component parts of the matrix)
-     * @param flip_z Change sign of third column of gradients (or of the z-component parts of the matrix)
-     * @param no_flip Don't change any gradient/matrix signs (default behavior)
-     * @param in_bvals BVAL_FILE is a file of b-values either in a single row or a single column
-     * @param out_col_bval Switch to put a column of the bvalues as the first column in the output data
-     * @param out_row_bval_sep Output a file of bvalues in a single row
-     * @param out_col_bval_sep Output a file of bvalues in a single column
-     * @param unit_mag_out Switch to scale each vector/matrix from the INFILE to either unit or zero magnitude
-     * @param check_abs_min Specify the threshold to replace small negative diagonal elements with zero in the input matrix
-     * @param bref_mean_top When averaging the reference 'b0' values, represent the mean of X values in the top row
-     * @param put_zeros_top Add a row at the top with all zeros in the output format
-     * @param bmax_ref THRESH is a scalar number below which b-values are considered zero or reference
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dDW_Grad_o_Mat++" as const,
+        "@type": "afni.1dDW_Grad_o_Mat++" as const,
         "in_row_vec": in_row_vec,
         "in_col_vec": in_col_vec,
         "in_col_matA": in_col_mat_a,
@@ -184,18 +184,18 @@ function v_1d_dw_grad_o_mat___params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_dw_grad_o_mat___cargs(
     params: V1dDwGradOMatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dDW_Grad_o_Mat++");
     cargs.push(
@@ -288,18 +288,18 @@ function v_1d_dw_grad_o_mat___cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_dw_grad_o_mat___outputs(
     params: V1dDwGradOMatParameters,
     execution: Execution,
 ): V1dDwGradOMatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dDwGradOMatOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["out_row_vec"] ?? null)].join('')),
@@ -310,22 +310,22 @@ function v_1d_dw_grad_o_mat___outputs(
 }
 
 
+/**
+ * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
+ */
 function v_1d_dw_grad_o_mat___execute(
     params: V1dDwGradOMatParameters,
     execution: Execution,
 ): V1dDwGradOMatOutputs {
-    /**
-     * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_dw_grad_o_mat___cargs(params, execution)
     const ret = v_1d_dw_grad_o_mat___outputs(params, execution)
@@ -334,6 +334,38 @@ function v_1d_dw_grad_o_mat___execute(
 }
 
 
+/**
+ * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_row_vec Input file of 3 rows of gradients (e.g., dcm2nii-format output)
+ * @param in_col_vec Input file of 3 columns of gradients
+ * @param in_col_mat_a Input file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
+ * @param in_col_mat_t Input file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
+ * @param out_row_vec Output file of 3 rows of gradients
+ * @param out_col_vec Output file of 3 columns of gradients
+ * @param out_col_mat_a Output file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
+ * @param out_col_mat_t Output file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
+ * @param flip_x Change sign of first column of gradients (or of the x-component parts of the matrix)
+ * @param flip_y Change sign of second column of gradients (or of the y-component parts of the matrix)
+ * @param flip_z Change sign of third column of gradients (or of the z-component parts of the matrix)
+ * @param no_flip Don't change any gradient/matrix signs (default behavior)
+ * @param in_bvals BVAL_FILE is a file of b-values either in a single row or a single column
+ * @param out_col_bval Switch to put a column of the bvalues as the first column in the output data
+ * @param out_row_bval_sep Output a file of bvalues in a single row
+ * @param out_col_bval_sep Output a file of bvalues in a single column
+ * @param unit_mag_out Switch to scale each vector/matrix from the INFILE to either unit or zero magnitude
+ * @param check_abs_min Specify the threshold to replace small negative diagonal elements with zero in the input matrix
+ * @param bref_mean_top When averaging the reference 'b0' values, represent the mean of X values in the top row
+ * @param put_zeros_top Add a row at the top with all zeros in the output format
+ * @param bmax_ref THRESH is a scalar number below which b-values are considered zero or reference
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
+ */
 function v_1d_dw_grad_o_mat__(
     in_row_vec: InputPathType,
     in_col_vec: InputPathType,
@@ -358,38 +390,6 @@ function v_1d_dw_grad_o_mat__(
     bmax_ref: number | null = null,
     runner: Runner | null = null,
 ): V1dDwGradOMatOutputs {
-    /**
-     * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_row_vec Input file of 3 rows of gradients (e.g., dcm2nii-format output)
-     * @param in_col_vec Input file of 3 columns of gradients
-     * @param in_col_mat_a Input file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
-     * @param in_col_mat_t Input file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
-     * @param out_row_vec Output file of 3 rows of gradients
-     * @param out_col_vec Output file of 3 columns of gradients
-     * @param out_col_mat_a Output file of 6 columns of b- or g-matrix in 'A(FNI)' diagonal first format
-     * @param out_col_mat_t Output file of 6 columns of b- or g-matrix in 'T(ORTOISE)' row first format
-     * @param flip_x Change sign of first column of gradients (or of the x-component parts of the matrix)
-     * @param flip_y Change sign of second column of gradients (or of the y-component parts of the matrix)
-     * @param flip_z Change sign of third column of gradients (or of the z-component parts of the matrix)
-     * @param no_flip Don't change any gradient/matrix signs (default behavior)
-     * @param in_bvals BVAL_FILE is a file of b-values either in a single row or a single column
-     * @param out_col_bval Switch to put a column of the bvalues as the first column in the output data
-     * @param out_row_bval_sep Output a file of bvalues in a single row
-     * @param out_col_bval_sep Output a file of bvalues in a single column
-     * @param unit_mag_out Switch to scale each vector/matrix from the INFILE to either unit or zero magnitude
-     * @param check_abs_min Specify the threshold to replace small negative diagonal elements with zero in the input matrix
-     * @param bref_mean_top When averaging the reference 'b0' values, represent the mean of X values in the top row
-     * @param put_zeros_top Add a row at the top with all zeros in the output format
-     * @param bmax_ref THRESH is a scalar number below which b-values are considered zero or reference
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_DW_GRAD_O_MAT___METADATA);
     const params = v_1d_dw_grad_o_mat___params(in_row_vec, in_col_vec, in_col_mat_a, in_col_mat_t, out_row_vec, out_col_vec, out_col_mat_a, out_col_mat_t, flip_x, flip_y, flip_z, no_flip, in_bvals, out_col_bval, out_row_bval_sep, out_col_bval_sep, unit_mag_out, check_abs_min, bref_mean_top, put_zeros_top, bmax_ref)
@@ -402,5 +402,8 @@ export {
       V1dDwGradOMatParameters,
       V_1D_DW_GRAD_O_MAT___METADATA,
       v_1d_dw_grad_o_mat__,
+      v_1d_dw_grad_o_mat___cargs,
+      v_1d_dw_grad_o_mat___execute,
+      v_1d_dw_grad_o_mat___outputs,
       v_1d_dw_grad_o_mat___params,
 };

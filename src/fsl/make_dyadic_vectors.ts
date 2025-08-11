@@ -12,7 +12,7 @@ const MAKE_DYADIC_VECTORS_METADATA: Metadata = {
 
 
 interface MakeDyadicVectorsParameters {
-    "__STYXTYPE__": "make_dyadic_vectors";
+    "@type": "fsl.make_dyadic_vectors";
     "theta_vol": InputPathType;
     "phi_vol": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface MakeDyadicVectorsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_dyadic_vectors": make_dyadic_vectors_cargs,
+        "fsl.make_dyadic_vectors": make_dyadic_vectors_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_dyadic_vectors": make_dyadic_vectors_outputs,
+        "fsl.make_dyadic_vectors": make_dyadic_vectors_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MakeDyadicVectorsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param theta_vol Theta volume input file
+ * @param phi_vol Phi volume input file
+ * @param output Output file
+ * @param mask Mask input file (optional)
+ * @param perc Percentage angle of the output cone of uncertainty (output will be in degrees)
+ *
+ * @returns Parameter dictionary
+ */
 function make_dyadic_vectors_params(
     theta_vol: InputPathType,
     phi_vol: InputPathType,
@@ -79,19 +90,8 @@ function make_dyadic_vectors_params(
     mask: InputPathType | null = null,
     perc: number | null = null,
 ): MakeDyadicVectorsParameters {
-    /**
-     * Build parameters.
-    
-     * @param theta_vol Theta volume input file
-     * @param phi_vol Phi volume input file
-     * @param output Output file
-     * @param mask Mask input file (optional)
-     * @param perc Percentage angle of the output cone of uncertainty (output will be in degrees)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_dyadic_vectors" as const,
+        "@type": "fsl.make_dyadic_vectors" as const,
         "theta_vol": theta_vol,
         "phi_vol": phi_vol,
         "output": output,
@@ -106,18 +106,18 @@ function make_dyadic_vectors_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_dyadic_vectors_cargs(
     params: MakeDyadicVectorsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_dyadic_vectors");
     cargs.push(execution.inputFile((params["theta_vol"] ?? null)));
@@ -133,18 +133,18 @@ function make_dyadic_vectors_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_dyadic_vectors_outputs(
     params: MakeDyadicVectorsParameters,
     execution: Execution,
 ): MakeDyadicVectorsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeDyadicVectorsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -153,22 +153,22 @@ function make_dyadic_vectors_outputs(
 }
 
 
+/**
+ * Generate dyadic vectors from theta and phi volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
+ */
 function make_dyadic_vectors_execute(
     params: MakeDyadicVectorsParameters,
     execution: Execution,
 ): MakeDyadicVectorsOutputs {
-    /**
-     * Generate dyadic vectors from theta and phi volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_dyadic_vectors_cargs(params, execution)
     const ret = make_dyadic_vectors_outputs(params, execution)
@@ -177,6 +177,22 @@ function make_dyadic_vectors_execute(
 }
 
 
+/**
+ * Generate dyadic vectors from theta and phi volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param theta_vol Theta volume input file
+ * @param phi_vol Phi volume input file
+ * @param output Output file
+ * @param mask Mask input file (optional)
+ * @param perc Percentage angle of the output cone of uncertainty (output will be in degrees)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
+ */
 function make_dyadic_vectors(
     theta_vol: InputPathType,
     phi_vol: InputPathType,
@@ -185,22 +201,6 @@ function make_dyadic_vectors(
     perc: number | null = null,
     runner: Runner | null = null,
 ): MakeDyadicVectorsOutputs {
-    /**
-     * Generate dyadic vectors from theta and phi volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param theta_vol Theta volume input file
-     * @param phi_vol Phi volume input file
-     * @param output Output file
-     * @param mask Mask input file (optional)
-     * @param perc Percentage angle of the output cone of uncertainty (output will be in degrees)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_DYADIC_VECTORS_METADATA);
     const params = make_dyadic_vectors_params(theta_vol, phi_vol, output, mask, perc)
@@ -213,5 +213,8 @@ export {
       MakeDyadicVectorsOutputs,
       MakeDyadicVectorsParameters,
       make_dyadic_vectors,
+      make_dyadic_vectors_cargs,
+      make_dyadic_vectors_execute,
+      make_dyadic_vectors_outputs,
       make_dyadic_vectors_params,
 };

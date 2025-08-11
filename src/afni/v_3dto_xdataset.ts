@@ -12,42 +12,42 @@ const V_3DTO_XDATASET_METADATA: Metadata = {
 
 
 interface V3dtoXdatasetParameters {
-    "__STYXTYPE__": "3dtoXdataset";
+    "@type": "afni.3dtoXdataset";
     "prefix": string;
     "mask": InputPathType;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dtoXdataset": v_3dto_xdataset_cargs,
+        "afni.3dtoXdataset": v_3dto_xdataset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dtoXdataset": v_3dto_xdataset_outputs,
+        "afni.3dtoXdataset": v_3dto_xdataset_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dtoXdatasetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for the output file.
+ * @param mask Mask dataset file.
+ * @param input_files Input datasets to be converted.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dto_xdataset_params(
     prefix: string,
     mask: InputPathType,
     input_files: Array<InputPathType>,
 ): V3dtoXdatasetParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for the output file.
-     * @param mask Mask dataset file.
-     * @param input_files Input datasets to be converted.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dtoXdataset" as const,
+        "@type": "afni.3dtoXdataset" as const,
         "prefix": prefix,
         "mask": mask,
         "input_files": input_files,
@@ -94,18 +94,18 @@ function v_3dto_xdataset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dto_xdataset_cargs(
     params: V3dtoXdatasetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dtoXdataset");
     cargs.push(
@@ -118,18 +118,18 @@ function v_3dto_xdataset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dto_xdataset_outputs(
     params: V3dtoXdatasetParameters,
     execution: Execution,
 ): V3dtoXdatasetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dtoXdatasetOutputs = {
         root: execution.outputFile("."),
         output_sdat: execution.outputFile([(params["prefix"] ?? null), ".sdat"].join('')),
@@ -138,22 +138,22 @@ function v_3dto_xdataset_outputs(
 }
 
 
+/**
+ * Convert input datasets to the format needed for 3dClustSimX.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
+ */
 function v_3dto_xdataset_execute(
     params: V3dtoXdatasetParameters,
     execution: Execution,
 ): V3dtoXdatasetOutputs {
-    /**
-     * Convert input datasets to the format needed for 3dClustSimX.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dto_xdataset_cargs(params, execution)
     const ret = v_3dto_xdataset_outputs(params, execution)
@@ -162,26 +162,26 @@ function v_3dto_xdataset_execute(
 }
 
 
+/**
+ * Convert input datasets to the format needed for 3dClustSimX.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for the output file.
+ * @param mask Mask dataset file.
+ * @param input_files Input datasets to be converted.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
+ */
 function v_3dto_xdataset(
     prefix: string,
     mask: InputPathType,
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V3dtoXdatasetOutputs {
-    /**
-     * Convert input datasets to the format needed for 3dClustSimX.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for the output file.
-     * @param mask Mask dataset file.
-     * @param input_files Input datasets to be converted.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DTO_XDATASET_METADATA);
     const params = v_3dto_xdataset_params(prefix, mask, input_files)
@@ -194,5 +194,8 @@ export {
       V3dtoXdatasetParameters,
       V_3DTO_XDATASET_METADATA,
       v_3dto_xdataset,
+      v_3dto_xdataset_cargs,
+      v_3dto_xdataset_execute,
+      v_3dto_xdataset_outputs,
       v_3dto_xdataset_params,
 };

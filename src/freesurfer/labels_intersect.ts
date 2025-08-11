@@ -12,42 +12,42 @@ const LABELS_INTERSECT_METADATA: Metadata = {
 
 
 interface LabelsIntersectParameters {
-    "__STYXTYPE__": "labels_intersect";
+    "@type": "freesurfer.labels_intersect";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "labels_intersect": labels_intersect_cargs,
+        "freesurfer.labels_intersect": labels_intersect_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "labels_intersect": labels_intersect_outputs,
+        "freesurfer.labels_intersect": labels_intersect_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface LabelsIntersectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label1 First input label file
+ * @param label2 Second input label file
+ * @param outputname Output label file name
+ *
+ * @returns Parameter dictionary
+ */
 function labels_intersect_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
 ): LabelsIntersectParameters {
-    /**
-     * Build parameters.
-    
-     * @param label1 First input label file
-     * @param label2 Second input label file
-     * @param outputname Output label file name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "labels_intersect" as const,
+        "@type": "freesurfer.labels_intersect" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -94,18 +94,18 @@ function labels_intersect_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labels_intersect_cargs(
     params: LabelsIntersectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("labels_intersect");
     cargs.push(execution.inputFile((params["label1"] ?? null)));
@@ -115,18 +115,18 @@ function labels_intersect_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function labels_intersect_outputs(
     params: LabelsIntersectParameters,
     execution: Execution,
 ): LabelsIntersectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelsIntersectOutputs = {
         root: execution.outputFile("."),
         output_label: execution.outputFile([(params["outputname"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function labels_intersect_outputs(
 }
 
 
+/**
+ * Tool to find the intersection of two label files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
+ */
 function labels_intersect_execute(
     params: LabelsIntersectParameters,
     execution: Execution,
 ): LabelsIntersectOutputs {
-    /**
-     * Tool to find the intersection of two label files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
-     */
     params = execution.params(params)
     const cargs = labels_intersect_cargs(params, execution)
     const ret = labels_intersect_outputs(params, execution)
@@ -159,26 +159,26 @@ function labels_intersect_execute(
 }
 
 
+/**
+ * Tool to find the intersection of two label files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label1 First input label file
+ * @param label2 Second input label file
+ * @param outputname Output label file name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
+ */
 function labels_intersect(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
     runner: Runner | null = null,
 ): LabelsIntersectOutputs {
-    /**
-     * Tool to find the intersection of two label files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label1 First input label file
-     * @param label2 Second input label file
-     * @param outputname Output label file name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABELS_INTERSECT_METADATA);
     const params = labels_intersect_params(label1, label2, outputname)
@@ -191,5 +191,8 @@ export {
       LabelsIntersectOutputs,
       LabelsIntersectParameters,
       labels_intersect,
+      labels_intersect_cargs,
+      labels_intersect_execute,
+      labels_intersect_outputs,
       labels_intersect_params,
 };

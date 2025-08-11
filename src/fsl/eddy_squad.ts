@@ -12,7 +12,7 @@ const EDDY_SQUAD_METADATA: Metadata = {
 
 
 interface EddySquadParameters {
-    "__STYXTYPE__": "eddy_squad";
+    "@type": "fsl.eddy_squad";
     "grouping"?: string | null | undefined;
     "group_db"?: InputPathType | null | undefined;
     "update": boolean;
@@ -21,35 +21,35 @@ interface EddySquadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "eddy_squad": eddy_squad_cargs,
+        "fsl.eddy_squad": eddy_squad_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "eddy_squad": eddy_squad_outputs,
+        "fsl.eddy_squad": eddy_squad_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface EddySquadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_list List of subject IDs for the QC.
+ * @param grouping Specifies the grouping of studies.
+ * @param group_db Path to the group database.
+ * @param update Option to update the QC results.
+ * @param output_dir Output directory for the QC results.
+ *
+ * @returns Parameter dictionary
+ */
 function eddy_squad_params(
     subject_list: string,
     grouping: string | null = null,
@@ -79,19 +90,8 @@ function eddy_squad_params(
     update: boolean = false,
     output_dir: string | null = null,
 ): EddySquadParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_list List of subject IDs for the QC.
-     * @param grouping Specifies the grouping of studies.
-     * @param group_db Path to the group database.
-     * @param update Option to update the QC results.
-     * @param output_dir Output directory for the QC results.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "eddy_squad" as const,
+        "@type": "fsl.eddy_squad" as const,
         "update": update,
         "subject_list": subject_list,
     };
@@ -108,18 +108,18 @@ function eddy_squad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function eddy_squad_cargs(
     params: EddySquadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("eddy_squad");
     if ((params["grouping"] ?? null) !== null) {
@@ -148,18 +148,18 @@ function eddy_squad_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function eddy_squad_outputs(
     params: EddySquadParameters,
     execution: Execution,
 ): EddySquadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EddySquadOutputs = {
         root: execution.outputFile("."),
         qc_results: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/qc_results.json"].join('')) : null,
@@ -168,22 +168,22 @@ function eddy_squad_outputs(
 }
 
 
+/**
+ * Study-wise QC for dMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
+ */
 function eddy_squad_execute(
     params: EddySquadParameters,
     execution: Execution,
 ): EddySquadOutputs {
-    /**
-     * Study-wise QC for dMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
-     */
     params = execution.params(params)
     const cargs = eddy_squad_cargs(params, execution)
     const ret = eddy_squad_outputs(params, execution)
@@ -192,6 +192,22 @@ function eddy_squad_execute(
 }
 
 
+/**
+ * Study-wise QC for dMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param subject_list List of subject IDs for the QC.
+ * @param grouping Specifies the grouping of studies.
+ * @param group_db Path to the group database.
+ * @param update Option to update the QC results.
+ * @param output_dir Output directory for the QC results.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
+ */
 function eddy_squad(
     subject_list: string,
     grouping: string | null = null,
@@ -200,22 +216,6 @@ function eddy_squad(
     output_dir: string | null = null,
     runner: Runner | null = null,
 ): EddySquadOutputs {
-    /**
-     * Study-wise QC for dMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param subject_list List of subject IDs for the QC.
-     * @param grouping Specifies the grouping of studies.
-     * @param group_db Path to the group database.
-     * @param update Option to update the QC results.
-     * @param output_dir Output directory for the QC results.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EDDY_SQUAD_METADATA);
     const params = eddy_squad_params(subject_list, grouping, group_db, update, output_dir)
@@ -228,5 +228,8 @@ export {
       EddySquadOutputs,
       EddySquadParameters,
       eddy_squad,
+      eddy_squad_cargs,
+      eddy_squad_execute,
+      eddy_squad_outputs,
       eddy_squad_params,
 };

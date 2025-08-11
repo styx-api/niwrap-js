@@ -12,7 +12,7 @@ const MAP_CENTRAL_SULCUS_METADATA: Metadata = {
 
 
 interface MapCentralSulcusParameters {
-    "__STYXTYPE__": "map_central_sulcus";
+    "@type": "freesurfer.map_central_sulcus";
     "subjid": string;
     "process_directive": string;
     "hemi_flag"?: string | null | undefined;
@@ -52,35 +52,35 @@ interface MapCentralSulcusParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "map_central_sulcus": map_central_sulcus_cargs,
+        "freesurfer.map_central_sulcus": map_central_sulcus_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "map_central_sulcus": map_central_sulcus_outputs,
+        "freesurfer.map_central_sulcus": map_central_sulcus_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,6 +107,48 @@ interface MapCentralSulcusOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid FreeSurfer subject identification string which doubles as the name of the reconstruction root directory for the subject.
+ * @param process_directive Process directive for recon-all (e.g. -all, -autorecon-all, -autorecon1)
+ * @param hemi_flag Specify hemisphere processing (e.g., lh for left hemisphere or rh for right hemisphere)
+ * @param expert_prefs_file Read-in expert options file for processing. Overrides default options.
+ * @param xopts_use Use pre-existing expert options file.
+ * @param xopts_clean Delete pre-existing expert options file.
+ * @param xopts_overwrite Overwrite pre-existing expert options file.
+ * @param watershed_cmd Controls how the skull stripping will be performed.
+ * @param xmask_file Custom external brain mask to replace automated skullstripping.
+ * @param wsless Decrease watershed threshold (leaves less skull, but can strip more brain).
+ * @param wsmore Increase watershed threshold (leaves more skull, but can strip less brain).
+ * @param wsatlas Use atlas when skull stripping.
+ * @param no_wsatlas Do not use atlas when skull stripping.
+ * @param no_wsgcaatlas Do not use GCA atlas when skull stripping.
+ * @param wsthresh Explicitly set watershed threshold.
+ * @param wsseed Specify an index (C, R, S) point in the skull.
+ * @param norm3diters Number of 3d iterations for mri_normalize.
+ * @param normmaxgrad Max grad (-g) for mri_normalize. Default is 1.
+ * @param norm1_b In the first usage of mri_normalize, use control point with intensity N below target (default=10.0).
+ * @param norm2_b In the second usage of mri_normalize, use control point with intensity N below target (default=10.0).
+ * @param norm1_n In the first usage of mri_normalize, do N number of iterations.
+ * @param norm2_n In the second usage of mri_normalize, do N number of iterations.
+ * @param cm_flag Conform volumes to the min voxel size.
+ * @param no_fix_with_ga Do not use genetic algorithm when fixing topology.
+ * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created, then stops.
+ * @param seg_wlo Set wlo value for mri_segment and mris_make_surfaces.
+ * @param seg_ghi Set ghi value for mri_segment and mris_make_surfaces.
+ * @param nothicken Pass '-thicken 0' to mri_segment.
+ * @param no_ca_align_after Turn off -align-after with mri_ca_register.
+ * @param no_ca_align Turn off -align with mri_ca_label.
+ * @param deface Deface subject, written to orig_defaced.mgz.
+ * @param mprage Assume scan parameters are MGH MP-RAGE protocol.
+ * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol.
+ * @param schwartzya3t_atlas For tal reg, use special young adult 3T atlas.
+ * @param mail_username Mail user when done.
+ * @param threads Set number of threads to use.
+ *
+ * @returns Parameter dictionary
+ */
 function map_central_sulcus_params(
     subjid: string,
     process_directive: string,
@@ -145,50 +187,8 @@ function map_central_sulcus_params(
     mail_username: string | null = null,
     threads: number | null = null,
 ): MapCentralSulcusParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid FreeSurfer subject identification string which doubles as the name of the reconstruction root directory for the subject.
-     * @param process_directive Process directive for recon-all (e.g. -all, -autorecon-all, -autorecon1)
-     * @param hemi_flag Specify hemisphere processing (e.g., lh for left hemisphere or rh for right hemisphere)
-     * @param expert_prefs_file Read-in expert options file for processing. Overrides default options.
-     * @param xopts_use Use pre-existing expert options file.
-     * @param xopts_clean Delete pre-existing expert options file.
-     * @param xopts_overwrite Overwrite pre-existing expert options file.
-     * @param watershed_cmd Controls how the skull stripping will be performed.
-     * @param xmask_file Custom external brain mask to replace automated skullstripping.
-     * @param wsless Decrease watershed threshold (leaves less skull, but can strip more brain).
-     * @param wsmore Increase watershed threshold (leaves more skull, but can strip less brain).
-     * @param wsatlas Use atlas when skull stripping.
-     * @param no_wsatlas Do not use atlas when skull stripping.
-     * @param no_wsgcaatlas Do not use GCA atlas when skull stripping.
-     * @param wsthresh Explicitly set watershed threshold.
-     * @param wsseed Specify an index (C, R, S) point in the skull.
-     * @param norm3diters Number of 3d iterations for mri_normalize.
-     * @param normmaxgrad Max grad (-g) for mri_normalize. Default is 1.
-     * @param norm1_b In the first usage of mri_normalize, use control point with intensity N below target (default=10.0).
-     * @param norm2_b In the second usage of mri_normalize, use control point with intensity N below target (default=10.0).
-     * @param norm1_n In the first usage of mri_normalize, do N number of iterations.
-     * @param norm2_n In the second usage of mri_normalize, do N number of iterations.
-     * @param cm_flag Conform volumes to the min voxel size.
-     * @param no_fix_with_ga Do not use genetic algorithm when fixing topology.
-     * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created, then stops.
-     * @param seg_wlo Set wlo value for mri_segment and mris_make_surfaces.
-     * @param seg_ghi Set ghi value for mri_segment and mris_make_surfaces.
-     * @param nothicken Pass '-thicken 0' to mri_segment.
-     * @param no_ca_align_after Turn off -align-after with mri_ca_register.
-     * @param no_ca_align Turn off -align with mri_ca_label.
-     * @param deface Deface subject, written to orig_defaced.mgz.
-     * @param mprage Assume scan parameters are MGH MP-RAGE protocol.
-     * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol.
-     * @param schwartzya3t_atlas For tal reg, use special young adult 3T atlas.
-     * @param mail_username Mail user when done.
-     * @param threads Set number of threads to use.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "map_central_sulcus" as const,
+        "@type": "freesurfer.map_central_sulcus" as const,
         "subjid": subjid,
         "process_directive": process_directive,
         "xopts_use": xopts_use,
@@ -262,18 +262,18 @@ function map_central_sulcus_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function map_central_sulcus_cargs(
     params: MapCentralSulcusParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("map_central_sulcus");
     cargs.push(
@@ -435,18 +435,18 @@ function map_central_sulcus_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function map_central_sulcus_outputs(
     params: MapCentralSulcusParameters,
     execution: Execution,
 ): MapCentralSulcusOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MapCentralSulcusOutputs = {
         root: execution.outputFile("."),
         log_file: execution.outputFile([(params["subjid"] ?? null), "/scripts/recon-all.log"].join('')),
@@ -456,22 +456,22 @@ function map_central_sulcus_outputs(
 }
 
 
+/**
+ * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
+ */
 function map_central_sulcus_execute(
     params: MapCentralSulcusParameters,
     execution: Execution,
 ): MapCentralSulcusOutputs {
-    /**
-     * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
-     */
     params = execution.params(params)
     const cargs = map_central_sulcus_cargs(params, execution)
     const ret = map_central_sulcus_outputs(params, execution)
@@ -480,6 +480,53 @@ function map_central_sulcus_execute(
 }
 
 
+/**
+ * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid FreeSurfer subject identification string which doubles as the name of the reconstruction root directory for the subject.
+ * @param process_directive Process directive for recon-all (e.g. -all, -autorecon-all, -autorecon1)
+ * @param hemi_flag Specify hemisphere processing (e.g., lh for left hemisphere or rh for right hemisphere)
+ * @param expert_prefs_file Read-in expert options file for processing. Overrides default options.
+ * @param xopts_use Use pre-existing expert options file.
+ * @param xopts_clean Delete pre-existing expert options file.
+ * @param xopts_overwrite Overwrite pre-existing expert options file.
+ * @param watershed_cmd Controls how the skull stripping will be performed.
+ * @param xmask_file Custom external brain mask to replace automated skullstripping.
+ * @param wsless Decrease watershed threshold (leaves less skull, but can strip more brain).
+ * @param wsmore Increase watershed threshold (leaves more skull, but can strip less brain).
+ * @param wsatlas Use atlas when skull stripping.
+ * @param no_wsatlas Do not use atlas when skull stripping.
+ * @param no_wsgcaatlas Do not use GCA atlas when skull stripping.
+ * @param wsthresh Explicitly set watershed threshold.
+ * @param wsseed Specify an index (C, R, S) point in the skull.
+ * @param norm3diters Number of 3d iterations for mri_normalize.
+ * @param normmaxgrad Max grad (-g) for mri_normalize. Default is 1.
+ * @param norm1_b In the first usage of mri_normalize, use control point with intensity N below target (default=10.0).
+ * @param norm2_b In the second usage of mri_normalize, use control point with intensity N below target (default=10.0).
+ * @param norm1_n In the first usage of mri_normalize, do N number of iterations.
+ * @param norm2_n In the second usage of mri_normalize, do N number of iterations.
+ * @param cm_flag Conform volumes to the min voxel size.
+ * @param no_fix_with_ga Do not use genetic algorithm when fixing topology.
+ * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created, then stops.
+ * @param seg_wlo Set wlo value for mri_segment and mris_make_surfaces.
+ * @param seg_ghi Set ghi value for mri_segment and mris_make_surfaces.
+ * @param nothicken Pass '-thicken 0' to mri_segment.
+ * @param no_ca_align_after Turn off -align-after with mri_ca_register.
+ * @param no_ca_align Turn off -align with mri_ca_label.
+ * @param deface Deface subject, written to orig_defaced.mgz.
+ * @param mprage Assume scan parameters are MGH MP-RAGE protocol.
+ * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol.
+ * @param schwartzya3t_atlas For tal reg, use special young adult 3T atlas.
+ * @param mail_username Mail user when done.
+ * @param threads Set number of threads to use.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
+ */
 function map_central_sulcus(
     subjid: string,
     process_directive: string,
@@ -519,53 +566,6 @@ function map_central_sulcus(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MapCentralSulcusOutputs {
-    /**
-     * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid FreeSurfer subject identification string which doubles as the name of the reconstruction root directory for the subject.
-     * @param process_directive Process directive for recon-all (e.g. -all, -autorecon-all, -autorecon1)
-     * @param hemi_flag Specify hemisphere processing (e.g., lh for left hemisphere or rh for right hemisphere)
-     * @param expert_prefs_file Read-in expert options file for processing. Overrides default options.
-     * @param xopts_use Use pre-existing expert options file.
-     * @param xopts_clean Delete pre-existing expert options file.
-     * @param xopts_overwrite Overwrite pre-existing expert options file.
-     * @param watershed_cmd Controls how the skull stripping will be performed.
-     * @param xmask_file Custom external brain mask to replace automated skullstripping.
-     * @param wsless Decrease watershed threshold (leaves less skull, but can strip more brain).
-     * @param wsmore Increase watershed threshold (leaves more skull, but can strip less brain).
-     * @param wsatlas Use atlas when skull stripping.
-     * @param no_wsatlas Do not use atlas when skull stripping.
-     * @param no_wsgcaatlas Do not use GCA atlas when skull stripping.
-     * @param wsthresh Explicitly set watershed threshold.
-     * @param wsseed Specify an index (C, R, S) point in the skull.
-     * @param norm3diters Number of 3d iterations for mri_normalize.
-     * @param normmaxgrad Max grad (-g) for mri_normalize. Default is 1.
-     * @param norm1_b In the first usage of mri_normalize, use control point with intensity N below target (default=10.0).
-     * @param norm2_b In the second usage of mri_normalize, use control point with intensity N below target (default=10.0).
-     * @param norm1_n In the first usage of mri_normalize, do N number of iterations.
-     * @param norm2_n In the second usage of mri_normalize, do N number of iterations.
-     * @param cm_flag Conform volumes to the min voxel size.
-     * @param no_fix_with_ga Do not use genetic algorithm when fixing topology.
-     * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created, then stops.
-     * @param seg_wlo Set wlo value for mri_segment and mris_make_surfaces.
-     * @param seg_ghi Set ghi value for mri_segment and mris_make_surfaces.
-     * @param nothicken Pass '-thicken 0' to mri_segment.
-     * @param no_ca_align_after Turn off -align-after with mri_ca_register.
-     * @param no_ca_align Turn off -align with mri_ca_label.
-     * @param deface Deface subject, written to orig_defaced.mgz.
-     * @param mprage Assume scan parameters are MGH MP-RAGE protocol.
-     * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol.
-     * @param schwartzya3t_atlas For tal reg, use special young adult 3T atlas.
-     * @param mail_username Mail user when done.
-     * @param threads Set number of threads to use.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_CENTRAL_SULCUS_METADATA);
     const params = map_central_sulcus_params(subjid, process_directive, hemi_flag, expert_prefs_file, xopts_use, xopts_clean, xopts_overwrite, watershed_cmd, xmask_file, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm3diters, normmaxgrad, norm1_b, norm2_b, norm1_n, norm2_n, cm_flag, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, mprage, washu_mprage, schwartzya3t_atlas, mail_username, threads)
@@ -578,5 +578,8 @@ export {
       MapCentralSulcusOutputs,
       MapCentralSulcusParameters,
       map_central_sulcus,
+      map_central_sulcus_cargs,
+      map_central_sulcus_execute,
+      map_central_sulcus_outputs,
       map_central_sulcus_params,
 };

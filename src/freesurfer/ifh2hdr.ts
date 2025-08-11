@@ -12,39 +12,39 @@ const IFH2HDR_METADATA: Metadata = {
 
 
 interface Ifh2hdrParameters {
-    "__STYXTYPE__": "ifh2hdr";
+    "@type": "freesurfer.ifh2hdr";
     "input_file": InputPathType;
     "range"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ifh2hdr": ifh2hdr_cargs,
+        "freesurfer.ifh2hdr": ifh2hdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface Ifh2hdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 4dfp file
+ * @param range Set range for the 4dfp file. Format: <float>[to<float>].
+ *
+ * @returns Parameter dictionary
+ */
 function ifh2hdr_params(
     input_file: InputPathType,
     range: string | null = null,
 ): Ifh2hdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 4dfp file
-     * @param range Set range for the 4dfp file. Format: <float>[to<float>].
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ifh2hdr" as const,
+        "@type": "freesurfer.ifh2hdr" as const,
         "input_file": input_file,
     };
     if (range !== null) {
@@ -87,18 +87,18 @@ function ifh2hdr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ifh2hdr_cargs(
     params: Ifh2hdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ifh2hdr");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -112,18 +112,18 @@ function ifh2hdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ifh2hdr_outputs(
     params: Ifh2hdrParameters,
     execution: Execution,
 ): Ifh2hdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Ifh2hdrOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function ifh2hdr_outputs(
 }
 
 
+/**
+ * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
+ */
 function ifh2hdr_execute(
     params: Ifh2hdrParameters,
     execution: Execution,
 ): Ifh2hdrOutputs {
-    /**
-     * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = ifh2hdr_cargs(params, execution)
     const ret = ifh2hdr_outputs(params, execution)
@@ -155,24 +155,24 @@ function ifh2hdr_execute(
 }
 
 
+/**
+ * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input 4dfp file
+ * @param range Set range for the 4dfp file. Format: <float>[to<float>].
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
+ */
 function ifh2hdr(
     input_file: InputPathType,
     range: string | null = null,
     runner: Runner | null = null,
 ): Ifh2hdrOutputs {
-    /**
-     * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input 4dfp file
-     * @param range Set range for the 4dfp file. Format: <float>[to<float>].
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IFH2HDR_METADATA);
     const params = ifh2hdr_params(input_file, range)
@@ -185,5 +185,8 @@ export {
       Ifh2hdrOutputs,
       Ifh2hdrParameters,
       ifh2hdr,
+      ifh2hdr_cargs,
+      ifh2hdr_execute,
+      ifh2hdr_outputs,
       ifh2hdr_params,
 };

@@ -12,7 +12,7 @@ const MRI_SBBR_METADATA: Metadata = {
 
 
 interface MriSbbrParameters {
-    "__STYXTYPE__": "mri_sbbr";
+    "@type": "freesurfer.mri_sbbr";
     "template_volume": InputPathType;
     "surface_file": InputPathType;
     "init_reg_file": InputPathType;
@@ -40,33 +40,33 @@ interface MriSbbrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_sbbr": mri_sbbr_cargs,
+        "freesurfer.mri_sbbr": mri_sbbr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface MriSbbrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template_volume Template volume file.
+ * @param surface_file Surface file.
+ * @param init_reg_file Initial registration file.
+ * @param t1 Use T1-weighted image.
+ * @param t2 Use T2-weighted image.
+ * @param optimization_type Optimization type; choose 1, 2, or 3 (default is 1, 6 dof).
+ * @param distance_in Distance in mm into surface (default 1.0).
+ * @param distance_out Distance in mm out of surface (default 2.0).
+ * @param slope BBR slope (default 0.5).
+ * @param ftol Tolerance for fitting (default 1.000000e-08).
+ * @param linmintol Linear minimization tolerance (default 0.0).
+ * @param niters_max Maximum number of iterations (default 10).
+ * @param search Brute force search through parameter space.
+ * @param search1d 1D search through parameter space.
+ * @param parameter_set Set initial parameter.
+ * @param increment Face number increment (default 1).
+ * @param slice_number Slice number (defaults to 0).
+ * @param threads Number of threads.
+ * @param output_registration Output registration file.
+ * @param inverted_output_registration Inverted output registration file.
+ * @param output_surface Output surface in slice coordinates.
+ * @param debug Turn on debugging.
+ * @param diagnostic Turn on diagnostics.
+ * @param check_options Don't run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_sbbr_params(
     template_volume: InputPathType,
     surface_file: InputPathType,
@@ -112,38 +142,8 @@ function mri_sbbr_params(
     diagnostic: boolean = false,
     check_options: boolean = false,
 ): MriSbbrParameters {
-    /**
-     * Build parameters.
-    
-     * @param template_volume Template volume file.
-     * @param surface_file Surface file.
-     * @param init_reg_file Initial registration file.
-     * @param t1 Use T1-weighted image.
-     * @param t2 Use T2-weighted image.
-     * @param optimization_type Optimization type; choose 1, 2, or 3 (default is 1, 6 dof).
-     * @param distance_in Distance in mm into surface (default 1.0).
-     * @param distance_out Distance in mm out of surface (default 2.0).
-     * @param slope BBR slope (default 0.5).
-     * @param ftol Tolerance for fitting (default 1.000000e-08).
-     * @param linmintol Linear minimization tolerance (default 0.0).
-     * @param niters_max Maximum number of iterations (default 10).
-     * @param search Brute force search through parameter space.
-     * @param search1d 1D search through parameter space.
-     * @param parameter_set Set initial parameter.
-     * @param increment Face number increment (default 1).
-     * @param slice_number Slice number (defaults to 0).
-     * @param threads Number of threads.
-     * @param output_registration Output registration file.
-     * @param inverted_output_registration Inverted output registration file.
-     * @param output_surface Output surface in slice coordinates.
-     * @param debug Turn on debugging.
-     * @param diagnostic Turn on diagnostics.
-     * @param check_options Don't run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_sbbr" as const,
+        "@type": "freesurfer.mri_sbbr" as const,
         "template_volume": template_volume,
         "surface_file": surface_file,
         "init_reg_file": init_reg_file,
@@ -205,18 +205,18 @@ function mri_sbbr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_sbbr_cargs(
     params: MriSbbrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_sbbr");
     cargs.push(
@@ -346,18 +346,18 @@ function mri_sbbr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_sbbr_outputs(
     params: MriSbbrParameters,
     execution: Execution,
 ): MriSbbrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSbbrOutputs = {
         root: execution.outputFile("."),
     };
@@ -365,22 +365,22 @@ function mri_sbbr_outputs(
 }
 
 
+/**
+ * Special implementation of boundary-based registration for a single slice.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
+ */
 function mri_sbbr_execute(
     params: MriSbbrParameters,
     execution: Execution,
 ): MriSbbrOutputs {
-    /**
-     * Special implementation of boundary-based registration for a single slice.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_sbbr_cargs(params, execution)
     const ret = mri_sbbr_outputs(params, execution)
@@ -389,6 +389,41 @@ function mri_sbbr_execute(
 }
 
 
+/**
+ * Special implementation of boundary-based registration for a single slice.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param template_volume Template volume file.
+ * @param surface_file Surface file.
+ * @param init_reg_file Initial registration file.
+ * @param t1 Use T1-weighted image.
+ * @param t2 Use T2-weighted image.
+ * @param optimization_type Optimization type; choose 1, 2, or 3 (default is 1, 6 dof).
+ * @param distance_in Distance in mm into surface (default 1.0).
+ * @param distance_out Distance in mm out of surface (default 2.0).
+ * @param slope BBR slope (default 0.5).
+ * @param ftol Tolerance for fitting (default 1.000000e-08).
+ * @param linmintol Linear minimization tolerance (default 0.0).
+ * @param niters_max Maximum number of iterations (default 10).
+ * @param search Brute force search through parameter space.
+ * @param search1d 1D search through parameter space.
+ * @param parameter_set Set initial parameter.
+ * @param increment Face number increment (default 1).
+ * @param slice_number Slice number (defaults to 0).
+ * @param threads Number of threads.
+ * @param output_registration Output registration file.
+ * @param inverted_output_registration Inverted output registration file.
+ * @param output_surface Output surface in slice coordinates.
+ * @param debug Turn on debugging.
+ * @param diagnostic Turn on diagnostics.
+ * @param check_options Don't run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
+ */
 function mri_sbbr(
     template_volume: InputPathType,
     surface_file: InputPathType,
@@ -416,41 +451,6 @@ function mri_sbbr(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriSbbrOutputs {
-    /**
-     * Special implementation of boundary-based registration for a single slice.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param template_volume Template volume file.
-     * @param surface_file Surface file.
-     * @param init_reg_file Initial registration file.
-     * @param t1 Use T1-weighted image.
-     * @param t2 Use T2-weighted image.
-     * @param optimization_type Optimization type; choose 1, 2, or 3 (default is 1, 6 dof).
-     * @param distance_in Distance in mm into surface (default 1.0).
-     * @param distance_out Distance in mm out of surface (default 2.0).
-     * @param slope BBR slope (default 0.5).
-     * @param ftol Tolerance for fitting (default 1.000000e-08).
-     * @param linmintol Linear minimization tolerance (default 0.0).
-     * @param niters_max Maximum number of iterations (default 10).
-     * @param search Brute force search through parameter space.
-     * @param search1d 1D search through parameter space.
-     * @param parameter_set Set initial parameter.
-     * @param increment Face number increment (default 1).
-     * @param slice_number Slice number (defaults to 0).
-     * @param threads Number of threads.
-     * @param output_registration Output registration file.
-     * @param inverted_output_registration Inverted output registration file.
-     * @param output_surface Output surface in slice coordinates.
-     * @param debug Turn on debugging.
-     * @param diagnostic Turn on diagnostics.
-     * @param check_options Don't run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SBBR_METADATA);
     const params = mri_sbbr_params(template_volume, surface_file, init_reg_file, t1, t2, optimization_type, distance_in, distance_out, slope, ftol, linmintol, niters_max, search, search1d, parameter_set, increment, slice_number, threads, output_registration, inverted_output_registration, output_surface, debug, diagnostic, check_options)
@@ -463,5 +463,8 @@ export {
       MriSbbrOutputs,
       MriSbbrParameters,
       mri_sbbr,
+      mri_sbbr_cargs,
+      mri_sbbr_execute,
+      mri_sbbr_outputs,
       mri_sbbr_params,
 };

@@ -12,7 +12,7 @@ const V__ROI_MODAL_GROW_METADATA: Metadata = {
 
 
 interface VRoiModalGrowParameters {
-    "__STYXTYPE__": "@ROI_modal_grow";
+    "@type": "afni.@ROI_modal_grow";
     "input_dset": InputPathType;
     "niters": number;
     "outdir"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface VRoiModalGrowParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ROI_modal_grow": v__roi_modal_grow_cargs,
+        "afni.@ROI_modal_grow": v__roi_modal_grow_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ROI_modal_grow": v__roi_modal_grow_outputs,
+        "afni.@ROI_modal_grow": v__roi_modal_grow_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VRoiModalGrowOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dset Required input dataset. This dataset should be a set of integer values, assuming approximate isotropic voxels.
+ * @param niters Number of iterations for modal growth, generally making sense for values from about 1-10.
+ * @param outdir Directory name for output. All output goes to this directory. Default is rmgrow.
+ * @param mask Mask dataset at the same grid as the input dataset. Could be a dilated version of the original mask or a larger region like a cortical ribbon mask. Not required but often desirable.
+ * @param prefix Base name of the final output dataset, i.e., baseprefix.nii.gz. Default is rmg, so output would be rmg.nii.gz.
+ * @param neighborhood_type Neighborhood type used in finding mode. 1 - facing neighbors, 2 - edges, 3 - corners.
+ *
+ * @returns Parameter dictionary
+ */
 function v__roi_modal_grow_params(
     input_dset: InputPathType,
     niters: number,
@@ -81,20 +93,8 @@ function v__roi_modal_grow_params(
     prefix: string | null = null,
     neighborhood_type: number | null = null,
 ): VRoiModalGrowParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dset Required input dataset. This dataset should be a set of integer values, assuming approximate isotropic voxels.
-     * @param niters Number of iterations for modal growth, generally making sense for values from about 1-10.
-     * @param outdir Directory name for output. All output goes to this directory. Default is rmgrow.
-     * @param mask Mask dataset at the same grid as the input dataset. Could be a dilated version of the original mask or a larger region like a cortical ribbon mask. Not required but often desirable.
-     * @param prefix Base name of the final output dataset, i.e., baseprefix.nii.gz. Default is rmg, so output would be rmg.nii.gz.
-     * @param neighborhood_type Neighborhood type used in finding mode. 1 - facing neighbors, 2 - edges, 3 - corners.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ROI_modal_grow" as const,
+        "@type": "afni.@ROI_modal_grow" as const,
         "input_dset": input_dset,
         "niters": niters,
     };
@@ -114,18 +114,18 @@ function v__roi_modal_grow_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__roi_modal_grow_cargs(
     params: VRoiModalGrowParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ROI_modal_grow");
     cargs.push(
@@ -164,18 +164,18 @@ function v__roi_modal_grow_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__roi_modal_grow_outputs(
     params: VRoiModalGrowParameters,
     execution: Execution,
 ): VRoiModalGrowOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRoiModalGrowOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["outdir"] ?? null) !== null && (params["prefix"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/", (params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -184,22 +184,22 @@ function v__roi_modal_grow_outputs(
 }
 
 
+/**
+ * Script to grow a set of regions in a volumetric dataset using modal smoothing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
+ */
 function v__roi_modal_grow_execute(
     params: VRoiModalGrowParameters,
     execution: Execution,
 ): VRoiModalGrowOutputs {
-    /**
-     * Script to grow a set of regions in a volumetric dataset using modal smoothing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__roi_modal_grow_cargs(params, execution)
     const ret = v__roi_modal_grow_outputs(params, execution)
@@ -208,6 +208,23 @@ function v__roi_modal_grow_execute(
 }
 
 
+/**
+ * Script to grow a set of regions in a volumetric dataset using modal smoothing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dset Required input dataset. This dataset should be a set of integer values, assuming approximate isotropic voxels.
+ * @param niters Number of iterations for modal growth, generally making sense for values from about 1-10.
+ * @param outdir Directory name for output. All output goes to this directory. Default is rmgrow.
+ * @param mask Mask dataset at the same grid as the input dataset. Could be a dilated version of the original mask or a larger region like a cortical ribbon mask. Not required but often desirable.
+ * @param prefix Base name of the final output dataset, i.e., baseprefix.nii.gz. Default is rmg, so output would be rmg.nii.gz.
+ * @param neighborhood_type Neighborhood type used in finding mode. 1 - facing neighbors, 2 - edges, 3 - corners.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
+ */
 function v__roi_modal_grow(
     input_dset: InputPathType,
     niters: number,
@@ -217,23 +234,6 @@ function v__roi_modal_grow(
     neighborhood_type: number | null = null,
     runner: Runner | null = null,
 ): VRoiModalGrowOutputs {
-    /**
-     * Script to grow a set of regions in a volumetric dataset using modal smoothing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dset Required input dataset. This dataset should be a set of integer values, assuming approximate isotropic voxels.
-     * @param niters Number of iterations for modal growth, generally making sense for values from about 1-10.
-     * @param outdir Directory name for output. All output goes to this directory. Default is rmgrow.
-     * @param mask Mask dataset at the same grid as the input dataset. Could be a dilated version of the original mask or a larger region like a cortical ribbon mask. Not required but often desirable.
-     * @param prefix Base name of the final output dataset, i.e., baseprefix.nii.gz. Default is rmg, so output would be rmg.nii.gz.
-     * @param neighborhood_type Neighborhood type used in finding mode. 1 - facing neighbors, 2 - edges, 3 - corners.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ROI_MODAL_GROW_METADATA);
     const params = v__roi_modal_grow_params(input_dset, niters, outdir, mask, prefix, neighborhood_type)
@@ -246,5 +246,8 @@ export {
       VRoiModalGrowParameters,
       V__ROI_MODAL_GROW_METADATA,
       v__roi_modal_grow,
+      v__roi_modal_grow_cargs,
+      v__roi_modal_grow_execute,
+      v__roi_modal_grow_outputs,
       v__roi_modal_grow_params,
 };

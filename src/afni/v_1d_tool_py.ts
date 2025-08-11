@@ -12,7 +12,7 @@ const V_1D_TOOL_PY_METADATA: Metadata = {
 
 
 interface V1dToolPyParameters {
-    "__STYXTYPE__": "1d_tool.py";
+    "@type": "afni.1d_tool.py";
     "infile": InputPathType;
     "write"?: string | null | undefined;
     "select_cols"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface V1dToolPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1d_tool.py": v_1d_tool_py_cargs,
+        "afni.1d_tool.py": v_1d_tool_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1d_tool.py": v_1d_tool_py_outputs,
+        "afni.1d_tool.py": v_1d_tool_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface V1dToolPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input 1D file
+ * @param write Output file to write results
+ * @param select_cols Select specific columns
+ * @param select_rows Select specific rows
+ * @param select_groups Select columns by group numbers
+ * @param censor_motion Generate a boolean censor file
+ * @param pad_into_many_runs Pad a 1D file into many runs
+ * @param set_nruns Set number of runs
+ * @param set_run_lengths Set run lengths
+ * @param show_rows_cols Show the number of rows and columns
+ * @param transpose Transpose the input matrix
+ * @param reverse Reverse the data over time
+ * @param show_max_displace Show the maximum pairwise displacement
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_tool_py_params(
     infile: InputPathType,
     write: string | null = null,
@@ -95,27 +114,8 @@ function v_1d_tool_py_params(
     reverse: boolean = false,
     show_max_displace: boolean = false,
 ): V1dToolPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input 1D file
-     * @param write Output file to write results
-     * @param select_cols Select specific columns
-     * @param select_rows Select specific rows
-     * @param select_groups Select columns by group numbers
-     * @param censor_motion Generate a boolean censor file
-     * @param pad_into_many_runs Pad a 1D file into many runs
-     * @param set_nruns Set number of runs
-     * @param set_run_lengths Set run lengths
-     * @param show_rows_cols Show the number of rows and columns
-     * @param transpose Transpose the input matrix
-     * @param reverse Reverse the data over time
-     * @param show_max_displace Show the maximum pairwise displacement
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1d_tool.py" as const,
+        "@type": "afni.1d_tool.py" as const,
         "infile": infile,
         "show_rows_cols": show_rows_cols,
         "transpose": transpose,
@@ -150,18 +150,18 @@ function v_1d_tool_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_tool_py_cargs(
     params: V1dToolPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1d_tool.py");
     cargs.push(
@@ -232,18 +232,18 @@ function v_1d_tool_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_tool_py_outputs(
     params: V1dToolPyParameters,
     execution: Execution,
 ): V1dToolPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dToolPyOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["write"] ?? null) !== null) ? execution.outputFile([(params["write"] ?? null)].join('')) : null,
@@ -252,22 +252,22 @@ function v_1d_tool_py_outputs(
 }
 
 
+/**
+ * A tool for manipulating and evaluating 1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
+ */
 function v_1d_tool_py_execute(
     params: V1dToolPyParameters,
     execution: Execution,
 ): V1dToolPyOutputs {
-    /**
-     * A tool for manipulating and evaluating 1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_tool_py_cargs(params, execution)
     const ret = v_1d_tool_py_outputs(params, execution)
@@ -276,6 +276,30 @@ function v_1d_tool_py_execute(
 }
 
 
+/**
+ * A tool for manipulating and evaluating 1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input 1D file
+ * @param write Output file to write results
+ * @param select_cols Select specific columns
+ * @param select_rows Select specific rows
+ * @param select_groups Select columns by group numbers
+ * @param censor_motion Generate a boolean censor file
+ * @param pad_into_many_runs Pad a 1D file into many runs
+ * @param set_nruns Set number of runs
+ * @param set_run_lengths Set run lengths
+ * @param show_rows_cols Show the number of rows and columns
+ * @param transpose Transpose the input matrix
+ * @param reverse Reverse the data over time
+ * @param show_max_displace Show the maximum pairwise displacement
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
+ */
 function v_1d_tool_py(
     infile: InputPathType,
     write: string | null = null,
@@ -292,30 +316,6 @@ function v_1d_tool_py(
     show_max_displace: boolean = false,
     runner: Runner | null = null,
 ): V1dToolPyOutputs {
-    /**
-     * A tool for manipulating and evaluating 1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input 1D file
-     * @param write Output file to write results
-     * @param select_cols Select specific columns
-     * @param select_rows Select specific rows
-     * @param select_groups Select columns by group numbers
-     * @param censor_motion Generate a boolean censor file
-     * @param pad_into_many_runs Pad a 1D file into many runs
-     * @param set_nruns Set number of runs
-     * @param set_run_lengths Set run lengths
-     * @param show_rows_cols Show the number of rows and columns
-     * @param transpose Transpose the input matrix
-     * @param reverse Reverse the data over time
-     * @param show_max_displace Show the maximum pairwise displacement
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_TOOL_PY_METADATA);
     const params = v_1d_tool_py_params(infile, write, select_cols, select_rows, select_groups, censor_motion, pad_into_many_runs, set_nruns, set_run_lengths, show_rows_cols, transpose, reverse, show_max_displace)
@@ -328,5 +328,8 @@ export {
       V1dToolPyParameters,
       V_1D_TOOL_PY_METADATA,
       v_1d_tool_py,
+      v_1d_tool_py_cargs,
+      v_1d_tool_py_execute,
+      v_1d_tool_py_outputs,
       v_1d_tool_py_params,
 };

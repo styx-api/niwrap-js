@@ -12,7 +12,7 @@ const FS_LIB_CHECK_METADATA: Metadata = {
 
 
 interface FsLibCheckParameters {
-    "__STYXTYPE__": "fs_lib_check";
+    "@type": "freesurfer.fs_lib_check";
     "use_ldconfig": boolean;
     "use_rpm": boolean;
     "show_help": boolean;
@@ -20,33 +20,33 @@ interface FsLibCheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_lib_check": fs_lib_check_cargs,
+        "freesurfer.fs_lib_check": fs_lib_check_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface FsLibCheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param use_ldconfig Force use of 'ldconfig' to check for instances of required system libraries. This is useful on rpm systems if system libraries were installed from source code, and are thus not known to the system rpm database.
+ * @param use_rpm Force use of 'rpm -qa' to check for installed library packages. If -r and -l are both specified concurrently, then behavior is unspecified.
+ * @param show_help Show this synopsis and exit.
+ * @param show_version Show a version number and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fs_lib_check_params(
     use_ldconfig: boolean = false,
     use_rpm: boolean = false,
     show_help: boolean = false,
     show_version: boolean = false,
 ): FsLibCheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param use_ldconfig Force use of 'ldconfig' to check for instances of required system libraries. This is useful on rpm systems if system libraries were installed from source code, and are thus not known to the system rpm database.
-     * @param use_rpm Force use of 'rpm -qa' to check for installed library packages. If -r and -l are both specified concurrently, then behavior is unspecified.
-     * @param show_help Show this synopsis and exit.
-     * @param show_version Show a version number and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_lib_check" as const,
+        "@type": "freesurfer.fs_lib_check" as const,
         "use_ldconfig": use_ldconfig,
         "use_rpm": use_rpm,
         "show_help": show_help,
@@ -93,18 +93,18 @@ function fs_lib_check_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_lib_check_cargs(
     params: FsLibCheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_lib_check");
     if ((params["use_ldconfig"] ?? null)) {
@@ -123,18 +123,18 @@ function fs_lib_check_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_lib_check_outputs(
     params: FsLibCheckParameters,
     execution: Execution,
 ): FsLibCheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsLibCheckOutputs = {
         root: execution.outputFile("."),
     };
@@ -142,22 +142,22 @@ function fs_lib_check_outputs(
 }
 
 
+/**
+ * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
+ */
 function fs_lib_check_execute(
     params: FsLibCheckParameters,
     execution: Execution,
 ): FsLibCheckOutputs {
-    /**
-     * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_lib_check_cargs(params, execution)
     const ret = fs_lib_check_outputs(params, execution)
@@ -166,6 +166,21 @@ function fs_lib_check_execute(
 }
 
 
+/**
+ * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param use_ldconfig Force use of 'ldconfig' to check for instances of required system libraries. This is useful on rpm systems if system libraries were installed from source code, and are thus not known to the system rpm database.
+ * @param use_rpm Force use of 'rpm -qa' to check for installed library packages. If -r and -l are both specified concurrently, then behavior is unspecified.
+ * @param show_help Show this synopsis and exit.
+ * @param show_version Show a version number and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
+ */
 function fs_lib_check(
     use_ldconfig: boolean = false,
     use_rpm: boolean = false,
@@ -173,21 +188,6 @@ function fs_lib_check(
     show_version: boolean = false,
     runner: Runner | null = null,
 ): FsLibCheckOutputs {
-    /**
-     * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param use_ldconfig Force use of 'ldconfig' to check for instances of required system libraries. This is useful on rpm systems if system libraries were installed from source code, and are thus not known to the system rpm database.
-     * @param use_rpm Force use of 'rpm -qa' to check for installed library packages. If -r and -l are both specified concurrently, then behavior is unspecified.
-     * @param show_help Show this synopsis and exit.
-     * @param show_version Show a version number and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_LIB_CHECK_METADATA);
     const params = fs_lib_check_params(use_ldconfig, use_rpm, show_help, show_version)
@@ -200,5 +200,8 @@ export {
       FsLibCheckOutputs,
       FsLibCheckParameters,
       fs_lib_check,
+      fs_lib_check_cargs,
+      fs_lib_check_execute,
+      fs_lib_check_outputs,
       fs_lib_check_params,
 };

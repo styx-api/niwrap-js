@@ -12,7 +12,7 @@ const V_2DCAT_METADATA: Metadata = {
 
 
 interface V2dcatParameters {
-    "__STYXTYPE__": "2dcat";
+    "@type": "afni.2dcat";
     "filenames": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
     "scale_pixels"?: InputPathType | null | undefined;
@@ -41,35 +41,35 @@ interface V2dcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "2dcat": v_2dcat_cargs,
+        "afni.2dcat": v_2dcat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "2dcat": v_2dcat_outputs,
+        "afni.2dcat": v_2dcat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,37 @@ interface V2dcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filenames List of input image files.
+ * @param scale_image Multiply each image in the output image matrix by the color or intensity of the pixel in the scale image.
+ * @param scale_pixels Multiply each pixel in the output image by the color or intensity of the pixel in the scale image. The scale image is resized to the output image's resolution.
+ * @param scale_intensity Use the intensity (average color) of the pixel instead of its color.
+ * @param gscale Apply additional scaling factor.
+ * @param rgb_out Force output to be in RGB, even if input is bytes.
+ * @param res_in Set resolution of all input images.
+ * @param respad_in Resample to max while respecting the aspect ratio, then pad to desired pixel count.
+ * @param pad_val Set the padding value when using -respad_in. Should be in the range [0, 255], default is 0.
+ * @param crop Crop images by specified number of pixels from the left, right, top, and bottom.
+ * @param autocrop_ctol Automatically crop lines where RGB values differ by less than the specified percentage from the corner pixel values.
+ * @param autocrop_atol Automatically crop lines where RGB values differ by less than the specified percentage from the line average.
+ * @param autocrop Automatically crop lines with default tolerances using both autocrop_atol and autocrop_ctol set to 20.
+ * @param zero_wrap Use solid black images if not enough images are provided to fill the matrix.
+ * @param white_wrap Use solid white images if not enough images are provided to fill the matrix.
+ * @param gray_wrap Use solid gray images if not enough images are provided to fill the matrix. The gray value must be between 0 and 1.0.
+ * @param image_wrap Reuse images to fill the matrix. This is the default behavior.
+ * @param rand_wrap Randomize the order of images when reusing to fill the matrix.
+ * @param prefix Prefix the output file names with the specified string.
+ * @param matrix Specify the number of images in each row (NX) and column (NY) of the image matrix.
+ * @param nx Specify the number of images in each row.
+ * @param ny Specify the number of images in each column.
+ * @param matrix_from_scale Set matrix dimensions NX and NY to be the same as the SCALE_IMG's dimensions. Requires the -scale_image option.
+ * @param gap Put a gap of specified pixels between images.
+ * @param gap_col Set color of the gap line to specified R, G, B values. Values range from 0 to 255.
+ *
+ * @returns Parameter dictionary
+ */
 function v_2dcat_params(
     filenames: Array<InputPathType>,
     scale_image: InputPathType | null = null,
@@ -123,39 +154,8 @@ function v_2dcat_params(
     gap: number | null = null,
     gap_col: Array<number> | null = null,
 ): V2dcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param filenames List of input image files.
-     * @param scale_image Multiply each image in the output image matrix by the color or intensity of the pixel in the scale image.
-     * @param scale_pixels Multiply each pixel in the output image by the color or intensity of the pixel in the scale image. The scale image is resized to the output image's resolution.
-     * @param scale_intensity Use the intensity (average color) of the pixel instead of its color.
-     * @param gscale Apply additional scaling factor.
-     * @param rgb_out Force output to be in RGB, even if input is bytes.
-     * @param res_in Set resolution of all input images.
-     * @param respad_in Resample to max while respecting the aspect ratio, then pad to desired pixel count.
-     * @param pad_val Set the padding value when using -respad_in. Should be in the range [0, 255], default is 0.
-     * @param crop Crop images by specified number of pixels from the left, right, top, and bottom.
-     * @param autocrop_ctol Automatically crop lines where RGB values differ by less than the specified percentage from the corner pixel values.
-     * @param autocrop_atol Automatically crop lines where RGB values differ by less than the specified percentage from the line average.
-     * @param autocrop Automatically crop lines with default tolerances using both autocrop_atol and autocrop_ctol set to 20.
-     * @param zero_wrap Use solid black images if not enough images are provided to fill the matrix.
-     * @param white_wrap Use solid white images if not enough images are provided to fill the matrix.
-     * @param gray_wrap Use solid gray images if not enough images are provided to fill the matrix. The gray value must be between 0 and 1.0.
-     * @param image_wrap Reuse images to fill the matrix. This is the default behavior.
-     * @param rand_wrap Randomize the order of images when reusing to fill the matrix.
-     * @param prefix Prefix the output file names with the specified string.
-     * @param matrix Specify the number of images in each row (NX) and column (NY) of the image matrix.
-     * @param nx Specify the number of images in each row.
-     * @param ny Specify the number of images in each column.
-     * @param matrix_from_scale Set matrix dimensions NX and NY to be the same as the SCALE_IMG's dimensions. Requires the -scale_image option.
-     * @param gap Put a gap of specified pixels between images.
-     * @param gap_col Set color of the gap line to specified R, G, B values. Values range from 0 to 255.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "2dcat" as const,
+        "@type": "afni.2dcat" as const,
         "filenames": filenames,
         "scale_intensity": scale_intensity,
         "rgb_out": rgb_out,
@@ -218,18 +218,18 @@ function v_2dcat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_2dcat_cargs(
     params: V2dcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("2dcat");
     cargs.push(...(params["filenames"] ?? null).map(f => execution.inputFile(f)));
@@ -357,18 +357,18 @@ function v_2dcat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_2dcat_outputs(
     params: V2dcatParameters,
     execution: Execution,
 ): V2dcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2dcatOutputs = {
         root: execution.outputFile("."),
         output_image: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".ppm"].join('')) : null,
@@ -378,22 +378,22 @@ function v_2dcat_outputs(
 }
 
 
+/**
+ * Puts a set of images into an image matrix montage of NX by NY images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
+ */
 function v_2dcat_execute(
     params: V2dcatParameters,
     execution: Execution,
 ): V2dcatOutputs {
-    /**
-     * Puts a set of images into an image matrix montage of NX by NY images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_2dcat_cargs(params, execution)
     const ret = v_2dcat_outputs(params, execution)
@@ -402,6 +402,42 @@ function v_2dcat_execute(
 }
 
 
+/**
+ * Puts a set of images into an image matrix montage of NX by NY images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param filenames List of input image files.
+ * @param scale_image Multiply each image in the output image matrix by the color or intensity of the pixel in the scale image.
+ * @param scale_pixels Multiply each pixel in the output image by the color or intensity of the pixel in the scale image. The scale image is resized to the output image's resolution.
+ * @param scale_intensity Use the intensity (average color) of the pixel instead of its color.
+ * @param gscale Apply additional scaling factor.
+ * @param rgb_out Force output to be in RGB, even if input is bytes.
+ * @param res_in Set resolution of all input images.
+ * @param respad_in Resample to max while respecting the aspect ratio, then pad to desired pixel count.
+ * @param pad_val Set the padding value when using -respad_in. Should be in the range [0, 255], default is 0.
+ * @param crop Crop images by specified number of pixels from the left, right, top, and bottom.
+ * @param autocrop_ctol Automatically crop lines where RGB values differ by less than the specified percentage from the corner pixel values.
+ * @param autocrop_atol Automatically crop lines where RGB values differ by less than the specified percentage from the line average.
+ * @param autocrop Automatically crop lines with default tolerances using both autocrop_atol and autocrop_ctol set to 20.
+ * @param zero_wrap Use solid black images if not enough images are provided to fill the matrix.
+ * @param white_wrap Use solid white images if not enough images are provided to fill the matrix.
+ * @param gray_wrap Use solid gray images if not enough images are provided to fill the matrix. The gray value must be between 0 and 1.0.
+ * @param image_wrap Reuse images to fill the matrix. This is the default behavior.
+ * @param rand_wrap Randomize the order of images when reusing to fill the matrix.
+ * @param prefix Prefix the output file names with the specified string.
+ * @param matrix Specify the number of images in each row (NX) and column (NY) of the image matrix.
+ * @param nx Specify the number of images in each row.
+ * @param ny Specify the number of images in each column.
+ * @param matrix_from_scale Set matrix dimensions NX and NY to be the same as the SCALE_IMG's dimensions. Requires the -scale_image option.
+ * @param gap Put a gap of specified pixels between images.
+ * @param gap_col Set color of the gap line to specified R, G, B values. Values range from 0 to 255.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
+ */
 function v_2dcat(
     filenames: Array<InputPathType>,
     scale_image: InputPathType | null = null,
@@ -430,42 +466,6 @@ function v_2dcat(
     gap_col: Array<number> | null = null,
     runner: Runner | null = null,
 ): V2dcatOutputs {
-    /**
-     * Puts a set of images into an image matrix montage of NX by NY images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param filenames List of input image files.
-     * @param scale_image Multiply each image in the output image matrix by the color or intensity of the pixel in the scale image.
-     * @param scale_pixels Multiply each pixel in the output image by the color or intensity of the pixel in the scale image. The scale image is resized to the output image's resolution.
-     * @param scale_intensity Use the intensity (average color) of the pixel instead of its color.
-     * @param gscale Apply additional scaling factor.
-     * @param rgb_out Force output to be in RGB, even if input is bytes.
-     * @param res_in Set resolution of all input images.
-     * @param respad_in Resample to max while respecting the aspect ratio, then pad to desired pixel count.
-     * @param pad_val Set the padding value when using -respad_in. Should be in the range [0, 255], default is 0.
-     * @param crop Crop images by specified number of pixels from the left, right, top, and bottom.
-     * @param autocrop_ctol Automatically crop lines where RGB values differ by less than the specified percentage from the corner pixel values.
-     * @param autocrop_atol Automatically crop lines where RGB values differ by less than the specified percentage from the line average.
-     * @param autocrop Automatically crop lines with default tolerances using both autocrop_atol and autocrop_ctol set to 20.
-     * @param zero_wrap Use solid black images if not enough images are provided to fill the matrix.
-     * @param white_wrap Use solid white images if not enough images are provided to fill the matrix.
-     * @param gray_wrap Use solid gray images if not enough images are provided to fill the matrix. The gray value must be between 0 and 1.0.
-     * @param image_wrap Reuse images to fill the matrix. This is the default behavior.
-     * @param rand_wrap Randomize the order of images when reusing to fill the matrix.
-     * @param prefix Prefix the output file names with the specified string.
-     * @param matrix Specify the number of images in each row (NX) and column (NY) of the image matrix.
-     * @param nx Specify the number of images in each row.
-     * @param ny Specify the number of images in each column.
-     * @param matrix_from_scale Set matrix dimensions NX and NY to be the same as the SCALE_IMG's dimensions. Requires the -scale_image option.
-     * @param gap Put a gap of specified pixels between images.
-     * @param gap_col Set color of the gap line to specified R, G, B values. Values range from 0 to 255.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_2DCAT_METADATA);
     const params = v_2dcat_params(filenames, scale_image, scale_pixels, scale_intensity, gscale, rgb_out, res_in, respad_in, pad_val, crop, autocrop_ctol, autocrop_atol, autocrop, zero_wrap, white_wrap, gray_wrap, image_wrap, rand_wrap, prefix, matrix, nx, ny, matrix_from_scale, gap, gap_col)
@@ -478,5 +478,8 @@ export {
       V2dcatParameters,
       V_2DCAT_METADATA,
       v_2dcat,
+      v_2dcat_cargs,
+      v_2dcat_execute,
+      v_2dcat_outputs,
       v_2dcat_params,
 };

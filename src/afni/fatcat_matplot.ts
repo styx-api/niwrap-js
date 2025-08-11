@@ -12,39 +12,39 @@ const FATCAT_MATPLOT_METADATA: Metadata = {
 
 
 interface FatcatMatplotParameters {
-    "__STYXTYPE__": "FATCAT_matplot";
+    "@type": "afni.FATCAT_matplot";
     "directory": string;
     "shiny_folder": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "FATCAT_matplot": fatcat_matplot_cargs,
+        "afni.FATCAT_matplot": fatcat_matplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FatcatMatplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directory Path to a folder containing .netcc and/or .grid files.
+ * @param shiny_folder Use a custom shiny folder (for testing purposes).
+ *
+ * @returns Parameter dictionary
+ */
 function fatcat_matplot_params(
     directory: string,
     shiny_folder: boolean = false,
 ): FatcatMatplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param directory Path to a folder containing .netcc and/or .grid files.
-     * @param shiny_folder Use a custom shiny folder (for testing purposes).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "FATCAT_matplot" as const,
+        "@type": "afni.FATCAT_matplot" as const,
         "directory": directory,
         "shiny_folder": shiny_folder,
     };
@@ -85,18 +85,18 @@ function fatcat_matplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fatcat_matplot_cargs(
     params: FatcatMatplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("FATCAT_matplot");
     cargs.push((params["directory"] ?? null));
@@ -107,18 +107,18 @@ function fatcat_matplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fatcat_matplot_outputs(
     params: FatcatMatplotParameters,
     execution: Execution,
 ): FatcatMatplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatcatMatplotOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function fatcat_matplot_outputs(
 }
 
 
+/**
+ * Launch a shiny app to visualize .netcc and/or .grid files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
+ */
 function fatcat_matplot_execute(
     params: FatcatMatplotParameters,
     execution: Execution,
 ): FatcatMatplotOutputs {
-    /**
-     * Launch a shiny app to visualize .netcc and/or .grid files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = fatcat_matplot_cargs(params, execution)
     const ret = fatcat_matplot_outputs(params, execution)
@@ -150,24 +150,24 @@ function fatcat_matplot_execute(
 }
 
 
+/**
+ * Launch a shiny app to visualize .netcc and/or .grid files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param directory Path to a folder containing .netcc and/or .grid files.
+ * @param shiny_folder Use a custom shiny folder (for testing purposes).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
+ */
 function fatcat_matplot(
     directory: string,
     shiny_folder: boolean = false,
     runner: Runner | null = null,
 ): FatcatMatplotOutputs {
-    /**
-     * Launch a shiny app to visualize .netcc and/or .grid files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param directory Path to a folder containing .netcc and/or .grid files.
-     * @param shiny_folder Use a custom shiny folder (for testing purposes).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FATCAT_MATPLOT_METADATA);
     const params = fatcat_matplot_params(directory, shiny_folder)
@@ -180,5 +180,8 @@ export {
       FatcatMatplotOutputs,
       FatcatMatplotParameters,
       fatcat_matplot,
+      fatcat_matplot_cargs,
+      fatcat_matplot_execute,
+      fatcat_matplot_outputs,
       fatcat_matplot_params,
 };

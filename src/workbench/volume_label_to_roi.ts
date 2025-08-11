@@ -12,7 +12,7 @@ const VOLUME_LABEL_TO_ROI_METADATA: Metadata = {
 
 
 interface VolumeLabelToRoiParameters {
-    "__STYXTYPE__": "volume-label-to-roi";
+    "@type": "workbench.volume-label-to-roi";
     "label_in": InputPathType;
     "volume_out": string;
     "opt_name_label_name"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface VolumeLabelToRoiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-label-to-roi": volume_label_to_roi_cargs,
+        "workbench.volume-label-to-roi": volume_label_to_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-label-to-roi": volume_label_to_roi_outputs,
+        "workbench.volume-label-to-roi": volume_label_to_roi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface VolumeLabelToRoiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input volume label file
+ * @param volume_out the output volume file
+ * @param opt_name_label_name select label by name: the label name that you want an roi of
+ * @param opt_key_label_key select label by key: the label key that you want an roi of
+ * @param opt_map_map select a single label map to use: the map number or name
+ *
+ * @returns Parameter dictionary
+ */
 function volume_label_to_roi_params(
     label_in: InputPathType,
     volume_out: string,
@@ -79,19 +90,8 @@ function volume_label_to_roi_params(
     opt_key_label_key: number | null = null,
     opt_map_map: string | null = null,
 ): VolumeLabelToRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input volume label file
-     * @param volume_out the output volume file
-     * @param opt_name_label_name select label by name: the label name that you want an roi of
-     * @param opt_key_label_key select label by key: the label key that you want an roi of
-     * @param opt_map_map select a single label map to use: the map number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-label-to-roi" as const,
+        "@type": "workbench.volume-label-to-roi" as const,
         "label_in": label_in,
         "volume_out": volume_out,
     };
@@ -108,18 +108,18 @@ function volume_label_to_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_label_to_roi_cargs(
     params: VolumeLabelToRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-label-to-roi");
@@ -147,18 +147,18 @@ function volume_label_to_roi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_label_to_roi_outputs(
     params: VolumeLabelToRoiParameters,
     execution: Execution,
 ): VolumeLabelToRoiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeLabelToRoiOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -167,24 +167,24 @@ function volume_label_to_roi_outputs(
 }
 
 
+/**
+ * Make a volume label into an roi volume.
+ *
+ * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
+ */
 function volume_label_to_roi_execute(
     params: VolumeLabelToRoiParameters,
     execution: Execution,
 ): VolumeLabelToRoiOutputs {
-    /**
-     * Make a volume label into an roi volume.
-     * 
-     * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_label_to_roi_cargs(params, execution)
     const ret = volume_label_to_roi_outputs(params, execution)
@@ -193,6 +193,24 @@ function volume_label_to_roi_execute(
 }
 
 
+/**
+ * Make a volume label into an roi volume.
+ *
+ * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input volume label file
+ * @param volume_out the output volume file
+ * @param opt_name_label_name select label by name: the label name that you want an roi of
+ * @param opt_key_label_key select label by key: the label key that you want an roi of
+ * @param opt_map_map select a single label map to use: the map number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
+ */
 function volume_label_to_roi(
     label_in: InputPathType,
     volume_out: string,
@@ -201,24 +219,6 @@ function volume_label_to_roi(
     opt_map_map: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToRoiOutputs {
-    /**
-     * Make a volume label into an roi volume.
-     * 
-     * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input volume label file
-     * @param volume_out the output volume file
-     * @param opt_name_label_name select label by name: the label name that you want an roi of
-     * @param opt_key_label_key select label by key: the label key that you want an roi of
-     * @param opt_map_map select a single label map to use: the map number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_LABEL_TO_ROI_METADATA);
     const params = volume_label_to_roi_params(label_in, volume_out, opt_name_label_name, opt_key_label_key, opt_map_map)
@@ -231,5 +231,8 @@ export {
       VolumeLabelToRoiOutputs,
       VolumeLabelToRoiParameters,
       volume_label_to_roi,
+      volume_label_to_roi_cargs,
+      volume_label_to_roi_execute,
+      volume_label_to_roi_outputs,
       volume_label_to_roi_params,
 };

@@ -12,38 +12,38 @@ const INFLATE_SUBJECT_NEW_RH_METADATA: Metadata = {
 
 
 interface InflateSubjectNewRhParameters {
-    "__STYXTYPE__": "inflate_subject_new-rh";
+    "@type": "freesurfer.inflate_subject_new-rh";
     "args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "inflate_subject_new-rh": inflate_subject_new_rh_cargs,
+        "freesurfer.inflate_subject_new-rh": inflate_subject_new_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface InflateSubjectNewRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param args Additional command-line arguments for inflate_subject_new-rh.
+ *
+ * @returns Parameter dictionary
+ */
 function inflate_subject_new_rh_params(
     args: string | null = null,
 ): InflateSubjectNewRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param args Additional command-line arguments for inflate_subject_new-rh.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inflate_subject_new-rh" as const,
+        "@type": "freesurfer.inflate_subject_new-rh" as const,
     };
     if (args !== null) {
         params["args"] = args;
@@ -83,18 +83,18 @@ function inflate_subject_new_rh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function inflate_subject_new_rh_cargs(
     params: InflateSubjectNewRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("inflate_subject_new-rh");
     if ((params["args"] ?? null) !== null) {
@@ -107,18 +107,18 @@ function inflate_subject_new_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function inflate_subject_new_rh_outputs(
     params: InflateSubjectNewRhParameters,
     execution: Execution,
 ): InflateSubjectNewRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InflateSubjectNewRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function inflate_subject_new_rh_outputs(
 }
 
 
+/**
+ * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewRhOutputs`).
+ */
 function inflate_subject_new_rh_execute(
     params: InflateSubjectNewRhParameters,
     execution: Execution,
 ): InflateSubjectNewRhOutputs {
-    /**
-     * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = inflate_subject_new_rh_cargs(params, execution)
     const ret = inflate_subject_new_rh_outputs(params, execution)
@@ -150,22 +150,22 @@ function inflate_subject_new_rh_execute(
 }
 
 
+/**
+ * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param args Additional command-line arguments for inflate_subject_new-rh.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewRhOutputs`).
+ */
 function inflate_subject_new_rh(
     args: string | null = null,
     runner: Runner | null = null,
 ): InflateSubjectNewRhOutputs {
-    /**
-     * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param args Additional command-line arguments for inflate_subject_new-rh.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INFLATE_SUBJECT_NEW_RH_METADATA);
     const params = inflate_subject_new_rh_params(args)
@@ -178,5 +178,8 @@ export {
       InflateSubjectNewRhOutputs,
       InflateSubjectNewRhParameters,
       inflate_subject_new_rh,
+      inflate_subject_new_rh_cargs,
+      inflate_subject_new_rh_execute,
+      inflate_subject_new_rh_outputs,
       inflate_subject_new_rh_params,
 };

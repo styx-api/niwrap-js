@@ -12,7 +12,7 @@ const V_3D_GEN_FEATURE_DIST_METADATA: Metadata = {
 
 
 interface V3dGenFeatureDistParameters {
-    "__STYXTYPE__": "3dGenFeatureDist";
+    "@type": "afni.3dGenFeatureDist";
     "features_string": string;
     "class_string": string;
     "prefix"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface V3dGenFeatureDistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dGenFeatureDist": v_3d_gen_feature_dist_cargs,
+        "afni.3dGenFeatureDist": v_3d_gen_feature_dist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dGenFeatureDist": v_3d_gen_feature_dist_outputs,
+        "afni.3dGenFeatureDist": v_3d_gen_feature_dist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface V3dGenFeatureDistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param features_string FEATURES_STRING is a semicolon delimited string of features.
+ * @param class_string CLASS_STRING is a semicolon delimited string of class labels.
+ * @param prefix PREF is the prefix for all output volumes that are not debugging related.
+ * @param overwrite Automatically overwrite existing output.
+ * @param debug_level Debugging level.
+ * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
+ * @param no_other Opposite of -OTHER.
+ * @param samp Specify which voxels belong to each class of interest.
+ * @param sig Specify volumes that define the features.
+ * @param hspec Set histogram parameters for a specific feature.
+ * @param labeltable Specify the label table.
+ * @param show_histograms Show specified histograms and quit.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_gen_feature_dist_params(
     features_string: string,
     class_string: string,
@@ -93,26 +111,8 @@ function v_3d_gen_feature_dist_params(
     labeltable: InputPathType | null = null,
     show_histograms: string | null = null,
 ): V3dGenFeatureDistParameters {
-    /**
-     * Build parameters.
-    
-     * @param features_string FEATURES_STRING is a semicolon delimited string of features.
-     * @param class_string CLASS_STRING is a semicolon delimited string of class labels.
-     * @param prefix PREF is the prefix for all output volumes that are not debugging related.
-     * @param overwrite Automatically overwrite existing output.
-     * @param debug_level Debugging level.
-     * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
-     * @param no_other Opposite of -OTHER.
-     * @param samp Specify which voxels belong to each class of interest.
-     * @param sig Specify volumes that define the features.
-     * @param hspec Set histogram parameters for a specific feature.
-     * @param labeltable Specify the label table.
-     * @param show_histograms Show specified histograms and quit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dGenFeatureDist" as const,
+        "@type": "afni.3dGenFeatureDist" as const,
         "features_string": features_string,
         "class_string": class_string,
         "overwrite": overwrite,
@@ -144,18 +144,18 @@ function v_3d_gen_feature_dist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_gen_feature_dist_cargs(
     params: V3dGenFeatureDistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dGenFeatureDist");
     cargs.push(
@@ -221,18 +221,18 @@ function v_3d_gen_feature_dist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_gen_feature_dist_outputs(
     params: V3dGenFeatureDistParameters,
     execution: Execution,
 ): V3dGenFeatureDistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dGenFeatureDistOutputs = {
         root: execution.outputFile("."),
         output_hive: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_hive.nii.gz"].join('')) : null,
@@ -241,22 +241,22 @@ function v_3d_gen_feature_dist_outputs(
 }
 
 
+/**
+ * 3dGenFeatureDist produces histogram volume (hives) from input data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dGenFeatureDistOutputs`).
+ */
 function v_3d_gen_feature_dist_execute(
     params: V3dGenFeatureDistParameters,
     execution: Execution,
 ): V3dGenFeatureDistOutputs {
-    /**
-     * 3dGenFeatureDist produces histogram volume (hives) from input data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dGenFeatureDistOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_gen_feature_dist_cargs(params, execution)
     const ret = v_3d_gen_feature_dist_outputs(params, execution)
@@ -265,6 +265,29 @@ function v_3d_gen_feature_dist_execute(
 }
 
 
+/**
+ * 3dGenFeatureDist produces histogram volume (hives) from input data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param features_string FEATURES_STRING is a semicolon delimited string of features.
+ * @param class_string CLASS_STRING is a semicolon delimited string of class labels.
+ * @param prefix PREF is the prefix for all output volumes that are not debugging related.
+ * @param overwrite Automatically overwrite existing output.
+ * @param debug_level Debugging level.
+ * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
+ * @param no_other Opposite of -OTHER.
+ * @param samp Specify which voxels belong to each class of interest.
+ * @param sig Specify volumes that define the features.
+ * @param hspec Set histogram parameters for a specific feature.
+ * @param labeltable Specify the label table.
+ * @param show_histograms Show specified histograms and quit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dGenFeatureDistOutputs`).
+ */
 function v_3d_gen_feature_dist(
     features_string: string,
     class_string: string,
@@ -280,29 +303,6 @@ function v_3d_gen_feature_dist(
     show_histograms: string | null = null,
     runner: Runner | null = null,
 ): V3dGenFeatureDistOutputs {
-    /**
-     * 3dGenFeatureDist produces histogram volume (hives) from input data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param features_string FEATURES_STRING is a semicolon delimited string of features.
-     * @param class_string CLASS_STRING is a semicolon delimited string of class labels.
-     * @param prefix PREF is the prefix for all output volumes that are not debugging related.
-     * @param overwrite Automatically overwrite existing output.
-     * @param debug_level Debugging level.
-     * @param other Add histograms for an 'OTHER' class that has a uniform pdf.
-     * @param no_other Opposite of -OTHER.
-     * @param samp Specify which voxels belong to each class of interest.
-     * @param sig Specify volumes that define the features.
-     * @param hspec Set histogram parameters for a specific feature.
-     * @param labeltable Specify the label table.
-     * @param show_histograms Show specified histograms and quit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dGenFeatureDistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_GEN_FEATURE_DIST_METADATA);
     const params = v_3d_gen_feature_dist_params(features_string, class_string, prefix, overwrite, debug_level, other, no_other, samp, sig, hspec, labeltable, show_histograms)
@@ -315,5 +315,8 @@ export {
       V3dGenFeatureDistParameters,
       V_3D_GEN_FEATURE_DIST_METADATA,
       v_3d_gen_feature_dist,
+      v_3d_gen_feature_dist_cargs,
+      v_3d_gen_feature_dist_execute,
+      v_3d_gen_feature_dist_outputs,
       v_3d_gen_feature_dist_params,
 };

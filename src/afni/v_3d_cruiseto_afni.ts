@@ -12,14 +12,14 @@ const V_3D_CRUISETO_AFNI_METADATA: Metadata = {
 
 
 interface V3dCruisetoAfniTraceParameters {
-    "__STYXTYPE__": "trace";
+    "@type": "afni.3dCRUISEtoAFNI.trace";
     "trace": boolean;
     "TRACE": boolean;
 }
 
 
 interface V3dCruisetoAfniParameters {
-    "__STYXTYPE__": "3dCRUISEtoAFNI";
+    "@type": "afni.3dCRUISEtoAFNI";
     "input": InputPathType;
     "novolreg": boolean;
     "noxform": boolean;
@@ -32,54 +32,54 @@ interface V3dCruisetoAfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dCRUISEtoAFNI": v_3d_cruiseto_afni_cargs,
-        "trace": v_3d_cruiseto_afni_trace_cargs,
+        "afni.3dCRUISEtoAFNI": v_3d_cruiseto_afni_cargs,
+        "afni.3dCRUISEtoAFNI.trace": v_3d_cruiseto_afni_trace_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param trace_ Turns on extreme tracing.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_cruiseto_afni_trace_params(
     trace: boolean = false,
     trace_: boolean = false,
 ): V3dCruisetoAfniTraceParameters {
-    /**
-     * Build parameters.
-    
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param trace_ Turns on extreme tracing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trace" as const,
+        "@type": "afni.3dCRUISEtoAFNI.trace" as const,
         "trace": trace,
         "TRACE": trace_,
     };
@@ -87,18 +87,18 @@ function v_3d_cruiseto_afni_trace_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_cruiseto_afni_trace_cargs(
     params: V3dCruisetoAfniTraceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["trace"] ?? null)) {
         cargs.push("-trace");
@@ -123,6 +123,21 @@ interface V3dCruisetoAfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input CRUISE header file in OpenDX format
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg.
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ * @param help The entire help output.
+ * @param h Displays mini help; in many cases, it's the same as -help.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_cruiseto_afni_params(
     input: InputPathType,
     novolreg: boolean = false,
@@ -134,23 +149,8 @@ function v_3d_cruiseto_afni_params(
     help: boolean = false,
     h: boolean = false,
 ): V3dCruisetoAfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input CRUISE header file in OpenDX format
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg.
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-     * @param help The entire help output.
-     * @param h Displays mini help; in many cases, it's the same as -help.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dCRUISEtoAFNI" as const,
+        "@type": "afni.3dCRUISEtoAFNI" as const,
         "input": input,
         "novolreg": novolreg,
         "noxform": noxform,
@@ -169,18 +169,18 @@ function v_3d_cruiseto_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_cruiseto_afni_cargs(
     params: V3dCruisetoAfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dCRUISEtoAFNI");
     cargs.push(
@@ -200,7 +200,7 @@ function v_3d_cruiseto_afni_cargs(
         );
     }
     if ((params["trace"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["trace"] ?? null).__STYXTYPE__)((params["trace"] ?? null), execution));
+        cargs.push(...dynCargs((params["trace"] ?? null)["@type"])((params["trace"] ?? null), execution));
     }
     if ((params["nomall"] ?? null)) {
         cargs.push("-nomall");
@@ -218,18 +218,18 @@ function v_3d_cruiseto_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_cruiseto_afni_outputs(
     params: V3dCruisetoAfniParameters,
     execution: Execution,
 ): V3dCruisetoAfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dCruisetoAfniOutputs = {
         root: execution.outputFile("."),
     };
@@ -237,22 +237,22 @@ function v_3d_cruiseto_afni_outputs(
 }
 
 
+/**
+ * Converts a CRUISE dataset defined by a header in OpenDX format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
+ */
 function v_3d_cruiseto_afni_execute(
     params: V3dCruisetoAfniParameters,
     execution: Execution,
 ): V3dCruisetoAfniOutputs {
-    /**
-     * Converts a CRUISE dataset defined by a header in OpenDX format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_cruiseto_afni_cargs(params, execution)
     const ret = v_3d_cruiseto_afni_outputs(params, execution)
@@ -261,6 +261,26 @@ function v_3d_cruiseto_afni_execute(
 }
 
 
+/**
+ * Converts a CRUISE dataset defined by a header in OpenDX format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input CRUISE header file in OpenDX format
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg.
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ * @param help The entire help output.
+ * @param h Displays mini help; in many cases, it's the same as -help.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
+ */
 function v_3d_cruiseto_afni(
     input: InputPathType,
     novolreg: boolean = false,
@@ -273,26 +293,6 @@ function v_3d_cruiseto_afni(
     h: boolean = false,
     runner: Runner | null = null,
 ): V3dCruisetoAfniOutputs {
-    /**
-     * Converts a CRUISE dataset defined by a header in OpenDX format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input CRUISE header file in OpenDX format
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg.
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary. Example: suma -setenv "'SUMA_BackgroundColor = 1 0 1'"
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-     * @param help The entire help output.
-     * @param h Displays mini help; in many cases, it's the same as -help.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CRUISETO_AFNI_METADATA);
     const params = v_3d_cruiseto_afni_params(input, novolreg, noxform, setenv, trace, nomall, yesmall, help, h)
@@ -306,6 +306,10 @@ export {
       V3dCruisetoAfniTraceParameters,
       V_3D_CRUISETO_AFNI_METADATA,
       v_3d_cruiseto_afni,
+      v_3d_cruiseto_afni_cargs,
+      v_3d_cruiseto_afni_execute,
+      v_3d_cruiseto_afni_outputs,
       v_3d_cruiseto_afni_params,
+      v_3d_cruiseto_afni_trace_cargs,
       v_3d_cruiseto_afni_trace_params,
 };

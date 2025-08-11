@@ -12,40 +12,40 @@ const V__GET_AFNI_VERSION_METADATA: Metadata = {
 
 
 interface VGetAfniVersionParameters {
-    "__STYXTYPE__": "@get.afni.version";
+    "@type": "afni.@get.afni.version";
     "version": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@get.afni.version": v__get_afni_version_cargs,
+        "afni.@get.afni.version": v__get_afni_version_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@get.afni.version": v__get_afni_version_outputs,
+        "afni.@get.afni.version": v__get_afni_version_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VGetAfniVersionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param version AFNI version number to get (e.g., 16.0.01)
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_version_params(
     version: string,
 ): VGetAfniVersionParameters {
-    /**
-     * Build parameters.
-    
-     * @param version AFNI version number to get (e.g., 16.0.01)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@get.afni.version" as const,
+        "@type": "afni.@get.afni.version" as const,
         "version": version,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_version_cargs(
     params: VGetAfniVersionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@get.afni.version");
     cargs.push((params["version"] ?? null));
@@ -105,18 +105,18 @@ function v__get_afni_version_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_version_outputs(
     params: VGetAfniVersionParameters,
     execution: Execution,
 ): VGetAfniVersionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniVersionOutputs = {
         root: execution.outputFile("."),
         src_dir: execution.outputFile(["AFNI_", (params["version"] ?? null), "/AFNI/src"].join('')),
@@ -125,22 +125,22 @@ function v__get_afni_version_outputs(
 }
 
 
+/**
+ * Downloads the source code for a specified AFNI version.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
+ */
 function v__get_afni_version_execute(
     params: VGetAfniVersionParameters,
     execution: Execution,
 ): VGetAfniVersionOutputs {
-    /**
-     * Downloads the source code for a specified AFNI version.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_version_cargs(params, execution)
     const ret = v__get_afni_version_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__get_afni_version_execute(
 }
 
 
+/**
+ * Downloads the source code for a specified AFNI version.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param version AFNI version number to get (e.g., 16.0.01)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
+ */
 function v__get_afni_version(
     version: string,
     runner: Runner | null = null,
 ): VGetAfniVersionOutputs {
-    /**
-     * Downloads the source code for a specified AFNI version.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param version AFNI version number to get (e.g., 16.0.01)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_VERSION_METADATA);
     const params = v__get_afni_version_params(version)
@@ -177,5 +177,8 @@ export {
       VGetAfniVersionParameters,
       V__GET_AFNI_VERSION_METADATA,
       v__get_afni_version,
+      v__get_afni_version_cargs,
+      v__get_afni_version_execute,
+      v__get_afni_version_outputs,
       v__get_afni_version_params,
 };

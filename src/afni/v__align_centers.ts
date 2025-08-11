@@ -12,7 +12,7 @@ const V__ALIGN_CENTERS_METADATA: Metadata = {
 
 
 interface VAlignCentersParameters {
-    "__STYXTYPE__": "@Align_Centers";
+    "@type": "afni.@Align_Centers";
     "base": InputPathType;
     "dset": InputPathType;
     "children"?: Array<InputPathType> | null | undefined;
@@ -30,35 +30,35 @@ interface VAlignCentersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Align_Centers": v__align_centers_cargs,
+        "afni.@Align_Centers": v__align_centers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@Align_Centers": v__align_centers_outputs,
+        "afni.@Align_Centers": v__align_centers_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface VAlignCentersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base Base volume, typically a template. Can also specify RAI coordinates for center alignment.
+ * @param dset Dataset to be aligned to BASE.
+ * @param children Additional datasets (originally in register with DSET) that should be shifted in the same way.
+ * @param echo Echo all commands to terminal for debugging.
+ * @param overwrite Overwrite existing output files.
+ * @param prefix Custom prefix for the result files.
+ * @param matrix_only Only output the transform needed to align the centers without shifting any child volumes.
+ * @param matrix_only_no_dset Like -1Dmat_only, but no datasets are created or changed.
+ * @param no_cp Do not create new data; shift existing ones. Use with caution.
+ * @param center_grid Center is that of the volume's grid (default).
+ * @param center_cm Center is the center of mass of the volume.
+ * @param center_cm_no_amask Like -cm, but with no automask.
+ * @param shift_xform Apply shift translation from a 1D file.
+ * @param shift_xform_inv Apply inverse of shift translation from a 1D file.
+ *
+ * @returns Parameter dictionary
+ */
 function v__align_centers_params(
     base: InputPathType,
     dset: InputPathType,
@@ -105,28 +125,8 @@ function v__align_centers_params(
     shift_xform: InputPathType | null = null,
     shift_xform_inv: InputPathType | null = null,
 ): VAlignCentersParameters {
-    /**
-     * Build parameters.
-    
-     * @param base Base volume, typically a template. Can also specify RAI coordinates for center alignment.
-     * @param dset Dataset to be aligned to BASE.
-     * @param children Additional datasets (originally in register with DSET) that should be shifted in the same way.
-     * @param echo Echo all commands to terminal for debugging.
-     * @param overwrite Overwrite existing output files.
-     * @param prefix Custom prefix for the result files.
-     * @param matrix_only Only output the transform needed to align the centers without shifting any child volumes.
-     * @param matrix_only_no_dset Like -1Dmat_only, but no datasets are created or changed.
-     * @param no_cp Do not create new data; shift existing ones. Use with caution.
-     * @param center_grid Center is that of the volume's grid (default).
-     * @param center_cm Center is the center of mass of the volume.
-     * @param center_cm_no_amask Like -cm, but with no automask.
-     * @param shift_xform Apply shift translation from a 1D file.
-     * @param shift_xform_inv Apply inverse of shift translation from a 1D file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Align_Centers" as const,
+        "@type": "afni.@Align_Centers" as const,
         "base": base,
         "dset": dset,
         "echo": echo,
@@ -154,18 +154,18 @@ function v__align_centers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__align_centers_cargs(
     params: VAlignCentersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Align_Centers");
     cargs.push(execution.inputFile((params["base"] ?? null)));
@@ -222,18 +222,18 @@ function v__align_centers_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__align_centers_outputs(
     params: VAlignCentersParameters,
     execution: Execution,
 ): VAlignCentersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAlignCentersOutputs = {
         root: execution.outputFile("."),
         transform_matrix: execution.outputFile([path.basename((params["dset"] ?? null)), "_shft.1D"].join('')),
@@ -244,22 +244,22 @@ function v__align_centers_outputs(
 }
 
 
+/**
+ * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
+ */
 function v__align_centers_execute(
     params: VAlignCentersParameters,
     execution: Execution,
 ): VAlignCentersOutputs {
-    /**
-     * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__align_centers_cargs(params, execution)
     const ret = v__align_centers_outputs(params, execution)
@@ -268,6 +268,31 @@ function v__align_centers_execute(
 }
 
 
+/**
+ * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base Base volume, typically a template. Can also specify RAI coordinates for center alignment.
+ * @param dset Dataset to be aligned to BASE.
+ * @param children Additional datasets (originally in register with DSET) that should be shifted in the same way.
+ * @param echo Echo all commands to terminal for debugging.
+ * @param overwrite Overwrite existing output files.
+ * @param prefix Custom prefix for the result files.
+ * @param matrix_only Only output the transform needed to align the centers without shifting any child volumes.
+ * @param matrix_only_no_dset Like -1Dmat_only, but no datasets are created or changed.
+ * @param no_cp Do not create new data; shift existing ones. Use with caution.
+ * @param center_grid Center is that of the volume's grid (default).
+ * @param center_cm Center is the center of mass of the volume.
+ * @param center_cm_no_amask Like -cm, but with no automask.
+ * @param shift_xform Apply shift translation from a 1D file.
+ * @param shift_xform_inv Apply inverse of shift translation from a 1D file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
+ */
 function v__align_centers(
     base: InputPathType,
     dset: InputPathType,
@@ -285,31 +310,6 @@ function v__align_centers(
     shift_xform_inv: InputPathType | null = null,
     runner: Runner | null = null,
 ): VAlignCentersOutputs {
-    /**
-     * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base Base volume, typically a template. Can also specify RAI coordinates for center alignment.
-     * @param dset Dataset to be aligned to BASE.
-     * @param children Additional datasets (originally in register with DSET) that should be shifted in the same way.
-     * @param echo Echo all commands to terminal for debugging.
-     * @param overwrite Overwrite existing output files.
-     * @param prefix Custom prefix for the result files.
-     * @param matrix_only Only output the transform needed to align the centers without shifting any child volumes.
-     * @param matrix_only_no_dset Like -1Dmat_only, but no datasets are created or changed.
-     * @param no_cp Do not create new data; shift existing ones. Use with caution.
-     * @param center_grid Center is that of the volume's grid (default).
-     * @param center_cm Center is the center of mass of the volume.
-     * @param center_cm_no_amask Like -cm, but with no automask.
-     * @param shift_xform Apply shift translation from a 1D file.
-     * @param shift_xform_inv Apply inverse of shift translation from a 1D file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ALIGN_CENTERS_METADATA);
     const params = v__align_centers_params(base, dset, children, echo, overwrite, prefix, matrix_only, matrix_only_no_dset, no_cp, center_grid, center_cm, center_cm_no_amask, shift_xform, shift_xform_inv)
@@ -322,5 +322,8 @@ export {
       VAlignCentersParameters,
       V__ALIGN_CENTERS_METADATA,
       v__align_centers,
+      v__align_centers_cargs,
+      v__align_centers_execute,
+      v__align_centers_outputs,
       v__align_centers_params,
 };

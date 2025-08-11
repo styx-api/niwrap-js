@@ -12,39 +12,39 @@ const FILMBABESCRIPT_METADATA: Metadata = {
 
 
 interface FilmbabescriptParameters {
-    "__STYXTYPE__": "filmbabescript";
+    "@type": "fsl.filmbabescript";
     "feat_dir": string;
     "flobs_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "filmbabescript": filmbabescript_cargs,
+        "fsl.filmbabescript": filmbabescript_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FilmbabescriptOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_dir Input FEAT directory
+ * @param flobs_dir Input FLOBs directory
+ *
+ * @returns Parameter dictionary
+ */
 function filmbabescript_params(
     feat_dir: string,
     flobs_dir: string,
 ): FilmbabescriptParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_dir Input FEAT directory
-     * @param flobs_dir Input FLOBs directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "filmbabescript" as const,
+        "@type": "fsl.filmbabescript" as const,
         "feat_dir": feat_dir,
         "flobs_dir": flobs_dir,
     };
@@ -85,18 +85,18 @@ function filmbabescript_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function filmbabescript_cargs(
     params: FilmbabescriptParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("filmbabescript");
     cargs.push((params["feat_dir"] ?? null));
@@ -105,18 +105,18 @@ function filmbabescript_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function filmbabescript_outputs(
     params: FilmbabescriptParameters,
     execution: Execution,
 ): FilmbabescriptOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FilmbabescriptOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function filmbabescript_outputs(
 }
 
 
+/**
+ * A tool/script for processing FEAT directories and FLOBs directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
+ */
 function filmbabescript_execute(
     params: FilmbabescriptParameters,
     execution: Execution,
 ): FilmbabescriptOutputs {
-    /**
-     * A tool/script for processing FEAT directories and FLOBs directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
-     */
     params = execution.params(params)
     const cargs = filmbabescript_cargs(params, execution)
     const ret = filmbabescript_outputs(params, execution)
@@ -148,24 +148,24 @@ function filmbabescript_execute(
 }
 
 
+/**
+ * A tool/script for processing FEAT directories and FLOBs directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param feat_dir Input FEAT directory
+ * @param flobs_dir Input FLOBs directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
+ */
 function filmbabescript(
     feat_dir: string,
     flobs_dir: string,
     runner: Runner | null = null,
 ): FilmbabescriptOutputs {
-    /**
-     * A tool/script for processing FEAT directories and FLOBs directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param feat_dir Input FEAT directory
-     * @param flobs_dir Input FLOBs directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILMBABESCRIPT_METADATA);
     const params = filmbabescript_params(feat_dir, flobs_dir)
@@ -178,5 +178,8 @@ export {
       FilmbabescriptOutputs,
       FilmbabescriptParameters,
       filmbabescript,
+      filmbabescript_cargs,
+      filmbabescript_execute,
+      filmbabescript_outputs,
       filmbabescript_params,
 };

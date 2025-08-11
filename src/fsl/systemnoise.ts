@@ -12,7 +12,7 @@ const SYSTEMNOISE_METADATA: Metadata = {
 
 
 interface SystemnoiseParameters {
-    "__STYXTYPE__": "systemnoise";
+    "@type": "fsl.systemnoise";
     "input_signal": InputPathType;
     "output_signal": string;
     "noise_standard_deviation": number;
@@ -22,35 +22,35 @@ interface SystemnoiseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "systemnoise": systemnoise_cargs,
+        "fsl.systemnoise": systemnoise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "systemnoise": systemnoise_outputs,
+        "fsl.systemnoise": systemnoise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface SystemnoiseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_signal Input signal (possum output matrix)
+ * @param output_signal Output signal (possum matrix form)
+ * @param noise_standard_deviation Set noise standard deviation (units of intensity)
+ * @param seed Input seed value for the sequence
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function systemnoise_params(
     input_signal: InputPathType,
     output_signal: string,
@@ -81,20 +93,8 @@ function systemnoise_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): SystemnoiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_signal Input signal (possum output matrix)
-     * @param output_signal Output signal (possum matrix form)
-     * @param noise_standard_deviation Set noise standard deviation (units of intensity)
-     * @param seed Input seed value for the sequence
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "systemnoise" as const,
+        "@type": "fsl.systemnoise" as const,
         "input_signal": input_signal,
         "output_signal": output_signal,
         "noise_standard_deviation": noise_standard_deviation,
@@ -108,18 +108,18 @@ function systemnoise_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function systemnoise_cargs(
     params: SystemnoiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("systemnoise");
     cargs.push(
@@ -150,18 +150,18 @@ function systemnoise_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function systemnoise_outputs(
     params: SystemnoiseParameters,
     execution: Execution,
 ): SystemnoiseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SystemnoiseOutputs = {
         root: execution.outputFile("."),
         output_signal_file: execution.outputFile([(params["output_signal"] ?? null)].join('')),
@@ -170,22 +170,22 @@ function systemnoise_outputs(
 }
 
 
+/**
+ * Tool for adding system noise to a given signal using FSL's utilities.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
+ */
 function systemnoise_execute(
     params: SystemnoiseParameters,
     execution: Execution,
 ): SystemnoiseOutputs {
-    /**
-     * Tool for adding system noise to a given signal using FSL's utilities.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
-     */
     params = execution.params(params)
     const cargs = systemnoise_cargs(params, execution)
     const ret = systemnoise_outputs(params, execution)
@@ -194,6 +194,23 @@ function systemnoise_execute(
 }
 
 
+/**
+ * Tool for adding system noise to a given signal using FSL's utilities.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_signal Input signal (possum output matrix)
+ * @param output_signal Output signal (possum matrix form)
+ * @param noise_standard_deviation Set noise standard deviation (units of intensity)
+ * @param seed Input seed value for the sequence
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
+ */
 function systemnoise(
     input_signal: InputPathType,
     output_signal: string,
@@ -203,23 +220,6 @@ function systemnoise(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): SystemnoiseOutputs {
-    /**
-     * Tool for adding system noise to a given signal using FSL's utilities.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_signal Input signal (possum output matrix)
-     * @param output_signal Output signal (possum matrix form)
-     * @param noise_standard_deviation Set noise standard deviation (units of intensity)
-     * @param seed Input seed value for the sequence
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SYSTEMNOISE_METADATA);
     const params = systemnoise_params(input_signal, output_signal, noise_standard_deviation, seed, verbose_flag, help_flag)
@@ -232,5 +232,8 @@ export {
       SystemnoiseOutputs,
       SystemnoiseParameters,
       systemnoise,
+      systemnoise_cargs,
+      systemnoise_execute,
+      systemnoise_outputs,
       systemnoise_params,
 };

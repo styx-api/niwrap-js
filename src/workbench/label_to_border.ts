@@ -12,7 +12,7 @@ const LABEL_TO_BORDER_METADATA: Metadata = {
 
 
 interface LabelToBorderParameters {
-    "__STYXTYPE__": "label-to-border";
+    "@type": "workbench.label-to-border";
     "surface": InputPathType;
     "label_in": InputPathType;
     "border_out": string;
@@ -21,35 +21,35 @@ interface LabelToBorderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-to-border": label_to_border_cargs,
+        "workbench.label-to-border": label_to_border_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-to-border": label_to_border_outputs,
+        "workbench.label-to-border": label_to_border_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface LabelToBorderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use for neighbor information
+ * @param label_in the input label file
+ * @param border_out the output border file
+ * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
+ * @param opt_column_column select a single column: the column number or name
+ *
+ * @returns Parameter dictionary
+ */
 function label_to_border_params(
     surface: InputPathType,
     label_in: InputPathType,
@@ -79,19 +90,8 @@ function label_to_border_params(
     opt_placement_fraction: number | null = null,
     opt_column_column: string | null = null,
 ): LabelToBorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use for neighbor information
-     * @param label_in the input label file
-     * @param border_out the output border file
-     * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
-     * @param opt_column_column select a single column: the column number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-to-border" as const,
+        "@type": "workbench.label-to-border" as const,
         "surface": surface,
         "label_in": label_in,
         "border_out": border_out,
@@ -106,18 +106,18 @@ function label_to_border_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_to_border_cargs(
     params: LabelToBorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-to-border");
@@ -140,18 +140,18 @@ function label_to_border_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_to_border_outputs(
     params: LabelToBorderParameters,
     execution: Execution,
 ): LabelToBorderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelToBorderOutputs = {
         root: execution.outputFile("."),
         border_out: execution.outputFile([(params["border_out"] ?? null)].join('')),
@@ -160,24 +160,24 @@ function label_to_border_outputs(
 }
 
 
+/**
+ * Draw borders around labels.
+ *
+ * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
+ */
 function label_to_border_execute(
     params: LabelToBorderParameters,
     execution: Execution,
 ): LabelToBorderOutputs {
-    /**
-     * Draw borders around labels.
-     * 
-     * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_to_border_cargs(params, execution)
     const ret = label_to_border_outputs(params, execution)
@@ -186,6 +186,24 @@ function label_to_border_execute(
 }
 
 
+/**
+ * Draw borders around labels.
+ *
+ * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use for neighbor information
+ * @param label_in the input label file
+ * @param border_out the output border file
+ * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
+ * @param opt_column_column select a single column: the column number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
+ */
 function label_to_border(
     surface: InputPathType,
     label_in: InputPathType,
@@ -194,24 +212,6 @@ function label_to_border(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
-    /**
-     * Draw borders around labels.
-     * 
-     * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use for neighbor information
-     * @param label_in the input label file
-     * @param border_out the output border file
-     * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
-     * @param opt_column_column select a single column: the column number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_TO_BORDER_METADATA);
     const params = label_to_border_params(surface, label_in, border_out, opt_placement_fraction, opt_column_column)
@@ -224,5 +224,8 @@ export {
       LabelToBorderOutputs,
       LabelToBorderParameters,
       label_to_border,
+      label_to_border_cargs,
+      label_to_border_execute,
+      label_to_border_outputs,
       label_to_border_params,
 };

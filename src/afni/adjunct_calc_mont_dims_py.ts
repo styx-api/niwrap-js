@@ -12,38 +12,38 @@ const ADJUNCT_CALC_MONT_DIMS_PY_METADATA: Metadata = {
 
 
 interface AdjunctCalcMontDimsPyParameters {
-    "__STYXTYPE__": "adjunct_calc_mont_dims.py";
+    "@type": "afni.adjunct_calc_mont_dims.py";
     "help": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_calc_mont_dims.py": adjunct_calc_mont_dims_py_cargs,
+        "afni.adjunct_calc_mont_dims.py": adjunct_calc_mont_dims_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface AdjunctCalcMontDimsPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param help Display help information
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_calc_mont_dims_py_params(
     help: boolean = false,
 ): AdjunctCalcMontDimsPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param help Display help information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_calc_mont_dims.py" as const,
+        "@type": "afni.adjunct_calc_mont_dims.py" as const,
         "help": help,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_calc_mont_dims_py_cargs(
     params: AdjunctCalcMontDimsPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_calc_mont_dims.py");
     if ((params["help"] ?? null)) {
@@ -102,18 +102,18 @@ function adjunct_calc_mont_dims_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_calc_mont_dims_py_outputs(
     params: AdjunctCalcMontDimsPyParameters,
     execution: Execution,
 ): AdjunctCalcMontDimsPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctCalcMontDimsPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -121,22 +121,22 @@ function adjunct_calc_mont_dims_py_outputs(
 }
 
 
+/**
+ * A helper function for the fat_proc* scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
+ */
 function adjunct_calc_mont_dims_py_execute(
     params: AdjunctCalcMontDimsPyParameters,
     execution: Execution,
 ): AdjunctCalcMontDimsPyOutputs {
-    /**
-     * A helper function for the fat_proc* scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_calc_mont_dims_py_cargs(params, execution)
     const ret = adjunct_calc_mont_dims_py_outputs(params, execution)
@@ -145,22 +145,22 @@ function adjunct_calc_mont_dims_py_execute(
 }
 
 
+/**
+ * A helper function for the fat_proc* scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param help Display help information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
+ */
 function adjunct_calc_mont_dims_py(
     help: boolean = false,
     runner: Runner | null = null,
 ): AdjunctCalcMontDimsPyOutputs {
-    /**
-     * A helper function for the fat_proc* scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param help Display help information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_CALC_MONT_DIMS_PY_METADATA);
     const params = adjunct_calc_mont_dims_py_params(help)
@@ -173,5 +173,8 @@ export {
       AdjunctCalcMontDimsPyOutputs,
       AdjunctCalcMontDimsPyParameters,
       adjunct_calc_mont_dims_py,
+      adjunct_calc_mont_dims_py_cargs,
+      adjunct_calc_mont_dims_py_execute,
+      adjunct_calc_mont_dims_py_outputs,
       adjunct_calc_mont_dims_py_params,
 };

@@ -12,7 +12,7 @@ const LONG_SUBMIT_POSTPROC_METADATA: Metadata = {
 
 
 interface LongSubmitPostprocParameters {
-    "__STYXTYPE__": "long_submit_postproc";
+    "@type": "freesurfer.long_submit_postproc";
     "qdec": InputPathType;
     "prog": string;
     "flags"?: string | null | undefined;
@@ -24,33 +24,33 @@ interface LongSubmitPostprocParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_submit_postproc": long_submit_postproc_cargs,
+        "freesurfer.long_submit_postproc": long_submit_postproc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface LongSubmitPostprocOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec QDEC table file specifying the subjects and time points
+ * @param prog Longitudinal script to call
+ * @param flags Parameters (without --qdec) to pass to prog (using quotes ...)
+ * @param dir Directory to store sub-tables and command files
+ * @param simulate Do not submit anything, just print commands
+ * @param pause Pause in seconds between submissions
+ * @param max Maximum number of jobs for this user
+ * @param queue Special queue to submit
+ *
+ * @returns Parameter dictionary
+ */
 function long_submit_postproc_params(
     qdec: InputPathType,
     prog: string,
@@ -80,22 +94,8 @@ function long_submit_postproc_params(
     max: number | null = 100,
     queue: string | null = null,
 ): LongSubmitPostprocParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec QDEC table file specifying the subjects and time points
-     * @param prog Longitudinal script to call
-     * @param flags Parameters (without --qdec) to pass to prog (using quotes ...)
-     * @param dir Directory to store sub-tables and command files
-     * @param simulate Do not submit anything, just print commands
-     * @param pause Pause in seconds between submissions
-     * @param max Maximum number of jobs for this user
-     * @param queue Special queue to submit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_submit_postproc" as const,
+        "@type": "freesurfer.long_submit_postproc" as const,
         "qdec": qdec,
         "prog": prog,
         "simulate": simulate,
@@ -119,18 +119,18 @@ function long_submit_postproc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_submit_postproc_cargs(
     params: LongSubmitPostprocParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_submit_postproc");
     cargs.push(
@@ -178,18 +178,18 @@ function long_submit_postproc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_submit_postproc_outputs(
     params: LongSubmitPostprocParameters,
     execution: Execution,
 ): LongSubmitPostprocOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongSubmitPostprocOutputs = {
         root: execution.outputFile("."),
     };
@@ -197,22 +197,22 @@ function long_submit_postproc_outputs(
 }
 
 
+/**
+ * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
+ */
 function long_submit_postproc_execute(
     params: LongSubmitPostprocParameters,
     execution: Execution,
 ): LongSubmitPostprocOutputs {
-    /**
-     * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_submit_postproc_cargs(params, execution)
     const ret = long_submit_postproc_outputs(params, execution)
@@ -221,6 +221,25 @@ function long_submit_postproc_execute(
 }
 
 
+/**
+ * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec QDEC table file specifying the subjects and time points
+ * @param prog Longitudinal script to call
+ * @param flags Parameters (without --qdec) to pass to prog (using quotes ...)
+ * @param dir Directory to store sub-tables and command files
+ * @param simulate Do not submit anything, just print commands
+ * @param pause Pause in seconds between submissions
+ * @param max Maximum number of jobs for this user
+ * @param queue Special queue to submit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
+ */
 function long_submit_postproc(
     qdec: InputPathType,
     prog: string,
@@ -232,25 +251,6 @@ function long_submit_postproc(
     queue: string | null = null,
     runner: Runner | null = null,
 ): LongSubmitPostprocOutputs {
-    /**
-     * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec QDEC table file specifying the subjects and time points
-     * @param prog Longitudinal script to call
-     * @param flags Parameters (without --qdec) to pass to prog (using quotes ...)
-     * @param dir Directory to store sub-tables and command files
-     * @param simulate Do not submit anything, just print commands
-     * @param pause Pause in seconds between submissions
-     * @param max Maximum number of jobs for this user
-     * @param queue Special queue to submit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_SUBMIT_POSTPROC_METADATA);
     const params = long_submit_postproc_params(qdec, prog, flags, dir, simulate, pause, max, queue)
@@ -263,5 +263,8 @@ export {
       LongSubmitPostprocOutputs,
       LongSubmitPostprocParameters,
       long_submit_postproc,
+      long_submit_postproc_cargs,
+      long_submit_postproc_execute,
+      long_submit_postproc_outputs,
       long_submit_postproc_params,
 };

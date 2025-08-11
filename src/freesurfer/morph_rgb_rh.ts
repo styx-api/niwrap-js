@@ -12,38 +12,38 @@ const MORPH_RGB_RH_METADATA: Metadata = {
 
 
 interface MorphRgbRhParameters {
-    "__STYXTYPE__": "morph_rgb-rh";
+    "@type": "freesurfer.morph_rgb-rh";
     "subject_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_rgb-rh": morph_rgb_rh_cargs,
+        "freesurfer.morph_rgb-rh": morph_rgb_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MorphRgbRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID for which the RGB morphing should be performed.
+ *
+ * @returns Parameter dictionary
+ */
 function morph_rgb_rh_params(
     subject_id: string,
 ): MorphRgbRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID for which the RGB morphing should be performed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_rgb-rh" as const,
+        "@type": "freesurfer.morph_rgb-rh" as const,
         "subject_id": subject_id,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_rgb_rh_cargs(
     params: MorphRgbRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_rgb-rh");
     cargs.push(
@@ -103,18 +103,18 @@ function morph_rgb_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_rgb_rh_outputs(
     params: MorphRgbRhParameters,
     execution: Execution,
 ): MorphRgbRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphRgbRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function morph_rgb_rh_outputs(
 }
 
 
+/**
+ * Morphs RGB values onto a FreeSurfer right hemisphere surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
+ */
 function morph_rgb_rh_execute(
     params: MorphRgbRhParameters,
     execution: Execution,
 ): MorphRgbRhOutputs {
-    /**
-     * Morphs RGB values onto a FreeSurfer right hemisphere surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_rgb_rh_cargs(params, execution)
     const ret = morph_rgb_rh_outputs(params, execution)
@@ -146,22 +146,22 @@ function morph_rgb_rh_execute(
 }
 
 
+/**
+ * Morphs RGB values onto a FreeSurfer right hemisphere surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject ID for which the RGB morphing should be performed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
+ */
 function morph_rgb_rh(
     subject_id: string,
     runner: Runner | null = null,
 ): MorphRgbRhOutputs {
-    /**
-     * Morphs RGB values onto a FreeSurfer right hemisphere surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject ID for which the RGB morphing should be performed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_RGB_RH_METADATA);
     const params = morph_rgb_rh_params(subject_id)
@@ -174,5 +174,8 @@ export {
       MorphRgbRhOutputs,
       MorphRgbRhParameters,
       morph_rgb_rh,
+      morph_rgb_rh_cargs,
+      morph_rgb_rh_execute,
+      morph_rgb_rh_outputs,
       morph_rgb_rh_params,
 };

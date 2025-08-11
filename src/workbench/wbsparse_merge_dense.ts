@@ -12,83 +12,83 @@ const WBSPARSE_MERGE_DENSE_METADATA: Metadata = {
 
 
 interface WbsparseMergeDenseWbsparseParameters {
-    "__STYXTYPE__": "wbsparse";
+    "@type": "workbench.wbsparse-merge-dense.wbsparse";
     "wbsparse_in": string;
 }
 
 
 interface WbsparseMergeDenseParameters {
-    "__STYXTYPE__": "wbsparse-merge-dense";
+    "@type": "workbench.wbsparse-merge-dense";
     "direction": string;
     "wbsparse_out": string;
     "wbsparse"?: Array<WbsparseMergeDenseWbsparseParameters> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "wbsparse-merge-dense": wbsparse_merge_dense_cargs,
-        "wbsparse": wbsparse_merge_dense_wbsparse_cargs,
+        "workbench.wbsparse-merge-dense": wbsparse_merge_dense_cargs,
+        "workbench.wbsparse-merge-dense.wbsparse": wbsparse_merge_dense_wbsparse_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param wbsparse_in a wbsparse file to merge
+ *
+ * @returns Parameter dictionary
+ */
 function wbsparse_merge_dense_wbsparse_params(
     wbsparse_in: string,
 ): WbsparseMergeDenseWbsparseParameters {
-    /**
-     * Build parameters.
-    
-     * @param wbsparse_in a wbsparse file to merge
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wbsparse" as const,
+        "@type": "workbench.wbsparse-merge-dense.wbsparse" as const,
         "wbsparse_in": wbsparse_in,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wbsparse_merge_dense_wbsparse_cargs(
     params: WbsparseMergeDenseWbsparseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-wbsparse");
     cargs.push((params["wbsparse_in"] ?? null));
@@ -109,22 +109,22 @@ interface WbsparseMergeDenseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param direction which dimension to merge along, ROW or COLUMN
+ * @param wbsparse_out output - the output wbsparse file
+ * @param wbsparse specify an input wbsparse file
+ *
+ * @returns Parameter dictionary
+ */
 function wbsparse_merge_dense_params(
     direction: string,
     wbsparse_out: string,
     wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
 ): WbsparseMergeDenseParameters {
-    /**
-     * Build parameters.
-    
-     * @param direction which dimension to merge along, ROW or COLUMN
-     * @param wbsparse_out output - the output wbsparse file
-     * @param wbsparse specify an input wbsparse file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wbsparse-merge-dense" as const,
+        "@type": "workbench.wbsparse-merge-dense" as const,
         "direction": direction,
         "wbsparse_out": wbsparse_out,
     };
@@ -135,42 +135,42 @@ function wbsparse_merge_dense_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wbsparse_merge_dense_cargs(
     params: WbsparseMergeDenseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-wbsparse-merge-dense");
     cargs.push((params["direction"] ?? null));
     cargs.push((params["wbsparse_out"] ?? null));
     if ((params["wbsparse"] ?? null) !== null) {
-        cargs.push(...(params["wbsparse"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["wbsparse"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function wbsparse_merge_dense_outputs(
     params: WbsparseMergeDenseParameters,
     execution: Execution,
 ): WbsparseMergeDenseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WbsparseMergeDenseOutputs = {
         root: execution.outputFile("."),
     };
@@ -178,24 +178,24 @@ function wbsparse_merge_dense_outputs(
 }
 
 
+/**
+ * Merge wbsparse files along dense dimension.
+ *
+ * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
+ */
 function wbsparse_merge_dense_execute(
     params: WbsparseMergeDenseParameters,
     execution: Execution,
 ): WbsparseMergeDenseOutputs {
-    /**
-     * Merge wbsparse files along dense dimension.
-     * 
-     * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
-     */
     params = execution.params(params)
     const cargs = wbsparse_merge_dense_cargs(params, execution)
     const ret = wbsparse_merge_dense_outputs(params, execution)
@@ -204,28 +204,28 @@ function wbsparse_merge_dense_execute(
 }
 
 
+/**
+ * Merge wbsparse files along dense dimension.
+ *
+ * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param direction which dimension to merge along, ROW or COLUMN
+ * @param wbsparse_out output - the output wbsparse file
+ * @param wbsparse specify an input wbsparse file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
+ */
 function wbsparse_merge_dense(
     direction: string,
     wbsparse_out: string,
     wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
     runner: Runner | null = null,
 ): WbsparseMergeDenseOutputs {
-    /**
-     * Merge wbsparse files along dense dimension.
-     * 
-     * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param direction which dimension to merge along, ROW or COLUMN
-     * @param wbsparse_out output - the output wbsparse file
-     * @param wbsparse specify an input wbsparse file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WBSPARSE_MERGE_DENSE_METADATA);
     const params = wbsparse_merge_dense_params(direction, wbsparse_out, wbsparse)
@@ -239,6 +239,10 @@ export {
       WbsparseMergeDenseParameters,
       WbsparseMergeDenseWbsparseParameters,
       wbsparse_merge_dense,
+      wbsparse_merge_dense_cargs,
+      wbsparse_merge_dense_execute,
+      wbsparse_merge_dense_outputs,
       wbsparse_merge_dense_params,
+      wbsparse_merge_dense_wbsparse_cargs,
       wbsparse_merge_dense_wbsparse_params,
 };

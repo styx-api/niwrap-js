@@ -12,7 +12,7 @@ const RETRO_TS_PY_METADATA: Metadata = {
 
 
 interface RetroTsPyParameters {
-    "__STYXTYPE__": "RetroTS.py";
+    "@type": "afni.RetroTS.py";
     "resp_file"?: InputPathType | null | undefined;
     "card_file"?: InputPathType | null | undefined;
     "phys_fs"?: number | null | undefined;
@@ -41,35 +41,35 @@ interface RetroTsPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "RetroTS.py": retro_ts_py_cargs,
+        "afni.RetroTS.py": retro_ts_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "RetroTS.py": retro_ts_py_outputs,
+        "afni.RetroTS.py": retro_ts_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface RetroTsPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param num_slices Number of slices
+ * @param volume_tr Volume TR in seconds
+ * @param resp_file Respiration data file
+ * @param card_file Cardiac data file
+ * @param phys_fs Physiological signal sampling frequency in Hz
+ * @param phys_file BIDS formatted physio file in tab-separated format, can be gzipped
+ * @param phys_json BIDS formatted physio metadata json file. If not specified, the json corresponding to the phys_file will be loaded.
+ * @param prefix Prefix of output file
+ * @param rvt_shifts Vector of shifts in seconds of RVT signal. (default is [0:5:20])
+ * @param rvt_out Flag for writing RVT regressors (default is 1)
+ * @param resp_cutoff_freq Cut-off frequency in Hz for respiratory lowpass filter (default 3 Hz)
+ * @param cardiac_cutoff_freq Cut-off frequency in Hz for cardiac lowpass filter (default 3 Hz)
+ * @param cardiac_out Flag for writing Cardiac regressors (default is 1)
+ * @param respiration_out Flag for writing Respiratory regressors (default is 1)
+ * @param interp_style Resampling kernel (default is 'linear')
+ * @param fir_order Order of FIR filter (default is 40)
+ * @param quiet Show talkative progress as the program runs (default is 1)
+ * @param demo Run demonstration of RetroTS (default is 0)
+ * @param show_graphs Show graphs (default is unset; set with any parameter to view)
+ * @param debug Drop into pdb upon an exception (default is False)
+ * @param slice_offset Vector of slice acquisition time offsets in seconds (default is equivalent of alt+z)
+ * @param slice_major Unknown parameter (default is 1)
+ * @param slice_order Slice timing information in seconds. (default is alt+z)
+ * @param zero_phase_offset Zero phase offset flag
+ * @param legacy_transform Specify the version of the original Matlab code's transformation (default is 0)
+ *
+ * @returns Parameter dictionary
+ */
 function retro_ts_py_params(
     num_slices: number,
     volume_tr: number,
@@ -119,39 +150,8 @@ function retro_ts_py_params(
     zero_phase_offset: boolean = false,
     legacy_transform: number | null = null,
 ): RetroTsPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param num_slices Number of slices
-     * @param volume_tr Volume TR in seconds
-     * @param resp_file Respiration data file
-     * @param card_file Cardiac data file
-     * @param phys_fs Physiological signal sampling frequency in Hz
-     * @param phys_file BIDS formatted physio file in tab-separated format, can be gzipped
-     * @param phys_json BIDS formatted physio metadata json file. If not specified, the json corresponding to the phys_file will be loaded.
-     * @param prefix Prefix of output file
-     * @param rvt_shifts Vector of shifts in seconds of RVT signal. (default is [0:5:20])
-     * @param rvt_out Flag for writing RVT regressors (default is 1)
-     * @param resp_cutoff_freq Cut-off frequency in Hz for respiratory lowpass filter (default 3 Hz)
-     * @param cardiac_cutoff_freq Cut-off frequency in Hz for cardiac lowpass filter (default 3 Hz)
-     * @param cardiac_out Flag for writing Cardiac regressors (default is 1)
-     * @param respiration_out Flag for writing Respiratory regressors (default is 1)
-     * @param interp_style Resampling kernel (default is 'linear')
-     * @param fir_order Order of FIR filter (default is 40)
-     * @param quiet Show talkative progress as the program runs (default is 1)
-     * @param demo Run demonstration of RetroTS (default is 0)
-     * @param show_graphs Show graphs (default is unset; set with any parameter to view)
-     * @param debug Drop into pdb upon an exception (default is False)
-     * @param slice_offset Vector of slice acquisition time offsets in seconds (default is equivalent of alt+z)
-     * @param slice_major Unknown parameter (default is 1)
-     * @param slice_order Slice timing information in seconds. (default is alt+z)
-     * @param zero_phase_offset Zero phase offset flag
-     * @param legacy_transform Specify the version of the original Matlab code's transformation (default is 0)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "RetroTS.py" as const,
+        "@type": "afni.RetroTS.py" as const,
         "num_slices": num_slices,
         "volume_tr": volume_tr,
         "rvt_out": rvt_out,
@@ -212,18 +212,18 @@ function retro_ts_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function retro_ts_py_cargs(
     params: RetroTsPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("RetroTS.py");
     if ((params["resp_file"] ?? null) !== null) {
@@ -352,18 +352,18 @@ function retro_ts_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function retro_ts_py_outputs(
     params: RetroTsPyParameters,
     execution: Execution,
 ): RetroTsPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RetroTsPyOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".slibase.1D"].join('')) : null,
@@ -372,22 +372,22 @@ function retro_ts_py_outputs(
 }
 
 
+/**
+ * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
+ */
 function retro_ts_py_execute(
     params: RetroTsPyParameters,
     execution: Execution,
 ): RetroTsPyOutputs {
-    /**
-     * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = retro_ts_py_cargs(params, execution)
     const ret = retro_ts_py_outputs(params, execution)
@@ -396,6 +396,42 @@ function retro_ts_py_execute(
 }
 
 
+/**
+ * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param num_slices Number of slices
+ * @param volume_tr Volume TR in seconds
+ * @param resp_file Respiration data file
+ * @param card_file Cardiac data file
+ * @param phys_fs Physiological signal sampling frequency in Hz
+ * @param phys_file BIDS formatted physio file in tab-separated format, can be gzipped
+ * @param phys_json BIDS formatted physio metadata json file. If not specified, the json corresponding to the phys_file will be loaded.
+ * @param prefix Prefix of output file
+ * @param rvt_shifts Vector of shifts in seconds of RVT signal. (default is [0:5:20])
+ * @param rvt_out Flag for writing RVT regressors (default is 1)
+ * @param resp_cutoff_freq Cut-off frequency in Hz for respiratory lowpass filter (default 3 Hz)
+ * @param cardiac_cutoff_freq Cut-off frequency in Hz for cardiac lowpass filter (default 3 Hz)
+ * @param cardiac_out Flag for writing Cardiac regressors (default is 1)
+ * @param respiration_out Flag for writing Respiratory regressors (default is 1)
+ * @param interp_style Resampling kernel (default is 'linear')
+ * @param fir_order Order of FIR filter (default is 40)
+ * @param quiet Show talkative progress as the program runs (default is 1)
+ * @param demo Run demonstration of RetroTS (default is 0)
+ * @param show_graphs Show graphs (default is unset; set with any parameter to view)
+ * @param debug Drop into pdb upon an exception (default is False)
+ * @param slice_offset Vector of slice acquisition time offsets in seconds (default is equivalent of alt+z)
+ * @param slice_major Unknown parameter (default is 1)
+ * @param slice_order Slice timing information in seconds. (default is alt+z)
+ * @param zero_phase_offset Zero phase offset flag
+ * @param legacy_transform Specify the version of the original Matlab code's transformation (default is 0)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
+ */
 function retro_ts_py(
     num_slices: number,
     volume_tr: number,
@@ -424,42 +460,6 @@ function retro_ts_py(
     legacy_transform: number | null = null,
     runner: Runner | null = null,
 ): RetroTsPyOutputs {
-    /**
-     * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param num_slices Number of slices
-     * @param volume_tr Volume TR in seconds
-     * @param resp_file Respiration data file
-     * @param card_file Cardiac data file
-     * @param phys_fs Physiological signal sampling frequency in Hz
-     * @param phys_file BIDS formatted physio file in tab-separated format, can be gzipped
-     * @param phys_json BIDS formatted physio metadata json file. If not specified, the json corresponding to the phys_file will be loaded.
-     * @param prefix Prefix of output file
-     * @param rvt_shifts Vector of shifts in seconds of RVT signal. (default is [0:5:20])
-     * @param rvt_out Flag for writing RVT regressors (default is 1)
-     * @param resp_cutoff_freq Cut-off frequency in Hz for respiratory lowpass filter (default 3 Hz)
-     * @param cardiac_cutoff_freq Cut-off frequency in Hz for cardiac lowpass filter (default 3 Hz)
-     * @param cardiac_out Flag for writing Cardiac regressors (default is 1)
-     * @param respiration_out Flag for writing Respiratory regressors (default is 1)
-     * @param interp_style Resampling kernel (default is 'linear')
-     * @param fir_order Order of FIR filter (default is 40)
-     * @param quiet Show talkative progress as the program runs (default is 1)
-     * @param demo Run demonstration of RetroTS (default is 0)
-     * @param show_graphs Show graphs (default is unset; set with any parameter to view)
-     * @param debug Drop into pdb upon an exception (default is False)
-     * @param slice_offset Vector of slice acquisition time offsets in seconds (default is equivalent of alt+z)
-     * @param slice_major Unknown parameter (default is 1)
-     * @param slice_order Slice timing information in seconds. (default is alt+z)
-     * @param zero_phase_offset Zero phase offset flag
-     * @param legacy_transform Specify the version of the original Matlab code's transformation (default is 0)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RETRO_TS_PY_METADATA);
     const params = retro_ts_py_params(num_slices, volume_tr, resp_file, card_file, phys_fs, phys_file, phys_json, prefix, rvt_shifts, rvt_out, resp_cutoff_freq, cardiac_cutoff_freq, cardiac_out, respiration_out, interp_style, fir_order, quiet, demo, show_graphs, debug, slice_offset, slice_major, slice_order, zero_phase_offset, legacy_transform)
@@ -472,5 +472,8 @@ export {
       RetroTsPyOutputs,
       RetroTsPyParameters,
       retro_ts_py,
+      retro_ts_py_cargs,
+      retro_ts_py_execute,
+      retro_ts_py_outputs,
       retro_ts_py_params,
 };

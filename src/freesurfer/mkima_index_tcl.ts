@@ -12,41 +12,41 @@ const MKIMA_INDEX_TCL_METADATA: Metadata = {
 
 
 interface MkimaIndexTclParameters {
-    "__STYXTYPE__": "mkima_index.tcl";
+    "@type": "freesurfer.mkima_index.tcl";
     "input_file": InputPathType;
     "output_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mkima_index.tcl": mkima_index_tcl_cargs,
+        "freesurfer.mkima_index.tcl": mkima_index_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mkima_index.tcl": mkima_index_tcl_outputs,
+        "freesurfer.mkima_index.tcl": mkima_index_tcl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MkimaIndexTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file for mkima index operations.
+ * @param output_flag Flag to specify output for mkima index operation.
+ *
+ * @returns Parameter dictionary
+ */
 function mkima_index_tcl_params(
     input_file: InputPathType,
     output_flag: boolean = false,
 ): MkimaIndexTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file for mkima index operations.
-     * @param output_flag Flag to specify output for mkima index operation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mkima_index.tcl" as const,
+        "@type": "freesurfer.mkima_index.tcl" as const,
         "input_file": input_file,
         "output_flag": output_flag,
     };
@@ -90,18 +90,18 @@ function mkima_index_tcl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mkima_index_tcl_cargs(
     params: MkimaIndexTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mkima_index.tcl");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -112,18 +112,18 @@ function mkima_index_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mkima_index_tcl_outputs(
     params: MkimaIndexTclParameters,
     execution: Execution,
 ): MkimaIndexTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MkimaIndexTclOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([path.basename((params["input_file"] ?? null)), "_index_output"].join('')),
@@ -132,22 +132,22 @@ function mkima_index_tcl_outputs(
 }
 
 
+/**
+ * A command-line tool for handling mkima index operations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
+ */
 function mkima_index_tcl_execute(
     params: MkimaIndexTclParameters,
     execution: Execution,
 ): MkimaIndexTclOutputs {
-    /**
-     * A command-line tool for handling mkima index operations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = mkima_index_tcl_cargs(params, execution)
     const ret = mkima_index_tcl_outputs(params, execution)
@@ -156,24 +156,24 @@ function mkima_index_tcl_execute(
 }
 
 
+/**
+ * A command-line tool for handling mkima index operations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file for mkima index operations.
+ * @param output_flag Flag to specify output for mkima index operation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
+ */
 function mkima_index_tcl(
     input_file: InputPathType,
     output_flag: boolean = false,
     runner: Runner | null = null,
 ): MkimaIndexTclOutputs {
-    /**
-     * A command-line tool for handling mkima index operations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file for mkima index operations.
-     * @param output_flag Flag to specify output for mkima index operation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKIMA_INDEX_TCL_METADATA);
     const params = mkima_index_tcl_params(input_file, output_flag)
@@ -186,5 +186,8 @@ export {
       MkimaIndexTclOutputs,
       MkimaIndexTclParameters,
       mkima_index_tcl,
+      mkima_index_tcl_cargs,
+      mkima_index_tcl_execute,
+      mkima_index_tcl_outputs,
       mkima_index_tcl_params,
 };

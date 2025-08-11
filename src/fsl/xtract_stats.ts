@@ -12,7 +12,7 @@ const XTRACT_STATS_METADATA: Metadata = {
 
 
 interface XtractStatsParameters {
-    "__STYXTYPE__": "xtract_stats";
+    "@type": "fsl.xtract_stats";
     "folder_basename": string;
     "XTRACT_dir": string;
     "xtract2diff": string;
@@ -25,35 +25,35 @@ interface XtractStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xtract_stats": xtract_stats_cargs,
+        "fsl.xtract_stats": xtract_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "xtract_stats": xtract_stats_outputs,
+        "fsl.xtract_stats": xtract_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface XtractStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
+ * @param xtract_dir Path to XTRACT output folder
+ * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
+ * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
+ * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
+ * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
+ * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
+ * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
+ * @param keep_temp_files Keep temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function xtract_stats_params(
     folder_basename: string,
     xtract_dir: string,
@@ -87,23 +102,8 @@ function xtract_stats_params(
     measurements: string | null = null,
     keep_temp_files: boolean = false,
 ): XtractStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
-     * @param xtract_dir Path to XTRACT output folder
-     * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
-     * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
-     * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
-     * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
-     * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
-     * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
-     * @param keep_temp_files Keep temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xtract_stats" as const,
+        "@type": "fsl.xtract_stats" as const,
         "folder_basename": folder_basename,
         "XTRACT_dir": xtract_dir,
         "xtract2diff": xtract2diff,
@@ -128,18 +128,18 @@ function xtract_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xtract_stats_cargs(
     params: XtractStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xtract_stats");
     cargs.push(
@@ -191,18 +191,18 @@ function xtract_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xtract_stats_outputs(
     params: XtractStatsParameters,
     execution: Execution,
 ): XtractStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XtractStatsOutputs = {
         root: execution.outputFile("."),
         csv_output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -211,22 +211,22 @@ function xtract_stats_outputs(
 }
 
 
+/**
+ * Quantitative evaluation tool of XTRACT results in neuroimaging.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
+ */
 function xtract_stats_execute(
     params: XtractStatsParameters,
     execution: Execution,
 ): XtractStatsOutputs {
-    /**
-     * Quantitative evaluation tool of XTRACT results in neuroimaging.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = xtract_stats_cargs(params, execution)
     const ret = xtract_stats_outputs(params, execution)
@@ -235,6 +235,26 @@ function xtract_stats_execute(
 }
 
 
+/**
+ * Quantitative evaluation tool of XTRACT results in neuroimaging.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
+ * @param xtract_dir Path to XTRACT output folder
+ * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
+ * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
+ * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
+ * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
+ * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
+ * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
+ * @param keep_temp_files Keep temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
+ */
 function xtract_stats(
     folder_basename: string,
     xtract_dir: string,
@@ -247,26 +267,6 @@ function xtract_stats(
     keep_temp_files: boolean = false,
     runner: Runner | null = null,
 ): XtractStatsOutputs {
-    /**
-     * Quantitative evaluation tool of XTRACT results in neuroimaging.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param folder_basename Path to microstructure folder and basename of data (e.g. /home/DTI/dti_)
-     * @param xtract_dir Path to XTRACT output folder
-     * @param xtract2diff EITHER XTRACT results to diffusion space transform OR 'native' if tracts are already in diffusion space
-     * @param reference_image If not 'native', provide reference image in diffusion space (e.g. /home/DTI/dti_FA)
-     * @param output_file Output filepath (Default <XTRACT_dir>/stats.csv)
-     * @param structures_file Structures file (as in XTRACT) (Default is all tracts under <XTRACT_dir>)
-     * @param threshold Threshold applied to tract probability map (default = 0.001 = 0.1%)
-     * @param measurements Comma separated list of features to extract (Default = vol,prob,length,FA,MD - assumes DTI folder has been provided). vol = tract volume, prob = tract probability, length = tract length. Additional metrics must follow file naming conventions. e.g. for dti_L1 use 'L1'
-     * @param keep_temp_files Keep temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XTRACT_STATS_METADATA);
     const params = xtract_stats_params(folder_basename, xtract_dir, xtract2diff, reference_image, output_file, structures_file, threshold, measurements, keep_temp_files)
@@ -279,5 +279,8 @@ export {
       XtractStatsOutputs,
       XtractStatsParameters,
       xtract_stats,
+      xtract_stats_cargs,
+      xtract_stats_execute,
+      xtract_stats_outputs,
       xtract_stats_params,
 };

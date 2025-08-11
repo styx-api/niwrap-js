@@ -12,7 +12,7 @@ const AFNI_HISTORY_METADATA: Metadata = {
 
 
 interface AfniHistoryParameters {
-    "__STYXTYPE__": "afni_history";
+    "@type": "afni.afni_history";
     "verb_level"?: number | null | undefined;
     "check_date"?: string | null | undefined;
     "help": boolean;
@@ -37,33 +37,33 @@ interface AfniHistoryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni_history": afni_history_cargs,
+        "afni.afni_history": afni_history_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -83,6 +83,33 @@ interface AfniHistoryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param verb_level Request verbose output (LEVEL is from 0-6)
+ * @param check_date Check history against given date. If most recent afni_history is older than the passed date, the distribution version might be considered out of date.
+ * @param help Show help information
+ * @param history Show this program's history
+ * @param list_authors Show the list of valid authors
+ * @param list_types Show the list of valid change types
+ * @param version Show this program's version
+ * @param author Restrict output to the given author
+ * @param level Restrict output to the given level
+ * @param min_level Restrict output to at least level LEVEL
+ * @param program Restrict output to the given program
+ * @param past_entries Restrict output to final ENTRIES entries
+ * @param past_days Restrict output to the past DAYS days
+ * @param past_months Restrict output to the past MONTHS months
+ * @param past_years Restrict output to the past YEARS years
+ * @param type_ Restrict output to the given TYPE (TYPE = 0..5, or strings 'NEW_PROG', etc.)
+ * @param html Add HTML formatting
+ * @param dline Put a divider line between dates
+ * @param reverse Reverse the sorting order (sort is by date, author, level, program)
+ * @param show_field Restrict entry output to field FIELD. Valid FIELDs include: all, firstline, day, month, year, date, author, program, level, type, desc, verbtext.
+ * @param show_field_names List valid FIELD names for -show_field
+ *
+ * @returns Parameter dictionary
+ */
 function afni_history_params(
     verb_level: number | null = null,
     check_date: string | null = null,
@@ -106,35 +133,8 @@ function afni_history_params(
     show_field: string | null = null,
     show_field_names: boolean = false,
 ): AfniHistoryParameters {
-    /**
-     * Build parameters.
-    
-     * @param verb_level Request verbose output (LEVEL is from 0-6)
-     * @param check_date Check history against given date. If most recent afni_history is older than the passed date, the distribution version might be considered out of date.
-     * @param help Show help information
-     * @param history Show this program's history
-     * @param list_authors Show the list of valid authors
-     * @param list_types Show the list of valid change types
-     * @param version Show this program's version
-     * @param author Restrict output to the given author
-     * @param level Restrict output to the given level
-     * @param min_level Restrict output to at least level LEVEL
-     * @param program Restrict output to the given program
-     * @param past_entries Restrict output to final ENTRIES entries
-     * @param past_days Restrict output to the past DAYS days
-     * @param past_months Restrict output to the past MONTHS months
-     * @param past_years Restrict output to the past YEARS years
-     * @param type_ Restrict output to the given TYPE (TYPE = 0..5, or strings 'NEW_PROG', etc.)
-     * @param html Add HTML formatting
-     * @param dline Put a divider line between dates
-     * @param reverse Reverse the sorting order (sort is by date, author, level, program)
-     * @param show_field Restrict entry output to field FIELD. Valid FIELDs include: all, firstline, day, month, year, date, author, program, level, type, desc, verbtext.
-     * @param show_field_names List valid FIELD names for -show_field
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni_history" as const,
+        "@type": "afni.afni_history" as const,
         "help": help,
         "history": history,
         "list_authors": list_authors,
@@ -185,18 +185,18 @@ function afni_history_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_history_cargs(
     params: AfniHistoryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni_history");
     if ((params["verb_level"] ?? null) !== null) {
@@ -302,18 +302,18 @@ function afni_history_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_history_outputs(
     params: AfniHistoryParameters,
     execution: Execution,
 ): AfniHistoryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniHistoryOutputs = {
         root: execution.outputFile("."),
     };
@@ -321,22 +321,22 @@ function afni_history_outputs(
 }
 
 
+/**
+ * Show AFNI updates per user, dates, or levels.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
+ */
 function afni_history_execute(
     params: AfniHistoryParameters,
     execution: Execution,
 ): AfniHistoryOutputs {
-    /**
-     * Show AFNI updates per user, dates, or levels.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_history_cargs(params, execution)
     const ret = afni_history_outputs(params, execution)
@@ -345,6 +345,38 @@ function afni_history_execute(
 }
 
 
+/**
+ * Show AFNI updates per user, dates, or levels.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param verb_level Request verbose output (LEVEL is from 0-6)
+ * @param check_date Check history against given date. If most recent afni_history is older than the passed date, the distribution version might be considered out of date.
+ * @param help Show help information
+ * @param history Show this program's history
+ * @param list_authors Show the list of valid authors
+ * @param list_types Show the list of valid change types
+ * @param version Show this program's version
+ * @param author Restrict output to the given author
+ * @param level Restrict output to the given level
+ * @param min_level Restrict output to at least level LEVEL
+ * @param program Restrict output to the given program
+ * @param past_entries Restrict output to final ENTRIES entries
+ * @param past_days Restrict output to the past DAYS days
+ * @param past_months Restrict output to the past MONTHS months
+ * @param past_years Restrict output to the past YEARS years
+ * @param type_ Restrict output to the given TYPE (TYPE = 0..5, or strings 'NEW_PROG', etc.)
+ * @param html Add HTML formatting
+ * @param dline Put a divider line between dates
+ * @param reverse Reverse the sorting order (sort is by date, author, level, program)
+ * @param show_field Restrict entry output to field FIELD. Valid FIELDs include: all, firstline, day, month, year, date, author, program, level, type, desc, verbtext.
+ * @param show_field_names List valid FIELD names for -show_field
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
+ */
 function afni_history(
     verb_level: number | null = null,
     check_date: string | null = null,
@@ -369,38 +401,6 @@ function afni_history(
     show_field_names: boolean = false,
     runner: Runner | null = null,
 ): AfniHistoryOutputs {
-    /**
-     * Show AFNI updates per user, dates, or levels.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param verb_level Request verbose output (LEVEL is from 0-6)
-     * @param check_date Check history against given date. If most recent afni_history is older than the passed date, the distribution version might be considered out of date.
-     * @param help Show help information
-     * @param history Show this program's history
-     * @param list_authors Show the list of valid authors
-     * @param list_types Show the list of valid change types
-     * @param version Show this program's version
-     * @param author Restrict output to the given author
-     * @param level Restrict output to the given level
-     * @param min_level Restrict output to at least level LEVEL
-     * @param program Restrict output to the given program
-     * @param past_entries Restrict output to final ENTRIES entries
-     * @param past_days Restrict output to the past DAYS days
-     * @param past_months Restrict output to the past MONTHS months
-     * @param past_years Restrict output to the past YEARS years
-     * @param type_ Restrict output to the given TYPE (TYPE = 0..5, or strings 'NEW_PROG', etc.)
-     * @param html Add HTML formatting
-     * @param dline Put a divider line between dates
-     * @param reverse Reverse the sorting order (sort is by date, author, level, program)
-     * @param show_field Restrict entry output to field FIELD. Valid FIELDs include: all, firstline, day, month, year, date, author, program, level, type, desc, verbtext.
-     * @param show_field_names List valid FIELD names for -show_field
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_HISTORY_METADATA);
     const params = afni_history_params(verb_level, check_date, help, history, list_authors, list_types, version, author, level, min_level, program, past_entries, past_days, past_months, past_years, type_, html, dline, reverse, show_field, show_field_names)
@@ -413,5 +413,8 @@ export {
       AfniHistoryOutputs,
       AfniHistoryParameters,
       afni_history,
+      afni_history_cargs,
+      afni_history_execute,
+      afni_history_outputs,
       afni_history_params,
 };

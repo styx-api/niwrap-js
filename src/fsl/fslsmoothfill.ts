@@ -12,7 +12,7 @@ const FSLSMOOTHFILL_METADATA: Metadata = {
 
 
 interface FslsmoothfillParameters {
-    "__STYXTYPE__": "fslsmoothfill";
+    "@type": "fsl.fslsmoothfill";
     "input_image": InputPathType;
     "mask_image": InputPathType;
     "output_image": string;
@@ -22,33 +22,33 @@ interface FslsmoothfillParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslsmoothfill": fslsmoothfill_cargs,
+        "fsl.fslsmoothfill": fslsmoothfill_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface FslsmoothfillOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Filename of the input image.
+ * @param mask_image Filename of the mask image.
+ * @param output_image Filename for the output smoothed result image.
+ * @param number_of_iterations Number of iterations.
+ * @param debug_flag Turn on debugging output.
+ * @param verbose_flag Switch on diagnostic messages.
+ *
+ * @returns Parameter dictionary
+ */
 function fslsmoothfill_params(
     input_image: InputPathType,
     mask_image: InputPathType,
@@ -76,20 +88,8 @@ function fslsmoothfill_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
 ): FslsmoothfillParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Filename of the input image.
-     * @param mask_image Filename of the mask image.
-     * @param output_image Filename for the output smoothed result image.
-     * @param number_of_iterations Number of iterations.
-     * @param debug_flag Turn on debugging output.
-     * @param verbose_flag Switch on diagnostic messages.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslsmoothfill" as const,
+        "@type": "fsl.fslsmoothfill" as const,
         "input_image": input_image,
         "mask_image": mask_image,
         "output_image": output_image,
@@ -103,18 +103,18 @@ function fslsmoothfill_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslsmoothfill_cargs(
     params: FslsmoothfillParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslsmoothfill");
     cargs.push(["--in=", execution.inputFile((params["input_image"] ?? null))].join(''));
@@ -136,18 +136,18 @@ function fslsmoothfill_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslsmoothfill_outputs(
     params: FslsmoothfillParameters,
     execution: Execution,
 ): FslsmoothfillOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslsmoothfillOutputs = {
         root: execution.outputFile("."),
     };
@@ -155,22 +155,22 @@ function fslsmoothfill_outputs(
 }
 
 
+/**
+ * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
+ */
 function fslsmoothfill_execute(
     params: FslsmoothfillParameters,
     execution: Execution,
 ): FslsmoothfillOutputs {
-    /**
-     * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslsmoothfill_cargs(params, execution)
     const ret = fslsmoothfill_outputs(params, execution)
@@ -179,6 +179,23 @@ function fslsmoothfill_execute(
 }
 
 
+/**
+ * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Filename of the input image.
+ * @param mask_image Filename of the mask image.
+ * @param output_image Filename for the output smoothed result image.
+ * @param number_of_iterations Number of iterations.
+ * @param debug_flag Turn on debugging output.
+ * @param verbose_flag Switch on diagnostic messages.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
+ */
 function fslsmoothfill(
     input_image: InputPathType,
     mask_image: InputPathType,
@@ -188,23 +205,6 @@ function fslsmoothfill(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FslsmoothfillOutputs {
-    /**
-     * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Filename of the input image.
-     * @param mask_image Filename of the mask image.
-     * @param output_image Filename for the output smoothed result image.
-     * @param number_of_iterations Number of iterations.
-     * @param debug_flag Turn on debugging output.
-     * @param verbose_flag Switch on diagnostic messages.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSMOOTHFILL_METADATA);
     const params = fslsmoothfill_params(input_image, mask_image, output_image, number_of_iterations, debug_flag, verbose_flag)
@@ -217,5 +217,8 @@ export {
       FslsmoothfillOutputs,
       FslsmoothfillParameters,
       fslsmoothfill,
+      fslsmoothfill_cargs,
+      fslsmoothfill_execute,
+      fslsmoothfill_outputs,
       fslsmoothfill_params,
 };

@@ -12,42 +12,42 @@ const ASEGSTATSDIFF_METADATA: Metadata = {
 
 
 interface AsegstatsdiffParameters {
-    "__STYXTYPE__": "asegstatsdiff";
+    "@type": "freesurfer.asegstatsdiff";
     "subject1": string;
     "subject2": string;
     "outdir"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "asegstatsdiff": asegstatsdiff_cargs,
+        "freesurfer.asegstatsdiff": asegstatsdiff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "asegstatsdiff": asegstatsdiff_outputs,
+        "freesurfer.asegstatsdiff": asegstatsdiff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface AsegstatsdiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject1 The first subject to be compared.
+ * @param subject2 The second subject to be compared.
+ * @param outdir Optionally specify a directory to write the output asegstats.txt.
+ *
+ * @returns Parameter dictionary
+ */
 function asegstatsdiff_params(
     subject1: string,
     subject2: string,
     outdir: string | null = null,
 ): AsegstatsdiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject1 The first subject to be compared.
-     * @param subject2 The second subject to be compared.
-     * @param outdir Optionally specify a directory to write the output asegstats.txt.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asegstatsdiff" as const,
+        "@type": "freesurfer.asegstatsdiff" as const,
         "subject1": subject1,
         "subject2": subject2,
     };
@@ -96,18 +96,18 @@ function asegstatsdiff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function asegstatsdiff_cargs(
     params: AsegstatsdiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("asegstatsdiff");
     cargs.push((params["subject1"] ?? null));
@@ -118,18 +118,18 @@ function asegstatsdiff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function asegstatsdiff_outputs(
     params: AsegstatsdiffParameters,
     execution: Execution,
 ): AsegstatsdiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AsegstatsdiffOutputs = {
         root: execution.outputFile("."),
         asegstats_output: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/asegstats.txt"].join('')) : null,
@@ -138,22 +138,22 @@ function asegstatsdiff_outputs(
 }
 
 
+/**
+ * Compute and report percentage differences in aseg morphometry data between two subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
+ */
 function asegstatsdiff_execute(
     params: AsegstatsdiffParameters,
     execution: Execution,
 ): AsegstatsdiffOutputs {
-    /**
-     * Compute and report percentage differences in aseg morphometry data between two subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = asegstatsdiff_cargs(params, execution)
     const ret = asegstatsdiff_outputs(params, execution)
@@ -162,26 +162,26 @@ function asegstatsdiff_execute(
 }
 
 
+/**
+ * Compute and report percentage differences in aseg morphometry data between two subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject1 The first subject to be compared.
+ * @param subject2 The second subject to be compared.
+ * @param outdir Optionally specify a directory to write the output asegstats.txt.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
+ */
 function asegstatsdiff(
     subject1: string,
     subject2: string,
     outdir: string | null = null,
     runner: Runner | null = null,
 ): AsegstatsdiffOutputs {
-    /**
-     * Compute and report percentage differences in aseg morphometry data between two subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject1 The first subject to be compared.
-     * @param subject2 The second subject to be compared.
-     * @param outdir Optionally specify a directory to write the output asegstats.txt.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASEGSTATSDIFF_METADATA);
     const params = asegstatsdiff_params(subject1, subject2, outdir)
@@ -194,5 +194,8 @@ export {
       AsegstatsdiffOutputs,
       AsegstatsdiffParameters,
       asegstatsdiff,
+      asegstatsdiff_cargs,
+      asegstatsdiff_execute,
+      asegstatsdiff_outputs,
       asegstatsdiff_params,
 };

@@ -12,7 +12,7 @@ const V_3DINFILL_METADATA: Metadata = {
 
 
 interface V3dinfillParameters {
-    "__STYXTYPE__": "3dinfill";
+    "@type": "afni.3dinfill";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
     "niter"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface V3dinfillParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dinfill": v_3dinfill_cargs,
+        "afni.3dinfill": v_3dinfill_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dinfill": v_3dinfill_outputs,
+        "afni.3dinfill": v_3dinfill_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface V3dinfillOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Fill volume dataset
+ * @param prefix Use PREF for output prefix.
+ * @param niter Do not allow the fill function to do more than NITER passes.
+ * @param blend Method for assigning a value to a hole.
+ * @param minhits Criterion for considering a zero voxel to be a hole. Can only be used with -blend SOLID.
+ * @param ed Erode N times then dilate N times to get rid of hanging chunks. Values filled in by this process get value V.
+ * @param mask Provide mask dataset to select subset of input.
+ * @param mask_range Specify the range of values to consider from mask dataset.
+ * @param mrange Alias for -mask_range option.
+ * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dinfill_params(
     input: InputPathType,
     prefix: string | null = null,
@@ -89,24 +105,8 @@ function v_3dinfill_params(
     mrange: Array<number> | null = null,
     cmask: string | null = null,
 ): V3dinfillParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Fill volume dataset
-     * @param prefix Use PREF for output prefix.
-     * @param niter Do not allow the fill function to do more than NITER passes.
-     * @param blend Method for assigning a value to a hole.
-     * @param minhits Criterion for considering a zero voxel to be a hole. Can only be used with -blend SOLID.
-     * @param ed Erode N times then dilate N times to get rid of hanging chunks. Values filled in by this process get value V.
-     * @param mask Provide mask dataset to select subset of input.
-     * @param mask_range Specify the range of values to consider from mask dataset.
-     * @param mrange Alias for -mask_range option.
-     * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dinfill" as const,
+        "@type": "afni.3dinfill" as const,
         "input": input,
     };
     if (prefix !== null) {
@@ -140,18 +140,18 @@ function v_3dinfill_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dinfill_cargs(
     params: V3dinfillParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dinfill");
     cargs.push(
@@ -216,18 +216,18 @@ function v_3dinfill_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dinfill_outputs(
     params: V3dinfillParameters,
     execution: Execution,
 ): V3dinfillOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dinfillOutputs = {
         root: execution.outputFile("."),
         output_filled: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_filled.nii.gz"].join('')) : null,
@@ -236,22 +236,22 @@ function v_3dinfill_outputs(
 }
 
 
+/**
+ * A program to fill holes in volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
+ */
 function v_3dinfill_execute(
     params: V3dinfillParameters,
     execution: Execution,
 ): V3dinfillOutputs {
-    /**
-     * A program to fill holes in volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dinfill_cargs(params, execution)
     const ret = v_3dinfill_outputs(params, execution)
@@ -260,6 +260,27 @@ function v_3dinfill_execute(
 }
 
 
+/**
+ * A program to fill holes in volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Fill volume dataset
+ * @param prefix Use PREF for output prefix.
+ * @param niter Do not allow the fill function to do more than NITER passes.
+ * @param blend Method for assigning a value to a hole.
+ * @param minhits Criterion for considering a zero voxel to be a hole. Can only be used with -blend SOLID.
+ * @param ed Erode N times then dilate N times to get rid of hanging chunks. Values filled in by this process get value V.
+ * @param mask Provide mask dataset to select subset of input.
+ * @param mask_range Specify the range of values to consider from mask dataset.
+ * @param mrange Alias for -mask_range option.
+ * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
+ */
 function v_3dinfill(
     input: InputPathType,
     prefix: string | null = null,
@@ -273,27 +294,6 @@ function v_3dinfill(
     cmask: string | null = null,
     runner: Runner | null = null,
 ): V3dinfillOutputs {
-    /**
-     * A program to fill holes in volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Fill volume dataset
-     * @param prefix Use PREF for output prefix.
-     * @param niter Do not allow the fill function to do more than NITER passes.
-     * @param blend Method for assigning a value to a hole.
-     * @param minhits Criterion for considering a zero voxel to be a hole. Can only be used with -blend SOLID.
-     * @param ed Erode N times then dilate N times to get rid of hanging chunks. Values filled in by this process get value V.
-     * @param mask Provide mask dataset to select subset of input.
-     * @param mask_range Specify the range of values to consider from mask dataset.
-     * @param mrange Alias for -mask_range option.
-     * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DINFILL_METADATA);
     const params = v_3dinfill_params(input, prefix, niter, blend, minhits, ed, mask, mask_range, mrange, cmask)
@@ -306,5 +306,8 @@ export {
       V3dinfillParameters,
       V_3DINFILL_METADATA,
       v_3dinfill,
+      v_3dinfill_cargs,
+      v_3dinfill_execute,
+      v_3dinfill_outputs,
       v_3dinfill_params,
 };

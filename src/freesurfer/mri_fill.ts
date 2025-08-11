@@ -12,7 +12,7 @@ const MRI_FILL_METADATA: Metadata = {
 
 
 interface MriFillParameters {
-    "__STYXTYPE__": "mri_fill";
+    "@type": "freesurfer.mri_fill";
     "input_mr_dir": string;
     "output_mr_dir": string;
     "threshold"?: number | null | undefined;
@@ -33,35 +33,35 @@ interface MriFillParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fill": mri_fill_cargs,
+        "freesurfer.mri_fill": mri_fill_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fill": mri_fill_outputs,
+        "freesurfer.mri_fill": mri_fill_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface MriFillOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_mr_dir Input MR directory
+ * @param output_mr_dir Output MR directory
+ * @param threshold Specify fill_holes threshold (default=1)
+ * @param xform_name Use xform dst offset to get an accurate Talairach volume
+ * @param segmentation_file ASEG volume used to perform fill
+ * @param atlas_file Specify atlas to use for auto-filling
+ * @param fill_ven Fill ventricles
+ * @param seed_cc_tal Talairach coords of the seed for the corpus callosum (three numerical values required)
+ * @param seed_pons_tal Talairach coords of the seed for the pons (three numerical values required)
+ * @param seed_lh_tal Talairach coords of the white matter seed for the left hemisphere (three numerical values required)
+ * @param seed_rh_tal Talairach coords of the white matter seed for the right hemisphere (three numerical values required)
+ * @param seed_cc_vox Voxel coords of the seed for the corpus callosum (three numerical values required)
+ * @param seed_pons_vox Voxel coords of the seed for the pons (three numerical values required)
+ * @param auto_man_files Get edits based on the difference between auto and man and apply to the output
+ * @param no_auto_man Turns off the -auto-man option
+ * @param pointset_args Stand-alone option: takes one or more pointsets and fills in all the voxels that intersect lines connecting any two points within a given point set
+ * @param ctab_file Embed color table in the output
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fill_params(
     input_mr_dir: string,
     output_mr_dir: string,
@@ -103,31 +126,8 @@ function mri_fill_params(
     pointset_args: Array<string> | null = null,
     ctab_file: InputPathType | null = null,
 ): MriFillParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_mr_dir Input MR directory
-     * @param output_mr_dir Output MR directory
-     * @param threshold Specify fill_holes threshold (default=1)
-     * @param xform_name Use xform dst offset to get an accurate Talairach volume
-     * @param segmentation_file ASEG volume used to perform fill
-     * @param atlas_file Specify atlas to use for auto-filling
-     * @param fill_ven Fill ventricles
-     * @param seed_cc_tal Talairach coords of the seed for the corpus callosum (three numerical values required)
-     * @param seed_pons_tal Talairach coords of the seed for the pons (three numerical values required)
-     * @param seed_lh_tal Talairach coords of the white matter seed for the left hemisphere (three numerical values required)
-     * @param seed_rh_tal Talairach coords of the white matter seed for the right hemisphere (three numerical values required)
-     * @param seed_cc_vox Voxel coords of the seed for the corpus callosum (three numerical values required)
-     * @param seed_pons_vox Voxel coords of the seed for the pons (three numerical values required)
-     * @param auto_man_files Get edits based on the difference between auto and man and apply to the output
-     * @param no_auto_man Turns off the -auto-man option
-     * @param pointset_args Stand-alone option: takes one or more pointsets and fills in all the voxels that intersect lines connecting any two points within a given point set
-     * @param ctab_file Embed color table in the output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fill" as const,
+        "@type": "freesurfer.mri_fill" as const,
         "input_mr_dir": input_mr_dir,
         "output_mr_dir": output_mr_dir,
         "fill_ven": fill_ven,
@@ -176,18 +176,18 @@ function mri_fill_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fill_cargs(
     params: MriFillParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fill");
     cargs.push((params["input_mr_dir"] ?? null));
@@ -280,18 +280,18 @@ function mri_fill_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fill_outputs(
     params: MriFillParameters,
     execution: Execution,
 ): MriFillOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFillOutputs = {
         root: execution.outputFile("."),
         filled_volume: execution.outputFile([(params["output_mr_dir"] ?? null), "/filled"].join('')),
@@ -300,22 +300,22 @@ function mri_fill_outputs(
 }
 
 
+/**
+ * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFillOutputs`).
+ */
 function mri_fill_execute(
     params: MriFillParameters,
     execution: Execution,
 ): MriFillOutputs {
-    /**
-     * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFillOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fill_cargs(params, execution)
     const ret = mri_fill_outputs(params, execution)
@@ -324,6 +324,34 @@ function mri_fill_execute(
 }
 
 
+/**
+ * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_mr_dir Input MR directory
+ * @param output_mr_dir Output MR directory
+ * @param threshold Specify fill_holes threshold (default=1)
+ * @param xform_name Use xform dst offset to get an accurate Talairach volume
+ * @param segmentation_file ASEG volume used to perform fill
+ * @param atlas_file Specify atlas to use for auto-filling
+ * @param fill_ven Fill ventricles
+ * @param seed_cc_tal Talairach coords of the seed for the corpus callosum (three numerical values required)
+ * @param seed_pons_tal Talairach coords of the seed for the pons (three numerical values required)
+ * @param seed_lh_tal Talairach coords of the white matter seed for the left hemisphere (three numerical values required)
+ * @param seed_rh_tal Talairach coords of the white matter seed for the right hemisphere (three numerical values required)
+ * @param seed_cc_vox Voxel coords of the seed for the corpus callosum (three numerical values required)
+ * @param seed_pons_vox Voxel coords of the seed for the pons (three numerical values required)
+ * @param auto_man_files Get edits based on the difference between auto and man and apply to the output
+ * @param no_auto_man Turns off the -auto-man option
+ * @param pointset_args Stand-alone option: takes one or more pointsets and fills in all the voxels that intersect lines connecting any two points within a given point set
+ * @param ctab_file Embed color table in the output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFillOutputs`).
+ */
 function mri_fill(
     input_mr_dir: string,
     output_mr_dir: string,
@@ -344,34 +372,6 @@ function mri_fill(
     ctab_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriFillOutputs {
-    /**
-     * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_mr_dir Input MR directory
-     * @param output_mr_dir Output MR directory
-     * @param threshold Specify fill_holes threshold (default=1)
-     * @param xform_name Use xform dst offset to get an accurate Talairach volume
-     * @param segmentation_file ASEG volume used to perform fill
-     * @param atlas_file Specify atlas to use for auto-filling
-     * @param fill_ven Fill ventricles
-     * @param seed_cc_tal Talairach coords of the seed for the corpus callosum (three numerical values required)
-     * @param seed_pons_tal Talairach coords of the seed for the pons (three numerical values required)
-     * @param seed_lh_tal Talairach coords of the white matter seed for the left hemisphere (three numerical values required)
-     * @param seed_rh_tal Talairach coords of the white matter seed for the right hemisphere (three numerical values required)
-     * @param seed_cc_vox Voxel coords of the seed for the corpus callosum (three numerical values required)
-     * @param seed_pons_vox Voxel coords of the seed for the pons (three numerical values required)
-     * @param auto_man_files Get edits based on the difference between auto and man and apply to the output
-     * @param no_auto_man Turns off the -auto-man option
-     * @param pointset_args Stand-alone option: takes one or more pointsets and fills in all the voxels that intersect lines connecting any two points within a given point set
-     * @param ctab_file Embed color table in the output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFillOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FILL_METADATA);
     const params = mri_fill_params(input_mr_dir, output_mr_dir, threshold, xform_name, segmentation_file, atlas_file, fill_ven, seed_cc_tal, seed_pons_tal, seed_lh_tal, seed_rh_tal, seed_cc_vox, seed_pons_vox, auto_man_files, no_auto_man, pointset_args, ctab_file)
@@ -384,5 +384,8 @@ export {
       MriFillOutputs,
       MriFillParameters,
       mri_fill,
+      mri_fill_cargs,
+      mri_fill_execute,
+      mri_fill_outputs,
       mri_fill_params,
 };

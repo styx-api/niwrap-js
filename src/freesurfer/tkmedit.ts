@@ -12,39 +12,39 @@ const TKMEDIT_METADATA: Metadata = {
 
 
 interface TkmeditParameters {
-    "__STYXTYPE__": "tkmedit";
+    "@type": "freesurfer.tkmedit";
     "input_volume": InputPathType;
     "options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tkmedit": tkmedit_cargs,
+        "freesurfer.tkmedit": tkmedit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface TkmeditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file (e.g., nu.mgz or brain.mgz)
+ * @param options Options for running tkmedit.
+ *
+ * @returns Parameter dictionary
+ */
 function tkmedit_params(
     input_volume: InputPathType,
     options: string | null = null,
 ): TkmeditParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file (e.g., nu.mgz or brain.mgz)
-     * @param options Options for running tkmedit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tkmedit" as const,
+        "@type": "freesurfer.tkmedit" as const,
         "input_volume": input_volume,
     };
     if (options !== null) {
@@ -87,18 +87,18 @@ function tkmedit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tkmedit_cargs(
     params: TkmeditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tkmedit");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -109,18 +109,18 @@ function tkmedit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tkmedit_outputs(
     params: TkmeditParameters,
     execution: Execution,
 ): TkmeditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TkmeditOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function tkmedit_outputs(
 }
 
 
+/**
+ * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
+ */
 function tkmedit_execute(
     params: TkmeditParameters,
     execution: Execution,
 ): TkmeditOutputs {
-    /**
-     * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
-     */
     params = execution.params(params)
     const cargs = tkmedit_cargs(params, execution)
     const ret = tkmedit_outputs(params, execution)
@@ -152,24 +152,24 @@ function tkmedit_execute(
 }
 
 
+/**
+ * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file (e.g., nu.mgz or brain.mgz)
+ * @param options Options for running tkmedit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
+ */
 function tkmedit(
     input_volume: InputPathType,
     options: string | null = null,
     runner: Runner | null = null,
 ): TkmeditOutputs {
-    /**
-     * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file (e.g., nu.mgz or brain.mgz)
-     * @param options Options for running tkmedit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKMEDIT_METADATA);
     const params = tkmedit_params(input_volume, options)
@@ -182,5 +182,8 @@ export {
       TkmeditOutputs,
       TkmeditParameters,
       tkmedit,
+      tkmedit_cargs,
+      tkmedit_execute,
+      tkmedit_outputs,
       tkmedit_params,
 };

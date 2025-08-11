@@ -12,7 +12,7 @@ const V_3D_MSE_METADATA: Metadata = {
 
 
 interface V3dMseParameters {
-    "__STYXTYPE__": "3dMSE";
+    "@type": "afni.3dMSE";
     "polynomial_order"?: number | null | undefined;
     "autoclip": boolean;
     "automask": boolean;
@@ -25,35 +25,35 @@ interface V3dMseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMSE": v_3d_mse_cargs,
+        "afni.3dMSE": v_3d_mse_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMSE": v_3d_mse_outputs,
+        "afni.3dMSE": v_3d_mse_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dMseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Input dataset (e.g., dset.nii.gz)
+ * @param polynomial_order Remove polynomial trend of order 'm' (default is m=1; m=-1 means no detrending).
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Use automask to clip low-intensity regions.
+ * @param mask Mask to define 'in-brain' voxels.
+ * @param prefix Prefix for the output dataset (default is 'MSE').
+ * @param scales The number of scales to be used in the calculation (default is 5).
+ * @param entwin The window size used in the calculation (default is 2).
+ * @param rthresh The radius threshold for determining if values are the same in the SampleEn calculation, in fractions of the standard deviation (default is 0.5).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mse_params(
     dset: InputPathType,
     polynomial_order: number | null = null,
@@ -91,23 +106,8 @@ function v_3d_mse_params(
     entwin: number | null = null,
     rthresh: number | null = null,
 ): V3dMseParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Input dataset (e.g., dset.nii.gz)
-     * @param polynomial_order Remove polynomial trend of order 'm' (default is m=1; m=-1 means no detrending).
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Use automask to clip low-intensity regions.
-     * @param mask Mask to define 'in-brain' voxels.
-     * @param prefix Prefix for the output dataset (default is 'MSE').
-     * @param scales The number of scales to be used in the calculation (default is 5).
-     * @param entwin The window size used in the calculation (default is 2).
-     * @param rthresh The radius threshold for determining if values are the same in the SampleEn calculation, in fractions of the standard deviation (default is 0.5).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMSE" as const,
+        "@type": "afni.3dMSE" as const,
         "autoclip": autoclip,
         "automask": automask,
         "dset": dset,
@@ -134,18 +134,18 @@ function v_3d_mse_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mse_cargs(
     params: V3dMseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMSE");
     if ((params["polynomial_order"] ?? null) !== null) {
@@ -195,18 +195,18 @@ function v_3d_mse_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mse_outputs(
     params: V3dMseParameters,
     execution: Execution,
 ): V3dMseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMseOutputs = {
         root: execution.outputFile("."),
         out_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -216,22 +216,22 @@ function v_3d_mse_outputs(
 }
 
 
+/**
+ * Computes voxelwise multi-scale entropy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMseOutputs`).
+ */
 function v_3d_mse_execute(
     params: V3dMseParameters,
     execution: Execution,
 ): V3dMseOutputs {
-    /**
-     * Computes voxelwise multi-scale entropy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMseOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mse_cargs(params, execution)
     const ret = v_3d_mse_outputs(params, execution)
@@ -240,6 +240,26 @@ function v_3d_mse_execute(
 }
 
 
+/**
+ * Computes voxelwise multi-scale entropy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Input dataset (e.g., dset.nii.gz)
+ * @param polynomial_order Remove polynomial trend of order 'm' (default is m=1; m=-1 means no detrending).
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Use automask to clip low-intensity regions.
+ * @param mask Mask to define 'in-brain' voxels.
+ * @param prefix Prefix for the output dataset (default is 'MSE').
+ * @param scales The number of scales to be used in the calculation (default is 5).
+ * @param entwin The window size used in the calculation (default is 2).
+ * @param rthresh The radius threshold for determining if values are the same in the SampleEn calculation, in fractions of the standard deviation (default is 0.5).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMseOutputs`).
+ */
 function v_3d_mse(
     dset: InputPathType,
     polynomial_order: number | null = null,
@@ -252,26 +272,6 @@ function v_3d_mse(
     rthresh: number | null = null,
     runner: Runner | null = null,
 ): V3dMseOutputs {
-    /**
-     * Computes voxelwise multi-scale entropy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Input dataset (e.g., dset.nii.gz)
-     * @param polynomial_order Remove polynomial trend of order 'm' (default is m=1; m=-1 means no detrending).
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Use automask to clip low-intensity regions.
-     * @param mask Mask to define 'in-brain' voxels.
-     * @param prefix Prefix for the output dataset (default is 'MSE').
-     * @param scales The number of scales to be used in the calculation (default is 5).
-     * @param entwin The window size used in the calculation (default is 2).
-     * @param rthresh The radius threshold for determining if values are the same in the SampleEn calculation, in fractions of the standard deviation (default is 0.5).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MSE_METADATA);
     const params = v_3d_mse_params(dset, polynomial_order, autoclip, automask, mask, prefix, scales, entwin, rthresh)
@@ -284,5 +284,8 @@ export {
       V3dMseParameters,
       V_3D_MSE_METADATA,
       v_3d_mse,
+      v_3d_mse_cargs,
+      v_3d_mse_execute,
+      v_3d_mse_outputs,
       v_3d_mse_params,
 };

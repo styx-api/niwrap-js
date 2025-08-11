@@ -12,7 +12,7 @@ const FABBER_CEST_METADATA: Metadata = {
 
 
 interface FabberCestParameters {
-    "__STYXTYPE__": "fabber_cest";
+    "@type": "fsl.fabber_cest";
     "output": string;
     "method": string;
     "model": string;
@@ -52,35 +52,35 @@ interface FabberCestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fabber_cest": fabber_cest_cargs,
+        "fsl.fabber_cest": fabber_cest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fabber_cest": fabber_cest_outputs,
+        "fsl.fabber_cest": fabber_cest_outputs,
     };
     return outputsFuncs[t];
 }
@@ -147,6 +147,48 @@ interface FabberCestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output Directory for output files
+ * @param method Inference method
+ * @param model Forward model
+ * @param data Input data file
+ * @param help Print usage help
+ * @param listmethods List all known inference methods
+ * @param listmodels List all known forward models
+ * @param listparams List model parameters
+ * @param descparams Describe model parameters
+ * @param listoutputs List additional model outputs
+ * @param evaluate Evaluate model and set to name of output required
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation
+ * @param simple_output Simple output series of lines each giving progress as percentage
+ * @param overwrite Overwrite existing output
+ * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename
+ * @param data_multi Specify multiple data files (data<n>)
+ * @param data_order Handling of multiple data files (concatenate or interleave)
+ * @param mask Mask file. Inference performed where mask value > 0
+ * @param masked_timepoints List of masked time points to ignore (mt<n>)
+ * @param suppdata Supplemental timeseries data required for some models
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions.
+ * @param save_mean Output the parameter means.
+ * @param save_std Output the parameter standard deviations.
+ * @param save_var Output the parameter variances.
+ * @param save_zstat Output the parameter Zstats.
+ * @param save_noise_mean Output the noise means.
+ * @param save_noise_std Output the noise standard deviations.
+ * @param save_free_energy Output the free energy, if calculated.
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ *
+ * @returns Parameter dictionary
+ */
 function fabber_cest_params(
     output: string,
     method: string,
@@ -185,50 +227,8 @@ function fabber_cest_params(
     optfile: InputPathType | null = null,
     debug: boolean = false,
 ): FabberCestParameters {
-    /**
-     * Build parameters.
-    
-     * @param output Directory for output files
-     * @param method Inference method
-     * @param model Forward model
-     * @param data Input data file
-     * @param help Print usage help
-     * @param listmethods List all known inference methods
-     * @param listmodels List all known forward models
-     * @param listparams List model parameters
-     * @param descparams Describe model parameters
-     * @param listoutputs List additional model outputs
-     * @param evaluate Evaluate model and set to name of output required
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation
-     * @param simple_output Simple output series of lines each giving progress as percentage
-     * @param overwrite Overwrite existing output
-     * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename
-     * @param data_multi Specify multiple data files (data<n>)
-     * @param data_order Handling of multiple data files (concatenate or interleave)
-     * @param mask Mask file. Inference performed where mask value > 0
-     * @param masked_timepoints List of masked time points to ignore (mt<n>)
-     * @param suppdata Supplemental timeseries data required for some models
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions.
-     * @param save_mean Output the parameter means.
-     * @param save_std Output the parameter standard deviations.
-     * @param save_var Output the parameter variances.
-     * @param save_zstat Output the parameter Zstats.
-     * @param save_noise_mean Output the noise means.
-     * @param save_noise_std Output the noise standard deviations.
-     * @param save_free_energy Output the free energy, if calculated.
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fabber_cest" as const,
+        "@type": "fsl.fabber_cest" as const,
         "output": output,
         "method": method,
         "model": model,
@@ -290,18 +290,18 @@ function fabber_cest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fabber_cest_cargs(
     params: FabberCestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fabber_cest");
     cargs.push(
@@ -450,18 +450,18 @@ function fabber_cest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fabber_cest_outputs(
     params: FabberCestParameters,
     execution: Execution,
 ): FabberCestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FabberCestOutputs = {
         root: execution.outputFile("."),
         logfile: execution.outputFile([(params["output"] ?? null), "/logfile.log"].join('')),
@@ -481,22 +481,22 @@ function fabber_cest_outputs(
 }
 
 
+/**
+ * Fabber Model-based Analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
+ */
 function fabber_cest_execute(
     params: FabberCestParameters,
     execution: Execution,
 ): FabberCestOutputs {
-    /**
-     * Fabber Model-based Analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
-     */
     params = execution.params(params)
     const cargs = fabber_cest_cargs(params, execution)
     const ret = fabber_cest_outputs(params, execution)
@@ -505,6 +505,53 @@ function fabber_cest_execute(
 }
 
 
+/**
+ * Fabber Model-based Analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output Directory for output files
+ * @param method Inference method
+ * @param model Forward model
+ * @param data Input data file
+ * @param help Print usage help
+ * @param listmethods List all known inference methods
+ * @param listmodels List all known forward models
+ * @param listparams List model parameters
+ * @param descparams Describe model parameters
+ * @param listoutputs List additional model outputs
+ * @param evaluate Evaluate model and set to name of output required
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation
+ * @param simple_output Simple output series of lines each giving progress as percentage
+ * @param overwrite Overwrite existing output
+ * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename
+ * @param data_multi Specify multiple data files (data<n>)
+ * @param data_order Handling of multiple data files (concatenate or interleave)
+ * @param mask Mask file. Inference performed where mask value > 0
+ * @param masked_timepoints List of masked time points to ignore (mt<n>)
+ * @param suppdata Supplemental timeseries data required for some models
+ * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit Output the model prediction as a 4d volume
+ * @param save_residuals Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras Output additional model-specific timeseries data
+ * @param save_mvn Output the final MVN distributions.
+ * @param save_mean Output the parameter means.
+ * @param save_std Output the parameter standard deviations.
+ * @param save_var Output the parameter variances.
+ * @param save_zstat Output the parameter Zstats.
+ * @param save_noise_mean Output the noise means.
+ * @param save_noise_std Output the noise standard deviations.
+ * @param save_free_energy Output the free energy, if calculated.
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
+ */
 function fabber_cest(
     output: string,
     method: string,
@@ -544,53 +591,6 @@ function fabber_cest(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberCestOutputs {
-    /**
-     * Fabber Model-based Analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output Directory for output files
-     * @param method Inference method
-     * @param model Forward model
-     * @param data Input data file
-     * @param help Print usage help
-     * @param listmethods List all known inference methods
-     * @param listmodels List all known forward models
-     * @param listparams List model parameters
-     * @param descparams Describe model parameters
-     * @param listoutputs List additional model outputs
-     * @param evaluate Evaluate model and set to name of output required
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation
-     * @param simple_output Simple output series of lines each giving progress as percentage
-     * @param overwrite Overwrite existing output
-     * @param link_to_latest Create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename
-     * @param data_multi Specify multiple data files (data<n>)
-     * @param data_order Handling of multiple data files (concatenate or interleave)
-     * @param mask Mask file. Inference performed where mask value > 0
-     * @param masked_timepoints List of masked time points to ignore (mt<n>)
-     * @param suppdata Supplemental timeseries data required for some models
-     * @param dump_param_names Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit Output the model prediction as a 4d volume
-     * @param save_residuals Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras Output additional model-specific timeseries data
-     * @param save_mvn Output the final MVN distributions.
-     * @param save_mean Output the parameter means.
-     * @param save_std Output the parameter standard deviations.
-     * @param save_var Output the parameter variances.
-     * @param save_zstat Output the parameter Zstats.
-     * @param save_noise_mean Output the noise means.
-     * @param save_noise_std Output the noise standard deviations.
-     * @param save_free_energy Output the free energy, if calculated.
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_CEST_METADATA);
     const params = fabber_cest_params(output, method, model, data, help, listmethods, listmodels, listparams, descparams, listoutputs, evaluate, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, loadmodels, data_multi, data_order, mask, masked_timepoints, suppdata, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
@@ -603,5 +603,8 @@ export {
       FabberCestOutputs,
       FabberCestParameters,
       fabber_cest,
+      fabber_cest_cargs,
+      fabber_cest_execute,
+      fabber_cest_outputs,
       fabber_cest_params,
 };

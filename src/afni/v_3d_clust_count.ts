@@ -12,7 +12,7 @@ const V_3D_CLUST_COUNT_METADATA: Metadata = {
 
 
 interface V3dClustCountParameters {
-    "__STYXTYPE__": "3dClustCount";
+    "@type": "afni.3dClustCount";
     "datasets": Array<InputPathType>;
     "prefix"?: string | null | undefined;
     "final": boolean;
@@ -20,35 +20,35 @@ interface V3dClustCountParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dClustCount": v_3d_clust_count_cargs,
+        "afni.3dClustCount": v_3d_clust_count_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dClustCount": v_3d_clust_count_outputs,
+        "afni.3dClustCount": v_3d_clust_count_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,24 +79,24 @@ interface V3dClustCountOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input datasets to be processed.
+ * @param prefix Prefix of the filename into which results will be summed. Actual filename will be 'sss.clustcount.niml'. If this file already exists, results from the current run will be summed into the existing results and the file then re-written.
+ * @param final Output results in a format similar to 3dClustSim -- as 1D and NIML formatted files with probabilities of various cluster sizes. This option can be used without any input datasets to create final output files from saved '.clustcount.niml' output file from earlier runs.
+ * @param quiet Suppresses progress reports and other informational messages. Should be placed first in the command line to quiet most messages.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_clust_count_params(
     datasets: Array<InputPathType>,
     prefix: string | null = null,
     final: boolean = false,
     quiet: boolean = false,
 ): V3dClustCountParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input datasets to be processed.
-     * @param prefix Prefix of the filename into which results will be summed. Actual filename will be 'sss.clustcount.niml'. If this file already exists, results from the current run will be summed into the existing results and the file then re-written.
-     * @param final Output results in a format similar to 3dClustSim -- as 1D and NIML formatted files with probabilities of various cluster sizes. This option can be used without any input datasets to create final output files from saved '.clustcount.niml' output file from earlier runs.
-     * @param quiet Suppresses progress reports and other informational messages. Should be placed first in the command line to quiet most messages.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dClustCount" as const,
+        "@type": "afni.3dClustCount" as const,
         "datasets": datasets,
         "final": final,
         "quiet": quiet,
@@ -108,18 +108,18 @@ function v_3d_clust_count_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_clust_count_cargs(
     params: V3dClustCountParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dClustCount");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -139,18 +139,18 @@ function v_3d_clust_count_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_clust_count_outputs(
     params: V3dClustCountParameters,
     execution: Execution,
 ): V3dClustCountOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dClustCountOutputs = {
         root: execution.outputFile("."),
         clustcount_niml: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".clustcount.niml"].join('')) : null,
@@ -161,22 +161,22 @@ function v_3d_clust_count_outputs(
 }
 
 
+/**
+ * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dClustCountOutputs`).
+ */
 function v_3d_clust_count_execute(
     params: V3dClustCountParameters,
     execution: Execution,
 ): V3dClustCountOutputs {
-    /**
-     * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dClustCountOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_clust_count_cargs(params, execution)
     const ret = v_3d_clust_count_outputs(params, execution)
@@ -185,6 +185,21 @@ function v_3d_clust_count_execute(
 }
 
 
+/**
+ * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input datasets to be processed.
+ * @param prefix Prefix of the filename into which results will be summed. Actual filename will be 'sss.clustcount.niml'. If this file already exists, results from the current run will be summed into the existing results and the file then re-written.
+ * @param final Output results in a format similar to 3dClustSim -- as 1D and NIML formatted files with probabilities of various cluster sizes. This option can be used without any input datasets to create final output files from saved '.clustcount.niml' output file from earlier runs.
+ * @param quiet Suppresses progress reports and other informational messages. Should be placed first in the command line to quiet most messages.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dClustCountOutputs`).
+ */
 function v_3d_clust_count(
     datasets: Array<InputPathType>,
     prefix: string | null = null,
@@ -192,21 +207,6 @@ function v_3d_clust_count(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dClustCountOutputs {
-    /**
-     * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input datasets to be processed.
-     * @param prefix Prefix of the filename into which results will be summed. Actual filename will be 'sss.clustcount.niml'. If this file already exists, results from the current run will be summed into the existing results and the file then re-written.
-     * @param final Output results in a format similar to 3dClustSim -- as 1D and NIML formatted files with probabilities of various cluster sizes. This option can be used without any input datasets to create final output files from saved '.clustcount.niml' output file from earlier runs.
-     * @param quiet Suppresses progress reports and other informational messages. Should be placed first in the command line to quiet most messages.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dClustCountOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CLUST_COUNT_METADATA);
     const params = v_3d_clust_count_params(datasets, prefix, final, quiet)
@@ -219,5 +219,8 @@ export {
       V3dClustCountParameters,
       V_3D_CLUST_COUNT_METADATA,
       v_3d_clust_count,
+      v_3d_clust_count_cargs,
+      v_3d_clust_count_execute,
+      v_3d_clust_count_outputs,
       v_3d_clust_count_params,
 };

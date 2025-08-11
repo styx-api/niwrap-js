@@ -12,42 +12,42 @@ const SBTIV_METADATA: Metadata = {
 
 
 interface SbtivParameters {
-    "__STYXTYPE__": "sbtiv";
+    "@type": "freesurfer.sbtiv";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "labels_file"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sbtiv": sbtiv_cargs,
+        "freesurfer.sbtiv": sbtiv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sbtiv": sbtiv_outputs,
+        "freesurfer.sbtiv": sbtiv_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SbtivOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Volume stats input file.
+ * @param output_file Intracranial stats output file.
+ * @param labels_file File containing a list of intracranial structure labelnames to include in the calculation
+ *
+ * @returns Parameter dictionary
+ */
 function sbtiv_params(
     input_file: InputPathType,
     output_file: string | null = null,
     labels_file: InputPathType | null = null,
 ): SbtivParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Volume stats input file.
-     * @param output_file Intracranial stats output file.
-     * @param labels_file File containing a list of intracranial structure labelnames to include in the calculation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sbtiv" as const,
+        "@type": "freesurfer.sbtiv" as const,
         "input_file": input_file,
     };
     if (output_file !== null) {
@@ -98,18 +98,18 @@ function sbtiv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sbtiv_cargs(
     params: SbtivParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sbtiv");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -129,18 +129,18 @@ function sbtiv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sbtiv_outputs(
     params: SbtivParameters,
     execution: Execution,
 ): SbtivOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SbtivOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -149,22 +149,22 @@ function sbtiv_outputs(
 }
 
 
+/**
+ * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SbtivOutputs`).
+ */
 function sbtiv_execute(
     params: SbtivParameters,
     execution: Execution,
 ): SbtivOutputs {
-    /**
-     * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SbtivOutputs`).
-     */
     params = execution.params(params)
     const cargs = sbtiv_cargs(params, execution)
     const ret = sbtiv_outputs(params, execution)
@@ -173,26 +173,26 @@ function sbtiv_execute(
 }
 
 
+/**
+ * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Volume stats input file.
+ * @param output_file Intracranial stats output file.
+ * @param labels_file File containing a list of intracranial structure labelnames to include in the calculation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SbtivOutputs`).
+ */
 function sbtiv(
     input_file: InputPathType,
     output_file: string | null = null,
     labels_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SbtivOutputs {
-    /**
-     * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Volume stats input file.
-     * @param output_file Intracranial stats output file.
-     * @param labels_file File containing a list of intracranial structure labelnames to include in the calculation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SbtivOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SBTIV_METADATA);
     const params = sbtiv_params(input_file, output_file, labels_file)
@@ -205,5 +205,8 @@ export {
       SbtivOutputs,
       SbtivParameters,
       sbtiv,
+      sbtiv_cargs,
+      sbtiv_execute,
+      sbtiv_outputs,
       sbtiv_params,
 };

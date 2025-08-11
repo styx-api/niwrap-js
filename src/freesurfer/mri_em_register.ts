@@ -12,7 +12,7 @@ const MRI_EM_REGISTER_METADATA: Metadata = {
 
 
 interface MriEmRegisterParameters {
-    "__STYXTYPE__": "mri_em_register";
+    "@type": "freesurfer.mri_em_register";
     "input_volume": InputPathType;
     "template_gca": InputPathType;
     "output_transform": string;
@@ -72,35 +72,35 @@ interface MriEmRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_em_register": mri_em_register_cargs,
+        "freesurfer.mri_em_register": mri_em_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_em_register": mri_em_register_outputs,
+        "freesurfer.mri_em_register": mri_em_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -123,6 +123,68 @@ interface MriEmRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input brain volume
+ * @param template_gca Template GCA file
+ * @param output_transform Output transform name
+ * @param distance Distance
+ * @param nomap No map
+ * @param flash Use FLASH forward model to predict intensity values
+ * @param mask Use volname as a mask
+ * @param skull Align to atlas containing skull (uns=5)
+ * @param uns Align to atlas containing skull setting unknown_nbr_spacing = nbrspacing
+ * @param diag Open diagfile for writing
+ * @param debug_voxel Debug voxel (x, y, z)
+ * @param debug_label Debug label (label)
+ * @param tr Use TR msec
+ * @param te Use TE msec
+ * @param alpha Use alpha degrees
+ * @param example Use T1 and seg as example T1 and segmentations respectively
+ * @param samples Write control points to fname
+ * @param fsamples Write transformed control points to fname
+ * @param nsamples Write transformed normalization control points to fname
+ * @param contrast Use contrast to find labels
+ * @param flash_parms Use FLASH forward model and tissue parms in parameterfile to predict intensity values
+ * @param transonly Only compute translation parameters
+ * @param write_mean Write GCA means to fname
+ * @param prior Use prior threshold min_prior
+ * @param spacing Use max GCA spacing
+ * @param scales Find optimal linear transform over int scales
+ * @param novar Do not use variance estimates
+ * @param dt DT parameter
+ * @param tol Tolerance
+ * @param center Use GCA centroid as origin of transform
+ * @param noscale Disable scaling
+ * @param noiscale Disable intensity scaling
+ * @param num_transforms Find a total of num_xforms linear transforms
+ * @param area Area
+ * @param nlarea Non-linear area
+ * @param levels Levels
+ * @param intensity Intensity
+ * @param reduce Reduce input images nreductions times before aligning
+ * @param n_samples Using n samples of GCA
+ * @param norm Normalize intensity and write to fname
+ * @param trans Setting max translation search range to be max_trans
+ * @param steps Taking max_angles angular steps
+ * @param long_reg Longitudinal: read previously computed atlas xform and apply registration long_reg
+ * @param cpfile Read manually defined control points from cpfile
+ * @param translation_vector Translation vector (tx, ty, tz)
+ * @param rotation_vector Rotation vector (rx, ry, rz)
+ * @param xform Using previously computed transform xform
+ * @param blur Blurring input image with sigma=blur_sigma
+ * @param diagno Diago flag (unspecified function)
+ * @param s Max angles
+ * @param max_angle Max angle for rotational search in radians (def=15 deg)
+ * @param niters Niterations = niters
+ * @param write_iters Write iterations = write_iters
+ * @param ctl_point_pct Use top pct percent wm points as control points
+ * @param momentum Set momentum
+ * @param threads Number of threads (nompthreads)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_em_register_params(
     input_volume: InputPathType,
     template_gca: InputPathType,
@@ -181,70 +243,8 @@ function mri_em_register_params(
     momentum: number | null = null,
     threads: number | null = null,
 ): MriEmRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input brain volume
-     * @param template_gca Template GCA file
-     * @param output_transform Output transform name
-     * @param distance Distance
-     * @param nomap No map
-     * @param flash Use FLASH forward model to predict intensity values
-     * @param mask Use volname as a mask
-     * @param skull Align to atlas containing skull (uns=5)
-     * @param uns Align to atlas containing skull setting unknown_nbr_spacing = nbrspacing
-     * @param diag Open diagfile for writing
-     * @param debug_voxel Debug voxel (x, y, z)
-     * @param debug_label Debug label (label)
-     * @param tr Use TR msec
-     * @param te Use TE msec
-     * @param alpha Use alpha degrees
-     * @param example Use T1 and seg as example T1 and segmentations respectively
-     * @param samples Write control points to fname
-     * @param fsamples Write transformed control points to fname
-     * @param nsamples Write transformed normalization control points to fname
-     * @param contrast Use contrast to find labels
-     * @param flash_parms Use FLASH forward model and tissue parms in parameterfile to predict intensity values
-     * @param transonly Only compute translation parameters
-     * @param write_mean Write GCA means to fname
-     * @param prior Use prior threshold min_prior
-     * @param spacing Use max GCA spacing
-     * @param scales Find optimal linear transform over int scales
-     * @param novar Do not use variance estimates
-     * @param dt DT parameter
-     * @param tol Tolerance
-     * @param center Use GCA centroid as origin of transform
-     * @param noscale Disable scaling
-     * @param noiscale Disable intensity scaling
-     * @param num_transforms Find a total of num_xforms linear transforms
-     * @param area Area
-     * @param nlarea Non-linear area
-     * @param levels Levels
-     * @param intensity Intensity
-     * @param reduce Reduce input images nreductions times before aligning
-     * @param n_samples Using n samples of GCA
-     * @param norm Normalize intensity and write to fname
-     * @param trans Setting max translation search range to be max_trans
-     * @param steps Taking max_angles angular steps
-     * @param long_reg Longitudinal: read previously computed atlas xform and apply registration long_reg
-     * @param cpfile Read manually defined control points from cpfile
-     * @param translation_vector Translation vector (tx, ty, tz)
-     * @param rotation_vector Rotation vector (rx, ry, rz)
-     * @param xform Using previously computed transform xform
-     * @param blur Blurring input image with sigma=blur_sigma
-     * @param diagno Diago flag (unspecified function)
-     * @param s Max angles
-     * @param max_angle Max angle for rotational search in radians (def=15 deg)
-     * @param niters Niterations = niters
-     * @param write_iters Write iterations = write_iters
-     * @param ctl_point_pct Use top pct percent wm points as control points
-     * @param momentum Set momentum
-     * @param threads Number of threads (nompthreads)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_em_register" as const,
+        "@type": "freesurfer.mri_em_register" as const,
         "input_volume": input_volume,
         "template_gca": template_gca,
         "output_transform": output_transform,
@@ -392,18 +392,18 @@ function mri_em_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_em_register_cargs(
     params: MriEmRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_em_register");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -701,18 +701,18 @@ function mri_em_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_em_register_outputs(
     params: MriEmRegisterParameters,
     execution: Execution,
 ): MriEmRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEmRegisterOutputs = {
         root: execution.outputFile("."),
         output_transform_file: execution.outputFile([(params["output_transform"] ?? null), ".lta"].join('')),
@@ -721,22 +721,22 @@ function mri_em_register_outputs(
 }
 
 
+/**
+ * This program creates a transform in lta format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
+ */
 function mri_em_register_execute(
     params: MriEmRegisterParameters,
     execution: Execution,
 ): MriEmRegisterOutputs {
-    /**
-     * This program creates a transform in lta format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_em_register_cargs(params, execution)
     const ret = mri_em_register_outputs(params, execution)
@@ -745,6 +745,73 @@ function mri_em_register_execute(
 }
 
 
+/**
+ * This program creates a transform in lta format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input brain volume
+ * @param template_gca Template GCA file
+ * @param output_transform Output transform name
+ * @param distance Distance
+ * @param nomap No map
+ * @param flash Use FLASH forward model to predict intensity values
+ * @param mask Use volname as a mask
+ * @param skull Align to atlas containing skull (uns=5)
+ * @param uns Align to atlas containing skull setting unknown_nbr_spacing = nbrspacing
+ * @param diag Open diagfile for writing
+ * @param debug_voxel Debug voxel (x, y, z)
+ * @param debug_label Debug label (label)
+ * @param tr Use TR msec
+ * @param te Use TE msec
+ * @param alpha Use alpha degrees
+ * @param example Use T1 and seg as example T1 and segmentations respectively
+ * @param samples Write control points to fname
+ * @param fsamples Write transformed control points to fname
+ * @param nsamples Write transformed normalization control points to fname
+ * @param contrast Use contrast to find labels
+ * @param flash_parms Use FLASH forward model and tissue parms in parameterfile to predict intensity values
+ * @param transonly Only compute translation parameters
+ * @param write_mean Write GCA means to fname
+ * @param prior Use prior threshold min_prior
+ * @param spacing Use max GCA spacing
+ * @param scales Find optimal linear transform over int scales
+ * @param novar Do not use variance estimates
+ * @param dt DT parameter
+ * @param tol Tolerance
+ * @param center Use GCA centroid as origin of transform
+ * @param noscale Disable scaling
+ * @param noiscale Disable intensity scaling
+ * @param num_transforms Find a total of num_xforms linear transforms
+ * @param area Area
+ * @param nlarea Non-linear area
+ * @param levels Levels
+ * @param intensity Intensity
+ * @param reduce Reduce input images nreductions times before aligning
+ * @param n_samples Using n samples of GCA
+ * @param norm Normalize intensity and write to fname
+ * @param trans Setting max translation search range to be max_trans
+ * @param steps Taking max_angles angular steps
+ * @param long_reg Longitudinal: read previously computed atlas xform and apply registration long_reg
+ * @param cpfile Read manually defined control points from cpfile
+ * @param translation_vector Translation vector (tx, ty, tz)
+ * @param rotation_vector Rotation vector (rx, ry, rz)
+ * @param xform Using previously computed transform xform
+ * @param blur Blurring input image with sigma=blur_sigma
+ * @param diagno Diago flag (unspecified function)
+ * @param s Max angles
+ * @param max_angle Max angle for rotational search in radians (def=15 deg)
+ * @param niters Niterations = niters
+ * @param write_iters Write iterations = write_iters
+ * @param ctl_point_pct Use top pct percent wm points as control points
+ * @param momentum Set momentum
+ * @param threads Number of threads (nompthreads)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
+ */
 function mri_em_register(
     input_volume: InputPathType,
     template_gca: InputPathType,
@@ -804,73 +871,6 @@ function mri_em_register(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriEmRegisterOutputs {
-    /**
-     * This program creates a transform in lta format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input brain volume
-     * @param template_gca Template GCA file
-     * @param output_transform Output transform name
-     * @param distance Distance
-     * @param nomap No map
-     * @param flash Use FLASH forward model to predict intensity values
-     * @param mask Use volname as a mask
-     * @param skull Align to atlas containing skull (uns=5)
-     * @param uns Align to atlas containing skull setting unknown_nbr_spacing = nbrspacing
-     * @param diag Open diagfile for writing
-     * @param debug_voxel Debug voxel (x, y, z)
-     * @param debug_label Debug label (label)
-     * @param tr Use TR msec
-     * @param te Use TE msec
-     * @param alpha Use alpha degrees
-     * @param example Use T1 and seg as example T1 and segmentations respectively
-     * @param samples Write control points to fname
-     * @param fsamples Write transformed control points to fname
-     * @param nsamples Write transformed normalization control points to fname
-     * @param contrast Use contrast to find labels
-     * @param flash_parms Use FLASH forward model and tissue parms in parameterfile to predict intensity values
-     * @param transonly Only compute translation parameters
-     * @param write_mean Write GCA means to fname
-     * @param prior Use prior threshold min_prior
-     * @param spacing Use max GCA spacing
-     * @param scales Find optimal linear transform over int scales
-     * @param novar Do not use variance estimates
-     * @param dt DT parameter
-     * @param tol Tolerance
-     * @param center Use GCA centroid as origin of transform
-     * @param noscale Disable scaling
-     * @param noiscale Disable intensity scaling
-     * @param num_transforms Find a total of num_xforms linear transforms
-     * @param area Area
-     * @param nlarea Non-linear area
-     * @param levels Levels
-     * @param intensity Intensity
-     * @param reduce Reduce input images nreductions times before aligning
-     * @param n_samples Using n samples of GCA
-     * @param norm Normalize intensity and write to fname
-     * @param trans Setting max translation search range to be max_trans
-     * @param steps Taking max_angles angular steps
-     * @param long_reg Longitudinal: read previously computed atlas xform and apply registration long_reg
-     * @param cpfile Read manually defined control points from cpfile
-     * @param translation_vector Translation vector (tx, ty, tz)
-     * @param rotation_vector Rotation vector (rx, ry, rz)
-     * @param xform Using previously computed transform xform
-     * @param blur Blurring input image with sigma=blur_sigma
-     * @param diagno Diago flag (unspecified function)
-     * @param s Max angles
-     * @param max_angle Max angle for rotational search in radians (def=15 deg)
-     * @param niters Niterations = niters
-     * @param write_iters Write iterations = write_iters
-     * @param ctl_point_pct Use top pct percent wm points as control points
-     * @param momentum Set momentum
-     * @param threads Number of threads (nompthreads)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EM_REGISTER_METADATA);
     const params = mri_em_register_params(input_volume, template_gca, output_transform, distance, nomap, flash, mask, skull, uns, diag, debug_voxel, debug_label, tr, te, alpha, example, samples, fsamples, nsamples, contrast, flash_parms, transonly, write_mean, prior, spacing, scales, novar, dt, tol, center, noscale, noiscale, num_transforms, area, nlarea, levels, intensity, reduce, n_samples, norm, trans, steps, long_reg, cpfile, translation_vector, rotation_vector, xform, blur, diagno, s, max_angle, niters, write_iters, ctl_point_pct, momentum, threads)
@@ -883,5 +883,8 @@ export {
       MriEmRegisterOutputs,
       MriEmRegisterParameters,
       mri_em_register,
+      mri_em_register_cargs,
+      mri_em_register_execute,
+      mri_em_register_outputs,
       mri_em_register_params,
 };

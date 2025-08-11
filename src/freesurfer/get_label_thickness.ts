@@ -12,38 +12,38 @@ const GET_LABEL_THICKNESS_METADATA: Metadata = {
 
 
 interface GetLabelThicknessParameters {
-    "__STYXTYPE__": "get_label_thickness";
+    "@type": "freesurfer.get_label_thickness";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "get_label_thickness": get_label_thickness_cargs,
+        "freesurfer.get_label_thickness": get_label_thickness_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface GetLabelThicknessOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file
+ *
+ * @returns Parameter dictionary
+ */
 function get_label_thickness_params(
     infile: InputPathType,
 ): GetLabelThicknessParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "get_label_thickness" as const,
+        "@type": "freesurfer.get_label_thickness" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function get_label_thickness_cargs(
     params: GetLabelThicknessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("get_label_thickness");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -100,18 +100,18 @@ function get_label_thickness_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function get_label_thickness_outputs(
     params: GetLabelThicknessParameters,
     execution: Execution,
 ): GetLabelThicknessOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GetLabelThicknessOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function get_label_thickness_outputs(
 }
 
 
+/**
+ * Tool to calculate label thickness.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
+ */
 function get_label_thickness_execute(
     params: GetLabelThicknessParameters,
     execution: Execution,
 ): GetLabelThicknessOutputs {
-    /**
-     * Tool to calculate label thickness.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
-     */
     params = execution.params(params)
     const cargs = get_label_thickness_cargs(params, execution)
     const ret = get_label_thickness_outputs(params, execution)
@@ -143,22 +143,22 @@ function get_label_thickness_execute(
 }
 
 
+/**
+ * Tool to calculate label thickness.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
+ */
 function get_label_thickness(
     infile: InputPathType,
     runner: Runner | null = null,
 ): GetLabelThicknessOutputs {
-    /**
-     * Tool to calculate label thickness.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GET_LABEL_THICKNESS_METADATA);
     const params = get_label_thickness_params(infile)
@@ -171,5 +171,8 @@ export {
       GetLabelThicknessOutputs,
       GetLabelThicknessParameters,
       get_label_thickness,
+      get_label_thickness_cargs,
+      get_label_thickness_execute,
+      get_label_thickness_outputs,
       get_label_thickness_params,
 };

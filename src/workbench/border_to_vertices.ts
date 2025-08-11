@@ -12,7 +12,7 @@ const BORDER_TO_VERTICES_METADATA: Metadata = {
 
 
 interface BorderToVerticesParameters {
-    "__STYXTYPE__": "border-to-vertices";
+    "@type": "workbench.border-to-vertices";
     "surface": InputPathType;
     "border_file": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface BorderToVerticesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "border-to-vertices": border_to_vertices_cargs,
+        "workbench.border-to-vertices": border_to_vertices_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "border-to-vertices": border_to_vertices_outputs,
+        "workbench.border-to-vertices": border_to_vertices_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface BorderToVerticesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
+ * @param metric_out the output metric file
+ * @param opt_border_name create ROI for only one border: the name of the border
+ *
+ * @returns Parameter dictionary
+ */
 function border_to_vertices_params(
     surface: InputPathType,
     border_file: InputPathType,
     metric_out: string,
     opt_border_name: string | null = null,
 ): BorderToVerticesParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface the borders are drawn on
-     * @param border_file the border file
-     * @param metric_out the output metric file
-     * @param opt_border_name create ROI for only one border: the name of the border
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "border-to-vertices" as const,
+        "@type": "workbench.border-to-vertices" as const,
         "surface": surface,
         "border_file": border_file,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function border_to_vertices_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function border_to_vertices_cargs(
     params: BorderToVerticesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-border-to-vertices");
@@ -128,18 +128,18 @@ function border_to_vertices_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function border_to_vertices_outputs(
     params: BorderToVerticesParameters,
     execution: Execution,
 ): BorderToVerticesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BorderToVerticesOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function border_to_vertices_outputs(
 }
 
 
+/**
+ * Draw borders as vertices in a metric file.
+ *
+ * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
+ */
 function border_to_vertices_execute(
     params: BorderToVerticesParameters,
     execution: Execution,
 ): BorderToVerticesOutputs {
-    /**
-     * Draw borders as vertices in a metric file.
-     * 
-     * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
-     */
     params = execution.params(params)
     const cargs = border_to_vertices_cargs(params, execution)
     const ret = border_to_vertices_outputs(params, execution)
@@ -174,6 +174,23 @@ function border_to_vertices_execute(
 }
 
 
+/**
+ * Draw borders as vertices in a metric file.
+ *
+ * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
+ * @param metric_out the output metric file
+ * @param opt_border_name create ROI for only one border: the name of the border
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
+ */
 function border_to_vertices(
     surface: InputPathType,
     border_file: InputPathType,
@@ -181,23 +198,6 @@ function border_to_vertices(
     opt_border_name: string | null = null,
     runner: Runner | null = null,
 ): BorderToVerticesOutputs {
-    /**
-     * Draw borders as vertices in a metric file.
-     * 
-     * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface the borders are drawn on
-     * @param border_file the border file
-     * @param metric_out the output metric file
-     * @param opt_border_name create ROI for only one border: the name of the border
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BORDER_TO_VERTICES_METADATA);
     const params = border_to_vertices_params(surface, border_file, metric_out, opt_border_name)
@@ -210,5 +210,8 @@ export {
       BorderToVerticesOutputs,
       BorderToVerticesParameters,
       border_to_vertices,
+      border_to_vertices_cargs,
+      border_to_vertices_execute,
+      border_to_vertices_outputs,
       border_to_vertices_params,
 };

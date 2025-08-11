@@ -12,7 +12,7 @@ const V_3DVOLREG_METADATA: Metadata = {
 
 
 interface V3dvolregParameters {
-    "__STYXTYPE__": "3dvolreg";
+    "@type": "afni.3dvolreg";
     "copyorigin": boolean;
     "twopass": boolean;
     "Fourier": boolean;
@@ -31,35 +31,35 @@ interface V3dvolregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dvolreg": v_3dvolreg_cargs,
+        "afni.3dvolreg": v_3dvolreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dvolreg": v_3dvolreg_outputs,
+        "afni.3dvolreg": v_3dvolreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,27 @@ interface V3dvolregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix
+ * @param in_file Input file to 3dvolreg.
+ * @param copyorigin Copy base file origin coords to output.
+ * @param twopass Do two passes of the registration algorithm
+ * @param fourier Perform the alignments using Fourier interpolation.
+ * @param in_weight_volume (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+ * @param in_weight_volume_2 (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+ * @param interp 'fourier' or 'cubic' or 'heptic' or 'quintic' or 'linear'. Spatial interpolation methods [default = heptic].
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param timeshift Time shift to mean slice time offset.
+ * @param verbose More detailed description of the process.
+ * @param basefile Base file for registration.
+ * @param zpad Zeropad around the edges by 'n' voxels during rotations.
+ * @param maxdisp1d Do '-maxdisp' and also write the max displacement for each sub-brick into file 'mm' in 1D (columnar) format.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dvolreg_params(
     prefix: string,
     in_file: InputPathType,
@@ -123,29 +144,8 @@ function v_3dvolreg_params(
     zpad: number | null = null,
     maxdisp1d: string | null = null,
 ): V3dvolregParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix
-     * @param in_file Input file to 3dvolreg.
-     * @param copyorigin Copy base file origin coords to output.
-     * @param twopass Do two passes of the registration algorithm
-     * @param fourier Perform the alignments using Fourier interpolation.
-     * @param in_weight_volume (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
-     * @param in_weight_volume_2 (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
-     * @param interp 'fourier' or 'cubic' or 'heptic' or 'quintic' or 'linear'. Spatial interpolation methods [default = heptic].
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param timeshift Time shift to mean slice time offset.
-     * @param verbose More detailed description of the process.
-     * @param basefile Base file for registration.
-     * @param zpad Zeropad around the edges by 'n' voxels during rotations.
-     * @param maxdisp1d Do '-maxdisp' and also write the max displacement for each sub-brick into file 'mm' in 1D (columnar) format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dvolreg" as const,
+        "@type": "afni.3dvolreg" as const,
         "copyorigin": copyorigin,
         "twopass": twopass,
         "Fourier": fourier,
@@ -182,18 +182,18 @@ function v_3dvolreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dvolreg_cargs(
     params: V3dvolregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dvolreg");
     if ((params["copyorigin"] ?? null)) {
@@ -262,18 +262,18 @@ function v_3dvolreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dvolreg_outputs(
     params: V3dvolregParameters,
     execution: Execution,
 ): V3dvolregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dvolregOutputs = {
         root: execution.outputFile("."),
         md1d_file: execution.outputFile([(params["prefix"] ?? null), "_md.1D"].join('')),
@@ -288,22 +288,22 @@ function v_3dvolreg_outputs(
 }
 
 
+/**
+ * Register input volumes to a base volume using AFNI 3dvolreg command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
+ */
 function v_3dvolreg_execute(
     params: V3dvolregParameters,
     execution: Execution,
 ): V3dvolregOutputs {
-    /**
-     * Register input volumes to a base volume using AFNI 3dvolreg command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dvolreg_cargs(params, execution)
     const ret = v_3dvolreg_outputs(params, execution)
@@ -312,6 +312,32 @@ function v_3dvolreg_execute(
 }
 
 
+/**
+ * Register input volumes to a base volume using AFNI 3dvolreg command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix
+ * @param in_file Input file to 3dvolreg.
+ * @param copyorigin Copy base file origin coords to output.
+ * @param twopass Do two passes of the registration algorithm
+ * @param fourier Perform the alignments using Fourier interpolation.
+ * @param in_weight_volume (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+ * @param in_weight_volume_2 (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+ * @param interp 'fourier' or 'cubic' or 'heptic' or 'quintic' or 'linear'. Spatial interpolation methods [default = heptic].
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param timeshift Time shift to mean slice time offset.
+ * @param verbose More detailed description of the process.
+ * @param basefile Base file for registration.
+ * @param zpad Zeropad around the edges by 'n' voxels during rotations.
+ * @param maxdisp1d Do '-maxdisp' and also write the max displacement for each sub-brick into file 'mm' in 1D (columnar) format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
+ */
 function v_3dvolreg(
     prefix: string,
     in_file: InputPathType,
@@ -330,32 +356,6 @@ function v_3dvolreg(
     maxdisp1d: string | null = null,
     runner: Runner | null = null,
 ): V3dvolregOutputs {
-    /**
-     * Register input volumes to a base volume using AFNI 3dvolreg command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix
-     * @param in_file Input file to 3dvolreg.
-     * @param copyorigin Copy base file origin coords to output.
-     * @param twopass Do two passes of the registration algorithm
-     * @param fourier Perform the alignments using Fourier interpolation.
-     * @param in_weight_volume (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
-     * @param in_weight_volume_2 (file or string, an integer) or file or string. Weights for each voxel specified by a file with an optional volume number (defaults to 0).
-     * @param interp 'fourier' or 'cubic' or 'heptic' or 'quintic' or 'linear'. Spatial interpolation methods [default = heptic].
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param timeshift Time shift to mean slice time offset.
-     * @param verbose More detailed description of the process.
-     * @param basefile Base file for registration.
-     * @param zpad Zeropad around the edges by 'n' voxels during rotations.
-     * @param maxdisp1d Do '-maxdisp' and also write the max displacement for each sub-brick into file 'mm' in 1D (columnar) format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DVOLREG_METADATA);
     const params = v_3dvolreg_params(prefix, in_file, copyorigin, twopass, fourier, in_weight_volume, in_weight_volume_2, interp, num_threads, outputtype, timeshift, verbose, basefile, zpad, maxdisp1d)
@@ -368,5 +368,8 @@ export {
       V3dvolregParameters,
       V_3DVOLREG_METADATA,
       v_3dvolreg,
+      v_3dvolreg_cargs,
+      v_3dvolreg_execute,
+      v_3dvolreg_outputs,
       v_3dvolreg_params,
 };

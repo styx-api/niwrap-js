@@ -12,42 +12,42 @@ const V_3D_CONVOLVE_METADATA: Metadata = {
 
 
 interface V3dConvolveParameters {
-    "__STYXTYPE__": "3dConvolve";
+    "@type": "afni.3dConvolve";
     "infile": InputPathType;
     "outfile": string;
     "options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dConvolve": v_3d_convolve_cargs,
+        "afni.3dConvolve": v_3d_convolve_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dConvolve": v_3d_convolve_outputs,
+        "afni.3dConvolve": v_3d_convolve_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dConvolveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file for 3dConvolve
+ * @param outfile Output file for 3dConvolve
+ * @param options Additional options for 3dConvolve
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_convolve_params(
     infile: InputPathType,
     outfile: string,
     options: string | null = null,
 ): V3dConvolveParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file for 3dConvolve
-     * @param outfile Output file for 3dConvolve
-     * @param options Additional options for 3dConvolve
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dConvolve" as const,
+        "@type": "afni.3dConvolve" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -96,18 +96,18 @@ function v_3d_convolve_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_convolve_cargs(
     params: V3dConvolveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dConvolve");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -122,18 +122,18 @@ function v_3d_convolve_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_convolve_outputs(
     params: V3dConvolveParameters,
     execution: Execution,
 ): V3dConvolveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dConvolveOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function v_3d_convolve_outputs(
 }
 
 
+/**
+ * 3dConvolve is no longer supported in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
+ */
 function v_3d_convolve_execute(
     params: V3dConvolveParameters,
     execution: Execution,
 ): V3dConvolveOutputs {
-    /**
-     * 3dConvolve is no longer supported in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_convolve_cargs(params, execution)
     const ret = v_3d_convolve_outputs(params, execution)
@@ -166,26 +166,26 @@ function v_3d_convolve_execute(
 }
 
 
+/**
+ * 3dConvolve is no longer supported in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input file for 3dConvolve
+ * @param outfile Output file for 3dConvolve
+ * @param options Additional options for 3dConvolve
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
+ */
 function v_3d_convolve(
     infile: InputPathType,
     outfile: string,
     options: string | null = null,
     runner: Runner | null = null,
 ): V3dConvolveOutputs {
-    /**
-     * 3dConvolve is no longer supported in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input file for 3dConvolve
-     * @param outfile Output file for 3dConvolve
-     * @param options Additional options for 3dConvolve
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CONVOLVE_METADATA);
     const params = v_3d_convolve_params(infile, outfile, options)
@@ -198,5 +198,8 @@ export {
       V3dConvolveParameters,
       V_3D_CONVOLVE_METADATA,
       v_3d_convolve,
+      v_3d_convolve_cargs,
+      v_3d_convolve_execute,
+      v_3d_convolve_outputs,
       v_3d_convolve_params,
 };

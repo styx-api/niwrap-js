@@ -12,7 +12,7 @@ const MRI_LABEL_VALS_METADATA: Metadata = {
 
 
 interface MriLabelValsParameters {
-    "__STYXTYPE__": "mri_label_vals";
+    "@type": "freesurfer.mri_label_vals";
     "volume": InputPathType;
     "label_file": InputPathType;
     "cras_flag": boolean;
@@ -20,33 +20,33 @@ interface MriLabelValsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_label_vals": mri_label_vals_cargs,
+        "freesurfer.mri_label_vals": mri_label_vals_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MriLabelValsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume Input volume file
+ * @param label_file Input label file
+ * @param cras_flag Use this option if the label was created where c_(r,a,s) != 0
+ * @param help_flag Print help
+ *
+ * @returns Parameter dictionary
+ */
 function mri_label_vals_params(
     volume: InputPathType,
     label_file: InputPathType,
     cras_flag: boolean = false,
     help_flag: boolean = false,
 ): MriLabelValsParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume Input volume file
-     * @param label_file Input label file
-     * @param cras_flag Use this option if the label was created where c_(r,a,s) != 0
-     * @param help_flag Print help
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_label_vals" as const,
+        "@type": "freesurfer.mri_label_vals" as const,
         "volume": volume,
         "label_file": label_file,
         "cras_flag": cras_flag,
@@ -93,18 +93,18 @@ function mri_label_vals_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_label_vals_cargs(
     params: MriLabelValsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_label_vals");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -119,18 +119,18 @@ function mri_label_vals_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_label_vals_outputs(
     params: MriLabelValsParameters,
     execution: Execution,
 ): MriLabelValsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLabelValsOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function mri_label_vals_outputs(
 }
 
 
+/**
+ * Extract values at label coordinates from a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
+ */
 function mri_label_vals_execute(
     params: MriLabelValsParameters,
     execution: Execution,
 ): MriLabelValsOutputs {
-    /**
-     * Extract values at label coordinates from a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_label_vals_cargs(params, execution)
     const ret = mri_label_vals_outputs(params, execution)
@@ -162,6 +162,21 @@ function mri_label_vals_execute(
 }
 
 
+/**
+ * Extract values at label coordinates from a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume Input volume file
+ * @param label_file Input label file
+ * @param cras_flag Use this option if the label was created where c_(r,a,s) != 0
+ * @param help_flag Print help
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
+ */
 function mri_label_vals(
     volume: InputPathType,
     label_file: InputPathType,
@@ -169,21 +184,6 @@ function mri_label_vals(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriLabelValsOutputs {
-    /**
-     * Extract values at label coordinates from a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume Input volume file
-     * @param label_file Input label file
-     * @param cras_flag Use this option if the label was created where c_(r,a,s) != 0
-     * @param help_flag Print help
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LABEL_VALS_METADATA);
     const params = mri_label_vals_params(volume, label_file, cras_flag, help_flag)
@@ -196,5 +196,8 @@ export {
       MriLabelValsOutputs,
       MriLabelValsParameters,
       mri_label_vals,
+      mri_label_vals_cargs,
+      mri_label_vals_execute,
+      mri_label_vals_outputs,
       mri_label_vals_params,
 };

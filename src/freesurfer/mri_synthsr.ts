@@ -12,7 +12,7 @@ const MRI_SYNTHSR_METADATA: Metadata = {
 
 
 interface MriSynthsrParameters {
-    "__STYXTYPE__": "mri_synthsr";
+    "@type": "freesurfer.mri_synthsr";
     "input": string;
     "output": string;
     "ct": boolean;
@@ -26,33 +26,33 @@ interface MriSynthsrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthsr": mri_synthsr_cargs,
+        "freesurfer.mri_synthsr": mri_synthsr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface MriSynthsrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Image(s) to super-resolve. Can be a path to an image or to a folder.
+ * @param output Output(s), i.e., synthetic 1mm MP-RAGE(s). Must be a folder if input is a folder.
+ * @param ct Use this flag for CT scans in Hounsfield scale, it clips intensities to [0,80].
+ * @param disable_sharpening Use this flag to disable unsharp masking.
+ * @param disable_flipping Use this flag to disable flipping augmentation at test time.
+ * @param lowfield Use model for low-field scans (e.g., acquired with Hyperfine's Swoop scanner).
+ * @param v1 Use version 1 model from July 2021.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param cpu Enforce running with CPU rather than GPU.
+ * @param model Use a different model file.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthsr_params(
     input: string,
     output: string,
@@ -84,24 +100,8 @@ function mri_synthsr_params(
     cpu: boolean = false,
     model: string | null = null,
 ): MriSynthsrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Image(s) to super-resolve. Can be a path to an image or to a folder.
-     * @param output Output(s), i.e., synthetic 1mm MP-RAGE(s). Must be a folder if input is a folder.
-     * @param ct Use this flag for CT scans in Hounsfield scale, it clips intensities to [0,80].
-     * @param disable_sharpening Use this flag to disable unsharp masking.
-     * @param disable_flipping Use this flag to disable flipping augmentation at test time.
-     * @param lowfield Use model for low-field scans (e.g., acquired with Hyperfine's Swoop scanner).
-     * @param v1 Use version 1 model from July 2021.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param cpu Enforce running with CPU rather than GPU.
-     * @param model Use a different model file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthsr" as const,
+        "@type": "freesurfer.mri_synthsr" as const,
         "input": input,
         "output": output,
         "ct": ct,
@@ -121,18 +121,18 @@ function mri_synthsr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthsr_cargs(
     params: MriSynthsrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthsr");
     cargs.push((params["input"] ?? null));
@@ -171,18 +171,18 @@ function mri_synthsr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthsr_outputs(
     params: MriSynthsrParameters,
     execution: Execution,
 ): MriSynthsrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthsrOutputs = {
         root: execution.outputFile("."),
     };
@@ -190,22 +190,22 @@ function mri_synthsr_outputs(
 }
 
 
+/**
+ * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
+ */
 function mri_synthsr_execute(
     params: MriSynthsrParameters,
     execution: Execution,
 ): MriSynthsrOutputs {
-    /**
-     * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthsr_cargs(params, execution)
     const ret = mri_synthsr_outputs(params, execution)
@@ -214,6 +214,27 @@ function mri_synthsr_execute(
 }
 
 
+/**
+ * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input Image(s) to super-resolve. Can be a path to an image or to a folder.
+ * @param output Output(s), i.e., synthetic 1mm MP-RAGE(s). Must be a folder if input is a folder.
+ * @param ct Use this flag for CT scans in Hounsfield scale, it clips intensities to [0,80].
+ * @param disable_sharpening Use this flag to disable unsharp masking.
+ * @param disable_flipping Use this flag to disable flipping augmentation at test time.
+ * @param lowfield Use model for low-field scans (e.g., acquired with Hyperfine's Swoop scanner).
+ * @param v1 Use version 1 model from July 2021.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param cpu Enforce running with CPU rather than GPU.
+ * @param model Use a different model file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
+ */
 function mri_synthsr(
     input: string,
     output: string,
@@ -227,27 +248,6 @@ function mri_synthsr(
     model: string | null = null,
     runner: Runner | null = null,
 ): MriSynthsrOutputs {
-    /**
-     * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input Image(s) to super-resolve. Can be a path to an image or to a folder.
-     * @param output Output(s), i.e., synthetic 1mm MP-RAGE(s). Must be a folder if input is a folder.
-     * @param ct Use this flag for CT scans in Hounsfield scale, it clips intensities to [0,80].
-     * @param disable_sharpening Use this flag to disable unsharp masking.
-     * @param disable_flipping Use this flag to disable flipping augmentation at test time.
-     * @param lowfield Use model for low-field scans (e.g., acquired with Hyperfine's Swoop scanner).
-     * @param v1 Use version 1 model from July 2021.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param cpu Enforce running with CPU rather than GPU.
-     * @param model Use a different model file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHSR_METADATA);
     const params = mri_synthsr_params(input, output, ct, disable_sharpening, disable_flipping, lowfield, v1, threads, cpu, model)
@@ -260,5 +260,8 @@ export {
       MriSynthsrOutputs,
       MriSynthsrParameters,
       mri_synthsr,
+      mri_synthsr_cargs,
+      mri_synthsr_execute,
+      mri_synthsr_outputs,
       mri_synthsr_params,
 };

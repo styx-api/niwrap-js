@@ -12,7 +12,7 @@ const MRIS_LEFT_RIGHT_REGISTER_METADATA: Metadata = {
 
 
 interface MrisLeftRightRegisterParameters {
-    "__STYXTYPE__": "mris_left_right_register";
+    "@type": "freesurfer.mris_left_right_register";
     "lh_sphere": InputPathType;
     "rh_sphere": InputPathType;
     "lh_sphere_left_right": string;
@@ -20,35 +20,35 @@ interface MrisLeftRightRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_left_right_register": mris_left_right_register_cargs,
+        "freesurfer.mris_left_right_register": mris_left_right_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_left_right_register": mris_left_right_register_outputs,
+        "freesurfer.mris_left_right_register": mris_left_right_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface MrisLeftRightRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param lh_sphere Left hemisphere spherical surface input file
+ * @param rh_sphere Right hemisphere spherical surface input file
+ * @param lh_sphere_left_right Output file for left hemisphere with left-right registration
+ * @param rh_sphere_left_right Output file for right hemisphere with left-right registration
+ *
+ * @returns Parameter dictionary
+ */
 function mris_left_right_register_params(
     lh_sphere: InputPathType,
     rh_sphere: InputPathType,
     lh_sphere_left_right: string,
     rh_sphere_left_right: string,
 ): MrisLeftRightRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param lh_sphere Left hemisphere spherical surface input file
-     * @param rh_sphere Right hemisphere spherical surface input file
-     * @param lh_sphere_left_right Output file for left hemisphere with left-right registration
-     * @param rh_sphere_left_right Output file for right hemisphere with left-right registration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_left_right_register" as const,
+        "@type": "freesurfer.mris_left_right_register" as const,
         "lh_sphere": lh_sphere,
         "rh_sphere": rh_sphere,
         "lh_sphere_left_right": lh_sphere_left_right,
@@ -102,18 +102,18 @@ function mris_left_right_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_left_right_register_cargs(
     params: MrisLeftRightRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_left_right_register");
     cargs.push(execution.inputFile((params["lh_sphere"] ?? null)));
@@ -124,18 +124,18 @@ function mris_left_right_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_left_right_register_outputs(
     params: MrisLeftRightRegisterParameters,
     execution: Execution,
 ): MrisLeftRightRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisLeftRightRegisterOutputs = {
         root: execution.outputFile("."),
         out_lh_sphere_left_right: execution.outputFile([(params["lh_sphere_left_right"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function mris_left_right_register_outputs(
 }
 
 
+/**
+ * Register left and right hemisphere spherical surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
+ */
 function mris_left_right_register_execute(
     params: MrisLeftRightRegisterParameters,
     execution: Execution,
 ): MrisLeftRightRegisterOutputs {
-    /**
-     * Register left and right hemisphere spherical surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_left_right_register_cargs(params, execution)
     const ret = mris_left_right_register_outputs(params, execution)
@@ -169,6 +169,21 @@ function mris_left_right_register_execute(
 }
 
 
+/**
+ * Register left and right hemisphere spherical surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param lh_sphere Left hemisphere spherical surface input file
+ * @param rh_sphere Right hemisphere spherical surface input file
+ * @param lh_sphere_left_right Output file for left hemisphere with left-right registration
+ * @param rh_sphere_left_right Output file for right hemisphere with left-right registration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
+ */
 function mris_left_right_register(
     lh_sphere: InputPathType,
     rh_sphere: InputPathType,
@@ -176,21 +191,6 @@ function mris_left_right_register(
     rh_sphere_left_right: string,
     runner: Runner | null = null,
 ): MrisLeftRightRegisterOutputs {
-    /**
-     * Register left and right hemisphere spherical surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param lh_sphere Left hemisphere spherical surface input file
-     * @param rh_sphere Right hemisphere spherical surface input file
-     * @param lh_sphere_left_right Output file for left hemisphere with left-right registration
-     * @param rh_sphere_left_right Output file for right hemisphere with left-right registration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LEFT_RIGHT_REGISTER_METADATA);
     const params = mris_left_right_register_params(lh_sphere, rh_sphere, lh_sphere_left_right, rh_sphere_left_right)
@@ -203,5 +203,8 @@ export {
       MrisLeftRightRegisterOutputs,
       MrisLeftRightRegisterParameters,
       mris_left_right_register,
+      mris_left_right_register_cargs,
+      mris_left_right_register_execute,
+      mris_left_right_register_outputs,
       mris_left_right_register_params,
 };

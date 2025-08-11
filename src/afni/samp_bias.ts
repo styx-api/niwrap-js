@@ -12,7 +12,7 @@ const SAMP_BIAS_METADATA: Metadata = {
 
 
 interface SampBiasParameters {
-    "__STYXTYPE__": "SampBias";
+    "@type": "afni.SampBias";
     "specfile": InputPathType;
     "surfname": string;
     "plimit"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface SampBiasParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SampBias": samp_bias_cargs,
+        "afni.SampBias": samp_bias_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SampBias": samp_bias_outputs,
+        "afni.SampBias": samp_bias_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface SampBiasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param specfile Spec file containing input surfaces.
+ * @param surfname Name of input surface.
+ * @param outfile Output results in .1D format.
+ * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
+ * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
+ * @param prefix Output results into a proper surface-based dataset.
+ * @param segdo Output a displayable object file that contains segments between paired nodes.
+ *
+ * @returns Parameter dictionary
+ */
 function samp_bias_params(
     specfile: InputPathType,
     surfname: string,
@@ -87,21 +100,8 @@ function samp_bias_params(
     prefix: string | null = null,
     segdo: string | null = null,
 ): SampBiasParameters {
-    /**
-     * Build parameters.
-    
-     * @param specfile Spec file containing input surfaces.
-     * @param surfname Name of input surface.
-     * @param outfile Output results in .1D format.
-     * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
-     * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
-     * @param prefix Output results into a proper surface-based dataset.
-     * @param segdo Output a displayable object file that contains segments between paired nodes.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SampBias" as const,
+        "@type": "afni.SampBias" as const,
         "specfile": specfile,
         "surfname": surfname,
         "outfile": outfile,
@@ -122,18 +122,18 @@ function samp_bias_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function samp_bias_cargs(
     params: SampBiasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SampBias");
     cargs.push(
@@ -176,18 +176,18 @@ function samp_bias_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function samp_bias_outputs(
     params: SampBiasParameters,
     execution: Execution,
 ): SampBiasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SampBiasOutputs = {
         root: execution.outputFile("."),
         out_1_d: execution.outputFile([(params["outfile"] ?? null), ".1D"].join('')),
@@ -197,22 +197,22 @@ function samp_bias_outputs(
 }
 
 
+/**
+ * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
+ */
 function samp_bias_execute(
     params: SampBiasParameters,
     execution: Execution,
 ): SampBiasOutputs {
-    /**
-     * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
-     */
     params = execution.params(params)
     const cargs = samp_bias_cargs(params, execution)
     const ret = samp_bias_outputs(params, execution)
@@ -221,6 +221,24 @@ function samp_bias_execute(
 }
 
 
+/**
+ * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param specfile Spec file containing input surfaces.
+ * @param surfname Name of input surface.
+ * @param outfile Output results in .1D format.
+ * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
+ * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
+ * @param prefix Output results into a proper surface-based dataset.
+ * @param segdo Output a displayable object file that contains segments between paired nodes.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
+ */
 function samp_bias(
     specfile: InputPathType,
     surfname: string,
@@ -231,24 +249,6 @@ function samp_bias(
     segdo: string | null = null,
     runner: Runner | null = null,
 ): SampBiasOutputs {
-    /**
-     * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param specfile Spec file containing input surfaces.
-     * @param surfname Name of input surface.
-     * @param outfile Output results in .1D format.
-     * @param plimit Maximum length of path along surface in mm. Default is 50 mm.
-     * @param dlimit Maximum length of euclidean distance in mm. Default is 1000 mm.
-     * @param prefix Output results into a proper surface-based dataset.
-     * @param segdo Output a displayable object file that contains segments between paired nodes.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMP_BIAS_METADATA);
     const params = samp_bias_params(specfile, surfname, outfile, plimit, dlimit, prefix, segdo)
@@ -261,5 +261,8 @@ export {
       SampBiasOutputs,
       SampBiasParameters,
       samp_bias,
+      samp_bias_cargs,
+      samp_bias_execute,
+      samp_bias_outputs,
       samp_bias_params,
 };

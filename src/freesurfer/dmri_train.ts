@@ -12,7 +12,7 @@ const DMRI_TRAIN_METADATA: Metadata = {
 
 
 interface DmriTrainParameters {
-    "__STYXTYPE__": "dmri_train";
+    "@type": "freesurfer.dmri_train";
     "slist": InputPathType;
     "trk_files": Array<InputPathType>;
     "rois"?: Array<InputPathType> | null | undefined;
@@ -44,33 +44,33 @@ interface DmriTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_train": dmri_train_cargs,
+        "freesurfer.dmri_train": dmri_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -90,6 +90,40 @@ interface DmriTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param slist Text file with list of training subject directories
+ * @param trk_files Name(s) of input .trk file(s), one per path
+ * @param seg Name of input aparc+aseg volume
+ * @param cmask Name of input cortex mask volume
+ * @param lmask Add a label ID from aparc+aseg to cortex mask, one per path
+ * @param bmask_training Input brain mask volume(s)
+ * @param outtrk Name(s) of output, pre-sorted .trk file(s), one per path
+ * @param bmask_test Input brain mask volume(s) for test subject
+ * @param ncpts Number of control points for initial spline
+ * @param max_streamlines Maximum number of training streamlines to keep per path
+ * @param out_files Base name(s) of output(s) for test subject, one per path
+ * @param rois Optional, names of input tract labeling ROIs, two per path
+ * @param fa Input FA volume(s) for test subject
+ * @param reg Affine registration from atlas to base space
+ * @param regnl Nonlinear registration from atlas to base space
+ * @param refnl Nonlinear registration source reference volume
+ * @param basereg Affine registration(s) from base to FA volume(s)
+ * @param baseref Base space reference volume
+ * @param xstr Exclude previously chosen center streamline(s)
+ * @param aprior Compute priors on underlying anatomy
+ * @param sprior Compute priors on shape
+ * @param trunc Use all training streamlines, truncated or not
+ * @param outdir Output directory
+ * @param cptdir Output directory for control points in test subject's space
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_train_params(
     slist: InputPathType,
     trk_files: Array<InputPathType>,
@@ -120,42 +154,8 @@ function dmri_train_params(
     help: boolean = false,
     version: boolean = false,
 ): DmriTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param slist Text file with list of training subject directories
-     * @param trk_files Name(s) of input .trk file(s), one per path
-     * @param seg Name of input aparc+aseg volume
-     * @param cmask Name of input cortex mask volume
-     * @param lmask Add a label ID from aparc+aseg to cortex mask, one per path
-     * @param bmask_training Input brain mask volume(s)
-     * @param outtrk Name(s) of output, pre-sorted .trk file(s), one per path
-     * @param bmask_test Input brain mask volume(s) for test subject
-     * @param ncpts Number of control points for initial spline
-     * @param max_streamlines Maximum number of training streamlines to keep per path
-     * @param out_files Base name(s) of output(s) for test subject, one per path
-     * @param rois Optional, names of input tract labeling ROIs, two per path
-     * @param fa Input FA volume(s) for test subject
-     * @param reg Affine registration from atlas to base space
-     * @param regnl Nonlinear registration from atlas to base space
-     * @param refnl Nonlinear registration source reference volume
-     * @param basereg Affine registration(s) from base to FA volume(s)
-     * @param baseref Base space reference volume
-     * @param xstr Exclude previously chosen center streamline(s)
-     * @param aprior Compute priors on underlying anatomy
-     * @param sprior Compute priors on shape
-     * @param trunc Use all training streamlines, truncated or not
-     * @param outdir Output directory
-     * @param cptdir Output directory for control points in test subject's space
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_train" as const,
+        "@type": "freesurfer.dmri_train" as const,
         "slist": slist,
         "trk_files": trk_files,
         "seg": seg,
@@ -207,18 +207,18 @@ function dmri_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_train_cargs(
     params: DmriTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_train");
     cargs.push(
@@ -347,18 +347,18 @@ function dmri_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_train_outputs(
     params: DmriTrainParameters,
     execution: Execution,
 ): DmriTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriTrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -366,22 +366,22 @@ function dmri_train_outputs(
 }
 
 
+/**
+ * DMRI training tool for processing diffusion MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
+ */
 function dmri_train_execute(
     params: DmriTrainParameters,
     execution: Execution,
 ): DmriTrainOutputs {
-    /**
-     * DMRI training tool for processing diffusion MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_train_cargs(params, execution)
     const ret = dmri_train_outputs(params, execution)
@@ -390,6 +390,45 @@ function dmri_train_execute(
 }
 
 
+/**
+ * DMRI training tool for processing diffusion MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param slist Text file with list of training subject directories
+ * @param trk_files Name(s) of input .trk file(s), one per path
+ * @param seg Name of input aparc+aseg volume
+ * @param cmask Name of input cortex mask volume
+ * @param lmask Add a label ID from aparc+aseg to cortex mask, one per path
+ * @param bmask_training Input brain mask volume(s)
+ * @param outtrk Name(s) of output, pre-sorted .trk file(s), one per path
+ * @param bmask_test Input brain mask volume(s) for test subject
+ * @param ncpts Number of control points for initial spline
+ * @param max_streamlines Maximum number of training streamlines to keep per path
+ * @param out_files Base name(s) of output(s) for test subject, one per path
+ * @param rois Optional, names of input tract labeling ROIs, two per path
+ * @param fa Input FA volume(s) for test subject
+ * @param reg Affine registration from atlas to base space
+ * @param regnl Nonlinear registration from atlas to base space
+ * @param refnl Nonlinear registration source reference volume
+ * @param basereg Affine registration(s) from base to FA volume(s)
+ * @param baseref Base space reference volume
+ * @param xstr Exclude previously chosen center streamline(s)
+ * @param aprior Compute priors on underlying anatomy
+ * @param sprior Compute priors on shape
+ * @param trunc Use all training streamlines, truncated or not
+ * @param outdir Output directory
+ * @param cptdir Output directory for control points in test subject's space
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
+ */
 function dmri_train(
     slist: InputPathType,
     trk_files: Array<InputPathType>,
@@ -421,45 +460,6 @@ function dmri_train(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriTrainOutputs {
-    /**
-     * DMRI training tool for processing diffusion MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param slist Text file with list of training subject directories
-     * @param trk_files Name(s) of input .trk file(s), one per path
-     * @param seg Name of input aparc+aseg volume
-     * @param cmask Name of input cortex mask volume
-     * @param lmask Add a label ID from aparc+aseg to cortex mask, one per path
-     * @param bmask_training Input brain mask volume(s)
-     * @param outtrk Name(s) of output, pre-sorted .trk file(s), one per path
-     * @param bmask_test Input brain mask volume(s) for test subject
-     * @param ncpts Number of control points for initial spline
-     * @param max_streamlines Maximum number of training streamlines to keep per path
-     * @param out_files Base name(s) of output(s) for test subject, one per path
-     * @param rois Optional, names of input tract labeling ROIs, two per path
-     * @param fa Input FA volume(s) for test subject
-     * @param reg Affine registration from atlas to base space
-     * @param regnl Nonlinear registration from atlas to base space
-     * @param refnl Nonlinear registration source reference volume
-     * @param basereg Affine registration(s) from base to FA volume(s)
-     * @param baseref Base space reference volume
-     * @param xstr Exclude previously chosen center streamline(s)
-     * @param aprior Compute priors on underlying anatomy
-     * @param sprior Compute priors on shape
-     * @param trunc Use all training streamlines, truncated or not
-     * @param outdir Output directory
-     * @param cptdir Output directory for control points in test subject's space
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_TRAIN_METADATA);
     const params = dmri_train_params(slist, trk_files, seg, cmask, lmask, bmask_training, outtrk, bmask_test, ncpts, max_streamlines, out_files, rois, fa, reg, regnl, refnl, basereg, baseref, xstr, aprior, sprior, trunc, outdir, cptdir, debug, checkopts, help, version)
@@ -472,5 +472,8 @@ export {
       DmriTrainOutputs,
       DmriTrainParameters,
       dmri_train,
+      dmri_train_cargs,
+      dmri_train_execute,
+      dmri_train_outputs,
       dmri_train_params,
 };

@@ -12,7 +12,7 @@ const CIFTI_ROI_AVERAGE_METADATA: Metadata = {
 
 
 interface CiftiRoiAverageParameters {
-    "__STYXTYPE__": "cifti-roi-average";
+    "@type": "workbench.cifti-roi-average";
     "cifti_in": InputPathType;
     "text_out": string;
     "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
@@ -23,33 +23,33 @@ interface CiftiRoiAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-roi-average": cifti_roi_average_cargs,
+        "workbench.cifti-roi-average": cifti_roi_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface CiftiRoiAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the cifti file to average rows from
+ * @param text_out output text file of the average values
+ * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
+ * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_roi_average_params(
     cifti_in: InputPathType,
     text_out: string,
@@ -78,21 +91,8 @@ function cifti_roi_average_params(
     opt_cerebellum_roi_roi_metric: InputPathType | null = null,
     opt_vol_roi_roi_vol: InputPathType | null = null,
 ): CiftiRoiAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the cifti file to average rows from
-     * @param text_out output text file of the average values
-     * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
-     * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-roi-average" as const,
+        "@type": "workbench.cifti-roi-average" as const,
         "cifti_in": cifti_in,
         "text_out": text_out,
     };
@@ -115,18 +115,18 @@ function cifti_roi_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_roi_average_cargs(
     params: CiftiRoiAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-roi-average");
@@ -166,18 +166,18 @@ function cifti_roi_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_roi_average_outputs(
     params: CiftiRoiAverageParameters,
     execution: Execution,
 ): CiftiRoiAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiRoiAverageOutputs = {
         root: execution.outputFile("."),
     };
@@ -185,24 +185,24 @@ function cifti_roi_average_outputs(
 }
 
 
+/**
+ * Average rows in a single cifti file.
+ *
+ * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
+ */
 function cifti_roi_average_execute(
     params: CiftiRoiAverageParameters,
     execution: Execution,
 ): CiftiRoiAverageOutputs {
-    /**
-     * Average rows in a single cifti file.
-     * 
-     * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_roi_average_cargs(params, execution)
     const ret = cifti_roi_average_outputs(params, execution)
@@ -211,6 +211,26 @@ function cifti_roi_average_execute(
 }
 
 
+/**
+ * Average rows in a single cifti file.
+ *
+ * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the cifti file to average rows from
+ * @param text_out output text file of the average values
+ * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
+ * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
+ */
 function cifti_roi_average(
     cifti_in: InputPathType,
     text_out: string,
@@ -221,26 +241,6 @@ function cifti_roi_average(
     opt_vol_roi_roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
-    /**
-     * Average rows in a single cifti file.
-     * 
-     * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the cifti file to average rows from
-     * @param text_out output text file of the average values
-     * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
-     * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_ROI_AVERAGE_METADATA);
     const params = cifti_roi_average_params(cifti_in, text_out, opt_cifti_roi_roi_cifti, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol)
@@ -253,5 +253,8 @@ export {
       CiftiRoiAverageOutputs,
       CiftiRoiAverageParameters,
       cifti_roi_average,
+      cifti_roi_average_cargs,
+      cifti_roi_average_execute,
+      cifti_roi_average_outputs,
       cifti_roi_average_params,
 };

@@ -12,7 +12,7 @@ const MRIS_AUTODET_GWSTATS_METADATA: Metadata = {
 
 
 interface MrisAutodetGwstatsParameters {
-    "__STYXTYPE__": "mris_autodet_gwstats";
+    "@type": "freesurfer.mris_autodet_gwstats";
     "output_file": string;
     "t1w_volume": InputPathType;
     "wm_volume": InputPathType;
@@ -31,35 +31,35 @@ interface MrisAutodetGwstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_autodet_gwstats": mris_autodet_gwstats_cargs,
+        "freesurfer.mris_autodet_gwstats": mris_autodet_gwstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_autodet_gwstats": mris_autodet_gwstats_outputs,
+        "freesurfer.mris_autodet_gwstats": mris_autodet_gwstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface MrisAutodetGwstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output text file with stats
+ * @param t1w_volume T1 weighted volume (usually brain.finalsurfs.mgz)
+ * @param wm_volume White matter volume (usually wm.mgz)
+ * @param surf Surface (usually ?h.orig)
+ * @param subject Subject: reads in brain.finalsurfs.mgz, wm.mgz, lh.orig and rh.orig
+ * @param subjects_dir SUBJECTS_DIR
+ * @param lhsurf Left hemisphere surface
+ * @param rhsurf Right hemisphere surface
+ * @param min_border_white Minimum border white (MinBW)
+ * @param max_border_white Maximum border white (MaxBW)
+ * @param min_gray_at_white_border Minimum gray at white border (MinGWB)
+ * @param max_gray Maximum gray (MaxG)
+ * @param max_gray_at_csf_border Maximum gray at CSF border (MaxGCSFB)
+ * @param min_gray_at_csf_border Minimum gray at CSF border (MinGCSFB)
+ * @param max_csf Maximum CSF (MaxCSF)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_autodet_gwstats_params(
     output_file: string,
     t1w_volume: InputPathType,
@@ -99,29 +120,8 @@ function mris_autodet_gwstats_params(
     min_gray_at_csf_border: number | null = null,
     max_csf: number | null = null,
 ): MrisAutodetGwstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output text file with stats
-     * @param t1w_volume T1 weighted volume (usually brain.finalsurfs.mgz)
-     * @param wm_volume White matter volume (usually wm.mgz)
-     * @param surf Surface (usually ?h.orig)
-     * @param subject Subject: reads in brain.finalsurfs.mgz, wm.mgz, lh.orig and rh.orig
-     * @param subjects_dir SUBJECTS_DIR
-     * @param lhsurf Left hemisphere surface
-     * @param rhsurf Right hemisphere surface
-     * @param min_border_white Minimum border white (MinBW)
-     * @param max_border_white Maximum border white (MaxBW)
-     * @param min_gray_at_white_border Minimum gray at white border (MinGWB)
-     * @param max_gray Maximum gray (MaxG)
-     * @param max_gray_at_csf_border Maximum gray at CSF border (MaxGCSFB)
-     * @param min_gray_at_csf_border Minimum gray at CSF border (MinGCSFB)
-     * @param max_csf Maximum CSF (MaxCSF)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_autodet_gwstats" as const,
+        "@type": "freesurfer.mris_autodet_gwstats" as const,
         "output_file": output_file,
         "t1w_volume": t1w_volume,
         "wm_volume": wm_volume,
@@ -160,18 +160,18 @@ function mris_autodet_gwstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_autodet_gwstats_cargs(
     params: MrisAutodetGwstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_autodet_gwstats");
     cargs.push(
@@ -256,18 +256,18 @@ function mris_autodet_gwstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_autodet_gwstats_outputs(
     params: MrisAutodetGwstatsParameters,
     execution: Execution,
 ): MrisAutodetGwstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisAutodetGwstatsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -276,22 +276,22 @@ function mris_autodet_gwstats_outputs(
 }
 
 
+/**
+ * Manages the computation of the gray/white statistics used to place the white and pial surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
+ */
 function mris_autodet_gwstats_execute(
     params: MrisAutodetGwstatsParameters,
     execution: Execution,
 ): MrisAutodetGwstatsOutputs {
-    /**
-     * Manages the computation of the gray/white statistics used to place the white and pial surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_autodet_gwstats_cargs(params, execution)
     const ret = mris_autodet_gwstats_outputs(params, execution)
@@ -300,6 +300,32 @@ function mris_autodet_gwstats_execute(
 }
 
 
+/**
+ * Manages the computation of the gray/white statistics used to place the white and pial surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_file Output text file with stats
+ * @param t1w_volume T1 weighted volume (usually brain.finalsurfs.mgz)
+ * @param wm_volume White matter volume (usually wm.mgz)
+ * @param surf Surface (usually ?h.orig)
+ * @param subject Subject: reads in brain.finalsurfs.mgz, wm.mgz, lh.orig and rh.orig
+ * @param subjects_dir SUBJECTS_DIR
+ * @param lhsurf Left hemisphere surface
+ * @param rhsurf Right hemisphere surface
+ * @param min_border_white Minimum border white (MinBW)
+ * @param max_border_white Maximum border white (MaxBW)
+ * @param min_gray_at_white_border Minimum gray at white border (MinGWB)
+ * @param max_gray Maximum gray (MaxG)
+ * @param max_gray_at_csf_border Maximum gray at CSF border (MaxGCSFB)
+ * @param min_gray_at_csf_border Minimum gray at CSF border (MinGCSFB)
+ * @param max_csf Maximum CSF (MaxCSF)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
+ */
 function mris_autodet_gwstats(
     output_file: string,
     t1w_volume: InputPathType,
@@ -318,32 +344,6 @@ function mris_autodet_gwstats(
     max_csf: number | null = null,
     runner: Runner | null = null,
 ): MrisAutodetGwstatsOutputs {
-    /**
-     * Manages the computation of the gray/white statistics used to place the white and pial surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_file Output text file with stats
-     * @param t1w_volume T1 weighted volume (usually brain.finalsurfs.mgz)
-     * @param wm_volume White matter volume (usually wm.mgz)
-     * @param surf Surface (usually ?h.orig)
-     * @param subject Subject: reads in brain.finalsurfs.mgz, wm.mgz, lh.orig and rh.orig
-     * @param subjects_dir SUBJECTS_DIR
-     * @param lhsurf Left hemisphere surface
-     * @param rhsurf Right hemisphere surface
-     * @param min_border_white Minimum border white (MinBW)
-     * @param max_border_white Maximum border white (MaxBW)
-     * @param min_gray_at_white_border Minimum gray at white border (MinGWB)
-     * @param max_gray Maximum gray (MaxG)
-     * @param max_gray_at_csf_border Maximum gray at CSF border (MaxGCSFB)
-     * @param min_gray_at_csf_border Minimum gray at CSF border (MinGCSFB)
-     * @param max_csf Maximum CSF (MaxCSF)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_AUTODET_GWSTATS_METADATA);
     const params = mris_autodet_gwstats_params(output_file, t1w_volume, wm_volume, surf, subject, subjects_dir, lhsurf, rhsurf, min_border_white, max_border_white, min_gray_at_white_border, max_gray, max_gray_at_csf_border, min_gray_at_csf_border, max_csf)
@@ -356,5 +356,8 @@ export {
       MrisAutodetGwstatsOutputs,
       MrisAutodetGwstatsParameters,
       mris_autodet_gwstats,
+      mris_autodet_gwstats_cargs,
+      mris_autodet_gwstats_execute,
+      mris_autodet_gwstats_outputs,
       mris_autodet_gwstats_params,
 };

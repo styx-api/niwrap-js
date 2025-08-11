@@ -12,20 +12,20 @@ const DENOISE_IMAGE_METADATA: Metadata = {
 
 
 interface DenoiseImageCorrectedOutputParameters {
-    "__STYXTYPE__": "correctedOutput";
+    "@type": "ants.DenoiseImage.correctedOutput";
     "correctedOutputFileName": string;
 }
 
 
 interface DenoiseImageCorrectedOutputNoiseParameters {
-    "__STYXTYPE__": "correctedOutputNoise";
+    "@type": "ants.DenoiseImage.correctedOutputNoise";
     "correctedOutputFileName": string;
     "noiseFile"?: string | null | undefined;
 }
 
 
 interface DenoiseImageParameters {
-    "__STYXTYPE__": "DenoiseImage";
+    "@type": "ants.DenoiseImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "noise_model"?: "Gaussian" | "Rician" | null | undefined;
     "shrink_factor"?: number | null | undefined;
@@ -38,39 +38,39 @@ interface DenoiseImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "DenoiseImage": denoise_image_cargs,
-        "correctedOutput": denoise_image_corrected_output_cargs,
-        "correctedOutputNoise": denoise_image_corrected_output_noise_cargs,
+        "ants.DenoiseImage": denoise_image_cargs,
+        "ants.DenoiseImage.correctedOutput": denoise_image_corrected_output_cargs,
+        "ants.DenoiseImage.correctedOutputNoise": denoise_image_corrected_output_noise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "DenoiseImage": denoise_image_outputs,
-        "correctedOutput": denoise_image_corrected_output_outputs,
-        "correctedOutputNoise": denoise_image_corrected_output_noise_outputs,
+        "ants.DenoiseImage": denoise_image_outputs,
+        "ants.DenoiseImage.correctedOutput": denoise_image_corrected_output_outputs,
+        "ants.DenoiseImage.correctedOutputNoise": denoise_image_corrected_output_noise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,54 +93,54 @@ interface DenoiseImageCorrectedOutputOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param corrected_output_file_name Output file name.
+ *
+ * @returns Parameter dictionary
+ */
 function denoise_image_corrected_output_params(
     corrected_output_file_name: string,
 ): DenoiseImageCorrectedOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param corrected_output_file_name Output file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "correctedOutput" as const,
+        "@type": "ants.DenoiseImage.correctedOutput" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function denoise_image_corrected_output_cargs(
     params: DenoiseImageCorrectedOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["correctedOutputFileName"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function denoise_image_corrected_output_outputs(
     params: DenoiseImageCorrectedOutputParameters,
     execution: Execution,
 ): DenoiseImageCorrectedOutputOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DenoiseImageCorrectedOutputOutputs = {
         root: execution.outputFile("."),
         output_image_outfile: execution.outputFile([(params["correctedOutputFileName"] ?? null)].join('')),
@@ -170,20 +170,20 @@ interface DenoiseImageCorrectedOutputNoiseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param corrected_output_file_name Output file name.
+ * @param noise_file Output noise map image.
+ *
+ * @returns Parameter dictionary
+ */
 function denoise_image_corrected_output_noise_params(
     corrected_output_file_name: string,
     noise_file: string | null = null,
 ): DenoiseImageCorrectedOutputNoiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param corrected_output_file_name Output file name.
-     * @param noise_file Output noise map image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "correctedOutputNoise" as const,
+        "@type": "ants.DenoiseImage.correctedOutputNoise" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     if (noise_file !== null) {
@@ -193,18 +193,18 @@ function denoise_image_corrected_output_noise_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function denoise_image_corrected_output_noise_cargs(
     params: DenoiseImageCorrectedOutputNoiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["noiseFile"] ?? null) !== null) {
         cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["noiseFile"] ?? null), "]"].join(''));
@@ -213,18 +213,18 @@ function denoise_image_corrected_output_noise_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function denoise_image_corrected_output_noise_outputs(
     params: DenoiseImageCorrectedOutputNoiseParameters,
     execution: Execution,
 ): DenoiseImageCorrectedOutputNoiseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DenoiseImageCorrectedOutputNoiseOutputs = {
         root: execution.outputFile("."),
         output_image_outfile: execution.outputFile([(params["correctedOutputFileName"] ?? null)].join('')),
@@ -251,6 +251,21 @@ interface DenoiseImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for noise correction.
+ * @param output The denoised version of the input image, with optional noise map image.
+ * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param noise_model -n, --noise-model Rician/(Gaussian). Employ a Rician or Gaussian noise model.
+ * @param shrink_factor -s, --shrink-factor (1)/2/3/... Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
+ * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, denoising is only performed in the mask region.
+ * @param patch_radius -p, --patch-radius 1x1x1. Patch radius. Default is 1x1x1.
+ * @param search_radius -r, --search-radius 2x2x2. Search radius. Default is 2x2x2.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function denoise_image_params(
     input_image: InputPathType,
     output: DenoiseImageCorrectedOutputParameters | DenoiseImageCorrectedOutputNoiseParameters,
@@ -262,23 +277,8 @@ function denoise_image_params(
     search_radius: string | null = null,
     verbose: 0 | 1 | null = null,
 ): DenoiseImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for noise correction.
-     * @param output The denoised version of the input image, with optional noise map image.
-     * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param noise_model -n, --noise-model Rician/(Gaussian). Employ a Rician or Gaussian noise model.
-     * @param shrink_factor -s, --shrink-factor (1)/2/3/... Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
-     * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, denoising is only performed in the mask region.
-     * @param patch_radius -p, --patch-radius 1x1x1. Patch radius. Default is 1x1x1.
-     * @param search_radius -r, --search-radius 2x2x2. Search radius. Default is 2x2x2.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "DenoiseImage" as const,
+        "@type": "ants.DenoiseImage" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -307,18 +307,18 @@ function denoise_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function denoise_image_cargs(
     params: DenoiseImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("DenoiseImage");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -369,48 +369,48 @@ function denoise_image_cargs(
     );
     cargs.push(
         "--output",
-        ...dynCargs((params["output"] ?? null).__STYXTYPE__)((params["output"] ?? null), execution)
+        ...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
     );
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function denoise_image_outputs(
     params: DenoiseImageParameters,
     execution: Execution,
 ): DenoiseImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DenoiseImageOutputs = {
         root: execution.outputFile("."),
-        output: dynOutputs((params["output"] ?? null).__STYXTYPE__)?.((params["output"] ?? null), execution),
+        output: dynOutputs((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
     };
     return ret;
 }
 
 
+/**
+ * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
+ */
 function denoise_image_execute(
     params: DenoiseImageParameters,
     execution: Execution,
 ): DenoiseImageOutputs {
-    /**
-     * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = denoise_image_cargs(params, execution)
     const ret = denoise_image_outputs(params, execution)
@@ -419,6 +419,26 @@ function denoise_image_execute(
 }
 
 
+/**
+ * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for noise correction.
+ * @param output The denoised version of the input image, with optional noise map image.
+ * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param noise_model -n, --noise-model Rician/(Gaussian). Employ a Rician or Gaussian noise model.
+ * @param shrink_factor -s, --shrink-factor (1)/2/3/... Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
+ * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, denoising is only performed in the mask region.
+ * @param patch_radius -p, --patch-radius 1x1x1. Patch radius. Default is 1x1x1.
+ * @param search_radius -r, --search-radius 2x2x2. Search radius. Default is 2x2x2.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
+ */
 function denoise_image(
     input_image: InputPathType,
     output: DenoiseImageCorrectedOutputParameters | DenoiseImageCorrectedOutputNoiseParameters,
@@ -431,26 +451,6 @@ function denoise_image(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): DenoiseImageOutputs {
-    /**
-     * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_image -i, --input-image inputImageFilename. A scalar image is expected as input for noise correction.
-     * @param output The denoised version of the input image, with optional noise map image.
-     * @param image_dimensionality -d, --image-dimensionality 2/3/4. This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param noise_model -n, --noise-model Rician/(Gaussian). Employ a Rician or Gaussian noise model.
-     * @param shrink_factor -s, --shrink-factor (1)/2/3/... Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default.
-     * @param mask_image -x, --mask-image maskImageFilename. If a mask image is specified, denoising is only performed in the mask region.
-     * @param patch_radius -p, --patch-radius 1x1x1. Patch radius. Default is 1x1x1.
-     * @param search_radius -r, --search-radius 2x2x2. Search radius. Default is 2x2x2.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DENOISE_IMAGE_METADATA);
     const params = denoise_image_params(input_image, output, image_dimensionality, noise_model, shrink_factor, mask_image, patch_radius, search_radius, verbose)
@@ -467,7 +467,14 @@ export {
       DenoiseImageOutputs,
       DenoiseImageParameters,
       denoise_image,
+      denoise_image_cargs,
+      denoise_image_corrected_output_cargs,
+      denoise_image_corrected_output_noise_cargs,
+      denoise_image_corrected_output_noise_outputs,
       denoise_image_corrected_output_noise_params,
+      denoise_image_corrected_output_outputs,
       denoise_image_corrected_output_params,
+      denoise_image_execute,
+      denoise_image_outputs,
       denoise_image_params,
 };

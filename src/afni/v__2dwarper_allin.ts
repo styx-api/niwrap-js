@@ -12,42 +12,42 @@ const V__2DWARPER_ALLIN_METADATA: Metadata = {
 
 
 interface V2dwarperAllinParameters {
-    "__STYXTYPE__": "@2dwarper.Allin";
+    "@type": "afni.@2dwarper.Allin";
     "input_prefix": string;
     "mask_prefix"?: string | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@2dwarper.Allin": v__2dwarper_allin_cargs,
+        "afni.@2dwarper.Allin": v__2dwarper_allin_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@2dwarper.Allin": v__2dwarper_allin_outputs,
+        "afni.@2dwarper.Allin": v__2dwarper_allin_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface V2dwarperAllinOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_prefix Prefix for the input 3D+time dataset
+ * @param mask_prefix Prefix of an existing mask dataset
+ * @param output_prefix Prefix for output datasets
+ *
+ * @returns Parameter dictionary
+ */
 function v__2dwarper_allin_params(
     input_prefix: string,
     mask_prefix: string | null = null,
     output_prefix: string | null = null,
 ): V2dwarperAllinParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_prefix Prefix for the input 3D+time dataset
-     * @param mask_prefix Prefix of an existing mask dataset
-     * @param output_prefix Prefix for output datasets
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@2dwarper.Allin" as const,
+        "@type": "afni.@2dwarper.Allin" as const,
         "input_prefix": input_prefix,
     };
     if (mask_prefix !== null) {
@@ -102,18 +102,18 @@ function v__2dwarper_allin_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__2dwarper_allin_cargs(
     params: V2dwarperAllinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@2dwarper.Allin");
     cargs.push((params["input_prefix"] ?? null));
@@ -133,18 +133,18 @@ function v__2dwarper_allin_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__2dwarper_allin_outputs(
     params: V2dwarperAllinParameters,
     execution: Execution,
 ): V2dwarperAllinOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2dwarperAllinOutputs = {
         root: execution.outputFile("."),
         reg_output: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_reg+orig.HEAD"].join('')) : null,
@@ -154,22 +154,22 @@ function v__2dwarper_allin_outputs(
 }
 
 
+/**
+ * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
+ */
 function v__2dwarper_allin_execute(
     params: V2dwarperAllinParameters,
     execution: Execution,
 ): V2dwarperAllinOutputs {
-    /**
-     * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__2dwarper_allin_cargs(params, execution)
     const ret = v__2dwarper_allin_outputs(params, execution)
@@ -178,26 +178,26 @@ function v__2dwarper_allin_execute(
 }
 
 
+/**
+ * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_prefix Prefix for the input 3D+time dataset
+ * @param mask_prefix Prefix of an existing mask dataset
+ * @param output_prefix Prefix for output datasets
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
+ */
 function v__2dwarper_allin(
     input_prefix: string,
     mask_prefix: string | null = null,
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V2dwarperAllinOutputs {
-    /**
-     * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_prefix Prefix for the input 3D+time dataset
-     * @param mask_prefix Prefix of an existing mask dataset
-     * @param output_prefix Prefix for output datasets
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__2DWARPER_ALLIN_METADATA);
     const params = v__2dwarper_allin_params(input_prefix, mask_prefix, output_prefix)
@@ -210,5 +210,8 @@ export {
       V2dwarperAllinParameters,
       V__2DWARPER_ALLIN_METADATA,
       v__2dwarper_allin,
+      v__2dwarper_allin_cargs,
+      v__2dwarper_allin_execute,
+      v__2dwarper_allin_outputs,
       v__2dwarper_allin_params,
 };

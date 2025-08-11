@@ -12,7 +12,7 @@ const IMCUTUP_METADATA: Metadata = {
 
 
 interface ImcutupParameters {
-    "__STYXTYPE__": "imcutup";
+    "@type": "afni.imcutup";
     "prefix"?: string | null | undefined;
     "xynum": boolean;
     "yxnum": boolean;
@@ -24,35 +24,35 @@ interface ImcutupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imcutup": imcutup_cargs,
+        "afni.imcutup": imcutup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imcutup": imcutup_outputs,
+        "afni.imcutup": imcutup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface ImcutupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nx Number of pixels along the x-dimension for the smaller images.
+ * @param ny Number of pixels along the y-dimension for the smaller images.
+ * @param input_file Input image filename. Must be a single 2D image.
+ * @param prefix Prefix the output files with the provided string
+ * @param xynum Number the output images in x-first, then y (default behavior)
+ * @param yxnum Number the output images in y-first, then x
+ * @param xynum_format 2D numbering in x.y format
+ * @param yxnum_format 2D numbering in y.x format
+ *
+ * @returns Parameter dictionary
+ */
 function imcutup_params(
     nx: number,
     ny: number,
@@ -85,22 +99,8 @@ function imcutup_params(
     xynum_format: boolean = false,
     yxnum_format: boolean = false,
 ): ImcutupParameters {
-    /**
-     * Build parameters.
-    
-     * @param nx Number of pixels along the x-dimension for the smaller images.
-     * @param ny Number of pixels along the y-dimension for the smaller images.
-     * @param input_file Input image filename. Must be a single 2D image.
-     * @param prefix Prefix the output files with the provided string
-     * @param xynum Number the output images in x-first, then y (default behavior)
-     * @param yxnum Number the output images in y-first, then x
-     * @param xynum_format 2D numbering in x.y format
-     * @param yxnum_format 2D numbering in y.x format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imcutup" as const,
+        "@type": "afni.imcutup" as const,
         "xynum": xynum,
         "yxnum": yxnum,
         "xynum_format": xynum_format,
@@ -116,18 +116,18 @@ function imcutup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imcutup_cargs(
     params: ImcutupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imcutup");
     if ((params["prefix"] ?? null) !== null) {
@@ -155,18 +155,18 @@ function imcutup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imcutup_outputs(
     params: ImcutupParameters,
     execution: Execution,
 ): ImcutupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImcutupOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "*"].join('')) : null,
@@ -175,22 +175,22 @@ function imcutup_outputs(
 }
 
 
+/**
+ * Breaks up larger images into smaller image files of user-defined size.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
+ */
 function imcutup_execute(
     params: ImcutupParameters,
     execution: Execution,
 ): ImcutupOutputs {
-    /**
-     * Breaks up larger images into smaller image files of user-defined size.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
-     */
     params = execution.params(params)
     const cargs = imcutup_cargs(params, execution)
     const ret = imcutup_outputs(params, execution)
@@ -199,6 +199,25 @@ function imcutup_execute(
 }
 
 
+/**
+ * Breaks up larger images into smaller image files of user-defined size.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param nx Number of pixels along the x-dimension for the smaller images.
+ * @param ny Number of pixels along the y-dimension for the smaller images.
+ * @param input_file Input image filename. Must be a single 2D image.
+ * @param prefix Prefix the output files with the provided string
+ * @param xynum Number the output images in x-first, then y (default behavior)
+ * @param yxnum Number the output images in y-first, then x
+ * @param xynum_format 2D numbering in x.y format
+ * @param yxnum_format 2D numbering in y.x format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
+ */
 function imcutup(
     nx: number,
     ny: number,
@@ -210,25 +229,6 @@ function imcutup(
     yxnum_format: boolean = false,
     runner: Runner | null = null,
 ): ImcutupOutputs {
-    /**
-     * Breaks up larger images into smaller image files of user-defined size.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param nx Number of pixels along the x-dimension for the smaller images.
-     * @param ny Number of pixels along the y-dimension for the smaller images.
-     * @param input_file Input image filename. Must be a single 2D image.
-     * @param prefix Prefix the output files with the provided string
-     * @param xynum Number the output images in x-first, then y (default behavior)
-     * @param yxnum Number the output images in y-first, then x
-     * @param xynum_format 2D numbering in x.y format
-     * @param yxnum_format 2D numbering in y.x format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMCUTUP_METADATA);
     const params = imcutup_params(nx, ny, input_file, prefix, xynum, yxnum, xynum_format, yxnum_format)
@@ -241,5 +241,8 @@ export {
       ImcutupOutputs,
       ImcutupParameters,
       imcutup,
+      imcutup_cargs,
+      imcutup_execute,
+      imcutup_outputs,
       imcutup_params,
 };

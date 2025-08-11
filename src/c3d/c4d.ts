@@ -12,1337 +12,1337 @@ const C4D_METADATA: Metadata = {
 
 
 interface C4dAccumParameters {
-    "__STYXTYPE__": "accum";
+    "@type": "c3d.c4d.accum";
     "accum": string;
 }
 
 
 interface C4dAcosParameters {
-    "__STYXTYPE__": "acos";
+    "@type": "c3d.c4d.acos";
     "acos": string;
 }
 
 
 interface C4dAddParameters {
-    "__STYXTYPE__": "add";
+    "@type": "c3d.c4d.add";
     "add": string;
 }
 
 
 interface C4dAlignLandmarksParameters {
-    "__STYXTYPE__": "align_landmarks";
+    "@type": "c3d.c4d.align_landmarks";
     "align_landmarks": string;
 }
 
 
 interface C4dAnisotropicDiffusionParameters {
-    "__STYXTYPE__": "anisotropic_diffusion";
+    "@type": "c3d.c4d.anisotropic_diffusion";
     "anisotropic_diffusion": string;
 }
 
 
 interface C4dAntialiasParameters {
-    "__STYXTYPE__": "antialias";
+    "@type": "c3d.c4d.antialias";
     "antialias": string;
 }
 
 
 interface C4dSetParameters {
-    "__STYXTYPE__": "set";
+    "@type": "c3d.c4d.set";
     "set": string;
 }
 
 
 interface C4dAsinParameters {
-    "__STYXTYPE__": "asin";
+    "@type": "c3d.c4d.asin";
     "asin": string;
 }
 
 
 interface C4dAtan2Parameters {
-    "__STYXTYPE__": "atan2";
+    "@type": "c3d.c4d.atan2";
     "atan2": string;
 }
 
 
 interface C4dBackgroundParameters {
-    "__STYXTYPE__": "background";
+    "@type": "c3d.c4d.background";
     "background": string;
 }
 
 
 interface C4dN4BiasCorrectionParameters {
-    "__STYXTYPE__": "n4_bias_correction";
+    "@type": "c3d.c4d.n4_bias_correction";
     "n4_bias_correction": string;
 }
 
 
 interface C4dBinarizeParameters {
-    "__STYXTYPE__": "binarize";
+    "@type": "c3d.c4d.binarize";
     "binarize": string;
 }
 
 
 interface C4dCannyParameters {
-    "__STYXTYPE__": "canny";
+    "@type": "c3d.c4d.canny";
     "canny": string;
 }
 
 
 interface C4dCeilParameters {
-    "__STYXTYPE__": "ceil";
+    "@type": "c3d.c4d.ceil";
     "ceil": string;
 }
 
 
 interface C4dCentroidParameters {
-    "__STYXTYPE__": "centroid";
+    "@type": "c3d.c4d.centroid";
     "centroid": string;
 }
 
 
 interface C4dCentroidMarkParameters {
-    "__STYXTYPE__": "centroid_mark";
+    "@type": "c3d.c4d.centroid_mark";
     "centroid_mark": string;
 }
 
 
 interface C4dConnectedComponentsParameters {
-    "__STYXTYPE__": "connected_components";
+    "@type": "c3d.c4d.connected_components";
     "connected_components": string;
 }
 
 
 interface C4dClearParameters {
-    "__STYXTYPE__": "clear";
+    "@type": "c3d.c4d.clear";
     "clear": string;
 }
 
 
 interface C4dClipParameters {
-    "__STYXTYPE__": "clip";
+    "@type": "c3d.c4d.clip";
     "clip": string;
 }
 
 
 interface C4dColorMapParameters {
-    "__STYXTYPE__": "color_map";
+    "@type": "c3d.c4d.color_map";
     "color_map": string;
 }
 
 
 interface C4dCompressParameters {
-    "__STYXTYPE__": "compress";
+    "@type": "c3d.c4d.compress";
     "compress": string;
 }
 
 
 interface C4dNoCompressParameters {
-    "__STYXTYPE__": "no_compress";
+    "@type": "c3d.c4d.no_compress";
     "no_compress": string;
 }
 
 
 interface C4dConvParameters {
-    "__STYXTYPE__": "conv";
+    "@type": "c3d.c4d.conv";
     "conv": string;
 }
 
 
 interface C4dCoordinateMapVoxelParameters {
-    "__STYXTYPE__": "coordinate_map_voxel";
+    "@type": "c3d.c4d.coordinate_map_voxel";
     "coordinate_map_voxel": string;
 }
 
 
 interface C4dCoordinateMapPhysicalParameters {
-    "__STYXTYPE__": "coordinate_map_physical";
+    "@type": "c3d.c4d.coordinate_map_physical";
     "coordinate_map_physical": string;
 }
 
 
 interface C4dCopyTransformParameters {
-    "__STYXTYPE__": "copy_transform";
+    "@type": "c3d.c4d.copy_transform";
     "copy_transform": string;
 }
 
 
 interface C4dCosParameters {
-    "__STYXTYPE__": "cos";
+    "@type": "c3d.c4d.cos";
     "cos": string;
 }
 
 
 interface C4dCreateParameters {
-    "__STYXTYPE__": "create";
+    "@type": "c3d.c4d.create";
     "create": string;
 }
 
 
 interface C4dDicomSeriesListParameters {
-    "__STYXTYPE__": "dicom_series_list";
+    "@type": "c3d.c4d.dicom_series_list";
     "dicom_series_list": string;
 }
 
 
 interface C4dDicomSeriesReadParameters {
-    "__STYXTYPE__": "dicom_series_read";
+    "@type": "c3d.c4d.dicom_series_read";
     "dicom_series_read": string;
 }
 
 
 interface C4dDilateParameters {
-    "__STYXTYPE__": "dilate";
+    "@type": "c3d.c4d.dilate";
     "dilate": string;
 }
 
 
 interface C4dDivideParameters {
-    "__STYXTYPE__": "divide";
+    "@type": "c3d.c4d.divide";
     "divide": string;
 }
 
 
 interface C4dDuplicateParameters {
-    "__STYXTYPE__": "duplicate";
+    "@type": "c3d.c4d.duplicate";
     "duplicate": string;
 }
 
 
 interface C4dEndaccumParameters {
-    "__STYXTYPE__": "endaccum";
+    "@type": "c3d.c4d.endaccum";
     "endaccum": string;
 }
 
 
 interface C4dEndforParameters {
-    "__STYXTYPE__": "endfor";
+    "@type": "c3d.c4d.endfor";
     "endfor": string;
 }
 
 
 interface C4dErodeParameters {
-    "__STYXTYPE__": "erode";
+    "@type": "c3d.c4d.erode";
     "erode": string;
 }
 
 
 interface C4dErfParameters {
-    "__STYXTYPE__": "erf";
+    "@type": "c3d.c4d.erf";
     "erf": string;
 }
 
 
 interface C4dExpParameters {
-    "__STYXTYPE__": "exp";
+    "@type": "c3d.c4d.exp";
     "exp": string;
 }
 
 
 interface C4dExportPatchesParameters {
-    "__STYXTYPE__": "export_patches";
+    "@type": "c3d.c4d.export_patches";
     "export_patches": string;
 }
 
 
 interface C4dExportPatchesAugParameters {
-    "__STYXTYPE__": "export_patches_aug";
+    "@type": "c3d.c4d.export_patches_aug";
     "export_patches_aug": string;
 }
 
 
 interface C4dExtrudeSegParameters {
-    "__STYXTYPE__": "extrude_seg";
+    "@type": "c3d.c4d.extrude_seg";
     "extrude_seg": string;
 }
 
 
 interface C4dFillBackgroundWithNoiseParameters {
-    "__STYXTYPE__": "fill_background_with_noise";
+    "@type": "c3d.c4d.fill_background_with_noise";
     "fill_background_with_noise": string;
 }
 
 
 interface C4dFftParameters {
-    "__STYXTYPE__": "fft";
+    "@type": "c3d.c4d.fft";
     "fft": string;
 }
 
 
 interface C4dFlipParameters {
-    "__STYXTYPE__": "flip";
+    "@type": "c3d.c4d.flip";
     "flip": string;
 }
 
 
 interface C4dFloorParameters {
-    "__STYXTYPE__": "floor";
+    "@type": "c3d.c4d.floor";
     "floor": string;
 }
 
 
 interface C4dForeachParameters {
-    "__STYXTYPE__": "foreach";
+    "@type": "c3d.c4d.foreach";
     "foreach": string;
 }
 
 
 interface C4dForeachCompParameters {
-    "__STYXTYPE__": "foreach_comp";
+    "@type": "c3d.c4d.foreach_comp";
     "foreach_comp": string;
 }
 
 
 interface C4dGlmParameters {
-    "__STYXTYPE__": "glm";
+    "@type": "c3d.c4d.glm";
     "glm": string;
 }
 
 
 interface C4dGradientParameters {
-    "__STYXTYPE__": "gradient";
+    "@type": "c3d.c4d.gradient";
     "gradient": string;
 }
 
 
 interface C4dHelpParameters {
-    "__STYXTYPE__": "_help";
+    "@type": "c3d.c4d._help";
     "_help": string;
 }
 
 
 interface C4dHolefillParameters {
-    "__STYXTYPE__": "holefill";
+    "@type": "c3d.c4d.holefill";
     "holefill": string;
 }
 
 
 interface C4dHessianEigenvaluesParameters {
-    "__STYXTYPE__": "hessian_eigenvalues";
+    "@type": "c3d.c4d.hessian_eigenvalues";
     "hessian_eigenvalues": string;
 }
 
 
 interface C4dHessianObjectnessParameters {
-    "__STYXTYPE__": "hessian_objectness";
+    "@type": "c3d.c4d.hessian_objectness";
     "hessian_objectness": string;
 }
 
 
 interface C4dHistogramMatchParameters {
-    "__STYXTYPE__": "histogram_match";
+    "@type": "c3d.c4d.histogram_match";
     "histogram_match": string;
 }
 
 
 interface C4dInfoParameters {
-    "__STYXTYPE__": "info";
+    "@type": "c3d.c4d.info";
     "info": string;
 }
 
 
 interface C4dInfoFullParameters {
-    "__STYXTYPE__": "info_full";
+    "@type": "c3d.c4d.info_full";
     "info_full": string;
 }
 
 
 interface C4dInsertParameters {
-    "__STYXTYPE__": "insert";
+    "@type": "c3d.c4d.insert";
     "insert": string;
 }
 
 
 interface C4dInterpolationParameters {
-    "__STYXTYPE__": "interpolation";
+    "@type": "c3d.c4d.interpolation";
     "interpolation": string;
 }
 
 
 interface C4dIterationsParameters {
-    "__STYXTYPE__": "iterations";
+    "@type": "c3d.c4d.iterations";
     "iterations": string;
 }
 
 
 interface C4dLabelOverlapParameters {
-    "__STYXTYPE__": "label_overlap";
+    "@type": "c3d.c4d.label_overlap";
     "label_overlap": string;
 }
 
 
 interface C4dLabelStatisticsParameters {
-    "__STYXTYPE__": "label_statistics";
+    "@type": "c3d.c4d.label_statistics";
     "label_statistics": string;
 }
 
 
 interface C4dLandmarksToSpheresParameters {
-    "__STYXTYPE__": "landmarks_to_spheres";
+    "@type": "c3d.c4d.landmarks_to_spheres";
     "landmarks_to_spheres": string;
 }
 
 
 interface C4dLaplacianParameters {
-    "__STYXTYPE__": "laplacian";
+    "@type": "c3d.c4d.laplacian";
     "laplacian": string;
 }
 
 
 interface C4dLevelsetParameters {
-    "__STYXTYPE__": "levelset";
+    "@type": "c3d.c4d.levelset";
     "levelset": string;
 }
 
 
 interface C4dLevelsetCurvatureParameters {
-    "__STYXTYPE__": "levelset_curvature";
+    "@type": "c3d.c4d.levelset_curvature";
     "levelset_curvature": string;
 }
 
 
 interface C4dLevelsetAdvectionParameters {
-    "__STYXTYPE__": "levelset_advection";
+    "@type": "c3d.c4d.levelset_advection";
     "levelset_advection": string;
 }
 
 
 interface C4dLogParameters {
-    "__STYXTYPE__": "log";
+    "@type": "c3d.c4d.log";
     "log": string;
 }
 
 
 interface C4dLog10Parameters {
-    "__STYXTYPE__": "log10";
+    "@type": "c3d.c4d.log10";
     "log10": string;
 }
 
 
 interface C4dManualParameters {
-    "__STYXTYPE__": "manual";
+    "@type": "c3d.c4d.manual";
     "manual": string;
 }
 
 
 interface C4dMatchBoundingBoxParameters {
-    "__STYXTYPE__": "match_bounding_box";
+    "@type": "c3d.c4d.match_bounding_box";
     "match_bounding_box": string;
 }
 
 
 interface C4dMaximumParameters {
-    "__STYXTYPE__": "maximum";
+    "@type": "c3d.c4d.maximum";
     "maximum": string;
 }
 
 
 interface C4dMulticomponentSplitParameters {
-    "__STYXTYPE__": "multicomponent_split";
+    "@type": "c3d.c4d.multicomponent_split";
     "multicomponent_split": string;
 }
 
 
 interface C4dMeanParameters {
-    "__STYXTYPE__": "mean";
+    "@type": "c3d.c4d.mean";
     "mean": string;
 }
 
 
 interface C4dMedianFilterParameters {
-    "__STYXTYPE__": "median_filter";
+    "@type": "c3d.c4d.median_filter";
     "median_filter": string;
 }
 
 
 interface C4dMergeParameters {
-    "__STYXTYPE__": "merge";
+    "@type": "c3d.c4d.merge";
     "merge": string;
 }
 
 
 interface C4dMeanFilterParameters {
-    "__STYXTYPE__": "mean_filter";
+    "@type": "c3d.c4d.mean_filter";
     "mean_filter": string;
 }
 
 
 interface C4dMutualInfoParameters {
-    "__STYXTYPE__": "mutual_info";
+    "@type": "c3d.c4d.mutual_info";
     "mutual_info": string;
 }
 
 
 interface C4dMinimumParameters {
-    "__STYXTYPE__": "minimum";
+    "@type": "c3d.c4d.minimum";
     "minimum": string;
 }
 
 
 interface C4dMixtureModelParameters {
-    "__STYXTYPE__": "mixture_model";
+    "@type": "c3d.c4d.mixture_model";
     "mixture_model": string;
 }
 
 
 interface C4dMomentsParameters {
-    "__STYXTYPE__": "moments";
+    "@type": "c3d.c4d.moments";
     "moments": string;
 }
 
 
 interface C4dMattesMutualInfoParameters {
-    "__STYXTYPE__": "mattes_mutual_info";
+    "@type": "c3d.c4d.mattes_mutual_info";
     "mattes_mutual_info": string;
 }
 
 
 interface C4dMeanSquareParameters {
-    "__STYXTYPE__": "mean_square";
+    "@type": "c3d.c4d.mean_square";
     "mean_square": string;
 }
 
 
 interface C4dMultiplyParameters {
-    "__STYXTYPE__": "multiply";
+    "@type": "c3d.c4d.multiply";
     "multiply": string;
 }
 
 
 interface C4dNormalizedCrossCorrelationParameters {
-    "__STYXTYPE__": "normalized_cross_correlation";
+    "@type": "c3d.c4d.normalized_cross_correlation";
     "normalized_cross_correlation": string;
 }
 
 
 interface C4dNormalizedCorrelationParameters {
-    "__STYXTYPE__": "normalized_correlation";
+    "@type": "c3d.c4d.normalized_correlation";
     "normalized_correlation": string;
 }
 
 
 interface C4dNormalizedMutualInfoParameters {
-    "__STYXTYPE__": "normalized_mutual_info";
+    "@type": "c3d.c4d.normalized_mutual_info";
     "normalized_mutual_info": string;
 }
 
 
 interface C4dNoiseGaussianParameters {
-    "__STYXTYPE__": "noise_gaussian";
+    "@type": "c3d.c4d.noise_gaussian";
     "noise_gaussian": string;
 }
 
 
 interface C4dNoisePoissonParameters {
-    "__STYXTYPE__": "noise_poisson";
+    "@type": "c3d.c4d.noise_poisson";
     "noise_poisson": string;
 }
 
 
 interface C4dNoiseSpeckleParameters {
-    "__STYXTYPE__": "noise_speckle";
+    "@type": "c3d.c4d.noise_speckle";
     "noise_speckle": string;
 }
 
 
 interface C4dNoiseSaltPepperParameters {
-    "__STYXTYPE__": "noise_salt_pepper";
+    "@type": "c3d.c4d.noise_salt_pepper";
     "noise_salt_pepper": string;
 }
 
 
 interface C4dNoMulticomponentSplitParameters {
-    "__STYXTYPE__": "no_multicomponent_split";
+    "@type": "c3d.c4d.no_multicomponent_split";
     "no_multicomponent_split": string;
 }
 
 
 interface C4dNormalizeLocalWindowParameters {
-    "__STYXTYPE__": "normalize_local_window";
+    "@type": "c3d.c4d.normalize_local_window";
     "normalize_local_window": string;
 }
 
 
 interface C4dNormpdfParameters {
-    "__STYXTYPE__": "normpdf";
+    "@type": "c3d.c4d.normpdf";
     "normpdf": string;
 }
 
 
 interface C4dNoroundParameters {
-    "__STYXTYPE__": "noround";
+    "@type": "c3d.c4d.noround";
     "noround": string;
 }
 
 
 interface C4dNospmParameters {
-    "__STYXTYPE__": "nospm";
+    "@type": "c3d.c4d.nospm";
     "nospm": string;
 }
 
 
 interface C4dOutputParameters {
-    "__STYXTYPE__": "output";
+    "@type": "c3d.c4d.output";
     "output": string;
 }
 
 
 interface C4dOutputMulticomponentParameters {
-    "__STYXTYPE__": "output_multicomponent";
+    "@type": "c3d.c4d.output_multicomponent";
     "output_multicomponent": string;
 }
 
 
 interface C4dOutputMultipleMulticomponentParameters {
-    "__STYXTYPE__": "output_multiple_multicomponent";
+    "@type": "c3d.c4d.output_multiple_multicomponent";
     "output_multiple_multicomponent": string;
 }
 
 
 interface C4dOrientParameters {
-    "__STYXTYPE__": "orient";
+    "@type": "c3d.c4d.orient";
     "orient": string;
 }
 
 
 interface C4dOutputMultipleParameters {
-    "__STYXTYPE__": "output_multiple";
+    "@type": "c3d.c4d.output_multiple";
     "output_multiple": string;
 }
 
 
 interface C4dOrient1Parameters {
-    "__STYXTYPE__": "orient_1";
+    "@type": "c3d.c4d.orient";
     "orient": string;
 }
 
 
 interface C4dOriginParameters {
-    "__STYXTYPE__": "origin";
+    "@type": "c3d.c4d.origin";
     "origin": string;
 }
 
 
 interface C4dOriginVoxelParameters {
-    "__STYXTYPE__": "origin_voxel";
+    "@type": "c3d.c4d.origin_voxel";
     "origin_voxel": string;
 }
 
 
 interface C4dOriginVoxelCoordParameters {
-    "__STYXTYPE__": "origin_voxel_coord";
+    "@type": "c3d.c4d.origin_voxel_coord";
     "origin_voxel_coord": string;
 }
 
 
 interface C4dOverlapParameters {
-    "__STYXTYPE__": "overlap";
+    "@type": "c3d.c4d.overlap";
     "overlap": string;
 }
 
 
 interface C4dOverlayLabelImageParameters {
-    "__STYXTYPE__": "overlay_label_image";
+    "@type": "c3d.c4d.overlay_label_image";
     "overlay_label_image": string;
 }
 
 
 interface C4dPadParameters {
-    "__STYXTYPE__": "pad";
+    "@type": "c3d.c4d.pad";
     "pad": string;
 }
 
 
 interface C4dPadToParameters {
-    "__STYXTYPE__": "pad_to";
+    "@type": "c3d.c4d.pad_to";
     "pad_to": string;
 }
 
 
 interface C4dPcaParameters {
-    "__STYXTYPE__": "pca";
+    "@type": "c3d.c4d.pca";
     "pca": string;
 }
 
 
 interface C4dPercentIntensityModeParameters {
-    "__STYXTYPE__": "percent_intensity_mode";
+    "@type": "c3d.c4d.percent_intensity_mode";
     "percent_intensity_mode": string;
 }
 
 
 interface C4dPixelParameters {
-    "__STYXTYPE__": "pixel";
+    "@type": "c3d.c4d.pixel";
     "pixel": string;
 }
 
 
 interface C4dPopParameters {
-    "__STYXTYPE__": "pop";
+    "@type": "c3d.c4d.pop";
     "pop": string;
 }
 
 
 interface C4dPopasParameters {
-    "__STYXTYPE__": "popas";
+    "@type": "c3d.c4d.popas";
     "popas": string;
 }
 
 
 interface C4dProbeParameters {
-    "__STYXTYPE__": "probe";
+    "@type": "c3d.c4d.probe";
     "probe": string;
 }
 
 
 interface C4dPushParameters {
-    "__STYXTYPE__": "push";
+    "@type": "c3d.c4d.push";
     "push": string;
 }
 
 
 interface C4dRankParameters {
-    "__STYXTYPE__": "rank";
+    "@type": "c3d.c4d.rank";
     "rank": string;
 }
 
 
 interface C4dReciprocalParameters {
-    "__STYXTYPE__": "reciprocal";
+    "@type": "c3d.c4d.reciprocal";
     "reciprocal": string;
 }
 
 
 interface C4dRegionParameters {
-    "__STYXTYPE__": "region";
+    "@type": "c3d.c4d.region";
     "region": string;
 }
 
 
 interface C4dReorderParameters {
-    "__STYXTYPE__": "reorder";
+    "@type": "c3d.c4d.reorder";
     "reorder": string;
 }
 
 
 interface C4dRetainLabelsParameters {
-    "__STYXTYPE__": "retain_labels";
+    "@type": "c3d.c4d.retain_labels";
     "retain_labels": string;
 }
 
 
 interface C4dRfApplyParameters {
-    "__STYXTYPE__": "rf_apply";
+    "@type": "c3d.c4d.rf_apply";
     "rf_apply": string;
 }
 
 
 interface C4dRfTrainParameters {
-    "__STYXTYPE__": "rf_train";
+    "@type": "c3d.c4d.rf_train";
     "rf_train": string;
 }
 
 
 interface C4dRfParamPatchParameters {
-    "__STYXTYPE__": "rf_param_patch";
+    "@type": "c3d.c4d.rf_param_patch";
     "rf_param_patch": string;
 }
 
 
 interface C4dRfParamUsexyzParameters {
-    "__STYXTYPE__": "rf_param_usexyz";
+    "@type": "c3d.c4d.rf_param_usexyz";
     "rf_param_usexyz": string;
 }
 
 
 interface C4dRfParamNousexyzParameters {
-    "__STYXTYPE__": "rf_param_nousexyz";
+    "@type": "c3d.c4d.rf_param_nousexyz";
     "rf_param_nousexyz": string;
 }
 
 
 interface C4dRfParamNtreesParameters {
-    "__STYXTYPE__": "rf_param_ntrees";
+    "@type": "c3d.c4d.rf_param_ntrees";
     "rf_param_ntrees": string;
 }
 
 
 interface C4dRfParamTreedepthParameters {
-    "__STYXTYPE__": "rf_param_treedepth";
+    "@type": "c3d.c4d.rf_param_treedepth";
     "rf_param_treedepth": string;
 }
 
 
 interface C4dSetSformParameters {
-    "__STYXTYPE__": "set_sform";
+    "@type": "c3d.c4d.set_sform";
     "set_sform": string;
 }
 
 
 interface C4dReplaceParameters {
-    "__STYXTYPE__": "replace";
+    "@type": "c3d.c4d.replace";
     "replace": string;
 }
 
 
 interface C4dResampleParameters {
-    "__STYXTYPE__": "resample";
+    "@type": "c3d.c4d.resample";
     "resample": string;
 }
 
 
 interface C4dResampleIsoParameters {
-    "__STYXTYPE__": "resample_iso";
+    "@type": "c3d.c4d.resample_iso";
     "resample_iso": string;
 }
 
 
 interface C4dResampleMmParameters {
-    "__STYXTYPE__": "resample_mm";
+    "@type": "c3d.c4d.resample_mm";
     "resample_mm": string;
 }
 
 
 interface C4dResliceItkParameters {
-    "__STYXTYPE__": "reslice_itk";
+    "@type": "c3d.c4d.reslice_itk";
     "reslice_itk": string;
 }
 
 
 interface C4dResliceMatrixParameters {
-    "__STYXTYPE__": "reslice_matrix";
+    "@type": "c3d.c4d.reslice_matrix";
     "reslice_matrix": string;
 }
 
 
 interface C4dResliceIdentityParameters {
-    "__STYXTYPE__": "reslice_identity";
+    "@type": "c3d.c4d.reslice_identity";
     "reslice_identity": string;
 }
 
 
 interface C4dRgb2hsvParameters {
-    "__STYXTYPE__": "rgb2hsv";
+    "@type": "c3d.c4d.rgb2hsv";
     "rgb2hsv": string;
 }
 
 
 interface C4dRmsParameters {
-    "__STYXTYPE__": "rms";
+    "@type": "c3d.c4d.rms";
     "rms": string;
 }
 
 
 interface C4dRoundParameters {
-    "__STYXTYPE__": "round";
+    "@type": "c3d.c4d.round";
     "round": string;
 }
 
 
 interface C4dScaleParameters {
-    "__STYXTYPE__": "scale";
+    "@type": "c3d.c4d.scale";
     "scale": string;
 }
 
 
 interface C4dSetSform1Parameters {
-    "__STYXTYPE__": "set_sform_1";
+    "@type": "c3d.c4d.set_sform";
     "set_sform": string;
 }
 
 
 interface C4dSinParameters {
-    "__STYXTYPE__": "sin";
+    "@type": "c3d.c4d.sin";
     "sin": string;
 }
 
 
 interface C4dSliceParameters {
-    "__STYXTYPE__": "slice";
+    "@type": "c3d.c4d.slice";
     "slice": string;
 }
 
 
 interface C4dSliceAllParameters {
-    "__STYXTYPE__": "slice_all";
+    "@type": "c3d.c4d.slice_all";
     "slice_all": string;
 }
 
 
 interface C4dSharpenParameters {
-    "__STYXTYPE__": "sharpen";
+    "@type": "c3d.c4d.sharpen";
     "sharpen": string;
 }
 
 
 interface C4dShiftParameters {
-    "__STYXTYPE__": "shift";
+    "@type": "c3d.c4d.shift";
     "shift": string;
 }
 
 
 interface C4dSignedDistanceTransformParameters {
-    "__STYXTYPE__": "signed_distance_transform";
+    "@type": "c3d.c4d.signed_distance_transform";
     "signed_distance_transform": string;
 }
 
 
 interface C4dSmoothParameters {
-    "__STYXTYPE__": "smooth";
+    "@type": "c3d.c4d.smooth";
     "smooth": string;
 }
 
 
 interface C4dSmoothFastParameters {
-    "__STYXTYPE__": "smooth_fast";
+    "@type": "c3d.c4d.smooth_fast";
     "smooth_fast": string;
 }
 
 
 interface C4dSpacingParameters {
-    "__STYXTYPE__": "spacing";
+    "@type": "c3d.c4d.spacing";
     "spacing": string;
 }
 
 
 interface C4dSplitParameters {
-    "__STYXTYPE__": "split";
+    "@type": "c3d.c4d.split";
     "split": string;
 }
 
 
 interface C4dSqrtParameters {
-    "__STYXTYPE__": "sqrt";
+    "@type": "c3d.c4d.sqrt";
     "sqrt": string;
 }
 
 
 interface C4dStapleParameters {
-    "__STYXTYPE__": "staple";
+    "@type": "c3d.c4d.staple";
     "staple": string;
 }
 
 
 interface C4dStructureTensorEigenvaluesParameters {
-    "__STYXTYPE__": "structure_tensor_eigenvalues";
+    "@type": "c3d.c4d.structure_tensor_eigenvalues";
     "structure_tensor_eigenvalues": string;
 }
 
 
 interface C4dSpmParameters {
-    "__STYXTYPE__": "spm";
+    "@type": "c3d.c4d.spm";
     "spm": string;
 }
 
 
 interface C4dSubtractParameters {
-    "__STYXTYPE__": "subtract";
+    "@type": "c3d.c4d.subtract";
     "subtract": string;
 }
 
 
 interface C4dSupervoxelParameters {
-    "__STYXTYPE__": "supervoxel";
+    "@type": "c3d.c4d.supervoxel";
     "supervoxel": string;
 }
 
 
 interface C4dStretchParameters {
-    "__STYXTYPE__": "stretch";
+    "@type": "c3d.c4d.stretch";
     "stretch": string;
 }
 
 
 interface C4dSwapdimParameters {
-    "__STYXTYPE__": "swapdim";
+    "@type": "c3d.c4d.swapdim";
     "swapdim": string;
 }
 
 
 interface C4dTestImageParameters {
-    "__STYXTYPE__": "test_image";
+    "@type": "c3d.c4d.test_image";
     "test_image": string;
 }
 
 
 interface C4dTestProbeParameters {
-    "__STYXTYPE__": "test_probe";
+    "@type": "c3d.c4d.test_probe";
     "test_probe": string;
 }
 
 
 interface C4dThresholdParameters {
-    "__STYXTYPE__": "threshold";
+    "@type": "c3d.c4d.threshold";
     "threshold": string;
 }
 
 
 interface C4dTileParameters {
-    "__STYXTYPE__": "tile";
+    "@type": "c3d.c4d.tile";
     "tile": string;
 }
 
 
 interface C4dTrimParameters {
-    "__STYXTYPE__": "trim";
+    "@type": "c3d.c4d.trim";
     "trim": string;
 }
 
 
 interface C4dTrimToSizeParameters {
-    "__STYXTYPE__": "trim_to_size";
+    "@type": "c3d.c4d.trim_to_size";
     "trim_to_size": string;
 }
 
 
 interface C4dTypeParameters {
-    "__STYXTYPE__": "type";
+    "@type": "c3d.c4d.type";
     "type": string;
 }
 
 
 interface C4dVerboseParameters {
-    "__STYXTYPE__": "verbose";
+    "@type": "c3d.c4d.verbose";
     "verbose": string;
 }
 
 
 interface C4dNoverboseParameters {
-    "__STYXTYPE__": "noverbose";
+    "@type": "c3d.c4d.noverbose";
     "noverbose": string;
 }
 
 
 interface C4dVersionParameters {
-    "__STYXTYPE__": "version";
+    "@type": "c3d.c4d.version";
     "version": string;
 }
 
 
 interface C4dVoteParameters {
-    "__STYXTYPE__": "vote";
+    "@type": "c3d.c4d.vote";
     "vote": string;
 }
 
 
 interface C4dVoteMrfParameters {
-    "__STYXTYPE__": "vote_mrf";
+    "@type": "c3d.c4d.vote_mrf";
     "vote_mrf": string;
 }
 
 
 interface C4dVoteLabelParameters {
-    "__STYXTYPE__": "vote_label";
+    "@type": "c3d.c4d.vote_label";
     "vote_label": string;
 }
 
 
 interface C4dVoxelSumParameters {
-    "__STYXTYPE__": "voxel_sum";
+    "@type": "c3d.c4d.voxel_sum";
     "voxel_sum": string;
 }
 
 
 interface C4dVoxelIntegralParameters {
-    "__STYXTYPE__": "voxel_integral";
+    "@type": "c3d.c4d.voxel_integral";
     "voxel_integral": string;
 }
 
 
 interface C4dVoxelwiseRegressionParameters {
-    "__STYXTYPE__": "voxelwise_regression";
+    "@type": "c3d.c4d.voxelwise_regression";
     "voxelwise_regression": string;
 }
 
 
 interface C4dWarpParameters {
-    "__STYXTYPE__": "warp";
+    "@type": "c3d.c4d.warp";
     "warp": string;
 }
 
 
 interface C4dWarpLabelParameters {
-    "__STYXTYPE__": "warp_label";
+    "@type": "c3d.c4d.warp_label";
     "warp_label": string;
 }
 
 
 interface C4dWrapParameters {
-    "__STYXTYPE__": "wrap";
+    "@type": "c3d.c4d.wrap";
     "wrap": string;
 }
 
 
 interface C4dWeightedSumParameters {
-    "__STYXTYPE__": "weighted_sum";
+    "@type": "c3d.c4d.weighted_sum";
     "weighted_sum": string;
 }
 
 
 interface C4dWeightedSumVoxelwiseParameters {
-    "__STYXTYPE__": "weighted_sum_voxelwise";
+    "@type": "c3d.c4d.weighted_sum_voxelwise";
     "weighted_sum_voxelwise": string;
 }
 
 
 interface C4dParameters {
-    "__STYXTYPE__": "c4d";
+    "@type": "c3d.c4d";
     "input": Array<InputPathType>;
     "operations": Array<C4dAccumParameters | C4dAcosParameters | C4dAddParameters | C4dAlignLandmarksParameters | C4dAnisotropicDiffusionParameters | C4dAntialiasParameters | C4dSetParameters | C4dAsinParameters | C4dAtan2Parameters | C4dBackgroundParameters | C4dN4BiasCorrectionParameters | C4dBinarizeParameters | C4dCannyParameters | C4dCeilParameters | C4dCentroidParameters | C4dCentroidMarkParameters | C4dConnectedComponentsParameters | C4dClearParameters | C4dClipParameters | C4dColorMapParameters | C4dCompressParameters | C4dNoCompressParameters | C4dConvParameters | C4dCoordinateMapVoxelParameters | C4dCoordinateMapPhysicalParameters | C4dCopyTransformParameters | C4dCosParameters | C4dCreateParameters | C4dDicomSeriesListParameters | C4dDicomSeriesReadParameters | C4dDilateParameters | C4dDivideParameters | C4dDuplicateParameters | C4dEndaccumParameters | C4dEndforParameters | C4dErodeParameters | C4dErfParameters | C4dExpParameters | C4dExportPatchesParameters | C4dExportPatchesAugParameters | C4dExtrudeSegParameters | C4dFillBackgroundWithNoiseParameters | C4dFftParameters | C4dFlipParameters | C4dFloorParameters | C4dForeachParameters | C4dForeachCompParameters | C4dGlmParameters | C4dGradientParameters | C4dHelpParameters | C4dHolefillParameters | C4dHessianEigenvaluesParameters | C4dHessianObjectnessParameters | C4dHistogramMatchParameters | C4dInfoParameters | C4dInfoFullParameters | C4dInsertParameters | C4dInterpolationParameters | C4dIterationsParameters | C4dLabelOverlapParameters | C4dLabelStatisticsParameters | C4dLandmarksToSpheresParameters | C4dLaplacianParameters | C4dLevelsetParameters | C4dLevelsetCurvatureParameters | C4dLevelsetAdvectionParameters | C4dLogParameters | C4dLog10Parameters | C4dManualParameters | C4dMatchBoundingBoxParameters | C4dMaximumParameters | C4dMulticomponentSplitParameters | C4dMeanParameters | C4dMedianFilterParameters | C4dMergeParameters | C4dMeanFilterParameters | C4dMutualInfoParameters | C4dMinimumParameters | C4dMixtureModelParameters | C4dMomentsParameters | C4dMattesMutualInfoParameters | C4dMeanSquareParameters | C4dMultiplyParameters | C4dNormalizedCrossCorrelationParameters | C4dNormalizedCorrelationParameters | C4dNormalizedMutualInfoParameters | C4dNoiseGaussianParameters | C4dNoisePoissonParameters | C4dNoiseSpeckleParameters | C4dNoiseSaltPepperParameters | C4dNoMulticomponentSplitParameters | C4dNormalizeLocalWindowParameters | C4dNormpdfParameters | C4dNoroundParameters | C4dNospmParameters | C4dOutputParameters | C4dOutputMulticomponentParameters | C4dOutputMultipleMulticomponentParameters | C4dOrientParameters | C4dOutputMultipleParameters | C4dOrient1Parameters | C4dOriginParameters | C4dOriginVoxelParameters | C4dOriginVoxelCoordParameters | C4dOverlapParameters | C4dOverlayLabelImageParameters | C4dPadParameters | C4dPadToParameters | C4dPcaParameters | C4dPercentIntensityModeParameters | C4dPixelParameters | C4dPopParameters | C4dPopasParameters | C4dProbeParameters | C4dPushParameters | C4dRankParameters | C4dReciprocalParameters | C4dRegionParameters | C4dReorderParameters | C4dRetainLabelsParameters | C4dRfApplyParameters | C4dRfTrainParameters | C4dRfParamPatchParameters | C4dRfParamUsexyzParameters | C4dRfParamNousexyzParameters | C4dRfParamNtreesParameters | C4dRfParamTreedepthParameters | C4dSetSformParameters | C4dReplaceParameters | C4dResampleParameters | C4dResampleIsoParameters | C4dResampleMmParameters | C4dResliceItkParameters | C4dResliceMatrixParameters | C4dResliceIdentityParameters | C4dRgb2hsvParameters | C4dRmsParameters | C4dRoundParameters | C4dScaleParameters | C4dSetSform1Parameters | C4dSinParameters | C4dSliceParameters | C4dSliceAllParameters | C4dSharpenParameters | C4dShiftParameters | C4dSignedDistanceTransformParameters | C4dSmoothParameters | C4dSmoothFastParameters | C4dSpacingParameters | C4dSplitParameters | C4dSqrtParameters | C4dStapleParameters | C4dStructureTensorEigenvaluesParameters | C4dSpmParameters | C4dSubtractParameters | C4dSupervoxelParameters | C4dStretchParameters | C4dSwapdimParameters | C4dTestImageParameters | C4dTestProbeParameters | C4dThresholdParameters | C4dTileParameters | C4dTrimParameters | C4dTrimToSizeParameters | C4dTypeParameters | C4dVerboseParameters | C4dNoverboseParameters | C4dVersionParameters | C4dVoteParameters | C4dVoteMrfParameters | C4dVoteLabelParameters | C4dVoxelSumParameters | C4dVoxelIntegralParameters | C4dVoxelwiseRegressionParameters | C4dWarpParameters | C4dWarpLabelParameters | C4dWrapParameters | C4dWeightedSumParameters | C4dWeightedSumVoxelwiseParameters>;
     "output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "c4d": c4d_cargs,
-        "accum": c4d_accum_cargs,
-        "acos": c4d_acos_cargs,
-        "add": c4d_add_cargs,
-        "align_landmarks": c4d_align_landmarks_cargs,
-        "anisotropic_diffusion": c4d_anisotropic_diffusion_cargs,
-        "antialias": c4d_antialias_cargs,
-        "set": c4d_set_cargs,
-        "asin": c4d_asin_cargs,
-        "atan2": c4d_atan2_cargs,
-        "background": c4d_background_cargs,
-        "n4_bias_correction": c4d_n4_bias_correction_cargs,
-        "binarize": c4d_binarize_cargs,
-        "canny": c4d_canny_cargs,
-        "ceil": c4d_ceil_cargs,
-        "centroid": c4d_centroid_cargs,
-        "centroid_mark": c4d_centroid_mark_cargs,
-        "connected_components": c4d_connected_components_cargs,
-        "clear": c4d_clear_cargs,
-        "clip": c4d_clip_cargs,
-        "color_map": c4d_color_map_cargs,
-        "compress": c4d_compress_cargs,
-        "no_compress": c4d_no_compress_cargs,
-        "conv": c4d_conv_cargs,
-        "coordinate_map_voxel": c4d_coordinate_map_voxel_cargs,
-        "coordinate_map_physical": c4d_coordinate_map_physical_cargs,
-        "copy_transform": c4d_copy_transform_cargs,
-        "cos": c4d_cos_cargs,
-        "create": c4d_create_cargs,
-        "dicom_series_list": c4d_dicom_series_list_cargs,
-        "dicom_series_read": c4d_dicom_series_read_cargs,
-        "dilate": c4d_dilate_cargs,
-        "divide": c4d_divide_cargs,
-        "duplicate": c4d_duplicate_cargs,
-        "endaccum": c4d_endaccum_cargs,
-        "endfor": c4d_endfor_cargs,
-        "erode": c4d_erode_cargs,
-        "erf": c4d_erf_cargs,
-        "exp": c4d_exp_cargs,
-        "export_patches": c4d_export_patches_cargs,
-        "export_patches_aug": c4d_export_patches_aug_cargs,
-        "extrude_seg": c4d_extrude_seg_cargs,
-        "fill_background_with_noise": c4d_fill_background_with_noise_cargs,
-        "fft": c4d_fft_cargs,
-        "flip": c4d_flip_cargs,
-        "floor": c4d_floor_cargs,
-        "foreach": c4d_foreach_cargs,
-        "foreach_comp": c4d_foreach_comp_cargs,
-        "glm": c4d_glm_cargs,
-        "gradient": c4d_gradient_cargs,
-        "_help": c4d__help_cargs,
-        "holefill": c4d_holefill_cargs,
-        "hessian_eigenvalues": c4d_hessian_eigenvalues_cargs,
-        "hessian_objectness": c4d_hessian_objectness_cargs,
-        "histogram_match": c4d_histogram_match_cargs,
-        "info": c4d_info_cargs,
-        "info_full": c4d_info_full_cargs,
-        "insert": c4d_insert_cargs,
-        "interpolation": c4d_interpolation_cargs,
-        "iterations": c4d_iterations_cargs,
-        "label_overlap": c4d_label_overlap_cargs,
-        "label_statistics": c4d_label_statistics_cargs,
-        "landmarks_to_spheres": c4d_landmarks_to_spheres_cargs,
-        "laplacian": c4d_laplacian_cargs,
-        "levelset": c4d_levelset_cargs,
-        "levelset_curvature": c4d_levelset_curvature_cargs,
-        "levelset_advection": c4d_levelset_advection_cargs,
-        "log": c4d_log_cargs,
-        "log10": c4d_log10_cargs,
-        "manual": c4d_manual_cargs,
-        "match_bounding_box": c4d_match_bounding_box_cargs,
-        "maximum": c4d_maximum_cargs,
-        "multicomponent_split": c4d_multicomponent_split_cargs,
-        "mean": c4d_mean_cargs,
-        "median_filter": c4d_median_filter_cargs,
-        "merge": c4d_merge_cargs,
-        "mean_filter": c4d_mean_filter_cargs,
-        "mutual_info": c4d_mutual_info_cargs,
-        "minimum": c4d_minimum_cargs,
-        "mixture_model": c4d_mixture_model_cargs,
-        "moments": c4d_moments_cargs,
-        "mattes_mutual_info": c4d_mattes_mutual_info_cargs,
-        "mean_square": c4d_mean_square_cargs,
-        "multiply": c4d_multiply_cargs,
-        "normalized_cross_correlation": c4d_normalized_cross_correlation_cargs,
-        "normalized_correlation": c4d_normalized_correlation_cargs,
-        "normalized_mutual_info": c4d_normalized_mutual_info_cargs,
-        "noise_gaussian": c4d_noise_gaussian_cargs,
-        "noise_poisson": c4d_noise_poisson_cargs,
-        "noise_speckle": c4d_noise_speckle_cargs,
-        "noise_salt_pepper": c4d_noise_salt_pepper_cargs,
-        "no_multicomponent_split": c4d_no_multicomponent_split_cargs,
-        "normalize_local_window": c4d_normalize_local_window_cargs,
-        "normpdf": c4d_normpdf_cargs,
-        "noround": c4d_noround_cargs,
-        "nospm": c4d_nospm_cargs,
-        "output": c4d_output_cargs,
-        "output_multicomponent": c4d_output_multicomponent_cargs,
-        "output_multiple_multicomponent": c4d_output_multiple_multicomponent_cargs,
-        "orient": c4d_orient_cargs,
-        "output_multiple": c4d_output_multiple_cargs,
-        "orient_1": c4d_orient_1_cargs,
-        "origin": c4d_origin_cargs,
-        "origin_voxel": c4d_origin_voxel_cargs,
-        "origin_voxel_coord": c4d_origin_voxel_coord_cargs,
-        "overlap": c4d_overlap_cargs,
-        "overlay_label_image": c4d_overlay_label_image_cargs,
-        "pad": c4d_pad_cargs,
-        "pad_to": c4d_pad_to_cargs,
-        "pca": c4d_pca_cargs,
-        "percent_intensity_mode": c4d_percent_intensity_mode_cargs,
-        "pixel": c4d_pixel_cargs,
-        "pop": c4d_pop_cargs,
-        "popas": c4d_popas_cargs,
-        "probe": c4d_probe_cargs,
-        "push": c4d_push_cargs,
-        "rank": c4d_rank_cargs,
-        "reciprocal": c4d_reciprocal_cargs,
-        "region": c4d_region_cargs,
-        "reorder": c4d_reorder_cargs,
-        "retain_labels": c4d_retain_labels_cargs,
-        "rf_apply": c4d_rf_apply_cargs,
-        "rf_train": c4d_rf_train_cargs,
-        "rf_param_patch": c4d_rf_param_patch_cargs,
-        "rf_param_usexyz": c4d_rf_param_usexyz_cargs,
-        "rf_param_nousexyz": c4d_rf_param_nousexyz_cargs,
-        "rf_param_ntrees": c4d_rf_param_ntrees_cargs,
-        "rf_param_treedepth": c4d_rf_param_treedepth_cargs,
-        "set_sform": c4d_set_sform_cargs,
-        "replace": c4d_replace_cargs,
-        "resample": c4d_resample_cargs,
-        "resample_iso": c4d_resample_iso_cargs,
-        "resample_mm": c4d_resample_mm_cargs,
-        "reslice_itk": c4d_reslice_itk_cargs,
-        "reslice_matrix": c4d_reslice_matrix_cargs,
-        "reslice_identity": c4d_reslice_identity_cargs,
-        "rgb2hsv": c4d_rgb2hsv_cargs,
-        "rms": c4d_rms_cargs,
-        "round": c4d_round_cargs,
-        "scale": c4d_scale_cargs,
-        "set_sform_1": c4d_set_sform_1_cargs,
-        "sin": c4d_sin_cargs,
-        "slice": c4d_slice_cargs,
-        "slice_all": c4d_slice_all_cargs,
-        "sharpen": c4d_sharpen_cargs,
-        "shift": c4d_shift_cargs,
-        "signed_distance_transform": c4d_signed_distance_transform_cargs,
-        "smooth": c4d_smooth_cargs,
-        "smooth_fast": c4d_smooth_fast_cargs,
-        "spacing": c4d_spacing_cargs,
-        "split": c4d_split_cargs,
-        "sqrt": c4d_sqrt_cargs,
-        "staple": c4d_staple_cargs,
-        "structure_tensor_eigenvalues": c4d_structure_tensor_eigenvalues_cargs,
-        "spm": c4d_spm_cargs,
-        "subtract": c4d_subtract_cargs,
-        "supervoxel": c4d_supervoxel_cargs,
-        "stretch": c4d_stretch_cargs,
-        "swapdim": c4d_swapdim_cargs,
-        "test_image": c4d_test_image_cargs,
-        "test_probe": c4d_test_probe_cargs,
-        "threshold": c4d_threshold_cargs,
-        "tile": c4d_tile_cargs,
-        "trim": c4d_trim_cargs,
-        "trim_to_size": c4d_trim_to_size_cargs,
-        "type": c4d_type_cargs,
-        "verbose": c4d_verbose_cargs,
-        "noverbose": c4d_noverbose_cargs,
-        "version": c4d_version_cargs,
-        "vote": c4d_vote_cargs,
-        "vote_mrf": c4d_vote_mrf_cargs,
-        "vote_label": c4d_vote_label_cargs,
-        "voxel_sum": c4d_voxel_sum_cargs,
-        "voxel_integral": c4d_voxel_integral_cargs,
-        "voxelwise_regression": c4d_voxelwise_regression_cargs,
-        "warp": c4d_warp_cargs,
-        "warp_label": c4d_warp_label_cargs,
-        "wrap": c4d_wrap_cargs,
-        "weighted_sum": c4d_weighted_sum_cargs,
-        "weighted_sum_voxelwise": c4d_weighted_sum_voxelwise_cargs,
+        "c3d.c4d": c4d_cargs,
+        "c3d.c4d.accum": c4d_accum_cargs,
+        "c3d.c4d.acos": c4d_acos_cargs,
+        "c3d.c4d.add": c4d_add_cargs,
+        "c3d.c4d.align_landmarks": c4d_align_landmarks_cargs,
+        "c3d.c4d.anisotropic_diffusion": c4d_anisotropic_diffusion_cargs,
+        "c3d.c4d.antialias": c4d_antialias_cargs,
+        "c3d.c4d.set": c4d_set_cargs,
+        "c3d.c4d.asin": c4d_asin_cargs,
+        "c3d.c4d.atan2": c4d_atan2_cargs,
+        "c3d.c4d.background": c4d_background_cargs,
+        "c3d.c4d.n4_bias_correction": c4d_n4_bias_correction_cargs,
+        "c3d.c4d.binarize": c4d_binarize_cargs,
+        "c3d.c4d.canny": c4d_canny_cargs,
+        "c3d.c4d.ceil": c4d_ceil_cargs,
+        "c3d.c4d.centroid": c4d_centroid_cargs,
+        "c3d.c4d.centroid_mark": c4d_centroid_mark_cargs,
+        "c3d.c4d.connected_components": c4d_connected_components_cargs,
+        "c3d.c4d.clear": c4d_clear_cargs,
+        "c3d.c4d.clip": c4d_clip_cargs,
+        "c3d.c4d.color_map": c4d_color_map_cargs,
+        "c3d.c4d.compress": c4d_compress_cargs,
+        "c3d.c4d.no_compress": c4d_no_compress_cargs,
+        "c3d.c4d.conv": c4d_conv_cargs,
+        "c3d.c4d.coordinate_map_voxel": c4d_coordinate_map_voxel_cargs,
+        "c3d.c4d.coordinate_map_physical": c4d_coordinate_map_physical_cargs,
+        "c3d.c4d.copy_transform": c4d_copy_transform_cargs,
+        "c3d.c4d.cos": c4d_cos_cargs,
+        "c3d.c4d.create": c4d_create_cargs,
+        "c3d.c4d.dicom_series_list": c4d_dicom_series_list_cargs,
+        "c3d.c4d.dicom_series_read": c4d_dicom_series_read_cargs,
+        "c3d.c4d.dilate": c4d_dilate_cargs,
+        "c3d.c4d.divide": c4d_divide_cargs,
+        "c3d.c4d.duplicate": c4d_duplicate_cargs,
+        "c3d.c4d.endaccum": c4d_endaccum_cargs,
+        "c3d.c4d.endfor": c4d_endfor_cargs,
+        "c3d.c4d.erode": c4d_erode_cargs,
+        "c3d.c4d.erf": c4d_erf_cargs,
+        "c3d.c4d.exp": c4d_exp_cargs,
+        "c3d.c4d.export_patches": c4d_export_patches_cargs,
+        "c3d.c4d.export_patches_aug": c4d_export_patches_aug_cargs,
+        "c3d.c4d.extrude_seg": c4d_extrude_seg_cargs,
+        "c3d.c4d.fill_background_with_noise": c4d_fill_background_with_noise_cargs,
+        "c3d.c4d.fft": c4d_fft_cargs,
+        "c3d.c4d.flip": c4d_flip_cargs,
+        "c3d.c4d.floor": c4d_floor_cargs,
+        "c3d.c4d.foreach": c4d_foreach_cargs,
+        "c3d.c4d.foreach_comp": c4d_foreach_comp_cargs,
+        "c3d.c4d.glm": c4d_glm_cargs,
+        "c3d.c4d.gradient": c4d_gradient_cargs,
+        "c3d.c4d._help": c4d__help_cargs,
+        "c3d.c4d.holefill": c4d_holefill_cargs,
+        "c3d.c4d.hessian_eigenvalues": c4d_hessian_eigenvalues_cargs,
+        "c3d.c4d.hessian_objectness": c4d_hessian_objectness_cargs,
+        "c3d.c4d.histogram_match": c4d_histogram_match_cargs,
+        "c3d.c4d.info": c4d_info_cargs,
+        "c3d.c4d.info_full": c4d_info_full_cargs,
+        "c3d.c4d.insert": c4d_insert_cargs,
+        "c3d.c4d.interpolation": c4d_interpolation_cargs,
+        "c3d.c4d.iterations": c4d_iterations_cargs,
+        "c3d.c4d.label_overlap": c4d_label_overlap_cargs,
+        "c3d.c4d.label_statistics": c4d_label_statistics_cargs,
+        "c3d.c4d.landmarks_to_spheres": c4d_landmarks_to_spheres_cargs,
+        "c3d.c4d.laplacian": c4d_laplacian_cargs,
+        "c3d.c4d.levelset": c4d_levelset_cargs,
+        "c3d.c4d.levelset_curvature": c4d_levelset_curvature_cargs,
+        "c3d.c4d.levelset_advection": c4d_levelset_advection_cargs,
+        "c3d.c4d.log": c4d_log_cargs,
+        "c3d.c4d.log10": c4d_log10_cargs,
+        "c3d.c4d.manual": c4d_manual_cargs,
+        "c3d.c4d.match_bounding_box": c4d_match_bounding_box_cargs,
+        "c3d.c4d.maximum": c4d_maximum_cargs,
+        "c3d.c4d.multicomponent_split": c4d_multicomponent_split_cargs,
+        "c3d.c4d.mean": c4d_mean_cargs,
+        "c3d.c4d.median_filter": c4d_median_filter_cargs,
+        "c3d.c4d.merge": c4d_merge_cargs,
+        "c3d.c4d.mean_filter": c4d_mean_filter_cargs,
+        "c3d.c4d.mutual_info": c4d_mutual_info_cargs,
+        "c3d.c4d.minimum": c4d_minimum_cargs,
+        "c3d.c4d.mixture_model": c4d_mixture_model_cargs,
+        "c3d.c4d.moments": c4d_moments_cargs,
+        "c3d.c4d.mattes_mutual_info": c4d_mattes_mutual_info_cargs,
+        "c3d.c4d.mean_square": c4d_mean_square_cargs,
+        "c3d.c4d.multiply": c4d_multiply_cargs,
+        "c3d.c4d.normalized_cross_correlation": c4d_normalized_cross_correlation_cargs,
+        "c3d.c4d.normalized_correlation": c4d_normalized_correlation_cargs,
+        "c3d.c4d.normalized_mutual_info": c4d_normalized_mutual_info_cargs,
+        "c3d.c4d.noise_gaussian": c4d_noise_gaussian_cargs,
+        "c3d.c4d.noise_poisson": c4d_noise_poisson_cargs,
+        "c3d.c4d.noise_speckle": c4d_noise_speckle_cargs,
+        "c3d.c4d.noise_salt_pepper": c4d_noise_salt_pepper_cargs,
+        "c3d.c4d.no_multicomponent_split": c4d_no_multicomponent_split_cargs,
+        "c3d.c4d.normalize_local_window": c4d_normalize_local_window_cargs,
+        "c3d.c4d.normpdf": c4d_normpdf_cargs,
+        "c3d.c4d.noround": c4d_noround_cargs,
+        "c3d.c4d.nospm": c4d_nospm_cargs,
+        "c3d.c4d.output": c4d_output_cargs,
+        "c3d.c4d.output_multicomponent": c4d_output_multicomponent_cargs,
+        "c3d.c4d.output_multiple_multicomponent": c4d_output_multiple_multicomponent_cargs,
+        "c3d.c4d.orient": c4d_orient_cargs,
+        "c3d.c4d.output_multiple": c4d_output_multiple_cargs,
+        "c3d.c4d.orient": c4d_orient_1_cargs,
+        "c3d.c4d.origin": c4d_origin_cargs,
+        "c3d.c4d.origin_voxel": c4d_origin_voxel_cargs,
+        "c3d.c4d.origin_voxel_coord": c4d_origin_voxel_coord_cargs,
+        "c3d.c4d.overlap": c4d_overlap_cargs,
+        "c3d.c4d.overlay_label_image": c4d_overlay_label_image_cargs,
+        "c3d.c4d.pad": c4d_pad_cargs,
+        "c3d.c4d.pad_to": c4d_pad_to_cargs,
+        "c3d.c4d.pca": c4d_pca_cargs,
+        "c3d.c4d.percent_intensity_mode": c4d_percent_intensity_mode_cargs,
+        "c3d.c4d.pixel": c4d_pixel_cargs,
+        "c3d.c4d.pop": c4d_pop_cargs,
+        "c3d.c4d.popas": c4d_popas_cargs,
+        "c3d.c4d.probe": c4d_probe_cargs,
+        "c3d.c4d.push": c4d_push_cargs,
+        "c3d.c4d.rank": c4d_rank_cargs,
+        "c3d.c4d.reciprocal": c4d_reciprocal_cargs,
+        "c3d.c4d.region": c4d_region_cargs,
+        "c3d.c4d.reorder": c4d_reorder_cargs,
+        "c3d.c4d.retain_labels": c4d_retain_labels_cargs,
+        "c3d.c4d.rf_apply": c4d_rf_apply_cargs,
+        "c3d.c4d.rf_train": c4d_rf_train_cargs,
+        "c3d.c4d.rf_param_patch": c4d_rf_param_patch_cargs,
+        "c3d.c4d.rf_param_usexyz": c4d_rf_param_usexyz_cargs,
+        "c3d.c4d.rf_param_nousexyz": c4d_rf_param_nousexyz_cargs,
+        "c3d.c4d.rf_param_ntrees": c4d_rf_param_ntrees_cargs,
+        "c3d.c4d.rf_param_treedepth": c4d_rf_param_treedepth_cargs,
+        "c3d.c4d.set_sform": c4d_set_sform_cargs,
+        "c3d.c4d.replace": c4d_replace_cargs,
+        "c3d.c4d.resample": c4d_resample_cargs,
+        "c3d.c4d.resample_iso": c4d_resample_iso_cargs,
+        "c3d.c4d.resample_mm": c4d_resample_mm_cargs,
+        "c3d.c4d.reslice_itk": c4d_reslice_itk_cargs,
+        "c3d.c4d.reslice_matrix": c4d_reslice_matrix_cargs,
+        "c3d.c4d.reslice_identity": c4d_reslice_identity_cargs,
+        "c3d.c4d.rgb2hsv": c4d_rgb2hsv_cargs,
+        "c3d.c4d.rms": c4d_rms_cargs,
+        "c3d.c4d.round": c4d_round_cargs,
+        "c3d.c4d.scale": c4d_scale_cargs,
+        "c3d.c4d.set_sform": c4d_set_sform_1_cargs,
+        "c3d.c4d.sin": c4d_sin_cargs,
+        "c3d.c4d.slice": c4d_slice_cargs,
+        "c3d.c4d.slice_all": c4d_slice_all_cargs,
+        "c3d.c4d.sharpen": c4d_sharpen_cargs,
+        "c3d.c4d.shift": c4d_shift_cargs,
+        "c3d.c4d.signed_distance_transform": c4d_signed_distance_transform_cargs,
+        "c3d.c4d.smooth": c4d_smooth_cargs,
+        "c3d.c4d.smooth_fast": c4d_smooth_fast_cargs,
+        "c3d.c4d.spacing": c4d_spacing_cargs,
+        "c3d.c4d.split": c4d_split_cargs,
+        "c3d.c4d.sqrt": c4d_sqrt_cargs,
+        "c3d.c4d.staple": c4d_staple_cargs,
+        "c3d.c4d.structure_tensor_eigenvalues": c4d_structure_tensor_eigenvalues_cargs,
+        "c3d.c4d.spm": c4d_spm_cargs,
+        "c3d.c4d.subtract": c4d_subtract_cargs,
+        "c3d.c4d.supervoxel": c4d_supervoxel_cargs,
+        "c3d.c4d.stretch": c4d_stretch_cargs,
+        "c3d.c4d.swapdim": c4d_swapdim_cargs,
+        "c3d.c4d.test_image": c4d_test_image_cargs,
+        "c3d.c4d.test_probe": c4d_test_probe_cargs,
+        "c3d.c4d.threshold": c4d_threshold_cargs,
+        "c3d.c4d.tile": c4d_tile_cargs,
+        "c3d.c4d.trim": c4d_trim_cargs,
+        "c3d.c4d.trim_to_size": c4d_trim_to_size_cargs,
+        "c3d.c4d.type": c4d_type_cargs,
+        "c3d.c4d.verbose": c4d_verbose_cargs,
+        "c3d.c4d.noverbose": c4d_noverbose_cargs,
+        "c3d.c4d.version": c4d_version_cargs,
+        "c3d.c4d.vote": c4d_vote_cargs,
+        "c3d.c4d.vote_mrf": c4d_vote_mrf_cargs,
+        "c3d.c4d.vote_label": c4d_vote_label_cargs,
+        "c3d.c4d.voxel_sum": c4d_voxel_sum_cargs,
+        "c3d.c4d.voxel_integral": c4d_voxel_integral_cargs,
+        "c3d.c4d.voxelwise_regression": c4d_voxelwise_regression_cargs,
+        "c3d.c4d.warp": c4d_warp_cargs,
+        "c3d.c4d.warp_label": c4d_warp_label_cargs,
+        "c3d.c4d.wrap": c4d_wrap_cargs,
+        "c3d.c4d.weighted_sum": c4d_weighted_sum_cargs,
+        "c3d.c4d.weighted_sum_voxelwise": c4d_weighted_sum_voxelwise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "c4d": c4d_outputs,
-        "output": c4d_output_outputs,
+        "c3d.c4d": c4d_outputs,
+        "c3d.c4d.output": c4d_output_outputs,
     };
     return outputsFuncs[t];
 }
 
 
-function c4d_accum_params(
-    accum: string,
-): C4dAccumParameters {
-    /**
-     * Build parameters.
-    
-     * @param accum -accum, -endaccum: Accumulate operations over all images
+/**
+ * Build parameters.
+ *
+ * @param accum -accum, -endaccum: Accumulate operations over all images
 
 Syntax: `-accum command-list -endaccum`
 
 Apply a binary operation (such as addition or multiplication) to all the images on the stack in a cumulative fashion. The command(s) will be applied to the last and second-to-last images on the stack, then to the result of this operation and the third-to-last image on the stack and so on. Below is the example of using the command to add multiple images. 
 
     c3d image*.nii -accum -add -endaccum -o sum.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_accum_params(
+    accum: string,
+): C4dAccumParameters {
     const params = {
-        "__STYXTYPE__": "accum" as const,
+        "@type": "c3d.c4d.accum" as const,
         "accum": accum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_accum_cargs(
     params: C4dAccumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-accum",
@@ -1352,36 +1352,36 @@ function c4d_accum_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param acos No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_acos_params(
     acos: string,
 ): C4dAcosParameters {
-    /**
-     * Build parameters.
-    
-     * @param acos No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "acos" as const,
+        "@type": "c3d.c4d.acos" as const,
         "acos": acos,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_acos_cargs(
     params: C4dAcosParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-acos",
@@ -1391,13 +1391,10 @@ function c4d_acos_cargs(
 }
 
 
-function c4d_add_params(
-    add: string,
-): C4dAddParameters {
-    /**
-     * Build parameters.
-    
-     * @param add -add: Voxelwise image addition
+/**
+ * Build parameters.
+ *
+ * @param add -add: Voxelwise image addition
 
 Syntax: `-add`
 
@@ -1412,29 +1409,32 @@ Adds the last two images on the stack, and places the sum at the end of the stac
 
     # Subtract two images, using -scale command: x = a - b
     c3d a.img b.img -scale -1 -add -o x.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_add_params(
+    add: string,
+): C4dAddParameters {
     const params = {
-        "__STYXTYPE__": "add" as const,
+        "@type": "c3d.c4d.add" as const,
         "add": add,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_add_cargs(
     params: C4dAddParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-add",
@@ -1444,13 +1444,10 @@ function c4d_add_cargs(
 }
 
 
-function c4d_align_landmarks_params(
-    align_landmarks: string,
-): C4dAlignLandmarksParameters {
-    /**
-     * Build parameters.
-    
-     * @param align_landmarks -alm, -align-landmarks: Align images based on landmark matching
+/**
+ * Build parameters.
+ *
+ * @param align_landmarks -alm, -align-landmarks: Align images based on landmark matching
 
 Syntax: `-alm dof outfile`
 
@@ -1458,29 +1455,32 @@ Performs rigid or affine alignment between to sets of landmark images. A landmar
 
     c3d fixed_landmarks.nii moving_landmarks.nii -alm 6 rigid.mat
     c3d fixed.nii moving.nii -reslice-matrix rigid.mat -o moving_resliced_to_fixed.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_align_landmarks_params(
+    align_landmarks: string,
+): C4dAlignLandmarksParameters {
     const params = {
-        "__STYXTYPE__": "align_landmarks" as const,
+        "@type": "c3d.c4d.align_landmarks" as const,
         "align_landmarks": align_landmarks,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_align_landmarks_cargs(
     params: C4dAlignLandmarksParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-align-landmarks",
@@ -1490,13 +1490,10 @@ function c4d_align_landmarks_cargs(
 }
 
 
-function c4d_anisotropic_diffusion_params(
-    anisotropic_diffusion: string,
-): C4dAnisotropicDiffusionParameters {
-    /**
-     * Build parameters.
-    
-     * @param anisotropic_diffusion -add: Voxelwise image addition
+/**
+ * Build parameters.
+ *
+ * @param anisotropic_diffusion -add: Voxelwise image addition
 
 Syntax: `-add`
 
@@ -1511,29 +1508,32 @@ Adds the last two images on the stack, and places the sum at the end of the stac
 
     # Subtract two images, using -scale command: x = a - b
     c3d a.img b.img -scale -1 -add -o x.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_anisotropic_diffusion_params(
+    anisotropic_diffusion: string,
+): C4dAnisotropicDiffusionParameters {
     const params = {
-        "__STYXTYPE__": "anisotropic_diffusion" as const,
+        "@type": "c3d.c4d.anisotropic_diffusion" as const,
         "anisotropic_diffusion": anisotropic_diffusion,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_anisotropic_diffusion_cargs(
     params: C4dAnisotropicDiffusionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-anisotropic-diffusion",
@@ -1543,36 +1543,36 @@ function c4d_anisotropic_diffusion_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param antialias No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_antialias_params(
     antialias: string,
 ): C4dAntialiasParameters {
-    /**
-     * Build parameters.
-    
-     * @param antialias No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antialias" as const,
+        "@type": "c3d.c4d.antialias" as const,
         "antialias": antialias,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_antialias_cargs(
     params: C4dAntialiasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-antialias",
@@ -1582,42 +1582,42 @@ function c4d_antialias_cargs(
 }
 
 
-function c4d_set_params(
-    set_: string,
-): C4dSetParameters {
-    /**
-     * Build parameters.
-    
-     * @param set_ -as: Assign image at the end of the stack to a variable
+/**
+ * Build parameters.
+ *
+ * @param set_ -as: Assign image at the end of the stack to a variable
 
 Syntax: `-as var`
 
 Associates the image currently at the end of the stack with variable name 'var'. This allows you to retrieve the image later on the command line using the **-push** command. The **-as** and **-push** commands are useful when you need to use a certain image more than once during a convert3d operation. For example, if you want to compute the distance transform of a binary image and mask it so that the values outside of the binary image region have value 0, you would use the following command: 
 
     c3d binary.img -as A -sdt -push A -times -o masked_distance.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_set_params(
+    set_: string,
+): C4dSetParameters {
     const params = {
-        "__STYXTYPE__": "set" as const,
+        "@type": "c3d.c4d.set" as const,
         "set": set_,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_set_cargs(
     params: C4dSetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-as",
@@ -1627,36 +1627,36 @@ function c4d_set_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param asin No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_asin_params(
     asin: string,
 ): C4dAsinParameters {
-    /**
-     * Build parameters.
-    
-     * @param asin No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asin" as const,
+        "@type": "c3d.c4d.asin" as const,
         "asin": asin,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_asin_cargs(
     params: C4dAsinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-asin",
@@ -1666,42 +1666,42 @@ function c4d_asin_cargs(
 }
 
 
-function c4d_atan2_params(
-    atan2: string,
-): C4dAtan2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param atan2 -atan2: Voxelwise angle from sine and cosine
+/**
+ * Build parameters.
+ *
+ * @param atan2 -atan2: Voxelwise angle from sine and cosine
 
 Syntax: `-atan2`
 
 Computes the angle in radians from images containing sine and cosine. This is a voxel-wise operation. It requires two images on the stack (sine followed by cosine): 
 
     c3d sin_theta.nii.gz cos_theta.nii.gz -atan2 -o theta.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_atan2_params(
+    atan2: string,
+): C4dAtan2Parameters {
     const params = {
-        "__STYXTYPE__": "atan2" as const,
+        "@type": "c3d.c4d.atan2" as const,
         "atan2": atan2,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_atan2_cargs(
     params: C4dAtan2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-atan2",
@@ -1711,40 +1711,40 @@ function c4d_atan2_cargs(
 }
 
 
-function c4d_background_params(
-    background: string,
-): C4dBackgroundParameters {
-    /**
-     * Build parameters.
-    
-     * @param background -background: Specify background intensity
+/**
+ * Build parameters.
+ *
+ * @param background -background: Specify background intensity
 
 Syntax: `-background <value> `
 
 Sets the background intensity for interpolation and other operations where some default background value is needed. Default is 0.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_background_params(
+    background: string,
+): C4dBackgroundParameters {
     const params = {
-        "__STYXTYPE__": "background" as const,
+        "@type": "c3d.c4d.background" as const,
         "background": background,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_background_cargs(
     params: C4dBackgroundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-background",
@@ -1754,42 +1754,42 @@ function c4d_background_cargs(
 }
 
 
-function c4d_n4_bias_correction_params(
-    n4_bias_correction: string,
-): C4dN4BiasCorrectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param n4_bias_correction -biascorr: Automatic MRI bias field correction
+/**
+ * Build parameters.
+ *
+ * @param n4_bias_correction -biascorr: Automatic MRI bias field correction
 
 Syntax: `-biascorr`
 
 Performs automatic bias field correction for MRI images. This feature uses the [N3 implementation in ITK by Dr. Tustison][4], based on the N3 algorithm by Sled et al. 
 
     c3d mri.nii.gz -biascorr -o mricorr.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_n4_bias_correction_params(
+    n4_bias_correction: string,
+): C4dN4BiasCorrectionParameters {
     const params = {
-        "__STYXTYPE__": "n4_bias_correction" as const,
+        "@type": "c3d.c4d.n4_bias_correction" as const,
         "n4_bias_correction": n4_bias_correction,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_n4_bias_correction_cargs(
     params: C4dN4BiasCorrectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-biascorr",
@@ -1799,13 +1799,10 @@ function c4d_n4_bias_correction_cargs(
 }
 
 
-function c4d_binarize_params(
-    binarize: string,
-): C4dBinarizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param binarize -binarize: Convert image to binary
+/**
+ * Build parameters.
+ *
+ * @param binarize -binarize: Convert image to binary
 
 Syntax: `-binarize`
 
@@ -1814,29 +1811,32 @@ Converts an image to binary by mapping all background values (the background is 
     c3d test.img -binarize -o binary.img 
     c3d -background 10 -binarize -o binary.img
     c3d test.img -threshold 10 10 0 1              // equivalent to above command
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_binarize_params(
+    binarize: string,
+): C4dBinarizeParameters {
     const params = {
-        "__STYXTYPE__": "binarize" as const,
+        "@type": "c3d.c4d.binarize" as const,
         "binarize": binarize,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_binarize_cargs(
     params: C4dBinarizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-binarize",
@@ -1846,40 +1846,40 @@ function c4d_binarize_cargs(
 }
 
 
-function c4d_canny_params(
-    canny: string,
-): C4dCannyParameters {
-    /**
-     * Build parameters.
-    
-     * @param canny -canny: Canny edge detector
+/**
+ * Build parameters.
+ *
+ * @param canny -canny: Canny edge detector
 
 Syntax: `-canny <sigma_vector> <t_lower> <t_upper>`
 
 Performs edge detection on the last image on the stack using the Canny filter. The parameters are a vector of standard deviations defining the scale of the edges detected and lower and upper thresholds for edge selection. See documentation on the [ITK Canny Filter][14].
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_canny_params(
+    canny: string,
+): C4dCannyParameters {
     const params = {
-        "__STYXTYPE__": "canny" as const,
+        "@type": "c3d.c4d.canny" as const,
         "canny": canny,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_canny_cargs(
     params: C4dCannyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-canny",
@@ -1889,42 +1889,42 @@ function c4d_canny_cargs(
 }
 
 
-function c4d_ceil_params(
-    ceil: string,
-): C4dCeilParameters {
-    /**
-     * Build parameters.
-    
-     * @param ceil -ceil: Round up image intensities
+/**
+ * Build parameters.
+ *
+ * @param ceil -ceil: Round up image intensities
 
 Syntax: `-ceil `
 
 Each image intensity is replaced by the smallest integer larger or equal to it
 
     c3d input.img -ceil -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_ceil_params(
+    ceil: string,
+): C4dCeilParameters {
     const params = {
-        "__STYXTYPE__": "ceil" as const,
+        "@type": "c3d.c4d.ceil" as const,
         "ceil": ceil,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_ceil_cargs(
     params: C4dCeilParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-ceil",
@@ -1934,13 +1934,10 @@ function c4d_ceil_cargs(
 }
 
 
-function c4d_centroid_params(
-    centroid: string,
-): C4dCentroidParameters {
-    /**
-     * Build parameters.
-    
-     * @param centroid -centroid: Report centroid of foreground voxels
+/**
+ * Build parameters.
+ *
+ * @param centroid -centroid: Report centroid of foreground voxels
 
 Syntax: `-centroid`
 
@@ -1950,29 +1947,32 @@ Reports the centroid, in physical coordinates, of all foreground voxels in the i
     c3d grayimage.img -thresh 1000 7000 1 0 -centroid 1   // centroid of all voxels in range 1000-7000
     c3d labelimage.img -thresh 5 5 1 0 -centroid          // centroid of all voxels with label 5
     c3d labelimage.img -split -foreach -centroid -endfor  // centroids of all labels (including 0)
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_centroid_params(
+    centroid: string,
+): C4dCentroidParameters {
     const params = {
-        "__STYXTYPE__": "centroid" as const,
+        "@type": "c3d.c4d.centroid" as const,
         "centroid": centroid,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_centroid_cargs(
     params: C4dCentroidParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-centroid",
@@ -1982,13 +1982,10 @@ function c4d_centroid_cargs(
 }
 
 
-function c4d_centroid_mark_params(
-    centroid_mark: string,
-): C4dCentroidMarkParameters {
-    /**
-     * Build parameters.
-    
-     * @param centroid_mark -centroid-mark: Mark the centroid of foreground voxels
+/**
+ * Build parameters.
+ *
+ * @param centroid_mark -centroid-mark: Mark the centroid of foreground voxels
 
 Syntax: `-centroid-mark <label>`
 
@@ -1996,29 +1993,32 @@ Marks the centroid of the foreground voxels in an image. Unlike **-centroid**, t
 
     c3d binaryimage.nii -centroid-mark -dilate 1 3x3x3
     c3d labelimage.nii -split -foreach -centroid-mark -endfor -merge -o centers.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_centroid_mark_params(
+    centroid_mark: string,
+): C4dCentroidMarkParameters {
     const params = {
-        "__STYXTYPE__": "centroid_mark" as const,
+        "@type": "c3d.c4d.centroid_mark" as const,
         "centroid_mark": centroid_mark,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_centroid_mark_cargs(
     params: C4dCentroidMarkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-centroid-mark",
@@ -2028,13 +2028,10 @@ function c4d_centroid_mark_cargs(
 }
 
 
-function c4d_connected_components_params(
-    connected_components: string,
-): C4dConnectedComponentsParameters {
-    /**
-     * Build parameters.
-    
-     * @param connected_components -comp, -connected-components: Compute connected components
+/**
+ * Build parameters.
+ *
+ * @param connected_components -comp, -connected-components: Compute connected components
 
 Syntax: `-comp`
 
@@ -2042,29 +2039,32 @@ Computes the connected components of a binary image. Each connected component is
 
     c3d binary.img -comp -o comp.img
     c3d binary.img -comp -threshold 1 1 1 0 -o largest_comp.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_connected_components_params(
+    connected_components: string,
+): C4dConnectedComponentsParameters {
     const params = {
-        "__STYXTYPE__": "connected_components" as const,
+        "@type": "c3d.c4d.connected_components" as const,
         "connected_components": connected_components,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_connected_components_cargs(
     params: C4dConnectedComponentsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-connected-components",
@@ -2074,40 +2074,40 @@ function c4d_connected_components_cargs(
 }
 
 
-function c4d_clear_params(
-    clear: string,
-): C4dClearParameters {
-    /**
-     * Build parameters.
-    
-     * @param clear -clear: Clear the image stack
+/**
+ * Build parameters.
+ *
+ * @param clear -clear: Clear the image stack
 
 Syntax: `-clear` 
 
 Clears the image stack. Images assigned a name with the **-as** command will remain in memory.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_clear_params(
+    clear: string,
+): C4dClearParameters {
     const params = {
-        "__STYXTYPE__": "clear" as const,
+        "@type": "c3d.c4d.clear" as const,
         "clear": clear,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_clear_cargs(
     params: C4dClearParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-clear",
@@ -2117,13 +2117,10 @@ function c4d_clear_cargs(
 }
 
 
-function c4d_clip_params(
-    clip: string,
-): C4dClipParameters {
-    /**
-     * Build parameters.
-    
-     * @param clip -clip: Clip image intensity to range
+/**
+ * Build parameters.
+ *
+ * @param clip -clip: Clip image intensity to range
 
 Syntax: `-clip iMin iMax`
 
@@ -2132,29 +2129,32 @@ Clips image intensities, so that the values below *iMin* are converted to *iMin*
     c3d mri.img -clip 1000 8000 -o mriclip01.img          // Clips below and above
     c3d mri.img -clip -inf 8000 -o mriclip02.img          // Clips above only
     c3d mri.img -clip -inf 95% -o mriclip03.img           // Clips at 95th percentile
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_clip_params(
+    clip: string,
+): C4dClipParameters {
     const params = {
-        "__STYXTYPE__": "clip" as const,
+        "@type": "c3d.c4d.clip" as const,
         "clip": clip,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_clip_cargs(
     params: C4dClipParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-clip",
@@ -2164,13 +2164,10 @@ function c4d_clip_cargs(
 }
 
 
-function c4d_color_map_params(
-    color_map: string,
-): C4dColorMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param color_map -color-map, -colormap: Convert scalar image to RGB using color map    
+/**
+ * Build parameters.
+ *
+ * @param color_map -color-map, -colormap: Convert scalar image to RGB using color map    
 
 Syntax: `-color-map <ColormapName> [min max]`
 
@@ -2181,29 +2178,32 @@ Converts a scalar image to a color (RGB) image using a specified color map. The 
 By default the full image intensity range is mapped. The optional **min** and **max** parameters can be used to set the range of the color map. 
 
     c3d scalar.nii.gz -slice z 50% -flip y -color-map jet 0 1 -type uchar -omc colorslice.png
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_color_map_params(
+    color_map: string,
+): C4dColorMapParameters {
     const params = {
-        "__STYXTYPE__": "color_map" as const,
+        "@type": "c3d.c4d.color_map" as const,
         "color_map": color_map,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_color_map_cargs(
     params: C4dColorMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-colormap",
@@ -2213,13 +2213,10 @@ function c4d_color_map_cargs(
 }
 
 
-function c4d_compress_params(
-    compress: string,
-): C4dCompressParameters {
-    /**
-     * Build parameters.
-    
-     * @param compress -compress, -no-compress: Enable/disable compression for some image files
+/**
+ * Build parameters.
+ *
+ * @param compress -compress, -no-compress: Enable/disable compression for some image files
 
 Syntax: `-compress` or `-no-compress`
 
@@ -2227,29 +2224,32 @@ Turns on compressing for image file formats that support it. For some file forma
 
     c3d input.nii -o output.nii.gz
     c3d input.nii -compress -o output.mha
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_compress_params(
+    compress: string,
+): C4dCompressParameters {
     const params = {
-        "__STYXTYPE__": "compress" as const,
+        "@type": "c3d.c4d.compress" as const,
         "compress": compress,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_compress_cargs(
     params: C4dCompressParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-compress",
@@ -2259,13 +2259,10 @@ function c4d_compress_cargs(
 }
 
 
-function c4d_no_compress_params(
-    no_compress: string,
-): C4dNoCompressParameters {
-    /**
-     * Build parameters.
-    
-     * @param no_compress -compress, -no-compress: Enable/disable compression for some image files
+/**
+ * Build parameters.
+ *
+ * @param no_compress -compress, -no-compress: Enable/disable compression for some image files
 
 Syntax: `-compress` or `-no-compress`
 
@@ -2273,29 +2270,32 @@ Turns on compressing for image file formats that support it. For some file forma
 
     c3d input.nii -o output.nii.gz
     c3d input.nii -compress -o output.mha
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_no_compress_params(
+    no_compress: string,
+): C4dNoCompressParameters {
     const params = {
-        "__STYXTYPE__": "no_compress" as const,
+        "@type": "c3d.c4d.no_compress" as const,
         "no_compress": no_compress,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_no_compress_cargs(
     params: C4dNoCompressParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-no-compress",
@@ -2305,13 +2305,10 @@ function c4d_no_compress_cargs(
 }
 
 
-function c4d_conv_params(
-    conv: string,
-): C4dConvParameters {
-    /**
-     * Build parameters.
-    
-     * @param conv -conv: Convolution
+/**
+ * Build parameters.
+ *
+ * @param conv -conv: Convolution
 
 Syntax `-conv`
 
@@ -2321,29 +2318,32 @@ Performs convolution between the last two images on the stack. The convolution i
 
 
 [Lehmann]: https://hdl.handle.net/10380/3154
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_conv_params(
+    conv: string,
+): C4dConvParameters {
     const params = {
-        "__STYXTYPE__": "conv" as const,
+        "@type": "c3d.c4d.conv" as const,
         "conv": conv,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_conv_cargs(
     params: C4dConvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-conv",
@@ -2353,13 +2353,10 @@ function c4d_conv_cargs(
 }
 
 
-function c4d_coordinate_map_voxel_params(
-    coordinate_map_voxel: string,
-): C4dCoordinateMapVoxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param coordinate_map_voxel -cmv, -coordinate-map-voxel: Generate voxel coordinate maps (voxel units)
+/**
+ * Build parameters.
+ *
+ * @param coordinate_map_voxel -cmv, -coordinate-map-voxel: Generate voxel coordinate maps (voxel units)
 
 Syntax: `-cmv`
 
@@ -2373,29 +2370,32 @@ One can use this command to split a brain segmentation image into a left hemisph
         -push SEG -times -o seg_left.nii.gz \
         -push MASK -replace 1 0 0 1 \
         -push SEG -times -o seg_right.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_coordinate_map_voxel_params(
+    coordinate_map_voxel: string,
+): C4dCoordinateMapVoxelParameters {
     const params = {
-        "__STYXTYPE__": "coordinate_map_voxel" as const,
+        "@type": "c3d.c4d.coordinate_map_voxel" as const,
         "coordinate_map_voxel": coordinate_map_voxel,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_coordinate_map_voxel_cargs(
     params: C4dCoordinateMapVoxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-coordinate-map-voxel",
@@ -2405,40 +2405,40 @@ function c4d_coordinate_map_voxel_cargs(
 }
 
 
-function c4d_coordinate_map_physical_params(
-    coordinate_map_physical: string,
-): C4dCoordinateMapPhysicalParameters {
-    /**
-     * Build parameters.
-    
-     * @param coordinate_map_physical -cmp, -coordinate-map-physical: Generate voxel coordinate maps (voxel units)
+/**
+ * Build parameters.
+ *
+ * @param coordinate_map_physical -cmp, -coordinate-map-physical: Generate voxel coordinate maps (voxel units)
 
 Syntax: `-cmp`
 
 This command is similar to **-cmv** (**-coordinate-map-voxel**), but the output will contain the physical coordinates of the voxels, in the NIFTI (RAS) coordinate frame.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_coordinate_map_physical_params(
+    coordinate_map_physical: string,
+): C4dCoordinateMapPhysicalParameters {
     const params = {
-        "__STYXTYPE__": "coordinate_map_physical" as const,
+        "@type": "c3d.c4d.coordinate_map_physical" as const,
         "coordinate_map_physical": coordinate_map_physical,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_coordinate_map_physical_cargs(
     params: C4dCoordinateMapPhysicalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-coordinate-map-physical",
@@ -2448,42 +2448,42 @@ function c4d_coordinate_map_physical_cargs(
 }
 
 
-function c4d_copy_transform_params(
-    copy_transform: string,
-): C4dCopyTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param copy_transform -copy-transform: Copy header information 
+/**
+ * Build parameters.
+ *
+ * @param copy_transform -copy-transform: Copy header information 
 
 Syntax: `-copy-transform`
 
 Copies the image header, specifically the image to physical space transform (origin, spacing, direction cosines), from the first image (reference) to the second image (target). This is best done with NIFTI images, which store this information well. In the example below, *out.nii* will have the same header as *first.nii* and the same intensities as *second.nii*.
 
     c3d first.nii second.nii -copy-transform -o out.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_copy_transform_params(
+    copy_transform: string,
+): C4dCopyTransformParameters {
     const params = {
-        "__STYXTYPE__": "copy_transform" as const,
+        "@type": "c3d.c4d.copy_transform" as const,
         "copy_transform": copy_transform,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_copy_transform_cargs(
     params: C4dCopyTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-copy-transform",
@@ -2493,36 +2493,36 @@ function c4d_copy_transform_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cos No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_cos_params(
     cos: string,
 ): C4dCosParameters {
-    /**
-     * Build parameters.
-    
-     * @param cos No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cos" as const,
+        "@type": "c3d.c4d.cos" as const,
         "cos": cos,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_cos_cargs(
     params: C4dCosParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-cos",
@@ -2532,13 +2532,10 @@ function c4d_cos_cargs(
 }
 
 
-function c4d_create_params(
-    create: string,
-): C4dCreateParameters {
-    /**
-     * Build parameters.
-    
-     * @param create -create: Generate blank image
+/**
+ * Build parameters.
+ *
+ * @param create -create: Generate blank image
 
 Syntax: `-create dimensions voxel_size`
 
@@ -2546,29 +2543,32 @@ Creates a new blank image with specified dimensions and voxel size, and places i
 
     c3d -create 256x256x160 1x1x1mm -o newimage.img
     c3d -background 128 -create 256x256x160 1x1x1mm -origin 128x128x80mm -o newimage.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_create_params(
+    create: string,
+): C4dCreateParameters {
     const params = {
-        "__STYXTYPE__": "create" as const,
+        "@type": "c3d.c4d.create" as const,
         "create": create,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_create_cargs(
     params: C4dCreateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-create",
@@ -2578,40 +2578,40 @@ function c4d_create_cargs(
 }
 
 
-function c4d_dicom_series_list_params(
-    dicom_series_list: string,
-): C4dDicomSeriesListParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_series_list -dicom-series-list: List image series in a DICOM directory
+/**
+ * Build parameters.
+ *
+ * @param dicom_series_list -dicom-series-list: List image series in a DICOM directory
 
 Syntax: `-dicom-series-list <directory>
 
 Prints out a table of DICOM series ids and corresponding image information to standard output.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_dicom_series_list_params(
+    dicom_series_list: string,
+): C4dDicomSeriesListParameters {
     const params = {
-        "__STYXTYPE__": "dicom_series_list" as const,
+        "@type": "c3d.c4d.dicom_series_list" as const,
         "dicom_series_list": dicom_series_list,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_dicom_series_list_cargs(
     params: C4dDicomSeriesListParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-dicom-series-list",
@@ -2621,41 +2621,41 @@ function c4d_dicom_series_list_cargs(
 }
 
 
-function c4d_dicom_series_read_params(
-    dicom_series_read: string,
-): C4dDicomSeriesReadParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_series_read -dicom-series-read: Read a DICOM image series
+/**
+ * Build parameters.
+ *
+ * @param dicom_series_read -dicom-series-read: Read a DICOM image series
 
 Syntax: `-dicom-series-read <directory> <series_id>`
 
 Imports a specific DICOM image series from a directory containing DICOM files. The **directory** parameter may also point to one of the DICOM files in the directory.
 The **seried_id** is a string identifier for the series that can be obtained by calling **-dicom-series-list**
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_dicom_series_read_params(
+    dicom_series_read: string,
+): C4dDicomSeriesReadParameters {
     const params = {
-        "__STYXTYPE__": "dicom_series_read" as const,
+        "@type": "c3d.c4d.dicom_series_read" as const,
         "dicom_series_read": dicom_series_read,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_dicom_series_read_cargs(
     params: C4dDicomSeriesReadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-dicom-series-read",
@@ -2665,42 +2665,42 @@ function c4d_dicom_series_read_cargs(
 }
 
 
-function c4d_dilate_params(
-    dilate: string,
-): C4dDilateParameters {
-    /**
-     * Build parameters.
-    
-     * @param dilate -dilate: Binary dilation
+/**
+ * Build parameters.
+ *
+ * @param dilate -dilate: Binary dilation
 
 Syntax: `-dilate <label> <radius_vector>`
 
 Applies the dilation [mathematical morphology][5] operation to a binary image. The first parameter is the intensity value of the object that is to be dilated. The second is the radius of the dilation structuring element in 3D. 
 
     c3d binary.img -dilate 255 3x3x3vox -o newimage.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_dilate_params(
+    dilate: string,
+): C4dDilateParameters {
     const params = {
-        "__STYXTYPE__": "dilate" as const,
+        "@type": "c3d.c4d.dilate" as const,
         "dilate": dilate,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_dilate_cargs(
     params: C4dDilateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-dilate",
@@ -2710,13 +2710,10 @@ function c4d_dilate_cargs(
 }
 
 
-function c4d_divide_params(
-    divide: string,
-): C4dDivideParameters {
-    /**
-     * Build parameters.
-    
-     * @param divide -divide: Voxelwise image division    
+/**
+ * Build parameters.
+ *
+ * @param divide -divide: Voxelwise image division    
 
 Syntax: `-divide`
 
@@ -2727,29 +2724,32 @@ Divides one image by another. For instance to compute C = A / B, use the command
 Divison may generate infinite and not-a-number (NaN) values if B contains zeros. You can use **-replace** to get rid of these values
 
     c3d A.img B.img -divide -replace inf 1000 -inf -1000 NaN 0 -o C2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_divide_params(
+    divide: string,
+): C4dDivideParameters {
     const params = {
-        "__STYXTYPE__": "divide" as const,
+        "@type": "c3d.c4d.divide" as const,
         "divide": divide,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_divide_cargs(
     params: C4dDivideParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-divide",
@@ -2759,13 +2759,10 @@ function c4d_divide_cargs(
 }
 
 
-function c4d_duplicate_params(
-    duplicate: string,
-): C4dDuplicateParameters {
-    /**
-     * Build parameters.
-    
-     * @param duplicate -dup: Duplicate the last image on the stack
+/**
+ * Build parameters.
+ *
+ * @param duplicate -dup: Duplicate the last image on the stack
 
 Syntax: `-dup` 
 
@@ -2774,29 +2771,32 @@ Duplicates the image at the end of the stack. This is equivalent to **-as var -p
     c3d input.img -dup -times -o square.img
 
 ### Commands: Voxelwise Calculations
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_duplicate_params(
+    duplicate: string,
+): C4dDuplicateParameters {
     const params = {
-        "__STYXTYPE__": "duplicate" as const,
+        "@type": "c3d.c4d.duplicate" as const,
         "duplicate": duplicate,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_duplicate_cargs(
     params: C4dDuplicateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-dup",
@@ -2806,42 +2806,42 @@ function c4d_duplicate_cargs(
 }
 
 
-function c4d_endaccum_params(
-    endaccum: string,
-): C4dEndaccumParameters {
-    /**
-     * Build parameters.
-    
-     * @param endaccum -accum, -endaccum: Accumulate operations over all images
+/**
+ * Build parameters.
+ *
+ * @param endaccum -accum, -endaccum: Accumulate operations over all images
 
 Syntax: `-accum command-list -endaccum`
 
 Apply a binary operation (such as addition or multiplication) to all the images on the stack in a cumulative fashion. The command(s) will be applied to the last and second-to-last images on the stack, then to the result of this operation and the third-to-last image on the stack and so on. Below is the example of using the command to add multiple images. 
 
     c3d image*.nii -accum -add -endaccum -o sum.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_endaccum_params(
+    endaccum: string,
+): C4dEndaccumParameters {
     const params = {
-        "__STYXTYPE__": "endaccum" as const,
+        "@type": "c3d.c4d.endaccum" as const,
         "endaccum": endaccum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_endaccum_cargs(
     params: C4dEndaccumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-endaccum",
@@ -2851,42 +2851,42 @@ function c4d_endaccum_cargs(
 }
 
 
-function c4d_endfor_params(
-    endfor: string,
-): C4dEndforParameters {
-    /**
-     * Build parameters.
-    
-     * @param endfor -foreach, -endfor: Loop commands over all images on the stack
+/**
+ * Build parameters.
+ *
+ * @param endfor -foreach, -endfor: Loop commands over all images on the stack
 
 Syntax: `-foreach commands-list -endfor`
 
 This command forces the commands between **-foreach** and **-endfor** to be applied to every image on the stack. The main use of this command is to automate processing of multiple datasets. For example, 
 
     c3d epi*.nii -foreach -smooth 3mm -endfor -oo epism%03d.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_endfor_params(
+    endfor: string,
+): C4dEndforParameters {
     const params = {
-        "__STYXTYPE__": "endfor" as const,
+        "@type": "c3d.c4d.endfor" as const,
         "endfor": endfor,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_endfor_cargs(
     params: C4dEndforParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-endfor",
@@ -2896,42 +2896,42 @@ function c4d_endfor_cargs(
 }
 
 
-function c4d_erode_params(
-    erode: string,
-): C4dErodeParameters {
-    /**
-     * Build parameters.
-    
-     * @param erode -erode: Binary erosion
+/**
+ * Build parameters.
+ *
+ * @param erode -erode: Binary erosion
 
 Syntax: `-erode <label> <radius_vector>`
 
 Applies erosion [mathematical morphology][5] operation to a binary image. The first parameter is the intensity value of the object that is to be eroded. The second is the radius of the erosion structuring element in 3D. 
 
     c3d binary.img -erode 255 3x3x3vox -o newimage.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_erode_params(
+    erode: string,
+): C4dErodeParameters {
     const params = {
-        "__STYXTYPE__": "erode" as const,
+        "@type": "c3d.c4d.erode" as const,
         "erode": erode,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_erode_cargs(
     params: C4dErodeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-erode",
@@ -2941,42 +2941,42 @@ function c4d_erode_cargs(
 }
 
 
-function c4d_erf_params(
-    erf: string,
-): C4dErfParameters {
-    /**
-     * Build parameters.
-    
-     * @param erf -erf: Standard error function
+/**
+ * Build parameters.
+ *
+ * @param erf -erf: Standard error function
 
 Syntax: `-erf mu sigma`
 
 Computes the standard error function. This is useful for applying soft thresholds. The function computes y = erf((x - mu)/sigma). 
 
     c3d input.img -erf 5 2 -o erf.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_erf_params(
+    erf: string,
+): C4dErfParameters {
     const params = {
-        "__STYXTYPE__": "erf" as const,
+        "@type": "c3d.c4d.erf" as const,
         "erf": erf,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_erf_cargs(
     params: C4dErfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-erf",
@@ -2986,42 +2986,42 @@ function c4d_erf_cargs(
 }
 
 
-function c4d_exp_params(
-    exp: string,
-): C4dExpParameters {
-    /**
-     * Build parameters.
-    
-     * @param exp -exp: Voxelwise natural exponent
+/**
+ * Build parameters.
+ *
+ * @param exp -exp: Voxelwise natural exponent
 
 Syntax: `-exp`
 
 Computes exponent of each voxel in the last image on the stack.
 
     c3d input.img -exp -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_exp_params(
+    exp: string,
+): C4dExpParameters {
     const params = {
-        "__STYXTYPE__": "exp" as const,
+        "@type": "c3d.c4d.exp" as const,
         "exp": exp,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_exp_cargs(
     params: C4dExpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-exp",
@@ -3031,13 +3031,10 @@ function c4d_exp_cargs(
 }
 
 
-function c4d_export_patches_params(
-    export_patches: string,
-): C4dExportPatchesParameters {
-    /**
-     * Build parameters.
-    
-     * @param export_patches -export-patches, -xp: Fixed size patch sampling from masked regions
+/**
+ * Build parameters.
+ *
+ * @param export_patches -export-patches, -xp: Fixed size patch sampling from masked regions
 
 Syntax: `-export-patches <outfile> <radius_vector> <frequency>`
 
@@ -3064,29 +3061,32 @@ The command can also be used to extract entire structures. For example, if we ha
     c3d mri.nii lesion_seg.nii -centroid-mark 1 -xp single_sample.dat 50x50x20 1
 
 In the above example, **-centroid-mark** transforms the lesion segmentation into a single-voxel mask, from which the sample from the MRI is taken.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_export_patches_params(
+    export_patches: string,
+): C4dExportPatchesParameters {
     const params = {
-        "__STYXTYPE__": "export_patches" as const,
+        "@type": "c3d.c4d.export_patches" as const,
         "export_patches": export_patches,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_export_patches_cargs(
     params: C4dExportPatchesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-export-patches",
@@ -3096,42 +3096,42 @@ function c4d_export_patches_cargs(
 }
 
 
-function c4d_export_patches_aug_params(
-    export_patches_aug: string,
-): C4dExportPatchesAugParameters {
-    /**
-     * Build parameters.
-    
-     * @param export_patches_aug -export-patches-aug, -xpa: data augmentation for deep learning
+/**
+ * Build parameters.
+ *
+ * @param export_patches_aug -export-patches-aug, -xpa: data augmentation for deep learning
 
 Syntax `-export-patches-aug <N> <sigma_angle>`
 
 This command must precede the `-export-patches (-xp)` command and instructs this command to not only sample patches along the image axes but to also sample **N** randomly rotated patches. Rotation is around a uniformly distributed axis with a rotation angle distributed normally with teh standard deviation **sigma_angle**, specified in degrees. This kind of sampling is useful for data augmentation for machine learning algorithms.
 
     c3d chan1.nii chan2.nii chan3.nii mask.nii -xpa 5 10 -xp samples.dat 4x4x4 100
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_export_patches_aug_params(
+    export_patches_aug: string,
+): C4dExportPatchesAugParameters {
     const params = {
-        "__STYXTYPE__": "export_patches_aug" as const,
+        "@type": "c3d.c4d.export_patches_aug" as const,
         "export_patches_aug": export_patches_aug,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_export_patches_aug_cargs(
     params: C4dExportPatchesAugParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-export-patches-aug",
@@ -3141,36 +3141,36 @@ function c4d_export_patches_aug_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param extrude_seg No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_extrude_seg_params(
     extrude_seg: string,
 ): C4dExtrudeSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param extrude_seg No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "extrude_seg" as const,
+        "@type": "c3d.c4d.extrude_seg" as const,
         "extrude_seg": extrude_seg,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_extrude_seg_cargs(
     params: C4dExtrudeSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-extrude-seg",
@@ -3180,36 +3180,36 @@ function c4d_extrude_seg_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fill_background_with_noise No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_fill_background_with_noise_params(
     fill_background_with_noise: string,
 ): C4dFillBackgroundWithNoiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param fill_background_with_noise No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fill_background_with_noise" as const,
+        "@type": "c3d.c4d.fill_background_with_noise" as const,
         "fill_background_with_noise": fill_background_with_noise,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_fill_background_with_noise_cargs(
     params: C4dFillBackgroundWithNoiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-fill-background-with-noise",
@@ -3219,42 +3219,42 @@ function c4d_fill_background_with_noise_cargs(
 }
 
 
-function c4d_fft_params(
-    fft: string,
-): C4dFftParameters {
-    /**
-     * Build parameters.
-    
-     * @param fft -fft: Fast Fourier transform
+/**
+ * Build parameters.
+ *
+ * @param fft -fft: Fast Fourier transform
 
 Syntax `-fft`
 
 Computes the Fourier transform of a real-valued image at the end of the stack. The image is replaced by the real and imaginary components of the FFT. This command is only available if **convert3d** is compiled with the FFTW library support. 
 
     c3d image.nii -fft -oo real.nii imag.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_fft_params(
+    fft: string,
+): C4dFftParameters {
     const params = {
-        "__STYXTYPE__": "fft" as const,
+        "@type": "c3d.c4d.fft" as const,
         "fft": fft,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_fft_cargs(
     params: C4dFftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-fft",
@@ -3264,42 +3264,42 @@ function c4d_fft_cargs(
 }
 
 
-function c4d_flip_params(
-    flip: string,
-): C4dFlipParameters {
-    /**
-     * Build parameters.
-    
-     * @param flip -flip: Flip image around an axis    
+/**
+ * Build parameters.
+ *
+ * @param flip -flip: Flip image around an axis    
 
 Syntax: `-flip axes`
 
 Flips the image around specified axes. The parameter 'axes' may be any combination of characters 'x', 'y', and 'z'; the order does not matter. 
 
     c3d input.img -flip xy -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_flip_params(
+    flip: string,
+): C4dFlipParameters {
     const params = {
-        "__STYXTYPE__": "flip" as const,
+        "@type": "c3d.c4d.flip" as const,
         "flip": flip,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_flip_cargs(
     params: C4dFlipParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-flip",
@@ -3309,13 +3309,10 @@ function c4d_flip_cargs(
 }
 
 
-function c4d_floor_params(
-    floor: string,
-): C4dFloorParameters {
-    /**
-     * Build parameters.
-    
-     * @param floor -floor: Round down image intensities
+/**
+ * Build parameters.
+ *
+ * @param floor -floor: Round down image intensities
 
 Syntax: `-floor `
 
@@ -3326,29 +3323,32 @@ Each image intensity is replaced by the largest integer smaller or equal to it.
 To round each intensity to the closest integer, use
 
     c3d input.img -shift 0.5 -floor
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_floor_params(
+    floor: string,
+): C4dFloorParameters {
     const params = {
-        "__STYXTYPE__": "floor" as const,
+        "@type": "c3d.c4d.floor" as const,
         "floor": floor,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_floor_cargs(
     params: C4dFloorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-floor",
@@ -3358,42 +3358,42 @@ function c4d_floor_cargs(
 }
 
 
-function c4d_foreach_params(
-    foreach: string,
-): C4dForeachParameters {
-    /**
-     * Build parameters.
-    
-     * @param foreach -foreach, -endfor: Loop commands over all images on the stack
+/**
+ * Build parameters.
+ *
+ * @param foreach -foreach, -endfor: Loop commands over all images on the stack
 
 Syntax: `-foreach commands-list -endfor`
 
 This command forces the commands between **-foreach** and **-endfor** to be applied to every image on the stack. The main use of this command is to automate processing of multiple datasets. For example, 
 
     c3d epi*.nii -foreach -smooth 3mm -endfor -oo epism%03d.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_foreach_params(
+    foreach: string,
+): C4dForeachParameters {
     const params = {
-        "__STYXTYPE__": "foreach" as const,
+        "@type": "c3d.c4d.foreach" as const,
         "foreach": foreach,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_foreach_cargs(
     params: C4dForeachParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-foreach",
@@ -3403,42 +3403,42 @@ function c4d_foreach_cargs(
 }
 
 
-function c4d_foreach_comp_params(
-    foreach_comp: string,
-): C4dForeachCompParameters {
-    /**
-     * Build parameters.
-    
-     * @param foreach_comp -foreach-comp, -endfor: Loop commands over components of a multi-component image 
+/**
+ * Build parameters.
+ *
+ * @param foreach_comp -foreach-comp, -endfor: Loop commands over components of a multi-component image 
 
 Syntax `-foreach-comp <N> commands-list -endfor`
 
 This command runs the list of commands separately for each component of a set of multi-component images loaded with -mcs. This makes it possible to perform component-wise operations on multi-component images. For example, it can be used to average several multi-component images. If the image stack contains images *x1* *y1* *z1* *x2* *y2* *z2*, then the operations will be run on *[x1,x2]*, *[y1,y2]*, *[z1,z2]*. For example, if multi_1.nii to multi_10.nii are three-component images, then the mean three-component image is given by
 
     c2d -mcs multi_*.nii -foreach-comp -mean -endfor -omc multi_mean.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_foreach_comp_params(
+    foreach_comp: string,
+): C4dForeachCompParameters {
     const params = {
-        "__STYXTYPE__": "foreach_comp" as const,
+        "@type": "c3d.c4d.foreach_comp" as const,
         "foreach_comp": foreach_comp,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_foreach_comp_cargs(
     params: C4dForeachCompParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-foreach-comp",
@@ -3448,13 +3448,10 @@ function c4d_foreach_comp_cargs(
 }
 
 
-function c4d_glm_params(
-    glm: string,
-): C4dGlmParameters {
-    /**
-     * Build parameters.
-    
-     * @param glm -glm: General linear model    
+/**
+ * Build parameters.
+ *
+ * @param glm -glm: General linear model    
 
 Syntax: `-glm design_matrix_file contrast_vector_file`
 
@@ -3466,29 +3463,32 @@ Applies voxel-wise general linear model to a set of images. More precisely, the 
       echo "1 83.00" >> design_mat.txt
       echo "0 1" >> contrast_vec.txt
       c3d time1.img time2.img time3.img time4.img -glm design_mat.txt contrast_vec.txt -o regress.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_glm_params(
+    glm: string,
+): C4dGlmParameters {
     const params = {
-        "__STYXTYPE__": "glm" as const,
+        "@type": "c3d.c4d.glm" as const,
         "glm": glm,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_glm_cargs(
     params: C4dGlmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-glm",
@@ -3498,42 +3498,42 @@ function c4d_glm_cargs(
 }
 
 
-function c4d_gradient_params(
-    gradient: string,
-): C4dGradientParameters {
-    /**
-     * Build parameters.
-    
-     * @param gradient -grad, -gradient: Image gradient
+/**
+ * Build parameters.
+ *
+ * @param gradient -grad, -gradient: Image gradient
 
 Syntax `-grad`
 
 Computes the gradient of the image. Each component of the gradient is placed on the stack in order (x,y,z). The gradient is computed in physical RAS coordinates, taking into account image spacing and orientation. In other words, the gradient is the vector in physical space orthogonal to the isocontours of the image. No smoothing is performed, so it is a good idea to smooth the image first before computing the gradient.
 
     c3d myimage.nii -smooth 1.2vox -grad -oo grad_comp_%02d.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_gradient_params(
+    gradient: string,
+): C4dGradientParameters {
     const params = {
-        "__STYXTYPE__": "gradient" as const,
+        "@type": "c3d.c4d.gradient" as const,
         "gradient": gradient,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_gradient_cargs(
     params: C4dGradientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-grad",
@@ -3543,42 +3543,42 @@ function c4d_gradient_cargs(
 }
 
 
-function c4d__help_params(
-    v__help: string,
-): C4dHelpParameters {
-    /**
-     * Build parameters.
-    
-     * @param v__help -hesseig, -hessian-eigenvalues: Compute eigenvalues of the Hessian matrix
+/**
+ * Build parameters.
+ *
+ * @param v__help -hesseig, -hessian-eigenvalues: Compute eigenvalues of the Hessian matrix
 
 Syntax `-hesseig <scale>`
 
 Computes the Hessian matrix at every pixel of an image and the eigenvalues of the Hessian. Images of the eigenvalues (sorted by value) are placed on the stack. These images are useful as texture features. See also the '''-steig''' command. The scale determines the amount of Gaussian smoothing applied for computing the partial derivatives in the Hessian, and is in physical (mm) units.
 
     c3d myimage.nii -hesseig 2.0 -oo eig%02d.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d__help_params(
+    v__help: string,
+): C4dHelpParameters {
     const params = {
-        "__STYXTYPE__": "_help" as const,
+        "@type": "c3d.c4d._help" as const,
         "_help": v__help,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d__help_cargs(
     params: C4dHelpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-h",
@@ -3588,42 +3588,42 @@ function c4d__help_cargs(
 }
 
 
-function c4d_holefill_params(
-    holefill: string,
-): C4dHolefillParameters {
-    /**
-     * Build parameters.
-    
-     * @param holefill -holefill: Fill holes in binary image
+/**
+ * Build parameters.
+ *
+ * @param holefill -holefill: Fill holes in binary image
 
 Syntax: `-holefill intensity_value [0|1] `
 
 Apply the binary hole filling algorithm to a particular intensity value in the image. The input image is typically a binary image or a multi-label segmentation image. Holes (voxels not matching the specified intensity value that are completely contained by voxels matching this value) are filled. The second parameter specifies what type of topological connectivity is used to determine holes. The value 0 uses the default algorithm in ITK (face connectivity) and 1 uses the full connectivity variant (face, edge and vertex connectivity). For more details see the [ITK page for this algorithm][7]. 
 
     c3d segmentation.nii.gz -holefill 5 0 -type uchar -o filledlabel5.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_holefill_params(
+    holefill: string,
+): C4dHolefillParameters {
     const params = {
-        "__STYXTYPE__": "holefill" as const,
+        "@type": "c3d.c4d.holefill" as const,
         "holefill": holefill,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_holefill_cargs(
     params: C4dHolefillParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-hf",
@@ -3633,42 +3633,42 @@ function c4d_holefill_cargs(
 }
 
 
-function c4d_hessian_eigenvalues_params(
-    hessian_eigenvalues: string,
-): C4dHessianEigenvaluesParameters {
-    /**
-     * Build parameters.
-    
-     * @param hessian_eigenvalues -hesseig, -hessian-eigenvalues: Compute eigenvalues of the Hessian matrix
+/**
+ * Build parameters.
+ *
+ * @param hessian_eigenvalues -hesseig, -hessian-eigenvalues: Compute eigenvalues of the Hessian matrix
 
 Syntax `-hesseig <scale>`
 
 Computes the Hessian matrix at every pixel of an image and the eigenvalues of the Hessian. Images of the eigenvalues (sorted by value) are placed on the stack. These images are useful as texture features. See also the '''-steig''' command. The scale determines the amount of Gaussian smoothing applied for computing the partial derivatives in the Hessian, and is in physical (mm) units.
 
     c3d myimage.nii -hesseig 2.0 -oo eig%02d.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_hessian_eigenvalues_params(
+    hessian_eigenvalues: string,
+): C4dHessianEigenvaluesParameters {
     const params = {
-        "__STYXTYPE__": "hessian_eigenvalues" as const,
+        "@type": "c3d.c4d.hessian_eigenvalues" as const,
         "hessian_eigenvalues": hessian_eigenvalues,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_hessian_eigenvalues_cargs(
     params: C4dHessianEigenvaluesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-hesseig",
@@ -3678,13 +3678,10 @@ function c4d_hessian_eigenvalues_cargs(
 }
 
 
-function c4d_hessian_objectness_params(
-    hessian_objectness: string,
-): C4dHessianObjectnessParameters {
-    /**
-     * Build parameters.
-    
-     * @param hessian_objectness -hessobj, -hessian-objectness: Hessian objectness filter
+/**
+ * Build parameters.
+ *
+ * @param hessian_objectness -hessobj, -hessian-objectness: Hessian objectness filter
 
 Syntax: `-hessobj <dimension> <min_scale> <max_scale>`
 
@@ -3696,29 +3693,32 @@ Parameter `dimension` is an integer that determines the kind of features that ar
     c3d image.nii.gz -hessobj 1 0.5 0.5
 
  [HTOMIF] http://www.itk.org/Doxygen/html/classitk_1_1HessianToObjectnessMeasureImageFilter.html
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_hessian_objectness_params(
+    hessian_objectness: string,
+): C4dHessianObjectnessParameters {
     const params = {
-        "__STYXTYPE__": "hessian_objectness" as const,
+        "@type": "c3d.c4d.hessian_objectness" as const,
         "hessian_objectness": hessian_objectness,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_hessian_objectness_cargs(
     params: C4dHessianObjectnessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-hessobj",
@@ -3728,36 +3728,36 @@ function c4d_hessian_objectness_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param histogram_match No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_histogram_match_params(
     histogram_match: string,
 ): C4dHistogramMatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param histogram_match No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "histogram_match" as const,
+        "@type": "c3d.c4d.histogram_match" as const,
         "histogram_match": histogram_match,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_histogram_match_cargs(
     params: C4dHistogramMatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-histmatch",
@@ -3767,13 +3767,10 @@ function c4d_histogram_match_cargs(
 }
 
 
-function c4d_info_params(
-    info: string,
-): C4dInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param info -info: Display brief image information        
+/**
+ * Build parameters.
+ *
+ * @param info -info: Display brief image information        
 
 Syntax: `-info`
 
@@ -3784,29 +3781,32 @@ Prints brief information about the last image on the stack. Does not affect the 
 Use with the **-foreach** command to get information on multiple images
 
     c3d images*.nii -foreach -info -endfor
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_info_params(
+    info: string,
+): C4dInfoParameters {
     const params = {
-        "__STYXTYPE__": "info" as const,
+        "@type": "c3d.c4d.info" as const,
         "info": info,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_info_cargs(
     params: C4dInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-info",
@@ -3816,42 +3816,42 @@ function c4d_info_cargs(
 }
 
 
-function c4d_info_full_params(
-    info_full: string,
-): C4dInfoFullParameters {
-    /**
-     * Build parameters.
-    
-     * @param info_full -info-full: Display verbose image information        
+/**
+ * Build parameters.
+ *
+ * @param info_full -info-full: Display verbose image information        
 
 Syntax: `-info-full`
 
 Prints extended information about the last image on the stack, such as the metadata dictionary. For example, 
 
     c3d image.hdr -info-full
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_info_full_params(
+    info_full: string,
+): C4dInfoFullParameters {
     const params = {
-        "__STYXTYPE__": "info_full" as const,
+        "@type": "c3d.c4d.info_full" as const,
         "info_full": info_full,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_info_full_cargs(
     params: C4dInfoFullParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-info-full",
@@ -3861,40 +3861,40 @@ function c4d_info_full_cargs(
 }
 
 
-function c4d_insert_params(
-    insert: string,
-): C4dInsertParameters {
-    /**
-     * Build parameters.
-    
-     * @param insert -insert: Insert image anywhere in the stack
+/**
+ * Build parameters.
+ *
+ * @param insert -insert: Insert image anywhere in the stack
 
 Syntax: `-insert var pos` 
 
 This command is similar to **-push**, but allows you to insert the image associated with 'var' at any position in the stack, counting from the end. When 'pos' is 0, the image is placed at the end of the stack (same as **-push**). When pos is one, the image is placed at the next-to-end position, and so on.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_insert_params(
+    insert: string,
+): C4dInsertParameters {
     const params = {
-        "__STYXTYPE__": "insert" as const,
+        "@type": "c3d.c4d.insert" as const,
         "insert": insert,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_insert_cargs(
     params: C4dInsertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-insert",
@@ -3904,13 +3904,10 @@ function c4d_insert_cargs(
 }
 
 
-function c4d_interpolation_params(
-    interpolation: string,
-): C4dInterpolationParameters {
-    /**
-     * Build parameters.
-    
-     * @param interpolation -interpolation: Set interpolation mode
+/**
+ * Build parameters.
+ *
+ * @param interpolation -interpolation: Set interpolation mode
 
 Syntax: `-interpolation <NearestNeighbor|Linear|Cubic|Sinc|Gaussian> [param]`
 
@@ -3919,29 +3916,32 @@ Specifies the interpolation used with **-resample** and other commands. Default 
 Shorthand 0 can be used for *NearestNeighbor*, 1 for *Linear* and 3 for *Cubic*. For example:
 
     c3d -int 3 test.nii -resample 200x200x200% -o cubic_supersample.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_interpolation_params(
+    interpolation: string,
+): C4dInterpolationParameters {
     const params = {
-        "__STYXTYPE__": "interpolation" as const,
+        "@type": "c3d.c4d.interpolation" as const,
         "interpolation": interpolation,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_interpolation_cargs(
     params: C4dInterpolationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-interpolation",
@@ -3951,36 +3951,36 @@ function c4d_interpolation_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param iterations No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_iterations_params(
     iterations: string,
 ): C4dIterationsParameters {
-    /**
-     * Build parameters.
-    
-     * @param iterations No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "iterations" as const,
+        "@type": "c3d.c4d.iterations" as const,
         "iterations": iterations,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_iterations_cargs(
     params: C4dIterationsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-iterations",
@@ -3990,36 +3990,36 @@ function c4d_iterations_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_overlap No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_label_overlap_params(
     label_overlap: string,
 ): C4dLabelOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_overlap No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_overlap" as const,
+        "@type": "c3d.c4d.label_overlap" as const,
         "label_overlap": label_overlap,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_label_overlap_cargs(
     params: C4dLabelOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-label-overlap",
@@ -4029,13 +4029,10 @@ function c4d_label_overlap_cargs(
 }
 
 
-function c4d_label_statistics_params(
-    label_statistics: string,
-): C4dLabelStatisticsParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_statistics -lstat, -label-statistics: Display segmentation volumes and intensity statistics
+/**
+ * Build parameters.
+ *
+ * @param label_statistics -lstat, -label-statistics: Display segmentation volumes and intensity statistics
 
 Syntax: `-lstat`
 
@@ -4046,29 +4043,32 @@ Given a grayscale image and a multilabel (or binary) image, this command compute
 The output contains the mean, standard deviation, maximum intensity and minimum intensity for each label. If you just need volumes from a multi-label image, use **-dup** command as follows:
 
     c3d seg.nii -dup -lstat
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_label_statistics_params(
+    label_statistics: string,
+): C4dLabelStatisticsParameters {
     const params = {
-        "__STYXTYPE__": "label_statistics" as const,
+        "@type": "c3d.c4d.label_statistics" as const,
         "label_statistics": label_statistics,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_label_statistics_cargs(
     params: C4dLabelStatisticsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-label-statistics",
@@ -4078,36 +4078,36 @@ function c4d_label_statistics_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param landmarks_to_spheres No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_landmarks_to_spheres_params(
     landmarks_to_spheres: string,
 ): C4dLandmarksToSpheresParameters {
-    /**
-     * Build parameters.
-    
-     * @param landmarks_to_spheres No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "landmarks_to_spheres" as const,
+        "@type": "c3d.c4d.landmarks_to_spheres" as const,
         "landmarks_to_spheres": landmarks_to_spheres,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_landmarks_to_spheres_cargs(
     params: C4dLandmarksToSpheresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-landmarks-to-spheres",
@@ -4117,42 +4117,42 @@ function c4d_landmarks_to_spheres_cargs(
 }
 
 
-function c4d_laplacian_params(
-    laplacian: string,
-): C4dLaplacianParameters {
-    /**
-     * Build parameters.
-    
-     * @param laplacian -laplacian, -laplace: Laplacian filter
+/**
+ * Build parameters.
+ *
+ * @param laplacian -laplacian, -laplace: Laplacian filter
 
 Syntax: `-laplacian`
 
 Applies the Laplacian filter to the image. Used to detect ridges of intensity. Typically, used with the **-smooth** option to obtain the equivalent of convolving the image with the *Laplacian of the Gaussian (LoG)* kernel: 
 
     c3d input.img -smooth 1.2vox -laplacian -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_laplacian_params(
+    laplacian: string,
+): C4dLaplacianParameters {
     const params = {
-        "__STYXTYPE__": "laplacian" as const,
+        "@type": "c3d.c4d.laplacian" as const,
         "laplacian": laplacian,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_laplacian_cargs(
     params: C4dLaplacianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-laplacian",
@@ -4162,13 +4162,10 @@ function c4d_laplacian_cargs(
 }
 
 
-function c4d_levelset_params(
-    levelset: string,
-): C4dLevelsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param levelset -levelset: Level set segmentation
+/**
+ * Build parameters.
+ *
+ * @param levelset -levelset: Level set segmentation
 
 Syntax: `-levelset n_iter `
 
@@ -4194,29 +4191,32 @@ Another example of smoothing a binary image that is useful for cleaning up manua
     c3d binary.img -threshold 1 inf 1 -1 -binary.img 1 inf 1 -1 \
         -levelset-curvature 1.5 -levelset 100 -o levelset.img \
         -thresh -inf 0 1 0 -o smoothed_binary.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_levelset_params(
+    levelset: string,
+): C4dLevelsetParameters {
     const params = {
-        "__STYXTYPE__": "levelset" as const,
+        "@type": "c3d.c4d.levelset" as const,
         "levelset": levelset,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_levelset_cargs(
     params: C4dLevelsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-levelset",
@@ -4226,36 +4226,36 @@ function c4d_levelset_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param levelset_curvature No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_levelset_curvature_params(
     levelset_curvature: string,
 ): C4dLevelsetCurvatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param levelset_curvature No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "levelset_curvature" as const,
+        "@type": "c3d.c4d.levelset_curvature" as const,
         "levelset_curvature": levelset_curvature,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_levelset_curvature_cargs(
     params: C4dLevelsetCurvatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-levelset-curvature",
@@ -4265,36 +4265,36 @@ function c4d_levelset_curvature_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param levelset_advection No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_levelset_advection_params(
     levelset_advection: string,
 ): C4dLevelsetAdvectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param levelset_advection No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "levelset_advection" as const,
+        "@type": "c3d.c4d.levelset_advection" as const,
         "levelset_advection": levelset_advection,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_levelset_advection_cargs(
     params: C4dLevelsetAdvectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-levelset-advection",
@@ -4304,40 +4304,40 @@ function c4d_levelset_advection_cargs(
 }
 
 
-function c4d_log_params(
-    log: string,
-): C4dLogParameters {
-    /**
-     * Build parameters.
-    
-     * @param log -log, -ln: Voxelwise natural logarithm
+/**
+ * Build parameters.
+ *
+ * @param log -log, -ln: Voxelwise natural logarithm
 
 Syntax: `-log`
 
 Computes natural logarithm of each voxel in the last image on the stack.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_log_params(
+    log: string,
+): C4dLogParameters {
     const params = {
-        "__STYXTYPE__": "log" as const,
+        "@type": "c3d.c4d.log" as const,
         "log": log,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_log_cargs(
     params: C4dLogParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-ln",
@@ -4347,40 +4347,40 @@ function c4d_log_cargs(
 }
 
 
-function c4d_log10_params(
-    log10: string,
-): C4dLog10Parameters {
-    /**
-     * Build parameters.
-    
-     * @param log10 -log10: Voxelwise base 10 logarithm
+/**
+ * Build parameters.
+ *
+ * @param log10 -log10: Voxelwise base 10 logarithm
 
 Syntax: `-log10`
 
 Computes base 10 logarithm of each voxel in the last image on the stack.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_log10_params(
+    log10: string,
+): C4dLog10Parameters {
     const params = {
-        "__STYXTYPE__": "log10" as const,
+        "@type": "c3d.c4d.log10" as const,
         "log10": log10,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_log10_cargs(
     params: C4dLog10Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-log10",
@@ -4390,36 +4390,36 @@ function c4d_log10_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param manual No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_manual_params(
     manual: string,
 ): C4dManualParameters {
-    /**
-     * Build parameters.
-    
-     * @param manual No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "manual" as const,
+        "@type": "c3d.c4d.manual" as const,
         "manual": manual,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_manual_cargs(
     params: C4dManualParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-manual",
@@ -4429,42 +4429,42 @@ function c4d_manual_cargs(
 }
 
 
-function c4d_match_bounding_box_params(
-    match_bounding_box: string,
-): C4dMatchBoundingBoxParameters {
-    /**
-     * Build parameters.
-    
-     * @param match_bounding_box -mbb, -match-bounding-box: Match bounding box of one image to another
+/**
+ * Build parameters.
+ *
+ * @param match_bounding_box -mbb, -match-bounding-box: Match bounding box of one image to another
 
 Syntax: `-mbb`
 
 Given two images on the stack (reference and target), sets the header of the target image so that the two images occupy the same physical space. The direction cosines of the target image are set to match the reference image.  This command is related to '-copy-transform' but supports images of different size.
 
     c3d reference.nii target.nii -mbb -o out.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_match_bounding_box_params(
+    match_bounding_box: string,
+): C4dMatchBoundingBoxParameters {
     const params = {
-        "__STYXTYPE__": "match_bounding_box" as const,
+        "@type": "c3d.c4d.match_bounding_box" as const,
         "match_bounding_box": match_bounding_box,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_match_bounding_box_cargs(
     params: C4dMatchBoundingBoxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-match-bounding-box",
@@ -4474,13 +4474,10 @@ function c4d_match_bounding_box_cargs(
 }
 
 
-function c4d_maximum_params(
-    maximum: string,
-): C4dMaximumParameters {
-    /**
-     * Build parameters.
-    
-     * @param maximum -max: Voxel-wise maximum of two images
+/**
+ * Build parameters.
+ *
+ * @param maximum -max: Voxel-wise maximum of two images
 
 Syntax: `-max`
 
@@ -4488,29 +4485,32 @@ Computes the voxel-wise maximum of two images. Can be used with the **-accum** c
 
     c3d i1.nii i2.nii -max -o max12.nii
     c3d i1.nii i2.nii i3.nii i4.nii -accum -max -endaccum -o max1234.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_maximum_params(
+    maximum: string,
+): C4dMaximumParameters {
     const params = {
-        "__STYXTYPE__": "maximum" as const,
+        "@type": "c3d.c4d.maximum" as const,
         "maximum": maximum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_maximum_cargs(
     params: C4dMaximumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-maximum",
@@ -4520,13 +4520,10 @@ function c4d_maximum_cargs(
 }
 
 
-function c4d_multicomponent_split_params(
-    multicomponent_split: string,
-): C4dMulticomponentSplitParameters {
-    /**
-     * Build parameters.
-    
-     * @param multicomponent_split -mcs, -multicomponent-split: Enable splitting of multi-component images on read
+/**
+ * Build parameters.
+ *
+ * @param multicomponent_split -mcs, -multicomponent-split: Enable splitting of multi-component images on read
 
 Syntax: `-mcs`
 
@@ -4539,29 +4536,32 @@ Enable reading of multi-component images. By default, when a multi-component ima
 
     $ c3d rgb.mha -foreach -probe 110x110x80mm -endfor
     Interpolated image value at 110 110 80 is 49.5198
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_multicomponent_split_params(
+    multicomponent_split: string,
+): C4dMulticomponentSplitParameters {
     const params = {
-        "__STYXTYPE__": "multicomponent_split" as const,
+        "@type": "c3d.c4d.multicomponent_split" as const,
         "multicomponent_split": multicomponent_split,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_multicomponent_split_cargs(
     params: C4dMulticomponentSplitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mcs",
@@ -4571,42 +4571,42 @@ function c4d_multicomponent_split_cargs(
 }
 
 
-function c4d_mean_params(
-    mean: string,
-): C4dMeanParameters {
-    /**
-     * Build parameters.
-    
-     * @param mean -mean: Mean of all images on the stack    
+/**
+ * Build parameters.
+ *
+ * @param mean -mean: Mean of all images on the stack    
 
 Syntax: `-mean `
 
 Computes the mean of all the images on the stack. All images on the stack are replaced with the mean image.
 
     c3d image_*.nii -mean -o mean.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_mean_params(
+    mean: string,
+): C4dMeanParameters {
     const params = {
-        "__STYXTYPE__": "mean" as const,
+        "@type": "c3d.c4d.mean" as const,
         "mean": mean,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mean_cargs(
     params: C4dMeanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mean",
@@ -4616,42 +4616,42 @@ function c4d_mean_cargs(
 }
 
 
-function c4d_median_filter_params(
-    median_filter: string,
-): C4dMedianFilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param median_filter -median, -median-filter: Median filter
+/**
+ * Build parameters.
+ *
+ * @param median_filter -median, -median-filter: Median filter
 
 Syntax: `-median <radius_vector>`
 
 Applies the median filter: the intensity of each voxel is replaced by the median of the intensities in the neighborhood of size specified by the radius parameter. For example, the following code will apply the median filter with the 5x5x5 neighborhood. 
 
     c3d in.nii -median 2x2x2 -o median.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_median_filter_params(
+    median_filter: string,
+): C4dMedianFilterParameters {
     const params = {
-        "__STYXTYPE__": "median_filter" as const,
+        "@type": "c3d.c4d.median_filter" as const,
         "median_filter": median_filter,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_median_filter_cargs(
     params: C4dMedianFilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-median",
@@ -4661,40 +4661,40 @@ function c4d_median_filter_cargs(
 }
 
 
-function c4d_merge_params(
-    merge: string,
-): C4dMergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param merge -merge: Merge images from previous split command   
+/**
+ * Build parameters.
+ *
+ * @param merge -merge: Merge images from previous split command   
 
 Syntax: `-merge`
 
 Works in conjunction with the **-split** command. Has similar behavior to **-vote**, except that label values are carried from the input to the **-split** command.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_merge_params(
+    merge: string,
+): C4dMergeParameters {
     const params = {
-        "__STYXTYPE__": "merge" as const,
+        "@type": "c3d.c4d.merge" as const,
         "merge": merge,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_merge_cargs(
     params: C4dMergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-merge",
@@ -4704,42 +4704,42 @@ function c4d_merge_cargs(
 }
 
 
-function c4d_mean_filter_params(
-    mean_filter: string,
-): C4dMeanFilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param mean_filter -mf, -mean-filter: Mean filter
+/**
+ * Build parameters.
+ *
+ * @param mean_filter -mf, -mean-filter: Mean filter
 
 Syntax: `-mf <radius_vector>`
 
 Applies the mean filter: the intensity of each voxel is replaced by the mean of the intensities in the neighborhood of size specified by the radius parameter. For example, the following code will apply the mean filter with the 5x5x5 neighborhood. 
 
     c3d in.nii -mf 2x2x2 -o filtered.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_mean_filter_params(
+    mean_filter: string,
+): C4dMeanFilterParameters {
     const params = {
-        "__STYXTYPE__": "mean_filter" as const,
+        "@type": "c3d.c4d.mean_filter" as const,
         "mean_filter": mean_filter,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mean_filter_cargs(
     params: C4dMeanFilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mf",
@@ -4749,13 +4749,10 @@ function c4d_mean_filter_cargs(
 }
 
 
-function c4d_mutual_info_params(
-    mutual_info: string,
-): C4dMutualInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param mutual_info -min: Voxel-wise minimum of two images
+/**
+ * Build parameters.
+ *
+ * @param mutual_info -min: Voxel-wise minimum of two images
 
 Syntax: `-min`
 
@@ -4763,29 +4760,32 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
 
     c3d i1.nii i2.nii -min -o min12.nii
     c3d i1.nii i2.nii i3.nii i4.nii -accum -min -endaccum -o min1234.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_mutual_info_params(
+    mutual_info: string,
+): C4dMutualInfoParameters {
     const params = {
-        "__STYXTYPE__": "mutual_info" as const,
+        "@type": "c3d.c4d.mutual_info" as const,
         "mutual_info": mutual_info,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mutual_info_cargs(
     params: C4dMutualInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mi",
@@ -4795,13 +4795,10 @@ function c4d_mutual_info_cargs(
 }
 
 
-function c4d_minimum_params(
-    minimum: string,
-): C4dMinimumParameters {
-    /**
-     * Build parameters.
-    
-     * @param minimum -min: Voxel-wise minimum of two images
+/**
+ * Build parameters.
+ *
+ * @param minimum -min: Voxel-wise minimum of two images
 
 Syntax: `-min`
 
@@ -4809,29 +4806,32 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
 
     c3d i1.nii i2.nii -min -o min12.nii
     c3d i1.nii i2.nii i3.nii i4.nii -accum -min -endaccum -o min1234.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_minimum_params(
+    minimum: string,
+): C4dMinimumParameters {
     const params = {
-        "__STYXTYPE__": "minimum" as const,
+        "@type": "c3d.c4d.minimum" as const,
         "minimum": minimum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_minimum_cargs(
     params: C4dMinimumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-minimum",
@@ -4841,36 +4841,36 @@ function c4d_minimum_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mixture_model No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_mixture_model_params(
     mixture_model: string,
 ): C4dMixtureModelParameters {
-    /**
-     * Build parameters.
-    
-     * @param mixture_model No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mixture_model" as const,
+        "@type": "c3d.c4d.mixture_model" as const,
         "mixture_model": mixture_model,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mixture_model_cargs(
     params: C4dMixtureModelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mixture",
@@ -4880,36 +4880,36 @@ function c4d_mixture_model_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param moments No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_moments_params(
     moments: string,
 ): C4dMomentsParameters {
-    /**
-     * Build parameters.
-    
-     * @param moments No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "moments" as const,
+        "@type": "c3d.c4d.moments" as const,
         "moments": moments,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_moments_cargs(
     params: C4dMomentsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-moments",
@@ -4919,36 +4919,36 @@ function c4d_moments_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mattes_mutual_info No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_mattes_mutual_info_params(
     mattes_mutual_info: string,
 ): C4dMattesMutualInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param mattes_mutual_info No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mattes_mutual_info" as const,
+        "@type": "c3d.c4d.mattes_mutual_info" as const,
         "mattes_mutual_info": mattes_mutual_info,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mattes_mutual_info_cargs(
     params: C4dMattesMutualInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-mmi",
@@ -4958,13 +4958,10 @@ function c4d_mattes_mutual_info_cargs(
 }
 
 
-function c4d_mean_square_params(
-    mean_square: string,
-): C4dMeanSquareParameters {
-    /**
-     * Build parameters.
-    
-     * @param mean_square -msq, -mean-square: Compute mean square difference metric
+/**
+ * Build parameters.
+ *
+ * @param mean_square -msq, -mean-square: Compute mean square difference metric
 
 Syntax: `-msq [movtransform.mat] [reftransform.mat]`
 
@@ -4978,29 +4975,32 @@ Compute the mean square difference metric between the last two images on the sta
 
     # Compute metric between ref.nii and mov.nii in a neutral space after applying transforms to both
     c3d ref.nii mov.nii -msq tmov.mat tref.mat
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_mean_square_params(
+    mean_square: string,
+): C4dMeanSquareParameters {
     const params = {
-        "__STYXTYPE__": "mean_square" as const,
+        "@type": "c3d.c4d.mean_square" as const,
         "mean_square": mean_square,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_mean_square_cargs(
     params: C4dMeanSquareParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-msq",
@@ -5010,13 +5010,10 @@ function c4d_mean_square_cargs(
 }
 
 
-function c4d_multiply_params(
-    multiply: string,
-): C4dMultiplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param multiply -multiply, -times: Multiply two images
+/**
+ * Build parameters.
+ *
+ * @param multiply -multiply, -times: Multiply two images
 
 Syntax: `-multiply`
 
@@ -5032,29 +5029,32 @@ Combine with the **-dup** command to compute voxelwise square of the image
 
     # Compute x = a^2
     c3d a.img -dup -multiply -o x.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_multiply_params(
+    multiply: string,
+): C4dMultiplyParameters {
     const params = {
-        "__STYXTYPE__": "multiply" as const,
+        "@type": "c3d.c4d.multiply" as const,
         "multiply": multiply,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_multiply_cargs(
     params: C4dMultiplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-multiply",
@@ -5064,40 +5064,40 @@ function c4d_multiply_cargs(
 }
 
 
-function c4d_normalized_cross_correlation_params(
-    normalized_cross_correlation: string,
-): C4dNormalizedCrossCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param normalized_cross_correlation -ncc, -normalized-cross-correlation: Compute normalized cross-correlation image
+/**
+ * Build parameters.
+ *
+ * @param normalized_cross_correlation -ncc, -normalized-cross-correlation: Compute normalized cross-correlation image
 
 Syntax: `-ncc <radius_vector>`
 
 Computes normalized cross-correlation between two images that occupy the same physical space. Each voxel in the resulting image is the cross-correlation of patches of given radius surrounding the voxel in the two input images. This is different from **-ncor**, which computes a global cross-correlation metric value.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_normalized_cross_correlation_params(
+    normalized_cross_correlation: string,
+): C4dNormalizedCrossCorrelationParameters {
     const params = {
-        "__STYXTYPE__": "normalized_cross_correlation" as const,
+        "@type": "c3d.c4d.normalized_cross_correlation" as const,
         "normalized_cross_correlation": normalized_cross_correlation,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_normalized_cross_correlation_cargs(
     params: C4dNormalizedCrossCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-ncc",
@@ -5107,40 +5107,40 @@ function c4d_normalized_cross_correlation_cargs(
 }
 
 
-function c4d_normalized_correlation_params(
-    normalized_correlation: string,
-): C4dNormalizedCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param normalized_correlation -ncor, -normalized-correlation: Compute normalized correlation metric
+/**
+ * Build parameters.
+ *
+ * @param normalized_correlation -ncor, -normalized-correlation: Compute normalized correlation metric
 
 Syntax: `-ncor [movtransform.mat] [reftransform.mat]`
 
     :   Compute the normalized correlation metric between the last two images on the stack. See documentation for **-msq***.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_normalized_correlation_params(
+    normalized_correlation: string,
+): C4dNormalizedCorrelationParameters {
     const params = {
-        "__STYXTYPE__": "normalized_correlation" as const,
+        "@type": "c3d.c4d.normalized_correlation" as const,
         "normalized_correlation": normalized_correlation,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_normalized_correlation_cargs(
     params: C4dNormalizedCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-ncor",
@@ -5150,40 +5150,40 @@ function c4d_normalized_correlation_cargs(
 }
 
 
-function c4d_normalized_mutual_info_params(
-    normalized_mutual_info: string,
-): C4dNormalizedMutualInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param normalized_mutual_info -mmi, -mattes-mutual-info: Compute mutual informaiton metric
+/**
+ * Build parameters.
+ *
+ * @param normalized_mutual_info -mmi, -mattes-mutual-info: Compute mutual informaiton metric
 
 Syntax: `-nmi [movtransform.mat] [reftransform.mat]`
 
 Compute the Mattes mutual information metric between the last two images on the stack. See documentation for **-msq**.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_normalized_mutual_info_params(
+    normalized_mutual_info: string,
+): C4dNormalizedMutualInfoParameters {
     const params = {
-        "__STYXTYPE__": "normalized_mutual_info" as const,
+        "@type": "c3d.c4d.normalized_mutual_info" as const,
         "normalized_mutual_info": normalized_mutual_info,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_normalized_mutual_info_cargs(
     params: C4dNormalizedMutualInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-nmi",
@@ -5193,42 +5193,42 @@ function c4d_normalized_mutual_info_cargs(
 }
 
 
-function c4d_noise_gaussian_params(
-    noise_gaussian: string,
-): C4dNoiseGaussianParameters {
-    /**
-     * Build parameters.
-    
-     * @param noise_gaussian -noise-gaussian, -noise: Apply additive Gaussian noise
+/**
+ * Build parameters.
+ *
+ * @param noise_gaussian -noise-gaussian, -noise: Apply additive Gaussian noise
 
 Syntax: `-noise-gaussian <sigma>`
 
 Adds Gaussian noise to an image with zero mean and standard deviation sigma. Please see [Noise simulation article][15] by G. Lehmann for details.
 
     c3d image.nii -noise-gaussian 5 -o noisy.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_noise_gaussian_params(
+    noise_gaussian: string,
+): C4dNoiseGaussianParameters {
     const params = {
-        "__STYXTYPE__": "noise_gaussian" as const,
+        "@type": "c3d.c4d.noise_gaussian" as const,
         "noise_gaussian": noise_gaussian,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noise_gaussian_cargs(
     params: C4dNoiseGaussianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noise-gaussian",
@@ -5238,41 +5238,41 @@ function c4d_noise_gaussian_cargs(
 }
 
 
-function c4d_noise_poisson_params(
-    noise_poisson: string,
-): C4dNoisePoissonParameters {
-    /**
-     * Build parameters.
-    
-     * @param noise_poisson -noise-poisson: Apply Poisson noise
+/**
+ * Build parameters.
+ *
+ * @param noise_poisson -noise-poisson: Apply Poisson noise
 Syntax: `-noise-poisson <scale>`
 
 Applies Poisson (shot) noise to an image with given scale. Please see [Noise simulation article][15] by G. Lehmann for details.
 
     c3d image.nii -noise-poisson 5 -o noisy.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_noise_poisson_params(
+    noise_poisson: string,
+): C4dNoisePoissonParameters {
     const params = {
-        "__STYXTYPE__": "noise_poisson" as const,
+        "@type": "c3d.c4d.noise_poisson" as const,
         "noise_poisson": noise_poisson,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noise_poisson_cargs(
     params: C4dNoisePoissonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noise-poisson",
@@ -5282,41 +5282,41 @@ function c4d_noise_poisson_cargs(
 }
 
 
-function c4d_noise_speckle_params(
-    noise_speckle: string,
-): C4dNoiseSpeckleParameters {
-    /**
-     * Build parameters.
-    
-     * @param noise_speckle -noise-speckle: Apply Poisson noise
+/**
+ * Build parameters.
+ *
+ * @param noise_speckle -noise-speckle: Apply Poisson noise
 Syntax: `-noise-speckle <sigma>`
 
 Applies Speckle noise to an image with given standard deviation. Please see [Noise simulation article][15] by G. Lehmann for details.
 
     c3d image.nii -noise-speckle 5 -o noisy.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_noise_speckle_params(
+    noise_speckle: string,
+): C4dNoiseSpeckleParameters {
     const params = {
-        "__STYXTYPE__": "noise_speckle" as const,
+        "@type": "c3d.c4d.noise_speckle" as const,
         "noise_speckle": noise_speckle,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noise_speckle_cargs(
     params: C4dNoiseSpeckleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noise-speckle",
@@ -5326,41 +5326,41 @@ function c4d_noise_speckle_cargs(
 }
 
 
-function c4d_noise_salt_pepper_params(
-    noise_salt_pepper: string,
-): C4dNoiseSaltPepperParameters {
-    /**
-     * Build parameters.
-    
-     * @param noise_salt_pepper -noise-salt-pepper: Apply salt and pepper noise
+/**
+ * Build parameters.
+ *
+ * @param noise_salt_pepper -noise-salt-pepper: Apply salt and pepper noise
 Syntax: `-noise-salt-pepper <probability>`
 
 Applies salt and pepper noise to an image with given probability. Please see [Noise simulation article][15] by G. Lehmann for details.
 
     c3d image.nii -noise-salt-pepper 0.1 -o noisy.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_noise_salt_pepper_params(
+    noise_salt_pepper: string,
+): C4dNoiseSaltPepperParameters {
     const params = {
-        "__STYXTYPE__": "noise_salt_pepper" as const,
+        "@type": "c3d.c4d.noise_salt_pepper" as const,
         "noise_salt_pepper": noise_salt_pepper,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noise_salt_pepper_cargs(
     params: C4dNoiseSaltPepperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noise-salt-pepper",
@@ -5370,40 +5370,40 @@ function c4d_noise_salt_pepper_cargs(
 }
 
 
-function c4d_no_multicomponent_split_params(
-    no_multicomponent_split: string,
-): C4dNoMulticomponentSplitParameters {
-    /**
-     * Build parameters.
-    
-     * @param no_multicomponent_split -nomcs, -no-multicomponent-split: Disable splitting of multi-component images on read
+/**
+ * Build parameters.
+ *
+ * @param no_multicomponent_split -nomcs, -no-multicomponent-split: Disable splitting of multi-component images on read
 
 Syntax: `-nomcs`
 
 Used to reverse the effect of previous **-mcs** command.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_no_multicomponent_split_params(
+    no_multicomponent_split: string,
+): C4dNoMulticomponentSplitParameters {
     const params = {
-        "__STYXTYPE__": "no_multicomponent_split" as const,
+        "@type": "c3d.c4d.no_multicomponent_split" as const,
         "no_multicomponent_split": no_multicomponent_split,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_no_multicomponent_split_cargs(
     params: C4dNoMulticomponentSplitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-nomcs",
@@ -5413,42 +5413,42 @@ function c4d_no_multicomponent_split_cargs(
 }
 
 
-function c4d_normalize_local_window_params(
-    normalize_local_window: string,
-): C4dNormalizeLocalWindowParameters {
-    /**
-     * Build parameters.
-    
-     * @param normalize_local_window -nlw, -normalize-local-window: Standardize image intensity using local neighborhood
+/**
+ * Build parameters.
+ *
+ * @param normalize_local_window -nlw, -normalize-local-window: Standardize image intensity using local neighborhood
 
 Syntax: `-nlw <radius>`
 
 This command takes as inputs an image and a mask image. At each voxel, the mean of the local neighborhood is subtracted, and the result is divided by the standard deviation of the neighborhood. The mean and standard deviation are computed only over the masked region. You might also want to multiply by the mask.
 
     c3d gray.nii.gz mask.nii.gz -nlw 10x10x10 -o residual.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_normalize_local_window_params(
+    normalize_local_window: string,
+): C4dNormalizeLocalWindowParameters {
     const params = {
-        "__STYXTYPE__": "normalize_local_window" as const,
+        "@type": "c3d.c4d.normalize_local_window" as const,
         "normalize_local_window": normalize_local_window,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_normalize_local_window_cargs(
     params: C4dNormalizeLocalWindowParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-nlw",
@@ -5458,36 +5458,36 @@ function c4d_normalize_local_window_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param normpdf No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_normpdf_params(
     normpdf: string,
 ): C4dNormpdfParameters {
-    /**
-     * Build parameters.
-    
-     * @param normpdf No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "normpdf" as const,
+        "@type": "c3d.c4d.normpdf" as const,
         "normpdf": normpdf,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_normpdf_cargs(
     params: C4dNormpdfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-normpdf",
@@ -5497,42 +5497,42 @@ function c4d_normpdf_cargs(
 }
 
 
-function c4d_noround_params(
-    noround: string,
-): C4dNoroundParameters {
-    /**
-     * Build parameters.
-    
-     * @param noround -noround, -round: Floating point rounding behavior
+/**
+ * Build parameters.
+ *
+ * @param noround -noround, -round: Floating point rounding behavior
 
 Syntax: `-noround` or `-round `
 
 By default, **convert3d** will round floating point values when converting to an integer, short or byte image. This command specifies that rounding should not be used. Rounding is used to avoid numerical errors stemming from the internal floating point representation. 
 
     c3d image1.img -type short -noround image2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_noround_params(
+    noround: string,
+): C4dNoroundParameters {
     const params = {
-        "__STYXTYPE__": "noround" as const,
+        "@type": "c3d.c4d.noround" as const,
         "noround": noround,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noround_cargs(
     params: C4dNoroundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noround",
@@ -5542,42 +5542,42 @@ function c4d_noround_cargs(
 }
 
 
-function c4d_nospm_params(
-    nospm: string,
-): C4dNospmParameters {
-    /**
-     * Build parameters.
-    
-     * @param nospm -spm, -nospm: SPM compatibility in Analyze output
+/**
+ * Build parameters.
+ *
+ * @param nospm -spm, -nospm: SPM compatibility in Analyze output
 
 Syntax: `-spm` or `-nospm `
 
 These options specify whether use the SPM extension to the Analyze (.hdr,.img) format. When this option is on, the origin field stored by SPM in the Analyze header will be correctly interpreted. When saving analyze files, the origin will be set correctly. The default is equivalent to the **-nospm** option. Best to avoid this issue altogether by using NIFTI and SPM5 or later.
 
     c3d -spm in.hdr out.img.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_nospm_params(
+    nospm: string,
+): C4dNospmParameters {
     const params = {
-        "__STYXTYPE__": "nospm" as const,
+        "@type": "c3d.c4d.nospm" as const,
         "nospm": nospm,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_nospm_cargs(
     params: C4dNospmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-nospm",
@@ -5604,13 +5604,10 @@ interface C4dOutputOutputs {
 }
 
 
-function c4d_output_params(
-    output: string,
-): C4dOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param output -o: Output (write) last image on the stack to image file    
+/**
+ * Build parameters.
+ *
+ * @param output -o: Output (write) last image on the stack to image file    
 
 Syntax: `-o filename`
 
@@ -5621,29 +5618,32 @@ Write image, overriding an existing image. Without the **-o** option, **convert3
 The **-o** option can also be used to save an intermediate image in the stack: 
 
     c3d image1.img -threshold 1 10 1 0 -o thresh.img -resample 50% -o final.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_output_params(
+    output: string,
+): C4dOutputParameters {
     const params = {
-        "__STYXTYPE__": "output" as const,
+        "@type": "c3d.c4d.output" as const,
         "output": output,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_output_cargs(
     params: C4dOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-o",
@@ -5653,18 +5653,18 @@ function c4d_output_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function c4d_output_outputs(
     params: C4dOutputParameters,
     execution: Execution,
 ): C4dOutputOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: C4dOutputOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -5673,13 +5673,10 @@ function c4d_output_outputs(
 }
 
 
-function c4d_output_multicomponent_params(
-    output_multicomponent: string,
-): C4dOutputMulticomponentParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_multicomponent -omc, -output-multicomponent: Output multiple images to single file
+/**
+ * Build parameters.
+ *
+ * @param output_multicomponent -omc, -output-multicomponent: Output multiple images to single file
 
 Syntax: `-omc [number] filename`
 
@@ -5690,29 +5687,32 @@ Write multiple images on the **Convert3d** stack as a single multi-component ima
 For 2D images, this command can be used to generate color PNG files:
 
     c3d image.nii -slice z 50% -colormap jet -type uchar -omc colorslice.png
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_output_multicomponent_params(
+    output_multicomponent: string,
+): C4dOutputMulticomponentParameters {
     const params = {
-        "__STYXTYPE__": "output_multicomponent" as const,
+        "@type": "c3d.c4d.output_multicomponent" as const,
         "output_multicomponent": output_multicomponent,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_output_multicomponent_cargs(
     params: C4dOutputMulticomponentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-omc",
@@ -5722,13 +5722,10 @@ function c4d_output_multicomponent_cargs(
 }
 
 
-function c4d_output_multiple_multicomponent_params(
-    output_multiple_multicomponent: string,
-): C4dOutputMultipleMulticomponentParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_multiple_multicomponent -oomc: Output multiple multi-component images to multiple files
+/**
+ * Build parameters.
+ *
+ * @param output_multiple_multicomponent -oomc: Output multiple multi-component images to multiple files
 
 Syntax: `-oomc n_comp image_list` or `-oomc n_comp image_spec`
 
@@ -5739,29 +5736,32 @@ Write all images on the **convert3d** stack as multiple multi-component image fi
 These commands are used to manipulate the **convert3d** stack. The stack is a linear array of images. Every time an image is specified on the command line, it is loaded and placed at the end of the stack. Most operations take one image from the end of the stack, apply some operation to it, and place the result on the end of the stack. Certain commands like **-levelset** and **-reslice-matrix** take two images from the end of the stack as the input and replace them with a single output. Some other commands, like **-mean** and **-vote** take all images on the stack and replace them with a single output. 
 
 Sometimes, for complex operations, it is useful to change the order of the images on the stack, to duplicate images, or to execute the same command multiple times. The stack manipulation and flow control commands allow you to complete complex tasks without saving intermediate images to the disk.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_output_multiple_multicomponent_params(
+    output_multiple_multicomponent: string,
+): C4dOutputMultipleMulticomponentParameters {
     const params = {
-        "__STYXTYPE__": "output_multiple_multicomponent" as const,
+        "@type": "c3d.c4d.output_multiple_multicomponent" as const,
         "output_multiple_multicomponent": output_multiple_multicomponent,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_output_multiple_multicomponent_cargs(
     params: C4dOutputMultipleMulticomponentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-oomc",
@@ -5771,13 +5771,10 @@ function c4d_output_multiple_multicomponent_cargs(
 }
 
 
-function c4d_orient_params(
-    orient: string,
-): C4dOrientParameters {
-    /**
-     * Build parameters.
-    
-     * @param orient -orient: Change image orientation
+/**
+ * Build parameters.
+ *
+ * @param orient -orient: Change image orientation
 
 Syntax: `-orient CODE`
 
@@ -5789,29 +5786,32 @@ The CODE passed in is a three-letter code consisting of letters RLAPSI. Each let
     c3d input.img -orient SAL -o output.img
 
 This command has the same behavior as the 'Reorient Image' menu option in ITK-SNAP.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_orient_params(
+    orient: string,
+): C4dOrientParameters {
     const params = {
-        "__STYXTYPE__": "orient" as const,
+        "@type": "c3d.c4d.orient" as const,
         "orient": orient,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_orient_cargs(
     params: C4dOrientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-orient",
@@ -5821,13 +5821,10 @@ function c4d_orient_cargs(
 }
 
 
-function c4d_output_multiple_params(
-    output_multiple: string,
-): C4dOutputMultipleParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_multiple -oo: Output multiple images to multiple files 
+/**
+ * Build parameters.
+ *
+ * @param output_multiple -oo: Output multiple images to multiple files 
 
 Syntax: `-oo image_list` or `-oo image_spec`
 
@@ -5842,29 +5839,32 @@ The second way to use the **-oo** command is to supply a pattern for the output 
     c3d labelimage.nii -split -oo label%02d.nii
 
 will generate images *label00.nii*, *label01.nii*, *label02.nii* and so on. The image at the end of the stack will have the highest number, and the image at the beginning of the stack will have number 00.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_output_multiple_params(
+    output_multiple: string,
+): C4dOutputMultipleParameters {
     const params = {
-        "__STYXTYPE__": "output_multiple" as const,
+        "@type": "c3d.c4d.output_multiple" as const,
         "output_multiple": output_multiple,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_output_multiple_cargs(
     params: C4dOutputMultipleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-oo",
@@ -5874,13 +5874,10 @@ function c4d_output_multiple_cargs(
 }
 
 
-function c4d_orient_1_params(
-    orient: string,
-): C4dOrient1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param orient -orient: Change image orientation
+/**
+ * Build parameters.
+ *
+ * @param orient -orient: Change image orientation
 
 Syntax: `-orient CODE`
 
@@ -5892,29 +5889,32 @@ The CODE passed in is a three-letter code consisting of letters RLAPSI. Each let
     c3d input.img -orient SAL -o output.img
 
 This command has the same behavior as the 'Reorient Image' menu option in ITK-SNAP.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_orient_1_params(
+    orient: string,
+): C4dOrient1Parameters {
     const params = {
-        "__STYXTYPE__": "orient_1" as const,
+        "@type": "c3d.c4d.orient" as const,
         "orient": orient,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_orient_1_cargs(
     params: C4dOrient1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-orient",
@@ -5924,42 +5924,42 @@ function c4d_orient_1_cargs(
 }
 
 
-function c4d_origin_params(
-    origin: string,
-): C4dOriginParameters {
-    /**
-     * Build parameters.
-    
-     * @param origin -origin: Set image origin
+/**
+ * Build parameters.
+ *
+ * @param origin -origin: Set image origin
 
 Syntax: `-origin vector `
 
 Set the origin of the image. The origin is the world coordinate (in NIfTI coordinate space) of the center of the voxel (0,0,0) in the image. The origin should be specified in millimeters. 
 
     c3d input.img -origin 100x100x100mm -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_origin_params(
+    origin: string,
+): C4dOriginParameters {
     const params = {
-        "__STYXTYPE__": "origin" as const,
+        "@type": "c3d.c4d.origin" as const,
         "origin": origin,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_origin_cargs(
     params: C4dOriginParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-origin",
@@ -5969,13 +5969,10 @@ function c4d_origin_cargs(
 }
 
 
-function c4d_origin_voxel_params(
-    origin_voxel: string,
-): C4dOriginVoxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param origin_voxel -origin-voxel: Assign image origin to a voxel
+/**
+ * Build parameters.
+ *
+ * @param origin_voxel -origin-voxel: Assign image origin to a voxel
 
 Syntax: `-origin-voxel vector `
 
@@ -5983,29 +5980,32 @@ Set the origin of the image by specifying the voxel coordinates of the center of
 
     c3d input.img -origin-voxel 60x70x35 -o output.img
     c3d input.img -origin-voxel 50% -o output.img        # image centered around origin
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_origin_voxel_params(
+    origin_voxel: string,
+): C4dOriginVoxelParameters {
     const params = {
-        "__STYXTYPE__": "origin_voxel" as const,
+        "@type": "c3d.c4d.origin_voxel" as const,
         "origin_voxel": origin_voxel,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_origin_voxel_cargs(
     params: C4dOriginVoxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-origin-voxel",
@@ -6015,42 +6015,42 @@ function c4d_origin_voxel_cargs(
 }
 
 
-function c4d_origin_voxel_coord_params(
-    origin_voxel_coord: string,
-): C4dOriginVoxelCoordParameters {
-    /**
-     * Build parameters.
-    
-     * @param origin_voxel_coord -origin-voxel-coord: Set coordinate of specified voxel
+/**
+ * Build parameters.
+ *
+ * @param origin_voxel_coord -origin-voxel-coord: Set coordinate of specified voxel
 
 Syntax: `-origin-voxel-coord: <index> <vector>`
 
 This command updates the origin of the image such that the specifed voxel has the specified coordinate. For example, you can use the command to set the world coordinate (in NIFTI coordinate space) of the center voxel of the image, as follows:
 
     c3d input.nii -origin-voxel-coord: 50% 10x10x5mm -o output.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_origin_voxel_coord_params(
+    origin_voxel_coord: string,
+): C4dOriginVoxelCoordParameters {
     const params = {
-        "__STYXTYPE__": "origin_voxel_coord" as const,
+        "@type": "c3d.c4d.origin_voxel_coord" as const,
         "origin_voxel_coord": origin_voxel_coord,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_origin_voxel_coord_cargs(
     params: C4dOriginVoxelCoordParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-origin-voxel-coord",
@@ -6060,13 +6060,10 @@ function c4d_origin_voxel_coord_cargs(
 }
 
 
-function c4d_overlap_params(
-    overlap: string,
-): C4dOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param overlap -overlap: Compute relative overlap between binary images    
+/**
+ * Build parameters.
+ *
+ * @param overlap -overlap: Compute relative overlap between binary images    
 
 Syntax: `-overlap Z`
 
@@ -6089,29 +6086,32 @@ Use the flag **-verbose** to get full information.
     Intersection / ratio:            0.592459
 
 This command does not alter the stack.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_overlap_params(
+    overlap: string,
+): C4dOverlapParameters {
     const params = {
-        "__STYXTYPE__": "overlap" as const,
+        "@type": "c3d.c4d.overlap" as const,
         "overlap": overlap,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_overlap_cargs(
     params: C4dOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-overlap",
@@ -6121,13 +6121,10 @@ function c4d_overlap_cargs(
 }
 
 
-function c4d_overlay_label_image_params(
-    overlay_label_image: string,
-): C4dOverlayLabelImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param overlay_label_image -oli, -overlay-label-image: Overlay segmentation image on grayscale image
+/**
+ * Build parameters.
+ *
+ * @param overlay_label_image -oli, -overlay-label-image: Overlay segmentation image on grayscale image
 
 Syntax: `-oli lookup_table_file opacity`
 
@@ -6146,29 +6143,32 @@ Here is a more complex example, used to visualize a segmentation result. We do a
     c3d seg.nii.gz -trim 20x20x0vox -as S gray.nii.gz -stretch 2% 98% 0 255 -clip 0 255 \\
         -reslice-identity -push S -foreach -slice z 50% -flip xy -endfor \\
         -oli labels.txt 0.5 -type uchar -omc ovl.png
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_overlay_label_image_params(
+    overlay_label_image: string,
+): C4dOverlayLabelImageParameters {
     const params = {
-        "__STYXTYPE__": "overlay_label_image" as const,
+        "@type": "c3d.c4d.overlay_label_image" as const,
         "overlay_label_image": overlay_label_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_overlay_label_image_cargs(
     params: C4dOverlayLabelImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-overlay-label-image",
@@ -6178,13 +6178,10 @@ function c4d_overlay_label_image_cargs(
 }
 
 
-function c4d_pad_params(
-    pad: string,
-): C4dPadParameters {
-    /**
-     * Build parameters.
-    
-     * @param pad -pad: Pad image with constant value
+/**
+ * Build parameters.
+ *
+ * @param pad -pad: Pad image with constant value
 
 Syntax: `-pad <padlower> <padupper> <value> `
 
@@ -6203,29 +6200,32 @@ Normally you will want to pad with zeros, but you can pad with any constant valu
     c3d img1.nii -pad 10% 10% 1 -o padded.nii
 
 Adds 10% to all sides of the image, and fills the new voxels with the value 1.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_pad_params(
+    pad: string,
+): C4dPadParameters {
     const params = {
-        "__STYXTYPE__": "pad" as const,
+        "@type": "c3d.c4d.pad" as const,
         "pad": pad,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_pad_cargs(
     params: C4dPadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-pad",
@@ -6235,36 +6235,36 @@ function c4d_pad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pad_to No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_pad_to_params(
     pad_to: string,
 ): C4dPadToParameters {
-    /**
-     * Build parameters.
-    
-     * @param pad_to No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pad_to" as const,
+        "@type": "c3d.c4d.pad_to" as const,
         "pad_to": pad_to,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_pad_to_cargs(
     params: C4dPadToParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-padto",
@@ -6274,13 +6274,10 @@ function c4d_pad_to_cargs(
 }
 
 
-function c4d_pca_params(
-    pca: string,
-): C4dPcaParameters {
-    /**
-     * Build parameters.
-    
-     * @param pca -pca: Principal components analysis of foreground voxels
+/**
+ * Build parameters.
+ *
+ * @param pca -pca: Principal components analysis of foreground voxels
 
 Syntax: `-pca`
 
@@ -6289,29 +6286,32 @@ Similar to the *-centroid* command, computes the centroid and prinicipal compone
     c3d binaryimage.img -pca                              // centroid of all non-0 voxels
     c3d labelimage.img -thresh 5 5 1 0 -pca               // centroid of all voxels with label 5
     c3d labelimage.img -split -foreach -pca -endfor       // centroids of all labels (including 0)
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_pca_params(
+    pca: string,
+): C4dPcaParameters {
     const params = {
-        "__STYXTYPE__": "pca" as const,
+        "@type": "c3d.c4d.pca" as const,
         "pca": pca,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_pca_cargs(
     params: C4dPcaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-pca",
@@ -6321,13 +6321,10 @@ function c4d_pca_cargs(
 }
 
 
-function c4d_percent_intensity_mode_params(
-    percent_intensity_mode: string,
-): C4dPercentIntensityModeParameters {
-    /**
-     * Build parameters.
-    
-     * @param percent_intensity_mode -pim, -percent-intensity-mode: Set behavior of % specifier
+/**
+ * Build parameters.
+ *
+ * @param percent_intensity_mode -pim, -percent-intensity-mode: Set behavior of % specifier
 
 Syntax: `-pim Quantile | q | ForegroundQuantile | fq | Range | r`
 
@@ -6341,29 +6338,32 @@ This options changes how the percent sign (%) is interpreted when specifying int
 
     $ c3d comp01.png -verbose -pim Range -verbose -threshold 75% inf 1 0 
     Intensity range spec 0.75 maps to 191.25
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_percent_intensity_mode_params(
+    percent_intensity_mode: string,
+): C4dPercentIntensityModeParameters {
     const params = {
-        "__STYXTYPE__": "percent_intensity_mode" as const,
+        "@type": "c3d.c4d.percent_intensity_mode" as const,
         "percent_intensity_mode": percent_intensity_mode,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_percent_intensity_mode_cargs(
     params: C4dPercentIntensityModeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-percent-intensity-mode",
@@ -6373,36 +6373,36 @@ function c4d_percent_intensity_mode_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pixel No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_pixel_params(
     pixel: string,
 ): C4dPixelParameters {
-    /**
-     * Build parameters.
-    
-     * @param pixel No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pixel" as const,
+        "@type": "c3d.c4d.pixel" as const,
         "pixel": pixel,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_pixel_cargs(
     params: C4dPixelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-pixel",
@@ -6412,40 +6412,40 @@ function c4d_pixel_cargs(
 }
 
 
-function c4d_pop_params(
-    pop: string,
-): C4dPopParameters {
-    /**
-     * Build parameters.
-    
-     * @param pop -pop: Remove last image from the stack
+/**
+ * Build parameters.
+ *
+ * @param pop -pop: Remove last image from the stack
 
 Syntax: `-pop` 
 
 Removes the last image from the image stack. Images assigned a name with the **-as** command will remain in memory.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_pop_params(
+    pop: string,
+): C4dPopParameters {
     const params = {
-        "__STYXTYPE__": "pop" as const,
+        "@type": "c3d.c4d.pop" as const,
         "pop": pop,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_pop_cargs(
     params: C4dPopParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-pop",
@@ -6455,40 +6455,40 @@ function c4d_pop_cargs(
 }
 
 
-function c4d_popas_params(
-    popas: string,
-): C4dPopasParameters {
-    /**
-     * Build parameters.
-    
-     * @param popas -popas: Remove last image from the stack and assign to variable
+/**
+ * Build parameters.
+ *
+ * @param popas -popas: Remove last image from the stack and assign to variable
 
 Syntax: `-popas var` 
 
 Removes the last image from the stack, but also assigns it the name 'var', keeping the image in memory. Same as calling **-as** *var* followed by **-pop**.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_popas_params(
+    popas: string,
+): C4dPopasParameters {
     const params = {
-        "__STYXTYPE__": "popas" as const,
+        "@type": "c3d.c4d.popas" as const,
         "popas": popas,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_popas_cargs(
     params: C4dPopasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-popas",
@@ -6498,13 +6498,10 @@ function c4d_popas_cargs(
 }
 
 
-function c4d_probe_params(
-    probe: string,
-): C4dProbeParameters {
-    /**
-     * Build parameters.
-    
-     * @param probe -probe: Report image intensity at a voxel
+/**
+ * Build parameters.
+ *
+ * @param probe -probe: Report image intensity at a voxel
 
 Syntax: `-probe <point_spec>`
 
@@ -6513,29 +6510,32 @@ Prints the value of the image at the position specified by the parameter `point_
     c3d img1.img -probe 128x120x160vox
     c3d img1.img -interpolation NearestNeighbor -probe 60x60x60mm
     c3d img1.img -probe 50%
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_probe_params(
+    probe: string,
+): C4dProbeParameters {
     const params = {
-        "__STYXTYPE__": "probe" as const,
+        "@type": "c3d.c4d.probe" as const,
         "probe": probe,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_probe_cargs(
     params: C4dProbeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-probe",
@@ -6545,42 +6545,42 @@ function c4d_probe_cargs(
 }
 
 
-function c4d_push_params(
-    push: string,
-): C4dPushParameters {
-    /**
-     * Build parameters.
-    
-     * @param push -push: Place variable at the end of the stack
+/**
+ * Build parameters.
+ *
+ * @param push -push: Place variable at the end of the stack
 
 Syntax: `-push var`
 
 Places the image associated with variable name 'var' on end of the image stack. Variable names are assigned using the **-as** command. The **-as** and **-push** commands are useful when you need to use a certain image more than once during a convert3d operation. For example, if you want to compute the distance transform of a binary image and mask it so that the values outside of the binary image region have value 0, you would use the following command: 
 
     c3d binary.img -as A -sdt -push A -times -o masked_distance.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_push_params(
+    push: string,
+): C4dPushParameters {
     const params = {
-        "__STYXTYPE__": "push" as const,
+        "@type": "c3d.c4d.push" as const,
         "push": push,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_push_cargs(
     params: C4dPushParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-push",
@@ -6590,42 +6590,42 @@ function c4d_push_cargs(
 }
 
 
-function c4d_rank_params(
-    rank: string,
-): C4dRankParameters {
-    /**
-     * Build parameters.
-    
-     * @param rank -rank: Voxelwise ranking of intensity values
+/**
+ * Build parameters.
+ *
+ * @param rank -rank: Voxelwise ranking of intensity values
 
 Syntax: `-rank `
 
 This command takes N images as the input (all the images on the stack are used). It also generates N images as the output. For voxel k in image j, it assigns it a label based on its rank among the values of voxel k in all N images. If the voxel has highest intensity in image j, then the j'th output will have value 1. 
 
     c3d img1.img img2.img ... imgN.img -rank -oo rank%d.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rank_params(
+    rank: string,
+): C4dRankParameters {
     const params = {
-        "__STYXTYPE__": "rank" as const,
+        "@type": "c3d.c4d.rank" as const,
         "rank": rank,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rank_cargs(
     params: C4dRankParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rank",
@@ -6635,42 +6635,42 @@ function c4d_rank_cargs(
 }
 
 
-function c4d_reciprocal_params(
-    reciprocal: string,
-): C4dReciprocalParameters {
-    /**
-     * Build parameters.
-    
-     * @param reciprocal -reciprocal: Image voxelwise reciprocal 
+/**
+ * Build parameters.
+ *
+ * @param reciprocal -reciprocal: Image voxelwise reciprocal 
 
 Syntax: `-reciprocal `
 
 Computes the reciprocal of an image. For instance to compute B = 1 / A, use the command 
 
     c3d A.img -reciprocal -o B.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_reciprocal_params(
+    reciprocal: string,
+): C4dReciprocalParameters {
     const params = {
-        "__STYXTYPE__": "reciprocal" as const,
+        "@type": "c3d.c4d.reciprocal" as const,
         "reciprocal": reciprocal,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_reciprocal_cargs(
     params: C4dReciprocalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-reciprocal",
@@ -6680,13 +6680,10 @@ function c4d_reciprocal_cargs(
 }
 
 
-function c4d_region_params(
-    region: string,
-): C4dRegionParameters {
-    /**
-     * Build parameters.
-    
-     * @param region -region: Extract region from image
+/**
+ * Build parameters.
+ *
+ * @param region -region: Extract region from image
 
 Syntax: `-region vOrigin vSize `
 
@@ -6694,29 +6691,32 @@ Extract a rectangular region from the image. The first parameter is the position
 
     c3d img1.img -region 20x20x20vox 50x60x70vox -o img2.img
     c3d img1.img -region 25% 50% -o img3.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_region_params(
+    region: string,
+): C4dRegionParameters {
     const params = {
-        "__STYXTYPE__": "region" as const,
+        "@type": "c3d.c4d.region" as const,
         "region": region,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_region_cargs(
     params: C4dRegionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-region",
@@ -6726,13 +6726,10 @@ function c4d_region_cargs(
 }
 
 
-function c4d_reorder_params(
-    reorder: string,
-): C4dReorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param reorder -reorder: Rearrange images on the stack
+/**
+ * Build parameters.
+ *
+ * @param reorder -reorder: Rearrange images on the stack
 
 Syntax: `-reorder k` or `-reorder fraction`
 
@@ -6751,29 +6748,32 @@ The **-reorder** command us useful when you specify two sets of images using wil
 is equivalent to the command
 
     c3d weight1.nii gray1.nii weight2.nii gray2.nii ... -weighted-sum-voxelwise -o wsum.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_reorder_params(
+    reorder: string,
+): C4dReorderParameters {
     const params = {
-        "__STYXTYPE__": "reorder" as const,
+        "@type": "c3d.c4d.reorder" as const,
         "reorder": reorder,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_reorder_cargs(
     params: C4dReorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-reorder",
@@ -6783,42 +6783,42 @@ function c4d_reorder_cargs(
 }
 
 
-function c4d_retain_labels_params(
-    retain_labels: string,
-): C4dRetainLabelsParameters {
-    /**
-     * Build parameters.
-    
-     * @param retain_labels -retain-labels: Retain labels in a label image
+/**
+ * Build parameters.
+ *
+ * @param retain_labels -retain-labels: Retain labels in a label image
 
 Syntax: `-retain-labels I1 I2 ... IN`
 
 Assuming that the input is a multi-label segmentation image, this command keeps all labels specifed in the list and replaces the remaining labels with the background value.
 
     c3d seg.nii -retain-labels 2 3 4 8 -o subseg.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_retain_labels_params(
+    retain_labels: string,
+): C4dRetainLabelsParameters {
     const params = {
-        "__STYXTYPE__": "retain_labels" as const,
+        "@type": "c3d.c4d.retain_labels" as const,
         "retain_labels": retain_labels,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_retain_labels_cargs(
     params: C4dRetainLabelsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-retain-labels",
@@ -6828,40 +6828,40 @@ function c4d_retain_labels_cargs(
 }
 
 
-function c4d_rf_apply_params(
-    rf_apply: string,
-): C4dRfApplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_apply -rf-apply: Apply Random Forest classifier 
+/**
+ * Build parameters.
+ *
+ * @param rf_apply -rf-apply: Apply Random Forest classifier 
 
 Syntax: `-rf-apply <classifier_file>`
 
 This command applies a classifier trained previously by **-rf-train**. The stack must contain the same number of feature images as when training. The images will be removed from the stack and replaced with a set of K probability images, where K is the number of classes during training. See examples under **-rf-train** for usage.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_apply_params(
+    rf_apply: string,
+): C4dRfApplyParameters {
     const params = {
-        "__STYXTYPE__": "rf_apply" as const,
+        "@type": "c3d.c4d.rf_apply" as const,
         "rf_apply": rf_apply,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_apply_cargs(
     params: C4dRfApplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-apply",
@@ -6871,13 +6871,10 @@ function c4d_rf_apply_cargs(
 }
 
 
-function c4d_rf_train_params(
-    rf_train: string,
-): C4dRfTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_train -rf-train: Train Random Forest classifier
+/**
+ * Build parameters.
+ *
+ * @param rf_train -rf-train: Train Random Forest classifier
 
 Syntax: `-rf-train <classifier_file>`
 
@@ -6905,29 +6902,32 @@ The commands are meant to replicate the "classification" pre-segmentation mode i
 
  [Br2001] Breiman, L. (2001). Random forests. Machine learning, 45(1), 5-32.
  [Cr2004] Criminisi, A., & Shotton, J. (2013). Decision forests for computer vision and medical image analysis. Springer Science & Business Media
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_train_params(
+    rf_train: string,
+): C4dRfTrainParameters {
     const params = {
-        "__STYXTYPE__": "rf_train" as const,
+        "@type": "c3d.c4d.rf_train" as const,
         "rf_train": rf_train,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_train_cargs(
     params: C4dRfTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-train",
@@ -6937,13 +6937,10 @@ function c4d_rf_train_cargs(
 }
 
 
-function c4d_rf_param_patch_params(
-    rf_param_patch: string,
-): C4dRfParamPatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_param_patch -rf-param-patch: Random Forest training patch size
+/**
+ * Build parameters.
+ *
+ * @param rf_param_patch -rf-param-patch: Random Forest training patch size
 
 Syntax: `-rf-param-patch <size_spec>`
 
@@ -6951,29 +6948,32 @@ Set the radius of the patch used to generate features for the RF classifier. By 
 
     # Set patch size to 5x5x5 
     c3d ... -rf-param-patch 2x2x2 ... -rf-train myforest.rf
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_param_patch_params(
+    rf_param_patch: string,
+): C4dRfParamPatchParameters {
     const params = {
-        "__STYXTYPE__": "rf_param_patch" as const,
+        "@type": "c3d.c4d.rf_param_patch" as const,
         "rf_param_patch": rf_param_patch,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_param_patch_cargs(
     params: C4dRfParamPatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-param-patch",
@@ -6983,40 +6983,40 @@ function c4d_rf_param_patch_cargs(
 }
 
 
-function c4d_rf_param_usexyz_params(
-    rf_param_usexyz: string,
-): C4dRfParamUsexyzParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_param_usexyz -rf-param-usexyz: Random Forest coordinate features
+/**
+ * Build parameters.
+ *
+ * @param rf_param_usexyz -rf-param-usexyz: Random Forest coordinate features
 
 Syntax: `-rf-param-usexyz`
 
 Use the coordinates of voxels as additional features. This allows some geometric relations between different labels to be learned. Equivalent to the corresponding ITK-SNAP option.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_param_usexyz_params(
+    rf_param_usexyz: string,
+): C4dRfParamUsexyzParameters {
     const params = {
-        "__STYXTYPE__": "rf_param_usexyz" as const,
+        "@type": "c3d.c4d.rf_param_usexyz" as const,
         "rf_param_usexyz": rf_param_usexyz,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_param_usexyz_cargs(
     params: C4dRfParamUsexyzParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-param-usexyz",
@@ -7026,36 +7026,36 @@ function c4d_rf_param_usexyz_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rf_param_nousexyz No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_rf_param_nousexyz_params(
     rf_param_nousexyz: string,
 ): C4dRfParamNousexyzParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_param_nousexyz No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rf_param_nousexyz" as const,
+        "@type": "c3d.c4d.rf_param_nousexyz" as const,
         "rf_param_nousexyz": rf_param_nousexyz,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_param_nousexyz_cargs(
     params: C4dRfParamNousexyzParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-param-nousexyz",
@@ -7065,40 +7065,40 @@ function c4d_rf_param_nousexyz_cargs(
 }
 
 
-function c4d_rf_param_ntrees_params(
-    rf_param_ntrees: string,
-): C4dRfParamNtreesParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_param_ntrees -rf-param-ntrees: Random Forest forest size
+/**
+ * Build parameters.
+ *
+ * @param rf_param_ntrees -rf-param-ntrees: Random Forest forest size
 
 Syntax: `-rf-param-ntrees <integer>`
 
 Sets the number of trees in the forest. Default value is 50. Larger forests are more robust but more time to train and apply.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_param_ntrees_params(
+    rf_param_ntrees: string,
+): C4dRfParamNtreesParameters {
     const params = {
-        "__STYXTYPE__": "rf_param_ntrees" as const,
+        "@type": "c3d.c4d.rf_param_ntrees" as const,
         "rf_param_ntrees": rf_param_ntrees,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_param_ntrees_cargs(
     params: C4dRfParamNtreesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-param-ntrees",
@@ -7108,40 +7108,40 @@ function c4d_rf_param_ntrees_cargs(
 }
 
 
-function c4d_rf_param_treedepth_params(
-    rf_param_treedepth: string,
-): C4dRfParamTreedepthParameters {
-    /**
-     * Build parameters.
-    
-     * @param rf_param_treedepth -rf-param-treedepth: Random Forest tree depth
+/**
+ * Build parameters.
+ *
+ * @param rf_param_treedepth -rf-param-treedepth: Random Forest tree depth
 
 Syntax: `-rf-param-treedepth <integer>`
 
 Sets the depth of the trees in the classifier. Default value is 30. Deeper trees can learn on more complex data but require more time.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rf_param_treedepth_params(
+    rf_param_treedepth: string,
+): C4dRfParamTreedepthParameters {
     const params = {
-        "__STYXTYPE__": "rf_param_treedepth" as const,
+        "@type": "c3d.c4d.rf_param_treedepth" as const,
         "rf_param_treedepth": rf_param_treedepth,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rf_param_treedepth_cargs(
     params: C4dRfParamTreedepthParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rf-param-treedepth",
@@ -7151,40 +7151,40 @@ function c4d_rf_param_treedepth_cargs(
 }
 
 
-function c4d_set_sform_params(
-    set_sform: string,
-): C4dSetSformParameters {
-    /**
-     * Build parameters.
-    
-     * @param set_sform -set-sform: Set the transform to physical space
+/**
+ * Build parameters.
+ *
+ * @param set_sform -set-sform: Set the transform to physical space
 
 Syntax: `-set-sform <sform.mat> `
 
 Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_set_sform_params(
+    set_sform: string,
+): C4dSetSformParameters {
     const params = {
-        "__STYXTYPE__": "set_sform" as const,
+        "@type": "c3d.c4d.set_sform" as const,
         "set_sform": set_sform,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_set_sform_cargs(
     params: C4dSetSformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-set-sform",
@@ -7194,42 +7194,42 @@ function c4d_set_sform_cargs(
 }
 
 
-function c4d_replace_params(
-    replace: string,
-): C4dReplaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param replace -replace: Replace intensities in image
+/**
+ * Build parameters.
+ *
+ * @param replace -replace: Replace intensities in image
 
 Syntax: `-replace I1 J1 I2 J2 ... `
 
 Replace intensity I1 by J1, I2 by J2 and so on. Allowed values of intensity include **nan**, **inf** and **-inf**. 
 
     c3d img1.img -replace 1 128 nan 0.0 -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_replace_params(
+    replace: string,
+): C4dReplaceParameters {
     const params = {
-        "__STYXTYPE__": "replace" as const,
+        "@type": "c3d.c4d.replace" as const,
         "replace": replace,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_replace_cargs(
     params: C4dReplaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-replace",
@@ -7239,13 +7239,10 @@ function c4d_replace_cargs(
 }
 
 
-function c4d_resample_params(
-    resample: string,
-): C4dResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param resample -resample: Resample image to new dimensions
+/**
+ * Build parameters.
+ *
+ * @param resample -resample: Resample image to new dimensions
 
 Syntax: `-resample <dimensions> `
 
@@ -7255,29 +7252,32 @@ Resamples the image, keeping the bounding box the same, but changing the number 
     c3d img1.img -resample 200% -o img2.img 
     c3d img1.img -resample 100x100x200% -o img2.img 
     c3d img1.img -background 4.0 -interpolation Cubic -resample 123x142x200 -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_resample_params(
+    resample: string,
+): C4dResampleParameters {
     const params = {
-        "__STYXTYPE__": "resample" as const,
+        "@type": "c3d.c4d.resample" as const,
         "resample": resample,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_resample_cargs(
     params: C4dResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-resample",
@@ -7287,42 +7287,42 @@ function c4d_resample_cargs(
 }
 
 
-function c4d_resample_iso_params(
-    resample_iso: string,
-): C4dResampleIsoParameters {
-    /**
-     * Build parameters.
-    
-     * @param resample_iso -resample-iso: Resample image to (approximately) isotropic resolution
+/**
+ * Build parameters.
+ *
+ * @param resample_iso -resample-iso: Resample image to (approximately) isotropic resolution
 
 Syntax: `-resample-iso <min|max>`
 
 Resamples the image to have approximately isotropic resolution, either based on the smallest voxel dimension ('min' mode) or largest voxel dimension ('max' mode). This command calls **-resample** with appropriately calculated new image dimensions. The bounding box of the image in physical space is preserved. Therefore, since the image dimensions must be integer, the actual voxel dimensions after resampling may not be precisely isotropic. 
 
     c3d img1.img -resample-iso min -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_resample_iso_params(
+    resample_iso: string,
+): C4dResampleIsoParameters {
     const params = {
-        "__STYXTYPE__": "resample_iso" as const,
+        "@type": "c3d.c4d.resample_iso" as const,
         "resample_iso": resample_iso,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_resample_iso_cargs(
     params: C4dResampleIsoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-resample-iso",
@@ -7332,42 +7332,42 @@ function c4d_resample_iso_cargs(
 }
 
 
-function c4d_resample_mm_params(
-    resample_mm: string,
-): C4dResampleMmParameters {
-    /**
-     * Build parameters.
-    
-     * @param resample_mm -resample-mm: Resample image to new resolution
+/**
+ * Build parameters.
+ *
+ * @param resample_mm -resample-mm: Resample image to new resolution
 
 Syntax: `-resample-mm <voxel_size> `
 
 Resamples the image as in **-resample**, but the user specifies the new voxel size rather than dimensions. This may not be precise, so the bounding box of the image may change. A warning will be generated in that case. 
 
     c3d img1.img -resample-mm 1.0x1.5x1.5mm -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_resample_mm_params(
+    resample_mm: string,
+): C4dResampleMmParameters {
     const params = {
-        "__STYXTYPE__": "resample_mm" as const,
+        "@type": "c3d.c4d.resample_mm" as const,
         "resample_mm": resample_mm,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_resample_mm_cargs(
     params: C4dResampleMmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-resample-mm",
@@ -7377,40 +7377,40 @@ function c4d_resample_mm_cargs(
 }
 
 
-function c4d_reslice_itk_params(
-    reslice_itk: string,
-): C4dResliceItkParameters {
-    /**
-     * Build parameters.
-    
-     * @param reslice_itk -reslice-itk: Resample image using affine transform
+/**
+ * Build parameters.
+ *
+ * @param reslice_itk -reslice-itk: Resample image using affine transform
 
 Syntax: `-reslice-itk <transform_file> `
 
 Applies affine (or other) transform in ITK (ANTs) format to an image. See notes to **-reslice-matrix** for usage.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_reslice_itk_params(
+    reslice_itk: string,
+): C4dResliceItkParameters {
     const params = {
-        "__STYXTYPE__": "reslice_itk" as const,
+        "@type": "c3d.c4d.reslice_itk" as const,
         "reslice_itk": reslice_itk,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_reslice_itk_cargs(
     params: C4dResliceItkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-reslice-itk",
@@ -7420,36 +7420,36 @@ function c4d_reslice_itk_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reslice_matrix No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_reslice_matrix_params(
     reslice_matrix: string,
 ): C4dResliceMatrixParameters {
-    /**
-     * Build parameters.
-    
-     * @param reslice_matrix No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reslice_matrix" as const,
+        "@type": "c3d.c4d.reslice_matrix" as const,
         "reslice_matrix": reslice_matrix,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_reslice_matrix_cargs(
     params: C4dResliceMatrixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-reslice-matrix",
@@ -7459,42 +7459,42 @@ function c4d_reslice_matrix_cargs(
 }
 
 
-function c4d_reslice_identity_params(
-    reslice_identity: string,
-): C4dResliceIdentityParameters {
-    /**
-     * Build parameters.
-    
-     * @param reslice_identity -reslice-identity: Resample image using identity transform 
+/**
+ * Build parameters.
+ *
+ * @param reslice_identity -reslice-identity: Resample image using identity transform 
 
 Syntax: `-reslice-identity `
 
 Applies the **-reslice-matrix** command with the identity transform. This is useful when you have two scans of the same subject with different coordinate transformations to patient space and you want to resample one scan in the space of another scan. For example, if you have T1 and T2 images in different coordinate frames, and want to reslice the T2 image into the space of the T1 
 
     c3d t1.nii t2.nii -reslice-identity -o t2_in_t1_space.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_reslice_identity_params(
+    reslice_identity: string,
+): C4dResliceIdentityParameters {
     const params = {
-        "__STYXTYPE__": "reslice_identity" as const,
+        "@type": "c3d.c4d.reslice_identity" as const,
         "reslice_identity": reslice_identity,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_reslice_identity_cargs(
     params: C4dResliceIdentityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-reslice-identity",
@@ -7504,42 +7504,42 @@ function c4d_reslice_identity_cargs(
 }
 
 
-function c4d_rgb2hsv_params(
-    rgb2hsv: string,
-): C4dRgb2hsvParameters {
-    /**
-     * Build parameters.
-    
-     * @param rgb2hsv -rgb2hsv: Convert RGB image to HSV image
+/**
+ * Build parameters.
+ *
+ * @param rgb2hsv -rgb2hsv: Convert RGB image to HSV image
 
 Syntax `-rgb2hsv`
 
 Takes the last three images on the stack and treats them as red, green, and blue channels. Outputs three images corresponding to hue, saturation, value. To read color images you need the ***-msc*** command.
 
     c3d -mcs color.png -rgb2hsv -omc hsv.png
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rgb2hsv_params(
+    rgb2hsv: string,
+): C4dRgb2hsvParameters {
     const params = {
-        "__STYXTYPE__": "rgb2hsv" as const,
+        "@type": "c3d.c4d.rgb2hsv" as const,
         "rgb2hsv": rgb2hsv,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rgb2hsv_cargs(
     params: C4dRgb2hsvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rgb2hsv",
@@ -7549,13 +7549,10 @@ function c4d_rgb2hsv_cargs(
 }
 
 
-function c4d_rms_params(
-    rms: string,
-): C4dRmsParameters {
-    /**
-     * Build parameters.
-    
-     * @param rms -rms: Voxelwise vector norm
+/**
+ * Build parameters.
+ *
+ * @param rms -rms: Voxelwise vector norm
 
 Syntax: `-rms`
 
@@ -7567,29 +7564,32 @@ The equivalent of this command is
 
     c3d img1.img img2.img img3.img img4.img -foreach -dup -times -endfor \
         -accum -add -endaccum -sqrt -o rms.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_rms_params(
+    rms: string,
+): C4dRmsParameters {
     const params = {
-        "__STYXTYPE__": "rms" as const,
+        "@type": "c3d.c4d.rms" as const,
         "rms": rms,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_rms_cargs(
     params: C4dRmsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-rms",
@@ -7599,42 +7599,42 @@ function c4d_rms_cargs(
 }
 
 
-function c4d_round_params(
-    round: string,
-): C4dRoundParameters {
-    /**
-     * Build parameters.
-    
-     * @param round -noround, -round: Floating point rounding behavior
+/**
+ * Build parameters.
+ *
+ * @param round -noround, -round: Floating point rounding behavior
 
 Syntax: `-noround` or `-round `
 
 By default, **convert3d** will round floating point values when converting to an integer, short or byte image. This command specifies that rounding should not be used. Rounding is used to avoid numerical errors stemming from the internal floating point representation. 
 
     c3d image1.img -type short -noround image2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_round_params(
+    round: string,
+): C4dRoundParameters {
     const params = {
-        "__STYXTYPE__": "round" as const,
+        "@type": "c3d.c4d.round" as const,
         "round": round,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_round_cargs(
     params: C4dRoundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-round",
@@ -7644,42 +7644,42 @@ function c4d_round_cargs(
 }
 
 
-function c4d_scale_params(
-    scale: string,
-): C4dScaleParameters {
-    /**
-     * Build parameters.
-    
-     * @param scale -scale: Scale intensity by constant factor
+/**
+ * Build parameters.
+ *
+ * @param scale -scale: Scale intensity by constant factor
 
 Syntax: `-scale <factor>`
 
 Multiplies the intensity of each voxel in the last image on the stack by the given factor. 
 
     c3d img1.img -scale 0.5 -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_scale_params(
+    scale: string,
+): C4dScaleParameters {
     const params = {
-        "__STYXTYPE__": "scale" as const,
+        "@type": "c3d.c4d.scale" as const,
         "scale": scale,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_scale_cargs(
     params: C4dScaleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-scale",
@@ -7689,40 +7689,40 @@ function c4d_scale_cargs(
 }
 
 
-function c4d_set_sform_1_params(
-    set_sform: string,
-): C4dSetSform1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param set_sform -set-sform: Set the transform to physical space
+/**
+ * Build parameters.
+ *
+ * @param set_sform -set-sform: Set the transform to physical space
 
 Syntax: `-set-sform <sform.mat> `
 
 Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_set_sform_1_params(
+    set_sform: string,
+): C4dSetSform1Parameters {
     const params = {
-        "__STYXTYPE__": "set_sform_1" as const,
+        "@type": "c3d.c4d.set_sform" as const,
         "set_sform": set_sform,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_set_sform_1_cargs(
     params: C4dSetSform1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-set-sform",
@@ -7732,40 +7732,40 @@ function c4d_set_sform_1_cargs(
 }
 
 
-function c4d_sin_params(
-    sin: string,
-): C4dSinParameters {
-    /**
-     * Build parameters.
-    
-     * @param sin -cos: Voxelwise cosine 
+/**
+ * Build parameters.
+ *
+ * @param sin -cos: Voxelwise cosine 
 
 Syntax: `-sin`
 
 Replaces the last image on the stack with the cosine trigonometric operation applied to all voxels. Input must be in radians.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_sin_params(
+    sin: string,
+): C4dSinParameters {
     const params = {
-        "__STYXTYPE__": "sin" as const,
+        "@type": "c3d.c4d.sin" as const,
         "sin": sin,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_sin_cargs(
     params: C4dSinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-sin",
@@ -7775,13 +7775,10 @@ function c4d_sin_cargs(
 }
 
 
-function c4d_slice_params(
-    slice: string,
-): C4dSliceParameters {
-    /**
-     * Build parameters.
-    
-     * @param slice -slice: Extract slices from an image
+/**
+ * Build parameters.
+ *
+ * @param slice -slice: Extract slices from an image
 
 Syntax: `-slice axis position_spec`
 
@@ -7796,29 +7793,32 @@ Extracts a slice along the specified axis (x,y or z). The position specifier **p
 With the new command **c4d**, the **-slice** command can be used to extract volumes from a 4D image. This can be useful to reformat a 4D NIFTI image as a 3D multi-component NIFTI image, using the command 
 
     c4d input4d.nii.gz -slice w 0:-1 -omc output3d_multicomp.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_slice_params(
+    slice: string,
+): C4dSliceParameters {
     const params = {
-        "__STYXTYPE__": "slice" as const,
+        "@type": "c3d.c4d.slice" as const,
         "slice": slice,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_slice_cargs(
     params: C4dSliceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-slice",
@@ -7828,42 +7828,42 @@ function c4d_slice_cargs(
 }
 
 
-function c4d_slice_all_params(
-    slice_all: string,
-): C4dSliceAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param slice_all -slice-all: Extract slices from all images on the stack
+/**
+ * Build parameters.
+ *
+ * @param slice_all -slice-all: Extract slices from all images on the stack
 
 Syntax `-slice-all axis position_spec`
 
 This command behaves identical to the **-slice** command, but all images on the stack are sliced, and the slices are interleaved. This is useful for slicing multi-component images. For example, if you read a four-component image 'test4.nii.gz', you can extract and save the slices as follows:
 
     c3d test4.nii.gz -slice-all 20%:10%:80% -oomc 4 slice4_%03d.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_slice_all_params(
+    slice_all: string,
+): C4dSliceAllParameters {
     const params = {
-        "__STYXTYPE__": "slice_all" as const,
+        "@type": "c3d.c4d.slice_all" as const,
         "slice_all": slice_all,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_slice_all_cargs(
     params: C4dSliceAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-slice-all",
@@ -7873,42 +7873,42 @@ function c4d_slice_all_cargs(
 }
 
 
-function c4d_sharpen_params(
-    sharpen: string,
-): C4dSharpenParameters {
-    /**
-     * Build parameters.
-    
-     * @param sharpen -sharpen: Sharpen edges in the image
+/**
+ * Build parameters.
+ *
+ * @param sharpen -sharpen: Sharpen edges in the image
 
 Syntax: `-sharpen`
 
 Applies the Laplacian sharpening filter from ITK, which accentuates the edges in the image.
 
     c3d input.nii.gz -sharpen -o output.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_sharpen_params(
+    sharpen: string,
+): C4dSharpenParameters {
     const params = {
-        "__STYXTYPE__": "sharpen" as const,
+        "@type": "c3d.c4d.sharpen" as const,
         "sharpen": sharpen,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_sharpen_cargs(
     params: C4dSharpenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-sharpen",
@@ -7918,42 +7918,42 @@ function c4d_sharpen_cargs(
 }
 
 
-function c4d_shift_params(
-    shift: string,
-): C4dShiftParameters {
-    /**
-     * Build parameters.
-    
-     * @param shift -shift: Shift image intensity by constant
+/**
+ * Build parameters.
+ *
+ * @param shift -shift: Shift image intensity by constant
 
 Syntax: `-shift <constant>`
 
 Adds the given constant to every voxel.
 
     c3d img1.img -shift 100 -o img2.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_shift_params(
+    shift: string,
+): C4dShiftParameters {
     const params = {
-        "__STYXTYPE__": "shift" as const,
+        "@type": "c3d.c4d.shift" as const,
         "shift": shift,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_shift_cargs(
     params: C4dShiftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-shift",
@@ -7963,42 +7963,42 @@ function c4d_shift_cargs(
 }
 
 
-function c4d_signed_distance_transform_params(
-    signed_distance_transform: string,
-): C4dSignedDistanceTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param signed_distance_transform -sdt, -signed-distance-transform: Signed distance transform of a binary image
+/**
+ * Build parameters.
+ *
+ * @param signed_distance_transform -sdt, -signed-distance-transform: Signed distance transform of a binary image
 
 Syntax: `-sdt`
 
 Computes the signed distance transform of a binary image. Voxels where the binary image is non-zero will have negative values and voxels where the binary image is zero will have negative values. The magnitude of the value will be the approximate Euclidean distance to the boundary of the object represented by the binary image. 
 
     c3d binary.img -sdt -o dist.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_signed_distance_transform_params(
+    signed_distance_transform: string,
+): C4dSignedDistanceTransformParameters {
     const params = {
-        "__STYXTYPE__": "signed_distance_transform" as const,
+        "@type": "c3d.c4d.signed_distance_transform" as const,
         "signed_distance_transform": signed_distance_transform,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_signed_distance_transform_cargs(
     params: C4dSignedDistanceTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-signed-distance-transform",
@@ -8008,42 +8008,42 @@ function c4d_signed_distance_transform_cargs(
 }
 
 
-function c4d_smooth_params(
-    smooth: string,
-): C4dSmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param smooth -smooth: Gaussian smoothing
+/**
+ * Build parameters.
+ *
+ * @param smooth -smooth: Gaussian smoothing
 
 Syntax: `-smooth <sigma_vector> `
 
 Applies Gaussian smoothing to the image. The parameter vector specifies the standard deviation of the Gaussian kernel. Also see [Vector Format Specification][10] below. 
 
     c3d img1.img -smooth 2x1x1vox -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_smooth_params(
+    smooth: string,
+): C4dSmoothParameters {
     const params = {
-        "__STYXTYPE__": "smooth" as const,
+        "@type": "c3d.c4d.smooth" as const,
         "smooth": smooth,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_smooth_cargs(
     params: C4dSmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-smooth",
@@ -8053,42 +8053,42 @@ function c4d_smooth_cargs(
 }
 
 
-function c4d_smooth_fast_params(
-    smooth_fast: string,
-): C4dSmoothFastParameters {
-    /**
-     * Build parameters.
-    
-     * @param smooth_fast -smooth-fast: Fast approximate Gaussian smoothing
+/**
+ * Build parameters.
+ *
+ * @param smooth_fast -smooth-fast: Fast approximate Gaussian smoothing
 
 Syntax: `-smooth-fast <sigma_vector> `
 
 Applies Gaussian smoothing to the image using the fast [Deriche recursive smoothing algorithm][15].  The parameter vector specifies the standard deviation of the Gaussian kernel. Also see [Vector Format Specification][10] below. 
 
     c3d img1.img -smooth-fast 20x10x10vox -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_smooth_fast_params(
+    smooth_fast: string,
+): C4dSmoothFastParameters {
     const params = {
-        "__STYXTYPE__": "smooth_fast" as const,
+        "@type": "c3d.c4d.smooth_fast" as const,
         "smooth_fast": smooth_fast,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_smooth_fast_cargs(
     params: C4dSmoothFastParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-smooth-fast",
@@ -8098,42 +8098,42 @@ function c4d_smooth_fast_cargs(
 }
 
 
-function c4d_spacing_params(
-    spacing: string,
-): C4dSpacingParameters {
-    /**
-     * Build parameters.
-    
-     * @param spacing -spacing: Set voxel spacing
+/**
+ * Build parameters.
+ *
+ * @param spacing -spacing: Set voxel spacing
 
 Syntax: `-spacing <vector> `
 
 Sets the voxel spacing of the image. This should always be a vector with positive components. For example, to set the spacing of the image to 1mm isotropic, use the command below. This command only changes the header of the image, not its contents. 
 
     c3d img.nii -spacing 1x1x1mm -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_spacing_params(
+    spacing: string,
+): C4dSpacingParameters {
     const params = {
-        "__STYXTYPE__": "spacing" as const,
+        "@type": "c3d.c4d.spacing" as const,
         "spacing": spacing,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_spacing_cargs(
     params: C4dSpacingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-spacing",
@@ -8143,13 +8143,10 @@ function c4d_spacing_cargs(
 }
 
 
-function c4d_split_params(
-    split: string,
-): C4dSplitParameters {
-    /**
-     * Build parameters.
-    
-     * @param split -split: Split multi-label image into binary images
+/**
+ * Build parameters.
+ *
+ * @param split -split: Split multi-label image into binary images
 
 Syntax: `-split`
 
@@ -8158,29 +8155,32 @@ This command takes a multilabel image (one with a small number of discrete inten
     c3d multilabel.nii -split -foreach -smooth 3mm -endfor -merge -o ml_smooth.nii
 
 Also of note is that the **-split** command will disregard infinite intensity values. So if you want to apply voting to a subset of the labels, you can replace labels you do not care about with *inf*, for example, using the **-thresh** command.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_split_params(
+    split: string,
+): C4dSplitParameters {
     const params = {
-        "__STYXTYPE__": "split" as const,
+        "@type": "c3d.c4d.split" as const,
         "split": split,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_split_cargs(
     params: C4dSplitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-split",
@@ -8190,42 +8190,42 @@ function c4d_split_cargs(
 }
 
 
-function c4d_sqrt_params(
-    sqrt: string,
-): C4dSqrtParameters {
-    /**
-     * Build parameters.
-    
-     * @param sqrt -sqrt: Take square root of image
+/**
+ * Build parameters.
+ *
+ * @param sqrt -sqrt: Take square root of image
 
 Syntax: `-sqrt `
 
 Computes square root of each voxel in the image.
 
     c3d input.img -sqrt -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_sqrt_params(
+    sqrt: string,
+): C4dSqrtParameters {
     const params = {
-        "__STYXTYPE__": "sqrt" as const,
+        "@type": "c3d.c4d.sqrt" as const,
         "sqrt": sqrt,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_sqrt_cargs(
     params: C4dSqrtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-sqrt",
@@ -8235,13 +8235,10 @@ function c4d_sqrt_cargs(
 }
 
 
-function c4d_staple_params(
-    staple: string,
-): C4dStapleParameters {
-    /**
-     * Build parameters.
-    
-     * @param staple -staple: STAPLE algorithm to combine segmentations
+/**
+ * Build parameters.
+ *
+ * @param staple -staple: STAPLE algorithm to combine segmentations
 
 Syntax: `-staple <intensity_value> `
 
@@ -8249,29 +8246,32 @@ Runs the ITK implementation of the STAPLE algorithm ([See Paper][11]). STAPLE ge
 
     c3d -verbose rater1.img rater2.img rater3.img -staple 1 -o probmap.img
     c3d -verbose rater*.img -staple 1 -threshold 0.5 inf 1 0 -o bin_segm.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_staple_params(
+    staple: string,
+): C4dStapleParameters {
     const params = {
-        "__STYXTYPE__": "staple" as const,
+        "@type": "c3d.c4d.staple" as const,
         "staple": staple,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_staple_cargs(
     params: C4dStapleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-staple",
@@ -8281,42 +8281,42 @@ function c4d_staple_cargs(
 }
 
 
-function c4d_structure_tensor_eigenvalues_params(
-    structure_tensor_eigenvalues: string,
-): C4dStructureTensorEigenvaluesParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure_tensor_eigenvalues -steig, -structure-tensor-eigenvalues: Compute eigenvalues of the structure tensor
+/**
+ * Build parameters.
+ *
+ * @param structure_tensor_eigenvalues -steig, -structure-tensor-eigenvalues: Compute eigenvalues of the structure tensor
 
 Syntax `-steig <scale> <radius>`
 
 Computes the Hessian matrix at every pixel of an image and the eigenvalues of the Hessian. Images of the eigenvalues (sorted by value) are placed on the stack. These images are useful as texture features. See also the '''-steig''' command. The scale determines the amount of Gaussian smoothing applied for computing the partial derivatives in the Hessian, and is in physical (mm) units.
 
     c3d myimage.nii -hesseig 2.0 -oo eig%02d.nii.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_structure_tensor_eigenvalues_params(
+    structure_tensor_eigenvalues: string,
+): C4dStructureTensorEigenvaluesParameters {
     const params = {
-        "__STYXTYPE__": "structure_tensor_eigenvalues" as const,
+        "@type": "c3d.c4d.structure_tensor_eigenvalues" as const,
         "structure_tensor_eigenvalues": structure_tensor_eigenvalues,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_structure_tensor_eigenvalues_cargs(
     params: C4dStructureTensorEigenvaluesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-steig",
@@ -8326,42 +8326,42 @@ function c4d_structure_tensor_eigenvalues_cargs(
 }
 
 
-function c4d_spm_params(
-    spm: string,
-): C4dSpmParameters {
-    /**
-     * Build parameters.
-    
-     * @param spm -spm, -nospm: SPM compatibility in Analyze output
+/**
+ * Build parameters.
+ *
+ * @param spm -spm, -nospm: SPM compatibility in Analyze output
 
 Syntax: `-spm` or `-nospm `
 
 These options specify whether use the SPM extension to the Analyze (.hdr,.img) format. When this option is on, the origin field stored by SPM in the Analyze header will be correctly interpreted. When saving analyze files, the origin will be set correctly. The default is equivalent to the **-nospm** option. Best to avoid this issue altogether by using NIFTI and SPM5 or later.
 
     c3d -spm in.hdr out.img.gz
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_spm_params(
+    spm: string,
+): C4dSpmParameters {
     const params = {
-        "__STYXTYPE__": "spm" as const,
+        "@type": "c3d.c4d.spm" as const,
         "spm": spm,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_spm_cargs(
     params: C4dSpmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-spm",
@@ -8371,36 +8371,36 @@ function c4d_spm_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subtract No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_subtract_params(
     subtract: string,
 ): C4dSubtractParameters {
-    /**
-     * Build parameters.
-    
-     * @param subtract No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "subtract" as const,
+        "@type": "c3d.c4d.subtract" as const,
         "subtract": subtract,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_subtract_cargs(
     params: C4dSubtractParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-subtract",
@@ -8410,36 +8410,36 @@ function c4d_subtract_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param supervoxel No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_supervoxel_params(
     supervoxel: string,
 ): C4dSupervoxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param supervoxel No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "supervoxel" as const,
+        "@type": "c3d.c4d.supervoxel" as const,
         "supervoxel": supervoxel,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_supervoxel_cargs(
     params: C4dSupervoxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-supervoxel",
@@ -8449,42 +8449,42 @@ function c4d_supervoxel_cargs(
 }
 
 
-function c4d_stretch_params(
-    stretch: string,
-): C4dStretchParameters {
-    /**
-     * Build parameters.
-    
-     * @param stretch -stretch: Stretch image intensities linearly
+/**
+ * Build parameters.
+ *
+ * @param stretch -stretch: Stretch image intensities linearly
 
 Syntax: `-stretch <u1 u2 v1 v2> `
 
 Stretches the intensities in the image linearly, such that u1 maps to v1 and u2 maps to v2. The linear transformation is applied to all intensities in the image, whether inside the range or not. For example, to map a floating point image with intensities in interval (0,1) to the full range of an unsigned short image, use 
 
     c3d input.img -stretch 0.0 1.0 0 65535 -type ushort -o output.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_stretch_params(
+    stretch: string,
+): C4dStretchParameters {
     const params = {
-        "__STYXTYPE__": "stretch" as const,
+        "@type": "c3d.c4d.stretch" as const,
         "stretch": stretch,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_stretch_cargs(
     params: C4dStretchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-stretch",
@@ -8494,13 +8494,10 @@ function c4d_stretch_cargs(
 }
 
 
-function c4d_swapdim_params(
-    swapdim: string,
-): C4dSwapdimParameters {
-    /**
-     * Build parameters.
-    
-     * @param swapdim -swapdim: Reorder the coordinate axes of an image
+/**
+ * Build parameters.
+ *
+ * @param swapdim -swapdim: Reorder the coordinate axes of an image
 
 Syntax `-swapdim <code>`
 
@@ -8512,29 +8509,32 @@ This command reorders the image axes (columns, rows, slices) to achieve a desire
 ### Commands: Image Processing
 
 The following commands invoke an action that is applied to images. Unary commands apply the action to the last image on the stack, binary commands apply to the last two images and so on. Commands are affected by options, which are listed separately.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_swapdim_params(
+    swapdim: string,
+): C4dSwapdimParameters {
     const params = {
-        "__STYXTYPE__": "swapdim" as const,
+        "@type": "c3d.c4d.swapdim" as const,
         "swapdim": swapdim,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_swapdim_cargs(
     params: C4dSwapdimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-swapdim",
@@ -8544,13 +8544,10 @@ function c4d_swapdim_cargs(
 }
 
 
-function c4d_test_image_params(
-    test_image: string,
-): C4dTestImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param test_image -test-image, -test-probe: Test condition
+/**
+ * Build parameters.
+ *
+ * @param test_image -test-image, -test-probe: Test condition
 
 Syntax: `-test-image [tolerance]` and `-test-probe <vector> <value> [tolerance]`
 
@@ -8563,29 +8560,32 @@ These advanced commands (with more to come in the future) are primarily meant to
 **-test-probe** is similar to the **-probe** command. It tests if the value of the last image on the stack at the position given by **vector** is equal to the **test_value**. An optional tolerance value may be specified, the default is 1e-8. 
 
     c3d input1.img -test-probe 40x40x20vox 1.0 1e-6
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_test_image_params(
+    test_image: string,
+): C4dTestImageParameters {
     const params = {
-        "__STYXTYPE__": "test_image" as const,
+        "@type": "c3d.c4d.test_image" as const,
         "test_image": test_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_test_image_cargs(
     params: C4dTestImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-test-image",
@@ -8595,13 +8595,10 @@ function c4d_test_image_cargs(
 }
 
 
-function c4d_test_probe_params(
-    test_probe: string,
-): C4dTestProbeParameters {
-    /**
-     * Build parameters.
-    
-     * @param test_probe -test-image, -test-probe: Test condition
+/**
+ * Build parameters.
+ *
+ * @param test_probe -test-image, -test-probe: Test condition
 
 Syntax: `-test-image [tolerance]` and `-test-probe <vector> <value> [tolerance]`
 
@@ -8614,29 +8611,32 @@ These advanced commands (with more to come in the future) are primarily meant to
 **-test-probe** is similar to the **-probe** command. It tests if the value of the last image on the stack at the position given by **vector** is equal to the **test_value**. An optional tolerance value may be specified, the default is 1e-8. 
 
     c3d input1.img -test-probe 40x40x20vox 1.0 1e-6
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_test_probe_params(
+    test_probe: string,
+): C4dTestProbeParameters {
     const params = {
-        "__STYXTYPE__": "test_probe" as const,
+        "@type": "c3d.c4d.test_probe" as const,
         "test_probe": test_probe,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_test_probe_cargs(
     params: C4dTestProbeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-test-probe",
@@ -8646,13 +8646,10 @@ function c4d_test_probe_cargs(
 }
 
 
-function c4d_threshold_params(
-    threshold: string,
-): C4dThresholdParameters {
-    /**
-     * Build parameters.
-    
-     * @param threshold -thresh, -threshold: Binary thresholding
+/**
+ * Build parameters.
+ *
+ * @param threshold -thresh, -threshold: Binary thresholding
 
 Syntax: `-thresh <u1 u2 vIn vOut> `
 
@@ -8660,29 +8657,32 @@ Thresholds the image, setting voxels whose intensity is in the range [u1,u2] to 
     c3d in.img -threshold -inf 128 1 0 -o out.img
     c3d in.img -threshold 64 128 1 0 -o out.img
     c3d in.img -threshold 20% 40% 1 0 -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_threshold_params(
+    threshold: string,
+): C4dThresholdParameters {
     const params = {
-        "__STYXTYPE__": "threshold" as const,
+        "@type": "c3d.c4d.threshold" as const,
         "threshold": threshold,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_threshold_cargs(
     params: C4dThresholdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-threshold",
@@ -8692,13 +8692,10 @@ function c4d_threshold_cargs(
 }
 
 
-function c4d_tile_params(
-    tile: string,
-): C4dTileParameters {
-    /**
-     * Build parameters.
-    
-     * @param tile -tile: Tile and stack multiple images into one
+/**
+ * Build parameters.
+ *
+ * @param tile -tile: Tile and stack multiple images into one
 
 Syntax: `-tile <tile_spec>`
 
@@ -8709,29 +8706,32 @@ Tiles multiple images into a single image -- including stacking slices into a 3D
 And to arrange the same 2D slices into a 2D montage of 4 images per row, we would use the **c2d** command as follows: 
 
     c2d slices*.png -tile 4x0 -type uchar -o montage.png
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_tile_params(
+    tile: string,
+): C4dTileParameters {
     const params = {
-        "__STYXTYPE__": "tile" as const,
+        "@type": "c3d.c4d.tile" as const,
         "tile": tile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_tile_cargs(
     params: C4dTileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-tile",
@@ -8741,42 +8741,42 @@ function c4d_tile_cargs(
 }
 
 
-function c4d_trim_params(
-    trim: string,
-): C4dTrimParameters {
-    /**
-     * Build parameters.
-    
-     * @param trim -trim: Trim background region of image
+/**
+ * Build parameters.
+ *
+ * @param trim -trim: Trim background region of image
 
 Syntax: `-trim <margin_vector>`
 
 Use this command to trim background in an image. When most of the image is filled by background, this command will find the smallest rectangular region that contains all of the non-background voxels in the image. I will then expand this region by the margin of the size specified, and return the resulting region as the new image. For example, this command will trim an image, leaving a 5-voxel margin of background values on all sides
 
     c3d in.img -trim 5vox -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_trim_params(
+    trim: string,
+): C4dTrimParameters {
     const params = {
-        "__STYXTYPE__": "trim" as const,
+        "@type": "c3d.c4d.trim" as const,
         "trim": trim,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_trim_cargs(
     params: C4dTrimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-trim",
@@ -8786,42 +8786,42 @@ function c4d_trim_cargs(
 }
 
 
-function c4d_trim_to_size_params(
-    trim_to_size: string,
-): C4dTrimToSizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param trim_to_size -trim-to-size: Trim image to given size
+/**
+ * Build parameters.
+ *
+ * @param trim_to_size -trim-to-size: Trim image to given size
 
 Syntax: `-trim-to-size <size_vector>`
 
 Like **-trim**, this command trims the background in an image. However, instead of **-trim**, you specify the target size of the output region. The actual region may be smaller if the specified region falls outside the boundaries of the input image. For example, if you want a 64x64x128 image containing all the foreground pixels in your image, call 
 
     c3d in.img -trim-to-size 64x64x128vox -o out.img
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_trim_to_size_params(
+    trim_to_size: string,
+): C4dTrimToSizeParameters {
     const params = {
-        "__STYXTYPE__": "trim_to_size" as const,
+        "@type": "c3d.c4d.trim_to_size" as const,
         "trim_to_size": trim_to_size,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_trim_to_size_cargs(
     params: C4dTrimToSizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-trim-to-size",
@@ -8831,13 +8831,10 @@ function c4d_trim_to_size_cargs(
 }
 
 
-function c4d_type_params(
-    type_: string,
-): C4dTypeParameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ -type: Specify pixel type for image output
+/**
+ * Build parameters.
+ *
+ * @param type_ -type: Specify pixel type for image output
 
 Syntax: `-type < char | uchar | short | ushort | int | uint | float | double > `
 
@@ -8846,29 +8843,32 @@ Specifies the pixel type for the output image. By default, images are written in
     c3d image1.img -type short image2.img
 
 Some images require data in certain types. For example, to save PNG images, uchar or ushort type must be specified.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_type_params(
+    type_: string,
+): C4dTypeParameters {
     const params = {
-        "__STYXTYPE__": "type" as const,
+        "@type": "c3d.c4d.type" as const,
         "type": type_,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_type_cargs(
     params: C4dTypeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-type",
@@ -8878,42 +8878,42 @@ function c4d_type_cargs(
 }
 
 
-function c4d_verbose_params(
-    verbose: string,
-): C4dVerboseParameters {
-    /**
-     * Build parameters.
-    
-     * @param verbose -verbose: Enable verbose output of commands
+/**
+ * Build parameters.
+ *
+ * @param verbose -verbose: Enable verbose output of commands
 
 Syntax: `-verbose`
 
 Commands entered after the **-verbose** command will print debugging information. This can be turned off with **-noverbose**.
 
 ### Parameter Specifications
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_verbose_params(
+    verbose: string,
+): C4dVerboseParameters {
     const params = {
-        "__STYXTYPE__": "verbose" as const,
+        "@type": "c3d.c4d.verbose" as const,
         "verbose": verbose,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_verbose_cargs(
     params: C4dVerboseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-verbose",
@@ -8923,36 +8923,36 @@ function c4d_verbose_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param noverbose No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_noverbose_params(
     noverbose: string,
 ): C4dNoverboseParameters {
-    /**
-     * Build parameters.
-    
-     * @param noverbose No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "noverbose" as const,
+        "@type": "c3d.c4d.noverbose" as const,
         "noverbose": noverbose,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_noverbose_cargs(
     params: C4dNoverboseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-noverbose",
@@ -8962,36 +8962,36 @@ function c4d_noverbose_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param version No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_version_params(
     version: string,
 ): C4dVersionParameters {
-    /**
-     * Build parameters.
-    
-     * @param version No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "version" as const,
+        "@type": "c3d.c4d.version" as const,
         "version": version,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_version_cargs(
     params: C4dVersionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-version",
@@ -9001,13 +9001,10 @@ function c4d_version_cargs(
 }
 
 
-function c4d_vote_params(
-    vote: string,
-): C4dVoteParameters {
-    /**
-     * Build parameters.
-    
-     * @param vote -vote: Vote among images on the stack
+/**
+ * Build parameters.
+ *
+ * @param vote -vote: Vote among images on the stack
 
 Syntax: `-vote `
 
@@ -9016,29 +9013,32 @@ This command takes all images on the stack as arguments and at each voxel *(i,j,
     c3d prob1.img prob2.img prob3.img -vote -type uchar -o label.img
 
 The value assigned to each image is based on its position from the bottom of the stack, with zero indicating bottom-most image. In the example above, the output image has values 0 for voxels where prob1.img is highest, 1 for prob2.img and 2 for prob3.img. Also see the related commands **-split** and **-merge**.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_vote_params(
+    vote: string,
+): C4dVoteParameters {
     const params = {
-        "__STYXTYPE__": "vote" as const,
+        "@type": "c3d.c4d.vote" as const,
         "vote": vote,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_vote_cargs(
     params: C4dVoteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-vote",
@@ -9048,13 +9048,10 @@ function c4d_vote_cargs(
 }
 
 
-function c4d_vote_mrf_params(
-    vote_mrf: string,
-): C4dVoteMrfParameters {
-    /**
-     * Build parameters.
-    
-     * @param vote_mrf -vote-mrf: Vote with Markov Random Field regularlization
+/**
+ * Build parameters.
+ *
+ * @param vote_mrf -vote-mrf: Vote with Markov Random Field regularlization
 
 Syntax: `-vote-mrf <mode> <lambda>`
 
@@ -9085,29 +9082,32 @@ The example below illustrates applying **-vote-mrf** with a user-specified mask.
     c3d lhood01.nii lhood02.nii lhood03.nii mask.nii -popas M \
         -foreach -push M -replace 0 NaN -times -endfor \
         -vote-mrf VA 0.2 -o result.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_vote_mrf_params(
+    vote_mrf: string,
+): C4dVoteMrfParameters {
     const params = {
-        "__STYXTYPE__": "vote_mrf" as const,
+        "@type": "c3d.c4d.vote_mrf" as const,
         "vote_mrf": vote_mrf,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_vote_mrf_cargs(
     params: C4dVoteMrfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-vote-mrf",
@@ -9117,36 +9117,36 @@ function c4d_vote_mrf_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vote_label No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_vote_label_params(
     vote_label: string,
 ): C4dVoteLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param vote_label No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vote_label" as const,
+        "@type": "c3d.c4d.vote_label" as const,
         "vote_label": vote_label,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_vote_label_cargs(
     params: C4dVoteLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-vote-label",
@@ -9156,13 +9156,10 @@ function c4d_vote_label_cargs(
 }
 
 
-function c4d_voxel_sum_params(
-    voxel_sum: string,
-): C4dVoxelSumParameters {
-    /**
-     * Build parameters.
-    
-     * @param voxel_sum -voxel-sum: Print sum of all voxel intensities
+/**
+ * Build parameters.
+ *
+ * @param voxel_sum -voxel-sum: Print sum of all voxel intensities
 
 Syntax: `-voxel-sum `
 
@@ -9170,29 +9167,32 @@ Print the sum of all voxels in the image.
 
     $ c3d image.img -voxel-sum 
     Voxel Sum: 200923123
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_voxel_sum_params(
+    voxel_sum: string,
+): C4dVoxelSumParameters {
     const params = {
-        "__STYXTYPE__": "voxel_sum" as const,
+        "@type": "c3d.c4d.voxel_sum" as const,
         "voxel_sum": voxel_sum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_voxel_sum_cargs(
     params: C4dVoxelSumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-voxel-sum",
@@ -9202,13 +9202,10 @@ function c4d_voxel_sum_cargs(
 }
 
 
-function c4d_voxel_integral_params(
-    voxel_integral: string,
-): C4dVoxelIntegralParameters {
-    /**
-     * Build parameters.
-    
-     * @param voxel_integral -voxel-integral: Print volume integral of all voxel intensities
+/**
+ * Build parameters.
+ *
+ * @param voxel_integral -voxel-integral: Print volume integral of all voxel intensities
 
 Syntax: `-voxel-integral`
 
@@ -9216,29 +9213,32 @@ Like **-voxel-sum**, but multiplies the sum of voxel intensities by voxel volume
 
     $ c3d image.img -voxel-integral 
     Voxel Integral: 2341
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_voxel_integral_params(
+    voxel_integral: string,
+): C4dVoxelIntegralParameters {
     const params = {
-        "__STYXTYPE__": "voxel_integral" as const,
+        "@type": "c3d.c4d.voxel_integral" as const,
         "voxel_integral": voxel_integral,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_voxel_integral_cargs(
     params: C4dVoxelIntegralParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-voxel-integral",
@@ -9248,13 +9248,10 @@ function c4d_voxel_integral_cargs(
 }
 
 
-function c4d_voxelwise_regression_params(
-    voxelwise_regression: string,
-): C4dVoxelwiseRegressionParameters {
-    /**
-     * Build parameters.
-    
-     * @param voxelwise_regression -voxreg, -voxelwise-regression: Regression between two images
+/**
+ * Build parameters.
+ *
+ * @param voxelwise_regression -voxreg, -voxelwise-regression: Regression between two images
 
 Syntax: `-voxreg regression_order `
 
@@ -9267,29 +9264,32 @@ Perform regression between corresponding voxels in two images. This command take
     $ c3d Y.nii X.nii -scale 0.844024 -shift 5.56935 -voxreg 2
     REGCOEFF[0] = 0
     REGCOEFF[1] = 1
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_voxelwise_regression_params(
+    voxelwise_regression: string,
+): C4dVoxelwiseRegressionParameters {
     const params = {
-        "__STYXTYPE__": "voxelwise_regression" as const,
+        "@type": "c3d.c4d.voxelwise_regression" as const,
         "voxelwise_regression": voxelwise_regression,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_voxelwise_regression_cargs(
     params: C4dVoxelwiseRegressionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-voxelwise-regression",
@@ -9299,36 +9299,36 @@ function c4d_voxelwise_regression_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warp No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_warp_params(
     warp: string,
 ): C4dWarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param warp No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warp" as const,
+        "@type": "c3d.c4d.warp" as const,
         "warp": warp,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_warp_cargs(
     params: C4dWarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-warp",
@@ -9338,36 +9338,36 @@ function c4d_warp_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warp_label No description found.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_warp_label_params(
     warp_label: string,
 ): C4dWarpLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param warp_label No description found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warp_label" as const,
+        "@type": "c3d.c4d.warp_label" as const,
         "warp_label": warp_label,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_warp_label_cargs(
     params: C4dWarpLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-warp-label",
@@ -9377,13 +9377,10 @@ function c4d_warp_label_cargs(
 }
 
 
-function c4d_wrap_params(
-    wrap: string,
-): C4dWrapParameters {
-    /**
-     * Build parameters.
-    
-     * @param wrap -wrap: Wrap (rotate) image 
+/**
+ * Build parameters.
+ *
+ * @param wrap -wrap: Wrap (rotate) image 
 
 Syntax: `-wrap <vector> `
 
@@ -9397,29 +9394,32 @@ will wrap the image in the second voxel dimension by 20 voxels (i.e., voxel at 1
 ### Commands: Options and Parameters
 
 Options change the behavior of commands that *appear later on the command line*. This is very important. Specifying options after the command will have no effect.
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_wrap_params(
+    wrap: string,
+): C4dWrapParameters {
     const params = {
-        "__STYXTYPE__": "wrap" as const,
+        "@type": "c3d.c4d.wrap" as const,
         "wrap": wrap,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_wrap_cargs(
     params: C4dWrapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-wrap",
@@ -9429,13 +9429,10 @@ function c4d_wrap_cargs(
 }
 
 
-function c4d_weighted_sum_params(
-    weighted_sum: string,
-): C4dWeightedSumParameters {
-    /**
-     * Build parameters.
-    
-     * @param weighted_sum -wsum, -weighted-sum: Weighed sum of images with constant weights
+/**
+ * Build parameters.
+ *
+ * @param weighted_sum -wsum, -weighted-sum: Weighed sum of images with constant weights
 
 Syntax: `-wsum weight1 weight2 ... weightN `
 
@@ -9446,29 +9443,32 @@ Computes weighted sum of the last N images on the stack.
 This command is particularly useful for combining components in a multicomponent image. For example, for an RGB image, we can convert it to grayscale (using [ImageMagick][13] formula) as follows: 
 
     c3d -mcs rgb.nii -wsum 0.29900 0.58700 0.11400 -o gray.nii
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_weighted_sum_params(
+    weighted_sum: string,
+): C4dWeightedSumParameters {
     const params = {
-        "__STYXTYPE__": "weighted_sum" as const,
+        "@type": "c3d.c4d.weighted_sum" as const,
         "weighted_sum": weighted_sum,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_weighted_sum_cargs(
     params: C4dWeightedSumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-weighted-sum",
@@ -9478,13 +9478,10 @@ function c4d_weighted_sum_cargs(
 }
 
 
-function c4d_weighted_sum_voxelwise_params(
-    weighted_sum_voxelwise: string,
-): C4dWeightedSumVoxelwiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param weighted_sum_voxelwise -wsv, -weighed-sum-voxelwise: Weighed sum of images with spatially varying weights
+/**
+ * Build parameters.
+ *
+ * @param weighted_sum_voxelwise -wsv, -weighed-sum-voxelwise: Weighed sum of images with spatially varying weights
 
 Syntax: `-wsv `
 
@@ -9497,29 +9494,32 @@ The **-reorder** command can simplify loading the images:
     c3d weight*.nii image*.nii -reorder 0.5 -wsv -o mysum.nii.gz
 
 ### Commands: Image Header Manipulation
-    
-     * @returns Parameter dictionary
-     */
+ *
+ * @returns Parameter dictionary
+ */
+function c4d_weighted_sum_voxelwise_params(
+    weighted_sum_voxelwise: string,
+): C4dWeightedSumVoxelwiseParameters {
     const params = {
-        "__STYXTYPE__": "weighted_sum_voxelwise" as const,
+        "@type": "c3d.c4d.weighted_sum_voxelwise" as const,
         "weighted_sum_voxelwise": weighted_sum_voxelwise,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_weighted_sum_voxelwise_cargs(
     params: C4dWeightedSumVoxelwiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "-weighted-sum-voxelwise",
@@ -9546,22 +9546,22 @@ interface C4dOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input image to process.
+ * @param operations The operations to perform.
+ * @param output The output image.
+ *
+ * @returns Parameter dictionary
+ */
 function c4d_params(
     input: Array<InputPathType>,
     operations: Array<C4dAccumParameters | C4dAcosParameters | C4dAddParameters | C4dAlignLandmarksParameters | C4dAnisotropicDiffusionParameters | C4dAntialiasParameters | C4dSetParameters | C4dAsinParameters | C4dAtan2Parameters | C4dBackgroundParameters | C4dN4BiasCorrectionParameters | C4dBinarizeParameters | C4dCannyParameters | C4dCeilParameters | C4dCentroidParameters | C4dCentroidMarkParameters | C4dConnectedComponentsParameters | C4dClearParameters | C4dClipParameters | C4dColorMapParameters | C4dCompressParameters | C4dNoCompressParameters | C4dConvParameters | C4dCoordinateMapVoxelParameters | C4dCoordinateMapPhysicalParameters | C4dCopyTransformParameters | C4dCosParameters | C4dCreateParameters | C4dDicomSeriesListParameters | C4dDicomSeriesReadParameters | C4dDilateParameters | C4dDivideParameters | C4dDuplicateParameters | C4dEndaccumParameters | C4dEndforParameters | C4dErodeParameters | C4dErfParameters | C4dExpParameters | C4dExportPatchesParameters | C4dExportPatchesAugParameters | C4dExtrudeSegParameters | C4dFillBackgroundWithNoiseParameters | C4dFftParameters | C4dFlipParameters | C4dFloorParameters | C4dForeachParameters | C4dForeachCompParameters | C4dGlmParameters | C4dGradientParameters | C4dHelpParameters | C4dHolefillParameters | C4dHessianEigenvaluesParameters | C4dHessianObjectnessParameters | C4dHistogramMatchParameters | C4dInfoParameters | C4dInfoFullParameters | C4dInsertParameters | C4dInterpolationParameters | C4dIterationsParameters | C4dLabelOverlapParameters | C4dLabelStatisticsParameters | C4dLandmarksToSpheresParameters | C4dLaplacianParameters | C4dLevelsetParameters | C4dLevelsetCurvatureParameters | C4dLevelsetAdvectionParameters | C4dLogParameters | C4dLog10Parameters | C4dManualParameters | C4dMatchBoundingBoxParameters | C4dMaximumParameters | C4dMulticomponentSplitParameters | C4dMeanParameters | C4dMedianFilterParameters | C4dMergeParameters | C4dMeanFilterParameters | C4dMutualInfoParameters | C4dMinimumParameters | C4dMixtureModelParameters | C4dMomentsParameters | C4dMattesMutualInfoParameters | C4dMeanSquareParameters | C4dMultiplyParameters | C4dNormalizedCrossCorrelationParameters | C4dNormalizedCorrelationParameters | C4dNormalizedMutualInfoParameters | C4dNoiseGaussianParameters | C4dNoisePoissonParameters | C4dNoiseSpeckleParameters | C4dNoiseSaltPepperParameters | C4dNoMulticomponentSplitParameters | C4dNormalizeLocalWindowParameters | C4dNormpdfParameters | C4dNoroundParameters | C4dNospmParameters | C4dOutputParameters | C4dOutputMulticomponentParameters | C4dOutputMultipleMulticomponentParameters | C4dOrientParameters | C4dOutputMultipleParameters | C4dOrient1Parameters | C4dOriginParameters | C4dOriginVoxelParameters | C4dOriginVoxelCoordParameters | C4dOverlapParameters | C4dOverlayLabelImageParameters | C4dPadParameters | C4dPadToParameters | C4dPcaParameters | C4dPercentIntensityModeParameters | C4dPixelParameters | C4dPopParameters | C4dPopasParameters | C4dProbeParameters | C4dPushParameters | C4dRankParameters | C4dReciprocalParameters | C4dRegionParameters | C4dReorderParameters | C4dRetainLabelsParameters | C4dRfApplyParameters | C4dRfTrainParameters | C4dRfParamPatchParameters | C4dRfParamUsexyzParameters | C4dRfParamNousexyzParameters | C4dRfParamNtreesParameters | C4dRfParamTreedepthParameters | C4dSetSformParameters | C4dReplaceParameters | C4dResampleParameters | C4dResampleIsoParameters | C4dResampleMmParameters | C4dResliceItkParameters | C4dResliceMatrixParameters | C4dResliceIdentityParameters | C4dRgb2hsvParameters | C4dRmsParameters | C4dRoundParameters | C4dScaleParameters | C4dSetSform1Parameters | C4dSinParameters | C4dSliceParameters | C4dSliceAllParameters | C4dSharpenParameters | C4dShiftParameters | C4dSignedDistanceTransformParameters | C4dSmoothParameters | C4dSmoothFastParameters | C4dSpacingParameters | C4dSplitParameters | C4dSqrtParameters | C4dStapleParameters | C4dStructureTensorEigenvaluesParameters | C4dSpmParameters | C4dSubtractParameters | C4dSupervoxelParameters | C4dStretchParameters | C4dSwapdimParameters | C4dTestImageParameters | C4dTestProbeParameters | C4dThresholdParameters | C4dTileParameters | C4dTrimParameters | C4dTrimToSizeParameters | C4dTypeParameters | C4dVerboseParameters | C4dNoverboseParameters | C4dVersionParameters | C4dVoteParameters | C4dVoteMrfParameters | C4dVoteLabelParameters | C4dVoxelSumParameters | C4dVoxelIntegralParameters | C4dVoxelwiseRegressionParameters | C4dWarpParameters | C4dWarpLabelParameters | C4dWrapParameters | C4dWeightedSumParameters | C4dWeightedSumVoxelwiseParameters>,
     output: string,
 ): C4dParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input image to process.
-     * @param operations The operations to perform.
-     * @param output The output image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "c4d" as const,
+        "@type": "c3d.c4d" as const,
         "input": input,
         "operations": operations,
         "output": output,
@@ -9570,22 +9570,22 @@ function c4d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c4d_cargs(
     params: C4dParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("c4d");
     cargs.push((params["input"] ?? null).map(f => execution.inputFile(f)).join(" "));
-    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     cargs.push(
         "-o",
         (params["output"] ?? null)
@@ -9594,42 +9594,42 @@ function c4d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function c4d_outputs(
     params: C4dParameters,
     execution: Execution,
 ): C4dOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: C4dOutputs = {
         root: execution.outputFile("."),
-        operations: (params["operations"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null),
+        operations: (params["operations"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * C4D is a command-line tool for medical image processing.
+ *
+ * Author: Convert3D Developers
+ *
+ * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `C4dOutputs`).
+ */
 function c4d_execute(
     params: C4dParameters,
     execution: Execution,
 ): C4dOutputs {
-    /**
-     * C4D is a command-line tool for medical image processing.
-     * 
-     * Author: Convert3D Developers
-     * 
-     * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `C4dOutputs`).
-     */
     params = execution.params(params)
     const cargs = c4d_cargs(params, execution)
     const ret = c4d_outputs(params, execution)
@@ -9638,26 +9638,26 @@ function c4d_execute(
 }
 
 
+/**
+ * C4D is a command-line tool for medical image processing.
+ *
+ * Author: Convert3D Developers
+ *
+ * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
+ *
+ * @param input The input image to process.
+ * @param operations The operations to perform.
+ * @param output The output image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `C4dOutputs`).
+ */
 function c4d(
     input: Array<InputPathType>,
     operations: Array<C4dAccumParameters | C4dAcosParameters | C4dAddParameters | C4dAlignLandmarksParameters | C4dAnisotropicDiffusionParameters | C4dAntialiasParameters | C4dSetParameters | C4dAsinParameters | C4dAtan2Parameters | C4dBackgroundParameters | C4dN4BiasCorrectionParameters | C4dBinarizeParameters | C4dCannyParameters | C4dCeilParameters | C4dCentroidParameters | C4dCentroidMarkParameters | C4dConnectedComponentsParameters | C4dClearParameters | C4dClipParameters | C4dColorMapParameters | C4dCompressParameters | C4dNoCompressParameters | C4dConvParameters | C4dCoordinateMapVoxelParameters | C4dCoordinateMapPhysicalParameters | C4dCopyTransformParameters | C4dCosParameters | C4dCreateParameters | C4dDicomSeriesListParameters | C4dDicomSeriesReadParameters | C4dDilateParameters | C4dDivideParameters | C4dDuplicateParameters | C4dEndaccumParameters | C4dEndforParameters | C4dErodeParameters | C4dErfParameters | C4dExpParameters | C4dExportPatchesParameters | C4dExportPatchesAugParameters | C4dExtrudeSegParameters | C4dFillBackgroundWithNoiseParameters | C4dFftParameters | C4dFlipParameters | C4dFloorParameters | C4dForeachParameters | C4dForeachCompParameters | C4dGlmParameters | C4dGradientParameters | C4dHelpParameters | C4dHolefillParameters | C4dHessianEigenvaluesParameters | C4dHessianObjectnessParameters | C4dHistogramMatchParameters | C4dInfoParameters | C4dInfoFullParameters | C4dInsertParameters | C4dInterpolationParameters | C4dIterationsParameters | C4dLabelOverlapParameters | C4dLabelStatisticsParameters | C4dLandmarksToSpheresParameters | C4dLaplacianParameters | C4dLevelsetParameters | C4dLevelsetCurvatureParameters | C4dLevelsetAdvectionParameters | C4dLogParameters | C4dLog10Parameters | C4dManualParameters | C4dMatchBoundingBoxParameters | C4dMaximumParameters | C4dMulticomponentSplitParameters | C4dMeanParameters | C4dMedianFilterParameters | C4dMergeParameters | C4dMeanFilterParameters | C4dMutualInfoParameters | C4dMinimumParameters | C4dMixtureModelParameters | C4dMomentsParameters | C4dMattesMutualInfoParameters | C4dMeanSquareParameters | C4dMultiplyParameters | C4dNormalizedCrossCorrelationParameters | C4dNormalizedCorrelationParameters | C4dNormalizedMutualInfoParameters | C4dNoiseGaussianParameters | C4dNoisePoissonParameters | C4dNoiseSpeckleParameters | C4dNoiseSaltPepperParameters | C4dNoMulticomponentSplitParameters | C4dNormalizeLocalWindowParameters | C4dNormpdfParameters | C4dNoroundParameters | C4dNospmParameters | C4dOutputParameters | C4dOutputMulticomponentParameters | C4dOutputMultipleMulticomponentParameters | C4dOrientParameters | C4dOutputMultipleParameters | C4dOrient1Parameters | C4dOriginParameters | C4dOriginVoxelParameters | C4dOriginVoxelCoordParameters | C4dOverlapParameters | C4dOverlayLabelImageParameters | C4dPadParameters | C4dPadToParameters | C4dPcaParameters | C4dPercentIntensityModeParameters | C4dPixelParameters | C4dPopParameters | C4dPopasParameters | C4dProbeParameters | C4dPushParameters | C4dRankParameters | C4dReciprocalParameters | C4dRegionParameters | C4dReorderParameters | C4dRetainLabelsParameters | C4dRfApplyParameters | C4dRfTrainParameters | C4dRfParamPatchParameters | C4dRfParamUsexyzParameters | C4dRfParamNousexyzParameters | C4dRfParamNtreesParameters | C4dRfParamTreedepthParameters | C4dSetSformParameters | C4dReplaceParameters | C4dResampleParameters | C4dResampleIsoParameters | C4dResampleMmParameters | C4dResliceItkParameters | C4dResliceMatrixParameters | C4dResliceIdentityParameters | C4dRgb2hsvParameters | C4dRmsParameters | C4dRoundParameters | C4dScaleParameters | C4dSetSform1Parameters | C4dSinParameters | C4dSliceParameters | C4dSliceAllParameters | C4dSharpenParameters | C4dShiftParameters | C4dSignedDistanceTransformParameters | C4dSmoothParameters | C4dSmoothFastParameters | C4dSpacingParameters | C4dSplitParameters | C4dSqrtParameters | C4dStapleParameters | C4dStructureTensorEigenvaluesParameters | C4dSpmParameters | C4dSubtractParameters | C4dSupervoxelParameters | C4dStretchParameters | C4dSwapdimParameters | C4dTestImageParameters | C4dTestProbeParameters | C4dThresholdParameters | C4dTileParameters | C4dTrimParameters | C4dTrimToSizeParameters | C4dTypeParameters | C4dVerboseParameters | C4dNoverboseParameters | C4dVersionParameters | C4dVoteParameters | C4dVoteMrfParameters | C4dVoteLabelParameters | C4dVoxelSumParameters | C4dVoxelIntegralParameters | C4dVoxelwiseRegressionParameters | C4dWarpParameters | C4dWarpLabelParameters | C4dWrapParameters | C4dWeightedSumParameters | C4dWeightedSumVoxelwiseParameters>,
     output: string,
     runner: Runner | null = null,
 ): C4dOutputs {
-    /**
-     * C4D is a command-line tool for medical image processing.
-     * 
-     * Author: Convert3D Developers
-     * 
-     * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
-    
-     * @param input The input image to process.
-     * @param operations The operations to perform.
-     * @param output The output image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `C4dOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(C4D_METADATA);
     const params = c4d_params(input, operations, output)
@@ -9850,184 +9850,367 @@ export {
       C4dWeightedSumVoxelwiseParameters,
       C4dWrapParameters,
       c4d,
+      c4d__help_cargs,
       c4d__help_params,
+      c4d_accum_cargs,
       c4d_accum_params,
+      c4d_acos_cargs,
       c4d_acos_params,
+      c4d_add_cargs,
       c4d_add_params,
+      c4d_align_landmarks_cargs,
       c4d_align_landmarks_params,
+      c4d_anisotropic_diffusion_cargs,
       c4d_anisotropic_diffusion_params,
+      c4d_antialias_cargs,
       c4d_antialias_params,
+      c4d_asin_cargs,
       c4d_asin_params,
+      c4d_atan2_cargs,
       c4d_atan2_params,
+      c4d_background_cargs,
       c4d_background_params,
+      c4d_binarize_cargs,
       c4d_binarize_params,
+      c4d_canny_cargs,
       c4d_canny_params,
+      c4d_cargs,
+      c4d_ceil_cargs,
       c4d_ceil_params,
+      c4d_centroid_cargs,
+      c4d_centroid_mark_cargs,
       c4d_centroid_mark_params,
       c4d_centroid_params,
+      c4d_clear_cargs,
       c4d_clear_params,
+      c4d_clip_cargs,
       c4d_clip_params,
+      c4d_color_map_cargs,
       c4d_color_map_params,
+      c4d_compress_cargs,
       c4d_compress_params,
+      c4d_connected_components_cargs,
       c4d_connected_components_params,
+      c4d_conv_cargs,
       c4d_conv_params,
+      c4d_coordinate_map_physical_cargs,
       c4d_coordinate_map_physical_params,
+      c4d_coordinate_map_voxel_cargs,
       c4d_coordinate_map_voxel_params,
+      c4d_copy_transform_cargs,
       c4d_copy_transform_params,
+      c4d_cos_cargs,
       c4d_cos_params,
+      c4d_create_cargs,
       c4d_create_params,
+      c4d_dicom_series_list_cargs,
       c4d_dicom_series_list_params,
+      c4d_dicom_series_read_cargs,
       c4d_dicom_series_read_params,
+      c4d_dilate_cargs,
       c4d_dilate_params,
+      c4d_divide_cargs,
       c4d_divide_params,
+      c4d_duplicate_cargs,
       c4d_duplicate_params,
+      c4d_endaccum_cargs,
       c4d_endaccum_params,
+      c4d_endfor_cargs,
       c4d_endfor_params,
+      c4d_erf_cargs,
       c4d_erf_params,
+      c4d_erode_cargs,
       c4d_erode_params,
+      c4d_execute,
+      c4d_exp_cargs,
       c4d_exp_params,
+      c4d_export_patches_aug_cargs,
       c4d_export_patches_aug_params,
+      c4d_export_patches_cargs,
       c4d_export_patches_params,
+      c4d_extrude_seg_cargs,
       c4d_extrude_seg_params,
+      c4d_fft_cargs,
       c4d_fft_params,
+      c4d_fill_background_with_noise_cargs,
       c4d_fill_background_with_noise_params,
+      c4d_flip_cargs,
       c4d_flip_params,
+      c4d_floor_cargs,
       c4d_floor_params,
+      c4d_foreach_cargs,
+      c4d_foreach_comp_cargs,
       c4d_foreach_comp_params,
       c4d_foreach_params,
+      c4d_glm_cargs,
       c4d_glm_params,
+      c4d_gradient_cargs,
       c4d_gradient_params,
+      c4d_hessian_eigenvalues_cargs,
       c4d_hessian_eigenvalues_params,
+      c4d_hessian_objectness_cargs,
       c4d_hessian_objectness_params,
+      c4d_histogram_match_cargs,
       c4d_histogram_match_params,
+      c4d_holefill_cargs,
       c4d_holefill_params,
+      c4d_info_cargs,
+      c4d_info_full_cargs,
       c4d_info_full_params,
       c4d_info_params,
+      c4d_insert_cargs,
       c4d_insert_params,
+      c4d_interpolation_cargs,
       c4d_interpolation_params,
+      c4d_iterations_cargs,
       c4d_iterations_params,
+      c4d_label_overlap_cargs,
       c4d_label_overlap_params,
+      c4d_label_statistics_cargs,
       c4d_label_statistics_params,
+      c4d_landmarks_to_spheres_cargs,
       c4d_landmarks_to_spheres_params,
+      c4d_laplacian_cargs,
       c4d_laplacian_params,
+      c4d_levelset_advection_cargs,
       c4d_levelset_advection_params,
+      c4d_levelset_cargs,
+      c4d_levelset_curvature_cargs,
       c4d_levelset_curvature_params,
       c4d_levelset_params,
+      c4d_log10_cargs,
       c4d_log10_params,
+      c4d_log_cargs,
       c4d_log_params,
+      c4d_manual_cargs,
       c4d_manual_params,
+      c4d_match_bounding_box_cargs,
       c4d_match_bounding_box_params,
+      c4d_mattes_mutual_info_cargs,
       c4d_mattes_mutual_info_params,
+      c4d_maximum_cargs,
       c4d_maximum_params,
+      c4d_mean_cargs,
+      c4d_mean_filter_cargs,
       c4d_mean_filter_params,
       c4d_mean_params,
+      c4d_mean_square_cargs,
       c4d_mean_square_params,
+      c4d_median_filter_cargs,
       c4d_median_filter_params,
+      c4d_merge_cargs,
       c4d_merge_params,
+      c4d_minimum_cargs,
       c4d_minimum_params,
+      c4d_mixture_model_cargs,
       c4d_mixture_model_params,
+      c4d_moments_cargs,
       c4d_moments_params,
+      c4d_multicomponent_split_cargs,
       c4d_multicomponent_split_params,
+      c4d_multiply_cargs,
       c4d_multiply_params,
+      c4d_mutual_info_cargs,
       c4d_mutual_info_params,
+      c4d_n4_bias_correction_cargs,
       c4d_n4_bias_correction_params,
+      c4d_no_compress_cargs,
       c4d_no_compress_params,
+      c4d_no_multicomponent_split_cargs,
       c4d_no_multicomponent_split_params,
+      c4d_noise_gaussian_cargs,
       c4d_noise_gaussian_params,
+      c4d_noise_poisson_cargs,
       c4d_noise_poisson_params,
+      c4d_noise_salt_pepper_cargs,
       c4d_noise_salt_pepper_params,
+      c4d_noise_speckle_cargs,
       c4d_noise_speckle_params,
+      c4d_normalize_local_window_cargs,
       c4d_normalize_local_window_params,
+      c4d_normalized_correlation_cargs,
       c4d_normalized_correlation_params,
+      c4d_normalized_cross_correlation_cargs,
       c4d_normalized_cross_correlation_params,
+      c4d_normalized_mutual_info_cargs,
       c4d_normalized_mutual_info_params,
+      c4d_normpdf_cargs,
       c4d_normpdf_params,
+      c4d_noround_cargs,
       c4d_noround_params,
+      c4d_nospm_cargs,
       c4d_nospm_params,
+      c4d_noverbose_cargs,
       c4d_noverbose_params,
+      c4d_orient_1_cargs,
       c4d_orient_1_params,
+      c4d_orient_cargs,
       c4d_orient_params,
+      c4d_origin_cargs,
       c4d_origin_params,
+      c4d_origin_voxel_cargs,
+      c4d_origin_voxel_coord_cargs,
       c4d_origin_voxel_coord_params,
       c4d_origin_voxel_params,
+      c4d_output_cargs,
+      c4d_output_multicomponent_cargs,
       c4d_output_multicomponent_params,
+      c4d_output_multiple_cargs,
+      c4d_output_multiple_multicomponent_cargs,
       c4d_output_multiple_multicomponent_params,
       c4d_output_multiple_params,
+      c4d_output_outputs,
       c4d_output_params,
+      c4d_outputs,
+      c4d_overlap_cargs,
       c4d_overlap_params,
+      c4d_overlay_label_image_cargs,
       c4d_overlay_label_image_params,
+      c4d_pad_cargs,
       c4d_pad_params,
+      c4d_pad_to_cargs,
       c4d_pad_to_params,
       c4d_params,
+      c4d_pca_cargs,
       c4d_pca_params,
+      c4d_percent_intensity_mode_cargs,
       c4d_percent_intensity_mode_params,
+      c4d_pixel_cargs,
       c4d_pixel_params,
+      c4d_pop_cargs,
       c4d_pop_params,
+      c4d_popas_cargs,
       c4d_popas_params,
+      c4d_probe_cargs,
       c4d_probe_params,
+      c4d_push_cargs,
       c4d_push_params,
+      c4d_rank_cargs,
       c4d_rank_params,
+      c4d_reciprocal_cargs,
       c4d_reciprocal_params,
+      c4d_region_cargs,
       c4d_region_params,
+      c4d_reorder_cargs,
       c4d_reorder_params,
+      c4d_replace_cargs,
       c4d_replace_params,
+      c4d_resample_cargs,
+      c4d_resample_iso_cargs,
       c4d_resample_iso_params,
+      c4d_resample_mm_cargs,
       c4d_resample_mm_params,
       c4d_resample_params,
+      c4d_reslice_identity_cargs,
       c4d_reslice_identity_params,
+      c4d_reslice_itk_cargs,
       c4d_reslice_itk_params,
+      c4d_reslice_matrix_cargs,
       c4d_reslice_matrix_params,
+      c4d_retain_labels_cargs,
       c4d_retain_labels_params,
+      c4d_rf_apply_cargs,
       c4d_rf_apply_params,
+      c4d_rf_param_nousexyz_cargs,
       c4d_rf_param_nousexyz_params,
+      c4d_rf_param_ntrees_cargs,
       c4d_rf_param_ntrees_params,
+      c4d_rf_param_patch_cargs,
       c4d_rf_param_patch_params,
+      c4d_rf_param_treedepth_cargs,
       c4d_rf_param_treedepth_params,
+      c4d_rf_param_usexyz_cargs,
       c4d_rf_param_usexyz_params,
+      c4d_rf_train_cargs,
       c4d_rf_train_params,
+      c4d_rgb2hsv_cargs,
       c4d_rgb2hsv_params,
+      c4d_rms_cargs,
       c4d_rms_params,
+      c4d_round_cargs,
       c4d_round_params,
+      c4d_scale_cargs,
       c4d_scale_params,
+      c4d_set_cargs,
       c4d_set_params,
+      c4d_set_sform_1_cargs,
       c4d_set_sform_1_params,
+      c4d_set_sform_cargs,
       c4d_set_sform_params,
+      c4d_sharpen_cargs,
       c4d_sharpen_params,
+      c4d_shift_cargs,
       c4d_shift_params,
+      c4d_signed_distance_transform_cargs,
       c4d_signed_distance_transform_params,
+      c4d_sin_cargs,
       c4d_sin_params,
+      c4d_slice_all_cargs,
       c4d_slice_all_params,
+      c4d_slice_cargs,
       c4d_slice_params,
+      c4d_smooth_cargs,
+      c4d_smooth_fast_cargs,
       c4d_smooth_fast_params,
       c4d_smooth_params,
+      c4d_spacing_cargs,
       c4d_spacing_params,
+      c4d_split_cargs,
       c4d_split_params,
+      c4d_spm_cargs,
       c4d_spm_params,
+      c4d_sqrt_cargs,
       c4d_sqrt_params,
+      c4d_staple_cargs,
       c4d_staple_params,
+      c4d_stretch_cargs,
       c4d_stretch_params,
+      c4d_structure_tensor_eigenvalues_cargs,
       c4d_structure_tensor_eigenvalues_params,
+      c4d_subtract_cargs,
       c4d_subtract_params,
+      c4d_supervoxel_cargs,
       c4d_supervoxel_params,
+      c4d_swapdim_cargs,
       c4d_swapdim_params,
+      c4d_test_image_cargs,
       c4d_test_image_params,
+      c4d_test_probe_cargs,
       c4d_test_probe_params,
+      c4d_threshold_cargs,
       c4d_threshold_params,
+      c4d_tile_cargs,
       c4d_tile_params,
+      c4d_trim_cargs,
       c4d_trim_params,
+      c4d_trim_to_size_cargs,
       c4d_trim_to_size_params,
+      c4d_type_cargs,
       c4d_type_params,
+      c4d_verbose_cargs,
       c4d_verbose_params,
+      c4d_version_cargs,
       c4d_version_params,
+      c4d_vote_cargs,
+      c4d_vote_label_cargs,
       c4d_vote_label_params,
+      c4d_vote_mrf_cargs,
       c4d_vote_mrf_params,
       c4d_vote_params,
+      c4d_voxel_integral_cargs,
       c4d_voxel_integral_params,
+      c4d_voxel_sum_cargs,
       c4d_voxel_sum_params,
+      c4d_voxelwise_regression_cargs,
       c4d_voxelwise_regression_params,
+      c4d_warp_cargs,
+      c4d_warp_label_cargs,
       c4d_warp_label_params,
       c4d_warp_params,
+      c4d_weighted_sum_cargs,
       c4d_weighted_sum_params,
+      c4d_weighted_sum_voxelwise_cargs,
       c4d_weighted_sum_voxelwise_params,
+      c4d_wrap_cargs,
       c4d_wrap_params,
 };

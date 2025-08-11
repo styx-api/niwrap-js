@@ -12,7 +12,7 @@ const REG_RESAMPLE_METADATA: Metadata = {
 
 
 interface RegResampleParameters {
-    "__STYXTYPE__": "reg_resample";
+    "@type": "niftyreg.reg_resample";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "affine_transform"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface RegResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_resample": reg_resample_cargs,
+        "niftyreg.reg_resample": reg_resample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_resample": reg_resample_outputs,
+        "niftyreg.reg_resample": reg_resample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface RegResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Filename of the reference image
+ * @param floating_image Filename of the floating image
+ * @param affine_transform Filename which contains an affine transformation (Affine*Reference=Floating)
+ * @param flirt_affine_transform Filename which contains a radiological flirt affine transformation
+ * @param control_point_grid Filename of the control point grid image (from reg_f3d)
+ * @param deformation_field Filename of the deformation field image (from reg_transform)
+ * @param resampled_image Filename of the resampled image
+ * @param resampled_blank Filename of the resampled blank grid
+ * @param nearest_neighbor Use a Nearest Neighbor interpolation for the source resampling (cubic spline by default)
+ * @param linear_interpolation Use a Linear interpolation for the source resampling (cubic spline by default)
+ *
+ * @returns Parameter dictionary
+ */
 function reg_resample_params(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -93,24 +109,8 @@ function reg_resample_params(
     nearest_neighbor: boolean = false,
     linear_interpolation: boolean = false,
 ): RegResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Filename of the reference image
-     * @param floating_image Filename of the floating image
-     * @param affine_transform Filename which contains an affine transformation (Affine*Reference=Floating)
-     * @param flirt_affine_transform Filename which contains a radiological flirt affine transformation
-     * @param control_point_grid Filename of the control point grid image (from reg_f3d)
-     * @param deformation_field Filename of the deformation field image (from reg_transform)
-     * @param resampled_image Filename of the resampled image
-     * @param resampled_blank Filename of the resampled blank grid
-     * @param nearest_neighbor Use a Nearest Neighbor interpolation for the source resampling (cubic spline by default)
-     * @param linear_interpolation Use a Linear interpolation for the source resampling (cubic spline by default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_resample" as const,
+        "@type": "niftyreg.reg_resample" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "nearest_neighbor": nearest_neighbor,
@@ -138,18 +138,18 @@ function reg_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_resample_cargs(
     params: RegResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_resample");
     cargs.push(
@@ -206,18 +206,18 @@ function reg_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_resample_outputs(
     params: RegResampleParameters,
     execution: Execution,
 ): RegResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegResampleOutputs = {
         root: execution.outputFile("."),
         output_resampled_image: ((params["resampled_image"] ?? null) !== null) ? execution.outputFile([(params["resampled_image"] ?? null)].join('')) : null,
@@ -227,22 +227,22 @@ function reg_resample_outputs(
 }
 
 
+/**
+ * Tool for resampling floating images to the reference image space using different transformations.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
+ */
 function reg_resample_execute(
     params: RegResampleParameters,
     execution: Execution,
 ): RegResampleOutputs {
-    /**
-     * Tool for resampling floating images to the reference image space using different transformations.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_resample_cargs(params, execution)
     const ret = reg_resample_outputs(params, execution)
@@ -251,6 +251,27 @@ function reg_resample_execute(
 }
 
 
+/**
+ * Tool for resampling floating images to the reference image space using different transformations.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param reference_image Filename of the reference image
+ * @param floating_image Filename of the floating image
+ * @param affine_transform Filename which contains an affine transformation (Affine*Reference=Floating)
+ * @param flirt_affine_transform Filename which contains a radiological flirt affine transformation
+ * @param control_point_grid Filename of the control point grid image (from reg_f3d)
+ * @param deformation_field Filename of the deformation field image (from reg_transform)
+ * @param resampled_image Filename of the resampled image
+ * @param resampled_blank Filename of the resampled blank grid
+ * @param nearest_neighbor Use a Nearest Neighbor interpolation for the source resampling (cubic spline by default)
+ * @param linear_interpolation Use a Linear interpolation for the source resampling (cubic spline by default)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
+ */
 function reg_resample(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -264,27 +285,6 @@ function reg_resample(
     linear_interpolation: boolean = false,
     runner: Runner | null = null,
 ): RegResampleOutputs {
-    /**
-     * Tool for resampling floating images to the reference image space using different transformations.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param reference_image Filename of the reference image
-     * @param floating_image Filename of the floating image
-     * @param affine_transform Filename which contains an affine transformation (Affine*Reference=Floating)
-     * @param flirt_affine_transform Filename which contains a radiological flirt affine transformation
-     * @param control_point_grid Filename of the control point grid image (from reg_f3d)
-     * @param deformation_field Filename of the deformation field image (from reg_transform)
-     * @param resampled_image Filename of the resampled image
-     * @param resampled_blank Filename of the resampled blank grid
-     * @param nearest_neighbor Use a Nearest Neighbor interpolation for the source resampling (cubic spline by default)
-     * @param linear_interpolation Use a Linear interpolation for the source resampling (cubic spline by default)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_RESAMPLE_METADATA);
     const params = reg_resample_params(reference_image, floating_image, affine_transform, flirt_affine_transform, control_point_grid, deformation_field, resampled_image, resampled_blank, nearest_neighbor, linear_interpolation)
@@ -297,5 +297,8 @@ export {
       RegResampleOutputs,
       RegResampleParameters,
       reg_resample,
+      reg_resample_cargs,
+      reg_resample_execute,
+      reg_resample_outputs,
       reg_resample_params,
 };

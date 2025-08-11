@@ -12,7 +12,7 @@ const V_3D_TCORRELATE_METADATA: Metadata = {
 
 
 interface V3dTcorrelateParameters {
-    "__STYXTYPE__": "3dTcorrelate";
+    "@type": "afni.3dTcorrelate";
     "xset": InputPathType;
     "yset": InputPathType;
     "pearson": boolean;
@@ -32,35 +32,35 @@ interface V3dTcorrelateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTcorrelate": v_3d_tcorrelate_cargs,
+        "afni.3dTcorrelate": v_3d_tcorrelate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTcorrelate": v_3d_tcorrelate_outputs,
+        "afni.3dTcorrelate": v_3d_tcorrelate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface V3dTcorrelateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xset Input xset.
+ * @param yset Input yset.
+ * @param pearson Correlation is the normal pearson correlation coefficient.
+ * @param spearman Correlation is the Spearman (rank) correlation coefficient.
+ * @param quadrant Correlation is the quadrant coefficient.
+ * @param ktaub Correlation is Kendall's tau_b coefficient. For continuous or finely discretized data, tau_b and rank correlation are nearly equivalent.
+ * @param covariance Covariance instead of correlation. That would be Pearson correlation without scaling by the product of the standard deviations.
+ * @param partial Partial Pearson's correlation of X & Y, adjusting for Z (the dataset provided here).
+ * @param ycoef Least squares coefficient that best fits y(t) to x(t), after detrending. That is, if yd(t) is the detrended y(t) and xd(t) is the detrended x(t), then the ycoef value is from the OLSQ fit to xd(t) = ycoef & y(t) + error.
+ * @param fisher Apply the Fisher (inverse hyperbolic tangent) transformation to correlation results. Does not make sense with ktaub, covariance, or ycoef.
+ * @param polort Remove polynomial trend of order m. Using m=-1 mean no detrending; this is only useful fro data that has been preprocessed.
+ * @param ort A 1D file. Also detrend using the columbs of the 1D file provided here. Only one -ort option can be given, so if you would like to use more than one, create a temporary file using 1dcat.
+ * @param autoclip Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
+ * @param automask Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
+ * @param zcensor Omit (censor out) any time points where the xset volume is all zero OR where the yset volume is all zero (in mask). Please note that using -zcensor with any detrending is unlikely to be useful.
+ * @param prefix Save output into a dataset with this prefix.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tcorrelate_params(
     xset: InputPathType,
     yset: InputPathType,
@@ -101,30 +123,8 @@ function v_3d_tcorrelate_params(
     zcensor: boolean = false,
     prefix: string | null = null,
 ): V3dTcorrelateParameters {
-    /**
-     * Build parameters.
-    
-     * @param xset Input xset.
-     * @param yset Input yset.
-     * @param pearson Correlation is the normal pearson correlation coefficient.
-     * @param spearman Correlation is the Spearman (rank) correlation coefficient.
-     * @param quadrant Correlation is the quadrant coefficient.
-     * @param ktaub Correlation is Kendall's tau_b coefficient. For continuous or finely discretized data, tau_b and rank correlation are nearly equivalent.
-     * @param covariance Covariance instead of correlation. That would be Pearson correlation without scaling by the product of the standard deviations.
-     * @param partial Partial Pearson's correlation of X & Y, adjusting for Z (the dataset provided here).
-     * @param ycoef Least squares coefficient that best fits y(t) to x(t), after detrending. That is, if yd(t) is the detrended y(t) and xd(t) is the detrended x(t), then the ycoef value is from the OLSQ fit to xd(t) = ycoef & y(t) + error.
-     * @param fisher Apply the Fisher (inverse hyperbolic tangent) transformation to correlation results. Does not make sense with ktaub, covariance, or ycoef.
-     * @param polort Remove polynomial trend of order m. Using m=-1 mean no detrending; this is only useful fro data that has been preprocessed.
-     * @param ort A 1D file. Also detrend using the columbs of the 1D file provided here. Only one -ort option can be given, so if you would like to use more than one, create a temporary file using 1dcat.
-     * @param autoclip Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
-     * @param automask Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
-     * @param zcensor Omit (censor out) any time points where the xset volume is all zero OR where the yset volume is all zero (in mask). Please note that using -zcensor with any detrending is unlikely to be useful.
-     * @param prefix Save output into a dataset with this prefix.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTcorrelate" as const,
+        "@type": "afni.3dTcorrelate" as const,
         "xset": xset,
         "yset": yset,
         "pearson": pearson,
@@ -154,18 +154,18 @@ function v_3d_tcorrelate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tcorrelate_cargs(
     params: V3dTcorrelateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTcorrelate");
     cargs.push(execution.inputFile((params["xset"] ?? null)));
@@ -228,18 +228,18 @@ function v_3d_tcorrelate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tcorrelate_outputs(
     params: V3dTcorrelateParameters,
     execution: Execution,
 ): V3dTcorrelateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTcorrelateOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -248,22 +248,22 @@ function v_3d_tcorrelate_outputs(
 }
 
 
+/**
+ * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
+ */
 function v_3d_tcorrelate_execute(
     params: V3dTcorrelateParameters,
     execution: Execution,
 ): V3dTcorrelateOutputs {
-    /**
-     * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tcorrelate_cargs(params, execution)
     const ret = v_3d_tcorrelate_outputs(params, execution)
@@ -272,6 +272,33 @@ function v_3d_tcorrelate_execute(
 }
 
 
+/**
+ * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param xset Input xset.
+ * @param yset Input yset.
+ * @param pearson Correlation is the normal pearson correlation coefficient.
+ * @param spearman Correlation is the Spearman (rank) correlation coefficient.
+ * @param quadrant Correlation is the quadrant coefficient.
+ * @param ktaub Correlation is Kendall's tau_b coefficient. For continuous or finely discretized data, tau_b and rank correlation are nearly equivalent.
+ * @param covariance Covariance instead of correlation. That would be Pearson correlation without scaling by the product of the standard deviations.
+ * @param partial Partial Pearson's correlation of X & Y, adjusting for Z (the dataset provided here).
+ * @param ycoef Least squares coefficient that best fits y(t) to x(t), after detrending. That is, if yd(t) is the detrended y(t) and xd(t) is the detrended x(t), then the ycoef value is from the OLSQ fit to xd(t) = ycoef & y(t) + error.
+ * @param fisher Apply the Fisher (inverse hyperbolic tangent) transformation to correlation results. Does not make sense with ktaub, covariance, or ycoef.
+ * @param polort Remove polynomial trend of order m. Using m=-1 mean no detrending; this is only useful fro data that has been preprocessed.
+ * @param ort A 1D file. Also detrend using the columbs of the 1D file provided here. Only one -ort option can be given, so if you would like to use more than one, create a temporary file using 1dcat.
+ * @param autoclip Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
+ * @param automask Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
+ * @param zcensor Omit (censor out) any time points where the xset volume is all zero OR where the yset volume is all zero (in mask). Please note that using -zcensor with any detrending is unlikely to be useful.
+ * @param prefix Save output into a dataset with this prefix.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
+ */
 function v_3d_tcorrelate(
     xset: InputPathType,
     yset: InputPathType,
@@ -291,33 +318,6 @@ function v_3d_tcorrelate(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dTcorrelateOutputs {
-    /**
-     * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param xset Input xset.
-     * @param yset Input yset.
-     * @param pearson Correlation is the normal pearson correlation coefficient.
-     * @param spearman Correlation is the Spearman (rank) correlation coefficient.
-     * @param quadrant Correlation is the quadrant coefficient.
-     * @param ktaub Correlation is Kendall's tau_b coefficient. For continuous or finely discretized data, tau_b and rank correlation are nearly equivalent.
-     * @param covariance Covariance instead of correlation. That would be Pearson correlation without scaling by the product of the standard deviations.
-     * @param partial Partial Pearson's correlation of X & Y, adjusting for Z (the dataset provided here).
-     * @param ycoef Least squares coefficient that best fits y(t) to x(t), after detrending. That is, if yd(t) is the detrended y(t) and xd(t) is the detrended x(t), then the ycoef value is from the OLSQ fit to xd(t) = ycoef & y(t) + error.
-     * @param fisher Apply the Fisher (inverse hyperbolic tangent) transformation to correlation results. Does not make sense with ktaub, covariance, or ycoef.
-     * @param polort Remove polynomial trend of order m. Using m=-1 mean no detrending; this is only useful fro data that has been preprocessed.
-     * @param ort A 1D file. Also detrend using the columbs of the 1D file provided here. Only one -ort option can be given, so if you would like to use more than one, create a temporary file using 1dcat.
-     * @param autoclip Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
-     * @param automask Clip off low-intensity regions in the two datasets, so that the correlation is only computed between high-intensity (presumably brain) voxels. The intensity level is determined the same way that 3dClipLevel works.
-     * @param zcensor Omit (censor out) any time points where the xset volume is all zero OR where the yset volume is all zero (in mask). Please note that using -zcensor with any detrending is unlikely to be useful.
-     * @param prefix Save output into a dataset with this prefix.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TCORRELATE_METADATA);
     const params = v_3d_tcorrelate_params(xset, yset, pearson, spearman, quadrant, ktaub, covariance, partial, ycoef, fisher, polort, ort, autoclip, automask, zcensor, prefix)
@@ -330,5 +330,8 @@ export {
       V3dTcorrelateParameters,
       V_3D_TCORRELATE_METADATA,
       v_3d_tcorrelate,
+      v_3d_tcorrelate_cargs,
+      v_3d_tcorrelate_execute,
+      v_3d_tcorrelate_outputs,
       v_3d_tcorrelate_params,
 };

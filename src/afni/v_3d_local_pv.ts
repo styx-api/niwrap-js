@@ -12,7 +12,7 @@ const V_3D_LOCAL_PV_METADATA: Metadata = {
 
 
 interface V3dLocalPvParameters {
-    "__STYXTYPE__": "3dLocalPV";
+    "@type": "afni.3dLocalPV";
     "input_dataset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -27,35 +27,35 @@ interface V3dLocalPvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLocalPV": v_3d_local_pv_cargs,
+        "afni.3dLocalPV": v_3d_local_pv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLocalPV": v_3d_local_pv_outputs,
+        "afni.3dLocalPV": v_3d_local_pv_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface V3dLocalPvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input time series dataset
+ * @param mask Restrict operations to this mask
+ * @param automask Create a mask from the time series dataset
+ * @param prefix Save SVD vector result into this new dataset [default = 'LocalPV']
+ * @param prefix2 Save second principal vector into this new dataset [default = don't save it]
+ * @param evprefix Save singular value at each voxel into this dataset [default = don't save]
+ * @param neighborhood Neighborhood definition (e.g., 'SPHERE(5)', 'TOHD(7)', etc.)
+ * @param despike Remove time series spikes from input dataset
+ * @param polort Detrending
+ * @param vnorm Normalize data vectors [strongly recommended]
+ * @param vproj Project central data time series onto local SVD vector; if followed by '2', then the central data time series will be projected on the 2-dimensional subspace spanned by the first 2 principal SVD vectors. [default: just output principal singular vector]
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_local_pv_params(
     input_dataset: InputPathType,
     mask: InputPathType | null = null,
@@ -99,25 +116,8 @@ function v_3d_local_pv_params(
     vnorm: boolean = false,
     vproj: string | null = null,
 ): V3dLocalPvParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input time series dataset
-     * @param mask Restrict operations to this mask
-     * @param automask Create a mask from the time series dataset
-     * @param prefix Save SVD vector result into this new dataset [default = 'LocalPV']
-     * @param prefix2 Save second principal vector into this new dataset [default = don't save it]
-     * @param evprefix Save singular value at each voxel into this dataset [default = don't save]
-     * @param neighborhood Neighborhood definition (e.g., 'SPHERE(5)', 'TOHD(7)', etc.)
-     * @param despike Remove time series spikes from input dataset
-     * @param polort Detrending
-     * @param vnorm Normalize data vectors [strongly recommended]
-     * @param vproj Project central data time series onto local SVD vector; if followed by '2', then the central data time series will be projected on the 2-dimensional subspace spanned by the first 2 principal SVD vectors. [default: just output principal singular vector]
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLocalPV" as const,
+        "@type": "afni.3dLocalPV" as const,
         "input_dataset": input_dataset,
         "automask": automask,
         "despike": despike,
@@ -148,18 +148,18 @@ function v_3d_local_pv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_local_pv_cargs(
     params: V3dLocalPvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLocalPV");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -218,18 +218,18 @@ function v_3d_local_pv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_local_pv_outputs(
     params: V3dLocalPvParameters,
     execution: Execution,
 ): V3dLocalPvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLocalPvOutputs = {
         root: execution.outputFile("."),
         svd_vector_result: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -240,22 +240,22 @@ function v_3d_local_pv_outputs(
 }
 
 
+/**
+ * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
+ */
 function v_3d_local_pv_execute(
     params: V3dLocalPvParameters,
     execution: Execution,
 ): V3dLocalPvOutputs {
-    /**
-     * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_local_pv_cargs(params, execution)
     const ret = v_3d_local_pv_outputs(params, execution)
@@ -264,6 +264,28 @@ function v_3d_local_pv_execute(
 }
 
 
+/**
+ * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input time series dataset
+ * @param mask Restrict operations to this mask
+ * @param automask Create a mask from the time series dataset
+ * @param prefix Save SVD vector result into this new dataset [default = 'LocalPV']
+ * @param prefix2 Save second principal vector into this new dataset [default = don't save it]
+ * @param evprefix Save singular value at each voxel into this dataset [default = don't save]
+ * @param neighborhood Neighborhood definition (e.g., 'SPHERE(5)', 'TOHD(7)', etc.)
+ * @param despike Remove time series spikes from input dataset
+ * @param polort Detrending
+ * @param vnorm Normalize data vectors [strongly recommended]
+ * @param vproj Project central data time series onto local SVD vector; if followed by '2', then the central data time series will be projected on the 2-dimensional subspace spanned by the first 2 principal SVD vectors. [default: just output principal singular vector]
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
+ */
 function v_3d_local_pv(
     input_dataset: InputPathType,
     mask: InputPathType | null = null,
@@ -278,28 +300,6 @@ function v_3d_local_pv(
     vproj: string | null = null,
     runner: Runner | null = null,
 ): V3dLocalPvOutputs {
-    /**
-     * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input time series dataset
-     * @param mask Restrict operations to this mask
-     * @param automask Create a mask from the time series dataset
-     * @param prefix Save SVD vector result into this new dataset [default = 'LocalPV']
-     * @param prefix2 Save second principal vector into this new dataset [default = don't save it]
-     * @param evprefix Save singular value at each voxel into this dataset [default = don't save]
-     * @param neighborhood Neighborhood definition (e.g., 'SPHERE(5)', 'TOHD(7)', etc.)
-     * @param despike Remove time series spikes from input dataset
-     * @param polort Detrending
-     * @param vnorm Normalize data vectors [strongly recommended]
-     * @param vproj Project central data time series onto local SVD vector; if followed by '2', then the central data time series will be projected on the 2-dimensional subspace spanned by the first 2 principal SVD vectors. [default: just output principal singular vector]
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_PV_METADATA);
     const params = v_3d_local_pv_params(input_dataset, mask, automask, prefix, prefix2, evprefix, neighborhood, despike, polort, vnorm, vproj)
@@ -312,5 +312,8 @@ export {
       V3dLocalPvParameters,
       V_3D_LOCAL_PV_METADATA,
       v_3d_local_pv,
+      v_3d_local_pv_cargs,
+      v_3d_local_pv_execute,
+      v_3d_local_pv_outputs,
       v_3d_local_pv_params,
 };

@@ -12,42 +12,42 @@ const CONNECTEDCOMP_METADATA: Metadata = {
 
 
 interface ConnectedcompParameters {
-    "__STYXTYPE__": "connectedcomp";
+    "@type": "fsl.connectedcomp";
     "in_volume": InputPathType;
     "output_volume"?: string | null | undefined;
     "num_connect"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "connectedcomp": connectedcomp_cargs,
+        "fsl.connectedcomp": connectedcomp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "connectedcomp": connectedcomp_outputs,
+        "fsl.connectedcomp": connectedcomp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ConnectedcompOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_volume Input image volume
+ * @param output_volume Output image volume
+ * @param num_connect Number of connected components
+ *
+ * @returns Parameter dictionary
+ */
 function connectedcomp_params(
     in_volume: InputPathType,
     output_volume: string | null = null,
     num_connect: number | null = null,
 ): ConnectedcompParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_volume Input image volume
-     * @param output_volume Output image volume
-     * @param num_connect Number of connected components
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "connectedcomp" as const,
+        "@type": "fsl.connectedcomp" as const,
         "in_volume": in_volume,
     };
     if (output_volume !== null) {
@@ -98,18 +98,18 @@ function connectedcomp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connectedcomp_cargs(
     params: ConnectedcompParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("connectedcomp");
     cargs.push(execution.inputFile((params["in_volume"] ?? null)));
@@ -123,18 +123,18 @@ function connectedcomp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function connectedcomp_outputs(
     params: ConnectedcompParameters,
     execution: Execution,
 ): ConnectedcompOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConnectedcompOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["output_volume"] ?? null) !== null) ? execution.outputFile([(params["output_volume"] ?? null)].join('')) : null,
@@ -143,22 +143,22 @@ function connectedcomp_outputs(
 }
 
 
+/**
+ * Connected component analysis tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
+ */
 function connectedcomp_execute(
     params: ConnectedcompParameters,
     execution: Execution,
 ): ConnectedcompOutputs {
-    /**
-     * Connected component analysis tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
-     */
     params = execution.params(params)
     const cargs = connectedcomp_cargs(params, execution)
     const ret = connectedcomp_outputs(params, execution)
@@ -167,26 +167,26 @@ function connectedcomp_execute(
 }
 
 
+/**
+ * Connected component analysis tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_volume Input image volume
+ * @param output_volume Output image volume
+ * @param num_connect Number of connected components
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
+ */
 function connectedcomp(
     in_volume: InputPathType,
     output_volume: string | null = null,
     num_connect: number | null = null,
     runner: Runner | null = null,
 ): ConnectedcompOutputs {
-    /**
-     * Connected component analysis tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_volume Input image volume
-     * @param output_volume Output image volume
-     * @param num_connect Number of connected components
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONNECTEDCOMP_METADATA);
     const params = connectedcomp_params(in_volume, output_volume, num_connect)
@@ -199,5 +199,8 @@ export {
       ConnectedcompOutputs,
       ConnectedcompParameters,
       connectedcomp,
+      connectedcomp_cargs,
+      connectedcomp_execute,
+      connectedcomp_outputs,
       connectedcomp_params,
 };

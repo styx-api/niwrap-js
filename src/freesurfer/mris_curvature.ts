@@ -12,7 +12,7 @@ const MRIS_CURVATURE_METADATA: Metadata = {
 
 
 interface MrisCurvatureParameters {
-    "__STYXTYPE__": "mris_curvature";
+    "@type": "freesurfer.mris_curvature";
     "save_curvature_files": boolean;
     "max_principal_curvature": boolean;
     "mgh_output_format": boolean;
@@ -30,35 +30,35 @@ interface MrisCurvatureParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_curvature": mris_curvature_cargs,
+        "freesurfer.mris_curvature": mris_curvature_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_curvature": mris_curvature_outputs,
+        "freesurfer.mris_curvature": mris_curvature_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface MrisCurvatureOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param save_curvature_files Save curvature files (will only generate screen output without this option)
+ * @param max_principal_curvature Save 1st (max) principal curvature in ?h.<surface>.max file
+ * @param mgh_output_format Save outputs in .mgz format
+ * @param min_principal_curvature Save 2nd (min) principal curvature in ?h.<surface>.min file
+ * @param iterative_averages Perform <avgs> iterative averages of curvature measure before saving
+ * @param neighborhood_size Set neighborhood size to nbrs
+ * @param random_seed Set random number generator to seed N
+ * @param curvatures Stand-alone option to save H (mean), K (gaussian), k1, and k2 curvatures to stem.{curvname}.mgz
+ * @param h_curvature Stand-alone option to save H mean curvature to stem.H.mgz
+ * @param k_curvature Stand-alone option to save K gaussian curvature to stem.K.mgz
+ * @param k1_curvature Stand-alone option to save k1 (primary principle) curvature to stem.k1.mgz
+ * @param k2_curvature Stand-alone option to save k2 (secondary principle) curvature to stem.k2.mgz
+ * @param k1k2_curvature Stand-alone option to save k1 and k2 curvature to stem.{k1,k2}.mgz
+ *
+ * @returns Parameter dictionary
+ */
 function mris_curvature_params(
     input_surface: InputPathType,
     save_curvature_files: boolean = false,
@@ -101,28 +121,8 @@ function mris_curvature_params(
     k2_curvature: string | null = null,
     k1k2_curvature: string | null = null,
 ): MrisCurvatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param save_curvature_files Save curvature files (will only generate screen output without this option)
-     * @param max_principal_curvature Save 1st (max) principal curvature in ?h.<surface>.max file
-     * @param mgh_output_format Save outputs in .mgz format
-     * @param min_principal_curvature Save 2nd (min) principal curvature in ?h.<surface>.min file
-     * @param iterative_averages Perform <avgs> iterative averages of curvature measure before saving
-     * @param neighborhood_size Set neighborhood size to nbrs
-     * @param random_seed Set random number generator to seed N
-     * @param curvatures Stand-alone option to save H (mean), K (gaussian), k1, and k2 curvatures to stem.{curvname}.mgz
-     * @param h_curvature Stand-alone option to save H mean curvature to stem.H.mgz
-     * @param k_curvature Stand-alone option to save K gaussian curvature to stem.K.mgz
-     * @param k1_curvature Stand-alone option to save k1 (primary principle) curvature to stem.k1.mgz
-     * @param k2_curvature Stand-alone option to save k2 (secondary principle) curvature to stem.k2.mgz
-     * @param k1k2_curvature Stand-alone option to save k1 and k2 curvature to stem.{k1,k2}.mgz
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_curvature" as const,
+        "@type": "freesurfer.mris_curvature" as const,
         "save_curvature_files": save_curvature_files,
         "max_principal_curvature": max_principal_curvature,
         "mgh_output_format": mgh_output_format,
@@ -160,18 +160,18 @@ function mris_curvature_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_curvature_cargs(
     params: MrisCurvatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_curvature");
     if ((params["save_curvature_files"] ?? null)) {
@@ -245,18 +245,18 @@ function mris_curvature_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_curvature_outputs(
     params: MrisCurvatureParameters,
     execution: Execution,
 ): MrisCurvatureOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisCurvatureOutputs = {
         root: execution.outputFile("."),
         mean_curvature: execution.outputFile(["<hemi>.<surface>.H"].join('')),
@@ -266,22 +266,22 @@ function mris_curvature_outputs(
 }
 
 
+/**
+ * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
+ */
 function mris_curvature_execute(
     params: MrisCurvatureParameters,
     execution: Execution,
 ): MrisCurvatureOutputs {
-    /**
-     * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_curvature_cargs(params, execution)
     const ret = mris_curvature_outputs(params, execution)
@@ -290,6 +290,31 @@ function mris_curvature_execute(
 }
 
 
+/**
+ * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file
+ * @param save_curvature_files Save curvature files (will only generate screen output without this option)
+ * @param max_principal_curvature Save 1st (max) principal curvature in ?h.<surface>.max file
+ * @param mgh_output_format Save outputs in .mgz format
+ * @param min_principal_curvature Save 2nd (min) principal curvature in ?h.<surface>.min file
+ * @param iterative_averages Perform <avgs> iterative averages of curvature measure before saving
+ * @param neighborhood_size Set neighborhood size to nbrs
+ * @param random_seed Set random number generator to seed N
+ * @param curvatures Stand-alone option to save H (mean), K (gaussian), k1, and k2 curvatures to stem.{curvname}.mgz
+ * @param h_curvature Stand-alone option to save H mean curvature to stem.H.mgz
+ * @param k_curvature Stand-alone option to save K gaussian curvature to stem.K.mgz
+ * @param k1_curvature Stand-alone option to save k1 (primary principle) curvature to stem.k1.mgz
+ * @param k2_curvature Stand-alone option to save k2 (secondary principle) curvature to stem.k2.mgz
+ * @param k1k2_curvature Stand-alone option to save k1 and k2 curvature to stem.{k1,k2}.mgz
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
+ */
 function mris_curvature(
     input_surface: InputPathType,
     save_curvature_files: boolean = false,
@@ -307,31 +332,6 @@ function mris_curvature(
     k1k2_curvature: string | null = null,
     runner: Runner | null = null,
 ): MrisCurvatureOutputs {
-    /**
-     * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file
-     * @param save_curvature_files Save curvature files (will only generate screen output without this option)
-     * @param max_principal_curvature Save 1st (max) principal curvature in ?h.<surface>.max file
-     * @param mgh_output_format Save outputs in .mgz format
-     * @param min_principal_curvature Save 2nd (min) principal curvature in ?h.<surface>.min file
-     * @param iterative_averages Perform <avgs> iterative averages of curvature measure before saving
-     * @param neighborhood_size Set neighborhood size to nbrs
-     * @param random_seed Set random number generator to seed N
-     * @param curvatures Stand-alone option to save H (mean), K (gaussian), k1, and k2 curvatures to stem.{curvname}.mgz
-     * @param h_curvature Stand-alone option to save H mean curvature to stem.H.mgz
-     * @param k_curvature Stand-alone option to save K gaussian curvature to stem.K.mgz
-     * @param k1_curvature Stand-alone option to save k1 (primary principle) curvature to stem.k1.mgz
-     * @param k2_curvature Stand-alone option to save k2 (secondary principle) curvature to stem.k2.mgz
-     * @param k1k2_curvature Stand-alone option to save k1 and k2 curvature to stem.{k1,k2}.mgz
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CURVATURE_METADATA);
     const params = mris_curvature_params(input_surface, save_curvature_files, max_principal_curvature, mgh_output_format, min_principal_curvature, iterative_averages, neighborhood_size, random_seed, curvatures, h_curvature, k_curvature, k1_curvature, k2_curvature, k1k2_curvature)
@@ -344,5 +344,8 @@ export {
       MrisCurvatureOutputs,
       MrisCurvatureParameters,
       mris_curvature,
+      mris_curvature_cargs,
+      mris_curvature_execute,
+      mris_curvature_outputs,
       mris_curvature_params,
 };

@@ -12,14 +12,14 @@ const VOXEL2MESH_METADATA: Metadata = {
 
 
 interface Voxel2meshConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.voxel2mesh.config";
     "key": string;
     "value": string;
 }
 
 
 interface Voxel2meshParameters {
-    "__STYXTYPE__": "voxel2mesh";
+    "@type": "mrtrix.voxel2mesh";
     "blocky": boolean;
     "threshold"?: number | null | undefined;
     "info": boolean;
@@ -35,55 +35,55 @@ interface Voxel2meshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "voxel2mesh": voxel2mesh_cargs,
-        "config": voxel2mesh_config_cargs,
+        "mrtrix.voxel2mesh": voxel2mesh_cargs,
+        "mrtrix.voxel2mesh.config": voxel2mesh_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "voxel2mesh": voxel2mesh_outputs,
+        "mrtrix.voxel2mesh": voxel2mesh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function voxel2mesh_config_params(
     key: string,
     value: string,
 ): Voxel2meshConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.voxel2mesh.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function voxel2mesh_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function voxel2mesh_config_cargs(
     params: Voxel2meshConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface Voxel2meshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image.
+ * @param output the output mesh file.
+ * @param blocky generate a 'blocky' mesh that precisely represents the voxel edges
+ * @param threshold manually set the intensity threshold for the Marching Cubes algorithm
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function voxel2mesh_params(
     input: InputPathType,
     output: string,
@@ -142,26 +160,8 @@ function voxel2mesh_params(
     help: boolean = false,
     version: boolean = false,
 ): Voxel2meshParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image.
-     * @param output the output mesh file.
-     * @param blocky generate a 'blocky' mesh that precisely represents the voxel edges
-     * @param threshold manually set the intensity threshold for the Marching Cubes algorithm
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "voxel2mesh" as const,
+        "@type": "mrtrix.voxel2mesh" as const,
         "blocky": blocky,
         "info": info,
         "quiet": quiet,
@@ -185,18 +185,18 @@ function voxel2mesh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function voxel2mesh_cargs(
     params: Voxel2meshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("voxel2mesh");
     if ((params["blocky"] ?? null)) {
@@ -227,7 +227,7 @@ function voxel2mesh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -241,18 +241,18 @@ function voxel2mesh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function voxel2mesh_outputs(
     params: Voxel2meshParameters,
     execution: Execution,
 ): Voxel2meshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Voxel2meshOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -261,30 +261,30 @@ function voxel2mesh_outputs(
 }
 
 
+/**
+ * Generate a surface mesh representation from a voxel image.
+ *
+ * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.
+ *
+ * If the -blocky option is used, then the Marching Cubes algorithm will not be used. Instead, the input image will be interpreted as a binary mask image, and polygonal surfaces will be generated at the outer faces of the voxel clusters within the mask.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Voxel2meshOutputs`).
+ */
 function voxel2mesh_execute(
     params: Voxel2meshParameters,
     execution: Execution,
 ): Voxel2meshOutputs {
-    /**
-     * Generate a surface mesh representation from a voxel image.
-     * 
-     * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.
-     * 
-     * If the -blocky option is used, then the Marching Cubes algorithm will not be used. Instead, the input image will be interpreted as a binary mask image, and polygonal surfaces will be generated at the outer faces of the voxel clusters within the mask.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Voxel2meshOutputs`).
-     */
     params = execution.params(params)
     const cargs = voxel2mesh_cargs(params, execution)
     const ret = voxel2mesh_outputs(params, execution)
@@ -293,6 +293,37 @@ function voxel2mesh_execute(
 }
 
 
+/**
+ * Generate a surface mesh representation from a voxel image.
+ *
+ * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.
+ *
+ * If the -blocky option is used, then the Marching Cubes algorithm will not be used. Instead, the input image will be interpreted as a binary mask image, and polygonal surfaces will be generated at the outer faces of the voxel clusters within the mask.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image.
+ * @param output the output mesh file.
+ * @param blocky generate a 'blocky' mesh that precisely represents the voxel edges
+ * @param threshold manually set the intensity threshold for the Marching Cubes algorithm
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Voxel2meshOutputs`).
+ */
 function voxel2mesh(
     input: InputPathType,
     output: string,
@@ -308,37 +339,6 @@ function voxel2mesh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Voxel2meshOutputs {
-    /**
-     * Generate a surface mesh representation from a voxel image.
-     * 
-     * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.
-     * 
-     * If the -blocky option is used, then the Marching Cubes algorithm will not be used. Instead, the input image will be interpreted as a binary mask image, and polygonal surfaces will be generated at the outer faces of the voxel clusters within the mask.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image.
-     * @param output the output mesh file.
-     * @param blocky generate a 'blocky' mesh that precisely represents the voxel edges
-     * @param threshold manually set the intensity threshold for the Marching Cubes algorithm
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Voxel2meshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOXEL2MESH_METADATA);
     const params = voxel2mesh_params(input, output, blocky, threshold, info, quiet, debug, force, nthreads, config, help, version)
@@ -352,6 +352,10 @@ export {
       Voxel2meshOutputs,
       Voxel2meshParameters,
       voxel2mesh,
+      voxel2mesh_cargs,
+      voxel2mesh_config_cargs,
       voxel2mesh_config_params,
+      voxel2mesh_execute,
+      voxel2mesh_outputs,
       voxel2mesh_params,
 };

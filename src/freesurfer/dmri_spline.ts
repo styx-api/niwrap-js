@@ -12,7 +12,7 @@ const DMRI_SPLINE_METADATA: Metadata = {
 
 
 interface DmriSplineParameters {
-    "__STYXTYPE__": "dmri_spline";
+    "@type": "freesurfer.dmri_spline";
     "control_points_file": InputPathType;
     "mask_volume": InputPathType;
     "output_volume"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface DmriSplineParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_spline": dmri_spline_cargs,
+        "freesurfer.dmri_spline": dmri_spline_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_spline": dmri_spline_outputs,
+        "freesurfer.dmri_spline": dmri_spline_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,20 @@ interface DmriSplineOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param control_points_file Input text file containing control points
+ * @param mask_volume Input mask volume (spline is not allowed to stray off mask)
+ * @param output_volume Output volume of the interpolated spline
+ * @param show_points Highlight control points in output volume (default: no)
+ * @param output_points Output text file containing all interpolated spline points
+ * @param output_vectors_base Base name of output text files containing tangent vectors, normal vectors, and curvatures at every point along the spline
+ * @param debug Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_spline_params(
     control_points_file: InputPathType,
     mask_volume: InputPathType,
@@ -101,22 +115,8 @@ function dmri_spline_params(
     debug: boolean = false,
     check_options: boolean = false,
 ): DmriSplineParameters {
-    /**
-     * Build parameters.
-    
-     * @param control_points_file Input text file containing control points
-     * @param mask_volume Input mask volume (spline is not allowed to stray off mask)
-     * @param output_volume Output volume of the interpolated spline
-     * @param show_points Highlight control points in output volume (default: no)
-     * @param output_points Output text file containing all interpolated spline points
-     * @param output_vectors_base Base name of output text files containing tangent vectors, normal vectors, and curvatures at every point along the spline
-     * @param debug Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_spline" as const,
+        "@type": "freesurfer.dmri_spline" as const,
         "control_points_file": control_points_file,
         "mask_volume": mask_volume,
         "show_points": show_points,
@@ -136,18 +136,18 @@ function dmri_spline_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_spline_cargs(
     params: DmriSplineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_spline");
     cargs.push(
@@ -189,18 +189,18 @@ function dmri_spline_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_spline_outputs(
     params: DmriSplineParameters,
     execution: Execution,
 ): DmriSplineOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriSplineOutputs = {
         root: execution.outputFile("."),
         out_volume: ((params["output_volume"] ?? null) !== null) ? execution.outputFile([(params["output_volume"] ?? null)].join('')) : null,
@@ -213,22 +213,22 @@ function dmri_spline_outputs(
 }
 
 
+/**
+ * Tool for interpolating and analyzing splines within a defined mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriSplineOutputs`).
+ */
 function dmri_spline_execute(
     params: DmriSplineParameters,
     execution: Execution,
 ): DmriSplineOutputs {
-    /**
-     * Tool for interpolating and analyzing splines within a defined mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriSplineOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_spline_cargs(params, execution)
     const ret = dmri_spline_outputs(params, execution)
@@ -237,6 +237,25 @@ function dmri_spline_execute(
 }
 
 
+/**
+ * Tool for interpolating and analyzing splines within a defined mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param control_points_file Input text file containing control points
+ * @param mask_volume Input mask volume (spline is not allowed to stray off mask)
+ * @param output_volume Output volume of the interpolated spline
+ * @param show_points Highlight control points in output volume (default: no)
+ * @param output_points Output text file containing all interpolated spline points
+ * @param output_vectors_base Base name of output text files containing tangent vectors, normal vectors, and curvatures at every point along the spline
+ * @param debug Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriSplineOutputs`).
+ */
 function dmri_spline(
     control_points_file: InputPathType,
     mask_volume: InputPathType,
@@ -248,25 +267,6 @@ function dmri_spline(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): DmriSplineOutputs {
-    /**
-     * Tool for interpolating and analyzing splines within a defined mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param control_points_file Input text file containing control points
-     * @param mask_volume Input mask volume (spline is not allowed to stray off mask)
-     * @param output_volume Output volume of the interpolated spline
-     * @param show_points Highlight control points in output volume (default: no)
-     * @param output_points Output text file containing all interpolated spline points
-     * @param output_vectors_base Base name of output text files containing tangent vectors, normal vectors, and curvatures at every point along the spline
-     * @param debug Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriSplineOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_SPLINE_METADATA);
     const params = dmri_spline_params(control_points_file, mask_volume, output_volume, show_points, output_points, output_vectors_base, debug, check_options)
@@ -279,5 +279,8 @@ export {
       DmriSplineOutputs,
       DmriSplineParameters,
       dmri_spline,
+      dmri_spline_cargs,
+      dmri_spline_execute,
+      dmri_spline_outputs,
       dmri_spline_params,
 };

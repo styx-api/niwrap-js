@@ -12,7 +12,7 @@ const FSLVBM_3_PROC_METADATA: Metadata = {
 
 
 interface Fslvbm3ProcParameters {
-    "__STYXTYPE__": "fslvbm_3_proc";
+    "@type": "fsl.fslvbm_3_proc";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: string | null | undefined;
@@ -48,35 +48,35 @@ interface Fslvbm3ProcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslvbm_3_proc": fslvbm_3_proc_cargs,
+        "fsl.fslvbm_3_proc": fslvbm_3_proc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslvbm_3_proc": fslvbm_3_proc_outputs,
+        "fsl.fslvbm_3_proc": fslvbm_3_proc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,44 @@ interface Fslvbm3ProcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param arch Specify architecture
+ * @param coprocessor Specify coprocessor
+ * @param coprocessor_multi Specify multiple coprocessors
+ * @param coprocessor_class Specify coprocessor class
+ * @param coprocessor_class_strict Use strict class matching for coprocessor
+ * @param coprocessor_toolkit Specify coprocessor toolkit
+ * @param not_requeueable Do not requeue the job
+ * @param jobhold Job to hold
+ * @param array_hold Array hold
+ * @param logdir Specify log directory
+ * @param mailoptions Specify mail options
+ * @param mailto Specify mail recipient
+ * @param name Job name
+ * @param priority Job priority
+ * @param queue Queue to submit to
+ * @param resource Resource identifier
+ * @param delete_job Delete specified job
+ * @param memory_gb Memory (GB)
+ * @param parallel_env_threads Parallel environment and threads
+ * @param array_task Array task file
+ * @param array_native Array native specification
+ * @param number_jobscripts Keep number of job scripts
+ * @param keep_jobscript Keep job script
+ * @param coprocessor_name Specify coprocessor name
+ * @param has_queues Specify queues
+ * @param project Specify project name
+ * @param submit_scheduler Submit to Scheduler
+ * @param runtime_limit Specify runtime limit in minutes
+ * @param show_config Show configuration
+ * @param verbose Verbose output
+ * @param version Version information
+ * @param config_file Specify configuration file
+ *
+ * @returns Parameter dictionary
+ */
 function fslvbm_3_proc_params(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -133,46 +171,8 @@ function fslvbm_3_proc_params(
     version: boolean = false,
     config_file: InputPathType | null = null,
 ): Fslvbm3ProcParameters {
-    /**
-     * Build parameters.
-    
-     * @param arch Specify architecture
-     * @param coprocessor Specify coprocessor
-     * @param coprocessor_multi Specify multiple coprocessors
-     * @param coprocessor_class Specify coprocessor class
-     * @param coprocessor_class_strict Use strict class matching for coprocessor
-     * @param coprocessor_toolkit Specify coprocessor toolkit
-     * @param not_requeueable Do not requeue the job
-     * @param jobhold Job to hold
-     * @param array_hold Array hold
-     * @param logdir Specify log directory
-     * @param mailoptions Specify mail options
-     * @param mailto Specify mail recipient
-     * @param name Job name
-     * @param priority Job priority
-     * @param queue Queue to submit to
-     * @param resource Resource identifier
-     * @param delete_job Delete specified job
-     * @param memory_gb Memory (GB)
-     * @param parallel_env_threads Parallel environment and threads
-     * @param array_task Array task file
-     * @param array_native Array native specification
-     * @param number_jobscripts Keep number of job scripts
-     * @param keep_jobscript Keep job script
-     * @param coprocessor_name Specify coprocessor name
-     * @param has_queues Specify queues
-     * @param project Specify project name
-     * @param submit_scheduler Submit to Scheduler
-     * @param runtime_limit Specify runtime limit in minutes
-     * @param show_config Show configuration
-     * @param verbose Verbose output
-     * @param version Version information
-     * @param config_file Specify configuration file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslvbm_3_proc" as const,
+        "@type": "fsl.fslvbm_3_proc" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
         "not_requeueable": not_requeueable,
         "keep_jobscript": keep_jobscript,
@@ -258,18 +258,18 @@ function fslvbm_3_proc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslvbm_3_proc_cargs(
     params: Fslvbm3ProcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslvbm_3_proc");
     if ((params["arch"] ?? null) !== null) {
@@ -444,18 +444,18 @@ function fslvbm_3_proc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslvbm_3_proc_outputs(
     params: Fslvbm3ProcParameters,
     execution: Execution,
 ): Fslvbm3ProcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fslvbm3ProcOutputs = {
         root: execution.outputFile("."),
         output_directory: execution.outputFile(["fslvbm3a"].join('')),
@@ -464,22 +464,22 @@ function fslvbm_3_proc_outputs(
 }
 
 
+/**
+ * Pipeline for voxel-based morphometry analysis using FSL tools.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
+ */
 function fslvbm_3_proc_execute(
     params: Fslvbm3ProcParameters,
     execution: Execution,
 ): Fslvbm3ProcOutputs {
-    /**
-     * Pipeline for voxel-based morphometry analysis using FSL tools.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslvbm_3_proc_cargs(params, execution)
     const ret = fslvbm_3_proc_outputs(params, execution)
@@ -488,6 +488,49 @@ function fslvbm_3_proc_execute(
 }
 
 
+/**
+ * Pipeline for voxel-based morphometry analysis using FSL tools.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param arch Specify architecture
+ * @param coprocessor Specify coprocessor
+ * @param coprocessor_multi Specify multiple coprocessors
+ * @param coprocessor_class Specify coprocessor class
+ * @param coprocessor_class_strict Use strict class matching for coprocessor
+ * @param coprocessor_toolkit Specify coprocessor toolkit
+ * @param not_requeueable Do not requeue the job
+ * @param jobhold Job to hold
+ * @param array_hold Array hold
+ * @param logdir Specify log directory
+ * @param mailoptions Specify mail options
+ * @param mailto Specify mail recipient
+ * @param name Job name
+ * @param priority Job priority
+ * @param queue Queue to submit to
+ * @param resource Resource identifier
+ * @param delete_job Delete specified job
+ * @param memory_gb Memory (GB)
+ * @param parallel_env_threads Parallel environment and threads
+ * @param array_task Array task file
+ * @param array_native Array native specification
+ * @param number_jobscripts Keep number of job scripts
+ * @param keep_jobscript Keep job script
+ * @param coprocessor_name Specify coprocessor name
+ * @param has_queues Specify queues
+ * @param project Specify project name
+ * @param submit_scheduler Submit to Scheduler
+ * @param runtime_limit Specify runtime limit in minutes
+ * @param show_config Show configuration
+ * @param verbose Verbose output
+ * @param version Version information
+ * @param config_file Specify configuration file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
+ */
 function fslvbm_3_proc(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -523,49 +566,6 @@ function fslvbm_3_proc(
     config_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): Fslvbm3ProcOutputs {
-    /**
-     * Pipeline for voxel-based morphometry analysis using FSL tools.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param arch Specify architecture
-     * @param coprocessor Specify coprocessor
-     * @param coprocessor_multi Specify multiple coprocessors
-     * @param coprocessor_class Specify coprocessor class
-     * @param coprocessor_class_strict Use strict class matching for coprocessor
-     * @param coprocessor_toolkit Specify coprocessor toolkit
-     * @param not_requeueable Do not requeue the job
-     * @param jobhold Job to hold
-     * @param array_hold Array hold
-     * @param logdir Specify log directory
-     * @param mailoptions Specify mail options
-     * @param mailto Specify mail recipient
-     * @param name Job name
-     * @param priority Job priority
-     * @param queue Queue to submit to
-     * @param resource Resource identifier
-     * @param delete_job Delete specified job
-     * @param memory_gb Memory (GB)
-     * @param parallel_env_threads Parallel environment and threads
-     * @param array_task Array task file
-     * @param array_native Array native specification
-     * @param number_jobscripts Keep number of job scripts
-     * @param keep_jobscript Keep job script
-     * @param coprocessor_name Specify coprocessor name
-     * @param has_queues Specify queues
-     * @param project Specify project name
-     * @param submit_scheduler Submit to Scheduler
-     * @param runtime_limit Specify runtime limit in minutes
-     * @param show_config Show configuration
-     * @param verbose Verbose output
-     * @param version Version information
-     * @param config_file Specify configuration file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLVBM_3_PROC_METADATA);
     const params = fslvbm_3_proc_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_class_strict, coprocessor_toolkit, not_requeueable, jobhold, array_hold, logdir, mailoptions, mailto, name, priority, queue, resource, delete_job, memory_gb, parallel_env_threads, array_task, array_native, number_jobscripts, keep_jobscript, coprocessor_name, has_queues, project, submit_scheduler, runtime_limit, show_config, verbose, version, config_file)
@@ -578,5 +578,8 @@ export {
       Fslvbm3ProcOutputs,
       Fslvbm3ProcParameters,
       fslvbm_3_proc,
+      fslvbm_3_proc_cargs,
+      fslvbm_3_proc_execute,
+      fslvbm_3_proc_outputs,
       fslvbm_3_proc_params,
 };

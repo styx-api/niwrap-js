@@ -12,38 +12,38 @@ const SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 
 interface SegmentSubjectT2AutoEstimateAlveusMlParameters {
-    "__STYXTYPE__": "segmentSubjectT2_autoEstimateAlveusML";
+    "@type": "freesurfer.segmentSubjectT2_autoEstimateAlveusML";
     "missing_library": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentSubjectT2_autoEstimateAlveusML": segment_subject_t2_auto_estimate_alveus_ml_cargs,
+        "freesurfer.segmentSubjectT2_autoEstimateAlveusML": segment_subject_t2_auto_estimate_alveus_ml_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SegmentSubjectT2AutoEstimateAlveusMlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_t2_auto_estimate_alveus_ml_params(
     missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
 ): SegmentSubjectT2AutoEstimateAlveusMlParameters {
-    /**
-     * Build parameters.
-    
-     * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentSubjectT2_autoEstimateAlveusML" as const,
+        "@type": "freesurfer.segmentSubjectT2_autoEstimateAlveusML" as const,
         "missing_library": missing_library,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_t2_auto_estimate_alveus_ml_cargs(
     params: SegmentSubjectT2AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentSubjectT2_autoEstimateAlveusML");
     cargs.push((params["missing_library"] ?? null));
@@ -100,18 +100,18 @@ function segment_subject_t2_auto_estimate_alveus_ml_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_t2_auto_estimate_alveus_ml_outputs(
     params: SegmentSubjectT2AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectT2AutoEstimateAlveusMlOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function segment_subject_t2_auto_estimate_alveus_ml_outputs(
 }
 
 
+/**
+ * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
+ */
 function segment_subject_t2_auto_estimate_alveus_ml_execute(
     params: SegmentSubjectT2AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
-    /**
-     * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_t2_auto_estimate_alveus_ml_cargs(params, execution)
     const ret = segment_subject_t2_auto_estimate_alveus_ml_outputs(params, execution)
@@ -143,22 +143,22 @@ function segment_subject_t2_auto_estimate_alveus_ml_execute(
 }
 
 
+/**
+ * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
+ */
 function segment_subject_t2_auto_estimate_alveus_ml(
     missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
     runner: Runner | null = null,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
-    /**
-     * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param missing_library The tool could not be executed due to a missing shared library: libmwlaunchermain.so
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     const params = segment_subject_t2_auto_estimate_alveus_ml_params(missing_library)
@@ -171,5 +171,8 @@ export {
       SegmentSubjectT2AutoEstimateAlveusMlOutputs,
       SegmentSubjectT2AutoEstimateAlveusMlParameters,
       segment_subject_t2_auto_estimate_alveus_ml,
+      segment_subject_t2_auto_estimate_alveus_ml_cargs,
+      segment_subject_t2_auto_estimate_alveus_ml_execute,
+      segment_subject_t2_auto_estimate_alveus_ml_outputs,
       segment_subject_t2_auto_estimate_alveus_ml_params,
 };

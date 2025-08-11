@@ -12,7 +12,7 @@ const SAMSEG_LONG_METADATA: Metadata = {
 
 
 interface SamsegLongParameters {
-    "__STYXTYPE__": "samseg-long";
+    "@type": "freesurfer.samseg-long";
     "output_dir": string;
     "input_files": Array<InputPathType>;
     "align_mc": boolean;
@@ -23,35 +23,35 @@ interface SamsegLongParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "samseg-long": samseg_long_cargs,
+        "freesurfer.samseg-long": samseg_long_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "samseg-long": samseg_long_outputs,
+        "freesurfer.samseg-long": samseg_long_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,19 @@ interface SamsegLongOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_dir Output directory.
+ * @param input_files Input image files. All inputs must be a single modality.
+ * @param align_mc Align all inputs using robust register.
+ * @param align_no_mc Do not align inputs using robust register.
+ * @param threads Number of threads to use.
+ * @param save_posteriors Save posterior probabilities.
+ * @param force_update Force update of outputs.
+ *
+ * @returns Parameter dictionary
+ */
 function samseg_long_params(
     output_dir: string,
     input_files: Array<InputPathType>,
@@ -91,21 +104,8 @@ function samseg_long_params(
     save_posteriors: boolean = false,
     force_update: boolean = false,
 ): SamsegLongParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_dir Output directory.
-     * @param input_files Input image files. All inputs must be a single modality.
-     * @param align_mc Align all inputs using robust register.
-     * @param align_no_mc Do not align inputs using robust register.
-     * @param threads Number of threads to use.
-     * @param save_posteriors Save posterior probabilities.
-     * @param force_update Force update of outputs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "samseg-long" as const,
+        "@type": "freesurfer.samseg-long" as const,
         "output_dir": output_dir,
         "input_files": input_files,
         "align_mc": align_mc,
@@ -120,18 +120,18 @@ function samseg_long_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function samseg_long_cargs(
     params: SamsegLongParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("samseg-long");
     cargs.push(
@@ -164,18 +164,18 @@ function samseg_long_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function samseg_long_outputs(
     params: SamsegLongParameters,
     execution: Execution,
 ): SamsegLongOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SamsegLongOutputs = {
         root: execution.outputFile("."),
         tp001_output: execution.outputFile([(params["output_dir"] ?? null), "/tp001"].join('')),
@@ -186,22 +186,22 @@ function samseg_long_outputs(
 }
 
 
+/**
+ * Longitudinal analysis tool using SAMSEG in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
+ */
 function samseg_long_execute(
     params: SamsegLongParameters,
     execution: Execution,
 ): SamsegLongOutputs {
-    /**
-     * Longitudinal analysis tool using SAMSEG in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
-     */
     params = execution.params(params)
     const cargs = samseg_long_cargs(params, execution)
     const ret = samseg_long_outputs(params, execution)
@@ -210,6 +210,24 @@ function samseg_long_execute(
 }
 
 
+/**
+ * Longitudinal analysis tool using SAMSEG in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_dir Output directory.
+ * @param input_files Input image files. All inputs must be a single modality.
+ * @param align_mc Align all inputs using robust register.
+ * @param align_no_mc Do not align inputs using robust register.
+ * @param threads Number of threads to use.
+ * @param save_posteriors Save posterior probabilities.
+ * @param force_update Force update of outputs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
+ */
 function samseg_long(
     output_dir: string,
     input_files: Array<InputPathType>,
@@ -220,24 +238,6 @@ function samseg_long(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): SamsegLongOutputs {
-    /**
-     * Longitudinal analysis tool using SAMSEG in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_dir Output directory.
-     * @param input_files Input image files. All inputs must be a single modality.
-     * @param align_mc Align all inputs using robust register.
-     * @param align_no_mc Do not align inputs using robust register.
-     * @param threads Number of threads to use.
-     * @param save_posteriors Save posterior probabilities.
-     * @param force_update Force update of outputs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEG_LONG_METADATA);
     const params = samseg_long_params(output_dir, input_files, align_mc, align_no_mc, threads, save_posteriors, force_update)
@@ -250,5 +250,8 @@ export {
       SamsegLongOutputs,
       SamsegLongParameters,
       samseg_long,
+      samseg_long_cargs,
+      samseg_long_execute,
+      samseg_long_outputs,
       samseg_long_params,
 };

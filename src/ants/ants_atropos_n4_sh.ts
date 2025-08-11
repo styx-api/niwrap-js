@@ -12,14 +12,14 @@ const ANTS_ATROPOS_N4_SH_METADATA: Metadata = {
 
 
 interface AntsAtroposN4ShSegmentationPriorsParameters {
-    "__STYXTYPE__": "segmentation_priors";
+    "@type": "ants.antsAtroposN4.sh.segmentation_priors";
     "segmentation_priors_pattern"?: string | null | undefined;
     "segmentation_priors_folder"?: InputPathType | null | undefined;
 }
 
 
 interface AntsAtroposN4ShParameters {
-    "__STYXTYPE__": "antsAtroposN4.sh";
+    "@type": "ants.antsAtroposN4.sh";
     "image_dimension": 2 | 3;
     "input_image": InputPathType;
     "mask_image": InputPathType;
@@ -46,55 +46,55 @@ interface AntsAtroposN4ShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsAtroposN4.sh": ants_atropos_n4_sh_cargs,
-        "segmentation_priors": ants_atropos_n4_sh_segmentation_priors_cargs,
+        "ants.antsAtroposN4.sh": ants_atropos_n4_sh_cargs,
+        "ants.antsAtroposN4.sh.segmentation_priors": ants_atropos_n4_sh_segmentation_priors_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsAtroposN4.sh": ants_atropos_n4_sh_outputs,
+        "ants.antsAtroposN4.sh": ants_atropos_n4_sh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param segmentation_priors_pattern Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
+ * @param segmentation_priors_folder Included so.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_atropos_n4_sh_segmentation_priors_params(
     segmentation_priors_pattern: string | null = null,
     segmentation_priors_folder: InputPathType | null = null,
 ): AntsAtroposN4ShSegmentationPriorsParameters {
-    /**
-     * Build parameters.
-    
-     * @param segmentation_priors_pattern Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
-     * @param segmentation_priors_folder Included so.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentation_priors" as const,
+        "@type": "ants.antsAtroposN4.sh.segmentation_priors" as const,
     };
     if (segmentation_priors_pattern !== null) {
         params["segmentation_priors_pattern"] = segmentation_priors_pattern;
@@ -106,18 +106,18 @@ function ants_atropos_n4_sh_segmentation_priors_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_atropos_n4_sh_segmentation_priors_cargs(
     params: AntsAtroposN4ShSegmentationPriorsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["segmentation_priors_pattern"] ?? null) !== null || (params["segmentation_priors_folder"] ?? null) !== null) {
         cargs.push([(((params["segmentation_priors_pattern"] ?? null) !== null) ? (params["segmentation_priors_pattern"] ?? null) : ""), "/", (((params["segmentation_priors_folder"] ?? null) !== null) ? execution.inputFile((params["segmentation_priors_folder"] ?? null)) : "")].join(''));
@@ -151,6 +151,39 @@ interface AntsAtroposN4ShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension 2 or 3, for 2- or 3-dimensional image.
+ * @param input_image Anatomical image, typically T1. If more than one anatomical image is specified, subsequent images are also used during the segmentation process.
+ * @param mask_image Binary mask defining the region of interest.
+ * @param number_of_classes Number of classes defining the segmentation.
+ * @param output_prefix The following images are created: {output_prefix}N4Corrected.{output_suffix}, {output_prefix}Segmentation.{output_suffix}, {output_prefix}SegmentationPosteriors.{output_suffix}
+ * @param segmentation_priors Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
+ * @param max_n4_atropos_iterations Maximum number of (outer loop) iterations between N4 <-> Atropos (default = 15).
+ * @param max_atropos_iterations Maximum number of (inner loop) iterations in Atropos (default = 3).
+ * @param mrf Specifies MRF prior (of the form '[ weight,neighborhood ]', e.g. '[ 0.1,1x1x1 ]' which is default).
+ * @param denoise_anatomical_images Denoise anatomical images (1) or not (0) (default = 1).
+ * @param posterior_formulation Posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.  Choose the latter if you want to use the distance priors, see also the -l option for label propagation control (default = 'Socrates[ 1 ]').
+ * @param label_propagation Incorporate a distance prior into the 'Aristotle' posterior formulation. Should be of the form 'label[ lambda,boundaryProbability ]' where label is a value of 1,2,3,... denoting label ID. The label probability for anything outside the current label
+
+  = boundaryProbability * exp( -lambda * distanceFromBoundary )
+
+Intuitively, smaller lambda values will increase the spatial capture range of the distance prior. To apply to all label values, simply omit specifying the label, i.e. -l '[ lambda,boundaryProbability ]'.
+ * @param posterior_label_for_n4_weight_mask Which posterior probability image should be used to define the N4 weight mask. Can also specify multiple posteriors in which case the chosen posteriors are combined.
+ * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+ * @param keep_temporary_files Keep temporary files on disk (1) or delete them (0) (default = 0).
+ * @param use_random_seeding Use random number generated from system clock in Atropos (default = 1).
+ * @param atropos_segmentation_prior_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+ * @param n4_convergence Convergence parameters for N4, see '-c' option in N4BiasFieldCorrection (default = [50x50x50x50,0.0000001]).
+ * @param n4_shrink_factor Shrink factor for N4 (default = 4).
+ * @param n4_bspline_params N4 b-spline specification, see '-b' option in N4BiasFieldCorrection (default = [200,0,0,0]).
+ * @param atropos_segmentation_icm ICM parameters for segmentation, see '-g' option in Atropos (default = [1,1]).
+ * @param atropos_segmentation_use_euclidean_distance Use euclidean distances in distance prior formulation (1) or not (0), see Atropos usage for details (default = 1).
+ * @param test_debug_mode If > 0, attempts to continue after errors.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_atropos_n4_sh_params(
     image_dimension: 2 | 3,
     input_image: InputPathType,
@@ -176,41 +209,8 @@ function ants_atropos_n4_sh_params(
     atropos_segmentation_use_euclidean_distance: 0 | 1 | null = null,
     test_debug_mode: number | null = null,
 ): AntsAtroposN4ShParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension 2 or 3, for 2- or 3-dimensional image.
-     * @param input_image Anatomical image, typically T1. If more than one anatomical image is specified, subsequent images are also used during the segmentation process.
-     * @param mask_image Binary mask defining the region of interest.
-     * @param number_of_classes Number of classes defining the segmentation.
-     * @param output_prefix The following images are created: {output_prefix}N4Corrected.{output_suffix}, {output_prefix}Segmentation.{output_suffix}, {output_prefix}SegmentationPosteriors.{output_suffix}
-     * @param segmentation_priors Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
-     * @param max_n4_atropos_iterations Maximum number of (outer loop) iterations between N4 <-> Atropos (default = 15).
-     * @param max_atropos_iterations Maximum number of (inner loop) iterations in Atropos (default = 3).
-     * @param mrf Specifies MRF prior (of the form '[ weight,neighborhood ]', e.g. '[ 0.1,1x1x1 ]' which is default).
-     * @param denoise_anatomical_images Denoise anatomical images (1) or not (0) (default = 1).
-     * @param posterior_formulation Posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.  Choose the latter if you want to use the distance priors, see also the -l option for label propagation control (default = 'Socrates[ 1 ]').
-     * @param label_propagation Incorporate a distance prior into the 'Aristotle' posterior formulation. Should be of the form 'label[ lambda,boundaryProbability ]' where label is a value of 1,2,3,... denoting label ID. The label probability for anything outside the current label
-
-  = boundaryProbability * exp( -lambda * distanceFromBoundary )
-
-Intuitively, smaller lambda values will increase the spatial capture range of the distance prior. To apply to all label values, simply omit specifying the label, i.e. -l '[ lambda,boundaryProbability ]'.
-     * @param posterior_label_for_n4_weight_mask Which posterior probability image should be used to define the N4 weight mask. Can also specify multiple posteriors in which case the chosen posteriors are combined.
-     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
-     * @param keep_temporary_files Keep temporary files on disk (1) or delete them (0) (default = 0).
-     * @param use_random_seeding Use random number generated from system clock in Atropos (default = 1).
-     * @param atropos_segmentation_prior_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
-     * @param n4_convergence Convergence parameters for N4, see '-c' option in N4BiasFieldCorrection (default = [50x50x50x50,0.0000001]).
-     * @param n4_shrink_factor Shrink factor for N4 (default = 4).
-     * @param n4_bspline_params N4 b-spline specification, see '-b' option in N4BiasFieldCorrection (default = [200,0,0,0]).
-     * @param atropos_segmentation_icm ICM parameters for segmentation, see '-g' option in Atropos (default = [1,1]).
-     * @param atropos_segmentation_use_euclidean_distance Use euclidean distances in distance prior formulation (1) or not (0), see Atropos usage for details (default = 1).
-     * @param test_debug_mode If > 0, attempts to continue after errors.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsAtroposN4.sh" as const,
+        "@type": "ants.antsAtroposN4.sh" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "mask_image": mask_image,
@@ -273,18 +273,18 @@ Intuitively, smaller lambda values will increase the spatial capture range of th
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_atropos_n4_sh_cargs(
     params: AntsAtroposN4ShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsAtroposN4.sh");
     cargs.push(
@@ -321,7 +321,7 @@ function ants_atropos_n4_sh_cargs(
     }
     cargs.push(
         "-p",
-        ...dynCargs((params["segmentation_priors"] ?? null).__STYXTYPE__)((params["segmentation_priors"] ?? null), execution)
+        ...dynCargs((params["segmentation_priors"] ?? null)["@type"])((params["segmentation_priors"] ?? null), execution)
     );
     if ((params["mrf"] ?? null) !== null) {
         cargs.push(
@@ -417,18 +417,18 @@ function ants_atropos_n4_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_atropos_n4_sh_outputs(
     params: AntsAtroposN4ShParameters,
     execution: Execution,
 ): AntsAtroposN4ShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsAtroposN4ShOutputs = {
         root: execution.outputFile("."),
         n4_corrected: execution.outputFile([(params["output_prefix"] ?? null), "N4Corrected.[OUTPUT_SUFFIX]"].join('')),
@@ -439,22 +439,22 @@ function ants_atropos_n4_sh_outputs(
 }
 
 
+/**
+ * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsAtroposN4ShOutputs`).
+ */
 function ants_atropos_n4_sh_execute(
     params: AntsAtroposN4ShParameters,
     execution: Execution,
 ): AntsAtroposN4ShOutputs {
-    /**
-     * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsAtroposN4ShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_atropos_n4_sh_cargs(params, execution)
     const ret = ants_atropos_n4_sh_outputs(params, execution)
@@ -463,6 +463,44 @@ function ants_atropos_n4_sh_execute(
 }
 
 
+/**
+ * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension 2 or 3, for 2- or 3-dimensional image.
+ * @param input_image Anatomical image, typically T1. If more than one anatomical image is specified, subsequent images are also used during the segmentation process.
+ * @param mask_image Binary mask defining the region of interest.
+ * @param number_of_classes Number of classes defining the segmentation.
+ * @param output_prefix The following images are created: {output_prefix}N4Corrected.{output_suffix}, {output_prefix}Segmentation.{output_suffix}, {output_prefix}SegmentationPosteriors.{output_suffix}
+ * @param segmentation_priors Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
+ * @param max_n4_atropos_iterations Maximum number of (outer loop) iterations between N4 <-> Atropos (default = 15).
+ * @param max_atropos_iterations Maximum number of (inner loop) iterations in Atropos (default = 3).
+ * @param mrf Specifies MRF prior (of the form '[ weight,neighborhood ]', e.g. '[ 0.1,1x1x1 ]' which is default).
+ * @param denoise_anatomical_images Denoise anatomical images (1) or not (0) (default = 1).
+ * @param posterior_formulation Posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.  Choose the latter if you want to use the distance priors, see also the -l option for label propagation control (default = 'Socrates[ 1 ]').
+ * @param label_propagation Incorporate a distance prior into the 'Aristotle' posterior formulation. Should be of the form 'label[ lambda,boundaryProbability ]' where label is a value of 1,2,3,... denoting label ID. The label probability for anything outside the current label
+
+  = boundaryProbability * exp( -lambda * distanceFromBoundary )
+
+Intuitively, smaller lambda values will increase the spatial capture range of the distance prior. To apply to all label values, simply omit specifying the label, i.e. -l '[ lambda,boundaryProbability ]'.
+ * @param posterior_label_for_n4_weight_mask Which posterior probability image should be used to define the N4 weight mask. Can also specify multiple posteriors in which case the chosen posteriors are combined.
+ * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+ * @param keep_temporary_files Keep temporary files on disk (1) or delete them (0) (default = 0).
+ * @param use_random_seeding Use random number generated from system clock in Atropos (default = 1).
+ * @param atropos_segmentation_prior_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+ * @param n4_convergence Convergence parameters for N4, see '-c' option in N4BiasFieldCorrection (default = [50x50x50x50,0.0000001]).
+ * @param n4_shrink_factor Shrink factor for N4 (default = 4).
+ * @param n4_bspline_params N4 b-spline specification, see '-b' option in N4BiasFieldCorrection (default = [200,0,0,0]).
+ * @param atropos_segmentation_icm ICM parameters for segmentation, see '-g' option in Atropos (default = [1,1]).
+ * @param atropos_segmentation_use_euclidean_distance Use euclidean distances in distance prior formulation (1) or not (0), see Atropos usage for details (default = 1).
+ * @param test_debug_mode If > 0, attempts to continue after errors.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsAtroposN4ShOutputs`).
+ */
 function ants_atropos_n4_sh(
     image_dimension: 2 | 3,
     input_image: InputPathType,
@@ -489,44 +527,6 @@ function ants_atropos_n4_sh(
     test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsAtroposN4ShOutputs {
-    /**
-     * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension 2 or 3, for 2- or 3-dimensional image.
-     * @param input_image Anatomical image, typically T1. If more than one anatomical image is specified, subsequent images are also used during the segmentation process.
-     * @param mask_image Binary mask defining the region of interest.
-     * @param number_of_classes Number of classes defining the segmentation.
-     * @param output_prefix The following images are created: {output_prefix}N4Corrected.{output_suffix}, {output_prefix}Segmentation.{output_suffix}, {output_prefix}SegmentationPosteriors.{output_suffix}
-     * @param segmentation_priors Prior probability images initializing the segmentation. Specified using c-style formatting, e.g. -p labelsPriors%02d.nii.gz. If this is not specified, k-means initialization is used instead.
-     * @param max_n4_atropos_iterations Maximum number of (outer loop) iterations between N4 <-> Atropos (default = 15).
-     * @param max_atropos_iterations Maximum number of (inner loop) iterations in Atropos (default = 3).
-     * @param mrf Specifies MRF prior (of the form '[ weight,neighborhood ]', e.g. '[ 0.1,1x1x1 ]' which is default).
-     * @param denoise_anatomical_images Denoise anatomical images (1) or not (0) (default = 1).
-     * @param posterior_formulation Posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.  Choose the latter if you want to use the distance priors, see also the -l option for label propagation control (default = 'Socrates[ 1 ]').
-     * @param label_propagation Incorporate a distance prior into the 'Aristotle' posterior formulation. Should be of the form 'label[ lambda,boundaryProbability ]' where label is a value of 1,2,3,... denoting label ID. The label probability for anything outside the current label
-
-  = boundaryProbability * exp( -lambda * distanceFromBoundary )
-
-Intuitively, smaller lambda values will increase the spatial capture range of the distance prior. To apply to all label values, simply omit specifying the label, i.e. -l '[ lambda,boundaryProbability ]'.
-     * @param posterior_label_for_n4_weight_mask Which posterior probability image should be used to define the N4 weight mask. Can also specify multiple posteriors in which case the chosen posteriors are combined.
-     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
-     * @param keep_temporary_files Keep temporary files on disk (1) or delete them (0) (default = 0).
-     * @param use_random_seeding Use random number generated from system clock in Atropos (default = 1).
-     * @param atropos_segmentation_prior_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
-     * @param n4_convergence Convergence parameters for N4, see '-c' option in N4BiasFieldCorrection (default = [50x50x50x50,0.0000001]).
-     * @param n4_shrink_factor Shrink factor for N4 (default = 4).
-     * @param n4_bspline_params N4 b-spline specification, see '-b' option in N4BiasFieldCorrection (default = [200,0,0,0]).
-     * @param atropos_segmentation_icm ICM parameters for segmentation, see '-g' option in Atropos (default = [1,1]).
-     * @param atropos_segmentation_use_euclidean_distance Use euclidean distances in distance prior formulation (1) or not (0), see Atropos usage for details (default = 1).
-     * @param test_debug_mode If > 0, attempts to continue after errors.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsAtroposN4ShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_ATROPOS_N4_SH_METADATA);
     const params = ants_atropos_n4_sh_params(image_dimension, input_image, mask_image, number_of_classes, output_prefix, segmentation_priors, max_n4_atropos_iterations, max_atropos_iterations, mrf, denoise_anatomical_images, posterior_formulation, label_propagation, posterior_label_for_n4_weight_mask, image_file_suffix, keep_temporary_files, use_random_seeding, atropos_segmentation_prior_weight, n4_convergence, n4_shrink_factor, n4_bspline_params, atropos_segmentation_icm, atropos_segmentation_use_euclidean_distance, test_debug_mode)
@@ -540,6 +540,10 @@ export {
       AntsAtroposN4ShParameters,
       AntsAtroposN4ShSegmentationPriorsParameters,
       ants_atropos_n4_sh,
+      ants_atropos_n4_sh_cargs,
+      ants_atropos_n4_sh_execute,
+      ants_atropos_n4_sh_outputs,
       ants_atropos_n4_sh_params,
+      ants_atropos_n4_sh_segmentation_priors_cargs,
       ants_atropos_n4_sh_segmentation_priors_params,
 };

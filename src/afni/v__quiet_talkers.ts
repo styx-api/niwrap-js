@@ -12,7 +12,7 @@ const V__QUIET_TALKERS_METADATA: Metadata = {
 
 
 interface VQuietTalkersParameters {
-    "__STYXTYPE__": "@Quiet_Talkers";
+    "@type": "afni.@Quiet_Talkers";
     "sudo": boolean;
     "prog"?: Array<string> | null | undefined;
     "npb_val"?: Array<number> | null | undefined;
@@ -24,33 +24,33 @@ interface VQuietTalkersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Quiet_Talkers": v__quiet_talkers_cargs,
+        "afni.@Quiet_Talkers": v__quiet_talkers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface VQuietTalkersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sudo Invoke higher powers to kill processes that you do not own
+ * @param prog Instead of the default program list, only kill the specified program. You can use multiple -prog options
+ * @param npb_val Kill those programs using NIML port block NV
+ * @param npb_range Kill those using NIML port blocks between NV0 and NV1
+ * @param pif_key Kill those programs that have a string matching KEY_STRING in their commandline
+ * @param no_npb Kill any program in the list regardless of -npb options or -pif
+ * @param list Just list process numbers, don't run kill command
+ * @param quiet Do it quietly
+ *
+ * @returns Parameter dictionary
+ */
 function v__quiet_talkers_params(
     sudo: boolean = false,
     prog: Array<string> | null = null,
@@ -80,22 +94,8 @@ function v__quiet_talkers_params(
     list: boolean = false,
     quiet: boolean = false,
 ): VQuietTalkersParameters {
-    /**
-     * Build parameters.
-    
-     * @param sudo Invoke higher powers to kill processes that you do not own
-     * @param prog Instead of the default program list, only kill the specified program. You can use multiple -prog options
-     * @param npb_val Kill those programs using NIML port block NV
-     * @param npb_range Kill those using NIML port blocks between NV0 and NV1
-     * @param pif_key Kill those programs that have a string matching KEY_STRING in their commandline
-     * @param no_npb Kill any program in the list regardless of -npb options or -pif
-     * @param list Just list process numbers, don't run kill command
-     * @param quiet Do it quietly
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Quiet_Talkers" as const,
+        "@type": "afni.@Quiet_Talkers" as const,
         "sudo": sudo,
         "no_npb": no_npb,
         "list": list,
@@ -117,18 +117,18 @@ function v__quiet_talkers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__quiet_talkers_cargs(
     params: VQuietTalkersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Quiet_Talkers");
     if ((params["sudo"] ?? null)) {
@@ -171,18 +171,18 @@ function v__quiet_talkers_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__quiet_talkers_outputs(
     params: VQuietTalkersParameters,
     execution: Execution,
 ): VQuietTalkersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VQuietTalkersOutputs = {
         root: execution.outputFile("."),
     };
@@ -190,22 +190,22 @@ function v__quiet_talkers_outputs(
 }
 
 
+/**
+ * A script to find and kill AFNI processes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
+ */
 function v__quiet_talkers_execute(
     params: VQuietTalkersParameters,
     execution: Execution,
 ): VQuietTalkersOutputs {
-    /**
-     * A script to find and kill AFNI processes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__quiet_talkers_cargs(params, execution)
     const ret = v__quiet_talkers_outputs(params, execution)
@@ -214,6 +214,25 @@ function v__quiet_talkers_execute(
 }
 
 
+/**
+ * A script to find and kill AFNI processes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param sudo Invoke higher powers to kill processes that you do not own
+ * @param prog Instead of the default program list, only kill the specified program. You can use multiple -prog options
+ * @param npb_val Kill those programs using NIML port block NV
+ * @param npb_range Kill those using NIML port blocks between NV0 and NV1
+ * @param pif_key Kill those programs that have a string matching KEY_STRING in their commandline
+ * @param no_npb Kill any program in the list regardless of -npb options or -pif
+ * @param list Just list process numbers, don't run kill command
+ * @param quiet Do it quietly
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
+ */
 function v__quiet_talkers(
     sudo: boolean = false,
     prog: Array<string> | null = null,
@@ -225,25 +244,6 @@ function v__quiet_talkers(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): VQuietTalkersOutputs {
-    /**
-     * A script to find and kill AFNI processes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param sudo Invoke higher powers to kill processes that you do not own
-     * @param prog Instead of the default program list, only kill the specified program. You can use multiple -prog options
-     * @param npb_val Kill those programs using NIML port block NV
-     * @param npb_range Kill those using NIML port blocks between NV0 and NV1
-     * @param pif_key Kill those programs that have a string matching KEY_STRING in their commandline
-     * @param no_npb Kill any program in the list regardless of -npb options or -pif
-     * @param list Just list process numbers, don't run kill command
-     * @param quiet Do it quietly
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__QUIET_TALKERS_METADATA);
     const params = v__quiet_talkers_params(sudo, prog, npb_val, npb_range, pif_key, no_npb, list, quiet)
@@ -256,5 +256,8 @@ export {
       VQuietTalkersParameters,
       V__QUIET_TALKERS_METADATA,
       v__quiet_talkers,
+      v__quiet_talkers_cargs,
+      v__quiet_talkers_execute,
+      v__quiet_talkers_outputs,
       v__quiet_talkers_params,
 };

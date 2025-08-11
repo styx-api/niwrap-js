@@ -12,14 +12,14 @@ const PEAKS2FIXEL_METADATA: Metadata = {
 
 
 interface Peaks2fixelConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.peaks2fixel.config";
     "key": string;
     "value": string;
 }
 
 
 interface Peaks2fixelParameters {
-    "__STYXTYPE__": "peaks2fixel";
+    "@type": "mrtrix.peaks2fixel";
     "dataname"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface Peaks2fixelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "peaks2fixel": peaks2fixel_cargs,
-        "config": peaks2fixel_config_cargs,
+        "mrtrix.peaks2fixel": peaks2fixel_cargs,
+        "mrtrix.peaks2fixel.config": peaks2fixel_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "peaks2fixel": peaks2fixel_outputs,
+        "mrtrix.peaks2fixel": peaks2fixel_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function peaks2fixel_config_params(
     key: string,
     value: string,
 ): Peaks2fixelConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.peaks2fixel.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function peaks2fixel_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function peaks2fixel_config_cargs(
     params: Peaks2fixelConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface Peaks2fixelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directions the input directions image; each volume corresponds to the x, y & z component of each direction vector in turn.
+ * @param fixels the output fixel directory.
+ * @param dataname the name of the output fixel data file encoding peak amplitudes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function peaks2fixel_params(
     directions: InputPathType,
     fixels: string,
@@ -140,25 +157,8 @@ function peaks2fixel_params(
     help: boolean = false,
     version: boolean = false,
 ): Peaks2fixelParameters {
-    /**
-     * Build parameters.
-    
-     * @param directions the input directions image; each volume corresponds to the x, y & z component of each direction vector in turn.
-     * @param fixels the output fixel directory.
-     * @param dataname the name of the output fixel data file encoding peak amplitudes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "peaks2fixel" as const,
+        "@type": "mrtrix.peaks2fixel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -181,18 +181,18 @@ function peaks2fixel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function peaks2fixel_cargs(
     params: Peaks2fixelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("peaks2fixel");
     if ((params["dataname"] ?? null) !== null) {
@@ -220,7 +220,7 @@ function peaks2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -234,18 +234,18 @@ function peaks2fixel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function peaks2fixel_outputs(
     params: Peaks2fixelParameters,
     execution: Execution,
 ): Peaks2fixelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Peaks2fixelOutputs = {
         root: execution.outputFile("."),
         fixels: execution.outputFile([(params["fixels"] ?? null)].join('')),
@@ -254,28 +254,28 @@ function peaks2fixel_outputs(
 }
 
 
+/**
+ * Convert peak directions image to a fixel directory.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
+ */
 function peaks2fixel_execute(
     params: Peaks2fixelParameters,
     execution: Execution,
 ): Peaks2fixelOutputs {
-    /**
-     * Convert peak directions image to a fixel directory.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
-     */
     params = execution.params(params)
     const cargs = peaks2fixel_cargs(params, execution)
     const ret = peaks2fixel_outputs(params, execution)
@@ -284,6 +284,34 @@ function peaks2fixel_execute(
 }
 
 
+/**
+ * Convert peak directions image to a fixel directory.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param directions the input directions image; each volume corresponds to the x, y & z component of each direction vector in turn.
+ * @param fixels the output fixel directory.
+ * @param dataname the name of the output fixel data file encoding peak amplitudes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
+ */
 function peaks2fixel(
     directions: InputPathType,
     fixels: string,
@@ -298,34 +326,6 @@ function peaks2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Peaks2fixelOutputs {
-    /**
-     * Convert peak directions image to a fixel directory.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param directions the input directions image; each volume corresponds to the x, y & z component of each direction vector in turn.
-     * @param fixels the output fixel directory.
-     * @param dataname the name of the output fixel data file encoding peak amplitudes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PEAKS2FIXEL_METADATA);
     const params = peaks2fixel_params(directions, fixels, dataname, info, quiet, debug, force, nthreads, config, help, version)
@@ -339,6 +339,10 @@ export {
       Peaks2fixelOutputs,
       Peaks2fixelParameters,
       peaks2fixel,
+      peaks2fixel_cargs,
+      peaks2fixel_config_cargs,
       peaks2fixel_config_params,
+      peaks2fixel_execute,
+      peaks2fixel_outputs,
       peaks2fixel_params,
 };

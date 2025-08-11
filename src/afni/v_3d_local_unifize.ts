@@ -12,7 +12,7 @@ const V_3D_LOCAL_UNIFIZE_METADATA: Metadata = {
 
 
 interface V3dLocalUnifizeParameters {
-    "__STYXTYPE__": "3dLocalUnifize";
+    "@type": "afni.3dLocalUnifize";
     "input": InputPathType;
     "output": string;
     "working_dir"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface V3dLocalUnifizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLocalUnifize": v_3d_local_unifize_cargs,
+        "afni.3dLocalUnifize": v_3d_local_unifize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLocalUnifize": v_3d_local_unifize_outputs,
+        "afni.3dLocalUnifize": v_3d_local_unifize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dLocalUnifizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input dataset
+ * @param output Output dataset name, including path
+ * @param working_dir Name of temporary working directory (def: __wdir_LocalUni_, plus a random alphanumeric str)
+ * @param echo Run this program very verbosely (default: false)
+ * @param no_clean Do not remove the working directory (default: remove it)
+ * @param local_rad The spherical neighborhood's radius for the 3dLocalStat step (default: -3)
+ * @param local_perc The percentile used in the 3dLocalStat step, generating the scaling volume (default: 50)
+ * @param local_mask Provide the masking option for the 3dLocalStat step; to remove any masking, put 'None' as the option value (default: "-automask")
+ * @param filter_thr Ceiling on values in the final, scaled dataset; values <=0 turn off this final filtering (default: 1.5)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_local_unifize_params(
     input: InputPathType,
     output: string,
@@ -87,23 +102,8 @@ function v_3d_local_unifize_params(
     local_mask: string | null = null,
     filter_thr: number | null = null,
 ): V3dLocalUnifizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input dataset
-     * @param output Output dataset name, including path
-     * @param working_dir Name of temporary working directory (def: __wdir_LocalUni_, plus a random alphanumeric str)
-     * @param echo Run this program very verbosely (default: false)
-     * @param no_clean Do not remove the working directory (default: remove it)
-     * @param local_rad The spherical neighborhood's radius for the 3dLocalStat step (default: -3)
-     * @param local_perc The percentile used in the 3dLocalStat step, generating the scaling volume (default: 50)
-     * @param local_mask Provide the masking option for the 3dLocalStat step; to remove any masking, put 'None' as the option value (default: "-automask")
-     * @param filter_thr Ceiling on values in the final, scaled dataset; values <=0 turn off this final filtering (default: 1.5)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLocalUnifize" as const,
+        "@type": "afni.3dLocalUnifize" as const,
         "input": input,
         "output": output,
         "echo": echo,
@@ -128,18 +128,18 @@ function v_3d_local_unifize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_local_unifize_cargs(
     params: V3dLocalUnifizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLocalUnifize");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -187,18 +187,18 @@ function v_3d_local_unifize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_local_unifize_outputs(
     params: V3dLocalUnifizeParameters,
     execution: Execution,
 ): V3dLocalUnifizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLocalUnifizeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -207,22 +207,22 @@ function v_3d_local_unifize_outputs(
 }
 
 
+/**
+ * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalUnifizeOutputs`).
+ */
 function v_3d_local_unifize_execute(
     params: V3dLocalUnifizeParameters,
     execution: Execution,
 ): V3dLocalUnifizeOutputs {
-    /**
-     * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalUnifizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_local_unifize_cargs(params, execution)
     const ret = v_3d_local_unifize_outputs(params, execution)
@@ -231,6 +231,26 @@ function v_3d_local_unifize_execute(
 }
 
 
+/**
+ * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input dataset
+ * @param output Output dataset name, including path
+ * @param working_dir Name of temporary working directory (def: __wdir_LocalUni_, plus a random alphanumeric str)
+ * @param echo Run this program very verbosely (default: false)
+ * @param no_clean Do not remove the working directory (default: remove it)
+ * @param local_rad The spherical neighborhood's radius for the 3dLocalStat step (default: -3)
+ * @param local_perc The percentile used in the 3dLocalStat step, generating the scaling volume (default: 50)
+ * @param local_mask Provide the masking option for the 3dLocalStat step; to remove any masking, put 'None' as the option value (default: "-automask")
+ * @param filter_thr Ceiling on values in the final, scaled dataset; values <=0 turn off this final filtering (default: 1.5)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalUnifizeOutputs`).
+ */
 function v_3d_local_unifize(
     input: InputPathType,
     output: string,
@@ -243,26 +263,6 @@ function v_3d_local_unifize(
     filter_thr: number | null = null,
     runner: Runner | null = null,
 ): V3dLocalUnifizeOutputs {
-    /**
-     * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input dataset
-     * @param output Output dataset name, including path
-     * @param working_dir Name of temporary working directory (def: __wdir_LocalUni_, plus a random alphanumeric str)
-     * @param echo Run this program very verbosely (default: false)
-     * @param no_clean Do not remove the working directory (default: remove it)
-     * @param local_rad The spherical neighborhood's radius for the 3dLocalStat step (default: -3)
-     * @param local_perc The percentile used in the 3dLocalStat step, generating the scaling volume (default: 50)
-     * @param local_mask Provide the masking option for the 3dLocalStat step; to remove any masking, put 'None' as the option value (default: "-automask")
-     * @param filter_thr Ceiling on values in the final, scaled dataset; values <=0 turn off this final filtering (default: 1.5)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalUnifizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_UNIFIZE_METADATA);
     const params = v_3d_local_unifize_params(input, output, working_dir, echo, no_clean, local_rad, local_perc, local_mask, filter_thr)
@@ -275,5 +275,8 @@ export {
       V3dLocalUnifizeParameters,
       V_3D_LOCAL_UNIFIZE_METADATA,
       v_3d_local_unifize,
+      v_3d_local_unifize_cargs,
+      v_3d_local_unifize_execute,
+      v_3d_local_unifize_outputs,
       v_3d_local_unifize_params,
 };

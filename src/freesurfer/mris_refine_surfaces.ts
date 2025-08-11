@@ -12,7 +12,7 @@ const MRIS_REFINE_SURFACES_METADATA: Metadata = {
 
 
 interface MrisRefineSurfacesParameters {
-    "__STYXTYPE__": "mris_refine_surfaces";
+    "@type": "freesurfer.mris_refine_surfaces";
     "subject_name": string;
     "hemi": string;
     "hires_volume": string;
@@ -24,35 +24,35 @@ interface MrisRefineSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_refine_surfaces": mris_refine_surfaces_cargs,
+        "freesurfer.mris_refine_surfaces": mris_refine_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_refine_surfaces": mris_refine_surfaces_outputs,
+        "freesurfer.mris_refine_surfaces": mris_refine_surfaces_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface MrisRefineSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name The name of the subject
+ * @param hemi The hemisphere to process ('lh' for left hemisphere, 'rh' for right hemisphere)
+ * @param hires_volume The high-resolution volume filename
+ * @param label_file The label file specifying the region to refine
+ * @param low_to_hires_xfm The optional low to high resolution transform file
+ * @param sdir Specify the SUBJECTS_DIR
+ * @param use_mgz Use .mgz volumes
+ * @param suffix Add specified suffix to the final surfaces
+ *
+ * @returns Parameter dictionary
+ */
 function mris_refine_surfaces_params(
     subject_name: string,
     hemi: string,
@@ -89,22 +103,8 @@ function mris_refine_surfaces_params(
     use_mgz: boolean = false,
     suffix: string | null = null,
 ): MrisRefineSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name The name of the subject
-     * @param hemi The hemisphere to process ('lh' for left hemisphere, 'rh' for right hemisphere)
-     * @param hires_volume The high-resolution volume filename
-     * @param label_file The label file specifying the region to refine
-     * @param low_to_hires_xfm The optional low to high resolution transform file
-     * @param sdir Specify the SUBJECTS_DIR
-     * @param use_mgz Use .mgz volumes
-     * @param suffix Add specified suffix to the final surfaces
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_refine_surfaces" as const,
+        "@type": "freesurfer.mris_refine_surfaces" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "hires_volume": hires_volume,
@@ -124,18 +124,18 @@ function mris_refine_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_refine_surfaces_cargs(
     params: MrisRefineSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_refine_surfaces");
     cargs.push((params["subject_name"] ?? null));
@@ -164,18 +164,18 @@ function mris_refine_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_refine_surfaces_outputs(
     params: MrisRefineSurfacesParameters,
     execution: Execution,
 ): MrisRefineSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRefineSurfacesOutputs = {
         root: execution.outputFile("."),
         pial_surface: execution.outputFile(["$(SUBJECTS_DIR)/", (params["subject_name"] ?? null), "/surf/", (params["hemi"] ?? null), ".pialhires"].join('')),
@@ -185,22 +185,22 @@ function mris_refine_surfaces_outputs(
 }
 
 
+/**
+ * Refines cortical surfaces around the region specified by the label file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
+ */
 function mris_refine_surfaces_execute(
     params: MrisRefineSurfacesParameters,
     execution: Execution,
 ): MrisRefineSurfacesOutputs {
-    /**
-     * Refines cortical surfaces around the region specified by the label file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_refine_surfaces_cargs(params, execution)
     const ret = mris_refine_surfaces_outputs(params, execution)
@@ -209,6 +209,25 @@ function mris_refine_surfaces_execute(
 }
 
 
+/**
+ * Refines cortical surfaces around the region specified by the label file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name The name of the subject
+ * @param hemi The hemisphere to process ('lh' for left hemisphere, 'rh' for right hemisphere)
+ * @param hires_volume The high-resolution volume filename
+ * @param label_file The label file specifying the region to refine
+ * @param low_to_hires_xfm The optional low to high resolution transform file
+ * @param sdir Specify the SUBJECTS_DIR
+ * @param use_mgz Use .mgz volumes
+ * @param suffix Add specified suffix to the final surfaces
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
+ */
 function mris_refine_surfaces(
     subject_name: string,
     hemi: string,
@@ -220,25 +239,6 @@ function mris_refine_surfaces(
     suffix: string | null = null,
     runner: Runner | null = null,
 ): MrisRefineSurfacesOutputs {
-    /**
-     * Refines cortical surfaces around the region specified by the label file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name The name of the subject
-     * @param hemi The hemisphere to process ('lh' for left hemisphere, 'rh' for right hemisphere)
-     * @param hires_volume The high-resolution volume filename
-     * @param label_file The label file specifying the region to refine
-     * @param low_to_hires_xfm The optional low to high resolution transform file
-     * @param sdir Specify the SUBJECTS_DIR
-     * @param use_mgz Use .mgz volumes
-     * @param suffix Add specified suffix to the final surfaces
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REFINE_SURFACES_METADATA);
     const params = mris_refine_surfaces_params(subject_name, hemi, hires_volume, label_file, low_to_hires_xfm, sdir, use_mgz, suffix)
@@ -251,5 +251,8 @@ export {
       MrisRefineSurfacesOutputs,
       MrisRefineSurfacesParameters,
       mris_refine_surfaces,
+      mris_refine_surfaces_cargs,
+      mris_refine_surfaces_execute,
+      mris_refine_surfaces_outputs,
       mris_refine_surfaces_params,
 };

@@ -12,7 +12,7 @@ const V_3D_MEAN_METADATA: Metadata = {
 
 
 interface V3dMeanParameters {
-    "__STYXTYPE__": "3dMean";
+    "@type": "afni.3dMean";
     "input_files": Array<InputPathType>;
     "verbose": boolean;
     "prefix"?: string | null | undefined;
@@ -35,35 +35,35 @@ interface V3dMeanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMean": v_3d_mean_cargs,
+        "afni.3dMean": v_3d_mean_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMean": v_3d_mean_outputs,
+        "afni.3dMean": v_3d_mean_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,31 @@ interface V3dMeanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets
+ * @param verbose Print out some information along the way
+ * @param prefix Sets the prefix of the output dataset
+ * @param datum Sets the datum of the output dataset
+ * @param fscale Force scaling of the output to the maximum integer range
+ * @param gscale Force scaling of the output to the maximum integer range, with uniform scaling factor for each sub-brick
+ * @param nscale Don't do any scaling on output to byte or short datasets. Only use if you want the output dataset to be integer-valued.
+ * @param non_zero Use only non-zero values for calculation of mean, min, max, sum, squares
+ * @param stdev Calculate the standard deviation, sqrt(variance), instead of the mean (cannot be used with -sqr, -sum or -non_zero)
+ * @param sqr Average the squares, instead of the values
+ * @param sum Just take the sum (don't divide by number of datasets)
+ * @param count Compute only the count of non-zero voxels
+ * @param max Find the maximum at each voxel
+ * @param min Find the minimum at each voxel
+ * @param absmax Find maximum absolute value at each voxel
+ * @param signed_absmax Find extremes with maximum absolute value but preserve sign
+ * @param mask_inter Create a simple intersection mask
+ * @param mask_union Create a simple union mask
+ * @param weightset Sum of N dsets will be weighted by N volume WSET. This weight dataset must be of type float.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mean_params(
     input_files: Array<InputPathType>,
     verbose: boolean = false,
@@ -107,33 +132,8 @@ function v_3d_mean_params(
     mask_union: boolean = false,
     weightset: InputPathType | null = null,
 ): V3dMeanParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets
-     * @param verbose Print out some information along the way
-     * @param prefix Sets the prefix of the output dataset
-     * @param datum Sets the datum of the output dataset
-     * @param fscale Force scaling of the output to the maximum integer range
-     * @param gscale Force scaling of the output to the maximum integer range, with uniform scaling factor for each sub-brick
-     * @param nscale Don't do any scaling on output to byte or short datasets. Only use if you want the output dataset to be integer-valued.
-     * @param non_zero Use only non-zero values for calculation of mean, min, max, sum, squares
-     * @param stdev Calculate the standard deviation, sqrt(variance), instead of the mean (cannot be used with -sqr, -sum or -non_zero)
-     * @param sqr Average the squares, instead of the values
-     * @param sum Just take the sum (don't divide by number of datasets)
-     * @param count Compute only the count of non-zero voxels
-     * @param max Find the maximum at each voxel
-     * @param min Find the minimum at each voxel
-     * @param absmax Find maximum absolute value at each voxel
-     * @param signed_absmax Find extremes with maximum absolute value but preserve sign
-     * @param mask_inter Create a simple intersection mask
-     * @param mask_union Create a simple union mask
-     * @param weightset Sum of N dsets will be weighted by N volume WSET. This weight dataset must be of type float.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMean" as const,
+        "@type": "afni.3dMean" as const,
         "input_files": input_files,
         "verbose": verbose,
         "fscale": fscale,
@@ -164,18 +164,18 @@ function v_3d_mean_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mean_cargs(
     params: V3dMeanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMean");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -246,18 +246,18 @@ function v_3d_mean_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mean_outputs(
     params: V3dMeanParameters,
     execution: Execution,
 ): V3dMeanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMeanOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "<+optional_extension>"].join('')) : null,
@@ -266,22 +266,22 @@ function v_3d_mean_outputs(
 }
 
 
+/**
+ * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
+ */
 function v_3d_mean_execute(
     params: V3dMeanParameters,
     execution: Execution,
 ): V3dMeanOutputs {
-    /**
-     * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mean_cargs(params, execution)
     const ret = v_3d_mean_outputs(params, execution)
@@ -290,6 +290,36 @@ function v_3d_mean_execute(
 }
 
 
+/**
+ * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets
+ * @param verbose Print out some information along the way
+ * @param prefix Sets the prefix of the output dataset
+ * @param datum Sets the datum of the output dataset
+ * @param fscale Force scaling of the output to the maximum integer range
+ * @param gscale Force scaling of the output to the maximum integer range, with uniform scaling factor for each sub-brick
+ * @param nscale Don't do any scaling on output to byte or short datasets. Only use if you want the output dataset to be integer-valued.
+ * @param non_zero Use only non-zero values for calculation of mean, min, max, sum, squares
+ * @param stdev Calculate the standard deviation, sqrt(variance), instead of the mean (cannot be used with -sqr, -sum or -non_zero)
+ * @param sqr Average the squares, instead of the values
+ * @param sum Just take the sum (don't divide by number of datasets)
+ * @param count Compute only the count of non-zero voxels
+ * @param max Find the maximum at each voxel
+ * @param min Find the minimum at each voxel
+ * @param absmax Find maximum absolute value at each voxel
+ * @param signed_absmax Find extremes with maximum absolute value but preserve sign
+ * @param mask_inter Create a simple intersection mask
+ * @param mask_union Create a simple union mask
+ * @param weightset Sum of N dsets will be weighted by N volume WSET. This weight dataset must be of type float.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
+ */
 function v_3d_mean(
     input_files: Array<InputPathType>,
     verbose: boolean = false,
@@ -312,36 +342,6 @@ function v_3d_mean(
     weightset: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dMeanOutputs {
-    /**
-     * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets
-     * @param verbose Print out some information along the way
-     * @param prefix Sets the prefix of the output dataset
-     * @param datum Sets the datum of the output dataset
-     * @param fscale Force scaling of the output to the maximum integer range
-     * @param gscale Force scaling of the output to the maximum integer range, with uniform scaling factor for each sub-brick
-     * @param nscale Don't do any scaling on output to byte or short datasets. Only use if you want the output dataset to be integer-valued.
-     * @param non_zero Use only non-zero values for calculation of mean, min, max, sum, squares
-     * @param stdev Calculate the standard deviation, sqrt(variance), instead of the mean (cannot be used with -sqr, -sum or -non_zero)
-     * @param sqr Average the squares, instead of the values
-     * @param sum Just take the sum (don't divide by number of datasets)
-     * @param count Compute only the count of non-zero voxels
-     * @param max Find the maximum at each voxel
-     * @param min Find the minimum at each voxel
-     * @param absmax Find maximum absolute value at each voxel
-     * @param signed_absmax Find extremes with maximum absolute value but preserve sign
-     * @param mask_inter Create a simple intersection mask
-     * @param mask_union Create a simple union mask
-     * @param weightset Sum of N dsets will be weighted by N volume WSET. This weight dataset must be of type float.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MEAN_METADATA);
     const params = v_3d_mean_params(input_files, verbose, prefix, datum, fscale, gscale, nscale, non_zero, stdev, sqr, sum, count, max, min, absmax, signed_absmax, mask_inter, mask_union, weightset)
@@ -354,5 +354,8 @@ export {
       V3dMeanParameters,
       V_3D_MEAN_METADATA,
       v_3d_mean,
+      v_3d_mean_cargs,
+      v_3d_mean_execute,
+      v_3d_mean_outputs,
       v_3d_mean_params,
 };

@@ -12,7 +12,7 @@ const MRIS_SPHERICAL_AVERAGE_METADATA: Metadata = {
 
 
 interface MrisSphericalAverageParameters {
-    "__STYXTYPE__": "mris_spherical_average";
+    "@type": "freesurfer.mris_spherical_average";
     "which": "coords" | "label" | "vals" | "curv" | "area";
     "fname": string;
     "hemi": "lh" | "rh";
@@ -30,33 +30,33 @@ interface MrisSphericalAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_spherical_average": mris_spherical_average_cargs,
+        "freesurfer.mris_spherical_average": mris_spherical_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface MrisSphericalAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param which Specifies the type, one of: coords, label, vals, curv, or area.
+ * @param fname Input file name.
+ * @param hemi Hemisphere: one of lh or rh.
+ * @param spherical_surf The spherical surface file.
+ * @param subjects List of subjects.
+ * @param output Output file or directory.
+ * @param segment Only use largest connected component of label.
+ * @param normalize Normalize output so it can be interpreted as a probability.
+ * @param orig Use <name> as original surface position; default=orig.
+ * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
+ * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
+ * @param subjects_dir Set the subjects directory.
+ * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
+ * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_spherical_average_params(
     which: "coords" | "label" | "vals" | "curv" | "area",
     fname: string,
@@ -92,28 +112,8 @@ function mris_spherical_average_params(
     average_area: boolean = false,
     summary_statistics: string | null = null,
 ): MrisSphericalAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param which Specifies the type, one of: coords, label, vals, curv, or area.
-     * @param fname Input file name.
-     * @param hemi Hemisphere: one of lh or rh.
-     * @param spherical_surf The spherical surface file.
-     * @param subjects List of subjects.
-     * @param output Output file or directory.
-     * @param segment Only use largest connected component of label.
-     * @param normalize Normalize output so it can be interpreted as a probability.
-     * @param orig Use <name> as original surface position; default=orig.
-     * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
-     * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
-     * @param subjects_dir Set the subjects directory.
-     * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
-     * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_spherical_average" as const,
+        "@type": "freesurfer.mris_spherical_average" as const,
         "which": which,
         "fname": fname,
         "hemi": hemi,
@@ -143,18 +143,18 @@ function mris_spherical_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_spherical_average_cargs(
     params: MrisSphericalAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_spherical_average");
     cargs.push((params["which"] ?? null));
@@ -206,18 +206,18 @@ function mris_spherical_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_spherical_average_outputs(
     params: MrisSphericalAverageParameters,
     execution: Execution,
 ): MrisSphericalAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSphericalAverageOutputs = {
         root: execution.outputFile("."),
     };
@@ -225,22 +225,22 @@ function mris_spherical_average_outputs(
 }
 
 
+/**
+ * This tool adds a template into an average surface in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
+ */
 function mris_spherical_average_execute(
     params: MrisSphericalAverageParameters,
     execution: Execution,
 ): MrisSphericalAverageOutputs {
-    /**
-     * This tool adds a template into an average surface in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_spherical_average_cargs(params, execution)
     const ret = mris_spherical_average_outputs(params, execution)
@@ -249,6 +249,31 @@ function mris_spherical_average_execute(
 }
 
 
+/**
+ * This tool adds a template into an average surface in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param which Specifies the type, one of: coords, label, vals, curv, or area.
+ * @param fname Input file name.
+ * @param hemi Hemisphere: one of lh or rh.
+ * @param spherical_surf The spherical surface file.
+ * @param subjects List of subjects.
+ * @param output Output file or directory.
+ * @param segment Only use largest connected component of label.
+ * @param normalize Normalize output so it can be interpreted as a probability.
+ * @param orig Use <name> as original surface position; default=orig.
+ * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
+ * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
+ * @param subjects_dir Set the subjects directory.
+ * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
+ * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
+ */
 function mris_spherical_average(
     which: "coords" | "label" | "vals" | "curv" | "area",
     fname: string,
@@ -266,31 +291,6 @@ function mris_spherical_average(
     summary_statistics: string | null = null,
     runner: Runner | null = null,
 ): MrisSphericalAverageOutputs {
-    /**
-     * This tool adds a template into an average surface in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param which Specifies the type, one of: coords, label, vals, curv, or area.
-     * @param fname Input file name.
-     * @param hemi Hemisphere: one of lh or rh.
-     * @param spherical_surf The spherical surface file.
-     * @param subjects List of subjects.
-     * @param output Output file or directory.
-     * @param segment Only use largest connected component of label.
-     * @param normalize Normalize output so it can be interpreted as a probability.
-     * @param orig Use <name> as original surface position; default=orig.
-     * @param output_subject_name Use <output subject name> as the space to write the results in instead of the last subject given.
-     * @param output_subject_dir Use <output subject dir> as the subjects dir for the output subject.
-     * @param subjects_dir Set the subjects directory.
-     * @param average_area Compute threshold for label that will give the average label approximately the average surface area.
-     * @param summary_statistics Generate summary statistics and write them into sigavg<cond #>-<hemi>.w and sigvar<cond #>-<hemi>.w.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SPHERICAL_AVERAGE_METADATA);
     const params = mris_spherical_average_params(which, fname, hemi, spherical_surf, subjects, output, segment, normalize, orig, output_subject_name, output_subject_dir, subjects_dir, average_area, summary_statistics)
@@ -303,5 +303,8 @@ export {
       MrisSphericalAverageOutputs,
       MrisSphericalAverageParameters,
       mris_spherical_average,
+      mris_spherical_average_cargs,
+      mris_spherical_average_execute,
+      mris_spherical_average_outputs,
       mris_spherical_average_params,
 };

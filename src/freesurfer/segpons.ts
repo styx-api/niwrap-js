@@ -12,7 +12,7 @@ const SEGPONS_METADATA: Metadata = {
 
 
 interface SegponsParameters {
-    "__STYXTYPE__": "segpons";
+    "@type": "freesurfer.segpons";
     "subject": string;
     "aseg": boolean;
     "apas": boolean;
@@ -22,35 +22,35 @@ interface SegponsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segpons": segpons_cargs,
+        "freesurfer.segpons": segpons_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segpons": segpons_outputs,
+        "freesurfer.segpons": segpons_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface SegponsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier.
+ * @param aseg Use and refine aseg (default, output will be aseg+pons.mgz).
+ * @param apas Use aparc+aseg.mgz (output will be apas+pons.mgz).
+ * @param seg Specify your own segmentation file.
+ * @param no_refine Do not refine when using aseg.
+ * @param pons152_mask Mask of pons in MNI152 space.
+ *
+ * @returns Parameter dictionary
+ */
 function segpons_params(
     subject: string,
     aseg: boolean = false,
@@ -81,20 +93,8 @@ function segpons_params(
     no_refine: boolean = false,
     pons152_mask: InputPathType | null = null,
 ): SegponsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier.
-     * @param aseg Use and refine aseg (default, output will be aseg+pons.mgz).
-     * @param apas Use aparc+aseg.mgz (output will be apas+pons.mgz).
-     * @param seg Specify your own segmentation file.
-     * @param no_refine Do not refine when using aseg.
-     * @param pons152_mask Mask of pons in MNI152 space.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segpons" as const,
+        "@type": "freesurfer.segpons" as const,
         "subject": subject,
         "aseg": aseg,
         "apas": apas,
@@ -110,18 +110,18 @@ function segpons_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segpons_cargs(
     params: SegponsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segpons");
     cargs.push(
@@ -153,18 +153,18 @@ function segpons_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segpons_outputs(
     params: SegponsParameters,
     execution: Execution,
 ): SegponsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegponsOutputs = {
         root: execution.outputFile("."),
         pons_output: execution.outputFile([(params["subject"] ?? null), "+pons.mgz"].join('')),
@@ -173,22 +173,22 @@ function segpons_outputs(
 }
 
 
+/**
+ * Approximate segmentation of pons using MNI152 space registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegponsOutputs`).
+ */
 function segpons_execute(
     params: SegponsParameters,
     execution: Execution,
 ): SegponsOutputs {
-    /**
-     * Approximate segmentation of pons using MNI152 space registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegponsOutputs`).
-     */
     params = execution.params(params)
     const cargs = segpons_cargs(params, execution)
     const ret = segpons_outputs(params, execution)
@@ -197,6 +197,23 @@ function segpons_execute(
 }
 
 
+/**
+ * Approximate segmentation of pons using MNI152 space registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier.
+ * @param aseg Use and refine aseg (default, output will be aseg+pons.mgz).
+ * @param apas Use aparc+aseg.mgz (output will be apas+pons.mgz).
+ * @param seg Specify your own segmentation file.
+ * @param no_refine Do not refine when using aseg.
+ * @param pons152_mask Mask of pons in MNI152 space.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegponsOutputs`).
+ */
 function segpons(
     subject: string,
     aseg: boolean = false,
@@ -206,23 +223,6 @@ function segpons(
     pons152_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): SegponsOutputs {
-    /**
-     * Approximate segmentation of pons using MNI152 space registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier.
-     * @param aseg Use and refine aseg (default, output will be aseg+pons.mgz).
-     * @param apas Use aparc+aseg.mgz (output will be apas+pons.mgz).
-     * @param seg Specify your own segmentation file.
-     * @param no_refine Do not refine when using aseg.
-     * @param pons152_mask Mask of pons in MNI152 space.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegponsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGPONS_METADATA);
     const params = segpons_params(subject, aseg, apas, seg, no_refine, pons152_mask)
@@ -235,5 +235,8 @@ export {
       SegponsOutputs,
       SegponsParameters,
       segpons,
+      segpons_cargs,
+      segpons_execute,
+      segpons_outputs,
       segpons_params,
 };

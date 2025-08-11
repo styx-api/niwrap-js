@@ -12,7 +12,7 @@ const AFNI_BATCH_R_METADATA: Metadata = {
 
 
 interface AfniBatchRParameters {
-    "__STYXTYPE__": "AFNI_Batch_R";
+    "@type": "afni.AFNI_Batch_R";
     "no_restore": boolean;
     "save_workspace": boolean;
     "no_readline": boolean;
@@ -21,33 +21,33 @@ interface AfniBatchRParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AFNI_Batch_R": afni_batch_r_cargs,
+        "afni.AFNI_Batch_R": afni_batch_r_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface AfniBatchROutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param no_restore Do not restore anything in the R workspace at startup
+ * @param save_workspace Save the workspace at the end of the script execution
+ * @param no_readline Disable reading input from the command line
+ * @param vanilla_mode Run R without saving the workspace at the end, restoring anything, reading the site file, or acting on startup files
+ * @param help Display this help message and exit
+ *
+ * @returns Parameter dictionary
+ */
 function afni_batch_r_params(
     no_restore: boolean = false,
     save_workspace: boolean = false,
@@ -74,19 +85,8 @@ function afni_batch_r_params(
     vanilla_mode: boolean = false,
     help: boolean = false,
 ): AfniBatchRParameters {
-    /**
-     * Build parameters.
-    
-     * @param no_restore Do not restore anything in the R workspace at startup
-     * @param save_workspace Save the workspace at the end of the script execution
-     * @param no_readline Disable reading input from the command line
-     * @param vanilla_mode Run R without saving the workspace at the end, restoring anything, reading the site file, or acting on startup files
-     * @param help Display this help message and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AFNI_Batch_R" as const,
+        "@type": "afni.AFNI_Batch_R" as const,
         "no_restore": no_restore,
         "save_workspace": save_workspace,
         "no_readline": no_readline,
@@ -97,18 +97,18 @@ function afni_batch_r_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_batch_r_cargs(
     params: AfniBatchRParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AFNI_Batch_R");
     cargs.push("R");
@@ -133,18 +133,18 @@ function afni_batch_r_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_batch_r_outputs(
     params: AfniBatchRParameters,
     execution: Execution,
 ): AfniBatchROutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniBatchROutputs = {
         root: execution.outputFile("."),
     };
@@ -152,22 +152,22 @@ function afni_batch_r_outputs(
 }
 
 
+/**
+ * Batch mode for executing R scripts in the AFNI environment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniBatchROutputs`).
+ */
 function afni_batch_r_execute(
     params: AfniBatchRParameters,
     execution: Execution,
 ): AfniBatchROutputs {
-    /**
-     * Batch mode for executing R scripts in the AFNI environment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniBatchROutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_batch_r_cargs(params, execution)
     const ret = afni_batch_r_outputs(params, execution)
@@ -176,6 +176,22 @@ function afni_batch_r_execute(
 }
 
 
+/**
+ * Batch mode for executing R scripts in the AFNI environment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param no_restore Do not restore anything in the R workspace at startup
+ * @param save_workspace Save the workspace at the end of the script execution
+ * @param no_readline Disable reading input from the command line
+ * @param vanilla_mode Run R without saving the workspace at the end, restoring anything, reading the site file, or acting on startup files
+ * @param help Display this help message and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniBatchROutputs`).
+ */
 function afni_batch_r(
     no_restore: boolean = false,
     save_workspace: boolean = false,
@@ -184,22 +200,6 @@ function afni_batch_r(
     help: boolean = false,
     runner: Runner | null = null,
 ): AfniBatchROutputs {
-    /**
-     * Batch mode for executing R scripts in the AFNI environment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param no_restore Do not restore anything in the R workspace at startup
-     * @param save_workspace Save the workspace at the end of the script execution
-     * @param no_readline Disable reading input from the command line
-     * @param vanilla_mode Run R without saving the workspace at the end, restoring anything, reading the site file, or acting on startup files
-     * @param help Display this help message and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniBatchROutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_BATCH_R_METADATA);
     const params = afni_batch_r_params(no_restore, save_workspace, no_readline, vanilla_mode, help)
@@ -212,5 +212,8 @@ export {
       AfniBatchROutputs,
       AfniBatchRParameters,
       afni_batch_r,
+      afni_batch_r_cargs,
+      afni_batch_r_execute,
+      afni_batch_r_outputs,
       afni_batch_r_params,
 };

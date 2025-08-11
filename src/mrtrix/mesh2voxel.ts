@@ -12,14 +12,14 @@ const MESH2VOXEL_METADATA: Metadata = {
 
 
 interface Mesh2voxelConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mesh2voxel.config";
     "key": string;
     "value": string;
 }
 
 
 interface Mesh2voxelParameters {
-    "__STYXTYPE__": "mesh2voxel";
+    "@type": "mrtrix.mesh2voxel";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface Mesh2voxelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mesh2voxel": mesh2voxel_cargs,
-        "config": mesh2voxel_config_cargs,
+        "mrtrix.mesh2voxel": mesh2voxel_cargs,
+        "mrtrix.mesh2voxel.config": mesh2voxel_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mesh2voxel": mesh2voxel_outputs,
+        "mrtrix.mesh2voxel": mesh2voxel_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mesh2voxel_config_params(
     key: string,
     value: string,
 ): Mesh2voxelConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mesh2voxel.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function mesh2voxel_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mesh2voxel_config_cargs(
     params: Mesh2voxelConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface Mesh2voxelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source the mesh file; note vertices must be defined in realspace coordinates
+ * @param template the template image
+ * @param output the output image
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mesh2voxel_params(
     source: InputPathType,
     template: InputPathType,
@@ -140,25 +157,8 @@ function mesh2voxel_params(
     help: boolean = false,
     version: boolean = false,
 ): Mesh2voxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param source the mesh file; note vertices must be defined in realspace coordinates
-     * @param template the template image
-     * @param output the output image
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mesh2voxel" as const,
+        "@type": "mrtrix.mesh2voxel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function mesh2voxel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mesh2voxel_cargs(
     params: Mesh2voxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mesh2voxel");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function mesh2voxel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function mesh2voxel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mesh2voxel_outputs(
     params: Mesh2voxelParameters,
     execution: Execution,
 ): Mesh2voxelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Mesh2voxelOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function mesh2voxel_outputs(
 }
 
 
+/**
+ * Convert a mesh surface to a partial volume estimation image.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography: Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Mesh2voxelOutputs`).
+ */
 function mesh2voxel_execute(
     params: Mesh2voxelParameters,
     execution: Execution,
 ): Mesh2voxelOutputs {
-    /**
-     * Convert a mesh surface to a partial volume estimation image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography: Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Mesh2voxelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mesh2voxel_cargs(params, execution)
     const ret = mesh2voxel_outputs(params, execution)
@@ -277,6 +277,34 @@ function mesh2voxel_execute(
 }
 
 
+/**
+ * Convert a mesh surface to a partial volume estimation image.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography: Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param source the mesh file; note vertices must be defined in realspace coordinates
+ * @param template the template image
+ * @param output the output image
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Mesh2voxelOutputs`).
+ */
 function mesh2voxel(
     source: InputPathType,
     template: InputPathType,
@@ -291,34 +319,6 @@ function mesh2voxel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Mesh2voxelOutputs {
-    /**
-     * Convert a mesh surface to a partial volume estimation image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography: Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param source the mesh file; note vertices must be defined in realspace coordinates
-     * @param template the template image
-     * @param output the output image
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Mesh2voxelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MESH2VOXEL_METADATA);
     const params = mesh2voxel_params(source, template, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       Mesh2voxelOutputs,
       Mesh2voxelParameters,
       mesh2voxel,
+      mesh2voxel_cargs,
+      mesh2voxel_config_cargs,
       mesh2voxel_config_params,
+      mesh2voxel_execute,
+      mesh2voxel_outputs,
       mesh2voxel_params,
 };

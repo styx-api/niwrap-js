@@ -12,7 +12,7 @@ const MRIS_REMOVE_INTERSECTION_METADATA: Metadata = {
 
 
 interface MrisRemoveIntersectionParameters {
-    "__STYXTYPE__": "mris_remove_intersection";
+    "@type": "freesurfer.mris_remove_intersection";
     "surface_in_file": InputPathType;
     "corrected_surface_out_file": string;
     "fill_holes": boolean;
@@ -21,35 +21,35 @@ interface MrisRemoveIntersectionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_remove_intersection": mris_remove_intersection_cargs,
+        "freesurfer.mris_remove_intersection": mris_remove_intersection_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_remove_intersection": mris_remove_intersection_outputs,
+        "freesurfer.mris_remove_intersection": mris_remove_intersection_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface MrisRemoveIntersectionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_in_file Input surface file.
+ * @param corrected_surface_out_file Corrected output surface file.
+ * @param fill_holes Fill any holes in the intersection mark map and include them in the fix.
+ * @param map_option Create a binary map of intersections.
+ * @param projdistmm Projection distance in mm when using -map option.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_remove_intersection_params(
     surface_in_file: InputPathType,
     corrected_surface_out_file: string,
@@ -83,19 +94,8 @@ function mris_remove_intersection_params(
     map_option: InputPathType | null = null,
     projdistmm: number | null = null,
 ): MrisRemoveIntersectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_in_file Input surface file.
-     * @param corrected_surface_out_file Corrected output surface file.
-     * @param fill_holes Fill any holes in the intersection mark map and include them in the fix.
-     * @param map_option Create a binary map of intersections.
-     * @param projdistmm Projection distance in mm when using -map option.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_remove_intersection" as const,
+        "@type": "freesurfer.mris_remove_intersection" as const,
         "surface_in_file": surface_in_file,
         "corrected_surface_out_file": corrected_surface_out_file,
         "fill_holes": fill_holes,
@@ -110,18 +110,18 @@ function mris_remove_intersection_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_remove_intersection_cargs(
     params: MrisRemoveIntersectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_remove_intersection");
     cargs.push(execution.inputFile((params["surface_in_file"] ?? null)));
@@ -142,18 +142,18 @@ function mris_remove_intersection_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_remove_intersection_outputs(
     params: MrisRemoveIntersectionParameters,
     execution: Execution,
 ): MrisRemoveIntersectionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRemoveIntersectionOutputs = {
         root: execution.outputFile("."),
         out_corrected_surface: execution.outputFile([(params["corrected_surface_out_file"] ?? null)].join('')),
@@ -163,22 +163,22 @@ function mris_remove_intersection_outputs(
 }
 
 
+/**
+ * Tool to remove intersections in surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
+ */
 function mris_remove_intersection_execute(
     params: MrisRemoveIntersectionParameters,
     execution: Execution,
 ): MrisRemoveIntersectionOutputs {
-    /**
-     * Tool to remove intersections in surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_remove_intersection_cargs(params, execution)
     const ret = mris_remove_intersection_outputs(params, execution)
@@ -187,6 +187,22 @@ function mris_remove_intersection_execute(
 }
 
 
+/**
+ * Tool to remove intersections in surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface_in_file Input surface file.
+ * @param corrected_surface_out_file Corrected output surface file.
+ * @param fill_holes Fill any holes in the intersection mark map and include them in the fix.
+ * @param map_option Create a binary map of intersections.
+ * @param projdistmm Projection distance in mm when using -map option.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
+ */
 function mris_remove_intersection(
     surface_in_file: InputPathType,
     corrected_surface_out_file: string,
@@ -195,22 +211,6 @@ function mris_remove_intersection(
     projdistmm: number | null = null,
     runner: Runner | null = null,
 ): MrisRemoveIntersectionOutputs {
-    /**
-     * Tool to remove intersections in surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface_in_file Input surface file.
-     * @param corrected_surface_out_file Corrected output surface file.
-     * @param fill_holes Fill any holes in the intersection mark map and include them in the fix.
-     * @param map_option Create a binary map of intersections.
-     * @param projdistmm Projection distance in mm when using -map option.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REMOVE_INTERSECTION_METADATA);
     const params = mris_remove_intersection_params(surface_in_file, corrected_surface_out_file, fill_holes, map_option, projdistmm)
@@ -223,5 +223,8 @@ export {
       MrisRemoveIntersectionOutputs,
       MrisRemoveIntersectionParameters,
       mris_remove_intersection,
+      mris_remove_intersection_cargs,
+      mris_remove_intersection_execute,
+      mris_remove_intersection_outputs,
       mris_remove_intersection_params,
 };

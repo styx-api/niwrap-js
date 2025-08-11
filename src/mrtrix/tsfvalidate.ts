@@ -12,14 +12,14 @@ const TSFVALIDATE_METADATA: Metadata = {
 
 
 interface TsfvalidateConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tsfvalidate.config";
     "key": string;
     "value": string;
 }
 
 
 interface TsfvalidateParameters {
-    "__STYXTYPE__": "tsfvalidate";
+    "@type": "mrtrix.tsfvalidate";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -33,54 +33,54 @@ interface TsfvalidateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tsfvalidate": tsfvalidate_cargs,
-        "config": tsfvalidate_config_cargs,
+        "mrtrix.tsfvalidate": tsfvalidate_cargs,
+        "mrtrix.tsfvalidate.config": tsfvalidate_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfvalidate_config_params(
     key: string,
     value: string,
 ): TsfvalidateConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tsfvalidate.config" as const,
         "key": key,
         "value": value,
     };
@@ -88,18 +88,18 @@ function tsfvalidate_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfvalidate_config_cargs(
     params: TsfvalidateConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -121,6 +121,22 @@ interface TsfvalidateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tsf the input track scalar file
+ * @param tracks the track file on which the TSF is based
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfvalidate_params(
     tsf: InputPathType,
     tracks: InputPathType,
@@ -133,24 +149,8 @@ function tsfvalidate_params(
     help: boolean = false,
     version: boolean = false,
 ): TsfvalidateParameters {
-    /**
-     * Build parameters.
-    
-     * @param tsf the input track scalar file
-     * @param tracks the track file on which the TSF is based
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tsfvalidate" as const,
+        "@type": "mrtrix.tsfvalidate" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -170,18 +170,18 @@ function tsfvalidate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfvalidate_cargs(
     params: TsfvalidateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tsfvalidate");
     if ((params["info"] ?? null)) {
@@ -203,7 +203,7 @@ function tsfvalidate_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -217,18 +217,18 @@ function tsfvalidate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tsfvalidate_outputs(
     params: TsfvalidateParameters,
     execution: Execution,
 ): TsfvalidateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TsfvalidateOutputs = {
         root: execution.outputFile("."),
     };
@@ -236,28 +236,28 @@ function tsfvalidate_outputs(
 }
 
 
+/**
+ * Validate a track scalar file against the corresponding track data.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
+ */
 function tsfvalidate_execute(
     params: TsfvalidateParameters,
     execution: Execution,
 ): TsfvalidateOutputs {
-    /**
-     * Validate a track scalar file against the corresponding track data.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
-     */
     params = execution.params(params)
     const cargs = tsfvalidate_cargs(params, execution)
     const ret = tsfvalidate_outputs(params, execution)
@@ -266,6 +266,33 @@ function tsfvalidate_execute(
 }
 
 
+/**
+ * Validate a track scalar file against the corresponding track data.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tsf the input track scalar file
+ * @param tracks the track file on which the TSF is based
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
+ */
 function tsfvalidate(
     tsf: InputPathType,
     tracks: InputPathType,
@@ -279,33 +306,6 @@ function tsfvalidate(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfvalidateOutputs {
-    /**
-     * Validate a track scalar file against the corresponding track data.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tsf the input track scalar file
-     * @param tracks the track file on which the TSF is based
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSFVALIDATE_METADATA);
     const params = tsfvalidate_params(tsf, tracks, info, quiet, debug, force, nthreads, config, help, version)
@@ -319,6 +319,10 @@ export {
       TsfvalidateOutputs,
       TsfvalidateParameters,
       tsfvalidate,
+      tsfvalidate_cargs,
+      tsfvalidate_config_cargs,
       tsfvalidate_config_params,
+      tsfvalidate_execute,
+      tsfvalidate_outputs,
       tsfvalidate_params,
 };

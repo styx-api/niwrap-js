@@ -12,14 +12,14 @@ const MRHISTMATCH_METADATA: Metadata = {
 
 
 interface MrhistmatchConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrhistmatch.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrhistmatchParameters {
-    "__STYXTYPE__": "mrhistmatch";
+    "@type": "mrtrix.mrhistmatch";
     "mask_input"?: InputPathType | null | undefined;
     "mask_target"?: InputPathType | null | undefined;
     "bins"?: number | null | undefined;
@@ -38,55 +38,55 @@ interface MrhistmatchParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrhistmatch": mrhistmatch_cargs,
-        "config": mrhistmatch_config_cargs,
+        "mrtrix.mrhistmatch": mrhistmatch_cargs,
+        "mrtrix.mrhistmatch.config": mrhistmatch_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrhistmatch": mrhistmatch_outputs,
+        "mrtrix.mrhistmatch": mrhistmatch_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrhistmatch_config_params(
     key: string,
     value: string,
 ): MrhistmatchConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrhistmatch.config" as const,
         "key": key,
         "value": value,
     };
@@ -94,18 +94,18 @@ function mrhistmatch_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrhistmatch_config_cargs(
     params: MrhistmatchConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -131,6 +131,27 @@ interface MrhistmatchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param type_ type of histogram matching to perform; options are: scale,linear,nonlinear
+ * @param input the input image to be modified
+ * @param target the input image from which to derive the target histogram
+ * @param output the output image
+ * @param mask_input only generate input histogram based on a specified binary mask image
+ * @param mask_target only generate target histogram based on a specified binary mask image
+ * @param bins the number of bins to use to generate the histograms
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrhistmatch_params(
     type_: string,
     input: InputPathType,
@@ -148,29 +169,8 @@ function mrhistmatch_params(
     help: boolean = false,
     version: boolean = false,
 ): MrhistmatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ type of histogram matching to perform; options are: scale,linear,nonlinear
-     * @param input the input image to be modified
-     * @param target the input image from which to derive the target histogram
-     * @param output the output image
-     * @param mask_input only generate input histogram based on a specified binary mask image
-     * @param mask_target only generate target histogram based on a specified binary mask image
-     * @param bins the number of bins to use to generate the histograms
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrhistmatch" as const,
+        "@type": "mrtrix.mrhistmatch" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,18 +201,18 @@ function mrhistmatch_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrhistmatch_cargs(
     params: MrhistmatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrhistmatch");
     if ((params["mask_input"] ?? null) !== null) {
@@ -252,7 +252,7 @@ function mrhistmatch_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -268,18 +268,18 @@ function mrhistmatch_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrhistmatch_outputs(
     params: MrhistmatchParameters,
     execution: Execution,
 ): MrhistmatchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrhistmatchOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -288,29 +288,29 @@ function mrhistmatch_outputs(
 }
 
 
+/**
+ * Modify the intensities of one image to match the histogram of another.
+ *
+ *
+ *
+ * References:
+ *
+ * * If using inverse contrast normalization for inter-modal (DWI - T1) registration:
+ * Bhushan, C.; Haldar, J. P.; Choi, S.; Joshi, A. A.; Shattuck, D. W. & Leahy, R. M. Co-registration and distortion correction of diffusion and anatomical images based on inverse contrast normalization. NeuroImage, 2015, 115, 269-280.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
+ */
 function mrhistmatch_execute(
     params: MrhistmatchParameters,
     execution: Execution,
 ): MrhistmatchOutputs {
-    /**
-     * Modify the intensities of one image to match the histogram of another.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * * If using inverse contrast normalization for inter-modal (DWI - T1) registration:
-     * Bhushan, C.; Haldar, J. P.; Choi, S.; Joshi, A. A.; Shattuck, D. W. & Leahy, R. M. Co-registration and distortion correction of diffusion and anatomical images based on inverse contrast normalization. NeuroImage, 2015, 115, 269-280.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrhistmatch_cargs(params, execution)
     const ret = mrhistmatch_outputs(params, execution)
@@ -319,6 +319,39 @@ function mrhistmatch_execute(
 }
 
 
+/**
+ * Modify the intensities of one image to match the histogram of another.
+ *
+ *
+ *
+ * References:
+ *
+ * * If using inverse contrast normalization for inter-modal (DWI - T1) registration:
+ * Bhushan, C.; Haldar, J. P.; Choi, S.; Joshi, A. A.; Shattuck, D. W. & Leahy, R. M. Co-registration and distortion correction of diffusion and anatomical images based on inverse contrast normalization. NeuroImage, 2015, 115, 269-280.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param type_ type of histogram matching to perform; options are: scale,linear,nonlinear
+ * @param input the input image to be modified
+ * @param target the input image from which to derive the target histogram
+ * @param output the output image
+ * @param mask_input only generate input histogram based on a specified binary mask image
+ * @param mask_target only generate target histogram based on a specified binary mask image
+ * @param bins the number of bins to use to generate the histograms
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
+ */
 function mrhistmatch(
     type_: string,
     input: InputPathType,
@@ -337,39 +370,6 @@ function mrhistmatch(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrhistmatchOutputs {
-    /**
-     * Modify the intensities of one image to match the histogram of another.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * * If using inverse contrast normalization for inter-modal (DWI - T1) registration:
-     * Bhushan, C.; Haldar, J. P.; Choi, S.; Joshi, A. A.; Shattuck, D. W. & Leahy, R. M. Co-registration and distortion correction of diffusion and anatomical images based on inverse contrast normalization. NeuroImage, 2015, 115, 269-280.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param type_ type of histogram matching to perform; options are: scale,linear,nonlinear
-     * @param input the input image to be modified
-     * @param target the input image from which to derive the target histogram
-     * @param output the output image
-     * @param mask_input only generate input histogram based on a specified binary mask image
-     * @param mask_target only generate target histogram based on a specified binary mask image
-     * @param bins the number of bins to use to generate the histograms
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRHISTMATCH_METADATA);
     const params = mrhistmatch_params(type_, input, target, output, mask_input, mask_target, bins, info, quiet, debug, force, nthreads, config, help, version)
@@ -383,6 +383,10 @@ export {
       MrhistmatchOutputs,
       MrhistmatchParameters,
       mrhistmatch,
+      mrhistmatch_cargs,
+      mrhistmatch_config_cargs,
       mrhistmatch_config_params,
+      mrhistmatch_execute,
+      mrhistmatch_outputs,
       mrhistmatch_params,
 };

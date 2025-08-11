@@ -12,7 +12,7 @@ const MELODIC_METADATA: Metadata = {
 
 
 interface MelodicParameters {
-    "__STYXTYPE__": "melodic";
+    "@type": "fsl.melodic";
     "input_file": InputPathType;
     "output_directory"?: string | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -65,35 +65,35 @@ interface MelodicParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "melodic": melodic_cargs,
+        "fsl.melodic": melodic_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "melodic": melodic_outputs,
+        "fsl.melodic": melodic_outputs,
     };
     return outputsFuncs[t];
 }
@@ -132,6 +132,61 @@ interface MelodicOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file names (either single file name or comma-separated list or text file)
+ * @param output_directory Output directory name
+ * @param mask_file File name of mask for thresholding
+ * @param dimensionality_reduction Dimensionality reduction into specified number of dimensions (default is automatic estimation)
+ * @param generate_report Generate Melodic web report
+ * @param cifti_io Input/output as CIFTI (warning: auto-dimensionality estimation for CIFTI data is currently inaccurate)
+ * @param variance_normalization Switch off variance normalization
+ * @param no_masking Switch off masking
+ * @param update_masking Switch off mask updating
+ * @param no_bet Switch off BET
+ * @param bg_threshold Brain / non-brain threshold (only if --nobet selected)
+ * @param dimest_technique Use specific dimensionality estimation technique: lap, bic, mdl, aic, mean (default: lap)
+ * @param separate_variance_normalization Switch on separate variance normalization for each input dataset (off by default)
+ * @param disable_migp Switch off MIGP data reduction when using -a concat (full temporal concatenation will be used)
+ * @param num_internal_eigenmaps Number of internal Eigenmaps
+ * @param migp_shuffle Randomize MIGP file order (default: TRUE)
+ * @param migp_factor Internal Factor of mem-threshold relative to number of Eigenmaps (default: 2)
+ * @param num_ics Number of ICs to extract (for deflation approach)
+ * @param nonlinearity Nonlinearity: gauss, tanh, pow3 (default), pow4
+ * @param covar_weights Voxel-wise weights for the covariance matrix (e.g. segmentation information)
+ * @param eps_error Minimum error change
+ * @param eps_rank1_error Minimum error change for rank-1 approximation in TICA
+ * @param max_iters Maximum number of iterations before restart
+ * @param max_restarts Maximum number of restarts
+ * @param mm_threshold Threshold for Mixture Model based inference
+ * @param no_mixture_modeling Switch off mixture modeling on IC maps
+ * @param ic_components_file Input filename of the IC components file for mixture modeling
+ * @param mixing_matrix_file Input filename of mixing matrix for mixture modeling / filtering
+ * @param session_modes_file Input filename of matrix of session modes for report generation
+ * @param component_filter List of component numbers to remove
+ * @param background_image Specify background image for report (default: mean image)
+ * @param tr_seconds TR in seconds
+ * @param log_power_calc Calculate log of power for frequency spectrum
+ * @param time_domain_design_matrix Design matrix across time-domain
+ * @param time_domain_t_contrast_matrix T-contrast matrix across time-domain
+ * @param subject_domain_design_matrix Design matrix across subject-domain
+ * @param subject_domain_t_contrast_matrix T-contrast matrix across subject-domain
+ * @param output_unmixing_matrix Output unmixing matrix
+ * @param output_stats Output thresholded maps and probability maps
+ * @param output_pca Output PCA results
+ * @param output_whitening Output whitening/dewhitening matrices
+ * @param output_original_ics Output the original ICs
+ * @param output_mean_volume Output mean volume
+ * @param version Prints version information
+ * @param copyright Prints copyright information
+ * @param help Prints this help message
+ * @param debug Switch on debug messages
+ * @param report_maps Control string for spatial map images (see slicer)
+ * @param keep_meanvol Do not subtract mean volume
+ *
+ * @returns Parameter dictionary
+ */
 function melodic_params(
     input_file: InputPathType,
     output_directory: string | null = null,
@@ -183,63 +238,8 @@ function melodic_params(
     report_maps: string | null = null,
     keep_meanvol: boolean = false,
 ): MelodicParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file names (either single file name or comma-separated list or text file)
-     * @param output_directory Output directory name
-     * @param mask_file File name of mask for thresholding
-     * @param dimensionality_reduction Dimensionality reduction into specified number of dimensions (default is automatic estimation)
-     * @param generate_report Generate Melodic web report
-     * @param cifti_io Input/output as CIFTI (warning: auto-dimensionality estimation for CIFTI data is currently inaccurate)
-     * @param variance_normalization Switch off variance normalization
-     * @param no_masking Switch off masking
-     * @param update_masking Switch off mask updating
-     * @param no_bet Switch off BET
-     * @param bg_threshold Brain / non-brain threshold (only if --nobet selected)
-     * @param dimest_technique Use specific dimensionality estimation technique: lap, bic, mdl, aic, mean (default: lap)
-     * @param separate_variance_normalization Switch on separate variance normalization for each input dataset (off by default)
-     * @param disable_migp Switch off MIGP data reduction when using -a concat (full temporal concatenation will be used)
-     * @param num_internal_eigenmaps Number of internal Eigenmaps
-     * @param migp_shuffle Randomize MIGP file order (default: TRUE)
-     * @param migp_factor Internal Factor of mem-threshold relative to number of Eigenmaps (default: 2)
-     * @param num_ics Number of ICs to extract (for deflation approach)
-     * @param nonlinearity Nonlinearity: gauss, tanh, pow3 (default), pow4
-     * @param covar_weights Voxel-wise weights for the covariance matrix (e.g. segmentation information)
-     * @param eps_error Minimum error change
-     * @param eps_rank1_error Minimum error change for rank-1 approximation in TICA
-     * @param max_iters Maximum number of iterations before restart
-     * @param max_restarts Maximum number of restarts
-     * @param mm_threshold Threshold for Mixture Model based inference
-     * @param no_mixture_modeling Switch off mixture modeling on IC maps
-     * @param ic_components_file Input filename of the IC components file for mixture modeling
-     * @param mixing_matrix_file Input filename of mixing matrix for mixture modeling / filtering
-     * @param session_modes_file Input filename of matrix of session modes for report generation
-     * @param component_filter List of component numbers to remove
-     * @param background_image Specify background image for report (default: mean image)
-     * @param tr_seconds TR in seconds
-     * @param log_power_calc Calculate log of power for frequency spectrum
-     * @param time_domain_design_matrix Design matrix across time-domain
-     * @param time_domain_t_contrast_matrix T-contrast matrix across time-domain
-     * @param subject_domain_design_matrix Design matrix across subject-domain
-     * @param subject_domain_t_contrast_matrix T-contrast matrix across subject-domain
-     * @param output_unmixing_matrix Output unmixing matrix
-     * @param output_stats Output thresholded maps and probability maps
-     * @param output_pca Output PCA results
-     * @param output_whitening Output whitening/dewhitening matrices
-     * @param output_original_ics Output the original ICs
-     * @param output_mean_volume Output mean volume
-     * @param version Prints version information
-     * @param copyright Prints copyright information
-     * @param help Prints this help message
-     * @param debug Switch on debug messages
-     * @param report_maps Control string for spatial map images (see slicer)
-     * @param keep_meanvol Do not subtract mean volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "melodic" as const,
+        "@type": "fsl.melodic" as const,
         "input_file": input_file,
         "generate_report": generate_report,
         "cifti_io": cifti_io,
@@ -346,18 +346,18 @@ function melodic_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function melodic_cargs(
     params: MelodicParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("melodic");
     cargs.push(
@@ -590,18 +590,18 @@ function melodic_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function melodic_outputs(
     params: MelodicParameters,
     execution: Execution,
 ): MelodicOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MelodicOutputs = {
         root: execution.outputFile("."),
         report_file: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/report.html"].join('')) : null,
@@ -614,22 +614,22 @@ function melodic_outputs(
 }
 
 
+/**
+ * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MelodicOutputs`).
+ */
 function melodic_execute(
     params: MelodicParameters,
     execution: Execution,
 ): MelodicOutputs {
-    /**
-     * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MelodicOutputs`).
-     */
     params = execution.params(params)
     const cargs = melodic_cargs(params, execution)
     const ret = melodic_outputs(params, execution)
@@ -638,6 +638,66 @@ function melodic_execute(
 }
 
 
+/**
+ * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file names (either single file name or comma-separated list or text file)
+ * @param output_directory Output directory name
+ * @param mask_file File name of mask for thresholding
+ * @param dimensionality_reduction Dimensionality reduction into specified number of dimensions (default is automatic estimation)
+ * @param generate_report Generate Melodic web report
+ * @param cifti_io Input/output as CIFTI (warning: auto-dimensionality estimation for CIFTI data is currently inaccurate)
+ * @param variance_normalization Switch off variance normalization
+ * @param no_masking Switch off masking
+ * @param update_masking Switch off mask updating
+ * @param no_bet Switch off BET
+ * @param bg_threshold Brain / non-brain threshold (only if --nobet selected)
+ * @param dimest_technique Use specific dimensionality estimation technique: lap, bic, mdl, aic, mean (default: lap)
+ * @param separate_variance_normalization Switch on separate variance normalization for each input dataset (off by default)
+ * @param disable_migp Switch off MIGP data reduction when using -a concat (full temporal concatenation will be used)
+ * @param num_internal_eigenmaps Number of internal Eigenmaps
+ * @param migp_shuffle Randomize MIGP file order (default: TRUE)
+ * @param migp_factor Internal Factor of mem-threshold relative to number of Eigenmaps (default: 2)
+ * @param num_ics Number of ICs to extract (for deflation approach)
+ * @param nonlinearity Nonlinearity: gauss, tanh, pow3 (default), pow4
+ * @param covar_weights Voxel-wise weights for the covariance matrix (e.g. segmentation information)
+ * @param eps_error Minimum error change
+ * @param eps_rank1_error Minimum error change for rank-1 approximation in TICA
+ * @param max_iters Maximum number of iterations before restart
+ * @param max_restarts Maximum number of restarts
+ * @param mm_threshold Threshold for Mixture Model based inference
+ * @param no_mixture_modeling Switch off mixture modeling on IC maps
+ * @param ic_components_file Input filename of the IC components file for mixture modeling
+ * @param mixing_matrix_file Input filename of mixing matrix for mixture modeling / filtering
+ * @param session_modes_file Input filename of matrix of session modes for report generation
+ * @param component_filter List of component numbers to remove
+ * @param background_image Specify background image for report (default: mean image)
+ * @param tr_seconds TR in seconds
+ * @param log_power_calc Calculate log of power for frequency spectrum
+ * @param time_domain_design_matrix Design matrix across time-domain
+ * @param time_domain_t_contrast_matrix T-contrast matrix across time-domain
+ * @param subject_domain_design_matrix Design matrix across subject-domain
+ * @param subject_domain_t_contrast_matrix T-contrast matrix across subject-domain
+ * @param output_unmixing_matrix Output unmixing matrix
+ * @param output_stats Output thresholded maps and probability maps
+ * @param output_pca Output PCA results
+ * @param output_whitening Output whitening/dewhitening matrices
+ * @param output_original_ics Output the original ICs
+ * @param output_mean_volume Output mean volume
+ * @param version Prints version information
+ * @param copyright Prints copyright information
+ * @param help Prints this help message
+ * @param debug Switch on debug messages
+ * @param report_maps Control string for spatial map images (see slicer)
+ * @param keep_meanvol Do not subtract mean volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MelodicOutputs`).
+ */
 function melodic(
     input_file: InputPathType,
     output_directory: string | null = null,
@@ -690,66 +750,6 @@ function melodic(
     keep_meanvol: boolean = false,
     runner: Runner | null = null,
 ): MelodicOutputs {
-    /**
-     * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file names (either single file name or comma-separated list or text file)
-     * @param output_directory Output directory name
-     * @param mask_file File name of mask for thresholding
-     * @param dimensionality_reduction Dimensionality reduction into specified number of dimensions (default is automatic estimation)
-     * @param generate_report Generate Melodic web report
-     * @param cifti_io Input/output as CIFTI (warning: auto-dimensionality estimation for CIFTI data is currently inaccurate)
-     * @param variance_normalization Switch off variance normalization
-     * @param no_masking Switch off masking
-     * @param update_masking Switch off mask updating
-     * @param no_bet Switch off BET
-     * @param bg_threshold Brain / non-brain threshold (only if --nobet selected)
-     * @param dimest_technique Use specific dimensionality estimation technique: lap, bic, mdl, aic, mean (default: lap)
-     * @param separate_variance_normalization Switch on separate variance normalization for each input dataset (off by default)
-     * @param disable_migp Switch off MIGP data reduction when using -a concat (full temporal concatenation will be used)
-     * @param num_internal_eigenmaps Number of internal Eigenmaps
-     * @param migp_shuffle Randomize MIGP file order (default: TRUE)
-     * @param migp_factor Internal Factor of mem-threshold relative to number of Eigenmaps (default: 2)
-     * @param num_ics Number of ICs to extract (for deflation approach)
-     * @param nonlinearity Nonlinearity: gauss, tanh, pow3 (default), pow4
-     * @param covar_weights Voxel-wise weights for the covariance matrix (e.g. segmentation information)
-     * @param eps_error Minimum error change
-     * @param eps_rank1_error Minimum error change for rank-1 approximation in TICA
-     * @param max_iters Maximum number of iterations before restart
-     * @param max_restarts Maximum number of restarts
-     * @param mm_threshold Threshold for Mixture Model based inference
-     * @param no_mixture_modeling Switch off mixture modeling on IC maps
-     * @param ic_components_file Input filename of the IC components file for mixture modeling
-     * @param mixing_matrix_file Input filename of mixing matrix for mixture modeling / filtering
-     * @param session_modes_file Input filename of matrix of session modes for report generation
-     * @param component_filter List of component numbers to remove
-     * @param background_image Specify background image for report (default: mean image)
-     * @param tr_seconds TR in seconds
-     * @param log_power_calc Calculate log of power for frequency spectrum
-     * @param time_domain_design_matrix Design matrix across time-domain
-     * @param time_domain_t_contrast_matrix T-contrast matrix across time-domain
-     * @param subject_domain_design_matrix Design matrix across subject-domain
-     * @param subject_domain_t_contrast_matrix T-contrast matrix across subject-domain
-     * @param output_unmixing_matrix Output unmixing matrix
-     * @param output_stats Output thresholded maps and probability maps
-     * @param output_pca Output PCA results
-     * @param output_whitening Output whitening/dewhitening matrices
-     * @param output_original_ics Output the original ICs
-     * @param output_mean_volume Output mean volume
-     * @param version Prints version information
-     * @param copyright Prints copyright information
-     * @param help Prints this help message
-     * @param debug Switch on debug messages
-     * @param report_maps Control string for spatial map images (see slicer)
-     * @param keep_meanvol Do not subtract mean volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MelodicOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MELODIC_METADATA);
     const params = melodic_params(input_file, output_directory, mask_file, dimensionality_reduction, generate_report, cifti_io, variance_normalization, no_masking, update_masking, no_bet, bg_threshold, dimest_technique, separate_variance_normalization, disable_migp, num_internal_eigenmaps, migp_shuffle, migp_factor, num_ics, nonlinearity, covar_weights, eps_error, eps_rank1_error, max_iters, max_restarts, mm_threshold, no_mixture_modeling, ic_components_file, mixing_matrix_file, session_modes_file, component_filter, background_image, tr_seconds, log_power_calc, time_domain_design_matrix, time_domain_t_contrast_matrix, subject_domain_design_matrix, subject_domain_t_contrast_matrix, output_unmixing_matrix, output_stats, output_pca, output_whitening, output_original_ics, output_mean_volume, version, copyright, help, debug, report_maps, keep_meanvol)
@@ -762,5 +762,8 @@ export {
       MelodicOutputs,
       MelodicParameters,
       melodic,
+      melodic_cargs,
+      melodic_execute,
+      melodic_outputs,
       melodic_params,
 };

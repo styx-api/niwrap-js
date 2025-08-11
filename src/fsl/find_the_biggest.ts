@@ -12,41 +12,41 @@ const FIND_THE_BIGGEST_METADATA: Metadata = {
 
 
 interface FindTheBiggestParameters {
-    "__STYXTYPE__": "find_the_biggest";
+    "@type": "fsl.find_the_biggest";
     "volumes_surfaces": Array<InputPathType>;
     "output_index": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "find_the_biggest": find_the_biggest_cargs,
+        "fsl.find_the_biggest": find_the_biggest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "find_the_biggest": find_the_biggest_outputs,
+        "fsl.find_the_biggest": find_the_biggest_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FindTheBiggestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volumes_surfaces List of input volumes or surfaces
+ * @param output_index Output index of the largest volume or surface
+ *
+ * @returns Parameter dictionary
+ */
 function find_the_biggest_params(
     volumes_surfaces: Array<InputPathType>,
     output_index: string,
 ): FindTheBiggestParameters {
-    /**
-     * Build parameters.
-    
-     * @param volumes_surfaces List of input volumes or surfaces
-     * @param output_index Output index of the largest volume or surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "find_the_biggest" as const,
+        "@type": "fsl.find_the_biggest" as const,
         "volumes_surfaces": volumes_surfaces,
         "output_index": output_index,
     };
@@ -90,18 +90,18 @@ function find_the_biggest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function find_the_biggest_cargs(
     params: FindTheBiggestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("find_the_biggest");
     cargs.push(...(params["volumes_surfaces"] ?? null).map(f => execution.inputFile(f)));
@@ -110,18 +110,18 @@ function find_the_biggest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function find_the_biggest_outputs(
     params: FindTheBiggestParameters,
     execution: Execution,
 ): FindTheBiggestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FindTheBiggestOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_index"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function find_the_biggest_outputs(
 }
 
 
+/**
+ * Tool to find the largest volume or surface from a set of inputs.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
+ */
 function find_the_biggest_execute(
     params: FindTheBiggestParameters,
     execution: Execution,
 ): FindTheBiggestOutputs {
-    /**
-     * Tool to find the largest volume or surface from a set of inputs.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
-     */
     params = execution.params(params)
     const cargs = find_the_biggest_cargs(params, execution)
     const ret = find_the_biggest_outputs(params, execution)
@@ -154,24 +154,24 @@ function find_the_biggest_execute(
 }
 
 
+/**
+ * Tool to find the largest volume or surface from a set of inputs.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param volumes_surfaces List of input volumes or surfaces
+ * @param output_index Output index of the largest volume or surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
+ */
 function find_the_biggest(
     volumes_surfaces: Array<InputPathType>,
     output_index: string,
     runner: Runner | null = null,
 ): FindTheBiggestOutputs {
-    /**
-     * Tool to find the largest volume or surface from a set of inputs.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param volumes_surfaces List of input volumes or surfaces
-     * @param output_index Output index of the largest volume or surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIND_THE_BIGGEST_METADATA);
     const params = find_the_biggest_params(volumes_surfaces, output_index)
@@ -184,5 +184,8 @@ export {
       FindTheBiggestOutputs,
       FindTheBiggestParameters,
       find_the_biggest,
+      find_the_biggest_cargs,
+      find_the_biggest_execute,
+      find_the_biggest_outputs,
       find_the_biggest_params,
 };

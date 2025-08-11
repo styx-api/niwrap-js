@@ -12,7 +12,7 @@ const V_3D_LFCD_METADATA: Metadata = {
 
 
 interface V3dLfcdParameters {
-    "__STYXTYPE__": "3dLFCD";
+    "@type": "afni.3dLFCD";
     "in_file": InputPathType;
     "autoclip": boolean;
     "automask": boolean;
@@ -25,35 +25,35 @@ interface V3dLfcdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLFCD": v_3d_lfcd_cargs,
+        "afni.3dLFCD": v_3d_lfcd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLFCD": v_3d_lfcd_outputs,
+        "afni.3dLFCD": v_3d_lfcd_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dLfcdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dlfcd.
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Mask the dataset to target brain-only voxels.
+ * @param mask Mask file to mask input data.
+ * @param num_threads Set number of threads.
+ * @param out_file Output image file name.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param polort No description provided.
+ * @param thresh Threshold to exclude connections where corr <= thresh.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lfcd_params(
     in_file: InputPathType,
     autoclip: boolean = false,
@@ -87,23 +102,8 @@ function v_3d_lfcd_params(
     polort: number | null = null,
     thresh: number | null = null,
 ): V3dLfcdParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dlfcd.
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Mask the dataset to target brain-only voxels.
-     * @param mask Mask file to mask input data.
-     * @param num_threads Set number of threads.
-     * @param out_file Output image file name.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param polort No description provided.
-     * @param thresh Threshold to exclude connections where corr <= thresh.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLFCD" as const,
+        "@type": "afni.3dLFCD" as const,
         "in_file": in_file,
         "autoclip": autoclip,
         "automask": automask,
@@ -130,18 +130,18 @@ function v_3d_lfcd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lfcd_cargs(
     params: V3dLfcdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLFCD");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -185,18 +185,18 @@ function v_3d_lfcd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lfcd_outputs(
     params: V3dLfcdParameters,
     execution: Execution,
 ): V3dLfcdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLfcdOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_afni"].join('')),
@@ -205,22 +205,22 @@ function v_3d_lfcd_outputs(
 }
 
 
+/**
+ * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
+ */
 function v_3d_lfcd_execute(
     params: V3dLfcdParameters,
     execution: Execution,
 ): V3dLfcdOutputs {
-    /**
-     * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lfcd_cargs(params, execution)
     const ret = v_3d_lfcd_outputs(params, execution)
@@ -229,6 +229,26 @@ function v_3d_lfcd_execute(
 }
 
 
+/**
+ * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dlfcd.
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Mask the dataset to target brain-only voxels.
+ * @param mask Mask file to mask input data.
+ * @param num_threads Set number of threads.
+ * @param out_file Output image file name.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param polort No description provided.
+ * @param thresh Threshold to exclude connections where corr <= thresh.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
+ */
 function v_3d_lfcd(
     in_file: InputPathType,
     autoclip: boolean = false,
@@ -241,26 +261,6 @@ function v_3d_lfcd(
     thresh: number | null = null,
     runner: Runner | null = null,
 ): V3dLfcdOutputs {
-    /**
-     * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dlfcd.
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Mask the dataset to target brain-only voxels.
-     * @param mask Mask file to mask input data.
-     * @param num_threads Set number of threads.
-     * @param out_file Output image file name.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param polort No description provided.
-     * @param thresh Threshold to exclude connections where corr <= thresh.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LFCD_METADATA);
     const params = v_3d_lfcd_params(in_file, autoclip, automask, mask, num_threads, out_file, outputtype, polort, thresh)
@@ -273,5 +273,8 @@ export {
       V3dLfcdParameters,
       V_3D_LFCD_METADATA,
       v_3d_lfcd,
+      v_3d_lfcd_cargs,
+      v_3d_lfcd_execute,
+      v_3d_lfcd_outputs,
       v_3d_lfcd_params,
 };

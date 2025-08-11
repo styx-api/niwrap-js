@@ -12,7 +12,7 @@ const MRI_PAINT_METADATA: Metadata = {
 
 
 interface MriPaintParameters {
-    "__STYXTYPE__": "mri_paint";
+    "@type": "freesurfer.mri_paint";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "registration_file": InputPathType;
@@ -22,35 +22,35 @@ interface MriPaintParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_paint": mri_paint_cargs,
+        "freesurfer.mri_paint": mri_paint_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_paint": mri_paint_outputs,
+        "freesurfer.mri_paint": mri_paint_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriPaintOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume The input volume file
+ * @param input_surface The input surface file
+ * @param registration_file The registration file
+ * @param output_float_file The output .float file
+ * @param image_offset Set offset to use
+ * @param paint_surf_coords Paint using surface coordinates
+ *
+ * @returns Parameter dictionary
+ */
 function mri_paint_params(
     input_volume: InputPathType,
     input_surface: InputPathType,
@@ -81,20 +93,8 @@ function mri_paint_params(
     image_offset: number | null = null,
     paint_surf_coords: boolean = false,
 ): MriPaintParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume The input volume file
-     * @param input_surface The input surface file
-     * @param registration_file The registration file
-     * @param output_float_file The output .float file
-     * @param image_offset Set offset to use
-     * @param paint_surf_coords Paint using surface coordinates
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_paint" as const,
+        "@type": "freesurfer.mri_paint" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "registration_file": registration_file,
@@ -108,18 +108,18 @@ function mri_paint_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_paint_cargs(
     params: MriPaintParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_paint");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -139,18 +139,18 @@ function mri_paint_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_paint_outputs(
     params: MriPaintParameters,
     execution: Execution,
 ): MriPaintOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriPaintOutputs = {
         root: execution.outputFile("."),
         output_float: execution.outputFile([(params["output_float_file"] ?? null)].join('')),
@@ -159,22 +159,22 @@ function mri_paint_outputs(
 }
 
 
+/**
+ * This program will paint average Talairach stats onto a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
+ */
 function mri_paint_execute(
     params: MriPaintParameters,
     execution: Execution,
 ): MriPaintOutputs {
-    /**
-     * This program will paint average Talairach stats onto a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_paint_cargs(params, execution)
     const ret = mri_paint_outputs(params, execution)
@@ -183,6 +183,23 @@ function mri_paint_execute(
 }
 
 
+/**
+ * This program will paint average Talairach stats onto a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume The input volume file
+ * @param input_surface The input surface file
+ * @param registration_file The registration file
+ * @param output_float_file The output .float file
+ * @param image_offset Set offset to use
+ * @param paint_surf_coords Paint using surface coordinates
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
+ */
 function mri_paint(
     input_volume: InputPathType,
     input_surface: InputPathType,
@@ -192,23 +209,6 @@ function mri_paint(
     paint_surf_coords: boolean = false,
     runner: Runner | null = null,
 ): MriPaintOutputs {
-    /**
-     * This program will paint average Talairach stats onto a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume The input volume file
-     * @param input_surface The input surface file
-     * @param registration_file The registration file
-     * @param output_float_file The output .float file
-     * @param image_offset Set offset to use
-     * @param paint_surf_coords Paint using surface coordinates
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PAINT_METADATA);
     const params = mri_paint_params(input_volume, input_surface, registration_file, output_float_file, image_offset, paint_surf_coords)
@@ -221,5 +221,8 @@ export {
       MriPaintOutputs,
       MriPaintParameters,
       mri_paint,
+      mri_paint_cargs,
+      mri_paint_execute,
+      mri_paint_outputs,
       mri_paint_params,
 };

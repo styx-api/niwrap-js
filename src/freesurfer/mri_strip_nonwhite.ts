@@ -12,7 +12,7 @@ const MRI_STRIP_NONWHITE_METADATA: Metadata = {
 
 
 interface MriStripNonwhiteParameters {
-    "__STYXTYPE__": "mri_strip_nonwhite";
+    "@type": "freesurfer.mri_strip_nonwhite";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "template_volume": InputPathType;
@@ -20,35 +20,35 @@ interface MriStripNonwhiteParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_strip_nonwhite": mri_strip_nonwhite_cargs,
+        "freesurfer.mri_strip_nonwhite": mri_strip_nonwhite_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_strip_nonwhite": mri_strip_nonwhite_outputs,
+        "freesurfer.mri_strip_nonwhite": mri_strip_nonwhite_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriStripNonwhiteOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input MRI volume file
+ * @param transform Transformation file to be applied to the input volume
+ * @param template_volume Template volume file used in conjunction with the transform
+ * @param output_volume Name of the output volume file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_strip_nonwhite_params(
     input_volume: InputPathType,
     transform: InputPathType,
     template_volume: InputPathType,
     output_volume: string,
 ): MriStripNonwhiteParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input MRI volume file
-     * @param transform Transformation file to be applied to the input volume
-     * @param template_volume Template volume file used in conjunction with the transform
-     * @param output_volume Name of the output volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_strip_nonwhite" as const,
+        "@type": "freesurfer.mri_strip_nonwhite" as const,
         "input_volume": input_volume,
         "transform": transform,
         "template_volume": template_volume,
@@ -98,18 +98,18 @@ function mri_strip_nonwhite_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_strip_nonwhite_cargs(
     params: MriStripNonwhiteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_strip_nonwhite");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mri_strip_nonwhite_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_strip_nonwhite_outputs(
     params: MriStripNonwhiteParameters,
     execution: Execution,
 ): MriStripNonwhiteOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriStripNonwhiteOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_strip_nonwhite_outputs(
 }
 
 
+/**
+ * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
+ */
 function mri_strip_nonwhite_execute(
     params: MriStripNonwhiteParameters,
     execution: Execution,
 ): MriStripNonwhiteOutputs {
-    /**
-     * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_strip_nonwhite_cargs(params, execution)
     const ret = mri_strip_nonwhite_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_strip_nonwhite_execute(
 }
 
 
+/**
+ * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input MRI volume file
+ * @param transform Transformation file to be applied to the input volume
+ * @param template_volume Template volume file used in conjunction with the transform
+ * @param output_volume Name of the output volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
+ */
 function mri_strip_nonwhite(
     input_volume: InputPathType,
     transform: InputPathType,
@@ -171,21 +186,6 @@ function mri_strip_nonwhite(
     output_volume: string,
     runner: Runner | null = null,
 ): MriStripNonwhiteOutputs {
-    /**
-     * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input MRI volume file
-     * @param transform Transformation file to be applied to the input volume
-     * @param template_volume Template volume file used in conjunction with the transform
-     * @param output_volume Name of the output volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_STRIP_NONWHITE_METADATA);
     const params = mri_strip_nonwhite_params(input_volume, transform, template_volume, output_volume)
@@ -198,5 +198,8 @@ export {
       MriStripNonwhiteOutputs,
       MriStripNonwhiteParameters,
       mri_strip_nonwhite,
+      mri_strip_nonwhite_cargs,
+      mri_strip_nonwhite_execute,
+      mri_strip_nonwhite_outputs,
       mri_strip_nonwhite_params,
 };

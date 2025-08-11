@@ -12,7 +12,7 @@ const MAKE_COLOR_MAP_METADATA: Metadata = {
 
 
 interface MakeColorMapParameters {
-    "__STYXTYPE__": "MakeColorMap";
+    "@type": "afni.MakeColorMap";
     "fiducials_ncol"?: InputPathType | null | undefined;
     "fiducials"?: InputPathType | null | undefined;
     "num_colors"?: number | null | undefined;
@@ -36,35 +36,35 @@ interface MakeColorMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "MakeColorMap": make_color_map_cargs,
+        "afni.MakeColorMap": make_color_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "MakeColorMap": make_color_map_outputs,
+        "afni.MakeColorMap": make_color_map_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,32 @@ interface MakeColorMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fiducials_ncol Fiducial colors and their indices in the color map are listed in file Fiducials_Ncol.
+ * @param fiducials Fiducial colors are listed in an ascii file Fiducials.
+ * @param num_colors Total number of colors in the color map.
+ * @param std_mapname Returns one of SUMA's standard colormaps.
+ * @param palette_file Specify the palette file for colormap.
+ * @param cmap_name Specify the colormap name.
+ * @param fscolut_labels Get AFNI/SUMA colormaps of FreeSurfer colors indexed between lbl0 and lbl1.
+ * @param fscolut_file Use color LUT file FS_COL_LUT.
+ * @param afni_hex Afni Hex format. Use this option if you want a color map formatted to fit in AFNI's .afnirc file
+ * @param afni_hex_complete Afni Hex format, ready to go into pbardefs.h.
+ * @param suma_colormap Write colormap in SUMA's format.
+ * @param user_colut_file Provide a user's own color lookup file.
+ * @param sdset Add colormap to surface-based dataset DSET, making it a labeled dataset.
+ * @param sdset_prefix Prefix of dset for writing labeled version of DSET.
+ * @param flipupdown Flip the map upside down.
+ * @param skip_last If used, the last color in the Fiducial list is omitted.
+ * @param show_fscolut Show all of the FreeSurfer LUT.
+ * @param help_flag Displays the help message.
+ * @param help_full_flag Displays the help message.
+ * @param flip_map_updside_down Flip the map upside down.
+ *
+ * @returns Parameter dictionary
+ */
 function make_color_map_params(
     fiducials_ncol: InputPathType | null = null,
     fiducials: InputPathType | null = null,
@@ -113,34 +139,8 @@ function make_color_map_params(
     help_full_flag: boolean = false,
     flip_map_updside_down: boolean = false,
 ): MakeColorMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param fiducials_ncol Fiducial colors and their indices in the color map are listed in file Fiducials_Ncol.
-     * @param fiducials Fiducial colors are listed in an ascii file Fiducials.
-     * @param num_colors Total number of colors in the color map.
-     * @param std_mapname Returns one of SUMA's standard colormaps.
-     * @param palette_file Specify the palette file for colormap.
-     * @param cmap_name Specify the colormap name.
-     * @param fscolut_labels Get AFNI/SUMA colormaps of FreeSurfer colors indexed between lbl0 and lbl1.
-     * @param fscolut_file Use color LUT file FS_COL_LUT.
-     * @param afni_hex Afni Hex format. Use this option if you want a color map formatted to fit in AFNI's .afnirc file
-     * @param afni_hex_complete Afni Hex format, ready to go into pbardefs.h.
-     * @param suma_colormap Write colormap in SUMA's format.
-     * @param user_colut_file Provide a user's own color lookup file.
-     * @param sdset Add colormap to surface-based dataset DSET, making it a labeled dataset.
-     * @param sdset_prefix Prefix of dset for writing labeled version of DSET.
-     * @param flipupdown Flip the map upside down.
-     * @param skip_last If used, the last color in the Fiducial list is omitted.
-     * @param show_fscolut Show all of the FreeSurfer LUT.
-     * @param help_flag Displays the help message.
-     * @param help_full_flag Displays the help message.
-     * @param flip_map_updside_down Flip the map upside down.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "MakeColorMap" as const,
+        "@type": "afni.MakeColorMap" as const,
         "flipupdown": flipupdown,
         "skip_last": skip_last,
         "show_fscolut": show_fscolut,
@@ -194,18 +194,18 @@ function make_color_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_color_map_cargs(
     params: MakeColorMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("MakeColorMap");
     if ((params["fiducials_ncol"] ?? null) !== null) {
@@ -314,18 +314,18 @@ function make_color_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_color_map_outputs(
     params: MakeColorMapParameters,
     execution: Execution,
 ): MakeColorMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeColorMapOutputs = {
         root: execution.outputFile("."),
         afni_hex_output_prefix: ((params["afni_hex"] ?? null) !== null) ? execution.outputFile([(params["afni_hex"] ?? null), "_01"].join('')) : null,
@@ -335,22 +335,22 @@ function make_color_map_outputs(
 }
 
 
+/**
+ * Utility for creating and modifying colormaps with various formats and fiducial points.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
+ */
 function make_color_map_execute(
     params: MakeColorMapParameters,
     execution: Execution,
 ): MakeColorMapOutputs {
-    /**
-     * Utility for creating and modifying colormaps with various formats and fiducial points.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_color_map_cargs(params, execution)
     const ret = make_color_map_outputs(params, execution)
@@ -359,6 +359,37 @@ function make_color_map_execute(
 }
 
 
+/**
+ * Utility for creating and modifying colormaps with various formats and fiducial points.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fiducials_ncol Fiducial colors and their indices in the color map are listed in file Fiducials_Ncol.
+ * @param fiducials Fiducial colors are listed in an ascii file Fiducials.
+ * @param num_colors Total number of colors in the color map.
+ * @param std_mapname Returns one of SUMA's standard colormaps.
+ * @param palette_file Specify the palette file for colormap.
+ * @param cmap_name Specify the colormap name.
+ * @param fscolut_labels Get AFNI/SUMA colormaps of FreeSurfer colors indexed between lbl0 and lbl1.
+ * @param fscolut_file Use color LUT file FS_COL_LUT.
+ * @param afni_hex Afni Hex format. Use this option if you want a color map formatted to fit in AFNI's .afnirc file
+ * @param afni_hex_complete Afni Hex format, ready to go into pbardefs.h.
+ * @param suma_colormap Write colormap in SUMA's format.
+ * @param user_colut_file Provide a user's own color lookup file.
+ * @param sdset Add colormap to surface-based dataset DSET, making it a labeled dataset.
+ * @param sdset_prefix Prefix of dset for writing labeled version of DSET.
+ * @param flipupdown Flip the map upside down.
+ * @param skip_last If used, the last color in the Fiducial list is omitted.
+ * @param show_fscolut Show all of the FreeSurfer LUT.
+ * @param help_flag Displays the help message.
+ * @param help_full_flag Displays the help message.
+ * @param flip_map_updside_down Flip the map upside down.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
+ */
 function make_color_map(
     fiducials_ncol: InputPathType | null = null,
     fiducials: InputPathType | null = null,
@@ -382,37 +413,6 @@ function make_color_map(
     flip_map_updside_down: boolean = false,
     runner: Runner | null = null,
 ): MakeColorMapOutputs {
-    /**
-     * Utility for creating and modifying colormaps with various formats and fiducial points.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fiducials_ncol Fiducial colors and their indices in the color map are listed in file Fiducials_Ncol.
-     * @param fiducials Fiducial colors are listed in an ascii file Fiducials.
-     * @param num_colors Total number of colors in the color map.
-     * @param std_mapname Returns one of SUMA's standard colormaps.
-     * @param palette_file Specify the palette file for colormap.
-     * @param cmap_name Specify the colormap name.
-     * @param fscolut_labels Get AFNI/SUMA colormaps of FreeSurfer colors indexed between lbl0 and lbl1.
-     * @param fscolut_file Use color LUT file FS_COL_LUT.
-     * @param afni_hex Afni Hex format. Use this option if you want a color map formatted to fit in AFNI's .afnirc file
-     * @param afni_hex_complete Afni Hex format, ready to go into pbardefs.h.
-     * @param suma_colormap Write colormap in SUMA's format.
-     * @param user_colut_file Provide a user's own color lookup file.
-     * @param sdset Add colormap to surface-based dataset DSET, making it a labeled dataset.
-     * @param sdset_prefix Prefix of dset for writing labeled version of DSET.
-     * @param flipupdown Flip the map upside down.
-     * @param skip_last If used, the last color in the Fiducial list is omitted.
-     * @param show_fscolut Show all of the FreeSurfer LUT.
-     * @param help_flag Displays the help message.
-     * @param help_full_flag Displays the help message.
-     * @param flip_map_updside_down Flip the map upside down.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_COLOR_MAP_METADATA);
     const params = make_color_map_params(fiducials_ncol, fiducials, num_colors, std_mapname, palette_file, cmap_name, fscolut_labels, fscolut_file, afni_hex, afni_hex_complete, suma_colormap, user_colut_file, sdset, sdset_prefix, flipupdown, skip_last, show_fscolut, help_flag, help_full_flag, flip_map_updside_down)
@@ -425,5 +425,8 @@ export {
       MakeColorMapOutputs,
       MakeColorMapParameters,
       make_color_map,
+      make_color_map_cargs,
+      make_color_map_execute,
+      make_color_map_outputs,
       make_color_map_params,
 };

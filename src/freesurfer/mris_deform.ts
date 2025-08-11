@@ -12,7 +12,7 @@ const MRIS_DEFORM_METADATA: Metadata = {
 
 
 interface MrisDeformParameters {
-    "__STYXTYPE__": "mris_deform";
+    "@type": "freesurfer.mris_deform";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
     "xform": InputPathType;
@@ -20,35 +20,35 @@ interface MrisDeformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_deform": mris_deform_cargs,
+        "freesurfer.mris_deform": mris_deform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_deform": mris_deform_outputs,
+        "freesurfer.mris_deform": mris_deform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisDeformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file (e.g., lh.white)
+ * @param input_volume Input volume file (e.g., brain.mgz)
+ * @param xform Transformation file (e.g., talairach.xfm)
+ * @param output_surface Output surface file (e.g., lh.white.deformed)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_deform_params(
     input_surface: InputPathType,
     input_volume: InputPathType,
     xform: InputPathType,
     output_surface: string,
 ): MrisDeformParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file (e.g., lh.white)
-     * @param input_volume Input volume file (e.g., brain.mgz)
-     * @param xform Transformation file (e.g., talairach.xfm)
-     * @param output_surface Output surface file (e.g., lh.white.deformed)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_deform" as const,
+        "@type": "freesurfer.mris_deform" as const,
         "input_surface": input_surface,
         "input_volume": input_volume,
         "xform": xform,
@@ -98,18 +98,18 @@ function mris_deform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_deform_cargs(
     params: MrisDeformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_deform");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -120,18 +120,18 @@ function mris_deform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_deform_outputs(
     params: MrisDeformParameters,
     execution: Execution,
 ): MrisDeformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisDeformOutputs = {
         root: execution.outputFile("."),
         deformed_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_deform_outputs(
 }
 
 
+/**
+ * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
+ */
 function mris_deform_execute(
     params: MrisDeformParameters,
     execution: Execution,
 ): MrisDeformOutputs {
-    /**
-     * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_deform_cargs(params, execution)
     const ret = mris_deform_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_deform_execute(
 }
 
 
+/**
+ * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file (e.g., lh.white)
+ * @param input_volume Input volume file (e.g., brain.mgz)
+ * @param xform Transformation file (e.g., talairach.xfm)
+ * @param output_surface Output surface file (e.g., lh.white.deformed)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
+ */
 function mris_deform(
     input_surface: InputPathType,
     input_volume: InputPathType,
@@ -171,21 +186,6 @@ function mris_deform(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisDeformOutputs {
-    /**
-     * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file (e.g., lh.white)
-     * @param input_volume Input volume file (e.g., brain.mgz)
-     * @param xform Transformation file (e.g., talairach.xfm)
-     * @param output_surface Output surface file (e.g., lh.white.deformed)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_DEFORM_METADATA);
     const params = mris_deform_params(input_surface, input_volume, xform, output_surface)
@@ -198,5 +198,8 @@ export {
       MrisDeformOutputs,
       MrisDeformParameters,
       mris_deform,
+      mris_deform_cargs,
+      mris_deform_execute,
+      mris_deform_outputs,
       mris_deform_params,
 };

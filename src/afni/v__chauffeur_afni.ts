@@ -12,7 +12,7 @@ const V__CHAUFFEUR_AFNI_METADATA: Metadata = {
 
 
 interface VChauffeurAfniParameters {
-    "__STYXTYPE__": "@chauffeur_afni";
+    "@type": "afni.@chauffeur_afni";
     "ulay": InputPathType;
     "olay"?: InputPathType | null | undefined;
     "prefix": string;
@@ -34,35 +34,35 @@ interface VChauffeurAfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@chauffeur_afni": v__chauffeur_afni_cargs,
+        "afni.@chauffeur_afni": v__chauffeur_afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@chauffeur_afni": v__chauffeur_afni_outputs,
+        "afni.@chauffeur_afni": v__chauffeur_afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,30 @@ interface VChauffeurAfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ulay Name of underlay dataset (required); can be 3D or 4D set
+ * @param prefix Prefix for output files (required)
+ * @param olay Name of overlay dataset (optional)
+ * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
+ * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
+ * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
+ * @param set_subbricks Specify subbricks for 3D image viewing
+ * @param montx Number of image panels in a row (default: 3)
+ * @param monty Number of image panels in a column (default: 3)
+ * @param montgap Number of pixels as gap between image panels (default: 0)
+ * @param label_mode Control labels, ON/OFF and location (default: 1)
+ * @param label_size Control labels, size (default: 3)
+ * @param label_color Control labels, color (default: white)
+ * @param label_setback Control labels, offset from edge (default: 0.01)
+ * @param no_clean Do not remove the temporary directory of copied/intermediate files
+ * @param do_clean Remove the temporary directory of copied/intermediate files
+ * @param help Display help information
+ * @param version Display version number
+ *
+ * @returns Parameter dictionary
+ */
 function v__chauffeur_afni_params(
     ulay: InputPathType,
     prefix: string,
@@ -113,32 +137,8 @@ function v__chauffeur_afni_params(
     help: boolean = false,
     version: boolean = false,
 ): VChauffeurAfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param ulay Name of underlay dataset (required); can be 3D or 4D set
-     * @param prefix Prefix for output files (required)
-     * @param olay Name of overlay dataset (optional)
-     * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
-     * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
-     * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
-     * @param set_subbricks Specify subbricks for 3D image viewing
-     * @param montx Number of image panels in a row (default: 3)
-     * @param monty Number of image panels in a column (default: 3)
-     * @param montgap Number of pixels as gap between image panels (default: 0)
-     * @param label_mode Control labels, ON/OFF and location (default: 1)
-     * @param label_size Control labels, size (default: 3)
-     * @param label_color Control labels, color (default: white)
-     * @param label_setback Control labels, offset from edge (default: 0.01)
-     * @param no_clean Do not remove the temporary directory of copied/intermediate files
-     * @param do_clean Remove the temporary directory of copied/intermediate files
-     * @param help Display help information
-     * @param version Display version number
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@chauffeur_afni" as const,
+        "@type": "afni.@chauffeur_afni" as const,
         "ulay": ulay,
         "prefix": prefix,
         "mode_4D": mode_4_d,
@@ -184,18 +184,18 @@ function v__chauffeur_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__chauffeur_afni_cargs(
     params: VChauffeurAfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@chauffeur_afni");
     cargs.push(execution.inputFile((params["ulay"] ?? null)));
@@ -285,18 +285,18 @@ function v__chauffeur_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__chauffeur_afni_outputs(
     params: VChauffeurAfniParameters,
     execution: Execution,
 ): VChauffeurAfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VChauffeurAfniOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["prefix"] ?? null), ".png"].join('')),
@@ -307,22 +307,22 @@ function v__chauffeur_afni_outputs(
 }
 
 
+/**
+ * Automated QC snapshots generator in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
+ */
 function v__chauffeur_afni_execute(
     params: VChauffeurAfniParameters,
     execution: Execution,
 ): VChauffeurAfniOutputs {
-    /**
-     * Automated QC snapshots generator in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__chauffeur_afni_cargs(params, execution)
     const ret = v__chauffeur_afni_outputs(params, execution)
@@ -331,6 +331,35 @@ function v__chauffeur_afni_execute(
 }
 
 
+/**
+ * Automated QC snapshots generator in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param ulay Name of underlay dataset (required); can be 3D or 4D set
+ * @param prefix Prefix for output files (required)
+ * @param olay Name of overlay dataset (optional)
+ * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
+ * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
+ * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
+ * @param set_subbricks Specify subbricks for 3D image viewing
+ * @param montx Number of image panels in a row (default: 3)
+ * @param monty Number of image panels in a column (default: 3)
+ * @param montgap Number of pixels as gap between image panels (default: 0)
+ * @param label_mode Control labels, ON/OFF and location (default: 1)
+ * @param label_size Control labels, size (default: 3)
+ * @param label_color Control labels, color (default: white)
+ * @param label_setback Control labels, offset from edge (default: 0.01)
+ * @param no_clean Do not remove the temporary directory of copied/intermediate files
+ * @param do_clean Remove the temporary directory of copied/intermediate files
+ * @param help Display help information
+ * @param version Display version number
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
+ */
 function v__chauffeur_afni(
     ulay: InputPathType,
     prefix: string,
@@ -352,35 +381,6 @@ function v__chauffeur_afni(
     version: boolean = false,
     runner: Runner | null = null,
 ): VChauffeurAfniOutputs {
-    /**
-     * Automated QC snapshots generator in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param ulay Name of underlay dataset (required); can be 3D or 4D set
-     * @param prefix Prefix for output files (required)
-     * @param olay Name of overlay dataset (optional)
-     * @param mode_4_d For each viewing plane, one slice is selected across all volumes in a 4D dataset
-     * @param func_range Specify upper value of the overlay dataset to be matched to top of colorbar (default: 98%ile non-zero value of dataset)
-     * @param opacity Enter an opacity factor for the overlay (0-9, with 9 being opaque)
-     * @param set_subbricks Specify subbricks for 3D image viewing
-     * @param montx Number of image panels in a row (default: 3)
-     * @param monty Number of image panels in a column (default: 3)
-     * @param montgap Number of pixels as gap between image panels (default: 0)
-     * @param label_mode Control labels, ON/OFF and location (default: 1)
-     * @param label_size Control labels, size (default: 3)
-     * @param label_color Control labels, color (default: white)
-     * @param label_setback Control labels, offset from edge (default: 0.01)
-     * @param no_clean Do not remove the temporary directory of copied/intermediate files
-     * @param do_clean Remove the temporary directory of copied/intermediate files
-     * @param help Display help information
-     * @param version Display version number
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CHAUFFEUR_AFNI_METADATA);
     const params = v__chauffeur_afni_params(ulay, prefix, olay, mode_4_d, func_range, opacity, set_subbricks, montx, monty, montgap, label_mode, label_size, label_color, label_setback, no_clean, do_clean, help, version)
@@ -393,5 +393,8 @@ export {
       VChauffeurAfniParameters,
       V__CHAUFFEUR_AFNI_METADATA,
       v__chauffeur_afni,
+      v__chauffeur_afni_cargs,
+      v__chauffeur_afni_execute,
+      v__chauffeur_afni_outputs,
       v__chauffeur_afni_params,
 };

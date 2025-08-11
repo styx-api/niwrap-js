@@ -12,14 +12,14 @@ const TCKSIFT_METADATA: Metadata = {
 
 
 interface TcksiftConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tcksift.config";
     "key": string;
     "value": string;
 }
 
 
 interface TcksiftParameters {
-    "__STYXTYPE__": "tcksift";
+    "@type": "mrtrix.tcksift";
     "nofilter": boolean;
     "output_at_counts"?: Array<number> | null | undefined;
     "proc_mask"?: InputPathType | null | undefined;
@@ -50,55 +50,55 @@ interface TcksiftParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tcksift": tcksift_cargs,
-        "config": tcksift_config_cargs,
+        "mrtrix.tcksift": tcksift_cargs,
+        "mrtrix.tcksift.config": tcksift_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tcksift": tcksift_outputs,
+        "mrtrix.tcksift": tcksift_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksift_config_params(
     key: string,
     value: string,
 ): TcksiftConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tcksift.config" as const,
         "key": key,
         "value": value,
     };
@@ -106,18 +106,18 @@ function tcksift_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksift_config_cargs(
     params: TcksiftConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -155,6 +155,40 @@ interface TcksiftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_tracks the input track file
+ * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
+ * @param out_tracks the output filtered tracks file
+ * @param nofilter do NOT perform track filtering - just construct the model in order to provide output debugging images
+ * @param output_at_counts output filtered track files (and optionally debugging images if -output_debug is specified) at specific numbers of remaining streamlines; provide as comma-separated list of integers
+ * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
+ * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
+ * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
+ * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
+ * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
+ * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
+ * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
+ * @param csv output statistics of execution per iteration to a .csv file
+ * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
+ * @param output_debug provide various output images for assessing & debugging performance etc.
+ * @param out_selection output a text file containing the binary selection of streamlines
+ * @param term_number number of streamlines - continue filtering until this number of streamlines remain
+ * @param term_ratio termination ratio - defined as the ratio between reduction in cost function, and reduction in density of streamlines.
+Smaller values result in more streamlines being filtered out.
+ * @param term_mu terminate filtering once the SIFT proportionality coefficient reaches a given value
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksift_params(
     in_tracks: InputPathType,
     in_fod: InputPathType,
@@ -184,42 +218,8 @@ function tcksift_params(
     help: boolean = false,
     version: boolean = false,
 ): TcksiftParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_tracks the input track file
-     * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
-     * @param out_tracks the output filtered tracks file
-     * @param nofilter do NOT perform track filtering - just construct the model in order to provide output debugging images
-     * @param output_at_counts output filtered track files (and optionally debugging images if -output_debug is specified) at specific numbers of remaining streamlines; provide as comma-separated list of integers
-     * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
-     * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
-     * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
-     * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
-     * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
-     * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
-     * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
-     * @param csv output statistics of execution per iteration to a .csv file
-     * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
-     * @param output_debug provide various output images for assessing & debugging performance etc.
-     * @param out_selection output a text file containing the binary selection of streamlines
-     * @param term_number number of streamlines - continue filtering until this number of streamlines remain
-     * @param term_ratio termination ratio - defined as the ratio between reduction in cost function, and reduction in density of streamlines.
-Smaller values result in more streamlines being filtered out.
-     * @param term_mu terminate filtering once the SIFT proportionality coefficient reaches a given value
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tcksift" as const,
+        "@type": "mrtrix.tcksift" as const,
         "nofilter": nofilter,
         "fd_scale_gm": fd_scale_gm,
         "no_dilate_lut": no_dilate_lut,
@@ -276,18 +276,18 @@ Smaller values result in more streamlines being filtered out.
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksift_cargs(
     params: TcksiftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tcksift");
     if ((params["nofilter"] ?? null)) {
@@ -387,7 +387,7 @@ function tcksift_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -402,18 +402,18 @@ function tcksift_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tcksift_outputs(
     params: TcksiftParameters,
     execution: Execution,
 ): TcksiftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TcksiftOutputs = {
         root: execution.outputFile("."),
         out_tracks: execution.outputFile([(params["out_tracks"] ?? null)].join('')),
@@ -425,28 +425,28 @@ function tcksift_outputs(
 }
 
 
+/**
+ * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
+ */
 function tcksift_execute(
     params: TcksiftParameters,
     execution: Execution,
 ): TcksiftOutputs {
-    /**
-     * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
-     */
     params = execution.params(params)
     const cargs = tcksift_cargs(params, execution)
     const ret = tcksift_outputs(params, execution)
@@ -455,6 +455,51 @@ function tcksift_execute(
 }
 
 
+/**
+ * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_tracks the input track file
+ * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
+ * @param out_tracks the output filtered tracks file
+ * @param nofilter do NOT perform track filtering - just construct the model in order to provide output debugging images
+ * @param output_at_counts output filtered track files (and optionally debugging images if -output_debug is specified) at specific numbers of remaining streamlines; provide as comma-separated list of integers
+ * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
+ * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
+ * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
+ * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
+ * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
+ * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
+ * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
+ * @param csv output statistics of execution per iteration to a .csv file
+ * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
+ * @param output_debug provide various output images for assessing & debugging performance etc.
+ * @param out_selection output a text file containing the binary selection of streamlines
+ * @param term_number number of streamlines - continue filtering until this number of streamlines remain
+ * @param term_ratio termination ratio - defined as the ratio between reduction in cost function, and reduction in density of streamlines.
+Smaller values result in more streamlines being filtered out.
+ * @param term_mu terminate filtering once the SIFT proportionality coefficient reaches a given value
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
+ */
 function tcksift(
     in_tracks: InputPathType,
     in_fod: InputPathType,
@@ -485,51 +530,6 @@ function tcksift(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcksiftOutputs {
-    /**
-     * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_tracks the input track file
-     * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
-     * @param out_tracks the output filtered tracks file
-     * @param nofilter do NOT perform track filtering - just construct the model in order to provide output debugging images
-     * @param output_at_counts output filtered track files (and optionally debugging images if -output_debug is specified) at specific numbers of remaining streamlines; provide as comma-separated list of integers
-     * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
-     * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
-     * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
-     * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
-     * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
-     * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
-     * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
-     * @param csv output statistics of execution per iteration to a .csv file
-     * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
-     * @param output_debug provide various output images for assessing & debugging performance etc.
-     * @param out_selection output a text file containing the binary selection of streamlines
-     * @param term_number number of streamlines - continue filtering until this number of streamlines remain
-     * @param term_ratio termination ratio - defined as the ratio between reduction in cost function, and reduction in density of streamlines.
-Smaller values result in more streamlines being filtered out.
-     * @param term_mu terminate filtering once the SIFT proportionality coefficient reaches a given value
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKSIFT_METADATA);
     const params = tcksift_params(in_tracks, in_fod, out_tracks, nofilter, output_at_counts, proc_mask, act, fd_scale_gm, no_dilate_lut, make_null_lobes, remove_untracked, fd_thresh, csv, out_mu, output_debug, out_selection, term_number, term_ratio, term_mu, info, quiet, debug, force, nthreads, config, help, version)
@@ -543,6 +543,10 @@ export {
       TcksiftOutputs,
       TcksiftParameters,
       tcksift,
+      tcksift_cargs,
+      tcksift_config_cargs,
       tcksift_config_params,
+      tcksift_execute,
+      tcksift_outputs,
       tcksift_params,
 };

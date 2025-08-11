@@ -12,7 +12,7 @@ const GAUSS_4DFP_METADATA: Metadata = {
 
 
 interface Gauss4dfpParameters {
-    "__STYXTYPE__": "gauss_4dfp";
+    "@type": "freesurfer.gauss_4dfp";
     "input_file": string;
     "f_half": number;
     "output_root"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface Gauss4dfpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gauss_4dfp": gauss_4dfp_cargs,
+        "freesurfer.gauss_4dfp": gauss_4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gauss_4dfp": gauss_4dfp_outputs,
+        "freesurfer.gauss_4dfp": gauss_4dfp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface Gauss4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 4dfp or conc file to be processed.
+ * @param f_half Half frequency in 1/cm for the Gaussian filter application (f_half is the half frequency in 1/cm).
+ * @param output_root Root name for the output file. Default is <inroot>_g<10*f_half>.
+ * @param endian_flag Specify output endian; 'b' for big or 'l' for little endian. Default is input endian.
+ * @param wrap_flag Suppress x and y padding (wrap-around).
+ * @param differentiate_flag Apply differentiation.
+ *
+ * @returns Parameter dictionary
+ */
 function gauss_4dfp_params(
     input_file: string,
     f_half: number,
@@ -81,20 +93,8 @@ function gauss_4dfp_params(
     wrap_flag: boolean = false,
     differentiate_flag: boolean = false,
 ): Gauss4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 4dfp or conc file to be processed.
-     * @param f_half Half frequency in 1/cm for the Gaussian filter application (f_half is the half frequency in 1/cm).
-     * @param output_root Root name for the output file. Default is <inroot>_g<10*f_half>.
-     * @param endian_flag Specify output endian; 'b' for big or 'l' for little endian. Default is input endian.
-     * @param wrap_flag Suppress x and y padding (wrap-around).
-     * @param differentiate_flag Apply differentiation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gauss_4dfp" as const,
+        "@type": "freesurfer.gauss_4dfp" as const,
         "input_file": input_file,
         "f_half": f_half,
         "wrap_flag": wrap_flag,
@@ -110,18 +110,18 @@ function gauss_4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gauss_4dfp_cargs(
     params: Gauss4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gauss_4dfp");
     cargs.push((params["input_file"] ?? null));
@@ -145,18 +145,18 @@ function gauss_4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gauss_4dfp_outputs(
     params: Gauss4dfpParameters,
     execution: Execution,
 ): Gauss4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Gauss4dfpOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_root"] ?? null) !== null) ? execution.outputFile([(params["output_root"] ?? null), ".4dfp.ifh"].join('')) : null,
@@ -165,22 +165,22 @@ function gauss_4dfp_outputs(
 }
 
 
+/**
+ * Applies a Gaussian filter to 4dfp or conc input files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
+ */
 function gauss_4dfp_execute(
     params: Gauss4dfpParameters,
     execution: Execution,
 ): Gauss4dfpOutputs {
-    /**
-     * Applies a Gaussian filter to 4dfp or conc input files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = gauss_4dfp_cargs(params, execution)
     const ret = gauss_4dfp_outputs(params, execution)
@@ -189,6 +189,23 @@ function gauss_4dfp_execute(
 }
 
 
+/**
+ * Applies a Gaussian filter to 4dfp or conc input files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input 4dfp or conc file to be processed.
+ * @param f_half Half frequency in 1/cm for the Gaussian filter application (f_half is the half frequency in 1/cm).
+ * @param output_root Root name for the output file. Default is <inroot>_g<10*f_half>.
+ * @param endian_flag Specify output endian; 'b' for big or 'l' for little endian. Default is input endian.
+ * @param wrap_flag Suppress x and y padding (wrap-around).
+ * @param differentiate_flag Apply differentiation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
+ */
 function gauss_4dfp(
     input_file: string,
     f_half: number,
@@ -198,23 +215,6 @@ function gauss_4dfp(
     differentiate_flag: boolean = false,
     runner: Runner | null = null,
 ): Gauss4dfpOutputs {
-    /**
-     * Applies a Gaussian filter to 4dfp or conc input files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input 4dfp or conc file to be processed.
-     * @param f_half Half frequency in 1/cm for the Gaussian filter application (f_half is the half frequency in 1/cm).
-     * @param output_root Root name for the output file. Default is <inroot>_g<10*f_half>.
-     * @param endian_flag Specify output endian; 'b' for big or 'l' for little endian. Default is input endian.
-     * @param wrap_flag Suppress x and y padding (wrap-around).
-     * @param differentiate_flag Apply differentiation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GAUSS_4DFP_METADATA);
     const params = gauss_4dfp_params(input_file, f_half, output_root, endian_flag, wrap_flag, differentiate_flag)
@@ -227,5 +227,8 @@ export {
       Gauss4dfpOutputs,
       Gauss4dfpParameters,
       gauss_4dfp,
+      gauss_4dfp_cargs,
+      gauss_4dfp_execute,
+      gauss_4dfp_outputs,
       gauss_4dfp_params,
 };

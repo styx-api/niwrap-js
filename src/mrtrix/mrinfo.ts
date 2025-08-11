@@ -12,41 +12,41 @@ const MRINFO_METADATA: Metadata = {
 
 
 interface MrinfoPropertyParameters {
-    "__STYXTYPE__": "property";
+    "@type": "mrtrix.mrinfo.property";
     "key": string;
 }
 
 
 interface MrinfoFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.mrinfo.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface MrinfoExportGradFslParameters {
-    "__STYXTYPE__": "export_grad_fsl";
+    "@type": "mrtrix.mrinfo.export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
 
 
 interface MrinfoExportPeEddyParameters {
-    "__STYXTYPE__": "export_pe_eddy";
+    "@type": "mrtrix.mrinfo.export_pe_eddy";
     "config": string;
     "indices": string;
 }
 
 
 interface MrinfoConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrinfo.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrinfoParameters {
-    "__STYXTYPE__": "mrinfo";
+    "@type": "mrtrix.mrinfo";
     "all": boolean;
     "name": boolean;
     "format": boolean;
@@ -86,77 +86,77 @@ interface MrinfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrinfo": mrinfo_cargs,
-        "property": mrinfo_property_cargs,
-        "fslgrad": mrinfo_fslgrad_cargs,
-        "export_grad_fsl": mrinfo_export_grad_fsl_cargs,
-        "export_pe_eddy": mrinfo_export_pe_eddy_cargs,
-        "config": mrinfo_config_cargs,
+        "mrtrix.mrinfo": mrinfo_cargs,
+        "mrtrix.mrinfo.property": mrinfo_property_cargs,
+        "mrtrix.mrinfo.fslgrad": mrinfo_fslgrad_cargs,
+        "mrtrix.mrinfo.export_grad_fsl": mrinfo_export_grad_fsl_cargs,
+        "mrtrix.mrinfo.export_pe_eddy": mrinfo_export_pe_eddy_cargs,
+        "mrtrix.mrinfo.config": mrinfo_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrinfo": mrinfo_outputs,
-        "export_grad_fsl": mrinfo_export_grad_fsl_outputs,
-        "export_pe_eddy": mrinfo_export_pe_eddy_outputs,
+        "mrtrix.mrinfo": mrinfo_outputs,
+        "mrtrix.mrinfo.export_grad_fsl": mrinfo_export_grad_fsl_outputs,
+        "mrtrix.mrinfo.export_pe_eddy": mrinfo_export_pe_eddy_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_property_params(
     key: string,
 ): MrinfoPropertyParameters {
-    /**
-     * Build parameters.
-    
-     * @param key any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "property" as const,
+        "@type": "mrtrix.mrinfo.property" as const,
         "key": key,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_property_cargs(
     params: MrinfoPropertyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-property");
     cargs.push((params["key"] ?? null));
@@ -164,20 +164,20 @@ function mrinfo_property_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): MrinfoFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.mrinfo.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -185,18 +185,18 @@ function mrinfo_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_fslgrad_cargs(
     params: MrinfoFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -226,20 +226,20 @@ interface MrinfoExportGradFslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
 ): MrinfoExportGradFslParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_grad_fsl" as const,
+        "@type": "mrtrix.mrinfo.export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -247,18 +247,18 @@ function mrinfo_export_grad_fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_export_grad_fsl_cargs(
     params: MrinfoExportGradFslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_grad_fsl");
     cargs.push((params["bvecs_path"] ?? null));
@@ -267,18 +267,18 @@ function mrinfo_export_grad_fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrinfo_export_grad_fsl_outputs(
     params: MrinfoExportGradFslParameters,
     execution: Execution,
 ): MrinfoExportGradFslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrinfoExportGradFslOutputs = {
         root: execution.outputFile("."),
         bvecs_path: execution.outputFile([(params["bvecs_path"] ?? null)].join('')),
@@ -309,20 +309,20 @@ interface MrinfoExportPeEddyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param config export phase-encoding information to an EDDY-style config / index file pair
+ * @param indices export phase-encoding information to an EDDY-style config / index file pair
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_export_pe_eddy_params(
     config: string,
     indices: string,
 ): MrinfoExportPeEddyParameters {
-    /**
-     * Build parameters.
-    
-     * @param config export phase-encoding information to an EDDY-style config / index file pair
-     * @param indices export phase-encoding information to an EDDY-style config / index file pair
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_pe_eddy" as const,
+        "@type": "mrtrix.mrinfo.export_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -330,18 +330,18 @@ function mrinfo_export_pe_eddy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_export_pe_eddy_cargs(
     params: MrinfoExportPeEddyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_pe_eddy");
     cargs.push((params["config"] ?? null));
@@ -350,18 +350,18 @@ function mrinfo_export_pe_eddy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrinfo_export_pe_eddy_outputs(
     params: MrinfoExportPeEddyParameters,
     execution: Execution,
 ): MrinfoExportPeEddyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrinfoExportPeEddyOutputs = {
         root: execution.outputFile("."),
         config: execution.outputFile([(params["config"] ?? null)].join('')),
@@ -371,20 +371,20 @@ function mrinfo_export_pe_eddy_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_config_params(
     key: string,
     value: string,
 ): MrinfoConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrinfo.config" as const,
         "key": key,
         "value": value,
     };
@@ -392,18 +392,18 @@ function mrinfo_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_config_cargs(
     params: MrinfoConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -449,6 +449,48 @@ interface MrinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image the input image(s).
+ * @param all print all properties, rather than the first and last 2 of each.
+ * @param name print the file system path of the image
+ * @param format image file format
+ * @param ndim number of image dimensions
+ * @param size image size along each axis
+ * @param spacing voxel spacing along each image dimension
+ * @param datatype data type used for image data storage
+ * @param strides data strides i.e. order and direction of axes data layout
+ * @param offset image intensity offset
+ * @param multiplier image intensity multiplier
+ * @param transform the transformation from image coordinates [mm] to scanner / real world coordinates [mm]
+ * @param property any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
+ * @param json_keyval export header key/value entries to a JSON file
+ * @param json_all export all header contents to a JSON file
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param dwgrad the diffusion-weighting gradient table, as interpreted by MRtrix3
+ * @param shell_bvalues list the average b-value of each shell
+ * @param shell_sizes list the number of volumes in each shell
+ * @param shell_indices list the image volumes attributed to each b-value shell
+ * @param export_pe_table export phase-encoding table to file
+ * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
+ * @param petable print the phase encoding table
+ * @param nodelete don't delete temporary images or images passed to mrinfo via Unix pipes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrinfo_params(
     image: Array<InputPathType>,
     all: boolean = false,
@@ -487,50 +529,8 @@ function mrinfo_params(
     help: boolean = false,
     version: boolean = false,
 ): MrinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param image the input image(s).
-     * @param all print all properties, rather than the first and last 2 of each.
-     * @param name print the file system path of the image
-     * @param format image file format
-     * @param ndim number of image dimensions
-     * @param size image size along each axis
-     * @param spacing voxel spacing along each image dimension
-     * @param datatype data type used for image data storage
-     * @param strides data strides i.e. order and direction of axes data layout
-     * @param offset image intensity offset
-     * @param multiplier image intensity multiplier
-     * @param transform the transformation from image coordinates [mm] to scanner / real world coordinates [mm]
-     * @param property any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
-     * @param json_keyval export header key/value entries to a JSON file
-     * @param json_all export all header contents to a JSON file
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param dwgrad the diffusion-weighting gradient table, as interpreted by MRtrix3
-     * @param shell_bvalues list the average b-value of each shell
-     * @param shell_sizes list the number of volumes in each shell
-     * @param shell_indices list the image volumes attributed to each b-value shell
-     * @param export_pe_table export phase-encoding table to file
-     * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
-     * @param petable print the phase encoding table
-     * @param nodelete don't delete temporary images or images passed to mrinfo via Unix pipes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrinfo" as const,
+        "@type": "mrtrix.mrinfo" as const,
         "all": all,
         "name": name,
         "format": format,
@@ -596,18 +596,18 @@ function mrinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrinfo_cargs(
     params: MrinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrinfo");
     if ((params["all"] ?? null)) {
@@ -644,7 +644,7 @@ function mrinfo_cargs(
         cargs.push("-transform");
     }
     if ((params["property"] ?? null) !== null) {
-        cargs.push(...(params["property"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["json_keyval"] ?? null) !== null) {
         cargs.push(
@@ -665,7 +665,7 @@ function mrinfo_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["bvalue_scaling"] ?? null) !== null) {
         cargs.push(
@@ -680,7 +680,7 @@ function mrinfo_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null).__STYXTYPE__)((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["dwgrad"] ?? null)) {
         cargs.push("-dwgrad");
@@ -701,7 +701,7 @@ function mrinfo_cargs(
         );
     }
     if ((params["export_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null).__STYXTYPE__)((params["export_pe_eddy"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null)["@type"])((params["export_pe_eddy"] ?? null), execution));
     }
     if ((params["petable"] ?? null)) {
         cargs.push("-petable");
@@ -728,7 +728,7 @@ function mrinfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -741,61 +741,61 @@ function mrinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrinfo_outputs(
     params: MrinfoParameters,
     execution: Execution,
 ): MrinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrinfoOutputs = {
         root: execution.outputFile("."),
         json_keyval: ((params["json_keyval"] ?? null) !== null) ? execution.outputFile([(params["json_keyval"] ?? null)].join('')) : null,
         json_all: ((params["json_all"] ?? null) !== null) ? execution.outputFile([(params["json_all"] ?? null)].join('')) : null,
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_pe_table: ((params["export_pe_table"] ?? null) !== null) ? execution.outputFile([(params["export_pe_table"] ?? null)].join('')) : null,
-        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null).__STYXTYPE__)?.((params["export_grad_fsl"] ?? null), execution) ?? null),
-        export_pe_eddy: (dynOutputs((params["export_pe_eddy"] ?? null).__STYXTYPE__)?.((params["export_pe_eddy"] ?? null), execution) ?? null),
+        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
+        export_pe_eddy: (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Display image header information, or extract specific information from the header.
+ *
+ * By default, all information contained in each image header will be printed to the console in a reader-friendly format.
+ *
+ * Alternatively, command-line options may be used to extract specific details from the header(s); these are printed to the console in a format more appropriate for scripting purposes or piping to file. If multiple options and/or images are provided, the requested header fields will be printed in the order in which they appear in the help page, with all requested details from each input image in sequence printed before the next image is processed.
+ *
+ * The command can also write the diffusion gradient table from a single input image to file; either in the MRtrix or FSL format (bvecs/bvals file pair; includes appropriate diffusion gradient vector reorientation)
+ *
+ * The -dwgrad, -export_* and -shell_* options provide (information about) the diffusion weighting gradient table after it has been processed by the MRtrix3 back-end (vectors normalised, b-values scaled by the square of the vector norm, depending on the -bvalue_scaling option). To see the raw gradient table information as stored in the image header, i.e. without MRtrix3 back-end processing, use "-property dw_scheme".
+ *
+ * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
+ */
 function mrinfo_execute(
     params: MrinfoParameters,
     execution: Execution,
 ): MrinfoOutputs {
-    /**
-     * Display image header information, or extract specific information from the header.
-     * 
-     * By default, all information contained in each image header will be printed to the console in a reader-friendly format.
-     * 
-     * Alternatively, command-line options may be used to extract specific details from the header(s); these are printed to the console in a format more appropriate for scripting purposes or piping to file. If multiple options and/or images are provided, the requested header fields will be printed in the order in which they appear in the help page, with all requested details from each input image in sequence printed before the next image is processed.
-     * 
-     * The command can also write the diffusion gradient table from a single input image to file; either in the MRtrix or FSL format (bvecs/bvals file pair; includes appropriate diffusion gradient vector reorientation)
-     * 
-     * The -dwgrad, -export_* and -shell_* options provide (information about) the diffusion weighting gradient table after it has been processed by the MRtrix3 back-end (vectors normalised, b-values scaled by the square of the vector norm, depending on the -bvalue_scaling option). To see the raw gradient table information as stored in the image header, i.e. without MRtrix3 back-end processing, use "-property dw_scheme".
-     * 
-     * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrinfo_cargs(params, execution)
     const ret = mrinfo_outputs(params, execution)
@@ -804,6 +804,67 @@ function mrinfo_execute(
 }
 
 
+/**
+ * Display image header information, or extract specific information from the header.
+ *
+ * By default, all information contained in each image header will be printed to the console in a reader-friendly format.
+ *
+ * Alternatively, command-line options may be used to extract specific details from the header(s); these are printed to the console in a format more appropriate for scripting purposes or piping to file. If multiple options and/or images are provided, the requested header fields will be printed in the order in which they appear in the help page, with all requested details from each input image in sequence printed before the next image is processed.
+ *
+ * The command can also write the diffusion gradient table from a single input image to file; either in the MRtrix or FSL format (bvecs/bvals file pair; includes appropriate diffusion gradient vector reorientation)
+ *
+ * The -dwgrad, -export_* and -shell_* options provide (information about) the diffusion weighting gradient table after it has been processed by the MRtrix3 back-end (vectors normalised, b-values scaled by the square of the vector norm, depending on the -bvalue_scaling option). To see the raw gradient table information as stored in the image header, i.e. without MRtrix3 back-end processing, use "-property dw_scheme".
+ *
+ * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image the input image(s).
+ * @param all print all properties, rather than the first and last 2 of each.
+ * @param name print the file system path of the image
+ * @param format image file format
+ * @param ndim number of image dimensions
+ * @param size image size along each axis
+ * @param spacing voxel spacing along each image dimension
+ * @param datatype data type used for image data storage
+ * @param strides data strides i.e. order and direction of axes data layout
+ * @param offset image intensity offset
+ * @param multiplier image intensity multiplier
+ * @param transform the transformation from image coordinates [mm] to scanner / real world coordinates [mm]
+ * @param property any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
+ * @param json_keyval export header key/value entries to a JSON file
+ * @param json_all export all header contents to a JSON file
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param dwgrad the diffusion-weighting gradient table, as interpreted by MRtrix3
+ * @param shell_bvalues list the average b-value of each shell
+ * @param shell_sizes list the number of volumes in each shell
+ * @param shell_indices list the image volumes attributed to each b-value shell
+ * @param export_pe_table export phase-encoding table to file
+ * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
+ * @param petable print the phase encoding table
+ * @param nodelete don't delete temporary images or images passed to mrinfo via Unix pipes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
+ */
 function mrinfo(
     image: Array<InputPathType>,
     all: boolean = false,
@@ -843,67 +904,6 @@ function mrinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrinfoOutputs {
-    /**
-     * Display image header information, or extract specific information from the header.
-     * 
-     * By default, all information contained in each image header will be printed to the console in a reader-friendly format.
-     * 
-     * Alternatively, command-line options may be used to extract specific details from the header(s); these are printed to the console in a format more appropriate for scripting purposes or piping to file. If multiple options and/or images are provided, the requested header fields will be printed in the order in which they appear in the help page, with all requested details from each input image in sequence printed before the next image is processed.
-     * 
-     * The command can also write the diffusion gradient table from a single input image to file; either in the MRtrix or FSL format (bvecs/bvals file pair; includes appropriate diffusion gradient vector reorientation)
-     * 
-     * The -dwgrad, -export_* and -shell_* options provide (information about) the diffusion weighting gradient table after it has been processed by the MRtrix3 back-end (vectors normalised, b-values scaled by the square of the vector norm, depending on the -bvalue_scaling option). To see the raw gradient table information as stored in the image header, i.e. without MRtrix3 back-end processing, use "-property dw_scheme".
-     * 
-     * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image the input image(s).
-     * @param all print all properties, rather than the first and last 2 of each.
-     * @param name print the file system path of the image
-     * @param format image file format
-     * @param ndim number of image dimensions
-     * @param size image size along each axis
-     * @param spacing voxel spacing along each image dimension
-     * @param datatype data type used for image data storage
-     * @param strides data strides i.e. order and direction of axes data layout
-     * @param offset image intensity offset
-     * @param multiplier image intensity multiplier
-     * @param transform the transformation from image coordinates [mm] to scanner / real world coordinates [mm]
-     * @param property any text properties embedded in the image header under the specified key (use 'all' to list all keys found)
-     * @param json_keyval export header key/value entries to a JSON file
-     * @param json_all export all header contents to a JSON file
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param dwgrad the diffusion-weighting gradient table, as interpreted by MRtrix3
-     * @param shell_bvalues list the average b-value of each shell
-     * @param shell_sizes list the number of volumes in each shell
-     * @param shell_indices list the image volumes attributed to each b-value shell
-     * @param export_pe_table export phase-encoding table to file
-     * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
-     * @param petable print the phase encoding table
-     * @param nodelete don't delete temporary images or images passed to mrinfo via Unix pipes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRINFO_METADATA);
     const params = mrinfo_params(image, all, name, format, ndim, size, spacing, datatype, strides, offset, multiplier, transform, property, json_keyval, json_all, grad, fslgrad, bvalue_scaling, export_grad_mrtrix, export_grad_fsl, dwgrad, shell_bvalues, shell_sizes, shell_indices, export_pe_table, export_pe_eddy, petable, nodelete, info, quiet, debug, force, nthreads, config, help, version)
@@ -923,10 +923,20 @@ export {
       MrinfoParameters,
       MrinfoPropertyParameters,
       mrinfo,
+      mrinfo_cargs,
+      mrinfo_config_cargs,
       mrinfo_config_params,
+      mrinfo_execute,
+      mrinfo_export_grad_fsl_cargs,
+      mrinfo_export_grad_fsl_outputs,
       mrinfo_export_grad_fsl_params,
+      mrinfo_export_pe_eddy_cargs,
+      mrinfo_export_pe_eddy_outputs,
       mrinfo_export_pe_eddy_params,
+      mrinfo_fslgrad_cargs,
       mrinfo_fslgrad_params,
+      mrinfo_outputs,
       mrinfo_params,
+      mrinfo_property_cargs,
       mrinfo_property_params,
 };

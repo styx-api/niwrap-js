@@ -12,14 +12,14 @@ const MRMATH_METADATA: Metadata = {
 
 
 interface MrmathConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrmath.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrmathParameters {
-    "__STYXTYPE__": "mrmath";
+    "@type": "mrtrix.mrmath";
     "axis"?: number | null | undefined;
     "keep_unary_axes": boolean;
     "datatype"?: string | null | undefined;
@@ -37,55 +37,55 @@ interface MrmathParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrmath": mrmath_cargs,
-        "config": mrmath_config_cargs,
+        "mrtrix.mrmath": mrmath_cargs,
+        "mrtrix.mrmath.config": mrmath_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrmath": mrmath_outputs,
+        "mrtrix.mrmath": mrmath_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrmath_config_params(
     key: string,
     value: string,
 ): MrmathConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrmath.config" as const,
         "key": key,
         "value": value,
     };
@@ -93,18 +93,18 @@ function mrmath_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrmath_config_cargs(
     params: MrmathConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -130,6 +130,26 @@ interface MrmathOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image(s).
+ * @param operation the operation to apply, one of: mean, median, sum, product, rms, norm, var, std, min, max, absmax, magmax.
+ * @param output the output image.
+ * @param axis perform operation along a specified axis of a single input image
+ * @param keep_unary_axes Keep unary axes in input images prior to calculating the stats. The default is to wipe axes with single elements.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrmath_params(
     input: Array<InputPathType>,
     operation: string,
@@ -146,28 +166,8 @@ function mrmath_params(
     help: boolean = false,
     version: boolean = false,
 ): MrmathParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image(s).
-     * @param operation the operation to apply, one of: mean, median, sum, product, rms, norm, var, std, min, max, absmax, magmax.
-     * @param output the output image.
-     * @param axis perform operation along a specified axis of a single input image
-     * @param keep_unary_axes Keep unary axes in input images prior to calculating the stats. The default is to wipe axes with single elements.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrmath" as const,
+        "@type": "mrtrix.mrmath" as const,
         "keep_unary_axes": keep_unary_axes,
         "info": info,
         "quiet": quiet,
@@ -195,18 +195,18 @@ function mrmath_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrmath_cargs(
     params: MrmathParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrmath");
     if ((params["axis"] ?? null) !== null) {
@@ -243,7 +243,7 @@ function mrmath_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -258,18 +258,18 @@ function mrmath_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrmath_outputs(
     params: MrmathParameters,
     execution: Execution,
 ): MrmathOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrmathOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -278,32 +278,32 @@ function mrmath_outputs(
 }
 
 
+/**
+ * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
+ *
+ * Supported operations are:
+ *
+ * mean, median, sum, product, rms (root-mean-square value), norm (vector 2-norm), var (unbiased variance), std (unbiased standard deviation), min, max, absmax (maximum absolute value), magmax (value with maximum absolute value, preserving its sign).
+ *
+ * This command is used to traverse either along an image axis, or across a set of input images, calculating some statistic from the values along each traversal. If you are seeking to instead perform mathematical calculations that are done independently for each voxel, pleaase see the 'mrcalc' command.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrmathOutputs`).
+ */
 function mrmath_execute(
     params: MrmathParameters,
     execution: Execution,
 ): MrmathOutputs {
-    /**
-     * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
-     * 
-     * Supported operations are:
-     * 
-     * mean, median, sum, product, rms (root-mean-square value), norm (vector 2-norm), var (unbiased variance), std (unbiased standard deviation), min, max, absmax (maximum absolute value), magmax (value with maximum absolute value, preserving its sign).
-     * 
-     * This command is used to traverse either along an image axis, or across a set of input images, calculating some statistic from the values along each traversal. If you are seeking to instead perform mathematical calculations that are done independently for each voxel, pleaase see the 'mrcalc' command.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrmathOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrmath_cargs(params, execution)
     const ret = mrmath_outputs(params, execution)
@@ -312,6 +312,41 @@ function mrmath_execute(
 }
 
 
+/**
+ * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
+ *
+ * Supported operations are:
+ *
+ * mean, median, sum, product, rms (root-mean-square value), norm (vector 2-norm), var (unbiased variance), std (unbiased standard deviation), min, max, absmax (maximum absolute value), magmax (value with maximum absolute value, preserving its sign).
+ *
+ * This command is used to traverse either along an image axis, or across a set of input images, calculating some statistic from the values along each traversal. If you are seeking to instead perform mathematical calculations that are done independently for each voxel, pleaase see the 'mrcalc' command.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image(s).
+ * @param operation the operation to apply, one of: mean, median, sum, product, rms, norm, var, std, min, max, absmax, magmax.
+ * @param output the output image.
+ * @param axis perform operation along a specified axis of a single input image
+ * @param keep_unary_axes Keep unary axes in input images prior to calculating the stats. The default is to wipe axes with single elements.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrmathOutputs`).
+ */
 function mrmath(
     input: Array<InputPathType>,
     operation: string,
@@ -329,41 +364,6 @@ function mrmath(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrmathOutputs {
-    /**
-     * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
-     * 
-     * Supported operations are:
-     * 
-     * mean, median, sum, product, rms (root-mean-square value), norm (vector 2-norm), var (unbiased variance), std (unbiased standard deviation), min, max, absmax (maximum absolute value), magmax (value with maximum absolute value, preserving its sign).
-     * 
-     * This command is used to traverse either along an image axis, or across a set of input images, calculating some statistic from the values along each traversal. If you are seeking to instead perform mathematical calculations that are done independently for each voxel, pleaase see the 'mrcalc' command.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image(s).
-     * @param operation the operation to apply, one of: mean, median, sum, product, rms, norm, var, std, min, max, absmax, magmax.
-     * @param output the output image.
-     * @param axis perform operation along a specified axis of a single input image
-     * @param keep_unary_axes Keep unary axes in input images prior to calculating the stats. The default is to wipe axes with single elements.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrmathOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRMATH_METADATA);
     const params = mrmath_params(input, operation, output, axis, keep_unary_axes, datatype, info, quiet, debug, force, nthreads, config, help, version)
@@ -377,6 +377,10 @@ export {
       MrmathOutputs,
       MrmathParameters,
       mrmath,
+      mrmath_cargs,
+      mrmath_config_cargs,
       mrmath_config_params,
+      mrmath_execute,
+      mrmath_outputs,
       mrmath_params,
 };

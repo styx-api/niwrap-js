@@ -12,7 +12,7 @@ const V_3D_ICC_METADATA: Metadata = {
 
 
 interface V3dIccParameters {
-    "__STYXTYPE__": "3dICC";
+    "@type": "afni.3dICC";
     "model": string;
     "prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface V3dIccParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dICC": v_3d_icc_cargs,
+        "afni.3dICC": v_3d_icc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dICC": v_3d_icc_outputs,
+        "afni.3dICC": v_3d_icc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface V3dIccOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param model Model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes. Variable names should be consistent with the ones used in the header of -dataTable.
+ * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
+ * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
+ * @param mask Path to mask file. Only process voxels inside this mask.
+ * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
+ * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
+ * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
+ * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
+ * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
+ * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
+ * @param t_stat Specify the column name that is designated as the t-statistic.
+ * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
+ * @param cio Use AFNI's C io functions. Default is -cio.
+ * @param rio Use R's io functions.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_icc_params(
     model: string,
     prefix: string,
@@ -97,28 +117,8 @@ function v_3d_icc_params(
     cio: boolean = false,
     rio: boolean = false,
 ): V3dIccParameters {
-    /**
-     * Build parameters.
-    
-     * @param model Model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes. Variable names should be consistent with the ones used in the header of -dataTable.
-     * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
-     * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
-     * @param mask Path to mask file. Only process voxels inside this mask.
-     * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
-     * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
-     * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
-     * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
-     * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
-     * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
-     * @param t_stat Specify the column name that is designated as the t-statistic.
-     * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
-     * @param cio Use AFNI's C io functions. Default is -cio.
-     * @param rio Use R's io functions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dICC" as const,
+        "@type": "afni.3dICC" as const,
         "model": model,
         "prefix": prefix,
         "data_table": data_table,
@@ -154,18 +154,18 @@ function v_3d_icc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_icc_cargs(
     params: V3dIccParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dICC");
     cargs.push((params["model"] ?? null));
@@ -238,18 +238,18 @@ function v_3d_icc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_icc_outputs(
     params: V3dIccParameters,
     execution: Execution,
 ): V3dIccOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dIccOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -258,22 +258,22 @@ function v_3d_icc_outputs(
 }
 
 
+/**
+ * AFNI Program for IntraClass Correlatin (ICC) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
+ */
 function v_3d_icc_execute(
     params: V3dIccParameters,
     execution: Execution,
 ): V3dIccOutputs {
-    /**
-     * AFNI Program for IntraClass Correlatin (ICC) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_icc_cargs(params, execution)
     const ret = v_3d_icc_outputs(params, execution)
@@ -282,6 +282,31 @@ function v_3d_icc_execute(
 }
 
 
+/**
+ * AFNI Program for IntraClass Correlatin (ICC) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param model Model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes. Variable names should be consistent with the ones used in the header of -dataTable.
+ * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
+ * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
+ * @param mask Path to mask file. Only process voxels inside this mask.
+ * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
+ * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
+ * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
+ * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
+ * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
+ * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
+ * @param t_stat Specify the column name that is designated as the t-statistic.
+ * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
+ * @param cio Use AFNI's C io functions. Default is -cio.
+ * @param rio Use R's io functions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
+ */
 function v_3d_icc(
     model: string,
     prefix: string,
@@ -299,31 +324,6 @@ function v_3d_icc(
     rio: boolean = false,
     runner: Runner | null = null,
 ): V3dIccOutputs {
-    /**
-     * AFNI Program for IntraClass Correlatin (ICC) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param model Model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes. Variable names should be consistent with the ones used in the header of -dataTable.
-     * @param prefix Name of output file. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached, while file name for surface data is expected to end with .niml.dset.
-     * @param data_table List the data structure with a header as the first line. The first column is reserved with label 'Subj', and the last is reserved for 'InputFile'.
-     * @param mask Path to mask file. Only process voxels inside this mask.
-     * @param bounds Bounds for outlier removal. Provide two numbers: the lower bound (lb) and the upper bound (ub). Input data will be confined within [lb, ub]. Any values beyond the bounds will be treated as missing.
-     * @param jobs Number of jobs for parallel computing. Choose 1 for a single-processor computer.
-     * @param q_vars Identify quantitative variables with this option. List should be separated with comma and surrounded within quotes.
-     * @param q_var_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas and should be surrounded within quotes.
-     * @param subj Specify the column name that is designated as the measuring entity variable (usually subject).
-     * @param input_file_column Specify the last column name that is designated for input files of effect estimate.
-     * @param t_stat Specify the column name that is designated as the t-statistic.
-     * @param dbg_args Enable R to save the parameters in a file called .3dICC.dbg.AFNI.args in the current directory for debugging.
-     * @param cio Use AFNI's C io functions. Default is -cio.
-     * @param rio Use R's io functions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ICC_METADATA);
     const params = v_3d_icc_params(model, prefix, data_table, mask, bounds, jobs, q_vars, q_var_centers, subj, input_file_column, t_stat, dbg_args, cio, rio)
@@ -336,5 +336,8 @@ export {
       V3dIccParameters,
       V_3D_ICC_METADATA,
       v_3d_icc,
+      v_3d_icc_cargs,
+      v_3d_icc_execute,
+      v_3d_icc_outputs,
       v_3d_icc_params,
 };

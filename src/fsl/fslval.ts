@@ -12,41 +12,41 @@ const FSLVAL_METADATA: Metadata = {
 
 
 interface FslvalParameters {
-    "__STYXTYPE__": "fslval";
+    "@type": "fsl.fslval";
     "input_file": InputPathType;
     "keyword": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslval": fslval_cargs,
+        "fsl.fslval": fslval_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslval": fslval_outputs,
+        "fsl.fslval": fslval_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FslvalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input NIfTI image file
+ * @param keyword Keyword to query from the NIfTI header
+ *
+ * @returns Parameter dictionary
+ */
 function fslval_params(
     input_file: InputPathType,
     keyword: string,
 ): FslvalParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input NIfTI image file
-     * @param keyword Keyword to query from the NIfTI header
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslval" as const,
+        "@type": "fsl.fslval" as const,
         "input_file": input_file,
         "keyword": keyword,
     };
@@ -90,18 +90,18 @@ function fslval_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslval_cargs(
     params: FslvalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslval");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function fslval_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslval_outputs(
     params: FslvalParameters,
     execution: Execution,
 ): FslvalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslvalOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout"].join('')),
@@ -130,22 +130,22 @@ function fslval_outputs(
 }
 
 
+/**
+ * Tool for printing out header information from NIfTI image files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslvalOutputs`).
+ */
 function fslval_execute(
     params: FslvalParameters,
     execution: Execution,
 ): FslvalOutputs {
-    /**
-     * Tool for printing out header information from NIfTI image files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslvalOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslval_cargs(params, execution)
     const ret = fslval_outputs(params, execution)
@@ -154,24 +154,24 @@ function fslval_execute(
 }
 
 
+/**
+ * Tool for printing out header information from NIfTI image files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input NIfTI image file
+ * @param keyword Keyword to query from the NIfTI header
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslvalOutputs`).
+ */
 function fslval(
     input_file: InputPathType,
     keyword: string,
     runner: Runner | null = null,
 ): FslvalOutputs {
-    /**
-     * Tool for printing out header information from NIfTI image files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input NIfTI image file
-     * @param keyword Keyword to query from the NIfTI header
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslvalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLVAL_METADATA);
     const params = fslval_params(input_file, keyword)
@@ -184,5 +184,8 @@ export {
       FslvalOutputs,
       FslvalParameters,
       fslval,
+      fslval_cargs,
+      fslval_execute,
+      fslval_outputs,
       fslval_params,
 };

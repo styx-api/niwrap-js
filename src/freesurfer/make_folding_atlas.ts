@@ -12,7 +12,7 @@ const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
 
 
 interface MakeFoldingAtlasParameters {
-    "__STYXTYPE__": "make_folding_atlas";
+    "@type": "freesurfer.make_folding_atlas";
     "subjlistfile"?: InputPathType | null | undefined;
     "fsgdfile"?: InputPathType | null | undefined;
     "subjects"?: Array<string> | null | undefined;
@@ -36,35 +36,35 @@ interface MakeFoldingAtlasParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_folding_atlas": make_folding_atlas_cargs,
+        "freesurfer.make_folding_atlas": make_folding_atlas_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_folding_atlas": make_folding_atlas_outputs,
+        "freesurfer.make_folding_atlas": make_folding_atlas_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface MakeFoldingAtlasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjlistfile Subject list file.
+ * @param fsgdfile FS Gradient Design file.
+ * @param subjects Subjects to be included.
+ * @param output_base Output base; the subject will be named based on this.
+ * @param max_iterations Maximum number of iterations.
+ * @param xhemi Do xhemi (sets hemilist to lh only, use --lhrh after if both are wanted).
+ * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
+ * @param init_subject Create first atlas from subject instead of all subjects.
+ * @param no_annot_template Disable annotation template (good for monkeys).
+ * @param left_hemisphere Process left hemisphere.
+ * @param right_hemisphere Process right hemisphere.
+ * @param lhrh Process both left and right hemispheres (default).
+ * @param ico_order Icosahedron order; default is 7.
+ * @param no_vol_on_last Do not run make_average_volume on the last iteration.
+ * @param vol Run make_average_volume on each iteration.
+ * @param init Use previous iteration registration to initialize mris_register/surfreg.
+ * @param short_sleep Sleep for a shorter time before polling.
+ * @param no_template_only Make average surface files even with a single hemi or --no-vol.
+ * @param threads Number of threads to use.
+ * @param slurm_account SLURM account or set FS_BATCH_ACCOUNT environment variable.
+ *
+ * @returns Parameter dictionary
+ */
 function make_folding_atlas_params(
     subjlistfile: InputPathType | null = null,
     fsgdfile: InputPathType | null = null,
@@ -109,34 +135,8 @@ function make_folding_atlas_params(
     threads: number | null = null,
     slurm_account: string | null = null,
 ): MakeFoldingAtlasParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjlistfile Subject list file.
-     * @param fsgdfile FS Gradient Design file.
-     * @param subjects Subjects to be included.
-     * @param output_base Output base; the subject will be named based on this.
-     * @param max_iterations Maximum number of iterations.
-     * @param xhemi Do xhemi (sets hemilist to lh only, use --lhrh after if both are wanted).
-     * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
-     * @param init_subject Create first atlas from subject instead of all subjects.
-     * @param no_annot_template Disable annotation template (good for monkeys).
-     * @param left_hemisphere Process left hemisphere.
-     * @param right_hemisphere Process right hemisphere.
-     * @param lhrh Process both left and right hemispheres (default).
-     * @param ico_order Icosahedron order; default is 7.
-     * @param no_vol_on_last Do not run make_average_volume on the last iteration.
-     * @param vol Run make_average_volume on each iteration.
-     * @param init Use previous iteration registration to initialize mris_register/surfreg.
-     * @param short_sleep Sleep for a shorter time before polling.
-     * @param no_template_only Make average surface files even with a single hemi or --no-vol.
-     * @param threads Number of threads to use.
-     * @param slurm_account SLURM account or set FS_BATCH_ACCOUNT environment variable.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_folding_atlas" as const,
+        "@type": "freesurfer.make_folding_atlas" as const,
         "xhemi": xhemi,
         "no_annot_template": no_annot_template,
         "left_hemisphere": left_hemisphere,
@@ -182,18 +182,18 @@ function make_folding_atlas_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_folding_atlas_cargs(
     params: MakeFoldingAtlasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_folding_atlas");
     if ((params["subjlistfile"] ?? null) !== null) {
@@ -290,18 +290,18 @@ function make_folding_atlas_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_folding_atlas_outputs(
     params: MakeFoldingAtlasParameters,
     execution: Execution,
 ): MakeFoldingAtlasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeFoldingAtlasOutputs = {
         root: execution.outputFile("."),
         average_subject_folder: ((params["output_base"] ?? null) !== null) ? execution.outputFile([(params["output_base"] ?? null), ".i*"].join('')) : null,
@@ -310,22 +310,22 @@ function make_folding_atlas_outputs(
 }
 
 
+/**
+ * Script to iteratively create a cortical folding atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
+ */
 function make_folding_atlas_execute(
     params: MakeFoldingAtlasParameters,
     execution: Execution,
 ): MakeFoldingAtlasOutputs {
-    /**
-     * Script to iteratively create a cortical folding atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_folding_atlas_cargs(params, execution)
     const ret = make_folding_atlas_outputs(params, execution)
@@ -334,6 +334,37 @@ function make_folding_atlas_execute(
 }
 
 
+/**
+ * Script to iteratively create a cortical folding atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjlistfile Subject list file.
+ * @param fsgdfile FS Gradient Design file.
+ * @param subjects Subjects to be included.
+ * @param output_base Output base; the subject will be named based on this.
+ * @param max_iterations Maximum number of iterations.
+ * @param xhemi Do xhemi (sets hemilist to lh only, use --lhrh after if both are wanted).
+ * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
+ * @param init_subject Create first atlas from subject instead of all subjects.
+ * @param no_annot_template Disable annotation template (good for monkeys).
+ * @param left_hemisphere Process left hemisphere.
+ * @param right_hemisphere Process right hemisphere.
+ * @param lhrh Process both left and right hemispheres (default).
+ * @param ico_order Icosahedron order; default is 7.
+ * @param no_vol_on_last Do not run make_average_volume on the last iteration.
+ * @param vol Run make_average_volume on each iteration.
+ * @param init Use previous iteration registration to initialize mris_register/surfreg.
+ * @param short_sleep Sleep for a shorter time before polling.
+ * @param no_template_only Make average surface files even with a single hemi or --no-vol.
+ * @param threads Number of threads to use.
+ * @param slurm_account SLURM account or set FS_BATCH_ACCOUNT environment variable.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
+ */
 function make_folding_atlas(
     subjlistfile: InputPathType | null = null,
     fsgdfile: InputPathType | null = null,
@@ -357,37 +388,6 @@ function make_folding_atlas(
     slurm_account: string | null = null,
     runner: Runner | null = null,
 ): MakeFoldingAtlasOutputs {
-    /**
-     * Script to iteratively create a cortical folding atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjlistfile Subject list file.
-     * @param fsgdfile FS Gradient Design file.
-     * @param subjects Subjects to be included.
-     * @param output_base Output base; the subject will be named based on this.
-     * @param max_iterations Maximum number of iterations.
-     * @param xhemi Do xhemi (sets hemilist to lh only, use --lhrh after if both are wanted).
-     * @param init_surf_reg Registration used to make template on first iteration (default sphere.reg).
-     * @param init_subject Create first atlas from subject instead of all subjects.
-     * @param no_annot_template Disable annotation template (good for monkeys).
-     * @param left_hemisphere Process left hemisphere.
-     * @param right_hemisphere Process right hemisphere.
-     * @param lhrh Process both left and right hemispheres (default).
-     * @param ico_order Icosahedron order; default is 7.
-     * @param no_vol_on_last Do not run make_average_volume on the last iteration.
-     * @param vol Run make_average_volume on each iteration.
-     * @param init Use previous iteration registration to initialize mris_register/surfreg.
-     * @param short_sleep Sleep for a shorter time before polling.
-     * @param no_template_only Make average surface files even with a single hemi or --no-vol.
-     * @param threads Number of threads to use.
-     * @param slurm_account SLURM account or set FS_BATCH_ACCOUNT environment variable.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_FOLDING_ATLAS_METADATA);
     const params = make_folding_atlas_params(subjlistfile, fsgdfile, subjects, output_base, max_iterations, xhemi, init_surf_reg, init_subject, no_annot_template, left_hemisphere, right_hemisphere, lhrh, ico_order, no_vol_on_last, vol, init, short_sleep, no_template_only, threads, slurm_account)
@@ -400,5 +400,8 @@ export {
       MakeFoldingAtlasOutputs,
       MakeFoldingAtlasParameters,
       make_folding_atlas,
+      make_folding_atlas_cargs,
+      make_folding_atlas_execute,
+      make_folding_atlas_outputs,
       make_folding_atlas_params,
 };

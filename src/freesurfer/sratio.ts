@@ -12,7 +12,7 @@ const SRATIO_METADATA: Metadata = {
 
 
 interface SratioParameters {
-    "__STYXTYPE__": "sratio";
+    "@type": "freesurfer.sratio";
     "value_a": number;
     "value_b": number;
     "abs_flag": boolean;
@@ -20,35 +20,35 @@ interface SratioParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sratio": sratio_cargs,
+        "freesurfer.sratio": sratio_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sratio": sratio_outputs,
+        "freesurfer.sratio": sratio_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SratioOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param value_a First value for the sratio operation
+ * @param value_b Second value for the sratio operation
+ * @param abs_flag Compute absolute value of both A and B before sratio
+ * @param mask_threshold Threshold based on max(abs(A),abs(B)) > thresh
+ *
+ * @returns Parameter dictionary
+ */
 function sratio_params(
     value_a: number,
     value_b: number,
     abs_flag: boolean = false,
     mask_threshold: number | null = null,
 ): SratioParameters {
-    /**
-     * Build parameters.
-    
-     * @param value_a First value for the sratio operation
-     * @param value_b Second value for the sratio operation
-     * @param abs_flag Compute absolute value of both A and B before sratio
-     * @param mask_threshold Threshold based on max(abs(A),abs(B)) > thresh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sratio" as const,
+        "@type": "freesurfer.sratio" as const,
         "value_a": value_a,
         "value_b": value_b,
         "abs_flag": abs_flag,
@@ -100,18 +100,18 @@ function sratio_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sratio_cargs(
     params: SratioParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sratio");
     cargs.push(String((params["value_a"] ?? null)));
@@ -129,18 +129,18 @@ function sratio_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sratio_outputs(
     params: SratioParameters,
     execution: Execution,
 ): SratioOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SratioOutputs = {
         root: execution.outputFile("."),
         sratio_result: execution.outputFile(["[SRATIO_RESULT]"].join('')),
@@ -149,22 +149,22 @@ function sratio_outputs(
 }
 
 
+/**
+ * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SratioOutputs`).
+ */
 function sratio_execute(
     params: SratioParameters,
     execution: Execution,
 ): SratioOutputs {
-    /**
-     * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SratioOutputs`).
-     */
     params = execution.params(params)
     const cargs = sratio_cargs(params, execution)
     const ret = sratio_outputs(params, execution)
@@ -173,6 +173,21 @@ function sratio_execute(
 }
 
 
+/**
+ * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param value_a First value for the sratio operation
+ * @param value_b Second value for the sratio operation
+ * @param abs_flag Compute absolute value of both A and B before sratio
+ * @param mask_threshold Threshold based on max(abs(A),abs(B)) > thresh
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SratioOutputs`).
+ */
 function sratio(
     value_a: number,
     value_b: number,
@@ -180,21 +195,6 @@ function sratio(
     mask_threshold: number | null = null,
     runner: Runner | null = null,
 ): SratioOutputs {
-    /**
-     * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param value_a First value for the sratio operation
-     * @param value_b Second value for the sratio operation
-     * @param abs_flag Compute absolute value of both A and B before sratio
-     * @param mask_threshold Threshold based on max(abs(A),abs(B)) > thresh
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SratioOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SRATIO_METADATA);
     const params = sratio_params(value_a, value_b, abs_flag, mask_threshold)
@@ -207,5 +207,8 @@ export {
       SratioOutputs,
       SratioParameters,
       sratio,
+      sratio_cargs,
+      sratio_execute,
+      sratio_outputs,
       sratio_params,
 };

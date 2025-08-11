@@ -12,7 +12,7 @@ const FNIRT_METADATA: Metadata = {
 
 
 interface FnirtParameters {
-    "__STYXTYPE__": "fnirt";
+    "@type": "fsl.fnirt";
     "affine_file"?: InputPathType | null | undefined;
     "config_file"?: "T1_2_MNI152_2mm" | "FA_2_FMRIB58_1mm" | null | undefined;
     "field_file"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface FnirtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fnirt": fnirt_cargs,
+        "fsl.fnirt": fnirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fnirt": fnirt_outputs,
+        "fsl.fnirt": fnirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,23 @@ interface FnirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Name of input image.
+ * @param ref_file Name of reference image.
+ * @param affine_file Name of file containing affine transform.
+ * @param config_file 't1_2_mni152_2mm' or 'fa_2_fmrib58_1mm' or file or string. Name of config file specifying command line arguments.
+ * @param field_file file. Name of output file with field.
+ * @param fieldcoeff_file string representing a file. Name of output file with field coefficients.
+ * @param jacobian_file A file. Name of file for writing out the jacobian of the field (for diagnostic or vbm purposes).
+ * @param log_file Name of log-file.
+ * @param modulatedref_file string representing a file. Name of file for writing out intensity modulated --ref (for diagnostic purposes).
+ * @param refmask_file Name of file with mask in reference space.
+ * @param warped_file Name of output-file containing the --in image after it has been warped to the --ref image
+ *
+ * @returns Parameter dictionary
+ */
 function fnirt_params(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -111,25 +128,8 @@ function fnirt_params(
     refmask_file: InputPathType | null = null,
     warped_file: InputPathType | null = null,
 ): FnirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Name of input image.
-     * @param ref_file Name of reference image.
-     * @param affine_file Name of file containing affine transform.
-     * @param config_file 't1_2_mni152_2mm' or 'fa_2_fmrib58_1mm' or file or string. Name of config file specifying command line arguments.
-     * @param field_file file. Name of output file with field.
-     * @param fieldcoeff_file string representing a file. Name of output file with field coefficients.
-     * @param jacobian_file A file. Name of file for writing out the jacobian of the field (for diagnostic or vbm purposes).
-     * @param log_file Name of log-file.
-     * @param modulatedref_file string representing a file. Name of file for writing out intensity modulated --ref (for diagnostic purposes).
-     * @param refmask_file Name of file with mask in reference space.
-     * @param warped_file Name of output-file containing the --in image after it has been warped to the --ref image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fnirt" as const,
+        "@type": "fsl.fnirt" as const,
         "in_file": in_file,
         "ref_file": ref_file,
     };
@@ -164,18 +164,18 @@ function fnirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fnirt_cargs(
     params: FnirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fnirt");
     if ((params["affine_file"] ?? null) !== null) {
@@ -211,18 +211,18 @@ function fnirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fnirt_outputs(
     params: FnirtParameters,
     execution: Execution,
 ): FnirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FnirtOutputs = {
         root: execution.outputFile("."),
         field_file_outfile: ((params["field_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["field_file"] ?? null)), ".nii.gz"].join('')) : null,
@@ -236,22 +236,22 @@ function fnirt_outputs(
 }
 
 
+/**
+ * FSL non-linear registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FnirtOutputs`).
+ */
 function fnirt_execute(
     params: FnirtParameters,
     execution: Execution,
 ): FnirtOutputs {
-    /**
-     * FSL non-linear registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FnirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = fnirt_cargs(params, execution)
     const ret = fnirt_outputs(params, execution)
@@ -260,6 +260,28 @@ function fnirt_execute(
 }
 
 
+/**
+ * FSL non-linear registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Name of input image.
+ * @param ref_file Name of reference image.
+ * @param affine_file Name of file containing affine transform.
+ * @param config_file 't1_2_mni152_2mm' or 'fa_2_fmrib58_1mm' or file or string. Name of config file specifying command line arguments.
+ * @param field_file file. Name of output file with field.
+ * @param fieldcoeff_file string representing a file. Name of output file with field coefficients.
+ * @param jacobian_file A file. Name of file for writing out the jacobian of the field (for diagnostic or vbm purposes).
+ * @param log_file Name of log-file.
+ * @param modulatedref_file string representing a file. Name of file for writing out intensity modulated --ref (for diagnostic purposes).
+ * @param refmask_file Name of file with mask in reference space.
+ * @param warped_file Name of output-file containing the --in image after it has been warped to the --ref image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FnirtOutputs`).
+ */
 function fnirt(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -274,28 +296,6 @@ function fnirt(
     warped_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FnirtOutputs {
-    /**
-     * FSL non-linear registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Name of input image.
-     * @param ref_file Name of reference image.
-     * @param affine_file Name of file containing affine transform.
-     * @param config_file 't1_2_mni152_2mm' or 'fa_2_fmrib58_1mm' or file or string. Name of config file specifying command line arguments.
-     * @param field_file file. Name of output file with field.
-     * @param fieldcoeff_file string representing a file. Name of output file with field coefficients.
-     * @param jacobian_file A file. Name of file for writing out the jacobian of the field (for diagnostic or vbm purposes).
-     * @param log_file Name of log-file.
-     * @param modulatedref_file string representing a file. Name of file for writing out intensity modulated --ref (for diagnostic purposes).
-     * @param refmask_file Name of file with mask in reference space.
-     * @param warped_file Name of output-file containing the --in image after it has been warped to the --ref image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FnirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FNIRT_METADATA);
     const params = fnirt_params(in_file, ref_file, affine_file, config_file, field_file, fieldcoeff_file, jacobian_file, log_file, modulatedref_file, refmask_file, warped_file)
@@ -308,5 +308,8 @@ export {
       FnirtOutputs,
       FnirtParameters,
       fnirt,
+      fnirt_cargs,
+      fnirt_execute,
+      fnirt_outputs,
       fnirt_params,
 };

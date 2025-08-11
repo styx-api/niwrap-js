@@ -12,7 +12,7 @@ const V__SURF_TO_VOL_SPACKLE_METADATA: Metadata = {
 
 
 interface VSurfToVolSpackleParameters {
-    "__STYXTYPE__": "@surf_to_vol_spackle";
+    "@type": "afni.@surf_to_vol_spackle";
     "maskset": InputPathType;
     "spec": InputPathType;
     "surfA": string;
@@ -30,35 +30,35 @@ interface VSurfToVolSpackleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@surf_to_vol_spackle": v__surf_to_vol_spackle_cargs,
+        "afni.@surf_to_vol_spackle": v__surf_to_vol_spackle_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@surf_to_vol_spackle": v__surf_to_vol_spackle_outputs,
+        "afni.@surf_to_vol_spackle": v__surf_to_vol_spackle_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface VSurfToVolSpackleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param maskset Mask dataset in which to project surface measures.
+ * @param spec Surface specification file with list of surfaces.
+ * @param surf_a Name of the first surface, e.g., smoothwm, pial, etc.
+ * @param surfset Dataset of surface measures.
+ * @param prefix Basename of output. Final name used is prefix.nii.gz.
+ * @param surf_b Name of the second surface. If not included, computes using normal vector.
+ * @param normal_vector_length Normal vector length if only using a single surface (default 2 mm).
+ * @param search_radius Radius for search for mean to fill holes (default 2 mm).
+ * @param num_steps Number of steps on line segments (default 10).
+ * @param keep_temp_files Do not remove any of the temporary files (default is to remove them).
+ * @param max_iters Maximum number of smoothing and filling iterations (default is 4).
+ * @param use_mode Use mode instead of non-zero median (appropriate for ROIs).
+ * @param datum_type Set datum type to byte, short, or float instead of maskset type. Mode triggers -datum short.
+ * @param ignore_unknown_options Ignore additional options that are not needed.
+ *
+ * @returns Parameter dictionary
+ */
 function v__surf_to_vol_spackle_params(
     maskset: InputPathType,
     spec: InputPathType,
@@ -97,28 +117,8 @@ function v__surf_to_vol_spackle_params(
     datum_type: string | null = null,
     ignore_unknown_options: boolean = false,
 ): VSurfToVolSpackleParameters {
-    /**
-     * Build parameters.
-    
-     * @param maskset Mask dataset in which to project surface measures.
-     * @param spec Surface specification file with list of surfaces.
-     * @param surf_a Name of the first surface, e.g., smoothwm, pial, etc.
-     * @param surfset Dataset of surface measures.
-     * @param prefix Basename of output. Final name used is prefix.nii.gz.
-     * @param surf_b Name of the second surface. If not included, computes using normal vector.
-     * @param normal_vector_length Normal vector length if only using a single surface (default 2 mm).
-     * @param search_radius Radius for search for mean to fill holes (default 2 mm).
-     * @param num_steps Number of steps on line segments (default 10).
-     * @param keep_temp_files Do not remove any of the temporary files (default is to remove them).
-     * @param max_iters Maximum number of smoothing and filling iterations (default is 4).
-     * @param use_mode Use mode instead of non-zero median (appropriate for ROIs).
-     * @param datum_type Set datum type to byte, short, or float instead of maskset type. Mode triggers -datum short.
-     * @param ignore_unknown_options Ignore additional options that are not needed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@surf_to_vol_spackle" as const,
+        "@type": "afni.@surf_to_vol_spackle" as const,
         "maskset": maskset,
         "spec": spec,
         "surfA": surf_a,
@@ -150,18 +150,18 @@ function v__surf_to_vol_spackle_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__surf_to_vol_spackle_cargs(
     params: VSurfToVolSpackleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@surf_to_vol_spackle");
     cargs.push(execution.inputFile((params["maskset"] ?? null)));
@@ -215,18 +215,18 @@ function v__surf_to_vol_spackle_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__surf_to_vol_spackle_outputs(
     params: VSurfToVolSpackleParameters,
     execution: Execution,
 ): VSurfToVolSpackleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSurfToVolSpackleOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -235,22 +235,22 @@ function v__surf_to_vol_spackle_outputs(
 }
 
 
+/**
+ * Project data from a surface dataset into a volume primarily using 3dSurf2Vol but then filling any holes with an iterative smoothing procedure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
+ */
 function v__surf_to_vol_spackle_execute(
     params: VSurfToVolSpackleParameters,
     execution: Execution,
 ): VSurfToVolSpackleOutputs {
-    /**
-     * Project data from a surface dataset into a volume primarily using 3dSurf2Vol but then filling any holes with an iterative smoothing procedure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__surf_to_vol_spackle_cargs(params, execution)
     const ret = v__surf_to_vol_spackle_outputs(params, execution)
@@ -259,6 +259,31 @@ function v__surf_to_vol_spackle_execute(
 }
 
 
+/**
+ * Project data from a surface dataset into a volume primarily using 3dSurf2Vol but then filling any holes with an iterative smoothing procedure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param maskset Mask dataset in which to project surface measures.
+ * @param spec Surface specification file with list of surfaces.
+ * @param surf_a Name of the first surface, e.g., smoothwm, pial, etc.
+ * @param surfset Dataset of surface measures.
+ * @param prefix Basename of output. Final name used is prefix.nii.gz.
+ * @param surf_b Name of the second surface. If not included, computes using normal vector.
+ * @param normal_vector_length Normal vector length if only using a single surface (default 2 mm).
+ * @param search_radius Radius for search for mean to fill holes (default 2 mm).
+ * @param num_steps Number of steps on line segments (default 10).
+ * @param keep_temp_files Do not remove any of the temporary files (default is to remove them).
+ * @param max_iters Maximum number of smoothing and filling iterations (default is 4).
+ * @param use_mode Use mode instead of non-zero median (appropriate for ROIs).
+ * @param datum_type Set datum type to byte, short, or float instead of maskset type. Mode triggers -datum short.
+ * @param ignore_unknown_options Ignore additional options that are not needed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
+ */
 function v__surf_to_vol_spackle(
     maskset: InputPathType,
     spec: InputPathType,
@@ -276,31 +301,6 @@ function v__surf_to_vol_spackle(
     ignore_unknown_options: boolean = false,
     runner: Runner | null = null,
 ): VSurfToVolSpackleOutputs {
-    /**
-     * Project data from a surface dataset into a volume primarily using 3dSurf2Vol but then filling any holes with an iterative smoothing procedure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param maskset Mask dataset in which to project surface measures.
-     * @param spec Surface specification file with list of surfaces.
-     * @param surf_a Name of the first surface, e.g., smoothwm, pial, etc.
-     * @param surfset Dataset of surface measures.
-     * @param prefix Basename of output. Final name used is prefix.nii.gz.
-     * @param surf_b Name of the second surface. If not included, computes using normal vector.
-     * @param normal_vector_length Normal vector length if only using a single surface (default 2 mm).
-     * @param search_radius Radius for search for mean to fill holes (default 2 mm).
-     * @param num_steps Number of steps on line segments (default 10).
-     * @param keep_temp_files Do not remove any of the temporary files (default is to remove them).
-     * @param max_iters Maximum number of smoothing and filling iterations (default is 4).
-     * @param use_mode Use mode instead of non-zero median (appropriate for ROIs).
-     * @param datum_type Set datum type to byte, short, or float instead of maskset type. Mode triggers -datum short.
-     * @param ignore_unknown_options Ignore additional options that are not needed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SURF_TO_VOL_SPACKLE_METADATA);
     const params = v__surf_to_vol_spackle_params(maskset, spec, surf_a, surfset, prefix, surf_b, normal_vector_length, search_radius, num_steps, keep_temp_files, max_iters, use_mode, datum_type, ignore_unknown_options)
@@ -313,5 +313,8 @@ export {
       VSurfToVolSpackleParameters,
       V__SURF_TO_VOL_SPACKLE_METADATA,
       v__surf_to_vol_spackle,
+      v__surf_to_vol_spackle_cargs,
+      v__surf_to_vol_spackle_execute,
+      v__surf_to_vol_spackle_outputs,
       v__surf_to_vol_spackle_params,
 };

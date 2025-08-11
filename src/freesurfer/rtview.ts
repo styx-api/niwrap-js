@@ -12,7 +12,7 @@ const RTVIEW_METADATA: Metadata = {
 
 
 interface RtviewParameters {
-    "__STYXTYPE__": "rtview";
+    "@type": "freesurfer.rtview";
     "subject"?: string | null | undefined;
     "hemi"?: string | null | undefined;
     "left_hemi": boolean;
@@ -30,33 +30,33 @@ interface RtviewParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rtview": rtview_cargs,
+        "freesurfer.rtview": rtview_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface RtviewOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject to use as display
+ * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
+ * @param left_hemi Display left hemisphere
+ * @param right_hemi Display right hemisphere
+ * @param eccen Display eccentricity data
+ * @param polar Display polar data
+ * @param real_file File containing real (cosine) values
+ * @param imag_file File containing imaginary (sine) values
+ * @param fsig_file File containing significance values
+ * @param reg_file Registration file for when real/imag/fsig are volumes
+ * @param flat_display Display on occip.patch.flat
+ * @param patch Display on specified patchname
+ * @param tcl_file Use your own TCL command file
+ * @param no_cleanup Don't delete temporary directory
+ *
+ * @returns Parameter dictionary
+ */
 function rtview_params(
     subject: string | null = null,
     hemi: string | null = null,
@@ -92,28 +112,8 @@ function rtview_params(
     tcl_file: InputPathType | null = null,
     no_cleanup: boolean = false,
 ): RtviewParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject to use as display
-     * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
-     * @param left_hemi Display left hemisphere
-     * @param right_hemi Display right hemisphere
-     * @param eccen Display eccentricity data
-     * @param polar Display polar data
-     * @param real_file File containing real (cosine) values
-     * @param imag_file File containing imaginary (sine) values
-     * @param fsig_file File containing significance values
-     * @param reg_file Registration file for when real/imag/fsig are volumes
-     * @param flat_display Display on occip.patch.flat
-     * @param patch Display on specified patchname
-     * @param tcl_file Use your own TCL command file
-     * @param no_cleanup Don't delete temporary directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rtview" as const,
+        "@type": "freesurfer.rtview" as const,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "eccen": eccen,
@@ -149,18 +149,18 @@ function rtview_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rtview_cargs(
     params: RtviewParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rtview");
     if ((params["subject"] ?? null) !== null) {
@@ -233,18 +233,18 @@ function rtview_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rtview_outputs(
     params: RtviewParameters,
     execution: Execution,
 ): RtviewOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RtviewOutputs = {
         root: execution.outputFile("."),
     };
@@ -252,22 +252,22 @@ function rtview_outputs(
 }
 
 
+/**
+ * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RtviewOutputs`).
+ */
 function rtview_execute(
     params: RtviewParameters,
     execution: Execution,
 ): RtviewOutputs {
-    /**
-     * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RtviewOutputs`).
-     */
     params = execution.params(params)
     const cargs = rtview_cargs(params, execution)
     const ret = rtview_outputs(params, execution)
@@ -276,6 +276,31 @@ function rtview_execute(
 }
 
 
+/**
+ * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject to use as display
+ * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
+ * @param left_hemi Display left hemisphere
+ * @param right_hemi Display right hemisphere
+ * @param eccen Display eccentricity data
+ * @param polar Display polar data
+ * @param real_file File containing real (cosine) values
+ * @param imag_file File containing imaginary (sine) values
+ * @param fsig_file File containing significance values
+ * @param reg_file Registration file for when real/imag/fsig are volumes
+ * @param flat_display Display on occip.patch.flat
+ * @param patch Display on specified patchname
+ * @param tcl_file Use your own TCL command file
+ * @param no_cleanup Don't delete temporary directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RtviewOutputs`).
+ */
 function rtview(
     subject: string | null = null,
     hemi: string | null = null,
@@ -293,31 +318,6 @@ function rtview(
     no_cleanup: boolean = false,
     runner: Runner | null = null,
 ): RtviewOutputs {
-    /**
-     * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject to use as display
-     * @param hemi Hemisphere to display: 'lh' for left hemisphere or 'rh' for right hemisphere
-     * @param left_hemi Display left hemisphere
-     * @param right_hemi Display right hemisphere
-     * @param eccen Display eccentricity data
-     * @param polar Display polar data
-     * @param real_file File containing real (cosine) values
-     * @param imag_file File containing imaginary (sine) values
-     * @param fsig_file File containing significance values
-     * @param reg_file Registration file for when real/imag/fsig are volumes
-     * @param flat_display Display on occip.patch.flat
-     * @param patch Display on specified patchname
-     * @param tcl_file Use your own TCL command file
-     * @param no_cleanup Don't delete temporary directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RtviewOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RTVIEW_METADATA);
     const params = rtview_params(subject, hemi, left_hemi, right_hemi, eccen, polar, real_file, imag_file, fsig_file, reg_file, flat_display, patch, tcl_file, no_cleanup)
@@ -330,5 +330,8 @@ export {
       RtviewOutputs,
       RtviewParameters,
       rtview,
+      rtview_cargs,
+      rtview_execute,
+      rtview_outputs,
       rtview_params,
 };

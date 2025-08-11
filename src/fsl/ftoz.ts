@@ -12,7 +12,7 @@ const FTOZ_METADATA: Metadata = {
 
 
 interface FtozParameters {
-    "__STYXTYPE__": "ftoz";
+    "@type": "fsl.ftoz";
     "input_file": InputPathType;
     "dof1": number;
     "dof2": number;
@@ -21,35 +21,35 @@ interface FtozParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ftoz": ftoz_cargs,
+        "fsl.ftoz": ftoz_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ftoz": ftoz_outputs,
+        "fsl.ftoz": ftoz_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface FtozOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file File containing F-statistics
+ * @param dof1 Degrees of freedom 1 for F-to-Z conversion
+ * @param dof2 Degrees of freedom 2 for F-to-Z conversion
+ * @param output_file Output file for Z-scores
+ * @param help_flag Display this help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function ftoz_params(
     input_file: InputPathType,
     dof1: number,
@@ -79,19 +90,8 @@ function ftoz_params(
     output_file: string | null = "zstats",
     help_flag: boolean = false,
 ): FtozParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file File containing F-statistics
-     * @param dof1 Degrees of freedom 1 for F-to-Z conversion
-     * @param dof2 Degrees of freedom 2 for F-to-Z conversion
-     * @param output_file Output file for Z-scores
-     * @param help_flag Display this help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ftoz" as const,
+        "@type": "fsl.ftoz" as const,
         "input_file": input_file,
         "dof1": dof1,
         "dof2": dof2,
@@ -104,18 +104,18 @@ function ftoz_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ftoz_cargs(
     params: FtozParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ftoz");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -134,18 +134,18 @@ function ftoz_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ftoz_outputs(
     params: FtozParameters,
     execution: Execution,
 ): FtozOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FtozOutputs = {
         root: execution.outputFile("."),
         output_zscores: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -154,22 +154,22 @@ function ftoz_outputs(
 }
 
 
+/**
+ * Convert F-statistics to Z-scores.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FtozOutputs`).
+ */
 function ftoz_execute(
     params: FtozParameters,
     execution: Execution,
 ): FtozOutputs {
-    /**
-     * Convert F-statistics to Z-scores.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FtozOutputs`).
-     */
     params = execution.params(params)
     const cargs = ftoz_cargs(params, execution)
     const ret = ftoz_outputs(params, execution)
@@ -178,6 +178,22 @@ function ftoz_execute(
 }
 
 
+/**
+ * Convert F-statistics to Z-scores.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file File containing F-statistics
+ * @param dof1 Degrees of freedom 1 for F-to-Z conversion
+ * @param dof2 Degrees of freedom 2 for F-to-Z conversion
+ * @param output_file Output file for Z-scores
+ * @param help_flag Display this help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FtozOutputs`).
+ */
 function ftoz(
     input_file: InputPathType,
     dof1: number,
@@ -186,22 +202,6 @@ function ftoz(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FtozOutputs {
-    /**
-     * Convert F-statistics to Z-scores.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file File containing F-statistics
-     * @param dof1 Degrees of freedom 1 for F-to-Z conversion
-     * @param dof2 Degrees of freedom 2 for F-to-Z conversion
-     * @param output_file Output file for Z-scores
-     * @param help_flag Display this help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FtozOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FTOZ_METADATA);
     const params = ftoz_params(input_file, dof1, dof2, output_file, help_flag)
@@ -214,5 +214,8 @@ export {
       FtozOutputs,
       FtozParameters,
       ftoz,
+      ftoz_cargs,
+      ftoz_execute,
+      ftoz_outputs,
       ftoz_params,
 };

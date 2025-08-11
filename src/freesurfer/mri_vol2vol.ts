@@ -12,7 +12,7 @@ const MRI_VOL2VOL_METADATA: Metadata = {
 
 
 interface MriVol2volParameters {
-    "__STYXTYPE__": "mri_vol2vol";
+    "@type": "freesurfer.mri_vol2vol";
     "movvol": InputPathType;
     "targvol": InputPathType;
     "outvol": InputPathType;
@@ -60,35 +60,35 @@ interface MriVol2volParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_vol2vol": mri_vol2vol_cargs,
+        "freesurfer.mri_vol2vol": mri_vol2vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_vol2vol": mri_vol2vol_outputs,
+        "freesurfer.mri_vol2vol": mri_vol2vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -111,6 +111,56 @@ interface MriVol2volOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param movvol Input volume (or output template with --inv)
+ * @param targvol Output template (or input with --inv)
+ * @param outvol Output volume
+ * @param dispvol Displacement volume
+ * @param downsample Downsample factor (e.g., 2) (do not include a targ or registration)
+ * @param register_dat tkRAS-to-tkRAS matrix (tkregister2 format)
+ * @param lta Linear Transform Array (usually only 1 transform)
+ * @param lta_inv LTA, invert (may not be the same as --lta --inv with --fstal)
+ * @param fsl fslRAS-to-fslRAS matrix (FSL format)
+ * @param xfm ScannerRAS-to-ScannerRAS matrix (MNI format)
+ * @param inv Sample from targ to mov
+ * @param tal Map to a sub FOV of MNI305 (with --reg only)
+ * @param talres Set voxel size 1mm or 2mm (default is 1)
+ * @param talxfm Path to the talairach transformation file. Default is talairach.xfm (looks in mri/transforms)
+ * @param m3z Non-linear morph encoded in the m3z format
+ * @param inv_morph Compute and use the inverse of the m3z morph
+ * @param fstarg Optionally use the specified volume from the subject in --reg as target. Default is orig.mgz
+ * @param crop Crop and change voxel size
+ * @param slice_crop Crop output slices to be within specified start and end indices
+ * @param slice_reverse Reverse order of slices, update vox2ras
+ * @param slice_bias Apply half-cosine bias field
+ * @param interp Interpolation method: cubic, trilin, or nearest (default is trilin)
+ * @param fill_average Compute mean of all source voxels in a given target voxel
+ * @param fill_conserve Compute sum of all source voxels in a given target voxel
+ * @param fill_up Source upsampling factor for --fill-{avg,cons} (default is 2)
+ * @param mul Multiply output by the specified value
+ * @param precision Output precision (default is float)
+ * @param keep_precision Set output precision to that of the input
+ * @param kernel Save the trilinear interpolation kernel at each voxel instead of the interpolated image
+ * @param copy_ctab Setenv FS_COPY_HEADER_CTAB to copy any ctab in the mov header
+ * @param gcam GCAM warp procedure
+ * @param spm_warp SPM warp procedure
+ * @param map_point Standalone option to map a point to another space
+ * @param map_point_inv_lta Same as --map-point but inverts the LTA
+ * @param no_resample Do not resample, just change vox2ras matrix
+ * @param rot Rotation angles (degrees) to apply to registration matrix
+ * @param trans Translation (mm) to apply to registration matrix
+ * @param shear Shearing factors. Sxy Sxz Syz with xz as in-plane
+ * @param reg_final Final registration matrix after rotation and translation (but not inversion)
+ * @param synth Replace input with white Gaussian noise
+ * @param seed Seed for synth (default is to set from time of day)
+ * @param save_reg Write out output volume registration matrix
+ * @param debug Turn on debugging output
+ * @param version Print out version string and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_vol2vol_params(
     movvol: InputPathType,
     targvol: InputPathType,
@@ -157,58 +207,8 @@ function mri_vol2vol_params(
     debug: boolean = false,
     version: boolean = false,
 ): MriVol2volParameters {
-    /**
-     * Build parameters.
-    
-     * @param movvol Input volume (or output template with --inv)
-     * @param targvol Output template (or input with --inv)
-     * @param outvol Output volume
-     * @param dispvol Displacement volume
-     * @param downsample Downsample factor (e.g., 2) (do not include a targ or registration)
-     * @param register_dat tkRAS-to-tkRAS matrix (tkregister2 format)
-     * @param lta Linear Transform Array (usually only 1 transform)
-     * @param lta_inv LTA, invert (may not be the same as --lta --inv with --fstal)
-     * @param fsl fslRAS-to-fslRAS matrix (FSL format)
-     * @param xfm ScannerRAS-to-ScannerRAS matrix (MNI format)
-     * @param inv Sample from targ to mov
-     * @param tal Map to a sub FOV of MNI305 (with --reg only)
-     * @param talres Set voxel size 1mm or 2mm (default is 1)
-     * @param talxfm Path to the talairach transformation file. Default is talairach.xfm (looks in mri/transforms)
-     * @param m3z Non-linear morph encoded in the m3z format
-     * @param inv_morph Compute and use the inverse of the m3z morph
-     * @param fstarg Optionally use the specified volume from the subject in --reg as target. Default is orig.mgz
-     * @param crop Crop and change voxel size
-     * @param slice_crop Crop output slices to be within specified start and end indices
-     * @param slice_reverse Reverse order of slices, update vox2ras
-     * @param slice_bias Apply half-cosine bias field
-     * @param interp Interpolation method: cubic, trilin, or nearest (default is trilin)
-     * @param fill_average Compute mean of all source voxels in a given target voxel
-     * @param fill_conserve Compute sum of all source voxels in a given target voxel
-     * @param fill_up Source upsampling factor for --fill-{avg,cons} (default is 2)
-     * @param mul Multiply output by the specified value
-     * @param precision Output precision (default is float)
-     * @param keep_precision Set output precision to that of the input
-     * @param kernel Save the trilinear interpolation kernel at each voxel instead of the interpolated image
-     * @param copy_ctab Setenv FS_COPY_HEADER_CTAB to copy any ctab in the mov header
-     * @param gcam GCAM warp procedure
-     * @param spm_warp SPM warp procedure
-     * @param map_point Standalone option to map a point to another space
-     * @param map_point_inv_lta Same as --map-point but inverts the LTA
-     * @param no_resample Do not resample, just change vox2ras matrix
-     * @param rot Rotation angles (degrees) to apply to registration matrix
-     * @param trans Translation (mm) to apply to registration matrix
-     * @param shear Shearing factors. Sxy Sxz Syz with xz as in-plane
-     * @param reg_final Final registration matrix after rotation and translation (but not inversion)
-     * @param synth Replace input with white Gaussian noise
-     * @param seed Seed for synth (default is to set from time of day)
-     * @param save_reg Write out output volume registration matrix
-     * @param debug Turn on debugging output
-     * @param version Print out version string and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_vol2vol" as const,
+        "@type": "freesurfer.mri_vol2vol" as const,
         "movvol": movvol,
         "targvol": targvol,
         "outvol": outvol,
@@ -312,18 +312,18 @@ function mri_vol2vol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_vol2vol_cargs(
     params: MriVol2volParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_vol2vol");
     cargs.push(execution.inputFile((params["movvol"] ?? null)));
@@ -537,18 +537,18 @@ function mri_vol2vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_vol2vol_outputs(
     params: MriVol2volParameters,
     execution: Execution,
 ): MriVol2volOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVol2volOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([path.basename((params["outvol"] ?? null))].join('')),
@@ -557,22 +557,22 @@ function mri_vol2vol_outputs(
 }
 
 
+/**
+ * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
+ */
 function mri_vol2vol_execute(
     params: MriVol2volParameters,
     execution: Execution,
 ): MriVol2volOutputs {
-    /**
-     * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_vol2vol_cargs(params, execution)
     const ret = mri_vol2vol_outputs(params, execution)
@@ -581,6 +581,61 @@ function mri_vol2vol_execute(
 }
 
 
+/**
+ * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param movvol Input volume (or output template with --inv)
+ * @param targvol Output template (or input with --inv)
+ * @param outvol Output volume
+ * @param dispvol Displacement volume
+ * @param downsample Downsample factor (e.g., 2) (do not include a targ or registration)
+ * @param register_dat tkRAS-to-tkRAS matrix (tkregister2 format)
+ * @param lta Linear Transform Array (usually only 1 transform)
+ * @param lta_inv LTA, invert (may not be the same as --lta --inv with --fstal)
+ * @param fsl fslRAS-to-fslRAS matrix (FSL format)
+ * @param xfm ScannerRAS-to-ScannerRAS matrix (MNI format)
+ * @param inv Sample from targ to mov
+ * @param tal Map to a sub FOV of MNI305 (with --reg only)
+ * @param talres Set voxel size 1mm or 2mm (default is 1)
+ * @param talxfm Path to the talairach transformation file. Default is talairach.xfm (looks in mri/transforms)
+ * @param m3z Non-linear morph encoded in the m3z format
+ * @param inv_morph Compute and use the inverse of the m3z morph
+ * @param fstarg Optionally use the specified volume from the subject in --reg as target. Default is orig.mgz
+ * @param crop Crop and change voxel size
+ * @param slice_crop Crop output slices to be within specified start and end indices
+ * @param slice_reverse Reverse order of slices, update vox2ras
+ * @param slice_bias Apply half-cosine bias field
+ * @param interp Interpolation method: cubic, trilin, or nearest (default is trilin)
+ * @param fill_average Compute mean of all source voxels in a given target voxel
+ * @param fill_conserve Compute sum of all source voxels in a given target voxel
+ * @param fill_up Source upsampling factor for --fill-{avg,cons} (default is 2)
+ * @param mul Multiply output by the specified value
+ * @param precision Output precision (default is float)
+ * @param keep_precision Set output precision to that of the input
+ * @param kernel Save the trilinear interpolation kernel at each voxel instead of the interpolated image
+ * @param copy_ctab Setenv FS_COPY_HEADER_CTAB to copy any ctab in the mov header
+ * @param gcam GCAM warp procedure
+ * @param spm_warp SPM warp procedure
+ * @param map_point Standalone option to map a point to another space
+ * @param map_point_inv_lta Same as --map-point but inverts the LTA
+ * @param no_resample Do not resample, just change vox2ras matrix
+ * @param rot Rotation angles (degrees) to apply to registration matrix
+ * @param trans Translation (mm) to apply to registration matrix
+ * @param shear Shearing factors. Sxy Sxz Syz with xz as in-plane
+ * @param reg_final Final registration matrix after rotation and translation (but not inversion)
+ * @param synth Replace input with white Gaussian noise
+ * @param seed Seed for synth (default is to set from time of day)
+ * @param save_reg Write out output volume registration matrix
+ * @param debug Turn on debugging output
+ * @param version Print out version string and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
+ */
 function mri_vol2vol(
     movvol: InputPathType,
     targvol: InputPathType,
@@ -628,61 +683,6 @@ function mri_vol2vol(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriVol2volOutputs {
-    /**
-     * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param movvol Input volume (or output template with --inv)
-     * @param targvol Output template (or input with --inv)
-     * @param outvol Output volume
-     * @param dispvol Displacement volume
-     * @param downsample Downsample factor (e.g., 2) (do not include a targ or registration)
-     * @param register_dat tkRAS-to-tkRAS matrix (tkregister2 format)
-     * @param lta Linear Transform Array (usually only 1 transform)
-     * @param lta_inv LTA, invert (may not be the same as --lta --inv with --fstal)
-     * @param fsl fslRAS-to-fslRAS matrix (FSL format)
-     * @param xfm ScannerRAS-to-ScannerRAS matrix (MNI format)
-     * @param inv Sample from targ to mov
-     * @param tal Map to a sub FOV of MNI305 (with --reg only)
-     * @param talres Set voxel size 1mm or 2mm (default is 1)
-     * @param talxfm Path to the talairach transformation file. Default is talairach.xfm (looks in mri/transforms)
-     * @param m3z Non-linear morph encoded in the m3z format
-     * @param inv_morph Compute and use the inverse of the m3z morph
-     * @param fstarg Optionally use the specified volume from the subject in --reg as target. Default is orig.mgz
-     * @param crop Crop and change voxel size
-     * @param slice_crop Crop output slices to be within specified start and end indices
-     * @param slice_reverse Reverse order of slices, update vox2ras
-     * @param slice_bias Apply half-cosine bias field
-     * @param interp Interpolation method: cubic, trilin, or nearest (default is trilin)
-     * @param fill_average Compute mean of all source voxels in a given target voxel
-     * @param fill_conserve Compute sum of all source voxels in a given target voxel
-     * @param fill_up Source upsampling factor for --fill-{avg,cons} (default is 2)
-     * @param mul Multiply output by the specified value
-     * @param precision Output precision (default is float)
-     * @param keep_precision Set output precision to that of the input
-     * @param kernel Save the trilinear interpolation kernel at each voxel instead of the interpolated image
-     * @param copy_ctab Setenv FS_COPY_HEADER_CTAB to copy any ctab in the mov header
-     * @param gcam GCAM warp procedure
-     * @param spm_warp SPM warp procedure
-     * @param map_point Standalone option to map a point to another space
-     * @param map_point_inv_lta Same as --map-point but inverts the LTA
-     * @param no_resample Do not resample, just change vox2ras matrix
-     * @param rot Rotation angles (degrees) to apply to registration matrix
-     * @param trans Translation (mm) to apply to registration matrix
-     * @param shear Shearing factors. Sxy Sxz Syz with xz as in-plane
-     * @param reg_final Final registration matrix after rotation and translation (but not inversion)
-     * @param synth Replace input with white Gaussian noise
-     * @param seed Seed for synth (default is to set from time of day)
-     * @param save_reg Write out output volume registration matrix
-     * @param debug Turn on debugging output
-     * @param version Print out version string and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOL2VOL_METADATA);
     const params = mri_vol2vol_params(movvol, targvol, outvol, dispvol, downsample, register_dat, lta, lta_inv, fsl, xfm, inv, tal, talres, talxfm, m3z, inv_morph, fstarg, crop, slice_crop, slice_reverse, slice_bias, interp, fill_average, fill_conserve, fill_up, mul, precision, keep_precision, kernel, copy_ctab, gcam, spm_warp, map_point, map_point_inv_lta, no_resample, rot, trans, shear, reg_final, synth, seed, save_reg, debug, version)
@@ -695,5 +695,8 @@ export {
       MriVol2volOutputs,
       MriVol2volParameters,
       mri_vol2vol,
+      mri_vol2vol_cargs,
+      mri_vol2vol_execute,
+      mri_vol2vol_outputs,
       mri_vol2vol_params,
 };

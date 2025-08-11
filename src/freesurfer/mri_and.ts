@@ -12,38 +12,38 @@ const MRI_AND_METADATA: Metadata = {
 
 
 interface MriAndParameters {
-    "__STYXTYPE__": "mri_and";
+    "@type": "freesurfer.mri_and";
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_and": mri_and_cargs,
+        "freesurfer.mri_and": mri_and_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MriAndOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input volume files
+ *
+ * @returns Parameter dictionary
+ */
 function mri_and_params(
     input_files: Array<InputPathType>,
 ): MriAndParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input volume files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_and" as const,
+        "@type": "freesurfer.mri_and" as const,
         "input_files": input_files,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_and_cargs(
     params: MriAndParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_and");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -100,18 +100,18 @@ function mri_and_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_and_outputs(
     params: MriAndParameters,
     execution: Execution,
 ): MriAndOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAndOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function mri_and_outputs(
 }
 
 
+/**
+ * Performs a logical voxel-wise AND on a series of volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAndOutputs`).
+ */
 function mri_and_execute(
     params: MriAndParameters,
     execution: Execution,
 ): MriAndOutputs {
-    /**
-     * Performs a logical voxel-wise AND on a series of volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAndOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_and_cargs(params, execution)
     const ret = mri_and_outputs(params, execution)
@@ -143,22 +143,22 @@ function mri_and_execute(
 }
 
 
+/**
+ * Performs a logical voxel-wise AND on a series of volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input volume files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAndOutputs`).
+ */
 function mri_and(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): MriAndOutputs {
-    /**
-     * Performs a logical voxel-wise AND on a series of volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input volume files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAndOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_AND_METADATA);
     const params = mri_and_params(input_files)
@@ -171,5 +171,8 @@ export {
       MriAndOutputs,
       MriAndParameters,
       mri_and,
+      mri_and_cargs,
+      mri_and_execute,
+      mri_and_outputs,
       mri_and_params,
 };

@@ -12,38 +12,38 @@ const GCAINIT_METADATA: Metadata = {
 
 
 interface GcainitParameters {
-    "__STYXTYPE__": "gcainit";
+    "@type": "freesurfer.gcainit";
     "gcadir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gcainit": gcainit_cargs,
+        "freesurfer.gcainit": gcainit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface GcainitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gcadir Output directory of gcaprep
+ *
+ * @returns Parameter dictionary
+ */
 function gcainit_params(
     gcadir: string,
 ): GcainitParameters {
-    /**
-     * Build parameters.
-    
-     * @param gcadir Output directory of gcaprep
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gcainit" as const,
+        "@type": "freesurfer.gcainit" as const,
         "gcadir": gcadir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gcainit_cargs(
     params: GcainitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gcainit");
     cargs.push(
@@ -103,18 +103,18 @@ function gcainit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gcainit_outputs(
     params: GcainitParameters,
     execution: Execution,
 ): GcainitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GcainitOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function gcainit_outputs(
 }
 
 
+/**
+ * Initializes the GCA for brain processing tasks.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GcainitOutputs`).
+ */
 function gcainit_execute(
     params: GcainitParameters,
     execution: Execution,
 ): GcainitOutputs {
-    /**
-     * Initializes the GCA for brain processing tasks.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GcainitOutputs`).
-     */
     params = execution.params(params)
     const cargs = gcainit_cargs(params, execution)
     const ret = gcainit_outputs(params, execution)
@@ -146,22 +146,22 @@ function gcainit_execute(
 }
 
 
+/**
+ * Initializes the GCA for brain processing tasks.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gcadir Output directory of gcaprep
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GcainitOutputs`).
+ */
 function gcainit(
     gcadir: string,
     runner: Runner | null = null,
 ): GcainitOutputs {
-    /**
-     * Initializes the GCA for brain processing tasks.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gcadir Output directory of gcaprep
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GcainitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GCAINIT_METADATA);
     const params = gcainit_params(gcadir)
@@ -174,5 +174,8 @@ export {
       GcainitOutputs,
       GcainitParameters,
       gcainit,
+      gcainit_cargs,
+      gcainit_execute,
+      gcainit_outputs,
       gcainit_params,
 };

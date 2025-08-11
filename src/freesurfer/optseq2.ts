@@ -12,7 +12,7 @@ const OPTSEQ2_METADATA: Metadata = {
 
 
 interface Optseq2Parameters {
-    "__STYXTYPE__": "optseq2";
+    "@type": "freesurfer.optseq2";
     "ntp": number;
     "tr": number;
     "tprescan": number;
@@ -48,35 +48,35 @@ interface Optseq2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "optseq2": optseq2_cargs,
+        "freesurfer.optseq2": optseq2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "optseq2": optseq2_outputs,
+        "freesurfer.optseq2": optseq2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -119,6 +119,44 @@ interface Optseq2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ntp Number of time points to be acquired during the scan.
+ * @param tr Temporal resolution of acquisition in seconds.
+ * @param tprescan Start events t seconds before first acquisition.
+ * @param psdwin Post-stimulus window specifications: minimum PSD, maximum PSD, and optional dPSD.
+ * @param event Event type specification with label, duration, and number of repetitions.
+ * @param repvar Allow number of repetitions of event types to vary by percentage, optionally per event.
+ * @param polyfit Add polynomial regressors as nuisance variables of specified order.
+ * @param tnullmin Minimum duration of null time between stimuli in seconds.
+ * @param tnullmax Maximum duration of null time between stimuli in seconds.
+ * @param nsearch Search over a specified number of iterations for schedules.
+ * @param tsearch Search for schedules over a specified number of hours.
+ * @param first_order_cb Pre-optimize first order counter-balancing.
+ * @param ar1 Optimize assuming whitening with AR1 parameter
+ * @param penalize Penalize for presentations being too close with parameters alpha, T, and dtmin.
+ * @param evc Contrast of event types with weights.
+ * @param cmtx Load contrast from ASCII matrix file.
+ * @param cost Specify cost function and its parameters.
+ * @param sumdelays Sum delays when forming contrast matrix.
+ * @param seed Initialize random number generator with seed value.
+ * @param nkeep Number of best schedules to keep.
+ * @param outstem Output stem for saved schedules.
+ * @param mtxstem Output stem for saved design matrices.
+ * @param cmtxfile File for saving contrast matrix.
+ * @param summaryfile File for saving search summary.
+ * @param logfile File for saving log information.
+ * @param pctupdate Percentage interval after which progress is logged.
+ * @param sviterfile File to save information from each iteration.
+ * @param instem Initialize with input schedules that match instem-RRR.par.
+ * @param input_schedule Input schedule files.
+ * @param nosearch Do not perform search for optimal schedules.
+ * @param help Print help page.
+ * @param version Print version string.
+ *
+ * @returns Parameter dictionary
+ */
 function optseq2_params(
     ntp: number,
     tr: number,
@@ -153,46 +191,8 @@ function optseq2_params(
     help: boolean = false,
     version: boolean = false,
 ): Optseq2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param ntp Number of time points to be acquired during the scan.
-     * @param tr Temporal resolution of acquisition in seconds.
-     * @param tprescan Start events t seconds before first acquisition.
-     * @param psdwin Post-stimulus window specifications: minimum PSD, maximum PSD, and optional dPSD.
-     * @param event Event type specification with label, duration, and number of repetitions.
-     * @param repvar Allow number of repetitions of event types to vary by percentage, optionally per event.
-     * @param polyfit Add polynomial regressors as nuisance variables of specified order.
-     * @param tnullmin Minimum duration of null time between stimuli in seconds.
-     * @param tnullmax Maximum duration of null time between stimuli in seconds.
-     * @param nsearch Search over a specified number of iterations for schedules.
-     * @param tsearch Search for schedules over a specified number of hours.
-     * @param first_order_cb Pre-optimize first order counter-balancing.
-     * @param ar1 Optimize assuming whitening with AR1 parameter
-     * @param penalize Penalize for presentations being too close with parameters alpha, T, and dtmin.
-     * @param evc Contrast of event types with weights.
-     * @param cmtx Load contrast from ASCII matrix file.
-     * @param cost Specify cost function and its parameters.
-     * @param sumdelays Sum delays when forming contrast matrix.
-     * @param seed Initialize random number generator with seed value.
-     * @param nkeep Number of best schedules to keep.
-     * @param outstem Output stem for saved schedules.
-     * @param mtxstem Output stem for saved design matrices.
-     * @param cmtxfile File for saving contrast matrix.
-     * @param summaryfile File for saving search summary.
-     * @param logfile File for saving log information.
-     * @param pctupdate Percentage interval after which progress is logged.
-     * @param sviterfile File to save information from each iteration.
-     * @param instem Initialize with input schedules that match instem-RRR.par.
-     * @param input_schedule Input schedule files.
-     * @param nosearch Do not perform search for optimal schedules.
-     * @param help Print help page.
-     * @param version Print version string.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "optseq2" as const,
+        "@type": "freesurfer.optseq2" as const,
         "ntp": ntp,
         "tr": tr,
         "tprescan": tprescan,
@@ -278,18 +278,18 @@ function optseq2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function optseq2_cargs(
     params: Optseq2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("optseq2");
     cargs.push(
@@ -468,18 +468,18 @@ function optseq2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function optseq2_outputs(
     params: Optseq2Parameters,
     execution: Execution,
 ): Optseq2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Optseq2Outputs = {
         root: execution.outputFile("."),
         output_schedules: ((params["outstem"] ?? null) !== null) ? execution.outputFile([(params["outstem"] ?? null), "-RRR.par"].join('')) : null,
@@ -493,22 +493,22 @@ function optseq2_outputs(
 }
 
 
+/**
+ * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
+ */
 function optseq2_execute(
     params: Optseq2Parameters,
     execution: Execution,
 ): Optseq2Outputs {
-    /**
-     * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
-     */
     params = execution.params(params)
     const cargs = optseq2_cargs(params, execution)
     const ret = optseq2_outputs(params, execution)
@@ -517,6 +517,49 @@ function optseq2_execute(
 }
 
 
+/**
+ * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param ntp Number of time points to be acquired during the scan.
+ * @param tr Temporal resolution of acquisition in seconds.
+ * @param tprescan Start events t seconds before first acquisition.
+ * @param psdwin Post-stimulus window specifications: minimum PSD, maximum PSD, and optional dPSD.
+ * @param event Event type specification with label, duration, and number of repetitions.
+ * @param repvar Allow number of repetitions of event types to vary by percentage, optionally per event.
+ * @param polyfit Add polynomial regressors as nuisance variables of specified order.
+ * @param tnullmin Minimum duration of null time between stimuli in seconds.
+ * @param tnullmax Maximum duration of null time between stimuli in seconds.
+ * @param nsearch Search over a specified number of iterations for schedules.
+ * @param tsearch Search for schedules over a specified number of hours.
+ * @param first_order_cb Pre-optimize first order counter-balancing.
+ * @param ar1 Optimize assuming whitening with AR1 parameter
+ * @param penalize Penalize for presentations being too close with parameters alpha, T, and dtmin.
+ * @param evc Contrast of event types with weights.
+ * @param cmtx Load contrast from ASCII matrix file.
+ * @param cost Specify cost function and its parameters.
+ * @param sumdelays Sum delays when forming contrast matrix.
+ * @param seed Initialize random number generator with seed value.
+ * @param nkeep Number of best schedules to keep.
+ * @param outstem Output stem for saved schedules.
+ * @param mtxstem Output stem for saved design matrices.
+ * @param cmtxfile File for saving contrast matrix.
+ * @param summaryfile File for saving search summary.
+ * @param logfile File for saving log information.
+ * @param pctupdate Percentage interval after which progress is logged.
+ * @param sviterfile File to save information from each iteration.
+ * @param instem Initialize with input schedules that match instem-RRR.par.
+ * @param input_schedule Input schedule files.
+ * @param nosearch Do not perform search for optimal schedules.
+ * @param help Print help page.
+ * @param version Print version string.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
+ */
 function optseq2(
     ntp: number,
     tr: number,
@@ -552,49 +595,6 @@ function optseq2(
     version: boolean = false,
     runner: Runner | null = null,
 ): Optseq2Outputs {
-    /**
-     * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param ntp Number of time points to be acquired during the scan.
-     * @param tr Temporal resolution of acquisition in seconds.
-     * @param tprescan Start events t seconds before first acquisition.
-     * @param psdwin Post-stimulus window specifications: minimum PSD, maximum PSD, and optional dPSD.
-     * @param event Event type specification with label, duration, and number of repetitions.
-     * @param repvar Allow number of repetitions of event types to vary by percentage, optionally per event.
-     * @param polyfit Add polynomial regressors as nuisance variables of specified order.
-     * @param tnullmin Minimum duration of null time between stimuli in seconds.
-     * @param tnullmax Maximum duration of null time between stimuli in seconds.
-     * @param nsearch Search over a specified number of iterations for schedules.
-     * @param tsearch Search for schedules over a specified number of hours.
-     * @param first_order_cb Pre-optimize first order counter-balancing.
-     * @param ar1 Optimize assuming whitening with AR1 parameter
-     * @param penalize Penalize for presentations being too close with parameters alpha, T, and dtmin.
-     * @param evc Contrast of event types with weights.
-     * @param cmtx Load contrast from ASCII matrix file.
-     * @param cost Specify cost function and its parameters.
-     * @param sumdelays Sum delays when forming contrast matrix.
-     * @param seed Initialize random number generator with seed value.
-     * @param nkeep Number of best schedules to keep.
-     * @param outstem Output stem for saved schedules.
-     * @param mtxstem Output stem for saved design matrices.
-     * @param cmtxfile File for saving contrast matrix.
-     * @param summaryfile File for saving search summary.
-     * @param logfile File for saving log information.
-     * @param pctupdate Percentage interval after which progress is logged.
-     * @param sviterfile File to save information from each iteration.
-     * @param instem Initialize with input schedules that match instem-RRR.par.
-     * @param input_schedule Input schedule files.
-     * @param nosearch Do not perform search for optimal schedules.
-     * @param help Print help page.
-     * @param version Print version string.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(OPTSEQ2_METADATA);
     const params = optseq2_params(ntp, tr, tprescan, psdwin, event, repvar, polyfit, tnullmin, tnullmax, nsearch, tsearch, first_order_cb, ar1, penalize, evc, cmtx, cost, sumdelays, seed, nkeep, outstem, mtxstem, cmtxfile, summaryfile, logfile, pctupdate, sviterfile, instem, input_schedule, nosearch, help, version)
@@ -607,5 +607,8 @@ export {
       Optseq2Outputs,
       Optseq2Parameters,
       optseq2,
+      optseq2_cargs,
+      optseq2_execute,
+      optseq2_outputs,
       optseq2_params,
 };

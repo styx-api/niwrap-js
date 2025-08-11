@@ -12,7 +12,7 @@ const MAKE_RANDOM_TIMING_PY_METADATA: Metadata = {
 
 
 interface MakeRandomTimingPyParameters {
-    "__STYXTYPE__": "make_random_timing.py";
+    "@type": "afni.make_random_timing.py";
     "num_runs": number;
     "run_time": Array<number>;
     "num_stim": number;
@@ -41,35 +41,35 @@ interface MakeRandomTimingPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_random_timing.py": make_random_timing_py_cargs,
+        "afni.make_random_timing.py": make_random_timing_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_random_timing.py": make_random_timing_py_outputs,
+        "afni.make_random_timing.py": make_random_timing_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface MakeRandomTimingPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param num_runs Set the number of runs.
+ * @param run_time Set the total time per run (in seconds).
+ * @param num_stim Set the number of stimulus classes.
+ * @param num_reps Set the number of repetitions per class (or across runs).
+ * @param prefix Set the prefix for output filenames.
+ * @param stim_dur Set the duration for a single stimulus (in seconds).
+ * @param across_runs Distribute stimuli across all runs at once.
+ * @param max_consec Specify maximum consecutive stimuli per class.
+ * @param max_rest Specify maximum rest between stimuli.
+ * @param min_rest Specify extra rest after each stimulus.
+ * @param not_first Specify classes that should not start a run.
+ * @param not_last Specify classes that should not end a run.
+ * @param offset Specify an offset to add to every stim time.
+ * @param ordered_stimuli Specify a partial ordering of stimuli.
+ * @param pre_stim_rest Specify minimum rest period to start each run.
+ * @param post_stim_rest Specify minimum rest period to end each run.
+ * @param save_3dd_cmd Save a 3dDeconvolve -nodata example.
+ * @param seed Specify a seed for random number generation.
+ * @param stim_labels Specify labels for the stimulus classes.
+ * @param t_digits Set the number of decimal places for times.
+ * @param t_gran Set the time granularity.
+ * @param tr Set the scanner TR.
+ * @param tr_locked Make stimuli timing locked to the accompanying TR.
+ * @param verb Set the verbose level.
+ * @param show_timing_stats Show statistics from the timing.
+ *
+ * @returns Parameter dictionary
+ */
 function make_random_timing_py_params(
     num_runs: number,
     run_time: Array<number>,
@@ -119,39 +150,8 @@ function make_random_timing_py_params(
     verb: number | null = null,
     show_timing_stats: boolean = false,
 ): MakeRandomTimingPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param num_runs Set the number of runs.
-     * @param run_time Set the total time per run (in seconds).
-     * @param num_stim Set the number of stimulus classes.
-     * @param num_reps Set the number of repetitions per class (or across runs).
-     * @param prefix Set the prefix for output filenames.
-     * @param stim_dur Set the duration for a single stimulus (in seconds).
-     * @param across_runs Distribute stimuli across all runs at once.
-     * @param max_consec Specify maximum consecutive stimuli per class.
-     * @param max_rest Specify maximum rest between stimuli.
-     * @param min_rest Specify extra rest after each stimulus.
-     * @param not_first Specify classes that should not start a run.
-     * @param not_last Specify classes that should not end a run.
-     * @param offset Specify an offset to add to every stim time.
-     * @param ordered_stimuli Specify a partial ordering of stimuli.
-     * @param pre_stim_rest Specify minimum rest period to start each run.
-     * @param post_stim_rest Specify minimum rest period to end each run.
-     * @param save_3dd_cmd Save a 3dDeconvolve -nodata example.
-     * @param seed Specify a seed for random number generation.
-     * @param stim_labels Specify labels for the stimulus classes.
-     * @param t_digits Set the number of decimal places for times.
-     * @param t_gran Set the time granularity.
-     * @param tr Set the scanner TR.
-     * @param tr_locked Make stimuli timing locked to the accompanying TR.
-     * @param verb Set the verbose level.
-     * @param show_timing_stats Show statistics from the timing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_random_timing.py" as const,
+        "@type": "afni.make_random_timing.py" as const,
         "num_runs": num_runs,
         "run_time": run_time,
         "num_stim": num_stim,
@@ -216,18 +216,18 @@ function make_random_timing_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_random_timing_py_cargs(
     params: MakeRandomTimingPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_random_timing.py");
     cargs.push(
@@ -365,18 +365,18 @@ function make_random_timing_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_random_timing_py_outputs(
     params: MakeRandomTimingPyParameters,
     execution: Execution,
 ): MakeRandomTimingPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeRandomTimingPyOutputs = {
         root: execution.outputFile("."),
         stim_output: execution.outputFile([(params["prefix"] ?? null), "_*.1D"].join('')),
@@ -385,22 +385,22 @@ function make_random_timing_py_outputs(
 }
 
 
+/**
+ * Create random stimulus timing files for use with AFNI 3dDeconvolve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
+ */
 function make_random_timing_py_execute(
     params: MakeRandomTimingPyParameters,
     execution: Execution,
 ): MakeRandomTimingPyOutputs {
-    /**
-     * Create random stimulus timing files for use with AFNI 3dDeconvolve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_random_timing_py_cargs(params, execution)
     const ret = make_random_timing_py_outputs(params, execution)
@@ -409,6 +409,42 @@ function make_random_timing_py_execute(
 }
 
 
+/**
+ * Create random stimulus timing files for use with AFNI 3dDeconvolve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param num_runs Set the number of runs.
+ * @param run_time Set the total time per run (in seconds).
+ * @param num_stim Set the number of stimulus classes.
+ * @param num_reps Set the number of repetitions per class (or across runs).
+ * @param prefix Set the prefix for output filenames.
+ * @param stim_dur Set the duration for a single stimulus (in seconds).
+ * @param across_runs Distribute stimuli across all runs at once.
+ * @param max_consec Specify maximum consecutive stimuli per class.
+ * @param max_rest Specify maximum rest between stimuli.
+ * @param min_rest Specify extra rest after each stimulus.
+ * @param not_first Specify classes that should not start a run.
+ * @param not_last Specify classes that should not end a run.
+ * @param offset Specify an offset to add to every stim time.
+ * @param ordered_stimuli Specify a partial ordering of stimuli.
+ * @param pre_stim_rest Specify minimum rest period to start each run.
+ * @param post_stim_rest Specify minimum rest period to end each run.
+ * @param save_3dd_cmd Save a 3dDeconvolve -nodata example.
+ * @param seed Specify a seed for random number generation.
+ * @param stim_labels Specify labels for the stimulus classes.
+ * @param t_digits Set the number of decimal places for times.
+ * @param t_gran Set the time granularity.
+ * @param tr Set the scanner TR.
+ * @param tr_locked Make stimuli timing locked to the accompanying TR.
+ * @param verb Set the verbose level.
+ * @param show_timing_stats Show statistics from the timing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
+ */
 function make_random_timing_py(
     num_runs: number,
     run_time: Array<number>,
@@ -437,42 +473,6 @@ function make_random_timing_py(
     show_timing_stats: boolean = false,
     runner: Runner | null = null,
 ): MakeRandomTimingPyOutputs {
-    /**
-     * Create random stimulus timing files for use with AFNI 3dDeconvolve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param num_runs Set the number of runs.
-     * @param run_time Set the total time per run (in seconds).
-     * @param num_stim Set the number of stimulus classes.
-     * @param num_reps Set the number of repetitions per class (or across runs).
-     * @param prefix Set the prefix for output filenames.
-     * @param stim_dur Set the duration for a single stimulus (in seconds).
-     * @param across_runs Distribute stimuli across all runs at once.
-     * @param max_consec Specify maximum consecutive stimuli per class.
-     * @param max_rest Specify maximum rest between stimuli.
-     * @param min_rest Specify extra rest after each stimulus.
-     * @param not_first Specify classes that should not start a run.
-     * @param not_last Specify classes that should not end a run.
-     * @param offset Specify an offset to add to every stim time.
-     * @param ordered_stimuli Specify a partial ordering of stimuli.
-     * @param pre_stim_rest Specify minimum rest period to start each run.
-     * @param post_stim_rest Specify minimum rest period to end each run.
-     * @param save_3dd_cmd Save a 3dDeconvolve -nodata example.
-     * @param seed Specify a seed for random number generation.
-     * @param stim_labels Specify labels for the stimulus classes.
-     * @param t_digits Set the number of decimal places for times.
-     * @param t_gran Set the time granularity.
-     * @param tr Set the scanner TR.
-     * @param tr_locked Make stimuli timing locked to the accompanying TR.
-     * @param verb Set the verbose level.
-     * @param show_timing_stats Show statistics from the timing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_RANDOM_TIMING_PY_METADATA);
     const params = make_random_timing_py_params(num_runs, run_time, num_stim, num_reps, prefix, stim_dur, across_runs, max_consec, max_rest, min_rest, not_first, not_last, offset, ordered_stimuli, pre_stim_rest, post_stim_rest, save_3dd_cmd, seed, stim_labels, t_digits, t_gran, tr, tr_locked, verb, show_timing_stats)
@@ -485,5 +485,8 @@ export {
       MakeRandomTimingPyOutputs,
       MakeRandomTimingPyParameters,
       make_random_timing_py,
+      make_random_timing_py_cargs,
+      make_random_timing_py_execute,
+      make_random_timing_py_outputs,
       make_random_timing_py_params,
 };

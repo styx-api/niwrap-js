@@ -12,7 +12,7 @@ const V_3D_AFNITO_NIFTI_METADATA: Metadata = {
 
 
 interface V3dAfnitoNiftiParameters {
-    "__STYXTYPE__": "3dAFNItoNIFTI";
+    "@type": "afni.3dAFNItoNIFTI";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
@@ -24,35 +24,35 @@ interface V3dAfnitoNiftiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAFNItoNIFTI": v_3d_afnito_nifti_cargs,
+        "afni.3dAFNItoNIFTI": v_3d_afnito_nifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAFNItoNIFTI": v_3d_afnito_nifti_outputs,
+        "afni.3dAFNItoNIFTI": v_3d_afnito_nifti_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dAfnitoNiftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input AFNI dataset
+ * @param prefix Output NIfTI file prefix
+ * @param verbose Print progress messages (increases verbosity if repeated)
+ * @param force_float Force the output dataset to be 32-bit floats
+ * @param pure Do not write an AFNI extension field into the output file
+ * @param denote Remove text notes from AFNI extension field that might contain identifying information
+ * @param oldid Retain the input dataset's AFNI ID code
+ * @param newid Assign a new AFNI ID code to the dataset (default action)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_afnito_nifti_params(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -85,22 +99,8 @@ function v_3d_afnito_nifti_params(
     oldid: boolean = false,
     newid: boolean = false,
 ): V3dAfnitoNiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input AFNI dataset
-     * @param prefix Output NIfTI file prefix
-     * @param verbose Print progress messages (increases verbosity if repeated)
-     * @param force_float Force the output dataset to be 32-bit floats
-     * @param pure Do not write an AFNI extension field into the output file
-     * @param denote Remove text notes from AFNI extension field that might contain identifying information
-     * @param oldid Retain the input dataset's AFNI ID code
-     * @param newid Assign a new AFNI ID code to the dataset (default action)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAFNItoNIFTI" as const,
+        "@type": "afni.3dAFNItoNIFTI" as const,
         "input_dataset": input_dataset,
         "verbose": verbose,
         "force_float": force_float,
@@ -116,18 +116,18 @@ function v_3d_afnito_nifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_afnito_nifti_cargs(
     params: V3dAfnitoNiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAFNItoNIFTI");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -159,18 +159,18 @@ function v_3d_afnito_nifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_afnito_nifti_outputs(
     params: V3dAfnitoNiftiParameters,
     execution: Execution,
 ): V3dAfnitoNiftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAfnitoNiftiOutputs = {
         root: execution.outputFile("."),
         output_nifti: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')) : null,
@@ -179,22 +179,22 @@ function v_3d_afnito_nifti_outputs(
 }
 
 
+/**
+ * Converts an AFNI dataset to a NIfTI-1.1 file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoNiftiOutputs`).
+ */
 function v_3d_afnito_nifti_execute(
     params: V3dAfnitoNiftiParameters,
     execution: Execution,
 ): V3dAfnitoNiftiOutputs {
-    /**
-     * Converts an AFNI dataset to a NIfTI-1.1 file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoNiftiOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_afnito_nifti_cargs(params, execution)
     const ret = v_3d_afnito_nifti_outputs(params, execution)
@@ -203,6 +203,25 @@ function v_3d_afnito_nifti_execute(
 }
 
 
+/**
+ * Converts an AFNI dataset to a NIfTI-1.1 file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input AFNI dataset
+ * @param prefix Output NIfTI file prefix
+ * @param verbose Print progress messages (increases verbosity if repeated)
+ * @param force_float Force the output dataset to be 32-bit floats
+ * @param pure Do not write an AFNI extension field into the output file
+ * @param denote Remove text notes from AFNI extension field that might contain identifying information
+ * @param oldid Retain the input dataset's AFNI ID code
+ * @param newid Assign a new AFNI ID code to the dataset (default action)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoNiftiOutputs`).
+ */
 function v_3d_afnito_nifti(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -214,25 +233,6 @@ function v_3d_afnito_nifti(
     newid: boolean = false,
     runner: Runner | null = null,
 ): V3dAfnitoNiftiOutputs {
-    /**
-     * Converts an AFNI dataset to a NIfTI-1.1 file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input AFNI dataset
-     * @param prefix Output NIfTI file prefix
-     * @param verbose Print progress messages (increases verbosity if repeated)
-     * @param force_float Force the output dataset to be 32-bit floats
-     * @param pure Do not write an AFNI extension field into the output file
-     * @param denote Remove text notes from AFNI extension field that might contain identifying information
-     * @param oldid Retain the input dataset's AFNI ID code
-     * @param newid Assign a new AFNI ID code to the dataset (default action)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoNiftiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AFNITO_NIFTI_METADATA);
     const params = v_3d_afnito_nifti_params(input_dataset, prefix, verbose, force_float, pure, denote, oldid, newid)
@@ -245,5 +245,8 @@ export {
       V3dAfnitoNiftiParameters,
       V_3D_AFNITO_NIFTI_METADATA,
       v_3d_afnito_nifti,
+      v_3d_afnito_nifti_cargs,
+      v_3d_afnito_nifti_execute,
+      v_3d_afnito_nifti_outputs,
       v_3d_afnito_nifti_params,
 };

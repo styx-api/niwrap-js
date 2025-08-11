@@ -12,7 +12,7 @@ const MRI_CAL_RENORMALIZE_GCA_METADATA: Metadata = {
 
 
 interface MriCalRenormalizeGcaParameters {
-    "__STYXTYPE__": "mri_cal_renormalize_gca";
+    "@type": "freesurfer.mri_cal_renormalize_gca";
     "timepoint_file": InputPathType;
     "in_vol": InputPathType;
     "input_atlas": InputPathType;
@@ -21,35 +21,35 @@ interface MriCalRenormalizeGcaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_cal_renormalize_gca": mri_cal_renormalize_gca_cargs,
+        "freesurfer.mri_cal_renormalize_gca": mri_cal_renormalize_gca_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_cal_renormalize_gca": mri_cal_renormalize_gca_outputs,
+        "freesurfer.mri_cal_renormalize_gca": mri_cal_renormalize_gca_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriCalRenormalizeGcaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timepoint_file Longitudinal time point file
+ * @param in_vol Input volume
+ * @param input_atlas Input atlas
+ * @param transform_file Transform file
+ * @param output_atlas Output atlas
+ *
+ * @returns Parameter dictionary
+ */
 function mri_cal_renormalize_gca_params(
     timepoint_file: InputPathType,
     in_vol: InputPathType,
@@ -79,19 +90,8 @@ function mri_cal_renormalize_gca_params(
     transform_file: InputPathType,
     output_atlas: string,
 ): MriCalRenormalizeGcaParameters {
-    /**
-     * Build parameters.
-    
-     * @param timepoint_file Longitudinal time point file
-     * @param in_vol Input volume
-     * @param input_atlas Input atlas
-     * @param transform_file Transform file
-     * @param output_atlas Output atlas
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_cal_renormalize_gca" as const,
+        "@type": "freesurfer.mri_cal_renormalize_gca" as const,
         "timepoint_file": timepoint_file,
         "in_vol": in_vol,
         "input_atlas": input_atlas,
@@ -102,18 +102,18 @@ function mri_cal_renormalize_gca_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_cal_renormalize_gca_cargs(
     params: MriCalRenormalizeGcaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_cal_renormalize_gca");
     cargs.push(execution.inputFile((params["timepoint_file"] ?? null)));
@@ -125,18 +125,18 @@ function mri_cal_renormalize_gca_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_cal_renormalize_gca_outputs(
     params: MriCalRenormalizeGcaParameters,
     execution: Execution,
 ): MriCalRenormalizeGcaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCalRenormalizeGcaOutputs = {
         root: execution.outputFile("."),
         output_atlas_file: execution.outputFile([(params["output_atlas"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function mri_cal_renormalize_gca_outputs(
 }
 
 
+/**
+ * Tool for atlas renormalization in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
+ */
 function mri_cal_renormalize_gca_execute(
     params: MriCalRenormalizeGcaParameters,
     execution: Execution,
 ): MriCalRenormalizeGcaOutputs {
-    /**
-     * Tool for atlas renormalization in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_cal_renormalize_gca_cargs(params, execution)
     const ret = mri_cal_renormalize_gca_outputs(params, execution)
@@ -169,6 +169,22 @@ function mri_cal_renormalize_gca_execute(
 }
 
 
+/**
+ * Tool for atlas renormalization in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param timepoint_file Longitudinal time point file
+ * @param in_vol Input volume
+ * @param input_atlas Input atlas
+ * @param transform_file Transform file
+ * @param output_atlas Output atlas
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
+ */
 function mri_cal_renormalize_gca(
     timepoint_file: InputPathType,
     in_vol: InputPathType,
@@ -177,22 +193,6 @@ function mri_cal_renormalize_gca(
     output_atlas: string,
     runner: Runner | null = null,
 ): MriCalRenormalizeGcaOutputs {
-    /**
-     * Tool for atlas renormalization in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param timepoint_file Longitudinal time point file
-     * @param in_vol Input volume
-     * @param input_atlas Input atlas
-     * @param transform_file Transform file
-     * @param output_atlas Output atlas
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CAL_RENORMALIZE_GCA_METADATA);
     const params = mri_cal_renormalize_gca_params(timepoint_file, in_vol, input_atlas, transform_file, output_atlas)
@@ -205,5 +205,8 @@ export {
       MriCalRenormalizeGcaOutputs,
       MriCalRenormalizeGcaParameters,
       mri_cal_renormalize_gca,
+      mri_cal_renormalize_gca_cargs,
+      mri_cal_renormalize_gca_execute,
+      mri_cal_renormalize_gca_outputs,
       mri_cal_renormalize_gca_params,
 };

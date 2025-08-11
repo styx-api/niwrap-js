@@ -12,7 +12,7 @@ const TKREGISTERFV_METADATA: Metadata = {
 
 
 interface TkregisterfvParameters {
-    "__STYXTYPE__": "tkregisterfv";
+    "@type": "freesurfer.tkregisterfv";
     "mov"?: InputPathType | null | undefined;
     "targ"?: InputPathType | null | undefined;
     "reg": InputPathType;
@@ -48,33 +48,33 @@ interface TkregisterfvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tkregisterfv": tkregisterfv_cargs,
+        "freesurfer.tkregisterfv": tkregisterfv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -94,6 +94,44 @@ interface TkregisterfvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reg LTA registration file
+ * @param mov Moving image volume
+ * @param targ Target image volume
+ * @param subject Subject identifier for FreeSurfer directories
+ * @param fstarg Freesurfer target volume instead of orig.mgz
+ * @param sd FreeSurfer SUBJECTS_DIR environment variable
+ * @param seg Segmentation volume to load
+ * @param aseg_flag Load aseg.mgz as segmentation volume
+ * @param aparc_aseg_flag Load aparc+aseg.mgz as segmentation volume
+ * @param opacity Set segmentation volume opacity
+ * @param surfs_flag Load left and right hemisphere white matter surfaces
+ * @param pial_surfs_flag Load pial surfaces instead of white matter surfaces
+ * @param all_surfs_flag Load both pial and white matter surfaces
+ * @param no_surfs_flag Do not load any surfaces
+ * @param lh_only_flag Load only left hemisphere surface
+ * @param rh_only_flag Load only right hemisphere surface
+ * @param surf Explicit path to surface to load
+ * @param aux_s Explicit path to auxiliary surface to load
+ * @param plane Plane view: cor, sag, ax
+ * @param no_config_flag Do not automatically raise transform config window
+ * @param mov2 Provide a second moving image volume
+ * @param reg2 Provide a second registration file
+ * @param mov3 Provide a third moving image volume
+ * @param reg3 Provide a third registration file
+ * @param heat_flag Use heat map color tables for all volumes
+ * @param regheader_flag Create registration file assuming the two volumes share a RAS
+ * @param params_ Affine matrix parameters: translations in mm, rotations in degrees
+ * @param flip_x_flag Regheader with rx=180
+ * @param flip_y_flag Regheader with ry=180
+ * @param flip_z_flag Regheader with rz=180
+ * @param fstal Modify the talairach.xfm with subject
+ * @param aux Load auxiliary volumes with registration
+ *
+ * @returns Parameter dictionary
+ */
 function tkregisterfv_params(
     reg: InputPathType,
     mov: InputPathType | null = null,
@@ -128,46 +166,8 @@ function tkregisterfv_params(
     fstal: boolean = false,
     aux: InputPathType | null = null,
 ): TkregisterfvParameters {
-    /**
-     * Build parameters.
-    
-     * @param reg LTA registration file
-     * @param mov Moving image volume
-     * @param targ Target image volume
-     * @param subject Subject identifier for FreeSurfer directories
-     * @param fstarg Freesurfer target volume instead of orig.mgz
-     * @param sd FreeSurfer SUBJECTS_DIR environment variable
-     * @param seg Segmentation volume to load
-     * @param aseg_flag Load aseg.mgz as segmentation volume
-     * @param aparc_aseg_flag Load aparc+aseg.mgz as segmentation volume
-     * @param opacity Set segmentation volume opacity
-     * @param surfs_flag Load left and right hemisphere white matter surfaces
-     * @param pial_surfs_flag Load pial surfaces instead of white matter surfaces
-     * @param all_surfs_flag Load both pial and white matter surfaces
-     * @param no_surfs_flag Do not load any surfaces
-     * @param lh_only_flag Load only left hemisphere surface
-     * @param rh_only_flag Load only right hemisphere surface
-     * @param surf Explicit path to surface to load
-     * @param aux_s Explicit path to auxiliary surface to load
-     * @param plane Plane view: cor, sag, ax
-     * @param no_config_flag Do not automatically raise transform config window
-     * @param mov2 Provide a second moving image volume
-     * @param reg2 Provide a second registration file
-     * @param mov3 Provide a third moving image volume
-     * @param reg3 Provide a third registration file
-     * @param heat_flag Use heat map color tables for all volumes
-     * @param regheader_flag Create registration file assuming the two volumes share a RAS
-     * @param params_ Affine matrix parameters: translations in mm, rotations in degrees
-     * @param flip_x_flag Regheader with rx=180
-     * @param flip_y_flag Regheader with ry=180
-     * @param flip_z_flag Regheader with rz=180
-     * @param fstal Modify the talairach.xfm with subject
-     * @param aux Load auxiliary volumes with registration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tkregisterfv" as const,
+        "@type": "freesurfer.tkregisterfv" as const,
         "reg": reg,
         "aseg_flag": aseg_flag,
         "aparc_aseg_flag": aparc_aseg_flag,
@@ -237,18 +237,18 @@ function tkregisterfv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tkregisterfv_cargs(
     params: TkregisterfvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tkregisterfv");
     if ((params["mov"] ?? null) !== null) {
@@ -400,18 +400,18 @@ function tkregisterfv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tkregisterfv_outputs(
     params: TkregisterfvParameters,
     execution: Execution,
 ): TkregisterfvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TkregisterfvOutputs = {
         root: execution.outputFile("."),
     };
@@ -419,22 +419,22 @@ function tkregisterfv_outputs(
 }
 
 
+/**
+ * A script that runs freeview with arguments like tkregister, focusing on LTA files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
+ */
 function tkregisterfv_execute(
     params: TkregisterfvParameters,
     execution: Execution,
 ): TkregisterfvOutputs {
-    /**
-     * A script that runs freeview with arguments like tkregister, focusing on LTA files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
-     */
     params = execution.params(params)
     const cargs = tkregisterfv_cargs(params, execution)
     const ret = tkregisterfv_outputs(params, execution)
@@ -443,6 +443,49 @@ function tkregisterfv_execute(
 }
 
 
+/**
+ * A script that runs freeview with arguments like tkregister, focusing on LTA files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param reg LTA registration file
+ * @param mov Moving image volume
+ * @param targ Target image volume
+ * @param subject Subject identifier for FreeSurfer directories
+ * @param fstarg Freesurfer target volume instead of orig.mgz
+ * @param sd FreeSurfer SUBJECTS_DIR environment variable
+ * @param seg Segmentation volume to load
+ * @param aseg_flag Load aseg.mgz as segmentation volume
+ * @param aparc_aseg_flag Load aparc+aseg.mgz as segmentation volume
+ * @param opacity Set segmentation volume opacity
+ * @param surfs_flag Load left and right hemisphere white matter surfaces
+ * @param pial_surfs_flag Load pial surfaces instead of white matter surfaces
+ * @param all_surfs_flag Load both pial and white matter surfaces
+ * @param no_surfs_flag Do not load any surfaces
+ * @param lh_only_flag Load only left hemisphere surface
+ * @param rh_only_flag Load only right hemisphere surface
+ * @param surf Explicit path to surface to load
+ * @param aux_s Explicit path to auxiliary surface to load
+ * @param plane Plane view: cor, sag, ax
+ * @param no_config_flag Do not automatically raise transform config window
+ * @param mov2 Provide a second moving image volume
+ * @param reg2 Provide a second registration file
+ * @param mov3 Provide a third moving image volume
+ * @param reg3 Provide a third registration file
+ * @param heat_flag Use heat map color tables for all volumes
+ * @param regheader_flag Create registration file assuming the two volumes share a RAS
+ * @param params_ Affine matrix parameters: translations in mm, rotations in degrees
+ * @param flip_x_flag Regheader with rx=180
+ * @param flip_y_flag Regheader with ry=180
+ * @param flip_z_flag Regheader with rz=180
+ * @param fstal Modify the talairach.xfm with subject
+ * @param aux Load auxiliary volumes with registration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
+ */
 function tkregisterfv(
     reg: InputPathType,
     mov: InputPathType | null = null,
@@ -478,49 +521,6 @@ function tkregisterfv(
     aux: InputPathType | null = null,
     runner: Runner | null = null,
 ): TkregisterfvOutputs {
-    /**
-     * A script that runs freeview with arguments like tkregister, focusing on LTA files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param reg LTA registration file
-     * @param mov Moving image volume
-     * @param targ Target image volume
-     * @param subject Subject identifier for FreeSurfer directories
-     * @param fstarg Freesurfer target volume instead of orig.mgz
-     * @param sd FreeSurfer SUBJECTS_DIR environment variable
-     * @param seg Segmentation volume to load
-     * @param aseg_flag Load aseg.mgz as segmentation volume
-     * @param aparc_aseg_flag Load aparc+aseg.mgz as segmentation volume
-     * @param opacity Set segmentation volume opacity
-     * @param surfs_flag Load left and right hemisphere white matter surfaces
-     * @param pial_surfs_flag Load pial surfaces instead of white matter surfaces
-     * @param all_surfs_flag Load both pial and white matter surfaces
-     * @param no_surfs_flag Do not load any surfaces
-     * @param lh_only_flag Load only left hemisphere surface
-     * @param rh_only_flag Load only right hemisphere surface
-     * @param surf Explicit path to surface to load
-     * @param aux_s Explicit path to auxiliary surface to load
-     * @param plane Plane view: cor, sag, ax
-     * @param no_config_flag Do not automatically raise transform config window
-     * @param mov2 Provide a second moving image volume
-     * @param reg2 Provide a second registration file
-     * @param mov3 Provide a third moving image volume
-     * @param reg3 Provide a third registration file
-     * @param heat_flag Use heat map color tables for all volumes
-     * @param regheader_flag Create registration file assuming the two volumes share a RAS
-     * @param params_ Affine matrix parameters: translations in mm, rotations in degrees
-     * @param flip_x_flag Regheader with rx=180
-     * @param flip_y_flag Regheader with ry=180
-     * @param flip_z_flag Regheader with rz=180
-     * @param fstal Modify the talairach.xfm with subject
-     * @param aux Load auxiliary volumes with registration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKREGISTERFV_METADATA);
     const params = tkregisterfv_params(reg, mov, targ, subject, fstarg, sd, seg, aseg_flag, aparc_aseg_flag, opacity, surfs_flag, pial_surfs_flag, all_surfs_flag, no_surfs_flag, lh_only_flag, rh_only_flag, surf, aux_s, plane, no_config_flag, mov2, reg2, mov3, reg3, heat_flag, regheader_flag, params_, flip_x_flag, flip_y_flag, flip_z_flag, fstal, aux)
@@ -533,5 +533,8 @@ export {
       TkregisterfvOutputs,
       TkregisterfvParameters,
       tkregisterfv,
+      tkregisterfv_cargs,
+      tkregisterfv_execute,
+      tkregisterfv_outputs,
       tkregisterfv_params,
 };

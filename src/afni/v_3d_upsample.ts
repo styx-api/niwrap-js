@@ -12,7 +12,7 @@ const V_3D_UPSAMPLE_METADATA: Metadata = {
 
 
 interface V3dUpsampleParameters {
-    "__STYXTYPE__": "3dUpsample";
+    "@type": "afni.3dUpsample";
     "upsample_factor": number;
     "input_dataset": string;
     "linear_interpolation": boolean;
@@ -22,35 +22,35 @@ interface V3dUpsampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dUpsample": v_3d_upsample_cargs,
+        "afni.3dUpsample": v_3d_upsample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dUpsample": v_3d_upsample_outputs,
+        "afni.3dUpsample": v_3d_upsample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface V3dUpsampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param upsample_factor Upsampling factor; must be between 2 and 320 (inclusive)
+ * @param input_dataset Input dataset
+ * @param linear_interpolation Use linear interpolation instead of 7th order polynomial interpolation
+ * @param output_prefix Define the prefix name of the output dataset; default is 'Upsam'
+ * @param verbose_flag Print verbose output
+ * @param datatype Specify the datatype for the output dataset (float, short, byte); default is float
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_upsample_params(
     upsample_factor: number,
     input_dataset: string,
@@ -85,20 +97,8 @@ function v_3d_upsample_params(
     verbose_flag: boolean = false,
     datatype: string | null = null,
 ): V3dUpsampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param upsample_factor Upsampling factor; must be between 2 and 320 (inclusive)
-     * @param input_dataset Input dataset
-     * @param linear_interpolation Use linear interpolation instead of 7th order polynomial interpolation
-     * @param output_prefix Define the prefix name of the output dataset; default is 'Upsam'
-     * @param verbose_flag Print verbose output
-     * @param datatype Specify the datatype for the output dataset (float, short, byte); default is float
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dUpsample" as const,
+        "@type": "afni.3dUpsample" as const,
         "upsample_factor": upsample_factor,
         "input_dataset": input_dataset,
         "linear_interpolation": linear_interpolation,
@@ -114,18 +114,18 @@ function v_3d_upsample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_upsample_cargs(
     params: V3dUpsampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dUpsample");
     cargs.push(
@@ -158,18 +158,18 @@ function v_3d_upsample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_upsample_outputs(
     params: V3dUpsampleParameters,
     execution: Execution,
 ): V3dUpsampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dUpsampleOutputs = {
         root: execution.outputFile("."),
         output_brik: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -179,22 +179,22 @@ function v_3d_upsample_outputs(
 }
 
 
+/**
+ * Upsamples a 3D+time dataset in the time direction by a specified factor.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
+ */
 function v_3d_upsample_execute(
     params: V3dUpsampleParameters,
     execution: Execution,
 ): V3dUpsampleOutputs {
-    /**
-     * Upsamples a 3D+time dataset in the time direction by a specified factor.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_upsample_cargs(params, execution)
     const ret = v_3d_upsample_outputs(params, execution)
@@ -203,6 +203,23 @@ function v_3d_upsample_execute(
 }
 
 
+/**
+ * Upsamples a 3D+time dataset in the time direction by a specified factor.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param upsample_factor Upsampling factor; must be between 2 and 320 (inclusive)
+ * @param input_dataset Input dataset
+ * @param linear_interpolation Use linear interpolation instead of 7th order polynomial interpolation
+ * @param output_prefix Define the prefix name of the output dataset; default is 'Upsam'
+ * @param verbose_flag Print verbose output
+ * @param datatype Specify the datatype for the output dataset (float, short, byte); default is float
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
+ */
 function v_3d_upsample(
     upsample_factor: number,
     input_dataset: string,
@@ -212,23 +229,6 @@ function v_3d_upsample(
     datatype: string | null = null,
     runner: Runner | null = null,
 ): V3dUpsampleOutputs {
-    /**
-     * Upsamples a 3D+time dataset in the time direction by a specified factor.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param upsample_factor Upsampling factor; must be between 2 and 320 (inclusive)
-     * @param input_dataset Input dataset
-     * @param linear_interpolation Use linear interpolation instead of 7th order polynomial interpolation
-     * @param output_prefix Define the prefix name of the output dataset; default is 'Upsam'
-     * @param verbose_flag Print verbose output
-     * @param datatype Specify the datatype for the output dataset (float, short, byte); default is float
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_UPSAMPLE_METADATA);
     const params = v_3d_upsample_params(upsample_factor, input_dataset, linear_interpolation, output_prefix, verbose_flag, datatype)
@@ -241,5 +241,8 @@ export {
       V3dUpsampleParameters,
       V_3D_UPSAMPLE_METADATA,
       v_3d_upsample,
+      v_3d_upsample_cargs,
+      v_3d_upsample_execute,
+      v_3d_upsample_outputs,
       v_3d_upsample_params,
 };

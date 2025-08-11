@@ -12,7 +12,7 @@ const V_3DDOT_BETA_METADATA: Metadata = {
 
 
 interface V3ddotBetaParameters {
-    "__STYXTYPE__": "3ddot_beta";
+    "@type": "afni.3ddot_beta";
     "input_file": InputPathType;
     "prefix": string;
     "doeta2": boolean;
@@ -20,35 +20,35 @@ interface V3ddotBetaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3ddot_beta": v_3ddot_beta_cargs,
+        "afni.3ddot_beta": v_3ddot_beta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3ddot_beta": v_3ddot_beta_outputs,
+        "afni.3ddot_beta": v_3ddot_beta_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3ddotBetaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file with N bricks
+ * @param prefix Output prefix for the result file
+ * @param doeta2 Required flag for performing eta2 tests
+ * @param mask Optional mask file within which to take values
+ *
+ * @returns Parameter dictionary
+ */
 function v_3ddot_beta_params(
     input_file: InputPathType,
     prefix: string,
     doeta2: boolean = false,
     mask: InputPathType | null = null,
 ): V3ddotBetaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file with N bricks
-     * @param prefix Output prefix for the result file
-     * @param doeta2 Required flag for performing eta2 tests
-     * @param mask Optional mask file within which to take values
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3ddot_beta" as const,
+        "@type": "afni.3ddot_beta" as const,
         "input_file": input_file,
         "prefix": prefix,
         "doeta2": doeta2,
@@ -100,18 +100,18 @@ function v_3ddot_beta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3ddot_beta_cargs(
     params: V3ddotBetaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3ddot_beta");
     cargs.push(
@@ -135,18 +135,18 @@ function v_3ddot_beta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3ddot_beta_outputs(
     params: V3ddotBetaParameters,
     execution: Execution,
 ): V3ddotBetaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3ddotBetaOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), "_eta2.dat"].join('')),
@@ -155,22 +155,22 @@ function v_3ddot_beta_outputs(
 }
 
 
+/**
+ * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
+ */
 function v_3ddot_beta_execute(
     params: V3ddotBetaParameters,
     execution: Execution,
 ): V3ddotBetaOutputs {
-    /**
-     * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3ddot_beta_cargs(params, execution)
     const ret = v_3ddot_beta_outputs(params, execution)
@@ -179,6 +179,21 @@ function v_3ddot_beta_execute(
 }
 
 
+/**
+ * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input file with N bricks
+ * @param prefix Output prefix for the result file
+ * @param doeta2 Required flag for performing eta2 tests
+ * @param mask Optional mask file within which to take values
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
+ */
 function v_3ddot_beta(
     input_file: InputPathType,
     prefix: string,
@@ -186,21 +201,6 @@ function v_3ddot_beta(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3ddotBetaOutputs {
-    /**
-     * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input file with N bricks
-     * @param prefix Output prefix for the result file
-     * @param doeta2 Required flag for performing eta2 tests
-     * @param mask Optional mask file within which to take values
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DDOT_BETA_METADATA);
     const params = v_3ddot_beta_params(input_file, prefix, doeta2, mask)
@@ -213,5 +213,8 @@ export {
       V3ddotBetaParameters,
       V_3DDOT_BETA_METADATA,
       v_3ddot_beta,
+      v_3ddot_beta_cargs,
+      v_3ddot_beta_execute,
+      v_3ddot_beta_outputs,
       v_3ddot_beta_params,
 };

@@ -12,14 +12,14 @@ const CIFTI_REDUCE_METADATA: Metadata = {
 
 
 interface CiftiReduceExcludeOutliersParameters {
-    "__STYXTYPE__": "exclude_outliers";
+    "@type": "workbench.cifti-reduce.exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
 
 
 interface CiftiReduceParameters {
-    "__STYXTYPE__": "cifti-reduce";
+    "@type": "workbench.cifti-reduce";
     "cifti_in": InputPathType;
     "operation": string;
     "cifti_out": string;
@@ -29,55 +29,55 @@ interface CiftiReduceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-reduce": cifti_reduce_cargs,
-        "exclude_outliers": cifti_reduce_exclude_outliers_cargs,
+        "workbench.cifti-reduce": cifti_reduce_cargs,
+        "workbench.cifti-reduce.exclude_outliers": cifti_reduce_exclude_outliers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-reduce": cifti_reduce_outputs,
+        "workbench.cifti-reduce": cifti_reduce_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma_below number of standard deviations below the mean to include
+ * @param sigma_above number of standard deviations above the mean to include
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_reduce_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
 ): CiftiReduceExcludeOutliersParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma_below number of standard deviations below the mean to include
-     * @param sigma_above number of standard deviations above the mean to include
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exclude_outliers" as const,
+        "@type": "workbench.cifti-reduce.exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -85,18 +85,18 @@ function cifti_reduce_exclude_outliers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_reduce_exclude_outliers_cargs(
     params: CiftiReduceExcludeOutliersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exclude-outliers");
     cargs.push(String((params["sigma_below"] ?? null)));
@@ -122,6 +122,18 @@ interface CiftiReduceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the cifti file to reduce
+ * @param operation the reduction operator to use
+ * @param cifti_out the output cifti file
+ * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_reduce_params(
     cifti_in: InputPathType,
     operation: string,
@@ -130,20 +142,8 @@ function cifti_reduce_params(
     exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
     opt_only_numeric: boolean = false,
 ): CiftiReduceParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the cifti file to reduce
-     * @param operation the reduction operator to use
-     * @param cifti_out the output cifti file
-     * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
-     * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-reduce" as const,
+        "@type": "workbench.cifti-reduce" as const,
         "cifti_in": cifti_in,
         "operation": operation,
         "cifti_out": cifti_out,
@@ -159,18 +159,18 @@ function cifti_reduce_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_reduce_cargs(
     params: CiftiReduceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-reduce");
@@ -184,7 +184,7 @@ function cifti_reduce_cargs(
         );
     }
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null).__STYXTYPE__)((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
     }
     if ((params["opt_only_numeric"] ?? null)) {
         cargs.push("-only-numeric");
@@ -193,18 +193,18 @@ function cifti_reduce_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_reduce_outputs(
     params: CiftiReduceParameters,
     execution: Execution,
 ): CiftiReduceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiReduceOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -213,42 +213,42 @@ function cifti_reduce_outputs(
 }
 
 
+/**
+ * Perform reduction operation on a cifti file.
+ *
+ * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
+ */
 function cifti_reduce_execute(
     params: CiftiReduceParameters,
     execution: Execution,
 ): CiftiReduceOutputs {
-    /**
-     * Perform reduction operation on a cifti file.
-     * 
-     * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_reduce_cargs(params, execution)
     const ret = cifti_reduce_outputs(params, execution)
@@ -257,6 +257,43 @@ function cifti_reduce_execute(
 }
 
 
+/**
+ * Perform reduction operation on a cifti file.
+ *
+ * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the cifti file to reduce
+ * @param operation the reduction operator to use
+ * @param cifti_out the output cifti file
+ * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
+ */
 function cifti_reduce(
     cifti_in: InputPathType,
     operation: string,
@@ -266,43 +303,6 @@ function cifti_reduce(
     opt_only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
-    /**
-     * Perform reduction operation on a cifti file.
-     * 
-     * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the cifti file to reduce
-     * @param operation the reduction operator to use
-     * @param cifti_out the output cifti file
-     * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
-     * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_REDUCE_METADATA);
     const params = cifti_reduce_params(cifti_in, operation, cifti_out, opt_direction_direction, exclude_outliers, opt_only_numeric)
@@ -316,6 +316,10 @@ export {
       CiftiReduceOutputs,
       CiftiReduceParameters,
       cifti_reduce,
+      cifti_reduce_cargs,
+      cifti_reduce_exclude_outliers_cargs,
       cifti_reduce_exclude_outliers_params,
+      cifti_reduce_execute,
+      cifti_reduce_outputs,
       cifti_reduce_params,
 };

@@ -12,39 +12,39 @@ const FSLSIZE_METADATA: Metadata = {
 
 
 interface FslsizeParameters {
-    "__STYXTYPE__": "fslsize";
+    "@type": "fsl.fslsize";
     "input_file": InputPathType;
     "short_format_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslsize": fslsize_cargs,
+        "fsl.fslsize": fslsize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FslsizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file
+ * @param short_format_flag Output using short format (one line)
+ *
+ * @returns Parameter dictionary
+ */
 function fslsize_params(
     input_file: InputPathType,
     short_format_flag: boolean = false,
 ): FslsizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file
-     * @param short_format_flag Output using short format (one line)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslsize" as const,
+        "@type": "fsl.fslsize" as const,
         "input_file": input_file,
         "short_format_flag": short_format_flag,
     };
@@ -85,18 +85,18 @@ function fslsize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslsize_cargs(
     params: FslsizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslsize");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -107,18 +107,18 @@ function fslsize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslsize_outputs(
     params: FslsizeParameters,
     execution: Execution,
 ): FslsizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslsizeOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function fslsize_outputs(
 }
 
 
+/**
+ * Tool to output the size of an image file in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
+ */
 function fslsize_execute(
     params: FslsizeParameters,
     execution: Execution,
 ): FslsizeOutputs {
-    /**
-     * Tool to output the size of an image file in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslsize_cargs(params, execution)
     const ret = fslsize_outputs(params, execution)
@@ -150,24 +150,24 @@ function fslsize_execute(
 }
 
 
+/**
+ * Tool to output the size of an image file in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file
+ * @param short_format_flag Output using short format (one line)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
+ */
 function fslsize(
     input_file: InputPathType,
     short_format_flag: boolean = false,
     runner: Runner | null = null,
 ): FslsizeOutputs {
-    /**
-     * Tool to output the size of an image file in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file
-     * @param short_format_flag Output using short format (one line)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSIZE_METADATA);
     const params = fslsize_params(input_file, short_format_flag)
@@ -180,5 +180,8 @@ export {
       FslsizeOutputs,
       FslsizeParameters,
       fslsize,
+      fslsize_cargs,
+      fslsize_execute,
+      fslsize_outputs,
       fslsize_params,
 };

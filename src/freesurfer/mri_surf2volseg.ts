@@ -12,7 +12,7 @@ const MRI_SURF2VOLSEG_METADATA: Metadata = {
 
 
 interface MriSurf2volsegParameters {
-    "__STYXTYPE__": "mri_surf2volseg";
+    "@type": "freesurfer.mri_surf2volseg";
     "input_segmentation"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
     "source_segmentation"?: InputPathType | null | undefined;
@@ -41,33 +41,33 @@ interface MriSurf2volsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_surf2volseg": mri_surf2volseg_cargs,
+        "freesurfer.mri_surf2volseg": mri_surf2volseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -87,6 +87,37 @@ interface MriSurf2volsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_segmentation Full path of input segmentation.
+ * @param output_segmentation Output segmentation file.
+ * @param source_segmentation Source subcortical volume segmentation file (instead of using subcortical segs in input segmentation).
+ * @param lh_white_surf White surface for left hemisphere.
+ * @param lh_pial_surf Pial surface for left hemisphere.
+ * @param rh_white_surf White surface for right hemisphere.
+ * @param rh_pial_surf Pial surface for right hemisphere.
+ * @param lh_cortex_mask Mask for left hemisphere cortex (usually lh.cortex.label).
+ * @param rh_cortex_mask Mask for right hemisphere cortex (usually rh.cortex.label).
+ * @param fix_presurf_ribbon Fix the cortical and WM labels in the input segmentation using ribbon file.
+ * @param label_cortex Relabel cortex in the input segmentation with surface annotation.
+ * @param label_wm Relabel cerebral WM in the input segmentation with surface annotation.
+ * @param label_wm_unknown Relabel unknown WM as lhval and rhval (default is 5001 and 5002).
+ * @param lh_annotation Left hemisphere annotation for --label-cortex and --label-wm.
+ * @param rh_annotation Right hemisphere annotation for --label-cortex and --label-wm.
+ * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM.
+ * @param rip_unknown Do not label WM based on 'unknown' cortical label.
+ * @param hypo_as_wm Label hypointensities as WM (when fixing with ribbon).
+ * @param hashres Surface hash table resolution.
+ * @param nhops Number of surface hops when searching for a nearby annotation.
+ * @param help_flag Print out information on how to use this program.
+ * @param version_flag Print out version and exit.
+ * @param crs_test Test labeling of only the voxel given by column, row, slice (debugging).
+ * @param ctab_file Embed color table in the output.
+ * @param threads_number Run in parallel with the specified number of threads.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_surf2volseg_params(
     input_segmentation: InputPathType | null = null,
     output_segmentation: string | null = null,
@@ -114,39 +145,8 @@ function mri_surf2volseg_params(
     ctab_file: InputPathType | null = null,
     threads_number: number | null = null,
 ): MriSurf2volsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_segmentation Full path of input segmentation.
-     * @param output_segmentation Output segmentation file.
-     * @param source_segmentation Source subcortical volume segmentation file (instead of using subcortical segs in input segmentation).
-     * @param lh_white_surf White surface for left hemisphere.
-     * @param lh_pial_surf Pial surface for left hemisphere.
-     * @param rh_white_surf White surface for right hemisphere.
-     * @param rh_pial_surf Pial surface for right hemisphere.
-     * @param lh_cortex_mask Mask for left hemisphere cortex (usually lh.cortex.label).
-     * @param rh_cortex_mask Mask for right hemisphere cortex (usually rh.cortex.label).
-     * @param fix_presurf_ribbon Fix the cortical and WM labels in the input segmentation using ribbon file.
-     * @param label_cortex Relabel cortex in the input segmentation with surface annotation.
-     * @param label_wm Relabel cerebral WM in the input segmentation with surface annotation.
-     * @param label_wm_unknown Relabel unknown WM as lhval and rhval (default is 5001 and 5002).
-     * @param lh_annotation Left hemisphere annotation for --label-cortex and --label-wm.
-     * @param rh_annotation Right hemisphere annotation for --label-cortex and --label-wm.
-     * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM.
-     * @param rip_unknown Do not label WM based on 'unknown' cortical label.
-     * @param hypo_as_wm Label hypointensities as WM (when fixing with ribbon).
-     * @param hashres Surface hash table resolution.
-     * @param nhops Number of surface hops when searching for a nearby annotation.
-     * @param help_flag Print out information on how to use this program.
-     * @param version_flag Print out version and exit.
-     * @param crs_test Test labeling of only the voxel given by column, row, slice (debugging).
-     * @param ctab_file Embed color table in the output.
-     * @param threads_number Run in parallel with the specified number of threads.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_surf2volseg" as const,
+        "@type": "freesurfer.mri_surf2volseg" as const,
         "label_cortex": label_cortex,
         "label_wm": label_wm,
         "rip_unknown": rip_unknown,
@@ -215,18 +215,18 @@ function mri_surf2volseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_surf2volseg_cargs(
     params: MriSurf2volsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_surf2volseg");
     if ((params["input_segmentation"] ?? null) !== null) {
@@ -365,18 +365,18 @@ function mri_surf2volseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_surf2volseg_outputs(
     params: MriSurf2volsegParameters,
     execution: Execution,
 ): MriSurf2volsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSurf2volsegOutputs = {
         root: execution.outputFile("."),
     };
@@ -384,22 +384,22 @@ function mri_surf2volseg_outputs(
 }
 
 
+/**
+ * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
+ */
 function mri_surf2volseg_execute(
     params: MriSurf2volsegParameters,
     execution: Execution,
 ): MriSurf2volsegOutputs {
-    /**
-     * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_surf2volseg_cargs(params, execution)
     const ret = mri_surf2volseg_outputs(params, execution)
@@ -408,6 +408,42 @@ function mri_surf2volseg_execute(
 }
 
 
+/**
+ * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_segmentation Full path of input segmentation.
+ * @param output_segmentation Output segmentation file.
+ * @param source_segmentation Source subcortical volume segmentation file (instead of using subcortical segs in input segmentation).
+ * @param lh_white_surf White surface for left hemisphere.
+ * @param lh_pial_surf Pial surface for left hemisphere.
+ * @param rh_white_surf White surface for right hemisphere.
+ * @param rh_pial_surf Pial surface for right hemisphere.
+ * @param lh_cortex_mask Mask for left hemisphere cortex (usually lh.cortex.label).
+ * @param rh_cortex_mask Mask for right hemisphere cortex (usually rh.cortex.label).
+ * @param fix_presurf_ribbon Fix the cortical and WM labels in the input segmentation using ribbon file.
+ * @param label_cortex Relabel cortex in the input segmentation with surface annotation.
+ * @param label_wm Relabel cerebral WM in the input segmentation with surface annotation.
+ * @param label_wm_unknown Relabel unknown WM as lhval and rhval (default is 5001 and 5002).
+ * @param lh_annotation Left hemisphere annotation for --label-cortex and --label-wm.
+ * @param rh_annotation Right hemisphere annotation for --label-cortex and --label-wm.
+ * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM.
+ * @param rip_unknown Do not label WM based on 'unknown' cortical label.
+ * @param hypo_as_wm Label hypointensities as WM (when fixing with ribbon).
+ * @param hashres Surface hash table resolution.
+ * @param nhops Number of surface hops when searching for a nearby annotation.
+ * @param help_flag Print out information on how to use this program.
+ * @param version_flag Print out version and exit.
+ * @param crs_test Test labeling of only the voxel given by column, row, slice (debugging).
+ * @param ctab_file Embed color table in the output.
+ * @param threads_number Run in parallel with the specified number of threads.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
+ */
 function mri_surf2volseg(
     input_segmentation: InputPathType | null = null,
     output_segmentation: string | null = null,
@@ -436,42 +472,6 @@ function mri_surf2volseg(
     threads_number: number | null = null,
     runner: Runner | null = null,
 ): MriSurf2volsegOutputs {
-    /**
-     * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_segmentation Full path of input segmentation.
-     * @param output_segmentation Output segmentation file.
-     * @param source_segmentation Source subcortical volume segmentation file (instead of using subcortical segs in input segmentation).
-     * @param lh_white_surf White surface for left hemisphere.
-     * @param lh_pial_surf Pial surface for left hemisphere.
-     * @param rh_white_surf White surface for right hemisphere.
-     * @param rh_pial_surf Pial surface for right hemisphere.
-     * @param lh_cortex_mask Mask for left hemisphere cortex (usually lh.cortex.label).
-     * @param rh_cortex_mask Mask for right hemisphere cortex (usually rh.cortex.label).
-     * @param fix_presurf_ribbon Fix the cortical and WM labels in the input segmentation using ribbon file.
-     * @param label_cortex Relabel cortex in the input segmentation with surface annotation.
-     * @param label_wm Relabel cerebral WM in the input segmentation with surface annotation.
-     * @param label_wm_unknown Relabel unknown WM as lhval and rhval (default is 5001 and 5002).
-     * @param lh_annotation Left hemisphere annotation for --label-cortex and --label-wm.
-     * @param rh_annotation Right hemisphere annotation for --label-cortex and --label-wm.
-     * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM.
-     * @param rip_unknown Do not label WM based on 'unknown' cortical label.
-     * @param hypo_as_wm Label hypointensities as WM (when fixing with ribbon).
-     * @param hashres Surface hash table resolution.
-     * @param nhops Number of surface hops when searching for a nearby annotation.
-     * @param help_flag Print out information on how to use this program.
-     * @param version_flag Print out version and exit.
-     * @param crs_test Test labeling of only the voxel given by column, row, slice (debugging).
-     * @param ctab_file Embed color table in the output.
-     * @param threads_number Run in parallel with the specified number of threads.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SURF2VOLSEG_METADATA);
     const params = mri_surf2volseg_params(input_segmentation, output_segmentation, source_segmentation, lh_white_surf, lh_pial_surf, rh_white_surf, rh_pial_surf, lh_cortex_mask, rh_cortex_mask, fix_presurf_ribbon, label_cortex, label_wm, label_wm_unknown, lh_annotation, rh_annotation, wmparc_dmax, rip_unknown, hypo_as_wm, hashres, nhops, help_flag, version_flag, crs_test, ctab_file, threads_number)
@@ -484,5 +484,8 @@ export {
       MriSurf2volsegOutputs,
       MriSurf2volsegParameters,
       mri_surf2volseg,
+      mri_surf2volseg_cargs,
+      mri_surf2volseg_execute,
+      mri_surf2volseg_outputs,
       mri_surf2volseg_params,
 };

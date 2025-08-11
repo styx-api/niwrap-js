@@ -12,7 +12,7 @@ const DTIFIT_METADATA: Metadata = {
 
 
 interface DtifitParameters {
-    "__STYXTYPE__": "dtifit";
+    "@type": "fsl.dtifit";
     "data_file": InputPathType;
     "output_basename": string;
     "mask_file": InputPathType;
@@ -36,35 +36,35 @@ interface DtifitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dtifit": dtifit_cargs,
+        "fsl.dtifit": dtifit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dtifit": dtifit_outputs,
+        "fsl.dtifit": dtifit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,6 +107,32 @@ interface DtifitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file DTI data file
+ * @param output_basename Output basename
+ * @param mask_file Bet binary mask file
+ * @param bvec_file B vectors file
+ * @param bval_file B values file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param sse_flag Output sum of squared errors
+ * @param wls_flag Fit the tensor with weighted least squares
+ * @param kurt_flag Output mean kurtosis map (for multi-shell data)
+ * @param kurtdir_flag Output maps of kurtosis along each eigenvector: K1, K2, and K3 (for multi-shell data)
+ * @param littlebit_flag Only process small area of brain
+ * @param save_tensor_flag Save the elements of the tensor
+ * @param zmin Minimum z
+ * @param zmax Maximum z
+ * @param ymin Minimum y
+ * @param ymax Maximum y
+ * @param xmin Minimum x
+ * @param xmax Maximum x
+ * @param gradnonlin_file Gradient Nonlinearity Tensor file
+ * @param confound_regressors Input confound regressors
+ *
+ * @returns Parameter dictionary
+ */
 function dtifit_params(
     data_file: InputPathType,
     output_basename: string,
@@ -129,34 +155,8 @@ function dtifit_params(
     gradnonlin_file: InputPathType | null = null,
     confound_regressors: InputPathType | null = null,
 ): DtifitParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file DTI data file
-     * @param output_basename Output basename
-     * @param mask_file Bet binary mask file
-     * @param bvec_file B vectors file
-     * @param bval_file B values file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param sse_flag Output sum of squared errors
-     * @param wls_flag Fit the tensor with weighted least squares
-     * @param kurt_flag Output mean kurtosis map (for multi-shell data)
-     * @param kurtdir_flag Output maps of kurtosis along each eigenvector: K1, K2, and K3 (for multi-shell data)
-     * @param littlebit_flag Only process small area of brain
-     * @param save_tensor_flag Save the elements of the tensor
-     * @param zmin Minimum z
-     * @param zmax Maximum z
-     * @param ymin Minimum y
-     * @param ymax Maximum y
-     * @param xmin Minimum x
-     * @param xmax Maximum x
-     * @param gradnonlin_file Gradient Nonlinearity Tensor file
-     * @param confound_regressors Input confound regressors
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dtifit" as const,
+        "@type": "fsl.dtifit" as const,
         "data_file": data_file,
         "output_basename": output_basename,
         "mask_file": mask_file,
@@ -198,18 +198,18 @@ function dtifit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dtifit_cargs(
     params: DtifitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dtifit");
     cargs.push(
@@ -305,18 +305,18 @@ function dtifit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dtifit_outputs(
     params: DtifitParameters,
     execution: Execution,
 ): DtifitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DtifitOutputs = {
         root: execution.outputFile("."),
         fa_output: execution.outputFile([(params["output_basename"] ?? null), "_FA.nii.gz"].join('')),
@@ -330,22 +330,22 @@ function dtifit_outputs(
 }
 
 
+/**
+ * DTIFIT - Fit a diffusion tensor model at each voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DtifitOutputs`).
+ */
 function dtifit_execute(
     params: DtifitParameters,
     execution: Execution,
 ): DtifitOutputs {
-    /**
-     * DTIFIT - Fit a diffusion tensor model at each voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DtifitOutputs`).
-     */
     params = execution.params(params)
     const cargs = dtifit_cargs(params, execution)
     const ret = dtifit_outputs(params, execution)
@@ -354,6 +354,37 @@ function dtifit_execute(
 }
 
 
+/**
+ * DTIFIT - Fit a diffusion tensor model at each voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param data_file DTI data file
+ * @param output_basename Output basename
+ * @param mask_file Bet binary mask file
+ * @param bvec_file B vectors file
+ * @param bval_file B values file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param sse_flag Output sum of squared errors
+ * @param wls_flag Fit the tensor with weighted least squares
+ * @param kurt_flag Output mean kurtosis map (for multi-shell data)
+ * @param kurtdir_flag Output maps of kurtosis along each eigenvector: K1, K2, and K3 (for multi-shell data)
+ * @param littlebit_flag Only process small area of brain
+ * @param save_tensor_flag Save the elements of the tensor
+ * @param zmin Minimum z
+ * @param zmax Maximum z
+ * @param ymin Minimum y
+ * @param ymax Maximum y
+ * @param xmin Minimum x
+ * @param xmax Maximum x
+ * @param gradnonlin_file Gradient Nonlinearity Tensor file
+ * @param confound_regressors Input confound regressors
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DtifitOutputs`).
+ */
 function dtifit(
     data_file: InputPathType,
     output_basename: string,
@@ -377,37 +408,6 @@ function dtifit(
     confound_regressors: InputPathType | null = null,
     runner: Runner | null = null,
 ): DtifitOutputs {
-    /**
-     * DTIFIT - Fit a diffusion tensor model at each voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param data_file DTI data file
-     * @param output_basename Output basename
-     * @param mask_file Bet binary mask file
-     * @param bvec_file B vectors file
-     * @param bval_file B values file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param sse_flag Output sum of squared errors
-     * @param wls_flag Fit the tensor with weighted least squares
-     * @param kurt_flag Output mean kurtosis map (for multi-shell data)
-     * @param kurtdir_flag Output maps of kurtosis along each eigenvector: K1, K2, and K3 (for multi-shell data)
-     * @param littlebit_flag Only process small area of brain
-     * @param save_tensor_flag Save the elements of the tensor
-     * @param zmin Minimum z
-     * @param zmax Maximum z
-     * @param ymin Minimum y
-     * @param ymax Maximum y
-     * @param xmin Minimum x
-     * @param xmax Maximum x
-     * @param gradnonlin_file Gradient Nonlinearity Tensor file
-     * @param confound_regressors Input confound regressors
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DtifitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DTIFIT_METADATA);
     const params = dtifit_params(data_file, output_basename, mask_file, bvec_file, bval_file, verbose_flag, sse_flag, wls_flag, kurt_flag, kurtdir_flag, littlebit_flag, save_tensor_flag, zmin, zmax, ymin, ymax, xmin, xmax, gradnonlin_file, confound_regressors)
@@ -420,5 +420,8 @@ export {
       DtifitOutputs,
       DtifitParameters,
       dtifit,
+      dtifit_cargs,
+      dtifit_execute,
+      dtifit_outputs,
       dtifit_params,
 };

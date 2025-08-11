@@ -12,7 +12,7 @@ const V_3D_AFNITO3_D_METADATA: Metadata = {
 
 
 interface V3dAfnito3DParameters {
-    "__STYXTYPE__": "3dAFNIto3D";
+    "@type": "afni.3dAFNIto3D";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "binary": boolean;
@@ -20,35 +20,35 @@ interface V3dAfnito3DParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAFNIto3D": v_3d_afnito3_d_cargs,
+        "afni.3dAFNIto3D": v_3d_afnito3_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAFNIto3D": v_3d_afnito3_d_outputs,
+        "afni.3dAFNIto3D": v_3d_afnito3_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3dAfnito3DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset AFNI dataset to be converted
+ * @param prefix Write result into file with specified prefix
+ * @param binary Write data in binary format
+ * @param text Write data in text format
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_afnito3_d_params(
     dataset: InputPathType,
     prefix: string | null = null,
     binary: boolean = false,
     text: boolean = false,
 ): V3dAfnito3DParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset AFNI dataset to be converted
-     * @param prefix Write result into file with specified prefix
-     * @param binary Write data in binary format
-     * @param text Write data in text format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAFNIto3D" as const,
+        "@type": "afni.3dAFNIto3D" as const,
         "dataset": dataset,
         "binary": binary,
         "text": text,
@@ -100,18 +100,18 @@ function v_3d_afnito3_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_afnito3_d_cargs(
     params: V3dAfnito3DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAFNIto3D");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -131,18 +131,18 @@ function v_3d_afnito3_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_afnito3_d_outputs(
     params: V3dAfnito3DParameters,
     execution: Execution,
 ): V3dAfnito3DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAfnito3DOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".3D"].join('')) : null,
@@ -151,22 +151,22 @@ function v_3d_afnito3_d_outputs(
 }
 
 
+/**
+ * Reads in an AFNI dataset, and writes it out as a 3D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
+ */
 function v_3d_afnito3_d_execute(
     params: V3dAfnito3DParameters,
     execution: Execution,
 ): V3dAfnito3DOutputs {
-    /**
-     * Reads in an AFNI dataset, and writes it out as a 3D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_afnito3_d_cargs(params, execution)
     const ret = v_3d_afnito3_d_outputs(params, execution)
@@ -175,6 +175,21 @@ function v_3d_afnito3_d_execute(
 }
 
 
+/**
+ * Reads in an AFNI dataset, and writes it out as a 3D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset AFNI dataset to be converted
+ * @param prefix Write result into file with specified prefix
+ * @param binary Write data in binary format
+ * @param text Write data in text format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
+ */
 function v_3d_afnito3_d(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -182,21 +197,6 @@ function v_3d_afnito3_d(
     text: boolean = false,
     runner: Runner | null = null,
 ): V3dAfnito3DOutputs {
-    /**
-     * Reads in an AFNI dataset, and writes it out as a 3D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset AFNI dataset to be converted
-     * @param prefix Write result into file with specified prefix
-     * @param binary Write data in binary format
-     * @param text Write data in text format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AFNITO3_D_METADATA);
     const params = v_3d_afnito3_d_params(dataset, prefix, binary, text)
@@ -209,5 +209,8 @@ export {
       V3dAfnito3DParameters,
       V_3D_AFNITO3_D_METADATA,
       v_3d_afnito3_d,
+      v_3d_afnito3_d_cargs,
+      v_3d_afnito3_d_execute,
+      v_3d_afnito3_d_outputs,
       v_3d_afnito3_d_params,
 };

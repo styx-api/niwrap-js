@@ -12,7 +12,7 @@ const SURF_CLUST_METADATA: Metadata = {
 
 
 interface SurfClustParameters {
-    "__STYXTYPE__": "SurfClust";
+    "@type": "afni.SurfClust";
     "specfile"?: InputPathType | null | undefined;
     "input_surface"?: string | null | undefined;
     "input_surf_name"?: InputPathType | null | undefined;
@@ -55,35 +55,35 @@ interface SurfClustParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfClust": surf_clust_cargs,
+        "afni.SurfClust": surf_clust_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfClust": surf_clust_outputs,
+        "afni.SurfClust": surf_clust_outputs,
     };
     return outputsFuncs[t];
 }
@@ -114,6 +114,51 @@ interface SurfClustOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset The input dataset and the index of the datacolumn to use (index 0 for 1st column). Values of 0 indicate inactive nodes.
+ * @param rmm Maximum distance between an activated node and the cluster to which it belongs.
+ * @param specfile The surface spec file
+ * @param input_surface The input surface name
+ * @param input_surf_name Full name of the input surface
+ * @param amm2 Minimum area for clusters
+ * @param min_nodes Minimum nodes for clusters
+ * @param prefix Prefix for output. Default is the prefix of the input dataset.
+ * @param out_clusterdset Output a clustered version of input dataset
+ * @param out_roidset Output an ROI dataset with the rank of its cluster
+ * @param out_fulllist Output a value for all nodes of input surface
+ * @param sort_none No sorting of ROI clusters
+ * @param sort_n_nodes Sorting based on number of nodes in cluster
+ * @param sort_area Sorting based on area of clusters (default)
+ * @param thresh_col Index of thresholding column. Default is column 0.
+ * @param thresh Apply thresholding prior to clustering.
+ * @param athresh Apply absolute thresholding prior to clustering
+ * @param ir_range Apply thresholding in range. A node n is considered if thresh_col[n] >= R0 && thresh_col[n] <= R1
+ * @param ex_range Apply thresholding outside of range. A node n is considered if thresh_col[n] < R0 || thresh_col[n] > R1
+ * @param prepend_node_index Force the output dataset to have node indices in column 0 of output.
+ * @param update Pacify me when perc of the data have been processed. perc is between 1% and 50%. Default is no update.
+ * @param no_cent Do not find the central nodes
+ * @param cent Do find the central nodes (default)
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param set_env Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param trace_extreme Turns on extreme tracing.
+ * @param no_memory_trace Turn off memory tracing.
+ * @param yes_memory_trace Turn on memory tracing (default).
+ * @param mini_help Mini help, same as -help in many cases.
+ * @param help The entire help output.
+ * @param extreme_help Extreme help, same as -help in majority of cases.
+ * @param view_help Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+ * @param web_help Open help in web browser. AFNI will try to find a browser. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+ * @param find_help Look for lines in this program's -help output that match (approximately) the given word.
+ * @param raw_help Help string unedited.
+ * @param spx_help Help string in sphinx format, but do not try to autoformat.
+ * @param aspx_help Help string in sphinx format with autoformatting of options.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_clust_params(
     input_dataset: Array<InputPathType>,
     rmm: number,
@@ -155,53 +200,8 @@ function surf_clust_params(
     spx_help: boolean = false,
     aspx_help: boolean = false,
 ): SurfClustParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset The input dataset and the index of the datacolumn to use (index 0 for 1st column). Values of 0 indicate inactive nodes.
-     * @param rmm Maximum distance between an activated node and the cluster to which it belongs.
-     * @param specfile The surface spec file
-     * @param input_surface The input surface name
-     * @param input_surf_name Full name of the input surface
-     * @param amm2 Minimum area for clusters
-     * @param min_nodes Minimum nodes for clusters
-     * @param prefix Prefix for output. Default is the prefix of the input dataset.
-     * @param out_clusterdset Output a clustered version of input dataset
-     * @param out_roidset Output an ROI dataset with the rank of its cluster
-     * @param out_fulllist Output a value for all nodes of input surface
-     * @param sort_none No sorting of ROI clusters
-     * @param sort_n_nodes Sorting based on number of nodes in cluster
-     * @param sort_area Sorting based on area of clusters (default)
-     * @param thresh_col Index of thresholding column. Default is column 0.
-     * @param thresh Apply thresholding prior to clustering.
-     * @param athresh Apply absolute thresholding prior to clustering
-     * @param ir_range Apply thresholding in range. A node n is considered if thresh_col[n] >= R0 && thresh_col[n] <= R1
-     * @param ex_range Apply thresholding outside of range. A node n is considered if thresh_col[n] < R0 || thresh_col[n] > R1
-     * @param prepend_node_index Force the output dataset to have node indices in column 0 of output.
-     * @param update Pacify me when perc of the data have been processed. perc is between 1% and 50%. Default is no update.
-     * @param no_cent Do not find the central nodes
-     * @param cent Do find the central nodes (default)
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param set_env Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param trace_extreme Turns on extreme tracing.
-     * @param no_memory_trace Turn off memory tracing.
-     * @param yes_memory_trace Turn on memory tracing (default).
-     * @param mini_help Mini help, same as -help in many cases.
-     * @param help The entire help output.
-     * @param extreme_help Extreme help, same as -help in majority of cases.
-     * @param view_help Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
-     * @param web_help Open help in web browser. AFNI will try to find a browser. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
-     * @param find_help Look for lines in this program's -help output that match (approximately) the given word.
-     * @param raw_help Help string unedited.
-     * @param spx_help Help string in sphinx format, but do not try to autoformat.
-     * @param aspx_help Help string in sphinx format with autoformatting of options.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfClust" as const,
+        "@type": "afni.SurfClust" as const,
         "input_dataset": input_dataset,
         "rmm": rmm,
         "out_clusterdset": out_clusterdset,
@@ -274,18 +274,18 @@ function surf_clust_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_clust_cargs(
     params: SurfClustParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfClust");
     if ((params["specfile"] ?? null) !== null) {
@@ -453,18 +453,18 @@ function surf_clust_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_clust_outputs(
     params: SurfClustParameters,
     execution: Execution,
 ): SurfClustOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfClustOutputs = {
         root: execution.outputFile("."),
         cluster_table: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_ClstTable_rXX_aXX.1D"].join('')) : null,
@@ -475,22 +475,22 @@ function surf_clust_outputs(
 }
 
 
+/**
+ * A program to perform clustering analysis surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
+ */
 function surf_clust_execute(
     params: SurfClustParameters,
     execution: Execution,
 ): SurfClustOutputs {
-    /**
-     * A program to perform clustering analysis surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_clust_cargs(params, execution)
     const ret = surf_clust_outputs(params, execution)
@@ -499,6 +499,56 @@ function surf_clust_execute(
 }
 
 
+/**
+ * A program to perform clustering analysis surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset The input dataset and the index of the datacolumn to use (index 0 for 1st column). Values of 0 indicate inactive nodes.
+ * @param rmm Maximum distance between an activated node and the cluster to which it belongs.
+ * @param specfile The surface spec file
+ * @param input_surface The input surface name
+ * @param input_surf_name Full name of the input surface
+ * @param amm2 Minimum area for clusters
+ * @param min_nodes Minimum nodes for clusters
+ * @param prefix Prefix for output. Default is the prefix of the input dataset.
+ * @param out_clusterdset Output a clustered version of input dataset
+ * @param out_roidset Output an ROI dataset with the rank of its cluster
+ * @param out_fulllist Output a value for all nodes of input surface
+ * @param sort_none No sorting of ROI clusters
+ * @param sort_n_nodes Sorting based on number of nodes in cluster
+ * @param sort_area Sorting based on area of clusters (default)
+ * @param thresh_col Index of thresholding column. Default is column 0.
+ * @param thresh Apply thresholding prior to clustering.
+ * @param athresh Apply absolute thresholding prior to clustering
+ * @param ir_range Apply thresholding in range. A node n is considered if thresh_col[n] >= R0 && thresh_col[n] <= R1
+ * @param ex_range Apply thresholding outside of range. A node n is considered if thresh_col[n] < R0 || thresh_col[n] > R1
+ * @param prepend_node_index Force the output dataset to have node indices in column 0 of output.
+ * @param update Pacify me when perc of the data have been processed. perc is between 1% and 50%. Default is no update.
+ * @param no_cent Do not find the central nodes
+ * @param cent Do find the central nodes (default)
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param set_env Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param trace_extreme Turns on extreme tracing.
+ * @param no_memory_trace Turn off memory tracing.
+ * @param yes_memory_trace Turn on memory tracing (default).
+ * @param mini_help Mini help, same as -help in many cases.
+ * @param help The entire help output.
+ * @param extreme_help Extreme help, same as -help in majority of cases.
+ * @param view_help Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+ * @param web_help Open help in web browser. AFNI will try to find a browser. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
+ * @param find_help Look for lines in this program's -help output that match (approximately) the given word.
+ * @param raw_help Help string unedited.
+ * @param spx_help Help string in sphinx format, but do not try to autoformat.
+ * @param aspx_help Help string in sphinx format with autoformatting of options.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
+ */
 function surf_clust(
     input_dataset: Array<InputPathType>,
     rmm: number,
@@ -541,56 +591,6 @@ function surf_clust(
     aspx_help: boolean = false,
     runner: Runner | null = null,
 ): SurfClustOutputs {
-    /**
-     * A program to perform clustering analysis surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset The input dataset and the index of the datacolumn to use (index 0 for 1st column). Values of 0 indicate inactive nodes.
-     * @param rmm Maximum distance between an activated node and the cluster to which it belongs.
-     * @param specfile The surface spec file
-     * @param input_surface The input surface name
-     * @param input_surf_name Full name of the input surface
-     * @param amm2 Minimum area for clusters
-     * @param min_nodes Minimum nodes for clusters
-     * @param prefix Prefix for output. Default is the prefix of the input dataset.
-     * @param out_clusterdset Output a clustered version of input dataset
-     * @param out_roidset Output an ROI dataset with the rank of its cluster
-     * @param out_fulllist Output a value for all nodes of input surface
-     * @param sort_none No sorting of ROI clusters
-     * @param sort_n_nodes Sorting based on number of nodes in cluster
-     * @param sort_area Sorting based on area of clusters (default)
-     * @param thresh_col Index of thresholding column. Default is column 0.
-     * @param thresh Apply thresholding prior to clustering.
-     * @param athresh Apply absolute thresholding prior to clustering
-     * @param ir_range Apply thresholding in range. A node n is considered if thresh_col[n] >= R0 && thresh_col[n] <= R1
-     * @param ex_range Apply thresholding outside of range. A node n is considered if thresh_col[n] < R0 || thresh_col[n] > R1
-     * @param prepend_node_index Force the output dataset to have node indices in column 0 of output.
-     * @param update Pacify me when perc of the data have been processed. perc is between 1% and 50%. Default is no update.
-     * @param no_cent Do not find the central nodes
-     * @param cent Do find the central nodes (default)
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param set_env Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param trace_extreme Turns on extreme tracing.
-     * @param no_memory_trace Turn off memory tracing.
-     * @param yes_memory_trace Turn on memory tracing (default).
-     * @param mini_help Mini help, same as -help in many cases.
-     * @param help The entire help output.
-     * @param extreme_help Extreme help, same as -help in majority of cases.
-     * @param view_help Open help in text editor. AFNI will try to find a GUI editor on your machine. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
-     * @param web_help Open help in web browser. AFNI will try to find a browser. You can control which it should use by setting environment variable AFNI_GUI_EDITOR.
-     * @param find_help Look for lines in this program's -help output that match (approximately) the given word.
-     * @param raw_help Help string unedited.
-     * @param spx_help Help string in sphinx format, but do not try to autoformat.
-     * @param aspx_help Help string in sphinx format with autoformatting of options.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_CLUST_METADATA);
     const params = surf_clust_params(input_dataset, rmm, specfile, input_surface, input_surf_name, amm2, min_nodes, prefix, out_clusterdset, out_roidset, out_fulllist, sort_none, sort_n_nodes, sort_area, thresh_col, thresh, athresh, ir_range, ex_range, prepend_node_index, update, no_cent, cent, novolreg, noxform, set_env, trace, trace_extreme, no_memory_trace, yes_memory_trace, mini_help, help, extreme_help, view_help, web_help, find_help, raw_help, spx_help, aspx_help)
@@ -603,5 +603,8 @@ export {
       SurfClustOutputs,
       SurfClustParameters,
       surf_clust,
+      surf_clust_cargs,
+      surf_clust_execute,
+      surf_clust_outputs,
       surf_clust_params,
 };

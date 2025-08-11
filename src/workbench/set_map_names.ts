@@ -12,14 +12,14 @@ const SET_MAP_NAMES_METADATA: Metadata = {
 
 
 interface SetMapNamesMapParameters {
-    "__STYXTYPE__": "map";
+    "@type": "workbench.set-map-names.map";
     "index": number;
     "new_name": string;
 }
 
 
 interface SetMapNamesParameters {
-    "__STYXTYPE__": "set-map-names";
+    "@type": "workbench.set-map-names";
     "data_file": string;
     "opt_name_file_file"?: string | null | undefined;
     "opt_from_data_file_file"?: string | null | undefined;
@@ -27,54 +27,54 @@ interface SetMapNamesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "set-map-names": set_map_names_cargs,
-        "map": set_map_names_map_cargs,
+        "workbench.set-map-names": set_map_names_cargs,
+        "workbench.set-map-names.map": set_map_names_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param index the map index to change the name of
+ * @param new_name the name to set for the map
+ *
+ * @returns Parameter dictionary
+ */
 function set_map_names_map_params(
     index: number,
     new_name: string,
 ): SetMapNamesMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param index the map index to change the name of
-     * @param new_name the name to set for the map
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "map" as const,
+        "@type": "workbench.set-map-names.map" as const,
         "index": index,
         "new_name": new_name,
     };
@@ -82,18 +82,18 @@ function set_map_names_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function set_map_names_map_cargs(
     params: SetMapNamesMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-map");
     cargs.push(String((params["index"] ?? null)));
@@ -115,24 +115,24 @@ interface SetMapNamesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file the file to set the map names of
+ * @param opt_name_file_file use a text file to replace all map names: text file containing map names, one per line
+ * @param opt_from_data_file_file use the map names from another data file: a data file with the same number of maps
+ * @param map specify a map to set the name of
+ *
+ * @returns Parameter dictionary
+ */
 function set_map_names_params(
     data_file: string,
     opt_name_file_file: string | null = null,
     opt_from_data_file_file: string | null = null,
     map: Array<SetMapNamesMapParameters> | null = null,
 ): SetMapNamesParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file the file to set the map names of
-     * @param opt_name_file_file use a text file to replace all map names: text file containing map names, one per line
-     * @param opt_from_data_file_file use the map names from another data file: a data file with the same number of maps
-     * @param map specify a map to set the name of
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "set-map-names" as const,
+        "@type": "workbench.set-map-names" as const,
         "data_file": data_file,
     };
     if (opt_name_file_file !== null) {
@@ -148,18 +148,18 @@ function set_map_names_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function set_map_names_cargs(
     params: SetMapNamesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-set-map-names");
@@ -177,24 +177,24 @@ function set_map_names_cargs(
         );
     }
     if ((params["map"] ?? null) !== null) {
-        cargs.push(...(params["map"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["map"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function set_map_names_outputs(
     params: SetMapNamesParameters,
     execution: Execution,
 ): SetMapNamesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SetMapNamesOutputs = {
         root: execution.outputFile("."),
     };
@@ -202,24 +202,24 @@ function set_map_names_outputs(
 }
 
 
+/**
+ * Set the name of one or more maps in a file.
+ *
+ * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
+ */
 function set_map_names_execute(
     params: SetMapNamesParameters,
     execution: Execution,
 ): SetMapNamesOutputs {
-    /**
-     * Set the name of one or more maps in a file.
-     * 
-     * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
-     */
     params = execution.params(params)
     const cargs = set_map_names_cargs(params, execution)
     const ret = set_map_names_outputs(params, execution)
@@ -228,6 +228,23 @@ function set_map_names_execute(
 }
 
 
+/**
+ * Set the name of one or more maps in a file.
+ *
+ * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param data_file the file to set the map names of
+ * @param opt_name_file_file use a text file to replace all map names: text file containing map names, one per line
+ * @param opt_from_data_file_file use the map names from another data file: a data file with the same number of maps
+ * @param map specify a map to set the name of
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
+ */
 function set_map_names(
     data_file: string,
     opt_name_file_file: string | null = null,
@@ -235,23 +252,6 @@ function set_map_names(
     map: Array<SetMapNamesMapParameters> | null = null,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
-    /**
-     * Set the name of one or more maps in a file.
-     * 
-     * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param data_file the file to set the map names of
-     * @param opt_name_file_file use a text file to replace all map names: text file containing map names, one per line
-     * @param opt_from_data_file_file use the map names from another data file: a data file with the same number of maps
-     * @param map specify a map to set the name of
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SET_MAP_NAMES_METADATA);
     const params = set_map_names_params(data_file, opt_name_file_file, opt_from_data_file_file, map)
@@ -265,6 +265,10 @@ export {
       SetMapNamesOutputs,
       SetMapNamesParameters,
       set_map_names,
+      set_map_names_cargs,
+      set_map_names_execute,
+      set_map_names_map_cargs,
       set_map_names_map_params,
+      set_map_names_outputs,
       set_map_names_params,
 };

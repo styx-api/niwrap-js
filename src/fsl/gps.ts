@@ -12,7 +12,7 @@ const GPS_METADATA: Metadata = {
 
 
 interface GpsParameters {
-    "__STYXTYPE__": "gps";
+    "@type": "fsl.gps";
     "ndir": number;
     "optws": boolean;
     "output"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface GpsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gps": gps_cargs,
+        "fsl.gps": gps_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gps": gps_outputs,
+        "fsl.gps": gps_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface GpsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ndir Number of directions
+ * @param optws Perform additional optimisation on the whole sphere (needed for eddy)
+ * @param output Name of output file (default: bvecs#.txt)
+ * @param ranseed Seed random generator with supplied number
+ * @param init File with bvecs to use as initialisation
+ * @param report Report coulomb forces for initial configuration
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function gps_params(
     ndir: number,
     optws: boolean = false,
@@ -85,22 +99,8 @@ function gps_params(
     verbose: boolean = false,
     help: boolean = false,
 ): GpsParameters {
-    /**
-     * Build parameters.
-    
-     * @param ndir Number of directions
-     * @param optws Perform additional optimisation on the whole sphere (needed for eddy)
-     * @param output Name of output file (default: bvecs#.txt)
-     * @param ranseed Seed random generator with supplied number
-     * @param init File with bvecs to use as initialisation
-     * @param report Report coulomb forces for initial configuration
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gps" as const,
+        "@type": "fsl.gps" as const,
         "ndir": ndir,
         "optws": optws,
         "report": report,
@@ -120,18 +120,18 @@ function gps_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gps_cargs(
     params: GpsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gps");
     cargs.push(
@@ -172,18 +172,18 @@ function gps_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gps_outputs(
     params: GpsParameters,
     execution: Execution,
 ): GpsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GpsOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -192,22 +192,22 @@ function gps_outputs(
 }
 
 
+/**
+ * Generate set of diffusion gradient directions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GpsOutputs`).
+ */
 function gps_execute(
     params: GpsParameters,
     execution: Execution,
 ): GpsOutputs {
-    /**
-     * Generate set of diffusion gradient directions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GpsOutputs`).
-     */
     params = execution.params(params)
     const cargs = gps_cargs(params, execution)
     const ret = gps_outputs(params, execution)
@@ -216,6 +216,25 @@ function gps_execute(
 }
 
 
+/**
+ * Generate set of diffusion gradient directions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param ndir Number of directions
+ * @param optws Perform additional optimisation on the whole sphere (needed for eddy)
+ * @param output Name of output file (default: bvecs#.txt)
+ * @param ranseed Seed random generator with supplied number
+ * @param init File with bvecs to use as initialisation
+ * @param report Report coulomb forces for initial configuration
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GpsOutputs`).
+ */
 function gps(
     ndir: number,
     optws: boolean = false,
@@ -227,25 +246,6 @@ function gps(
     help: boolean = false,
     runner: Runner | null = null,
 ): GpsOutputs {
-    /**
-     * Generate set of diffusion gradient directions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param ndir Number of directions
-     * @param optws Perform additional optimisation on the whole sphere (needed for eddy)
-     * @param output Name of output file (default: bvecs#.txt)
-     * @param ranseed Seed random generator with supplied number
-     * @param init File with bvecs to use as initialisation
-     * @param report Report coulomb forces for initial configuration
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GpsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GPS_METADATA);
     const params = gps_params(ndir, optws, output, ranseed, init, report, verbose, help)
@@ -258,5 +258,8 @@ export {
       GpsOutputs,
       GpsParameters,
       gps,
+      gps_cargs,
+      gps_execute,
+      gps_outputs,
       gps_params,
 };

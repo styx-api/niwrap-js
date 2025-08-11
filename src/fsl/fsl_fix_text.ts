@@ -12,41 +12,41 @@ const FSL_FIX_TEXT_METADATA: Metadata = {
 
 
 interface FslFixTextParameters {
-    "__STYXTYPE__": "fslFixText";
+    "@type": "fsl.fslFixText";
     "input_text_file": InputPathType;
     "output_text_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslFixText": fsl_fix_text_cargs,
+        "fsl.fslFixText": fsl_fix_text_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslFixText": fsl_fix_text_outputs,
+        "fsl.fslFixText": fsl_fix_text_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FslFixTextOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_text_file Input text file
+ * @param output_text_file Output text file
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_fix_text_params(
     input_text_file: InputPathType,
     output_text_file: string,
 ): FslFixTextParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_text_file Input text file
-     * @param output_text_file Output text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslFixText" as const,
+        "@type": "fsl.fslFixText" as const,
         "input_text_file": input_text_file,
         "output_text_file": output_text_file,
     };
@@ -90,18 +90,18 @@ function fsl_fix_text_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_fix_text_cargs(
     params: FslFixTextParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslFixText");
     cargs.push(execution.inputFile((params["input_text_file"] ?? null)));
@@ -110,18 +110,18 @@ function fsl_fix_text_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_fix_text_outputs(
     params: FslFixTextParameters,
     execution: Execution,
 ): FslFixTextOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslFixTextOutputs = {
         root: execution.outputFile("."),
         output_text_file: execution.outputFile([(params["output_text_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function fsl_fix_text_outputs(
 }
 
 
+/**
+ * Ensures standard UNIX line endings in the output text file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
+ */
 function fsl_fix_text_execute(
     params: FslFixTextParameters,
     execution: Execution,
 ): FslFixTextOutputs {
-    /**
-     * Ensures standard UNIX line endings in the output text file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_fix_text_cargs(params, execution)
     const ret = fsl_fix_text_outputs(params, execution)
@@ -154,24 +154,24 @@ function fsl_fix_text_execute(
 }
 
 
+/**
+ * Ensures standard UNIX line endings in the output text file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_text_file Input text file
+ * @param output_text_file Output text file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
+ */
 function fsl_fix_text(
     input_text_file: InputPathType,
     output_text_file: string,
     runner: Runner | null = null,
 ): FslFixTextOutputs {
-    /**
-     * Ensures standard UNIX line endings in the output text file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_text_file Input text file
-     * @param output_text_file Output text file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_FIX_TEXT_METADATA);
     const params = fsl_fix_text_params(input_text_file, output_text_file)
@@ -184,5 +184,8 @@ export {
       FslFixTextOutputs,
       FslFixTextParameters,
       fsl_fix_text,
+      fsl_fix_text_cargs,
+      fsl_fix_text_execute,
+      fsl_fix_text_outputs,
       fsl_fix_text_params,
 };

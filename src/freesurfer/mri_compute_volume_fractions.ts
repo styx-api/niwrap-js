@@ -12,7 +12,7 @@ const MRI_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 
 
 interface MriComputeVolumeFractionsParameters {
-    "__STYXTYPE__": "mri_compute_volume_fractions";
+    "@type": "freesurfer.mri_compute_volume_fractions";
     "output_stem": string;
     "registration_file"?: InputPathType | null | undefined;
     "regheader"?: string | null | undefined;
@@ -41,35 +41,35 @@ interface MriComputeVolumeFractionsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_volume_fractions": mri_compute_volume_fractions_cargs,
+        "freesurfer.mri_compute_volume_fractions": mri_compute_volume_fractions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_volume_fractions": mri_compute_volume_fractions_outputs,
+        "freesurfer.mri_compute_volume_fractions": mri_compute_volume_fractions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -104,6 +104,37 @@ interface MriComputeVolumeFractionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_stem Output stem for generated files (e.g. cortex, subcort_gm, wm, csf). Files will be saved with this stem in different formats based on the selected flags.
+ * @param registration_file Registration file (can be LTA or reg.dat). If using reg.dat, a template volume is needed.
+ * @param regheader Specify the subject for regheader.
+ * @param usf Set anatomical upsample factor (default is 2).
+ * @param resolution Resolution setting. Sets USF to round(1/res).
+ * @param resmm Set functional upsampling resolution (default is aseg->xsize/(USF)).
+ * @param segmentation_file Use specified segmentation file instead of aseg.mgz.
+ * @param wsurf Specify the white surface (default is 'white').
+ * @param psurf Specify the pial surface (default is 'pial').
+ * @param no_aseg Do not include aseg in processing (useful for testing).
+ * @param stackfile Put cortex, subcortical GM, WM, CSF into a single multi-frame file.
+ * @param gmfile Put cortex + subcortical GM into a single-frame file.
+ * @param no_fill_csf Do not attempt to fill voxels surrounding segmentation with extracerebral CSF segmentation.
+ * @param dilation For xCSF fill, dilate by specified number (default is 3). Use -1 to fill the entire volume.
+ * @param out_seg Save segmentation (after adding xCSF voxels).
+ * @param ttseg Save tissue type segmentation.
+ * @param ttseg_ctab Save tissue type segmentation color table.
+ * @param mgz_format Use MGZ format.
+ * @param mgh_format Use MGH format.
+ * @param nii_format Use NII format.
+ * @param nii_gz_format Use NII.GZ format.
+ * @param ttype_head Use default+head instead of default tissue type info for segmentation.
+ * @param vg_thresh Threshold for 'ERROR: LTAconcat(): LTAs 0 and 1 do not match'.
+ * @param debug Turn on debugging mode.
+ * @param checkopts Do not run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_volume_fractions_params(
     output_stem: string,
     registration_file: InputPathType | null = null,
@@ -131,39 +162,8 @@ function mri_compute_volume_fractions_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriComputeVolumeFractionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_stem Output stem for generated files (e.g. cortex, subcort_gm, wm, csf). Files will be saved with this stem in different formats based on the selected flags.
-     * @param registration_file Registration file (can be LTA or reg.dat). If using reg.dat, a template volume is needed.
-     * @param regheader Specify the subject for regheader.
-     * @param usf Set anatomical upsample factor (default is 2).
-     * @param resolution Resolution setting. Sets USF to round(1/res).
-     * @param resmm Set functional upsampling resolution (default is aseg->xsize/(USF)).
-     * @param segmentation_file Use specified segmentation file instead of aseg.mgz.
-     * @param wsurf Specify the white surface (default is 'white').
-     * @param psurf Specify the pial surface (default is 'pial').
-     * @param no_aseg Do not include aseg in processing (useful for testing).
-     * @param stackfile Put cortex, subcortical GM, WM, CSF into a single multi-frame file.
-     * @param gmfile Put cortex + subcortical GM into a single-frame file.
-     * @param no_fill_csf Do not attempt to fill voxels surrounding segmentation with extracerebral CSF segmentation.
-     * @param dilation For xCSF fill, dilate by specified number (default is 3). Use -1 to fill the entire volume.
-     * @param out_seg Save segmentation (after adding xCSF voxels).
-     * @param ttseg Save tissue type segmentation.
-     * @param ttseg_ctab Save tissue type segmentation color table.
-     * @param mgz_format Use MGZ format.
-     * @param mgh_format Use MGH format.
-     * @param nii_format Use NII format.
-     * @param nii_gz_format Use NII.GZ format.
-     * @param ttype_head Use default+head instead of default tissue type info for segmentation.
-     * @param vg_thresh Threshold for 'ERROR: LTAconcat(): LTAs 0 and 1 do not match'.
-     * @param debug Turn on debugging mode.
-     * @param checkopts Do not run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_volume_fractions" as const,
+        "@type": "freesurfer.mri_compute_volume_fractions" as const,
         "output_stem": output_stem,
         "no_aseg": no_aseg,
         "no_fill_csf": no_fill_csf,
@@ -224,18 +224,18 @@ function mri_compute_volume_fractions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_volume_fractions_cargs(
     params: MriComputeVolumeFractionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_volume_fractions");
     cargs.push(
@@ -363,18 +363,18 @@ function mri_compute_volume_fractions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_volume_fractions_outputs(
     params: MriComputeVolumeFractionsParameters,
     execution: Execution,
 ): MriComputeVolumeFractionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeVolumeFractionsOutputs = {
         root: execution.outputFile("."),
         output_cortex: execution.outputFile([(params["output_stem"] ?? null), ".cortex.mgz"].join('')),
@@ -386,22 +386,22 @@ function mri_compute_volume_fractions_outputs(
 }
 
 
+/**
+ * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
+ */
 function mri_compute_volume_fractions_execute(
     params: MriComputeVolumeFractionsParameters,
     execution: Execution,
 ): MriComputeVolumeFractionsOutputs {
-    /**
-     * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_volume_fractions_cargs(params, execution)
     const ret = mri_compute_volume_fractions_outputs(params, execution)
@@ -410,6 +410,42 @@ function mri_compute_volume_fractions_execute(
 }
 
 
+/**
+ * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_stem Output stem for generated files (e.g. cortex, subcort_gm, wm, csf). Files will be saved with this stem in different formats based on the selected flags.
+ * @param registration_file Registration file (can be LTA or reg.dat). If using reg.dat, a template volume is needed.
+ * @param regheader Specify the subject for regheader.
+ * @param usf Set anatomical upsample factor (default is 2).
+ * @param resolution Resolution setting. Sets USF to round(1/res).
+ * @param resmm Set functional upsampling resolution (default is aseg->xsize/(USF)).
+ * @param segmentation_file Use specified segmentation file instead of aseg.mgz.
+ * @param wsurf Specify the white surface (default is 'white').
+ * @param psurf Specify the pial surface (default is 'pial').
+ * @param no_aseg Do not include aseg in processing (useful for testing).
+ * @param stackfile Put cortex, subcortical GM, WM, CSF into a single multi-frame file.
+ * @param gmfile Put cortex + subcortical GM into a single-frame file.
+ * @param no_fill_csf Do not attempt to fill voxels surrounding segmentation with extracerebral CSF segmentation.
+ * @param dilation For xCSF fill, dilate by specified number (default is 3). Use -1 to fill the entire volume.
+ * @param out_seg Save segmentation (after adding xCSF voxels).
+ * @param ttseg Save tissue type segmentation.
+ * @param ttseg_ctab Save tissue type segmentation color table.
+ * @param mgz_format Use MGZ format.
+ * @param mgh_format Use MGH format.
+ * @param nii_format Use NII format.
+ * @param nii_gz_format Use NII.GZ format.
+ * @param ttype_head Use default+head instead of default tissue type info for segmentation.
+ * @param vg_thresh Threshold for 'ERROR: LTAconcat(): LTAs 0 and 1 do not match'.
+ * @param debug Turn on debugging mode.
+ * @param checkopts Do not run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
+ */
 function mri_compute_volume_fractions(
     output_stem: string,
     registration_file: InputPathType | null = null,
@@ -438,42 +474,6 @@ function mri_compute_volume_fractions(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriComputeVolumeFractionsOutputs {
-    /**
-     * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_stem Output stem for generated files (e.g. cortex, subcort_gm, wm, csf). Files will be saved with this stem in different formats based on the selected flags.
-     * @param registration_file Registration file (can be LTA or reg.dat). If using reg.dat, a template volume is needed.
-     * @param regheader Specify the subject for regheader.
-     * @param usf Set anatomical upsample factor (default is 2).
-     * @param resolution Resolution setting. Sets USF to round(1/res).
-     * @param resmm Set functional upsampling resolution (default is aseg->xsize/(USF)).
-     * @param segmentation_file Use specified segmentation file instead of aseg.mgz.
-     * @param wsurf Specify the white surface (default is 'white').
-     * @param psurf Specify the pial surface (default is 'pial').
-     * @param no_aseg Do not include aseg in processing (useful for testing).
-     * @param stackfile Put cortex, subcortical GM, WM, CSF into a single multi-frame file.
-     * @param gmfile Put cortex + subcortical GM into a single-frame file.
-     * @param no_fill_csf Do not attempt to fill voxels surrounding segmentation with extracerebral CSF segmentation.
-     * @param dilation For xCSF fill, dilate by specified number (default is 3). Use -1 to fill the entire volume.
-     * @param out_seg Save segmentation (after adding xCSF voxels).
-     * @param ttseg Save tissue type segmentation.
-     * @param ttseg_ctab Save tissue type segmentation color table.
-     * @param mgz_format Use MGZ format.
-     * @param mgh_format Use MGH format.
-     * @param nii_format Use NII format.
-     * @param nii_gz_format Use NII.GZ format.
-     * @param ttype_head Use default+head instead of default tissue type info for segmentation.
-     * @param vg_thresh Threshold for 'ERROR: LTAconcat(): LTAs 0 and 1 do not match'.
-     * @param debug Turn on debugging mode.
-     * @param checkopts Do not run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_VOLUME_FRACTIONS_METADATA);
     const params = mri_compute_volume_fractions_params(output_stem, registration_file, regheader, usf, resolution, resmm, segmentation_file, wsurf, psurf, no_aseg, stackfile, gmfile, no_fill_csf, dilation, out_seg, ttseg, ttseg_ctab, mgz_format, mgh_format, nii_format, nii_gz_format, ttype_head, vg_thresh, debug, checkopts)
@@ -486,5 +486,8 @@ export {
       MriComputeVolumeFractionsOutputs,
       MriComputeVolumeFractionsParameters,
       mri_compute_volume_fractions,
+      mri_compute_volume_fractions_cargs,
+      mri_compute_volume_fractions_execute,
+      mri_compute_volume_fractions_outputs,
       mri_compute_volume_fractions_params,
 };

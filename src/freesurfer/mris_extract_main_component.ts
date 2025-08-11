@@ -12,41 +12,41 @@ const MRIS_EXTRACT_MAIN_COMPONENT_METADATA: Metadata = {
 
 
 interface MrisExtractMainComponentParameters {
-    "__STYXTYPE__": "mris_extract_main_component";
+    "@type": "freesurfer.mris_extract_main_component";
     "input_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_extract_main_component": mris_extract_main_component_cargs,
+        "freesurfer.mris_extract_main_component": mris_extract_main_component_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_extract_main_component": mris_extract_main_component_outputs,
+        "freesurfer.mris_extract_main_component": mris_extract_main_component_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MrisExtractMainComponentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file (e.g. lh.white)
+ * @param output_surface Output surface file (e.g. lh.white.main)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_extract_main_component_params(
     input_surface: InputPathType,
     output_surface: string,
 ): MrisExtractMainComponentParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file (e.g. lh.white)
-     * @param output_surface Output surface file (e.g. lh.white.main)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_extract_main_component" as const,
+        "@type": "freesurfer.mris_extract_main_component" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -90,18 +90,18 @@ function mris_extract_main_component_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_extract_main_component_cargs(
     params: MrisExtractMainComponentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_extract_main_component");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -110,18 +110,18 @@ function mris_extract_main_component_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_extract_main_component_outputs(
     params: MrisExtractMainComponentParameters,
     execution: Execution,
 ): MrisExtractMainComponentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisExtractMainComponentOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mris_extract_main_component_outputs(
 }
 
 
+/**
+ * Tool for extracting the main component from a surface input.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
+ */
 function mris_extract_main_component_execute(
     params: MrisExtractMainComponentParameters,
     execution: Execution,
 ): MrisExtractMainComponentOutputs {
-    /**
-     * Tool for extracting the main component from a surface input.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_extract_main_component_cargs(params, execution)
     const ret = mris_extract_main_component_outputs(params, execution)
@@ -154,24 +154,24 @@ function mris_extract_main_component_execute(
 }
 
 
+/**
+ * Tool for extracting the main component from a surface input.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file (e.g. lh.white)
+ * @param output_surface Output surface file (e.g. lh.white.main)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
+ */
 function mris_extract_main_component(
     input_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): MrisExtractMainComponentOutputs {
-    /**
-     * Tool for extracting the main component from a surface input.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file (e.g. lh.white)
-     * @param output_surface Output surface file (e.g. lh.white.main)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_EXTRACT_MAIN_COMPONENT_METADATA);
     const params = mris_extract_main_component_params(input_surface, output_surface)
@@ -184,5 +184,8 @@ export {
       MrisExtractMainComponentOutputs,
       MrisExtractMainComponentParameters,
       mris_extract_main_component,
+      mris_extract_main_component_cargs,
+      mris_extract_main_component_execute,
+      mris_extract_main_component_outputs,
       mris_extract_main_component_params,
 };

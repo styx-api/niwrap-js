@@ -12,7 +12,7 @@ const V_3D_FRIEDMAN_METADATA: Metadata = {
 
 
 interface V3dFriedmanParameters {
-    "__STYXTYPE__": "3dFriedman";
+    "@type": "afni.3dFriedman";
     "levels": number;
     "datasets": Array<InputPathType>;
     "workmem"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface V3dFriedmanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dFriedman": v_3d_friedman_cargs,
+        "afni.3dFriedman": v_3d_friedman_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dFriedman": v_3d_friedman_outputs,
+        "afni.3dFriedman": v_3d_friedman_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dFriedmanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param levels Number of treatments
+ * @param datasets Data sets for each treatment
+ * @param output_prefix Prefix for the output files
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel_num Screen output for a specific voxel number
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_friedman_params(
     levels: number,
     datasets: Array<InputPathType>,
@@ -79,19 +90,8 @@ function v_3d_friedman_params(
     workmem: number | null = null,
     voxel_num: number | null = null,
 ): V3dFriedmanParameters {
-    /**
-     * Build parameters.
-    
-     * @param levels Number of treatments
-     * @param datasets Data sets for each treatment
-     * @param output_prefix Prefix for the output files
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel_num Screen output for a specific voxel number
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dFriedman" as const,
+        "@type": "afni.3dFriedman" as const,
         "levels": levels,
         "datasets": datasets,
         "output_prefix": output_prefix,
@@ -106,18 +106,18 @@ function v_3d_friedman_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_friedman_cargs(
     params: V3dFriedmanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dFriedman");
     cargs.push(String((params["levels"] ?? null)));
@@ -145,18 +145,18 @@ function v_3d_friedman_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_friedman_outputs(
     params: V3dFriedmanParameters,
     execution: Execution,
 ): V3dFriedmanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dFriedmanOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')),
@@ -165,22 +165,22 @@ function v_3d_friedman_outputs(
 }
 
 
+/**
+ * Performs nonparametric Friedman test for randomized complete block design experiments.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
+ */
 function v_3d_friedman_execute(
     params: V3dFriedmanParameters,
     execution: Execution,
 ): V3dFriedmanOutputs {
-    /**
-     * Performs nonparametric Friedman test for randomized complete block design experiments.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_friedman_cargs(params, execution)
     const ret = v_3d_friedman_outputs(params, execution)
@@ -189,6 +189,22 @@ function v_3d_friedman_execute(
 }
 
 
+/**
+ * Performs nonparametric Friedman test for randomized complete block design experiments.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param levels Number of treatments
+ * @param datasets Data sets for each treatment
+ * @param output_prefix Prefix for the output files
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel_num Screen output for a specific voxel number
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
+ */
 function v_3d_friedman(
     levels: number,
     datasets: Array<InputPathType>,
@@ -197,22 +213,6 @@ function v_3d_friedman(
     voxel_num: number | null = null,
     runner: Runner | null = null,
 ): V3dFriedmanOutputs {
-    /**
-     * Performs nonparametric Friedman test for randomized complete block design experiments.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param levels Number of treatments
-     * @param datasets Data sets for each treatment
-     * @param output_prefix Prefix for the output files
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel_num Screen output for a specific voxel number
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_FRIEDMAN_METADATA);
     const params = v_3d_friedman_params(levels, datasets, output_prefix, workmem, voxel_num)
@@ -225,5 +225,8 @@ export {
       V3dFriedmanParameters,
       V_3D_FRIEDMAN_METADATA,
       v_3d_friedman,
+      v_3d_friedman_cargs,
+      v_3d_friedman_execute,
+      v_3d_friedman_outputs,
       v_3d_friedman_params,
 };

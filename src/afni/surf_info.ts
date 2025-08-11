@@ -12,7 +12,7 @@ const SURF_INFO_METADATA: Metadata = {
 
 
 interface SurfInfoParameters {
-    "__STYXTYPE__": "SurfInfo";
+    "@type": "afni.SurfInfo";
     "surface": InputPathType;
     "com": boolean;
     "debug_level"?: number | null | undefined;
@@ -36,35 +36,35 @@ interface SurfInfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfInfo": surf_info_cargs,
+        "afni.SurfInfo": surf_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfInfo": surf_info_outputs,
+        "afni.SurfInfo": surf_info_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface SurfInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Input surface file.
+ * @param com Output the center of mass.
+ * @param debug_level Debugging level (2 turns LocalHead ON)
+ * @param detail_level Calculate surface metrics. 1=yes, 0=no
+ * @param n_node Output the number of nodes.
+ * @param n_faceset Output the number of face sets.
+ * @param n_tri Output the number of triangles.
+ * @param quiet Do not include the name of the parameter in output.
+ * @param separator Use string SEP to separate parameter values. Default is ' ; '
+ * @param input_surface Specify the input surface type and file.
+ * @param surface_state Specify surface type, state, and name.
+ * @param surface_volume Specify a surface volume file.
+ * @param spec_file Specify a surface specification (spec) file.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg.
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ *
+ * @returns Parameter dictionary
+ */
 function surf_info_params(
     surface: InputPathType,
     com: boolean = false,
@@ -109,34 +135,8 @@ function surf_info_params(
     nomall: boolean = false,
     yesmall: boolean = false,
 ): SurfInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Input surface file.
-     * @param com Output the center of mass.
-     * @param debug_level Debugging level (2 turns LocalHead ON)
-     * @param detail_level Calculate surface metrics. 1=yes, 0=no
-     * @param n_node Output the number of nodes.
-     * @param n_faceset Output the number of face sets.
-     * @param n_tri Output the number of triangles.
-     * @param quiet Do not include the name of the parameter in output.
-     * @param separator Use string SEP to separate parameter values. Default is ' ; '
-     * @param input_surface Specify the input surface type and file.
-     * @param surface_state Specify surface type, state, and name.
-     * @param surface_volume Specify a surface volume file.
-     * @param spec_file Specify a surface specification (spec) file.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg.
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfInfo" as const,
+        "@type": "afni.SurfInfo" as const,
         "surface": surface,
         "com": com,
         "n_node": n_node,
@@ -178,18 +178,18 @@ function surf_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_info_cargs(
     params: SurfInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfInfo");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -278,18 +278,18 @@ function surf_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_info_outputs(
     params: SurfInfoParameters,
     execution: Execution,
 ): SurfInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfInfoOutputs = {
         root: execution.outputFile("."),
         metrics_output: execution.outputFile([path.basename((params["surface"] ?? null)), "_metrics.txt"].join('')),
@@ -298,22 +298,22 @@ function surf_info_outputs(
 }
 
 
+/**
+ * Tool to gather information about surface files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
+ */
 function surf_info_execute(
     params: SurfInfoParameters,
     execution: Execution,
 ): SurfInfoOutputs {
-    /**
-     * Tool to gather information about surface files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_info_cargs(params, execution)
     const ret = surf_info_outputs(params, execution)
@@ -322,6 +322,37 @@ function surf_info_execute(
 }
 
 
+/**
+ * Tool to gather information about surface files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Input surface file.
+ * @param com Output the center of mass.
+ * @param debug_level Debugging level (2 turns LocalHead ON)
+ * @param detail_level Calculate surface metrics. 1=yes, 0=no
+ * @param n_node Output the number of nodes.
+ * @param n_faceset Output the number of face sets.
+ * @param n_tri Output the number of triangles.
+ * @param quiet Do not include the name of the parameter in output.
+ * @param separator Use string SEP to separate parameter values. Default is ' ; '
+ * @param input_surface Specify the input surface type and file.
+ * @param surface_state Specify surface type, state, and name.
+ * @param surface_volume Specify a surface volume file.
+ * @param spec_file Specify a surface specification (spec) file.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg.
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
+ */
 function surf_info(
     surface: InputPathType,
     com: boolean = false,
@@ -345,37 +376,6 @@ function surf_info(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): SurfInfoOutputs {
-    /**
-     * Tool to gather information about surface files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Input surface file.
-     * @param com Output the center of mass.
-     * @param debug_level Debugging level (2 turns LocalHead ON)
-     * @param detail_level Calculate surface metrics. 1=yes, 0=no
-     * @param n_node Output the number of nodes.
-     * @param n_faceset Output the number of face sets.
-     * @param n_tri Output the number of triangles.
-     * @param quiet Do not include the name of the parameter in output.
-     * @param separator Use string SEP to separate parameter values. Default is ' ; '
-     * @param input_surface Specify the input surface type and file.
-     * @param surface_state Specify surface type, state, and name.
-     * @param surface_volume Specify a surface volume file.
-     * @param spec_file Specify a surface specification (spec) file.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg.
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_INFO_METADATA);
     const params = surf_info_params(surface, com, debug_level, detail_level, n_node, n_faceset, n_tri, quiet, separator, input_surface, surface_state, surface_volume, spec_file, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall)
@@ -388,5 +388,8 @@ export {
       SurfInfoOutputs,
       SurfInfoParameters,
       surf_info,
+      surf_info_cargs,
+      surf_info_execute,
+      surf_info_outputs,
       surf_info_params,
 };

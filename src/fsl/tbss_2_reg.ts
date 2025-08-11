@@ -12,40 +12,40 @@ const TBSS_2_REG_METADATA: Metadata = {
 
 
 interface Tbss2RegParameters {
-    "__STYXTYPE__": "tbss_2_reg";
+    "@type": "fsl.tbss_2_reg";
     "use_fmrib58_fa_1mm": boolean;
     "target_image"?: InputPathType | null | undefined;
     "find_best_target": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_2_reg": tbss_2_reg_cargs,
+        "fsl.tbss_2_reg": tbss_2_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface Tbss2RegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param use_fmrib58_fa_1mm Use FMRIB58_FA_1mm as the target for nonlinear registrations (recommended)
+ * @param target_image Use the specified image as the target for nonlinear registrations
+ * @param find_best_target Find the best target from all images in the FA
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_2_reg_params(
     use_fmrib58_fa_1mm: boolean = false,
     target_image: InputPathType | null = null,
     find_best_target: boolean = false,
 ): Tbss2RegParameters {
-    /**
-     * Build parameters.
-    
-     * @param use_fmrib58_fa_1mm Use FMRIB58_FA_1mm as the target for nonlinear registrations (recommended)
-     * @param target_image Use the specified image as the target for nonlinear registrations
-     * @param find_best_target Find the best target from all images in the FA
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_2_reg" as const,
+        "@type": "fsl.tbss_2_reg" as const,
         "use_fmrib58_fa_1mm": use_fmrib58_fa_1mm,
         "find_best_target": find_best_target,
     };
@@ -91,18 +91,18 @@ function tbss_2_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_2_reg_cargs(
     params: Tbss2RegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_2_reg");
     if ((params["use_fmrib58_fa_1mm"] ?? null)) {
@@ -121,18 +121,18 @@ function tbss_2_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_2_reg_outputs(
     params: Tbss2RegParameters,
     execution: Execution,
 ): Tbss2RegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tbss2RegOutputs = {
         root: execution.outputFile("."),
     };
@@ -140,22 +140,22 @@ function tbss_2_reg_outputs(
 }
 
 
+/**
+ * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
+ */
 function tbss_2_reg_execute(
     params: Tbss2RegParameters,
     execution: Execution,
 ): Tbss2RegOutputs {
-    /**
-     * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_2_reg_cargs(params, execution)
     const ret = tbss_2_reg_outputs(params, execution)
@@ -164,26 +164,26 @@ function tbss_2_reg_execute(
 }
 
 
+/**
+ * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param use_fmrib58_fa_1mm Use FMRIB58_FA_1mm as the target for nonlinear registrations (recommended)
+ * @param target_image Use the specified image as the target for nonlinear registrations
+ * @param find_best_target Find the best target from all images in the FA
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
+ */
 function tbss_2_reg(
     use_fmrib58_fa_1mm: boolean = false,
     target_image: InputPathType | null = null,
     find_best_target: boolean = false,
     runner: Runner | null = null,
 ): Tbss2RegOutputs {
-    /**
-     * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param use_fmrib58_fa_1mm Use FMRIB58_FA_1mm as the target for nonlinear registrations (recommended)
-     * @param target_image Use the specified image as the target for nonlinear registrations
-     * @param find_best_target Find the best target from all images in the FA
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_2_REG_METADATA);
     const params = tbss_2_reg_params(use_fmrib58_fa_1mm, target_image, find_best_target)
@@ -196,5 +196,8 @@ export {
       Tbss2RegOutputs,
       Tbss2RegParameters,
       tbss_2_reg,
+      tbss_2_reg_cargs,
+      tbss_2_reg_execute,
+      tbss_2_reg_outputs,
       tbss_2_reg_params,
 };

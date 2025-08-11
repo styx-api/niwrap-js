@@ -12,7 +12,7 @@ const MKSURFATLAS_METADATA: Metadata = {
 
 
 interface MksurfatlasParameters {
-    "__STYXTYPE__": "mksurfatlas";
+    "@type": "freesurfer.mksurfatlas";
     "atlas": string;
     "hemi": string;
     "subjects": Array<string>;
@@ -25,35 +25,35 @@ interface MksurfatlasParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mksurfatlas": mksurfatlas_cargs,
+        "freesurfer.mksurfatlas": mksurfatlas_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mksurfatlas": mksurfatlas_outputs,
+        "freesurfer.mksurfatlas": mksurfatlas_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MksurfatlasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param atlas Save results to this file (tif file).
+ * @param hemi Hemisphere to process.
+ * @param subjects Subject(s) to process. Multiple subjects can be specified by repeating the flag.
+ * @param surfval Surface values file. Looks for subject/surfvaldir/hemi.surfval.
+ * @param surfvaldir Directory for surface values; default is 'label'.
+ * @param regsurf Registration surface; default is 'sphere'.
+ * @param debug Turn on debugging.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mksurfatlas_params(
     atlas: string,
     hemi: string,
@@ -87,23 +102,8 @@ function mksurfatlas_params(
     version: boolean = false,
     help: boolean = false,
 ): MksurfatlasParameters {
-    /**
-     * Build parameters.
-    
-     * @param atlas Save results to this file (tif file).
-     * @param hemi Hemisphere to process.
-     * @param subjects Subject(s) to process. Multiple subjects can be specified by repeating the flag.
-     * @param surfval Surface values file. Looks for subject/surfvaldir/hemi.surfval.
-     * @param surfvaldir Directory for surface values; default is 'label'.
-     * @param regsurf Registration surface; default is 'sphere'.
-     * @param debug Turn on debugging.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mksurfatlas" as const,
+        "@type": "freesurfer.mksurfatlas" as const,
         "atlas": atlas,
         "hemi": hemi,
         "subjects": subjects,
@@ -122,18 +122,18 @@ function mksurfatlas_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mksurfatlas_cargs(
     params: MksurfatlasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mksurfatlas");
     cargs.push(
@@ -177,18 +177,18 @@ function mksurfatlas_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mksurfatlas_outputs(
     params: MksurfatlasParameters,
     execution: Execution,
 ): MksurfatlasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MksurfatlasOutputs = {
         root: execution.outputFile("."),
         output_atlas: execution.outputFile([(params["atlas"] ?? null)].join('')),
@@ -197,22 +197,22 @@ function mksurfatlas_outputs(
 }
 
 
+/**
+ * Creates an atlas using mris_make_template. The atlas can then be used to create the surface registration for each subject based on this atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
+ */
 function mksurfatlas_execute(
     params: MksurfatlasParameters,
     execution: Execution,
 ): MksurfatlasOutputs {
-    /**
-     * Creates an atlas using mris_make_template. The atlas can then be used to create the surface registration for each subject based on this atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
-     */
     params = execution.params(params)
     const cargs = mksurfatlas_cargs(params, execution)
     const ret = mksurfatlas_outputs(params, execution)
@@ -221,6 +221,26 @@ function mksurfatlas_execute(
 }
 
 
+/**
+ * Creates an atlas using mris_make_template. The atlas can then be used to create the surface registration for each subject based on this atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param atlas Save results to this file (tif file).
+ * @param hemi Hemisphere to process.
+ * @param subjects Subject(s) to process. Multiple subjects can be specified by repeating the flag.
+ * @param surfval Surface values file. Looks for subject/surfvaldir/hemi.surfval.
+ * @param surfvaldir Directory for surface values; default is 'label'.
+ * @param regsurf Registration surface; default is 'sphere'.
+ * @param debug Turn on debugging.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
+ */
 function mksurfatlas(
     atlas: string,
     hemi: string,
@@ -233,26 +253,6 @@ function mksurfatlas(
     help: boolean = false,
     runner: Runner | null = null,
 ): MksurfatlasOutputs {
-    /**
-     * Creates an atlas using mris_make_template. The atlas can then be used to create the surface registration for each subject based on this atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param atlas Save results to this file (tif file).
-     * @param hemi Hemisphere to process.
-     * @param subjects Subject(s) to process. Multiple subjects can be specified by repeating the flag.
-     * @param surfval Surface values file. Looks for subject/surfvaldir/hemi.surfval.
-     * @param surfvaldir Directory for surface values; default is 'label'.
-     * @param regsurf Registration surface; default is 'sphere'.
-     * @param debug Turn on debugging.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKSURFATLAS_METADATA);
     const params = mksurfatlas_params(atlas, hemi, subjects, surfval, surfvaldir, regsurf, debug, version, help)
@@ -265,5 +265,8 @@ export {
       MksurfatlasOutputs,
       MksurfatlasParameters,
       mksurfatlas,
+      mksurfatlas_cargs,
+      mksurfatlas_execute,
+      mksurfatlas_outputs,
       mksurfatlas_params,
 };

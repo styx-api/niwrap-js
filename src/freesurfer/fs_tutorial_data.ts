@@ -12,40 +12,40 @@ const FS_TUTORIAL_DATA_METADATA: Metadata = {
 
 
 interface FsTutorialDataParameters {
-    "__STYXTYPE__": "fs_tutorial_data";
+    "@type": "freesurfer.fs_tutorial_data";
     "rsync_options"?: Array<string> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_tutorial_data": fs_tutorial_data_cargs,
+        "freesurfer.fs_tutorial_data": fs_tutorial_data_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fs_tutorial_data": fs_tutorial_data_outputs,
+        "freesurfer.fs_tutorial_data": fs_tutorial_data_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,18 +68,18 @@ interface FsTutorialDataOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rsync_options Additional rsync options for downloading tutorial data.
+ *
+ * @returns Parameter dictionary
+ */
 function fs_tutorial_data_params(
     rsync_options: Array<string> | null = null,
 ): FsTutorialDataParameters {
-    /**
-     * Build parameters.
-    
-     * @param rsync_options Additional rsync options for downloading tutorial data.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_tutorial_data" as const,
+        "@type": "freesurfer.fs_tutorial_data" as const,
     };
     if (rsync_options !== null) {
         params["rsync_options"] = rsync_options;
@@ -88,18 +88,18 @@ function fs_tutorial_data_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_tutorial_data_cargs(
     params: FsTutorialDataParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_tutorial_data");
     if ((params["rsync_options"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function fs_tutorial_data_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_tutorial_data_outputs(
     params: FsTutorialDataParameters,
     execution: Execution,
 ): FsTutorialDataOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsTutorialDataOutputs = {
         root: execution.outputFile("."),
         tutorial_data_dir: execution.outputFile(["/usr/local/freesurfer/subjects/tutorial_data"].join('')),
@@ -129,22 +129,22 @@ function fs_tutorial_data_outputs(
 }
 
 
+/**
+ * Tool to download and install FreeSurfer tutorial data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
+ */
 function fs_tutorial_data_execute(
     params: FsTutorialDataParameters,
     execution: Execution,
 ): FsTutorialDataOutputs {
-    /**
-     * Tool to download and install FreeSurfer tutorial data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_tutorial_data_cargs(params, execution)
     const ret = fs_tutorial_data_outputs(params, execution)
@@ -153,22 +153,22 @@ function fs_tutorial_data_execute(
 }
 
 
+/**
+ * Tool to download and install FreeSurfer tutorial data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param rsync_options Additional rsync options for downloading tutorial data.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
+ */
 function fs_tutorial_data(
     rsync_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): FsTutorialDataOutputs {
-    /**
-     * Tool to download and install FreeSurfer tutorial data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param rsync_options Additional rsync options for downloading tutorial data.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_TUTORIAL_DATA_METADATA);
     const params = fs_tutorial_data_params(rsync_options)
@@ -181,5 +181,8 @@ export {
       FsTutorialDataOutputs,
       FsTutorialDataParameters,
       fs_tutorial_data,
+      fs_tutorial_data_cargs,
+      fs_tutorial_data_execute,
+      fs_tutorial_data_outputs,
       fs_tutorial_data_params,
 };

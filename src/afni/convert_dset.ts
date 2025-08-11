@@ -12,7 +12,7 @@ const CONVERT_DSET_METADATA: Metadata = {
 
 
 interface ConvertDsetParameters {
-    "__STYXTYPE__": "ConvertDset";
+    "@type": "afni.ConvertDset";
     "output_type": Array<"niml_asc" | "niml_bi" | "1D" | "1Dp" | "1Dpt" | "gii" | "gii_asc" | "gii_b64" | "gii_b64gz" | "1D_stderr" | "1D_stdout" | "niml_stderr" | "niml_stdout" | "1Dp_stdout" | "1Dp_stderr" | "1Dpt_stdout" | "1Dpt_stderr">;
     "input_dataset": InputPathType;
     "input_type"?: "niml" | "1D" | "dx" | null | undefined;
@@ -37,35 +37,35 @@ interface ConvertDsetParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvertDset": convert_dset_cargs,
+        "afni.ConvertDset": convert_dset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ConvertDset": convert_dset_outputs,
+        "afni.ConvertDset": convert_dset_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface ConvertDsetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_type Type of output datasets
+ * @param input_dataset Input dataset to be converted
+ * @param input_type Type of input datasets
+ * @param output_prefix Output prefix for dataset
+ * @param dset_labels Label the columns (sub-bricks) of the output dataset
+ * @param add_node_index Add a node index element if one does not exist in the input dataset
+ * @param node_index_file File containing node indices
+ * @param node_select_file File specifying the nodes to keep in the output
+ * @param prepend_node_index Add a node index column to the data
+ * @param pad_to_node Output a full dataset from node 0 to MAX_INDEX
+ * @param labelize Turn the dataset into a labeled set per the colormap in CMAP
+ * @param graphize Turn the dataset into a SUMA graph dataset
+ * @param graph_nodelist Two files specifying the indices and the coordinates of the graph's nodes
+ * @param graph_full_nodelist Similar to -graph_nodelist_1D but without need for NODEINDLIST.1D
+ * @param graph_named_nodelist Two files specifying graph node indices, string labels, and their coordinates
+ * @param graph_xyz_lpi Coordinates in NodeList.1D are in LPI instead of RAI
+ * @param graph_edgelist Indices of graph nodes defining edge
+ * @param onegraph Expect input dataset to be one square matrix defining the graph (default)
+ * @param multigraph Expect each column in input dataset to define an entire graph
+ * @param split Split a multi-column dataset into about N output datasets
+ * @param no_history Do not include a history element in the output
+ *
+ * @returns Parameter dictionary
+ */
 function convert_dset_params(
     output_type: Array<"niml_asc" | "niml_bi" | "1D" | "1Dp" | "1Dpt" | "gii" | "gii_asc" | "gii_b64" | "gii_b64gz" | "1D_stderr" | "1D_stdout" | "niml_stderr" | "niml_stdout" | "1Dp_stdout" | "1Dp_stderr" | "1Dpt_stdout" | "1Dpt_stderr">,
     input_dataset: InputPathType,
@@ -111,35 +138,8 @@ function convert_dset_params(
     split: number | null = null,
     no_history: boolean = false,
 ): ConvertDsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_type Type of output datasets
-     * @param input_dataset Input dataset to be converted
-     * @param input_type Type of input datasets
-     * @param output_prefix Output prefix for dataset
-     * @param dset_labels Label the columns (sub-bricks) of the output dataset
-     * @param add_node_index Add a node index element if one does not exist in the input dataset
-     * @param node_index_file File containing node indices
-     * @param node_select_file File specifying the nodes to keep in the output
-     * @param prepend_node_index Add a node index column to the data
-     * @param pad_to_node Output a full dataset from node 0 to MAX_INDEX
-     * @param labelize Turn the dataset into a labeled set per the colormap in CMAP
-     * @param graphize Turn the dataset into a SUMA graph dataset
-     * @param graph_nodelist Two files specifying the indices and the coordinates of the graph's nodes
-     * @param graph_full_nodelist Similar to -graph_nodelist_1D but without need for NODEINDLIST.1D
-     * @param graph_named_nodelist Two files specifying graph node indices, string labels, and their coordinates
-     * @param graph_xyz_lpi Coordinates in NodeList.1D are in LPI instead of RAI
-     * @param graph_edgelist Indices of graph nodes defining edge
-     * @param onegraph Expect input dataset to be one square matrix defining the graph (default)
-     * @param multigraph Expect each column in input dataset to define an entire graph
-     * @param split Split a multi-column dataset into about N output datasets
-     * @param no_history Do not include a history element in the output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvertDset" as const,
+        "@type": "afni.ConvertDset" as const,
         "output_type": output_type,
         "input_dataset": input_dataset,
         "add_node_index": add_node_index,
@@ -190,18 +190,18 @@ function convert_dset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_dset_cargs(
     params: ConvertDsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvertDset");
     cargs.push(
@@ -309,18 +309,18 @@ function convert_dset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_dset_outputs(
     params: ConvertDsetParameters,
     execution: Execution,
 ): ConvertDsetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertDsetOutputs = {
         root: execution.outputFile("."),
         converted_dataset: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null)].join('')) : null,
@@ -329,22 +329,22 @@ function convert_dset_outputs(
 }
 
 
+/**
+ * Converts a surface dataset from one format to another.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
+ */
 function convert_dset_execute(
     params: ConvertDsetParameters,
     execution: Execution,
 ): ConvertDsetOutputs {
-    /**
-     * Converts a surface dataset from one format to another.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_dset_cargs(params, execution)
     const ret = convert_dset_outputs(params, execution)
@@ -353,6 +353,38 @@ function convert_dset_execute(
 }
 
 
+/**
+ * Converts a surface dataset from one format to another.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param output_type Type of output datasets
+ * @param input_dataset Input dataset to be converted
+ * @param input_type Type of input datasets
+ * @param output_prefix Output prefix for dataset
+ * @param dset_labels Label the columns (sub-bricks) of the output dataset
+ * @param add_node_index Add a node index element if one does not exist in the input dataset
+ * @param node_index_file File containing node indices
+ * @param node_select_file File specifying the nodes to keep in the output
+ * @param prepend_node_index Add a node index column to the data
+ * @param pad_to_node Output a full dataset from node 0 to MAX_INDEX
+ * @param labelize Turn the dataset into a labeled set per the colormap in CMAP
+ * @param graphize Turn the dataset into a SUMA graph dataset
+ * @param graph_nodelist Two files specifying the indices and the coordinates of the graph's nodes
+ * @param graph_full_nodelist Similar to -graph_nodelist_1D but without need for NODEINDLIST.1D
+ * @param graph_named_nodelist Two files specifying graph node indices, string labels, and their coordinates
+ * @param graph_xyz_lpi Coordinates in NodeList.1D are in LPI instead of RAI
+ * @param graph_edgelist Indices of graph nodes defining edge
+ * @param onegraph Expect input dataset to be one square matrix defining the graph (default)
+ * @param multigraph Expect each column in input dataset to define an entire graph
+ * @param split Split a multi-column dataset into about N output datasets
+ * @param no_history Do not include a history element in the output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
+ */
 function convert_dset(
     output_type: Array<"niml_asc" | "niml_bi" | "1D" | "1Dp" | "1Dpt" | "gii" | "gii_asc" | "gii_b64" | "gii_b64gz" | "1D_stderr" | "1D_stdout" | "niml_stderr" | "niml_stdout" | "1Dp_stdout" | "1Dp_stderr" | "1Dpt_stdout" | "1Dpt_stderr">,
     input_dataset: InputPathType,
@@ -377,38 +409,6 @@ function convert_dset(
     no_history: boolean = false,
     runner: Runner | null = null,
 ): ConvertDsetOutputs {
-    /**
-     * Converts a surface dataset from one format to another.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param output_type Type of output datasets
-     * @param input_dataset Input dataset to be converted
-     * @param input_type Type of input datasets
-     * @param output_prefix Output prefix for dataset
-     * @param dset_labels Label the columns (sub-bricks) of the output dataset
-     * @param add_node_index Add a node index element if one does not exist in the input dataset
-     * @param node_index_file File containing node indices
-     * @param node_select_file File specifying the nodes to keep in the output
-     * @param prepend_node_index Add a node index column to the data
-     * @param pad_to_node Output a full dataset from node 0 to MAX_INDEX
-     * @param labelize Turn the dataset into a labeled set per the colormap in CMAP
-     * @param graphize Turn the dataset into a SUMA graph dataset
-     * @param graph_nodelist Two files specifying the indices and the coordinates of the graph's nodes
-     * @param graph_full_nodelist Similar to -graph_nodelist_1D but without need for NODEINDLIST.1D
-     * @param graph_named_nodelist Two files specifying graph node indices, string labels, and their coordinates
-     * @param graph_xyz_lpi Coordinates in NodeList.1D are in LPI instead of RAI
-     * @param graph_edgelist Indices of graph nodes defining edge
-     * @param onegraph Expect input dataset to be one square matrix defining the graph (default)
-     * @param multigraph Expect each column in input dataset to define an entire graph
-     * @param split Split a multi-column dataset into about N output datasets
-     * @param no_history Do not include a history element in the output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_DSET_METADATA);
     const params = convert_dset_params(output_type, input_dataset, input_type, output_prefix, dset_labels, add_node_index, node_index_file, node_select_file, prepend_node_index, pad_to_node, labelize, graphize, graph_nodelist, graph_full_nodelist, graph_named_nodelist, graph_xyz_lpi, graph_edgelist, onegraph, multigraph, split, no_history)
@@ -421,5 +421,8 @@ export {
       ConvertDsetOutputs,
       ConvertDsetParameters,
       convert_dset,
+      convert_dset_cargs,
+      convert_dset_execute,
+      convert_dset_outputs,
       convert_dset_params,
 };

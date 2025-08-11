@@ -12,7 +12,7 @@ const VECREG_METADATA: Metadata = {
 
 
 interface VecregParameters {
-    "__STYXTYPE__": "vecreg";
+    "@type": "fsl.vecreg";
     "input_file": InputPathType;
     "output_file": string;
     "reference_volume": InputPathType;
@@ -27,35 +27,35 @@ interface VecregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vecreg": vecreg_cargs,
+        "fsl.vecreg": vecreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vecreg": vecreg_outputs,
+        "fsl.vecreg": vecreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface VecregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename for input vector or tensor field
+ * @param output_file Filename for output registered vector or tensor field
+ * @param reference_volume Filename for reference (target) volume
+ * @param transform_file Filename for affine transformation matrix
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param secondary_affine Filename for secondary affine matrix; if set, this will be used for the rotation of the vector/tensor field
+ * @param secondary_warp Filename for secondary warp field; if set, this will be used for the rotation of the vector/tensor field
+ * @param interp_method Interpolation method (nearestneighbour, trilinear (default), sinc, or spline)
+ * @param brain_mask Brain mask in input space
+ * @param ref_brain_mask Brain mask in output space (useful for speed up of nonlinear registration)
+ *
+ * @returns Parameter dictionary
+ */
 function vecreg_params(
     input_file: InputPathType,
     output_file: string,
@@ -91,25 +108,8 @@ function vecreg_params(
     brain_mask: InputPathType | null = null,
     ref_brain_mask: InputPathType | null = null,
 ): VecregParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename for input vector or tensor field
-     * @param output_file Filename for output registered vector or tensor field
-     * @param reference_volume Filename for reference (target) volume
-     * @param transform_file Filename for affine transformation matrix
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param secondary_affine Filename for secondary affine matrix; if set, this will be used for the rotation of the vector/tensor field
-     * @param secondary_warp Filename for secondary warp field; if set, this will be used for the rotation of the vector/tensor field
-     * @param interp_method Interpolation method (nearestneighbour, trilinear (default), sinc, or spline)
-     * @param brain_mask Brain mask in input space
-     * @param ref_brain_mask Brain mask in output space (useful for speed up of nonlinear registration)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vecreg" as const,
+        "@type": "fsl.vecreg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "reference_volume": reference_volume,
@@ -138,18 +138,18 @@ function vecreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vecreg_cargs(
     params: VecregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vecreg");
     cargs.push(
@@ -210,18 +210,18 @@ function vecreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vecreg_outputs(
     params: VecregParameters,
     execution: Execution,
 ): VecregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VecregOutputs = {
         root: execution.outputFile("."),
         registered_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -230,22 +230,22 @@ function vecreg_outputs(
 }
 
 
+/**
+ * Vector Affine/NonLinear Transformation with Orientation Preservation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VecregOutputs`).
+ */
 function vecreg_execute(
     params: VecregParameters,
     execution: Execution,
 ): VecregOutputs {
-    /**
-     * Vector Affine/NonLinear Transformation with Orientation Preservation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VecregOutputs`).
-     */
     params = execution.params(params)
     const cargs = vecreg_cargs(params, execution)
     const ret = vecreg_outputs(params, execution)
@@ -254,6 +254,28 @@ function vecreg_execute(
 }
 
 
+/**
+ * Vector Affine/NonLinear Transformation with Orientation Preservation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Filename for input vector or tensor field
+ * @param output_file Filename for output registered vector or tensor field
+ * @param reference_volume Filename for reference (target) volume
+ * @param transform_file Filename for affine transformation matrix
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param secondary_affine Filename for secondary affine matrix; if set, this will be used for the rotation of the vector/tensor field
+ * @param secondary_warp Filename for secondary warp field; if set, this will be used for the rotation of the vector/tensor field
+ * @param interp_method Interpolation method (nearestneighbour, trilinear (default), sinc, or spline)
+ * @param brain_mask Brain mask in input space
+ * @param ref_brain_mask Brain mask in output space (useful for speed up of nonlinear registration)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VecregOutputs`).
+ */
 function vecreg(
     input_file: InputPathType,
     output_file: string,
@@ -268,28 +290,6 @@ function vecreg(
     ref_brain_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): VecregOutputs {
-    /**
-     * Vector Affine/NonLinear Transformation with Orientation Preservation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Filename for input vector or tensor field
-     * @param output_file Filename for output registered vector or tensor field
-     * @param reference_volume Filename for reference (target) volume
-     * @param transform_file Filename for affine transformation matrix
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param secondary_affine Filename for secondary affine matrix; if set, this will be used for the rotation of the vector/tensor field
-     * @param secondary_warp Filename for secondary warp field; if set, this will be used for the rotation of the vector/tensor field
-     * @param interp_method Interpolation method (nearestneighbour, trilinear (default), sinc, or spline)
-     * @param brain_mask Brain mask in input space
-     * @param ref_brain_mask Brain mask in output space (useful for speed up of nonlinear registration)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VecregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VECREG_METADATA);
     const params = vecreg_params(input_file, output_file, reference_volume, transform_file, verbose_flag, help_flag, secondary_affine, secondary_warp, interp_method, brain_mask, ref_brain_mask)
@@ -302,5 +302,8 @@ export {
       VecregOutputs,
       VecregParameters,
       vecreg,
+      vecreg_cargs,
+      vecreg_execute,
+      vecreg_outputs,
       vecreg_params,
 };

@@ -12,7 +12,7 @@ const TKREGISTER2_METADATA: Metadata = {
 
 
 interface Tkregister2Parameters {
-    "__STYXTYPE__": "tkregister2";
+    "@type": "freesurfer.tkregister2";
     "fixed_volume": InputPathType;
     "moving_volume": InputPathType;
     "reg_file": InputPathType;
@@ -24,35 +24,35 @@ interface Tkregister2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tkregister2": tkregister2_cargs,
+        "freesurfer.tkregister2": tkregister2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tkregister2": tkregister2_outputs,
+        "freesurfer.tkregister2": tkregister2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface Tkregister2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed_volume Fixed volume (e.g., anatomical image)
+ * @param moving_volume Moving volume (e.g., functional image)
+ * @param reg_file Registration file to be saved or loaded
+ * @param noedit Run in no-edit mode, useful for scripting.
+ * @param lta Use LTA format for registration file.
+ * @param surf_reg Use surface registration.
+ * @param reg_only Don't show GUI, just save registration.
+ * @param help Display help information.
+ *
+ * @returns Parameter dictionary
+ */
 function tkregister2_params(
     fixed_volume: InputPathType,
     moving_volume: InputPathType,
@@ -85,22 +99,8 @@ function tkregister2_params(
     reg_only: boolean = false,
     help: boolean = false,
 ): Tkregister2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed_volume Fixed volume (e.g., anatomical image)
-     * @param moving_volume Moving volume (e.g., functional image)
-     * @param reg_file Registration file to be saved or loaded
-     * @param noedit Run in no-edit mode, useful for scripting.
-     * @param lta Use LTA format for registration file.
-     * @param surf_reg Use surface registration.
-     * @param reg_only Don't show GUI, just save registration.
-     * @param help Display help information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tkregister2" as const,
+        "@type": "freesurfer.tkregister2" as const,
         "fixed_volume": fixed_volume,
         "moving_volume": moving_volume,
         "reg_file": reg_file,
@@ -114,18 +114,18 @@ function tkregister2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tkregister2_cargs(
     params: Tkregister2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tkregister2");
     cargs.push(execution.inputFile((params["fixed_volume"] ?? null)));
@@ -150,18 +150,18 @@ function tkregister2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tkregister2_outputs(
     params: Tkregister2Parameters,
     execution: Execution,
 ): Tkregister2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tkregister2Outputs = {
         root: execution.outputFile("."),
         output_reg_file: execution.outputFile([path.basename((params["reg_file"] ?? null))].join('')),
@@ -170,22 +170,22 @@ function tkregister2_outputs(
 }
 
 
+/**
+ * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
+ */
 function tkregister2_execute(
     params: Tkregister2Parameters,
     execution: Execution,
 ): Tkregister2Outputs {
-    /**
-     * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
-     */
     params = execution.params(params)
     const cargs = tkregister2_cargs(params, execution)
     const ret = tkregister2_outputs(params, execution)
@@ -194,6 +194,25 @@ function tkregister2_execute(
 }
 
 
+/**
+ * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param fixed_volume Fixed volume (e.g., anatomical image)
+ * @param moving_volume Moving volume (e.g., functional image)
+ * @param reg_file Registration file to be saved or loaded
+ * @param noedit Run in no-edit mode, useful for scripting.
+ * @param lta Use LTA format for registration file.
+ * @param surf_reg Use surface registration.
+ * @param reg_only Don't show GUI, just save registration.
+ * @param help Display help information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
+ */
 function tkregister2(
     fixed_volume: InputPathType,
     moving_volume: InputPathType,
@@ -205,25 +224,6 @@ function tkregister2(
     help: boolean = false,
     runner: Runner | null = null,
 ): Tkregister2Outputs {
-    /**
-     * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param fixed_volume Fixed volume (e.g., anatomical image)
-     * @param moving_volume Moving volume (e.g., functional image)
-     * @param reg_file Registration file to be saved or loaded
-     * @param noedit Run in no-edit mode, useful for scripting.
-     * @param lta Use LTA format for registration file.
-     * @param surf_reg Use surface registration.
-     * @param reg_only Don't show GUI, just save registration.
-     * @param help Display help information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKREGISTER2_METADATA);
     const params = tkregister2_params(fixed_volume, moving_volume, reg_file, noedit, lta, surf_reg, reg_only, help)
@@ -236,5 +236,8 @@ export {
       Tkregister2Outputs,
       Tkregister2Parameters,
       tkregister2,
+      tkregister2_cargs,
+      tkregister2_execute,
+      tkregister2_outputs,
       tkregister2_params,
 };

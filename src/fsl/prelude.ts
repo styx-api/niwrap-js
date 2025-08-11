@@ -12,7 +12,7 @@ const PRELUDE_METADATA: Metadata = {
 
 
 interface PreludeParameters {
-    "__STYXTYPE__": "prelude";
+    "@type": "fsl.prelude";
     "output_unwrap": string;
     "output_unwrap_alias": InputPathType;
     "complex_phase"?: InputPathType | null | undefined;
@@ -46,35 +46,35 @@ interface PreludeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "prelude": prelude_cargs,
+        "fsl.prelude": prelude_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "prelude": prelude_outputs,
+        "fsl.prelude": prelude_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,6 +109,42 @@ interface PreludeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_unwrap Filename for saving the unwrapped phase output
+ * @param output_unwrap_alias Filename for saving the unwrapped phase output
+ * @param complex_phase Filename of complex phase input volume
+ * @param complex_phase_alias Filename of complex phase input volume
+ * @param absolute_volume Filename of absolute input volume
+ * @param absolute_volume_alias Filename of absolute input volume
+ * @param phase_volume Filename of raw phase input volume
+ * @param phase_volume_alias Filename of raw phase input volume
+ * @param num_phase_split Number of phase partitions to use
+ * @param label_slices Does label processing in 2D (slice at a time)
+ * @param slice_processing Does all processing in 2D (slice at a time)
+ * @param slice_processing_alias Does all processing in 2D (slice at a time)
+ * @param force_3d Forces all processing to be full 3D
+ * @param force_3d_alias Forces all processing to be full 3D
+ * @param threshold Intensity threshold for masking
+ * @param threshold_alias Intensity threshold for masking
+ * @param mask_volume Filename of mask input volume
+ * @param mask_volume_alias Filename of mask input volume
+ * @param start_image First image number to process (default 0)
+ * @param end_image Final image number to process (default Inf)
+ * @param save_mask Filename for saving the mask volume
+ * @param save_raw_phase Filename for saving the raw phase output
+ * @param save_raw_phase_alias Filename for saving the raw phase output
+ * @param save_labels Filename for saving the area labels output
+ * @param save_labels_alias Filename for saving the area labels output
+ * @param remove_ramps Remove phase ramps during unwrapping
+ * @param verbose Switch on diagnostic messages
+ * @param verbose_alias Switch on diagnostic messages
+ * @param help Display help message
+ * @param help_alias Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function prelude_params(
     output_unwrap: string,
     output_unwrap_alias: InputPathType,
@@ -141,44 +177,8 @@ function prelude_params(
     help: boolean = false,
     help_alias: boolean = false,
 ): PreludeParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_unwrap Filename for saving the unwrapped phase output
-     * @param output_unwrap_alias Filename for saving the unwrapped phase output
-     * @param complex_phase Filename of complex phase input volume
-     * @param complex_phase_alias Filename of complex phase input volume
-     * @param absolute_volume Filename of absolute input volume
-     * @param absolute_volume_alias Filename of absolute input volume
-     * @param phase_volume Filename of raw phase input volume
-     * @param phase_volume_alias Filename of raw phase input volume
-     * @param num_phase_split Number of phase partitions to use
-     * @param label_slices Does label processing in 2D (slice at a time)
-     * @param slice_processing Does all processing in 2D (slice at a time)
-     * @param slice_processing_alias Does all processing in 2D (slice at a time)
-     * @param force_3d Forces all processing to be full 3D
-     * @param force_3d_alias Forces all processing to be full 3D
-     * @param threshold Intensity threshold for masking
-     * @param threshold_alias Intensity threshold for masking
-     * @param mask_volume Filename of mask input volume
-     * @param mask_volume_alias Filename of mask input volume
-     * @param start_image First image number to process (default 0)
-     * @param end_image Final image number to process (default Inf)
-     * @param save_mask Filename for saving the mask volume
-     * @param save_raw_phase Filename for saving the raw phase output
-     * @param save_raw_phase_alias Filename for saving the raw phase output
-     * @param save_labels Filename for saving the area labels output
-     * @param save_labels_alias Filename for saving the area labels output
-     * @param remove_ramps Remove phase ramps during unwrapping
-     * @param verbose Switch on diagnostic messages
-     * @param verbose_alias Switch on diagnostic messages
-     * @param help Display help message
-     * @param help_alias Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "prelude" as const,
+        "@type": "fsl.prelude" as const,
         "output_unwrap": output_unwrap,
         "output_unwrap_alias": output_unwrap_alias,
         "label_slices": label_slices,
@@ -250,18 +250,18 @@ function prelude_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function prelude_cargs(
     params: PreludeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("prelude");
     cargs.push(
@@ -414,18 +414,18 @@ function prelude_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function prelude_outputs(
     params: PreludeParameters,
     execution: Execution,
 ): PreludeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PreludeOutputs = {
         root: execution.outputFile("."),
         unwrapped_phase_output: execution.outputFile([(params["output_unwrap"] ?? null), ".nii.gz"].join('')),
@@ -437,22 +437,22 @@ function prelude_outputs(
 }
 
 
+/**
+ * Phase Region Expanding Labeller for Unwrapping Discrete Estimates.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PreludeOutputs`).
+ */
 function prelude_execute(
     params: PreludeParameters,
     execution: Execution,
 ): PreludeOutputs {
-    /**
-     * Phase Region Expanding Labeller for Unwrapping Discrete Estimates.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PreludeOutputs`).
-     */
     params = execution.params(params)
     const cargs = prelude_cargs(params, execution)
     const ret = prelude_outputs(params, execution)
@@ -461,6 +461,47 @@ function prelude_execute(
 }
 
 
+/**
+ * Phase Region Expanding Labeller for Unwrapping Discrete Estimates.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_unwrap Filename for saving the unwrapped phase output
+ * @param output_unwrap_alias Filename for saving the unwrapped phase output
+ * @param complex_phase Filename of complex phase input volume
+ * @param complex_phase_alias Filename of complex phase input volume
+ * @param absolute_volume Filename of absolute input volume
+ * @param absolute_volume_alias Filename of absolute input volume
+ * @param phase_volume Filename of raw phase input volume
+ * @param phase_volume_alias Filename of raw phase input volume
+ * @param num_phase_split Number of phase partitions to use
+ * @param label_slices Does label processing in 2D (slice at a time)
+ * @param slice_processing Does all processing in 2D (slice at a time)
+ * @param slice_processing_alias Does all processing in 2D (slice at a time)
+ * @param force_3d Forces all processing to be full 3D
+ * @param force_3d_alias Forces all processing to be full 3D
+ * @param threshold Intensity threshold for masking
+ * @param threshold_alias Intensity threshold for masking
+ * @param mask_volume Filename of mask input volume
+ * @param mask_volume_alias Filename of mask input volume
+ * @param start_image First image number to process (default 0)
+ * @param end_image Final image number to process (default Inf)
+ * @param save_mask Filename for saving the mask volume
+ * @param save_raw_phase Filename for saving the raw phase output
+ * @param save_raw_phase_alias Filename for saving the raw phase output
+ * @param save_labels Filename for saving the area labels output
+ * @param save_labels_alias Filename for saving the area labels output
+ * @param remove_ramps Remove phase ramps during unwrapping
+ * @param verbose Switch on diagnostic messages
+ * @param verbose_alias Switch on diagnostic messages
+ * @param help Display help message
+ * @param help_alias Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PreludeOutputs`).
+ */
 function prelude(
     output_unwrap: string,
     output_unwrap_alias: InputPathType,
@@ -494,47 +535,6 @@ function prelude(
     help_alias: boolean = false,
     runner: Runner | null = null,
 ): PreludeOutputs {
-    /**
-     * Phase Region Expanding Labeller for Unwrapping Discrete Estimates.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_unwrap Filename for saving the unwrapped phase output
-     * @param output_unwrap_alias Filename for saving the unwrapped phase output
-     * @param complex_phase Filename of complex phase input volume
-     * @param complex_phase_alias Filename of complex phase input volume
-     * @param absolute_volume Filename of absolute input volume
-     * @param absolute_volume_alias Filename of absolute input volume
-     * @param phase_volume Filename of raw phase input volume
-     * @param phase_volume_alias Filename of raw phase input volume
-     * @param num_phase_split Number of phase partitions to use
-     * @param label_slices Does label processing in 2D (slice at a time)
-     * @param slice_processing Does all processing in 2D (slice at a time)
-     * @param slice_processing_alias Does all processing in 2D (slice at a time)
-     * @param force_3d Forces all processing to be full 3D
-     * @param force_3d_alias Forces all processing to be full 3D
-     * @param threshold Intensity threshold for masking
-     * @param threshold_alias Intensity threshold for masking
-     * @param mask_volume Filename of mask input volume
-     * @param mask_volume_alias Filename of mask input volume
-     * @param start_image First image number to process (default 0)
-     * @param end_image Final image number to process (default Inf)
-     * @param save_mask Filename for saving the mask volume
-     * @param save_raw_phase Filename for saving the raw phase output
-     * @param save_raw_phase_alias Filename for saving the raw phase output
-     * @param save_labels Filename for saving the area labels output
-     * @param save_labels_alias Filename for saving the area labels output
-     * @param remove_ramps Remove phase ramps during unwrapping
-     * @param verbose Switch on diagnostic messages
-     * @param verbose_alias Switch on diagnostic messages
-     * @param help Display help message
-     * @param help_alias Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PreludeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PRELUDE_METADATA);
     const params = prelude_params(output_unwrap, output_unwrap_alias, complex_phase, complex_phase_alias, absolute_volume, absolute_volume_alias, phase_volume, phase_volume_alias, num_phase_split, label_slices, slice_processing, slice_processing_alias, force_3d, force_3d_alias, threshold, threshold_alias, mask_volume, mask_volume_alias, start_image, end_image, save_mask, save_raw_phase, save_raw_phase_alias, save_labels, save_labels_alias, remove_ramps, verbose, verbose_alias, help, help_alias)
@@ -547,5 +547,8 @@ export {
       PreludeOutputs,
       PreludeParameters,
       prelude,
+      prelude_cargs,
+      prelude_execute,
+      prelude_outputs,
       prelude_params,
 };

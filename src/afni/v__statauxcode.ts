@@ -12,40 +12,40 @@ const V__STATAUXCODE_METADATA: Metadata = {
 
 
 interface VStatauxcodeParameters {
-    "__STYXTYPE__": "@statauxcode";
+    "@type": "afni.@statauxcode";
     "code": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@statauxcode": v__statauxcode_cargs,
+        "afni.@statauxcode": v__statauxcode_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@statauxcode": v__statauxcode_outputs,
+        "afni.@statauxcode": v__statauxcode_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VStatauxcodeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param code The statistical code or its numerical equivalent to be converted.
+ *
+ * @returns Parameter dictionary
+ */
 function v__statauxcode_params(
     code: string,
 ): VStatauxcodeParameters {
-    /**
-     * Build parameters.
-    
-     * @param code The statistical code or its numerical equivalent to be converted.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@statauxcode" as const,
+        "@type": "afni.@statauxcode" as const,
         "code": code,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__statauxcode_cargs(
     params: VStatauxcodeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@statauxcode");
     cargs.push((params["code"] ?? null));
@@ -105,18 +105,18 @@ function v__statauxcode_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__statauxcode_outputs(
     params: VStatauxcodeParameters,
     execution: Execution,
 ): VStatauxcodeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VStatauxcodeOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["output.txt"].join('')),
@@ -125,22 +125,22 @@ function v__statauxcode_outputs(
 }
 
 
+/**
+ * Returns the name or number of a statistics code based on specified mappings.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
+ */
 function v__statauxcode_execute(
     params: VStatauxcodeParameters,
     execution: Execution,
 ): VStatauxcodeOutputs {
-    /**
-     * Returns the name or number of a statistics code based on specified mappings.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__statauxcode_cargs(params, execution)
     const ret = v__statauxcode_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__statauxcode_execute(
 }
 
 
+/**
+ * Returns the name or number of a statistics code based on specified mappings.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param code The statistical code or its numerical equivalent to be converted.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
+ */
 function v__statauxcode(
     code: string,
     runner: Runner | null = null,
 ): VStatauxcodeOutputs {
-    /**
-     * Returns the name or number of a statistics code based on specified mappings.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param code The statistical code or its numerical equivalent to be converted.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__STATAUXCODE_METADATA);
     const params = v__statauxcode_params(code)
@@ -177,5 +177,8 @@ export {
       VStatauxcodeParameters,
       V__STATAUXCODE_METADATA,
       v__statauxcode,
+      v__statauxcode_cargs,
+      v__statauxcode_execute,
+      v__statauxcode_outputs,
       v__statauxcode_params,
 };

@@ -12,34 +12,34 @@ const MRREGISTER_METADATA: Metadata = {
 
 
 interface MrregisterTransformedParameters {
-    "__STYXTYPE__": "transformed";
+    "@type": "mrtrix.mrregister.transformed";
     "image": string;
 }
 
 
 interface MrregisterTransformedMidwayParameters {
-    "__STYXTYPE__": "transformed_midway";
+    "@type": "mrtrix.mrregister.transformed_midway";
     "image1_transformed": string;
     "image2_transformed": string;
 }
 
 
 interface MrregisterNlWarpParameters {
-    "__STYXTYPE__": "nl_warp";
+    "@type": "mrtrix.mrregister.nl_warp";
     "warp1": string;
     "warp2": string;
 }
 
 
 interface MrregisterConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrregister.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrregisterParameters {
-    "__STYXTYPE__": "mrregister";
+    "@type": "mrtrix.mrregister";
     "type"?: string | null | undefined;
     "transformed"?: Array<MrregisterTransformedParameters> | null | undefined;
     "transformed_midway"?: Array<MrregisterTransformedMidwayParameters> | null | undefined;
@@ -111,42 +111,42 @@ interface MrregisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrregister": mrregister_cargs,
-        "transformed": mrregister_transformed_cargs,
-        "transformed_midway": mrregister_transformed_midway_cargs,
-        "nl_warp": mrregister_nl_warp_cargs,
-        "config": mrregister_config_cargs,
+        "mrtrix.mrregister": mrregister_cargs,
+        "mrtrix.mrregister.transformed": mrregister_transformed_cargs,
+        "mrtrix.mrregister.transformed_midway": mrregister_transformed_midway_cargs,
+        "mrtrix.mrregister.nl_warp": mrregister_nl_warp_cargs,
+        "mrtrix.mrregister.config": mrregister_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrregister": mrregister_outputs,
-        "transformed": mrregister_transformed_outputs,
-        "transformed_midway": mrregister_transformed_midway_outputs,
-        "nl_warp": mrregister_nl_warp_outputs,
+        "mrtrix.mrregister": mrregister_outputs,
+        "mrtrix.mrregister.transformed": mrregister_transformed_outputs,
+        "mrtrix.mrregister.transformed_midway": mrregister_transformed_midway_outputs,
+        "mrtrix.mrregister.nl_warp": mrregister_nl_warp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -169,36 +169,36 @@ interface MrregisterTransformedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
+ *
+ * @returns Parameter dictionary
+ */
 function mrregister_transformed_params(
     image: string,
 ): MrregisterTransformedParameters {
-    /**
-     * Build parameters.
-    
-     * @param image image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformed" as const,
+        "@type": "mrtrix.mrregister.transformed" as const,
         "image": image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrregister_transformed_cargs(
     params: MrregisterTransformedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-transformed");
     cargs.push((params["image"] ?? null));
@@ -206,18 +206,18 @@ function mrregister_transformed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrregister_transformed_outputs(
     params: MrregisterTransformedParameters,
     execution: Execution,
 ): MrregisterTransformedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrregisterTransformedOutputs = {
         root: execution.outputFile("."),
         image: execution.outputFile([(params["image"] ?? null)].join('')),
@@ -247,20 +247,20 @@ interface MrregisterTransformedMidwayOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image1_transformed image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
+ * @param image2_transformed image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
+ *
+ * @returns Parameter dictionary
+ */
 function mrregister_transformed_midway_params(
     image1_transformed: string,
     image2_transformed: string,
 ): MrregisterTransformedMidwayParameters {
-    /**
-     * Build parameters.
-    
-     * @param image1_transformed image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
-     * @param image2_transformed image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformed_midway" as const,
+        "@type": "mrtrix.mrregister.transformed_midway" as const,
         "image1_transformed": image1_transformed,
         "image2_transformed": image2_transformed,
     };
@@ -268,18 +268,18 @@ function mrregister_transformed_midway_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrregister_transformed_midway_cargs(
     params: MrregisterTransformedMidwayParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-transformed_midway");
     cargs.push((params["image1_transformed"] ?? null));
@@ -288,18 +288,18 @@ function mrregister_transformed_midway_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrregister_transformed_midway_outputs(
     params: MrregisterTransformedMidwayParameters,
     execution: Execution,
 ): MrregisterTransformedMidwayOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrregisterTransformedMidwayOutputs = {
         root: execution.outputFile("."),
         image1_transformed: execution.outputFile([(params["image1_transformed"] ?? null)].join('')),
@@ -330,20 +330,20 @@ interface MrregisterNlWarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warp1 the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
+ * @param warp2 the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
+ *
+ * @returns Parameter dictionary
+ */
 function mrregister_nl_warp_params(
     warp1: string,
     warp2: string,
 ): MrregisterNlWarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param warp1 the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
-     * @param warp2 the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nl_warp" as const,
+        "@type": "mrtrix.mrregister.nl_warp" as const,
         "warp1": warp1,
         "warp2": warp2,
     };
@@ -351,18 +351,18 @@ function mrregister_nl_warp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrregister_nl_warp_cargs(
     params: MrregisterNlWarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-nl_warp");
     cargs.push((params["warp1"] ?? null));
@@ -371,18 +371,18 @@ function mrregister_nl_warp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrregister_nl_warp_outputs(
     params: MrregisterNlWarpParameters,
     execution: Execution,
 ): MrregisterNlWarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrregisterNlWarpOutputs = {
         root: execution.outputFile("."),
         warp1: execution.outputFile([(params["warp1"] ?? null)].join('')),
@@ -392,20 +392,20 @@ function mrregister_nl_warp_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrregister_config_params(
     key: string,
     value: string,
 ): MrregisterConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrregister.config" as const,
         "key": key,
         "value": value,
     };
@@ -413,18 +413,18 @@ function mrregister_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrregister_config_cargs(
     params: MrregisterConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -494,6 +494,92 @@ interface MrregisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image1_image2 input image 1 ('moving') and input image 2 ('template')
+ * @param type_ the registration type. Valid choices are: rigid, affine, nonlinear, rigid_affine, rigid_nonlinear, affine_nonlinear, rigid_affine_nonlinear (Default: affine_nonlinear)
+ * @param transformed image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
+ * @param transformed_midway image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
+ * @param mask1 a mask to define the region of image1 to use for optimisation.
+ * @param mask2 a mask to define the region of image2 to use for optimisation.
+ * @param nan use NaN as out of bounds value. (Default: 0.0)
+ * @param rigid the output text file containing the rigid transformation as a 4x4 matrix
+ * @param rigid_1tomidway the output text file containing the rigid transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
+ * @param rigid_2tomidway the output text file containing the rigid transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
+ * @param rigid_init_translation initialise the translation and centre of rotation 
+Valid choices are: 
+mass (aligns the centers of mass of both images, default), 
+geometric (aligns geometric image centres) and none.
+ * @param rigid_init_rotation initialise the rotation Valid choices are: 
+search (search for the best rotation using mean squared residuals), 
+moments (rotation based on directions of intensity variance with respect to centre of mass), 
+none (default).
+ * @param rigid_init_matrix initialise either the rigid, affine, or syn registration with the supplied rigid transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides rigid_init_translation and rigid_init_rotation initialisation 
+ * @param rigid_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param rigid_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
+ * @param rigid_metric valid choices are: diff (intensity differences), Default: diff
+ * @param rigid_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
+ * @param rigid_lmax explicitly set the lmax to be used per scale factor in rigid FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param rigid_log write gradient descent parameter evolution to log file
+ * @param affine the output text file containing the affine transformation as a 4x4 matrix
+ * @param affine_1tomidway the output text file containing the affine transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
+ * @param affine_2tomidway the output text file containing the affine transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
+ * @param affine_init_translation initialise the translation and centre of rotation 
+Valid choices are: 
+mass (aligns the centers of mass of both images), 
+geometric (aligns geometric image centres) and none. (Default: mass)
+ * @param affine_init_rotation initialise the rotation Valid choices are: 
+search (search for the best rotation using mean squared residuals), 
+moments (rotation based on directions of intensity variance with respect to centre of mass), 
+none (Default: none).
+ * @param affine_init_matrix initialise either the affine, or syn registration with the supplied affine transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides affine_init_translation and affine_init_rotation initialisation 
+ * @param affine_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param affine_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
+ * @param affine_metric valid choices are: diff (intensity differences), Default: diff
+ * @param affine_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
+ * @param affine_lmax explicitly set the lmax to be used per scale factor in affine FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param affine_log write gradient descent parameter evolution to log file
+ * @param init_translation_unmasked1 disregard mask1 for the translation initialisation (affects 'mass')
+ * @param init_translation_unmasked2 disregard mask2 for the translation initialisation (affects 'mass')
+ * @param init_rotation_unmasked1 disregard mask1 for the rotation initialisation (affects 'search' and 'moments')
+ * @param init_rotation_unmasked2 disregard mask2 for the rotation initialisation (affects 'search' and 'moments')
+ * @param init_rotation_search_angles rotation angles for the local search in degrees between 0 and 180. (Default: 2,5,10,15,20)
+ * @param init_rotation_search_scale relative size of the images used for the rotation search. (Default: 0.15)
+ * @param init_rotation_search_directions number of rotation axis for local search. (Default: 250)
+ * @param init_rotation_search_run_global perform a global search. (Default: local)
+ * @param init_rotation_search_global_iterations number of rotations to investigate (Default: 10000)
+ * @param linstage_iterations number of iterations for each registration stage, not to be confused with -rigid_niter or -affine_niter. This can be used to generate intermediate diagnostics images (-linstage.diagnostics.prefix) or to change the cost function optimiser during registration (without the need to repeatedly resize the images). (Default: 1 == no repetition)
+ * @param linstage_optimiser_first Cost function optimisation algorithm to use at first iteration of all stages. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_optimiser_last Cost function optimisation algorithm to use at last iteration of all stages (if there are more than one). Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_optimiser_default Cost function optimisation algorithm to use at any stage iteration other than first or last iteration. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_diagnostics_prefix generate diagnostics images after every registration stage
+ * @param nl_warp the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
+ * @param nl_warp_full output all warps used during registration. This saves four different warps that map each image to a midway space and their inverses in a single 5D image file. The 4th image dimension indexes the x,y,z component of the deformation vector and the 5th dimension indexes the field in this order: image1->midway, midway->image1, image2->midway, midway->image2. Where image1->midway defines the field that maps image1 onto the midway space using the reverse convention When linear registration is performed first, the estimated linear transform will be included in the comments of the image header, and therefore the entire linear and non-linear transform can be applied (in either direction) using this output warp file with mrtransform
+ * @param nl_init initialise the non-linear registration with the supplied warp image. The supplied warp must be in the same format as output using the -nl_warp_full option (i.e. have 4 deformation fields with the linear transforms in the image header)
+ * @param nl_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param nl_niter the maximum number of iterations. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 50)
+ * @param nl_update_smooth regularise the gradient update field with Gaussian smoothing (standard deviation in voxel units, Default 2.0)
+ * @param nl_disp_smooth regularise the displacement field with Gaussian smoothing (standard deviation in voxel units, Default 1.0)
+ * @param nl_grad_step the gradient step size for non-linear registration (Default: 0.5)
+ * @param nl_lmax explicitly set the lmax to be used per scale factor in non-linear FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param diagnostics_image write intermediate images for diagnostics purposes
+ * @param directions the directions used for FOD reorientation using apodised point spread functions (Default: 60 directions)
+ * @param noreorientation turn off FOD reorientation. Reorientation is on by default if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series (i.e. 6, 15, 28, 45, 66 etc)
+ * @param mc_weights relative weight of images used for multi-contrast registration. Default: 1.0 (equal weighting)
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param contrast1_contrast2 optional list of additional input images used as additional contrasts. Can be used multiple times. contrastX and imageX must share the same coordinate system. 
+ *
+ * @returns Parameter dictionary
+ */
 function mrregister_params(
     image1_image2: InputPathType,
     type_: string | null = null,
@@ -564,94 +650,8 @@ function mrregister_params(
     version: boolean = false,
     contrast1_contrast2: Array<InputPathType> | null = null,
 ): MrregisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param image1_image2 input image 1 ('moving') and input image 2 ('template')
-     * @param type_ the registration type. Valid choices are: rigid, affine, nonlinear, rigid_affine, rigid_nonlinear, affine_nonlinear, rigid_affine_nonlinear (Default: affine_nonlinear)
-     * @param transformed image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
-     * @param transformed_midway image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
-     * @param mask1 a mask to define the region of image1 to use for optimisation.
-     * @param mask2 a mask to define the region of image2 to use for optimisation.
-     * @param nan use NaN as out of bounds value. (Default: 0.0)
-     * @param rigid the output text file containing the rigid transformation as a 4x4 matrix
-     * @param rigid_1tomidway the output text file containing the rigid transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
-     * @param rigid_2tomidway the output text file containing the rigid transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
-     * @param rigid_init_translation initialise the translation and centre of rotation 
-Valid choices are: 
-mass (aligns the centers of mass of both images, default), 
-geometric (aligns geometric image centres) and none.
-     * @param rigid_init_rotation initialise the rotation Valid choices are: 
-search (search for the best rotation using mean squared residuals), 
-moments (rotation based on directions of intensity variance with respect to centre of mass), 
-none (default).
-     * @param rigid_init_matrix initialise either the rigid, affine, or syn registration with the supplied rigid transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides rigid_init_translation and rigid_init_rotation initialisation 
-     * @param rigid_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param rigid_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
-     * @param rigid_metric valid choices are: diff (intensity differences), Default: diff
-     * @param rigid_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
-     * @param rigid_lmax explicitly set the lmax to be used per scale factor in rigid FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param rigid_log write gradient descent parameter evolution to log file
-     * @param affine the output text file containing the affine transformation as a 4x4 matrix
-     * @param affine_1tomidway the output text file containing the affine transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
-     * @param affine_2tomidway the output text file containing the affine transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
-     * @param affine_init_translation initialise the translation and centre of rotation 
-Valid choices are: 
-mass (aligns the centers of mass of both images), 
-geometric (aligns geometric image centres) and none. (Default: mass)
-     * @param affine_init_rotation initialise the rotation Valid choices are: 
-search (search for the best rotation using mean squared residuals), 
-moments (rotation based on directions of intensity variance with respect to centre of mass), 
-none (Default: none).
-     * @param affine_init_matrix initialise either the affine, or syn registration with the supplied affine transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides affine_init_translation and affine_init_rotation initialisation 
-     * @param affine_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param affine_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
-     * @param affine_metric valid choices are: diff (intensity differences), Default: diff
-     * @param affine_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
-     * @param affine_lmax explicitly set the lmax to be used per scale factor in affine FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param affine_log write gradient descent parameter evolution to log file
-     * @param init_translation_unmasked1 disregard mask1 for the translation initialisation (affects 'mass')
-     * @param init_translation_unmasked2 disregard mask2 for the translation initialisation (affects 'mass')
-     * @param init_rotation_unmasked1 disregard mask1 for the rotation initialisation (affects 'search' and 'moments')
-     * @param init_rotation_unmasked2 disregard mask2 for the rotation initialisation (affects 'search' and 'moments')
-     * @param init_rotation_search_angles rotation angles for the local search in degrees between 0 and 180. (Default: 2,5,10,15,20)
-     * @param init_rotation_search_scale relative size of the images used for the rotation search. (Default: 0.15)
-     * @param init_rotation_search_directions number of rotation axis for local search. (Default: 250)
-     * @param init_rotation_search_run_global perform a global search. (Default: local)
-     * @param init_rotation_search_global_iterations number of rotations to investigate (Default: 10000)
-     * @param linstage_iterations number of iterations for each registration stage, not to be confused with -rigid_niter or -affine_niter. This can be used to generate intermediate diagnostics images (-linstage.diagnostics.prefix) or to change the cost function optimiser during registration (without the need to repeatedly resize the images). (Default: 1 == no repetition)
-     * @param linstage_optimiser_first Cost function optimisation algorithm to use at first iteration of all stages. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_optimiser_last Cost function optimisation algorithm to use at last iteration of all stages (if there are more than one). Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_optimiser_default Cost function optimisation algorithm to use at any stage iteration other than first or last iteration. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_diagnostics_prefix generate diagnostics images after every registration stage
-     * @param nl_warp the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
-     * @param nl_warp_full output all warps used during registration. This saves four different warps that map each image to a midway space and their inverses in a single 5D image file. The 4th image dimension indexes the x,y,z component of the deformation vector and the 5th dimension indexes the field in this order: image1->midway, midway->image1, image2->midway, midway->image2. Where image1->midway defines the field that maps image1 onto the midway space using the reverse convention When linear registration is performed first, the estimated linear transform will be included in the comments of the image header, and therefore the entire linear and non-linear transform can be applied (in either direction) using this output warp file with mrtransform
-     * @param nl_init initialise the non-linear registration with the supplied warp image. The supplied warp must be in the same format as output using the -nl_warp_full option (i.e. have 4 deformation fields with the linear transforms in the image header)
-     * @param nl_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param nl_niter the maximum number of iterations. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 50)
-     * @param nl_update_smooth regularise the gradient update field with Gaussian smoothing (standard deviation in voxel units, Default 2.0)
-     * @param nl_disp_smooth regularise the displacement field with Gaussian smoothing (standard deviation in voxel units, Default 1.0)
-     * @param nl_grad_step the gradient step size for non-linear registration (Default: 0.5)
-     * @param nl_lmax explicitly set the lmax to be used per scale factor in non-linear FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param diagnostics_image write intermediate images for diagnostics purposes
-     * @param directions the directions used for FOD reorientation using apodised point spread functions (Default: 60 directions)
-     * @param noreorientation turn off FOD reorientation. Reorientation is on by default if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series (i.e. 6, 15, 28, 45, 66 etc)
-     * @param mc_weights relative weight of images used for multi-contrast registration. Default: 1.0 (equal weighting)
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param contrast1_contrast2 optional list of additional input images used as additional contrasts. Can be used multiple times. contrastX and imageX must share the same coordinate system. 
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrregister" as const,
+        "@type": "mrtrix.mrregister" as const,
         "nan": nan,
         "init_translation_unmasked1": init_translation_unmasked1,
         "init_translation_unmasked2": init_translation_unmasked2,
@@ -833,18 +833,18 @@ none (Default: none).
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrregister_cargs(
     params: MrregisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrregister");
     if ((params["type"] ?? null) !== null) {
@@ -854,10 +854,10 @@ function mrregister_cargs(
         );
     }
     if ((params["transformed"] ?? null) !== null) {
-        cargs.push(...(params["transformed"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["transformed"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["transformed_midway"] ?? null) !== null) {
-        cargs.push(...(params["transformed_midway"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["transformed_midway"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["mask1"] ?? null) !== null) {
         cargs.push(
@@ -1088,7 +1088,7 @@ function mrregister_cargs(
         );
     }
     if ((params["nl_warp"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["nl_warp"] ?? null).__STYXTYPE__)((params["nl_warp"] ?? null), execution));
+        cargs.push(...dynCargs((params["nl_warp"] ?? null)["@type"])((params["nl_warp"] ?? null), execution));
     }
     if ((params["nl_warp_full"] ?? null) !== null) {
         cargs.push(
@@ -1184,7 +1184,7 @@ function mrregister_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -1200,18 +1200,18 @@ function mrregister_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrregister_outputs(
     params: MrregisterParameters,
     execution: Execution,
 ): MrregisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrregisterOutputs = {
         root: execution.outputFile("."),
         rigid: ((params["rigid"] ?? null) !== null) ? execution.outputFile([(params["rigid"] ?? null)].join('')) : null,
@@ -1223,43 +1223,43 @@ function mrregister_outputs(
         affine_2tomidway: ((params["affine_2tomidway"] ?? null) !== null) ? execution.outputFile([(params["affine_2tomidway"] ?? null)].join('')) : null,
         affine_log: ((params["affine_log"] ?? null) !== null) ? execution.outputFile([(params["affine_log"] ?? null)].join('')) : null,
         nl_warp_full: ((params["nl_warp_full"] ?? null) !== null) ? execution.outputFile([(params["nl_warp_full"] ?? null)].join('')) : null,
-        transformed: ((params["transformed"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null) ?? null),
-        transformed_midway: ((params["transformed_midway"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null) ?? null),
-        nl_warp: (dynOutputs((params["nl_warp"] ?? null).__STYXTYPE__)?.((params["nl_warp"] ?? null), execution) ?? null),
+        transformed: ((params["transformed"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        transformed_midway: ((params["transformed_midway"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        nl_warp: (dynOutputs((params["nl_warp"] ?? null)["@type"])?.((params["nl_warp"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Register two images together using a symmetric rigid, affine or non-linear transformation model.
+ *
+ * By default this application will perform an affine, followed by non-linear registration.
+ *
+ * FOD registration (with apodised point spread reorientation) will be performed by default if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). The -no_reorientation option can be used to force reorientation off if required.
+ *
+ * Non-linear registration computes warps to map from both image1->image2 and image2->image1. Similar to Avants (2008) Med Image Anal. 12(1): 26â€“41, registration is performed by matching both the image1 and image2 in a 'midway space'. Warps can be saved as two deformation fields that map directly between image1->image2 and image2->image1, or if using -nl_warp_full as a single 5D file that stores all 4 warps image1->mid->image2, and image2->mid->image1. The 5D warp format stores x,y,z deformations in the 4th dimension, and uses the 5th dimension to index the 4 warps. The affine transforms estimated (to midway space) are also stored as comments in the image header. The 5D warp file can be used to reinitialise subsequent registrations, in addition to transforming images to midway space (e.g. for intra-subject alignment in a 2-time-point longitudinal analysis).
+ *
+ * References:
+ *
+ * * If FOD registration is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Fripp, J; Crozier, S.; Connelly, A. & Salvado, O. Symmetric diffeomorphic registration of fibre orientation distributions. NeuroImage, 2011, 56(3), 1171-1180
+ *
+ * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
+ */
 function mrregister_execute(
     params: MrregisterParameters,
     execution: Execution,
 ): MrregisterOutputs {
-    /**
-     * Register two images together using a symmetric rigid, affine or non-linear transformation model.
-     * 
-     * By default this application will perform an affine, followed by non-linear registration.
-     * 
-     * FOD registration (with apodised point spread reorientation) will be performed by default if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). The -no_reorientation option can be used to force reorientation off if required.
-     * 
-     * Non-linear registration computes warps to map from both image1->image2 and image2->image1. Similar to Avants (2008) Med Image Anal. 12(1): 26â€“41, registration is performed by matching both the image1 and image2 in a 'midway space'. Warps can be saved as two deformation fields that map directly between image1->image2 and image2->image1, or if using -nl_warp_full as a single 5D file that stores all 4 warps image1->mid->image2, and image2->mid->image1. The 5D warp format stores x,y,z deformations in the 4th dimension, and uses the 5th dimension to index the 4 warps. The affine transforms estimated (to midway space) are also stored as comments in the image header. The 5D warp file can be used to reinitialise subsequent registrations, in addition to transforming images to midway space (e.g. for intra-subject alignment in a 2-time-point longitudinal analysis).
-     * 
-     * References:
-     * 
-     * * If FOD registration is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Fripp, J; Crozier, S.; Connelly, A. & Salvado, O. Symmetric diffeomorphic registration of fibre orientation distributions. NeuroImage, 2011, 56(3), 1171-1180
-     * 
-     * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrregister_cargs(params, execution)
     const ret = mrregister_outputs(params, execution)
@@ -1268,6 +1268,110 @@ function mrregister_execute(
 }
 
 
+/**
+ * Register two images together using a symmetric rigid, affine or non-linear transformation model.
+ *
+ * By default this application will perform an affine, followed by non-linear registration.
+ *
+ * FOD registration (with apodised point spread reorientation) will be performed by default if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). The -no_reorientation option can be used to force reorientation off if required.
+ *
+ * Non-linear registration computes warps to map from both image1->image2 and image2->image1. Similar to Avants (2008) Med Image Anal. 12(1): 26â€“41, registration is performed by matching both the image1 and image2 in a 'midway space'. Warps can be saved as two deformation fields that map directly between image1->image2 and image2->image1, or if using -nl_warp_full as a single 5D file that stores all 4 warps image1->mid->image2, and image2->mid->image1. The 5D warp format stores x,y,z deformations in the 4th dimension, and uses the 5th dimension to index the 4 warps. The affine transforms estimated (to midway space) are also stored as comments in the image header. The 5D warp file can be used to reinitialise subsequent registrations, in addition to transforming images to midway space (e.g. for intra-subject alignment in a 2-time-point longitudinal analysis).
+ *
+ * References:
+ *
+ * * If FOD registration is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Fripp, J; Crozier, S.; Connelly, A. & Salvado, O. Symmetric diffeomorphic registration of fibre orientation distributions. NeuroImage, 2011, 56(3), 1171-1180
+ *
+ * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image1_image2 input image 1 ('moving') and input image 2 ('template')
+ * @param type_ the registration type. Valid choices are: rigid, affine, nonlinear, rigid_affine, rigid_nonlinear, affine_nonlinear, rigid_affine_nonlinear (Default: affine_nonlinear)
+ * @param transformed image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
+ * @param transformed_midway image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
+ * @param mask1 a mask to define the region of image1 to use for optimisation.
+ * @param mask2 a mask to define the region of image2 to use for optimisation.
+ * @param nan use NaN as out of bounds value. (Default: 0.0)
+ * @param rigid the output text file containing the rigid transformation as a 4x4 matrix
+ * @param rigid_1tomidway the output text file containing the rigid transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
+ * @param rigid_2tomidway the output text file containing the rigid transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
+ * @param rigid_init_translation initialise the translation and centre of rotation 
+Valid choices are: 
+mass (aligns the centers of mass of both images, default), 
+geometric (aligns geometric image centres) and none.
+ * @param rigid_init_rotation initialise the rotation Valid choices are: 
+search (search for the best rotation using mean squared residuals), 
+moments (rotation based on directions of intensity variance with respect to centre of mass), 
+none (default).
+ * @param rigid_init_matrix initialise either the rigid, affine, or syn registration with the supplied rigid transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides rigid_init_translation and rigid_init_rotation initialisation 
+ * @param rigid_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param rigid_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
+ * @param rigid_metric valid choices are: diff (intensity differences), Default: diff
+ * @param rigid_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
+ * @param rigid_lmax explicitly set the lmax to be used per scale factor in rigid FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param rigid_log write gradient descent parameter evolution to log file
+ * @param affine the output text file containing the affine transformation as a 4x4 matrix
+ * @param affine_1tomidway the output text file containing the affine transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
+ * @param affine_2tomidway the output text file containing the affine transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
+ * @param affine_init_translation initialise the translation and centre of rotation 
+Valid choices are: 
+mass (aligns the centers of mass of both images), 
+geometric (aligns geometric image centres) and none. (Default: mass)
+ * @param affine_init_rotation initialise the rotation Valid choices are: 
+search (search for the best rotation using mean squared residuals), 
+moments (rotation based on directions of intensity variance with respect to centre of mass), 
+none (Default: none).
+ * @param affine_init_matrix initialise either the affine, or syn registration with the supplied affine transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides affine_init_translation and affine_init_rotation initialisation 
+ * @param affine_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param affine_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
+ * @param affine_metric valid choices are: diff (intensity differences), Default: diff
+ * @param affine_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
+ * @param affine_lmax explicitly set the lmax to be used per scale factor in affine FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param affine_log write gradient descent parameter evolution to log file
+ * @param init_translation_unmasked1 disregard mask1 for the translation initialisation (affects 'mass')
+ * @param init_translation_unmasked2 disregard mask2 for the translation initialisation (affects 'mass')
+ * @param init_rotation_unmasked1 disregard mask1 for the rotation initialisation (affects 'search' and 'moments')
+ * @param init_rotation_unmasked2 disregard mask2 for the rotation initialisation (affects 'search' and 'moments')
+ * @param init_rotation_search_angles rotation angles for the local search in degrees between 0 and 180. (Default: 2,5,10,15,20)
+ * @param init_rotation_search_scale relative size of the images used for the rotation search. (Default: 0.15)
+ * @param init_rotation_search_directions number of rotation axis for local search. (Default: 250)
+ * @param init_rotation_search_run_global perform a global search. (Default: local)
+ * @param init_rotation_search_global_iterations number of rotations to investigate (Default: 10000)
+ * @param linstage_iterations number of iterations for each registration stage, not to be confused with -rigid_niter or -affine_niter. This can be used to generate intermediate diagnostics images (-linstage.diagnostics.prefix) or to change the cost function optimiser during registration (without the need to repeatedly resize the images). (Default: 1 == no repetition)
+ * @param linstage_optimiser_first Cost function optimisation algorithm to use at first iteration of all stages. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_optimiser_last Cost function optimisation algorithm to use at last iteration of all stages (if there are more than one). Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_optimiser_default Cost function optimisation algorithm to use at any stage iteration other than first or last iteration. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
+ * @param linstage_diagnostics_prefix generate diagnostics images after every registration stage
+ * @param nl_warp the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
+ * @param nl_warp_full output all warps used during registration. This saves four different warps that map each image to a midway space and their inverses in a single 5D image file. The 4th image dimension indexes the x,y,z component of the deformation vector and the 5th dimension indexes the field in this order: image1->midway, midway->image1, image2->midway, midway->image2. Where image1->midway defines the field that maps image1 onto the midway space using the reverse convention When linear registration is performed first, the estimated linear transform will be included in the comments of the image header, and therefore the entire linear and non-linear transform can be applied (in either direction) using this output warp file with mrtransform
+ * @param nl_init initialise the non-linear registration with the supplied warp image. The supplied warp must be in the same format as output using the -nl_warp_full option (i.e. have 4 deformation fields with the linear transforms in the image header)
+ * @param nl_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
+ * @param nl_niter the maximum number of iterations. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 50)
+ * @param nl_update_smooth regularise the gradient update field with Gaussian smoothing (standard deviation in voxel units, Default 2.0)
+ * @param nl_disp_smooth regularise the displacement field with Gaussian smoothing (standard deviation in voxel units, Default 1.0)
+ * @param nl_grad_step the gradient step size for non-linear registration (Default: 0.5)
+ * @param nl_lmax explicitly set the lmax to be used per scale factor in non-linear FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
+ * @param diagnostics_image write intermediate images for diagnostics purposes
+ * @param directions the directions used for FOD reorientation using apodised point spread functions (Default: 60 directions)
+ * @param noreorientation turn off FOD reorientation. Reorientation is on by default if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series (i.e. 6, 15, 28, 45, 66 etc)
+ * @param mc_weights relative weight of images used for multi-contrast registration. Default: 1.0 (equal weighting)
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param contrast1_contrast2 optional list of additional input images used as additional contrasts. Can be used multiple times. contrastX and imageX must share the same coordinate system. 
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
+ */
 function mrregister(
     image1_image2: InputPathType,
     type_: string | null = null,
@@ -1339,110 +1443,6 @@ function mrregister(
     contrast1_contrast2: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): MrregisterOutputs {
-    /**
-     * Register two images together using a symmetric rigid, affine or non-linear transformation model.
-     * 
-     * By default this application will perform an affine, followed by non-linear registration.
-     * 
-     * FOD registration (with apodised point spread reorientation) will be performed by default if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). The -no_reorientation option can be used to force reorientation off if required.
-     * 
-     * Non-linear registration computes warps to map from both image1->image2 and image2->image1. Similar to Avants (2008) Med Image Anal. 12(1): 26â€“41, registration is performed by matching both the image1 and image2 in a 'midway space'. Warps can be saved as two deformation fields that map directly between image1->image2 and image2->image1, or if using -nl_warp_full as a single 5D file that stores all 4 warps image1->mid->image2, and image2->mid->image1. The 5D warp format stores x,y,z deformations in the 4th dimension, and uses the 5th dimension to index the 4 warps. The affine transforms estimated (to midway space) are also stored as comments in the image header. The 5D warp file can be used to reinitialise subsequent registrations, in addition to transforming images to midway space (e.g. for intra-subject alignment in a 2-time-point longitudinal analysis).
-     * 
-     * References:
-     * 
-     * * If FOD registration is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Fripp, J; Crozier, S.; Connelly, A. & Salvado, O. Symmetric diffeomorphic registration of fibre orientation distributions. NeuroImage, 2011, 56(3), 1171-1180
-     * 
-     * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image1_image2 input image 1 ('moving') and input image 2 ('template')
-     * @param type_ the registration type. Valid choices are: rigid, affine, nonlinear, rigid_affine, rigid_nonlinear, affine_nonlinear, rigid_affine_nonlinear (Default: affine_nonlinear)
-     * @param transformed image1 after registration transformed and regridded to the space of image2. Note that -transformed needs to be repeated for each contrast if multi-contrast registration is used.
-     * @param transformed_midway image1 and image2 after registration transformed and regridded to the midway space. Note that -transformed_midway needs to be repeated for each contrast if multi-contrast registration is used.
-     * @param mask1 a mask to define the region of image1 to use for optimisation.
-     * @param mask2 a mask to define the region of image2 to use for optimisation.
-     * @param nan use NaN as out of bounds value. (Default: 0.0)
-     * @param rigid the output text file containing the rigid transformation as a 4x4 matrix
-     * @param rigid_1tomidway the output text file containing the rigid transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
-     * @param rigid_2tomidway the output text file containing the rigid transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
-     * @param rigid_init_translation initialise the translation and centre of rotation 
-Valid choices are: 
-mass (aligns the centers of mass of both images, default), 
-geometric (aligns geometric image centres) and none.
-     * @param rigid_init_rotation initialise the rotation Valid choices are: 
-search (search for the best rotation using mean squared residuals), 
-moments (rotation based on directions of intensity variance with respect to centre of mass), 
-none (default).
-     * @param rigid_init_matrix initialise either the rigid, affine, or syn registration with the supplied rigid transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides rigid_init_translation and rigid_init_rotation initialisation 
-     * @param rigid_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param rigid_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
-     * @param rigid_metric valid choices are: diff (intensity differences), Default: diff
-     * @param rigid_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
-     * @param rigid_lmax explicitly set the lmax to be used per scale factor in rigid FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param rigid_log write gradient descent parameter evolution to log file
-     * @param affine the output text file containing the affine transformation as a 4x4 matrix
-     * @param affine_1tomidway the output text file containing the affine transformation that aligns image1 to image2 in their common midway space as a 4x4 matrix
-     * @param affine_2tomidway the output text file containing the affine transformation that aligns image2 to image1 in their common midway space as a 4x4 matrix
-     * @param affine_init_translation initialise the translation and centre of rotation 
-Valid choices are: 
-mass (aligns the centers of mass of both images), 
-geometric (aligns geometric image centres) and none. (Default: mass)
-     * @param affine_init_rotation initialise the rotation Valid choices are: 
-search (search for the best rotation using mean squared residuals), 
-moments (rotation based on directions of intensity variance with respect to centre of mass), 
-none (Default: none).
-     * @param affine_init_matrix initialise either the affine, or syn registration with the supplied affine transformation (as a 4x4 matrix in scanner coordinates). Note that this overrides affine_init_translation and affine_init_rotation initialisation 
-     * @param affine_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param affine_niter the maximum number of gradient descent iterations per stage. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 1000)
-     * @param affine_metric valid choices are: diff (intensity differences), Default: diff
-     * @param affine_metric_diff_estimator Valid choices are: l1 (least absolute: |x|), l2 (ordinary least squares), lp (least powers: |x|^1.2), Default: l2
-     * @param affine_lmax explicitly set the lmax to be used per scale factor in affine FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param affine_log write gradient descent parameter evolution to log file
-     * @param init_translation_unmasked1 disregard mask1 for the translation initialisation (affects 'mass')
-     * @param init_translation_unmasked2 disregard mask2 for the translation initialisation (affects 'mass')
-     * @param init_rotation_unmasked1 disregard mask1 for the rotation initialisation (affects 'search' and 'moments')
-     * @param init_rotation_unmasked2 disregard mask2 for the rotation initialisation (affects 'search' and 'moments')
-     * @param init_rotation_search_angles rotation angles for the local search in degrees between 0 and 180. (Default: 2,5,10,15,20)
-     * @param init_rotation_search_scale relative size of the images used for the rotation search. (Default: 0.15)
-     * @param init_rotation_search_directions number of rotation axis for local search. (Default: 250)
-     * @param init_rotation_search_run_global perform a global search. (Default: local)
-     * @param init_rotation_search_global_iterations number of rotations to investigate (Default: 10000)
-     * @param linstage_iterations number of iterations for each registration stage, not to be confused with -rigid_niter or -affine_niter. This can be used to generate intermediate diagnostics images (-linstage.diagnostics.prefix) or to change the cost function optimiser during registration (without the need to repeatedly resize the images). (Default: 1 == no repetition)
-     * @param linstage_optimiser_first Cost function optimisation algorithm to use at first iteration of all stages. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_optimiser_last Cost function optimisation algorithm to use at last iteration of all stages (if there are more than one). Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_optimiser_default Cost function optimisation algorithm to use at any stage iteration other than first or last iteration. Valid choices: bbgd (Barzilai-Borwein gradient descent) or gd (simple gradient descent). (Default: bbgd)
-     * @param linstage_diagnostics_prefix generate diagnostics images after every registration stage
-     * @param nl_warp the non-linear warp output defined as two deformation fields, where warp1 can be used to transform image1->image2 and warp2 to transform image2->image1. The deformation fields also encapsulate any linear transformation estimated prior to non-linear registration.
-     * @param nl_warp_full output all warps used during registration. This saves four different warps that map each image to a midway space and their inverses in a single 5D image file. The 4th image dimension indexes the x,y,z component of the deformation vector and the 5th dimension indexes the field in this order: image1->midway, midway->image1, image2->midway, midway->image2. Where image1->midway defines the field that maps image1 onto the midway space using the reverse convention When linear registration is performed first, the estimated linear transform will be included in the comments of the image header, and therefore the entire linear and non-linear transform can be applied (in either direction) using this output warp file with mrtransform
-     * @param nl_init initialise the non-linear registration with the supplied warp image. The supplied warp must be in the same format as output using the -nl_warp_full option (i.e. have 4 deformation fields with the linear transforms in the image header)
-     * @param nl_scale use a multi-resolution scheme by defining a scale factor for each level using comma separated values (Default: 0.25,0.5,1.0)
-     * @param nl_niter the maximum number of iterations. This can be specified either as a single number for all multi-resolution levels, or a single value for each level. (Default: 50)
-     * @param nl_update_smooth regularise the gradient update field with Gaussian smoothing (standard deviation in voxel units, Default 2.0)
-     * @param nl_disp_smooth regularise the displacement field with Gaussian smoothing (standard deviation in voxel units, Default 1.0)
-     * @param nl_grad_step the gradient step size for non-linear registration (Default: 0.5)
-     * @param nl_lmax explicitly set the lmax to be used per scale factor in non-linear FOD registration. By default FOD registration will use lmax 0,2,4 with default scale factors 0.25,0.5,1.0 respectively. Note that no reorientation will be performed with lmax = 0.
-     * @param diagnostics_image write intermediate images for diagnostics purposes
-     * @param directions the directions used for FOD reorientation using apodised point spread functions (Default: 60 directions)
-     * @param noreorientation turn off FOD reorientation. Reorientation is on by default if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series (i.e. 6, 15, 28, 45, 66 etc)
-     * @param mc_weights relative weight of images used for multi-contrast registration. Default: 1.0 (equal weighting)
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param contrast1_contrast2 optional list of additional input images used as additional contrasts. Can be used multiple times. contrastX and imageX must share the same coordinate system. 
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRREGISTER_METADATA);
     const params = mrregister_params(image1_image2, type_, transformed, transformed_midway, mask1, mask2, nan, rigid, rigid_1tomidway, rigid_2tomidway, rigid_init_translation, rigid_init_rotation, rigid_init_matrix, rigid_scale, rigid_niter, rigid_metric, rigid_metric_diff_estimator, rigid_lmax, rigid_log, affine, affine_1tomidway, affine_2tomidway, affine_init_translation, affine_init_rotation, affine_init_matrix, affine_scale, affine_niter, affine_metric, affine_metric_diff_estimator, affine_lmax, affine_log, init_translation_unmasked1, init_translation_unmasked2, init_rotation_unmasked1, init_rotation_unmasked2, init_rotation_search_angles, init_rotation_search_scale, init_rotation_search_directions, init_rotation_search_run_global, init_rotation_search_global_iterations, linstage_iterations, linstage_optimiser_first, linstage_optimiser_last, linstage_optimiser_default, linstage_diagnostics_prefix, nl_warp, nl_warp_full, nl_init, nl_scale, nl_niter, nl_update_smooth, nl_disp_smooth, nl_grad_step, nl_lmax, diagnostics_image, directions, noreorientation, mc_weights, datatype, info, quiet, debug, force, nthreads, config, help, version, contrast1_contrast2)
@@ -1462,9 +1462,19 @@ export {
       MrregisterTransformedOutputs,
       MrregisterTransformedParameters,
       mrregister,
+      mrregister_cargs,
+      mrregister_config_cargs,
       mrregister_config_params,
+      mrregister_execute,
+      mrregister_nl_warp_cargs,
+      mrregister_nl_warp_outputs,
       mrregister_nl_warp_params,
+      mrregister_outputs,
       mrregister_params,
+      mrregister_transformed_cargs,
+      mrregister_transformed_midway_cargs,
+      mrregister_transformed_midway_outputs,
       mrregister_transformed_midway_params,
+      mrregister_transformed_outputs,
       mrregister_transformed_params,
 };

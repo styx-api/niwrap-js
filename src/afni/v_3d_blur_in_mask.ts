@@ -12,7 +12,7 @@ const V_3D_BLUR_IN_MASK_METADATA: Metadata = {
 
 
 interface V3dBlurInMaskParameters {
-    "__STYXTYPE__": "3dBlurInMask";
+    "@type": "afni.3dBlurInMask";
     "input_file": InputPathType;
     "output_prefix": string;
     "fwhm": number;
@@ -27,35 +27,35 @@ interface V3dBlurInMaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBlurInMask": v_3d_blur_in_mask_cargs,
+        "afni.3dBlurInMask": v_3d_blur_in_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBlurInMask": v_3d_blur_in_mask_outputs,
+        "afni.3dBlurInMask": v_3d_blur_in_mask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V3dBlurInMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Dataset to be smoothed and output
+ * @param output_prefix Prefix for output dataset
+ * @param fwhm Amount of smoothness to add to the dataset (in mm)
+ * @param fwhm_dataset Dataset containing the amount of smoothness for each voxel
+ * @param mask Mask dataset for blurring; voxels NOT in the mask will be zeroed in the output
+ * @param multi_mask Multi-mask dataset; each distinct nonzero value is treated as a separate mask
+ * @param automask Create an automask from the input dataset
+ * @param preserve Preserve original values in the dataset outside the mask
+ * @param quiet Don't be verbose with progress reports
+ * @param float Save dataset as floats
+ * @param fwhm_xyz Add different amounts of smoothness in the 3 spatial directions
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_blur_in_mask_params(
     input_file: InputPathType,
     output_prefix: string,
@@ -91,25 +108,8 @@ function v_3d_blur_in_mask_params(
     float: boolean = false,
     fwhm_xyz: Array<number> | null = null,
 ): V3dBlurInMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Dataset to be smoothed and output
-     * @param output_prefix Prefix for output dataset
-     * @param fwhm Amount of smoothness to add to the dataset (in mm)
-     * @param fwhm_dataset Dataset containing the amount of smoothness for each voxel
-     * @param mask Mask dataset for blurring; voxels NOT in the mask will be zeroed in the output
-     * @param multi_mask Multi-mask dataset; each distinct nonzero value is treated as a separate mask
-     * @param automask Create an automask from the input dataset
-     * @param preserve Preserve original values in the dataset outside the mask
-     * @param quiet Don't be verbose with progress reports
-     * @param float Save dataset as floats
-     * @param fwhm_xyz Add different amounts of smoothness in the 3 spatial directions
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBlurInMask" as const,
+        "@type": "afni.3dBlurInMask" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "fwhm": fwhm,
@@ -134,18 +134,18 @@ function v_3d_blur_in_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_blur_in_mask_cargs(
     params: V3dBlurInMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBlurInMask");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -194,18 +194,18 @@ function v_3d_blur_in_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_blur_in_mask_outputs(
     params: V3dBlurInMaskParameters,
     execution: Execution,
 ): V3dBlurInMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBlurInMaskOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null)].join('')),
@@ -214,22 +214,22 @@ function v_3d_blur_in_mask_outputs(
 }
 
 
+/**
+ * Blurs a dataset spatially inside a mask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
+ */
 function v_3d_blur_in_mask_execute(
     params: V3dBlurInMaskParameters,
     execution: Execution,
 ): V3dBlurInMaskOutputs {
-    /**
-     * Blurs a dataset spatially inside a mask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_blur_in_mask_cargs(params, execution)
     const ret = v_3d_blur_in_mask_outputs(params, execution)
@@ -238,6 +238,28 @@ function v_3d_blur_in_mask_execute(
 }
 
 
+/**
+ * Blurs a dataset spatially inside a mask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Dataset to be smoothed and output
+ * @param output_prefix Prefix for output dataset
+ * @param fwhm Amount of smoothness to add to the dataset (in mm)
+ * @param fwhm_dataset Dataset containing the amount of smoothness for each voxel
+ * @param mask Mask dataset for blurring; voxels NOT in the mask will be zeroed in the output
+ * @param multi_mask Multi-mask dataset; each distinct nonzero value is treated as a separate mask
+ * @param automask Create an automask from the input dataset
+ * @param preserve Preserve original values in the dataset outside the mask
+ * @param quiet Don't be verbose with progress reports
+ * @param float Save dataset as floats
+ * @param fwhm_xyz Add different amounts of smoothness in the 3 spatial directions
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
+ */
 function v_3d_blur_in_mask(
     input_file: InputPathType,
     output_prefix: string,
@@ -252,28 +274,6 @@ function v_3d_blur_in_mask(
     fwhm_xyz: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dBlurInMaskOutputs {
-    /**
-     * Blurs a dataset spatially inside a mask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Dataset to be smoothed and output
-     * @param output_prefix Prefix for output dataset
-     * @param fwhm Amount of smoothness to add to the dataset (in mm)
-     * @param fwhm_dataset Dataset containing the amount of smoothness for each voxel
-     * @param mask Mask dataset for blurring; voxels NOT in the mask will be zeroed in the output
-     * @param multi_mask Multi-mask dataset; each distinct nonzero value is treated as a separate mask
-     * @param automask Create an automask from the input dataset
-     * @param preserve Preserve original values in the dataset outside the mask
-     * @param quiet Don't be verbose with progress reports
-     * @param float Save dataset as floats
-     * @param fwhm_xyz Add different amounts of smoothness in the 3 spatial directions
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BLUR_IN_MASK_METADATA);
     const params = v_3d_blur_in_mask_params(input_file, output_prefix, fwhm, fwhm_dataset, mask, multi_mask, automask, preserve, quiet, float, fwhm_xyz)
@@ -286,5 +286,8 @@ export {
       V3dBlurInMaskParameters,
       V_3D_BLUR_IN_MASK_METADATA,
       v_3d_blur_in_mask,
+      v_3d_blur_in_mask_cargs,
+      v_3d_blur_in_mask_execute,
+      v_3d_blur_in_mask_outputs,
       v_3d_blur_in_mask_params,
 };

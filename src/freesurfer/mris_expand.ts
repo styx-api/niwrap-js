@@ -12,7 +12,7 @@ const MRIS_EXPAND_METADATA: Metadata = {
 
 
 interface MrisExpandParameters {
-    "__STYXTYPE__": "mris_expand";
+    "@type": "freesurfer.mris_expand";
     "input_surface": InputPathType;
     "expansion_distance": number;
     "output_surface": string;
@@ -23,35 +23,35 @@ interface MrisExpandParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_expand": mris_expand_cargs,
+        "freesurfer.mris_expand": mris_expand_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_expand": mris_expand_outputs,
+        "freesurfer.mris_expand": mris_expand_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisExpandOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file (e.g. lh.white)
+ * @param expansion_distance Expansion distance in mm
+ * @param output_surface Output surface file
+ * @param thickness Use thickness for expansion
+ * @param label Use label file for expansion
+ * @param tmap Use a prespecified map of percent thickness to compute the target locations for expansion
+ * @param tmap_random Create a random target distance map with Gaussian sampling for the target locations
+ *
+ * @returns Parameter dictionary
+ */
 function mris_expand_params(
     input_surface: InputPathType,
     expansion_distance: number,
@@ -83,21 +96,8 @@ function mris_expand_params(
     tmap: string | null = null,
     tmap_random: string | null = null,
 ): MrisExpandParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file (e.g. lh.white)
-     * @param expansion_distance Expansion distance in mm
-     * @param output_surface Output surface file
-     * @param thickness Use thickness for expansion
-     * @param label Use label file for expansion
-     * @param tmap Use a prespecified map of percent thickness to compute the target locations for expansion
-     * @param tmap_random Create a random target distance map with Gaussian sampling for the target locations
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_expand" as const,
+        "@type": "freesurfer.mris_expand" as const,
         "input_surface": input_surface,
         "expansion_distance": expansion_distance,
         "output_surface": output_surface,
@@ -116,18 +116,18 @@ function mris_expand_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_expand_cargs(
     params: MrisExpandParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_expand");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -158,18 +158,18 @@ function mris_expand_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_expand_outputs(
     params: MrisExpandParameters,
     execution: Execution,
 ): MrisExpandOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisExpandOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -178,22 +178,22 @@ function mris_expand_outputs(
 }
 
 
+/**
+ * Expand a given surface by a specified distance.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
+ */
 function mris_expand_execute(
     params: MrisExpandParameters,
     execution: Execution,
 ): MrisExpandOutputs {
-    /**
-     * Expand a given surface by a specified distance.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_expand_cargs(params, execution)
     const ret = mris_expand_outputs(params, execution)
@@ -202,6 +202,24 @@ function mris_expand_execute(
 }
 
 
+/**
+ * Expand a given surface by a specified distance.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file (e.g. lh.white)
+ * @param expansion_distance Expansion distance in mm
+ * @param output_surface Output surface file
+ * @param thickness Use thickness for expansion
+ * @param label Use label file for expansion
+ * @param tmap Use a prespecified map of percent thickness to compute the target locations for expansion
+ * @param tmap_random Create a random target distance map with Gaussian sampling for the target locations
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
+ */
 function mris_expand(
     input_surface: InputPathType,
     expansion_distance: number,
@@ -212,24 +230,6 @@ function mris_expand(
     tmap_random: string | null = null,
     runner: Runner | null = null,
 ): MrisExpandOutputs {
-    /**
-     * Expand a given surface by a specified distance.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file (e.g. lh.white)
-     * @param expansion_distance Expansion distance in mm
-     * @param output_surface Output surface file
-     * @param thickness Use thickness for expansion
-     * @param label Use label file for expansion
-     * @param tmap Use a prespecified map of percent thickness to compute the target locations for expansion
-     * @param tmap_random Create a random target distance map with Gaussian sampling for the target locations
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_EXPAND_METADATA);
     const params = mris_expand_params(input_surface, expansion_distance, output_surface, thickness, label, tmap, tmap_random)
@@ -242,5 +242,8 @@ export {
       MrisExpandOutputs,
       MrisExpandParameters,
       mris_expand,
+      mris_expand_cargs,
+      mris_expand_execute,
+      mris_expand_outputs,
       mris_expand_params,
 };

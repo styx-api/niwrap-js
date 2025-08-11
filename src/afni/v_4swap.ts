@@ -12,39 +12,39 @@ const V_4SWAP_METADATA: Metadata = {
 
 
 interface V4swapParameters {
-    "__STYXTYPE__": "4swap";
+    "@type": "afni.4swap";
     "files": Array<InputPathType>;
     "quiet": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "4swap": v_4swap_cargs,
+        "afni.4swap": v_4swap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface V4swapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files List of files to process.
+ * @param quiet Work quietly; suppress output messages.
+ *
+ * @returns Parameter dictionary
+ */
 function v_4swap_params(
     files: Array<InputPathType>,
     quiet: boolean = false,
 ): V4swapParameters {
-    /**
-     * Build parameters.
-    
-     * @param files List of files to process.
-     * @param quiet Work quietly; suppress output messages.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "4swap" as const,
+        "@type": "afni.4swap" as const,
         "files": files,
         "quiet": quiet,
     };
@@ -85,18 +85,18 @@ function v_4swap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_4swap_cargs(
     params: V4swapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("4swap");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -107,18 +107,18 @@ function v_4swap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_4swap_outputs(
     params: V4swapParameters,
     execution: Execution,
 ): V4swapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V4swapOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function v_4swap_outputs(
 }
 
 
+/**
+ * Swaps byte quadruples on the listed files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V4swapOutputs`).
+ */
 function v_4swap_execute(
     params: V4swapParameters,
     execution: Execution,
 ): V4swapOutputs {
-    /**
-     * Swaps byte quadruples on the listed files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V4swapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_4swap_cargs(params, execution)
     const ret = v_4swap_outputs(params, execution)
@@ -150,24 +150,24 @@ function v_4swap_execute(
 }
 
 
+/**
+ * Swaps byte quadruples on the listed files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files List of files to process.
+ * @param quiet Work quietly; suppress output messages.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V4swapOutputs`).
+ */
 function v_4swap(
     files: Array<InputPathType>,
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V4swapOutputs {
-    /**
-     * Swaps byte quadruples on the listed files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files List of files to process.
-     * @param quiet Work quietly; suppress output messages.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V4swapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_4SWAP_METADATA);
     const params = v_4swap_params(files, quiet)
@@ -180,5 +180,8 @@ export {
       V4swapParameters,
       V_4SWAP_METADATA,
       v_4swap,
+      v_4swap_cargs,
+      v_4swap_execute,
+      v_4swap_outputs,
       v_4swap_params,
 };

@@ -12,7 +12,7 @@ const V_3D_TPROJECT_METADATA: Metadata = {
 
 
 interface V3dTprojectParameters {
-    "__STYXTYPE__": "3dTproject";
+    "@type": "afni.3dTproject";
     "TR"?: number | null | undefined;
     "automask": boolean;
     "bandpass"?: Array<number> | null | undefined;
@@ -33,35 +33,35 @@ interface V3dTprojectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTproject": v_3d_tproject_cargs,
+        "afni.3dTproject": v_3d_tproject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTproject": v_3d_tproject_outputs,
+        "afni.3dTproject": v_3d_tproject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface V3dTprojectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dtproject.
+ * @param prefix Output file prefix.
+ * @param tr Use time step dd for the frequency calculations,rather than the value stored in the dataset header.
+ * @param automask Generate a mask automatically.
+ * @param bandpass (a float, a float). Remove all frequencies except those in the range.
+ * @param blur Blur (inside the mask only) with a filter that haswidth (fwhm) of fff millimeters.spatial blurring (if done) is after the timeseries filtering.
+ * @param cenmode 'kill' or 'zero' or 'ntrp'. Specifies how censored time points are treated in the output dataset:* mode = zero -- put zero values in their place; output dataset is same length as input* mode = kill -- remove those time points;  output dataset is shorter than input* mode = ntrp -- censored values are replaced by interpolated  neighboring (in time) non-censored values,  before any projections, and then the  analysis proceeds without actual removal  of any time points -- this feature is to  keep the spanish inquisition happy.* the default mode is kill !!!.
+ * @param censor Filename of censor .1d time series.this is a file of 1s and 0s, indicating whichtime points are to be included (1) and which areto be excluded (0).
+ * @param censortr List of strings that specify time indexes to be removed from the analysis.  each string isof one of the following forms:* ``37`` => remove global time index #37* ``2:37`` => remove time index #37 in run #2* ``37..47`` => remove global time indexes #37-47* ``37-47`` => same as above* ``2:37..47`` => remove time indexes #37-47 in run #2* ``*:0-2`` => remove time indexes #0-2 in all runs  * time indexes within each run start at 0.  * run indexes start at 1 (just be to confusing).  * n.b.: 2:37,47 means index #37 in run #2 and    global time index 47; it does not mean    index #37 in run #2 and index #47 in run #2.
+ * @param concat The catenation file, as in 3ddeconvolve, containing thetr indexes of the start points for each contiguous runwithin the input dataset (the first entry should be 0).* also as in 3ddeconvolve, if the input dataset is  automatically catenated from a collection of datasets,  then the run start indexes are determined directly,  and '-concat' is not needed (and will be ignored).* each run must have at least 9 time points after  censoring, or the program will not work!* the only use made of this input is in setting up  the bandpass/stopband regressors.* '-ort' and '-dsort' regressors run through all time  points, as read in.  if you want separate projections  in each run, then you must either break these ort files  into appropriate components, or you must run 3dtproject  for each run separately, using the appropriate pieces  from the ort files via the ``{...}`` selector for the  1d files and the ``[...]`` selector for the datasets.
+ * @param dsort Remove the 3d+time time series in dataset fset.* that is, 'fset' contains a different nuisance time  series for each voxel (e.g., from anaticor).* multiple -dsort options are allowed.
+ * @param mask Only operate on voxels nonzero in the mset dataset.* voxels outside the mask will be filled with zeros.* if no masking option is given, then all voxels  will be processed.
+ * @param noblock Also as in 3ddeconvolve, if you want the program to treatan auto-catenated dataset as one long run, use this option.however, '-noblock' will not affect catenation if you usethe '-concat' option.
+ * @param norm normalize each output time series to have sum ofsquares = 1. this is the last operation.
+ * @param ort Remove each column in file.each column will have its mean removed.
+ * @param polort Remove polynomials up to and including degree pp.* default value is 2.* it makes no sense to use a value of pp greater than  2, if you are bandpassing out the lower frequencies!* for catenated datasets, each run gets a separate set  set of pp+1 legendre polynomial regressors.* use of -polort -1 is not advised (if data mean != 0),  even if -ort contains constant terms, as all means are  removed.
+ * @param stopband (a float, a float). Remove all frequencies in the range.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tproject_params(
     in_file: InputPathType,
     prefix: string,
@@ -103,31 +126,8 @@ function v_3d_tproject_params(
     polort: number | null = null,
     stopband: Array<number> | null = null,
 ): V3dTprojectParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dtproject.
-     * @param prefix Output file prefix.
-     * @param tr Use time step dd for the frequency calculations,rather than the value stored in the dataset header.
-     * @param automask Generate a mask automatically.
-     * @param bandpass (a float, a float). Remove all frequencies except those in the range.
-     * @param blur Blur (inside the mask only) with a filter that haswidth (fwhm) of fff millimeters.spatial blurring (if done) is after the timeseries filtering.
-     * @param cenmode 'kill' or 'zero' or 'ntrp'. Specifies how censored time points are treated in the output dataset:* mode = zero -- put zero values in their place; output dataset is same length as input* mode = kill -- remove those time points;  output dataset is shorter than input* mode = ntrp -- censored values are replaced by interpolated  neighboring (in time) non-censored values,  before any projections, and then the  analysis proceeds without actual removal  of any time points -- this feature is to  keep the spanish inquisition happy.* the default mode is kill !!!.
-     * @param censor Filename of censor .1d time series.this is a file of 1s and 0s, indicating whichtime points are to be included (1) and which areto be excluded (0).
-     * @param censortr List of strings that specify time indexes to be removed from the analysis.  each string isof one of the following forms:* ``37`` => remove global time index #37* ``2:37`` => remove time index #37 in run #2* ``37..47`` => remove global time indexes #37-47* ``37-47`` => same as above* ``2:37..47`` => remove time indexes #37-47 in run #2* ``*:0-2`` => remove time indexes #0-2 in all runs  * time indexes within each run start at 0.  * run indexes start at 1 (just be to confusing).  * n.b.: 2:37,47 means index #37 in run #2 and    global time index 47; it does not mean    index #37 in run #2 and index #47 in run #2.
-     * @param concat The catenation file, as in 3ddeconvolve, containing thetr indexes of the start points for each contiguous runwithin the input dataset (the first entry should be 0).* also as in 3ddeconvolve, if the input dataset is  automatically catenated from a collection of datasets,  then the run start indexes are determined directly,  and '-concat' is not needed (and will be ignored).* each run must have at least 9 time points after  censoring, or the program will not work!* the only use made of this input is in setting up  the bandpass/stopband regressors.* '-ort' and '-dsort' regressors run through all time  points, as read in.  if you want separate projections  in each run, then you must either break these ort files  into appropriate components, or you must run 3dtproject  for each run separately, using the appropriate pieces  from the ort files via the ``{...}`` selector for the  1d files and the ``[...]`` selector for the datasets.
-     * @param dsort Remove the 3d+time time series in dataset fset.* that is, 'fset' contains a different nuisance time  series for each voxel (e.g., from anaticor).* multiple -dsort options are allowed.
-     * @param mask Only operate on voxels nonzero in the mset dataset.* voxels outside the mask will be filled with zeros.* if no masking option is given, then all voxels  will be processed.
-     * @param noblock Also as in 3ddeconvolve, if you want the program to treatan auto-catenated dataset as one long run, use this option.however, '-noblock' will not affect catenation if you usethe '-concat' option.
-     * @param norm normalize each output time series to have sum ofsquares = 1. this is the last operation.
-     * @param ort Remove each column in file.each column will have its mean removed.
-     * @param polort Remove polynomials up to and including degree pp.* default value is 2.* it makes no sense to use a value of pp greater than  2, if you are bandpassing out the lower frequencies!* for catenated datasets, each run gets a separate set  set of pp+1 legendre polynomial regressors.* use of -polort -1 is not advised (if data mean != 0),  even if -ort contains constant terms, as all means are  removed.
-     * @param stopband (a float, a float). Remove all frequencies in the range.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTproject" as const,
+        "@type": "afni.3dTproject" as const,
         "automask": automask,
         "in_file": in_file,
         "noblock": noblock,
@@ -174,18 +174,18 @@ function v_3d_tproject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tproject_cargs(
     params: V3dTprojectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTproject");
     if ((params["TR"] ?? null) !== null) {
@@ -281,18 +281,18 @@ function v_3d_tproject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tproject_outputs(
     params: V3dTprojectParameters,
     execution: Execution,
 ): V3dTprojectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTprojectOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -301,22 +301,22 @@ function v_3d_tproject_outputs(
 }
 
 
+/**
+ * This program projects (detrends) out various 'nuisance' time series from each voxel in the input dataset.  Note that all the projections are done via linear regression, including the frequency-based options such as '-passband'.  In this way, you can bandpass time-censored data, and at the same time, remove other time series of no interest (e.g., physiological estimates, motion parameters).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
+ */
 function v_3d_tproject_execute(
     params: V3dTprojectParameters,
     execution: Execution,
 ): V3dTprojectOutputs {
-    /**
-     * This program projects (detrends) out various 'nuisance' time series from each voxel in the input dataset.  Note that all the projections are done via linear regression, including the frequency-based options such as '-passband'.  In this way, you can bandpass time-censored data, and at the same time, remove other time series of no interest (e.g., physiological estimates, motion parameters).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tproject_cargs(params, execution)
     const ret = v_3d_tproject_outputs(params, execution)
@@ -325,6 +325,34 @@ function v_3d_tproject_execute(
 }
 
 
+/**
+ * This program projects (detrends) out various 'nuisance' time series from each voxel in the input dataset.  Note that all the projections are done via linear regression, including the frequency-based options such as '-passband'.  In this way, you can bandpass time-censored data, and at the same time, remove other time series of no interest (e.g., physiological estimates, motion parameters).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dtproject.
+ * @param prefix Output file prefix.
+ * @param tr Use time step dd for the frequency calculations,rather than the value stored in the dataset header.
+ * @param automask Generate a mask automatically.
+ * @param bandpass (a float, a float). Remove all frequencies except those in the range.
+ * @param blur Blur (inside the mask only) with a filter that haswidth (fwhm) of fff millimeters.spatial blurring (if done) is after the timeseries filtering.
+ * @param cenmode 'kill' or 'zero' or 'ntrp'. Specifies how censored time points are treated in the output dataset:* mode = zero -- put zero values in their place; output dataset is same length as input* mode = kill -- remove those time points;  output dataset is shorter than input* mode = ntrp -- censored values are replaced by interpolated  neighboring (in time) non-censored values,  before any projections, and then the  analysis proceeds without actual removal  of any time points -- this feature is to  keep the spanish inquisition happy.* the default mode is kill !!!.
+ * @param censor Filename of censor .1d time series.this is a file of 1s and 0s, indicating whichtime points are to be included (1) and which areto be excluded (0).
+ * @param censortr List of strings that specify time indexes to be removed from the analysis.  each string isof one of the following forms:* ``37`` => remove global time index #37* ``2:37`` => remove time index #37 in run #2* ``37..47`` => remove global time indexes #37-47* ``37-47`` => same as above* ``2:37..47`` => remove time indexes #37-47 in run #2* ``*:0-2`` => remove time indexes #0-2 in all runs  * time indexes within each run start at 0.  * run indexes start at 1 (just be to confusing).  * n.b.: 2:37,47 means index #37 in run #2 and    global time index 47; it does not mean    index #37 in run #2 and index #47 in run #2.
+ * @param concat The catenation file, as in 3ddeconvolve, containing thetr indexes of the start points for each contiguous runwithin the input dataset (the first entry should be 0).* also as in 3ddeconvolve, if the input dataset is  automatically catenated from a collection of datasets,  then the run start indexes are determined directly,  and '-concat' is not needed (and will be ignored).* each run must have at least 9 time points after  censoring, or the program will not work!* the only use made of this input is in setting up  the bandpass/stopband regressors.* '-ort' and '-dsort' regressors run through all time  points, as read in.  if you want separate projections  in each run, then you must either break these ort files  into appropriate components, or you must run 3dtproject  for each run separately, using the appropriate pieces  from the ort files via the ``{...}`` selector for the  1d files and the ``[...]`` selector for the datasets.
+ * @param dsort Remove the 3d+time time series in dataset fset.* that is, 'fset' contains a different nuisance time  series for each voxel (e.g., from anaticor).* multiple -dsort options are allowed.
+ * @param mask Only operate on voxels nonzero in the mset dataset.* voxels outside the mask will be filled with zeros.* if no masking option is given, then all voxels  will be processed.
+ * @param noblock Also as in 3ddeconvolve, if you want the program to treatan auto-catenated dataset as one long run, use this option.however, '-noblock' will not affect catenation if you usethe '-concat' option.
+ * @param norm normalize each output time series to have sum ofsquares = 1. this is the last operation.
+ * @param ort Remove each column in file.each column will have its mean removed.
+ * @param polort Remove polynomials up to and including degree pp.* default value is 2.* it makes no sense to use a value of pp greater than  2, if you are bandpassing out the lower frequencies!* for catenated datasets, each run gets a separate set  set of pp+1 legendre polynomial regressors.* use of -polort -1 is not advised (if data mean != 0),  even if -ort contains constant terms, as all means are  removed.
+ * @param stopband (a float, a float). Remove all frequencies in the range.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
+ */
 function v_3d_tproject(
     in_file: InputPathType,
     prefix: string,
@@ -345,34 +373,6 @@ function v_3d_tproject(
     stopband: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dTprojectOutputs {
-    /**
-     * This program projects (detrends) out various 'nuisance' time series from each voxel in the input dataset.  Note that all the projections are done via linear regression, including the frequency-based options such as '-passband'.  In this way, you can bandpass time-censored data, and at the same time, remove other time series of no interest (e.g., physiological estimates, motion parameters).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dtproject.
-     * @param prefix Output file prefix.
-     * @param tr Use time step dd for the frequency calculations,rather than the value stored in the dataset header.
-     * @param automask Generate a mask automatically.
-     * @param bandpass (a float, a float). Remove all frequencies except those in the range.
-     * @param blur Blur (inside the mask only) with a filter that haswidth (fwhm) of fff millimeters.spatial blurring (if done) is after the timeseries filtering.
-     * @param cenmode 'kill' or 'zero' or 'ntrp'. Specifies how censored time points are treated in the output dataset:* mode = zero -- put zero values in their place; output dataset is same length as input* mode = kill -- remove those time points;  output dataset is shorter than input* mode = ntrp -- censored values are replaced by interpolated  neighboring (in time) non-censored values,  before any projections, and then the  analysis proceeds without actual removal  of any time points -- this feature is to  keep the spanish inquisition happy.* the default mode is kill !!!.
-     * @param censor Filename of censor .1d time series.this is a file of 1s and 0s, indicating whichtime points are to be included (1) and which areto be excluded (0).
-     * @param censortr List of strings that specify time indexes to be removed from the analysis.  each string isof one of the following forms:* ``37`` => remove global time index #37* ``2:37`` => remove time index #37 in run #2* ``37..47`` => remove global time indexes #37-47* ``37-47`` => same as above* ``2:37..47`` => remove time indexes #37-47 in run #2* ``*:0-2`` => remove time indexes #0-2 in all runs  * time indexes within each run start at 0.  * run indexes start at 1 (just be to confusing).  * n.b.: 2:37,47 means index #37 in run #2 and    global time index 47; it does not mean    index #37 in run #2 and index #47 in run #2.
-     * @param concat The catenation file, as in 3ddeconvolve, containing thetr indexes of the start points for each contiguous runwithin the input dataset (the first entry should be 0).* also as in 3ddeconvolve, if the input dataset is  automatically catenated from a collection of datasets,  then the run start indexes are determined directly,  and '-concat' is not needed (and will be ignored).* each run must have at least 9 time points after  censoring, or the program will not work!* the only use made of this input is in setting up  the bandpass/stopband regressors.* '-ort' and '-dsort' regressors run through all time  points, as read in.  if you want separate projections  in each run, then you must either break these ort files  into appropriate components, or you must run 3dtproject  for each run separately, using the appropriate pieces  from the ort files via the ``{...}`` selector for the  1d files and the ``[...]`` selector for the datasets.
-     * @param dsort Remove the 3d+time time series in dataset fset.* that is, 'fset' contains a different nuisance time  series for each voxel (e.g., from anaticor).* multiple -dsort options are allowed.
-     * @param mask Only operate on voxels nonzero in the mset dataset.* voxels outside the mask will be filled with zeros.* if no masking option is given, then all voxels  will be processed.
-     * @param noblock Also as in 3ddeconvolve, if you want the program to treatan auto-catenated dataset as one long run, use this option.however, '-noblock' will not affect catenation if you usethe '-concat' option.
-     * @param norm normalize each output time series to have sum ofsquares = 1. this is the last operation.
-     * @param ort Remove each column in file.each column will have its mean removed.
-     * @param polort Remove polynomials up to and including degree pp.* default value is 2.* it makes no sense to use a value of pp greater than  2, if you are bandpassing out the lower frequencies!* for catenated datasets, each run gets a separate set  set of pp+1 legendre polynomial regressors.* use of -polort -1 is not advised (if data mean != 0),  even if -ort contains constant terms, as all means are  removed.
-     * @param stopband (a float, a float). Remove all frequencies in the range.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TPROJECT_METADATA);
     const params = v_3d_tproject_params(in_file, prefix, tr, automask, bandpass, blur, cenmode, censor, censortr, concat, dsort, mask, noblock, norm, ort, polort, stopband)
@@ -385,5 +385,8 @@ export {
       V3dTprojectParameters,
       V_3D_TPROJECT_METADATA,
       v_3d_tproject,
+      v_3d_tproject_cargs,
+      v_3d_tproject_execute,
+      v_3d_tproject_outputs,
       v_3d_tproject_params,
 };

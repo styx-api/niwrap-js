@@ -12,7 +12,7 @@ const V_3D_EMPTY_METADATA: Metadata = {
 
 
 interface V3dEmptyParameters {
-    "__STYXTYPE__": "3dEmpty";
+    "@type": "afni.3dEmpty";
     "prefix"?: string | null | undefined;
     "geometry"?: string | null | undefined;
     "nxyz"?: Array<number> | null | undefined;
@@ -20,35 +20,35 @@ interface V3dEmptyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dEmpty": v_3d_empty_cargs,
+        "afni.3dEmpty": v_3d_empty_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dEmpty": v_3d_empty_outputs,
+        "afni.3dEmpty": v_3d_empty_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3dEmptyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix name for output file (default = 'Empty')
+ * @param geometry Set the 3D geometry of the grid using a string of the form 'MATRIX(a11,a12,a13,a14,a21,a22,a23,a24,a31,a32,a33,a34):nx,ny,nz'
+ * @param nxyz Set number of voxels to 'x', 'y', and 'z' along the 3 axes [defaults=64]
+ * @param nt Number of time points [default=1]
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_empty_params(
     prefix: string | null = null,
     geometry: string | null = null,
     nxyz: Array<number> | null = null,
     nt: number | null = null,
 ): V3dEmptyParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix name for output file (default = 'Empty')
-     * @param geometry Set the 3D geometry of the grid using a string of the form 'MATRIX(a11,a12,a13,a14,a21,a22,a23,a24,a31,a32,a33,a34):nx,ny,nz'
-     * @param nxyz Set number of voxels to 'x', 'y', and 'z' along the 3 axes [defaults=64]
-     * @param nt Number of time points [default=1]
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dEmpty" as const,
+        "@type": "afni.3dEmpty" as const,
     };
     if (prefix !== null) {
         params["prefix"] = prefix;
@@ -106,18 +106,18 @@ function v_3d_empty_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_empty_cargs(
     params: V3dEmptyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dEmpty");
     if ((params["prefix"] ?? null) !== null) {
@@ -148,18 +148,18 @@ function v_3d_empty_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_empty_outputs(
     params: V3dEmptyParameters,
     execution: Execution,
 ): V3dEmptyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dEmptyOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -168,22 +168,22 @@ function v_3d_empty_outputs(
 }
 
 
+/**
+ * Tool to create an 'empty' dataset .HEAD file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
+ */
 function v_3d_empty_execute(
     params: V3dEmptyParameters,
     execution: Execution,
 ): V3dEmptyOutputs {
-    /**
-     * Tool to create an 'empty' dataset .HEAD file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_empty_cargs(params, execution)
     const ret = v_3d_empty_outputs(params, execution)
@@ -192,6 +192,21 @@ function v_3d_empty_execute(
 }
 
 
+/**
+ * Tool to create an 'empty' dataset .HEAD file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix name for output file (default = 'Empty')
+ * @param geometry Set the 3D geometry of the grid using a string of the form 'MATRIX(a11,a12,a13,a14,a21,a22,a23,a24,a31,a32,a33,a34):nx,ny,nz'
+ * @param nxyz Set number of voxels to 'x', 'y', and 'z' along the 3 axes [defaults=64]
+ * @param nt Number of time points [default=1]
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
+ */
 function v_3d_empty(
     prefix: string | null = null,
     geometry: string | null = null,
@@ -199,21 +214,6 @@ function v_3d_empty(
     nt: number | null = null,
     runner: Runner | null = null,
 ): V3dEmptyOutputs {
-    /**
-     * Tool to create an 'empty' dataset .HEAD file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix name for output file (default = 'Empty')
-     * @param geometry Set the 3D geometry of the grid using a string of the form 'MATRIX(a11,a12,a13,a14,a21,a22,a23,a24,a31,a32,a33,a34):nx,ny,nz'
-     * @param nxyz Set number of voxels to 'x', 'y', and 'z' along the 3 axes [defaults=64]
-     * @param nt Number of time points [default=1]
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_EMPTY_METADATA);
     const params = v_3d_empty_params(prefix, geometry, nxyz, nt)
@@ -226,5 +226,8 @@ export {
       V3dEmptyParameters,
       V_3D_EMPTY_METADATA,
       v_3d_empty,
+      v_3d_empty_cargs,
+      v_3d_empty_execute,
+      v_3d_empty_outputs,
       v_3d_empty_params,
 };

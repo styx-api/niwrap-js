@@ -12,7 +12,7 @@ const MRIS_COMPUTE_OVERLAP_METADATA: Metadata = {
 
 
 interface MrisComputeOverlapParameters {
-    "__STYXTYPE__": "mris_compute_overlap";
+    "@type": "freesurfer.mris_compute_overlap";
     "subject": string;
     "hemi": string;
     "surface": string;
@@ -24,33 +24,33 @@ interface MrisComputeOverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_overlap": mris_compute_overlap_cargs,
+        "freesurfer.mris_compute_overlap": mris_compute_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MrisComputeOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject name
+ * @param hemi Hemisphere (e.g. lh or rh)
+ * @param surface Surface name
+ * @param annotation Annotation name
+ * @param labels Labels to compute overlap for
+ * @param percentage Compute brain area as a percentage of all brain labels
+ * @param log_file Log results to file, where %d will include label number
+ * @param brain_volume Load brain volume and use it to normalize areas
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_overlap_params(
     subject: string,
     hemi: string,
@@ -80,22 +94,8 @@ function mris_compute_overlap_params(
     log_file: string | null = null,
     brain_volume: InputPathType | null = null,
 ): MrisComputeOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject name
-     * @param hemi Hemisphere (e.g. lh or rh)
-     * @param surface Surface name
-     * @param annotation Annotation name
-     * @param labels Labels to compute overlap for
-     * @param percentage Compute brain area as a percentage of all brain labels
-     * @param log_file Log results to file, where %d will include label number
-     * @param brain_volume Load brain volume and use it to normalize areas
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_overlap" as const,
+        "@type": "freesurfer.mris_compute_overlap" as const,
         "subject": subject,
         "hemi": hemi,
         "surface": surface,
@@ -113,18 +113,18 @@ function mris_compute_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_overlap_cargs(
     params: MrisComputeOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_overlap");
     cargs.push((params["subject"] ?? null));
@@ -151,18 +151,18 @@ function mris_compute_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_overlap_outputs(
     params: MrisComputeOverlapParameters,
     execution: Execution,
 ): MrisComputeOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeOverlapOutputs = {
         root: execution.outputFile("."),
     };
@@ -170,22 +170,22 @@ function mris_compute_overlap_outputs(
 }
 
 
+/**
+ * Tool to compute the overlap between two or more labels on a cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
+ */
 function mris_compute_overlap_execute(
     params: MrisComputeOverlapParameters,
     execution: Execution,
 ): MrisComputeOverlapOutputs {
-    /**
-     * Tool to compute the overlap between two or more labels on a cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_overlap_cargs(params, execution)
     const ret = mris_compute_overlap_outputs(params, execution)
@@ -194,6 +194,25 @@ function mris_compute_overlap_execute(
 }
 
 
+/**
+ * Tool to compute the overlap between two or more labels on a cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject name
+ * @param hemi Hemisphere (e.g. lh or rh)
+ * @param surface Surface name
+ * @param annotation Annotation name
+ * @param labels Labels to compute overlap for
+ * @param percentage Compute brain area as a percentage of all brain labels
+ * @param log_file Log results to file, where %d will include label number
+ * @param brain_volume Load brain volume and use it to normalize areas
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
+ */
 function mris_compute_overlap(
     subject: string,
     hemi: string,
@@ -205,25 +224,6 @@ function mris_compute_overlap(
     brain_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisComputeOverlapOutputs {
-    /**
-     * Tool to compute the overlap between two or more labels on a cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject name
-     * @param hemi Hemisphere (e.g. lh or rh)
-     * @param surface Surface name
-     * @param annotation Annotation name
-     * @param labels Labels to compute overlap for
-     * @param percentage Compute brain area as a percentage of all brain labels
-     * @param log_file Log results to file, where %d will include label number
-     * @param brain_volume Load brain volume and use it to normalize areas
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_OVERLAP_METADATA);
     const params = mris_compute_overlap_params(subject, hemi, surface, annotation, labels, percentage, log_file, brain_volume)
@@ -236,5 +236,8 @@ export {
       MrisComputeOverlapOutputs,
       MrisComputeOverlapParameters,
       mris_compute_overlap,
+      mris_compute_overlap_cargs,
+      mris_compute_overlap_execute,
+      mris_compute_overlap_outputs,
       mris_compute_overlap_params,
 };

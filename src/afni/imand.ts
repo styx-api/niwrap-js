@@ -12,42 +12,42 @@ const IMAND_METADATA: Metadata = {
 
 
 interface ImandParameters {
-    "__STYXTYPE__": "imand";
+    "@type": "afni.imand";
     "threshold"?: number | null | undefined;
     "input_images": Array<InputPathType>;
     "output_image": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imand": imand_cargs,
+        "afni.imand": imand_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imand": imand_outputs,
+        "afni.imand": imand_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ImandOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_images Input images to be processed. Multiple input images can be specified.
+ * @param output_image Output image file.
+ * @param threshold Threshold value; only pixels above this value will be output. Optional.
+ *
+ * @returns Parameter dictionary
+ */
 function imand_params(
     input_images: Array<InputPathType>,
     output_image: string,
     threshold: number | null = null,
 ): ImandParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_images Input images to be processed. Multiple input images can be specified.
-     * @param output_image Output image file.
-     * @param threshold Threshold value; only pixels above this value will be output. Optional.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imand" as const,
+        "@type": "afni.imand" as const,
         "input_images": input_images,
         "output_image": output_image,
     };
@@ -96,18 +96,18 @@ function imand_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imand_cargs(
     params: ImandParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imand");
     if ((params["threshold"] ?? null) !== null) {
@@ -122,18 +122,18 @@ function imand_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imand_outputs(
     params: ImandParameters,
     execution: Execution,
 ): ImandOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImandOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function imand_outputs(
 }
 
 
+/**
+ * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImandOutputs`).
+ */
 function imand_execute(
     params: ImandParameters,
     execution: Execution,
 ): ImandOutputs {
-    /**
-     * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImandOutputs`).
-     */
     params = execution.params(params)
     const cargs = imand_cargs(params, execution)
     const ret = imand_outputs(params, execution)
@@ -166,26 +166,26 @@ function imand_execute(
 }
 
 
+/**
+ * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_images Input images to be processed. Multiple input images can be specified.
+ * @param output_image Output image file.
+ * @param threshold Threshold value; only pixels above this value will be output. Optional.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImandOutputs`).
+ */
 function imand(
     input_images: Array<InputPathType>,
     output_image: string,
     threshold: number | null = null,
     runner: Runner | null = null,
 ): ImandOutputs {
-    /**
-     * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_images Input images to be processed. Multiple input images can be specified.
-     * @param output_image Output image file.
-     * @param threshold Threshold value; only pixels above this value will be output. Optional.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImandOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMAND_METADATA);
     const params = imand_params(input_images, output_image, threshold)
@@ -198,5 +198,8 @@ export {
       ImandOutputs,
       ImandParameters,
       imand,
+      imand_cargs,
+      imand_execute,
+      imand_outputs,
       imand_params,
 };

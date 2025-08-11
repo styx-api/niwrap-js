@@ -12,7 +12,7 @@ const CALC_GRAD_PERC_DEV_METADATA: Metadata = {
 
 
 interface CalcGradPercDevParameters {
-    "__STYXTYPE__": "calc_grad_perc_dev";
+    "@type": "fsl.calc_grad_perc_dev";
     "fullwarp_image": InputPathType;
     "out_basename": string;
     "verbose_flag": boolean;
@@ -20,33 +20,33 @@ interface CalcGradPercDevParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "calc_grad_perc_dev": calc_grad_perc_dev_cargs,
+        "fsl.calc_grad_perc_dev": calc_grad_perc_dev_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface CalcGradPercDevOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fullwarp_image Full warp image from gradient_unwarp.py
+ * @param out_basename Output basename
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display the help message
+ *
+ * @returns Parameter dictionary
+ */
 function calc_grad_perc_dev_params(
     fullwarp_image: InputPathType,
     out_basename: string,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): CalcGradPercDevParameters {
-    /**
-     * Build parameters.
-    
-     * @param fullwarp_image Full warp image from gradient_unwarp.py
-     * @param out_basename Output basename
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display the help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "calc_grad_perc_dev" as const,
+        "@type": "fsl.calc_grad_perc_dev" as const,
         "fullwarp_image": fullwarp_image,
         "out_basename": out_basename,
         "verbose_flag": verbose_flag,
@@ -93,18 +93,18 @@ function calc_grad_perc_dev_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function calc_grad_perc_dev_cargs(
     params: CalcGradPercDevParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("calc_grad_perc_dev");
     cargs.push(
@@ -125,18 +125,18 @@ function calc_grad_perc_dev_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function calc_grad_perc_dev_outputs(
     params: CalcGradPercDevParameters,
     execution: Execution,
 ): CalcGradPercDevOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CalcGradPercDevOutputs = {
         root: execution.outputFile("."),
     };
@@ -144,22 +144,22 @@ function calc_grad_perc_dev_outputs(
 }
 
 
+/**
+ * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
+ */
 function calc_grad_perc_dev_execute(
     params: CalcGradPercDevParameters,
     execution: Execution,
 ): CalcGradPercDevOutputs {
-    /**
-     * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
-     */
     params = execution.params(params)
     const cargs = calc_grad_perc_dev_cargs(params, execution)
     const ret = calc_grad_perc_dev_outputs(params, execution)
@@ -168,6 +168,21 @@ function calc_grad_perc_dev_execute(
 }
 
 
+/**
+ * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param fullwarp_image Full warp image from gradient_unwarp.py
+ * @param out_basename Output basename
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display the help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
+ */
 function calc_grad_perc_dev(
     fullwarp_image: InputPathType,
     out_basename: string,
@@ -175,21 +190,6 @@ function calc_grad_perc_dev(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): CalcGradPercDevOutputs {
-    /**
-     * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param fullwarp_image Full warp image from gradient_unwarp.py
-     * @param out_basename Output basename
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display the help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CALC_GRAD_PERC_DEV_METADATA);
     const params = calc_grad_perc_dev_params(fullwarp_image, out_basename, verbose_flag, help_flag)
@@ -202,5 +202,8 @@ export {
       CalcGradPercDevOutputs,
       CalcGradPercDevParameters,
       calc_grad_perc_dev,
+      calc_grad_perc_dev_cargs,
+      calc_grad_perc_dev_execute,
+      calc_grad_perc_dev_outputs,
       calc_grad_perc_dev_params,
 };

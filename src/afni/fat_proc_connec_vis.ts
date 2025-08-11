@@ -12,7 +12,7 @@ const FAT_PROC_CONNEC_VIS_METADATA: Metadata = {
 
 
 interface FatProcConnecVisParameters {
-    "__STYXTYPE__": "fat_proc_connec_vis";
+    "@type": "afni.fat_proc_connec_vis";
     "in_rois": string;
     "prefix": string;
     "prefix_file"?: string | null | undefined;
@@ -27,35 +27,35 @@ interface FatProcConnecVisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_connec_vis": fat_proc_connec_vis_cargs,
+        "afni.fat_proc_connec_vis": fat_proc_connec_vis_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_connec_vis": fat_proc_connec_vis_outputs,
+        "afni.fat_proc_connec_vis": fat_proc_connec_vis_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface FatProcConnecVisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_rois List of separate files, each with a single ROI volume mask; can include wildcards, etc. to specify the list
+ * @param prefix Directory to contain the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; the namebase of files within this directory will be the default for the program, 'wmc'. The value PPP can contain parts of a path in it.
+ * @param prefix_file Prefix for the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; can include path steps; and can make one level of a new directory. For example, if FFF were 'A/B', then the program could make a new directory called 'A' if it didn't exist already and populate it with individual files having the same prefix 'B'.
+ * @param tsmoo_kpb 'KPB' parameter in IsoSurface program; default value is 0.01.
+ * @param tsmoo_niter 'NITER' parameter in IsoSurface program; default value is 6.
+ * @param iso_opt Input one of the 'iso* options' from IsoSurface program, such as 'isorois+dsets', 'mergerois', etc. Quotations around the entry may be needed, especially if something like the '-mergerois [LAB_OUT]' route is being followed. Default: isorois+dsets
+ * @param trackid_no_or Use this option to have the program recognize the naming convention of 3dTrackID output and to ignore the OR-logic ROIs, including only the AND-logic (AKA pairwise) connections
+ * @param output_tcat Flag to output the multibrick file of concatenated ROI masks; note that the [0]th brick will be all zeros (it is just a placeholder). So, if there are N ROI maps concatenated, there will be N+1 bricks in the output dataset, which has the name PPP_tcat.nii.gz.
+ * @param output_tstat Flag to output the single brick file from the 3dTstat operation on the tcat dataset. If there were N ROI maps concatenated, then the largest value should be N. The output file's name will be PPP_tstat.nii.gz.
+ * @param wdir Working directory prefix. The format is '__WDIR_connec_vis_PPP', where PPP is the input prefix.
+ * @param no_clean Optional switch to NOT remove the working directory (default is to remove the working directory)
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_connec_vis_params(
     in_rois: string,
     prefix: string,
@@ -99,25 +116,8 @@ function fat_proc_connec_vis_params(
     wdir: string | null = null,
     no_clean: boolean = false,
 ): FatProcConnecVisParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_rois List of separate files, each with a single ROI volume mask; can include wildcards, etc. to specify the list
-     * @param prefix Directory to contain the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; the namebase of files within this directory will be the default for the program, 'wmc'. The value PPP can contain parts of a path in it.
-     * @param prefix_file Prefix for the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; can include path steps; and can make one level of a new directory. For example, if FFF were 'A/B', then the program could make a new directory called 'A' if it didn't exist already and populate it with individual files having the same prefix 'B'.
-     * @param tsmoo_kpb 'KPB' parameter in IsoSurface program; default value is 0.01.
-     * @param tsmoo_niter 'NITER' parameter in IsoSurface program; default value is 6.
-     * @param iso_opt Input one of the 'iso* options' from IsoSurface program, such as 'isorois+dsets', 'mergerois', etc. Quotations around the entry may be needed, especially if something like the '-mergerois [LAB_OUT]' route is being followed. Default: isorois+dsets
-     * @param trackid_no_or Use this option to have the program recognize the naming convention of 3dTrackID output and to ignore the OR-logic ROIs, including only the AND-logic (AKA pairwise) connections
-     * @param output_tcat Flag to output the multibrick file of concatenated ROI masks; note that the [0]th brick will be all zeros (it is just a placeholder). So, if there are N ROI maps concatenated, there will be N+1 bricks in the output dataset, which has the name PPP_tcat.nii.gz.
-     * @param output_tstat Flag to output the single brick file from the 3dTstat operation on the tcat dataset. If there were N ROI maps concatenated, then the largest value should be N. The output file's name will be PPP_tstat.nii.gz.
-     * @param wdir Working directory prefix. The format is '__WDIR_connec_vis_PPP', where PPP is the input prefix.
-     * @param no_clean Optional switch to NOT remove the working directory (default is to remove the working directory)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_connec_vis" as const,
+        "@type": "afni.fat_proc_connec_vis" as const,
         "in_rois": in_rois,
         "prefix": prefix,
         "trackid_no_or": trackid_no_or,
@@ -144,18 +144,18 @@ function fat_proc_connec_vis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_connec_vis_cargs(
     params: FatProcConnecVisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_connec_vis");
     cargs.push((params["in_rois"] ?? null));
@@ -206,18 +206,18 @@ function fat_proc_connec_vis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_connec_vis_outputs(
     params: FatProcConnecVisParameters,
     execution: Execution,
 ): FatProcConnecVisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcConnecVisOutputs = {
         root: execution.outputFile("."),
         cmd_txt: execution.outputFile([(params["prefix"] ?? null), "_cmd.txt"].join('')),
@@ -228,22 +228,22 @@ function fat_proc_connec_vis_outputs(
 }
 
 
+/**
+ * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
+ */
 function fat_proc_connec_vis_execute(
     params: FatProcConnecVisParameters,
     execution: Execution,
 ): FatProcConnecVisOutputs {
-    /**
-     * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_connec_vis_cargs(params, execution)
     const ret = fat_proc_connec_vis_outputs(params, execution)
@@ -252,6 +252,28 @@ function fat_proc_connec_vis_execute(
 }
 
 
+/**
+ * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_rois List of separate files, each with a single ROI volume mask; can include wildcards, etc. to specify the list
+ * @param prefix Directory to contain the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; the namebase of files within this directory will be the default for the program, 'wmc'. The value PPP can contain parts of a path in it.
+ * @param prefix_file Prefix for the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; can include path steps; and can make one level of a new directory. For example, if FFF were 'A/B', then the program could make a new directory called 'A' if it didn't exist already and populate it with individual files having the same prefix 'B'.
+ * @param tsmoo_kpb 'KPB' parameter in IsoSurface program; default value is 0.01.
+ * @param tsmoo_niter 'NITER' parameter in IsoSurface program; default value is 6.
+ * @param iso_opt Input one of the 'iso* options' from IsoSurface program, such as 'isorois+dsets', 'mergerois', etc. Quotations around the entry may be needed, especially if something like the '-mergerois [LAB_OUT]' route is being followed. Default: isorois+dsets
+ * @param trackid_no_or Use this option to have the program recognize the naming convention of 3dTrackID output and to ignore the OR-logic ROIs, including only the AND-logic (AKA pairwise) connections
+ * @param output_tcat Flag to output the multibrick file of concatenated ROI masks; note that the [0]th brick will be all zeros (it is just a placeholder). So, if there are N ROI maps concatenated, there will be N+1 bricks in the output dataset, which has the name PPP_tcat.nii.gz.
+ * @param output_tstat Flag to output the single brick file from the 3dTstat operation on the tcat dataset. If there were N ROI maps concatenated, then the largest value should be N. The output file's name will be PPP_tstat.nii.gz.
+ * @param wdir Working directory prefix. The format is '__WDIR_connec_vis_PPP', where PPP is the input prefix.
+ * @param no_clean Optional switch to NOT remove the working directory (default is to remove the working directory)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
+ */
 function fat_proc_connec_vis(
     in_rois: string,
     prefix: string,
@@ -266,28 +288,6 @@ function fat_proc_connec_vis(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcConnecVisOutputs {
-    /**
-     * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_rois List of separate files, each with a single ROI volume mask; can include wildcards, etc. to specify the list
-     * @param prefix Directory to contain the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; the namebase of files within this directory will be the default for the program, 'wmc'. The value PPP can contain parts of a path in it.
-     * @param prefix_file Prefix for the output files: *cmd.txt and surface files such as *.gii and *.niml.dset; can include path steps; and can make one level of a new directory. For example, if FFF were 'A/B', then the program could make a new directory called 'A' if it didn't exist already and populate it with individual files having the same prefix 'B'.
-     * @param tsmoo_kpb 'KPB' parameter in IsoSurface program; default value is 0.01.
-     * @param tsmoo_niter 'NITER' parameter in IsoSurface program; default value is 6.
-     * @param iso_opt Input one of the 'iso* options' from IsoSurface program, such as 'isorois+dsets', 'mergerois', etc. Quotations around the entry may be needed, especially if something like the '-mergerois [LAB_OUT]' route is being followed. Default: isorois+dsets
-     * @param trackid_no_or Use this option to have the program recognize the naming convention of 3dTrackID output and to ignore the OR-logic ROIs, including only the AND-logic (AKA pairwise) connections
-     * @param output_tcat Flag to output the multibrick file of concatenated ROI masks; note that the [0]th brick will be all zeros (it is just a placeholder). So, if there are N ROI maps concatenated, there will be N+1 bricks in the output dataset, which has the name PPP_tcat.nii.gz.
-     * @param output_tstat Flag to output the single brick file from the 3dTstat operation on the tcat dataset. If there were N ROI maps concatenated, then the largest value should be N. The output file's name will be PPP_tstat.nii.gz.
-     * @param wdir Working directory prefix. The format is '__WDIR_connec_vis_PPP', where PPP is the input prefix.
-     * @param no_clean Optional switch to NOT remove the working directory (default is to remove the working directory)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_CONNEC_VIS_METADATA);
     const params = fat_proc_connec_vis_params(in_rois, prefix, prefix_file, tsmoo_kpb, tsmoo_niter, iso_opt, trackid_no_or, output_tcat, output_tstat, wdir, no_clean)
@@ -300,5 +300,8 @@ export {
       FatProcConnecVisOutputs,
       FatProcConnecVisParameters,
       fat_proc_connec_vis,
+      fat_proc_connec_vis_cargs,
+      fat_proc_connec_vis_execute,
+      fat_proc_connec_vis_outputs,
       fat_proc_connec_vis_params,
 };

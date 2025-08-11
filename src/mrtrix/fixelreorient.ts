@@ -12,14 +12,14 @@ const FIXELREORIENT_METADATA: Metadata = {
 
 
 interface FixelreorientConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelreorient.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelreorientParameters {
-    "__STYXTYPE__": "fixelreorient";
+    "@type": "mrtrix.fixelreorient";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface FixelreorientParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelreorient": fixelreorient_cargs,
-        "config": fixelreorient_config_cargs,
+        "mrtrix.fixelreorient": fixelreorient_cargs,
+        "mrtrix.fixelreorient.config": fixelreorient_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixelreorient": fixelreorient_outputs,
+        "mrtrix.fixelreorient": fixelreorient_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelreorient_config_params(
     key: string,
     value: string,
 ): FixelreorientConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelreorient.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function fixelreorient_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelreorient_config_cargs(
     params: FixelreorientConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface FixelreorientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixel_in the input fixel directory
+ * @param warp a 4D deformation field used to perform reorientation. Reorientation is performed by applying the Jacobian affine transform in each voxel in the warp, then re-normalising the vector representing the fixel direction
+ * @param fixel_out the output fixel directory. If the the input and output directories are the same, the existing directions file will be replaced (providing the -force option is supplied). If a new directory is supplied then the fixel directions and all other fixel data will be copied to the new directory.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelreorient_params(
     fixel_in: InputPathType,
     warp: InputPathType,
@@ -140,25 +157,8 @@ function fixelreorient_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelreorientParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixel_in the input fixel directory
-     * @param warp a 4D deformation field used to perform reorientation. Reorientation is performed by applying the Jacobian affine transform in each voxel in the warp, then re-normalising the vector representing the fixel direction
-     * @param fixel_out the output fixel directory. If the the input and output directories are the same, the existing directions file will be replaced (providing the -force option is supplied). If a new directory is supplied then the fixel directions and all other fixel data will be copied to the new directory.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelreorient" as const,
+        "@type": "mrtrix.fixelreorient" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function fixelreorient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelreorient_cargs(
     params: FixelreorientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelreorient");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function fixelreorient_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function fixelreorient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelreorient_outputs(
     params: FixelreorientParameters,
     execution: Execution,
 ): FixelreorientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelreorientOutputs = {
         root: execution.outputFile("."),
         fixel_out: execution.outputFile([(params["fixel_out"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function fixelreorient_outputs(
 }
 
 
+/**
+ * Reorient fixel directions.
+ *
+ * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
+ */
 function fixelreorient_execute(
     params: FixelreorientParameters,
     execution: Execution,
 ): FixelreorientOutputs {
-    /**
-     * Reorient fixel directions.
-     * 
-     * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelreorient_cargs(params, execution)
     const ret = fixelreorient_outputs(params, execution)
@@ -277,6 +277,34 @@ function fixelreorient_execute(
 }
 
 
+/**
+ * Reorient fixel directions.
+ *
+ * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fixel_in the input fixel directory
+ * @param warp a 4D deformation field used to perform reorientation. Reorientation is performed by applying the Jacobian affine transform in each voxel in the warp, then re-normalising the vector representing the fixel direction
+ * @param fixel_out the output fixel directory. If the the input and output directories are the same, the existing directions file will be replaced (providing the -force option is supplied). If a new directory is supplied then the fixel directions and all other fixel data will be copied to the new directory.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
+ */
 function fixelreorient(
     fixel_in: InputPathType,
     warp: InputPathType,
@@ -291,34 +319,6 @@ function fixelreorient(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelreorientOutputs {
-    /**
-     * Reorient fixel directions.
-     * 
-     * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fixel_in the input fixel directory
-     * @param warp a 4D deformation field used to perform reorientation. Reorientation is performed by applying the Jacobian affine transform in each voxel in the warp, then re-normalising the vector representing the fixel direction
-     * @param fixel_out the output fixel directory. If the the input and output directories are the same, the existing directions file will be replaced (providing the -force option is supplied). If a new directory is supplied then the fixel directions and all other fixel data will be copied to the new directory.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELREORIENT_METADATA);
     const params = fixelreorient_params(fixel_in, warp, fixel_out, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       FixelreorientOutputs,
       FixelreorientParameters,
       fixelreorient,
+      fixelreorient_cargs,
+      fixelreorient_config_cargs,
       fixelreorient_config_params,
+      fixelreorient_execute,
+      fixelreorient_outputs,
       fixelreorient_params,
 };

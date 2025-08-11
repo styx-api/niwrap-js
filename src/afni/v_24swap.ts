@@ -12,40 +12,40 @@ const V_24SWAP_METADATA: Metadata = {
 
 
 interface V24swapParameters {
-    "__STYXTYPE__": "24swap";
+    "@type": "afni.24swap";
     "quiet": boolean;
     "pattern"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "24swap": v_24swap_cargs,
+        "afni.24swap": v_24swap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface V24swapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input file(s) to swap bytes
+ * @param quiet Operate quietly
+ * @param pattern Pattern that determines the pattern of 2 and 4 byte swaps.
+ *
+ * @returns Parameter dictionary
+ */
 function v_24swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
     pattern: string | null = null,
 ): V24swapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input file(s) to swap bytes
-     * @param quiet Operate quietly
-     * @param pattern Pattern that determines the pattern of 2 and 4 byte swaps.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "24swap" as const,
+        "@type": "afni.24swap" as const,
         "quiet": quiet,
         "input_files": input_files,
     };
@@ -91,18 +91,18 @@ function v_24swap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_24swap_cargs(
     params: V24swapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("24swap");
     if ((params["quiet"] ?? null)) {
@@ -119,18 +119,18 @@ function v_24swap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_24swap_outputs(
     params: V24swapParameters,
     execution: Execution,
 ): V24swapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V24swapOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function v_24swap_outputs(
 }
 
 
+/**
+ * Swaps bytes pairs and/or quadruples on the files listed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V24swapOutputs`).
+ */
 function v_24swap_execute(
     params: V24swapParameters,
     execution: Execution,
 ): V24swapOutputs {
-    /**
-     * Swaps bytes pairs and/or quadruples on the files listed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V24swapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_24swap_cargs(params, execution)
     const ret = v_24swap_outputs(params, execution)
@@ -162,26 +162,26 @@ function v_24swap_execute(
 }
 
 
+/**
+ * Swaps bytes pairs and/or quadruples on the files listed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input file(s) to swap bytes
+ * @param quiet Operate quietly
+ * @param pattern Pattern that determines the pattern of 2 and 4 byte swaps.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V24swapOutputs`).
+ */
 function v_24swap(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
     pattern: string | null = null,
     runner: Runner | null = null,
 ): V24swapOutputs {
-    /**
-     * Swaps bytes pairs and/or quadruples on the files listed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input file(s) to swap bytes
-     * @param quiet Operate quietly
-     * @param pattern Pattern that determines the pattern of 2 and 4 byte swaps.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V24swapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_24SWAP_METADATA);
     const params = v_24swap_params(input_files, quiet, pattern)
@@ -194,5 +194,8 @@ export {
       V24swapParameters,
       V_24SWAP_METADATA,
       v_24swap,
+      v_24swap_cargs,
+      v_24swap_execute,
+      v_24swap_outputs,
       v_24swap_params,
 };

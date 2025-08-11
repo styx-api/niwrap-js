@@ -12,38 +12,38 @@ const SPHERE_SUBJECT_LH_METADATA: Metadata = {
 
 
 interface SphereSubjectLhParameters {
-    "__STYXTYPE__": "sphere_subject-lh";
+    "@type": "freesurfer.sphere_subject-lh";
     "license_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sphere_subject-lh": sphere_subject_lh_cargs,
+        "freesurfer.sphere_subject-lh": sphere_subject_lh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SphereSubjectLhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param license_file Path to the FreeSurfer license file
+ *
+ * @returns Parameter dictionary
+ */
 function sphere_subject_lh_params(
     license_file: InputPathType,
 ): SphereSubjectLhParameters {
-    /**
-     * Build parameters.
-    
-     * @param license_file Path to the FreeSurfer license file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sphere_subject-lh" as const,
+        "@type": "freesurfer.sphere_subject-lh" as const,
         "license_file": license_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sphere_subject_lh_cargs(
     params: SphereSubjectLhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sphere_subject-lh");
     cargs.push(
@@ -103,18 +103,18 @@ function sphere_subject_lh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sphere_subject_lh_outputs(
     params: SphereSubjectLhParameters,
     execution: Execution,
 ): SphereSubjectLhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SphereSubjectLhOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function sphere_subject_lh_outputs(
 }
 
 
+/**
+ * Tool for processing spherical representations in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SphereSubjectLhOutputs`).
+ */
 function sphere_subject_lh_execute(
     params: SphereSubjectLhParameters,
     execution: Execution,
 ): SphereSubjectLhOutputs {
-    /**
-     * Tool for processing spherical representations in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SphereSubjectLhOutputs`).
-     */
     params = execution.params(params)
     const cargs = sphere_subject_lh_cargs(params, execution)
     const ret = sphere_subject_lh_outputs(params, execution)
@@ -146,22 +146,22 @@ function sphere_subject_lh_execute(
 }
 
 
+/**
+ * Tool for processing spherical representations in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param license_file Path to the FreeSurfer license file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SphereSubjectLhOutputs`).
+ */
 function sphere_subject_lh(
     license_file: InputPathType,
     runner: Runner | null = null,
 ): SphereSubjectLhOutputs {
-    /**
-     * Tool for processing spherical representations in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param license_file Path to the FreeSurfer license file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SphereSubjectLhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPHERE_SUBJECT_LH_METADATA);
     const params = sphere_subject_lh_params(license_file)
@@ -174,5 +174,8 @@ export {
       SphereSubjectLhOutputs,
       SphereSubjectLhParameters,
       sphere_subject_lh,
+      sphere_subject_lh_cargs,
+      sphere_subject_lh_execute,
+      sphere_subject_lh_outputs,
       sphere_subject_lh_params,
 };

@@ -12,39 +12,39 @@ const V__4_DAVERAGE_METADATA: Metadata = {
 
 
 interface V4DaverageParameters {
-    "__STYXTYPE__": "@4Daverage";
+    "@type": "afni.@4Daverage";
     "output_prefix": string;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@4Daverage": v__4_daverage_cargs,
+        "afni.@4Daverage": v__4_daverage_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface V4DaverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_prefix Prefix for the output 3D+t brick
+ * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
+ *
+ * @returns Parameter dictionary
+ */
 function v__4_daverage_params(
     output_prefix: string,
     input_files: Array<InputPathType>,
 ): V4DaverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_prefix Prefix for the output 3D+t brick
-     * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@4Daverage" as const,
+        "@type": "afni.@4Daverage" as const,
         "output_prefix": output_prefix,
         "input_files": input_files,
     };
@@ -85,18 +85,18 @@ function v__4_daverage_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__4_daverage_cargs(
     params: V4DaverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@4Daverage");
     cargs.push((params["output_prefix"] ?? null));
@@ -105,18 +105,18 @@ function v__4_daverage_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__4_daverage_outputs(
     params: V4DaverageParameters,
     execution: Execution,
 ): V4DaverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V4DaverageOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function v__4_daverage_outputs(
 }
 
 
+/**
+ * Script for computing average 3D+time bricks using 3Dcalc.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
+ */
 function v__4_daverage_execute(
     params: V4DaverageParameters,
     execution: Execution,
 ): V4DaverageOutputs {
-    /**
-     * Script for computing average 3D+time bricks using 3Dcalc.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__4_daverage_cargs(params, execution)
     const ret = v__4_daverage_outputs(params, execution)
@@ -148,24 +148,24 @@ function v__4_daverage_execute(
 }
 
 
+/**
+ * Script for computing average 3D+time bricks using 3Dcalc.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param output_prefix Prefix for the output 3D+t brick
+ * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
+ */
 function v__4_daverage(
     output_prefix: string,
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V4DaverageOutputs {
-    /**
-     * Script for computing average 3D+time bricks using 3Dcalc.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param output_prefix Prefix for the output 3D+t brick
-     * @param input_files List of 3D+t brick filenames to be averaged (e.g., brick1+orig, brick2+orig). Can use wildcards.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__4_DAVERAGE_METADATA);
     const params = v__4_daverage_params(output_prefix, input_files)
@@ -178,5 +178,8 @@ export {
       V4DaverageParameters,
       V__4_DAVERAGE_METADATA,
       v__4_daverage,
+      v__4_daverage_cargs,
+      v__4_daverage_execute,
+      v__4_daverage_outputs,
       v__4_daverage_params,
 };

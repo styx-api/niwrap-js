@@ -12,7 +12,7 @@ const FAT_MVM_PREP_METADATA: Metadata = {
 
 
 interface FatMvmPrepParameters {
-    "__STYXTYPE__": "fat_mvm_prep";
+    "@type": "afni.fat_mvm_prep";
     "prefix": string;
     "csv_file": InputPathType;
     "matrix_files"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface FatMvmPrepParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mvm_prep": fat_mvm_prep_cargs,
+        "afni.fat_mvm_prep": fat_mvm_prep_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mvm_prep": fat_mvm_prep_outputs,
+        "afni.fat_mvm_prep": fat_mvm_prep_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface FatMvmPrepOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output files.
+ * @param csv_file Comma-separated variable (CSV) file for input.
+ * @param matrix_files Set of matrix (*.grid or *.netcc) files by searchable path.
+ * @param list_match Text file containing two columns: path to subject matrix file and CSV IDs.
+ * @param unionize_rois Make the ROI list as the union of elements across the group.
+ * @param na_warn_off Turn off the automatic warnings as the data table is created.
+ * @param extern_labels_no Turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mvm_prep_params(
     prefix: string,
     csv_file: InputPathType,
@@ -87,21 +100,8 @@ function fat_mvm_prep_params(
     na_warn_off: boolean = false,
     extern_labels_no: boolean = false,
 ): FatMvmPrepParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output files.
-     * @param csv_file Comma-separated variable (CSV) file for input.
-     * @param matrix_files Set of matrix (*.grid or *.netcc) files by searchable path.
-     * @param list_match Text file containing two columns: path to subject matrix file and CSV IDs.
-     * @param unionize_rois Make the ROI list as the union of elements across the group.
-     * @param na_warn_off Turn off the automatic warnings as the data table is created.
-     * @param extern_labels_no Turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mvm_prep" as const,
+        "@type": "afni.fat_mvm_prep" as const,
         "prefix": prefix,
         "csv_file": csv_file,
         "unionize_rois": unionize_rois,
@@ -118,18 +118,18 @@ function fat_mvm_prep_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mvm_prep_cargs(
     params: FatMvmPrepParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mvm_prep.py");
     cargs.push(
@@ -165,18 +165,18 @@ function fat_mvm_prep_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mvm_prep_outputs(
     params: FatMvmPrepParameters,
     execution: Execution,
 ): FatMvmPrepOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMvmPrepOutputs = {
         root: execution.outputFile("."),
         mvmtbl: execution.outputFile([(params["prefix"] ?? null), "_MVMtbl.txt"].join('')),
@@ -186,22 +186,22 @@ function fat_mvm_prep_outputs(
 }
 
 
+/**
+ * Combine FATCAT output with CSV data for statistical modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
+ */
 function fat_mvm_prep_execute(
     params: FatMvmPrepParameters,
     execution: Execution,
 ): FatMvmPrepOutputs {
-    /**
-     * Combine FATCAT output with CSV data for statistical modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mvm_prep_cargs(params, execution)
     const ret = fat_mvm_prep_outputs(params, execution)
@@ -210,6 +210,24 @@ function fat_mvm_prep_execute(
 }
 
 
+/**
+ * Combine FATCAT output with CSV data for statistical modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output files.
+ * @param csv_file Comma-separated variable (CSV) file for input.
+ * @param matrix_files Set of matrix (*.grid or *.netcc) files by searchable path.
+ * @param list_match Text file containing two columns: path to subject matrix file and CSV IDs.
+ * @param unionize_rois Make the ROI list as the union of elements across the group.
+ * @param na_warn_off Turn off the automatic warnings as the data table is created.
+ * @param extern_labels_no Turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
+ */
 function fat_mvm_prep(
     prefix: string,
     csv_file: InputPathType,
@@ -220,24 +238,6 @@ function fat_mvm_prep(
     extern_labels_no: boolean = false,
     runner: Runner | null = null,
 ): FatMvmPrepOutputs {
-    /**
-     * Combine FATCAT output with CSV data for statistical modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output files.
-     * @param csv_file Comma-separated variable (CSV) file for input.
-     * @param matrix_files Set of matrix (*.grid or *.netcc) files by searchable path.
-     * @param list_match Text file containing two columns: path to subject matrix file and CSV IDs.
-     * @param unionize_rois Make the ROI list as the union of elements across the group.
-     * @param na_warn_off Turn off the automatic warnings as the data table is created.
-     * @param extern_labels_no Turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MVM_PREP_METADATA);
     const params = fat_mvm_prep_params(prefix, csv_file, matrix_files, list_match, unionize_rois, na_warn_off, extern_labels_no)
@@ -250,5 +250,8 @@ export {
       FatMvmPrepOutputs,
       FatMvmPrepParameters,
       fat_mvm_prep,
+      fat_mvm_prep_cargs,
+      fat_mvm_prep_execute,
+      fat_mvm_prep_outputs,
       fat_mvm_prep_params,
 };

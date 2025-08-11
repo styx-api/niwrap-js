@@ -12,7 +12,7 @@ const V__GRAYPLOT_METADATA: Metadata = {
 
 
 interface VGrayplotParameters {
-    "__STYXTYPE__": "@grayplot";
+    "@type": "afni.@grayplot";
     "dirname": string;
     "pvorder": boolean;
     "peelorder": boolean;
@@ -21,35 +21,35 @@ interface VGrayplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@grayplot": v__grayplot_cargs,
+        "afni.@grayplot": v__grayplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@grayplot": v__grayplot_outputs,
+        "afni.@grayplot": v__grayplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface VGrayplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dirname Directory containing afni_proc.py results.
+ * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
+ * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
+ * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
+ * @param allorder Create grayplots for all ordering methods.
+ *
+ * @returns Parameter dictionary
+ */
 function v__grayplot_params(
     dirname: string,
     pvorder: boolean = false,
@@ -79,19 +90,8 @@ function v__grayplot_params(
     ijkorder: boolean = false,
     allorder: boolean = false,
 ): VGrayplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param dirname Directory containing afni_proc.py results.
-     * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
-     * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
-     * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
-     * @param allorder Create grayplots for all ordering methods.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@grayplot" as const,
+        "@type": "afni.@grayplot" as const,
         "dirname": dirname,
         "pvorder": pvorder,
         "peelorder": peelorder,
@@ -102,18 +102,18 @@ function v__grayplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__grayplot_cargs(
     params: VGrayplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@grayplot");
     cargs.push((params["dirname"] ?? null));
@@ -133,18 +133,18 @@ function v__grayplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__grayplot_outputs(
     params: VGrayplotParameters,
     execution: Execution,
 ): VGrayplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGrayplotOutputs = {
         root: execution.outputFile("."),
         grayplot_img: execution.outputFile(["Grayplot.errts.*.png"].join('')),
@@ -153,22 +153,22 @@ function v__grayplot_outputs(
 }
 
 
+/**
+ * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
+ */
 function v__grayplot_execute(
     params: VGrayplotParameters,
     execution: Execution,
 ): VGrayplotOutputs {
-    /**
-     * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__grayplot_cargs(params, execution)
     const ret = v__grayplot_outputs(params, execution)
@@ -177,6 +177,22 @@ function v__grayplot_execute(
 }
 
 
+/**
+ * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dirname Directory containing afni_proc.py results.
+ * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
+ * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
+ * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
+ * @param allorder Create grayplots for all ordering methods.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
+ */
 function v__grayplot(
     dirname: string,
     pvorder: boolean = false,
@@ -185,22 +201,6 @@ function v__grayplot(
     allorder: boolean = false,
     runner: Runner | null = null,
 ): VGrayplotOutputs {
-    /**
-     * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dirname Directory containing afni_proc.py results.
-     * @param pvorder Within each partition, voxels are ordered by a simple similarity measure.
-     * @param peelorder Within each partition, voxels are ordered by how many 'peel' operations are needed to reach a given voxel.
-     * @param ijkorder Within each partition, voxels are ordered by the 3D index in which they appear in the dataset.
-     * @param allorder Create grayplots for all ordering methods.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GRAYPLOT_METADATA);
     const params = v__grayplot_params(dirname, pvorder, peelorder, ijkorder, allorder)
@@ -213,5 +213,8 @@ export {
       VGrayplotParameters,
       V__GRAYPLOT_METADATA,
       v__grayplot,
+      v__grayplot_cargs,
+      v__grayplot_execute,
+      v__grayplot_outputs,
       v__grayplot_params,
 };

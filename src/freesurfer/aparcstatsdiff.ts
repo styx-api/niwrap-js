@@ -12,7 +12,7 @@ const APARCSTATSDIFF_METADATA: Metadata = {
 
 
 interface AparcstatsdiffParameters {
-    "__STYXTYPE__": "aparcstatsdiff";
+    "@type": "freesurfer.aparcstatsdiff";
     "subj1": string;
     "subj2": string;
     "hemi": string;
@@ -22,35 +22,35 @@ interface AparcstatsdiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aparcstatsdiff": aparcstatsdiff_cargs,
+        "freesurfer.aparcstatsdiff": aparcstatsdiff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "aparcstatsdiff": aparcstatsdiff_outputs,
+        "freesurfer.aparcstatsdiff": aparcstatsdiff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface AparcstatsdiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subj1 Subject 1 identifier
+ * @param subj2 Subject 2 identifier
+ * @param hemi Hemisphere (rh or lh)
+ * @param parc Parcellation scheme (aparc or aparc.a2009s)
+ * @param meas Measure type (area, volume, or thickness)
+ * @param outdir Directory to write the output table file
+ *
+ * @returns Parameter dictionary
+ */
 function aparcstatsdiff_params(
     subj1: string,
     subj2: string,
@@ -81,20 +93,8 @@ function aparcstatsdiff_params(
     meas: string,
     outdir: string | null = null,
 ): AparcstatsdiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param subj1 Subject 1 identifier
-     * @param subj2 Subject 2 identifier
-     * @param hemi Hemisphere (rh or lh)
-     * @param parc Parcellation scheme (aparc or aparc.a2009s)
-     * @param meas Measure type (area, volume, or thickness)
-     * @param outdir Directory to write the output table file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aparcstatsdiff" as const,
+        "@type": "freesurfer.aparcstatsdiff" as const,
         "subj1": subj1,
         "subj2": subj2,
         "hemi": hemi,
@@ -108,18 +108,18 @@ function aparcstatsdiff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aparcstatsdiff_cargs(
     params: AparcstatsdiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aparcstatsdiff");
     cargs.push((params["subj1"] ?? null));
@@ -134,18 +134,18 @@ function aparcstatsdiff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aparcstatsdiff_outputs(
     params: AparcstatsdiffParameters,
     execution: Execution,
 ): AparcstatsdiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AparcstatsdiffOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["aparcstats-", (params["hemi"] ?? null), ".", (params["parc"] ?? null), ".", (params["meas"] ?? null), ".txt"].join('')),
@@ -154,22 +154,22 @@ function aparcstatsdiff_outputs(
 }
 
 
+/**
+ * Utility to calculate percentage differences in aparc morphometry data between two subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
+ */
 function aparcstatsdiff_execute(
     params: AparcstatsdiffParameters,
     execution: Execution,
 ): AparcstatsdiffOutputs {
-    /**
-     * Utility to calculate percentage differences in aparc morphometry data between two subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = aparcstatsdiff_cargs(params, execution)
     const ret = aparcstatsdiff_outputs(params, execution)
@@ -178,6 +178,23 @@ function aparcstatsdiff_execute(
 }
 
 
+/**
+ * Utility to calculate percentage differences in aparc morphometry data between two subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subj1 Subject 1 identifier
+ * @param subj2 Subject 2 identifier
+ * @param hemi Hemisphere (rh or lh)
+ * @param parc Parcellation scheme (aparc or aparc.a2009s)
+ * @param meas Measure type (area, volume, or thickness)
+ * @param outdir Directory to write the output table file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
+ */
 function aparcstatsdiff(
     subj1: string,
     subj2: string,
@@ -187,23 +204,6 @@ function aparcstatsdiff(
     outdir: string | null = null,
     runner: Runner | null = null,
 ): AparcstatsdiffOutputs {
-    /**
-     * Utility to calculate percentage differences in aparc morphometry data between two subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subj1 Subject 1 identifier
-     * @param subj2 Subject 2 identifier
-     * @param hemi Hemisphere (rh or lh)
-     * @param parc Parcellation scheme (aparc or aparc.a2009s)
-     * @param meas Measure type (area, volume, or thickness)
-     * @param outdir Directory to write the output table file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APARCSTATSDIFF_METADATA);
     const params = aparcstatsdiff_params(subj1, subj2, hemi, parc, meas, outdir)
@@ -216,5 +216,8 @@ export {
       AparcstatsdiffOutputs,
       AparcstatsdiffParameters,
       aparcstatsdiff,
+      aparcstatsdiff_cargs,
+      aparcstatsdiff_execute,
+      aparcstatsdiff_outputs,
       aparcstatsdiff_params,
 };

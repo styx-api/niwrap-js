@@ -12,7 +12,7 @@ const FAT_PROC_DECMAP_METADATA: Metadata = {
 
 
 interface FatProcDecmapParameters {
-    "__STYXTYPE__": "fat_proc_decmap";
+    "@type": "afni.fat_proc_decmap";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
     "prefix": string;
@@ -27,35 +27,35 @@ interface FatProcDecmapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_decmap": fat_proc_decmap_cargs,
+        "afni.fat_proc_decmap": fat_proc_decmap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_decmap": fat_proc_decmap_outputs,
+        "afni.fat_proc_decmap": fat_proc_decmap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,23 @@ interface FatProcDecmapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_fa Input FA (scalar) map.
+ * @param in_v1 Input first eigenvector (3-vector) map.
+ * @param prefix Set prefix (and path) for output DWI data.
+ * @param mask Optional mask for picking out a region. Otherwise, only places with FA>0 are given coloration.
+ * @param fa_thr For QC1 type of DEC images, use FFF to threshold where DEC values are calculated (default: 0.2).
+ * @param fa_sca For QC2 type of DEC images, use SSS to scale the FA weighting of what would otherwise be a 'classical' DEC map (default: 0.7).
+ * @param workdir Specify a working directory, which can be removed (default: '__WORKING_decmap').
+ * @param no_clean Do not delete temporary files when finishing.
+ * @param qc_prefix Set the prefix of the QC image files (default: 'PREFIX').
+ * @param no_cmd_out Do not save the command line call of this program and location where it was run.
+ * @param no_qc_view Turn off generating QC image files.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_decmap_params(
     in_fa: InputPathType,
     in_v1: InputPathType,
@@ -111,25 +128,8 @@ function fat_proc_decmap_params(
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
 ): FatProcDecmapParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_fa Input FA (scalar) map.
-     * @param in_v1 Input first eigenvector (3-vector) map.
-     * @param prefix Set prefix (and path) for output DWI data.
-     * @param mask Optional mask for picking out a region. Otherwise, only places with FA>0 are given coloration.
-     * @param fa_thr For QC1 type of DEC images, use FFF to threshold where DEC values are calculated (default: 0.2).
-     * @param fa_sca For QC2 type of DEC images, use SSS to scale the FA weighting of what would otherwise be a 'classical' DEC map (default: 0.7).
-     * @param workdir Specify a working directory, which can be removed (default: '__WORKING_decmap').
-     * @param no_clean Do not delete temporary files when finishing.
-     * @param qc_prefix Set the prefix of the QC image files (default: 'PREFIX').
-     * @param no_cmd_out Do not save the command line call of this program and location where it was run.
-     * @param no_qc_view Turn off generating QC image files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_decmap" as const,
+        "@type": "afni.fat_proc_decmap" as const,
         "in_fa": in_fa,
         "in_v1": in_v1,
         "prefix": prefix,
@@ -156,18 +156,18 @@ function fat_proc_decmap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_decmap_cargs(
     params: FatProcDecmapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_decmap");
     cargs.push(
@@ -225,18 +225,18 @@ function fat_proc_decmap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_decmap_outputs(
     params: FatProcDecmapParameters,
     execution: Execution,
 ): FatProcDecmapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcDecmapOutputs = {
         root: execution.outputFile("."),
         outfile_dec_rgb: execution.outputFile([(params["prefix"] ?? null), "_dec.nii.gz"].join('')),
@@ -250,22 +250,22 @@ function fat_proc_decmap_outputs(
 }
 
 
+/**
+ * This program makes a directionally encoded color (DEC) map for DTI results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
+ */
 function fat_proc_decmap_execute(
     params: FatProcDecmapParameters,
     execution: Execution,
 ): FatProcDecmapOutputs {
-    /**
-     * This program makes a directionally encoded color (DEC) map for DTI results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_decmap_cargs(params, execution)
     const ret = fat_proc_decmap_outputs(params, execution)
@@ -274,6 +274,28 @@ function fat_proc_decmap_execute(
 }
 
 
+/**
+ * This program makes a directionally encoded color (DEC) map for DTI results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_fa Input FA (scalar) map.
+ * @param in_v1 Input first eigenvector (3-vector) map.
+ * @param prefix Set prefix (and path) for output DWI data.
+ * @param mask Optional mask for picking out a region. Otherwise, only places with FA>0 are given coloration.
+ * @param fa_thr For QC1 type of DEC images, use FFF to threshold where DEC values are calculated (default: 0.2).
+ * @param fa_sca For QC2 type of DEC images, use SSS to scale the FA weighting of what would otherwise be a 'classical' DEC map (default: 0.7).
+ * @param workdir Specify a working directory, which can be removed (default: '__WORKING_decmap').
+ * @param no_clean Do not delete temporary files when finishing.
+ * @param qc_prefix Set the prefix of the QC image files (default: 'PREFIX').
+ * @param no_cmd_out Do not save the command line call of this program and location where it was run.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
+ */
 function fat_proc_decmap(
     in_fa: InputPathType,
     in_v1: InputPathType,
@@ -288,28 +310,6 @@ function fat_proc_decmap(
     no_qc_view: boolean = false,
     runner: Runner | null = null,
 ): FatProcDecmapOutputs {
-    /**
-     * This program makes a directionally encoded color (DEC) map for DTI results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_fa Input FA (scalar) map.
-     * @param in_v1 Input first eigenvector (3-vector) map.
-     * @param prefix Set prefix (and path) for output DWI data.
-     * @param mask Optional mask for picking out a region. Otherwise, only places with FA>0 are given coloration.
-     * @param fa_thr For QC1 type of DEC images, use FFF to threshold where DEC values are calculated (default: 0.2).
-     * @param fa_sca For QC2 type of DEC images, use SSS to scale the FA weighting of what would otherwise be a 'classical' DEC map (default: 0.7).
-     * @param workdir Specify a working directory, which can be removed (default: '__WORKING_decmap').
-     * @param no_clean Do not delete temporary files when finishing.
-     * @param qc_prefix Set the prefix of the QC image files (default: 'PREFIX').
-     * @param no_cmd_out Do not save the command line call of this program and location where it was run.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_DECMAP_METADATA);
     const params = fat_proc_decmap_params(in_fa, in_v1, prefix, mask, fa_thr, fa_sca, workdir, no_clean, qc_prefix, no_cmd_out, no_qc_view)
@@ -322,5 +322,8 @@ export {
       FatProcDecmapOutputs,
       FatProcDecmapParameters,
       fat_proc_decmap,
+      fat_proc_decmap_cargs,
+      fat_proc_decmap_execute,
+      fat_proc_decmap_outputs,
       fat_proc_decmap_params,
 };

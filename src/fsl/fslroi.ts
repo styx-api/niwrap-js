@@ -12,7 +12,7 @@ const FSLROI_METADATA: Metadata = {
 
 
 interface FslroiParameters {
-    "__STYXTYPE__": "fslroi";
+    "@type": "fsl.fslroi";
     "infile": InputPathType;
     "outfile": string;
     "xmin"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface FslroiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslroi": fslroi_cargs,
+        "fsl.fslroi": fslroi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslroi": fslroi_outputs,
+        "fsl.fslroi": fslroi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface FslroiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image file
+ * @param outfile Output image file
+ * @param xmin Minimum X coordinate for ROI (indexing starts at 0)
+ * @param xsize Size of the ROI in X direction
+ * @param ymin Minimum Y coordinate for ROI (indexing starts at 0)
+ * @param ysize Size of the ROI in Y direction
+ * @param zmin Minimum Z coordinate for ROI (indexing starts at 0)
+ * @param zsize Size of the ROI in Z direction
+ * @param tmin Minimum T coordinate for ROI (indexing starts at 0)
+ * @param tsize Size of the ROI in T direction
+ *
+ * @returns Parameter dictionary
+ */
 function fslroi_params(
     infile: InputPathType,
     outfile: string,
@@ -89,24 +105,8 @@ function fslroi_params(
     tmin: number | null = null,
     tsize: number | null = null,
 ): FslroiParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image file
-     * @param outfile Output image file
-     * @param xmin Minimum X coordinate for ROI (indexing starts at 0)
-     * @param xsize Size of the ROI in X direction
-     * @param ymin Minimum Y coordinate for ROI (indexing starts at 0)
-     * @param ysize Size of the ROI in Y direction
-     * @param zmin Minimum Z coordinate for ROI (indexing starts at 0)
-     * @param zsize Size of the ROI in Z direction
-     * @param tmin Minimum T coordinate for ROI (indexing starts at 0)
-     * @param tsize Size of the ROI in T direction
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslroi" as const,
+        "@type": "fsl.fslroi" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -138,18 +138,18 @@ function fslroi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslroi_cargs(
     params: FslroiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslroi");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -182,18 +182,18 @@ function fslroi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslroi_outputs(
     params: FslroiParameters,
     execution: Execution,
 ): FslroiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslroiOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -202,22 +202,22 @@ function fslroi_outputs(
 }
 
 
+/**
+ * Extracts a region of interest (ROI) from an image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslroiOutputs`).
+ */
 function fslroi_execute(
     params: FslroiParameters,
     execution: Execution,
 ): FslroiOutputs {
-    /**
-     * Extracts a region of interest (ROI) from an image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslroiOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslroi_cargs(params, execution)
     const ret = fslroi_outputs(params, execution)
@@ -226,6 +226,27 @@ function fslroi_execute(
 }
 
 
+/**
+ * Extracts a region of interest (ROI) from an image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image file
+ * @param outfile Output image file
+ * @param xmin Minimum X coordinate for ROI (indexing starts at 0)
+ * @param xsize Size of the ROI in X direction
+ * @param ymin Minimum Y coordinate for ROI (indexing starts at 0)
+ * @param ysize Size of the ROI in Y direction
+ * @param zmin Minimum Z coordinate for ROI (indexing starts at 0)
+ * @param zsize Size of the ROI in Z direction
+ * @param tmin Minimum T coordinate for ROI (indexing starts at 0)
+ * @param tsize Size of the ROI in T direction
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslroiOutputs`).
+ */
 function fslroi(
     infile: InputPathType,
     outfile: string,
@@ -239,27 +260,6 @@ function fslroi(
     tsize: number | null = null,
     runner: Runner | null = null,
 ): FslroiOutputs {
-    /**
-     * Extracts a region of interest (ROI) from an image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image file
-     * @param outfile Output image file
-     * @param xmin Minimum X coordinate for ROI (indexing starts at 0)
-     * @param xsize Size of the ROI in X direction
-     * @param ymin Minimum Y coordinate for ROI (indexing starts at 0)
-     * @param ysize Size of the ROI in Y direction
-     * @param zmin Minimum Z coordinate for ROI (indexing starts at 0)
-     * @param zsize Size of the ROI in Z direction
-     * @param tmin Minimum T coordinate for ROI (indexing starts at 0)
-     * @param tsize Size of the ROI in T direction
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslroiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLROI_METADATA);
     const params = fslroi_params(infile, outfile, xmin, xsize, ymin, ysize, zmin, zsize, tmin, tsize)
@@ -272,5 +272,8 @@ export {
       FslroiOutputs,
       FslroiParameters,
       fslroi,
+      fslroi_cargs,
+      fslroi_execute,
+      fslroi_outputs,
       fslroi_params,
 };

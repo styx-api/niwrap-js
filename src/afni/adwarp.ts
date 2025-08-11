@@ -12,7 +12,7 @@ const ADWARP_METADATA: Metadata = {
 
 
 interface AdwarpParameters {
-    "__STYXTYPE__": "adwarp";
+    "@type": "afni.adwarp";
     "apar": InputPathType;
     "dpar": string;
     "prefix"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface AdwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adwarp": adwarp_cargs,
+        "afni.adwarp": adwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adwarp": adwarp_outputs,
+        "afni.adwarp": adwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface AdwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param apar Set the anat parent dataset (nonoptional)
+ * @param dpar Set the data parent dataset (nonoptional). dset may contain a sub-brick selector, e.g., -dpar 'dset+orig[2,5,7]'
+ * @param prefix Set the prefix for the output dataset. Default is the prefix of 'dset'.
+ * @param dxyz Set the grid spacing in the output dataset. Default is 1 mm.
+ * @param verbose Print out progress reports.
+ * @param force Write out result even if it means deleting an existing dataset. Default is not to overwrite.
+ * @param resam Set resampling mode for all sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation). Default is Li for all sub-bricks.
+ * @param thr Set resampling mode for threshold sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
+ * @param func Set resampling mode for functional sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
+ *
+ * @returns Parameter dictionary
+ */
 function adwarp_params(
     apar: InputPathType,
     dpar: string,
@@ -91,23 +106,8 @@ function adwarp_params(
     thr: string | null = null,
     func: string | null = null,
 ): AdwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param apar Set the anat parent dataset (nonoptional)
-     * @param dpar Set the data parent dataset (nonoptional). dset may contain a sub-brick selector, e.g., -dpar 'dset+orig[2,5,7]'
-     * @param prefix Set the prefix for the output dataset. Default is the prefix of 'dset'.
-     * @param dxyz Set the grid spacing in the output dataset. Default is 1 mm.
-     * @param verbose Print out progress reports.
-     * @param force Write out result even if it means deleting an existing dataset. Default is not to overwrite.
-     * @param resam Set resampling mode for all sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation). Default is Li for all sub-bricks.
-     * @param thr Set resampling mode for threshold sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
-     * @param func Set resampling mode for functional sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adwarp" as const,
+        "@type": "afni.adwarp" as const,
         "apar": apar,
         "dpar": dpar,
         "verbose": verbose,
@@ -132,18 +132,18 @@ function adwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adwarp_cargs(
     params: AdwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adwarp");
     cargs.push(
@@ -194,18 +194,18 @@ function adwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adwarp_outputs(
     params: AdwarpParameters,
     execution: Execution,
 ): AdwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdwarpOutputs = {
         root: execution.outputFile("."),
         header_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -215,22 +215,22 @@ function adwarp_outputs(
 }
 
 
+/**
+ * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
+ */
 function adwarp_execute(
     params: AdwarpParameters,
     execution: Execution,
 ): AdwarpOutputs {
-    /**
-     * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = adwarp_cargs(params, execution)
     const ret = adwarp_outputs(params, execution)
@@ -239,6 +239,26 @@ function adwarp_execute(
 }
 
 
+/**
+ * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param apar Set the anat parent dataset (nonoptional)
+ * @param dpar Set the data parent dataset (nonoptional). dset may contain a sub-brick selector, e.g., -dpar 'dset+orig[2,5,7]'
+ * @param prefix Set the prefix for the output dataset. Default is the prefix of 'dset'.
+ * @param dxyz Set the grid spacing in the output dataset. Default is 1 mm.
+ * @param verbose Print out progress reports.
+ * @param force Write out result even if it means deleting an existing dataset. Default is not to overwrite.
+ * @param resam Set resampling mode for all sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation). Default is Li for all sub-bricks.
+ * @param thr Set resampling mode for threshold sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
+ * @param func Set resampling mode for functional sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
+ */
 function adwarp(
     apar: InputPathType,
     dpar: string,
@@ -251,26 +271,6 @@ function adwarp(
     func: string | null = null,
     runner: Runner | null = null,
 ): AdwarpOutputs {
-    /**
-     * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param apar Set the anat parent dataset (nonoptional)
-     * @param dpar Set the data parent dataset (nonoptional). dset may contain a sub-brick selector, e.g., -dpar 'dset+orig[2,5,7]'
-     * @param prefix Set the prefix for the output dataset. Default is the prefix of 'dset'.
-     * @param dxyz Set the grid spacing in the output dataset. Default is 1 mm.
-     * @param verbose Print out progress reports.
-     * @param force Write out result even if it means deleting an existing dataset. Default is not to overwrite.
-     * @param resam Set resampling mode for all sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation). Default is Li for all sub-bricks.
-     * @param thr Set resampling mode for threshold sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
-     * @param func Set resampling mode for functional sub-bricks. Modes: NN (Nearest Neighbor), Li (Linear Interpolation), Cu (Cubic Interpolation), Bk (Blocky Interpolation).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADWARP_METADATA);
     const params = adwarp_params(apar, dpar, prefix, dxyz, verbose, force, resam, thr, func)
@@ -283,5 +283,8 @@ export {
       AdwarpOutputs,
       AdwarpParameters,
       adwarp,
+      adwarp_cargs,
+      adwarp_execute,
+      adwarp_outputs,
       adwarp_params,
 };

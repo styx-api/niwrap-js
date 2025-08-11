@@ -12,7 +12,7 @@ const TKSURFER_METADATA: Metadata = {
 
 
 interface TksurferParameters {
-    "__STYXTYPE__": "tksurfer";
+    "@type": "freesurfer.tksurfer";
     "subject_id": string;
     "hemisphere": string;
     "surface_name": string;
@@ -20,33 +20,33 @@ interface TksurferParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tksurfer": tksurfer_cargs,
+        "freesurfer.tksurfer": tksurfer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface TksurferOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject identifier
+ * @param hemisphere Cortical hemisphere (e.g., lh or rh)
+ * @param surface_name Surface name (e.g., inflated, sphere, white)
+ * @param options Optional flags and parameters
+ *
+ * @returns Parameter dictionary
+ */
 function tksurfer_params(
     subject_id: string,
     hemisphere: string,
     surface_name: string,
     options: string | null = null,
 ): TksurferParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject identifier
-     * @param hemisphere Cortical hemisphere (e.g., lh or rh)
-     * @param surface_name Surface name (e.g., inflated, sphere, white)
-     * @param options Optional flags and parameters
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tksurfer" as const,
+        "@type": "freesurfer.tksurfer" as const,
         "subject_id": subject_id,
         "hemisphere": hemisphere,
         "surface_name": surface_name,
@@ -95,18 +95,18 @@ function tksurfer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tksurfer_cargs(
     params: TksurferParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tksurfer");
     cargs.push((params["subject_id"] ?? null));
@@ -119,18 +119,18 @@ function tksurfer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tksurfer_outputs(
     params: TksurferParameters,
     execution: Execution,
 ): TksurferOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TksurferOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function tksurfer_outputs(
 }
 
 
+/**
+ * 3D visualization tool for cortical surface models (part of FreeSurfer).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TksurferOutputs`).
+ */
 function tksurfer_execute(
     params: TksurferParameters,
     execution: Execution,
 ): TksurferOutputs {
-    /**
-     * 3D visualization tool for cortical surface models (part of FreeSurfer).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TksurferOutputs`).
-     */
     params = execution.params(params)
     const cargs = tksurfer_cargs(params, execution)
     const ret = tksurfer_outputs(params, execution)
@@ -162,6 +162,21 @@ function tksurfer_execute(
 }
 
 
+/**
+ * 3D visualization tool for cortical surface models (part of FreeSurfer).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject identifier
+ * @param hemisphere Cortical hemisphere (e.g., lh or rh)
+ * @param surface_name Surface name (e.g., inflated, sphere, white)
+ * @param options Optional flags and parameters
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TksurferOutputs`).
+ */
 function tksurfer(
     subject_id: string,
     hemisphere: string,
@@ -169,21 +184,6 @@ function tksurfer(
     options: string | null = null,
     runner: Runner | null = null,
 ): TksurferOutputs {
-    /**
-     * 3D visualization tool for cortical surface models (part of FreeSurfer).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject identifier
-     * @param hemisphere Cortical hemisphere (e.g., lh or rh)
-     * @param surface_name Surface name (e.g., inflated, sphere, white)
-     * @param options Optional flags and parameters
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TksurferOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKSURFER_METADATA);
     const params = tksurfer_params(subject_id, hemisphere, surface_name, options)
@@ -196,5 +196,8 @@ export {
       TksurferOutputs,
       TksurferParameters,
       tksurfer,
+      tksurfer_cargs,
+      tksurfer_execute,
+      tksurfer_outputs,
       tksurfer_params,
 };

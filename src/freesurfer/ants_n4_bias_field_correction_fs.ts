@@ -12,7 +12,7 @@ const ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA: Metadata = {
 
 
 interface AntsN4BiasFieldCorrectionFsParameters {
-    "__STYXTYPE__": "AntsN4BiasFieldCorrectionFs";
+    "@type": "freesurfer.AntsN4BiasFieldCorrectionFs";
     "input_file": InputPathType;
     "output_file": string;
     "mask_file"?: InputPathType | null | undefined;
@@ -23,35 +23,35 @@ interface AntsN4BiasFieldCorrectionFsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_cargs,
+        "freesurfer.AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_outputs,
+        "freesurfer.AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface AntsN4BiasFieldCorrectionFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume file.
+ * @param output_file Corrected output volume file.
+ * @param mask_file Use image mask during correction.
+ * @param shrink_factor Resample factor to decrease computation time. Default is 4.
+ * @param iterations Number of resolutions and max iterations per resolution. Default is `50 50 50 50`, which indicates 4 fitting levels with 50 iterations each.
+ * @param output_dtype Corrected output data type. Can be float, uchar, or int. Default is float.
+ * @param replace_zeros Replace 0s with offset + scale*rand(). Values will be remasked in the output if remask=1.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_n4_bias_field_correction_fs_params(
     input_file: InputPathType,
     output_file: string,
@@ -83,21 +96,8 @@ function ants_n4_bias_field_correction_fs_params(
     output_dtype: string | null = "float",
     replace_zeros: string | null = null,
 ): AntsN4BiasFieldCorrectionFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume file.
-     * @param output_file Corrected output volume file.
-     * @param mask_file Use image mask during correction.
-     * @param shrink_factor Resample factor to decrease computation time. Default is 4.
-     * @param iterations Number of resolutions and max iterations per resolution. Default is `50 50 50 50`, which indicates 4 fitting levels with 50 iterations each.
-     * @param output_dtype Corrected output data type. Can be float, uchar, or int. Default is float.
-     * @param replace_zeros Replace 0s with offset + scale*rand(). Values will be remasked in the output if remask=1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AntsN4BiasFieldCorrectionFs" as const,
+        "@type": "freesurfer.AntsN4BiasFieldCorrectionFs" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -120,18 +120,18 @@ function ants_n4_bias_field_correction_fs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_n4_bias_field_correction_fs_cargs(
     params: AntsN4BiasFieldCorrectionFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AntsN4BiasFieldCorrectionFs");
     cargs.push(
@@ -176,18 +176,18 @@ function ants_n4_bias_field_correction_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_n4_bias_field_correction_fs_outputs(
     params: AntsN4BiasFieldCorrectionFsParameters,
     execution: Execution,
 ): AntsN4BiasFieldCorrectionFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsN4BiasFieldCorrectionFsOutputs = {
         root: execution.outputFile("."),
         corrected_output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -196,22 +196,22 @@ function ants_n4_bias_field_correction_fs_outputs(
 }
 
 
+/**
+ * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
+ */
 function ants_n4_bias_field_correction_fs_execute(
     params: AntsN4BiasFieldCorrectionFsParameters,
     execution: Execution,
 ): AntsN4BiasFieldCorrectionFsOutputs {
-    /**
-     * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_n4_bias_field_correction_fs_cargs(params, execution)
     const ret = ants_n4_bias_field_correction_fs_outputs(params, execution)
@@ -220,6 +220,24 @@ function ants_n4_bias_field_correction_fs_execute(
 }
 
 
+/**
+ * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume file.
+ * @param output_file Corrected output volume file.
+ * @param mask_file Use image mask during correction.
+ * @param shrink_factor Resample factor to decrease computation time. Default is 4.
+ * @param iterations Number of resolutions and max iterations per resolution. Default is `50 50 50 50`, which indicates 4 fitting levels with 50 iterations each.
+ * @param output_dtype Corrected output data type. Can be float, uchar, or int. Default is float.
+ * @param replace_zeros Replace 0s with offset + scale*rand(). Values will be remasked in the output if remask=1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
+ */
 function ants_n4_bias_field_correction_fs(
     input_file: InputPathType,
     output_file: string,
@@ -230,24 +248,6 @@ function ants_n4_bias_field_correction_fs(
     replace_zeros: string | null = null,
     runner: Runner | null = null,
 ): AntsN4BiasFieldCorrectionFsOutputs {
-    /**
-     * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume file.
-     * @param output_file Corrected output volume file.
-     * @param mask_file Use image mask during correction.
-     * @param shrink_factor Resample factor to decrease computation time. Default is 4.
-     * @param iterations Number of resolutions and max iterations per resolution. Default is `50 50 50 50`, which indicates 4 fitting levels with 50 iterations each.
-     * @param output_dtype Corrected output data type. Can be float, uchar, or int. Default is float.
-     * @param replace_zeros Replace 0s with offset + scale*rand(). Values will be remasked in the output if remask=1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA);
     const params = ants_n4_bias_field_correction_fs_params(input_file, output_file, mask_file, shrink_factor, iterations, output_dtype, replace_zeros)
@@ -260,5 +260,8 @@ export {
       AntsN4BiasFieldCorrectionFsOutputs,
       AntsN4BiasFieldCorrectionFsParameters,
       ants_n4_bias_field_correction_fs,
+      ants_n4_bias_field_correction_fs_cargs,
+      ants_n4_bias_field_correction_fs_execute,
+      ants_n4_bias_field_correction_fs_outputs,
       ants_n4_bias_field_correction_fs_params,
 };

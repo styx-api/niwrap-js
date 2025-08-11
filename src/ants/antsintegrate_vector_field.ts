@@ -12,7 +12,7 @@ const ANTSINTEGRATE_VECTOR_FIELD_METADATA: Metadata = {
 
 
 interface AntsintegrateVectorFieldParameters {
-    "__STYXTYPE__": "ANTSIntegrateVectorField";
+    "@type": "ants.ANTSIntegrateVectorField";
     "vector_field_input": InputPathType;
     "roi_mask_input": InputPathType;
     "fibers_output": string;
@@ -20,35 +20,35 @@ interface AntsintegrateVectorFieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ANTSIntegrateVectorField": antsintegrate_vector_field_cargs,
+        "ants.ANTSIntegrateVectorField": antsintegrate_vector_field_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ANTSIntegrateVectorField": antsintegrate_vector_field_outputs,
+        "ants.ANTSIntegrateVectorField": antsintegrate_vector_field_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface AntsintegrateVectorFieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vector_field_input Input vector field image (e.g., VecImageIN.nii.gz), where vectors are voxels.
+ * @param roi_mask_input Input ROI mask image (e.g., ROIMaskIN.nii.gz), an integer image controlling where the integration is performed.
+ * @param fibers_output Output VTK text file for fibers (e.g., FibersOUT.vtk).
+ * @param length_image_output Output length image (e.g., LengthImageOUT.nii.gz).
+ *
+ * @returns Parameter dictionary
+ */
 function antsintegrate_vector_field_params(
     vector_field_input: InputPathType,
     roi_mask_input: InputPathType,
     fibers_output: string,
     length_image_output: string,
 ): AntsintegrateVectorFieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param vector_field_input Input vector field image (e.g., VecImageIN.nii.gz), where vectors are voxels.
-     * @param roi_mask_input Input ROI mask image (e.g., ROIMaskIN.nii.gz), an integer image controlling where the integration is performed.
-     * @param fibers_output Output VTK text file for fibers (e.g., FibersOUT.vtk).
-     * @param length_image_output Output length image (e.g., LengthImageOUT.nii.gz).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ANTSIntegrateVectorField" as const,
+        "@type": "ants.ANTSIntegrateVectorField" as const,
         "vector_field_input": vector_field_input,
         "roi_mask_input": roi_mask_input,
         "fibers_output": fibers_output,
@@ -102,18 +102,18 @@ function antsintegrate_vector_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function antsintegrate_vector_field_cargs(
     params: AntsintegrateVectorFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ANTSIntegrateVectorField");
     cargs.push(execution.inputFile((params["vector_field_input"] ?? null)));
@@ -124,18 +124,18 @@ function antsintegrate_vector_field_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function antsintegrate_vector_field_outputs(
     params: AntsintegrateVectorFieldParameters,
     execution: Execution,
 ): AntsintegrateVectorFieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsintegrateVectorFieldOutputs = {
         root: execution.outputFile("."),
         fibers_out_vtk: execution.outputFile([(params["fibers_output"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function antsintegrate_vector_field_outputs(
 }
 
 
+/**
+ * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
+ */
 function antsintegrate_vector_field_execute(
     params: AntsintegrateVectorFieldParameters,
     execution: Execution,
 ): AntsintegrateVectorFieldOutputs {
-    /**
-     * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = antsintegrate_vector_field_cargs(params, execution)
     const ret = antsintegrate_vector_field_outputs(params, execution)
@@ -169,6 +169,21 @@ function antsintegrate_vector_field_execute(
 }
 
 
+/**
+ * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param vector_field_input Input vector field image (e.g., VecImageIN.nii.gz), where vectors are voxels.
+ * @param roi_mask_input Input ROI mask image (e.g., ROIMaskIN.nii.gz), an integer image controlling where the integration is performed.
+ * @param fibers_output Output VTK text file for fibers (e.g., FibersOUT.vtk).
+ * @param length_image_output Output length image (e.g., LengthImageOUT.nii.gz).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
+ */
 function antsintegrate_vector_field(
     vector_field_input: InputPathType,
     roi_mask_input: InputPathType,
@@ -176,21 +191,6 @@ function antsintegrate_vector_field(
     length_image_output: string,
     runner: Runner | null = null,
 ): AntsintegrateVectorFieldOutputs {
-    /**
-     * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param vector_field_input Input vector field image (e.g., VecImageIN.nii.gz), where vectors are voxels.
-     * @param roi_mask_input Input ROI mask image (e.g., ROIMaskIN.nii.gz), an integer image controlling where the integration is performed.
-     * @param fibers_output Output VTK text file for fibers (e.g., FibersOUT.vtk).
-     * @param length_image_output Output length image (e.g., LengthImageOUT.nii.gz).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTSINTEGRATE_VECTOR_FIELD_METADATA);
     const params = antsintegrate_vector_field_params(vector_field_input, roi_mask_input, fibers_output, length_image_output)
@@ -203,5 +203,8 @@ export {
       AntsintegrateVectorFieldOutputs,
       AntsintegrateVectorFieldParameters,
       antsintegrate_vector_field,
+      antsintegrate_vector_field_cargs,
+      antsintegrate_vector_field_execute,
+      antsintegrate_vector_field_outputs,
       antsintegrate_vector_field_params,
 };

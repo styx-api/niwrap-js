@@ -12,7 +12,7 @@ const MAP_ALL_LABELS_LH_METADATA: Metadata = {
 
 
 interface MapAllLabelsLhParameters {
-    "__STYXTYPE__": "map_all_labels-lh";
+    "@type": "freesurfer.map_all_labels-lh";
     "which": string;
     "fname": string;
     "hemi": string;
@@ -22,35 +22,35 @@ interface MapAllLabelsLhParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "map_all_labels-lh": map_all_labels_lh_cargs,
+        "freesurfer.map_all_labels-lh": map_all_labels_lh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "map_all_labels-lh": map_all_labels_lh_outputs,
+        "freesurfer.map_all_labels-lh": map_all_labels_lh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MapAllLabelsLhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param which Which type of data to process. Options are: coords, label, vals, curv, area.
+ * @param fname The file name to process.
+ * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
+ * @param spherical_surf The spherical surface file.
+ * @param subjects List of subjects to process.
+ * @param output Output file.
+ *
+ * @returns Parameter dictionary
+ */
 function map_all_labels_lh_params(
     which: string,
     fname: string,
@@ -81,20 +93,8 @@ function map_all_labels_lh_params(
     subjects: Array<string>,
     output: string,
 ): MapAllLabelsLhParameters {
-    /**
-     * Build parameters.
-    
-     * @param which Which type of data to process. Options are: coords, label, vals, curv, area.
-     * @param fname The file name to process.
-     * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
-     * @param spherical_surf The spherical surface file.
-     * @param subjects List of subjects to process.
-     * @param output Output file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "map_all_labels-lh" as const,
+        "@type": "freesurfer.map_all_labels-lh" as const,
         "which": which,
         "fname": fname,
         "hemi": hemi,
@@ -106,18 +106,18 @@ function map_all_labels_lh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function map_all_labels_lh_cargs(
     params: MapAllLabelsLhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("map_all_labels-lh");
     cargs.push(
@@ -133,18 +133,18 @@ function map_all_labels_lh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function map_all_labels_lh_outputs(
     params: MapAllLabelsLhParameters,
     execution: Execution,
 ): MapAllLabelsLhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MapAllLabelsLhOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -153,22 +153,22 @@ function map_all_labels_lh_outputs(
 }
 
 
+/**
+ * Paints output onto a subject's left hemisphere using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
+ */
 function map_all_labels_lh_execute(
     params: MapAllLabelsLhParameters,
     execution: Execution,
 ): MapAllLabelsLhOutputs {
-    /**
-     * Paints output onto a subject's left hemisphere using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
-     */
     params = execution.params(params)
     const cargs = map_all_labels_lh_cargs(params, execution)
     const ret = map_all_labels_lh_outputs(params, execution)
@@ -177,6 +177,23 @@ function map_all_labels_lh_execute(
 }
 
 
+/**
+ * Paints output onto a subject's left hemisphere using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param which Which type of data to process. Options are: coords, label, vals, curv, area.
+ * @param fname The file name to process.
+ * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
+ * @param spherical_surf The spherical surface file.
+ * @param subjects List of subjects to process.
+ * @param output Output file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
+ */
 function map_all_labels_lh(
     which: string,
     fname: string,
@@ -186,23 +203,6 @@ function map_all_labels_lh(
     output: string,
     runner: Runner | null = null,
 ): MapAllLabelsLhOutputs {
-    /**
-     * Paints output onto a subject's left hemisphere using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param which Which type of data to process. Options are: coords, label, vals, curv, area.
-     * @param fname The file name to process.
-     * @param hemi The hemisphere to process (usually 'lh' for left hemisphere).
-     * @param spherical_surf The spherical surface file.
-     * @param subjects List of subjects to process.
-     * @param output Output file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_ALL_LABELS_LH_METADATA);
     const params = map_all_labels_lh_params(which, fname, hemi, spherical_surf, subjects, output)
@@ -215,5 +215,8 @@ export {
       MapAllLabelsLhOutputs,
       MapAllLabelsLhParameters,
       map_all_labels_lh,
+      map_all_labels_lh_cargs,
+      map_all_labels_lh_execute,
+      map_all_labels_lh_outputs,
       map_all_labels_lh_params,
 };

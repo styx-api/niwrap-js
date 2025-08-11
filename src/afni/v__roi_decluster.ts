@@ -12,7 +12,7 @@ const V__ROI_DECLUSTER_METADATA: Metadata = {
 
 
 interface VRoiDeclusterParameters {
-    "__STYXTYPE__": "@ROI_decluster";
+    "@type": "afni.@ROI_decluster";
     "input_dset": InputPathType;
     "output_dir"?: string | null | undefined;
     "nvox_thresh"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface VRoiDeclusterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ROI_decluster": v__roi_decluster_cargs,
+        "afni.@ROI_decluster": v__roi_decluster_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ROI_decluster": v__roi_decluster_outputs,
+        "afni.@ROI_decluster": v__roi_decluster_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VRoiDeclusterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dset Required input dataset. This dataset should be set of integer values. The program mostly assumes approximate isotropic voxels.
+ * @param output_dir Directory name for output. All output goes to this directory.
+ * @param nvox_thresh Number of voxels in a cluster to keep
+ * @param frac_thresh Fraction of voxels in a cluster to keep [0.0-1.0]
+ * @param prefix Base name of final output dataset, i.e. baseprefix.nii.gz
+ * @param neighborhood_type Neighborhood type using in finding mode: 1 - facing neighbors, 2 - edges, 3 - corners
+ *
+ * @returns Parameter dictionary
+ */
 function v__roi_decluster_params(
     input_dset: InputPathType,
     output_dir: string | null = null,
@@ -81,20 +93,8 @@ function v__roi_decluster_params(
     prefix: string | null = null,
     neighborhood_type: number | null = null,
 ): VRoiDeclusterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dset Required input dataset. This dataset should be set of integer values. The program mostly assumes approximate isotropic voxels.
-     * @param output_dir Directory name for output. All output goes to this directory.
-     * @param nvox_thresh Number of voxels in a cluster to keep
-     * @param frac_thresh Fraction of voxels in a cluster to keep [0.0-1.0]
-     * @param prefix Base name of final output dataset, i.e. baseprefix.nii.gz
-     * @param neighborhood_type Neighborhood type using in finding mode: 1 - facing neighbors, 2 - edges, 3 - corners
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ROI_decluster" as const,
+        "@type": "afni.@ROI_decluster" as const,
         "input_dset": input_dset,
     };
     if (output_dir !== null) {
@@ -116,18 +116,18 @@ function v__roi_decluster_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__roi_decluster_cargs(
     params: VRoiDeclusterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ROI_decluster");
     cargs.push(
@@ -168,18 +168,18 @@ function v__roi_decluster_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__roi_decluster_outputs(
     params: VRoiDeclusterParameters,
     execution: Execution,
 ): VRoiDeclusterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRoiDeclusterOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -188,22 +188,22 @@ function v__roi_decluster_outputs(
 }
 
 
+/**
+ * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
+ */
 function v__roi_decluster_execute(
     params: VRoiDeclusterParameters,
     execution: Execution,
 ): VRoiDeclusterOutputs {
-    /**
-     * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__roi_decluster_cargs(params, execution)
     const ret = v__roi_decluster_outputs(params, execution)
@@ -212,6 +212,23 @@ function v__roi_decluster_execute(
 }
 
 
+/**
+ * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dset Required input dataset. This dataset should be set of integer values. The program mostly assumes approximate isotropic voxels.
+ * @param output_dir Directory name for output. All output goes to this directory.
+ * @param nvox_thresh Number of voxels in a cluster to keep
+ * @param frac_thresh Fraction of voxels in a cluster to keep [0.0-1.0]
+ * @param prefix Base name of final output dataset, i.e. baseprefix.nii.gz
+ * @param neighborhood_type Neighborhood type using in finding mode: 1 - facing neighbors, 2 - edges, 3 - corners
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
+ */
 function v__roi_decluster(
     input_dset: InputPathType,
     output_dir: string | null = null,
@@ -221,23 +238,6 @@ function v__roi_decluster(
     neighborhood_type: number | null = null,
     runner: Runner | null = null,
 ): VRoiDeclusterOutputs {
-    /**
-     * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dset Required input dataset. This dataset should be set of integer values. The program mostly assumes approximate isotropic voxels.
-     * @param output_dir Directory name for output. All output goes to this directory.
-     * @param nvox_thresh Number of voxels in a cluster to keep
-     * @param frac_thresh Fraction of voxels in a cluster to keep [0.0-1.0]
-     * @param prefix Base name of final output dataset, i.e. baseprefix.nii.gz
-     * @param neighborhood_type Neighborhood type using in finding mode: 1 - facing neighbors, 2 - edges, 3 - corners
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ROI_DECLUSTER_METADATA);
     const params = v__roi_decluster_params(input_dset, output_dir, nvox_thresh, frac_thresh, prefix, neighborhood_type)
@@ -250,5 +250,8 @@ export {
       VRoiDeclusterParameters,
       V__ROI_DECLUSTER_METADATA,
       v__roi_decluster,
+      v__roi_decluster_cargs,
+      v__roi_decluster_execute,
+      v__roi_decluster_outputs,
       v__roi_decluster_params,
 };

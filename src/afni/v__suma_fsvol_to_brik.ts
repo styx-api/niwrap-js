@@ -12,41 +12,41 @@ const V__SUMA_FSVOL_TO_BRIK_METADATA: Metadata = {
 
 
 interface VSumaFsvolToBrikParameters {
-    "__STYXTYPE__": "@SUMA_FSvolToBRIK";
+    "@type": "afni.@SUMA_FSvolToBRIK";
     "fs_vol_data": InputPathType;
     "prefix": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SUMA_FSvolToBRIK": v__suma_fsvol_to_brik_cargs,
+        "afni.@SUMA_FSvolToBRIK": v__suma_fsvol_to_brik_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SUMA_FSvolToBRIK": v__suma_fsvol_to_brik_outputs,
+        "afni.@SUMA_FSvolToBRIK": v__suma_fsvol_to_brik_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface VSumaFsvolToBrikOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fs_vol_data Input FreeSurfer volume data (e.g. COR- images or .mgz volume)
+ * @param prefix Prefix for output BRIK volume
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_fsvol_to_brik_params(
     fs_vol_data: InputPathType,
     prefix: string,
 ): VSumaFsvolToBrikParameters {
-    /**
-     * Build parameters.
-    
-     * @param fs_vol_data Input FreeSurfer volume data (e.g. COR- images or .mgz volume)
-     * @param prefix Prefix for output BRIK volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SUMA_FSvolToBRIK" as const,
+        "@type": "afni.@SUMA_FSvolToBRIK" as const,
         "fs_vol_data": fs_vol_data,
         "prefix": prefix,
     };
@@ -94,18 +94,18 @@ function v__suma_fsvol_to_brik_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_fsvol_to_brik_cargs(
     params: VSumaFsvolToBrikParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SUMA_FSvolToBRIK");
     cargs.push(execution.inputFile((params["fs_vol_data"] ?? null)));
@@ -114,18 +114,18 @@ function v__suma_fsvol_to_brik_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_fsvol_to_brik_outputs(
     params: VSumaFsvolToBrikParameters,
     execution: Execution,
 ): VSumaFsvolToBrikOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaFsvolToBrikOutputs = {
         root: execution.outputFile("."),
         out_brik: execution.outputFile([(params["prefix"] ?? null), ".BRIK"].join('')),
@@ -135,22 +135,22 @@ function v__suma_fsvol_to_brik_outputs(
 }
 
 
+/**
+ * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
+ */
 function v__suma_fsvol_to_brik_execute(
     params: VSumaFsvolToBrikParameters,
     execution: Execution,
 ): VSumaFsvolToBrikOutputs {
-    /**
-     * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_fsvol_to_brik_cargs(params, execution)
     const ret = v__suma_fsvol_to_brik_outputs(params, execution)
@@ -159,24 +159,24 @@ function v__suma_fsvol_to_brik_execute(
 }
 
 
+/**
+ * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fs_vol_data Input FreeSurfer volume data (e.g. COR- images or .mgz volume)
+ * @param prefix Prefix for output BRIK volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
+ */
 function v__suma_fsvol_to_brik(
     fs_vol_data: InputPathType,
     prefix: string,
     runner: Runner | null = null,
 ): VSumaFsvolToBrikOutputs {
-    /**
-     * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fs_vol_data Input FreeSurfer volume data (e.g. COR- images or .mgz volume)
-     * @param prefix Prefix for output BRIK volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_FSVOL_TO_BRIK_METADATA);
     const params = v__suma_fsvol_to_brik_params(fs_vol_data, prefix)
@@ -189,5 +189,8 @@ export {
       VSumaFsvolToBrikParameters,
       V__SUMA_FSVOL_TO_BRIK_METADATA,
       v__suma_fsvol_to_brik,
+      v__suma_fsvol_to_brik_cargs,
+      v__suma_fsvol_to_brik_execute,
+      v__suma_fsvol_to_brik_outputs,
       v__suma_fsvol_to_brik_params,
 };

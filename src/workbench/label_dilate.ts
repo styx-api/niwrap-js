@@ -12,7 +12,7 @@ const LABEL_DILATE_METADATA: Metadata = {
 
 
 interface LabelDilateParameters {
-    "__STYXTYPE__": "label-dilate";
+    "@type": "workbench.label-dilate";
     "label": InputPathType;
     "surface": InputPathType;
     "dilate_dist": number;
@@ -23,35 +23,35 @@ interface LabelDilateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-dilate": label_dilate_cargs,
+        "workbench.label-dilate": label_dilate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-dilate": label_dilate_outputs,
+        "workbench.label-dilate": label_dilate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface LabelDilateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the input label
+ * @param surface the surface to dilate on
+ * @param dilate_dist distance in mm to dilate the labels
+ * @param label_out the output label file
+ * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
+ * @param opt_column_column select a single column to dilate: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function label_dilate_params(
     label: InputPathType,
     surface: InputPathType,
@@ -83,21 +96,8 @@ function label_dilate_params(
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): LabelDilateParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the input label
-     * @param surface the surface to dilate on
-     * @param dilate_dist distance in mm to dilate the labels
-     * @param label_out the output label file
-     * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
-     * @param opt_column_column select a single column to dilate: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-dilate" as const,
+        "@type": "workbench.label-dilate" as const,
         "label": label,
         "surface": surface,
         "dilate_dist": dilate_dist,
@@ -116,18 +116,18 @@ function label_dilate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_dilate_cargs(
     params: LabelDilateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-dilate");
@@ -157,18 +157,18 @@ function label_dilate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_dilate_outputs(
     params: LabelDilateParameters,
     execution: Execution,
 ): LabelDilateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelDilateOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -177,24 +177,24 @@ function label_dilate_outputs(
 }
 
 
+/**
+ * Dilate a label file.
+ *
+ * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
+ */
 function label_dilate_execute(
     params: LabelDilateParameters,
     execution: Execution,
 ): LabelDilateOutputs {
-    /**
-     * Dilate a label file.
-     * 
-     * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_dilate_cargs(params, execution)
     const ret = label_dilate_outputs(params, execution)
@@ -203,6 +203,26 @@ function label_dilate_execute(
 }
 
 
+/**
+ * Dilate a label file.
+ *
+ * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label the input label
+ * @param surface the surface to dilate on
+ * @param dilate_dist distance in mm to dilate the labels
+ * @param label_out the output label file
+ * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
+ * @param opt_column_column select a single column to dilate: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
+ */
 function label_dilate(
     label: InputPathType,
     surface: InputPathType,
@@ -213,26 +233,6 @@ function label_dilate(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    /**
-     * Dilate a label file.
-     * 
-     * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label the input label
-     * @param surface the surface to dilate on
-     * @param dilate_dist distance in mm to dilate the labels
-     * @param label_out the output label file
-     * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
-     * @param opt_column_column select a single column to dilate: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_DILATE_METADATA);
     const params = label_dilate_params(label, surface, dilate_dist, label_out, opt_bad_vertex_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
@@ -245,5 +245,8 @@ export {
       LabelDilateOutputs,
       LabelDilateParameters,
       label_dilate,
+      label_dilate_cargs,
+      label_dilate_execute,
+      label_dilate_outputs,
       label_dilate_params,
 };

@@ -12,7 +12,7 @@ const MAKE_STIM_TIMES_PY_METADATA: Metadata = {
 
 
 interface MakeStimTimesPyParameters {
-    "__STYXTYPE__": "make_stim_times.py";
+    "@type": "afni.make_stim_times.py";
     "files": Array<InputPathType>;
     "prefix": string;
     "tr": number;
@@ -28,35 +28,35 @@ interface MakeStimTimesPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_stim_times.py": make_stim_times_py_cargs,
+        "afni.make_stim_times.py": make_stim_times_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_stim_times.py": make_stim_times_py_outputs,
+        "afni.make_stim_times.py": make_stim_times_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface MakeStimTimesPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files Specify stim files
+ * @param prefix Output prefix for files
+ * @param tr TR time, in seconds
+ * @param nruns Number of runs
+ * @param nt Number of TRs per run
+ * @param run_trs Specify TRs per run, if they differ
+ * @param offset Add OFFSET to all output times
+ * @param labels Provide labels for filenames
+ * @param no_consec_events Do not allow consecutive events
+ * @param amplitudes Marry times with amplitudes
+ * @param show_valid_opts Output all options
+ * @param verbose Provide verbose output
+ *
+ * @returns Parameter dictionary
+ */
 function make_stim_times_py_params(
     files: Array<InputPathType>,
     prefix: string,
@@ -101,26 +119,8 @@ function make_stim_times_py_params(
     show_valid_opts: boolean = false,
     verbose: number | null = null,
 ): MakeStimTimesPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param files Specify stim files
-     * @param prefix Output prefix for files
-     * @param tr TR time, in seconds
-     * @param nruns Number of runs
-     * @param nt Number of TRs per run
-     * @param run_trs Specify TRs per run, if they differ
-     * @param offset Add OFFSET to all output times
-     * @param labels Provide labels for filenames
-     * @param no_consec_events Do not allow consecutive events
-     * @param amplitudes Marry times with amplitudes
-     * @param show_valid_opts Output all options
-     * @param verbose Provide verbose output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_stim_times.py" as const,
+        "@type": "afni.make_stim_times.py" as const,
         "files": files,
         "prefix": prefix,
         "tr": tr,
@@ -146,18 +146,18 @@ function make_stim_times_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_stim_times_py_cargs(
     params: MakeStimTimesPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_stim_times.py");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -211,18 +211,18 @@ function make_stim_times_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_stim_times_py_outputs(
     params: MakeStimTimesPyParameters,
     execution: Execution,
 ): MakeStimTimesPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeStimTimesPyOutputs = {
         root: execution.outputFile("."),
         out_stim_times_01: execution.outputFile([(params["prefix"] ?? null), ".01.1D"].join('')),
@@ -233,22 +233,22 @@ function make_stim_times_py_outputs(
 }
 
 
+/**
+ * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
+ */
 function make_stim_times_py_execute(
     params: MakeStimTimesPyParameters,
     execution: Execution,
 ): MakeStimTimesPyOutputs {
-    /**
-     * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_stim_times_py_cargs(params, execution)
     const ret = make_stim_times_py_outputs(params, execution)
@@ -257,6 +257,29 @@ function make_stim_times_py_execute(
 }
 
 
+/**
+ * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files Specify stim files
+ * @param prefix Output prefix for files
+ * @param tr TR time, in seconds
+ * @param nruns Number of runs
+ * @param nt Number of TRs per run
+ * @param run_trs Specify TRs per run, if they differ
+ * @param offset Add OFFSET to all output times
+ * @param labels Provide labels for filenames
+ * @param no_consec_events Do not allow consecutive events
+ * @param amplitudes Marry times with amplitudes
+ * @param show_valid_opts Output all options
+ * @param verbose Provide verbose output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
+ */
 function make_stim_times_py(
     files: Array<InputPathType>,
     prefix: string,
@@ -272,29 +295,6 @@ function make_stim_times_py(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): MakeStimTimesPyOutputs {
-    /**
-     * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files Specify stim files
-     * @param prefix Output prefix for files
-     * @param tr TR time, in seconds
-     * @param nruns Number of runs
-     * @param nt Number of TRs per run
-     * @param run_trs Specify TRs per run, if they differ
-     * @param offset Add OFFSET to all output times
-     * @param labels Provide labels for filenames
-     * @param no_consec_events Do not allow consecutive events
-     * @param amplitudes Marry times with amplitudes
-     * @param show_valid_opts Output all options
-     * @param verbose Provide verbose output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_STIM_TIMES_PY_METADATA);
     const params = make_stim_times_py_params(files, prefix, tr, nruns, nt, run_trs, offset, labels, no_consec_events, amplitudes, show_valid_opts, verbose)
@@ -307,5 +307,8 @@ export {
       MakeStimTimesPyOutputs,
       MakeStimTimesPyParameters,
       make_stim_times_py,
+      make_stim_times_py_cargs,
+      make_stim_times_py_execute,
+      make_stim_times_py_outputs,
       make_stim_times_py_params,
 };

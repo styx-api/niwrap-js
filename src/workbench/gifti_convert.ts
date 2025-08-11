@@ -12,40 +12,40 @@ const GIFTI_CONVERT_METADATA: Metadata = {
 
 
 interface GiftiConvertParameters {
-    "__STYXTYPE__": "gifti-convert";
+    "@type": "workbench.gifti-convert";
     "gifti_encoding": string;
     "input_gifti_file": string;
     "output_gifti_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gifti-convert": gifti_convert_cargs,
+        "workbench.gifti-convert": gifti_convert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface GiftiConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gifti_encoding what the output encoding should be
+ * @param input_gifti_file the input gifti file
+ * @param output_gifti_file output - the output gifti file
+ *
+ * @returns Parameter dictionary
+ */
 function gifti_convert_params(
     gifti_encoding: string,
     input_gifti_file: string,
     output_gifti_file: string,
 ): GiftiConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param gifti_encoding what the output encoding should be
-     * @param input_gifti_file the input gifti file
-     * @param output_gifti_file output - the output gifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gifti-convert" as const,
+        "@type": "workbench.gifti-convert" as const,
         "gifti_encoding": gifti_encoding,
         "input_gifti_file": input_gifti_file,
         "output_gifti_file": output_gifti_file,
@@ -89,18 +89,18 @@ function gifti_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gifti_convert_cargs(
     params: GiftiConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-gifti-convert");
@@ -111,18 +111,18 @@ function gifti_convert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gifti_convert_outputs(
     params: GiftiConvertParameters,
     execution: Execution,
 ): GiftiConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GiftiConvertOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,29 +130,29 @@ function gifti_convert_outputs(
 }
 
 
+/**
+ * Convert a gifti file to a different encoding.
+ *
+ * The value of <gifti-encoding> must be one of the following:
+ *
+ * ASCII
+ * BASE64_BINARY
+ * GZIP_BASE64_BINARY
+ * EXTERNAL_FILE_BINARY.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
+ */
 function gifti_convert_execute(
     params: GiftiConvertParameters,
     execution: Execution,
 ): GiftiConvertOutputs {
-    /**
-     * Convert a gifti file to a different encoding.
-     * 
-     * The value of <gifti-encoding> must be one of the following:
-     * 
-     * ASCII
-     * BASE64_BINARY
-     * GZIP_BASE64_BINARY
-     * EXTERNAL_FILE_BINARY.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = gifti_convert_cargs(params, execution)
     const ret = gifti_convert_outputs(params, execution)
@@ -161,33 +161,33 @@ function gifti_convert_execute(
 }
 
 
+/**
+ * Convert a gifti file to a different encoding.
+ *
+ * The value of <gifti-encoding> must be one of the following:
+ *
+ * ASCII
+ * BASE64_BINARY
+ * GZIP_BASE64_BINARY
+ * EXTERNAL_FILE_BINARY.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param gifti_encoding what the output encoding should be
+ * @param input_gifti_file the input gifti file
+ * @param output_gifti_file output - the output gifti file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
+ */
 function gifti_convert(
     gifti_encoding: string,
     input_gifti_file: string,
     output_gifti_file: string,
     runner: Runner | null = null,
 ): GiftiConvertOutputs {
-    /**
-     * Convert a gifti file to a different encoding.
-     * 
-     * The value of <gifti-encoding> must be one of the following:
-     * 
-     * ASCII
-     * BASE64_BINARY
-     * GZIP_BASE64_BINARY
-     * EXTERNAL_FILE_BINARY.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param gifti_encoding what the output encoding should be
-     * @param input_gifti_file the input gifti file
-     * @param output_gifti_file output - the output gifti file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GIFTI_CONVERT_METADATA);
     const params = gifti_convert_params(gifti_encoding, input_gifti_file, output_gifti_file)
@@ -200,5 +200,8 @@ export {
       GiftiConvertOutputs,
       GiftiConvertParameters,
       gifti_convert,
+      gifti_convert_cargs,
+      gifti_convert_execute,
+      gifti_convert_outputs,
       gifti_convert_params,
 };

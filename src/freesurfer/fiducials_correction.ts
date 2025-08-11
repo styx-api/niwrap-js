@@ -12,41 +12,41 @@ const FIDUCIALS_CORRECTION_METADATA: Metadata = {
 
 
 interface FiducialsCorrectionParameters {
-    "__STYXTYPE__": "fiducials_correction";
+    "@type": "freesurfer.fiducials_correction";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fiducials_correction": fiducials_correction_cargs,
+        "freesurfer.fiducials_correction": fiducials_correction_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fiducials_correction": fiducials_correction_outputs,
+        "freesurfer.fiducials_correction": fiducials_correction_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FiducialsCorrectionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file containing imaging data with fiducial markers to correct.
+ * @param output_file Output file with corrected fiducial markers.
+ *
+ * @returns Parameter dictionary
+ */
 function fiducials_correction_params(
     input_file: InputPathType,
     output_file: string,
 ): FiducialsCorrectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file containing imaging data with fiducial markers to correct.
-     * @param output_file Output file with corrected fiducial markers.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fiducials_correction" as const,
+        "@type": "freesurfer.fiducials_correction" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function fiducials_correction_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fiducials_correction_cargs(
     params: FiducialsCorrectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fiducials_correction");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function fiducials_correction_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fiducials_correction_outputs(
     params: FiducialsCorrectionParameters,
     execution: Execution,
 ): FiducialsCorrectionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FiducialsCorrectionOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function fiducials_correction_outputs(
 }
 
 
+/**
+ * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
+ */
 function fiducials_correction_execute(
     params: FiducialsCorrectionParameters,
     execution: Execution,
 ): FiducialsCorrectionOutputs {
-    /**
-     * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
-     */
     params = execution.params(params)
     const cargs = fiducials_correction_cargs(params, execution)
     const ret = fiducials_correction_outputs(params, execution)
@@ -154,24 +154,24 @@ function fiducials_correction_execute(
 }
 
 
+/**
+ * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file containing imaging data with fiducial markers to correct.
+ * @param output_file Output file with corrected fiducial markers.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
+ */
 function fiducials_correction(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): FiducialsCorrectionOutputs {
-    /**
-     * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file containing imaging data with fiducial markers to correct.
-     * @param output_file Output file with corrected fiducial markers.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIDUCIALS_CORRECTION_METADATA);
     const params = fiducials_correction_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       FiducialsCorrectionOutputs,
       FiducialsCorrectionParameters,
       fiducials_correction,
+      fiducials_correction_cargs,
+      fiducials_correction_execute,
+      fiducials_correction_outputs,
       fiducials_correction_params,
 };

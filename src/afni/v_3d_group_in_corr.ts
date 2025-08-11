@@ -12,7 +12,7 @@ const V_3D_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dGroupInCorrParameters {
-    "__STYXTYPE__": "3dGroupInCorr";
+    "@type": "afni.3dGroupInCorr";
     "set_a": InputPathType;
     "set_b"?: InputPathType | null | undefined;
     "apair": boolean;
@@ -44,35 +44,35 @@ interface V3dGroupInCorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dGroupInCorr": v_3d_group_in_corr_cargs,
+        "afni.3dGroupInCorr": v_3d_group_in_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dGroupInCorr": v_3d_group_in_corr_outputs,
+        "afni.3dGroupInCorr": v_3d_group_in_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,40 @@ interface V3dGroupInCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param set_a Setup file describing the first dataset collection.
+ * @param set_b Setup file describing the second dataset collection for two-sample t-test analysis.
+ * @param apair Use -setA collection again but with different seed locations; produce paired t-test.
+ * @param label_a Label for sub-bricks corresponding to setA.
+ * @param label_b Label for sub-bricks corresponding to setB.
+ * @param pooled Use pooled variance estimator for two-sample un-paired t-test.
+ * @param unpooled Use unpooled variance estimator for two-sample un-paired t-test.
+ * @param paired Use a two-sample paired t-test.
+ * @param nosix Suppress the individual 1-sample t-tests and only return the difference 2-sample t-test.
+ * @param covariates_file File containing covariate values for each dataset.
+ * @param center Option for centering covariates.
+ * @param seed_radius Radius for seed voxel time series averaging (mm).
+ * @param sendall Send all individual subject results to AFNI along with group statistics.
+ * @param donocov Compute results both with and without covariates.
+ * @param dospcov Compute Spearman (rank) correlation coefficient of subject correlation results vs each covariate.
+ * @param cluster Input results from a 3dClustSim run to interface with AFNI.
+ * @param read Force program to read data into memory instead of memory mapping.
+ * @param ztest Debugging option to test if input data is all zero.
+ * @param ah Connect to AFNI/SUMA on a remote host.
+ * @param port_offset Provide a port offset.
+ * @param port_offset_quiet Provide a port offset, with less verbose output.
+ * @param port_bloc Provide a port offset bloc.
+ * @param suma Talk to SUMA instead of AFNI.
+ * @param quiet Suppress informational messages.
+ * @param verbose Print extra informational messages.
+ * @param very_verbose Print even more detailed informational messages.
+ * @param debug Enable internal testing.
+ * @param batch Run program in batch mode with specified METHOD and command file.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_group_in_corr_params(
     set_a: InputPathType,
     set_b: InputPathType | null = null,
@@ -125,42 +159,8 @@ function v_3d_group_in_corr_params(
     debug: boolean = false,
     batch: string | null = null,
 ): V3dGroupInCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param set_a Setup file describing the first dataset collection.
-     * @param set_b Setup file describing the second dataset collection for two-sample t-test analysis.
-     * @param apair Use -setA collection again but with different seed locations; produce paired t-test.
-     * @param label_a Label for sub-bricks corresponding to setA.
-     * @param label_b Label for sub-bricks corresponding to setB.
-     * @param pooled Use pooled variance estimator for two-sample un-paired t-test.
-     * @param unpooled Use unpooled variance estimator for two-sample un-paired t-test.
-     * @param paired Use a two-sample paired t-test.
-     * @param nosix Suppress the individual 1-sample t-tests and only return the difference 2-sample t-test.
-     * @param covariates_file File containing covariate values for each dataset.
-     * @param center Option for centering covariates.
-     * @param seed_radius Radius for seed voxel time series averaging (mm).
-     * @param sendall Send all individual subject results to AFNI along with group statistics.
-     * @param donocov Compute results both with and without covariates.
-     * @param dospcov Compute Spearman (rank) correlation coefficient of subject correlation results vs each covariate.
-     * @param cluster Input results from a 3dClustSim run to interface with AFNI.
-     * @param read Force program to read data into memory instead of memory mapping.
-     * @param ztest Debugging option to test if input data is all zero.
-     * @param ah Connect to AFNI/SUMA on a remote host.
-     * @param port_offset Provide a port offset.
-     * @param port_offset_quiet Provide a port offset, with less verbose output.
-     * @param port_bloc Provide a port offset bloc.
-     * @param suma Talk to SUMA instead of AFNI.
-     * @param quiet Suppress informational messages.
-     * @param verbose Print extra informational messages.
-     * @param very_verbose Print even more detailed informational messages.
-     * @param debug Enable internal testing.
-     * @param batch Run program in batch mode with specified METHOD and command file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dGroupInCorr" as const,
+        "@type": "afni.3dGroupInCorr" as const,
         "set_a": set_a,
         "apair": apair,
         "pooled": pooled,
@@ -218,18 +218,18 @@ function v_3d_group_in_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_group_in_corr_cargs(
     params: V3dGroupInCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dGroupInCorr");
     cargs.push(
@@ -357,18 +357,18 @@ function v_3d_group_in_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_group_in_corr_outputs(
     params: V3dGroupInCorrParameters,
     execution: Execution,
 ): V3dGroupInCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dGroupInCorrOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([path.basename((params["set_a"] ?? null)), ".results.nii"].join('')),
@@ -377,22 +377,22 @@ function v_3d_group_in_corr_outputs(
 }
 
 
+/**
+ * Functional connectivity analysis in group of subjects.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dGroupInCorrOutputs`).
+ */
 function v_3d_group_in_corr_execute(
     params: V3dGroupInCorrParameters,
     execution: Execution,
 ): V3dGroupInCorrOutputs {
-    /**
-     * Functional connectivity analysis in group of subjects.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dGroupInCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_group_in_corr_cargs(params, execution)
     const ret = v_3d_group_in_corr_outputs(params, execution)
@@ -401,6 +401,45 @@ function v_3d_group_in_corr_execute(
 }
 
 
+/**
+ * Functional connectivity analysis in group of subjects.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param set_a Setup file describing the first dataset collection.
+ * @param set_b Setup file describing the second dataset collection for two-sample t-test analysis.
+ * @param apair Use -setA collection again but with different seed locations; produce paired t-test.
+ * @param label_a Label for sub-bricks corresponding to setA.
+ * @param label_b Label for sub-bricks corresponding to setB.
+ * @param pooled Use pooled variance estimator for two-sample un-paired t-test.
+ * @param unpooled Use unpooled variance estimator for two-sample un-paired t-test.
+ * @param paired Use a two-sample paired t-test.
+ * @param nosix Suppress the individual 1-sample t-tests and only return the difference 2-sample t-test.
+ * @param covariates_file File containing covariate values for each dataset.
+ * @param center Option for centering covariates.
+ * @param seed_radius Radius for seed voxel time series averaging (mm).
+ * @param sendall Send all individual subject results to AFNI along with group statistics.
+ * @param donocov Compute results both with and without covariates.
+ * @param dospcov Compute Spearman (rank) correlation coefficient of subject correlation results vs each covariate.
+ * @param cluster Input results from a 3dClustSim run to interface with AFNI.
+ * @param read Force program to read data into memory instead of memory mapping.
+ * @param ztest Debugging option to test if input data is all zero.
+ * @param ah Connect to AFNI/SUMA on a remote host.
+ * @param port_offset Provide a port offset.
+ * @param port_offset_quiet Provide a port offset, with less verbose output.
+ * @param port_bloc Provide a port offset bloc.
+ * @param suma Talk to SUMA instead of AFNI.
+ * @param quiet Suppress informational messages.
+ * @param verbose Print extra informational messages.
+ * @param very_verbose Print even more detailed informational messages.
+ * @param debug Enable internal testing.
+ * @param batch Run program in batch mode with specified METHOD and command file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dGroupInCorrOutputs`).
+ */
 function v_3d_group_in_corr(
     set_a: InputPathType,
     set_b: InputPathType | null = null,
@@ -432,45 +471,6 @@ function v_3d_group_in_corr(
     batch: string | null = null,
     runner: Runner | null = null,
 ): V3dGroupInCorrOutputs {
-    /**
-     * Functional connectivity analysis in group of subjects.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param set_a Setup file describing the first dataset collection.
-     * @param set_b Setup file describing the second dataset collection for two-sample t-test analysis.
-     * @param apair Use -setA collection again but with different seed locations; produce paired t-test.
-     * @param label_a Label for sub-bricks corresponding to setA.
-     * @param label_b Label for sub-bricks corresponding to setB.
-     * @param pooled Use pooled variance estimator for two-sample un-paired t-test.
-     * @param unpooled Use unpooled variance estimator for two-sample un-paired t-test.
-     * @param paired Use a two-sample paired t-test.
-     * @param nosix Suppress the individual 1-sample t-tests and only return the difference 2-sample t-test.
-     * @param covariates_file File containing covariate values for each dataset.
-     * @param center Option for centering covariates.
-     * @param seed_radius Radius for seed voxel time series averaging (mm).
-     * @param sendall Send all individual subject results to AFNI along with group statistics.
-     * @param donocov Compute results both with and without covariates.
-     * @param dospcov Compute Spearman (rank) correlation coefficient of subject correlation results vs each covariate.
-     * @param cluster Input results from a 3dClustSim run to interface with AFNI.
-     * @param read Force program to read data into memory instead of memory mapping.
-     * @param ztest Debugging option to test if input data is all zero.
-     * @param ah Connect to AFNI/SUMA on a remote host.
-     * @param port_offset Provide a port offset.
-     * @param port_offset_quiet Provide a port offset, with less verbose output.
-     * @param port_bloc Provide a port offset bloc.
-     * @param suma Talk to SUMA instead of AFNI.
-     * @param quiet Suppress informational messages.
-     * @param verbose Print extra informational messages.
-     * @param very_verbose Print even more detailed informational messages.
-     * @param debug Enable internal testing.
-     * @param batch Run program in batch mode with specified METHOD and command file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dGroupInCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_GROUP_IN_CORR_METADATA);
     const params = v_3d_group_in_corr_params(set_a, set_b, apair, label_a, label_b, pooled, unpooled, paired, nosix, covariates_file, center, seed_radius, sendall, donocov, dospcov, cluster, read, ztest, ah, port_offset, port_offset_quiet, port_bloc, suma, quiet, verbose, very_verbose, debug, batch)
@@ -483,5 +483,8 @@ export {
       V3dGroupInCorrParameters,
       V_3D_GROUP_IN_CORR_METADATA,
       v_3d_group_in_corr,
+      v_3d_group_in_corr_cargs,
+      v_3d_group_in_corr_execute,
+      v_3d_group_in_corr_outputs,
       v_3d_group_in_corr_params,
 };

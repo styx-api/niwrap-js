@@ -12,7 +12,7 @@ const MRI_COMPUTE_SEG_OVERLAP_METADATA: Metadata = {
 
 
 interface MriComputeSegOverlapParameters {
-    "__STYXTYPE__": "mri_compute_seg_overlap";
+    "@type": "freesurfer.mri_compute_seg_overlap";
     "segvol1": InputPathType;
     "segvol2": InputPathType;
     "log_file"?: string | null | undefined;
@@ -26,33 +26,33 @@ interface MriComputeSegOverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_seg_overlap": mri_compute_seg_overlap_cargs,
+        "freesurfer.mri_compute_seg_overlap": mri_compute_seg_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface MriComputeSegOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param segvol1 First segmentation volume.
+ * @param segvol2 Second segmentation volume.
+ * @param log_file Log file for individual Dice coefficients for 12 structure pairs, plus mean, std, and 'overall'.
+ * @param mean_log_file Log file for mean Dice.
+ * @param std_log_file Log file for std Dice.
+ * @param overall_log_flag Log file for 'overall' Dice (mean excluding wm, gm, and accumbens).
+ * @param exclude_cortex_flag Exclude cerebral cortex labels from all calculation. (0/1 flag, if nonzero)
+ * @param exclude_wm_flag Exclude cerebral white matter labels from all calculation. (0/1 flag, if nonzero)
+ * @param all_labels_flag Check all labels, not just the predefined main structures.
+ * @param dice_params Standalone way to compute Dice coefficients, using seg1, seg2, ctab, ReportEmpty01, ExcludeId, datfile, and tablefile as additional parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_seg_overlap_params(
     segvol1: InputPathType,
     segvol2: InputPathType,
@@ -84,24 +100,8 @@ function mri_compute_seg_overlap_params(
     all_labels_flag: boolean = false,
     dice_params: string | null = null,
 ): MriComputeSegOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param segvol1 First segmentation volume.
-     * @param segvol2 Second segmentation volume.
-     * @param log_file Log file for individual Dice coefficients for 12 structure pairs, plus mean, std, and 'overall'.
-     * @param mean_log_file Log file for mean Dice.
-     * @param std_log_file Log file for std Dice.
-     * @param overall_log_flag Log file for 'overall' Dice (mean excluding wm, gm, and accumbens).
-     * @param exclude_cortex_flag Exclude cerebral cortex labels from all calculation. (0/1 flag, if nonzero)
-     * @param exclude_wm_flag Exclude cerebral white matter labels from all calculation. (0/1 flag, if nonzero)
-     * @param all_labels_flag Check all labels, not just the predefined main structures.
-     * @param dice_params Standalone way to compute Dice coefficients, using seg1, seg2, ctab, ReportEmpty01, ExcludeId, datfile, and tablefile as additional parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_seg_overlap" as const,
+        "@type": "freesurfer.mri_compute_seg_overlap" as const,
         "segvol1": segvol1,
         "segvol2": segvol2,
         "overall_log_flag": overall_log_flag,
@@ -125,18 +125,18 @@ function mri_compute_seg_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_seg_overlap_cargs(
     params: MriComputeSegOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_seg_overlap");
     cargs.push(execution.inputFile((params["segvol1"] ?? null)));
@@ -181,18 +181,18 @@ function mri_compute_seg_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_seg_overlap_outputs(
     params: MriComputeSegOverlapParameters,
     execution: Execution,
 ): MriComputeSegOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeSegOverlapOutputs = {
         root: execution.outputFile("."),
     };
@@ -200,22 +200,22 @@ function mri_compute_seg_overlap_outputs(
 }
 
 
+/**
+ * Compute coefficients of overlap between segmentation volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
+ */
 function mri_compute_seg_overlap_execute(
     params: MriComputeSegOverlapParameters,
     execution: Execution,
 ): MriComputeSegOverlapOutputs {
-    /**
-     * Compute coefficients of overlap between segmentation volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_seg_overlap_cargs(params, execution)
     const ret = mri_compute_seg_overlap_outputs(params, execution)
@@ -224,6 +224,27 @@ function mri_compute_seg_overlap_execute(
 }
 
 
+/**
+ * Compute coefficients of overlap between segmentation volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param segvol1 First segmentation volume.
+ * @param segvol2 Second segmentation volume.
+ * @param log_file Log file for individual Dice coefficients for 12 structure pairs, plus mean, std, and 'overall'.
+ * @param mean_log_file Log file for mean Dice.
+ * @param std_log_file Log file for std Dice.
+ * @param overall_log_flag Log file for 'overall' Dice (mean excluding wm, gm, and accumbens).
+ * @param exclude_cortex_flag Exclude cerebral cortex labels from all calculation. (0/1 flag, if nonzero)
+ * @param exclude_wm_flag Exclude cerebral white matter labels from all calculation. (0/1 flag, if nonzero)
+ * @param all_labels_flag Check all labels, not just the predefined main structures.
+ * @param dice_params Standalone way to compute Dice coefficients, using seg1, seg2, ctab, ReportEmpty01, ExcludeId, datfile, and tablefile as additional parameters.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
+ */
 function mri_compute_seg_overlap(
     segvol1: InputPathType,
     segvol2: InputPathType,
@@ -237,27 +258,6 @@ function mri_compute_seg_overlap(
     dice_params: string | null = null,
     runner: Runner | null = null,
 ): MriComputeSegOverlapOutputs {
-    /**
-     * Compute coefficients of overlap between segmentation volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param segvol1 First segmentation volume.
-     * @param segvol2 Second segmentation volume.
-     * @param log_file Log file for individual Dice coefficients for 12 structure pairs, plus mean, std, and 'overall'.
-     * @param mean_log_file Log file for mean Dice.
-     * @param std_log_file Log file for std Dice.
-     * @param overall_log_flag Log file for 'overall' Dice (mean excluding wm, gm, and accumbens).
-     * @param exclude_cortex_flag Exclude cerebral cortex labels from all calculation. (0/1 flag, if nonzero)
-     * @param exclude_wm_flag Exclude cerebral white matter labels from all calculation. (0/1 flag, if nonzero)
-     * @param all_labels_flag Check all labels, not just the predefined main structures.
-     * @param dice_params Standalone way to compute Dice coefficients, using seg1, seg2, ctab, ReportEmpty01, ExcludeId, datfile, and tablefile as additional parameters.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_SEG_OVERLAP_METADATA);
     const params = mri_compute_seg_overlap_params(segvol1, segvol2, log_file, mean_log_file, std_log_file, overall_log_flag, exclude_cortex_flag, exclude_wm_flag, all_labels_flag, dice_params)
@@ -270,5 +270,8 @@ export {
       MriComputeSegOverlapOutputs,
       MriComputeSegOverlapParameters,
       mri_compute_seg_overlap,
+      mri_compute_seg_overlap_cargs,
+      mri_compute_seg_overlap_execute,
+      mri_compute_seg_overlap_outputs,
       mri_compute_seg_overlap_params,
 };

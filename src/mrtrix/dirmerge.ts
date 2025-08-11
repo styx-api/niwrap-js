@@ -12,14 +12,14 @@ const DIRMERGE_METADATA: Metadata = {
 
 
 interface DirmergeConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dirmerge.config";
     "key": string;
     "value": string;
 }
 
 
 interface DirmergeParameters {
-    "__STYXTYPE__": "dirmerge";
+    "@type": "mrtrix.dirmerge";
     "unipolar_weight"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -35,55 +35,55 @@ interface DirmergeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dirmerge": dirmerge_cargs,
-        "config": dirmerge_config_cargs,
+        "mrtrix.dirmerge": dirmerge_cargs,
+        "mrtrix.dirmerge.config": dirmerge_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dirmerge": dirmerge_outputs,
+        "mrtrix.dirmerge": dirmerge_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dirmerge_config_params(
     key: string,
     value: string,
 ): DirmergeConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dirmerge.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function dirmerge_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirmerge_config_cargs(
     params: DirmergeConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface DirmergeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subsets the number of subsets (eg. phase encoding directions) per b-value
+ * @param bvalue_files the b-value and sets of corresponding files, in order
+ * @param out the output directions file, with each row listing the X Y Z gradient directions, the b-value, and an index representing the phase encode direction
+ * @param unipolar_weight set the weight given to the unipolar electrostatic repulsion model compared to the bipolar model (default: 0.2).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dirmerge_params(
     subsets: number,
     bvalue_files: Array<string>,
@@ -142,26 +160,8 @@ function dirmerge_params(
     help: boolean = false,
     version: boolean = false,
 ): DirmergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param subsets the number of subsets (eg. phase encoding directions) per b-value
-     * @param bvalue_files the b-value and sets of corresponding files, in order
-     * @param out the output directions file, with each row listing the X Y Z gradient directions, the b-value, and an index representing the phase encode direction
-     * @param unipolar_weight set the weight given to the unipolar electrostatic repulsion model compared to the bipolar model (default: 0.2).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dirmerge" as const,
+        "@type": "mrtrix.dirmerge" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -185,18 +185,18 @@ function dirmerge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirmerge_cargs(
     params: DirmergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dirmerge");
     if ((params["unipolar_weight"] ?? null) !== null) {
@@ -224,7 +224,7 @@ function dirmerge_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -239,18 +239,18 @@ function dirmerge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dirmerge_outputs(
     params: DirmergeParameters,
     execution: Execution,
 ): DirmergeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DirmergeOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -259,28 +259,28 @@ function dirmerge_outputs(
 }
 
 
+/**
+ * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
+ */
 function dirmerge_execute(
     params: DirmergeParameters,
     execution: Execution,
 ): DirmergeOutputs {
-    /**
-     * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
-     */
     params = execution.params(params)
     const cargs = dirmerge_cargs(params, execution)
     const ret = dirmerge_outputs(params, execution)
@@ -289,6 +289,35 @@ function dirmerge_execute(
 }
 
 
+/**
+ * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param subsets the number of subsets (eg. phase encoding directions) per b-value
+ * @param bvalue_files the b-value and sets of corresponding files, in order
+ * @param out the output directions file, with each row listing the X Y Z gradient directions, the b-value, and an index representing the phase encode direction
+ * @param unipolar_weight set the weight given to the unipolar electrostatic repulsion model compared to the bipolar model (default: 0.2).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
+ */
 function dirmerge(
     subsets: number,
     bvalue_files: Array<string>,
@@ -304,35 +333,6 @@ function dirmerge(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirmergeOutputs {
-    /**
-     * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param subsets the number of subsets (eg. phase encoding directions) per b-value
-     * @param bvalue_files the b-value and sets of corresponding files, in order
-     * @param out the output directions file, with each row listing the X Y Z gradient directions, the b-value, and an index representing the phase encode direction
-     * @param unipolar_weight set the weight given to the unipolar electrostatic repulsion model compared to the bipolar model (default: 0.2).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIRMERGE_METADATA);
     const params = dirmerge_params(subsets, bvalue_files, out, unipolar_weight, info, quiet, debug, force, nthreads, config, help, version)
@@ -346,6 +346,10 @@ export {
       DirmergeOutputs,
       DirmergeParameters,
       dirmerge,
+      dirmerge_cargs,
+      dirmerge_config_cargs,
       dirmerge_config_params,
+      dirmerge_execute,
+      dirmerge_outputs,
       dirmerge_params,
 };

@@ -12,41 +12,41 @@ const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
 
 
 interface SurfaceCreateSphereParameters {
-    "__STYXTYPE__": "surface-create-sphere";
+    "@type": "workbench.surface-create-sphere";
     "num_vertices": number;
     "sphere_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-create-sphere": surface_create_sphere_cargs,
+        "workbench.surface-create-sphere": surface_create_sphere_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-create-sphere": surface_create_sphere_outputs,
+        "workbench.surface-create-sphere": surface_create_sphere_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SurfaceCreateSphereOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param num_vertices desired number of vertices
+ * @param sphere_out the output sphere
+ *
+ * @returns Parameter dictionary
+ */
 function surface_create_sphere_params(
     num_vertices: number,
     sphere_out: string,
 ): SurfaceCreateSphereParameters {
-    /**
-     * Build parameters.
-    
-     * @param num_vertices desired number of vertices
-     * @param sphere_out the output sphere
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-create-sphere" as const,
+        "@type": "workbench.surface-create-sphere" as const,
         "num_vertices": num_vertices,
         "sphere_out": sphere_out,
     };
@@ -90,18 +90,18 @@ function surface_create_sphere_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_create_sphere_cargs(
     params: SurfaceCreateSphereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-create-sphere");
@@ -111,18 +111,18 @@ function surface_create_sphere_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_create_sphere_outputs(
     params: SurfaceCreateSphereParameters,
     execution: Execution,
 ): SurfaceCreateSphereOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceCreateSphereOutputs = {
         root: execution.outputFile("."),
         sphere_out: execution.outputFile([(params["sphere_out"] ?? null)].join('')),
@@ -131,29 +131,29 @@ function surface_create_sphere_outputs(
 }
 
 
+/**
+ * Generate a sphere with consistent vertex areas.
+ *
+ * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:
+ *
+ * $ wb_command -surface-create-sphere 6000 Sphere.6k.R.surf.gii
+ * $ wb_command -surface-flip-lr Sphere.6k.R.surf.gii Sphere.6k.L.surf.gii
+ * $ wb_command -set-structure Sphere.6k.R.surf.gii CORTEX_RIGHT
+ * $ wb_command -set-structure Sphere.6k.L.surf.gii CORTEX_LEFT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
+ */
 function surface_create_sphere_execute(
     params: SurfaceCreateSphereParameters,
     execution: Execution,
 ): SurfaceCreateSphereOutputs {
-    /**
-     * Generate a sphere with consistent vertex areas.
-     * 
-     * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:
-     * 
-     * $ wb_command -surface-create-sphere 6000 Sphere.6k.R.surf.gii
-     * $ wb_command -surface-flip-lr Sphere.6k.R.surf.gii Sphere.6k.L.surf.gii
-     * $ wb_command -set-structure Sphere.6k.R.surf.gii CORTEX_RIGHT
-     * $ wb_command -set-structure Sphere.6k.L.surf.gii CORTEX_LEFT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_create_sphere_cargs(params, execution)
     const ret = surface_create_sphere_outputs(params, execution)
@@ -162,31 +162,31 @@ function surface_create_sphere_execute(
 }
 
 
+/**
+ * Generate a sphere with consistent vertex areas.
+ *
+ * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:
+ *
+ * $ wb_command -surface-create-sphere 6000 Sphere.6k.R.surf.gii
+ * $ wb_command -surface-flip-lr Sphere.6k.R.surf.gii Sphere.6k.L.surf.gii
+ * $ wb_command -set-structure Sphere.6k.R.surf.gii CORTEX_RIGHT
+ * $ wb_command -set-structure Sphere.6k.L.surf.gii CORTEX_LEFT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param num_vertices desired number of vertices
+ * @param sphere_out the output sphere
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
+ */
 function surface_create_sphere(
     num_vertices: number,
     sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceCreateSphereOutputs {
-    /**
-     * Generate a sphere with consistent vertex areas.
-     * 
-     * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:
-     * 
-     * $ wb_command -surface-create-sphere 6000 Sphere.6k.R.surf.gii
-     * $ wb_command -surface-flip-lr Sphere.6k.R.surf.gii Sphere.6k.L.surf.gii
-     * $ wb_command -set-structure Sphere.6k.R.surf.gii CORTEX_RIGHT
-     * $ wb_command -set-structure Sphere.6k.L.surf.gii CORTEX_LEFT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param num_vertices desired number of vertices
-     * @param sphere_out the output sphere
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_CREATE_SPHERE_METADATA);
     const params = surface_create_sphere_params(num_vertices, sphere_out)
@@ -199,5 +199,8 @@ export {
       SurfaceCreateSphereOutputs,
       SurfaceCreateSphereParameters,
       surface_create_sphere,
+      surface_create_sphere_cargs,
+      surface_create_sphere_execute,
+      surface_create_sphere_outputs,
       surface_create_sphere_params,
 };

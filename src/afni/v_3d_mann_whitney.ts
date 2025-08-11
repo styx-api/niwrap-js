@@ -12,7 +12,7 @@ const V_3D_MANN_WHITNEY_METADATA: Metadata = {
 
 
 interface V3dMannWhitneyParameters {
-    "__STYXTYPE__": "3dMannWhitney";
+    "@type": "afni.3dMannWhitney";
     "dset1_x": Array<string>;
     "dset2_y": Array<string>;
     "output_prefix": string;
@@ -21,35 +21,35 @@ interface V3dMannWhitneyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMannWhitney": v_3d_mann_whitney_cargs,
+        "afni.3dMannWhitney": v_3d_mann_whitney_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMannWhitney": v_3d_mann_whitney_outputs,
+        "afni.3dMannWhitney": v_3d_mann_whitney_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dMannWhitneyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset1_x Data set for X observations. Must specify 1 and only 1 sub-brick.
+ * @param dset2_y Data set for Y observations. Must specify 1 and only 1 sub-brick.
+ * @param output_prefix Estimated population delta and Wilcoxon-Mann-Whitney statistics written to file.
+ * @param workmem Number of megabytes of RAM to use for statistical workspace.
+ * @param voxel_num Screen output for voxel # num.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mann_whitney_params(
     dset1_x: Array<string>,
     dset2_y: Array<string>,
@@ -79,19 +90,8 @@ function v_3d_mann_whitney_params(
     workmem: number | null = null,
     voxel_num: number | null = null,
 ): V3dMannWhitneyParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset1_x Data set for X observations. Must specify 1 and only 1 sub-brick.
-     * @param dset2_y Data set for Y observations. Must specify 1 and only 1 sub-brick.
-     * @param output_prefix Estimated population delta and Wilcoxon-Mann-Whitney statistics written to file.
-     * @param workmem Number of megabytes of RAM to use for statistical workspace.
-     * @param voxel_num Screen output for voxel # num.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMannWhitney" as const,
+        "@type": "afni.3dMannWhitney" as const,
         "dset1_x": dset1_x,
         "dset2_y": dset2_y,
         "output_prefix": output_prefix,
@@ -106,18 +106,18 @@ function v_3d_mann_whitney_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mann_whitney_cargs(
     params: V3dMannWhitneyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMannWhitney");
     cargs.push(
@@ -148,18 +148,18 @@ function v_3d_mann_whitney_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mann_whitney_outputs(
     params: V3dMannWhitneyParameters,
     execution: Execution,
 ): V3dMannWhitneyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMannWhitneyOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')),
@@ -168,22 +168,22 @@ function v_3d_mann_whitney_outputs(
 }
 
 
+/**
+ * Performs nonparametric Mann-Whitney two-sample test.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
+ */
 function v_3d_mann_whitney_execute(
     params: V3dMannWhitneyParameters,
     execution: Execution,
 ): V3dMannWhitneyOutputs {
-    /**
-     * Performs nonparametric Mann-Whitney two-sample test.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mann_whitney_cargs(params, execution)
     const ret = v_3d_mann_whitney_outputs(params, execution)
@@ -192,6 +192,22 @@ function v_3d_mann_whitney_execute(
 }
 
 
+/**
+ * Performs nonparametric Mann-Whitney two-sample test.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset1_x Data set for X observations. Must specify 1 and only 1 sub-brick.
+ * @param dset2_y Data set for Y observations. Must specify 1 and only 1 sub-brick.
+ * @param output_prefix Estimated population delta and Wilcoxon-Mann-Whitney statistics written to file.
+ * @param workmem Number of megabytes of RAM to use for statistical workspace.
+ * @param voxel_num Screen output for voxel # num.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
+ */
 function v_3d_mann_whitney(
     dset1_x: Array<string>,
     dset2_y: Array<string>,
@@ -200,22 +216,6 @@ function v_3d_mann_whitney(
     voxel_num: number | null = null,
     runner: Runner | null = null,
 ): V3dMannWhitneyOutputs {
-    /**
-     * Performs nonparametric Mann-Whitney two-sample test.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset1_x Data set for X observations. Must specify 1 and only 1 sub-brick.
-     * @param dset2_y Data set for Y observations. Must specify 1 and only 1 sub-brick.
-     * @param output_prefix Estimated population delta and Wilcoxon-Mann-Whitney statistics written to file.
-     * @param workmem Number of megabytes of RAM to use for statistical workspace.
-     * @param voxel_num Screen output for voxel # num.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MANN_WHITNEY_METADATA);
     const params = v_3d_mann_whitney_params(dset1_x, dset2_y, output_prefix, workmem, voxel_num)
@@ -228,5 +228,8 @@ export {
       V3dMannWhitneyParameters,
       V_3D_MANN_WHITNEY_METADATA,
       v_3d_mann_whitney,
+      v_3d_mann_whitney_cargs,
+      v_3d_mann_whitney_execute,
+      v_3d_mann_whitney_outputs,
       v_3d_mann_whitney_params,
 };

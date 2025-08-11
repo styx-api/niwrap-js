@@ -12,7 +12,7 @@ const QBOOT_METADATA: Metadata = {
 
 
 interface QbootParameters {
-    "__STYXTYPE__": "qboot";
+    "@type": "fsl.qboot";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "bvecs_file": InputPathType;
@@ -37,35 +37,35 @@ interface QbootParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "qboot": qboot_cargs,
+        "fsl.qboot": qboot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "qboot": qboot_outputs,
+        "fsl.qboot": qboot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface QbootOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file Data file
+ * @param mask_file Mask file
+ * @param bvecs_file b vectors file
+ * @param bvals_file b values file
+ * @param log_dir Output directory (default is logdir)
+ * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param q_file File provided with multi-shell data. Indicates the number of directions for each shell
+ * @param model_type Which model to use. 1=Tuch's ODFs, 2=CSA ODFs (default), 3=multi-shell CSA ODFs
+ * @param lmax_order Maximum spherical harmonic order employed (must be even, default=4)
+ * @param npeaks Maximum number of ODF peaks to be detected (default 2)
+ * @param threshold Minimum threshold for a local maxima to be considered an ODF peak. Expressed as a fraction of the maximum ODF value (default 0.4)
+ * @param num_samples Number of bootstrap samples (default is 50)
+ * @param lambda_param Laplace-Beltrami regularization parameter (default is 0)
+ * @param delta_param Signal attenuation regularization parameter for models=2,3 (default is 0.01)
+ * @param alpha_param Laplacian sharpening parameter for model=1 (default is 0, should be smaller than 1)
+ * @param seed_param Seed for pseudo-random number generator
+ * @param gfa_flag Compute a generalised FA, using the mean ODF in each voxel
+ * @param savecoeff_flag Save the ODF coefficients instead of the peaks. WARNING: These can be huge files, please use a few bootstrap samples and a low lmax!
+ * @param savemeancoeff_flag Save the mean ODF coefficients across all samples
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function qboot_params(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -111,35 +138,8 @@ function qboot_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): QbootParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file Data file
-     * @param mask_file Mask file
-     * @param bvecs_file b vectors file
-     * @param bvals_file b values file
-     * @param log_dir Output directory (default is logdir)
-     * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param q_file File provided with multi-shell data. Indicates the number of directions for each shell
-     * @param model_type Which model to use. 1=Tuch's ODFs, 2=CSA ODFs (default), 3=multi-shell CSA ODFs
-     * @param lmax_order Maximum spherical harmonic order employed (must be even, default=4)
-     * @param npeaks Maximum number of ODF peaks to be detected (default 2)
-     * @param threshold Minimum threshold for a local maxima to be considered an ODF peak. Expressed as a fraction of the maximum ODF value (default 0.4)
-     * @param num_samples Number of bootstrap samples (default is 50)
-     * @param lambda_param Laplace-Beltrami regularization parameter (default is 0)
-     * @param delta_param Signal attenuation regularization parameter for models=2,3 (default is 0.01)
-     * @param alpha_param Laplacian sharpening parameter for model=1 (default is 0, should be smaller than 1)
-     * @param seed_param Seed for pseudo-random number generator
-     * @param gfa_flag Compute a generalised FA, using the mean ODF in each voxel
-     * @param savecoeff_flag Save the ODF coefficients instead of the peaks. WARNING: These can be huge files, please use a few bootstrap samples and a low lmax!
-     * @param savemeancoeff_flag Save the mean ODF coefficients across all samples
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "qboot" as const,
+        "@type": "fsl.qboot" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "bvecs_file": bvecs_file,
@@ -188,18 +188,18 @@ function qboot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function qboot_cargs(
     params: QbootParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("qboot");
     cargs.push(
@@ -306,18 +306,18 @@ function qboot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function qboot_outputs(
     params: QbootParameters,
     execution: Execution,
 ): QbootOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QbootOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile(["logdir/*"].join('')),
@@ -326,22 +326,22 @@ function qboot_outputs(
 }
 
 
+/**
+ * Tool for computing q-ball ODFs using bootstrap samples.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QbootOutputs`).
+ */
 function qboot_execute(
     params: QbootParameters,
     execution: Execution,
 ): QbootOutputs {
-    /**
-     * Tool for computing q-ball ODFs using bootstrap samples.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QbootOutputs`).
-     */
     params = execution.params(params)
     const cargs = qboot_cargs(params, execution)
     const ret = qboot_outputs(params, execution)
@@ -350,6 +350,38 @@ function qboot_execute(
 }
 
 
+/**
+ * Tool for computing q-ball ODFs using bootstrap samples.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param data_file Data file
+ * @param mask_file Mask file
+ * @param bvecs_file b vectors file
+ * @param bvals_file b values file
+ * @param log_dir Output directory (default is logdir)
+ * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
+ * @param q_file File provided with multi-shell data. Indicates the number of directions for each shell
+ * @param model_type Which model to use. 1=Tuch's ODFs, 2=CSA ODFs (default), 3=multi-shell CSA ODFs
+ * @param lmax_order Maximum spherical harmonic order employed (must be even, default=4)
+ * @param npeaks Maximum number of ODF peaks to be detected (default 2)
+ * @param threshold Minimum threshold for a local maxima to be considered an ODF peak. Expressed as a fraction of the maximum ODF value (default 0.4)
+ * @param num_samples Number of bootstrap samples (default is 50)
+ * @param lambda_param Laplace-Beltrami regularization parameter (default is 0)
+ * @param delta_param Signal attenuation regularization parameter for models=2,3 (default is 0.01)
+ * @param alpha_param Laplacian sharpening parameter for model=1 (default is 0, should be smaller than 1)
+ * @param seed_param Seed for pseudo-random number generator
+ * @param gfa_flag Compute a generalised FA, using the mean ODF in each voxel
+ * @param savecoeff_flag Save the ODF coefficients instead of the peaks. WARNING: These can be huge files, please use a few bootstrap samples and a low lmax!
+ * @param savemeancoeff_flag Save the mean ODF coefficients across all samples
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QbootOutputs`).
+ */
 function qboot(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -374,38 +406,6 @@ function qboot(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): QbootOutputs {
-    /**
-     * Tool for computing q-ball ODFs using bootstrap samples.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param data_file Data file
-     * @param mask_file Mask file
-     * @param bvecs_file b vectors file
-     * @param bvals_file b values file
-     * @param log_dir Output directory (default is logdir)
-     * @param forcedir_flag Use the actual directory name given - i.e. don't add + to make a new directory
-     * @param q_file File provided with multi-shell data. Indicates the number of directions for each shell
-     * @param model_type Which model to use. 1=Tuch's ODFs, 2=CSA ODFs (default), 3=multi-shell CSA ODFs
-     * @param lmax_order Maximum spherical harmonic order employed (must be even, default=4)
-     * @param npeaks Maximum number of ODF peaks to be detected (default 2)
-     * @param threshold Minimum threshold for a local maxima to be considered an ODF peak. Expressed as a fraction of the maximum ODF value (default 0.4)
-     * @param num_samples Number of bootstrap samples (default is 50)
-     * @param lambda_param Laplace-Beltrami regularization parameter (default is 0)
-     * @param delta_param Signal attenuation regularization parameter for models=2,3 (default is 0.01)
-     * @param alpha_param Laplacian sharpening parameter for model=1 (default is 0, should be smaller than 1)
-     * @param seed_param Seed for pseudo-random number generator
-     * @param gfa_flag Compute a generalised FA, using the mean ODF in each voxel
-     * @param savecoeff_flag Save the ODF coefficients instead of the peaks. WARNING: These can be huge files, please use a few bootstrap samples and a low lmax!
-     * @param savemeancoeff_flag Save the mean ODF coefficients across all samples
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QbootOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QBOOT_METADATA);
     const params = qboot_params(data_file, mask_file, bvecs_file, bvals_file, log_dir, forcedir_flag, q_file, model_type, lmax_order, npeaks, threshold, num_samples, lambda_param, delta_param, alpha_param, seed_param, gfa_flag, savecoeff_flag, savemeancoeff_flag, verbose_flag, help_flag)
@@ -418,5 +418,8 @@ export {
       QbootOutputs,
       QbootParameters,
       qboot,
+      qboot_cargs,
+      qboot_execute,
+      qboot_outputs,
       qboot_params,
 };

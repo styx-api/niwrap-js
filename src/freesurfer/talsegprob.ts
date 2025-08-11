@@ -12,7 +12,7 @@ const TALSEGPROB_METADATA: Metadata = {
 
 
 interface TalsegprobParameters {
-    "__STYXTYPE__": "talsegprob";
+    "@type": "freesurfer.talsegprob";
     "subjects_list"?: Array<string> | null | undefined;
     "fsgd_file"?: InputPathType | null | undefined;
     "segmentation_number"?: number | null | undefined;
@@ -33,35 +33,35 @@ interface TalsegprobParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talsegprob": talsegprob_cargs,
+        "freesurfer.talsegprob": talsegprob_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "talsegprob": talsegprob_outputs,
+        "freesurfer.talsegprob": talsegprob_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,29 @@ interface TalsegprobOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_list List of subjects to include in the analysis.
+ * @param fsgd_file FSGD file to get subject list.
+ * @param segmentation_number Segmentation number.
+ * @param second_segmentation_number Second segmentation number.
+ * @param hippo_flag Use segmentation numbers 17 and 53.
+ * @param left_hippo_flag Use segmentation number 17.
+ * @param right_hippo_flag Use segmentation number 53.
+ * @param segmentation_file Use subject/mri/segfile.mgz instead of aseg.
+ * @param probability_output Probability output file name.
+ * @param vote_output Vote output file name.
+ * @param concat_output Concatenated output file name.
+ * @param xform_file Transformation file to use (default is talairach.xfm).
+ * @param subjects_dir SUBJECTS_DIR to use instead of the one in the environment.
+ * @param tmpdir Temporary directory (implies --nocleanup).
+ * @param nocleanup_flag Do not delete temporary directory.
+ * @param version_flag Display script version information.
+ * @param echo_flag Enable command echo, for debug.
+ *
+ * @returns Parameter dictionary
+ */
 function talsegprob_params(
     subjects_list: Array<string> | null = null,
     fsgd_file: InputPathType | null = null,
@@ -111,31 +134,8 @@ function talsegprob_params(
     version_flag: boolean = false,
     echo_flag: boolean = false,
 ): TalsegprobParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_list List of subjects to include in the analysis.
-     * @param fsgd_file FSGD file to get subject list.
-     * @param segmentation_number Segmentation number.
-     * @param second_segmentation_number Second segmentation number.
-     * @param hippo_flag Use segmentation numbers 17 and 53.
-     * @param left_hippo_flag Use segmentation number 17.
-     * @param right_hippo_flag Use segmentation number 53.
-     * @param segmentation_file Use subject/mri/segfile.mgz instead of aseg.
-     * @param probability_output Probability output file name.
-     * @param vote_output Vote output file name.
-     * @param concat_output Concatenated output file name.
-     * @param xform_file Transformation file to use (default is talairach.xfm).
-     * @param subjects_dir SUBJECTS_DIR to use instead of the one in the environment.
-     * @param tmpdir Temporary directory (implies --nocleanup).
-     * @param nocleanup_flag Do not delete temporary directory.
-     * @param version_flag Display script version information.
-     * @param echo_flag Enable command echo, for debug.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talsegprob" as const,
+        "@type": "freesurfer.talsegprob" as const,
         "hippo_flag": hippo_flag,
         "left_hippo_flag": left_hippo_flag,
         "right_hippo_flag": right_hippo_flag,
@@ -180,18 +180,18 @@ function talsegprob_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talsegprob_cargs(
     params: TalsegprobParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talsegprob");
     if ((params["subjects_list"] ?? null) !== null) {
@@ -282,18 +282,18 @@ function talsegprob_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talsegprob_outputs(
     params: TalsegprobParameters,
     execution: Execution,
 ): TalsegprobOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalsegprobOutputs = {
         root: execution.outputFile("."),
         probability_output_file: ((params["probability_output"] ?? null) !== null) ? execution.outputFile([(params["probability_output"] ?? null)].join('')) : null,
@@ -304,22 +304,22 @@ function talsegprob_outputs(
 }
 
 
+/**
+ * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
+ */
 function talsegprob_execute(
     params: TalsegprobParameters,
     execution: Execution,
 ): TalsegprobOutputs {
-    /**
-     * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
-     */
     params = execution.params(params)
     const cargs = talsegprob_cargs(params, execution)
     const ret = talsegprob_outputs(params, execution)
@@ -328,6 +328,34 @@ function talsegprob_execute(
 }
 
 
+/**
+ * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_list List of subjects to include in the analysis.
+ * @param fsgd_file FSGD file to get subject list.
+ * @param segmentation_number Segmentation number.
+ * @param second_segmentation_number Second segmentation number.
+ * @param hippo_flag Use segmentation numbers 17 and 53.
+ * @param left_hippo_flag Use segmentation number 17.
+ * @param right_hippo_flag Use segmentation number 53.
+ * @param segmentation_file Use subject/mri/segfile.mgz instead of aseg.
+ * @param probability_output Probability output file name.
+ * @param vote_output Vote output file name.
+ * @param concat_output Concatenated output file name.
+ * @param xform_file Transformation file to use (default is talairach.xfm).
+ * @param subjects_dir SUBJECTS_DIR to use instead of the one in the environment.
+ * @param tmpdir Temporary directory (implies --nocleanup).
+ * @param nocleanup_flag Do not delete temporary directory.
+ * @param version_flag Display script version information.
+ * @param echo_flag Enable command echo, for debug.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
+ */
 function talsegprob(
     subjects_list: Array<string> | null = null,
     fsgd_file: InputPathType | null = null,
@@ -348,34 +376,6 @@ function talsegprob(
     echo_flag: boolean = false,
     runner: Runner | null = null,
 ): TalsegprobOutputs {
-    /**
-     * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_list List of subjects to include in the analysis.
-     * @param fsgd_file FSGD file to get subject list.
-     * @param segmentation_number Segmentation number.
-     * @param second_segmentation_number Second segmentation number.
-     * @param hippo_flag Use segmentation numbers 17 and 53.
-     * @param left_hippo_flag Use segmentation number 17.
-     * @param right_hippo_flag Use segmentation number 53.
-     * @param segmentation_file Use subject/mri/segfile.mgz instead of aseg.
-     * @param probability_output Probability output file name.
-     * @param vote_output Vote output file name.
-     * @param concat_output Concatenated output file name.
-     * @param xform_file Transformation file to use (default is talairach.xfm).
-     * @param subjects_dir SUBJECTS_DIR to use instead of the one in the environment.
-     * @param tmpdir Temporary directory (implies --nocleanup).
-     * @param nocleanup_flag Do not delete temporary directory.
-     * @param version_flag Display script version information.
-     * @param echo_flag Enable command echo, for debug.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALSEGPROB_METADATA);
     const params = talsegprob_params(subjects_list, fsgd_file, segmentation_number, second_segmentation_number, hippo_flag, left_hippo_flag, right_hippo_flag, segmentation_file, probability_output, vote_output, concat_output, xform_file, subjects_dir, tmpdir, nocleanup_flag, version_flag, echo_flag)
@@ -388,5 +388,8 @@ export {
       TalsegprobOutputs,
       TalsegprobParameters,
       talsegprob,
+      talsegprob_cargs,
+      talsegprob_execute,
+      talsegprob_outputs,
       talsegprob_params,
 };

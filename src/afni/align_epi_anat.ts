@@ -12,7 +12,7 @@ const ALIGN_EPI_ANAT_METADATA: Metadata = {
 
 
 interface AlignEpiAnatParameters {
-    "__STYXTYPE__": "align_epi_anat";
+    "@type": "afni.align_epi_anat";
     "epi": InputPathType;
     "anat": InputPathType;
     "epi_base": string;
@@ -33,35 +33,35 @@ interface AlignEpiAnatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "align_epi_anat": align_epi_anat_cargs,
+        "afni.align_epi_anat": align_epi_anat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "align_epi_anat": align_epi_anat_outputs,
+        "afni.align_epi_anat": align_epi_anat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,29 @@ interface AlignEpiAnatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param epi EPI dataset to align or to which to align
+ * @param anat Anatomical dataset to align or to which to align
+ * @param epi_base Base sub-brick to use for alignment (0/mean/median/max/subbrick#)
+ * @param anat2epi Align anatomical to EPI dataset (default)
+ * @param epi2anat Align EPI to anatomical dataset
+ * @param suffix Append suffix to the original anat/epi dataset to use in the resulting dataset names
+ * @param add_edge Run @AddEdge script to create composite edge images
+ * @param big_move Large displacement is needed to align the two volumes
+ * @param giant_move Even larger movement required, uses cmass, two passes and very large angles and shifts
+ * @param ginormous_move Adds align_centers to giant_move
+ * @param keep_rm_files Don't delete any of the temporary files created
+ * @param prep_only Do preprocessing steps only without alignment
+ * @param ana_has_skull Do not skullstrip anat dataset
+ * @param epi_strip Method to remove skull for EPI data
+ * @param volreg_method Time series volume registration method
+ * @param ex_mode Command execution mode
+ * @param overwrite Overwrite existing files
+ *
+ * @returns Parameter dictionary
+ */
 function align_epi_anat_params(
     epi: InputPathType,
     anat: InputPathType,
@@ -107,31 +130,8 @@ function align_epi_anat_params(
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
     overwrite: boolean = false,
 ): AlignEpiAnatParameters {
-    /**
-     * Build parameters.
-    
-     * @param epi EPI dataset to align or to which to align
-     * @param anat Anatomical dataset to align or to which to align
-     * @param epi_base Base sub-brick to use for alignment (0/mean/median/max/subbrick#)
-     * @param anat2epi Align anatomical to EPI dataset (default)
-     * @param epi2anat Align EPI to anatomical dataset
-     * @param suffix Append suffix to the original anat/epi dataset to use in the resulting dataset names
-     * @param add_edge Run @AddEdge script to create composite edge images
-     * @param big_move Large displacement is needed to align the two volumes
-     * @param giant_move Even larger movement required, uses cmass, two passes and very large angles and shifts
-     * @param ginormous_move Adds align_centers to giant_move
-     * @param keep_rm_files Don't delete any of the temporary files created
-     * @param prep_only Do preprocessing steps only without alignment
-     * @param ana_has_skull Do not skullstrip anat dataset
-     * @param epi_strip Method to remove skull for EPI data
-     * @param volreg_method Time series volume registration method
-     * @param ex_mode Command execution mode
-     * @param overwrite Overwrite existing files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "align_epi_anat" as const,
+        "@type": "afni.align_epi_anat" as const,
         "epi": epi,
         "anat": anat,
         "epi_base": epi_base,
@@ -164,18 +164,18 @@ function align_epi_anat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function align_epi_anat_cargs(
     params: AlignEpiAnatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("align_epi_anat.py");
     cargs.push(
@@ -251,18 +251,18 @@ function align_epi_anat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function align_epi_anat_outputs(
     params: AlignEpiAnatParameters,
     execution: Execution,
 ): AlignEpiAnatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AlignEpiAnatOutputs = {
         root: execution.outputFile("."),
         anat_aligned: execution.outputFile([path.basename((params["anat"] ?? null)), "+orig"].join('')),
@@ -272,22 +272,22 @@ function align_epi_anat_outputs(
 }
 
 
+/**
+ * Align EPI to anatomical datasets or vice versa.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
+ */
 function align_epi_anat_execute(
     params: AlignEpiAnatParameters,
     execution: Execution,
 ): AlignEpiAnatOutputs {
-    /**
-     * Align EPI to anatomical datasets or vice versa.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
-     */
     params = execution.params(params)
     const cargs = align_epi_anat_cargs(params, execution)
     const ret = align_epi_anat_outputs(params, execution)
@@ -296,6 +296,34 @@ function align_epi_anat_execute(
 }
 
 
+/**
+ * Align EPI to anatomical datasets or vice versa.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param epi EPI dataset to align or to which to align
+ * @param anat Anatomical dataset to align or to which to align
+ * @param epi_base Base sub-brick to use for alignment (0/mean/median/max/subbrick#)
+ * @param anat2epi Align anatomical to EPI dataset (default)
+ * @param epi2anat Align EPI to anatomical dataset
+ * @param suffix Append suffix to the original anat/epi dataset to use in the resulting dataset names
+ * @param add_edge Run @AddEdge script to create composite edge images
+ * @param big_move Large displacement is needed to align the two volumes
+ * @param giant_move Even larger movement required, uses cmass, two passes and very large angles and shifts
+ * @param ginormous_move Adds align_centers to giant_move
+ * @param keep_rm_files Don't delete any of the temporary files created
+ * @param prep_only Do preprocessing steps only without alignment
+ * @param ana_has_skull Do not skullstrip anat dataset
+ * @param epi_strip Method to remove skull for EPI data
+ * @param volreg_method Time series volume registration method
+ * @param ex_mode Command execution mode
+ * @param overwrite Overwrite existing files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
+ */
 function align_epi_anat(
     epi: InputPathType,
     anat: InputPathType,
@@ -316,34 +344,6 @@ function align_epi_anat(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): AlignEpiAnatOutputs {
-    /**
-     * Align EPI to anatomical datasets or vice versa.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param epi EPI dataset to align or to which to align
-     * @param anat Anatomical dataset to align or to which to align
-     * @param epi_base Base sub-brick to use for alignment (0/mean/median/max/subbrick#)
-     * @param anat2epi Align anatomical to EPI dataset (default)
-     * @param epi2anat Align EPI to anatomical dataset
-     * @param suffix Append suffix to the original anat/epi dataset to use in the resulting dataset names
-     * @param add_edge Run @AddEdge script to create composite edge images
-     * @param big_move Large displacement is needed to align the two volumes
-     * @param giant_move Even larger movement required, uses cmass, two passes and very large angles and shifts
-     * @param ginormous_move Adds align_centers to giant_move
-     * @param keep_rm_files Don't delete any of the temporary files created
-     * @param prep_only Do preprocessing steps only without alignment
-     * @param ana_has_skull Do not skullstrip anat dataset
-     * @param epi_strip Method to remove skull for EPI data
-     * @param volreg_method Time series volume registration method
-     * @param ex_mode Command execution mode
-     * @param overwrite Overwrite existing files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ALIGN_EPI_ANAT_METADATA);
     const params = align_epi_anat_params(epi, anat, epi_base, anat2epi, epi2anat, suffix, add_edge, big_move, giant_move, ginormous_move, keep_rm_files, prep_only, ana_has_skull, epi_strip, volreg_method, ex_mode, overwrite)
@@ -356,5 +356,8 @@ export {
       AlignEpiAnatOutputs,
       AlignEpiAnatParameters,
       align_epi_anat,
+      align_epi_anat_cargs,
+      align_epi_anat_execute,
+      align_epi_anat_outputs,
       align_epi_anat_params,
 };

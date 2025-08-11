@@ -12,7 +12,7 @@ const MRI_Z2P_METADATA: Metadata = {
 
 
 interface MriZ2pParameters {
-    "__STYXTYPE__": "mri_z2p";
+    "@type": "freesurfer.mri_z2p";
     "z_volume": InputPathType;
     "p_volume": string;
     "sig_volume": string;
@@ -32,35 +32,35 @@ interface MriZ2pParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_z2p": mri_z2p_cargs,
+        "freesurfer.mri_z2p": mri_z2p_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_z2p": mri_z2p_outputs,
+        "freesurfer.mri_z2p": mri_z2p_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,28 @@ interface MriZ2pOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param z_volume Z volume file
+ * @param p_volume P volume file
+ * @param sig_volume Significance volume file
+ * @param mask_volume Mask volume file
+ * @param two_sided Assume a two-sided, unsigned test (keeps sign of input).
+ * @param one_sided Assume a one-sided, signed test.
+ * @param signed Two-sided/signed p-value (p = 2*(1-p)).
+ * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
+ * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
+ * @param nii_format Use NIfTI output format.
+ * @param niigz_format Use compressed NIfTI output format.
+ * @param mgh_format Use MGH output format.
+ * @param mgz_format Use MGZ output format.
+ * @param img_format Use Analyze output format.
+ * @param debug Turn on debugging.
+ * @param check_opts Don't run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_z2p_params(
     z_volume: InputPathType,
     p_volume: string,
@@ -105,30 +127,8 @@ function mri_z2p_params(
     debug: boolean = false,
     check_opts: boolean = false,
 ): MriZ2pParameters {
-    /**
-     * Build parameters.
-    
-     * @param z_volume Z volume file
-     * @param p_volume P volume file
-     * @param sig_volume Significance volume file
-     * @param mask_volume Mask volume file
-     * @param two_sided Assume a two-sided, unsigned test (keeps sign of input).
-     * @param one_sided Assume a one-sided, signed test.
-     * @param signed Two-sided/signed p-value (p = 2*(1-p)).
-     * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
-     * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
-     * @param nii_format Use NIfTI output format.
-     * @param niigz_format Use compressed NIfTI output format.
-     * @param mgh_format Use MGH output format.
-     * @param mgz_format Use MGZ output format.
-     * @param img_format Use Analyze output format.
-     * @param debug Turn on debugging.
-     * @param check_opts Don't run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_z2p" as const,
+        "@type": "freesurfer.mri_z2p" as const,
         "z_volume": z_volume,
         "p_volume": p_volume,
         "sig_volume": sig_volume,
@@ -156,18 +156,18 @@ function mri_z2p_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_z2p_cargs(
     params: MriZ2pParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_z2p");
     cargs.push(
@@ -234,18 +234,18 @@ function mri_z2p_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_z2p_outputs(
     params: MriZ2pParameters,
     execution: Execution,
 ): MriZ2pOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriZ2pOutputs = {
         root: execution.outputFile("."),
         output_p_volume: execution.outputFile([(params["p_volume"] ?? null)].join('')),
@@ -255,22 +255,22 @@ function mri_z2p_outputs(
 }
 
 
+/**
+ * Converts Z-statistic volumes to P-value volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
+ */
 function mri_z2p_execute(
     params: MriZ2pParameters,
     execution: Execution,
 ): MriZ2pOutputs {
-    /**
-     * Converts Z-statistic volumes to P-value volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_z2p_cargs(params, execution)
     const ret = mri_z2p_outputs(params, execution)
@@ -279,6 +279,33 @@ function mri_z2p_execute(
 }
 
 
+/**
+ * Converts Z-statistic volumes to P-value volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param z_volume Z volume file
+ * @param p_volume P volume file
+ * @param sig_volume Significance volume file
+ * @param mask_volume Mask volume file
+ * @param two_sided Assume a two-sided, unsigned test (keeps sign of input).
+ * @param one_sided Assume a one-sided, signed test.
+ * @param signed Two-sided/signed p-value (p = 2*(1-p)).
+ * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
+ * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
+ * @param nii_format Use NIfTI output format.
+ * @param niigz_format Use compressed NIfTI output format.
+ * @param mgh_format Use MGH output format.
+ * @param mgz_format Use MGZ output format.
+ * @param img_format Use Analyze output format.
+ * @param debug Turn on debugging.
+ * @param check_opts Don't run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
+ */
 function mri_z2p(
     z_volume: InputPathType,
     p_volume: string,
@@ -298,33 +325,6 @@ function mri_z2p(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriZ2pOutputs {
-    /**
-     * Converts Z-statistic volumes to P-value volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param z_volume Z volume file
-     * @param p_volume P volume file
-     * @param sig_volume Significance volume file
-     * @param mask_volume Mask volume file
-     * @param two_sided Assume a two-sided, unsigned test (keeps sign of input).
-     * @param one_sided Assume a one-sided, signed test.
-     * @param signed Two-sided/signed p-value (p = 2*(1-p)).
-     * @param feat Convert all z-stats and zf-stats to sigs in the specified directory.
-     * @param feat_format Use specified format for output (e.g., nii, nii.gz, mgh).
-     * @param nii_format Use NIfTI output format.
-     * @param niigz_format Use compressed NIfTI output format.
-     * @param mgh_format Use MGH output format.
-     * @param mgz_format Use MGZ output format.
-     * @param img_format Use Analyze output format.
-     * @param debug Turn on debugging.
-     * @param check_opts Don't run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_Z2P_METADATA);
     const params = mri_z2p_params(z_volume, p_volume, sig_volume, mask_volume, two_sided, one_sided, signed, feat, feat_format, nii_format, niigz_format, mgh_format, mgz_format, img_format, debug, check_opts)
@@ -337,5 +337,8 @@ export {
       MriZ2pOutputs,
       MriZ2pParameters,
       mri_z2p,
+      mri_z2p_cargs,
+      mri_z2p_execute,
+      mri_z2p_outputs,
       mri_z2p_params,
 };

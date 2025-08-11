@@ -12,7 +12,7 @@ const MRI_NU_CORRECT_MNI_METADATA: Metadata = {
 
 
 interface MriNuCorrectMniParameters {
-    "__STYXTYPE__": "mri_nu_correct.mni";
+    "@type": "freesurfer.mri_nu_correct.mni";
     "input_volume": InputPathType;
     "output_volume": string;
     "iterations": number;
@@ -29,35 +29,35 @@ interface MriNuCorrectMniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_nu_correct.mni": mri_nu_correct_mni_cargs,
+        "freesurfer.mri_nu_correct.mni": mri_nu_correct_mni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_nu_correct.mni": mri_nu_correct_mni_outputs,
+        "freesurfer.mri_nu_correct.mni": mri_nu_correct_mni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface MriNuCorrectMniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume. Can be any format accepted by mri_convert.
+ * @param output_volume Output volume. Can be any format accepted by mri_convert.
+ * @param iterations Number of iterations to run nu_correct. Default is 4.
+ * @param proto_iterations Passes as argument of the -iterations flag of nu_correct.
+ * @param mask_volume Brainmask volume. Can be any format accepted by mri_convert.
+ * @param stop_threshold Threshold for stopping iteration. Suggest values between 0.01 to 0.0001.
+ * @param uchar_transform Use mri_make_uchar instead of conforming.
+ * @param ants_n3 Run N3 using ANTS N3BiasFieldCorrection.
+ * @param ants_n4 Run N4 using ANTS N4BiasFieldCorrection.
+ * @param no_uchar Do not use mri_make_uchar (default).
+ * @param ants_n4_replace_zeros Replace 0s with small random numbers then remove after nu correction.
+ * @param cm_flag For use with data that is higher than 1mm resolution.
+ * @param debug_flag Turn on debugging.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_nu_correct_mni_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -95,27 +114,8 @@ function mri_nu_correct_mni_params(
     cm_flag: boolean = false,
     debug_flag: boolean = false,
 ): MriNuCorrectMniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume. Can be any format accepted by mri_convert.
-     * @param output_volume Output volume. Can be any format accepted by mri_convert.
-     * @param iterations Number of iterations to run nu_correct. Default is 4.
-     * @param proto_iterations Passes as argument of the -iterations flag of nu_correct.
-     * @param mask_volume Brainmask volume. Can be any format accepted by mri_convert.
-     * @param stop_threshold Threshold for stopping iteration. Suggest values between 0.01 to 0.0001.
-     * @param uchar_transform Use mri_make_uchar instead of conforming.
-     * @param ants_n3 Run N3 using ANTS N3BiasFieldCorrection.
-     * @param ants_n4 Run N4 using ANTS N4BiasFieldCorrection.
-     * @param no_uchar Do not use mri_make_uchar (default).
-     * @param ants_n4_replace_zeros Replace 0s with small random numbers then remove after nu correction.
-     * @param cm_flag For use with data that is higher than 1mm resolution.
-     * @param debug_flag Turn on debugging.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_nu_correct.mni" as const,
+        "@type": "freesurfer.mri_nu_correct.mni" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "iterations": iterations,
@@ -142,18 +142,18 @@ function mri_nu_correct_mni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_nu_correct_mni_cargs(
     params: MriNuCorrectMniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_nu_correct.mni");
     cargs.push(
@@ -214,18 +214,18 @@ function mri_nu_correct_mni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_nu_correct_mni_outputs(
     params: MriNuCorrectMniParameters,
     execution: Execution,
 ): MriNuCorrectMniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNuCorrectMniOutputs = {
         root: execution.outputFile("."),
         corrected_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -234,22 +234,22 @@ function mri_nu_correct_mni_outputs(
 }
 
 
+/**
+ * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
+ */
 function mri_nu_correct_mni_execute(
     params: MriNuCorrectMniParameters,
     execution: Execution,
 ): MriNuCorrectMniOutputs {
-    /**
-     * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_nu_correct_mni_cargs(params, execution)
     const ret = mri_nu_correct_mni_outputs(params, execution)
@@ -258,6 +258,30 @@ function mri_nu_correct_mni_execute(
 }
 
 
+/**
+ * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume. Can be any format accepted by mri_convert.
+ * @param output_volume Output volume. Can be any format accepted by mri_convert.
+ * @param iterations Number of iterations to run nu_correct. Default is 4.
+ * @param proto_iterations Passes as argument of the -iterations flag of nu_correct.
+ * @param mask_volume Brainmask volume. Can be any format accepted by mri_convert.
+ * @param stop_threshold Threshold for stopping iteration. Suggest values between 0.01 to 0.0001.
+ * @param uchar_transform Use mri_make_uchar instead of conforming.
+ * @param ants_n3 Run N3 using ANTS N3BiasFieldCorrection.
+ * @param ants_n4 Run N4 using ANTS N4BiasFieldCorrection.
+ * @param no_uchar Do not use mri_make_uchar (default).
+ * @param ants_n4_replace_zeros Replace 0s with small random numbers then remove after nu correction.
+ * @param cm_flag For use with data that is higher than 1mm resolution.
+ * @param debug_flag Turn on debugging.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
+ */
 function mri_nu_correct_mni(
     input_volume: InputPathType,
     output_volume: string,
@@ -274,30 +298,6 @@ function mri_nu_correct_mni(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriNuCorrectMniOutputs {
-    /**
-     * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume. Can be any format accepted by mri_convert.
-     * @param output_volume Output volume. Can be any format accepted by mri_convert.
-     * @param iterations Number of iterations to run nu_correct. Default is 4.
-     * @param proto_iterations Passes as argument of the -iterations flag of nu_correct.
-     * @param mask_volume Brainmask volume. Can be any format accepted by mri_convert.
-     * @param stop_threshold Threshold for stopping iteration. Suggest values between 0.01 to 0.0001.
-     * @param uchar_transform Use mri_make_uchar instead of conforming.
-     * @param ants_n3 Run N3 using ANTS N3BiasFieldCorrection.
-     * @param ants_n4 Run N4 using ANTS N4BiasFieldCorrection.
-     * @param no_uchar Do not use mri_make_uchar (default).
-     * @param ants_n4_replace_zeros Replace 0s with small random numbers then remove after nu correction.
-     * @param cm_flag For use with data that is higher than 1mm resolution.
-     * @param debug_flag Turn on debugging.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NU_CORRECT_MNI_METADATA);
     const params = mri_nu_correct_mni_params(input_volume, output_volume, iterations, proto_iterations, mask_volume, stop_threshold, uchar_transform, ants_n3, ants_n4, no_uchar, ants_n4_replace_zeros, cm_flag, debug_flag)
@@ -310,5 +310,8 @@ export {
       MriNuCorrectMniOutputs,
       MriNuCorrectMniParameters,
       mri_nu_correct_mni,
+      mri_nu_correct_mni_cargs,
+      mri_nu_correct_mni_execute,
+      mri_nu_correct_mni_outputs,
       mri_nu_correct_mni_params,
 };

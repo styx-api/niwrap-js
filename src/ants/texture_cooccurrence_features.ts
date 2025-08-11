@@ -12,7 +12,7 @@ const TEXTURE_COOCCURRENCE_FEATURES_METADATA: Metadata = {
 
 
 interface TextureCooccurrenceFeaturesParameters {
-    "__STYXTYPE__": "TextureCooccurrenceFeatures";
+    "@type": "ants.TextureCooccurrenceFeatures";
     "image_dimension": number;
     "input_image": InputPathType;
     "number_of_bins_per_axis"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface TextureCooccurrenceFeaturesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "TextureCooccurrenceFeatures": texture_cooccurrence_features_cargs,
+        "ants.TextureCooccurrenceFeatures": texture_cooccurrence_features_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "TextureCooccurrenceFeatures": texture_cooccurrence_features_outputs,
+        "ants.TextureCooccurrenceFeatures": texture_cooccurrence_features_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface TextureCooccurrenceFeaturesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the input image, e.g., 2 for 2D images, 3 for 3D images.
+ * @param input_image The input image file for which texture co-occurrence features will be calculated.
+ * @param number_of_bins_per_axis The number of bins per axis to be used in the histogram for texture calculation. Defaults to 256.
+ * @param mask_image Optional mask image to specify the regions of interest in the input image for which features will be calculated.
+ * @param mask_label Label value in the mask image to specify which region to process. Defaults to 1.
+ *
+ * @returns Parameter dictionary
+ */
 function texture_cooccurrence_features_params(
     image_dimension: number,
     input_image: InputPathType,
@@ -79,19 +90,8 @@ function texture_cooccurrence_features_params(
     mask_image: InputPathType | null = null,
     mask_label: number | null = 1,
 ): TextureCooccurrenceFeaturesParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the input image, e.g., 2 for 2D images, 3 for 3D images.
-     * @param input_image The input image file for which texture co-occurrence features will be calculated.
-     * @param number_of_bins_per_axis The number of bins per axis to be used in the histogram for texture calculation. Defaults to 256.
-     * @param mask_image Optional mask image to specify the regions of interest in the input image for which features will be calculated.
-     * @param mask_label Label value in the mask image to specify which region to process. Defaults to 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "TextureCooccurrenceFeatures" as const,
+        "@type": "ants.TextureCooccurrenceFeatures" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -108,18 +108,18 @@ function texture_cooccurrence_features_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function texture_cooccurrence_features_cargs(
     params: TextureCooccurrenceFeaturesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("TextureCooccurrenceFeatures");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -137,18 +137,18 @@ function texture_cooccurrence_features_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function texture_cooccurrence_features_outputs(
     params: TextureCooccurrenceFeaturesParameters,
     execution: Execution,
 ): TextureCooccurrenceFeaturesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TextureCooccurrenceFeaturesOutputs = {
         root: execution.outputFile("."),
         features_output: execution.outputFile([path.basename((params["input_image"] ?? null)), "_features.txt"].join('')),
@@ -157,22 +157,22 @@ function texture_cooccurrence_features_outputs(
 }
 
 
+/**
+ * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
+ */
 function texture_cooccurrence_features_execute(
     params: TextureCooccurrenceFeaturesParameters,
     execution: Execution,
 ): TextureCooccurrenceFeaturesOutputs {
-    /**
-     * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
-     */
     params = execution.params(params)
     const cargs = texture_cooccurrence_features_cargs(params, execution)
     const ret = texture_cooccurrence_features_outputs(params, execution)
@@ -181,6 +181,22 @@ function texture_cooccurrence_features_execute(
 }
 
 
+/**
+ * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the input image, e.g., 2 for 2D images, 3 for 3D images.
+ * @param input_image The input image file for which texture co-occurrence features will be calculated.
+ * @param number_of_bins_per_axis The number of bins per axis to be used in the histogram for texture calculation. Defaults to 256.
+ * @param mask_image Optional mask image to specify the regions of interest in the input image for which features will be calculated.
+ * @param mask_label Label value in the mask image to specify which region to process. Defaults to 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
+ */
 function texture_cooccurrence_features(
     image_dimension: number,
     input_image: InputPathType,
@@ -189,22 +205,6 @@ function texture_cooccurrence_features(
     mask_label: number | null = 1,
     runner: Runner | null = null,
 ): TextureCooccurrenceFeaturesOutputs {
-    /**
-     * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the input image, e.g., 2 for 2D images, 3 for 3D images.
-     * @param input_image The input image file for which texture co-occurrence features will be calculated.
-     * @param number_of_bins_per_axis The number of bins per axis to be used in the histogram for texture calculation. Defaults to 256.
-     * @param mask_image Optional mask image to specify the regions of interest in the input image for which features will be calculated.
-     * @param mask_label Label value in the mask image to specify which region to process. Defaults to 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEXTURE_COOCCURRENCE_FEATURES_METADATA);
     const params = texture_cooccurrence_features_params(image_dimension, input_image, number_of_bins_per_axis, mask_image, mask_label)
@@ -217,5 +217,8 @@ export {
       TextureCooccurrenceFeaturesOutputs,
       TextureCooccurrenceFeaturesParameters,
       texture_cooccurrence_features,
+      texture_cooccurrence_features_cargs,
+      texture_cooccurrence_features_execute,
+      texture_cooccurrence_features_outputs,
       texture_cooccurrence_features_params,
 };

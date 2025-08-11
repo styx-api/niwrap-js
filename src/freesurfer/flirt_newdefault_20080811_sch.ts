@@ -12,40 +12,40 @@ const FLIRT_NEWDEFAULT_20080811_SCH_METADATA: Metadata = {
 
 
 interface FlirtNewdefault20080811SchParameters {
-    "__STYXTYPE__": "flirt.newdefault.20080811.sch";
+    "@type": "freesurfer.flirt.newdefault.20080811.sch";
     "term_option"?: string | null | undefined;
     "curses_flag": boolean;
     "scrollback_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "flirt.newdefault.20080811.sch": flirt_newdefault_20080811_sch_cargs,
+        "freesurfer.flirt.newdefault.20080811.sch": flirt_newdefault_20080811_sch_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface FlirtNewdefault20080811SchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param term_option Use this terminal type instead of $TERM
+ * @param curses_flag Print curses-version
+ * @param scrollback_flag Do not try to clear scrollback
+ *
+ * @returns Parameter dictionary
+ */
 function flirt_newdefault_20080811_sch_params(
     term_option: string | null = null,
     curses_flag: boolean = false,
     scrollback_flag: boolean = false,
 ): FlirtNewdefault20080811SchParameters {
-    /**
-     * Build parameters.
-    
-     * @param term_option Use this terminal type instead of $TERM
-     * @param curses_flag Print curses-version
-     * @param scrollback_flag Do not try to clear scrollback
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flirt.newdefault.20080811.sch" as const,
+        "@type": "freesurfer.flirt.newdefault.20080811.sch" as const,
         "curses_flag": curses_flag,
         "scrollback_flag": scrollback_flag,
     };
@@ -91,18 +91,18 @@ function flirt_newdefault_20080811_sch_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function flirt_newdefault_20080811_sch_cargs(
     params: FlirtNewdefault20080811SchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("flirt.newdefault.20080811.sch");
     if ((params["term_option"] ?? null) !== null) {
@@ -121,18 +121,18 @@ function flirt_newdefault_20080811_sch_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function flirt_newdefault_20080811_sch_outputs(
     params: FlirtNewdefault20080811SchParameters,
     execution: Execution,
 ): FlirtNewdefault20080811SchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FlirtNewdefault20080811SchOutputs = {
         root: execution.outputFile("."),
     };
@@ -140,22 +140,22 @@ function flirt_newdefault_20080811_sch_outputs(
 }
 
 
+/**
+ * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
+ */
 function flirt_newdefault_20080811_sch_execute(
     params: FlirtNewdefault20080811SchParameters,
     execution: Execution,
 ): FlirtNewdefault20080811SchOutputs {
-    /**
-     * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
-     */
     params = execution.params(params)
     const cargs = flirt_newdefault_20080811_sch_cargs(params, execution)
     const ret = flirt_newdefault_20080811_sch_outputs(params, execution)
@@ -164,26 +164,26 @@ function flirt_newdefault_20080811_sch_execute(
 }
 
 
+/**
+ * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param term_option Use this terminal type instead of $TERM
+ * @param curses_flag Print curses-version
+ * @param scrollback_flag Do not try to clear scrollback
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
+ */
 function flirt_newdefault_20080811_sch(
     term_option: string | null = null,
     curses_flag: boolean = false,
     scrollback_flag: boolean = false,
     runner: Runner | null = null,
 ): FlirtNewdefault20080811SchOutputs {
-    /**
-     * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param term_option Use this terminal type instead of $TERM
-     * @param curses_flag Print curses-version
-     * @param scrollback_flag Do not try to clear scrollback
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLIRT_NEWDEFAULT_20080811_SCH_METADATA);
     const params = flirt_newdefault_20080811_sch_params(term_option, curses_flag, scrollback_flag)
@@ -196,5 +196,8 @@ export {
       FlirtNewdefault20080811SchOutputs,
       FlirtNewdefault20080811SchParameters,
       flirt_newdefault_20080811_sch,
+      flirt_newdefault_20080811_sch_cargs,
+      flirt_newdefault_20080811_sch_execute,
+      flirt_newdefault_20080811_sch_outputs,
       flirt_newdefault_20080811_sch_params,
 };

@@ -12,7 +12,7 @@ const BIANCA_CLUSTER_STATS_METADATA: Metadata = {
 
 
 interface BiancaClusterStatsParameters {
-    "__STYXTYPE__": "bianca_cluster_stats";
+    "@type": "fsl.bianca_cluster_stats";
     "bianca_output_map": InputPathType;
     "threshold": number;
     "min_cluster_size": number;
@@ -20,33 +20,33 @@ interface BiancaClusterStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bianca_cluster_stats": bianca_cluster_stats_cargs,
+        "fsl.bianca_cluster_stats": bianca_cluster_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface BiancaClusterStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bianca_output_map BIANCA output map file
+ * @param threshold Threshold value to apply
+ * @param min_cluster_size Minimum cluster size in voxels
+ * @param mask Optional mask file (in the same space as the BIANCA output map)
+ *
+ * @returns Parameter dictionary
+ */
 function bianca_cluster_stats_params(
     bianca_output_map: InputPathType,
     threshold: number,
     min_cluster_size: number,
     mask: InputPathType | null = null,
 ): BiancaClusterStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param bianca_output_map BIANCA output map file
-     * @param threshold Threshold value to apply
-     * @param min_cluster_size Minimum cluster size in voxels
-     * @param mask Optional mask file (in the same space as the BIANCA output map)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bianca_cluster_stats" as const,
+        "@type": "fsl.bianca_cluster_stats" as const,
         "bianca_output_map": bianca_output_map,
         "threshold": threshold,
         "min_cluster_size": min_cluster_size,
@@ -95,18 +95,18 @@ function bianca_cluster_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bianca_cluster_stats_cargs(
     params: BiancaClusterStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bianca_cluster_stats");
     cargs.push(execution.inputFile((params["bianca_output_map"] ?? null)));
@@ -119,18 +119,18 @@ function bianca_cluster_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bianca_cluster_stats_outputs(
     params: BiancaClusterStatsParameters,
     execution: Execution,
 ): BiancaClusterStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BiancaClusterStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function bianca_cluster_stats_outputs(
 }
 
 
+/**
+ * Calculate number of clusters and WMH volume in a BIANCA output map.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
+ */
 function bianca_cluster_stats_execute(
     params: BiancaClusterStatsParameters,
     execution: Execution,
 ): BiancaClusterStatsOutputs {
-    /**
-     * Calculate number of clusters and WMH volume in a BIANCA output map.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = bianca_cluster_stats_cargs(params, execution)
     const ret = bianca_cluster_stats_outputs(params, execution)
@@ -162,6 +162,21 @@ function bianca_cluster_stats_execute(
 }
 
 
+/**
+ * Calculate number of clusters and WMH volume in a BIANCA output map.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param bianca_output_map BIANCA output map file
+ * @param threshold Threshold value to apply
+ * @param min_cluster_size Minimum cluster size in voxels
+ * @param mask Optional mask file (in the same space as the BIANCA output map)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
+ */
 function bianca_cluster_stats(
     bianca_output_map: InputPathType,
     threshold: number,
@@ -169,21 +184,6 @@ function bianca_cluster_stats(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): BiancaClusterStatsOutputs {
-    /**
-     * Calculate number of clusters and WMH volume in a BIANCA output map.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param bianca_output_map BIANCA output map file
-     * @param threshold Threshold value to apply
-     * @param min_cluster_size Minimum cluster size in voxels
-     * @param mask Optional mask file (in the same space as the BIANCA output map)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BIANCA_CLUSTER_STATS_METADATA);
     const params = bianca_cluster_stats_params(bianca_output_map, threshold, min_cluster_size, mask)
@@ -196,5 +196,8 @@ export {
       BiancaClusterStatsOutputs,
       BiancaClusterStatsParameters,
       bianca_cluster_stats,
+      bianca_cluster_stats_cargs,
+      bianca_cluster_stats_execute,
+      bianca_cluster_stats_outputs,
       bianca_cluster_stats_params,
 };

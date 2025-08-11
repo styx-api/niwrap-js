@@ -12,7 +12,7 @@ const ANTS_MOTION_CORR_STATS_METADATA: Metadata = {
 
 
 interface AntsMotionCorrStatsParameters {
-    "__STYXTYPE__": "antsMotionCorrStats";
+    "@type": "ants.antsMotionCorrStats";
     "mask": InputPathType;
     "moco_params": InputPathType;
     "output": string;
@@ -24,35 +24,35 @@ interface AntsMotionCorrStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsMotionCorrStats": ants_motion_corr_stats_cargs,
+        "ants.antsMotionCorrStats": ants_motion_corr_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsMotionCorrStats": ants_motion_corr_stats_outputs,
+        "ants.antsMotionCorrStats": ants_motion_corr_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface AntsMotionCorrStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mask Mask image - compute displacements within mask.
+ * @param moco_params Motion correction parameters from antsMotionCorr.
+ * @param output Specify the output file.
+ * @param transform_index Specify the index for a 3D transform to output.
+ * @param framewise Do framewise summary stats.
+ * @param spatial_map Output image of displacement magnitude.
+ * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
+ * @param help Print the help menu. Short version with -h.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_motion_corr_stats_params(
     mask: InputPathType,
     moco_params: InputPathType,
@@ -85,22 +99,8 @@ function ants_motion_corr_stats_params(
     timeseries_displacement: boolean = false,
     help: 0 | 1 | null = null,
 ): AntsMotionCorrStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param mask Mask image - compute displacements within mask.
-     * @param moco_params Motion correction parameters from antsMotionCorr.
-     * @param output Specify the output file.
-     * @param transform_index Specify the index for a 3D transform to output.
-     * @param framewise Do framewise summary stats.
-     * @param spatial_map Output image of displacement magnitude.
-     * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
-     * @param help Print the help menu. Short version with -h.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsMotionCorrStats" as const,
+        "@type": "ants.antsMotionCorrStats" as const,
         "mask": mask,
         "moco_params": moco_params,
         "output": output,
@@ -120,18 +120,18 @@ function ants_motion_corr_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_motion_corr_stats_cargs(
     params: AntsMotionCorrStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsMotionCorrStats");
     cargs.push(
@@ -174,18 +174,18 @@ function ants_motion_corr_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_motion_corr_stats_outputs(
     params: AntsMotionCorrStatsParameters,
     execution: Execution,
 ): AntsMotionCorrStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsMotionCorrStatsOutputs = {
         root: execution.outputFile("."),
         corrected_csv: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -194,22 +194,22 @@ function ants_motion_corr_stats_outputs(
 }
 
 
+/**
+ * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
+ */
 function ants_motion_corr_stats_execute(
     params: AntsMotionCorrStatsParameters,
     execution: Execution,
 ): AntsMotionCorrStatsOutputs {
-    /**
-     * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_motion_corr_stats_cargs(params, execution)
     const ret = ants_motion_corr_stats_outputs(params, execution)
@@ -218,6 +218,25 @@ function ants_motion_corr_stats_execute(
 }
 
 
+/**
+ * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param mask Mask image - compute displacements within mask.
+ * @param moco_params Motion correction parameters from antsMotionCorr.
+ * @param output Specify the output file.
+ * @param transform_index Specify the index for a 3D transform to output.
+ * @param framewise Do framewise summary stats.
+ * @param spatial_map Output image of displacement magnitude.
+ * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
+ * @param help Print the help menu. Short version with -h.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
+ */
 function ants_motion_corr_stats(
     mask: InputPathType,
     moco_params: InputPathType,
@@ -229,25 +248,6 @@ function ants_motion_corr_stats(
     help: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
-    /**
-     * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param mask Mask image - compute displacements within mask.
-     * @param moco_params Motion correction parameters from antsMotionCorr.
-     * @param output Specify the output file.
-     * @param transform_index Specify the index for a 3D transform to output.
-     * @param framewise Do framewise summary stats.
-     * @param spatial_map Output image of displacement magnitude.
-     * @param timeseries_displacement Output 4d time-series image of displacement magnitude.
-     * @param help Print the help menu. Short version with -h.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_MOTION_CORR_STATS_METADATA);
     const params = ants_motion_corr_stats_params(mask, moco_params, output, transform_index, framewise, spatial_map, timeseries_displacement, help)
@@ -260,5 +260,8 @@ export {
       AntsMotionCorrStatsOutputs,
       AntsMotionCorrStatsParameters,
       ants_motion_corr_stats,
+      ants_motion_corr_stats_cargs,
+      ants_motion_corr_stats_execute,
+      ants_motion_corr_stats_outputs,
       ants_motion_corr_stats_params,
 };

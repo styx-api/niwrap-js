@@ -12,7 +12,7 @@ const V_3D_VOL2_SURF_METADATA: Metadata = {
 
 
 interface V3dVol2SurfParameters {
-    "__STYXTYPE__": "3dVol2Surf";
+    "@type": "afni.3dVol2Surf";
     "spec_file": InputPathType;
     "sv": InputPathType;
     "grid_parent": InputPathType;
@@ -58,35 +58,35 @@ interface V3dVol2SurfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dVol2Surf": v_3d_vol2_surf_cargs,
+        "afni.3dVol2Surf": v_3d_vol2_surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dVol2Surf": v_3d_vol2_surf_outputs,
+        "afni.3dVol2Surf": v_3d_vol2_surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -117,6 +117,54 @@ interface V3dVol2SurfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file SUMA spec file
+ * @param sv AFNI volume dataset mapped by the surface
+ * @param grid_parent AFNI volume dataset used as a grid and orientation master for output
+ * @param map_func Filter for values along the segment
+ * @param surf_a Name of surface A from the spec file
+ * @param surf_b Name of surface B from the spec file
+ * @param out_1_d Specify a 1D file for the output
+ * @param out_niml Specify a niml file for the output
+ * @param use_norms Use normals for second surface
+ * @param norm_len Length for node normals
+ * @param first_node Skip all previous nodes
+ * @param last_node Skip all following nodes
+ * @param debug_level Verbose output level
+ * @param dnode Node for debug
+ * @param f_steps Number of steps along each segment (defines the number of evenly spaced points along each segment)
+ * @param f_index Whether to use all segment point values or only those corresponding to unique volume voxels
+ * @param f_p1_mm Distance in millimeters to add to the first point of each line segment
+ * @param f_pn_mm Distance in millimeters to add to the second point of each line segment
+ * @param f_p1_fr Fractional distance to add to the first point of each line segment
+ * @param f_pn_fr Fractional distance to add to the second point of each line segment
+ * @param skip_col_nodes Do not output node column
+ * @param skip_col_1dindex Do not output 1dindex column
+ * @param skip_col_i Do not output i column
+ * @param skip_col_j Do not output j column
+ * @param skip_col_k Do not output k column
+ * @param skip_col_vals Do not output vals column
+ * @param no_headers Do not output column headers
+ * @param save_seg_coords Save segment coordinates to a file
+ * @param cmask Command for dataset mask
+ * @param gp_index Choose grid_parent sub-brick
+ * @param oob_index Specify default index for out of bounds nodes
+ * @param oob_value Specify default value for out of bounds nodes
+ * @param oom_value Specify default value for out of mask nodes
+ * @param outcols_afni_nsd Output nodes and one result column
+ * @param outcols_1_result Output only one result column
+ * @param outcols_results Output only all result columns
+ * @param outcols_nsd_format Output nodes and all results (NI_SURF_DSET format)
+ * @param help Show this help
+ * @param hist Show revision history
+ * @param version Show version information
+ * @param keep_norm_dir Keep the direction of the normals
+ * @param reverse_norm_dir Reverse the normal directions
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_vol2_surf_params(
     spec_file: InputPathType,
     sv: InputPathType,
@@ -161,56 +209,8 @@ function v_3d_vol2_surf_params(
     keep_norm_dir: boolean = false,
     reverse_norm_dir: boolean = false,
 ): V3dVol2SurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file SUMA spec file
-     * @param sv AFNI volume dataset mapped by the surface
-     * @param grid_parent AFNI volume dataset used as a grid and orientation master for output
-     * @param map_func Filter for values along the segment
-     * @param surf_a Name of surface A from the spec file
-     * @param surf_b Name of surface B from the spec file
-     * @param out_1_d Specify a 1D file for the output
-     * @param out_niml Specify a niml file for the output
-     * @param use_norms Use normals for second surface
-     * @param norm_len Length for node normals
-     * @param first_node Skip all previous nodes
-     * @param last_node Skip all following nodes
-     * @param debug_level Verbose output level
-     * @param dnode Node for debug
-     * @param f_steps Number of steps along each segment (defines the number of evenly spaced points along each segment)
-     * @param f_index Whether to use all segment point values or only those corresponding to unique volume voxels
-     * @param f_p1_mm Distance in millimeters to add to the first point of each line segment
-     * @param f_pn_mm Distance in millimeters to add to the second point of each line segment
-     * @param f_p1_fr Fractional distance to add to the first point of each line segment
-     * @param f_pn_fr Fractional distance to add to the second point of each line segment
-     * @param skip_col_nodes Do not output node column
-     * @param skip_col_1dindex Do not output 1dindex column
-     * @param skip_col_i Do not output i column
-     * @param skip_col_j Do not output j column
-     * @param skip_col_k Do not output k column
-     * @param skip_col_vals Do not output vals column
-     * @param no_headers Do not output column headers
-     * @param save_seg_coords Save segment coordinates to a file
-     * @param cmask Command for dataset mask
-     * @param gp_index Choose grid_parent sub-brick
-     * @param oob_index Specify default index for out of bounds nodes
-     * @param oob_value Specify default value for out of bounds nodes
-     * @param oom_value Specify default value for out of mask nodes
-     * @param outcols_afni_nsd Output nodes and one result column
-     * @param outcols_1_result Output only one result column
-     * @param outcols_results Output only all result columns
-     * @param outcols_nsd_format Output nodes and all results (NI_SURF_DSET format)
-     * @param help Show this help
-     * @param hist Show revision history
-     * @param version Show version information
-     * @param keep_norm_dir Keep the direction of the normals
-     * @param reverse_norm_dir Reverse the normal directions
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dVol2Surf" as const,
+        "@type": "afni.3dVol2Surf" as const,
         "spec_file": spec_file,
         "sv": sv,
         "grid_parent": grid_parent,
@@ -298,18 +298,18 @@ function v_3d_vol2_surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_vol2_surf_cargs(
     params: V3dVol2SurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dVol2Surf");
     cargs.push(execution.inputFile((params["spec_file"] ?? null)));
@@ -504,18 +504,18 @@ function v_3d_vol2_surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_vol2_surf_outputs(
     params: V3dVol2SurfParameters,
     execution: Execution,
 ): V3dVol2SurfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dVol2SurfOutputs = {
         root: execution.outputFile("."),
         out_1d_file: ((params["out_1D"] ?? null) !== null) ? execution.outputFile([(params["out_1D"] ?? null)].join('')) : null,
@@ -526,22 +526,22 @@ function v_3d_vol2_surf_outputs(
 }
 
 
+/**
+ * Map data from a volume domain to a surface domain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
+ */
 function v_3d_vol2_surf_execute(
     params: V3dVol2SurfParameters,
     execution: Execution,
 ): V3dVol2SurfOutputs {
-    /**
-     * Map data from a volume domain to a surface domain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_vol2_surf_cargs(params, execution)
     const ret = v_3d_vol2_surf_outputs(params, execution)
@@ -550,6 +550,59 @@ function v_3d_vol2_surf_execute(
 }
 
 
+/**
+ * Map data from a volume domain to a surface domain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file SUMA spec file
+ * @param sv AFNI volume dataset mapped by the surface
+ * @param grid_parent AFNI volume dataset used as a grid and orientation master for output
+ * @param map_func Filter for values along the segment
+ * @param surf_a Name of surface A from the spec file
+ * @param surf_b Name of surface B from the spec file
+ * @param out_1_d Specify a 1D file for the output
+ * @param out_niml Specify a niml file for the output
+ * @param use_norms Use normals for second surface
+ * @param norm_len Length for node normals
+ * @param first_node Skip all previous nodes
+ * @param last_node Skip all following nodes
+ * @param debug_level Verbose output level
+ * @param dnode Node for debug
+ * @param f_steps Number of steps along each segment (defines the number of evenly spaced points along each segment)
+ * @param f_index Whether to use all segment point values or only those corresponding to unique volume voxels
+ * @param f_p1_mm Distance in millimeters to add to the first point of each line segment
+ * @param f_pn_mm Distance in millimeters to add to the second point of each line segment
+ * @param f_p1_fr Fractional distance to add to the first point of each line segment
+ * @param f_pn_fr Fractional distance to add to the second point of each line segment
+ * @param skip_col_nodes Do not output node column
+ * @param skip_col_1dindex Do not output 1dindex column
+ * @param skip_col_i Do not output i column
+ * @param skip_col_j Do not output j column
+ * @param skip_col_k Do not output k column
+ * @param skip_col_vals Do not output vals column
+ * @param no_headers Do not output column headers
+ * @param save_seg_coords Save segment coordinates to a file
+ * @param cmask Command for dataset mask
+ * @param gp_index Choose grid_parent sub-brick
+ * @param oob_index Specify default index for out of bounds nodes
+ * @param oob_value Specify default value for out of bounds nodes
+ * @param oom_value Specify default value for out of mask nodes
+ * @param outcols_afni_nsd Output nodes and one result column
+ * @param outcols_1_result Output only one result column
+ * @param outcols_results Output only all result columns
+ * @param outcols_nsd_format Output nodes and all results (NI_SURF_DSET format)
+ * @param help Show this help
+ * @param hist Show revision history
+ * @param version Show version information
+ * @param keep_norm_dir Keep the direction of the normals
+ * @param reverse_norm_dir Reverse the normal directions
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
+ */
 function v_3d_vol2_surf(
     spec_file: InputPathType,
     sv: InputPathType,
@@ -595,59 +648,6 @@ function v_3d_vol2_surf(
     reverse_norm_dir: boolean = false,
     runner: Runner | null = null,
 ): V3dVol2SurfOutputs {
-    /**
-     * Map data from a volume domain to a surface domain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file SUMA spec file
-     * @param sv AFNI volume dataset mapped by the surface
-     * @param grid_parent AFNI volume dataset used as a grid and orientation master for output
-     * @param map_func Filter for values along the segment
-     * @param surf_a Name of surface A from the spec file
-     * @param surf_b Name of surface B from the spec file
-     * @param out_1_d Specify a 1D file for the output
-     * @param out_niml Specify a niml file for the output
-     * @param use_norms Use normals for second surface
-     * @param norm_len Length for node normals
-     * @param first_node Skip all previous nodes
-     * @param last_node Skip all following nodes
-     * @param debug_level Verbose output level
-     * @param dnode Node for debug
-     * @param f_steps Number of steps along each segment (defines the number of evenly spaced points along each segment)
-     * @param f_index Whether to use all segment point values or only those corresponding to unique volume voxels
-     * @param f_p1_mm Distance in millimeters to add to the first point of each line segment
-     * @param f_pn_mm Distance in millimeters to add to the second point of each line segment
-     * @param f_p1_fr Fractional distance to add to the first point of each line segment
-     * @param f_pn_fr Fractional distance to add to the second point of each line segment
-     * @param skip_col_nodes Do not output node column
-     * @param skip_col_1dindex Do not output 1dindex column
-     * @param skip_col_i Do not output i column
-     * @param skip_col_j Do not output j column
-     * @param skip_col_k Do not output k column
-     * @param skip_col_vals Do not output vals column
-     * @param no_headers Do not output column headers
-     * @param save_seg_coords Save segment coordinates to a file
-     * @param cmask Command for dataset mask
-     * @param gp_index Choose grid_parent sub-brick
-     * @param oob_index Specify default index for out of bounds nodes
-     * @param oob_value Specify default value for out of bounds nodes
-     * @param oom_value Specify default value for out of mask nodes
-     * @param outcols_afni_nsd Output nodes and one result column
-     * @param outcols_1_result Output only one result column
-     * @param outcols_results Output only all result columns
-     * @param outcols_nsd_format Output nodes and all results (NI_SURF_DSET format)
-     * @param help Show this help
-     * @param hist Show revision history
-     * @param version Show version information
-     * @param keep_norm_dir Keep the direction of the normals
-     * @param reverse_norm_dir Reverse the normal directions
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_VOL2_SURF_METADATA);
     const params = v_3d_vol2_surf_params(spec_file, sv, grid_parent, map_func, surf_a, surf_b, out_1_d, out_niml, use_norms, norm_len, first_node, last_node, debug_level, dnode, f_steps, f_index, f_p1_mm, f_pn_mm, f_p1_fr, f_pn_fr, skip_col_nodes, skip_col_1dindex, skip_col_i, skip_col_j, skip_col_k, skip_col_vals, no_headers, save_seg_coords, cmask, gp_index, oob_index, oob_value, oom_value, outcols_afni_nsd, outcols_1_result, outcols_results, outcols_nsd_format, help, hist, version, keep_norm_dir, reverse_norm_dir)
@@ -660,5 +660,8 @@ export {
       V3dVol2SurfParameters,
       V_3D_VOL2_SURF_METADATA,
       v_3d_vol2_surf,
+      v_3d_vol2_surf_cargs,
+      v_3d_vol2_surf_execute,
+      v_3d_vol2_surf_outputs,
       v_3d_vol2_surf_params,
 };

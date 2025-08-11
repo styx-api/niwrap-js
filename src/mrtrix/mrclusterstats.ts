@@ -12,20 +12,20 @@ const MRCLUSTERSTATS_METADATA: Metadata = {
 
 
 interface MrclusterstatsColumnParameters {
-    "__STYXTYPE__": "column";
+    "@type": "mrtrix.mrclusterstats.column";
     "path": InputPathType;
 }
 
 
 interface MrclusterstatsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrclusterstats.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrclusterstatsParameters {
-    "__STYXTYPE__": "mrclusterstats";
+    "@type": "mrtrix.mrclusterstats";
     "notest": boolean;
     "errors"?: string | null | undefined;
     "exchange_within"?: InputPathType | null | undefined;
@@ -62,71 +62,71 @@ interface MrclusterstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrclusterstats": mrclusterstats_cargs,
-        "column": mrclusterstats_column_cargs,
-        "config": mrclusterstats_config_cargs,
+        "mrtrix.mrclusterstats": mrclusterstats_cargs,
+        "mrtrix.mrclusterstats.column": mrclusterstats_column_cargs,
+        "mrtrix.mrclusterstats.config": mrclusterstats_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param path add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ *
+ * @returns Parameter dictionary
+ */
 function mrclusterstats_column_params(
     path: InputPathType,
 ): MrclusterstatsColumnParameters {
-    /**
-     * Build parameters.
-    
-     * @param path add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "column" as const,
+        "@type": "mrtrix.mrclusterstats.column" as const,
         "path": path,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrclusterstats_column_cargs(
     params: MrclusterstatsColumnParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-column");
     cargs.push(execution.inputFile((params["path"] ?? null)));
@@ -134,20 +134,20 @@ function mrclusterstats_column_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrclusterstats_config_params(
     key: string,
     value: string,
 ): MrclusterstatsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrclusterstats.config" as const,
         "key": key,
         "value": value,
     };
@@ -155,18 +155,18 @@ function mrclusterstats_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrclusterstats_config_cargs(
     params: MrclusterstatsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -188,6 +188,45 @@ interface MrclusterstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input a text file containing the file names of the input images, one file per line
+ * @param design the design matrix
+ * @param contrast the contrast matrix
+ * @param mask a mask used to define voxels included in the analysis.
+ * @param output the filename prefix for all output.
+ * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
+ * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
+ * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
+ * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
+ * @param strong use strong familywise error control across multiple hypotheses
+ * @param nshuffles the number of shuffles (default: 5000)
+ * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
+ * @param nonstationarity perform non-stationarity correction
+ * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
+ * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
+ * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
+ * @param tfce_dh the height increment used in the tfce integration (default: 0.1)
+ * @param tfce_e tfce extent exponent (default: 0.5)
+ * @param tfce_h tfce height exponent (default: 2)
+ * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
+ * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
+ * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
+ * @param column add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ * @param threshold the cluster-forming threshold to use for a standard cluster-based analysis. This disables TFCE, which is the default otherwise.
+ * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrclusterstats_params(
     input: InputPathType,
     design: InputPathType,
@@ -223,47 +262,8 @@ function mrclusterstats_params(
     help: boolean = false,
     version: boolean = false,
 ): MrclusterstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input a text file containing the file names of the input images, one file per line
-     * @param design the design matrix
-     * @param contrast the contrast matrix
-     * @param mask a mask used to define voxels included in the analysis.
-     * @param output the filename prefix for all output.
-     * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
-     * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
-     * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
-     * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
-     * @param strong use strong familywise error control across multiple hypotheses
-     * @param nshuffles the number of shuffles (default: 5000)
-     * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
-     * @param nonstationarity perform non-stationarity correction
-     * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
-     * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
-     * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
-     * @param tfce_dh the height increment used in the tfce integration (default: 0.1)
-     * @param tfce_e tfce extent exponent (default: 0.5)
-     * @param tfce_h tfce height exponent (default: 2)
-     * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
-     * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
-     * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
-     * @param column add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-     * @param threshold the cluster-forming threshold to use for a standard cluster-based analysis. This disables TFCE, which is the default otherwise.
-     * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrclusterstats" as const,
+        "@type": "mrtrix.mrclusterstats" as const,
         "notest": notest,
         "strong": strong,
         "nonstationarity": nonstationarity,
@@ -336,18 +336,18 @@ function mrclusterstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrclusterstats_cargs(
     params: MrclusterstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrclusterstats");
     if ((params["notest"] ?? null)) {
@@ -441,7 +441,7 @@ function mrclusterstats_cargs(
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["threshold"] ?? null) !== null) {
         cargs.push(
@@ -471,7 +471,7 @@ function mrclusterstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -488,18 +488,18 @@ function mrclusterstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrclusterstats_outputs(
     params: MrclusterstatsParameters,
     execution: Execution,
 ): MrclusterstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrclusterstatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -507,32 +507,32 @@ function mrclusterstats_outputs(
 }
 
 
+/**
+ * Voxel-based analysis using permutation testing and threshold-free cluster enhancement.
+ *
+ * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
+ *
+ * References:
+ *
+ * * If not using the -threshold command-line option:
+ * Smith, S. M. & Nichols, T. E. Threshold-free cluster enhancement: Addressing problems of smoothing, threshold dependence and localisation in cluster inference. NeuroImage, 2009, 44, 83-98
+ *
+ * * If using the -nonstationary option:
+ * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. Neuroimage, 2011, 54(3), 2006-19.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
+ */
 function mrclusterstats_execute(
     params: MrclusterstatsParameters,
     execution: Execution,
 ): MrclusterstatsOutputs {
-    /**
-     * Voxel-based analysis using permutation testing and threshold-free cluster enhancement.
-     * 
-     * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
-     * 
-     * References:
-     * 
-     * * If not using the -threshold command-line option:
-     * Smith, S. M. & Nichols, T. E. Threshold-free cluster enhancement: Addressing problems of smoothing, threshold dependence and localisation in cluster inference. NeuroImage, 2009, 44, 83-98
-     * 
-     * * If using the -nonstationary option:
-     * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. Neuroimage, 2011, 54(3), 2006-19.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrclusterstats_cargs(params, execution)
     const ret = mrclusterstats_outputs(params, execution)
@@ -541,6 +541,60 @@ function mrclusterstats_execute(
 }
 
 
+/**
+ * Voxel-based analysis using permutation testing and threshold-free cluster enhancement.
+ *
+ * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
+ *
+ * References:
+ *
+ * * If not using the -threshold command-line option:
+ * Smith, S. M. & Nichols, T. E. Threshold-free cluster enhancement: Addressing problems of smoothing, threshold dependence and localisation in cluster inference. NeuroImage, 2009, 44, 83-98
+ *
+ * * If using the -nonstationary option:
+ * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. Neuroimage, 2011, 54(3), 2006-19.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input a text file containing the file names of the input images, one file per line
+ * @param design the design matrix
+ * @param contrast the contrast matrix
+ * @param mask a mask used to define voxels included in the analysis.
+ * @param output the filename prefix for all output.
+ * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
+ * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
+ * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
+ * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
+ * @param strong use strong familywise error control across multiple hypotheses
+ * @param nshuffles the number of shuffles (default: 5000)
+ * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
+ * @param nonstationarity perform non-stationarity correction
+ * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
+ * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
+ * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
+ * @param tfce_dh the height increment used in the tfce integration (default: 0.1)
+ * @param tfce_e tfce extent exponent (default: 0.5)
+ * @param tfce_h tfce height exponent (default: 2)
+ * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
+ * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
+ * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
+ * @param column add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ * @param threshold the cluster-forming threshold to use for a standard cluster-based analysis. This disables TFCE, which is the default otherwise.
+ * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
+ */
 function mrclusterstats(
     input: InputPathType,
     design: InputPathType,
@@ -577,60 +631,6 @@ function mrclusterstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrclusterstatsOutputs {
-    /**
-     * Voxel-based analysis using permutation testing and threshold-free cluster enhancement.
-     * 
-     * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
-     * 
-     * References:
-     * 
-     * * If not using the -threshold command-line option:
-     * Smith, S. M. & Nichols, T. E. Threshold-free cluster enhancement: Addressing problems of smoothing, threshold dependence and localisation in cluster inference. NeuroImage, 2009, 44, 83-98
-     * 
-     * * If using the -nonstationary option:
-     * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. Neuroimage, 2011, 54(3), 2006-19.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input a text file containing the file names of the input images, one file per line
-     * @param design the design matrix
-     * @param contrast the contrast matrix
-     * @param mask a mask used to define voxels included in the analysis.
-     * @param output the filename prefix for all output.
-     * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
-     * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
-     * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
-     * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
-     * @param strong use strong familywise error control across multiple hypotheses
-     * @param nshuffles the number of shuffles (default: 5000)
-     * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
-     * @param nonstationarity perform non-stationarity correction
-     * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
-     * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
-     * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
-     * @param tfce_dh the height increment used in the tfce integration (default: 0.1)
-     * @param tfce_e tfce extent exponent (default: 0.5)
-     * @param tfce_h tfce height exponent (default: 2)
-     * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
-     * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
-     * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
-     * @param column add a column to the design matrix corresponding to subject voxel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-     * @param threshold the cluster-forming threshold to use for a standard cluster-based analysis. This disables TFCE, which is the default otherwise.
-     * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRCLUSTERSTATS_METADATA);
     const params = mrclusterstats_params(input, design, contrast, mask, output, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, nonstationarity, skew_nonstationarity, nshuffles_nonstationarity, permutations_nonstationarity, tfce_dh, tfce_e, tfce_h, variance, ftests, fonly, column, threshold, connectivity, info, quiet, debug, force, nthreads, config, help, version)
@@ -645,7 +645,12 @@ export {
       MrclusterstatsOutputs,
       MrclusterstatsParameters,
       mrclusterstats,
+      mrclusterstats_cargs,
+      mrclusterstats_column_cargs,
       mrclusterstats_column_params,
+      mrclusterstats_config_cargs,
       mrclusterstats_config_params,
+      mrclusterstats_execute,
+      mrclusterstats_outputs,
       mrclusterstats_params,
 };

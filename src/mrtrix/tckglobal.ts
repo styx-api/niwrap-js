@@ -12,20 +12,20 @@ const TCKGLOBAL_METADATA: Metadata = {
 
 
 interface TckglobalRisoParameters {
-    "__STYXTYPE__": "riso";
+    "@type": "mrtrix.tckglobal.riso";
     "response": InputPathType;
 }
 
 
 interface TckglobalConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckglobal.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckglobalParameters {
-    "__STYXTYPE__": "tckglobal";
+    "@type": "mrtrix.tckglobal";
     "grad"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "riso"?: Array<TckglobalRisoParameters> | null | undefined;
@@ -61,72 +61,72 @@ interface TckglobalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckglobal": tckglobal_cargs,
-        "riso": tckglobal_riso_cargs,
-        "config": tckglobal_config_cargs,
+        "mrtrix.tckglobal": tckglobal_cargs,
+        "mrtrix.tckglobal.riso": tckglobal_riso_cargs,
+        "mrtrix.tckglobal.config": tckglobal_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tckglobal": tckglobal_outputs,
+        "mrtrix.tckglobal": tckglobal_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param response set one or more isotropic response functions. (multiple allowed)
+ *
+ * @returns Parameter dictionary
+ */
 function tckglobal_riso_params(
     response: InputPathType,
 ): TckglobalRisoParameters {
-    /**
-     * Build parameters.
-    
-     * @param response set one or more isotropic response functions. (multiple allowed)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "riso" as const,
+        "@type": "mrtrix.tckglobal.riso" as const,
         "response": response,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckglobal_riso_cargs(
     params: TckglobalRisoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-riso");
     cargs.push(execution.inputFile((params["response"] ?? null)));
@@ -134,20 +134,20 @@ function tckglobal_riso_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckglobal_config_params(
     key: string,
     value: string,
 ): TckglobalConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckglobal.config" as const,
         "key": key,
         "value": value,
     };
@@ -155,18 +155,18 @@ function tckglobal_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckglobal_config_cargs(
     params: TckglobalConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -209,6 +209,48 @@ This fODF is estimated as part of the global track optimization, and therefore i
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source the image containing the raw DWI data.
+ * @param response the response of a track segment on the DWI signal.
+ * @param tracks the output file containing the tracks generated.
+ * @param grad specify the diffusion encoding scheme (required if not supplied in the header).
+ * @param mask only reconstruct the tractogram within the specified brain mask image.
+ * @param riso set one or more isotropic response functions. (multiple allowed)
+ * @param lmax set the maximum harmonic order for the output series. (default = 8)
+ * @param length set the length of the particles (fibre segments). (default = 1mm)
+ * @param weight set the weight by which particles contribute to the model. (default = 0.1)
+ * @param ppot set the particle potential, i.e., the cost of adding one segment, relative to the particle weight. (default = 0.05)
+ * @param cpot set the connection potential, i.e., the energy term that drives two segments together. (default = 0.5)
+ * @param t0 set the initial temperature of the metropolis hastings optimizer. (default = 0.1)
+ * @param t1 set the final temperature of the metropolis hastings optimizer. (default = 0.001)
+ * @param niter set the number of iterations of the metropolis hastings optimizer. (default = 10M)
+ * @param fod Predicted fibre orientation distribution function (fODF).
+This fODF is estimated as part of the global track optimization, and therefore incorporates the spatial regularization that it imposes. Internally, the fODF is represented as a discrete sum of apodized point spread functions (aPSF) oriented along the directions of all particles in the voxel, used to predict the DWI signal from the particle configuration.
+ * @param noapo disable spherical convolution of fODF with apodized PSF, to output a sum of delta functions rather than a sum of aPSFs.
+ * @param fiso Predicted isotropic fractions of the tissues for which response functions were provided with -riso. Typically, these are CSF and GM.
+ * @param eext Residual external energy in every voxel.
+ * @param etrend internal and external energy trend and cooling statistics.
+ * @param balance balance internal and external energy. (default = 0)
+Negative values give more weight to the internal energy, positive to the external energy.
+ * @param density set the desired density of the free Poisson process. (default = 1)
+ * @param prob set the probabilities of generating birth, death, randshift, optshift and connect proposals respectively. (default = 0.25,0.05,0.25,0.1,0.35)
+ * @param beta set the width of the Hanning interpolation window. (in [0, 1], default = 0)
+If used, a mask is required, and this mask must keep at least one voxel distance to the image bounding box.
+ * @param lambda set the weight of the internal energy directly. (default = 1)
+If provided, any value of -balance will be ignored.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckglobal_params(
     source: InputPathType,
     response: InputPathType,
@@ -243,50 +285,8 @@ function tckglobal_params(
     help: boolean = false,
     version: boolean = false,
 ): TckglobalParameters {
-    /**
-     * Build parameters.
-    
-     * @param source the image containing the raw DWI data.
-     * @param response the response of a track segment on the DWI signal.
-     * @param tracks the output file containing the tracks generated.
-     * @param grad specify the diffusion encoding scheme (required if not supplied in the header).
-     * @param mask only reconstruct the tractogram within the specified brain mask image.
-     * @param riso set one or more isotropic response functions. (multiple allowed)
-     * @param lmax set the maximum harmonic order for the output series. (default = 8)
-     * @param length set the length of the particles (fibre segments). (default = 1mm)
-     * @param weight set the weight by which particles contribute to the model. (default = 0.1)
-     * @param ppot set the particle potential, i.e., the cost of adding one segment, relative to the particle weight. (default = 0.05)
-     * @param cpot set the connection potential, i.e., the energy term that drives two segments together. (default = 0.5)
-     * @param t0 set the initial temperature of the metropolis hastings optimizer. (default = 0.1)
-     * @param t1 set the final temperature of the metropolis hastings optimizer. (default = 0.001)
-     * @param niter set the number of iterations of the metropolis hastings optimizer. (default = 10M)
-     * @param fod Predicted fibre orientation distribution function (fODF).
-This fODF is estimated as part of the global track optimization, and therefore incorporates the spatial regularization that it imposes. Internally, the fODF is represented as a discrete sum of apodized point spread functions (aPSF) oriented along the directions of all particles in the voxel, used to predict the DWI signal from the particle configuration.
-     * @param noapo disable spherical convolution of fODF with apodized PSF, to output a sum of delta functions rather than a sum of aPSFs.
-     * @param fiso Predicted isotropic fractions of the tissues for which response functions were provided with -riso. Typically, these are CSF and GM.
-     * @param eext Residual external energy in every voxel.
-     * @param etrend internal and external energy trend and cooling statistics.
-     * @param balance balance internal and external energy. (default = 0)
-Negative values give more weight to the internal energy, positive to the external energy.
-     * @param density set the desired density of the free Poisson process. (default = 1)
-     * @param prob set the probabilities of generating birth, death, randshift, optshift and connect proposals respectively. (default = 0.25,0.05,0.25,0.1,0.35)
-     * @param beta set the width of the Hanning interpolation window. (in [0, 1], default = 0)
-If used, a mask is required, and this mask must keep at least one voxel distance to the image bounding box.
-     * @param lambda set the weight of the internal energy directly. (default = 1)
-If provided, any value of -balance will be ignored.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckglobal" as const,
+        "@type": "mrtrix.tckglobal" as const,
         "noapo": noapo,
         "info": info,
         "quiet": quiet,
@@ -368,18 +368,18 @@ If provided, any value of -balance will be ignored.
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckglobal_cargs(
     params: TckglobalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckglobal");
     if ((params["grad"] ?? null) !== null) {
@@ -395,7 +395,7 @@ function tckglobal_cargs(
         );
     }
     if ((params["riso"] ?? null) !== null) {
-        cargs.push(...(params["riso"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["riso"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["lmax"] ?? null) !== null) {
         cargs.push(
@@ -521,7 +521,7 @@ function tckglobal_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -536,18 +536,18 @@ function tckglobal_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckglobal_outputs(
     params: TckglobalParameters,
     execution: Execution,
 ): TckglobalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckglobalOutputs = {
         root: execution.outputFile("."),
         tracks: execution.outputFile([(params["tracks"] ?? null)].join('')),
@@ -560,35 +560,35 @@ function tckglobal_outputs(
 }
 
 
+/**
+ * Multi-Shell Multi-Tissue Global Tractography.
+ *
+ * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.
+ *
+ * Example use: 
+ *
+ *  $ tckglobal dwi.mif wmr.txt -riso csfr.txt -riso gmr.txt -mask mask.mif 
+ *    -niter 1e9 -fod fod.mif -fiso fiso.mif tracks.tck 
+ *
+ * in which dwi.mif is the input image, wmr.txt is an anisotropic, multi-shell response function for WM, and csfr.txt and gmr.txt are isotropic response functions for CSF and GM. The output tractogram is saved to tracks.tck. Optional output images fod.mif and fiso.mif contain the predicted WM fODF and isotropic tissue fractions of CSF and GM respectively, estimated as part of the global optimization and thus affected by spatial regularization.
+ *
+ * References:
+ *
+ * Christiaens, D.; Reisert, M.; Dhollander, T.; Sunaert, S.; Suetens, P. & Maes, F. Global tractography of multi-shell diffusion-weighted imaging data using a multi-tissue model. NeuroImage, 2015, 123, 89-101.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
+ */
 function tckglobal_execute(
     params: TckglobalParameters,
     execution: Execution,
 ): TckglobalOutputs {
-    /**
-     * Multi-Shell Multi-Tissue Global Tractography.
-     * 
-     * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.
-     * 
-     * Example use: 
-     * 
-     *  $ tckglobal dwi.mif wmr.txt -riso csfr.txt -riso gmr.txt -mask mask.mif 
-     *    -niter 1e9 -fod fod.mif -fiso fiso.mif tracks.tck 
-     * 
-     * in which dwi.mif is the input image, wmr.txt is an anisotropic, multi-shell response function for WM, and csfr.txt and gmr.txt are isotropic response functions for CSF and GM. The output tractogram is saved to tracks.tck. Optional output images fod.mif and fiso.mif contain the predicted WM fODF and isotropic tissue fractions of CSF and GM respectively, estimated as part of the global optimization and thus affected by spatial regularization.
-     * 
-     * References:
-     * 
-     * Christiaens, D.; Reisert, M.; Dhollander, T.; Sunaert, S.; Suetens, P. & Maes, F. Global tractography of multi-shell diffusion-weighted imaging data using a multi-tissue model. NeuroImage, 2015, 123, 89-101.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckglobal_cargs(params, execution)
     const ret = tckglobal_outputs(params, execution)
@@ -597,6 +597,66 @@ function tckglobal_execute(
 }
 
 
+/**
+ * Multi-Shell Multi-Tissue Global Tractography.
+ *
+ * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.
+ *
+ * Example use: 
+ *
+ *  $ tckglobal dwi.mif wmr.txt -riso csfr.txt -riso gmr.txt -mask mask.mif 
+ *    -niter 1e9 -fod fod.mif -fiso fiso.mif tracks.tck 
+ *
+ * in which dwi.mif is the input image, wmr.txt is an anisotropic, multi-shell response function for WM, and csfr.txt and gmr.txt are isotropic response functions for CSF and GM. The output tractogram is saved to tracks.tck. Optional output images fod.mif and fiso.mif contain the predicted WM fODF and isotropic tissue fractions of CSF and GM respectively, estimated as part of the global optimization and thus affected by spatial regularization.
+ *
+ * References:
+ *
+ * Christiaens, D.; Reisert, M.; Dhollander, T.; Sunaert, S.; Suetens, P. & Maes, F. Global tractography of multi-shell diffusion-weighted imaging data using a multi-tissue model. NeuroImage, 2015, 123, 89-101.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param source the image containing the raw DWI data.
+ * @param response the response of a track segment on the DWI signal.
+ * @param tracks the output file containing the tracks generated.
+ * @param grad specify the diffusion encoding scheme (required if not supplied in the header).
+ * @param mask only reconstruct the tractogram within the specified brain mask image.
+ * @param riso set one or more isotropic response functions. (multiple allowed)
+ * @param lmax set the maximum harmonic order for the output series. (default = 8)
+ * @param length set the length of the particles (fibre segments). (default = 1mm)
+ * @param weight set the weight by which particles contribute to the model. (default = 0.1)
+ * @param ppot set the particle potential, i.e., the cost of adding one segment, relative to the particle weight. (default = 0.05)
+ * @param cpot set the connection potential, i.e., the energy term that drives two segments together. (default = 0.5)
+ * @param t0 set the initial temperature of the metropolis hastings optimizer. (default = 0.1)
+ * @param t1 set the final temperature of the metropolis hastings optimizer. (default = 0.001)
+ * @param niter set the number of iterations of the metropolis hastings optimizer. (default = 10M)
+ * @param fod Predicted fibre orientation distribution function (fODF).
+This fODF is estimated as part of the global track optimization, and therefore incorporates the spatial regularization that it imposes. Internally, the fODF is represented as a discrete sum of apodized point spread functions (aPSF) oriented along the directions of all particles in the voxel, used to predict the DWI signal from the particle configuration.
+ * @param noapo disable spherical convolution of fODF with apodized PSF, to output a sum of delta functions rather than a sum of aPSFs.
+ * @param fiso Predicted isotropic fractions of the tissues for which response functions were provided with -riso. Typically, these are CSF and GM.
+ * @param eext Residual external energy in every voxel.
+ * @param etrend internal and external energy trend and cooling statistics.
+ * @param balance balance internal and external energy. (default = 0)
+Negative values give more weight to the internal energy, positive to the external energy.
+ * @param density set the desired density of the free Poisson process. (default = 1)
+ * @param prob set the probabilities of generating birth, death, randshift, optshift and connect proposals respectively. (default = 0.25,0.05,0.25,0.1,0.35)
+ * @param beta set the width of the Hanning interpolation window. (in [0, 1], default = 0)
+If used, a mask is required, and this mask must keep at least one voxel distance to the image bounding box.
+ * @param lambda set the weight of the internal energy directly. (default = 1)
+If provided, any value of -balance will be ignored.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
+ */
 function tckglobal(
     source: InputPathType,
     response: InputPathType,
@@ -632,66 +692,6 @@ function tckglobal(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckglobalOutputs {
-    /**
-     * Multi-Shell Multi-Tissue Global Tractography.
-     * 
-     * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.
-     * 
-     * Example use: 
-     * 
-     *  $ tckglobal dwi.mif wmr.txt -riso csfr.txt -riso gmr.txt -mask mask.mif 
-     *    -niter 1e9 -fod fod.mif -fiso fiso.mif tracks.tck 
-     * 
-     * in which dwi.mif is the input image, wmr.txt is an anisotropic, multi-shell response function for WM, and csfr.txt and gmr.txt are isotropic response functions for CSF and GM. The output tractogram is saved to tracks.tck. Optional output images fod.mif and fiso.mif contain the predicted WM fODF and isotropic tissue fractions of CSF and GM respectively, estimated as part of the global optimization and thus affected by spatial regularization.
-     * 
-     * References:
-     * 
-     * Christiaens, D.; Reisert, M.; Dhollander, T.; Sunaert, S.; Suetens, P. & Maes, F. Global tractography of multi-shell diffusion-weighted imaging data using a multi-tissue model. NeuroImage, 2015, 123, 89-101.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param source the image containing the raw DWI data.
-     * @param response the response of a track segment on the DWI signal.
-     * @param tracks the output file containing the tracks generated.
-     * @param grad specify the diffusion encoding scheme (required if not supplied in the header).
-     * @param mask only reconstruct the tractogram within the specified brain mask image.
-     * @param riso set one or more isotropic response functions. (multiple allowed)
-     * @param lmax set the maximum harmonic order for the output series. (default = 8)
-     * @param length set the length of the particles (fibre segments). (default = 1mm)
-     * @param weight set the weight by which particles contribute to the model. (default = 0.1)
-     * @param ppot set the particle potential, i.e., the cost of adding one segment, relative to the particle weight. (default = 0.05)
-     * @param cpot set the connection potential, i.e., the energy term that drives two segments together. (default = 0.5)
-     * @param t0 set the initial temperature of the metropolis hastings optimizer. (default = 0.1)
-     * @param t1 set the final temperature of the metropolis hastings optimizer. (default = 0.001)
-     * @param niter set the number of iterations of the metropolis hastings optimizer. (default = 10M)
-     * @param fod Predicted fibre orientation distribution function (fODF).
-This fODF is estimated as part of the global track optimization, and therefore incorporates the spatial regularization that it imposes. Internally, the fODF is represented as a discrete sum of apodized point spread functions (aPSF) oriented along the directions of all particles in the voxel, used to predict the DWI signal from the particle configuration.
-     * @param noapo disable spherical convolution of fODF with apodized PSF, to output a sum of delta functions rather than a sum of aPSFs.
-     * @param fiso Predicted isotropic fractions of the tissues for which response functions were provided with -riso. Typically, these are CSF and GM.
-     * @param eext Residual external energy in every voxel.
-     * @param etrend internal and external energy trend and cooling statistics.
-     * @param balance balance internal and external energy. (default = 0)
-Negative values give more weight to the internal energy, positive to the external energy.
-     * @param density set the desired density of the free Poisson process. (default = 1)
-     * @param prob set the probabilities of generating birth, death, randshift, optshift and connect proposals respectively. (default = 0.25,0.05,0.25,0.1,0.35)
-     * @param beta set the width of the Hanning interpolation window. (in [0, 1], default = 0)
-If used, a mask is required, and this mask must keep at least one voxel distance to the image bounding box.
-     * @param lambda set the weight of the internal energy directly. (default = 1)
-If provided, any value of -balance will be ignored.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKGLOBAL_METADATA);
     const params = tckglobal_params(source, response, tracks, grad, mask, riso, lmax, length, weight, ppot, cpot, t0, t1, niter, fod, noapo, fiso, eext, etrend, balance, density, prob, beta, lambda, info, quiet, debug, force, nthreads, config, help, version)
@@ -706,7 +706,12 @@ export {
       TckglobalParameters,
       TckglobalRisoParameters,
       tckglobal,
+      tckglobal_cargs,
+      tckglobal_config_cargs,
       tckglobal_config_params,
+      tckglobal_execute,
+      tckglobal_outputs,
       tckglobal_params,
+      tckglobal_riso_cargs,
       tckglobal_riso_params,
 };

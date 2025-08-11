@@ -12,7 +12,7 @@ const V_1D_BPORT_METADATA: Metadata = {
 
 
 interface V1dBportParameters {
-    "__STYXTYPE__": "1dBport";
+    "@type": "afni.1dBport";
     "band": Array<number>;
     "invert": boolean;
     "nozero": boolean;
@@ -26,35 +26,35 @@ interface V1dBportParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dBport": v_1d_bport_cargs,
+        "afni.1dBport": v_1d_bport_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dBport": v_1d_bport_outputs,
+        "afni.1dBport": v_1d_bport_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface V1dBportOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param band Specify lowest and highest frequencies in the passband.
+ * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
+ * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
+ * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
+ * @param quad Add regressors for linear and quadratic trends.
+ * @param input_dataset Specify the dataset input.
+ * @param input_1d_file Specify the 1D input file.
+ * @param nodata Specify the number of time points and optionally TR value for the simulation.
+ * @param tr Set the time step duration.
+ * @param concat Specify the list of start indexes for concatenated runs.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_bport_params(
     band: Array<number>,
     invert: boolean = false,
@@ -89,24 +105,8 @@ function v_1d_bport_params(
     tr: number | null = null,
     concat: InputPathType | null = null,
 ): V1dBportParameters {
-    /**
-     * Build parameters.
-    
-     * @param band Specify lowest and highest frequencies in the passband.
-     * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
-     * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
-     * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
-     * @param quad Add regressors for linear and quadratic trends.
-     * @param input_dataset Specify the dataset input.
-     * @param input_1d_file Specify the 1D input file.
-     * @param nodata Specify the number of time points and optionally TR value for the simulation.
-     * @param tr Set the time step duration.
-     * @param concat Specify the list of start indexes for concatenated runs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dBport" as const,
+        "@type": "afni.1dBport" as const,
         "band": band,
         "invert": invert,
         "nozero": nozero,
@@ -132,18 +132,18 @@ function v_1d_bport_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_bport_cargs(
     params: V1dBportParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dBport");
     cargs.push(
@@ -196,18 +196,18 @@ function v_1d_bport_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_bport_outputs(
     params: V1dBportParameters,
     execution: Execution,
 ): V1dBportOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dBportOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout"].join('')),
@@ -216,22 +216,22 @@ function v_1d_bport_outputs(
 }
 
 
+/**
+ * Creates a set of columns of sines and cosines for bandpassing via regression.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
+ */
 function v_1d_bport_execute(
     params: V1dBportParameters,
     execution: Execution,
 ): V1dBportOutputs {
-    /**
-     * Creates a set of columns of sines and cosines for bandpassing via regression.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_bport_cargs(params, execution)
     const ret = v_1d_bport_outputs(params, execution)
@@ -240,6 +240,27 @@ function v_1d_bport_execute(
 }
 
 
+/**
+ * Creates a set of columns of sines and cosines for bandpassing via regression.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param band Specify lowest and highest frequencies in the passband.
+ * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
+ * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
+ * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
+ * @param quad Add regressors for linear and quadratic trends.
+ * @param input_dataset Specify the dataset input.
+ * @param input_1d_file Specify the 1D input file.
+ * @param nodata Specify the number of time points and optionally TR value for the simulation.
+ * @param tr Set the time step duration.
+ * @param concat Specify the list of start indexes for concatenated runs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
+ */
 function v_1d_bport(
     band: Array<number>,
     invert: boolean = false,
@@ -253,27 +274,6 @@ function v_1d_bport(
     concat: InputPathType | null = null,
     runner: Runner | null = null,
 ): V1dBportOutputs {
-    /**
-     * Creates a set of columns of sines and cosines for bandpassing via regression.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param band Specify lowest and highest frequencies in the passband.
-     * @param invert Invert the selection after computing which frequency indexes correspond to the input band(s).
-     * @param nozero Do NOT generate the 0 frequency (constant) component when fbot = 0.
-     * @param noconst Same as -nozero. Do NOT generate the 0 frequency (constant) component when fbot = 0.
-     * @param quad Add regressors for linear and quadratic trends.
-     * @param input_dataset Specify the dataset input.
-     * @param input_1d_file Specify the 1D input file.
-     * @param nodata Specify the number of time points and optionally TR value for the simulation.
-     * @param tr Set the time step duration.
-     * @param concat Specify the list of start indexes for concatenated runs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_BPORT_METADATA);
     const params = v_1d_bport_params(band, invert, nozero, noconst, quad, input_dataset, input_1d_file, nodata, tr, concat)
@@ -286,5 +286,8 @@ export {
       V1dBportParameters,
       V_1D_BPORT_METADATA,
       v_1d_bport,
+      v_1d_bport_cargs,
+      v_1d_bport_execute,
+      v_1d_bport_outputs,
       v_1d_bport_params,
 };

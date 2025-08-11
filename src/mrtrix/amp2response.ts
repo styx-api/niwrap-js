@@ -12,14 +12,14 @@ const AMP2RESPONSE_METADATA: Metadata = {
 
 
 interface Amp2responseConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.amp2response.config";
     "key": string;
     "value": string;
 }
 
 
 interface Amp2responseParameters {
-    "__STYXTYPE__": "amp2response";
+    "@type": "mrtrix.amp2response";
     "isotropic": boolean;
     "noconstraint": boolean;
     "directions"?: InputPathType | null | undefined;
@@ -40,55 +40,55 @@ interface Amp2responseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "amp2response": amp2response_cargs,
-        "config": amp2response_config_cargs,
+        "mrtrix.amp2response": amp2response_cargs,
+        "mrtrix.amp2response.config": amp2response_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "amp2response": amp2response_outputs,
+        "mrtrix.amp2response": amp2response_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2response_config_params(
     key: string,
     value: string,
 ): Amp2responseConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.amp2response.config" as const,
         "key": key,
         "value": value,
     };
@@ -96,18 +96,18 @@ function amp2response_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2response_config_cargs(
     params: Amp2responseConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -133,6 +133,30 @@ interface Amp2responseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param amps the amplitudes image
+ * @param mask the mask containing the voxels from which to estimate the response function
+ * @param directions_1 a 4D image containing the estimated fibre directions
+ * @param response the output zonal spherical harmonic coefficients
+ * @param isotropic estimate an isotropic response function (lmax=0 for all shells)
+ * @param noconstraint disable the non-negativity and monotonicity constraints
+ * @param directions provide an external text file containing the directions along which the amplitudes are sampled
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param lmax specify the maximum harmonic degree of the response function to estimate (can be a comma-separated list for multi-shell data)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function amp2response_params(
     amps: InputPathType,
     mask: InputPathType,
@@ -152,32 +176,8 @@ function amp2response_params(
     help: boolean = false,
     version: boolean = false,
 ): Amp2responseParameters {
-    /**
-     * Build parameters.
-    
-     * @param amps the amplitudes image
-     * @param mask the mask containing the voxels from which to estimate the response function
-     * @param directions_1 a 4D image containing the estimated fibre directions
-     * @param response the output zonal spherical harmonic coefficients
-     * @param isotropic estimate an isotropic response function (lmax=0 for all shells)
-     * @param noconstraint disable the non-negativity and monotonicity constraints
-     * @param directions provide an external text file containing the directions along which the amplitudes are sampled
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param lmax specify the maximum harmonic degree of the response function to estimate (can be a comma-separated list for multi-shell data)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "amp2response" as const,
+        "@type": "mrtrix.amp2response" as const,
         "isotropic": isotropic,
         "noconstraint": noconstraint,
         "info": info,
@@ -210,18 +210,18 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function amp2response_cargs(
     params: Amp2responseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("amp2response");
     if ((params["isotropic"] ?? null)) {
@@ -267,7 +267,7 @@ function amp2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -283,18 +283,18 @@ function amp2response_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function amp2response_outputs(
     params: Amp2responseParameters,
     execution: Execution,
 ): Amp2responseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Amp2responseOutputs = {
         root: execution.outputFile("."),
         response: execution.outputFile([(params["response"] ?? null)].join('')),
@@ -303,30 +303,30 @@ function amp2response_outputs(
 }
 
 
+/**
+ * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
+ *
+ * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).
+ *
+ * If multi-shell data are provided, and one or more b-value shells are not explicitly requested, the command will generate a response function for every b-value shell (including b=0 if present).
+ *
+ * References:
+ *
+ * Smith, R. E.; Dhollander, T. & Connelly, A. Constrained linear least squares estimation of anisotropic response function for spherical deconvolution. ISMRM Workshop on Breaking the Barriers of Diffusion MRI, 23.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
+ */
 function amp2response_execute(
     params: Amp2responseParameters,
     execution: Execution,
 ): Amp2responseOutputs {
-    /**
-     * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
-     * 
-     * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).
-     * 
-     * If multi-shell data are provided, and one or more b-value shells are not explicitly requested, the command will generate a response function for every b-value shell (including b=0 if present).
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Dhollander, T. & Connelly, A. Constrained linear least squares estimation of anisotropic response function for spherical deconvolution. ISMRM Workshop on Breaking the Barriers of Diffusion MRI, 23.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
-     */
     params = execution.params(params)
     const cargs = amp2response_cargs(params, execution)
     const ret = amp2response_outputs(params, execution)
@@ -335,6 +335,43 @@ function amp2response_execute(
 }
 
 
+/**
+ * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
+ *
+ * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).
+ *
+ * If multi-shell data are provided, and one or more b-value shells are not explicitly requested, the command will generate a response function for every b-value shell (including b=0 if present).
+ *
+ * References:
+ *
+ * Smith, R. E.; Dhollander, T. & Connelly, A. Constrained linear least squares estimation of anisotropic response function for spherical deconvolution. ISMRM Workshop on Breaking the Barriers of Diffusion MRI, 23.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param amps the amplitudes image
+ * @param mask the mask containing the voxels from which to estimate the response function
+ * @param directions_1 a 4D image containing the estimated fibre directions
+ * @param response the output zonal spherical harmonic coefficients
+ * @param isotropic estimate an isotropic response function (lmax=0 for all shells)
+ * @param noconstraint disable the non-negativity and monotonicity constraints
+ * @param directions provide an external text file containing the directions along which the amplitudes are sampled
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param lmax specify the maximum harmonic degree of the response function to estimate (can be a comma-separated list for multi-shell data)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
+ */
 function amp2response(
     amps: InputPathType,
     mask: InputPathType,
@@ -355,43 +392,6 @@ function amp2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Amp2responseOutputs {
-    /**
-     * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
-     * 
-     * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).
-     * 
-     * If multi-shell data are provided, and one or more b-value shells are not explicitly requested, the command will generate a response function for every b-value shell (including b=0 if present).
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Dhollander, T. & Connelly, A. Constrained linear least squares estimation of anisotropic response function for spherical deconvolution. ISMRM Workshop on Breaking the Barriers of Diffusion MRI, 23.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param amps the amplitudes image
-     * @param mask the mask containing the voxels from which to estimate the response function
-     * @param directions_1 a 4D image containing the estimated fibre directions
-     * @param response the output zonal spherical harmonic coefficients
-     * @param isotropic estimate an isotropic response function (lmax=0 for all shells)
-     * @param noconstraint disable the non-negativity and monotonicity constraints
-     * @param directions provide an external text file containing the directions along which the amplitudes are sampled
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param lmax specify the maximum harmonic degree of the response function to estimate (can be a comma-separated list for multi-shell data)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AMP2RESPONSE_METADATA);
     const params = amp2response_params(amps, mask, directions_1, response, isotropic, noconstraint, directions, shells, lmax, info, quiet, debug, force, nthreads, config, help, version)
@@ -405,6 +405,10 @@ export {
       Amp2responseOutputs,
       Amp2responseParameters,
       amp2response,
+      amp2response_cargs,
+      amp2response_config_cargs,
       amp2response_config_params,
+      amp2response_execute,
+      amp2response_outputs,
       amp2response_params,
 };

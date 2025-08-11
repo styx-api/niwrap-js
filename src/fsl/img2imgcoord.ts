@@ -12,7 +12,7 @@ const IMG2IMGCOORD_METADATA: Metadata = {
 
 
 interface Img2imgcoordParameters {
-    "__STYXTYPE__": "img2imgcoord";
+    "@type": "fsl.img2imgcoord";
     "coordinates_file": string;
     "source_image": InputPathType;
     "dest_image": InputPathType;
@@ -26,33 +26,33 @@ interface Img2imgcoordParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "img2imgcoord": img2imgcoord_cargs,
+        "fsl.img2imgcoord": img2imgcoord_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface Img2imgcoordOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param coordinates_file Filename containing coordinates
+ * @param source_image Filename of source image
+ * @param dest_image Filename of destination image
+ * @param affine_transform Filename of affine transform (e.g. source2dest.mat)
+ * @param warp_field Filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
+ * @param pre_warp_affine Filename of pre-warp affine transform (default=identity)
+ * @param coords_in_voxels All coordinates in voxels (default)
+ * @param coords_in_mm All coordinates in mm
+ * @param verbose Verbose mode
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function img2imgcoord_params(
     coordinates_file: string,
     source_image: InputPathType,
@@ -84,24 +100,8 @@ function img2imgcoord_params(
     verbose: boolean = false,
     help: boolean = false,
 ): Img2imgcoordParameters {
-    /**
-     * Build parameters.
-    
-     * @param coordinates_file Filename containing coordinates
-     * @param source_image Filename of source image
-     * @param dest_image Filename of destination image
-     * @param affine_transform Filename of affine transform (e.g. source2dest.mat)
-     * @param warp_field Filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
-     * @param pre_warp_affine Filename of pre-warp affine transform (default=identity)
-     * @param coords_in_voxels All coordinates in voxels (default)
-     * @param coords_in_mm All coordinates in mm
-     * @param verbose Verbose mode
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "img2imgcoord" as const,
+        "@type": "fsl.img2imgcoord" as const,
         "coordinates_file": coordinates_file,
         "source_image": source_image,
         "dest_image": dest_image,
@@ -121,18 +121,18 @@ function img2imgcoord_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function img2imgcoord_cargs(
     params: Img2imgcoordParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("img2imgcoord");
     cargs.push((params["coordinates_file"] ?? null));
@@ -176,18 +176,18 @@ function img2imgcoord_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function img2imgcoord_outputs(
     params: Img2imgcoordParameters,
     execution: Execution,
 ): Img2imgcoordOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Img2imgcoordOutputs = {
         root: execution.outputFile("."),
     };
@@ -195,22 +195,22 @@ function img2imgcoord_outputs(
 }
 
 
+/**
+ * Tool for transforming coordinates between images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
+ */
 function img2imgcoord_execute(
     params: Img2imgcoordParameters,
     execution: Execution,
 ): Img2imgcoordOutputs {
-    /**
-     * Tool for transforming coordinates between images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
-     */
     params = execution.params(params)
     const cargs = img2imgcoord_cargs(params, execution)
     const ret = img2imgcoord_outputs(params, execution)
@@ -219,6 +219,27 @@ function img2imgcoord_execute(
 }
 
 
+/**
+ * Tool for transforming coordinates between images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param coordinates_file Filename containing coordinates
+ * @param source_image Filename of source image
+ * @param dest_image Filename of destination image
+ * @param affine_transform Filename of affine transform (e.g. source2dest.mat)
+ * @param warp_field Filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
+ * @param pre_warp_affine Filename of pre-warp affine transform (default=identity)
+ * @param coords_in_voxels All coordinates in voxels (default)
+ * @param coords_in_mm All coordinates in mm
+ * @param verbose Verbose mode
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
+ */
 function img2imgcoord(
     coordinates_file: string,
     source_image: InputPathType,
@@ -232,27 +253,6 @@ function img2imgcoord(
     help: boolean = false,
     runner: Runner | null = null,
 ): Img2imgcoordOutputs {
-    /**
-     * Tool for transforming coordinates between images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param coordinates_file Filename containing coordinates
-     * @param source_image Filename of source image
-     * @param dest_image Filename of destination image
-     * @param affine_transform Filename of affine transform (e.g. source2dest.mat)
-     * @param warp_field Filename of warpfield (e.g. intermediate2dest_warp.nii.gz)
-     * @param pre_warp_affine Filename of pre-warp affine transform (default=identity)
-     * @param coords_in_voxels All coordinates in voxels (default)
-     * @param coords_in_mm All coordinates in mm
-     * @param verbose Verbose mode
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMG2IMGCOORD_METADATA);
     const params = img2imgcoord_params(coordinates_file, source_image, dest_image, affine_transform, warp_field, pre_warp_affine, coords_in_voxels, coords_in_mm, verbose, help)
@@ -265,5 +265,8 @@ export {
       Img2imgcoordOutputs,
       Img2imgcoordParameters,
       img2imgcoord,
+      img2imgcoord_cargs,
+      img2imgcoord_execute,
+      img2imgcoord_outputs,
       img2imgcoord_params,
 };

@@ -12,42 +12,42 @@ const SPHERE_SUBJECT_METADATA: Metadata = {
 
 
 interface SphereSubjectParameters {
-    "__STYXTYPE__": "sphere_subject";
+    "@type": "freesurfer.sphere_subject";
     "input_dir": string;
     "output_file": string;
     "license_file"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sphere_subject": sphere_subject_cargs,
+        "freesurfer.sphere_subject": sphere_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sphere_subject": sphere_subject_outputs,
+        "freesurfer.sphere_subject": sphere_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SphereSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dir Input subject directory
+ * @param output_file Output file for results
+ * @param license_file Path to FreeSurfer license file
+ *
+ * @returns Parameter dictionary
+ */
 function sphere_subject_params(
     input_dir: string,
     output_file: string,
     license_file: string | null = "/usr/local/freesurfer/.license",
 ): SphereSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dir Input subject directory
-     * @param output_file Output file for results
-     * @param license_file Path to FreeSurfer license file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sphere_subject" as const,
+        "@type": "freesurfer.sphere_subject" as const,
         "input_dir": input_dir,
         "output_file": output_file,
     };
@@ -96,18 +96,18 @@ function sphere_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sphere_subject_cargs(
     params: SphereSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sphere_subject");
     cargs.push((params["input_dir"] ?? null));
@@ -119,18 +119,18 @@ function sphere_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sphere_subject_outputs(
     params: SphereSubjectParameters,
     execution: Execution,
 ): SphereSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SphereSubjectOutputs = {
         root: execution.outputFile("."),
         output_result: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -139,22 +139,22 @@ function sphere_subject_outputs(
 }
 
 
+/**
+ * A FreeSurfer tool for processing subject data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
+ */
 function sphere_subject_execute(
     params: SphereSubjectParameters,
     execution: Execution,
 ): SphereSubjectOutputs {
-    /**
-     * A FreeSurfer tool for processing subject data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = sphere_subject_cargs(params, execution)
     const ret = sphere_subject_outputs(params, execution)
@@ -163,26 +163,26 @@ function sphere_subject_execute(
 }
 
 
+/**
+ * A FreeSurfer tool for processing subject data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_dir Input subject directory
+ * @param output_file Output file for results
+ * @param license_file Path to FreeSurfer license file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
+ */
 function sphere_subject(
     input_dir: string,
     output_file: string,
     license_file: string | null = "/usr/local/freesurfer/.license",
     runner: Runner | null = null,
 ): SphereSubjectOutputs {
-    /**
-     * A FreeSurfer tool for processing subject data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_dir Input subject directory
-     * @param output_file Output file for results
-     * @param license_file Path to FreeSurfer license file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPHERE_SUBJECT_METADATA);
     const params = sphere_subject_params(input_dir, output_file, license_file)
@@ -195,5 +195,8 @@ export {
       SphereSubjectOutputs,
       SphereSubjectParameters,
       sphere_subject,
+      sphere_subject_cargs,
+      sphere_subject_execute,
+      sphere_subject_outputs,
       sphere_subject_params,
 };

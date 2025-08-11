@@ -12,40 +12,40 @@ const CLUSTER2HTML_METADATA: Metadata = {
 
 
 interface Cluster2htmlParameters {
-    "__STYXTYPE__": "cluster2html";
+    "@type": "fsl.cluster2html";
     "featdir": string;
     "inroot": string;
     "std_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cluster2html": cluster2html_cargs,
+        "fsl.cluster2html": cluster2html_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface Cluster2htmlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param featdir Directory containing the FEAT analysis results
+ * @param inroot Root name for cluster files (should not contain the _std extension)
+ * @param std_flag Indicate that the input files contain the _std extension
+ *
+ * @returns Parameter dictionary
+ */
 function cluster2html_params(
     featdir: string,
     inroot: string,
     std_flag: boolean = false,
 ): Cluster2htmlParameters {
-    /**
-     * Build parameters.
-    
-     * @param featdir Directory containing the FEAT analysis results
-     * @param inroot Root name for cluster files (should not contain the _std extension)
-     * @param std_flag Indicate that the input files contain the _std extension
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cluster2html" as const,
+        "@type": "fsl.cluster2html" as const,
         "featdir": featdir,
         "inroot": inroot,
         "std_flag": std_flag,
@@ -89,18 +89,18 @@ function cluster2html_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cluster2html_cargs(
     params: Cluster2htmlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cluster2html");
     cargs.push((params["featdir"] ?? null));
@@ -112,18 +112,18 @@ function cluster2html_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cluster2html_outputs(
     params: Cluster2htmlParameters,
     execution: Execution,
 ): Cluster2htmlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Cluster2htmlOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function cluster2html_outputs(
 }
 
 
+/**
+ * Generates an HTML report from cluster-based FEAT analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
+ */
 function cluster2html_execute(
     params: Cluster2htmlParameters,
     execution: Execution,
 ): Cluster2htmlOutputs {
-    /**
-     * Generates an HTML report from cluster-based FEAT analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
-     */
     params = execution.params(params)
     const cargs = cluster2html_cargs(params, execution)
     const ret = cluster2html_outputs(params, execution)
@@ -155,26 +155,26 @@ function cluster2html_execute(
 }
 
 
+/**
+ * Generates an HTML report from cluster-based FEAT analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param featdir Directory containing the FEAT analysis results
+ * @param inroot Root name for cluster files (should not contain the _std extension)
+ * @param std_flag Indicate that the input files contain the _std extension
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
+ */
 function cluster2html(
     featdir: string,
     inroot: string,
     std_flag: boolean = false,
     runner: Runner | null = null,
 ): Cluster2htmlOutputs {
-    /**
-     * Generates an HTML report from cluster-based FEAT analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param featdir Directory containing the FEAT analysis results
-     * @param inroot Root name for cluster files (should not contain the _std extension)
-     * @param std_flag Indicate that the input files contain the _std extension
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CLUSTER2HTML_METADATA);
     const params = cluster2html_params(featdir, inroot, std_flag)
@@ -187,5 +187,8 @@ export {
       Cluster2htmlOutputs,
       Cluster2htmlParameters,
       cluster2html,
+      cluster2html_cargs,
+      cluster2html_execute,
+      cluster2html_outputs,
       cluster2html_params,
 };

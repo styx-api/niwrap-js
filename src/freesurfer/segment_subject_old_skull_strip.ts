@@ -12,7 +12,7 @@ const SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface SegmentSubjectOldSkullStripParameters {
-    "__STYXTYPE__": "segment_subject_old_skull_strip";
+    "@type": "freesurfer.segment_subject_old_skull_strip";
     "input_volume": InputPathType;
     "output_xfm": string;
     "log_file"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface SegmentSubjectOldSkullStripParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_subject_old_skull_strip": segment_subject_old_skull_strip_cargs,
+        "freesurfer.segment_subject_old_skull_strip": segment_subject_old_skull_strip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segment_subject_old_skull_strip": segment_subject_old_skull_strip_outputs,
+        "freesurfer.segment_subject_old_skull_strip": segment_subject_old_skull_strip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface SegmentSubjectOldSkullStripOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file
+ * @param output_xfm Output xfm file
+ * @param log_file Log file. Default is outdir/talarach.log
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param version_flag Print version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_old_skull_strip_params(
     input_volume: InputPathType,
     output_xfm: string,
@@ -85,20 +97,8 @@ function segment_subject_old_skull_strip_params(
     debug_flag: boolean = false,
     version_flag: boolean = false,
 ): SegmentSubjectOldSkullStripParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file
-     * @param output_xfm Output xfm file
-     * @param log_file Log file. Default is outdir/talarach.log
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param version_flag Print version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_subject_old_skull_strip" as const,
+        "@type": "freesurfer.segment_subject_old_skull_strip" as const,
         "input_volume": input_volume,
         "output_xfm": output_xfm,
         "help_flag": help_flag,
@@ -112,18 +112,18 @@ function segment_subject_old_skull_strip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_old_skull_strip_cargs(
     params: SegmentSubjectOldSkullStripParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_subject_old_skull_strip");
     cargs.push(
@@ -153,18 +153,18 @@ function segment_subject_old_skull_strip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_old_skull_strip_outputs(
     params: SegmentSubjectOldSkullStripParameters,
     execution: Execution,
 ): SegmentSubjectOldSkullStripOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectOldSkullStripOutputs = {
         root: execution.outputFile("."),
         output_xfm_file: execution.outputFile([(params["output_xfm"] ?? null)].join('')),
@@ -174,22 +174,22 @@ function segment_subject_old_skull_strip_outputs(
 }
 
 
+/**
+ * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
+ */
 function segment_subject_old_skull_strip_execute(
     params: SegmentSubjectOldSkullStripParameters,
     execution: Execution,
 ): SegmentSubjectOldSkullStripOutputs {
-    /**
-     * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_old_skull_strip_cargs(params, execution)
     const ret = segment_subject_old_skull_strip_outputs(params, execution)
@@ -198,6 +198,23 @@ function segment_subject_old_skull_strip_execute(
 }
 
 
+/**
+ * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file
+ * @param output_xfm Output xfm file
+ * @param log_file Log file. Default is outdir/talarach.log
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param version_flag Print version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
+ */
 function segment_subject_old_skull_strip(
     input_volume: InputPathType,
     output_xfm: string,
@@ -207,23 +224,6 @@ function segment_subject_old_skull_strip(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): SegmentSubjectOldSkullStripOutputs {
-    /**
-     * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file
-     * @param output_xfm Output xfm file
-     * @param log_file Log file. Default is outdir/talarach.log
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param version_flag Print version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA);
     const params = segment_subject_old_skull_strip_params(input_volume, output_xfm, log_file, help_flag, debug_flag, version_flag)
@@ -236,5 +236,8 @@ export {
       SegmentSubjectOldSkullStripOutputs,
       SegmentSubjectOldSkullStripParameters,
       segment_subject_old_skull_strip,
+      segment_subject_old_skull_strip_cargs,
+      segment_subject_old_skull_strip_execute,
+      segment_subject_old_skull_strip_outputs,
       segment_subject_old_skull_strip_params,
 };

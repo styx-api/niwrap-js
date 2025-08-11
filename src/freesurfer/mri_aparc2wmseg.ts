@@ -12,7 +12,7 @@ const MRI_APARC2WMSEG_METADATA: Metadata = {
 
 
 interface MriAparc2wmsegParameters {
-    "__STYXTYPE__": "mri_aparc2wmseg";
+    "@type": "freesurfer.mri_aparc2wmseg";
     "subject": string;
     "wmseg_file": string;
     "help": boolean;
@@ -20,33 +20,33 @@ interface MriAparc2wmsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_aparc2wmseg": mri_aparc2wmseg_cargs,
+        "freesurfer.mri_aparc2wmseg": mri_aparc2wmseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MriAparc2wmsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject identifier used in FreeSurfer.
+ * @param wmseg_file File to store the output white matter segmentation.
+ * @param help Print out information on how to use this program.
+ * @param version Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_aparc2wmseg_params(
     subject: string,
     wmseg_file: string,
     help: boolean = false,
     version: boolean = false,
 ): MriAparc2wmsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject identifier used in FreeSurfer.
-     * @param wmseg_file File to store the output white matter segmentation.
-     * @param help Print out information on how to use this program.
-     * @param version Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_aparc2wmseg" as const,
+        "@type": "freesurfer.mri_aparc2wmseg" as const,
         "subject": subject,
         "wmseg_file": wmseg_file,
         "help": help,
@@ -93,18 +93,18 @@ function mri_aparc2wmseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_aparc2wmseg_cargs(
     params: MriAparc2wmsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_aparc2wmseg");
     cargs.push(
@@ -125,18 +125,18 @@ function mri_aparc2wmseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_aparc2wmseg_outputs(
     params: MriAparc2wmsegParameters,
     execution: Execution,
 ): MriAparc2wmsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAparc2wmsegOutputs = {
         root: execution.outputFile("."),
     };
@@ -144,22 +144,22 @@ function mri_aparc2wmseg_outputs(
 }
 
 
+/**
+ * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
+ */
 function mri_aparc2wmseg_execute(
     params: MriAparc2wmsegParameters,
     execution: Execution,
 ): MriAparc2wmsegOutputs {
-    /**
-     * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_aparc2wmseg_cargs(params, execution)
     const ret = mri_aparc2wmseg_outputs(params, execution)
@@ -168,6 +168,21 @@ function mri_aparc2wmseg_execute(
 }
 
 
+/**
+ * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject identifier used in FreeSurfer.
+ * @param wmseg_file File to store the output white matter segmentation.
+ * @param help Print out information on how to use this program.
+ * @param version Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
+ */
 function mri_aparc2wmseg(
     subject: string,
     wmseg_file: string,
@@ -175,21 +190,6 @@ function mri_aparc2wmseg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAparc2wmsegOutputs {
-    /**
-     * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject identifier used in FreeSurfer.
-     * @param wmseg_file File to store the output white matter segmentation.
-     * @param help Print out information on how to use this program.
-     * @param version Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_APARC2WMSEG_METADATA);
     const params = mri_aparc2wmseg_params(subject, wmseg_file, help, version)
@@ -202,5 +202,8 @@ export {
       MriAparc2wmsegOutputs,
       MriAparc2wmsegParameters,
       mri_aparc2wmseg,
+      mri_aparc2wmseg_cargs,
+      mri_aparc2wmseg_execute,
+      mri_aparc2wmseg_outputs,
       mri_aparc2wmseg_params,
 };

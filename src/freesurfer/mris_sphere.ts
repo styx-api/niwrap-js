@@ -12,42 +12,42 @@ const MRIS_SPHERE_METADATA: Metadata = {
 
 
 interface MrisSphereParameters {
-    "__STYXTYPE__": "mris_sphere";
+    "@type": "freesurfer.mris_sphere";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_sphere": mris_sphere_cargs,
+        "freesurfer.mris_sphere": mris_sphere_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_sphere": mris_sphere_outputs,
+        "freesurfer.mris_sphere": mris_sphere_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisSphereOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_file Input surface file.
+ * @param patch_file Input patch file name.
+ * @param output_patch Output patch file name.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_sphere_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
 ): MrisSphereParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_file Input surface file.
-     * @param patch_file Input patch file name.
-     * @param output_patch Output patch file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_sphere" as const,
+        "@type": "freesurfer.mris_sphere" as const,
         "surface_file": surface_file,
         "patch_file": patch_file,
         "output_patch": output_patch,
@@ -94,18 +94,18 @@ function mris_sphere_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_sphere_cargs(
     params: MrisSphereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_sphere");
     cargs.push(execution.inputFile((params["surface_file"] ?? null)));
@@ -115,18 +115,18 @@ function mris_sphere_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_sphere_outputs(
     params: MrisSphereParameters,
     execution: Execution,
 ): MrisSphereOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSphereOutputs = {
         root: execution.outputFile("."),
         output_patch_file: execution.outputFile([(params["output_patch"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mris_sphere_outputs(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
+ */
 function mris_sphere_execute(
     params: MrisSphereParameters,
     execution: Execution,
 ): MrisSphereOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_sphere_cargs(params, execution)
     const ret = mris_sphere_outputs(params, execution)
@@ -159,26 +159,26 @@ function mris_sphere_execute(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface_file Input surface file.
+ * @param patch_file Input patch file name.
+ * @param output_patch Output patch file name.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
+ */
 function mris_sphere(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
     runner: Runner | null = null,
 ): MrisSphereOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface_file Input surface file.
-     * @param patch_file Input patch file name.
-     * @param output_patch Output patch file name.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SPHERE_METADATA);
     const params = mris_sphere_params(surface_file, patch_file, output_patch)
@@ -191,5 +191,8 @@ export {
       MrisSphereOutputs,
       MrisSphereParameters,
       mris_sphere,
+      mris_sphere_cargs,
+      mris_sphere_execute,
+      mris_sphere_outputs,
       mris_sphere_params,
 };

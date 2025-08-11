@@ -12,7 +12,7 @@ const V_3D_TAGALIGN_METADATA: Metadata = {
 
 
 interface V3dTagalignParameters {
-    "__STYXTYPE__": "3dTagalign";
+    "@type": "afni.3dTagalign";
     "input_dataset": InputPathType;
     "master_dataset": InputPathType;
     "tagset_file"?: InputPathType | null | undefined;
@@ -31,35 +31,35 @@ interface V3dTagalignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTagalign": v_3d_tagalign_cargs,
+        "afni.3dTagalign": v_3d_tagalign_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTagalign": v_3d_tagalign_outputs,
+        "afni.3dTagalign": v_3d_tagalign_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,27 @@ interface V3dTagalignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset to align
+ * @param master_dataset Use dataset 'mset' as the master dataset. This option is mandatory.
+ * @param tagset_file Use the tagset in the .tag file instead of dset.
+ * @param no_keep_tags Don't put transformed locations of dset's tags into the output dataset [default = keep tags].
+ * @param matvec_file Write the matrix+vector transformation to file 'mfile'. This can be used with 3dWarp's '-matvec_in2out' option to align other datasets in the same way (e.g., functional datasets).
+ * @param rotate Compute the transformation as a rotation + shift (default).
+ * @param affine Compute the transformation as a general affine map, where the matrix is a general 3x3 matrix.
+ * @param rotscl Compute transformation as a rotation times an isotropic scaling; where matrix is an orthogonal matrix times a scalar.
+ * @param prefix Specify the prefix for the output dataset.
+ * @param verbose Print progress reports.
+ * @param dummy Don't actually rotate the dataset, just compute the transformation matrix and vector. If '-matvec' is used, the mfile will be written.
+ * @param linear_interpolation Use linear interpolation method.
+ * @param cubic_interpolation Use cubic interpolation method (default).
+ * @param nearest_neighbor_interpolation Use nearest neighbour interpolation method.
+ * @param quintic_interpolation Use quintic interpolation method.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tagalign_params(
     input_dataset: InputPathType,
     master_dataset: InputPathType,
@@ -107,29 +128,8 @@ function v_3d_tagalign_params(
     nearest_neighbor_interpolation: boolean = false,
     quintic_interpolation: boolean = false,
 ): V3dTagalignParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset to align
-     * @param master_dataset Use dataset 'mset' as the master dataset. This option is mandatory.
-     * @param tagset_file Use the tagset in the .tag file instead of dset.
-     * @param no_keep_tags Don't put transformed locations of dset's tags into the output dataset [default = keep tags].
-     * @param matvec_file Write the matrix+vector transformation to file 'mfile'. This can be used with 3dWarp's '-matvec_in2out' option to align other datasets in the same way (e.g., functional datasets).
-     * @param rotate Compute the transformation as a rotation + shift (default).
-     * @param affine Compute the transformation as a general affine map, where the matrix is a general 3x3 matrix.
-     * @param rotscl Compute transformation as a rotation times an isotropic scaling; where matrix is an orthogonal matrix times a scalar.
-     * @param prefix Specify the prefix for the output dataset.
-     * @param verbose Print progress reports.
-     * @param dummy Don't actually rotate the dataset, just compute the transformation matrix and vector. If '-matvec' is used, the mfile will be written.
-     * @param linear_interpolation Use linear interpolation method.
-     * @param cubic_interpolation Use cubic interpolation method (default).
-     * @param nearest_neighbor_interpolation Use nearest neighbour interpolation method.
-     * @param quintic_interpolation Use quintic interpolation method.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTagalign" as const,
+        "@type": "afni.3dTagalign" as const,
         "input_dataset": input_dataset,
         "master_dataset": master_dataset,
         "no_keep_tags": no_keep_tags,
@@ -156,18 +156,18 @@ function v_3d_tagalign_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tagalign_cargs(
     params: V3dTagalignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTagalign");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -227,18 +227,18 @@ function v_3d_tagalign_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tagalign_outputs(
     params: V3dTagalignParameters,
     execution: Execution,
 ): V3dTagalignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTagalignOutputs = {
         root: execution.outputFile("."),
         output_dataset_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -249,22 +249,22 @@ function v_3d_tagalign_outputs(
 }
 
 
+/**
+ * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
+ */
 function v_3d_tagalign_execute(
     params: V3dTagalignParameters,
     execution: Execution,
 ): V3dTagalignOutputs {
-    /**
-     * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tagalign_cargs(params, execution)
     const ret = v_3d_tagalign_outputs(params, execution)
@@ -273,6 +273,32 @@ function v_3d_tagalign_execute(
 }
 
 
+/**
+ * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset to align
+ * @param master_dataset Use dataset 'mset' as the master dataset. This option is mandatory.
+ * @param tagset_file Use the tagset in the .tag file instead of dset.
+ * @param no_keep_tags Don't put transformed locations of dset's tags into the output dataset [default = keep tags].
+ * @param matvec_file Write the matrix+vector transformation to file 'mfile'. This can be used with 3dWarp's '-matvec_in2out' option to align other datasets in the same way (e.g., functional datasets).
+ * @param rotate Compute the transformation as a rotation + shift (default).
+ * @param affine Compute the transformation as a general affine map, where the matrix is a general 3x3 matrix.
+ * @param rotscl Compute transformation as a rotation times an isotropic scaling; where matrix is an orthogonal matrix times a scalar.
+ * @param prefix Specify the prefix for the output dataset.
+ * @param verbose Print progress reports.
+ * @param dummy Don't actually rotate the dataset, just compute the transformation matrix and vector. If '-matvec' is used, the mfile will be written.
+ * @param linear_interpolation Use linear interpolation method.
+ * @param cubic_interpolation Use cubic interpolation method (default).
+ * @param nearest_neighbor_interpolation Use nearest neighbour interpolation method.
+ * @param quintic_interpolation Use quintic interpolation method.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
+ */
 function v_3d_tagalign(
     input_dataset: InputPathType,
     master_dataset: InputPathType,
@@ -291,32 +317,6 @@ function v_3d_tagalign(
     quintic_interpolation: boolean = false,
     runner: Runner | null = null,
 ): V3dTagalignOutputs {
-    /**
-     * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset to align
-     * @param master_dataset Use dataset 'mset' as the master dataset. This option is mandatory.
-     * @param tagset_file Use the tagset in the .tag file instead of dset.
-     * @param no_keep_tags Don't put transformed locations of dset's tags into the output dataset [default = keep tags].
-     * @param matvec_file Write the matrix+vector transformation to file 'mfile'. This can be used with 3dWarp's '-matvec_in2out' option to align other datasets in the same way (e.g., functional datasets).
-     * @param rotate Compute the transformation as a rotation + shift (default).
-     * @param affine Compute the transformation as a general affine map, where the matrix is a general 3x3 matrix.
-     * @param rotscl Compute transformation as a rotation times an isotropic scaling; where matrix is an orthogonal matrix times a scalar.
-     * @param prefix Specify the prefix for the output dataset.
-     * @param verbose Print progress reports.
-     * @param dummy Don't actually rotate the dataset, just compute the transformation matrix and vector. If '-matvec' is used, the mfile will be written.
-     * @param linear_interpolation Use linear interpolation method.
-     * @param cubic_interpolation Use cubic interpolation method (default).
-     * @param nearest_neighbor_interpolation Use nearest neighbour interpolation method.
-     * @param quintic_interpolation Use quintic interpolation method.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TAGALIGN_METADATA);
     const params = v_3d_tagalign_params(input_dataset, master_dataset, tagset_file, no_keep_tags, matvec_file, rotate, affine, rotscl, prefix, verbose, dummy, linear_interpolation, cubic_interpolation, nearest_neighbor_interpolation, quintic_interpolation)
@@ -329,5 +329,8 @@ export {
       V3dTagalignParameters,
       V_3D_TAGALIGN_METADATA,
       v_3d_tagalign,
+      v_3d_tagalign_cargs,
+      v_3d_tagalign_execute,
+      v_3d_tagalign_outputs,
       v_3d_tagalign_params,
 };

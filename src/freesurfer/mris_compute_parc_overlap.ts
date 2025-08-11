@@ -12,7 +12,7 @@ const MRIS_COMPUTE_PARC_OVERLAP_METADATA: Metadata = {
 
 
 interface MrisComputeParcOverlapParameters {
-    "__STYXTYPE__": "mris_compute_parc_overlap";
+    "@type": "freesurfer.mris_compute_parc_overlap";
     "subject": string;
     "hemi": string;
     "annot1"?: InputPathType | null | undefined;
@@ -32,33 +32,33 @@ interface MrisComputeParcOverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_parc_overlap": mris_compute_parc_overlap_cargs,
+        "freesurfer.mris_compute_parc_overlap": mris_compute_parc_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -78,6 +78,28 @@ interface MrisComputeParcOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject to check
+ * @param hemi Hemisphere: rh or lh
+ * @param annot1 First .annot file
+ * @param annot2 Second .annot file
+ * @param label1 First .label file
+ * @param label2 Second .label file
+ * @param subj_dir Set SUBJECTS_DIR
+ * @param log_file Output the overall DICE and minimum distance to filename
+ * @param label_list File containing labels to check, one per line
+ * @param nocheck_label1_xyz When loading label1 file, don't check x,y,z coords to surface
+ * @param nocheck_label2_xyz When loading label2 file, don't check x,y,z coords to surface
+ * @param nocheck_label_xyz Do not check label1 and label2
+ * @param use_label1_xyz Replace surface x,y,z coords with those in label1 file
+ * @param use_label2_xyz Replace surface x,y,z coords with those in label2 file
+ * @param use_label_xyz Use label1 and label2 coords
+ * @param debug_overlap Generate ?h.overlap.annot
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_parc_overlap_params(
     subject: string,
     hemi: string,
@@ -96,30 +118,8 @@ function mris_compute_parc_overlap_params(
     use_label_xyz: boolean = false,
     debug_overlap: boolean = false,
 ): MrisComputeParcOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject to check
-     * @param hemi Hemisphere: rh or lh
-     * @param annot1 First .annot file
-     * @param annot2 Second .annot file
-     * @param label1 First .label file
-     * @param label2 Second .label file
-     * @param subj_dir Set SUBJECTS_DIR
-     * @param log_file Output the overall DICE and minimum distance to filename
-     * @param label_list File containing labels to check, one per line
-     * @param nocheck_label1_xyz When loading label1 file, don't check x,y,z coords to surface
-     * @param nocheck_label2_xyz When loading label2 file, don't check x,y,z coords to surface
-     * @param nocheck_label_xyz Do not check label1 and label2
-     * @param use_label1_xyz Replace surface x,y,z coords with those in label1 file
-     * @param use_label2_xyz Replace surface x,y,z coords with those in label2 file
-     * @param use_label_xyz Use label1 and label2 coords
-     * @param debug_overlap Generate ?h.overlap.annot
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_parc_overlap" as const,
+        "@type": "freesurfer.mris_compute_parc_overlap" as const,
         "subject": subject,
         "hemi": hemi,
         "nocheck_label1_xyz": nocheck_label1_xyz,
@@ -155,18 +155,18 @@ function mris_compute_parc_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_parc_overlap_cargs(
     params: MrisComputeParcOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_parc_overlap");
     cargs.push(
@@ -244,18 +244,18 @@ function mris_compute_parc_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_parc_overlap_outputs(
     params: MrisComputeParcOverlapParameters,
     execution: Execution,
 ): MrisComputeParcOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeParcOverlapOutputs = {
         root: execution.outputFile("."),
     };
@@ -263,22 +263,22 @@ function mris_compute_parc_overlap_outputs(
 }
 
 
+/**
+ * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
+ */
 function mris_compute_parc_overlap_execute(
     params: MrisComputeParcOverlapParameters,
     execution: Execution,
 ): MrisComputeParcOverlapOutputs {
-    /**
-     * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_parc_overlap_cargs(params, execution)
     const ret = mris_compute_parc_overlap_outputs(params, execution)
@@ -287,6 +287,33 @@ function mris_compute_parc_overlap_execute(
 }
 
 
+/**
+ * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject to check
+ * @param hemi Hemisphere: rh or lh
+ * @param annot1 First .annot file
+ * @param annot2 Second .annot file
+ * @param label1 First .label file
+ * @param label2 Second .label file
+ * @param subj_dir Set SUBJECTS_DIR
+ * @param log_file Output the overall DICE and minimum distance to filename
+ * @param label_list File containing labels to check, one per line
+ * @param nocheck_label1_xyz When loading label1 file, don't check x,y,z coords to surface
+ * @param nocheck_label2_xyz When loading label2 file, don't check x,y,z coords to surface
+ * @param nocheck_label_xyz Do not check label1 and label2
+ * @param use_label1_xyz Replace surface x,y,z coords with those in label1 file
+ * @param use_label2_xyz Replace surface x,y,z coords with those in label2 file
+ * @param use_label_xyz Use label1 and label2 coords
+ * @param debug_overlap Generate ?h.overlap.annot
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
+ */
 function mris_compute_parc_overlap(
     subject: string,
     hemi: string,
@@ -306,33 +333,6 @@ function mris_compute_parc_overlap(
     debug_overlap: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeParcOverlapOutputs {
-    /**
-     * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject to check
-     * @param hemi Hemisphere: rh or lh
-     * @param annot1 First .annot file
-     * @param annot2 Second .annot file
-     * @param label1 First .label file
-     * @param label2 Second .label file
-     * @param subj_dir Set SUBJECTS_DIR
-     * @param log_file Output the overall DICE and minimum distance to filename
-     * @param label_list File containing labels to check, one per line
-     * @param nocheck_label1_xyz When loading label1 file, don't check x,y,z coords to surface
-     * @param nocheck_label2_xyz When loading label2 file, don't check x,y,z coords to surface
-     * @param nocheck_label_xyz Do not check label1 and label2
-     * @param use_label1_xyz Replace surface x,y,z coords with those in label1 file
-     * @param use_label2_xyz Replace surface x,y,z coords with those in label2 file
-     * @param use_label_xyz Use label1 and label2 coords
-     * @param debug_overlap Generate ?h.overlap.annot
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_PARC_OVERLAP_METADATA);
     const params = mris_compute_parc_overlap_params(subject, hemi, annot1, annot2, label1, label2, subj_dir, log_file, label_list, nocheck_label1_xyz, nocheck_label2_xyz, nocheck_label_xyz, use_label1_xyz, use_label2_xyz, use_label_xyz, debug_overlap)
@@ -345,5 +345,8 @@ export {
       MrisComputeParcOverlapOutputs,
       MrisComputeParcOverlapParameters,
       mris_compute_parc_overlap,
+      mris_compute_parc_overlap_cargs,
+      mris_compute_parc_overlap_execute,
+      mris_compute_parc_overlap_outputs,
       mris_compute_parc_overlap_params,
 };

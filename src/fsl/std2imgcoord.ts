@@ -12,7 +12,7 @@ const STD2IMGCOORD_METADATA: Metadata = {
 
 
 interface Std2imgcoordParameters {
-    "__STYXTYPE__": "std2imgcoord";
+    "@type": "fsl.std2imgcoord";
     "filename_coordinates": InputPathType;
     "standard_image"?: InputPathType | null | undefined;
     "input_image": InputPathType;
@@ -26,33 +26,33 @@ interface Std2imgcoordParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "std2imgcoord": std2imgcoord_cargs,
+        "fsl.std2imgcoord": std2imgcoord_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface Std2imgcoordOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename_coordinates Path to the filename containing coordinates or '-' to read from standard input
+ * @param input_image Filename of input image
+ * @param standard_image Filename of standard image
+ * @param affine_transform Filename of affine transform (e.g. example_func2standard.mat)
+ * @param warp_field Filename of warpfield (e.g. highres2standard_warp.nii.gz)
+ * @param prewarp_affine_transform Filename of pre-warp affine transform (e.g. example_func2highres.mat). Defaults to identity matrix.
+ * @param output_mm Outputs coordinates in mm (default)
+ * @param output_vox Outputs coordinates in voxels
+ * @param verbose Verbose output
+ * @param more_verbose More verbose output
+ *
+ * @returns Parameter dictionary
+ */
 function std2imgcoord_params(
     filename_coordinates: InputPathType,
     input_image: InputPathType,
@@ -84,24 +100,8 @@ function std2imgcoord_params(
     verbose: boolean = false,
     more_verbose: boolean = false,
 ): Std2imgcoordParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename_coordinates Path to the filename containing coordinates or '-' to read from standard input
-     * @param input_image Filename of input image
-     * @param standard_image Filename of standard image
-     * @param affine_transform Filename of affine transform (e.g. example_func2standard.mat)
-     * @param warp_field Filename of warpfield (e.g. highres2standard_warp.nii.gz)
-     * @param prewarp_affine_transform Filename of pre-warp affine transform (e.g. example_func2highres.mat). Defaults to identity matrix.
-     * @param output_mm Outputs coordinates in mm (default)
-     * @param output_vox Outputs coordinates in voxels
-     * @param verbose Verbose output
-     * @param more_verbose More verbose output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "std2imgcoord" as const,
+        "@type": "fsl.std2imgcoord" as const,
         "filename_coordinates": filename_coordinates,
         "input_image": input_image,
         "output_mm": output_mm,
@@ -125,18 +125,18 @@ function std2imgcoord_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function std2imgcoord_cargs(
     params: Std2imgcoordParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("std2imgcoord");
     cargs.push(execution.inputFile((params["filename_coordinates"] ?? null)));
@@ -184,18 +184,18 @@ function std2imgcoord_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function std2imgcoord_outputs(
     params: Std2imgcoordParameters,
     execution: Execution,
 ): Std2imgcoordOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Std2imgcoordOutputs = {
         root: execution.outputFile("."),
     };
@@ -203,22 +203,22 @@ function std2imgcoord_outputs(
 }
 
 
+/**
+ * Convert standard space coordinates to image space coordinates.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Std2imgcoordOutputs`).
+ */
 function std2imgcoord_execute(
     params: Std2imgcoordParameters,
     execution: Execution,
 ): Std2imgcoordOutputs {
-    /**
-     * Convert standard space coordinates to image space coordinates.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Std2imgcoordOutputs`).
-     */
     params = execution.params(params)
     const cargs = std2imgcoord_cargs(params, execution)
     const ret = std2imgcoord_outputs(params, execution)
@@ -227,6 +227,27 @@ function std2imgcoord_execute(
 }
 
 
+/**
+ * Convert standard space coordinates to image space coordinates.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param filename_coordinates Path to the filename containing coordinates or '-' to read from standard input
+ * @param input_image Filename of input image
+ * @param standard_image Filename of standard image
+ * @param affine_transform Filename of affine transform (e.g. example_func2standard.mat)
+ * @param warp_field Filename of warpfield (e.g. highres2standard_warp.nii.gz)
+ * @param prewarp_affine_transform Filename of pre-warp affine transform (e.g. example_func2highres.mat). Defaults to identity matrix.
+ * @param output_mm Outputs coordinates in mm (default)
+ * @param output_vox Outputs coordinates in voxels
+ * @param verbose Verbose output
+ * @param more_verbose More verbose output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Std2imgcoordOutputs`).
+ */
 function std2imgcoord(
     filename_coordinates: InputPathType,
     input_image: InputPathType,
@@ -240,27 +261,6 @@ function std2imgcoord(
     more_verbose: boolean = false,
     runner: Runner | null = null,
 ): Std2imgcoordOutputs {
-    /**
-     * Convert standard space coordinates to image space coordinates.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param filename_coordinates Path to the filename containing coordinates or '-' to read from standard input
-     * @param input_image Filename of input image
-     * @param standard_image Filename of standard image
-     * @param affine_transform Filename of affine transform (e.g. example_func2standard.mat)
-     * @param warp_field Filename of warpfield (e.g. highres2standard_warp.nii.gz)
-     * @param prewarp_affine_transform Filename of pre-warp affine transform (e.g. example_func2highres.mat). Defaults to identity matrix.
-     * @param output_mm Outputs coordinates in mm (default)
-     * @param output_vox Outputs coordinates in voxels
-     * @param verbose Verbose output
-     * @param more_verbose More verbose output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Std2imgcoordOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STD2IMGCOORD_METADATA);
     const params = std2imgcoord_params(filename_coordinates, input_image, standard_image, affine_transform, warp_field, prewarp_affine_transform, output_mm, output_vox, verbose, more_verbose)
@@ -273,5 +273,8 @@ export {
       Std2imgcoordOutputs,
       Std2imgcoordParameters,
       std2imgcoord,
+      std2imgcoord_cargs,
+      std2imgcoord_execute,
+      std2imgcoord_outputs,
       std2imgcoord_params,
 };

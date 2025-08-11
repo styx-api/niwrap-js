@@ -12,40 +12,40 @@ const V__CHECK_FOR_AFNI_DSET_METADATA: Metadata = {
 
 
 interface VCheckForAfniDsetParameters {
-    "__STYXTYPE__": "@CheckForAfniDset";
+    "@type": "afni.@CheckForAfniDset";
     "dataset_name": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@CheckForAfniDset": v__check_for_afni_dset_cargs,
+        "afni.@CheckForAfniDset": v__check_for_afni_dset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@CheckForAfniDset": v__check_for_afni_dset_outputs,
+        "afni.@CheckForAfniDset": v__check_for_afni_dset_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VCheckForAfniDsetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset_name Path to the AFNI dataset (e.g., /Data/stuff/Hello+orig.HEAD)
+ *
+ * @returns Parameter dictionary
+ */
 function v__check_for_afni_dset_params(
     dataset_name: string,
 ): VCheckForAfniDsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset_name Path to the AFNI dataset (e.g., /Data/stuff/Hello+orig.HEAD)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@CheckForAfniDset" as const,
+        "@type": "afni.@CheckForAfniDset" as const,
         "dataset_name": dataset_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__check_for_afni_dset_cargs(
     params: VCheckForAfniDsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@CheckForAfniDset");
     cargs.push((params["dataset_name"] ?? null));
@@ -105,18 +105,18 @@ function v__check_for_afni_dset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__check_for_afni_dset_outputs(
     params: VCheckForAfniDsetParameters,
     execution: Execution,
 ): VCheckForAfniDsetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VCheckForAfniDsetOutputs = {
         root: execution.outputFile("."),
         output_status: execution.outputFile([(params["dataset_name"] ?? null), "_status.txt"].join('')),
@@ -125,22 +125,22 @@ function v__check_for_afni_dset_outputs(
 }
 
 
+/**
+ * Check for the existence of AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
+ */
 function v__check_for_afni_dset_execute(
     params: VCheckForAfniDsetParameters,
     execution: Execution,
 ): VCheckForAfniDsetOutputs {
-    /**
-     * Check for the existence of AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__check_for_afni_dset_cargs(params, execution)
     const ret = v__check_for_afni_dset_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__check_for_afni_dset_execute(
 }
 
 
+/**
+ * Check for the existence of AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset_name Path to the AFNI dataset (e.g., /Data/stuff/Hello+orig.HEAD)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
+ */
 function v__check_for_afni_dset(
     dataset_name: string,
     runner: Runner | null = null,
 ): VCheckForAfniDsetOutputs {
-    /**
-     * Check for the existence of AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset_name Path to the AFNI dataset (e.g., /Data/stuff/Hello+orig.HEAD)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CHECK_FOR_AFNI_DSET_METADATA);
     const params = v__check_for_afni_dset_params(dataset_name)
@@ -177,5 +177,8 @@ export {
       VCheckForAfniDsetParameters,
       V__CHECK_FOR_AFNI_DSET_METADATA,
       v__check_for_afni_dset,
+      v__check_for_afni_dset_cargs,
+      v__check_for_afni_dset_execute,
+      v__check_for_afni_dset_outputs,
       v__check_for_afni_dset_params,
 };

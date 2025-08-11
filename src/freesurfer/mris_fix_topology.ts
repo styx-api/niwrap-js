@@ -12,7 +12,7 @@ const MRIS_FIX_TOPOLOGY_METADATA: Metadata = {
 
 
 interface MrisFixTopologyParameters {
-    "__STYXTYPE__": "mris_fix_topology";
+    "@type": "freesurfer.mris_fix_topology";
     "subject_name": string;
     "hemisphere": string;
     "orig_name"?: string | null | undefined;
@@ -42,33 +42,33 @@ interface MrisFixTopologyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_fix_topology": mris_fix_topology_cargs,
+        "freesurfer.mris_fix_topology": mris_fix_topology_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -88,6 +88,38 @@ interface MrisFixTopologyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name
+ * @param hemisphere Hemisphere
+ * @param orig_name Input orig name (default is orig.nofix)
+ * @param sphere_name Sphere name (default is qsphere.nofix)
+ * @param inflated_name Inflated name (default is inflated.nofix)
+ * @param output_name Output name (default is orig)
+ * @param defect_base_name Defect basename (default is defect)
+ * @param write_fixed_inflated Write fixed inflated
+ * @param verbose Increase verbosity
+ * @param verbose_low Low verbosity
+ * @param warnings Show warnings
+ * @param errors Show errors
+ * @param movies Generate movies
+ * @param intersect Check if the final surface self-intersects
+ * @param mappings Generate several different mappings
+ * @param correct_defect Correct specific defect number
+ * @param niters Number of iterations for genetic algorithm
+ * @param genetic Use genetic search
+ * @param optimize Optimize genetic search
+ * @param random Use random search with specified iterations
+ * @param seed Set random number generator seed
+ * @param diag Sets DIAG_SAVE_DIAGS
+ * @param mgz Assume volumes are in mgz format
+ * @param smooth Smooth corrected surface by N iterations
+ * @param diagnostic_level Set diagnostic level
+ * @param threads Set number of OpenMP threads
+ *
+ * @returns Parameter dictionary
+ */
 function mris_fix_topology_params(
     subject_name: string,
     hemisphere: string,
@@ -116,40 +148,8 @@ function mris_fix_topology_params(
     diagnostic_level: number | null = null,
     threads: number | null = null,
 ): MrisFixTopologyParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name
-     * @param hemisphere Hemisphere
-     * @param orig_name Input orig name (default is orig.nofix)
-     * @param sphere_name Sphere name (default is qsphere.nofix)
-     * @param inflated_name Inflated name (default is inflated.nofix)
-     * @param output_name Output name (default is orig)
-     * @param defect_base_name Defect basename (default is defect)
-     * @param write_fixed_inflated Write fixed inflated
-     * @param verbose Increase verbosity
-     * @param verbose_low Low verbosity
-     * @param warnings Show warnings
-     * @param errors Show errors
-     * @param movies Generate movies
-     * @param intersect Check if the final surface self-intersects
-     * @param mappings Generate several different mappings
-     * @param correct_defect Correct specific defect number
-     * @param niters Number of iterations for genetic algorithm
-     * @param genetic Use genetic search
-     * @param optimize Optimize genetic search
-     * @param random Use random search with specified iterations
-     * @param seed Set random number generator seed
-     * @param diag Sets DIAG_SAVE_DIAGS
-     * @param mgz Assume volumes are in mgz format
-     * @param smooth Smooth corrected surface by N iterations
-     * @param diagnostic_level Set diagnostic level
-     * @param threads Set number of OpenMP threads
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_fix_topology" as const,
+        "@type": "freesurfer.mris_fix_topology" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "write_fixed_inflated": write_fixed_inflated,
@@ -205,18 +205,18 @@ function mris_fix_topology_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_fix_topology_cargs(
     params: MrisFixTopologyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_fix_topology");
     cargs.push((params["subject_name"] ?? null));
@@ -333,18 +333,18 @@ function mris_fix_topology_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_fix_topology_outputs(
     params: MrisFixTopologyParameters,
     execution: Execution,
 ): MrisFixTopologyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisFixTopologyOutputs = {
         root: execution.outputFile("."),
     };
@@ -352,22 +352,22 @@ function mris_fix_topology_outputs(
 }
 
 
+/**
+ * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
+ */
 function mris_fix_topology_execute(
     params: MrisFixTopologyParameters,
     execution: Execution,
 ): MrisFixTopologyOutputs {
-    /**
-     * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_fix_topology_cargs(params, execution)
     const ret = mris_fix_topology_outputs(params, execution)
@@ -376,6 +376,43 @@ function mris_fix_topology_execute(
 }
 
 
+/**
+ * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name
+ * @param hemisphere Hemisphere
+ * @param orig_name Input orig name (default is orig.nofix)
+ * @param sphere_name Sphere name (default is qsphere.nofix)
+ * @param inflated_name Inflated name (default is inflated.nofix)
+ * @param output_name Output name (default is orig)
+ * @param defect_base_name Defect basename (default is defect)
+ * @param write_fixed_inflated Write fixed inflated
+ * @param verbose Increase verbosity
+ * @param verbose_low Low verbosity
+ * @param warnings Show warnings
+ * @param errors Show errors
+ * @param movies Generate movies
+ * @param intersect Check if the final surface self-intersects
+ * @param mappings Generate several different mappings
+ * @param correct_defect Correct specific defect number
+ * @param niters Number of iterations for genetic algorithm
+ * @param genetic Use genetic search
+ * @param optimize Optimize genetic search
+ * @param random Use random search with specified iterations
+ * @param seed Set random number generator seed
+ * @param diag Sets DIAG_SAVE_DIAGS
+ * @param mgz Assume volumes are in mgz format
+ * @param smooth Smooth corrected surface by N iterations
+ * @param diagnostic_level Set diagnostic level
+ * @param threads Set number of OpenMP threads
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
+ */
 function mris_fix_topology(
     subject_name: string,
     hemisphere: string,
@@ -405,43 +442,6 @@ function mris_fix_topology(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MrisFixTopologyOutputs {
-    /**
-     * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name
-     * @param hemisphere Hemisphere
-     * @param orig_name Input orig name (default is orig.nofix)
-     * @param sphere_name Sphere name (default is qsphere.nofix)
-     * @param inflated_name Inflated name (default is inflated.nofix)
-     * @param output_name Output name (default is orig)
-     * @param defect_base_name Defect basename (default is defect)
-     * @param write_fixed_inflated Write fixed inflated
-     * @param verbose Increase verbosity
-     * @param verbose_low Low verbosity
-     * @param warnings Show warnings
-     * @param errors Show errors
-     * @param movies Generate movies
-     * @param intersect Check if the final surface self-intersects
-     * @param mappings Generate several different mappings
-     * @param correct_defect Correct specific defect number
-     * @param niters Number of iterations for genetic algorithm
-     * @param genetic Use genetic search
-     * @param optimize Optimize genetic search
-     * @param random Use random search with specified iterations
-     * @param seed Set random number generator seed
-     * @param diag Sets DIAG_SAVE_DIAGS
-     * @param mgz Assume volumes are in mgz format
-     * @param smooth Smooth corrected surface by N iterations
-     * @param diagnostic_level Set diagnostic level
-     * @param threads Set number of OpenMP threads
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_FIX_TOPOLOGY_METADATA);
     const params = mris_fix_topology_params(subject_name, hemisphere, orig_name, sphere_name, inflated_name, output_name, defect_base_name, write_fixed_inflated, verbose, verbose_low, warnings, errors, movies, intersect, mappings, correct_defect, niters, genetic, optimize, random, seed, diag, mgz, smooth, diagnostic_level, threads)
@@ -454,5 +454,8 @@ export {
       MrisFixTopologyOutputs,
       MrisFixTopologyParameters,
       mris_fix_topology,
+      mris_fix_topology_cargs,
+      mris_fix_topology_execute,
+      mris_fix_topology_outputs,
       mris_fix_topology_params,
 };

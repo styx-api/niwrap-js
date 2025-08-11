@@ -12,14 +12,14 @@ const TCKSAMPLE_METADATA: Metadata = {
 
 
 interface TcksampleConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tcksample.config";
     "key": string;
     "value": string;
 }
 
 
 interface TcksampleParameters {
-    "__STYXTYPE__": "tcksample";
+    "@type": "mrtrix.tcksample";
     "stat_tck"?: string | null | undefined;
     "nointerp": boolean;
     "precise": boolean;
@@ -38,55 +38,55 @@ interface TcksampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tcksample": tcksample_cargs,
-        "config": tcksample_config_cargs,
+        "mrtrix.tcksample": tcksample_cargs,
+        "mrtrix.tcksample.config": tcksample_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tcksample": tcksample_outputs,
+        "mrtrix.tcksample": tcksample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksample_config_params(
     key: string,
     value: string,
 ): TcksampleConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tcksample.config" as const,
         "key": key,
         "value": value,
     };
@@ -94,18 +94,18 @@ function tcksample_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksample_config_cargs(
     params: TcksampleConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -131,6 +131,27 @@ interface TcksampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks the input track file
+ * @param image the image to be sampled
+ * @param values the output sampled values
+ * @param stat_tck compute some statistic from the values along each streamline (options are: mean,median,min,max)
+ * @param nointerp do not use trilinear interpolation when sampling image values
+ * @param precise use the precise mechanism for mapping streamlines to voxels (obviates the need for trilinear interpolation) (only applicable if some per-streamline statistic is requested)
+ * @param use_tdi_fraction each streamline is assigned a fraction of the image intensity in each voxel based on the fraction of the track density contributed by that streamline (this is only appropriate for processing a whole-brain tractogram, and images for which the quantiative parameter is additive)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksample_params(
     tracks: InputPathType,
     image: InputPathType,
@@ -148,29 +169,8 @@ function tcksample_params(
     help: boolean = false,
     version: boolean = false,
 ): TcksampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks the input track file
-     * @param image the image to be sampled
-     * @param values the output sampled values
-     * @param stat_tck compute some statistic from the values along each streamline (options are: mean,median,min,max)
-     * @param nointerp do not use trilinear interpolation when sampling image values
-     * @param precise use the precise mechanism for mapping streamlines to voxels (obviates the need for trilinear interpolation) (only applicable if some per-streamline statistic is requested)
-     * @param use_tdi_fraction each streamline is assigned a fraction of the image intensity in each voxel based on the fraction of the track density contributed by that streamline (this is only appropriate for processing a whole-brain tractogram, and images for which the quantiative parameter is additive)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tcksample" as const,
+        "@type": "mrtrix.tcksample" as const,
         "nointerp": nointerp,
         "precise": precise,
         "use_tdi_fraction": use_tdi_fraction,
@@ -197,18 +197,18 @@ function tcksample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksample_cargs(
     params: TcksampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tcksample");
     if ((params["stat_tck"] ?? null) !== null) {
@@ -245,7 +245,7 @@ function tcksample_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -260,18 +260,18 @@ function tcksample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tcksample_outputs(
     params: TcksampleParameters,
     execution: Execution,
 ): TcksampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TcksampleOutputs = {
         root: execution.outputFile("."),
         values: execution.outputFile([(params["values"] ?? null)].join('')),
@@ -280,28 +280,28 @@ function tcksample_outputs(
 }
 
 
+/**
+ * Sample values of an associated image along tracks.
+ *
+ * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.
+ *
+ * References:
+ *
+ * * If using -precise option: Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
+ */
 function tcksample_execute(
     params: TcksampleParameters,
     execution: Execution,
 ): TcksampleOutputs {
-    /**
-     * Sample values of an associated image along tracks.
-     * 
-     * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.
-     * 
-     * References:
-     * 
-     * * If using -precise option: Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = tcksample_cargs(params, execution)
     const ret = tcksample_outputs(params, execution)
@@ -310,6 +310,38 @@ function tcksample_execute(
 }
 
 
+/**
+ * Sample values of an associated image along tracks.
+ *
+ * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.
+ *
+ * References:
+ *
+ * * If using -precise option: Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks the input track file
+ * @param image the image to be sampled
+ * @param values the output sampled values
+ * @param stat_tck compute some statistic from the values along each streamline (options are: mean,median,min,max)
+ * @param nointerp do not use trilinear interpolation when sampling image values
+ * @param precise use the precise mechanism for mapping streamlines to voxels (obviates the need for trilinear interpolation) (only applicable if some per-streamline statistic is requested)
+ * @param use_tdi_fraction each streamline is assigned a fraction of the image intensity in each voxel based on the fraction of the track density contributed by that streamline (this is only appropriate for processing a whole-brain tractogram, and images for which the quantiative parameter is additive)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
+ */
 function tcksample(
     tracks: InputPathType,
     image: InputPathType,
@@ -328,38 +360,6 @@ function tcksample(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcksampleOutputs {
-    /**
-     * Sample values of an associated image along tracks.
-     * 
-     * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.
-     * 
-     * References:
-     * 
-     * * If using -precise option: Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks the input track file
-     * @param image the image to be sampled
-     * @param values the output sampled values
-     * @param stat_tck compute some statistic from the values along each streamline (options are: mean,median,min,max)
-     * @param nointerp do not use trilinear interpolation when sampling image values
-     * @param precise use the precise mechanism for mapping streamlines to voxels (obviates the need for trilinear interpolation) (only applicable if some per-streamline statistic is requested)
-     * @param use_tdi_fraction each streamline is assigned a fraction of the image intensity in each voxel based on the fraction of the track density contributed by that streamline (this is only appropriate for processing a whole-brain tractogram, and images for which the quantiative parameter is additive)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKSAMPLE_METADATA);
     const params = tcksample_params(tracks, image, values, stat_tck, nointerp, precise, use_tdi_fraction, info, quiet, debug, force, nthreads, config, help, version)
@@ -373,6 +373,10 @@ export {
       TcksampleOutputs,
       TcksampleParameters,
       tcksample,
+      tcksample_cargs,
+      tcksample_config_cargs,
       tcksample_config_params,
+      tcksample_execute,
+      tcksample_outputs,
       tcksample_params,
 };

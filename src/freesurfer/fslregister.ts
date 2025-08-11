@@ -12,7 +12,7 @@ const FSLREGISTER_METADATA: Metadata = {
 
 
 interface FslregisterParameters {
-    "__STYXTYPE__": "fslregister";
+    "@type": "freesurfer.fslregister";
     "subjid": string;
     "mov_vol": string;
     "reg_file": string;
@@ -46,35 +46,35 @@ interface FslregisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslregister": fslregister_cargs,
+        "freesurfer.fslregister": fslregister_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslregister": fslregister_outputs,
+        "freesurfer.fslregister": fslregister_outputs,
     };
     return outputsFuncs[t];
 }
@@ -113,6 +113,42 @@ interface FslregisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Id of the subject as found in SUBJECTS_DIR.
+ * @param mov_vol Volume identifier of the movable volume.
+ * @param reg_file Output registration file.
+ * @param fsl_matrix Output registration matrix in FSL format.
+ * @param init_fsl_matrix Supply initial FSL matrix file.
+ * @param no_init_xfm Do not initialize based on header geometry.
+ * @param niters Number of iterations for FLIRT.
+ * @param dof Degrees of freedom in the FLIRT registration.
+ * @param bins Number of bins for FLIRT.
+ * @param cost Cost function for FLIRT.
+ * @param max_angle Maximum search angle for FLIRT.
+ * @param no_new_schedule Disable new schedule in FLIRT.
+ * @param no_allow_swap Do not allow swap dimension of positive determinant input volumes.
+ * @param no_trans Do not perform translation-only registration prior to full.
+ * @param bet_mov Perform brain extraction on movable volume.
+ * @param bet_fvalue f value for BET.
+ * @param bet_func Run betfunc instead of bet.
+ * @param bet_ref Perform brain extraction on reference volume.
+ * @param frame Frame number for registration.
+ * @param mid_frame Use the middle frame of the volume.
+ * @param freesurfer_volume Use FreeSurfer volid as reference volume.
+ * @param template_output Save template.
+ * @param output_volume Have FLIRT reslice movable volume to target.
+ * @param verbose FLIRT verbosity level.
+ * @param tmp_dir Temporary directory to use.
+ * @param no_cleanup Do not delete temporary files.
+ * @param no_log Do not produce a log file.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param lta_format Output registration in LTA format.
+ *
+ * @returns Parameter dictionary
+ */
 function fslregister_params(
     subjid: string,
     mov_vol: string,
@@ -145,44 +181,8 @@ function fslregister_params(
     help: boolean = false,
     lta_format: string | null = null,
 ): FslregisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Id of the subject as found in SUBJECTS_DIR.
-     * @param mov_vol Volume identifier of the movable volume.
-     * @param reg_file Output registration file.
-     * @param fsl_matrix Output registration matrix in FSL format.
-     * @param init_fsl_matrix Supply initial FSL matrix file.
-     * @param no_init_xfm Do not initialize based on header geometry.
-     * @param niters Number of iterations for FLIRT.
-     * @param dof Degrees of freedom in the FLIRT registration.
-     * @param bins Number of bins for FLIRT.
-     * @param cost Cost function for FLIRT.
-     * @param max_angle Maximum search angle for FLIRT.
-     * @param no_new_schedule Disable new schedule in FLIRT.
-     * @param no_allow_swap Do not allow swap dimension of positive determinant input volumes.
-     * @param no_trans Do not perform translation-only registration prior to full.
-     * @param bet_mov Perform brain extraction on movable volume.
-     * @param bet_fvalue f value for BET.
-     * @param bet_func Run betfunc instead of bet.
-     * @param bet_ref Perform brain extraction on reference volume.
-     * @param frame Frame number for registration.
-     * @param mid_frame Use the middle frame of the volume.
-     * @param freesurfer_volume Use FreeSurfer volid as reference volume.
-     * @param template_output Save template.
-     * @param output_volume Have FLIRT reslice movable volume to target.
-     * @param verbose FLIRT verbosity level.
-     * @param tmp_dir Temporary directory to use.
-     * @param no_cleanup Do not delete temporary files.
-     * @param no_log Do not produce a log file.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param lta_format Output registration in LTA format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslregister" as const,
+        "@type": "freesurfer.fslregister" as const,
         "subjid": subjid,
         "mov_vol": mov_vol,
         "reg_file": reg_file,
@@ -248,18 +248,18 @@ function fslregister_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslregister_cargs(
     params: FslregisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslregister");
     cargs.push(
@@ -404,18 +404,18 @@ function fslregister_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslregister_outputs(
     params: FslregisterParameters,
     execution: Execution,
 ): FslregisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslregisterOutputs = {
         root: execution.outputFile("."),
         output_reg_file: execution.outputFile([(params["reg_file"] ?? null)].join('')),
@@ -428,22 +428,22 @@ function fslregister_outputs(
 }
 
 
+/**
+ * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
+ */
 function fslregister_execute(
     params: FslregisterParameters,
     execution: Execution,
 ): FslregisterOutputs {
-    /**
-     * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslregister_cargs(params, execution)
     const ret = fslregister_outputs(params, execution)
@@ -452,6 +452,47 @@ function fslregister_execute(
 }
 
 
+/**
+ * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Id of the subject as found in SUBJECTS_DIR.
+ * @param mov_vol Volume identifier of the movable volume.
+ * @param reg_file Output registration file.
+ * @param fsl_matrix Output registration matrix in FSL format.
+ * @param init_fsl_matrix Supply initial FSL matrix file.
+ * @param no_init_xfm Do not initialize based on header geometry.
+ * @param niters Number of iterations for FLIRT.
+ * @param dof Degrees of freedom in the FLIRT registration.
+ * @param bins Number of bins for FLIRT.
+ * @param cost Cost function for FLIRT.
+ * @param max_angle Maximum search angle for FLIRT.
+ * @param no_new_schedule Disable new schedule in FLIRT.
+ * @param no_allow_swap Do not allow swap dimension of positive determinant input volumes.
+ * @param no_trans Do not perform translation-only registration prior to full.
+ * @param bet_mov Perform brain extraction on movable volume.
+ * @param bet_fvalue f value for BET.
+ * @param bet_func Run betfunc instead of bet.
+ * @param bet_ref Perform brain extraction on reference volume.
+ * @param frame Frame number for registration.
+ * @param mid_frame Use the middle frame of the volume.
+ * @param freesurfer_volume Use FreeSurfer volid as reference volume.
+ * @param template_output Save template.
+ * @param output_volume Have FLIRT reslice movable volume to target.
+ * @param verbose FLIRT verbosity level.
+ * @param tmp_dir Temporary directory to use.
+ * @param no_cleanup Do not delete temporary files.
+ * @param no_log Do not produce a log file.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param lta_format Output registration in LTA format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
+ */
 function fslregister(
     subjid: string,
     mov_vol: string,
@@ -485,47 +526,6 @@ function fslregister(
     lta_format: string | null = null,
     runner: Runner | null = null,
 ): FslregisterOutputs {
-    /**
-     * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Id of the subject as found in SUBJECTS_DIR.
-     * @param mov_vol Volume identifier of the movable volume.
-     * @param reg_file Output registration file.
-     * @param fsl_matrix Output registration matrix in FSL format.
-     * @param init_fsl_matrix Supply initial FSL matrix file.
-     * @param no_init_xfm Do not initialize based on header geometry.
-     * @param niters Number of iterations for FLIRT.
-     * @param dof Degrees of freedom in the FLIRT registration.
-     * @param bins Number of bins for FLIRT.
-     * @param cost Cost function for FLIRT.
-     * @param max_angle Maximum search angle for FLIRT.
-     * @param no_new_schedule Disable new schedule in FLIRT.
-     * @param no_allow_swap Do not allow swap dimension of positive determinant input volumes.
-     * @param no_trans Do not perform translation-only registration prior to full.
-     * @param bet_mov Perform brain extraction on movable volume.
-     * @param bet_fvalue f value for BET.
-     * @param bet_func Run betfunc instead of bet.
-     * @param bet_ref Perform brain extraction on reference volume.
-     * @param frame Frame number for registration.
-     * @param mid_frame Use the middle frame of the volume.
-     * @param freesurfer_volume Use FreeSurfer volid as reference volume.
-     * @param template_output Save template.
-     * @param output_volume Have FLIRT reslice movable volume to target.
-     * @param verbose FLIRT verbosity level.
-     * @param tmp_dir Temporary directory to use.
-     * @param no_cleanup Do not delete temporary files.
-     * @param no_log Do not produce a log file.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param lta_format Output registration in LTA format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLREGISTER_METADATA);
     const params = fslregister_params(subjid, mov_vol, reg_file, fsl_matrix, init_fsl_matrix, no_init_xfm, niters, dof, bins, cost, max_angle, no_new_schedule, no_allow_swap, no_trans, bet_mov, bet_fvalue, bet_func, bet_ref, frame, mid_frame, freesurfer_volume, template_output, output_volume, verbose, tmp_dir, no_cleanup, no_log, version, help, lta_format)
@@ -538,5 +538,8 @@ export {
       FslregisterOutputs,
       FslregisterParameters,
       fslregister,
+      fslregister_cargs,
+      fslregister_execute,
+      fslregister_outputs,
       fslregister_params,
 };

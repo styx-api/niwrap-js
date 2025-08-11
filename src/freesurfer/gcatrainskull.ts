@@ -12,38 +12,38 @@ const GCATRAINSKULL_METADATA: Metadata = {
 
 
 interface GcatrainskullParameters {
-    "__STYXTYPE__": "gcatrainskull";
+    "@type": "freesurfer.gcatrainskull";
     "gcatrain_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gcatrainskull": gcatrainskull_cargs,
+        "freesurfer.gcatrainskull": gcatrainskull_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface GcatrainskullOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gcatrain_dir Directory containing GCA training data
+ *
+ * @returns Parameter dictionary
+ */
 function gcatrainskull_params(
     gcatrain_dir: string,
 ): GcatrainskullParameters {
-    /**
-     * Build parameters.
-    
-     * @param gcatrain_dir Directory containing GCA training data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gcatrainskull" as const,
+        "@type": "freesurfer.gcatrainskull" as const,
         "gcatrain_dir": gcatrain_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gcatrainskull_cargs(
     params: GcatrainskullParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gcatrainskull");
     cargs.push(
@@ -103,18 +103,18 @@ function gcatrainskull_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gcatrainskull_outputs(
     params: GcatrainskullParameters,
     execution: Execution,
 ): GcatrainskullOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GcatrainskullOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function gcatrainskull_outputs(
 }
 
 
+/**
+ * GCA train skull stripping tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
+ */
 function gcatrainskull_execute(
     params: GcatrainskullParameters,
     execution: Execution,
 ): GcatrainskullOutputs {
-    /**
-     * GCA train skull stripping tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
-     */
     params = execution.params(params)
     const cargs = gcatrainskull_cargs(params, execution)
     const ret = gcatrainskull_outputs(params, execution)
@@ -146,22 +146,22 @@ function gcatrainskull_execute(
 }
 
 
+/**
+ * GCA train skull stripping tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gcatrain_dir Directory containing GCA training data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
+ */
 function gcatrainskull(
     gcatrain_dir: string,
     runner: Runner | null = null,
 ): GcatrainskullOutputs {
-    /**
-     * GCA train skull stripping tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gcatrain_dir Directory containing GCA training data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GCATRAINSKULL_METADATA);
     const params = gcatrainskull_params(gcatrain_dir)
@@ -174,5 +174,8 @@ export {
       GcatrainskullOutputs,
       GcatrainskullParameters,
       gcatrainskull,
+      gcatrainskull_cargs,
+      gcatrainskull_execute,
+      gcatrainskull_outputs,
       gcatrainskull_params,
 };

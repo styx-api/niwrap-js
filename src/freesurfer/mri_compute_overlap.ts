@@ -12,7 +12,7 @@ const MRI_COMPUTE_OVERLAP_METADATA: Metadata = {
 
 
 interface MriComputeOverlapParameters {
-    "__STYXTYPE__": "mri_compute_overlap";
+    "@type": "freesurfer.mri_compute_overlap";
     "volumes": Array<InputPathType>;
     "label_numbers"?: Array<string> | null | undefined;
     "all_labels": boolean;
@@ -27,33 +27,33 @@ interface MriComputeOverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_overlap": mri_compute_overlap_cargs,
+        "freesurfer.mri_compute_overlap": mri_compute_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface MriComputeOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volumes Input volume files for which overlap measures are computed.
+ * @param label_numbers List of specific label numbers for which to compute overlap measures. If not specified, all labels are considered if -a is provided.
+ * @param all_labels Compute overlap for all labels.
+ * @param show_label Show label name for segmentation.
+ * @param total_overlap Compute the total overlap, which is the number of voxels that are the same among all labels.
+ * @param no_summary Do not compute total label summary.
+ * @param mask Limit the domain of the calculation to the nonzero voxels in specified volume.
+ * @param output_file Filename to write results to.
+ * @param quiet_mode Do not display results on standard display. If -l is specified, this flag is automatically set.
+ * @param translate_label Translate label l1 to label l2.
+ * @param help Print help.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_overlap_params(
     volumes: Array<InputPathType>,
     label_numbers: Array<string> | null = null,
@@ -86,25 +103,8 @@ function mri_compute_overlap_params(
     translate_label: Array<number> | null = null,
     help: boolean = false,
 ): MriComputeOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param volumes Input volume files for which overlap measures are computed.
-     * @param label_numbers List of specific label numbers for which to compute overlap measures. If not specified, all labels are considered if -a is provided.
-     * @param all_labels Compute overlap for all labels.
-     * @param show_label Show label name for segmentation.
-     * @param total_overlap Compute the total overlap, which is the number of voxels that are the same among all labels.
-     * @param no_summary Do not compute total label summary.
-     * @param mask Limit the domain of the calculation to the nonzero voxels in specified volume.
-     * @param output_file Filename to write results to.
-     * @param quiet_mode Do not display results on standard display. If -l is specified, this flag is automatically set.
-     * @param translate_label Translate label l1 to label l2.
-     * @param help Print help.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_overlap" as const,
+        "@type": "freesurfer.mri_compute_overlap" as const,
         "volumes": volumes,
         "all_labels": all_labels,
         "show_label": show_label,
@@ -129,18 +129,18 @@ function mri_compute_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_overlap_cargs(
     params: MriComputeOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_overlap");
     cargs.push(...(params["volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -187,18 +187,18 @@ function mri_compute_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_overlap_outputs(
     params: MriComputeOverlapParameters,
     execution: Execution,
 ): MriComputeOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeOverlapOutputs = {
         root: execution.outputFile("."),
     };
@@ -206,22 +206,22 @@ function mri_compute_overlap_outputs(
 }
 
 
+/**
+ * Computes three different types of overlap measures for labels in input volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
+ */
 function mri_compute_overlap_execute(
     params: MriComputeOverlapParameters,
     execution: Execution,
 ): MriComputeOverlapOutputs {
-    /**
-     * Computes three different types of overlap measures for labels in input volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_overlap_cargs(params, execution)
     const ret = mri_compute_overlap_outputs(params, execution)
@@ -230,6 +230,28 @@ function mri_compute_overlap_execute(
 }
 
 
+/**
+ * Computes three different types of overlap measures for labels in input volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volumes Input volume files for which overlap measures are computed.
+ * @param label_numbers List of specific label numbers for which to compute overlap measures. If not specified, all labels are considered if -a is provided.
+ * @param all_labels Compute overlap for all labels.
+ * @param show_label Show label name for segmentation.
+ * @param total_overlap Compute the total overlap, which is the number of voxels that are the same among all labels.
+ * @param no_summary Do not compute total label summary.
+ * @param mask Limit the domain of the calculation to the nonzero voxels in specified volume.
+ * @param output_file Filename to write results to.
+ * @param quiet_mode Do not display results on standard display. If -l is specified, this flag is automatically set.
+ * @param translate_label Translate label l1 to label l2.
+ * @param help Print help.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
+ */
 function mri_compute_overlap(
     volumes: Array<InputPathType>,
     label_numbers: Array<string> | null = null,
@@ -244,28 +266,6 @@ function mri_compute_overlap(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriComputeOverlapOutputs {
-    /**
-     * Computes three different types of overlap measures for labels in input volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volumes Input volume files for which overlap measures are computed.
-     * @param label_numbers List of specific label numbers for which to compute overlap measures. If not specified, all labels are considered if -a is provided.
-     * @param all_labels Compute overlap for all labels.
-     * @param show_label Show label name for segmentation.
-     * @param total_overlap Compute the total overlap, which is the number of voxels that are the same among all labels.
-     * @param no_summary Do not compute total label summary.
-     * @param mask Limit the domain of the calculation to the nonzero voxels in specified volume.
-     * @param output_file Filename to write results to.
-     * @param quiet_mode Do not display results on standard display. If -l is specified, this flag is automatically set.
-     * @param translate_label Translate label l1 to label l2.
-     * @param help Print help.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_OVERLAP_METADATA);
     const params = mri_compute_overlap_params(volumes, label_numbers, all_labels, show_label, total_overlap, no_summary, mask, output_file, quiet_mode, translate_label, help)
@@ -278,5 +278,8 @@ export {
       MriComputeOverlapOutputs,
       MriComputeOverlapParameters,
       mri_compute_overlap,
+      mri_compute_overlap_cargs,
+      mri_compute_overlap_execute,
+      mri_compute_overlap_outputs,
       mri_compute_overlap_params,
 };

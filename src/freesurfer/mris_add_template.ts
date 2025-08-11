@@ -12,40 +12,40 @@ const MRIS_ADD_TEMPLATE_METADATA: Metadata = {
 
 
 interface MrisAddTemplateParameters {
-    "__STYXTYPE__": "mris_add_template";
+    "@type": "freesurfer.mris_add_template";
     "placeholder_input"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_add_template": mris_add_template_cargs,
+        "freesurfer.mris_add_template": mris_add_template_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_add_template": mris_add_template_outputs,
+        "freesurfer.mris_add_template": mris_add_template_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,18 +68,18 @@ interface MrisAddTemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param placeholder_input No inputs available as the tool has been removed.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_add_template_params(
     placeholder_input: string | null = null,
 ): MrisAddTemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param placeholder_input No inputs available as the tool has been removed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_add_template" as const,
+        "@type": "freesurfer.mris_add_template" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -88,18 +88,18 @@ function mris_add_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_add_template_cargs(
     params: MrisAddTemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_add_template");
     if ((params["placeholder_input"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function mris_add_template_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_add_template_outputs(
     params: MrisAddTemplateParameters,
     execution: Execution,
 ): MrisAddTemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisAddTemplateOutputs = {
         root: execution.outputFile("."),
         placeholder_output: execution.outputFile(["[PLACEHOLDER_OUTPUT]"].join('')),
@@ -129,22 +129,22 @@ function mris_add_template_outputs(
 }
 
 
+/**
+ * This tool has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
+ */
 function mris_add_template_execute(
     params: MrisAddTemplateParameters,
     execution: Execution,
 ): MrisAddTemplateOutputs {
-    /**
-     * This tool has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_add_template_cargs(params, execution)
     const ret = mris_add_template_outputs(params, execution)
@@ -153,22 +153,22 @@ function mris_add_template_execute(
 }
 
 
+/**
+ * This tool has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param placeholder_input No inputs available as the tool has been removed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
+ */
 function mris_add_template(
     placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): MrisAddTemplateOutputs {
-    /**
-     * This tool has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param placeholder_input No inputs available as the tool has been removed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ADD_TEMPLATE_METADATA);
     const params = mris_add_template_params(placeholder_input)
@@ -181,5 +181,8 @@ export {
       MrisAddTemplateOutputs,
       MrisAddTemplateParameters,
       mris_add_template,
+      mris_add_template_cargs,
+      mris_add_template_execute,
+      mris_add_template_outputs,
       mris_add_template_params,
 };

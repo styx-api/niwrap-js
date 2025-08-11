@@ -12,41 +12,41 @@ const IMCP_METADATA: Metadata = {
 
 
 interface ImcpParameters {
-    "__STYXTYPE__": "imcp";
+    "@type": "fsl.imcp";
     "infiles": Array<InputPathType>;
     "output_location": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imcp": imcp_cargs,
+        "fsl.imcp": imcp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imcp": imcp_outputs,
+        "fsl.imcp": imcp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface ImcpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infiles Input image files (e.g. img1.nii.gz, img2.nii.gz)
+ * @param output_location Output file or directory
+ *
+ * @returns Parameter dictionary
+ */
 function imcp_params(
     infiles: Array<InputPathType>,
     output_location: string,
 ): ImcpParameters {
-    /**
-     * Build parameters.
-    
-     * @param infiles Input image files (e.g. img1.nii.gz, img2.nii.gz)
-     * @param output_location Output file or directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imcp" as const,
+        "@type": "fsl.imcp" as const,
         "infiles": infiles,
         "output_location": output_location,
     };
@@ -90,18 +90,18 @@ function imcp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imcp_cargs(
     params: ImcpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imcp");
     cargs.push(...(params["infiles"] ?? null).map(f => execution.inputFile(f)));
@@ -110,18 +110,18 @@ function imcp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imcp_outputs(
     params: ImcpParameters,
     execution: Execution,
 ): ImcpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImcpOutputs = {
         root: execution.outputFile("."),
         outfiles: execution.outputFile([(params["output_location"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function imcp_outputs(
 }
 
 
+/**
+ * Copy images from one location to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImcpOutputs`).
+ */
 function imcp_execute(
     params: ImcpParameters,
     execution: Execution,
 ): ImcpOutputs {
-    /**
-     * Copy images from one location to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImcpOutputs`).
-     */
     params = execution.params(params)
     const cargs = imcp_cargs(params, execution)
     const ret = imcp_outputs(params, execution)
@@ -154,24 +154,24 @@ function imcp_execute(
 }
 
 
+/**
+ * Copy images from one location to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infiles Input image files (e.g. img1.nii.gz, img2.nii.gz)
+ * @param output_location Output file or directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImcpOutputs`).
+ */
 function imcp(
     infiles: Array<InputPathType>,
     output_location: string,
     runner: Runner | null = null,
 ): ImcpOutputs {
-    /**
-     * Copy images from one location to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infiles Input image files (e.g. img1.nii.gz, img2.nii.gz)
-     * @param output_location Output file or directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImcpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMCP_METADATA);
     const params = imcp_params(infiles, output_location)
@@ -184,5 +184,8 @@ export {
       ImcpOutputs,
       ImcpParameters,
       imcp,
+      imcp_cargs,
+      imcp_execute,
+      imcp_outputs,
       imcp_params,
 };

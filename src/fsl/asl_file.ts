@@ -12,7 +12,7 @@ const ASL_FILE_METADATA: Metadata = {
 
 
 interface AslFileParameters {
-    "__STYXTYPE__": "asl_file";
+    "@type": "fsl.asl_file";
     "datafile": InputPathType;
     "ntis": number;
     "mask"?: InputPathType | null | undefined;
@@ -43,35 +43,35 @@ interface AslFileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "asl_file": asl_file_cargs,
+        "fsl.asl_file": asl_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "asl_file": asl_file_outputs,
+        "fsl.asl_file": asl_file_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,39 @@ interface AslFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile ASL data file
+ * @param ntis Number of TIs in the file
+ * @param outfile Output data file
+ * @param mask Mask file
+ * @param inblockform Input block format
+ * @param inaslform ASL data form
+ * @param rpts Number of repeats at each TI as comma separated list, not required if the number of repeats is same for all TIs  (only for use with --ibf=tis)
+ * @param pairs Data contains adjacent pairs of measurements (e.g. Tag, Control) DEPRECATED use --iaf instead
+ * @param spairs Split the pairs within the data, e.g. to separate tag and control images in output
+ * @param diff Take the difference between the pairs, i.e., Tag-control difference
+ * @param surrdiff Do surround subtraction on the pairs
+ * @param extrapolate Option to extrapolate the edge of the brain to fix the artefact on the edge of the brain
+ * @param neighbour Neighbour size for extrapolation, must be an odd number between 3 and 9. Default: 5
+ * @param pvgm GM partial volume map
+ * @param pvwm WM partial volume map
+ * @param kernel Kernel size (in voxels) of partial volume correction, must be an odd number between 3 and 9. Default: 5
+ * @param outblockform Output block format
+ * @param mean Output ASL data having taken mean at each TI to file
+ * @param split Split data into separate files for each TI, specify filename root
+ * @param epoch Output epochs of ASL data (takes mean at each TI within the epoch)
+ * @param epoch_length Length of epochs in number of repeats
+ * @param epoch_overlap Amount of overlap between epochs in number of repeats
+ * @param epoch_unit Epochs to be determined over
+ * @param deconv Deconvolution of data with arterial input functions
+ * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+ * @param help Display the help message
+ * @param version Display version identification
+ *
+ * @returns Parameter dictionary
+ */
 function asl_file_params(
     datafile: InputPathType,
     ntis: number,
@@ -127,41 +160,8 @@ function asl_file_params(
     help: boolean = false,
     version: boolean = false,
 ): AslFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile ASL data file
-     * @param ntis Number of TIs in the file
-     * @param outfile Output data file
-     * @param mask Mask file
-     * @param inblockform Input block format
-     * @param inaslform ASL data form
-     * @param rpts Number of repeats at each TI as comma separated list, not required if the number of repeats is same for all TIs  (only for use with --ibf=tis)
-     * @param pairs Data contains adjacent pairs of measurements (e.g. Tag, Control) DEPRECATED use --iaf instead
-     * @param spairs Split the pairs within the data, e.g. to separate tag and control images in output
-     * @param diff Take the difference between the pairs, i.e., Tag-control difference
-     * @param surrdiff Do surround subtraction on the pairs
-     * @param extrapolate Option to extrapolate the edge of the brain to fix the artefact on the edge of the brain
-     * @param neighbour Neighbour size for extrapolation, must be an odd number between 3 and 9. Default: 5
-     * @param pvgm GM partial volume map
-     * @param pvwm WM partial volume map
-     * @param kernel Kernel size (in voxels) of partial volume correction, must be an odd number between 3 and 9. Default: 5
-     * @param outblockform Output block format
-     * @param mean Output ASL data having taken mean at each TI to file
-     * @param split Split data into separate files for each TI, specify filename root
-     * @param epoch Output epochs of ASL data (takes mean at each TI within the epoch)
-     * @param epoch_length Length of epochs in number of repeats
-     * @param epoch_overlap Amount of overlap between epochs in number of repeats
-     * @param epoch_unit Epochs to be determined over
-     * @param deconv Deconvolution of data with arterial input functions
-     * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
-     * @param help Display the help message
-     * @param version Display version identification
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asl_file" as const,
+        "@type": "fsl.asl_file" as const,
         "datafile": datafile,
         "ntis": ntis,
         "pairs": pairs,
@@ -222,18 +222,18 @@ function asl_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function asl_file_cargs(
     params: AslFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("asl_file");
     cargs.push(
@@ -366,18 +366,18 @@ function asl_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function asl_file_outputs(
     params: AslFileParameters,
     execution: Execution,
 ): AslFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AslFileOutputs = {
         root: execution.outputFile("."),
         output_data: execution.outputFile([(params["outfile"] ?? null), ".nii.gz"].join('')),
@@ -387,22 +387,22 @@ function asl_file_outputs(
 }
 
 
+/**
+ * ASL data manipulation tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AslFileOutputs`).
+ */
 function asl_file_execute(
     params: AslFileParameters,
     execution: Execution,
 ): AslFileOutputs {
-    /**
-     * ASL data manipulation tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AslFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = asl_file_cargs(params, execution)
     const ret = asl_file_outputs(params, execution)
@@ -411,6 +411,44 @@ function asl_file_execute(
 }
 
 
+/**
+ * ASL data manipulation tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile ASL data file
+ * @param ntis Number of TIs in the file
+ * @param outfile Output data file
+ * @param mask Mask file
+ * @param inblockform Input block format
+ * @param inaslform ASL data form
+ * @param rpts Number of repeats at each TI as comma separated list, not required if the number of repeats is same for all TIs  (only for use with --ibf=tis)
+ * @param pairs Data contains adjacent pairs of measurements (e.g. Tag, Control) DEPRECATED use --iaf instead
+ * @param spairs Split the pairs within the data, e.g. to separate tag and control images in output
+ * @param diff Take the difference between the pairs, i.e., Tag-control difference
+ * @param surrdiff Do surround subtraction on the pairs
+ * @param extrapolate Option to extrapolate the edge of the brain to fix the artefact on the edge of the brain
+ * @param neighbour Neighbour size for extrapolation, must be an odd number between 3 and 9. Default: 5
+ * @param pvgm GM partial volume map
+ * @param pvwm WM partial volume map
+ * @param kernel Kernel size (in voxels) of partial volume correction, must be an odd number between 3 and 9. Default: 5
+ * @param outblockform Output block format
+ * @param mean Output ASL data having taken mean at each TI to file
+ * @param split Split data into separate files for each TI, specify filename root
+ * @param epoch Output epochs of ASL data (takes mean at each TI within the epoch)
+ * @param epoch_length Length of epochs in number of repeats
+ * @param epoch_overlap Amount of overlap between epochs in number of repeats
+ * @param epoch_unit Epochs to be determined over
+ * @param deconv Deconvolution of data with arterial input functions
+ * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+ * @param help Display the help message
+ * @param version Display version identification
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AslFileOutputs`).
+ */
 function asl_file(
     datafile: InputPathType,
     ntis: number,
@@ -441,44 +479,6 @@ function asl_file(
     version: boolean = false,
     runner: Runner | null = null,
 ): AslFileOutputs {
-    /**
-     * ASL data manipulation tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile ASL data file
-     * @param ntis Number of TIs in the file
-     * @param outfile Output data file
-     * @param mask Mask file
-     * @param inblockform Input block format
-     * @param inaslform ASL data form
-     * @param rpts Number of repeats at each TI as comma separated list, not required if the number of repeats is same for all TIs  (only for use with --ibf=tis)
-     * @param pairs Data contains adjacent pairs of measurements (e.g. Tag, Control) DEPRECATED use --iaf instead
-     * @param spairs Split the pairs within the data, e.g. to separate tag and control images in output
-     * @param diff Take the difference between the pairs, i.e., Tag-control difference
-     * @param surrdiff Do surround subtraction on the pairs
-     * @param extrapolate Option to extrapolate the edge of the brain to fix the artefact on the edge of the brain
-     * @param neighbour Neighbour size for extrapolation, must be an odd number between 3 and 9. Default: 5
-     * @param pvgm GM partial volume map
-     * @param pvwm WM partial volume map
-     * @param kernel Kernel size (in voxels) of partial volume correction, must be an odd number between 3 and 9. Default: 5
-     * @param outblockform Output block format
-     * @param mean Output ASL data having taken mean at each TI to file
-     * @param split Split data into separate files for each TI, specify filename root
-     * @param epoch Output epochs of ASL data (takes mean at each TI within the epoch)
-     * @param epoch_length Length of epochs in number of repeats
-     * @param epoch_overlap Amount of overlap between epochs in number of repeats
-     * @param epoch_unit Epochs to be determined over
-     * @param deconv Deconvolution of data with arterial input functions
-     * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
-     * @param help Display the help message
-     * @param version Display version identification
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AslFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASL_FILE_METADATA);
     const params = asl_file_params(datafile, ntis, outfile, mask, inblockform, inaslform, rpts, pairs, spairs, diff, surrdiff, extrapolate, neighbour, pvgm, pvwm, kernel, outblockform, mean, split, epoch, epoch_length, epoch_overlap, epoch_unit, deconv, aif, help, version)
@@ -491,5 +491,8 @@ export {
       AslFileOutputs,
       AslFileParameters,
       asl_file,
+      asl_file_cargs,
+      asl_file_execute,
+      asl_file_outputs,
       asl_file_params,
 };

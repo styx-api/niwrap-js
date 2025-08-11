@@ -12,40 +12,40 @@ const V_3D_CONFORMIST_METADATA: Metadata = {
 
 
 interface V3dConformistParameters {
-    "__STYXTYPE__": "3dConformist";
+    "@type": "afni.3dConformist";
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dConformist": v_3d_conformist_cargs,
+        "afni.3dConformist": v_3d_conformist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dConformist": v_3d_conformist_outputs,
+        "afni.3dConformist": v_3d_conformist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface V3dConformistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets to be zero padded to the same size
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_conformist_params(
     input_files: Array<InputPathType>,
 ): V3dConformistParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets to be zero padded to the same size
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dConformist" as const,
+        "@type": "afni.3dConformist" as const,
         "input_files": input_files,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_conformist_cargs(
     params: V3dConformistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dConformist");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function v_3d_conformist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_conformist_outputs(
     params: V3dConformistParameters,
     execution: Execution,
 ): V3dConformistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dConformistOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile(["."].join('')),
@@ -125,22 +125,22 @@ function v_3d_conformist_outputs(
 }
 
 
+/**
+ * Program to conform a collection of datasets to the same size by zero padding.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
+ */
 function v_3d_conformist_execute(
     params: V3dConformistParameters,
     execution: Execution,
 ): V3dConformistOutputs {
-    /**
-     * Program to conform a collection of datasets to the same size by zero padding.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_conformist_cargs(params, execution)
     const ret = v_3d_conformist_outputs(params, execution)
@@ -149,22 +149,22 @@ function v_3d_conformist_execute(
 }
 
 
+/**
+ * Program to conform a collection of datasets to the same size by zero padding.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets to be zero padded to the same size
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
+ */
 function v_3d_conformist(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V3dConformistOutputs {
-    /**
-     * Program to conform a collection of datasets to the same size by zero padding.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets to be zero padded to the same size
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CONFORMIST_METADATA);
     const params = v_3d_conformist_params(input_files)
@@ -177,5 +177,8 @@ export {
       V3dConformistParameters,
       V_3D_CONFORMIST_METADATA,
       v_3d_conformist,
+      v_3d_conformist_cargs,
+      v_3d_conformist_execute,
+      v_3d_conformist_outputs,
       v_3d_conformist_params,
 };

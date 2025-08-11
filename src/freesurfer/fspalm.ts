@@ -12,7 +12,7 @@ const FSPALM_METADATA: Metadata = {
 
 
 interface FspalmParameters {
-    "__STYXTYPE__": "fspalm";
+    "@type": "freesurfer.fspalm";
     "glmdir": string;
     "cft": number;
     "cwp": number;
@@ -30,33 +30,33 @@ interface FspalmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fspalm": fspalm_cargs,
+        "freesurfer.fspalm": fspalm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface FspalmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param glmdir The mri_glmfit directory to prepare
+ * @param cft Voxel-wise cluster forming threshold (CFT), -log10(p)
+ * @param cwp Clusterwise p-value threshold
+ * @param onetail Perform a one-tailed test
+ * @param twotail Perform a two-tailed test. NOTE: changes CFT
+ * @param name Name of palm subdirectory (default="palm")
+ * @param iters Number of iterations
+ * @param monly Only create matlab file, do not run
+ * @param pponly Only perform post-processing
+ * @param octave Run with octave, not matlab
+ * @param centroid Add --centroid flag to mri_surfcluster post-processing
+ * @param v_2spaces Bonferroni-correct for 2 spaces
+ * @param v_3spaces Bonferroni-correct for 3 spaces
+ * @param pargs Supply additional args to be passed to the palm function
+ *
+ * @returns Parameter dictionary
+ */
 function fspalm_params(
     glmdir: string,
     cft: number,
@@ -92,28 +112,8 @@ function fspalm_params(
     v_3spaces: boolean = false,
     pargs: string | null = null,
 ): FspalmParameters {
-    /**
-     * Build parameters.
-    
-     * @param glmdir The mri_glmfit directory to prepare
-     * @param cft Voxel-wise cluster forming threshold (CFT), -log10(p)
-     * @param cwp Clusterwise p-value threshold
-     * @param onetail Perform a one-tailed test
-     * @param twotail Perform a two-tailed test. NOTE: changes CFT
-     * @param name Name of palm subdirectory (default="palm")
-     * @param iters Number of iterations
-     * @param monly Only create matlab file, do not run
-     * @param pponly Only perform post-processing
-     * @param octave Run with octave, not matlab
-     * @param centroid Add --centroid flag to mri_surfcluster post-processing
-     * @param v_2spaces Bonferroni-correct for 2 spaces
-     * @param v_3spaces Bonferroni-correct for 3 spaces
-     * @param pargs Supply additional args to be passed to the palm function
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fspalm" as const,
+        "@type": "freesurfer.fspalm" as const,
         "glmdir": glmdir,
         "cft": cft,
         "cwp": cwp,
@@ -139,18 +139,18 @@ function fspalm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fspalm_cargs(
     params: FspalmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fspalm");
     cargs.push(
@@ -211,18 +211,18 @@ function fspalm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fspalm_outputs(
     params: FspalmParameters,
     execution: Execution,
 ): FspalmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FspalmOutputs = {
         root: execution.outputFile("."),
     };
@@ -230,22 +230,22 @@ function fspalm_outputs(
 }
 
 
+/**
+ * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FspalmOutputs`).
+ */
 function fspalm_execute(
     params: FspalmParameters,
     execution: Execution,
 ): FspalmOutputs {
-    /**
-     * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FspalmOutputs`).
-     */
     params = execution.params(params)
     const cargs = fspalm_cargs(params, execution)
     const ret = fspalm_outputs(params, execution)
@@ -254,6 +254,31 @@ function fspalm_execute(
 }
 
 
+/**
+ * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param glmdir The mri_glmfit directory to prepare
+ * @param cft Voxel-wise cluster forming threshold (CFT), -log10(p)
+ * @param cwp Clusterwise p-value threshold
+ * @param onetail Perform a one-tailed test
+ * @param twotail Perform a two-tailed test. NOTE: changes CFT
+ * @param name Name of palm subdirectory (default="palm")
+ * @param iters Number of iterations
+ * @param monly Only create matlab file, do not run
+ * @param pponly Only perform post-processing
+ * @param octave Run with octave, not matlab
+ * @param centroid Add --centroid flag to mri_surfcluster post-processing
+ * @param v_2spaces Bonferroni-correct for 2 spaces
+ * @param v_3spaces Bonferroni-correct for 3 spaces
+ * @param pargs Supply additional args to be passed to the palm function
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FspalmOutputs`).
+ */
 function fspalm(
     glmdir: string,
     cft: number,
@@ -271,31 +296,6 @@ function fspalm(
     pargs: string | null = null,
     runner: Runner | null = null,
 ): FspalmOutputs {
-    /**
-     * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param glmdir The mri_glmfit directory to prepare
-     * @param cft Voxel-wise cluster forming threshold (CFT), -log10(p)
-     * @param cwp Clusterwise p-value threshold
-     * @param onetail Perform a one-tailed test
-     * @param twotail Perform a two-tailed test. NOTE: changes CFT
-     * @param name Name of palm subdirectory (default="palm")
-     * @param iters Number of iterations
-     * @param monly Only create matlab file, do not run
-     * @param pponly Only perform post-processing
-     * @param octave Run with octave, not matlab
-     * @param centroid Add --centroid flag to mri_surfcluster post-processing
-     * @param v_2spaces Bonferroni-correct for 2 spaces
-     * @param v_3spaces Bonferroni-correct for 3 spaces
-     * @param pargs Supply additional args to be passed to the palm function
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FspalmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSPALM_METADATA);
     const params = fspalm_params(glmdir, cft, cwp, onetail, twotail, name, iters, monly, pponly, octave, centroid, v_2spaces, v_3spaces, pargs)
@@ -308,5 +308,8 @@ export {
       FspalmOutputs,
       FspalmParameters,
       fspalm,
+      fspalm_cargs,
+      fspalm_execute,
+      fspalm_outputs,
       fspalm_params,
 };

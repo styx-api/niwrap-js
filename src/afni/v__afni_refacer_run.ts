@@ -12,7 +12,7 @@ const V__AFNI_REFACER_RUN_METADATA: Metadata = {
 
 
 interface VAfniRefacerRunParameters {
-    "__STYXTYPE__": "@afni_refacer_run";
+    "@type": "afni.@afni_refacer_run";
     "input_file": InputPathType;
     "mode_deface": boolean;
     "mode_reface": boolean;
@@ -29,35 +29,35 @@ interface VAfniRefacerRunParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@afni_refacer_run": v__afni_refacer_run_cargs,
+        "afni.@afni_refacer_run": v__afni_refacer_run_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@afni_refacer_run": v__afni_refacer_run_outputs,
+        "afni.@afni_refacer_run": v__afni_refacer_run_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,25 @@ interface VAfniRefacerRunOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Name of input dataset; can contain path information.
+ * @param prefix Name of output dataset
+ * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
+ * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
+ * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
+ * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
+ * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
+ * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
+ * @param shell_option Specify which shell to use. Options: afni_refacer_shell_sym_1.0.nii.gz (traditional), afni_refacer_shell_sym_2.0.nii.gz (more face/neck removal). Default: afni_refacer_shell_sym_1.0.nii.gz
+ * @param no_clean Don't delete temp working directory (default: remove working directory)
+ * @param no_images Don't make pretty images to automatically view the results of re/defacing
+ * @param overwrite Final two file outputs will overwrite any existing files of the same name (default: don't do this). NB: this option does not apply to the working directory
+ * @param verbose Run the 3dAllineate part herein with '-verb' (for verbosity)
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_refacer_run_params(
     input_file: InputPathType,
     prefix: string,
@@ -111,27 +130,8 @@ function v__afni_refacer_run_params(
     overwrite: boolean = false,
     verbose: boolean = false,
 ): VAfniRefacerRunParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Name of input dataset; can contain path information.
-     * @param prefix Name of output dataset
-     * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
-     * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
-     * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
-     * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
-     * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
-     * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
-     * @param shell_option Specify which shell to use. Options: afni_refacer_shell_sym_1.0.nii.gz (traditional), afni_refacer_shell_sym_2.0.nii.gz (more face/neck removal). Default: afni_refacer_shell_sym_1.0.nii.gz
-     * @param no_clean Don't delete temp working directory (default: remove working directory)
-     * @param no_images Don't make pretty images to automatically view the results of re/defacing
-     * @param overwrite Final two file outputs will overwrite any existing files of the same name (default: don't do this). NB: this option does not apply to the working directory
-     * @param verbose Run the 3dAllineate part herein with '-verb' (for verbosity)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@afni_refacer_run" as const,
+        "@type": "afni.@afni_refacer_run" as const,
         "input_file": input_file,
         "mode_deface": mode_deface,
         "mode_reface": mode_reface,
@@ -154,18 +154,18 @@ function v__afni_refacer_run_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_refacer_run_cargs(
     params: VAfniRefacerRunParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@afni_refacer_run");
     cargs.push(
@@ -219,18 +219,18 @@ function v__afni_refacer_run_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_refacer_run_outputs(
     params: VAfniRefacerRunParameters,
     execution: Execution,
 ): VAfniRefacerRunOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniRefacerRunOutputs = {
         root: execution.outputFile("."),
         output_deface: execution.outputFile([(params["prefix"] ?? null), ".deface.nii.gz"].join('')),
@@ -243,22 +243,22 @@ function v__afni_refacer_run_outputs(
 }
 
 
+/**
+ * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
+ */
 function v__afni_refacer_run_execute(
     params: VAfniRefacerRunParameters,
     execution: Execution,
 ): VAfniRefacerRunOutputs {
-    /**
-     * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_refacer_run_cargs(params, execution)
     const ret = v__afni_refacer_run_outputs(params, execution)
@@ -267,6 +267,30 @@ function v__afni_refacer_run_execute(
 }
 
 
+/**
+ * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Name of input dataset; can contain path information.
+ * @param prefix Name of output dataset
+ * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
+ * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
+ * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
+ * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
+ * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
+ * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
+ * @param shell_option Specify which shell to use. Options: afni_refacer_shell_sym_1.0.nii.gz (traditional), afni_refacer_shell_sym_2.0.nii.gz (more face/neck removal). Default: afni_refacer_shell_sym_1.0.nii.gz
+ * @param no_clean Don't delete temp working directory (default: remove working directory)
+ * @param no_images Don't make pretty images to automatically view the results of re/defacing
+ * @param overwrite Final two file outputs will overwrite any existing files of the same name (default: don't do this). NB: this option does not apply to the working directory
+ * @param verbose Run the 3dAllineate part herein with '-verb' (for verbosity)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
+ */
 function v__afni_refacer_run(
     input_file: InputPathType,
     prefix: string,
@@ -283,30 +307,6 @@ function v__afni_refacer_run(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): VAfniRefacerRunOutputs {
-    /**
-     * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Name of input dataset; can contain path information.
-     * @param prefix Name of output dataset
-     * @param mode_deface Replace the computed face+ears voxels with all zeros instead of the artificial face (ears are also removed)
-     * @param mode_reface Replace the subject's face+ears with a scaled set of artificial values
-     * @param mode_reface_plus Replace the subject's face+ears+skull with a scaled set of artificial values (i.e., like 'refacing', but replacing a more complete shell around the subject's brain)
-     * @param mode_all Output three volumes: one defaced, one refaced and one reface_plused
-     * @param anonymize_output Use 3drefit and nifti_tool to anonymize the output datasets
-     * @param cost_function Specify any cost function that is allowed by 3dAllineate (default: lpa)
-     * @param shell_option Specify which shell to use. Options: afni_refacer_shell_sym_1.0.nii.gz (traditional), afni_refacer_shell_sym_2.0.nii.gz (more face/neck removal). Default: afni_refacer_shell_sym_1.0.nii.gz
-     * @param no_clean Don't delete temp working directory (default: remove working directory)
-     * @param no_images Don't make pretty images to automatically view the results of re/defacing
-     * @param overwrite Final two file outputs will overwrite any existing files of the same name (default: don't do this). NB: this option does not apply to the working directory
-     * @param verbose Run the 3dAllineate part herein with '-verb' (for verbosity)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_REFACER_RUN_METADATA);
     const params = v__afni_refacer_run_params(input_file, prefix, mode_deface, mode_reface, mode_reface_plus, mode_all, anonymize_output, cost_function, shell_option, no_clean, no_images, overwrite, verbose)
@@ -319,5 +319,8 @@ export {
       VAfniRefacerRunParameters,
       V__AFNI_REFACER_RUN_METADATA,
       v__afni_refacer_run,
+      v__afni_refacer_run_cargs,
+      v__afni_refacer_run_execute,
+      v__afni_refacer_run_outputs,
       v__afni_refacer_run_params,
 };

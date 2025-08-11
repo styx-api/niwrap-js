@@ -12,7 +12,7 @@ const SEG2RECON_METADATA: Metadata = {
 
 
 interface Seg2reconParameters {
-    "__STYXTYPE__": "seg2recon";
+    "@type": "freesurfer.seg2recon";
     "subject": string;
     "segvol": InputPathType;
     "inputvol": InputPathType;
@@ -30,35 +30,35 @@ interface Seg2reconParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "seg2recon": seg2recon_cargs,
+        "freesurfer.seg2recon": seg2recon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "seg2recon": seg2recon_outputs,
+        "freesurfer.seg2recon": seg2recon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface Seg2reconOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Output subject directory name.
+ * @param segvol Aseg-type volume, e.g., from synthseg, fastsurfer, psacnn, samseg, or aseg.
+ * @param inputvol Input volume as would be passed to recon-all.
+ * @param ctab Color table for the segmentation. Uses embedded table if available, or FreeSurferColorLUT.txt if not specified.
+ * @param ndilate Dilate binarization of segmentation when creating brainmask. Default is 2.
+ * @param threads Number of threads to use for processing.
+ * @param force_update Force regeneration of files whether needed or not.
+ * @param no_cc Do not segment corpus callosum.
+ * @param mask Use this mask as brainmask instead of computing from segmentation.
+ * @param headmask Use this headmask instead of running mri_seghead.
+ * @param thresh Threshold for bias field estimation.
+ * @param expert Path to expert options file.
+ * @param rca Run recon-all on the output.
+ * @param no_bias_field_cor Do not compute or apply bias field correction.
+ *
+ * @returns Parameter dictionary
+ */
 function seg2recon_params(
     subject: string,
     segvol: InputPathType,
@@ -105,28 +125,8 @@ function seg2recon_params(
     rca: boolean = false,
     no_bias_field_cor: boolean = false,
 ): Seg2reconParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Output subject directory name.
-     * @param segvol Aseg-type volume, e.g., from synthseg, fastsurfer, psacnn, samseg, or aseg.
-     * @param inputvol Input volume as would be passed to recon-all.
-     * @param ctab Color table for the segmentation. Uses embedded table if available, or FreeSurferColorLUT.txt if not specified.
-     * @param ndilate Dilate binarization of segmentation when creating brainmask. Default is 2.
-     * @param threads Number of threads to use for processing.
-     * @param force_update Force regeneration of files whether needed or not.
-     * @param no_cc Do not segment corpus callosum.
-     * @param mask Use this mask as brainmask instead of computing from segmentation.
-     * @param headmask Use this headmask instead of running mri_seghead.
-     * @param thresh Threshold for bias field estimation.
-     * @param expert Path to expert options file.
-     * @param rca Run recon-all on the output.
-     * @param no_bias_field_cor Do not compute or apply bias field correction.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "seg2recon" as const,
+        "@type": "freesurfer.seg2recon" as const,
         "subject": subject,
         "segvol": segvol,
         "inputvol": inputvol,
@@ -160,18 +160,18 @@ function seg2recon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function seg2recon_cargs(
     params: Seg2reconParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("seg2recon");
     cargs.push(
@@ -244,18 +244,18 @@ function seg2recon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function seg2recon_outputs(
     params: Seg2reconParameters,
     execution: Execution,
 ): Seg2reconOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Seg2reconOutputs = {
         root: execution.outputFile("."),
         aseg_auto_mgz: execution.outputFile([(params["subject"] ?? null), "/aseg.auto.mgz"].join('')),
@@ -266,22 +266,22 @@ function seg2recon_outputs(
 }
 
 
+/**
+ * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
+ */
 function seg2recon_execute(
     params: Seg2reconParameters,
     execution: Execution,
 ): Seg2reconOutputs {
-    /**
-     * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
-     */
     params = execution.params(params)
     const cargs = seg2recon_cargs(params, execution)
     const ret = seg2recon_outputs(params, execution)
@@ -290,6 +290,31 @@ function seg2recon_execute(
 }
 
 
+/**
+ * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Output subject directory name.
+ * @param segvol Aseg-type volume, e.g., from synthseg, fastsurfer, psacnn, samseg, or aseg.
+ * @param inputvol Input volume as would be passed to recon-all.
+ * @param ctab Color table for the segmentation. Uses embedded table if available, or FreeSurferColorLUT.txt if not specified.
+ * @param ndilate Dilate binarization of segmentation when creating brainmask. Default is 2.
+ * @param threads Number of threads to use for processing.
+ * @param force_update Force regeneration of files whether needed or not.
+ * @param no_cc Do not segment corpus callosum.
+ * @param mask Use this mask as brainmask instead of computing from segmentation.
+ * @param headmask Use this headmask instead of running mri_seghead.
+ * @param thresh Threshold for bias field estimation.
+ * @param expert Path to expert options file.
+ * @param rca Run recon-all on the output.
+ * @param no_bias_field_cor Do not compute or apply bias field correction.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
+ */
 function seg2recon(
     subject: string,
     segvol: InputPathType,
@@ -307,31 +332,6 @@ function seg2recon(
     no_bias_field_cor: boolean = false,
     runner: Runner | null = null,
 ): Seg2reconOutputs {
-    /**
-     * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Output subject directory name.
-     * @param segvol Aseg-type volume, e.g., from synthseg, fastsurfer, psacnn, samseg, or aseg.
-     * @param inputvol Input volume as would be passed to recon-all.
-     * @param ctab Color table for the segmentation. Uses embedded table if available, or FreeSurferColorLUT.txt if not specified.
-     * @param ndilate Dilate binarization of segmentation when creating brainmask. Default is 2.
-     * @param threads Number of threads to use for processing.
-     * @param force_update Force regeneration of files whether needed or not.
-     * @param no_cc Do not segment corpus callosum.
-     * @param mask Use this mask as brainmask instead of computing from segmentation.
-     * @param headmask Use this headmask instead of running mri_seghead.
-     * @param thresh Threshold for bias field estimation.
-     * @param expert Path to expert options file.
-     * @param rca Run recon-all on the output.
-     * @param no_bias_field_cor Do not compute or apply bias field correction.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEG2RECON_METADATA);
     const params = seg2recon_params(subject, segvol, inputvol, ctab, ndilate, threads, force_update, no_cc, mask, headmask, thresh, expert, rca, no_bias_field_cor)
@@ -344,5 +344,8 @@ export {
       Seg2reconOutputs,
       Seg2reconParameters,
       seg2recon,
+      seg2recon_cargs,
+      seg2recon_execute,
+      seg2recon_outputs,
       seg2recon_params,
 };

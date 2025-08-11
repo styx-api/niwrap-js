@@ -12,7 +12,7 @@ const GCAPREPONE_METADATA: Metadata = {
 
 
 interface GcapreponeParameters {
-    "__STYXTYPE__": "gcaprepone";
+    "@type": "freesurfer.gcaprepone";
     "gcadir": string;
     "subject": string;
     "init_subject": boolean;
@@ -22,33 +22,33 @@ interface GcapreponeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gcaprepone": gcaprepone_cargs,
+        "freesurfer.gcaprepone": gcaprepone_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface GcapreponeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gcadir Directory to be the new SUBJECTS_DIR
+ * @param subject Subject for the process
+ * @param source_subjects_dir SUBJECTS_DIR for source data
+ * @param done_file File to indicate completion
+ * @param init_subject Flag indicating the initial subject
+ * @param no_emreg Flag to skip EM registration
+ *
+ * @returns Parameter dictionary
+ */
 function gcaprepone_params(
     gcadir: string,
     subject: string,
@@ -76,20 +88,8 @@ function gcaprepone_params(
     init_subject: boolean = false,
     no_emreg: boolean = false,
 ): GcapreponeParameters {
-    /**
-     * Build parameters.
-    
-     * @param gcadir Directory to be the new SUBJECTS_DIR
-     * @param subject Subject for the process
-     * @param source_subjects_dir SUBJECTS_DIR for source data
-     * @param done_file File to indicate completion
-     * @param init_subject Flag indicating the initial subject
-     * @param no_emreg Flag to skip EM registration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gcaprepone" as const,
+        "@type": "freesurfer.gcaprepone" as const,
         "gcadir": gcadir,
         "subject": subject,
         "init_subject": init_subject,
@@ -101,18 +101,18 @@ function gcaprepone_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gcaprepone_cargs(
     params: GcapreponeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gcaprepone");
     cargs.push(
@@ -141,18 +141,18 @@ function gcaprepone_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gcaprepone_outputs(
     params: GcapreponeParameters,
     execution: Execution,
 ): GcapreponeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GcapreponeOutputs = {
         root: execution.outputFile("."),
     };
@@ -160,22 +160,22 @@ function gcaprepone_outputs(
 }
 
 
+/**
+ * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
+ */
 function gcaprepone_execute(
     params: GcapreponeParameters,
     execution: Execution,
 ): GcapreponeOutputs {
-    /**
-     * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
-     */
     params = execution.params(params)
     const cargs = gcaprepone_cargs(params, execution)
     const ret = gcaprepone_outputs(params, execution)
@@ -184,6 +184,23 @@ function gcaprepone_execute(
 }
 
 
+/**
+ * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gcadir Directory to be the new SUBJECTS_DIR
+ * @param subject Subject for the process
+ * @param source_subjects_dir SUBJECTS_DIR for source data
+ * @param done_file File to indicate completion
+ * @param init_subject Flag indicating the initial subject
+ * @param no_emreg Flag to skip EM registration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
+ */
 function gcaprepone(
     gcadir: string,
     subject: string,
@@ -193,23 +210,6 @@ function gcaprepone(
     no_emreg: boolean = false,
     runner: Runner | null = null,
 ): GcapreponeOutputs {
-    /**
-     * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gcadir Directory to be the new SUBJECTS_DIR
-     * @param subject Subject for the process
-     * @param source_subjects_dir SUBJECTS_DIR for source data
-     * @param done_file File to indicate completion
-     * @param init_subject Flag indicating the initial subject
-     * @param no_emreg Flag to skip EM registration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GCAPREPONE_METADATA);
     const params = gcaprepone_params(gcadir, subject, source_subjects_dir, done_file, init_subject, no_emreg)
@@ -222,5 +222,8 @@ export {
       GcapreponeOutputs,
       GcapreponeParameters,
       gcaprepone,
+      gcaprepone_cargs,
+      gcaprepone_execute,
+      gcaprepone_outputs,
       gcaprepone_params,
 };

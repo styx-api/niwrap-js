@@ -12,7 +12,7 @@ const FNIRTFILEUTILS_METADATA: Metadata = {
 
 
 interface FnirtfileutilsParameters {
-    "__STYXTYPE__": "fnirtfileutils";
+    "@type": "fsl.fnirtfileutils";
     "input_coefs": InputPathType;
     "ref_volume"?: InputPathType | null | undefined;
     "out_field"?: string | null | undefined;
@@ -27,35 +27,35 @@ interface FnirtfileutilsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fnirtfileutils": fnirtfileutils_cargs,
+        "fsl.fnirtfileutils": fnirtfileutils_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fnirtfileutils": fnirtfileutils_outputs,
+        "fsl.fnirtfileutils": fnirtfileutils_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface FnirtfileutilsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_coefs Filename of input coefficient volume to be converted
+ * @param ref_volume Filename for reference volume
+ * @param out_field Filename for output field/coef volume - uses relative warp convention
+ * @param output_format Output format [field, spline], default=field
+ * @param warp_res Warp resolution (mm), only relevant when --outformat=spline
+ * @param knot_space Knot-spacing (voxels), only relevant when --outformat=spline
+ * @param jacobian_output Filename for output jacobian determinant map volume
+ * @param jacobian_matrix_output Filename for output full jacobian matrix 4D-map volume
+ * @param with_aff If set, the affine transform is included in the field/jacobian
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function fnirtfileutils_params(
     input_coefs: InputPathType,
     ref_volume: InputPathType | null = null,
@@ -99,25 +116,8 @@ function fnirtfileutils_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): FnirtfileutilsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_coefs Filename of input coefficient volume to be converted
-     * @param ref_volume Filename for reference volume
-     * @param out_field Filename for output field/coef volume - uses relative warp convention
-     * @param output_format Output format [field, spline], default=field
-     * @param warp_res Warp resolution (mm), only relevant when --outformat=spline
-     * @param knot_space Knot-spacing (voxels), only relevant when --outformat=spline
-     * @param jacobian_output Filename for output jacobian determinant map volume
-     * @param jacobian_matrix_output Filename for output full jacobian matrix 4D-map volume
-     * @param with_aff If set, the affine transform is included in the field/jacobian
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fnirtfileutils" as const,
+        "@type": "fsl.fnirtfileutils" as const,
         "input_coefs": input_coefs,
         "with_aff": with_aff,
         "verbose_flag": verbose_flag,
@@ -148,18 +148,18 @@ function fnirtfileutils_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fnirtfileutils_cargs(
     params: FnirtfileutilsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fnirtfileutils");
     cargs.push(
@@ -221,18 +221,18 @@ function fnirtfileutils_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fnirtfileutils_outputs(
     params: FnirtfileutilsParameters,
     execution: Execution,
 ): FnirtfileutilsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FnirtfileutilsOutputs = {
         root: execution.outputFile("."),
         output_field_file: ((params["out_field"] ?? null) !== null) ? execution.outputFile([(params["out_field"] ?? null), ".nii.gz"].join('')) : null,
@@ -243,22 +243,22 @@ function fnirtfileutils_outputs(
 }
 
 
+/**
+ * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
+ */
 function fnirtfileutils_execute(
     params: FnirtfileutilsParameters,
     execution: Execution,
 ): FnirtfileutilsOutputs {
-    /**
-     * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fnirtfileutils_cargs(params, execution)
     const ret = fnirtfileutils_outputs(params, execution)
@@ -267,6 +267,28 @@ function fnirtfileutils_execute(
 }
 
 
+/**
+ * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_coefs Filename of input coefficient volume to be converted
+ * @param ref_volume Filename for reference volume
+ * @param out_field Filename for output field/coef volume - uses relative warp convention
+ * @param output_format Output format [field, spline], default=field
+ * @param warp_res Warp resolution (mm), only relevant when --outformat=spline
+ * @param knot_space Knot-spacing (voxels), only relevant when --outformat=spline
+ * @param jacobian_output Filename for output jacobian determinant map volume
+ * @param jacobian_matrix_output Filename for output full jacobian matrix 4D-map volume
+ * @param with_aff If set, the affine transform is included in the field/jacobian
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
+ */
 function fnirtfileutils(
     input_coefs: InputPathType,
     ref_volume: InputPathType | null = null,
@@ -281,28 +303,6 @@ function fnirtfileutils(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FnirtfileutilsOutputs {
-    /**
-     * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_coefs Filename of input coefficient volume to be converted
-     * @param ref_volume Filename for reference volume
-     * @param out_field Filename for output field/coef volume - uses relative warp convention
-     * @param output_format Output format [field, spline], default=field
-     * @param warp_res Warp resolution (mm), only relevant when --outformat=spline
-     * @param knot_space Knot-spacing (voxels), only relevant when --outformat=spline
-     * @param jacobian_output Filename for output jacobian determinant map volume
-     * @param jacobian_matrix_output Filename for output full jacobian matrix 4D-map volume
-     * @param with_aff If set, the affine transform is included in the field/jacobian
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FNIRTFILEUTILS_METADATA);
     const params = fnirtfileutils_params(input_coefs, ref_volume, out_field, output_format, warp_res, knot_space, jacobian_output, jacobian_matrix_output, with_aff, verbose_flag, help_flag)
@@ -315,5 +315,8 @@ export {
       FnirtfileutilsOutputs,
       FnirtfileutilsParameters,
       fnirtfileutils,
+      fnirtfileutils_cargs,
+      fnirtfileutils_execute,
+      fnirtfileutils_outputs,
       fnirtfileutils_params,
 };

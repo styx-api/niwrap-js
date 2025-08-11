@@ -12,39 +12,39 @@ const FEAT_GM_PREPARE_METADATA: Metadata = {
 
 
 interface FeatGmPrepareParameters {
-    "__STYXTYPE__": "feat_gm_prepare";
+    "@type": "fsl.feat_gm_prepare";
     "gm_output": string;
     "feat_dirs_list": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "feat_gm_prepare": feat_gm_prepare_cargs,
+        "fsl.feat_gm_prepare": feat_gm_prepare_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FeatGmPrepareOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gm_output 4D grey matter output file
+ * @param feat_dirs_list List of first-level FEAT output directories
+ *
+ * @returns Parameter dictionary
+ */
 function feat_gm_prepare_params(
     gm_output: string,
     feat_dirs_list: Array<InputPathType>,
 ): FeatGmPrepareParameters {
-    /**
-     * Build parameters.
-    
-     * @param gm_output 4D grey matter output file
-     * @param feat_dirs_list List of first-level FEAT output directories
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "feat_gm_prepare" as const,
+        "@type": "fsl.feat_gm_prepare" as const,
         "gm_output": gm_output,
         "feat_dirs_list": feat_dirs_list,
     };
@@ -85,18 +85,18 @@ function feat_gm_prepare_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function feat_gm_prepare_cargs(
     params: FeatGmPrepareParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("feat_gm_prepare");
     cargs.push((params["gm_output"] ?? null));
@@ -105,18 +105,18 @@ function feat_gm_prepare_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function feat_gm_prepare_outputs(
     params: FeatGmPrepareParameters,
     execution: Execution,
 ): FeatGmPrepareOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FeatGmPrepareOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function feat_gm_prepare_outputs(
 }
 
 
+/**
+ * Prepare 4D grey matter files for higher-level analysis in FEAT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
+ */
 function feat_gm_prepare_execute(
     params: FeatGmPrepareParameters,
     execution: Execution,
 ): FeatGmPrepareOutputs {
-    /**
-     * Prepare 4D grey matter files for higher-level analysis in FEAT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
-     */
     params = execution.params(params)
     const cargs = feat_gm_prepare_cargs(params, execution)
     const ret = feat_gm_prepare_outputs(params, execution)
@@ -148,24 +148,24 @@ function feat_gm_prepare_execute(
 }
 
 
+/**
+ * Prepare 4D grey matter files for higher-level analysis in FEAT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param gm_output 4D grey matter output file
+ * @param feat_dirs_list List of first-level FEAT output directories
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
+ */
 function feat_gm_prepare(
     gm_output: string,
     feat_dirs_list: Array<InputPathType>,
     runner: Runner | null = null,
 ): FeatGmPrepareOutputs {
-    /**
-     * Prepare 4D grey matter files for higher-level analysis in FEAT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param gm_output 4D grey matter output file
-     * @param feat_dirs_list List of first-level FEAT output directories
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEAT_GM_PREPARE_METADATA);
     const params = feat_gm_prepare_params(gm_output, feat_dirs_list)
@@ -178,5 +178,8 @@ export {
       FeatGmPrepareOutputs,
       FeatGmPrepareParameters,
       feat_gm_prepare,
+      feat_gm_prepare_cargs,
+      feat_gm_prepare_execute,
+      feat_gm_prepare_outputs,
       feat_gm_prepare_params,
 };

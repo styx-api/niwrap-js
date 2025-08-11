@@ -12,42 +12,42 @@ const CONNECTED_COMPONENTS_METADATA: Metadata = {
 
 
 interface ConnectedComponentsParameters {
-    "__STYXTYPE__": "connected_components";
+    "@type": "freesurfer.connected_components";
     "input_image": InputPathType;
     "output_image": string;
     "threshold"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "connected_components": connected_components_cargs,
+        "freesurfer.connected_components": connected_components_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "connected_components": connected_components_outputs,
+        "freesurfer.connected_components": connected_components_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ConnectedComponentsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image file.
+ * @param output_image Output labeled connected components image.
+ * @param threshold Threshold for binarizing the input image.
+ *
+ * @returns Parameter dictionary
+ */
 function connected_components_params(
     input_image: InputPathType,
     output_image: string = "output_labelled_image",
     threshold: number | null = null,
 ): ConnectedComponentsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image file.
-     * @param output_image Output labeled connected components image.
-     * @param threshold Threshold for binarizing the input image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "connected_components" as const,
+        "@type": "freesurfer.connected_components" as const,
         "input_image": input_image,
         "output_image": output_image,
     };
@@ -96,18 +96,18 @@ function connected_components_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connected_components_cargs(
     params: ConnectedComponentsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("connected_components");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -125,18 +125,18 @@ function connected_components_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function connected_components_outputs(
     params: ConnectedComponentsParameters,
     execution: Execution,
 ): ConnectedComponentsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConnectedComponentsOutputs = {
         root: execution.outputFile("."),
         output_labelled_image_file: execution.outputFile([(params["output_image"] ?? null), ".nii.gz"].join('')),
@@ -145,22 +145,22 @@ function connected_components_outputs(
 }
 
 
+/**
+ * A tool for identifying connected components in an image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
+ */
 function connected_components_execute(
     params: ConnectedComponentsParameters,
     execution: Execution,
 ): ConnectedComponentsOutputs {
-    /**
-     * A tool for identifying connected components in an image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
-     */
     params = execution.params(params)
     const cargs = connected_components_cargs(params, execution)
     const ret = connected_components_outputs(params, execution)
@@ -169,26 +169,26 @@ function connected_components_execute(
 }
 
 
+/**
+ * A tool for identifying connected components in an image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input image file.
+ * @param output_image Output labeled connected components image.
+ * @param threshold Threshold for binarizing the input image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
+ */
 function connected_components(
     input_image: InputPathType,
     output_image: string = "output_labelled_image",
     threshold: number | null = null,
     runner: Runner | null = null,
 ): ConnectedComponentsOutputs {
-    /**
-     * A tool for identifying connected components in an image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input image file.
-     * @param output_image Output labeled connected components image.
-     * @param threshold Threshold for binarizing the input image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONNECTED_COMPONENTS_METADATA);
     const params = connected_components_params(input_image, output_image, threshold)
@@ -201,5 +201,8 @@ export {
       ConnectedComponentsOutputs,
       ConnectedComponentsParameters,
       connected_components,
+      connected_components_cargs,
+      connected_components_execute,
+      connected_components_outputs,
       connected_components_params,
 };

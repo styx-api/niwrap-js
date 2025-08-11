@@ -12,7 +12,7 @@ const V_3D_NET_CORR_METADATA: Metadata = {
 
 
 interface V3dNetCorrParameters {
-    "__STYXTYPE__": "3dNetCorr";
+    "@type": "afni.3dNetCorr";
     "prefix": string;
     "inset": InputPathType;
     "in_rois": InputPathType;
@@ -36,35 +36,35 @@ interface V3dNetCorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNetCorr": v_3d_net_corr_cargs,
+        "afni.3dNetCorr": v_3d_net_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNetCorr": v_3d_net_corr_outputs,
+        "afni.3dNetCorr": v_3d_net_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -111,6 +111,32 @@ interface V3dNetCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file name prefix
+ * @param inset Time series file (4D data set)
+ * @param in_rois Input a set of ROIs each labelled with distinct integers. Multiple subbricks can be input, each will be treated as a separate network.
+ * @param mask Whole brain mask within which to calculate correlation.
+ * @param fish_z Output Fisher Z-transform matrix along with correlation matrix.
+ * @param part_corr Output the partial correlation matrix.
+ * @param ts_out Output the mean time series of the ROIs.
+ * @param ts_label Insert the integer ROI label at the start of each line of the *.netts file created.
+ * @param ts_indiv Create a directory for each network that contains the average time series for each ROI in individual files.
+ * @param ts_wb_corr Perform whole brain correlation for each ROI's average time series and output as Pearson 'r' values.
+ * @param ts_wb_z Perform whole brain correlation for each ROI's average time series and output as Fisher transformed Z-scores.
+ * @param weight_ts Input a 1D file of weights to be applied multiplicatively to each ROI's average time series.
+ * @param weight_corr Input a 1D file of weights to estimate a weighted Pearson Correlation.
+ * @param ts_wb_strlabel Apply string labels to the WB correlation/Z-score output files.
+ * @param nifti Output any correlation map files as NIFTI files.
+ * @param output_mask_nonnull Output mask of non-null time series.
+ * @param push_thru_many_zeros Push through the calculation even if any ROI contains more than 10 percent of voxels with null time series.
+ * @param allow_roi_zeros Allow ROIs to have all-zero time series.
+ * @param automask_off Disable internal automasking of where time series are not uniformly zero.
+ * @param ignore_lt Ignore any label table labels in the '-in_rois' file.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_net_corr_params(
     prefix: string,
     inset: InputPathType,
@@ -133,34 +159,8 @@ function v_3d_net_corr_params(
     automask_off: boolean = false,
     ignore_lt: boolean = false,
 ): V3dNetCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file name prefix
-     * @param inset Time series file (4D data set)
-     * @param in_rois Input a set of ROIs each labelled with distinct integers. Multiple subbricks can be input, each will be treated as a separate network.
-     * @param mask Whole brain mask within which to calculate correlation.
-     * @param fish_z Output Fisher Z-transform matrix along with correlation matrix.
-     * @param part_corr Output the partial correlation matrix.
-     * @param ts_out Output the mean time series of the ROIs.
-     * @param ts_label Insert the integer ROI label at the start of each line of the *.netts file created.
-     * @param ts_indiv Create a directory for each network that contains the average time series for each ROI in individual files.
-     * @param ts_wb_corr Perform whole brain correlation for each ROI's average time series and output as Pearson 'r' values.
-     * @param ts_wb_z Perform whole brain correlation for each ROI's average time series and output as Fisher transformed Z-scores.
-     * @param weight_ts Input a 1D file of weights to be applied multiplicatively to each ROI's average time series.
-     * @param weight_corr Input a 1D file of weights to estimate a weighted Pearson Correlation.
-     * @param ts_wb_strlabel Apply string labels to the WB correlation/Z-score output files.
-     * @param nifti Output any correlation map files as NIFTI files.
-     * @param output_mask_nonnull Output mask of non-null time series.
-     * @param push_thru_many_zeros Push through the calculation even if any ROI contains more than 10 percent of voxels with null time series.
-     * @param allow_roi_zeros Allow ROIs to have all-zero time series.
-     * @param automask_off Disable internal automasking of where time series are not uniformly zero.
-     * @param ignore_lt Ignore any label table labels in the '-in_rois' file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNetCorr" as const,
+        "@type": "afni.3dNetCorr" as const,
         "prefix": prefix,
         "inset": inset,
         "in_rois": in_rois,
@@ -192,18 +192,18 @@ function v_3d_net_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_net_corr_cargs(
     params: V3dNetCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNetCorr");
     cargs.push((params["prefix"] ?? null));
@@ -273,18 +273,18 @@ function v_3d_net_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_net_corr_outputs(
     params: V3dNetCorrParameters,
     execution: Execution,
 ): V3dNetCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNetCorrOutputs = {
         root: execution.outputFile("."),
         output_netcc: execution.outputFile([(params["prefix"] ?? null), "_000.netcc"].join('')),
@@ -299,22 +299,22 @@ function v_3d_net_corr_outputs(
 }
 
 
+/**
+ * Compute correlation matrix of a set of ROIs based on mean time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
+ */
 function v_3d_net_corr_execute(
     params: V3dNetCorrParameters,
     execution: Execution,
 ): V3dNetCorrOutputs {
-    /**
-     * Compute correlation matrix of a set of ROIs based on mean time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_net_corr_cargs(params, execution)
     const ret = v_3d_net_corr_outputs(params, execution)
@@ -323,6 +323,37 @@ function v_3d_net_corr_execute(
 }
 
 
+/**
+ * Compute correlation matrix of a set of ROIs based on mean time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file name prefix
+ * @param inset Time series file (4D data set)
+ * @param in_rois Input a set of ROIs each labelled with distinct integers. Multiple subbricks can be input, each will be treated as a separate network.
+ * @param mask Whole brain mask within which to calculate correlation.
+ * @param fish_z Output Fisher Z-transform matrix along with correlation matrix.
+ * @param part_corr Output the partial correlation matrix.
+ * @param ts_out Output the mean time series of the ROIs.
+ * @param ts_label Insert the integer ROI label at the start of each line of the *.netts file created.
+ * @param ts_indiv Create a directory for each network that contains the average time series for each ROI in individual files.
+ * @param ts_wb_corr Perform whole brain correlation for each ROI's average time series and output as Pearson 'r' values.
+ * @param ts_wb_z Perform whole brain correlation for each ROI's average time series and output as Fisher transformed Z-scores.
+ * @param weight_ts Input a 1D file of weights to be applied multiplicatively to each ROI's average time series.
+ * @param weight_corr Input a 1D file of weights to estimate a weighted Pearson Correlation.
+ * @param ts_wb_strlabel Apply string labels to the WB correlation/Z-score output files.
+ * @param nifti Output any correlation map files as NIFTI files.
+ * @param output_mask_nonnull Output mask of non-null time series.
+ * @param push_thru_many_zeros Push through the calculation even if any ROI contains more than 10 percent of voxels with null time series.
+ * @param allow_roi_zeros Allow ROIs to have all-zero time series.
+ * @param automask_off Disable internal automasking of where time series are not uniformly zero.
+ * @param ignore_lt Ignore any label table labels in the '-in_rois' file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
+ */
 function v_3d_net_corr(
     prefix: string,
     inset: InputPathType,
@@ -346,37 +377,6 @@ function v_3d_net_corr(
     ignore_lt: boolean = false,
     runner: Runner | null = null,
 ): V3dNetCorrOutputs {
-    /**
-     * Compute correlation matrix of a set of ROIs based on mean time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file name prefix
-     * @param inset Time series file (4D data set)
-     * @param in_rois Input a set of ROIs each labelled with distinct integers. Multiple subbricks can be input, each will be treated as a separate network.
-     * @param mask Whole brain mask within which to calculate correlation.
-     * @param fish_z Output Fisher Z-transform matrix along with correlation matrix.
-     * @param part_corr Output the partial correlation matrix.
-     * @param ts_out Output the mean time series of the ROIs.
-     * @param ts_label Insert the integer ROI label at the start of each line of the *.netts file created.
-     * @param ts_indiv Create a directory for each network that contains the average time series for each ROI in individual files.
-     * @param ts_wb_corr Perform whole brain correlation for each ROI's average time series and output as Pearson 'r' values.
-     * @param ts_wb_z Perform whole brain correlation for each ROI's average time series and output as Fisher transformed Z-scores.
-     * @param weight_ts Input a 1D file of weights to be applied multiplicatively to each ROI's average time series.
-     * @param weight_corr Input a 1D file of weights to estimate a weighted Pearson Correlation.
-     * @param ts_wb_strlabel Apply string labels to the WB correlation/Z-score output files.
-     * @param nifti Output any correlation map files as NIFTI files.
-     * @param output_mask_nonnull Output mask of non-null time series.
-     * @param push_thru_many_zeros Push through the calculation even if any ROI contains more than 10 percent of voxels with null time series.
-     * @param allow_roi_zeros Allow ROIs to have all-zero time series.
-     * @param automask_off Disable internal automasking of where time series are not uniformly zero.
-     * @param ignore_lt Ignore any label table labels in the '-in_rois' file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NET_CORR_METADATA);
     const params = v_3d_net_corr_params(prefix, inset, in_rois, mask, fish_z, part_corr, ts_out, ts_label, ts_indiv, ts_wb_corr, ts_wb_z, weight_ts, weight_corr, ts_wb_strlabel, nifti, output_mask_nonnull, push_thru_many_zeros, allow_roi_zeros, automask_off, ignore_lt)
@@ -389,5 +389,8 @@ export {
       V3dNetCorrParameters,
       V_3D_NET_CORR_METADATA,
       v_3d_net_corr,
+      v_3d_net_corr_cargs,
+      v_3d_net_corr_execute,
+      v_3d_net_corr_outputs,
       v_3d_net_corr_params,
 };

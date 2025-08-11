@@ -12,20 +12,20 @@ const ANTS_REGISTRATION_METADATA: Metadata = {
 
 
 interface AntsRegistrationInitialMovingTransformParameters {
-    "__STYXTYPE__": "initial_moving_transform";
+    "@type": "ants.antsRegistration.initial_moving_transform";
     "initial_moving_transform": InputPathType;
 }
 
 
 interface AntsRegistrationInitialMovingTransformUseInverseParameters {
-    "__STYXTYPE__": "initial_moving_transform_use_inverse";
+    "@type": "ants.antsRegistration.initial_moving_transform_use_inverse";
     "initial_moving_transform": InputPathType;
     "use_inverse"?: 0 | 1 | null | undefined;
 }
 
 
 interface AntsRegistrationInitialMovingTransformInitializationFeatureParameters {
-    "__STYXTYPE__": "initial_moving_transform_initialization_feature";
+    "@type": "ants.antsRegistration.initial_moving_transform_initialization_feature";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "initialization_feature": 0 | 1 | 2;
@@ -33,44 +33,44 @@ interface AntsRegistrationInitialMovingTransformInitializationFeatureParameters 
 
 
 interface AntsRegistrationTransformRigidParameters {
-    "__STYXTYPE__": "transform_rigid";
+    "@type": "ants.antsRegistration.stages.transform_rigid";
     "gradient_step": number;
 }
 
 
 interface AntsRegistrationTransformAffineParameters {
-    "__STYXTYPE__": "transform_affine";
+    "@type": "ants.antsRegistration.stages.transform_affine";
     "gradient_step": number;
 }
 
 
 interface AntsRegistrationTransformCompositeAffineParameters {
-    "__STYXTYPE__": "transform_composite_affine";
+    "@type": "ants.antsRegistration.stages.transform_composite_affine";
     "gradient_step": number;
 }
 
 
 interface AntsRegistrationTransformSimilarityParameters {
-    "__STYXTYPE__": "transform_similarity";
+    "@type": "ants.antsRegistration.stages.transform_similarity";
     "gradient_step": number;
 }
 
 
 interface AntsRegistrationTransformTranslationParameters {
-    "__STYXTYPE__": "transform_translation";
+    "@type": "ants.antsRegistration.stages.transform_translation";
     "gradient_step": number;
 }
 
 
 interface AntsRegistrationTransformBsplineParameters {
-    "__STYXTYPE__": "transform_bspline";
+    "@type": "ants.antsRegistration.stages.transform_bspline";
     "gradient_step": number;
     "mesh_size_at_base_level": number;
 }
 
 
 interface AntsRegistrationTransformGaussianDisplacementFieldParameters {
-    "__STYXTYPE__": "transform_gaussian_displacement_field";
+    "@type": "ants.antsRegistration.stages.transform_gaussian_displacement_field";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "total_field_variance_in_voxel_space": number;
@@ -78,7 +78,7 @@ interface AntsRegistrationTransformGaussianDisplacementFieldParameters {
 
 
 interface AntsRegistrationTransformBsplineDisplacementFieldParameters {
-    "__STYXTYPE__": "transform_bspline_displacement_field";
+    "@type": "ants.antsRegistration.stages.transform_bspline_displacement_field";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
     "total_field_mesh_size_at_base_level"?: number | null | undefined;
@@ -87,7 +87,7 @@ interface AntsRegistrationTransformBsplineDisplacementFieldParameters {
 
 
 interface AntsRegistrationTransformTimeVaryingVelocityFieldParameters {
-    "__STYXTYPE__": "transform_time_varying_velocity_field";
+    "@type": "ants.antsRegistration.stages.transform_time_varying_velocity_field";
     "gradient_step": number;
     "number_of_time_indices": number;
     "update_field_variance_in_voxel_space": number;
@@ -98,7 +98,7 @@ interface AntsRegistrationTransformTimeVaryingVelocityFieldParameters {
 
 
 interface AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters {
-    "__STYXTYPE__": "transform_time_varying_bspline_velocity_field";
+    "@type": "ants.antsRegistration.stages.transform_time_varying_bspline_velocity_field";
     "gradient_step": number;
     "velocity_field_mesh_size": number;
     "number_of_time_point_samples"?: number | null | undefined;
@@ -107,7 +107,7 @@ interface AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters {
 
 
 interface AntsRegistrationTransformSynParameters {
-    "__STYXTYPE__": "transform_syn";
+    "@type": "ants.antsRegistration.stages.transform_syn";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "total_field_variance_in_voxel_space": number;
@@ -115,7 +115,7 @@ interface AntsRegistrationTransformSynParameters {
 
 
 interface AntsRegistrationTransformBsplineSynParameters {
-    "__STYXTYPE__": "transform_bspline_syn";
+    "@type": "ants.antsRegistration.stages.transform_bspline_syn";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
     "total_field_mesh_size_at_base_level"?: number | null | undefined;
@@ -124,7 +124,7 @@ interface AntsRegistrationTransformBsplineSynParameters {
 
 
 interface AntsRegistrationTransformExponentialParameters {
-    "__STYXTYPE__": "transform_exponential";
+    "@type": "ants.antsRegistration.stages.transform_exponential";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "velocity_field_variance_in_voxel_space": number;
@@ -133,7 +133,7 @@ interface AntsRegistrationTransformExponentialParameters {
 
 
 interface AntsRegistrationTransformBsplineExponentialParameters {
-    "__STYXTYPE__": "transform_bspline_exponential";
+    "@type": "ants.antsRegistration.stages.transform_bspline_exponential";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
     "velocity_field_mesh_size_at_base_level"?: number | null | undefined;
@@ -143,7 +143,7 @@ interface AntsRegistrationTransformBsplineExponentialParameters {
 
 
 interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
-    "__STYXTYPE__": "metric_ants_neighbourhood_cross_correlation";
+    "@type": "ants.antsRegistration.stages.metric_ants_neighbourhood_cross_correlation";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -155,7 +155,7 @@ interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
 
 
 interface AntsRegistrationMetricMutualInformationParameters {
-    "__STYXTYPE__": "metric_mutual_information";
+    "@type": "ants.antsRegistration.stages.metric_mutual_information";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -167,7 +167,7 @@ interface AntsRegistrationMetricMutualInformationParameters {
 
 
 interface AntsRegistrationMetricMattesParameters {
-    "__STYXTYPE__": "metric_mattes";
+    "@type": "ants.antsRegistration.stages.metric_mattes";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -179,7 +179,7 @@ interface AntsRegistrationMetricMattesParameters {
 
 
 interface AntsRegistrationMetricMeanSquaresParameters {
-    "__STYXTYPE__": "metric_mean_squares";
+    "@type": "ants.antsRegistration.stages.metric_mean_squares";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -191,7 +191,7 @@ interface AntsRegistrationMetricMeanSquaresParameters {
 
 
 interface AntsRegistrationMetricDemonsParameters {
-    "__STYXTYPE__": "metric_demons";
+    "@type": "ants.antsRegistration.stages.metric_demons";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -203,7 +203,7 @@ interface AntsRegistrationMetricDemonsParameters {
 
 
 interface AntsRegistrationMetricGlobalCorrelationParameters {
-    "__STYXTYPE__": "metric_global_correlation";
+    "@type": "ants.antsRegistration.stages.metric_global_correlation";
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
@@ -215,7 +215,7 @@ interface AntsRegistrationMetricGlobalCorrelationParameters {
 
 
 interface AntsRegistrationMetricEuclideanIcpParameters {
-    "__STYXTYPE__": "metric_euclidean_icp";
+    "@type": "ants.antsRegistration.stages.metric_euclidean_icp";
     "fixed_point_set": string;
     "moving_point_set": string;
     "metric_weight": number;
@@ -225,7 +225,7 @@ interface AntsRegistrationMetricEuclideanIcpParameters {
 
 
 interface AntsRegistrationMetricPointSetExpectationParameters {
-    "__STYXTYPE__": "metric_point_set_expectation";
+    "@type": "ants.antsRegistration.stages.metric_point_set_expectation";
     "metric_weight": number;
     "point_set_sigma"?: number | null | undefined;
     "sampling_percentage"?: number | null | undefined;
@@ -233,7 +233,7 @@ interface AntsRegistrationMetricPointSetExpectationParameters {
 
 
 interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters {
-    "__STYXTYPE__": "metric_jensen_havrda_charvet_tsallis";
+    "@type": "ants.antsRegistration.stages.metric_jensen_havrda_charvet_tsallis";
     "fixed_point_set": string;
     "moving_point_set": string;
     "metric_weight": number;
@@ -245,12 +245,12 @@ interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters {
 
 
 interface AntsRegistrationMetricIgdmParameters {
-    "__STYXTYPE__": "metric_igdm";
+    "@type": "ants.antsRegistration.stages.metric_igdm";
 }
 
 
 interface AntsRegistrationConvergenceParameters {
-    "__STYXTYPE__": "convergence";
+    "@type": "ants.antsRegistration.stages.convergence";
     "convergence": string;
     "convergence_threshold": number;
     "convergence_window_size": number;
@@ -258,7 +258,7 @@ interface AntsRegistrationConvergenceParameters {
 
 
 interface AntsRegistrationStageParameters {
-    "__STYXTYPE__": "stage";
+    "@type": "ants.antsRegistration.stages";
     "transform": AntsRegistrationTransformRigidParameters | AntsRegistrationTransformAffineParameters | AntsRegistrationTransformCompositeAffineParameters | AntsRegistrationTransformSimilarityParameters | AntsRegistrationTransformTranslationParameters | AntsRegistrationTransformBsplineParameters | AntsRegistrationTransformGaussianDisplacementFieldParameters | AntsRegistrationTransformBsplineDisplacementFieldParameters | AntsRegistrationTransformTimeVaryingVelocityFieldParameters | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters | AntsRegistrationTransformSynParameters | AntsRegistrationTransformBsplineSynParameters | AntsRegistrationTransformExponentialParameters | AntsRegistrationTransformBsplineExponentialParameters;
     "metric": AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters | AntsRegistrationMetricMutualInformationParameters | AntsRegistrationMetricMattesParameters | AntsRegistrationMetricMeanSquaresParameters | AntsRegistrationMetricDemonsParameters | AntsRegistrationMetricGlobalCorrelationParameters | AntsRegistrationMetricEuclideanIcpParameters | AntsRegistrationMetricPointSetExpectationParameters | AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters | AntsRegistrationMetricIgdmParameters;
     "convergence": AntsRegistrationConvergenceParameters;
@@ -269,21 +269,21 @@ interface AntsRegistrationStageParameters {
 
 
 interface AntsRegistrationWinsorizeImageIntensitiesParameters {
-    "__STYXTYPE__": "winsorize_image_intensities";
+    "@type": "ants.antsRegistration.winsorize_image_intensities";
     "lower_quantile": number;
     "upper_quantile": number;
 }
 
 
 interface AntsRegistrationMasksParameters {
-    "__STYXTYPE__": "masks";
+    "@type": "ants.antsRegistration.masks";
     "fixed_mask"?: string | null | undefined;
     "moving_mask"?: string | null | undefined;
 }
 
 
 interface AntsRegistrationParameters {
-    "__STYXTYPE__": "antsRegistration";
+    "@type": "ants.antsRegistration";
     "dimensionality"?: 2 | 3 | 4 | null | undefined;
     "output"?: string | null | undefined;
     "save_state"?: string | null | undefined;
@@ -307,119 +307,119 @@ interface AntsRegistrationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsRegistration": ants_registration_cargs,
-        "initial_moving_transform": ants_registration_initial_moving_transform_cargs,
-        "initial_moving_transform_use_inverse": ants_registration_initial_moving_transform_use_inverse_cargs,
-        "initial_moving_transform_initialization_feature": ants_registration_initial_moving_transform_initialization_feature_cargs,
-        "stage": ants_registration_stage_cargs,
-        "transform_rigid": ants_registration_transform_rigid_cargs,
-        "transform_affine": ants_registration_transform_affine_cargs,
-        "transform_composite_affine": ants_registration_transform_composite_affine_cargs,
-        "transform_similarity": ants_registration_transform_similarity_cargs,
-        "transform_translation": ants_registration_transform_translation_cargs,
-        "transform_bspline": ants_registration_transform_bspline_cargs,
-        "transform_gaussian_displacement_field": ants_registration_transform_gaussian_displacement_field_cargs,
-        "transform_bspline_displacement_field": ants_registration_transform_bspline_displacement_field_cargs,
-        "transform_time_varying_velocity_field": ants_registration_transform_time_varying_velocity_field_cargs,
-        "transform_time_varying_bspline_velocity_field": ants_registration_transform_time_varying_bspline_velocity_field_cargs,
-        "transform_syn": ants_registration_transform_syn_cargs,
-        "transform_bspline_syn": ants_registration_transform_bspline_syn_cargs,
-        "transform_exponential": ants_registration_transform_exponential_cargs,
-        "transform_bspline_exponential": ants_registration_transform_bspline_exponential_cargs,
-        "metric_ants_neighbourhood_cross_correlation": ants_registration_metric_ants_neighbourhood_cross_correlation_cargs,
-        "metric_mutual_information": ants_registration_metric_mutual_information_cargs,
-        "metric_mattes": ants_registration_metric_mattes_cargs,
-        "metric_mean_squares": ants_registration_metric_mean_squares_cargs,
-        "metric_demons": ants_registration_metric_demons_cargs,
-        "metric_global_correlation": ants_registration_metric_global_correlation_cargs,
-        "metric_euclidean_icp": ants_registration_metric_euclidean_icp_cargs,
-        "metric_point_set_expectation": ants_registration_metric_point_set_expectation_cargs,
-        "metric_jensen_havrda_charvet_tsallis": ants_registration_metric_jensen_havrda_charvet_tsallis_cargs,
-        "metric_igdm": ants_registration_metric_igdm_cargs,
-        "convergence": ants_registration_convergence_cargs,
-        "winsorize_image_intensities": ants_registration_winsorize_image_intensities_cargs,
-        "masks": ants_registration_masks_cargs,
+        "ants.antsRegistration": ants_registration_cargs,
+        "ants.antsRegistration.initial_moving_transform": ants_registration_initial_moving_transform_cargs,
+        "ants.antsRegistration.initial_moving_transform_use_inverse": ants_registration_initial_moving_transform_use_inverse_cargs,
+        "ants.antsRegistration.initial_moving_transform_initialization_feature": ants_registration_initial_moving_transform_initialization_feature_cargs,
+        "ants.antsRegistration.stages": ants_registration_stage_cargs,
+        "ants.antsRegistration.stages.transform_rigid": ants_registration_transform_rigid_cargs,
+        "ants.antsRegistration.stages.transform_affine": ants_registration_transform_affine_cargs,
+        "ants.antsRegistration.stages.transform_composite_affine": ants_registration_transform_composite_affine_cargs,
+        "ants.antsRegistration.stages.transform_similarity": ants_registration_transform_similarity_cargs,
+        "ants.antsRegistration.stages.transform_translation": ants_registration_transform_translation_cargs,
+        "ants.antsRegistration.stages.transform_bspline": ants_registration_transform_bspline_cargs,
+        "ants.antsRegistration.stages.transform_gaussian_displacement_field": ants_registration_transform_gaussian_displacement_field_cargs,
+        "ants.antsRegistration.stages.transform_bspline_displacement_field": ants_registration_transform_bspline_displacement_field_cargs,
+        "ants.antsRegistration.stages.transform_time_varying_velocity_field": ants_registration_transform_time_varying_velocity_field_cargs,
+        "ants.antsRegistration.stages.transform_time_varying_bspline_velocity_field": ants_registration_transform_time_varying_bspline_velocity_field_cargs,
+        "ants.antsRegistration.stages.transform_syn": ants_registration_transform_syn_cargs,
+        "ants.antsRegistration.stages.transform_bspline_syn": ants_registration_transform_bspline_syn_cargs,
+        "ants.antsRegistration.stages.transform_exponential": ants_registration_transform_exponential_cargs,
+        "ants.antsRegistration.stages.transform_bspline_exponential": ants_registration_transform_bspline_exponential_cargs,
+        "ants.antsRegistration.stages.metric_ants_neighbourhood_cross_correlation": ants_registration_metric_ants_neighbourhood_cross_correlation_cargs,
+        "ants.antsRegistration.stages.metric_mutual_information": ants_registration_metric_mutual_information_cargs,
+        "ants.antsRegistration.stages.metric_mattes": ants_registration_metric_mattes_cargs,
+        "ants.antsRegistration.stages.metric_mean_squares": ants_registration_metric_mean_squares_cargs,
+        "ants.antsRegistration.stages.metric_demons": ants_registration_metric_demons_cargs,
+        "ants.antsRegistration.stages.metric_global_correlation": ants_registration_metric_global_correlation_cargs,
+        "ants.antsRegistration.stages.metric_euclidean_icp": ants_registration_metric_euclidean_icp_cargs,
+        "ants.antsRegistration.stages.metric_point_set_expectation": ants_registration_metric_point_set_expectation_cargs,
+        "ants.antsRegistration.stages.metric_jensen_havrda_charvet_tsallis": ants_registration_metric_jensen_havrda_charvet_tsallis_cargs,
+        "ants.antsRegistration.stages.metric_igdm": ants_registration_metric_igdm_cargs,
+        "ants.antsRegistration.stages.convergence": ants_registration_convergence_cargs,
+        "ants.antsRegistration.winsorize_image_intensities": ants_registration_winsorize_image_intensities_cargs,
+        "ants.antsRegistration.masks": ants_registration_masks_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsRegistration": ants_registration_outputs,
+        "ants.antsRegistration": ants_registration_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_initial_moving_transform_params(
     initial_moving_transform: InputPathType,
 ): AntsRegistrationInitialMovingTransformParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "initial_moving_transform" as const,
+        "@type": "ants.antsRegistration.initial_moving_transform" as const,
         "initial_moving_transform": initial_moving_transform,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_initial_moving_transform_cargs(
     params: AntsRegistrationInitialMovingTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["initial_moving_transform"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param use_inverse Use the inverse of the initial moving transform.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_initial_moving_transform_use_inverse_params(
     initial_moving_transform: InputPathType,
     use_inverse: 0 | 1 | null = null,
 ): AntsRegistrationInitialMovingTransformUseInverseParameters {
-    /**
-     * Build parameters.
-    
-     * @param use_inverse Use the inverse of the initial moving transform.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "initial_moving_transform_use_inverse" as const,
+        "@type": "ants.antsRegistration.initial_moving_transform_use_inverse" as const,
         "initial_moving_transform": initial_moving_transform,
     };
     if (use_inverse !== null) {
@@ -429,18 +429,18 @@ function ants_registration_initial_moving_transform_use_inverse_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_initial_moving_transform_use_inverse_cargs(
     params: AntsRegistrationInitialMovingTransformUseInverseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["use_inverse"] ?? null) !== null) {
         cargs.push(["[", execution.inputFile((params["initial_moving_transform"] ?? null)), ",", String((params["use_inverse"] ?? null)), "]"].join(''));
@@ -449,20 +449,20 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param initialization_feature Initialization feature. 0: Geometric center of images, 1: Image intensities, 2: Origin of images
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_initial_moving_transform_initialization_feature_params(
     fixed_image: InputPathType,
     moving_image: InputPathType,
     initialization_feature: 0 | 1 | 2,
 ): AntsRegistrationInitialMovingTransformInitializationFeatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param initialization_feature Initialization feature. 0: Geometric center of images, 1: Image intensities, 2: Origin of images
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "initial_moving_transform_initialization_feature" as const,
+        "@type": "ants.antsRegistration.initial_moving_transform_initialization_feature" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "initialization_feature": initialization_feature,
@@ -471,211 +471,211 @@ function ants_registration_initial_moving_transform_initialization_feature_param
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_initial_moving_transform_initialization_feature_cargs(
     params: AntsRegistrationInitialMovingTransformInitializationFeatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["initialization_feature"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_rigid_params(
     gradient_step: number,
 ): AntsRegistrationTransformRigidParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_rigid" as const,
+        "@type": "ants.antsRegistration.stages.transform_rigid" as const,
         "gradient_step": gradient_step,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_rigid_cargs(
     params: AntsRegistrationTransformRigidParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["Rigid[", String((params["gradient_step"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_affine_params(
     gradient_step: number,
 ): AntsRegistrationTransformAffineParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_affine" as const,
+        "@type": "ants.antsRegistration.stages.transform_affine" as const,
         "gradient_step": gradient_step,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_affine_cargs(
     params: AntsRegistrationTransformAffineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["Affine[", String((params["gradient_step"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_composite_affine_params(
     gradient_step: number,
 ): AntsRegistrationTransformCompositeAffineParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_composite_affine" as const,
+        "@type": "ants.antsRegistration.stages.transform_composite_affine" as const,
         "gradient_step": gradient_step,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_composite_affine_cargs(
     params: AntsRegistrationTransformCompositeAffineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["CompositeAffine[", String((params["gradient_step"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_similarity_params(
     gradient_step: number,
 ): AntsRegistrationTransformSimilarityParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_similarity" as const,
+        "@type": "ants.antsRegistration.stages.transform_similarity" as const,
         "gradient_step": gradient_step,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_similarity_cargs(
     params: AntsRegistrationTransformSimilarityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["Similarity[", String((params["gradient_step"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_translation_params(
     gradient_step: number,
 ): AntsRegistrationTransformTranslationParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_translation" as const,
+        "@type": "ants.antsRegistration.stages.transform_translation" as const,
         "gradient_step": gradient_step,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_translation_cargs(
     params: AntsRegistrationTransformTranslationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["Translation[", String((params["gradient_step"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_bspline_params(
     gradient_step: number,
     mesh_size_at_base_level: number,
 ): AntsRegistrationTransformBsplineParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_bspline" as const,
+        "@type": "ants.antsRegistration.stages.transform_bspline" as const,
         "gradient_step": gradient_step,
         "mesh_size_at_base_level": mesh_size_at_base_level,
     };
@@ -683,37 +683,37 @@ function ants_registration_transform_bspline_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_bspline_cargs(
     params: AntsRegistrationTransformBsplineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["BSpline[", String((params["gradient_step"] ?? null)), ",", String((params["mesh_size_at_base_level"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_gaussian_displacement_field_params(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     total_field_variance_in_voxel_space: number,
 ): AntsRegistrationTransformGaussianDisplacementFieldParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_gaussian_displacement_field" as const,
+        "@type": "ants.antsRegistration.stages.transform_gaussian_displacement_field" as const,
         "gradient_step": gradient_step,
         "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
         "total_field_variance_in_voxel_space": total_field_variance_in_voxel_space,
@@ -722,38 +722,38 @@ function ants_registration_transform_gaussian_displacement_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_gaussian_displacement_field_cargs(
     params: AntsRegistrationTransformGaussianDisplacementFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["GaussianDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["total_field_variance_in_voxel_space"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_bspline_displacement_field_params(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
     total_field_mesh_size_at_base_level: number | null = null,
     spline_order: number | null = null,
 ): AntsRegistrationTransformBsplineDisplacementFieldParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_bspline_displacement_field" as const,
+        "@type": "ants.antsRegistration.stages.transform_bspline_displacement_field" as const,
         "gradient_step": gradient_step,
         "update_field_mesh_size_at_base_level": update_field_mesh_size_at_base_level,
     };
@@ -767,18 +767,18 @@ function ants_registration_transform_bspline_displacement_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_bspline_displacement_field_cargs(
     params: AntsRegistrationTransformBsplineDisplacementFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
         cargs.push(["BSplineDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["total_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["total_field_mesh_size_at_base_level"] ?? null)) : ""), (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
@@ -787,6 +787,12 @@ function ants_registration_transform_bspline_displacement_field_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_time_varying_velocity_field_params(
     gradient_step: number,
     number_of_time_indices: number,
@@ -795,14 +801,8 @@ function ants_registration_transform_time_varying_velocity_field_params(
     total_field_variance_in_voxel_space: number,
     total_field_time_variance: number,
 ): AntsRegistrationTransformTimeVaryingVelocityFieldParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_time_varying_velocity_field" as const,
+        "@type": "ants.antsRegistration.stages.transform_time_varying_velocity_field" as const,
         "gradient_step": gradient_step,
         "number_of_time_indices": number_of_time_indices,
         "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
@@ -814,38 +814,38 @@ function ants_registration_transform_time_varying_velocity_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_time_varying_velocity_field_cargs(
     params: AntsRegistrationTransformTimeVaryingVelocityFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["TimeVaryingVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["number_of_time_indices"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["update_field_time_variance"] ?? null)), ",", String((params["total_field_variance_in_voxel_space"] ?? null)), ",", String((params["total_field_time_variance"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_time_varying_bspline_velocity_field_params(
     gradient_step: number,
     velocity_field_mesh_size: number,
     number_of_time_point_samples: number | null = null,
     spline_order: number | null = null,
 ): AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_time_varying_bspline_velocity_field" as const,
+        "@type": "ants.antsRegistration.stages.transform_time_varying_bspline_velocity_field" as const,
         "gradient_step": gradient_step,
         "velocity_field_mesh_size": velocity_field_mesh_size,
     };
@@ -859,18 +859,18 @@ function ants_registration_transform_time_varying_bspline_velocity_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
     params: AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["number_of_time_point_samples"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
         cargs.push(["TimeVaryingBSplineVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["velocity_field_mesh_size"] ?? null)), ",", (((params["number_of_time_point_samples"] ?? null) !== null) ? String((params["number_of_time_point_samples"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
@@ -879,19 +879,19 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_syn_params(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     total_field_variance_in_voxel_space: number,
 ): AntsRegistrationTransformSynParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_syn" as const,
+        "@type": "ants.antsRegistration.stages.transform_syn" as const,
         "gradient_step": gradient_step,
         "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
         "total_field_variance_in_voxel_space": total_field_variance_in_voxel_space,
@@ -900,38 +900,38 @@ function ants_registration_transform_syn_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_syn_cargs(
     params: AntsRegistrationTransformSynParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["SyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["total_field_variance_in_voxel_space"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_bspline_syn_params(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
     total_field_mesh_size_at_base_level: number | null = null,
     spline_order: number | null = null,
 ): AntsRegistrationTransformBsplineSynParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_bspline_syn" as const,
+        "@type": "ants.antsRegistration.stages.transform_bspline_syn" as const,
         "gradient_step": gradient_step,
         "update_field_mesh_size_at_base_level": update_field_mesh_size_at_base_level,
     };
@@ -945,18 +945,18 @@ function ants_registration_transform_bspline_syn_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_bspline_syn_cargs(
     params: AntsRegistrationTransformBsplineSynParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
         cargs.push(["BSplineSyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["total_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["total_field_mesh_size_at_base_level"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
@@ -965,20 +965,20 @@ function ants_registration_transform_bspline_syn_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_exponential_params(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     velocity_field_variance_in_voxel_space: number,
     number_of_integration_steps: number,
 ): AntsRegistrationTransformExponentialParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_exponential" as const,
+        "@type": "ants.antsRegistration.stages.transform_exponential" as const,
         "gradient_step": gradient_step,
         "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
         "velocity_field_variance_in_voxel_space": velocity_field_variance_in_voxel_space,
@@ -988,24 +988,30 @@ function ants_registration_transform_exponential_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_exponential_cargs(
     params: AntsRegistrationTransformExponentialParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["Exponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["velocity_field_variance_in_voxel_space"] ?? null)), ",", String((params["number_of_integration_steps"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_bspline_exponential_params(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
@@ -1013,14 +1019,8 @@ function ants_registration_transform_bspline_exponential_params(
     number_of_integration_steps: number | null = null,
     spline_order: number | null = null,
 ): AntsRegistrationTransformBsplineExponentialParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform_bspline_exponential" as const,
+        "@type": "ants.antsRegistration.stages.transform_bspline_exponential" as const,
         "gradient_step": gradient_step,
         "update_field_mesh_size_at_base_level": update_field_mesh_size_at_base_level,
     };
@@ -1037,18 +1037,18 @@ function ants_registration_transform_bspline_exponential_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_transform_bspline_exponential_cargs(
     params: AntsRegistrationTransformBsplineExponentialParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null || (params["number_of_integration_steps"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
         cargs.push(["BSplineExponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["velocity_field_mesh_size_at_base_level"] ?? null)) : ""), ",", (((params["number_of_integration_steps"] ?? null) !== null) ? String((params["number_of_integration_steps"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
@@ -1057,6 +1057,12 @@ function ants_registration_transform_bspline_exponential_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
     fixed_image: string,
     moving_image: string,
@@ -1066,14 +1072,8 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_ants_neighbourhood_cross_correlation" as const,
+        "@type": "ants.antsRegistration.stages.metric_ants_neighbourhood_cross_correlation" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1094,18 +1094,18 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
     params: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1114,6 +1114,12 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_mutual_information_params(
     fixed_image: string,
     moving_image: string,
@@ -1123,14 +1129,8 @@ function ants_registration_metric_mutual_information_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricMutualInformationParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_mutual_information" as const,
+        "@type": "ants.antsRegistration.stages.metric_mutual_information" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1151,18 +1151,18 @@ function ants_registration_metric_mutual_information_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_mutual_information_cargs(
     params: AntsRegistrationMetricMutualInformationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1171,6 +1171,12 @@ function ants_registration_metric_mutual_information_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_mattes_params(
     fixed_image: string,
     moving_image: string,
@@ -1180,14 +1186,8 @@ function ants_registration_metric_mattes_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricMattesParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_mattes" as const,
+        "@type": "ants.antsRegistration.stages.metric_mattes" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1208,18 +1208,18 @@ function ants_registration_metric_mattes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_mattes_cargs(
     params: AntsRegistrationMetricMattesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1228,6 +1228,12 @@ function ants_registration_metric_mattes_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_mean_squares_params(
     fixed_image: string,
     moving_image: string,
@@ -1237,14 +1243,8 @@ function ants_registration_metric_mean_squares_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricMeanSquaresParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_mean_squares" as const,
+        "@type": "ants.antsRegistration.stages.metric_mean_squares" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1265,18 +1265,18 @@ function ants_registration_metric_mean_squares_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_mean_squares_cargs(
     params: AntsRegistrationMetricMeanSquaresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1285,6 +1285,12 @@ function ants_registration_metric_mean_squares_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_demons_params(
     fixed_image: string,
     moving_image: string,
@@ -1294,14 +1300,8 @@ function ants_registration_metric_demons_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricDemonsParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_demons" as const,
+        "@type": "ants.antsRegistration.stages.metric_demons" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1322,18 +1322,18 @@ function ants_registration_metric_demons_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_demons_cargs(
     params: AntsRegistrationMetricDemonsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1342,6 +1342,12 @@ function ants_registration_metric_demons_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_global_correlation_params(
     fixed_image: string,
     moving_image: string,
@@ -1351,14 +1357,8 @@ function ants_registration_metric_global_correlation_params(
     sampling_percentage: number | null = null,
     use_gradient_filter: "true" | "false" | null = null,
 ): AntsRegistrationMetricGlobalCorrelationParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_global_correlation" as const,
+        "@type": "ants.antsRegistration.stages.metric_global_correlation" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "metric_weight": metric_weight,
@@ -1379,18 +1379,18 @@ function ants_registration_metric_global_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_global_correlation_cargs(
     params: AntsRegistrationMetricGlobalCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
         cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
@@ -1399,6 +1399,12 @@ function ants_registration_metric_global_correlation_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_euclidean_icp_params(
     fixed_point_set: string,
     moving_point_set: string,
@@ -1406,14 +1412,8 @@ function ants_registration_metric_euclidean_icp_params(
     sampling_percentage: number | null = null,
     boundary_points_only: "0" | null = null,
 ): AntsRegistrationMetricEuclideanIcpParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_euclidean_icp" as const,
+        "@type": "ants.antsRegistration.stages.metric_euclidean_icp" as const,
         "fixed_point_set": fixed_point_set,
         "moving_point_set": moving_point_set,
         "metric_weight": metric_weight,
@@ -1428,18 +1428,18 @@ function ants_registration_metric_euclidean_icp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_euclidean_icp_cargs(
     params: AntsRegistrationMetricEuclideanIcpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["sampling_percentage"] ?? null) !== null || (params["boundary_points_only"] ?? null) !== null) {
         cargs.push(["ICP[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["boundary_points_only"] ?? null) !== null) ? (params["boundary_points_only"] ?? null) : ""), "]"].join(''));
@@ -1448,19 +1448,19 @@ function ants_registration_metric_euclidean_icp_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_point_set_expectation_params(
     metric_weight: number,
     point_set_sigma: number | null = null,
     sampling_percentage: number | null = null,
 ): AntsRegistrationMetricPointSetExpectationParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_point_set_expectation" as const,
+        "@type": "ants.antsRegistration.stages.metric_point_set_expectation" as const,
         "metric_weight": metric_weight,
     };
     if (point_set_sigma !== null) {
@@ -1473,18 +1473,18 @@ function ants_registration_metric_point_set_expectation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_point_set_expectation_cargs(
     params: AntsRegistrationMetricPointSetExpectationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["point_set_sigma"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null) {
         cargs.push(["PSE[[FIXED_IMAGE],[MOVING_IMAGE],", String((params["metric_weight"] ?? null)), ",,", (((params["point_set_sigma"] ?? null) !== null) ? String((params["point_set_sigma"] ?? null)) : ""), "[SAMPLING_STRATEGY],", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), "[USE_GRADIENT_FILTER]]"].join(''));
@@ -1493,6 +1493,12 @@ function ants_registration_metric_point_set_expectation_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
     fixed_point_set: string,
     moving_point_set: string,
@@ -1502,14 +1508,8 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
     point_set_sigma: number | null = null,
     k_neighborhood: number | null = null,
 ): AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_jensen_havrda_charvet_tsallis" as const,
+        "@type": "ants.antsRegistration.stages.metric_jensen_havrda_charvet_tsallis" as const,
         "fixed_point_set": fixed_point_set,
         "moving_point_set": moving_point_set,
         "metric_weight": metric_weight,
@@ -1530,18 +1530,18 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
     params: AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["sampling_percentage"] ?? null) !== null || (params["boundary_points_only"] ?? null) !== null || (params["point_set_sigma"] ?? null) !== null || (params["k_neighborhood"] ?? null) !== null) {
         cargs.push(["JHCT[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["boundary_points_only"] ?? null) !== null) ? (params["boundary_points_only"] ?? null) : ""), ",", (((params["point_set_sigma"] ?? null) !== null) ? String((params["point_set_sigma"] ?? null)) : ""), ",", (((params["k_neighborhood"] ?? null) !== null) ? String((params["k_neighborhood"] ?? null)) : ""), "]"].join(''));
@@ -1550,51 +1550,51 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_metric_igdm_params(
 ): AntsRegistrationMetricIgdmParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric_igdm" as const,
+        "@type": "ants.antsRegistration.stages.metric_igdm" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_metric_igdm_cargs(
     params: AntsRegistrationMetricIgdmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("IGDM[");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_convergence_params(
     convergence: string,
     convergence_threshold: number,
     convergence_window_size: number,
 ): AntsRegistrationConvergenceParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convergence" as const,
+        "@type": "ants.antsRegistration.stages.convergence" as const,
         "convergence": convergence,
         "convergence_threshold": convergence_threshold,
         "convergence_window_size": convergence_window_size,
@@ -1603,24 +1603,36 @@ function ants_registration_convergence_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_convergence_cargs(
     params: AntsRegistrationConvergenceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["[", (params["convergence"] ?? null), ",", String((params["convergence_threshold"] ?? null)), ",", String((params["convergence_window_size"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization and is scaled appropriately for each transform using the shift scales estimator. Subsequent parameters are transform-specific and can be determined from the usage. For the B-spline transforms one can also specify the smoothing in terms of spline distance (i.e. knot spacing).
+ * @param metric These image metrics are available--- CC: ANTS neighborhood cross correlation, MI: Mutual information, Demons: (Thirion), MeanSquares, and GC: Global Correlation. The "metricWeight" variable is used to modulate the per stage weighting of the metrics. The metrics can also employ a sampling strategy defined by a sampling percentage. The sampling strategy defaults to 'None' (aka a dense sampling of one sample per voxel), otherwise it defines a point set over which to optimize the metric. The point set can be on a regular lattice or a random lattice of points slightly perturbed to minimize aliasing artifacts. samplingPercentage defines the fraction of points to select from the domain. useGradientFilter specifies whether a smoothingfilter is applied when estimating the metric gradient.In addition, three point set metrics are available: Euclidean (ICP), Point-set expectation (PSE), and Jensen-Havrda-Charvet-Tsallis (JHCT).
+ * @param convergence Convergence is determined from the number of iterations per level and is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold. 
+ * @param smoothing_sigmas Specify the sigma of gaussian smoothing at each level. Units are given in terms of voxels ('vox') or physical spacing ('mm'). Example usage is '4x2x1mm' and '4x2x1vox' where no units implies voxel spacing.
+ * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
+ * @param use_histogram_matching Use histogram matching.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_stage_params(
     transform: AntsRegistrationTransformRigidParameters | AntsRegistrationTransformAffineParameters | AntsRegistrationTransformCompositeAffineParameters | AntsRegistrationTransformSimilarityParameters | AntsRegistrationTransformTranslationParameters | AntsRegistrationTransformBsplineParameters | AntsRegistrationTransformGaussianDisplacementFieldParameters | AntsRegistrationTransformBsplineDisplacementFieldParameters | AntsRegistrationTransformTimeVaryingVelocityFieldParameters | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters | AntsRegistrationTransformSynParameters | AntsRegistrationTransformBsplineSynParameters | AntsRegistrationTransformExponentialParameters | AntsRegistrationTransformBsplineExponentialParameters,
     metric: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters | AntsRegistrationMetricMutualInformationParameters | AntsRegistrationMetricMattesParameters | AntsRegistrationMetricMeanSquaresParameters | AntsRegistrationMetricDemonsParameters | AntsRegistrationMetricGlobalCorrelationParameters | AntsRegistrationMetricEuclideanIcpParameters | AntsRegistrationMetricPointSetExpectationParameters | AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters | AntsRegistrationMetricIgdmParameters,
@@ -1629,20 +1641,8 @@ function ants_registration_stage_params(
     shrink_factors: string,
     use_histogram_matching: 0 | 1 | null = null,
 ): AntsRegistrationStageParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization and is scaled appropriately for each transform using the shift scales estimator. Subsequent parameters are transform-specific and can be determined from the usage. For the B-spline transforms one can also specify the smoothing in terms of spline distance (i.e. knot spacing).
-     * @param metric These image metrics are available--- CC: ANTS neighborhood cross correlation, MI: Mutual information, Demons: (Thirion), MeanSquares, and GC: Global Correlation. The "metricWeight" variable is used to modulate the per stage weighting of the metrics. The metrics can also employ a sampling strategy defined by a sampling percentage. The sampling strategy defaults to 'None' (aka a dense sampling of one sample per voxel), otherwise it defines a point set over which to optimize the metric. The point set can be on a regular lattice or a random lattice of points slightly perturbed to minimize aliasing artifacts. samplingPercentage defines the fraction of points to select from the domain. useGradientFilter specifies whether a smoothingfilter is applied when estimating the metric gradient.In addition, three point set metrics are available: Euclidean (ICP), Point-set expectation (PSE), and Jensen-Havrda-Charvet-Tsallis (JHCT).
-     * @param convergence Convergence is determined from the number of iterations per level and is determined by fitting a line to the normalized energy profile of the last N iterations (where N is specified by the window size) and determining the slope which is then compared with the convergence threshold. 
-     * @param smoothing_sigmas Specify the sigma of gaussian smoothing at each level. Units are given in terms of voxels ('vox') or physical spacing ('mm'). Example usage is '4x2x1mm' and '4x2x1vox' where no units implies voxel spacing.
-     * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
-     * @param use_histogram_matching Use histogram matching.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stage" as const,
+        "@type": "ants.antsRegistration.stages" as const,
         "transform": transform,
         "metric": metric,
         "convergence": convergence,
@@ -1656,30 +1656,30 @@ function ants_registration_stage_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_stage_cargs(
     params: AntsRegistrationStageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(
         "--transform",
-        ...dynCargs((params["transform"] ?? null).__STYXTYPE__)((params["transform"] ?? null), execution)
+        ...dynCargs((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution)
     );
     cargs.push(
         "--metric",
-        ...dynCargs((params["metric"] ?? null).__STYXTYPE__)((params["metric"] ?? null), execution)
+        ...dynCargs((params["metric"] ?? null)["@type"])((params["metric"] ?? null), execution)
     );
     cargs.push(
         "--convergence",
-        ...dynCargs((params["convergence"] ?? null).__STYXTYPE__)((params["convergence"] ?? null), execution)
+        ...dynCargs((params["convergence"] ?? null)["@type"])((params["convergence"] ?? null), execution)
     );
     cargs.push(
         "--smoothing-sigmas",
@@ -1699,18 +1699,18 @@ function ants_registration_stage_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_winsorize_image_intensities_params(
     lower_quantile: number,
     upper_quantile: number,
 ): AntsRegistrationWinsorizeImageIntensitiesParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "winsorize_image_intensities" as const,
+        "@type": "ants.antsRegistration.winsorize_image_intensities" as const,
         "lower_quantile": lower_quantile,
         "upper_quantile": upper_quantile,
     };
@@ -1718,36 +1718,36 @@ function ants_registration_winsorize_image_intensities_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_winsorize_image_intensities_cargs(
     params: AntsRegistrationWinsorizeImageIntensitiesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["[", String((params["lower_quantile"] ?? null)), String((params["upper_quantile"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_masks_params(
     fixed_mask: string | null = null,
     moving_mask: string | null = null,
 ): AntsRegistrationMasksParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "masks" as const,
+        "@type": "ants.antsRegistration.masks" as const,
     };
     if (fixed_mask !== null) {
         params["fixed_mask"] = fixed_mask;
@@ -1759,18 +1759,18 @@ function ants_registration_masks_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_masks_cargs(
     params: AntsRegistrationMasksParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["fixed_mask"] ?? null) !== null || (params["moving_mask"] ?? null) !== null) {
         cargs.push(["[", (((params["fixed_mask"] ?? null) !== null) ? (params["fixed_mask"] ?? null) : ""), (((params["moving_mask"] ?? null) !== null) ? (params["moving_mask"] ?? null) : ""), "]"].join(''));
@@ -1812,6 +1812,33 @@ interface AntsRegistrationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stages Stages of the registration process.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
+ * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image. Note that only the images specified in the first metric call are warped. Use antsApplyTransforms to warp other images using the resultant transform(s). When a composite transform is not specified, linear transforms are specified with a '.mat' suffix and displacement fields with a 'Warp.nii.gz' suffix (and 'InverseWarp.nii.gz', when applicable. In addition, for velocity-based transforms, the full velocity field is written to file ('VelocityField.nii.gz') as long as the collapse transforms flag is turned off ('-z 0').
+ * @param save_state  Specify the output file for the current state of the registration. The state file is written to an hdf5 composite file. It is specially usefull if we want to save the current state of a SyN registration to the disk, so we can load and restore that later to continue the next registration process directly started from the last saved state. The output file of this flag is the same as the write-composite-transform, unless the last transform is a SyN transform. In that case, the inverse displacement field of the SyN transform is also added to the output composite transform. Again notice that this file cannot be treated as a transform, and restore-state option must be used to load the written file by this flag.
+ * @param restore_state Specify the initial state of the registration which get immediately used to directly initialize the registration process. The flag is mutually exclusive with other intialization flags.If this flag is used, none of the initial-moving-transform and initial-fixed-transform cannot be used.
+ * @param write_composite_transform Boolean specifying whether or not the composite transform (and its inverse, if it exists) should be written to an hdf5 composite file. This is false by default so that only the transform for each stage is written to file.
+ * @param print_similarity_measure_interval Prints out the CC similarity metric measure between the full-size input fixed and the transformed moving images at each iteration a value of 0 (the default) indicates that the full scale computation should not take placeany value greater than 0 represents the interval of full scale metric computation.
+ * @param write_interval_volumes Writes out the output volume at each iteration. It helps to present the registration process as a short movie a value of 0 (the default) indicates that this option should not take placeany value greater than 0 represents the interval between the iterations which outputs are written to the disk.
+ * @param collapse_output_transforms Collapse output transforms. Specifically, enabling this option combines all adjacent transforms where possible. All adjacent linear transforms are written to disk in the form of an itk affine transform (called xxxGenericAffine.mat).
+Similarly, all adjacent displacement field transforms are combined when written to disk (e.g. xxxWarp.nii.gz and xxxInverseWarp.nii.gz (if available)). Also, an output composite transform including the collapsed transforms is written to the disk (called outputCollapsed(Inverse)Composite).
+ * @param initialize_transforms_per_stage Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly intialized from the previous stage's linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+ * @param interpolation Several interpolation options are available in ITK. These have all been made available. Currently the interpolator choice is only used to warp (and possibly inverse warp) the final output image(s).
+ * @param restrict_deformation This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation. Low-dimensional restriction only works if there are no preceding transformations.All stages up to and including the desired stage must have this option specified,even if they should not be restricted (in which case specify 1x1x1...)
+ * @param initial_fixed_transform Specify the initial fixed transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
+ * @param initial_moving_transform Specify the initial moving transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
+ * @param winsorize_image_intensities Winsorize data based on specified quantiles.
+ * @param masks Image masks to limit voxels considered by the metric. Two options are allowed for mask specification: 1) Either the user specifies a single mask to be used for all stages or 2) the user specifies a mask for each stage. With the latter one can select to which stages masks are applied by supplying valid file names. If the file does not exist, a mask will not be used for that stage. Note that we handle the fixed and moving masks separately to enforce this constraint.
+ * @param minc Use MINC file formats for transformations.
+ * @param random_seed Random seed.
+ * @param verbose Verbose output.
+ * @param float Use 'float' instead of 'double' for computations.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_params(
     stages: Array<AntsRegistrationStageParameters>,
     dimensionality: 2 | 3 | 4 | null = null,
@@ -1834,35 +1861,8 @@ function ants_registration_params(
     verbose: 0 | 1 | null = null,
     float: 0 | 1 | null = null,
 ): AntsRegistrationParameters {
-    /**
-     * Build parameters.
-    
-     * @param stages Stages of the registration process.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
-     * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image. Note that only the images specified in the first metric call are warped. Use antsApplyTransforms to warp other images using the resultant transform(s). When a composite transform is not specified, linear transforms are specified with a '.mat' suffix and displacement fields with a 'Warp.nii.gz' suffix (and 'InverseWarp.nii.gz', when applicable. In addition, for velocity-based transforms, the full velocity field is written to file ('VelocityField.nii.gz') as long as the collapse transforms flag is turned off ('-z 0').
-     * @param save_state  Specify the output file for the current state of the registration. The state file is written to an hdf5 composite file. It is specially usefull if we want to save the current state of a SyN registration to the disk, so we can load and restore that later to continue the next registration process directly started from the last saved state. The output file of this flag is the same as the write-composite-transform, unless the last transform is a SyN transform. In that case, the inverse displacement field of the SyN transform is also added to the output composite transform. Again notice that this file cannot be treated as a transform, and restore-state option must be used to load the written file by this flag.
-     * @param restore_state Specify the initial state of the registration which get immediately used to directly initialize the registration process. The flag is mutually exclusive with other intialization flags.If this flag is used, none of the initial-moving-transform and initial-fixed-transform cannot be used.
-     * @param write_composite_transform Boolean specifying whether or not the composite transform (and its inverse, if it exists) should be written to an hdf5 composite file. This is false by default so that only the transform for each stage is written to file.
-     * @param print_similarity_measure_interval Prints out the CC similarity metric measure between the full-size input fixed and the transformed moving images at each iteration a value of 0 (the default) indicates that the full scale computation should not take placeany value greater than 0 represents the interval of full scale metric computation.
-     * @param write_interval_volumes Writes out the output volume at each iteration. It helps to present the registration process as a short movie a value of 0 (the default) indicates that this option should not take placeany value greater than 0 represents the interval between the iterations which outputs are written to the disk.
-     * @param collapse_output_transforms Collapse output transforms. Specifically, enabling this option combines all adjacent transforms where possible. All adjacent linear transforms are written to disk in the form of an itk affine transform (called xxxGenericAffine.mat).
-Similarly, all adjacent displacement field transforms are combined when written to disk (e.g. xxxWarp.nii.gz and xxxInverseWarp.nii.gz (if available)). Also, an output composite transform including the collapsed transforms is written to the disk (called outputCollapsed(Inverse)Composite).
-     * @param initialize_transforms_per_stage Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly intialized from the previous stage's linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-     * @param interpolation Several interpolation options are available in ITK. These have all been made available. Currently the interpolator choice is only used to warp (and possibly inverse warp) the final output image(s).
-     * @param restrict_deformation This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation. Low-dimensional restriction only works if there are no preceding transformations.All stages up to and including the desired stage must have this option specified,even if they should not be restricted (in which case specify 1x1x1...)
-     * @param initial_fixed_transform Specify the initial fixed transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
-     * @param initial_moving_transform Specify the initial moving transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
-     * @param winsorize_image_intensities Winsorize data based on specified quantiles.
-     * @param masks Image masks to limit voxels considered by the metric. Two options are allowed for mask specification: 1) Either the user specifies a single mask to be used for all stages or 2) the user specifies a mask for each stage. With the latter one can select to which stages masks are applied by supplying valid file names. If the file does not exist, a mask will not be used for that stage. Note that we handle the fixed and moving masks separately to enforce this constraint.
-     * @param minc Use MINC file formats for transformations.
-     * @param random_seed Random seed.
-     * @param verbose Verbose output.
-     * @param float Use 'float' instead of 'double' for computations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsRegistration" as const,
+        "@type": "ants.antsRegistration" as const,
         "stages": stages,
     };
     if (dimensionality !== null) {
@@ -1926,18 +1926,18 @@ Similarly, all adjacent displacement field transforms are combined when written 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_cargs(
     params: AntsRegistrationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsRegistration");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -2015,20 +2015,20 @@ function ants_registration_cargs(
     if ((params["initial_moving_transform"] ?? null) !== null) {
         cargs.push(
             "--initial-moving-transform",
-            ...dynCargs((params["initial_moving_transform"] ?? null).__STYXTYPE__)((params["initial_moving_transform"] ?? null), execution)
+            ...dynCargs((params["initial_moving_transform"] ?? null)["@type"])((params["initial_moving_transform"] ?? null), execution)
         );
     }
-    cargs.push(...(params["stages"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["stages"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     if ((params["winsorize_image_intensities"] ?? null) !== null) {
         cargs.push(
             "--winsorize-image-intensities",
-            ...dynCargs((params["winsorize_image_intensities"] ?? null).__STYXTYPE__)((params["winsorize_image_intensities"] ?? null), execution)
+            ...dynCargs((params["winsorize_image_intensities"] ?? null)["@type"])((params["winsorize_image_intensities"] ?? null), execution)
         );
     }
     if ((params["masks"] ?? null) !== null) {
         cargs.push(
             "--masks",
-            ...dynCargs((params["masks"] ?? null).__STYXTYPE__)((params["masks"] ?? null), execution)
+            ...dynCargs((params["masks"] ?? null)["@type"])((params["masks"] ?? null), execution)
         );
     }
     if ((params["minc"] ?? null) !== null) {
@@ -2059,18 +2059,18 @@ function ants_registration_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_registration_outputs(
     params: AntsRegistrationParameters,
     execution: Execution,
 ): AntsRegistrationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsRegistrationOutputs = {
         root: execution.outputFile("."),
         generic_affine: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null), "0GenericAffine.mat"].join('')) : null,
@@ -2083,22 +2083,22 @@ function ants_registration_outputs(
 }
 
 
+/**
+ * This program is a user-level registration application meant to utilize classes in ITK v4.0 and later. The user can specify any number of "stages" where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Note that explicitly setting the dimensionality, metric, transform, output, convergence, shrink-factors, and smoothing-sigmas parameters is mandatory.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
+ */
 function ants_registration_execute(
     params: AntsRegistrationParameters,
     execution: Execution,
 ): AntsRegistrationOutputs {
-    /**
-     * This program is a user-level registration application meant to utilize classes in ITK v4.0 and later. The user can specify any number of "stages" where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Note that explicitly setting the dimensionality, metric, transform, output, convergence, shrink-factors, and smoothing-sigmas parameters is mandatory.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_registration_cargs(params, execution)
     const ret = ants_registration_outputs(params, execution)
@@ -2107,6 +2107,38 @@ function ants_registration_execute(
 }
 
 
+/**
+ * This program is a user-level registration application meant to utilize classes in ITK v4.0 and later. The user can specify any number of "stages" where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Note that explicitly setting the dimensionality, metric, transform, output, convergence, shrink-factors, and smoothing-sigmas parameters is mandatory.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param stages Stages of the registration process.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
+ * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image. Note that only the images specified in the first metric call are warped. Use antsApplyTransforms to warp other images using the resultant transform(s). When a composite transform is not specified, linear transforms are specified with a '.mat' suffix and displacement fields with a 'Warp.nii.gz' suffix (and 'InverseWarp.nii.gz', when applicable. In addition, for velocity-based transforms, the full velocity field is written to file ('VelocityField.nii.gz') as long as the collapse transforms flag is turned off ('-z 0').
+ * @param save_state  Specify the output file for the current state of the registration. The state file is written to an hdf5 composite file. It is specially usefull if we want to save the current state of a SyN registration to the disk, so we can load and restore that later to continue the next registration process directly started from the last saved state. The output file of this flag is the same as the write-composite-transform, unless the last transform is a SyN transform. In that case, the inverse displacement field of the SyN transform is also added to the output composite transform. Again notice that this file cannot be treated as a transform, and restore-state option must be used to load the written file by this flag.
+ * @param restore_state Specify the initial state of the registration which get immediately used to directly initialize the registration process. The flag is mutually exclusive with other intialization flags.If this flag is used, none of the initial-moving-transform and initial-fixed-transform cannot be used.
+ * @param write_composite_transform Boolean specifying whether or not the composite transform (and its inverse, if it exists) should be written to an hdf5 composite file. This is false by default so that only the transform for each stage is written to file.
+ * @param print_similarity_measure_interval Prints out the CC similarity metric measure between the full-size input fixed and the transformed moving images at each iteration a value of 0 (the default) indicates that the full scale computation should not take placeany value greater than 0 represents the interval of full scale metric computation.
+ * @param write_interval_volumes Writes out the output volume at each iteration. It helps to present the registration process as a short movie a value of 0 (the default) indicates that this option should not take placeany value greater than 0 represents the interval between the iterations which outputs are written to the disk.
+ * @param collapse_output_transforms Collapse output transforms. Specifically, enabling this option combines all adjacent transforms where possible. All adjacent linear transforms are written to disk in the form of an itk affine transform (called xxxGenericAffine.mat).
+Similarly, all adjacent displacement field transforms are combined when written to disk (e.g. xxxWarp.nii.gz and xxxInverseWarp.nii.gz (if available)). Also, an output composite transform including the collapsed transforms is written to the disk (called outputCollapsed(Inverse)Composite).
+ * @param initialize_transforms_per_stage Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly intialized from the previous stage's linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
+ * @param interpolation Several interpolation options are available in ITK. These have all been made available. Currently the interpolator choice is only used to warp (and possibly inverse warp) the final output image(s).
+ * @param restrict_deformation This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation. Low-dimensional restriction only works if there are no preceding transformations.All stages up to and including the desired stage must have this option specified,even if they should not be restricted (in which case specify 1x1x1...)
+ * @param initial_fixed_transform Specify the initial fixed transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
+ * @param initial_moving_transform Specify the initial moving transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
+ * @param winsorize_image_intensities Winsorize data based on specified quantiles.
+ * @param masks Image masks to limit voxels considered by the metric. Two options are allowed for mask specification: 1) Either the user specifies a single mask to be used for all stages or 2) the user specifies a mask for each stage. With the latter one can select to which stages masks are applied by supplying valid file names. If the file does not exist, a mask will not be used for that stage. Note that we handle the fixed and moving masks separately to enforce this constraint.
+ * @param minc Use MINC file formats for transformations.
+ * @param random_seed Random seed.
+ * @param verbose Verbose output.
+ * @param float Use 'float' instead of 'double' for computations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
+ */
 function ants_registration(
     stages: Array<AntsRegistrationStageParameters>,
     dimensionality: 2 | 3 | 4 | null = null,
@@ -2130,38 +2162,6 @@ function ants_registration(
     float: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationOutputs {
-    /**
-     * This program is a user-level registration application meant to utilize classes in ITK v4.0 and later. The user can specify any number of "stages" where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Note that explicitly setting the dimensionality, metric, transform, output, convergence, shrink-factors, and smoothing-sigmas parameters is mandatory.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param stages Stages of the registration process.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
-     * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image. Note that only the images specified in the first metric call are warped. Use antsApplyTransforms to warp other images using the resultant transform(s). When a composite transform is not specified, linear transforms are specified with a '.mat' suffix and displacement fields with a 'Warp.nii.gz' suffix (and 'InverseWarp.nii.gz', when applicable. In addition, for velocity-based transforms, the full velocity field is written to file ('VelocityField.nii.gz') as long as the collapse transforms flag is turned off ('-z 0').
-     * @param save_state  Specify the output file for the current state of the registration. The state file is written to an hdf5 composite file. It is specially usefull if we want to save the current state of a SyN registration to the disk, so we can load and restore that later to continue the next registration process directly started from the last saved state. The output file of this flag is the same as the write-composite-transform, unless the last transform is a SyN transform. In that case, the inverse displacement field of the SyN transform is also added to the output composite transform. Again notice that this file cannot be treated as a transform, and restore-state option must be used to load the written file by this flag.
-     * @param restore_state Specify the initial state of the registration which get immediately used to directly initialize the registration process. The flag is mutually exclusive with other intialization flags.If this flag is used, none of the initial-moving-transform and initial-fixed-transform cannot be used.
-     * @param write_composite_transform Boolean specifying whether or not the composite transform (and its inverse, if it exists) should be written to an hdf5 composite file. This is false by default so that only the transform for each stage is written to file.
-     * @param print_similarity_measure_interval Prints out the CC similarity metric measure between the full-size input fixed and the transformed moving images at each iteration a value of 0 (the default) indicates that the full scale computation should not take placeany value greater than 0 represents the interval of full scale metric computation.
-     * @param write_interval_volumes Writes out the output volume at each iteration. It helps to present the registration process as a short movie a value of 0 (the default) indicates that this option should not take placeany value greater than 0 represents the interval between the iterations which outputs are written to the disk.
-     * @param collapse_output_transforms Collapse output transforms. Specifically, enabling this option combines all adjacent transforms where possible. All adjacent linear transforms are written to disk in the form of an itk affine transform (called xxxGenericAffine.mat).
-Similarly, all adjacent displacement field transforms are combined when written to disk (e.g. xxxWarp.nii.gz and xxxInverseWarp.nii.gz (if available)). Also, an output composite transform including the collapsed transforms is written to the disk (called outputCollapsed(Inverse)Composite).
-     * @param initialize_transforms_per_stage Initialize linear transforms from the previous stage. By enabling this option, the current linear stage transform is directly intialized from the previous stage's linear transform; this allows multiple linear stages to be run where each stage directly updates the estimated linear transform from the previous stage. (e.g. Translation -> Rigid -> Affine).
-     * @param interpolation Several interpolation options are available in ITK. These have all been made available. Currently the interpolator choice is only used to warp (and possibly inverse warp) the final output image(s).
-     * @param restrict_deformation This option allows the user to restrict the optimization of the displacement field, translation, rigid or affine transform on a per-component basis. For example, if one wants to limit the deformation or rotation of 3-D volume to the first two dimensions, this is possible by specifying a weight vector of '1x1x0' for a deformation field or '1x1x0x1x1x0' for a rigid transformation. Low-dimensional restriction only works if there are no preceding transformations.All stages up to and including the desired stage must have this option specified,even if they should not be restricted (in which case specify 1x1x1...)
-     * @param initial_fixed_transform Specify the initial fixed transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
-     * @param initial_moving_transform Specify the initial moving transform(s) which get immediately incorporated into the composite transform. The order of the transforms is stack-esque in that the last transform specified on the command line is the first to be applied. In addition to initialization with ITK transforms, the user can perform an initial translation alignment by specifying the fixed and moving images and selecting an initialization feature. These features include using the geometric center of the images (=0), the image intensities (=1), or the origin of the images (=2).
-     * @param winsorize_image_intensities Winsorize data based on specified quantiles.
-     * @param masks Image masks to limit voxels considered by the metric. Two options are allowed for mask specification: 1) Either the user specifies a single mask to be used for all stages or 2) the user specifies a mask for each stage. With the latter one can select to which stages masks are applied by supplying valid file names. If the file does not exist, a mask will not be used for that stage. Note that we handle the fixed and moving masks separately to enforce this constraint.
-     * @param minc Use MINC file formats for transformations.
-     * @param random_seed Random seed.
-     * @param verbose Verbose output.
-     * @param float Use 'float' instead of 'double' for computations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_REGISTRATION_METADATA);
     const params = ants_registration_params(stages, dimensionality, output, save_state, restore_state, write_composite_transform, print_similarity_measure_interval, write_interval_volumes, collapse_output_transforms, initialize_transforms_per_stage, interpolation, restrict_deformation, initial_fixed_transform, initial_moving_transform, winsorize_image_intensities, masks, minc, random_seed, verbose, float)
@@ -2205,36 +2205,70 @@ export {
       AntsRegistrationTransformTranslationParameters,
       AntsRegistrationWinsorizeImageIntensitiesParameters,
       ants_registration,
+      ants_registration_cargs,
+      ants_registration_convergence_cargs,
       ants_registration_convergence_params,
+      ants_registration_execute,
+      ants_registration_initial_moving_transform_cargs,
+      ants_registration_initial_moving_transform_initialization_feature_cargs,
       ants_registration_initial_moving_transform_initialization_feature_params,
       ants_registration_initial_moving_transform_params,
+      ants_registration_initial_moving_transform_use_inverse_cargs,
       ants_registration_initial_moving_transform_use_inverse_params,
+      ants_registration_masks_cargs,
       ants_registration_masks_params,
+      ants_registration_metric_ants_neighbourhood_cross_correlation_cargs,
       ants_registration_metric_ants_neighbourhood_cross_correlation_params,
+      ants_registration_metric_demons_cargs,
       ants_registration_metric_demons_params,
+      ants_registration_metric_euclidean_icp_cargs,
       ants_registration_metric_euclidean_icp_params,
+      ants_registration_metric_global_correlation_cargs,
       ants_registration_metric_global_correlation_params,
+      ants_registration_metric_igdm_cargs,
       ants_registration_metric_igdm_params,
+      ants_registration_metric_jensen_havrda_charvet_tsallis_cargs,
       ants_registration_metric_jensen_havrda_charvet_tsallis_params,
+      ants_registration_metric_mattes_cargs,
       ants_registration_metric_mattes_params,
+      ants_registration_metric_mean_squares_cargs,
       ants_registration_metric_mean_squares_params,
+      ants_registration_metric_mutual_information_cargs,
       ants_registration_metric_mutual_information_params,
+      ants_registration_metric_point_set_expectation_cargs,
       ants_registration_metric_point_set_expectation_params,
+      ants_registration_outputs,
       ants_registration_params,
+      ants_registration_stage_cargs,
       ants_registration_stage_params,
+      ants_registration_transform_affine_cargs,
       ants_registration_transform_affine_params,
+      ants_registration_transform_bspline_cargs,
+      ants_registration_transform_bspline_displacement_field_cargs,
       ants_registration_transform_bspline_displacement_field_params,
+      ants_registration_transform_bspline_exponential_cargs,
       ants_registration_transform_bspline_exponential_params,
       ants_registration_transform_bspline_params,
+      ants_registration_transform_bspline_syn_cargs,
       ants_registration_transform_bspline_syn_params,
+      ants_registration_transform_composite_affine_cargs,
       ants_registration_transform_composite_affine_params,
+      ants_registration_transform_exponential_cargs,
       ants_registration_transform_exponential_params,
+      ants_registration_transform_gaussian_displacement_field_cargs,
       ants_registration_transform_gaussian_displacement_field_params,
+      ants_registration_transform_rigid_cargs,
       ants_registration_transform_rigid_params,
+      ants_registration_transform_similarity_cargs,
       ants_registration_transform_similarity_params,
+      ants_registration_transform_syn_cargs,
       ants_registration_transform_syn_params,
+      ants_registration_transform_time_varying_bspline_velocity_field_cargs,
       ants_registration_transform_time_varying_bspline_velocity_field_params,
+      ants_registration_transform_time_varying_velocity_field_cargs,
       ants_registration_transform_time_varying_velocity_field_params,
+      ants_registration_transform_translation_cargs,
       ants_registration_transform_translation_params,
+      ants_registration_winsorize_image_intensities_cargs,
       ants_registration_winsorize_image_intensities_params,
 };

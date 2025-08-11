@@ -12,7 +12,7 @@ const DMRI_FORREST_METADATA: Metadata = {
 
 
 interface DmriForrestParameters {
-    "__STYXTYPE__": "dmri_forrest";
+    "@type": "freesurfer.dmri_forrest";
     "test_dir": string;
     "train_file": InputPathType;
     "mask_file": InputPathType;
@@ -25,33 +25,33 @@ interface DmriForrestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_forrest": dmri_forrest_cargs,
+        "freesurfer.dmri_forrest": dmri_forrest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface DmriForrestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param test_dir Directory containing the test subject data
+ * @param train_file File listing training subject directories, one per line
+ * @param mask_file Input brain mask volume name, relative to subject directory
+ * @param tract_files Input tract label volume(s), relative to subject directory
+ * @param seg_file Input aparc+aseg volume name, relative to subject directory
+ * @param diff_file Input diffusion orientation volume name, relative to subject directory
+ * @param debug Turn on debugging mode
+ * @param checkopts Only check options and exit
+ * @param help Display help information
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_forrest_params(
     test_dir: string,
     train_file: InputPathType,
@@ -82,23 +97,8 @@ function dmri_forrest_params(
     checkopts: boolean = false,
     help: boolean = false,
 ): DmriForrestParameters {
-    /**
-     * Build parameters.
-    
-     * @param test_dir Directory containing the test subject data
-     * @param train_file File listing training subject directories, one per line
-     * @param mask_file Input brain mask volume name, relative to subject directory
-     * @param tract_files Input tract label volume(s), relative to subject directory
-     * @param seg_file Input aparc+aseg volume name, relative to subject directory
-     * @param diff_file Input diffusion orientation volume name, relative to subject directory
-     * @param debug Turn on debugging mode
-     * @param checkopts Only check options and exit
-     * @param help Display help information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_forrest" as const,
+        "@type": "freesurfer.dmri_forrest" as const,
         "test_dir": test_dir,
         "train_file": train_file,
         "mask_file": mask_file,
@@ -117,18 +117,18 @@ function dmri_forrest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_forrest_cargs(
     params: DmriForrestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_forrest");
     cargs.push(
@@ -172,18 +172,18 @@ function dmri_forrest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_forrest_outputs(
     params: DmriForrestParameters,
     execution: Execution,
 ): DmriForrestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriForrestOutputs = {
         root: execution.outputFile("."),
     };
@@ -191,22 +191,22 @@ function dmri_forrest_outputs(
 }
 
 
+/**
+ * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
+ */
 function dmri_forrest_execute(
     params: DmriForrestParameters,
     execution: Execution,
 ): DmriForrestOutputs {
-    /**
-     * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_forrest_cargs(params, execution)
     const ret = dmri_forrest_outputs(params, execution)
@@ -215,6 +215,26 @@ function dmri_forrest_execute(
 }
 
 
+/**
+ * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param test_dir Directory containing the test subject data
+ * @param train_file File listing training subject directories, one per line
+ * @param mask_file Input brain mask volume name, relative to subject directory
+ * @param tract_files Input tract label volume(s), relative to subject directory
+ * @param seg_file Input aparc+aseg volume name, relative to subject directory
+ * @param diff_file Input diffusion orientation volume name, relative to subject directory
+ * @param debug Turn on debugging mode
+ * @param checkopts Only check options and exit
+ * @param help Display help information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
+ */
 function dmri_forrest(
     test_dir: string,
     train_file: InputPathType,
@@ -227,26 +247,6 @@ function dmri_forrest(
     help: boolean = false,
     runner: Runner | null = null,
 ): DmriForrestOutputs {
-    /**
-     * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param test_dir Directory containing the test subject data
-     * @param train_file File listing training subject directories, one per line
-     * @param mask_file Input brain mask volume name, relative to subject directory
-     * @param tract_files Input tract label volume(s), relative to subject directory
-     * @param seg_file Input aparc+aseg volume name, relative to subject directory
-     * @param diff_file Input diffusion orientation volume name, relative to subject directory
-     * @param debug Turn on debugging mode
-     * @param checkopts Only check options and exit
-     * @param help Display help information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_FORREST_METADATA);
     const params = dmri_forrest_params(test_dir, train_file, mask_file, tract_files, seg_file, diff_file, debug, checkopts, help)
@@ -259,5 +259,8 @@ export {
       DmriForrestOutputs,
       DmriForrestParameters,
       dmri_forrest,
+      dmri_forrest_cargs,
+      dmri_forrest_execute,
+      dmri_forrest_outputs,
       dmri_forrest_params,
 };

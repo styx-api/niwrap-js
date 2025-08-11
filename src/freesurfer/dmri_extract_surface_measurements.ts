@@ -12,7 +12,7 @@ const DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA: Metadata = {
 
 
 interface DmriExtractSurfaceMeasurementsParameters {
-    "__STYXTYPE__": "dmri_extractSurfaceMeasurements";
+    "@type": "freesurfer.dmri_extractSurfaceMeasurements";
     "streamline_file": InputPathType;
     "lh_surface_file": InputPathType;
     "lh_thickness_overlay": InputPathType;
@@ -29,33 +29,33 @@ interface DmriExtractSurfaceMeasurementsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_extractSurfaceMeasurements": dmri_extract_surface_measurements_cargs,
+        "freesurfer.dmri_extractSurfaceMeasurements": dmri_extract_surface_measurements_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface DmriExtractSurfaceMeasurementsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param streamline_file Streamline file in .trk format
+ * @param lh_surface_file Left hemisphere surface file
+ * @param lh_thickness_overlay Left hemisphere thickness overlay file
+ * @param lh_curvature_overlay Left hemisphere curvature overlay file
+ * @param rh_surface_file Right hemisphere surface file
+ * @param rh_thickness_overlay Right hemisphere thickness overlay file
+ * @param rh_curvature_overlay Right hemisphere curvature overlay file
+ * @param output_directory Output directory
+ * @param reference_image Reference image for situations where FA is not used
+ * @param reference_image_anatomical Reference image for anatomical space when diffusion and anatomical spaces are not registered
+ * @param transformation Transformation from diffusion to anatomical space
+ * @param annotation_file Annotation file
+ * @param fa_options FA options including the number of files and their respective paths
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_extract_surface_measurements_params(
     streamline_file: InputPathType,
     lh_surface_file: InputPathType,
@@ -90,27 +109,8 @@ function dmri_extract_surface_measurements_params(
     annotation_file: InputPathType | null = null,
     fa_options: Array<string> | null = null,
 ): DmriExtractSurfaceMeasurementsParameters {
-    /**
-     * Build parameters.
-    
-     * @param streamline_file Streamline file in .trk format
-     * @param lh_surface_file Left hemisphere surface file
-     * @param lh_thickness_overlay Left hemisphere thickness overlay file
-     * @param lh_curvature_overlay Left hemisphere curvature overlay file
-     * @param rh_surface_file Right hemisphere surface file
-     * @param rh_thickness_overlay Right hemisphere thickness overlay file
-     * @param rh_curvature_overlay Right hemisphere curvature overlay file
-     * @param output_directory Output directory
-     * @param reference_image Reference image for situations where FA is not used
-     * @param reference_image_anatomical Reference image for anatomical space when diffusion and anatomical spaces are not registered
-     * @param transformation Transformation from diffusion to anatomical space
-     * @param annotation_file Annotation file
-     * @param fa_options FA options including the number of files and their respective paths
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_extractSurfaceMeasurements" as const,
+        "@type": "freesurfer.dmri_extractSurfaceMeasurements" as const,
         "streamline_file": streamline_file,
         "lh_surface_file": lh_surface_file,
         "lh_thickness_overlay": lh_thickness_overlay,
@@ -139,18 +139,18 @@ function dmri_extract_surface_measurements_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_extract_surface_measurements_cargs(
     params: DmriExtractSurfaceMeasurementsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_extractSurfaceMeasurements");
     cargs.push(
@@ -219,18 +219,18 @@ function dmri_extract_surface_measurements_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_extract_surface_measurements_outputs(
     params: DmriExtractSurfaceMeasurementsParameters,
     execution: Execution,
 ): DmriExtractSurfaceMeasurementsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriExtractSurfaceMeasurementsOutputs = {
         root: execution.outputFile("."),
     };
@@ -238,22 +238,22 @@ function dmri_extract_surface_measurements_outputs(
 }
 
 
+/**
+ * A tool for extracting surface measurements from diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
+ */
 function dmri_extract_surface_measurements_execute(
     params: DmriExtractSurfaceMeasurementsParameters,
     execution: Execution,
 ): DmriExtractSurfaceMeasurementsOutputs {
-    /**
-     * A tool for extracting surface measurements from diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_extract_surface_measurements_cargs(params, execution)
     const ret = dmri_extract_surface_measurements_outputs(params, execution)
@@ -262,6 +262,30 @@ function dmri_extract_surface_measurements_execute(
 }
 
 
+/**
+ * A tool for extracting surface measurements from diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param streamline_file Streamline file in .trk format
+ * @param lh_surface_file Left hemisphere surface file
+ * @param lh_thickness_overlay Left hemisphere thickness overlay file
+ * @param lh_curvature_overlay Left hemisphere curvature overlay file
+ * @param rh_surface_file Right hemisphere surface file
+ * @param rh_thickness_overlay Right hemisphere thickness overlay file
+ * @param rh_curvature_overlay Right hemisphere curvature overlay file
+ * @param output_directory Output directory
+ * @param reference_image Reference image for situations where FA is not used
+ * @param reference_image_anatomical Reference image for anatomical space when diffusion and anatomical spaces are not registered
+ * @param transformation Transformation from diffusion to anatomical space
+ * @param annotation_file Annotation file
+ * @param fa_options FA options including the number of files and their respective paths
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
+ */
 function dmri_extract_surface_measurements(
     streamline_file: InputPathType,
     lh_surface_file: InputPathType,
@@ -278,30 +302,6 @@ function dmri_extract_surface_measurements(
     fa_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): DmriExtractSurfaceMeasurementsOutputs {
-    /**
-     * A tool for extracting surface measurements from diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param streamline_file Streamline file in .trk format
-     * @param lh_surface_file Left hemisphere surface file
-     * @param lh_thickness_overlay Left hemisphere thickness overlay file
-     * @param lh_curvature_overlay Left hemisphere curvature overlay file
-     * @param rh_surface_file Right hemisphere surface file
-     * @param rh_thickness_overlay Right hemisphere thickness overlay file
-     * @param rh_curvature_overlay Right hemisphere curvature overlay file
-     * @param output_directory Output directory
-     * @param reference_image Reference image for situations where FA is not used
-     * @param reference_image_anatomical Reference image for anatomical space when diffusion and anatomical spaces are not registered
-     * @param transformation Transformation from diffusion to anatomical space
-     * @param annotation_file Annotation file
-     * @param fa_options FA options including the number of files and their respective paths
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA);
     const params = dmri_extract_surface_measurements_params(streamline_file, lh_surface_file, lh_thickness_overlay, lh_curvature_overlay, rh_surface_file, rh_thickness_overlay, rh_curvature_overlay, output_directory, reference_image, reference_image_anatomical, transformation, annotation_file, fa_options)
@@ -314,5 +314,8 @@ export {
       DmriExtractSurfaceMeasurementsOutputs,
       DmriExtractSurfaceMeasurementsParameters,
       dmri_extract_surface_measurements,
+      dmri_extract_surface_measurements_cargs,
+      dmri_extract_surface_measurements_execute,
+      dmri_extract_surface_measurements_outputs,
       dmri_extract_surface_measurements_params,
 };

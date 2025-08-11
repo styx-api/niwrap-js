@@ -12,7 +12,7 @@ const V__UPDATE_AFNI_BINARIES_METADATA: Metadata = {
 
 
 interface VUpdateAfniBinariesParameters {
-    "__STYXTYPE__": "@update.afni.binaries";
+    "@type": "afni.@update.afni.binaries";
     "defaults_flag": boolean;
     "help_flag": boolean;
     "help_sys_progs_flag": boolean;
@@ -40,33 +40,33 @@ interface VUpdateAfniBinariesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@update.afni.binaries": v__update_afni_binaries_cargs,
+        "afni.@update.afni.binaries": v__update_afni_binaries_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface VUpdateAfniBinariesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param defaults_flag Install current package into abin.
+ * @param help_flag Show this help.
+ * @param help_sys_progs_flag List system programs that block update.
+ * @param apsearch Specify getting apsearch updates.
+ * @param bindir Set AFNI binary directory to ABIN.
+ * @param curl_flag Default to curl instead of wget.
+ * @param do_dotfiles_flag Try to initialize dot files if needed.
+ * @param do_extras_flag Do extra niceties (beyond simple install).
+ * @param echo_flag Turn on shell command echo.
+ * @param make_backup Make a backup of binaries before replacing.
+ * @param no_cert_verify_flag Do not verify the server CA certificate.
+ * @param no_recur_flag Do not download and run new @uab script.
+ * @param proto Access afni host via specified PROTOCOL.
+ * @param quick_flag Quick mode, no fancies.
+ * @param show_obsoletes_flag List any obsolete packages.
+ * @param show_obsoletes_grep_flag List any obsolete packages (easy to grep).
+ * @param show_system_progs_flag Show system programs that do not belong in abin.
+ * @param sys_ok_flag OK to update, even if system progs found.
+ * @param test_flag Just attempt the download and quit.
+ * @param test_protos_flag Test download protocols and exit.
+ * @param revert_flag Revert binaries to previous version.
+ * @param local_package Install local PACKAGE.tgz package.
+ * @param prog_list Install given programs, not whole PACKAGE.
+ * @param package_ Install distribution package PACKAGE.
+ *
+ * @returns Parameter dictionary
+ */
 function v__update_afni_binaries_params(
     defaults_flag: boolean = false,
     help_flag: boolean = false,
@@ -112,38 +142,8 @@ function v__update_afni_binaries_params(
     prog_list: Array<string> | null = null,
     package_: string | null = null,
 ): VUpdateAfniBinariesParameters {
-    /**
-     * Build parameters.
-    
-     * @param defaults_flag Install current package into abin.
-     * @param help_flag Show this help.
-     * @param help_sys_progs_flag List system programs that block update.
-     * @param apsearch Specify getting apsearch updates.
-     * @param bindir Set AFNI binary directory to ABIN.
-     * @param curl_flag Default to curl instead of wget.
-     * @param do_dotfiles_flag Try to initialize dot files if needed.
-     * @param do_extras_flag Do extra niceties (beyond simple install).
-     * @param echo_flag Turn on shell command echo.
-     * @param make_backup Make a backup of binaries before replacing.
-     * @param no_cert_verify_flag Do not verify the server CA certificate.
-     * @param no_recur_flag Do not download and run new @uab script.
-     * @param proto Access afni host via specified PROTOCOL.
-     * @param quick_flag Quick mode, no fancies.
-     * @param show_obsoletes_flag List any obsolete packages.
-     * @param show_obsoletes_grep_flag List any obsolete packages (easy to grep).
-     * @param show_system_progs_flag Show system programs that do not belong in abin.
-     * @param sys_ok_flag OK to update, even if system progs found.
-     * @param test_flag Just attempt the download and quit.
-     * @param test_protos_flag Test download protocols and exit.
-     * @param revert_flag Revert binaries to previous version.
-     * @param local_package Install local PACKAGE.tgz package.
-     * @param prog_list Install given programs, not whole PACKAGE.
-     * @param package_ Install distribution package PACKAGE.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@update.afni.binaries" as const,
+        "@type": "afni.@update.afni.binaries" as const,
         "defaults_flag": defaults_flag,
         "help_flag": help_flag,
         "help_sys_progs_flag": help_sys_progs_flag,
@@ -187,18 +187,18 @@ function v__update_afni_binaries_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__update_afni_binaries_cargs(
     params: VUpdateAfniBinariesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@update.afni.binaries");
     if ((params["defaults_flag"] ?? null)) {
@@ -298,18 +298,18 @@ function v__update_afni_binaries_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__update_afni_binaries_outputs(
     params: VUpdateAfniBinariesParameters,
     execution: Execution,
 ): VUpdateAfniBinariesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VUpdateAfniBinariesOutputs = {
         root: execution.outputFile("."),
     };
@@ -317,22 +317,22 @@ function v__update_afni_binaries_outputs(
 }
 
 
+/**
+ * Install or update AFNI binaries.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
+ */
 function v__update_afni_binaries_execute(
     params: VUpdateAfniBinariesParameters,
     execution: Execution,
 ): VUpdateAfniBinariesOutputs {
-    /**
-     * Install or update AFNI binaries.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__update_afni_binaries_cargs(params, execution)
     const ret = v__update_afni_binaries_outputs(params, execution)
@@ -341,6 +341,41 @@ function v__update_afni_binaries_execute(
 }
 
 
+/**
+ * Install or update AFNI binaries.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param defaults_flag Install current package into abin.
+ * @param help_flag Show this help.
+ * @param help_sys_progs_flag List system programs that block update.
+ * @param apsearch Specify getting apsearch updates.
+ * @param bindir Set AFNI binary directory to ABIN.
+ * @param curl_flag Default to curl instead of wget.
+ * @param do_dotfiles_flag Try to initialize dot files if needed.
+ * @param do_extras_flag Do extra niceties (beyond simple install).
+ * @param echo_flag Turn on shell command echo.
+ * @param make_backup Make a backup of binaries before replacing.
+ * @param no_cert_verify_flag Do not verify the server CA certificate.
+ * @param no_recur_flag Do not download and run new @uab script.
+ * @param proto Access afni host via specified PROTOCOL.
+ * @param quick_flag Quick mode, no fancies.
+ * @param show_obsoletes_flag List any obsolete packages.
+ * @param show_obsoletes_grep_flag List any obsolete packages (easy to grep).
+ * @param show_system_progs_flag Show system programs that do not belong in abin.
+ * @param sys_ok_flag OK to update, even if system progs found.
+ * @param test_flag Just attempt the download and quit.
+ * @param test_protos_flag Test download protocols and exit.
+ * @param revert_flag Revert binaries to previous version.
+ * @param local_package Install local PACKAGE.tgz package.
+ * @param prog_list Install given programs, not whole PACKAGE.
+ * @param package_ Install distribution package PACKAGE.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
+ */
 function v__update_afni_binaries(
     defaults_flag: boolean = false,
     help_flag: boolean = false,
@@ -368,41 +403,6 @@ function v__update_afni_binaries(
     package_: string | null = null,
     runner: Runner | null = null,
 ): VUpdateAfniBinariesOutputs {
-    /**
-     * Install or update AFNI binaries.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param defaults_flag Install current package into abin.
-     * @param help_flag Show this help.
-     * @param help_sys_progs_flag List system programs that block update.
-     * @param apsearch Specify getting apsearch updates.
-     * @param bindir Set AFNI binary directory to ABIN.
-     * @param curl_flag Default to curl instead of wget.
-     * @param do_dotfiles_flag Try to initialize dot files if needed.
-     * @param do_extras_flag Do extra niceties (beyond simple install).
-     * @param echo_flag Turn on shell command echo.
-     * @param make_backup Make a backup of binaries before replacing.
-     * @param no_cert_verify_flag Do not verify the server CA certificate.
-     * @param no_recur_flag Do not download and run new @uab script.
-     * @param proto Access afni host via specified PROTOCOL.
-     * @param quick_flag Quick mode, no fancies.
-     * @param show_obsoletes_flag List any obsolete packages.
-     * @param show_obsoletes_grep_flag List any obsolete packages (easy to grep).
-     * @param show_system_progs_flag Show system programs that do not belong in abin.
-     * @param sys_ok_flag OK to update, even if system progs found.
-     * @param test_flag Just attempt the download and quit.
-     * @param test_protos_flag Test download protocols and exit.
-     * @param revert_flag Revert binaries to previous version.
-     * @param local_package Install local PACKAGE.tgz package.
-     * @param prog_list Install given programs, not whole PACKAGE.
-     * @param package_ Install distribution package PACKAGE.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__UPDATE_AFNI_BINARIES_METADATA);
     const params = v__update_afni_binaries_params(defaults_flag, help_flag, help_sys_progs_flag, apsearch, bindir, curl_flag, do_dotfiles_flag, do_extras_flag, echo_flag, make_backup, no_cert_verify_flag, no_recur_flag, proto, quick_flag, show_obsoletes_flag, show_obsoletes_grep_flag, show_system_progs_flag, sys_ok_flag, test_flag, test_protos_flag, revert_flag, local_package, prog_list, package_)
@@ -415,5 +415,8 @@ export {
       VUpdateAfniBinariesParameters,
       V__UPDATE_AFNI_BINARIES_METADATA,
       v__update_afni_binaries,
+      v__update_afni_binaries_cargs,
+      v__update_afni_binaries_execute,
+      v__update_afni_binaries_outputs,
       v__update_afni_binaries_params,
 };

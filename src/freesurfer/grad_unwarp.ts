@@ -12,7 +12,7 @@ const GRAD_UNWARP_METADATA: Metadata = {
 
 
 interface GradUnwarpParameters {
-    "__STYXTYPE__": "grad_unwarp";
+    "@type": "freesurfer.grad_unwarp";
     "infile": InputPathType;
     "seriesno"?: string | null | undefined;
     "unwarp_type"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface GradUnwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "grad_unwarp": grad_unwarp_cargs,
+        "freesurfer.grad_unwarp": grad_unwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "grad_unwarp": grad_unwarp_outputs,
+        "freesurfer.grad_unwarp": grad_unwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface GradUnwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file or directory (dcmfile, dcmdir, or mghfile)
+ * @param outfile Output file in MGH format
+ * @param seriesno DICOM series number, required if input is a directory
+ * @param unwarp_type Gradient unwarping displacement type or map file (required for MGH file)
+ * @param nojac Do not perform jacobian correction when unwarping
+ * @param corfov Resample to Coronal FOV
+ * @param cor Output in COR format instead of MGH
+ * @param interp Interpolation method (cubic, linear, nearest, spline)
+ * @param matlab_binary Path to the Matlab binary, version 6.5 or higher required
+ *
+ * @returns Parameter dictionary
+ */
 function grad_unwarp_params(
     infile: InputPathType,
     outfile: string,
@@ -91,23 +106,8 @@ function grad_unwarp_params(
     interp: string | null = null,
     matlab_binary: string | null = "/space/lyon/6/pubsw/common/matlab/6.5/bin/matlab",
 ): GradUnwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file or directory (dcmfile, dcmdir, or mghfile)
-     * @param outfile Output file in MGH format
-     * @param seriesno DICOM series number, required if input is a directory
-     * @param unwarp_type Gradient unwarping displacement type or map file (required for MGH file)
-     * @param nojac Do not perform jacobian correction when unwarping
-     * @param corfov Resample to Coronal FOV
-     * @param cor Output in COR format instead of MGH
-     * @param interp Interpolation method (cubic, linear, nearest, spline)
-     * @param matlab_binary Path to the Matlab binary, version 6.5 or higher required
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "grad_unwarp" as const,
+        "@type": "freesurfer.grad_unwarp" as const,
         "infile": infile,
         "nojac": nojac,
         "corfov": corfov,
@@ -130,18 +130,18 @@ function grad_unwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function grad_unwarp_cargs(
     params: GradUnwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("grad_unwarp");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -186,18 +186,18 @@ function grad_unwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function grad_unwarp_outputs(
     params: GradUnwarpParameters,
     execution: Execution,
 ): GradUnwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GradUnwarpOutputs = {
         root: execution.outputFile("."),
         mgh_output: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -207,22 +207,22 @@ function grad_unwarp_outputs(
 }
 
 
+/**
+ * Convert, dewarp, and resample DICOM files to MGH files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
+ */
 function grad_unwarp_execute(
     params: GradUnwarpParameters,
     execution: Execution,
 ): GradUnwarpOutputs {
-    /**
-     * Convert, dewarp, and resample DICOM files to MGH files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = grad_unwarp_cargs(params, execution)
     const ret = grad_unwarp_outputs(params, execution)
@@ -231,6 +231,26 @@ function grad_unwarp_execute(
 }
 
 
+/**
+ * Convert, dewarp, and resample DICOM files to MGH files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input file or directory (dcmfile, dcmdir, or mghfile)
+ * @param outfile Output file in MGH format
+ * @param seriesno DICOM series number, required if input is a directory
+ * @param unwarp_type Gradient unwarping displacement type or map file (required for MGH file)
+ * @param nojac Do not perform jacobian correction when unwarping
+ * @param corfov Resample to Coronal FOV
+ * @param cor Output in COR format instead of MGH
+ * @param interp Interpolation method (cubic, linear, nearest, spline)
+ * @param matlab_binary Path to the Matlab binary, version 6.5 or higher required
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
+ */
 function grad_unwarp(
     infile: InputPathType,
     outfile: string,
@@ -243,26 +263,6 @@ function grad_unwarp(
     matlab_binary: string | null = "/space/lyon/6/pubsw/common/matlab/6.5/bin/matlab",
     runner: Runner | null = null,
 ): GradUnwarpOutputs {
-    /**
-     * Convert, dewarp, and resample DICOM files to MGH files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input file or directory (dcmfile, dcmdir, or mghfile)
-     * @param outfile Output file in MGH format
-     * @param seriesno DICOM series number, required if input is a directory
-     * @param unwarp_type Gradient unwarping displacement type or map file (required for MGH file)
-     * @param nojac Do not perform jacobian correction when unwarping
-     * @param corfov Resample to Coronal FOV
-     * @param cor Output in COR format instead of MGH
-     * @param interp Interpolation method (cubic, linear, nearest, spline)
-     * @param matlab_binary Path to the Matlab binary, version 6.5 or higher required
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GRAD_UNWARP_METADATA);
     const params = grad_unwarp_params(infile, outfile, seriesno, unwarp_type, nojac, corfov, cor, interp, matlab_binary)
@@ -275,5 +275,8 @@ export {
       GradUnwarpOutputs,
       GradUnwarpParameters,
       grad_unwarp,
+      grad_unwarp_cargs,
+      grad_unwarp_execute,
+      grad_unwarp_outputs,
       grad_unwarp_params,
 };

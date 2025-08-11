@@ -12,7 +12,7 @@ const MRIS_ESTIMATE_WM_METADATA: Metadata = {
 
 
 interface MrisEstimateWmParameters {
-    "__STYXTYPE__": "mris_estimate_wm";
+    "@type": "freesurfer.mris_estimate_wm";
     "subjs": Array<string>;
     "hemi": string;
     "sdir"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface MrisEstimateWmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_estimate_wm": mris_estimate_wm_cargs,
+        "freesurfer.mris_estimate_wm": mris_estimate_wm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface MrisEstimateWmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjs List of subjects to process.
+ * @param hemi Hemisphere to reconstruct (lh or rh).
+ * @param sdir Override SUBJECTS_DIR.
+ * @param model Override default model.
+ * @param suffix Suffix of output surface (default is 'topofit').
+ * @param gpu Use the GPU.
+ * @param rsi Remove self-intersecting faces during the deformation.
+ * @param single_iter Prevent deformation steps from running more than once.
+ * @param vol Subject volume to use as input.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_estimate_wm_params(
     subjs: Array<string>,
     hemi: string,
@@ -82,23 +97,8 @@ function mris_estimate_wm_params(
     single_iter: boolean = false,
     vol: string | null = null,
 ): MrisEstimateWmParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjs List of subjects to process.
-     * @param hemi Hemisphere to reconstruct (lh or rh).
-     * @param sdir Override SUBJECTS_DIR.
-     * @param model Override default model.
-     * @param suffix Suffix of output surface (default is 'topofit').
-     * @param gpu Use the GPU.
-     * @param rsi Remove self-intersecting faces during the deformation.
-     * @param single_iter Prevent deformation steps from running more than once.
-     * @param vol Subject volume to use as input.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_estimate_wm" as const,
+        "@type": "freesurfer.mris_estimate_wm" as const,
         "subjs": subjs,
         "hemi": hemi,
         "gpu": gpu,
@@ -121,18 +121,18 @@ function mris_estimate_wm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_estimate_wm_cargs(
     params: MrisEstimateWmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_estimate_wm");
     cargs.push(
@@ -180,18 +180,18 @@ function mris_estimate_wm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_estimate_wm_outputs(
     params: MrisEstimateWmParameters,
     execution: Execution,
 ): MrisEstimateWmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisEstimateWmOutputs = {
         root: execution.outputFile("."),
     };
@@ -199,22 +199,22 @@ function mris_estimate_wm_outputs(
 }
 
 
+/**
+ * Tool to estimate white matter surfaces using MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
+ */
 function mris_estimate_wm_execute(
     params: MrisEstimateWmParameters,
     execution: Execution,
 ): MrisEstimateWmOutputs {
-    /**
-     * Tool to estimate white matter surfaces using MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_estimate_wm_cargs(params, execution)
     const ret = mris_estimate_wm_outputs(params, execution)
@@ -223,6 +223,26 @@ function mris_estimate_wm_execute(
 }
 
 
+/**
+ * Tool to estimate white matter surfaces using MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjs List of subjects to process.
+ * @param hemi Hemisphere to reconstruct (lh or rh).
+ * @param sdir Override SUBJECTS_DIR.
+ * @param model Override default model.
+ * @param suffix Suffix of output surface (default is 'topofit').
+ * @param gpu Use the GPU.
+ * @param rsi Remove self-intersecting faces during the deformation.
+ * @param single_iter Prevent deformation steps from running more than once.
+ * @param vol Subject volume to use as input.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
+ */
 function mris_estimate_wm(
     subjs: Array<string>,
     hemi: string,
@@ -235,26 +255,6 @@ function mris_estimate_wm(
     vol: string | null = null,
     runner: Runner | null = null,
 ): MrisEstimateWmOutputs {
-    /**
-     * Tool to estimate white matter surfaces using MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjs List of subjects to process.
-     * @param hemi Hemisphere to reconstruct (lh or rh).
-     * @param sdir Override SUBJECTS_DIR.
-     * @param model Override default model.
-     * @param suffix Suffix of output surface (default is 'topofit').
-     * @param gpu Use the GPU.
-     * @param rsi Remove self-intersecting faces during the deformation.
-     * @param single_iter Prevent deformation steps from running more than once.
-     * @param vol Subject volume to use as input.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ESTIMATE_WM_METADATA);
     const params = mris_estimate_wm_params(subjs, hemi, sdir, model, suffix, gpu, rsi, single_iter, vol)
@@ -267,5 +267,8 @@ export {
       MrisEstimateWmOutputs,
       MrisEstimateWmParameters,
       mris_estimate_wm,
+      mris_estimate_wm_cargs,
+      mris_estimate_wm_execute,
+      mris_estimate_wm_outputs,
       mris_estimate_wm_params,
 };

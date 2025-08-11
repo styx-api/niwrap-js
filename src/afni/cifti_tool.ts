@@ -12,7 +12,7 @@ const CIFTI_TOOL_METADATA: Metadata = {
 
 
 interface CiftiToolParameters {
-    "__STYXTYPE__": "cifti_tool";
+    "@type": "afni.cifti_tool";
     "input_file": InputPathType;
     "as_cext": boolean;
     "disp_cext": boolean;
@@ -25,35 +25,35 @@ interface CiftiToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti_tool": cifti_tool_cargs,
+        "afni.cifti_tool": cifti_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti_tool": cifti_tool_outputs,
+        "afni.cifti_tool": cifti_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface CiftiToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Specify input dataset
+ * @param as_cext Process the input as just an extension
+ * @param disp_cext Display the CIFTI extension
+ * @param eval_cext Evaluate the CIFTI extension
+ * @param eval_type Method for evaluation of axml elements
+ * @param output_file Where to write output
+ * @param verbose_level Set the verbose level
+ * @param verbose_read_level Set verbose level when reading
+ * @param both_verbose_levels Apply both -verb options
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_tool_params(
     input_file: InputPathType,
     as_cext: boolean = false,
@@ -87,23 +102,8 @@ function cifti_tool_params(
     verbose_read_level: number | null = null,
     both_verbose_levels: number | null = null,
 ): CiftiToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Specify input dataset
-     * @param as_cext Process the input as just an extension
-     * @param disp_cext Display the CIFTI extension
-     * @param eval_cext Evaluate the CIFTI extension
-     * @param eval_type Method for evaluation of axml elements
-     * @param output_file Where to write output
-     * @param verbose_level Set the verbose level
-     * @param verbose_read_level Set verbose level when reading
-     * @param both_verbose_levels Apply both -verb options
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti_tool" as const,
+        "@type": "afni.cifti_tool" as const,
         "input_file": input_file,
         "as_cext": as_cext,
         "disp_cext": disp_cext,
@@ -128,18 +128,18 @@ function cifti_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_tool_cargs(
     params: CiftiToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cifti_tool");
     cargs.push(
@@ -189,18 +189,18 @@ function cifti_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_tool_outputs(
     params: CiftiToolParameters,
     execution: Execution,
 ): CiftiToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiToolOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -209,22 +209,22 @@ function cifti_tool_outputs(
 }
 
 
+/**
+ * Example tool for reading/writing CIFTI-2 datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
+ */
 function cifti_tool_execute(
     params: CiftiToolParameters,
     execution: Execution,
 ): CiftiToolOutputs {
-    /**
-     * Example tool for reading/writing CIFTI-2 datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_tool_cargs(params, execution)
     const ret = cifti_tool_outputs(params, execution)
@@ -233,6 +233,26 @@ function cifti_tool_execute(
 }
 
 
+/**
+ * Example tool for reading/writing CIFTI-2 datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Specify input dataset
+ * @param as_cext Process the input as just an extension
+ * @param disp_cext Display the CIFTI extension
+ * @param eval_cext Evaluate the CIFTI extension
+ * @param eval_type Method for evaluation of axml elements
+ * @param output_file Where to write output
+ * @param verbose_level Set the verbose level
+ * @param verbose_read_level Set verbose level when reading
+ * @param both_verbose_levels Apply both -verb options
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
+ */
 function cifti_tool(
     input_file: InputPathType,
     as_cext: boolean = false,
@@ -245,26 +265,6 @@ function cifti_tool(
     both_verbose_levels: number | null = null,
     runner: Runner | null = null,
 ): CiftiToolOutputs {
-    /**
-     * Example tool for reading/writing CIFTI-2 datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Specify input dataset
-     * @param as_cext Process the input as just an extension
-     * @param disp_cext Display the CIFTI extension
-     * @param eval_cext Evaluate the CIFTI extension
-     * @param eval_type Method for evaluation of axml elements
-     * @param output_file Where to write output
-     * @param verbose_level Set the verbose level
-     * @param verbose_read_level Set verbose level when reading
-     * @param both_verbose_levels Apply both -verb options
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_TOOL_METADATA);
     const params = cifti_tool_params(input_file, as_cext, disp_cext, eval_cext, eval_type, output_file, verbose_level, verbose_read_level, both_verbose_levels)
@@ -277,5 +277,8 @@ export {
       CiftiToolOutputs,
       CiftiToolParameters,
       cifti_tool,
+      cifti_tool_cargs,
+      cifti_tool_execute,
+      cifti_tool_outputs,
       cifti_tool_params,
 };

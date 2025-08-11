@@ -12,7 +12,7 @@ const MRI_MCSIM_METADATA: Metadata = {
 
 
 interface MriMcsimParameters {
-    "__STYXTYPE__": "mri_mcsim";
+    "@type": "freesurfer.mri_mcsim";
     "top_output_dir": string;
     "base_name": string;
     "surface": Array<string>;
@@ -39,35 +39,35 @@ interface MriMcsimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mcsim": mri_mcsim_cargs,
+        "freesurfer.mri_mcsim": mri_mcsim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_mcsim": mri_mcsim_outputs,
+        "freesurfer.mri_mcsim": mri_mcsim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,6 +102,35 @@ interface MriMcsimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param top_output_dir Top output directory
+ * @param base_name Base name for CSD files
+ * @param surface Subject name and hemisphere for the surface (e.g., subjectname lh)
+ * @param num_repetitions Number of repetitions for the simulation
+ * @param fwhm_values Full Width at Half Maximum values for smoothing
+ * @param fwhm_max Maximum FWHM for simulation (default 30)
+ * @param avg_vertex_area Report cluster area based on average vertex area
+ * @param random_seed Random seed value (default is based on Time of Day)
+ * @param label_file Label file for masking (default is ?h.cortex.label)
+ * @param mask_file Mask file instead of label
+ * @param no_label Do not use a label to mask
+ * @param no_save_mask Do not save mask to output
+ * @param surface_name Surface name (default is white)
+ * @param log_file Log file for the output
+ * @param done_file Done file to create when finished
+ * @param stop_file Stop file (default is ourdir/mri_mcsim.stop)
+ * @param save_file Save file (default is ourdir/mri_mcsim.save)
+ * @param save_iter Save output after each iteration
+ * @param subjects_dir Subjects directory
+ * @param debug Turn on debugging
+ * @param check_opts Check options do not run
+ * @param help Display help message
+ * @param version Display version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mcsim_params(
     top_output_dir: string,
     base_name: string,
@@ -127,37 +156,8 @@ function mri_mcsim_params(
     help: boolean = false,
     version: boolean = false,
 ): MriMcsimParameters {
-    /**
-     * Build parameters.
-    
-     * @param top_output_dir Top output directory
-     * @param base_name Base name for CSD files
-     * @param surface Subject name and hemisphere for the surface (e.g., subjectname lh)
-     * @param num_repetitions Number of repetitions for the simulation
-     * @param fwhm_values Full Width at Half Maximum values for smoothing
-     * @param fwhm_max Maximum FWHM for simulation (default 30)
-     * @param avg_vertex_area Report cluster area based on average vertex area
-     * @param random_seed Random seed value (default is based on Time of Day)
-     * @param label_file Label file for masking (default is ?h.cortex.label)
-     * @param mask_file Mask file instead of label
-     * @param no_label Do not use a label to mask
-     * @param no_save_mask Do not save mask to output
-     * @param surface_name Surface name (default is white)
-     * @param log_file Log file for the output
-     * @param done_file Done file to create when finished
-     * @param stop_file Stop file (default is ourdir/mri_mcsim.stop)
-     * @param save_file Save file (default is ourdir/mri_mcsim.save)
-     * @param save_iter Save output after each iteration
-     * @param subjects_dir Subjects directory
-     * @param debug Turn on debugging
-     * @param check_opts Check options do not run
-     * @param help Display help message
-     * @param version Display version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mcsim" as const,
+        "@type": "freesurfer.mri_mcsim" as const,
         "top_output_dir": top_output_dir,
         "base_name": base_name,
         "surface": surface,
@@ -208,18 +208,18 @@ function mri_mcsim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mcsim_cargs(
     params: MriMcsimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mcsim");
     cargs.push(
@@ -332,18 +332,18 @@ function mri_mcsim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mcsim_outputs(
     params: MriMcsimParameters,
     execution: Execution,
 ): MriMcsimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMcsimOutputs = {
         root: execution.outputFile("."),
         csd_output: execution.outputFile([(params["top_output_dir"] ?? null), "/", (params["base_name"] ?? null), ".csd"].join('')),
@@ -355,22 +355,22 @@ function mri_mcsim_outputs(
 }
 
 
+/**
+ * Monte Carlo simulation tool for surface-based multiple comparisons.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
+ */
 function mri_mcsim_execute(
     params: MriMcsimParameters,
     execution: Execution,
 ): MriMcsimOutputs {
-    /**
-     * Monte Carlo simulation tool for surface-based multiple comparisons.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mcsim_cargs(params, execution)
     const ret = mri_mcsim_outputs(params, execution)
@@ -379,6 +379,40 @@ function mri_mcsim_execute(
 }
 
 
+/**
+ * Monte Carlo simulation tool for surface-based multiple comparisons.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param top_output_dir Top output directory
+ * @param base_name Base name for CSD files
+ * @param surface Subject name and hemisphere for the surface (e.g., subjectname lh)
+ * @param num_repetitions Number of repetitions for the simulation
+ * @param fwhm_values Full Width at Half Maximum values for smoothing
+ * @param fwhm_max Maximum FWHM for simulation (default 30)
+ * @param avg_vertex_area Report cluster area based on average vertex area
+ * @param random_seed Random seed value (default is based on Time of Day)
+ * @param label_file Label file for masking (default is ?h.cortex.label)
+ * @param mask_file Mask file instead of label
+ * @param no_label Do not use a label to mask
+ * @param no_save_mask Do not save mask to output
+ * @param surface_name Surface name (default is white)
+ * @param log_file Log file for the output
+ * @param done_file Done file to create when finished
+ * @param stop_file Stop file (default is ourdir/mri_mcsim.stop)
+ * @param save_file Save file (default is ourdir/mri_mcsim.save)
+ * @param save_iter Save output after each iteration
+ * @param subjects_dir Subjects directory
+ * @param debug Turn on debugging
+ * @param check_opts Check options do not run
+ * @param help Display help message
+ * @param version Display version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
+ */
 function mri_mcsim(
     top_output_dir: string,
     base_name: string,
@@ -405,40 +439,6 @@ function mri_mcsim(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriMcsimOutputs {
-    /**
-     * Monte Carlo simulation tool for surface-based multiple comparisons.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param top_output_dir Top output directory
-     * @param base_name Base name for CSD files
-     * @param surface Subject name and hemisphere for the surface (e.g., subjectname lh)
-     * @param num_repetitions Number of repetitions for the simulation
-     * @param fwhm_values Full Width at Half Maximum values for smoothing
-     * @param fwhm_max Maximum FWHM for simulation (default 30)
-     * @param avg_vertex_area Report cluster area based on average vertex area
-     * @param random_seed Random seed value (default is based on Time of Day)
-     * @param label_file Label file for masking (default is ?h.cortex.label)
-     * @param mask_file Mask file instead of label
-     * @param no_label Do not use a label to mask
-     * @param no_save_mask Do not save mask to output
-     * @param surface_name Surface name (default is white)
-     * @param log_file Log file for the output
-     * @param done_file Done file to create when finished
-     * @param stop_file Stop file (default is ourdir/mri_mcsim.stop)
-     * @param save_file Save file (default is ourdir/mri_mcsim.save)
-     * @param save_iter Save output after each iteration
-     * @param subjects_dir Subjects directory
-     * @param debug Turn on debugging
-     * @param check_opts Check options do not run
-     * @param help Display help message
-     * @param version Display version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MCSIM_METADATA);
     const params = mri_mcsim_params(top_output_dir, base_name, surface, num_repetitions, fwhm_values, fwhm_max, avg_vertex_area, random_seed, label_file, mask_file, no_label, no_save_mask, surface_name, log_file, done_file, stop_file, save_file, save_iter, subjects_dir, debug, check_opts, help, version)
@@ -451,5 +451,8 @@ export {
       MriMcsimOutputs,
       MriMcsimParameters,
       mri_mcsim,
+      mri_mcsim_cargs,
+      mri_mcsim_execute,
+      mri_mcsim_outputs,
       mri_mcsim_params,
 };

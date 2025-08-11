@@ -12,7 +12,7 @@ const CONVERT_MATRIX4_TO_MATRIX2_METADATA: Metadata = {
 
 
 interface ConvertMatrix4ToMatrix2IndividualFibersParameters {
-    "__STYXTYPE__": "individual_fibers";
+    "@type": "workbench.convert-matrix4-to-matrix2.individual_fibers";
     "fiber_1": string;
     "fiber_2": string;
     "fiber_3": string;
@@ -20,7 +20,7 @@ interface ConvertMatrix4ToMatrix2IndividualFibersParameters {
 
 
 interface ConvertMatrix4ToMatrix2Parameters {
-    "__STYXTYPE__": "convert-matrix4-to-matrix2";
+    "@type": "workbench.convert-matrix4-to-matrix2";
     "matrix4_wbsparse": string;
     "counts_out": string;
     "opt_distances_distance_out"?: string | null | undefined;
@@ -28,37 +28,37 @@ interface ConvertMatrix4ToMatrix2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_cargs,
-        "individual_fibers": convert_matrix4_to_matrix2_individual_fibers_cargs,
+        "workbench.convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_cargs,
+        "workbench.convert-matrix4-to-matrix2.individual_fibers": convert_matrix4_to_matrix2_individual_fibers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_outputs,
-        "individual_fibers": convert_matrix4_to_matrix2_individual_fibers_outputs,
+        "workbench.convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_outputs,
+        "workbench.convert-matrix4-to-matrix2.individual_fibers": convert_matrix4_to_matrix2_individual_fibers_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,22 +89,22 @@ interface ConvertMatrix4ToMatrix2IndividualFibersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fiber_1 output file for first fiber
+ * @param fiber_2 output file for second fiber
+ * @param fiber_3 output file for third fiber
+ *
+ * @returns Parameter dictionary
+ */
 function convert_matrix4_to_matrix2_individual_fibers_params(
     fiber_1: string,
     fiber_2: string,
     fiber_3: string,
 ): ConvertMatrix4ToMatrix2IndividualFibersParameters {
-    /**
-     * Build parameters.
-    
-     * @param fiber_1 output file for first fiber
-     * @param fiber_2 output file for second fiber
-     * @param fiber_3 output file for third fiber
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "individual_fibers" as const,
+        "@type": "workbench.convert-matrix4-to-matrix2.individual_fibers" as const,
         "fiber_1": fiber_1,
         "fiber_2": fiber_2,
         "fiber_3": fiber_3,
@@ -113,18 +113,18 @@ function convert_matrix4_to_matrix2_individual_fibers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_matrix4_to_matrix2_individual_fibers_cargs(
     params: ConvertMatrix4ToMatrix2IndividualFibersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-individual-fibers");
     cargs.push((params["fiber_1"] ?? null));
@@ -134,18 +134,18 @@ function convert_matrix4_to_matrix2_individual_fibers_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_matrix4_to_matrix2_individual_fibers_outputs(
     params: ConvertMatrix4ToMatrix2IndividualFibersParameters,
     execution: Execution,
 ): ConvertMatrix4ToMatrix2IndividualFibersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertMatrix4ToMatrix2IndividualFibersOutputs = {
         root: execution.outputFile("."),
         fiber_1: execution.outputFile([(params["fiber_1"] ?? null)].join('')),
@@ -181,24 +181,24 @@ interface ConvertMatrix4ToMatrix2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix4_wbsparse a wbsparse matrix4 file
+ * @param counts_out the total fiber counts, as a cifti file
+ * @param opt_distances_distance_out output average trajectory distance: the distances, as a cifti file
+ * @param individual_fibers output files for each fiber direction
+ *
+ * @returns Parameter dictionary
+ */
 function convert_matrix4_to_matrix2_params(
     matrix4_wbsparse: string,
     counts_out: string,
     opt_distances_distance_out: string | null = null,
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
 ): ConvertMatrix4ToMatrix2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix4_wbsparse a wbsparse matrix4 file
-     * @param counts_out the total fiber counts, as a cifti file
-     * @param opt_distances_distance_out output average trajectory distance: the distances, as a cifti file
-     * @param individual_fibers output files for each fiber direction
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convert-matrix4-to-matrix2" as const,
+        "@type": "workbench.convert-matrix4-to-matrix2" as const,
         "matrix4_wbsparse": matrix4_wbsparse,
         "counts_out": counts_out,
     };
@@ -212,18 +212,18 @@ function convert_matrix4_to_matrix2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_matrix4_to_matrix2_cargs(
     params: ConvertMatrix4ToMatrix2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-convert-matrix4-to-matrix2");
@@ -236,52 +236,52 @@ function convert_matrix4_to_matrix2_cargs(
         );
     }
     if ((params["individual_fibers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["individual_fibers"] ?? null).__STYXTYPE__)((params["individual_fibers"] ?? null), execution));
+        cargs.push(...dynCargs((params["individual_fibers"] ?? null)["@type"])((params["individual_fibers"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_matrix4_to_matrix2_outputs(
     params: ConvertMatrix4ToMatrix2Parameters,
     execution: Execution,
 ): ConvertMatrix4ToMatrix2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertMatrix4ToMatrix2Outputs = {
         root: execution.outputFile("."),
         counts_out: execution.outputFile([(params["counts_out"] ?? null)].join('')),
         opt_distances_distance_out: ((params["opt_distances_distance_out"] ?? null) !== null) ? execution.outputFile([(params["opt_distances_distance_out"] ?? null)].join('')) : null,
-        individual_fibers: (dynOutputs((params["individual_fibers"] ?? null).__STYXTYPE__)?.((params["individual_fibers"] ?? null), execution) ?? null),
+        individual_fibers: (dynOutputs((params["individual_fibers"] ?? null)["@type"])?.((params["individual_fibers"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Generates a matrix2 cifti from matrix4 wbsparse.
+ *
+ * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
+ */
 function convert_matrix4_to_matrix2_execute(
     params: ConvertMatrix4ToMatrix2Parameters,
     execution: Execution,
 ): ConvertMatrix4ToMatrix2Outputs {
-    /**
-     * Generates a matrix2 cifti from matrix4 wbsparse.
-     * 
-     * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
-     */
     params = execution.params(params)
     const cargs = convert_matrix4_to_matrix2_cargs(params, execution)
     const ret = convert_matrix4_to_matrix2_outputs(params, execution)
@@ -290,6 +290,23 @@ function convert_matrix4_to_matrix2_execute(
 }
 
 
+/**
+ * Generates a matrix2 cifti from matrix4 wbsparse.
+ *
+ * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param matrix4_wbsparse a wbsparse matrix4 file
+ * @param counts_out the total fiber counts, as a cifti file
+ * @param opt_distances_distance_out output average trajectory distance: the distances, as a cifti file
+ * @param individual_fibers output files for each fiber direction
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
+ */
 function convert_matrix4_to_matrix2(
     matrix4_wbsparse: string,
     counts_out: string,
@@ -297,23 +314,6 @@ function convert_matrix4_to_matrix2(
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
-    /**
-     * Generates a matrix2 cifti from matrix4 wbsparse.
-     * 
-     * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param matrix4_wbsparse a wbsparse matrix4 file
-     * @param counts_out the total fiber counts, as a cifti file
-     * @param opt_distances_distance_out output average trajectory distance: the distances, as a cifti file
-     * @param individual_fibers output files for each fiber direction
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_MATRIX4_TO_MATRIX2_METADATA);
     const params = convert_matrix4_to_matrix2_params(matrix4_wbsparse, counts_out, opt_distances_distance_out, individual_fibers)
@@ -328,6 +328,11 @@ export {
       ConvertMatrix4ToMatrix2Outputs,
       ConvertMatrix4ToMatrix2Parameters,
       convert_matrix4_to_matrix2,
+      convert_matrix4_to_matrix2_cargs,
+      convert_matrix4_to_matrix2_execute,
+      convert_matrix4_to_matrix2_individual_fibers_cargs,
+      convert_matrix4_to_matrix2_individual_fibers_outputs,
       convert_matrix4_to_matrix2_individual_fibers_params,
+      convert_matrix4_to_matrix2_outputs,
       convert_matrix4_to_matrix2_params,
 };

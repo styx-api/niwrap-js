@@ -12,41 +12,41 @@ const IREPIFITVOL_GLNX64_METADATA: Metadata = {
 
 
 interface IrepifitvolGlnx64Parameters {
-    "__STYXTYPE__": "irepifitvol.glnx64";
+    "@type": "freesurfer.irepifitvol.glnx64";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "irepifitvol.glnx64": irepifitvol_glnx64_cargs,
+        "freesurfer.irepifitvol.glnx64": irepifitvol_glnx64_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "irepifitvol.glnx64": irepifitvol_glnx64_outputs,
+        "freesurfer.irepifitvol.glnx64": irepifitvol_glnx64_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface IrepifitvolGlnx64Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file The input volume file to be processed.
+ * @param output_file The path to save the output volume file after fitting.
+ *
+ * @returns Parameter dictionary
+ */
 function irepifitvol_glnx64_params(
     input_file: InputPathType,
     output_file: string,
 ): IrepifitvolGlnx64Parameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file The input volume file to be processed.
-     * @param output_file The path to save the output volume file after fitting.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "irepifitvol.glnx64" as const,
+        "@type": "freesurfer.irepifitvol.glnx64" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function irepifitvol_glnx64_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function irepifitvol_glnx64_cargs(
     params: IrepifitvolGlnx64Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("irepifitvol.glnx64");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function irepifitvol_glnx64_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function irepifitvol_glnx64_outputs(
     params: IrepifitvolGlnx64Parameters,
     execution: Execution,
 ): IrepifitvolGlnx64Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IrepifitvolGlnx64Outputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function irepifitvol_glnx64_outputs(
 }
 
 
+/**
+ * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
+ */
 function irepifitvol_glnx64_execute(
     params: IrepifitvolGlnx64Parameters,
     execution: Execution,
 ): IrepifitvolGlnx64Outputs {
-    /**
-     * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
-     */
     params = execution.params(params)
     const cargs = irepifitvol_glnx64_cargs(params, execution)
     const ret = irepifitvol_glnx64_outputs(params, execution)
@@ -154,24 +154,24 @@ function irepifitvol_glnx64_execute(
 }
 
 
+/**
+ * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file The input volume file to be processed.
+ * @param output_file The path to save the output volume file after fitting.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
+ */
 function irepifitvol_glnx64(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): IrepifitvolGlnx64Outputs {
-    /**
-     * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file The input volume file to be processed.
-     * @param output_file The path to save the output volume file after fitting.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IREPIFITVOL_GLNX64_METADATA);
     const params = irepifitvol_glnx64_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       IrepifitvolGlnx64Outputs,
       IrepifitvolGlnx64Parameters,
       irepifitvol_glnx64,
+      irepifitvol_glnx64_cargs,
+      irepifitvol_glnx64_execute,
+      irepifitvol_glnx64_outputs,
       irepifitvol_glnx64_params,
 };

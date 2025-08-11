@@ -12,41 +12,41 @@ const SEGMENT_HA_T2_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT2ShParameters {
-    "__STYXTYPE__": "segmentHA_T2.sh";
+    "@type": "freesurfer.segmentHA_T2.sh";
     "input_image": InputPathType;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentHA_T2.sh": segment_ha_t2_sh_cargs,
+        "freesurfer.segmentHA_T2.sh": segment_ha_t2_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segmentHA_T2.sh": segment_ha_t2_sh_outputs,
+        "freesurfer.segmentHA_T2.sh": segment_ha_t2_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface SegmentHaT2ShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input T2-weighted MRI image file
+ * @param output_directory Output directory for segmented structures
+ *
+ * @returns Parameter dictionary
+ */
 function segment_ha_t2_sh_params(
     input_image: InputPathType,
     output_directory: string,
 ): SegmentHaT2ShParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input T2-weighted MRI image file
-     * @param output_directory Output directory for segmented structures
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentHA_T2.sh" as const,
+        "@type": "freesurfer.segmentHA_T2.sh" as const,
         "input_image": input_image,
         "output_directory": output_directory,
     };
@@ -94,18 +94,18 @@ function segment_ha_t2_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_ha_t2_sh_cargs(
     params: SegmentHaT2ShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentHA_T2.sh");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -114,18 +114,18 @@ function segment_ha_t2_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_ha_t2_sh_outputs(
     params: SegmentHaT2ShParameters,
     execution: Execution,
 ): SegmentHaT2ShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentHaT2ShOutputs = {
         root: execution.outputFile("."),
         left_hemisphere_labels: execution.outputFile([(params["output_directory"] ?? null), "/lh.hippoAmygLabels-T2.v21.mgz"].join('')),
@@ -135,22 +135,22 @@ function segment_ha_t2_sh_outputs(
 }
 
 
+/**
+ * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
+ */
 function segment_ha_t2_sh_execute(
     params: SegmentHaT2ShParameters,
     execution: Execution,
 ): SegmentHaT2ShOutputs {
-    /**
-     * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_ha_t2_sh_cargs(params, execution)
     const ret = segment_ha_t2_sh_outputs(params, execution)
@@ -159,24 +159,24 @@ function segment_ha_t2_sh_execute(
 }
 
 
+/**
+ * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input T2-weighted MRI image file
+ * @param output_directory Output directory for segmented structures
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
+ */
 function segment_ha_t2_sh(
     input_image: InputPathType,
     output_directory: string,
     runner: Runner | null = null,
 ): SegmentHaT2ShOutputs {
-    /**
-     * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input T2-weighted MRI image file
-     * @param output_directory Output directory for segmented structures
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_HA_T2_SH_METADATA);
     const params = segment_ha_t2_sh_params(input_image, output_directory)
@@ -189,5 +189,8 @@ export {
       SegmentHaT2ShOutputs,
       SegmentHaT2ShParameters,
       segment_ha_t2_sh,
+      segment_ha_t2_sh_cargs,
+      segment_ha_t2_sh_execute,
+      segment_ha_t2_sh_outputs,
       segment_ha_t2_sh_params,
 };

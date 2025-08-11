@@ -12,7 +12,7 @@ const V_3D_TTO1_D_METADATA: Metadata = {
 
 
 interface V3dTto1DParameters {
-    "__STYXTYPE__": "3dTto1D";
+    "@type": "afni.3dTto1D";
     "input_dataset": InputPathType;
     "method": string;
     "automask": boolean;
@@ -22,35 +22,35 @@ interface V3dTto1DParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTto1D": v_3d_tto1_d_cargs,
+        "afni.3dTto1D": v_3d_tto1_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTto1D": v_3d_tto1_d_outputs,
+        "afni.3dTto1D": v_3d_tto1_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dTto1DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Specify input dataset. This should be a set of 3D time series. If the input is in 1D format, a transpose operator will typically be required.
+ * @param method Specify 4D to 1D conversion method. Methods include: enorm, dvars, srms, shift_srms, mdiff, smdiff, 4095_count, 4095_frac, 4095_warn.
+ * @param automask Restrict computation to automask
+ * @param mask Restrict computation to given mask
+ * @param prefix Specify output file. Default is stdout
+ * @param verbose Specify verbose level. Default is 1
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tto1_d_params(
     input_dataset: InputPathType,
     method: string,
@@ -81,20 +93,8 @@ function v_3d_tto1_d_params(
     prefix: string | null = null,
     verbose: number | null = null,
 ): V3dTto1DParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Specify input dataset. This should be a set of 3D time series. If the input is in 1D format, a transpose operator will typically be required.
-     * @param method Specify 4D to 1D conversion method. Methods include: enorm, dvars, srms, shift_srms, mdiff, smdiff, 4095_count, 4095_frac, 4095_warn.
-     * @param automask Restrict computation to automask
-     * @param mask Restrict computation to given mask
-     * @param prefix Specify output file. Default is stdout
-     * @param verbose Specify verbose level. Default is 1
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTto1D" as const,
+        "@type": "afni.3dTto1D" as const,
         "input_dataset": input_dataset,
         "method": method,
         "automask": automask,
@@ -112,18 +112,18 @@ function v_3d_tto1_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tto1_d_cargs(
     params: V3dTto1DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTto1D");
     cargs.push(
@@ -159,18 +159,18 @@ function v_3d_tto1_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tto1_d_outputs(
     params: V3dTto1DParameters,
     execution: Execution,
 ): V3dTto1DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTto1DOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -179,22 +179,22 @@ function v_3d_tto1_d_outputs(
 }
 
 
+/**
+ * Collapse a 4D time series to a 1D time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
+ */
 function v_3d_tto1_d_execute(
     params: V3dTto1DParameters,
     execution: Execution,
 ): V3dTto1DOutputs {
-    /**
-     * Collapse a 4D time series to a 1D time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tto1_d_cargs(params, execution)
     const ret = v_3d_tto1_d_outputs(params, execution)
@@ -203,6 +203,23 @@ function v_3d_tto1_d_execute(
 }
 
 
+/**
+ * Collapse a 4D time series to a 1D time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Specify input dataset. This should be a set of 3D time series. If the input is in 1D format, a transpose operator will typically be required.
+ * @param method Specify 4D to 1D conversion method. Methods include: enorm, dvars, srms, shift_srms, mdiff, smdiff, 4095_count, 4095_frac, 4095_warn.
+ * @param automask Restrict computation to automask
+ * @param mask Restrict computation to given mask
+ * @param prefix Specify output file. Default is stdout
+ * @param verbose Specify verbose level. Default is 1
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
+ */
 function v_3d_tto1_d(
     input_dataset: InputPathType,
     method: string,
@@ -212,23 +229,6 @@ function v_3d_tto1_d(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): V3dTto1DOutputs {
-    /**
-     * Collapse a 4D time series to a 1D time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Specify input dataset. This should be a set of 3D time series. If the input is in 1D format, a transpose operator will typically be required.
-     * @param method Specify 4D to 1D conversion method. Methods include: enorm, dvars, srms, shift_srms, mdiff, smdiff, 4095_count, 4095_frac, 4095_warn.
-     * @param automask Restrict computation to automask
-     * @param mask Restrict computation to given mask
-     * @param prefix Specify output file. Default is stdout
-     * @param verbose Specify verbose level. Default is 1
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TTO1_D_METADATA);
     const params = v_3d_tto1_d_params(input_dataset, method, automask, mask, prefix, verbose)
@@ -241,5 +241,8 @@ export {
       V3dTto1DParameters,
       V_3D_TTO1_D_METADATA,
       v_3d_tto1_d,
+      v_3d_tto1_d_cargs,
+      v_3d_tto1_d_execute,
+      v_3d_tto1_d_outputs,
       v_3d_tto1_d_params,
 };

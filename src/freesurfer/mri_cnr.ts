@@ -12,7 +12,7 @@ const MRI_CNR_METADATA: Metadata = {
 
 
 interface MriCnrParameters {
-    "__STYXTYPE__": "mri_cnr";
+    "@type": "freesurfer.mri_cnr";
     "surf_dir": string;
     "volume_files": Array<InputPathType>;
     "slope"?: Array<string> | null | undefined;
@@ -24,33 +24,33 @@ interface MriCnrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_cnr": mri_cnr_cargs,
+        "freesurfer.mri_cnr": mri_cnr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MriCnrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_dir Directory containing surface data.
+ * @param volume_files Volumes to process.
+ * @param slope Compute slope and write to files labeled with slope_fname. Requires four additional values: dist_in, dist_out, step_in, and step_out.
+ * @param logfile Log CNR to specified logfile. Will contain 8 values in a specific order: gray_white_cnr, gray_csf_cnr, white_mean, gray_mean, csf_mean, sqrt(white_var), sqrt(gray_var), sqrt(csf_var).
+ * @param labels Read hemisphere labels from specified left and right hemisphere files.
+ * @param print_total_cnr Print only the total CNR to stdout.
+ * @param version_flag Print software version information and quit.
+ * @param help_flag Print usage information and quit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_cnr_params(
     surf_dir: string,
     volume_files: Array<InputPathType>,
@@ -80,22 +94,8 @@ function mri_cnr_params(
     version_flag: boolean = false,
     help_flag: boolean = false,
 ): MriCnrParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_dir Directory containing surface data.
-     * @param volume_files Volumes to process.
-     * @param slope Compute slope and write to files labeled with slope_fname. Requires four additional values: dist_in, dist_out, step_in, and step_out.
-     * @param logfile Log CNR to specified logfile. Will contain 8 values in a specific order: gray_white_cnr, gray_csf_cnr, white_mean, gray_mean, csf_mean, sqrt(white_var), sqrt(gray_var), sqrt(csf_var).
-     * @param labels Read hemisphere labels from specified left and right hemisphere files.
-     * @param print_total_cnr Print only the total CNR to stdout.
-     * @param version_flag Print software version information and quit.
-     * @param help_flag Print usage information and quit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_cnr" as const,
+        "@type": "freesurfer.mri_cnr" as const,
         "surf_dir": surf_dir,
         "volume_files": volume_files,
         "print_total_cnr": print_total_cnr,
@@ -115,18 +115,18 @@ function mri_cnr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_cnr_cargs(
     params: MriCnrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_cnr");
     cargs.push((params["surf_dir"] ?? null));
@@ -162,18 +162,18 @@ function mri_cnr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_cnr_outputs(
     params: MriCnrParameters,
     execution: Execution,
 ): MriCnrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCnrOutputs = {
         root: execution.outputFile("."),
     };
@@ -181,22 +181,22 @@ function mri_cnr_outputs(
 }
 
 
+/**
+ * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
+ */
 function mri_cnr_execute(
     params: MriCnrParameters,
     execution: Execution,
 ): MriCnrOutputs {
-    /**
-     * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_cnr_cargs(params, execution)
     const ret = mri_cnr_outputs(params, execution)
@@ -205,6 +205,25 @@ function mri_cnr_execute(
 }
 
 
+/**
+ * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surf_dir Directory containing surface data.
+ * @param volume_files Volumes to process.
+ * @param slope Compute slope and write to files labeled with slope_fname. Requires four additional values: dist_in, dist_out, step_in, and step_out.
+ * @param logfile Log CNR to specified logfile. Will contain 8 values in a specific order: gray_white_cnr, gray_csf_cnr, white_mean, gray_mean, csf_mean, sqrt(white_var), sqrt(gray_var), sqrt(csf_var).
+ * @param labels Read hemisphere labels from specified left and right hemisphere files.
+ * @param print_total_cnr Print only the total CNR to stdout.
+ * @param version_flag Print software version information and quit.
+ * @param help_flag Print usage information and quit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
+ */
 function mri_cnr(
     surf_dir: string,
     volume_files: Array<InputPathType>,
@@ -216,25 +235,6 @@ function mri_cnr(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCnrOutputs {
-    /**
-     * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surf_dir Directory containing surface data.
-     * @param volume_files Volumes to process.
-     * @param slope Compute slope and write to files labeled with slope_fname. Requires four additional values: dist_in, dist_out, step_in, and step_out.
-     * @param logfile Log CNR to specified logfile. Will contain 8 values in a specific order: gray_white_cnr, gray_csf_cnr, white_mean, gray_mean, csf_mean, sqrt(white_var), sqrt(gray_var), sqrt(csf_var).
-     * @param labels Read hemisphere labels from specified left and right hemisphere files.
-     * @param print_total_cnr Print only the total CNR to stdout.
-     * @param version_flag Print software version information and quit.
-     * @param help_flag Print usage information and quit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CNR_METADATA);
     const params = mri_cnr_params(surf_dir, volume_files, slope, logfile, labels, print_total_cnr, version_flag, help_flag)
@@ -247,5 +247,8 @@ export {
       MriCnrOutputs,
       MriCnrParameters,
       mri_cnr,
+      mri_cnr_cargs,
+      mri_cnr_execute,
+      mri_cnr_outputs,
       mri_cnr_params,
 };

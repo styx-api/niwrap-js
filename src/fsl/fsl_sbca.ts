@@ -12,7 +12,7 @@ const FSL_SBCA_METADATA: Metadata = {
 
 
 interface FslSbcaParameters {
-    "__STYXTYPE__": "fsl_sbca";
+    "@type": "fsl.fsl_sbca";
     "infile": InputPathType;
     "seed": InputPathType;
     "target": InputPathType;
@@ -33,35 +33,35 @@ interface FslSbcaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_sbca": fsl_sbca_cargs,
+        "fsl.fsl_sbca": fsl_sbca_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_sbca": fsl_sbca_outputs,
+        "fsl.fsl_sbca": fsl_sbca_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,29 @@ interface FslSbcaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file name (4D image file)
+ * @param seed Seed voxel coordinate or file name of seed mask (3D/4D file)
+ * @param target File name of target mask(s) (3D or 4D file)
+ * @param out Output file base name
+ * @param reg_flag Perform time series regression rather than classification to targets
+ * @param conf_files File name (or comma-separated list of file names) for confound ASCII text files
+ * @param seed_data File name of 4D data file for the seed
+ * @param binarise_flag Binarise spatial maps prior to calculation of time courses
+ * @param mean_flag Use mean instead of Eigenvariates for calculation of time courses
+ * @param abs_cc_flag Use maximum absolute value instead of maximum value of the cross-correlations
+ * @param order Number of Eigenvariates (default 1)
+ * @param out_seeds_flag Output seed mask image as <basename>_seeds
+ * @param out_seedmask_flag Output seed mask image as <basename>_seedmask
+ * @param out_ttcs_flag Output target time courses as <basename>_ttc<X>.txt
+ * @param out_conf_flag Output confound time courses as <basename>_confounds.txt
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help text
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_sbca_params(
     infile: InputPathType,
     seed: InputPathType,
@@ -115,31 +138,8 @@ function fsl_sbca_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): FslSbcaParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file name (4D image file)
-     * @param seed Seed voxel coordinate or file name of seed mask (3D/4D file)
-     * @param target File name of target mask(s) (3D or 4D file)
-     * @param out Output file base name
-     * @param reg_flag Perform time series regression rather than classification to targets
-     * @param conf_files File name (or comma-separated list of file names) for confound ASCII text files
-     * @param seed_data File name of 4D data file for the seed
-     * @param binarise_flag Binarise spatial maps prior to calculation of time courses
-     * @param mean_flag Use mean instead of Eigenvariates for calculation of time courses
-     * @param abs_cc_flag Use maximum absolute value instead of maximum value of the cross-correlations
-     * @param order Number of Eigenvariates (default 1)
-     * @param out_seeds_flag Output seed mask image as <basename>_seeds
-     * @param out_seedmask_flag Output seed mask image as <basename>_seedmask
-     * @param out_ttcs_flag Output target time courses as <basename>_ttc<X>.txt
-     * @param out_conf_flag Output confound time courses as <basename>_confounds.txt
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help text
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_sbca" as const,
+        "@type": "fsl.fsl_sbca" as const,
         "infile": infile,
         "seed": seed,
         "target": target,
@@ -168,18 +168,18 @@ function fsl_sbca_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_sbca_cargs(
     params: FslSbcaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_sbca");
     cargs.push(
@@ -250,18 +250,18 @@ function fsl_sbca_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_sbca_outputs(
     params: FslSbcaParameters,
     execution: Execution,
 ): FslSbcaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslSbcaOutputs = {
         root: execution.outputFile("."),
         output_seed_mask_image: execution.outputFile([(params["out"] ?? null), "_seeds"].join('')),
@@ -273,22 +273,22 @@ function fsl_sbca_outputs(
 }
 
 
+/**
+ * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
+ */
 function fsl_sbca_execute(
     params: FslSbcaParameters,
     execution: Execution,
 ): FslSbcaOutputs {
-    /**
-     * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_sbca_cargs(params, execution)
     const ret = fsl_sbca_outputs(params, execution)
@@ -297,6 +297,34 @@ function fsl_sbca_execute(
 }
 
 
+/**
+ * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input file name (4D image file)
+ * @param seed Seed voxel coordinate or file name of seed mask (3D/4D file)
+ * @param target File name of target mask(s) (3D or 4D file)
+ * @param out Output file base name
+ * @param reg_flag Perform time series regression rather than classification to targets
+ * @param conf_files File name (or comma-separated list of file names) for confound ASCII text files
+ * @param seed_data File name of 4D data file for the seed
+ * @param binarise_flag Binarise spatial maps prior to calculation of time courses
+ * @param mean_flag Use mean instead of Eigenvariates for calculation of time courses
+ * @param abs_cc_flag Use maximum absolute value instead of maximum value of the cross-correlations
+ * @param order Number of Eigenvariates (default 1)
+ * @param out_seeds_flag Output seed mask image as <basename>_seeds
+ * @param out_seedmask_flag Output seed mask image as <basename>_seedmask
+ * @param out_ttcs_flag Output target time courses as <basename>_ttc<X>.txt
+ * @param out_conf_flag Output confound time courses as <basename>_confounds.txt
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help text
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
+ */
 function fsl_sbca(
     infile: InputPathType,
     seed: InputPathType,
@@ -317,34 +345,6 @@ function fsl_sbca(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslSbcaOutputs {
-    /**
-     * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input file name (4D image file)
-     * @param seed Seed voxel coordinate or file name of seed mask (3D/4D file)
-     * @param target File name of target mask(s) (3D or 4D file)
-     * @param out Output file base name
-     * @param reg_flag Perform time series regression rather than classification to targets
-     * @param conf_files File name (or comma-separated list of file names) for confound ASCII text files
-     * @param seed_data File name of 4D data file for the seed
-     * @param binarise_flag Binarise spatial maps prior to calculation of time courses
-     * @param mean_flag Use mean instead of Eigenvariates for calculation of time courses
-     * @param abs_cc_flag Use maximum absolute value instead of maximum value of the cross-correlations
-     * @param order Number of Eigenvariates (default 1)
-     * @param out_seeds_flag Output seed mask image as <basename>_seeds
-     * @param out_seedmask_flag Output seed mask image as <basename>_seedmask
-     * @param out_ttcs_flag Output target time courses as <basename>_ttc<X>.txt
-     * @param out_conf_flag Output confound time courses as <basename>_confounds.txt
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help text
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_SBCA_METADATA);
     const params = fsl_sbca_params(infile, seed, target, out, reg_flag, conf_files, seed_data, binarise_flag, mean_flag, abs_cc_flag, order, out_seeds_flag, out_seedmask_flag, out_ttcs_flag, out_conf_flag, verbose_flag, help_flag)
@@ -357,5 +357,8 @@ export {
       FslSbcaOutputs,
       FslSbcaParameters,
       fsl_sbca,
+      fsl_sbca_cargs,
+      fsl_sbca_execute,
+      fsl_sbca_outputs,
       fsl_sbca_params,
 };

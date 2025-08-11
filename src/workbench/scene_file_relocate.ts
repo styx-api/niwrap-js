@@ -12,39 +12,39 @@ const SCENE_FILE_RELOCATE_METADATA: Metadata = {
 
 
 interface SceneFileRelocateParameters {
-    "__STYXTYPE__": "scene-file-relocate";
+    "@type": "workbench.scene-file-relocate";
     "input_scene": string;
     "output_scene": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "scene-file-relocate": scene_file_relocate_cargs,
+        "workbench.scene-file-relocate": scene_file_relocate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface SceneFileRelocateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_scene the scene file to use
+ * @param output_scene output - the new scene file to create
+ *
+ * @returns Parameter dictionary
+ */
 function scene_file_relocate_params(
     input_scene: string,
     output_scene: string,
 ): SceneFileRelocateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_scene the scene file to use
-     * @param output_scene output - the new scene file to create
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "scene-file-relocate" as const,
+        "@type": "workbench.scene-file-relocate" as const,
         "input_scene": input_scene,
         "output_scene": output_scene,
     };
@@ -85,18 +85,18 @@ function scene_file_relocate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scene_file_relocate_cargs(
     params: SceneFileRelocateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-scene-file-relocate");
@@ -106,18 +106,18 @@ function scene_file_relocate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function scene_file_relocate_outputs(
     params: SceneFileRelocateParameters,
     execution: Execution,
 ): SceneFileRelocateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SceneFileRelocateOutputs = {
         root: execution.outputFile("."),
     };
@@ -125,24 +125,24 @@ function scene_file_relocate_outputs(
 }
 
 
+/**
+ * Recreate scene file in new location.
+ *
+ * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
+ */
 function scene_file_relocate_execute(
     params: SceneFileRelocateParameters,
     execution: Execution,
 ): SceneFileRelocateOutputs {
-    /**
-     * Recreate scene file in new location.
-     * 
-     * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
-     */
     params = execution.params(params)
     const cargs = scene_file_relocate_cargs(params, execution)
     const ret = scene_file_relocate_outputs(params, execution)
@@ -151,26 +151,26 @@ function scene_file_relocate_execute(
 }
 
 
+/**
+ * Recreate scene file in new location.
+ *
+ * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input_scene the scene file to use
+ * @param output_scene output - the new scene file to create
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
+ */
 function scene_file_relocate(
     input_scene: string,
     output_scene: string,
     runner: Runner | null = null,
 ): SceneFileRelocateOutputs {
-    /**
-     * Recreate scene file in new location.
-     * 
-     * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input_scene the scene file to use
-     * @param output_scene output - the new scene file to create
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SCENE_FILE_RELOCATE_METADATA);
     const params = scene_file_relocate_params(input_scene, output_scene)
@@ -183,5 +183,8 @@ export {
       SceneFileRelocateOutputs,
       SceneFileRelocateParameters,
       scene_file_relocate,
+      scene_file_relocate_cargs,
+      scene_file_relocate_execute,
+      scene_file_relocate_outputs,
       scene_file_relocate_params,
 };

@@ -12,40 +12,40 @@ const DMRI_GROUP_BY_ENDPOINTS_METADATA: Metadata = {
 
 
 interface DmriGroupByEndpointsParameters {
-    "__STYXTYPE__": "dmri_groupByEndpoints";
+    "@type": "freesurfer.dmri_groupByEndpoints";
     "streamline_file": InputPathType;
     "image_file": InputPathType;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_groupByEndpoints": dmri_group_by_endpoints_cargs,
+        "freesurfer.dmri_groupByEndpoints": dmri_group_by_endpoints_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface DmriGroupByEndpointsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param streamline_file The file containing streamline data.
+ * @param image_file The image file to be used in grouping.
+ * @param output_directory The directory where output will be saved.
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_group_by_endpoints_params(
     streamline_file: InputPathType,
     image_file: InputPathType,
     output_directory: string,
 ): DmriGroupByEndpointsParameters {
-    /**
-     * Build parameters.
-    
-     * @param streamline_file The file containing streamline data.
-     * @param image_file The image file to be used in grouping.
-     * @param output_directory The directory where output will be saved.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_groupByEndpoints" as const,
+        "@type": "freesurfer.dmri_groupByEndpoints" as const,
         "streamline_file": streamline_file,
         "image_file": image_file,
         "output_directory": output_directory,
@@ -89,18 +89,18 @@ function dmri_group_by_endpoints_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_group_by_endpoints_cargs(
     params: DmriGroupByEndpointsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_groupByEndpoints");
     cargs.push(
@@ -119,18 +119,18 @@ function dmri_group_by_endpoints_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_group_by_endpoints_outputs(
     params: DmriGroupByEndpointsParameters,
     execution: Execution,
 ): DmriGroupByEndpointsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriGroupByEndpointsOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function dmri_group_by_endpoints_outputs(
 }
 
 
+/**
+ * A tool to group streamlines by their endpoints using diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
+ */
 function dmri_group_by_endpoints_execute(
     params: DmriGroupByEndpointsParameters,
     execution: Execution,
 ): DmriGroupByEndpointsOutputs {
-    /**
-     * A tool to group streamlines by their endpoints using diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_group_by_endpoints_cargs(params, execution)
     const ret = dmri_group_by_endpoints_outputs(params, execution)
@@ -162,26 +162,26 @@ function dmri_group_by_endpoints_execute(
 }
 
 
+/**
+ * A tool to group streamlines by their endpoints using diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param streamline_file The file containing streamline data.
+ * @param image_file The image file to be used in grouping.
+ * @param output_directory The directory where output will be saved.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
+ */
 function dmri_group_by_endpoints(
     streamline_file: InputPathType,
     image_file: InputPathType,
     output_directory: string,
     runner: Runner | null = null,
 ): DmriGroupByEndpointsOutputs {
-    /**
-     * A tool to group streamlines by their endpoints using diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param streamline_file The file containing streamline data.
-     * @param image_file The image file to be used in grouping.
-     * @param output_directory The directory where output will be saved.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_GROUP_BY_ENDPOINTS_METADATA);
     const params = dmri_group_by_endpoints_params(streamline_file, image_file, output_directory)
@@ -194,5 +194,8 @@ export {
       DmriGroupByEndpointsOutputs,
       DmriGroupByEndpointsParameters,
       dmri_group_by_endpoints,
+      dmri_group_by_endpoints_cargs,
+      dmri_group_by_endpoints_execute,
+      dmri_group_by_endpoints_outputs,
       dmri_group_by_endpoints_params,
 };

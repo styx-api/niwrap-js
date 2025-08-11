@@ -12,7 +12,7 @@ const MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA: Metadata = {
 
 
 interface MrisTransmantleDysplasiaPathsParameters {
-    "__STYXTYPE__": "mris_transmantle_dysplasia_paths";
+    "@type": "freesurfer.mris_transmantle_dysplasia_paths";
     "surface": InputPathType;
     "aseg_volume": InputPathType;
     "intensity_volume": InputPathType;
@@ -23,35 +23,35 @@ interface MrisTransmantleDysplasiaPathsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_cargs,
+        "freesurfer.mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_outputs,
+        "freesurfer.mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisTransmantleDysplasiaPathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface file
+ * @param aseg_volume ASEG volume file
+ * @param intensity_volume Intensity volume file
+ * @param xform Transformation file
+ * @param output_volume Output volume file
+ * @param filter Apply specified filter with low and high values (not implemented yet)
+ * @param noise_sensitivity Noise-sensitivity normalize inverse (default=1)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_transmantle_dysplasia_paths_params(
     surface: InputPathType,
     aseg_volume: InputPathType,
@@ -83,21 +96,8 @@ function mris_transmantle_dysplasia_paths_params(
     filter: Array<number> | null = null,
     noise_sensitivity: boolean = false,
 ): MrisTransmantleDysplasiaPathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface file
-     * @param aseg_volume ASEG volume file
-     * @param intensity_volume Intensity volume file
-     * @param xform Transformation file
-     * @param output_volume Output volume file
-     * @param filter Apply specified filter with low and high values (not implemented yet)
-     * @param noise_sensitivity Noise-sensitivity normalize inverse (default=1)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_transmantle_dysplasia_paths" as const,
+        "@type": "freesurfer.mris_transmantle_dysplasia_paths" as const,
         "surface": surface,
         "aseg_volume": aseg_volume,
         "intensity_volume": intensity_volume,
@@ -112,18 +112,18 @@ function mris_transmantle_dysplasia_paths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_transmantle_dysplasia_paths_cargs(
     params: MrisTransmantleDysplasiaPathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_transmantle_dysplasia_paths");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -144,18 +144,18 @@ function mris_transmantle_dysplasia_paths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_transmantle_dysplasia_paths_outputs(
     params: MrisTransmantleDysplasiaPathsParameters,
     execution: Execution,
 ): MrisTransmantleDysplasiaPathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTransmantleDysplasiaPathsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -164,22 +164,22 @@ function mris_transmantle_dysplasia_paths_outputs(
 }
 
 
+/**
+ * Tool for transmantle dysplasia path computation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
+ */
 function mris_transmantle_dysplasia_paths_execute(
     params: MrisTransmantleDysplasiaPathsParameters,
     execution: Execution,
 ): MrisTransmantleDysplasiaPathsOutputs {
-    /**
-     * Tool for transmantle dysplasia path computation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_transmantle_dysplasia_paths_cargs(params, execution)
     const ret = mris_transmantle_dysplasia_paths_outputs(params, execution)
@@ -188,6 +188,24 @@ function mris_transmantle_dysplasia_paths_execute(
 }
 
 
+/**
+ * Tool for transmantle dysplasia path computation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Surface file
+ * @param aseg_volume ASEG volume file
+ * @param intensity_volume Intensity volume file
+ * @param xform Transformation file
+ * @param output_volume Output volume file
+ * @param filter Apply specified filter with low and high values (not implemented yet)
+ * @param noise_sensitivity Noise-sensitivity normalize inverse (default=1)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
+ */
 function mris_transmantle_dysplasia_paths(
     surface: InputPathType,
     aseg_volume: InputPathType,
@@ -198,24 +216,6 @@ function mris_transmantle_dysplasia_paths(
     noise_sensitivity: boolean = false,
     runner: Runner | null = null,
 ): MrisTransmantleDysplasiaPathsOutputs {
-    /**
-     * Tool for transmantle dysplasia path computation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Surface file
-     * @param aseg_volume ASEG volume file
-     * @param intensity_volume Intensity volume file
-     * @param xform Transformation file
-     * @param output_volume Output volume file
-     * @param filter Apply specified filter with low and high values (not implemented yet)
-     * @param noise_sensitivity Noise-sensitivity normalize inverse (default=1)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA);
     const params = mris_transmantle_dysplasia_paths_params(surface, aseg_volume, intensity_volume, xform, output_volume, filter, noise_sensitivity)
@@ -228,5 +228,8 @@ export {
       MrisTransmantleDysplasiaPathsOutputs,
       MrisTransmantleDysplasiaPathsParameters,
       mris_transmantle_dysplasia_paths,
+      mris_transmantle_dysplasia_paths_cargs,
+      mris_transmantle_dysplasia_paths_execute,
+      mris_transmantle_dysplasia_paths_outputs,
       mris_transmantle_dysplasia_paths_params,
 };

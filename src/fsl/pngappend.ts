@@ -12,39 +12,39 @@ const PNGAPPEND_METADATA: Metadata = {
 
 
 interface PngappendParameters {
-    "__STYXTYPE__": "pngappend";
+    "@type": "fsl.pngappend";
     "input_files_and_options": Array<string>;
     "output_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pngappend": pngappend_cargs,
+        "fsl.pngappend": pngappend_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface PngappendOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files_and_options List of input files and options for appending (e.g., file1.png +3 file2.png -2 file3.png)
+ * @param output_file Output file (e.g., output.png or output.gif)
+ *
+ * @returns Parameter dictionary
+ */
 function pngappend_params(
     input_files_and_options: Array<string>,
     output_file: InputPathType,
 ): PngappendParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files_and_options List of input files and options for appending (e.g., file1.png +3 file2.png -2 file3.png)
-     * @param output_file Output file (e.g., output.png or output.gif)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pngappend" as const,
+        "@type": "fsl.pngappend" as const,
         "input_files_and_options": input_files_and_options,
         "output_file": output_file,
     };
@@ -85,18 +85,18 @@ function pngappend_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pngappend_cargs(
     params: PngappendParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pngappend");
     cargs.push(...(params["input_files_and_options"] ?? null));
@@ -105,18 +105,18 @@ function pngappend_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pngappend_outputs(
     params: PngappendParameters,
     execution: Execution,
 ): PngappendOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PngappendOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function pngappend_outputs(
 }
 
 
+/**
+ * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PngappendOutputs`).
+ */
 function pngappend_execute(
     params: PngappendParameters,
     execution: Execution,
 ): PngappendOutputs {
-    /**
-     * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PngappendOutputs`).
-     */
     params = execution.params(params)
     const cargs = pngappend_cargs(params, execution)
     const ret = pngappend_outputs(params, execution)
@@ -148,24 +148,24 @@ function pngappend_execute(
 }
 
 
+/**
+ * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_files_and_options List of input files and options for appending (e.g., file1.png +3 file2.png -2 file3.png)
+ * @param output_file Output file (e.g., output.png or output.gif)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PngappendOutputs`).
+ */
 function pngappend(
     input_files_and_options: Array<string>,
     output_file: InputPathType,
     runner: Runner | null = null,
 ): PngappendOutputs {
-    /**
-     * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_files_and_options List of input files and options for appending (e.g., file1.png +3 file2.png -2 file3.png)
-     * @param output_file Output file (e.g., output.png or output.gif)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PngappendOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PNGAPPEND_METADATA);
     const params = pngappend_params(input_files_and_options, output_file)
@@ -178,5 +178,8 @@ export {
       PngappendOutputs,
       PngappendParameters,
       pngappend,
+      pngappend_cargs,
+      pngappend_execute,
+      pngappend_outputs,
       pngappend_params,
 };

@@ -12,7 +12,7 @@ const V_1D_APAR2MAT_METADATA: Metadata = {
 
 
 interface V1dApar2matParameters {
-    "__STYXTYPE__": "1dApar2mat";
+    "@type": "afni.1dApar2mat";
     "x_shift": number;
     "y_shift": number;
     "z_shift": number;
@@ -28,33 +28,33 @@ interface V1dApar2matParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dApar2mat": v_1d_apar2mat_cargs,
+        "afni.1dApar2mat": v_1d_apar2mat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface V1dApar2matOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param x_shift x-shift in mm
+ * @param y_shift y-shift in mm
+ * @param z_shift z-shift in mm
+ * @param z_angle z-angle (roll) in degrees
+ * @param x_angle x-angle (pitch) in degrees
+ * @param y_angle y-angle (yaw) in degrees
+ * @param x_scale x-scale factor in [0.10,10.0]
+ * @param y_scale y-scale factor in [0.10,10.0]
+ * @param z_scale z-scale factor in [0.10,10.0]
+ * @param y_x_shear y/x-shear factor in [-0.3333,0.3333]
+ * @param z_x_shear z/x-shear factor in [-0.3333,0.3333]
+ * @param z_y_shear z/y-shear factor in [-0.3333,0.3333]
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_apar2mat_params(
     x_shift: number,
     y_shift: number,
@@ -88,26 +106,8 @@ function v_1d_apar2mat_params(
     z_x_shear: number,
     z_y_shear: number,
 ): V1dApar2matParameters {
-    /**
-     * Build parameters.
-    
-     * @param x_shift x-shift in mm
-     * @param y_shift y-shift in mm
-     * @param z_shift z-shift in mm
-     * @param z_angle z-angle (roll) in degrees
-     * @param x_angle x-angle (pitch) in degrees
-     * @param y_angle y-angle (yaw) in degrees
-     * @param x_scale x-scale factor in [0.10,10.0]
-     * @param y_scale y-scale factor in [0.10,10.0]
-     * @param z_scale z-scale factor in [0.10,10.0]
-     * @param y_x_shear y/x-shear factor in [-0.3333,0.3333]
-     * @param z_x_shear z/x-shear factor in [-0.3333,0.3333]
-     * @param z_y_shear z/y-shear factor in [-0.3333,0.3333]
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dApar2mat" as const,
+        "@type": "afni.1dApar2mat" as const,
         "x_shift": x_shift,
         "y_shift": y_shift,
         "z_shift": z_shift,
@@ -125,18 +125,18 @@ function v_1d_apar2mat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_apar2mat_cargs(
     params: V1dApar2matParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dApar2mat");
     cargs.push(String((params["x_shift"] ?? null)));
@@ -155,18 +155,18 @@ function v_1d_apar2mat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_apar2mat_outputs(
     params: V1dApar2matParameters,
     execution: Execution,
 ): V1dApar2matOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dApar2matOutputs = {
         root: execution.outputFile("."),
     };
@@ -174,22 +174,22 @@ function v_1d_apar2mat_outputs(
 }
 
 
+/**
+ * Computes the affine transformation matrix from the set of 3dAllineate parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
+ */
 function v_1d_apar2mat_execute(
     params: V1dApar2matParameters,
     execution: Execution,
 ): V1dApar2matOutputs {
-    /**
-     * Computes the affine transformation matrix from the set of 3dAllineate parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_apar2mat_cargs(params, execution)
     const ret = v_1d_apar2mat_outputs(params, execution)
@@ -198,6 +198,29 @@ function v_1d_apar2mat_execute(
 }
 
 
+/**
+ * Computes the affine transformation matrix from the set of 3dAllineate parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param x_shift x-shift in mm
+ * @param y_shift y-shift in mm
+ * @param z_shift z-shift in mm
+ * @param z_angle z-angle (roll) in degrees
+ * @param x_angle x-angle (pitch) in degrees
+ * @param y_angle y-angle (yaw) in degrees
+ * @param x_scale x-scale factor in [0.10,10.0]
+ * @param y_scale y-scale factor in [0.10,10.0]
+ * @param z_scale z-scale factor in [0.10,10.0]
+ * @param y_x_shear y/x-shear factor in [-0.3333,0.3333]
+ * @param z_x_shear z/x-shear factor in [-0.3333,0.3333]
+ * @param z_y_shear z/y-shear factor in [-0.3333,0.3333]
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
+ */
 function v_1d_apar2mat(
     x_shift: number,
     y_shift: number,
@@ -213,29 +236,6 @@ function v_1d_apar2mat(
     z_y_shear: number,
     runner: Runner | null = null,
 ): V1dApar2matOutputs {
-    /**
-     * Computes the affine transformation matrix from the set of 3dAllineate parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param x_shift x-shift in mm
-     * @param y_shift y-shift in mm
-     * @param z_shift z-shift in mm
-     * @param z_angle z-angle (roll) in degrees
-     * @param x_angle x-angle (pitch) in degrees
-     * @param y_angle y-angle (yaw) in degrees
-     * @param x_scale x-scale factor in [0.10,10.0]
-     * @param y_scale y-scale factor in [0.10,10.0]
-     * @param z_scale z-scale factor in [0.10,10.0]
-     * @param y_x_shear y/x-shear factor in [-0.3333,0.3333]
-     * @param z_x_shear z/x-shear factor in [-0.3333,0.3333]
-     * @param z_y_shear z/y-shear factor in [-0.3333,0.3333]
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_APAR2MAT_METADATA);
     const params = v_1d_apar2mat_params(x_shift, y_shift, z_shift, z_angle, x_angle, y_angle, x_scale, y_scale, z_scale, y_x_shear, z_x_shear, z_y_shear)
@@ -248,5 +248,8 @@ export {
       V1dApar2matParameters,
       V_1D_APAR2MAT_METADATA,
       v_1d_apar2mat,
+      v_1d_apar2mat_cargs,
+      v_1d_apar2mat_execute,
+      v_1d_apar2mat_outputs,
       v_1d_apar2mat_params,
 };

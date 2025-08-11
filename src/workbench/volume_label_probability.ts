@@ -12,42 +12,42 @@ const VOLUME_LABEL_PROBABILITY_METADATA: Metadata = {
 
 
 interface VolumeLabelProbabilityParameters {
-    "__STYXTYPE__": "volume-label-probability";
+    "@type": "workbench.volume-label-probability";
     "label_maps": InputPathType;
     "probability_out": string;
     "opt_exclude_unlabeled": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-label-probability": volume_label_probability_cargs,
+        "workbench.volume-label-probability": volume_label_probability_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-label-probability": volume_label_probability_outputs,
+        "workbench.volume-label-probability": volume_label_probability_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface VolumeLabelProbabilityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_maps volume label file containing individual label maps from many subjects
+ * @param probability_out the relative frequencies of each label at each voxel
+ * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ *
+ * @returns Parameter dictionary
+ */
 function volume_label_probability_params(
     label_maps: InputPathType,
     probability_out: string,
     opt_exclude_unlabeled: boolean = false,
 ): VolumeLabelProbabilityParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_maps volume label file containing individual label maps from many subjects
-     * @param probability_out the relative frequencies of each label at each voxel
-     * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-label-probability" as const,
+        "@type": "workbench.volume-label-probability" as const,
         "label_maps": label_maps,
         "probability_out": probability_out,
         "opt_exclude_unlabeled": opt_exclude_unlabeled,
@@ -94,18 +94,18 @@ function volume_label_probability_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_label_probability_cargs(
     params: VolumeLabelProbabilityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-label-probability");
@@ -118,18 +118,18 @@ function volume_label_probability_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_label_probability_outputs(
     params: VolumeLabelProbabilityParameters,
     execution: Execution,
 ): VolumeLabelProbabilityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeLabelProbabilityOutputs = {
         root: execution.outputFile("."),
         probability_out: execution.outputFile([(params["probability_out"] ?? null)].join('')),
@@ -138,24 +138,24 @@ function volume_label_probability_outputs(
 }
 
 
+/**
+ * Find frequency of volume labels.
+ *
+ * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
+ */
 function volume_label_probability_execute(
     params: VolumeLabelProbabilityParameters,
     execution: Execution,
 ): VolumeLabelProbabilityOutputs {
-    /**
-     * Find frequency of volume labels.
-     * 
-     * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_label_probability_cargs(params, execution)
     const ret = volume_label_probability_outputs(params, execution)
@@ -164,28 +164,28 @@ function volume_label_probability_execute(
 }
 
 
+/**
+ * Find frequency of volume labels.
+ *
+ * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_maps volume label file containing individual label maps from many subjects
+ * @param probability_out the relative frequencies of each label at each voxel
+ * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
+ */
 function volume_label_probability(
     label_maps: InputPathType,
     probability_out: string,
     opt_exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
-    /**
-     * Find frequency of volume labels.
-     * 
-     * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_maps volume label file containing individual label maps from many subjects
-     * @param probability_out the relative frequencies of each label at each voxel
-     * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_LABEL_PROBABILITY_METADATA);
     const params = volume_label_probability_params(label_maps, probability_out, opt_exclude_unlabeled)
@@ -198,5 +198,8 @@ export {
       VolumeLabelProbabilityOutputs,
       VolumeLabelProbabilityParameters,
       volume_label_probability,
+      volume_label_probability_cargs,
+      volume_label_probability_execute,
+      volume_label_probability_outputs,
       volume_label_probability_params,
 };

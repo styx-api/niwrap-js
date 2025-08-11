@@ -12,7 +12,7 @@ const ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA: Metadata = {
 
 
 interface AntsMotionCorrDiffusionDirectionParameters {
-    "__STYXTYPE__": "antsMotionCorrDiffusionDirection";
+    "@type": "ants.antsMotionCorrDiffusionDirection";
     "scheme": InputPathType;
     "bvec": InputPathType;
     "physical": InputPathType;
@@ -21,35 +21,35 @@ interface AntsMotionCorrDiffusionDirectionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_cargs,
+        "ants.antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_outputs,
+        "ants.antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface AntsMotionCorrDiffusionDirectionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scheme Camino scheme file specify acquisition parameters.
+ * @param bvec bvec image specifying diffusion directions.
+ * @param physical 3D image in dwi space.
+ * @param moco Motion correction parameters from antsMotionCorr.
+ * @param output Specify the output file for corrected directions.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_motion_corr_diffusion_direction_params(
     scheme: InputPathType,
     bvec: InputPathType,
@@ -79,19 +90,8 @@ function ants_motion_corr_diffusion_direction_params(
     moco: InputPathType,
     output: string,
 ): AntsMotionCorrDiffusionDirectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param scheme Camino scheme file specify acquisition parameters.
-     * @param bvec bvec image specifying diffusion directions.
-     * @param physical 3D image in dwi space.
-     * @param moco Motion correction parameters from antsMotionCorr.
-     * @param output Specify the output file for corrected directions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsMotionCorrDiffusionDirection" as const,
+        "@type": "ants.antsMotionCorrDiffusionDirection" as const,
         "scheme": scheme,
         "bvec": bvec,
         "physical": physical,
@@ -102,18 +102,18 @@ function ants_motion_corr_diffusion_direction_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_motion_corr_diffusion_direction_cargs(
     params: AntsMotionCorrDiffusionDirectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsMotionCorrDiffusionDirection");
     cargs.push(
@@ -140,18 +140,18 @@ function ants_motion_corr_diffusion_direction_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_motion_corr_diffusion_direction_outputs(
     params: AntsMotionCorrDiffusionDirectionParameters,
     execution: Execution,
 ): AntsMotionCorrDiffusionDirectionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsMotionCorrDiffusionDirectionOutputs = {
         root: execution.outputFile("."),
         corrected_scheme: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -160,22 +160,22 @@ function ants_motion_corr_diffusion_direction_outputs(
 }
 
 
+/**
+ * This tool adjusts the diffusion scheme for motion correction.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
+ */
 function ants_motion_corr_diffusion_direction_execute(
     params: AntsMotionCorrDiffusionDirectionParameters,
     execution: Execution,
 ): AntsMotionCorrDiffusionDirectionOutputs {
-    /**
-     * This tool adjusts the diffusion scheme for motion correction.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_motion_corr_diffusion_direction_cargs(params, execution)
     const ret = ants_motion_corr_diffusion_direction_outputs(params, execution)
@@ -184,6 +184,22 @@ function ants_motion_corr_diffusion_direction_execute(
 }
 
 
+/**
+ * This tool adjusts the diffusion scheme for motion correction.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param scheme Camino scheme file specify acquisition parameters.
+ * @param bvec bvec image specifying diffusion directions.
+ * @param physical 3D image in dwi space.
+ * @param moco Motion correction parameters from antsMotionCorr.
+ * @param output Specify the output file for corrected directions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
+ */
 function ants_motion_corr_diffusion_direction(
     scheme: InputPathType,
     bvec: InputPathType,
@@ -192,22 +208,6 @@ function ants_motion_corr_diffusion_direction(
     output: string,
     runner: Runner | null = null,
 ): AntsMotionCorrDiffusionDirectionOutputs {
-    /**
-     * This tool adjusts the diffusion scheme for motion correction.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param scheme Camino scheme file specify acquisition parameters.
-     * @param bvec bvec image specifying diffusion directions.
-     * @param physical 3D image in dwi space.
-     * @param moco Motion correction parameters from antsMotionCorr.
-     * @param output Specify the output file for corrected directions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA);
     const params = ants_motion_corr_diffusion_direction_params(scheme, bvec, physical, moco, output)
@@ -220,5 +220,8 @@ export {
       AntsMotionCorrDiffusionDirectionOutputs,
       AntsMotionCorrDiffusionDirectionParameters,
       ants_motion_corr_diffusion_direction,
+      ants_motion_corr_diffusion_direction_cargs,
+      ants_motion_corr_diffusion_direction_execute,
+      ants_motion_corr_diffusion_direction_outputs,
       ants_motion_corr_diffusion_direction_params,
 };

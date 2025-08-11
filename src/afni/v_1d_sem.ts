@@ -12,7 +12,7 @@ const V_1D_SEM_METADATA: Metadata = {
 
 
 interface V1dSemParameters {
-    "__STYXTYPE__": "1dSEM";
+    "@type": "afni.1dSEM";
     "theta": InputPathType;
     "correlation_matrix": InputPathType;
     "residual_variance": InputPathType;
@@ -32,35 +32,35 @@ interface V1dSemParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dSEM": v_1d_sem_cargs,
+        "afni.1dSEM": v_1d_sem_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dSEM": v_1d_sem_outputs,
+        "afni.1dSEM": v_1d_sem_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface V1dSemOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param theta Connection matrix 1D file with initial representation
+ * @param correlation_matrix Correlation matrix 1D file
+ * @param residual_variance Residual variance vector 1D file
+ * @param degrees_of_freedom Degrees of freedom
+ * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
+ * @param number_random_trials Number of random trials before optimization (Default = 100).
+ * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
+ * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
+ * @param verbose Print info every nnnnn steps
+ * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+ * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+ * @param max_paths Maximum number of paths to include (Default = 1000).
+ * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
+ * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+ * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+ * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_sem_params(
     theta: InputPathType,
     correlation_matrix: InputPathType,
@@ -101,30 +123,8 @@ function v_1d_sem_params(
     grow_all: boolean = false,
     leafpicker: boolean = false,
 ): V1dSemParameters {
-    /**
-     * Build parameters.
-    
-     * @param theta Connection matrix 1D file with initial representation
-     * @param correlation_matrix Correlation matrix 1D file
-     * @param residual_variance Residual variance vector 1D file
-     * @param degrees_of_freedom Degrees of freedom
-     * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
-     * @param number_random_trials Number of random trials before optimization (Default = 100).
-     * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
-     * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
-     * @param verbose Print info every nnnnn steps
-     * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
-     * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
-     * @param max_paths Maximum number of paths to include (Default = 1000).
-     * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
-     * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
-     * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
-     * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dSEM" as const,
+        "@type": "afni.1dSEM" as const,
         "theta": theta,
         "correlation_matrix": correlation_matrix,
         "residual_variance": residual_variance,
@@ -158,18 +158,18 @@ function v_1d_sem_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_sem_cargs(
     params: V1dSemParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dSEM");
     cargs.push(
@@ -246,18 +246,18 @@ function v_1d_sem_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_sem_outputs(
     params: V1dSemParameters,
     execution: Execution,
 ): V1dSemOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dSemOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["output.txt"].join('')),
@@ -266,22 +266,22 @@ function v_1d_sem_outputs(
 }
 
 
+/**
+ * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
+ */
 function v_1d_sem_execute(
     params: V1dSemParameters,
     execution: Execution,
 ): V1dSemOutputs {
-    /**
-     * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_sem_cargs(params, execution)
     const ret = v_1d_sem_outputs(params, execution)
@@ -290,6 +290,33 @@ function v_1d_sem_execute(
 }
 
 
+/**
+ * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param theta Connection matrix 1D file with initial representation
+ * @param correlation_matrix Correlation matrix 1D file
+ * @param residual_variance Residual variance vector 1D file
+ * @param degrees_of_freedom Degrees of freedom
+ * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
+ * @param number_random_trials Number of random trials before optimization (Default = 100).
+ * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
+ * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
+ * @param verbose Print info every nnnnn steps
+ * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+ * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
+ * @param max_paths Maximum number of paths to include (Default = 1000).
+ * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
+ * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+ * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
+ * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
+ */
 function v_1d_sem(
     theta: InputPathType,
     correlation_matrix: InputPathType,
@@ -309,33 +336,6 @@ function v_1d_sem(
     leafpicker: boolean = false,
     runner: Runner | null = null,
 ): V1dSemOutputs {
-    /**
-     * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param theta Connection matrix 1D file with initial representation
-     * @param correlation_matrix Correlation matrix 1D file
-     * @param residual_variance Residual variance vector 1D file
-     * @param degrees_of_freedom Degrees of freedom
-     * @param max_iterations Maximum number of iterations for convergence (Default=10000). Values can range from 1 to any positive integer less than 10000.
-     * @param number_random_trials Number of random trials before optimization (Default = 100).
-     * @param limits Lower and upper limits for connection coefficients (Default = -1.0 to 1.0)
-     * @param calculate_cost No modeling at all, just calculate the cost function for the coefficients as given in the theta file.
-     * @param verbose Print info every nnnnn steps
-     * @param tree_growth Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
-     * @param model_search Search for best model by growing a model for one additional coefficient from the previous model for n-1 coefficients.
-     * @param max_paths Maximum number of paths to include (Default = 1000).
-     * @param stop_cost Stop searching for paths when cost function is below this value (Default = 0.1).
-     * @param forest_growth Search over all possible models by comparing models at incrementally increasing number of path coefficients.
-     * @param grow_all Search over all possible models by comparing models at incrementally increasing number of path coefficients.
-     * @param leafpicker Expands the search optimization to look at multiple paths to avoid local minimum. This method is the default technique for tree growth and standard coefficient searches.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_SEM_METADATA);
     const params = v_1d_sem_params(theta, correlation_matrix, residual_variance, degrees_of_freedom, max_iterations, number_random_trials, limits, calculate_cost, verbose, tree_growth, model_search, max_paths, stop_cost, forest_growth, grow_all, leafpicker)
@@ -348,5 +348,8 @@ export {
       V1dSemParameters,
       V_1D_SEM_METADATA,
       v_1d_sem,
+      v_1d_sem_cargs,
+      v_1d_sem_execute,
+      v_1d_sem_outputs,
       v_1d_sem_params,
 };

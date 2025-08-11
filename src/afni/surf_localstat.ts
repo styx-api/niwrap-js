@@ -12,7 +12,7 @@ const SURF_LOCALSTAT_METADATA: Metadata = {
 
 
 interface SurfLocalstatParameters {
-    "__STYXTYPE__": "SurfLocalstat";
+    "@type": "afni.SurfLocalstat";
     "hood"?: number | null | undefined;
     "nbhd_rad"?: number | null | undefined;
     "prefix": string;
@@ -22,35 +22,35 @@ interface SurfLocalstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfLocalstat": surf_localstat_cargs,
+        "afni.SurfLocalstat": surf_localstat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfLocalstat": surf_localstat_outputs,
+        "afni.SurfLocalstat": surf_localstat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface SurfLocalstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix of output data set.
+ * @param stat Compute the specified statistic on the values extracted from the region around each voxel. Options: mean, mode, num, FWHM, ALL.
+ * @param input_dataset Input dataset.
+ * @param surface Input GIFTI surface file.
+ * @param hood Neighborhood of nodes within the specified radius R.
+ * @param nbhd_rad Distance from node n as measured by the shortest distance along the mesh.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_localstat_params(
     prefix: string,
     stat: "mean" | "mode" | "num" | "FWHM" | "ALL",
@@ -81,20 +93,8 @@ function surf_localstat_params(
     hood: number | null = null,
     nbhd_rad: number | null = null,
 ): SurfLocalstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix of output data set.
-     * @param stat Compute the specified statistic on the values extracted from the region around each voxel. Options: mean, mode, num, FWHM, ALL.
-     * @param input_dataset Input dataset.
-     * @param surface Input GIFTI surface file.
-     * @param hood Neighborhood of nodes within the specified radius R.
-     * @param nbhd_rad Distance from node n as measured by the shortest distance along the mesh.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfLocalstat" as const,
+        "@type": "afni.SurfLocalstat" as const,
         "prefix": prefix,
         "stat": stat,
         "input_dataset": input_dataset,
@@ -110,18 +110,18 @@ function surf_localstat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_localstat_cargs(
     params: SurfLocalstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfLocalstat");
     if ((params["hood"] ?? null) !== null) {
@@ -156,18 +156,18 @@ function surf_localstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_localstat_outputs(
     params: SurfLocalstatParameters,
     execution: Execution,
 ): SurfLocalstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfLocalstatOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".niml.dset"].join('')),
@@ -176,22 +176,22 @@ function surf_localstat_outputs(
 }
 
 
+/**
+ * Compute local statistics on a surface mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
+ */
 function surf_localstat_execute(
     params: SurfLocalstatParameters,
     execution: Execution,
 ): SurfLocalstatOutputs {
-    /**
-     * Compute local statistics on a surface mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_localstat_cargs(params, execution)
     const ret = surf_localstat_outputs(params, execution)
@@ -200,6 +200,23 @@ function surf_localstat_execute(
 }
 
 
+/**
+ * Compute local statistics on a surface mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix of output data set.
+ * @param stat Compute the specified statistic on the values extracted from the region around each voxel. Options: mean, mode, num, FWHM, ALL.
+ * @param input_dataset Input dataset.
+ * @param surface Input GIFTI surface file.
+ * @param hood Neighborhood of nodes within the specified radius R.
+ * @param nbhd_rad Distance from node n as measured by the shortest distance along the mesh.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
+ */
 function surf_localstat(
     prefix: string,
     stat: "mean" | "mode" | "num" | "FWHM" | "ALL",
@@ -209,23 +226,6 @@ function surf_localstat(
     nbhd_rad: number | null = null,
     runner: Runner | null = null,
 ): SurfLocalstatOutputs {
-    /**
-     * Compute local statistics on a surface mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix of output data set.
-     * @param stat Compute the specified statistic on the values extracted from the region around each voxel. Options: mean, mode, num, FWHM, ALL.
-     * @param input_dataset Input dataset.
-     * @param surface Input GIFTI surface file.
-     * @param hood Neighborhood of nodes within the specified radius R.
-     * @param nbhd_rad Distance from node n as measured by the shortest distance along the mesh.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_LOCALSTAT_METADATA);
     const params = surf_localstat_params(prefix, stat, input_dataset, surface, hood, nbhd_rad)
@@ -238,5 +238,8 @@ export {
       SurfLocalstatOutputs,
       SurfLocalstatParameters,
       surf_localstat,
+      surf_localstat_cargs,
+      surf_localstat_execute,
+      surf_localstat_outputs,
       surf_localstat_params,
 };

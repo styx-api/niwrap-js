@@ -12,7 +12,7 @@ const EXTRACT_SEG_WAVEFORM_METADATA: Metadata = {
 
 
 interface ExtractSegWaveformParameters {
-    "__STYXTYPE__": "extract_seg_waveform";
+    "@type": "freesurfer.extract_seg_waveform";
     "seg_file": InputPathType;
     "seg_indices": Array<number>;
     "input_volume": InputPathType;
@@ -24,33 +24,33 @@ interface ExtractSegWaveformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "extract_seg_waveform": extract_seg_waveform_cargs,
+        "freesurfer.extract_seg_waveform": extract_seg_waveform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface ExtractSegWaveformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param seg_file Segmentation file
+ * @param seg_indices Segmentation indices, one or more indices can be specified
+ * @param input_volume Input volume
+ * @param reg_file Registration file (.lta)
+ * @param output_file Output waveform file
+ * @param vsm_file Voxel shift map for B0 distortion correction
+ * @param regheader_flag Uses the header information in the registration file
+ * @param demean_flag Remove mean, first, and second order trends
+ *
+ * @returns Parameter dictionary
+ */
 function extract_seg_waveform_params(
     seg_file: InputPathType,
     seg_indices: Array<number>,
@@ -80,22 +94,8 @@ function extract_seg_waveform_params(
     regheader_flag: boolean = false,
     demean_flag: boolean = false,
 ): ExtractSegWaveformParameters {
-    /**
-     * Build parameters.
-    
-     * @param seg_file Segmentation file
-     * @param seg_indices Segmentation indices, one or more indices can be specified
-     * @param input_volume Input volume
-     * @param reg_file Registration file (.lta)
-     * @param output_file Output waveform file
-     * @param vsm_file Voxel shift map for B0 distortion correction
-     * @param regheader_flag Uses the header information in the registration file
-     * @param demean_flag Remove mean, first, and second order trends
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "extract_seg_waveform" as const,
+        "@type": "freesurfer.extract_seg_waveform" as const,
         "seg_file": seg_file,
         "seg_indices": seg_indices,
         "input_volume": input_volume,
@@ -111,18 +111,18 @@ function extract_seg_waveform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_seg_waveform_cargs(
     params: ExtractSegWaveformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("extract_seg_waveform");
     cargs.push(
@@ -161,18 +161,18 @@ function extract_seg_waveform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function extract_seg_waveform_outputs(
     params: ExtractSegWaveformParameters,
     execution: Execution,
 ): ExtractSegWaveformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExtractSegWaveformOutputs = {
         root: execution.outputFile("."),
     };
@@ -180,22 +180,22 @@ function extract_seg_waveform_outputs(
 }
 
 
+/**
+ * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
+ */
 function extract_seg_waveform_execute(
     params: ExtractSegWaveformParameters,
     execution: Execution,
 ): ExtractSegWaveformOutputs {
-    /**
-     * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
-     */
     params = execution.params(params)
     const cargs = extract_seg_waveform_cargs(params, execution)
     const ret = extract_seg_waveform_outputs(params, execution)
@@ -204,6 +204,25 @@ function extract_seg_waveform_execute(
 }
 
 
+/**
+ * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param seg_file Segmentation file
+ * @param seg_indices Segmentation indices, one or more indices can be specified
+ * @param input_volume Input volume
+ * @param reg_file Registration file (.lta)
+ * @param output_file Output waveform file
+ * @param vsm_file Voxel shift map for B0 distortion correction
+ * @param regheader_flag Uses the header information in the registration file
+ * @param demean_flag Remove mean, first, and second order trends
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
+ */
 function extract_seg_waveform(
     seg_file: InputPathType,
     seg_indices: Array<number>,
@@ -215,25 +234,6 @@ function extract_seg_waveform(
     demean_flag: boolean = false,
     runner: Runner | null = null,
 ): ExtractSegWaveformOutputs {
-    /**
-     * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param seg_file Segmentation file
-     * @param seg_indices Segmentation indices, one or more indices can be specified
-     * @param input_volume Input volume
-     * @param reg_file Registration file (.lta)
-     * @param output_file Output waveform file
-     * @param vsm_file Voxel shift map for B0 distortion correction
-     * @param regheader_flag Uses the header information in the registration file
-     * @param demean_flag Remove mean, first, and second order trends
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXTRACT_SEG_WAVEFORM_METADATA);
     const params = extract_seg_waveform_params(seg_file, seg_indices, input_volume, reg_file, output_file, vsm_file, regheader_flag, demean_flag)
@@ -246,5 +246,8 @@ export {
       ExtractSegWaveformOutputs,
       ExtractSegWaveformParameters,
       extract_seg_waveform,
+      extract_seg_waveform_cargs,
+      extract_seg_waveform_execute,
+      extract_seg_waveform_outputs,
       extract_seg_waveform_params,
 };

@@ -12,41 +12,41 @@ const SURFACE_FLIP_LR_METADATA: Metadata = {
 
 
 interface SurfaceFlipLrParameters {
-    "__STYXTYPE__": "surface-flip-lr";
+    "@type": "workbench.surface-flip-lr";
     "surface": InputPathType;
     "surface_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-flip-lr": surface_flip_lr_cargs,
+        "workbench.surface-flip-lr": surface_flip_lr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-flip-lr": surface_flip_lr_outputs,
+        "workbench.surface-flip-lr": surface_flip_lr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SurfaceFlipLrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to flip
+ * @param surface_out the output flipped surface
+ *
+ * @returns Parameter dictionary
+ */
 function surface_flip_lr_params(
     surface: InputPathType,
     surface_out: string,
 ): SurfaceFlipLrParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to flip
-     * @param surface_out the output flipped surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-flip-lr" as const,
+        "@type": "workbench.surface-flip-lr" as const,
         "surface": surface,
         "surface_out": surface_out,
     };
@@ -90,18 +90,18 @@ function surface_flip_lr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_flip_lr_cargs(
     params: SurfaceFlipLrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-flip-lr");
@@ -111,18 +111,18 @@ function surface_flip_lr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_flip_lr_outputs(
     params: SurfaceFlipLrParameters,
     execution: Execution,
 ): SurfaceFlipLrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceFlipLrOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -131,24 +131,24 @@ function surface_flip_lr_outputs(
 }
 
 
+/**
+ * Mirror a surface through the yz plane.
+ *
+ * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
+ */
 function surface_flip_lr_execute(
     params: SurfaceFlipLrParameters,
     execution: Execution,
 ): SurfaceFlipLrOutputs {
-    /**
-     * Mirror a surface through the yz plane.
-     * 
-     * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_flip_lr_cargs(params, execution)
     const ret = surface_flip_lr_outputs(params, execution)
@@ -157,26 +157,26 @@ function surface_flip_lr_execute(
 }
 
 
+/**
+ * Mirror a surface through the yz plane.
+ *
+ * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to flip
+ * @param surface_out the output flipped surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
+ */
 function surface_flip_lr(
     surface: InputPathType,
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
-    /**
-     * Mirror a surface through the yz plane.
-     * 
-     * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to flip
-     * @param surface_out the output flipped surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_FLIP_LR_METADATA);
     const params = surface_flip_lr_params(surface, surface_out)
@@ -189,5 +189,8 @@ export {
       SurfaceFlipLrOutputs,
       SurfaceFlipLrParameters,
       surface_flip_lr,
+      surface_flip_lr_cargs,
+      surface_flip_lr_execute,
+      surface_flip_lr_outputs,
       surface_flip_lr_params,
 };

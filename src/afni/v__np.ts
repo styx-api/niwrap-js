@@ -12,40 +12,40 @@ const V__NP_METADATA: Metadata = {
 
 
 interface VNpParameters {
-    "__STYXTYPE__": "@np";
+    "@type": "afni.@np";
     "prefix": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@np": v__np_cargs,
+        "afni.@np": v__np_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@np": v__np_outputs,
+        "afni.@np": v__np_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VNpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix The prefix to be checked.
+ *
+ * @returns Parameter dictionary
+ */
 function v__np_params(
     prefix: string,
 ): VNpParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix The prefix to be checked.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@np" as const,
+        "@type": "afni.@np" as const,
         "prefix": prefix,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__np_cargs(
     params: VNpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@np");
     cargs.push((params["prefix"] ?? null));
@@ -105,18 +105,18 @@ function v__np_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__np_outputs(
     params: VNpParameters,
     execution: Execution,
 ): VNpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VNpOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["appropriate_prefix.txt"].join('')),
@@ -125,22 +125,22 @@ function v__np_outputs(
 }
 
 
+/**
+ * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VNpOutputs`).
+ */
 function v__np_execute(
     params: VNpParameters,
     execution: Execution,
 ): VNpOutputs {
-    /**
-     * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VNpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__np_cargs(params, execution)
     const ret = v__np_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__np_execute(
 }
 
 
+/**
+ * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix The prefix to be checked.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VNpOutputs`).
+ */
 function v__np(
     prefix: string,
     runner: Runner | null = null,
 ): VNpOutputs {
-    /**
-     * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix The prefix to be checked.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VNpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__NP_METADATA);
     const params = v__np_params(prefix)
@@ -177,5 +177,8 @@ export {
       VNpParameters,
       V__NP_METADATA,
       v__np,
+      v__np_cargs,
+      v__np_execute,
+      v__np_outputs,
       v__np_params,
 };

@@ -12,7 +12,7 @@ const MRI_FUNC2SPH_METADATA: Metadata = {
 
 
 interface MriFunc2sphParameters {
-    "__STYXTYPE__": "mri-func2sph";
+    "@type": "freesurfer.mri-func2sph";
     "instem": string;
     "outstem": string;
     "hemisphere": "lh" | "rh";
@@ -24,33 +24,33 @@ interface MriFunc2sphParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri-func2sph": mri_func2sph_cargs,
+        "freesurfer.mri-func2sph": mri_func2sph_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MriFunc2sphOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param instem Input file stem
+ * @param outstem Output file stem
+ * @param hemisphere Hemisphere to process, can be 'lh' or 'rh'
+ * @param fvitdir Functional vertex information directory
+ * @param hole_filling_iters Number of hole-filling iterations
+ * @param icosahedron_size Size of the icosahedron
+ * @param input_type Type of input data, will be auto-detected if not specified
+ * @param umask New umask value
+ *
+ * @returns Parameter dictionary
+ */
 function mri_func2sph_params(
     instem: string,
     outstem: string,
@@ -80,22 +94,8 @@ function mri_func2sph_params(
     input_type: string | null = null,
     umask: string | null = null,
 ): MriFunc2sphParameters {
-    /**
-     * Build parameters.
-    
-     * @param instem Input file stem
-     * @param outstem Output file stem
-     * @param hemisphere Hemisphere to process, can be 'lh' or 'rh'
-     * @param fvitdir Functional vertex information directory
-     * @param hole_filling_iters Number of hole-filling iterations
-     * @param icosahedron_size Size of the icosahedron
-     * @param input_type Type of input data, will be auto-detected if not specified
-     * @param umask New umask value
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri-func2sph" as const,
+        "@type": "freesurfer.mri-func2sph" as const,
         "instem": instem,
         "outstem": outstem,
         "hemisphere": hemisphere,
@@ -117,18 +117,18 @@ function mri_func2sph_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_func2sph_cargs(
     params: MriFunc2sphParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri-func2sph");
     cargs.push(
@@ -175,18 +175,18 @@ function mri_func2sph_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_func2sph_outputs(
     params: MriFunc2sphParameters,
     execution: Execution,
 ): MriFunc2sphOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFunc2sphOutputs = {
         root: execution.outputFile("."),
     };
@@ -194,22 +194,22 @@ function mri_func2sph_outputs(
 }
 
 
+/**
+ * Maps functional data from volume space to spherical surface space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
+ */
 function mri_func2sph_execute(
     params: MriFunc2sphParameters,
     execution: Execution,
 ): MriFunc2sphOutputs {
-    /**
-     * Maps functional data from volume space to spherical surface space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_func2sph_cargs(params, execution)
     const ret = mri_func2sph_outputs(params, execution)
@@ -218,6 +218,25 @@ function mri_func2sph_execute(
 }
 
 
+/**
+ * Maps functional data from volume space to spherical surface space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param instem Input file stem
+ * @param outstem Output file stem
+ * @param hemisphere Hemisphere to process, can be 'lh' or 'rh'
+ * @param fvitdir Functional vertex information directory
+ * @param hole_filling_iters Number of hole-filling iterations
+ * @param icosahedron_size Size of the icosahedron
+ * @param input_type Type of input data, will be auto-detected if not specified
+ * @param umask New umask value
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
+ */
 function mri_func2sph(
     instem: string,
     outstem: string,
@@ -229,25 +248,6 @@ function mri_func2sph(
     umask: string | null = null,
     runner: Runner | null = null,
 ): MriFunc2sphOutputs {
-    /**
-     * Maps functional data from volume space to spherical surface space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param instem Input file stem
-     * @param outstem Output file stem
-     * @param hemisphere Hemisphere to process, can be 'lh' or 'rh'
-     * @param fvitdir Functional vertex information directory
-     * @param hole_filling_iters Number of hole-filling iterations
-     * @param icosahedron_size Size of the icosahedron
-     * @param input_type Type of input data, will be auto-detected if not specified
-     * @param umask New umask value
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FUNC2SPH_METADATA);
     const params = mri_func2sph_params(instem, outstem, hemisphere, fvitdir, hole_filling_iters, icosahedron_size, input_type, umask)
@@ -260,5 +260,8 @@ export {
       MriFunc2sphOutputs,
       MriFunc2sphParameters,
       mri_func2sph,
+      mri_func2sph_cargs,
+      mri_func2sph_execute,
+      mri_func2sph_outputs,
       mri_func2sph_params,
 };

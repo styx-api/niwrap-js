@@ -12,42 +12,42 @@ const MRIS_REMOVE_NEGATIVE_VERTICES_METADATA: Metadata = {
 
 
 interface MrisRemoveNegativeVerticesParameters {
-    "__STYXTYPE__": "mris_remove_negative_vertices";
+    "@type": "freesurfer.mris_remove_negative_vertices";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_remove_negative_vertices": mris_remove_negative_vertices_cargs,
+        "freesurfer.mris_remove_negative_vertices": mris_remove_negative_vertices_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_remove_negative_vertices": mris_remove_negative_vertices_outputs,
+        "freesurfer.mris_remove_negative_vertices": mris_remove_negative_vertices_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisRemoveNegativeVerticesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_file Input surface file
+ * @param patch_file Patch file name
+ * @param output_patch Output patch file
+ *
+ * @returns Parameter dictionary
+ */
 function mris_remove_negative_vertices_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
 ): MrisRemoveNegativeVerticesParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_file Input surface file
-     * @param patch_file Patch file name
-     * @param output_patch Output patch file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_remove_negative_vertices" as const,
+        "@type": "freesurfer.mris_remove_negative_vertices" as const,
         "surface_file": surface_file,
         "patch_file": patch_file,
         "output_patch": output_patch,
@@ -94,18 +94,18 @@ function mris_remove_negative_vertices_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_remove_negative_vertices_cargs(
     params: MrisRemoveNegativeVerticesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_remove_negative_vertices");
     cargs.push(execution.inputFile((params["surface_file"] ?? null)));
@@ -115,18 +115,18 @@ function mris_remove_negative_vertices_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_remove_negative_vertices_outputs(
     params: MrisRemoveNegativeVerticesParameters,
     execution: Execution,
 ): MrisRemoveNegativeVerticesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRemoveNegativeVerticesOutputs = {
         root: execution.outputFile("."),
         output_patch_file: execution.outputFile([(params["output_patch"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mris_remove_negative_vertices_outputs(
 }
 
 
+/**
+ * This program adds a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
+ */
 function mris_remove_negative_vertices_execute(
     params: MrisRemoveNegativeVerticesParameters,
     execution: Execution,
 ): MrisRemoveNegativeVerticesOutputs {
-    /**
-     * This program adds a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_remove_negative_vertices_cargs(params, execution)
     const ret = mris_remove_negative_vertices_outputs(params, execution)
@@ -159,26 +159,26 @@ function mris_remove_negative_vertices_execute(
 }
 
 
+/**
+ * This program adds a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface_file Input surface file
+ * @param patch_file Patch file name
+ * @param output_patch Output patch file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
+ */
 function mris_remove_negative_vertices(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
     runner: Runner | null = null,
 ): MrisRemoveNegativeVerticesOutputs {
-    /**
-     * This program adds a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface_file Input surface file
-     * @param patch_file Patch file name
-     * @param output_patch Output patch file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REMOVE_NEGATIVE_VERTICES_METADATA);
     const params = mris_remove_negative_vertices_params(surface_file, patch_file, output_patch)
@@ -191,5 +191,8 @@ export {
       MrisRemoveNegativeVerticesOutputs,
       MrisRemoveNegativeVerticesParameters,
       mris_remove_negative_vertices,
+      mris_remove_negative_vertices_cargs,
+      mris_remove_negative_vertices_execute,
+      mris_remove_negative_vertices_outputs,
       mris_remove_negative_vertices_params,
 };

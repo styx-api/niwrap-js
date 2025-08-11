@@ -12,7 +12,7 @@ const RESPONSEMEAN_METADATA: Metadata = {
 
 
 interface ResponsemeanParameters {
-    "__STYXTYPE__": "responsemean";
+    "@type": "mrtrix.responsemean";
     "input_response": Array<InputPathType>;
     "output_response": string;
     "legacy": boolean;
@@ -30,35 +30,35 @@ interface ResponsemeanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "responsemean": responsemean_cargs,
+        "mrtrix.responsemean": responsemean_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "responsemean": responsemean_outputs,
+        "mrtrix.responsemean": responsemean_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface ResponsemeanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_response Input response functions
+ * @param output_response Output mean response function
+ * @param legacy Calculate the mean response function from a set of text files
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config Temporarily set the value of an MRtrix config file entry
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ *
+ * @returns Parameter dictionary
+ */
 function responsemean_params(
     input_response: Array<InputPathType>,
     output_response: string,
@@ -97,28 +117,8 @@ function responsemean_params(
     help: boolean = false,
     version: boolean = false,
 ): ResponsemeanParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_response Input response functions
-     * @param output_response Output mean response function
-     * @param legacy Calculate the mean response function from a set of text files
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config Temporarily set the value of an MRtrix config file entry
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "responsemean" as const,
+        "@type": "mrtrix.responsemean" as const,
         "input_response": input_response,
         "output_response": output_response,
         "legacy": legacy,
@@ -146,18 +146,18 @@ function responsemean_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function responsemean_cargs(
     params: ResponsemeanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("responsemean");
     cargs.push(...(params["input_response"] ?? null).map(f => execution.inputFile(f)));
@@ -214,18 +214,18 @@ function responsemean_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function responsemean_outputs(
     params: ResponsemeanParameters,
     execution: Execution,
 ): ResponsemeanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ResponsemeanOutputs = {
         root: execution.outputFile("."),
         output_response_file: execution.outputFile([(params["output_response"] ?? null)].join('')),
@@ -234,22 +234,22 @@ function responsemean_outputs(
 }
 
 
+/**
+ * Calculate the mean response function from a set of text files.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
+ */
 function responsemean_execute(
     params: ResponsemeanParameters,
     execution: Execution,
 ): ResponsemeanOutputs {
-    /**
-     * Calculate the mean response function from a set of text files.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
-     */
     params = execution.params(params)
     const cargs = responsemean_cargs(params, execution)
     const ret = responsemean_outputs(params, execution)
@@ -258,6 +258,31 @@ function responsemean_execute(
 }
 
 
+/**
+ * Calculate the mean response function from a set of text files.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input_response Input response functions
+ * @param output_response Output mean response function
+ * @param legacy Calculate the mean response function from a set of text files
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config Temporarily set the value of an MRtrix config file entry
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
+ */
 function responsemean(
     input_response: Array<InputPathType>,
     output_response: string,
@@ -275,31 +300,6 @@ function responsemean(
     version: boolean = false,
     runner: Runner | null = null,
 ): ResponsemeanOutputs {
-    /**
-     * Calculate the mean response function from a set of text files.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input_response Input response functions
-     * @param output_response Output mean response function
-     * @param legacy Calculate the mean response function from a set of text files
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config Temporarily set the value of an MRtrix config file entry
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RESPONSEMEAN_METADATA);
     const params = responsemean_params(input_response, output_response, legacy, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version)
@@ -312,5 +312,8 @@ export {
       ResponsemeanOutputs,
       ResponsemeanParameters,
       responsemean,
+      responsemean_cargs,
+      responsemean_execute,
+      responsemean_outputs,
       responsemean_params,
 };

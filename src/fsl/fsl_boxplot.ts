@@ -12,7 +12,7 @@ const FSL_BOXPLOT_METADATA: Metadata = {
 
 
 interface FslBoxplotParameters {
-    "__STYXTYPE__": "fsl_boxplot";
+    "@type": "fsl.fsl_boxplot";
     "input_files": Array<InputPathType>;
     "output_image": string;
     "help_flag": boolean;
@@ -25,35 +25,35 @@ interface FslBoxplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_boxplot": fsl_boxplot_cargs,
+        "fsl.fsl_boxplot": fsl_boxplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_boxplot": fsl_boxplot_outputs,
+        "fsl.fsl_boxplot": fsl_boxplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface FslBoxplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
+ * @param output_image Output filename for the PNG file
+ * @param help_flag Display this help message
+ * @param title Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param x_label X-axis label
+ * @param y_label Y-axis label
+ * @param plot_height Plot height in pixels (default 450)
+ * @param plot_width Plot width in pixels (default 80*#boxplots)
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_boxplot_params(
     input_files: Array<InputPathType>,
     output_image: string,
@@ -87,23 +102,8 @@ function fsl_boxplot_params(
     plot_height: number | null = 450,
     plot_width: number | null = null,
 ): FslBoxplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
-     * @param output_image Output filename for the PNG file
-     * @param help_flag Display this help message
-     * @param title Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param x_label X-axis label
-     * @param y_label Y-axis label
-     * @param plot_height Plot height in pixels (default 450)
-     * @param plot_width Plot width in pixels (default 80*#boxplots)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_boxplot" as const,
+        "@type": "fsl.fsl_boxplot" as const,
         "input_files": input_files,
         "output_image": output_image,
         "help_flag": help_flag,
@@ -130,18 +130,18 @@ function fsl_boxplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_boxplot_cargs(
     params: FslBoxplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_boxplot");
     cargs.push(
@@ -195,18 +195,18 @@ function fsl_boxplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_boxplot_outputs(
     params: FslBoxplotParameters,
     execution: Execution,
 ): FslBoxplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslBoxplotOutputs = {
         root: execution.outputFile("."),
         output_png: execution.outputFile([(params["output_image"] ?? null), ".png"].join('')),
@@ -215,22 +215,22 @@ function fsl_boxplot_outputs(
 }
 
 
+/**
+ * Tool for creating boxplot images from ASCII text matrices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
+ */
 function fsl_boxplot_execute(
     params: FslBoxplotParameters,
     execution: Execution,
 ): FslBoxplotOutputs {
-    /**
-     * Tool for creating boxplot images from ASCII text matrices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_boxplot_cargs(params, execution)
     const ret = fsl_boxplot_outputs(params, execution)
@@ -239,6 +239,26 @@ function fsl_boxplot_execute(
 }
 
 
+/**
+ * Tool for creating boxplot images from ASCII text matrices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
+ * @param output_image Output filename for the PNG file
+ * @param help_flag Display this help message
+ * @param title Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param x_label X-axis label
+ * @param y_label Y-axis label
+ * @param plot_height Plot height in pixels (default 450)
+ * @param plot_width Plot width in pixels (default 80*#boxplots)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
+ */
 function fsl_boxplot(
     input_files: Array<InputPathType>,
     output_image: string,
@@ -251,26 +271,6 @@ function fsl_boxplot(
     plot_width: number | null = null,
     runner: Runner | null = null,
 ): FslBoxplotOutputs {
-    /**
-     * Tool for creating boxplot images from ASCII text matrices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_files Comma-separated list of input file names (ASCII text matrices, one column per boxplot)
-     * @param output_image Output filename for the PNG file
-     * @param help_flag Display this help message
-     * @param title Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param x_label X-axis label
-     * @param y_label Y-axis label
-     * @param plot_height Plot height in pixels (default 450)
-     * @param plot_width Plot width in pixels (default 80*#boxplots)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_BOXPLOT_METADATA);
     const params = fsl_boxplot_params(input_files, output_image, help_flag, title, legend_file, x_label, y_label, plot_height, plot_width)
@@ -283,5 +283,8 @@ export {
       FslBoxplotOutputs,
       FslBoxplotParameters,
       fsl_boxplot,
+      fsl_boxplot_cargs,
+      fsl_boxplot_execute,
+      fsl_boxplot_outputs,
       fsl_boxplot_params,
 };

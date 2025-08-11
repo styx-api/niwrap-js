@@ -12,7 +12,7 @@ const PULSE_METADATA: Metadata = {
 
 
 interface PulseParameters {
-    "__STYXTYPE__": "pulse";
+    "@type": "fsl.pulse";
     "input_file": InputPathType;
     "output_base": string;
     "seq"?: string | null | undefined;
@@ -41,35 +41,35 @@ interface PulseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pulse": pulse_cargs,
+        "fsl.pulse": pulse_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pulse": pulse_outputs,
+        "fsl.pulse": pulse_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface PulseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file 4D digital brain, resolution can be any.
+ * @param output_base Output base name
+ * @param seq Type of pulse sequence; default=epi (epi OR ge)
+ * @param angle Flip angle in degrees; default=90
+ * @param te The time from the first RF to the first echo; default=0.03s
+ * @param tr The time between the two RF pulses applied on the same part of the object; default=3s
+ * @param trslc The time that takes for the acquisition of one slice; default=0.12s
+ * @param nx Resolution in x of the output image; default=64
+ * @param ny Resolution in y of the output image; default=64
+ * @param dx Image voxel x-dimension; default=0.004m
+ * @param dy Image voxel y-dimension; default=0.004m
+ * @param max_g Maximum gradient strength; default=0.055 T/m
+ * @param riset Time it takes for the gradient to reach its max value; default=0.00022s
+ * @param bw Receiving bandwidth; default=100000Hz
+ * @param numvol Number of volumes; default=1
+ * @param numslc Number of slices; default=1
+ * @param slcthk Slice thickness; default=0.006m
+ * @param gap Gap between the slices in meters; default=0m
+ * @param zstart The lowest position in the slice direction in meters; default=0m
+ * @param slcdir Slice acquisition direction/orientation; default=z- (x+,x-, y+,y- or z+,or z-)
+ * @param phasedir Phase encode direction/orientation; default=y+ (x+,x-, y+,y- or z+,or z-)
+ * @param readdir Read-out direction/orientation; default=x+ (x+,x-, y+,y- or z+,or z-)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param kcoord_flag Save k-space coordinates; default=no
+ * @param cover Phase partial Fourier coverage in percentage; default=100 (min=50, max=100)
+ *
+ * @returns Parameter dictionary
+ */
 function pulse_params(
     input_file: InputPathType,
     output_base: string,
@@ -119,39 +150,8 @@ function pulse_params(
     kcoord_flag: boolean = false,
     cover: number | null = null,
 ): PulseParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file 4D digital brain, resolution can be any.
-     * @param output_base Output base name
-     * @param seq Type of pulse sequence; default=epi (epi OR ge)
-     * @param angle Flip angle in degrees; default=90
-     * @param te The time from the first RF to the first echo; default=0.03s
-     * @param tr The time between the two RF pulses applied on the same part of the object; default=3s
-     * @param trslc The time that takes for the acquisition of one slice; default=0.12s
-     * @param nx Resolution in x of the output image; default=64
-     * @param ny Resolution in y of the output image; default=64
-     * @param dx Image voxel x-dimension; default=0.004m
-     * @param dy Image voxel y-dimension; default=0.004m
-     * @param max_g Maximum gradient strength; default=0.055 T/m
-     * @param riset Time it takes for the gradient to reach its max value; default=0.00022s
-     * @param bw Receiving bandwidth; default=100000Hz
-     * @param numvol Number of volumes; default=1
-     * @param numslc Number of slices; default=1
-     * @param slcthk Slice thickness; default=0.006m
-     * @param gap Gap between the slices in meters; default=0m
-     * @param zstart The lowest position in the slice direction in meters; default=0m
-     * @param slcdir Slice acquisition direction/orientation; default=z- (x+,x-, y+,y- or z+,or z-)
-     * @param phasedir Phase encode direction/orientation; default=y+ (x+,x-, y+,y- or z+,or z-)
-     * @param readdir Read-out direction/orientation; default=x+ (x+,x-, y+,y- or z+,or z-)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param kcoord_flag Save k-space coordinates; default=no
-     * @param cover Phase partial Fourier coverage in percentage; default=100 (min=50, max=100)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pulse" as const,
+        "@type": "fsl.pulse" as const,
         "input_file": input_file,
         "output_base": output_base,
         "verbose_flag": verbose_flag,
@@ -224,18 +224,18 @@ function pulse_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pulse_cargs(
     params: PulseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pulse");
     cargs.push(
@@ -382,18 +382,18 @@ function pulse_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pulse_outputs(
     params: PulseParameters,
     execution: Execution,
 ): PulseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PulseOutputs = {
         root: execution.outputFile("."),
         output_pulse_sequence_matrix: execution.outputFile([(params["output_base"] ?? null), "_pulsesequence_matrix"].join('')),
@@ -402,22 +402,22 @@ function pulse_outputs(
 }
 
 
+/**
+ * Generates a pulse sequence matrix for a given digital brain image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PulseOutputs`).
+ */
 function pulse_execute(
     params: PulseParameters,
     execution: Execution,
 ): PulseOutputs {
-    /**
-     * Generates a pulse sequence matrix for a given digital brain image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PulseOutputs`).
-     */
     params = execution.params(params)
     const cargs = pulse_cargs(params, execution)
     const ret = pulse_outputs(params, execution)
@@ -426,6 +426,42 @@ function pulse_execute(
 }
 
 
+/**
+ * Generates a pulse sequence matrix for a given digital brain image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file 4D digital brain, resolution can be any.
+ * @param output_base Output base name
+ * @param seq Type of pulse sequence; default=epi (epi OR ge)
+ * @param angle Flip angle in degrees; default=90
+ * @param te The time from the first RF to the first echo; default=0.03s
+ * @param tr The time between the two RF pulses applied on the same part of the object; default=3s
+ * @param trslc The time that takes for the acquisition of one slice; default=0.12s
+ * @param nx Resolution in x of the output image; default=64
+ * @param ny Resolution in y of the output image; default=64
+ * @param dx Image voxel x-dimension; default=0.004m
+ * @param dy Image voxel y-dimension; default=0.004m
+ * @param max_g Maximum gradient strength; default=0.055 T/m
+ * @param riset Time it takes for the gradient to reach its max value; default=0.00022s
+ * @param bw Receiving bandwidth; default=100000Hz
+ * @param numvol Number of volumes; default=1
+ * @param numslc Number of slices; default=1
+ * @param slcthk Slice thickness; default=0.006m
+ * @param gap Gap between the slices in meters; default=0m
+ * @param zstart The lowest position in the slice direction in meters; default=0m
+ * @param slcdir Slice acquisition direction/orientation; default=z- (x+,x-, y+,y- or z+,or z-)
+ * @param phasedir Phase encode direction/orientation; default=y+ (x+,x-, y+,y- or z+,or z-)
+ * @param readdir Read-out direction/orientation; default=x+ (x+,x-, y+,y- or z+,or z-)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param kcoord_flag Save k-space coordinates; default=no
+ * @param cover Phase partial Fourier coverage in percentage; default=100 (min=50, max=100)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PulseOutputs`).
+ */
 function pulse(
     input_file: InputPathType,
     output_base: string,
@@ -454,42 +490,6 @@ function pulse(
     cover: number | null = null,
     runner: Runner | null = null,
 ): PulseOutputs {
-    /**
-     * Generates a pulse sequence matrix for a given digital brain image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file 4D digital brain, resolution can be any.
-     * @param output_base Output base name
-     * @param seq Type of pulse sequence; default=epi (epi OR ge)
-     * @param angle Flip angle in degrees; default=90
-     * @param te The time from the first RF to the first echo; default=0.03s
-     * @param tr The time between the two RF pulses applied on the same part of the object; default=3s
-     * @param trslc The time that takes for the acquisition of one slice; default=0.12s
-     * @param nx Resolution in x of the output image; default=64
-     * @param ny Resolution in y of the output image; default=64
-     * @param dx Image voxel x-dimension; default=0.004m
-     * @param dy Image voxel y-dimension; default=0.004m
-     * @param max_g Maximum gradient strength; default=0.055 T/m
-     * @param riset Time it takes for the gradient to reach its max value; default=0.00022s
-     * @param bw Receiving bandwidth; default=100000Hz
-     * @param numvol Number of volumes; default=1
-     * @param numslc Number of slices; default=1
-     * @param slcthk Slice thickness; default=0.006m
-     * @param gap Gap between the slices in meters; default=0m
-     * @param zstart The lowest position in the slice direction in meters; default=0m
-     * @param slcdir Slice acquisition direction/orientation; default=z- (x+,x-, y+,y- or z+,or z-)
-     * @param phasedir Phase encode direction/orientation; default=y+ (x+,x-, y+,y- or z+,or z-)
-     * @param readdir Read-out direction/orientation; default=x+ (x+,x-, y+,y- or z+,or z-)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param kcoord_flag Save k-space coordinates; default=no
-     * @param cover Phase partial Fourier coverage in percentage; default=100 (min=50, max=100)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PulseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PULSE_METADATA);
     const params = pulse_params(input_file, output_base, seq, angle, te, tr, trslc, nx, ny, dx, dy, max_g, riset, bw, numvol, numslc, slcthk, gap, zstart, slcdir, phasedir, readdir, verbose_flag, kcoord_flag, cover)
@@ -502,5 +502,8 @@ export {
       PulseOutputs,
       PulseParameters,
       pulse,
+      pulse_cargs,
+      pulse_execute,
+      pulse_outputs,
       pulse_params,
 };

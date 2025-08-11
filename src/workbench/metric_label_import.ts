@@ -12,7 +12,7 @@ const METRIC_LABEL_IMPORT_METADATA: Metadata = {
 
 
 interface MetricLabelImportParameters {
-    "__STYXTYPE__": "metric-label-import";
+    "@type": "workbench.metric-label-import";
     "input": InputPathType;
     "label_list_file": string;
     "output": string;
@@ -23,35 +23,35 @@ interface MetricLabelImportParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-label-import": metric_label_import_cargs,
+        "workbench.metric-label-import": metric_label_import_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-label-import": metric_label_import_outputs,
+        "workbench.metric-label-import": metric_label_import_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MetricLabelImportOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input metric file
+ * @param label_list_file text file containing the values and names for labels
+ * @param output the output gifti label file
+ * @param opt_discard_others set any values not mentioned in the label list to the ??? label
+ * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
+ * @param opt_column_column select a single column to import: the column number or name
+ * @param opt_drop_unused_labels remove any unused label values from the label table
+ *
+ * @returns Parameter dictionary
+ */
 function metric_label_import_params(
     input: InputPathType,
     label_list_file: string,
@@ -83,21 +96,8 @@ function metric_label_import_params(
     opt_column_column: string | null = null,
     opt_drop_unused_labels: boolean = false,
 ): MetricLabelImportParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input metric file
-     * @param label_list_file text file containing the values and names for labels
-     * @param output the output gifti label file
-     * @param opt_discard_others set any values not mentioned in the label list to the ??? label
-     * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
-     * @param opt_column_column select a single column to import: the column number or name
-     * @param opt_drop_unused_labels remove any unused label values from the label table
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-label-import" as const,
+        "@type": "workbench.metric-label-import" as const,
         "input": input,
         "label_list_file": label_list_file,
         "output": output,
@@ -114,18 +114,18 @@ function metric_label_import_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_label_import_cargs(
     params: MetricLabelImportParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-label-import");
@@ -154,18 +154,18 @@ function metric_label_import_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_label_import_outputs(
     params: MetricLabelImportParameters,
     execution: Execution,
 ): MetricLabelImportOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricLabelImportOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -174,32 +174,32 @@ function metric_label_import_outputs(
 }
 
 
+/**
+ * Import a gifti label file from a metric file.
+ *
+ * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
+ *
+ * <labelname>
+ * <key> <red> <green> <blue> <alpha>
+ * ...
+ *
+ * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
+ *
+ * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
+ */
 function metric_label_import_execute(
     params: MetricLabelImportParameters,
     execution: Execution,
 ): MetricLabelImportOutputs {
-    /**
-     * Import a gifti label file from a metric file.
-     * 
-     * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
-     * 
-     * <labelname>
-     * <key> <red> <green> <blue> <alpha>
-     * ...
-     * 
-     * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
-     * 
-     * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_label_import_cargs(params, execution)
     const ret = metric_label_import_outputs(params, execution)
@@ -208,6 +208,34 @@ function metric_label_import_execute(
 }
 
 
+/**
+ * Import a gifti label file from a metric file.
+ *
+ * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
+ *
+ * <labelname>
+ * <key> <red> <green> <blue> <alpha>
+ * ...
+ *
+ * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
+ *
+ * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input the input metric file
+ * @param label_list_file text file containing the values and names for labels
+ * @param output the output gifti label file
+ * @param opt_discard_others set any values not mentioned in the label list to the ??? label
+ * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
+ * @param opt_column_column select a single column to import: the column number or name
+ * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
+ */
 function metric_label_import(
     input: InputPathType,
     label_list_file: string,
@@ -218,34 +246,6 @@ function metric_label_import(
     opt_drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): MetricLabelImportOutputs {
-    /**
-     * Import a gifti label file from a metric file.
-     * 
-     * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
-     * 
-     * <labelname>
-     * <key> <red> <green> <blue> <alpha>
-     * ...
-     * 
-     * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
-     * 
-     * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input the input metric file
-     * @param label_list_file text file containing the values and names for labels
-     * @param output the output gifti label file
-     * @param opt_discard_others set any values not mentioned in the label list to the ??? label
-     * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
-     * @param opt_column_column select a single column to import: the column number or name
-     * @param opt_drop_unused_labels remove any unused label values from the label table
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_LABEL_IMPORT_METADATA);
     const params = metric_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_column_column, opt_drop_unused_labels)
@@ -258,5 +258,8 @@ export {
       MetricLabelImportOutputs,
       MetricLabelImportParameters,
       metric_label_import,
+      metric_label_import_cargs,
+      metric_label_import_execute,
+      metric_label_import_outputs,
       metric_label_import_params,
 };

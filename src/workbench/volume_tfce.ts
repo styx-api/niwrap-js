@@ -12,21 +12,21 @@ const VOLUME_TFCE_METADATA: Metadata = {
 
 
 interface VolumeTfcePresmoothParameters {
-    "__STYXTYPE__": "presmooth";
+    "@type": "workbench.volume-tfce.presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
 
 
 interface VolumeTfceParametersParameters {
-    "__STYXTYPE__": "parameters";
+    "@type": "workbench.volume-tfce.parameters";
     "e": number;
     "h": number;
 }
 
 
 interface VolumeTfceParameters {
-    "__STYXTYPE__": "volume-tfce";
+    "@type": "workbench.volume-tfce";
     "volume_in": InputPathType;
     "volume_out": string;
     "presmooth"?: VolumeTfcePresmoothParameters | null | undefined;
@@ -36,56 +36,56 @@ interface VolumeTfceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-tfce": volume_tfce_cargs,
-        "presmooth": volume_tfce_presmooth_cargs,
-        "parameters": volume_tfce_parameters_cargs,
+        "workbench.volume-tfce": volume_tfce_cargs,
+        "workbench.volume-tfce.presmooth": volume_tfce_presmooth_cargs,
+        "workbench.volume-tfce.parameters": volume_tfce_parameters_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-tfce": volume_tfce_outputs,
+        "workbench.volume-tfce": volume_tfce_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ *
+ * @returns Parameter dictionary
+ */
 function volume_tfce_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
 ): VolumeTfcePresmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
-     * @param opt_fwhm smoothing kernel size is FWHM, not sigma
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "presmooth" as const,
+        "@type": "workbench.volume-tfce.presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -93,18 +93,18 @@ function volume_tfce_presmooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_tfce_presmooth_cargs(
     params: VolumeTfcePresmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
@@ -115,20 +115,20 @@ function volume_tfce_presmooth_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param e exponent for cluster volume (default 0.5)
+ * @param h exponent for threshold value (default 2.0)
+ *
+ * @returns Parameter dictionary
+ */
 function volume_tfce_parameters_params(
     e: number,
     h: number,
 ): VolumeTfceParametersParameters {
-    /**
-     * Build parameters.
-    
-     * @param e exponent for cluster volume (default 0.5)
-     * @param h exponent for threshold value (default 2.0)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "parameters" as const,
+        "@type": "workbench.volume-tfce.parameters" as const,
         "e": e,
         "h": h,
     };
@@ -136,18 +136,18 @@ function volume_tfce_parameters_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_tfce_parameters_cargs(
     params: VolumeTfceParametersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-parameters");
     cargs.push(String((params["e"] ?? null)));
@@ -173,6 +173,18 @@ interface VolumeTfceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the volume to run TFCE on
+ * @param volume_out the output volume
+ * @param presmooth smooth the volume before running TFCE
+ * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
+ * @param parameters set parameters for TFCE integral
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ *
+ * @returns Parameter dictionary
+ */
 function volume_tfce_params(
     volume_in: InputPathType,
     volume_out: string,
@@ -181,20 +193,8 @@ function volume_tfce_params(
     parameters: VolumeTfceParametersParameters | null = null,
     opt_subvolume_subvolume: string | null = null,
 ): VolumeTfceParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the volume to run TFCE on
-     * @param volume_out the output volume
-     * @param presmooth smooth the volume before running TFCE
-     * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
-     * @param parameters set parameters for TFCE integral
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-tfce" as const,
+        "@type": "workbench.volume-tfce" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -214,25 +214,25 @@ function volume_tfce_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_tfce_cargs(
     params: VolumeTfceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-tfce");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null).__STYXTYPE__)((params["presmooth"] ?? null), execution));
+        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_volume"] ?? null) !== null) {
         cargs.push(
@@ -241,7 +241,7 @@ function volume_tfce_cargs(
         );
     }
     if ((params["parameters"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["parameters"] ?? null).__STYXTYPE__)((params["parameters"] ?? null), execution));
+        cargs.push(...dynCargs((params["parameters"] ?? null)["@type"])((params["parameters"] ?? null), execution));
     }
     if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
         cargs.push(
@@ -253,18 +253,18 @@ function volume_tfce_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_tfce_outputs(
     params: VolumeTfceParameters,
     execution: Execution,
 ): VolumeTfceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeTfceOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -273,32 +273,32 @@ function volume_tfce_outputs(
 }
 
 
+/**
+ * Do tfce on a volume file.
+ *
+ * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
+ *
+ * Threshold-free cluster enhancement is a method to increase the relative value of regions that would form clusters in a standard thresholding test.  This is accomplished by evaluating the integral of:
+ *
+ * e(h, p)^E * h^H * dh
+ *
+ * at each voxel p, where h ranges from 0 to the maximum value in the data, and e(h, p) is the extent of the cluster containing voxel p at threshold h.  Negative values are similarly enhanced by negating the data, running the same process, and negating the result.
+ *
+ * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
+ */
 function volume_tfce_execute(
     params: VolumeTfceParameters,
     execution: Execution,
 ): VolumeTfceOutputs {
-    /**
-     * Do tfce on a volume file.
-     * 
-     * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
-     * 
-     * Threshold-free cluster enhancement is a method to increase the relative value of regions that would form clusters in a standard thresholding test.  This is accomplished by evaluating the integral of:
-     * 
-     * e(h, p)^E * h^H * dh
-     * 
-     * at each voxel p, where h ranges from 0 to the maximum value in the data, and e(h, p) is the extent of the cluster containing voxel p at threshold h.  Negative values are similarly enhanced by negating the data, running the same process, and negating the result.
-     * 
-     * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_tfce_cargs(params, execution)
     const ret = volume_tfce_outputs(params, execution)
@@ -307,6 +307,33 @@ function volume_tfce_execute(
 }
 
 
+/**
+ * Do tfce on a volume file.
+ *
+ * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
+ *
+ * Threshold-free cluster enhancement is a method to increase the relative value of regions that would form clusters in a standard thresholding test.  This is accomplished by evaluating the integral of:
+ *
+ * e(h, p)^E * h^H * dh
+ *
+ * at each voxel p, where h ranges from 0 to the maximum value in the data, and e(h, p) is the extent of the cluster containing voxel p at threshold h.  Negative values are similarly enhanced by negating the data, running the same process, and negating the result.
+ *
+ * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the volume to run TFCE on
+ * @param volume_out the output volume
+ * @param presmooth smooth the volume before running TFCE
+ * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
+ * @param parameters set parameters for TFCE integral
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
+ */
 function volume_tfce(
     volume_in: InputPathType,
     volume_out: string,
@@ -316,33 +343,6 @@ function volume_tfce(
     opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
-    /**
-     * Do tfce on a volume file.
-     * 
-     * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
-     * 
-     * Threshold-free cluster enhancement is a method to increase the relative value of regions that would form clusters in a standard thresholding test.  This is accomplished by evaluating the integral of:
-     * 
-     * e(h, p)^E * h^H * dh
-     * 
-     * at each voxel p, where h ranges from 0 to the maximum value in the data, and e(h, p) is the extent of the cluster containing voxel p at threshold h.  Negative values are similarly enhanced by negating the data, running the same process, and negating the result.
-     * 
-     * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the volume to run TFCE on
-     * @param volume_out the output volume
-     * @param presmooth smooth the volume before running TFCE
-     * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
-     * @param parameters set parameters for TFCE integral
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_TFCE_METADATA);
     const params = volume_tfce_params(volume_in, volume_out, presmooth, opt_roi_roi_volume, parameters, opt_subvolume_subvolume)
@@ -357,7 +357,12 @@ export {
       VolumeTfceParametersParameters,
       VolumeTfcePresmoothParameters,
       volume_tfce,
+      volume_tfce_cargs,
+      volume_tfce_execute,
+      volume_tfce_outputs,
+      volume_tfce_parameters_cargs,
       volume_tfce_parameters_params,
       volume_tfce_params,
+      volume_tfce_presmooth_cargs,
       volume_tfce_presmooth_params,
 };

@@ -12,14 +12,14 @@ const TENSOR2METRIC_METADATA: Metadata = {
 
 
 interface Tensor2metricConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tensor2metric.config";
     "key": string;
     "value": string;
 }
 
 
 interface Tensor2metricParameters {
-    "__STYXTYPE__": "tensor2metric";
+    "@type": "mrtrix.tensor2metric";
     "adc"?: string | null | undefined;
     "fa"?: string | null | undefined;
     "ad"?: string | null | undefined;
@@ -44,55 +44,55 @@ interface Tensor2metricParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tensor2metric": tensor2metric_cargs,
-        "config": tensor2metric_config_cargs,
+        "mrtrix.tensor2metric": tensor2metric_cargs,
+        "mrtrix.tensor2metric.config": tensor2metric_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tensor2metric": tensor2metric_outputs,
+        "mrtrix.tensor2metric": tensor2metric_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tensor2metric_config_params(
     key: string,
     value: string,
 ): Tensor2metricConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tensor2metric.config" as const,
         "key": key,
         "value": value,
     };
@@ -100,18 +100,18 @@ function tensor2metric_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tensor2metric_config_cargs(
     params: Tensor2metricConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -169,6 +169,33 @@ interface Tensor2metricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tensor the input tensor image.
+ * @param adc compute the mean apparent diffusion coefficient (ADC) of the diffusion tensor. (sometimes also referred to as the mean diffusivity (MD))
+ * @param fa compute the fractional anisotropy (FA) of the diffusion tensor.
+ * @param ad compute the axial diffusivity (AD) of the diffusion tensor. (equivalent to the principal eigenvalue)
+ * @param rd compute the radial diffusivity (RD) of the diffusion tensor. (equivalent to the mean of the two non-principal eigenvalues)
+ * @param cl compute the linearity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param cp compute the planarity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param cs compute the sphericity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param value compute the selected eigenvalue(s) of the diffusion tensor.
+ * @param vector compute the selected eigenvector(s) of the diffusion tensor.
+ * @param num specify the desired eigenvalue/eigenvector(s). Note that several eigenvalues can be specified as a number sequence. For example, '1,3' specifies the principal (1) and minor (3) eigenvalues/eigenvectors (default = 1).
+ * @param modulate specify how to modulate the magnitude of the eigenvectors. Valid choices are: none, FA, eigval (default = FA).
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tensor2metric_params(
     tensor: InputPathType,
     adc: string | null = null,
@@ -192,35 +219,8 @@ function tensor2metric_params(
     help: boolean = false,
     version: boolean = false,
 ): Tensor2metricParameters {
-    /**
-     * Build parameters.
-    
-     * @param tensor the input tensor image.
-     * @param adc compute the mean apparent diffusion coefficient (ADC) of the diffusion tensor. (sometimes also referred to as the mean diffusivity (MD))
-     * @param fa compute the fractional anisotropy (FA) of the diffusion tensor.
-     * @param ad compute the axial diffusivity (AD) of the diffusion tensor. (equivalent to the principal eigenvalue)
-     * @param rd compute the radial diffusivity (RD) of the diffusion tensor. (equivalent to the mean of the two non-principal eigenvalues)
-     * @param cl compute the linearity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param cp compute the planarity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param cs compute the sphericity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param value compute the selected eigenvalue(s) of the diffusion tensor.
-     * @param vector compute the selected eigenvector(s) of the diffusion tensor.
-     * @param num specify the desired eigenvalue/eigenvector(s). Note that several eigenvalues can be specified as a number sequence. For example, '1,3' specifies the principal (1) and minor (3) eigenvalues/eigenvectors (default = 1).
-     * @param modulate specify how to modulate the magnitude of the eigenvectors. Valid choices are: none, FA, eigval (default = FA).
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tensor2metric" as const,
+        "@type": "mrtrix.tensor2metric" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -275,18 +275,18 @@ function tensor2metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tensor2metric_cargs(
     params: Tensor2metricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tensor2metric");
     if ((params["adc"] ?? null) !== null) {
@@ -380,7 +380,7 @@ function tensor2metric_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -393,18 +393,18 @@ function tensor2metric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tensor2metric_outputs(
     params: Tensor2metricParameters,
     execution: Execution,
 ): Tensor2metricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tensor2metricOutputs = {
         root: execution.outputFile("."),
         adc: ((params["adc"] ?? null) !== null) ? execution.outputFile([(params["adc"] ?? null)].join('')) : null,
@@ -421,30 +421,30 @@ function tensor2metric_outputs(
 }
 
 
+/**
+ * Generate maps of tensor-derived parameters.
+ *
+ *
+ *
+ * References:
+ *
+ * Basser, P. J.; Mattiello, J. & Lebihan, D. MR diffusion tensor spectroscopy and imaging. Biophysical Journal, 1994, 66, 259-267
+ *
+ * Westin, C. F.; Peled, S.; Gudbjartsson, H.; Kikinis, R. & Jolesz, F. A. Geometrical diffusion measures for MRI from tensor basis analysis. Proc Intl Soc Mag Reson Med, 1997, 5, 1742.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
+ */
 function tensor2metric_execute(
     params: Tensor2metricParameters,
     execution: Execution,
 ): Tensor2metricOutputs {
-    /**
-     * Generate maps of tensor-derived parameters.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Basser, P. J.; Mattiello, J. & Lebihan, D. MR diffusion tensor spectroscopy and imaging. Biophysical Journal, 1994, 66, 259-267
-     * 
-     * Westin, C. F.; Peled, S.; Gudbjartsson, H.; Kikinis, R. & Jolesz, F. A. Geometrical diffusion measures for MRI from tensor basis analysis. Proc Intl Soc Mag Reson Med, 1997, 5, 1742.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
-     */
     params = execution.params(params)
     const cargs = tensor2metric_cargs(params, execution)
     const ret = tensor2metric_outputs(params, execution)
@@ -453,6 +453,46 @@ function tensor2metric_execute(
 }
 
 
+/**
+ * Generate maps of tensor-derived parameters.
+ *
+ *
+ *
+ * References:
+ *
+ * Basser, P. J.; Mattiello, J. & Lebihan, D. MR diffusion tensor spectroscopy and imaging. Biophysical Journal, 1994, 66, 259-267
+ *
+ * Westin, C. F.; Peled, S.; Gudbjartsson, H.; Kikinis, R. & Jolesz, F. A. Geometrical diffusion measures for MRI from tensor basis analysis. Proc Intl Soc Mag Reson Med, 1997, 5, 1742.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tensor the input tensor image.
+ * @param adc compute the mean apparent diffusion coefficient (ADC) of the diffusion tensor. (sometimes also referred to as the mean diffusivity (MD))
+ * @param fa compute the fractional anisotropy (FA) of the diffusion tensor.
+ * @param ad compute the axial diffusivity (AD) of the diffusion tensor. (equivalent to the principal eigenvalue)
+ * @param rd compute the radial diffusivity (RD) of the diffusion tensor. (equivalent to the mean of the two non-principal eigenvalues)
+ * @param cl compute the linearity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param cp compute the planarity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param cs compute the sphericity metric of the diffusion tensor. (one of the three Westin shape metrics)
+ * @param value compute the selected eigenvalue(s) of the diffusion tensor.
+ * @param vector compute the selected eigenvector(s) of the diffusion tensor.
+ * @param num specify the desired eigenvalue/eigenvector(s). Note that several eigenvalues can be specified as a number sequence. For example, '1,3' specifies the principal (1) and minor (3) eigenvalues/eigenvectors (default = 1).
+ * @param modulate specify how to modulate the magnitude of the eigenvectors. Valid choices are: none, FA, eigval (default = FA).
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
+ */
 function tensor2metric(
     tensor: InputPathType,
     adc: string | null = null,
@@ -477,46 +517,6 @@ function tensor2metric(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tensor2metricOutputs {
-    /**
-     * Generate maps of tensor-derived parameters.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Basser, P. J.; Mattiello, J. & Lebihan, D. MR diffusion tensor spectroscopy and imaging. Biophysical Journal, 1994, 66, 259-267
-     * 
-     * Westin, C. F.; Peled, S.; Gudbjartsson, H.; Kikinis, R. & Jolesz, F. A. Geometrical diffusion measures for MRI from tensor basis analysis. Proc Intl Soc Mag Reson Med, 1997, 5, 1742.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tensor the input tensor image.
-     * @param adc compute the mean apparent diffusion coefficient (ADC) of the diffusion tensor. (sometimes also referred to as the mean diffusivity (MD))
-     * @param fa compute the fractional anisotropy (FA) of the diffusion tensor.
-     * @param ad compute the axial diffusivity (AD) of the diffusion tensor. (equivalent to the principal eigenvalue)
-     * @param rd compute the radial diffusivity (RD) of the diffusion tensor. (equivalent to the mean of the two non-principal eigenvalues)
-     * @param cl compute the linearity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param cp compute the planarity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param cs compute the sphericity metric of the diffusion tensor. (one of the three Westin shape metrics)
-     * @param value compute the selected eigenvalue(s) of the diffusion tensor.
-     * @param vector compute the selected eigenvector(s) of the diffusion tensor.
-     * @param num specify the desired eigenvalue/eigenvector(s). Note that several eigenvalues can be specified as a number sequence. For example, '1,3' specifies the principal (1) and minor (3) eigenvalues/eigenvectors (default = 1).
-     * @param modulate specify how to modulate the magnitude of the eigenvectors. Valid choices are: none, FA, eigval (default = FA).
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TENSOR2METRIC_METADATA);
     const params = tensor2metric_params(tensor, adc, fa, ad, rd, cl, cp, cs, value, vector, num, modulate, mask, info, quiet, debug, force, nthreads, config, help, version)
@@ -530,6 +530,10 @@ export {
       Tensor2metricOutputs,
       Tensor2metricParameters,
       tensor2metric,
+      tensor2metric_cargs,
+      tensor2metric_config_cargs,
       tensor2metric_config_params,
+      tensor2metric_execute,
+      tensor2metric_outputs,
       tensor2metric_params,
 };

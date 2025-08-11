@@ -12,7 +12,7 @@ const MRI_MAP_CPDAT_METADATA: Metadata = {
 
 
 interface MriMapCpdatParameters {
-    "__STYXTYPE__": "mri_map_cpdat";
+    "@type": "freesurfer.mri_map_cpdat";
     "input_file": InputPathType;
     "output_file": string;
     "lta_file"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface MriMapCpdatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_map_cpdat": mri_map_cpdat_cargs,
+        "freesurfer.mri_map_cpdat": mri_map_cpdat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_map_cpdat": mri_map_cpdat_outputs,
+        "freesurfer.mri_map_cpdat": mri_map_cpdat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriMapCpdatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input control point text file
+ * @param output_file Output control point text file
+ * @param lta_file LTA transform file to be applied
+ * @param to_mni305 Get LTA from talairach.xfm for a specific subject
+ * @param from_mni305 Get LTA from talairach.xfm from a specific subject
+ * @param subject_list_file Maps all control points from all subjects listed in the text/ascii subjectlistfile to MNI305 (talairach) space
+ *
+ * @returns Parameter dictionary
+ */
 function mri_map_cpdat_params(
     input_file: InputPathType,
     output_file: string,
@@ -81,20 +93,8 @@ function mri_map_cpdat_params(
     from_mni305: string | null = null,
     subject_list_file: InputPathType | null = null,
 ): MriMapCpdatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input control point text file
-     * @param output_file Output control point text file
-     * @param lta_file LTA transform file to be applied
-     * @param to_mni305 Get LTA from talairach.xfm for a specific subject
-     * @param from_mni305 Get LTA from talairach.xfm from a specific subject
-     * @param subject_list_file Maps all control points from all subjects listed in the text/ascii subjectlistfile to MNI305 (talairach) space
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_map_cpdat" as const,
+        "@type": "freesurfer.mri_map_cpdat" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -114,18 +114,18 @@ function mri_map_cpdat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_map_cpdat_cargs(
     params: MriMapCpdatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_map_cpdat");
     cargs.push(
@@ -164,18 +164,18 @@ function mri_map_cpdat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_map_cpdat_outputs(
     params: MriMapCpdatParameters,
     execution: Execution,
 ): MriMapCpdatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMapCpdatOutputs = {
         root: execution.outputFile("."),
         output_ctrl_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -184,22 +184,22 @@ function mri_map_cpdat_outputs(
 }
 
 
+/**
+ * Maps a control.dat file to a different space using an LTA.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
+ */
 function mri_map_cpdat_execute(
     params: MriMapCpdatParameters,
     execution: Execution,
 ): MriMapCpdatOutputs {
-    /**
-     * Maps a control.dat file to a different space using an LTA.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_map_cpdat_cargs(params, execution)
     const ret = mri_map_cpdat_outputs(params, execution)
@@ -208,6 +208,23 @@ function mri_map_cpdat_execute(
 }
 
 
+/**
+ * Maps a control.dat file to a different space using an LTA.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input control point text file
+ * @param output_file Output control point text file
+ * @param lta_file LTA transform file to be applied
+ * @param to_mni305 Get LTA from talairach.xfm for a specific subject
+ * @param from_mni305 Get LTA from talairach.xfm from a specific subject
+ * @param subject_list_file Maps all control points from all subjects listed in the text/ascii subjectlistfile to MNI305 (talairach) space
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
+ */
 function mri_map_cpdat(
     input_file: InputPathType,
     output_file: string,
@@ -217,23 +234,6 @@ function mri_map_cpdat(
     subject_list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriMapCpdatOutputs {
-    /**
-     * Maps a control.dat file to a different space using an LTA.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input control point text file
-     * @param output_file Output control point text file
-     * @param lta_file LTA transform file to be applied
-     * @param to_mni305 Get LTA from talairach.xfm for a specific subject
-     * @param from_mni305 Get LTA from talairach.xfm from a specific subject
-     * @param subject_list_file Maps all control points from all subjects listed in the text/ascii subjectlistfile to MNI305 (talairach) space
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MAP_CPDAT_METADATA);
     const params = mri_map_cpdat_params(input_file, output_file, lta_file, to_mni305, from_mni305, subject_list_file)
@@ -246,5 +246,8 @@ export {
       MriMapCpdatOutputs,
       MriMapCpdatParameters,
       mri_map_cpdat,
+      mri_map_cpdat_cargs,
+      mri_map_cpdat_execute,
+      mri_map_cpdat_outputs,
       mri_map_cpdat_params,
 };

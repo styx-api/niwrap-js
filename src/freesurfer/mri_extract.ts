@@ -12,7 +12,7 @@ const MRI_EXTRACT_METADATA: Metadata = {
 
 
 interface MriExtractParameters {
-    "__STYXTYPE__": "mri_extract";
+    "@type": "freesurfer.mri_extract";
     "like_template"?: InputPathType | null | undefined;
     "src_volume": InputPathType;
     "dst_volume": InputPathType;
@@ -20,35 +20,35 @@ interface MriExtractParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_extract": mri_extract_cargs,
+        "freesurfer.mri_extract": mri_extract_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_extract": mri_extract_outputs,
+        "freesurfer.mri_extract": mri_extract_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriExtractOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_volume Source MRI volume file from which data will be extracted.
+ * @param dst_volume The destination file where the extracted data will be saved.
+ * @param like_template Extract region like the given template volume.
+ * @param coordinates Coordinates and size of the extraction box: x0 y0 z0 dx dy dz.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_extract_params(
     src_volume: InputPathType,
     dst_volume: InputPathType,
     like_template: InputPathType | null = null,
     coordinates: Array<number> | null = null,
 ): MriExtractParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_volume Source MRI volume file from which data will be extracted.
-     * @param dst_volume The destination file where the extracted data will be saved.
-     * @param like_template Extract region like the given template volume.
-     * @param coordinates Coordinates and size of the extraction box: x0 y0 z0 dx dy dz.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_extract" as const,
+        "@type": "freesurfer.mri_extract" as const,
         "src_volume": src_volume,
         "dst_volume": dst_volume,
     };
@@ -102,18 +102,18 @@ function mri_extract_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_extract_cargs(
     params: MriExtractParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_extract");
     if ((params["like_template"] ?? null) !== null) {
@@ -131,18 +131,18 @@ function mri_extract_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_extract_outputs(
     params: MriExtractParameters,
     execution: Execution,
 ): MriExtractOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExtractOutputs = {
         root: execution.outputFile("."),
         output_extracted_volume: execution.outputFile([path.basename((params["dst_volume"] ?? null))].join('')),
@@ -151,22 +151,22 @@ function mri_extract_outputs(
 }
 
 
+/**
+ * MRI data extraction tool for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
+ */
 function mri_extract_execute(
     params: MriExtractParameters,
     execution: Execution,
 ): MriExtractOutputs {
-    /**
-     * MRI data extraction tool for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_extract_cargs(params, execution)
     const ret = mri_extract_outputs(params, execution)
@@ -175,6 +175,21 @@ function mri_extract_execute(
 }
 
 
+/**
+ * MRI data extraction tool for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_volume Source MRI volume file from which data will be extracted.
+ * @param dst_volume The destination file where the extracted data will be saved.
+ * @param like_template Extract region like the given template volume.
+ * @param coordinates Coordinates and size of the extraction box: x0 y0 z0 dx dy dz.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
+ */
 function mri_extract(
     src_volume: InputPathType,
     dst_volume: InputPathType,
@@ -182,21 +197,6 @@ function mri_extract(
     coordinates: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriExtractOutputs {
-    /**
-     * MRI data extraction tool for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_volume Source MRI volume file from which data will be extracted.
-     * @param dst_volume The destination file where the extracted data will be saved.
-     * @param like_template Extract region like the given template volume.
-     * @param coordinates Coordinates and size of the extraction box: x0 y0 z0 dx dy dz.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXTRACT_METADATA);
     const params = mri_extract_params(src_volume, dst_volume, like_template, coordinates)
@@ -209,5 +209,8 @@ export {
       MriExtractOutputs,
       MriExtractParameters,
       mri_extract,
+      mri_extract_cargs,
+      mri_extract_execute,
+      mri_extract_outputs,
       mri_extract_params,
 };

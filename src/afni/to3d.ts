@@ -12,7 +12,7 @@ const TO3D_METADATA: Metadata = {
 
 
 interface To3dParameters {
-    "__STYXTYPE__": "to3d";
+    "@type": "afni.to3d";
     "input_files": Array<InputPathType>;
     "type"?: "spgr" | "fse" | "epan" | "anat" | "ct" | "spct" | "pet" | "mra" | "bmap" | "diff" | "omri" | "abuc" | "fim" | "fith" | "fico" | "fitt" | "fift" | "fizt" | "fict" | "fibt" | "fibn" | "figt" | "fipt" | "fbuc" | null | undefined;
     "statpar"?: Array<number> | null | undefined;
@@ -56,35 +56,35 @@ interface To3dParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "to3d": to3d_cargs,
+        "afni.to3d": to3d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "to3d": to3d_outputs,
+        "afni.to3d": to3d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -115,6 +115,52 @@ interface To3dOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 2D image files
+ * @param type_ Declare images to contain data of a given type
+ * @param statpar Supply auxiliary statistical parameters
+ * @param prefix Prefix of the output 3D dataset
+ * @param session Session directory for output 3D dataset
+ * @param geomparent Read geometry data from dataset file
+ * @param anatparent Take anatomy parent from dataset file
+ * @param nosave_flag Suppress autosave of 3D dataset
+ * @param nowritebrik_flag Suppress saving of the BRIK file
+ * @param view Set the dataset's viewing coordinates
+ * @param time_zt Specify time dependent dataset (z-axis first, then t-axis)
+ * @param time_tz Specify time dependent dataset (t-axis first, then z-axis)
+ * @param tr_units Specify TR units
+ * @param torg Set time origin of dataset
+ * @param x_fov Specify size and orientation of the x-axis extent
+ * @param y_fov Specify size and orientation of the y-axis extent
+ * @param z_fov Specify size and orientation of the z-axis extent
+ * @param x_slab Specify x-axis slab
+ * @param y_slab Specify y-axis slab
+ * @param z_slab Specify z-axis slab
+ * @param zorigin Set the center of the first slice offset in z-axis
+ * @param data_type Set voxel data to be stored as given data type
+ * @param global_scaling_factor Global scaling factor
+ * @param nofloatscan_flag Do not scan for illegal floating point values
+ * @param in1_flag Read and process images one slice at a time
+ * @param orient Set the orientation of the 3D volumes
+ * @param skip_outliers_flag Skip the outlier check for 3D+time datasets
+ * @param text_outliers_flag Only print out the outlier check results in text form
+ * @param save_outliers Save the outliers count into a 1D file
+ * @param assume_dicom_mosaic_flag Assume any Siemens DICOM file is a potential MOSAIC image
+ * @param oblique_origin_flag Assume origin and orientation from oblique transformation matrix
+ * @param reverse_list_flag Reverse the input file list
+ * @param use_last_elem_flag Search DICOM images for the last occurrence of each element
+ * @param use_old_mosaic_code_flag Do not use the Dec 2010 updates to Siemens mosaic code
+ * @param ushort2float_flag Convert input shorts to float and add 2^16 to any negatives
+ * @param verbose_flag Show debugging information for reading DICOM files
+ * @param gamma Gamma correction factor for the monitor
+ * @param ncolors Number of gray levels for the image displays
+ * @param xtwarns_flag Turn on display of Xt warning messages
+ * @param quit_on_err_flag Do not launch interactive to3d mode if input has error
+ *
+ * @returns Parameter dictionary
+ */
 function to3d_params(
     input_files: Array<InputPathType>,
     type_: "spgr" | "fse" | "epan" | "anat" | "ct" | "spct" | "pet" | "mra" | "bmap" | "diff" | "omri" | "abuc" | "fim" | "fith" | "fico" | "fitt" | "fift" | "fizt" | "fict" | "fibt" | "fibn" | "figt" | "fipt" | "fbuc" | null = null,
@@ -157,54 +203,8 @@ function to3d_params(
     xtwarns_flag: boolean = false,
     quit_on_err_flag: boolean = false,
 ): To3dParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 2D image files
-     * @param type_ Declare images to contain data of a given type
-     * @param statpar Supply auxiliary statistical parameters
-     * @param prefix Prefix of the output 3D dataset
-     * @param session Session directory for output 3D dataset
-     * @param geomparent Read geometry data from dataset file
-     * @param anatparent Take anatomy parent from dataset file
-     * @param nosave_flag Suppress autosave of 3D dataset
-     * @param nowritebrik_flag Suppress saving of the BRIK file
-     * @param view Set the dataset's viewing coordinates
-     * @param time_zt Specify time dependent dataset (z-axis first, then t-axis)
-     * @param time_tz Specify time dependent dataset (t-axis first, then z-axis)
-     * @param tr_units Specify TR units
-     * @param torg Set time origin of dataset
-     * @param x_fov Specify size and orientation of the x-axis extent
-     * @param y_fov Specify size and orientation of the y-axis extent
-     * @param z_fov Specify size and orientation of the z-axis extent
-     * @param x_slab Specify x-axis slab
-     * @param y_slab Specify y-axis slab
-     * @param z_slab Specify z-axis slab
-     * @param zorigin Set the center of the first slice offset in z-axis
-     * @param data_type Set voxel data to be stored as given data type
-     * @param global_scaling_factor Global scaling factor
-     * @param nofloatscan_flag Do not scan for illegal floating point values
-     * @param in1_flag Read and process images one slice at a time
-     * @param orient Set the orientation of the 3D volumes
-     * @param skip_outliers_flag Skip the outlier check for 3D+time datasets
-     * @param text_outliers_flag Only print out the outlier check results in text form
-     * @param save_outliers Save the outliers count into a 1D file
-     * @param assume_dicom_mosaic_flag Assume any Siemens DICOM file is a potential MOSAIC image
-     * @param oblique_origin_flag Assume origin and orientation from oblique transformation matrix
-     * @param reverse_list_flag Reverse the input file list
-     * @param use_last_elem_flag Search DICOM images for the last occurrence of each element
-     * @param use_old_mosaic_code_flag Do not use the Dec 2010 updates to Siemens mosaic code
-     * @param ushort2float_flag Convert input shorts to float and add 2^16 to any negatives
-     * @param verbose_flag Show debugging information for reading DICOM files
-     * @param gamma Gamma correction factor for the monitor
-     * @param ncolors Number of gray levels for the image displays
-     * @param xtwarns_flag Turn on display of Xt warning messages
-     * @param quit_on_err_flag Do not launch interactive to3d mode if input has error
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to3d" as const,
+        "@type": "afni.to3d" as const,
         "input_files": input_files,
         "nosave_flag": nosave_flag,
         "nowritebrik_flag": nowritebrik_flag,
@@ -298,18 +298,18 @@ function to3d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function to3d_cargs(
     params: To3dParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("to3d");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -506,18 +506,18 @@ function to3d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function to3d_outputs(
     params: To3dParameters,
     execution: Execution,
 ): To3dOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: To3dOutputs = {
         root: execution.outputFile("."),
         headfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -528,22 +528,22 @@ function to3d_outputs(
 }
 
 
+/**
+ * Creates 3D datasets for use with AFNI from 2D image files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `To3dOutputs`).
+ */
 function to3d_execute(
     params: To3dParameters,
     execution: Execution,
 ): To3dOutputs {
-    /**
-     * Creates 3D datasets for use with AFNI from 2D image files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `To3dOutputs`).
-     */
     params = execution.params(params)
     const cargs = to3d_cargs(params, execution)
     const ret = to3d_outputs(params, execution)
@@ -552,6 +552,57 @@ function to3d_execute(
 }
 
 
+/**
+ * Creates 3D datasets for use with AFNI from 2D image files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 2D image files
+ * @param type_ Declare images to contain data of a given type
+ * @param statpar Supply auxiliary statistical parameters
+ * @param prefix Prefix of the output 3D dataset
+ * @param session Session directory for output 3D dataset
+ * @param geomparent Read geometry data from dataset file
+ * @param anatparent Take anatomy parent from dataset file
+ * @param nosave_flag Suppress autosave of 3D dataset
+ * @param nowritebrik_flag Suppress saving of the BRIK file
+ * @param view Set the dataset's viewing coordinates
+ * @param time_zt Specify time dependent dataset (z-axis first, then t-axis)
+ * @param time_tz Specify time dependent dataset (t-axis first, then z-axis)
+ * @param tr_units Specify TR units
+ * @param torg Set time origin of dataset
+ * @param x_fov Specify size and orientation of the x-axis extent
+ * @param y_fov Specify size and orientation of the y-axis extent
+ * @param z_fov Specify size and orientation of the z-axis extent
+ * @param x_slab Specify x-axis slab
+ * @param y_slab Specify y-axis slab
+ * @param z_slab Specify z-axis slab
+ * @param zorigin Set the center of the first slice offset in z-axis
+ * @param data_type Set voxel data to be stored as given data type
+ * @param global_scaling_factor Global scaling factor
+ * @param nofloatscan_flag Do not scan for illegal floating point values
+ * @param in1_flag Read and process images one slice at a time
+ * @param orient Set the orientation of the 3D volumes
+ * @param skip_outliers_flag Skip the outlier check for 3D+time datasets
+ * @param text_outliers_flag Only print out the outlier check results in text form
+ * @param save_outliers Save the outliers count into a 1D file
+ * @param assume_dicom_mosaic_flag Assume any Siemens DICOM file is a potential MOSAIC image
+ * @param oblique_origin_flag Assume origin and orientation from oblique transformation matrix
+ * @param reverse_list_flag Reverse the input file list
+ * @param use_last_elem_flag Search DICOM images for the last occurrence of each element
+ * @param use_old_mosaic_code_flag Do not use the Dec 2010 updates to Siemens mosaic code
+ * @param ushort2float_flag Convert input shorts to float and add 2^16 to any negatives
+ * @param verbose_flag Show debugging information for reading DICOM files
+ * @param gamma Gamma correction factor for the monitor
+ * @param ncolors Number of gray levels for the image displays
+ * @param xtwarns_flag Turn on display of Xt warning messages
+ * @param quit_on_err_flag Do not launch interactive to3d mode if input has error
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `To3dOutputs`).
+ */
 function to3d(
     input_files: Array<InputPathType>,
     type_: "spgr" | "fse" | "epan" | "anat" | "ct" | "spct" | "pet" | "mra" | "bmap" | "diff" | "omri" | "abuc" | "fim" | "fith" | "fico" | "fitt" | "fift" | "fizt" | "fict" | "fibt" | "fibn" | "figt" | "fipt" | "fbuc" | null = null,
@@ -595,57 +646,6 @@ function to3d(
     quit_on_err_flag: boolean = false,
     runner: Runner | null = null,
 ): To3dOutputs {
-    /**
-     * Creates 3D datasets for use with AFNI from 2D image files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 2D image files
-     * @param type_ Declare images to contain data of a given type
-     * @param statpar Supply auxiliary statistical parameters
-     * @param prefix Prefix of the output 3D dataset
-     * @param session Session directory for output 3D dataset
-     * @param geomparent Read geometry data from dataset file
-     * @param anatparent Take anatomy parent from dataset file
-     * @param nosave_flag Suppress autosave of 3D dataset
-     * @param nowritebrik_flag Suppress saving of the BRIK file
-     * @param view Set the dataset's viewing coordinates
-     * @param time_zt Specify time dependent dataset (z-axis first, then t-axis)
-     * @param time_tz Specify time dependent dataset (t-axis first, then z-axis)
-     * @param tr_units Specify TR units
-     * @param torg Set time origin of dataset
-     * @param x_fov Specify size and orientation of the x-axis extent
-     * @param y_fov Specify size and orientation of the y-axis extent
-     * @param z_fov Specify size and orientation of the z-axis extent
-     * @param x_slab Specify x-axis slab
-     * @param y_slab Specify y-axis slab
-     * @param z_slab Specify z-axis slab
-     * @param zorigin Set the center of the first slice offset in z-axis
-     * @param data_type Set voxel data to be stored as given data type
-     * @param global_scaling_factor Global scaling factor
-     * @param nofloatscan_flag Do not scan for illegal floating point values
-     * @param in1_flag Read and process images one slice at a time
-     * @param orient Set the orientation of the 3D volumes
-     * @param skip_outliers_flag Skip the outlier check for 3D+time datasets
-     * @param text_outliers_flag Only print out the outlier check results in text form
-     * @param save_outliers Save the outliers count into a 1D file
-     * @param assume_dicom_mosaic_flag Assume any Siemens DICOM file is a potential MOSAIC image
-     * @param oblique_origin_flag Assume origin and orientation from oblique transformation matrix
-     * @param reverse_list_flag Reverse the input file list
-     * @param use_last_elem_flag Search DICOM images for the last occurrence of each element
-     * @param use_old_mosaic_code_flag Do not use the Dec 2010 updates to Siemens mosaic code
-     * @param ushort2float_flag Convert input shorts to float and add 2^16 to any negatives
-     * @param verbose_flag Show debugging information for reading DICOM files
-     * @param gamma Gamma correction factor for the monitor
-     * @param ncolors Number of gray levels for the image displays
-     * @param xtwarns_flag Turn on display of Xt warning messages
-     * @param quit_on_err_flag Do not launch interactive to3d mode if input has error
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `To3dOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TO3D_METADATA);
     const params = to3d_params(input_files, type_, statpar, prefix, session, geomparent, anatparent, nosave_flag, nowritebrik_flag, view, time_zt, time_tz, tr_units, torg, x_fov, y_fov, z_fov, x_slab, y_slab, z_slab, zorigin, data_type, global_scaling_factor, nofloatscan_flag, in1_flag, orient, skip_outliers_flag, text_outliers_flag, save_outliers, assume_dicom_mosaic_flag, oblique_origin_flag, reverse_list_flag, use_last_elem_flag, use_old_mosaic_code_flag, ushort2float_flag, verbose_flag, gamma, ncolors, xtwarns_flag, quit_on_err_flag)
@@ -658,5 +658,8 @@ export {
       To3dOutputs,
       To3dParameters,
       to3d,
+      to3d_cargs,
+      to3d_execute,
+      to3d_outputs,
       to3d_params,
 };

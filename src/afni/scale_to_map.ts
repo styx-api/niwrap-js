@@ -12,14 +12,14 @@ const SCALE_TO_MAP_METADATA: Metadata = {
 
 
 interface ScaleToMapTraceParameters {
-    "__STYXTYPE__": "trace";
+    "@type": "afni.ScaleToMap.trace";
     "trace": boolean;
     "TRACE": boolean;
 }
 
 
 interface ScaleToMapParameters {
-    "__STYXTYPE__": "ScaleToMap";
+    "@type": "afni.ScaleToMap";
     "input_file": InputPathType;
     "icol": number;
     "vcol": number;
@@ -52,54 +52,54 @@ interface ScaleToMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ScaleToMap": scale_to_map_cargs,
-        "trace": scale_to_map_trace_cargs,
+        "afni.ScaleToMap": scale_to_map_cargs,
+        "afni.ScaleToMap.trace": scale_to_map_trace_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param trace_ Turns on extreme tracing.
+ *
+ * @returns Parameter dictionary
+ */
 function scale_to_map_trace_params(
     trace: boolean = false,
     trace_: boolean = false,
 ): ScaleToMapTraceParameters {
-    /**
-     * Build parameters.
-    
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param trace_ Turns on extreme tracing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trace" as const,
+        "@type": "afni.ScaleToMap.trace" as const,
         "trace": trace,
         "TRACE": trace_,
     };
@@ -107,18 +107,18 @@ function scale_to_map_trace_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scale_to_map_trace_cargs(
     params: ScaleToMapTraceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["trace"] ?? null)) {
         cargs.push("-trace");
@@ -143,6 +143,41 @@ interface ScaleToMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file in 1D formatted ascii containing node values
+ * @param icol Index of node index column (-1 if node index is implicit)
+ * @param vcol Index of node value column
+ * @param cmap Choose one of the standard colormaps available with SUMA
+ * @param cmapfile Read color map from a Mapfile
+ * @param cmapdb Read color maps from an AFNI .pal file
+ * @param frf Indicate that the first row in the file is the first color
+ * @param clp Clip values in IntVect to specified range
+ * @param perc_clp Percentile clip values in IntVect to specified range
+ * @param apr Clip values in IntVect to [0 range]
+ * @param anr Clip values in IntVect to [-range range]
+ * @param interp Use color interpolation between colors in colormap (default)
+ * @param nointerp Turn off color interpolation within the colormap
+ * @param direct Directly map values to index of color in colormap
+ * @param msk_zero Mask values that are 0
+ * @param msk Mask values in vcol between specified range
+ * @param msk_col Set color of masked voxels
+ * @param nomsk_col Do not output nodes that got masked
+ * @param br Apply a brightness factor to colormap and mask color
+ * @param help Display help message
+ * @param verbose Verbose mode
+ * @param showmap Print colormap to screen and quit
+ * @param showdb Print colors and colormaps of AFNI along with any loaded from Palfile
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param nomall Turn off memory tracing
+ * @param yesmall Turn on memory tracing (default)
+ *
+ * @returns Parameter dictionary
+ */
 function scale_to_map_params(
     input_file: InputPathType,
     icol: number,
@@ -174,43 +209,8 @@ function scale_to_map_params(
     nomall: boolean = false,
     yesmall: boolean = false,
 ): ScaleToMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file in 1D formatted ascii containing node values
-     * @param icol Index of node index column (-1 if node index is implicit)
-     * @param vcol Index of node value column
-     * @param cmap Choose one of the standard colormaps available with SUMA
-     * @param cmapfile Read color map from a Mapfile
-     * @param cmapdb Read color maps from an AFNI .pal file
-     * @param frf Indicate that the first row in the file is the first color
-     * @param clp Clip values in IntVect to specified range
-     * @param perc_clp Percentile clip values in IntVect to specified range
-     * @param apr Clip values in IntVect to [0 range]
-     * @param anr Clip values in IntVect to [-range range]
-     * @param interp Use color interpolation between colors in colormap (default)
-     * @param nointerp Turn off color interpolation within the colormap
-     * @param direct Directly map values to index of color in colormap
-     * @param msk_zero Mask values that are 0
-     * @param msk Mask values in vcol between specified range
-     * @param msk_col Set color of masked voxels
-     * @param nomsk_col Do not output nodes that got masked
-     * @param br Apply a brightness factor to colormap and mask color
-     * @param help Display help message
-     * @param verbose Verbose mode
-     * @param showmap Print colormap to screen and quit
-     * @param showdb Print colors and colormaps of AFNI along with any loaded from Palfile
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param nomall Turn off memory tracing
-     * @param yesmall Turn on memory tracing (default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ScaleToMap" as const,
+        "@type": "afni.ScaleToMap" as const,
         "input_file": input_file,
         "icol": icol,
         "vcol": vcol,
@@ -269,18 +269,18 @@ function scale_to_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scale_to_map_cargs(
     params: ScaleToMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ScaleToMap");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -389,7 +389,7 @@ function scale_to_map_cargs(
         );
     }
     if ((params["trace"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["trace"] ?? null).__STYXTYPE__)((params["trace"] ?? null), execution));
+        cargs.push(...dynCargs((params["trace"] ?? null)["@type"])((params["trace"] ?? null), execution));
     }
     if ((params["nomall"] ?? null)) {
         cargs.push("-nomall");
@@ -401,18 +401,18 @@ function scale_to_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function scale_to_map_outputs(
     params: ScaleToMapParameters,
     execution: Execution,
 ): ScaleToMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ScaleToMapOutputs = {
         root: execution.outputFile("."),
     };
@@ -420,22 +420,22 @@ function scale_to_map_outputs(
 }
 
 
+/**
+ * Tool to scale values to a color map.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
+ */
 function scale_to_map_execute(
     params: ScaleToMapParameters,
     execution: Execution,
 ): ScaleToMapOutputs {
-    /**
-     * Tool to scale values to a color map.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = scale_to_map_cargs(params, execution)
     const ret = scale_to_map_outputs(params, execution)
@@ -444,6 +444,46 @@ function scale_to_map_execute(
 }
 
 
+/**
+ * Tool to scale values to a color map.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input file in 1D formatted ascii containing node values
+ * @param icol Index of node index column (-1 if node index is implicit)
+ * @param vcol Index of node value column
+ * @param cmap Choose one of the standard colormaps available with SUMA
+ * @param cmapfile Read color map from a Mapfile
+ * @param cmapdb Read color maps from an AFNI .pal file
+ * @param frf Indicate that the first row in the file is the first color
+ * @param clp Clip values in IntVect to specified range
+ * @param perc_clp Percentile clip values in IntVect to specified range
+ * @param apr Clip values in IntVect to [0 range]
+ * @param anr Clip values in IntVect to [-range range]
+ * @param interp Use color interpolation between colors in colormap (default)
+ * @param nointerp Turn off color interpolation within the colormap
+ * @param direct Directly map values to index of color in colormap
+ * @param msk_zero Mask values that are 0
+ * @param msk Mask values in vcol between specified range
+ * @param msk_col Set color of masked voxels
+ * @param nomsk_col Do not output nodes that got masked
+ * @param br Apply a brightness factor to colormap and mask color
+ * @param help Display help message
+ * @param verbose Verbose mode
+ * @param showmap Print colormap to screen and quit
+ * @param showdb Print colors and colormaps of AFNI along with any loaded from Palfile
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
+ * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
+ * @param nomall Turn off memory tracing
+ * @param yesmall Turn on memory tracing (default)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
+ */
 function scale_to_map(
     input_file: InputPathType,
     icol: number,
@@ -476,46 +516,6 @@ function scale_to_map(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): ScaleToMapOutputs {
-    /**
-     * Tool to scale values to a color map.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input file in 1D formatted ascii containing node values
-     * @param icol Index of node index column (-1 if node index is implicit)
-     * @param vcol Index of node value column
-     * @param cmap Choose one of the standard colormaps available with SUMA
-     * @param cmapfile Read color map from a Mapfile
-     * @param cmapdb Read color maps from an AFNI .pal file
-     * @param frf Indicate that the first row in the file is the first color
-     * @param clp Clip values in IntVect to specified range
-     * @param perc_clp Percentile clip values in IntVect to specified range
-     * @param apr Clip values in IntVect to [0 range]
-     * @param anr Clip values in IntVect to [-range range]
-     * @param interp Use color interpolation between colors in colormap (default)
-     * @param nointerp Turn off color interpolation within the colormap
-     * @param direct Directly map values to index of color in colormap
-     * @param msk_zero Mask values that are 0
-     * @param msk Mask values in vcol between specified range
-     * @param msk_col Set color of masked voxels
-     * @param nomsk_col Do not output nodes that got masked
-     * @param br Apply a brightness factor to colormap and mask color
-     * @param help Display help message
-     * @param verbose Verbose mode
-     * @param showmap Print colormap to screen and quit
-     * @param showdb Print colors and colormaps of AFNI along with any loaded from Palfile
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable ENVname to ENVvalue. Quotes are necessary
-     * @param trace Turns on In/Out debug and Memory tracing. It's recommended to redirect stdout to a file when using this option.
-     * @param nomall Turn off memory tracing
-     * @param yesmall Turn on memory tracing (default)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SCALE_TO_MAP_METADATA);
     const params = scale_to_map_params(input_file, icol, vcol, cmap, cmapfile, cmapdb, frf, clp, perc_clp, apr, anr, interp, nointerp, direct, msk_zero, msk, msk_col, nomsk_col, br, help, verbose, showmap, showdb, novolreg, noxform, setenv, trace, nomall, yesmall)
@@ -529,6 +529,10 @@ export {
       ScaleToMapParameters,
       ScaleToMapTraceParameters,
       scale_to_map,
+      scale_to_map_cargs,
+      scale_to_map_execute,
+      scale_to_map_outputs,
       scale_to_map_params,
+      scale_to_map_trace_cargs,
       scale_to_map_trace_params,
 };

@@ -12,7 +12,7 @@ const MRI_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriNormalizeParameters {
-    "__STYXTYPE__": "mri_normalize";
+    "@type": "freesurfer.mri_normalize";
     "input_vol": InputPathType;
     "output_vol": string;
     "norm_iters"?: number | null | undefined;
@@ -50,35 +50,35 @@ interface MriNormalizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_normalize": mri_normalize_cargs,
+        "freesurfer.mri_normalize": mri_normalize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_normalize": mri_normalize_outputs,
+        "freesurfer.mri_normalize": mri_normalize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,46 @@ interface MriNormalizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input MRI volume file
+ * @param output_vol Output MRI volume file
+ * @param norm_iters Use n 3D normalization iterations (default=2)
+ * @param disable_1d Disable 1D normalization
+ * @param nonmax_suppress Turn non-maximum suppression on (1) or off (0) when using interior of surfaces
+ * @param conform Interpolate and embed volume to be 256^3
+ * @param nonconform Do not conform the volume
+ * @param gentle Perform kinder gentler normalization
+ * @param control_points Use control points file (usually control.dat)
+ * @param fonly_control_points Use only control points file
+ * @param lonly_labels Use only control points in label file
+ * @param labels Use control points in label file
+ * @param write_volumes Write control point (c) and bias field (b) volumes
+ * @param intensity_above Use control point with intensity above target (default=25.0)
+ * @param intensity_below Use control point with intensity below target (default=10.0)
+ * @param intensity_gradient Use max intensity/mm gradient (default=1.000)
+ * @param prune Turn pruning of control points on/off (default=off)
+ * @param no_gentle_cp Do not use gentle normalization with control points file
+ * @param mask_file Mask file to use
+ * @param atlas_transform Use atlas to exclude control points from being in non-brain regions
+ * @param noskull Do not consider skull regions
+ * @param monkey Turns off 1D, sets num_3d_iter=1
+ * @param nosnr Disable SNR normalization
+ * @param sigma_smooth Smooth bias field with given sigma
+ * @param aseg_file Aseg file for processing
+ * @param debug_v For debugging
+ * @param debug_d For debugging
+ * @param renorm_vol Load volume and use all points in it that are exactly 110 as control points
+ * @param checknorm_vol Load volume and remove all control points that aren't in [min max]
+ * @param load_read_cp For reading control points and bias field
+ * @param cp_output_vol Output final control points as a volume (only with -aseg)
+ * @param surface_transform Normalize based on the skeleton of the interior of the transformed surface
+ * @param seed_value Set random number generator to seed N
+ * @param print_help Print usage
+ *
+ * @returns Parameter dictionary
+ */
 function mri_normalize_params(
     input_vol: InputPathType,
     output_vol: string,
@@ -141,48 +181,8 @@ function mri_normalize_params(
     seed_value: number | null = null,
     print_help: boolean = false,
 ): MriNormalizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input MRI volume file
-     * @param output_vol Output MRI volume file
-     * @param norm_iters Use n 3D normalization iterations (default=2)
-     * @param disable_1d Disable 1D normalization
-     * @param nonmax_suppress Turn non-maximum suppression on (1) or off (0) when using interior of surfaces
-     * @param conform Interpolate and embed volume to be 256^3
-     * @param nonconform Do not conform the volume
-     * @param gentle Perform kinder gentler normalization
-     * @param control_points Use control points file (usually control.dat)
-     * @param fonly_control_points Use only control points file
-     * @param lonly_labels Use only control points in label file
-     * @param labels Use control points in label file
-     * @param write_volumes Write control point (c) and bias field (b) volumes
-     * @param intensity_above Use control point with intensity above target (default=25.0)
-     * @param intensity_below Use control point with intensity below target (default=10.0)
-     * @param intensity_gradient Use max intensity/mm gradient (default=1.000)
-     * @param prune Turn pruning of control points on/off (default=off)
-     * @param no_gentle_cp Do not use gentle normalization with control points file
-     * @param mask_file Mask file to use
-     * @param atlas_transform Use atlas to exclude control points from being in non-brain regions
-     * @param noskull Do not consider skull regions
-     * @param monkey Turns off 1D, sets num_3d_iter=1
-     * @param nosnr Disable SNR normalization
-     * @param sigma_smooth Smooth bias field with given sigma
-     * @param aseg_file Aseg file for processing
-     * @param debug_v For debugging
-     * @param debug_d For debugging
-     * @param renorm_vol Load volume and use all points in it that are exactly 110 as control points
-     * @param checknorm_vol Load volume and remove all control points that aren't in [min max]
-     * @param load_read_cp For reading control points and bias field
-     * @param cp_output_vol Output final control points as a volume (only with -aseg)
-     * @param surface_transform Normalize based on the skeleton of the interior of the transformed surface
-     * @param seed_value Set random number generator to seed N
-     * @param print_help Print usage
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_normalize" as const,
+        "@type": "freesurfer.mri_normalize" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "disable_1d": disable_1d,
@@ -266,18 +266,18 @@ function mri_normalize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_normalize_cargs(
     params: MriNormalizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_normalize");
     cargs.push(execution.inputFile((params["input_vol"] ?? null)));
@@ -448,18 +448,18 @@ function mri_normalize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_normalize_outputs(
     params: MriNormalizeParameters,
     execution: Execution,
 ): MriNormalizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNormalizeOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["output_vol"] ?? null)].join('')),
@@ -469,22 +469,22 @@ function mri_normalize_outputs(
 }
 
 
+/**
+ * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
+ */
 function mri_normalize_execute(
     params: MriNormalizeParameters,
     execution: Execution,
 ): MriNormalizeOutputs {
-    /**
-     * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_normalize_cargs(params, execution)
     const ret = mri_normalize_outputs(params, execution)
@@ -493,6 +493,51 @@ function mri_normalize_execute(
 }
 
 
+/**
+ * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input MRI volume file
+ * @param output_vol Output MRI volume file
+ * @param norm_iters Use n 3D normalization iterations (default=2)
+ * @param disable_1d Disable 1D normalization
+ * @param nonmax_suppress Turn non-maximum suppression on (1) or off (0) when using interior of surfaces
+ * @param conform Interpolate and embed volume to be 256^3
+ * @param nonconform Do not conform the volume
+ * @param gentle Perform kinder gentler normalization
+ * @param control_points Use control points file (usually control.dat)
+ * @param fonly_control_points Use only control points file
+ * @param lonly_labels Use only control points in label file
+ * @param labels Use control points in label file
+ * @param write_volumes Write control point (c) and bias field (b) volumes
+ * @param intensity_above Use control point with intensity above target (default=25.0)
+ * @param intensity_below Use control point with intensity below target (default=10.0)
+ * @param intensity_gradient Use max intensity/mm gradient (default=1.000)
+ * @param prune Turn pruning of control points on/off (default=off)
+ * @param no_gentle_cp Do not use gentle normalization with control points file
+ * @param mask_file Mask file to use
+ * @param atlas_transform Use atlas to exclude control points from being in non-brain regions
+ * @param noskull Do not consider skull regions
+ * @param monkey Turns off 1D, sets num_3d_iter=1
+ * @param nosnr Disable SNR normalization
+ * @param sigma_smooth Smooth bias field with given sigma
+ * @param aseg_file Aseg file for processing
+ * @param debug_v For debugging
+ * @param debug_d For debugging
+ * @param renorm_vol Load volume and use all points in it that are exactly 110 as control points
+ * @param checknorm_vol Load volume and remove all control points that aren't in [min max]
+ * @param load_read_cp For reading control points and bias field
+ * @param cp_output_vol Output final control points as a volume (only with -aseg)
+ * @param surface_transform Normalize based on the skeleton of the interior of the transformed surface
+ * @param seed_value Set random number generator to seed N
+ * @param print_help Print usage
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
+ */
 function mri_normalize(
     input_vol: InputPathType,
     output_vol: string,
@@ -530,51 +575,6 @@ function mri_normalize(
     print_help: boolean = false,
     runner: Runner | null = null,
 ): MriNormalizeOutputs {
-    /**
-     * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input MRI volume file
-     * @param output_vol Output MRI volume file
-     * @param norm_iters Use n 3D normalization iterations (default=2)
-     * @param disable_1d Disable 1D normalization
-     * @param nonmax_suppress Turn non-maximum suppression on (1) or off (0) when using interior of surfaces
-     * @param conform Interpolate and embed volume to be 256^3
-     * @param nonconform Do not conform the volume
-     * @param gentle Perform kinder gentler normalization
-     * @param control_points Use control points file (usually control.dat)
-     * @param fonly_control_points Use only control points file
-     * @param lonly_labels Use only control points in label file
-     * @param labels Use control points in label file
-     * @param write_volumes Write control point (c) and bias field (b) volumes
-     * @param intensity_above Use control point with intensity above target (default=25.0)
-     * @param intensity_below Use control point with intensity below target (default=10.0)
-     * @param intensity_gradient Use max intensity/mm gradient (default=1.000)
-     * @param prune Turn pruning of control points on/off (default=off)
-     * @param no_gentle_cp Do not use gentle normalization with control points file
-     * @param mask_file Mask file to use
-     * @param atlas_transform Use atlas to exclude control points from being in non-brain regions
-     * @param noskull Do not consider skull regions
-     * @param monkey Turns off 1D, sets num_3d_iter=1
-     * @param nosnr Disable SNR normalization
-     * @param sigma_smooth Smooth bias field with given sigma
-     * @param aseg_file Aseg file for processing
-     * @param debug_v For debugging
-     * @param debug_d For debugging
-     * @param renorm_vol Load volume and use all points in it that are exactly 110 as control points
-     * @param checknorm_vol Load volume and remove all control points that aren't in [min max]
-     * @param load_read_cp For reading control points and bias field
-     * @param cp_output_vol Output final control points as a volume (only with -aseg)
-     * @param surface_transform Normalize based on the skeleton of the interior of the transformed surface
-     * @param seed_value Set random number generator to seed N
-     * @param print_help Print usage
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NORMALIZE_METADATA);
     const params = mri_normalize_params(input_vol, output_vol, norm_iters, disable_1d, nonmax_suppress, conform, nonconform, gentle, control_points, fonly_control_points, lonly_labels, labels, write_volumes, intensity_above, intensity_below, intensity_gradient, prune, no_gentle_cp, mask_file, atlas_transform, noskull, monkey, nosnr, sigma_smooth, aseg_file, debug_v, debug_d, renorm_vol, checknorm_vol, load_read_cp, cp_output_vol, surface_transform, seed_value, print_help)
@@ -587,5 +587,8 @@ export {
       MriNormalizeOutputs,
       MriNormalizeParameters,
       mri_normalize,
+      mri_normalize_cargs,
+      mri_normalize_execute,
+      mri_normalize_outputs,
       mri_normalize_params,
 };

@@ -12,38 +12,38 @@ const V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA: Metadata = {
 
 
 interface VSurfSmoothHeat07ExamplesParameters {
-    "__STYXTYPE__": "@SurfSmooth.HEAT_07.examples";
+    "@type": "afni.@SurfSmooth.HEAT_07.examples";
     "path_to_suma_demo": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SurfSmooth.HEAT_07.examples": v__surf_smooth_heat_07_examples_cargs,
+        "afni.@SurfSmooth.HEAT_07.examples": v__surf_smooth_heat_07_examples_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface VSurfSmoothHeat07ExamplesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param path_to_suma_demo Path to SUMA demo directory
+ *
+ * @returns Parameter dictionary
+ */
 function v__surf_smooth_heat_07_examples_params(
     path_to_suma_demo: string,
 ): VSurfSmoothHeat07ExamplesParameters {
-    /**
-     * Build parameters.
-    
-     * @param path_to_suma_demo Path to SUMA demo directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SurfSmooth.HEAT_07.examples" as const,
+        "@type": "afni.@SurfSmooth.HEAT_07.examples" as const,
         "path_to_suma_demo": path_to_suma_demo,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__surf_smooth_heat_07_examples_cargs(
     params: VSurfSmoothHeat07ExamplesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SurfSmooth.HEAT_07.examples");
     cargs.push((params["path_to_suma_demo"] ?? null));
@@ -100,18 +100,18 @@ function v__surf_smooth_heat_07_examples_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__surf_smooth_heat_07_examples_outputs(
     params: VSurfSmoothHeat07ExamplesParameters,
     execution: Execution,
 ): VSurfSmoothHeat07ExamplesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSurfSmoothHeat07ExamplesOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function v__surf_smooth_heat_07_examples_outputs(
 }
 
 
+/**
+ * A script to illustrate controlled blurring of data on the surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
+ */
 function v__surf_smooth_heat_07_examples_execute(
     params: VSurfSmoothHeat07ExamplesParameters,
     execution: Execution,
 ): VSurfSmoothHeat07ExamplesOutputs {
-    /**
-     * A script to illustrate controlled blurring of data on the surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__surf_smooth_heat_07_examples_cargs(params, execution)
     const ret = v__surf_smooth_heat_07_examples_outputs(params, execution)
@@ -143,22 +143,22 @@ function v__surf_smooth_heat_07_examples_execute(
 }
 
 
+/**
+ * A script to illustrate controlled blurring of data on the surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param path_to_suma_demo Path to SUMA demo directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
+ */
 function v__surf_smooth_heat_07_examples(
     path_to_suma_demo: string,
     runner: Runner | null = null,
 ): VSurfSmoothHeat07ExamplesOutputs {
-    /**
-     * A script to illustrate controlled blurring of data on the surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param path_to_suma_demo Path to SUMA demo directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA);
     const params = v__surf_smooth_heat_07_examples_params(path_to_suma_demo)
@@ -171,5 +171,8 @@ export {
       VSurfSmoothHeat07ExamplesParameters,
       V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA,
       v__surf_smooth_heat_07_examples,
+      v__surf_smooth_heat_07_examples_cargs,
+      v__surf_smooth_heat_07_examples_execute,
+      v__surf_smooth_heat_07_examples_outputs,
       v__surf_smooth_heat_07_examples_params,
 };

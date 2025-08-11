@@ -12,7 +12,7 @@ const V_3DNEWID_METADATA: Metadata = {
 
 
 interface V3dnewidParameters {
-    "__STYXTYPE__": "3dnewid";
+    "@type": "afni.3dnewid";
     "datasets": Array<InputPathType>;
     "fun"?: number | null | undefined;
     "fun11": boolean;
@@ -22,33 +22,33 @@ interface V3dnewidParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dnewid": v_3dnewid_cargs,
+        "afni.3dnewid": v_3dnewid_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface V3dnewidOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input datasets to assign new ID codes.
+ * @param fun Generate n randomly generated ID codes. If n is not present, 1 ID code is printed.
+ * @param fun11 Generate an 11 character ID code for use in scripting
+ * @param int Generate a random positive integer between 1 million and 1 billion.
+ * @param hash Generate a unique hash code of the provided string. The same string produces the same hash code.
+ * @param md5 Generate the MD5 hash of the provided string. Output should be the same as the -hash output without the prefix and without the + and / char substitutions.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dnewid_params(
     datasets: Array<InputPathType>,
     fun: number | null = null,
@@ -76,20 +88,8 @@ function v_3dnewid_params(
     hash: string | null = null,
     md5: string | null = null,
 ): V3dnewidParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input datasets to assign new ID codes.
-     * @param fun Generate n randomly generated ID codes. If n is not present, 1 ID code is printed.
-     * @param fun11 Generate an 11 character ID code for use in scripting
-     * @param int Generate a random positive integer between 1 million and 1 billion.
-     * @param hash Generate a unique hash code of the provided string. The same string produces the same hash code.
-     * @param md5 Generate the MD5 hash of the provided string. Output should be the same as the -hash output without the prefix and without the + and / char substitutions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dnewid" as const,
+        "@type": "afni.3dnewid" as const,
         "datasets": datasets,
         "fun11": fun11,
         "int": int,
@@ -107,18 +107,18 @@ function v_3dnewid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dnewid_cargs(
     params: V3dnewidParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dnewid");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -150,18 +150,18 @@ function v_3dnewid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dnewid_outputs(
     params: V3dnewidParameters,
     execution: Execution,
 ): V3dnewidOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dnewidOutputs = {
         root: execution.outputFile("."),
     };
@@ -169,22 +169,22 @@ function v_3dnewid_outputs(
 }
 
 
+/**
+ * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
+ */
 function v_3dnewid_execute(
     params: V3dnewidParameters,
     execution: Execution,
 ): V3dnewidOutputs {
-    /**
-     * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dnewid_cargs(params, execution)
     const ret = v_3dnewid_outputs(params, execution)
@@ -193,6 +193,23 @@ function v_3dnewid_execute(
 }
 
 
+/**
+ * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input datasets to assign new ID codes.
+ * @param fun Generate n randomly generated ID codes. If n is not present, 1 ID code is printed.
+ * @param fun11 Generate an 11 character ID code for use in scripting
+ * @param int Generate a random positive integer between 1 million and 1 billion.
+ * @param hash Generate a unique hash code of the provided string. The same string produces the same hash code.
+ * @param md5 Generate the MD5 hash of the provided string. Output should be the same as the -hash output without the prefix and without the + and / char substitutions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
+ */
 function v_3dnewid(
     datasets: Array<InputPathType>,
     fun: number | null = null,
@@ -202,23 +219,6 @@ function v_3dnewid(
     md5: string | null = null,
     runner: Runner | null = null,
 ): V3dnewidOutputs {
-    /**
-     * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input datasets to assign new ID codes.
-     * @param fun Generate n randomly generated ID codes. If n is not present, 1 ID code is printed.
-     * @param fun11 Generate an 11 character ID code for use in scripting
-     * @param int Generate a random positive integer between 1 million and 1 billion.
-     * @param hash Generate a unique hash code of the provided string. The same string produces the same hash code.
-     * @param md5 Generate the MD5 hash of the provided string. Output should be the same as the -hash output without the prefix and without the + and / char substitutions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DNEWID_METADATA);
     const params = v_3dnewid_params(datasets, fun, fun11, int, hash, md5)
@@ -231,5 +231,8 @@ export {
       V3dnewidParameters,
       V_3DNEWID_METADATA,
       v_3dnewid,
+      v_3dnewid_cargs,
+      v_3dnewid_execute,
+      v_3dnewid_outputs,
       v_3dnewid_params,
 };

@@ -12,42 +12,42 @@ const MRI_DCT_ALIGN_METADATA: Metadata = {
 
 
 interface MriDctAlignParameters {
-    "__STYXTYPE__": "mri_dct_align";
+    "@type": "freesurfer.mri_dct_align";
     "source": InputPathType;
     "destination": InputPathType;
     "output_xform": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_dct_align": mri_dct_align_cargs,
+        "freesurfer.mri_dct_align": mri_dct_align_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_dct_align": mri_dct_align_outputs,
+        "freesurfer.mri_dct_align": mri_dct_align_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriDctAlignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Source image file
+ * @param destination Destination image file
+ * @param output_xform Output transformation file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_dct_align_params(
     source: InputPathType,
     destination: InputPathType,
     output_xform: string,
 ): MriDctAlignParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Source image file
-     * @param destination Destination image file
-     * @param output_xform Output transformation file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_dct_align" as const,
+        "@type": "freesurfer.mri_dct_align" as const,
         "source": source,
         "destination": destination,
         "output_xform": output_xform,
@@ -94,18 +94,18 @@ function mri_dct_align_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_dct_align_cargs(
     params: MriDctAlignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_dct_align");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -115,18 +115,18 @@ function mri_dct_align_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_dct_align_outputs(
     params: MriDctAlignParameters,
     execution: Execution,
 ): MriDctAlignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDctAlignOutputs = {
         root: execution.outputFile("."),
         output_xform_file: execution.outputFile([(params["output_xform"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_dct_align_outputs(
 }
 
 
+/**
+ * MRI DCT alignment tool from FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
+ */
 function mri_dct_align_execute(
     params: MriDctAlignParameters,
     execution: Execution,
 ): MriDctAlignOutputs {
-    /**
-     * MRI DCT alignment tool from FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_dct_align_cargs(params, execution)
     const ret = mri_dct_align_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_dct_align_execute(
 }
 
 
+/**
+ * MRI DCT alignment tool from FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Source image file
+ * @param destination Destination image file
+ * @param output_xform Output transformation file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
+ */
 function mri_dct_align(
     source: InputPathType,
     destination: InputPathType,
     output_xform: string,
     runner: Runner | null = null,
 ): MriDctAlignOutputs {
-    /**
-     * MRI DCT alignment tool from FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Source image file
-     * @param destination Destination image file
-     * @param output_xform Output transformation file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DCT_ALIGN_METADATA);
     const params = mri_dct_align_params(source, destination, output_xform)
@@ -191,5 +191,8 @@ export {
       MriDctAlignOutputs,
       MriDctAlignParameters,
       mri_dct_align,
+      mri_dct_align_cargs,
+      mri_dct_align_execute,
+      mri_dct_align_outputs,
       mri_dct_align_params,
 };

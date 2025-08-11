@@ -12,41 +12,41 @@ const DMRI_NEIGHBORING_REGIONS_METADATA: Metadata = {
 
 
 interface DmriNeighboringRegionsParameters {
-    "__STYXTYPE__": "dmri_neighboringRegions";
+    "@type": "freesurfer.dmri_neighboringRegions";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_neighboringRegions": dmri_neighboring_regions_cargs,
+        "freesurfer.dmri_neighboringRegions": dmri_neighboring_regions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_neighboringRegions": dmri_neighboring_regions_outputs,
+        "freesurfer.dmri_neighboringRegions": dmri_neighboring_regions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface DmriNeighboringRegionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file (e.g. img.nii.gz)
+ * @param output_file Output result file (e.g. result.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_neighboring_regions_params(
     input_file: InputPathType,
     output_file: string,
 ): DmriNeighboringRegionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file (e.g. img.nii.gz)
-     * @param output_file Output result file (e.g. result.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_neighboringRegions" as const,
+        "@type": "freesurfer.dmri_neighboringRegions" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function dmri_neighboring_regions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_neighboring_regions_cargs(
     params: DmriNeighboringRegionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_neighboringRegions");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function dmri_neighboring_regions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_neighboring_regions_outputs(
     params: DmriNeighboringRegionsParameters,
     execution: Execution,
 ): DmriNeighboringRegionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriNeighboringRegionsOutputs = {
         root: execution.outputFile("."),
         result_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function dmri_neighboring_regions_outputs(
 }
 
 
+/**
+ * A tool for diffusion MRI analysis involving neighboring regions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
+ */
 function dmri_neighboring_regions_execute(
     params: DmriNeighboringRegionsParameters,
     execution: Execution,
 ): DmriNeighboringRegionsOutputs {
-    /**
-     * A tool for diffusion MRI analysis involving neighboring regions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_neighboring_regions_cargs(params, execution)
     const ret = dmri_neighboring_regions_outputs(params, execution)
@@ -154,24 +154,24 @@ function dmri_neighboring_regions_execute(
 }
 
 
+/**
+ * A tool for diffusion MRI analysis involving neighboring regions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input image file (e.g. img.nii.gz)
+ * @param output_file Output result file (e.g. result.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
+ */
 function dmri_neighboring_regions(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): DmriNeighboringRegionsOutputs {
-    /**
-     * A tool for diffusion MRI analysis involving neighboring regions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input image file (e.g. img.nii.gz)
-     * @param output_file Output result file (e.g. result.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_NEIGHBORING_REGIONS_METADATA);
     const params = dmri_neighboring_regions_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       DmriNeighboringRegionsOutputs,
       DmriNeighboringRegionsParameters,
       dmri_neighboring_regions,
+      dmri_neighboring_regions_cargs,
+      dmri_neighboring_regions_execute,
+      dmri_neighboring_regions_outputs,
       dmri_neighboring_regions_params,
 };

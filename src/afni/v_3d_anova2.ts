@@ -12,7 +12,7 @@ const V_3D_ANOVA2_METADATA: Metadata = {
 
 
 interface V3dAnova2Parameters {
-    "__STYXTYPE__": "3dANOVA2";
+    "@type": "afni.3dANOVA2";
     "type": number;
     "alevels": number;
     "blevels": number;
@@ -40,35 +40,35 @@ interface V3dAnova2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dANOVA2": v_3d_anova2_cargs,
+        "afni.3dANOVA2": v_3d_anova2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dANOVA2": v_3d_anova2_outputs,
+        "afni.3dANOVA2": v_3d_anova2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -143,6 +143,36 @@ interface V3dAnova2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param type_ Type of ANOVA model to be used: 1=fixed, 2=random, 3=mixed
+ * @param alevels Number of levels of factor A
+ * @param blevels Number of levels of factor B
+ * @param dataset Data set for levels of factor A and factor B
+ * @param voxel Screen output for voxel number
+ * @param diskspace Print out disk space required for program execution
+ * @param mask Use sub-brick #0 of dataset 'mset' to define which voxels to process
+ * @param ftr F-statistic for treatment effect
+ * @param fa F-statistic for factor A effect
+ * @param fb F-statistic for factor B effect
+ * @param fab F-statistic for interaction
+ * @param amean Estimate mean of factor A level
+ * @param bmean Estimate mean of factor B level
+ * @param xmean Estimate mean of cell at level i of factor A and level j of factor B
+ * @param adiff Difference between levels i and j of factor A
+ * @param bdiff Difference between levels i and j of factor B
+ * @param xdiff Difference between cell mean at A=i, B=j and cell mean at A=k, B=l
+ * @param acontr Contrast in factor A levels
+ * @param bcontr Contrast in factor B levels
+ * @param xcontr Contrast in cell means
+ * @param bucket Create one AFNI 'bucket' dataset whose sub-bricks are obtained by concatenating the above output files
+ * @param old_method Request to perform ANOVA using the previous functionality (requires -OK, also)
+ * @param ok Confirm understanding that contrasts that do not sum to zero have inflated t-stats, and contrasts that do sum to zero assume sphericity (to be used with -old_method)
+ * @param assume_sph Assume sphericity (zero-sum contrasts, only). This allows use of the old_method for computing contrasts which sum to zero
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anova2_params(
     type_: number,
     alevels: number,
@@ -169,38 +199,8 @@ function v_3d_anova2_params(
     ok: boolean = false,
     assume_sph: boolean = false,
 ): V3dAnova2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ Type of ANOVA model to be used: 1=fixed, 2=random, 3=mixed
-     * @param alevels Number of levels of factor A
-     * @param blevels Number of levels of factor B
-     * @param dataset Data set for levels of factor A and factor B
-     * @param voxel Screen output for voxel number
-     * @param diskspace Print out disk space required for program execution
-     * @param mask Use sub-brick #0 of dataset 'mset' to define which voxels to process
-     * @param ftr F-statistic for treatment effect
-     * @param fa F-statistic for factor A effect
-     * @param fb F-statistic for factor B effect
-     * @param fab F-statistic for interaction
-     * @param amean Estimate mean of factor A level
-     * @param bmean Estimate mean of factor B level
-     * @param xmean Estimate mean of cell at level i of factor A and level j of factor B
-     * @param adiff Difference between levels i and j of factor A
-     * @param bdiff Difference between levels i and j of factor B
-     * @param xdiff Difference between cell mean at A=i, B=j and cell mean at A=k, B=l
-     * @param acontr Contrast in factor A levels
-     * @param bcontr Contrast in factor B levels
-     * @param xcontr Contrast in cell means
-     * @param bucket Create one AFNI 'bucket' dataset whose sub-bricks are obtained by concatenating the above output files
-     * @param old_method Request to perform ANOVA using the previous functionality (requires -OK, also)
-     * @param ok Confirm understanding that contrasts that do not sum to zero have inflated t-stats, and contrasts that do sum to zero assume sphericity (to be used with -old_method)
-     * @param assume_sph Assume sphericity (zero-sum contrasts, only). This allows use of the old_method for computing contrasts which sum to zero
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dANOVA2" as const,
+        "@type": "afni.3dANOVA2" as const,
         "type": type_,
         "alevels": alevels,
         "blevels": blevels,
@@ -264,18 +264,18 @@ function v_3d_anova2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anova2_cargs(
     params: V3dAnova2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dANOVA2");
     cargs.push(
@@ -408,18 +408,18 @@ function v_3d_anova2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_anova2_outputs(
     params: V3dAnova2Parameters,
     execution: Execution,
 ): V3dAnova2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAnova2Outputs = {
         root: execution.outputFile("."),
         output_ftr: ((params["ftr"] ?? null) !== null) ? execution.outputFile([(params["ftr"] ?? null), ".+tlrc"].join('')) : null,
@@ -441,22 +441,22 @@ function v_3d_anova2_outputs(
 }
 
 
+/**
+ * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnova2Outputs`).
+ */
 function v_3d_anova2_execute(
     params: V3dAnova2Parameters,
     execution: Execution,
 ): V3dAnova2Outputs {
-    /**
-     * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAnova2Outputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_anova2_cargs(params, execution)
     const ret = v_3d_anova2_outputs(params, execution)
@@ -465,6 +465,41 @@ function v_3d_anova2_execute(
 }
 
 
+/**
+ * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param type_ Type of ANOVA model to be used: 1=fixed, 2=random, 3=mixed
+ * @param alevels Number of levels of factor A
+ * @param blevels Number of levels of factor B
+ * @param dataset Data set for levels of factor A and factor B
+ * @param voxel Screen output for voxel number
+ * @param diskspace Print out disk space required for program execution
+ * @param mask Use sub-brick #0 of dataset 'mset' to define which voxels to process
+ * @param ftr F-statistic for treatment effect
+ * @param fa F-statistic for factor A effect
+ * @param fb F-statistic for factor B effect
+ * @param fab F-statistic for interaction
+ * @param amean Estimate mean of factor A level
+ * @param bmean Estimate mean of factor B level
+ * @param xmean Estimate mean of cell at level i of factor A and level j of factor B
+ * @param adiff Difference between levels i and j of factor A
+ * @param bdiff Difference between levels i and j of factor B
+ * @param xdiff Difference between cell mean at A=i, B=j and cell mean at A=k, B=l
+ * @param acontr Contrast in factor A levels
+ * @param bcontr Contrast in factor B levels
+ * @param xcontr Contrast in cell means
+ * @param bucket Create one AFNI 'bucket' dataset whose sub-bricks are obtained by concatenating the above output files
+ * @param old_method Request to perform ANOVA using the previous functionality (requires -OK, also)
+ * @param ok Confirm understanding that contrasts that do not sum to zero have inflated t-stats, and contrasts that do sum to zero assume sphericity (to be used with -old_method)
+ * @param assume_sph Assume sphericity (zero-sum contrasts, only). This allows use of the old_method for computing contrasts which sum to zero
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnova2Outputs`).
+ */
 function v_3d_anova2(
     type_: number,
     alevels: number,
@@ -492,41 +527,6 @@ function v_3d_anova2(
     assume_sph: boolean = false,
     runner: Runner | null = null,
 ): V3dAnova2Outputs {
-    /**
-     * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param type_ Type of ANOVA model to be used: 1=fixed, 2=random, 3=mixed
-     * @param alevels Number of levels of factor A
-     * @param blevels Number of levels of factor B
-     * @param dataset Data set for levels of factor A and factor B
-     * @param voxel Screen output for voxel number
-     * @param diskspace Print out disk space required for program execution
-     * @param mask Use sub-brick #0 of dataset 'mset' to define which voxels to process
-     * @param ftr F-statistic for treatment effect
-     * @param fa F-statistic for factor A effect
-     * @param fb F-statistic for factor B effect
-     * @param fab F-statistic for interaction
-     * @param amean Estimate mean of factor A level
-     * @param bmean Estimate mean of factor B level
-     * @param xmean Estimate mean of cell at level i of factor A and level j of factor B
-     * @param adiff Difference between levels i and j of factor A
-     * @param bdiff Difference between levels i and j of factor B
-     * @param xdiff Difference between cell mean at A=i, B=j and cell mean at A=k, B=l
-     * @param acontr Contrast in factor A levels
-     * @param bcontr Contrast in factor B levels
-     * @param xcontr Contrast in cell means
-     * @param bucket Create one AFNI 'bucket' dataset whose sub-bricks are obtained by concatenating the above output files
-     * @param old_method Request to perform ANOVA using the previous functionality (requires -OK, also)
-     * @param ok Confirm understanding that contrasts that do not sum to zero have inflated t-stats, and contrasts that do sum to zero assume sphericity (to be used with -old_method)
-     * @param assume_sph Assume sphericity (zero-sum contrasts, only). This allows use of the old_method for computing contrasts which sum to zero
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAnova2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ANOVA2_METADATA);
     const params = v_3d_anova2_params(type_, alevels, blevels, dataset, voxel, diskspace, mask, ftr, fa, fb, fab, amean, bmean, xmean, adiff, bdiff, xdiff, acontr, bcontr, xcontr, bucket, old_method, ok, assume_sph)
@@ -539,5 +539,8 @@ export {
       V3dAnova2Parameters,
       V_3D_ANOVA2_METADATA,
       v_3d_anova2,
+      v_3d_anova2_cargs,
+      v_3d_anova2_execute,
+      v_3d_anova2_outputs,
       v_3d_anova2_params,
 };

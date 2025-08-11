@@ -12,26 +12,26 @@ const MASKFILTER_METADATA: Metadata = {
 
 
 interface MaskfilterVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.maskfilter.VariousString";
     "obj": string;
 }
 
 
 interface MaskfilterVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.maskfilter.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MaskfilterConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.maskfilter.config";
     "key": string;
     "value": string;
 }
 
 
 interface MaskfilterParameters {
-    "__STYXTYPE__": "maskfilter";
+    "@type": "mrtrix.maskfilter";
     "scale"?: number | null | undefined;
     "axes"?: Array<number> | null | undefined;
     "largest": boolean;
@@ -53,129 +53,129 @@ interface MaskfilterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "maskfilter": maskfilter_cargs,
-        "VariousString": maskfilter_various_string_cargs,
-        "VariousFile": maskfilter_various_file_cargs,
-        "config": maskfilter_config_cargs,
+        "mrtrix.maskfilter": maskfilter_cargs,
+        "mrtrix.maskfilter.VariousString": maskfilter_various_string_cargs,
+        "mrtrix.maskfilter.VariousFile": maskfilter_various_file_cargs,
+        "mrtrix.maskfilter.config": maskfilter_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "maskfilter": maskfilter_outputs,
+        "mrtrix.maskfilter": maskfilter_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function maskfilter_various_string_params(
     obj: string,
 ): MaskfilterVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.maskfilter.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskfilter_various_string_cargs(
     params: MaskfilterVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function maskfilter_various_file_params(
     obj: InputPathType,
 ): MaskfilterVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.maskfilter.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskfilter_various_file_cargs(
     params: MaskfilterVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function maskfilter_config_params(
     key: string,
     value: string,
 ): MaskfilterConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.maskfilter.config" as const,
         "key": key,
         "value": value,
     };
@@ -183,18 +183,18 @@ function maskfilter_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskfilter_config_cargs(
     params: MaskfilterConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -220,6 +220,30 @@ interface MaskfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image.
+ * @param filter the type of filter to be applied (clean, connect, dilate, erode, median)
+ * @param output the output image.
+ * @param scale the maximum scale used to cut bridges. A certain maximum scale cuts bridges up to a width (in voxels) of 2x the provided scale. (Default: 2)
+ * @param axes specify which axes should be included in the connected components. By default only the first 3 axes are included. The axes should be provided as a comma-separated list of values.
+ * @param largest only retain the largest connected component
+ * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
+ * @param npass the number of times to repeatedly apply the filter
+ * @param extent specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default is 3x3x3.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function maskfilter_params(
     input: InputPathType,
     filter: string,
@@ -240,32 +264,8 @@ function maskfilter_params(
     help: boolean = false,
     version: boolean = false,
 ): MaskfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image.
-     * @param filter the type of filter to be applied (clean, connect, dilate, erode, median)
-     * @param output the output image.
-     * @param scale the maximum scale used to cut bridges. A certain maximum scale cuts bridges up to a width (in voxels) of 2x the provided scale. (Default: 2)
-     * @param axes specify which axes should be included in the connected components. By default only the first 3 axes are included. The axes should be provided as a comma-separated list of values.
-     * @param largest only retain the largest connected component
-     * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
-     * @param npass the number of times to repeatedly apply the filter
-     * @param extent specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default is 3x3x3.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "maskfilter" as const,
+        "@type": "mrtrix.maskfilter" as const,
         "largest": largest,
         "connectivity": connectivity,
         "info": info,
@@ -303,18 +303,18 @@ function maskfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskfilter_cargs(
     params: MaskfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("maskfilter");
     if ((params["scale"] ?? null) !== null) {
@@ -350,7 +350,7 @@ function maskfilter_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -372,7 +372,7 @@ function maskfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -387,18 +387,18 @@ function maskfilter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function maskfilter_outputs(
     params: MaskfilterParameters,
     execution: Execution,
 ): MaskfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MaskfilterOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -407,30 +407,30 @@ function maskfilter_outputs(
 }
 
 
+/**
+ * Perform filtering operations on 3D / 4D mask images.
+ *
+ * The available filters are: clean, connect, dilate, erode, median.
+ *
+ * Each filter has its own unique set of optional parameters.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
+ */
 function maskfilter_execute(
     params: MaskfilterParameters,
     execution: Execution,
 ): MaskfilterOutputs {
-    /**
-     * Perform filtering operations on 3D / 4D mask images.
-     * 
-     * The available filters are: clean, connect, dilate, erode, median.
-     * 
-     * Each filter has its own unique set of optional parameters.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = maskfilter_cargs(params, execution)
     const ret = maskfilter_outputs(params, execution)
@@ -439,6 +439,43 @@ function maskfilter_execute(
 }
 
 
+/**
+ * Perform filtering operations on 3D / 4D mask images.
+ *
+ * The available filters are: clean, connect, dilate, erode, median.
+ *
+ * Each filter has its own unique set of optional parameters.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image.
+ * @param filter the type of filter to be applied (clean, connect, dilate, erode, median)
+ * @param output the output image.
+ * @param scale the maximum scale used to cut bridges. A certain maximum scale cuts bridges up to a width (in voxels) of 2x the provided scale. (Default: 2)
+ * @param axes specify which axes should be included in the connected components. By default only the first 3 axes are included. The axes should be provided as a comma-separated list of values.
+ * @param largest only retain the largest connected component
+ * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
+ * @param npass the number of times to repeatedly apply the filter
+ * @param extent specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default is 3x3x3.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
+ */
 function maskfilter(
     input: InputPathType,
     filter: string,
@@ -460,43 +497,6 @@ function maskfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): MaskfilterOutputs {
-    /**
-     * Perform filtering operations on 3D / 4D mask images.
-     * 
-     * The available filters are: clean, connect, dilate, erode, median.
-     * 
-     * Each filter has its own unique set of optional parameters.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image.
-     * @param filter the type of filter to be applied (clean, connect, dilate, erode, median)
-     * @param output the output image.
-     * @param scale the maximum scale used to cut bridges. A certain maximum scale cuts bridges up to a width (in voxels) of 2x the provided scale. (Default: 2)
-     * @param axes specify which axes should be included in the connected components. By default only the first 3 axes are included. The axes should be provided as a comma-separated list of values.
-     * @param largest only retain the largest connected component
-     * @param connectivity use 26-voxel-neighbourhood connectivity (Default: 6)
-     * @param npass the number of times to repeatedly apply the filter
-     * @param extent specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default is 3x3x3.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MASKFILTER_METADATA);
     const params = maskfilter_params(input, filter, output, scale, axes, largest, connectivity, npass, extent, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -512,8 +512,14 @@ export {
       MaskfilterVariousFileParameters,
       MaskfilterVariousStringParameters,
       maskfilter,
+      maskfilter_cargs,
+      maskfilter_config_cargs,
       maskfilter_config_params,
+      maskfilter_execute,
+      maskfilter_outputs,
       maskfilter_params,
+      maskfilter_various_file_cargs,
       maskfilter_various_file_params,
+      maskfilter_various_string_cargs,
       maskfilter_various_string_params,
 };

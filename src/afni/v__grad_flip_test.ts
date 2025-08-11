@@ -12,7 +12,7 @@ const V__GRAD_FLIP_TEST_METADATA: Metadata = {
 
 
 interface VGradFlipTestParameters {
-    "__STYXTYPE__": "@GradFlipTest";
+    "@type": "afni.@GradFlipTest";
     "dwi": InputPathType;
     "grad_row_vec"?: InputPathType | null | undefined;
     "grad_col_vec"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface VGradFlipTestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GradFlipTest": v__grad_flip_test_cargs,
+        "afni.@GradFlipTest": v__grad_flip_test_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@GradFlipTest": v__grad_flip_test_outputs,
+        "afni.@GradFlipTest": v__grad_flip_test_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface VGradFlipTestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dwi Set of DWIs (N total volumes)
+ * @param grad_row_vec Set of row-wise gradient vectors
+ * @param grad_col_vec Set of column-wise gradient vectors
+ * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
+ * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
+ * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
+ * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
+ * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
+ * @param thresh_len Set minimum tract length to keep a tract when propagating (default L=30mm)
+ * @param prefix Output name of text file that stores recommended flip option
+ * @param check_abs_min Handle tiny negative values in gradient vectors
+ * @param scale_out_1000 Scale output to 1000, as in 3dDWItoDT (probably not necessary)
+ * @param wdir Rename working directory output; useful if running multiple iterations
+ * @param do_clean Remove temporary directory
+ *
+ * @returns Parameter dictionary
+ */
 function v__grad_flip_test_params(
     dwi: InputPathType,
     grad_row_vec: InputPathType | null = null,
@@ -101,28 +121,8 @@ function v__grad_flip_test_params(
     wdir: string | null = null,
     do_clean: boolean = false,
 ): VGradFlipTestParameters {
-    /**
-     * Build parameters.
-    
-     * @param dwi Set of DWIs (N total volumes)
-     * @param grad_row_vec Set of row-wise gradient vectors
-     * @param grad_col_vec Set of column-wise gradient vectors
-     * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
-     * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
-     * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
-     * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
-     * @param thresh_len Set minimum tract length to keep a tract when propagating (default L=30mm)
-     * @param prefix Output name of text file that stores recommended flip option
-     * @param check_abs_min Handle tiny negative values in gradient vectors
-     * @param scale_out_1000 Scale output to 1000, as in 3dDWItoDT (probably not necessary)
-     * @param wdir Rename working directory output; useful if running multiple iterations
-     * @param do_clean Remove temporary directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GradFlipTest" as const,
+        "@type": "afni.@GradFlipTest" as const,
         "dwi": dwi,
         "scale_out_1000": scale_out_1000,
         "do_clean": do_clean,
@@ -164,18 +164,18 @@ function v__grad_flip_test_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__grad_flip_test_cargs(
     params: VGradFlipTestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GradFlipTest");
     cargs.push(
@@ -258,18 +258,18 @@ function v__grad_flip_test_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__grad_flip_test_outputs(
     params: VGradFlipTestParameters,
     execution: Execution,
 ): VGradFlipTestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGradFlipTestOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".txt"].join('')) : null,
@@ -279,22 +279,22 @@ function v__grad_flip_test_outputs(
 }
 
 
+/**
+ * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
+ */
 function v__grad_flip_test_execute(
     params: VGradFlipTestParameters,
     execution: Execution,
 ): VGradFlipTestOutputs {
-    /**
-     * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__grad_flip_test_cargs(params, execution)
     const ret = v__grad_flip_test_outputs(params, execution)
@@ -303,6 +303,31 @@ function v__grad_flip_test_execute(
 }
 
 
+/**
+ * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dwi Set of DWIs (N total volumes)
+ * @param grad_row_vec Set of row-wise gradient vectors
+ * @param grad_col_vec Set of column-wise gradient vectors
+ * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
+ * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
+ * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
+ * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
+ * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
+ * @param thresh_len Set minimum tract length to keep a tract when propagating (default L=30mm)
+ * @param prefix Output name of text file that stores recommended flip option
+ * @param check_abs_min Handle tiny negative values in gradient vectors
+ * @param scale_out_1000 Scale output to 1000, as in 3dDWItoDT (probably not necessary)
+ * @param wdir Rename working directory output; useful if running multiple iterations
+ * @param do_clean Remove temporary directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
+ */
 function v__grad_flip_test(
     dwi: InputPathType,
     grad_row_vec: InputPathType | null = null,
@@ -320,31 +345,6 @@ function v__grad_flip_test(
     do_clean: boolean = false,
     runner: Runner | null = null,
 ): VGradFlipTestOutputs {
-    /**
-     * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dwi Set of DWIs (N total volumes)
-     * @param grad_row_vec Set of row-wise gradient vectors
-     * @param grad_col_vec Set of column-wise gradient vectors
-     * @param grad_col_mat_a Set of column-wise g- or b-matrix elements ("AFNI"-style format, "diagonal-first")
-     * @param grad_col_mat_t Set of column-wise g- or b-matrix elements ("TORTOISE"-style format, "row-first")
-     * @param mask Optional mask (probably whole brain); otherwise, automasking is performed
-     * @param bvals Can input bvals, if necessary (but shouldn't be necessary?)
-     * @param thresh_fa Set minimum FA value for tracking (default X=0.2)
-     * @param thresh_len Set minimum tract length to keep a tract when propagating (default L=30mm)
-     * @param prefix Output name of text file that stores recommended flip option
-     * @param check_abs_min Handle tiny negative values in gradient vectors
-     * @param scale_out_1000 Scale output to 1000, as in 3dDWItoDT (probably not necessary)
-     * @param wdir Rename working directory output; useful if running multiple iterations
-     * @param do_clean Remove temporary directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GRAD_FLIP_TEST_METADATA);
     const params = v__grad_flip_test_params(dwi, grad_row_vec, grad_col_vec, grad_col_mat_a, grad_col_mat_t, mask, bvals, thresh_fa, thresh_len, prefix, check_abs_min, scale_out_1000, wdir, do_clean)
@@ -357,5 +357,8 @@ export {
       VGradFlipTestParameters,
       V__GRAD_FLIP_TEST_METADATA,
       v__grad_flip_test,
+      v__grad_flip_test_cargs,
+      v__grad_flip_test_execute,
+      v__grad_flip_test_outputs,
       v__grad_flip_test_params,
 };

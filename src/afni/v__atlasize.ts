@@ -12,7 +12,7 @@ const V__ATLASIZE_METADATA: Metadata = {
 
 
 interface VAtlasizeParameters {
-    "__STYXTYPE__": "@Atlasize";
+    "@type": "afni.@Atlasize";
     "dset"?: InputPathType | null | undefined;
     "space"?: string | null | undefined;
     "lab_file"?: Array<string> | null | undefined;
@@ -34,35 +34,35 @@ interface VAtlasizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Atlasize": v__atlasize_cargs,
+        "afni.@Atlasize": v__atlasize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@Atlasize": v__atlasize_outputs,
+        "afni.@Atlasize": v__atlasize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface VAtlasizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Make DSET an atlas
+ * @param space Mark DSET as being in space SPACE
+ * @param lab_file Labels and keys are in text file FILE. cLAB is the index of column containing labels, vVAL is the index of column containing keys (1st column is indexed at 0)
+ * @param lab_file_delim Set column delimiter for -lab_file option. Default is ' ' (space), but you can set your own. ';' for example.
+ * @param longnames Additionally, allow for another column of long names for regions, e.g., amygdala for AMY. cLONGNAME is the starting column for the long name continuing to the last name of the output.
+ * @param last_longname_col Limit long names to nth column
+ * @param atlas_type Set the atlas type where TP is 'S' for subject-based and 'G' for group-based atlases, respectively.
+ * @param atlas_description A description for the atlas. Default is 'My Atlas'
+ * @param atlas_name Name for the atlas. Default name is based on prefix of DSET.
+ * @param auto_backup Back up the dataset if it already exists in the custom atlas directory and allows an overwrite
+ * @param centers Add center of mass coordinates to atlas
+ * @param centertype Choose Icent, Dcent, or cm for different ways to compute centers
+ * @param centermask Calculate center of mass locations for each ROI using a subset of voxels. Useful for atlases with identical labels in both hemispheres.
+ * @param skip_novoxels Skip regions without any voxels in the dataset
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find Search for lines containing WORD in -help output. Search is approximate.
+ *
+ * @returns Parameter dictionary
+ */
 function v__atlasize_params(
     dset: InputPathType | null = null,
     space: string | null = null,
@@ -105,32 +129,8 @@ function v__atlasize_params(
     all_opts: boolean = false,
     h_find: string | null = null,
 ): VAtlasizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Make DSET an atlas
-     * @param space Mark DSET as being in space SPACE
-     * @param lab_file Labels and keys are in text file FILE. cLAB is the index of column containing labels, vVAL is the index of column containing keys (1st column is indexed at 0)
-     * @param lab_file_delim Set column delimiter for -lab_file option. Default is ' ' (space), but you can set your own. ';' for example.
-     * @param longnames Additionally, allow for another column of long names for regions, e.g., amygdala for AMY. cLONGNAME is the starting column for the long name continuing to the last name of the output.
-     * @param last_longname_col Limit long names to nth column
-     * @param atlas_type Set the atlas type where TP is 'S' for subject-based and 'G' for group-based atlases, respectively.
-     * @param atlas_description A description for the atlas. Default is 'My Atlas'
-     * @param atlas_name Name for the atlas. Default name is based on prefix of DSET.
-     * @param auto_backup Back up the dataset if it already exists in the custom atlas directory and allows an overwrite
-     * @param centers Add center of mass coordinates to atlas
-     * @param centertype Choose Icent, Dcent, or cm for different ways to compute centers
-     * @param centermask Calculate center of mass locations for each ROI using a subset of voxels. Useful for atlases with identical labels in both hemispheres.
-     * @param skip_novoxels Skip regions without any voxels in the dataset
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find Search for lines containing WORD in -help output. Search is approximate.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Atlasize" as const,
+        "@type": "afni.@Atlasize" as const,
         "auto_backup": auto_backup,
         "centers": centers,
         "skip_novoxels": skip_novoxels,
@@ -178,18 +178,18 @@ function v__atlasize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__atlasize_cargs(
     params: VAtlasizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Atlasize");
     if ((params["dset"] ?? null) !== null) {
@@ -286,18 +286,18 @@ function v__atlasize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__atlasize_outputs(
     params: VAtlasizeParameters,
     execution: Execution,
 ): VAtlasizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAtlasizeOutputs = {
         root: execution.outputFile("."),
         niml_file: ((params["dset"] ?? null) !== null) ? execution.outputFile([path.basename((params["dset"] ?? null)), ".niml"].join('')) : null,
@@ -306,22 +306,22 @@ function v__atlasize_outputs(
 }
 
 
+/**
+ * Script to turn a volumetric dataset into an AFNI atlas.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
+ */
 function v__atlasize_execute(
     params: VAtlasizeParameters,
     execution: Execution,
 ): VAtlasizeOutputs {
-    /**
-     * Script to turn a volumetric dataset into an AFNI atlas.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__atlasize_cargs(params, execution)
     const ret = v__atlasize_outputs(params, execution)
@@ -330,6 +330,35 @@ function v__atlasize_execute(
 }
 
 
+/**
+ * Script to turn a volumetric dataset into an AFNI atlas.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Make DSET an atlas
+ * @param space Mark DSET as being in space SPACE
+ * @param lab_file Labels and keys are in text file FILE. cLAB is the index of column containing labels, vVAL is the index of column containing keys (1st column is indexed at 0)
+ * @param lab_file_delim Set column delimiter for -lab_file option. Default is ' ' (space), but you can set your own. ';' for example.
+ * @param longnames Additionally, allow for another column of long names for regions, e.g., amygdala for AMY. cLONGNAME is the starting column for the long name continuing to the last name of the output.
+ * @param last_longname_col Limit long names to nth column
+ * @param atlas_type Set the atlas type where TP is 'S' for subject-based and 'G' for group-based atlases, respectively.
+ * @param atlas_description A description for the atlas. Default is 'My Atlas'
+ * @param atlas_name Name for the atlas. Default name is based on prefix of DSET.
+ * @param auto_backup Back up the dataset if it already exists in the custom atlas directory and allows an overwrite
+ * @param centers Add center of mass coordinates to atlas
+ * @param centertype Choose Icent, Dcent, or cm for different ways to compute centers
+ * @param centermask Calculate center of mass locations for each ROI using a subset of voxels. Useful for atlases with identical labels in both hemispheres.
+ * @param skip_novoxels Skip regions without any voxels in the dataset
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find Search for lines containing WORD in -help output. Search is approximate.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
+ */
 function v__atlasize(
     dset: InputPathType | null = null,
     space: string | null = null,
@@ -351,35 +380,6 @@ function v__atlasize(
     h_find: string | null = null,
     runner: Runner | null = null,
 ): VAtlasizeOutputs {
-    /**
-     * Script to turn a volumetric dataset into an AFNI atlas.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Make DSET an atlas
-     * @param space Mark DSET as being in space SPACE
-     * @param lab_file Labels and keys are in text file FILE. cLAB is the index of column containing labels, vVAL is the index of column containing keys (1st column is indexed at 0)
-     * @param lab_file_delim Set column delimiter for -lab_file option. Default is ' ' (space), but you can set your own. ';' for example.
-     * @param longnames Additionally, allow for another column of long names for regions, e.g., amygdala for AMY. cLONGNAME is the starting column for the long name continuing to the last name of the output.
-     * @param last_longname_col Limit long names to nth column
-     * @param atlas_type Set the atlas type where TP is 'S' for subject-based and 'G' for group-based atlases, respectively.
-     * @param atlas_description A description for the atlas. Default is 'My Atlas'
-     * @param atlas_name Name for the atlas. Default name is based on prefix of DSET.
-     * @param auto_backup Back up the dataset if it already exists in the custom atlas directory and allows an overwrite
-     * @param centers Add center of mass coordinates to atlas
-     * @param centertype Choose Icent, Dcent, or cm for different ways to compute centers
-     * @param centermask Calculate center of mass locations for each ROI using a subset of voxels. Useful for atlases with identical labels in both hemispheres.
-     * @param skip_novoxels Skip regions without any voxels in the dataset
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find Search for lines containing WORD in -help output. Search is approximate.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ATLASIZE_METADATA);
     const params = v__atlasize_params(dset, space, lab_file, lab_file_delim, longnames, last_longname_col, atlas_type, atlas_description, atlas_name, auto_backup, centers, centertype, centermask, skip_novoxels, h_web, h_view, all_opts, h_find)
@@ -392,5 +392,8 @@ export {
       VAtlasizeParameters,
       V__ATLASIZE_METADATA,
       v__atlasize,
+      v__atlasize_cargs,
+      v__atlasize_execute,
+      v__atlasize_outputs,
       v__atlasize_params,
 };

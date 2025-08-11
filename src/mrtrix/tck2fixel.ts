@@ -12,14 +12,14 @@ const TCK2FIXEL_METADATA: Metadata = {
 
 
 interface Tck2fixelConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tck2fixel.config";
     "key": string;
     "value": string;
 }
 
 
 interface Tck2fixelParameters {
-    "__STYXTYPE__": "tck2fixel";
+    "@type": "mrtrix.tck2fixel";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -36,54 +36,54 @@ interface Tck2fixelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tck2fixel": tck2fixel_cargs,
-        "config": tck2fixel_config_cargs,
+        "mrtrix.tck2fixel": tck2fixel_cargs,
+        "mrtrix.tck2fixel.config": tck2fixel_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tck2fixel_config_params(
     key: string,
     value: string,
 ): Tck2fixelConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tck2fixel.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function tck2fixel_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tck2fixel_config_cargs(
     params: Tck2fixelConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -124,6 +124,25 @@ interface Tck2fixelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks the input tracks.
+ * @param fixel_folder_in the input fixel folder. Used to define the fixels and their directions
+ * @param fixel_folder_out the fixel folder to which the output will be written. This can be the same as the input folder if desired
+ * @param fixel_data_out the name of the fixel data image.
+ * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tck2fixel_params(
     tracks: InputPathType,
     fixel_folder_in: InputPathType,
@@ -139,27 +158,8 @@ function tck2fixel_params(
     help: boolean = false,
     version: boolean = false,
 ): Tck2fixelParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks the input tracks.
-     * @param fixel_folder_in the input fixel folder. Used to define the fixels and their directions
-     * @param fixel_folder_out the fixel folder to which the output will be written. This can be the same as the input folder if desired
-     * @param fixel_data_out the name of the fixel data image.
-     * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tck2fixel" as const,
+        "@type": "mrtrix.tck2fixel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -184,18 +184,18 @@ function tck2fixel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tck2fixel_cargs(
     params: Tck2fixelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tck2fixel");
     if ((params["angle"] ?? null) !== null) {
@@ -223,7 +223,7 @@ function tck2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -239,18 +239,18 @@ function tck2fixel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tck2fixel_outputs(
     params: Tck2fixelParameters,
     execution: Execution,
 ): Tck2fixelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tck2fixelOutputs = {
         root: execution.outputFile("."),
     };
@@ -258,28 +258,28 @@ function tck2fixel_outputs(
 }
 
 
+/**
+ * Compute a fixel TDI map from a tractogram.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
+ */
 function tck2fixel_execute(
     params: Tck2fixelParameters,
     execution: Execution,
 ): Tck2fixelOutputs {
-    /**
-     * Compute a fixel TDI map from a tractogram.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
-     */
     params = execution.params(params)
     const cargs = tck2fixel_cargs(params, execution)
     const ret = tck2fixel_outputs(params, execution)
@@ -288,6 +288,36 @@ function tck2fixel_execute(
 }
 
 
+/**
+ * Compute a fixel TDI map from a tractogram.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks the input tracks.
+ * @param fixel_folder_in the input fixel folder. Used to define the fixels and their directions
+ * @param fixel_folder_out the fixel folder to which the output will be written. This can be the same as the input folder if desired
+ * @param fixel_data_out the name of the fixel data image.
+ * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
+ */
 function tck2fixel(
     tracks: InputPathType,
     fixel_folder_in: InputPathType,
@@ -304,36 +334,6 @@ function tck2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tck2fixelOutputs {
-    /**
-     * Compute a fixel TDI map from a tractogram.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks the input tracks.
-     * @param fixel_folder_in the input fixel folder. Used to define the fixels and their directions
-     * @param fixel_folder_out the fixel folder to which the output will be written. This can be the same as the input folder if desired
-     * @param fixel_data_out the name of the fixel data image.
-     * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCK2FIXEL_METADATA);
     const params = tck2fixel_params(tracks, fixel_folder_in, fixel_folder_out, fixel_data_out, angle, info, quiet, debug, force, nthreads, config, help, version)
@@ -347,6 +347,10 @@ export {
       Tck2fixelOutputs,
       Tck2fixelParameters,
       tck2fixel,
+      tck2fixel_cargs,
+      tck2fixel_config_cargs,
       tck2fixel_config_params,
+      tck2fixel_execute,
+      tck2fixel_outputs,
       tck2fixel_params,
 };

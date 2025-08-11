@@ -12,38 +12,38 @@ const RUN_QDEC_GLM_METADATA: Metadata = {
 
 
 interface RunQdecGlmParameters {
-    "__STYXTYPE__": "run-qdec-glm";
+    "@type": "freesurfer.run-qdec-glm";
     "qdec_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run-qdec-glm": run_qdec_glm_cargs,
+        "freesurfer.run-qdec-glm": run_qdec_glm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface RunQdecGlmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec_directory Directory containing QDEC data
+ *
+ * @returns Parameter dictionary
+ */
 function run_qdec_glm_params(
     qdec_directory: string,
 ): RunQdecGlmParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec_directory Directory containing QDEC data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run-qdec-glm" as const,
+        "@type": "freesurfer.run-qdec-glm" as const,
         "qdec_directory": qdec_directory,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_qdec_glm_cargs(
     params: RunQdecGlmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run-qdec-glm");
     cargs.push(
@@ -103,18 +103,18 @@ function run_qdec_glm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_qdec_glm_outputs(
     params: RunQdecGlmParameters,
     execution: Execution,
 ): RunQdecGlmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunQdecGlmOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function run_qdec_glm_outputs(
 }
 
 
+/**
+ * QDEC GLM (General Linear Model) execution tool for statistical analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
+ */
 function run_qdec_glm_execute(
     params: RunQdecGlmParameters,
     execution: Execution,
 ): RunQdecGlmOutputs {
-    /**
-     * QDEC GLM (General Linear Model) execution tool for statistical analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_qdec_glm_cargs(params, execution)
     const ret = run_qdec_glm_outputs(params, execution)
@@ -146,22 +146,22 @@ function run_qdec_glm_execute(
 }
 
 
+/**
+ * QDEC GLM (General Linear Model) execution tool for statistical analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec_directory Directory containing QDEC data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
+ */
 function run_qdec_glm(
     qdec_directory: string,
     runner: Runner | null = null,
 ): RunQdecGlmOutputs {
-    /**
-     * QDEC GLM (General Linear Model) execution tool for statistical analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec_directory Directory containing QDEC data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_QDEC_GLM_METADATA);
     const params = run_qdec_glm_params(qdec_directory)
@@ -174,5 +174,8 @@ export {
       RunQdecGlmOutputs,
       RunQdecGlmParameters,
       run_qdec_glm,
+      run_qdec_glm_cargs,
+      run_qdec_glm_execute,
+      run_qdec_glm_outputs,
       run_qdec_glm_params,
 };

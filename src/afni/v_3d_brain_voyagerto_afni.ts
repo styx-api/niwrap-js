@@ -12,7 +12,7 @@ const V_3D_BRAIN_VOYAGERTO_AFNI_METADATA: Metadata = {
 
 
 interface V3dBrainVoyagertoAfniParameters {
-    "__STYXTYPE__": "3dBRAIN_VOYAGERtoAFNI";
+    "@type": "afni.3dBRAIN_VOYAGERtoAFNI";
     "input_file": InputPathType;
     "force_byte_swap": boolean;
     "brainvoyager_qx": boolean;
@@ -30,35 +30,35 @@ interface V3dBrainVoyagertoAfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_cargs,
+        "afni.3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_outputs,
+        "afni.3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface V3dBrainVoyagertoAfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input BrainVoyager VMR file
+ * @param force_byte_swap Force byte swapping
+ * @param brainvoyager_qx .vmr file is from BrainVoyager QX
+ * @param tlrc_space Dset in tlrc space
+ * @param acpc_space Dset in acpc-aligned space
+ * @param orig_space Dset in orig space
+ * @param prefix Prefix for output files
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param set_environment Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace_debugging Turns on In/Out debug and Memory tracing.
+ * @param trace_extreme_debugging Turns on extreme tracing.
+ * @param turn_off_memory_tracing Turn off memory tracing.
+ * @param turn_on_memory_tracing Turn on memory tracing (default).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_brain_voyagerto_afni_params(
     input_file: InputPathType,
     force_byte_swap: boolean = false,
@@ -101,28 +121,8 @@ function v_3d_brain_voyagerto_afni_params(
     turn_off_memory_tracing: boolean = false,
     turn_on_memory_tracing: boolean = false,
 ): V3dBrainVoyagertoAfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input BrainVoyager VMR file
-     * @param force_byte_swap Force byte swapping
-     * @param brainvoyager_qx .vmr file is from BrainVoyager QX
-     * @param tlrc_space Dset in tlrc space
-     * @param acpc_space Dset in acpc-aligned space
-     * @param orig_space Dset in orig space
-     * @param prefix Prefix for output files
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param set_environment Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace_debugging Turns on In/Out debug and Memory tracing.
-     * @param trace_extreme_debugging Turns on extreme tracing.
-     * @param turn_off_memory_tracing Turn off memory tracing.
-     * @param turn_on_memory_tracing Turn on memory tracing (default).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBRAIN_VOYAGERtoAFNI" as const,
+        "@type": "afni.3dBRAIN_VOYAGERtoAFNI" as const,
         "input_file": input_file,
         "force_byte_swap": force_byte_swap,
         "brainvoyager_qx": brainvoyager_qx,
@@ -146,18 +146,18 @@ function v_3d_brain_voyagerto_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_brain_voyagerto_afni_cargs(
     params: V3dBrainVoyagertoAfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBRAIN_VOYAGERtoAFNI");
     cargs.push(
@@ -213,18 +213,18 @@ function v_3d_brain_voyagerto_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_brain_voyagerto_afni_outputs(
     params: V3dBrainVoyagertoAfniParameters,
     execution: Execution,
 ): V3dBrainVoyagertoAfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBrainVoyagertoAfniOutputs = {
         root: execution.outputFile("."),
         output_brik_file: execution.outputFile(["output.BRIK"].join('')),
@@ -234,22 +234,22 @@ function v_3d_brain_voyagerto_afni_outputs(
 }
 
 
+/**
+ * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
+ */
 function v_3d_brain_voyagerto_afni_execute(
     params: V3dBrainVoyagertoAfniParameters,
     execution: Execution,
 ): V3dBrainVoyagertoAfniOutputs {
-    /**
-     * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_brain_voyagerto_afni_cargs(params, execution)
     const ret = v_3d_brain_voyagerto_afni_outputs(params, execution)
@@ -258,6 +258,31 @@ function v_3d_brain_voyagerto_afni_execute(
 }
 
 
+/**
+ * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input BrainVoyager VMR file
+ * @param force_byte_swap Force byte swapping
+ * @param brainvoyager_qx .vmr file is from BrainVoyager QX
+ * @param tlrc_space Dset in tlrc space
+ * @param acpc_space Dset in acpc-aligned space
+ * @param orig_space Dset in orig space
+ * @param prefix Prefix for output files
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param set_environment Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace_debugging Turns on In/Out debug and Memory tracing.
+ * @param trace_extreme_debugging Turns on extreme tracing.
+ * @param turn_off_memory_tracing Turn off memory tracing.
+ * @param turn_on_memory_tracing Turn on memory tracing (default).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
+ */
 function v_3d_brain_voyagerto_afni(
     input_file: InputPathType,
     force_byte_swap: boolean = false,
@@ -275,31 +300,6 @@ function v_3d_brain_voyagerto_afni(
     turn_on_memory_tracing: boolean = false,
     runner: Runner | null = null,
 ): V3dBrainVoyagertoAfniOutputs {
-    /**
-     * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input BrainVoyager VMR file
-     * @param force_byte_swap Force byte swapping
-     * @param brainvoyager_qx .vmr file is from BrainVoyager QX
-     * @param tlrc_space Dset in tlrc space
-     * @param acpc_space Dset in acpc-aligned space
-     * @param orig_space Dset in orig space
-     * @param prefix Prefix for output files
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param set_environment Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace_debugging Turns on In/Out debug and Memory tracing.
-     * @param trace_extreme_debugging Turns on extreme tracing.
-     * @param turn_off_memory_tracing Turn off memory tracing.
-     * @param turn_on_memory_tracing Turn on memory tracing (default).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BRAIN_VOYAGERTO_AFNI_METADATA);
     const params = v_3d_brain_voyagerto_afni_params(input_file, force_byte_swap, brainvoyager_qx, tlrc_space, acpc_space, orig_space, prefix, novolreg, noxform, set_environment, trace_debugging, trace_extreme_debugging, turn_off_memory_tracing, turn_on_memory_tracing)
@@ -312,5 +312,8 @@ export {
       V3dBrainVoyagertoAfniParameters,
       V_3D_BRAIN_VOYAGERTO_AFNI_METADATA,
       v_3d_brain_voyagerto_afni,
+      v_3d_brain_voyagerto_afni_cargs,
+      v_3d_brain_voyagerto_afni_execute,
+      v_3d_brain_voyagerto_afni_outputs,
       v_3d_brain_voyagerto_afni_params,
 };

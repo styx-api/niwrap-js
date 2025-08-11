@@ -12,7 +12,7 @@ const LABEL_ELDERLY_SUBJECT_METADATA: Metadata = {
 
 
 interface LabelElderlySubjectParameters {
-    "__STYXTYPE__": "label_elderly_subject";
+    "@type": "freesurfer.label_elderly_subject";
     "norm_volume": InputPathType;
     "transform_lta": InputPathType;
     "classifier_array"?: InputPathType | null | undefined;
@@ -20,35 +20,35 @@ interface LabelElderlySubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label_elderly_subject": label_elderly_subject_cargs,
+        "freesurfer.label_elderly_subject": label_elderly_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label_elderly_subject": label_elderly_subject_outputs,
+        "freesurfer.label_elderly_subject": label_elderly_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface LabelElderlySubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param norm_volume Normalized input volume (e.g. norm.mgz)
+ * @param transform_lta Transformation file (e.g. talairach.lta)
+ * @param aseg_volume Asegmentation volume file (e.g. aseg.mgz)
+ * @param classifier_array Classifier array file (e.g. mixed.gca)
+ *
+ * @returns Parameter dictionary
+ */
 function label_elderly_subject_params(
     norm_volume: InputPathType,
     transform_lta: InputPathType,
     aseg_volume: InputPathType,
     classifier_array: InputPathType | null = null,
 ): LabelElderlySubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param norm_volume Normalized input volume (e.g. norm.mgz)
-     * @param transform_lta Transformation file (e.g. talairach.lta)
-     * @param aseg_volume Asegmentation volume file (e.g. aseg.mgz)
-     * @param classifier_array Classifier array file (e.g. mixed.gca)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_elderly_subject" as const,
+        "@type": "freesurfer.label_elderly_subject" as const,
         "norm_volume": norm_volume,
         "transform_lta": transform_lta,
         "aseg_volume": aseg_volume,
@@ -100,18 +100,18 @@ function label_elderly_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_elderly_subject_cargs(
     params: LabelElderlySubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label_elderly_subject");
     cargs.push(execution.inputFile((params["norm_volume"] ?? null)));
@@ -124,18 +124,18 @@ function label_elderly_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_elderly_subject_outputs(
     params: LabelElderlySubjectParameters,
     execution: Execution,
 ): LabelElderlySubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelElderlySubjectOutputs = {
         root: execution.outputFile("."),
         labeled_volume: execution.outputFile([path.basename((params["aseg_volume"] ?? null)), "_labeled.mgz"].join('')),
@@ -144,22 +144,22 @@ function label_elderly_subject_outputs(
 }
 
 
+/**
+ * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
+ */
 function label_elderly_subject_execute(
     params: LabelElderlySubjectParameters,
     execution: Execution,
 ): LabelElderlySubjectOutputs {
-    /**
-     * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_elderly_subject_cargs(params, execution)
     const ret = label_elderly_subject_outputs(params, execution)
@@ -168,6 +168,21 @@ function label_elderly_subject_execute(
 }
 
 
+/**
+ * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param norm_volume Normalized input volume (e.g. norm.mgz)
+ * @param transform_lta Transformation file (e.g. talairach.lta)
+ * @param aseg_volume Asegmentation volume file (e.g. aseg.mgz)
+ * @param classifier_array Classifier array file (e.g. mixed.gca)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
+ */
 function label_elderly_subject(
     norm_volume: InputPathType,
     transform_lta: InputPathType,
@@ -175,21 +190,6 @@ function label_elderly_subject(
     classifier_array: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelElderlySubjectOutputs {
-    /**
-     * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param norm_volume Normalized input volume (e.g. norm.mgz)
-     * @param transform_lta Transformation file (e.g. talairach.lta)
-     * @param aseg_volume Asegmentation volume file (e.g. aseg.mgz)
-     * @param classifier_array Classifier array file (e.g. mixed.gca)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_ELDERLY_SUBJECT_METADATA);
     const params = label_elderly_subject_params(norm_volume, transform_lta, aseg_volume, classifier_array)
@@ -202,5 +202,8 @@ export {
       LabelElderlySubjectOutputs,
       LabelElderlySubjectParameters,
       label_elderly_subject,
+      label_elderly_subject_cargs,
+      label_elderly_subject_execute,
+      label_elderly_subject_outputs,
       label_elderly_subject_params,
 };

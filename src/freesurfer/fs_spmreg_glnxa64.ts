@@ -12,41 +12,41 @@ const FS_SPMREG_GLNXA64_METADATA: Metadata = {
 
 
 interface FsSpmregGlnxa64Parameters {
-    "__STYXTYPE__": "fs_spmreg.glnxa64";
+    "@type": "freesurfer.fs_spmreg.glnxa64";
     "input_volume": InputPathType;
     "output_matrix": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_spmreg.glnxa64": fs_spmreg_glnxa64_cargs,
+        "freesurfer.fs_spmreg.glnxa64": fs_spmreg_glnxa64_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fs_spmreg.glnxa64": fs_spmreg_glnxa64_outputs,
+        "freesurfer.fs_spmreg.glnxa64": fs_spmreg_glnxa64_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FsSpmregGlnxa64Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input anatomical volume
+ * @param output_matrix Output registration matrix
+ *
+ * @returns Parameter dictionary
+ */
 function fs_spmreg_glnxa64_params(
     input_volume: InputPathType,
     output_matrix: string = "output.mat",
 ): FsSpmregGlnxa64Parameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input anatomical volume
-     * @param output_matrix Output registration matrix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_spmreg.glnxa64" as const,
+        "@type": "freesurfer.fs_spmreg.glnxa64" as const,
         "input_volume": input_volume,
         "output_matrix": output_matrix,
     };
@@ -90,18 +90,18 @@ function fs_spmreg_glnxa64_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_spmreg_glnxa64_cargs(
     params: FsSpmregGlnxa64Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_spmreg.glnxa64");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -110,18 +110,18 @@ function fs_spmreg_glnxa64_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_spmreg_glnxa64_outputs(
     params: FsSpmregGlnxa64Parameters,
     execution: Execution,
 ): FsSpmregGlnxa64Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsSpmregGlnxa64Outputs = {
         root: execution.outputFile("."),
         output_matrix_file: execution.outputFile([(params["output_matrix"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function fs_spmreg_glnxa64_outputs(
 }
 
 
+/**
+ * fs_spmreg is a tool for registration using SPM within FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
+ */
 function fs_spmreg_glnxa64_execute(
     params: FsSpmregGlnxa64Parameters,
     execution: Execution,
 ): FsSpmregGlnxa64Outputs {
-    /**
-     * fs_spmreg is a tool for registration using SPM within FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
-     */
     params = execution.params(params)
     const cargs = fs_spmreg_glnxa64_cargs(params, execution)
     const ret = fs_spmreg_glnxa64_outputs(params, execution)
@@ -154,24 +154,24 @@ function fs_spmreg_glnxa64_execute(
 }
 
 
+/**
+ * fs_spmreg is a tool for registration using SPM within FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input anatomical volume
+ * @param output_matrix Output registration matrix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
+ */
 function fs_spmreg_glnxa64(
     input_volume: InputPathType,
     output_matrix: string = "output.mat",
     runner: Runner | null = null,
 ): FsSpmregGlnxa64Outputs {
-    /**
-     * fs_spmreg is a tool for registration using SPM within FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input anatomical volume
-     * @param output_matrix Output registration matrix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_SPMREG_GLNXA64_METADATA);
     const params = fs_spmreg_glnxa64_params(input_volume, output_matrix)
@@ -184,5 +184,8 @@ export {
       FsSpmregGlnxa64Outputs,
       FsSpmregGlnxa64Parameters,
       fs_spmreg_glnxa64,
+      fs_spmreg_glnxa64_cargs,
+      fs_spmreg_glnxa64_execute,
+      fs_spmreg_glnxa64_outputs,
       fs_spmreg_glnxa64_params,
 };

@@ -12,7 +12,7 @@ const ISO_SURFACE_METADATA: Metadata = {
 
 
 interface IsoSurfaceParameters {
-    "__STYXTYPE__": "IsoSurface";
+    "@type": "afni.IsoSurface";
     "input_vol"?: InputPathType | null | undefined;
     "shape_spec"?: Array<string> | null | undefined;
     "isorois": boolean;
@@ -30,35 +30,35 @@ interface IsoSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "IsoSurface": iso_surface_cargs,
+        "afni.IsoSurface": iso_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "IsoSurface": iso_surface_outputs,
+        "afni.IsoSurface": iso_surface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface IsoSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input volume file.
+ * @param shape_spec Built-in shape specification.
+ * @param isorois Create isosurface for each unique value in the input volume.
+ * @param isoval Create isosurface where volume = V.
+ * @param isorange Create isosurface where V0 <= volume < V1.
+ * @param isocmask Create isosurface where MASK_COM != 0.
+ * @param output_prefix Prefix of output surface file.
+ * @param tsmooth Smooth resultant surface using Taubin smoothing with parameters KPB and NITER.
+ * @param debug Debug levels of 0 (default), 1, 2, 3.
+ * @param autocrop Crop input volume before extraction.
+ * @param remesh Remesh the surface(s).
+ * @param xform Transform to apply to volume values before extracting.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations.
+ * @param noxform Same as -novolreg.
+ *
+ * @returns Parameter dictionary
+ */
 function iso_surface_params(
     input_vol: InputPathType | null = null,
     shape_spec: Array<string> | null = null,
@@ -105,28 +125,8 @@ function iso_surface_params(
     novolreg: boolean = false,
     noxform: boolean = false,
 ): IsoSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input volume file.
-     * @param shape_spec Built-in shape specification.
-     * @param isorois Create isosurface for each unique value in the input volume.
-     * @param isoval Create isosurface where volume = V.
-     * @param isorange Create isosurface where V0 <= volume < V1.
-     * @param isocmask Create isosurface where MASK_COM != 0.
-     * @param output_prefix Prefix of output surface file.
-     * @param tsmooth Smooth resultant surface using Taubin smoothing with parameters KPB and NITER.
-     * @param debug Debug levels of 0 (default), 1, 2, 3.
-     * @param autocrop Crop input volume before extraction.
-     * @param remesh Remesh the surface(s).
-     * @param xform Transform to apply to volume values before extracting.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations.
-     * @param noxform Same as -novolreg.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "IsoSurface" as const,
+        "@type": "afni.IsoSurface" as const,
         "isorois": isorois,
         "autocrop": autocrop,
         "novolreg": novolreg,
@@ -166,18 +166,18 @@ function iso_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function iso_surface_cargs(
     params: IsoSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("IsoSurface");
     if ((params["input_vol"] ?? null) !== null) {
@@ -256,18 +256,18 @@ function iso_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function iso_surface_outputs(
     params: IsoSurfaceParameters,
     execution: Execution,
 ): IsoSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsoSurfaceOutputs = {
         root: execution.outputFile("."),
         output_surface_ply: execution.outputFile(["[MASK]_surf.ply"].join('')),
@@ -278,22 +278,22 @@ function iso_surface_outputs(
 }
 
 
+/**
+ * A program to perform isosurface extraction from a volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
+ */
 function iso_surface_execute(
     params: IsoSurfaceParameters,
     execution: Execution,
 ): IsoSurfaceOutputs {
-    /**
-     * A program to perform isosurface extraction from a volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = iso_surface_cargs(params, execution)
     const ret = iso_surface_outputs(params, execution)
@@ -302,6 +302,31 @@ function iso_surface_execute(
 }
 
 
+/**
+ * A program to perform isosurface extraction from a volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_vol Input volume file.
+ * @param shape_spec Built-in shape specification.
+ * @param isorois Create isosurface for each unique value in the input volume.
+ * @param isoval Create isosurface where volume = V.
+ * @param isorange Create isosurface where V0 <= volume < V1.
+ * @param isocmask Create isosurface where MASK_COM != 0.
+ * @param output_prefix Prefix of output surface file.
+ * @param tsmooth Smooth resultant surface using Taubin smoothing with parameters KPB and NITER.
+ * @param debug Debug levels of 0 (default), 1, 2, 3.
+ * @param autocrop Crop input volume before extraction.
+ * @param remesh Remesh the surface(s).
+ * @param xform Transform to apply to volume values before extracting.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations.
+ * @param noxform Same as -novolreg.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
+ */
 function iso_surface(
     input_vol: InputPathType | null = null,
     shape_spec: Array<string> | null = null,
@@ -319,31 +344,6 @@ function iso_surface(
     noxform: boolean = false,
     runner: Runner | null = null,
 ): IsoSurfaceOutputs {
-    /**
-     * A program to perform isosurface extraction from a volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_vol Input volume file.
-     * @param shape_spec Built-in shape specification.
-     * @param isorois Create isosurface for each unique value in the input volume.
-     * @param isoval Create isosurface where volume = V.
-     * @param isorange Create isosurface where V0 <= volume < V1.
-     * @param isocmask Create isosurface where MASK_COM != 0.
-     * @param output_prefix Prefix of output surface file.
-     * @param tsmooth Smooth resultant surface using Taubin smoothing with parameters KPB and NITER.
-     * @param debug Debug levels of 0 (default), 1, 2, 3.
-     * @param autocrop Crop input volume before extraction.
-     * @param remesh Remesh the surface(s).
-     * @param xform Transform to apply to volume values before extracting.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations.
-     * @param noxform Same as -novolreg.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISO_SURFACE_METADATA);
     const params = iso_surface_params(input_vol, shape_spec, isorois, isoval, isorange, isocmask, output_prefix, tsmooth, debug, autocrop, remesh, xform, novolreg, noxform)
@@ -356,5 +356,8 @@ export {
       IsoSurfaceOutputs,
       IsoSurfaceParameters,
       iso_surface,
+      iso_surface_cargs,
+      iso_surface_execute,
+      iso_surface_outputs,
       iso_surface_params,
 };

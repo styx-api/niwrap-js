@@ -12,38 +12,38 @@ const SUMA_GLXDINO_METADATA: Metadata = {
 
 
 interface SumaGlxdinoParameters {
-    "__STYXTYPE__": "SUMA_glxdino";
+    "@type": "afni.SUMA_glxdino";
     "verbose": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SUMA_glxdino": suma_glxdino_cargs,
+        "afni.SUMA_glxdino": suma_glxdino_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SumaGlxdinoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param verbose Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function suma_glxdino_params(
     verbose: boolean = false,
 ): SumaGlxdinoParameters {
-    /**
-     * Build parameters.
-    
-     * @param verbose Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SUMA_glxdino" as const,
+        "@type": "afni.SUMA_glxdino" as const,
         "verbose": verbose,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function suma_glxdino_cargs(
     params: SumaGlxdinoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SUMA_glxdino");
     if ((params["verbose"] ?? null)) {
@@ -102,18 +102,18 @@ function suma_glxdino_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function suma_glxdino_outputs(
     params: SumaGlxdinoParameters,
     execution: Execution,
 ): SumaGlxdinoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SumaGlxdinoOutputs = {
         root: execution.outputFile("."),
     };
@@ -121,22 +121,22 @@ function suma_glxdino_outputs(
 }
 
 
+/**
+ * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
+ */
 function suma_glxdino_execute(
     params: SumaGlxdinoParameters,
     execution: Execution,
 ): SumaGlxdinoOutputs {
-    /**
-     * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
-     */
     params = execution.params(params)
     const cargs = suma_glxdino_cargs(params, execution)
     const ret = suma_glxdino_outputs(params, execution)
@@ -145,22 +145,22 @@ function suma_glxdino_execute(
 }
 
 
+/**
+ * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param verbose Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
+ */
 function suma_glxdino(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): SumaGlxdinoOutputs {
-    /**
-     * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param verbose Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SUMA_GLXDINO_METADATA);
     const params = suma_glxdino_params(verbose)
@@ -173,5 +173,8 @@ export {
       SumaGlxdinoOutputs,
       SumaGlxdinoParameters,
       suma_glxdino,
+      suma_glxdino_cargs,
+      suma_glxdino_execute,
+      suma_glxdino_outputs,
       suma_glxdino_params,
 };

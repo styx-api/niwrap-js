@@ -12,7 +12,7 @@ const IMCALC_METADATA: Metadata = {
 
 
 interface ImcalcParameters {
-    "__STYXTYPE__": "imcalc";
+    "@type": "afni.imcalc";
     "datum_type"?: string | null | undefined;
     "image_inputs"?: Array<InputPathType> | null | undefined;
     "expression": string;
@@ -20,35 +20,35 @@ interface ImcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imcalc": imcalc_cargs,
+        "afni.imcalc": imcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imcalc": imcalc_outputs,
+        "afni.imcalc": imcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface ImcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param expression Apply the expression within quotes to the input images, one voxel at a time, to produce the output image. (e.g., "sqrt(a*b)" to compute the geometric mean)
+ * @param datum_type Coerce the output data to be stored as the given type: byte, short, or float. Default is the datum of the first input image on the command line.
+ * @param image_inputs Read image 'dname' and call the voxel values 'a' in the expression. 'a' may be any letter from 'a' to 'z'. If some letter name is used in the expression but not present in one of the image options here, then that variable is set to 0.
+ * @param output_name Use 'name' for the output image filename. Default is 'imcalc.out'.
+ *
+ * @returns Parameter dictionary
+ */
 function imcalc_params(
     expression: string,
     datum_type: string | null = null,
     image_inputs: Array<InputPathType> | null = null,
     output_name: string | null = null,
 ): ImcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param expression Apply the expression within quotes to the input images, one voxel at a time, to produce the output image. (e.g., "sqrt(a*b)" to compute the geometric mean)
-     * @param datum_type Coerce the output data to be stored as the given type: byte, short, or float. Default is the datum of the first input image on the command line.
-     * @param image_inputs Read image 'dname' and call the voxel values 'a' in the expression. 'a' may be any letter from 'a' to 'z'. If some letter name is used in the expression but not present in one of the image options here, then that variable is set to 0.
-     * @param output_name Use 'name' for the output image filename. Default is 'imcalc.out'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imcalc" as const,
+        "@type": "afni.imcalc" as const,
         "expression": expression,
     };
     if (datum_type !== null) {
@@ -104,18 +104,18 @@ function imcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imcalc_cargs(
     params: ImcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imcalc");
     if ((params["datum_type"] ?? null) !== null) {
@@ -144,18 +144,18 @@ function imcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imcalc_outputs(
     params: ImcalcParameters,
     execution: Execution,
 ): ImcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImcalcOutputs = {
         root: execution.outputFile("."),
         output_image: ((params["output_name"] ?? null) !== null) ? execution.outputFile([(params["output_name"] ?? null)].join('')) : null,
@@ -164,22 +164,22 @@ function imcalc_outputs(
 }
 
 
+/**
+ * Tool for arithmetic operations on 2D images, pixel-by-pixel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
+ */
 function imcalc_execute(
     params: ImcalcParameters,
     execution: Execution,
 ): ImcalcOutputs {
-    /**
-     * Tool for arithmetic operations on 2D images, pixel-by-pixel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = imcalc_cargs(params, execution)
     const ret = imcalc_outputs(params, execution)
@@ -188,6 +188,21 @@ function imcalc_execute(
 }
 
 
+/**
+ * Tool for arithmetic operations on 2D images, pixel-by-pixel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param expression Apply the expression within quotes to the input images, one voxel at a time, to produce the output image. (e.g., "sqrt(a*b)" to compute the geometric mean)
+ * @param datum_type Coerce the output data to be stored as the given type: byte, short, or float. Default is the datum of the first input image on the command line.
+ * @param image_inputs Read image 'dname' and call the voxel values 'a' in the expression. 'a' may be any letter from 'a' to 'z'. If some letter name is used in the expression but not present in one of the image options here, then that variable is set to 0.
+ * @param output_name Use 'name' for the output image filename. Default is 'imcalc.out'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
+ */
 function imcalc(
     expression: string,
     datum_type: string | null = null,
@@ -195,21 +210,6 @@ function imcalc(
     output_name: string | null = null,
     runner: Runner | null = null,
 ): ImcalcOutputs {
-    /**
-     * Tool for arithmetic operations on 2D images, pixel-by-pixel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param expression Apply the expression within quotes to the input images, one voxel at a time, to produce the output image. (e.g., "sqrt(a*b)" to compute the geometric mean)
-     * @param datum_type Coerce the output data to be stored as the given type: byte, short, or float. Default is the datum of the first input image on the command line.
-     * @param image_inputs Read image 'dname' and call the voxel values 'a' in the expression. 'a' may be any letter from 'a' to 'z'. If some letter name is used in the expression but not present in one of the image options here, then that variable is set to 0.
-     * @param output_name Use 'name' for the output image filename. Default is 'imcalc.out'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMCALC_METADATA);
     const params = imcalc_params(expression, datum_type, image_inputs, output_name)
@@ -222,5 +222,8 @@ export {
       ImcalcOutputs,
       ImcalcParameters,
       imcalc,
+      imcalc_cargs,
+      imcalc_execute,
+      imcalc_outputs,
       imcalc_params,
 };

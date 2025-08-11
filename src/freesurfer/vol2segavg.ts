@@ -12,7 +12,7 @@ const VOL2SEGAVG_METADATA: Metadata = {
 
 
 interface Vol2segavgParameters {
-    "__STYXTYPE__": "vol2segavg";
+    "@type": "freesurfer.vol2segavg";
     "output_file": string;
     "input_volume": InputPathType;
     "registration": string;
@@ -31,35 +31,35 @@ interface Vol2segavgParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vol2segavg": vol2segavg_cargs,
+        "freesurfer.vol2segavg": vol2segavg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vol2segavg": vol2segavg_outputs,
+        "freesurfer.vol2segavg": vol2segavg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface Vol2segavgOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output file, can be .txt or a binary (e.g., .nii, .mgh)
+ * @param input_volume Input volume file (e.g., vol.nii)
+ * @param registration Registration file, can be reg.dat or use --regheader
+ * @param segmentation_file Segmentation file (e.g., seg.mgz)
+ * @param aparc_aseg_flag Use aparc+aseg flag
+ * @param subject_id Subject ID, may be needed if --reg not supplied
+ * @param segmentation_id Segmentation ID(s). Multiple IDs can be supplied.
+ * @param multiply_value Multiply input by MulVal
+ * @param no_bb_flag Do not use bounding box
+ * @param erode_value Erode segmentation
+ * @param dilate_value Dilate segmentation
+ * @param wm_flag Sets segid to 2, 41, 7, 46, 251, 252, 253, 254, 255, 77, 78, 79 and use aparc+aseg
+ * @param vcsf_flag Sets segid to 4, 5, 43, 44, 31, 63 and use aparc+aseg
+ * @param xcsf_flag Sets segid to 257 and use apas+head
+ * @param remove_mean_flag Remove mean from time course
+ *
+ * @returns Parameter dictionary
+ */
 function vol2segavg_params(
     output_file: string,
     input_volume: InputPathType,
@@ -99,29 +120,8 @@ function vol2segavg_params(
     xcsf_flag: boolean = false,
     remove_mean_flag: boolean = false,
 ): Vol2segavgParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output file, can be .txt or a binary (e.g., .nii, .mgh)
-     * @param input_volume Input volume file (e.g., vol.nii)
-     * @param registration Registration file, can be reg.dat or use --regheader
-     * @param segmentation_file Segmentation file (e.g., seg.mgz)
-     * @param aparc_aseg_flag Use aparc+aseg flag
-     * @param subject_id Subject ID, may be needed if --reg not supplied
-     * @param segmentation_id Segmentation ID(s). Multiple IDs can be supplied.
-     * @param multiply_value Multiply input by MulVal
-     * @param no_bb_flag Do not use bounding box
-     * @param erode_value Erode segmentation
-     * @param dilate_value Dilate segmentation
-     * @param wm_flag Sets segid to 2, 41, 7, 46, 251, 252, 253, 254, 255, 77, 78, 79 and use aparc+aseg
-     * @param vcsf_flag Sets segid to 4, 5, 43, 44, 31, 63 and use aparc+aseg
-     * @param xcsf_flag Sets segid to 257 and use apas+head
-     * @param remove_mean_flag Remove mean from time course
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vol2segavg" as const,
+        "@type": "freesurfer.vol2segavg" as const,
         "output_file": output_file,
         "input_volume": input_volume,
         "registration": registration,
@@ -152,18 +152,18 @@ function vol2segavg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vol2segavg_cargs(
     params: Vol2segavgParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vol2segavg");
     cargs.push(
@@ -234,18 +234,18 @@ function vol2segavg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vol2segavg_outputs(
     params: Vol2segavgParameters,
     execution: Execution,
 ): Vol2segavgOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Vol2segavgOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -254,22 +254,22 @@ function vol2segavg_outputs(
 }
 
 
+/**
+ * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
+ */
 function vol2segavg_execute(
     params: Vol2segavgParameters,
     execution: Execution,
 ): Vol2segavgOutputs {
-    /**
-     * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
-     */
     params = execution.params(params)
     const cargs = vol2segavg_cargs(params, execution)
     const ret = vol2segavg_outputs(params, execution)
@@ -278,6 +278,32 @@ function vol2segavg_execute(
 }
 
 
+/**
+ * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_file Output file, can be .txt or a binary (e.g., .nii, .mgh)
+ * @param input_volume Input volume file (e.g., vol.nii)
+ * @param registration Registration file, can be reg.dat or use --regheader
+ * @param segmentation_file Segmentation file (e.g., seg.mgz)
+ * @param aparc_aseg_flag Use aparc+aseg flag
+ * @param subject_id Subject ID, may be needed if --reg not supplied
+ * @param segmentation_id Segmentation ID(s). Multiple IDs can be supplied.
+ * @param multiply_value Multiply input by MulVal
+ * @param no_bb_flag Do not use bounding box
+ * @param erode_value Erode segmentation
+ * @param dilate_value Dilate segmentation
+ * @param wm_flag Sets segid to 2, 41, 7, 46, 251, 252, 253, 254, 255, 77, 78, 79 and use aparc+aseg
+ * @param vcsf_flag Sets segid to 4, 5, 43, 44, 31, 63 and use aparc+aseg
+ * @param xcsf_flag Sets segid to 257 and use apas+head
+ * @param remove_mean_flag Remove mean from time course
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
+ */
 function vol2segavg(
     output_file: string,
     input_volume: InputPathType,
@@ -296,32 +322,6 @@ function vol2segavg(
     remove_mean_flag: boolean = false,
     runner: Runner | null = null,
 ): Vol2segavgOutputs {
-    /**
-     * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_file Output file, can be .txt or a binary (e.g., .nii, .mgh)
-     * @param input_volume Input volume file (e.g., vol.nii)
-     * @param registration Registration file, can be reg.dat or use --regheader
-     * @param segmentation_file Segmentation file (e.g., seg.mgz)
-     * @param aparc_aseg_flag Use aparc+aseg flag
-     * @param subject_id Subject ID, may be needed if --reg not supplied
-     * @param segmentation_id Segmentation ID(s). Multiple IDs can be supplied.
-     * @param multiply_value Multiply input by MulVal
-     * @param no_bb_flag Do not use bounding box
-     * @param erode_value Erode segmentation
-     * @param dilate_value Dilate segmentation
-     * @param wm_flag Sets segid to 2, 41, 7, 46, 251, 252, 253, 254, 255, 77, 78, 79 and use aparc+aseg
-     * @param vcsf_flag Sets segid to 4, 5, 43, 44, 31, 63 and use aparc+aseg
-     * @param xcsf_flag Sets segid to 257 and use apas+head
-     * @param remove_mean_flag Remove mean from time course
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOL2SEGAVG_METADATA);
     const params = vol2segavg_params(output_file, input_volume, registration, segmentation_file, aparc_aseg_flag, subject_id, segmentation_id, multiply_value, no_bb_flag, erode_value, dilate_value, wm_flag, vcsf_flag, xcsf_flag, remove_mean_flag)
@@ -334,5 +334,8 @@ export {
       Vol2segavgOutputs,
       Vol2segavgParameters,
       vol2segavg,
+      vol2segavg_cargs,
+      vol2segavg_execute,
+      vol2segavg_outputs,
       vol2segavg_params,
 };

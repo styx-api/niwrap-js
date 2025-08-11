@@ -12,7 +12,7 @@ const V_1D_CORRELATE_METADATA: Metadata = {
 
 
 interface V1dCorrelateParameters {
-    "__STYXTYPE__": "1dCorrelate";
+    "@type": "afni.1dCorrelate";
     "ktaub": boolean;
     "nboot"?: number | null | undefined;
     "alpha"?: number | null | undefined;
@@ -25,33 +25,33 @@ interface V1dCorrelateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dCorrelate": v_1d_correlate_cargs,
+        "afni.1dCorrelate": v_1d_correlate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface V1dCorrelateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 1D files
+ * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
+ * @param nboot Set the number of bootstrap replicates
+ * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
+ * @param block Use variable-length block resampling to account for serial correlation
+ * @param blk Alternate flag for variable-length block resampling
+ * @param pearson Pearson correlation (the default method)
+ * @param spearman Spearman (rank) correlation (more robust versus outliers)
+ * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_correlate_params(
     input_files: Array<InputPathType>,
     ktaub: boolean = false,
@@ -82,23 +97,8 @@ function v_1d_correlate_params(
     spearman: boolean = false,
     quadrant: boolean = false,
 ): V1dCorrelateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 1D files
-     * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
-     * @param nboot Set the number of bootstrap replicates
-     * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
-     * @param block Use variable-length block resampling to account for serial correlation
-     * @param blk Alternate flag for variable-length block resampling
-     * @param pearson Pearson correlation (the default method)
-     * @param spearman Spearman (rank) correlation (more robust versus outliers)
-     * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dCorrelate" as const,
+        "@type": "afni.1dCorrelate" as const,
         "ktaub": ktaub,
         "block": block,
         "blk": blk,
@@ -117,18 +117,18 @@ function v_1d_correlate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_correlate_cargs(
     params: V1dCorrelateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dCorrelate");
     if ((params["ktaub"] ?? null)) {
@@ -166,18 +166,18 @@ function v_1d_correlate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_correlate_outputs(
     params: V1dCorrelateParameters,
     execution: Execution,
 ): V1dCorrelateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dCorrelateOutputs = {
         root: execution.outputFile("."),
     };
@@ -185,22 +185,22 @@ function v_1d_correlate_outputs(
 }
 
 
+/**
+ * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
+ */
 function v_1d_correlate_execute(
     params: V1dCorrelateParameters,
     execution: Execution,
 ): V1dCorrelateOutputs {
-    /**
-     * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_correlate_cargs(params, execution)
     const ret = v_1d_correlate_outputs(params, execution)
@@ -209,6 +209,26 @@ function v_1d_correlate_execute(
 }
 
 
+/**
+ * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 1D files
+ * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
+ * @param nboot Set the number of bootstrap replicates
+ * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
+ * @param block Use variable-length block resampling to account for serial correlation
+ * @param blk Alternate flag for variable-length block resampling
+ * @param pearson Pearson correlation (the default method)
+ * @param spearman Spearman (rank) correlation (more robust versus outliers)
+ * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
+ */
 function v_1d_correlate(
     input_files: Array<InputPathType>,
     ktaub: boolean = false,
@@ -221,26 +241,6 @@ function v_1d_correlate(
     quadrant: boolean = false,
     runner: Runner | null = null,
 ): V1dCorrelateOutputs {
-    /**
-     * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 1D files
-     * @param ktaub Kendall's tau_b correlation (popular somewhere, maybe)
-     * @param nboot Set the number of bootstrap replicates
-     * @param alpha Set the 2-sided confidence interval width to '100-A' percent.
-     * @param block Use variable-length block resampling to account for serial correlation
-     * @param blk Alternate flag for variable-length block resampling
-     * @param pearson Pearson correlation (the default method)
-     * @param spearman Spearman (rank) correlation (more robust versus outliers)
-     * @param quadrant Quadrant (binarized) correlation (most robust, but weaker)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_CORRELATE_METADATA);
     const params = v_1d_correlate_params(input_files, ktaub, nboot, alpha, block, blk, pearson, spearman, quadrant)
@@ -253,5 +253,8 @@ export {
       V1dCorrelateParameters,
       V_1D_CORRELATE_METADATA,
       v_1d_correlate,
+      v_1d_correlate_cargs,
+      v_1d_correlate_execute,
+      v_1d_correlate_outputs,
       v_1d_correlate_params,
 };

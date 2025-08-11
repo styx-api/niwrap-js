@@ -12,7 +12,7 @@ const FFTEST_METADATA: Metadata = {
 
 
 interface FftestParameters {
-    "__STYXTYPE__": "fftest";
+    "@type": "afni.fftest";
     "length": number;
     "num_tests": number;
     "vector_size": number;
@@ -20,33 +20,33 @@ interface FftestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fftest": fftest_cargs,
+        "afni.fftest": fftest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface FftestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param length Length of the test
+ * @param num_tests Number of tests to run
+ * @param vector_size Vector size for the test
+ * @param quiet_mode Quiet mode
+ *
+ * @returns Parameter dictionary
+ */
 function fftest_params(
     length: number,
     num_tests: number,
     vector_size: number,
     quiet_mode: boolean = false,
 ): FftestParameters {
-    /**
-     * Build parameters.
-    
-     * @param length Length of the test
-     * @param num_tests Number of tests to run
-     * @param vector_size Vector size for the test
-     * @param quiet_mode Quiet mode
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fftest" as const,
+        "@type": "afni.fftest" as const,
         "length": length,
         "num_tests": num_tests,
         "vector_size": vector_size,
@@ -93,18 +93,18 @@ function fftest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fftest_cargs(
     params: FftestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fftest");
     cargs.push(String((params["length"] ?? null)));
@@ -117,18 +117,18 @@ function fftest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fftest_outputs(
     params: FftestParameters,
     execution: Execution,
 ): FftestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FftestOutputs = {
         root: execution.outputFile("."),
     };
@@ -136,22 +136,22 @@ function fftest_outputs(
 }
 
 
+/**
+ * A command line tool for testing purposes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FftestOutputs`).
+ */
 function fftest_execute(
     params: FftestParameters,
     execution: Execution,
 ): FftestOutputs {
-    /**
-     * A command line tool for testing purposes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FftestOutputs`).
-     */
     params = execution.params(params)
     const cargs = fftest_cargs(params, execution)
     const ret = fftest_outputs(params, execution)
@@ -160,6 +160,21 @@ function fftest_execute(
 }
 
 
+/**
+ * A command line tool for testing purposes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param length Length of the test
+ * @param num_tests Number of tests to run
+ * @param vector_size Vector size for the test
+ * @param quiet_mode Quiet mode
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FftestOutputs`).
+ */
 function fftest(
     length: number,
     num_tests: number,
@@ -167,21 +182,6 @@ function fftest(
     quiet_mode: boolean = false,
     runner: Runner | null = null,
 ): FftestOutputs {
-    /**
-     * A command line tool for testing purposes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param length Length of the test
-     * @param num_tests Number of tests to run
-     * @param vector_size Vector size for the test
-     * @param quiet_mode Quiet mode
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FftestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FFTEST_METADATA);
     const params = fftest_params(length, num_tests, vector_size, quiet_mode)
@@ -194,5 +194,8 @@ export {
       FftestOutputs,
       FftestParameters,
       fftest,
+      fftest_cargs,
+      fftest_execute,
+      fftest_outputs,
       fftest_params,
 };

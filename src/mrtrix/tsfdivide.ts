@@ -12,14 +12,14 @@ const TSFDIVIDE_METADATA: Metadata = {
 
 
 interface TsfdivideConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tsfdivide.config";
     "key": string;
     "value": string;
 }
 
 
 interface TsfdivideParameters {
-    "__STYXTYPE__": "tsfdivide";
+    "@type": "mrtrix.tsfdivide";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface TsfdivideParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tsfdivide": tsfdivide_cargs,
-        "config": tsfdivide_config_cargs,
+        "mrtrix.tsfdivide": tsfdivide_cargs,
+        "mrtrix.tsfdivide.config": tsfdivide_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tsfdivide": tsfdivide_outputs,
+        "mrtrix.tsfdivide": tsfdivide_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfdivide_config_params(
     key: string,
     value: string,
 ): TsfdivideConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tsfdivide.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function tsfdivide_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfdivide_config_cargs(
     params: TsfdivideConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface TsfdivideOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 the first input track scalar file.
+ * @param input2 the second input track scalar file.
+ * @param output the output track scalar file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfdivide_params(
     input1: InputPathType,
     input2: InputPathType,
@@ -140,25 +157,8 @@ function tsfdivide_params(
     help: boolean = false,
     version: boolean = false,
 ): TsfdivideParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 the first input track scalar file.
-     * @param input2 the second input track scalar file.
-     * @param output the output track scalar file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tsfdivide" as const,
+        "@type": "mrtrix.tsfdivide" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function tsfdivide_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfdivide_cargs(
     params: TsfdivideParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tsfdivide");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function tsfdivide_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function tsfdivide_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tsfdivide_outputs(
     params: TsfdivideParameters,
     execution: Execution,
 ): TsfdivideOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TsfdivideOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function tsfdivide_outputs(
 }
 
 
+/**
+ * Divide corresponding values in track scalar files.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
+ */
 function tsfdivide_execute(
     params: TsfdivideParameters,
     execution: Execution,
 ): TsfdivideOutputs {
-    /**
-     * Divide corresponding values in track scalar files.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
-     */
     params = execution.params(params)
     const cargs = tsfdivide_cargs(params, execution)
     const ret = tsfdivide_outputs(params, execution)
@@ -277,6 +277,34 @@ function tsfdivide_execute(
 }
 
 
+/**
+ * Divide corresponding values in track scalar files.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input1 the first input track scalar file.
+ * @param input2 the second input track scalar file.
+ * @param output the output track scalar file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
+ */
 function tsfdivide(
     input1: InputPathType,
     input2: InputPathType,
@@ -291,34 +319,6 @@ function tsfdivide(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfdivideOutputs {
-    /**
-     * Divide corresponding values in track scalar files.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input1 the first input track scalar file.
-     * @param input2 the second input track scalar file.
-     * @param output the output track scalar file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSFDIVIDE_METADATA);
     const params = tsfdivide_params(input1, input2, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       TsfdivideOutputs,
       TsfdivideParameters,
       tsfdivide,
+      tsfdivide_cargs,
+      tsfdivide_config_cargs,
       tsfdivide_config_params,
+      tsfdivide_execute,
+      tsfdivide_outputs,
       tsfdivide_params,
 };

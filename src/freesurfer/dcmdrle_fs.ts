@@ -12,7 +12,7 @@ const DCMDRLE_FS_METADATA: Metadata = {
 
 
 interface DcmdrleFsParameters {
-    "__STYXTYPE__": "dcmdrle.fs";
+    "@type": "freesurfer.dcmdrle.fs";
     "input_file": InputPathType;
     "output_file": string;
     "help": boolean;
@@ -48,35 +48,35 @@ interface DcmdrleFsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmdrle.fs": dcmdrle_fs_cargs,
+        "freesurfer.dcmdrle.fs": dcmdrle_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dcmdrle.fs": dcmdrle_fs_outputs,
+        "freesurfer.dcmdrle.fs": dcmdrle_fs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,44 @@ interface DcmdrleFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file DICOM input filename to be converted.
+ * @param output_file DICOM output filename.
+ * @param help Print help text and exit.
+ * @param version Print version information and exit.
+ * @param arguments_ Print expanded command line arguments.
+ * @param quiet Quiet mode, print no warnings and errors.
+ * @param verbose Verbose mode, print processing details.
+ * @param debug Debug mode, print debug information.
+ * @param log_level Set logger level.
+ * @param log_config Use config file for the logger.
+ * @param read_file Read file format or data set (default).
+ * @param read_file_only Read file format only.
+ * @param read_dataset Read data set without file meta information.
+ * @param uid_default Keep same SOP Instance UID (default).
+ * @param uid_always Always assign new UID.
+ * @param byte_order_default Most significant byte first (default).
+ * @param byte_order_reverse Least significant byte first.
+ * @param write_file Write file format (default).
+ * @param write_dataset Write data set without file meta information.
+ * @param write_xfer_little Write with explicit VR little endian (default).
+ * @param write_xfer_big Write with explicit VR big endian TS.
+ * @param write_xfer_implicit Write with implicit VR little endian TS.
+ * @param enable_new_vr Enable support for new VRs (UN/UT) (default).
+ * @param disable_new_vr Disable support for new VRs, convert to OB.
+ * @param group_length_recalc Recalculate group lengths if present (default).
+ * @param group_length_create Always write with group length elements.
+ * @param group_length_remove Always write without group length elements.
+ * @param length_explicit Write with explicit lengths (default).
+ * @param length_undefined Write with undefined lengths.
+ * @param padding_retain Do not change padding.
+ * @param padding_off No padding (implicit if --write-dataset).
+ * @param padding_create Align file on multiple of file-pad bytes and items on multiple of item-pad bytes.
+ *
+ * @returns Parameter dictionary
+ */
 function dcmdrle_fs_params(
     input_file: InputPathType,
     output_file: string,
@@ -133,46 +171,8 @@ function dcmdrle_fs_params(
     padding_off: boolean = false,
     padding_create: string | null = null,
 ): DcmdrleFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file DICOM input filename to be converted.
-     * @param output_file DICOM output filename.
-     * @param help Print help text and exit.
-     * @param version Print version information and exit.
-     * @param arguments_ Print expanded command line arguments.
-     * @param quiet Quiet mode, print no warnings and errors.
-     * @param verbose Verbose mode, print processing details.
-     * @param debug Debug mode, print debug information.
-     * @param log_level Set logger level.
-     * @param log_config Use config file for the logger.
-     * @param read_file Read file format or data set (default).
-     * @param read_file_only Read file format only.
-     * @param read_dataset Read data set without file meta information.
-     * @param uid_default Keep same SOP Instance UID (default).
-     * @param uid_always Always assign new UID.
-     * @param byte_order_default Most significant byte first (default).
-     * @param byte_order_reverse Least significant byte first.
-     * @param write_file Write file format (default).
-     * @param write_dataset Write data set without file meta information.
-     * @param write_xfer_little Write with explicit VR little endian (default).
-     * @param write_xfer_big Write with explicit VR big endian TS.
-     * @param write_xfer_implicit Write with implicit VR little endian TS.
-     * @param enable_new_vr Enable support for new VRs (UN/UT) (default).
-     * @param disable_new_vr Disable support for new VRs, convert to OB.
-     * @param group_length_recalc Recalculate group lengths if present (default).
-     * @param group_length_create Always write with group length elements.
-     * @param group_length_remove Always write without group length elements.
-     * @param length_explicit Write with explicit lengths (default).
-     * @param length_undefined Write with undefined lengths.
-     * @param padding_retain Do not change padding.
-     * @param padding_off No padding (implicit if --write-dataset).
-     * @param padding_create Align file on multiple of file-pad bytes and items on multiple of item-pad bytes.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmdrle.fs" as const,
+        "@type": "freesurfer.dcmdrle.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "help": help,
@@ -216,18 +216,18 @@ function dcmdrle_fs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmdrle_fs_cargs(
     params: DcmdrleFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmdrle.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -335,18 +335,18 @@ function dcmdrle_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmdrle_fs_outputs(
     params: DcmdrleFsParameters,
     execution: Execution,
 ): DcmdrleFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmdrleFsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -355,22 +355,22 @@ function dcmdrle_fs_outputs(
 }
 
 
+/**
+ * Decodes RLE-compressed DICOM files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
+ */
 function dcmdrle_fs_execute(
     params: DcmdrleFsParameters,
     execution: Execution,
 ): DcmdrleFsOutputs {
-    /**
-     * Decodes RLE-compressed DICOM files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmdrle_fs_cargs(params, execution)
     const ret = dcmdrle_fs_outputs(params, execution)
@@ -379,6 +379,49 @@ function dcmdrle_fs_execute(
 }
 
 
+/**
+ * Decodes RLE-compressed DICOM files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file DICOM input filename to be converted.
+ * @param output_file DICOM output filename.
+ * @param help Print help text and exit.
+ * @param version Print version information and exit.
+ * @param arguments_ Print expanded command line arguments.
+ * @param quiet Quiet mode, print no warnings and errors.
+ * @param verbose Verbose mode, print processing details.
+ * @param debug Debug mode, print debug information.
+ * @param log_level Set logger level.
+ * @param log_config Use config file for the logger.
+ * @param read_file Read file format or data set (default).
+ * @param read_file_only Read file format only.
+ * @param read_dataset Read data set without file meta information.
+ * @param uid_default Keep same SOP Instance UID (default).
+ * @param uid_always Always assign new UID.
+ * @param byte_order_default Most significant byte first (default).
+ * @param byte_order_reverse Least significant byte first.
+ * @param write_file Write file format (default).
+ * @param write_dataset Write data set without file meta information.
+ * @param write_xfer_little Write with explicit VR little endian (default).
+ * @param write_xfer_big Write with explicit VR big endian TS.
+ * @param write_xfer_implicit Write with implicit VR little endian TS.
+ * @param enable_new_vr Enable support for new VRs (UN/UT) (default).
+ * @param disable_new_vr Disable support for new VRs, convert to OB.
+ * @param group_length_recalc Recalculate group lengths if present (default).
+ * @param group_length_create Always write with group length elements.
+ * @param group_length_remove Always write without group length elements.
+ * @param length_explicit Write with explicit lengths (default).
+ * @param length_undefined Write with undefined lengths.
+ * @param padding_retain Do not change padding.
+ * @param padding_off No padding (implicit if --write-dataset).
+ * @param padding_create Align file on multiple of file-pad bytes and items on multiple of item-pad bytes.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
+ */
 function dcmdrle_fs(
     input_file: InputPathType,
     output_file: string,
@@ -414,49 +457,6 @@ function dcmdrle_fs(
     padding_create: string | null = null,
     runner: Runner | null = null,
 ): DcmdrleFsOutputs {
-    /**
-     * Decodes RLE-compressed DICOM files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file DICOM input filename to be converted.
-     * @param output_file DICOM output filename.
-     * @param help Print help text and exit.
-     * @param version Print version information and exit.
-     * @param arguments_ Print expanded command line arguments.
-     * @param quiet Quiet mode, print no warnings and errors.
-     * @param verbose Verbose mode, print processing details.
-     * @param debug Debug mode, print debug information.
-     * @param log_level Set logger level.
-     * @param log_config Use config file for the logger.
-     * @param read_file Read file format or data set (default).
-     * @param read_file_only Read file format only.
-     * @param read_dataset Read data set without file meta information.
-     * @param uid_default Keep same SOP Instance UID (default).
-     * @param uid_always Always assign new UID.
-     * @param byte_order_default Most significant byte first (default).
-     * @param byte_order_reverse Least significant byte first.
-     * @param write_file Write file format (default).
-     * @param write_dataset Write data set without file meta information.
-     * @param write_xfer_little Write with explicit VR little endian (default).
-     * @param write_xfer_big Write with explicit VR big endian TS.
-     * @param write_xfer_implicit Write with implicit VR little endian TS.
-     * @param enable_new_vr Enable support for new VRs (UN/UT) (default).
-     * @param disable_new_vr Disable support for new VRs, convert to OB.
-     * @param group_length_recalc Recalculate group lengths if present (default).
-     * @param group_length_create Always write with group length elements.
-     * @param group_length_remove Always write without group length elements.
-     * @param length_explicit Write with explicit lengths (default).
-     * @param length_undefined Write with undefined lengths.
-     * @param padding_retain Do not change padding.
-     * @param padding_off No padding (implicit if --write-dataset).
-     * @param padding_create Align file on multiple of file-pad bytes and items on multiple of item-pad bytes.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMDRLE_FS_METADATA);
     const params = dcmdrle_fs_params(input_file, output_file, help, version, arguments_, quiet, verbose, debug, log_level, log_config, read_file, read_file_only, read_dataset, uid_default, uid_always, byte_order_default, byte_order_reverse, write_file, write_dataset, write_xfer_little, write_xfer_big, write_xfer_implicit, enable_new_vr, disable_new_vr, group_length_recalc, group_length_create, group_length_remove, length_explicit, length_undefined, padding_retain, padding_off, padding_create)
@@ -469,5 +469,8 @@ export {
       DcmdrleFsOutputs,
       DcmdrleFsParameters,
       dcmdrle_fs,
+      dcmdrle_fs_cargs,
+      dcmdrle_fs_execute,
+      dcmdrle_fs_outputs,
       dcmdrle_fs_params,
 };

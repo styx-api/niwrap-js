@@ -12,32 +12,32 @@ const FIXELCFESTATS_METADATA: Metadata = {
 
 
 interface FixelcfestatsColumnParameters {
-    "__STYXTYPE__": "column";
+    "@type": "mrtrix.fixelcfestats.column";
     "path": InputPathType;
 }
 
 
 interface FixelcfestatsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelcfestats.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelcfestatsVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.fixelcfestats.VariousString";
     "obj": string;
 }
 
 
 interface FixelcfestatsVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.fixelcfestats.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface FixelcfestatsParameters {
-    "__STYXTYPE__": "fixelcfestats";
+    "@type": "mrtrix.fixelcfestats";
     "mask"?: InputPathType | null | undefined;
     "notest": boolean;
     "errors"?: string | null | undefined;
@@ -76,73 +76,73 @@ interface FixelcfestatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelcfestats": fixelcfestats_cargs,
-        "column": fixelcfestats_column_cargs,
-        "config": fixelcfestats_config_cargs,
-        "VariousString": fixelcfestats_various_string_cargs,
-        "VariousFile": fixelcfestats_various_file_cargs,
+        "mrtrix.fixelcfestats": fixelcfestats_cargs,
+        "mrtrix.fixelcfestats.column": fixelcfestats_column_cargs,
+        "mrtrix.fixelcfestats.config": fixelcfestats_config_cargs,
+        "mrtrix.fixelcfestats.VariousString": fixelcfestats_various_string_cargs,
+        "mrtrix.fixelcfestats.VariousFile": fixelcfestats_various_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param path add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcfestats_column_params(
     path: InputPathType,
 ): FixelcfestatsColumnParameters {
-    /**
-     * Build parameters.
-    
-     * @param path add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "column" as const,
+        "@type": "mrtrix.fixelcfestats.column" as const,
         "path": path,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcfestats_column_cargs(
     params: FixelcfestatsColumnParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-column");
     cargs.push(execution.inputFile((params["path"] ?? null)));
@@ -150,20 +150,20 @@ function fixelcfestats_column_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcfestats_config_params(
     key: string,
     value: string,
 ): FixelcfestatsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelcfestats.config" as const,
         "key": key,
         "value": value,
     };
@@ -171,18 +171,18 @@ function fixelcfestats_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcfestats_config_cargs(
     params: FixelcfestatsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -191,72 +191,72 @@ function fixelcfestats_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcfestats_various_string_params(
     obj: string,
 ): FixelcfestatsVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.fixelcfestats.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcfestats_various_string_cargs(
     params: FixelcfestatsVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcfestats_various_file_params(
     obj: InputPathType,
 ): FixelcfestatsVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.fixelcfestats.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcfestats_various_file_cargs(
     params: FixelcfestatsVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -276,6 +276,47 @@ interface FixelcfestatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_fixel_directory the fixel directory containing the data files for each subject (after obtaining fixel correspondence
+ * @param subjects a text file listing the subject identifiers (one per line). This should correspond with the filenames in the fixel directory (including the file extension), and be listed in the same order as the rows of the design matrix.
+ * @param design the design matrix
+ * @param contrast the contrast matrix, specified as rows of weights
+ * @param connectivity the fixel-fixel connectivity matrix
+ * @param out_fixel_directory the output directory where results will be saved. Will be created if it does not exist
+ * @param mask provide a fixel data file containing a mask of those fixels to be used during processing
+ * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
+ * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
+ * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
+ * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
+ * @param strong use strong familywise error control across multiple hypotheses
+ * @param nshuffles the number of shuffles (default: 5000)
+ * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
+ * @param nonstationarity perform non-stationarity correction
+ * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
+ * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
+ * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
+ * @param cfe_dh the height increment used in the cfe integration (default: 0.1)
+ * @param cfe_e cfe extent exponent (default: 2)
+ * @param cfe_h cfe height exponent (default: 3)
+ * @param cfe_c cfe connectivity exponent (default: 0.5)
+ * @param cfe_legacy use the legacy (non-normalised) form of the cfe equation
+ * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
+ * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
+ * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
+ * @param column add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcfestats_params(
     in_fixel_directory: InputPathType,
     subjects: InputPathType,
@@ -313,49 +354,8 @@ function fixelcfestats_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelcfestatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_fixel_directory the fixel directory containing the data files for each subject (after obtaining fixel correspondence
-     * @param subjects a text file listing the subject identifiers (one per line). This should correspond with the filenames in the fixel directory (including the file extension), and be listed in the same order as the rows of the design matrix.
-     * @param design the design matrix
-     * @param contrast the contrast matrix, specified as rows of weights
-     * @param connectivity the fixel-fixel connectivity matrix
-     * @param out_fixel_directory the output directory where results will be saved. Will be created if it does not exist
-     * @param mask provide a fixel data file containing a mask of those fixels to be used during processing
-     * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
-     * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
-     * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
-     * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
-     * @param strong use strong familywise error control across multiple hypotheses
-     * @param nshuffles the number of shuffles (default: 5000)
-     * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
-     * @param nonstationarity perform non-stationarity correction
-     * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
-     * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
-     * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
-     * @param cfe_dh the height increment used in the cfe integration (default: 0.1)
-     * @param cfe_e cfe extent exponent (default: 2)
-     * @param cfe_h cfe height exponent (default: 3)
-     * @param cfe_c cfe connectivity exponent (default: 0.5)
-     * @param cfe_legacy use the legacy (non-normalised) form of the cfe equation
-     * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
-     * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
-     * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
-     * @param column add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelcfestats" as const,
+        "@type": "mrtrix.fixelcfestats" as const,
         "notest": notest,
         "strong": strong,
         "nonstationarity": nonstationarity,
@@ -432,18 +432,18 @@ function fixelcfestats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcfestats_cargs(
     params: FixelcfestatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelcfestats");
     if ((params["mask"] ?? null) !== null) {
@@ -552,7 +552,7 @@ function fixelcfestats_cargs(
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -573,7 +573,7 @@ function fixelcfestats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -585,24 +585,24 @@ function fixelcfestats_cargs(
     cargs.push(execution.inputFile((params["subjects"] ?? null)));
     cargs.push(execution.inputFile((params["design"] ?? null)));
     cargs.push(execution.inputFile((params["contrast"] ?? null)));
-    cargs.push(...dynCargs((params["connectivity"] ?? null).__STYXTYPE__)((params["connectivity"] ?? null), execution));
+    cargs.push(...dynCargs((params["connectivity"] ?? null)["@type"])((params["connectivity"] ?? null), execution));
     cargs.push((params["out_fixel_directory"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelcfestats_outputs(
     params: FixelcfestatsParameters,
     execution: Execution,
 ): FixelcfestatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelcfestatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -610,38 +610,38 @@ function fixelcfestats_outputs(
 }
 
 
+/**
+ * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
+ *
+ * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).
+ *
+ * Note that if the -mask option is used, the output fixel directory will still contain the same set of fixels as that present in the input fixel template, in order to retain fixel correspondence. However a consequence of this is that all fixels in the template will be initialy visible when the output fixel directory is loaded in mrview. Those fixels outside the processing mask will immediately disappear from view as soon as any data-file-based fixel colouring or thresholding is applied.
+ *
+ * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
+ *
+ * References:
+ *
+ * Raffelt, D.; Smith, RE.; Ridgway, GR.; Tournier, JD.; Vaughan, DN.; Rose, S.; Henderson, R.; Connelly, A. Connectivity-based fixel enhancement: Whole-brain statistical analysis of diffusion MRI measures in the presence of crossing fibres.Neuroimage, 2015, 15(117):40-55
+ *
+ * * If not using the -cfe_legacy option: 
+ * Smith, RE.; Dimond, D; Vaughan, D.; Parker, D.; Dhollander, T.; Jackson, G.; Connelly, A. Intrinsic non-stationarity correction for Fixel-Based Analysis. In Proc OHBM 2019 M789
+ *
+ * * If using the -nonstationary option: 
+ * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. NeuroImage, 2011, 54(3), 2006-19.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
+ */
 function fixelcfestats_execute(
     params: FixelcfestatsParameters,
     execution: Execution,
 ): FixelcfestatsOutputs {
-    /**
-     * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
-     * 
-     * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).
-     * 
-     * Note that if the -mask option is used, the output fixel directory will still contain the same set of fixels as that present in the input fixel template, in order to retain fixel correspondence. However a consequence of this is that all fixels in the template will be initialy visible when the output fixel directory is loaded in mrview. Those fixels outside the processing mask will immediately disappear from view as soon as any data-file-based fixel colouring or thresholding is applied.
-     * 
-     * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
-     * 
-     * References:
-     * 
-     * Raffelt, D.; Smith, RE.; Ridgway, GR.; Tournier, JD.; Vaughan, DN.; Rose, S.; Henderson, R.; Connelly, A. Connectivity-based fixel enhancement: Whole-brain statistical analysis of diffusion MRI measures in the presence of crossing fibres.Neuroimage, 2015, 15(117):40-55
-     * 
-     * * If not using the -cfe_legacy option: 
-     * Smith, RE.; Dimond, D; Vaughan, D.; Parker, D.; Dhollander, T.; Jackson, G.; Connelly, A. Intrinsic non-stationarity correction for Fixel-Based Analysis. In Proc OHBM 2019 M789
-     * 
-     * * If using the -nonstationary option: 
-     * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. NeuroImage, 2011, 54(3), 2006-19.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelcfestats_cargs(params, execution)
     const ret = fixelcfestats_outputs(params, execution)
@@ -650,6 +650,68 @@ function fixelcfestats_execute(
 }
 
 
+/**
+ * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
+ *
+ * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).
+ *
+ * Note that if the -mask option is used, the output fixel directory will still contain the same set of fixels as that present in the input fixel template, in order to retain fixel correspondence. However a consequence of this is that all fixels in the template will be initialy visible when the output fixel directory is loaded in mrview. Those fixels outside the processing mask will immediately disappear from view as soon as any data-file-based fixel colouring or thresholding is applied.
+ *
+ * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
+ *
+ * References:
+ *
+ * Raffelt, D.; Smith, RE.; Ridgway, GR.; Tournier, JD.; Vaughan, DN.; Rose, S.; Henderson, R.; Connelly, A. Connectivity-based fixel enhancement: Whole-brain statistical analysis of diffusion MRI measures in the presence of crossing fibres.Neuroimage, 2015, 15(117):40-55
+ *
+ * * If not using the -cfe_legacy option: 
+ * Smith, RE.; Dimond, D; Vaughan, D.; Parker, D.; Dhollander, T.; Jackson, G.; Connelly, A. Intrinsic non-stationarity correction for Fixel-Based Analysis. In Proc OHBM 2019 M789
+ *
+ * * If using the -nonstationary option: 
+ * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. NeuroImage, 2011, 54(3), 2006-19.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_fixel_directory the fixel directory containing the data files for each subject (after obtaining fixel correspondence
+ * @param subjects a text file listing the subject identifiers (one per line). This should correspond with the filenames in the fixel directory (including the file extension), and be listed in the same order as the rows of the design matrix.
+ * @param design the design matrix
+ * @param contrast the contrast matrix, specified as rows of weights
+ * @param connectivity the fixel-fixel connectivity matrix
+ * @param out_fixel_directory the output directory where results will be saved. Will be created if it does not exist
+ * @param mask provide a fixel data file containing a mask of those fixels to be used during processing
+ * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
+ * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
+ * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
+ * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
+ * @param strong use strong familywise error control across multiple hypotheses
+ * @param nshuffles the number of shuffles (default: 5000)
+ * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
+ * @param nonstationarity perform non-stationarity correction
+ * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
+ * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
+ * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
+ * @param cfe_dh the height increment used in the cfe integration (default: 0.1)
+ * @param cfe_e cfe extent exponent (default: 2)
+ * @param cfe_h cfe height exponent (default: 3)
+ * @param cfe_c cfe connectivity exponent (default: 0.5)
+ * @param cfe_legacy use the legacy (non-normalised) form of the cfe equation
+ * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
+ * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
+ * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
+ * @param column add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
+ */
 function fixelcfestats(
     in_fixel_directory: InputPathType,
     subjects: InputPathType,
@@ -688,68 +750,6 @@ function fixelcfestats(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcfestatsOutputs {
-    /**
-     * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
-     * 
-     * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).
-     * 
-     * Note that if the -mask option is used, the output fixel directory will still contain the same set of fixels as that present in the input fixel template, in order to retain fixel correspondence. However a consequence of this is that all fixels in the template will be initialy visible when the output fixel directory is loaded in mrview. Those fixels outside the processing mask will immediately disappear from view as soon as any data-file-based fixel colouring or thresholding is applied.
-     * 
-     * In some software packages, a column of ones is automatically added to the GLM design matrix; the purpose of this column is to estimate the "global intercept", which is the predicted value of the observed variable if all explanatory variables were to be zero. However there are rare situations where including such a column would not be appropriate for a particular experimental design. Hence, in MRtrix3 statistical inference commands, it is up to the user to determine whether or not this column of ones should be included in their design matrix, and add it explicitly if necessary. The contrast matrix must also reflect the presence of this additional column.
-     * 
-     * References:
-     * 
-     * Raffelt, D.; Smith, RE.; Ridgway, GR.; Tournier, JD.; Vaughan, DN.; Rose, S.; Henderson, R.; Connelly, A. Connectivity-based fixel enhancement: Whole-brain statistical analysis of diffusion MRI measures in the presence of crossing fibres.Neuroimage, 2015, 15(117):40-55
-     * 
-     * * If not using the -cfe_legacy option: 
-     * Smith, RE.; Dimond, D; Vaughan, D.; Parker, D.; Dhollander, T.; Jackson, G.; Connelly, A. Intrinsic non-stationarity correction for Fixel-Based Analysis. In Proc OHBM 2019 M789
-     * 
-     * * If using the -nonstationary option: 
-     * Salimi-Khorshidi, G. Smith, S.M. Nichols, T.E. Adjusting the effect of nonstationarity in cluster-based and TFCE inference. NeuroImage, 2011, 54(3), 2006-19.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_fixel_directory the fixel directory containing the data files for each subject (after obtaining fixel correspondence
-     * @param subjects a text file listing the subject identifiers (one per line). This should correspond with the filenames in the fixel directory (including the file extension), and be listed in the same order as the rows of the design matrix.
-     * @param design the design matrix
-     * @param contrast the contrast matrix, specified as rows of weights
-     * @param connectivity the fixel-fixel connectivity matrix
-     * @param out_fixel_directory the output directory where results will be saved. Will be created if it does not exist
-     * @param mask provide a fixel data file containing a mask of those fixels to be used during processing
-     * @param notest don't perform statistical inference; only output population statistics (effect size, stdev etc)
-     * @param errors specify nature of errors for shuffling; options are: ee,ise,both (default: ee)
-     * @param exchange_within specify blocks of observations within each of which data may undergo restricted exchange
-     * @param exchange_whole specify blocks of observations that may be exchanged with one another (for independent and symmetric errors, sign-flipping will occur block-wise)
-     * @param strong use strong familywise error control across multiple hypotheses
-     * @param nshuffles the number of shuffles (default: 5000)
-     * @param permutations manually define the permutations (relabelling). The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM). Overrides the -nshuffles option.
-     * @param nonstationarity perform non-stationarity correction
-     * @param skew_nonstationarity specify the skew parameter for empirical statistic calculation (default for this command is 1)
-     * @param nshuffles_nonstationarity the number of shuffles to use when precomputing the empirical statistic image for non-stationarity correction (default: 5000)
-     * @param permutations_nonstationarity manually define the permutations (relabelling) for computing the emprical statistics for non-stationarity correction. The input should be a text file defining a m x n matrix, where each relabelling is defined as a column vector of size m, and the number of columns, n, defines the number of permutations. Can be generated with the palm_quickperms function in PALM (http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) Overrides the -nshuffles_nonstationarity option.
-     * @param cfe_dh the height increment used in the cfe integration (default: 0.1)
-     * @param cfe_e cfe extent exponent (default: 2)
-     * @param cfe_h cfe height exponent (default: 3)
-     * @param cfe_c cfe connectivity exponent (default: 0.5)
-     * @param cfe_legacy use the legacy (non-normalised) form of the cfe equation
-     * @param variance define variance groups for the G-statistic; measurements for which the expected variance is equivalent should contain the same index
-     * @param ftests perform F-tests; input text file should contain, for each F-test, a row containing ones and zeros, where ones indicate the rows of the contrast matrix to be included in the F-test.
-     * @param fonly only assess F-tests; do not perform statistical inference on entries in the contrast matrix
-     * @param column add a column to the design matrix corresponding to subject fixel-wise values (note that the contrast matrix must include an additional column for each use of this option); the text file provided via this option should contain a file name for each subject
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELCFESTATS_METADATA);
     const params = fixelcfestats_params(in_fixel_directory, subjects, design, contrast, connectivity, out_fixel_directory, mask, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, nonstationarity, skew_nonstationarity, nshuffles_nonstationarity, permutations_nonstationarity, cfe_dh, cfe_e, cfe_h, cfe_c, cfe_legacy, variance, ftests, fonly, column, info, quiet, debug, force, nthreads, config, help, version)
@@ -766,9 +766,16 @@ export {
       FixelcfestatsVariousFileParameters,
       FixelcfestatsVariousStringParameters,
       fixelcfestats,
+      fixelcfestats_cargs,
+      fixelcfestats_column_cargs,
       fixelcfestats_column_params,
+      fixelcfestats_config_cargs,
       fixelcfestats_config_params,
+      fixelcfestats_execute,
+      fixelcfestats_outputs,
       fixelcfestats_params,
+      fixelcfestats_various_file_cargs,
       fixelcfestats_various_file_params,
+      fixelcfestats_various_string_cargs,
       fixelcfestats_various_string_params,
 };

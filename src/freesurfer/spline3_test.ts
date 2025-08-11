@@ -12,42 +12,42 @@ const SPLINE3_TEST_METADATA: Metadata = {
 
 
 interface Spline3TestParameters {
-    "__STYXTYPE__": "Spline3_test";
+    "@type": "freesurfer.Spline3_test";
     "x_values": Array<number>;
     "y_values": Array<number>;
     "x_new_values": Array<number>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "Spline3_test": spline3_test_cargs,
+        "freesurfer.Spline3_test": spline3_test_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "Spline3_test": spline3_test_outputs,
+        "freesurfer.Spline3_test": spline3_test_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface Spline3TestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param x_values Original x values for interpolation.
+ * @param y_values Original y values corresponding to x values.
+ * @param x_new_values New x values where interpolation is evaluated.
+ *
+ * @returns Parameter dictionary
+ */
 function spline3_test_params(
     x_values: Array<number>,
     y_values: Array<number>,
     x_new_values: Array<number>,
 ): Spline3TestParameters {
-    /**
-     * Build parameters.
-    
-     * @param x_values Original x values for interpolation.
-     * @param y_values Original y values corresponding to x values.
-     * @param x_new_values New x values where interpolation is evaluated.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "Spline3_test" as const,
+        "@type": "freesurfer.Spline3_test" as const,
         "x_values": x_values,
         "y_values": y_values,
         "x_new_values": x_new_values,
@@ -98,18 +98,18 @@ function spline3_test_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spline3_test_cargs(
     params: Spline3TestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Spline3_test");
     cargs.push(...(params["x_values"] ?? null).map(String));
@@ -119,18 +119,18 @@ function spline3_test_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spline3_test_outputs(
     params: Spline3TestParameters,
     execution: Execution,
 ): Spline3TestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Spline3TestOutputs = {
         root: execution.outputFile("."),
         output_ynew: execution.outputFile(["Ynew.txt"].join('')),
@@ -140,22 +140,22 @@ function spline3_test_outputs(
 }
 
 
+/**
+ * A tool for cubic spline interpolation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
+ */
 function spline3_test_execute(
     params: Spline3TestParameters,
     execution: Execution,
 ): Spline3TestOutputs {
-    /**
-     * A tool for cubic spline interpolation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
-     */
     params = execution.params(params)
     const cargs = spline3_test_cargs(params, execution)
     const ret = spline3_test_outputs(params, execution)
@@ -164,26 +164,26 @@ function spline3_test_execute(
 }
 
 
+/**
+ * A tool for cubic spline interpolation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param x_values Original x values for interpolation.
+ * @param y_values Original y values corresponding to x values.
+ * @param x_new_values New x values where interpolation is evaluated.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
+ */
 function spline3_test(
     x_values: Array<number>,
     y_values: Array<number>,
     x_new_values: Array<number>,
     runner: Runner | null = null,
 ): Spline3TestOutputs {
-    /**
-     * A tool for cubic spline interpolation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param x_values Original x values for interpolation.
-     * @param y_values Original y values corresponding to x values.
-     * @param x_new_values New x values where interpolation is evaluated.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPLINE3_TEST_METADATA);
     const params = spline3_test_params(x_values, y_values, x_new_values)
@@ -196,5 +196,8 @@ export {
       Spline3TestOutputs,
       Spline3TestParameters,
       spline3_test,
+      spline3_test_cargs,
+      spline3_test_execute,
+      spline3_test_outputs,
       spline3_test_params,
 };

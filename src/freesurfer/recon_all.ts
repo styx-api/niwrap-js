@@ -12,7 +12,7 @@ const RECON_ALL_METADATA: Metadata = {
 
 
 interface ReconAllParameters {
-    "__STYXTYPE__": "recon-all";
+    "@type": "freesurfer.recon-all";
     "subjid": string;
     "all_flag": boolean;
     "autorecon_all_flag": boolean;
@@ -85,35 +85,35 @@ interface ReconAllParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "recon-all": recon_all_cargs,
+        "freesurfer.recon-all": recon_all_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "recon-all": recon_all_outputs,
+        "freesurfer.recon-all": recon_all_outputs,
     };
     return outputsFuncs[t];
 }
@@ -140,6 +140,81 @@ interface ReconAllOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Subject ID for the FreeSurfer analysis
+ * @param all_flag Performs all stages of cortical reconstruction
+ * @param autorecon_all_flag Same as -all
+ * @param autorecon1_flag Process stages 1-5
+ * @param autorecon2_flag Process stages 6-23
+ * @param autorecon2_cp_flag Process stages 12-23
+ * @param autorecon2_wm_flag Process stages 15-23
+ * @param autorecon2_inflate1_flag Process stages 6-18
+ * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
+ * @param autorecon3_flag Process stages 24-34
+ * @param hemi Specify hemisphere ('lh' or 'rh')
+ * @param pons_crs Specify CRS for pons during fill operation
+ * @param cc_crs Specify CRS for corpus callosum during fill operation
+ * @param lh_crs Specify CRS for left hemisphere during fill operation
+ * @param rh_crs Specify CRS for right hemisphere during fill operation
+ * @param nofill Do not use automatic subcortical seg to fill
+ * @param watershed Control skull stripping/watershed program
+ * @param external_brain_mask Custom external brain mask file
+ * @param wsless Decrease watershed threshold
+ * @param wsmore Increase watershed threshold
+ * @param wsatlas Use atlas when skull stripping
+ * @param no_wsatlas Do not use atlas when skull stripping
+ * @param no_wsgcaatlas Do not use GCA atlas when skull stripping
+ * @param wsthresh Explicitly set watershed threshold
+ * @param wsseed Identify an index (C, R, S) point in the skull
+ * @param norm_3d_iters Number of 3D iterations for mri_normalize
+ * @param norm_max_grad Max grad for mri_normalize
+ * @param norm1_b First usage of mri_normalize with control point intensity N below target
+ * @param norm2_b Second usage of mri_normalize with control point intensity N below target
+ * @param norm1_n First usage of mri_normalize, number of iterations
+ * @param norm2_n Second usage of mri_normalize, number of iterations
+ * @param cm Conform volumes to the min voxel size
+ * @param no_fix_with_ga Do not use genetic algorithm when fixing topology
+ * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created
+ * @param seg_wlo Set WLO value for mri_segment and mris_make_surfaces
+ * @param seg_ghi Set GHI value for mri_segment and mris_make_surfaces
+ * @param nothicken Pass '-thicken 0' to mri_segment
+ * @param no_ca_align_after Turn off '-align-after' with mri_ca_register
+ * @param no_ca_align Turn off '-align' with mri_ca_label
+ * @param deface Deface subject, written to orig_defaced.mgz
+ * @param expert_file Read-in expert options file
+ * @param xopts_use Use pre-existing expert options file
+ * @param xopts_clean Delete pre-existing expert options file
+ * @param xopts_overwrite Overwrite pre-existing expert options file
+ * @param termscript_file Run script before exiting
+ * @param mprage Assume scan parameters are MGH MP-RAGE protocol
+ * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol
+ * @param schwartzya3t_atlas Use special young adult 3T atlas for tal reg
+ * @param threads Set number of threads to use
+ * @param waitfor_file Wait for file to appear before beginning
+ * @param notify_file Create this file after finishing
+ * @param log_file Specify log file
+ * @param status_file Specify status file
+ * @param noappend Start new log and status files instead of appending
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param hippocampal_subfields_t1 Segmentation of hippocampal subfields using input T1 scan
+ * @param hippocampal_subfields_t2 Segmentation using an additional scan and input T2 scan
+ * @param hippocampal_subfields_t1t2 Segmentation using additional scan and input T1
+ * @param brainstem_structures Segmentation of brainstem structures
+ * @param subjects_dir Specify subjects directory
+ * @param mail_user Mail user when done
+ * @param umask Set unix file permission mask
+ * @param group_id Check that current group is alpha group
+ * @param only_versions Print version of each binary and exit
+ * @param debug Print out lots of info
+ * @param allow_coredump Set coredump limit to unlimited
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ * @param help Display help message and exit
+ *
+ * @returns Parameter dictionary
+ */
 function recon_all_params(
     subjid: string,
     all_flag: boolean = false,
@@ -211,83 +286,8 @@ function recon_all_params(
     version: boolean = false,
     help: boolean = false,
 ): ReconAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Subject ID for the FreeSurfer analysis
-     * @param all_flag Performs all stages of cortical reconstruction
-     * @param autorecon_all_flag Same as -all
-     * @param autorecon1_flag Process stages 1-5
-     * @param autorecon2_flag Process stages 6-23
-     * @param autorecon2_cp_flag Process stages 12-23
-     * @param autorecon2_wm_flag Process stages 15-23
-     * @param autorecon2_inflate1_flag Process stages 6-18
-     * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
-     * @param autorecon3_flag Process stages 24-34
-     * @param hemi Specify hemisphere ('lh' or 'rh')
-     * @param pons_crs Specify CRS for pons during fill operation
-     * @param cc_crs Specify CRS for corpus callosum during fill operation
-     * @param lh_crs Specify CRS for left hemisphere during fill operation
-     * @param rh_crs Specify CRS for right hemisphere during fill operation
-     * @param nofill Do not use automatic subcortical seg to fill
-     * @param watershed Control skull stripping/watershed program
-     * @param external_brain_mask Custom external brain mask file
-     * @param wsless Decrease watershed threshold
-     * @param wsmore Increase watershed threshold
-     * @param wsatlas Use atlas when skull stripping
-     * @param no_wsatlas Do not use atlas when skull stripping
-     * @param no_wsgcaatlas Do not use GCA atlas when skull stripping
-     * @param wsthresh Explicitly set watershed threshold
-     * @param wsseed Identify an index (C, R, S) point in the skull
-     * @param norm_3d_iters Number of 3D iterations for mri_normalize
-     * @param norm_max_grad Max grad for mri_normalize
-     * @param norm1_b First usage of mri_normalize with control point intensity N below target
-     * @param norm2_b Second usage of mri_normalize with control point intensity N below target
-     * @param norm1_n First usage of mri_normalize, number of iterations
-     * @param norm2_n Second usage of mri_normalize, number of iterations
-     * @param cm Conform volumes to the min voxel size
-     * @param no_fix_with_ga Do not use genetic algorithm when fixing topology
-     * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created
-     * @param seg_wlo Set WLO value for mri_segment and mris_make_surfaces
-     * @param seg_ghi Set GHI value for mri_segment and mris_make_surfaces
-     * @param nothicken Pass '-thicken 0' to mri_segment
-     * @param no_ca_align_after Turn off '-align-after' with mri_ca_register
-     * @param no_ca_align Turn off '-align' with mri_ca_label
-     * @param deface Deface subject, written to orig_defaced.mgz
-     * @param expert_file Read-in expert options file
-     * @param xopts_use Use pre-existing expert options file
-     * @param xopts_clean Delete pre-existing expert options file
-     * @param xopts_overwrite Overwrite pre-existing expert options file
-     * @param termscript_file Run script before exiting
-     * @param mprage Assume scan parameters are MGH MP-RAGE protocol
-     * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol
-     * @param schwartzya3t_atlas Use special young adult 3T atlas for tal reg
-     * @param threads Set number of threads to use
-     * @param waitfor_file Wait for file to appear before beginning
-     * @param notify_file Create this file after finishing
-     * @param log_file Specify log file
-     * @param status_file Specify status file
-     * @param noappend Start new log and status files instead of appending
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param hippocampal_subfields_t1 Segmentation of hippocampal subfields using input T1 scan
-     * @param hippocampal_subfields_t2 Segmentation using an additional scan and input T2 scan
-     * @param hippocampal_subfields_t1t2 Segmentation using additional scan and input T1
-     * @param brainstem_structures Segmentation of brainstem structures
-     * @param subjects_dir Specify subjects directory
-     * @param mail_user Mail user when done
-     * @param umask Set unix file permission mask
-     * @param group_id Check that current group is alpha group
-     * @param only_versions Print version of each binary and exit
-     * @param debug Print out lots of info
-     * @param allow_coredump Set coredump limit to unlimited
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-     * @param help Display help message and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "recon-all" as const,
+        "@type": "freesurfer.recon-all" as const,
         "subjid": subjid,
         "all_flag": all_flag,
         "autorecon_all_flag": autorecon_all_flag,
@@ -422,18 +422,18 @@ function recon_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function recon_all_cargs(
     params: ReconAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("recon-all");
     cargs.push(
@@ -738,18 +738,18 @@ function recon_all_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function recon_all_outputs(
     params: ReconAllParameters,
     execution: Execution,
 ): ReconAllOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReconAllOutputs = {
         root: execution.outputFile("."),
         logfile: execution.outputFile([(params["subjid"] ?? null), "/scripts/recon-all.log"].join('')),
@@ -759,22 +759,22 @@ function recon_all_outputs(
 }
 
 
+/**
+ * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
+ */
 function recon_all_execute(
     params: ReconAllParameters,
     execution: Execution,
 ): ReconAllOutputs {
-    /**
-     * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
-     */
     params = execution.params(params)
     const cargs = recon_all_cargs(params, execution)
     const ret = recon_all_outputs(params, execution)
@@ -783,6 +783,86 @@ function recon_all_execute(
 }
 
 
+/**
+ * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Subject ID for the FreeSurfer analysis
+ * @param all_flag Performs all stages of cortical reconstruction
+ * @param autorecon_all_flag Same as -all
+ * @param autorecon1_flag Process stages 1-5
+ * @param autorecon2_flag Process stages 6-23
+ * @param autorecon2_cp_flag Process stages 12-23
+ * @param autorecon2_wm_flag Process stages 15-23
+ * @param autorecon2_inflate1_flag Process stages 6-18
+ * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
+ * @param autorecon3_flag Process stages 24-34
+ * @param hemi Specify hemisphere ('lh' or 'rh')
+ * @param pons_crs Specify CRS for pons during fill operation
+ * @param cc_crs Specify CRS for corpus callosum during fill operation
+ * @param lh_crs Specify CRS for left hemisphere during fill operation
+ * @param rh_crs Specify CRS for right hemisphere during fill operation
+ * @param nofill Do not use automatic subcortical seg to fill
+ * @param watershed Control skull stripping/watershed program
+ * @param external_brain_mask Custom external brain mask file
+ * @param wsless Decrease watershed threshold
+ * @param wsmore Increase watershed threshold
+ * @param wsatlas Use atlas when skull stripping
+ * @param no_wsatlas Do not use atlas when skull stripping
+ * @param no_wsgcaatlas Do not use GCA atlas when skull stripping
+ * @param wsthresh Explicitly set watershed threshold
+ * @param wsseed Identify an index (C, R, S) point in the skull
+ * @param norm_3d_iters Number of 3D iterations for mri_normalize
+ * @param norm_max_grad Max grad for mri_normalize
+ * @param norm1_b First usage of mri_normalize with control point intensity N below target
+ * @param norm2_b Second usage of mri_normalize with control point intensity N below target
+ * @param norm1_n First usage of mri_normalize, number of iterations
+ * @param norm2_n Second usage of mri_normalize, number of iterations
+ * @param cm Conform volumes to the min voxel size
+ * @param no_fix_with_ga Do not use genetic algorithm when fixing topology
+ * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created
+ * @param seg_wlo Set WLO value for mri_segment and mris_make_surfaces
+ * @param seg_ghi Set GHI value for mri_segment and mris_make_surfaces
+ * @param nothicken Pass '-thicken 0' to mri_segment
+ * @param no_ca_align_after Turn off '-align-after' with mri_ca_register
+ * @param no_ca_align Turn off '-align' with mri_ca_label
+ * @param deface Deface subject, written to orig_defaced.mgz
+ * @param expert_file Read-in expert options file
+ * @param xopts_use Use pre-existing expert options file
+ * @param xopts_clean Delete pre-existing expert options file
+ * @param xopts_overwrite Overwrite pre-existing expert options file
+ * @param termscript_file Run script before exiting
+ * @param mprage Assume scan parameters are MGH MP-RAGE protocol
+ * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol
+ * @param schwartzya3t_atlas Use special young adult 3T atlas for tal reg
+ * @param threads Set number of threads to use
+ * @param waitfor_file Wait for file to appear before beginning
+ * @param notify_file Create this file after finishing
+ * @param log_file Specify log file
+ * @param status_file Specify status file
+ * @param noappend Start new log and status files instead of appending
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param hippocampal_subfields_t1 Segmentation of hippocampal subfields using input T1 scan
+ * @param hippocampal_subfields_t2 Segmentation using an additional scan and input T2 scan
+ * @param hippocampal_subfields_t1t2 Segmentation using additional scan and input T1
+ * @param brainstem_structures Segmentation of brainstem structures
+ * @param subjects_dir Specify subjects directory
+ * @param mail_user Mail user when done
+ * @param umask Set unix file permission mask
+ * @param group_id Check that current group is alpha group
+ * @param only_versions Print version of each binary and exit
+ * @param debug Print out lots of info
+ * @param allow_coredump Set coredump limit to unlimited
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ * @param help Display help message and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
+ */
 function recon_all(
     subjid: string,
     all_flag: boolean = false,
@@ -855,86 +935,6 @@ function recon_all(
     help: boolean = false,
     runner: Runner | null = null,
 ): ReconAllOutputs {
-    /**
-     * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Subject ID for the FreeSurfer analysis
-     * @param all_flag Performs all stages of cortical reconstruction
-     * @param autorecon_all_flag Same as -all
-     * @param autorecon1_flag Process stages 1-5
-     * @param autorecon2_flag Process stages 6-23
-     * @param autorecon2_cp_flag Process stages 12-23
-     * @param autorecon2_wm_flag Process stages 15-23
-     * @param autorecon2_inflate1_flag Process stages 6-18
-     * @param autorecon2_perhemi_flag Tessellation, Smooth1, Inflate1, Qsphere, Fix, Smooth2, Inflate2, Finalsurf, Ribbon
-     * @param autorecon3_flag Process stages 24-34
-     * @param hemi Specify hemisphere ('lh' or 'rh')
-     * @param pons_crs Specify CRS for pons during fill operation
-     * @param cc_crs Specify CRS for corpus callosum during fill operation
-     * @param lh_crs Specify CRS for left hemisphere during fill operation
-     * @param rh_crs Specify CRS for right hemisphere during fill operation
-     * @param nofill Do not use automatic subcortical seg to fill
-     * @param watershed Control skull stripping/watershed program
-     * @param external_brain_mask Custom external brain mask file
-     * @param wsless Decrease watershed threshold
-     * @param wsmore Increase watershed threshold
-     * @param wsatlas Use atlas when skull stripping
-     * @param no_wsatlas Do not use atlas when skull stripping
-     * @param no_wsgcaatlas Do not use GCA atlas when skull stripping
-     * @param wsthresh Explicitly set watershed threshold
-     * @param wsseed Identify an index (C, R, S) point in the skull
-     * @param norm_3d_iters Number of 3D iterations for mri_normalize
-     * @param norm_max_grad Max grad for mri_normalize
-     * @param norm1_b First usage of mri_normalize with control point intensity N below target
-     * @param norm2_b Second usage of mri_normalize with control point intensity N below target
-     * @param norm1_n First usage of mri_normalize, number of iterations
-     * @param norm2_n Second usage of mri_normalize, number of iterations
-     * @param cm Conform volumes to the min voxel size
-     * @param no_fix_with_ga Do not use genetic algorithm when fixing topology
-     * @param fix_diag_only Topology fixer runs until ?h.defect_labels files are created
-     * @param seg_wlo Set WLO value for mri_segment and mris_make_surfaces
-     * @param seg_ghi Set GHI value for mri_segment and mris_make_surfaces
-     * @param nothicken Pass '-thicken 0' to mri_segment
-     * @param no_ca_align_after Turn off '-align-after' with mri_ca_register
-     * @param no_ca_align Turn off '-align' with mri_ca_label
-     * @param deface Deface subject, written to orig_defaced.mgz
-     * @param expert_file Read-in expert options file
-     * @param xopts_use Use pre-existing expert options file
-     * @param xopts_clean Delete pre-existing expert options file
-     * @param xopts_overwrite Overwrite pre-existing expert options file
-     * @param termscript_file Run script before exiting
-     * @param mprage Assume scan parameters are MGH MP-RAGE protocol
-     * @param washu_mprage Assume scan parameters are Wash.U. MP-RAGE protocol
-     * @param schwartzya3t_atlas Use special young adult 3T atlas for tal reg
-     * @param threads Set number of threads to use
-     * @param waitfor_file Wait for file to appear before beginning
-     * @param notify_file Create this file after finishing
-     * @param log_file Specify log file
-     * @param status_file Specify status file
-     * @param noappend Start new log and status files instead of appending
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param hippocampal_subfields_t1 Segmentation of hippocampal subfields using input T1 scan
-     * @param hippocampal_subfields_t2 Segmentation using an additional scan and input T2 scan
-     * @param hippocampal_subfields_t1t2 Segmentation using additional scan and input T1
-     * @param brainstem_structures Segmentation of brainstem structures
-     * @param subjects_dir Specify subjects directory
-     * @param mail_user Mail user when done
-     * @param umask Set unix file permission mask
-     * @param group_id Check that current group is alpha group
-     * @param only_versions Print version of each binary and exit
-     * @param debug Print out lots of info
-     * @param allow_coredump Set coredump limit to unlimited
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-     * @param help Display help message and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RECON_ALL_METADATA);
     const params = recon_all_params(subjid, all_flag, autorecon_all_flag, autorecon1_flag, autorecon2_flag, autorecon2_cp_flag, autorecon2_wm_flag, autorecon2_inflate1_flag, autorecon2_perhemi_flag, autorecon3_flag, hemi, pons_crs, cc_crs, lh_crs, rh_crs, nofill, watershed, external_brain_mask, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm_3d_iters, norm_max_grad, norm1_b, norm2_b, norm1_n, norm2_n, cm, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, expert_file, xopts_use, xopts_clean, xopts_overwrite, termscript_file, mprage, washu_mprage, schwartzya3t_atlas, threads, waitfor_file, notify_file, log_file, status_file, noappend, no_isrunning, hippocampal_subfields_t1, hippocampal_subfields_t2, hippocampal_subfields_t1t2, brainstem_structures, subjects_dir, mail_user, umask, group_id, only_versions, debug, allow_coredump, dontrun, version, help)
@@ -947,5 +947,8 @@ export {
       ReconAllOutputs,
       ReconAllParameters,
       recon_all,
+      recon_all_cargs,
+      recon_all_execute,
+      recon_all_outputs,
       recon_all_params,
 };

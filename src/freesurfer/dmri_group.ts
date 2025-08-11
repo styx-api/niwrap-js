@@ -12,7 +12,7 @@ const DMRI_GROUP_METADATA: Metadata = {
 
 
 interface DmriGroupParameters {
-    "__STYXTYPE__": "dmri_group";
+    "@type": "freesurfer.dmri_group";
     "input_list": InputPathType;
     "reference_volume": InputPathType;
     "output_base": string;
@@ -23,33 +23,33 @@ interface DmriGroupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_group": dmri_group_cargs,
+        "freesurfer.dmri_group": dmri_group_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface DmriGroupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_list Text file with list of individual inputs
+ * @param reference_volume Reference volume for output path
+ * @param output_base Base name of output stats files
+ * @param no_interpolation Do not attempt to interpolate along-tract measures (Assume that subjects are sampled at equivalent positions)
+ * @param sections_num Divide the pathway into a number of sections and output average measures for each section
+ * @param debug_mode Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_group_params(
     input_list: InputPathType,
     reference_volume: InputPathType,
@@ -78,21 +91,8 @@ function dmri_group_params(
     debug_mode: boolean = false,
     check_options: boolean = false,
 ): DmriGroupParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_list Text file with list of individual inputs
-     * @param reference_volume Reference volume for output path
-     * @param output_base Base name of output stats files
-     * @param no_interpolation Do not attempt to interpolate along-tract measures (Assume that subjects are sampled at equivalent positions)
-     * @param sections_num Divide the pathway into a number of sections and output average measures for each section
-     * @param debug_mode Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_group" as const,
+        "@type": "freesurfer.dmri_group" as const,
         "input_list": input_list,
         "reference_volume": reference_volume,
         "output_base": output_base,
@@ -107,18 +107,18 @@ function dmri_group_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_group_cargs(
     params: DmriGroupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_group");
     cargs.push(
@@ -152,18 +152,18 @@ function dmri_group_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_group_outputs(
     params: DmriGroupParameters,
     execution: Execution,
 ): DmriGroupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriGroupOutputs = {
         root: execution.outputFile("."),
     };
@@ -171,22 +171,22 @@ function dmri_group_outputs(
 }
 
 
+/**
+ * A tool to process and analyze diffusion MRI group data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriGroupOutputs`).
+ */
 function dmri_group_execute(
     params: DmriGroupParameters,
     execution: Execution,
 ): DmriGroupOutputs {
-    /**
-     * A tool to process and analyze diffusion MRI group data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriGroupOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_group_cargs(params, execution)
     const ret = dmri_group_outputs(params, execution)
@@ -195,6 +195,24 @@ function dmri_group_execute(
 }
 
 
+/**
+ * A tool to process and analyze diffusion MRI group data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_list Text file with list of individual inputs
+ * @param reference_volume Reference volume for output path
+ * @param output_base Base name of output stats files
+ * @param no_interpolation Do not attempt to interpolate along-tract measures (Assume that subjects are sampled at equivalent positions)
+ * @param sections_num Divide the pathway into a number of sections and output average measures for each section
+ * @param debug_mode Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriGroupOutputs`).
+ */
 function dmri_group(
     input_list: InputPathType,
     reference_volume: InputPathType,
@@ -205,24 +223,6 @@ function dmri_group(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): DmriGroupOutputs {
-    /**
-     * A tool to process and analyze diffusion MRI group data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_list Text file with list of individual inputs
-     * @param reference_volume Reference volume for output path
-     * @param output_base Base name of output stats files
-     * @param no_interpolation Do not attempt to interpolate along-tract measures (Assume that subjects are sampled at equivalent positions)
-     * @param sections_num Divide the pathway into a number of sections and output average measures for each section
-     * @param debug_mode Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriGroupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_GROUP_METADATA);
     const params = dmri_group_params(input_list, reference_volume, output_base, no_interpolation, sections_num, debug_mode, check_options)
@@ -235,5 +235,8 @@ export {
       DmriGroupOutputs,
       DmriGroupParameters,
       dmri_group,
+      dmri_group_cargs,
+      dmri_group_execute,
+      dmri_group_outputs,
       dmri_group_params,
 };

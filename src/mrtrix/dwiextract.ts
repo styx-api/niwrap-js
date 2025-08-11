@@ -12,47 +12,47 @@ const DWIEXTRACT_METADATA: Metadata = {
 
 
 interface DwiextractFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwiextract.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface DwiextractExportGradFslParameters {
-    "__STYXTYPE__": "export_grad_fsl";
+    "@type": "mrtrix.dwiextract.export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
 
 
 interface DwiextractImportPeEddyParameters {
-    "__STYXTYPE__": "import_pe_eddy";
+    "@type": "mrtrix.dwiextract.import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
 
 
 interface DwiextractVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.dwiextract.VariousString";
     "obj": string;
 }
 
 
 interface DwiextractVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.dwiextract.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface DwiextractConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dwiextract.config";
     "key": string;
     "value": string;
 }
 
 
 interface DwiextractParameters {
-    "__STYXTYPE__": "dwiextract";
+    "@type": "mrtrix.dwiextract";
     "bzero": boolean;
     "no_bzero": boolean;
     "singleshell": boolean;
@@ -78,61 +78,61 @@ interface DwiextractParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwiextract": dwiextract_cargs,
-        "fslgrad": dwiextract_fslgrad_cargs,
-        "export_grad_fsl": dwiextract_export_grad_fsl_cargs,
-        "import_pe_eddy": dwiextract_import_pe_eddy_cargs,
-        "VariousString": dwiextract_various_string_cargs,
-        "VariousFile": dwiextract_various_file_cargs,
-        "config": dwiextract_config_cargs,
+        "mrtrix.dwiextract": dwiextract_cargs,
+        "mrtrix.dwiextract.fslgrad": dwiextract_fslgrad_cargs,
+        "mrtrix.dwiextract.export_grad_fsl": dwiextract_export_grad_fsl_cargs,
+        "mrtrix.dwiextract.import_pe_eddy": dwiextract_import_pe_eddy_cargs,
+        "mrtrix.dwiextract.VariousString": dwiextract_various_string_cargs,
+        "mrtrix.dwiextract.VariousFile": dwiextract_various_file_cargs,
+        "mrtrix.dwiextract.config": dwiextract_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwiextract": dwiextract_outputs,
-        "export_grad_fsl": dwiextract_export_grad_fsl_outputs,
+        "mrtrix.dwiextract": dwiextract_outputs,
+        "mrtrix.dwiextract.export_grad_fsl": dwiextract_export_grad_fsl_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): DwiextractFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwiextract.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -140,18 +140,18 @@ function dwiextract_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_fslgrad_cargs(
     params: DwiextractFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -181,20 +181,20 @@ interface DwiextractExportGradFslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
 ): DwiextractExportGradFslParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_grad_fsl" as const,
+        "@type": "mrtrix.dwiextract.export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -202,18 +202,18 @@ function dwiextract_export_grad_fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_export_grad_fsl_cargs(
     params: DwiextractExportGradFslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_grad_fsl");
     cargs.push((params["bvecs_path"] ?? null));
@@ -222,18 +222,18 @@ function dwiextract_export_grad_fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwiextract_export_grad_fsl_outputs(
     params: DwiextractExportGradFslParameters,
     execution: Execution,
 ): DwiextractExportGradFslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DwiextractExportGradFslOutputs = {
         root: execution.outputFile("."),
         bvecs_path: execution.outputFile([(params["bvecs_path"] ?? null)].join('')),
@@ -243,20 +243,20 @@ function dwiextract_export_grad_fsl_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param config import phase-encoding information from an EDDY-style config / index file pair
+ * @param indices import phase-encoding information from an EDDY-style config / index file pair
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_import_pe_eddy_params(
     config: InputPathType,
     indices: InputPathType,
 ): DwiextractImportPeEddyParameters {
-    /**
-     * Build parameters.
-    
-     * @param config import phase-encoding information from an EDDY-style config / index file pair
-     * @param indices import phase-encoding information from an EDDY-style config / index file pair
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "import_pe_eddy" as const,
+        "@type": "mrtrix.dwiextract.import_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -264,18 +264,18 @@ function dwiextract_import_pe_eddy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_import_pe_eddy_cargs(
     params: DwiextractImportPeEddyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-import_pe_eddy");
     cargs.push(execution.inputFile((params["config"] ?? null)));
@@ -284,92 +284,92 @@ function dwiextract_import_pe_eddy_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_various_string_params(
     obj: string,
 ): DwiextractVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.dwiextract.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_various_string_cargs(
     params: DwiextractVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_various_file_params(
     obj: InputPathType,
 ): DwiextractVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.dwiextract.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_various_file_cargs(
     params: DwiextractVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_config_params(
     key: string,
     value: string,
 ): DwiextractConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dwiextract.config" as const,
         "key": key,
         "value": value,
     };
@@ -377,18 +377,18 @@ function dwiextract_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_config_cargs(
     params: DwiextractConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -422,6 +422,35 @@ interface DwiextractOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input DW image.
+ * @param output the output image (diffusion-weighted volumes by default).
+ * @param bzero Output b=0 volumes (instead of the diffusion weighted volumes, if -singleshell is not specified).
+ * @param no_bzero Output only non b=0 volumes (default, if -singleshell is not specified).
+ * @param singleshell Force a single-shell (single non b=0 shell) output. This will include b=0 volumes, if present. Use with -bzero to enforce presence of b=0 volumes (error if not present) or with -no_bzero to exclude them.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param import_pe_table import a phase-encoding table from file
+ * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
+ * @param pe select volumes with a particular phase encoding; this can be three comma-separated values (for i,j,k components of vector direction) or four (direction & total readout time)
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dwiextract_params(
     input: InputPathType,
     output: string,
@@ -446,37 +475,8 @@ function dwiextract_params(
     help: boolean = false,
     version: boolean = false,
 ): DwiextractParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input DW image.
-     * @param output the output image (diffusion-weighted volumes by default).
-     * @param bzero Output b=0 volumes (instead of the diffusion weighted volumes, if -singleshell is not specified).
-     * @param no_bzero Output only non b=0 volumes (default, if -singleshell is not specified).
-     * @param singleshell Force a single-shell (single non b=0 shell) output. This will include b=0 volumes, if present. Use with -bzero to enforce presence of b=0 volumes (error if not present) or with -no_bzero to exclude them.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param import_pe_table import a phase-encoding table from file
-     * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
-     * @param pe select volumes with a particular phase encoding; this can be three comma-separated values (for i,j,k components of vector direction) or four (direction & total readout time)
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwiextract" as const,
+        "@type": "mrtrix.dwiextract" as const,
         "bzero": bzero,
         "no_bzero": no_bzero,
         "singleshell": singleshell,
@@ -526,18 +526,18 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwiextract_cargs(
     params: DwiextractParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwiextract");
     if ((params["bzero"] ?? null)) {
@@ -556,7 +556,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -571,7 +571,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null).__STYXTYPE__)((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["import_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -580,7 +580,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["import_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null).__STYXTYPE__)((params["import_pe_eddy"] ?? null), execution));
+        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null)["@type"])((params["import_pe_eddy"] ?? null), execution));
     }
     if ((params["pe"] ?? null) !== null) {
         cargs.push(
@@ -591,7 +591,7 @@ function dwiextract_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -613,7 +613,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -627,50 +627,50 @@ function dwiextract_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwiextract_outputs(
     params: DwiextractParameters,
     execution: Execution,
 ): DwiextractOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DwiextractOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null).__STYXTYPE__)?.((params["export_grad_fsl"] ?? null), execution) ?? null),
+        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
+ */
 function dwiextract_execute(
     params: DwiextractParameters,
     execution: Execution,
 ): DwiextractOutputs {
-    /**
-     * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwiextract_cargs(params, execution)
     const ret = dwiextract_outputs(params, execution)
@@ -679,6 +679,46 @@ function dwiextract_execute(
 }
 
 
+/**
+ * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input DW image.
+ * @param output the output image (diffusion-weighted volumes by default).
+ * @param bzero Output b=0 volumes (instead of the diffusion weighted volumes, if -singleshell is not specified).
+ * @param no_bzero Output only non b=0 volumes (default, if -singleshell is not specified).
+ * @param singleshell Force a single-shell (single non b=0 shell) output. This will include b=0 volumes, if present. Use with -bzero to enforce presence of b=0 volumes (error if not present) or with -no_bzero to exclude them.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param import_pe_table import a phase-encoding table from file
+ * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
+ * @param pe select volumes with a particular phase encoding; this can be three comma-separated values (for i,j,k components of vector direction) or four (direction & total readout time)
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
+ */
 function dwiextract(
     input: InputPathType,
     output: string,
@@ -704,46 +744,6 @@ function dwiextract(
     version: boolean = false,
     runner: Runner | null = null,
 ): DwiextractOutputs {
-    /**
-     * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input DW image.
-     * @param output the output image (diffusion-weighted volumes by default).
-     * @param bzero Output b=0 volumes (instead of the diffusion weighted volumes, if -singleshell is not specified).
-     * @param no_bzero Output only non b=0 volumes (default, if -singleshell is not specified).
-     * @param singleshell Force a single-shell (single non b=0 shell) output. This will include b=0 volumes, if present. Use with -bzero to enforce presence of b=0 volumes (error if not present) or with -no_bzero to exclude them.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param import_pe_table import a phase-encoding table from file
-     * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
-     * @param pe select volumes with a particular phase encoding; this can be three comma-separated values (for i,j,k components of vector direction) or four (direction & total readout time)
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWIEXTRACT_METADATA);
     const params = dwiextract_params(input, output, bzero, no_bzero, singleshell, grad, fslgrad, shells, export_grad_mrtrix, export_grad_fsl, import_pe_table, import_pe_eddy, pe, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -763,11 +763,21 @@ export {
       DwiextractVariousFileParameters,
       DwiextractVariousStringParameters,
       dwiextract,
+      dwiextract_cargs,
+      dwiextract_config_cargs,
       dwiextract_config_params,
+      dwiextract_execute,
+      dwiextract_export_grad_fsl_cargs,
+      dwiextract_export_grad_fsl_outputs,
       dwiextract_export_grad_fsl_params,
+      dwiextract_fslgrad_cargs,
       dwiextract_fslgrad_params,
+      dwiextract_import_pe_eddy_cargs,
       dwiextract_import_pe_eddy_params,
+      dwiextract_outputs,
       dwiextract_params,
+      dwiextract_various_file_cargs,
       dwiextract_various_file_params,
+      dwiextract_various_string_cargs,
       dwiextract_various_string_params,
 };

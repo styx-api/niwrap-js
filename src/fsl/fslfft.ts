@@ -12,42 +12,42 @@ const FSLFFT_METADATA: Metadata = {
 
 
 interface FslfftParameters {
-    "__STYXTYPE__": "fslfft";
+    "@type": "fsl.fslfft";
     "input_volume": InputPathType;
     "output_volume": string;
     "inverse_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslfft": fslfft_cargs,
+        "fsl.fslfft": fslfft_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslfft": fslfft_outputs,
+        "fsl.fslfft": fslfft_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface FslfftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file (e.g. invol.nii.gz)
+ * @param output_volume Output volume file (e.g. outvol.nii.gz)
+ * @param inverse_flag Flag to perform the inverse Fourier transform
+ *
+ * @returns Parameter dictionary
+ */
 function fslfft_params(
     input_volume: InputPathType,
     output_volume: string,
     inverse_flag: boolean = false,
 ): FslfftParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file (e.g. invol.nii.gz)
-     * @param output_volume Output volume file (e.g. outvol.nii.gz)
-     * @param inverse_flag Flag to perform the inverse Fourier transform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslfft" as const,
+        "@type": "fsl.fslfft" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "inverse_flag": inverse_flag,
@@ -94,18 +94,18 @@ function fslfft_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslfft_cargs(
     params: FslfftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslfft");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -117,18 +117,18 @@ function fslfft_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslfft_outputs(
     params: FslfftParameters,
     execution: Execution,
 ): FslfftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslfftOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null), ".nii.gz"].join('')),
@@ -137,22 +137,22 @@ function fslfft_outputs(
 }
 
 
+/**
+ * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslfftOutputs`).
+ */
 function fslfft_execute(
     params: FslfftParameters,
     execution: Execution,
 ): FslfftOutputs {
-    /**
-     * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslfftOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslfft_cargs(params, execution)
     const ret = fslfft_outputs(params, execution)
@@ -161,26 +161,26 @@ function fslfft_execute(
 }
 
 
+/**
+ * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_volume Input volume file (e.g. invol.nii.gz)
+ * @param output_volume Output volume file (e.g. outvol.nii.gz)
+ * @param inverse_flag Flag to perform the inverse Fourier transform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslfftOutputs`).
+ */
 function fslfft(
     input_volume: InputPathType,
     output_volume: string,
     inverse_flag: boolean = false,
     runner: Runner | null = null,
 ): FslfftOutputs {
-    /**
-     * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_volume Input volume file (e.g. invol.nii.gz)
-     * @param output_volume Output volume file (e.g. outvol.nii.gz)
-     * @param inverse_flag Flag to perform the inverse Fourier transform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslfftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLFFT_METADATA);
     const params = fslfft_params(input_volume, output_volume, inverse_flag)
@@ -193,5 +193,8 @@ export {
       FslfftOutputs,
       FslfftParameters,
       fslfft,
+      fslfft_cargs,
+      fslfft_execute,
+      fslfft_outputs,
       fslfft_params,
 };

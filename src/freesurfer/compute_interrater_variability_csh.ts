@@ -12,7 +12,7 @@ const COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA: Metadata = {
 
 
 interface ComputeInterraterVariabilityCshParameters {
-    "__STYXTYPE__": "compute_interrater_variability.csh";
+    "@type": "freesurfer.compute_interrater_variability.csh";
     "label_vol1": InputPathType;
     "label_vol2": InputPathType;
     "output_prefix": string;
@@ -21,35 +21,35 @@ interface ComputeInterraterVariabilityCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "compute_interrater_variability.csh": compute_interrater_variability_csh_cargs,
+        "freesurfer.compute_interrater_variability.csh": compute_interrater_variability_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "compute_interrater_variability.csh": compute_interrater_variability_csh_outputs,
+        "freesurfer.compute_interrater_variability.csh": compute_interrater_variability_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,17 @@ interface ComputeInterraterVariabilityCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_vol1 Label volume from rater 1.
+ * @param label_vol2 Label volume from rater 2.
+ * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
+ * @param version Print version information and exit.
+ * @param help Print help information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function compute_interrater_variability_csh_params(
     label_vol1: InputPathType,
     label_vol2: InputPathType,
@@ -87,19 +98,8 @@ function compute_interrater_variability_csh_params(
     version: boolean = false,
     help: boolean = false,
 ): ComputeInterraterVariabilityCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_vol1 Label volume from rater 1.
-     * @param label_vol2 Label volume from rater 2.
-     * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
-     * @param version Print version information and exit.
-     * @param help Print help information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "compute_interrater_variability.csh" as const,
+        "@type": "freesurfer.compute_interrater_variability.csh" as const,
         "label_vol1": label_vol1,
         "label_vol2": label_vol2,
         "output_prefix": output_prefix,
@@ -110,18 +110,18 @@ function compute_interrater_variability_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function compute_interrater_variability_csh_cargs(
     params: ComputeInterraterVariabilityCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("compute_interrater_variability.csh");
     cargs.push(
@@ -146,18 +146,18 @@ function compute_interrater_variability_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function compute_interrater_variability_csh_outputs(
     params: ComputeInterraterVariabilityCshParameters,
     execution: Execution,
 ): ComputeInterraterVariabilityCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ComputeInterraterVariabilityCshOutputs = {
         root: execution.outputFile("."),
         output_file_1: execution.outputFile([(params["output_prefix"] ?? null), "_file1.txt"].join('')),
@@ -168,22 +168,22 @@ function compute_interrater_variability_csh_outputs(
 }
 
 
+/**
+ * Computes the interrater variability between label volumes from different raters or time points using several metrics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
+ */
 function compute_interrater_variability_csh_execute(
     params: ComputeInterraterVariabilityCshParameters,
     execution: Execution,
 ): ComputeInterraterVariabilityCshOutputs {
-    /**
-     * Computes the interrater variability between label volumes from different raters or time points using several metrics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = compute_interrater_variability_csh_cargs(params, execution)
     const ret = compute_interrater_variability_csh_outputs(params, execution)
@@ -192,6 +192,22 @@ function compute_interrater_variability_csh_execute(
 }
 
 
+/**
+ * Computes the interrater variability between label volumes from different raters or time points using several metrics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label_vol1 Label volume from rater 1.
+ * @param label_vol2 Label volume from rater 2.
+ * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
+ * @param version Print version information and exit.
+ * @param help Print help information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
+ */
 function compute_interrater_variability_csh(
     label_vol1: InputPathType,
     label_vol2: InputPathType,
@@ -200,22 +216,6 @@ function compute_interrater_variability_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): ComputeInterraterVariabilityCshOutputs {
-    /**
-     * Computes the interrater variability between label volumes from different raters or time points using several metrics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label_vol1 Label volume from rater 1.
-     * @param label_vol2 Label volume from rater 2.
-     * @param output_prefix Prefix for the output text files containing results. A total of three files will be produced.
-     * @param version Print version information and exit.
-     * @param help Print help information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA);
     const params = compute_interrater_variability_csh_params(label_vol1, label_vol2, output_prefix, version, help)
@@ -228,5 +228,8 @@ export {
       ComputeInterraterVariabilityCshOutputs,
       ComputeInterraterVariabilityCshParameters,
       compute_interrater_variability_csh,
+      compute_interrater_variability_csh_cargs,
+      compute_interrater_variability_csh_execute,
+      compute_interrater_variability_csh_outputs,
       compute_interrater_variability_csh_params,
 };

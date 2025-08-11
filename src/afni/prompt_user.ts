@@ -12,40 +12,40 @@ const PROMPT_USER_METADATA: Metadata = {
 
 
 interface PromptUserParameters {
-    "__STYXTYPE__": "prompt_user";
+    "@type": "afni.prompt_user";
     "pause_message": string;
     "timeout"?: number | null | undefined;
     "timeout_alias"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "prompt_user": prompt_user_cargs,
+        "afni.prompt_user": prompt_user_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface PromptUserOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+ * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
+ * @param timeout_alias Alias for -timeout
+ *
+ * @returns Parameter dictionary
+ */
 function prompt_user_params(
     pause_message: string,
     timeout: number | null = null,
     timeout_alias: number | null = null,
 ): PromptUserParameters {
-    /**
-     * Build parameters.
-    
-     * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
-     * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
-     * @param timeout_alias Alias for -timeout
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "prompt_user" as const,
+        "@type": "afni.prompt_user" as const,
         "pause_message": pause_message,
     };
     if (timeout !== null) {
@@ -93,18 +93,18 @@ function prompt_user_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function prompt_user_cargs(
     params: PromptUserParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("prompt_user");
     cargs.push(
@@ -127,18 +127,18 @@ function prompt_user_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function prompt_user_outputs(
     params: PromptUserParameters,
     execution: Execution,
 ): PromptUserOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PromptUserOutputs = {
         root: execution.outputFile("."),
     };
@@ -146,22 +146,22 @@ function prompt_user_outputs(
 }
 
 
+/**
+ * Tool that prompts a window requesting user input with a custom message.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
+ */
 function prompt_user_execute(
     params: PromptUserParameters,
     execution: Execution,
 ): PromptUserOutputs {
-    /**
-     * Tool that prompts a window requesting user input with a custom message.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
-     */
     params = execution.params(params)
     const cargs = prompt_user_cargs(params, execution)
     const ret = prompt_user_outputs(params, execution)
@@ -170,26 +170,26 @@ function prompt_user_execute(
 }
 
 
+/**
+ * Tool that prompts a window requesting user input with a custom message.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+ * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
+ * @param timeout_alias Alias for -timeout
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
+ */
 function prompt_user(
     pause_message: string,
     timeout: number | null = null,
     timeout_alias: number | null = null,
     runner: Runner | null = null,
 ): PromptUserOutputs {
-    /**
-     * Tool that prompts a window requesting user input with a custom message.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param pause_message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
-     * @param timeout Timeout in seconds for the prompt message. Default answer is returned if TT seconds elapse without user input.
-     * @param timeout_alias Alias for -timeout
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROMPT_USER_METADATA);
     const params = prompt_user_params(pause_message, timeout, timeout_alias)
@@ -202,5 +202,8 @@ export {
       PromptUserOutputs,
       PromptUserParameters,
       prompt_user,
+      prompt_user_cargs,
+      prompt_user_execute,
+      prompt_user_outputs,
       prompt_user_params,
 };

@@ -12,7 +12,7 @@ const DMRI_STATS_AC_METADATA: Metadata = {
 
 
 interface DmriStatsAcParameters {
-    "__STYXTYPE__": "dmri_stats_ac";
+    "@type": "freesurfer.dmri_stats_ac";
     "anatomicuts_folder": string;
     "num_clusters": number;
     "correspondence_file": string;
@@ -21,35 +21,35 @@ interface DmriStatsAcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_stats_ac": dmri_stats_ac_cargs,
+        "freesurfer.dmri_stats_ac": dmri_stats_ac_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_stats_ac": dmri_stats_ac_outputs,
+        "freesurfer.dmri_stats_ac": dmri_stats_ac_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface DmriStatsAcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param anatomicuts_folder Input folder containing anatomicuts data
+ * @param num_clusters Number of clusters for analysis
+ * @param correspondence_file File specifying correspondence details
+ * @param measures Number of measures followed by each measure name and file
+ * @param output_file Output file
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_stats_ac_params(
     anatomicuts_folder: string,
     num_clusters: number,
@@ -79,19 +90,8 @@ function dmri_stats_ac_params(
     measures: Array<string>,
     output_file: string,
 ): DmriStatsAcParameters {
-    /**
-     * Build parameters.
-    
-     * @param anatomicuts_folder Input folder containing anatomicuts data
-     * @param num_clusters Number of clusters for analysis
-     * @param correspondence_file File specifying correspondence details
-     * @param measures Number of measures followed by each measure name and file
-     * @param output_file Output file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_stats_ac" as const,
+        "@type": "freesurfer.dmri_stats_ac" as const,
         "anatomicuts_folder": anatomicuts_folder,
         "num_clusters": num_clusters,
         "correspondence_file": correspondence_file,
@@ -102,18 +102,18 @@ function dmri_stats_ac_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_stats_ac_cargs(
     params: DmriStatsAcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_stats_ac");
     cargs.push(
@@ -140,18 +140,18 @@ function dmri_stats_ac_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_stats_ac_outputs(
     params: DmriStatsAcParameters,
     execution: Execution,
 ): DmriStatsAcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriStatsAcOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -160,22 +160,22 @@ function dmri_stats_ac_outputs(
 }
 
 
+/**
+ * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
+ */
 function dmri_stats_ac_execute(
     params: DmriStatsAcParameters,
     execution: Execution,
 ): DmriStatsAcOutputs {
-    /**
-     * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_stats_ac_cargs(params, execution)
     const ret = dmri_stats_ac_outputs(params, execution)
@@ -184,6 +184,22 @@ function dmri_stats_ac_execute(
 }
 
 
+/**
+ * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param anatomicuts_folder Input folder containing anatomicuts data
+ * @param num_clusters Number of clusters for analysis
+ * @param correspondence_file File specifying correspondence details
+ * @param measures Number of measures followed by each measure name and file
+ * @param output_file Output file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
+ */
 function dmri_stats_ac(
     anatomicuts_folder: string,
     num_clusters: number,
@@ -192,22 +208,6 @@ function dmri_stats_ac(
     output_file: string,
     runner: Runner | null = null,
 ): DmriStatsAcOutputs {
-    /**
-     * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param anatomicuts_folder Input folder containing anatomicuts data
-     * @param num_clusters Number of clusters for analysis
-     * @param correspondence_file File specifying correspondence details
-     * @param measures Number of measures followed by each measure name and file
-     * @param output_file Output file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_STATS_AC_METADATA);
     const params = dmri_stats_ac_params(anatomicuts_folder, num_clusters, correspondence_file, measures, output_file)
@@ -220,5 +220,8 @@ export {
       DmriStatsAcOutputs,
       DmriStatsAcParameters,
       dmri_stats_ac,
+      dmri_stats_ac_cargs,
+      dmri_stats_ac_execute,
+      dmri_stats_ac_outputs,
       dmri_stats_ac_params,
 };

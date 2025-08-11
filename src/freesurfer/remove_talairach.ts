@@ -12,41 +12,41 @@ const REMOVE_TALAIRACH_METADATA: Metadata = {
 
 
 interface RemoveTalairachParameters {
-    "__STYXTYPE__": "remove_talairach";
+    "@type": "freesurfer.remove_talairach";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "remove_talairach": remove_talairach_cargs,
+        "freesurfer.remove_talairach": remove_talairach_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "remove_talairach": remove_talairach_outputs,
+        "freesurfer.remove_talairach": remove_talairach_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface RemoveTalairachOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume with Talairach transformation (e.g., volume.nii)
+ * @param output_file Output volume after removing Talairach transformation (e.g., volume_notal.nii)
+ *
+ * @returns Parameter dictionary
+ */
 function remove_talairach_params(
     input_file: InputPathType,
     output_file: string,
 ): RemoveTalairachParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume with Talairach transformation (e.g., volume.nii)
-     * @param output_file Output volume after removing Talairach transformation (e.g., volume_notal.nii)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "remove_talairach" as const,
+        "@type": "freesurfer.remove_talairach" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function remove_talairach_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function remove_talairach_cargs(
     params: RemoveTalairachParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("remove_talairach");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function remove_talairach_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function remove_talairach_outputs(
     params: RemoveTalairachParameters,
     execution: Execution,
 ): RemoveTalairachOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RemoveTalairachOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function remove_talairach_outputs(
 }
 
 
+/**
+ * A tool for removing the Talairach transformation from a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
+ */
 function remove_talairach_execute(
     params: RemoveTalairachParameters,
     execution: Execution,
 ): RemoveTalairachOutputs {
-    /**
-     * A tool for removing the Talairach transformation from a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
-     */
     params = execution.params(params)
     const cargs = remove_talairach_cargs(params, execution)
     const ret = remove_talairach_outputs(params, execution)
@@ -154,24 +154,24 @@ function remove_talairach_execute(
 }
 
 
+/**
+ * A tool for removing the Talairach transformation from a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume with Talairach transformation (e.g., volume.nii)
+ * @param output_file Output volume after removing Talairach transformation (e.g., volume_notal.nii)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
+ */
 function remove_talairach(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): RemoveTalairachOutputs {
-    /**
-     * A tool for removing the Talairach transformation from a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume with Talairach transformation (e.g., volume.nii)
-     * @param output_file Output volume after removing Talairach transformation (e.g., volume_notal.nii)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REMOVE_TALAIRACH_METADATA);
     const params = remove_talairach_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       RemoveTalairachOutputs,
       RemoveTalairachParameters,
       remove_talairach,
+      remove_talairach_cargs,
+      remove_talairach_execute,
+      remove_talairach_outputs,
       remove_talairach_params,
 };

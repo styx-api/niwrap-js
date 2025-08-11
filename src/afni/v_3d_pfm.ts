@@ -12,7 +12,7 @@ const V_3D_PFM_METADATA: Metadata = {
 
 
 interface V3dPfmParameters {
-    "__STYXTYPE__": "3dPFM";
+    "@type": "afni.3dPFM";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "algorithm"?: string | null | undefined;
@@ -31,35 +31,35 @@ interface V3dPfmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPFM": v_3d_pfm_cargs,
+        "afni.3dPFM": v_3d_pfm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPFM": v_3d_pfm_outputs,
+        "afni.3dPFM": v_3d_pfm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -182,6 +182,27 @@ interface V3dPfmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Specify the dataset to analyze (e.g., epi.nii).
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
+ * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
+ * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
+ * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
+ * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
+ * @param tr Repetition time or sampling period of the input data.
+ * @param hrf Haemodynamic response function used for deconvolution.
+ * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
+ * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
+ * @param lhs Additional regressors to be fitted to the dataset.
+ * @param jobs Number of parallel jobs to use in processing.
+ * @param n_seg Divide into segments to report progress.
+ * @param verb Verbosity level (0 for quiet, 1 for talkative).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_pfm_params(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -199,29 +220,8 @@ function v_3d_pfm_params(
     n_seg: number | null = null,
     verb: number | null = null,
 ): V3dPfmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Specify the dataset to analyze (e.g., epi.nii).
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
-     * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
-     * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
-     * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
-     * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
-     * @param tr Repetition time or sampling period of the input data.
-     * @param hrf Haemodynamic response function used for deconvolution.
-     * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
-     * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
-     * @param lhs Additional regressors to be fitted to the dataset.
-     * @param jobs Number of parallel jobs to use in processing.
-     * @param n_seg Divide into segments to report progress.
-     * @param verb Verbosity level (0 for quiet, 1 for talkative).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPFM" as const,
+        "@type": "afni.3dPFM" as const,
         "input": input,
     };
     if (mask !== null) {
@@ -270,18 +270,18 @@ function v_3d_pfm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_pfm_cargs(
     params: V3dPfmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPFM");
     cargs.push(
@@ -376,18 +376,18 @@ function v_3d_pfm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_pfm_outputs(
     params: V3dPfmParameters,
     execution: Execution,
 ): V3dPfmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPfmOutputs = {
         root: execution.outputFile("."),
         beta: execution.outputFile(["[BETA]"].join('')),
@@ -421,22 +421,22 @@ function v_3d_pfm_outputs(
 }
 
 
+/**
+ * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
+ */
 function v_3d_pfm_execute(
     params: V3dPfmParameters,
     execution: Execution,
 ): V3dPfmOutputs {
-    /**
-     * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_pfm_cargs(params, execution)
     const ret = v_3d_pfm_outputs(params, execution)
@@ -445,6 +445,32 @@ function v_3d_pfm_execute(
 }
 
 
+/**
+ * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Specify the dataset to analyze (e.g., epi.nii).
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
+ * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
+ * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
+ * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
+ * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
+ * @param tr Repetition time or sampling period of the input data.
+ * @param hrf Haemodynamic response function used for deconvolution.
+ * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
+ * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
+ * @param lhs Additional regressors to be fitted to the dataset.
+ * @param jobs Number of parallel jobs to use in processing.
+ * @param n_seg Divide into segments to report progress.
+ * @param verb Verbosity level (0 for quiet, 1 for talkative).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
+ */
 function v_3d_pfm(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -463,32 +489,6 @@ function v_3d_pfm(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dPfmOutputs {
-    /**
-     * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Specify the dataset to analyze (e.g., epi.nii).
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param algorithm Regularization function used for HRF deconvolution (dantzig or lasso).
-     * @param criteria Model selection criterion for HRF deconvolution (BIC or AIC).
-     * @param nonzeros Choose estimate with a fixed number of nonzero coefficients.
-     * @param maxiter Maximum number of iterations in the homotopy procedure (absolute value).
-     * @param maxiterfactor Maximum number of iterations relative to the number of volumes.
-     * @param tr Repetition time or sampling period of the input data.
-     * @param hrf Haemodynamic response function used for deconvolution.
-     * @param hrf_vol 3D+time dataset with voxel/nodes/vertex -dependent HRFs.
-     * @param idx_hrf 3D dataset with voxel-dependent indexes for HRF.
-     * @param lhs Additional regressors to be fitted to the dataset.
-     * @param jobs Number of parallel jobs to use in processing.
-     * @param n_seg Divide into segments to report progress.
-     * @param verb Verbosity level (0 for quiet, 1 for talkative).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PFM_METADATA);
     const params = v_3d_pfm_params(input, mask, algorithm, criteria, nonzeros, maxiter, maxiterfactor, tr, hrf, hrf_vol, idx_hrf, lhs, jobs, n_seg, verb)
@@ -501,5 +501,8 @@ export {
       V3dPfmParameters,
       V_3D_PFM_METADATA,
       v_3d_pfm,
+      v_3d_pfm_cargs,
+      v_3d_pfm_execute,
+      v_3d_pfm_outputs,
       v_3d_pfm_params,
 };

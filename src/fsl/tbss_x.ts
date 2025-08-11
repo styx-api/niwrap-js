@@ -12,39 +12,39 @@ const TBSS_X_METADATA: Metadata = {
 
 
 interface TbssXParameters {
-    "__STYXTYPE__": "tbss_x";
+    "@type": "fsl.tbss_x";
     "scalar_dirs": Array<string>;
     "vector_dirs": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_x": tbss_x_cargs,
+        "fsl.tbss_x": tbss_x_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface TbssXOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scalar_dirs List of scalar directories (e.g., F1, F2)
+ * @param vector_dirs List of vector directories (e.g., D1, D2)
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_x_params(
     scalar_dirs: Array<string>,
     vector_dirs: Array<string>,
 ): TbssXParameters {
-    /**
-     * Build parameters.
-    
-     * @param scalar_dirs List of scalar directories (e.g., F1, F2)
-     * @param vector_dirs List of vector directories (e.g., D1, D2)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_x" as const,
+        "@type": "fsl.tbss_x" as const,
         "scalar_dirs": scalar_dirs,
         "vector_dirs": vector_dirs,
     };
@@ -85,18 +85,18 @@ function tbss_x_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_x_cargs(
     params: TbssXParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_x");
     cargs.push(...(params["scalar_dirs"] ?? null));
@@ -105,18 +105,18 @@ function tbss_x_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_x_outputs(
     params: TbssXParameters,
     execution: Execution,
 ): TbssXOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TbssXOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function tbss_x_outputs(
 }
 
 
+/**
+ * TBSS cross-subject script for processing scalar and vector directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TbssXOutputs`).
+ */
 function tbss_x_execute(
     params: TbssXParameters,
     execution: Execution,
 ): TbssXOutputs {
-    /**
-     * TBSS cross-subject script for processing scalar and vector directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TbssXOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_x_cargs(params, execution)
     const ret = tbss_x_outputs(params, execution)
@@ -148,24 +148,24 @@ function tbss_x_execute(
 }
 
 
+/**
+ * TBSS cross-subject script for processing scalar and vector directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param scalar_dirs List of scalar directories (e.g., F1, F2)
+ * @param vector_dirs List of vector directories (e.g., D1, D2)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TbssXOutputs`).
+ */
 function tbss_x(
     scalar_dirs: Array<string>,
     vector_dirs: Array<string>,
     runner: Runner | null = null,
 ): TbssXOutputs {
-    /**
-     * TBSS cross-subject script for processing scalar and vector directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param scalar_dirs List of scalar directories (e.g., F1, F2)
-     * @param vector_dirs List of vector directories (e.g., D1, D2)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TbssXOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_X_METADATA);
     const params = tbss_x_params(scalar_dirs, vector_dirs)
@@ -178,5 +178,8 @@ export {
       TbssXOutputs,
       TbssXParameters,
       tbss_x,
+      tbss_x_cargs,
+      tbss_x_execute,
+      tbss_x_outputs,
       tbss_x_params,
 };

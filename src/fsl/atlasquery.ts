@@ -12,7 +12,7 @@ const ATLASQUERY_METADATA: Metadata = {
 
 
 interface AtlasqueryParameters {
-    "__STYXTYPE__": "atlasquery";
+    "@type": "fsl.atlasquery";
     "dumpatlases_flag": boolean;
     "atlas"?: string | null | undefined;
     "coord"?: string | null | undefined;
@@ -22,33 +22,33 @@ interface AtlasqueryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "atlasquery": atlasquery_cargs,
+        "fsl.atlasquery": atlasquery_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface AtlasqueryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dumpatlases_flag Dump a list of available atlases
+ * @param atlas Name of atlas to use
+ * @param coord Coordinate to query in the format X,Y,Z
+ * @param mask A mask image to use during structural lookups
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Show help message and exit
+ *
+ * @returns Parameter dictionary
+ */
 function atlasquery_params(
     dumpatlases_flag: boolean = false,
     atlas: string | null = null,
@@ -76,20 +88,8 @@ function atlasquery_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): AtlasqueryParameters {
-    /**
-     * Build parameters.
-    
-     * @param dumpatlases_flag Dump a list of available atlases
-     * @param atlas Name of atlas to use
-     * @param coord Coordinate to query in the format X,Y,Z
-     * @param mask A mask image to use during structural lookups
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Show help message and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "atlasquery" as const,
+        "@type": "fsl.atlasquery" as const,
         "dumpatlases_flag": dumpatlases_flag,
         "verbose_flag": verbose_flag,
         "help_flag": help_flag,
@@ -107,18 +107,18 @@ function atlasquery_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function atlasquery_cargs(
     params: AtlasqueryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("atlasquery");
     if ((params["dumpatlases_flag"] ?? null)) {
@@ -152,18 +152,18 @@ function atlasquery_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function atlasquery_outputs(
     params: AtlasqueryParameters,
     execution: Execution,
 ): AtlasqueryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AtlasqueryOutputs = {
         root: execution.outputFile("."),
     };
@@ -171,22 +171,22 @@ function atlasquery_outputs(
 }
 
 
+/**
+ * Structural lookup tool for FSL atlases.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
+ */
 function atlasquery_execute(
     params: AtlasqueryParameters,
     execution: Execution,
 ): AtlasqueryOutputs {
-    /**
-     * Structural lookup tool for FSL atlases.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
-     */
     params = execution.params(params)
     const cargs = atlasquery_cargs(params, execution)
     const ret = atlasquery_outputs(params, execution)
@@ -195,6 +195,23 @@ function atlasquery_execute(
 }
 
 
+/**
+ * Structural lookup tool for FSL atlases.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param dumpatlases_flag Dump a list of available atlases
+ * @param atlas Name of atlas to use
+ * @param coord Coordinate to query in the format X,Y,Z
+ * @param mask A mask image to use during structural lookups
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Show help message and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
+ */
 function atlasquery(
     dumpatlases_flag: boolean = false,
     atlas: string | null = null,
@@ -204,23 +221,6 @@ function atlasquery(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AtlasqueryOutputs {
-    /**
-     * Structural lookup tool for FSL atlases.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param dumpatlases_flag Dump a list of available atlases
-     * @param atlas Name of atlas to use
-     * @param coord Coordinate to query in the format X,Y,Z
-     * @param mask A mask image to use during structural lookups
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Show help message and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ATLASQUERY_METADATA);
     const params = atlasquery_params(dumpatlases_flag, atlas, coord, mask, verbose_flag, help_flag)
@@ -233,5 +233,8 @@ export {
       AtlasqueryOutputs,
       AtlasqueryParameters,
       atlasquery,
+      atlasquery_cargs,
+      atlasquery_execute,
+      atlasquery_outputs,
       atlasquery_params,
 };

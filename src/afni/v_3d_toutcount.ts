@@ -12,7 +12,7 @@ const V_3D_TOUTCOUNT_METADATA: Metadata = {
 
 
 interface V3dToutcountParameters {
-    "__STYXTYPE__": "3dToutcount";
+    "@type": "afni.3dToutcount";
     "input_dataset": string;
     "output_prefix"?: string | null | undefined;
     "mask_dataset"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface V3dToutcountParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dToutcount": v_3d_toutcount_cargs,
+        "afni.3dToutcount": v_3d_toutcount_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dToutcount": v_3d_toutcount_outputs,
+        "afni.3dToutcount": v_3d_toutcount_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface V3dToutcountOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input 3D+time dataset (e.g. dataset+orig)
+ * @param output_prefix Prefix of the new dataset saved with the outlier Q values, applicable with the -save option
+ * @param mask_dataset Only count voxels in the provided mask dataset
+ * @param q_threshold Use 'q' instead of 0.001 in the calculation of alpha. Must be within range 0 < q < 1.
+ * @param autoclip Clip off 'small' voxels (as in 3dClipLevel). Cannot use with -mask.
+ * @param automask Automatically mask the dataset. Cannot use with -mask.
+ * @param fraction Output the fraction of (masked) voxels which are outliers at each time point, instead of the count.
+ * @param range Print out median+3.5*MAD of outlier count with each time point.
+ * @param polort_order Detrend each voxel time series with polynomials of order 'nn'. Default value is 0, which removes the median.
+ * @param legendre Use Legendre polynomials for detrending (also allows -polort > 3).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_toutcount_params(
     input_dataset: string,
     output_prefix: string | null = null,
@@ -93,24 +109,8 @@ function v_3d_toutcount_params(
     polort_order: number | null = null,
     legendre: boolean = false,
 ): V3dToutcountParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input 3D+time dataset (e.g. dataset+orig)
-     * @param output_prefix Prefix of the new dataset saved with the outlier Q values, applicable with the -save option
-     * @param mask_dataset Only count voxels in the provided mask dataset
-     * @param q_threshold Use 'q' instead of 0.001 in the calculation of alpha. Must be within range 0 < q < 1.
-     * @param autoclip Clip off 'small' voxels (as in 3dClipLevel). Cannot use with -mask.
-     * @param automask Automatically mask the dataset. Cannot use with -mask.
-     * @param fraction Output the fraction of (masked) voxels which are outliers at each time point, instead of the count.
-     * @param range Print out median+3.5*MAD of outlier count with each time point.
-     * @param polort_order Detrend each voxel time series with polynomials of order 'nn'. Default value is 0, which removes the median.
-     * @param legendre Use Legendre polynomials for detrending (also allows -polort > 3).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dToutcount" as const,
+        "@type": "afni.3dToutcount" as const,
         "input_dataset": input_dataset,
         "autoclip": autoclip,
         "automask": automask,
@@ -134,18 +134,18 @@ function v_3d_toutcount_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_toutcount_cargs(
     params: V3dToutcountParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dToutcount");
     cargs.push((params["input_dataset"] ?? null));
@@ -189,18 +189,18 @@ function v_3d_toutcount_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_toutcount_outputs(
     params: V3dToutcountParameters,
     execution: Execution,
 ): V3dToutcountOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dToutcountOutputs = {
         root: execution.outputFile("."),
         output_afni_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -210,22 +210,22 @@ function v_3d_toutcount_outputs(
 }
 
 
+/**
+ * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
+ */
 function v_3d_toutcount_execute(
     params: V3dToutcountParameters,
     execution: Execution,
 ): V3dToutcountOutputs {
-    /**
-     * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_toutcount_cargs(params, execution)
     const ret = v_3d_toutcount_outputs(params, execution)
@@ -234,6 +234,27 @@ function v_3d_toutcount_execute(
 }
 
 
+/**
+ * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input 3D+time dataset (e.g. dataset+orig)
+ * @param output_prefix Prefix of the new dataset saved with the outlier Q values, applicable with the -save option
+ * @param mask_dataset Only count voxels in the provided mask dataset
+ * @param q_threshold Use 'q' instead of 0.001 in the calculation of alpha. Must be within range 0 < q < 1.
+ * @param autoclip Clip off 'small' voxels (as in 3dClipLevel). Cannot use with -mask.
+ * @param automask Automatically mask the dataset. Cannot use with -mask.
+ * @param fraction Output the fraction of (masked) voxels which are outliers at each time point, instead of the count.
+ * @param range Print out median+3.5*MAD of outlier count with each time point.
+ * @param polort_order Detrend each voxel time series with polynomials of order 'nn'. Default value is 0, which removes the median.
+ * @param legendre Use Legendre polynomials for detrending (also allows -polort > 3).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
+ */
 function v_3d_toutcount(
     input_dataset: string,
     output_prefix: string | null = null,
@@ -247,27 +268,6 @@ function v_3d_toutcount(
     legendre: boolean = false,
     runner: Runner | null = null,
 ): V3dToutcountOutputs {
-    /**
-     * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input 3D+time dataset (e.g. dataset+orig)
-     * @param output_prefix Prefix of the new dataset saved with the outlier Q values, applicable with the -save option
-     * @param mask_dataset Only count voxels in the provided mask dataset
-     * @param q_threshold Use 'q' instead of 0.001 in the calculation of alpha. Must be within range 0 < q < 1.
-     * @param autoclip Clip off 'small' voxels (as in 3dClipLevel). Cannot use with -mask.
-     * @param automask Automatically mask the dataset. Cannot use with -mask.
-     * @param fraction Output the fraction of (masked) voxels which are outliers at each time point, instead of the count.
-     * @param range Print out median+3.5*MAD of outlier count with each time point.
-     * @param polort_order Detrend each voxel time series with polynomials of order 'nn'. Default value is 0, which removes the median.
-     * @param legendre Use Legendre polynomials for detrending (also allows -polort > 3).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TOUTCOUNT_METADATA);
     const params = v_3d_toutcount_params(input_dataset, output_prefix, mask_dataset, q_threshold, autoclip, automask, fraction, range, polort_order, legendre)
@@ -280,5 +280,8 @@ export {
       V3dToutcountParameters,
       V_3D_TOUTCOUNT_METADATA,
       v_3d_toutcount,
+      v_3d_toutcount_cargs,
+      v_3d_toutcount_execute,
+      v_3d_toutcount_outputs,
       v_3d_toutcount_params,
 };

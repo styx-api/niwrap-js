@@ -12,39 +12,39 @@ const TALAIRACH2_METADATA: Metadata = {
 
 
 interface Talairach2Parameters {
-    "__STYXTYPE__": "talairach2";
+    "@type": "freesurfer.talairach2";
     "subject_id": string;
     "mgz_flag"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talairach2": talairach2_cargs,
+        "freesurfer.talairach2": talairach2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface Talairach2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject identifier for the talairach transformation.
+ * @param mgz_flag Flag to indicate whether mgz format is used.
+ *
+ * @returns Parameter dictionary
+ */
 function talairach2_params(
     subject_id: string,
     mgz_flag: string | null = null,
 ): Talairach2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject identifier for the talairach transformation.
-     * @param mgz_flag Flag to indicate whether mgz format is used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talairach2" as const,
+        "@type": "freesurfer.talairach2" as const,
         "subject_id": subject_id,
     };
     if (mgz_flag !== null) {
@@ -87,18 +87,18 @@ function talairach2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talairach2_cargs(
     params: Talairach2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talairach2");
     cargs.push((params["subject_id"] ?? null));
@@ -109,18 +109,18 @@ function talairach2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talairach2_outputs(
     params: Talairach2Parameters,
     execution: Execution,
 ): Talairach2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Talairach2Outputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function talairach2_outputs(
 }
 
 
+/**
+ * Tool for processing and converting talairach transformation files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Talairach2Outputs`).
+ */
 function talairach2_execute(
     params: Talairach2Parameters,
     execution: Execution,
 ): Talairach2Outputs {
-    /**
-     * Tool for processing and converting talairach transformation files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Talairach2Outputs`).
-     */
     params = execution.params(params)
     const cargs = talairach2_cargs(params, execution)
     const ret = talairach2_outputs(params, execution)
@@ -152,24 +152,24 @@ function talairach2_execute(
 }
 
 
+/**
+ * Tool for processing and converting talairach transformation files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject identifier for the talairach transformation.
+ * @param mgz_flag Flag to indicate whether mgz format is used.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Talairach2Outputs`).
+ */
 function talairach2(
     subject_id: string,
     mgz_flag: string | null = null,
     runner: Runner | null = null,
 ): Talairach2Outputs {
-    /**
-     * Tool for processing and converting talairach transformation files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject identifier for the talairach transformation.
-     * @param mgz_flag Flag to indicate whether mgz format is used.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Talairach2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALAIRACH2_METADATA);
     const params = talairach2_params(subject_id, mgz_flag)
@@ -182,5 +182,8 @@ export {
       Talairach2Outputs,
       Talairach2Parameters,
       talairach2,
+      talairach2_cargs,
+      talairach2_execute,
+      talairach2_outputs,
       talairach2_params,
 };

@@ -12,7 +12,7 @@ const MRI_COMPUTE_CHANGE_MAP_METADATA: Metadata = {
 
 
 interface MriComputeChangeMapParameters {
-    "__STYXTYPE__": "mri_compute_change_map";
+    "@type": "freesurfer.mri_compute_change_map";
     "mean_filter": boolean;
     "gaussian_sigma"?: number | null | undefined;
     "volume1": InputPathType;
@@ -22,35 +22,35 @@ interface MriComputeChangeMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_change_map": mri_compute_change_map_cargs,
+        "freesurfer.mri_compute_change_map": mri_compute_change_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_change_map": mri_compute_change_map_outputs,
+        "freesurfer.mri_compute_change_map": mri_compute_change_map_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriComputeChangeMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume1 First volume (e.g. volume1.mgz)
+ * @param volume2 Second volume, transformed into the space of Volume 1 (e.g. volume2.mgz)
+ * @param transform Transform that takes Volume 2 coordinates into Volume 1 space
+ * @param outvolume Output change map volume (e.g. change_map.mgz)
+ * @param mean_filter Apply mean filter to the output before writing
+ * @param gaussian_sigma Smooth with Gaussian filter of specified sigma before writing
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_change_map_params(
     volume1: InputPathType,
     volume2: InputPathType,
@@ -81,20 +93,8 @@ function mri_compute_change_map_params(
     mean_filter: boolean = false,
     gaussian_sigma: number | null = null,
 ): MriComputeChangeMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume1 First volume (e.g. volume1.mgz)
-     * @param volume2 Second volume, transformed into the space of Volume 1 (e.g. volume2.mgz)
-     * @param transform Transform that takes Volume 2 coordinates into Volume 1 space
-     * @param outvolume Output change map volume (e.g. change_map.mgz)
-     * @param mean_filter Apply mean filter to the output before writing
-     * @param gaussian_sigma Smooth with Gaussian filter of specified sigma before writing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_change_map" as const,
+        "@type": "freesurfer.mri_compute_change_map" as const,
         "mean_filter": mean_filter,
         "volume1": volume1,
         "volume2": volume2,
@@ -108,18 +108,18 @@ function mri_compute_change_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_change_map_cargs(
     params: MriComputeChangeMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_change_map");
     if ((params["mean_filter"] ?? null)) {
@@ -139,18 +139,18 @@ function mri_compute_change_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_change_map_outputs(
     params: MriComputeChangeMapParameters,
     execution: Execution,
 ): MriComputeChangeMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeChangeMapOutputs = {
         root: execution.outputFile("."),
         out_change_map: execution.outputFile([(params["outvolume"] ?? null)].join('')),
@@ -159,22 +159,22 @@ function mri_compute_change_map_outputs(
 }
 
 
+/**
+ * Compute the change map between two MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
+ */
 function mri_compute_change_map_execute(
     params: MriComputeChangeMapParameters,
     execution: Execution,
 ): MriComputeChangeMapOutputs {
-    /**
-     * Compute the change map between two MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_change_map_cargs(params, execution)
     const ret = mri_compute_change_map_outputs(params, execution)
@@ -183,6 +183,23 @@ function mri_compute_change_map_execute(
 }
 
 
+/**
+ * Compute the change map between two MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume1 First volume (e.g. volume1.mgz)
+ * @param volume2 Second volume, transformed into the space of Volume 1 (e.g. volume2.mgz)
+ * @param transform Transform that takes Volume 2 coordinates into Volume 1 space
+ * @param outvolume Output change map volume (e.g. change_map.mgz)
+ * @param mean_filter Apply mean filter to the output before writing
+ * @param gaussian_sigma Smooth with Gaussian filter of specified sigma before writing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
+ */
 function mri_compute_change_map(
     volume1: InputPathType,
     volume2: InputPathType,
@@ -192,23 +209,6 @@ function mri_compute_change_map(
     gaussian_sigma: number | null = null,
     runner: Runner | null = null,
 ): MriComputeChangeMapOutputs {
-    /**
-     * Compute the change map between two MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume1 First volume (e.g. volume1.mgz)
-     * @param volume2 Second volume, transformed into the space of Volume 1 (e.g. volume2.mgz)
-     * @param transform Transform that takes Volume 2 coordinates into Volume 1 space
-     * @param outvolume Output change map volume (e.g. change_map.mgz)
-     * @param mean_filter Apply mean filter to the output before writing
-     * @param gaussian_sigma Smooth with Gaussian filter of specified sigma before writing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_CHANGE_MAP_METADATA);
     const params = mri_compute_change_map_params(volume1, volume2, transform, outvolume, mean_filter, gaussian_sigma)
@@ -221,5 +221,8 @@ export {
       MriComputeChangeMapOutputs,
       MriComputeChangeMapParameters,
       mri_compute_change_map,
+      mri_compute_change_map_cargs,
+      mri_compute_change_map_execute,
+      mri_compute_change_map_outputs,
       mri_compute_change_map_params,
 };

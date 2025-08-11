@@ -12,40 +12,40 @@ const MRI_VALIDATE_SKULL_STRIPPED_METADATA: Metadata = {
 
 
 interface MriValidateSkullStrippedParameters {
-    "__STYXTYPE__": "mri_validate_skull_stripped";
+    "@type": "freesurfer.mri_validate_skull_stripped";
     "mri_reference": InputPathType;
     "mri_test": InputPathType;
     "weight": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_validate_skull_stripped": mri_validate_skull_stripped_cargs,
+        "freesurfer.mri_validate_skull_stripped": mri_validate_skull_stripped_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MriValidateSkullStrippedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mri_reference Reference MRI image to compare against.
+ * @param mri_test Test MRI image that has undergone skull stripping.
+ * @param weight Weight parameter, should be greater than 1.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_validate_skull_stripped_params(
     mri_reference: InputPathType,
     mri_test: InputPathType,
     weight: number,
 ): MriValidateSkullStrippedParameters {
-    /**
-     * Build parameters.
-    
-     * @param mri_reference Reference MRI image to compare against.
-     * @param mri_test Test MRI image that has undergone skull stripping.
-     * @param weight Weight parameter, should be greater than 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_validate_skull_stripped" as const,
+        "@type": "freesurfer.mri_validate_skull_stripped" as const,
         "mri_reference": mri_reference,
         "mri_test": mri_test,
         "weight": weight,
@@ -89,18 +89,18 @@ function mri_validate_skull_stripped_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_validate_skull_stripped_cargs(
     params: MriValidateSkullStrippedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_validate_skull_stripped");
     cargs.push(execution.inputFile((params["mri_reference"] ?? null)));
@@ -110,18 +110,18 @@ function mri_validate_skull_stripped_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_validate_skull_stripped_outputs(
     params: MriValidateSkullStrippedParameters,
     execution: Execution,
 ): MriValidateSkullStrippedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriValidateSkullStrippedOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function mri_validate_skull_stripped_outputs(
 }
 
 
+/**
+ * Tool to validate skull stripped MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
+ */
 function mri_validate_skull_stripped_execute(
     params: MriValidateSkullStrippedParameters,
     execution: Execution,
 ): MriValidateSkullStrippedOutputs {
-    /**
-     * Tool to validate skull stripped MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_validate_skull_stripped_cargs(params, execution)
     const ret = mri_validate_skull_stripped_outputs(params, execution)
@@ -153,26 +153,26 @@ function mri_validate_skull_stripped_execute(
 }
 
 
+/**
+ * Tool to validate skull stripped MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mri_reference Reference MRI image to compare against.
+ * @param mri_test Test MRI image that has undergone skull stripping.
+ * @param weight Weight parameter, should be greater than 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
+ */
 function mri_validate_skull_stripped(
     mri_reference: InputPathType,
     mri_test: InputPathType,
     weight: number,
     runner: Runner | null = null,
 ): MriValidateSkullStrippedOutputs {
-    /**
-     * Tool to validate skull stripped MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mri_reference Reference MRI image to compare against.
-     * @param mri_test Test MRI image that has undergone skull stripping.
-     * @param weight Weight parameter, should be greater than 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VALIDATE_SKULL_STRIPPED_METADATA);
     const params = mri_validate_skull_stripped_params(mri_reference, mri_test, weight)
@@ -185,5 +185,8 @@ export {
       MriValidateSkullStrippedOutputs,
       MriValidateSkullStrippedParameters,
       mri_validate_skull_stripped,
+      mri_validate_skull_stripped_cargs,
+      mri_validate_skull_stripped_execute,
+      mri_validate_skull_stripped_outputs,
       mri_validate_skull_stripped_params,
 };

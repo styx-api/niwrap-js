@@ -12,7 +12,7 @@ const V_3D_MSS_METADATA: Metadata = {
 
 
 interface V3dMssParameters {
-    "__STYXTYPE__": "3dMSS";
+    "@type": "afni.3dMSS";
     "prefix": string;
     "jobs"?: number | null | undefined;
     "mrr_formula"?: string | null | undefined;
@@ -34,35 +34,35 @@ interface V3dMssParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMSS": v_3d_mss_cargs,
+        "afni.3dMSS": v_3d_mss_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMSS": v_3d_mss_outputs,
+        "afni.3dMSS": v_3d_mss_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface V3dMssOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached.
+ * @param data_table List the data structure with a header as the first line.
+ * @param jobs Number of CPU cores for parallel processing
+ * @param mrr_formula Model formulation through multilevel smoothing splines
+ * @param lme_formula Specify the fixed effect components of the model
+ * @param random_effect Specify the random effect components of the model
+ * @param qvars Identify quantitative variables (or covariates). The list with more than one variable has to be separated with comma without any other characters.
+ * @param mask Process voxels inside this mask only.
+ * @param bounds Outlier removal bounds. Any values in the input data that are beyond the bounds will be removed and treated as missing.
+ * @param prediction_table Provide a data table so that predicted values could be generated for graphical illustration.
+ * @param cio_flag Use AFNI's C io functions, which is default.
+ * @param rio_flag Use R's io functions.
+ * @param help_flag Display help message
+ * @param dbg_args_flag Enable R to save the parameters in a file called .3dMSS.dbg.AFNI.args for debugging.
+ * @param if_name Specify the column name that is designated for input files of effect estimate. Default is 'InputFile'.
+ * @param show_allowed_options_flag List of allowed options
+ * @param sdiff_vars Specify the factors for group comparisons.
+ * @param vt_formula Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mss_params(
     prefix: string,
     data_table: InputPathType,
@@ -105,32 +129,8 @@ function v_3d_mss_params(
     sdiff_vars: string | null = null,
     vt_formula: string | null = null,
 ): V3dMssParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached.
-     * @param data_table List the data structure with a header as the first line.
-     * @param jobs Number of CPU cores for parallel processing
-     * @param mrr_formula Model formulation through multilevel smoothing splines
-     * @param lme_formula Specify the fixed effect components of the model
-     * @param random_effect Specify the random effect components of the model
-     * @param qvars Identify quantitative variables (or covariates). The list with more than one variable has to be separated with comma without any other characters.
-     * @param mask Process voxels inside this mask only.
-     * @param bounds Outlier removal bounds. Any values in the input data that are beyond the bounds will be removed and treated as missing.
-     * @param prediction_table Provide a data table so that predicted values could be generated for graphical illustration.
-     * @param cio_flag Use AFNI's C io functions, which is default.
-     * @param rio_flag Use R's io functions.
-     * @param help_flag Display help message
-     * @param dbg_args_flag Enable R to save the parameters in a file called .3dMSS.dbg.AFNI.args for debugging.
-     * @param if_name Specify the column name that is designated for input files of effect estimate. Default is 'InputFile'.
-     * @param show_allowed_options_flag List of allowed options
-     * @param sdiff_vars Specify the factors for group comparisons.
-     * @param vt_formula Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMSS" as const,
+        "@type": "afni.3dMSS" as const,
         "prefix": prefix,
         "data_table": data_table,
         "cio_flag": cio_flag,
@@ -176,18 +176,18 @@ function v_3d_mss_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mss_cargs(
     params: V3dMssParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMSS");
     cargs.push((params["prefix"] ?? null));
@@ -280,18 +280,18 @@ function v_3d_mss_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mss_outputs(
     params: V3dMssParameters,
     execution: Execution,
 ): V3dMssOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMssOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')),
@@ -300,22 +300,22 @@ function v_3d_mss_outputs(
 }
 
 
+/**
+ * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
+ */
 function v_3d_mss_execute(
     params: V3dMssParameters,
     execution: Execution,
 ): V3dMssOutputs {
-    /**
-     * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mss_cargs(params, execution)
     const ret = v_3d_mss_outputs(params, execution)
@@ -324,6 +324,35 @@ function v_3d_mss_execute(
 }
 
 
+/**
+ * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached.
+ * @param data_table List the data structure with a header as the first line.
+ * @param jobs Number of CPU cores for parallel processing
+ * @param mrr_formula Model formulation through multilevel smoothing splines
+ * @param lme_formula Specify the fixed effect components of the model
+ * @param random_effect Specify the random effect components of the model
+ * @param qvars Identify quantitative variables (or covariates). The list with more than one variable has to be separated with comma without any other characters.
+ * @param mask Process voxels inside this mask only.
+ * @param bounds Outlier removal bounds. Any values in the input data that are beyond the bounds will be removed and treated as missing.
+ * @param prediction_table Provide a data table so that predicted values could be generated for graphical illustration.
+ * @param cio_flag Use AFNI's C io functions, which is default.
+ * @param rio_flag Use R's io functions.
+ * @param help_flag Display help message
+ * @param dbg_args_flag Enable R to save the parameters in a file called .3dMSS.dbg.AFNI.args for debugging.
+ * @param if_name Specify the column name that is designated for input files of effect estimate. Default is 'InputFile'.
+ * @param show_allowed_options_flag List of allowed options
+ * @param sdiff_vars Specify the factors for group comparisons.
+ * @param vt_formula Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
+ */
 function v_3d_mss(
     prefix: string,
     data_table: InputPathType,
@@ -345,35 +374,6 @@ function v_3d_mss(
     vt_formula: string | null = null,
     runner: Runner | null = null,
 ): V3dMssOutputs {
-    /**
-     * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed. Filename for NIfTI format should have .nii attached.
-     * @param data_table List the data structure with a header as the first line.
-     * @param jobs Number of CPU cores for parallel processing
-     * @param mrr_formula Model formulation through multilevel smoothing splines
-     * @param lme_formula Specify the fixed effect components of the model
-     * @param random_effect Specify the random effect components of the model
-     * @param qvars Identify quantitative variables (or covariates). The list with more than one variable has to be separated with comma without any other characters.
-     * @param mask Process voxels inside this mask only.
-     * @param bounds Outlier removal bounds. Any values in the input data that are beyond the bounds will be removed and treated as missing.
-     * @param prediction_table Provide a data table so that predicted values could be generated for graphical illustration.
-     * @param cio_flag Use AFNI's C io functions, which is default.
-     * @param rio_flag Use R's io functions.
-     * @param help_flag Display help message
-     * @param dbg_args_flag Enable R to save the parameters in a file called .3dMSS.dbg.AFNI.args for debugging.
-     * @param if_name Specify the column name that is designated for input files of effect estimate. Default is 'InputFile'.
-     * @param show_allowed_options_flag List of allowed options
-     * @param sdiff_vars Specify the factors for group comparisons.
-     * @param vt_formula Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MSS_METADATA);
     const params = v_3d_mss_params(prefix, data_table, jobs, mrr_formula, lme_formula, random_effect, qvars, mask, bounds, prediction_table, cio_flag, rio_flag, help_flag, dbg_args_flag, if_name, show_allowed_options_flag, sdiff_vars, vt_formula)
@@ -386,5 +386,8 @@ export {
       V3dMssParameters,
       V_3D_MSS_METADATA,
       v_3d_mss,
+      v_3d_mss_cargs,
+      v_3d_mss_execute,
+      v_3d_mss_outputs,
       v_3d_mss_params,
 };

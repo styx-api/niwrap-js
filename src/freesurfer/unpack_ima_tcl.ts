@@ -12,38 +12,38 @@ const UNPACK_IMA_TCL_METADATA: Metadata = {
 
 
 interface UnpackImaTclParameters {
-    "__STYXTYPE__": "unpack_ima.tcl";
+    "@type": "freesurfer.unpack_ima.tcl";
     "target_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpack_ima.tcl": unpack_ima_tcl_cargs,
+        "freesurfer.unpack_ima.tcl": unpack_ima_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface UnpackImaTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param target_dir Target directory to unpack the files.
+ *
+ * @returns Parameter dictionary
+ */
 function unpack_ima_tcl_params(
     target_dir: string = "~",
 ): UnpackImaTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param target_dir Target directory to unpack the files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpack_ima.tcl" as const,
+        "@type": "freesurfer.unpack_ima.tcl" as const,
         "target_dir": target_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpack_ima_tcl_cargs(
     params: UnpackImaTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpack_ima.tcl");
     cargs.push((params["target_dir"] ?? null));
@@ -100,18 +100,18 @@ function unpack_ima_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpack_ima_tcl_outputs(
     params: UnpackImaTclParameters,
     execution: Execution,
 ): UnpackImaTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnpackImaTclOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function unpack_ima_tcl_outputs(
 }
 
 
+/**
+ * A tool to unpack MRI DICOM .ima files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnpackImaTclOutputs`).
+ */
 function unpack_ima_tcl_execute(
     params: UnpackImaTclParameters,
     execution: Execution,
 ): UnpackImaTclOutputs {
-    /**
-     * A tool to unpack MRI DICOM .ima files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnpackImaTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = unpack_ima_tcl_cargs(params, execution)
     const ret = unpack_ima_tcl_outputs(params, execution)
@@ -143,22 +143,22 @@ function unpack_ima_tcl_execute(
 }
 
 
+/**
+ * A tool to unpack MRI DICOM .ima files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param target_dir Target directory to unpack the files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnpackImaTclOutputs`).
+ */
 function unpack_ima_tcl(
     target_dir: string = "~",
     runner: Runner | null = null,
 ): UnpackImaTclOutputs {
-    /**
-     * A tool to unpack MRI DICOM .ima files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param target_dir Target directory to unpack the files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnpackImaTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACK_IMA_TCL_METADATA);
     const params = unpack_ima_tcl_params(target_dir)
@@ -171,5 +171,8 @@ export {
       UnpackImaTclOutputs,
       UnpackImaTclParameters,
       unpack_ima_tcl,
+      unpack_ima_tcl_cargs,
+      unpack_ima_tcl_execute,
+      unpack_ima_tcl_outputs,
       unpack_ima_tcl_params,
 };

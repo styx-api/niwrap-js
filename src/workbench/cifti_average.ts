@@ -12,21 +12,21 @@ const CIFTI_AVERAGE_METADATA: Metadata = {
 
 
 interface CiftiAverageExcludeOutliersParameters {
-    "__STYXTYPE__": "exclude_outliers";
+    "@type": "workbench.cifti-average.exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
 
 
 interface CiftiAverageCiftiParameters {
-    "__STYXTYPE__": "cifti";
+    "@type": "workbench.cifti-average.cifti";
     "cifti_in": InputPathType;
     "opt_weight_weight"?: number | null | undefined;
 }
 
 
 interface CiftiAverageParameters {
-    "__STYXTYPE__": "cifti-average";
+    "@type": "workbench.cifti-average";
     "cifti_out": string;
     "exclude_outliers"?: CiftiAverageExcludeOutliersParameters | null | undefined;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
@@ -34,56 +34,56 @@ interface CiftiAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-average": cifti_average_cargs,
-        "exclude_outliers": cifti_average_exclude_outliers_cargs,
-        "cifti": cifti_average_cifti_cargs,
+        "workbench.cifti-average": cifti_average_cargs,
+        "workbench.cifti-average.exclude_outliers": cifti_average_exclude_outliers_cargs,
+        "workbench.cifti-average.cifti": cifti_average_cifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-average": cifti_average_outputs,
+        "workbench.cifti-average": cifti_average_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma_below number of standard deviations below the mean to include
+ * @param sigma_above number of standard deviations above the mean to include
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
 ): CiftiAverageExcludeOutliersParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma_below number of standard deviations below the mean to include
-     * @param sigma_above number of standard deviations above the mean to include
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exclude_outliers" as const,
+        "@type": "workbench.cifti-average.exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -91,18 +91,18 @@ function cifti_average_exclude_outliers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_exclude_outliers_cargs(
     params: CiftiAverageExcludeOutliersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exclude-outliers");
     cargs.push(String((params["sigma_below"] ?? null)));
@@ -111,20 +111,20 @@ function cifti_average_exclude_outliers_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param opt_weight_weight give a weight for this file: the weight to use
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_cifti_params(
     cifti_in: InputPathType,
     opt_weight_weight: number | null = null,
 ): CiftiAverageCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param opt_weight_weight give a weight for this file: the weight to use
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti" as const,
+        "@type": "workbench.cifti-average.cifti" as const,
         "cifti_in": cifti_in,
     };
     if (opt_weight_weight !== null) {
@@ -134,18 +134,18 @@ function cifti_average_cifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_cifti_cargs(
     params: CiftiAverageCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -176,24 +176,24 @@ interface CiftiAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_out output cifti file
+ * @param exclude_outliers exclude outliers by standard deviation of each element across files
+ * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
+ * @param cifti specify an input file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_params(
     cifti_out: string,
     exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
     opt_mem_limit_limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
 ): CiftiAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_out output cifti file
-     * @param exclude_outliers exclude outliers by standard deviation of each element across files
-     * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
-     * @param cifti specify an input file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-average" as const,
+        "@type": "workbench.cifti-average" as const,
         "cifti_out": cifti_out,
     };
     if (exclude_outliers !== null) {
@@ -209,24 +209,24 @@ function cifti_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_cargs(
     params: CiftiAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-average");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null).__STYXTYPE__)((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
     }
     if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
         cargs.push(
@@ -235,24 +235,24 @@ function cifti_average_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_average_outputs(
     params: CiftiAverageParameters,
     execution: Execution,
 ): CiftiAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiAverageOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -261,24 +261,24 @@ function cifti_average_outputs(
 }
 
 
+/**
+ * Average cifti files.
+ *
+ * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
+ */
 function cifti_average_execute(
     params: CiftiAverageParameters,
     execution: Execution,
 ): CiftiAverageOutputs {
-    /**
-     * Average cifti files.
-     * 
-     * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_average_cargs(params, execution)
     const ret = cifti_average_outputs(params, execution)
@@ -287,6 +287,23 @@ function cifti_average_execute(
 }
 
 
+/**
+ * Average cifti files.
+ *
+ * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_out output cifti file
+ * @param exclude_outliers exclude outliers by standard deviation of each element across files
+ * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
+ * @param cifti specify an input file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
+ */
 function cifti_average(
     cifti_out: string,
     exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
@@ -294,23 +311,6 @@ function cifti_average(
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
-    /**
-     * Average cifti files.
-     * 
-     * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_out output cifti file
-     * @param exclude_outliers exclude outliers by standard deviation of each element across files
-     * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
-     * @param cifti specify an input file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_AVERAGE_METADATA);
     const params = cifti_average_params(cifti_out, exclude_outliers, opt_mem_limit_limit_gb, cifti)
@@ -325,7 +325,12 @@ export {
       CiftiAverageOutputs,
       CiftiAverageParameters,
       cifti_average,
+      cifti_average_cargs,
+      cifti_average_cifti_cargs,
       cifti_average_cifti_params,
+      cifti_average_exclude_outliers_cargs,
       cifti_average_exclude_outliers_params,
+      cifti_average_execute,
+      cifti_average_outputs,
       cifti_average_params,
 };

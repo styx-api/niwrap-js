@@ -12,7 +12,7 @@ const MRI_CONCATENATE_LTA_METADATA: Metadata = {
 
 
 interface MriConcatenateLtaParameters {
-    "__STYXTYPE__": "mri_concatenate_lta";
+    "@type": "freesurfer.mri_concatenate_lta";
     "lta_1": InputPathType;
     "lta_2": InputPathType;
     "lta_final": string;
@@ -28,33 +28,33 @@ interface MriConcatenateLtaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_concatenate_lta": mri_concatenate_lta_cargs,
+        "freesurfer.mri_concatenate_lta": mri_concatenate_lta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface MriConcatenateLtaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param lta_1 File for LTA transformation that maps some src1 to dst1
+ * @param lta_2 File for LTA transformation that maps dst1 (src2) to dst2
+ * @param lta_final File for the combined LTA maps: src1 to dst2 = LTA2*LTA1
+ * @param tal_src Specify source (file1) for Talairach transformation
+ * @param tal_template Specify template (file2) for Talairach transformation
+ * @param invert1 Invert LTA1 before applying it
+ * @param invert2 Invert LTA2 before applying it
+ * @param invertout Invert output LTA
+ * @param out_type Set final LTA type: 0 for VOX2VOX (default), 1 for RAS2RAS
+ * @param subject Set subject in output LTA
+ * @param rmsdiff_radius Radius used for computing RMS diff between transforms
+ * @param rmsdiff_outputfile Output file for RMS diff computation. Use 'nofile' to skip output
+ *
+ * @returns Parameter dictionary
+ */
 function mri_concatenate_lta_params(
     lta_1: InputPathType,
     lta_2: InputPathType,
@@ -88,26 +106,8 @@ function mri_concatenate_lta_params(
     rmsdiff_radius: number | null = null,
     rmsdiff_outputfile: string | null = null,
 ): MriConcatenateLtaParameters {
-    /**
-     * Build parameters.
-    
-     * @param lta_1 File for LTA transformation that maps some src1 to dst1
-     * @param lta_2 File for LTA transformation that maps dst1 (src2) to dst2
-     * @param lta_final File for the combined LTA maps: src1 to dst2 = LTA2*LTA1
-     * @param tal_src Specify source (file1) for Talairach transformation
-     * @param tal_template Specify template (file2) for Talairach transformation
-     * @param invert1 Invert LTA1 before applying it
-     * @param invert2 Invert LTA2 before applying it
-     * @param invertout Invert output LTA
-     * @param out_type Set final LTA type: 0 for VOX2VOX (default), 1 for RAS2RAS
-     * @param subject Set subject in output LTA
-     * @param rmsdiff_radius Radius used for computing RMS diff between transforms
-     * @param rmsdiff_outputfile Output file for RMS diff computation. Use 'nofile' to skip output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_concatenate_lta" as const,
+        "@type": "freesurfer.mri_concatenate_lta" as const,
         "lta_1": lta_1,
         "lta_2": lta_2,
         "lta_final": lta_final,
@@ -137,18 +137,18 @@ function mri_concatenate_lta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_concatenate_lta_cargs(
     params: MriConcatenateLtaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_concatenate_lta");
     cargs.push(execution.inputFile((params["lta_1"] ?? null)));
@@ -197,18 +197,18 @@ function mri_concatenate_lta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_concatenate_lta_outputs(
     params: MriConcatenateLtaParameters,
     execution: Execution,
 ): MriConcatenateLtaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriConcatenateLtaOutputs = {
         root: execution.outputFile("."),
     };
@@ -216,22 +216,22 @@ function mri_concatenate_lta_outputs(
 }
 
 
+/**
+ * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
+ */
 function mri_concatenate_lta_execute(
     params: MriConcatenateLtaParameters,
     execution: Execution,
 ): MriConcatenateLtaOutputs {
-    /**
-     * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_concatenate_lta_cargs(params, execution)
     const ret = mri_concatenate_lta_outputs(params, execution)
@@ -240,6 +240,29 @@ function mri_concatenate_lta_execute(
 }
 
 
+/**
+ * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param lta_1 File for LTA transformation that maps some src1 to dst1
+ * @param lta_2 File for LTA transformation that maps dst1 (src2) to dst2
+ * @param lta_final File for the combined LTA maps: src1 to dst2 = LTA2*LTA1
+ * @param tal_src Specify source (file1) for Talairach transformation
+ * @param tal_template Specify template (file2) for Talairach transformation
+ * @param invert1 Invert LTA1 before applying it
+ * @param invert2 Invert LTA2 before applying it
+ * @param invertout Invert output LTA
+ * @param out_type Set final LTA type: 0 for VOX2VOX (default), 1 for RAS2RAS
+ * @param subject Set subject in output LTA
+ * @param rmsdiff_radius Radius used for computing RMS diff between transforms
+ * @param rmsdiff_outputfile Output file for RMS diff computation. Use 'nofile' to skip output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
+ */
 function mri_concatenate_lta(
     lta_1: InputPathType,
     lta_2: InputPathType,
@@ -255,29 +278,6 @@ function mri_concatenate_lta(
     rmsdiff_outputfile: string | null = null,
     runner: Runner | null = null,
 ): MriConcatenateLtaOutputs {
-    /**
-     * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param lta_1 File for LTA transformation that maps some src1 to dst1
-     * @param lta_2 File for LTA transformation that maps dst1 (src2) to dst2
-     * @param lta_final File for the combined LTA maps: src1 to dst2 = LTA2*LTA1
-     * @param tal_src Specify source (file1) for Talairach transformation
-     * @param tal_template Specify template (file2) for Talairach transformation
-     * @param invert1 Invert LTA1 before applying it
-     * @param invert2 Invert LTA2 before applying it
-     * @param invertout Invert output LTA
-     * @param out_type Set final LTA type: 0 for VOX2VOX (default), 1 for RAS2RAS
-     * @param subject Set subject in output LTA
-     * @param rmsdiff_radius Radius used for computing RMS diff between transforms
-     * @param rmsdiff_outputfile Output file for RMS diff computation. Use 'nofile' to skip output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CONCATENATE_LTA_METADATA);
     const params = mri_concatenate_lta_params(lta_1, lta_2, lta_final, tal_src, tal_template, invert1, invert2, invertout, out_type, subject, rmsdiff_radius, rmsdiff_outputfile)
@@ -290,5 +290,8 @@ export {
       MriConcatenateLtaOutputs,
       MriConcatenateLtaParameters,
       mri_concatenate_lta,
+      mri_concatenate_lta_cargs,
+      mri_concatenate_lta_execute,
+      mri_concatenate_lta_outputs,
       mri_concatenate_lta_params,
 };

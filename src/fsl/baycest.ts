@@ -12,7 +12,7 @@ const BAYCEST_METADATA: Metadata = {
 
 
 interface BaycestParameters {
-    "__STYXTYPE__": "baycest";
+    "@type": "fsl.baycest";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "output_dir": string;
@@ -24,35 +24,35 @@ interface BaycestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "baycest": baycest_cargs,
+        "fsl.baycest": baycest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "baycest": baycest_outputs,
+        "fsl.baycest": baycest_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface BaycestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file Specify data file (nifti image)
+ * @param mask_file Specify mask file (nifti image)
+ * @param output_dir Specify output directory name
+ * @param pools_file Specify pools to be included in model (ascii matrix)
+ * @param spec_file Data specification (ascii matrix)
+ * @param ptrain_file Specify pulse shape (ascii matrix)
+ * @param spatial_flag Use spatial prior (appropriate for in vivo data)
+ * @param t12prior_flag Include uncertainty in T1 and T2 values
+ *
+ * @returns Parameter dictionary
+ */
 function baycest_params(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -85,22 +99,8 @@ function baycest_params(
     spatial_flag: boolean = false,
     t12prior_flag: boolean = false,
 ): BaycestParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file Specify data file (nifti image)
-     * @param mask_file Specify mask file (nifti image)
-     * @param output_dir Specify output directory name
-     * @param pools_file Specify pools to be included in model (ascii matrix)
-     * @param spec_file Data specification (ascii matrix)
-     * @param ptrain_file Specify pulse shape (ascii matrix)
-     * @param spatial_flag Use spatial prior (appropriate for in vivo data)
-     * @param t12prior_flag Include uncertainty in T1 and T2 values
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "baycest" as const,
+        "@type": "fsl.baycest" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "output_dir": output_dir,
@@ -114,18 +114,18 @@ function baycest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function baycest_cargs(
     params: BaycestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("baycest");
     cargs.push(["--data=", execution.inputFile((params["data_file"] ?? null))].join(''));
@@ -144,18 +144,18 @@ function baycest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function baycest_outputs(
     params: BaycestParameters,
     execution: Execution,
 ): BaycestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BaycestOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_dir"] ?? null), "/output_file.nii.gz"].join('')),
@@ -164,22 +164,22 @@ function baycest_outputs(
 }
 
 
+/**
+ * Bayesian analysis for chemical exchange saturation transfer z-spectra.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BaycestOutputs`).
+ */
 function baycest_execute(
     params: BaycestParameters,
     execution: Execution,
 ): BaycestOutputs {
-    /**
-     * Bayesian analysis for chemical exchange saturation transfer z-spectra.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BaycestOutputs`).
-     */
     params = execution.params(params)
     const cargs = baycest_cargs(params, execution)
     const ret = baycest_outputs(params, execution)
@@ -188,6 +188,25 @@ function baycest_execute(
 }
 
 
+/**
+ * Bayesian analysis for chemical exchange saturation transfer z-spectra.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param data_file Specify data file (nifti image)
+ * @param mask_file Specify mask file (nifti image)
+ * @param output_dir Specify output directory name
+ * @param pools_file Specify pools to be included in model (ascii matrix)
+ * @param spec_file Data specification (ascii matrix)
+ * @param ptrain_file Specify pulse shape (ascii matrix)
+ * @param spatial_flag Use spatial prior (appropriate for in vivo data)
+ * @param t12prior_flag Include uncertainty in T1 and T2 values
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BaycestOutputs`).
+ */
 function baycest(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -199,25 +218,6 @@ function baycest(
     t12prior_flag: boolean = false,
     runner: Runner | null = null,
 ): BaycestOutputs {
-    /**
-     * Bayesian analysis for chemical exchange saturation transfer z-spectra.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param data_file Specify data file (nifti image)
-     * @param mask_file Specify mask file (nifti image)
-     * @param output_dir Specify output directory name
-     * @param pools_file Specify pools to be included in model (ascii matrix)
-     * @param spec_file Data specification (ascii matrix)
-     * @param ptrain_file Specify pulse shape (ascii matrix)
-     * @param spatial_flag Use spatial prior (appropriate for in vivo data)
-     * @param t12prior_flag Include uncertainty in T1 and T2 values
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BaycestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BAYCEST_METADATA);
     const params = baycest_params(data_file, mask_file, output_dir, pools_file, spec_file, ptrain_file, spatial_flag, t12prior_flag)
@@ -230,5 +230,8 @@ export {
       BaycestOutputs,
       BaycestParameters,
       baycest,
+      baycest_cargs,
+      baycest_execute,
+      baycest_outputs,
       baycest_params,
 };

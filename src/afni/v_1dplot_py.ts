@@ -12,7 +12,7 @@ const V_1DPLOT_PY_METADATA: Metadata = {
 
 
 interface V1dplotPyParameters {
-    "__STYXTYPE__": "1dplot.py";
+    "@type": "afni.1dplot.py";
     "infiles": Array<InputPathType>;
     "prefix": string;
     "help": boolean;
@@ -48,35 +48,35 @@ interface V1dplotPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dplot.py": v_1dplot_py_cargs,
+        "afni.1dplot.py": v_1dplot_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dplot.py": v_1dplot_py_outputs,
+        "afni.1dplot.py": v_1dplot_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,44 @@ interface V1dplotPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infiles One or more file names of text files. Each column in this file will be treated as a separate time series for plotting.
+ * @param prefix Output filename or prefix. Default output image type is .jpg
+ * @param help See helpfile
+ * @param boxplot_on A fun feature to show an additional boxplot adjacent to each time series
+ * @param bplot_view Adjust view for boxplots when using censoring
+ * @param margin_off Fill the plot frame completely, thus no labels, frame, or titles will be visible
+ * @param scale Provide a list of scales to apply to the y-values
+ * @param xfile One way to input x-values explicitly: as a "1D" file containing a single file of numbers
+ * @param xvals Provide exactly 3 numbers for x-values: start, stop, and stepsize
+ * @param yaxis Optional range for each 'infile' y-axis
+ * @param ylabels Optional text labels for each 'infile' column
+ * @param ylabels_maxlen allows y-axis labels to wrap into multiple rows, each of length <= which the user can decide
+ * @param legend_on Turn on the plotting of a legend in the plot(s)
+ * @param legend_labels Optional legend labels, if using '-legend_on'
+ * @param legend_locs Optional legend locations, if using '-legend_on'
+ * @param xlabel Optional text labels for the abscissa/x-axis
+ * @param title Optional title for the set of plots
+ * @param reverse_order Reverses the order of plotted time series
+ * @param sepscl Make each graph have its own y-range
+ * @param one_graph Plot multiple infiles in a single subplot
+ * @param dpi Choose the output image's DPI. Default value is 150
+ * @param figsize Choose the output image's dimensions (units are inches)
+ * @param fontsize Change image fontsize; default is 10
+ * @param fontfamily Change font-family used; default is monospace
+ * @param fontstyles Add a specific font name; should match with chosen font-family
+ * @param colors Decide what color(s) to cycle through in plots (one or more)
+ * @param patches Specify run lengths for background patches to distinguish runs
+ * @param censor_trs Specify time points where censoring has occurred using AFNI index notation
+ * @param censor_files Specify time points where censoring has occurred using one or more 1D files
+ * @param censor_hline Add a dotted horizontal line to the plot, representing the censor threshold
+ * @param censor_rgb Choose the color of the censoring background; default is: [1, 0.7, 0.7]
+ * @param bkgd_color Change the background color outside of the plot windows. Default is 0.9
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dplot_py_params(
     infiles: Array<InputPathType>,
     prefix: string,
@@ -133,46 +171,8 @@ function v_1dplot_py_params(
     censor_rgb: string | null = null,
     bkgd_color: string | null = null,
 ): V1dplotPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param infiles One or more file names of text files. Each column in this file will be treated as a separate time series for plotting.
-     * @param prefix Output filename or prefix. Default output image type is .jpg
-     * @param help See helpfile
-     * @param boxplot_on A fun feature to show an additional boxplot adjacent to each time series
-     * @param bplot_view Adjust view for boxplots when using censoring
-     * @param margin_off Fill the plot frame completely, thus no labels, frame, or titles will be visible
-     * @param scale Provide a list of scales to apply to the y-values
-     * @param xfile One way to input x-values explicitly: as a "1D" file containing a single file of numbers
-     * @param xvals Provide exactly 3 numbers for x-values: start, stop, and stepsize
-     * @param yaxis Optional range for each 'infile' y-axis
-     * @param ylabels Optional text labels for each 'infile' column
-     * @param ylabels_maxlen allows y-axis labels to wrap into multiple rows, each of length <= which the user can decide
-     * @param legend_on Turn on the plotting of a legend in the plot(s)
-     * @param legend_labels Optional legend labels, if using '-legend_on'
-     * @param legend_locs Optional legend locations, if using '-legend_on'
-     * @param xlabel Optional text labels for the abscissa/x-axis
-     * @param title Optional title for the set of plots
-     * @param reverse_order Reverses the order of plotted time series
-     * @param sepscl Make each graph have its own y-range
-     * @param one_graph Plot multiple infiles in a single subplot
-     * @param dpi Choose the output image's DPI. Default value is 150
-     * @param figsize Choose the output image's dimensions (units are inches)
-     * @param fontsize Change image fontsize; default is 10
-     * @param fontfamily Change font-family used; default is monospace
-     * @param fontstyles Add a specific font name; should match with chosen font-family
-     * @param colors Decide what color(s) to cycle through in plots (one or more)
-     * @param patches Specify run lengths for background patches to distinguish runs
-     * @param censor_trs Specify time points where censoring has occurred using AFNI index notation
-     * @param censor_files Specify time points where censoring has occurred using one or more 1D files
-     * @param censor_hline Add a dotted horizontal line to the plot, representing the censor threshold
-     * @param censor_rgb Choose the color of the censoring background; default is: [1, 0.7, 0.7]
-     * @param bkgd_color Change the background color outside of the plot windows. Default is 0.9
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dplot.py" as const,
+        "@type": "afni.1dplot.py" as const,
         "infiles": infiles,
         "prefix": prefix,
         "help": help,
@@ -256,18 +256,18 @@ function v_1dplot_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dplot_py_cargs(
     params: V1dplotPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dplot.py");
     cargs.push(
@@ -441,18 +441,18 @@ function v_1dplot_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dplot_py_outputs(
     params: V1dplotPyParameters,
     execution: Execution,
 ): V1dplotPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dplotPyOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["prefix"] ?? null), ".jpg"].join('')),
@@ -461,22 +461,22 @@ function v_1dplot_py_outputs(
 }
 
 
+/**
+ * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
+ */
 function v_1dplot_py_execute(
     params: V1dplotPyParameters,
     execution: Execution,
 ): V1dplotPyOutputs {
-    /**
-     * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dplot_py_cargs(params, execution)
     const ret = v_1dplot_py_outputs(params, execution)
@@ -485,6 +485,49 @@ function v_1dplot_py_execute(
 }
 
 
+/**
+ * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infiles One or more file names of text files. Each column in this file will be treated as a separate time series for plotting.
+ * @param prefix Output filename or prefix. Default output image type is .jpg
+ * @param help See helpfile
+ * @param boxplot_on A fun feature to show an additional boxplot adjacent to each time series
+ * @param bplot_view Adjust view for boxplots when using censoring
+ * @param margin_off Fill the plot frame completely, thus no labels, frame, or titles will be visible
+ * @param scale Provide a list of scales to apply to the y-values
+ * @param xfile One way to input x-values explicitly: as a "1D" file containing a single file of numbers
+ * @param xvals Provide exactly 3 numbers for x-values: start, stop, and stepsize
+ * @param yaxis Optional range for each 'infile' y-axis
+ * @param ylabels Optional text labels for each 'infile' column
+ * @param ylabels_maxlen allows y-axis labels to wrap into multiple rows, each of length <= which the user can decide
+ * @param legend_on Turn on the plotting of a legend in the plot(s)
+ * @param legend_labels Optional legend labels, if using '-legend_on'
+ * @param legend_locs Optional legend locations, if using '-legend_on'
+ * @param xlabel Optional text labels for the abscissa/x-axis
+ * @param title Optional title for the set of plots
+ * @param reverse_order Reverses the order of plotted time series
+ * @param sepscl Make each graph have its own y-range
+ * @param one_graph Plot multiple infiles in a single subplot
+ * @param dpi Choose the output image's DPI. Default value is 150
+ * @param figsize Choose the output image's dimensions (units are inches)
+ * @param fontsize Change image fontsize; default is 10
+ * @param fontfamily Change font-family used; default is monospace
+ * @param fontstyles Add a specific font name; should match with chosen font-family
+ * @param colors Decide what color(s) to cycle through in plots (one or more)
+ * @param patches Specify run lengths for background patches to distinguish runs
+ * @param censor_trs Specify time points where censoring has occurred using AFNI index notation
+ * @param censor_files Specify time points where censoring has occurred using one or more 1D files
+ * @param censor_hline Add a dotted horizontal line to the plot, representing the censor threshold
+ * @param censor_rgb Choose the color of the censoring background; default is: [1, 0.7, 0.7]
+ * @param bkgd_color Change the background color outside of the plot windows. Default is 0.9
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
+ */
 function v_1dplot_py(
     infiles: Array<InputPathType>,
     prefix: string,
@@ -520,49 +563,6 @@ function v_1dplot_py(
     bkgd_color: string | null = null,
     runner: Runner | null = null,
 ): V1dplotPyOutputs {
-    /**
-     * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infiles One or more file names of text files. Each column in this file will be treated as a separate time series for plotting.
-     * @param prefix Output filename or prefix. Default output image type is .jpg
-     * @param help See helpfile
-     * @param boxplot_on A fun feature to show an additional boxplot adjacent to each time series
-     * @param bplot_view Adjust view for boxplots when using censoring
-     * @param margin_off Fill the plot frame completely, thus no labels, frame, or titles will be visible
-     * @param scale Provide a list of scales to apply to the y-values
-     * @param xfile One way to input x-values explicitly: as a "1D" file containing a single file of numbers
-     * @param xvals Provide exactly 3 numbers for x-values: start, stop, and stepsize
-     * @param yaxis Optional range for each 'infile' y-axis
-     * @param ylabels Optional text labels for each 'infile' column
-     * @param ylabels_maxlen allows y-axis labels to wrap into multiple rows, each of length <= which the user can decide
-     * @param legend_on Turn on the plotting of a legend in the plot(s)
-     * @param legend_labels Optional legend labels, if using '-legend_on'
-     * @param legend_locs Optional legend locations, if using '-legend_on'
-     * @param xlabel Optional text labels for the abscissa/x-axis
-     * @param title Optional title for the set of plots
-     * @param reverse_order Reverses the order of plotted time series
-     * @param sepscl Make each graph have its own y-range
-     * @param one_graph Plot multiple infiles in a single subplot
-     * @param dpi Choose the output image's DPI. Default value is 150
-     * @param figsize Choose the output image's dimensions (units are inches)
-     * @param fontsize Change image fontsize; default is 10
-     * @param fontfamily Change font-family used; default is monospace
-     * @param fontstyles Add a specific font name; should match with chosen font-family
-     * @param colors Decide what color(s) to cycle through in plots (one or more)
-     * @param patches Specify run lengths for background patches to distinguish runs
-     * @param censor_trs Specify time points where censoring has occurred using AFNI index notation
-     * @param censor_files Specify time points where censoring has occurred using one or more 1D files
-     * @param censor_hline Add a dotted horizontal line to the plot, representing the censor threshold
-     * @param censor_rgb Choose the color of the censoring background; default is: [1, 0.7, 0.7]
-     * @param bkgd_color Change the background color outside of the plot windows. Default is 0.9
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DPLOT_PY_METADATA);
     const params = v_1dplot_py_params(infiles, prefix, help, boxplot_on, bplot_view, margin_off, scale, xfile, xvals, yaxis, ylabels, ylabels_maxlen, legend_on, legend_labels, legend_locs, xlabel, title, reverse_order, sepscl, one_graph, dpi, figsize, fontsize, fontfamily, fontstyles, colors, patches, censor_trs, censor_files, censor_hline, censor_rgb, bkgd_color)
@@ -575,5 +575,8 @@ export {
       V1dplotPyParameters,
       V_1DPLOT_PY_METADATA,
       v_1dplot_py,
+      v_1dplot_py_cargs,
+      v_1dplot_py_execute,
+      v_1dplot_py_outputs,
       v_1dplot_py_params,
 };

@@ -12,7 +12,7 @@ const MRIS_TARGET_POS_METADATA: Metadata = {
 
 
 interface MrisTargetPosParameters {
-    "__STYXTYPE__": "mris_target_pos";
+    "@type": "freesurfer.mris_target_pos";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "output_surface": string;
@@ -29,33 +29,33 @@ interface MrisTargetPosParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_target_pos": mris_target_pos_cargs,
+        "freesurfer.mris_target_pos": mris_target_pos_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface MrisTargetPosOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param adgws_file ADGWS file
+ * @param threshold_values Threshold values for inward and outward target positions
+ * @param label Label for processing
+ * @param interpolation_method Interpolation method name
+ * @param debug_vertex Vertex number for debugging
+ * @param cbv_flag CBV flag
+ * @param debug_flag Turn on debugging
+ * @param check_options Check options without running the program
+ * @param help_flag Display help information
+ * @param version_flag Display version information and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mris_target_pos_params(
     input_volume: InputPathType,
     input_surface: InputPathType,
@@ -90,27 +109,8 @@ function mris_target_pos_params(
     help_flag: boolean = false,
     version_flag: boolean = false,
 ): MrisTargetPosParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param adgws_file ADGWS file
-     * @param threshold_values Threshold values for inward and outward target positions
-     * @param label Label for processing
-     * @param interpolation_method Interpolation method name
-     * @param debug_vertex Vertex number for debugging
-     * @param cbv_flag CBV flag
-     * @param debug_flag Turn on debugging
-     * @param check_options Check options without running the program
-     * @param help_flag Display help information
-     * @param version_flag Display version information and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_target_pos" as const,
+        "@type": "freesurfer.mris_target_pos" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "output_surface": output_surface,
@@ -137,18 +137,18 @@ function mris_target_pos_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_target_pos_cargs(
     params: MrisTargetPosParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_target_pos");
     cargs.push(
@@ -210,18 +210,18 @@ function mris_target_pos_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_target_pos_outputs(
     params: MrisTargetPosParameters,
     execution: Execution,
 ): MrisTargetPosOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTargetPosOutputs = {
         root: execution.outputFile("."),
     };
@@ -229,22 +229,22 @@ function mris_target_pos_outputs(
 }
 
 
+/**
+ * Tool for setting target positions of a surface using input imaging data and other parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
+ */
 function mris_target_pos_execute(
     params: MrisTargetPosParameters,
     execution: Execution,
 ): MrisTargetPosOutputs {
-    /**
-     * Tool for setting target positions of a surface using input imaging data and other parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_target_pos_cargs(params, execution)
     const ret = mris_target_pos_outputs(params, execution)
@@ -253,6 +253,30 @@ function mris_target_pos_execute(
 }
 
 
+/**
+ * Tool for setting target positions of a surface using input imaging data and other parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param adgws_file ADGWS file
+ * @param threshold_values Threshold values for inward and outward target positions
+ * @param label Label for processing
+ * @param interpolation_method Interpolation method name
+ * @param debug_vertex Vertex number for debugging
+ * @param cbv_flag CBV flag
+ * @param debug_flag Turn on debugging
+ * @param check_options Check options without running the program
+ * @param help_flag Display help information
+ * @param version_flag Display version information and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
+ */
 function mris_target_pos(
     input_volume: InputPathType,
     input_surface: InputPathType,
@@ -269,30 +293,6 @@ function mris_target_pos(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisTargetPosOutputs {
-    /**
-     * Tool for setting target positions of a surface using input imaging data and other parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param adgws_file ADGWS file
-     * @param threshold_values Threshold values for inward and outward target positions
-     * @param label Label for processing
-     * @param interpolation_method Interpolation method name
-     * @param debug_vertex Vertex number for debugging
-     * @param cbv_flag CBV flag
-     * @param debug_flag Turn on debugging
-     * @param check_options Check options without running the program
-     * @param help_flag Display help information
-     * @param version_flag Display version information and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TARGET_POS_METADATA);
     const params = mris_target_pos_params(input_volume, input_surface, output_surface, adgws_file, threshold_values, label, interpolation_method, debug_vertex, cbv_flag, debug_flag, check_options, help_flag, version_flag)
@@ -305,5 +305,8 @@ export {
       MrisTargetPosOutputs,
       MrisTargetPosParameters,
       mris_target_pos,
+      mris_target_pos_cargs,
+      mris_target_pos_execute,
+      mris_target_pos_outputs,
       mris_target_pos_params,
 };

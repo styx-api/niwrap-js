@@ -12,7 +12,7 @@ const V_3D_XCLUST_SIM_METADATA: Metadata = {
 
 
 interface V3dXclustSimParameters {
-    "__STYXTYPE__": "3dXClustSim";
+    "@type": "afni.3dXClustSim";
     "inset": InputPathType;
     "insdat"?: InputPathType | null | undefined;
     "nn"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface V3dXclustSimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dXClustSim": v_3d_xclust_sim_cargs,
+        "afni.3dXClustSim": v_3d_xclust_sim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dXClustSim": v_3d_xclust_sim_outputs,
+        "afni.3dXClustSim": v_3d_xclust_sim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface V3dXclustSimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset Mask sdata file (from 3dtoXdataset or 3dttest++)
+ * @param insdat Data files in the '.sdat' format.
+ * @param nn Neighborhood connectivity (1, 2, or 3). Default is 2.
+ * @param sid Sidedness: 1 (one-sided) or 2 (two-sided). Default is 2.
+ * @param hpow H power values (can be a subset of 0, 1, 2). Default is 2.
+ * @param ncase Number of cases with labels. Default is 1 A.
+ * @param pthr List of p-value thresholds. Default is 0.0100 0.0056 0.0031 0.0018 0.0010.
+ * @param fpr Set global FPR goal to an integer ff between 2 and 9. Default is 5.
+ * @param multi_fpr Compute results for multiple FPR goals (2%, 3%, ... 9%).
+ * @param minclust Minimum cluster size in voxels. Default is 5.
+ * @param local Do voxel-wise (local) ETAC computations.
+ * @param global Do volume-wise (global) ETAC computations.
+ * @param nolocal Do not perform voxel-wise ETAC computations.
+ * @param noglobal Do not perform volume-wise ETAC computations.
+ * @param splitfrac Fraction to split simulations into pieces (0.2 < F < 0.8).
+ * @param prefix Output filename prefix.
+ * @param verbose Be more verbose.
+ * @param quiet Silent mode.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_xclust_sim_params(
     inset: InputPathType,
     insdat: InputPathType | null = null,
@@ -105,32 +129,8 @@ function v_3d_xclust_sim_params(
     verbose: boolean = false,
     quiet: boolean = false,
 ): V3dXclustSimParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset Mask sdata file (from 3dtoXdataset or 3dttest++)
-     * @param insdat Data files in the '.sdat' format.
-     * @param nn Neighborhood connectivity (1, 2, or 3). Default is 2.
-     * @param sid Sidedness: 1 (one-sided) or 2 (two-sided). Default is 2.
-     * @param hpow H power values (can be a subset of 0, 1, 2). Default is 2.
-     * @param ncase Number of cases with labels. Default is 1 A.
-     * @param pthr List of p-value thresholds. Default is 0.0100 0.0056 0.0031 0.0018 0.0010.
-     * @param fpr Set global FPR goal to an integer ff between 2 and 9. Default is 5.
-     * @param multi_fpr Compute results for multiple FPR goals (2%, 3%, ... 9%).
-     * @param minclust Minimum cluster size in voxels. Default is 5.
-     * @param local Do voxel-wise (local) ETAC computations.
-     * @param global Do volume-wise (global) ETAC computations.
-     * @param nolocal Do not perform voxel-wise ETAC computations.
-     * @param noglobal Do not perform volume-wise ETAC computations.
-     * @param splitfrac Fraction to split simulations into pieces (0.2 < F < 0.8).
-     * @param prefix Output filename prefix.
-     * @param verbose Be more verbose.
-     * @param quiet Silent mode.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dXClustSim" as const,
+        "@type": "afni.3dXClustSim" as const,
         "inset": inset,
         "multiFPR": multi_fpr,
         "local": local,
@@ -174,18 +174,18 @@ function v_3d_xclust_sim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_xclust_sim_cargs(
     params: V3dXclustSimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dXClustSim");
     cargs.push(execution.inputFile((params["inset"] ?? null)));
@@ -271,18 +271,18 @@ function v_3d_xclust_sim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_xclust_sim_outputs(
     params: V3dXclustSimParameters,
     execution: Execution,
 ): V3dXclustSimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dXclustSimOutputs = {
         root: execution.outputFile("."),
         out_mthresh: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".mthresh.*.nii"].join('')) : null,
@@ -291,22 +291,22 @@ function v_3d_xclust_sim_outputs(
 }
 
 
+/**
+ * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dXclustSimOutputs`).
+ */
 function v_3d_xclust_sim_execute(
     params: V3dXclustSimParameters,
     execution: Execution,
 ): V3dXclustSimOutputs {
-    /**
-     * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dXclustSimOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_xclust_sim_cargs(params, execution)
     const ret = v_3d_xclust_sim_outputs(params, execution)
@@ -315,6 +315,35 @@ function v_3d_xclust_sim_execute(
 }
 
 
+/**
+ * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset Mask sdata file (from 3dtoXdataset or 3dttest++)
+ * @param insdat Data files in the '.sdat' format.
+ * @param nn Neighborhood connectivity (1, 2, or 3). Default is 2.
+ * @param sid Sidedness: 1 (one-sided) or 2 (two-sided). Default is 2.
+ * @param hpow H power values (can be a subset of 0, 1, 2). Default is 2.
+ * @param ncase Number of cases with labels. Default is 1 A.
+ * @param pthr List of p-value thresholds. Default is 0.0100 0.0056 0.0031 0.0018 0.0010.
+ * @param fpr Set global FPR goal to an integer ff between 2 and 9. Default is 5.
+ * @param multi_fpr Compute results for multiple FPR goals (2%, 3%, ... 9%).
+ * @param minclust Minimum cluster size in voxels. Default is 5.
+ * @param local Do voxel-wise (local) ETAC computations.
+ * @param global Do volume-wise (global) ETAC computations.
+ * @param nolocal Do not perform voxel-wise ETAC computations.
+ * @param noglobal Do not perform volume-wise ETAC computations.
+ * @param splitfrac Fraction to split simulations into pieces (0.2 < F < 0.8).
+ * @param prefix Output filename prefix.
+ * @param verbose Be more verbose.
+ * @param quiet Silent mode.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dXclustSimOutputs`).
+ */
 function v_3d_xclust_sim(
     inset: InputPathType,
     insdat: InputPathType | null = null,
@@ -336,35 +365,6 @@ function v_3d_xclust_sim(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dXclustSimOutputs {
-    /**
-     * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset Mask sdata file (from 3dtoXdataset or 3dttest++)
-     * @param insdat Data files in the '.sdat' format.
-     * @param nn Neighborhood connectivity (1, 2, or 3). Default is 2.
-     * @param sid Sidedness: 1 (one-sided) or 2 (two-sided). Default is 2.
-     * @param hpow H power values (can be a subset of 0, 1, 2). Default is 2.
-     * @param ncase Number of cases with labels. Default is 1 A.
-     * @param pthr List of p-value thresholds. Default is 0.0100 0.0056 0.0031 0.0018 0.0010.
-     * @param fpr Set global FPR goal to an integer ff between 2 and 9. Default is 5.
-     * @param multi_fpr Compute results for multiple FPR goals (2%, 3%, ... 9%).
-     * @param minclust Minimum cluster size in voxels. Default is 5.
-     * @param local Do voxel-wise (local) ETAC computations.
-     * @param global Do volume-wise (global) ETAC computations.
-     * @param nolocal Do not perform voxel-wise ETAC computations.
-     * @param noglobal Do not perform volume-wise ETAC computations.
-     * @param splitfrac Fraction to split simulations into pieces (0.2 < F < 0.8).
-     * @param prefix Output filename prefix.
-     * @param verbose Be more verbose.
-     * @param quiet Silent mode.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dXclustSimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_XCLUST_SIM_METADATA);
     const params = v_3d_xclust_sim_params(inset, insdat, nn, sid, hpow, ncase, pthr, fpr, multi_fpr, minclust, local, global, nolocal, noglobal, splitfrac, prefix, verbose, quiet)
@@ -377,5 +377,8 @@ export {
       V3dXclustSimParameters,
       V_3D_XCLUST_SIM_METADATA,
       v_3d_xclust_sim,
+      v_3d_xclust_sim_cargs,
+      v_3d_xclust_sim_execute,
+      v_3d_xclust_sim_outputs,
       v_3d_xclust_sim_params,
 };

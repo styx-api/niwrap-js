@@ -12,14 +12,14 @@ const V_5TTCHECK_METADATA: Metadata = {
 
 
 interface V5ttcheckConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.5ttcheck.config";
     "key": string;
     "value": string;
 }
 
 
 interface V5ttcheckParameters {
-    "__STYXTYPE__": "5ttcheck";
+    "@type": "mrtrix.5ttcheck";
     "voxels"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -33,54 +33,54 @@ interface V5ttcheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "5ttcheck": v_5ttcheck_cargs,
-        "config": v_5ttcheck_config_cargs,
+        "mrtrix.5ttcheck": v_5ttcheck_cargs,
+        "mrtrix.5ttcheck.config": v_5ttcheck_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5ttcheck_config_params(
     key: string,
     value: string,
 ): V5ttcheckConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.5ttcheck.config" as const,
         "key": key,
         "value": value,
     };
@@ -88,18 +88,18 @@ function v_5ttcheck_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5ttcheck_config_cargs(
     params: V5ttcheckConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -121,6 +121,22 @@ interface V5ttcheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the 5TT image(s) to be tested
+ * @param voxels output mask images highlighting voxels where the input does not conform to 5TT requirements
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5ttcheck_params(
     input: Array<InputPathType>,
     voxels: string | null = null,
@@ -133,24 +149,8 @@ function v_5ttcheck_params(
     help: boolean = false,
     version: boolean = false,
 ): V5ttcheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the 5TT image(s) to be tested
-     * @param voxels output mask images highlighting voxels where the input does not conform to 5TT requirements
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "5ttcheck" as const,
+        "@type": "mrtrix.5ttcheck" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -172,18 +172,18 @@ function v_5ttcheck_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5ttcheck_cargs(
     params: V5ttcheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("5ttcheck");
     if ((params["voxels"] ?? null) !== null) {
@@ -211,7 +211,7 @@ function v_5ttcheck_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -224,18 +224,18 @@ function v_5ttcheck_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_5ttcheck_outputs(
     params: V5ttcheckParameters,
     execution: Execution,
 ): V5ttcheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V5ttcheckOutputs = {
         root: execution.outputFile("."),
     };
@@ -243,28 +243,28 @@ function v_5ttcheck_outputs(
 }
 
 
+/**
+ * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
+ */
 function v_5ttcheck_execute(
     params: V5ttcheckParameters,
     execution: Execution,
 ): V5ttcheckOutputs {
-    /**
-     * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_5ttcheck_cargs(params, execution)
     const ret = v_5ttcheck_outputs(params, execution)
@@ -273,6 +273,33 @@ function v_5ttcheck_execute(
 }
 
 
+/**
+ * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the 5TT image(s) to be tested
+ * @param voxels output mask images highlighting voxels where the input does not conform to 5TT requirements
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
+ */
 function v_5ttcheck(
     input: Array<InputPathType>,
     voxels: string | null = null,
@@ -286,33 +313,6 @@ function v_5ttcheck(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5ttcheckOutputs {
-    /**
-     * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the 5TT image(s) to be tested
-     * @param voxels output mask images highlighting voxels where the input does not conform to 5TT requirements
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_5TTCHECK_METADATA);
     const params = v_5ttcheck_params(input, voxels, info, quiet, debug, force, nthreads, config, help, version)
@@ -326,6 +326,10 @@ export {
       V5ttcheckParameters,
       V_5TTCHECK_METADATA,
       v_5ttcheck,
+      v_5ttcheck_cargs,
+      v_5ttcheck_config_cargs,
       v_5ttcheck_config_params,
+      v_5ttcheck_execute,
+      v_5ttcheck_outputs,
       v_5ttcheck_params,
 };

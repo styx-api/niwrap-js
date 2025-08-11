@@ -12,7 +12,7 @@ const NEURO_DECONVOLVE_PY_METADATA: Metadata = {
 
 
 interface NeuroDeconvolvePyParameters {
-    "__STYXTYPE__": "neuro_deconvolve.py";
+    "@type": "afni.neuro_deconvolve.py";
     "input_file": InputPathType;
     "prefix": string;
     "script": string;
@@ -26,35 +26,35 @@ interface NeuroDeconvolvePyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "neuro_deconvolve.py": neuro_deconvolve_py_cargs,
+        "afni.neuro_deconvolve.py": neuro_deconvolve_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "neuro_deconvolve.py": neuro_deconvolve_py_outputs,
+        "afni.neuro_deconvolve.py": neuro_deconvolve_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface NeuroDeconvolvePyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Set the data to deconvolve
+ * @param prefix Set the prefix for output filenames
+ * @param script Specify the name of the output script
+ * @param kernel Set the response kernel
+ * @param kernel_file Set the filename to store the kernel in; should be at the upsampled TR
+ * @param mask_dset Set a mask dataset for 3dTfitter to use
+ * @param old_style Make old-style script (pre-2015.02.24) for 1D case
+ * @param tr Set the scanner TR; needed for 1D formatted input files
+ * @param tr_nup Upsample factor for TR; number of pieces each original TR is divided into
+ * @param verbosity Set the verbose level
+ *
+ * @returns Parameter dictionary
+ */
 function neuro_deconvolve_py_params(
     input_file: InputPathType,
     prefix: string,
@@ -97,24 +113,8 @@ function neuro_deconvolve_py_params(
     tr_nup: number | null = null,
     verbosity: number | null = null,
 ): NeuroDeconvolvePyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Set the data to deconvolve
-     * @param prefix Set the prefix for output filenames
-     * @param script Specify the name of the output script
-     * @param kernel Set the response kernel
-     * @param kernel_file Set the filename to store the kernel in; should be at the upsampled TR
-     * @param mask_dset Set a mask dataset for 3dTfitter to use
-     * @param old_style Make old-style script (pre-2015.02.24) for 1D case
-     * @param tr Set the scanner TR; needed for 1D formatted input files
-     * @param tr_nup Upsample factor for TR; number of pieces each original TR is divided into
-     * @param verbosity Set the verbose level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neuro_deconvolve.py" as const,
+        "@type": "afni.neuro_deconvolve.py" as const,
         "input_file": input_file,
         "prefix": prefix,
         "script": script,
@@ -142,18 +142,18 @@ function neuro_deconvolve_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function neuro_deconvolve_py_cargs(
     params: NeuroDeconvolvePyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("neuro_deconvolve.py");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -202,18 +202,18 @@ function neuro_deconvolve_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function neuro_deconvolve_py_outputs(
     params: NeuroDeconvolvePyParameters,
     execution: Execution,
 ): NeuroDeconvolvePyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NeuroDeconvolvePyOutputs = {
         root: execution.outputFile("."),
         output_head: execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')),
@@ -224,22 +224,22 @@ function neuro_deconvolve_py_outputs(
 }
 
 
+/**
+ * Generate a script to apply 3dTfitter to deconvolve an MRI signal (BOLD response curve) into a neuro response curve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
+ */
 function neuro_deconvolve_py_execute(
     params: NeuroDeconvolvePyParameters,
     execution: Execution,
 ): NeuroDeconvolvePyOutputs {
-    /**
-     * Generate a script to apply 3dTfitter to deconvolve an MRI signal (BOLD response curve) into a neuro response curve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
-     */
     params = execution.params(params)
     const cargs = neuro_deconvolve_py_cargs(params, execution)
     const ret = neuro_deconvolve_py_outputs(params, execution)
@@ -248,6 +248,27 @@ function neuro_deconvolve_py_execute(
 }
 
 
+/**
+ * Generate a script to apply 3dTfitter to deconvolve an MRI signal (BOLD response curve) into a neuro response curve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Set the data to deconvolve
+ * @param prefix Set the prefix for output filenames
+ * @param script Specify the name of the output script
+ * @param kernel Set the response kernel
+ * @param kernel_file Set the filename to store the kernel in; should be at the upsampled TR
+ * @param mask_dset Set a mask dataset for 3dTfitter to use
+ * @param old_style Make old-style script (pre-2015.02.24) for 1D case
+ * @param tr Set the scanner TR; needed for 1D formatted input files
+ * @param tr_nup Upsample factor for TR; number of pieces each original TR is divided into
+ * @param verbosity Set the verbose level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
+ */
 function neuro_deconvolve_py(
     input_file: InputPathType,
     prefix: string,
@@ -261,27 +282,6 @@ function neuro_deconvolve_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): NeuroDeconvolvePyOutputs {
-    /**
-     * Generate a script to apply 3dTfitter to deconvolve an MRI signal (BOLD response curve) into a neuro response curve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Set the data to deconvolve
-     * @param prefix Set the prefix for output filenames
-     * @param script Specify the name of the output script
-     * @param kernel Set the response kernel
-     * @param kernel_file Set the filename to store the kernel in; should be at the upsampled TR
-     * @param mask_dset Set a mask dataset for 3dTfitter to use
-     * @param old_style Make old-style script (pre-2015.02.24) for 1D case
-     * @param tr Set the scanner TR; needed for 1D formatted input files
-     * @param tr_nup Upsample factor for TR; number of pieces each original TR is divided into
-     * @param verbosity Set the verbose level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NEURO_DECONVOLVE_PY_METADATA);
     const params = neuro_deconvolve_py_params(input_file, prefix, script, kernel, kernel_file, mask_dset, old_style, tr, tr_nup, verbosity)
@@ -294,5 +294,8 @@ export {
       NeuroDeconvolvePyOutputs,
       NeuroDeconvolvePyParameters,
       neuro_deconvolve_py,
+      neuro_deconvolve_py_cargs,
+      neuro_deconvolve_py_execute,
+      neuro_deconvolve_py_outputs,
       neuro_deconvolve_py_params,
 };

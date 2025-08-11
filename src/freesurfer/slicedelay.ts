@@ -12,7 +12,7 @@ const SLICEDELAY_METADATA: Metadata = {
 
 
 interface SlicedelayParameters {
-    "__STYXTYPE__": "slicedelay";
+    "@type": "freesurfer.slicedelay";
     "slicedelayfile": string;
     "nslices": number;
     "order": "up" | "down" | "odd" | "even" | "siemens";
@@ -20,35 +20,35 @@ interface SlicedelayParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slicedelay": slicedelay_cargs,
+        "freesurfer.slicedelay": slicedelay_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "slicedelay": slicedelay_outputs,
+        "freesurfer.slicedelay": slicedelay_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SlicedelayOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param slicedelayfile Output file for the custom slice delay
+ * @param nslices Total number of slices in the volume
+ * @param order Order of slices (up, down, odd, even, siemens)
+ * @param ngroups Number of slice groups for SMS
+ *
+ * @returns Parameter dictionary
+ */
 function slicedelay_params(
     slicedelayfile: string,
     nslices: number,
     order: "up" | "down" | "odd" | "even" | "siemens",
     ngroups: number,
 ): SlicedelayParameters {
-    /**
-     * Build parameters.
-    
-     * @param slicedelayfile Output file for the custom slice delay
-     * @param nslices Total number of slices in the volume
-     * @param order Order of slices (up, down, odd, even, siemens)
-     * @param ngroups Number of slice groups for SMS
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slicedelay" as const,
+        "@type": "freesurfer.slicedelay" as const,
         "slicedelayfile": slicedelayfile,
         "nslices": nslices,
         "order": order,
@@ -98,18 +98,18 @@ function slicedelay_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slicedelay_cargs(
     params: SlicedelayParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slicedelay");
     cargs.push(
@@ -132,18 +132,18 @@ function slicedelay_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slicedelay_outputs(
     params: SlicedelayParameters,
     execution: Execution,
 ): SlicedelayOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicedelayOutputs = {
         root: execution.outputFile("."),
         slicedelayfile: execution.outputFile([(params["slicedelayfile"] ?? null)].join('')),
@@ -152,22 +152,22 @@ function slicedelay_outputs(
 }
 
 
+/**
+ * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
+ */
 function slicedelay_execute(
     params: SlicedelayParameters,
     execution: Execution,
 ): SlicedelayOutputs {
-    /**
-     * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
-     */
     params = execution.params(params)
     const cargs = slicedelay_cargs(params, execution)
     const ret = slicedelay_outputs(params, execution)
@@ -176,6 +176,21 @@ function slicedelay_execute(
 }
 
 
+/**
+ * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param slicedelayfile Output file for the custom slice delay
+ * @param nslices Total number of slices in the volume
+ * @param order Order of slices (up, down, odd, even, siemens)
+ * @param ngroups Number of slice groups for SMS
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
+ */
 function slicedelay(
     slicedelayfile: string,
     nslices: number,
@@ -183,21 +198,6 @@ function slicedelay(
     ngroups: number,
     runner: Runner | null = null,
 ): SlicedelayOutputs {
-    /**
-     * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param slicedelayfile Output file for the custom slice delay
-     * @param nslices Total number of slices in the volume
-     * @param order Order of slices (up, down, odd, even, siemens)
-     * @param ngroups Number of slice groups for SMS
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICEDELAY_METADATA);
     const params = slicedelay_params(slicedelayfile, nslices, order, ngroups)
@@ -210,5 +210,8 @@ export {
       SlicedelayOutputs,
       SlicedelayParameters,
       slicedelay,
+      slicedelay_cargs,
+      slicedelay_execute,
+      slicedelay_outputs,
       slicedelay_params,
 };

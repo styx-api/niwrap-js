@@ -12,7 +12,7 @@ const LISTSUBJ_METADATA: Metadata = {
 
 
 interface ListsubjParameters {
-    "__STYXTYPE__": "listsubj";
+    "@type": "freesurfer.listsubj";
     "subject_dir": string;
     "cross": boolean;
     "base": boolean;
@@ -26,33 +26,33 @@ interface ListsubjParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "listsubj": listsubj_cargs,
+        "freesurfer.listsubj": listsubj_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface ListsubjOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory where subjects are stored
+ * @param cross Only cross-sectional stream
+ * @param base Only base stream
+ * @param long Only longitudinal stream
+ * @param done Only subject IDs with scripts/recon-all.done
+ * @param error Only subject IDs with scripts/recon-all.error
+ * @param running Only subject IDs with scripts/IsRunning.?h
+ * @param full_path Prepend full absolute path
+ * @param count Print number of subjects found
+ * @param help Show this help text
+ *
+ * @returns Parameter dictionary
+ */
 function listsubj_params(
     subject_dir: string,
     cross: boolean = false,
@@ -84,24 +100,8 @@ function listsubj_params(
     count: boolean = false,
     help: boolean = false,
 ): ListsubjParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory where subjects are stored
-     * @param cross Only cross-sectional stream
-     * @param base Only base stream
-     * @param long Only longitudinal stream
-     * @param done Only subject IDs with scripts/recon-all.done
-     * @param error Only subject IDs with scripts/recon-all.error
-     * @param running Only subject IDs with scripts/IsRunning.?h
-     * @param full_path Prepend full absolute path
-     * @param count Print number of subjects found
-     * @param help Show this help text
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "listsubj" as const,
+        "@type": "freesurfer.listsubj" as const,
         "subject_dir": subject_dir,
         "cross": cross,
         "base": base,
@@ -117,18 +117,18 @@ function listsubj_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function listsubj_cargs(
     params: ListsubjParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("listsubj");
     cargs.push((params["subject_dir"] ?? null));
@@ -163,18 +163,18 @@ function listsubj_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function listsubj_outputs(
     params: ListsubjParameters,
     execution: Execution,
 ): ListsubjOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ListsubjOutputs = {
         root: execution.outputFile("."),
     };
@@ -182,22 +182,22 @@ function listsubj_outputs(
 }
 
 
+/**
+ * List subject IDs in SUBJECT_DIR.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
+ */
 function listsubj_execute(
     params: ListsubjParameters,
     execution: Execution,
 ): ListsubjOutputs {
-    /**
-     * List subject IDs in SUBJECT_DIR.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
-     */
     params = execution.params(params)
     const cargs = listsubj_cargs(params, execution)
     const ret = listsubj_outputs(params, execution)
@@ -206,6 +206,27 @@ function listsubj_execute(
 }
 
 
+/**
+ * List subject IDs in SUBJECT_DIR.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Directory where subjects are stored
+ * @param cross Only cross-sectional stream
+ * @param base Only base stream
+ * @param long Only longitudinal stream
+ * @param done Only subject IDs with scripts/recon-all.done
+ * @param error Only subject IDs with scripts/recon-all.error
+ * @param running Only subject IDs with scripts/IsRunning.?h
+ * @param full_path Prepend full absolute path
+ * @param count Print number of subjects found
+ * @param help Show this help text
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
+ */
 function listsubj(
     subject_dir: string,
     cross: boolean = false,
@@ -219,27 +240,6 @@ function listsubj(
     help: boolean = false,
     runner: Runner | null = null,
 ): ListsubjOutputs {
-    /**
-     * List subject IDs in SUBJECT_DIR.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Directory where subjects are stored
-     * @param cross Only cross-sectional stream
-     * @param base Only base stream
-     * @param long Only longitudinal stream
-     * @param done Only subject IDs with scripts/recon-all.done
-     * @param error Only subject IDs with scripts/recon-all.error
-     * @param running Only subject IDs with scripts/IsRunning.?h
-     * @param full_path Prepend full absolute path
-     * @param count Print number of subjects found
-     * @param help Show this help text
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LISTSUBJ_METADATA);
     const params = listsubj_params(subject_dir, cross, base, long, done, error, running, full_path, count, help)
@@ -252,5 +252,8 @@ export {
       ListsubjOutputs,
       ListsubjParameters,
       listsubj,
+      listsubj_cargs,
+      listsubj_execute,
+      listsubj_outputs,
       listsubj_params,
 };

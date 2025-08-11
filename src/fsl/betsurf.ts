@@ -12,7 +12,7 @@ const BETSURF_METADATA: Metadata = {
 
 
 interface BetsurfParameters {
-    "__STYXTYPE__": "betsurf";
+    "@type": "fsl.betsurf";
     "t1_image": InputPathType;
     "t2_image"?: InputPathType | null | undefined;
     "bet_mesh": InputPathType;
@@ -28,35 +28,35 @@ interface BetsurfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "betsurf": betsurf_cargs,
+        "fsl.betsurf": betsurf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "betsurf": betsurf_outputs,
+        "fsl.betsurf": betsurf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface BetsurfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_image T1-weighted MRI image
+ * @param bet_mesh BET Mesh File (.vtk)
+ * @param t1_to_standard_mat Transformation matrix file from T1 to standard space
+ * @param output_prefix Output prefix for generated files
+ * @param t2_image T2-weighted MRI image (optional if using --t1only flag)
+ * @param help_flag Displays help message and exits
+ * @param verbose_flag Switch on diagnostic messages
+ * @param t1only_flag Extraction with T1 only
+ * @param outline_flag Generates all surface outlines
+ * @param mask_flag Generates binary masks from the meshes
+ * @param skull_mask_flag Generates skull binary mask
+ * @param increased_precision Retessellates the meshes the indicated number of times (int)
+ *
+ * @returns Parameter dictionary
+ */
 function betsurf_params(
     t1_image: InputPathType,
     bet_mesh: InputPathType,
@@ -101,26 +119,8 @@ function betsurf_params(
     skull_mask_flag: boolean = false,
     increased_precision: number | null = null,
 ): BetsurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_image T1-weighted MRI image
-     * @param bet_mesh BET Mesh File (.vtk)
-     * @param t1_to_standard_mat Transformation matrix file from T1 to standard space
-     * @param output_prefix Output prefix for generated files
-     * @param t2_image T2-weighted MRI image (optional if using --t1only flag)
-     * @param help_flag Displays help message and exits
-     * @param verbose_flag Switch on diagnostic messages
-     * @param t1only_flag Extraction with T1 only
-     * @param outline_flag Generates all surface outlines
-     * @param mask_flag Generates binary masks from the meshes
-     * @param skull_mask_flag Generates skull binary mask
-     * @param increased_precision Retessellates the meshes the indicated number of times (int)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "betsurf" as const,
+        "@type": "fsl.betsurf" as const,
         "t1_image": t1_image,
         "bet_mesh": bet_mesh,
         "t1_to_standard_mat": t1_to_standard_mat,
@@ -142,18 +142,18 @@ function betsurf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function betsurf_cargs(
     params: BetsurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("betsurf");
     cargs.push(execution.inputFile((params["t1_image"] ?? null)));
@@ -191,18 +191,18 @@ function betsurf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function betsurf_outputs(
     params: BetsurfParameters,
     execution: Execution,
 ): BetsurfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BetsurfOutputs = {
         root: execution.outputFile("."),
         output_mask: execution.outputFile([(params["output_prefix"] ?? null), "_mask.nii.gz"].join('')),
@@ -213,22 +213,22 @@ function betsurf_outputs(
 }
 
 
+/**
+ * BET Surface Finder to extract brain surfaces using T1 and T2 images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
+ */
 function betsurf_execute(
     params: BetsurfParameters,
     execution: Execution,
 ): BetsurfOutputs {
-    /**
-     * BET Surface Finder to extract brain surfaces using T1 and T2 images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
-     */
     params = execution.params(params)
     const cargs = betsurf_cargs(params, execution)
     const ret = betsurf_outputs(params, execution)
@@ -237,6 +237,29 @@ function betsurf_execute(
 }
 
 
+/**
+ * BET Surface Finder to extract brain surfaces using T1 and T2 images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param t1_image T1-weighted MRI image
+ * @param bet_mesh BET Mesh File (.vtk)
+ * @param t1_to_standard_mat Transformation matrix file from T1 to standard space
+ * @param output_prefix Output prefix for generated files
+ * @param t2_image T2-weighted MRI image (optional if using --t1only flag)
+ * @param help_flag Displays help message and exits
+ * @param verbose_flag Switch on diagnostic messages
+ * @param t1only_flag Extraction with T1 only
+ * @param outline_flag Generates all surface outlines
+ * @param mask_flag Generates binary masks from the meshes
+ * @param skull_mask_flag Generates skull binary mask
+ * @param increased_precision Retessellates the meshes the indicated number of times (int)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
+ */
 function betsurf(
     t1_image: InputPathType,
     bet_mesh: InputPathType,
@@ -252,29 +275,6 @@ function betsurf(
     increased_precision: number | null = null,
     runner: Runner | null = null,
 ): BetsurfOutputs {
-    /**
-     * BET Surface Finder to extract brain surfaces using T1 and T2 images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param t1_image T1-weighted MRI image
-     * @param bet_mesh BET Mesh File (.vtk)
-     * @param t1_to_standard_mat Transformation matrix file from T1 to standard space
-     * @param output_prefix Output prefix for generated files
-     * @param t2_image T2-weighted MRI image (optional if using --t1only flag)
-     * @param help_flag Displays help message and exits
-     * @param verbose_flag Switch on diagnostic messages
-     * @param t1only_flag Extraction with T1 only
-     * @param outline_flag Generates all surface outlines
-     * @param mask_flag Generates binary masks from the meshes
-     * @param skull_mask_flag Generates skull binary mask
-     * @param increased_precision Retessellates the meshes the indicated number of times (int)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BETSURF_METADATA);
     const params = betsurf_params(t1_image, bet_mesh, t1_to_standard_mat, output_prefix, t2_image, help_flag, verbose_flag, t1only_flag, outline_flag, mask_flag, skull_mask_flag, increased_precision)
@@ -287,5 +287,8 @@ export {
       BetsurfOutputs,
       BetsurfParameters,
       betsurf,
+      betsurf_cargs,
+      betsurf_execute,
+      betsurf_outputs,
       betsurf_params,
 };

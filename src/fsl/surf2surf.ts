@@ -12,7 +12,7 @@ const SURF2SURF_METADATA: Metadata = {
 
 
 interface Surf2surfParameters {
-    "__STYXTYPE__": "surf2surf";
+    "@type": "fsl.surf2surf";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
     "input_convention"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface Surf2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surf2surf": surf2surf_cargs,
+        "fsl.surf2surf": surf2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface Surf2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface
+ * @param output_surface Output surface
+ * @param input_convention Input convention [default=caret] - only used if output convention is different
+ * @param output_convention Output convention [default=same as input]
+ * @param input_ref_volume Input reference volume - Must set this if changing conventions
+ * @param output_ref_volume Output reference volume [default=same as input]
+ * @param transform In-to-out ASCII matrix or out-to-in warpfield [default=identity]
+ * @param output_type Output type: ASCII, VTK, GIFTI_ASCII, GIFTI_BIN, GIFTI_BIN_GZ (default)
+ * @param output_values Set output scalar values (e.g. --values=mysurface.func.gii or --values=1)
+ *
+ * @returns Parameter dictionary
+ */
 function surf2surf_params(
     input_surface: InputPathType,
     output_surface: InputPathType,
@@ -82,23 +97,8 @@ function surf2surf_params(
     output_type: string | null = null,
     output_values: string | null = null,
 ): Surf2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface
-     * @param output_surface Output surface
-     * @param input_convention Input convention [default=caret] - only used if output convention is different
-     * @param output_convention Output convention [default=same as input]
-     * @param input_ref_volume Input reference volume - Must set this if changing conventions
-     * @param output_ref_volume Output reference volume [default=same as input]
-     * @param transform In-to-out ASCII matrix or out-to-in warpfield [default=identity]
-     * @param output_type Output type: ASCII, VTK, GIFTI_ASCII, GIFTI_BIN, GIFTI_BIN_GZ (default)
-     * @param output_values Set output scalar values (e.g. --values=mysurface.func.gii or --values=1)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surf2surf" as const,
+        "@type": "fsl.surf2surf" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -127,18 +127,18 @@ function surf2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf2surf_cargs(
     params: Surf2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surf2surf");
     cargs.push(["--surfin=", execution.inputFile((params["input_surface"] ?? null))].join(''));
@@ -189,18 +189,18 @@ function surf2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf2surf_outputs(
     params: Surf2surfParameters,
     execution: Execution,
 ): Surf2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Surf2surfOutputs = {
         root: execution.outputFile("."),
     };
@@ -208,22 +208,22 @@ function surf2surf_outputs(
 }
 
 
+/**
+ * Conversions between surface formats and/or conventions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
+ */
 function surf2surf_execute(
     params: Surf2surfParameters,
     execution: Execution,
 ): Surf2surfOutputs {
-    /**
-     * Conversions between surface formats and/or conventions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf2surf_cargs(params, execution)
     const ret = surf2surf_outputs(params, execution)
@@ -232,6 +232,26 @@ function surf2surf_execute(
 }
 
 
+/**
+ * Conversions between surface formats and/or conventions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_surface Input surface
+ * @param output_surface Output surface
+ * @param input_convention Input convention [default=caret] - only used if output convention is different
+ * @param output_convention Output convention [default=same as input]
+ * @param input_ref_volume Input reference volume - Must set this if changing conventions
+ * @param output_ref_volume Output reference volume [default=same as input]
+ * @param transform In-to-out ASCII matrix or out-to-in warpfield [default=identity]
+ * @param output_type Output type: ASCII, VTK, GIFTI_ASCII, GIFTI_BIN, GIFTI_BIN_GZ (default)
+ * @param output_values Set output scalar values (e.g. --values=mysurface.func.gii or --values=1)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
+ */
 function surf2surf(
     input_surface: InputPathType,
     output_surface: InputPathType,
@@ -244,26 +264,6 @@ function surf2surf(
     output_values: string | null = null,
     runner: Runner | null = null,
 ): Surf2surfOutputs {
-    /**
-     * Conversions between surface formats and/or conventions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_surface Input surface
-     * @param output_surface Output surface
-     * @param input_convention Input convention [default=caret] - only used if output convention is different
-     * @param output_convention Output convention [default=same as input]
-     * @param input_ref_volume Input reference volume - Must set this if changing conventions
-     * @param output_ref_volume Output reference volume [default=same as input]
-     * @param transform In-to-out ASCII matrix or out-to-in warpfield [default=identity]
-     * @param output_type Output type: ASCII, VTK, GIFTI_ASCII, GIFTI_BIN, GIFTI_BIN_GZ (default)
-     * @param output_values Set output scalar values (e.g. --values=mysurface.func.gii or --values=1)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF2SURF_METADATA);
     const params = surf2surf_params(input_surface, output_surface, input_convention, output_convention, input_ref_volume, output_ref_volume, transform, output_type, output_values)
@@ -276,5 +276,8 @@ export {
       Surf2surfOutputs,
       Surf2surfParameters,
       surf2surf,
+      surf2surf_cargs,
+      surf2surf_execute,
+      surf2surf_outputs,
       surf2surf_params,
 };

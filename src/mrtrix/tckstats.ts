@@ -12,20 +12,20 @@ const TCKSTATS_METADATA: Metadata = {
 
 
 interface TckstatsOutputParameters {
-    "__STYXTYPE__": "output";
+    "@type": "mrtrix.tckstats.output";
     "field": string;
 }
 
 
 interface TckstatsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckstats.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckstatsParameters {
-    "__STYXTYPE__": "tckstats";
+    "@type": "mrtrix.tckstats";
     "output"?: Array<TckstatsOutputParameters> | null | undefined;
     "histogram"?: string | null | undefined;
     "dump"?: string | null | undefined;
@@ -43,72 +43,72 @@ interface TckstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckstats": tckstats_cargs,
-        "output": tckstats_output_cargs,
-        "config": tckstats_config_cargs,
+        "mrtrix.tckstats": tckstats_cargs,
+        "mrtrix.tckstats.output": tckstats_output_cargs,
+        "mrtrix.tckstats.config": tckstats_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tckstats": tckstats_outputs,
+        "mrtrix.tckstats": tckstats_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param field output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
+ *
+ * @returns Parameter dictionary
+ */
 function tckstats_output_params(
     field: string,
 ): TckstatsOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param field output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "output" as const,
+        "@type": "mrtrix.tckstats.output" as const,
         "field": field,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckstats_output_cargs(
     params: TckstatsOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-output");
     cargs.push((params["field"] ?? null));
@@ -116,20 +116,20 @@ function tckstats_output_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckstats_config_params(
     key: string,
     value: string,
 ): TckstatsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckstats.config" as const,
         "key": key,
         "value": value,
     };
@@ -137,18 +137,18 @@ function tckstats_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckstats_config_cargs(
     params: TckstatsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -178,6 +178,26 @@ interface TckstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks_in the input track file
+ * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
+ * @param histogram output a histogram of streamline lengths
+ * @param dump dump the streamlines lengths to a text file
+ * @param ignorezero do not generate a warning if the track file contains streamlines with zero length
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckstats_params(
     tracks_in: InputPathType,
     output: Array<TckstatsOutputParameters> | null = null,
@@ -194,28 +214,8 @@ function tckstats_params(
     help: boolean = false,
     version: boolean = false,
 ): TckstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks_in the input track file
-     * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
-     * @param histogram output a histogram of streamline lengths
-     * @param dump dump the streamlines lengths to a text file
-     * @param ignorezero do not generate a warning if the track file contains streamlines with zero length
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckstats" as const,
+        "@type": "mrtrix.tckstats" as const,
         "ignorezero": ignorezero,
         "info": info,
         "quiet": quiet,
@@ -247,22 +247,22 @@ function tckstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckstats_cargs(
     params: TckstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckstats");
     if ((params["output"] ?? null) !== null) {
-        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["histogram"] ?? null) !== null) {
         cargs.push(
@@ -304,7 +304,7 @@ function tckstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -317,18 +317,18 @@ function tckstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckstats_outputs(
     params: TckstatsParameters,
     execution: Execution,
 ): TckstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckstatsOutputs = {
         root: execution.outputFile("."),
         histogram: ((params["histogram"] ?? null) !== null) ? execution.outputFile([(params["histogram"] ?? null)].join('')) : null,
@@ -338,28 +338,28 @@ function tckstats_outputs(
 }
 
 
+/**
+ * Calculate statistics on streamlines lengths.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
+ */
 function tckstats_execute(
     params: TckstatsParameters,
     execution: Execution,
 ): TckstatsOutputs {
-    /**
-     * Calculate statistics on streamlines lengths.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckstats_cargs(params, execution)
     const ret = tckstats_outputs(params, execution)
@@ -368,6 +368,37 @@ function tckstats_execute(
 }
 
 
+/**
+ * Calculate statistics on streamlines lengths.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks_in the input track file
+ * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
+ * @param histogram output a histogram of streamline lengths
+ * @param dump dump the streamlines lengths to a text file
+ * @param ignorezero do not generate a warning if the track file contains streamlines with zero length
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
+ */
 function tckstats(
     tracks_in: InputPathType,
     output: Array<TckstatsOutputParameters> | null = null,
@@ -385,37 +416,6 @@ function tckstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckstatsOutputs {
-    /**
-     * Calculate statistics on streamlines lengths.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks_in the input track file
-     * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, min, max, count. Useful for use in scripts.
-     * @param histogram output a histogram of streamline lengths
-     * @param dump dump the streamlines lengths to a text file
-     * @param ignorezero do not generate a warning if the track file contains streamlines with zero length
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKSTATS_METADATA);
     const params = tckstats_params(tracks_in, output, histogram, dump, ignorezero, tck_weights_in, info, quiet, debug, force, nthreads, config, help, version)
@@ -430,7 +430,12 @@ export {
       TckstatsOutputs,
       TckstatsParameters,
       tckstats,
+      tckstats_cargs,
+      tckstats_config_cargs,
       tckstats_config_params,
+      tckstats_execute,
+      tckstats_output_cargs,
       tckstats_output_params,
+      tckstats_outputs,
       tckstats_params,
 };

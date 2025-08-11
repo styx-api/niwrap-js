@@ -12,42 +12,42 @@ const V__NOISY_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface VNoisySkullStripParameters {
-    "__STYXTYPE__": "@NoisySkullStrip";
+    "@type": "afni.@NoisySkullStrip";
     "input_file": InputPathType;
     "keep_tmp": boolean;
     "3dskullstrip_opts"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@NoisySkullStrip": v__noisy_skull_strip_cargs,
+        "afni.@NoisySkullStrip": v__noisy_skull_strip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@NoisySkullStrip": v__noisy_skull_strip_outputs,
+        "afni.@NoisySkullStrip": v__noisy_skull_strip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,22 +82,22 @@ interface VNoisySkullStripOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file The anatomical dataset
+ * @param keep_tmp Do not erase temporary files at the end.
+ * @param v_3dskullstrip_opts Anything following this option is passed to 3dSkullStrip
+ *
+ * @returns Parameter dictionary
+ */
 function v__noisy_skull_strip_params(
     input_file: InputPathType,
     keep_tmp: boolean = false,
     v_3dskullstrip_opts: string | null = null,
 ): VNoisySkullStripParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file The anatomical dataset
-     * @param keep_tmp Do not erase temporary files at the end.
-     * @param v_3dskullstrip_opts Anything following this option is passed to 3dSkullStrip
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@NoisySkullStrip" as const,
+        "@type": "afni.@NoisySkullStrip" as const,
         "input_file": input_file,
         "keep_tmp": keep_tmp,
     };
@@ -108,18 +108,18 @@ function v__noisy_skull_strip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__noisy_skull_strip_cargs(
     params: VNoisySkullStripParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@NoisySkullStrip");
     cargs.push(
@@ -139,18 +139,18 @@ function v__noisy_skull_strip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__noisy_skull_strip_outputs(
     params: VNoisySkullStripParameters,
     execution: Execution,
 ): VNoisySkullStripOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VNoisySkullStripOutputs = {
         root: execution.outputFile("."),
         anat_ns: execution.outputFile([path.basename((params["input_file"] ?? null)), ".ns"].join('')),
@@ -162,22 +162,22 @@ function v__noisy_skull_strip_outputs(
 }
 
 
+/**
+ * Strips the skull of anatomical datasets with low SNR.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
+ */
 function v__noisy_skull_strip_execute(
     params: VNoisySkullStripParameters,
     execution: Execution,
 ): VNoisySkullStripOutputs {
-    /**
-     * Strips the skull of anatomical datasets with low SNR.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__noisy_skull_strip_cargs(params, execution)
     const ret = v__noisy_skull_strip_outputs(params, execution)
@@ -186,26 +186,26 @@ function v__noisy_skull_strip_execute(
 }
 
 
+/**
+ * Strips the skull of anatomical datasets with low SNR.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file The anatomical dataset
+ * @param keep_tmp Do not erase temporary files at the end.
+ * @param v_3dskullstrip_opts Anything following this option is passed to 3dSkullStrip
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
+ */
 function v__noisy_skull_strip(
     input_file: InputPathType,
     keep_tmp: boolean = false,
     v_3dskullstrip_opts: string | null = null,
     runner: Runner | null = null,
 ): VNoisySkullStripOutputs {
-    /**
-     * Strips the skull of anatomical datasets with low SNR.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file The anatomical dataset
-     * @param keep_tmp Do not erase temporary files at the end.
-     * @param v_3dskullstrip_opts Anything following this option is passed to 3dSkullStrip
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__NOISY_SKULL_STRIP_METADATA);
     const params = v__noisy_skull_strip_params(input_file, keep_tmp, v_3dskullstrip_opts)
@@ -218,5 +218,8 @@ export {
       VNoisySkullStripParameters,
       V__NOISY_SKULL_STRIP_METADATA,
       v__noisy_skull_strip,
+      v__noisy_skull_strip_cargs,
+      v__noisy_skull_strip_execute,
+      v__noisy_skull_strip_outputs,
       v__noisy_skull_strip_params,
 };

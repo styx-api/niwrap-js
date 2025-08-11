@@ -12,38 +12,38 @@ const MRIS2RGB_METADATA: Metadata = {
 
 
 interface Mris2rgbParameters {
-    "__STYXTYPE__": "mris2rgb";
+    "@type": "freesurfer.mris2rgb";
     "library_path": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris2rgb": mris2rgb_cargs,
+        "freesurfer.mris2rgb": mris2rgb_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Mris2rgbOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param library_path Path to the directory containing the libGLU.so.1 library required by mris2rgb.
+ *
+ * @returns Parameter dictionary
+ */
 function mris2rgb_params(
     library_path: string,
 ): Mris2rgbParameters {
-    /**
-     * Build parameters.
-    
-     * @param library_path Path to the directory containing the libGLU.so.1 library required by mris2rgb.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris2rgb" as const,
+        "@type": "freesurfer.mris2rgb" as const,
         "library_path": library_path,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris2rgb_cargs(
     params: Mris2rgbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris2rgb");
     cargs.push(
@@ -103,18 +103,18 @@ function mris2rgb_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris2rgb_outputs(
     params: Mris2rgbParameters,
     execution: Execution,
 ): Mris2rgbOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Mris2rgbOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function mris2rgb_outputs(
 }
 
 
+/**
+ * A tool from FreeSurfer for converting MRI surface files to RGB images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
+ */
 function mris2rgb_execute(
     params: Mris2rgbParameters,
     execution: Execution,
 ): Mris2rgbOutputs {
-    /**
-     * A tool from FreeSurfer for converting MRI surface files to RGB images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris2rgb_cargs(params, execution)
     const ret = mris2rgb_outputs(params, execution)
@@ -146,22 +146,22 @@ function mris2rgb_execute(
 }
 
 
+/**
+ * A tool from FreeSurfer for converting MRI surface files to RGB images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param library_path Path to the directory containing the libGLU.so.1 library required by mris2rgb.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
+ */
 function mris2rgb(
     library_path: string,
     runner: Runner | null = null,
 ): Mris2rgbOutputs {
-    /**
-     * A tool from FreeSurfer for converting MRI surface files to RGB images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param library_path Path to the directory containing the libGLU.so.1 library required by mris2rgb.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS2RGB_METADATA);
     const params = mris2rgb_params(library_path)
@@ -174,5 +174,8 @@ export {
       Mris2rgbOutputs,
       Mris2rgbParameters,
       mris2rgb,
+      mris2rgb_cargs,
+      mris2rgb_execute,
+      mris2rgb_outputs,
       mris2rgb_params,
 };

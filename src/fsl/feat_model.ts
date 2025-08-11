@@ -12,39 +12,39 @@ const FEAT_MODEL_METADATA: Metadata = {
 
 
 interface FeatModelParameters {
-    "__STYXTYPE__": "feat_model";
+    "@type": "fsl.feat_model";
     "design_name_root": string;
     "confound_matrix"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "feat_model": feat_model_cargs,
+        "fsl.feat_model": feat_model_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FeatModelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param design_name_root Design name root
+ * @param confound_matrix Confound matrix text file
+ *
+ * @returns Parameter dictionary
+ */
 function feat_model_params(
     design_name_root: string,
     confound_matrix: InputPathType | null = null,
 ): FeatModelParameters {
-    /**
-     * Build parameters.
-    
-     * @param design_name_root Design name root
-     * @param confound_matrix Confound matrix text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "feat_model" as const,
+        "@type": "fsl.feat_model" as const,
         "design_name_root": design_name_root,
     };
     if (confound_matrix !== null) {
@@ -87,18 +87,18 @@ function feat_model_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function feat_model_cargs(
     params: FeatModelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("feat_model");
     cargs.push((params["design_name_root"] ?? null));
@@ -109,18 +109,18 @@ function feat_model_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function feat_model_outputs(
     params: FeatModelParameters,
     execution: Execution,
 ): FeatModelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FeatModelOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function feat_model_outputs(
 }
 
 
+/**
+ * Generate design matrices for use by FEAT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FeatModelOutputs`).
+ */
 function feat_model_execute(
     params: FeatModelParameters,
     execution: Execution,
 ): FeatModelOutputs {
-    /**
-     * Generate design matrices for use by FEAT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FeatModelOutputs`).
-     */
     params = execution.params(params)
     const cargs = feat_model_cargs(params, execution)
     const ret = feat_model_outputs(params, execution)
@@ -152,24 +152,24 @@ function feat_model_execute(
 }
 
 
+/**
+ * Generate design matrices for use by FEAT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param design_name_root Design name root
+ * @param confound_matrix Confound matrix text file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FeatModelOutputs`).
+ */
 function feat_model(
     design_name_root: string,
     confound_matrix: InputPathType | null = null,
     runner: Runner | null = null,
 ): FeatModelOutputs {
-    /**
-     * Generate design matrices for use by FEAT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param design_name_root Design name root
-     * @param confound_matrix Confound matrix text file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FeatModelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEAT_MODEL_METADATA);
     const params = feat_model_params(design_name_root, confound_matrix)
@@ -182,5 +182,8 @@ export {
       FeatModelOutputs,
       FeatModelParameters,
       feat_model,
+      feat_model_cargs,
+      feat_model_execute,
+      feat_model_outputs,
       feat_model_params,
 };

@@ -12,41 +12,41 @@ const UNPACK_IMA1_TCL_METADATA: Metadata = {
 
 
 interface UnpackIma1TclParameters {
-    "__STYXTYPE__": "unpack_ima1.tcl";
+    "@type": "freesurfer.unpack_ima1.tcl";
     "input_directory": string;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpack_ima1.tcl": unpack_ima1_tcl_cargs,
+        "freesurfer.unpack_ima1.tcl": unpack_ima1_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "unpack_ima1.tcl": unpack_ima1_tcl_outputs,
+        "freesurfer.unpack_ima1.tcl": unpack_ima1_tcl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface UnpackIma1TclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory The directory containing the input files to be unpacked.
+ * @param output_directory The directory where the unpacked files will be stored.
+ *
+ * @returns Parameter dictionary
+ */
 function unpack_ima1_tcl_params(
     input_directory: string,
     output_directory: string,
 ): UnpackIma1TclParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory The directory containing the input files to be unpacked.
-     * @param output_directory The directory where the unpacked files will be stored.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpack_ima1.tcl" as const,
+        "@type": "freesurfer.unpack_ima1.tcl" as const,
         "input_directory": input_directory,
         "output_directory": output_directory,
     };
@@ -90,18 +90,18 @@ function unpack_ima1_tcl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpack_ima1_tcl_cargs(
     params: UnpackIma1TclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpack_ima1.tcl");
     cargs.push((params["input_directory"] ?? null));
@@ -110,18 +110,18 @@ function unpack_ima1_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpack_ima1_tcl_outputs(
     params: UnpackIma1TclParameters,
     execution: Execution,
 ): UnpackIma1TclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnpackIma1TclOutputs = {
         root: execution.outputFile("."),
         unpacked_files: execution.outputFile([(params["output_directory"] ?? null), "/*"].join('')),
@@ -130,22 +130,22 @@ function unpack_ima1_tcl_outputs(
 }
 
 
+/**
+ * A tool for unpacking images using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
+ */
 function unpack_ima1_tcl_execute(
     params: UnpackIma1TclParameters,
     execution: Execution,
 ): UnpackIma1TclOutputs {
-    /**
-     * A tool for unpacking images using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
-     */
     params = execution.params(params)
     const cargs = unpack_ima1_tcl_cargs(params, execution)
     const ret = unpack_ima1_tcl_outputs(params, execution)
@@ -154,24 +154,24 @@ function unpack_ima1_tcl_execute(
 }
 
 
+/**
+ * A tool for unpacking images using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_directory The directory containing the input files to be unpacked.
+ * @param output_directory The directory where the unpacked files will be stored.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
+ */
 function unpack_ima1_tcl(
     input_directory: string,
     output_directory: string,
     runner: Runner | null = null,
 ): UnpackIma1TclOutputs {
-    /**
-     * A tool for unpacking images using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_directory The directory containing the input files to be unpacked.
-     * @param output_directory The directory where the unpacked files will be stored.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACK_IMA1_TCL_METADATA);
     const params = unpack_ima1_tcl_params(input_directory, output_directory)
@@ -184,5 +184,8 @@ export {
       UnpackIma1TclOutputs,
       UnpackIma1TclParameters,
       unpack_ima1_tcl,
+      unpack_ima1_tcl_cargs,
+      unpack_ima1_tcl_execute,
+      unpack_ima1_tcl_outputs,
       unpack_ima1_tcl_params,
 };

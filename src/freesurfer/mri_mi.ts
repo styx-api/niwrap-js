@@ -12,7 +12,7 @@ const MRI_MI_METADATA: Metadata = {
 
 
 interface MriMiParameters {
-    "__STYXTYPE__": "mri_mi";
+    "@type": "freesurfer.mri_mi";
     "input_file1": InputPathType;
     "input_file2": InputPathType;
     "bins"?: string | null | undefined;
@@ -20,33 +20,33 @@ interface MriMiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mi": mri_mi_cargs,
+        "freesurfer.mri_mi": mri_mi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MriMiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file1 First input file name.
+ * @param input_file2 Second input file name.
+ * @param bins Specifies the number of bins for the two input volumes. Default is 64x64.
+ * @param silent Write out only the final mutual information result.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mi_params(
     input_file1: InputPathType,
     input_file2: InputPathType,
     bins: string | null = null,
     silent: boolean = false,
 ): MriMiParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file1 First input file name.
-     * @param input_file2 Second input file name.
-     * @param bins Specifies the number of bins for the two input volumes. Default is 64x64.
-     * @param silent Write out only the final mutual information result.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mi" as const,
+        "@type": "freesurfer.mri_mi" as const,
         "input_file1": input_file1,
         "input_file2": input_file2,
         "silent": silent,
@@ -95,18 +95,18 @@ function mri_mi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mi_cargs(
     params: MriMiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mi");
     cargs.push(execution.inputFile((params["input_file1"] ?? null)));
@@ -124,18 +124,18 @@ function mri_mi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mi_outputs(
     params: MriMiParameters,
     execution: Execution,
 ): MriMiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMiOutputs = {
         root: execution.outputFile("."),
     };
@@ -143,22 +143,22 @@ function mri_mi_outputs(
 }
 
 
+/**
+ * Computes mutual information (mi) between two input volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMiOutputs`).
+ */
 function mri_mi_execute(
     params: MriMiParameters,
     execution: Execution,
 ): MriMiOutputs {
-    /**
-     * Computes mutual information (mi) between two input volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMiOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mi_cargs(params, execution)
     const ret = mri_mi_outputs(params, execution)
@@ -167,6 +167,21 @@ function mri_mi_execute(
 }
 
 
+/**
+ * Computes mutual information (mi) between two input volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file1 First input file name.
+ * @param input_file2 Second input file name.
+ * @param bins Specifies the number of bins for the two input volumes. Default is 64x64.
+ * @param silent Write out only the final mutual information result.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMiOutputs`).
+ */
 function mri_mi(
     input_file1: InputPathType,
     input_file2: InputPathType,
@@ -174,21 +189,6 @@ function mri_mi(
     silent: boolean = false,
     runner: Runner | null = null,
 ): MriMiOutputs {
-    /**
-     * Computes mutual information (mi) between two input volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file1 First input file name.
-     * @param input_file2 Second input file name.
-     * @param bins Specifies the number of bins for the two input volumes. Default is 64x64.
-     * @param silent Write out only the final mutual information result.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MI_METADATA);
     const params = mri_mi_params(input_file1, input_file2, bins, silent)
@@ -201,5 +201,8 @@ export {
       MriMiOutputs,
       MriMiParameters,
       mri_mi,
+      mri_mi_cargs,
+      mri_mi_execute,
+      mri_mi_outputs,
       mri_mi_params,
 };

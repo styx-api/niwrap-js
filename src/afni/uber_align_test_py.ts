@@ -12,7 +12,7 @@ const UBER_ALIGN_TEST_PY_METADATA: Metadata = {
 
 
 interface UberAlignTestPyParameters {
-    "__STYXTYPE__": "uber_align_test.py";
+    "@type": "afni.uber_align_test.py";
     "no_gui": boolean;
     "print_script": boolean;
     "save_script"?: string | null | undefined;
@@ -26,33 +26,33 @@ interface UberAlignTestPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "uber_align_test.py": uber_align_test_py_cargs,
+        "afni.uber_align_test.py": uber_align_test_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface UberAlignTestPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param no_gui Run without the graphical user interface (GUI)
+ * @param print_script Print the generated script to standard output
+ * @param save_script Save the generated script to the specified file
+ * @param user_variable Specify user variables for alignment
+ * @param qt_opts Pass PyQt4 options directly to the GUI
+ * @param help Show help information
+ * @param help_gui Show help information for the GUI
+ * @param history Show command history
+ * @param show_valid_opts Show valid options
+ * @param version Show version information
+ *
+ * @returns Parameter dictionary
+ */
 function uber_align_test_py_params(
     no_gui: boolean = false,
     print_script: boolean = false,
@@ -84,24 +100,8 @@ function uber_align_test_py_params(
     show_valid_opts: boolean = false,
     version: boolean = false,
 ): UberAlignTestPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param no_gui Run without the graphical user interface (GUI)
-     * @param print_script Print the generated script to standard output
-     * @param save_script Save the generated script to the specified file
-     * @param user_variable Specify user variables for alignment
-     * @param qt_opts Pass PyQt4 options directly to the GUI
-     * @param help Show help information
-     * @param help_gui Show help information for the GUI
-     * @param history Show command history
-     * @param show_valid_opts Show valid options
-     * @param version Show version information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "uber_align_test.py" as const,
+        "@type": "afni.uber_align_test.py" as const,
         "no_gui": no_gui,
         "print_script": print_script,
         "help": help,
@@ -123,18 +123,18 @@ function uber_align_test_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function uber_align_test_py_cargs(
     params: UberAlignTestPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("uber_align_test.py");
     if ((params["no_gui"] ?? null)) {
@@ -180,18 +180,18 @@ function uber_align_test_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function uber_align_test_py_outputs(
     params: UberAlignTestPyParameters,
     execution: Execution,
 ): UberAlignTestPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UberAlignTestPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -199,22 +199,22 @@ function uber_align_test_py_outputs(
 }
 
 
+/**
+ * Generate script to test anatomical/EPI alignment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
+ */
 function uber_align_test_py_execute(
     params: UberAlignTestPyParameters,
     execution: Execution,
 ): UberAlignTestPyOutputs {
-    /**
-     * Generate script to test anatomical/EPI alignment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = uber_align_test_py_cargs(params, execution)
     const ret = uber_align_test_py_outputs(params, execution)
@@ -223,6 +223,27 @@ function uber_align_test_py_execute(
 }
 
 
+/**
+ * Generate script to test anatomical/EPI alignment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param no_gui Run without the graphical user interface (GUI)
+ * @param print_script Print the generated script to standard output
+ * @param save_script Save the generated script to the specified file
+ * @param user_variable Specify user variables for alignment
+ * @param qt_opts Pass PyQt4 options directly to the GUI
+ * @param help Show help information
+ * @param help_gui Show help information for the GUI
+ * @param history Show command history
+ * @param show_valid_opts Show valid options
+ * @param version Show version information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
+ */
 function uber_align_test_py(
     no_gui: boolean = false,
     print_script: boolean = false,
@@ -236,27 +257,6 @@ function uber_align_test_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): UberAlignTestPyOutputs {
-    /**
-     * Generate script to test anatomical/EPI alignment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param no_gui Run without the graphical user interface (GUI)
-     * @param print_script Print the generated script to standard output
-     * @param save_script Save the generated script to the specified file
-     * @param user_variable Specify user variables for alignment
-     * @param qt_opts Pass PyQt4 options directly to the GUI
-     * @param help Show help information
-     * @param help_gui Show help information for the GUI
-     * @param history Show command history
-     * @param show_valid_opts Show valid options
-     * @param version Show version information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UBER_ALIGN_TEST_PY_METADATA);
     const params = uber_align_test_py_params(no_gui, print_script, save_script, user_variable, qt_opts, help, help_gui, history, show_valid_opts, version)
@@ -269,5 +269,8 @@ export {
       UberAlignTestPyOutputs,
       UberAlignTestPyParameters,
       uber_align_test_py,
+      uber_align_test_py_cargs,
+      uber_align_test_py_execute,
+      uber_align_test_py_outputs,
       uber_align_test_py_params,
 };

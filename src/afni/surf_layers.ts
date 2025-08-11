@@ -12,7 +12,7 @@ const SURF_LAYERS_METADATA: Metadata = {
 
 
 interface SurfLayersParameters {
-    "__STYXTYPE__": "SurfLayers";
+    "@type": "afni.SurfLayers";
     "spec_dset"?: InputPathType | null | undefined;
     "outdir"?: string | null | undefined;
     "states"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface SurfLayersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfLayers": surf_layers_cargs,
+        "afni.SurfLayers": surf_layers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfLayers": surf_layers_outputs,
+        "afni.SurfLayers": surf_layers_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface SurfLayersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_dset Dataset that is the SUMA specification file describing input surfaces
+ * @param outdir New directory for output (default: surflayers)
+ * @param states Typically smoothwm, pial states to describe inner and outer surfaces (default: 'smoothwm pial')
+ * @param hemi Choose hemisphere: 'lh', 'rh', or 'lh rh' (for both)
+ * @param n_intermed_surfs Total number of intermediate surfaces to create
+ * @param surf_a Inner boundary surface by filename (e.g., smoothwm.gii)
+ * @param surf_b Outer boundary surface by filename (e.g., pial.gii)
+ * @param surf_intermed_pref Name for interpolated surfaces (default: isurf)
+ * @param echo Run script with 'set echo' (i.e., verbosely)
+ * @param no_clean Do not remove temp files (probably just for testing)
+ *
+ * @returns Parameter dictionary
+ */
 function surf_layers_params(
     spec_dset: InputPathType | null = null,
     outdir: string | null = null,
@@ -97,24 +113,8 @@ function surf_layers_params(
     echo: boolean = false,
     no_clean: boolean = false,
 ): SurfLayersParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_dset Dataset that is the SUMA specification file describing input surfaces
-     * @param outdir New directory for output (default: surflayers)
-     * @param states Typically smoothwm, pial states to describe inner and outer surfaces (default: 'smoothwm pial')
-     * @param hemi Choose hemisphere: 'lh', 'rh', or 'lh rh' (for both)
-     * @param n_intermed_surfs Total number of intermediate surfaces to create
-     * @param surf_a Inner boundary surface by filename (e.g., smoothwm.gii)
-     * @param surf_b Outer boundary surface by filename (e.g., pial.gii)
-     * @param surf_intermed_pref Name for interpolated surfaces (default: isurf)
-     * @param echo Run script with 'set echo' (i.e., verbosely)
-     * @param no_clean Do not remove temp files (probably just for testing)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfLayers" as const,
+        "@type": "afni.SurfLayers" as const,
         "echo": echo,
         "no_clean": no_clean,
     };
@@ -146,18 +146,18 @@ function surf_layers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_layers_cargs(
     params: SurfLayersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfLayers");
     if ((params["spec_dset"] ?? null) !== null) {
@@ -218,18 +218,18 @@ function surf_layers_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_layers_outputs(
     params: SurfLayersParameters,
     execution: Execution,
 ): SurfLayersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfLayersOutputs = {
         root: execution.outputFile("."),
         interpolated_surfaces: ((params["outdir"] ?? null) !== null && (params["hemi"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/isurf.", (params["hemi"] ?? null), ".*.gii"].join('')) : null,
@@ -240,22 +240,22 @@ function surf_layers_outputs(
 }
 
 
+/**
+ * Compute intermediate equi-distant surfaces between two boundary surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
+ */
 function surf_layers_execute(
     params: SurfLayersParameters,
     execution: Execution,
 ): SurfLayersOutputs {
-    /**
-     * Compute intermediate equi-distant surfaces between two boundary surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_layers_cargs(params, execution)
     const ret = surf_layers_outputs(params, execution)
@@ -264,6 +264,27 @@ function surf_layers_execute(
 }
 
 
+/**
+ * Compute intermediate equi-distant surfaces between two boundary surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_dset Dataset that is the SUMA specification file describing input surfaces
+ * @param outdir New directory for output (default: surflayers)
+ * @param states Typically smoothwm, pial states to describe inner and outer surfaces (default: 'smoothwm pial')
+ * @param hemi Choose hemisphere: 'lh', 'rh', or 'lh rh' (for both)
+ * @param n_intermed_surfs Total number of intermediate surfaces to create
+ * @param surf_a Inner boundary surface by filename (e.g., smoothwm.gii)
+ * @param surf_b Outer boundary surface by filename (e.g., pial.gii)
+ * @param surf_intermed_pref Name for interpolated surfaces (default: isurf)
+ * @param echo Run script with 'set echo' (i.e., verbosely)
+ * @param no_clean Do not remove temp files (probably just for testing)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
+ */
 function surf_layers(
     spec_dset: InputPathType | null = null,
     outdir: string | null = null,
@@ -277,27 +298,6 @@ function surf_layers(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): SurfLayersOutputs {
-    /**
-     * Compute intermediate equi-distant surfaces between two boundary surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_dset Dataset that is the SUMA specification file describing input surfaces
-     * @param outdir New directory for output (default: surflayers)
-     * @param states Typically smoothwm, pial states to describe inner and outer surfaces (default: 'smoothwm pial')
-     * @param hemi Choose hemisphere: 'lh', 'rh', or 'lh rh' (for both)
-     * @param n_intermed_surfs Total number of intermediate surfaces to create
-     * @param surf_a Inner boundary surface by filename (e.g., smoothwm.gii)
-     * @param surf_b Outer boundary surface by filename (e.g., pial.gii)
-     * @param surf_intermed_pref Name for interpolated surfaces (default: isurf)
-     * @param echo Run script with 'set echo' (i.e., verbosely)
-     * @param no_clean Do not remove temp files (probably just for testing)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_LAYERS_METADATA);
     const params = surf_layers_params(spec_dset, outdir, states, hemi, n_intermed_surfs, surf_a, surf_b, surf_intermed_pref, echo, no_clean)
@@ -310,5 +310,8 @@ export {
       SurfLayersOutputs,
       SurfLayersParameters,
       surf_layers,
+      surf_layers_cargs,
+      surf_layers_execute,
+      surf_layers_outputs,
       surf_layers_params,
 };

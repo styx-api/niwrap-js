@@ -12,40 +12,40 @@ const V__AFNI_ORIENT_SIGN_METADATA: Metadata = {
 
 
 interface VAfniOrientSignParameters {
-    "__STYXTYPE__": "@AfniOrientSign";
+    "@type": "afni.@AfniOrientSign";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@AfniOrientSign": v__afni_orient_sign_cargs,
+        "afni.@AfniOrientSign": v__afni_orient_sign_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@AfniOrientSign": v__afni_orient_sign_outputs,
+        "afni.@AfniOrientSign": v__afni_orient_sign_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VAfniOrientSignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image file to determine orientation
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_orient_sign_params(
     infile: InputPathType,
 ): VAfniOrientSignParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image file to determine orientation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@AfniOrientSign" as const,
+        "@type": "afni.@AfniOrientSign" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_orient_sign_cargs(
     params: VAfniOrientSignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@AfniOrientSign");
     cargs.push(
@@ -108,18 +108,18 @@ function v__afni_orient_sign_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_orient_sign_outputs(
     params: VAfniOrientSignParameters,
     execution: Execution,
 ): VAfniOrientSignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniOrientSignOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([path.basename((params["infile"] ?? null)), "_orient.txt"].join('')),
@@ -128,22 +128,22 @@ function v__afni_orient_sign_outputs(
 }
 
 
+/**
+ * A tool within the AFNI suite to determine the orientation signs of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
+ */
 function v__afni_orient_sign_execute(
     params: VAfniOrientSignParameters,
     execution: Execution,
 ): VAfniOrientSignOutputs {
-    /**
-     * A tool within the AFNI suite to determine the orientation signs of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_orient_sign_cargs(params, execution)
     const ret = v__afni_orient_sign_outputs(params, execution)
@@ -152,22 +152,22 @@ function v__afni_orient_sign_execute(
 }
 
 
+/**
+ * A tool within the AFNI suite to determine the orientation signs of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input image file to determine orientation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
+ */
 function v__afni_orient_sign(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VAfniOrientSignOutputs {
-    /**
-     * A tool within the AFNI suite to determine the orientation signs of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input image file to determine orientation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_ORIENT_SIGN_METADATA);
     const params = v__afni_orient_sign_params(infile)
@@ -180,5 +180,8 @@ export {
       VAfniOrientSignParameters,
       V__AFNI_ORIENT_SIGN_METADATA,
       v__afni_orient_sign,
+      v__afni_orient_sign_cargs,
+      v__afni_orient_sign_execute,
+      v__afni_orient_sign_outputs,
       v__afni_orient_sign_params,
 };

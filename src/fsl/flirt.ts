@@ -12,7 +12,7 @@ const FLIRT_METADATA: Metadata = {
 
 
 interface FlirtParameters {
-    "__STYXTYPE__": "flirt";
+    "@type": "fsl.flirt";
     "in_file": InputPathType;
     "reference": InputPathType;
     "out_file": string;
@@ -61,35 +61,35 @@ interface FlirtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "flirt": flirt_cargs,
+        "fsl.flirt": flirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "flirt": flirt_outputs,
+        "fsl.flirt": flirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -116,6 +116,57 @@ interface FlirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file.
+ * @param reference Reference file.
+ * @param out_file Registered output file.
+ * @param out_matrix_file Output affine matrix in 4x4 asciii format.
+ * @param angle_rep 'quaternion' or 'euler'. Representation of rotation angles.
+ * @param apply_isoxfm As applyxfm but forces isotropic resampling.
+ * @param apply_xfm Apply transformation supplied by in_matrix_file or uses_qform to use the affine matrix stored in the reference header.
+ * @param bbrslope Value of bbr slope.
+ * @param bbrtype 'signed' or 'global_abs' or 'local_abs'. Type of bbr cost function: signed [default], global_abs, local_abs.
+ * @param bgvalue Use specified background value for points outside fov.
+ * @param bins Number of histogram bins.
+ * @param coarse_search Coarse search delta angle.
+ * @param cost 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
+ * @param cost_func 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
+ * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type.
+ * @param display_init Display initial matrix.
+ * @param dof Number of transform degrees of freedom.
+ * @param echospacing Value of epi echo spacing - units of seconds.
+ * @param fieldmap Fieldmap image in rads/s - must be already registered to the reference image.
+ * @param fieldmapmask Mask for fieldmap image.
+ * @param fine_search Fine search delta angle.
+ * @param force_scaling Force rescaling even for low-res images.
+ * @param in_matrix_file Input 4x4 affine matrix.
+ * @param in_weight File for input weighting volume.
+ * @param interp 'trilinear' or 'nearestneighbour' or 'sinc' or 'spline'. Final interpolation method used in reslicing.
+ * @param min_sampling Set minimum voxel dimension for sampling.
+ * @param no_clamp Do not use intensity clamping.
+ * @param no_resample Do not change input sampling.
+ * @param no_resample_blur Do not use blurring on downsampling.
+ * @param no_search Set all angular searches to ranges 0 to 0.
+ * @param padding_size For applyxfm: interpolates outside image by size.
+ * @param pedir Phase encode direction of epi - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z.
+ * @param ref_weight File for reference weighting volume.
+ * @param rigid2_d Use 2d rigid body mode - ignores dof.
+ * @param schedule Replaces default schedule.
+ * @param searchr_x Search angles along x-axis, in degrees.
+ * @param searchr_y Search angles along y-axis, in degrees.
+ * @param searchr_z Search angles along z-axis, in degrees.
+ * @param sinc_width Full-width in voxels.
+ * @param sinc_window 'rectangular' or 'hanning' or 'blackman'. Sinc window.
+ * @param uses_qform Initialize using sform or qform.
+ * @param verbose Verbose mode, 0 is least.
+ * @param wm_seg White matter segmentation volume needed by bbr cost function.
+ * @param wmcoords White matter boundary coordinates for bbr cost function.
+ * @param wmnorms White matter boundary normals for bbr cost function.
+ *
+ * @returns Parameter dictionary
+ */
 function flirt_params(
     in_file: InputPathType,
     reference: InputPathType,
@@ -163,59 +214,8 @@ function flirt_params(
     wmcoords: InputPathType | null = null,
     wmnorms: InputPathType | null = null,
 ): FlirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file.
-     * @param reference Reference file.
-     * @param out_file Registered output file.
-     * @param out_matrix_file Output affine matrix in 4x4 asciii format.
-     * @param angle_rep 'quaternion' or 'euler'. Representation of rotation angles.
-     * @param apply_isoxfm As applyxfm but forces isotropic resampling.
-     * @param apply_xfm Apply transformation supplied by in_matrix_file or uses_qform to use the affine matrix stored in the reference header.
-     * @param bbrslope Value of bbr slope.
-     * @param bbrtype 'signed' or 'global_abs' or 'local_abs'. Type of bbr cost function: signed [default], global_abs, local_abs.
-     * @param bgvalue Use specified background value for points outside fov.
-     * @param bins Number of histogram bins.
-     * @param coarse_search Coarse search delta angle.
-     * @param cost 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
-     * @param cost_func 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
-     * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type.
-     * @param display_init Display initial matrix.
-     * @param dof Number of transform degrees of freedom.
-     * @param echospacing Value of epi echo spacing - units of seconds.
-     * @param fieldmap Fieldmap image in rads/s - must be already registered to the reference image.
-     * @param fieldmapmask Mask for fieldmap image.
-     * @param fine_search Fine search delta angle.
-     * @param force_scaling Force rescaling even for low-res images.
-     * @param in_matrix_file Input 4x4 affine matrix.
-     * @param in_weight File for input weighting volume.
-     * @param interp 'trilinear' or 'nearestneighbour' or 'sinc' or 'spline'. Final interpolation method used in reslicing.
-     * @param min_sampling Set minimum voxel dimension for sampling.
-     * @param no_clamp Do not use intensity clamping.
-     * @param no_resample Do not change input sampling.
-     * @param no_resample_blur Do not use blurring on downsampling.
-     * @param no_search Set all angular searches to ranges 0 to 0.
-     * @param padding_size For applyxfm: interpolates outside image by size.
-     * @param pedir Phase encode direction of epi - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z.
-     * @param ref_weight File for reference weighting volume.
-     * @param rigid2_d Use 2d rigid body mode - ignores dof.
-     * @param schedule Replaces default schedule.
-     * @param searchr_x Search angles along x-axis, in degrees.
-     * @param searchr_y Search angles along y-axis, in degrees.
-     * @param searchr_z Search angles along z-axis, in degrees.
-     * @param sinc_width Full-width in voxels.
-     * @param sinc_window 'rectangular' or 'hanning' or 'blackman'. Sinc window.
-     * @param uses_qform Initialize using sform or qform.
-     * @param verbose Verbose mode, 0 is least.
-     * @param wm_seg White matter segmentation volume needed by bbr cost function.
-     * @param wmcoords White matter boundary coordinates for bbr cost function.
-     * @param wmnorms White matter boundary normals for bbr cost function.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flirt" as const,
+        "@type": "fsl.flirt" as const,
         "in_file": in_file,
         "reference": reference,
         "out_file": out_file,
@@ -330,18 +330,18 @@ function flirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function flirt_cargs(
     params: FlirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("flirt");
     cargs.push(
@@ -583,18 +583,18 @@ function flirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function flirt_outputs(
     params: FlirtParameters,
     execution: Execution,
 ): FlirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FlirtOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([(params["out_file"] ?? null)].join('')),
@@ -604,22 +604,22 @@ function flirt_outputs(
 }
 
 
+/**
+ * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FlirtOutputs`).
+ */
 function flirt_execute(
     params: FlirtParameters,
     execution: Execution,
 ): FlirtOutputs {
-    /**
-     * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FlirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = flirt_cargs(params, execution)
     const ret = flirt_outputs(params, execution)
@@ -628,6 +628,62 @@ function flirt_execute(
 }
 
 
+/**
+ * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Input file.
+ * @param reference Reference file.
+ * @param out_file Registered output file.
+ * @param out_matrix_file Output affine matrix in 4x4 asciii format.
+ * @param angle_rep 'quaternion' or 'euler'. Representation of rotation angles.
+ * @param apply_isoxfm As applyxfm but forces isotropic resampling.
+ * @param apply_xfm Apply transformation supplied by in_matrix_file or uses_qform to use the affine matrix stored in the reference header.
+ * @param bbrslope Value of bbr slope.
+ * @param bbrtype 'signed' or 'global_abs' or 'local_abs'. Type of bbr cost function: signed [default], global_abs, local_abs.
+ * @param bgvalue Use specified background value for points outside fov.
+ * @param bins Number of histogram bins.
+ * @param coarse_search Coarse search delta angle.
+ * @param cost 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
+ * @param cost_func 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
+ * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type.
+ * @param display_init Display initial matrix.
+ * @param dof Number of transform degrees of freedom.
+ * @param echospacing Value of epi echo spacing - units of seconds.
+ * @param fieldmap Fieldmap image in rads/s - must be already registered to the reference image.
+ * @param fieldmapmask Mask for fieldmap image.
+ * @param fine_search Fine search delta angle.
+ * @param force_scaling Force rescaling even for low-res images.
+ * @param in_matrix_file Input 4x4 affine matrix.
+ * @param in_weight File for input weighting volume.
+ * @param interp 'trilinear' or 'nearestneighbour' or 'sinc' or 'spline'. Final interpolation method used in reslicing.
+ * @param min_sampling Set minimum voxel dimension for sampling.
+ * @param no_clamp Do not use intensity clamping.
+ * @param no_resample Do not change input sampling.
+ * @param no_resample_blur Do not use blurring on downsampling.
+ * @param no_search Set all angular searches to ranges 0 to 0.
+ * @param padding_size For applyxfm: interpolates outside image by size.
+ * @param pedir Phase encode direction of epi - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z.
+ * @param ref_weight File for reference weighting volume.
+ * @param rigid2_d Use 2d rigid body mode - ignores dof.
+ * @param schedule Replaces default schedule.
+ * @param searchr_x Search angles along x-axis, in degrees.
+ * @param searchr_y Search angles along y-axis, in degrees.
+ * @param searchr_z Search angles along z-axis, in degrees.
+ * @param sinc_width Full-width in voxels.
+ * @param sinc_window 'rectangular' or 'hanning' or 'blackman'. Sinc window.
+ * @param uses_qform Initialize using sform or qform.
+ * @param verbose Verbose mode, 0 is least.
+ * @param wm_seg White matter segmentation volume needed by bbr cost function.
+ * @param wmcoords White matter boundary coordinates for bbr cost function.
+ * @param wmnorms White matter boundary normals for bbr cost function.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FlirtOutputs`).
+ */
 function flirt(
     in_file: InputPathType,
     reference: InputPathType,
@@ -676,62 +732,6 @@ function flirt(
     wmnorms: InputPathType | null = null,
     runner: Runner | null = null,
 ): FlirtOutputs {
-    /**
-     * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Input file.
-     * @param reference Reference file.
-     * @param out_file Registered output file.
-     * @param out_matrix_file Output affine matrix in 4x4 asciii format.
-     * @param angle_rep 'quaternion' or 'euler'. Representation of rotation angles.
-     * @param apply_isoxfm As applyxfm but forces isotropic resampling.
-     * @param apply_xfm Apply transformation supplied by in_matrix_file or uses_qform to use the affine matrix stored in the reference header.
-     * @param bbrslope Value of bbr slope.
-     * @param bbrtype 'signed' or 'global_abs' or 'local_abs'. Type of bbr cost function: signed [default], global_abs, local_abs.
-     * @param bgvalue Use specified background value for points outside fov.
-     * @param bins Number of histogram bins.
-     * @param coarse_search Coarse search delta angle.
-     * @param cost 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
-     * @param cost_func 'mutualinfo' or 'corratio' or 'normcorr' or 'normmi' or 'leastsq' or 'labeldiff' or 'bbr'. Cost function.
-     * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type.
-     * @param display_init Display initial matrix.
-     * @param dof Number of transform degrees of freedom.
-     * @param echospacing Value of epi echo spacing - units of seconds.
-     * @param fieldmap Fieldmap image in rads/s - must be already registered to the reference image.
-     * @param fieldmapmask Mask for fieldmap image.
-     * @param fine_search Fine search delta angle.
-     * @param force_scaling Force rescaling even for low-res images.
-     * @param in_matrix_file Input 4x4 affine matrix.
-     * @param in_weight File for input weighting volume.
-     * @param interp 'trilinear' or 'nearestneighbour' or 'sinc' or 'spline'. Final interpolation method used in reslicing.
-     * @param min_sampling Set minimum voxel dimension for sampling.
-     * @param no_clamp Do not use intensity clamping.
-     * @param no_resample Do not change input sampling.
-     * @param no_resample_blur Do not use blurring on downsampling.
-     * @param no_search Set all angular searches to ranges 0 to 0.
-     * @param padding_size For applyxfm: interpolates outside image by size.
-     * @param pedir Phase encode direction of epi - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z.
-     * @param ref_weight File for reference weighting volume.
-     * @param rigid2_d Use 2d rigid body mode - ignores dof.
-     * @param schedule Replaces default schedule.
-     * @param searchr_x Search angles along x-axis, in degrees.
-     * @param searchr_y Search angles along y-axis, in degrees.
-     * @param searchr_z Search angles along z-axis, in degrees.
-     * @param sinc_width Full-width in voxels.
-     * @param sinc_window 'rectangular' or 'hanning' or 'blackman'. Sinc window.
-     * @param uses_qform Initialize using sform or qform.
-     * @param verbose Verbose mode, 0 is least.
-     * @param wm_seg White matter segmentation volume needed by bbr cost function.
-     * @param wmcoords White matter boundary coordinates for bbr cost function.
-     * @param wmnorms White matter boundary normals for bbr cost function.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FlirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLIRT_METADATA);
     const params = flirt_params(in_file, reference, out_file, out_matrix_file, angle_rep, apply_isoxfm, apply_xfm, bbrslope, bbrtype, bgvalue, bins, coarse_search, cost, cost_func, datatype, display_init, dof, echospacing, fieldmap, fieldmapmask, fine_search, force_scaling, in_matrix_file, in_weight, interp, min_sampling, no_clamp, no_resample, no_resample_blur, no_search, padding_size, pedir, ref_weight, rigid2_d, schedule, searchr_x, searchr_y, searchr_z, sinc_width, sinc_window, uses_qform, verbose, wm_seg, wmcoords, wmnorms)
@@ -744,5 +744,8 @@ export {
       FlirtOutputs,
       FlirtParameters,
       flirt,
+      flirt_cargs,
+      flirt_execute,
+      flirt_outputs,
       flirt_params,
 };

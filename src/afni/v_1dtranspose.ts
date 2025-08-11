@@ -12,41 +12,41 @@ const V_1DTRANSPOSE_METADATA: Metadata = {
 
 
 interface V1dtransposeParameters {
-    "__STYXTYPE__": "1dtranspose";
+    "@type": "afni.1dtranspose";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dtranspose": v_1dtranspose_cargs,
+        "afni.1dtranspose": v_1dtranspose_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dtranspose": v_1dtranspose_outputs,
+        "afni.1dtranspose": v_1dtranspose_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface V1dtransposeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file (e.g. data.1D)
+ * @param outfile Output file (e.g. transposed_data.1D), or '-' to write to stdout
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dtranspose_params(
     infile: InputPathType,
     outfile: string | null = null,
 ): V1dtransposeParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file (e.g. data.1D)
-     * @param outfile Output file (e.g. transposed_data.1D), or '-' to write to stdout
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dtranspose" as const,
+        "@type": "afni.1dtranspose" as const,
         "infile": infile,
     };
     if (outfile !== null) {
@@ -92,18 +92,18 @@ function v_1dtranspose_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dtranspose_cargs(
     params: V1dtransposeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dtranspose");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -114,18 +114,18 @@ function v_1dtranspose_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dtranspose_outputs(
     params: V1dtransposeParameters,
     execution: Execution,
 ): V1dtransposeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dtransposeOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["outfile"] ?? null) !== null) ? execution.outputFile([(params["outfile"] ?? null)].join('')) : null,
@@ -134,22 +134,22 @@ function v_1dtranspose_outputs(
 }
 
 
+/**
+ * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
+ */
 function v_1dtranspose_execute(
     params: V1dtransposeParameters,
     execution: Execution,
 ): V1dtransposeOutputs {
-    /**
-     * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dtranspose_cargs(params, execution)
     const ret = v_1dtranspose_outputs(params, execution)
@@ -158,24 +158,24 @@ function v_1dtranspose_execute(
 }
 
 
+/**
+ * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input file (e.g. data.1D)
+ * @param outfile Output file (e.g. transposed_data.1D), or '-' to write to stdout
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
+ */
 function v_1dtranspose(
     infile: InputPathType,
     outfile: string | null = null,
     runner: Runner | null = null,
 ): V1dtransposeOutputs {
-    /**
-     * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input file (e.g. data.1D)
-     * @param outfile Output file (e.g. transposed_data.1D), or '-' to write to stdout
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DTRANSPOSE_METADATA);
     const params = v_1dtranspose_params(infile, outfile)
@@ -188,5 +188,8 @@ export {
       V1dtransposeParameters,
       V_1DTRANSPOSE_METADATA,
       v_1dtranspose,
+      v_1dtranspose_cargs,
+      v_1dtranspose_execute,
+      v_1dtranspose_outputs,
       v_1dtranspose_params,
 };

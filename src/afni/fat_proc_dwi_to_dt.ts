@@ -12,7 +12,7 @@ const FAT_PROC_DWI_TO_DT_METADATA: Metadata = {
 
 
 interface FatProcDwiToDtParameters {
-    "__STYXTYPE__": "fat_proc_dwi_to_dt";
+    "@type": "afni.fat_proc_dwi_to_dt";
     "in_dwi": InputPathType;
     "in_gradmat": InputPathType;
     "prefix": string;
@@ -45,35 +45,35 @@ interface FatProcDwiToDtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_cargs,
+        "afni.fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_outputs,
+        "afni.fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,41 @@ interface FatProcDwiToDtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_dwi 4D volume of N DWIs. Required.
+ * @param in_gradmat Input text file of N gradient vectors or bmatrices.
+ * @param prefix Set prefix for output DWI data.
+ * @param in_bvals Optional, if bvalue information is in a separate file from the b-vectors or matrices.
+ * @param mask Optional whole brain mask can be input; otherwise, automasking is performed.
+ * @param mask_from_struc Flag to make a mask using 3dSkullStrip+3dmask_tool from the structural file.
+ * @param in_struc_res Alignment of the output DWI to the REF data set via anatomical reference; a version of the anatomical that has been resampled to match the DWI set.
+ * @param in_ref_orig Use another data set to adjust the DWI and subsequent parameter dsets' orientation and origin.
+ * @param prefix_dti Set prefix for output DTI data; default is 'dt'. Do not include path information here.
+ * @param flip_x Flip the DW gradients in the x-direction.
+ * @param flip_y Flip the DW gradients in the y-direction.
+ * @param flip_z Flip the DW gradients in the z-direction.
+ * @param no_flip Do not flip the DW gradients.
+ * @param no_scale_out_1000 Turn off scaling of physical length units by 1000 for tensor fitting.
+ * @param no_reweight Turn off reweighting and refitting of tensors during estimation.
+ * @param no_cumulative_wts Turn off displaying overall weight factors for each gradient.
+ * @param qc_fa_thr Set threshold for overlay FA volume in QC image.
+ * @param qc_fa_max Set cbar max for overlay FA volume in QC image.
+ * @param qc_fa_unc_max Set cbar max for overlay uncertainty (stdev) of FA in QC image.
+ * @param qc_v12_unc_max Set cbar max for overlay uncertainty (stdev) of V1 towards V2 direction for DTs in QC image.
+ * @param qc_prefix Set the prefix of the QC image files separately.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
+ * @param workdir Specify a working directory, which can be removed.
+ * @param no_clean Do not remove the working directory.
+ * @param uncert_off Don't perform uncertainty calculation.
+ * @param uncert_iters Set the number of Monte Carlo iterations for the uncertainty calculation (default: 300).
+ * @param uncert_extra_cmds Extra commands for the uncertainty calculations.
+ * @param check_abs_min Help the program push through finding tiny negative values in columns that should contain numbers >=0. Provide a tolerance value VVV.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_dwi_to_dt_params(
     in_dwi: InputPathType,
     in_gradmat: InputPathType,
@@ -127,43 +162,8 @@ function fat_proc_dwi_to_dt_params(
     uncert_extra_cmds: string | null = null,
     check_abs_min: number | null = null,
 ): FatProcDwiToDtParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_dwi 4D volume of N DWIs. Required.
-     * @param in_gradmat Input text file of N gradient vectors or bmatrices.
-     * @param prefix Set prefix for output DWI data.
-     * @param in_bvals Optional, if bvalue information is in a separate file from the b-vectors or matrices.
-     * @param mask Optional whole brain mask can be input; otherwise, automasking is performed.
-     * @param mask_from_struc Flag to make a mask using 3dSkullStrip+3dmask_tool from the structural file.
-     * @param in_struc_res Alignment of the output DWI to the REF data set via anatomical reference; a version of the anatomical that has been resampled to match the DWI set.
-     * @param in_ref_orig Use another data set to adjust the DWI and subsequent parameter dsets' orientation and origin.
-     * @param prefix_dti Set prefix for output DTI data; default is 'dt'. Do not include path information here.
-     * @param flip_x Flip the DW gradients in the x-direction.
-     * @param flip_y Flip the DW gradients in the y-direction.
-     * @param flip_z Flip the DW gradients in the z-direction.
-     * @param no_flip Do not flip the DW gradients.
-     * @param no_scale_out_1000 Turn off scaling of physical length units by 1000 for tensor fitting.
-     * @param no_reweight Turn off reweighting and refitting of tensors during estimation.
-     * @param no_cumulative_wts Turn off displaying overall weight factors for each gradient.
-     * @param qc_fa_thr Set threshold for overlay FA volume in QC image.
-     * @param qc_fa_max Set cbar max for overlay FA volume in QC image.
-     * @param qc_fa_unc_max Set cbar max for overlay uncertainty (stdev) of FA in QC image.
-     * @param qc_v12_unc_max Set cbar max for overlay uncertainty (stdev) of V1 towards V2 direction for DTs in QC image.
-     * @param qc_prefix Set the prefix of the QC image files separately.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
-     * @param workdir Specify a working directory, which can be removed.
-     * @param no_clean Do not remove the working directory.
-     * @param uncert_off Don't perform uncertainty calculation.
-     * @param uncert_iters Set the number of Monte Carlo iterations for the uncertainty calculation (default: 300).
-     * @param uncert_extra_cmds Extra commands for the uncertainty calculations.
-     * @param check_abs_min Help the program push through finding tiny negative values in columns that should contain numbers >=0. Provide a tolerance value VVV.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_dwi_to_dt" as const,
+        "@type": "afni.fat_proc_dwi_to_dt" as const,
         "in_dwi": in_dwi,
         "in_gradmat": in_gradmat,
         "prefix": prefix,
@@ -226,18 +226,18 @@ function fat_proc_dwi_to_dt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_dwi_to_dt_cargs(
     params: FatProcDwiToDtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_dwi_to_dt");
     cargs.push(execution.inputFile((params["in_dwi"] ?? null)));
@@ -373,18 +373,18 @@ function fat_proc_dwi_to_dt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_dwi_to_dt_outputs(
     params: FatProcDwiToDtParameters,
     execution: Execution,
 ): FatProcDwiToDtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcDwiToDtOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["prefix"] ?? null), "*"].join('')),
@@ -393,22 +393,22 @@ function fat_proc_dwi_to_dt_outputs(
 }
 
 
+/**
+ * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
+ */
 function fat_proc_dwi_to_dt_execute(
     params: FatProcDwiToDtParameters,
     execution: Execution,
 ): FatProcDwiToDtOutputs {
-    /**
-     * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_dwi_to_dt_cargs(params, execution)
     const ret = fat_proc_dwi_to_dt_outputs(params, execution)
@@ -417,6 +417,46 @@ function fat_proc_dwi_to_dt_execute(
 }
 
 
+/**
+ * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_dwi 4D volume of N DWIs. Required.
+ * @param in_gradmat Input text file of N gradient vectors or bmatrices.
+ * @param prefix Set prefix for output DWI data.
+ * @param in_bvals Optional, if bvalue information is in a separate file from the b-vectors or matrices.
+ * @param mask Optional whole brain mask can be input; otherwise, automasking is performed.
+ * @param mask_from_struc Flag to make a mask using 3dSkullStrip+3dmask_tool from the structural file.
+ * @param in_struc_res Alignment of the output DWI to the REF data set via anatomical reference; a version of the anatomical that has been resampled to match the DWI set.
+ * @param in_ref_orig Use another data set to adjust the DWI and subsequent parameter dsets' orientation and origin.
+ * @param prefix_dti Set prefix for output DTI data; default is 'dt'. Do not include path information here.
+ * @param flip_x Flip the DW gradients in the x-direction.
+ * @param flip_y Flip the DW gradients in the y-direction.
+ * @param flip_z Flip the DW gradients in the z-direction.
+ * @param no_flip Do not flip the DW gradients.
+ * @param no_scale_out_1000 Turn off scaling of physical length units by 1000 for tensor fitting.
+ * @param no_reweight Turn off reweighting and refitting of tensors during estimation.
+ * @param no_cumulative_wts Turn off displaying overall weight factors for each gradient.
+ * @param qc_fa_thr Set threshold for overlay FA volume in QC image.
+ * @param qc_fa_max Set cbar max for overlay FA volume in QC image.
+ * @param qc_fa_unc_max Set cbar max for overlay uncertainty (stdev) of FA in QC image.
+ * @param qc_v12_unc_max Set cbar max for overlay uncertainty (stdev) of V1 towards V2 direction for DTs in QC image.
+ * @param qc_prefix Set the prefix of the QC image files separately.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
+ * @param workdir Specify a working directory, which can be removed.
+ * @param no_clean Do not remove the working directory.
+ * @param uncert_off Don't perform uncertainty calculation.
+ * @param uncert_iters Set the number of Monte Carlo iterations for the uncertainty calculation (default: 300).
+ * @param uncert_extra_cmds Extra commands for the uncertainty calculations.
+ * @param check_abs_min Help the program push through finding tiny negative values in columns that should contain numbers >=0. Provide a tolerance value VVV.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
+ */
 function fat_proc_dwi_to_dt(
     in_dwi: InputPathType,
     in_gradmat: InputPathType,
@@ -449,46 +489,6 @@ function fat_proc_dwi_to_dt(
     check_abs_min: number | null = null,
     runner: Runner | null = null,
 ): FatProcDwiToDtOutputs {
-    /**
-     * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_dwi 4D volume of N DWIs. Required.
-     * @param in_gradmat Input text file of N gradient vectors or bmatrices.
-     * @param prefix Set prefix for output DWI data.
-     * @param in_bvals Optional, if bvalue information is in a separate file from the b-vectors or matrices.
-     * @param mask Optional whole brain mask can be input; otherwise, automasking is performed.
-     * @param mask_from_struc Flag to make a mask using 3dSkullStrip+3dmask_tool from the structural file.
-     * @param in_struc_res Alignment of the output DWI to the REF data set via anatomical reference; a version of the anatomical that has been resampled to match the DWI set.
-     * @param in_ref_orig Use another data set to adjust the DWI and subsequent parameter dsets' orientation and origin.
-     * @param prefix_dti Set prefix for output DTI data; default is 'dt'. Do not include path information here.
-     * @param flip_x Flip the DW gradients in the x-direction.
-     * @param flip_y Flip the DW gradients in the y-direction.
-     * @param flip_z Flip the DW gradients in the z-direction.
-     * @param no_flip Do not flip the DW gradients.
-     * @param no_scale_out_1000 Turn off scaling of physical length units by 1000 for tensor fitting.
-     * @param no_reweight Turn off reweighting and refitting of tensors during estimation.
-     * @param no_cumulative_wts Turn off displaying overall weight factors for each gradient.
-     * @param qc_fa_thr Set threshold for overlay FA volume in QC image.
-     * @param qc_fa_max Set cbar max for overlay FA volume in QC image.
-     * @param qc_fa_unc_max Set cbar max for overlay uncertainty (stdev) of FA in QC image.
-     * @param qc_v12_unc_max Set cbar max for overlay uncertainty (stdev) of V1 towards V2 direction for DTs in QC image.
-     * @param qc_prefix Set the prefix of the QC image files separately.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run.
-     * @param workdir Specify a working directory, which can be removed.
-     * @param no_clean Do not remove the working directory.
-     * @param uncert_off Don't perform uncertainty calculation.
-     * @param uncert_iters Set the number of Monte Carlo iterations for the uncertainty calculation (default: 300).
-     * @param uncert_extra_cmds Extra commands for the uncertainty calculations.
-     * @param check_abs_min Help the program push through finding tiny negative values in columns that should contain numbers >=0. Provide a tolerance value VVV.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_DWI_TO_DT_METADATA);
     const params = fat_proc_dwi_to_dt_params(in_dwi, in_gradmat, prefix, in_bvals, mask, mask_from_struc, in_struc_res, in_ref_orig, prefix_dti, flip_x, flip_y, flip_z, no_flip, no_scale_out_1000, no_reweight, no_cumulative_wts, qc_fa_thr, qc_fa_max, qc_fa_unc_max, qc_v12_unc_max, qc_prefix, no_qc_view, no_cmd_out, workdir, no_clean, uncert_off, uncert_iters, uncert_extra_cmds, check_abs_min)
@@ -501,5 +501,8 @@ export {
       FatProcDwiToDtOutputs,
       FatProcDwiToDtParameters,
       fat_proc_dwi_to_dt,
+      fat_proc_dwi_to_dt_cargs,
+      fat_proc_dwi_to_dt_execute,
+      fat_proc_dwi_to_dt_outputs,
       fat_proc_dwi_to_dt_params,
 };

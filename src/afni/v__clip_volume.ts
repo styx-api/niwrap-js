@@ -12,7 +12,7 @@ const V__CLIP_VOLUME_METADATA: Metadata = {
 
 
 interface VClipVolumeParameters {
-    "__STYXTYPE__": "@clip_volume";
+    "@type": "afni.@clip_volume";
     "input_volume": InputPathType;
     "below_zmm"?: number | null | undefined;
     "above_zmm"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface VClipVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@clip_volume": v__clip_volume_cargs,
+        "afni.@clip_volume": v__clip_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@clip_volume": v__clip_volume_outputs,
+        "afni.@clip_volume": v__clip_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,30 @@ interface VClipVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Volume to clip
+ * @param below_zmm Set to 0 slices below Zmm
+ * @param above_zmm Set to 0 slices above Zmm
+ * @param left_xmm Set to 0 slices left of Xmm
+ * @param right_xmm Set to 0 slices right of Xmm
+ * @param anterior_ymm Set to 0 slices anterior to Ymm
+ * @param posterior_ymm Set to 0 slices posterior to Ymm
+ * @param box Clip the volume to a box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
+ * @param mask_box Set all values inside the box to 1. Box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
+ * @param and_logic Combine with next clipping planes using 'and'.
+ * @param or_logic Combine with next clipping planes using 'or'.
+ * @param verbosity Show command details (verbose output).
+ * @param crop_allzero Crop the output volume with 3dAutobox -noclust.
+ * @param crop_greedy Crop the output volume with 3dAutobox.
+ * @param crop Same as -crop_greedy, kept for backward compatibility.
+ * @param crop_npad Set 3dAutobox's -npad option to NPAD. NPAD fattens the volume a little after cropping.
+ * @param output_prefix Output prefix for the resultant volume. Default is the input prefix with _clp suffixed to it.
+ * @param followers Apply the same clipping or cropping treatment to the follower datasets.
+ *
+ * @returns Parameter dictionary
+ */
 function v__clip_volume_params(
     input_volume: InputPathType,
     below_zmm: number | null = null,
@@ -109,32 +133,8 @@ function v__clip_volume_params(
     output_prefix: string | null = null,
     followers: Array<InputPathType> | null = null,
 ): VClipVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Volume to clip
-     * @param below_zmm Set to 0 slices below Zmm
-     * @param above_zmm Set to 0 slices above Zmm
-     * @param left_xmm Set to 0 slices left of Xmm
-     * @param right_xmm Set to 0 slices right of Xmm
-     * @param anterior_ymm Set to 0 slices anterior to Ymm
-     * @param posterior_ymm Set to 0 slices posterior to Ymm
-     * @param box Clip the volume to a box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
-     * @param mask_box Set all values inside the box to 1. Box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
-     * @param and_logic Combine with next clipping planes using 'and'.
-     * @param or_logic Combine with next clipping planes using 'or'.
-     * @param verbosity Show command details (verbose output).
-     * @param crop_allzero Crop the output volume with 3dAutobox -noclust.
-     * @param crop_greedy Crop the output volume with 3dAutobox.
-     * @param crop Same as -crop_greedy, kept for backward compatibility.
-     * @param crop_npad Set 3dAutobox's -npad option to NPAD. NPAD fattens the volume a little after cropping.
-     * @param output_prefix Output prefix for the resultant volume. Default is the input prefix with _clp suffixed to it.
-     * @param followers Apply the same clipping or cropping treatment to the follower datasets.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@clip_volume" as const,
+        "@type": "afni.@clip_volume" as const,
         "input_volume": input_volume,
         "and_logic": and_logic,
         "or_logic": or_logic,
@@ -180,18 +180,18 @@ function v__clip_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__clip_volume_cargs(
     params: VClipVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@clip_volume");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -283,18 +283,18 @@ function v__clip_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__clip_volume_outputs(
     params: VClipVolumeParameters,
     execution: Execution,
 ): VClipVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VClipVolumeOutputs = {
         root: execution.outputFile("."),
         output_clipped_volume: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_clp.nii.gz"].join('')) : null,
@@ -304,22 +304,22 @@ function v__clip_volume_outputs(
 }
 
 
+/**
+ * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
+ */
 function v__clip_volume_execute(
     params: VClipVolumeParameters,
     execution: Execution,
 ): VClipVolumeOutputs {
-    /**
-     * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__clip_volume_cargs(params, execution)
     const ret = v__clip_volume_outputs(params, execution)
@@ -328,6 +328,35 @@ function v__clip_volume_execute(
 }
 
 
+/**
+ * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_volume Volume to clip
+ * @param below_zmm Set to 0 slices below Zmm
+ * @param above_zmm Set to 0 slices above Zmm
+ * @param left_xmm Set to 0 slices left of Xmm
+ * @param right_xmm Set to 0 slices right of Xmm
+ * @param anterior_ymm Set to 0 slices anterior to Ymm
+ * @param posterior_ymm Set to 0 slices posterior to Ymm
+ * @param box Clip the volume to a box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
+ * @param mask_box Set all values inside the box to 1. Box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
+ * @param and_logic Combine with next clipping planes using 'and'.
+ * @param or_logic Combine with next clipping planes using 'or'.
+ * @param verbosity Show command details (verbose output).
+ * @param crop_allzero Crop the output volume with 3dAutobox -noclust.
+ * @param crop_greedy Crop the output volume with 3dAutobox.
+ * @param crop Same as -crop_greedy, kept for backward compatibility.
+ * @param crop_npad Set 3dAutobox's -npad option to NPAD. NPAD fattens the volume a little after cropping.
+ * @param output_prefix Output prefix for the resultant volume. Default is the input prefix with _clp suffixed to it.
+ * @param followers Apply the same clipping or cropping treatment to the follower datasets.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
+ */
 function v__clip_volume(
     input_volume: InputPathType,
     below_zmm: number | null = null,
@@ -349,35 +378,6 @@ function v__clip_volume(
     followers: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): VClipVolumeOutputs {
-    /**
-     * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_volume Volume to clip
-     * @param below_zmm Set to 0 slices below Zmm
-     * @param above_zmm Set to 0 slices above Zmm
-     * @param left_xmm Set to 0 slices left of Xmm
-     * @param right_xmm Set to 0 slices right of Xmm
-     * @param anterior_ymm Set to 0 slices anterior to Ymm
-     * @param posterior_ymm Set to 0 slices posterior to Ymm
-     * @param box Clip the volume to a box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
-     * @param mask_box Set all values inside the box to 1. Box centered at Cx, Cy, Cz (RAI mm), and of dimensions Dx Dy Dz (RAI mm).
-     * @param and_logic Combine with next clipping planes using 'and'.
-     * @param or_logic Combine with next clipping planes using 'or'.
-     * @param verbosity Show command details (verbose output).
-     * @param crop_allzero Crop the output volume with 3dAutobox -noclust.
-     * @param crop_greedy Crop the output volume with 3dAutobox.
-     * @param crop Same as -crop_greedy, kept for backward compatibility.
-     * @param crop_npad Set 3dAutobox's -npad option to NPAD. NPAD fattens the volume a little after cropping.
-     * @param output_prefix Output prefix for the resultant volume. Default is the input prefix with _clp suffixed to it.
-     * @param followers Apply the same clipping or cropping treatment to the follower datasets.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CLIP_VOLUME_METADATA);
     const params = v__clip_volume_params(input_volume, below_zmm, above_zmm, left_xmm, right_xmm, anterior_ymm, posterior_ymm, box, mask_box, and_logic, or_logic, verbosity, crop_allzero, crop_greedy, crop, crop_npad, output_prefix, followers)
@@ -390,5 +390,8 @@ export {
       VClipVolumeParameters,
       V__CLIP_VOLUME_METADATA,
       v__clip_volume,
+      v__clip_volume_cargs,
+      v__clip_volume_execute,
+      v__clip_volume_outputs,
       v__clip_volume_params,
 };

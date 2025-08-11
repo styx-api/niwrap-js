@@ -12,7 +12,7 @@ const V_3DCALC_METADATA: Metadata = {
 
 
 interface V3dcalcParameters {
-    "__STYXTYPE__": "3dcalc";
+    "@type": "afni.3dcalc";
     "in_file_a": InputPathType;
     "in_file_b"?: InputPathType | null | undefined;
     "in_file_c"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface V3dcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dcalc": v_3dcalc_cargs,
+        "afni.3dcalc": v_3dcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dcalc": v_3dcalc_outputs,
+        "afni.3dcalc": v_3dcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface V3dcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file_a Input file to 3dcalc.
+ * @param expr Expr.
+ * @param in_file_b Operand file to 3dcalc.
+ * @param in_file_c Operand file to 3dcalc.
+ * @param other Other options.
+ * @param overwrite Overwrite output.
+ * @param single_idx Volume index for in_file_a.
+ * @param start_idx Start index for in_file_a.
+ * @param stop_idx Stop index for in_file_a.
+ * @param prefix Output image file name.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dcalc_params(
     in_file_a: InputPathType,
     expr: string,
@@ -89,24 +105,8 @@ function v_3dcalc_params(
     stop_idx: number | null = null,
     prefix: string | null = null,
 ): V3dcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file_a Input file to 3dcalc.
-     * @param expr Expr.
-     * @param in_file_b Operand file to 3dcalc.
-     * @param in_file_c Operand file to 3dcalc.
-     * @param other Other options.
-     * @param overwrite Overwrite output.
-     * @param single_idx Volume index for in_file_a.
-     * @param start_idx Start index for in_file_a.
-     * @param stop_idx Stop index for in_file_a.
-     * @param prefix Output image file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dcalc" as const,
+        "@type": "afni.3dcalc" as const,
         "in_file_a": in_file_a,
         "overwrite": overwrite,
         "expr": expr,
@@ -136,18 +136,18 @@ function v_3dcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dcalc_cargs(
     params: V3dcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dcalc");
     cargs.push(
@@ -195,18 +195,18 @@ function v_3dcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dcalc_outputs(
     params: V3dcalcParameters,
     execution: Execution,
 ): V3dcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dcalcOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -215,22 +215,22 @@ function v_3dcalc_outputs(
 }
 
 
+/**
+ * AFNI's calculator program.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
+ */
 function v_3dcalc_execute(
     params: V3dcalcParameters,
     execution: Execution,
 ): V3dcalcOutputs {
-    /**
-     * AFNI's calculator program.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dcalc_cargs(params, execution)
     const ret = v_3dcalc_outputs(params, execution)
@@ -239,6 +239,27 @@ function v_3dcalc_execute(
 }
 
 
+/**
+ * AFNI's calculator program.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file_a Input file to 3dcalc.
+ * @param expr Expr.
+ * @param in_file_b Operand file to 3dcalc.
+ * @param in_file_c Operand file to 3dcalc.
+ * @param other Other options.
+ * @param overwrite Overwrite output.
+ * @param single_idx Volume index for in_file_a.
+ * @param start_idx Start index for in_file_a.
+ * @param stop_idx Stop index for in_file_a.
+ * @param prefix Output image file name.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
+ */
 function v_3dcalc(
     in_file_a: InputPathType,
     expr: string,
@@ -252,27 +273,6 @@ function v_3dcalc(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dcalcOutputs {
-    /**
-     * AFNI's calculator program.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file_a Input file to 3dcalc.
-     * @param expr Expr.
-     * @param in_file_b Operand file to 3dcalc.
-     * @param in_file_c Operand file to 3dcalc.
-     * @param other Other options.
-     * @param overwrite Overwrite output.
-     * @param single_idx Volume index for in_file_a.
-     * @param start_idx Start index for in_file_a.
-     * @param stop_idx Stop index for in_file_a.
-     * @param prefix Output image file name.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DCALC_METADATA);
     const params = v_3dcalc_params(in_file_a, expr, in_file_b, in_file_c, other, overwrite, single_idx, start_idx, stop_idx, prefix)
@@ -285,5 +285,8 @@ export {
       V3dcalcParameters,
       V_3DCALC_METADATA,
       v_3dcalc,
+      v_3dcalc_cargs,
+      v_3dcalc_execute,
+      v_3dcalc_outputs,
       v_3dcalc_params,
 };

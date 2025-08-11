@@ -12,7 +12,7 @@ const DMRI_SAVE_HISTOGRAMS_METADATA: Metadata = {
 
 
 interface DmriSaveHistogramsParameters {
-    "__STYXTYPE__": "dmri_saveHistograms";
+    "@type": "freesurfer.dmri_saveHistograms";
     "parcellation": InputPathType;
     "number_of_bundles": number;
     "vtk_bundle_list": Array<InputPathType>;
@@ -21,35 +21,35 @@ interface DmriSaveHistogramsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_saveHistograms": dmri_save_histograms_cargs,
+        "freesurfer.dmri_saveHistograms": dmri_save_histograms_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_saveHistograms": dmri_save_histograms_outputs,
+        "freesurfer.dmri_saveHistograms": dmri_save_histograms_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface DmriSaveHistogramsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param parcellation Parcellation file for the tractography data.
+ * @param number_of_bundles Number of bundles in the tractography data.
+ * @param vtk_bundle_list List of VTK bundles for creating histograms.
+ * @param output_csv Output CSV file to save histograms.
+ * @param brain_bundle_flag Brain Bundle flag.
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_save_histograms_params(
     parcellation: InputPathType,
     number_of_bundles: number,
@@ -79,19 +90,8 @@ function dmri_save_histograms_params(
     output_csv: string,
     brain_bundle_flag: boolean = false,
 ): DmriSaveHistogramsParameters {
-    /**
-     * Build parameters.
-    
-     * @param parcellation Parcellation file for the tractography data.
-     * @param number_of_bundles Number of bundles in the tractography data.
-     * @param vtk_bundle_list List of VTK bundles for creating histograms.
-     * @param output_csv Output CSV file to save histograms.
-     * @param brain_bundle_flag Brain Bundle flag.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_saveHistograms" as const,
+        "@type": "freesurfer.dmri_saveHistograms" as const,
         "parcellation": parcellation,
         "number_of_bundles": number_of_bundles,
         "vtk_bundle_list": vtk_bundle_list,
@@ -102,18 +102,18 @@ function dmri_save_histograms_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_save_histograms_cargs(
     params: DmriSaveHistogramsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_saveHistograms");
     cargs.push(
@@ -136,18 +136,18 @@ function dmri_save_histograms_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_save_histograms_outputs(
     params: DmriSaveHistogramsParameters,
     execution: Execution,
 ): DmriSaveHistogramsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriSaveHistogramsOutputs = {
         root: execution.outputFile("."),
         histogram_csv: execution.outputFile(["histograms.csv"].join('')),
@@ -156,22 +156,22 @@ function dmri_save_histograms_outputs(
 }
 
 
+/**
+ * A tool to save histograms from diffusion MRI tractography data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
+ */
 function dmri_save_histograms_execute(
     params: DmriSaveHistogramsParameters,
     execution: Execution,
 ): DmriSaveHistogramsOutputs {
-    /**
-     * A tool to save histograms from diffusion MRI tractography data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_save_histograms_cargs(params, execution)
     const ret = dmri_save_histograms_outputs(params, execution)
@@ -180,6 +180,22 @@ function dmri_save_histograms_execute(
 }
 
 
+/**
+ * A tool to save histograms from diffusion MRI tractography data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param parcellation Parcellation file for the tractography data.
+ * @param number_of_bundles Number of bundles in the tractography data.
+ * @param vtk_bundle_list List of VTK bundles for creating histograms.
+ * @param output_csv Output CSV file to save histograms.
+ * @param brain_bundle_flag Brain Bundle flag.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
+ */
 function dmri_save_histograms(
     parcellation: InputPathType,
     number_of_bundles: number,
@@ -188,22 +204,6 @@ function dmri_save_histograms(
     brain_bundle_flag: boolean = false,
     runner: Runner | null = null,
 ): DmriSaveHistogramsOutputs {
-    /**
-     * A tool to save histograms from diffusion MRI tractography data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param parcellation Parcellation file for the tractography data.
-     * @param number_of_bundles Number of bundles in the tractography data.
-     * @param vtk_bundle_list List of VTK bundles for creating histograms.
-     * @param output_csv Output CSV file to save histograms.
-     * @param brain_bundle_flag Brain Bundle flag.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_SAVE_HISTOGRAMS_METADATA);
     const params = dmri_save_histograms_params(parcellation, number_of_bundles, vtk_bundle_list, output_csv, brain_bundle_flag)
@@ -216,5 +216,8 @@ export {
       DmriSaveHistogramsOutputs,
       DmriSaveHistogramsParameters,
       dmri_save_histograms,
+      dmri_save_histograms_cargs,
+      dmri_save_histograms_execute,
+      dmri_save_histograms_outputs,
       dmri_save_histograms_params,
 };

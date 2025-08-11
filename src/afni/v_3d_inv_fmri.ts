@@ -12,7 +12,7 @@ const V_3D_INV_FMRI_METADATA: Metadata = {
 
 
 interface V3dInvFmriParameters {
-    "__STYXTYPE__": "3dInvFMRI";
+    "@type": "afni.3dInvFMRI";
     "input_file": InputPathType;
     "activation_map": InputPathType;
     "map_weight"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface V3dInvFmriParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dInvFMRI": v_3d_inv_fmri_cargs,
+        "afni.3dInvFMRI": v_3d_inv_fmri_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dInvFMRI": v_3d_inv_fmri_outputs,
+        "afni.3dInvFMRI": v_3d_inv_fmri_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V3dInvFmriOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 3D+time dataset.
+ * @param activation_map Defines activation map; should be a bucket dataset where each sub-brick defines the beta weight map for an unknown stimulus time series.
+ * @param map_weight Defines a weighting factor for the map. Dataset can have either 1 sub-brick or the same number as in the -map dataset.
+ * @param mask Defines a mask dataset to restrict input voxels from -data and -map.
+ * @param baseline_file Baseline time series file. Each column of the file defines a baseline time series.
+ * @param polynom_order Adds polynomials of specified order to the baseline collection.
+ * @param output_file Name of the 1D output file.
+ * @param method Determines the method to use: C for least squares fit to data matrix (default) or K for least squares fit to activation matrix.
+ * @param alpha Set the alpha factor to penalize large values of the output vectors.
+ * @param smooth_fir Smooth the results with a 5 point lowpass FIR filter.
+ * @param smooth_median Smooth the results with a 5 point median filter.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_inv_fmri_params(
     input_file: InputPathType,
     activation_map: InputPathType,
@@ -91,25 +108,8 @@ function v_3d_inv_fmri_params(
     smooth_fir: boolean = false,
     smooth_median: boolean = false,
 ): V3dInvFmriParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 3D+time dataset.
-     * @param activation_map Defines activation map; should be a bucket dataset where each sub-brick defines the beta weight map for an unknown stimulus time series.
-     * @param map_weight Defines a weighting factor for the map. Dataset can have either 1 sub-brick or the same number as in the -map dataset.
-     * @param mask Defines a mask dataset to restrict input voxels from -data and -map.
-     * @param baseline_file Baseline time series file. Each column of the file defines a baseline time series.
-     * @param polynom_order Adds polynomials of specified order to the baseline collection.
-     * @param output_file Name of the 1D output file.
-     * @param method Determines the method to use: C for least squares fit to data matrix (default) or K for least squares fit to activation matrix.
-     * @param alpha Set the alpha factor to penalize large values of the output vectors.
-     * @param smooth_fir Smooth the results with a 5 point lowpass FIR filter.
-     * @param smooth_median Smooth the results with a 5 point median filter.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dInvFMRI" as const,
+        "@type": "afni.3dInvFMRI" as const,
         "input_file": input_file,
         "activation_map": activation_map,
         "smooth_fir": smooth_fir,
@@ -140,18 +140,18 @@ function v_3d_inv_fmri_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_inv_fmri_cargs(
     params: V3dInvFmriParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dInvFMRI");
     cargs.push(
@@ -214,18 +214,18 @@ function v_3d_inv_fmri_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_inv_fmri_outputs(
     params: V3dInvFmriParameters,
     execution: Execution,
 ): V3dInvFmriOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dInvFmriOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -234,22 +234,22 @@ function v_3d_inv_fmri_outputs(
 }
 
 
+/**
+ * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
+ */
 function v_3d_inv_fmri_execute(
     params: V3dInvFmriParameters,
     execution: Execution,
 ): V3dInvFmriOutputs {
-    /**
-     * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_inv_fmri_cargs(params, execution)
     const ret = v_3d_inv_fmri_outputs(params, execution)
@@ -258,6 +258,28 @@ function v_3d_inv_fmri_execute(
 }
 
 
+/**
+ * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input 3D+time dataset.
+ * @param activation_map Defines activation map; should be a bucket dataset where each sub-brick defines the beta weight map for an unknown stimulus time series.
+ * @param map_weight Defines a weighting factor for the map. Dataset can have either 1 sub-brick or the same number as in the -map dataset.
+ * @param mask Defines a mask dataset to restrict input voxels from -data and -map.
+ * @param baseline_file Baseline time series file. Each column of the file defines a baseline time series.
+ * @param polynom_order Adds polynomials of specified order to the baseline collection.
+ * @param output_file Name of the 1D output file.
+ * @param method Determines the method to use: C for least squares fit to data matrix (default) or K for least squares fit to activation matrix.
+ * @param alpha Set the alpha factor to penalize large values of the output vectors.
+ * @param smooth_fir Smooth the results with a 5 point lowpass FIR filter.
+ * @param smooth_median Smooth the results with a 5 point median filter.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
+ */
 function v_3d_inv_fmri(
     input_file: InputPathType,
     activation_map: InputPathType,
@@ -272,28 +294,6 @@ function v_3d_inv_fmri(
     smooth_median: boolean = false,
     runner: Runner | null = null,
 ): V3dInvFmriOutputs {
-    /**
-     * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input 3D+time dataset.
-     * @param activation_map Defines activation map; should be a bucket dataset where each sub-brick defines the beta weight map for an unknown stimulus time series.
-     * @param map_weight Defines a weighting factor for the map. Dataset can have either 1 sub-brick or the same number as in the -map dataset.
-     * @param mask Defines a mask dataset to restrict input voxels from -data and -map.
-     * @param baseline_file Baseline time series file. Each column of the file defines a baseline time series.
-     * @param polynom_order Adds polynomials of specified order to the baseline collection.
-     * @param output_file Name of the 1D output file.
-     * @param method Determines the method to use: C for least squares fit to data matrix (default) or K for least squares fit to activation matrix.
-     * @param alpha Set the alpha factor to penalize large values of the output vectors.
-     * @param smooth_fir Smooth the results with a 5 point lowpass FIR filter.
-     * @param smooth_median Smooth the results with a 5 point median filter.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_INV_FMRI_METADATA);
     const params = v_3d_inv_fmri_params(input_file, activation_map, map_weight, mask, baseline_file, polynom_order, output_file, method, alpha, smooth_fir, smooth_median)
@@ -306,5 +306,8 @@ export {
       V3dInvFmriParameters,
       V_3D_INV_FMRI_METADATA,
       v_3d_inv_fmri,
+      v_3d_inv_fmri_cargs,
+      v_3d_inv_fmri_execute,
+      v_3d_inv_fmri_outputs,
       v_3d_inv_fmri_params,
 };

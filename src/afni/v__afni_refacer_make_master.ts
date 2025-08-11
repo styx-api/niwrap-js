@@ -12,40 +12,40 @@ const V__AFNI_REFACER_MAKE_MASTER_METADATA: Metadata = {
 
 
 interface VAfniRefacerMakeMasterParameters {
-    "__STYXTYPE__": "@afni_refacer_make_master";
+    "@type": "afni.@afni_refacer_make_master";
     "input_datasets": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@afni_refacer_make_master": v__afni_refacer_make_master_cargs,
+        "afni.@afni_refacer_make_master": v__afni_refacer_make_master_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@afni_refacer_make_master": v__afni_refacer_make_master_outputs,
+        "afni.@afni_refacer_make_master": v__afni_refacer_make_master_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VAfniRefacerMakeMasterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_datasets List of T1-weighted datasets that have NOT been skull-stripped, defaced, or refaced.
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_refacer_make_master_params(
     input_datasets: Array<InputPathType>,
 ): VAfniRefacerMakeMasterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_datasets List of T1-weighted datasets that have NOT been skull-stripped, defaced, or refaced.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@afni_refacer_make_master" as const,
+        "@type": "afni.@afni_refacer_make_master" as const,
         "input_datasets": input_datasets,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_refacer_make_master_cargs(
     params: VAfniRefacerMakeMasterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@afni_refacer_make_master");
     cargs.push(...(params["input_datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function v__afni_refacer_make_master_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_refacer_make_master_outputs(
     params: VAfniRefacerMakeMasterParameters,
     execution: Execution,
 ): VAfniRefacerMakeMasterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniRefacerMakeMasterOutputs = {
         root: execution.outputFile("."),
         output_shell_dataset: execution.outputFile(["afni_refacer_shell.nii.gz"].join('')),
@@ -125,22 +125,22 @@ function v__afni_refacer_make_master_outputs(
 }
 
 
+/**
+ * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
+ */
 function v__afni_refacer_make_master_execute(
     params: VAfniRefacerMakeMasterParameters,
     execution: Execution,
 ): VAfniRefacerMakeMasterOutputs {
-    /**
-     * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_refacer_make_master_cargs(params, execution)
     const ret = v__afni_refacer_make_master_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__afni_refacer_make_master_execute(
 }
 
 
+/**
+ * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_datasets List of T1-weighted datasets that have NOT been skull-stripped, defaced, or refaced.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
+ */
 function v__afni_refacer_make_master(
     input_datasets: Array<InputPathType>,
     runner: Runner | null = null,
 ): VAfniRefacerMakeMasterOutputs {
-    /**
-     * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_datasets List of T1-weighted datasets that have NOT been skull-stripped, defaced, or refaced.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_REFACER_MAKE_MASTER_METADATA);
     const params = v__afni_refacer_make_master_params(input_datasets)
@@ -177,5 +177,8 @@ export {
       VAfniRefacerMakeMasterParameters,
       V__AFNI_REFACER_MAKE_MASTER_METADATA,
       v__afni_refacer_make_master,
+      v__afni_refacer_make_master_cargs,
+      v__afni_refacer_make_master_execute,
+      v__afni_refacer_make_master_outputs,
       v__afni_refacer_make_master_params,
 };

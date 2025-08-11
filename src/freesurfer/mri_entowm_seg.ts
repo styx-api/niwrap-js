@@ -12,7 +12,7 @@ const MRI_ENTOWM_SEG_METADATA: Metadata = {
 
 
 interface MriEntowmSegParameters {
-    "__STYXTYPE__": "mri_entowm_seg";
+    "@type": "freesurfer.mri_entowm_seg";
     "input_image"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
     "recon_subjects"?: Array<string> | null | undefined;
@@ -41,35 +41,35 @@ interface MriEntowmSegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_entowm_seg": mri_entowm_seg_cargs,
+        "freesurfer.mri_entowm_seg": mri_entowm_seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_entowm_seg": mri_entowm_seg_outputs,
+        "freesurfer.mri_entowm_seg": mri_entowm_seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -104,6 +104,37 @@ interface MriEntowmSegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image T1-weighted image(s) to segment. Can be a path to a single image or a directory of images.
+ * @param output_segmentation Segmentation output file or directory (required if --i is provided).
+ * @param recon_subjects Process a series of FreeSurfer recon-all subjects, enables subject-mode.
+ * @param subjects_directory Set the subjects directory, overrides the SUBJECTS_DIR env variable.
+ * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
+ * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and with --tal).
+ * @param tal Alternative talairach xfm transform for estimating TIV, can be file or suffix (for multiple inputs).
+ * @param write_posteriors Save the label posteriors.
+ * @param write_volumes Save label volume stats (enabled by default in subject-mode).
+ * @param write_qa_stats Save QA stats (z and confidence).
+ * @param exclude_labels List of label IDs to exclude in any output stats files.
+ * @param keep_ac Explicitly keep anterior commissure in the volume/QA files.
+ * @param vox_count_volumes Use discrete voxel count for label volumes.
+ * @param model_weights Alternative model weights to load.
+ * @param color_table Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
+ * @param population_stats Alternative population volume stats for QA output.
+ * @param debug Enable debug logging.
+ * @param vmp Enable printing of vmpeak at the end.
+ * @param threads Number of threads to use. Default is 1.
+ * @param seven_tesla Preprocess 7T images (just sets percentile to 99.9).
+ * @param percentile Use intensity percentile threshold for normalization.
+ * @param cuda_device CUDA device for GPU support.
+ * @param output_base String to use in output file name; default is sclimbic.
+ * @param no_cite_sclimbic Do not cite sclimbic paper at the end.
+ * @param nchannels Number of channels.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_entowm_seg_params(
     input_image: InputPathType | null = null,
     output_segmentation: string | null = null,
@@ -131,39 +162,8 @@ function mri_entowm_seg_params(
     no_cite_sclimbic: boolean = false,
     nchannels: number | null = null,
 ): MriEntowmSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image T1-weighted image(s) to segment. Can be a path to a single image or a directory of images.
-     * @param output_segmentation Segmentation output file or directory (required if --i is provided).
-     * @param recon_subjects Process a series of FreeSurfer recon-all subjects, enables subject-mode.
-     * @param subjects_directory Set the subjects directory, overrides the SUBJECTS_DIR env variable.
-     * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
-     * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and with --tal).
-     * @param tal Alternative talairach xfm transform for estimating TIV, can be file or suffix (for multiple inputs).
-     * @param write_posteriors Save the label posteriors.
-     * @param write_volumes Save label volume stats (enabled by default in subject-mode).
-     * @param write_qa_stats Save QA stats (z and confidence).
-     * @param exclude_labels List of label IDs to exclude in any output stats files.
-     * @param keep_ac Explicitly keep anterior commissure in the volume/QA files.
-     * @param vox_count_volumes Use discrete voxel count for label volumes.
-     * @param model_weights Alternative model weights to load.
-     * @param color_table Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
-     * @param population_stats Alternative population volume stats for QA output.
-     * @param debug Enable debug logging.
-     * @param vmp Enable printing of vmpeak at the end.
-     * @param threads Number of threads to use. Default is 1.
-     * @param seven_tesla Preprocess 7T images (just sets percentile to 99.9).
-     * @param percentile Use intensity percentile threshold for normalization.
-     * @param cuda_device CUDA device for GPU support.
-     * @param output_base String to use in output file name; default is sclimbic.
-     * @param no_cite_sclimbic Do not cite sclimbic paper at the end.
-     * @param nchannels Number of channels.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_entowm_seg" as const,
+        "@type": "freesurfer.mri_entowm_seg" as const,
         "conform": conform,
         "etiv": etiv,
         "write_posteriors": write_posteriors,
@@ -222,18 +222,18 @@ function mri_entowm_seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_entowm_seg_cargs(
     params: MriEntowmSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_entowm_seg");
     if ((params["input_image"] ?? null) !== null) {
@@ -357,18 +357,18 @@ function mri_entowm_seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_entowm_seg_outputs(
     params: MriEntowmSegParameters,
     execution: Execution,
 ): MriEntowmSegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEntowmSegOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_segmentation"] ?? null) !== null) ? execution.outputFile([(params["output_segmentation"] ?? null)].join('')) : null,
@@ -380,22 +380,22 @@ function mri_entowm_seg_outputs(
 }
 
 
+/**
+ * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
+ */
 function mri_entowm_seg_execute(
     params: MriEntowmSegParameters,
     execution: Execution,
 ): MriEntowmSegOutputs {
-    /**
-     * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_entowm_seg_cargs(params, execution)
     const ret = mri_entowm_seg_outputs(params, execution)
@@ -404,6 +404,42 @@ function mri_entowm_seg_execute(
 }
 
 
+/**
+ * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image T1-weighted image(s) to segment. Can be a path to a single image or a directory of images.
+ * @param output_segmentation Segmentation output file or directory (required if --i is provided).
+ * @param recon_subjects Process a series of FreeSurfer recon-all subjects, enables subject-mode.
+ * @param subjects_directory Set the subjects directory, overrides the SUBJECTS_DIR env variable.
+ * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
+ * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and with --tal).
+ * @param tal Alternative talairach xfm transform for estimating TIV, can be file or suffix (for multiple inputs).
+ * @param write_posteriors Save the label posteriors.
+ * @param write_volumes Save label volume stats (enabled by default in subject-mode).
+ * @param write_qa_stats Save QA stats (z and confidence).
+ * @param exclude_labels List of label IDs to exclude in any output stats files.
+ * @param keep_ac Explicitly keep anterior commissure in the volume/QA files.
+ * @param vox_count_volumes Use discrete voxel count for label volumes.
+ * @param model_weights Alternative model weights to load.
+ * @param color_table Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
+ * @param population_stats Alternative population volume stats for QA output.
+ * @param debug Enable debug logging.
+ * @param vmp Enable printing of vmpeak at the end.
+ * @param threads Number of threads to use. Default is 1.
+ * @param seven_tesla Preprocess 7T images (just sets percentile to 99.9).
+ * @param percentile Use intensity percentile threshold for normalization.
+ * @param cuda_device CUDA device for GPU support.
+ * @param output_base String to use in output file name; default is sclimbic.
+ * @param no_cite_sclimbic Do not cite sclimbic paper at the end.
+ * @param nchannels Number of channels.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
+ */
 function mri_entowm_seg(
     input_image: InputPathType | null = null,
     output_segmentation: string | null = null,
@@ -432,42 +468,6 @@ function mri_entowm_seg(
     nchannels: number | null = null,
     runner: Runner | null = null,
 ): MriEntowmSegOutputs {
-    /**
-     * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image T1-weighted image(s) to segment. Can be a path to a single image or a directory of images.
-     * @param output_segmentation Segmentation output file or directory (required if --i is provided).
-     * @param recon_subjects Process a series of FreeSurfer recon-all subjects, enables subject-mode.
-     * @param subjects_directory Set the subjects directory, overrides the SUBJECTS_DIR env variable.
-     * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
-     * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and with --tal).
-     * @param tal Alternative talairach xfm transform for estimating TIV, can be file or suffix (for multiple inputs).
-     * @param write_posteriors Save the label posteriors.
-     * @param write_volumes Save label volume stats (enabled by default in subject-mode).
-     * @param write_qa_stats Save QA stats (z and confidence).
-     * @param exclude_labels List of label IDs to exclude in any output stats files.
-     * @param keep_ac Explicitly keep anterior commissure in the volume/QA files.
-     * @param vox_count_volumes Use discrete voxel count for label volumes.
-     * @param model_weights Alternative model weights to load.
-     * @param color_table Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
-     * @param population_stats Alternative population volume stats for QA output.
-     * @param debug Enable debug logging.
-     * @param vmp Enable printing of vmpeak at the end.
-     * @param threads Number of threads to use. Default is 1.
-     * @param seven_tesla Preprocess 7T images (just sets percentile to 99.9).
-     * @param percentile Use intensity percentile threshold for normalization.
-     * @param cuda_device CUDA device for GPU support.
-     * @param output_base String to use in output file name; default is sclimbic.
-     * @param no_cite_sclimbic Do not cite sclimbic paper at the end.
-     * @param nchannels Number of channels.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ENTOWM_SEG_METADATA);
     const params = mri_entowm_seg_params(input_image, output_segmentation, recon_subjects, subjects_directory, conform, etiv, tal, write_posteriors, write_volumes, write_qa_stats, exclude_labels, keep_ac, vox_count_volumes, model_weights, color_table, population_stats, debug, vmp, threads, seven_tesla, percentile, cuda_device, output_base, no_cite_sclimbic, nchannels)
@@ -480,5 +480,8 @@ export {
       MriEntowmSegOutputs,
       MriEntowmSegParameters,
       mri_entowm_seg,
+      mri_entowm_seg_cargs,
+      mri_entowm_seg_execute,
+      mri_entowm_seg_outputs,
       mri_entowm_seg_params,
 };

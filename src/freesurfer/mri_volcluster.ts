@@ -12,7 +12,7 @@ const MRI_VOLCLUSTER_METADATA: Metadata = {
 
 
 interface MriVolclusterParameters {
-    "__STYXTYPE__": "mri_volcluster";
+    "@type": "freesurfer.mri_volcluster";
     "input_file": InputPathType;
     "summary_file"?: string | null | undefined;
     "output_volid"?: string | null | undefined;
@@ -64,35 +64,35 @@ interface MriVolclusterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_volcluster": mri_volcluster_cargs,
+        "freesurfer.mri_volcluster": mri_volcluster_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_volcluster": mri_volcluster_outputs,
+        "freesurfer.mri_volcluster": mri_volcluster_outputs,
     };
     return outputsFuncs[t];
 }
@@ -127,6 +127,60 @@ interface MriVolclusterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Source of volume values.
+ * @param summary_file Text summary file.
+ * @param output_volid Output volume ID after clustering.
+ * @param output_cluster_num_volid Output volume ID with cluster number values.
+ * @param cwsig_volid Volume ID for clusterwise significance.
+ * @param pointset_file Create a freeview pointset of the clusters.
+ * @param min_threshold Minimum intensity threshold.
+ * @param max_threshold Maximum intensity threshold.
+ * @param sign Sign for one-sided tests (<abs>, pos, neg).
+ * @param no_adjust_flag Do not adjust threshold for one-tailed tests.
+ * @param match_value Set thmin=matchval-0.5 and thmax=matchval+0.5.
+ * @param cwpval_threshold Require clusters to have cwp < threshold.
+ * @param registration_file For reporting Talairach coordinates.
+ * @param mni152reg_flag Input is in MNI152 space.
+ * @param regheader_subject Use header registration with subject.
+ * @param fsaverage_flag Assume input is in fsaverage space.
+ * @param frame_number Perform cluster analysis on the nth frame (0-based).
+ * @param csd_files Cluster simulation data files.
+ * @param cwsig_map Map of corrected cluster-wise significances.
+ * @param vwsig_map Map of corrected voxel-wise significances.
+ * @param max_cwpval_file Save p-value of the largest cluster.
+ * @param csdpdf_file PDF/CDF of cluster and max significance.
+ * @param csdpdf_only_flag Write CSD PDF file and exit.
+ * @param fwhm_value FWHM in mm^3, forces GRF analysis.
+ * @param fwhm_file Text file with FWHM in mm^3 for GRF.
+ * @param min_size Minimum volume (mm^3) for a cluster.
+ * @param min_size_vox Minimum number of contiguous voxels for a cluster.
+ * @param min_distance Minimum distance between peak clusters.
+ * @param allow_diag_flag Allow diagonal adjacency for contiguity.
+ * @param bonferroni_number Bonferroni correction across spaces.
+ * @param bonferroni_max_number Bonferroni correction applied to maximum.
+ * @param sig2p_max_flag Convert maximum significance to p-value.
+ * @param gte_flag Use >= when computing p-value from CSD.
+ * @param mask_volid Mask volume ID.
+ * @param mask_type File type of mask volume.
+ * @param mask_frame Nth frame of mask to use.
+ * @param mask_threshold Upper threshold for the mask.
+ * @param mask_sign Sign in mask thresholding (<abs>, neg, pos).
+ * @param mask_invert_flag Invert mask after thresholding.
+ * @param out_mask_volid Path for final binary mask.
+ * @param out_mask_type File type for output mask.
+ * @param label_file File to save nth cluster as a label.
+ * @param nlabel_cluster Save the nth cluster as a label.
+ * @param label_base Base name for saving clusters as labels.
+ * @param synth_func Function for synthetic data (uniform, loguniform, gaussian).
+ * @param diagnostic_level Set diagnostic level.
+ * @param fill_params Parameters for fill operation (invol outvol matchval).
+ * @param help_flag Display help message and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_volcluster_params(
     input_file: InputPathType,
     summary_file: string | null = null,
@@ -177,62 +231,8 @@ function mri_volcluster_params(
     fill_params: string | null = null,
     help_flag: boolean = false,
 ): MriVolclusterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Source of volume values.
-     * @param summary_file Text summary file.
-     * @param output_volid Output volume ID after clustering.
-     * @param output_cluster_num_volid Output volume ID with cluster number values.
-     * @param cwsig_volid Volume ID for clusterwise significance.
-     * @param pointset_file Create a freeview pointset of the clusters.
-     * @param min_threshold Minimum intensity threshold.
-     * @param max_threshold Maximum intensity threshold.
-     * @param sign Sign for one-sided tests (<abs>, pos, neg).
-     * @param no_adjust_flag Do not adjust threshold for one-tailed tests.
-     * @param match_value Set thmin=matchval-0.5 and thmax=matchval+0.5.
-     * @param cwpval_threshold Require clusters to have cwp < threshold.
-     * @param registration_file For reporting Talairach coordinates.
-     * @param mni152reg_flag Input is in MNI152 space.
-     * @param regheader_subject Use header registration with subject.
-     * @param fsaverage_flag Assume input is in fsaverage space.
-     * @param frame_number Perform cluster analysis on the nth frame (0-based).
-     * @param csd_files Cluster simulation data files.
-     * @param cwsig_map Map of corrected cluster-wise significances.
-     * @param vwsig_map Map of corrected voxel-wise significances.
-     * @param max_cwpval_file Save p-value of the largest cluster.
-     * @param csdpdf_file PDF/CDF of cluster and max significance.
-     * @param csdpdf_only_flag Write CSD PDF file and exit.
-     * @param fwhm_value FWHM in mm^3, forces GRF analysis.
-     * @param fwhm_file Text file with FWHM in mm^3 for GRF.
-     * @param min_size Minimum volume (mm^3) for a cluster.
-     * @param min_size_vox Minimum number of contiguous voxels for a cluster.
-     * @param min_distance Minimum distance between peak clusters.
-     * @param allow_diag_flag Allow diagonal adjacency for contiguity.
-     * @param bonferroni_number Bonferroni correction across spaces.
-     * @param bonferroni_max_number Bonferroni correction applied to maximum.
-     * @param sig2p_max_flag Convert maximum significance to p-value.
-     * @param gte_flag Use >= when computing p-value from CSD.
-     * @param mask_volid Mask volume ID.
-     * @param mask_type File type of mask volume.
-     * @param mask_frame Nth frame of mask to use.
-     * @param mask_threshold Upper threshold for the mask.
-     * @param mask_sign Sign in mask thresholding (<abs>, neg, pos).
-     * @param mask_invert_flag Invert mask after thresholding.
-     * @param out_mask_volid Path for final binary mask.
-     * @param out_mask_type File type for output mask.
-     * @param label_file File to save nth cluster as a label.
-     * @param nlabel_cluster Save the nth cluster as a label.
-     * @param label_base Base name for saving clusters as labels.
-     * @param synth_func Function for synthetic data (uniform, loguniform, gaussian).
-     * @param diagnostic_level Set diagnostic level.
-     * @param fill_params Parameters for fill operation (invol outvol matchval).
-     * @param help_flag Display help message and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_volcluster" as const,
+        "@type": "freesurfer.mri_volcluster" as const,
         "input_file": input_file,
         "no_adjust_flag": no_adjust_flag,
         "mni152reg_flag": mni152reg_flag,
@@ -362,18 +362,18 @@ function mri_volcluster_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_volcluster_cargs(
     params: MriVolclusterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_volcluster");
     cargs.push(
@@ -639,18 +639,18 @@ function mri_volcluster_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_volcluster_outputs(
     params: MriVolclusterParameters,
     execution: Execution,
 ): MriVolclusterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVolclusterOutputs = {
         root: execution.outputFile("."),
         output_volume: ((params["output_volid"] ?? null) !== null) ? execution.outputFile([(params["output_volid"] ?? null)].join('')) : null,
@@ -662,22 +662,22 @@ function mri_volcluster_outputs(
 }
 
 
+/**
+ * A tool for finding clusters in a volume, useful for analyzing MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
+ */
 function mri_volcluster_execute(
     params: MriVolclusterParameters,
     execution: Execution,
 ): MriVolclusterOutputs {
-    /**
-     * A tool for finding clusters in a volume, useful for analyzing MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_volcluster_cargs(params, execution)
     const ret = mri_volcluster_outputs(params, execution)
@@ -686,6 +686,65 @@ function mri_volcluster_execute(
 }
 
 
+/**
+ * A tool for finding clusters in a volume, useful for analyzing MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Source of volume values.
+ * @param summary_file Text summary file.
+ * @param output_volid Output volume ID after clustering.
+ * @param output_cluster_num_volid Output volume ID with cluster number values.
+ * @param cwsig_volid Volume ID for clusterwise significance.
+ * @param pointset_file Create a freeview pointset of the clusters.
+ * @param min_threshold Minimum intensity threshold.
+ * @param max_threshold Maximum intensity threshold.
+ * @param sign Sign for one-sided tests (<abs>, pos, neg).
+ * @param no_adjust_flag Do not adjust threshold for one-tailed tests.
+ * @param match_value Set thmin=matchval-0.5 and thmax=matchval+0.5.
+ * @param cwpval_threshold Require clusters to have cwp < threshold.
+ * @param registration_file For reporting Talairach coordinates.
+ * @param mni152reg_flag Input is in MNI152 space.
+ * @param regheader_subject Use header registration with subject.
+ * @param fsaverage_flag Assume input is in fsaverage space.
+ * @param frame_number Perform cluster analysis on the nth frame (0-based).
+ * @param csd_files Cluster simulation data files.
+ * @param cwsig_map Map of corrected cluster-wise significances.
+ * @param vwsig_map Map of corrected voxel-wise significances.
+ * @param max_cwpval_file Save p-value of the largest cluster.
+ * @param csdpdf_file PDF/CDF of cluster and max significance.
+ * @param csdpdf_only_flag Write CSD PDF file and exit.
+ * @param fwhm_value FWHM in mm^3, forces GRF analysis.
+ * @param fwhm_file Text file with FWHM in mm^3 for GRF.
+ * @param min_size Minimum volume (mm^3) for a cluster.
+ * @param min_size_vox Minimum number of contiguous voxels for a cluster.
+ * @param min_distance Minimum distance between peak clusters.
+ * @param allow_diag_flag Allow diagonal adjacency for contiguity.
+ * @param bonferroni_number Bonferroni correction across spaces.
+ * @param bonferroni_max_number Bonferroni correction applied to maximum.
+ * @param sig2p_max_flag Convert maximum significance to p-value.
+ * @param gte_flag Use >= when computing p-value from CSD.
+ * @param mask_volid Mask volume ID.
+ * @param mask_type File type of mask volume.
+ * @param mask_frame Nth frame of mask to use.
+ * @param mask_threshold Upper threshold for the mask.
+ * @param mask_sign Sign in mask thresholding (<abs>, neg, pos).
+ * @param mask_invert_flag Invert mask after thresholding.
+ * @param out_mask_volid Path for final binary mask.
+ * @param out_mask_type File type for output mask.
+ * @param label_file File to save nth cluster as a label.
+ * @param nlabel_cluster Save the nth cluster as a label.
+ * @param label_base Base name for saving clusters as labels.
+ * @param synth_func Function for synthetic data (uniform, loguniform, gaussian).
+ * @param diagnostic_level Set diagnostic level.
+ * @param fill_params Parameters for fill operation (invol outvol matchval).
+ * @param help_flag Display help message and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
+ */
 function mri_volcluster(
     input_file: InputPathType,
     summary_file: string | null = null,
@@ -737,65 +796,6 @@ function mri_volcluster(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriVolclusterOutputs {
-    /**
-     * A tool for finding clusters in a volume, useful for analyzing MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Source of volume values.
-     * @param summary_file Text summary file.
-     * @param output_volid Output volume ID after clustering.
-     * @param output_cluster_num_volid Output volume ID with cluster number values.
-     * @param cwsig_volid Volume ID for clusterwise significance.
-     * @param pointset_file Create a freeview pointset of the clusters.
-     * @param min_threshold Minimum intensity threshold.
-     * @param max_threshold Maximum intensity threshold.
-     * @param sign Sign for one-sided tests (<abs>, pos, neg).
-     * @param no_adjust_flag Do not adjust threshold for one-tailed tests.
-     * @param match_value Set thmin=matchval-0.5 and thmax=matchval+0.5.
-     * @param cwpval_threshold Require clusters to have cwp < threshold.
-     * @param registration_file For reporting Talairach coordinates.
-     * @param mni152reg_flag Input is in MNI152 space.
-     * @param regheader_subject Use header registration with subject.
-     * @param fsaverage_flag Assume input is in fsaverage space.
-     * @param frame_number Perform cluster analysis on the nth frame (0-based).
-     * @param csd_files Cluster simulation data files.
-     * @param cwsig_map Map of corrected cluster-wise significances.
-     * @param vwsig_map Map of corrected voxel-wise significances.
-     * @param max_cwpval_file Save p-value of the largest cluster.
-     * @param csdpdf_file PDF/CDF of cluster and max significance.
-     * @param csdpdf_only_flag Write CSD PDF file and exit.
-     * @param fwhm_value FWHM in mm^3, forces GRF analysis.
-     * @param fwhm_file Text file with FWHM in mm^3 for GRF.
-     * @param min_size Minimum volume (mm^3) for a cluster.
-     * @param min_size_vox Minimum number of contiguous voxels for a cluster.
-     * @param min_distance Minimum distance between peak clusters.
-     * @param allow_diag_flag Allow diagonal adjacency for contiguity.
-     * @param bonferroni_number Bonferroni correction across spaces.
-     * @param bonferroni_max_number Bonferroni correction applied to maximum.
-     * @param sig2p_max_flag Convert maximum significance to p-value.
-     * @param gte_flag Use >= when computing p-value from CSD.
-     * @param mask_volid Mask volume ID.
-     * @param mask_type File type of mask volume.
-     * @param mask_frame Nth frame of mask to use.
-     * @param mask_threshold Upper threshold for the mask.
-     * @param mask_sign Sign in mask thresholding (<abs>, neg, pos).
-     * @param mask_invert_flag Invert mask after thresholding.
-     * @param out_mask_volid Path for final binary mask.
-     * @param out_mask_type File type for output mask.
-     * @param label_file File to save nth cluster as a label.
-     * @param nlabel_cluster Save the nth cluster as a label.
-     * @param label_base Base name for saving clusters as labels.
-     * @param synth_func Function for synthetic data (uniform, loguniform, gaussian).
-     * @param diagnostic_level Set diagnostic level.
-     * @param fill_params Parameters for fill operation (invol outvol matchval).
-     * @param help_flag Display help message and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOLCLUSTER_METADATA);
     const params = mri_volcluster_params(input_file, summary_file, output_volid, output_cluster_num_volid, cwsig_volid, pointset_file, min_threshold, max_threshold, sign, no_adjust_flag, match_value, cwpval_threshold, registration_file, mni152reg_flag, regheader_subject, fsaverage_flag, frame_number, csd_files, cwsig_map, vwsig_map, max_cwpval_file, csdpdf_file, csdpdf_only_flag, fwhm_value, fwhm_file, min_size, min_size_vox, min_distance, allow_diag_flag, bonferroni_number, bonferroni_max_number, sig2p_max_flag, gte_flag, mask_volid, mask_type, mask_frame, mask_threshold, mask_sign, mask_invert_flag, out_mask_volid, out_mask_type, label_file, nlabel_cluster, label_base, synth_func, diagnostic_level, fill_params, help_flag)
@@ -808,5 +808,8 @@ export {
       MriVolclusterOutputs,
       MriVolclusterParameters,
       mri_volcluster,
+      mri_volcluster_cargs,
+      mri_volcluster_execute,
+      mri_volcluster_outputs,
       mri_volcluster_params,
 };

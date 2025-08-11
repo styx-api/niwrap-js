@@ -12,7 +12,7 @@ const ANNOT2STD_METADATA: Metadata = {
 
 
 interface Annot2stdParameters {
-    "__STYXTYPE__": "annot2std";
+    "@type": "freesurfer.annot2std";
     "output_annot_path": string;
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
@@ -34,35 +34,35 @@ interface Annot2stdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "annot2std": annot2std_cargs,
+        "freesurfer.annot2std": annot2std_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "annot2std": annot2std_outputs,
+        "freesurfer.annot2std": annot2std_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,30 @@ interface Annot2stdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_annot_path Full output annotation path (also creates outannotpath.p.mgh)
+ * @param subjects Input subject(s), specify each subject with --s subj
+ * @param fsgd_file FSGD file for group descriptor
+ * @param subject_list_file Subject list file
+ * @param target Target subject (e.g., fsaverage)
+ * @param left_hemisphere Use left hemisphere
+ * @param right_hemisphere Use right hemisphere
+ * @param xhemi For interhemispheric analysis
+ * @param surfreg Surface registration type (default is sphere.reg)
+ * @param srcsurfreg Source surface registration type (default is sphere.reg)
+ * @param trgsurfreg Target surface registration type (default is sphere.reg)
+ * @param annotname Input annotation name (?h.annotname.annot)
+ * @param aparc Annotation name set to aparc
+ * @param a2009s Annotation name set to aparc.a2009s
+ * @param segmentation Save output as a surface segmentation (2 frames, second = p)
+ * @param stack Stack of individual annotations as segmentation
+ * @param help Display help
+ * @param version Display version
+ *
+ * @returns Parameter dictionary
+ */
 function annot2std_params(
     output_annot_path: string,
     subjects: Array<string>,
@@ -113,32 +137,8 @@ function annot2std_params(
     help: boolean = false,
     version: boolean = false,
 ): Annot2stdParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_annot_path Full output annotation path (also creates outannotpath.p.mgh)
-     * @param subjects Input subject(s), specify each subject with --s subj
-     * @param fsgd_file FSGD file for group descriptor
-     * @param subject_list_file Subject list file
-     * @param target Target subject (e.g., fsaverage)
-     * @param left_hemisphere Use left hemisphere
-     * @param right_hemisphere Use right hemisphere
-     * @param xhemi For interhemispheric analysis
-     * @param surfreg Surface registration type (default is sphere.reg)
-     * @param srcsurfreg Source surface registration type (default is sphere.reg)
-     * @param trgsurfreg Target surface registration type (default is sphere.reg)
-     * @param annotname Input annotation name (?h.annotname.annot)
-     * @param aparc Annotation name set to aparc
-     * @param a2009s Annotation name set to aparc.a2009s
-     * @param segmentation Save output as a surface segmentation (2 frames, second = p)
-     * @param stack Stack of individual annotations as segmentation
-     * @param help Display help
-     * @param version Display version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "annot2std" as const,
+        "@type": "freesurfer.annot2std" as const,
         "output_annot_path": output_annot_path,
         "subjects": subjects,
         "left_hemisphere": left_hemisphere,
@@ -180,18 +180,18 @@ function annot2std_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function annot2std_cargs(
     params: Annot2stdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("annot2std");
     cargs.push(
@@ -281,18 +281,18 @@ function annot2std_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function annot2std_outputs(
     params: Annot2stdParameters,
     execution: Execution,
 ): Annot2stdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Annot2stdOutputs = {
         root: execution.outputFile("."),
         out_annot_file: execution.outputFile([(params["output_annot_path"] ?? null)].join('')),
@@ -303,22 +303,22 @@ function annot2std_outputs(
 }
 
 
+/**
+ * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
+ */
 function annot2std_execute(
     params: Annot2stdParameters,
     execution: Execution,
 ): Annot2stdOutputs {
-    /**
-     * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
-     */
     params = execution.params(params)
     const cargs = annot2std_cargs(params, execution)
     const ret = annot2std_outputs(params, execution)
@@ -327,6 +327,35 @@ function annot2std_execute(
 }
 
 
+/**
+ * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_annot_path Full output annotation path (also creates outannotpath.p.mgh)
+ * @param subjects Input subject(s), specify each subject with --s subj
+ * @param fsgd_file FSGD file for group descriptor
+ * @param subject_list_file Subject list file
+ * @param target Target subject (e.g., fsaverage)
+ * @param left_hemisphere Use left hemisphere
+ * @param right_hemisphere Use right hemisphere
+ * @param xhemi For interhemispheric analysis
+ * @param surfreg Surface registration type (default is sphere.reg)
+ * @param srcsurfreg Source surface registration type (default is sphere.reg)
+ * @param trgsurfreg Target surface registration type (default is sphere.reg)
+ * @param annotname Input annotation name (?h.annotname.annot)
+ * @param aparc Annotation name set to aparc
+ * @param a2009s Annotation name set to aparc.a2009s
+ * @param segmentation Save output as a surface segmentation (2 frames, second = p)
+ * @param stack Stack of individual annotations as segmentation
+ * @param help Display help
+ * @param version Display version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
+ */
 function annot2std(
     output_annot_path: string,
     subjects: Array<string>,
@@ -348,35 +377,6 @@ function annot2std(
     version: boolean = false,
     runner: Runner | null = null,
 ): Annot2stdOutputs {
-    /**
-     * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_annot_path Full output annotation path (also creates outannotpath.p.mgh)
-     * @param subjects Input subject(s), specify each subject with --s subj
-     * @param fsgd_file FSGD file for group descriptor
-     * @param subject_list_file Subject list file
-     * @param target Target subject (e.g., fsaverage)
-     * @param left_hemisphere Use left hemisphere
-     * @param right_hemisphere Use right hemisphere
-     * @param xhemi For interhemispheric analysis
-     * @param surfreg Surface registration type (default is sphere.reg)
-     * @param srcsurfreg Source surface registration type (default is sphere.reg)
-     * @param trgsurfreg Target surface registration type (default is sphere.reg)
-     * @param annotname Input annotation name (?h.annotname.annot)
-     * @param aparc Annotation name set to aparc
-     * @param a2009s Annotation name set to aparc.a2009s
-     * @param segmentation Save output as a surface segmentation (2 frames, second = p)
-     * @param stack Stack of individual annotations as segmentation
-     * @param help Display help
-     * @param version Display version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANNOT2STD_METADATA);
     const params = annot2std_params(output_annot_path, subjects, fsgd_file, subject_list_file, target, left_hemisphere, right_hemisphere, xhemi, surfreg, srcsurfreg, trgsurfreg, annotname, aparc, a2009s, segmentation, stack, help, version)
@@ -389,5 +389,8 @@ export {
       Annot2stdOutputs,
       Annot2stdParameters,
       annot2std,
+      annot2std_cargs,
+      annot2std_execute,
+      annot2std_outputs,
       annot2std_params,
 };

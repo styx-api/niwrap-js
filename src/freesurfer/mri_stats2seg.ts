@@ -12,7 +12,7 @@ const MRI_STATS2SEG_METADATA: Metadata = {
 
 
 interface MriStats2segParameters {
-    "__STYXTYPE__": "mri_stats2seg";
+    "@type": "freesurfer.mri_stats2seg";
     "stat_file": InputPathType;
     "segmentation_volume": InputPathType;
     "output_file": string;
@@ -21,35 +21,35 @@ interface MriStats2segParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_stats2seg": mri_stats2seg_cargs,
+        "freesurfer.mri_stats2seg": mri_stats2seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_stats2seg": mri_stats2seg_outputs,
+        "freesurfer.mri_stats2seg": mri_stats2seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriStats2segOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stat_file Stat file in an MRI format.
+ * @param segmentation_volume Segmentation volume file.
+ * @param output_file Output file.
+ * @param debug Turn on debugging.
+ * @param check_opts Don't run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_stats2seg_params(
     stat_file: InputPathType,
     segmentation_volume: InputPathType,
@@ -79,19 +90,8 @@ function mri_stats2seg_params(
     debug: boolean = false,
     check_opts: boolean = false,
 ): MriStats2segParameters {
-    /**
-     * Build parameters.
-    
-     * @param stat_file Stat file in an MRI format.
-     * @param segmentation_volume Segmentation volume file.
-     * @param output_file Output file.
-     * @param debug Turn on debugging.
-     * @param check_opts Don't run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_stats2seg" as const,
+        "@type": "freesurfer.mri_stats2seg" as const,
         "stat_file": stat_file,
         "segmentation_volume": segmentation_volume,
         "output_file": output_file,
@@ -102,18 +102,18 @@ function mri_stats2seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_stats2seg_cargs(
     params: MriStats2segParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_stats2seg");
     cargs.push(
@@ -138,18 +138,18 @@ function mri_stats2seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_stats2seg_outputs(
     params: MriStats2segParameters,
     execution: Execution,
 ): MriStats2segOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriStats2segOutputs = {
         root: execution.outputFile("."),
         segmented_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -158,22 +158,22 @@ function mri_stats2seg_outputs(
 }
 
 
+/**
+ * A command-line tool for converting MRI statistical maps to segmented volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
+ */
 function mri_stats2seg_execute(
     params: MriStats2segParameters,
     execution: Execution,
 ): MriStats2segOutputs {
-    /**
-     * A command-line tool for converting MRI statistical maps to segmented volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_stats2seg_cargs(params, execution)
     const ret = mri_stats2seg_outputs(params, execution)
@@ -182,6 +182,22 @@ function mri_stats2seg_execute(
 }
 
 
+/**
+ * A command-line tool for converting MRI statistical maps to segmented volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param stat_file Stat file in an MRI format.
+ * @param segmentation_volume Segmentation volume file.
+ * @param output_file Output file.
+ * @param debug Turn on debugging.
+ * @param check_opts Don't run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
+ */
 function mri_stats2seg(
     stat_file: InputPathType,
     segmentation_volume: InputPathType,
@@ -190,22 +206,6 @@ function mri_stats2seg(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriStats2segOutputs {
-    /**
-     * A command-line tool for converting MRI statistical maps to segmented volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param stat_file Stat file in an MRI format.
-     * @param segmentation_volume Segmentation volume file.
-     * @param output_file Output file.
-     * @param debug Turn on debugging.
-     * @param check_opts Don't run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_STATS2SEG_METADATA);
     const params = mri_stats2seg_params(stat_file, segmentation_volume, output_file, debug, check_opts)
@@ -218,5 +218,8 @@ export {
       MriStats2segOutputs,
       MriStats2segParameters,
       mri_stats2seg,
+      mri_stats2seg_cargs,
+      mri_stats2seg_execute,
+      mri_stats2seg_outputs,
       mri_stats2seg_params,
 };

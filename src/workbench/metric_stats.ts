@@ -12,14 +12,14 @@ const METRIC_STATS_METADATA: Metadata = {
 
 
 interface MetricStatsRoiParameters {
-    "__STYXTYPE__": "roi";
+    "@type": "workbench.metric-stats.roi";
     "roi_metric": InputPathType;
     "opt_match_maps": boolean;
 }
 
 
 interface MetricStatsParameters {
-    "__STYXTYPE__": "metric-stats";
+    "@type": "workbench.metric-stats";
     "metric_in": InputPathType;
     "opt_reduce_operation"?: string | null | undefined;
     "opt_percentile_percent"?: number | null | undefined;
@@ -29,54 +29,54 @@ interface MetricStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-stats": metric_stats_cargs,
-        "roi": metric_stats_roi_cargs,
+        "workbench.metric-stats": metric_stats_cargs,
+        "workbench.metric-stats.roi": metric_stats_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_metric the roi, as a metric file
+ * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ *
+ * @returns Parameter dictionary
+ */
 function metric_stats_roi_params(
     roi_metric: InputPathType,
     opt_match_maps: boolean = false,
 ): MetricStatsRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_metric the roi, as a metric file
-     * @param opt_match_maps each column of input uses the corresponding column from the roi file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi" as const,
+        "@type": "workbench.metric-stats.roi" as const,
         "roi_metric": roi_metric,
         "opt_match_maps": opt_match_maps,
     };
@@ -84,18 +84,18 @@ function metric_stats_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_stats_roi_cargs(
     params: MetricStatsRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
@@ -119,6 +119,18 @@ interface MetricStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_in the input metric
+ * @param opt_reduce_operation use a reduction operation: the reduction operation
+ * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
+ * @param opt_column_column only display output for one column: the column number or name
+ * @param roi only consider data inside an roi
+ * @param opt_show_map_name print map index and name before each output
+ *
+ * @returns Parameter dictionary
+ */
 function metric_stats_params(
     metric_in: InputPathType,
     opt_reduce_operation: string | null = null,
@@ -127,20 +139,8 @@ function metric_stats_params(
     roi: MetricStatsRoiParameters | null = null,
     opt_show_map_name: boolean = false,
 ): MetricStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_in the input metric
-     * @param opt_reduce_operation use a reduction operation: the reduction operation
-     * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
-     * @param opt_column_column only display output for one column: the column number or name
-     * @param roi only consider data inside an roi
-     * @param opt_show_map_name print map index and name before each output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-stats" as const,
+        "@type": "workbench.metric-stats" as const,
         "metric_in": metric_in,
         "opt_show_map_name": opt_show_map_name,
     };
@@ -160,18 +160,18 @@ function metric_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_stats_cargs(
     params: MetricStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-stats");
@@ -195,7 +195,7 @@ function metric_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null).__STYXTYPE__)((params["roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
     }
     if ((params["opt_show_map_name"] ?? null)) {
         cargs.push("-show-map-name");
@@ -204,18 +204,18 @@ function metric_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_stats_outputs(
     params: MetricStatsParameters,
     execution: Execution,
 ): MetricStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -223,44 +223,44 @@ function metric_stats_outputs(
 }
 
 
+/**
+ * Spatial statistics on a metric file.
+ *
+ * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
+ *
+ * The argument to the -reduce option must be one of the following:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
+ */
 function metric_stats_execute(
     params: MetricStatsParameters,
     execution: Execution,
 ): MetricStatsOutputs {
-    /**
-     * Spatial statistics on a metric file.
-     * 
-     * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
-     * 
-     * The argument to the -reduce option must be one of the following:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_stats_cargs(params, execution)
     const ret = metric_stats_outputs(params, execution)
@@ -269,6 +269,45 @@ function metric_stats_execute(
 }
 
 
+/**
+ * Spatial statistics on a metric file.
+ *
+ * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
+ *
+ * The argument to the -reduce option must be one of the following:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric_in the input metric
+ * @param opt_reduce_operation use a reduction operation: the reduction operation
+ * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
+ * @param opt_column_column only display output for one column: the column number or name
+ * @param roi only consider data inside an roi
+ * @param opt_show_map_name print map index and name before each output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
+ */
 function metric_stats(
     metric_in: InputPathType,
     opt_reduce_operation: string | null = null,
@@ -278,45 +317,6 @@ function metric_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
-    /**
-     * Spatial statistics on a metric file.
-     * 
-     * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
-     * 
-     * The argument to the -reduce option must be one of the following:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric_in the input metric
-     * @param opt_reduce_operation use a reduction operation: the reduction operation
-     * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
-     * @param opt_column_column only display output for one column: the column number or name
-     * @param roi only consider data inside an roi
-     * @param opt_show_map_name print map index and name before each output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_STATS_METADATA);
     const params = metric_stats_params(metric_in, opt_reduce_operation, opt_percentile_percent, opt_column_column, roi, opt_show_map_name)
@@ -330,6 +330,10 @@ export {
       MetricStatsParameters,
       MetricStatsRoiParameters,
       metric_stats,
+      metric_stats_cargs,
+      metric_stats_execute,
+      metric_stats_outputs,
       metric_stats_params,
+      metric_stats_roi_cargs,
       metric_stats_roi_params,
 };

@@ -12,7 +12,7 @@ const FIM2_METADATA: Metadata = {
 
 
 interface Fim2Parameters {
-    "__STYXTYPE__": "fim2";
+    "@type": "afni.fim2";
     "image_files": Array<InputPathType>;
     "pcnt"?: number | null | undefined;
     "pcthresh"?: number | null | undefined;
@@ -39,35 +39,35 @@ interface Fim2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fim2": fim2_cargs,
+        "afni.fim2": fim2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fim2": fim2_outputs,
+        "afni.fim2": fim2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -110,6 +110,35 @@ interface Fim2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_files Input MRI image files
+ * @param pcnt Correlation coefficient threshold will be 1 - 0.01 * #
+ * @param pcthresh Correlation coefficient threshold will be #
+ * @param im1 Index of image file to use as first in time series; default is 1
+ * @param num Number of images to actually use; default is to use all images
+ * @param non Turn off default normalization of the output activation image
+ * @param coef Scaling factor to convert the activation output from floats to short ints
+ * @param ort Filename of a time series to which the image data will be orthogonalized before correlations are computed
+ * @param ideal Filename of a time series to which the image data is to be correlated
+ * @param polref Use polynomials of order 0..# as extra 'orts'; default is 0
+ * @param fimfile Filename to save activation magnitudes in
+ * @param corr Indicates to write correlation output to image file 'fimfile.CORR'
+ * @param corfile Filename to save correlation image in
+ * @param cnrfile Filename to save contrast-to-noise image in
+ * @param sigfile Filename to save standard deviation image in
+ * @param fitfile Image files of the least squares fit coefficients of all the -ort and -polref time series
+ * @param subort Filename of the new timeseries of images with the orts and polrefs subtracted out
+ * @param flim Write outputs in mrilib 'float' format
+ * @param clean Output images won't have the +/- 10000 values forced into their corners for scaling purposes
+ * @param clip Set to zero regions of low intensity in output correlations, etc.
+ * @param q Quiet operation mode
+ * @param dfspace Use the 'dfspace' filter to register the images spatially before filtering.
+ * @param regbase Read image in file 'fname' as the base image for registration
+ *
+ * @returns Parameter dictionary
+ */
 function fim2_params(
     image_files: Array<InputPathType>,
     pcnt: number | null = null,
@@ -135,37 +164,8 @@ function fim2_params(
     dfspace: boolean = false,
     regbase: string | null = null,
 ): Fim2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param image_files Input MRI image files
-     * @param pcnt Correlation coefficient threshold will be 1 - 0.01 * #
-     * @param pcthresh Correlation coefficient threshold will be #
-     * @param im1 Index of image file to use as first in time series; default is 1
-     * @param num Number of images to actually use; default is to use all images
-     * @param non Turn off default normalization of the output activation image
-     * @param coef Scaling factor to convert the activation output from floats to short ints
-     * @param ort Filename of a time series to which the image data will be orthogonalized before correlations are computed
-     * @param ideal Filename of a time series to which the image data is to be correlated
-     * @param polref Use polynomials of order 0..# as extra 'orts'; default is 0
-     * @param fimfile Filename to save activation magnitudes in
-     * @param corr Indicates to write correlation output to image file 'fimfile.CORR'
-     * @param corfile Filename to save correlation image in
-     * @param cnrfile Filename to save contrast-to-noise image in
-     * @param sigfile Filename to save standard deviation image in
-     * @param fitfile Image files of the least squares fit coefficients of all the -ort and -polref time series
-     * @param subort Filename of the new timeseries of images with the orts and polrefs subtracted out
-     * @param flim Write outputs in mrilib 'float' format
-     * @param clean Output images won't have the +/- 10000 values forced into their corners for scaling purposes
-     * @param clip Set to zero regions of low intensity in output correlations, etc.
-     * @param q Quiet operation mode
-     * @param dfspace Use the 'dfspace' filter to register the images spatially before filtering.
-     * @param regbase Read image in file 'fname' as the base image for registration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fim2" as const,
+        "@type": "afni.fim2" as const,
         "image_files": image_files,
         "non": non,
         "corr": corr,
@@ -224,18 +224,18 @@ function fim2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fim2_cargs(
     params: Fim2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fim2");
     cargs.push(...(params["image_files"] ?? null).map(f => execution.inputFile(f)));
@@ -354,18 +354,18 @@ function fim2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fim2_outputs(
     params: Fim2Parameters,
     execution: Execution,
 ): Fim2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fim2Outputs = {
         root: execution.outputFile("."),
         activation_magnitudes: ((params["fimfile"] ?? null) !== null) ? execution.outputFile([(params["fimfile"] ?? null)].join('')) : null,
@@ -379,22 +379,22 @@ function fim2_outputs(
 }
 
 
+/**
+ * Functional Imaging Mapping Tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fim2Outputs`).
+ */
 function fim2_execute(
     params: Fim2Parameters,
     execution: Execution,
 ): Fim2Outputs {
-    /**
-     * Functional Imaging Mapping Tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fim2Outputs`).
-     */
     params = execution.params(params)
     const cargs = fim2_cargs(params, execution)
     const ret = fim2_outputs(params, execution)
@@ -403,6 +403,40 @@ function fim2_execute(
 }
 
 
+/**
+ * Functional Imaging Mapping Tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param image_files Input MRI image files
+ * @param pcnt Correlation coefficient threshold will be 1 - 0.01 * #
+ * @param pcthresh Correlation coefficient threshold will be #
+ * @param im1 Index of image file to use as first in time series; default is 1
+ * @param num Number of images to actually use; default is to use all images
+ * @param non Turn off default normalization of the output activation image
+ * @param coef Scaling factor to convert the activation output from floats to short ints
+ * @param ort Filename of a time series to which the image data will be orthogonalized before correlations are computed
+ * @param ideal Filename of a time series to which the image data is to be correlated
+ * @param polref Use polynomials of order 0..# as extra 'orts'; default is 0
+ * @param fimfile Filename to save activation magnitudes in
+ * @param corr Indicates to write correlation output to image file 'fimfile.CORR'
+ * @param corfile Filename to save correlation image in
+ * @param cnrfile Filename to save contrast-to-noise image in
+ * @param sigfile Filename to save standard deviation image in
+ * @param fitfile Image files of the least squares fit coefficients of all the -ort and -polref time series
+ * @param subort Filename of the new timeseries of images with the orts and polrefs subtracted out
+ * @param flim Write outputs in mrilib 'float' format
+ * @param clean Output images won't have the +/- 10000 values forced into their corners for scaling purposes
+ * @param clip Set to zero regions of low intensity in output correlations, etc.
+ * @param q Quiet operation mode
+ * @param dfspace Use the 'dfspace' filter to register the images spatially before filtering.
+ * @param regbase Read image in file 'fname' as the base image for registration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fim2Outputs`).
+ */
 function fim2(
     image_files: Array<InputPathType>,
     pcnt: number | null = null,
@@ -429,40 +463,6 @@ function fim2(
     regbase: string | null = null,
     runner: Runner | null = null,
 ): Fim2Outputs {
-    /**
-     * Functional Imaging Mapping Tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param image_files Input MRI image files
-     * @param pcnt Correlation coefficient threshold will be 1 - 0.01 * #
-     * @param pcthresh Correlation coefficient threshold will be #
-     * @param im1 Index of image file to use as first in time series; default is 1
-     * @param num Number of images to actually use; default is to use all images
-     * @param non Turn off default normalization of the output activation image
-     * @param coef Scaling factor to convert the activation output from floats to short ints
-     * @param ort Filename of a time series to which the image data will be orthogonalized before correlations are computed
-     * @param ideal Filename of a time series to which the image data is to be correlated
-     * @param polref Use polynomials of order 0..# as extra 'orts'; default is 0
-     * @param fimfile Filename to save activation magnitudes in
-     * @param corr Indicates to write correlation output to image file 'fimfile.CORR'
-     * @param corfile Filename to save correlation image in
-     * @param cnrfile Filename to save contrast-to-noise image in
-     * @param sigfile Filename to save standard deviation image in
-     * @param fitfile Image files of the least squares fit coefficients of all the -ort and -polref time series
-     * @param subort Filename of the new timeseries of images with the orts and polrefs subtracted out
-     * @param flim Write outputs in mrilib 'float' format
-     * @param clean Output images won't have the +/- 10000 values forced into their corners for scaling purposes
-     * @param clip Set to zero regions of low intensity in output correlations, etc.
-     * @param q Quiet operation mode
-     * @param dfspace Use the 'dfspace' filter to register the images spatially before filtering.
-     * @param regbase Read image in file 'fname' as the base image for registration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fim2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIM2_METADATA);
     const params = fim2_params(image_files, pcnt, pcthresh, im1, num, non, coef, ort, ideal, polref, fimfile, corr, corfile, cnrfile, sigfile, fitfile, subort, flim, clean, clip, q, dfspace, regbase)
@@ -475,5 +475,8 @@ export {
       Fim2Outputs,
       Fim2Parameters,
       fim2,
+      fim2_cargs,
+      fim2_execute,
+      fim2_outputs,
       fim2_params,
 };

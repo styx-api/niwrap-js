@@ -12,38 +12,38 @@ const FNAME2STEM_METADATA: Metadata = {
 
 
 interface Fname2stemParameters {
-    "__STYXTYPE__": "fname2stem";
+    "@type": "freesurfer.fname2stem";
     "filename": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fname2stem": fname2stem_cargs,
+        "freesurfer.fname2stem": fname2stem_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Fname2stemOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename The name of the file to convert to a stem. The file does not need to exist.
+ *
+ * @returns Parameter dictionary
+ */
 function fname2stem_params(
     filename: string,
 ): Fname2stemParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename The name of the file to convert to a stem. The file does not need to exist.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fname2stem" as const,
+        "@type": "freesurfer.fname2stem" as const,
         "filename": filename,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fname2stem_cargs(
     params: Fname2stemParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fname2stem");
     cargs.push((params["filename"] ?? null));
@@ -100,18 +100,18 @@ function fname2stem_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fname2stem_outputs(
     params: Fname2stemParameters,
     execution: Execution,
 ): Fname2stemOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fname2stemOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function fname2stem_outputs(
 }
 
 
+/**
+ * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fname2stemOutputs`).
+ */
 function fname2stem_execute(
     params: Fname2stemParameters,
     execution: Execution,
 ): Fname2stemOutputs {
-    /**
-     * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fname2stemOutputs`).
-     */
     params = execution.params(params)
     const cargs = fname2stem_cargs(params, execution)
     const ret = fname2stem_outputs(params, execution)
@@ -143,22 +143,22 @@ function fname2stem_execute(
 }
 
 
+/**
+ * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param filename The name of the file to convert to a stem. The file does not need to exist.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fname2stemOutputs`).
+ */
 function fname2stem(
     filename: string,
     runner: Runner | null = null,
 ): Fname2stemOutputs {
-    /**
-     * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param filename The name of the file to convert to a stem. The file does not need to exist.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fname2stemOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FNAME2STEM_METADATA);
     const params = fname2stem_params(filename)
@@ -171,5 +171,8 @@ export {
       Fname2stemOutputs,
       Fname2stemParameters,
       fname2stem,
+      fname2stem_cargs,
+      fname2stem_execute,
+      fname2stem_outputs,
       fname2stem_params,
 };

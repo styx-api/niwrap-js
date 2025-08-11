@@ -12,42 +12,42 @@ const SLICESMASK_METADATA: Metadata = {
 
 
 interface SlicesmaskParameters {
-    "__STYXTYPE__": "slicesmask";
+    "@type": "fsl.slicesmask";
     "image": InputPathType;
     "mask": InputPathType;
     "output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slicesmask": slicesmask_cargs,
+        "fsl.slicesmask": slicesmask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "slicesmask": slicesmask_outputs,
+        "fsl.slicesmask": slicesmask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SlicesmaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image Input image file
+ * @param mask Mask file
+ * @param output Output file
+ *
+ * @returns Parameter dictionary
+ */
 function slicesmask_params(
     image: InputPathType,
     mask: InputPathType,
     output: string,
 ): SlicesmaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param image Input image file
-     * @param mask Mask file
-     * @param output Output file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slicesmask" as const,
+        "@type": "fsl.slicesmask" as const,
         "image": image,
         "mask": mask,
         "output": output,
@@ -94,18 +94,18 @@ function slicesmask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slicesmask_cargs(
     params: SlicesmaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slicesmask");
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -115,18 +115,18 @@ function slicesmask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slicesmask_outputs(
     params: SlicesmaskParameters,
     execution: Execution,
 ): SlicesmaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicesmaskOutputs = {
         root: execution.outputFile("."),
         masked_output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function slicesmask_outputs(
 }
 
 
+/**
+ * Tool for masking slices from an image using a mask.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
+ */
 function slicesmask_execute(
     params: SlicesmaskParameters,
     execution: Execution,
 ): SlicesmaskOutputs {
-    /**
-     * Tool for masking slices from an image using a mask.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = slicesmask_cargs(params, execution)
     const ret = slicesmask_outputs(params, execution)
@@ -159,26 +159,26 @@ function slicesmask_execute(
 }
 
 
+/**
+ * Tool for masking slices from an image using a mask.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param image Input image file
+ * @param mask Mask file
+ * @param output Output file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
+ */
 function slicesmask(
     image: InputPathType,
     mask: InputPathType,
     output: string,
     runner: Runner | null = null,
 ): SlicesmaskOutputs {
-    /**
-     * Tool for masking slices from an image using a mask.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param image Input image file
-     * @param mask Mask file
-     * @param output Output file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICESMASK_METADATA);
     const params = slicesmask_params(image, mask, output)
@@ -191,5 +191,8 @@ export {
       SlicesmaskOutputs,
       SlicesmaskParameters,
       slicesmask,
+      slicesmask_cargs,
+      slicesmask_execute,
+      slicesmask_outputs,
       slicesmask_params,
 };

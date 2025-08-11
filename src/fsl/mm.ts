@@ -12,7 +12,7 @@ const MM_METADATA: Metadata = {
 
 
 interface MmParameters {
-    "__STYXTYPE__": "mm";
+    "@type": "fsl.mm";
     "spatial_data_file": InputPathType;
     "mask_file": InputPathType;
     "verbose_flag": boolean;
@@ -33,33 +33,33 @@ interface MmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mm": mm_cargs,
+        "fsl.mm": mm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface MmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spatial_data_file Spatial map data file.
+ * @param mask_file Mask file.
+ * @param verbose_flag Switch on diagnostic messages.
+ * @param debug_level Set debug level.
+ * @param timing_flag Turn timing on.
+ * @param example_epi_file Example EPI data file.
+ * @param log_directory Log directory.
+ * @param nonspatial_flag Nonspatial mixture model.
+ * @param fix_mrf_precision_flag Fix MRF precision to mrfprecstart throughout.
+ * @param mrf_prec_start MRF precision initial value (default is 10).
+ * @param mrf_prec_multiplier Update multiplier for MRF precision (default is -1, do not multiply).
+ * @param init_multiplier Init multiplier (default is 0.3).
+ * @param no_update_theta_flag Turn off updating of distribution parameters after non-spatial fit.
+ * @param zfstat_flag Turn on zfstat mode - this enforces no deactivation class.
+ * @param phi Phi (default is 0.05).
+ * @param niters Number of iterations (default is -1: auto stop).
+ * @param threshold Threshold for use when displaying classification maps in MM.html report (default is 0.5, -1 indicates no thresholding).
+ *
+ * @returns Parameter dictionary
+ */
 function mm_params(
     spatial_data_file: InputPathType,
     mask_file: InputPathType,
@@ -98,31 +121,8 @@ function mm_params(
     niters: number | null = null,
     threshold: number | null = null,
 ): MmParameters {
-    /**
-     * Build parameters.
-    
-     * @param spatial_data_file Spatial map data file.
-     * @param mask_file Mask file.
-     * @param verbose_flag Switch on diagnostic messages.
-     * @param debug_level Set debug level.
-     * @param timing_flag Turn timing on.
-     * @param example_epi_file Example EPI data file.
-     * @param log_directory Log directory.
-     * @param nonspatial_flag Nonspatial mixture model.
-     * @param fix_mrf_precision_flag Fix MRF precision to mrfprecstart throughout.
-     * @param mrf_prec_start MRF precision initial value (default is 10).
-     * @param mrf_prec_multiplier Update multiplier for MRF precision (default is -1, do not multiply).
-     * @param init_multiplier Init multiplier (default is 0.3).
-     * @param no_update_theta_flag Turn off updating of distribution parameters after non-spatial fit.
-     * @param zfstat_flag Turn on zfstat mode - this enforces no deactivation class.
-     * @param phi Phi (default is 0.05).
-     * @param niters Number of iterations (default is -1: auto stop).
-     * @param threshold Threshold for use when displaying classification maps in MM.html report (default is 0.5, -1 indicates no thresholding).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mm" as const,
+        "@type": "fsl.mm" as const,
         "spatial_data_file": spatial_data_file,
         "mask_file": mask_file,
         "verbose_flag": verbose_flag,
@@ -163,18 +163,18 @@ function mm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mm_cargs(
     params: MmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mm");
     cargs.push(
@@ -261,18 +261,18 @@ function mm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mm_outputs(
     params: MmParameters,
     execution: Execution,
 ): MmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MmOutputs = {
         root: execution.outputFile("."),
     };
@@ -280,22 +280,22 @@ function mm_outputs(
 }
 
 
+/**
+ * FSL's MM: mixture modelling.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MmOutputs`).
+ */
 function mm_execute(
     params: MmParameters,
     execution: Execution,
 ): MmOutputs {
-    /**
-     * FSL's MM: mixture modelling.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mm_cargs(params, execution)
     const ret = mm_outputs(params, execution)
@@ -304,6 +304,34 @@ function mm_execute(
 }
 
 
+/**
+ * FSL's MM: mixture modelling.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param spatial_data_file Spatial map data file.
+ * @param mask_file Mask file.
+ * @param verbose_flag Switch on diagnostic messages.
+ * @param debug_level Set debug level.
+ * @param timing_flag Turn timing on.
+ * @param example_epi_file Example EPI data file.
+ * @param log_directory Log directory.
+ * @param nonspatial_flag Nonspatial mixture model.
+ * @param fix_mrf_precision_flag Fix MRF precision to mrfprecstart throughout.
+ * @param mrf_prec_start MRF precision initial value (default is 10).
+ * @param mrf_prec_multiplier Update multiplier for MRF precision (default is -1, do not multiply).
+ * @param init_multiplier Init multiplier (default is 0.3).
+ * @param no_update_theta_flag Turn off updating of distribution parameters after non-spatial fit.
+ * @param zfstat_flag Turn on zfstat mode - this enforces no deactivation class.
+ * @param phi Phi (default is 0.05).
+ * @param niters Number of iterations (default is -1: auto stop).
+ * @param threshold Threshold for use when displaying classification maps in MM.html report (default is 0.5, -1 indicates no thresholding).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MmOutputs`).
+ */
 function mm(
     spatial_data_file: InputPathType,
     mask_file: InputPathType,
@@ -324,34 +352,6 @@ function mm(
     threshold: number | null = null,
     runner: Runner | null = null,
 ): MmOutputs {
-    /**
-     * FSL's MM: mixture modelling.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param spatial_data_file Spatial map data file.
-     * @param mask_file Mask file.
-     * @param verbose_flag Switch on diagnostic messages.
-     * @param debug_level Set debug level.
-     * @param timing_flag Turn timing on.
-     * @param example_epi_file Example EPI data file.
-     * @param log_directory Log directory.
-     * @param nonspatial_flag Nonspatial mixture model.
-     * @param fix_mrf_precision_flag Fix MRF precision to mrfprecstart throughout.
-     * @param mrf_prec_start MRF precision initial value (default is 10).
-     * @param mrf_prec_multiplier Update multiplier for MRF precision (default is -1, do not multiply).
-     * @param init_multiplier Init multiplier (default is 0.3).
-     * @param no_update_theta_flag Turn off updating of distribution parameters after non-spatial fit.
-     * @param zfstat_flag Turn on zfstat mode - this enforces no deactivation class.
-     * @param phi Phi (default is 0.05).
-     * @param niters Number of iterations (default is -1: auto stop).
-     * @param threshold Threshold for use when displaying classification maps in MM.html report (default is 0.5, -1 indicates no thresholding).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MM_METADATA);
     const params = mm_params(spatial_data_file, mask_file, verbose_flag, debug_level, timing_flag, example_epi_file, log_directory, nonspatial_flag, fix_mrf_precision_flag, mrf_prec_start, mrf_prec_multiplier, init_multiplier, no_update_theta_flag, zfstat_flag, phi, niters, threshold)
@@ -364,5 +364,8 @@ export {
       MmOutputs,
       MmParameters,
       mm,
+      mm_cargs,
+      mm_execute,
+      mm_outputs,
       mm_params,
 };

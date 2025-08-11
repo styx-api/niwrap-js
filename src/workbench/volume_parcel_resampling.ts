@@ -12,7 +12,7 @@ const VOLUME_PARCEL_RESAMPLING_METADATA: Metadata = {
 
 
 interface VolumeParcelResamplingParameters {
-    "__STYXTYPE__": "volume-parcel-resampling";
+    "@type": "workbench.volume-parcel-resampling";
     "volume_in": InputPathType;
     "cur_parcels": InputPathType;
     "new_parcels": InputPathType;
@@ -24,35 +24,35 @@ interface VolumeParcelResamplingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-parcel-resampling": volume_parcel_resampling_cargs,
+        "workbench.volume-parcel-resampling": volume_parcel_resampling_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-parcel-resampling": volume_parcel_resampling_outputs,
+        "workbench.volume-parcel-resampling": volume_parcel_resampling_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface VolumeParcelResamplingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input data volume
+ * @param cur_parcels label volume of where the parcels currently are
+ * @param new_parcels label volume of where the parcels should be
+ * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
+ * @param volume_out output volume
+ * @param opt_fix_zeros treat zero values as not being data
+ * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ * @param opt_subvolume_subvol select a single subvolume as input: the subvolume number or name
+ *
+ * @returns Parameter dictionary
+ */
 function volume_parcel_resampling_params(
     volume_in: InputPathType,
     cur_parcels: InputPathType,
@@ -85,22 +99,8 @@ function volume_parcel_resampling_params(
     opt_fwhm: boolean = false,
     opt_subvolume_subvol: string | null = null,
 ): VolumeParcelResamplingParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input data volume
-     * @param cur_parcels label volume of where the parcels currently are
-     * @param new_parcels label volume of where the parcels should be
-     * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
-     * @param volume_out output volume
-     * @param opt_fix_zeros treat zero values as not being data
-     * @param opt_fwhm smoothing kernel size is FWHM, not sigma
-     * @param opt_subvolume_subvol select a single subvolume as input: the subvolume number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-parcel-resampling" as const,
+        "@type": "workbench.volume-parcel-resampling" as const,
         "volume_in": volume_in,
         "cur_parcels": cur_parcels,
         "new_parcels": new_parcels,
@@ -116,18 +116,18 @@ function volume_parcel_resampling_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_parcel_resampling_cargs(
     params: VolumeParcelResamplingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-parcel-resampling");
@@ -152,18 +152,18 @@ function volume_parcel_resampling_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_parcel_resampling_outputs(
     params: VolumeParcelResamplingParameters,
     execution: Execution,
 ): VolumeParcelResamplingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeParcelResamplingOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -172,26 +172,26 @@ function volume_parcel_resampling_outputs(
 }
 
 
+/**
+ * Smooth and resample volume parcels.
+ *
+ * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.
+ *
+ * Note: all volumes must have the same dimensions and spacing.  To use a different output space, see -volume-parcel-resampling-generic.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
+ */
 function volume_parcel_resampling_execute(
     params: VolumeParcelResamplingParameters,
     execution: Execution,
 ): VolumeParcelResamplingOutputs {
-    /**
-     * Smooth and resample volume parcels.
-     * 
-     * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.
-     * 
-     * Note: all volumes must have the same dimensions and spacing.  To use a different output space, see -volume-parcel-resampling-generic.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_parcel_resampling_cargs(params, execution)
     const ret = volume_parcel_resampling_outputs(params, execution)
@@ -200,6 +200,29 @@ function volume_parcel_resampling_execute(
 }
 
 
+/**
+ * Smooth and resample volume parcels.
+ *
+ * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.
+ *
+ * Note: all volumes must have the same dimensions and spacing.  To use a different output space, see -volume-parcel-resampling-generic.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input data volume
+ * @param cur_parcels label volume of where the parcels currently are
+ * @param new_parcels label volume of where the parcels should be
+ * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
+ * @param volume_out output volume
+ * @param opt_fix_zeros treat zero values as not being data
+ * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ * @param opt_subvolume_subvol select a single subvolume as input: the subvolume number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
+ */
 function volume_parcel_resampling(
     volume_in: InputPathType,
     cur_parcels: InputPathType,
@@ -211,29 +234,6 @@ function volume_parcel_resampling(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelResamplingOutputs {
-    /**
-     * Smooth and resample volume parcels.
-     * 
-     * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.
-     * 
-     * Note: all volumes must have the same dimensions and spacing.  To use a different output space, see -volume-parcel-resampling-generic.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input data volume
-     * @param cur_parcels label volume of where the parcels currently are
-     * @param new_parcels label volume of where the parcels should be
-     * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
-     * @param volume_out output volume
-     * @param opt_fix_zeros treat zero values as not being data
-     * @param opt_fwhm smoothing kernel size is FWHM, not sigma
-     * @param opt_subvolume_subvol select a single subvolume as input: the subvolume number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_PARCEL_RESAMPLING_METADATA);
     const params = volume_parcel_resampling_params(volume_in, cur_parcels, new_parcels, kernel, volume_out, opt_fix_zeros, opt_fwhm, opt_subvolume_subvol)
@@ -246,5 +246,8 @@ export {
       VolumeParcelResamplingOutputs,
       VolumeParcelResamplingParameters,
       volume_parcel_resampling,
+      volume_parcel_resampling_cargs,
+      volume_parcel_resampling_execute,
+      volume_parcel_resampling_outputs,
       volume_parcel_resampling_params,
 };

@@ -12,7 +12,7 @@ const V__FAT_TRACT_COLORIZE_METADATA: Metadata = {
 
 
 interface VFatTractColorizeParameters {
-    "__STYXTYPE__": "@fat_tract_colorize";
+    "@type": "afni.@fat_tract_colorize";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
     "in_tracts": string;
@@ -23,35 +23,35 @@ interface VFatTractColorizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@fat_tract_colorize": v__fat_tract_colorize_cargs,
+        "afni.@fat_tract_colorize": v__fat_tract_colorize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@fat_tract_colorize": v__fat_tract_colorize_outputs,
+        "afni.@fat_tract_colorize": v__fat_tract_colorize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,19 @@ interface VFatTractColorizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_fa FA values of the DT fitting, used to modulate the brightness of the RGB coloration.
+ * @param in_v1 First eigenvector of the DT fitting. A unit vector volume with 3 components (0-1 range).
+ * @param in_tracts The INDIMAP or PAIRMAP file output by 3dTrackID, specifying the subbrick if >1 (e.g., NAME_INDIMAP+orig'[0]').
+ * @param prefix Prefix for all output files.
+ * @param in_ulay Optional underlay dataset for AFNI/SUMA viewing. Default is to use the FA dataset.
+ * @param no_view Turn off auto-running of AFNI_SUMA commands to view the output immediately.
+ * @param only_view Only view the data with AFNI+SUMA, assuming the command has been run before.
+ *
+ * @returns Parameter dictionary
+ */
 function v__fat_tract_colorize_params(
     in_fa: InputPathType,
     in_v1: InputPathType,
@@ -95,21 +108,8 @@ function v__fat_tract_colorize_params(
     no_view: boolean = false,
     only_view: boolean = false,
 ): VFatTractColorizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_fa FA values of the DT fitting, used to modulate the brightness of the RGB coloration.
-     * @param in_v1 First eigenvector of the DT fitting. A unit vector volume with 3 components (0-1 range).
-     * @param in_tracts The INDIMAP or PAIRMAP file output by 3dTrackID, specifying the subbrick if >1 (e.g., NAME_INDIMAP+orig'[0]').
-     * @param prefix Prefix for all output files.
-     * @param in_ulay Optional underlay dataset for AFNI/SUMA viewing. Default is to use the FA dataset.
-     * @param no_view Turn off auto-running of AFNI_SUMA commands to view the output immediately.
-     * @param only_view Only view the data with AFNI+SUMA, assuming the command has been run before.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@fat_tract_colorize" as const,
+        "@type": "afni.@fat_tract_colorize" as const,
         "in_fa": in_fa,
         "in_v1": in_v1,
         "in_tracts": in_tracts,
@@ -124,18 +124,18 @@ function v__fat_tract_colorize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__fat_tract_colorize_cargs(
     params: VFatTractColorizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@fat_tract_colorize");
     cargs.push(
@@ -170,18 +170,18 @@ function v__fat_tract_colorize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__fat_tract_colorize_outputs(
     params: VFatTractColorizeParameters,
     execution: Execution,
 ): VFatTractColorizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFatTractColorizeOutputs = {
         root: execution.outputFile("."),
         output_hue_volume: execution.outputFile([(params["prefix"] ?? null), "_RGB_HUE.nii.gz"].join('')),
@@ -193,22 +193,22 @@ function v__fat_tract_colorize_outputs(
 }
 
 
+/**
+ * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
+ */
 function v__fat_tract_colorize_execute(
     params: VFatTractColorizeParameters,
     execution: Execution,
 ): VFatTractColorizeOutputs {
-    /**
-     * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__fat_tract_colorize_cargs(params, execution)
     const ret = v__fat_tract_colorize_outputs(params, execution)
@@ -217,6 +217,24 @@ function v__fat_tract_colorize_execute(
 }
 
 
+/**
+ * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_fa FA values of the DT fitting, used to modulate the brightness of the RGB coloration.
+ * @param in_v1 First eigenvector of the DT fitting. A unit vector volume with 3 components (0-1 range).
+ * @param in_tracts The INDIMAP or PAIRMAP file output by 3dTrackID, specifying the subbrick if >1 (e.g., NAME_INDIMAP+orig'[0]').
+ * @param prefix Prefix for all output files.
+ * @param in_ulay Optional underlay dataset for AFNI/SUMA viewing. Default is to use the FA dataset.
+ * @param no_view Turn off auto-running of AFNI_SUMA commands to view the output immediately.
+ * @param only_view Only view the data with AFNI+SUMA, assuming the command has been run before.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
+ */
 function v__fat_tract_colorize(
     in_fa: InputPathType,
     in_v1: InputPathType,
@@ -227,24 +245,6 @@ function v__fat_tract_colorize(
     only_view: boolean = false,
     runner: Runner | null = null,
 ): VFatTractColorizeOutputs {
-    /**
-     * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_fa FA values of the DT fitting, used to modulate the brightness of the RGB coloration.
-     * @param in_v1 First eigenvector of the DT fitting. A unit vector volume with 3 components (0-1 range).
-     * @param in_tracts The INDIMAP or PAIRMAP file output by 3dTrackID, specifying the subbrick if >1 (e.g., NAME_INDIMAP+orig'[0]').
-     * @param prefix Prefix for all output files.
-     * @param in_ulay Optional underlay dataset for AFNI/SUMA viewing. Default is to use the FA dataset.
-     * @param no_view Turn off auto-running of AFNI_SUMA commands to view the output immediately.
-     * @param only_view Only view the data with AFNI+SUMA, assuming the command has been run before.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FAT_TRACT_COLORIZE_METADATA);
     const params = v__fat_tract_colorize_params(in_fa, in_v1, in_tracts, prefix, in_ulay, no_view, only_view)
@@ -257,5 +257,8 @@ export {
       VFatTractColorizeParameters,
       V__FAT_TRACT_COLORIZE_METADATA,
       v__fat_tract_colorize,
+      v__fat_tract_colorize_cargs,
+      v__fat_tract_colorize_execute,
+      v__fat_tract_colorize_outputs,
       v__fat_tract_colorize_params,
 };

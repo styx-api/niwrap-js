@@ -12,40 +12,40 @@ const HELP_FORMAT_METADATA: Metadata = {
 
 
 interface HelpFormatParameters {
-    "__STYXTYPE__": "help_format";
+    "@type": "afni.help_format";
     "stdin": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "help_format": help_format_cargs,
+        "afni.help_format": help_format_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "help_format": help_format_outputs,
+        "afni.help_format": help_format_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface HelpFormatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stdin Standard input text to be formatted
+ *
+ * @returns Parameter dictionary
+ */
 function help_format_params(
     stdin: string,
 ): HelpFormatParameters {
-    /**
-     * Build parameters.
-    
-     * @param stdin Standard input text to be formatted
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "help_format" as const,
+        "@type": "afni.help_format" as const,
         "stdin": stdin,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function help_format_cargs(
     params: HelpFormatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("help_format");
     cargs.push((params["stdin"] ?? null));
@@ -105,18 +105,18 @@ function help_format_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function help_format_outputs(
     params: HelpFormatParameters,
     execution: Execution,
 ): HelpFormatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HelpFormatOutputs = {
         root: execution.outputFile("."),
         formatted_output: execution.outputFile(["formatted_output.html"].join('')),
@@ -125,22 +125,22 @@ function help_format_outputs(
 }
 
 
+/**
+ * Formats text by converting URLs into HTML hyperlinks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
+ */
 function help_format_execute(
     params: HelpFormatParameters,
     execution: Execution,
 ): HelpFormatOutputs {
-    /**
-     * Formats text by converting URLs into HTML hyperlinks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
-     */
     params = execution.params(params)
     const cargs = help_format_cargs(params, execution)
     const ret = help_format_outputs(params, execution)
@@ -149,22 +149,22 @@ function help_format_execute(
 }
 
 
+/**
+ * Formats text by converting URLs into HTML hyperlinks.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param stdin Standard input text to be formatted
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
+ */
 function help_format(
     stdin: string,
     runner: Runner | null = null,
 ): HelpFormatOutputs {
-    /**
-     * Formats text by converting URLs into HTML hyperlinks.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param stdin Standard input text to be formatted
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HELP_FORMAT_METADATA);
     const params = help_format_params(stdin)
@@ -177,5 +177,8 @@ export {
       HelpFormatOutputs,
       HelpFormatParameters,
       help_format,
+      help_format_cargs,
+      help_format_execute,
+      help_format_outputs,
       help_format_params,
 };

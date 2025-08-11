@@ -12,14 +12,14 @@ const DIRFLIP_METADATA: Metadata = {
 
 
 interface DirflipConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dirflip.config";
     "key": string;
     "value": string;
 }
 
 
 interface DirflipParameters {
-    "__STYXTYPE__": "dirflip";
+    "@type": "mrtrix.dirflip";
     "permutations"?: number | null | undefined;
     "cartesian": boolean;
     "info": boolean;
@@ -35,55 +35,55 @@ interface DirflipParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dirflip": dirflip_cargs,
-        "config": dirflip_config_cargs,
+        "mrtrix.dirflip": dirflip_cargs,
+        "mrtrix.dirflip.config": dirflip_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dirflip": dirflip_outputs,
+        "mrtrix.dirflip": dirflip_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dirflip_config_params(
     key: string,
     value: string,
 ): DirflipConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dirflip.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function dirflip_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirflip_config_cargs(
     params: DirflipConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface DirflipOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input files for the directions.
+ * @param out the output files for the directions.
+ * @param permutations number of permutations to try (default: 100000000)
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dirflip_params(
     in_: InputPathType,
     out: string,
@@ -142,26 +160,8 @@ function dirflip_params(
     help: boolean = false,
     version: boolean = false,
 ): DirflipParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input files for the directions.
-     * @param out the output files for the directions.
-     * @param permutations number of permutations to try (default: 100000000)
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dirflip" as const,
+        "@type": "mrtrix.dirflip" as const,
         "cartesian": cartesian,
         "info": info,
         "quiet": quiet,
@@ -185,18 +185,18 @@ function dirflip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirflip_cargs(
     params: DirflipParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dirflip");
     if ((params["permutations"] ?? null) !== null) {
@@ -227,7 +227,7 @@ function dirflip_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -241,18 +241,18 @@ function dirflip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dirflip_outputs(
     params: DirflipParameters,
     execution: Execution,
 ): DirflipOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DirflipOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -261,28 +261,28 @@ function dirflip_outputs(
 }
 
 
+/**
+ * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
+ *
+ * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DirflipOutputs`).
+ */
 function dirflip_execute(
     params: DirflipParameters,
     execution: Execution,
 ): DirflipOutputs {
-    /**
-     * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
-     * 
-     * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DirflipOutputs`).
-     */
     params = execution.params(params)
     const cargs = dirflip_cargs(params, execution)
     const ret = dirflip_outputs(params, execution)
@@ -291,6 +291,35 @@ function dirflip_execute(
 }
 
 
+/**
+ * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
+ *
+ * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input files for the directions.
+ * @param out the output files for the directions.
+ * @param permutations number of permutations to try (default: 100000000)
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DirflipOutputs`).
+ */
 function dirflip(
     in_: InputPathType,
     out: string,
@@ -306,35 +335,6 @@ function dirflip(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirflipOutputs {
-    /**
-     * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
-     * 
-     * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input files for the directions.
-     * @param out the output files for the directions.
-     * @param permutations number of permutations to try (default: 100000000)
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DirflipOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIRFLIP_METADATA);
     const params = dirflip_params(in_, out, permutations, cartesian, info, quiet, debug, force, nthreads, config, help, version)
@@ -348,6 +348,10 @@ export {
       DirflipOutputs,
       DirflipParameters,
       dirflip,
+      dirflip_cargs,
+      dirflip_config_cargs,
       dirflip_config_params,
+      dirflip_execute,
+      dirflip_outputs,
       dirflip_params,
 };

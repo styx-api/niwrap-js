@@ -12,41 +12,41 @@ const REG_MNI305_2MM_METADATA: Metadata = {
 
 
 interface RegMni3052mmParameters {
-    "__STYXTYPE__": "reg-mni305.2mm";
+    "@type": "freesurfer.reg-mni305.2mm";
     "subject_id": string;
     "regfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg-mni305.2mm": reg_mni305_2mm_cargs,
+        "freesurfer.reg-mni305.2mm": reg_mni305_2mm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg-mni305.2mm": reg_mni305_2mm_outputs,
+        "freesurfer.reg-mni305.2mm": reg_mni305_2mm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface RegMni3052mmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID for the FreeSurfer anatomical space.
+ * @param regfile tkregister2-style registration matrix file (should have a .dat or .reg extension).
+ *
+ * @returns Parameter dictionary
+ */
 function reg_mni305_2mm_params(
     subject_id: string,
     regfile: InputPathType,
 ): RegMni3052mmParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID for the FreeSurfer anatomical space.
-     * @param regfile tkregister2-style registration matrix file (should have a .dat or .reg extension).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg-mni305.2mm" as const,
+        "@type": "freesurfer.reg-mni305.2mm" as const,
         "subject_id": subject_id,
         "regfile": regfile,
     };
@@ -90,18 +90,18 @@ function reg_mni305_2mm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_mni305_2mm_cargs(
     params: RegMni3052mmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg-mni305.2mm");
     cargs.push(
@@ -116,18 +116,18 @@ function reg_mni305_2mm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_mni305_2mm_outputs(
     params: RegMni3052mmParameters,
     execution: Execution,
 ): RegMni3052mmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegMni3052mmOutputs = {
         root: execution.outputFile("."),
         output_regfile: execution.outputFile([path.basename((params["regfile"] ?? null))].join('')),
@@ -136,22 +136,22 @@ function reg_mni305_2mm_outputs(
 }
 
 
+/**
+ * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
+ */
 function reg_mni305_2mm_execute(
     params: RegMni3052mmParameters,
     execution: Execution,
 ): RegMni3052mmOutputs {
-    /**
-     * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_mni305_2mm_cargs(params, execution)
     const ret = reg_mni305_2mm_outputs(params, execution)
@@ -160,24 +160,24 @@ function reg_mni305_2mm_execute(
 }
 
 
+/**
+ * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject ID for the FreeSurfer anatomical space.
+ * @param regfile tkregister2-style registration matrix file (should have a .dat or .reg extension).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
+ */
 function reg_mni305_2mm(
     subject_id: string,
     regfile: InputPathType,
     runner: Runner | null = null,
 ): RegMni3052mmOutputs {
-    /**
-     * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject ID for the FreeSurfer anatomical space.
-     * @param regfile tkregister2-style registration matrix file (should have a .dat or .reg extension).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_MNI305_2MM_METADATA);
     const params = reg_mni305_2mm_params(subject_id, regfile)
@@ -190,5 +190,8 @@ export {
       RegMni3052mmOutputs,
       RegMni3052mmParameters,
       reg_mni305_2mm,
+      reg_mni305_2mm_cargs,
+      reg_mni305_2mm_execute,
+      reg_mni305_2mm_outputs,
       reg_mni305_2mm_params,
 };

@@ -12,7 +12,7 @@ const IMSTAT_METADATA: Metadata = {
 
 
 interface ImstatParameters {
-    "__STYXTYPE__": "imstat";
+    "@type": "afni.imstat";
     "no_label": boolean;
     "quiet": boolean;
     "pixstat_prefix"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface ImstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imstat": imstat_cargs,
+        "afni.imstat": imstat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imstat": imstat_outputs,
+        "afni.imstat": imstat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface ImstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_files Input image file(s)
+ * @param no_label Don't write labels on each file's summary line
+ * @param quiet Don't print statistics for each file
+ * @param pixstat_prefix If more than one image file is given, then 'prefix.mean' and 'prefix.sdev' will be written as the pixel-wise statistics images of the whole collection. These images will be in the 'flim' floating point format. [This option only works on 2D images!]
+ *
+ * @returns Parameter dictionary
+ */
 function imstat_params(
     image_files: Array<InputPathType>,
     no_label: boolean = false,
     quiet: boolean = false,
     pixstat_prefix: string | null = null,
 ): ImstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_files Input image file(s)
-     * @param no_label Don't write labels on each file's summary line
-     * @param quiet Don't print statistics for each file
-     * @param pixstat_prefix If more than one image file is given, then 'prefix.mean' and 'prefix.sdev' will be written as the pixel-wise statistics images of the whole collection. These images will be in the 'flim' floating point format. [This option only works on 2D images!]
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imstat" as const,
+        "@type": "afni.imstat" as const,
         "no_label": no_label,
         "quiet": quiet,
         "image_files": image_files,
@@ -104,18 +104,18 @@ function imstat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imstat_cargs(
     params: ImstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imstat");
     if ((params["no_label"] ?? null)) {
@@ -135,18 +135,18 @@ function imstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imstat_outputs(
     params: ImstatParameters,
     execution: Execution,
 ): ImstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImstatOutputs = {
         root: execution.outputFile("."),
         mean_output: ((params["pixstat_prefix"] ?? null) !== null) ? execution.outputFile([(params["pixstat_prefix"] ?? null), ".mean"].join('')) : null,
@@ -156,22 +156,22 @@ function imstat_outputs(
 }
 
 
+/**
+ * Calculation of statistics of one or more images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImstatOutputs`).
+ */
 function imstat_execute(
     params: ImstatParameters,
     execution: Execution,
 ): ImstatOutputs {
-    /**
-     * Calculation of statistics of one or more images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = imstat_cargs(params, execution)
     const ret = imstat_outputs(params, execution)
@@ -180,6 +180,21 @@ function imstat_execute(
 }
 
 
+/**
+ * Calculation of statistics of one or more images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param image_files Input image file(s)
+ * @param no_label Don't write labels on each file's summary line
+ * @param quiet Don't print statistics for each file
+ * @param pixstat_prefix If more than one image file is given, then 'prefix.mean' and 'prefix.sdev' will be written as the pixel-wise statistics images of the whole collection. These images will be in the 'flim' floating point format. [This option only works on 2D images!]
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImstatOutputs`).
+ */
 function imstat(
     image_files: Array<InputPathType>,
     no_label: boolean = false,
@@ -187,21 +202,6 @@ function imstat(
     pixstat_prefix: string | null = null,
     runner: Runner | null = null,
 ): ImstatOutputs {
-    /**
-     * Calculation of statistics of one or more images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param image_files Input image file(s)
-     * @param no_label Don't write labels on each file's summary line
-     * @param quiet Don't print statistics for each file
-     * @param pixstat_prefix If more than one image file is given, then 'prefix.mean' and 'prefix.sdev' will be written as the pixel-wise statistics images of the whole collection. These images will be in the 'flim' floating point format. [This option only works on 2D images!]
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMSTAT_METADATA);
     const params = imstat_params(image_files, no_label, quiet, pixstat_prefix)
@@ -214,5 +214,8 @@ export {
       ImstatOutputs,
       ImstatParameters,
       imstat,
+      imstat_cargs,
+      imstat_execute,
+      imstat_outputs,
       imstat_params,
 };

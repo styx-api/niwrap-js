@@ -12,7 +12,7 @@ const ANTS_CORTICAL_THICKNESS_SH_METADATA: Metadata = {
 
 
 interface AntsCorticalThicknessShParameters {
-    "__STYXTYPE__": "antsCorticalThickness.sh";
+    "@type": "ants.antsCorticalThickness.sh";
     "image_dimension": 2 | 3;
     "anatomical_image": InputPathType;
     "brain_template": InputPathType;
@@ -41,35 +41,35 @@ interface AntsCorticalThicknessShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsCorticalThickness.sh": ants_cortical_thickness_sh_cargs,
+        "ants.antsCorticalThickness.sh": ants_cortical_thickness_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsCorticalThickness.sh": ants_cortical_thickness_sh_outputs,
+        "ants.antsCorticalThickness.sh": ants_cortical_thickness_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -104,6 +104,37 @@ interface AntsCorticalThicknessShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension 2 or 3 for 2- or 3-dimensional image
+ * @param anatomical_image Structural intensity image, typically T1.
+ * @param brain_template Anatomical intensity template. This template is not skull-stripped.
+ * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
+ * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
+ * @param output_prefix Output prefix for the generated filenames.
+ * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+ * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
+ * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
+ * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
+ * @param denoise_anatomical_images Denoise anatomical images (default = 0).
+ * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
+ * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+ * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
+ * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
+ * @param use_floating_point_precision Use single float precision in registrations (default = 0).
+ * @param use_random_seeding Use random number generated from system clock (default = 1).
+ * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
+ * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
+ * @param label_propagation Incorporate a distance prior on the posterior formulation.
+ * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
+ * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
+ * @param atropos_iterations Number of iterations within Atropos (default = 5).
+ * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
+ * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
+ *
+ * @returns Parameter dictionary
+ */
 function ants_cortical_thickness_sh_params(
     image_dimension: 2 | 3,
     anatomical_image: InputPathType,
@@ -131,39 +162,8 @@ function ants_cortical_thickness_sh_params(
     script_stage_to_run: number | null = null,
     test_debug_mode: number | null = null,
 ): AntsCorticalThicknessShParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension 2 or 3 for 2- or 3-dimensional image
-     * @param anatomical_image Structural intensity image, typically T1.
-     * @param brain_template Anatomical intensity template. This template is not skull-stripped.
-     * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
-     * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
-     * @param output_prefix Output prefix for the generated filenames.
-     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
-     * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
-     * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
-     * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
-     * @param denoise_anatomical_images Denoise anatomical images (default = 0).
-     * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
-     * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
-     * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
-     * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
-     * @param use_floating_point_precision Use single float precision in registrations (default = 0).
-     * @param use_random_seeding Use random number generated from system clock (default = 1).
-     * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
-     * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
-     * @param label_propagation Incorporate a distance prior on the posterior formulation.
-     * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
-     * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
-     * @param atropos_iterations Number of iterations within Atropos (default = 5).
-     * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
-     * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsCorticalThickness.sh" as const,
+        "@type": "ants.antsCorticalThickness.sh" as const,
         "image_dimension": image_dimension,
         "anatomical_image": anatomical_image,
         "brain_template": brain_template,
@@ -232,18 +232,18 @@ function ants_cortical_thickness_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_cortical_thickness_sh_cargs(
     params: AntsCorticalThicknessShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsCorticalThickness.sh");
     cargs.push(
@@ -388,18 +388,18 @@ function ants_cortical_thickness_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_cortical_thickness_sh_outputs(
     params: AntsCorticalThicknessShParameters,
     execution: Execution,
 ): AntsCorticalThicknessShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsCorticalThicknessShOutputs = {
         root: execution.outputFile("."),
         cortical_thickness: execution.outputFile([(params["output_prefix"] ?? null), "CorticalThickness.nii.gz"].join('')),
@@ -411,22 +411,22 @@ function ants_cortical_thickness_sh_outputs(
 }
 
 
+/**
+ * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
+ */
 function ants_cortical_thickness_sh_execute(
     params: AntsCorticalThicknessShParameters,
     execution: Execution,
 ): AntsCorticalThicknessShOutputs {
-    /**
-     * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_cortical_thickness_sh_cargs(params, execution)
     const ret = ants_cortical_thickness_sh_outputs(params, execution)
@@ -435,6 +435,42 @@ function ants_cortical_thickness_sh_execute(
 }
 
 
+/**
+ * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension 2 or 3 for 2- or 3-dimensional image
+ * @param anatomical_image Structural intensity image, typically T1.
+ * @param brain_template Anatomical intensity template. This template is not skull-stripped.
+ * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
+ * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
+ * @param output_prefix Output prefix for the generated filenames.
+ * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
+ * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
+ * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
+ * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
+ * @param denoise_anatomical_images Denoise anatomical images (default = 0).
+ * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
+ * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
+ * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
+ * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
+ * @param use_floating_point_precision Use single float precision in registrations (default = 0).
+ * @param use_random_seeding Use random number generated from system clock (default = 1).
+ * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
+ * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
+ * @param label_propagation Incorporate a distance prior on the posterior formulation.
+ * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
+ * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
+ * @param atropos_iterations Number of iterations within Atropos (default = 5).
+ * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
+ * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
+ */
 function ants_cortical_thickness_sh(
     image_dimension: 2 | 3,
     anatomical_image: InputPathType,
@@ -463,42 +499,6 @@ function ants_cortical_thickness_sh(
     test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsCorticalThicknessShOutputs {
-    /**
-     * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension 2 or 3 for 2- or 3-dimensional image
-     * @param anatomical_image Structural intensity image, typically T1.
-     * @param brain_template Anatomical intensity template. This template is not skull-stripped.
-     * @param brain_extraction_probability_mask Brain probability mask in the segmentation template space. A binary mask is acceptable.
-     * @param brain_segmentation_priors Tissue probability priors corresponding to the template image specified with the -e option. At least four priors must exist, corresponding to CSF, Cortical GM, WM, Subcortical GM.
-     * @param output_prefix Output prefix for the generated filenames.
-     * @param image_file_suffix Any of the standard ITK IO formats e.g. nrrd, nii.gz (default), mhd.
-     * @param template_for_t1_registration Anatomical intensity template. This template must be skull-stripped.
-     * @param extraction_registration_mask Binary metric mask defined in the segmentation template space (-e). Only used in brain extraction registration.
-     * @param keep_temporary_files Keep brain extraction/segmentation warps, etc (default = 0).
-     * @param denoise_anatomical_images Denoise anatomical images (default = 0).
-     * @param max_iterations_for_registration ANTS registration max iterations (default = 100x100x70x20).
-     * @param atropos_prior_segmentation_weight Atropos spatial prior probability weight for the segmentation (default = 0.25).
-     * @param number_of_segmentation_iterations N4 -> Atropos -> N4 iterations during segmentation (default = 3).
-     * @param posterior_formulation Atropos posterior formulation and whether or not to use mixture model proportions. e.g 'Socrates[ 1 ]' (default) or 'Aristotle[ 1 ]'.
-     * @param use_floating_point_precision Use single float precision in registrations (default = 0).
-     * @param use_random_seeding Use random number generated from system clock (default = 1).
-     * @param use_b_spline_smoothing Use B-spline SyN for registrations and B-spline exponential mapping in DiReCT (default = 0).
-     * @param cortical_thickness_prior_image Cortical thickness prior image in the template space, with an estimated upper limit of cortical thickness at each voxel.
-     * @param label_propagation Incorporate a distance prior on the posterior formulation.
-     * @param additional_priors_for_thickness Add segmentation classes for thickness estimation.
-     * @param use_quick_registration_parameters Use antsRegistrationSyNQuick.sh for registrations (default = 0).
-     * @param atropos_iterations Number of iterations within Atropos (default = 5).
-     * @param script_stage_to_run Which stage of ACT to run (default = 0, run all).
-     * @param test_debug_mode If > 0, runs a faster version of the script. Only for testing (default = 0).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_CORTICAL_THICKNESS_SH_METADATA);
     const params = ants_cortical_thickness_sh_params(image_dimension, anatomical_image, brain_template, brain_extraction_probability_mask, brain_segmentation_priors, output_prefix, image_file_suffix, template_for_t1_registration, extraction_registration_mask, keep_temporary_files, denoise_anatomical_images, max_iterations_for_registration, atropos_prior_segmentation_weight, number_of_segmentation_iterations, posterior_formulation, use_floating_point_precision, use_random_seeding, use_b_spline_smoothing, cortical_thickness_prior_image, label_propagation, additional_priors_for_thickness, use_quick_registration_parameters, atropos_iterations, script_stage_to_run, test_debug_mode)
@@ -511,5 +511,8 @@ export {
       AntsCorticalThicknessShOutputs,
       AntsCorticalThicknessShParameters,
       ants_cortical_thickness_sh,
+      ants_cortical_thickness_sh_cargs,
+      ants_cortical_thickness_sh_execute,
+      ants_cortical_thickness_sh_outputs,
       ants_cortical_thickness_sh_params,
 };

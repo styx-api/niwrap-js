@@ -12,42 +12,42 @@ const PERFUSION_SUBTRACT_METADATA: Metadata = {
 
 
 interface PerfusionSubtractParameters {
-    "__STYXTYPE__": "perfusion_subtract";
+    "@type": "fsl.perfusion_subtract";
     "four_d_input": InputPathType;
     "four_d_output": string;
     "control_first_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "perfusion_subtract": perfusion_subtract_cargs,
+        "fsl.perfusion_subtract": perfusion_subtract_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "perfusion_subtract": perfusion_subtract_outputs,
+        "fsl.perfusion_subtract": perfusion_subtract_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface PerfusionSubtractOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param four_d_input Input 4D perfusion image (e.g. perfusion.nii.gz)
+ * @param four_d_output Output 4D image with subtraction results (e.g. perfusion_subtracted.nii.gz)
+ * @param control_first_flag First timepoint is control instead of tag. Default is tag first.
+ *
+ * @returns Parameter dictionary
+ */
 function perfusion_subtract_params(
     four_d_input: InputPathType,
     four_d_output: string,
     control_first_flag: boolean = false,
 ): PerfusionSubtractParameters {
-    /**
-     * Build parameters.
-    
-     * @param four_d_input Input 4D perfusion image (e.g. perfusion.nii.gz)
-     * @param four_d_output Output 4D image with subtraction results (e.g. perfusion_subtracted.nii.gz)
-     * @param control_first_flag First timepoint is control instead of tag. Default is tag first.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "perfusion_subtract" as const,
+        "@type": "fsl.perfusion_subtract" as const,
         "four_d_input": four_d_input,
         "four_d_output": four_d_output,
         "control_first_flag": control_first_flag,
@@ -94,18 +94,18 @@ function perfusion_subtract_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function perfusion_subtract_cargs(
     params: PerfusionSubtractParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("perfusion_subtract");
     cargs.push(execution.inputFile((params["four_d_input"] ?? null)));
@@ -117,18 +117,18 @@ function perfusion_subtract_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function perfusion_subtract_outputs(
     params: PerfusionSubtractParameters,
     execution: Execution,
 ): PerfusionSubtractOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PerfusionSubtractOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["four_d_output"] ?? null), ".nii.gz"].join('')),
@@ -137,22 +137,22 @@ function perfusion_subtract_outputs(
 }
 
 
+/**
+ * Subtract control images from tag images in 4D perfusion data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
+ */
 function perfusion_subtract_execute(
     params: PerfusionSubtractParameters,
     execution: Execution,
 ): PerfusionSubtractOutputs {
-    /**
-     * Subtract control images from tag images in 4D perfusion data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
-     */
     params = execution.params(params)
     const cargs = perfusion_subtract_cargs(params, execution)
     const ret = perfusion_subtract_outputs(params, execution)
@@ -161,26 +161,26 @@ function perfusion_subtract_execute(
 }
 
 
+/**
+ * Subtract control images from tag images in 4D perfusion data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param four_d_input Input 4D perfusion image (e.g. perfusion.nii.gz)
+ * @param four_d_output Output 4D image with subtraction results (e.g. perfusion_subtracted.nii.gz)
+ * @param control_first_flag First timepoint is control instead of tag. Default is tag first.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
+ */
 function perfusion_subtract(
     four_d_input: InputPathType,
     four_d_output: string,
     control_first_flag: boolean = false,
     runner: Runner | null = null,
 ): PerfusionSubtractOutputs {
-    /**
-     * Subtract control images from tag images in 4D perfusion data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param four_d_input Input 4D perfusion image (e.g. perfusion.nii.gz)
-     * @param four_d_output Output 4D image with subtraction results (e.g. perfusion_subtracted.nii.gz)
-     * @param control_first_flag First timepoint is control instead of tag. Default is tag first.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PERFUSION_SUBTRACT_METADATA);
     const params = perfusion_subtract_params(four_d_input, four_d_output, control_first_flag)
@@ -193,5 +193,8 @@ export {
       PerfusionSubtractOutputs,
       PerfusionSubtractParameters,
       perfusion_subtract,
+      perfusion_subtract_cargs,
+      perfusion_subtract_execute,
+      perfusion_subtract_outputs,
       perfusion_subtract_params,
 };

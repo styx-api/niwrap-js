@@ -12,7 +12,7 @@ const MNI152REG_METADATA: Metadata = {
 
 
 interface Mni152regParameters {
-    "__STYXTYPE__": "mni152reg";
+    "@type": "freesurfer.mni152reg";
     "subject": string;
     "register_1mm": boolean;
     "output"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface Mni152regParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mni152reg": mni152reg_cargs,
+        "freesurfer.mni152reg": mni152reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mni152reg": mni152reg_outputs,
+        "freesurfer.mni152reg": mni152reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface Mni152regOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject FreeSurfer subject ID
+ * @param register_1mm Register to 1mm target (instead of 2mm)
+ * @param output Explicitly set output registration file
+ * @param symmetric Register to FSL symmetric target
+ * @param save_volume Sample original to output space
+ *
+ * @returns Parameter dictionary
+ */
 function mni152reg_params(
     subject: string,
     register_1mm: boolean = false,
@@ -83,19 +94,8 @@ function mni152reg_params(
     symmetric: boolean = false,
     save_volume: boolean = false,
 ): Mni152regParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject FreeSurfer subject ID
-     * @param register_1mm Register to 1mm target (instead of 2mm)
-     * @param output Explicitly set output registration file
-     * @param symmetric Register to FSL symmetric target
-     * @param save_volume Sample original to output space
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mni152reg" as const,
+        "@type": "freesurfer.mni152reg" as const,
         "subject": subject,
         "register_1mm": register_1mm,
         "symmetric": symmetric,
@@ -108,18 +108,18 @@ function mni152reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mni152reg_cargs(
     params: Mni152regParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mni152reg");
     cargs.push(
@@ -145,18 +145,18 @@ function mni152reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mni152reg_outputs(
     params: Mni152regParameters,
     execution: Execution,
 ): Mni152regOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Mni152regOutputs = {
         root: execution.outputFile("."),
         reg_matrix_2mm: execution.outputFile(["$SUBJECTS_DIR/", (params["subject"] ?? null), "/mri/transforms/reg.mni152.2mm.dat"].join('')),
@@ -166,22 +166,22 @@ function mni152reg_outputs(
 }
 
 
+/**
+ * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
+ */
 function mni152reg_execute(
     params: Mni152regParameters,
     execution: Execution,
 ): Mni152regOutputs {
-    /**
-     * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
-     */
     params = execution.params(params)
     const cargs = mni152reg_cargs(params, execution)
     const ret = mni152reg_outputs(params, execution)
@@ -190,6 +190,22 @@ function mni152reg_execute(
 }
 
 
+/**
+ * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject FreeSurfer subject ID
+ * @param register_1mm Register to 1mm target (instead of 2mm)
+ * @param output Explicitly set output registration file
+ * @param symmetric Register to FSL symmetric target
+ * @param save_volume Sample original to output space
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
+ */
 function mni152reg(
     subject: string,
     register_1mm: boolean = false,
@@ -198,22 +214,6 @@ function mni152reg(
     save_volume: boolean = false,
     runner: Runner | null = null,
 ): Mni152regOutputs {
-    /**
-     * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject FreeSurfer subject ID
-     * @param register_1mm Register to 1mm target (instead of 2mm)
-     * @param output Explicitly set output registration file
-     * @param symmetric Register to FSL symmetric target
-     * @param save_volume Sample original to output space
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MNI152REG_METADATA);
     const params = mni152reg_params(subject, register_1mm, output, symmetric, save_volume)
@@ -226,5 +226,8 @@ export {
       Mni152regOutputs,
       Mni152regParameters,
       mni152reg,
+      mni152reg_cargs,
+      mni152reg_execute,
+      mni152reg_outputs,
       mni152reg_params,
 };

@@ -12,39 +12,39 @@ const FSLHD_METADATA: Metadata = {
 
 
 interface FslhdParameters {
-    "__STYXTYPE__": "fslhd";
+    "@type": "fsl.fslhd";
     "xml_flag": boolean;
     "input_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslhd": fslhd_cargs,
+        "fsl.fslhd": fslhd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FslhdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input NIFTI file
+ * @param xml_flag Print an XML-style NIFTI header
+ *
+ * @returns Parameter dictionary
+ */
 function fslhd_params(
     input_file: InputPathType,
     xml_flag: boolean = false,
 ): FslhdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input NIFTI file
-     * @param xml_flag Print an XML-style NIFTI header
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslhd" as const,
+        "@type": "fsl.fslhd" as const,
         "xml_flag": xml_flag,
         "input_file": input_file,
     };
@@ -85,18 +85,18 @@ function fslhd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslhd_cargs(
     params: FslhdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslhd");
     if ((params["xml_flag"] ?? null)) {
@@ -107,18 +107,18 @@ function fslhd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslhd_outputs(
     params: FslhdParameters,
     execution: Execution,
 ): FslhdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslhdOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function fslhd_outputs(
 }
 
 
+/**
+ * Display header information from a NIFTI file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslhdOutputs`).
+ */
 function fslhd_execute(
     params: FslhdParameters,
     execution: Execution,
 ): FslhdOutputs {
-    /**
-     * Display header information from a NIFTI file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslhdOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslhd_cargs(params, execution)
     const ret = fslhd_outputs(params, execution)
@@ -150,24 +150,24 @@ function fslhd_execute(
 }
 
 
+/**
+ * Display header information from a NIFTI file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input NIFTI file
+ * @param xml_flag Print an XML-style NIFTI header
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslhdOutputs`).
+ */
 function fslhd(
     input_file: InputPathType,
     xml_flag: boolean = false,
     runner: Runner | null = null,
 ): FslhdOutputs {
-    /**
-     * Display header information from a NIFTI file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input NIFTI file
-     * @param xml_flag Print an XML-style NIFTI header
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslhdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLHD_METADATA);
     const params = fslhd_params(input_file, xml_flag)
@@ -180,5 +180,8 @@ export {
       FslhdOutputs,
       FslhdParameters,
       fslhd,
+      fslhd_cargs,
+      fslhd_execute,
+      fslhd_outputs,
       fslhd_params,
 };

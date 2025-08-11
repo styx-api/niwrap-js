@@ -12,7 +12,7 @@ const V_2D_IM_REG_METADATA: Metadata = {
 
 
 interface V2dImRegParameters {
-    "__STYXTYPE__": "2dImReg";
+    "@type": "afni.2dImReg";
     "input_file": InputPathType;
     "base_file"?: InputPathType | null | undefined;
     "base"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface V2dImRegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "2dImReg": v_2d_im_reg_cargs,
+        "afni.2dImReg": v_2d_im_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "2dImReg": v_2d_im_reg_outputs,
+        "afni.2dImReg": v_2d_im_reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,24 @@ interface V2dImRegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of input 3d+time dataset to process
+ * @param prefix Prefix name for output 3d+time dataset
+ * @param base_file Filename of 3d+time dataset for base image (default = current input dataset)
+ * @param base Time index for base image (0 <= num) (default: num = 3)
+ * @param nofine Deactivate fine fit phase of image registration (default: fine fit is active)
+ * @param fine_blur FWHM of blurring prior to registration (in pixels) (default: blur = 1.0)
+ * @param fine_dxy Convergence tolerance for translations (in pixels) (default: dxy = 0.07)
+ * @param fine_dphi Convergence tolerance for rotations (in degrees) (default: dphi = 0.21)
+ * @param dprefix Write files containing the registration parameters for each slice in chronological order
+ * @param dmm Change dx and dy output format from pixels to mm
+ * @param rprefix Write files containing the volume RMS error for the original and the registered datasets
+ * @param debug Lots of additional output to screen
+ *
+ * @returns Parameter dictionary
+ */
 function v_2d_im_reg_params(
     input_file: InputPathType,
     prefix: string,
@@ -113,26 +131,8 @@ function v_2d_im_reg_params(
     rprefix: string | null = null,
     debug: boolean = false,
 ): V2dImRegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of input 3d+time dataset to process
-     * @param prefix Prefix name for output 3d+time dataset
-     * @param base_file Filename of 3d+time dataset for base image (default = current input dataset)
-     * @param base Time index for base image (0 <= num) (default: num = 3)
-     * @param nofine Deactivate fine fit phase of image registration (default: fine fit is active)
-     * @param fine_blur FWHM of blurring prior to registration (in pixels) (default: blur = 1.0)
-     * @param fine_dxy Convergence tolerance for translations (in pixels) (default: dxy = 0.07)
-     * @param fine_dphi Convergence tolerance for rotations (in degrees) (default: dphi = 0.21)
-     * @param dprefix Write files containing the registration parameters for each slice in chronological order
-     * @param dmm Change dx and dy output format from pixels to mm
-     * @param rprefix Write files containing the volume RMS error for the original and the registered datasets
-     * @param debug Lots of additional output to screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "2dImReg" as const,
+        "@type": "afni.2dImReg" as const,
         "input_file": input_file,
         "nofine": nofine,
         "prefix": prefix,
@@ -164,18 +164,18 @@ function v_2d_im_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_2d_im_reg_cargs(
     params: V2dImRegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("2dImReg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -214,18 +214,18 @@ function v_2d_im_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_2d_im_reg_outputs(
     params: V2dImRegParameters,
     execution: Execution,
 ): V2dImRegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2dImRegOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')),
@@ -239,22 +239,22 @@ function v_2d_im_reg_outputs(
 }
 
 
+/**
+ * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
+ */
 function v_2d_im_reg_execute(
     params: V2dImRegParameters,
     execution: Execution,
 ): V2dImRegOutputs {
-    /**
-     * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_2d_im_reg_cargs(params, execution)
     const ret = v_2d_im_reg_outputs(params, execution)
@@ -263,6 +263,29 @@ function v_2d_im_reg_execute(
 }
 
 
+/**
+ * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Filename of input 3d+time dataset to process
+ * @param prefix Prefix name for output 3d+time dataset
+ * @param base_file Filename of 3d+time dataset for base image (default = current input dataset)
+ * @param base Time index for base image (0 <= num) (default: num = 3)
+ * @param nofine Deactivate fine fit phase of image registration (default: fine fit is active)
+ * @param fine_blur FWHM of blurring prior to registration (in pixels) (default: blur = 1.0)
+ * @param fine_dxy Convergence tolerance for translations (in pixels) (default: dxy = 0.07)
+ * @param fine_dphi Convergence tolerance for rotations (in degrees) (default: dphi = 0.21)
+ * @param dprefix Write files containing the registration parameters for each slice in chronological order
+ * @param dmm Change dx and dy output format from pixels to mm
+ * @param rprefix Write files containing the volume RMS error for the original and the registered datasets
+ * @param debug Lots of additional output to screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
+ */
 function v_2d_im_reg(
     input_file: InputPathType,
     prefix: string,
@@ -278,29 +301,6 @@ function v_2d_im_reg(
     debug: boolean = false,
     runner: Runner | null = null,
 ): V2dImRegOutputs {
-    /**
-     * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Filename of input 3d+time dataset to process
-     * @param prefix Prefix name for output 3d+time dataset
-     * @param base_file Filename of 3d+time dataset for base image (default = current input dataset)
-     * @param base Time index for base image (0 <= num) (default: num = 3)
-     * @param nofine Deactivate fine fit phase of image registration (default: fine fit is active)
-     * @param fine_blur FWHM of blurring prior to registration (in pixels) (default: blur = 1.0)
-     * @param fine_dxy Convergence tolerance for translations (in pixels) (default: dxy = 0.07)
-     * @param fine_dphi Convergence tolerance for rotations (in degrees) (default: dphi = 0.21)
-     * @param dprefix Write files containing the registration parameters for each slice in chronological order
-     * @param dmm Change dx and dy output format from pixels to mm
-     * @param rprefix Write files containing the volume RMS error for the original and the registered datasets
-     * @param debug Lots of additional output to screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_2D_IM_REG_METADATA);
     const params = v_2d_im_reg_params(input_file, prefix, base_file, base, nofine, fine_blur, fine_dxy, fine_dphi, dprefix, dmm, rprefix, debug)
@@ -313,5 +313,8 @@ export {
       V2dImRegParameters,
       V_2D_IM_REG_METADATA,
       v_2d_im_reg,
+      v_2d_im_reg_cargs,
+      v_2d_im_reg_execute,
+      v_2d_im_reg_outputs,
       v_2d_im_reg_params,
 };

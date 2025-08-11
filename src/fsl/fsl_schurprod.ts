@@ -12,7 +12,7 @@ const FSL_SCHURPROD_METADATA: Metadata = {
 
 
 interface FslSchurprodParameters {
-    "__STYXTYPE__": "fsl_schurprod";
+    "@type": "fsl.fsl_schurprod";
     "input_file": InputPathType;
     "design_file": InputPathType;
     "output_file": string;
@@ -24,35 +24,35 @@ interface FslSchurprodParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_schurprod": fsl_schurprod_cargs,
+        "fsl.fsl_schurprod": fsl_schurprod_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_schurprod": fsl_schurprod_outputs,
+        "fsl.fsl_schurprod": fsl_schurprod_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface FslSchurprodOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file name (4D image file)
+ * @param design_file ASCII text matrix of time series to be correlated
+ * @param output_file Output file base name
+ * @param regression_flag Use regression rather than correlation
+ * @param index Index of column in the design to be used for matrix product calculation
+ * @param mask_file Mask image file name
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help text
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_schurprod_params(
     input_file: InputPathType,
     design_file: InputPathType,
@@ -85,22 +99,8 @@ function fsl_schurprod_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): FslSchurprodParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file name (4D image file)
-     * @param design_file ASCII text matrix of time series to be correlated
-     * @param output_file Output file base name
-     * @param regression_flag Use regression rather than correlation
-     * @param index Index of column in the design to be used for matrix product calculation
-     * @param mask_file Mask image file name
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help text
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_schurprod" as const,
+        "@type": "fsl.fsl_schurprod" as const,
         "input_file": input_file,
         "design_file": design_file,
         "output_file": output_file,
@@ -118,18 +118,18 @@ function fsl_schurprod_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_schurprod_cargs(
     params: FslSchurprodParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_schurprod");
     cargs.push(
@@ -169,18 +169,18 @@ function fsl_schurprod_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_schurprod_outputs(
     params: FslSchurprodParameters,
     execution: Execution,
 ): FslSchurprodOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslSchurprodOutputs = {
         root: execution.outputFile("."),
         output_matrix_product: execution.outputFile([(params["output_file"] ?? null), ".nii.gz"].join('')),
@@ -189,22 +189,22 @@ function fsl_schurprod_outputs(
 }
 
 
+/**
+ * Generates element-wise matrix products or product of matrices against vectors from 4D data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
+ */
 function fsl_schurprod_execute(
     params: FslSchurprodParameters,
     execution: Execution,
 ): FslSchurprodOutputs {
-    /**
-     * Generates element-wise matrix products or product of matrices against vectors from 4D data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_schurprod_cargs(params, execution)
     const ret = fsl_schurprod_outputs(params, execution)
@@ -213,6 +213,25 @@ function fsl_schurprod_execute(
 }
 
 
+/**
+ * Generates element-wise matrix products or product of matrices against vectors from 4D data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file name (4D image file)
+ * @param design_file ASCII text matrix of time series to be correlated
+ * @param output_file Output file base name
+ * @param regression_flag Use regression rather than correlation
+ * @param index Index of column in the design to be used for matrix product calculation
+ * @param mask_file Mask image file name
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help text
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
+ */
 function fsl_schurprod(
     input_file: InputPathType,
     design_file: InputPathType,
@@ -224,25 +243,6 @@ function fsl_schurprod(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslSchurprodOutputs {
-    /**
-     * Generates element-wise matrix products or product of matrices against vectors from 4D data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file name (4D image file)
-     * @param design_file ASCII text matrix of time series to be correlated
-     * @param output_file Output file base name
-     * @param regression_flag Use regression rather than correlation
-     * @param index Index of column in the design to be used for matrix product calculation
-     * @param mask_file Mask image file name
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help text
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_SCHURPROD_METADATA);
     const params = fsl_schurprod_params(input_file, design_file, output_file, regression_flag, index, mask_file, verbose_flag, help_flag)
@@ -255,5 +255,8 @@ export {
       FslSchurprodOutputs,
       FslSchurprodParameters,
       fsl_schurprod,
+      fsl_schurprod_cargs,
+      fsl_schurprod_execute,
+      fsl_schurprod_outputs,
       fsl_schurprod_params,
 };

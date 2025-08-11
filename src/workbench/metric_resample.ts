@@ -12,21 +12,21 @@ const METRIC_RESAMPLE_METADATA: Metadata = {
 
 
 interface MetricResampleAreaSurfsParameters {
-    "__STYXTYPE__": "area_surfs";
+    "@type": "workbench.metric-resample.area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface MetricResampleAreaMetricsParameters {
-    "__STYXTYPE__": "area_metrics";
+    "@type": "workbench.metric-resample.area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface MetricResampleParameters {
-    "__STYXTYPE__": "metric-resample";
+    "@type": "workbench.metric-resample";
     "metric_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -41,56 +41,56 @@ interface MetricResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-resample": metric_resample_cargs,
-        "area_surfs": metric_resample_area_surfs_cargs,
-        "area_metrics": metric_resample_area_metrics_cargs,
+        "workbench.metric-resample": metric_resample_cargs,
+        "workbench.metric-resample.area_surfs": metric_resample_area_surfs_cargs,
+        "workbench.metric-resample.area_metrics": metric_resample_area_metrics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-resample": metric_resample_outputs,
+        "workbench.metric-resample": metric_resample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant anatomical surface with <current-sphere> mesh
+ * @param new_area a relevant anatomical surface with <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function metric_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): MetricResampleAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant anatomical surface with <current-sphere> mesh
-     * @param new_area a relevant anatomical surface with <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_surfs" as const,
+        "@type": "workbench.metric-resample.area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -98,18 +98,18 @@ function metric_resample_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_resample_area_surfs_cargs(
     params: MetricResampleAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -118,20 +118,20 @@ function metric_resample_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for <current-sphere> mesh
+ * @param new_area a metric file with vertex areas for <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function metric_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): MetricResampleAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for <current-sphere> mesh
-     * @param new_area a metric file with vertex areas for <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_metrics" as const,
+        "@type": "workbench.metric-resample.area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -139,18 +139,18 @@ function metric_resample_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_resample_area_metrics_cargs(
     params: MetricResampleAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -180,6 +180,23 @@ interface MetricResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_in the metric file to resample
+ * @param current_sphere a sphere surface with the mesh that the metric is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param metric_out the output metric
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
+ * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
+ * @param opt_largest use only the value of the vertex with the largest weight
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ *
+ * @returns Parameter dictionary
+ */
 function metric_resample_params(
     metric_in: InputPathType,
     current_sphere: InputPathType,
@@ -193,25 +210,8 @@ function metric_resample_params(
     opt_largest: boolean = false,
     opt_bypass_sphere_check: boolean = false,
 ): MetricResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_in the metric file to resample
-     * @param current_sphere a sphere surface with the mesh that the metric is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param metric_out the output metric
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
-     * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     * @param opt_largest use only the value of the vertex with the largest weight
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-resample" as const,
+        "@type": "workbench.metric-resample" as const,
         "metric_in": metric_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -236,18 +236,18 @@ function metric_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_resample_cargs(
     params: MetricResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-resample");
@@ -257,10 +257,10 @@ function metric_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["metric_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null).__STYXTYPE__)((params["area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null).__STYXTYPE__)((params["area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
     }
     if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -284,18 +284,18 @@ function metric_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_resample_outputs(
     params: MetricResampleParameters,
     execution: Execution,
 ): MetricResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricResampleOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -305,36 +305,36 @@ function metric_resample_outputs(
 }
 
 
+/**
+ * Resample a metric file to a different mesh.
+ *
+ * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
+ *
+ * The ADAP_BARY_AREA method is recommended for ordinary metric data, because it should use all data while downsampling, unlike BARYCENTRIC.  The recommended areas option for most data is individual midthicknesses for individual data, and averaged vertex area metrics from individual midthicknesses for group average data.
+ *
+ * The -current-roi option only masks the input, the output may be slightly dilated in comparison, consider using -metric-mask on the output when using -current-roi.
+ *
+ * The -largest option results in nearest vertex behavior when used with BARYCENTRIC.  When resampling a binary metric, consider thresholding at 0.5 after resampling rather than using -largest.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
+ */
 function metric_resample_execute(
     params: MetricResampleParameters,
     execution: Execution,
 ): MetricResampleOutputs {
-    /**
-     * Resample a metric file to a different mesh.
-     * 
-     * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
-     * 
-     * The ADAP_BARY_AREA method is recommended for ordinary metric data, because it should use all data while downsampling, unlike BARYCENTRIC.  The recommended areas option for most data is individual midthicknesses for individual data, and averaged vertex area metrics from individual midthicknesses for group average data.
-     * 
-     * The -current-roi option only masks the input, the output may be slightly dilated in comparison, consider using -metric-mask on the output when using -current-roi.
-     * 
-     * The -largest option results in nearest vertex behavior when used with BARYCENTRIC.  When resampling a binary metric, consider thresholding at 0.5 after resampling rather than using -largest.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_resample_cargs(params, execution)
     const ret = metric_resample_outputs(params, execution)
@@ -343,6 +343,42 @@ function metric_resample_execute(
 }
 
 
+/**
+ * Resample a metric file to a different mesh.
+ *
+ * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
+ *
+ * The ADAP_BARY_AREA method is recommended for ordinary metric data, because it should use all data while downsampling, unlike BARYCENTRIC.  The recommended areas option for most data is individual midthicknesses for individual data, and averaged vertex area metrics from individual midthicknesses for group average data.
+ *
+ * The -current-roi option only masks the input, the output may be slightly dilated in comparison, consider using -metric-mask on the output when using -current-roi.
+ *
+ * The -largest option results in nearest vertex behavior when used with BARYCENTRIC.  When resampling a binary metric, consider thresholding at 0.5 after resampling rather than using -largest.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric_in the metric file to resample
+ * @param current_sphere a sphere surface with the mesh that the metric is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param metric_out the output metric
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
+ * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
+ * @param opt_largest use only the value of the vertex with the largest weight
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
+ */
 function metric_resample(
     metric_in: InputPathType,
     current_sphere: InputPathType,
@@ -357,42 +393,6 @@ function metric_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    /**
-     * Resample a metric file to a different mesh.
-     * 
-     * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
-     * 
-     * The ADAP_BARY_AREA method is recommended for ordinary metric data, because it should use all data while downsampling, unlike BARYCENTRIC.  The recommended areas option for most data is individual midthicknesses for individual data, and averaged vertex area metrics from individual midthicknesses for group average data.
-     * 
-     * The -current-roi option only masks the input, the output may be slightly dilated in comparison, consider using -metric-mask on the output when using -current-roi.
-     * 
-     * The -largest option results in nearest vertex behavior when used with BARYCENTRIC.  When resampling a binary metric, consider thresholding at 0.5 after resampling rather than using -largest.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric_in the metric file to resample
-     * @param current_sphere a sphere surface with the mesh that the metric is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param metric_out the output metric
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
-     * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     * @param opt_largest use only the value of the vertex with the largest weight
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_RESAMPLE_METADATA);
     const params = metric_resample_params(metric_in, current_sphere, new_sphere, method, metric_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
@@ -407,7 +407,12 @@ export {
       MetricResampleOutputs,
       MetricResampleParameters,
       metric_resample,
+      metric_resample_area_metrics_cargs,
       metric_resample_area_metrics_params,
+      metric_resample_area_surfs_cargs,
       metric_resample_area_surfs_params,
+      metric_resample_cargs,
+      metric_resample_execute,
+      metric_resample_outputs,
       metric_resample_params,
 };

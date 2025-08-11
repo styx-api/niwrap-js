@@ -12,42 +12,42 @@ const V_3D_TFILTER_METADATA: Metadata = {
 
 
 interface V3dTfilterParameters {
-    "__STYXTYPE__": "3dTfilter";
+    "@type": "afni.3dTfilter";
     "inputdataset": InputPathType;
     "outputdataset": string;
     "filters": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTfilter": v_3d_tfilter_cargs,
+        "afni.3dTfilter": v_3d_tfilter_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTfilter": v_3d_tfilter_outputs,
+        "afni.3dTfilter": v_3d_tfilter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dTfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputdataset Input dataset
+ * @param outputdataset Output dataset
+ * @param filters Filter function(s) to apply
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tfilter_params(
     inputdataset: InputPathType,
     outputdataset: string,
     filters: Array<string>,
 ): V3dTfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputdataset Input dataset
-     * @param outputdataset Output dataset
-     * @param filters Filter function(s) to apply
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTfilter" as const,
+        "@type": "afni.3dTfilter" as const,
         "inputdataset": inputdataset,
         "outputdataset": outputdataset,
         "filters": filters,
@@ -94,18 +94,18 @@ function v_3d_tfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tfilter_cargs(
     params: V3dTfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTfilter");
     cargs.push(
@@ -124,18 +124,18 @@ function v_3d_tfilter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tfilter_outputs(
     params: V3dTfilterParameters,
     execution: Execution,
 ): V3dTfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTfilterOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["outputdataset"] ?? null)].join('')),
@@ -144,22 +144,22 @@ function v_3d_tfilter_outputs(
 }
 
 
+/**
+ * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
+ */
 function v_3d_tfilter_execute(
     params: V3dTfilterParameters,
     execution: Execution,
 ): V3dTfilterOutputs {
-    /**
-     * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tfilter_cargs(params, execution)
     const ret = v_3d_tfilter_outputs(params, execution)
@@ -168,26 +168,26 @@ function v_3d_tfilter_execute(
 }
 
 
+/**
+ * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inputdataset Input dataset
+ * @param outputdataset Output dataset
+ * @param filters Filter function(s) to apply
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
+ */
 function v_3d_tfilter(
     inputdataset: InputPathType,
     outputdataset: string,
     filters: Array<string>,
     runner: Runner | null = null,
 ): V3dTfilterOutputs {
-    /**
-     * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inputdataset Input dataset
-     * @param outputdataset Output dataset
-     * @param filters Filter function(s) to apply
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TFILTER_METADATA);
     const params = v_3d_tfilter_params(inputdataset, outputdataset, filters)
@@ -200,5 +200,8 @@ export {
       V3dTfilterParameters,
       V_3D_TFILTER_METADATA,
       v_3d_tfilter,
+      v_3d_tfilter_cargs,
+      v_3d_tfilter_execute,
+      v_3d_tfilter_outputs,
       v_3d_tfilter_params,
 };

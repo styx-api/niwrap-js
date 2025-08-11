@@ -12,7 +12,7 @@ const DMRI_MATCH_METADATA: Metadata = {
 
 
 interface DmriMatchParameters {
-    "__STYXTYPE__": "dmri_match";
+    "@type": "freesurfer.dmri_match";
     "parcellation1": InputPathType;
     "parcellation2": InputPathType;
     "num_clusters": number;
@@ -27,35 +27,35 @@ interface DmriMatchParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_match": dmri_match_cargs,
+        "freesurfer.dmri_match": dmri_match_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_match": dmri_match_outputs,
+        "freesurfer.dmri_match": dmri_match_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface DmriMatchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param parcellation1 First parcellation input file
+ * @param parcellation2 Second parcellation input file
+ * @param num_clusters Number of clusters
+ * @param clustering_path1 First clustering path
+ * @param clustering_path2 Second clustering path
+ * @param output Output file
+ * @param labels Use labels (no additional input expected)
+ * @param euclidean Use Euclidean distance for matching
+ * @param bounding_box Use bounding box constraint (no additional input expected)
+ * @param symmetry Use symmetry constraint (no additional input expected)
+ * @param inter_hemi_ratio_removal Inter-hemispheric ratio cluster removal constraint
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_match_params(
     parcellation1: InputPathType,
     parcellation2: InputPathType,
@@ -91,25 +108,8 @@ function dmri_match_params(
     symmetry: boolean = false,
     inter_hemi_ratio_removal: string | null = null,
 ): DmriMatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param parcellation1 First parcellation input file
-     * @param parcellation2 Second parcellation input file
-     * @param num_clusters Number of clusters
-     * @param clustering_path1 First clustering path
-     * @param clustering_path2 Second clustering path
-     * @param output Output file
-     * @param labels Use labels (no additional input expected)
-     * @param euclidean Use Euclidean distance for matching
-     * @param bounding_box Use bounding box constraint (no additional input expected)
-     * @param symmetry Use symmetry constraint (no additional input expected)
-     * @param inter_hemi_ratio_removal Inter-hemispheric ratio cluster removal constraint
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_match" as const,
+        "@type": "freesurfer.dmri_match" as const,
         "parcellation1": parcellation1,
         "parcellation2": parcellation2,
         "num_clusters": num_clusters,
@@ -128,18 +128,18 @@ function dmri_match_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_match_cargs(
     params: DmriMatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_match");
     cargs.push(
@@ -185,18 +185,18 @@ function dmri_match_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_match_outputs(
     params: DmriMatchParameters,
     execution: Execution,
 ): DmriMatchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriMatchOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -205,22 +205,22 @@ function dmri_match_outputs(
 }
 
 
+/**
+ * Tool for matching diffusion MRI parcellations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
+ */
 function dmri_match_execute(
     params: DmriMatchParameters,
     execution: Execution,
 ): DmriMatchOutputs {
-    /**
-     * Tool for matching diffusion MRI parcellations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_match_cargs(params, execution)
     const ret = dmri_match_outputs(params, execution)
@@ -229,6 +229,28 @@ function dmri_match_execute(
 }
 
 
+/**
+ * Tool for matching diffusion MRI parcellations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param parcellation1 First parcellation input file
+ * @param parcellation2 Second parcellation input file
+ * @param num_clusters Number of clusters
+ * @param clustering_path1 First clustering path
+ * @param clustering_path2 Second clustering path
+ * @param output Output file
+ * @param labels Use labels (no additional input expected)
+ * @param euclidean Use Euclidean distance for matching
+ * @param bounding_box Use bounding box constraint (no additional input expected)
+ * @param symmetry Use symmetry constraint (no additional input expected)
+ * @param inter_hemi_ratio_removal Inter-hemispheric ratio cluster removal constraint
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
+ */
 function dmri_match(
     parcellation1: InputPathType,
     parcellation2: InputPathType,
@@ -243,28 +265,6 @@ function dmri_match(
     inter_hemi_ratio_removal: string | null = null,
     runner: Runner | null = null,
 ): DmriMatchOutputs {
-    /**
-     * Tool for matching diffusion MRI parcellations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param parcellation1 First parcellation input file
-     * @param parcellation2 Second parcellation input file
-     * @param num_clusters Number of clusters
-     * @param clustering_path1 First clustering path
-     * @param clustering_path2 Second clustering path
-     * @param output Output file
-     * @param labels Use labels (no additional input expected)
-     * @param euclidean Use Euclidean distance for matching
-     * @param bounding_box Use bounding box constraint (no additional input expected)
-     * @param symmetry Use symmetry constraint (no additional input expected)
-     * @param inter_hemi_ratio_removal Inter-hemispheric ratio cluster removal constraint
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_MATCH_METADATA);
     const params = dmri_match_params(parcellation1, parcellation2, num_clusters, clustering_path1, clustering_path2, output, labels, euclidean, bounding_box, symmetry, inter_hemi_ratio_removal)
@@ -277,5 +277,8 @@ export {
       DmriMatchOutputs,
       DmriMatchParameters,
       dmri_match,
+      dmri_match_cargs,
+      dmri_match_execute,
+      dmri_match_outputs,
       dmri_match_params,
 };

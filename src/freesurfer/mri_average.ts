@@ -12,7 +12,7 @@ const MRI_AVERAGE_METADATA: Metadata = {
 
 
 interface MriAverageParameters {
-    "__STYXTYPE__": "mri_average";
+    "@type": "freesurfer.mri_average";
     "input_volumes": Array<InputPathType>;
     "output_volume": string;
     "rigid_alignment": boolean;
@@ -37,35 +37,35 @@ interface MriAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_average": mri_average_cargs,
+        "freesurfer.mri_average": mri_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_average": mri_average_outputs,
+        "freesurfer.mri_average": mri_average_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface MriAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Input volumes to average.
+ * @param output_volume Output volume file.
+ * @param rigid_alignment Rigid alignment of input volumes before averaging.
+ * @param read_from_file Read volumes from an input file (first argument is the input filename).
+ * @param dt Set dt to n (default=1e-6).
+ * @param tol Set tolerance to n (default=1e-5).
+ * @param conform Interpolate volume to be isotropic 1mm^3 (on by default).
+ * @param noconform Inhibit isotropic volume interpolation.
+ * @param reduce Reduce input images n (default=2) times.
+ * @param sinc_interpolation Using sinc interpolation with window width of 2*n (default=3).
+ * @param trilinear Use trilinear interpolation.
+ * @param window Apply hanning window to volumes.
+ * @param snapshots Write snapshots every n iterations.
+ * @param translation Translation of second volume.
+ * @param rotation Rotation of second volume around each axis in degrees.
+ * @param momentum Use momentum n (default=0).
+ * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
+ * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
+ * @param percent Compute percentage.
+ * @param binarize Binarize the input volumes using threshold th.
+ * @param absolute Take absolute value of volume.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_average_params(
     input_volumes: Array<InputPathType>,
     output_volume: string,
@@ -111,35 +138,8 @@ function mri_average_params(
     binarize: number | null = null,
     absolute: boolean = false,
 ): MriAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Input volumes to average.
-     * @param output_volume Output volume file.
-     * @param rigid_alignment Rigid alignment of input volumes before averaging.
-     * @param read_from_file Read volumes from an input file (first argument is the input filename).
-     * @param dt Set dt to n (default=1e-6).
-     * @param tol Set tolerance to n (default=1e-5).
-     * @param conform Interpolate volume to be isotropic 1mm^3 (on by default).
-     * @param noconform Inhibit isotropic volume interpolation.
-     * @param reduce Reduce input images n (default=2) times.
-     * @param sinc_interpolation Using sinc interpolation with window width of 2*n (default=3).
-     * @param trilinear Use trilinear interpolation.
-     * @param window Apply hanning window to volumes.
-     * @param snapshots Write snapshots every n iterations.
-     * @param translation Translation of second volume.
-     * @param rotation Rotation of second volume around each axis in degrees.
-     * @param momentum Use momentum n (default=0).
-     * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
-     * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
-     * @param percent Compute percentage.
-     * @param binarize Binarize the input volumes using threshold th.
-     * @param absolute Take absolute value of volume.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_average" as const,
+        "@type": "freesurfer.mri_average" as const,
         "input_volumes": input_volumes,
         "output_volume": output_volume,
         "rigid_alignment": rigid_alignment,
@@ -184,18 +184,18 @@ function mri_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_average_cargs(
     params: MriAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_average");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -288,18 +288,18 @@ function mri_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_average_outputs(
     params: MriAverageParameters,
     execution: Execution,
 ): MriAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAverageOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -308,22 +308,22 @@ function mri_average_outputs(
 }
 
 
+/**
+ * Averages multiple volumes with various options for alignment, interpolation, and transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
+ */
 function mri_average_execute(
     params: MriAverageParameters,
     execution: Execution,
 ): MriAverageOutputs {
-    /**
-     * Averages multiple volumes with various options for alignment, interpolation, and transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_average_cargs(params, execution)
     const ret = mri_average_outputs(params, execution)
@@ -332,6 +332,38 @@ function mri_average_execute(
 }
 
 
+/**
+ * Averages multiple volumes with various options for alignment, interpolation, and transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Input volumes to average.
+ * @param output_volume Output volume file.
+ * @param rigid_alignment Rigid alignment of input volumes before averaging.
+ * @param read_from_file Read volumes from an input file (first argument is the input filename).
+ * @param dt Set dt to n (default=1e-6).
+ * @param tol Set tolerance to n (default=1e-5).
+ * @param conform Interpolate volume to be isotropic 1mm^3 (on by default).
+ * @param noconform Inhibit isotropic volume interpolation.
+ * @param reduce Reduce input images n (default=2) times.
+ * @param sinc_interpolation Using sinc interpolation with window width of 2*n (default=3).
+ * @param trilinear Use trilinear interpolation.
+ * @param window Apply hanning window to volumes.
+ * @param snapshots Write snapshots every n iterations.
+ * @param translation Translation of second volume.
+ * @param rotation Rotation of second volume around each axis in degrees.
+ * @param momentum Use momentum n (default=0).
+ * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
+ * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
+ * @param percent Compute percentage.
+ * @param binarize Binarize the input volumes using threshold th.
+ * @param absolute Take absolute value of volume.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
+ */
 function mri_average(
     input_volumes: Array<InputPathType>,
     output_volume: string,
@@ -356,38 +388,6 @@ function mri_average(
     absolute: boolean = false,
     runner: Runner | null = null,
 ): MriAverageOutputs {
-    /**
-     * Averages multiple volumes with various options for alignment, interpolation, and transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Input volumes to average.
-     * @param output_volume Output volume file.
-     * @param rigid_alignment Rigid alignment of input volumes before averaging.
-     * @param read_from_file Read volumes from an input file (first argument is the input filename).
-     * @param dt Set dt to n (default=1e-6).
-     * @param tol Set tolerance to n (default=1e-5).
-     * @param conform Interpolate volume to be isotropic 1mm^3 (on by default).
-     * @param noconform Inhibit isotropic volume interpolation.
-     * @param reduce Reduce input images n (default=2) times.
-     * @param sinc_interpolation Using sinc interpolation with window width of 2*n (default=3).
-     * @param trilinear Use trilinear interpolation.
-     * @param window Apply hanning window to volumes.
-     * @param snapshots Write snapshots every n iterations.
-     * @param translation Translation of second volume.
-     * @param rotation Rotation of second volume around each axis in degrees.
-     * @param momentum Use momentum n (default=0).
-     * @param rms Compute sqrt of average of sum of squares (RMS, same as -rms).
-     * @param rms_alt Compute sqrt of average of sum of squares (RMS, same as -sqr).
-     * @param percent Compute percentage.
-     * @param binarize Binarize the input volumes using threshold th.
-     * @param absolute Take absolute value of volume.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_AVERAGE_METADATA);
     const params = mri_average_params(input_volumes, output_volume, rigid_alignment, read_from_file, dt, tol, conform, noconform, reduce, sinc_interpolation, trilinear, window, snapshots, translation, rotation, momentum, rms, rms_alt, percent, binarize, absolute)
@@ -400,5 +400,8 @@ export {
       MriAverageOutputs,
       MriAverageParameters,
       mri_average,
+      mri_average_cargs,
+      mri_average_execute,
+      mri_average_outputs,
       mri_average_params,
 };

@@ -12,7 +12,7 @@ const MRIS_VOLMASK_VTK_METADATA: Metadata = {
 
 
 interface MrisVolmaskVtkParameters {
-    "__STYXTYPE__": "mris_volmask_vtk";
+    "@type": "freesurfer.mris_volmask_vtk";
     "cap_distance"?: number | null | undefined;
     "label_background"?: number | null | undefined;
     "label_left_white"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface MrisVolmaskVtkParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_volmask_vtk": mris_volmask_vtk_cargs,
+        "freesurfer.mris_volmask_vtk": mris_volmask_vtk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_volmask_vtk": mris_volmask_vtk_outputs,
+        "freesurfer.mris_volmask_vtk": mris_volmask_vtk_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,30 @@ interface MrisVolmaskVtkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param io_param Input-Output parameter as positional argument
+ * @param cap_distance Maximum distance up to which the signed distance function computation is accurate.
+ * @param label_background Override the default background label value (0).
+ * @param label_left_white Override the default left white matter label (20).
+ * @param label_left_ribbon Override the default left ribbon label (10).
+ * @param label_right_white Override the default right white matter label (120).
+ * @param label_right_ribbon Override the default right ribbon label (110).
+ * @param surf_white Surface root name for white matter surfaces (default: white).
+ * @param surf_pial Surface root name for pial surfaces (default: pial).
+ * @param aseg_name Specify a different name for the aseg input file (default: aseg).
+ * @param out_root Output root name (default: ribbon) for generated output files.
+ * @param subjects_dir Specify the SUBJECTS_DIR, default is read from environment.
+ * @param save_distance Option to save the signed distance function.
+ * @param lh_only Only process left hemisphere.
+ * @param rh_only Only process right hemisphere.
+ * @param parallel Run hemispheres in parallel and combine the result.
+ * @param edit_aseg Edit the aseg using the ribbons and save it.
+ * @param save_ribbon Save only the ribbon for the hemispheres.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_volmask_vtk_params(
     io_param: string,
     cap_distance: number | null = null,
@@ -125,32 +149,8 @@ function mris_volmask_vtk_params(
     edit_aseg: boolean = false,
     save_ribbon: boolean = false,
 ): MrisVolmaskVtkParameters {
-    /**
-     * Build parameters.
-    
-     * @param io_param Input-Output parameter as positional argument
-     * @param cap_distance Maximum distance up to which the signed distance function computation is accurate.
-     * @param label_background Override the default background label value (0).
-     * @param label_left_white Override the default left white matter label (20).
-     * @param label_left_ribbon Override the default left ribbon label (10).
-     * @param label_right_white Override the default right white matter label (120).
-     * @param label_right_ribbon Override the default right ribbon label (110).
-     * @param surf_white Surface root name for white matter surfaces (default: white).
-     * @param surf_pial Surface root name for pial surfaces (default: pial).
-     * @param aseg_name Specify a different name for the aseg input file (default: aseg).
-     * @param out_root Output root name (default: ribbon) for generated output files.
-     * @param subjects_dir Specify the SUBJECTS_DIR, default is read from environment.
-     * @param save_distance Option to save the signed distance function.
-     * @param lh_only Only process left hemisphere.
-     * @param rh_only Only process right hemisphere.
-     * @param parallel Run hemispheres in parallel and combine the result.
-     * @param edit_aseg Edit the aseg using the ribbons and save it.
-     * @param save_ribbon Save only the ribbon for the hemispheres.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_volmask_vtk" as const,
+        "@type": "freesurfer.mris_volmask_vtk" as const,
         "save_distance": save_distance,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -196,18 +196,18 @@ function mris_volmask_vtk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_volmask_vtk_cargs(
     params: MrisVolmaskVtkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_volmask_vtk");
     if ((params["cap_distance"] ?? null) !== null) {
@@ -299,18 +299,18 @@ function mris_volmask_vtk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_volmask_vtk_outputs(
     params: MrisVolmaskVtkParameters,
     execution: Execution,
 ): MrisVolmaskVtkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisVolmaskVtkOutputs = {
         root: execution.outputFile("."),
         output_volume_mask: ((params["out_root"] ?? null) !== null) ? execution.outputFile(["mri/", (params["out_root"] ?? null), ".mgz"].join('')) : null,
@@ -324,22 +324,22 @@ function mris_volmask_vtk_outputs(
 }
 
 
+/**
+ * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
+ */
 function mris_volmask_vtk_execute(
     params: MrisVolmaskVtkParameters,
     execution: Execution,
 ): MrisVolmaskVtkOutputs {
-    /**
-     * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_volmask_vtk_cargs(params, execution)
     const ret = mris_volmask_vtk_outputs(params, execution)
@@ -348,6 +348,35 @@ function mris_volmask_vtk_execute(
 }
 
 
+/**
+ * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param io_param Input-Output parameter as positional argument
+ * @param cap_distance Maximum distance up to which the signed distance function computation is accurate.
+ * @param label_background Override the default background label value (0).
+ * @param label_left_white Override the default left white matter label (20).
+ * @param label_left_ribbon Override the default left ribbon label (10).
+ * @param label_right_white Override the default right white matter label (120).
+ * @param label_right_ribbon Override the default right ribbon label (110).
+ * @param surf_white Surface root name for white matter surfaces (default: white).
+ * @param surf_pial Surface root name for pial surfaces (default: pial).
+ * @param aseg_name Specify a different name for the aseg input file (default: aseg).
+ * @param out_root Output root name (default: ribbon) for generated output files.
+ * @param subjects_dir Specify the SUBJECTS_DIR, default is read from environment.
+ * @param save_distance Option to save the signed distance function.
+ * @param lh_only Only process left hemisphere.
+ * @param rh_only Only process right hemisphere.
+ * @param parallel Run hemispheres in parallel and combine the result.
+ * @param edit_aseg Edit the aseg using the ribbons and save it.
+ * @param save_ribbon Save only the ribbon for the hemispheres.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
+ */
 function mris_volmask_vtk(
     io_param: string,
     cap_distance: number | null = null,
@@ -369,35 +398,6 @@ function mris_volmask_vtk(
     save_ribbon: boolean = false,
     runner: Runner | null = null,
 ): MrisVolmaskVtkOutputs {
-    /**
-     * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param io_param Input-Output parameter as positional argument
-     * @param cap_distance Maximum distance up to which the signed distance function computation is accurate.
-     * @param label_background Override the default background label value (0).
-     * @param label_left_white Override the default left white matter label (20).
-     * @param label_left_ribbon Override the default left ribbon label (10).
-     * @param label_right_white Override the default right white matter label (120).
-     * @param label_right_ribbon Override the default right ribbon label (110).
-     * @param surf_white Surface root name for white matter surfaces (default: white).
-     * @param surf_pial Surface root name for pial surfaces (default: pial).
-     * @param aseg_name Specify a different name for the aseg input file (default: aseg).
-     * @param out_root Output root name (default: ribbon) for generated output files.
-     * @param subjects_dir Specify the SUBJECTS_DIR, default is read from environment.
-     * @param save_distance Option to save the signed distance function.
-     * @param lh_only Only process left hemisphere.
-     * @param rh_only Only process right hemisphere.
-     * @param parallel Run hemispheres in parallel and combine the result.
-     * @param edit_aseg Edit the aseg using the ribbons and save it.
-     * @param save_ribbon Save only the ribbon for the hemispheres.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_VOLMASK_VTK_METADATA);
     const params = mris_volmask_vtk_params(io_param, cap_distance, label_background, label_left_white, label_left_ribbon, label_right_white, label_right_ribbon, surf_white, surf_pial, aseg_name, out_root, subjects_dir, save_distance, lh_only, rh_only, parallel, edit_aseg, save_ribbon)
@@ -410,5 +410,8 @@ export {
       MrisVolmaskVtkOutputs,
       MrisVolmaskVtkParameters,
       mris_volmask_vtk,
+      mris_volmask_vtk_cargs,
+      mris_volmask_vtk_execute,
+      mris_volmask_vtk_outputs,
       mris_volmask_vtk_params,
 };

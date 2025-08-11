@@ -12,7 +12,7 @@ const FILMBABE_METADATA: Metadata = {
 
 
 interface FilmbabeParameters {
-    "__STYXTYPE__": "filmbabe";
+    "@type": "fsl.filmbabe";
     "datafile": InputPathType;
     "datafile_alias": InputPathType;
     "mask": InputPathType;
@@ -49,33 +49,33 @@ interface FilmbabeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "filmbabe": filmbabe_cargs,
+        "fsl.filmbabe": filmbabe_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -95,6 +95,45 @@ interface FilmbabeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile Data file
+ * @param datafile_alias Data file
+ * @param mask Mask file
+ * @param mask_alias Mask file
+ * @param designfile Design matrix file
+ * @param designfile_alias_1 Design matrix file
+ * @param designfile_alias_2 Design matrix file
+ * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param verbose_flag_alias Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param debug_level_alias_1 Set debug level
+ * @param debug_level_alias_2 Set debug level
+ * @param timing_on_flag Turn timing on
+ * @param help_flag Display help message
+ * @param help_flag_alias Display help message
+ * @param flobs_prior_off_flag Turn FLOBS prior off
+ * @param flobs_prior_off_alias Turn FLOBS prior off
+ * @param flobs_dir FLOBS directory; required when using FLOBS constraints
+ * @param prior_covar_file Prior covariance matrix file
+ * @param prior_covar_file_alias Prior covariance matrix file
+ * @param prior_mean_file Prior mean matrix file
+ * @param prior_mean_file_alias Prior mean matrix file
+ * @param log_dir Log directory
+ * @param log_dir_alias_1 Log directory
+ * @param log_dir_alias_2 Log directory
+ * @param num_iterations Number of VB iterations; default is 5
+ * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
+ * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
+ * @param temporal_ar_flag Impose ARD/MRF on temporal AR
+ * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
+ * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
+ * @param temporal_ar_order Order of temporal AR; default is 3
+ *
+ * @returns Parameter dictionary
+ */
 function filmbabe_params(
     datafile: InputPathType,
     datafile_alias: InputPathType,
@@ -130,47 +169,8 @@ function filmbabe_params(
     num_trace_samples_alias: number | null = 0,
     temporal_ar_order: number | null = 3,
 ): FilmbabeParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile Data file
-     * @param datafile_alias Data file
-     * @param mask Mask file
-     * @param mask_alias Mask file
-     * @param designfile Design matrix file
-     * @param designfile_alias_1 Design matrix file
-     * @param designfile_alias_2 Design matrix file
-     * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param verbose_flag_alias Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param debug_level_alias_1 Set debug level
-     * @param debug_level_alias_2 Set debug level
-     * @param timing_on_flag Turn timing on
-     * @param help_flag Display help message
-     * @param help_flag_alias Display help message
-     * @param flobs_prior_off_flag Turn FLOBS prior off
-     * @param flobs_prior_off_alias Turn FLOBS prior off
-     * @param flobs_dir FLOBS directory; required when using FLOBS constraints
-     * @param prior_covar_file Prior covariance matrix file
-     * @param prior_covar_file_alias Prior covariance matrix file
-     * @param prior_mean_file Prior mean matrix file
-     * @param prior_mean_file_alias Prior mean matrix file
-     * @param log_dir Log directory
-     * @param log_dir_alias_1 Log directory
-     * @param log_dir_alias_2 Log directory
-     * @param num_iterations Number of VB iterations; default is 5
-     * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
-     * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
-     * @param temporal_ar_flag Impose ARD/MRF on temporal AR
-     * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
-     * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
-     * @param temporal_ar_order Order of temporal AR; default is 3
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "filmbabe" as const,
+        "@type": "fsl.filmbabe" as const,
         "datafile": datafile,
         "datafile_alias": datafile_alias,
         "mask": mask,
@@ -243,18 +243,18 @@ function filmbabe_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function filmbabe_cargs(
     params: FilmbabeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("filmbabe");
     cargs.push(
@@ -419,18 +419,18 @@ function filmbabe_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function filmbabe_outputs(
     params: FilmbabeParameters,
     execution: Execution,
 ): FilmbabeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FilmbabeOutputs = {
         root: execution.outputFile("."),
     };
@@ -438,22 +438,22 @@ function filmbabe_outputs(
 }
 
 
+/**
+ * FILM with MCMC-based Bayesian Analysis for fMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
+ */
 function filmbabe_execute(
     params: FilmbabeParameters,
     execution: Execution,
 ): FilmbabeOutputs {
-    /**
-     * FILM with MCMC-based Bayesian Analysis for fMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
-     */
     params = execution.params(params)
     const cargs = filmbabe_cargs(params, execution)
     const ret = filmbabe_outputs(params, execution)
@@ -462,6 +462,50 @@ function filmbabe_execute(
 }
 
 
+/**
+ * FILM with MCMC-based Bayesian Analysis for fMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile Data file
+ * @param datafile_alias Data file
+ * @param mask Mask file
+ * @param mask_alias Mask file
+ * @param designfile Design matrix file
+ * @param designfile_alias_1 Design matrix file
+ * @param designfile_alias_2 Design matrix file
+ * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param verbose_flag_alias Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param debug_level_alias_1 Set debug level
+ * @param debug_level_alias_2 Set debug level
+ * @param timing_on_flag Turn timing on
+ * @param help_flag Display help message
+ * @param help_flag_alias Display help message
+ * @param flobs_prior_off_flag Turn FLOBS prior off
+ * @param flobs_prior_off_alias Turn FLOBS prior off
+ * @param flobs_dir FLOBS directory; required when using FLOBS constraints
+ * @param prior_covar_file Prior covariance matrix file
+ * @param prior_covar_file_alias Prior covariance matrix file
+ * @param prior_mean_file Prior mean matrix file
+ * @param prior_mean_file_alias Prior mean matrix file
+ * @param log_dir Log directory
+ * @param log_dir_alias_1 Log directory
+ * @param log_dir_alias_2 Log directory
+ * @param num_iterations Number of VB iterations; default is 5
+ * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
+ * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
+ * @param temporal_ar_flag Impose ARD/MRF on temporal AR
+ * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
+ * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
+ * @param temporal_ar_order Order of temporal AR; default is 3
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
+ */
 function filmbabe(
     datafile: InputPathType,
     datafile_alias: InputPathType,
@@ -498,50 +542,6 @@ function filmbabe(
     temporal_ar_order: number | null = 3,
     runner: Runner | null = null,
 ): FilmbabeOutputs {
-    /**
-     * FILM with MCMC-based Bayesian Analysis for fMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile Data file
-     * @param datafile_alias Data file
-     * @param mask Mask file
-     * @param mask_alias Mask file
-     * @param designfile Design matrix file
-     * @param designfile_alias_1 Design matrix file
-     * @param designfile_alias_2 Design matrix file
-     * @param frf File indicating which regressors belong to which original EV design matrix file (a -1 label indicates a non-flobs regressor)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param verbose_flag_alias Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param debug_level_alias_1 Set debug level
-     * @param debug_level_alias_2 Set debug level
-     * @param timing_on_flag Turn timing on
-     * @param help_flag Display help message
-     * @param help_flag_alias Display help message
-     * @param flobs_prior_off_flag Turn FLOBS prior off
-     * @param flobs_prior_off_alias Turn FLOBS prior off
-     * @param flobs_dir FLOBS directory; required when using FLOBS constraints
-     * @param prior_covar_file Prior covariance matrix file
-     * @param prior_covar_file_alias Prior covariance matrix file
-     * @param prior_mean_file Prior mean matrix file
-     * @param prior_mean_file_alias Prior mean matrix file
-     * @param log_dir Log directory
-     * @param log_dir_alias_1 Log directory
-     * @param log_dir_alias_2 Log directory
-     * @param num_iterations Number of VB iterations; default is 5
-     * @param temporal_ar_mrf_prec MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
-     * @param temporal_ar_mrf_prec_alias MRF precision to impose on temporal AR maps, default is -1 for a proper full Bayes approach
-     * @param temporal_ar_flag Impose ARD/MRF on temporal AR
-     * @param num_trace_samples Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
-     * @param num_trace_samples_alias Number of samples to take to estimate trace; default is 0 (uses only diagonal elements of precision matrix to estimate trace)
-     * @param temporal_ar_order Order of temporal AR; default is 3
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILMBABE_METADATA);
     const params = filmbabe_params(datafile, datafile_alias, mask, mask_alias, designfile, designfile_alias_1, designfile_alias_2, frf, verbose_flag, verbose_flag_alias, debug_level, debug_level_alias_1, debug_level_alias_2, timing_on_flag, help_flag, help_flag_alias, flobs_prior_off_flag, flobs_prior_off_alias, flobs_dir, prior_covar_file, prior_covar_file_alias, prior_mean_file, prior_mean_file_alias, log_dir, log_dir_alias_1, log_dir_alias_2, num_iterations, temporal_ar_mrf_prec, temporal_ar_mrf_prec_alias, temporal_ar_flag, num_trace_samples, num_trace_samples_alias, temporal_ar_order)
@@ -554,5 +554,8 @@ export {
       FilmbabeOutputs,
       FilmbabeParameters,
       filmbabe,
+      filmbabe_cargs,
+      filmbabe_execute,
+      filmbabe_outputs,
       filmbabe_params,
 };

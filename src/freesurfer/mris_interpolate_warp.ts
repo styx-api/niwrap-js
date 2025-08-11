@@ -12,40 +12,40 @@ const MRIS_INTERPOLATE_WARP_METADATA: Metadata = {
 
 
 interface MrisInterpolateWarpParameters {
-    "__STYXTYPE__": "mris_interpolate_warp";
+    "@type": "freesurfer.mris_interpolate_warp";
     "start_surface": InputPathType;
     "end_surface": InputPathType;
     "warp_field": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_interpolate_warp": mris_interpolate_warp_cargs,
+        "freesurfer.mris_interpolate_warp": mris_interpolate_warp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MrisInterpolateWarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param start_surface The starting surface file.
+ * @param end_surface The ending surface file.
+ * @param warp_field The warp field file with .m3z extension.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_interpolate_warp_params(
     start_surface: InputPathType,
     end_surface: InputPathType,
     warp_field: InputPathType,
 ): MrisInterpolateWarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param start_surface The starting surface file.
-     * @param end_surface The ending surface file.
-     * @param warp_field The warp field file with .m3z extension.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_interpolate_warp" as const,
+        "@type": "freesurfer.mris_interpolate_warp" as const,
         "start_surface": start_surface,
         "end_surface": end_surface,
         "warp_field": warp_field,
@@ -89,18 +89,18 @@ function mris_interpolate_warp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_interpolate_warp_cargs(
     params: MrisInterpolateWarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_interpolate_warp");
     cargs.push(execution.inputFile((params["start_surface"] ?? null)));
@@ -110,18 +110,18 @@ function mris_interpolate_warp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_interpolate_warp_outputs(
     params: MrisInterpolateWarpParameters,
     execution: Execution,
 ): MrisInterpolateWarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisInterpolateWarpOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function mris_interpolate_warp_outputs(
 }
 
 
+/**
+ * Interpolate warp on cortical surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
+ */
 function mris_interpolate_warp_execute(
     params: MrisInterpolateWarpParameters,
     execution: Execution,
 ): MrisInterpolateWarpOutputs {
-    /**
-     * Interpolate warp on cortical surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_interpolate_warp_cargs(params, execution)
     const ret = mris_interpolate_warp_outputs(params, execution)
@@ -153,26 +153,26 @@ function mris_interpolate_warp_execute(
 }
 
 
+/**
+ * Interpolate warp on cortical surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param start_surface The starting surface file.
+ * @param end_surface The ending surface file.
+ * @param warp_field The warp field file with .m3z extension.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
+ */
 function mris_interpolate_warp(
     start_surface: InputPathType,
     end_surface: InputPathType,
     warp_field: InputPathType,
     runner: Runner | null = null,
 ): MrisInterpolateWarpOutputs {
-    /**
-     * Interpolate warp on cortical surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param start_surface The starting surface file.
-     * @param end_surface The ending surface file.
-     * @param warp_field The warp field file with .m3z extension.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INTERPOLATE_WARP_METADATA);
     const params = mris_interpolate_warp_params(start_surface, end_surface, warp_field)
@@ -185,5 +185,8 @@ export {
       MrisInterpolateWarpOutputs,
       MrisInterpolateWarpParameters,
       mris_interpolate_warp,
+      mris_interpolate_warp_cargs,
+      mris_interpolate_warp_execute,
+      mris_interpolate_warp_outputs,
       mris_interpolate_warp_params,
 };

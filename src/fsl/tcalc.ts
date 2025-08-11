@@ -12,7 +12,7 @@ const TCALC_METADATA: Metadata = {
 
 
 interface TcalcParameters {
-    "__STYXTYPE__": "tcalc";
+    "@type": "fsl.tcalc";
     "input_image": InputPathType;
     "output_image": string;
     "echo_time"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface TcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tcalc": tcalc_cargs,
+        "fsl.tcalc": tcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tcalc": tcalc_outputs,
+        "fsl.tcalc": tcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,27 @@ interface TcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image (4D phantom for theoretical calculations)
+ * @param output_image Output image
+ * @param echo_time Echo Time (TE) in seconds [e.g., T1-weighted images for 3T TE=0.01 s]
+ * @param repetition_time Repetition Time (TR) in seconds [e.g., T1-weighted images for 3T TR=0.7 s]
+ * @param mrpar_file MRpar File
+ * @param num_voxel_x Number of Voxels along X (default: phantom)
+ * @param num_voxel_y Number of Voxels along Y (default: phantom)
+ * @param num_voxel_z Number of Voxels along Z (default: phantom)
+ * @param voxel_size_x Size of voxels along X (default: phantom)
+ * @param voxel_size_y Size of voxels along Y (default: phantom)
+ * @param voxel_size_z Size of voxels along Z i.e., number of slices (default: phantom)
+ * @param start_position Starting position of the volume in mm (default = 0mm)
+ * @param noise_sigma Add noise with given sigma (default: 0 i.e., no noise)
+ * @param save_flag Save original non-resample output image
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function tcalc_params(
     input_image: InputPathType,
     output_image: string,
@@ -103,29 +124,8 @@ function tcalc_params(
     save_flag: boolean = false,
     verbose_flag: boolean = false,
 ): TcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image (4D phantom for theoretical calculations)
-     * @param output_image Output image
-     * @param echo_time Echo Time (TE) in seconds [e.g., T1-weighted images for 3T TE=0.01 s]
-     * @param repetition_time Repetition Time (TR) in seconds [e.g., T1-weighted images for 3T TR=0.7 s]
-     * @param mrpar_file MRpar File
-     * @param num_voxel_x Number of Voxels along X (default: phantom)
-     * @param num_voxel_y Number of Voxels along Y (default: phantom)
-     * @param num_voxel_z Number of Voxels along Z (default: phantom)
-     * @param voxel_size_x Size of voxels along X (default: phantom)
-     * @param voxel_size_y Size of voxels along Y (default: phantom)
-     * @param voxel_size_z Size of voxels along Z i.e., number of slices (default: phantom)
-     * @param start_position Starting position of the volume in mm (default = 0mm)
-     * @param noise_sigma Add noise with given sigma (default: 0 i.e., no noise)
-     * @param save_flag Save original non-resample output image
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tcalc" as const,
+        "@type": "fsl.tcalc" as const,
         "input_image": input_image,
         "output_image": output_image,
         "save_flag": save_flag,
@@ -168,18 +168,18 @@ function tcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcalc_cargs(
     params: TcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tcalc");
     cargs.push(["--input=", execution.inputFile((params["input_image"] ?? null))].join(''));
@@ -260,18 +260,18 @@ function tcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tcalc_outputs(
     params: TcalcParameters,
     execution: Execution,
 ): TcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TcalcOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -281,22 +281,22 @@ function tcalc_outputs(
 }
 
 
+/**
+ * Resample a 4D phantom for theoretical calculations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TcalcOutputs`).
+ */
 function tcalc_execute(
     params: TcalcParameters,
     execution: Execution,
 ): TcalcOutputs {
-    /**
-     * Resample a 4D phantom for theoretical calculations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = tcalc_cargs(params, execution)
     const ret = tcalc_outputs(params, execution)
@@ -305,6 +305,32 @@ function tcalc_execute(
 }
 
 
+/**
+ * Resample a 4D phantom for theoretical calculations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image (4D phantom for theoretical calculations)
+ * @param output_image Output image
+ * @param echo_time Echo Time (TE) in seconds [e.g., T1-weighted images for 3T TE=0.01 s]
+ * @param repetition_time Repetition Time (TR) in seconds [e.g., T1-weighted images for 3T TR=0.7 s]
+ * @param mrpar_file MRpar File
+ * @param num_voxel_x Number of Voxels along X (default: phantom)
+ * @param num_voxel_y Number of Voxels along Y (default: phantom)
+ * @param num_voxel_z Number of Voxels along Z (default: phantom)
+ * @param voxel_size_x Size of voxels along X (default: phantom)
+ * @param voxel_size_y Size of voxels along Y (default: phantom)
+ * @param voxel_size_z Size of voxels along Z i.e., number of slices (default: phantom)
+ * @param start_position Starting position of the volume in mm (default = 0mm)
+ * @param noise_sigma Add noise with given sigma (default: 0 i.e., no noise)
+ * @param save_flag Save original non-resample output image
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TcalcOutputs`).
+ */
 function tcalc(
     input_image: InputPathType,
     output_image: string,
@@ -323,32 +349,6 @@ function tcalc(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): TcalcOutputs {
-    /**
-     * Resample a 4D phantom for theoretical calculations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image (4D phantom for theoretical calculations)
-     * @param output_image Output image
-     * @param echo_time Echo Time (TE) in seconds [e.g., T1-weighted images for 3T TE=0.01 s]
-     * @param repetition_time Repetition Time (TR) in seconds [e.g., T1-weighted images for 3T TR=0.7 s]
-     * @param mrpar_file MRpar File
-     * @param num_voxel_x Number of Voxels along X (default: phantom)
-     * @param num_voxel_y Number of Voxels along Y (default: phantom)
-     * @param num_voxel_z Number of Voxels along Z (default: phantom)
-     * @param voxel_size_x Size of voxels along X (default: phantom)
-     * @param voxel_size_y Size of voxels along Y (default: phantom)
-     * @param voxel_size_z Size of voxels along Z i.e., number of slices (default: phantom)
-     * @param start_position Starting position of the volume in mm (default = 0mm)
-     * @param noise_sigma Add noise with given sigma (default: 0 i.e., no noise)
-     * @param save_flag Save original non-resample output image
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCALC_METADATA);
     const params = tcalc_params(input_image, output_image, echo_time, repetition_time, mrpar_file, num_voxel_x, num_voxel_y, num_voxel_z, voxel_size_x, voxel_size_y, voxel_size_z, start_position, noise_sigma, save_flag, verbose_flag)
@@ -361,5 +361,8 @@ export {
       TcalcOutputs,
       TcalcParameters,
       tcalc,
+      tcalc_cargs,
+      tcalc_execute,
+      tcalc_outputs,
       tcalc_params,
 };

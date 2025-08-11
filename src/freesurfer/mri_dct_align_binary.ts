@@ -12,42 +12,42 @@ const MRI_DCT_ALIGN_BINARY_METADATA: Metadata = {
 
 
 interface MriDctAlignBinaryParameters {
-    "__STYXTYPE__": "mri_dct_align_binary";
+    "@type": "freesurfer.mri_dct_align_binary";
     "source_image": InputPathType;
     "destination_image": InputPathType;
     "output_transformation": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_dct_align_binary": mri_dct_align_binary_cargs,
+        "freesurfer.mri_dct_align_binary": mri_dct_align_binary_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_dct_align_binary": mri_dct_align_binary_outputs,
+        "freesurfer.mri_dct_align_binary": mri_dct_align_binary_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriDctAlignBinaryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_image Source image for alignment
+ * @param destination_image Destination image for alignment
+ * @param output_transformation Output transformation file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_dct_align_binary_params(
     source_image: InputPathType,
     destination_image: InputPathType,
     output_transformation: string,
 ): MriDctAlignBinaryParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_image Source image for alignment
-     * @param destination_image Destination image for alignment
-     * @param output_transformation Output transformation file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_dct_align_binary" as const,
+        "@type": "freesurfer.mri_dct_align_binary" as const,
         "source_image": source_image,
         "destination_image": destination_image,
         "output_transformation": output_transformation,
@@ -94,18 +94,18 @@ function mri_dct_align_binary_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_dct_align_binary_cargs(
     params: MriDctAlignBinaryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_dct_align_binary");
     cargs.push(execution.inputFile((params["source_image"] ?? null)));
@@ -115,18 +115,18 @@ function mri_dct_align_binary_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_dct_align_binary_outputs(
     params: MriDctAlignBinaryParameters,
     execution: Execution,
 ): MriDctAlignBinaryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDctAlignBinaryOutputs = {
         root: execution.outputFile("."),
         output_transformation_file: execution.outputFile([(params["output_transformation"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_dct_align_binary_outputs(
 }
 
 
+/**
+ * A binary tool for aligning MRI images using DCT.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
+ */
 function mri_dct_align_binary_execute(
     params: MriDctAlignBinaryParameters,
     execution: Execution,
 ): MriDctAlignBinaryOutputs {
-    /**
-     * A binary tool for aligning MRI images using DCT.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_dct_align_binary_cargs(params, execution)
     const ret = mri_dct_align_binary_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_dct_align_binary_execute(
 }
 
 
+/**
+ * A binary tool for aligning MRI images using DCT.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_image Source image for alignment
+ * @param destination_image Destination image for alignment
+ * @param output_transformation Output transformation file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
+ */
 function mri_dct_align_binary(
     source_image: InputPathType,
     destination_image: InputPathType,
     output_transformation: string,
     runner: Runner | null = null,
 ): MriDctAlignBinaryOutputs {
-    /**
-     * A binary tool for aligning MRI images using DCT.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_image Source image for alignment
-     * @param destination_image Destination image for alignment
-     * @param output_transformation Output transformation file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DCT_ALIGN_BINARY_METADATA);
     const params = mri_dct_align_binary_params(source_image, destination_image, output_transformation)
@@ -191,5 +191,8 @@ export {
       MriDctAlignBinaryOutputs,
       MriDctAlignBinaryParameters,
       mri_dct_align_binary,
+      mri_dct_align_binary_cargs,
+      mri_dct_align_binary_execute,
+      mri_dct_align_binary_outputs,
       mri_dct_align_binary_params,
 };

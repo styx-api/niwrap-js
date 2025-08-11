@@ -12,39 +12,39 @@ const MRI_HISTO_EQ_METADATA: Metadata = {
 
 
 interface MriHistoEqParameters {
-    "__STYXTYPE__": "mri_histo_eq";
+    "@type": "freesurfer.mri_histo_eq";
     "input_volume_1": InputPathType;
     "input_volume_2": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_histo_eq": mri_histo_eq_cargs,
+        "freesurfer.mri_histo_eq": mri_histo_eq_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MriHistoEqOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume_1 Input volume 1
+ * @param input_volume_2 Input volume 2
+ *
+ * @returns Parameter dictionary
+ */
 function mri_histo_eq_params(
     input_volume_1: InputPathType,
     input_volume_2: InputPathType,
 ): MriHistoEqParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume_1 Input volume 1
-     * @param input_volume_2 Input volume 2
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_histo_eq" as const,
+        "@type": "freesurfer.mri_histo_eq" as const,
         "input_volume_1": input_volume_1,
         "input_volume_2": input_volume_2,
     };
@@ -85,18 +85,18 @@ function mri_histo_eq_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_histo_eq_cargs(
     params: MriHistoEqParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_histo_eq");
     cargs.push(execution.inputFile((params["input_volume_1"] ?? null)));
@@ -105,18 +105,18 @@ function mri_histo_eq_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_histo_eq_outputs(
     params: MriHistoEqParameters,
     execution: Execution,
 ): MriHistoEqOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriHistoEqOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mri_histo_eq_outputs(
 }
 
 
+/**
+ * MRI histogram equalization tool from Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
+ */
 function mri_histo_eq_execute(
     params: MriHistoEqParameters,
     execution: Execution,
 ): MriHistoEqOutputs {
-    /**
-     * MRI histogram equalization tool from Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_histo_eq_cargs(params, execution)
     const ret = mri_histo_eq_outputs(params, execution)
@@ -148,24 +148,24 @@ function mri_histo_eq_execute(
 }
 
 
+/**
+ * MRI histogram equalization tool from Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume_1 Input volume 1
+ * @param input_volume_2 Input volume 2
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
+ */
 function mri_histo_eq(
     input_volume_1: InputPathType,
     input_volume_2: InputPathType,
     runner: Runner | null = null,
 ): MriHistoEqOutputs {
-    /**
-     * MRI histogram equalization tool from Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume_1 Input volume 1
-     * @param input_volume_2 Input volume 2
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_HISTO_EQ_METADATA);
     const params = mri_histo_eq_params(input_volume_1, input_volume_2)
@@ -178,5 +178,8 @@ export {
       MriHistoEqOutputs,
       MriHistoEqParameters,
       mri_histo_eq,
+      mri_histo_eq_cargs,
+      mri_histo_eq_execute,
+      mri_histo_eq_outputs,
       mri_histo_eq_params,
 };

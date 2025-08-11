@@ -12,7 +12,7 @@ const P2DSETSTAT_METADATA: Metadata = {
 
 
 interface P2dsetstatParameters {
-    "__STYXTYPE__": "p2dsetstat";
+    "@type": "afni.p2dsetstat";
     "dataset": string;
     "pvalue": number;
     "bisided": boolean;
@@ -22,35 +22,35 @@ interface P2dsetstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "p2dsetstat": p2dsetstat_cargs,
+        "afni.p2dsetstat": p2dsetstat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "p2dsetstat": p2dsetstat_outputs,
+        "afni.p2dsetstat": p2dsetstat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface P2dsetstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
+ * @param pvalue Input p-value P, which MUST be in the interval [0,1].
+ * @param bisided Two-sided test.
+ * @param twosided Two-sided test.
+ * @param onesided One-sided test.
+ * @param quiet Output only the final statistic value.
+ *
+ * @returns Parameter dictionary
+ */
 function p2dsetstat_params(
     dataset: string,
     pvalue: number,
@@ -81,20 +93,8 @@ function p2dsetstat_params(
     onesided: boolean = false,
     quiet: boolean = false,
 ): P2dsetstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
-     * @param pvalue Input p-value P, which MUST be in the interval [0,1].
-     * @param bisided Two-sided test.
-     * @param twosided Two-sided test.
-     * @param onesided One-sided test.
-     * @param quiet Output only the final statistic value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "p2dsetstat" as const,
+        "@type": "afni.p2dsetstat" as const,
         "dataset": dataset,
         "pvalue": pvalue,
         "bisided": bisided,
@@ -106,18 +106,18 @@ function p2dsetstat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function p2dsetstat_cargs(
     params: P2dsetstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("p2dsetstat");
     cargs.push(
@@ -144,18 +144,18 @@ function p2dsetstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function p2dsetstat_outputs(
     params: P2dsetstatParameters,
     execution: Execution,
 ): P2dsetstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: P2dsetstatOutputs = {
         root: execution.outputFile("."),
         stat_value: execution.outputFile(["stdout"].join('')),
@@ -164,22 +164,22 @@ function p2dsetstat_outputs(
 }
 
 
+/**
+ * Convert a p-value to a statistic of choice with reference to a specific dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
+ */
 function p2dsetstat_execute(
     params: P2dsetstatParameters,
     execution: Execution,
 ): P2dsetstatOutputs {
-    /**
-     * Convert a p-value to a statistic of choice with reference to a specific dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = p2dsetstat_cargs(params, execution)
     const ret = p2dsetstat_outputs(params, execution)
@@ -188,6 +188,23 @@ function p2dsetstat_execute(
 }
 
 
+/**
+ * Convert a p-value to a statistic of choice with reference to a specific dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
+ * @param pvalue Input p-value P, which MUST be in the interval [0,1].
+ * @param bisided Two-sided test.
+ * @param twosided Two-sided test.
+ * @param onesided One-sided test.
+ * @param quiet Output only the final statistic value.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
+ */
 function p2dsetstat(
     dataset: string,
     pvalue: number,
@@ -197,23 +214,6 @@ function p2dsetstat(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): P2dsetstatOutputs {
-    /**
-     * Convert a p-value to a statistic of choice with reference to a specific dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). 'i' can be either a number or a string label selector.
-     * @param pvalue Input p-value P, which MUST be in the interval [0,1].
-     * @param bisided Two-sided test.
-     * @param twosided Two-sided test.
-     * @param onesided One-sided test.
-     * @param quiet Output only the final statistic value.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(P2DSETSTAT_METADATA);
     const params = p2dsetstat_params(dataset, pvalue, bisided, twosided, onesided, quiet)
@@ -226,5 +226,8 @@ export {
       P2dsetstatOutputs,
       P2dsetstatParameters,
       p2dsetstat,
+      p2dsetstat_cargs,
+      p2dsetstat_execute,
+      p2dsetstat_outputs,
       p2dsetstat_params,
 };

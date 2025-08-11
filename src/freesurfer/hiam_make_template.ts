@@ -12,7 +12,7 @@ const HIAM_MAKE_TEMPLATE_METADATA: Metadata = {
 
 
 interface HiamMakeTemplateParameters {
-    "__STYXTYPE__": "hiam_make_template";
+    "@type": "freesurfer.hiam_make_template";
     "hemi": string;
     "surface_name": string;
     "subjects": Array<string>;
@@ -20,33 +20,33 @@ interface HiamMakeTemplateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "hiam_make_template": hiam_make_template_cargs,
+        "freesurfer.hiam_make_template": hiam_make_template_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface HiamMakeTemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere to be processed (e.g. lh or rh)
+ * @param surface_name Name of the surface
+ * @param subjects List of subject identifiers
+ * @param output_name Name of the output template
+ *
+ * @returns Parameter dictionary
+ */
 function hiam_make_template_params(
     hemi: string,
     surface_name: string,
     subjects: Array<string>,
     output_name: string,
 ): HiamMakeTemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere to be processed (e.g. lh or rh)
-     * @param surface_name Name of the surface
-     * @param subjects List of subject identifiers
-     * @param output_name Name of the output template
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "hiam_make_template" as const,
+        "@type": "freesurfer.hiam_make_template" as const,
         "hemi": hemi,
         "surface_name": surface_name,
         "subjects": subjects,
@@ -93,18 +93,18 @@ function hiam_make_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function hiam_make_template_cargs(
     params: HiamMakeTemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("hiam_make_template");
     cargs.push((params["hemi"] ?? null));
@@ -115,18 +115,18 @@ function hiam_make_template_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function hiam_make_template_outputs(
     params: HiamMakeTemplateParameters,
     execution: Execution,
 ): HiamMakeTemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HiamMakeTemplateOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function hiam_make_template_outputs(
 }
 
 
+/**
+ * This program adds a template into an average surface using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
+ */
 function hiam_make_template_execute(
     params: HiamMakeTemplateParameters,
     execution: Execution,
 ): HiamMakeTemplateOutputs {
-    /**
-     * This program adds a template into an average surface using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = hiam_make_template_cargs(params, execution)
     const ret = hiam_make_template_outputs(params, execution)
@@ -158,6 +158,21 @@ function hiam_make_template_execute(
 }
 
 
+/**
+ * This program adds a template into an average surface using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere to be processed (e.g. lh or rh)
+ * @param surface_name Name of the surface
+ * @param subjects List of subject identifiers
+ * @param output_name Name of the output template
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
+ */
 function hiam_make_template(
     hemi: string,
     surface_name: string,
@@ -165,21 +180,6 @@ function hiam_make_template(
     output_name: string,
     runner: Runner | null = null,
 ): HiamMakeTemplateOutputs {
-    /**
-     * This program adds a template into an average surface using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere to be processed (e.g. lh or rh)
-     * @param surface_name Name of the surface
-     * @param subjects List of subject identifiers
-     * @param output_name Name of the output template
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HIAM_MAKE_TEMPLATE_METADATA);
     const params = hiam_make_template_params(hemi, surface_name, subjects, output_name)
@@ -192,5 +192,8 @@ export {
       HiamMakeTemplateOutputs,
       HiamMakeTemplateParameters,
       hiam_make_template,
+      hiam_make_template_cargs,
+      hiam_make_template_execute,
+      hiam_make_template_outputs,
       hiam_make_template_params,
 };

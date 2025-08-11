@@ -12,41 +12,41 @@ const PLOT_STRUCTURE_STATS_TCL_METADATA: Metadata = {
 
 
 interface PlotStructureStatsTclParameters {
-    "__STYXTYPE__": "plot_structure_stats.tcl";
+    "@type": "freesurfer.plot_structure_stats.tcl";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "plot_structure_stats.tcl": plot_structure_stats_tcl_cargs,
+        "freesurfer.plot_structure_stats.tcl": plot_structure_stats_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "plot_structure_stats.tcl": plot_structure_stats_tcl_outputs,
+        "freesurfer.plot_structure_stats.tcl": plot_structure_stats_tcl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface PlotStructureStatsTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input stats file
+ * @param output_file Output plot file
+ *
+ * @returns Parameter dictionary
+ */
 function plot_structure_stats_tcl_params(
     input_file: InputPathType,
     output_file: string,
 ): PlotStructureStatsTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input stats file
-     * @param output_file Output plot file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plot_structure_stats.tcl" as const,
+        "@type": "freesurfer.plot_structure_stats.tcl" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function plot_structure_stats_tcl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function plot_structure_stats_tcl_cargs(
     params: PlotStructureStatsTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("plot_structure_stats.tcl");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function plot_structure_stats_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function plot_structure_stats_tcl_outputs(
     params: PlotStructureStatsTclParameters,
     execution: Execution,
 ): PlotStructureStatsTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PlotStructureStatsTclOutputs = {
         root: execution.outputFile("."),
         plot_file: execution.outputFile([(params["output_file"] ?? null), ".png"].join('')),
@@ -130,22 +130,22 @@ function plot_structure_stats_tcl_outputs(
 }
 
 
+/**
+ * Script to plot structural statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
+ */
 function plot_structure_stats_tcl_execute(
     params: PlotStructureStatsTclParameters,
     execution: Execution,
 ): PlotStructureStatsTclOutputs {
-    /**
-     * Script to plot structural statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = plot_structure_stats_tcl_cargs(params, execution)
     const ret = plot_structure_stats_tcl_outputs(params, execution)
@@ -154,24 +154,24 @@ function plot_structure_stats_tcl_execute(
 }
 
 
+/**
+ * Script to plot structural statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input stats file
+ * @param output_file Output plot file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
+ */
 function plot_structure_stats_tcl(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): PlotStructureStatsTclOutputs {
-    /**
-     * Script to plot structural statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input stats file
-     * @param output_file Output plot file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLOT_STRUCTURE_STATS_TCL_METADATA);
     const params = plot_structure_stats_tcl_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       PlotStructureStatsTclOutputs,
       PlotStructureStatsTclParameters,
       plot_structure_stats_tcl,
+      plot_structure_stats_tcl_cargs,
+      plot_structure_stats_tcl_execute,
+      plot_structure_stats_tcl_outputs,
       plot_structure_stats_tcl_params,
 };

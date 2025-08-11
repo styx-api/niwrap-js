@@ -12,7 +12,7 @@ const MULTIPLY_IMAGES_METADATA: Metadata = {
 
 
 interface MultiplyImagesParameters {
-    "__STYXTYPE__": "MultiplyImages";
+    "@type": "ants.MultiplyImages";
     "dimension": 3 | 2;
     "first_input": InputPathType;
     "second_input"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface MultiplyImagesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "MultiplyImages": multiply_images_cargs,
+        "ants.MultiplyImages": multiply_images_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "MultiplyImages": multiply_images_outputs,
+        "ants.MultiplyImages": multiply_images_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MultiplyImagesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimension 3 or 2. Image dimension (2 or 3).
+ * @param first_input Image 1.
+ * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
+ * @param second_input file or string or a float. Image 2 or multiplication weight.
+ * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
+ * @param num_threads Number of itk threads to use.
+ *
+ * @returns Parameter dictionary
+ */
 function multiply_images_params(
     dimension: 3 | 2,
     first_input: InputPathType,
@@ -81,20 +93,8 @@ function multiply_images_params(
     second_input_2: number | null = null,
     num_threads: number | null = 1,
 ): MultiplyImagesParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimension 3 or 2. Image dimension (2 or 3).
-     * @param first_input Image 1.
-     * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
-     * @param second_input file or string or a float. Image 2 or multiplication weight.
-     * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
-     * @param num_threads Number of itk threads to use.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "MultiplyImages" as const,
+        "@type": "ants.MultiplyImages" as const,
         "dimension": dimension,
         "first_input": first_input,
         "output_product_image": output_product_image,
@@ -112,18 +112,18 @@ function multiply_images_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function multiply_images_cargs(
     params: MultiplyImagesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("MultiplyImages");
     cargs.push(String((params["dimension"] ?? null)));
@@ -142,18 +142,18 @@ function multiply_images_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function multiply_images_outputs(
     params: MultiplyImagesParameters,
     execution: Execution,
 ): MultiplyImagesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MultiplyImagesOutputs = {
         root: execution.outputFile("."),
         output_product_image_outfile: execution.outputFile([(params["output_product_image"] ?? null)].join('')),
@@ -162,22 +162,22 @@ function multiply_images_outputs(
 }
 
 
+/**
+ * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
+ */
 function multiply_images_execute(
     params: MultiplyImagesParameters,
     execution: Execution,
 ): MultiplyImagesOutputs {
-    /**
-     * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
-     */
     params = execution.params(params)
     const cargs = multiply_images_cargs(params, execution)
     const ret = multiply_images_outputs(params, execution)
@@ -186,6 +186,23 @@ function multiply_images_execute(
 }
 
 
+/**
+ * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimension 3 or 2. Image dimension (2 or 3).
+ * @param first_input Image 1.
+ * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
+ * @param second_input file or string or a float. Image 2 or multiplication weight.
+ * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
+ * @param num_threads Number of itk threads to use.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
+ */
 function multiply_images(
     dimension: 3 | 2,
     first_input: InputPathType,
@@ -195,23 +212,6 @@ function multiply_images(
     num_threads: number | null = 1,
     runner: Runner | null = null,
 ): MultiplyImagesOutputs {
-    /**
-     * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimension 3 or 2. Image dimension (2 or 3).
-     * @param first_input Image 1.
-     * @param output_product_image Outputfname.nii.gz: the name of the resulting image.
-     * @param second_input file or string or a float. Image 2 or multiplication weight.
-     * @param second_input_2 file or string or a float. Image 2 or multiplication weight.
-     * @param num_threads Number of itk threads to use.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MULTIPLY_IMAGES_METADATA);
     const params = multiply_images_params(dimension, first_input, output_product_image, second_input, second_input_2, num_threads)
@@ -224,5 +224,8 @@ export {
       MultiplyImagesOutputs,
       MultiplyImagesParameters,
       multiply_images,
+      multiply_images_cargs,
+      multiply_images_execute,
+      multiply_images_outputs,
       multiply_images_params,
 };

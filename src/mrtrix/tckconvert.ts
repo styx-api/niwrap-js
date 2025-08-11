@@ -12,26 +12,26 @@ const TCKCONVERT_METADATA: Metadata = {
 
 
 interface TckconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckconvertVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.tckconvert.VariousString";
     "obj": string;
 }
 
 
 interface TckconvertVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.tckconvert.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface TckconvertParameters {
-    "__STYXTYPE__": "tckconvert";
+    "@type": "mrtrix.tckconvert";
     "scanner2voxel"?: InputPathType | null | undefined;
     "scanner2image"?: InputPathType | null | undefined;
     "voxel2scanner"?: InputPathType | null | undefined;
@@ -55,57 +55,57 @@ interface TckconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckconvert": tckconvert_cargs,
-        "config": tckconvert_config_cargs,
-        "VariousString": tckconvert_various_string_cargs,
-        "VariousFile": tckconvert_various_file_cargs,
+        "mrtrix.tckconvert": tckconvert_cargs,
+        "mrtrix.tckconvert.config": tckconvert_config_cargs,
+        "mrtrix.tckconvert.VariousString": tckconvert_various_string_cargs,
+        "mrtrix.tckconvert.VariousFile": tckconvert_various_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tckconvert": tckconvert_outputs,
+        "mrtrix.tckconvert": tckconvert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckconvert_config_params(
     key: string,
     value: string,
 ): TckconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -113,18 +113,18 @@ function tckconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckconvert_config_cargs(
     params: TckconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -133,72 +133,72 @@ function tckconvert_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckconvert_various_string_params(
     obj: string,
 ): TckconvertVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.tckconvert.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckconvert_various_string_cargs(
     params: TckconvertVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function tckconvert_various_file_params(
     obj: InputPathType,
 ): TckconvertVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.tckconvert.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckconvert_various_file_cargs(
     params: TckconvertVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -222,6 +222,32 @@ interface TckconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input track file.
+ * @param output the output track file.
+ * @param scanner2voxel if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into voxel coordinates.
+ * @param scanner2image if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into image coordinates (in mm).
+ * @param voxel2scanner if specified, the properties of this image will be used to convert track point positions from voxel coordinates into real (scanner) coordinates.
+ * @param image2scanner if specified, the properties of this image will be used to convert track point positions from image coordinates (in mm) into real (scanner) coordinates.
+ * @param sides number of sides for streamlines
+ * @param increment generate streamline points at every (increment) points
+ * @param dec add DEC as a primvar
+ * @param radius radius of the streamlines
+ * @param ascii write an ASCII VTK file (this is the default)
+ * @param binary write a binary VTK file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckconvert_params(
     input: TckconvertVariousStringParameters | TckconvertVariousFileParameters,
     output: string,
@@ -244,34 +270,8 @@ function tckconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): TckconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input track file.
-     * @param output the output track file.
-     * @param scanner2voxel if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into voxel coordinates.
-     * @param scanner2image if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into image coordinates (in mm).
-     * @param voxel2scanner if specified, the properties of this image will be used to convert track point positions from voxel coordinates into real (scanner) coordinates.
-     * @param image2scanner if specified, the properties of this image will be used to convert track point positions from image coordinates (in mm) into real (scanner) coordinates.
-     * @param sides number of sides for streamlines
-     * @param increment generate streamline points at every (increment) points
-     * @param dec add DEC as a primvar
-     * @param radius radius of the streamlines
-     * @param ascii write an ASCII VTK file (this is the default)
-     * @param binary write a binary VTK file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckconvert" as const,
+        "@type": "mrtrix.tckconvert" as const,
         "dec": dec,
         "ascii": ascii,
         "binary": binary,
@@ -315,18 +315,18 @@ function tckconvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckconvert_cargs(
     params: TckconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckconvert");
     if ((params["scanner2voxel"] ?? null) !== null) {
@@ -399,7 +399,7 @@ function tckconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -407,24 +407,24 @@ function tckconvert_cargs(
     if ((params["version"] ?? null)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["input"] ?? null).__STYXTYPE__)((params["input"] ?? null), execution));
+    cargs.push(...dynCargs((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
     cargs.push((params["output"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckconvert_outputs(
     params: TckconvertParameters,
     execution: Execution,
 ): TckconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckconvertOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -433,34 +433,34 @@ function tckconvert_outputs(
 }
 
 
+/**
+ * Convert between different track file formats.
+ *
+ * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).
+ *
+ * Note that ascii files will be stored with one streamline per numbered file. To support this, the command will use the multi-file numbering syntax, where square brackets denote the position of the numbering for the files, for example:
+ *
+ * $ tckconvert input.tck output-'[]'.txt
+ *
+ * will produce files named output-0000.txt, output-0001.txt, output-0002.txt, ...
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
+ */
 function tckconvert_execute(
     params: TckconvertParameters,
     execution: Execution,
 ): TckconvertOutputs {
-    /**
-     * Convert between different track file formats.
-     * 
-     * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).
-     * 
-     * Note that ascii files will be stored with one streamline per numbered file. To support this, the command will use the multi-file numbering syntax, where square brackets denote the position of the numbering for the files, for example:
-     * 
-     * $ tckconvert input.tck output-'[]'.txt
-     * 
-     * will produce files named output-0000.txt, output-0001.txt, output-0002.txt, ...
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckconvert_cargs(params, execution)
     const ret = tckconvert_outputs(params, execution)
@@ -469,6 +469,49 @@ function tckconvert_execute(
 }
 
 
+/**
+ * Convert between different track file formats.
+ *
+ * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).
+ *
+ * Note that ascii files will be stored with one streamline per numbered file. To support this, the command will use the multi-file numbering syntax, where square brackets denote the position of the numbering for the files, for example:
+ *
+ * $ tckconvert input.tck output-'[]'.txt
+ *
+ * will produce files named output-0000.txt, output-0001.txt, output-0002.txt, ...
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input track file.
+ * @param output the output track file.
+ * @param scanner2voxel if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into voxel coordinates.
+ * @param scanner2image if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into image coordinates (in mm).
+ * @param voxel2scanner if specified, the properties of this image will be used to convert track point positions from voxel coordinates into real (scanner) coordinates.
+ * @param image2scanner if specified, the properties of this image will be used to convert track point positions from image coordinates (in mm) into real (scanner) coordinates.
+ * @param sides number of sides for streamlines
+ * @param increment generate streamline points at every (increment) points
+ * @param dec add DEC as a primvar
+ * @param radius radius of the streamlines
+ * @param ascii write an ASCII VTK file (this is the default)
+ * @param binary write a binary VTK file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
+ */
 function tckconvert(
     input: TckconvertVariousStringParameters | TckconvertVariousFileParameters,
     output: string,
@@ -492,49 +535,6 @@ function tckconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckconvertOutputs {
-    /**
-     * Convert between different track file formats.
-     * 
-     * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).
-     * 
-     * Note that ascii files will be stored with one streamline per numbered file. To support this, the command will use the multi-file numbering syntax, where square brackets denote the position of the numbering for the files, for example:
-     * 
-     * $ tckconvert input.tck output-'[]'.txt
-     * 
-     * will produce files named output-0000.txt, output-0001.txt, output-0002.txt, ...
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input track file.
-     * @param output the output track file.
-     * @param scanner2voxel if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into voxel coordinates.
-     * @param scanner2image if specified, the properties of this image will be used to convert track point positions from real (scanner) coordinates into image coordinates (in mm).
-     * @param voxel2scanner if specified, the properties of this image will be used to convert track point positions from voxel coordinates into real (scanner) coordinates.
-     * @param image2scanner if specified, the properties of this image will be used to convert track point positions from image coordinates (in mm) into real (scanner) coordinates.
-     * @param sides number of sides for streamlines
-     * @param increment generate streamline points at every (increment) points
-     * @param dec add DEC as a primvar
-     * @param radius radius of the streamlines
-     * @param ascii write an ASCII VTK file (this is the default)
-     * @param binary write a binary VTK file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKCONVERT_METADATA);
     const params = tckconvert_params(input, output, scanner2voxel, scanner2image, voxel2scanner, image2scanner, sides, increment, dec, radius, ascii, binary, info, quiet, debug, force, nthreads, config, help, version)
@@ -550,8 +550,14 @@ export {
       TckconvertVariousFileParameters,
       TckconvertVariousStringParameters,
       tckconvert,
+      tckconvert_cargs,
+      tckconvert_config_cargs,
       tckconvert_config_params,
+      tckconvert_execute,
+      tckconvert_outputs,
       tckconvert_params,
+      tckconvert_various_file_cargs,
       tckconvert_various_file_params,
+      tckconvert_various_string_cargs,
       tckconvert_various_string_params,
 };

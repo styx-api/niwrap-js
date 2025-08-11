@@ -12,7 +12,7 @@ const MRI_BRAINVOL_STATS_METADATA: Metadata = {
 
 
 interface MriBrainvolStatsParameters {
-    "__STYXTYPE__": "mri_brainvol_stats";
+    "@type": "freesurfer.mri_brainvol_stats";
     "subject_id": string;
     "xml_string"?: string | null | undefined;
     "no_surface": boolean;
@@ -21,35 +21,35 @@ interface MriBrainvolStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_brainvol_stats": mri_brainvol_stats_cargs,
+        "freesurfer.mri_brainvol_stats": mri_brainvol_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_brainvol_stats": mri_brainvol_stats_outputs,
+        "freesurfer.mri_brainvol_stats": mri_brainvol_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriBrainvolStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id The subject ID for which brain volume statistics are computed
+ * @param xml_string XML string containing input data. The XML is used to define additional parameters for computation.
+ * @param no_surface Flag to specify that surface-based measurements should not be included in the output.
+ * @param include_segmentation Flag to include segmentation information in the brain volume calculations.
+ * @param output_file Output file path to write the brain volume statistics.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_brainvol_stats_params(
     subject_id: string,
     xml_string: string | null = null,
@@ -79,19 +90,8 @@ function mri_brainvol_stats_params(
     include_segmentation: boolean = false,
     output_file: string | null = null,
 ): MriBrainvolStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id The subject ID for which brain volume statistics are computed
-     * @param xml_string XML string containing input data. The XML is used to define additional parameters for computation.
-     * @param no_surface Flag to specify that surface-based measurements should not be included in the output.
-     * @param include_segmentation Flag to include segmentation information in the brain volume calculations.
-     * @param output_file Output file path to write the brain volume statistics.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_brainvol_stats" as const,
+        "@type": "freesurfer.mri_brainvol_stats" as const,
         "subject_id": subject_id,
         "no_surface": no_surface,
         "include_segmentation": include_segmentation,
@@ -106,18 +106,18 @@ function mri_brainvol_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_brainvol_stats_cargs(
     params: MriBrainvolStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_brainvol_stats");
     cargs.push(
@@ -146,18 +146,18 @@ function mri_brainvol_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_brainvol_stats_outputs(
     params: MriBrainvolStatsParameters,
     execution: Execution,
 ): MriBrainvolStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriBrainvolStatsOutputs = {
         root: execution.outputFile("."),
         brain_vol_stats_output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -166,22 +166,22 @@ function mri_brainvol_stats_outputs(
 }
 
 
+/**
+ * Tool for computing brain volume statistics with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
+ */
 function mri_brainvol_stats_execute(
     params: MriBrainvolStatsParameters,
     execution: Execution,
 ): MriBrainvolStatsOutputs {
-    /**
-     * Tool for computing brain volume statistics with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_brainvol_stats_cargs(params, execution)
     const ret = mri_brainvol_stats_outputs(params, execution)
@@ -190,6 +190,22 @@ function mri_brainvol_stats_execute(
 }
 
 
+/**
+ * Tool for computing brain volume statistics with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id The subject ID for which brain volume statistics are computed
+ * @param xml_string XML string containing input data. The XML is used to define additional parameters for computation.
+ * @param no_surface Flag to specify that surface-based measurements should not be included in the output.
+ * @param include_segmentation Flag to include segmentation information in the brain volume calculations.
+ * @param output_file Output file path to write the brain volume statistics.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
+ */
 function mri_brainvol_stats(
     subject_id: string,
     xml_string: string | null = null,
@@ -198,22 +214,6 @@ function mri_brainvol_stats(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): MriBrainvolStatsOutputs {
-    /**
-     * Tool for computing brain volume statistics with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id The subject ID for which brain volume statistics are computed
-     * @param xml_string XML string containing input data. The XML is used to define additional parameters for computation.
-     * @param no_surface Flag to specify that surface-based measurements should not be included in the output.
-     * @param include_segmentation Flag to include segmentation information in the brain volume calculations.
-     * @param output_file Output file path to write the brain volume statistics.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_BRAINVOL_STATS_METADATA);
     const params = mri_brainvol_stats_params(subject_id, xml_string, no_surface, include_segmentation, output_file)
@@ -226,5 +226,8 @@ export {
       MriBrainvolStatsOutputs,
       MriBrainvolStatsParameters,
       mri_brainvol_stats,
+      mri_brainvol_stats_cargs,
+      mri_brainvol_stats_execute,
+      mri_brainvol_stats_outputs,
       mri_brainvol_stats_params,
 };

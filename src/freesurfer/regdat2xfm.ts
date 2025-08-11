@@ -12,39 +12,39 @@ const REGDAT2XFM_METADATA: Metadata = {
 
 
 interface Regdat2xfmParameters {
-    "__STYXTYPE__": "regdat2xfm";
+    "@type": "freesurfer.regdat2xfm";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "regdat2xfm": regdat2xfm_cargs,
+        "freesurfer.regdat2xfm": regdat2xfm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface Regdat2xfmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file (registration data)
+ * @param output_file Output file (transformation matrix)
+ *
+ * @returns Parameter dictionary
+ */
 function regdat2xfm_params(
     input_file: InputPathType,
     output_file: string,
 ): Regdat2xfmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file (registration data)
-     * @param output_file Output file (transformation matrix)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "regdat2xfm" as const,
+        "@type": "freesurfer.regdat2xfm" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -85,18 +85,18 @@ function regdat2xfm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function regdat2xfm_cargs(
     params: Regdat2xfmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("regdat2xfm");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -105,18 +105,18 @@ function regdat2xfm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function regdat2xfm_outputs(
     params: Regdat2xfmParameters,
     execution: Execution,
 ): Regdat2xfmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Regdat2xfmOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function regdat2xfm_outputs(
 }
 
 
+/**
+ * This tool has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
+ */
 function regdat2xfm_execute(
     params: Regdat2xfmParameters,
     execution: Execution,
 ): Regdat2xfmOutputs {
-    /**
-     * This tool has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
-     */
     params = execution.params(params)
     const cargs = regdat2xfm_cargs(params, execution)
     const ret = regdat2xfm_outputs(params, execution)
@@ -148,24 +148,24 @@ function regdat2xfm_execute(
 }
 
 
+/**
+ * This tool has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file (registration data)
+ * @param output_file Output file (transformation matrix)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
+ */
 function regdat2xfm(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): Regdat2xfmOutputs {
-    /**
-     * This tool has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file (registration data)
-     * @param output_file Output file (transformation matrix)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGDAT2XFM_METADATA);
     const params = regdat2xfm_params(input_file, output_file)
@@ -178,5 +178,8 @@ export {
       Regdat2xfmOutputs,
       Regdat2xfmParameters,
       regdat2xfm,
+      regdat2xfm_cargs,
+      regdat2xfm_execute,
+      regdat2xfm_outputs,
       regdat2xfm_params,
 };

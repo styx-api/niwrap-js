@@ -12,42 +12,42 @@ const VOLUME_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 
 interface VolumeAllLabelsToRoisParameters {
-    "__STYXTYPE__": "volume-all-labels-to-rois";
+    "@type": "workbench.volume-all-labels-to-rois";
     "label_in": InputPathType;
     "map": string;
     "volume_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-all-labels-to-rois": volume_all_labels_to_rois_cargs,
+        "workbench.volume-all-labels-to-rois": volume_all_labels_to_rois_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-all-labels-to-rois": volume_all_labels_to_rois_outputs,
+        "workbench.volume-all-labels-to-rois": volume_all_labels_to_rois_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface VolumeAllLabelsToRoisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input volume label file
+ * @param map the number or name of the label map to use
+ * @param volume_out the output volume file
+ *
+ * @returns Parameter dictionary
+ */
 function volume_all_labels_to_rois_params(
     label_in: InputPathType,
     map: string,
     volume_out: string,
 ): VolumeAllLabelsToRoisParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input volume label file
-     * @param map the number or name of the label map to use
-     * @param volume_out the output volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-all-labels-to-rois" as const,
+        "@type": "workbench.volume-all-labels-to-rois" as const,
         "label_in": label_in,
         "map": map,
         "volume_out": volume_out,
@@ -94,18 +94,18 @@ function volume_all_labels_to_rois_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_all_labels_to_rois_cargs(
     params: VolumeAllLabelsToRoisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-all-labels-to-rois");
@@ -116,18 +116,18 @@ function volume_all_labels_to_rois_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_all_labels_to_rois_outputs(
     params: VolumeAllLabelsToRoisParameters,
     execution: Execution,
 ): VolumeAllLabelsToRoisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeAllLabelsToRoisOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -136,24 +136,24 @@ function volume_all_labels_to_rois_outputs(
 }
 
 
+/**
+ * Make rois from all labels in a volume frame.
+ *
+ * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
+ */
 function volume_all_labels_to_rois_execute(
     params: VolumeAllLabelsToRoisParameters,
     execution: Execution,
 ): VolumeAllLabelsToRoisOutputs {
-    /**
-     * Make rois from all labels in a volume frame.
-     * 
-     * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_all_labels_to_rois_cargs(params, execution)
     const ret = volume_all_labels_to_rois_outputs(params, execution)
@@ -162,28 +162,28 @@ function volume_all_labels_to_rois_execute(
 }
 
 
+/**
+ * Make rois from all labels in a volume frame.
+ *
+ * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input volume label file
+ * @param map the number or name of the label map to use
+ * @param volume_out the output volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
+ */
 function volume_all_labels_to_rois(
     label_in: InputPathType,
     map: string,
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeAllLabelsToRoisOutputs {
-    /**
-     * Make rois from all labels in a volume frame.
-     * 
-     * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input volume label file
-     * @param map the number or name of the label map to use
-     * @param volume_out the output volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_ALL_LABELS_TO_ROIS_METADATA);
     const params = volume_all_labels_to_rois_params(label_in, map, volume_out)
@@ -196,5 +196,8 @@ export {
       VolumeAllLabelsToRoisOutputs,
       VolumeAllLabelsToRoisParameters,
       volume_all_labels_to_rois,
+      volume_all_labels_to_rois_cargs,
+      volume_all_labels_to_rois_execute,
+      volume_all_labels_to_rois_outputs,
       volume_all_labels_to_rois_params,
 };

@@ -12,7 +12,7 @@ const V_3D_REG_ANA_METADATA: Metadata = {
 
 
 interface V3dRegAnaParameters {
-    "__STYXTYPE__": "3dRegAna";
+    "@type": "afni.3dRegAna";
     "rows": number;
     "cols": number;
     "xydata": Array<string>;
@@ -31,35 +31,35 @@ interface V3dRegAnaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRegAna": v_3d_reg_ana_cargs,
+        "afni.3dRegAna": v_3d_reg_ana_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRegAna": v_3d_reg_ana_outputs,
+        "afni.3dRegAna": v_3d_reg_ana_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,27 @@ interface V3dRegAnaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rows Number of input datasets
+ * @param cols Number of X variables
+ * @param xydata X variables and Y observations
+ * @param model Definition of linear regression model: reduced model (Y = f(Xj1,...,Xjr)) and full model (Y = f(Xj1,...,Xjr,Xi1,...,Xiq))
+ * @param diskspace Print out disk space required for program execution
+ * @param workmem Number of megabytes of RAM to use for statistical workspace  (default = 750)
+ * @param rmsmin Minimum rms error to reject constant model
+ * @param fdisp Display results for voxels whose F-statistic is > fval
+ * @param flof Minimum p value for F due to lack of fit
+ * @param fcoef Estimate of kth regression coefficient along with F-test for the regression is written to AFNI `fift` dataset
+ * @param rcoef Estimate of kth regression coefficient along with coef. of mult. deter. R^2 is written to AFNI `fith` dataset
+ * @param tcoef Estimate of kth regression coefficient along with t-test for the coefficient is written to AFNI `fitt` dataset
+ * @param bucket Create one AFNI 'bucket' dataset having n sub-bricks; n=0 creates default output
+ * @param brick Specify the contents of the mth sub-brick in the bucket dataset
+ * @param datum Write the output in DATUM format. Choose from short (default) or float
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_reg_ana_params(
     rows: number,
     cols: number,
@@ -115,29 +136,8 @@ function v_3d_reg_ana_params(
     brick: Array<string> | null = null,
     datum: string | null = null,
 ): V3dRegAnaParameters {
-    /**
-     * Build parameters.
-    
-     * @param rows Number of input datasets
-     * @param cols Number of X variables
-     * @param xydata X variables and Y observations
-     * @param model Definition of linear regression model: reduced model (Y = f(Xj1,...,Xjr)) and full model (Y = f(Xj1,...,Xjr,Xi1,...,Xiq))
-     * @param diskspace Print out disk space required for program execution
-     * @param workmem Number of megabytes of RAM to use for statistical workspace  (default = 750)
-     * @param rmsmin Minimum rms error to reject constant model
-     * @param fdisp Display results for voxels whose F-statistic is > fval
-     * @param flof Minimum p value for F due to lack of fit
-     * @param fcoef Estimate of kth regression coefficient along with F-test for the regression is written to AFNI `fift` dataset
-     * @param rcoef Estimate of kth regression coefficient along with coef. of mult. deter. R^2 is written to AFNI `fith` dataset
-     * @param tcoef Estimate of kth regression coefficient along with t-test for the coefficient is written to AFNI `fitt` dataset
-     * @param bucket Create one AFNI 'bucket' dataset having n sub-bricks; n=0 creates default output
-     * @param brick Specify the contents of the mth sub-brick in the bucket dataset
-     * @param datum Write the output in DATUM format. Choose from short (default) or float
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRegAna" as const,
+        "@type": "afni.3dRegAna" as const,
         "rows": rows,
         "cols": cols,
         "xydata": xydata,
@@ -178,18 +178,18 @@ function v_3d_reg_ana_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_reg_ana_cargs(
     params: V3dRegAnaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRegAna");
     cargs.push(
@@ -275,18 +275,18 @@ function v_3d_reg_ana_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_reg_ana_outputs(
     params: V3dRegAnaParameters,
     execution: Execution,
 ): V3dRegAnaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRegAnaOutputs = {
         root: execution.outputFile("."),
         output_fift: execution.outputFile(["[PREFIX].fift+orig.HEAD"].join('')),
@@ -299,22 +299,22 @@ function v_3d_reg_ana_outputs(
 }
 
 
+/**
+ * Multiple linear regression analysis for AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
+ */
 function v_3d_reg_ana_execute(
     params: V3dRegAnaParameters,
     execution: Execution,
 ): V3dRegAnaOutputs {
-    /**
-     * Multiple linear regression analysis for AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_reg_ana_cargs(params, execution)
     const ret = v_3d_reg_ana_outputs(params, execution)
@@ -323,6 +323,32 @@ function v_3d_reg_ana_execute(
 }
 
 
+/**
+ * Multiple linear regression analysis for AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param rows Number of input datasets
+ * @param cols Number of X variables
+ * @param xydata X variables and Y observations
+ * @param model Definition of linear regression model: reduced model (Y = f(Xj1,...,Xjr)) and full model (Y = f(Xj1,...,Xjr,Xi1,...,Xiq))
+ * @param diskspace Print out disk space required for program execution
+ * @param workmem Number of megabytes of RAM to use for statistical workspace  (default = 750)
+ * @param rmsmin Minimum rms error to reject constant model
+ * @param fdisp Display results for voxels whose F-statistic is > fval
+ * @param flof Minimum p value for F due to lack of fit
+ * @param fcoef Estimate of kth regression coefficient along with F-test for the regression is written to AFNI `fift` dataset
+ * @param rcoef Estimate of kth regression coefficient along with coef. of mult. deter. R^2 is written to AFNI `fith` dataset
+ * @param tcoef Estimate of kth regression coefficient along with t-test for the coefficient is written to AFNI `fitt` dataset
+ * @param bucket Create one AFNI 'bucket' dataset having n sub-bricks; n=0 creates default output
+ * @param brick Specify the contents of the mth sub-brick in the bucket dataset
+ * @param datum Write the output in DATUM format. Choose from short (default) or float
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
+ */
 function v_3d_reg_ana(
     rows: number,
     cols: number,
@@ -341,32 +367,6 @@ function v_3d_reg_ana(
     datum: string | null = null,
     runner: Runner | null = null,
 ): V3dRegAnaOutputs {
-    /**
-     * Multiple linear regression analysis for AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param rows Number of input datasets
-     * @param cols Number of X variables
-     * @param xydata X variables and Y observations
-     * @param model Definition of linear regression model: reduced model (Y = f(Xj1,...,Xjr)) and full model (Y = f(Xj1,...,Xjr,Xi1,...,Xiq))
-     * @param diskspace Print out disk space required for program execution
-     * @param workmem Number of megabytes of RAM to use for statistical workspace  (default = 750)
-     * @param rmsmin Minimum rms error to reject constant model
-     * @param fdisp Display results for voxels whose F-statistic is > fval
-     * @param flof Minimum p value for F due to lack of fit
-     * @param fcoef Estimate of kth regression coefficient along with F-test for the regression is written to AFNI `fift` dataset
-     * @param rcoef Estimate of kth regression coefficient along with coef. of mult. deter. R^2 is written to AFNI `fith` dataset
-     * @param tcoef Estimate of kth regression coefficient along with t-test for the coefficient is written to AFNI `fitt` dataset
-     * @param bucket Create one AFNI 'bucket' dataset having n sub-bricks; n=0 creates default output
-     * @param brick Specify the contents of the mth sub-brick in the bucket dataset
-     * @param datum Write the output in DATUM format. Choose from short (default) or float
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_REG_ANA_METADATA);
     const params = v_3d_reg_ana_params(rows, cols, xydata, model, diskspace, workmem, rmsmin, fdisp, flof, fcoef, rcoef, tcoef, bucket, brick, datum)
@@ -379,5 +379,8 @@ export {
       V3dRegAnaParameters,
       V_3D_REG_ANA_METADATA,
       v_3d_reg_ana,
+      v_3d_reg_ana_cargs,
+      v_3d_reg_ana_execute,
+      v_3d_reg_ana_outputs,
       v_3d_reg_ana_params,
 };

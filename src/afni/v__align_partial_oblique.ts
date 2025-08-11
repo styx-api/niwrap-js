@@ -12,7 +12,7 @@ const V__ALIGN_PARTIAL_OBLIQUE_METADATA: Metadata = {
 
 
 interface VAlignPartialObliqueParameters {
-    "__STYXTYPE__": "@align_partial_oblique";
+    "@type": "afni.@align_partial_oblique";
     "base": InputPathType;
     "input": InputPathType;
     "suffix"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface VAlignPartialObliqueParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@align_partial_oblique": v__align_partial_oblique_cargs,
+        "afni.@align_partial_oblique": v__align_partial_oblique_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@align_partial_oblique": v__align_partial_oblique_outputs,
+        "afni.@align_partial_oblique": v__align_partial_oblique_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface VAlignPartialObliqueOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base Reference anatomical full coverage volume.
+ * @param input Partial coverage T1 weighted non-oblique dataset.
+ * @param suffix Output dataset name is formed by adding SUF to the prefix of the base dataset. The default suffix is _alnd_PartialCoverageObliqueT1
+ * @param keep_tmp Keep temporary files.
+ * @param clean Clean all temp files, likely left from -keep_tmp option then exit.
+ * @param dxyz Cubic voxel size of output dataset in TLRC space Default MM is 1.
+ * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
+ * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
+ * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
+ *
+ * @returns Parameter dictionary
+ */
 function v__align_partial_oblique_params(
     base: InputPathType,
     input: InputPathType,
@@ -87,23 +102,8 @@ function v__align_partial_oblique_params(
     dy: number | null = null,
     dz: number | null = null,
 ): VAlignPartialObliqueParameters {
-    /**
-     * Build parameters.
-    
-     * @param base Reference anatomical full coverage volume.
-     * @param input Partial coverage T1 weighted non-oblique dataset.
-     * @param suffix Output dataset name is formed by adding SUF to the prefix of the base dataset. The default suffix is _alnd_PartialCoverageObliqueT1
-     * @param keep_tmp Keep temporary files.
-     * @param clean Clean all temp files, likely left from -keep_tmp option then exit.
-     * @param dxyz Cubic voxel size of output dataset in TLRC space Default MM is 1.
-     * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
-     * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
-     * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@align_partial_oblique" as const,
+        "@type": "afni.@align_partial_oblique" as const,
         "base": base,
         "input": input,
         "keep_tmp": keep_tmp,
@@ -128,18 +128,18 @@ function v__align_partial_oblique_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__align_partial_oblique_cargs(
     params: VAlignPartialObliqueParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@align_partial_oblique");
     cargs.push(
@@ -190,18 +190,18 @@ function v__align_partial_oblique_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__align_partial_oblique_outputs(
     params: VAlignPartialObliqueParameters,
     execution: Execution,
 ): VAlignPartialObliqueOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAlignPartialObliqueOutputs = {
         root: execution.outputFile("."),
         aligned_output: execution.outputFile([path.basename((params["base"] ?? null)), "_alnd_", path.basename((params["input"] ?? null)), ".nii.gz"].join('')),
@@ -210,22 +210,22 @@ function v__align_partial_oblique_outputs(
 }
 
 
+/**
+ * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
+ */
 function v__align_partial_oblique_execute(
     params: VAlignPartialObliqueParameters,
     execution: Execution,
 ): VAlignPartialObliqueOutputs {
-    /**
-     * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__align_partial_oblique_cargs(params, execution)
     const ret = v__align_partial_oblique_outputs(params, execution)
@@ -234,6 +234,26 @@ function v__align_partial_oblique_execute(
 }
 
 
+/**
+ * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base Reference anatomical full coverage volume.
+ * @param input Partial coverage T1 weighted non-oblique dataset.
+ * @param suffix Output dataset name is formed by adding SUF to the prefix of the base dataset. The default suffix is _alnd_PartialCoverageObliqueT1
+ * @param keep_tmp Keep temporary files.
+ * @param clean Clean all temp files, likely left from -keep_tmp option then exit.
+ * @param dxyz Cubic voxel size of output dataset in TLRC space Default MM is 1.
+ * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
+ * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
+ * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
+ */
 function v__align_partial_oblique(
     base: InputPathType,
     input: InputPathType,
@@ -246,26 +266,6 @@ function v__align_partial_oblique(
     dz: number | null = null,
     runner: Runner | null = null,
 ): VAlignPartialObliqueOutputs {
-    /**
-     * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base Reference anatomical full coverage volume.
-     * @param input Partial coverage T1 weighted non-oblique dataset.
-     * @param suffix Output dataset name is formed by adding SUF to the prefix of the base dataset. The default suffix is _alnd_PartialCoverageObliqueT1
-     * @param keep_tmp Keep temporary files.
-     * @param clean Clean all temp files, likely left from -keep_tmp option then exit.
-     * @param dxyz Cubic voxel size of output dataset in TLRC space Default MM is 1.
-     * @param dx Size of voxel in the x direction (Right-Left). Default is 1mm.
-     * @param dy Size of voxel in the y direction (Anterior-Posterior). Default is 1mm.
-     * @param dz Size of voxel in the z direction (Inferior-Superior). Default is 1mm.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ALIGN_PARTIAL_OBLIQUE_METADATA);
     const params = v__align_partial_oblique_params(base, input, suffix, keep_tmp, clean, dxyz, dx, dy, dz)
@@ -278,5 +278,8 @@ export {
       VAlignPartialObliqueParameters,
       V__ALIGN_PARTIAL_OBLIQUE_METADATA,
       v__align_partial_oblique,
+      v__align_partial_oblique_cargs,
+      v__align_partial_oblique_execute,
+      v__align_partial_oblique_outputs,
       v__align_partial_oblique_params,
 };

@@ -12,7 +12,7 @@ const FSREAD_ANNOT_METADATA: Metadata = {
 
 
 interface FsreadAnnotParameters {
-    "__STYXTYPE__": "FSread_annot";
+    "@type": "afni.FSread_annot";
     "infile": InputPathType;
     "hemi"?: string | null | undefined;
     "fscmap"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface FsreadAnnotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "FSread_annot": fsread_annot_cargs,
+        "afni.FSread_annot": fsread_annot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "FSread_annot": fsread_annot_outputs,
+        "afni.FSread_annot": fsread_annot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,23 @@ interface FsreadAnnotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Binary formatted FreeSurfer annotation file.
+ * @param hemi Specify hemisphere. HEMI is one of lh or rh. Program guesses by default.
+ * @param fscmap Get the colormap from the Freesurfer colormap file CMAPFILE. Colormaps inside the ANNOTFILE would be ignored.
+ * @param fscmap_range CMAPFILE contains multiple types of labels. The annotation values in ANNOTFILE can map to multiple labels if you do not restrict the range with iMin and iMax.
+ * @param fsversion VER is the annotation file vintage. Choose from 2009 or 2005.
+ * @param col_1d Write a 4-column 1D color file.
+ * @param roi_1d Write a 5-column 1D roi file.
+ * @param cmap_1d Write a 4-column 1D color map file.
+ * @param show_fscmap Show the info of the colormap in the ANNOT file.
+ * @param dset Write the annotation and colormap as a niml formatted Label Dset.
+ * @param help Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function fsread_annot_params(
     infile: InputPathType,
     hemi: string | null = null,
@@ -103,25 +120,8 @@ function fsread_annot_params(
     dset: string | null = null,
     help: boolean = false,
 ): FsreadAnnotParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Binary formatted FreeSurfer annotation file.
-     * @param hemi Specify hemisphere. HEMI is one of lh or rh. Program guesses by default.
-     * @param fscmap Get the colormap from the Freesurfer colormap file CMAPFILE. Colormaps inside the ANNOTFILE would be ignored.
-     * @param fscmap_range CMAPFILE contains multiple types of labels. The annotation values in ANNOTFILE can map to multiple labels if you do not restrict the range with iMin and iMax.
-     * @param fsversion VER is the annotation file vintage. Choose from 2009 or 2005.
-     * @param col_1d Write a 4-column 1D color file.
-     * @param roi_1d Write a 5-column 1D roi file.
-     * @param cmap_1d Write a 4-column 1D color map file.
-     * @param show_fscmap Show the info of the colormap in the ANNOT file.
-     * @param dset Write the annotation and colormap as a niml formatted Label Dset.
-     * @param help Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "FSread_annot" as const,
+        "@type": "afni.FSread_annot" as const,
         "infile": infile,
         "show_fscmap": show_fscmap,
         "help": help,
@@ -154,18 +154,18 @@ function fsread_annot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsread_annot_cargs(
     params: FsreadAnnotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("FSread_annot");
     cargs.push(
@@ -230,18 +230,18 @@ function fsread_annot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsread_annot_outputs(
     params: FsreadAnnotParameters,
     execution: Execution,
 ): FsreadAnnotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsreadAnnotOutputs = {
         root: execution.outputFile("."),
         out_col_1d: execution.outputFile(["annot.1D.col"].join('')),
@@ -253,22 +253,22 @@ function fsread_annot_outputs(
 }
 
 
+/**
+ * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
+ */
 function fsread_annot_execute(
     params: FsreadAnnotParameters,
     execution: Execution,
 ): FsreadAnnotOutputs {
-    /**
-     * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsread_annot_cargs(params, execution)
     const ret = fsread_annot_outputs(params, execution)
@@ -277,6 +277,28 @@ function fsread_annot_execute(
 }
 
 
+/**
+ * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Binary formatted FreeSurfer annotation file.
+ * @param hemi Specify hemisphere. HEMI is one of lh or rh. Program guesses by default.
+ * @param fscmap Get the colormap from the Freesurfer colormap file CMAPFILE. Colormaps inside the ANNOTFILE would be ignored.
+ * @param fscmap_range CMAPFILE contains multiple types of labels. The annotation values in ANNOTFILE can map to multiple labels if you do not restrict the range with iMin and iMax.
+ * @param fsversion VER is the annotation file vintage. Choose from 2009 or 2005.
+ * @param col_1d Write a 4-column 1D color file.
+ * @param roi_1d Write a 5-column 1D roi file.
+ * @param cmap_1d Write a 4-column 1D color map file.
+ * @param show_fscmap Show the info of the colormap in the ANNOT file.
+ * @param dset Write the annotation and colormap as a niml formatted Label Dset.
+ * @param help Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
+ */
 function fsread_annot(
     infile: InputPathType,
     hemi: string | null = null,
@@ -291,28 +313,6 @@ function fsread_annot(
     help: boolean = false,
     runner: Runner | null = null,
 ): FsreadAnnotOutputs {
-    /**
-     * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Binary formatted FreeSurfer annotation file.
-     * @param hemi Specify hemisphere. HEMI is one of lh or rh. Program guesses by default.
-     * @param fscmap Get the colormap from the Freesurfer colormap file CMAPFILE. Colormaps inside the ANNOTFILE would be ignored.
-     * @param fscmap_range CMAPFILE contains multiple types of labels. The annotation values in ANNOTFILE can map to multiple labels if you do not restrict the range with iMin and iMax.
-     * @param fsversion VER is the annotation file vintage. Choose from 2009 or 2005.
-     * @param col_1d Write a 4-column 1D color file.
-     * @param roi_1d Write a 5-column 1D roi file.
-     * @param cmap_1d Write a 4-column 1D color map file.
-     * @param show_fscmap Show the info of the colormap in the ANNOT file.
-     * @param dset Write the annotation and colormap as a niml formatted Label Dset.
-     * @param help Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSREAD_ANNOT_METADATA);
     const params = fsread_annot_params(infile, hemi, fscmap, fscmap_range, fsversion, col_1d, roi_1d, cmap_1d, show_fscmap, dset, help)
@@ -325,5 +325,8 @@ export {
       FsreadAnnotOutputs,
       FsreadAnnotParameters,
       fsread_annot,
+      fsread_annot_cargs,
+      fsread_annot_execute,
+      fsread_annot_outputs,
       fsread_annot_params,
 };

@@ -12,7 +12,7 @@ const MRI_SPH2SURF_METADATA: Metadata = {
 
 
 interface MriSph2surfParameters {
-    "__STYXTYPE__": "mri-sph2surf";
+    "@type": "freesurfer.mri-sph2surf";
     "instem": string;
     "outstem": string;
     "hemi": string;
@@ -25,35 +25,35 @@ interface MriSph2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri-sph2surf": mri_sph2surf_cargs,
+        "freesurfer.mri-sph2surf": mri_sph2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri-sph2surf": mri_sph2surf_outputs,
+        "freesurfer.mri-sph2surf": mri_sph2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MriSph2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param instem Input stem of a bfloat file. The full input file name must take the form instem-lh_000.bfloat (or rh).
+ * @param outstem Output stem for the resulting file. The output file will have the name outstem-lh.w (or rh).
+ * @param hemi Specifies the hemisphere for processing. Acceptable values are 'lh' or 'rh'.
+ * @param subject Specifies the subject identifier for the FreeSurfer processing pipeline.
+ * @param offset Zero-based plane/frame number. Default is 0.
+ * @param svitdir Directory for svit. Default is '/usr/local/freesurfer/subjects/subject/svit'.
+ * @param umask Specifies a new user mask.
+ * @param verbose Enable verbose output.
+ * @param version Show version information.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_sph2surf_params(
     instem: string,
     outstem: string,
@@ -87,23 +102,8 @@ function mri_sph2surf_params(
     verbose: boolean = false,
     version: boolean = false,
 ): MriSph2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param instem Input stem of a bfloat file. The full input file name must take the form instem-lh_000.bfloat (or rh).
-     * @param outstem Output stem for the resulting file. The output file will have the name outstem-lh.w (or rh).
-     * @param hemi Specifies the hemisphere for processing. Acceptable values are 'lh' or 'rh'.
-     * @param subject Specifies the subject identifier for the FreeSurfer processing pipeline.
-     * @param offset Zero-based plane/frame number. Default is 0.
-     * @param svitdir Directory for svit. Default is '/usr/local/freesurfer/subjects/subject/svit'.
-     * @param umask Specifies a new user mask.
-     * @param verbose Enable verbose output.
-     * @param version Show version information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri-sph2surf" as const,
+        "@type": "freesurfer.mri-sph2surf" as const,
         "instem": instem,
         "outstem": outstem,
         "hemi": hemi,
@@ -124,18 +124,18 @@ function mri_sph2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_sph2surf_cargs(
     params: MriSph2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri-sph2surf");
     cargs.push(
@@ -182,18 +182,18 @@ function mri_sph2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_sph2surf_outputs(
     params: MriSph2surfParameters,
     execution: Execution,
 ): MriSph2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSph2surfOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outstem"] ?? null), "-", (params["hemi"] ?? null), ".w"].join('')),
@@ -202,22 +202,22 @@ function mri_sph2surf_outputs(
 }
 
 
+/**
+ * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
+ */
 function mri_sph2surf_execute(
     params: MriSph2surfParameters,
     execution: Execution,
 ): MriSph2surfOutputs {
-    /**
-     * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_sph2surf_cargs(params, execution)
     const ret = mri_sph2surf_outputs(params, execution)
@@ -226,6 +226,26 @@ function mri_sph2surf_execute(
 }
 
 
+/**
+ * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param instem Input stem of a bfloat file. The full input file name must take the form instem-lh_000.bfloat (or rh).
+ * @param outstem Output stem for the resulting file. The output file will have the name outstem-lh.w (or rh).
+ * @param hemi Specifies the hemisphere for processing. Acceptable values are 'lh' or 'rh'.
+ * @param subject Specifies the subject identifier for the FreeSurfer processing pipeline.
+ * @param offset Zero-based plane/frame number. Default is 0.
+ * @param svitdir Directory for svit. Default is '/usr/local/freesurfer/subjects/subject/svit'.
+ * @param umask Specifies a new user mask.
+ * @param verbose Enable verbose output.
+ * @param version Show version information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
+ */
 function mri_sph2surf(
     instem: string,
     outstem: string,
@@ -238,26 +258,6 @@ function mri_sph2surf(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriSph2surfOutputs {
-    /**
-     * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param instem Input stem of a bfloat file. The full input file name must take the form instem-lh_000.bfloat (or rh).
-     * @param outstem Output stem for the resulting file. The output file will have the name outstem-lh.w (or rh).
-     * @param hemi Specifies the hemisphere for processing. Acceptable values are 'lh' or 'rh'.
-     * @param subject Specifies the subject identifier for the FreeSurfer processing pipeline.
-     * @param offset Zero-based plane/frame number. Default is 0.
-     * @param svitdir Directory for svit. Default is '/usr/local/freesurfer/subjects/subject/svit'.
-     * @param umask Specifies a new user mask.
-     * @param verbose Enable verbose output.
-     * @param version Show version information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SPH2SURF_METADATA);
     const params = mri_sph2surf_params(instem, outstem, hemi, subject, offset, svitdir, umask, verbose, version)
@@ -270,5 +270,8 @@ export {
       MriSph2surfOutputs,
       MriSph2surfParameters,
       mri_sph2surf,
+      mri_sph2surf_cargs,
+      mri_sph2surf_execute,
+      mri_sph2surf_outputs,
       mri_sph2surf_params,
 };

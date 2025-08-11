@@ -12,40 +12,40 @@ const BAYES_VIEW_METADATA: Metadata = {
 
 
 interface BayesViewParameters {
-    "__STYXTYPE__": "bayes_view";
+    "@type": "afni.bayes_view";
     "input_folder": string;
     "help": boolean;
     "shiny_folder"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bayes_view": bayes_view_cargs,
+        "afni.bayes_view": bayes_view_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface BayesViewOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_folder Path to a folder containing .RData files
+ * @param help Show help message
+ * @param shiny_folder Use a custom shiny folder (for testing purposes)
+ *
+ * @returns Parameter dictionary
+ */
 function bayes_view_params(
     input_folder: string,
     help: boolean = false,
     shiny_folder: string | null = null,
 ): BayesViewParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_folder Path to a folder containing .RData files
-     * @param help Show help message
-     * @param shiny_folder Use a custom shiny folder (for testing purposes)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bayes_view" as const,
+        "@type": "afni.bayes_view" as const,
         "input_folder": input_folder,
         "help": help,
     };
@@ -91,18 +91,18 @@ function bayes_view_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bayes_view_cargs(
     params: BayesViewParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bayes_view");
     cargs.push((params["input_folder"] ?? null));
@@ -119,18 +119,18 @@ function bayes_view_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bayes_view_outputs(
     params: BayesViewParameters,
     execution: Execution,
 ): BayesViewOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BayesViewOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function bayes_view_outputs(
 }
 
 
+/**
+ * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
+ */
 function bayes_view_execute(
     params: BayesViewParameters,
     execution: Execution,
 ): BayesViewOutputs {
-    /**
-     * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
-     */
     params = execution.params(params)
     const cargs = bayes_view_cargs(params, execution)
     const ret = bayes_view_outputs(params, execution)
@@ -162,26 +162,26 @@ function bayes_view_execute(
 }
 
 
+/**
+ * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_folder Path to a folder containing .RData files
+ * @param help Show help message
+ * @param shiny_folder Use a custom shiny folder (for testing purposes)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
+ */
 function bayes_view(
     input_folder: string,
     help: boolean = false,
     shiny_folder: string | null = null,
     runner: Runner | null = null,
 ): BayesViewOutputs {
-    /**
-     * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_folder Path to a folder containing .RData files
-     * @param help Show help message
-     * @param shiny_folder Use a custom shiny folder (for testing purposes)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BAYES_VIEW_METADATA);
     const params = bayes_view_params(input_folder, help, shiny_folder)
@@ -194,5 +194,8 @@ export {
       BayesViewOutputs,
       BayesViewParameters,
       bayes_view,
+      bayes_view_cargs,
+      bayes_view_execute,
+      bayes_view_outputs,
       bayes_view_params,
 };

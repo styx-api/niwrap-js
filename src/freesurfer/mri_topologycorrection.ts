@@ -12,41 +12,41 @@ const MRI_TOPOLOGYCORRECTION_METADATA: Metadata = {
 
 
 interface MriTopologycorrectionParameters {
-    "__STYXTYPE__": "mri_topologycorrection";
+    "@type": "freesurfer.mri_topologycorrection";
     "input_orig_file": InputPathType;
     "input_segmented_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_topologycorrection": mri_topologycorrection_cargs,
+        "freesurfer.mri_topologycorrection": mri_topologycorrection_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_topologycorrection": mri_topologycorrection_outputs,
+        "freesurfer.mri_topologycorrection": mri_topologycorrection_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriTopologycorrectionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_orig_file Path to the original image file.
+ * @param input_segmented_file Path to the segmented image file.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_topologycorrection_params(
     input_orig_file: InputPathType,
     input_segmented_file: InputPathType,
 ): MriTopologycorrectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_orig_file Path to the original image file.
-     * @param input_segmented_file Path to the segmented image file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_topologycorrection" as const,
+        "@type": "freesurfer.mri_topologycorrection" as const,
         "input_orig_file": input_orig_file,
         "input_segmented_file": input_segmented_file,
     };
@@ -90,18 +90,18 @@ function mri_topologycorrection_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_topologycorrection_cargs(
     params: MriTopologycorrectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_topologycorrection");
     cargs.push(execution.inputFile((params["input_orig_file"] ?? null)));
@@ -110,18 +110,18 @@ function mri_topologycorrection_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_topologycorrection_outputs(
     params: MriTopologycorrectionParameters,
     execution: Execution,
 ): MriTopologycorrectionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriTopologycorrectionOutputs = {
         root: execution.outputFile("."),
         output_folder: execution.outputFile(["[OUTPUT_FOLDER]"].join('')),
@@ -130,22 +130,22 @@ function mri_topologycorrection_outputs(
 }
 
 
+/**
+ * Corrects the topology of segmented MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
+ */
 function mri_topologycorrection_execute(
     params: MriTopologycorrectionParameters,
     execution: Execution,
 ): MriTopologycorrectionOutputs {
-    /**
-     * Corrects the topology of segmented MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_topologycorrection_cargs(params, execution)
     const ret = mri_topologycorrection_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_topologycorrection_execute(
 }
 
 
+/**
+ * Corrects the topology of segmented MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_orig_file Path to the original image file.
+ * @param input_segmented_file Path to the segmented image file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
+ */
 function mri_topologycorrection(
     input_orig_file: InputPathType,
     input_segmented_file: InputPathType,
     runner: Runner | null = null,
 ): MriTopologycorrectionOutputs {
-    /**
-     * Corrects the topology of segmented MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_orig_file Path to the original image file.
-     * @param input_segmented_file Path to the segmented image file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_TOPOLOGYCORRECTION_METADATA);
     const params = mri_topologycorrection_params(input_orig_file, input_segmented_file)
@@ -184,5 +184,8 @@ export {
       MriTopologycorrectionOutputs,
       MriTopologycorrectionParameters,
       mri_topologycorrection,
+      mri_topologycorrection_cargs,
+      mri_topologycorrection_execute,
+      mri_topologycorrection_outputs,
       mri_topologycorrection_params,
 };

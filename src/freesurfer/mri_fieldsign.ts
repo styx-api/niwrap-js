@@ -12,7 +12,7 @@ const MRI_FIELDSIGN_METADATA: Metadata = {
 
 
 interface MriFieldsignParameters {
-    "__STYXTYPE__": "mri_fieldsign";
+    "@type": "freesurfer.mri_fieldsign";
     "fieldsign_file": string;
     "eccen_values": Array<number>;
     "polar_values": Array<number>;
@@ -40,33 +40,33 @@ interface MriFieldsignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fieldsign": mri_fieldsign_cargs,
+        "freesurfer.mri_fieldsign": mri_fieldsign_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface MriFieldsignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fieldsign_file Output field sign file
+ * @param eccen_values Eccentricity values (real and imaginary)
+ * @param polar_values Polar values (real and imaginary)
+ * @param subject Subject identifier
+ * @param hemisphere Hemisphere to process
+ * @param patch_file Patch file, without hemi
+ * @param occip_flag Use occipital patch (patchfile = occip.patch.flat)
+ * @param sphere_flag Use spherical surface instead of patch
+ * @param fwhm Full-width at half-maximum (mm)
+ * @param nsmooth Number of smoothing steps
+ * @param reverse_flag Reverse sign
+ * @param old_flag Use old FS estimation code
+ * @param eccen_rotation Rotate eccentricity by rotangle degrees
+ * @param polar_rotation Rotate polar by rotangle degrees
+ * @param eccen_output Output eccentricity angle
+ * @param polar_output Output polar angle
+ * @param eccen_sfa_file Eccentricity self-frequency average file
+ * @param polar_sfa_file Polar self-frequency average file
+ * @param sfa_dir SFA directory
+ * @param sfa_true_flag Use true real and imaginary (affects small smoothing)
+ * @param debug_flag Turn on debugging
+ * @param checkopts_flag Check options and exit
+ * @param help_flag Display help information
+ * @param version_flag Print version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fieldsign_params(
     fieldsign_file: string,
     eccen_values: Array<number>,
@@ -112,38 +142,8 @@ function mri_fieldsign_params(
     help_flag: boolean = false,
     version_flag: boolean = false,
 ): MriFieldsignParameters {
-    /**
-     * Build parameters.
-    
-     * @param fieldsign_file Output field sign file
-     * @param eccen_values Eccentricity values (real and imaginary)
-     * @param polar_values Polar values (real and imaginary)
-     * @param subject Subject identifier
-     * @param hemisphere Hemisphere to process
-     * @param patch_file Patch file, without hemi
-     * @param occip_flag Use occipital patch (patchfile = occip.patch.flat)
-     * @param sphere_flag Use spherical surface instead of patch
-     * @param fwhm Full-width at half-maximum (mm)
-     * @param nsmooth Number of smoothing steps
-     * @param reverse_flag Reverse sign
-     * @param old_flag Use old FS estimation code
-     * @param eccen_rotation Rotate eccentricity by rotangle degrees
-     * @param polar_rotation Rotate polar by rotangle degrees
-     * @param eccen_output Output eccentricity angle
-     * @param polar_output Output polar angle
-     * @param eccen_sfa_file Eccentricity self-frequency average file
-     * @param polar_sfa_file Polar self-frequency average file
-     * @param sfa_dir SFA directory
-     * @param sfa_true_flag Use true real and imaginary (affects small smoothing)
-     * @param debug_flag Turn on debugging
-     * @param checkopts_flag Check options and exit
-     * @param help_flag Display help information
-     * @param version_flag Print version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fieldsign" as const,
+        "@type": "freesurfer.mri_fieldsign" as const,
         "fieldsign_file": fieldsign_file,
         "eccen_values": eccen_values,
         "polar_values": polar_values,
@@ -193,18 +193,18 @@ function mri_fieldsign_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fieldsign_cargs(
     params: MriFieldsignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fieldsign");
     cargs.push(
@@ -318,18 +318,18 @@ function mri_fieldsign_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fieldsign_outputs(
     params: MriFieldsignParameters,
     execution: Execution,
 ): MriFieldsignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFieldsignOutputs = {
         root: execution.outputFile("."),
     };
@@ -337,22 +337,22 @@ function mri_fieldsign_outputs(
 }
 
 
+/**
+ * Field Sign Mapping Tool from FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
+ */
 function mri_fieldsign_execute(
     params: MriFieldsignParameters,
     execution: Execution,
 ): MriFieldsignOutputs {
-    /**
-     * Field Sign Mapping Tool from FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fieldsign_cargs(params, execution)
     const ret = mri_fieldsign_outputs(params, execution)
@@ -361,6 +361,41 @@ function mri_fieldsign_execute(
 }
 
 
+/**
+ * Field Sign Mapping Tool from FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param fieldsign_file Output field sign file
+ * @param eccen_values Eccentricity values (real and imaginary)
+ * @param polar_values Polar values (real and imaginary)
+ * @param subject Subject identifier
+ * @param hemisphere Hemisphere to process
+ * @param patch_file Patch file, without hemi
+ * @param occip_flag Use occipital patch (patchfile = occip.patch.flat)
+ * @param sphere_flag Use spherical surface instead of patch
+ * @param fwhm Full-width at half-maximum (mm)
+ * @param nsmooth Number of smoothing steps
+ * @param reverse_flag Reverse sign
+ * @param old_flag Use old FS estimation code
+ * @param eccen_rotation Rotate eccentricity by rotangle degrees
+ * @param polar_rotation Rotate polar by rotangle degrees
+ * @param eccen_output Output eccentricity angle
+ * @param polar_output Output polar angle
+ * @param eccen_sfa_file Eccentricity self-frequency average file
+ * @param polar_sfa_file Polar self-frequency average file
+ * @param sfa_dir SFA directory
+ * @param sfa_true_flag Use true real and imaginary (affects small smoothing)
+ * @param debug_flag Turn on debugging
+ * @param checkopts_flag Check options and exit
+ * @param help_flag Display help information
+ * @param version_flag Print version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
+ */
 function mri_fieldsign(
     fieldsign_file: string,
     eccen_values: Array<number>,
@@ -388,41 +423,6 @@ function mri_fieldsign(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MriFieldsignOutputs {
-    /**
-     * Field Sign Mapping Tool from FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param fieldsign_file Output field sign file
-     * @param eccen_values Eccentricity values (real and imaginary)
-     * @param polar_values Polar values (real and imaginary)
-     * @param subject Subject identifier
-     * @param hemisphere Hemisphere to process
-     * @param patch_file Patch file, without hemi
-     * @param occip_flag Use occipital patch (patchfile = occip.patch.flat)
-     * @param sphere_flag Use spherical surface instead of patch
-     * @param fwhm Full-width at half-maximum (mm)
-     * @param nsmooth Number of smoothing steps
-     * @param reverse_flag Reverse sign
-     * @param old_flag Use old FS estimation code
-     * @param eccen_rotation Rotate eccentricity by rotangle degrees
-     * @param polar_rotation Rotate polar by rotangle degrees
-     * @param eccen_output Output eccentricity angle
-     * @param polar_output Output polar angle
-     * @param eccen_sfa_file Eccentricity self-frequency average file
-     * @param polar_sfa_file Polar self-frequency average file
-     * @param sfa_dir SFA directory
-     * @param sfa_true_flag Use true real and imaginary (affects small smoothing)
-     * @param debug_flag Turn on debugging
-     * @param checkopts_flag Check options and exit
-     * @param help_flag Display help information
-     * @param version_flag Print version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FIELDSIGN_METADATA);
     const params = mri_fieldsign_params(fieldsign_file, eccen_values, polar_values, subject, hemisphere, patch_file, occip_flag, sphere_flag, fwhm, nsmooth, reverse_flag, old_flag, eccen_rotation, polar_rotation, eccen_output, polar_output, eccen_sfa_file, polar_sfa_file, sfa_dir, sfa_true_flag, debug_flag, checkopts_flag, help_flag, version_flag)
@@ -435,5 +435,8 @@ export {
       MriFieldsignOutputs,
       MriFieldsignParameters,
       mri_fieldsign,
+      mri_fieldsign_cargs,
+      mri_fieldsign_execute,
+      mri_fieldsign_outputs,
       mri_fieldsign_params,
 };

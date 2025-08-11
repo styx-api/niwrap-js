@@ -12,42 +12,42 @@ const MYGET_METADATA: Metadata = {
 
 
 interface MygetParameters {
-    "__STYXTYPE__": "myget";
+    "@type": "afni.myget";
     "protocol_version"?: "-1" | "-1.1" | null | undefined;
     "url": string;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "myget": myget_cargs,
+        "afni.myget": myget_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "myget": myget_outputs,
+        "afni.myget": myget_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MygetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param url The URL to download the file from
+ * @param output_file The filename to save the downloaded file
+ * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
+ *
+ * @returns Parameter dictionary
+ */
 function myget_params(
     url: string,
     output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
 ): MygetParameters {
-    /**
-     * Build parameters.
-    
-     * @param url The URL to download the file from
-     * @param output_file The filename to save the downloaded file
-     * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "myget" as const,
+        "@type": "afni.myget" as const,
         "url": url,
         "output_file": output_file,
     };
@@ -96,18 +96,18 @@ function myget_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function myget_cargs(
     params: MygetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("myget");
     if ((params["protocol_version"] ?? null) !== null) {
@@ -122,18 +122,18 @@ function myget_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function myget_outputs(
     params: MygetParameters,
     execution: Execution,
 ): MygetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MygetOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function myget_outputs(
 }
 
 
+/**
+ * A simple file downloader from a URL.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MygetOutputs`).
+ */
 function myget_execute(
     params: MygetParameters,
     execution: Execution,
 ): MygetOutputs {
-    /**
-     * A simple file downloader from a URL.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MygetOutputs`).
-     */
     params = execution.params(params)
     const cargs = myget_cargs(params, execution)
     const ret = myget_outputs(params, execution)
@@ -166,26 +166,26 @@ function myget_execute(
 }
 
 
+/**
+ * A simple file downloader from a URL.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param url The URL to download the file from
+ * @param output_file The filename to save the downloaded file
+ * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MygetOutputs`).
+ */
 function myget(
     url: string,
     output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
     runner: Runner | null = null,
 ): MygetOutputs {
-    /**
-     * A simple file downloader from a URL.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param url The URL to download the file from
-     * @param output_file The filename to save the downloaded file
-     * @param protocol_version Specify protocol version. You can choose between -1 or -1.1
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MygetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MYGET_METADATA);
     const params = myget_params(url, output_file, protocol_version)
@@ -198,5 +198,8 @@ export {
       MygetOutputs,
       MygetParameters,
       myget,
+      myget_cargs,
+      myget_execute,
+      myget_outputs,
       myget_params,
 };

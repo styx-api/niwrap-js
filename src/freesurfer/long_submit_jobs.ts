@@ -12,7 +12,7 @@ const LONG_SUBMIT_JOBS_METADATA: Metadata = {
 
 
 interface LongSubmitJobsParameters {
-    "__STYXTYPE__": "long_submit_jobs";
+    "@type": "freesurfer.long_submit_jobs";
     "qdec": InputPathType;
     "cdir": string;
     "bdir"?: string | null | undefined;
@@ -41,33 +41,33 @@ interface LongSubmitJobsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_submit_jobs": long_submit_jobs_cargs,
+        "freesurfer.long_submit_jobs": long_submit_jobs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -87,6 +87,37 @@ interface LongSubmitJobsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec QDEC table file specifying the subjects and time points.
+ * @param cdir Directory for cross-sectional subjects (inherited by base and long).
+ * @param bdir Directory for base runs (default: inherit from cross).
+ * @param ldir Directory for longitudinal runs (default: inherit from base).
+ * @param scriptsdir Location to save submitted scripts (default: <cdir,bdir,ldir>/scripts_submitted).
+ * @param cross Process cross-sectional streams.
+ * @param base Process base streams.
+ * @param long Process longitudinal streams.
+ * @param cflags Manual flags for cross processing (e.g., '-all -cw256').
+ * @param bflags Manual flags for base processing (default: '-all').
+ * @param lflags Manual flags for long processing (default: '-all').
+ * @param affine Use affine registration for base.
+ * @param force Force reprocessing of jobs even if marked as done.
+ * @param simulate Simulate submission only, without executing.
+ * @param simfiles Simulate command file creation only, without executing.
+ * @param check Check if all longitudinal processing is complete.
+ * @param pause Pause duration (in seconds) between submissions (default: 13).
+ * @param max Maximum number of jobs per user (default: 100).
+ * @param queue Queue to submit jobs.
+ * @param cmem RAM (in GB) requested for cross (default: 7).
+ * @param bmem RAM (in GB) requested for base (default: 7).
+ * @param lmem RAM (in GB) requested for long (default: 7).
+ * @param cnodes Number of nodes for cross runs (default: 1).
+ * @param bnodes Number of nodes for base runs (default: 1).
+ * @param lnodes Number of nodes for long runs (default: 1).
+ *
+ * @returns Parameter dictionary
+ */
 function long_submit_jobs_params(
     qdec: InputPathType,
     cdir: string,
@@ -114,39 +145,8 @@ function long_submit_jobs_params(
     bnodes: number | null = null,
     lnodes: number | null = null,
 ): LongSubmitJobsParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec QDEC table file specifying the subjects and time points.
-     * @param cdir Directory for cross-sectional subjects (inherited by base and long).
-     * @param bdir Directory for base runs (default: inherit from cross).
-     * @param ldir Directory for longitudinal runs (default: inherit from base).
-     * @param scriptsdir Location to save submitted scripts (default: <cdir,bdir,ldir>/scripts_submitted).
-     * @param cross Process cross-sectional streams.
-     * @param base Process base streams.
-     * @param long Process longitudinal streams.
-     * @param cflags Manual flags for cross processing (e.g., '-all -cw256').
-     * @param bflags Manual flags for base processing (default: '-all').
-     * @param lflags Manual flags for long processing (default: '-all').
-     * @param affine Use affine registration for base.
-     * @param force Force reprocessing of jobs even if marked as done.
-     * @param simulate Simulate submission only, without executing.
-     * @param simfiles Simulate command file creation only, without executing.
-     * @param check Check if all longitudinal processing is complete.
-     * @param pause Pause duration (in seconds) between submissions (default: 13).
-     * @param max Maximum number of jobs per user (default: 100).
-     * @param queue Queue to submit jobs.
-     * @param cmem RAM (in GB) requested for cross (default: 7).
-     * @param bmem RAM (in GB) requested for base (default: 7).
-     * @param lmem RAM (in GB) requested for long (default: 7).
-     * @param cnodes Number of nodes for cross runs (default: 1).
-     * @param bnodes Number of nodes for base runs (default: 1).
-     * @param lnodes Number of nodes for long runs (default: 1).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_submit_jobs" as const,
+        "@type": "freesurfer.long_submit_jobs" as const,
         "qdec": qdec,
         "cdir": cdir,
         "cross": cross,
@@ -207,18 +207,18 @@ function long_submit_jobs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_submit_jobs_cargs(
     params: LongSubmitJobsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_submit_jobs");
     cargs.push(
@@ -347,18 +347,18 @@ function long_submit_jobs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_submit_jobs_outputs(
     params: LongSubmitJobsParameters,
     execution: Execution,
 ): LongSubmitJobsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongSubmitJobsOutputs = {
         root: execution.outputFile("."),
     };
@@ -366,22 +366,22 @@ function long_submit_jobs_outputs(
 }
 
 
+/**
+ * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
+ */
 function long_submit_jobs_execute(
     params: LongSubmitJobsParameters,
     execution: Execution,
 ): LongSubmitJobsOutputs {
-    /**
-     * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_submit_jobs_cargs(params, execution)
     const ret = long_submit_jobs_outputs(params, execution)
@@ -390,6 +390,42 @@ function long_submit_jobs_execute(
 }
 
 
+/**
+ * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec QDEC table file specifying the subjects and time points.
+ * @param cdir Directory for cross-sectional subjects (inherited by base and long).
+ * @param bdir Directory for base runs (default: inherit from cross).
+ * @param ldir Directory for longitudinal runs (default: inherit from base).
+ * @param scriptsdir Location to save submitted scripts (default: <cdir,bdir,ldir>/scripts_submitted).
+ * @param cross Process cross-sectional streams.
+ * @param base Process base streams.
+ * @param long Process longitudinal streams.
+ * @param cflags Manual flags for cross processing (e.g., '-all -cw256').
+ * @param bflags Manual flags for base processing (default: '-all').
+ * @param lflags Manual flags for long processing (default: '-all').
+ * @param affine Use affine registration for base.
+ * @param force Force reprocessing of jobs even if marked as done.
+ * @param simulate Simulate submission only, without executing.
+ * @param simfiles Simulate command file creation only, without executing.
+ * @param check Check if all longitudinal processing is complete.
+ * @param pause Pause duration (in seconds) between submissions (default: 13).
+ * @param max Maximum number of jobs per user (default: 100).
+ * @param queue Queue to submit jobs.
+ * @param cmem RAM (in GB) requested for cross (default: 7).
+ * @param bmem RAM (in GB) requested for base (default: 7).
+ * @param lmem RAM (in GB) requested for long (default: 7).
+ * @param cnodes Number of nodes for cross runs (default: 1).
+ * @param bnodes Number of nodes for base runs (default: 1).
+ * @param lnodes Number of nodes for long runs (default: 1).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
+ */
 function long_submit_jobs(
     qdec: InputPathType,
     cdir: string,
@@ -418,42 +454,6 @@ function long_submit_jobs(
     lnodes: number | null = null,
     runner: Runner | null = null,
 ): LongSubmitJobsOutputs {
-    /**
-     * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec QDEC table file specifying the subjects and time points.
-     * @param cdir Directory for cross-sectional subjects (inherited by base and long).
-     * @param bdir Directory for base runs (default: inherit from cross).
-     * @param ldir Directory for longitudinal runs (default: inherit from base).
-     * @param scriptsdir Location to save submitted scripts (default: <cdir,bdir,ldir>/scripts_submitted).
-     * @param cross Process cross-sectional streams.
-     * @param base Process base streams.
-     * @param long Process longitudinal streams.
-     * @param cflags Manual flags for cross processing (e.g., '-all -cw256').
-     * @param bflags Manual flags for base processing (default: '-all').
-     * @param lflags Manual flags for long processing (default: '-all').
-     * @param affine Use affine registration for base.
-     * @param force Force reprocessing of jobs even if marked as done.
-     * @param simulate Simulate submission only, without executing.
-     * @param simfiles Simulate command file creation only, without executing.
-     * @param check Check if all longitudinal processing is complete.
-     * @param pause Pause duration (in seconds) between submissions (default: 13).
-     * @param max Maximum number of jobs per user (default: 100).
-     * @param queue Queue to submit jobs.
-     * @param cmem RAM (in GB) requested for cross (default: 7).
-     * @param bmem RAM (in GB) requested for base (default: 7).
-     * @param lmem RAM (in GB) requested for long (default: 7).
-     * @param cnodes Number of nodes for cross runs (default: 1).
-     * @param bnodes Number of nodes for base runs (default: 1).
-     * @param lnodes Number of nodes for long runs (default: 1).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_SUBMIT_JOBS_METADATA);
     const params = long_submit_jobs_params(qdec, cdir, bdir, ldir, scriptsdir, cross, base, long, cflags, bflags, lflags, affine, force, simulate, simfiles, check, pause, max, queue, cmem, bmem, lmem, cnodes, bnodes, lnodes)
@@ -466,5 +466,8 @@ export {
       LongSubmitJobsOutputs,
       LongSubmitJobsParameters,
       long_submit_jobs,
+      long_submit_jobs_cargs,
+      long_submit_jobs_execute,
+      long_submit_jobs_outputs,
       long_submit_jobs_params,
 };

@@ -12,7 +12,7 @@ const ASEG2FEAT_METADATA: Metadata = {
 
 
 interface Aseg2featParameters {
-    "__STYXTYPE__": "aseg2feat";
+    "@type": "freesurfer.aseg2feat";
     "feat": string;
     "featdirfile"?: InputPathType | null | undefined;
     "seg"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface Aseg2featParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aseg2feat": aseg2feat_cargs,
+        "freesurfer.aseg2feat": aseg2feat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "aseg2feat": aseg2feat_outputs,
+        "freesurfer.aseg2feat": aseg2feat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface Aseg2featOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat FEAT output directory. Multiple --feat arguments can be supplied.
+ * @param featdirfile File with a list of FEAT directories. Can be used in conjunction with --feat.
+ * @param seg Change segmentation volume, default is aseg.
+ * @param aparc_aseg Use aparc+aseg.mgz. Same as --seg aparc+aseg.mgz.
+ * @param svstats Save result in featdir/stats instead of featdir/reg/freesurfer
+ * @param standard Map results to standard space instead of native functional space. Implies --svstats.
+ * @param debug Turn on debugging.
+ * @param help Print help and exit.
+ * @param version Print version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function aseg2feat_params(
     feat: string,
     featdirfile: InputPathType | null = null,
@@ -91,23 +106,8 @@ function aseg2feat_params(
     help: boolean = false,
     version: boolean = false,
 ): Aseg2featParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat FEAT output directory. Multiple --feat arguments can be supplied.
-     * @param featdirfile File with a list of FEAT directories. Can be used in conjunction with --feat.
-     * @param seg Change segmentation volume, default is aseg.
-     * @param aparc_aseg Use aparc+aseg.mgz. Same as --seg aparc+aseg.mgz.
-     * @param svstats Save result in featdir/stats instead of featdir/reg/freesurfer
-     * @param standard Map results to standard space instead of native functional space. Implies --svstats.
-     * @param debug Turn on debugging.
-     * @param help Print help and exit.
-     * @param version Print version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aseg2feat" as const,
+        "@type": "freesurfer.aseg2feat" as const,
         "feat": feat,
         "aparc_aseg": aparc_aseg,
         "svstats": svstats,
@@ -126,18 +126,18 @@ function aseg2feat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aseg2feat_cargs(
     params: Aseg2featParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aseg2feat");
     cargs.push(
@@ -178,18 +178,18 @@ function aseg2feat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aseg2feat_outputs(
     params: Aseg2featParameters,
     execution: Execution,
 ): Aseg2featOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Aseg2featOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["feat"] ?? null), "/reg/freesurfer/aseg.nii.gz"].join('')),
@@ -199,22 +199,22 @@ function aseg2feat_outputs(
 }
 
 
+/**
+ * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
+ */
 function aseg2feat_execute(
     params: Aseg2featParameters,
     execution: Execution,
 ): Aseg2featOutputs {
-    /**
-     * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
-     */
     params = execution.params(params)
     const cargs = aseg2feat_cargs(params, execution)
     const ret = aseg2feat_outputs(params, execution)
@@ -223,6 +223,26 @@ function aseg2feat_execute(
 }
 
 
+/**
+ * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param feat FEAT output directory. Multiple --feat arguments can be supplied.
+ * @param featdirfile File with a list of FEAT directories. Can be used in conjunction with --feat.
+ * @param seg Change segmentation volume, default is aseg.
+ * @param aparc_aseg Use aparc+aseg.mgz. Same as --seg aparc+aseg.mgz.
+ * @param svstats Save result in featdir/stats instead of featdir/reg/freesurfer
+ * @param standard Map results to standard space instead of native functional space. Implies --svstats.
+ * @param debug Turn on debugging.
+ * @param help Print help and exit.
+ * @param version Print version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
+ */
 function aseg2feat(
     feat: string,
     featdirfile: InputPathType | null = null,
@@ -235,26 +255,6 @@ function aseg2feat(
     version: boolean = false,
     runner: Runner | null = null,
 ): Aseg2featOutputs {
-    /**
-     * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param feat FEAT output directory. Multiple --feat arguments can be supplied.
-     * @param featdirfile File with a list of FEAT directories. Can be used in conjunction with --feat.
-     * @param seg Change segmentation volume, default is aseg.
-     * @param aparc_aseg Use aparc+aseg.mgz. Same as --seg aparc+aseg.mgz.
-     * @param svstats Save result in featdir/stats instead of featdir/reg/freesurfer
-     * @param standard Map results to standard space instead of native functional space. Implies --svstats.
-     * @param debug Turn on debugging.
-     * @param help Print help and exit.
-     * @param version Print version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASEG2FEAT_METADATA);
     const params = aseg2feat_params(feat, featdirfile, seg, aparc_aseg, svstats, standard, debug, help, version)
@@ -267,5 +267,8 @@ export {
       Aseg2featOutputs,
       Aseg2featParameters,
       aseg2feat,
+      aseg2feat_cargs,
+      aseg2feat_execute,
+      aseg2feat_outputs,
       aseg2feat_params,
 };

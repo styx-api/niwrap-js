@@ -12,7 +12,7 @@ const MRI_REMOVE_NECK_METADATA: Metadata = {
 
 
 interface MriRemoveNeckParameters {
-    "__STYXTYPE__": "mri_remove_neck";
+    "@type": "freesurfer.mri_remove_neck";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "gca": InputPathType;
@@ -20,35 +20,35 @@ interface MriRemoveNeckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_remove_neck": mri_remove_neck_cargs,
+        "freesurfer.mri_remove_neck": mri_remove_neck_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_remove_neck": mri_remove_neck_outputs,
+        "freesurfer.mri_remove_neck": mri_remove_neck_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriRemoveNeckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input MRI volume.
+ * @param transform Transformation matrix to register the volume.
+ * @param gca GCA file needed for processing.
+ * @param output_volume Output MRI volume with the neck removed.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_remove_neck_params(
     input_volume: InputPathType,
     transform: InputPathType,
     gca: InputPathType,
     output_volume: string,
 ): MriRemoveNeckParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input MRI volume.
-     * @param transform Transformation matrix to register the volume.
-     * @param gca GCA file needed for processing.
-     * @param output_volume Output MRI volume with the neck removed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_remove_neck" as const,
+        "@type": "freesurfer.mri_remove_neck" as const,
         "input_volume": input_volume,
         "transform": transform,
         "gca": gca,
@@ -98,18 +98,18 @@ function mri_remove_neck_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_remove_neck_cargs(
     params: MriRemoveNeckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_remove_neck");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mri_remove_neck_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_remove_neck_outputs(
     params: MriRemoveNeckParameters,
     execution: Execution,
 ): MriRemoveNeckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRemoveNeckOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_remove_neck_outputs(
 }
 
 
+/**
+ * Tool for removing neck from MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
+ */
 function mri_remove_neck_execute(
     params: MriRemoveNeckParameters,
     execution: Execution,
 ): MriRemoveNeckOutputs {
-    /**
-     * Tool for removing neck from MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_remove_neck_cargs(params, execution)
     const ret = mri_remove_neck_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_remove_neck_execute(
 }
 
 
+/**
+ * Tool for removing neck from MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input MRI volume.
+ * @param transform Transformation matrix to register the volume.
+ * @param gca GCA file needed for processing.
+ * @param output_volume Output MRI volume with the neck removed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
+ */
 function mri_remove_neck(
     input_volume: InputPathType,
     transform: InputPathType,
@@ -171,21 +186,6 @@ function mri_remove_neck(
     output_volume: string,
     runner: Runner | null = null,
 ): MriRemoveNeckOutputs {
-    /**
-     * Tool for removing neck from MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input MRI volume.
-     * @param transform Transformation matrix to register the volume.
-     * @param gca GCA file needed for processing.
-     * @param output_volume Output MRI volume with the neck removed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_REMOVE_NECK_METADATA);
     const params = mri_remove_neck_params(input_volume, transform, gca, output_volume)
@@ -198,5 +198,8 @@ export {
       MriRemoveNeckOutputs,
       MriRemoveNeckParameters,
       mri_remove_neck,
+      mri_remove_neck_cargs,
+      mri_remove_neck_execute,
+      mri_remove_neck_outputs,
       mri_remove_neck_params,
 };

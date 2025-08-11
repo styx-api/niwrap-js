@@ -12,41 +12,41 @@ const REGISTER_CHILD_METADATA: Metadata = {
 
 
 interface RegisterChildParameters {
-    "__STYXTYPE__": "register_child";
+    "@type": "freesurfer.register_child";
     "input_volume": InputPathType;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "register_child": register_child_cargs,
+        "freesurfer.register_child": register_child_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "register_child": register_child_outputs,
+        "freesurfer.register_child": register_child_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface RegisterChildOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input MR volume to be used for registration.
+ * @param output_directory Directory where output files will be written.
+ *
+ * @returns Parameter dictionary
+ */
 function register_child_params(
     input_volume: InputPathType,
     output_directory: string,
 ): RegisterChildParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input MR volume to be used for registration.
-     * @param output_directory Directory where output files will be written.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "register_child" as const,
+        "@type": "freesurfer.register_child" as const,
         "input_volume": input_volume,
         "output_directory": output_directory,
     };
@@ -94,18 +94,18 @@ function register_child_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function register_child_cargs(
     params: RegisterChildParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("register_child");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -114,18 +114,18 @@ function register_child_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function register_child_outputs(
     params: RegisterChildParameters,
     execution: Execution,
 ): RegisterChildOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegisterChildOutputs = {
         root: execution.outputFile("."),
         transformed_control_points: execution.outputFile([(params["output_directory"] ?? null), "/fsamples"].join('')),
@@ -135,22 +135,22 @@ function register_child_outputs(
 }
 
 
+/**
+ * A tool used for registering MR volumes with a child's atlas in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
+ */
 function register_child_execute(
     params: RegisterChildParameters,
     execution: Execution,
 ): RegisterChildOutputs {
-    /**
-     * A tool used for registering MR volumes with a child's atlas in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
-     */
     params = execution.params(params)
     const cargs = register_child_cargs(params, execution)
     const ret = register_child_outputs(params, execution)
@@ -159,24 +159,24 @@ function register_child_execute(
 }
 
 
+/**
+ * A tool used for registering MR volumes with a child's atlas in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input MR volume to be used for registration.
+ * @param output_directory Directory where output files will be written.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
+ */
 function register_child(
     input_volume: InputPathType,
     output_directory: string,
     runner: Runner | null = null,
 ): RegisterChildOutputs {
-    /**
-     * A tool used for registering MR volumes with a child's atlas in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input MR volume to be used for registration.
-     * @param output_directory Directory where output files will be written.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGISTER_CHILD_METADATA);
     const params = register_child_params(input_volume, output_directory)
@@ -189,5 +189,8 @@ export {
       RegisterChildOutputs,
       RegisterChildParameters,
       register_child,
+      register_child_cargs,
+      register_child_execute,
+      register_child_outputs,
       register_child_params,
 };

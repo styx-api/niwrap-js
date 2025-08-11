@@ -12,7 +12,7 @@ const RCA_LONG_TP_INIT_METADATA: Metadata = {
 
 
 interface RcaLongTpInitParameters {
-    "__STYXTYPE__": "rca-long-tp-init";
+    "@type": "freesurfer.rca-long-tp-init";
     "timepoint": string;
     "base": string;
     "use_long_base_ctrl_vol": boolean;
@@ -22,33 +22,33 @@ interface RcaLongTpInitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rca-long-tp-init": rca_long_tp_init_cargs,
+        "freesurfer.rca-long-tp-init": rca_long_tp_init_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface RcaLongTpInitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timepoint Timepoint identifier
+ * @param base Base identifier
+ * @param use_long_base_ctrl_vol Use long base control volume
+ * @param hemisphere Specify the hemisphere (left or right)
+ * @param expert_opts Expert options file
+ * @param subject Subject identifier for testing; put after -long
+ *
+ * @returns Parameter dictionary
+ */
 function rca_long_tp_init_params(
     timepoint: string,
     base: string,
@@ -76,20 +88,8 @@ function rca_long_tp_init_params(
     expert_opts: InputPathType | null = null,
     subject: string | null = null,
 ): RcaLongTpInitParameters {
-    /**
-     * Build parameters.
-    
-     * @param timepoint Timepoint identifier
-     * @param base Base identifier
-     * @param use_long_base_ctrl_vol Use long base control volume
-     * @param hemisphere Specify the hemisphere (left or right)
-     * @param expert_opts Expert options file
-     * @param subject Subject identifier for testing; put after -long
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rca-long-tp-init" as const,
+        "@type": "freesurfer.rca-long-tp-init" as const,
         "timepoint": timepoint,
         "base": base,
         "use_long_base_ctrl_vol": use_long_base_ctrl_vol,
@@ -107,18 +107,18 @@ function rca_long_tp_init_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rca_long_tp_init_cargs(
     params: RcaLongTpInitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rca-long-tp-init");
     cargs.push(
@@ -151,18 +151,18 @@ function rca_long_tp_init_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rca_long_tp_init_outputs(
     params: RcaLongTpInitParameters,
     execution: Execution,
 ): RcaLongTpInitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcaLongTpInitOutputs = {
         root: execution.outputFile("."),
     };
@@ -170,22 +170,22 @@ function rca_long_tp_init_outputs(
 }
 
 
+/**
+ * Initialize long timepoint subject for recon-all processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
+ */
 function rca_long_tp_init_execute(
     params: RcaLongTpInitParameters,
     execution: Execution,
 ): RcaLongTpInitOutputs {
-    /**
-     * Initialize long timepoint subject for recon-all processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
-     */
     params = execution.params(params)
     const cargs = rca_long_tp_init_cargs(params, execution)
     const ret = rca_long_tp_init_outputs(params, execution)
@@ -194,6 +194,23 @@ function rca_long_tp_init_execute(
 }
 
 
+/**
+ * Initialize long timepoint subject for recon-all processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param timepoint Timepoint identifier
+ * @param base Base identifier
+ * @param use_long_base_ctrl_vol Use long base control volume
+ * @param hemisphere Specify the hemisphere (left or right)
+ * @param expert_opts Expert options file
+ * @param subject Subject identifier for testing; put after -long
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
+ */
 function rca_long_tp_init(
     timepoint: string,
     base: string,
@@ -203,23 +220,6 @@ function rca_long_tp_init(
     subject: string | null = null,
     runner: Runner | null = null,
 ): RcaLongTpInitOutputs {
-    /**
-     * Initialize long timepoint subject for recon-all processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param timepoint Timepoint identifier
-     * @param base Base identifier
-     * @param use_long_base_ctrl_vol Use long base control volume
-     * @param hemisphere Specify the hemisphere (left or right)
-     * @param expert_opts Expert options file
-     * @param subject Subject identifier for testing; put after -long
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCA_LONG_TP_INIT_METADATA);
     const params = rca_long_tp_init_params(timepoint, base, use_long_base_ctrl_vol, hemisphere, expert_opts, subject)
@@ -232,5 +232,8 @@ export {
       RcaLongTpInitOutputs,
       RcaLongTpInitParameters,
       rca_long_tp_init,
+      rca_long_tp_init_cargs,
+      rca_long_tp_init_execute,
+      rca_long_tp_init_outputs,
       rca_long_tp_init_params,
 };

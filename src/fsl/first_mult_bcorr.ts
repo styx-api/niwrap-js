@@ -12,7 +12,7 @@ const FIRST_MULT_BCORR_METADATA: Metadata = {
 
 
 interface FirstMultBcorrParameters {
-    "__STYXTYPE__": "first_mult_bcorr";
+    "@type": "fsl.first_mult_bcorr";
     "input_image": InputPathType;
     "corrected_4d_labels": InputPathType;
     "uncorrected_4d_labels": InputPathType;
@@ -22,35 +22,35 @@ interface FirstMultBcorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "first_mult_bcorr": first_mult_bcorr_cargs,
+        "fsl.first_mult_bcorr": first_mult_bcorr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "first_mult_bcorr": first_mult_bcorr_outputs,
+        "fsl.first_mult_bcorr": first_mult_bcorr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface FirstMultBcorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Filename of original T1 input image
+ * @param corrected_4d_labels Filename of 4D image of individually corrected labels
+ * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
+ * @param output_image Output image name (3D label image)
+ * @param verbose_flag Output F-stats to standard out
+ * @param help_flag Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function first_mult_bcorr_params(
     input_image: InputPathType,
     corrected_4d_labels: InputPathType,
@@ -81,20 +93,8 @@ function first_mult_bcorr_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): FirstMultBcorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Filename of original T1 input image
-     * @param corrected_4d_labels Filename of 4D image of individually corrected labels
-     * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
-     * @param output_image Output image name (3D label image)
-     * @param verbose_flag Output F-stats to standard out
-     * @param help_flag Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "first_mult_bcorr" as const,
+        "@type": "fsl.first_mult_bcorr" as const,
         "input_image": input_image,
         "corrected_4d_labels": corrected_4d_labels,
         "uncorrected_4d_labels": uncorrected_4d_labels,
@@ -106,18 +106,18 @@ function first_mult_bcorr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function first_mult_bcorr_cargs(
     params: FirstMultBcorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("first_mult_bcorr");
     cargs.push(
@@ -146,18 +146,18 @@ function first_mult_bcorr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function first_mult_bcorr_outputs(
     params: FirstMultBcorrParameters,
     execution: Execution,
 ): FirstMultBcorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirstMultBcorrOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -166,22 +166,22 @@ function first_mult_bcorr_outputs(
 }
 
 
+/**
+ * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
+ */
 function first_mult_bcorr_execute(
     params: FirstMultBcorrParameters,
     execution: Execution,
 ): FirstMultBcorrOutputs {
-    /**
-     * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = first_mult_bcorr_cargs(params, execution)
     const ret = first_mult_bcorr_outputs(params, execution)
@@ -190,6 +190,23 @@ function first_mult_bcorr_execute(
 }
 
 
+/**
+ * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Filename of original T1 input image
+ * @param corrected_4d_labels Filename of 4D image of individually corrected labels
+ * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
+ * @param output_image Output image name (3D label image)
+ * @param verbose_flag Output F-stats to standard out
+ * @param help_flag Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
+ */
 function first_mult_bcorr(
     input_image: InputPathType,
     corrected_4d_labels: InputPathType,
@@ -199,23 +216,6 @@ function first_mult_bcorr(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FirstMultBcorrOutputs {
-    /**
-     * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Filename of original T1 input image
-     * @param corrected_4d_labels Filename of 4D image of individually corrected labels
-     * @param uncorrected_4d_labels Filename of 4D image of uncorrected labels (with boundaries)
-     * @param output_image Output image name (3D label image)
-     * @param verbose_flag Output F-stats to standard out
-     * @param help_flag Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_MULT_BCORR_METADATA);
     const params = first_mult_bcorr_params(input_image, corrected_4d_labels, uncorrected_4d_labels, output_image, verbose_flag, help_flag)
@@ -228,5 +228,8 @@ export {
       FirstMultBcorrOutputs,
       FirstMultBcorrParameters,
       first_mult_bcorr,
+      first_mult_bcorr_cargs,
+      first_mult_bcorr_execute,
+      first_mult_bcorr_outputs,
       first_mult_bcorr_params,
 };

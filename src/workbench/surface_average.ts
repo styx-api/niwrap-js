@@ -12,14 +12,14 @@ const SURFACE_AVERAGE_METADATA: Metadata = {
 
 
 interface SurfaceAverageSurfParameters {
-    "__STYXTYPE__": "surf";
+    "@type": "workbench.surface-average.surf";
     "surface": InputPathType;
     "opt_weight_weight"?: number | null | undefined;
 }
 
 
 interface SurfaceAverageParameters {
-    "__STYXTYPE__": "surface-average";
+    "@type": "workbench.surface-average";
     "surface_out": string;
     "opt_stddev_stddev_metric_out"?: string | null | undefined;
     "opt_uncertainty_uncert_metric_out"?: string | null | undefined;
@@ -27,55 +27,55 @@ interface SurfaceAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-average": surface_average_cargs,
-        "surf": surface_average_surf_cargs,
+        "workbench.surface-average": surface_average_cargs,
+        "workbench.surface-average.surf": surface_average_surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-average": surface_average_outputs,
+        "workbench.surface-average": surface_average_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface a surface file to average
+ * @param opt_weight_weight specify a weighted average: the weight to use (default 1)
+ *
+ * @returns Parameter dictionary
+ */
 function surface_average_surf_params(
     surface: InputPathType,
     opt_weight_weight: number | null = null,
 ): SurfaceAverageSurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface a surface file to average
-     * @param opt_weight_weight specify a weighted average: the weight to use (default 1)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surf" as const,
+        "@type": "workbench.surface-average.surf" as const,
         "surface": surface,
     };
     if (opt_weight_weight !== null) {
@@ -85,18 +85,18 @@ function surface_average_surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_average_surf_cargs(
     params: SurfaceAverageSurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-surf");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -135,24 +135,24 @@ interface SurfaceAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_out the output averaged surface
+ * @param opt_stddev_stddev_metric_out compute 3D sample standard deviation: the output metric for 3D sample standard deviation
+ * @param opt_uncertainty_uncert_metric_out compute caret5 'uncertainty': the output metric for uncertainty
+ * @param surf specify a surface to include in the average
+ *
+ * @returns Parameter dictionary
+ */
 function surface_average_params(
     surface_out: string,
     opt_stddev_stddev_metric_out: string | null = null,
     opt_uncertainty_uncert_metric_out: string | null = null,
     surf: Array<SurfaceAverageSurfParameters> | null = null,
 ): SurfaceAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_out the output averaged surface
-     * @param opt_stddev_stddev_metric_out compute 3D sample standard deviation: the output metric for 3D sample standard deviation
-     * @param opt_uncertainty_uncert_metric_out compute caret5 'uncertainty': the output metric for uncertainty
-     * @param surf specify a surface to include in the average
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-average" as const,
+        "@type": "workbench.surface-average" as const,
         "surface_out": surface_out,
     };
     if (opt_stddev_stddev_metric_out !== null) {
@@ -168,18 +168,18 @@ function surface_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_average_cargs(
     params: SurfaceAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-average");
@@ -197,24 +197,24 @@ function surface_average_cargs(
         );
     }
     if ((params["surf"] ?? null) !== null) {
-        cargs.push(...(params["surf"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["surf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_average_outputs(
     params: SurfaceAverageParameters,
     execution: Execution,
 ): SurfaceAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceAverageOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -225,28 +225,28 @@ function surface_average_outputs(
 }
 
 
+/**
+ * Average surface files together.
+ *
+ * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.
+ *
+ * Uncertainty is a legacy measure used in caret5, and is computed as 'sum(length(xyz - mean(xyz)))/n'.
+ *
+ * When weights are used, the 3D sample standard deviation treats them as reliability weights.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
+ */
 function surface_average_execute(
     params: SurfaceAverageParameters,
     execution: Execution,
 ): SurfaceAverageOutputs {
-    /**
-     * Average surface files together.
-     * 
-     * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.
-     * 
-     * Uncertainty is a legacy measure used in caret5, and is computed as 'sum(length(xyz - mean(xyz)))/n'.
-     * 
-     * When weights are used, the 3D sample standard deviation treats them as reliability weights.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_average_cargs(params, execution)
     const ret = surface_average_outputs(params, execution)
@@ -255,6 +255,27 @@ function surface_average_execute(
 }
 
 
+/**
+ * Average surface files together.
+ *
+ * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.
+ *
+ * Uncertainty is a legacy measure used in caret5, and is computed as 'sum(length(xyz - mean(xyz)))/n'.
+ *
+ * When weights are used, the 3D sample standard deviation treats them as reliability weights.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface_out the output averaged surface
+ * @param opt_stddev_stddev_metric_out compute 3D sample standard deviation: the output metric for 3D sample standard deviation
+ * @param opt_uncertainty_uncert_metric_out compute caret5 'uncertainty': the output metric for uncertainty
+ * @param surf specify a surface to include in the average
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
+ */
 function surface_average(
     surface_out: string,
     opt_stddev_stddev_metric_out: string | null = null,
@@ -262,27 +283,6 @@ function surface_average(
     surf: Array<SurfaceAverageSurfParameters> | null = null,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {
-    /**
-     * Average surface files together.
-     * 
-     * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.
-     * 
-     * Uncertainty is a legacy measure used in caret5, and is computed as 'sum(length(xyz - mean(xyz)))/n'.
-     * 
-     * When weights are used, the 3D sample standard deviation treats them as reliability weights.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface_out the output averaged surface
-     * @param opt_stddev_stddev_metric_out compute 3D sample standard deviation: the output metric for 3D sample standard deviation
-     * @param opt_uncertainty_uncert_metric_out compute caret5 'uncertainty': the output metric for uncertainty
-     * @param surf specify a surface to include in the average
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_AVERAGE_METADATA);
     const params = surface_average_params(surface_out, opt_stddev_stddev_metric_out, opt_uncertainty_uncert_metric_out, surf)
@@ -296,6 +296,10 @@ export {
       SurfaceAverageParameters,
       SurfaceAverageSurfParameters,
       surface_average,
+      surface_average_cargs,
+      surface_average_execute,
+      surface_average_outputs,
       surface_average_params,
+      surface_average_surf_cargs,
       surface_average_surf_params,
 };

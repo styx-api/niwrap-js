@@ -12,7 +12,7 @@ const ANALYZETO4DFP_METADATA: Metadata = {
 
 
 interface Analyzeto4dfpParameters {
-    "__STYXTYPE__": "analyzeto4dfp";
+    "@type": "freesurfer.analyzeto4dfp";
     "analyze_image": InputPathType;
     "rois_scale": boolean;
     "flip_x": boolean;
@@ -23,33 +23,33 @@ interface Analyzeto4dfpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "analyzeto4dfp": analyzeto4dfp_cargs,
+        "freesurfer.analyzeto4dfp": analyzeto4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface Analyzeto4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param analyze_image Input ANALYZE image file
+ * @param rois_scale Apply ROIScaleFactor
+ * @param flip_x Flip first axis
+ * @param flip_y Flip second axis
+ * @param flip_z Flip third axis
+ * @param endian Output big or little endian (default CPU endian)
+ * @param orientation Supply orientation code (in range [0-5])
+ *
+ * @returns Parameter dictionary
+ */
 function analyzeto4dfp_params(
     analyze_image: InputPathType,
     rois_scale: boolean = false,
@@ -78,21 +91,8 @@ function analyzeto4dfp_params(
     endian: string | null = null,
     orientation: number | null = null,
 ): Analyzeto4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param analyze_image Input ANALYZE image file
-     * @param rois_scale Apply ROIScaleFactor
-     * @param flip_x Flip first axis
-     * @param flip_y Flip second axis
-     * @param flip_z Flip third axis
-     * @param endian Output big or little endian (default CPU endian)
-     * @param orientation Supply orientation code (in range [0-5])
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "analyzeto4dfp" as const,
+        "@type": "freesurfer.analyzeto4dfp" as const,
         "analyze_image": analyze_image,
         "rois_scale": rois_scale,
         "flip_x": flip_x,
@@ -109,18 +109,18 @@ function analyzeto4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function analyzeto4dfp_cargs(
     params: Analyzeto4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("analyzeto4dfp");
     cargs.push(execution.inputFile((params["analyze_image"] ?? null)));
@@ -152,18 +152,18 @@ function analyzeto4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function analyzeto4dfp_outputs(
     params: Analyzeto4dfpParameters,
     execution: Execution,
 ): Analyzeto4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Analyzeto4dfpOutputs = {
         root: execution.outputFile("."),
     };
@@ -171,22 +171,22 @@ function analyzeto4dfp_outputs(
 }
 
 
+/**
+ * Convert ANALYZE image format to 4dfp format with various options.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
+ */
 function analyzeto4dfp_execute(
     params: Analyzeto4dfpParameters,
     execution: Execution,
 ): Analyzeto4dfpOutputs {
-    /**
-     * Convert ANALYZE image format to 4dfp format with various options.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = analyzeto4dfp_cargs(params, execution)
     const ret = analyzeto4dfp_outputs(params, execution)
@@ -195,6 +195,24 @@ function analyzeto4dfp_execute(
 }
 
 
+/**
+ * Convert ANALYZE image format to 4dfp format with various options.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param analyze_image Input ANALYZE image file
+ * @param rois_scale Apply ROIScaleFactor
+ * @param flip_x Flip first axis
+ * @param flip_y Flip second axis
+ * @param flip_z Flip third axis
+ * @param endian Output big or little endian (default CPU endian)
+ * @param orientation Supply orientation code (in range [0-5])
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
+ */
 function analyzeto4dfp(
     analyze_image: InputPathType,
     rois_scale: boolean = false,
@@ -205,24 +223,6 @@ function analyzeto4dfp(
     orientation: number | null = null,
     runner: Runner | null = null,
 ): Analyzeto4dfpOutputs {
-    /**
-     * Convert ANALYZE image format to 4dfp format with various options.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param analyze_image Input ANALYZE image file
-     * @param rois_scale Apply ROIScaleFactor
-     * @param flip_x Flip first axis
-     * @param flip_y Flip second axis
-     * @param flip_z Flip third axis
-     * @param endian Output big or little endian (default CPU endian)
-     * @param orientation Supply orientation code (in range [0-5])
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANALYZETO4DFP_METADATA);
     const params = analyzeto4dfp_params(analyze_image, rois_scale, flip_x, flip_y, flip_z, endian, orientation)
@@ -235,5 +235,8 @@ export {
       Analyzeto4dfpOutputs,
       Analyzeto4dfpParameters,
       analyzeto4dfp,
+      analyzeto4dfp_cargs,
+      analyzeto4dfp_execute,
+      analyzeto4dfp_outputs,
       analyzeto4dfp_params,
 };

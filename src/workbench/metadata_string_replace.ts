@@ -12,7 +12,7 @@ const METADATA_STRING_REPLACE_METADATA: Metadata = {
 
 
 interface MetadataStringReplaceParameters {
-    "__STYXTYPE__": "metadata-string-replace";
+    "@type": "workbench.metadata-string-replace";
     "input_file": string;
     "find_string": string;
     "replace_string": string;
@@ -21,33 +21,33 @@ interface MetadataStringReplaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metadata-string-replace": metadata_string_replace_cargs,
+        "workbench.metadata-string-replace": metadata_string_replace_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface MetadataStringReplaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file the file to replace metadata in
+ * @param find_string the string to find
+ * @param replace_string the string to replace <find-string> with
+ * @param output_file output - the name to save the modified file as
+ * @param opt_case_insensitive match with case variation also
+ *
+ * @returns Parameter dictionary
+ */
 function metadata_string_replace_params(
     input_file: string,
     find_string: string,
@@ -74,19 +85,8 @@ function metadata_string_replace_params(
     output_file: string,
     opt_case_insensitive: boolean = false,
 ): MetadataStringReplaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file the file to replace metadata in
-     * @param find_string the string to find
-     * @param replace_string the string to replace <find-string> with
-     * @param output_file output - the name to save the modified file as
-     * @param opt_case_insensitive match with case variation also
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metadata-string-replace" as const,
+        "@type": "workbench.metadata-string-replace" as const,
         "input_file": input_file,
         "find_string": find_string,
         "replace_string": replace_string,
@@ -97,18 +97,18 @@ function metadata_string_replace_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metadata_string_replace_cargs(
     params: MetadataStringReplaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metadata-string-replace");
@@ -123,18 +123,18 @@ function metadata_string_replace_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metadata_string_replace_outputs(
     params: MetadataStringReplaceParameters,
     execution: Execution,
 ): MetadataStringReplaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetadataStringReplaceOutputs = {
         root: execution.outputFile("."),
     };
@@ -142,24 +142,24 @@ function metadata_string_replace_outputs(
 }
 
 
+/**
+ * Replace a string in all metadata of a file.
+ *
+ * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
+ */
 function metadata_string_replace_execute(
     params: MetadataStringReplaceParameters,
     execution: Execution,
 ): MetadataStringReplaceOutputs {
-    /**
-     * Replace a string in all metadata of a file.
-     * 
-     * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = metadata_string_replace_cargs(params, execution)
     const ret = metadata_string_replace_outputs(params, execution)
@@ -168,6 +168,24 @@ function metadata_string_replace_execute(
 }
 
 
+/**
+ * Replace a string in all metadata of a file.
+ *
+ * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input_file the file to replace metadata in
+ * @param find_string the string to find
+ * @param replace_string the string to replace <find-string> with
+ * @param output_file output - the name to save the modified file as
+ * @param opt_case_insensitive match with case variation also
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
+ */
 function metadata_string_replace(
     input_file: string,
     find_string: string,
@@ -176,24 +194,6 @@ function metadata_string_replace(
     opt_case_insensitive: boolean = false,
     runner: Runner | null = null,
 ): MetadataStringReplaceOutputs {
-    /**
-     * Replace a string in all metadata of a file.
-     * 
-     * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input_file the file to replace metadata in
-     * @param find_string the string to find
-     * @param replace_string the string to replace <find-string> with
-     * @param output_file output - the name to save the modified file as
-     * @param opt_case_insensitive match with case variation also
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METADATA_STRING_REPLACE_METADATA);
     const params = metadata_string_replace_params(input_file, find_string, replace_string, output_file, opt_case_insensitive)
@@ -206,5 +206,8 @@ export {
       MetadataStringReplaceOutputs,
       MetadataStringReplaceParameters,
       metadata_string_replace,
+      metadata_string_replace_cargs,
+      metadata_string_replace_execute,
+      metadata_string_replace_outputs,
       metadata_string_replace_params,
 };

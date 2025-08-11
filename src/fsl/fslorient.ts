@@ -12,7 +12,7 @@ const FSLORIENT_METADATA: Metadata = {
 
 
 interface FslorientParameters {
-    "__STYXTYPE__": "fslorient";
+    "@type": "fsl.fslorient";
     "get_orient": boolean;
     "get_sform": boolean;
     "get_qform": boolean;
@@ -32,33 +32,33 @@ interface FslorientParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslorient": fslorient_cargs,
+        "fsl.fslorient": fslorient_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -78,6 +78,28 @@ interface FslorientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename Filename of the image to operate on (e.g. img.nii.gz)
+ * @param get_orient Prints FSL left-right orientation
+ * @param get_sform Prints the 16 elements of the sform matrix
+ * @param get_qform Prints the 16 elements of the qform matrix
+ * @param set_sform Sets the 16 elements of the sform matrix
+ * @param set_qform Sets the 16 elements of the qform matrix
+ * @param set_sform_code Sets sform integer code
+ * @param set_qform_code Sets qform integer code
+ * @param get_qform_code Prints the qform integer code
+ * @param get_sform_code Prints the sform integer code
+ * @param copy_qform_to_sform Sets the sform equal to the qform - code and matrix
+ * @param copy_sform_to_qform Sets the qform equal to the sform - code and matrix
+ * @param delete_orient Removes orient info from header
+ * @param force_neurological Makes FSL neurological header - not Analyze
+ * @param force_radiological Makes FSL radiological header
+ * @param swap_orient Swaps FSL radiological and FSL neurological
+ *
+ * @returns Parameter dictionary
+ */
 function fslorient_params(
     filename: InputPathType,
     get_orient: boolean = false,
@@ -96,30 +118,8 @@ function fslorient_params(
     force_radiological: boolean = false,
     swap_orient: boolean = false,
 ): FslorientParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename Filename of the image to operate on (e.g. img.nii.gz)
-     * @param get_orient Prints FSL left-right orientation
-     * @param get_sform Prints the 16 elements of the sform matrix
-     * @param get_qform Prints the 16 elements of the qform matrix
-     * @param set_sform Sets the 16 elements of the sform matrix
-     * @param set_qform Sets the 16 elements of the qform matrix
-     * @param set_sform_code Sets sform integer code
-     * @param set_qform_code Sets qform integer code
-     * @param get_qform_code Prints the qform integer code
-     * @param get_sform_code Prints the sform integer code
-     * @param copy_qform_to_sform Sets the sform equal to the qform - code and matrix
-     * @param copy_sform_to_qform Sets the qform equal to the sform - code and matrix
-     * @param delete_orient Removes orient info from header
-     * @param force_neurological Makes FSL neurological header - not Analyze
-     * @param force_radiological Makes FSL radiological header
-     * @param swap_orient Swaps FSL radiological and FSL neurological
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslorient" as const,
+        "@type": "fsl.fslorient" as const,
         "get_orient": get_orient,
         "get_sform": get_sform,
         "get_qform": get_qform,
@@ -149,18 +149,18 @@ function fslorient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslorient_cargs(
     params: FslorientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslorient");
     if ((params["get_orient"] ?? null)) {
@@ -222,18 +222,18 @@ function fslorient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslorient_outputs(
     params: FslorientParameters,
     execution: Execution,
 ): FslorientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslorientOutputs = {
         root: execution.outputFile("."),
     };
@@ -241,22 +241,22 @@ function fslorient_outputs(
 }
 
 
+/**
+ * FSL tool to manipulate NIfTI header orientation information.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslorientOutputs`).
+ */
 function fslorient_execute(
     params: FslorientParameters,
     execution: Execution,
 ): FslorientOutputs {
-    /**
-     * FSL tool to manipulate NIfTI header orientation information.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslorientOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslorient_cargs(params, execution)
     const ret = fslorient_outputs(params, execution)
@@ -265,6 +265,33 @@ function fslorient_execute(
 }
 
 
+/**
+ * FSL tool to manipulate NIfTI header orientation information.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param filename Filename of the image to operate on (e.g. img.nii.gz)
+ * @param get_orient Prints FSL left-right orientation
+ * @param get_sform Prints the 16 elements of the sform matrix
+ * @param get_qform Prints the 16 elements of the qform matrix
+ * @param set_sform Sets the 16 elements of the sform matrix
+ * @param set_qform Sets the 16 elements of the qform matrix
+ * @param set_sform_code Sets sform integer code
+ * @param set_qform_code Sets qform integer code
+ * @param get_qform_code Prints the qform integer code
+ * @param get_sform_code Prints the sform integer code
+ * @param copy_qform_to_sform Sets the sform equal to the qform - code and matrix
+ * @param copy_sform_to_qform Sets the qform equal to the sform - code and matrix
+ * @param delete_orient Removes orient info from header
+ * @param force_neurological Makes FSL neurological header - not Analyze
+ * @param force_radiological Makes FSL radiological header
+ * @param swap_orient Swaps FSL radiological and FSL neurological
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslorientOutputs`).
+ */
 function fslorient(
     filename: InputPathType,
     get_orient: boolean = false,
@@ -284,33 +311,6 @@ function fslorient(
     swap_orient: boolean = false,
     runner: Runner | null = null,
 ): FslorientOutputs {
-    /**
-     * FSL tool to manipulate NIfTI header orientation information.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param filename Filename of the image to operate on (e.g. img.nii.gz)
-     * @param get_orient Prints FSL left-right orientation
-     * @param get_sform Prints the 16 elements of the sform matrix
-     * @param get_qform Prints the 16 elements of the qform matrix
-     * @param set_sform Sets the 16 elements of the sform matrix
-     * @param set_qform Sets the 16 elements of the qform matrix
-     * @param set_sform_code Sets sform integer code
-     * @param set_qform_code Sets qform integer code
-     * @param get_qform_code Prints the qform integer code
-     * @param get_sform_code Prints the sform integer code
-     * @param copy_qform_to_sform Sets the sform equal to the qform - code and matrix
-     * @param copy_sform_to_qform Sets the qform equal to the sform - code and matrix
-     * @param delete_orient Removes orient info from header
-     * @param force_neurological Makes FSL neurological header - not Analyze
-     * @param force_radiological Makes FSL radiological header
-     * @param swap_orient Swaps FSL radiological and FSL neurological
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslorientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLORIENT_METADATA);
     const params = fslorient_params(filename, get_orient, get_sform, get_qform, set_sform, set_qform, set_sform_code, set_qform_code, get_qform_code, get_sform_code, copy_qform_to_sform, copy_sform_to_qform, delete_orient, force_neurological, force_radiological, swap_orient)
@@ -323,5 +323,8 @@ export {
       FslorientOutputs,
       FslorientParameters,
       fslorient,
+      fslorient_cargs,
+      fslorient_execute,
+      fslorient_outputs,
       fslorient_params,
 };

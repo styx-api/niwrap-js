@@ -12,7 +12,7 @@ const LONG_STATS_TPS_METADATA: Metadata = {
 
 
 interface LongStatsTpsParameters {
-    "__STYXTYPE__": "long_stats_tps";
+    "@type": "freesurfer.long_stats_tps";
     "qdec_table": InputPathType;
     "stats_file": string;
     "measure": string;
@@ -24,35 +24,35 @@ interface LongStatsTpsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_stats_tps": long_stats_tps_cargs,
+        "freesurfer.long_stats_tps": long_stats_tps_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "long_stats_tps": long_stats_tps_outputs,
+        "freesurfer.long_stats_tps": long_stats_tps_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface LongStatsTpsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec_table qdec.table.dat file with first columns: fsid  fsid-base
+ * @param stats_file Stats file without path: e.g. aseg.stats or lh.aparc.stats
+ * @param measure Stats measure, e.g. volume, thickness, mean, std
+ * @param subjects_dir Full path to FreeSurfer subjects directory
+ * @param time_point Time point number
+ * @param output_file File name of output
+ * @param qcolumn Select a column from the qdec table itself (then --stats, --meas and --sd are not necessary)
+ * @param cross_sectional Use cross sectional results (for testing only)
+ *
+ * @returns Parameter dictionary
+ */
 function long_stats_tps_params(
     qdec_table: InputPathType,
     stats_file: string,
@@ -85,22 +99,8 @@ function long_stats_tps_params(
     qcolumn: string | null = null,
     cross_sectional: boolean = false,
 ): LongStatsTpsParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec_table qdec.table.dat file with first columns: fsid  fsid-base
-     * @param stats_file Stats file without path: e.g. aseg.stats or lh.aparc.stats
-     * @param measure Stats measure, e.g. volume, thickness, mean, std
-     * @param subjects_dir Full path to FreeSurfer subjects directory
-     * @param time_point Time point number
-     * @param output_file File name of output
-     * @param qcolumn Select a column from the qdec table itself (then --stats, --meas and --sd are not necessary)
-     * @param cross_sectional Use cross sectional results (for testing only)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_stats_tps" as const,
+        "@type": "freesurfer.long_stats_tps" as const,
         "qdec_table": qdec_table,
         "stats_file": stats_file,
         "measure": measure,
@@ -116,18 +116,18 @@ function long_stats_tps_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_stats_tps_cargs(
     params: LongStatsTpsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_stats_tps");
     cargs.push(
@@ -167,18 +167,18 @@ function long_stats_tps_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_stats_tps_outputs(
     params: LongStatsTpsParameters,
     execution: Execution,
 ): LongStatsTpsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongStatsTpsOutputs = {
         root: execution.outputFile("."),
         stacked_results: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -187,22 +187,22 @@ function long_stats_tps_outputs(
 }
 
 
+/**
+ * Stack results for individual time points based on longitudinal qdec table.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
+ */
 function long_stats_tps_execute(
     params: LongStatsTpsParameters,
     execution: Execution,
 ): LongStatsTpsOutputs {
-    /**
-     * Stack results for individual time points based on longitudinal qdec table.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_stats_tps_cargs(params, execution)
     const ret = long_stats_tps_outputs(params, execution)
@@ -211,6 +211,25 @@ function long_stats_tps_execute(
 }
 
 
+/**
+ * Stack results for individual time points based on longitudinal qdec table.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec_table qdec.table.dat file with first columns: fsid  fsid-base
+ * @param stats_file Stats file without path: e.g. aseg.stats or lh.aparc.stats
+ * @param measure Stats measure, e.g. volume, thickness, mean, std
+ * @param subjects_dir Full path to FreeSurfer subjects directory
+ * @param time_point Time point number
+ * @param output_file File name of output
+ * @param qcolumn Select a column from the qdec table itself (then --stats, --meas and --sd are not necessary)
+ * @param cross_sectional Use cross sectional results (for testing only)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
+ */
 function long_stats_tps(
     qdec_table: InputPathType,
     stats_file: string,
@@ -222,25 +241,6 @@ function long_stats_tps(
     cross_sectional: boolean = false,
     runner: Runner | null = null,
 ): LongStatsTpsOutputs {
-    /**
-     * Stack results for individual time points based on longitudinal qdec table.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec_table qdec.table.dat file with first columns: fsid  fsid-base
-     * @param stats_file Stats file without path: e.g. aseg.stats or lh.aparc.stats
-     * @param measure Stats measure, e.g. volume, thickness, mean, std
-     * @param subjects_dir Full path to FreeSurfer subjects directory
-     * @param time_point Time point number
-     * @param output_file File name of output
-     * @param qcolumn Select a column from the qdec table itself (then --stats, --meas and --sd are not necessary)
-     * @param cross_sectional Use cross sectional results (for testing only)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_STATS_TPS_METADATA);
     const params = long_stats_tps_params(qdec_table, stats_file, measure, subjects_dir, time_point, output_file, qcolumn, cross_sectional)
@@ -253,5 +253,8 @@ export {
       LongStatsTpsOutputs,
       LongStatsTpsParameters,
       long_stats_tps,
+      long_stats_tps_cargs,
+      long_stats_tps_execute,
+      long_stats_tps_outputs,
       long_stats_tps_params,
 };

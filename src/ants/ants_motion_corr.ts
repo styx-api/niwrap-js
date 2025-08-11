@@ -12,7 +12,7 @@ const ANTS_MOTION_CORR_METADATA: Metadata = {
 
 
 interface AntsMotionCorrParameters {
-    "__STYXTYPE__": "antsMotionCorr";
+    "@type": "ants.antsMotionCorr";
     "dimensionality"?: 2 | 3 | null | undefined;
     "n_images"?: number | null | undefined;
     "metric"?: string | null | undefined;
@@ -32,35 +32,35 @@ interface AntsMotionCorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsMotionCorr": ants_motion_corr_cargs,
+        "ants.antsMotionCorr": ants_motion_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsMotionCorr": ants_motion_corr_outputs,
+        "ants.antsMotionCorr": ants_motion_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,28 @@ interface AntsMotionCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param n_images This option sets the number of images to use to construct the template image.
+ * @param metric Metrics for registration: GC (global correlation), CC (ANTS neighborhood cross correlation), MI (Mutual information), and Demons.
+ * @param use_fixed_reference_image Use a fixed reference image to correct all volumes, instead of correcting each image to the prior volume in the time series.
+ * @param use_scales_estimator Use the scale estimator to control optimization.
+ * @param transform Several transform options are available: Affine, Rigid, GaussianDisplacementField, SyN.
+ * @param iterations Specify the number of iterations at each level.
+ * @param smoothing_sigmas Specify the sigma for smoothing at each level. Smoothing may be specified in mm units or voxels with 'AxBxCmm' or 'AxBxCvox'. No units implies voxels.
+ * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
+ * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image.
+ * @param average_image Average the input time series image.
+ * @param write_displacement Write the low-dimensional 3D transforms to a 4D displacement field.
+ * @param use_histogram_matching Histogram match the moving images to the reference image.
+ * @param random_seed Use a fixed seed for random number generation.
+ * @param interpolation Several interpolation options are available in ITK. The above are available (default Linear).
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_motion_corr_params(
     dimensionality: 2 | 3 | null = null,
     n_images: number | null = null,
@@ -109,30 +131,8 @@ function ants_motion_corr_params(
     interpolation: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
 ): AntsMotionCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param n_images This option sets the number of images to use to construct the template image.
-     * @param metric Metrics for registration: GC (global correlation), CC (ANTS neighborhood cross correlation), MI (Mutual information), and Demons.
-     * @param use_fixed_reference_image Use a fixed reference image to correct all volumes, instead of correcting each image to the prior volume in the time series.
-     * @param use_scales_estimator Use the scale estimator to control optimization.
-     * @param transform Several transform options are available: Affine, Rigid, GaussianDisplacementField, SyN.
-     * @param iterations Specify the number of iterations at each level.
-     * @param smoothing_sigmas Specify the sigma for smoothing at each level. Smoothing may be specified in mm units or voxels with 'AxBxCmm' or 'AxBxCvox'. No units implies voxels.
-     * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
-     * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image.
-     * @param average_image Average the input time series image.
-     * @param write_displacement Write the low-dimensional 3D transforms to a 4D displacement field.
-     * @param use_histogram_matching Histogram match the moving images to the reference image.
-     * @param random_seed Use a fixed seed for random number generation.
-     * @param interpolation Several interpolation options are available in ITK. The above are available (default Linear).
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsMotionCorr" as const,
+        "@type": "ants.antsMotionCorr" as const,
         "use_scales_estimator": use_scales_estimator,
         "average_image": average_image,
         "write_displacement": write_displacement,
@@ -180,18 +180,18 @@ function ants_motion_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_motion_corr_cargs(
     params: AntsMotionCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsMotionCorr");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -285,18 +285,18 @@ function ants_motion_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_motion_corr_outputs(
     params: AntsMotionCorrParameters,
     execution: Execution,
 ): AntsMotionCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsMotionCorrOutputs = {
         root: execution.outputFile("."),
         output_transform_prefix: execution.outputFile(["[OUTPUT_TRANSFORM_PREFIX]Affine.mat"].join('')),
@@ -307,22 +307,22 @@ function ants_motion_corr_outputs(
 }
 
 
+/**
+ * ANTS Motion Correction application to perform motion correction on 4D time series data.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrOutputs`).
+ */
 function ants_motion_corr_execute(
     params: AntsMotionCorrParameters,
     execution: Execution,
 ): AntsMotionCorrOutputs {
-    /**
-     * ANTS Motion Correction application to perform motion correction on 4D time series data.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_motion_corr_cargs(params, execution)
     const ret = ants_motion_corr_outputs(params, execution)
@@ -331,6 +331,33 @@ function ants_motion_corr_execute(
 }
 
 
+/**
+ * ANTS Motion Correction application to perform motion correction on 4D time series data.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param n_images This option sets the number of images to use to construct the template image.
+ * @param metric Metrics for registration: GC (global correlation), CC (ANTS neighborhood cross correlation), MI (Mutual information), and Demons.
+ * @param use_fixed_reference_image Use a fixed reference image to correct all volumes, instead of correcting each image to the prior volume in the time series.
+ * @param use_scales_estimator Use the scale estimator to control optimization.
+ * @param transform Several transform options are available: Affine, Rigid, GaussianDisplacementField, SyN.
+ * @param iterations Specify the number of iterations at each level.
+ * @param smoothing_sigmas Specify the sigma for smoothing at each level. Smoothing may be specified in mm units or voxels with 'AxBxCmm' or 'AxBxCvox'. No units implies voxels.
+ * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
+ * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image.
+ * @param average_image Average the input time series image.
+ * @param write_displacement Write the low-dimensional 3D transforms to a 4D displacement field.
+ * @param use_histogram_matching Histogram match the moving images to the reference image.
+ * @param random_seed Use a fixed seed for random number generation.
+ * @param interpolation Several interpolation options are available in ITK. The above are available (default Linear).
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsMotionCorrOutputs`).
+ */
 function ants_motion_corr(
     dimensionality: 2 | 3 | null = null,
     n_images: number | null = null,
@@ -350,33 +377,6 @@ function ants_motion_corr(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrOutputs {
-    /**
-     * ANTS Motion Correction application to perform motion correction on 4D time series data.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param n_images This option sets the number of images to use to construct the template image.
-     * @param metric Metrics for registration: GC (global correlation), CC (ANTS neighborhood cross correlation), MI (Mutual information), and Demons.
-     * @param use_fixed_reference_image Use a fixed reference image to correct all volumes, instead of correcting each image to the prior volume in the time series.
-     * @param use_scales_estimator Use the scale estimator to control optimization.
-     * @param transform Several transform options are available: Affine, Rigid, GaussianDisplacementField, SyN.
-     * @param iterations Specify the number of iterations at each level.
-     * @param smoothing_sigmas Specify the sigma for smoothing at each level. Smoothing may be specified in mm units or voxels with 'AxBxCmm' or 'AxBxCvox'. No units implies voxels.
-     * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
-     * @param output Specify the output transform prefix (output format is .nii.gz ). Optionally, one can choose to warp the moving image to the fixed space and, if the inverse transform exists, one can also output the warped fixed image.
-     * @param average_image Average the input time series image.
-     * @param write_displacement Write the low-dimensional 3D transforms to a 4D displacement field.
-     * @param use_histogram_matching Histogram match the moving images to the reference image.
-     * @param random_seed Use a fixed seed for random number generation.
-     * @param interpolation Several interpolation options are available in ITK. The above are available (default Linear).
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsMotionCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_MOTION_CORR_METADATA);
     const params = ants_motion_corr_params(dimensionality, n_images, metric, use_fixed_reference_image, use_scales_estimator, transform, iterations, smoothing_sigmas, shrink_factors, output, average_image, write_displacement, use_histogram_matching, random_seed, interpolation, verbose)
@@ -389,5 +389,8 @@ export {
       AntsMotionCorrOutputs,
       AntsMotionCorrParameters,
       ants_motion_corr,
+      ants_motion_corr_cargs,
+      ants_motion_corr_execute,
+      ants_motion_corr_outputs,
       ants_motion_corr_params,
 };

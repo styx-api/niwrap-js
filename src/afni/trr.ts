@@ -12,7 +12,7 @@ const TRR_METADATA: Metadata = {
 
 
 interface TrrParameters {
-    "__STYXTYPE__": "TRR";
+    "@type": "afni.TRR";
     "prefix": string;
     "chains"?: number | null | undefined;
     "iterations"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface TrrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "TRR": trr_cargs,
+        "afni.TRR": trr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "TRR": trr_outputs,
+        "afni.TRR": trr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,30 @@ interface TrrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output file names
+ * @param response_var Specify the column name for the response variable
+ * @param subject_var Specify the column name for the subject variable
+ * @param data_table Specify the path to the data table in pure text format
+ * @param chains Specify the number of Markov chains
+ * @param iterations Specify the number of iterations per Markov chain
+ * @param repetition_var Specify the column name for the repetition variable
+ * @param condition_var Specify the column name for the condition variable
+ * @param categorical_vars Identify categorical (qualitative) variables
+ * @param quantitative_vars Identify quantitative (covariate) variables
+ * @param response_dist Specify the distribution for the response variable (e.g., 'gaussian', 'student', 'exgaussian')
+ * @param model Specify the effects associated with explanatory variables
+ * @param plot_size Specify the layout of posterior distribution plot (PDP) with width and height in inches
+ * @param standard_error Include standard error for the response variable as input
+ * @param t_stat Specify the column name for the t-statistic values
+ * @param within_chain_parallelization Invoke within-chain parallelization; specify number of threads per chain
+ * @param debug Enable R to save the parameters for debugging
+ * @param verbose Specify verbose level
+ *
+ * @returns Parameter dictionary
+ */
 function trr_params(
     prefix: string,
     response_var: string,
@@ -113,32 +137,8 @@ function trr_params(
     debug: boolean = false,
     verbose: number | null = null,
 ): TrrParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output file names
-     * @param response_var Specify the column name for the response variable
-     * @param subject_var Specify the column name for the subject variable
-     * @param data_table Specify the path to the data table in pure text format
-     * @param chains Specify the number of Markov chains
-     * @param iterations Specify the number of iterations per Markov chain
-     * @param repetition_var Specify the column name for the repetition variable
-     * @param condition_var Specify the column name for the condition variable
-     * @param categorical_vars Identify categorical (qualitative) variables
-     * @param quantitative_vars Identify quantitative (covariate) variables
-     * @param response_dist Specify the distribution for the response variable (e.g., 'gaussian', 'student', 'exgaussian')
-     * @param model Specify the effects associated with explanatory variables
-     * @param plot_size Specify the layout of posterior distribution plot (PDP) with width and height in inches
-     * @param standard_error Include standard error for the response variable as input
-     * @param t_stat Specify the column name for the t-statistic values
-     * @param within_chain_parallelization Invoke within-chain parallelization; specify number of threads per chain
-     * @param debug Enable R to save the parameters for debugging
-     * @param verbose Specify verbose level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "TRR" as const,
+        "@type": "afni.TRR" as const,
         "prefix": prefix,
         "response_var": response_var,
         "subject_var": subject_var,
@@ -188,18 +188,18 @@ function trr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function trr_cargs(
     params: TrrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("TRR");
     cargs.push(
@@ -303,18 +303,18 @@ function trr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function trr_outputs(
     params: TrrParameters,
     execution: Execution,
 ): TrrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TrrOutputs = {
         root: execution.outputFile("."),
         output_file_txt: execution.outputFile([(params["prefix"] ?? null), ".txt"].join('')),
@@ -325,22 +325,22 @@ function trr_outputs(
 }
 
 
+/**
+ * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TrrOutputs`).
+ */
 function trr_execute(
     params: TrrParameters,
     execution: Execution,
 ): TrrOutputs {
-    /**
-     * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TrrOutputs`).
-     */
     params = execution.params(params)
     const cargs = trr_cargs(params, execution)
     const ret = trr_outputs(params, execution)
@@ -349,6 +349,35 @@ function trr_execute(
 }
 
 
+/**
+ * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output file names
+ * @param response_var Specify the column name for the response variable
+ * @param subject_var Specify the column name for the subject variable
+ * @param data_table Specify the path to the data table in pure text format
+ * @param chains Specify the number of Markov chains
+ * @param iterations Specify the number of iterations per Markov chain
+ * @param repetition_var Specify the column name for the repetition variable
+ * @param condition_var Specify the column name for the condition variable
+ * @param categorical_vars Identify categorical (qualitative) variables
+ * @param quantitative_vars Identify quantitative (covariate) variables
+ * @param response_dist Specify the distribution for the response variable (e.g., 'gaussian', 'student', 'exgaussian')
+ * @param model Specify the effects associated with explanatory variables
+ * @param plot_size Specify the layout of posterior distribution plot (PDP) with width and height in inches
+ * @param standard_error Include standard error for the response variable as input
+ * @param t_stat Specify the column name for the t-statistic values
+ * @param within_chain_parallelization Invoke within-chain parallelization; specify number of threads per chain
+ * @param debug Enable R to save the parameters for debugging
+ * @param verbose Specify verbose level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TrrOutputs`).
+ */
 function trr(
     prefix: string,
     response_var: string,
@@ -370,35 +399,6 @@ function trr(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): TrrOutputs {
-    /**
-     * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output file names
-     * @param response_var Specify the column name for the response variable
-     * @param subject_var Specify the column name for the subject variable
-     * @param data_table Specify the path to the data table in pure text format
-     * @param chains Specify the number of Markov chains
-     * @param iterations Specify the number of iterations per Markov chain
-     * @param repetition_var Specify the column name for the repetition variable
-     * @param condition_var Specify the column name for the condition variable
-     * @param categorical_vars Identify categorical (qualitative) variables
-     * @param quantitative_vars Identify quantitative (covariate) variables
-     * @param response_dist Specify the distribution for the response variable (e.g., 'gaussian', 'student', 'exgaussian')
-     * @param model Specify the effects associated with explanatory variables
-     * @param plot_size Specify the layout of posterior distribution plot (PDP) with width and height in inches
-     * @param standard_error Include standard error for the response variable as input
-     * @param t_stat Specify the column name for the t-statistic values
-     * @param within_chain_parallelization Invoke within-chain parallelization; specify number of threads per chain
-     * @param debug Enable R to save the parameters for debugging
-     * @param verbose Specify verbose level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TrrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRR_METADATA);
     const params = trr_params(prefix, response_var, subject_var, data_table, chains, iterations, repetition_var, condition_var, categorical_vars, quantitative_vars, response_dist, model, plot_size, standard_error, t_stat, within_chain_parallelization, debug, verbose)
@@ -411,5 +411,8 @@ export {
       TrrOutputs,
       TrrParameters,
       trr,
+      trr_cargs,
+      trr_execute,
+      trr_outputs,
       trr_params,
 };

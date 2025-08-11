@@ -12,7 +12,7 @@ const MRI_EASYWARP_METADATA: Metadata = {
 
 
 interface MriEasywarpParameters {
-    "__STYXTYPE__": "mri_easywarp";
+    "@type": "freesurfer.mri_easywarp";
     "input_image": InputPathType;
     "output_image": string;
     "deformation_field"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface MriEasywarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_easywarp": mri_easywarp_cargs,
+        "freesurfer.mri_easywarp": mri_easywarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_easywarp": mri_easywarp_outputs,
+        "freesurfer.mri_easywarp": mri_easywarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriEasywarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image
+ * @param output_image Output (deformed) image
+ * @param deformation_field Deformation field
+ * @param nearest_neighbor Use nearest neighbor (rather than linear) interpolation
+ * @param num_threads Number of cores to be used. Default is 1. You can use -1 to use all available cores
+ *
+ * @returns Parameter dictionary
+ */
 function mri_easywarp_params(
     input_image: InputPathType,
     output_image: string,
@@ -79,19 +90,8 @@ function mri_easywarp_params(
     nearest_neighbor: boolean = false,
     num_threads: number | null = null,
 ): MriEasywarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image
-     * @param output_image Output (deformed) image
-     * @param deformation_field Deformation field
-     * @param nearest_neighbor Use nearest neighbor (rather than linear) interpolation
-     * @param num_threads Number of cores to be used. Default is 1. You can use -1 to use all available cores
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_easywarp" as const,
+        "@type": "freesurfer.mri_easywarp" as const,
         "input_image": input_image,
         "output_image": output_image,
         "nearest_neighbor": nearest_neighbor,
@@ -106,18 +106,18 @@ function mri_easywarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_easywarp_cargs(
     params: MriEasywarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_easywarp");
     cargs.push(
@@ -147,18 +147,18 @@ function mri_easywarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_easywarp_outputs(
     params: MriEasywarpParameters,
     execution: Execution,
 ): MriEasywarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEasywarpOutputs = {
         root: execution.outputFile("."),
         output_deformed_image: execution.outputFile([(params["output_image"] ?? null), ".nii.gz"].join('')),
@@ -167,22 +167,22 @@ function mri_easywarp_outputs(
 }
 
 
+/**
+ * EasyReg: deep learning registration simple and easy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
+ */
 function mri_easywarp_execute(
     params: MriEasywarpParameters,
     execution: Execution,
 ): MriEasywarpOutputs {
-    /**
-     * EasyReg: deep learning registration simple and easy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_easywarp_cargs(params, execution)
     const ret = mri_easywarp_outputs(params, execution)
@@ -191,6 +191,22 @@ function mri_easywarp_execute(
 }
 
 
+/**
+ * EasyReg: deep learning registration simple and easy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input image
+ * @param output_image Output (deformed) image
+ * @param deformation_field Deformation field
+ * @param nearest_neighbor Use nearest neighbor (rather than linear) interpolation
+ * @param num_threads Number of cores to be used. Default is 1. You can use -1 to use all available cores
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
+ */
 function mri_easywarp(
     input_image: InputPathType,
     output_image: string,
@@ -199,22 +215,6 @@ function mri_easywarp(
     num_threads: number | null = null,
     runner: Runner | null = null,
 ): MriEasywarpOutputs {
-    /**
-     * EasyReg: deep learning registration simple and easy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input image
-     * @param output_image Output (deformed) image
-     * @param deformation_field Deformation field
-     * @param nearest_neighbor Use nearest neighbor (rather than linear) interpolation
-     * @param num_threads Number of cores to be used. Default is 1. You can use -1 to use all available cores
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EASYWARP_METADATA);
     const params = mri_easywarp_params(input_image, output_image, deformation_field, nearest_neighbor, num_threads)
@@ -227,5 +227,8 @@ export {
       MriEasywarpOutputs,
       MriEasywarpParameters,
       mri_easywarp,
+      mri_easywarp_cargs,
+      mri_easywarp_execute,
+      mri_easywarp_outputs,
       mri_easywarp_params,
 };

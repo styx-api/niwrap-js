@@ -12,14 +12,14 @@ const COMPUTE_LABEL_VOLUMES_CSH_METADATA: Metadata = {
 
 
 interface ComputeLabelVolumesCshLabelLParameters {
-    "__STYXTYPE__": "label_L";
+    "@type": "freesurfer.compute_label_volumes.csh.label_L";
     "upper_L"?: string | null | undefined;
     "lower_L"?: string | null | undefined;
 }
 
 
 interface ComputeLabelVolumesCshParameters {
-    "__STYXTYPE__": "compute_label_volumes.csh";
+    "@type": "freesurfer.compute_label_volumes.csh";
     "label_vol": InputPathType;
     "output_file": string;
     "label_L"?: ComputeLabelVolumesCshLabelLParameters | null | undefined;
@@ -28,55 +28,55 @@ interface ComputeLabelVolumesCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "compute_label_volumes.csh": compute_label_volumes_csh_cargs,
-        "label_L": compute_label_volumes_csh_label_l_cargs,
+        "freesurfer.compute_label_volumes.csh": compute_label_volumes_csh_cargs,
+        "freesurfer.compute_label_volumes.csh.label_L": compute_label_volumes_csh_label_l_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "compute_label_volumes.csh": compute_label_volumes_csh_outputs,
+        "freesurfer.compute_label_volumes.csh": compute_label_volumes_csh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param upper_l The particular label to be analyzed (case-sensitive option)
+ * @param lower_l The particular label to be analyzed (case-insensitive option)
+ *
+ * @returns Parameter dictionary
+ */
 function compute_label_volumes_csh_label_l_params(
     upper_l: string | null = null,
     lower_l: string | null = null,
 ): ComputeLabelVolumesCshLabelLParameters {
-    /**
-     * Build parameters.
-    
-     * @param upper_l The particular label to be analyzed (case-sensitive option)
-     * @param lower_l The particular label to be analyzed (case-insensitive option)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_L" as const,
+        "@type": "freesurfer.compute_label_volumes.csh.label_L" as const,
     };
     if (upper_l !== null) {
         params["upper_L"] = upper_l;
@@ -88,18 +88,18 @@ function compute_label_volumes_csh_label_l_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function compute_label_volumes_csh_label_l_cargs(
     params: ComputeLabelVolumesCshLabelLParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["upper_L"] ?? null) !== null) {
         cargs.push(
@@ -134,6 +134,17 @@ interface ComputeLabelVolumesCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_vol Label volume to be analyzed
+ * @param output_file Text file where the results are written
+ * @param label_l The particular label to be analyzed
+ * @param version Print version and exit
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function compute_label_volumes_csh_params(
     label_vol: InputPathType,
     output_file: string,
@@ -141,19 +152,8 @@ function compute_label_volumes_csh_params(
     version: boolean = false,
     help: boolean = false,
 ): ComputeLabelVolumesCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_vol Label volume to be analyzed
-     * @param output_file Text file where the results are written
-     * @param label_l The particular label to be analyzed
-     * @param version Print version and exit
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "compute_label_volumes.csh" as const,
+        "@type": "freesurfer.compute_label_volumes.csh" as const,
         "label_vol": label_vol,
         "output_file": output_file,
         "version": version,
@@ -166,18 +166,18 @@ function compute_label_volumes_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function compute_label_volumes_csh_cargs(
     params: ComputeLabelVolumesCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("compute_label_volumes.csh");
     cargs.push(
@@ -189,7 +189,7 @@ function compute_label_volumes_csh_cargs(
         (params["output_file"] ?? null)
     );
     if ((params["label_L"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["label_L"] ?? null).__STYXTYPE__)((params["label_L"] ?? null), execution));
+        cargs.push(...dynCargs((params["label_L"] ?? null)["@type"])((params["label_L"] ?? null), execution));
     }
     if ((params["version"] ?? null)) {
         cargs.push("--version");
@@ -201,18 +201,18 @@ function compute_label_volumes_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function compute_label_volumes_csh_outputs(
     params: ComputeLabelVolumesCshParameters,
     execution: Execution,
 ): ComputeLabelVolumesCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ComputeLabelVolumesCshOutputs = {
         root: execution.outputFile("."),
         result_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -221,22 +221,22 @@ function compute_label_volumes_csh_outputs(
 }
 
 
+/**
+ * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
+ */
 function compute_label_volumes_csh_execute(
     params: ComputeLabelVolumesCshParameters,
     execution: Execution,
 ): ComputeLabelVolumesCshOutputs {
-    /**
-     * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = compute_label_volumes_csh_cargs(params, execution)
     const ret = compute_label_volumes_csh_outputs(params, execution)
@@ -245,6 +245,22 @@ function compute_label_volumes_csh_execute(
 }
 
 
+/**
+ * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label_vol Label volume to be analyzed
+ * @param output_file Text file where the results are written
+ * @param label_l The particular label to be analyzed
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
+ */
 function compute_label_volumes_csh(
     label_vol: InputPathType,
     output_file: string,
@@ -253,22 +269,6 @@ function compute_label_volumes_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): ComputeLabelVolumesCshOutputs {
-    /**
-     * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label_vol Label volume to be analyzed
-     * @param output_file Text file where the results are written
-     * @param label_l The particular label to be analyzed
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPUTE_LABEL_VOLUMES_CSH_METADATA);
     const params = compute_label_volumes_csh_params(label_vol, output_file, label_l, version, help)
@@ -282,6 +282,10 @@ export {
       ComputeLabelVolumesCshOutputs,
       ComputeLabelVolumesCshParameters,
       compute_label_volumes_csh,
+      compute_label_volumes_csh_cargs,
+      compute_label_volumes_csh_execute,
+      compute_label_volumes_csh_label_l_cargs,
       compute_label_volumes_csh_label_l_params,
+      compute_label_volumes_csh_outputs,
       compute_label_volumes_csh_params,
 };

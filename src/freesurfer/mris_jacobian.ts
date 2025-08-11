@@ -12,7 +12,7 @@ const MRIS_JACOBIAN_METADATA: Metadata = {
 
 
 interface MrisJacobianParameters {
-    "__STYXTYPE__": "mris_jacobian";
+    "@type": "freesurfer.mris_jacobian";
     "original_surface": InputPathType;
     "mapped_surface": InputPathType;
     "jacobian_file": string;
@@ -22,35 +22,35 @@ interface MrisJacobianParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_jacobian": mris_jacobian_cargs,
+        "freesurfer.mris_jacobian": mris_jacobian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_jacobian": mris_jacobian_outputs,
+        "freesurfer.mris_jacobian": mris_jacobian_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisJacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param original_surface The original surface file.
+ * @param mapped_surface The mapped surface file.
+ * @param jacobian_file The output file name for the Jacobian.
+ * @param log Compute and write out log of Jacobian.
+ * @param noscale Don't scale Jacobian by total surface areas.
+ * @param invert Compute -1/Jacobian for Jacobian < 1.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_jacobian_params(
     original_surface: InputPathType,
     mapped_surface: InputPathType,
@@ -81,20 +93,8 @@ function mris_jacobian_params(
     noscale: boolean = false,
     invert: boolean = false,
 ): MrisJacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param original_surface The original surface file.
-     * @param mapped_surface The mapped surface file.
-     * @param jacobian_file The output file name for the Jacobian.
-     * @param log Compute and write out log of Jacobian.
-     * @param noscale Don't scale Jacobian by total surface areas.
-     * @param invert Compute -1/Jacobian for Jacobian < 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_jacobian" as const,
+        "@type": "freesurfer.mris_jacobian" as const,
         "original_surface": original_surface,
         "mapped_surface": mapped_surface,
         "jacobian_file": jacobian_file,
@@ -106,18 +106,18 @@ function mris_jacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_jacobian_cargs(
     params: MrisJacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_jacobian");
     cargs.push(execution.inputFile((params["original_surface"] ?? null)));
@@ -136,18 +136,18 @@ function mris_jacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_jacobian_outputs(
     params: MrisJacobianParameters,
     execution: Execution,
 ): MrisJacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisJacobianOutputs = {
         root: execution.outputFile("."),
         output_jacobian_file: execution.outputFile([(params["jacobian_file"] ?? null)].join('')),
@@ -156,22 +156,22 @@ function mris_jacobian_outputs(
 }
 
 
+/**
+ * This program computes the Jacobian of a surface mapping.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
+ */
 function mris_jacobian_execute(
     params: MrisJacobianParameters,
     execution: Execution,
 ): MrisJacobianOutputs {
-    /**
-     * This program computes the Jacobian of a surface mapping.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_jacobian_cargs(params, execution)
     const ret = mris_jacobian_outputs(params, execution)
@@ -180,6 +180,23 @@ function mris_jacobian_execute(
 }
 
 
+/**
+ * This program computes the Jacobian of a surface mapping.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param original_surface The original surface file.
+ * @param mapped_surface The mapped surface file.
+ * @param jacobian_file The output file name for the Jacobian.
+ * @param log Compute and write out log of Jacobian.
+ * @param noscale Don't scale Jacobian by total surface areas.
+ * @param invert Compute -1/Jacobian for Jacobian < 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
+ */
 function mris_jacobian(
     original_surface: InputPathType,
     mapped_surface: InputPathType,
@@ -189,23 +206,6 @@ function mris_jacobian(
     invert: boolean = false,
     runner: Runner | null = null,
 ): MrisJacobianOutputs {
-    /**
-     * This program computes the Jacobian of a surface mapping.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param original_surface The original surface file.
-     * @param mapped_surface The mapped surface file.
-     * @param jacobian_file The output file name for the Jacobian.
-     * @param log Compute and write out log of Jacobian.
-     * @param noscale Don't scale Jacobian by total surface areas.
-     * @param invert Compute -1/Jacobian for Jacobian < 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_JACOBIAN_METADATA);
     const params = mris_jacobian_params(original_surface, mapped_surface, jacobian_file, log, noscale, invert)
@@ -218,5 +218,8 @@ export {
       MrisJacobianOutputs,
       MrisJacobianParameters,
       mris_jacobian,
+      mris_jacobian_cargs,
+      mris_jacobian_execute,
+      mris_jacobian_outputs,
       mris_jacobian_params,
 };

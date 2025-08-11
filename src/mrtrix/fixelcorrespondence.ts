@@ -12,14 +12,14 @@ const FIXELCORRESPONDENCE_METADATA: Metadata = {
 
 
 interface FixelcorrespondenceConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelcorrespondence.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelcorrespondenceParameters {
-    "__STYXTYPE__": "fixelcorrespondence";
+    "@type": "mrtrix.fixelcorrespondence";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -36,54 +36,54 @@ interface FixelcorrespondenceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelcorrespondence": fixelcorrespondence_cargs,
-        "config": fixelcorrespondence_config_cargs,
+        "mrtrix.fixelcorrespondence": fixelcorrespondence_cargs,
+        "mrtrix.fixelcorrespondence.config": fixelcorrespondence_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcorrespondence_config_params(
     key: string,
     value: string,
 ): FixelcorrespondenceConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelcorrespondence.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function fixelcorrespondence_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcorrespondence_config_cargs(
     params: FixelcorrespondenceConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -124,6 +124,25 @@ interface FixelcorrespondenceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_data the input subject fixel data file. This should be a file inside the fixel directory
+ * @param template_directory the input template fixel directory.
+ * @param output_directory the fixel directory where the output file will be written.
+ * @param output_data the name of the output fixel data file. This will be placed in the output fixel directory
+ * @param angle the max angle threshold for computing inter-subject fixel correspondence (Default: 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcorrespondence_params(
     subject_data: InputPathType,
     template_directory: InputPathType,
@@ -139,27 +158,8 @@ function fixelcorrespondence_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelcorrespondenceParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_data the input subject fixel data file. This should be a file inside the fixel directory
-     * @param template_directory the input template fixel directory.
-     * @param output_directory the fixel directory where the output file will be written.
-     * @param output_data the name of the output fixel data file. This will be placed in the output fixel directory
-     * @param angle the max angle threshold for computing inter-subject fixel correspondence (Default: 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelcorrespondence" as const,
+        "@type": "mrtrix.fixelcorrespondence" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -184,18 +184,18 @@ function fixelcorrespondence_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcorrespondence_cargs(
     params: FixelcorrespondenceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelcorrespondence");
     if ((params["angle"] ?? null) !== null) {
@@ -223,7 +223,7 @@ function fixelcorrespondence_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -239,18 +239,18 @@ function fixelcorrespondence_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelcorrespondence_outputs(
     params: FixelcorrespondenceParameters,
     execution: Execution,
 ): FixelcorrespondenceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelcorrespondenceOutputs = {
         root: execution.outputFile("."),
     };
@@ -258,28 +258,28 @@ function fixelcorrespondence_outputs(
 }
 
 
+/**
+ * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
+ *
+ * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
+ */
 function fixelcorrespondence_execute(
     params: FixelcorrespondenceParameters,
     execution: Execution,
 ): FixelcorrespondenceOutputs {
-    /**
-     * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
-     * 
-     * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelcorrespondence_cargs(params, execution)
     const ret = fixelcorrespondence_outputs(params, execution)
@@ -288,6 +288,36 @@ function fixelcorrespondence_execute(
 }
 
 
+/**
+ * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
+ *
+ * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param subject_data the input subject fixel data file. This should be a file inside the fixel directory
+ * @param template_directory the input template fixel directory.
+ * @param output_directory the fixel directory where the output file will be written.
+ * @param output_data the name of the output fixel data file. This will be placed in the output fixel directory
+ * @param angle the max angle threshold for computing inter-subject fixel correspondence (Default: 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
+ */
 function fixelcorrespondence(
     subject_data: InputPathType,
     template_directory: InputPathType,
@@ -304,36 +334,6 @@ function fixelcorrespondence(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcorrespondenceOutputs {
-    /**
-     * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
-     * 
-     * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param subject_data the input subject fixel data file. This should be a file inside the fixel directory
-     * @param template_directory the input template fixel directory.
-     * @param output_directory the fixel directory where the output file will be written.
-     * @param output_data the name of the output fixel data file. This will be placed in the output fixel directory
-     * @param angle the max angle threshold for computing inter-subject fixel correspondence (Default: 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELCORRESPONDENCE_METADATA);
     const params = fixelcorrespondence_params(subject_data, template_directory, output_directory, output_data, angle, info, quiet, debug, force, nthreads, config, help, version)
@@ -347,6 +347,10 @@ export {
       FixelcorrespondenceOutputs,
       FixelcorrespondenceParameters,
       fixelcorrespondence,
+      fixelcorrespondence_cargs,
+      fixelcorrespondence_config_cargs,
       fixelcorrespondence_config_params,
+      fixelcorrespondence_execute,
+      fixelcorrespondence_outputs,
       fixelcorrespondence_params,
 };

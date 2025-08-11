@@ -12,20 +12,20 @@ const MRSTATS_METADATA: Metadata = {
 
 
 interface MrstatsOutputParameters {
-    "__STYXTYPE__": "output";
+    "@type": "mrtrix.mrstats.output";
     "field": string;
 }
 
 
 interface MrstatsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrstats.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrstatsParameters {
-    "__STYXTYPE__": "mrstats";
+    "@type": "mrtrix.mrstats";
     "output"?: Array<MrstatsOutputParameters> | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "ignorezero": boolean;
@@ -42,71 +42,71 @@ interface MrstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrstats": mrstats_cargs,
-        "output": mrstats_output_cargs,
-        "config": mrstats_config_cargs,
+        "mrtrix.mrstats": mrstats_cargs,
+        "mrtrix.mrstats.output": mrstats_output_cargs,
+        "mrtrix.mrstats.config": mrstats_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param field output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
+ *
+ * @returns Parameter dictionary
+ */
 function mrstats_output_params(
     field: string,
 ): MrstatsOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param field output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "output" as const,
+        "@type": "mrtrix.mrstats.output" as const,
         "field": field,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrstats_output_cargs(
     params: MrstatsOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-output");
     cargs.push((params["field"] ?? null));
@@ -114,20 +114,20 @@ function mrstats_output_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrstats_config_params(
     key: string,
     value: string,
 ): MrstatsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrstats.config" as const,
         "key": key,
         "value": value,
     };
@@ -135,18 +135,18 @@ function mrstats_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrstats_config_cargs(
     params: MrstatsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -168,6 +168,25 @@ interface MrstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image the input image from which statistics will be computed.
+ * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
+ * @param mask only perform computation within the specified binary mask image.
+ * @param ignorezero ignore zero values during statistics calculation
+ * @param allvolumes generate statistics across all image volumes, rather than one set of statistics per image volume
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrstats_params(
     image: InputPathType,
     output: Array<MrstatsOutputParameters> | null = null,
@@ -183,27 +202,8 @@ function mrstats_params(
     help: boolean = false,
     version: boolean = false,
 ): MrstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param image the input image from which statistics will be computed.
-     * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
-     * @param mask only perform computation within the specified binary mask image.
-     * @param ignorezero ignore zero values during statistics calculation
-     * @param allvolumes generate statistics across all image volumes, rather than one set of statistics per image volume
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrstats" as const,
+        "@type": "mrtrix.mrstats" as const,
         "ignorezero": ignorezero,
         "allvolumes": allvolumes,
         "info": info,
@@ -230,22 +230,22 @@ function mrstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrstats_cargs(
     params: MrstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrstats");
     if ((params["output"] ?? null) !== null) {
-        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
@@ -278,7 +278,7 @@ function mrstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -291,18 +291,18 @@ function mrstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrstats_outputs(
     params: MrstatsParameters,
     execution: Execution,
 ): MrstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrstatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -310,28 +310,28 @@ function mrstats_outputs(
 }
 
 
+/**
+ * Compute images statistics.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
+ */
 function mrstats_execute(
     params: MrstatsParameters,
     execution: Execution,
 ): MrstatsOutputs {
-    /**
-     * Compute images statistics.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrstats_cargs(params, execution)
     const ret = mrstats_outputs(params, execution)
@@ -340,6 +340,36 @@ function mrstats_execute(
 }
 
 
+/**
+ * Compute images statistics.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image the input image from which statistics will be computed.
+ * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
+ * @param mask only perform computation within the specified binary mask image.
+ * @param ignorezero ignore zero values during statistics calculation
+ * @param allvolumes generate statistics across all image volumes, rather than one set of statistics per image volume
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
+ */
 function mrstats(
     image: InputPathType,
     output: Array<MrstatsOutputParameters> | null = null,
@@ -356,36 +386,6 @@ function mrstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrstatsOutputs {
-    /**
-     * Compute images statistics.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image the input image from which statistics will be computed.
-     * @param output output only the field specified. Multiple such options can be supplied if required. Choices are: mean, median, std, std_rv, min, max, count. Useful for use in scripts. Both std options refer to the unbiased (sample) standard deviation. For complex data, min, max and std are calculated separately for real and imaginary parts, std_rv is based on the real valued variance (equals sqrt of sum of variances of imaginary and real parts).
-     * @param mask only perform computation within the specified binary mask image.
-     * @param ignorezero ignore zero values during statistics calculation
-     * @param allvolumes generate statistics across all image volumes, rather than one set of statistics per image volume
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRSTATS_METADATA);
     const params = mrstats_params(image, output, mask, ignorezero, allvolumes, info, quiet, debug, force, nthreads, config, help, version)
@@ -400,7 +400,12 @@ export {
       MrstatsOutputs,
       MrstatsParameters,
       mrstats,
+      mrstats_cargs,
+      mrstats_config_cargs,
       mrstats_config_params,
+      mrstats_execute,
+      mrstats_output_cargs,
       mrstats_output_params,
+      mrstats_outputs,
       mrstats_params,
 };

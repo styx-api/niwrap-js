@@ -12,7 +12,7 @@ const HIST2PROB_METADATA: Metadata = {
 
 
 interface Hist2probParameters {
-    "__STYXTYPE__": "hist2prob";
+    "@type": "fsl.hist2prob";
     "image": InputPathType;
     "size": number;
     "low_threshold": number;
@@ -20,35 +20,35 @@ interface Hist2probParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "hist2prob": hist2prob_cargs,
+        "fsl.hist2prob": hist2prob_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "hist2prob": hist2prob_outputs,
+        "fsl.hist2prob": hist2prob_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface Hist2probOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image Input histogram image
+ * @param size Size of the histogram
+ * @param low_threshold Lower threshold for probability conversion
+ * @param high_threshold Higher threshold for probability conversion
+ *
+ * @returns Parameter dictionary
+ */
 function hist2prob_params(
     image: InputPathType,
     size: number,
     low_threshold: number,
     high_threshold: number,
 ): Hist2probParameters {
-    /**
-     * Build parameters.
-    
-     * @param image Input histogram image
-     * @param size Size of the histogram
-     * @param low_threshold Lower threshold for probability conversion
-     * @param high_threshold Higher threshold for probability conversion
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "hist2prob" as const,
+        "@type": "fsl.hist2prob" as const,
         "image": image,
         "size": size,
         "low_threshold": low_threshold,
@@ -98,18 +98,18 @@ function hist2prob_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function hist2prob_cargs(
     params: Hist2probParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("hist2prob");
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -120,18 +120,18 @@ function hist2prob_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function hist2prob_outputs(
     params: Hist2probParameters,
     execution: Execution,
 ): Hist2probOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Hist2probOutputs = {
         root: execution.outputFile("."),
         output_probability_map: execution.outputFile([path.basename((params["image"] ?? null)), "_probability_map.nii.gz"].join('')),
@@ -140,22 +140,22 @@ function hist2prob_outputs(
 }
 
 
+/**
+ * Converts a histogram image to a probability map based on specified thresholds.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
+ */
 function hist2prob_execute(
     params: Hist2probParameters,
     execution: Execution,
 ): Hist2probOutputs {
-    /**
-     * Converts a histogram image to a probability map based on specified thresholds.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
-     */
     params = execution.params(params)
     const cargs = hist2prob_cargs(params, execution)
     const ret = hist2prob_outputs(params, execution)
@@ -164,6 +164,21 @@ function hist2prob_execute(
 }
 
 
+/**
+ * Converts a histogram image to a probability map based on specified thresholds.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param image Input histogram image
+ * @param size Size of the histogram
+ * @param low_threshold Lower threshold for probability conversion
+ * @param high_threshold Higher threshold for probability conversion
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
+ */
 function hist2prob(
     image: InputPathType,
     size: number,
@@ -171,21 +186,6 @@ function hist2prob(
     high_threshold: number,
     runner: Runner | null = null,
 ): Hist2probOutputs {
-    /**
-     * Converts a histogram image to a probability map based on specified thresholds.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param image Input histogram image
-     * @param size Size of the histogram
-     * @param low_threshold Lower threshold for probability conversion
-     * @param high_threshold Higher threshold for probability conversion
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HIST2PROB_METADATA);
     const params = hist2prob_params(image, size, low_threshold, high_threshold)
@@ -198,5 +198,8 @@ export {
       Hist2probOutputs,
       Hist2probParameters,
       hist2prob,
+      hist2prob_cargs,
+      hist2prob_execute,
+      hist2prob_outputs,
       hist2prob_params,
 };

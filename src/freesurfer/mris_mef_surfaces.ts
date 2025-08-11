@@ -12,7 +12,7 @@ const MRIS_MEF_SURFACES_METADATA: Metadata = {
 
 
 interface MrisMefSurfacesParameters {
-    "__STYXTYPE__": "mris_mef_surfaces";
+    "@type": "freesurfer.mris_mef_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "omit_self_intersection": boolean;
@@ -22,33 +22,33 @@ interface MrisMefSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_mef_surfaces": mris_mef_surfaces_cargs,
+        "freesurfer.mris_mef_surfaces": mris_mef_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface MrisMefSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Hemisphere (e.g., left or right)
+ * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
+ * @param curvature Create curvature and area files from the white matter surface.
+ * @param average_curvature Average curvature values specified number of times, default is 10.
+ * @param white_only Only generate the white matter surface.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_mef_surfaces_params(
     subject_name: string,
     hemisphere: string,
@@ -76,20 +88,8 @@ function mris_mef_surfaces_params(
     average_curvature: number | null = null,
     white_only: boolean = false,
 ): MrisMefSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Hemisphere (e.g., left or right)
-     * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
-     * @param curvature Create curvature and area files from the white matter surface.
-     * @param average_curvature Average curvature values specified number of times, default is 10.
-     * @param white_only Only generate the white matter surface.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_mef_surfaces" as const,
+        "@type": "freesurfer.mris_mef_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "omit_self_intersection": omit_self_intersection,
@@ -103,18 +103,18 @@ function mris_mef_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_mef_surfaces_cargs(
     params: MrisMefSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_mef_surfaces");
     cargs.push((params["subject_name"] ?? null));
@@ -138,18 +138,18 @@ function mris_mef_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_mef_surfaces_outputs(
     params: MrisMefSurfacesParameters,
     execution: Execution,
 ): MrisMefSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMefSurfacesOutputs = {
         root: execution.outputFile("."),
     };
@@ -157,22 +157,22 @@ function mris_mef_surfaces_outputs(
 }
 
 
+/**
+ * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
+ */
 function mris_mef_surfaces_execute(
     params: MrisMefSurfacesParameters,
     execution: Execution,
 ): MrisMefSurfacesOutputs {
-    /**
-     * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_mef_surfaces_cargs(params, execution)
     const ret = mris_mef_surfaces_outputs(params, execution)
@@ -181,6 +181,23 @@ function mris_mef_surfaces_execute(
 }
 
 
+/**
+ * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Hemisphere (e.g., left or right)
+ * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
+ * @param curvature Create curvature and area files from the white matter surface.
+ * @param average_curvature Average curvature values specified number of times, default is 10.
+ * @param white_only Only generate the white matter surface.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
+ */
 function mris_mef_surfaces(
     subject_name: string,
     hemisphere: string,
@@ -190,23 +207,6 @@ function mris_mef_surfaces(
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisMefSurfacesOutputs {
-    /**
-     * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Hemisphere (e.g., left or right)
-     * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
-     * @param curvature Create curvature and area files from the white matter surface.
-     * @param average_curvature Average curvature values specified number of times, default is 10.
-     * @param white_only Only generate the white matter surface.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MEF_SURFACES_METADATA);
     const params = mris_mef_surfaces_params(subject_name, hemisphere, omit_self_intersection, curvature, average_curvature, white_only)
@@ -219,5 +219,8 @@ export {
       MrisMefSurfacesOutputs,
       MrisMefSurfacesParameters,
       mris_mef_surfaces,
+      mris_mef_surfaces_cargs,
+      mris_mef_surfaces_execute,
+      mris_mef_surfaces_outputs,
       mris_mef_surfaces_params,
 };

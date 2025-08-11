@@ -12,42 +12,42 @@ const MRI_LINEAR_REGISTER_METADATA: Metadata = {
 
 
 interface MriLinearRegisterParameters {
-    "__STYXTYPE__": "mri_linear_register";
+    "@type": "freesurfer.mri_linear_register";
     "input_brain": InputPathType;
     "template": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_linear_register": mri_linear_register_cargs,
+        "freesurfer.mri_linear_register": mri_linear_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_linear_register": mri_linear_register_outputs,
+        "freesurfer.mri_linear_register": mri_linear_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriLinearRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_brain Input brain image to be registered
+ * @param template Template to which the brain image will be registered
+ * @param output_file Output file name for the registered brain image
+ *
+ * @returns Parameter dictionary
+ */
 function mri_linear_register_params(
     input_brain: InputPathType,
     template: InputPathType,
     output_file: string,
 ): MriLinearRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_brain Input brain image to be registered
-     * @param template Template to which the brain image will be registered
-     * @param output_file Output file name for the registered brain image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_linear_register" as const,
+        "@type": "freesurfer.mri_linear_register" as const,
         "input_brain": input_brain,
         "template": template,
         "output_file": output_file,
@@ -94,18 +94,18 @@ function mri_linear_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_linear_register_cargs(
     params: MriLinearRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_linear_register");
     cargs.push(execution.inputFile((params["input_brain"] ?? null)));
@@ -115,18 +115,18 @@ function mri_linear_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_linear_register_outputs(
     params: MriLinearRegisterParameters,
     execution: Execution,
 ): MriLinearRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLinearRegisterOutputs = {
         root: execution.outputFile("."),
         output_registered_image: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_linear_register_outputs(
 }
 
 
+/**
+ * A tool for linear registration of MRI brain images to a template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
+ */
 function mri_linear_register_execute(
     params: MriLinearRegisterParameters,
     execution: Execution,
 ): MriLinearRegisterOutputs {
-    /**
-     * A tool for linear registration of MRI brain images to a template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_linear_register_cargs(params, execution)
     const ret = mri_linear_register_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_linear_register_execute(
 }
 
 
+/**
+ * A tool for linear registration of MRI brain images to a template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_brain Input brain image to be registered
+ * @param template Template to which the brain image will be registered
+ * @param output_file Output file name for the registered brain image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
+ */
 function mri_linear_register(
     input_brain: InputPathType,
     template: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): MriLinearRegisterOutputs {
-    /**
-     * A tool for linear registration of MRI brain images to a template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_brain Input brain image to be registered
-     * @param template Template to which the brain image will be registered
-     * @param output_file Output file name for the registered brain image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LINEAR_REGISTER_METADATA);
     const params = mri_linear_register_params(input_brain, template, output_file)
@@ -191,5 +191,8 @@ export {
       MriLinearRegisterOutputs,
       MriLinearRegisterParameters,
       mri_linear_register,
+      mri_linear_register_cargs,
+      mri_linear_register_execute,
+      mri_linear_register_outputs,
       mri_linear_register_params,
 };

@@ -12,7 +12,7 @@ const FS_RUN_FROM_MCR_METADATA: Metadata = {
 
 
 interface FsRunFromMcrParameters {
-    "__STYXTYPE__": "fs_run_from_mcr";
+    "@type": "freesurfer.fs_run_from_mcr";
     "name"?: string | null | undefined;
     "command"?: string | null | undefined;
     "zeroth_flag": boolean;
@@ -20,33 +20,33 @@ interface FsRunFromMcrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_run_from_mcr": fs_run_from_mcr_cargs,
+        "freesurfer.fs_run_from_mcr": fs_run_from_mcr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface FsRunFromMcrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param name Pass NAME as the zeroth argument to COMMAND
+ * @param command The command to execute
+ * @param zeroth_flag Place a dash in the zeroth argument to COMMAND
+ * @param empty_env_flag Execute COMMAND with an empty environment
+ *
+ * @returns Parameter dictionary
+ */
 function fs_run_from_mcr_params(
     name: string | null = null,
     command: string | null = null,
     zeroth_flag: boolean = false,
     empty_env_flag: boolean = false,
 ): FsRunFromMcrParameters {
-    /**
-     * Build parameters.
-    
-     * @param name Pass NAME as the zeroth argument to COMMAND
-     * @param command The command to execute
-     * @param zeroth_flag Place a dash in the zeroth argument to COMMAND
-     * @param empty_env_flag Execute COMMAND with an empty environment
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_run_from_mcr" as const,
+        "@type": "freesurfer.fs_run_from_mcr" as const,
         "zeroth_flag": zeroth_flag,
         "empty_env_flag": empty_env_flag,
     };
@@ -97,18 +97,18 @@ function fs_run_from_mcr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_run_from_mcr_cargs(
     params: FsRunFromMcrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_run_from_mcr");
     if ((params["name"] ?? null) !== null) {
@@ -130,18 +130,18 @@ function fs_run_from_mcr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_run_from_mcr_outputs(
     params: FsRunFromMcrParameters,
     execution: Execution,
 ): FsRunFromMcrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsRunFromMcrOutputs = {
         root: execution.outputFile("."),
     };
@@ -149,22 +149,22 @@ function fs_run_from_mcr_outputs(
 }
 
 
+/**
+ * Replace the shell with the given command.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
+ */
 function fs_run_from_mcr_execute(
     params: FsRunFromMcrParameters,
     execution: Execution,
 ): FsRunFromMcrOutputs {
-    /**
-     * Replace the shell with the given command.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_run_from_mcr_cargs(params, execution)
     const ret = fs_run_from_mcr_outputs(params, execution)
@@ -173,6 +173,21 @@ function fs_run_from_mcr_execute(
 }
 
 
+/**
+ * Replace the shell with the given command.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param name Pass NAME as the zeroth argument to COMMAND
+ * @param command The command to execute
+ * @param zeroth_flag Place a dash in the zeroth argument to COMMAND
+ * @param empty_env_flag Execute COMMAND with an empty environment
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
+ */
 function fs_run_from_mcr(
     name: string | null = null,
     command: string | null = null,
@@ -180,21 +195,6 @@ function fs_run_from_mcr(
     empty_env_flag: boolean = false,
     runner: Runner | null = null,
 ): FsRunFromMcrOutputs {
-    /**
-     * Replace the shell with the given command.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param name Pass NAME as the zeroth argument to COMMAND
-     * @param command The command to execute
-     * @param zeroth_flag Place a dash in the zeroth argument to COMMAND
-     * @param empty_env_flag Execute COMMAND with an empty environment
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_RUN_FROM_MCR_METADATA);
     const params = fs_run_from_mcr_params(name, command, zeroth_flag, empty_env_flag)
@@ -207,5 +207,8 @@ export {
       FsRunFromMcrOutputs,
       FsRunFromMcrParameters,
       fs_run_from_mcr,
+      fs_run_from_mcr_cargs,
+      fs_run_from_mcr_execute,
+      fs_run_from_mcr_outputs,
       fs_run_from_mcr_params,
 };

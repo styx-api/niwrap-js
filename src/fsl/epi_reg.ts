@@ -12,7 +12,7 @@ const EPI_REG_METADATA: Metadata = {
 
 
 interface EpiRegParameters {
-    "__STYXTYPE__": "epi_reg";
+    "@type": "fsl.epi_reg";
     "epi": InputPathType;
     "t1_head": InputPathType;
     "t1_brain": InputPathType;
@@ -29,35 +29,35 @@ interface EpiRegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "epi_reg": epi_reg_cargs,
+        "fsl.epi_reg": epi_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "epi_reg": epi_reg_outputs,
+        "fsl.epi_reg": epi_reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -132,6 +132,25 @@ interface EpiRegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param epi EPI Nifti image.
+ * @param t1_head Wholehead T1 image.
+ * @param t1_brain Brain-extracted T1 image.
+ * @param out_base_name Output base name.
+ * @param echospacing Effective epi echo spacing (sometimes called dwell time) - in seconds.
+ * @param fmap Fieldmap image (in rad/s).
+ * @param fmapmag Fieldmap magnitude image - wholehead.
+ * @param fmapmagbrain Fieldmap magnitude image - brain extracted.
+ * @param no_clean Do not clean up intermediate files.
+ * @param no_fmapreg Do not perform registration of fmap to t1 (use if fmap already registered).
+ * @param pedir 'x' or 'y' or 'z' or '-x' or '-y' or '-z'. Phase encoding direction, dir = x/y/z/-x/-y/-z.
+ * @param weight_image Weighting image (in t1 space).
+ * @param wmseg White matter segmentation of t1 image, has to be named                  like the t1brain and end on _wmseg.
+ *
+ * @returns Parameter dictionary
+ */
 function epi_reg_params(
     epi: InputPathType,
     t1_head: InputPathType,
@@ -147,27 +166,8 @@ function epi_reg_params(
     weight_image: InputPathType | null = null,
     wmseg: InputPathType | null = null,
 ): EpiRegParameters {
-    /**
-     * Build parameters.
-    
-     * @param epi EPI Nifti image.
-     * @param t1_head Wholehead T1 image.
-     * @param t1_brain Brain-extracted T1 image.
-     * @param out_base_name Output base name.
-     * @param echospacing Effective epi echo spacing (sometimes called dwell time) - in seconds.
-     * @param fmap Fieldmap image (in rad/s).
-     * @param fmapmag Fieldmap magnitude image - wholehead.
-     * @param fmapmagbrain Fieldmap magnitude image - brain extracted.
-     * @param no_clean Do not clean up intermediate files.
-     * @param no_fmapreg Do not perform registration of fmap to t1 (use if fmap already registered).
-     * @param pedir 'x' or 'y' or 'z' or '-x' or '-y' or '-z'. Phase encoding direction, dir = x/y/z/-x/-y/-z.
-     * @param weight_image Weighting image (in t1 space).
-     * @param wmseg White matter segmentation of t1 image, has to be named                  like the t1brain and end on _wmseg.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "epi_reg" as const,
+        "@type": "fsl.epi_reg" as const,
         "epi": epi,
         "t1_head": t1_head,
         "t1_brain": t1_brain,
@@ -200,18 +200,18 @@ function epi_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function epi_reg_cargs(
     params: EpiRegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("epi_reg");
     cargs.push(["--epi=", execution.inputFile((params["epi"] ?? null))].join(''));
@@ -249,18 +249,18 @@ function epi_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function epi_reg_outputs(
     params: EpiRegParameters,
     execution: Execution,
 ): EpiRegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EpiRegOutputs = {
         root: execution.outputFile("."),
         epi2str_inv: execution.outputFile(["epi2str_inv.mat"].join('')),
@@ -282,22 +282,22 @@ function epi_reg_outputs(
 }
 
 
+/**
+ * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
+ */
 function epi_reg_execute(
     params: EpiRegParameters,
     execution: Execution,
 ): EpiRegOutputs {
-    /**
-     * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
-     */
     params = execution.params(params)
     const cargs = epi_reg_cargs(params, execution)
     const ret = epi_reg_outputs(params, execution)
@@ -306,6 +306,30 @@ function epi_reg_execute(
 }
 
 
+/**
+ * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param epi EPI Nifti image.
+ * @param t1_head Wholehead T1 image.
+ * @param t1_brain Brain-extracted T1 image.
+ * @param out_base_name Output base name.
+ * @param echospacing Effective epi echo spacing (sometimes called dwell time) - in seconds.
+ * @param fmap Fieldmap image (in rad/s).
+ * @param fmapmag Fieldmap magnitude image - wholehead.
+ * @param fmapmagbrain Fieldmap magnitude image - brain extracted.
+ * @param no_clean Do not clean up intermediate files.
+ * @param no_fmapreg Do not perform registration of fmap to t1 (use if fmap already registered).
+ * @param pedir 'x' or 'y' or 'z' or '-x' or '-y' or '-z'. Phase encoding direction, dir = x/y/z/-x/-y/-z.
+ * @param weight_image Weighting image (in t1 space).
+ * @param wmseg White matter segmentation of t1 image, has to be named                  like the t1brain and end on _wmseg.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
+ */
 function epi_reg(
     epi: InputPathType,
     t1_head: InputPathType,
@@ -322,30 +346,6 @@ function epi_reg(
     wmseg: InputPathType | null = null,
     runner: Runner | null = null,
 ): EpiRegOutputs {
-    /**
-     * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param epi EPI Nifti image.
-     * @param t1_head Wholehead T1 image.
-     * @param t1_brain Brain-extracted T1 image.
-     * @param out_base_name Output base name.
-     * @param echospacing Effective epi echo spacing (sometimes called dwell time) - in seconds.
-     * @param fmap Fieldmap image (in rad/s).
-     * @param fmapmag Fieldmap magnitude image - wholehead.
-     * @param fmapmagbrain Fieldmap magnitude image - brain extracted.
-     * @param no_clean Do not clean up intermediate files.
-     * @param no_fmapreg Do not perform registration of fmap to t1 (use if fmap already registered).
-     * @param pedir 'x' or 'y' or 'z' or '-x' or '-y' or '-z'. Phase encoding direction, dir = x/y/z/-x/-y/-z.
-     * @param weight_image Weighting image (in t1 space).
-     * @param wmseg White matter segmentation of t1 image, has to be named                  like the t1brain and end on _wmseg.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EPI_REG_METADATA);
     const params = epi_reg_params(epi, t1_head, t1_brain, out_base_name, echospacing, fmap, fmapmag, fmapmagbrain, no_clean, no_fmapreg, pedir, weight_image, wmseg)
@@ -358,5 +358,8 @@ export {
       EpiRegOutputs,
       EpiRegParameters,
       epi_reg,
+      epi_reg_cargs,
+      epi_reg_execute,
+      epi_reg_outputs,
       epi_reg_params,
 };

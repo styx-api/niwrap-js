@@ -12,39 +12,39 @@ const AFF2RIGID_METADATA: Metadata = {
 
 
 interface Aff2rigidParameters {
-    "__STYXTYPE__": "aff2rigid";
+    "@type": "fsl.aff2rigid";
     "input_transform": InputPathType;
     "output_transform": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aff2rigid": aff2rigid_cargs,
+        "fsl.aff2rigid": aff2rigid_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface Aff2rigidOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_transform Input FLIRT transform (12 DOF) from the input image to standard space.
+ * @param output_transform Output matrix which will convert the input image to standard space using a 6 DOF transformation.
+ *
+ * @returns Parameter dictionary
+ */
 function aff2rigid_params(
     input_transform: InputPathType,
     output_transform: string,
 ): Aff2rigidParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_transform Input FLIRT transform (12 DOF) from the input image to standard space.
-     * @param output_transform Output matrix which will convert the input image to standard space using a 6 DOF transformation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aff2rigid" as const,
+        "@type": "fsl.aff2rigid" as const,
         "input_transform": input_transform,
         "output_transform": output_transform,
     };
@@ -85,18 +85,18 @@ function aff2rigid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aff2rigid_cargs(
     params: Aff2rigidParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aff2rigid");
     cargs.push(execution.inputFile((params["input_transform"] ?? null)));
@@ -105,18 +105,18 @@ function aff2rigid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aff2rigid_outputs(
     params: Aff2rigidParameters,
     execution: Execution,
 ): Aff2rigidOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Aff2rigidOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function aff2rigid_outputs(
 }
 
 
+/**
+ * Tool for converting affine transformations to rigid transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
+ */
 function aff2rigid_execute(
     params: Aff2rigidParameters,
     execution: Execution,
 ): Aff2rigidOutputs {
-    /**
-     * Tool for converting affine transformations to rigid transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
-     */
     params = execution.params(params)
     const cargs = aff2rigid_cargs(params, execution)
     const ret = aff2rigid_outputs(params, execution)
@@ -148,24 +148,24 @@ function aff2rigid_execute(
 }
 
 
+/**
+ * Tool for converting affine transformations to rigid transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_transform Input FLIRT transform (12 DOF) from the input image to standard space.
+ * @param output_transform Output matrix which will convert the input image to standard space using a 6 DOF transformation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
+ */
 function aff2rigid(
     input_transform: InputPathType,
     output_transform: string,
     runner: Runner | null = null,
 ): Aff2rigidOutputs {
-    /**
-     * Tool for converting affine transformations to rigid transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_transform Input FLIRT transform (12 DOF) from the input image to standard space.
-     * @param output_transform Output matrix which will convert the input image to standard space using a 6 DOF transformation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFF2RIGID_METADATA);
     const params = aff2rigid_params(input_transform, output_transform)
@@ -178,5 +178,8 @@ export {
       Aff2rigidOutputs,
       Aff2rigidParameters,
       aff2rigid,
+      aff2rigid_cargs,
+      aff2rigid_execute,
+      aff2rigid_outputs,
       aff2rigid_params,
 };

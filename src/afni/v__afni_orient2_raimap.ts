@@ -12,38 +12,38 @@ const V__AFNI_ORIENT2_RAIMAP_METADATA: Metadata = {
 
 
 interface VAfniOrient2RaimapParameters {
-    "__STYXTYPE__": "@AfniOrient2RAImap";
+    "@type": "afni.@AfniOrient2RAImap";
     "orientation_code": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@AfniOrient2RAImap": v__afni_orient2_raimap_cargs,
+        "afni.@AfniOrient2RAImap": v__afni_orient2_raimap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface VAfniOrient2RaimapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param orientation_code Orientation code (e.g., RAI, LSP)
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_orient2_raimap_params(
     orientation_code: string,
 ): VAfniOrient2RaimapParameters {
-    /**
-     * Build parameters.
-    
-     * @param orientation_code Orientation code (e.g., RAI, LSP)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@AfniOrient2RAImap" as const,
+        "@type": "afni.@AfniOrient2RAImap" as const,
         "orientation_code": orientation_code,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_orient2_raimap_cargs(
     params: VAfniOrient2RaimapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@AfniOrient2RAImap");
     cargs.push((params["orientation_code"] ?? null));
@@ -100,18 +100,18 @@ function v__afni_orient2_raimap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_orient2_raimap_outputs(
     params: VAfniOrient2RaimapParameters,
     execution: Execution,
 ): VAfniOrient2RaimapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniOrient2RaimapOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function v__afni_orient2_raimap_outputs(
 }
 
 
+/**
+ * Returns the index map for the RAI directions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
+ */
 function v__afni_orient2_raimap_execute(
     params: VAfniOrient2RaimapParameters,
     execution: Execution,
 ): VAfniOrient2RaimapOutputs {
-    /**
-     * Returns the index map for the RAI directions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_orient2_raimap_cargs(params, execution)
     const ret = v__afni_orient2_raimap_outputs(params, execution)
@@ -143,22 +143,22 @@ function v__afni_orient2_raimap_execute(
 }
 
 
+/**
+ * Returns the index map for the RAI directions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param orientation_code Orientation code (e.g., RAI, LSP)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
+ */
 function v__afni_orient2_raimap(
     orientation_code: string,
     runner: Runner | null = null,
 ): VAfniOrient2RaimapOutputs {
-    /**
-     * Returns the index map for the RAI directions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param orientation_code Orientation code (e.g., RAI, LSP)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_ORIENT2_RAIMAP_METADATA);
     const params = v__afni_orient2_raimap_params(orientation_code)
@@ -171,5 +171,8 @@ export {
       VAfniOrient2RaimapParameters,
       V__AFNI_ORIENT2_RAIMAP_METADATA,
       v__afni_orient2_raimap,
+      v__afni_orient2_raimap_cargs,
+      v__afni_orient2_raimap_execute,
+      v__afni_orient2_raimap_outputs,
       v__afni_orient2_raimap_params,
 };

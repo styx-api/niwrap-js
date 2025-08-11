@@ -12,7 +12,7 @@ const FSL_MVLM_METADATA: Metadata = {
 
 
 interface FslMvlmParameters {
-    "__STYXTYPE__": "fsl_mvlm";
+    "@type": "fsl.fsl_mvlm";
     "input_file": InputPathType;
     "basename_output_files": string;
     "algorithm"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface FslMvlmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_mvlm": fsl_mvlm_cargs,
+        "fsl.fsl_mvlm": fsl_mvlm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_mvlm": fsl_mvlm_outputs,
+        "fsl.fsl_mvlm": fsl_mvlm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,25 @@ interface FslMvlmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file (text matrix or 3D/4D image file)
+ * @param basename_output_files Basename for output files
+ * @param algorithm Algorithm for decomposition: PCA (or SVD; default), PLS, orthoPLS, CVA, SVD-CVA, MLM, NMF
+ * @param design_matrix File name of the GLM design matrix (time courses or spatial maps)
+ * @param mask_image Mask image file name if input is an image
+ * @param design_normalization Switch on normalisation of the design matrix columns to unit standard deviation
+ * @param variance_normalisation Perform MELODIC variance-normalisation on data
+ * @param demean Switch on de-meaning of design and data
+ * @param nmf_dim Number of underlying factors for NMF
+ * @param nmf_iterations Number of NMF iterations (default 100)
+ * @param verbose Switch on verbose output
+ * @param out_data Output file name for pre-processed data
+ * @param out_vnscales Output file name for scaling factors for variance normalisation
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_mvlm_params(
     input_file: InputPathType,
     basename_output_files: string,
@@ -103,27 +122,8 @@ function fsl_mvlm_params(
     out_data: string | null = null,
     out_vnscales: string | null = null,
 ): FslMvlmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file (text matrix or 3D/4D image file)
-     * @param basename_output_files Basename for output files
-     * @param algorithm Algorithm for decomposition: PCA (or SVD; default), PLS, orthoPLS, CVA, SVD-CVA, MLM, NMF
-     * @param design_matrix File name of the GLM design matrix (time courses or spatial maps)
-     * @param mask_image Mask image file name if input is an image
-     * @param design_normalization Switch on normalisation of the design matrix columns to unit standard deviation
-     * @param variance_normalisation Perform MELODIC variance-normalisation on data
-     * @param demean Switch on de-meaning of design and data
-     * @param nmf_dim Number of underlying factors for NMF
-     * @param nmf_iterations Number of NMF iterations (default 100)
-     * @param verbose Switch on verbose output
-     * @param out_data Output file name for pre-processed data
-     * @param out_vnscales Output file name for scaling factors for variance normalisation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_mvlm" as const,
+        "@type": "fsl.fsl_mvlm" as const,
         "input_file": input_file,
         "basename_output_files": basename_output_files,
         "design_normalization": design_normalization,
@@ -156,18 +156,18 @@ function fsl_mvlm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_mvlm_cargs(
     params: FslMvlmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_mvlm");
     cargs.push(
@@ -236,18 +236,18 @@ function fsl_mvlm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_mvlm_outputs(
     params: FslMvlmParameters,
     execution: Execution,
 ): FslMvlmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslMvlmOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["basename_output_files"] ?? null), "_out.nii.gz"].join('')),
@@ -258,22 +258,22 @@ function fsl_mvlm_outputs(
 }
 
 
+/**
+ * Multivariate Linear Model regression on time courses and/or 3D/4D images using SVD (PCA), PLS, normalised PLS, CVA, SVD-CVA or MLM.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
+ */
 function fsl_mvlm_execute(
     params: FslMvlmParameters,
     execution: Execution,
 ): FslMvlmOutputs {
-    /**
-     * Multivariate Linear Model regression on time courses and/or 3D/4D images using SVD (PCA), PLS, normalised PLS, CVA, SVD-CVA or MLM.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_mvlm_cargs(params, execution)
     const ret = fsl_mvlm_outputs(params, execution)
@@ -282,6 +282,30 @@ function fsl_mvlm_execute(
 }
 
 
+/**
+ * Multivariate Linear Model regression on time courses and/or 3D/4D images using SVD (PCA), PLS, normalised PLS, CVA, SVD-CVA or MLM.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file (text matrix or 3D/4D image file)
+ * @param basename_output_files Basename for output files
+ * @param algorithm Algorithm for decomposition: PCA (or SVD; default), PLS, orthoPLS, CVA, SVD-CVA, MLM, NMF
+ * @param design_matrix File name of the GLM design matrix (time courses or spatial maps)
+ * @param mask_image Mask image file name if input is an image
+ * @param design_normalization Switch on normalisation of the design matrix columns to unit standard deviation
+ * @param variance_normalisation Perform MELODIC variance-normalisation on data
+ * @param demean Switch on de-meaning of design and data
+ * @param nmf_dim Number of underlying factors for NMF
+ * @param nmf_iterations Number of NMF iterations (default 100)
+ * @param verbose Switch on verbose output
+ * @param out_data Output file name for pre-processed data
+ * @param out_vnscales Output file name for scaling factors for variance normalisation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
+ */
 function fsl_mvlm(
     input_file: InputPathType,
     basename_output_files: string,
@@ -298,30 +322,6 @@ function fsl_mvlm(
     out_vnscales: string | null = null,
     runner: Runner | null = null,
 ): FslMvlmOutputs {
-    /**
-     * Multivariate Linear Model regression on time courses and/or 3D/4D images using SVD (PCA), PLS, normalised PLS, CVA, SVD-CVA or MLM.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file (text matrix or 3D/4D image file)
-     * @param basename_output_files Basename for output files
-     * @param algorithm Algorithm for decomposition: PCA (or SVD; default), PLS, orthoPLS, CVA, SVD-CVA, MLM, NMF
-     * @param design_matrix File name of the GLM design matrix (time courses or spatial maps)
-     * @param mask_image Mask image file name if input is an image
-     * @param design_normalization Switch on normalisation of the design matrix columns to unit standard deviation
-     * @param variance_normalisation Perform MELODIC variance-normalisation on data
-     * @param demean Switch on de-meaning of design and data
-     * @param nmf_dim Number of underlying factors for NMF
-     * @param nmf_iterations Number of NMF iterations (default 100)
-     * @param verbose Switch on verbose output
-     * @param out_data Output file name for pre-processed data
-     * @param out_vnscales Output file name for scaling factors for variance normalisation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_MVLM_METADATA);
     const params = fsl_mvlm_params(input_file, basename_output_files, algorithm, design_matrix, mask_image, design_normalization, variance_normalisation, demean, nmf_dim, nmf_iterations, verbose, out_data, out_vnscales)
@@ -334,5 +334,8 @@ export {
       FslMvlmOutputs,
       FslMvlmParameters,
       fsl_mvlm,
+      fsl_mvlm_cargs,
+      fsl_mvlm_execute,
+      fsl_mvlm_outputs,
       fsl_mvlm_params,
 };

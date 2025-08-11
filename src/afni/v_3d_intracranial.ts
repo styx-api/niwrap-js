@@ -12,7 +12,7 @@ const V_3D_INTRACRANIAL_METADATA: Metadata = {
 
 
 interface V3dIntracranialParameters {
-    "__STYXTYPE__": "3dIntracranial";
+    "@type": "afni.3dIntracranial";
     "infile": InputPathType;
     "prefix": string;
     "min_val"?: number | null | undefined;
@@ -25,35 +25,35 @@ interface V3dIntracranialParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dIntracranial": v_3d_intracranial_cargs,
+        "afni.3dIntracranial": v_3d_intracranial_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dIntracranial": v_3d_intracranial_outputs,
+        "afni.3dIntracranial": v_3d_intracranial_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dIntracranialOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Filename of anat dataset to be segmented
+ * @param prefix Prefix name for file to contain segmented image
+ * @param min_val Minimum voxel intensity limit. Default is internal PDF estimate for lower bound
+ * @param max_val Maximum voxel intensity limit. Default is internal PDF estimate for upper bound
+ * @param min_conn Minimum voxel connectivity to enter. Default is 4
+ * @param max_conn Maximum voxel connectivity to leave. Default is 2
+ * @param no_smooth Suppress spatial smoothing of segmentation mask
+ * @param mask Generate functional image mask (complement). Default is to generate anatomical image
+ * @param quiet Suppress output to screen
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_intracranial_params(
     infile: InputPathType,
     prefix: string,
@@ -87,23 +102,8 @@ function v_3d_intracranial_params(
     mask: boolean = false,
     quiet: boolean = false,
 ): V3dIntracranialParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Filename of anat dataset to be segmented
-     * @param prefix Prefix name for file to contain segmented image
-     * @param min_val Minimum voxel intensity limit. Default is internal PDF estimate for lower bound
-     * @param max_val Maximum voxel intensity limit. Default is internal PDF estimate for upper bound
-     * @param min_conn Minimum voxel connectivity to enter. Default is 4
-     * @param max_conn Maximum voxel connectivity to leave. Default is 2
-     * @param no_smooth Suppress spatial smoothing of segmentation mask
-     * @param mask Generate functional image mask (complement). Default is to generate anatomical image
-     * @param quiet Suppress output to screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dIntracranial" as const,
+        "@type": "afni.3dIntracranial" as const,
         "infile": infile,
         "prefix": prefix,
         "no_smooth": no_smooth,
@@ -126,18 +126,18 @@ function v_3d_intracranial_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_intracranial_cargs(
     params: V3dIntracranialParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dIntracranial");
     cargs.push(
@@ -185,18 +185,18 @@ function v_3d_intracranial_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_intracranial_outputs(
     params: V3dIntracranialParameters,
     execution: Execution,
 ): V3dIntracranialOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dIntracranialOutputs = {
         root: execution.outputFile("."),
         segmented_image: execution.outputFile([(params["prefix"] ?? null), "+orig"].join('')),
@@ -205,22 +205,22 @@ function v_3d_intracranial_outputs(
 }
 
 
+/**
+ * Performs automatic segmentation of intracranial region.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
+ */
 function v_3d_intracranial_execute(
     params: V3dIntracranialParameters,
     execution: Execution,
 ): V3dIntracranialOutputs {
-    /**
-     * Performs automatic segmentation of intracranial region.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_intracranial_cargs(params, execution)
     const ret = v_3d_intracranial_outputs(params, execution)
@@ -229,6 +229,26 @@ function v_3d_intracranial_execute(
 }
 
 
+/**
+ * Performs automatic segmentation of intracranial region.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Filename of anat dataset to be segmented
+ * @param prefix Prefix name for file to contain segmented image
+ * @param min_val Minimum voxel intensity limit. Default is internal PDF estimate for lower bound
+ * @param max_val Maximum voxel intensity limit. Default is internal PDF estimate for upper bound
+ * @param min_conn Minimum voxel connectivity to enter. Default is 4
+ * @param max_conn Maximum voxel connectivity to leave. Default is 2
+ * @param no_smooth Suppress spatial smoothing of segmentation mask
+ * @param mask Generate functional image mask (complement). Default is to generate anatomical image
+ * @param quiet Suppress output to screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
+ */
 function v_3d_intracranial(
     infile: InputPathType,
     prefix: string,
@@ -241,26 +261,6 @@ function v_3d_intracranial(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dIntracranialOutputs {
-    /**
-     * Performs automatic segmentation of intracranial region.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Filename of anat dataset to be segmented
-     * @param prefix Prefix name for file to contain segmented image
-     * @param min_val Minimum voxel intensity limit. Default is internal PDF estimate for lower bound
-     * @param max_val Maximum voxel intensity limit. Default is internal PDF estimate for upper bound
-     * @param min_conn Minimum voxel connectivity to enter. Default is 4
-     * @param max_conn Maximum voxel connectivity to leave. Default is 2
-     * @param no_smooth Suppress spatial smoothing of segmentation mask
-     * @param mask Generate functional image mask (complement). Default is to generate anatomical image
-     * @param quiet Suppress output to screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_INTRACRANIAL_METADATA);
     const params = v_3d_intracranial_params(infile, prefix, min_val, max_val, min_conn, max_conn, no_smooth, mask, quiet)
@@ -273,5 +273,8 @@ export {
       V3dIntracranialParameters,
       V_3D_INTRACRANIAL_METADATA,
       v_3d_intracranial,
+      v_3d_intracranial_cargs,
+      v_3d_intracranial_execute,
+      v_3d_intracranial_outputs,
       v_3d_intracranial_params,
 };

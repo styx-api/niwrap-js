@@ -12,42 +12,42 @@ const MRI_COMPUTE_DISTANCES_METADATA: Metadata = {
 
 
 interface MriComputeDistancesParameters {
-    "__STYXTYPE__": "mri_compute_distances";
+    "@type": "freesurfer.mri_compute_distances";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_distances": mri_compute_distances_cargs,
+        "freesurfer.mri_compute_distances": mri_compute_distances_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_distances": mri_compute_distances_outputs,
+        "freesurfer.mri_compute_distances": mri_compute_distances_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriComputeDistancesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Input source image file
+ * @param target Input target image file
+ * @param output_xform Output transformation file containing the computed distances
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_distances_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
 ): MriComputeDistancesParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Input source image file
-     * @param target Input target image file
-     * @param output_xform Output transformation file containing the computed distances
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_distances" as const,
+        "@type": "freesurfer.mri_compute_distances" as const,
         "source": source,
         "target": target,
         "output_xform": output_xform,
@@ -94,18 +94,18 @@ function mri_compute_distances_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_distances_cargs(
     params: MriComputeDistancesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_distances");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -115,18 +115,18 @@ function mri_compute_distances_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_distances_outputs(
     params: MriComputeDistancesParameters,
     execution: Execution,
 ): MriComputeDistancesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeDistancesOutputs = {
         root: execution.outputFile("."),
         output_xform_file: execution.outputFile([(params["output_xform"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_compute_distances_outputs(
 }
 
 
+/**
+ * A tool to compute distances between source and target images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
+ */
 function mri_compute_distances_execute(
     params: MriComputeDistancesParameters,
     execution: Execution,
 ): MriComputeDistancesOutputs {
-    /**
-     * A tool to compute distances between source and target images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_distances_cargs(params, execution)
     const ret = mri_compute_distances_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_compute_distances_execute(
 }
 
 
+/**
+ * A tool to compute distances between source and target images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Input source image file
+ * @param target Input target image file
+ * @param output_xform Output transformation file containing the computed distances
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
+ */
 function mri_compute_distances(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
     runner: Runner | null = null,
 ): MriComputeDistancesOutputs {
-    /**
-     * A tool to compute distances between source and target images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Input source image file
-     * @param target Input target image file
-     * @param output_xform Output transformation file containing the computed distances
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_DISTANCES_METADATA);
     const params = mri_compute_distances_params(source, target, output_xform)
@@ -191,5 +191,8 @@ export {
       MriComputeDistancesOutputs,
       MriComputeDistancesParameters,
       mri_compute_distances,
+      mri_compute_distances_cargs,
+      mri_compute_distances_execute,
+      mri_compute_distances_outputs,
       mri_compute_distances_params,
 };

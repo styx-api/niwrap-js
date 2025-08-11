@@ -12,7 +12,7 @@ const MRI_GLMFIT_METADATA: Metadata = {
 
 
 interface MriGlmfitParameters {
-    "__STYXTYPE__": "mri_glmfit";
+    "@type": "freesurfer.mri_glmfit";
     "glmdir"?: string | null | undefined;
     "y_input": InputPathType;
     "table_input"?: InputPathType | null | undefined;
@@ -88,35 +88,35 @@ interface MriGlmfitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_glmfit": mri_glmfit_cargs,
+        "freesurfer.mri_glmfit": mri_glmfit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_glmfit": mri_glmfit_outputs,
+        "freesurfer.mri_glmfit": mri_glmfit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -175,6 +175,84 @@ interface MriGlmfitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param y_input Path to input file where each frame is a separate input. Accepts volume or surface-based formats.
+ * @param glmdir Directory where output will be saved.
+ * @param table_input Use text table as input instead of --y. Table should be of form produced by asegstats2table or aparcstats2table.
+ * @param fsgd Specify the global design matrix with a FreeSurfer Group Descriptor File (FSGDF).
+ * @param design_matrix Explicitly specify the design matrix. Can be in simple text or in matlab4 format.
+ * @param contrast_matrix Specify one or more contrasts to test. File should be ASCII text with the contrast matrix.
+ * @param osgm_flag Construct X and C as a one-sample group mean.
+ * @param no_contrasts_ok_flag Do not fail if no contrasts are specified.
+ * @param dti_params Do DTI analysis using bvals and bvecs.
+ * @param dti_matrix Do DTI analysis using provided matrix.
+ * @param pvr Per-voxel (or vertex) regressors.
+ * @param selfreg Create a 'self-regressor' from the input data based on the waveform at index col row slice.
+ * @param wls Perform weighted least squares (WLS) random effects analysis instead of ordinary least squares (OLS) using yffxvar.
+ * @param yffxvar For fixed effects analysis.
+ * @param ffxdof Degrees of Freedom (DOF) for fixed effects analysis.
+ * @param ffxdofdat Text file with DOF for fixed effects analysis.
+ * @param weight Perform weighted LMS using per-voxel weights from the weightfile.
+ * @param weight_inv_flag Invert weights.
+ * @param weight_sqrt_flag Square root of (inverted) weights.
+ * @param fwhm Smooth input with a Gaussian kernel, specified in mm.
+ * @param var_fwhm Smooth residual variance map with a Gaussian kernel, specified in mm.
+ * @param no_mask_smooth_flag Do not mask when smoothing.
+ * @param no_est_fwhm_flag Turn off FWHM output estimation.
+ * @param mask Binary mask file for analysis.
+ * @param label Use label as mask for surface data.
+ * @param no_mask_flag Do NOT use a mask, same as --no-cortex.
+ * @param no_cortex_flag Do NOT use subjects ?h.cortex.label as --label.
+ * @param mask_inv_flag Invert mask for analysis.
+ * @param prune_flag Remove voxels that do not have a non-zero value at each frame.
+ * @param no_prune_flag Do not prune zero-value voxels.
+ * @param logy_flag Compute natural log of y prior to analysis.
+ * @param no_logy_flag Do not compute natural log of y prior to analysis.
+ * @param rm_spatial_mean_flag Subtract the (masked) mean from each frame.
+ * @param yhat_save_flag Save signal estimate (yhat).
+ * @param eres_save_flag Save residual error (eres).
+ * @param eres_scm_flag Save residual error spatial correlation matrix (eres.scm).
+ * @param save_fwhm_map_flag Save voxel-wise map of FWHM estimates.
+ * @param y_out Save input after any pre-processing.
+ * @param surface Specify that the input has a surface geometry from the hemisphere of the given FreeSurfer subject. Required for surface data operations.
+ * @param skew_flag Compute skew and p-value for skew.
+ * @param kurtosis_flag Compute kurtosis and p-value for kurtosis.
+ * @param sim_params Simulate data for statistical testing. Specify nulltype, number of simulations, threshold and csd basename.
+ * @param sim_sign Specify sign for simulation: abs, pos, or neg.
+ * @param uniform_params Use uniform distribution for mc-full, specify min and max.
+ * @param permute_input_flag Permute input for testing purposes (not related to simulation).
+ * @param pca_flag Perform PCA/SVD analysis on the residual.
+ * @param tar1_flag Compute and save temporal AR1 of residual.
+ * @param save_yhat_flag Flag to save the signal estimate.
+ * @param save_cond_flag Flag to save design matrix condition at each voxel.
+ * @param voxdump Save GLM data for a single voxel at the specified col, row, slice.
+ * @param seed Use seed for random number generation.
+ * @param synth_flag Replace input data with Gaussian noise for testing.
+ * @param resynthtest_it Test GLM by resynthsis with the number of iterations specified.
+ * @param profile_it Test speed with specified number of iterations.
+ * @param mrtm1_params Perform MRTM1 kinetic modeling with specified reference tissue activity and time in seconds.
+ * @param mrtm2_params Perform MRTM2 kinetic modeling with specified parameters.
+ * @param logan_params Perform Logan kinetic modeling with specified parameters.
+ * @param bp_clip_neg_flag Set negative BP voxels to 0.
+ * @param bp_clip_max Set BP voxels above max to max.
+ * @param perm_force_flag Force permutation test, even when design matrix is not orthogonal.
+ * @param diag_level Set diagnostic level.
+ * @param diag_cluster_flag Save significant volume and exit from first simulation loop.
+ * @param debug_flag Turn on debugging mode.
+ * @param checkopts_flag Check options and exit without executing.
+ * @param help_flag Display help information.
+ * @param version_flag Print out version and exit.
+ * @param no_fix_vertex_area_flag Turn off fixing of vertex area (backward compatibility).
+ * @param allowsubjrep_flag Allow subject names to repeat in the fsgd file.
+ * @param allow_zero_dof_flag Allow analyses with zero degrees of freedom.
+ * @param illcond_flag Allow ill-conditioned design matrices.
+ * @param sim_done_file Create done file when simulation finishes.
+ * @param no_sig_double_flag Compute sig = -log10(p) from float p value, not double.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_glmfit_params(
     y_input: InputPathType,
     glmdir: string | null = null,
@@ -249,86 +327,8 @@ function mri_glmfit_params(
     sim_done_file: InputPathType | null = null,
     no_sig_double_flag: boolean = false,
 ): MriGlmfitParameters {
-    /**
-     * Build parameters.
-    
-     * @param y_input Path to input file where each frame is a separate input. Accepts volume or surface-based formats.
-     * @param glmdir Directory where output will be saved.
-     * @param table_input Use text table as input instead of --y. Table should be of form produced by asegstats2table or aparcstats2table.
-     * @param fsgd Specify the global design matrix with a FreeSurfer Group Descriptor File (FSGDF).
-     * @param design_matrix Explicitly specify the design matrix. Can be in simple text or in matlab4 format.
-     * @param contrast_matrix Specify one or more contrasts to test. File should be ASCII text with the contrast matrix.
-     * @param osgm_flag Construct X and C as a one-sample group mean.
-     * @param no_contrasts_ok_flag Do not fail if no contrasts are specified.
-     * @param dti_params Do DTI analysis using bvals and bvecs.
-     * @param dti_matrix Do DTI analysis using provided matrix.
-     * @param pvr Per-voxel (or vertex) regressors.
-     * @param selfreg Create a 'self-regressor' from the input data based on the waveform at index col row slice.
-     * @param wls Perform weighted least squares (WLS) random effects analysis instead of ordinary least squares (OLS) using yffxvar.
-     * @param yffxvar For fixed effects analysis.
-     * @param ffxdof Degrees of Freedom (DOF) for fixed effects analysis.
-     * @param ffxdofdat Text file with DOF for fixed effects analysis.
-     * @param weight Perform weighted LMS using per-voxel weights from the weightfile.
-     * @param weight_inv_flag Invert weights.
-     * @param weight_sqrt_flag Square root of (inverted) weights.
-     * @param fwhm Smooth input with a Gaussian kernel, specified in mm.
-     * @param var_fwhm Smooth residual variance map with a Gaussian kernel, specified in mm.
-     * @param no_mask_smooth_flag Do not mask when smoothing.
-     * @param no_est_fwhm_flag Turn off FWHM output estimation.
-     * @param mask Binary mask file for analysis.
-     * @param label Use label as mask for surface data.
-     * @param no_mask_flag Do NOT use a mask, same as --no-cortex.
-     * @param no_cortex_flag Do NOT use subjects ?h.cortex.label as --label.
-     * @param mask_inv_flag Invert mask for analysis.
-     * @param prune_flag Remove voxels that do not have a non-zero value at each frame.
-     * @param no_prune_flag Do not prune zero-value voxels.
-     * @param logy_flag Compute natural log of y prior to analysis.
-     * @param no_logy_flag Do not compute natural log of y prior to analysis.
-     * @param rm_spatial_mean_flag Subtract the (masked) mean from each frame.
-     * @param yhat_save_flag Save signal estimate (yhat).
-     * @param eres_save_flag Save residual error (eres).
-     * @param eres_scm_flag Save residual error spatial correlation matrix (eres.scm).
-     * @param save_fwhm_map_flag Save voxel-wise map of FWHM estimates.
-     * @param y_out Save input after any pre-processing.
-     * @param surface Specify that the input has a surface geometry from the hemisphere of the given FreeSurfer subject. Required for surface data operations.
-     * @param skew_flag Compute skew and p-value for skew.
-     * @param kurtosis_flag Compute kurtosis and p-value for kurtosis.
-     * @param sim_params Simulate data for statistical testing. Specify nulltype, number of simulations, threshold and csd basename.
-     * @param sim_sign Specify sign for simulation: abs, pos, or neg.
-     * @param uniform_params Use uniform distribution for mc-full, specify min and max.
-     * @param permute_input_flag Permute input for testing purposes (not related to simulation).
-     * @param pca_flag Perform PCA/SVD analysis on the residual.
-     * @param tar1_flag Compute and save temporal AR1 of residual.
-     * @param save_yhat_flag Flag to save the signal estimate.
-     * @param save_cond_flag Flag to save design matrix condition at each voxel.
-     * @param voxdump Save GLM data for a single voxel at the specified col, row, slice.
-     * @param seed Use seed for random number generation.
-     * @param synth_flag Replace input data with Gaussian noise for testing.
-     * @param resynthtest_it Test GLM by resynthsis with the number of iterations specified.
-     * @param profile_it Test speed with specified number of iterations.
-     * @param mrtm1_params Perform MRTM1 kinetic modeling with specified reference tissue activity and time in seconds.
-     * @param mrtm2_params Perform MRTM2 kinetic modeling with specified parameters.
-     * @param logan_params Perform Logan kinetic modeling with specified parameters.
-     * @param bp_clip_neg_flag Set negative BP voxels to 0.
-     * @param bp_clip_max Set BP voxels above max to max.
-     * @param perm_force_flag Force permutation test, even when design matrix is not orthogonal.
-     * @param diag_level Set diagnostic level.
-     * @param diag_cluster_flag Save significant volume and exit from first simulation loop.
-     * @param debug_flag Turn on debugging mode.
-     * @param checkopts_flag Check options and exit without executing.
-     * @param help_flag Display help information.
-     * @param version_flag Print out version and exit.
-     * @param no_fix_vertex_area_flag Turn off fixing of vertex area (backward compatibility).
-     * @param allowsubjrep_flag Allow subject names to repeat in the fsgd file.
-     * @param allow_zero_dof_flag Allow analyses with zero degrees of freedom.
-     * @param illcond_flag Allow ill-conditioned design matrices.
-     * @param sim_done_file Create done file when simulation finishes.
-     * @param no_sig_double_flag Compute sig = -log10(p) from float p value, not double.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_glmfit" as const,
+        "@type": "freesurfer.mri_glmfit" as const,
         "y_input": y_input,
         "osgm_flag": osgm_flag,
         "no_contrasts_ok_flag": no_contrasts_ok_flag,
@@ -472,18 +472,18 @@ function mri_glmfit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_glmfit_cargs(
     params: MriGlmfitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_glmfit");
     if ((params["glmdir"] ?? null) !== null) {
@@ -806,18 +806,18 @@ function mri_glmfit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_glmfit_outputs(
     params: MriGlmfitParameters,
     execution: Execution,
 ): MriGlmfitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGlmfitOutputs = {
         root: execution.outputFile("."),
         regression_coefs: execution.outputFile(["beta.mgh"].join('')),
@@ -835,22 +835,22 @@ function mri_glmfit_outputs(
 }
 
 
+/**
+ * Performs general linear model (GLM) analysis in the volume or the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
+ */
 function mri_glmfit_execute(
     params: MriGlmfitParameters,
     execution: Execution,
 ): MriGlmfitOutputs {
-    /**
-     * Performs general linear model (GLM) analysis in the volume or the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_glmfit_cargs(params, execution)
     const ret = mri_glmfit_outputs(params, execution)
@@ -859,6 +859,89 @@ function mri_glmfit_execute(
 }
 
 
+/**
+ * Performs general linear model (GLM) analysis in the volume or the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param y_input Path to input file where each frame is a separate input. Accepts volume or surface-based formats.
+ * @param glmdir Directory where output will be saved.
+ * @param table_input Use text table as input instead of --y. Table should be of form produced by asegstats2table or aparcstats2table.
+ * @param fsgd Specify the global design matrix with a FreeSurfer Group Descriptor File (FSGDF).
+ * @param design_matrix Explicitly specify the design matrix. Can be in simple text or in matlab4 format.
+ * @param contrast_matrix Specify one or more contrasts to test. File should be ASCII text with the contrast matrix.
+ * @param osgm_flag Construct X and C as a one-sample group mean.
+ * @param no_contrasts_ok_flag Do not fail if no contrasts are specified.
+ * @param dti_params Do DTI analysis using bvals and bvecs.
+ * @param dti_matrix Do DTI analysis using provided matrix.
+ * @param pvr Per-voxel (or vertex) regressors.
+ * @param selfreg Create a 'self-regressor' from the input data based on the waveform at index col row slice.
+ * @param wls Perform weighted least squares (WLS) random effects analysis instead of ordinary least squares (OLS) using yffxvar.
+ * @param yffxvar For fixed effects analysis.
+ * @param ffxdof Degrees of Freedom (DOF) for fixed effects analysis.
+ * @param ffxdofdat Text file with DOF for fixed effects analysis.
+ * @param weight Perform weighted LMS using per-voxel weights from the weightfile.
+ * @param weight_inv_flag Invert weights.
+ * @param weight_sqrt_flag Square root of (inverted) weights.
+ * @param fwhm Smooth input with a Gaussian kernel, specified in mm.
+ * @param var_fwhm Smooth residual variance map with a Gaussian kernel, specified in mm.
+ * @param no_mask_smooth_flag Do not mask when smoothing.
+ * @param no_est_fwhm_flag Turn off FWHM output estimation.
+ * @param mask Binary mask file for analysis.
+ * @param label Use label as mask for surface data.
+ * @param no_mask_flag Do NOT use a mask, same as --no-cortex.
+ * @param no_cortex_flag Do NOT use subjects ?h.cortex.label as --label.
+ * @param mask_inv_flag Invert mask for analysis.
+ * @param prune_flag Remove voxels that do not have a non-zero value at each frame.
+ * @param no_prune_flag Do not prune zero-value voxels.
+ * @param logy_flag Compute natural log of y prior to analysis.
+ * @param no_logy_flag Do not compute natural log of y prior to analysis.
+ * @param rm_spatial_mean_flag Subtract the (masked) mean from each frame.
+ * @param yhat_save_flag Save signal estimate (yhat).
+ * @param eres_save_flag Save residual error (eres).
+ * @param eres_scm_flag Save residual error spatial correlation matrix (eres.scm).
+ * @param save_fwhm_map_flag Save voxel-wise map of FWHM estimates.
+ * @param y_out Save input after any pre-processing.
+ * @param surface Specify that the input has a surface geometry from the hemisphere of the given FreeSurfer subject. Required for surface data operations.
+ * @param skew_flag Compute skew and p-value for skew.
+ * @param kurtosis_flag Compute kurtosis and p-value for kurtosis.
+ * @param sim_params Simulate data for statistical testing. Specify nulltype, number of simulations, threshold and csd basename.
+ * @param sim_sign Specify sign for simulation: abs, pos, or neg.
+ * @param uniform_params Use uniform distribution for mc-full, specify min and max.
+ * @param permute_input_flag Permute input for testing purposes (not related to simulation).
+ * @param pca_flag Perform PCA/SVD analysis on the residual.
+ * @param tar1_flag Compute and save temporal AR1 of residual.
+ * @param save_yhat_flag Flag to save the signal estimate.
+ * @param save_cond_flag Flag to save design matrix condition at each voxel.
+ * @param voxdump Save GLM data for a single voxel at the specified col, row, slice.
+ * @param seed Use seed for random number generation.
+ * @param synth_flag Replace input data with Gaussian noise for testing.
+ * @param resynthtest_it Test GLM by resynthsis with the number of iterations specified.
+ * @param profile_it Test speed with specified number of iterations.
+ * @param mrtm1_params Perform MRTM1 kinetic modeling with specified reference tissue activity and time in seconds.
+ * @param mrtm2_params Perform MRTM2 kinetic modeling with specified parameters.
+ * @param logan_params Perform Logan kinetic modeling with specified parameters.
+ * @param bp_clip_neg_flag Set negative BP voxels to 0.
+ * @param bp_clip_max Set BP voxels above max to max.
+ * @param perm_force_flag Force permutation test, even when design matrix is not orthogonal.
+ * @param diag_level Set diagnostic level.
+ * @param diag_cluster_flag Save significant volume and exit from first simulation loop.
+ * @param debug_flag Turn on debugging mode.
+ * @param checkopts_flag Check options and exit without executing.
+ * @param help_flag Display help information.
+ * @param version_flag Print out version and exit.
+ * @param no_fix_vertex_area_flag Turn off fixing of vertex area (backward compatibility).
+ * @param allowsubjrep_flag Allow subject names to repeat in the fsgd file.
+ * @param allow_zero_dof_flag Allow analyses with zero degrees of freedom.
+ * @param illcond_flag Allow ill-conditioned design matrices.
+ * @param sim_done_file Create done file when simulation finishes.
+ * @param no_sig_double_flag Compute sig = -log10(p) from float p value, not double.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
+ */
 function mri_glmfit(
     y_input: InputPathType,
     glmdir: string | null = null,
@@ -934,89 +1017,6 @@ function mri_glmfit(
     no_sig_double_flag: boolean = false,
     runner: Runner | null = null,
 ): MriGlmfitOutputs {
-    /**
-     * Performs general linear model (GLM) analysis in the volume or the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param y_input Path to input file where each frame is a separate input. Accepts volume or surface-based formats.
-     * @param glmdir Directory where output will be saved.
-     * @param table_input Use text table as input instead of --y. Table should be of form produced by asegstats2table or aparcstats2table.
-     * @param fsgd Specify the global design matrix with a FreeSurfer Group Descriptor File (FSGDF).
-     * @param design_matrix Explicitly specify the design matrix. Can be in simple text or in matlab4 format.
-     * @param contrast_matrix Specify one or more contrasts to test. File should be ASCII text with the contrast matrix.
-     * @param osgm_flag Construct X and C as a one-sample group mean.
-     * @param no_contrasts_ok_flag Do not fail if no contrasts are specified.
-     * @param dti_params Do DTI analysis using bvals and bvecs.
-     * @param dti_matrix Do DTI analysis using provided matrix.
-     * @param pvr Per-voxel (or vertex) regressors.
-     * @param selfreg Create a 'self-regressor' from the input data based on the waveform at index col row slice.
-     * @param wls Perform weighted least squares (WLS) random effects analysis instead of ordinary least squares (OLS) using yffxvar.
-     * @param yffxvar For fixed effects analysis.
-     * @param ffxdof Degrees of Freedom (DOF) for fixed effects analysis.
-     * @param ffxdofdat Text file with DOF for fixed effects analysis.
-     * @param weight Perform weighted LMS using per-voxel weights from the weightfile.
-     * @param weight_inv_flag Invert weights.
-     * @param weight_sqrt_flag Square root of (inverted) weights.
-     * @param fwhm Smooth input with a Gaussian kernel, specified in mm.
-     * @param var_fwhm Smooth residual variance map with a Gaussian kernel, specified in mm.
-     * @param no_mask_smooth_flag Do not mask when smoothing.
-     * @param no_est_fwhm_flag Turn off FWHM output estimation.
-     * @param mask Binary mask file for analysis.
-     * @param label Use label as mask for surface data.
-     * @param no_mask_flag Do NOT use a mask, same as --no-cortex.
-     * @param no_cortex_flag Do NOT use subjects ?h.cortex.label as --label.
-     * @param mask_inv_flag Invert mask for analysis.
-     * @param prune_flag Remove voxels that do not have a non-zero value at each frame.
-     * @param no_prune_flag Do not prune zero-value voxels.
-     * @param logy_flag Compute natural log of y prior to analysis.
-     * @param no_logy_flag Do not compute natural log of y prior to analysis.
-     * @param rm_spatial_mean_flag Subtract the (masked) mean from each frame.
-     * @param yhat_save_flag Save signal estimate (yhat).
-     * @param eres_save_flag Save residual error (eres).
-     * @param eres_scm_flag Save residual error spatial correlation matrix (eres.scm).
-     * @param save_fwhm_map_flag Save voxel-wise map of FWHM estimates.
-     * @param y_out Save input after any pre-processing.
-     * @param surface Specify that the input has a surface geometry from the hemisphere of the given FreeSurfer subject. Required for surface data operations.
-     * @param skew_flag Compute skew and p-value for skew.
-     * @param kurtosis_flag Compute kurtosis and p-value for kurtosis.
-     * @param sim_params Simulate data for statistical testing. Specify nulltype, number of simulations, threshold and csd basename.
-     * @param sim_sign Specify sign for simulation: abs, pos, or neg.
-     * @param uniform_params Use uniform distribution for mc-full, specify min and max.
-     * @param permute_input_flag Permute input for testing purposes (not related to simulation).
-     * @param pca_flag Perform PCA/SVD analysis on the residual.
-     * @param tar1_flag Compute and save temporal AR1 of residual.
-     * @param save_yhat_flag Flag to save the signal estimate.
-     * @param save_cond_flag Flag to save design matrix condition at each voxel.
-     * @param voxdump Save GLM data for a single voxel at the specified col, row, slice.
-     * @param seed Use seed for random number generation.
-     * @param synth_flag Replace input data with Gaussian noise for testing.
-     * @param resynthtest_it Test GLM by resynthsis with the number of iterations specified.
-     * @param profile_it Test speed with specified number of iterations.
-     * @param mrtm1_params Perform MRTM1 kinetic modeling with specified reference tissue activity and time in seconds.
-     * @param mrtm2_params Perform MRTM2 kinetic modeling with specified parameters.
-     * @param logan_params Perform Logan kinetic modeling with specified parameters.
-     * @param bp_clip_neg_flag Set negative BP voxels to 0.
-     * @param bp_clip_max Set BP voxels above max to max.
-     * @param perm_force_flag Force permutation test, even when design matrix is not orthogonal.
-     * @param diag_level Set diagnostic level.
-     * @param diag_cluster_flag Save significant volume and exit from first simulation loop.
-     * @param debug_flag Turn on debugging mode.
-     * @param checkopts_flag Check options and exit without executing.
-     * @param help_flag Display help information.
-     * @param version_flag Print out version and exit.
-     * @param no_fix_vertex_area_flag Turn off fixing of vertex area (backward compatibility).
-     * @param allowsubjrep_flag Allow subject names to repeat in the fsgd file.
-     * @param allow_zero_dof_flag Allow analyses with zero degrees of freedom.
-     * @param illcond_flag Allow ill-conditioned design matrices.
-     * @param sim_done_file Create done file when simulation finishes.
-     * @param no_sig_double_flag Compute sig = -log10(p) from float p value, not double.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GLMFIT_METADATA);
     const params = mri_glmfit_params(y_input, glmdir, table_input, fsgd, design_matrix, contrast_matrix, osgm_flag, no_contrasts_ok_flag, dti_params, dti_matrix, pvr, selfreg, wls, yffxvar, ffxdof, ffxdofdat, weight, weight_inv_flag, weight_sqrt_flag, fwhm, var_fwhm, no_mask_smooth_flag, no_est_fwhm_flag, mask, label, no_mask_flag, no_cortex_flag, mask_inv_flag, prune_flag, no_prune_flag, logy_flag, no_logy_flag, rm_spatial_mean_flag, yhat_save_flag, eres_save_flag, eres_scm_flag, save_fwhm_map_flag, y_out, surface, skew_flag, kurtosis_flag, sim_params, sim_sign, uniform_params, permute_input_flag, pca_flag, tar1_flag, save_yhat_flag, save_cond_flag, voxdump, seed, synth_flag, resynthtest_it, profile_it, mrtm1_params, mrtm2_params, logan_params, bp_clip_neg_flag, bp_clip_max, perm_force_flag, diag_level, diag_cluster_flag, debug_flag, checkopts_flag, help_flag, version_flag, no_fix_vertex_area_flag, allowsubjrep_flag, allow_zero_dof_flag, illcond_flag, sim_done_file, no_sig_double_flag)
@@ -1029,5 +1029,8 @@ export {
       MriGlmfitOutputs,
       MriGlmfitParameters,
       mri_glmfit,
+      mri_glmfit_cargs,
+      mri_glmfit_execute,
+      mri_glmfit_outputs,
       mri_glmfit_params,
 };

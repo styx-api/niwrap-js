@@ -12,7 +12,7 @@ const ANTS_JOINT_FUSION_METADATA: Metadata = {
 
 
 interface AntsJointFusionParameters {
-    "__STYXTYPE__": "antsJointFusion";
+    "@type": "ants.antsJointFusion";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "target_image": Array<InputPathType>;
     "atlas_image": Array<InputPathType>;
@@ -30,35 +30,35 @@ interface AntsJointFusionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsJointFusion": ants_joint_fusion_cargs,
+        "ants.antsJointFusion": ants_joint_fusion_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsJointFusion": ants_joint_fusion_outputs,
+        "ants.antsJointFusion": ants_joint_fusion_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,26 @@ interface AntsJointFusionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param target_image The target image (or multimodal target images) assumed to be aligned to a common image domain.
+ * @param atlas_image The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
+ * @param atlas_segmentation The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
+ * @param output The output is the intensity and/or label fusion image. Additional optional outputs include the label posterior probability images and the atlas voting weight images.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param alpha Regularization term added to matrix Mx for calculating the inverse. Default = 0.1.
+ * @param beta Exponent for mapping intensity difference to the joint error. Default = 2.0.
+ * @param constrain_nonnegative Constrain solution to non-negative weights.
+ * @param patch_radius Patch radius for similarity measures. Default = 2x2x2.
+ * @param patch_metric Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
+ * @param search_radius Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
+ * @param exclusion_image Specify an exclusion region for the given label.
+ * @param mask_image If a mask image is specified, fusion is only performed in the mask region.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_joint_fusion_params(
     target_image: Array<InputPathType>,
     atlas_image: Array<InputPathType>,
@@ -109,28 +129,8 @@ function ants_joint_fusion_params(
     mask_image: InputPathType | null = null,
     verbose: 0 | 1 | null = null,
 ): AntsJointFusionParameters {
-    /**
-     * Build parameters.
-    
-     * @param target_image The target image (or multimodal target images) assumed to be aligned to a common image domain.
-     * @param atlas_image The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
-     * @param atlas_segmentation The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
-     * @param output The output is the intensity and/or label fusion image. Additional optional outputs include the label posterior probability images and the atlas voting weight images.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param alpha Regularization term added to matrix Mx for calculating the inverse. Default = 0.1.
-     * @param beta Exponent for mapping intensity difference to the joint error. Default = 2.0.
-     * @param constrain_nonnegative Constrain solution to non-negative weights.
-     * @param patch_radius Patch radius for similarity measures. Default = 2x2x2.
-     * @param patch_metric Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
-     * @param search_radius Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
-     * @param exclusion_image Specify an exclusion region for the given label.
-     * @param mask_image If a mask image is specified, fusion is only performed in the mask region.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsJointFusion" as const,
+        "@type": "ants.antsJointFusion" as const,
         "target_image": target_image,
         "atlas_image": atlas_image,
         "atlas_segmentation": atlas_segmentation,
@@ -170,18 +170,18 @@ function ants_joint_fusion_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_joint_fusion_cargs(
     params: AntsJointFusionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsJointFusion");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -264,18 +264,18 @@ function ants_joint_fusion_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_joint_fusion_outputs(
     params: AntsJointFusionParameters,
     execution: Execution,
 ): AntsJointFusionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsJointFusionOutputs = {
         root: execution.outputFile("."),
         label_fusion_image: execution.outputFile(["[LABELFUSIONIMAGE]"].join('')),
@@ -287,22 +287,22 @@ function ants_joint_fusion_outputs(
 }
 
 
+/**
+ * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
+ */
 function ants_joint_fusion_execute(
     params: AntsJointFusionParameters,
     execution: Execution,
 ): AntsJointFusionOutputs {
-    /**
-     * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_joint_fusion_cargs(params, execution)
     const ret = ants_joint_fusion_outputs(params, execution)
@@ -311,6 +311,31 @@ function ants_joint_fusion_execute(
 }
 
 
+/**
+ * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param target_image The target image (or multimodal target images) assumed to be aligned to a common image domain.
+ * @param atlas_image The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
+ * @param atlas_segmentation The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
+ * @param output The output is the intensity and/or label fusion image. Additional optional outputs include the label posterior probability images and the atlas voting weight images.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param alpha Regularization term added to matrix Mx for calculating the inverse. Default = 0.1.
+ * @param beta Exponent for mapping intensity difference to the joint error. Default = 2.0.
+ * @param constrain_nonnegative Constrain solution to non-negative weights.
+ * @param patch_radius Patch radius for similarity measures. Default = 2x2x2.
+ * @param patch_metric Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
+ * @param search_radius Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
+ * @param exclusion_image Specify an exclusion region for the given label.
+ * @param mask_image If a mask image is specified, fusion is only performed in the mask region.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
+ */
 function ants_joint_fusion(
     target_image: Array<InputPathType>,
     atlas_image: Array<InputPathType>,
@@ -328,31 +353,6 @@ function ants_joint_fusion(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsJointFusionOutputs {
-    /**
-     * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param target_image The target image (or multimodal target images) assumed to be aligned to a common image domain.
-     * @param atlas_image The atlas image (or multimodal atlas images) assumed to be aligned to a common image domain.
-     * @param atlas_segmentation The atlas segmentation images. For performing label fusion the number of specified segmentations should be identical to the number of atlas image sets.
-     * @param output The output is the intensity and/or label fusion image. Additional optional outputs include the label posterior probability images and the atlas voting weight images.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param alpha Regularization term added to matrix Mx for calculating the inverse. Default = 0.1.
-     * @param beta Exponent for mapping intensity difference to the joint error. Default = 2.0.
-     * @param constrain_nonnegative Constrain solution to non-negative weights.
-     * @param patch_radius Patch radius for similarity measures. Default = 2x2x2.
-     * @param patch_metric Metric to be used in determining the most similar neighborhood patch. Options include Pearson's correlation (PC) and mean squares (MSQ). Default = PC (Pearson correlation).
-     * @param search_radius Search radius for similarity measures. Default = 3x3x3. One can also specify an image where the value at the voxel specifies the isotropic search radius at that voxel.
-     * @param exclusion_image Specify an exclusion region for the given label.
-     * @param mask_image If a mask image is specified, fusion is only performed in the mask region.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_JOINT_FUSION_METADATA);
     const params = ants_joint_fusion_params(target_image, atlas_image, atlas_segmentation, output, image_dimensionality, alpha, beta, constrain_nonnegative, patch_radius, patch_metric, search_radius, exclusion_image, mask_image, verbose)
@@ -365,5 +365,8 @@ export {
       AntsJointFusionOutputs,
       AntsJointFusionParameters,
       ants_joint_fusion,
+      ants_joint_fusion_cargs,
+      ants_joint_fusion_execute,
+      ants_joint_fusion_outputs,
       ants_joint_fusion_params,
 };

@@ -12,42 +12,42 @@ const COMPUTE_VOX2VOX_METADATA: Metadata = {
 
 
 interface ComputeVox2voxParameters {
-    "__STYXTYPE__": "compute_vox2vox";
+    "@type": "freesurfer.compute_vox2vox";
     "source": InputPathType;
     "t4file": InputPathType;
     "target": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "compute_vox2vox": compute_vox2vox_cargs,
+        "freesurfer.compute_vox2vox": compute_vox2vox_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "compute_vox2vox": compute_vox2vox_outputs,
+        "freesurfer.compute_vox2vox": compute_vox2vox_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ComputeVox2voxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Input 4dfp source file.
+ * @param t4file T4 transformation matrix file.
+ * @param target Input 4dfp target file.
+ *
+ * @returns Parameter dictionary
+ */
 function compute_vox2vox_params(
     source: InputPathType,
     t4file: InputPathType,
     target: InputPathType,
 ): ComputeVox2voxParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Input 4dfp source file.
-     * @param t4file T4 transformation matrix file.
-     * @param target Input 4dfp target file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "compute_vox2vox" as const,
+        "@type": "freesurfer.compute_vox2vox" as const,
         "source": source,
         "t4file": t4file,
         "target": target,
@@ -94,18 +94,18 @@ function compute_vox2vox_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function compute_vox2vox_cargs(
     params: ComputeVox2voxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("compute_vox2vox");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -115,18 +115,18 @@ function compute_vox2vox_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function compute_vox2vox_outputs(
     params: ComputeVox2voxParameters,
     execution: Execution,
 ): ComputeVox2voxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ComputeVox2voxOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["<replace_with_output_path_pattern>"].join('')),
@@ -135,22 +135,22 @@ function compute_vox2vox_outputs(
 }
 
 
+/**
+ * Tool for computing voxel-to-voxel transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
+ */
 function compute_vox2vox_execute(
     params: ComputeVox2voxParameters,
     execution: Execution,
 ): ComputeVox2voxOutputs {
-    /**
-     * Tool for computing voxel-to-voxel transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
-     */
     params = execution.params(params)
     const cargs = compute_vox2vox_cargs(params, execution)
     const ret = compute_vox2vox_outputs(params, execution)
@@ -159,26 +159,26 @@ function compute_vox2vox_execute(
 }
 
 
+/**
+ * Tool for computing voxel-to-voxel transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Input 4dfp source file.
+ * @param t4file T4 transformation matrix file.
+ * @param target Input 4dfp target file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
+ */
 function compute_vox2vox(
     source: InputPathType,
     t4file: InputPathType,
     target: InputPathType,
     runner: Runner | null = null,
 ): ComputeVox2voxOutputs {
-    /**
-     * Tool for computing voxel-to-voxel transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Input 4dfp source file.
-     * @param t4file T4 transformation matrix file.
-     * @param target Input 4dfp target file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COMPUTE_VOX2VOX_METADATA);
     const params = compute_vox2vox_params(source, t4file, target)
@@ -191,5 +191,8 @@ export {
       ComputeVox2voxOutputs,
       ComputeVox2voxParameters,
       compute_vox2vox,
+      compute_vox2vox_cargs,
+      compute_vox2vox_execute,
+      compute_vox2vox_outputs,
       compute_vox2vox_params,
 };

@@ -12,42 +12,42 @@ const REGISTER_CSH_METADATA: Metadata = {
 
 
 interface RegisterCshParameters {
-    "__STYXTYPE__": "register.csh";
+    "@type": "freesurfer.register.csh";
     "base_image": InputPathType;
     "new_image": InputPathType;
     "options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "register.csh": register_csh_cargs,
+        "freesurfer.register.csh": register_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "register.csh": register_csh_outputs,
+        "freesurfer.register.csh": register_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface RegisterCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_image The base image for registration
+ * @param new_image The new image to be registered to the base image
+ * @param options Additional options for the register.csh command
+ *
+ * @returns Parameter dictionary
+ */
 function register_csh_params(
     base_image: InputPathType,
     new_image: InputPathType,
     options: string | null = null,
 ): RegisterCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_image The base image for registration
-     * @param new_image The new image to be registered to the base image
-     * @param options Additional options for the register.csh command
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "register.csh" as const,
+        "@type": "freesurfer.register.csh" as const,
         "base_image": base_image,
         "new_image": new_image,
     };
@@ -96,18 +96,18 @@ function register_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function register_csh_cargs(
     params: RegisterCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("register.csh");
     cargs.push(execution.inputFile((params["base_image"] ?? null)));
@@ -119,18 +119,18 @@ function register_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function register_csh_outputs(
     params: RegisterCshParameters,
     execution: Execution,
 ): RegisterCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegisterCshOutputs = {
         root: execution.outputFile("."),
         registered_image: execution.outputFile([path.basename((params["new_image"] ?? null)), "_registered"].join('')),
@@ -139,22 +139,22 @@ function register_csh_outputs(
 }
 
 
+/**
+ * A script for registering MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
+ */
 function register_csh_execute(
     params: RegisterCshParameters,
     execution: Execution,
 ): RegisterCshOutputs {
-    /**
-     * A script for registering MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = register_csh_cargs(params, execution)
     const ret = register_csh_outputs(params, execution)
@@ -163,26 +163,26 @@ function register_csh_execute(
 }
 
 
+/**
+ * A script for registering MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_image The base image for registration
+ * @param new_image The new image to be registered to the base image
+ * @param options Additional options for the register.csh command
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
+ */
 function register_csh(
     base_image: InputPathType,
     new_image: InputPathType,
     options: string | null = null,
     runner: Runner | null = null,
 ): RegisterCshOutputs {
-    /**
-     * A script for registering MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_image The base image for registration
-     * @param new_image The new image to be registered to the base image
-     * @param options Additional options for the register.csh command
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGISTER_CSH_METADATA);
     const params = register_csh_params(base_image, new_image, options)
@@ -195,5 +195,8 @@ export {
       RegisterCshOutputs,
       RegisterCshParameters,
       register_csh,
+      register_csh_cargs,
+      register_csh_execute,
+      register_csh_outputs,
       register_csh_params,
 };

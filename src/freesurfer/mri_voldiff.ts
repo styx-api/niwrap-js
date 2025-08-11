@@ -12,7 +12,7 @@ const MRI_VOLDIFF_METADATA: Metadata = {
 
 
 interface MriVoldiffParameters {
-    "__STYXTYPE__": "mri_voldiff";
+    "@type": "freesurfer.mri_voldiff";
     "volume1": InputPathType;
     "volume2": InputPathType;
     "vox2ras_thresh"?: number | null | undefined;
@@ -25,33 +25,33 @@ interface MriVoldiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_voldiff": mri_voldiff_cargs,
+        "freesurfer.mri_voldiff": mri_voldiff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface MriVoldiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume1 First input volume
+ * @param volume2 Second input volume
+ * @param vox2ras_thresh Vox2RAS threshold value
+ * @param pix_thresh Pixel threshold value
+ * @param allow_precision Allow differences in precision
+ * @param allow_resolution Allow differences in resolution
+ * @param allow_vox2ras Allow differences in Vox2RAS
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_voldiff_params(
     volume1: InputPathType,
     volume2: InputPathType,
@@ -82,23 +97,8 @@ function mri_voldiff_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriVoldiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume1 First input volume
-     * @param volume2 Second input volume
-     * @param vox2ras_thresh Vox2RAS threshold value
-     * @param pix_thresh Pixel threshold value
-     * @param allow_precision Allow differences in precision
-     * @param allow_resolution Allow differences in resolution
-     * @param allow_vox2ras Allow differences in Vox2RAS
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_voldiff" as const,
+        "@type": "freesurfer.mri_voldiff" as const,
         "volume1": volume1,
         "volume2": volume2,
         "allow_precision": allow_precision,
@@ -117,18 +117,18 @@ function mri_voldiff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_voldiff_cargs(
     params: MriVoldiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_voldiff");
     cargs.push(
@@ -170,18 +170,18 @@ function mri_voldiff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_voldiff_outputs(
     params: MriVoldiffParameters,
     execution: Execution,
 ): MriVoldiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVoldiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -189,22 +189,22 @@ function mri_voldiff_outputs(
 }
 
 
+/**
+ * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
+ */
 function mri_voldiff_execute(
     params: MriVoldiffParameters,
     execution: Execution,
 ): MriVoldiffOutputs {
-    /**
-     * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_voldiff_cargs(params, execution)
     const ret = mri_voldiff_outputs(params, execution)
@@ -213,6 +213,26 @@ function mri_voldiff_execute(
 }
 
 
+/**
+ * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume1 First input volume
+ * @param volume2 Second input volume
+ * @param vox2ras_thresh Vox2RAS threshold value
+ * @param pix_thresh Pixel threshold value
+ * @param allow_precision Allow differences in precision
+ * @param allow_resolution Allow differences in resolution
+ * @param allow_vox2ras Allow differences in Vox2RAS
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
+ */
 function mri_voldiff(
     volume1: InputPathType,
     volume2: InputPathType,
@@ -225,26 +245,6 @@ function mri_voldiff(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriVoldiffOutputs {
-    /**
-     * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume1 First input volume
-     * @param volume2 Second input volume
-     * @param vox2ras_thresh Vox2RAS threshold value
-     * @param pix_thresh Pixel threshold value
-     * @param allow_precision Allow differences in precision
-     * @param allow_resolution Allow differences in resolution
-     * @param allow_vox2ras Allow differences in Vox2RAS
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOLDIFF_METADATA);
     const params = mri_voldiff_params(volume1, volume2, vox2ras_thresh, pix_thresh, allow_precision, allow_resolution, allow_vox2ras, debug, checkopts)
@@ -257,5 +257,8 @@ export {
       MriVoldiffOutputs,
       MriVoldiffParameters,
       mri_voldiff,
+      mri_voldiff_cargs,
+      mri_voldiff_execute,
+      mri_voldiff_outputs,
       mri_voldiff_params,
 };

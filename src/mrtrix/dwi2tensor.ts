@@ -12,21 +12,21 @@ const DWI2TENSOR_METADATA: Metadata = {
 
 
 interface Dwi2tensorFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwi2tensor.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface Dwi2tensorConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dwi2tensor.config";
     "key": string;
     "value": string;
 }
 
 
 interface Dwi2tensorParameters {
-    "__STYXTYPE__": "dwi2tensor";
+    "@type": "mrtrix.dwi2tensor";
     "ols": boolean;
     "mask"?: InputPathType | null | undefined;
     "b0"?: string | null | undefined;
@@ -48,56 +48,56 @@ interface Dwi2tensorParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwi2tensor": dwi2tensor_cargs,
-        "fslgrad": dwi2tensor_fslgrad_cargs,
-        "config": dwi2tensor_config_cargs,
+        "mrtrix.dwi2tensor": dwi2tensor_cargs,
+        "mrtrix.dwi2tensor.fslgrad": dwi2tensor_fslgrad_cargs,
+        "mrtrix.dwi2tensor.config": dwi2tensor_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwi2tensor": dwi2tensor_outputs,
+        "mrtrix.dwi2tensor": dwi2tensor_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2tensor_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): Dwi2tensorFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwi2tensor.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -105,18 +105,18 @@ function dwi2tensor_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2tensor_fslgrad_cargs(
     params: Dwi2tensorFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -125,20 +125,20 @@ function dwi2tensor_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2tensor_config_params(
     key: string,
     value: string,
 ): Dwi2tensorConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dwi2tensor.config" as const,
         "key": key,
         "value": value,
     };
@@ -146,18 +146,18 @@ function dwi2tensor_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2tensor_config_cargs(
     params: Dwi2tensorConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -195,6 +195,30 @@ interface Dwi2tensorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dwi the input dwi image.
+ * @param dt the output dt image.
+ * @param ols perform initial fit using an ordinary least-squares (OLS) fit (see Description).
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param b0 the output b0 image.
+ * @param dkt the output dkt image.
+ * @param iter number of iterative reweightings for IWLS algorithm (default: 2) (see Description).
+ * @param predicted_signal the predicted dwi image.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2tensor_params(
     dwi: InputPathType,
     dt: string,
@@ -215,32 +239,8 @@ function dwi2tensor_params(
     help: boolean = false,
     version: boolean = false,
 ): Dwi2tensorParameters {
-    /**
-     * Build parameters.
-    
-     * @param dwi the input dwi image.
-     * @param dt the output dt image.
-     * @param ols perform initial fit using an ordinary least-squares (OLS) fit (see Description).
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param b0 the output b0 image.
-     * @param dkt the output dkt image.
-     * @param iter number of iterative reweightings for IWLS algorithm (default: 2) (see Description).
-     * @param predicted_signal the predicted dwi image.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwi2tensor" as const,
+        "@type": "mrtrix.dwi2tensor" as const,
         "ols": ols,
         "info": info,
         "quiet": quiet,
@@ -282,18 +282,18 @@ function dwi2tensor_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2tensor_cargs(
     params: Dwi2tensorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwi2tensor");
     if ((params["ols"] ?? null)) {
@@ -336,7 +336,7 @@ function dwi2tensor_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -357,7 +357,7 @@ function dwi2tensor_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -371,18 +371,18 @@ function dwi2tensor_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2tensor_outputs(
     params: Dwi2tensorParameters,
     execution: Execution,
 ): Dwi2tensorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2tensorOutputs = {
         root: execution.outputFile("."),
         dt: execution.outputFile([(params["dt"] ?? null)].join('')),
@@ -394,47 +394,47 @@ function dwi2tensor_outputs(
 }
 
 
+/**
+ * Diffusion (kurtosis) tensor estimation.
+ *
+ * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:
+ *
+ * * The -ols option will cause the first fitting step to be performed using ordinary least-squares (OLS); that is, all measurements contribute equally to the fit, instead of the default behaviour of weighting based on the empirical signal intensities.
+ *
+ * * The -iter option controls the number of iterations of the IWLS prodedure. If this is set to zero, then the output model parameters will be those resulting from the first fitting step only: either WLS by default, or OLS if the -ols option is used in conjunction with -iter 0.
+ *
+ * The tensor coefficients are stored in the output image as follows:
+ * volumes 0-5: D11, D22, D33, D12, D13, D23
+ *
+ * If diffusion kurtosis is estimated using the -dkt option, these are stored as follows:
+ * volumes 0-2: W1111, W2222, W3333
+ * volumes 3-8: W1112, W1113, W1222, W1333, W2223, W2333
+ * volumes 9-11: W1122, W1133, W2233
+ * volumes 12-14: W1123, W1223, W1233
+ *
+ * References:
+ *
+ * References based on fitting algorithm used:
+ *
+ * * OLS, WLS:
+ * Basser, P.J.; Mattiello, J.; LeBihan, D. Estimation of the effective self-diffusion tensor from the NMR spin echo. J Magn Reson B., 1994, 103, 247â€“254.
+ *
+ * * IWLS:
+ * Veraart, J.; Sijbers, J.; Sunaert, S.; Leemans, A. & Jeurissen, B. Weighted linear least squares estimation of diffusion MRI parameters: strengths, limitations, and pitfalls. NeuroImage, 2013, 81, 335-346.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
+ */
 function dwi2tensor_execute(
     params: Dwi2tensorParameters,
     execution: Execution,
 ): Dwi2tensorOutputs {
-    /**
-     * Diffusion (kurtosis) tensor estimation.
-     * 
-     * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:
-     * 
-     * * The -ols option will cause the first fitting step to be performed using ordinary least-squares (OLS); that is, all measurements contribute equally to the fit, instead of the default behaviour of weighting based on the empirical signal intensities.
-     * 
-     * * The -iter option controls the number of iterations of the IWLS prodedure. If this is set to zero, then the output model parameters will be those resulting from the first fitting step only: either WLS by default, or OLS if the -ols option is used in conjunction with -iter 0.
-     * 
-     * The tensor coefficients are stored in the output image as follows:
-     * volumes 0-5: D11, D22, D33, D12, D13, D23
-     * 
-     * If diffusion kurtosis is estimated using the -dkt option, these are stored as follows:
-     * volumes 0-2: W1111, W2222, W3333
-     * volumes 3-8: W1112, W1113, W1222, W1333, W2223, W2333
-     * volumes 9-11: W1122, W1133, W2233
-     * volumes 12-14: W1123, W1223, W1233
-     * 
-     * References:
-     * 
-     * References based on fitting algorithm used:
-     * 
-     * * OLS, WLS:
-     * Basser, P.J.; Mattiello, J.; LeBihan, D. Estimation of the effective self-diffusion tensor from the NMR spin echo. J Magn Reson B., 1994, 103, 247â€“254.
-     * 
-     * * IWLS:
-     * Veraart, J.; Sijbers, J.; Sunaert, S.; Leemans, A. & Jeurissen, B. Weighted linear least squares estimation of diffusion MRI parameters: strengths, limitations, and pitfalls. NeuroImage, 2013, 81, 335-346.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwi2tensor_cargs(params, execution)
     const ret = dwi2tensor_outputs(params, execution)
@@ -443,6 +443,60 @@ function dwi2tensor_execute(
 }
 
 
+/**
+ * Diffusion (kurtosis) tensor estimation.
+ *
+ * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:
+ *
+ * * The -ols option will cause the first fitting step to be performed using ordinary least-squares (OLS); that is, all measurements contribute equally to the fit, instead of the default behaviour of weighting based on the empirical signal intensities.
+ *
+ * * The -iter option controls the number of iterations of the IWLS prodedure. If this is set to zero, then the output model parameters will be those resulting from the first fitting step only: either WLS by default, or OLS if the -ols option is used in conjunction with -iter 0.
+ *
+ * The tensor coefficients are stored in the output image as follows:
+ * volumes 0-5: D11, D22, D33, D12, D13, D23
+ *
+ * If diffusion kurtosis is estimated using the -dkt option, these are stored as follows:
+ * volumes 0-2: W1111, W2222, W3333
+ * volumes 3-8: W1112, W1113, W1222, W1333, W2223, W2333
+ * volumes 9-11: W1122, W1133, W2233
+ * volumes 12-14: W1123, W1223, W1233
+ *
+ * References:
+ *
+ * References based on fitting algorithm used:
+ *
+ * * OLS, WLS:
+ * Basser, P.J.; Mattiello, J.; LeBihan, D. Estimation of the effective self-diffusion tensor from the NMR spin echo. J Magn Reson B., 1994, 103, 247â€“254.
+ *
+ * * IWLS:
+ * Veraart, J.; Sijbers, J.; Sunaert, S.; Leemans, A. & Jeurissen, B. Weighted linear least squares estimation of diffusion MRI parameters: strengths, limitations, and pitfalls. NeuroImage, 2013, 81, 335-346.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param dwi the input dwi image.
+ * @param dt the output dt image.
+ * @param ols perform initial fit using an ordinary least-squares (OLS) fit (see Description).
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param b0 the output b0 image.
+ * @param dkt the output dkt image.
+ * @param iter number of iterative reweightings for IWLS algorithm (default: 2) (see Description).
+ * @param predicted_signal the predicted dwi image.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
+ */
 function dwi2tensor(
     dwi: InputPathType,
     dt: string,
@@ -464,60 +518,6 @@ function dwi2tensor(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2tensorOutputs {
-    /**
-     * Diffusion (kurtosis) tensor estimation.
-     * 
-     * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:
-     * 
-     * * The -ols option will cause the first fitting step to be performed using ordinary least-squares (OLS); that is, all measurements contribute equally to the fit, instead of the default behaviour of weighting based on the empirical signal intensities.
-     * 
-     * * The -iter option controls the number of iterations of the IWLS prodedure. If this is set to zero, then the output model parameters will be those resulting from the first fitting step only: either WLS by default, or OLS if the -ols option is used in conjunction with -iter 0.
-     * 
-     * The tensor coefficients are stored in the output image as follows:
-     * volumes 0-5: D11, D22, D33, D12, D13, D23
-     * 
-     * If diffusion kurtosis is estimated using the -dkt option, these are stored as follows:
-     * volumes 0-2: W1111, W2222, W3333
-     * volumes 3-8: W1112, W1113, W1222, W1333, W2223, W2333
-     * volumes 9-11: W1122, W1133, W2233
-     * volumes 12-14: W1123, W1223, W1233
-     * 
-     * References:
-     * 
-     * References based on fitting algorithm used:
-     * 
-     * * OLS, WLS:
-     * Basser, P.J.; Mattiello, J.; LeBihan, D. Estimation of the effective self-diffusion tensor from the NMR spin echo. J Magn Reson B., 1994, 103, 247â€“254.
-     * 
-     * * IWLS:
-     * Veraart, J.; Sijbers, J.; Sunaert, S.; Leemans, A. & Jeurissen, B. Weighted linear least squares estimation of diffusion MRI parameters: strengths, limitations, and pitfalls. NeuroImage, 2013, 81, 335-346.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param dwi the input dwi image.
-     * @param dt the output dt image.
-     * @param ols perform initial fit using an ordinary least-squares (OLS) fit (see Description).
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param b0 the output b0 image.
-     * @param dkt the output dkt image.
-     * @param iter number of iterative reweightings for IWLS algorithm (default: 2) (see Description).
-     * @param predicted_signal the predicted dwi image.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWI2TENSOR_METADATA);
     const params = dwi2tensor_params(dwi, dt, ols, mask, b0, dkt, iter, predicted_signal, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
@@ -532,7 +532,12 @@ export {
       Dwi2tensorOutputs,
       Dwi2tensorParameters,
       dwi2tensor,
+      dwi2tensor_cargs,
+      dwi2tensor_config_cargs,
       dwi2tensor_config_params,
+      dwi2tensor_execute,
+      dwi2tensor_fslgrad_cargs,
       dwi2tensor_fslgrad_params,
+      dwi2tensor_outputs,
       dwi2tensor_params,
 };

@@ -12,7 +12,7 @@ const PCTSURFCON_METADATA: Metadata = {
 
 
 interface PctsurfconParameters {
-    "__STYXTYPE__": "pctsurfcon";
+    "@type": "freesurfer.pctsurfcon";
     "subject": string;
     "fsvol"?: string | null | undefined;
     "outbase"?: string | null | undefined;
@@ -29,33 +29,33 @@ interface PctsurfconParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pctsurfcon": pctsurfcon_cargs,
+        "freesurfer.pctsurfcon": pctsurfcon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface PctsurfconOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject FreeSurfer subject name
+ * @param fsvol Use fsvol instead of rawavg
+ * @param outbase Use outbase instead of w-g.pct (?h.w-g.pct.mgh)
+ * @param lh_only Compute left hemisphere only
+ * @param rh_only Compute right hemisphere only
+ * @param gm_proj_frac GM projection fraction (default 0.3)
+ * @param gm_proj_abs GM projection distance (default is to use frac)
+ * @param wm_proj_abs WM projection distance (default is 1 mm)
+ * @param neg Compute G-W instead of W-G
+ * @param no_mask Do not mask out non-cortical regions
+ * @param pial Use pial surface as base to compute gray/CSF contrast
+ * @param tmp Temporary directory (implies --nocleanup)
+ * @param nocleanup Do not delete temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function pctsurfcon_params(
     subject: string,
     fsvol: string | null = null,
@@ -90,27 +109,8 @@ function pctsurfcon_params(
     tmp: string | null = null,
     nocleanup: boolean = false,
 ): PctsurfconParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject FreeSurfer subject name
-     * @param fsvol Use fsvol instead of rawavg
-     * @param outbase Use outbase instead of w-g.pct (?h.w-g.pct.mgh)
-     * @param lh_only Compute left hemisphere only
-     * @param rh_only Compute right hemisphere only
-     * @param gm_proj_frac GM projection fraction (default 0.3)
-     * @param gm_proj_abs GM projection distance (default is to use frac)
-     * @param wm_proj_abs WM projection distance (default is 1 mm)
-     * @param neg Compute G-W instead of W-G
-     * @param no_mask Do not mask out non-cortical regions
-     * @param pial Use pial surface as base to compute gray/CSF contrast
-     * @param tmp Temporary directory (implies --nocleanup)
-     * @param nocleanup Do not delete temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pctsurfcon" as const,
+        "@type": "freesurfer.pctsurfcon" as const,
         "subject": subject,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -141,18 +141,18 @@ function pctsurfcon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pctsurfcon_cargs(
     params: PctsurfconParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pctsurfcon");
     cargs.push(
@@ -217,18 +217,18 @@ function pctsurfcon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pctsurfcon_outputs(
     params: PctsurfconParameters,
     execution: Execution,
 ): PctsurfconOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PctsurfconOutputs = {
         root: execution.outputFile("."),
     };
@@ -236,22 +236,22 @@ function pctsurfcon_outputs(
 }
 
 
+/**
+ * Compute surface-wise gray/white matter contrast.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
+ */
 function pctsurfcon_execute(
     params: PctsurfconParameters,
     execution: Execution,
 ): PctsurfconOutputs {
-    /**
-     * Compute surface-wise gray/white matter contrast.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
-     */
     params = execution.params(params)
     const cargs = pctsurfcon_cargs(params, execution)
     const ret = pctsurfcon_outputs(params, execution)
@@ -260,6 +260,30 @@ function pctsurfcon_execute(
 }
 
 
+/**
+ * Compute surface-wise gray/white matter contrast.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject FreeSurfer subject name
+ * @param fsvol Use fsvol instead of rawavg
+ * @param outbase Use outbase instead of w-g.pct (?h.w-g.pct.mgh)
+ * @param lh_only Compute left hemisphere only
+ * @param rh_only Compute right hemisphere only
+ * @param gm_proj_frac GM projection fraction (default 0.3)
+ * @param gm_proj_abs GM projection distance (default is to use frac)
+ * @param wm_proj_abs WM projection distance (default is 1 mm)
+ * @param neg Compute G-W instead of W-G
+ * @param no_mask Do not mask out non-cortical regions
+ * @param pial Use pial surface as base to compute gray/CSF contrast
+ * @param tmp Temporary directory (implies --nocleanup)
+ * @param nocleanup Do not delete temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
+ */
 function pctsurfcon(
     subject: string,
     fsvol: string | null = null,
@@ -276,30 +300,6 @@ function pctsurfcon(
     nocleanup: boolean = false,
     runner: Runner | null = null,
 ): PctsurfconOutputs {
-    /**
-     * Compute surface-wise gray/white matter contrast.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject FreeSurfer subject name
-     * @param fsvol Use fsvol instead of rawavg
-     * @param outbase Use outbase instead of w-g.pct (?h.w-g.pct.mgh)
-     * @param lh_only Compute left hemisphere only
-     * @param rh_only Compute right hemisphere only
-     * @param gm_proj_frac GM projection fraction (default 0.3)
-     * @param gm_proj_abs GM projection distance (default is to use frac)
-     * @param wm_proj_abs WM projection distance (default is 1 mm)
-     * @param neg Compute G-W instead of W-G
-     * @param no_mask Do not mask out non-cortical regions
-     * @param pial Use pial surface as base to compute gray/CSF contrast
-     * @param tmp Temporary directory (implies --nocleanup)
-     * @param nocleanup Do not delete temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PCTSURFCON_METADATA);
     const params = pctsurfcon_params(subject, fsvol, outbase, lh_only, rh_only, gm_proj_frac, gm_proj_abs, wm_proj_abs, neg, no_mask, pial, tmp, nocleanup)
@@ -312,5 +312,8 @@ export {
       PctsurfconOutputs,
       PctsurfconParameters,
       pctsurfcon,
+      pctsurfcon_cargs,
+      pctsurfcon_execute,
+      pctsurfcon_outputs,
       pctsurfcon_params,
 };

@@ -12,7 +12,7 @@ const WARP2METRIC_METADATA: Metadata = {
 
 
 interface Warp2metricFcParameters {
-    "__STYXTYPE__": "fc";
+    "@type": "mrtrix.warp2metric.fc";
     "template_fixel_directory": InputPathType;
     "output_fixel_directory": string;
     "output_fixel_data": string;
@@ -20,14 +20,14 @@ interface Warp2metricFcParameters {
 
 
 interface Warp2metricConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.warp2metric.config";
     "key": string;
     "value": string;
 }
 
 
 interface Warp2metricParameters {
-    "__STYXTYPE__": "warp2metric";
+    "@type": "mrtrix.warp2metric";
     "fc"?: Warp2metricFcParameters | null | undefined;
     "jmat"?: string | null | undefined;
     "jdet"?: string | null | undefined;
@@ -43,58 +43,58 @@ interface Warp2metricParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "warp2metric": warp2metric_cargs,
-        "fc": warp2metric_fc_cargs,
-        "config": warp2metric_config_cargs,
+        "mrtrix.warp2metric": warp2metric_cargs,
+        "mrtrix.warp2metric.fc": warp2metric_fc_cargs,
+        "mrtrix.warp2metric.config": warp2metric_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "warp2metric": warp2metric_outputs,
+        "mrtrix.warp2metric": warp2metric_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template_fixel_directory use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
+ * @param output_fixel_directory use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
+ * @param output_fixel_data use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
+ *
+ * @returns Parameter dictionary
+ */
 function warp2metric_fc_params(
     template_fixel_directory: InputPathType,
     output_fixel_directory: string,
     output_fixel_data: string,
 ): Warp2metricFcParameters {
-    /**
-     * Build parameters.
-    
-     * @param template_fixel_directory use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
-     * @param output_fixel_directory use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
-     * @param output_fixel_data use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fc" as const,
+        "@type": "mrtrix.warp2metric.fc" as const,
         "template_fixel_directory": template_fixel_directory,
         "output_fixel_directory": output_fixel_directory,
         "output_fixel_data": output_fixel_data,
@@ -103,18 +103,18 @@ function warp2metric_fc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warp2metric_fc_cargs(
     params: Warp2metricFcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fc");
     cargs.push(execution.inputFile((params["template_fixel_directory"] ?? null)));
@@ -124,20 +124,20 @@ function warp2metric_fc_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function warp2metric_config_params(
     key: string,
     value: string,
 ): Warp2metricConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.warp2metric.config" as const,
         "key": key,
         "value": value,
     };
@@ -145,18 +145,18 @@ function warp2metric_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warp2metric_config_cargs(
     params: Warp2metricConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -186,6 +186,24 @@ interface Warp2metricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input deformation field
+ * @param fc use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
+ * @param jmat output a Jacobian matrix image stored in column-major order along the 4th dimension.Note the output jacobian describes the warp gradient w.r.t the scanner space coordinate system
+ * @param jdet output the Jacobian determinant instead of the full matrix
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function warp2metric_params(
     in_: InputPathType,
     fc: Warp2metricFcParameters | null = null,
@@ -200,26 +218,8 @@ function warp2metric_params(
     help: boolean = false,
     version: boolean = false,
 ): Warp2metricParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input deformation field
-     * @param fc use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
-     * @param jmat output a Jacobian matrix image stored in column-major order along the 4th dimension.Note the output jacobian describes the warp gradient w.r.t the scanner space coordinate system
-     * @param jdet output the Jacobian determinant instead of the full matrix
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warp2metric" as const,
+        "@type": "mrtrix.warp2metric" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -247,22 +247,22 @@ function warp2metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warp2metric_cargs(
     params: Warp2metricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("warp2metric");
     if ((params["fc"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fc"] ?? null).__STYXTYPE__)((params["fc"] ?? null), execution));
+        cargs.push(...dynCargs((params["fc"] ?? null)["@type"])((params["fc"] ?? null), execution));
     }
     if ((params["jmat"] ?? null) !== null) {
         cargs.push(
@@ -295,7 +295,7 @@ function warp2metric_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -308,18 +308,18 @@ function warp2metric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function warp2metric_outputs(
     params: Warp2metricParameters,
     execution: Execution,
 ): Warp2metricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Warp2metricOutputs = {
         root: execution.outputFile("."),
         jmat: ((params["jmat"] ?? null) !== null) ? execution.outputFile([(params["jmat"] ?? null)].join('')) : null,
@@ -329,28 +329,28 @@ function warp2metric_outputs(
 }
 
 
+/**
+ * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
+ *
+ *
+ *
+ * References:
+ *
+ * Raffelt, D.; Tournier, JD/; Smith, RE.; Vaughan, DN.; Jackson, G.; Ridgway, GR. Connelly, A.Investigating White Matter Fibre Density and Morphology using Fixel-Based Analysis. Neuroimage, 2017, 144, 58-73, doi: 10.1016/j.neuroimage.2016.09.029.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
+ */
 function warp2metric_execute(
     params: Warp2metricParameters,
     execution: Execution,
 ): Warp2metricOutputs {
-    /**
-     * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Raffelt, D.; Tournier, JD/; Smith, RE.; Vaughan, DN.; Jackson, G.; Ridgway, GR. Connelly, A.Investigating White Matter Fibre Density and Morphology using Fixel-Based Analysis. Neuroimage, 2017, 144, 58-73, doi: 10.1016/j.neuroimage.2016.09.029.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
-     */
     params = execution.params(params)
     const cargs = warp2metric_cargs(params, execution)
     const ret = warp2metric_outputs(params, execution)
@@ -359,6 +359,35 @@ function warp2metric_execute(
 }
 
 
+/**
+ * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
+ *
+ *
+ *
+ * References:
+ *
+ * Raffelt, D.; Tournier, JD/; Smith, RE.; Vaughan, DN.; Jackson, G.; Ridgway, GR. Connelly, A.Investigating White Matter Fibre Density and Morphology using Fixel-Based Analysis. Neuroimage, 2017, 144, 58-73, doi: 10.1016/j.neuroimage.2016.09.029.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input deformation field
+ * @param fc use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
+ * @param jmat output a Jacobian matrix image stored in column-major order along the 4th dimension.Note the output jacobian describes the warp gradient w.r.t the scanner space coordinate system
+ * @param jdet output the Jacobian determinant instead of the full matrix
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
+ */
 function warp2metric(
     in_: InputPathType,
     fc: Warp2metricFcParameters | null = null,
@@ -374,35 +403,6 @@ function warp2metric(
     version: boolean = false,
     runner: Runner | null = null,
 ): Warp2metricOutputs {
-    /**
-     * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Raffelt, D.; Tournier, JD/; Smith, RE.; Vaughan, DN.; Jackson, G.; Ridgway, GR. Connelly, A.Investigating White Matter Fibre Density and Morphology using Fixel-Based Analysis. Neuroimage, 2017, 144, 58-73, doi: 10.1016/j.neuroimage.2016.09.029.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input deformation field
-     * @param fc use an input template fixel image to define fibre orientations and output a fixel image describing the change in fibre cross-section (FC) in the perpendicular plane to the fixel orientation. e.g. warp2metric warp.mif -fc fixel_template_directory output_fixel_directory fc.mif
-     * @param jmat output a Jacobian matrix image stored in column-major order along the 4th dimension.Note the output jacobian describes the warp gradient w.r.t the scanner space coordinate system
-     * @param jdet output the Jacobian determinant instead of the full matrix
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARP2METRIC_METADATA);
     const params = warp2metric_params(in_, fc, jmat, jdet, info, quiet, debug, force, nthreads, config, help, version)
@@ -417,7 +417,12 @@ export {
       Warp2metricOutputs,
       Warp2metricParameters,
       warp2metric,
+      warp2metric_cargs,
+      warp2metric_config_cargs,
       warp2metric_config_params,
+      warp2metric_execute,
+      warp2metric_fc_cargs,
       warp2metric_fc_params,
+      warp2metric_outputs,
       warp2metric_params,
 };

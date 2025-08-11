@@ -12,7 +12,7 @@ const SEG2FILLED_METADATA: Metadata = {
 
 
 interface Seg2filledParameters {
-    "__STYXTYPE__": "seg2filled";
+    "@type": "freesurfer.seg2filled";
     "seg_file": InputPathType;
     "norm_file": InputPathType;
     "output_file": string;
@@ -23,35 +23,35 @@ interface Seg2filledParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "seg2filled": seg2filled_cargs,
+        "freesurfer.seg2filled": seg2filled_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "seg2filled": seg2filled_outputs,
+        "freesurfer.seg2filled": seg2filled_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface Seg2filledOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param seg_file Input aseg-style segmentation file (e.g., seg.mgz)
+ * @param norm_file Normalization file (e.g., norm.mgz)
+ * @param output_file Filled output file (e.g., filled.mgz)
+ * @param ndil Number of iterations for dilation used to speed cavity detection.
+ * @param cavity_flag Simulate a cavity to test the filling operation.
+ * @param surf_name Name for the surface output (creates ?h.surfname).
+ * @param surf_dir Directory to put the surface (default is same as filled).
+ *
+ * @returns Parameter dictionary
+ */
 function seg2filled_params(
     seg_file: InputPathType,
     norm_file: InputPathType,
@@ -83,21 +96,8 @@ function seg2filled_params(
     surf_name: string | null = null,
     surf_dir: string | null = null,
 ): Seg2filledParameters {
-    /**
-     * Build parameters.
-    
-     * @param seg_file Input aseg-style segmentation file (e.g., seg.mgz)
-     * @param norm_file Normalization file (e.g., norm.mgz)
-     * @param output_file Filled output file (e.g., filled.mgz)
-     * @param ndil Number of iterations for dilation used to speed cavity detection.
-     * @param cavity_flag Simulate a cavity to test the filling operation.
-     * @param surf_name Name for the surface output (creates ?h.surfname).
-     * @param surf_dir Directory to put the surface (default is same as filled).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "seg2filled" as const,
+        "@type": "freesurfer.seg2filled" as const,
         "seg_file": seg_file,
         "norm_file": norm_file,
         "output_file": output_file,
@@ -116,18 +116,18 @@ function seg2filled_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function seg2filled_cargs(
     params: Seg2filledParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("seg2filled");
     cargs.push(
@@ -167,18 +167,18 @@ function seg2filled_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function seg2filled_outputs(
     params: Seg2filledParameters,
     execution: Execution,
 ): Seg2filledOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Seg2filledOutputs = {
         root: execution.outputFile("."),
         out_filled_mgz: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -187,22 +187,22 @@ function seg2filled_outputs(
 }
 
 
+/**
+ * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
+ */
 function seg2filled_execute(
     params: Seg2filledParameters,
     execution: Execution,
 ): Seg2filledOutputs {
-    /**
-     * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
-     */
     params = execution.params(params)
     const cargs = seg2filled_cargs(params, execution)
     const ret = seg2filled_outputs(params, execution)
@@ -211,6 +211,24 @@ function seg2filled_execute(
 }
 
 
+/**
+ * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param seg_file Input aseg-style segmentation file (e.g., seg.mgz)
+ * @param norm_file Normalization file (e.g., norm.mgz)
+ * @param output_file Filled output file (e.g., filled.mgz)
+ * @param ndil Number of iterations for dilation used to speed cavity detection.
+ * @param cavity_flag Simulate a cavity to test the filling operation.
+ * @param surf_name Name for the surface output (creates ?h.surfname).
+ * @param surf_dir Directory to put the surface (default is same as filled).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
+ */
 function seg2filled(
     seg_file: InputPathType,
     norm_file: InputPathType,
@@ -221,24 +239,6 @@ function seg2filled(
     surf_dir: string | null = null,
     runner: Runner | null = null,
 ): Seg2filledOutputs {
-    /**
-     * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param seg_file Input aseg-style segmentation file (e.g., seg.mgz)
-     * @param norm_file Normalization file (e.g., norm.mgz)
-     * @param output_file Filled output file (e.g., filled.mgz)
-     * @param ndil Number of iterations for dilation used to speed cavity detection.
-     * @param cavity_flag Simulate a cavity to test the filling operation.
-     * @param surf_name Name for the surface output (creates ?h.surfname).
-     * @param surf_dir Directory to put the surface (default is same as filled).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEG2FILLED_METADATA);
     const params = seg2filled_params(seg_file, norm_file, output_file, ndil, cavity_flag, surf_name, surf_dir)
@@ -251,5 +251,8 @@ export {
       Seg2filledOutputs,
       Seg2filledParameters,
       seg2filled,
+      seg2filled_cargs,
+      seg2filled_execute,
+      seg2filled_outputs,
       seg2filled_params,
 };

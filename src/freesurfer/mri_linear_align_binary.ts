@@ -12,7 +12,7 @@ const MRI_LINEAR_ALIGN_BINARY_METADATA: Metadata = {
 
 
 interface MriLinearAlignBinaryParameters {
-    "__STYXTYPE__": "mri_linear_align_binary";
+    "@type": "freesurfer.mri_linear_align_binary";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
@@ -20,35 +20,35 @@ interface MriLinearAlignBinaryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_linear_align_binary": mri_linear_align_binary_cargs,
+        "freesurfer.mri_linear_align_binary": mri_linear_align_binary_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_linear_align_binary": mri_linear_align_binary_outputs,
+        "freesurfer.mri_linear_align_binary": mri_linear_align_binary_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriLinearAlignBinaryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Source image file
+ * @param target Target image file
+ * @param output_xform Output transformation file
+ * @param target_label Target label, assume source is high-resolution hippocampal labeling
+ *
+ * @returns Parameter dictionary
+ */
 function mri_linear_align_binary_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
     target_label: string | null = null,
 ): MriLinearAlignBinaryParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Source image file
-     * @param target Target image file
-     * @param output_xform Output transformation file
-     * @param target_label Target label, assume source is high-resolution hippocampal labeling
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_linear_align_binary" as const,
+        "@type": "freesurfer.mri_linear_align_binary" as const,
         "source": source,
         "target": target,
         "output_xform": output_xform,
@@ -100,18 +100,18 @@ function mri_linear_align_binary_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_linear_align_binary_cargs(
     params: MriLinearAlignBinaryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_linear_align_binary");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -127,18 +127,18 @@ function mri_linear_align_binary_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_linear_align_binary_outputs(
     params: MriLinearAlignBinaryParameters,
     execution: Execution,
 ): MriLinearAlignBinaryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLinearAlignBinaryOutputs = {
         root: execution.outputFile("."),
         output_xform_file: execution.outputFile([(params["output_xform"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function mri_linear_align_binary_outputs(
 }
 
 
+/**
+ * A tool for linear alignment of MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
+ */
 function mri_linear_align_binary_execute(
     params: MriLinearAlignBinaryParameters,
     execution: Execution,
 ): MriLinearAlignBinaryOutputs {
-    /**
-     * A tool for linear alignment of MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_linear_align_binary_cargs(params, execution)
     const ret = mri_linear_align_binary_outputs(params, execution)
@@ -171,6 +171,21 @@ function mri_linear_align_binary_execute(
 }
 
 
+/**
+ * A tool for linear alignment of MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Source image file
+ * @param target Target image file
+ * @param output_xform Output transformation file
+ * @param target_label Target label, assume source is high-resolution hippocampal labeling
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
+ */
 function mri_linear_align_binary(
     source: InputPathType,
     target: InputPathType,
@@ -178,21 +193,6 @@ function mri_linear_align_binary(
     target_label: string | null = null,
     runner: Runner | null = null,
 ): MriLinearAlignBinaryOutputs {
-    /**
-     * A tool for linear alignment of MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Source image file
-     * @param target Target image file
-     * @param output_xform Output transformation file
-     * @param target_label Target label, assume source is high-resolution hippocampal labeling
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LINEAR_ALIGN_BINARY_METADATA);
     const params = mri_linear_align_binary_params(source, target, output_xform, target_label)
@@ -205,5 +205,8 @@ export {
       MriLinearAlignBinaryOutputs,
       MriLinearAlignBinaryParameters,
       mri_linear_align_binary,
+      mri_linear_align_binary_cargs,
+      mri_linear_align_binary_execute,
+      mri_linear_align_binary_outputs,
       mri_linear_align_binary_params,
 };

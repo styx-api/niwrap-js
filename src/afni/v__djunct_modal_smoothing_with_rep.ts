@@ -12,7 +12,7 @@ const V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA: Metadata = {
 
 
 interface VDjunctModalSmoothingWithRepParameters {
-    "__STYXTYPE__": "@djunct_modal_smoothing_with_rep";
+    "@type": "afni.@djunct_modal_smoothing_with_rep";
     "input_file": InputPathType;
     "output_prefix": string;
     "modesmooth"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface VDjunctModalSmoothingWithRepParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_cargs,
+        "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_outputs,
+        "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface VDjunctModalSmoothingWithRepOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input dataset (assumes < 10^5 subbricks)
+ * @param output_prefix Prefix for output dataset
+ * @param modesmooth Fill in X in: 3dLocalstat -nbhd "SPHERE(-X)" ...
+ * @param help_view Display help in a viewable format
+ * @param help Display help information
+ * @param version Display version information
+ * @param overwrite Overwrite existing output files
+ * @param no_clean Do not clean up intermediate files
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_modal_smoothing_with_rep_params(
     input_file: InputPathType,
     output_prefix: string,
@@ -89,22 +103,8 @@ function v__djunct_modal_smoothing_with_rep_params(
     overwrite: boolean = false,
     no_clean: boolean = false,
 ): VDjunctModalSmoothingWithRepParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input dataset (assumes < 10^5 subbricks)
-     * @param output_prefix Prefix for output dataset
-     * @param modesmooth Fill in X in: 3dLocalstat -nbhd "SPHERE(-X)" ...
-     * @param help_view Display help in a viewable format
-     * @param help Display help information
-     * @param version Display version information
-     * @param overwrite Overwrite existing output files
-     * @param no_clean Do not clean up intermediate files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_modal_smoothing_with_rep" as const,
+        "@type": "afni.@djunct_modal_smoothing_with_rep" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "help_view": help_view,
@@ -120,18 +120,18 @@ function v__djunct_modal_smoothing_with_rep_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_modal_smoothing_with_rep_cargs(
     params: VDjunctModalSmoothingWithRepParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_modal_smoothing_with_rep");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -161,18 +161,18 @@ function v__djunct_modal_smoothing_with_rep_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_modal_smoothing_with_rep_outputs(
     params: VDjunctModalSmoothingWithRepParameters,
     execution: Execution,
 ): VDjunctModalSmoothingWithRepOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctModalSmoothingWithRepOutputs = {
         root: execution.outputFile("."),
         output_file_head: execution.outputFile([(params["output_prefix"] ?? null), "+tlrc.HEAD"].join('')),
@@ -182,22 +182,22 @@ function v__djunct_modal_smoothing_with_rep_outputs(
 }
 
 
+/**
+ * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
+ */
 function v__djunct_modal_smoothing_with_rep_execute(
     params: VDjunctModalSmoothingWithRepParameters,
     execution: Execution,
 ): VDjunctModalSmoothingWithRepOutputs {
-    /**
-     * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_modal_smoothing_with_rep_cargs(params, execution)
     const ret = v__djunct_modal_smoothing_with_rep_outputs(params, execution)
@@ -206,6 +206,25 @@ function v__djunct_modal_smoothing_with_rep_execute(
 }
 
 
+/**
+ * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input dataset (assumes < 10^5 subbricks)
+ * @param output_prefix Prefix for output dataset
+ * @param modesmooth Fill in X in: 3dLocalstat -nbhd "SPHERE(-X)" ...
+ * @param help_view Display help in a viewable format
+ * @param help Display help information
+ * @param version Display version information
+ * @param overwrite Overwrite existing output files
+ * @param no_clean Do not clean up intermediate files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
+ */
 function v__djunct_modal_smoothing_with_rep(
     input_file: InputPathType,
     output_prefix: string,
@@ -217,25 +236,6 @@ function v__djunct_modal_smoothing_with_rep(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctModalSmoothingWithRepOutputs {
-    /**
-     * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input dataset (assumes < 10^5 subbricks)
-     * @param output_prefix Prefix for output dataset
-     * @param modesmooth Fill in X in: 3dLocalstat -nbhd "SPHERE(-X)" ...
-     * @param help_view Display help in a viewable format
-     * @param help Display help information
-     * @param version Display version information
-     * @param overwrite Overwrite existing output files
-     * @param no_clean Do not clean up intermediate files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA);
     const params = v__djunct_modal_smoothing_with_rep_params(input_file, output_prefix, modesmooth, help_view, help, version, overwrite, no_clean)
@@ -248,5 +248,8 @@ export {
       VDjunctModalSmoothingWithRepParameters,
       V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA,
       v__djunct_modal_smoothing_with_rep,
+      v__djunct_modal_smoothing_with_rep_cargs,
+      v__djunct_modal_smoothing_with_rep_execute,
+      v__djunct_modal_smoothing_with_rep_outputs,
       v__djunct_modal_smoothing_with_rep_params,
 };

@@ -12,7 +12,7 @@ const C3D_AFFINE_TOOL_METADATA: Metadata = {
 
 
 interface C3dAffineToolParameters {
-    "__STYXTYPE__": "c3d_affine_tool";
+    "@type": "c3d.c3d_affine_tool";
     "transform_file"?: InputPathType | null | undefined;
     "reference_file"?: InputPathType | null | undefined;
     "source_file"?: InputPathType | null | undefined;
@@ -33,35 +33,35 @@ interface C3dAffineToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "c3d_affine_tool": c3d_affine_tool_cargs,
+        "c3d.c3d_affine_tool": c3d_affine_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "c3d_affine_tool": c3d_affine_tool_outputs,
+        "c3d.c3d_affine_tool": c3d_affine_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,29 @@ interface C3dAffineToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform_file file or string representing the transform.
+ * @param reference_file Set reference (fixed) image - only for -fsl2ras and -ras2fsl.
+ * @param source_file Set source (moving) image - only for -fsl2ras and -ras2fsl.
+ * @param sform_file Read matrix from NifTI sform.
+ * @param invert Invert matrix.
+ * @param determinant Print the determinant.
+ * @param multiply Multiply matrices.
+ * @param sqrt Matrix square root (i.e., Q s.t. A = Q * Q).
+ * @param itk_transform Import ITK transform.
+ * @param irtk_transform Import IRTK .dof format transform.
+ * @param fsl2ras Convert FSL to RAS.
+ * @param ras2fsl Convert RAS to FSL.
+ * @param out_itk_transform Export ITK transform.
+ * @param out_irtk_transform Export IRTK .dof format transform.
+ * @param out_matfile Write output matrix.
+ * @param info Print matrix.
+ * @param info_full Print matrix and more detail about the transform.
+ *
+ * @returns Parameter dictionary
+ */
 function c3d_affine_tool_params(
     transform_file: InputPathType | null = null,
     reference_file: InputPathType | null = null,
@@ -111,31 +134,8 @@ function c3d_affine_tool_params(
     info: boolean = false,
     info_full: boolean = false,
 ): C3dAffineToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform_file file or string representing the transform.
-     * @param reference_file Set reference (fixed) image - only for -fsl2ras and -ras2fsl.
-     * @param source_file Set source (moving) image - only for -fsl2ras and -ras2fsl.
-     * @param sform_file Read matrix from NifTI sform.
-     * @param invert Invert matrix.
-     * @param determinant Print the determinant.
-     * @param multiply Multiply matrices.
-     * @param sqrt Matrix square root (i.e., Q s.t. A = Q * Q).
-     * @param itk_transform Import ITK transform.
-     * @param irtk_transform Import IRTK .dof format transform.
-     * @param fsl2ras Convert FSL to RAS.
-     * @param ras2fsl Convert RAS to FSL.
-     * @param out_itk_transform Export ITK transform.
-     * @param out_irtk_transform Export IRTK .dof format transform.
-     * @param out_matfile Write output matrix.
-     * @param info Print matrix.
-     * @param info_full Print matrix and more detail about the transform.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "c3d_affine_tool" as const,
+        "@type": "c3d.c3d_affine_tool" as const,
         "invert": invert,
         "determinant": determinant,
         "multiply": multiply,
@@ -176,18 +176,18 @@ function c3d_affine_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function c3d_affine_tool_cargs(
     params: C3dAffineToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("c3d_affine_tool");
     if ((params["transform_file"] ?? null) !== null) {
@@ -269,18 +269,18 @@ function c3d_affine_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function c3d_affine_tool_outputs(
     params: C3dAffineToolParameters,
     execution: Execution,
 ): C3dAffineToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: C3dAffineToolOutputs = {
         root: execution.outputFile("."),
         itk_transform_outfile: ((params["out_itk_transform"] ?? null) !== null) ? execution.outputFile([(params["out_itk_transform"] ?? null)].join('')) : null,
@@ -291,22 +291,22 @@ function c3d_affine_tool_outputs(
 }
 
 
+/**
+ * RAS affine transform tool.
+ *
+ * Author: Convert3D Developers
+ *
+ * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
+ */
 function c3d_affine_tool_execute(
     params: C3dAffineToolParameters,
     execution: Execution,
 ): C3dAffineToolOutputs {
-    /**
-     * RAS affine transform tool.
-     * 
-     * Author: Convert3D Developers
-     * 
-     * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = c3d_affine_tool_cargs(params, execution)
     const ret = c3d_affine_tool_outputs(params, execution)
@@ -315,6 +315,34 @@ function c3d_affine_tool_execute(
 }
 
 
+/**
+ * RAS affine transform tool.
+ *
+ * Author: Convert3D Developers
+ *
+ * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
+ *
+ * @param transform_file file or string representing the transform.
+ * @param reference_file Set reference (fixed) image - only for -fsl2ras and -ras2fsl.
+ * @param source_file Set source (moving) image - only for -fsl2ras and -ras2fsl.
+ * @param sform_file Read matrix from NifTI sform.
+ * @param invert Invert matrix.
+ * @param determinant Print the determinant.
+ * @param multiply Multiply matrices.
+ * @param sqrt Matrix square root (i.e., Q s.t. A = Q * Q).
+ * @param itk_transform Import ITK transform.
+ * @param irtk_transform Import IRTK .dof format transform.
+ * @param fsl2ras Convert FSL to RAS.
+ * @param ras2fsl Convert RAS to FSL.
+ * @param out_itk_transform Export ITK transform.
+ * @param out_irtk_transform Export IRTK .dof format transform.
+ * @param out_matfile Write output matrix.
+ * @param info Print matrix.
+ * @param info_full Print matrix and more detail about the transform.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
+ */
 function c3d_affine_tool(
     transform_file: InputPathType | null = null,
     reference_file: InputPathType | null = null,
@@ -335,34 +363,6 @@ function c3d_affine_tool(
     info_full: boolean = false,
     runner: Runner | null = null,
 ): C3dAffineToolOutputs {
-    /**
-     * RAS affine transform tool.
-     * 
-     * Author: Convert3D Developers
-     * 
-     * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
-    
-     * @param transform_file file or string representing the transform.
-     * @param reference_file Set reference (fixed) image - only for -fsl2ras and -ras2fsl.
-     * @param source_file Set source (moving) image - only for -fsl2ras and -ras2fsl.
-     * @param sform_file Read matrix from NifTI sform.
-     * @param invert Invert matrix.
-     * @param determinant Print the determinant.
-     * @param multiply Multiply matrices.
-     * @param sqrt Matrix square root (i.e., Q s.t. A = Q * Q).
-     * @param itk_transform Import ITK transform.
-     * @param irtk_transform Import IRTK .dof format transform.
-     * @param fsl2ras Convert FSL to RAS.
-     * @param ras2fsl Convert RAS to FSL.
-     * @param out_itk_transform Export ITK transform.
-     * @param out_irtk_transform Export IRTK .dof format transform.
-     * @param out_matfile Write output matrix.
-     * @param info Print matrix.
-     * @param info_full Print matrix and more detail about the transform.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(C3D_AFFINE_TOOL_METADATA);
     const params = c3d_affine_tool_params(transform_file, reference_file, source_file, sform_file, invert, determinant, multiply, sqrt, itk_transform, irtk_transform, fsl2ras, ras2fsl, out_itk_transform, out_irtk_transform, out_matfile, info, info_full)
@@ -375,5 +375,8 @@ export {
       C3dAffineToolOutputs,
       C3dAffineToolParameters,
       c3d_affine_tool,
+      c3d_affine_tool_cargs,
+      c3d_affine_tool_execute,
+      c3d_affine_tool_outputs,
       c3d_affine_tool_params,
 };

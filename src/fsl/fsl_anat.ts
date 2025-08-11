@@ -12,7 +12,7 @@ const FSL_ANAT_METADATA: Metadata = {
 
 
 interface FslAnatParameters {
-    "__STYXTYPE__": "fsl_anat";
+    "@type": "fsl.fsl_anat";
     "structural_image"?: InputPathType | null | undefined;
     "existing_anat_dir"?: string | null | undefined;
     "output_dir"?: string | null | undefined;
@@ -34,35 +34,35 @@ interface FslAnatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_anat": fsl_anat_cargs,
+        "fsl.fsl_anat": fsl_anat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_anat": fsl_anat_outputs,
+        "fsl.fsl_anat": fsl_anat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,30 @@ interface FslAnatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structural_image Filename of input image (for one image only)
+ * @param existing_anat_dir Directory name for existing .anat directory where this script will be run in place
+ * @param output_dir Basename of directory for output (default is input image basename followed by .anat)
+ * @param clobber_flag If .anat directory exists (as specified by -o or default from -i) then delete it and make a new one
+ * @param strongbias_flag Used for images with very strong bias fields
+ * @param weakbias_flag Used for images with smoother, more typical, bias fields (default setting)
+ * @param noreorient_flag Turn off step that does reorientation to standard (fslreorient2std)
+ * @param nocrop_flag Turn off step that does automated cropping (robustfov)
+ * @param nobias_flag Turn off steps that do bias field correction (via FAST)
+ * @param noreg_flag Turn off steps that do registration to standard (FLIRT and FNIRT)
+ * @param nononlinreg_flag Turn off step that does non-linear registration (FNIRT)
+ * @param noseg_flag Turn off step that does tissue-type segmentation (FAST)
+ * @param nosubcortseg_flag Turn off step that does sub-cortical segmentation (FIRST)
+ * @param bias_smoothing Specify the value for bias field smoothing (the -l option in FAST)
+ * @param image_type Specify the type of image (choose one of T1 T2 PD - default is T1)
+ * @param nosearch_flag Specify that linear registration uses the -nosearch option (FLIRT)
+ * @param bet_f_param Specify f parameter for BET (only used if not running non-linear reg and also wanting brain extraction done)
+ * @param nocleanup_flag Do not remove intermediate files
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_anat_params(
     structural_image: InputPathType | null = null,
     existing_anat_dir: string | null = null,
@@ -105,32 +129,8 @@ function fsl_anat_params(
     bet_f_param: number | null = null,
     nocleanup_flag: boolean = false,
 ): FslAnatParameters {
-    /**
-     * Build parameters.
-    
-     * @param structural_image Filename of input image (for one image only)
-     * @param existing_anat_dir Directory name for existing .anat directory where this script will be run in place
-     * @param output_dir Basename of directory for output (default is input image basename followed by .anat)
-     * @param clobber_flag If .anat directory exists (as specified by -o or default from -i) then delete it and make a new one
-     * @param strongbias_flag Used for images with very strong bias fields
-     * @param weakbias_flag Used for images with smoother, more typical, bias fields (default setting)
-     * @param noreorient_flag Turn off step that does reorientation to standard (fslreorient2std)
-     * @param nocrop_flag Turn off step that does automated cropping (robustfov)
-     * @param nobias_flag Turn off steps that do bias field correction (via FAST)
-     * @param noreg_flag Turn off steps that do registration to standard (FLIRT and FNIRT)
-     * @param nononlinreg_flag Turn off step that does non-linear registration (FNIRT)
-     * @param noseg_flag Turn off step that does tissue-type segmentation (FAST)
-     * @param nosubcortseg_flag Turn off step that does sub-cortical segmentation (FIRST)
-     * @param bias_smoothing Specify the value for bias field smoothing (the -l option in FAST)
-     * @param image_type Specify the type of image (choose one of T1 T2 PD - default is T1)
-     * @param nosearch_flag Specify that linear registration uses the -nosearch option (FLIRT)
-     * @param bet_f_param Specify f parameter for BET (only used if not running non-linear reg and also wanting brain extraction done)
-     * @param nocleanup_flag Do not remove intermediate files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_anat" as const,
+        "@type": "fsl.fsl_anat" as const,
         "clobber_flag": clobber_flag,
         "strongbias_flag": strongbias_flag,
         "weakbias_flag": weakbias_flag,
@@ -166,18 +166,18 @@ function fsl_anat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_anat_cargs(
     params: FslAnatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_anat");
     if ((params["structural_image"] ?? null) !== null) {
@@ -256,18 +256,18 @@ function fsl_anat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_anat_outputs(
     params: FslAnatParameters,
     execution: Execution,
 ): FslAnatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslAnatOutputs = {
         root: execution.outputFile("."),
         output_anat_dir: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), ".anat"].join('')) : null,
@@ -276,22 +276,22 @@ function fsl_anat_outputs(
 }
 
 
+/**
+ * A wrapper for FSL tools to process anatomical scans.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
+ */
 function fsl_anat_execute(
     params: FslAnatParameters,
     execution: Execution,
 ): FslAnatOutputs {
-    /**
-     * A wrapper for FSL tools to process anatomical scans.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_anat_cargs(params, execution)
     const ret = fsl_anat_outputs(params, execution)
@@ -300,6 +300,35 @@ function fsl_anat_execute(
 }
 
 
+/**
+ * A wrapper for FSL tools to process anatomical scans.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param structural_image Filename of input image (for one image only)
+ * @param existing_anat_dir Directory name for existing .anat directory where this script will be run in place
+ * @param output_dir Basename of directory for output (default is input image basename followed by .anat)
+ * @param clobber_flag If .anat directory exists (as specified by -o or default from -i) then delete it and make a new one
+ * @param strongbias_flag Used for images with very strong bias fields
+ * @param weakbias_flag Used for images with smoother, more typical, bias fields (default setting)
+ * @param noreorient_flag Turn off step that does reorientation to standard (fslreorient2std)
+ * @param nocrop_flag Turn off step that does automated cropping (robustfov)
+ * @param nobias_flag Turn off steps that do bias field correction (via FAST)
+ * @param noreg_flag Turn off steps that do registration to standard (FLIRT and FNIRT)
+ * @param nononlinreg_flag Turn off step that does non-linear registration (FNIRT)
+ * @param noseg_flag Turn off step that does tissue-type segmentation (FAST)
+ * @param nosubcortseg_flag Turn off step that does sub-cortical segmentation (FIRST)
+ * @param bias_smoothing Specify the value for bias field smoothing (the -l option in FAST)
+ * @param image_type Specify the type of image (choose one of T1 T2 PD - default is T1)
+ * @param nosearch_flag Specify that linear registration uses the -nosearch option (FLIRT)
+ * @param bet_f_param Specify f parameter for BET (only used if not running non-linear reg and also wanting brain extraction done)
+ * @param nocleanup_flag Do not remove intermediate files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
+ */
 function fsl_anat(
     structural_image: InputPathType | null = null,
     existing_anat_dir: string | null = null,
@@ -321,35 +350,6 @@ function fsl_anat(
     nocleanup_flag: boolean = false,
     runner: Runner | null = null,
 ): FslAnatOutputs {
-    /**
-     * A wrapper for FSL tools to process anatomical scans.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param structural_image Filename of input image (for one image only)
-     * @param existing_anat_dir Directory name for existing .anat directory where this script will be run in place
-     * @param output_dir Basename of directory for output (default is input image basename followed by .anat)
-     * @param clobber_flag If .anat directory exists (as specified by -o or default from -i) then delete it and make a new one
-     * @param strongbias_flag Used for images with very strong bias fields
-     * @param weakbias_flag Used for images with smoother, more typical, bias fields (default setting)
-     * @param noreorient_flag Turn off step that does reorientation to standard (fslreorient2std)
-     * @param nocrop_flag Turn off step that does automated cropping (robustfov)
-     * @param nobias_flag Turn off steps that do bias field correction (via FAST)
-     * @param noreg_flag Turn off steps that do registration to standard (FLIRT and FNIRT)
-     * @param nononlinreg_flag Turn off step that does non-linear registration (FNIRT)
-     * @param noseg_flag Turn off step that does tissue-type segmentation (FAST)
-     * @param nosubcortseg_flag Turn off step that does sub-cortical segmentation (FIRST)
-     * @param bias_smoothing Specify the value for bias field smoothing (the -l option in FAST)
-     * @param image_type Specify the type of image (choose one of T1 T2 PD - default is T1)
-     * @param nosearch_flag Specify that linear registration uses the -nosearch option (FLIRT)
-     * @param bet_f_param Specify f parameter for BET (only used if not running non-linear reg and also wanting brain extraction done)
-     * @param nocleanup_flag Do not remove intermediate files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_ANAT_METADATA);
     const params = fsl_anat_params(structural_image, existing_anat_dir, output_dir, clobber_flag, strongbias_flag, weakbias_flag, noreorient_flag, nocrop_flag, nobias_flag, noreg_flag, nononlinreg_flag, noseg_flag, nosubcortseg_flag, bias_smoothing, image_type, nosearch_flag, bet_f_param, nocleanup_flag)
@@ -362,5 +362,8 @@ export {
       FslAnatOutputs,
       FslAnatParameters,
       fsl_anat,
+      fsl_anat_cargs,
+      fsl_anat_execute,
+      fsl_anat_outputs,
       fsl_anat_params,
 };

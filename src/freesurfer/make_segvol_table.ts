@@ -12,7 +12,7 @@ const MAKE_SEGVOL_TABLE_METADATA: Metadata = {
 
 
 interface MakeSegvolTableParameters {
-    "__STYXTYPE__": "make-segvol-table";
+    "@type": "freesurfer.make-segvol-table";
     "subjects": Array<string>;
     "subject_file": InputPathType;
     "outfile": string;
@@ -26,35 +26,35 @@ interface MakeSegvolTableParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make-segvol-table": make_segvol_table_cargs,
+        "freesurfer.make-segvol-table": make_segvol_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make-segvol-table": make_segvol_table_outputs,
+        "freesurfer.make-segvol-table": make_segvol_table_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface MakeSegvolTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subject IDs. Each subject should be specified with a separate -s flag.
+ * @param subject_file Path to a file containing a list of subjects.
+ * @param outfile Output file where the table will be saved.
+ * @param idmap File with structure name and id number. Default is FREESURFER_HOME/tkmeditColorsCMA.
+ * @param structure_ids Names of structures to include in the table. Defaults to all structures.
+ * @param segdir Segmentation subdirectory name. Default is 'aseg'.
+ * @param subjects_dir Path to the subjects directory. Default is SUBJECTS_DIR environment variable.
+ * @param umask Set UNIX file permission mask.
+ * @param version Print version and exit.
+ * @param help Display help information.
+ *
+ * @returns Parameter dictionary
+ */
 function make_segvol_table_params(
     subjects: Array<string>,
     subject_file: InputPathType,
@@ -89,24 +105,8 @@ function make_segvol_table_params(
     version: boolean = false,
     help: boolean = false,
 ): MakeSegvolTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subject IDs. Each subject should be specified with a separate -s flag.
-     * @param subject_file Path to a file containing a list of subjects.
-     * @param outfile Output file where the table will be saved.
-     * @param idmap File with structure name and id number. Default is FREESURFER_HOME/tkmeditColorsCMA.
-     * @param structure_ids Names of structures to include in the table. Defaults to all structures.
-     * @param segdir Segmentation subdirectory name. Default is 'aseg'.
-     * @param subjects_dir Path to the subjects directory. Default is SUBJECTS_DIR environment variable.
-     * @param umask Set UNIX file permission mask.
-     * @param version Print version and exit.
-     * @param help Display help information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make-segvol-table" as const,
+        "@type": "freesurfer.make-segvol-table" as const,
         "subjects": subjects,
         "subject_file": subject_file,
         "outfile": outfile,
@@ -132,18 +132,18 @@ function make_segvol_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_segvol_table_cargs(
     params: MakeSegvolTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make-segvol-table");
     cargs.push(
@@ -198,18 +198,18 @@ function make_segvol_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_segvol_table_outputs(
     params: MakeSegvolTableParameters,
     execution: Execution,
 ): MakeSegvolTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeSegvolTableOutputs = {
         root: execution.outputFile("."),
         output_table: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -218,22 +218,22 @@ function make_segvol_table_outputs(
 }
 
 
+/**
+ * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
+ */
 function make_segvol_table_execute(
     params: MakeSegvolTableParameters,
     execution: Execution,
 ): MakeSegvolTableOutputs {
-    /**
-     * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_segvol_table_cargs(params, execution)
     const ret = make_segvol_table_outputs(params, execution)
@@ -242,6 +242,27 @@ function make_segvol_table_execute(
 }
 
 
+/**
+ * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subject IDs. Each subject should be specified with a separate -s flag.
+ * @param subject_file Path to a file containing a list of subjects.
+ * @param outfile Output file where the table will be saved.
+ * @param idmap File with structure name and id number. Default is FREESURFER_HOME/tkmeditColorsCMA.
+ * @param structure_ids Names of structures to include in the table. Defaults to all structures.
+ * @param segdir Segmentation subdirectory name. Default is 'aseg'.
+ * @param subjects_dir Path to the subjects directory. Default is SUBJECTS_DIR environment variable.
+ * @param umask Set UNIX file permission mask.
+ * @param version Print version and exit.
+ * @param help Display help information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
+ */
 function make_segvol_table(
     subjects: Array<string>,
     subject_file: InputPathType,
@@ -255,27 +276,6 @@ function make_segvol_table(
     help: boolean = false,
     runner: Runner | null = null,
 ): MakeSegvolTableOutputs {
-    /**
-     * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subject IDs. Each subject should be specified with a separate -s flag.
-     * @param subject_file Path to a file containing a list of subjects.
-     * @param outfile Output file where the table will be saved.
-     * @param idmap File with structure name and id number. Default is FREESURFER_HOME/tkmeditColorsCMA.
-     * @param structure_ids Names of structures to include in the table. Defaults to all structures.
-     * @param segdir Segmentation subdirectory name. Default is 'aseg'.
-     * @param subjects_dir Path to the subjects directory. Default is SUBJECTS_DIR environment variable.
-     * @param umask Set UNIX file permission mask.
-     * @param version Print version and exit.
-     * @param help Display help information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_SEGVOL_TABLE_METADATA);
     const params = make_segvol_table_params(subjects, subject_file, outfile, idmap, structure_ids, segdir, subjects_dir, umask, version, help)
@@ -288,5 +288,8 @@ export {
       MakeSegvolTableOutputs,
       MakeSegvolTableParameters,
       make_segvol_table,
+      make_segvol_table_cargs,
+      make_segvol_table_execute,
+      make_segvol_table_outputs,
       make_segvol_table_params,
 };

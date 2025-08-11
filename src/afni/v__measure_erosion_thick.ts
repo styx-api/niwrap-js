@@ -12,7 +12,7 @@ const V__MEASURE_EROSION_THICK_METADATA: Metadata = {
 
 
 interface VMeasureErosionThickParameters {
-    "__STYXTYPE__": "@measure_erosion_thick";
+    "@type": "afni.@measure_erosion_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface VMeasureErosionThickParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@measure_erosion_thick": v__measure_erosion_thick_cargs,
+        "afni.@measure_erosion_thick": v__measure_erosion_thick_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@measure_erosion_thick": v__measure_erosion_thick_outputs,
+        "afni.@measure_erosion_thick": v__measure_erosion_thick_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,6 +109,22 @@ interface VMeasureErosionThickOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param maskset Mask dataset for input.
+ * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
+ * @param outdir Output directory. If not specified, erosion_thickdir is used.
+ * @param resample Resample input to mm in millimeters (put a number here). Recommended for most 1mm data.
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 8 mm.
+ * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param keep_temp_files Do not delete the intermediate files (for testing).
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
+ *
+ * @returns Parameter dictionary
+ */
 function v__measure_erosion_thick_params(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -121,24 +137,8 @@ function v__measure_erosion_thick_params(
     keep_temp_files: boolean = false,
     surfsmooth_method: string | null = null,
 ): VMeasureErosionThickParameters {
-    /**
-     * Build parameters.
-    
-     * @param maskset Mask dataset for input.
-     * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
-     * @param outdir Output directory. If not specified, erosion_thickdir is used.
-     * @param resample Resample input to mm in millimeters (put a number here). Recommended for most 1mm data.
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 8 mm.
-     * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param keep_temp_files Do not delete the intermediate files (for testing).
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@measure_erosion_thick" as const,
+        "@type": "afni.@measure_erosion_thick" as const,
         "maskset": maskset,
         "surfset": surfset,
         "keep_temp_files": keep_temp_files,
@@ -168,18 +168,18 @@ function v__measure_erosion_thick_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__measure_erosion_thick_cargs(
     params: VMeasureErosionThickParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@measure_erosion_thick");
     cargs.push(
@@ -239,18 +239,18 @@ function v__measure_erosion_thick_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__measure_erosion_thick_outputs(
     params: VMeasureErosionThickParameters,
     execution: Execution,
 ): VMeasureErosionThickOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMeasureErosionThickOutputs = {
         root: execution.outputFile("."),
         erosion_depth: execution.outputFile(["erosion_depth.nii.gz"].join('')),
@@ -267,22 +267,22 @@ function v__measure_erosion_thick_outputs(
 }
 
 
+/**
+ * Compute thickness of mask using erosion method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
+ */
 function v__measure_erosion_thick_execute(
     params: VMeasureErosionThickParameters,
     execution: Execution,
 ): VMeasureErosionThickOutputs {
-    /**
-     * Compute thickness of mask using erosion method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__measure_erosion_thick_cargs(params, execution)
     const ret = v__measure_erosion_thick_outputs(params, execution)
@@ -291,6 +291,27 @@ function v__measure_erosion_thick_execute(
 }
 
 
+/**
+ * Compute thickness of mask using erosion method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param maskset Mask dataset for input.
+ * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
+ * @param outdir Output directory. If not specified, erosion_thickdir is used.
+ * @param resample Resample input to mm in millimeters (put a number here). Recommended for most 1mm data.
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 8 mm.
+ * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param keep_temp_files Do not delete the intermediate files (for testing).
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
+ */
 function v__measure_erosion_thick(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -304,27 +325,6 @@ function v__measure_erosion_thick(
     surfsmooth_method: string | null = null,
     runner: Runner | null = null,
 ): VMeasureErosionThickOutputs {
-    /**
-     * Compute thickness of mask using erosion method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param maskset Mask dataset for input.
-     * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
-     * @param outdir Output directory. If not specified, erosion_thickdir is used.
-     * @param resample Resample input to mm in millimeters (put a number here). Recommended for most 1mm data.
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 8 mm.
-     * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param keep_temp_files Do not delete the intermediate files (for testing).
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MEASURE_EROSION_THICK_METADATA);
     const params = v__measure_erosion_thick_params(maskset, surfset, outdir, resample, surfsmooth, smoothmm, maxthick, depthsearch, keep_temp_files, surfsmooth_method)
@@ -337,5 +337,8 @@ export {
       VMeasureErosionThickParameters,
       V__MEASURE_EROSION_THICK_METADATA,
       v__measure_erosion_thick,
+      v__measure_erosion_thick_cargs,
+      v__measure_erosion_thick_execute,
+      v__measure_erosion_thick_outputs,
       v__measure_erosion_thick_params,
 };

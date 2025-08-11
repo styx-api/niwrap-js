@@ -12,7 +12,7 @@ const TTOLOGP_METADATA: Metadata = {
 
 
 interface TtologpParameters {
-    "__STYXTYPE__": "ttologp";
+    "@type": "fsl.ttologp";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
     "dof": string;
@@ -21,35 +21,35 @@ interface TtologpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ttologp": ttologp_cargs,
+        "fsl.ttologp": ttologp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ttologp": ttologp_outputs,
+        "fsl.ttologp": ttologp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface TtologpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param varsfile Path to the vars file
+ * @param cbsfile Path to the cbs file
+ * @param dof Degree of freedom
+ * @param outputvol Output volume for logp value (default is logps)
+ * @param help_flag Display help information and exit
+ *
+ * @returns Parameter dictionary
+ */
 function ttologp_params(
     varsfile: InputPathType,
     cbsfile: InputPathType,
@@ -79,19 +90,8 @@ function ttologp_params(
     outputvol: string | null = "logps",
     help_flag: boolean = false,
 ): TtologpParameters {
-    /**
-     * Build parameters.
-    
-     * @param varsfile Path to the vars file
-     * @param cbsfile Path to the cbs file
-     * @param dof Degree of freedom
-     * @param outputvol Output volume for logp value (default is logps)
-     * @param help_flag Display help information and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ttologp" as const,
+        "@type": "fsl.ttologp" as const,
         "varsfile": varsfile,
         "cbsfile": cbsfile,
         "dof": dof,
@@ -104,18 +104,18 @@ function ttologp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ttologp_cargs(
     params: TtologpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ttologp");
     cargs.push(execution.inputFile((params["varsfile"] ?? null)));
@@ -134,18 +134,18 @@ function ttologp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ttologp_outputs(
     params: TtologpParameters,
     execution: Execution,
 ): TtologpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TtologpOutputs = {
         root: execution.outputFile("."),
         output_logpvol: ((params["outputvol"] ?? null) !== null) ? execution.outputFile([(params["outputvol"] ?? null), ".nii.gz"].join('')) : null,
@@ -154,22 +154,22 @@ function ttologp_outputs(
 }
 
 
+/**
+ * Tool for computing logp.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TtologpOutputs`).
+ */
 function ttologp_execute(
     params: TtologpParameters,
     execution: Execution,
 ): TtologpOutputs {
-    /**
-     * Tool for computing logp.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TtologpOutputs`).
-     */
     params = execution.params(params)
     const cargs = ttologp_cargs(params, execution)
     const ret = ttologp_outputs(params, execution)
@@ -178,6 +178,22 @@ function ttologp_execute(
 }
 
 
+/**
+ * Tool for computing logp.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param varsfile Path to the vars file
+ * @param cbsfile Path to the cbs file
+ * @param dof Degree of freedom
+ * @param outputvol Output volume for logp value (default is logps)
+ * @param help_flag Display help information and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TtologpOutputs`).
+ */
 function ttologp(
     varsfile: InputPathType,
     cbsfile: InputPathType,
@@ -186,22 +202,6 @@ function ttologp(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): TtologpOutputs {
-    /**
-     * Tool for computing logp.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param varsfile Path to the vars file
-     * @param cbsfile Path to the cbs file
-     * @param dof Degree of freedom
-     * @param outputvol Output volume for logp value (default is logps)
-     * @param help_flag Display help information and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TtologpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TTOLOGP_METADATA);
     const params = ttologp_params(varsfile, cbsfile, dof, outputvol, help_flag)
@@ -214,5 +214,8 @@ export {
       TtologpOutputs,
       TtologpParameters,
       ttologp,
+      ttologp_cargs,
+      ttologp_execute,
+      ttologp_outputs,
       ttologp_params,
 };

@@ -12,41 +12,41 @@ const PRINT_HEADER_METADATA: Metadata = {
 
 
 interface PrintHeaderParameters {
-    "__STYXTYPE__": "PrintHeader";
+    "@type": "ants.PrintHeader";
     "image": InputPathType;
     "what_information"?: 0 | 1 | 2 | 3 | 4 | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "PrintHeader": print_header_cargs,
+        "ants.PrintHeader": print_header_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "PrintHeader": print_header_outputs,
+        "ants.PrintHeader": print_header_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface PrintHeaderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image The image file to extract header information from. Supported extension: .ext.
+ * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
+ *
+ * @returns Parameter dictionary
+ */
 function print_header_params(
     image: InputPathType,
     what_information: 0 | 1 | 2 | 3 | 4 | null = null,
 ): PrintHeaderParameters {
-    /**
-     * Build parameters.
-    
-     * @param image The image file to extract header information from. Supported extension: .ext.
-     * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "PrintHeader" as const,
+        "@type": "ants.PrintHeader" as const,
         "image": image,
     };
     if (what_information !== null) {
@@ -92,18 +92,18 @@ function print_header_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function print_header_cargs(
     params: PrintHeaderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("PrintHeader");
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -114,18 +114,18 @@ function print_header_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function print_header_outputs(
     params: PrintHeaderParameters,
     execution: Execution,
 ): PrintHeaderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PrintHeaderOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["header_info.txt"].join('')),
@@ -134,22 +134,22 @@ function print_header_outputs(
 }
 
 
+/**
+ * A utility to print header information from an image file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
+ */
 function print_header_execute(
     params: PrintHeaderParameters,
     execution: Execution,
 ): PrintHeaderOutputs {
-    /**
-     * A utility to print header information from an image file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
-     */
     params = execution.params(params)
     const cargs = print_header_cargs(params, execution)
     const ret = print_header_outputs(params, execution)
@@ -158,24 +158,24 @@ function print_header_execute(
 }
 
 
+/**
+ * A utility to print header information from an image file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image The image file to extract header information from. Supported extension: .ext.
+ * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
+ */
 function print_header(
     image: InputPathType,
     what_information: 0 | 1 | 2 | 3 | 4 | null = null,
     runner: Runner | null = null,
 ): PrintHeaderOutputs {
-    /**
-     * A utility to print header information from an image file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image The image file to extract header information from. Supported extension: .ext.
-     * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PRINT_HEADER_METADATA);
     const params = print_header_params(image, what_information)
@@ -188,5 +188,8 @@ export {
       PrintHeaderOutputs,
       PrintHeaderParameters,
       print_header,
+      print_header_cargs,
+      print_header_execute,
+      print_header_outputs,
       print_header_params,
 };

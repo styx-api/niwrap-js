@@ -12,40 +12,40 @@ const V__GET_AFNI_ID_METADATA: Metadata = {
 
 
 interface VGetAfniIdParameters {
-    "__STYXTYPE__": "@GetAfniID";
+    "@type": "afni.@GetAfniID";
     "dset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniID": v__get_afni_id_cargs,
+        "afni.@GetAfniID": v__get_afni_id_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@GetAfniID": v__get_afni_id_outputs,
+        "afni.@GetAfniID": v__get_afni_id_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VGetAfniIdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Dataset for which the unique identifier is to be returned.
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_id_params(
     dset: InputPathType,
 ): VGetAfniIdParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Dataset for which the unique identifier is to be returned.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniID" as const,
+        "@type": "afni.@GetAfniID" as const,
         "dset": dset,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_id_cargs(
     params: VGetAfniIdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniID");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
@@ -105,18 +105,18 @@ function v__get_afni_id_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_id_outputs(
     params: VGetAfniIdParameters,
     execution: Execution,
 ): VGetAfniIdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniIdOutputs = {
         root: execution.outputFile("."),
         unique_id: execution.outputFile(["stdout"].join('')),
@@ -125,22 +125,22 @@ function v__get_afni_id_outputs(
 }
 
 
+/**
+ * Returns the unique identifier of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniIdOutputs`).
+ */
 function v__get_afni_id_execute(
     params: VGetAfniIdParameters,
     execution: Execution,
 ): VGetAfniIdOutputs {
-    /**
-     * Returns the unique identifier of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniIdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_id_cargs(params, execution)
     const ret = v__get_afni_id_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__get_afni_id_execute(
 }
 
 
+/**
+ * Returns the unique identifier of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Dataset for which the unique identifier is to be returned.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniIdOutputs`).
+ */
 function v__get_afni_id(
     dset: InputPathType,
     runner: Runner | null = null,
 ): VGetAfniIdOutputs {
-    /**
-     * Returns the unique identifier of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Dataset for which the unique identifier is to be returned.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniIdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_ID_METADATA);
     const params = v__get_afni_id_params(dset)
@@ -177,5 +177,8 @@ export {
       VGetAfniIdParameters,
       V__GET_AFNI_ID_METADATA,
       v__get_afni_id,
+      v__get_afni_id_cargs,
+      v__get_afni_id_execute,
+      v__get_afni_id_outputs,
       v__get_afni_id_params,
 };

@@ -12,7 +12,7 @@ const ZIP_SCENE_FILE_METADATA: Metadata = {
 
 
 interface ZipSceneFileParameters {
-    "__STYXTYPE__": "zip-scene-file";
+    "@type": "workbench.zip-scene-file";
     "scene_file": string;
     "extract_folder": string;
     "zip_file": string;
@@ -22,33 +22,33 @@ interface ZipSceneFileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "zip-scene-file": zip_scene_file_cargs,
+        "workbench.zip-scene-file": zip_scene_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface ZipSceneFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scene_file the scene file to make the zip file from
+ * @param extract_folder the name of the folder created when the zip file is unzipped
+ * @param zip_file out - the zip file that will be created
+ * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
+ * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ *
+ * @returns Parameter dictionary
+ */
 function zip_scene_file_params(
     scene_file: string,
     extract_folder: string,
@@ -76,20 +88,8 @@ function zip_scene_file_params(
     opt_skip_missing: boolean = false,
     opt_write_scene_file: boolean = false,
 ): ZipSceneFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param scene_file the scene file to make the zip file from
-     * @param extract_folder the name of the folder created when the zip file is unzipped
-     * @param zip_file out - the zip file that will be created
-     * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
-     * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
-     * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "zip-scene-file" as const,
+        "@type": "workbench.zip-scene-file" as const,
         "scene_file": scene_file,
         "extract_folder": extract_folder,
         "zip_file": zip_file,
@@ -103,18 +103,18 @@ function zip_scene_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function zip_scene_file_cargs(
     params: ZipSceneFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-zip-scene-file");
@@ -137,18 +137,18 @@ function zip_scene_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function zip_scene_file_outputs(
     params: ZipSceneFileParameters,
     execution: Execution,
 ): ZipSceneFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ZipSceneFileOutputs = {
         root: execution.outputFile("."),
     };
@@ -156,24 +156,24 @@ function zip_scene_file_outputs(
 }
 
 
+/**
+ * Zip a scene file and its data files.
+ *
+ * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
+ */
 function zip_scene_file_execute(
     params: ZipSceneFileParameters,
     execution: Execution,
 ): ZipSceneFileOutputs {
-    /**
-     * Zip a scene file and its data files.
-     * 
-     * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = zip_scene_file_cargs(params, execution)
     const ret = zip_scene_file_outputs(params, execution)
@@ -182,6 +182,25 @@ function zip_scene_file_execute(
 }
 
 
+/**
+ * Zip a scene file and its data files.
+ *
+ * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param scene_file the scene file to make the zip file from
+ * @param extract_folder the name of the folder created when the zip file is unzipped
+ * @param zip_file out - the zip file that will be created
+ * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
+ * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
+ */
 function zip_scene_file(
     scene_file: string,
     extract_folder: string,
@@ -191,25 +210,6 @@ function zip_scene_file(
     opt_write_scene_file: boolean = false,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
-    /**
-     * Zip a scene file and its data files.
-     * 
-     * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param scene_file the scene file to make the zip file from
-     * @param extract_folder the name of the folder created when the zip file is unzipped
-     * @param zip_file out - the zip file that will be created
-     * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
-     * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
-     * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ZIP_SCENE_FILE_METADATA);
     const params = zip_scene_file_params(scene_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing, opt_write_scene_file)
@@ -222,5 +222,8 @@ export {
       ZipSceneFileOutputs,
       ZipSceneFileParameters,
       zip_scene_file,
+      zip_scene_file_cargs,
+      zip_scene_file_execute,
+      zip_scene_file_outputs,
       zip_scene_file_params,
 };

@@ -12,38 +12,38 @@ const FIXELFILTER_METADATA: Metadata = {
 
 
 interface FixelfilterConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelfilter.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelfilterVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.fixelfilter.VariousString";
     "obj": string;
 }
 
 
 interface FixelfilterVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.fixelfilter.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface FixelfilterVariousString1Parameters {
-    "__STYXTYPE__": "VariousString_1";
+    "@type": "mrtrix.fixelfilter.VariousString";
     "obj": string;
 }
 
 
 interface FixelfilterVariousFile1Parameters {
-    "__STYXTYPE__": "VariousFile_1";
+    "@type": "mrtrix.fixelfilter.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface FixelfilterParameters {
-    "__STYXTYPE__": "fixelfilter";
+    "@type": "mrtrix.fixelfilter";
     "matrix": InputPathType;
     "threshold_value"?: number | null | undefined;
     "threshold_connectivity"?: number | null | undefined;
@@ -64,58 +64,58 @@ interface FixelfilterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelfilter": fixelfilter_cargs,
-        "config": fixelfilter_config_cargs,
-        "VariousString": fixelfilter_various_string_cargs,
-        "VariousFile": fixelfilter_various_file_cargs,
-        "VariousString_1": fixelfilter_various_string_1_cargs,
-        "VariousFile_1": fixelfilter_various_file_1_cargs,
+        "mrtrix.fixelfilter": fixelfilter_cargs,
+        "mrtrix.fixelfilter.config": fixelfilter_config_cargs,
+        "mrtrix.fixelfilter.VariousString": fixelfilter_various_string_cargs,
+        "mrtrix.fixelfilter.VariousFile": fixelfilter_various_file_cargs,
+        "mrtrix.fixelfilter.VariousString": fixelfilter_various_string_1_cargs,
+        "mrtrix.fixelfilter.VariousFile": fixelfilter_various_file_1_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_config_params(
     key: string,
     value: string,
 ): FixelfilterConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelfilter.config" as const,
         "key": key,
         "value": value,
     };
@@ -123,18 +123,18 @@ function fixelfilter_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_config_cargs(
     params: FixelfilterConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -143,144 +143,144 @@ function fixelfilter_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_various_string_params(
     obj: string,
 ): FixelfilterVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.fixelfilter.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_various_string_cargs(
     params: FixelfilterVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_various_file_params(
     obj: InputPathType,
 ): FixelfilterVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.fixelfilter.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_various_file_cargs(
     params: FixelfilterVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_various_string_1_params(
     obj: string,
 ): FixelfilterVariousString1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString_1" as const,
+        "@type": "mrtrix.fixelfilter.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_various_string_1_cargs(
     params: FixelfilterVariousString1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_various_file_1_params(
     obj: InputPathType,
 ): FixelfilterVariousFile1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile_1" as const,
+        "@type": "mrtrix.fixelfilter.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_various_file_1_cargs(
     params: FixelfilterVariousFile1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -300,6 +300,29 @@ interface FixelfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix provide a fixel-fixel connectivity matrix for filtering operations that require it
+ * @param input the input: either a fixel data file, or a fixel directory (see Description)
+ * @param filter the filtering operation to perform; options are: connect, smooth
+ * @param output the output: either a fixel data file, or a fixel directory (see Description)
+ * @param threshold_value specify a threshold for the input fixel data file values (default = 0.5)
+ * @param threshold_connectivity specify a fixel-fixel connectivity threshold for connected-component analysis (default = 0.10000000000000001)
+ * @param fwhm the full-width half-maximum (FWHM) of the spatial component of the smoothing filter (default = 10mm)
+ * @param minweight apply a minimum threshold to smoothing weights (default = 0.01)
+ * @param mask only perform smoothing within a specified binary fixel mask
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelfilter_params(
     matrix: InputPathType,
     input: FixelfilterVariousStringParameters | FixelfilterVariousFileParameters,
@@ -319,31 +342,8 @@ function fixelfilter_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix provide a fixel-fixel connectivity matrix for filtering operations that require it
-     * @param input the input: either a fixel data file, or a fixel directory (see Description)
-     * @param filter the filtering operation to perform; options are: connect, smooth
-     * @param output the output: either a fixel data file, or a fixel directory (see Description)
-     * @param threshold_value specify a threshold for the input fixel data file values (default = 0.5)
-     * @param threshold_connectivity specify a fixel-fixel connectivity threshold for connected-component analysis (default = 0.10000000000000001)
-     * @param fwhm the full-width half-maximum (FWHM) of the spatial component of the smoothing filter (default = 10mm)
-     * @param minweight apply a minimum threshold to smoothing weights (default = 0.01)
-     * @param mask only perform smoothing within a specified binary fixel mask
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelfilter" as const,
+        "@type": "mrtrix.fixelfilter" as const,
         "matrix": matrix,
         "info": info,
         "quiet": quiet,
@@ -380,18 +380,18 @@ function fixelfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelfilter_cargs(
     params: FixelfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelfilter");
     cargs.push(
@@ -447,7 +447,7 @@ function fixelfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -455,25 +455,25 @@ function fixelfilter_cargs(
     if ((params["version"] ?? null)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["input"] ?? null).__STYXTYPE__)((params["input"] ?? null), execution));
+    cargs.push(...dynCargs((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
     cargs.push((params["filter"] ?? null));
-    cargs.push(...dynCargs((params["output"] ?? null).__STYXTYPE__)((params["output"] ?? null), execution));
+    cargs.push(...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelfilter_outputs(
     params: FixelfilterParameters,
     execution: Execution,
 ): FixelfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelfilterOutputs = {
         root: execution.outputFile("."),
     };
@@ -481,28 +481,28 @@ function fixelfilter_outputs(
 }
 
 
+/**
+ * Perform filtering operations on fixel-based data.
+ *
+ * If the first input to the command is a specific fixel data file, then a filtered version of only that file will be generated by the command. Alternatively, if the input is the location of a fixel directory, then the command will create a duplicate of the fixel directory, and apply the specified filter operation to all fixel data files within the directory.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
+ */
 function fixelfilter_execute(
     params: FixelfilterParameters,
     execution: Execution,
 ): FixelfilterOutputs {
-    /**
-     * Perform filtering operations on fixel-based data.
-     * 
-     * If the first input to the command is a specific fixel data file, then a filtered version of only that file will be generated by the command. Alternatively, if the input is the location of a fixel directory, then the command will create a duplicate of the fixel directory, and apply the specified filter operation to all fixel data files within the directory.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelfilter_cargs(params, execution)
     const ret = fixelfilter_outputs(params, execution)
@@ -511,6 +511,40 @@ function fixelfilter_execute(
 }
 
 
+/**
+ * Perform filtering operations on fixel-based data.
+ *
+ * If the first input to the command is a specific fixel data file, then a filtered version of only that file will be generated by the command. Alternatively, if the input is the location of a fixel directory, then the command will create a duplicate of the fixel directory, and apply the specified filter operation to all fixel data files within the directory.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param matrix provide a fixel-fixel connectivity matrix for filtering operations that require it
+ * @param input the input: either a fixel data file, or a fixel directory (see Description)
+ * @param filter the filtering operation to perform; options are: connect, smooth
+ * @param output the output: either a fixel data file, or a fixel directory (see Description)
+ * @param threshold_value specify a threshold for the input fixel data file values (default = 0.5)
+ * @param threshold_connectivity specify a fixel-fixel connectivity threshold for connected-component analysis (default = 0.10000000000000001)
+ * @param fwhm the full-width half-maximum (FWHM) of the spatial component of the smoothing filter (default = 10mm)
+ * @param minweight apply a minimum threshold to smoothing weights (default = 0.01)
+ * @param mask only perform smoothing within a specified binary fixel mask
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
+ */
 function fixelfilter(
     matrix: InputPathType,
     input: FixelfilterVariousStringParameters | FixelfilterVariousFileParameters,
@@ -531,40 +565,6 @@ function fixelfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelfilterOutputs {
-    /**
-     * Perform filtering operations on fixel-based data.
-     * 
-     * If the first input to the command is a specific fixel data file, then a filtered version of only that file will be generated by the command. Alternatively, if the input is the location of a fixel directory, then the command will create a duplicate of the fixel directory, and apply the specified filter operation to all fixel data files within the directory.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param matrix provide a fixel-fixel connectivity matrix for filtering operations that require it
-     * @param input the input: either a fixel data file, or a fixel directory (see Description)
-     * @param filter the filtering operation to perform; options are: connect, smooth
-     * @param output the output: either a fixel data file, or a fixel directory (see Description)
-     * @param threshold_value specify a threshold for the input fixel data file values (default = 0.5)
-     * @param threshold_connectivity specify a fixel-fixel connectivity threshold for connected-component analysis (default = 0.10000000000000001)
-     * @param fwhm the full-width half-maximum (FWHM) of the spatial component of the smoothing filter (default = 10mm)
-     * @param minweight apply a minimum threshold to smoothing weights (default = 0.01)
-     * @param mask only perform smoothing within a specified binary fixel mask
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELFILTER_METADATA);
     const params = fixelfilter_params(matrix, input, filter, output, threshold_value, threshold_connectivity, fwhm, minweight, mask, info, quiet, debug, force, nthreads, config, help, version)
@@ -582,10 +582,18 @@ export {
       FixelfilterVariousString1Parameters,
       FixelfilterVariousStringParameters,
       fixelfilter,
+      fixelfilter_cargs,
+      fixelfilter_config_cargs,
       fixelfilter_config_params,
+      fixelfilter_execute,
+      fixelfilter_outputs,
       fixelfilter_params,
+      fixelfilter_various_file_1_cargs,
       fixelfilter_various_file_1_params,
+      fixelfilter_various_file_cargs,
       fixelfilter_various_file_params,
+      fixelfilter_various_string_1_cargs,
       fixelfilter_various_string_1_params,
+      fixelfilter_various_string_cargs,
       fixelfilter_various_string_params,
 };

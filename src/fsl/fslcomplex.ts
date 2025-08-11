@@ -12,7 +12,7 @@ const FSLCOMPLEX_METADATA: Metadata = {
 
 
 interface FslcomplexParameters {
-    "__STYXTYPE__": "fslcomplex";
+    "@type": "fsl.fslcomplex";
     "input_file": InputPathType;
     "output_file": string;
     "output_type": "-realabs" | "-realphase" | "-realpolar" | "-realcartesian" | "-complex" | "-complexpolar" | "-complexsplit" | "-complexmerge" | "-copyonly";
@@ -21,35 +21,35 @@ interface FslcomplexParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslcomplex": fslcomplex_cargs,
+        "fsl.fslcomplex": fslcomplex_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslcomplex": fslcomplex_outputs,
+        "fsl.fslcomplex": fslcomplex_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface FslcomplexOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume (e.g. complexvol.nii.gz)
+ * @param output_file Output volume (e.g. absvol.nii.gz)
+ * @param output_type Output type (determines the operation to perform)
+ * @param start_vol Start volume (optional)
+ * @param end_vol End volume (optional)
+ *
+ * @returns Parameter dictionary
+ */
 function fslcomplex_params(
     input_file: InputPathType,
     output_file: string,
@@ -79,19 +90,8 @@ function fslcomplex_params(
     start_vol: number | null = null,
     end_vol: number | null = null,
 ): FslcomplexParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume (e.g. complexvol.nii.gz)
-     * @param output_file Output volume (e.g. absvol.nii.gz)
-     * @param output_type Output type (determines the operation to perform)
-     * @param start_vol Start volume (optional)
-     * @param end_vol End volume (optional)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslcomplex" as const,
+        "@type": "fsl.fslcomplex" as const,
         "input_file": input_file,
         "output_file": output_file,
         "output_type": output_type,
@@ -106,18 +106,18 @@ function fslcomplex_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslcomplex_cargs(
     params: FslcomplexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslcomplex");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -133,18 +133,18 @@ function fslcomplex_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslcomplex_outputs(
     params: FslcomplexParameters,
     execution: Execution,
 ): FslcomplexOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslcomplexOutputs = {
         root: execution.outputFile("."),
         result_output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -153,22 +153,22 @@ function fslcomplex_outputs(
 }
 
 
+/**
+ * Tool for manipulating complex-valued MR data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
+ */
 function fslcomplex_execute(
     params: FslcomplexParameters,
     execution: Execution,
 ): FslcomplexOutputs {
-    /**
-     * Tool for manipulating complex-valued MR data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslcomplex_cargs(params, execution)
     const ret = fslcomplex_outputs(params, execution)
@@ -177,6 +177,22 @@ function fslcomplex_execute(
 }
 
 
+/**
+ * Tool for manipulating complex-valued MR data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input volume (e.g. complexvol.nii.gz)
+ * @param output_file Output volume (e.g. absvol.nii.gz)
+ * @param output_type Output type (determines the operation to perform)
+ * @param start_vol Start volume (optional)
+ * @param end_vol End volume (optional)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
+ */
 function fslcomplex(
     input_file: InputPathType,
     output_file: string,
@@ -185,22 +201,6 @@ function fslcomplex(
     end_vol: number | null = null,
     runner: Runner | null = null,
 ): FslcomplexOutputs {
-    /**
-     * Tool for manipulating complex-valued MR data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input volume (e.g. complexvol.nii.gz)
-     * @param output_file Output volume (e.g. absvol.nii.gz)
-     * @param output_type Output type (determines the operation to perform)
-     * @param start_vol Start volume (optional)
-     * @param end_vol End volume (optional)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLCOMPLEX_METADATA);
     const params = fslcomplex_params(input_file, output_file, output_type, start_vol, end_vol)
@@ -213,5 +213,8 @@ export {
       FslcomplexOutputs,
       FslcomplexParameters,
       fslcomplex,
+      fslcomplex_cargs,
+      fslcomplex_execute,
+      fslcomplex_outputs,
       fslcomplex_params,
 };

@@ -12,7 +12,7 @@ const MRI_EXVIVO_NORM_METADATA: Metadata = {
 
 
 interface MriExvivoNormParameters {
-    "__STYXTYPE__": "mri_exvivo_norm";
+    "@type": "freesurfer.mri_exvivo_norm";
     "input_volume": InputPathType;
     "output_volume": string;
     "hemi": string;
@@ -31,35 +31,35 @@ interface MriExvivoNormParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_exvivo_norm": mri_exvivo_norm_cargs,
+        "freesurfer.mri_exvivo_norm": mri_exvivo_norm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_exvivo_norm": mri_exvivo_norm_outputs,
+        "freesurfer.mri_exvivo_norm": mri_exvivo_norm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface MriExvivoNormOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input MRI volume
+ * @param output_volume Output MRI volume
+ * @param hemi Hemi to process
+ * @param prediction_volume Write prediction volume
+ * @param normalized_volume Write normalized volume
+ * @param freeview Bring up freeview to show results
+ * @param normalize_output_mean Normalize output mean to match input mean
+ * @param write_normalization_rounds Write normalization results after each round
+ * @param upper_threshold Specify threshold to erase above
+ * @param bias_field_sigma Sigma to smooth bias field
+ * @param normalization_rounds Number of rounds of iterative normalization to apply
+ * @param multichannel Specify that data has multiple channels
+ * @param model_file Use alternative model file
+ * @param weights_file Alternative weights filename
+ * @param gpu_number GPU number - if not supplied, CPU is used
+ *
+ * @returns Parameter dictionary
+ */
 function mri_exvivo_norm_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -99,29 +120,8 @@ function mri_exvivo_norm_params(
     weights_file: InputPathType | null = null,
     gpu_number: number | null = null,
 ): MriExvivoNormParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input MRI volume
-     * @param output_volume Output MRI volume
-     * @param hemi Hemi to process
-     * @param prediction_volume Write prediction volume
-     * @param normalized_volume Write normalized volume
-     * @param freeview Bring up freeview to show results
-     * @param normalize_output_mean Normalize output mean to match input mean
-     * @param write_normalization_rounds Write normalization results after each round
-     * @param upper_threshold Specify threshold to erase above
-     * @param bias_field_sigma Sigma to smooth bias field
-     * @param normalization_rounds Number of rounds of iterative normalization to apply
-     * @param multichannel Specify that data has multiple channels
-     * @param model_file Use alternative model file
-     * @param weights_file Alternative weights filename
-     * @param gpu_number GPU number - if not supplied, CPU is used
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_exvivo_norm" as const,
+        "@type": "freesurfer.mri_exvivo_norm" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "hemi": hemi,
@@ -158,18 +158,18 @@ function mri_exvivo_norm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_exvivo_norm_cargs(
     params: MriExvivoNormParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_exvivo_norm");
     cargs.push(
@@ -248,18 +248,18 @@ function mri_exvivo_norm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_exvivo_norm_outputs(
     params: MriExvivoNormParameters,
     execution: Execution,
 ): MriExvivoNormOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExvivoNormOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -268,22 +268,22 @@ function mri_exvivo_norm_outputs(
 }
 
 
+/**
+ * MRI Ex Vivo Normalization Tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
+ */
 function mri_exvivo_norm_execute(
     params: MriExvivoNormParameters,
     execution: Execution,
 ): MriExvivoNormOutputs {
-    /**
-     * MRI Ex Vivo Normalization Tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_exvivo_norm_cargs(params, execution)
     const ret = mri_exvivo_norm_outputs(params, execution)
@@ -292,6 +292,32 @@ function mri_exvivo_norm_execute(
 }
 
 
+/**
+ * MRI Ex Vivo Normalization Tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input MRI volume
+ * @param output_volume Output MRI volume
+ * @param hemi Hemi to process
+ * @param prediction_volume Write prediction volume
+ * @param normalized_volume Write normalized volume
+ * @param freeview Bring up freeview to show results
+ * @param normalize_output_mean Normalize output mean to match input mean
+ * @param write_normalization_rounds Write normalization results after each round
+ * @param upper_threshold Specify threshold to erase above
+ * @param bias_field_sigma Sigma to smooth bias field
+ * @param normalization_rounds Number of rounds of iterative normalization to apply
+ * @param multichannel Specify that data has multiple channels
+ * @param model_file Use alternative model file
+ * @param weights_file Alternative weights filename
+ * @param gpu_number GPU number - if not supplied, CPU is used
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
+ */
 function mri_exvivo_norm(
     input_volume: InputPathType,
     output_volume: string,
@@ -310,32 +336,6 @@ function mri_exvivo_norm(
     gpu_number: number | null = null,
     runner: Runner | null = null,
 ): MriExvivoNormOutputs {
-    /**
-     * MRI Ex Vivo Normalization Tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input MRI volume
-     * @param output_volume Output MRI volume
-     * @param hemi Hemi to process
-     * @param prediction_volume Write prediction volume
-     * @param normalized_volume Write normalized volume
-     * @param freeview Bring up freeview to show results
-     * @param normalize_output_mean Normalize output mean to match input mean
-     * @param write_normalization_rounds Write normalization results after each round
-     * @param upper_threshold Specify threshold to erase above
-     * @param bias_field_sigma Sigma to smooth bias field
-     * @param normalization_rounds Number of rounds of iterative normalization to apply
-     * @param multichannel Specify that data has multiple channels
-     * @param model_file Use alternative model file
-     * @param weights_file Alternative weights filename
-     * @param gpu_number GPU number - if not supplied, CPU is used
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXVIVO_NORM_METADATA);
     const params = mri_exvivo_norm_params(input_volume, output_volume, hemi, prediction_volume, normalized_volume, freeview, normalize_output_mean, write_normalization_rounds, upper_threshold, bias_field_sigma, normalization_rounds, multichannel, model_file, weights_file, gpu_number)
@@ -348,5 +348,8 @@ export {
       MriExvivoNormOutputs,
       MriExvivoNormParameters,
       mri_exvivo_norm,
+      mri_exvivo_norm_cargs,
+      mri_exvivo_norm_execute,
+      mri_exvivo_norm_outputs,
       mri_exvivo_norm_params,
 };

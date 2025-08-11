@@ -12,7 +12,7 @@ const MRIS_COMPUTE_LAYER_INTENSITIES_METADATA: Metadata = {
 
 
 interface MrisComputeLayerIntensitiesParameters {
-    "__STYXTYPE__": "mris_compute_layer_intensities";
+    "@type": "freesurfer.mris_compute_layer_intensities";
     "input_intensity_volume": InputPathType;
     "layer_volume_fractions_file": InputPathType;
     "input_surface": InputPathType;
@@ -20,35 +20,35 @@ interface MrisComputeLayerIntensitiesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_layer_intensities": mris_compute_layer_intensities_cargs,
+        "freesurfer.mris_compute_layer_intensities": mris_compute_layer_intensities_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_compute_layer_intensities": mris_compute_layer_intensities_outputs,
+        "freesurfer.mris_compute_layer_intensities": mris_compute_layer_intensities_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisComputeLayerIntensitiesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_intensity_volume The input intensity volume file.
+ * @param layer_volume_fractions_file The layer volume fractions file.
+ * @param input_surface The input surface file for layer intensity computation.
+ * @param output_overlay The output file where the overlay will be saved.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_layer_intensities_params(
     input_intensity_volume: InputPathType,
     layer_volume_fractions_file: InputPathType,
     input_surface: InputPathType,
     output_overlay: string,
 ): MrisComputeLayerIntensitiesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_intensity_volume The input intensity volume file.
-     * @param layer_volume_fractions_file The layer volume fractions file.
-     * @param input_surface The input surface file for layer intensity computation.
-     * @param output_overlay The output file where the overlay will be saved.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_layer_intensities" as const,
+        "@type": "freesurfer.mris_compute_layer_intensities" as const,
         "input_intensity_volume": input_intensity_volume,
         "layer_volume_fractions_file": layer_volume_fractions_file,
         "input_surface": input_surface,
@@ -98,18 +98,18 @@ function mris_compute_layer_intensities_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_layer_intensities_cargs(
     params: MrisComputeLayerIntensitiesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_layer_intensities");
     cargs.push(execution.inputFile((params["input_intensity_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mris_compute_layer_intensities_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_layer_intensities_outputs(
     params: MrisComputeLayerIntensitiesParameters,
     execution: Execution,
 ): MrisComputeLayerIntensitiesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeLayerIntensitiesOutputs = {
         root: execution.outputFile("."),
         output_overlay_file: execution.outputFile([(params["output_overlay"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_compute_layer_intensities_outputs(
 }
 
 
+/**
+ * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
+ */
 function mris_compute_layer_intensities_execute(
     params: MrisComputeLayerIntensitiesParameters,
     execution: Execution,
 ): MrisComputeLayerIntensitiesOutputs {
-    /**
-     * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_layer_intensities_cargs(params, execution)
     const ret = mris_compute_layer_intensities_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_compute_layer_intensities_execute(
 }
 
 
+/**
+ * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_intensity_volume The input intensity volume file.
+ * @param layer_volume_fractions_file The layer volume fractions file.
+ * @param input_surface The input surface file for layer intensity computation.
+ * @param output_overlay The output file where the overlay will be saved.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
+ */
 function mris_compute_layer_intensities(
     input_intensity_volume: InputPathType,
     layer_volume_fractions_file: InputPathType,
@@ -171,21 +186,6 @@ function mris_compute_layer_intensities(
     output_overlay: string,
     runner: Runner | null = null,
 ): MrisComputeLayerIntensitiesOutputs {
-    /**
-     * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_intensity_volume The input intensity volume file.
-     * @param layer_volume_fractions_file The layer volume fractions file.
-     * @param input_surface The input surface file for layer intensity computation.
-     * @param output_overlay The output file where the overlay will be saved.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_LAYER_INTENSITIES_METADATA);
     const params = mris_compute_layer_intensities_params(input_intensity_volume, layer_volume_fractions_file, input_surface, output_overlay)
@@ -198,5 +198,8 @@ export {
       MrisComputeLayerIntensitiesOutputs,
       MrisComputeLayerIntensitiesParameters,
       mris_compute_layer_intensities,
+      mris_compute_layer_intensities_cargs,
+      mris_compute_layer_intensities_execute,
+      mris_compute_layer_intensities_outputs,
       mris_compute_layer_intensities_params,
 };

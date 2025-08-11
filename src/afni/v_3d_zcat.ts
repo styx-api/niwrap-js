@@ -12,7 +12,7 @@ const V_3D_ZCAT_METADATA: Metadata = {
 
 
 interface V3dZcatParameters {
-    "__STYXTYPE__": "3dZcat";
+    "@type": "afni.3dZcat";
     "prefix"?: string | null | undefined;
     "datum"?: "byte" | "short" | "float" | null | undefined;
     "fscale": boolean;
@@ -23,35 +23,35 @@ interface V3dZcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dZcat": v_3d_zcat_cargs,
+        "afni.3dZcat": v_3d_zcat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dZcat": v_3d_zcat_outputs,
+        "afni.3dZcat": v_3d_zcat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface V3dZcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets
+ * @param prefix Use 'pname' for the output dataset prefix name. [default='zcat']
+ * @param datum Coerce the output data to be stored as the given type, which may be byte, short, or float.
+ * @param fscale Force scaling of the output to the maximum integer range. This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
+ * @param nscale Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.
+ * @param verb Print out some verbosity as the program proceeds.
+ * @param frugal Be 'frugal' in the use of memory, at the cost of I/O time. Only needed if the program runs out of memory. Note frugality cannot be combined with NIFTI output
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_zcat_params(
     input_files: Array<InputPathType>,
     prefix: string | null = null,
@@ -87,21 +100,8 @@ function v_3d_zcat_params(
     verb: boolean = false,
     frugal: boolean = false,
 ): V3dZcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets
-     * @param prefix Use 'pname' for the output dataset prefix name. [default='zcat']
-     * @param datum Coerce the output data to be stored as the given type, which may be byte, short, or float.
-     * @param fscale Force scaling of the output to the maximum integer range. This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
-     * @param nscale Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.
-     * @param verb Print out some verbosity as the program proceeds.
-     * @param frugal Be 'frugal' in the use of memory, at the cost of I/O time. Only needed if the program runs out of memory. Note frugality cannot be combined with NIFTI output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dZcat" as const,
+        "@type": "afni.3dZcat" as const,
         "fscale": fscale,
         "nscale": nscale,
         "verb": verb,
@@ -118,18 +118,18 @@ function v_3d_zcat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_zcat_cargs(
     params: V3dZcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dZcat");
     if ((params["prefix"] ?? null) !== null) {
@@ -161,18 +161,18 @@ function v_3d_zcat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_zcat_outputs(
     params: V3dZcatParameters,
     execution: Execution,
 ): V3dZcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dZcatOutputs = {
         root: execution.outputFile("."),
         out_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -182,22 +182,22 @@ function v_3d_zcat_outputs(
 }
 
 
+/**
+ * Concatenates datasets in the slice (z) direction.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
+ */
 function v_3d_zcat_execute(
     params: V3dZcatParameters,
     execution: Execution,
 ): V3dZcatOutputs {
-    /**
-     * Concatenates datasets in the slice (z) direction.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_zcat_cargs(params, execution)
     const ret = v_3d_zcat_outputs(params, execution)
@@ -206,6 +206,24 @@ function v_3d_zcat_execute(
 }
 
 
+/**
+ * Concatenates datasets in the slice (z) direction.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets
+ * @param prefix Use 'pname' for the output dataset prefix name. [default='zcat']
+ * @param datum Coerce the output data to be stored as the given type, which may be byte, short, or float.
+ * @param fscale Force scaling of the output to the maximum integer range. This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
+ * @param nscale Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.
+ * @param verb Print out some verbosity as the program proceeds.
+ * @param frugal Be 'frugal' in the use of memory, at the cost of I/O time. Only needed if the program runs out of memory. Note frugality cannot be combined with NIFTI output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
+ */
 function v_3d_zcat(
     input_files: Array<InputPathType>,
     prefix: string | null = null,
@@ -216,24 +234,6 @@ function v_3d_zcat(
     frugal: boolean = false,
     runner: Runner | null = null,
 ): V3dZcatOutputs {
-    /**
-     * Concatenates datasets in the slice (z) direction.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets
-     * @param prefix Use 'pname' for the output dataset prefix name. [default='zcat']
-     * @param datum Coerce the output data to be stored as the given type, which may be byte, short, or float.
-     * @param fscale Force scaling of the output to the maximum integer range. This only has effect if the output datum is byte or short (either forced or defaulted). This option is sometimes necessary to eliminate unpleasant truncation artifacts.
-     * @param nscale Don't do any scaling on output to byte or short datasets. This may be especially useful when operating on mask datasets whose output values are only 0's and 1's.
-     * @param verb Print out some verbosity as the program proceeds.
-     * @param frugal Be 'frugal' in the use of memory, at the cost of I/O time. Only needed if the program runs out of memory. Note frugality cannot be combined with NIFTI output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ZCAT_METADATA);
     const params = v_3d_zcat_params(input_files, prefix, datum, fscale, nscale, verb, frugal)
@@ -246,5 +246,8 @@ export {
       V3dZcatParameters,
       V_3D_ZCAT_METADATA,
       v_3d_zcat,
+      v_3d_zcat_cargs,
+      v_3d_zcat_execute,
+      v_3d_zcat_outputs,
       v_3d_zcat_params,
 };

@@ -12,7 +12,7 @@ const V_3D_TSHIFT_METADATA: Metadata = {
 
 
 interface V3dTshiftParameters {
-    "__STYXTYPE__": "3dTshift";
+    "@type": "afni.3dTshift";
     "prefix"?: string | null | undefined;
     "ignore"?: number | null | undefined;
     "in_file": InputPathType;
@@ -29,35 +29,35 @@ interface V3dTshiftParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTshift": v_3d_tshift_cargs,
+        "afni.3dTshift": v_3d_tshift_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTshift": v_3d_tshift_outputs,
+        "afni.3dTshift": v_3d_tshift_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface V3dTshiftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dtshift.
+ * @param prefix Prefix for output image file name.
+ * @param ignore Ignore the first set of points specified.
+ * @param interp 'fourier' or 'linear' or 'cubic' or 'quintic' or 'heptic'. Different interpolation methods (see 3dtshift for details) default = fourier.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param rlt Before shifting, remove the mean and linear trend.
+ * @param rltplus Before shifting, remove the mean and linear trend and later put back the mean.
+ * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). if negative,slice_timing is defined in reverse order, that is, the first entry corresponds to the slice with the largest index, and the final entry corresponds to slice index zero. only in effect when slice_timing is passed as list, not when it is passed as file.
+ * @param tpattern 'alt+z' or 'altplus' or 'alt+z2' or 'alt-z' or 'altminus' or 'alt-z2' or 'seq+z' or 'seqplus' or 'seq-z' or 'seqminus' or a string. Use specified slice time pattern rather than one in header.
+ * @param tr Manually set the tr. you can attach suffix "s" for seconds or "ms" for milliseconds.
+ * @param tslice Align each slice to time offset of given slice.
+ * @param tzero Align each slice to given time offset.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tshift_params(
     in_file: InputPathType,
     prefix: string | null = null,
@@ -99,27 +118,8 @@ function v_3d_tshift_params(
     tslice: number | null = null,
     tzero: number | null = null,
 ): V3dTshiftParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dtshift.
-     * @param prefix Prefix for output image file name.
-     * @param ignore Ignore the first set of points specified.
-     * @param interp 'fourier' or 'linear' or 'cubic' or 'quintic' or 'heptic'. Different interpolation methods (see 3dtshift for details) default = fourier.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param rlt Before shifting, remove the mean and linear trend.
-     * @param rltplus Before shifting, remove the mean and linear trend and later put back the mean.
-     * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). if negative,slice_timing is defined in reverse order, that is, the first entry corresponds to the slice with the largest index, and the final entry corresponds to slice index zero. only in effect when slice_timing is passed as list, not when it is passed as file.
-     * @param tpattern 'alt+z' or 'altplus' or 'alt+z2' or 'alt-z' or 'altminus' or 'alt-z2' or 'seq+z' or 'seqplus' or 'seq-z' or 'seqminus' or a string. Use specified slice time pattern rather than one in header.
-     * @param tr Manually set the tr. you can attach suffix "s" for seconds or "ms" for milliseconds.
-     * @param tslice Align each slice to time offset of given slice.
-     * @param tzero Align each slice to given time offset.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTshift" as const,
+        "@type": "afni.3dTshift" as const,
         "in_file": in_file,
         "rlt": rlt,
         "rltplus": rltplus,
@@ -158,18 +158,18 @@ function v_3d_tshift_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tshift_cargs(
     params: V3dTshiftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTshift");
     if ((params["prefix"] ?? null) !== null) {
@@ -234,18 +234,18 @@ function v_3d_tshift_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tshift_outputs(
     params: V3dTshiftParameters,
     execution: Execution,
 ): V3dTshiftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTshiftOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -255,22 +255,22 @@ function v_3d_tshift_outputs(
 }
 
 
+/**
+ * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
+ */
 function v_3d_tshift_execute(
     params: V3dTshiftParameters,
     execution: Execution,
 ): V3dTshiftOutputs {
-    /**
-     * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tshift_cargs(params, execution)
     const ret = v_3d_tshift_outputs(params, execution)
@@ -279,6 +279,30 @@ function v_3d_tshift_execute(
 }
 
 
+/**
+ * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dtshift.
+ * @param prefix Prefix for output image file name.
+ * @param ignore Ignore the first set of points specified.
+ * @param interp 'fourier' or 'linear' or 'cubic' or 'quintic' or 'heptic'. Different interpolation methods (see 3dtshift for details) default = fourier.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param rlt Before shifting, remove the mean and linear trend.
+ * @param rltplus Before shifting, remove the mean and linear trend and later put back the mean.
+ * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). if negative,slice_timing is defined in reverse order, that is, the first entry corresponds to the slice with the largest index, and the final entry corresponds to slice index zero. only in effect when slice_timing is passed as list, not when it is passed as file.
+ * @param tpattern 'alt+z' or 'altplus' or 'alt+z2' or 'alt-z' or 'altminus' or 'alt-z2' or 'seq+z' or 'seqplus' or 'seq-z' or 'seqminus' or a string. Use specified slice time pattern rather than one in header.
+ * @param tr Manually set the tr. you can attach suffix "s" for seconds or "ms" for milliseconds.
+ * @param tslice Align each slice to time offset of given slice.
+ * @param tzero Align each slice to given time offset.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
+ */
 function v_3d_tshift(
     in_file: InputPathType,
     prefix: string | null = null,
@@ -295,30 +319,6 @@ function v_3d_tshift(
     tzero: number | null = null,
     runner: Runner | null = null,
 ): V3dTshiftOutputs {
-    /**
-     * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dtshift.
-     * @param prefix Prefix for output image file name.
-     * @param ignore Ignore the first set of points specified.
-     * @param interp 'fourier' or 'linear' or 'cubic' or 'quintic' or 'heptic'. Different interpolation methods (see 3dtshift for details) default = fourier.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param rlt Before shifting, remove the mean and linear trend.
-     * @param rltplus Before shifting, remove the mean and linear trend and later put back the mean.
-     * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). if negative,slice_timing is defined in reverse order, that is, the first entry corresponds to the slice with the largest index, and the final entry corresponds to slice index zero. only in effect when slice_timing is passed as list, not when it is passed as file.
-     * @param tpattern 'alt+z' or 'altplus' or 'alt+z2' or 'alt-z' or 'altminus' or 'alt-z2' or 'seq+z' or 'seqplus' or 'seq-z' or 'seqminus' or a string. Use specified slice time pattern rather than one in header.
-     * @param tr Manually set the tr. you can attach suffix "s" for seconds or "ms" for milliseconds.
-     * @param tslice Align each slice to time offset of given slice.
-     * @param tzero Align each slice to given time offset.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSHIFT_METADATA);
     const params = v_3d_tshift_params(in_file, prefix, ignore, interp, num_threads, outputtype, rlt, rltplus, slice_encoding_direction, tpattern, tr, tslice, tzero)
@@ -331,5 +331,8 @@ export {
       V3dTshiftParameters,
       V_3D_TSHIFT_METADATA,
       v_3d_tshift,
+      v_3d_tshift_cargs,
+      v_3d_tshift_execute,
+      v_3d_tshift_outputs,
       v_3d_tshift_params,
 };

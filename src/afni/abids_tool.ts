@@ -12,7 +12,7 @@ const ABIDS_TOOL_METADATA: Metadata = {
 
 
 interface AbidsToolParameters {
-    "__STYXTYPE__": "abids_tool";
+    "@type": "afni.abids_tool";
     "input_files": Array<InputPathType>;
     "tr_match": boolean;
     "add_tr": boolean;
@@ -22,33 +22,33 @@ interface AbidsToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "abids_tool": abids_tool_cargs,
+        "afni.abids_tool": abids_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface AbidsToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files At least one 3d+time dataset in NIFTI format.
+ * @param tr_match Check if the TR in the json file matches the TR from input dataset header. (Returns 1 if match)
+ * @param add_tr Add the TR from the BIDS json file to the input dataset using 3drefit.
+ * @param add_slice_times Add the slice times from the BIDS json file to the input dataset using 3drefit.
+ * @param copy_prefix Copy both the NIFTI dataset(s) and matching .json file(s) to PREFIX. Must have the same number of prefixes as datasets.
+ * @param help_flag Show help information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function abids_tool_params(
     input_files: Array<InputPathType>,
     tr_match: boolean = false,
@@ -76,20 +88,8 @@ function abids_tool_params(
     copy_prefix: Array<string> | null = null,
     help_flag: boolean = false,
 ): AbidsToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files At least one 3d+time dataset in NIFTI format.
-     * @param tr_match Check if the TR in the json file matches the TR from input dataset header. (Returns 1 if match)
-     * @param add_tr Add the TR from the BIDS json file to the input dataset using 3drefit.
-     * @param add_slice_times Add the slice times from the BIDS json file to the input dataset using 3drefit.
-     * @param copy_prefix Copy both the NIFTI dataset(s) and matching .json file(s) to PREFIX. Must have the same number of prefixes as datasets.
-     * @param help_flag Show help information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "abids_tool" as const,
+        "@type": "afni.abids_tool" as const,
         "input_files": input_files,
         "tr_match": tr_match,
         "add_tr": add_tr,
@@ -103,18 +103,18 @@ function abids_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function abids_tool_cargs(
     params: AbidsToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("abids_tool.py");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -140,18 +140,18 @@ function abids_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function abids_tool_outputs(
     params: AbidsToolParameters,
     execution: Execution,
 ): AbidsToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AbidsToolOutputs = {
         root: execution.outputFile("."),
     };
@@ -159,22 +159,22 @@ function abids_tool_outputs(
 }
 
 
+/**
+ * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
+ */
 function abids_tool_execute(
     params: AbidsToolParameters,
     execution: Execution,
 ): AbidsToolOutputs {
-    /**
-     * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = abids_tool_cargs(params, execution)
     const ret = abids_tool_outputs(params, execution)
@@ -183,6 +183,23 @@ function abids_tool_execute(
 }
 
 
+/**
+ * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files At least one 3d+time dataset in NIFTI format.
+ * @param tr_match Check if the TR in the json file matches the TR from input dataset header. (Returns 1 if match)
+ * @param add_tr Add the TR from the BIDS json file to the input dataset using 3drefit.
+ * @param add_slice_times Add the slice times from the BIDS json file to the input dataset using 3drefit.
+ * @param copy_prefix Copy both the NIFTI dataset(s) and matching .json file(s) to PREFIX. Must have the same number of prefixes as datasets.
+ * @param help_flag Show help information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
+ */
 function abids_tool(
     input_files: Array<InputPathType>,
     tr_match: boolean = false,
@@ -192,23 +209,6 @@ function abids_tool(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AbidsToolOutputs {
-    /**
-     * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files At least one 3d+time dataset in NIFTI format.
-     * @param tr_match Check if the TR in the json file matches the TR from input dataset header. (Returns 1 if match)
-     * @param add_tr Add the TR from the BIDS json file to the input dataset using 3drefit.
-     * @param add_slice_times Add the slice times from the BIDS json file to the input dataset using 3drefit.
-     * @param copy_prefix Copy both the NIFTI dataset(s) and matching .json file(s) to PREFIX. Must have the same number of prefixes as datasets.
-     * @param help_flag Show help information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ABIDS_TOOL_METADATA);
     const params = abids_tool_params(input_files, tr_match, add_tr, add_slice_times, copy_prefix, help_flag)
@@ -221,5 +221,8 @@ export {
       AbidsToolOutputs,
       AbidsToolParameters,
       abids_tool,
+      abids_tool_cargs,
+      abids_tool_execute,
+      abids_tool_outputs,
       abids_tool_params,
 };

@@ -12,7 +12,7 @@ const SIENA_METADATA: Metadata = {
 
 
 interface SienaParameters {
-    "__STYXTYPE__": "siena";
+    "@type": "fsl.siena";
     "input1": InputPathType;
     "input2": InputPathType;
     "output_dir"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface SienaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "siena": siena_cargs,
+        "fsl.siena": siena_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "siena": siena_outputs,
+        "fsl.siena": siena_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface SienaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 First input image (e.g. timepoint 1 image, img1.nii.gz)
+ * @param input2 Second input image (e.g. timepoint 2 image, img2.nii.gz)
+ * @param output_dir Set output directory (default output is <input1>_to_<input2>_siena)
+ * @param debug_flag Debug (don't delete intermediate files)
+ * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
+ * @param two_class_seg_flag Two-class segmentation (don't segment grey and white matter separately)
+ * @param t2_weighted_flag T2-weighted input image (default T1-weighted)
+ * @param standard_space_mask_flag Use standard-space masking as well as BET
+ * @param upper_ignore Ignore from t (mm) upwards in MNI152/Talairach space
+ * @param lower_ignore Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
+ * @param sienadiff_options Options to pass to siena_diff timepoint differencing (inside double-quotes), e.g. -S "-s -i 20"
+ * @param ventricle_analysis_flag Run ventricle analysis (VIENA)
+ * @param ventricle_mask Optional user-supplied ventricle mask (default is /usr/local/fsl/data/standard/MNI152_T1_2mm_VentricleMask)
+ *
+ * @returns Parameter dictionary
+ */
 function siena_params(
     input1: InputPathType,
     input2: InputPathType,
@@ -99,27 +118,8 @@ function siena_params(
     ventricle_analysis_flag: boolean = false,
     ventricle_mask: InputPathType | null = null,
 ): SienaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 First input image (e.g. timepoint 1 image, img1.nii.gz)
-     * @param input2 Second input image (e.g. timepoint 2 image, img2.nii.gz)
-     * @param output_dir Set output directory (default output is <input1>_to_<input2>_siena)
-     * @param debug_flag Debug (don't delete intermediate files)
-     * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
-     * @param two_class_seg_flag Two-class segmentation (don't segment grey and white matter separately)
-     * @param t2_weighted_flag T2-weighted input image (default T1-weighted)
-     * @param standard_space_mask_flag Use standard-space masking as well as BET
-     * @param upper_ignore Ignore from t (mm) upwards in MNI152/Talairach space
-     * @param lower_ignore Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
-     * @param sienadiff_options Options to pass to siena_diff timepoint differencing (inside double-quotes), e.g. -S "-s -i 20"
-     * @param ventricle_analysis_flag Run ventricle analysis (VIENA)
-     * @param ventricle_mask Optional user-supplied ventricle mask (default is /usr/local/fsl/data/standard/MNI152_T1_2mm_VentricleMask)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "siena" as const,
+        "@type": "fsl.siena" as const,
         "input1": input1,
         "input2": input2,
         "debug_flag": debug_flag,
@@ -150,18 +150,18 @@ function siena_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function siena_cargs(
     params: SienaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("siena");
     cargs.push(execution.inputFile((params["input1"] ?? null)));
@@ -221,18 +221,18 @@ function siena_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function siena_outputs(
     params: SienaParameters,
     execution: Execution,
 ): SienaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SienaOutputs = {
         root: execution.outputFile("."),
         output_report: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/report.html"].join('')) : null,
@@ -242,22 +242,22 @@ function siena_outputs(
 }
 
 
+/**
+ * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SienaOutputs`).
+ */
 function siena_execute(
     params: SienaParameters,
     execution: Execution,
 ): SienaOutputs {
-    /**
-     * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SienaOutputs`).
-     */
     params = execution.params(params)
     const cargs = siena_cargs(params, execution)
     const ret = siena_outputs(params, execution)
@@ -266,6 +266,30 @@ function siena_execute(
 }
 
 
+/**
+ * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input1 First input image (e.g. timepoint 1 image, img1.nii.gz)
+ * @param input2 Second input image (e.g. timepoint 2 image, img2.nii.gz)
+ * @param output_dir Set output directory (default output is <input1>_to_<input2>_siena)
+ * @param debug_flag Debug (don't delete intermediate files)
+ * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
+ * @param two_class_seg_flag Two-class segmentation (don't segment grey and white matter separately)
+ * @param t2_weighted_flag T2-weighted input image (default T1-weighted)
+ * @param standard_space_mask_flag Use standard-space masking as well as BET
+ * @param upper_ignore Ignore from t (mm) upwards in MNI152/Talairach space
+ * @param lower_ignore Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
+ * @param sienadiff_options Options to pass to siena_diff timepoint differencing (inside double-quotes), e.g. -S "-s -i 20"
+ * @param ventricle_analysis_flag Run ventricle analysis (VIENA)
+ * @param ventricle_mask Optional user-supplied ventricle mask (default is /usr/local/fsl/data/standard/MNI152_T1_2mm_VentricleMask)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SienaOutputs`).
+ */
 function siena(
     input1: InputPathType,
     input2: InputPathType,
@@ -282,30 +306,6 @@ function siena(
     ventricle_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): SienaOutputs {
-    /**
-     * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input1 First input image (e.g. timepoint 1 image, img1.nii.gz)
-     * @param input2 Second input image (e.g. timepoint 2 image, img2.nii.gz)
-     * @param output_dir Set output directory (default output is <input1>_to_<input2>_siena)
-     * @param debug_flag Debug (don't delete intermediate files)
-     * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
-     * @param two_class_seg_flag Two-class segmentation (don't segment grey and white matter separately)
-     * @param t2_weighted_flag T2-weighted input image (default T1-weighted)
-     * @param standard_space_mask_flag Use standard-space masking as well as BET
-     * @param upper_ignore Ignore from t (mm) upwards in MNI152/Talairach space
-     * @param lower_ignore Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
-     * @param sienadiff_options Options to pass to siena_diff timepoint differencing (inside double-quotes), e.g. -S "-s -i 20"
-     * @param ventricle_analysis_flag Run ventricle analysis (VIENA)
-     * @param ventricle_mask Optional user-supplied ventricle mask (default is /usr/local/fsl/data/standard/MNI152_T1_2mm_VentricleMask)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SienaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIENA_METADATA);
     const params = siena_params(input1, input2, output_dir, debug_flag, bet_options, two_class_seg_flag, t2_weighted_flag, standard_space_mask_flag, upper_ignore, lower_ignore, sienadiff_options, ventricle_analysis_flag, ventricle_mask)
@@ -318,5 +318,8 @@ export {
       SienaOutputs,
       SienaParameters,
       siena,
+      siena_cargs,
+      siena_execute,
+      siena_outputs,
       siena_params,
 };

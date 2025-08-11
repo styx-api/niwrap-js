@@ -12,7 +12,7 @@ const MRIS_FWHM_METADATA: Metadata = {
 
 
 interface MrisFwhmParameters {
-    "__STYXTYPE__": "mris_fwhm";
+    "@type": "freesurfer.mris_fwhm";
     "input_file": InputPathType;
     "subject": string;
     "hemi": string;
@@ -47,33 +47,33 @@ interface MrisFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_fwhm": mris_fwhm_cargs,
+        "freesurfer.mris_fwhm": mris_fwhm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -93,6 +93,43 @@ interface MrisFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input data file.
+ * @param subject Subject whose surface the input is defined on.
+ * @param hemi Hemifield that the input is defined on. Legal values are lh and rh.
+ * @param output_file Output file to save the processed data.
+ * @param surf Surface name to compute AR1 on. Default is white.
+ * @param label_file Label file to be used as a mask.
+ * @param cortex_flag Use hemi.cortex.label as a mask.
+ * @param mask_file Mask file. Compute AR1 only over voxels in the given mask.
+ * @param x_matrix Detrend data with the matrix in x.mat.
+ * @param detrend_order Order of polynomial detrending.
+ * @param smooth_only_flag Only smooth the data, implies --no-detrend.
+ * @param no_detrend_flag Turn off polynomial detrending.
+ * @param sqr_flag Compute square of input before smoothing.
+ * @param sum_file Prints ascii summary to sumfile.
+ * @param dat_file File for FWHM data.
+ * @param ar1dat_file File containing ar1mean and ar1std.
+ * @param ar1vol Save spatial AR1 as an overlay.
+ * @param fwhmmap Save vertex-wise spatial FWHM as an overlay.
+ * @param prune_flag Remove any voxel that is zero in any subject (after any inversion).
+ * @param no_prune_flag Do not prune (default).
+ * @param out_mask File to save the final mask.
+ * @param varnorm_flag Normalize the variance across space within any mask.
+ * @param fwhm Smooth input by the specified FWHM in mm.
+ * @param niters_only File that reports the number of iterations needed to achieve the specified FWHM.
+ * @param sd Subjects directory.
+ * @param synth_flag Synthesize input with white gaussian noise.
+ * @param synth_frames Number of frames for synthesized input.
+ * @param threads Number of threads to use.
+ * @param debug_flag Turn on debugging.
+ * @param checkopts_flag Don't run anything, just check options and exit.
+ * @param version_flag Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_fwhm_params(
     input_file: InputPathType,
     subject: string,
@@ -126,45 +163,8 @@ function mris_fwhm_params(
     checkopts_flag: boolean = false,
     version_flag: boolean = false,
 ): MrisFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input data file.
-     * @param subject Subject whose surface the input is defined on.
-     * @param hemi Hemifield that the input is defined on. Legal values are lh and rh.
-     * @param output_file Output file to save the processed data.
-     * @param surf Surface name to compute AR1 on. Default is white.
-     * @param label_file Label file to be used as a mask.
-     * @param cortex_flag Use hemi.cortex.label as a mask.
-     * @param mask_file Mask file. Compute AR1 only over voxels in the given mask.
-     * @param x_matrix Detrend data with the matrix in x.mat.
-     * @param detrend_order Order of polynomial detrending.
-     * @param smooth_only_flag Only smooth the data, implies --no-detrend.
-     * @param no_detrend_flag Turn off polynomial detrending.
-     * @param sqr_flag Compute square of input before smoothing.
-     * @param sum_file Prints ascii summary to sumfile.
-     * @param dat_file File for FWHM data.
-     * @param ar1dat_file File containing ar1mean and ar1std.
-     * @param ar1vol Save spatial AR1 as an overlay.
-     * @param fwhmmap Save vertex-wise spatial FWHM as an overlay.
-     * @param prune_flag Remove any voxel that is zero in any subject (after any inversion).
-     * @param no_prune_flag Do not prune (default).
-     * @param out_mask File to save the final mask.
-     * @param varnorm_flag Normalize the variance across space within any mask.
-     * @param fwhm Smooth input by the specified FWHM in mm.
-     * @param niters_only File that reports the number of iterations needed to achieve the specified FWHM.
-     * @param sd Subjects directory.
-     * @param synth_flag Synthesize input with white gaussian noise.
-     * @param synth_frames Number of frames for synthesized input.
-     * @param threads Number of threads to use.
-     * @param debug_flag Turn on debugging.
-     * @param checkopts_flag Don't run anything, just check options and exit.
-     * @param version_flag Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_fwhm" as const,
+        "@type": "freesurfer.mris_fwhm" as const,
         "input_file": input_file,
         "subject": subject,
         "hemi": hemi,
@@ -233,18 +233,18 @@ function mris_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_fwhm_cargs(
     params: MrisFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_fwhm");
     cargs.push(
@@ -396,18 +396,18 @@ function mris_fwhm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_fwhm_outputs(
     params: MrisFwhmParameters,
     execution: Execution,
 ): MrisFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisFwhmOutputs = {
         root: execution.outputFile("."),
     };
@@ -415,22 +415,22 @@ function mris_fwhm_outputs(
 }
 
 
+/**
+ * Smooths surface data and/or estimates FWHM.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
+ */
 function mris_fwhm_execute(
     params: MrisFwhmParameters,
     execution: Execution,
 ): MrisFwhmOutputs {
-    /**
-     * Smooths surface data and/or estimates FWHM.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_fwhm_cargs(params, execution)
     const ret = mris_fwhm_outputs(params, execution)
@@ -439,6 +439,48 @@ function mris_fwhm_execute(
 }
 
 
+/**
+ * Smooths surface data and/or estimates FWHM.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input data file.
+ * @param subject Subject whose surface the input is defined on.
+ * @param hemi Hemifield that the input is defined on. Legal values are lh and rh.
+ * @param output_file Output file to save the processed data.
+ * @param surf Surface name to compute AR1 on. Default is white.
+ * @param label_file Label file to be used as a mask.
+ * @param cortex_flag Use hemi.cortex.label as a mask.
+ * @param mask_file Mask file. Compute AR1 only over voxels in the given mask.
+ * @param x_matrix Detrend data with the matrix in x.mat.
+ * @param detrend_order Order of polynomial detrending.
+ * @param smooth_only_flag Only smooth the data, implies --no-detrend.
+ * @param no_detrend_flag Turn off polynomial detrending.
+ * @param sqr_flag Compute square of input before smoothing.
+ * @param sum_file Prints ascii summary to sumfile.
+ * @param dat_file File for FWHM data.
+ * @param ar1dat_file File containing ar1mean and ar1std.
+ * @param ar1vol Save spatial AR1 as an overlay.
+ * @param fwhmmap Save vertex-wise spatial FWHM as an overlay.
+ * @param prune_flag Remove any voxel that is zero in any subject (after any inversion).
+ * @param no_prune_flag Do not prune (default).
+ * @param out_mask File to save the final mask.
+ * @param varnorm_flag Normalize the variance across space within any mask.
+ * @param fwhm Smooth input by the specified FWHM in mm.
+ * @param niters_only File that reports the number of iterations needed to achieve the specified FWHM.
+ * @param sd Subjects directory.
+ * @param synth_flag Synthesize input with white gaussian noise.
+ * @param synth_frames Number of frames for synthesized input.
+ * @param threads Number of threads to use.
+ * @param debug_flag Turn on debugging.
+ * @param checkopts_flag Don't run anything, just check options and exit.
+ * @param version_flag Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
+ */
 function mris_fwhm(
     input_file: InputPathType,
     subject: string,
@@ -473,48 +515,6 @@ function mris_fwhm(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisFwhmOutputs {
-    /**
-     * Smooths surface data and/or estimates FWHM.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input data file.
-     * @param subject Subject whose surface the input is defined on.
-     * @param hemi Hemifield that the input is defined on. Legal values are lh and rh.
-     * @param output_file Output file to save the processed data.
-     * @param surf Surface name to compute AR1 on. Default is white.
-     * @param label_file Label file to be used as a mask.
-     * @param cortex_flag Use hemi.cortex.label as a mask.
-     * @param mask_file Mask file. Compute AR1 only over voxels in the given mask.
-     * @param x_matrix Detrend data with the matrix in x.mat.
-     * @param detrend_order Order of polynomial detrending.
-     * @param smooth_only_flag Only smooth the data, implies --no-detrend.
-     * @param no_detrend_flag Turn off polynomial detrending.
-     * @param sqr_flag Compute square of input before smoothing.
-     * @param sum_file Prints ascii summary to sumfile.
-     * @param dat_file File for FWHM data.
-     * @param ar1dat_file File containing ar1mean and ar1std.
-     * @param ar1vol Save spatial AR1 as an overlay.
-     * @param fwhmmap Save vertex-wise spatial FWHM as an overlay.
-     * @param prune_flag Remove any voxel that is zero in any subject (after any inversion).
-     * @param no_prune_flag Do not prune (default).
-     * @param out_mask File to save the final mask.
-     * @param varnorm_flag Normalize the variance across space within any mask.
-     * @param fwhm Smooth input by the specified FWHM in mm.
-     * @param niters_only File that reports the number of iterations needed to achieve the specified FWHM.
-     * @param sd Subjects directory.
-     * @param synth_flag Synthesize input with white gaussian noise.
-     * @param synth_frames Number of frames for synthesized input.
-     * @param threads Number of threads to use.
-     * @param debug_flag Turn on debugging.
-     * @param checkopts_flag Don't run anything, just check options and exit.
-     * @param version_flag Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_FWHM_METADATA);
     const params = mris_fwhm_params(input_file, subject, hemi, output_file, surf, label_file, cortex_flag, mask_file, x_matrix, detrend_order, smooth_only_flag, no_detrend_flag, sqr_flag, sum_file, dat_file, ar1dat_file, ar1vol, fwhmmap, prune_flag, no_prune_flag, out_mask, varnorm_flag, fwhm, niters_only, sd, synth_flag, synth_frames, threads, debug_flag, checkopts_flag, version_flag)
@@ -527,5 +527,8 @@ export {
       MrisFwhmOutputs,
       MrisFwhmParameters,
       mris_fwhm,
+      mris_fwhm_cargs,
+      mris_fwhm_execute,
+      mris_fwhm_outputs,
       mris_fwhm_params,
 };

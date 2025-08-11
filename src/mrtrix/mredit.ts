@@ -12,7 +12,7 @@ const MREDIT_METADATA: Metadata = {
 
 
 interface MreditPlaneParameters {
-    "__STYXTYPE__": "plane";
+    "@type": "mrtrix.mredit.plane";
     "axis": number;
     "coord": Array<number>;
     "value": number;
@@ -20,7 +20,7 @@ interface MreditPlaneParameters {
 
 
 interface MreditSphereParameters {
-    "__STYXTYPE__": "sphere";
+    "@type": "mrtrix.mredit.sphere";
     "position": Array<number>;
     "radius": number;
     "value": number;
@@ -28,21 +28,21 @@ interface MreditSphereParameters {
 
 
 interface MreditVoxelParameters {
-    "__STYXTYPE__": "voxel";
+    "@type": "mrtrix.mredit.voxel";
     "position": Array<number>;
     "value": number;
 }
 
 
 interface MreditConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mredit.config";
     "key": string;
     "value": string;
 }
 
 
 interface MreditParameters {
-    "__STYXTYPE__": "mredit";
+    "@type": "mrtrix.mredit";
     "plane"?: Array<MreditPlaneParameters> | null | undefined;
     "sphere"?: Array<MreditSphereParameters> | null | undefined;
     "voxel"?: Array<MreditVoxelParameters> | null | undefined;
@@ -60,60 +60,60 @@ interface MreditParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mredit": mredit_cargs,
-        "plane": mredit_plane_cargs,
-        "sphere": mredit_sphere_cargs,
-        "voxel": mredit_voxel_cargs,
-        "config": mredit_config_cargs,
+        "mrtrix.mredit": mredit_cargs,
+        "mrtrix.mredit.plane": mredit_plane_cargs,
+        "mrtrix.mredit.sphere": mredit_sphere_cargs,
+        "mrtrix.mredit.voxel": mredit_voxel_cargs,
+        "mrtrix.mredit.config": mredit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mredit": mredit_outputs,
+        "mrtrix.mredit": mredit_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param axis fill one or more planes on a particular image axis
+ * @param coord fill one or more planes on a particular image axis
+ * @param value fill one or more planes on a particular image axis
+ *
+ * @returns Parameter dictionary
+ */
 function mredit_plane_params(
     axis: number,
     coord: Array<number>,
     value: number,
 ): MreditPlaneParameters {
-    /**
-     * Build parameters.
-    
-     * @param axis fill one or more planes on a particular image axis
-     * @param coord fill one or more planes on a particular image axis
-     * @param value fill one or more planes on a particular image axis
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plane" as const,
+        "@type": "mrtrix.mredit.plane" as const,
         "axis": axis,
         "coord": coord,
         "value": value,
@@ -122,18 +122,18 @@ function mredit_plane_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mredit_plane_cargs(
     params: MreditPlaneParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-plane");
     cargs.push(String((params["axis"] ?? null)));
@@ -143,22 +143,22 @@ function mredit_plane_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param position draw a sphere with radius in mm
+ * @param radius draw a sphere with radius in mm
+ * @param value draw a sphere with radius in mm
+ *
+ * @returns Parameter dictionary
+ */
 function mredit_sphere_params(
     position: Array<number>,
     radius: number,
     value: number,
 ): MreditSphereParameters {
-    /**
-     * Build parameters.
-    
-     * @param position draw a sphere with radius in mm
-     * @param radius draw a sphere with radius in mm
-     * @param value draw a sphere with radius in mm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sphere" as const,
+        "@type": "mrtrix.mredit.sphere" as const,
         "position": position,
         "radius": radius,
         "value": value,
@@ -167,18 +167,18 @@ function mredit_sphere_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mredit_sphere_cargs(
     params: MreditSphereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sphere");
     cargs.push(...(params["position"] ?? null).map(String));
@@ -188,20 +188,20 @@ function mredit_sphere_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param position change the image value within a single voxel
+ * @param value change the image value within a single voxel
+ *
+ * @returns Parameter dictionary
+ */
 function mredit_voxel_params(
     position: Array<number>,
     value: number,
 ): MreditVoxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param position change the image value within a single voxel
-     * @param value change the image value within a single voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "voxel" as const,
+        "@type": "mrtrix.mredit.voxel" as const,
         "position": position,
         "value": value,
     };
@@ -209,18 +209,18 @@ function mredit_voxel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mredit_voxel_cargs(
     params: MreditVoxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-voxel");
     cargs.push(...(params["position"] ?? null).map(String));
@@ -229,20 +229,20 @@ function mredit_voxel_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mredit_config_params(
     key: string,
     value: string,
 ): MreditConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mredit.config" as const,
         "key": key,
         "value": value,
     };
@@ -250,18 +250,18 @@ function mredit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mredit_config_cargs(
     params: MreditConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -287,6 +287,26 @@ interface MreditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image
+ * @param plane fill one or more planes on a particular image axis
+ * @param sphere draw a sphere with radius in mm
+ * @param voxel change the image value within a single voxel
+ * @param scanner indicate that coordinates are specified in scanner space, rather than as voxel coordinates
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param output the (optional) output image
+ *
+ * @returns Parameter dictionary
+ */
 function mredit_params(
     input: InputPathType,
     plane: Array<MreditPlaneParameters> | null = null,
@@ -303,28 +323,8 @@ function mredit_params(
     version: boolean = false,
     output: string | null = null,
 ): MreditParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image
-     * @param plane fill one or more planes on a particular image axis
-     * @param sphere draw a sphere with radius in mm
-     * @param voxel change the image value within a single voxel
-     * @param scanner indicate that coordinates are specified in scanner space, rather than as voxel coordinates
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param output the (optional) output image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mredit" as const,
+        "@type": "mrtrix.mredit" as const,
         "scanner": scanner,
         "info": info,
         "quiet": quiet,
@@ -356,28 +356,28 @@ function mredit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mredit_cargs(
     params: MreditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mredit");
     if ((params["plane"] ?? null) !== null) {
-        cargs.push(...(params["plane"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["plane"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["sphere"] ?? null) !== null) {
-        cargs.push(...(params["sphere"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["sphere"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["voxel"] ?? null) !== null) {
-        cargs.push(...(params["voxel"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["voxel"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["scanner"] ?? null)) {
         cargs.push("-scanner");
@@ -401,7 +401,7 @@ function mredit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -417,18 +417,18 @@ function mredit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mredit_outputs(
     params: MreditParameters,
     execution: Execution,
 ): MreditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MreditOutputs = {
         root: execution.outputFile("."),
         output: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -437,28 +437,28 @@ function mredit_outputs(
 }
 
 
+/**
+ * Directly edit the intensities within an image from the command-line.
+ *
+ * A range of options are provided to enable direct editing of voxel intensities based on voxel / real-space coordinates. If only one image path is provided, the image will be edited in-place (use at own risk); if input and output image paths are provided, the output will contain the edited image, and the original image will not be modified in any way.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MreditOutputs`).
+ */
 function mredit_execute(
     params: MreditParameters,
     execution: Execution,
 ): MreditOutputs {
-    /**
-     * Directly edit the intensities within an image from the command-line.
-     * 
-     * A range of options are provided to enable direct editing of voxel intensities based on voxel / real-space coordinates. If only one image path is provided, the image will be edited in-place (use at own risk); if input and output image paths are provided, the output will contain the edited image, and the original image will not be modified in any way.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MreditOutputs`).
-     */
     params = execution.params(params)
     const cargs = mredit_cargs(params, execution)
     const ret = mredit_outputs(params, execution)
@@ -467,6 +467,37 @@ function mredit_execute(
 }
 
 
+/**
+ * Directly edit the intensities within an image from the command-line.
+ *
+ * A range of options are provided to enable direct editing of voxel intensities based on voxel / real-space coordinates. If only one image path is provided, the image will be edited in-place (use at own risk); if input and output image paths are provided, the output will contain the edited image, and the original image will not be modified in any way.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image
+ * @param plane fill one or more planes on a particular image axis
+ * @param sphere draw a sphere with radius in mm
+ * @param voxel change the image value within a single voxel
+ * @param scanner indicate that coordinates are specified in scanner space, rather than as voxel coordinates
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param output the (optional) output image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MreditOutputs`).
+ */
 function mredit(
     input: InputPathType,
     plane: Array<MreditPlaneParameters> | null = null,
@@ -484,37 +515,6 @@ function mredit(
     output: string | null = null,
     runner: Runner | null = null,
 ): MreditOutputs {
-    /**
-     * Directly edit the intensities within an image from the command-line.
-     * 
-     * A range of options are provided to enable direct editing of voxel intensities based on voxel / real-space coordinates. If only one image path is provided, the image will be edited in-place (use at own risk); if input and output image paths are provided, the output will contain the edited image, and the original image will not be modified in any way.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image
-     * @param plane fill one or more planes on a particular image axis
-     * @param sphere draw a sphere with radius in mm
-     * @param voxel change the image value within a single voxel
-     * @param scanner indicate that coordinates are specified in scanner space, rather than as voxel coordinates
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param output the (optional) output image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MreditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MREDIT_METADATA);
     const params = mredit_params(input, plane, sphere, voxel, scanner, info, quiet, debug, force, nthreads, config, help, version, output)
@@ -531,9 +531,16 @@ export {
       MreditSphereParameters,
       MreditVoxelParameters,
       mredit,
+      mredit_cargs,
+      mredit_config_cargs,
       mredit_config_params,
+      mredit_execute,
+      mredit_outputs,
       mredit_params,
+      mredit_plane_cargs,
       mredit_plane_params,
+      mredit_sphere_cargs,
       mredit_sphere_params,
+      mredit_voxel_cargs,
       mredit_voxel_params,
 };

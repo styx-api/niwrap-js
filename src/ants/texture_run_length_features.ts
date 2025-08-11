@@ -12,7 +12,7 @@ const TEXTURE_RUN_LENGTH_FEATURES_METADATA: Metadata = {
 
 
 interface TextureRunLengthFeaturesParameters {
-    "__STYXTYPE__": "TextureRunLengthFeatures";
+    "@type": "ants.TextureRunLengthFeatures";
     "image_dimension": number;
     "input_image": InputPathType;
     "number_of_bins_per_axis"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface TextureRunLengthFeaturesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "TextureRunLengthFeatures": texture_run_length_features_cargs,
+        "ants.TextureRunLengthFeatures": texture_run_length_features_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "TextureRunLengthFeatures": texture_run_length_features_outputs,
+        "ants.TextureRunLengthFeatures": texture_run_length_features_outputs,
     };
     return outputsFuncs[t];
 }
@@ -108,6 +108,17 @@ interface TextureRunLengthFeaturesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the input image.
+ * @param input_image The path to the input image file.
+ * @param number_of_bins_per_axis The number of bins per axis for the histogram.
+ * @param mask_image The path to the mask image file.
+ * @param mask_label The label value in the mask image to be used.
+ *
+ * @returns Parameter dictionary
+ */
 function texture_run_length_features_params(
     image_dimension: number,
     input_image: InputPathType,
@@ -115,19 +126,8 @@ function texture_run_length_features_params(
     mask_image: InputPathType | null = null,
     mask_label: number | null = 1,
 ): TextureRunLengthFeaturesParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the input image.
-     * @param input_image The path to the input image file.
-     * @param number_of_bins_per_axis The number of bins per axis for the histogram.
-     * @param mask_image The path to the mask image file.
-     * @param mask_label The label value in the mask image to be used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "TextureRunLengthFeatures" as const,
+        "@type": "ants.TextureRunLengthFeatures" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -144,18 +144,18 @@ function texture_run_length_features_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function texture_run_length_features_cargs(
     params: TextureRunLengthFeaturesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("TextureRunLengthFeatures");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -173,18 +173,18 @@ function texture_run_length_features_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function texture_run_length_features_outputs(
     params: TextureRunLengthFeaturesParameters,
     execution: Execution,
 ): TextureRunLengthFeaturesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TextureRunLengthFeaturesOutputs = {
         root: execution.outputFile("."),
         short_run_emphasis: execution.outputFile(["short_run_emphasis.csv"].join('')),
@@ -202,22 +202,22 @@ function texture_run_length_features_outputs(
 }
 
 
+/**
+ * A tool to calculate texture run length features on an input image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TextureRunLengthFeaturesOutputs`).
+ */
 function texture_run_length_features_execute(
     params: TextureRunLengthFeaturesParameters,
     execution: Execution,
 ): TextureRunLengthFeaturesOutputs {
-    /**
-     * A tool to calculate texture run length features on an input image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TextureRunLengthFeaturesOutputs`).
-     */
     params = execution.params(params)
     const cargs = texture_run_length_features_cargs(params, execution)
     const ret = texture_run_length_features_outputs(params, execution)
@@ -226,6 +226,22 @@ function texture_run_length_features_execute(
 }
 
 
+/**
+ * A tool to calculate texture run length features on an input image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the input image.
+ * @param input_image The path to the input image file.
+ * @param number_of_bins_per_axis The number of bins per axis for the histogram.
+ * @param mask_image The path to the mask image file.
+ * @param mask_label The label value in the mask image to be used.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TextureRunLengthFeaturesOutputs`).
+ */
 function texture_run_length_features(
     image_dimension: number,
     input_image: InputPathType,
@@ -234,22 +250,6 @@ function texture_run_length_features(
     mask_label: number | null = 1,
     runner: Runner | null = null,
 ): TextureRunLengthFeaturesOutputs {
-    /**
-     * A tool to calculate texture run length features on an input image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the input image.
-     * @param input_image The path to the input image file.
-     * @param number_of_bins_per_axis The number of bins per axis for the histogram.
-     * @param mask_image The path to the mask image file.
-     * @param mask_label The label value in the mask image to be used.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TextureRunLengthFeaturesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEXTURE_RUN_LENGTH_FEATURES_METADATA);
     const params = texture_run_length_features_params(image_dimension, input_image, number_of_bins_per_axis, mask_image, mask_label)
@@ -262,5 +262,8 @@ export {
       TextureRunLengthFeaturesOutputs,
       TextureRunLengthFeaturesParameters,
       texture_run_length_features,
+      texture_run_length_features_cargs,
+      texture_run_length_features_execute,
+      texture_run_length_features_outputs,
       texture_run_length_features_params,
 };

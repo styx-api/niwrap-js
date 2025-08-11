@@ -12,7 +12,7 @@ const MRI_SEGSTATS_METADATA: Metadata = {
 
 
 interface MriSegstatsParameters {
-    "__STYXTYPE__": "mri_segstats";
+    "@type": "freesurfer.mri_segstats";
     "segvol": InputPathType;
     "annot_subject"?: string | null | undefined;
     "annot_hemisphere"?: string | null | undefined;
@@ -76,35 +76,35 @@ interface MriSegstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segstats": mri_segstats_cargs,
+        "freesurfer.mri_segstats": mri_segstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segstats": mri_segstats_outputs,
+        "freesurfer.mri_segstats": mri_segstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -147,6 +147,68 @@ interface MriSegstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param segvol Input segmentation volume. This volume's voxel values indicate a segmentation or class.
+ * @param output_file ASCII file in which summary statistics are saved.
+ * @param annot_subject Create a segmentation from hemi.parc.annot. Subject is the name of the subject.
+ * @param slabel_subject Create a segmentation from the given surface label. The points in the label are given a value of 1; 0 for outside.
+ * @param partial_vol_comp Use pvvol to compensate for partial voluming, resulting in more accurate volumes.
+ * @param input_volume Input volume from which to compute more statistics.
+ * @param seg_erode Erode segmentation boundaries by Nerodes.
+ * @param frame Report statistics of the input volume at the specified 0-based frame number.
+ * @param robust Compute stats after excluding a percentage of high and low values.
+ * @param square_input Compute the square of the input before computing stats.
+ * @param sqrt_input Compute the square root of the input before computing stats.
+ * @param multiply_input Multiply input by value.
+ * @param divide_input Divide input by value.
+ * @param snr_column Save mean/std as extra column in output table.
+ * @param absolute_value Compute absolute value of input before spatial average.
+ * @param accumulate_mean Save mean*nvoxels instead of mean.
+ * @param color_table FreeSurfer color table file to specify how each segmentation index is mapped to a segmentation name and color.
+ * @param default_color_table Use default color table from FreeSurferColorLUT.txt.
+ * @param gca_color_table Get color table from the given GCA file.
+ * @param ids Specify numeric segmentation ids.
+ * @param exclude_ids Exclude the given segmentation id(s) from report.
+ * @param exclude_gm_wm Exclude cortical gray and white matter based on predefined IDs.
+ * @param surf_wm_vol Compute cortical matter volume based on the white surface volume.
+ * @param surf_ctx_vol Compute cortical volumes from surface.
+ * @param no_global_stats Turns off computation of global stats.
+ * @param empty_segments Report on segmentations listed in the color table even if they are not found in the segmentation volume.
+ * @param ctab_output Create an output color table with just the segmentations reported.
+ * @param mask_volume Exclude voxels that are not in the mask. Voxels to be excluded are assigned a segid of 0.
+ * @param mask_threshold Exclude voxels that are below thresh, above -thresh, or between -thresh and +thresh.
+ * @param mask_sign Specify sign for masking threshold. Choices are abs, pos, and neg.
+ * @param mask_frame Derive the mask volume from the specified 0-based frame.
+ * @param invert_mask After applying all the masking criteria, invert the mask.
+ * @param mask_erode Erode mask by specified number of iterations.
+ * @param brain_vol_seg Get volume of brain as the sum of the volumes of the segmentations that are in the brain.
+ * @param brain_mask_vol Load brain mask and compute brain volume from non-zero voxels.
+ * @param subcortical_gray Compute volume of subcortical gray matter.
+ * @param total_gray Compute volume of total gray matter.
+ * @param intracranial_volume Compute intracranial volume from talairach.xfm.
+ * @param intracranial_volume_only Compute intracranial volume from talairach.xfm and exit.
+ * @param old_intracranial_volume_only Compute intracranial volume from talairach_with_skull.lta and exit.
+ * @param talairach_transform Specify path to talairach.xfm file for eTIV.
+ * @param xfm_to_etiv Convert xfm to eTIV and write to output file.
+ * @param euler_hole_count Write out number of defect holes based on the Euler number.
+ * @param avg_waveform Compute the average waveform and save to text file.
+ * @param sum_waveform Compute the sum waveform and save to text file.
+ * @param avg_waveform_vol Compute average waveform and save to MRI volume.
+ * @param remove_avgwf_mean Remove temporal mean from avgwf and avgwfvol.
+ * @param spatial_frame_avg Save mean across space and frame.
+ * @param voxel_crs Replace segmentation with all 0s except at specified voxel.
+ * @param replace_ids Replace segmentation ID1 with ID2.
+ * @param replace_ids_file Replace segmentations based on pairs in file.
+ * @param gtm_default_seg_merge Replace segmentations based on GTM default.
+ * @param gtm_default_seg_merge_choroid Replace segmentations based on GTM default excluding choroid.
+ * @param qa_stats_file Compute stats useful for quality control.
+ * @param subjects_dir Set SUBJECTS_DIR environment variable.
+ * @param random_seed Set random number generator seed value.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segstats_params(
     segvol: InputPathType,
     output_file: string,
@@ -209,70 +271,8 @@ function mri_segstats_params(
     subjects_dir: string | null = null,
     random_seed: number | null = null,
 ): MriSegstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param segvol Input segmentation volume. This volume's voxel values indicate a segmentation or class.
-     * @param output_file ASCII file in which summary statistics are saved.
-     * @param annot_subject Create a segmentation from hemi.parc.annot. Subject is the name of the subject.
-     * @param slabel_subject Create a segmentation from the given surface label. The points in the label are given a value of 1; 0 for outside.
-     * @param partial_vol_comp Use pvvol to compensate for partial voluming, resulting in more accurate volumes.
-     * @param input_volume Input volume from which to compute more statistics.
-     * @param seg_erode Erode segmentation boundaries by Nerodes.
-     * @param frame Report statistics of the input volume at the specified 0-based frame number.
-     * @param robust Compute stats after excluding a percentage of high and low values.
-     * @param square_input Compute the square of the input before computing stats.
-     * @param sqrt_input Compute the square root of the input before computing stats.
-     * @param multiply_input Multiply input by value.
-     * @param divide_input Divide input by value.
-     * @param snr_column Save mean/std as extra column in output table.
-     * @param absolute_value Compute absolute value of input before spatial average.
-     * @param accumulate_mean Save mean*nvoxels instead of mean.
-     * @param color_table FreeSurfer color table file to specify how each segmentation index is mapped to a segmentation name and color.
-     * @param default_color_table Use default color table from FreeSurferColorLUT.txt.
-     * @param gca_color_table Get color table from the given GCA file.
-     * @param ids Specify numeric segmentation ids.
-     * @param exclude_ids Exclude the given segmentation id(s) from report.
-     * @param exclude_gm_wm Exclude cortical gray and white matter based on predefined IDs.
-     * @param surf_wm_vol Compute cortical matter volume based on the white surface volume.
-     * @param surf_ctx_vol Compute cortical volumes from surface.
-     * @param no_global_stats Turns off computation of global stats.
-     * @param empty_segments Report on segmentations listed in the color table even if they are not found in the segmentation volume.
-     * @param ctab_output Create an output color table with just the segmentations reported.
-     * @param mask_volume Exclude voxels that are not in the mask. Voxels to be excluded are assigned a segid of 0.
-     * @param mask_threshold Exclude voxels that are below thresh, above -thresh, or between -thresh and +thresh.
-     * @param mask_sign Specify sign for masking threshold. Choices are abs, pos, and neg.
-     * @param mask_frame Derive the mask volume from the specified 0-based frame.
-     * @param invert_mask After applying all the masking criteria, invert the mask.
-     * @param mask_erode Erode mask by specified number of iterations.
-     * @param brain_vol_seg Get volume of brain as the sum of the volumes of the segmentations that are in the brain.
-     * @param brain_mask_vol Load brain mask and compute brain volume from non-zero voxels.
-     * @param subcortical_gray Compute volume of subcortical gray matter.
-     * @param total_gray Compute volume of total gray matter.
-     * @param intracranial_volume Compute intracranial volume from talairach.xfm.
-     * @param intracranial_volume_only Compute intracranial volume from talairach.xfm and exit.
-     * @param old_intracranial_volume_only Compute intracranial volume from talairach_with_skull.lta and exit.
-     * @param talairach_transform Specify path to talairach.xfm file for eTIV.
-     * @param xfm_to_etiv Convert xfm to eTIV and write to output file.
-     * @param euler_hole_count Write out number of defect holes based on the Euler number.
-     * @param avg_waveform Compute the average waveform and save to text file.
-     * @param sum_waveform Compute the sum waveform and save to text file.
-     * @param avg_waveform_vol Compute average waveform and save to MRI volume.
-     * @param remove_avgwf_mean Remove temporal mean from avgwf and avgwfvol.
-     * @param spatial_frame_avg Save mean across space and frame.
-     * @param voxel_crs Replace segmentation with all 0s except at specified voxel.
-     * @param replace_ids Replace segmentation ID1 with ID2.
-     * @param replace_ids_file Replace segmentations based on pairs in file.
-     * @param gtm_default_seg_merge Replace segmentations based on GTM default.
-     * @param gtm_default_seg_merge_choroid Replace segmentations based on GTM default excluding choroid.
-     * @param qa_stats_file Compute stats useful for quality control.
-     * @param subjects_dir Set SUBJECTS_DIR environment variable.
-     * @param random_seed Set random number generator seed value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segstats" as const,
+        "@type": "freesurfer.mri_segstats" as const,
         "segvol": segvol,
         "output_file": output_file,
         "square_input": square_input,
@@ -410,18 +410,18 @@ function mri_segstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segstats_cargs(
     params: MriSegstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segstats");
     cargs.push(
@@ -706,18 +706,18 @@ function mri_segstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segstats_outputs(
     params: MriSegstatsParameters,
     execution: Execution,
 ): MriSegstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegstatsOutputs = {
         root: execution.outputFile("."),
         summary_output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -731,22 +731,22 @@ function mri_segstats_outputs(
 }
 
 
+/**
+ * Calculates measures and stats derived from brain segmentation data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
+ */
 function mri_segstats_execute(
     params: MriSegstatsParameters,
     execution: Execution,
 ): MriSegstatsOutputs {
-    /**
-     * Calculates measures and stats derived from brain segmentation data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segstats_cargs(params, execution)
     const ret = mri_segstats_outputs(params, execution)
@@ -755,6 +755,73 @@ function mri_segstats_execute(
 }
 
 
+/**
+ * Calculates measures and stats derived from brain segmentation data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param segvol Input segmentation volume. This volume's voxel values indicate a segmentation or class.
+ * @param output_file ASCII file in which summary statistics are saved.
+ * @param annot_subject Create a segmentation from hemi.parc.annot. Subject is the name of the subject.
+ * @param slabel_subject Create a segmentation from the given surface label. The points in the label are given a value of 1; 0 for outside.
+ * @param partial_vol_comp Use pvvol to compensate for partial voluming, resulting in more accurate volumes.
+ * @param input_volume Input volume from which to compute more statistics.
+ * @param seg_erode Erode segmentation boundaries by Nerodes.
+ * @param frame Report statistics of the input volume at the specified 0-based frame number.
+ * @param robust Compute stats after excluding a percentage of high and low values.
+ * @param square_input Compute the square of the input before computing stats.
+ * @param sqrt_input Compute the square root of the input before computing stats.
+ * @param multiply_input Multiply input by value.
+ * @param divide_input Divide input by value.
+ * @param snr_column Save mean/std as extra column in output table.
+ * @param absolute_value Compute absolute value of input before spatial average.
+ * @param accumulate_mean Save mean*nvoxels instead of mean.
+ * @param color_table FreeSurfer color table file to specify how each segmentation index is mapped to a segmentation name and color.
+ * @param default_color_table Use default color table from FreeSurferColorLUT.txt.
+ * @param gca_color_table Get color table from the given GCA file.
+ * @param ids Specify numeric segmentation ids.
+ * @param exclude_ids Exclude the given segmentation id(s) from report.
+ * @param exclude_gm_wm Exclude cortical gray and white matter based on predefined IDs.
+ * @param surf_wm_vol Compute cortical matter volume based on the white surface volume.
+ * @param surf_ctx_vol Compute cortical volumes from surface.
+ * @param no_global_stats Turns off computation of global stats.
+ * @param empty_segments Report on segmentations listed in the color table even if they are not found in the segmentation volume.
+ * @param ctab_output Create an output color table with just the segmentations reported.
+ * @param mask_volume Exclude voxels that are not in the mask. Voxels to be excluded are assigned a segid of 0.
+ * @param mask_threshold Exclude voxels that are below thresh, above -thresh, or between -thresh and +thresh.
+ * @param mask_sign Specify sign for masking threshold. Choices are abs, pos, and neg.
+ * @param mask_frame Derive the mask volume from the specified 0-based frame.
+ * @param invert_mask After applying all the masking criteria, invert the mask.
+ * @param mask_erode Erode mask by specified number of iterations.
+ * @param brain_vol_seg Get volume of brain as the sum of the volumes of the segmentations that are in the brain.
+ * @param brain_mask_vol Load brain mask and compute brain volume from non-zero voxels.
+ * @param subcortical_gray Compute volume of subcortical gray matter.
+ * @param total_gray Compute volume of total gray matter.
+ * @param intracranial_volume Compute intracranial volume from talairach.xfm.
+ * @param intracranial_volume_only Compute intracranial volume from talairach.xfm and exit.
+ * @param old_intracranial_volume_only Compute intracranial volume from talairach_with_skull.lta and exit.
+ * @param talairach_transform Specify path to talairach.xfm file for eTIV.
+ * @param xfm_to_etiv Convert xfm to eTIV and write to output file.
+ * @param euler_hole_count Write out number of defect holes based on the Euler number.
+ * @param avg_waveform Compute the average waveform and save to text file.
+ * @param sum_waveform Compute the sum waveform and save to text file.
+ * @param avg_waveform_vol Compute average waveform and save to MRI volume.
+ * @param remove_avgwf_mean Remove temporal mean from avgwf and avgwfvol.
+ * @param spatial_frame_avg Save mean across space and frame.
+ * @param voxel_crs Replace segmentation with all 0s except at specified voxel.
+ * @param replace_ids Replace segmentation ID1 with ID2.
+ * @param replace_ids_file Replace segmentations based on pairs in file.
+ * @param gtm_default_seg_merge Replace segmentations based on GTM default.
+ * @param gtm_default_seg_merge_choroid Replace segmentations based on GTM default excluding choroid.
+ * @param qa_stats_file Compute stats useful for quality control.
+ * @param subjects_dir Set SUBJECTS_DIR environment variable.
+ * @param random_seed Set random number generator seed value.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
+ */
 function mri_segstats(
     segvol: InputPathType,
     output_file: string,
@@ -818,73 +885,6 @@ function mri_segstats(
     random_seed: number | null = null,
     runner: Runner | null = null,
 ): MriSegstatsOutputs {
-    /**
-     * Calculates measures and stats derived from brain segmentation data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param segvol Input segmentation volume. This volume's voxel values indicate a segmentation or class.
-     * @param output_file ASCII file in which summary statistics are saved.
-     * @param annot_subject Create a segmentation from hemi.parc.annot. Subject is the name of the subject.
-     * @param slabel_subject Create a segmentation from the given surface label. The points in the label are given a value of 1; 0 for outside.
-     * @param partial_vol_comp Use pvvol to compensate for partial voluming, resulting in more accurate volumes.
-     * @param input_volume Input volume from which to compute more statistics.
-     * @param seg_erode Erode segmentation boundaries by Nerodes.
-     * @param frame Report statistics of the input volume at the specified 0-based frame number.
-     * @param robust Compute stats after excluding a percentage of high and low values.
-     * @param square_input Compute the square of the input before computing stats.
-     * @param sqrt_input Compute the square root of the input before computing stats.
-     * @param multiply_input Multiply input by value.
-     * @param divide_input Divide input by value.
-     * @param snr_column Save mean/std as extra column in output table.
-     * @param absolute_value Compute absolute value of input before spatial average.
-     * @param accumulate_mean Save mean*nvoxels instead of mean.
-     * @param color_table FreeSurfer color table file to specify how each segmentation index is mapped to a segmentation name and color.
-     * @param default_color_table Use default color table from FreeSurferColorLUT.txt.
-     * @param gca_color_table Get color table from the given GCA file.
-     * @param ids Specify numeric segmentation ids.
-     * @param exclude_ids Exclude the given segmentation id(s) from report.
-     * @param exclude_gm_wm Exclude cortical gray and white matter based on predefined IDs.
-     * @param surf_wm_vol Compute cortical matter volume based on the white surface volume.
-     * @param surf_ctx_vol Compute cortical volumes from surface.
-     * @param no_global_stats Turns off computation of global stats.
-     * @param empty_segments Report on segmentations listed in the color table even if they are not found in the segmentation volume.
-     * @param ctab_output Create an output color table with just the segmentations reported.
-     * @param mask_volume Exclude voxels that are not in the mask. Voxels to be excluded are assigned a segid of 0.
-     * @param mask_threshold Exclude voxels that are below thresh, above -thresh, or between -thresh and +thresh.
-     * @param mask_sign Specify sign for masking threshold. Choices are abs, pos, and neg.
-     * @param mask_frame Derive the mask volume from the specified 0-based frame.
-     * @param invert_mask After applying all the masking criteria, invert the mask.
-     * @param mask_erode Erode mask by specified number of iterations.
-     * @param brain_vol_seg Get volume of brain as the sum of the volumes of the segmentations that are in the brain.
-     * @param brain_mask_vol Load brain mask and compute brain volume from non-zero voxels.
-     * @param subcortical_gray Compute volume of subcortical gray matter.
-     * @param total_gray Compute volume of total gray matter.
-     * @param intracranial_volume Compute intracranial volume from talairach.xfm.
-     * @param intracranial_volume_only Compute intracranial volume from talairach.xfm and exit.
-     * @param old_intracranial_volume_only Compute intracranial volume from talairach_with_skull.lta and exit.
-     * @param talairach_transform Specify path to talairach.xfm file for eTIV.
-     * @param xfm_to_etiv Convert xfm to eTIV and write to output file.
-     * @param euler_hole_count Write out number of defect holes based on the Euler number.
-     * @param avg_waveform Compute the average waveform and save to text file.
-     * @param sum_waveform Compute the sum waveform and save to text file.
-     * @param avg_waveform_vol Compute average waveform and save to MRI volume.
-     * @param remove_avgwf_mean Remove temporal mean from avgwf and avgwfvol.
-     * @param spatial_frame_avg Save mean across space and frame.
-     * @param voxel_crs Replace segmentation with all 0s except at specified voxel.
-     * @param replace_ids Replace segmentation ID1 with ID2.
-     * @param replace_ids_file Replace segmentations based on pairs in file.
-     * @param gtm_default_seg_merge Replace segmentations based on GTM default.
-     * @param gtm_default_seg_merge_choroid Replace segmentations based on GTM default excluding choroid.
-     * @param qa_stats_file Compute stats useful for quality control.
-     * @param subjects_dir Set SUBJECTS_DIR environment variable.
-     * @param random_seed Set random number generator seed value.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGSTATS_METADATA);
     const params = mri_segstats_params(segvol, output_file, annot_subject, annot_hemisphere, annot_parcellation, slabel_subject, slabel_hemisphere, slabel_label, partial_vol_comp, input_volume, seg_erode, frame, robust, square_input, sqrt_input, multiply_input, divide_input, snr_column, absolute_value, accumulate_mean, color_table, default_color_table, gca_color_table, ids, exclude_ids, exclude_gm_wm, surf_wm_vol, surf_ctx_vol, no_global_stats, empty_segments, ctab_output, mask_volume, mask_threshold, mask_sign, mask_frame, invert_mask, mask_erode, brain_vol_seg, brain_mask_vol, subcortical_gray, total_gray, intracranial_volume, intracranial_volume_only, old_intracranial_volume_only, talairach_transform, xfm_to_etiv, euler_hole_count, avg_waveform, sum_waveform, avg_waveform_vol, remove_avgwf_mean, spatial_frame_avg, voxel_crs, replace_ids, replace_ids_file, gtm_default_seg_merge, gtm_default_seg_merge_choroid, qa_stats_file, subjects_dir, random_seed)
@@ -897,5 +897,8 @@ export {
       MriSegstatsOutputs,
       MriSegstatsParameters,
       mri_segstats,
+      mri_segstats_cargs,
+      mri_segstats_execute,
+      mri_segstats_outputs,
       mri_segstats_params,
 };

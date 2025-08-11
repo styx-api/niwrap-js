@@ -12,41 +12,41 @@ const V__CENTER_DISTANCE_METADATA: Metadata = {
 
 
 interface VCenterDistanceParameters {
-    "__STYXTYPE__": "@Center_Distance";
+    "@type": "afni.@Center_Distance";
     "dset1": InputPathType;
     "dset2": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Center_Distance": v__center_distance_cargs,
+        "afni.@Center_Distance": v__center_distance_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@Center_Distance": v__center_distance_outputs,
+        "afni.@Center_Distance": v__center_distance_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VCenterDistanceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset1 First dataset file (e.g. file1.nii.gz)
+ * @param dset2 Second dataset file (e.g. file2.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function v__center_distance_params(
     dset1: InputPathType,
     dset2: InputPathType,
 ): VCenterDistanceParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset1 First dataset file (e.g. file1.nii.gz)
-     * @param dset2 Second dataset file (e.g. file2.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Center_Distance" as const,
+        "@type": "afni.@Center_Distance" as const,
         "dset1": dset1,
         "dset2": dset2,
     };
@@ -90,18 +90,18 @@ function v__center_distance_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__center_distance_cargs(
     params: VCenterDistanceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Center_Distance");
     cargs.push(
@@ -113,18 +113,18 @@ function v__center_distance_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__center_distance_outputs(
     params: VCenterDistanceParameters,
     execution: Execution,
 ): VCenterDistanceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VCenterDistanceOutputs = {
         root: execution.outputFile("."),
         distance_output: execution.outputFile(["distance.txt"].join('')),
@@ -133,22 +133,22 @@ function v__center_distance_outputs(
 }
 
 
+/**
+ * Tool to calculate the distance between the centers of two datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
+ */
 function v__center_distance_execute(
     params: VCenterDistanceParameters,
     execution: Execution,
 ): VCenterDistanceOutputs {
-    /**
-     * Tool to calculate the distance between the centers of two datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__center_distance_cargs(params, execution)
     const ret = v__center_distance_outputs(params, execution)
@@ -157,24 +157,24 @@ function v__center_distance_execute(
 }
 
 
+/**
+ * Tool to calculate the distance between the centers of two datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset1 First dataset file (e.g. file1.nii.gz)
+ * @param dset2 Second dataset file (e.g. file2.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
+ */
 function v__center_distance(
     dset1: InputPathType,
     dset2: InputPathType,
     runner: Runner | null = null,
 ): VCenterDistanceOutputs {
-    /**
-     * Tool to calculate the distance between the centers of two datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset1 First dataset file (e.g. file1.nii.gz)
-     * @param dset2 Second dataset file (e.g. file2.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CENTER_DISTANCE_METADATA);
     const params = v__center_distance_params(dset1, dset2)
@@ -187,5 +187,8 @@ export {
       VCenterDistanceParameters,
       V__CENTER_DISTANCE_METADATA,
       v__center_distance,
+      v__center_distance_cargs,
+      v__center_distance_execute,
+      v__center_distance_outputs,
       v__center_distance_params,
 };

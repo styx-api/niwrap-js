@@ -12,7 +12,7 @@ const REGISTER_SUBJECT_METADATA: Metadata = {
 
 
 interface RegisterSubjectParameters {
-    "__STYXTYPE__": "register_subject";
+    "@type": "freesurfer.register_subject";
     "input_volume"?: InputPathType | null | undefined;
     "mask_volume"?: InputPathType | null | undefined;
     "control_points"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface RegisterSubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "register_subject": register_subject_cargs,
+        "freesurfer.register_subject": register_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "register_subject": register_subject_outputs,
+        "freesurfer.register_subject": register_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface RegisterSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume for registration (e.g., brain.mgz)
+ * @param mask_volume MR volume used to mask input volume.
+ * @param control_points Control points used for registration.
+ * @param output_directory Directory to write output files (e.g., transformed fsamples).
+ * @param log_file Log file for recording registration results.
+ * @param gca_file GCA file required for registration.
+ *
+ * @returns Parameter dictionary
+ */
 function register_subject_params(
     input_volume: InputPathType | null = null,
     mask_volume: InputPathType | null = null,
@@ -85,20 +97,8 @@ function register_subject_params(
     log_file: InputPathType | null = null,
     gca_file: InputPathType | null = null,
 ): RegisterSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume for registration (e.g., brain.mgz)
-     * @param mask_volume MR volume used to mask input volume.
-     * @param control_points Control points used for registration.
-     * @param output_directory Directory to write output files (e.g., transformed fsamples).
-     * @param log_file Log file for recording registration results.
-     * @param gca_file GCA file required for registration.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "register_subject" as const,
+        "@type": "freesurfer.register_subject" as const,
     };
     if (input_volume !== null) {
         params["input_volume"] = input_volume;
@@ -122,18 +122,18 @@ function register_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function register_subject_cargs(
     params: RegisterSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("register_subject");
     if ((params["input_volume"] ?? null) !== null) {
@@ -158,18 +158,18 @@ function register_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function register_subject_outputs(
     params: RegisterSubjectParameters,
     execution: Execution,
 ): RegisterSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegisterSubjectOutputs = {
         root: execution.outputFile("."),
         normalized_output: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/norm.mgz"].join('')) : null,
@@ -179,22 +179,22 @@ function register_subject_outputs(
 }
 
 
+/**
+ * Tool for registering brain MR volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
+ */
 function register_subject_execute(
     params: RegisterSubjectParameters,
     execution: Execution,
 ): RegisterSubjectOutputs {
-    /**
-     * Tool for registering brain MR volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = register_subject_cargs(params, execution)
     const ret = register_subject_outputs(params, execution)
@@ -203,6 +203,23 @@ function register_subject_execute(
 }
 
 
+/**
+ * Tool for registering brain MR volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume for registration (e.g., brain.mgz)
+ * @param mask_volume MR volume used to mask input volume.
+ * @param control_points Control points used for registration.
+ * @param output_directory Directory to write output files (e.g., transformed fsamples).
+ * @param log_file Log file for recording registration results.
+ * @param gca_file GCA file required for registration.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
+ */
 function register_subject(
     input_volume: InputPathType | null = null,
     mask_volume: InputPathType | null = null,
@@ -212,23 +229,6 @@ function register_subject(
     gca_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegisterSubjectOutputs {
-    /**
-     * Tool for registering brain MR volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume for registration (e.g., brain.mgz)
-     * @param mask_volume MR volume used to mask input volume.
-     * @param control_points Control points used for registration.
-     * @param output_directory Directory to write output files (e.g., transformed fsamples).
-     * @param log_file Log file for recording registration results.
-     * @param gca_file GCA file required for registration.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGISTER_SUBJECT_METADATA);
     const params = register_subject_params(input_volume, mask_volume, control_points, output_directory, log_file, gca_file)
@@ -241,5 +241,8 @@ export {
       RegisterSubjectOutputs,
       RegisterSubjectParameters,
       register_subject,
+      register_subject_cargs,
+      register_subject_execute,
+      register_subject_outputs,
       register_subject_params,
 };

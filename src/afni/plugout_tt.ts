@@ -12,7 +12,7 @@ const PLUGOUT_TT_METADATA: Metadata = {
 
 
 interface PlugoutTtParameters {
-    "__STYXTYPE__": "plugout_tt";
+    "@type": "afni.plugout_tt";
     "host"?: string | null | undefined;
     "ijk_option": boolean;
     "verbose": boolean;
@@ -28,33 +28,33 @@ interface PlugoutTtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "plugout_tt": plugout_tt_cargs,
+        "afni.plugout_tt": plugout_tt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface PlugoutTtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param host Name of the host computer to connect to AFNI on. The default is to connect on the current host using shared memory.
+ * @param ijk_option Get voxel indices from AFNI instead of Talairach coordinates.
+ * @param verbose Enable verbose mode (prints lots of diagnostic messages).
+ * @param port TCP/IP port number to use. The default is 8001.
+ * @param name String to use as the name that AFNI assigns to this plugout. The default is something silly.
+ * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same computer. Use an integer in the inclusive range [1025 to 65500].
+ * @param port_offset_quiet Provide a port offset to allow multiple instances of communicating programs to operate on the same computer with quiet output in case of issues. Use an integer in the inclusive range [1025 to 65500].
+ * @param port_bloc Provide a port offset bloc for easier configuration of multiple instances. PORT_OFFSET_BLOC is an integer between 0 and MAX_BLOC (around 4000).
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit. Stay under 2000 for safety.
+ * @param max_port_bloc_quiet Print the current value of MAX_BLOC quietly and exit.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI, then quit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI quietly, then quit.
+ *
+ * @returns Parameter dictionary
+ */
 function plugout_tt_params(
     host: string | null = null,
     ijk_option: boolean = false,
@@ -88,26 +106,8 @@ function plugout_tt_params(
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
 ): PlugoutTtParameters {
-    /**
-     * Build parameters.
-    
-     * @param host Name of the host computer to connect to AFNI on. The default is to connect on the current host using shared memory.
-     * @param ijk_option Get voxel indices from AFNI instead of Talairach coordinates.
-     * @param verbose Enable verbose mode (prints lots of diagnostic messages).
-     * @param port TCP/IP port number to use. The default is 8001.
-     * @param name String to use as the name that AFNI assigns to this plugout. The default is something silly.
-     * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same computer. Use an integer in the inclusive range [1025 to 65500].
-     * @param port_offset_quiet Provide a port offset to allow multiple instances of communicating programs to operate on the same computer with quiet output in case of issues. Use an integer in the inclusive range [1025 to 65500].
-     * @param port_bloc Provide a port offset bloc for easier configuration of multiple instances. PORT_OFFSET_BLOC is an integer between 0 and MAX_BLOC (around 4000).
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit. Stay under 2000 for safety.
-     * @param max_port_bloc_quiet Print the current value of MAX_BLOC quietly and exit.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI, then quit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI quietly, then quit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plugout_tt" as const,
+        "@type": "afni.plugout_tt" as const,
         "ijk_option": ijk_option,
         "verbose": verbose,
         "max_port_bloc": max_port_bloc,
@@ -137,18 +137,18 @@ function plugout_tt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function plugout_tt_cargs(
     params: PlugoutTtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("plugout_tt");
     if ((params["host"] ?? null) !== null) {
@@ -209,18 +209,18 @@ function plugout_tt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function plugout_tt_outputs(
     params: PlugoutTtParameters,
     execution: Execution,
 ): PlugoutTtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PlugoutTtOutputs = {
         root: execution.outputFile("."),
     };
@@ -228,22 +228,22 @@ function plugout_tt_outputs(
 }
 
 
+/**
+ * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutTtOutputs`).
+ */
 function plugout_tt_execute(
     params: PlugoutTtParameters,
     execution: Execution,
 ): PlugoutTtOutputs {
-    /**
-     * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PlugoutTtOutputs`).
-     */
     params = execution.params(params)
     const cargs = plugout_tt_cargs(params, execution)
     const ret = plugout_tt_outputs(params, execution)
@@ -252,6 +252,29 @@ function plugout_tt_execute(
 }
 
 
+/**
+ * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param host Name of the host computer to connect to AFNI on. The default is to connect on the current host using shared memory.
+ * @param ijk_option Get voxel indices from AFNI instead of Talairach coordinates.
+ * @param verbose Enable verbose mode (prints lots of diagnostic messages).
+ * @param port TCP/IP port number to use. The default is 8001.
+ * @param name String to use as the name that AFNI assigns to this plugout. The default is something silly.
+ * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same computer. Use an integer in the inclusive range [1025 to 65500].
+ * @param port_offset_quiet Provide a port offset to allow multiple instances of communicating programs to operate on the same computer with quiet output in case of issues. Use an integer in the inclusive range [1025 to 65500].
+ * @param port_bloc Provide a port offset bloc for easier configuration of multiple instances. PORT_OFFSET_BLOC is an integer between 0 and MAX_BLOC (around 4000).
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit. Stay under 2000 for safety.
+ * @param max_port_bloc_quiet Print the current value of MAX_BLOC quietly and exit.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI, then quit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI quietly, then quit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutTtOutputs`).
+ */
 function plugout_tt(
     host: string | null = null,
     ijk_option: boolean = false,
@@ -267,29 +290,6 @@ function plugout_tt(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutTtOutputs {
-    /**
-     * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param host Name of the host computer to connect to AFNI on. The default is to connect on the current host using shared memory.
-     * @param ijk_option Get voxel indices from AFNI instead of Talairach coordinates.
-     * @param verbose Enable verbose mode (prints lots of diagnostic messages).
-     * @param port TCP/IP port number to use. The default is 8001.
-     * @param name String to use as the name that AFNI assigns to this plugout. The default is something silly.
-     * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same computer. Use an integer in the inclusive range [1025 to 65500].
-     * @param port_offset_quiet Provide a port offset to allow multiple instances of communicating programs to operate on the same computer with quiet output in case of issues. Use an integer in the inclusive range [1025 to 65500].
-     * @param port_bloc Provide a port offset bloc for easier configuration of multiple instances. PORT_OFFSET_BLOC is an integer between 0 and MAX_BLOC (around 4000).
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit. Stay under 2000 for safety.
-     * @param max_port_bloc_quiet Print the current value of MAX_BLOC quietly and exit.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI, then quit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI quietly, then quit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PlugoutTtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLUGOUT_TT_METADATA);
     const params = plugout_tt_params(host, ijk_option, verbose, port, name, port_offset, port_offset_quiet, port_bloc, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
@@ -302,5 +302,8 @@ export {
       PlugoutTtOutputs,
       PlugoutTtParameters,
       plugout_tt,
+      plugout_tt_cargs,
+      plugout_tt_execute,
+      plugout_tt_outputs,
       plugout_tt_params,
 };

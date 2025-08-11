@@ -12,7 +12,7 @@ const MRI_CREATE_TESTS_METADATA: Metadata = {
 
 
 interface MriCreateTestsParameters {
-    "__STYXTYPE__": "mri_create_tests";
+    "@type": "freesurfer.mri_create_tests";
     "input_file": InputPathType;
     "out_src": string;
     "out_target": string;
@@ -35,33 +35,33 @@ interface MriCreateTestsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_create_tests": mri_create_tests_cargs,
+        "freesurfer.mri_create_tests": mri_create_tests_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -81,6 +81,31 @@ interface MriCreateTestsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume to be modified.
+ * @param out_src Output source volume name.
+ * @param out_target Output target volume name.
+ * @param input_target Input target volume to be modified, must be in the same space as input volume. Default: use input volume to create output target.
+ * @param lta_in Specify LTA for mapping input to output target. Cannot be used with --rotation or --translation.
+ * @param mask Mask source MRI with mask file.
+ * @param noise Add global Gaussian noise.
+ * @param outlier Add random outlier voxels.
+ * @param outlier_box Add box containing random voxels.
+ * @param translation_flag Apply random translation.
+ * @param transdist Set maximal translation distance in mm. Default is 11.
+ * @param rotation_flag Apply random rotation.
+ * @param maxdeg Maximal rotation in degrees. Default is 25.
+ * @param intensity_flag Apply random intensity scaling.
+ * @param iscale Use fixed intensity scaling parameter.
+ * @param lta_out Write used random transform to LTA.
+ * @param lta_outs Write halfway LTA for source.
+ * @param lta_outt Write halfway LTA for target.
+ * @param iscale_out Write used intensity scaling parameter.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_create_tests_params(
     input_file: InputPathType,
     out_src: string,
@@ -102,33 +127,8 @@ function mri_create_tests_params(
     lta_outt: string | null = null,
     iscale_out: string | null = null,
 ): MriCreateTestsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume to be modified.
-     * @param out_src Output source volume name.
-     * @param out_target Output target volume name.
-     * @param input_target Input target volume to be modified, must be in the same space as input volume. Default: use input volume to create output target.
-     * @param lta_in Specify LTA for mapping input to output target. Cannot be used with --rotation or --translation.
-     * @param mask Mask source MRI with mask file.
-     * @param noise Add global Gaussian noise.
-     * @param outlier Add random outlier voxels.
-     * @param outlier_box Add box containing random voxels.
-     * @param translation_flag Apply random translation.
-     * @param transdist Set maximal translation distance in mm. Default is 11.
-     * @param rotation_flag Apply random rotation.
-     * @param maxdeg Maximal rotation in degrees. Default is 25.
-     * @param intensity_flag Apply random intensity scaling.
-     * @param iscale Use fixed intensity scaling parameter.
-     * @param lta_out Write used random transform to LTA.
-     * @param lta_outs Write halfway LTA for source.
-     * @param lta_outt Write halfway LTA for target.
-     * @param iscale_out Write used intensity scaling parameter.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_create_tests" as const,
+        "@type": "freesurfer.mri_create_tests" as const,
         "input_file": input_file,
         "out_src": out_src,
         "out_target": out_target,
@@ -179,18 +179,18 @@ function mri_create_tests_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_create_tests_cargs(
     params: MriCreateTestsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_create_tests");
     cargs.push(
@@ -296,18 +296,18 @@ function mri_create_tests_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_create_tests_outputs(
     params: MriCreateTestsParameters,
     execution: Execution,
 ): MriCreateTestsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCreateTestsOutputs = {
         root: execution.outputFile("."),
     };
@@ -315,22 +315,22 @@ function mri_create_tests_outputs(
 }
 
 
+/**
+ * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
+ */
 function mri_create_tests_execute(
     params: MriCreateTestsParameters,
     execution: Execution,
 ): MriCreateTestsOutputs {
-    /**
-     * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_create_tests_cargs(params, execution)
     const ret = mri_create_tests_outputs(params, execution)
@@ -339,6 +339,36 @@ function mri_create_tests_execute(
 }
 
 
+/**
+ * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume to be modified.
+ * @param out_src Output source volume name.
+ * @param out_target Output target volume name.
+ * @param input_target Input target volume to be modified, must be in the same space as input volume. Default: use input volume to create output target.
+ * @param lta_in Specify LTA for mapping input to output target. Cannot be used with --rotation or --translation.
+ * @param mask Mask source MRI with mask file.
+ * @param noise Add global Gaussian noise.
+ * @param outlier Add random outlier voxels.
+ * @param outlier_box Add box containing random voxels.
+ * @param translation_flag Apply random translation.
+ * @param transdist Set maximal translation distance in mm. Default is 11.
+ * @param rotation_flag Apply random rotation.
+ * @param maxdeg Maximal rotation in degrees. Default is 25.
+ * @param intensity_flag Apply random intensity scaling.
+ * @param iscale Use fixed intensity scaling parameter.
+ * @param lta_out Write used random transform to LTA.
+ * @param lta_outs Write halfway LTA for source.
+ * @param lta_outt Write halfway LTA for target.
+ * @param iscale_out Write used intensity scaling parameter.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
+ */
 function mri_create_tests(
     input_file: InputPathType,
     out_src: string,
@@ -361,36 +391,6 @@ function mri_create_tests(
     iscale_out: string | null = null,
     runner: Runner | null = null,
 ): MriCreateTestsOutputs {
-    /**
-     * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume to be modified.
-     * @param out_src Output source volume name.
-     * @param out_target Output target volume name.
-     * @param input_target Input target volume to be modified, must be in the same space as input volume. Default: use input volume to create output target.
-     * @param lta_in Specify LTA for mapping input to output target. Cannot be used with --rotation or --translation.
-     * @param mask Mask source MRI with mask file.
-     * @param noise Add global Gaussian noise.
-     * @param outlier Add random outlier voxels.
-     * @param outlier_box Add box containing random voxels.
-     * @param translation_flag Apply random translation.
-     * @param transdist Set maximal translation distance in mm. Default is 11.
-     * @param rotation_flag Apply random rotation.
-     * @param maxdeg Maximal rotation in degrees. Default is 25.
-     * @param intensity_flag Apply random intensity scaling.
-     * @param iscale Use fixed intensity scaling parameter.
-     * @param lta_out Write used random transform to LTA.
-     * @param lta_outs Write halfway LTA for source.
-     * @param lta_outt Write halfway LTA for target.
-     * @param iscale_out Write used intensity scaling parameter.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CREATE_TESTS_METADATA);
     const params = mri_create_tests_params(input_file, out_src, out_target, input_target, lta_in, mask, noise, outlier, outlier_box, translation_flag, transdist, rotation_flag, maxdeg, intensity_flag, iscale, lta_out, lta_outs, lta_outt, iscale_out)
@@ -403,5 +403,8 @@ export {
       MriCreateTestsOutputs,
       MriCreateTestsParameters,
       mri_create_tests,
+      mri_create_tests_cargs,
+      mri_create_tests_execute,
+      mri_create_tests_outputs,
       mri_create_tests_params,
 };

@@ -12,42 +12,42 @@ const V_3DMAXDISP_METADATA: Metadata = {
 
 
 interface V3dmaxdispParameters {
-    "__STYXTYPE__": "3dmaxdisp";
+    "@type": "afni.3dmaxdisp";
     "inset": InputPathType;
     "matrix": InputPathType;
     "verbose": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmaxdisp": v_3dmaxdisp_cargs,
+        "afni.3dmaxdisp": v_3dmaxdisp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmaxdisp": v_3dmaxdisp_outputs,
+        "afni.3dmaxdisp": v_3dmaxdisp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dmaxdispOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset Input dataset file used to form the mask over which displacements will be computed.
+ * @param matrix 3x4 affine transformation matrix file applied to the coordinates of the voxels in the dataset mask.
+ * @param verbose Print a few progress reports.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmaxdisp_params(
     inset: InputPathType,
     matrix: InputPathType,
     verbose: boolean = false,
 ): V3dmaxdispParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset Input dataset file used to form the mask over which displacements will be computed.
-     * @param matrix 3x4 affine transformation matrix file applied to the coordinates of the voxels in the dataset mask.
-     * @param verbose Print a few progress reports.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmaxdisp" as const,
+        "@type": "afni.3dmaxdisp" as const,
         "inset": inset,
         "matrix": matrix,
         "verbose": verbose,
@@ -94,18 +94,18 @@ function v_3dmaxdisp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmaxdisp_cargs(
     params: V3dmaxdispParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmaxdisp");
     cargs.push(
@@ -123,18 +123,18 @@ function v_3dmaxdisp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmaxdisp_outputs(
     params: V3dmaxdispParameters,
     execution: Execution,
 ): V3dmaxdispOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaxdispOutputs = {
         root: execution.outputFile("."),
         displacement_output: execution.outputFile(["stdout"].join('')),
@@ -143,22 +143,22 @@ function v_3dmaxdisp_outputs(
 }
 
 
+/**
+ * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
+ */
 function v_3dmaxdisp_execute(
     params: V3dmaxdispParameters,
     execution: Execution,
 ): V3dmaxdispOutputs {
-    /**
-     * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmaxdisp_cargs(params, execution)
     const ret = v_3dmaxdisp_outputs(params, execution)
@@ -167,26 +167,26 @@ function v_3dmaxdisp_execute(
 }
 
 
+/**
+ * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset Input dataset file used to form the mask over which displacements will be computed.
+ * @param matrix 3x4 affine transformation matrix file applied to the coordinates of the voxels in the dataset mask.
+ * @param verbose Print a few progress reports.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
+ */
 function v_3dmaxdisp(
     inset: InputPathType,
     matrix: InputPathType,
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dmaxdispOutputs {
-    /**
-     * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset Input dataset file used to form the mask over which displacements will be computed.
-     * @param matrix 3x4 affine transformation matrix file applied to the coordinates of the voxels in the dataset mask.
-     * @param verbose Print a few progress reports.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMAXDISP_METADATA);
     const params = v_3dmaxdisp_params(inset, matrix, verbose)
@@ -199,5 +199,8 @@ export {
       V3dmaxdispParameters,
       V_3DMAXDISP_METADATA,
       v_3dmaxdisp,
+      v_3dmaxdisp_cargs,
+      v_3dmaxdisp_execute,
+      v_3dmaxdisp_outputs,
       v_3dmaxdisp_params,
 };

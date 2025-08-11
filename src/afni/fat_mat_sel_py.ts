@@ -12,7 +12,7 @@ const FAT_MAT_SEL_PY_METADATA: Metadata = {
 
 
 interface FatMatSelPyParameters {
-    "__STYXTYPE__": "fat_mat_sel.py";
+    "@type": "afni.fat_mat_sel.py";
     "parameters": string;
     "matr_in"?: string | null | undefined;
     "list_match"?: InputPathType | null | undefined;
@@ -39,35 +39,35 @@ interface FatMatSelPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mat_sel.py": fat_mat_sel_py_cargs,
+        "afni.fat_mat_sel.py": fat_mat_sel_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mat_sel.py": fat_mat_sel_py_outputs,
+        "afni.fat_mat_sel.py": fat_mat_sel_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,35 @@ interface FatMatSelPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param parameters Supply names of parameters, separated by whitespace, for selecting from a matrix file
+ * @param matr_in Provide the set of matrix (*.grid or *.netcc) files by searchable path. This can be a globbable entry in quotes containing wildcard characters.
+ * @param list_match Provide the matrix (*.grid or *.netcc) files by explicit path, matched per file with a CSV subject ID.
+ * @param out_ind_matr Output individual matrix files of properties.
+ * @param out_ind_1ddset Output as a 1D dset, more easily readable by other programs.
+ * @param hold_image Switch to hold the Python-produced image on the output screen until a key has been hit.
+ * @param extern_labs_no Switch to turn off the usage of user-defined labels in the *.grid/*.netcc files.
+ * @param type_file Select image format type (e.g., jpg, png, pdf).
+ * @param dpi_file Set resolution (dots per inch) of output image.
+ * @param xlen_file Horizontal dimension of output saved image, in units of inches.
+ * @param ylen_file Vertical dimension of output saved image, in units of inches.
+ * @param tight_layout_on Use matplotlib's tight_layout() option to ensure no overlap of features in the image.
+ * @param fig_off Switch if you don't want matrix figure output.
+ * @param size_font Set font size for colorbar and title.
+ * @param lab_size_font Set font size for x- and y-axis labels.
+ * @param a_plotmin Minimum colorbar value.
+ * @param b_plotmax Maximum colorbar value.
+ * @param cbar_off Switch to not include a colorbar at the right side of the plot.
+ * @param map_of_colors Change the colormap style used in the plot.
+ * @param cbar_int_num Set the number of intervals on the colorbar.
+ * @param width_cbar_perc Width of colorbar as percentage of width of the correlation matrix.
+ * @param specifier Specify number formatting for the colorbar numbers (e.g., '%.4f' for four decimal places).
+ * @param xtick_lab_off Switch to turn off labels along the x- (horizontal) axis but leave those along the y- (vertical) axis.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mat_sel_py_params(
     parameters: string,
     matr_in: string | null = null,
@@ -123,37 +152,8 @@ function fat_mat_sel_py_params(
     specifier: string | null = null,
     xtick_lab_off: boolean = false,
 ): FatMatSelPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param parameters Supply names of parameters, separated by whitespace, for selecting from a matrix file
-     * @param matr_in Provide the set of matrix (*.grid or *.netcc) files by searchable path. This can be a globbable entry in quotes containing wildcard characters.
-     * @param list_match Provide the matrix (*.grid or *.netcc) files by explicit path, matched per file with a CSV subject ID.
-     * @param out_ind_matr Output individual matrix files of properties.
-     * @param out_ind_1ddset Output as a 1D dset, more easily readable by other programs.
-     * @param hold_image Switch to hold the Python-produced image on the output screen until a key has been hit.
-     * @param extern_labs_no Switch to turn off the usage of user-defined labels in the *.grid/*.netcc files.
-     * @param type_file Select image format type (e.g., jpg, png, pdf).
-     * @param dpi_file Set resolution (dots per inch) of output image.
-     * @param xlen_file Horizontal dimension of output saved image, in units of inches.
-     * @param ylen_file Vertical dimension of output saved image, in units of inches.
-     * @param tight_layout_on Use matplotlib's tight_layout() option to ensure no overlap of features in the image.
-     * @param fig_off Switch if you don't want matrix figure output.
-     * @param size_font Set font size for colorbar and title.
-     * @param lab_size_font Set font size for x- and y-axis labels.
-     * @param a_plotmin Minimum colorbar value.
-     * @param b_plotmax Maximum colorbar value.
-     * @param cbar_off Switch to not include a colorbar at the right side of the plot.
-     * @param map_of_colors Change the colormap style used in the plot.
-     * @param cbar_int_num Set the number of intervals on the colorbar.
-     * @param width_cbar_perc Width of colorbar as percentage of width of the correlation matrix.
-     * @param specifier Specify number formatting for the colorbar numbers (e.g., '%.4f' for four decimal places).
-     * @param xtick_lab_off Switch to turn off labels along the x- (horizontal) axis but leave those along the y- (vertical) axis.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mat_sel.py" as const,
+        "@type": "afni.fat_mat_sel.py" as const,
         "parameters": parameters,
         "out_ind_matr": out_ind_matr,
         "out_ind_1ddset": out_ind_1ddset,
@@ -210,18 +210,18 @@ function fat_mat_sel_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mat_sel_py_cargs(
     params: FatMatSelPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mat_sel.py");
     cargs.push(
@@ -340,18 +340,18 @@ function fat_mat_sel_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mat_sel_py_outputs(
     params: FatMatSelPyParameters,
     execution: Execution,
 ): FatMatSelPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMatSelPyOutputs = {
         root: execution.outputFile("."),
         individual_images: execution.outputFile(["individual_images/*"].join('')),
@@ -362,22 +362,22 @@ function fat_mat_sel_py_outputs(
 }
 
 
+/**
+ * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
+ */
 function fat_mat_sel_py_execute(
     params: FatMatSelPyParameters,
     execution: Execution,
 ): FatMatSelPyOutputs {
-    /**
-     * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mat_sel_py_cargs(params, execution)
     const ret = fat_mat_sel_py_outputs(params, execution)
@@ -386,6 +386,40 @@ function fat_mat_sel_py_execute(
 }
 
 
+/**
+ * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param parameters Supply names of parameters, separated by whitespace, for selecting from a matrix file
+ * @param matr_in Provide the set of matrix (*.grid or *.netcc) files by searchable path. This can be a globbable entry in quotes containing wildcard characters.
+ * @param list_match Provide the matrix (*.grid or *.netcc) files by explicit path, matched per file with a CSV subject ID.
+ * @param out_ind_matr Output individual matrix files of properties.
+ * @param out_ind_1ddset Output as a 1D dset, more easily readable by other programs.
+ * @param hold_image Switch to hold the Python-produced image on the output screen until a key has been hit.
+ * @param extern_labs_no Switch to turn off the usage of user-defined labels in the *.grid/*.netcc files.
+ * @param type_file Select image format type (e.g., jpg, png, pdf).
+ * @param dpi_file Set resolution (dots per inch) of output image.
+ * @param xlen_file Horizontal dimension of output saved image, in units of inches.
+ * @param ylen_file Vertical dimension of output saved image, in units of inches.
+ * @param tight_layout_on Use matplotlib's tight_layout() option to ensure no overlap of features in the image.
+ * @param fig_off Switch if you don't want matrix figure output.
+ * @param size_font Set font size for colorbar and title.
+ * @param lab_size_font Set font size for x- and y-axis labels.
+ * @param a_plotmin Minimum colorbar value.
+ * @param b_plotmax Maximum colorbar value.
+ * @param cbar_off Switch to not include a colorbar at the right side of the plot.
+ * @param map_of_colors Change the colormap style used in the plot.
+ * @param cbar_int_num Set the number of intervals on the colorbar.
+ * @param width_cbar_perc Width of colorbar as percentage of width of the correlation matrix.
+ * @param specifier Specify number formatting for the colorbar numbers (e.g., '%.4f' for four decimal places).
+ * @param xtick_lab_off Switch to turn off labels along the x- (horizontal) axis but leave those along the y- (vertical) axis.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
+ */
 function fat_mat_sel_py(
     parameters: string,
     matr_in: string | null = null,
@@ -412,40 +446,6 @@ function fat_mat_sel_py(
     xtick_lab_off: boolean = false,
     runner: Runner | null = null,
 ): FatMatSelPyOutputs {
-    /**
-     * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param parameters Supply names of parameters, separated by whitespace, for selecting from a matrix file
-     * @param matr_in Provide the set of matrix (*.grid or *.netcc) files by searchable path. This can be a globbable entry in quotes containing wildcard characters.
-     * @param list_match Provide the matrix (*.grid or *.netcc) files by explicit path, matched per file with a CSV subject ID.
-     * @param out_ind_matr Output individual matrix files of properties.
-     * @param out_ind_1ddset Output as a 1D dset, more easily readable by other programs.
-     * @param hold_image Switch to hold the Python-produced image on the output screen until a key has been hit.
-     * @param extern_labs_no Switch to turn off the usage of user-defined labels in the *.grid/*.netcc files.
-     * @param type_file Select image format type (e.g., jpg, png, pdf).
-     * @param dpi_file Set resolution (dots per inch) of output image.
-     * @param xlen_file Horizontal dimension of output saved image, in units of inches.
-     * @param ylen_file Vertical dimension of output saved image, in units of inches.
-     * @param tight_layout_on Use matplotlib's tight_layout() option to ensure no overlap of features in the image.
-     * @param fig_off Switch if you don't want matrix figure output.
-     * @param size_font Set font size for colorbar and title.
-     * @param lab_size_font Set font size for x- and y-axis labels.
-     * @param a_plotmin Minimum colorbar value.
-     * @param b_plotmax Maximum colorbar value.
-     * @param cbar_off Switch to not include a colorbar at the right side of the plot.
-     * @param map_of_colors Change the colormap style used in the plot.
-     * @param cbar_int_num Set the number of intervals on the colorbar.
-     * @param width_cbar_perc Width of colorbar as percentage of width of the correlation matrix.
-     * @param specifier Specify number formatting for the colorbar numbers (e.g., '%.4f' for four decimal places).
-     * @param xtick_lab_off Switch to turn off labels along the x- (horizontal) axis but leave those along the y- (vertical) axis.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MAT_SEL_PY_METADATA);
     const params = fat_mat_sel_py_params(parameters, matr_in, list_match, out_ind_matr, out_ind_1ddset, hold_image, extern_labs_no, type_file, dpi_file, xlen_file, ylen_file, tight_layout_on, fig_off, size_font, lab_size_font, a_plotmin, b_plotmax, cbar_off, map_of_colors, cbar_int_num, width_cbar_perc, specifier, xtick_lab_off)
@@ -458,5 +458,8 @@ export {
       FatMatSelPyOutputs,
       FatMatSelPyParameters,
       fat_mat_sel_py,
+      fat_mat_sel_py_cargs,
+      fat_mat_sel_py_execute,
+      fat_mat_sel_py_outputs,
       fat_mat_sel_py_params,
 };

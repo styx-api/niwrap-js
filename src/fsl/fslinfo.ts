@@ -12,38 +12,38 @@ const FSLINFO_METADATA: Metadata = {
 
 
 interface FslinfoParameters {
-    "__STYXTYPE__": "fslinfo";
+    "@type": "fsl.fslinfo";
     "filename": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslinfo": fslinfo_cargs,
+        "fsl.fslinfo": fslinfo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface FslinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename Input NIFTI-1 image file (e.g. img.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function fslinfo_params(
     filename: InputPathType,
 ): FslinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename Input NIFTI-1 image file (e.g. img.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslinfo" as const,
+        "@type": "fsl.fslinfo" as const,
         "filename": filename,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslinfo_cargs(
     params: FslinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslinfo");
     cargs.push(execution.inputFile((params["filename"] ?? null)));
@@ -100,18 +100,18 @@ function fslinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslinfo_outputs(
     params: FslinfoParameters,
     execution: Execution,
 ): FslinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslinfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function fslinfo_outputs(
 }
 
 
+/**
+ * Display information about NIFTI-1 image file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
+ */
 function fslinfo_execute(
     params: FslinfoParameters,
     execution: Execution,
 ): FslinfoOutputs {
-    /**
-     * Display information about NIFTI-1 image file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslinfo_cargs(params, execution)
     const ret = fslinfo_outputs(params, execution)
@@ -143,22 +143,22 @@ function fslinfo_execute(
 }
 
 
+/**
+ * Display information about NIFTI-1 image file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param filename Input NIFTI-1 image file (e.g. img.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
+ */
 function fslinfo(
     filename: InputPathType,
     runner: Runner | null = null,
 ): FslinfoOutputs {
-    /**
-     * Display information about NIFTI-1 image file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param filename Input NIFTI-1 image file (e.g. img.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLINFO_METADATA);
     const params = fslinfo_params(filename)
@@ -171,5 +171,8 @@ export {
       FslinfoOutputs,
       FslinfoParameters,
       fslinfo,
+      fslinfo_cargs,
+      fslinfo_execute,
+      fslinfo_outputs,
       fslinfo_params,
 };

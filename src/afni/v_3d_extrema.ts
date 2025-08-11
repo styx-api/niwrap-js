@@ -12,7 +12,7 @@ const V_3D_EXTREMA_METADATA: Metadata = {
 
 
 interface V3dExtremaParameters {
-    "__STYXTYPE__": "3dExtrema";
+    "@type": "afni.3dExtrema";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
     "output_session"?: string | null | undefined;
@@ -36,35 +36,35 @@ interface V3dExtremaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dExtrema": v_3d_extrema_cargs,
+        "afni.3dExtrema": v_3d_extrema_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dExtrema": v_3d_extrema_outputs,
+        "afni.3dExtrema": v_3d_extrema_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,32 @@ interface V3dExtremaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g. dataset+tlrc'[sub-brick]')
+ * @param output_prefix Prefix for the output dataset name.
+ * @param output_session Directory for the output dataset session.
+ * @param quiet Suppress screen output.
+ * @param mask_file Mask statistic from file.
+ * @param mask_threshold Only voxels whose mask statistic is >= m in absolute value will be considered.
+ * @param data_threshold Only voxels whose value (intensity) is greater than d in absolute value will be considered.
+ * @param n_best Only print the first N extrema.
+ * @param separation_distance Minimum separation distance (in mm) for distinct extrema.
+ * @param minima Find local minima.
+ * @param maxima Find local maxima (default).
+ * @param strict Use strict inequality for extrema (default).
+ * @param partial Use partial inequality for extrema.
+ * @param interior Extrema must be interior points (default).
+ * @param closure Extrema may be boundary points.
+ * @param slice Consider each slice separately (default).
+ * @param volume Consider the volume as a whole.
+ * @param remove Remove all but strongest of neighboring extrema (default).
+ * @param average Replace neighboring extrema by average.
+ * @param weight Replace neighboring extrema by weighted average.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_extrema_params(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -113,34 +139,8 @@ function v_3d_extrema_params(
     average: boolean = false,
     weight: boolean = false,
 ): V3dExtremaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g. dataset+tlrc'[sub-brick]')
-     * @param output_prefix Prefix for the output dataset name.
-     * @param output_session Directory for the output dataset session.
-     * @param quiet Suppress screen output.
-     * @param mask_file Mask statistic from file.
-     * @param mask_threshold Only voxels whose mask statistic is >= m in absolute value will be considered.
-     * @param data_threshold Only voxels whose value (intensity) is greater than d in absolute value will be considered.
-     * @param n_best Only print the first N extrema.
-     * @param separation_distance Minimum separation distance (in mm) for distinct extrema.
-     * @param minima Find local minima.
-     * @param maxima Find local maxima (default).
-     * @param strict Use strict inequality for extrema (default).
-     * @param partial Use partial inequality for extrema.
-     * @param interior Extrema must be interior points (default).
-     * @param closure Extrema may be boundary points.
-     * @param slice Consider each slice separately (default).
-     * @param volume Consider the volume as a whole.
-     * @param remove Remove all but strongest of neighboring extrema (default).
-     * @param average Replace neighboring extrema by average.
-     * @param weight Replace neighboring extrema by weighted average.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dExtrema" as const,
+        "@type": "afni.3dExtrema" as const,
         "input_dataset": input_dataset,
         "quiet": quiet,
         "minima": minima,
@@ -180,18 +180,18 @@ function v_3d_extrema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_extrema_cargs(
     params: V3dExtremaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dExtrema");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -277,18 +277,18 @@ function v_3d_extrema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_extrema_outputs(
     params: V3dExtremaParameters,
     execution: Execution,
 ): V3dExtremaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dExtremaOutputs = {
         root: execution.outputFile("."),
         output_head_file: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -298,22 +298,22 @@ function v_3d_extrema_outputs(
 }
 
 
+/**
+ * Find local extrema (minima or maxima) in 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
+ */
 function v_3d_extrema_execute(
     params: V3dExtremaParameters,
     execution: Execution,
 ): V3dExtremaOutputs {
-    /**
-     * Find local extrema (minima or maxima) in 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_extrema_cargs(params, execution)
     const ret = v_3d_extrema_outputs(params, execution)
@@ -322,6 +322,37 @@ function v_3d_extrema_execute(
 }
 
 
+/**
+ * Find local extrema (minima or maxima) in 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g. dataset+tlrc'[sub-brick]')
+ * @param output_prefix Prefix for the output dataset name.
+ * @param output_session Directory for the output dataset session.
+ * @param quiet Suppress screen output.
+ * @param mask_file Mask statistic from file.
+ * @param mask_threshold Only voxels whose mask statistic is >= m in absolute value will be considered.
+ * @param data_threshold Only voxels whose value (intensity) is greater than d in absolute value will be considered.
+ * @param n_best Only print the first N extrema.
+ * @param separation_distance Minimum separation distance (in mm) for distinct extrema.
+ * @param minima Find local minima.
+ * @param maxima Find local maxima (default).
+ * @param strict Use strict inequality for extrema (default).
+ * @param partial Use partial inequality for extrema.
+ * @param interior Extrema must be interior points (default).
+ * @param closure Extrema may be boundary points.
+ * @param slice Consider each slice separately (default).
+ * @param volume Consider the volume as a whole.
+ * @param remove Remove all but strongest of neighboring extrema (default).
+ * @param average Replace neighboring extrema by average.
+ * @param weight Replace neighboring extrema by weighted average.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
+ */
 function v_3d_extrema(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -345,37 +376,6 @@ function v_3d_extrema(
     weight: boolean = false,
     runner: Runner | null = null,
 ): V3dExtremaOutputs {
-    /**
-     * Find local extrema (minima or maxima) in 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g. dataset+tlrc'[sub-brick]')
-     * @param output_prefix Prefix for the output dataset name.
-     * @param output_session Directory for the output dataset session.
-     * @param quiet Suppress screen output.
-     * @param mask_file Mask statistic from file.
-     * @param mask_threshold Only voxels whose mask statistic is >= m in absolute value will be considered.
-     * @param data_threshold Only voxels whose value (intensity) is greater than d in absolute value will be considered.
-     * @param n_best Only print the first N extrema.
-     * @param separation_distance Minimum separation distance (in mm) for distinct extrema.
-     * @param minima Find local minima.
-     * @param maxima Find local maxima (default).
-     * @param strict Use strict inequality for extrema (default).
-     * @param partial Use partial inequality for extrema.
-     * @param interior Extrema must be interior points (default).
-     * @param closure Extrema may be boundary points.
-     * @param slice Consider each slice separately (default).
-     * @param volume Consider the volume as a whole.
-     * @param remove Remove all but strongest of neighboring extrema (default).
-     * @param average Replace neighboring extrema by average.
-     * @param weight Replace neighboring extrema by weighted average.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_EXTREMA_METADATA);
     const params = v_3d_extrema_params(input_dataset, output_prefix, output_session, quiet, mask_file, mask_threshold, data_threshold, n_best, separation_distance, minima, maxima, strict, partial, interior, closure, slice, volume, remove, average, weight)
@@ -388,5 +388,8 @@ export {
       V3dExtremaParameters,
       V_3D_EXTREMA_METADATA,
       v_3d_extrema,
+      v_3d_extrema_cargs,
+      v_3d_extrema_execute,
+      v_3d_extrema_outputs,
       v_3d_extrema_params,
 };

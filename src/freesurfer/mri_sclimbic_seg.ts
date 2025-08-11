@@ -12,7 +12,7 @@ const MRI_SCLIMBIC_SEG_METADATA: Metadata = {
 
 
 interface MriSclimbicSegParameters {
-    "__STYXTYPE__": "mri_sclimbic_seg";
+    "@type": "freesurfer.mri_sclimbic_seg";
     "input_file": string;
     "output_file": string;
     "subjects"?: Array<string> | null | undefined;
@@ -41,35 +41,35 @@ interface MriSclimbicSegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_sclimbic_seg": mri_sclimbic_seg_cargs,
+        "freesurfer.mri_sclimbic_seg": mri_sclimbic_seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_sclimbic_seg": mri_sclimbic_seg_outputs,
+        "freesurfer.mri_sclimbic_seg": mri_sclimbic_seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface MriSclimbicSegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file T1-w image(s) to segment. Can be a path to a single image or a directory of images.
+ * @param output_file Segmentation output (required if --i is provided). Must be the same type as the input path (a single file or directory).
+ * @param subjects Process a series of freesurfer recon-all subjects (enables subject-mode).
+ * @param subjects_dir Set the subjects directory (overrides the SUBJECTS_DIR env variable).
+ * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
+ * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and --tal).
+ * @param exclude_labels List of label IDs to exclude in any output stats files.
+ * @param keep_ac Explicitly keep anterior commissure in the volume/qa files.
+ * @param vox_count_volumes Use discrete voxel count for label volumes.
+ * @param model_file Alternative model weights to load.
+ * @param ctab_file Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
+ * @param population_stats Alternative population volume stats for QA output.
+ * @param debug Enable debug logging.
+ * @param vmp Enable printing of vmpeak at the end.
+ * @param threads Number of threads to use. Default is 1.
+ * @param tal_xfm Alternative talairach xfm transform for estimating TIV. Can be file or suffix (for multiple inputs).
+ * @param write_posteriors Save the label posteriors.
+ * @param write_volumes Save label volume stats (enabled by default in subject-mode).
+ * @param write_qa_stats Save QA stats (z and confidence).
+ * @param preprocess_7_t Preprocess 7T images (just sets percentile to 99.9).
+ * @param percentile Use intensity percentile threshold for normalization.
+ * @param cuda_device Cuda device for GPU support.
+ * @param output_base String to use in output file name; default is sclimbic.
+ * @param no_cite Do not cite sclimbic paper at the end.
+ * @param nchannels Number of channels
+ *
+ * @returns Parameter dictionary
+ */
 function mri_sclimbic_seg_params(
     input_file: string,
     output_file: string,
@@ -119,39 +150,8 @@ function mri_sclimbic_seg_params(
     no_cite: boolean = false,
     nchannels: number | null = null,
 ): MriSclimbicSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file T1-w image(s) to segment. Can be a path to a single image or a directory of images.
-     * @param output_file Segmentation output (required if --i is provided). Must be the same type as the input path (a single file or directory).
-     * @param subjects Process a series of freesurfer recon-all subjects (enables subject-mode).
-     * @param subjects_dir Set the subjects directory (overrides the SUBJECTS_DIR env variable).
-     * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
-     * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and --tal).
-     * @param exclude_labels List of label IDs to exclude in any output stats files.
-     * @param keep_ac Explicitly keep anterior commissure in the volume/qa files.
-     * @param vox_count_volumes Use discrete voxel count for label volumes.
-     * @param model_file Alternative model weights to load.
-     * @param ctab_file Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
-     * @param population_stats Alternative population volume stats for QA output.
-     * @param debug Enable debug logging.
-     * @param vmp Enable printing of vmpeak at the end.
-     * @param threads Number of threads to use. Default is 1.
-     * @param tal_xfm Alternative talairach xfm transform for estimating TIV. Can be file or suffix (for multiple inputs).
-     * @param write_posteriors Save the label posteriors.
-     * @param write_volumes Save label volume stats (enabled by default in subject-mode).
-     * @param write_qa_stats Save QA stats (z and confidence).
-     * @param preprocess_7_t Preprocess 7T images (just sets percentile to 99.9).
-     * @param percentile Use intensity percentile threshold for normalization.
-     * @param cuda_device Cuda device for GPU support.
-     * @param output_base String to use in output file name; default is sclimbic.
-     * @param no_cite Do not cite sclimbic paper at the end.
-     * @param nchannels Number of channels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_sclimbic_seg" as const,
+        "@type": "freesurfer.mri_sclimbic_seg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "conform": conform,
@@ -206,18 +206,18 @@ function mri_sclimbic_seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_sclimbic_seg_cargs(
     params: MriSclimbicSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_sclimbic_seg");
     cargs.push(
@@ -337,18 +337,18 @@ function mri_sclimbic_seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_sclimbic_seg_outputs(
     params: MriSclimbicSegParameters,
     execution: Execution,
 ): MriSclimbicSegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSclimbicSegOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -357,22 +357,22 @@ function mri_sclimbic_seg_outputs(
 }
 
 
+/**
+ * Segment subcortical limbic structures using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
+ */
 function mri_sclimbic_seg_execute(
     params: MriSclimbicSegParameters,
     execution: Execution,
 ): MriSclimbicSegOutputs {
-    /**
-     * Segment subcortical limbic structures using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_sclimbic_seg_cargs(params, execution)
     const ret = mri_sclimbic_seg_outputs(params, execution)
@@ -381,6 +381,42 @@ function mri_sclimbic_seg_execute(
 }
 
 
+/**
+ * Segment subcortical limbic structures using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file T1-w image(s) to segment. Can be a path to a single image or a directory of images.
+ * @param output_file Segmentation output (required if --i is provided). Must be the same type as the input path (a single file or directory).
+ * @param subjects Process a series of freesurfer recon-all subjects (enables subject-mode).
+ * @param subjects_dir Set the subjects directory (overrides the SUBJECTS_DIR env variable).
+ * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
+ * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and --tal).
+ * @param exclude_labels List of label IDs to exclude in any output stats files.
+ * @param keep_ac Explicitly keep anterior commissure in the volume/qa files.
+ * @param vox_count_volumes Use discrete voxel count for label volumes.
+ * @param model_file Alternative model weights to load.
+ * @param ctab_file Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
+ * @param population_stats Alternative population volume stats for QA output.
+ * @param debug Enable debug logging.
+ * @param vmp Enable printing of vmpeak at the end.
+ * @param threads Number of threads to use. Default is 1.
+ * @param tal_xfm Alternative talairach xfm transform for estimating TIV. Can be file or suffix (for multiple inputs).
+ * @param write_posteriors Save the label posteriors.
+ * @param write_volumes Save label volume stats (enabled by default in subject-mode).
+ * @param write_qa_stats Save QA stats (z and confidence).
+ * @param preprocess_7_t Preprocess 7T images (just sets percentile to 99.9).
+ * @param percentile Use intensity percentile threshold for normalization.
+ * @param cuda_device Cuda device for GPU support.
+ * @param output_base String to use in output file name; default is sclimbic.
+ * @param no_cite Do not cite sclimbic paper at the end.
+ * @param nchannels Number of channels
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
+ */
 function mri_sclimbic_seg(
     input_file: string,
     output_file: string,
@@ -409,42 +445,6 @@ function mri_sclimbic_seg(
     nchannels: number | null = null,
     runner: Runner | null = null,
 ): MriSclimbicSegOutputs {
-    /**
-     * Segment subcortical limbic structures using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file T1-w image(s) to segment. Can be a path to a single image or a directory of images.
-     * @param output_file Segmentation output (required if --i is provided). Must be the same type as the input path (a single file or directory).
-     * @param subjects Process a series of freesurfer recon-all subjects (enables subject-mode).
-     * @param subjects_dir Set the subjects directory (overrides the SUBJECTS_DIR env variable).
-     * @param conform Resample input to 1mm-iso; results will be put back in native resolution.
-     * @param etiv Include eTIV in volume stats (enabled by default in subject-mode and --tal).
-     * @param exclude_labels List of label IDs to exclude in any output stats files.
-     * @param keep_ac Explicitly keep anterior commissure in the volume/qa files.
-     * @param vox_count_volumes Use discrete voxel count for label volumes.
-     * @param model_file Alternative model weights to load.
-     * @param ctab_file Alternative color lookup table to embed in segmentation. Must be minimal, including 0, and sorted.
-     * @param population_stats Alternative population volume stats for QA output.
-     * @param debug Enable debug logging.
-     * @param vmp Enable printing of vmpeak at the end.
-     * @param threads Number of threads to use. Default is 1.
-     * @param tal_xfm Alternative talairach xfm transform for estimating TIV. Can be file or suffix (for multiple inputs).
-     * @param write_posteriors Save the label posteriors.
-     * @param write_volumes Save label volume stats (enabled by default in subject-mode).
-     * @param write_qa_stats Save QA stats (z and confidence).
-     * @param preprocess_7_t Preprocess 7T images (just sets percentile to 99.9).
-     * @param percentile Use intensity percentile threshold for normalization.
-     * @param cuda_device Cuda device for GPU support.
-     * @param output_base String to use in output file name; default is sclimbic.
-     * @param no_cite Do not cite sclimbic paper at the end.
-     * @param nchannels Number of channels
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SCLIMBIC_SEG_METADATA);
     const params = mri_sclimbic_seg_params(input_file, output_file, subjects, subjects_dir, conform, etiv, exclude_labels, keep_ac, vox_count_volumes, model_file, ctab_file, population_stats, debug, vmp, threads, tal_xfm, write_posteriors, write_volumes, write_qa_stats, preprocess_7_t, percentile, cuda_device, output_base, no_cite, nchannels)
@@ -457,5 +457,8 @@ export {
       MriSclimbicSegOutputs,
       MriSclimbicSegParameters,
       mri_sclimbic_seg,
+      mri_sclimbic_seg_cargs,
+      mri_sclimbic_seg_execute,
+      mri_sclimbic_seg_outputs,
       mri_sclimbic_seg_params,
 };

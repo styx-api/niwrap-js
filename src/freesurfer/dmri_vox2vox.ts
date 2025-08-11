@@ -12,7 +12,7 @@ const DMRI_VOX2VOX_METADATA: Metadata = {
 
 
 interface DmriVox2voxParameters {
-    "__STYXTYPE__": "dmri_vox2vox";
+    "@type": "freesurfer.dmri_vox2vox";
     "input_files": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
     "output_files": Array<string>;
@@ -29,33 +29,33 @@ interface DmriVox2voxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_vox2vox": dmri_vox2vox_cargs,
+        "freesurfer.dmri_vox2vox": dmri_vox2vox_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface DmriVox2voxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input text file(s)
+ * @param output_files Output text file(s), as many as inputs
+ * @param input_reference Input reference volume
+ * @param output_reference Output reference volume
+ * @param affine_registration Affine registration file (.mat) to be applied first
+ * @param nonlinear_registration Nonlinear registration file (.m3z) to be applied second
+ * @param input_directory Input directory, if specified, names of input text files are relative to this
+ * @param output_directory Output directory, if specified, names of output text files are relative to this
+ * @param inverse_nonlinear Apply inverse of nonlinear warp when --regnl is used
+ * @param debug Turn on debugging
+ * @param check_options Check options and exit without running
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_vox2vox_params(
     input_files: Array<InputPathType>,
     output_files: Array<string>,
@@ -90,27 +109,8 @@ function dmri_vox2vox_params(
     help: boolean = false,
     version: boolean = false,
 ): DmriVox2voxParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input text file(s)
-     * @param output_files Output text file(s), as many as inputs
-     * @param input_reference Input reference volume
-     * @param output_reference Output reference volume
-     * @param affine_registration Affine registration file (.mat) to be applied first
-     * @param nonlinear_registration Nonlinear registration file (.m3z) to be applied second
-     * @param input_directory Input directory, if specified, names of input text files are relative to this
-     * @param output_directory Output directory, if specified, names of output text files are relative to this
-     * @param inverse_nonlinear Apply inverse of nonlinear warp when --regnl is used
-     * @param debug Turn on debugging
-     * @param check_options Check options and exit without running
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_vox2vox" as const,
+        "@type": "freesurfer.dmri_vox2vox" as const,
         "input_files": input_files,
         "output_files": output_files,
         "input_reference": input_reference,
@@ -133,18 +133,18 @@ function dmri_vox2vox_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_vox2vox_cargs(
     params: DmriVox2voxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_vox2vox");
     cargs.push(
@@ -202,18 +202,18 @@ function dmri_vox2vox_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_vox2vox_outputs(
     params: DmriVox2voxParameters,
     execution: Execution,
 ): DmriVox2voxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriVox2voxOutputs = {
         root: execution.outputFile("."),
     };
@@ -221,22 +221,22 @@ function dmri_vox2vox_outputs(
 }
 
 
+/**
+ * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
+ */
 function dmri_vox2vox_execute(
     params: DmriVox2voxParameters,
     execution: Execution,
 ): DmriVox2voxOutputs {
-    /**
-     * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_vox2vox_cargs(params, execution)
     const ret = dmri_vox2vox_outputs(params, execution)
@@ -245,6 +245,30 @@ function dmri_vox2vox_execute(
 }
 
 
+/**
+ * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input text file(s)
+ * @param output_files Output text file(s), as many as inputs
+ * @param input_reference Input reference volume
+ * @param output_reference Output reference volume
+ * @param affine_registration Affine registration file (.mat) to be applied first
+ * @param nonlinear_registration Nonlinear registration file (.m3z) to be applied second
+ * @param input_directory Input directory, if specified, names of input text files are relative to this
+ * @param output_directory Output directory, if specified, names of output text files are relative to this
+ * @param inverse_nonlinear Apply inverse of nonlinear warp when --regnl is used
+ * @param debug Turn on debugging
+ * @param check_options Check options and exit without running
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
+ */
 function dmri_vox2vox(
     input_files: Array<InputPathType>,
     output_files: Array<string>,
@@ -261,30 +285,6 @@ function dmri_vox2vox(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriVox2voxOutputs {
-    /**
-     * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input text file(s)
-     * @param output_files Output text file(s), as many as inputs
-     * @param input_reference Input reference volume
-     * @param output_reference Output reference volume
-     * @param affine_registration Affine registration file (.mat) to be applied first
-     * @param nonlinear_registration Nonlinear registration file (.m3z) to be applied second
-     * @param input_directory Input directory, if specified, names of input text files are relative to this
-     * @param output_directory Output directory, if specified, names of output text files are relative to this
-     * @param inverse_nonlinear Apply inverse of nonlinear warp when --regnl is used
-     * @param debug Turn on debugging
-     * @param check_options Check options and exit without running
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_VOX2VOX_METADATA);
     const params = dmri_vox2vox_params(input_files, output_files, input_reference, output_reference, affine_registration, nonlinear_registration, input_directory, output_directory, inverse_nonlinear, debug, check_options, help, version)
@@ -297,5 +297,8 @@ export {
       DmriVox2voxOutputs,
       DmriVox2voxParameters,
       dmri_vox2vox,
+      dmri_vox2vox_cargs,
+      dmri_vox2vox_execute,
+      dmri_vox2vox_outputs,
       dmri_vox2vox_params,
 };

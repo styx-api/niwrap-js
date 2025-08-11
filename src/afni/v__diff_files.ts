@@ -12,7 +12,7 @@ const V__DIFF_FILES_METADATA: Metadata = {
 
 
 interface VDiffFilesParameters {
-    "__STYXTYPE__": "@diff.files";
+    "@type": "afni.@diff.files";
     "files": Array<string>;
     "old_dir": string;
     "diff_opts"?: string | null | undefined;
@@ -27,33 +27,33 @@ interface VDiffFilesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@diff.files": v__diff_files_cargs,
+        "afni.@diff.files": v__diff_files_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface VDiffFilesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files List of files to compare
+ * @param old_dir Directory containing the files to compare against
+ * @param diff_opts Add options to diff command (e.g., -w)
+ * @param diff_prog Display diffs using a specified program (e.g., meld, xxdiff)
+ * @param ignore_missing Continue even if files are missing
+ * @param longlist Run 'ls -l' on both directories instead of listing files
+ * @param save Create PDFs of diffs
+ * @param show Show diffs using 'diff'
+ * @param xxdiff Show diffs using 'xxdiff'
+ * @param x_flag Implies -xxdiff and -ignore_missing
+ * @param verbosity Set verbosity level (2 or 3)
+ *
+ * @returns Parameter dictionary
+ */
 function v__diff_files_params(
     files: Array<string>,
     old_dir: string,
@@ -86,25 +103,8 @@ function v__diff_files_params(
     x_flag: boolean = false,
     verbosity: number | null = null,
 ): VDiffFilesParameters {
-    /**
-     * Build parameters.
-    
-     * @param files List of files to compare
-     * @param old_dir Directory containing the files to compare against
-     * @param diff_opts Add options to diff command (e.g., -w)
-     * @param diff_prog Display diffs using a specified program (e.g., meld, xxdiff)
-     * @param ignore_missing Continue even if files are missing
-     * @param longlist Run 'ls -l' on both directories instead of listing files
-     * @param save Create PDFs of diffs
-     * @param show Show diffs using 'diff'
-     * @param xxdiff Show diffs using 'xxdiff'
-     * @param x_flag Implies -xxdiff and -ignore_missing
-     * @param verbosity Set verbosity level (2 or 3)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@diff.files" as const,
+        "@type": "afni.@diff.files" as const,
         "files": files,
         "old_dir": old_dir,
         "ignore_missing": ignore_missing,
@@ -127,18 +127,18 @@ function v__diff_files_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__diff_files_cargs(
     params: VDiffFilesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@diff.files");
     cargs.push(...(params["files"] ?? null));
@@ -183,18 +183,18 @@ function v__diff_files_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__diff_files_outputs(
     params: VDiffFilesParameters,
     execution: Execution,
 ): VDiffFilesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDiffFilesOutputs = {
         root: execution.outputFile("."),
     };
@@ -202,22 +202,22 @@ function v__diff_files_outputs(
 }
 
 
+/**
+ * Show file differences (between specified files and those in another directory).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
+ */
 function v__diff_files_execute(
     params: VDiffFilesParameters,
     execution: Execution,
 ): VDiffFilesOutputs {
-    /**
-     * Show file differences (between specified files and those in another directory).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__diff_files_cargs(params, execution)
     const ret = v__diff_files_outputs(params, execution)
@@ -226,6 +226,28 @@ function v__diff_files_execute(
 }
 
 
+/**
+ * Show file differences (between specified files and those in another directory).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files List of files to compare
+ * @param old_dir Directory containing the files to compare against
+ * @param diff_opts Add options to diff command (e.g., -w)
+ * @param diff_prog Display diffs using a specified program (e.g., meld, xxdiff)
+ * @param ignore_missing Continue even if files are missing
+ * @param longlist Run 'ls -l' on both directories instead of listing files
+ * @param save Create PDFs of diffs
+ * @param show Show diffs using 'diff'
+ * @param xxdiff Show diffs using 'xxdiff'
+ * @param x_flag Implies -xxdiff and -ignore_missing
+ * @param verbosity Set verbosity level (2 or 3)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
+ */
 function v__diff_files(
     files: Array<string>,
     old_dir: string,
@@ -240,28 +262,6 @@ function v__diff_files(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): VDiffFilesOutputs {
-    /**
-     * Show file differences (between specified files and those in another directory).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files List of files to compare
-     * @param old_dir Directory containing the files to compare against
-     * @param diff_opts Add options to diff command (e.g., -w)
-     * @param diff_prog Display diffs using a specified program (e.g., meld, xxdiff)
-     * @param ignore_missing Continue even if files are missing
-     * @param longlist Run 'ls -l' on both directories instead of listing files
-     * @param save Create PDFs of diffs
-     * @param show Show diffs using 'diff'
-     * @param xxdiff Show diffs using 'xxdiff'
-     * @param x_flag Implies -xxdiff and -ignore_missing
-     * @param verbosity Set verbosity level (2 or 3)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DIFF_FILES_METADATA);
     const params = v__diff_files_params(files, old_dir, diff_opts, diff_prog, ignore_missing, longlist, save, show, xxdiff, x_flag, verbosity)
@@ -274,5 +274,8 @@ export {
       VDiffFilesParameters,
       V__DIFF_FILES_METADATA,
       v__diff_files,
+      v__diff_files_cargs,
+      v__diff_files_execute,
+      v__diff_files_outputs,
       v__diff_files_params,
 };

@@ -12,7 +12,7 @@ const METRIC_FALSE_CORRELATION_METADATA: Metadata = {
 
 
 interface MetricFalseCorrelationParameters {
-    "__STYXTYPE__": "metric-false-correlation";
+    "@type": "workbench.metric-false-correlation";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "3d_dist": number;
@@ -24,35 +24,35 @@ interface MetricFalseCorrelationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-false-correlation": metric_false_correlation_cargs,
+        "workbench.metric-false-correlation": metric_false_correlation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-false-correlation": metric_false_correlation_outputs,
+        "workbench.metric-false-correlation": metric_false_correlation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MetricFalseCorrelationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to compute geodesic and 3D distance with
+ * @param metric_in the metric to correlate
+ * @param v_3d_dist maximum 3D distance to check around each vertex
+ * @param geo_outer maximum geodesic distance to use for neighboring correlation
+ * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric select a region of interest that has data: the region, as a metric file
+ * @param opt_dump_text_text_out dump the raw measures used to a text file: the output text file
+ *
+ * @returns Parameter dictionary
+ */
 function metric_false_correlation_params(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -85,22 +99,8 @@ function metric_false_correlation_params(
     opt_roi_roi_metric: InputPathType | null = null,
     opt_dump_text_text_out: string | null = null,
 ): MetricFalseCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to compute geodesic and 3D distance with
-     * @param metric_in the metric to correlate
-     * @param v_3d_dist maximum 3D distance to check around each vertex
-     * @param geo_outer maximum geodesic distance to use for neighboring correlation
-     * @param geo_inner minimum geodesic distance to use for neighboring correlation
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric select a region of interest that has data: the region, as a metric file
-     * @param opt_dump_text_text_out dump the raw measures used to a text file: the output text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-false-correlation" as const,
+        "@type": "workbench.metric-false-correlation" as const,
         "surface": surface,
         "metric_in": metric_in,
         "3d_dist": v_3d_dist,
@@ -118,18 +118,18 @@ function metric_false_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_false_correlation_cargs(
     params: MetricFalseCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-false-correlation");
@@ -155,18 +155,18 @@ function metric_false_correlation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_false_correlation_outputs(
     params: MetricFalseCorrelationParameters,
     execution: Execution,
 ): MetricFalseCorrelationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricFalseCorrelationOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -175,24 +175,24 @@ function metric_false_correlation_outputs(
 }
 
 
+/**
+ * Compare correlation locally and across/through sulci/gyri.
+ *
+ * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
+ */
 function metric_false_correlation_execute(
     params: MetricFalseCorrelationParameters,
     execution: Execution,
 ): MetricFalseCorrelationOutputs {
-    /**
-     * Compare correlation locally and across/through sulci/gyri.
-     * 
-     * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_false_correlation_cargs(params, execution)
     const ret = metric_false_correlation_outputs(params, execution)
@@ -201,6 +201,27 @@ function metric_false_correlation_execute(
 }
 
 
+/**
+ * Compare correlation locally and across/through sulci/gyri.
+ *
+ * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to compute geodesic and 3D distance with
+ * @param metric_in the metric to correlate
+ * @param v_3d_dist maximum 3D distance to check around each vertex
+ * @param geo_outer maximum geodesic distance to use for neighboring correlation
+ * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric select a region of interest that has data: the region, as a metric file
+ * @param opt_dump_text_text_out dump the raw measures used to a text file: the output text file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
+ */
 function metric_false_correlation(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -212,27 +233,6 @@ function metric_false_correlation(
     opt_dump_text_text_out: string | null = null,
     runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
-    /**
-     * Compare correlation locally and across/through sulci/gyri.
-     * 
-     * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to compute geodesic and 3D distance with
-     * @param metric_in the metric to correlate
-     * @param v_3d_dist maximum 3D distance to check around each vertex
-     * @param geo_outer maximum geodesic distance to use for neighboring correlation
-     * @param geo_inner minimum geodesic distance to use for neighboring correlation
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric select a region of interest that has data: the region, as a metric file
-     * @param opt_dump_text_text_out dump the raw measures used to a text file: the output text file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_FALSE_CORRELATION_METADATA);
     const params = metric_false_correlation_params(surface, metric_in, v_3d_dist, geo_outer, geo_inner, metric_out, opt_roi_roi_metric, opt_dump_text_text_out)
@@ -245,5 +245,8 @@ export {
       MetricFalseCorrelationOutputs,
       MetricFalseCorrelationParameters,
       metric_false_correlation,
+      metric_false_correlation_cargs,
+      metric_false_correlation_execute,
+      metric_false_correlation_outputs,
       metric_false_correlation_params,
 };

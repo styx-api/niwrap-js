@@ -12,7 +12,7 @@ const V_3D_FWHMX_METADATA: Metadata = {
 
 
 interface V3dFwhmxParameters {
-    "__STYXTYPE__": "3dFWHMx";
+    "@type": "afni.3dFWHMx";
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
     "demed": boolean;
@@ -29,35 +29,35 @@ interface V3dFwhmxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dFWHMx": v_3d_fwhmx_cargs,
+        "afni.3dFWHMx": v_3d_fwhmx_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dFWHMx": v_3d_fwhmx_outputs,
+        "afni.3dFWHMx": v_3d_fwhmx_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface V3dFwhmxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input dataset
+ * @param mask Use only voxels that are nonzero in dataset 'mmm'
+ * @param automask Compute a mask from THIS dataset
+ * @param demed if the input dataset has more than one sub-brick then subtract the median of each voxel's time series before processing FWHM
+ * @param unif Normalize each voxel's time series to have the same MAD before processing FWHM, implies -demed
+ * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30; -detrend disables -demed, and includes -unif
+ * @param detprefix Save the detrended file into a dataset with prefix 'd'
+ * @param geom Compute the final estimate as the geometric mean
+ * @param arith Compute the final estimate as the arithmetic mean
+ * @param combine Combine the final measurements along each axis into one result
+ * @param out Write output to file 'ttt' (3 columns of numbers). If not given, the sub-brick outputs are not written. Use '-out -' to write to stdout, if desired
+ * @param compat Be compatible with the older 3dFWHM
+ * @param acf Compute the spatial autocorrelation of the data as a function of radius, then fit that to a model and output the model parameters
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_fwhmx_params(
     infile: InputPathType,
     mask: InputPathType | null = null,
@@ -99,27 +118,8 @@ function v_3d_fwhmx_params(
     compat: boolean = false,
     acf: string | null = null,
 ): V3dFwhmxParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input dataset
-     * @param mask Use only voxels that are nonzero in dataset 'mmm'
-     * @param automask Compute a mask from THIS dataset
-     * @param demed if the input dataset has more than one sub-brick then subtract the median of each voxel's time series before processing FWHM
-     * @param unif Normalize each voxel's time series to have the same MAD before processing FWHM, implies -demed
-     * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30; -detrend disables -demed, and includes -unif
-     * @param detprefix Save the detrended file into a dataset with prefix 'd'
-     * @param geom Compute the final estimate as the geometric mean
-     * @param arith Compute the final estimate as the arithmetic mean
-     * @param combine Combine the final measurements along each axis into one result
-     * @param out Write output to file 'ttt' (3 columns of numbers). If not given, the sub-brick outputs are not written. Use '-out -' to write to stdout, if desired
-     * @param compat Be compatible with the older 3dFWHM
-     * @param acf Compute the spatial autocorrelation of the data as a function of radius, then fit that to a model and output the model parameters
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dFWHMx" as const,
+        "@type": "afni.3dFWHMx" as const,
         "automask": automask,
         "demed": demed,
         "unif": unif,
@@ -148,18 +148,18 @@ function v_3d_fwhmx_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_fwhmx_cargs(
     params: V3dFwhmxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dFWHMx");
     if ((params["mask"] ?? null) !== null) {
@@ -218,18 +218,18 @@ function v_3d_fwhmx_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_fwhmx_outputs(
     params: V3dFwhmxParameters,
     execution: Execution,
 ): V3dFwhmxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dFwhmxOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null), ".1D"].join('')) : null,
@@ -239,22 +239,22 @@ function v_3d_fwhmx_outputs(
 }
 
 
+/**
+ * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
+ */
 function v_3d_fwhmx_execute(
     params: V3dFwhmxParameters,
     execution: Execution,
 ): V3dFwhmxOutputs {
-    /**
-     * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_fwhmx_cargs(params, execution)
     const ret = v_3d_fwhmx_outputs(params, execution)
@@ -263,6 +263,30 @@ function v_3d_fwhmx_execute(
 }
 
 
+/**
+ * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input dataset
+ * @param mask Use only voxels that are nonzero in dataset 'mmm'
+ * @param automask Compute a mask from THIS dataset
+ * @param demed if the input dataset has more than one sub-brick then subtract the median of each voxel's time series before processing FWHM
+ * @param unif Normalize each voxel's time series to have the same MAD before processing FWHM, implies -demed
+ * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30; -detrend disables -demed, and includes -unif
+ * @param detprefix Save the detrended file into a dataset with prefix 'd'
+ * @param geom Compute the final estimate as the geometric mean
+ * @param arith Compute the final estimate as the arithmetic mean
+ * @param combine Combine the final measurements along each axis into one result
+ * @param out Write output to file 'ttt' (3 columns of numbers). If not given, the sub-brick outputs are not written. Use '-out -' to write to stdout, if desired
+ * @param compat Be compatible with the older 3dFWHM
+ * @param acf Compute the spatial autocorrelation of the data as a function of radius, then fit that to a model and output the model parameters
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
+ */
 function v_3d_fwhmx(
     infile: InputPathType,
     mask: InputPathType | null = null,
@@ -279,30 +303,6 @@ function v_3d_fwhmx(
     acf: string | null = null,
     runner: Runner | null = null,
 ): V3dFwhmxOutputs {
-    /**
-     * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input dataset
-     * @param mask Use only voxels that are nonzero in dataset 'mmm'
-     * @param automask Compute a mask from THIS dataset
-     * @param demed if the input dataset has more than one sub-brick then subtract the median of each voxel's time series before processing FWHM
-     * @param unif Normalize each voxel's time series to have the same MAD before processing FWHM, implies -demed
-     * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30; -detrend disables -demed, and includes -unif
-     * @param detprefix Save the detrended file into a dataset with prefix 'd'
-     * @param geom Compute the final estimate as the geometric mean
-     * @param arith Compute the final estimate as the arithmetic mean
-     * @param combine Combine the final measurements along each axis into one result
-     * @param out Write output to file 'ttt' (3 columns of numbers). If not given, the sub-brick outputs are not written. Use '-out -' to write to stdout, if desired
-     * @param compat Be compatible with the older 3dFWHM
-     * @param acf Compute the spatial autocorrelation of the data as a function of radius, then fit that to a model and output the model parameters
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_FWHMX_METADATA);
     const params = v_3d_fwhmx_params(infile, mask, automask, demed, unif, detrend, detprefix, geom, arith, combine, out, compat, acf)
@@ -315,5 +315,8 @@ export {
       V3dFwhmxParameters,
       V_3D_FWHMX_METADATA,
       v_3d_fwhmx,
+      v_3d_fwhmx_cargs,
+      v_3d_fwhmx_execute,
+      v_3d_fwhmx_outputs,
       v_3d_fwhmx_params,
 };

@@ -12,7 +12,7 @@ const PAIRREG_METADATA: Metadata = {
 
 
 interface PairregParameters {
-    "__STYXTYPE__": "pairreg";
+    "@type": "fsl.pairreg";
     "brain1": InputPathType;
     "brain2": InputPathType;
     "skull1": InputPathType;
@@ -22,35 +22,35 @@ interface PairregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pairreg": pairreg_cargs,
+        "fsl.pairreg": pairreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pairreg": pairreg_outputs,
+        "fsl.pairreg": pairreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface PairregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param brain1 Brain image 1 (used as -ref internally)
+ * @param brain2 Brain image 2
+ * @param skull1 Skull image 1 (used as -ref internally)
+ * @param skull2 Skull image 2
+ * @param outputmatrix Output transformation matrix file
+ * @param extra_flirt_args Extra arguments to pass to flirt
+ *
+ * @returns Parameter dictionary
+ */
 function pairreg_params(
     brain1: InputPathType,
     brain2: InputPathType,
@@ -81,20 +93,8 @@ function pairreg_params(
     outputmatrix: InputPathType,
     extra_flirt_args: string | null = null,
 ): PairregParameters {
-    /**
-     * Build parameters.
-    
-     * @param brain1 Brain image 1 (used as -ref internally)
-     * @param brain2 Brain image 2
-     * @param skull1 Skull image 1 (used as -ref internally)
-     * @param skull2 Skull image 2
-     * @param outputmatrix Output transformation matrix file
-     * @param extra_flirt_args Extra arguments to pass to flirt
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pairreg" as const,
+        "@type": "fsl.pairreg" as const,
         "brain1": brain1,
         "brain2": brain2,
         "skull1": skull1,
@@ -108,18 +108,18 @@ function pairreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pairreg_cargs(
     params: PairregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pairreg");
     cargs.push(execution.inputFile((params["brain1"] ?? null)));
@@ -134,18 +134,18 @@ function pairreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pairreg_outputs(
     params: PairregParameters,
     execution: Execution,
 ): PairregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PairregOutputs = {
         root: execution.outputFile("."),
         output_matrix: execution.outputFile([path.basename((params["outputmatrix"] ?? null))].join('')),
@@ -154,22 +154,22 @@ function pairreg_outputs(
 }
 
 
+/**
+ * Pairwise registration tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PairregOutputs`).
+ */
 function pairreg_execute(
     params: PairregParameters,
     execution: Execution,
 ): PairregOutputs {
-    /**
-     * Pairwise registration tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PairregOutputs`).
-     */
     params = execution.params(params)
     const cargs = pairreg_cargs(params, execution)
     const ret = pairreg_outputs(params, execution)
@@ -178,6 +178,23 @@ function pairreg_execute(
 }
 
 
+/**
+ * Pairwise registration tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param brain1 Brain image 1 (used as -ref internally)
+ * @param brain2 Brain image 2
+ * @param skull1 Skull image 1 (used as -ref internally)
+ * @param skull2 Skull image 2
+ * @param outputmatrix Output transformation matrix file
+ * @param extra_flirt_args Extra arguments to pass to flirt
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PairregOutputs`).
+ */
 function pairreg(
     brain1: InputPathType,
     brain2: InputPathType,
@@ -187,23 +204,6 @@ function pairreg(
     extra_flirt_args: string | null = null,
     runner: Runner | null = null,
 ): PairregOutputs {
-    /**
-     * Pairwise registration tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param brain1 Brain image 1 (used as -ref internally)
-     * @param brain2 Brain image 2
-     * @param skull1 Skull image 1 (used as -ref internally)
-     * @param skull2 Skull image 2
-     * @param outputmatrix Output transformation matrix file
-     * @param extra_flirt_args Extra arguments to pass to flirt
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PairregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PAIRREG_METADATA);
     const params = pairreg_params(brain1, brain2, skull1, skull2, outputmatrix, extra_flirt_args)
@@ -216,5 +216,8 @@ export {
       PairregOutputs,
       PairregParameters,
       pairreg,
+      pairreg_cargs,
+      pairreg_execute,
+      pairreg_outputs,
       pairreg_params,
 };

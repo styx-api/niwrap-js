@@ -12,14 +12,14 @@ const CIFTI_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 
 interface CiftiRoisFromExtremaGaussianParameters {
-    "__STYXTYPE__": "gaussian";
+    "@type": "workbench.cifti-rois-from-extrema.gaussian";
     "surf_sigma": number;
     "vol_sigma": number;
 }
 
 
 interface CiftiRoisFromExtremaParameters {
-    "__STYXTYPE__": "cifti-rois-from-extrema";
+    "@type": "workbench.cifti-rois-from-extrema";
     "cifti": InputPathType;
     "surf_limit": number;
     "vol_limit": number;
@@ -34,55 +34,55 @@ interface CiftiRoisFromExtremaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-rois-from-extrema": cifti_rois_from_extrema_cargs,
-        "gaussian": cifti_rois_from_extrema_gaussian_cargs,
+        "workbench.cifti-rois-from-extrema": cifti_rois_from_extrema_cargs,
+        "workbench.cifti-rois-from-extrema.gaussian": cifti_rois_from_extrema_gaussian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-rois-from-extrema": cifti_rois_from_extrema_outputs,
+        "workbench.cifti-rois-from-extrema": cifti_rois_from_extrema_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_sigma the sigma for the surface gaussian kernel, in mm
+ * @param vol_sigma the sigma for the volume gaussian kernel, in mm
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_rois_from_extrema_gaussian_params(
     surf_sigma: number,
     vol_sigma: number,
 ): CiftiRoisFromExtremaGaussianParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_sigma the sigma for the surface gaussian kernel, in mm
-     * @param vol_sigma the sigma for the volume gaussian kernel, in mm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gaussian" as const,
+        "@type": "workbench.cifti-rois-from-extrema.gaussian" as const,
         "surf_sigma": surf_sigma,
         "vol_sigma": vol_sigma,
     };
@@ -90,18 +90,18 @@ function cifti_rois_from_extrema_gaussian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_rois_from_extrema_gaussian_cargs(
     params: CiftiRoisFromExtremaGaussianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-gaussian");
     cargs.push(String((params["surf_sigma"] ?? null)));
@@ -127,6 +127,23 @@ interface CiftiRoisFromExtremaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti
+ * @param surf_limit geodesic distance limit from vertex, in mm
+ * @param vol_limit euclidean distance limit from voxel center, in mm
+ * @param direction which dimension an extrema map is along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_left_surface_surface specify the left surface to use: the left surface file
+ * @param opt_right_surface_surface specify the right surface to use: the right surface file
+ * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param gaussian generate gaussian kernels instead of flat ROIs
+ * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
+ * @param opt_merged_volume treat volume components as if they were a single component
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_rois_from_extrema_params(
     cifti: InputPathType,
     surf_limit: number,
@@ -140,25 +157,8 @@ function cifti_rois_from_extrema_params(
     opt_overlap_logic_method: string | null = null,
     opt_merged_volume: boolean = false,
 ): CiftiRoisFromExtremaParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti
-     * @param surf_limit geodesic distance limit from vertex, in mm
-     * @param vol_limit euclidean distance limit from voxel center, in mm
-     * @param direction which dimension an extrema map is along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_left_surface_surface specify the left surface to use: the left surface file
-     * @param opt_right_surface_surface specify the right surface to use: the right surface file
-     * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
-     * @param gaussian generate gaussian kernels instead of flat ROIs
-     * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
-     * @param opt_merged_volume treat volume components as if they were a single component
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-rois-from-extrema" as const,
+        "@type": "workbench.cifti-rois-from-extrema" as const,
         "cifti": cifti,
         "surf_limit": surf_limit,
         "vol_limit": vol_limit,
@@ -185,18 +185,18 @@ function cifti_rois_from_extrema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_rois_from_extrema_cargs(
     params: CiftiRoisFromExtremaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-rois-from-extrema");
@@ -224,7 +224,7 @@ function cifti_rois_from_extrema_cargs(
         );
     }
     if ((params["gaussian"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["gaussian"] ?? null).__STYXTYPE__)((params["gaussian"] ?? null), execution));
+        cargs.push(...dynCargs((params["gaussian"] ?? null)["@type"])((params["gaussian"] ?? null), execution));
     }
     if ((params["opt_overlap_logic_method"] ?? null) !== null) {
         cargs.push(
@@ -239,18 +239,18 @@ function cifti_rois_from_extrema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_rois_from_extrema_outputs(
     params: CiftiRoisFromExtremaParameters,
     execution: Execution,
 ): CiftiRoisFromExtremaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiRoisFromExtremaOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -259,24 +259,24 @@ function cifti_rois_from_extrema_outputs(
 }
 
 
+/**
+ * Create cifti roi maps from extrema maps.
+ *
+ * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
+ */
 function cifti_rois_from_extrema_execute(
     params: CiftiRoisFromExtremaParameters,
     execution: Execution,
 ): CiftiRoisFromExtremaOutputs {
-    /**
-     * Create cifti roi maps from extrema maps.
-     * 
-     * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_rois_from_extrema_cargs(params, execution)
     const ret = cifti_rois_from_extrema_outputs(params, execution)
@@ -285,6 +285,30 @@ function cifti_rois_from_extrema_execute(
 }
 
 
+/**
+ * Create cifti roi maps from extrema maps.
+ *
+ * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti
+ * @param surf_limit geodesic distance limit from vertex, in mm
+ * @param vol_limit euclidean distance limit from voxel center, in mm
+ * @param direction which dimension an extrema map is along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_left_surface_surface specify the left surface to use: the left surface file
+ * @param opt_right_surface_surface specify the right surface to use: the right surface file
+ * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param gaussian generate gaussian kernels instead of flat ROIs
+ * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
+ */
 function cifti_rois_from_extrema(
     cifti: InputPathType,
     surf_limit: number,
@@ -299,30 +323,6 @@ function cifti_rois_from_extrema(
     opt_merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
-    /**
-     * Create cifti roi maps from extrema maps.
-     * 
-     * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti
-     * @param surf_limit geodesic distance limit from vertex, in mm
-     * @param vol_limit euclidean distance limit from voxel center, in mm
-     * @param direction which dimension an extrema map is along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_left_surface_surface specify the left surface to use: the left surface file
-     * @param opt_right_surface_surface specify the right surface to use: the right surface file
-     * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
-     * @param gaussian generate gaussian kernels instead of flat ROIs
-     * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_ROIS_FROM_EXTREMA_METADATA);
     const params = cifti_rois_from_extrema_params(cifti, surf_limit, vol_limit, direction, cifti_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface, gaussian, opt_overlap_logic_method, opt_merged_volume)
@@ -336,6 +336,10 @@ export {
       CiftiRoisFromExtremaOutputs,
       CiftiRoisFromExtremaParameters,
       cifti_rois_from_extrema,
+      cifti_rois_from_extrema_cargs,
+      cifti_rois_from_extrema_execute,
+      cifti_rois_from_extrema_gaussian_cargs,
       cifti_rois_from_extrema_gaussian_params,
+      cifti_rois_from_extrema_outputs,
       cifti_rois_from_extrema_params,
 };

@@ -12,14 +12,14 @@ const V_5TTEDIT_METADATA: Metadata = {
 
 
 interface V5tteditConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.5ttedit.config";
     "key": string;
     "value": string;
 }
 
 
 interface V5tteditParameters {
-    "__STYXTYPE__": "5ttedit";
+    "@type": "mrtrix.5ttedit";
     "cgm"?: InputPathType | null | undefined;
     "sgm"?: InputPathType | null | undefined;
     "wm"?: InputPathType | null | undefined;
@@ -39,55 +39,55 @@ interface V5tteditParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "5ttedit": v_5ttedit_cargs,
-        "config": v_5ttedit_config_cargs,
+        "mrtrix.5ttedit": v_5ttedit_cargs,
+        "mrtrix.5ttedit.config": v_5ttedit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "5ttedit": v_5ttedit_outputs,
+        "mrtrix.5ttedit": v_5ttedit_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5ttedit_config_params(
     key: string,
     value: string,
 ): V5tteditConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.5ttedit.config" as const,
         "key": key,
         "value": value,
     };
@@ -95,18 +95,18 @@ function v_5ttedit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5ttedit_config_cargs(
     params: V5tteditConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -132,6 +132,28 @@ interface V5tteditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the 5TT image to be modified
+ * @param output the output modified 5TT image
+ * @param cgm provide a mask of voxels that should be set to cortical grey matter
+ * @param sgm provide a mask of voxels that should be set to sub-cortical grey matter
+ * @param wm provide a mask of voxels that should be set to white matter
+ * @param csf provide a mask of voxels that should be set to CSF
+ * @param path provide a mask of voxels that should be set to pathological tissue
+ * @param none provide a mask of voxels that should be cleared (i.e. are non-brain); note that this will supersede all other provided masks
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5ttedit_params(
     input: InputPathType,
     output: string,
@@ -150,30 +172,8 @@ function v_5ttedit_params(
     help: boolean = false,
     version: boolean = false,
 ): V5tteditParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the 5TT image to be modified
-     * @param output the output modified 5TT image
-     * @param cgm provide a mask of voxels that should be set to cortical grey matter
-     * @param sgm provide a mask of voxels that should be set to sub-cortical grey matter
-     * @param wm provide a mask of voxels that should be set to white matter
-     * @param csf provide a mask of voxels that should be set to CSF
-     * @param path provide a mask of voxels that should be set to pathological tissue
-     * @param none provide a mask of voxels that should be cleared (i.e. are non-brain); note that this will supersede all other provided masks
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "5ttedit" as const,
+        "@type": "mrtrix.5ttedit" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -211,18 +211,18 @@ function v_5ttedit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5ttedit_cargs(
     params: V5tteditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("5ttedit");
     if ((params["cgm"] ?? null) !== null) {
@@ -280,7 +280,7 @@ function v_5ttedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -294,18 +294,18 @@ function v_5ttedit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_5ttedit_outputs(
     params: V5tteditParameters,
     execution: Execution,
 ): V5tteditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V5tteditOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -314,28 +314,28 @@ function v_5ttedit_outputs(
 }
 
 
+/**
+ * Manually set the partial volume fractions in an ACT five-tissue-type (5TT) image using mask images.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
+ */
 function v_5ttedit_execute(
     params: V5tteditParameters,
     execution: Execution,
 ): V5tteditOutputs {
-    /**
-     * Manually set the partial volume fractions in an ACT five-tissue-type (5TT) image using mask images.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_5ttedit_cargs(params, execution)
     const ret = v_5ttedit_outputs(params, execution)
@@ -344,6 +344,39 @@ function v_5ttedit_execute(
 }
 
 
+/**
+ * Manually set the partial volume fractions in an ACT five-tissue-type (5TT) image using mask images.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the 5TT image to be modified
+ * @param output the output modified 5TT image
+ * @param cgm provide a mask of voxels that should be set to cortical grey matter
+ * @param sgm provide a mask of voxels that should be set to sub-cortical grey matter
+ * @param wm provide a mask of voxels that should be set to white matter
+ * @param csf provide a mask of voxels that should be set to CSF
+ * @param path provide a mask of voxels that should be set to pathological tissue
+ * @param none provide a mask of voxels that should be cleared (i.e. are non-brain); note that this will supersede all other provided masks
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
+ */
 function v_5ttedit(
     input: InputPathType,
     output: string,
@@ -363,39 +396,6 @@ function v_5ttedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tteditOutputs {
-    /**
-     * Manually set the partial volume fractions in an ACT five-tissue-type (5TT) image using mask images.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the 5TT image to be modified
-     * @param output the output modified 5TT image
-     * @param cgm provide a mask of voxels that should be set to cortical grey matter
-     * @param sgm provide a mask of voxels that should be set to sub-cortical grey matter
-     * @param wm provide a mask of voxels that should be set to white matter
-     * @param csf provide a mask of voxels that should be set to CSF
-     * @param path provide a mask of voxels that should be set to pathological tissue
-     * @param none provide a mask of voxels that should be cleared (i.e. are non-brain); note that this will supersede all other provided masks
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_5TTEDIT_METADATA);
     const params = v_5ttedit_params(input, output, cgm, sgm, wm, csf, path, none, info, quiet, debug, force, nthreads, config, help, version)
@@ -409,6 +409,10 @@ export {
       V5tteditParameters,
       V_5TTEDIT_METADATA,
       v_5ttedit,
+      v_5ttedit_cargs,
+      v_5ttedit_config_cargs,
       v_5ttedit_config_params,
+      v_5ttedit_execute,
+      v_5ttedit_outputs,
       v_5ttedit_params,
 };

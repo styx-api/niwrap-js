@@ -12,7 +12,7 @@ const V_3D_DEPTH_MAP_METADATA: Metadata = {
 
 
 interface V3dDepthMapParameters {
-    "__STYXTYPE__": "3dDepthMap";
+    "@type": "afni.3dDepthMap";
     "input_dataset": InputPathType;
     "output_prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -29,35 +29,35 @@ interface V3dDepthMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDepthMap": v_3d_depth_map_cargs,
+        "afni.3dDepthMap": v_3d_depth_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDepthMap": v_3d_depth_map_outputs,
+        "afni.3dDepthMap": v_3d_depth_map_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface V3dDepthMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset
+ * @param output_prefix Output prefix name
+ * @param mask Mask dataset, applied after the EDT has been calculated
+ * @param dist_squared Output EDT values as distance squared
+ * @param ignore_voxdims Ignore voxel dimensions, producing outputs as if each voxel dimension was unity
+ * @param rimify Output a map of each ROI's boundary layer up to thickness RIM
+ * @param zeros_are_zero EDT values only reported within nonzero locations of the input dataset
+ * @param zeros_are_neg EDT values in the zero/background regions will be negative
+ * @param nz_are_neg EDT values in the nonzero ROI regions will be negative
+ * @param bounds_are_not_zero Treat FOV boundaries for nonzero ROIs as open (i.e., continue infinitely)
+ * @param only2_d Run EDT in 2D along the specified plane (axi|cor|sag)
+ * @param binary_only Treat the input as a binary mask for a faster calculation
+ * @param verbosity Manage verbosity when running code (default: 1)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_depth_map_params(
     input_dataset: InputPathType,
     output_prefix: string,
@@ -95,27 +114,8 @@ function v_3d_depth_map_params(
     binary_only: boolean = false,
     verbosity: number | null = null,
 ): V3dDepthMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset
-     * @param output_prefix Output prefix name
-     * @param mask Mask dataset, applied after the EDT has been calculated
-     * @param dist_squared Output EDT values as distance squared
-     * @param ignore_voxdims Ignore voxel dimensions, producing outputs as if each voxel dimension was unity
-     * @param rimify Output a map of each ROI's boundary layer up to thickness RIM
-     * @param zeros_are_zero EDT values only reported within nonzero locations of the input dataset
-     * @param zeros_are_neg EDT values in the zero/background regions will be negative
-     * @param nz_are_neg EDT values in the nonzero ROI regions will be negative
-     * @param bounds_are_not_zero Treat FOV boundaries for nonzero ROIs as open (i.e., continue infinitely)
-     * @param only2_d Run EDT in 2D along the specified plane (axi|cor|sag)
-     * @param binary_only Treat the input as a binary mask for a faster calculation
-     * @param verbosity Manage verbosity when running code (default: 1)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDepthMap" as const,
+        "@type": "afni.3dDepthMap" as const,
         "input_dataset": input_dataset,
         "output_prefix": output_prefix,
         "dist_squared": dist_squared,
@@ -142,18 +142,18 @@ function v_3d_depth_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_depth_map_cargs(
     params: V3dDepthMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDepthMap");
     cargs.push(
@@ -213,18 +213,18 @@ function v_3d_depth_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_depth_map_outputs(
     params: V3dDepthMapParameters,
     execution: Execution,
 ): V3dDepthMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDepthMapOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null), ".nii.gz"].join('')),
@@ -233,22 +233,22 @@ function v_3d_depth_map_outputs(
 }
 
 
+/**
+ * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
+ */
 function v_3d_depth_map_execute(
     params: V3dDepthMapParameters,
     execution: Execution,
 ): V3dDepthMapOutputs {
-    /**
-     * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_depth_map_cargs(params, execution)
     const ret = v_3d_depth_map_outputs(params, execution)
@@ -257,6 +257,30 @@ function v_3d_depth_map_execute(
 }
 
 
+/**
+ * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset
+ * @param output_prefix Output prefix name
+ * @param mask Mask dataset, applied after the EDT has been calculated
+ * @param dist_squared Output EDT values as distance squared
+ * @param ignore_voxdims Ignore voxel dimensions, producing outputs as if each voxel dimension was unity
+ * @param rimify Output a map of each ROI's boundary layer up to thickness RIM
+ * @param zeros_are_zero EDT values only reported within nonzero locations of the input dataset
+ * @param zeros_are_neg EDT values in the zero/background regions will be negative
+ * @param nz_are_neg EDT values in the nonzero ROI regions will be negative
+ * @param bounds_are_not_zero Treat FOV boundaries for nonzero ROIs as open (i.e., continue infinitely)
+ * @param only2_d Run EDT in 2D along the specified plane (axi|cor|sag)
+ * @param binary_only Treat the input as a binary mask for a faster calculation
+ * @param verbosity Manage verbosity when running code (default: 1)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
+ */
 function v_3d_depth_map(
     input_dataset: InputPathType,
     output_prefix: string,
@@ -273,30 +297,6 @@ function v_3d_depth_map(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): V3dDepthMapOutputs {
-    /**
-     * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset
-     * @param output_prefix Output prefix name
-     * @param mask Mask dataset, applied after the EDT has been calculated
-     * @param dist_squared Output EDT values as distance squared
-     * @param ignore_voxdims Ignore voxel dimensions, producing outputs as if each voxel dimension was unity
-     * @param rimify Output a map of each ROI's boundary layer up to thickness RIM
-     * @param zeros_are_zero EDT values only reported within nonzero locations of the input dataset
-     * @param zeros_are_neg EDT values in the zero/background regions will be negative
-     * @param nz_are_neg EDT values in the nonzero ROI regions will be negative
-     * @param bounds_are_not_zero Treat FOV boundaries for nonzero ROIs as open (i.e., continue infinitely)
-     * @param only2_d Run EDT in 2D along the specified plane (axi|cor|sag)
-     * @param binary_only Treat the input as a binary mask for a faster calculation
-     * @param verbosity Manage verbosity when running code (default: 1)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DEPTH_MAP_METADATA);
     const params = v_3d_depth_map_params(input_dataset, output_prefix, mask, dist_squared, ignore_voxdims, rimify, zeros_are_zero, zeros_are_neg, nz_are_neg, bounds_are_not_zero, only2_d, binary_only, verbosity)
@@ -309,5 +309,8 @@ export {
       V3dDepthMapParameters,
       V_3D_DEPTH_MAP_METADATA,
       v_3d_depth_map,
+      v_3d_depth_map_cargs,
+      v_3d_depth_map_execute,
+      v_3d_depth_map_outputs,
       v_3d_depth_map_params,
 };

@@ -12,38 +12,38 @@ const BROWSE_MINC_HEADER_TCL_METADATA: Metadata = {
 
 
 interface BrowseMincHeaderTclParameters {
-    "__STYXTYPE__": "browse-minc-header.tcl";
+    "@type": "freesurfer.browse-minc-header.tcl";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "browse-minc-header.tcl": browse_minc_header_tcl_cargs,
+        "freesurfer.browse-minc-header.tcl": browse_minc_header_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface BrowseMincHeaderTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile MINC file for which the header is to be browsed
+ *
+ * @returns Parameter dictionary
+ */
 function browse_minc_header_tcl_params(
     infile: InputPathType,
 ): BrowseMincHeaderTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile MINC file for which the header is to be browsed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "browse-minc-header.tcl" as const,
+        "@type": "freesurfer.browse-minc-header.tcl" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function browse_minc_header_tcl_cargs(
     params: BrowseMincHeaderTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("browse-minc-header.tcl");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -100,18 +100,18 @@ function browse_minc_header_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function browse_minc_header_tcl_outputs(
     params: BrowseMincHeaderTclParameters,
     execution: Execution,
 ): BrowseMincHeaderTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BrowseMincHeaderTclOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function browse_minc_header_tcl_outputs(
 }
 
 
+/**
+ * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
+ */
 function browse_minc_header_tcl_execute(
     params: BrowseMincHeaderTclParameters,
     execution: Execution,
 ): BrowseMincHeaderTclOutputs {
-    /**
-     * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = browse_minc_header_tcl_cargs(params, execution)
     const ret = browse_minc_header_tcl_outputs(params, execution)
@@ -143,22 +143,22 @@ function browse_minc_header_tcl_execute(
 }
 
 
+/**
+ * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile MINC file for which the header is to be browsed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
+ */
 function browse_minc_header_tcl(
     infile: InputPathType,
     runner: Runner | null = null,
 ): BrowseMincHeaderTclOutputs {
-    /**
-     * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile MINC file for which the header is to be browsed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BROWSE_MINC_HEADER_TCL_METADATA);
     const params = browse_minc_header_tcl_params(infile)
@@ -171,5 +171,8 @@ export {
       BrowseMincHeaderTclOutputs,
       BrowseMincHeaderTclParameters,
       browse_minc_header_tcl,
+      browse_minc_header_tcl_cargs,
+      browse_minc_header_tcl_execute,
+      browse_minc_header_tcl_outputs,
       browse_minc_header_tcl_params,
 };

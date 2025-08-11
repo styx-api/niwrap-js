@@ -12,7 +12,7 @@ const GEN_SS_REVIEW_SCRIPTS_METADATA: Metadata = {
 
 
 interface GenSsReviewScriptsParameters {
-    "__STYXTYPE__": "gen_ss_review_scripts";
+    "@type": "afni.gen_ss_review_scripts";
     "subject_id"?: string | null | undefined;
     "rm_trs"?: number | null | undefined;
     "num_stim"?: number | null | undefined;
@@ -35,35 +35,35 @@ interface GenSsReviewScriptsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gen_ss_review_scripts": gen_ss_review_scripts_cargs,
+        "afni.gen_ss_review_scripts": gen_ss_review_scripts_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gen_ss_review_scripts": gen_ss_review_scripts_outputs,
+        "afni.gen_ss_review_scripts": gen_ss_review_scripts_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,31 @@ interface GenSsReviewScriptsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID
+ * @param rm_trs Number of TRs removed per run
+ * @param num_stim Number of main stimulus classes
+ * @param mb_level Multiband slice acquisition level (>= 1)
+ * @param slice_pattern Slice timing pattern
+ * @param motion_dset Motion parameters dataset
+ * @param outlier_dset Outlier fraction time series dataset
+ * @param enorm_dset Euclidean norm of motion parameters dataset
+ * @param mot_limit Motion limit
+ * @param out_limit Outlier fraction limit
+ * @param xmat_regress X-matrix file used in regression
+ * @param xmat_uncensored Un-censored X-matrix file
+ * @param stats_dset Output from 3dDeconvolve
+ * @param final_anat Final anatomical dataset
+ * @param final_view Final view of data (e.g. 'orig' or 'tlrc')
+ * @param prefix Set the prefix for script names
+ * @param verbosity Set the verbosity level
+ * @param uvars_json Write JSON file of user variables dict
+ * @param init_uvars_json Initialize user variables from the given JSON file
+ *
+ * @returns Parameter dictionary
+ */
 function gen_ss_review_scripts_params(
     subject_id: string | null = null,
     rm_trs: number | null = null,
@@ -115,33 +140,8 @@ function gen_ss_review_scripts_params(
     uvars_json: InputPathType | null = null,
     init_uvars_json: InputPathType | null = null,
 ): GenSsReviewScriptsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID
-     * @param rm_trs Number of TRs removed per run
-     * @param num_stim Number of main stimulus classes
-     * @param mb_level Multiband slice acquisition level (>= 1)
-     * @param slice_pattern Slice timing pattern
-     * @param motion_dset Motion parameters dataset
-     * @param outlier_dset Outlier fraction time series dataset
-     * @param enorm_dset Euclidean norm of motion parameters dataset
-     * @param mot_limit Motion limit
-     * @param out_limit Outlier fraction limit
-     * @param xmat_regress X-matrix file used in regression
-     * @param xmat_uncensored Un-censored X-matrix file
-     * @param stats_dset Output from 3dDeconvolve
-     * @param final_anat Final anatomical dataset
-     * @param final_view Final view of data (e.g. 'orig' or 'tlrc')
-     * @param prefix Set the prefix for script names
-     * @param verbosity Set the verbosity level
-     * @param uvars_json Write JSON file of user variables dict
-     * @param init_uvars_json Initialize user variables from the given JSON file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gen_ss_review_scripts" as const,
+        "@type": "afni.gen_ss_review_scripts" as const,
     };
     if (subject_id !== null) {
         params["subject_id"] = subject_id;
@@ -204,18 +204,18 @@ function gen_ss_review_scripts_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gen_ss_review_scripts_cargs(
     params: GenSsReviewScriptsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gen_ss_review_scripts.py");
     if ((params["subject_id"] ?? null) !== null) {
@@ -336,18 +336,18 @@ function gen_ss_review_scripts_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gen_ss_review_scripts_outputs(
     params: GenSsReviewScriptsParameters,
     execution: Execution,
 ): GenSsReviewScriptsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GenSsReviewScriptsOutputs = {
         root: execution.outputFile("."),
         basic_review: execution.outputFile(["./@ss_review_basic"].join('')),
@@ -358,22 +358,22 @@ function gen_ss_review_scripts_outputs(
 }
 
 
+/**
+ * Generate single subject analysis review scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
+ */
 function gen_ss_review_scripts_execute(
     params: GenSsReviewScriptsParameters,
     execution: Execution,
 ): GenSsReviewScriptsOutputs {
-    /**
-     * Generate single subject analysis review scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
-     */
     params = execution.params(params)
     const cargs = gen_ss_review_scripts_cargs(params, execution)
     const ret = gen_ss_review_scripts_outputs(params, execution)
@@ -382,6 +382,36 @@ function gen_ss_review_scripts_execute(
 }
 
 
+/**
+ * Generate single subject analysis review scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param subject_id Subject ID
+ * @param rm_trs Number of TRs removed per run
+ * @param num_stim Number of main stimulus classes
+ * @param mb_level Multiband slice acquisition level (>= 1)
+ * @param slice_pattern Slice timing pattern
+ * @param motion_dset Motion parameters dataset
+ * @param outlier_dset Outlier fraction time series dataset
+ * @param enorm_dset Euclidean norm of motion parameters dataset
+ * @param mot_limit Motion limit
+ * @param out_limit Outlier fraction limit
+ * @param xmat_regress X-matrix file used in regression
+ * @param xmat_uncensored Un-censored X-matrix file
+ * @param stats_dset Output from 3dDeconvolve
+ * @param final_anat Final anatomical dataset
+ * @param final_view Final view of data (e.g. 'orig' or 'tlrc')
+ * @param prefix Set the prefix for script names
+ * @param verbosity Set the verbosity level
+ * @param uvars_json Write JSON file of user variables dict
+ * @param init_uvars_json Initialize user variables from the given JSON file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
+ */
 function gen_ss_review_scripts(
     subject_id: string | null = null,
     rm_trs: number | null = null,
@@ -404,36 +434,6 @@ function gen_ss_review_scripts(
     init_uvars_json: InputPathType | null = null,
     runner: Runner | null = null,
 ): GenSsReviewScriptsOutputs {
-    /**
-     * Generate single subject analysis review scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param subject_id Subject ID
-     * @param rm_trs Number of TRs removed per run
-     * @param num_stim Number of main stimulus classes
-     * @param mb_level Multiband slice acquisition level (>= 1)
-     * @param slice_pattern Slice timing pattern
-     * @param motion_dset Motion parameters dataset
-     * @param outlier_dset Outlier fraction time series dataset
-     * @param enorm_dset Euclidean norm of motion parameters dataset
-     * @param mot_limit Motion limit
-     * @param out_limit Outlier fraction limit
-     * @param xmat_regress X-matrix file used in regression
-     * @param xmat_uncensored Un-censored X-matrix file
-     * @param stats_dset Output from 3dDeconvolve
-     * @param final_anat Final anatomical dataset
-     * @param final_view Final view of data (e.g. 'orig' or 'tlrc')
-     * @param prefix Set the prefix for script names
-     * @param verbosity Set the verbosity level
-     * @param uvars_json Write JSON file of user variables dict
-     * @param init_uvars_json Initialize user variables from the given JSON file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GEN_SS_REVIEW_SCRIPTS_METADATA);
     const params = gen_ss_review_scripts_params(subject_id, rm_trs, num_stim, mb_level, slice_pattern, motion_dset, outlier_dset, enorm_dset, mot_limit, out_limit, xmat_regress, xmat_uncensored, stats_dset, final_anat, final_view, prefix, verbosity, uvars_json, init_uvars_json)
@@ -446,5 +446,8 @@ export {
       GenSsReviewScriptsOutputs,
       GenSsReviewScriptsParameters,
       gen_ss_review_scripts,
+      gen_ss_review_scripts_cargs,
+      gen_ss_review_scripts_execute,
+      gen_ss_review_scripts_outputs,
       gen_ss_review_scripts_params,
 };

@@ -12,7 +12,7 @@ const GET_AFNI_MODEL_PRF_6_METADATA: Metadata = {
 
 
 interface GetAfniModelPrf6Parameters {
-    "__STYXTYPE__": "get_afni_model_PRF_6";
+    "@type": "afni.get_afni_model_PRF_6";
     "NT": number;
     "AMP": number;
     "X": number;
@@ -23,33 +23,33 @@ interface GetAfniModelPrf6Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "get_afni_model_PRF_6": get_afni_model_prf_6_cargs,
+        "afni.get_afni_model_PRF_6": get_afni_model_prf_6_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface GetAfniModelPrf6Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nt Number of time points of the stimulus dataset.
+ * @param amp Amplitude of the pRF model.
+ * @param x X coordinate of the pRF center.
+ * @param y Y coordinate of the pRF center.
+ * @param sigma Standard deviation of the Gaussian pRF.
+ * @param sigrat Ratio of standard deviations (sigma_x/sigma_y) of the Gaussian pRF.
+ * @param theta Rotation angle theta of the Gaussian pRF.
+ *
+ * @returns Parameter dictionary
+ */
 function get_afni_model_prf_6_params(
     nt: number,
     amp: number,
@@ -78,21 +91,8 @@ function get_afni_model_prf_6_params(
     sigrat: number,
     theta: number,
 ): GetAfniModelPrf6Parameters {
-    /**
-     * Build parameters.
-    
-     * @param nt Number of time points of the stimulus dataset.
-     * @param amp Amplitude of the pRF model.
-     * @param x X coordinate of the pRF center.
-     * @param y Y coordinate of the pRF center.
-     * @param sigma Standard deviation of the Gaussian pRF.
-     * @param sigrat Ratio of standard deviations (sigma_x/sigma_y) of the Gaussian pRF.
-     * @param theta Rotation angle theta of the Gaussian pRF.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "get_afni_model_PRF_6" as const,
+        "@type": "afni.get_afni_model_PRF_6" as const,
         "NT": nt,
         "AMP": amp,
         "X": x,
@@ -105,18 +105,18 @@ function get_afni_model_prf_6_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function get_afni_model_prf_6_cargs(
     params: GetAfniModelPrf6Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("get_afni_model_PRF_6");
     cargs.push(String((params["NT"] ?? null)));
@@ -130,18 +130,18 @@ function get_afni_model_prf_6_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function get_afni_model_prf_6_outputs(
     params: GetAfniModelPrf6Parameters,
     execution: Execution,
 ): GetAfniModelPrf6Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GetAfniModelPrf6Outputs = {
         root: execution.outputFile("."),
     };
@@ -149,22 +149,22 @@ function get_afni_model_prf_6_outputs(
 }
 
 
+/**
+ * A command to invoke AFNI's population receptive field (pRF) model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
+ */
 function get_afni_model_prf_6_execute(
     params: GetAfniModelPrf6Parameters,
     execution: Execution,
 ): GetAfniModelPrf6Outputs {
-    /**
-     * A command to invoke AFNI's population receptive field (pRF) model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
-     */
     params = execution.params(params)
     const cargs = get_afni_model_prf_6_cargs(params, execution)
     const ret = get_afni_model_prf_6_outputs(params, execution)
@@ -173,6 +173,24 @@ function get_afni_model_prf_6_execute(
 }
 
 
+/**
+ * A command to invoke AFNI's population receptive field (pRF) model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param nt Number of time points of the stimulus dataset.
+ * @param amp Amplitude of the pRF model.
+ * @param x X coordinate of the pRF center.
+ * @param y Y coordinate of the pRF center.
+ * @param sigma Standard deviation of the Gaussian pRF.
+ * @param sigrat Ratio of standard deviations (sigma_x/sigma_y) of the Gaussian pRF.
+ * @param theta Rotation angle theta of the Gaussian pRF.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
+ */
 function get_afni_model_prf_6(
     nt: number,
     amp: number,
@@ -183,24 +201,6 @@ function get_afni_model_prf_6(
     theta: number,
     runner: Runner | null = null,
 ): GetAfniModelPrf6Outputs {
-    /**
-     * A command to invoke AFNI's population receptive field (pRF) model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param nt Number of time points of the stimulus dataset.
-     * @param amp Amplitude of the pRF model.
-     * @param x X coordinate of the pRF center.
-     * @param y Y coordinate of the pRF center.
-     * @param sigma Standard deviation of the Gaussian pRF.
-     * @param sigrat Ratio of standard deviations (sigma_x/sigma_y) of the Gaussian pRF.
-     * @param theta Rotation angle theta of the Gaussian pRF.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_METADATA);
     const params = get_afni_model_prf_6_params(nt, amp, x, y, sigma, sigrat, theta)
@@ -213,5 +213,8 @@ export {
       GetAfniModelPrf6Outputs,
       GetAfniModelPrf6Parameters,
       get_afni_model_prf_6,
+      get_afni_model_prf_6_cargs,
+      get_afni_model_prf_6_execute,
+      get_afni_model_prf_6_outputs,
       get_afni_model_prf_6_params,
 };

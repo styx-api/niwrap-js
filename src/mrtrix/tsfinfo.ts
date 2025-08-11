@@ -12,14 +12,14 @@ const TSFINFO_METADATA: Metadata = {
 
 
 interface TsfinfoConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tsfinfo.config";
     "key": string;
     "value": string;
 }
 
 
 interface TsfinfoParameters {
-    "__STYXTYPE__": "tsfinfo";
+    "@type": "mrtrix.tsfinfo";
     "count": boolean;
     "ascii"?: string | null | undefined;
     "info": boolean;
@@ -34,54 +34,54 @@ interface TsfinfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tsfinfo": tsfinfo_cargs,
-        "config": tsfinfo_config_cargs,
+        "mrtrix.tsfinfo": tsfinfo_cargs,
+        "mrtrix.tsfinfo.config": tsfinfo_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfinfo_config_params(
     key: string,
     value: string,
 ): TsfinfoConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tsfinfo.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function tsfinfo_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfinfo_config_cargs(
     params: TsfinfoConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -122,6 +122,23 @@ interface TsfinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks the input track scalar file.
+ * @param count count number of tracks in file explicitly, ignoring the header
+ * @param ascii save values of each track scalar file in individual ascii files, with the specified prefix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tsfinfo_params(
     tracks: Array<InputPathType>,
     count: boolean = false,
@@ -135,25 +152,8 @@ function tsfinfo_params(
     help: boolean = false,
     version: boolean = false,
 ): TsfinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks the input track scalar file.
-     * @param count count number of tracks in file explicitly, ignoring the header
-     * @param ascii save values of each track scalar file in individual ascii files, with the specified prefix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tsfinfo" as const,
+        "@type": "mrtrix.tsfinfo" as const,
         "count": count,
         "info": info,
         "quiet": quiet,
@@ -176,18 +176,18 @@ function tsfinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsfinfo_cargs(
     params: TsfinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tsfinfo");
     if ((params["count"] ?? null)) {
@@ -218,7 +218,7 @@ function tsfinfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -231,18 +231,18 @@ function tsfinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tsfinfo_outputs(
     params: TsfinfoParameters,
     execution: Execution,
 ): TsfinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TsfinfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -250,28 +250,28 @@ function tsfinfo_outputs(
 }
 
 
+/**
+ * Print out information about a track scalar file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
+ */
 function tsfinfo_execute(
     params: TsfinfoParameters,
     execution: Execution,
 ): TsfinfoOutputs {
-    /**
-     * Print out information about a track scalar file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = tsfinfo_cargs(params, execution)
     const ret = tsfinfo_outputs(params, execution)
@@ -280,6 +280,34 @@ function tsfinfo_execute(
 }
 
 
+/**
+ * Print out information about a track scalar file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks the input track scalar file.
+ * @param count count number of tracks in file explicitly, ignoring the header
+ * @param ascii save values of each track scalar file in individual ascii files, with the specified prefix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
+ */
 function tsfinfo(
     tracks: Array<InputPathType>,
     count: boolean = false,
@@ -294,34 +322,6 @@ function tsfinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfinfoOutputs {
-    /**
-     * Print out information about a track scalar file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks the input track scalar file.
-     * @param count count number of tracks in file explicitly, ignoring the header
-     * @param ascii save values of each track scalar file in individual ascii files, with the specified prefix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSFINFO_METADATA);
     const params = tsfinfo_params(tracks, count, ascii, info, quiet, debug, force, nthreads, config, help, version)
@@ -335,6 +335,10 @@ export {
       TsfinfoOutputs,
       TsfinfoParameters,
       tsfinfo,
+      tsfinfo_cargs,
+      tsfinfo_config_cargs,
       tsfinfo_config_params,
+      tsfinfo_execute,
+      tsfinfo_outputs,
       tsfinfo_params,
 };

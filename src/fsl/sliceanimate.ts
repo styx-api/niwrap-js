@@ -12,41 +12,41 @@ const SLICEANIMATE_METADATA: Metadata = {
 
 
 interface SliceanimateParameters {
-    "__STYXTYPE__": "sliceanimate";
+    "@type": "fsl.sliceanimate";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sliceanimate": sliceanimate_cargs,
+        "fsl.sliceanimate": sliceanimate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sliceanimate": sliceanimate_outputs,
+        "fsl.sliceanimate": sliceanimate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SliceanimateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output animated GIF file
+ * @param input_files Input image files for animation
+ *
+ * @returns Parameter dictionary
+ */
 function sliceanimate_params(
     output_file: string,
     input_files: Array<InputPathType>,
 ): SliceanimateParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output animated GIF file
-     * @param input_files Input image files for animation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sliceanimate" as const,
+        "@type": "fsl.sliceanimate" as const,
         "output_file": output_file,
         "input_files": input_files,
     };
@@ -90,18 +90,18 @@ function sliceanimate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sliceanimate_cargs(
     params: SliceanimateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sliceanimate");
     cargs.push((params["output_file"] ?? null));
@@ -110,18 +110,18 @@ function sliceanimate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sliceanimate_outputs(
     params: SliceanimateParameters,
     execution: Execution,
 ): SliceanimateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SliceanimateOutputs = {
         root: execution.outputFile("."),
         animated_gif: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function sliceanimate_outputs(
 }
 
 
+/**
+ * A tool for animating slices of an image using whirlgif.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
+ */
 function sliceanimate_execute(
     params: SliceanimateParameters,
     execution: Execution,
 ): SliceanimateOutputs {
-    /**
-     * A tool for animating slices of an image using whirlgif.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
-     */
     params = execution.params(params)
     const cargs = sliceanimate_cargs(params, execution)
     const ret = sliceanimate_outputs(params, execution)
@@ -154,24 +154,24 @@ function sliceanimate_execute(
 }
 
 
+/**
+ * A tool for animating slices of an image using whirlgif.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_file Output animated GIF file
+ * @param input_files Input image files for animation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
+ */
 function sliceanimate(
     output_file: string,
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): SliceanimateOutputs {
-    /**
-     * A tool for animating slices of an image using whirlgif.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_file Output animated GIF file
-     * @param input_files Input image files for animation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICEANIMATE_METADATA);
     const params = sliceanimate_params(output_file, input_files)
@@ -184,5 +184,8 @@ export {
       SliceanimateOutputs,
       SliceanimateParameters,
       sliceanimate,
+      sliceanimate_cargs,
+      sliceanimate_execute,
+      sliceanimate_outputs,
       sliceanimate_params,
 };

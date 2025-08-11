@@ -12,7 +12,7 @@ const NIML_FEEDME_METADATA: Metadata = {
 
 
 interface NimlFeedmeParameters {
-    "__STYXTYPE__": "niml_feedme";
+    "@type": "afni.niml_feedme";
     "host"?: string | null | undefined;
     "interval"?: number | null | undefined;
     "verbose": boolean;
@@ -23,33 +23,33 @@ interface NimlFeedmeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "niml_feedme": niml_feedme_cargs,
+        "afni.niml_feedme": niml_feedme_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface NimlFeedmeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset to be sent to AFNI.
+ * @param host Send data, via TCP/IP, to AFNI running on the computer system 'sname'. By default, uses the current system (localhost), if you don't use this option.
+ * @param interval Tries to maintain an inter-transmit interval of 'ms' milliseconds. The default is 1000 msec per volume.
+ * @param verbose Be (very) talkative about actions.
+ * @param accum Send sub-bricks so that they accumulate in AFNI. The default is to create only a 1 volume dataset inside AFNI, and each sub-brick just replaces that one volume when it is received.
+ * @param target_dataset Change the dataset name transmitted to AFNI from 'niml_feedme' to 'nam'.
+ * @param drive_cmds Send 'cmd' as a DRIVE_AFNI command. If cmd contains blanks, it must be in 'quotes'. Multiple -drive options may be used. These commands will be sent to AFNI just after the first volume is transmitted. See file README.driver for a list of commands.
+ *
+ * @returns Parameter dictionary
+ */
 function niml_feedme_params(
     dataset: InputPathType,
     host: string | null = null,
@@ -78,21 +91,8 @@ function niml_feedme_params(
     target_dataset: string | null = null,
     drive_cmds: Array<string> | null = null,
 ): NimlFeedmeParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset to be sent to AFNI.
-     * @param host Send data, via TCP/IP, to AFNI running on the computer system 'sname'. By default, uses the current system (localhost), if you don't use this option.
-     * @param interval Tries to maintain an inter-transmit interval of 'ms' milliseconds. The default is 1000 msec per volume.
-     * @param verbose Be (very) talkative about actions.
-     * @param accum Send sub-bricks so that they accumulate in AFNI. The default is to create only a 1 volume dataset inside AFNI, and each sub-brick just replaces that one volume when it is received.
-     * @param target_dataset Change the dataset name transmitted to AFNI from 'niml_feedme' to 'nam'.
-     * @param drive_cmds Send 'cmd' as a DRIVE_AFNI command. If cmd contains blanks, it must be in 'quotes'. Multiple -drive options may be used. These commands will be sent to AFNI just after the first volume is transmitted. See file README.driver for a list of commands.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "niml_feedme" as const,
+        "@type": "afni.niml_feedme" as const,
         "verbose": verbose,
         "accum": accum,
         "dataset": dataset,
@@ -113,18 +113,18 @@ function niml_feedme_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function niml_feedme_cargs(
     params: NimlFeedmeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("niml_feedme");
     if ((params["host"] ?? null) !== null) {
@@ -162,18 +162,18 @@ function niml_feedme_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function niml_feedme_outputs(
     params: NimlFeedmeParameters,
     execution: Execution,
 ): NimlFeedmeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NimlFeedmeOutputs = {
         root: execution.outputFile("."),
     };
@@ -181,22 +181,22 @@ function niml_feedme_outputs(
 }
 
 
+/**
+ * Sends volumes from the dataset to AFNI via the NIML socket interface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
+ */
 function niml_feedme_execute(
     params: NimlFeedmeParameters,
     execution: Execution,
 ): NimlFeedmeOutputs {
-    /**
-     * Sends volumes from the dataset to AFNI via the NIML socket interface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
-     */
     params = execution.params(params)
     const cargs = niml_feedme_cargs(params, execution)
     const ret = niml_feedme_outputs(params, execution)
@@ -205,6 +205,24 @@ function niml_feedme_execute(
 }
 
 
+/**
+ * Sends volumes from the dataset to AFNI via the NIML socket interface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset to be sent to AFNI.
+ * @param host Send data, via TCP/IP, to AFNI running on the computer system 'sname'. By default, uses the current system (localhost), if you don't use this option.
+ * @param interval Tries to maintain an inter-transmit interval of 'ms' milliseconds. The default is 1000 msec per volume.
+ * @param verbose Be (very) talkative about actions.
+ * @param accum Send sub-bricks so that they accumulate in AFNI. The default is to create only a 1 volume dataset inside AFNI, and each sub-brick just replaces that one volume when it is received.
+ * @param target_dataset Change the dataset name transmitted to AFNI from 'niml_feedme' to 'nam'.
+ * @param drive_cmds Send 'cmd' as a DRIVE_AFNI command. If cmd contains blanks, it must be in 'quotes'. Multiple -drive options may be used. These commands will be sent to AFNI just after the first volume is transmitted. See file README.driver for a list of commands.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
+ */
 function niml_feedme(
     dataset: InputPathType,
     host: string | null = null,
@@ -215,24 +233,6 @@ function niml_feedme(
     drive_cmds: Array<string> | null = null,
     runner: Runner | null = null,
 ): NimlFeedmeOutputs {
-    /**
-     * Sends volumes from the dataset to AFNI via the NIML socket interface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset to be sent to AFNI.
-     * @param host Send data, via TCP/IP, to AFNI running on the computer system 'sname'. By default, uses the current system (localhost), if you don't use this option.
-     * @param interval Tries to maintain an inter-transmit interval of 'ms' milliseconds. The default is 1000 msec per volume.
-     * @param verbose Be (very) talkative about actions.
-     * @param accum Send sub-bricks so that they accumulate in AFNI. The default is to create only a 1 volume dataset inside AFNI, and each sub-brick just replaces that one volume when it is received.
-     * @param target_dataset Change the dataset name transmitted to AFNI from 'niml_feedme' to 'nam'.
-     * @param drive_cmds Send 'cmd' as a DRIVE_AFNI command. If cmd contains blanks, it must be in 'quotes'. Multiple -drive options may be used. These commands will be sent to AFNI just after the first volume is transmitted. See file README.driver for a list of commands.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NIML_FEEDME_METADATA);
     const params = niml_feedme_params(dataset, host, interval, verbose, accum, target_dataset, drive_cmds)
@@ -245,5 +245,8 @@ export {
       NimlFeedmeOutputs,
       NimlFeedmeParameters,
       niml_feedme,
+      niml_feedme_cargs,
+      niml_feedme_execute,
+      niml_feedme_outputs,
       niml_feedme_params,
 };

@@ -12,38 +12,38 @@ const DIFFUSION_UTILS_METADATA: Metadata = {
 
 
 interface DiffusionUtilsParameters {
-    "__STYXTYPE__": "diffusionUtils";
+    "@type": "freesurfer.diffusionUtils";
     "dummy_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "diffusionUtils": diffusion_utils_cargs,
+        "freesurfer.diffusionUtils": diffusion_utils_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface DiffusionUtilsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dummy_flag Dummy input as no valid help information is provided due to missing module.
+ *
+ * @returns Parameter dictionary
+ */
 function diffusion_utils_params(
     dummy_flag: boolean = false,
 ): DiffusionUtilsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dummy_flag Dummy input as no valid help information is provided due to missing module.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "diffusionUtils" as const,
+        "@type": "freesurfer.diffusionUtils" as const,
         "dummy_flag": dummy_flag,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function diffusion_utils_cargs(
     params: DiffusionUtilsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("diffusionUtils");
     if ((params["dummy_flag"] ?? null)) {
@@ -102,18 +102,18 @@ function diffusion_utils_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function diffusion_utils_outputs(
     params: DiffusionUtilsParameters,
     execution: Execution,
 ): DiffusionUtilsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DiffusionUtilsOutputs = {
         root: execution.outputFile("."),
     };
@@ -121,22 +121,22 @@ function diffusion_utils_outputs(
 }
 
 
+/**
+ * A utility related to diffusion data, potentially using the DIPY library.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
+ */
 function diffusion_utils_execute(
     params: DiffusionUtilsParameters,
     execution: Execution,
 ): DiffusionUtilsOutputs {
-    /**
-     * A utility related to diffusion data, potentially using the DIPY library.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
-     */
     params = execution.params(params)
     const cargs = diffusion_utils_cargs(params, execution)
     const ret = diffusion_utils_outputs(params, execution)
@@ -145,22 +145,22 @@ function diffusion_utils_execute(
 }
 
 
+/**
+ * A utility related to diffusion data, potentially using the DIPY library.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dummy_flag Dummy input as no valid help information is provided due to missing module.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
+ */
 function diffusion_utils(
     dummy_flag: boolean = false,
     runner: Runner | null = null,
 ): DiffusionUtilsOutputs {
-    /**
-     * A utility related to diffusion data, potentially using the DIPY library.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dummy_flag Dummy input as no valid help information is provided due to missing module.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIFFUSION_UTILS_METADATA);
     const params = diffusion_utils_params(dummy_flag)
@@ -173,5 +173,8 @@ export {
       DiffusionUtilsOutputs,
       DiffusionUtilsParameters,
       diffusion_utils,
+      diffusion_utils_cargs,
+      diffusion_utils_execute,
+      diffusion_utils_outputs,
       diffusion_utils_params,
 };

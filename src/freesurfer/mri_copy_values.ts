@@ -12,42 +12,42 @@ const MRI_COPY_VALUES_METADATA: Metadata = {
 
 
 interface MriCopyValuesParameters {
-    "__STYXTYPE__": "mri_copy_values";
+    "@type": "freesurfer.mri_copy_values";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_copy_values": mri_copy_values_cargs,
+        "freesurfer.mri_copy_values": mri_copy_values_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_copy_values": mri_copy_values_outputs,
+        "freesurfer.mri_copy_values": mri_copy_values_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriCopyValuesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_volume Source volume from which values are copied.
+ * @param target_volume Target volume to which values are copied.
+ * @param output_volume Output volume where the result will be stored.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_copy_values_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     output_volume: string,
 ): MriCopyValuesParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_volume Source volume from which values are copied.
-     * @param target_volume Target volume to which values are copied.
-     * @param output_volume Output volume where the result will be stored.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_copy_values" as const,
+        "@type": "freesurfer.mri_copy_values" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
         "output_volume": output_volume,
@@ -94,18 +94,18 @@ function mri_copy_values_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_copy_values_cargs(
     params: MriCopyValuesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_copy_values");
     cargs.push(execution.inputFile((params["source_volume"] ?? null)));
@@ -115,18 +115,18 @@ function mri_copy_values_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_copy_values_outputs(
     params: MriCopyValuesParameters,
     execution: Execution,
 ): MriCopyValuesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCopyValuesOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_copy_values_outputs(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
+ */
 function mri_copy_values_execute(
     params: MriCopyValuesParameters,
     execution: Execution,
 ): MriCopyValuesOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_copy_values_cargs(params, execution)
     const ret = mri_copy_values_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_copy_values_execute(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_volume Source volume from which values are copied.
+ * @param target_volume Target volume to which values are copied.
+ * @param output_volume Output volume where the result will be stored.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
+ */
 function mri_copy_values(
     source_volume: InputPathType,
     target_volume: InputPathType,
     output_volume: string,
     runner: Runner | null = null,
 ): MriCopyValuesOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_volume Source volume from which values are copied.
-     * @param target_volume Target volume to which values are copied.
-     * @param output_volume Output volume where the result will be stored.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COPY_VALUES_METADATA);
     const params = mri_copy_values_params(source_volume, target_volume, output_volume)
@@ -191,5 +191,8 @@ export {
       MriCopyValuesOutputs,
       MriCopyValuesParameters,
       mri_copy_values,
+      mri_copy_values_cargs,
+      mri_copy_values_execute,
+      mri_copy_values_outputs,
       mri_copy_values_params,
 };

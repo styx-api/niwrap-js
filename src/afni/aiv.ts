@@ -12,7 +12,7 @@ const AIV_METADATA: Metadata = {
 
 
 interface AivParameters {
-    "__STYXTYPE__": "aiv";
+    "@type": "afni.aiv";
     "verbose": boolean;
     "quiet": boolean;
     "title"?: string | null | undefined;
@@ -22,33 +22,33 @@ interface AivParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aiv": aiv_cargs,
+        "afni.aiv": aiv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface AivOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_images Input image files (e.g., img1.jpg, img2.bmp).
+ * @param verbose Print out the image filenames for progress tracking.
+ * @param quiet Run the program in quiet mode.
+ * @param title Specify the window title.
+ * @param port Listen to TCP/IP port for incoming images.
+ * @param pad Pad all input images to be the same size.
+ *
+ * @returns Parameter dictionary
+ */
 function aiv_params(
     input_images: Array<InputPathType>,
     verbose: boolean = false,
@@ -76,20 +88,8 @@ function aiv_params(
     port: number | null = null,
     pad: string | null = null,
 ): AivParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_images Input image files (e.g., img1.jpg, img2.bmp).
-     * @param verbose Print out the image filenames for progress tracking.
-     * @param quiet Run the program in quiet mode.
-     * @param title Specify the window title.
-     * @param port Listen to TCP/IP port for incoming images.
-     * @param pad Pad all input images to be the same size.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aiv" as const,
+        "@type": "afni.aiv" as const,
         "verbose": verbose,
         "quiet": quiet,
         "input_images": input_images,
@@ -107,18 +107,18 @@ function aiv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aiv_cargs(
     params: AivParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aiv");
     if ((params["verbose"] ?? null)) {
@@ -150,18 +150,18 @@ function aiv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aiv_outputs(
     params: AivParameters,
     execution: Execution,
 ): AivOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AivOutputs = {
         root: execution.outputFile("."),
     };
@@ -169,22 +169,22 @@ function aiv_outputs(
 }
 
 
+/**
+ * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AivOutputs`).
+ */
 function aiv_execute(
     params: AivParameters,
     execution: Execution,
 ): AivOutputs {
-    /**
-     * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AivOutputs`).
-     */
     params = execution.params(params)
     const cargs = aiv_cargs(params, execution)
     const ret = aiv_outputs(params, execution)
@@ -193,6 +193,23 @@ function aiv_execute(
 }
 
 
+/**
+ * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_images Input image files (e.g., img1.jpg, img2.bmp).
+ * @param verbose Print out the image filenames for progress tracking.
+ * @param quiet Run the program in quiet mode.
+ * @param title Specify the window title.
+ * @param port Listen to TCP/IP port for incoming images.
+ * @param pad Pad all input images to be the same size.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AivOutputs`).
+ */
 function aiv(
     input_images: Array<InputPathType>,
     verbose: boolean = false,
@@ -202,23 +219,6 @@ function aiv(
     pad: string | null = null,
     runner: Runner | null = null,
 ): AivOutputs {
-    /**
-     * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_images Input image files (e.g., img1.jpg, img2.bmp).
-     * @param verbose Print out the image filenames for progress tracking.
-     * @param quiet Run the program in quiet mode.
-     * @param title Specify the window title.
-     * @param port Listen to TCP/IP port for incoming images.
-     * @param pad Pad all input images to be the same size.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AivOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AIV_METADATA);
     const params = aiv_params(input_images, verbose, quiet, title, port, pad)
@@ -231,5 +231,8 @@ export {
       AivOutputs,
       AivParameters,
       aiv,
+      aiv_cargs,
+      aiv_execute,
+      aiv_outputs,
       aiv_params,
 };

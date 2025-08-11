@@ -12,14 +12,14 @@ const LABELCONVERT_METADATA: Metadata = {
 
 
 interface LabelconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.labelconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface LabelconvertParameters {
-    "__STYXTYPE__": "labelconvert";
+    "@type": "mrtrix.labelconvert";
     "spine"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -36,55 +36,55 @@ interface LabelconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "labelconvert": labelconvert_cargs,
-        "config": labelconvert_config_cargs,
+        "mrtrix.labelconvert": labelconvert_cargs,
+        "mrtrix.labelconvert.config": labelconvert_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "labelconvert": labelconvert_outputs,
+        "mrtrix.labelconvert": labelconvert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function labelconvert_config_params(
     key: string,
     value: string,
 ): LabelconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.labelconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -92,18 +92,18 @@ function labelconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labelconvert_config_cargs(
     params: LabelconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -129,6 +129,25 @@ interface LabelconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param path_in the input image
+ * @param lut_in the connectome lookup table corresponding to the input image
+ * @param lut_out the target connectome lookup table for the output image
+ * @param image_out the output image
+ * @param spine provide a manually-defined segmentation of the base of the spine where the streamlines terminate, so that this can become a node in the connection matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function labelconvert_params(
     path_in: InputPathType,
     lut_in: InputPathType,
@@ -144,27 +163,8 @@ function labelconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): LabelconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param path_in the input image
-     * @param lut_in the connectome lookup table corresponding to the input image
-     * @param lut_out the target connectome lookup table for the output image
-     * @param image_out the output image
-     * @param spine provide a manually-defined segmentation of the base of the spine where the streamlines terminate, so that this can become a node in the connection matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "labelconvert" as const,
+        "@type": "mrtrix.labelconvert" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -189,18 +189,18 @@ function labelconvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labelconvert_cargs(
     params: LabelconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("labelconvert");
     if ((params["spine"] ?? null) !== null) {
@@ -228,7 +228,7 @@ function labelconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -244,18 +244,18 @@ function labelconvert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function labelconvert_outputs(
     params: LabelconvertParameters,
     execution: Execution,
 ): LabelconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelconvertOutputs = {
         root: execution.outputFile("."),
         image_out: execution.outputFile([(params["image_out"] ?? null)].join('')),
@@ -264,28 +264,28 @@ function labelconvert_outputs(
 }
 
 
+/**
+ * Convert a connectome node image from one lookup table to another.
+ *
+ * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
+ */
 function labelconvert_execute(
     params: LabelconvertParameters,
     execution: Execution,
 ): LabelconvertOutputs {
-    /**
-     * Convert a connectome node image from one lookup table to another.
-     * 
-     * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = labelconvert_cargs(params, execution)
     const ret = labelconvert_outputs(params, execution)
@@ -294,6 +294,36 @@ function labelconvert_execute(
 }
 
 
+/**
+ * Convert a connectome node image from one lookup table to another.
+ *
+ * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param path_in the input image
+ * @param lut_in the connectome lookup table corresponding to the input image
+ * @param lut_out the target connectome lookup table for the output image
+ * @param image_out the output image
+ * @param spine provide a manually-defined segmentation of the base of the spine where the streamlines terminate, so that this can become a node in the connection matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
+ */
 function labelconvert(
     path_in: InputPathType,
     lut_in: InputPathType,
@@ -310,36 +340,6 @@ function labelconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): LabelconvertOutputs {
-    /**
-     * Convert a connectome node image from one lookup table to another.
-     * 
-     * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param path_in the input image
-     * @param lut_in the connectome lookup table corresponding to the input image
-     * @param lut_out the target connectome lookup table for the output image
-     * @param image_out the output image
-     * @param spine provide a manually-defined segmentation of the base of the spine where the streamlines terminate, so that this can become a node in the connection matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABELCONVERT_METADATA);
     const params = labelconvert_params(path_in, lut_in, lut_out, image_out, spine, info, quiet, debug, force, nthreads, config, help, version)
@@ -353,6 +353,10 @@ export {
       LabelconvertOutputs,
       LabelconvertParameters,
       labelconvert,
+      labelconvert_cargs,
+      labelconvert_config_cargs,
       labelconvert_config_params,
+      labelconvert_execute,
+      labelconvert_outputs,
       labelconvert_params,
 };

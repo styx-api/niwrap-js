@@ -12,7 +12,7 @@ const SURF_MEASURES_METADATA: Metadata = {
 
 
 interface SurfMeasuresParameters {
-    "__STYXTYPE__": "SurfMeasures";
+    "@type": "afni.SurfMeasures";
     "spec_file": InputPathType;
     "surf_A": string;
     "surf_B"?: string | null | undefined;
@@ -34,35 +34,35 @@ interface SurfMeasuresParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfMeasures": surf_measures_cargs,
+        "afni.SurfMeasures": surf_measures_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfMeasures": surf_measures_outputs,
+        "afni.SurfMeasures": surf_measures_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,30 @@ interface SurfMeasuresOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file SUMA spec file containing a list of related surfaces
+ * @param surf_a Surface name (in spec file) for the first surface
+ * @param out_dset Output filename with dataset format
+ * @param surf_b Surface name (in spec file) for the second surface
+ * @param out_1_d Output filename in 1D format
+ * @param func Measure function to be applied
+ * @param surf_volume AFNI volume dataset associated with the surface
+ * @param cmask Restrict nodes with a mask
+ * @param debug Display extra run-time information with specified debug level (0-5)
+ * @param dnode Display extra information for specified node
+ * @param nodes_1_d Restrict output to specific nodes listed in a file
+ * @param info_all Display all final info
+ * @param info_area Display total area of each triangulated surface
+ * @param info_norms Display info about the normals
+ * @param info_thick Display minimum and maximum thickness between surfaces
+ * @param info_vol Display total computed volume between surfaces
+ * @param info_volg Display total computed volume estimated via Gauss' theorem
+ * @param ver Show program version and compile date
+ *
+ * @returns Parameter dictionary
+ */
 function surf_measures_params(
     spec_file: InputPathType,
     surf_a: string,
@@ -109,32 +133,8 @@ function surf_measures_params(
     info_volg: boolean = false,
     ver: boolean = false,
 ): SurfMeasuresParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file SUMA spec file containing a list of related surfaces
-     * @param surf_a Surface name (in spec file) for the first surface
-     * @param out_dset Output filename with dataset format
-     * @param surf_b Surface name (in spec file) for the second surface
-     * @param out_1_d Output filename in 1D format
-     * @param func Measure function to be applied
-     * @param surf_volume AFNI volume dataset associated with the surface
-     * @param cmask Restrict nodes with a mask
-     * @param debug Display extra run-time information with specified debug level (0-5)
-     * @param dnode Display extra information for specified node
-     * @param nodes_1_d Restrict output to specific nodes listed in a file
-     * @param info_all Display all final info
-     * @param info_area Display total area of each triangulated surface
-     * @param info_norms Display info about the normals
-     * @param info_thick Display minimum and maximum thickness between surfaces
-     * @param info_vol Display total computed volume between surfaces
-     * @param info_volg Display total computed volume estimated via Gauss' theorem
-     * @param ver Show program version and compile date
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfMeasures" as const,
+        "@type": "afni.SurfMeasures" as const,
         "spec_file": spec_file,
         "surf_A": surf_a,
         "out_dset": out_dset,
@@ -174,18 +174,18 @@ function surf_measures_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_measures_cargs(
     params: SurfMeasuresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfMeasures");
     cargs.push(
@@ -273,18 +273,18 @@ function surf_measures_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_measures_outputs(
     params: SurfMeasuresParameters,
     execution: Execution,
 ): SurfMeasuresOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfMeasuresOutputs = {
         root: execution.outputFile("."),
         output_1_d: ((params["out_1D"] ?? null) !== null) ? execution.outputFile([(params["out_1D"] ?? null), ".1D"].join('')) : null,
@@ -294,22 +294,22 @@ function surf_measures_outputs(
 }
 
 
+/**
+ * Compute measures from surface dataset(s).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
+ */
 function surf_measures_execute(
     params: SurfMeasuresParameters,
     execution: Execution,
 ): SurfMeasuresOutputs {
-    /**
-     * Compute measures from surface dataset(s).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_measures_cargs(params, execution)
     const ret = surf_measures_outputs(params, execution)
@@ -318,6 +318,35 @@ function surf_measures_execute(
 }
 
 
+/**
+ * Compute measures from surface dataset(s).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file SUMA spec file containing a list of related surfaces
+ * @param surf_a Surface name (in spec file) for the first surface
+ * @param out_dset Output filename with dataset format
+ * @param surf_b Surface name (in spec file) for the second surface
+ * @param out_1_d Output filename in 1D format
+ * @param func Measure function to be applied
+ * @param surf_volume AFNI volume dataset associated with the surface
+ * @param cmask Restrict nodes with a mask
+ * @param debug Display extra run-time information with specified debug level (0-5)
+ * @param dnode Display extra information for specified node
+ * @param nodes_1_d Restrict output to specific nodes listed in a file
+ * @param info_all Display all final info
+ * @param info_area Display total area of each triangulated surface
+ * @param info_norms Display info about the normals
+ * @param info_thick Display minimum and maximum thickness between surfaces
+ * @param info_vol Display total computed volume between surfaces
+ * @param info_volg Display total computed volume estimated via Gauss' theorem
+ * @param ver Show program version and compile date
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
+ */
 function surf_measures(
     spec_file: InputPathType,
     surf_a: string,
@@ -339,35 +368,6 @@ function surf_measures(
     ver: boolean = false,
     runner: Runner | null = null,
 ): SurfMeasuresOutputs {
-    /**
-     * Compute measures from surface dataset(s).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file SUMA spec file containing a list of related surfaces
-     * @param surf_a Surface name (in spec file) for the first surface
-     * @param out_dset Output filename with dataset format
-     * @param surf_b Surface name (in spec file) for the second surface
-     * @param out_1_d Output filename in 1D format
-     * @param func Measure function to be applied
-     * @param surf_volume AFNI volume dataset associated with the surface
-     * @param cmask Restrict nodes with a mask
-     * @param debug Display extra run-time information with specified debug level (0-5)
-     * @param dnode Display extra information for specified node
-     * @param nodes_1_d Restrict output to specific nodes listed in a file
-     * @param info_all Display all final info
-     * @param info_area Display total area of each triangulated surface
-     * @param info_norms Display info about the normals
-     * @param info_thick Display minimum and maximum thickness between surfaces
-     * @param info_vol Display total computed volume between surfaces
-     * @param info_volg Display total computed volume estimated via Gauss' theorem
-     * @param ver Show program version and compile date
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_MEASURES_METADATA);
     const params = surf_measures_params(spec_file, surf_a, out_dset, surf_b, out_1_d, func, surf_volume, cmask, debug, dnode, nodes_1_d, info_all, info_area, info_norms, info_thick, info_vol, info_volg, ver)
@@ -380,5 +380,8 @@ export {
       SurfMeasuresOutputs,
       SurfMeasuresParameters,
       surf_measures,
+      surf_measures_cargs,
+      surf_measures_execute,
+      surf_measures_outputs,
       surf_measures_params,
 };

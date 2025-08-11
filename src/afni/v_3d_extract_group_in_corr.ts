@@ -12,41 +12,41 @@ const V_3D_EXTRACT_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dExtractGroupInCorrParameters {
-    "__STYXTYPE__": "3dExtractGroupInCorr";
+    "@type": "afni.3dExtractGroupInCorr";
     "group_in_corr_file": InputPathType;
     "prefix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dExtractGroupInCorr": v_3d_extract_group_in_corr_cargs,
+        "afni.3dExtractGroupInCorr": v_3d_extract_group_in_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dExtractGroupInCorr": v_3d_extract_group_in_corr_outputs,
+        "afni.3dExtractGroupInCorr": v_3d_extract_group_in_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface V3dExtractGroupInCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param group_in_corr_file GroupInCorr file to extract datasets from (e.g. AAA.grpincorr.niml)
+ * @param prefix Prefix to prepend to dataset labels. Use 'NULL' to skip the use of the prefix.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_extract_group_in_corr_params(
     group_in_corr_file: InputPathType,
     prefix: string | null = null,
 ): V3dExtractGroupInCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param group_in_corr_file GroupInCorr file to extract datasets from (e.g. AAA.grpincorr.niml)
-     * @param prefix Prefix to prepend to dataset labels. Use 'NULL' to skip the use of the prefix.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dExtractGroupInCorr" as const,
+        "@type": "afni.3dExtractGroupInCorr" as const,
         "group_in_corr_file": group_in_corr_file,
     };
     if (prefix !== null) {
@@ -92,18 +92,18 @@ function v_3d_extract_group_in_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_extract_group_in_corr_cargs(
     params: V3dExtractGroupInCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dExtractGroupInCorr");
     cargs.push(execution.inputFile((params["group_in_corr_file"] ?? null)));
@@ -117,18 +117,18 @@ function v_3d_extract_group_in_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_extract_group_in_corr_outputs(
     params: V3dExtractGroupInCorrParameters,
     execution: Execution,
 ): V3dExtractGroupInCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dExtractGroupInCorrOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_[DATASET_LABEL].nii"].join('')) : null,
@@ -137,22 +137,22 @@ function v_3d_extract_group_in_corr_outputs(
 }
 
 
+/**
+ * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dExtractGroupInCorrOutputs`).
+ */
 function v_3d_extract_group_in_corr_execute(
     params: V3dExtractGroupInCorrParameters,
     execution: Execution,
 ): V3dExtractGroupInCorrOutputs {
-    /**
-     * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dExtractGroupInCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_extract_group_in_corr_cargs(params, execution)
     const ret = v_3d_extract_group_in_corr_outputs(params, execution)
@@ -161,24 +161,24 @@ function v_3d_extract_group_in_corr_execute(
 }
 
 
+/**
+ * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param group_in_corr_file GroupInCorr file to extract datasets from (e.g. AAA.grpincorr.niml)
+ * @param prefix Prefix to prepend to dataset labels. Use 'NULL' to skip the use of the prefix.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dExtractGroupInCorrOutputs`).
+ */
 function v_3d_extract_group_in_corr(
     group_in_corr_file: InputPathType,
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dExtractGroupInCorrOutputs {
-    /**
-     * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param group_in_corr_file GroupInCorr file to extract datasets from (e.g. AAA.grpincorr.niml)
-     * @param prefix Prefix to prepend to dataset labels. Use 'NULL' to skip the use of the prefix.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dExtractGroupInCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_EXTRACT_GROUP_IN_CORR_METADATA);
     const params = v_3d_extract_group_in_corr_params(group_in_corr_file, prefix)
@@ -191,5 +191,8 @@ export {
       V3dExtractGroupInCorrParameters,
       V_3D_EXTRACT_GROUP_IN_CORR_METADATA,
       v_3d_extract_group_in_corr,
+      v_3d_extract_group_in_corr_cargs,
+      v_3d_extract_group_in_corr_execute,
+      v_3d_extract_group_in_corr_outputs,
       v_3d_extract_group_in_corr_params,
 };

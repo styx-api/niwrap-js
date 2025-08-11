@@ -12,14 +12,14 @@ const MRDEGIBBS_METADATA: Metadata = {
 
 
 interface MrdegibbsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrdegibbs.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrdegibbsParameters {
-    "__STYXTYPE__": "mrdegibbs";
+    "@type": "mrtrix.mrdegibbs";
     "axes"?: Array<number> | null | undefined;
     "nshifts"?: number | null | undefined;
     "minW"?: number | null | undefined;
@@ -38,55 +38,55 @@ interface MrdegibbsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrdegibbs": mrdegibbs_cargs,
-        "config": mrdegibbs_config_cargs,
+        "mrtrix.mrdegibbs": mrdegibbs_cargs,
+        "mrtrix.mrdegibbs.config": mrdegibbs_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrdegibbs": mrdegibbs_outputs,
+        "mrtrix.mrdegibbs": mrdegibbs_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrdegibbs_config_params(
     key: string,
     value: string,
 ): MrdegibbsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrdegibbs.config" as const,
         "key": key,
         "value": value,
     };
@@ -94,18 +94,18 @@ function mrdegibbs_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrdegibbs_config_cargs(
     params: MrdegibbsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -131,6 +131,27 @@ interface MrdegibbsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input image.
+ * @param out the output image.
+ * @param axes select the slice axes (default: 0,1 - i.e. x-y).
+ * @param nshifts discretization of subpixel spacing (default: 20).
+ * @param min_w left border of window used for TV computation (default: 1).
+ * @param max_w right border of window used for TV computation (default: 3).
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrdegibbs_params(
     in_: InputPathType,
     out: string,
@@ -148,29 +169,8 @@ function mrdegibbs_params(
     help: boolean = false,
     version: boolean = false,
 ): MrdegibbsParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input image.
-     * @param out the output image.
-     * @param axes select the slice axes (default: 0,1 - i.e. x-y).
-     * @param nshifts discretization of subpixel spacing (default: 20).
-     * @param min_w left border of window used for TV computation (default: 1).
-     * @param max_w right border of window used for TV computation (default: 3).
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrdegibbs" as const,
+        "@type": "mrtrix.mrdegibbs" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -205,18 +205,18 @@ function mrdegibbs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrdegibbs_cargs(
     params: MrdegibbsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrdegibbs");
     if ((params["axes"] ?? null) !== null) {
@@ -268,7 +268,7 @@ function mrdegibbs_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -282,18 +282,18 @@ function mrdegibbs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrdegibbs_outputs(
     params: MrdegibbsParameters,
     execution: Execution,
 ): MrdegibbsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrdegibbsOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -302,32 +302,32 @@ function mrdegibbs_outputs(
 }
 
 
+/**
+ * Remove Gibbs Ringing Artifacts.
+ *
+ * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).
+ *
+ * This command is designed to run on data directly after it has been reconstructed by the scanner, before any interpolation of any kind has taken place. You should not run this command after any form of motion correction (e.g. not after dwifslpreproc). Similarly, if you intend running dwidenoise, you should run denoising before this command to not alter the noise structure, which would impact on dwidenoise's performance.
+ *
+ * Note that this method is designed to work on images acquired with full k-space coverage. Running this method on partial Fourier ('half-scan') data may lead to suboptimal and/or biased results, as noted in the original reference below. There is currently no means of dealing with this; users should exercise caution when using this method on partial Fourier data, and inspect its output for any obvious artefacts. 
+ *
+ * References:
+ *
+ * Kellner, E; Dhital, B; Kiselev, V.G & Reisert, M. Gibbs-ringing artifact removal based on local subvoxel-shifts. Magnetic Resonance in Medicine, 2016, 76, 1574â€“1581.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
+ */
 function mrdegibbs_execute(
     params: MrdegibbsParameters,
     execution: Execution,
 ): MrdegibbsOutputs {
-    /**
-     * Remove Gibbs Ringing Artifacts.
-     * 
-     * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).
-     * 
-     * This command is designed to run on data directly after it has been reconstructed by the scanner, before any interpolation of any kind has taken place. You should not run this command after any form of motion correction (e.g. not after dwifslpreproc). Similarly, if you intend running dwidenoise, you should run denoising before this command to not alter the noise structure, which would impact on dwidenoise's performance.
-     * 
-     * Note that this method is designed to work on images acquired with full k-space coverage. Running this method on partial Fourier ('half-scan') data may lead to suboptimal and/or biased results, as noted in the original reference below. There is currently no means of dealing with this; users should exercise caution when using this method on partial Fourier data, and inspect its output for any obvious artefacts. 
-     * 
-     * References:
-     * 
-     * Kellner, E; Dhital, B; Kiselev, V.G & Reisert, M. Gibbs-ringing artifact removal based on local subvoxel-shifts. Magnetic Resonance in Medicine, 2016, 76, 1574â€“1581.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrdegibbs_cargs(params, execution)
     const ret = mrdegibbs_outputs(params, execution)
@@ -336,6 +336,42 @@ function mrdegibbs_execute(
 }
 
 
+/**
+ * Remove Gibbs Ringing Artifacts.
+ *
+ * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).
+ *
+ * This command is designed to run on data directly after it has been reconstructed by the scanner, before any interpolation of any kind has taken place. You should not run this command after any form of motion correction (e.g. not after dwifslpreproc). Similarly, if you intend running dwidenoise, you should run denoising before this command to not alter the noise structure, which would impact on dwidenoise's performance.
+ *
+ * Note that this method is designed to work on images acquired with full k-space coverage. Running this method on partial Fourier ('half-scan') data may lead to suboptimal and/or biased results, as noted in the original reference below. There is currently no means of dealing with this; users should exercise caution when using this method on partial Fourier data, and inspect its output for any obvious artefacts. 
+ *
+ * References:
+ *
+ * Kellner, E; Dhital, B; Kiselev, V.G & Reisert, M. Gibbs-ringing artifact removal based on local subvoxel-shifts. Magnetic Resonance in Medicine, 2016, 76, 1574â€“1581.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input image.
+ * @param out the output image.
+ * @param axes select the slice axes (default: 0,1 - i.e. x-y).
+ * @param nshifts discretization of subpixel spacing (default: 20).
+ * @param min_w left border of window used for TV computation (default: 1).
+ * @param max_w right border of window used for TV computation (default: 3).
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
+ */
 function mrdegibbs(
     in_: InputPathType,
     out: string,
@@ -354,42 +390,6 @@ function mrdegibbs(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrdegibbsOutputs {
-    /**
-     * Remove Gibbs Ringing Artifacts.
-     * 
-     * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).
-     * 
-     * This command is designed to run on data directly after it has been reconstructed by the scanner, before any interpolation of any kind has taken place. You should not run this command after any form of motion correction (e.g. not after dwifslpreproc). Similarly, if you intend running dwidenoise, you should run denoising before this command to not alter the noise structure, which would impact on dwidenoise's performance.
-     * 
-     * Note that this method is designed to work on images acquired with full k-space coverage. Running this method on partial Fourier ('half-scan') data may lead to suboptimal and/or biased results, as noted in the original reference below. There is currently no means of dealing with this; users should exercise caution when using this method on partial Fourier data, and inspect its output for any obvious artefacts. 
-     * 
-     * References:
-     * 
-     * Kellner, E; Dhital, B; Kiselev, V.G & Reisert, M. Gibbs-ringing artifact removal based on local subvoxel-shifts. Magnetic Resonance in Medicine, 2016, 76, 1574â€“1581.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input image.
-     * @param out the output image.
-     * @param axes select the slice axes (default: 0,1 - i.e. x-y).
-     * @param nshifts discretization of subpixel spacing (default: 20).
-     * @param min_w left border of window used for TV computation (default: 1).
-     * @param max_w right border of window used for TV computation (default: 3).
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRDEGIBBS_METADATA);
     const params = mrdegibbs_params(in_, out, axes, nshifts, min_w, max_w, datatype, info, quiet, debug, force, nthreads, config, help, version)
@@ -403,6 +403,10 @@ export {
       MrdegibbsOutputs,
       MrdegibbsParameters,
       mrdegibbs,
+      mrdegibbs_cargs,
+      mrdegibbs_config_cargs,
       mrdegibbs_config_params,
+      mrdegibbs_execute,
+      mrdegibbs_outputs,
       mrdegibbs_params,
 };

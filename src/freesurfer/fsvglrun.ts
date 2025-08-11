@@ -12,7 +12,7 @@ const FSVGLRUN_METADATA: Metadata = {
 
 
 interface FsvglrunParameters {
-    "__STYXTYPE__": "fsvglrun";
+    "@type": "freesurfer.fsvglrun";
     "zeroth_arg_name"?: string | null | undefined;
     "empty_env": boolean;
     "dashed_arg": boolean;
@@ -21,33 +21,33 @@ interface FsvglrunParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsvglrun": fsvglrun_cargs,
+        "freesurfer.fsvglrun": fsvglrun_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface FsvglrunOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param command The command to be executed, replacing the shell with the specified program
+ * @param zeroth_arg_name Pass NAME as the zeroth argument to COMMAND
+ * @param empty_env Execute COMMAND with an empty environment
+ * @param dashed_arg Place a dash in the zeroth argument to COMMAND
+ * @param command_args Arguments for the command executed by fsvglrun
+ *
+ * @returns Parameter dictionary
+ */
 function fsvglrun_params(
     command: string,
     zeroth_arg_name: string | null = null,
@@ -74,19 +85,8 @@ function fsvglrun_params(
     dashed_arg: boolean = false,
     command_args: Array<string> | null = null,
 ): FsvglrunParameters {
-    /**
-     * Build parameters.
-    
-     * @param command The command to be executed, replacing the shell with the specified program
-     * @param zeroth_arg_name Pass NAME as the zeroth argument to COMMAND
-     * @param empty_env Execute COMMAND with an empty environment
-     * @param dashed_arg Place a dash in the zeroth argument to COMMAND
-     * @param command_args Arguments for the command executed by fsvglrun
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsvglrun" as const,
+        "@type": "freesurfer.fsvglrun" as const,
         "empty_env": empty_env,
         "dashed_arg": dashed_arg,
         "command": command,
@@ -101,18 +101,18 @@ function fsvglrun_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsvglrun_cargs(
     params: FsvglrunParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsvglrun");
     if ((params["zeroth_arg_name"] ?? null) !== null) {
@@ -135,18 +135,18 @@ function fsvglrun_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsvglrun_outputs(
     params: FsvglrunParameters,
     execution: Execution,
 ): FsvglrunOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsvglrunOutputs = {
         root: execution.outputFile("."),
     };
@@ -154,22 +154,22 @@ function fsvglrun_outputs(
 }
 
 
+/**
+ * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
+ */
 function fsvglrun_execute(
     params: FsvglrunParameters,
     execution: Execution,
 ): FsvglrunOutputs {
-    /**
-     * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsvglrun_cargs(params, execution)
     const ret = fsvglrun_outputs(params, execution)
@@ -178,6 +178,22 @@ function fsvglrun_execute(
 }
 
 
+/**
+ * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param command The command to be executed, replacing the shell with the specified program
+ * @param zeroth_arg_name Pass NAME as the zeroth argument to COMMAND
+ * @param empty_env Execute COMMAND with an empty environment
+ * @param dashed_arg Place a dash in the zeroth argument to COMMAND
+ * @param command_args Arguments for the command executed by fsvglrun
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
+ */
 function fsvglrun(
     command: string,
     zeroth_arg_name: string | null = null,
@@ -186,22 +202,6 @@ function fsvglrun(
     command_args: Array<string> | null = null,
     runner: Runner | null = null,
 ): FsvglrunOutputs {
-    /**
-     * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param command The command to be executed, replacing the shell with the specified program
-     * @param zeroth_arg_name Pass NAME as the zeroth argument to COMMAND
-     * @param empty_env Execute COMMAND with an empty environment
-     * @param dashed_arg Place a dash in the zeroth argument to COMMAND
-     * @param command_args Arguments for the command executed by fsvglrun
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSVGLRUN_METADATA);
     const params = fsvglrun_params(command, zeroth_arg_name, empty_env, dashed_arg, command_args)
@@ -214,5 +214,8 @@ export {
       FsvglrunOutputs,
       FsvglrunParameters,
       fsvglrun,
+      fsvglrun_cargs,
+      fsvglrun_execute,
+      fsvglrun_outputs,
       fsvglrun_params,
 };

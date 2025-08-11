@@ -12,7 +12,7 @@ const V_1D_BANDPASS_METADATA: Metadata = {
 
 
 interface V1dBandpassParameters {
-    "__STYXTYPE__": "1dBandpass";
+    "@type": "afni.1dBandpass";
     "fbot": number;
     "ftop": number;
     "infile": InputPathType;
@@ -23,33 +23,33 @@ interface V1dBandpassParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dBandpass": v_1d_bandpass_cargs,
+        "afni.1dBandpass": v_1d_bandpass_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface V1dBandpassOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fbot Lowest frequency in the passband, in Hz (must be greater than or equal to 0)
+ * @param ftop Highest frequency in the passband, in Hz (must be greater than FBOT)
+ * @param infile Input AFNI *.1D file; each column is processed
+ * @param timestep Set time step to 'dd' sec (default is 1.0)
+ * @param ortfile Also orthogonalize input to columns in specified *.1D file (only one '-ort' option is allowed)
+ * @param nodetrend Skip the quadratic detrending of the input
+ * @param norm Make output time series have L2 norm = 1
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_bandpass_params(
     fbot: number,
     ftop: number,
@@ -78,21 +91,8 @@ function v_1d_bandpass_params(
     nodetrend: boolean = false,
     norm: boolean = false,
 ): V1dBandpassParameters {
-    /**
-     * Build parameters.
-    
-     * @param fbot Lowest frequency in the passband, in Hz (must be greater than or equal to 0)
-     * @param ftop Highest frequency in the passband, in Hz (must be greater than FBOT)
-     * @param infile Input AFNI *.1D file; each column is processed
-     * @param timestep Set time step to 'dd' sec (default is 1.0)
-     * @param ortfile Also orthogonalize input to columns in specified *.1D file (only one '-ort' option is allowed)
-     * @param nodetrend Skip the quadratic detrending of the input
-     * @param norm Make output time series have L2 norm = 1
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dBandpass" as const,
+        "@type": "afni.1dBandpass" as const,
         "fbot": fbot,
         "ftop": ftop,
         "infile": infile,
@@ -109,18 +109,18 @@ function v_1d_bandpass_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_bandpass_cargs(
     params: V1dBandpassParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dBandpass");
     cargs.push(String((params["fbot"] ?? null)));
@@ -148,18 +148,18 @@ function v_1d_bandpass_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_bandpass_outputs(
     params: V1dBandpassParameters,
     execution: Execution,
 ): V1dBandpassOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dBandpassOutputs = {
         root: execution.outputFile("."),
     };
@@ -167,22 +167,22 @@ function v_1d_bandpass_outputs(
 }
 
 
+/**
+ * Bandpass filtering of time series data in AFNI *.1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
+ */
 function v_1d_bandpass_execute(
     params: V1dBandpassParameters,
     execution: Execution,
 ): V1dBandpassOutputs {
-    /**
-     * Bandpass filtering of time series data in AFNI *.1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_bandpass_cargs(params, execution)
     const ret = v_1d_bandpass_outputs(params, execution)
@@ -191,6 +191,24 @@ function v_1d_bandpass_execute(
 }
 
 
+/**
+ * Bandpass filtering of time series data in AFNI *.1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fbot Lowest frequency in the passband, in Hz (must be greater than or equal to 0)
+ * @param ftop Highest frequency in the passband, in Hz (must be greater than FBOT)
+ * @param infile Input AFNI *.1D file; each column is processed
+ * @param timestep Set time step to 'dd' sec (default is 1.0)
+ * @param ortfile Also orthogonalize input to columns in specified *.1D file (only one '-ort' option is allowed)
+ * @param nodetrend Skip the quadratic detrending of the input
+ * @param norm Make output time series have L2 norm = 1
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
+ */
 function v_1d_bandpass(
     fbot: number,
     ftop: number,
@@ -201,24 +219,6 @@ function v_1d_bandpass(
     norm: boolean = false,
     runner: Runner | null = null,
 ): V1dBandpassOutputs {
-    /**
-     * Bandpass filtering of time series data in AFNI *.1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fbot Lowest frequency in the passband, in Hz (must be greater than or equal to 0)
-     * @param ftop Highest frequency in the passband, in Hz (must be greater than FBOT)
-     * @param infile Input AFNI *.1D file; each column is processed
-     * @param timestep Set time step to 'dd' sec (default is 1.0)
-     * @param ortfile Also orthogonalize input to columns in specified *.1D file (only one '-ort' option is allowed)
-     * @param nodetrend Skip the quadratic detrending of the input
-     * @param norm Make output time series have L2 norm = 1
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_BANDPASS_METADATA);
     const params = v_1d_bandpass_params(fbot, ftop, infile, timestep, ortfile, nodetrend, norm)
@@ -231,5 +231,8 @@ export {
       V1dBandpassParameters,
       V_1D_BANDPASS_METADATA,
       v_1d_bandpass,
+      v_1d_bandpass_cargs,
+      v_1d_bandpass_execute,
+      v_1d_bandpass_outputs,
       v_1d_bandpass_params,
 };

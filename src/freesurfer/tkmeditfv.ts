@@ -12,7 +12,7 @@ const TKMEDITFV_METADATA: Metadata = {
 
 
 interface TkmeditfvParameters {
-    "__STYXTYPE__": "tkmeditfv";
+    "@type": "freesurfer.tkmeditfv";
     "subject"?: string | null | undefined;
     "mainvol": InputPathType;
     "aux_volume"?: InputPathType | null | undefined;
@@ -48,33 +48,33 @@ interface TkmeditfvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tkmeditfv": tkmeditfv_cargs,
+        "freesurfer.tkmeditfv": tkmeditfv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -94,6 +94,44 @@ interface TkmeditfvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mainvol Main volume file path
+ * @param subject Subject's name
+ * @param aux_volume Auxiliary volume file path
+ * @param seg_volume Segmentation volume file path
+ * @param overlay Overlay volume file path
+ * @param timecourse Timecourse for overlay
+ * @param overlay_registration Overlay timecourse registration file
+ * @param surface Load surface with optional color
+ * @param extra_volumes Load extra volume(s)
+ * @param crs_location Place cursor at given (col, row, slice) location
+ * @param zoom_level Set zoom level
+ * @param additional_segments Add additional segmentations
+ * @param load_white Load lh and rh.white surfaces
+ * @param load_pial Load lh and rh.pial surfaces
+ * @param load_orig Load lh and rh.orig surfaces
+ * @param load_orig_nofix Load lh and rh.orig.nofix surfaces
+ * @param load_smoothwm_nofix Load lh and rh.smoothwm.nofix surfaces
+ * @param load_white_preaparc Load lh and rh.white.preaparc surfaces
+ * @param load_inflated Load lh and rh.inflated surfaces
+ * @param annot Load annotation file
+ * @param load_aparc Load aparc annotation
+ * @param surfext Add extension to the name of the surface
+ * @param seg_outline Enable segmentation outline mode
+ * @param intensity_minmax Set intensity min and max on first volume
+ * @param load_defects Load info needed to evaluate defects
+ * @param load_defect_pointset Load defect pointset
+ * @param trilin_interpolation Use trilinear interpolation for volume overlays
+ * @param neurological_orientation Use neurological orientation instead of radiological
+ * @param rotate_around_cursor Rotate around cursor in 3D view
+ * @param vgl_display Set VGL_DISPLAY and run with vglrun
+ * @param use_tkmedit Use tkmedit instead of freeview
+ * @param load_aparc_aseg Load aparc+aseg
+ *
+ * @returns Parameter dictionary
+ */
 function tkmeditfv_params(
     mainvol: InputPathType,
     subject: string | null = null,
@@ -128,46 +166,8 @@ function tkmeditfv_params(
     use_tkmedit: boolean = false,
     load_aparc_aseg: boolean = false,
 ): TkmeditfvParameters {
-    /**
-     * Build parameters.
-    
-     * @param mainvol Main volume file path
-     * @param subject Subject's name
-     * @param aux_volume Auxiliary volume file path
-     * @param seg_volume Segmentation volume file path
-     * @param overlay Overlay volume file path
-     * @param timecourse Timecourse for overlay
-     * @param overlay_registration Overlay timecourse registration file
-     * @param surface Load surface with optional color
-     * @param extra_volumes Load extra volume(s)
-     * @param crs_location Place cursor at given (col, row, slice) location
-     * @param zoom_level Set zoom level
-     * @param additional_segments Add additional segmentations
-     * @param load_white Load lh and rh.white surfaces
-     * @param load_pial Load lh and rh.pial surfaces
-     * @param load_orig Load lh and rh.orig surfaces
-     * @param load_orig_nofix Load lh and rh.orig.nofix surfaces
-     * @param load_smoothwm_nofix Load lh and rh.smoothwm.nofix surfaces
-     * @param load_white_preaparc Load lh and rh.white.preaparc surfaces
-     * @param load_inflated Load lh and rh.inflated surfaces
-     * @param annot Load annotation file
-     * @param load_aparc Load aparc annotation
-     * @param surfext Add extension to the name of the surface
-     * @param seg_outline Enable segmentation outline mode
-     * @param intensity_minmax Set intensity min and max on first volume
-     * @param load_defects Load info needed to evaluate defects
-     * @param load_defect_pointset Load defect pointset
-     * @param trilin_interpolation Use trilinear interpolation for volume overlays
-     * @param neurological_orientation Use neurological orientation instead of radiological
-     * @param rotate_around_cursor Rotate around cursor in 3D view
-     * @param vgl_display Set VGL_DISPLAY and run with vglrun
-     * @param use_tkmedit Use tkmedit instead of freeview
-     * @param load_aparc_aseg Load aparc+aseg
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tkmeditfv" as const,
+        "@type": "freesurfer.tkmeditfv" as const,
         "mainvol": mainvol,
         "load_white": load_white,
         "load_pial": load_pial,
@@ -233,18 +233,18 @@ function tkmeditfv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tkmeditfv_cargs(
     params: TkmeditfvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tkmeditfv");
     if ((params["subject"] ?? null) !== null) {
@@ -384,18 +384,18 @@ function tkmeditfv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tkmeditfv_outputs(
     params: TkmeditfvParameters,
     execution: Execution,
 ): TkmeditfvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TkmeditfvOutputs = {
         root: execution.outputFile("."),
     };
@@ -403,22 +403,22 @@ function tkmeditfv_outputs(
 }
 
 
+/**
+ * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
+ */
 function tkmeditfv_execute(
     params: TkmeditfvParameters,
     execution: Execution,
 ): TkmeditfvOutputs {
-    /**
-     * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
-     */
     params = execution.params(params)
     const cargs = tkmeditfv_cargs(params, execution)
     const ret = tkmeditfv_outputs(params, execution)
@@ -427,6 +427,49 @@ function tkmeditfv_execute(
 }
 
 
+/**
+ * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mainvol Main volume file path
+ * @param subject Subject's name
+ * @param aux_volume Auxiliary volume file path
+ * @param seg_volume Segmentation volume file path
+ * @param overlay Overlay volume file path
+ * @param timecourse Timecourse for overlay
+ * @param overlay_registration Overlay timecourse registration file
+ * @param surface Load surface with optional color
+ * @param extra_volumes Load extra volume(s)
+ * @param crs_location Place cursor at given (col, row, slice) location
+ * @param zoom_level Set zoom level
+ * @param additional_segments Add additional segmentations
+ * @param load_white Load lh and rh.white surfaces
+ * @param load_pial Load lh and rh.pial surfaces
+ * @param load_orig Load lh and rh.orig surfaces
+ * @param load_orig_nofix Load lh and rh.orig.nofix surfaces
+ * @param load_smoothwm_nofix Load lh and rh.smoothwm.nofix surfaces
+ * @param load_white_preaparc Load lh and rh.white.preaparc surfaces
+ * @param load_inflated Load lh and rh.inflated surfaces
+ * @param annot Load annotation file
+ * @param load_aparc Load aparc annotation
+ * @param surfext Add extension to the name of the surface
+ * @param seg_outline Enable segmentation outline mode
+ * @param intensity_minmax Set intensity min and max on first volume
+ * @param load_defects Load info needed to evaluate defects
+ * @param load_defect_pointset Load defect pointset
+ * @param trilin_interpolation Use trilinear interpolation for volume overlays
+ * @param neurological_orientation Use neurological orientation instead of radiological
+ * @param rotate_around_cursor Rotate around cursor in 3D view
+ * @param vgl_display Set VGL_DISPLAY and run with vglrun
+ * @param use_tkmedit Use tkmedit instead of freeview
+ * @param load_aparc_aseg Load aparc+aseg
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
+ */
 function tkmeditfv(
     mainvol: InputPathType,
     subject: string | null = null,
@@ -462,49 +505,6 @@ function tkmeditfv(
     load_aparc_aseg: boolean = false,
     runner: Runner | null = null,
 ): TkmeditfvOutputs {
-    /**
-     * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mainvol Main volume file path
-     * @param subject Subject's name
-     * @param aux_volume Auxiliary volume file path
-     * @param seg_volume Segmentation volume file path
-     * @param overlay Overlay volume file path
-     * @param timecourse Timecourse for overlay
-     * @param overlay_registration Overlay timecourse registration file
-     * @param surface Load surface with optional color
-     * @param extra_volumes Load extra volume(s)
-     * @param crs_location Place cursor at given (col, row, slice) location
-     * @param zoom_level Set zoom level
-     * @param additional_segments Add additional segmentations
-     * @param load_white Load lh and rh.white surfaces
-     * @param load_pial Load lh and rh.pial surfaces
-     * @param load_orig Load lh and rh.orig surfaces
-     * @param load_orig_nofix Load lh and rh.orig.nofix surfaces
-     * @param load_smoothwm_nofix Load lh and rh.smoothwm.nofix surfaces
-     * @param load_white_preaparc Load lh and rh.white.preaparc surfaces
-     * @param load_inflated Load lh and rh.inflated surfaces
-     * @param annot Load annotation file
-     * @param load_aparc Load aparc annotation
-     * @param surfext Add extension to the name of the surface
-     * @param seg_outline Enable segmentation outline mode
-     * @param intensity_minmax Set intensity min and max on first volume
-     * @param load_defects Load info needed to evaluate defects
-     * @param load_defect_pointset Load defect pointset
-     * @param trilin_interpolation Use trilinear interpolation for volume overlays
-     * @param neurological_orientation Use neurological orientation instead of radiological
-     * @param rotate_around_cursor Rotate around cursor in 3D view
-     * @param vgl_display Set VGL_DISPLAY and run with vglrun
-     * @param use_tkmedit Use tkmedit instead of freeview
-     * @param load_aparc_aseg Load aparc+aseg
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKMEDITFV_METADATA);
     const params = tkmeditfv_params(mainvol, subject, aux_volume, seg_volume, overlay, timecourse, overlay_registration, surface, extra_volumes, crs_location, zoom_level, additional_segments, load_white, load_pial, load_orig, load_orig_nofix, load_smoothwm_nofix, load_white_preaparc, load_inflated, annot, load_aparc, surfext, seg_outline, intensity_minmax, load_defects, load_defect_pointset, trilin_interpolation, neurological_orientation, rotate_around_cursor, vgl_display, use_tkmedit, load_aparc_aseg)
@@ -517,5 +517,8 @@ export {
       TkmeditfvOutputs,
       TkmeditfvParameters,
       tkmeditfv,
+      tkmeditfv_cargs,
+      tkmeditfv_execute,
+      tkmeditfv_outputs,
       tkmeditfv_params,
 };

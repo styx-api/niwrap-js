@@ -12,7 +12,7 @@ const V_3D_WILCOXON_METADATA: Metadata = {
 
 
 interface V3dWilcoxonParameters {
-    "__STYXTYPE__": "3dWilcoxon";
+    "@type": "afni.3dWilcoxon";
     "workmem"?: number | null | undefined;
     "voxel"?: number | null | undefined;
     "dset1_x": Array<InputPathType>;
@@ -21,35 +21,35 @@ interface V3dWilcoxonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dWilcoxon": v_3d_wilcoxon_cargs,
+        "afni.3dWilcoxon": v_3d_wilcoxon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dWilcoxon": v_3d_wilcoxon_outputs,
+        "afni.3dWilcoxon": v_3d_wilcoxon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dWilcoxonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset1_x Data set for X observations. The user must specify 1 and only 1 sub-brick with each -dset command.
+ * @param dset2_y Data set for Y observations. The user must specify 1 and only 1 sub-brick with each -dset command.
+ * @param output_prefix Estimated population delta and Wilcoxon signed-rank statistics are written to file
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel Screen output for voxel # num
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_wilcoxon_params(
     dset1_x: Array<InputPathType>,
     dset2_y: Array<InputPathType>,
@@ -79,19 +90,8 @@ function v_3d_wilcoxon_params(
     workmem: number | null = null,
     voxel: number | null = null,
 ): V3dWilcoxonParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset1_x Data set for X observations. The user must specify 1 and only 1 sub-brick with each -dset command.
-     * @param dset2_y Data set for Y observations. The user must specify 1 and only 1 sub-brick with each -dset command.
-     * @param output_prefix Estimated population delta and Wilcoxon signed-rank statistics are written to file
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel Screen output for voxel # num
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dWilcoxon" as const,
+        "@type": "afni.3dWilcoxon" as const,
         "dset1_x": dset1_x,
         "dset2_y": dset2_y,
         "output_prefix": output_prefix,
@@ -106,18 +106,18 @@ function v_3d_wilcoxon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_wilcoxon_cargs(
     params: V3dWilcoxonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dWilcoxon");
     if ((params["workmem"] ?? null) !== null) {
@@ -148,18 +148,18 @@ function v_3d_wilcoxon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_wilcoxon_outputs(
     params: V3dWilcoxonParameters,
     execution: Execution,
 ): V3dWilcoxonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dWilcoxonOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null)].join('')),
@@ -168,22 +168,22 @@ function v_3d_wilcoxon_outputs(
 }
 
 
+/**
+ * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
+ */
 function v_3d_wilcoxon_execute(
     params: V3dWilcoxonParameters,
     execution: Execution,
 ): V3dWilcoxonOutputs {
-    /**
-     * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_wilcoxon_cargs(params, execution)
     const ret = v_3d_wilcoxon_outputs(params, execution)
@@ -192,6 +192,22 @@ function v_3d_wilcoxon_execute(
 }
 
 
+/**
+ * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset1_x Data set for X observations. The user must specify 1 and only 1 sub-brick with each -dset command.
+ * @param dset2_y Data set for Y observations. The user must specify 1 and only 1 sub-brick with each -dset command.
+ * @param output_prefix Estimated population delta and Wilcoxon signed-rank statistics are written to file
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel Screen output for voxel # num
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
+ */
 function v_3d_wilcoxon(
     dset1_x: Array<InputPathType>,
     dset2_y: Array<InputPathType>,
@@ -200,22 +216,6 @@ function v_3d_wilcoxon(
     voxel: number | null = null,
     runner: Runner | null = null,
 ): V3dWilcoxonOutputs {
-    /**
-     * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset1_x Data set for X observations. The user must specify 1 and only 1 sub-brick with each -dset command.
-     * @param dset2_y Data set for Y observations. The user must specify 1 and only 1 sub-brick with each -dset command.
-     * @param output_prefix Estimated population delta and Wilcoxon signed-rank statistics are written to file
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel Screen output for voxel # num
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_WILCOXON_METADATA);
     const params = v_3d_wilcoxon_params(dset1_x, dset2_y, output_prefix, workmem, voxel)
@@ -228,5 +228,8 @@ export {
       V3dWilcoxonParameters,
       V_3D_WILCOXON_METADATA,
       v_3d_wilcoxon,
+      v_3d_wilcoxon_cargs,
+      v_3d_wilcoxon_execute,
+      v_3d_wilcoxon_outputs,
       v_3d_wilcoxon_params,
 };

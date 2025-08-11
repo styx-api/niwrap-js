@@ -12,7 +12,7 @@ const MRIS_INTENSITY_PROFILE_METADATA: Metadata = {
 
 
 interface MrisIntensityProfileParameters {
-    "__STYXTYPE__": "mris_intensity_profile";
+    "@type": "freesurfer.mris_intensity_profile";
     "subject_name": string;
     "hemi": string;
     "volume": InputPathType;
@@ -30,35 +30,35 @@ interface MrisIntensityProfileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_intensity_profile": mris_intensity_profile_cargs,
+        "freesurfer.mris_intensity_profile": mris_intensity_profile_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_intensity_profile": mris_intensity_profile_outputs,
+        "freesurfer.mris_intensity_profile": mris_intensity_profile_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface MrisIntensityProfileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject.
+ * @param hemi Hemisphere (e.g. lh or rh).
+ * @param volume Volume file to be processed.
+ * @param output_file Output file where the measurement is saved.
+ * @param write_surf Write the variational pial surface target locations.
+ * @param sdir Specifies the SUBJECTS_DIR.
+ * @param white Specifies the WHITE surface filename.
+ * @param pial Specifies the PIAL surface filename.
+ * @param normalize_flag Normalized sampling with respect to thickness.
+ * @param mean Outputs the mean profile-integral to the specified file (output is in curv format).
+ * @param xform Specify the registration transformation that maps the T1 volume to the input volume to be sampled.
+ * @param src Source volume used when computing the registration transformation.
+ * @param dst Destination volume used when computing the registration transformation.
+ * @param invert_flag Apply the registration transformation inversely.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_intensity_profile_params(
     subject_name: string,
     hemi: string,
@@ -101,28 +121,8 @@ function mris_intensity_profile_params(
     dst: InputPathType | null = null,
     invert_flag: boolean = false,
 ): MrisIntensityProfileParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject.
-     * @param hemi Hemisphere (e.g. lh or rh).
-     * @param volume Volume file to be processed.
-     * @param output_file Output file where the measurement is saved.
-     * @param write_surf Write the variational pial surface target locations.
-     * @param sdir Specifies the SUBJECTS_DIR.
-     * @param white Specifies the WHITE surface filename.
-     * @param pial Specifies the PIAL surface filename.
-     * @param normalize_flag Normalized sampling with respect to thickness.
-     * @param mean Outputs the mean profile-integral to the specified file (output is in curv format).
-     * @param xform Specify the registration transformation that maps the T1 volume to the input volume to be sampled.
-     * @param src Source volume used when computing the registration transformation.
-     * @param dst Destination volume used when computing the registration transformation.
-     * @param invert_flag Apply the registration transformation inversely.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_intensity_profile" as const,
+        "@type": "freesurfer.mris_intensity_profile" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "volume": volume,
@@ -158,18 +158,18 @@ function mris_intensity_profile_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_intensity_profile_cargs(
     params: MrisIntensityProfileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_intensity_profile");
     cargs.push((params["subject_name"] ?? null));
@@ -234,18 +234,18 @@ function mris_intensity_profile_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_intensity_profile_outputs(
     params: MrisIntensityProfileParameters,
     execution: Execution,
 ): MrisIntensityProfileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisIntensityProfileOutputs = {
         root: execution.outputFile("."),
         output_curvature_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -255,22 +255,22 @@ function mris_intensity_profile_outputs(
 }
 
 
+/**
+ * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
+ */
 function mris_intensity_profile_execute(
     params: MrisIntensityProfileParameters,
     execution: Execution,
 ): MrisIntensityProfileOutputs {
-    /**
-     * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_intensity_profile_cargs(params, execution)
     const ret = mris_intensity_profile_outputs(params, execution)
@@ -279,6 +279,31 @@ function mris_intensity_profile_execute(
 }
 
 
+/**
+ * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject.
+ * @param hemi Hemisphere (e.g. lh or rh).
+ * @param volume Volume file to be processed.
+ * @param output_file Output file where the measurement is saved.
+ * @param write_surf Write the variational pial surface target locations.
+ * @param sdir Specifies the SUBJECTS_DIR.
+ * @param white Specifies the WHITE surface filename.
+ * @param pial Specifies the PIAL surface filename.
+ * @param normalize_flag Normalized sampling with respect to thickness.
+ * @param mean Outputs the mean profile-integral to the specified file (output is in curv format).
+ * @param xform Specify the registration transformation that maps the T1 volume to the input volume to be sampled.
+ * @param src Source volume used when computing the registration transformation.
+ * @param dst Destination volume used when computing the registration transformation.
+ * @param invert_flag Apply the registration transformation inversely.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
+ */
 function mris_intensity_profile(
     subject_name: string,
     hemi: string,
@@ -296,31 +321,6 @@ function mris_intensity_profile(
     invert_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisIntensityProfileOutputs {
-    /**
-     * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject.
-     * @param hemi Hemisphere (e.g. lh or rh).
-     * @param volume Volume file to be processed.
-     * @param output_file Output file where the measurement is saved.
-     * @param write_surf Write the variational pial surface target locations.
-     * @param sdir Specifies the SUBJECTS_DIR.
-     * @param white Specifies the WHITE surface filename.
-     * @param pial Specifies the PIAL surface filename.
-     * @param normalize_flag Normalized sampling with respect to thickness.
-     * @param mean Outputs the mean profile-integral to the specified file (output is in curv format).
-     * @param xform Specify the registration transformation that maps the T1 volume to the input volume to be sampled.
-     * @param src Source volume used when computing the registration transformation.
-     * @param dst Destination volume used when computing the registration transformation.
-     * @param invert_flag Apply the registration transformation inversely.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INTENSITY_PROFILE_METADATA);
     const params = mris_intensity_profile_params(subject_name, hemi, volume, output_file, write_surf, sdir, white, pial, normalize_flag, mean, xform, src, dst, invert_flag)
@@ -333,5 +333,8 @@ export {
       MrisIntensityProfileOutputs,
       MrisIntensityProfileParameters,
       mris_intensity_profile,
+      mris_intensity_profile_cargs,
+      mris_intensity_profile_execute,
+      mris_intensity_profile_outputs,
       mris_intensity_profile_params,
 };

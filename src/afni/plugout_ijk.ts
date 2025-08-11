@@ -12,7 +12,7 @@ const PLUGOUT_IJK_METADATA: Metadata = {
 
 
 interface PlugoutIjkParameters {
-    "__STYXTYPE__": "plugout_ijk";
+    "@type": "afni.plugout_ijk";
     "host"?: string | null | undefined;
     "verbose": boolean;
     "port"?: number | null | undefined;
@@ -27,33 +27,33 @@ interface PlugoutIjkParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "plugout_ijk": plugout_ijk_cargs,
+        "afni.plugout_ijk": plugout_ijk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface PlugoutIjkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param host Connect to AFNI running on the specified computer using TCP/IP.
+ * @param verbose Verbose mode.
+ * @param port Use TCP/IP port number 'pp'.
+ * @param name Use the string 'sss' for the name that AFNI assigns to this plugout.
+ * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same machine.
+ * @param port_quiet Provide a port offset like -np, but more quiet in the face of adversity.
+ * @param port_bloc_offset Provide a port offset block for easier port management.
+ * @param max_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_bloc_quiet Print MAX_BLOC value only and exit.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
+ * @param num_assigned_ports_quiet Prints the number of assigned ports quietly.
+ *
+ * @returns Parameter dictionary
+ */
 function plugout_ijk_params(
     host: string | null = null,
     verbose: boolean = false,
@@ -86,25 +103,8 @@ function plugout_ijk_params(
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
 ): PlugoutIjkParameters {
-    /**
-     * Build parameters.
-    
-     * @param host Connect to AFNI running on the specified computer using TCP/IP.
-     * @param verbose Verbose mode.
-     * @param port Use TCP/IP port number 'pp'.
-     * @param name Use the string 'sss' for the name that AFNI assigns to this plugout.
-     * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same machine.
-     * @param port_quiet Provide a port offset like -np, but more quiet in the face of adversity.
-     * @param port_bloc_offset Provide a port offset block for easier port management.
-     * @param max_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_bloc_quiet Print MAX_BLOC value only and exit.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
-     * @param num_assigned_ports_quiet Prints the number of assigned ports quietly.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plugout_ijk" as const,
+        "@type": "afni.plugout_ijk" as const,
         "verbose": verbose,
         "max_bloc": max_bloc,
         "max_bloc_quiet": max_bloc_quiet,
@@ -133,18 +133,18 @@ function plugout_ijk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function plugout_ijk_cargs(
     params: PlugoutIjkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("plugout_ijk");
     if ((params["host"] ?? null) !== null) {
@@ -202,18 +202,18 @@ function plugout_ijk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function plugout_ijk_outputs(
     params: PlugoutIjkParameters,
     execution: Execution,
 ): PlugoutIjkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PlugoutIjkOutputs = {
         root: execution.outputFile("."),
     };
@@ -221,22 +221,22 @@ function plugout_ijk_outputs(
 }
 
 
+/**
+ * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
+ */
 function plugout_ijk_execute(
     params: PlugoutIjkParameters,
     execution: Execution,
 ): PlugoutIjkOutputs {
-    /**
-     * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
-     */
     params = execution.params(params)
     const cargs = plugout_ijk_cargs(params, execution)
     const ret = plugout_ijk_outputs(params, execution)
@@ -245,6 +245,28 @@ function plugout_ijk_execute(
 }
 
 
+/**
+ * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param host Connect to AFNI running on the specified computer using TCP/IP.
+ * @param verbose Verbose mode.
+ * @param port Use TCP/IP port number 'pp'.
+ * @param name Use the string 'sss' for the name that AFNI assigns to this plugout.
+ * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same machine.
+ * @param port_quiet Provide a port offset like -np, but more quiet in the face of adversity.
+ * @param port_bloc_offset Provide a port offset block for easier port management.
+ * @param max_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_bloc_quiet Print MAX_BLOC value only and exit.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
+ * @param num_assigned_ports_quiet Prints the number of assigned ports quietly.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
+ */
 function plugout_ijk(
     host: string | null = null,
     verbose: boolean = false,
@@ -259,28 +281,6 @@ function plugout_ijk(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutIjkOutputs {
-    /**
-     * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param host Connect to AFNI running on the specified computer using TCP/IP.
-     * @param verbose Verbose mode.
-     * @param port Use TCP/IP port number 'pp'.
-     * @param name Use the string 'sss' for the name that AFNI assigns to this plugout.
-     * @param port_offset Provide a port offset to allow multiple instances of communicating programs to operate on the same machine.
-     * @param port_quiet Provide a port offset like -np, but more quiet in the face of adversity.
-     * @param port_bloc_offset Provide a port offset block for easier port management.
-     * @param max_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_bloc_quiet Print MAX_BLOC value only and exit.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
-     * @param num_assigned_ports_quiet Prints the number of assigned ports quietly.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLUGOUT_IJK_METADATA);
     const params = plugout_ijk_params(host, verbose, port, name, port_offset, port_quiet, port_bloc_offset, max_bloc, max_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
@@ -293,5 +293,8 @@ export {
       PlugoutIjkOutputs,
       PlugoutIjkParameters,
       plugout_ijk,
+      plugout_ijk_cargs,
+      plugout_ijk_execute,
+      plugout_ijk_outputs,
       plugout_ijk_params,
 };

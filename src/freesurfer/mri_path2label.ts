@@ -12,7 +12,7 @@ const MRI_PATH2LABEL_METADATA: Metadata = {
 
 
 interface MriPath2labelParameters {
-    "__STYXTYPE__": "mri_path2label";
+    "@type": "freesurfer.mri_path2label";
     "input_file": string;
     "output_file": string;
     "single": boolean;
@@ -27,33 +27,33 @@ interface MriPath2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_path2label": mri_path2label_cargs,
+        "freesurfer.mri_path2label": mri_path2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface MriPath2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file, either a path or label file.
+ * @param output_file Output file, either a path or label file.
+ * @param single Only convert a single path, and do not use sentinel values.
+ * @param path_to_label Treat input as a path and output a label.
+ * @param label_to_path Treat input as a label and output a path.
+ * @param connect Connect path; input and output must be paths; requires subject and hemi.
+ * @param fill Fill already closed, connected path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
+ * @param confillx Connect and fill path; input must be a path, output must be a label; requires surface_fname and seedvtx.
+ * @param confill Connect and fill path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
+ * @param source_file The path file, if path2label.
+ * @param dest_file The label file, if path2label.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_path2label_params(
     input_file: string,
     output_file: string,
@@ -86,25 +103,8 @@ function mri_path2label_params(
     source_file: string | null = null,
     dest_file: string | null = null,
 ): MriPath2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file, either a path or label file.
-     * @param output_file Output file, either a path or label file.
-     * @param single Only convert a single path, and do not use sentinel values.
-     * @param path_to_label Treat input as a path and output a label.
-     * @param label_to_path Treat input as a label and output a path.
-     * @param connect Connect path; input and output must be paths; requires subject and hemi.
-     * @param fill Fill already closed, connected path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
-     * @param confillx Connect and fill path; input must be a path, output must be a label; requires surface_fname and seedvtx.
-     * @param confill Connect and fill path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
-     * @param source_file The path file, if path2label.
-     * @param dest_file The label file, if path2label.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_path2label" as const,
+        "@type": "freesurfer.mri_path2label" as const,
         "input_file": input_file,
         "output_file": output_file,
         "single": single,
@@ -133,18 +133,18 @@ function mri_path2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_path2label_cargs(
     params: MriPath2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_path2label");
     cargs.push((params["input_file"] ?? null));
@@ -198,18 +198,18 @@ function mri_path2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_path2label_outputs(
     params: MriPath2labelParameters,
     execution: Execution,
 ): MriPath2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriPath2labelOutputs = {
         root: execution.outputFile("."),
     };
@@ -217,22 +217,22 @@ function mri_path2label_outputs(
 }
 
 
+/**
+ * Converts a path file to a label or a label file to a path file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
+ */
 function mri_path2label_execute(
     params: MriPath2labelParameters,
     execution: Execution,
 ): MriPath2labelOutputs {
-    /**
-     * Converts a path file to a label or a label file to a path file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_path2label_cargs(params, execution)
     const ret = mri_path2label_outputs(params, execution)
@@ -241,6 +241,28 @@ function mri_path2label_execute(
 }
 
 
+/**
+ * Converts a path file to a label or a label file to a path file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file, either a path or label file.
+ * @param output_file Output file, either a path or label file.
+ * @param single Only convert a single path, and do not use sentinel values.
+ * @param path_to_label Treat input as a path and output a label.
+ * @param label_to_path Treat input as a label and output a path.
+ * @param connect Connect path; input and output must be paths; requires subject and hemi.
+ * @param fill Fill already closed, connected path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
+ * @param confillx Connect and fill path; input must be a path, output must be a label; requires surface_fname and seedvtx.
+ * @param confill Connect and fill path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
+ * @param source_file The path file, if path2label.
+ * @param dest_file The label file, if path2label.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
+ */
 function mri_path2label(
     input_file: string,
     output_file: string,
@@ -255,28 +277,6 @@ function mri_path2label(
     dest_file: string | null = null,
     runner: Runner | null = null,
 ): MriPath2labelOutputs {
-    /**
-     * Converts a path file to a label or a label file to a path file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file, either a path or label file.
-     * @param output_file Output file, either a path or label file.
-     * @param single Only convert a single path, and do not use sentinel values.
-     * @param path_to_label Treat input as a path and output a label.
-     * @param label_to_path Treat input as a label and output a path.
-     * @param connect Connect path; input and output must be paths; requires subject and hemi.
-     * @param fill Fill already closed, connected path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
-     * @param confillx Connect and fill path; input must be a path, output must be a label; requires surface_fname and seedvtx.
-     * @param confill Connect and fill path; input must be a path, output must be a label; requires subject, hemi, and seedvtx.
-     * @param source_file The path file, if path2label.
-     * @param dest_file The label file, if path2label.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PATH2LABEL_METADATA);
     const params = mri_path2label_params(input_file, output_file, single, path_to_label, label_to_path, connect, fill, confillx, confill, source_file, dest_file)
@@ -289,5 +289,8 @@ export {
       MriPath2labelOutputs,
       MriPath2labelParameters,
       mri_path2label,
+      mri_path2label_cargs,
+      mri_path2label_execute,
+      mri_path2label_outputs,
       mri_path2label_params,
 };

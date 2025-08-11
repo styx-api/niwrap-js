@@ -12,7 +12,7 @@ const V__SUMA_ACKNOWLEDGE_METADATA: Metadata = {
 
 
 interface VSumaAcknowledgeParameters {
-    "__STYXTYPE__": "@suma_acknowledge";
+    "@type": "afni.@suma_acknowledge";
     "input_file": InputPathType;
     "surface_file": InputPathType;
     "output_prefix": string;
@@ -23,35 +23,35 @@ interface VSumaAcknowledgeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@suma_acknowledge": v__suma_acknowledge_cargs,
+        "afni.@suma_acknowledge": v__suma_acknowledge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@suma_acknowledge": v__suma_acknowledge_outputs,
+        "afni.@suma_acknowledge": v__suma_acknowledge_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VSumaAcknowledgeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Required input text file with format for each line: first last groupname.
+ * @param surface_file Required surface to place nodes.
+ * @param output_prefix Output prefix for graph dataset.
+ * @param center_flag Put center coord at x,y,z=0,0,0. Otherwise, uses average xyz in surface.
+ * @param subsurface_file Surface for surrounding members of group (use ld2, ld4, ld5, ld6, .... default is ld5).
+ * @param scale_factor Scale xyz for group nodes (default is 1.0).
+ * @param reduce_factor Scale xyz offsets for member nodes (xyz/r), default is 10.
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_acknowledge_params(
     input_file: InputPathType,
     surface_file: InputPathType,
@@ -83,21 +96,8 @@ function v__suma_acknowledge_params(
     scale_factor: number | null = null,
     reduce_factor: number | null = null,
 ): VSumaAcknowledgeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Required input text file with format for each line: first last groupname.
-     * @param surface_file Required surface to place nodes.
-     * @param output_prefix Output prefix for graph dataset.
-     * @param center_flag Put center coord at x,y,z=0,0,0. Otherwise, uses average xyz in surface.
-     * @param subsurface_file Surface for surrounding members of group (use ld2, ld4, ld5, ld6, .... default is ld5).
-     * @param scale_factor Scale xyz for group nodes (default is 1.0).
-     * @param reduce_factor Scale xyz offsets for member nodes (xyz/r), default is 10.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@suma_acknowledge" as const,
+        "@type": "afni.@suma_acknowledge" as const,
         "input_file": input_file,
         "surface_file": surface_file,
         "output_prefix": output_prefix,
@@ -116,18 +116,18 @@ function v__suma_acknowledge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_acknowledge_cargs(
     params: VSumaAcknowledgeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@suma_acknowledge");
     cargs.push(
@@ -167,18 +167,18 @@ function v__suma_acknowledge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_acknowledge_outputs(
     params: VSumaAcknowledgeParameters,
     execution: Execution,
 ): VSumaAcknowledgeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaAcknowledgeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null), "_graph_dataset"].join('')),
@@ -187,22 +187,22 @@ function v__suma_acknowledge_outputs(
 }
 
 
+/**
+ * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
+ */
 function v__suma_acknowledge_execute(
     params: VSumaAcknowledgeParameters,
     execution: Execution,
 ): VSumaAcknowledgeOutputs {
-    /**
-     * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_acknowledge_cargs(params, execution)
     const ret = v__suma_acknowledge_outputs(params, execution)
@@ -211,6 +211,24 @@ function v__suma_acknowledge_execute(
 }
 
 
+/**
+ * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Required input text file with format for each line: first last groupname.
+ * @param surface_file Required surface to place nodes.
+ * @param output_prefix Output prefix for graph dataset.
+ * @param center_flag Put center coord at x,y,z=0,0,0. Otherwise, uses average xyz in surface.
+ * @param subsurface_file Surface for surrounding members of group (use ld2, ld4, ld5, ld6, .... default is ld5).
+ * @param scale_factor Scale xyz for group nodes (default is 1.0).
+ * @param reduce_factor Scale xyz offsets for member nodes (xyz/r), default is 10.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
+ */
 function v__suma_acknowledge(
     input_file: InputPathType,
     surface_file: InputPathType,
@@ -221,24 +239,6 @@ function v__suma_acknowledge(
     reduce_factor: number | null = null,
     runner: Runner | null = null,
 ): VSumaAcknowledgeOutputs {
-    /**
-     * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Required input text file with format for each line: first last groupname.
-     * @param surface_file Required surface to place nodes.
-     * @param output_prefix Output prefix for graph dataset.
-     * @param center_flag Put center coord at x,y,z=0,0,0. Otherwise, uses average xyz in surface.
-     * @param subsurface_file Surface for surrounding members of group (use ld2, ld4, ld5, ld6, .... default is ld5).
-     * @param scale_factor Scale xyz for group nodes (default is 1.0).
-     * @param reduce_factor Scale xyz offsets for member nodes (xyz/r), default is 10.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_ACKNOWLEDGE_METADATA);
     const params = v__suma_acknowledge_params(input_file, surface_file, output_prefix, center_flag, subsurface_file, scale_factor, reduce_factor)
@@ -251,5 +251,8 @@ export {
       VSumaAcknowledgeParameters,
       V__SUMA_ACKNOWLEDGE_METADATA,
       v__suma_acknowledge,
+      v__suma_acknowledge_cargs,
+      v__suma_acknowledge_execute,
+      v__suma_acknowledge_outputs,
       v__suma_acknowledge_params,
 };

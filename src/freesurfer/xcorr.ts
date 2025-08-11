@@ -12,7 +12,7 @@ const XCORR_METADATA: Metadata = {
 
 
 interface XcorrParameters {
-    "__STYXTYPE__": "xcorr";
+    "@type": "freesurfer.xcorr";
     "input1": InputPathType;
     "input2": InputPathType;
     "output": string;
@@ -22,35 +22,35 @@ interface XcorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xcorr": xcorr_cargs,
+        "freesurfer.xcorr": xcorr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "xcorr": xcorr_outputs,
+        "freesurfer.xcorr": xcorr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface XcorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 First input volume file
+ * @param input2 Second input volume file
+ * @param output Output xcorr file
+ * @param log_file Log file
+ * @param tmp_dir Temporary directory
+ * @param no_cleanup Prevent cleanup of temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function xcorr_params(
     input1: InputPathType,
     input2: InputPathType,
@@ -85,20 +97,8 @@ function xcorr_params(
     tmp_dir: string | null = null,
     no_cleanup: boolean = false,
 ): XcorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 First input volume file
-     * @param input2 Second input volume file
-     * @param output Output xcorr file
-     * @param log_file Log file
-     * @param tmp_dir Temporary directory
-     * @param no_cleanup Prevent cleanup of temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xcorr" as const,
+        "@type": "freesurfer.xcorr" as const,
         "input1": input1,
         "input2": input2,
         "output": output,
@@ -114,18 +114,18 @@ function xcorr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xcorr_cargs(
     params: XcorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xcorr");
     cargs.push(
@@ -159,18 +159,18 @@ function xcorr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xcorr_outputs(
     params: XcorrParameters,
     execution: Execution,
 ): XcorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XcorrOutputs = {
         root: execution.outputFile("."),
         out_xcorrfile: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -180,22 +180,22 @@ function xcorr_outputs(
 }
 
 
+/**
+ * Computes the voxel-for-voxel correlation coefficient between two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XcorrOutputs`).
+ */
 function xcorr_execute(
     params: XcorrParameters,
     execution: Execution,
 ): XcorrOutputs {
-    /**
-     * Computes the voxel-for-voxel correlation coefficient between two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XcorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = xcorr_cargs(params, execution)
     const ret = xcorr_outputs(params, execution)
@@ -204,6 +204,23 @@ function xcorr_execute(
 }
 
 
+/**
+ * Computes the voxel-for-voxel correlation coefficient between two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input1 First input volume file
+ * @param input2 Second input volume file
+ * @param output Output xcorr file
+ * @param log_file Log file
+ * @param tmp_dir Temporary directory
+ * @param no_cleanup Prevent cleanup of temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XcorrOutputs`).
+ */
 function xcorr(
     input1: InputPathType,
     input2: InputPathType,
@@ -213,23 +230,6 @@ function xcorr(
     no_cleanup: boolean = false,
     runner: Runner | null = null,
 ): XcorrOutputs {
-    /**
-     * Computes the voxel-for-voxel correlation coefficient between two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input1 First input volume file
-     * @param input2 Second input volume file
-     * @param output Output xcorr file
-     * @param log_file Log file
-     * @param tmp_dir Temporary directory
-     * @param no_cleanup Prevent cleanup of temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XcorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XCORR_METADATA);
     const params = xcorr_params(input1, input2, output, log_file, tmp_dir, no_cleanup)
@@ -242,5 +242,8 @@ export {
       XcorrOutputs,
       XcorrParameters,
       xcorr,
+      xcorr_cargs,
+      xcorr_execute,
+      xcorr_outputs,
       xcorr_params,
 };

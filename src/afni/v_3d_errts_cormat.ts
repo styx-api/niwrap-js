@@ -12,7 +12,7 @@ const V_3D_ERRTS_CORMAT_METADATA: Metadata = {
 
 
 interface V3dErrtsCormatParameters {
-    "__STYXTYPE__": "3dErrtsCormat";
+    "@type": "afni.3dErrtsCormat";
     "dset": InputPathType;
     "concat"?: string | null | undefined;
     "input"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface V3dErrtsCormatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dErrtsCormat": v_3d_errts_cormat_cargs,
+        "afni.3dErrtsCormat": v_3d_errts_cormat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dErrtsCormat": v_3d_errts_cormat_outputs,
+        "afni.3dErrtsCormat": v_3d_errts_cormat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dErrtsCormatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Dataset to read, usually the '-errts' output from 3dDeconvolve.
+ * @param concat As used in 3dDeconvolve.
+ * @param input Alternate way of specifying the dataset to read.
+ * @param mask Mask dataset to apply.
+ * @param maxlag Set maximum lag.
+ * @param polort Set polort level. Default is 0.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_errts_cormat_params(
     dset: InputPathType,
     concat: string | null = null,
@@ -81,20 +93,8 @@ function v_3d_errts_cormat_params(
     maxlag: number | null = null,
     polort: number | null = null,
 ): V3dErrtsCormatParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Dataset to read, usually the '-errts' output from 3dDeconvolve.
-     * @param concat As used in 3dDeconvolve.
-     * @param input Alternate way of specifying the dataset to read.
-     * @param mask Mask dataset to apply.
-     * @param maxlag Set maximum lag.
-     * @param polort Set polort level. Default is 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dErrtsCormat" as const,
+        "@type": "afni.3dErrtsCormat" as const,
         "dset": dset,
     };
     if (concat !== null) {
@@ -116,18 +116,18 @@ function v_3d_errts_cormat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_errts_cormat_cargs(
     params: V3dErrtsCormatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dErrtsCormat");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
@@ -165,18 +165,18 @@ function v_3d_errts_cormat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_errts_cormat_outputs(
     params: V3dErrtsCormatParameters,
     execution: Execution,
 ): V3dErrtsCormatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dErrtsCormatOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["stdout"].join('')),
@@ -185,22 +185,22 @@ function v_3d_errts_cormat_outputs(
 }
 
 
+/**
+ * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
+ */
 function v_3d_errts_cormat_execute(
     params: V3dErrtsCormatParameters,
     execution: Execution,
 ): V3dErrtsCormatOutputs {
-    /**
-     * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_errts_cormat_cargs(params, execution)
     const ret = v_3d_errts_cormat_outputs(params, execution)
@@ -209,6 +209,23 @@ function v_3d_errts_cormat_execute(
 }
 
 
+/**
+ * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Dataset to read, usually the '-errts' output from 3dDeconvolve.
+ * @param concat As used in 3dDeconvolve.
+ * @param input Alternate way of specifying the dataset to read.
+ * @param mask Mask dataset to apply.
+ * @param maxlag Set maximum lag.
+ * @param polort Set polort level. Default is 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
+ */
 function v_3d_errts_cormat(
     dset: InputPathType,
     concat: string | null = null,
@@ -218,23 +235,6 @@ function v_3d_errts_cormat(
     polort: number | null = null,
     runner: Runner | null = null,
 ): V3dErrtsCormatOutputs {
-    /**
-     * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Dataset to read, usually the '-errts' output from 3dDeconvolve.
-     * @param concat As used in 3dDeconvolve.
-     * @param input Alternate way of specifying the dataset to read.
-     * @param mask Mask dataset to apply.
-     * @param maxlag Set maximum lag.
-     * @param polort Set polort level. Default is 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ERRTS_CORMAT_METADATA);
     const params = v_3d_errts_cormat_params(dset, concat, input, mask, maxlag, polort)
@@ -247,5 +247,8 @@ export {
       V3dErrtsCormatParameters,
       V_3D_ERRTS_CORMAT_METADATA,
       v_3d_errts_cormat,
+      v_3d_errts_cormat_cargs,
+      v_3d_errts_cormat_execute,
+      v_3d_errts_cormat_outputs,
       v_3d_errts_cormat_params,
 };

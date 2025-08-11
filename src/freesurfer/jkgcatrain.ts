@@ -12,7 +12,7 @@ const JKGCATRAIN_METADATA: Metadata = {
 
 
 interface JkgcatrainParameters {
-    "__STYXTYPE__": "jkgcatrain";
+    "@type": "freesurfer.jkgcatrain";
     "gca_directory": string;
     "iteration_number"?: number | null | undefined;
     "num_threads"?: number | null | undefined;
@@ -21,33 +21,33 @@ interface JkgcatrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "jkgcatrain": jkgcatrain_cargs,
+        "freesurfer.jkgcatrain": jkgcatrain_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface JkgcatrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gca_directory Output directory from gcatrain.
+ * @param iteration_number Iteration number (usually 2).
+ * @param num_threads Number of threads to use.
+ * @param no_submit Run serially, do not use pbsubmit.
+ * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
+ *
+ * @returns Parameter dictionary
+ */
 function jkgcatrain_params(
     gca_directory: string,
     iteration_number: number | null = 2,
@@ -74,19 +85,8 @@ function jkgcatrain_params(
     no_submit: boolean = false,
     mail_flag: boolean = false,
 ): JkgcatrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param gca_directory Output directory from gcatrain.
-     * @param iteration_number Iteration number (usually 2).
-     * @param num_threads Number of threads to use.
-     * @param no_submit Run serially, do not use pbsubmit.
-     * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "jkgcatrain" as const,
+        "@type": "freesurfer.jkgcatrain" as const,
         "gca_directory": gca_directory,
         "no_submit": no_submit,
         "mail_flag": mail_flag,
@@ -101,18 +101,18 @@ function jkgcatrain_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function jkgcatrain_cargs(
     params: JkgcatrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("jkgcatrain");
     cargs.push(
@@ -141,18 +141,18 @@ function jkgcatrain_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function jkgcatrain_outputs(
     params: JkgcatrainParameters,
     execution: Execution,
 ): JkgcatrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: JkgcatrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -160,22 +160,22 @@ function jkgcatrain_outputs(
 }
 
 
+/**
+ * Jackknife training of GCA using existing output from gcatrain.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
+ */
 function jkgcatrain_execute(
     params: JkgcatrainParameters,
     execution: Execution,
 ): JkgcatrainOutputs {
-    /**
-     * Jackknife training of GCA using existing output from gcatrain.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = jkgcatrain_cargs(params, execution)
     const ret = jkgcatrain_outputs(params, execution)
@@ -184,6 +184,22 @@ function jkgcatrain_execute(
 }
 
 
+/**
+ * Jackknife training of GCA using existing output from gcatrain.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gca_directory Output directory from gcatrain.
+ * @param iteration_number Iteration number (usually 2).
+ * @param num_threads Number of threads to use.
+ * @param no_submit Run serially, do not use pbsubmit.
+ * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
+ */
 function jkgcatrain(
     gca_directory: string,
     iteration_number: number | null = 2,
@@ -192,22 +208,6 @@ function jkgcatrain(
     mail_flag: boolean = false,
     runner: Runner | null = null,
 ): JkgcatrainOutputs {
-    /**
-     * Jackknife training of GCA using existing output from gcatrain.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gca_directory Output directory from gcatrain.
-     * @param iteration_number Iteration number (usually 2).
-     * @param num_threads Number of threads to use.
-     * @param no_submit Run serially, do not use pbsubmit.
-     * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(JKGCATRAIN_METADATA);
     const params = jkgcatrain_params(gca_directory, iteration_number, num_threads, no_submit, mail_flag)
@@ -220,5 +220,8 @@ export {
       JkgcatrainOutputs,
       JkgcatrainParameters,
       jkgcatrain,
+      jkgcatrain_cargs,
+      jkgcatrain_execute,
+      jkgcatrain_outputs,
       jkgcatrain_params,
 };

@@ -12,7 +12,7 @@ const LABEL_ERODE_METADATA: Metadata = {
 
 
 interface LabelErodeParameters {
-    "__STYXTYPE__": "label-erode";
+    "@type": "workbench.label-erode";
     "label": InputPathType;
     "surface": InputPathType;
     "erode_dist": number;
@@ -23,35 +23,35 @@ interface LabelErodeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-erode": label_erode_cargs,
+        "workbench.label-erode": label_erode_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-erode": label_erode_outputs,
+        "workbench.label-erode": label_erode_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface LabelErodeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the input label
+ * @param surface the surface to erode on
+ * @param erode_dist distance in mm to erode the labels
+ * @param label_out the output label file
+ * @param opt_roi_roi_metric assume values outside this roi are labeled: metric file, positive values denote vertices that have data
+ * @param opt_column_column select a single column to erode: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function label_erode_params(
     label: InputPathType,
     surface: InputPathType,
@@ -83,21 +96,8 @@ function label_erode_params(
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): LabelErodeParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the input label
-     * @param surface the surface to erode on
-     * @param erode_dist distance in mm to erode the labels
-     * @param label_out the output label file
-     * @param opt_roi_roi_metric assume values outside this roi are labeled: metric file, positive values denote vertices that have data
-     * @param opt_column_column select a single column to erode: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-erode" as const,
+        "@type": "workbench.label-erode" as const,
         "label": label,
         "surface": surface,
         "erode_dist": erode_dist,
@@ -116,18 +116,18 @@ function label_erode_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_erode_cargs(
     params: LabelErodeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-erode");
@@ -157,18 +157,18 @@ function label_erode_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_erode_outputs(
     params: LabelErodeParameters,
     execution: Execution,
 ): LabelErodeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelErodeOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -177,26 +177,26 @@ function label_erode_outputs(
 }
 
 
+/**
+ * Erode a label file.
+ *
+ * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
+ *
+ * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
+ */
 function label_erode_execute(
     params: LabelErodeParameters,
     execution: Execution,
 ): LabelErodeOutputs {
-    /**
-     * Erode a label file.
-     * 
-     * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
-     * 
-     * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_erode_cargs(params, execution)
     const ret = label_erode_outputs(params, execution)
@@ -205,6 +205,28 @@ function label_erode_execute(
 }
 
 
+/**
+ * Erode a label file.
+ *
+ * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
+ *
+ * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label the input label
+ * @param surface the surface to erode on
+ * @param erode_dist distance in mm to erode the labels
+ * @param label_out the output label file
+ * @param opt_roi_roi_metric assume values outside this roi are labeled: metric file, positive values denote vertices that have data
+ * @param opt_column_column select a single column to erode: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
+ */
 function label_erode(
     label: InputPathType,
     surface: InputPathType,
@@ -215,28 +237,6 @@ function label_erode(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelErodeOutputs {
-    /**
-     * Erode a label file.
-     * 
-     * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
-     * 
-     * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label the input label
-     * @param surface the surface to erode on
-     * @param erode_dist distance in mm to erode the labels
-     * @param label_out the output label file
-     * @param opt_roi_roi_metric assume values outside this roi are labeled: metric file, positive values denote vertices that have data
-     * @param opt_column_column select a single column to erode: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_ERODE_METADATA);
     const params = label_erode_params(label, surface, erode_dist, label_out, opt_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
@@ -249,5 +249,8 @@ export {
       LabelErodeOutputs,
       LabelErodeParameters,
       label_erode,
+      label_erode_cargs,
+      label_erode_execute,
+      label_erode_outputs,
       label_erode_params,
 };

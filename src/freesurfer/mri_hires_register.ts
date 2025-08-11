@@ -12,7 +12,7 @@ const MRI_HIRES_REGISTER_METADATA: Metadata = {
 
 
 interface MriHiresRegisterParameters {
-    "__STYXTYPE__": "mri_hires_register";
+    "@type": "freesurfer.mri_hires_register";
     "hires_labeling": InputPathType;
     "input_intensity": InputPathType;
     "input_aseg": InputPathType;
@@ -20,35 +20,35 @@ interface MriHiresRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_hires_register": mri_hires_register_cargs,
+        "freesurfer.mri_hires_register": mri_hires_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_hires_register": mri_hires_register_outputs,
+        "freesurfer.mri_hires_register": mri_hires_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriHiresRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hires_labeling The high resolution labeling input file
+ * @param input_intensity The input intensity file
+ * @param input_aseg The input aseg file
+ * @param output_xform The output transform file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_hires_register_params(
     hires_labeling: InputPathType,
     input_intensity: InputPathType,
     input_aseg: InputPathType,
     output_xform: string,
 ): MriHiresRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param hires_labeling The high resolution labeling input file
-     * @param input_intensity The input intensity file
-     * @param input_aseg The input aseg file
-     * @param output_xform The output transform file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_hires_register" as const,
+        "@type": "freesurfer.mri_hires_register" as const,
         "hires_labeling": hires_labeling,
         "input_intensity": input_intensity,
         "input_aseg": input_aseg,
@@ -98,18 +98,18 @@ function mri_hires_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_hires_register_cargs(
     params: MriHiresRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_hires_register");
     cargs.push(execution.inputFile((params["hires_labeling"] ?? null)));
@@ -120,18 +120,18 @@ function mri_hires_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_hires_register_outputs(
     params: MriHiresRegisterParameters,
     execution: Execution,
 ): MriHiresRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriHiresRegisterOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_xform"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_hires_register_outputs(
 }
 
 
+/**
+ * A tool for high-resolution registration for Freesurfer images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
+ */
 function mri_hires_register_execute(
     params: MriHiresRegisterParameters,
     execution: Execution,
 ): MriHiresRegisterOutputs {
-    /**
-     * A tool for high-resolution registration for Freesurfer images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_hires_register_cargs(params, execution)
     const ret = mri_hires_register_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_hires_register_execute(
 }
 
 
+/**
+ * A tool for high-resolution registration for Freesurfer images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hires_labeling The high resolution labeling input file
+ * @param input_intensity The input intensity file
+ * @param input_aseg The input aseg file
+ * @param output_xform The output transform file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
+ */
 function mri_hires_register(
     hires_labeling: InputPathType,
     input_intensity: InputPathType,
@@ -171,21 +186,6 @@ function mri_hires_register(
     output_xform: string,
     runner: Runner | null = null,
 ): MriHiresRegisterOutputs {
-    /**
-     * A tool for high-resolution registration for Freesurfer images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hires_labeling The high resolution labeling input file
-     * @param input_intensity The input intensity file
-     * @param input_aseg The input aseg file
-     * @param output_xform The output transform file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_HIRES_REGISTER_METADATA);
     const params = mri_hires_register_params(hires_labeling, input_intensity, input_aseg, output_xform)
@@ -198,5 +198,8 @@ export {
       MriHiresRegisterOutputs,
       MriHiresRegisterParameters,
       mri_hires_register,
+      mri_hires_register_cargs,
+      mri_hires_register_execute,
+      mri_hires_register_outputs,
       mri_hires_register_params,
 };

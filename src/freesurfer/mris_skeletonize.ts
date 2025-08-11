@@ -12,7 +12,7 @@ const MRIS_SKELETONIZE_METADATA: Metadata = {
 
 
 interface MrisSkeletonizeParameters {
-    "__STYXTYPE__": "mris_skeletonize";
+    "@type": "freesurfer.mris_skeletonize";
     "surface": string;
     "surfvals": string;
     "mask": string;
@@ -31,35 +31,35 @@ interface MrisSkeletonizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_skeletonize": mris_skeletonize_cargs,
+        "freesurfer.mris_skeletonize": mris_skeletonize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_skeletonize": mris_skeletonize_outputs,
+        "freesurfer.mris_skeletonize": mris_skeletonize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,27 @@ interface MrisSkeletonizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Path to the surface file.
+ * @param surfvals Pass input explicitly rather than computing it.
+ * @param mask Final skeletonized mask file.
+ * @param k1 Use k1 from surface (not with --curv-nonmaxsup).
+ * @param curv_nonmaxsup Use curvature H computed from surface with non-max suppression (not with --k1).
+ * @param gyrus Skeletonize the crowns of the gyri.
+ * @param sulcus Skeletonize the fundi of the sulci.
+ * @param outdir Directory where all outputs will be saved.
+ * @param sphere Sphere path, only needed for nonmax suppression.
+ * @param pointset Point set of the skeleton (PointSet.json).
+ * @param label Surface label of the skeleton (label file path).
+ * @param nbrsize Neighborhood size for 2nd FF (default is 2).
+ * @param threshold Used to create initial mask that will be skeletonized (typically about 0.3).
+ * @param cluster Cluster the thresholded input and keep the largest nkeep clusters.
+ * @param fwhm Smooth surface values by this FWHM.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_skeletonize_params(
     surface: string,
     surfvals: string,
@@ -107,29 +128,8 @@ function mris_skeletonize_params(
     cluster: number | null = null,
     fwhm: number | null = null,
 ): MrisSkeletonizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Path to the surface file.
-     * @param surfvals Pass input explicitly rather than computing it.
-     * @param mask Final skeletonized mask file.
-     * @param k1 Use k1 from surface (not with --curv-nonmaxsup).
-     * @param curv_nonmaxsup Use curvature H computed from surface with non-max suppression (not with --k1).
-     * @param gyrus Skeletonize the crowns of the gyri.
-     * @param sulcus Skeletonize the fundi of the sulci.
-     * @param outdir Directory where all outputs will be saved.
-     * @param sphere Sphere path, only needed for nonmax suppression.
-     * @param pointset Point set of the skeleton (PointSet.json).
-     * @param label Surface label of the skeleton (label file path).
-     * @param nbrsize Neighborhood size for 2nd FF (default is 2).
-     * @param threshold Used to create initial mask that will be skeletonized (typically about 0.3).
-     * @param cluster Cluster the thresholded input and keep the largest nkeep clusters.
-     * @param fwhm Smooth surface values by this FWHM.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_skeletonize" as const,
+        "@type": "freesurfer.mris_skeletonize" as const,
         "surface": surface,
         "surfvals": surfvals,
         "mask": mask,
@@ -166,18 +166,18 @@ function mris_skeletonize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_skeletonize_cargs(
     params: MrisSkeletonizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_skeletonize");
     cargs.push(
@@ -256,18 +256,18 @@ function mris_skeletonize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_skeletonize_outputs(
     params: MrisSkeletonizeParameters,
     execution: Execution,
 ): MrisSkeletonizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSkeletonizeOutputs = {
         root: execution.outputFile("."),
         skeleton_output: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/skeleton.mgz"].join('')) : null,
@@ -278,22 +278,22 @@ function mris_skeletonize_outputs(
 }
 
 
+/**
+ * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
+ */
 function mris_skeletonize_execute(
     params: MrisSkeletonizeParameters,
     execution: Execution,
 ): MrisSkeletonizeOutputs {
-    /**
-     * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_skeletonize_cargs(params, execution)
     const ret = mris_skeletonize_outputs(params, execution)
@@ -302,6 +302,32 @@ function mris_skeletonize_execute(
 }
 
 
+/**
+ * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Path to the surface file.
+ * @param surfvals Pass input explicitly rather than computing it.
+ * @param mask Final skeletonized mask file.
+ * @param k1 Use k1 from surface (not with --curv-nonmaxsup).
+ * @param curv_nonmaxsup Use curvature H computed from surface with non-max suppression (not with --k1).
+ * @param gyrus Skeletonize the crowns of the gyri.
+ * @param sulcus Skeletonize the fundi of the sulci.
+ * @param outdir Directory where all outputs will be saved.
+ * @param sphere Sphere path, only needed for nonmax suppression.
+ * @param pointset Point set of the skeleton (PointSet.json).
+ * @param label Surface label of the skeleton (label file path).
+ * @param nbrsize Neighborhood size for 2nd FF (default is 2).
+ * @param threshold Used to create initial mask that will be skeletonized (typically about 0.3).
+ * @param cluster Cluster the thresholded input and keep the largest nkeep clusters.
+ * @param fwhm Smooth surface values by this FWHM.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
+ */
 function mris_skeletonize(
     surface: string,
     surfvals: string,
@@ -320,32 +346,6 @@ function mris_skeletonize(
     fwhm: number | null = null,
     runner: Runner | null = null,
 ): MrisSkeletonizeOutputs {
-    /**
-     * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Path to the surface file.
-     * @param surfvals Pass input explicitly rather than computing it.
-     * @param mask Final skeletonized mask file.
-     * @param k1 Use k1 from surface (not with --curv-nonmaxsup).
-     * @param curv_nonmaxsup Use curvature H computed from surface with non-max suppression (not with --k1).
-     * @param gyrus Skeletonize the crowns of the gyri.
-     * @param sulcus Skeletonize the fundi of the sulci.
-     * @param outdir Directory where all outputs will be saved.
-     * @param sphere Sphere path, only needed for nonmax suppression.
-     * @param pointset Point set of the skeleton (PointSet.json).
-     * @param label Surface label of the skeleton (label file path).
-     * @param nbrsize Neighborhood size for 2nd FF (default is 2).
-     * @param threshold Used to create initial mask that will be skeletonized (typically about 0.3).
-     * @param cluster Cluster the thresholded input and keep the largest nkeep clusters.
-     * @param fwhm Smooth surface values by this FWHM.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SKELETONIZE_METADATA);
     const params = mris_skeletonize_params(surface, surfvals, mask, k1, curv_nonmaxsup, gyrus, sulcus, outdir, sphere, pointset, label, nbrsize, threshold, cluster, fwhm)
@@ -358,5 +358,8 @@ export {
       MrisSkeletonizeOutputs,
       MrisSkeletonizeParameters,
       mris_skeletonize,
+      mris_skeletonize_cargs,
+      mris_skeletonize_execute,
+      mris_skeletonize_outputs,
       mris_skeletonize_params,
 };

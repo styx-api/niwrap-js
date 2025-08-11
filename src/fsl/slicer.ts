@@ -12,7 +12,7 @@ const SLICER_METADATA: Metadata = {
 
 
 interface SlicerParameters {
-    "__STYXTYPE__": "slicer";
+    "@type": "fsl.slicer";
     "in_file": InputPathType;
     "overlay_file"?: InputPathType | null | undefined;
     "label_slices": boolean;
@@ -39,35 +39,35 @@ interface SlicerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slicer": slicer_cargs,
+        "fsl.slicer": slicer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "slicer": slicer_outputs,
+        "fsl.slicer": slicer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,35 @@ interface SlicerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input volume.
+ * @param overlay_file Overlay volume.
+ * @param label_slices Label slices with slice number.
+ * @param colour_map Use different colour map from that specified in the header.
+ * @param scaling Image scale.
+ * @param intensity_range Specify intensity min and max for display range.
+ * @param threshold_edges Use specified threshold for edges (if >0 use this proportion of max-min, if <0, use the absolute value)
+ * @param dither_edges Produce semi-transparent (dithered) edges.
+ * @param nearest_neighbour Use nearest neighbor interpolation for output.
+ * @param show_orientation Do not put left-right labels in output
+ * @param red_dot_marker Add a red dot marker to topright of image.
+ * @param output_single_image Output mid-sagittal, -coronal, and -axial slices into one image.
+ * @param output_sagittal_slice Output sagittal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_sagittal_slice_fname Output file name sagittal slice.
+ * @param output_axial_slice Output axial slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_axial_slice_fname Output file name axial slice.
+ * @param output_coronal_slice Output coronal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_coronal_slice_fname Output file name coronal slice.
+ * @param output_all_axial_slices Maximum width of image of all axial slices.
+ * @param output_all_axial_slices_fname File name of all axial slice output image.
+ * @param output_sample_axial_slices Ouput every <sample>'th axial slice.
+ * @param output_sample_axial_slices_width Width of every <sample'th> axial slice output image.
+ * @param output_sample_axial_slices_fname File name of every <sample'th> axial slice output image.
+ *
+ * @returns Parameter dictionary
+ */
 function slicer_params(
     in_file: InputPathType,
     overlay_file: InputPathType | null = null,
@@ -131,37 +160,8 @@ function slicer_params(
     output_sample_axial_slices_width: string | null = null,
     output_sample_axial_slices_fname: string | null = null,
 ): SlicerParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input volume.
-     * @param overlay_file Overlay volume.
-     * @param label_slices Label slices with slice number.
-     * @param colour_map Use different colour map from that specified in the header.
-     * @param scaling Image scale.
-     * @param intensity_range Specify intensity min and max for display range.
-     * @param threshold_edges Use specified threshold for edges (if >0 use this proportion of max-min, if <0, use the absolute value)
-     * @param dither_edges Produce semi-transparent (dithered) edges.
-     * @param nearest_neighbour Use nearest neighbor interpolation for output.
-     * @param show_orientation Do not put left-right labels in output
-     * @param red_dot_marker Add a red dot marker to topright of image.
-     * @param output_single_image Output mid-sagittal, -coronal, and -axial slices into one image.
-     * @param output_sagittal_slice Output sagittal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_sagittal_slice_fname Output file name sagittal slice.
-     * @param output_axial_slice Output axial slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_axial_slice_fname Output file name axial slice.
-     * @param output_coronal_slice Output coronal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_coronal_slice_fname Output file name coronal slice.
-     * @param output_all_axial_slices Maximum width of image of all axial slices.
-     * @param output_all_axial_slices_fname File name of all axial slice output image.
-     * @param output_sample_axial_slices Ouput every <sample>'th axial slice.
-     * @param output_sample_axial_slices_width Width of every <sample'th> axial slice output image.
-     * @param output_sample_axial_slices_fname File name of every <sample'th> axial slice output image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slicer" as const,
+        "@type": "fsl.slicer" as const,
         "in_file": in_file,
         "label_slices": label_slices,
         "dither_edges": dither_edges,
@@ -214,18 +214,18 @@ function slicer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slicer_cargs(
     params: SlicerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slicer");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -314,18 +314,18 @@ function slicer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slicer_outputs(
     params: SlicerParameters,
     execution: Execution,
 ): SlicerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicerOutputs = {
         root: execution.outputFile("."),
         sagittal_slice_outfile: ((params["output_sagittal_slice_fname"] ?? null) !== null) ? execution.outputFile([(params["output_sagittal_slice_fname"] ?? null)].join('')) : null,
@@ -338,22 +338,22 @@ function slicer_outputs(
 }
 
 
+/**
+ * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicerOutputs`).
+ */
 function slicer_execute(
     params: SlicerParameters,
     execution: Execution,
 ): SlicerOutputs {
-    /**
-     * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicerOutputs`).
-     */
     params = execution.params(params)
     const cargs = slicer_cargs(params, execution)
     const ret = slicer_outputs(params, execution)
@@ -362,6 +362,40 @@ function slicer_execute(
 }
 
 
+/**
+ * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Input volume.
+ * @param overlay_file Overlay volume.
+ * @param label_slices Label slices with slice number.
+ * @param colour_map Use different colour map from that specified in the header.
+ * @param scaling Image scale.
+ * @param intensity_range Specify intensity min and max for display range.
+ * @param threshold_edges Use specified threshold for edges (if >0 use this proportion of max-min, if <0, use the absolute value)
+ * @param dither_edges Produce semi-transparent (dithered) edges.
+ * @param nearest_neighbour Use nearest neighbor interpolation for output.
+ * @param show_orientation Do not put left-right labels in output
+ * @param red_dot_marker Add a red dot marker to topright of image.
+ * @param output_single_image Output mid-sagittal, -coronal, and -axial slices into one image.
+ * @param output_sagittal_slice Output sagittal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_sagittal_slice_fname Output file name sagittal slice.
+ * @param output_axial_slice Output axial slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_axial_slice_fname Output file name axial slice.
+ * @param output_coronal_slice Output coronal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
+ * @param output_coronal_slice_fname Output file name coronal slice.
+ * @param output_all_axial_slices Maximum width of image of all axial slices.
+ * @param output_all_axial_slices_fname File name of all axial slice output image.
+ * @param output_sample_axial_slices Ouput every <sample>'th axial slice.
+ * @param output_sample_axial_slices_width Width of every <sample'th> axial slice output image.
+ * @param output_sample_axial_slices_fname File name of every <sample'th> axial slice output image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicerOutputs`).
+ */
 function slicer(
     in_file: InputPathType,
     overlay_file: InputPathType | null = null,
@@ -388,40 +422,6 @@ function slicer(
     output_sample_axial_slices_fname: string | null = null,
     runner: Runner | null = null,
 ): SlicerOutputs {
-    /**
-     * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Input volume.
-     * @param overlay_file Overlay volume.
-     * @param label_slices Label slices with slice number.
-     * @param colour_map Use different colour map from that specified in the header.
-     * @param scaling Image scale.
-     * @param intensity_range Specify intensity min and max for display range.
-     * @param threshold_edges Use specified threshold for edges (if >0 use this proportion of max-min, if <0, use the absolute value)
-     * @param dither_edges Produce semi-transparent (dithered) edges.
-     * @param nearest_neighbour Use nearest neighbor interpolation for output.
-     * @param show_orientation Do not put left-right labels in output
-     * @param red_dot_marker Add a red dot marker to topright of image.
-     * @param output_single_image Output mid-sagittal, -coronal, and -axial slices into one image.
-     * @param output_sagittal_slice Output sagittal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_sagittal_slice_fname Output file name sagittal slice.
-     * @param output_axial_slice Output axial slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_axial_slice_fname Output file name axial slice.
-     * @param output_coronal_slice Output coronal slice (if slice >0, it is a fraction of image dimension, if <0, it is absolute slice number).
-     * @param output_coronal_slice_fname Output file name coronal slice.
-     * @param output_all_axial_slices Maximum width of image of all axial slices.
-     * @param output_all_axial_slices_fname File name of all axial slice output image.
-     * @param output_sample_axial_slices Ouput every <sample>'th axial slice.
-     * @param output_sample_axial_slices_width Width of every <sample'th> axial slice output image.
-     * @param output_sample_axial_slices_fname File name of every <sample'th> axial slice output image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICER_METADATA);
     const params = slicer_params(in_file, overlay_file, label_slices, colour_map, scaling, intensity_range, threshold_edges, dither_edges, nearest_neighbour, show_orientation, red_dot_marker, output_single_image, output_sagittal_slice, output_sagittal_slice_fname, output_axial_slice, output_axial_slice_fname, output_coronal_slice, output_coronal_slice_fname, output_all_axial_slices, output_all_axial_slices_fname, output_sample_axial_slices, output_sample_axial_slices_width, output_sample_axial_slices_fname)
@@ -434,5 +434,8 @@ export {
       SlicerOutputs,
       SlicerParameters,
       slicer,
+      slicer_cargs,
+      slicer_execute,
+      slicer_outputs,
       slicer_params,
 };

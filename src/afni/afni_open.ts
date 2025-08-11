@@ -12,7 +12,7 @@ const AFNI_OPEN_METADATA: Metadata = {
 
 
 interface AfniOpenParameters {
-    "__STYXTYPE__": "afni_open";
+    "@type": "afni.afni_open";
     "files": Array<InputPathType>;
     "method"?: string | null | undefined;
     "editor": boolean;
@@ -31,33 +31,33 @@ interface AfniOpenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni_open": afni_open_cargs,
+        "afni.afni_open": afni_open_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface AfniOpenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files Input file(s) to be opened.
+ * @param method Method to open files (editor, downloader, browser, afni, suma, 1dplot, ExamineXmat, iviewer, afniweb, readme).
+ * @param editor Same as -w editor.
+ * @param downloader Same as -w downloader.
+ * @param examinexmat Same as -w ExamineXmat.
+ * @param browser Same as -w browser.
+ * @param readme Same as -w readme.
+ * @param afniweb Same as -w afniweb.
+ * @param global_help Show help for global options.
+ * @param gopts_help Show help for global options.
+ * @param help The entire help output.
+ * @param mini_help Mini help.
+ * @param extreme_help Extreme help.
+ * @param h_view Open help in text editor.
+ * @param h_web Open help in web browser.
+ *
+ * @returns Parameter dictionary
+ */
 function afni_open_params(
     files: Array<InputPathType>,
     method: string | null = null,
@@ -94,29 +115,8 @@ function afni_open_params(
     h_view: boolean = false,
     h_web: boolean = false,
 ): AfniOpenParameters {
-    /**
-     * Build parameters.
-    
-     * @param files Input file(s) to be opened.
-     * @param method Method to open files (editor, downloader, browser, afni, suma, 1dplot, ExamineXmat, iviewer, afniweb, readme).
-     * @param editor Same as -w editor.
-     * @param downloader Same as -w downloader.
-     * @param examinexmat Same as -w ExamineXmat.
-     * @param browser Same as -w browser.
-     * @param readme Same as -w readme.
-     * @param afniweb Same as -w afniweb.
-     * @param global_help Show help for global options.
-     * @param gopts_help Show help for global options.
-     * @param help The entire help output.
-     * @param mini_help Mini help.
-     * @param extreme_help Extreme help.
-     * @param h_view Open help in text editor.
-     * @param h_web Open help in web browser.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni_open" as const,
+        "@type": "afni.afni_open" as const,
         "files": files,
         "editor": editor,
         "downloader": downloader,
@@ -139,18 +139,18 @@ function afni_open_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_open_cargs(
     params: AfniOpenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni_open");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -203,18 +203,18 @@ function afni_open_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_open_outputs(
     params: AfniOpenParameters,
     execution: Execution,
 ): AfniOpenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniOpenOutputs = {
         root: execution.outputFile("."),
     };
@@ -222,22 +222,22 @@ function afni_open_outputs(
 }
 
 
+/**
+ * A program to open various AFNI/SUMA files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
+ */
 function afni_open_execute(
     params: AfniOpenParameters,
     execution: Execution,
 ): AfniOpenOutputs {
-    /**
-     * A program to open various AFNI/SUMA files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_open_cargs(params, execution)
     const ret = afni_open_outputs(params, execution)
@@ -246,6 +246,32 @@ function afni_open_execute(
 }
 
 
+/**
+ * A program to open various AFNI/SUMA files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files Input file(s) to be opened.
+ * @param method Method to open files (editor, downloader, browser, afni, suma, 1dplot, ExamineXmat, iviewer, afniweb, readme).
+ * @param editor Same as -w editor.
+ * @param downloader Same as -w downloader.
+ * @param examinexmat Same as -w ExamineXmat.
+ * @param browser Same as -w browser.
+ * @param readme Same as -w readme.
+ * @param afniweb Same as -w afniweb.
+ * @param global_help Show help for global options.
+ * @param gopts_help Show help for global options.
+ * @param help The entire help output.
+ * @param mini_help Mini help.
+ * @param extreme_help Extreme help.
+ * @param h_view Open help in text editor.
+ * @param h_web Open help in web browser.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
+ */
 function afni_open(
     files: Array<InputPathType>,
     method: string | null = null,
@@ -264,32 +290,6 @@ function afni_open(
     h_web: boolean = false,
     runner: Runner | null = null,
 ): AfniOpenOutputs {
-    /**
-     * A program to open various AFNI/SUMA files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files Input file(s) to be opened.
-     * @param method Method to open files (editor, downloader, browser, afni, suma, 1dplot, ExamineXmat, iviewer, afniweb, readme).
-     * @param editor Same as -w editor.
-     * @param downloader Same as -w downloader.
-     * @param examinexmat Same as -w ExamineXmat.
-     * @param browser Same as -w browser.
-     * @param readme Same as -w readme.
-     * @param afniweb Same as -w afniweb.
-     * @param global_help Show help for global options.
-     * @param gopts_help Show help for global options.
-     * @param help The entire help output.
-     * @param mini_help Mini help.
-     * @param extreme_help Extreme help.
-     * @param h_view Open help in text editor.
-     * @param h_web Open help in web browser.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_OPEN_METADATA);
     const params = afni_open_params(files, method, editor, downloader, examinexmat, browser, readme, afniweb, global_help, gopts_help, help, mini_help, extreme_help, h_view, h_web)
@@ -302,5 +302,8 @@ export {
       AfniOpenOutputs,
       AfniOpenParameters,
       afni_open,
+      afni_open_cargs,
+      afni_open_execute,
+      afni_open_outputs,
       afni_open_params,
 };

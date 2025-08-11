@@ -12,7 +12,7 @@ const MRI_3D_PHOTO_RECON_METADATA: Metadata = {
 
 
 interface Mri3dPhotoReconParameters {
-    "__STYXTYPE__": "mri_3d_photo_recon";
+    "@type": "freesurfer.mri_3d_photo_recon";
     "input_photo_dir": Array<InputPathType>;
     "input_segmentation_dir": Array<InputPathType>;
     "slice_thickness": number;
@@ -30,35 +30,35 @@ interface Mri3dPhotoReconParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_3d_photo_recon": mri_3d_photo_recon_cargs,
+        "freesurfer.mri_3d_photo_recon": mri_3d_photo_recon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_3d_photo_recon": mri_3d_photo_recon_outputs,
+        "freesurfer.mri_3d_photo_recon": mri_3d_photo_recon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface Mri3dPhotoReconOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_photo_dir Directory with input photos (required)
+ * @param input_segmentation_dir Directory with input slab masks / segmentations (required)
+ * @param slice_thickness Slice thickness in mm
+ * @param photo_resolution Resolution of the photos in mm
+ * @param output_directory Output directory with reconstructed photo volume and reference
+ * @param ref_mask Reference binary mask
+ * @param ref_surface Reference surface file
+ * @param ref_soft_mask Reference soft mask
+ * @param mesh_reorient_with_indices Vertex indices of frontal pole, occipital pole, and top of central sulcus, separated with commas, for mesh alignment
+ * @param photos_posterior_side Use when photos are taken of posterior side of slabs (default is anterior side)
+ * @param order_posterior_to_anterior Use when photos are ordered from posterior to anterior (default is anterior to posterior)
+ * @param allow_z_stretch Use to adjust the slice thickness to best match the reference. You should probably *never* use this with soft references (ref_soft_mask)
+ * @param rigid_only_for_photos Switch on if you want photos to deform only rigidly (not affine)
+ * @param gpu_index Index of GPU to use
+ *
+ * @returns Parameter dictionary
+ */
 function mri_3d_photo_recon_params(
     input_photo_dir: Array<InputPathType>,
     input_segmentation_dir: Array<InputPathType>,
@@ -101,28 +121,8 @@ function mri_3d_photo_recon_params(
     rigid_only_for_photos: boolean = false,
     gpu_index: number | null = null,
 ): Mri3dPhotoReconParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_photo_dir Directory with input photos (required)
-     * @param input_segmentation_dir Directory with input slab masks / segmentations (required)
-     * @param slice_thickness Slice thickness in mm
-     * @param photo_resolution Resolution of the photos in mm
-     * @param output_directory Output directory with reconstructed photo volume and reference
-     * @param ref_mask Reference binary mask
-     * @param ref_surface Reference surface file
-     * @param ref_soft_mask Reference soft mask
-     * @param mesh_reorient_with_indices Vertex indices of frontal pole, occipital pole, and top of central sulcus, separated with commas, for mesh alignment
-     * @param photos_posterior_side Use when photos are taken of posterior side of slabs (default is anterior side)
-     * @param order_posterior_to_anterior Use when photos are ordered from posterior to anterior (default is anterior to posterior)
-     * @param allow_z_stretch Use to adjust the slice thickness to best match the reference. You should probably *never* use this with soft references (ref_soft_mask)
-     * @param rigid_only_for_photos Switch on if you want photos to deform only rigidly (not affine)
-     * @param gpu_index Index of GPU to use
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_3d_photo_recon" as const,
+        "@type": "freesurfer.mri_3d_photo_recon" as const,
         "input_photo_dir": input_photo_dir,
         "input_segmentation_dir": input_segmentation_dir,
         "slice_thickness": slice_thickness,
@@ -152,18 +152,18 @@ function mri_3d_photo_recon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_3d_photo_recon_cargs(
     params: Mri3dPhotoReconParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_3d_photo_recon");
     cargs.push(
@@ -232,18 +232,18 @@ function mri_3d_photo_recon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_3d_photo_recon_outputs(
     params: Mri3dPhotoReconParameters,
     execution: Execution,
 ): Mri3dPhotoReconOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Mri3dPhotoReconOutputs = {
         root: execution.outputFile("."),
         reconstructed_volume: execution.outputFile([(params["output_directory"] ?? null), "/reconstructed_volume.nii.gz"].join('')),
@@ -253,22 +253,22 @@ function mri_3d_photo_recon_outputs(
 }
 
 
+/**
+ * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
+ */
 function mri_3d_photo_recon_execute(
     params: Mri3dPhotoReconParameters,
     execution: Execution,
 ): Mri3dPhotoReconOutputs {
-    /**
-     * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_3d_photo_recon_cargs(params, execution)
     const ret = mri_3d_photo_recon_outputs(params, execution)
@@ -277,6 +277,31 @@ function mri_3d_photo_recon_execute(
 }
 
 
+/**
+ * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_photo_dir Directory with input photos (required)
+ * @param input_segmentation_dir Directory with input slab masks / segmentations (required)
+ * @param slice_thickness Slice thickness in mm
+ * @param photo_resolution Resolution of the photos in mm
+ * @param output_directory Output directory with reconstructed photo volume and reference
+ * @param ref_mask Reference binary mask
+ * @param ref_surface Reference surface file
+ * @param ref_soft_mask Reference soft mask
+ * @param mesh_reorient_with_indices Vertex indices of frontal pole, occipital pole, and top of central sulcus, separated with commas, for mesh alignment
+ * @param photos_posterior_side Use when photos are taken of posterior side of slabs (default is anterior side)
+ * @param order_posterior_to_anterior Use when photos are ordered from posterior to anterior (default is anterior to posterior)
+ * @param allow_z_stretch Use to adjust the slice thickness to best match the reference. You should probably *never* use this with soft references (ref_soft_mask)
+ * @param rigid_only_for_photos Switch on if you want photos to deform only rigidly (not affine)
+ * @param gpu_index Index of GPU to use
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
+ */
 function mri_3d_photo_recon(
     input_photo_dir: Array<InputPathType>,
     input_segmentation_dir: Array<InputPathType>,
@@ -294,31 +319,6 @@ function mri_3d_photo_recon(
     gpu_index: number | null = null,
     runner: Runner | null = null,
 ): Mri3dPhotoReconOutputs {
-    /**
-     * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_photo_dir Directory with input photos (required)
-     * @param input_segmentation_dir Directory with input slab masks / segmentations (required)
-     * @param slice_thickness Slice thickness in mm
-     * @param photo_resolution Resolution of the photos in mm
-     * @param output_directory Output directory with reconstructed photo volume and reference
-     * @param ref_mask Reference binary mask
-     * @param ref_surface Reference surface file
-     * @param ref_soft_mask Reference soft mask
-     * @param mesh_reorient_with_indices Vertex indices of frontal pole, occipital pole, and top of central sulcus, separated with commas, for mesh alignment
-     * @param photos_posterior_side Use when photos are taken of posterior side of slabs (default is anterior side)
-     * @param order_posterior_to_anterior Use when photos are ordered from posterior to anterior (default is anterior to posterior)
-     * @param allow_z_stretch Use to adjust the slice thickness to best match the reference. You should probably *never* use this with soft references (ref_soft_mask)
-     * @param rigid_only_for_photos Switch on if you want photos to deform only rigidly (not affine)
-     * @param gpu_index Index of GPU to use
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_3D_PHOTO_RECON_METADATA);
     const params = mri_3d_photo_recon_params(input_photo_dir, input_segmentation_dir, slice_thickness, photo_resolution, output_directory, ref_mask, ref_surface, ref_soft_mask, mesh_reorient_with_indices, photos_posterior_side, order_posterior_to_anterior, allow_z_stretch, rigid_only_for_photos, gpu_index)
@@ -331,5 +331,8 @@ export {
       Mri3dPhotoReconOutputs,
       Mri3dPhotoReconParameters,
       mri_3d_photo_recon,
+      mri_3d_photo_recon_cargs,
+      mri_3d_photo_recon_execute,
+      mri_3d_photo_recon_outputs,
       mri_3d_photo_recon_params,
 };

@@ -12,7 +12,7 @@ const REBASE_TENSOR_IMAGE_METADATA: Metadata = {
 
 
 interface RebaseTensorImageParameters {
-    "__STYXTYPE__": "RebaseTensorImage";
+    "@type": "ants.RebaseTensorImage";
     "dimension": number;
     "infile": InputPathType;
     "outfile": InputPathType;
@@ -21,35 +21,35 @@ interface RebaseTensorImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "RebaseTensorImage": rebase_tensor_image_cargs,
+        "ants.RebaseTensorImage": rebase_tensor_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "RebaseTensorImage": rebase_tensor_image_outputs,
+        "ants.RebaseTensorImage": rebase_tensor_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface RebaseTensorImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimension The dimensionality of the input image.
+ * @param infile The input image file.
+ * @param outfile The output image file.
+ * @param method Method of rebasing the tensor image.
+ * @param reference Reference image file (required if PHYSICAL or LOCAL method is chosen).
+ *
+ * @returns Parameter dictionary
+ */
 function rebase_tensor_image_params(
     dimension: number,
     infile: InputPathType,
@@ -79,19 +90,8 @@ function rebase_tensor_image_params(
     method: "PHYSICAL" | "LOCAL",
     reference: InputPathType | null = null,
 ): RebaseTensorImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimension The dimensionality of the input image.
-     * @param infile The input image file.
-     * @param outfile The output image file.
-     * @param method Method of rebasing the tensor image.
-     * @param reference Reference image file (required if PHYSICAL or LOCAL method is chosen).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "RebaseTensorImage" as const,
+        "@type": "ants.RebaseTensorImage" as const,
         "dimension": dimension,
         "infile": infile,
         "outfile": outfile,
@@ -104,18 +104,18 @@ function rebase_tensor_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rebase_tensor_image_cargs(
     params: RebaseTensorImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("RebaseTensorImage");
     cargs.push(String((params["dimension"] ?? null)));
@@ -129,18 +129,18 @@ function rebase_tensor_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rebase_tensor_image_outputs(
     params: RebaseTensorImageParameters,
     execution: Execution,
 ): RebaseTensorImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RebaseTensorImageOutputs = {
         root: execution.outputFile("."),
         rebased_image: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
@@ -149,22 +149,22 @@ function rebase_tensor_image_outputs(
 }
 
 
+/**
+ * Rebase Tensor Image using specified dimensionality and method.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
+ */
 function rebase_tensor_image_execute(
     params: RebaseTensorImageParameters,
     execution: Execution,
 ): RebaseTensorImageOutputs {
-    /**
-     * Rebase Tensor Image using specified dimensionality and method.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = rebase_tensor_image_cargs(params, execution)
     const ret = rebase_tensor_image_outputs(params, execution)
@@ -173,6 +173,22 @@ function rebase_tensor_image_execute(
 }
 
 
+/**
+ * Rebase Tensor Image using specified dimensionality and method.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimension The dimensionality of the input image.
+ * @param infile The input image file.
+ * @param outfile The output image file.
+ * @param method Method of rebasing the tensor image.
+ * @param reference Reference image file (required if PHYSICAL or LOCAL method is chosen).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
+ */
 function rebase_tensor_image(
     dimension: number,
     infile: InputPathType,
@@ -181,22 +197,6 @@ function rebase_tensor_image(
     reference: InputPathType | null = null,
     runner: Runner | null = null,
 ): RebaseTensorImageOutputs {
-    /**
-     * Rebase Tensor Image using specified dimensionality and method.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimension The dimensionality of the input image.
-     * @param infile The input image file.
-     * @param outfile The output image file.
-     * @param method Method of rebasing the tensor image.
-     * @param reference Reference image file (required if PHYSICAL or LOCAL method is chosen).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REBASE_TENSOR_IMAGE_METADATA);
     const params = rebase_tensor_image_params(dimension, infile, outfile, method, reference)
@@ -209,5 +209,8 @@ export {
       RebaseTensorImageOutputs,
       RebaseTensorImageParameters,
       rebase_tensor_image,
+      rebase_tensor_image_cargs,
+      rebase_tensor_image_execute,
+      rebase_tensor_image_outputs,
       rebase_tensor_image_params,
 };

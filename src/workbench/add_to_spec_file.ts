@@ -12,40 +12,40 @@ const ADD_TO_SPEC_FILE_METADATA: Metadata = {
 
 
 interface AddToSpecFileParameters {
-    "__STYXTYPE__": "add-to-spec-file";
+    "@type": "workbench.add-to-spec-file";
     "specfile": string;
     "structure": string;
     "filename": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "add-to-spec-file": add_to_spec_file_cargs,
+        "workbench.add-to-spec-file": add_to_spec_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface AddToSpecFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param specfile the specification file to add to
+ * @param structure the structure of the data file
+ * @param filename the path to the file
+ *
+ * @returns Parameter dictionary
+ */
 function add_to_spec_file_params(
     specfile: string,
     structure: string,
     filename: string,
 ): AddToSpecFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param specfile the specification file to add to
-     * @param structure the structure of the data file
-     * @param filename the path to the file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "add-to-spec-file" as const,
+        "@type": "workbench.add-to-spec-file" as const,
         "specfile": specfile,
         "structure": structure,
         "filename": filename,
@@ -89,18 +89,18 @@ function add_to_spec_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function add_to_spec_file_cargs(
     params: AddToSpecFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-add-to-spec-file");
@@ -111,18 +111,18 @@ function add_to_spec_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function add_to_spec_file_outputs(
     params: AddToSpecFileParameters,
     execution: Execution,
 ): AddToSpecFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AddToSpecFileOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,59 +130,59 @@ function add_to_spec_file_outputs(
 }
 
 
+/**
+ * Add a file to a specification file.
+ *
+ * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AddToSpecFileOutputs`).
+ */
 function add_to_spec_file_execute(
     params: AddToSpecFileParameters,
     execution: Execution,
 ): AddToSpecFileOutputs {
-    /**
-     * Add a file to a specification file.
-     * 
-     * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AddToSpecFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = add_to_spec_file_cargs(params, execution)
     const ret = add_to_spec_file_outputs(params, execution)
@@ -191,63 +191,63 @@ function add_to_spec_file_execute(
 }
 
 
+/**
+ * Add a file to a specification file.
+ *
+ * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param specfile the specification file to add to
+ * @param structure the structure of the data file
+ * @param filename the path to the file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AddToSpecFileOutputs`).
+ */
 function add_to_spec_file(
     specfile: string,
     structure: string,
     filename: string,
     runner: Runner | null = null,
 ): AddToSpecFileOutputs {
-    /**
-     * Add a file to a specification file.
-     * 
-     * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param specfile the specification file to add to
-     * @param structure the structure of the data file
-     * @param filename the path to the file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AddToSpecFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADD_TO_SPEC_FILE_METADATA);
     const params = add_to_spec_file_params(specfile, structure, filename)
@@ -260,5 +260,8 @@ export {
       AddToSpecFileOutputs,
       AddToSpecFileParameters,
       add_to_spec_file,
+      add_to_spec_file_cargs,
+      add_to_spec_file_execute,
+      add_to_spec_file_outputs,
       add_to_spec_file_params,
 };

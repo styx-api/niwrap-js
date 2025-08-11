@@ -12,7 +12,7 @@ const MRIS_SEGMENTATION_STATS_METADATA: Metadata = {
 
 
 interface MrisSegmentationStatsParameters {
-    "__STYXTYPE__": "mris_segmentation_stats";
+    "@type": "freesurfer.mris_segmentation_stats";
     "overlay_name": string;
     "segmentation_label_name": string;
     "subjects": Array<string>;
@@ -20,35 +20,35 @@ interface MrisSegmentationStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_segmentation_stats": mris_segmentation_stats_cargs,
+        "freesurfer.mris_segmentation_stats": mris_segmentation_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_segmentation_stats": mris_segmentation_stats_outputs,
+        "freesurfer.mris_segmentation_stats": mris_segmentation_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisSegmentationStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param overlay_name Overlay name for segmentation
+ * @param segmentation_label_name Segmentation label name
+ * @param subjects List of subjects to process
+ * @param roc_file File for ROC curve output
+ *
+ * @returns Parameter dictionary
+ */
 function mris_segmentation_stats_params(
     overlay_name: string,
     segmentation_label_name: string,
     subjects: Array<string>,
     roc_file: string,
 ): MrisSegmentationStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param overlay_name Overlay name for segmentation
-     * @param segmentation_label_name Segmentation label name
-     * @param subjects List of subjects to process
-     * @param roc_file File for ROC curve output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_segmentation_stats" as const,
+        "@type": "freesurfer.mris_segmentation_stats" as const,
         "overlay_name": overlay_name,
         "segmentation_label_name": segmentation_label_name,
         "subjects": subjects,
@@ -98,18 +98,18 @@ function mris_segmentation_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_segmentation_stats_cargs(
     params: MrisSegmentationStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_segmentation_stats");
     cargs.push((params["overlay_name"] ?? null));
@@ -120,18 +120,18 @@ function mris_segmentation_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_segmentation_stats_outputs(
     params: MrisSegmentationStatsParameters,
     execution: Execution,
 ): MrisSegmentationStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSegmentationStatsOutputs = {
         root: execution.outputFile("."),
         roc_output_file: execution.outputFile([(params["roc_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_segmentation_stats_outputs(
 }
 
 
+/**
+ * Tool for calculating segmentation statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
+ */
 function mris_segmentation_stats_execute(
     params: MrisSegmentationStatsParameters,
     execution: Execution,
 ): MrisSegmentationStatsOutputs {
-    /**
-     * Tool for calculating segmentation statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_segmentation_stats_cargs(params, execution)
     const ret = mris_segmentation_stats_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_segmentation_stats_execute(
 }
 
 
+/**
+ * Tool for calculating segmentation statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param overlay_name Overlay name for segmentation
+ * @param segmentation_label_name Segmentation label name
+ * @param subjects List of subjects to process
+ * @param roc_file File for ROC curve output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
+ */
 function mris_segmentation_stats(
     overlay_name: string,
     segmentation_label_name: string,
@@ -171,21 +186,6 @@ function mris_segmentation_stats(
     roc_file: string,
     runner: Runner | null = null,
 ): MrisSegmentationStatsOutputs {
-    /**
-     * Tool for calculating segmentation statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param overlay_name Overlay name for segmentation
-     * @param segmentation_label_name Segmentation label name
-     * @param subjects List of subjects to process
-     * @param roc_file File for ROC curve output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SEGMENTATION_STATS_METADATA);
     const params = mris_segmentation_stats_params(overlay_name, segmentation_label_name, subjects, roc_file)
@@ -198,5 +198,8 @@ export {
       MrisSegmentationStatsOutputs,
       MrisSegmentationStatsParameters,
       mris_segmentation_stats,
+      mris_segmentation_stats_cargs,
+      mris_segmentation_stats_execute,
+      mris_segmentation_stats_outputs,
       mris_segmentation_stats_params,
 };

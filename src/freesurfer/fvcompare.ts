@@ -12,7 +12,7 @@ const FVCOMPARE_METADATA: Metadata = {
 
 
 interface FvcompareParameters {
-    "__STYXTYPE__": "fvcompare";
+    "@type": "freesurfer.fvcompare";
     "subject1": string;
     "subject2": string;
     "subject_dir1"?: string | null | undefined;
@@ -41,33 +41,33 @@ interface FvcompareParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fvcompare": fvcompare_cargs,
+        "freesurfer.fvcompare": fvcompare_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -87,6 +87,37 @@ interface FvcompareOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject1 Subject 1 identifier
+ * @param subject2 Subject 2 identifier
+ * @param subject_dir1 Directory path for Subject 1
+ * @param subject_dir2 Directory path for Subject 2
+ * @param name1 Name associated with Subject 1 (default: s1)
+ * @param name2 Name associated with Subject 2 (default: s2)
+ * @param color1 Set surface colors for Subject 1
+ * @param volume Volume name found in subject/mri (default: brainmask.mgz, can have multiple)
+ * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
+ * @param aseg Add aseg.mgz to segmentation list
+ * @param no_seg Do not display segmentations
+ * @param left_hemi Only display left hemisphere
+ * @param right_hemi Only display right hemisphere
+ * @param no_surf Do not display surfaces
+ * @param gray_levels Set gray scale levels
+ * @param cursor_position Place cursor at given location and center Field of View
+ * @param zoom_level Set zoom level
+ * @param annotation Load annotation onto surfaces
+ * @param aparc Load aparc.annot onto surfaces
+ * @param inflated Load inflated surfaces in addition to white and pial
+ * @param white Only show white surfaces
+ * @param orig Only show orig.nofix and orig surfaces
+ * @param surf_name Only show specified surface name
+ * @param pointset Load point set file
+ * @param wot2 Include the ?h.woT2.pial surfs
+ *
+ * @returns Parameter dictionary
+ */
 function fvcompare_params(
     subject1: string,
     subject2: string,
@@ -114,39 +145,8 @@ function fvcompare_params(
     pointset: InputPathType | null = null,
     wot2: boolean = false,
 ): FvcompareParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject1 Subject 1 identifier
-     * @param subject2 Subject 2 identifier
-     * @param subject_dir1 Directory path for Subject 1
-     * @param subject_dir2 Directory path for Subject 2
-     * @param name1 Name associated with Subject 1 (default: s1)
-     * @param name2 Name associated with Subject 2 (default: s2)
-     * @param color1 Set surface colors for Subject 1
-     * @param volume Volume name found in subject/mri (default: brainmask.mgz, can have multiple)
-     * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
-     * @param aseg Add aseg.mgz to segmentation list
-     * @param no_seg Do not display segmentations
-     * @param left_hemi Only display left hemisphere
-     * @param right_hemi Only display right hemisphere
-     * @param no_surf Do not display surfaces
-     * @param gray_levels Set gray scale levels
-     * @param cursor_position Place cursor at given location and center Field of View
-     * @param zoom_level Set zoom level
-     * @param annotation Load annotation onto surfaces
-     * @param aparc Load aparc.annot onto surfaces
-     * @param inflated Load inflated surfaces in addition to white and pial
-     * @param white Only show white surfaces
-     * @param orig Only show orig.nofix and orig surfaces
-     * @param surf_name Only show specified surface name
-     * @param pointset Load point set file
-     * @param wot2 Include the ?h.woT2.pial surfs
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fvcompare" as const,
+        "@type": "freesurfer.fvcompare" as const,
         "subject1": subject1,
         "subject2": subject2,
         "aseg": aseg,
@@ -203,18 +203,18 @@ function fvcompare_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fvcompare_cargs(
     params: FvcompareParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fvcompare");
     cargs.push(
@@ -337,18 +337,18 @@ function fvcompare_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fvcompare_outputs(
     params: FvcompareParameters,
     execution: Execution,
 ): FvcompareOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FvcompareOutputs = {
         root: execution.outputFile("."),
     };
@@ -356,22 +356,22 @@ function fvcompare_outputs(
 }
 
 
+/**
+ * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
+ */
 function fvcompare_execute(
     params: FvcompareParameters,
     execution: Execution,
 ): FvcompareOutputs {
-    /**
-     * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
-     */
     params = execution.params(params)
     const cargs = fvcompare_cargs(params, execution)
     const ret = fvcompare_outputs(params, execution)
@@ -380,6 +380,42 @@ function fvcompare_execute(
 }
 
 
+/**
+ * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject1 Subject 1 identifier
+ * @param subject2 Subject 2 identifier
+ * @param subject_dir1 Directory path for Subject 1
+ * @param subject_dir2 Directory path for Subject 2
+ * @param name1 Name associated with Subject 1 (default: s1)
+ * @param name2 Name associated with Subject 2 (default: s2)
+ * @param color1 Set surface colors for Subject 1
+ * @param volume Volume name found in subject/mri (default: brainmask.mgz, can have multiple)
+ * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
+ * @param aseg Add aseg.mgz to segmentation list
+ * @param no_seg Do not display segmentations
+ * @param left_hemi Only display left hemisphere
+ * @param right_hemi Only display right hemisphere
+ * @param no_surf Do not display surfaces
+ * @param gray_levels Set gray scale levels
+ * @param cursor_position Place cursor at given location and center Field of View
+ * @param zoom_level Set zoom level
+ * @param annotation Load annotation onto surfaces
+ * @param aparc Load aparc.annot onto surfaces
+ * @param inflated Load inflated surfaces in addition to white and pial
+ * @param white Only show white surfaces
+ * @param orig Only show orig.nofix and orig surfaces
+ * @param surf_name Only show specified surface name
+ * @param pointset Load point set file
+ * @param wot2 Include the ?h.woT2.pial surfs
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
+ */
 function fvcompare(
     subject1: string,
     subject2: string,
@@ -408,42 +444,6 @@ function fvcompare(
     wot2: boolean = false,
     runner: Runner | null = null,
 ): FvcompareOutputs {
-    /**
-     * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject1 Subject 1 identifier
-     * @param subject2 Subject 2 identifier
-     * @param subject_dir1 Directory path for Subject 1
-     * @param subject_dir2 Directory path for Subject 2
-     * @param name1 Name associated with Subject 1 (default: s1)
-     * @param name2 Name associated with Subject 2 (default: s2)
-     * @param color1 Set surface colors for Subject 1
-     * @param volume Volume name found in subject/mri (default: brainmask.mgz, can have multiple)
-     * @param segmentation Segmentation name found in subject/mri (default: aparc+aseg.mgz, can have multiple)
-     * @param aseg Add aseg.mgz to segmentation list
-     * @param no_seg Do not display segmentations
-     * @param left_hemi Only display left hemisphere
-     * @param right_hemi Only display right hemisphere
-     * @param no_surf Do not display surfaces
-     * @param gray_levels Set gray scale levels
-     * @param cursor_position Place cursor at given location and center Field of View
-     * @param zoom_level Set zoom level
-     * @param annotation Load annotation onto surfaces
-     * @param aparc Load aparc.annot onto surfaces
-     * @param inflated Load inflated surfaces in addition to white and pial
-     * @param white Only show white surfaces
-     * @param orig Only show orig.nofix and orig surfaces
-     * @param surf_name Only show specified surface name
-     * @param pointset Load point set file
-     * @param wot2 Include the ?h.woT2.pial surfs
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FVCOMPARE_METADATA);
     const params = fvcompare_params(subject1, subject2, subject_dir1, subject_dir2, name1, name2, color1, volume, segmentation, aseg, no_seg, left_hemi, right_hemi, no_surf, gray_levels, cursor_position, zoom_level, annotation, aparc, inflated, white, orig, surf_name, pointset, wot2)
@@ -456,5 +456,8 @@ export {
       FvcompareOutputs,
       FvcompareParameters,
       fvcompare,
+      fvcompare_cargs,
+      fvcompare_execute,
+      fvcompare_outputs,
       fvcompare_params,
 };

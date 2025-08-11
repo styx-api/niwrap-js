@@ -12,39 +12,39 @@ const BREC_METADATA: Metadata = {
 
 
 interface BrecParameters {
-    "__STYXTYPE__": "brec";
+    "@type": "freesurfer.brec";
     "my_file": string;
     "depth_limit": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "brec": brec_cargs,
+        "freesurfer.brec": brec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface BrecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param my_file Input file with .rec extension
+ * @param depth_limit Optional depth limit flag
+ *
+ * @returns Parameter dictionary
+ */
 function brec_params(
     my_file: string,
     depth_limit: boolean = false,
 ): BrecParameters {
-    /**
-     * Build parameters.
-    
-     * @param my_file Input file with .rec extension
-     * @param depth_limit Optional depth limit flag
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "brec" as const,
+        "@type": "freesurfer.brec" as const,
         "my_file": my_file,
         "depth_limit": depth_limit,
     };
@@ -85,18 +85,18 @@ function brec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function brec_cargs(
     params: BrecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("brec");
     cargs.push((params["my_file"] ?? null));
@@ -107,18 +107,18 @@ function brec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function brec_outputs(
     params: BrecParameters,
     execution: Execution,
 ): BrecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BrecOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function brec_outputs(
 }
 
 
+/**
+ * A description for brec tool could not be retrieved.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BrecOutputs`).
+ */
 function brec_execute(
     params: BrecParameters,
     execution: Execution,
 ): BrecOutputs {
-    /**
-     * A description for brec tool could not be retrieved.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BrecOutputs`).
-     */
     params = execution.params(params)
     const cargs = brec_cargs(params, execution)
     const ret = brec_outputs(params, execution)
@@ -150,24 +150,24 @@ function brec_execute(
 }
 
 
+/**
+ * A description for brec tool could not be retrieved.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param my_file Input file with .rec extension
+ * @param depth_limit Optional depth limit flag
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BrecOutputs`).
+ */
 function brec(
     my_file: string,
     depth_limit: boolean = false,
     runner: Runner | null = null,
 ): BrecOutputs {
-    /**
-     * A description for brec tool could not be retrieved.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param my_file Input file with .rec extension
-     * @param depth_limit Optional depth limit flag
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BrecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BREC_METADATA);
     const params = brec_params(my_file, depth_limit)
@@ -180,5 +180,8 @@ export {
       BrecOutputs,
       BrecParameters,
       brec,
+      brec_cargs,
+      brec_execute,
+      brec_outputs,
       brec_params,
 };

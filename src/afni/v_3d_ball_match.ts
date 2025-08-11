@@ -12,7 +12,7 @@ const V_3D_BALL_MATCH_METADATA: Metadata = {
 
 
 interface V3dBallMatchParameters {
-    "__STYXTYPE__": "3dBallMatch";
+    "@type": "afni.3dBallMatch";
     "input_dataset": InputPathType;
     "radius"?: number | null | undefined;
     "dataset_option"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface V3dBallMatchParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBallMatch": v_3d_ball_match_cargs,
+        "afni.3dBallMatch": v_3d_ball_match_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBallMatch": v_3d_ball_match_outputs,
+        "afni.3dBallMatch": v_3d_ball_match_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dBallMatchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g., Fred.nii)
+ * @param radius Radius of the 3D ball to match (in mm)
+ * @param dataset_option Specifies the input dataset
+ * @param ball_radius Set the radius of the 3D ball to match (mm)
+ * @param spheroid_axes Match with a spheroid of revolution, with principal axis radius 'a' and secondary axes radii 'b'
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_ball_match_params(
     input_dataset: InputPathType,
     radius: number | null = null,
@@ -79,19 +90,8 @@ function v_3d_ball_match_params(
     ball_radius: number | null = null,
     spheroid_axes: Array<number> | null = null,
 ): V3dBallMatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g., Fred.nii)
-     * @param radius Radius of the 3D ball to match (in mm)
-     * @param dataset_option Specifies the input dataset
-     * @param ball_radius Set the radius of the 3D ball to match (mm)
-     * @param spheroid_axes Match with a spheroid of revolution, with principal axis radius 'a' and secondary axes radii 'b'
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBallMatch" as const,
+        "@type": "afni.3dBallMatch" as const,
         "input_dataset": input_dataset,
     };
     if (radius !== null) {
@@ -110,18 +110,18 @@ function v_3d_ball_match_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_ball_match_cargs(
     params: V3dBallMatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBallMatch");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -150,18 +150,18 @@ function v_3d_ball_match_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_ball_match_outputs(
     params: V3dBallMatchParameters,
     execution: Execution,
 ): V3dBallMatchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBallMatchOutputs = {
         root: execution.outputFile("."),
         output_stdout: execution.outputFile(["stdout"].join('')),
@@ -170,22 +170,22 @@ function v_3d_ball_match_outputs(
 }
 
 
+/**
+ * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
+ */
 function v_3d_ball_match_execute(
     params: V3dBallMatchParameters,
     execution: Execution,
 ): V3dBallMatchOutputs {
-    /**
-     * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_ball_match_cargs(params, execution)
     const ret = v_3d_ball_match_outputs(params, execution)
@@ -194,6 +194,22 @@ function v_3d_ball_match_execute(
 }
 
 
+/**
+ * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g., Fred.nii)
+ * @param radius Radius of the 3D ball to match (in mm)
+ * @param dataset_option Specifies the input dataset
+ * @param ball_radius Set the radius of the 3D ball to match (mm)
+ * @param spheroid_axes Match with a spheroid of revolution, with principal axis radius 'a' and secondary axes radii 'b'
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
+ */
 function v_3d_ball_match(
     input_dataset: InputPathType,
     radius: number | null = null,
@@ -202,22 +218,6 @@ function v_3d_ball_match(
     spheroid_axes: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dBallMatchOutputs {
-    /**
-     * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g., Fred.nii)
-     * @param radius Radius of the 3D ball to match (in mm)
-     * @param dataset_option Specifies the input dataset
-     * @param ball_radius Set the radius of the 3D ball to match (mm)
-     * @param spheroid_axes Match with a spheroid of revolution, with principal axis radius 'a' and secondary axes radii 'b'
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BALL_MATCH_METADATA);
     const params = v_3d_ball_match_params(input_dataset, radius, dataset_option, ball_radius, spheroid_axes)
@@ -230,5 +230,8 @@ export {
       V3dBallMatchParameters,
       V_3D_BALL_MATCH_METADATA,
       v_3d_ball_match,
+      v_3d_ball_match_cargs,
+      v_3d_ball_match_execute,
+      v_3d_ball_match_outputs,
       v_3d_ball_match_params,
 };

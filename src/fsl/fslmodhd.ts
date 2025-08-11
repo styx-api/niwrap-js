@@ -12,40 +12,40 @@ const FSLMODHD_METADATA: Metadata = {
 
 
 interface FslmodhdParameters {
-    "__STYXTYPE__": "fslmodhd";
+    "@type": "fsl.fslmodhd";
     "image": InputPathType;
     "keyword": string;
     "value": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslmodhd": fslmodhd_cargs,
+        "fsl.fslmodhd": fslmodhd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface FslmodhdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image Input image file (e.g. image.nii.gz)
+ * @param keyword Header keyword to modify (e.g. 'dim', 'pixdim')
+ * @param value New value for the given header keyword
+ *
+ * @returns Parameter dictionary
+ */
 function fslmodhd_params(
     image: InputPathType,
     keyword: string,
     value: string,
 ): FslmodhdParameters {
-    /**
-     * Build parameters.
-    
-     * @param image Input image file (e.g. image.nii.gz)
-     * @param keyword Header keyword to modify (e.g. 'dim', 'pixdim')
-     * @param value New value for the given header keyword
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslmodhd" as const,
+        "@type": "fsl.fslmodhd" as const,
         "image": image,
         "keyword": keyword,
         "value": value,
@@ -89,18 +89,18 @@ function fslmodhd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslmodhd_cargs(
     params: FslmodhdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslmodhd");
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -110,18 +110,18 @@ function fslmodhd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslmodhd_outputs(
     params: FslmodhdParameters,
     execution: Execution,
 ): FslmodhdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslmodhdOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function fslmodhd_outputs(
 }
 
 
+/**
+ * A tool for modifying header information of NIfTI images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
+ */
 function fslmodhd_execute(
     params: FslmodhdParameters,
     execution: Execution,
 ): FslmodhdOutputs {
-    /**
-     * A tool for modifying header information of NIfTI images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslmodhd_cargs(params, execution)
     const ret = fslmodhd_outputs(params, execution)
@@ -153,26 +153,26 @@ function fslmodhd_execute(
 }
 
 
+/**
+ * A tool for modifying header information of NIfTI images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param image Input image file (e.g. image.nii.gz)
+ * @param keyword Header keyword to modify (e.g. 'dim', 'pixdim')
+ * @param value New value for the given header keyword
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
+ */
 function fslmodhd(
     image: InputPathType,
     keyword: string,
     value: string,
     runner: Runner | null = null,
 ): FslmodhdOutputs {
-    /**
-     * A tool for modifying header information of NIfTI images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param image Input image file (e.g. image.nii.gz)
-     * @param keyword Header keyword to modify (e.g. 'dim', 'pixdim')
-     * @param value New value for the given header keyword
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMODHD_METADATA);
     const params = fslmodhd_params(image, keyword, value)
@@ -185,5 +185,8 @@ export {
       FslmodhdOutputs,
       FslmodhdParameters,
       fslmodhd,
+      fslmodhd_cargs,
+      fslmodhd_execute,
+      fslmodhd_outputs,
       fslmodhd_params,
 };

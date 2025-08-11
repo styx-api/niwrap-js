@@ -12,7 +12,7 @@ const DMRI_MOTION_METADATA: Metadata = {
 
 
 interface DmriMotionParameters {
-    "__STYXTYPE__": "dmri_motion";
+    "@type": "freesurfer.dmri_motion";
     "outfile": InputPathType;
     "outf"?: InputPathType | null | undefined;
     "mat"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface DmriMotionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_motion": dmri_motion_cargs,
+        "freesurfer.dmri_motion": dmri_motion_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_motion": dmri_motion_outputs,
+        "freesurfer.dmri_motion": dmri_motion_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,23 @@ interface DmriMotionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile Output text file of motion measures
+ * @param outf Output text file of frame-by-frame motion measures
+ * @param mat Input text file of volume-to-baseline affine transformations
+ * @param dwi Input DWI scan(s), unprocessed
+ * @param bval Input b-value table(s), one per scan
+ * @param threshold Low-b image intensity threshold
+ * @param diffusivity Nominal diffusivity
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_motion_params(
     outfile: InputPathType,
     outf: InputPathType | null = null,
@@ -95,25 +112,8 @@ function dmri_motion_params(
     help: boolean = false,
     version: boolean = false,
 ): DmriMotionParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile Output text file of motion measures
-     * @param outf Output text file of frame-by-frame motion measures
-     * @param mat Input text file of volume-to-baseline affine transformations
-     * @param dwi Input DWI scan(s), unprocessed
-     * @param bval Input b-value table(s), one per scan
-     * @param threshold Low-b image intensity threshold
-     * @param diffusivity Nominal diffusivity
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_motion" as const,
+        "@type": "freesurfer.dmri_motion" as const,
         "outfile": outfile,
         "debug": debug,
         "checkopts": checkopts,
@@ -142,18 +142,18 @@ function dmri_motion_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_motion_cargs(
     params: DmriMotionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_motion");
     cargs.push(
@@ -212,18 +212,18 @@ function dmri_motion_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_motion_outputs(
     params: DmriMotionParameters,
     execution: Execution,
 ): DmriMotionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriMotionOutputs = {
         root: execution.outputFile("."),
         motion_measures_out: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
@@ -233,22 +233,22 @@ function dmri_motion_outputs(
 }
 
 
+/**
+ * A tool for calculating motion measures from DWI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
+ */
 function dmri_motion_execute(
     params: DmriMotionParameters,
     execution: Execution,
 ): DmriMotionOutputs {
-    /**
-     * A tool for calculating motion measures from DWI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_motion_cargs(params, execution)
     const ret = dmri_motion_outputs(params, execution)
@@ -257,6 +257,28 @@ function dmri_motion_execute(
 }
 
 
+/**
+ * A tool for calculating motion measures from DWI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outfile Output text file of motion measures
+ * @param outf Output text file of frame-by-frame motion measures
+ * @param mat Input text file of volume-to-baseline affine transformations
+ * @param dwi Input DWI scan(s), unprocessed
+ * @param bval Input b-value table(s), one per scan
+ * @param threshold Low-b image intensity threshold
+ * @param diffusivity Nominal diffusivity
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
+ */
 function dmri_motion(
     outfile: InputPathType,
     outf: InputPathType | null = null,
@@ -271,28 +293,6 @@ function dmri_motion(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriMotionOutputs {
-    /**
-     * A tool for calculating motion measures from DWI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outfile Output text file of motion measures
-     * @param outf Output text file of frame-by-frame motion measures
-     * @param mat Input text file of volume-to-baseline affine transformations
-     * @param dwi Input DWI scan(s), unprocessed
-     * @param bval Input b-value table(s), one per scan
-     * @param threshold Low-b image intensity threshold
-     * @param diffusivity Nominal diffusivity
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_MOTION_METADATA);
     const params = dmri_motion_params(outfile, outf, mat, dwi, bval, threshold, diffusivity, debug, checkopts, help, version)
@@ -305,5 +305,8 @@ export {
       DmriMotionOutputs,
       DmriMotionParameters,
       dmri_motion,
+      dmri_motion_cargs,
+      dmri_motion_execute,
+      dmri_motion_outputs,
       dmri_motion_params,
 };

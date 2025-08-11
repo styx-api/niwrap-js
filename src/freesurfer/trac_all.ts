@@ -12,7 +12,7 @@ const TRAC_ALL_METADATA: Metadata = {
 
 
 interface TracAllParameters {
-    "__STYXTYPE__": "trac-all";
+    "@type": "freesurfer.trac-all";
     "config_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
     "dicom_file"?: InputPathType | null | undefined;
@@ -50,35 +50,35 @@ interface TracAllParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "trac-all": trac_all_cargs,
+        "freesurfer.trac-all": trac_all_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "trac-all": trac_all_outputs,
+        "freesurfer.trac-all": trac_all_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,46 @@ interface TracAllOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param config_file Configuration file to set analysis options (dmrirc file)
+ * @param subject_name Subject name (if not defined in dmrirc)
+ * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
+ * @param pre_processing Perform pre-processing (step 1, all substeps)
+ * @param bedpost Perform bedpost (step 2)
+ * @param pathway_reconstruction Perform pathway reconstruction (step 3)
+ * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
+ * @param image_corrections Perform image corrections (step 1.1)
+ * @param no_image_corrections Skip image corrections (step 1.1)
+ * @param image_quality_assessment Perform image quality assessment (step 1.2)
+ * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
+ * @param intra_registration Perform intra-subject registration (step 1.3)
+ * @param no_intra_registration Skip intra-subject registration (step 1.3)
+ * @param tensor_fit Perform tensor fit (step 1.4)
+ * @param no_tensor_fit Skip tensor fit (step 1.4)
+ * @param inter_registration Perform inter-subject registration (step 1.5)
+ * @param no_inter_registration Skip inter-subject registration (step 1.5)
+ * @param pathway_priors Perform pathway priors (step 1.6)
+ * @param no_pathway_priors Skip pathway priors (step 1.6)
+ * @param infant_options Use infant brain processing options
+ * @param job_file Write a text file with command lines that can be run in parallel and do not run them
+ * @param log_file Unique log file instead of the default scripts/trac-all.log
+ * @param no_append_log Overwrite old log files instead of appending
+ * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
+ * @param no_is_running Do not check whether subjects are currently being processed
+ * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
+ * @param umask Set Unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug_mode Generate much more output
+ * @param dont_run Do everything but execute each command
+ * @param only_versions Print version of each binary and exit
+ * @param version_info Print version of this script and exit
+ * @param help Print full contents of help
+ *
+ * @returns Parameter dictionary
+ */
 function trac_all_params(
     config_file: InputPathType | null = null,
     subject_name: string | null = null,
@@ -141,48 +181,8 @@ function trac_all_params(
     version_info: boolean = false,
     help: boolean = false,
 ): TracAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param config_file Configuration file to set analysis options (dmrirc file)
-     * @param subject_name Subject name (if not defined in dmrirc)
-     * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
-     * @param pre_processing Perform pre-processing (step 1, all substeps)
-     * @param bedpost Perform bedpost (step 2)
-     * @param pathway_reconstruction Perform pathway reconstruction (step 3)
-     * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
-     * @param image_corrections Perform image corrections (step 1.1)
-     * @param no_image_corrections Skip image corrections (step 1.1)
-     * @param image_quality_assessment Perform image quality assessment (step 1.2)
-     * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
-     * @param intra_registration Perform intra-subject registration (step 1.3)
-     * @param no_intra_registration Skip intra-subject registration (step 1.3)
-     * @param tensor_fit Perform tensor fit (step 1.4)
-     * @param no_tensor_fit Skip tensor fit (step 1.4)
-     * @param inter_registration Perform inter-subject registration (step 1.5)
-     * @param no_inter_registration Skip inter-subject registration (step 1.5)
-     * @param pathway_priors Perform pathway priors (step 1.6)
-     * @param no_pathway_priors Skip pathway priors (step 1.6)
-     * @param infant_options Use infant brain processing options
-     * @param job_file Write a text file with command lines that can be run in parallel and do not run them
-     * @param log_file Unique log file instead of the default scripts/trac-all.log
-     * @param no_append_log Overwrite old log files instead of appending
-     * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
-     * @param no_is_running Do not check whether subjects are currently being processed
-     * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
-     * @param umask Set Unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug_mode Generate much more output
-     * @param dont_run Do everything but execute each command
-     * @param only_versions Print version of each binary and exit
-     * @param version_info Print version of this script and exit
-     * @param help Print full contents of help
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trac-all" as const,
+        "@type": "freesurfer.trac-all" as const,
         "pre_processing": pre_processing,
         "bedpost": bedpost,
         "pathway_reconstruction": pathway_reconstruction,
@@ -240,18 +240,18 @@ function trac_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function trac_all_cargs(
     params: TracAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("trac-all");
     if ((params["config_file"] ?? null) !== null) {
@@ -387,18 +387,18 @@ function trac_all_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function trac_all_outputs(
     params: TracAllParameters,
     execution: Execution,
 ): TracAllOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TracAllOutputs = {
         root: execution.outputFile("."),
         default_log: execution.outputFile(["scripts/trac-all.log"].join('')),
@@ -408,22 +408,22 @@ function trac_all_outputs(
 }
 
 
+/**
+ * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TracAllOutputs`).
+ */
 function trac_all_execute(
     params: TracAllParameters,
     execution: Execution,
 ): TracAllOutputs {
-    /**
-     * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TracAllOutputs`).
-     */
     params = execution.params(params)
     const cargs = trac_all_cargs(params, execution)
     const ret = trac_all_outputs(params, execution)
@@ -432,6 +432,51 @@ function trac_all_execute(
 }
 
 
+/**
+ * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param config_file Configuration file to set analysis options (dmrirc file)
+ * @param subject_name Subject name (if not defined in dmrirc)
+ * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
+ * @param pre_processing Perform pre-processing (step 1, all substeps)
+ * @param bedpost Perform bedpost (step 2)
+ * @param pathway_reconstruction Perform pathway reconstruction (step 3)
+ * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
+ * @param image_corrections Perform image corrections (step 1.1)
+ * @param no_image_corrections Skip image corrections (step 1.1)
+ * @param image_quality_assessment Perform image quality assessment (step 1.2)
+ * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
+ * @param intra_registration Perform intra-subject registration (step 1.3)
+ * @param no_intra_registration Skip intra-subject registration (step 1.3)
+ * @param tensor_fit Perform tensor fit (step 1.4)
+ * @param no_tensor_fit Skip tensor fit (step 1.4)
+ * @param inter_registration Perform inter-subject registration (step 1.5)
+ * @param no_inter_registration Skip inter-subject registration (step 1.5)
+ * @param pathway_priors Perform pathway priors (step 1.6)
+ * @param no_pathway_priors Skip pathway priors (step 1.6)
+ * @param infant_options Use infant brain processing options
+ * @param job_file Write a text file with command lines that can be run in parallel and do not run them
+ * @param log_file Unique log file instead of the default scripts/trac-all.log
+ * @param no_append_log Overwrite old log files instead of appending
+ * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
+ * @param no_is_running Do not check whether subjects are currently being processed
+ * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
+ * @param umask Set Unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug_mode Generate much more output
+ * @param dont_run Do everything but execute each command
+ * @param only_versions Print version of each binary and exit
+ * @param version_info Print version of this script and exit
+ * @param help Print full contents of help
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TracAllOutputs`).
+ */
 function trac_all(
     config_file: InputPathType | null = null,
     subject_name: string | null = null,
@@ -469,51 +514,6 @@ function trac_all(
     help: boolean = false,
     runner: Runner | null = null,
 ): TracAllOutputs {
-    /**
-     * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param config_file Configuration file to set analysis options (dmrirc file)
-     * @param subject_name Subject name (if not defined in dmrirc)
-     * @param dicom_file Input DWI DICOM (if not defined in dmrirc)
-     * @param pre_processing Perform pre-processing (step 1, all substeps)
-     * @param bedpost Perform bedpost (step 2)
-     * @param pathway_reconstruction Perform pathway reconstruction (step 3)
-     * @param assemble_measures Assemble pathway measures from multiple subjects (step 4)
-     * @param image_corrections Perform image corrections (step 1.1)
-     * @param no_image_corrections Skip image corrections (step 1.1)
-     * @param image_quality_assessment Perform image quality assessment (step 1.2)
-     * @param no_image_quality_assessment Skip image quality assessment (step 1.2)
-     * @param intra_registration Perform intra-subject registration (step 1.3)
-     * @param no_intra_registration Skip intra-subject registration (step 1.3)
-     * @param tensor_fit Perform tensor fit (step 1.4)
-     * @param no_tensor_fit Skip tensor fit (step 1.4)
-     * @param inter_registration Perform inter-subject registration (step 1.5)
-     * @param no_inter_registration Skip inter-subject registration (step 1.5)
-     * @param pathway_priors Perform pathway priors (step 1.6)
-     * @param no_pathway_priors Skip pathway priors (step 1.6)
-     * @param infant_options Use infant brain processing options
-     * @param job_file Write a text file with command lines that can be run in parallel and do not run them
-     * @param log_file Unique log file instead of the default scripts/trac-all.log
-     * @param no_append_log Overwrite old log files instead of appending
-     * @param cmd_file Unique cmd file instead of the default scripts/trac-all.cmd
-     * @param no_is_running Do not check whether subjects are currently being processed
-     * @param subjects_directory Specify subjects directory (default environment SUBJECTS_DIR)
-     * @param umask Set Unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug_mode Generate much more output
-     * @param dont_run Do everything but execute each command
-     * @param only_versions Print version of each binary and exit
-     * @param version_info Print version of this script and exit
-     * @param help Print full contents of help
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TracAllOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAC_ALL_METADATA);
     const params = trac_all_params(config_file, subject_name, dicom_file, pre_processing, bedpost, pathway_reconstruction, assemble_measures, image_corrections, no_image_corrections, image_quality_assessment, no_image_quality_assessment, intra_registration, no_intra_registration, tensor_fit, no_tensor_fit, inter_registration, no_inter_registration, pathway_priors, no_pathway_priors, infant_options, job_file, log_file, no_append_log, cmd_file, no_is_running, subjects_directory, umask, group_id, allow_core_dump, debug_mode, dont_run, only_versions, version_info, help)
@@ -526,5 +526,8 @@ export {
       TracAllOutputs,
       TracAllParameters,
       trac_all,
+      trac_all_cargs,
+      trac_all_execute,
+      trac_all_outputs,
       trac_all_params,
 };

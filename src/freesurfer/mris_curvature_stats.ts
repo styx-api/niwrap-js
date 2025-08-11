@@ -12,7 +12,7 @@ const MRIS_CURVATURE_STATS_METADATA: Metadata = {
 
 
 interface MrisCurvatureStatsParameters {
-    "__STYXTYPE__": "mris_curvature_stats";
+    "@type": "freesurfer.mris_curvature_stats";
     "subject_name": string;
     "hemisphere": string;
     "curvature_files"?: Array<InputPathType> | null | undefined;
@@ -53,33 +53,33 @@ interface MrisCurvatureStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_curvature_stats": mris_curvature_stats_cargs,
+        "freesurfer.mris_curvature_stats": mris_curvature_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -99,6 +99,49 @@ interface MrisCurvatureStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name defined in the SUBJECTS_DIR
+ * @param hemisphere Hemisphere, can be 'lh' or 'rh'
+ * @param curvature_files Optional list of curvature files to process
+ * @param number_of_averages Average the curvature number of times.
+ * @param principal_curvatures Calculate principal curvatures and derived maps.
+ * @param discrete_method Use discrete calculation method for principal curvatures.
+ * @param continuous_method Use continuous calculation method for principal curvatures.
+ * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
+ * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
+ * @param vertex_area_normalize Divide curvature value by the area of its vertex.
+ * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
+ * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
+ * @param post_scale Scale the mean and areaNorm integrals by a factor.
+ * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
+ * @param shape_index Calculate shape index despite potential atan issues.
+ * @param output_file_stem Output file stem for results.
+ * @param histogram_bins Number of bins for curvature histogram.
+ * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
+ * @param bin_size Size of each histogram bin.
+ * @param bin_start_curvature Histogram bin start value.
+ * @param bin_end_curvature Histogram bin end value.
+ * @param label_file Label file to constrain statistics to a region.
+ * @param regional_percentages Report integral percentages relative to the region.
+ * @param high_pass_filter High pass filter for curvature values.
+ * @param low_pass_filter Low pass filter for curvature values.
+ * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
+ * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
+ * @param filter_label Store processed surface vertices in a label file.
+ * @param min_max_info Output min/max information for the processed curvature.
+ * @param normalize_curvature Normalize the curvature before computation.
+ * @param summary_condition Write out stats as a summary condition.
+ * @param min_curvature_scale Scale curvature values between min and max curvature.
+ * @param max_curvature_scale End value for curvature scaling.
+ * @param scale_factor Scale curvature values with a factor.
+ * @param version Print out version number.
+ * @param set_zero_vertex Sets the curvature values at that index to zero.
+ * @param max_ulps Toggle a more rigorous floating point comparison operation.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_curvature_stats_params(
     subject_name: string,
     hemisphere: string,
@@ -138,51 +181,8 @@ function mris_curvature_stats_params(
     set_zero_vertex: number | null = null,
     max_ulps: number | null = null,
 ): MrisCurvatureStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name defined in the SUBJECTS_DIR
-     * @param hemisphere Hemisphere, can be 'lh' or 'rh'
-     * @param curvature_files Optional list of curvature files to process
-     * @param number_of_averages Average the curvature number of times.
-     * @param principal_curvatures Calculate principal curvatures and derived maps.
-     * @param discrete_method Use discrete calculation method for principal curvatures.
-     * @param continuous_method Use continuous calculation method for principal curvatures.
-     * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
-     * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
-     * @param vertex_area_normalize Divide curvature value by the area of its vertex.
-     * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
-     * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
-     * @param post_scale Scale the mean and areaNorm integrals by a factor.
-     * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
-     * @param shape_index Calculate shape index despite potential atan issues.
-     * @param output_file_stem Output file stem for results.
-     * @param histogram_bins Number of bins for curvature histogram.
-     * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
-     * @param bin_size Size of each histogram bin.
-     * @param bin_start_curvature Histogram bin start value.
-     * @param bin_end_curvature Histogram bin end value.
-     * @param label_file Label file to constrain statistics to a region.
-     * @param regional_percentages Report integral percentages relative to the region.
-     * @param high_pass_filter High pass filter for curvature values.
-     * @param low_pass_filter Low pass filter for curvature values.
-     * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
-     * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
-     * @param filter_label Store processed surface vertices in a label file.
-     * @param min_max_info Output min/max information for the processed curvature.
-     * @param normalize_curvature Normalize the curvature before computation.
-     * @param summary_condition Write out stats as a summary condition.
-     * @param min_curvature_scale Scale curvature values between min and max curvature.
-     * @param max_curvature_scale End value for curvature scaling.
-     * @param scale_factor Scale curvature values with a factor.
-     * @param version Print out version number.
-     * @param set_zero_vertex Sets the curvature values at that index to zero.
-     * @param max_ulps Toggle a more rigorous floating point comparison operation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_curvature_stats" as const,
+        "@type": "freesurfer.mris_curvature_stats" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "principal_curvatures": principal_curvatures,
@@ -267,18 +267,18 @@ function mris_curvature_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_curvature_stats_cargs(
     params: MrisCurvatureStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_curvature_stats");
     cargs.push((params["subject_name"] ?? null));
@@ -452,18 +452,18 @@ function mris_curvature_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_curvature_stats_outputs(
     params: MrisCurvatureStatsParameters,
     execution: Execution,
 ): MrisCurvatureStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisCurvatureStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -471,22 +471,22 @@ function mris_curvature_stats_outputs(
 }
 
 
+/**
+ * Tool for calculating statistics on surface curvature values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
+ */
 function mris_curvature_stats_execute(
     params: MrisCurvatureStatsParameters,
     execution: Execution,
 ): MrisCurvatureStatsOutputs {
-    /**
-     * Tool for calculating statistics on surface curvature values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_curvature_stats_cargs(params, execution)
     const ret = mris_curvature_stats_outputs(params, execution)
@@ -495,6 +495,54 @@ function mris_curvature_stats_execute(
 }
 
 
+/**
+ * Tool for calculating statistics on surface curvature values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name defined in the SUBJECTS_DIR
+ * @param hemisphere Hemisphere, can be 'lh' or 'rh'
+ * @param curvature_files Optional list of curvature files to process
+ * @param number_of_averages Average the curvature number of times.
+ * @param principal_curvatures Calculate principal curvatures and derived maps.
+ * @param discrete_method Use discrete calculation method for principal curvatures.
+ * @param continuous_method Use continuous calculation method for principal curvatures.
+ * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
+ * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
+ * @param vertex_area_normalize Divide curvature value by the area of its vertex.
+ * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
+ * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
+ * @param post_scale Scale the mean and areaNorm integrals by a factor.
+ * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
+ * @param shape_index Calculate shape index despite potential atan issues.
+ * @param output_file_stem Output file stem for results.
+ * @param histogram_bins Number of bins for curvature histogram.
+ * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
+ * @param bin_size Size of each histogram bin.
+ * @param bin_start_curvature Histogram bin start value.
+ * @param bin_end_curvature Histogram bin end value.
+ * @param label_file Label file to constrain statistics to a region.
+ * @param regional_percentages Report integral percentages relative to the region.
+ * @param high_pass_filter High pass filter for curvature values.
+ * @param low_pass_filter Low pass filter for curvature values.
+ * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
+ * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
+ * @param filter_label Store processed surface vertices in a label file.
+ * @param min_max_info Output min/max information for the processed curvature.
+ * @param normalize_curvature Normalize the curvature before computation.
+ * @param summary_condition Write out stats as a summary condition.
+ * @param min_curvature_scale Scale curvature values between min and max curvature.
+ * @param max_curvature_scale End value for curvature scaling.
+ * @param scale_factor Scale curvature values with a factor.
+ * @param version Print out version number.
+ * @param set_zero_vertex Sets the curvature values at that index to zero.
+ * @param max_ulps Toggle a more rigorous floating point comparison operation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
+ */
 function mris_curvature_stats(
     subject_name: string,
     hemisphere: string,
@@ -535,54 +583,6 @@ function mris_curvature_stats(
     max_ulps: number | null = null,
     runner: Runner | null = null,
 ): MrisCurvatureStatsOutputs {
-    /**
-     * Tool for calculating statistics on surface curvature values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name defined in the SUBJECTS_DIR
-     * @param hemisphere Hemisphere, can be 'lh' or 'rh'
-     * @param curvature_files Optional list of curvature files to process
-     * @param number_of_averages Average the curvature number of times.
-     * @param principal_curvatures Calculate principal curvatures and derived maps.
-     * @param discrete_method Use discrete calculation method for principal curvatures.
-     * @param continuous_method Use continuous calculation method for principal curvatures.
-     * @param signed_principals Assign signed max and min to principal curvature K1 and K2.
-     * @param vertex_area_weigh Multiply curvature value by the area of its vertex.
-     * @param vertex_area_normalize Divide curvature value by the area of its vertex.
-     * @param vertex_area_weigh_frac Weigh curvature by the fractional vertex area.
-     * @param vertex_area_normalize_frac Normalize curvature by the fractional vertex area.
-     * @param post_scale Scale the mean and areaNorm integrals by a factor.
-     * @param write_curvature_files Write the calculated curvature values to files in FreeSurfer format.
-     * @param shape_index Calculate shape index despite potential atan issues.
-     * @param output_file_stem Output file stem for results.
-     * @param histogram_bins Number of bins for curvature histogram.
-     * @param percentage_histogram_bins Number of bins for percentage-based curvature histogram.
-     * @param bin_size Size of each histogram bin.
-     * @param bin_start_curvature Histogram bin start value.
-     * @param bin_end_curvature Histogram bin end value.
-     * @param label_file Label file to constrain statistics to a region.
-     * @param regional_percentages Report integral percentages relative to the region.
-     * @param high_pass_filter High pass filter for curvature values.
-     * @param low_pass_filter Low pass filter for curvature values.
-     * @param high_pass_filter_gaussian High pass filter for Gaussian curvature values.
-     * @param low_pass_filter_gaussian Low pass filter for Gaussian curvature values.
-     * @param filter_label Store processed surface vertices in a label file.
-     * @param min_max_info Output min/max information for the processed curvature.
-     * @param normalize_curvature Normalize the curvature before computation.
-     * @param summary_condition Write out stats as a summary condition.
-     * @param min_curvature_scale Scale curvature values between min and max curvature.
-     * @param max_curvature_scale End value for curvature scaling.
-     * @param scale_factor Scale curvature values with a factor.
-     * @param version Print out version number.
-     * @param set_zero_vertex Sets the curvature values at that index to zero.
-     * @param max_ulps Toggle a more rigorous floating point comparison operation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CURVATURE_STATS_METADATA);
     const params = mris_curvature_stats_params(subject_name, hemisphere, curvature_files, number_of_averages, principal_curvatures, discrete_method, continuous_method, signed_principals, vertex_area_weigh, vertex_area_normalize, vertex_area_weigh_frac, vertex_area_normalize_frac, post_scale, write_curvature_files, shape_index, output_file_stem, histogram_bins, percentage_histogram_bins, bin_size, bin_start_curvature, bin_end_curvature, label_file, regional_percentages, high_pass_filter, low_pass_filter, high_pass_filter_gaussian, low_pass_filter_gaussian, filter_label, min_max_info, normalize_curvature, summary_condition, min_curvature_scale, max_curvature_scale, scale_factor, version, set_zero_vertex, max_ulps)
@@ -595,5 +595,8 @@ export {
       MrisCurvatureStatsOutputs,
       MrisCurvatureStatsParameters,
       mris_curvature_stats,
+      mris_curvature_stats_cargs,
+      mris_curvature_stats_execute,
+      mris_curvature_stats_outputs,
       mris_curvature_stats_params,
 };

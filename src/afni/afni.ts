@@ -12,7 +12,7 @@ const AFNI_METADATA: Metadata = {
 
 
 interface AfniParameters {
-    "__STYXTYPE__": "afni";
+    "@type": "afni.afni";
     "session_directories"?: string | null | undefined;
     "bysub"?: Array<string> | null | undefined;
     "all_dsets": boolean;
@@ -41,35 +41,35 @@ interface AfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni": afni_cargs,
+        "afni.afni": afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "afni": afni_outputs,
+        "afni.afni": afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface AfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param session_directories Input session directories containing the datasets
+ * @param bysub Gather all datasets corresponding to a single subject identifier
+ * @param all_dsets Read in all datasets from all listed folders together
+ * @param purge Conserve memory by purging unused datasets
+ * @param posfunc Start up the color 'pbar' to use only positive function values
+ * @param recursive Recursively search each session_directory for more session subdirectories
+ * @param no1_d Tells AFNI not to read *.1D timeseries files
+ * @param nocsv Tells AFNI not to read *.csv files
+ * @param notsv Tells AFNI not to read *.tsv files
+ * @param unique Create a unique set of colors for each AFNI controller window
+ * @param orient Orientation code for displaying x-y-z coordinates
+ * @param noplugins Do not load plugins
+ * @param seehidden Show hidden plugins
+ * @param allow_all_plugins Do not hide plugins
+ * @param yesplugouts Listen for plugouts
+ * @param debug_plugouts Plugout code prints lots of messages (for debugging)
+ * @param noplugouts Do not listen for plugouts
+ * @param skip_afnirc Do not read .afnirc file
+ * @param layout Read initial windows layout from a file
+ * @param niml Turn on listening for NIML-formatted data from SUMA
+ * @param np Provide a port offset for multiple instances
+ * @param npq Like -np but quieter in case of errors
+ * @param npb Provide a block of port numbers
+ * @param com Specify command strings to drive AFNI on startup
+ * @param comsep Character to use as a separator for commands
+ *
+ * @returns Parameter dictionary
+ */
 function afni_params(
     session_directories: string | null = null,
     bysub: Array<string> | null = null,
@@ -119,39 +150,8 @@ function afni_params(
     com: string | null = null,
     comsep: string | null = null,
 ): AfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param session_directories Input session directories containing the datasets
-     * @param bysub Gather all datasets corresponding to a single subject identifier
-     * @param all_dsets Read in all datasets from all listed folders together
-     * @param purge Conserve memory by purging unused datasets
-     * @param posfunc Start up the color 'pbar' to use only positive function values
-     * @param recursive Recursively search each session_directory for more session subdirectories
-     * @param no1_d Tells AFNI not to read *.1D timeseries files
-     * @param nocsv Tells AFNI not to read *.csv files
-     * @param notsv Tells AFNI not to read *.tsv files
-     * @param unique Create a unique set of colors for each AFNI controller window
-     * @param orient Orientation code for displaying x-y-z coordinates
-     * @param noplugins Do not load plugins
-     * @param seehidden Show hidden plugins
-     * @param allow_all_plugins Do not hide plugins
-     * @param yesplugouts Listen for plugouts
-     * @param debug_plugouts Plugout code prints lots of messages (for debugging)
-     * @param noplugouts Do not listen for plugouts
-     * @param skip_afnirc Do not read .afnirc file
-     * @param layout Read initial windows layout from a file
-     * @param niml Turn on listening for NIML-formatted data from SUMA
-     * @param np Provide a port offset for multiple instances
-     * @param npq Like -np but quieter in case of errors
-     * @param npb Provide a block of port numbers
-     * @param com Specify command strings to drive AFNI on startup
-     * @param comsep Character to use as a separator for commands
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni" as const,
+        "@type": "afni.afni" as const,
         "all_dsets": all_dsets,
         "purge": purge,
         "posfunc": posfunc,
@@ -200,18 +200,18 @@ function afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_cargs(
     params: AfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni");
     if ((params["session_directories"] ?? null) !== null) {
@@ -317,18 +317,18 @@ function afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_outputs(
     params: AfniParameters,
     execution: Execution,
 ): AfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniOutputs = {
         root: execution.outputFile("."),
         session_output: execution.outputFile(["output_session.nii.gz"].join('')),
@@ -337,22 +337,22 @@ function afni_outputs(
 }
 
 
+/**
+ * Tool for reading in sessions of 3D datasets and visualizing them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniOutputs`).
+ */
 function afni_execute(
     params: AfniParameters,
     execution: Execution,
 ): AfniOutputs {
-    /**
-     * Tool for reading in sessions of 3D datasets and visualizing them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_cargs(params, execution)
     const ret = afni_outputs(params, execution)
@@ -361,6 +361,42 @@ function afni_execute(
 }
 
 
+/**
+ * Tool for reading in sessions of 3D datasets and visualizing them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param session_directories Input session directories containing the datasets
+ * @param bysub Gather all datasets corresponding to a single subject identifier
+ * @param all_dsets Read in all datasets from all listed folders together
+ * @param purge Conserve memory by purging unused datasets
+ * @param posfunc Start up the color 'pbar' to use only positive function values
+ * @param recursive Recursively search each session_directory for more session subdirectories
+ * @param no1_d Tells AFNI not to read *.1D timeseries files
+ * @param nocsv Tells AFNI not to read *.csv files
+ * @param notsv Tells AFNI not to read *.tsv files
+ * @param unique Create a unique set of colors for each AFNI controller window
+ * @param orient Orientation code for displaying x-y-z coordinates
+ * @param noplugins Do not load plugins
+ * @param seehidden Show hidden plugins
+ * @param allow_all_plugins Do not hide plugins
+ * @param yesplugouts Listen for plugouts
+ * @param debug_plugouts Plugout code prints lots of messages (for debugging)
+ * @param noplugouts Do not listen for plugouts
+ * @param skip_afnirc Do not read .afnirc file
+ * @param layout Read initial windows layout from a file
+ * @param niml Turn on listening for NIML-formatted data from SUMA
+ * @param np Provide a port offset for multiple instances
+ * @param npq Like -np but quieter in case of errors
+ * @param npb Provide a block of port numbers
+ * @param com Specify command strings to drive AFNI on startup
+ * @param comsep Character to use as a separator for commands
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniOutputs`).
+ */
 function afni_(
     session_directories: string | null = null,
     bysub: Array<string> | null = null,
@@ -389,42 +425,6 @@ function afni_(
     comsep: string | null = null,
     runner: Runner | null = null,
 ): AfniOutputs {
-    /**
-     * Tool for reading in sessions of 3D datasets and visualizing them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param session_directories Input session directories containing the datasets
-     * @param bysub Gather all datasets corresponding to a single subject identifier
-     * @param all_dsets Read in all datasets from all listed folders together
-     * @param purge Conserve memory by purging unused datasets
-     * @param posfunc Start up the color 'pbar' to use only positive function values
-     * @param recursive Recursively search each session_directory for more session subdirectories
-     * @param no1_d Tells AFNI not to read *.1D timeseries files
-     * @param nocsv Tells AFNI not to read *.csv files
-     * @param notsv Tells AFNI not to read *.tsv files
-     * @param unique Create a unique set of colors for each AFNI controller window
-     * @param orient Orientation code for displaying x-y-z coordinates
-     * @param noplugins Do not load plugins
-     * @param seehidden Show hidden plugins
-     * @param allow_all_plugins Do not hide plugins
-     * @param yesplugouts Listen for plugouts
-     * @param debug_plugouts Plugout code prints lots of messages (for debugging)
-     * @param noplugouts Do not listen for plugouts
-     * @param skip_afnirc Do not read .afnirc file
-     * @param layout Read initial windows layout from a file
-     * @param niml Turn on listening for NIML-formatted data from SUMA
-     * @param np Provide a port offset for multiple instances
-     * @param npq Like -np but quieter in case of errors
-     * @param npb Provide a block of port numbers
-     * @param com Specify command strings to drive AFNI on startup
-     * @param comsep Character to use as a separator for commands
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_METADATA);
     const params = afni_params(session_directories, bysub, all_dsets, purge, posfunc, recursive, no1_d, nocsv, notsv, unique, orient, noplugins, seehidden, allow_all_plugins, yesplugouts, debug_plugouts, noplugouts, skip_afnirc, layout, niml, np, npq, npb, com, comsep)
@@ -437,5 +437,8 @@ export {
       AfniOutputs,
       AfniParameters,
       afni_,
+      afni_cargs,
+      afni_execute,
+      afni_outputs,
       afni_params,
 };

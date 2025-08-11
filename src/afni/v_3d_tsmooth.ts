@@ -12,7 +12,7 @@ const V_3D_TSMOOTH_METADATA: Metadata = {
 
 
 interface V3dTsmoothParameters {
-    "__STYXTYPE__": "3dTsmooth";
+    "@type": "afni.3dTsmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "datum_type"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface V3dTsmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTsmooth": v_3d_tsmooth_cargs,
+        "afni.3dTsmooth": v_3d_tsmooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTsmooth": v_3d_tsmooth_outputs,
+        "afni.3dTsmooth": v_3d_tsmooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface V3dTsmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset The input 3D+time dataset.
+ * @param prefix Sets the prefix of the output dataset.
+ * @param datum_type Coerce output dataset to be stored as the given type.
+ * @param lin_filter 3 point linear filter: 0.15*a + 0.70*b + 0.15*c
+ * @param med_filter 3 point median filter: median(a,b,c)
+ * @param osf_filter 3 point order statistics filter: 0.15*min(a,b,c) + 0.70*median(a,b,c) + 0.15*max(a,b,c)
+ * @param lin_filter_custom 3 point linear filter with custom weight: 0.5*(1-m)*a + m*b + 0.5*(1-m)*c
+ * @param hamming Use N point Hamming window filter.
+ * @param blackman Use N point Blackman window filter.
+ * @param custom_filter Use custom filter with coefficients from a specified file.
+ * @param extend BEFORE: use the first value; AFTER: use the last value.
+ * @param zero BEFORE and AFTER: use zero.
+ * @param trend Compute a linear trend, and extrapolate BEFORE and AFTER.
+ * @param adaptive Use adaptive mean filtering of width N (N must be odd and bigger than 3).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tsmooth_params(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -97,28 +117,8 @@ function v_3d_tsmooth_params(
     trend: boolean = false,
     adaptive: number | null = null,
 ): V3dTsmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset The input 3D+time dataset.
-     * @param prefix Sets the prefix of the output dataset.
-     * @param datum_type Coerce output dataset to be stored as the given type.
-     * @param lin_filter 3 point linear filter: 0.15*a + 0.70*b + 0.15*c
-     * @param med_filter 3 point median filter: median(a,b,c)
-     * @param osf_filter 3 point order statistics filter: 0.15*min(a,b,c) + 0.70*median(a,b,c) + 0.15*max(a,b,c)
-     * @param lin_filter_custom 3 point linear filter with custom weight: 0.5*(1-m)*a + m*b + 0.5*(1-m)*c
-     * @param hamming Use N point Hamming window filter.
-     * @param blackman Use N point Blackman window filter.
-     * @param custom_filter Use custom filter with coefficients from a specified file.
-     * @param extend BEFORE: use the first value; AFTER: use the last value.
-     * @param zero BEFORE and AFTER: use zero.
-     * @param trend Compute a linear trend, and extrapolate BEFORE and AFTER.
-     * @param adaptive Use adaptive mean filtering of width N (N must be odd and bigger than 3).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTsmooth" as const,
+        "@type": "afni.3dTsmooth" as const,
         "input_dataset": input_dataset,
         "lin_filter": lin_filter,
         "med_filter": med_filter,
@@ -152,18 +152,18 @@ function v_3d_tsmooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tsmooth_cargs(
     params: V3dTsmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTsmooth");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -231,18 +231,18 @@ function v_3d_tsmooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tsmooth_outputs(
     params: V3dTsmoothParameters,
     execution: Execution,
 ): V3dTsmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTsmoothOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -251,22 +251,22 @@ function v_3d_tsmooth_outputs(
 }
 
 
+/**
+ * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
+ */
 function v_3d_tsmooth_execute(
     params: V3dTsmoothParameters,
     execution: Execution,
 ): V3dTsmoothOutputs {
-    /**
-     * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tsmooth_cargs(params, execution)
     const ret = v_3d_tsmooth_outputs(params, execution)
@@ -275,6 +275,31 @@ function v_3d_tsmooth_execute(
 }
 
 
+/**
+ * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset The input 3D+time dataset.
+ * @param prefix Sets the prefix of the output dataset.
+ * @param datum_type Coerce output dataset to be stored as the given type.
+ * @param lin_filter 3 point linear filter: 0.15*a + 0.70*b + 0.15*c
+ * @param med_filter 3 point median filter: median(a,b,c)
+ * @param osf_filter 3 point order statistics filter: 0.15*min(a,b,c) + 0.70*median(a,b,c) + 0.15*max(a,b,c)
+ * @param lin_filter_custom 3 point linear filter with custom weight: 0.5*(1-m)*a + m*b + 0.5*(1-m)*c
+ * @param hamming Use N point Hamming window filter.
+ * @param blackman Use N point Blackman window filter.
+ * @param custom_filter Use custom filter with coefficients from a specified file.
+ * @param extend BEFORE: use the first value; AFTER: use the last value.
+ * @param zero BEFORE and AFTER: use zero.
+ * @param trend Compute a linear trend, and extrapolate BEFORE and AFTER.
+ * @param adaptive Use adaptive mean filtering of width N (N must be odd and bigger than 3).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
+ */
 function v_3d_tsmooth(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -292,31 +317,6 @@ function v_3d_tsmooth(
     adaptive: number | null = null,
     runner: Runner | null = null,
 ): V3dTsmoothOutputs {
-    /**
-     * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset The input 3D+time dataset.
-     * @param prefix Sets the prefix of the output dataset.
-     * @param datum_type Coerce output dataset to be stored as the given type.
-     * @param lin_filter 3 point linear filter: 0.15*a + 0.70*b + 0.15*c
-     * @param med_filter 3 point median filter: median(a,b,c)
-     * @param osf_filter 3 point order statistics filter: 0.15*min(a,b,c) + 0.70*median(a,b,c) + 0.15*max(a,b,c)
-     * @param lin_filter_custom 3 point linear filter with custom weight: 0.5*(1-m)*a + m*b + 0.5*(1-m)*c
-     * @param hamming Use N point Hamming window filter.
-     * @param blackman Use N point Blackman window filter.
-     * @param custom_filter Use custom filter with coefficients from a specified file.
-     * @param extend BEFORE: use the first value; AFTER: use the last value.
-     * @param zero BEFORE and AFTER: use zero.
-     * @param trend Compute a linear trend, and extrapolate BEFORE and AFTER.
-     * @param adaptive Use adaptive mean filtering of width N (N must be odd and bigger than 3).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSMOOTH_METADATA);
     const params = v_3d_tsmooth_params(input_dataset, prefix, datum_type, lin_filter, med_filter, osf_filter, lin_filter_custom, hamming, blackman, custom_filter, extend, zero, trend, adaptive)
@@ -329,5 +329,8 @@ export {
       V3dTsmoothParameters,
       V_3D_TSMOOTH_METADATA,
       v_3d_tsmooth,
+      v_3d_tsmooth_cargs,
+      v_3d_tsmooth_execute,
+      v_3d_tsmooth_outputs,
       v_3d_tsmooth_params,
 };

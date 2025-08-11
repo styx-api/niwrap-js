@@ -12,41 +12,41 @@ const MAKE_AVERAGE_SUBCORT_METADATA: Metadata = {
 
 
 interface MakeAverageSubcortParameters {
-    "__STYXTYPE__": "make_average_subcort";
+    "@type": "freesurfer.make_average_subcort";
     "subjects": Array<string>;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_average_subcort": make_average_subcort_cargs,
+        "freesurfer.make_average_subcort": make_average_subcort_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_average_subcort": make_average_subcort_outputs,
+        "freesurfer.make_average_subcort": make_average_subcort_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MakeAverageSubcortOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subject identifiers
+ * @param output_volume Output volume file
+ *
+ * @returns Parameter dictionary
+ */
 function make_average_subcort_params(
     subjects: Array<string>,
     output_volume: string,
 ): MakeAverageSubcortParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subject identifiers
-     * @param output_volume Output volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_average_subcort" as const,
+        "@type": "freesurfer.make_average_subcort" as const,
         "subjects": subjects,
         "output_volume": output_volume,
     };
@@ -90,18 +90,18 @@ function make_average_subcort_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_average_subcort_cargs(
     params: MakeAverageSubcortParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_average_subcort");
     cargs.push(...(params["subjects"] ?? null));
@@ -113,18 +113,18 @@ function make_average_subcort_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_average_subcort_outputs(
     params: MakeAverageSubcortParameters,
     execution: Execution,
 ): MakeAverageSubcortOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeAverageSubcortOutputs = {
         root: execution.outputFile("."),
         output_mask_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -133,22 +133,22 @@ function make_average_subcort_outputs(
 }
 
 
+/**
+ * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
+ */
 function make_average_subcort_execute(
     params: MakeAverageSubcortParameters,
     execution: Execution,
 ): MakeAverageSubcortOutputs {
-    /**
-     * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_average_subcort_cargs(params, execution)
     const ret = make_average_subcort_outputs(params, execution)
@@ -157,24 +157,24 @@ function make_average_subcort_execute(
 }
 
 
+/**
+ * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subject identifiers
+ * @param output_volume Output volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
+ */
 function make_average_subcort(
     subjects: Array<string>,
     output_volume: string,
     runner: Runner | null = null,
 ): MakeAverageSubcortOutputs {
-    /**
-     * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subject identifiers
-     * @param output_volume Output volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_AVERAGE_SUBCORT_METADATA);
     const params = make_average_subcort_params(subjects, output_volume)
@@ -187,5 +187,8 @@ export {
       MakeAverageSubcortOutputs,
       MakeAverageSubcortParameters,
       make_average_subcort,
+      make_average_subcort_cargs,
+      make_average_subcort_execute,
+      make_average_subcort_outputs,
       make_average_subcort_params,
 };

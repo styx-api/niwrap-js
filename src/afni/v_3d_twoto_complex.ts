@@ -12,7 +12,7 @@ const V_3D_TWOTO_COMPLEX_METADATA: Metadata = {
 
 
 interface V3dTwotoComplexParameters {
-    "__STYXTYPE__": "3dTwotoComplex";
+    "@type": "afni.3dTwotoComplex";
     "dataset1": InputPathType;
     "dataset2"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface V3dTwotoComplexParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTwotoComplex": v_3d_twoto_complex_cargs,
+        "afni.3dTwotoComplex": v_3d_twoto_complex_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTwotoComplex": v_3d_twoto_complex_outputs,
+        "afni.3dTwotoComplex": v_3d_twoto_complex_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface V3dTwotoComplexOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset1 Input dataset (either as 1 dataset with 2 sub-bricks or 2 separate datasets)
+ * @param dataset2 Second input dataset (optional if 2 sub-bricks in the first dataset)
+ * @param prefix Prefix for the output dataset [default='cmplx']
+ * @param ri Specify that the 2 inputs are real and imaginary parts [this is the default]
+ * @param mp Specify that the 2 inputs are magnitude and phase [phase is in radians]
+ * @param mask Only output nonzero values where the mask dataset is nonzero
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_twoto_complex_params(
     dataset1: InputPathType,
     dataset2: InputPathType | null = null,
@@ -85,20 +97,8 @@ function v_3d_twoto_complex_params(
     mp: boolean = false,
     mask: InputPathType | null = null,
 ): V3dTwotoComplexParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset1 Input dataset (either as 1 dataset with 2 sub-bricks or 2 separate datasets)
-     * @param dataset2 Second input dataset (optional if 2 sub-bricks in the first dataset)
-     * @param prefix Prefix for the output dataset [default='cmplx']
-     * @param ri Specify that the 2 inputs are real and imaginary parts [this is the default]
-     * @param mp Specify that the 2 inputs are magnitude and phase [phase is in radians]
-     * @param mask Only output nonzero values where the mask dataset is nonzero
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTwotoComplex" as const,
+        "@type": "afni.3dTwotoComplex" as const,
         "dataset1": dataset1,
         "ri": ri,
         "mp": mp,
@@ -116,18 +116,18 @@ function v_3d_twoto_complex_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_twoto_complex_cargs(
     params: V3dTwotoComplexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTwotoComplex");
     cargs.push(execution.inputFile((params["dataset1"] ?? null)));
@@ -156,18 +156,18 @@ function v_3d_twoto_complex_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_twoto_complex_outputs(
     params: V3dTwotoComplexParameters,
     execution: Execution,
 ): V3dTwotoComplexOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTwotoComplexOutputs = {
         root: execution.outputFile("."),
         out_brick: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -177,22 +177,22 @@ function v_3d_twoto_complex_outputs(
 }
 
 
+/**
+ * Converts 2 sub-bricks of input to a complex-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
+ */
 function v_3d_twoto_complex_execute(
     params: V3dTwotoComplexParameters,
     execution: Execution,
 ): V3dTwotoComplexOutputs {
-    /**
-     * Converts 2 sub-bricks of input to a complex-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_twoto_complex_cargs(params, execution)
     const ret = v_3d_twoto_complex_outputs(params, execution)
@@ -201,6 +201,23 @@ function v_3d_twoto_complex_execute(
 }
 
 
+/**
+ * Converts 2 sub-bricks of input to a complex-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset1 Input dataset (either as 1 dataset with 2 sub-bricks or 2 separate datasets)
+ * @param dataset2 Second input dataset (optional if 2 sub-bricks in the first dataset)
+ * @param prefix Prefix for the output dataset [default='cmplx']
+ * @param ri Specify that the 2 inputs are real and imaginary parts [this is the default]
+ * @param mp Specify that the 2 inputs are magnitude and phase [phase is in radians]
+ * @param mask Only output nonzero values where the mask dataset is nonzero
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
+ */
 function v_3d_twoto_complex(
     dataset1: InputPathType,
     dataset2: InputPathType | null = null,
@@ -210,23 +227,6 @@ function v_3d_twoto_complex(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dTwotoComplexOutputs {
-    /**
-     * Converts 2 sub-bricks of input to a complex-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset1 Input dataset (either as 1 dataset with 2 sub-bricks or 2 separate datasets)
-     * @param dataset2 Second input dataset (optional if 2 sub-bricks in the first dataset)
-     * @param prefix Prefix for the output dataset [default='cmplx']
-     * @param ri Specify that the 2 inputs are real and imaginary parts [this is the default]
-     * @param mp Specify that the 2 inputs are magnitude and phase [phase is in radians]
-     * @param mask Only output nonzero values where the mask dataset is nonzero
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TWOTO_COMPLEX_METADATA);
     const params = v_3d_twoto_complex_params(dataset1, dataset2, prefix, ri, mp, mask)
@@ -239,5 +239,8 @@ export {
       V3dTwotoComplexParameters,
       V_3D_TWOTO_COMPLEX_METADATA,
       v_3d_twoto_complex,
+      v_3d_twoto_complex_cargs,
+      v_3d_twoto_complex_execute,
+      v_3d_twoto_complex_outputs,
       v_3d_twoto_complex_params,
 };

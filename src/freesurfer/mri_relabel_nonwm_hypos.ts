@@ -12,7 +12,7 @@ const MRI_RELABEL_NONWM_HYPOS_METADATA: Metadata = {
 
 
 interface MriRelabelNonwmHyposParameters {
-    "__STYXTYPE__": "mri_relabel_nonwm_hypos";
+    "@type": "freesurfer.mri_relabel_nonwm_hypos";
     "inputseg": InputPathType;
     "outputseg": string;
     "segments"?: Array<string> | null | undefined;
@@ -22,35 +22,35 @@ interface MriRelabelNonwmHyposParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_cargs,
+        "freesurfer.mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_outputs,
+        "freesurfer.mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriRelabelNonwmHyposOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputseg Input segmentation file with non-wm-hypos labeled as 80, 81, or 82.
+ * @param outputseg Output segmentation file with non-wm-hypos relabeled.
+ * @param segments Label hypos adjacent to specified segment as a new segment (can be used multiple times).
+ * @param seg_default Use the default relabeling scheme.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_relabel_nonwm_hypos_params(
     inputseg: InputPathType,
     outputseg: string,
@@ -81,20 +93,8 @@ function mri_relabel_nonwm_hypos_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriRelabelNonwmHyposParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputseg Input segmentation file with non-wm-hypos labeled as 80, 81, or 82.
-     * @param outputseg Output segmentation file with non-wm-hypos relabeled.
-     * @param segments Label hypos adjacent to specified segment as a new segment (can be used multiple times).
-     * @param seg_default Use the default relabeling scheme.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_relabel_nonwm_hypos" as const,
+        "@type": "freesurfer.mri_relabel_nonwm_hypos" as const,
         "inputseg": inputseg,
         "outputseg": outputseg,
         "seg_default": seg_default,
@@ -108,18 +108,18 @@ function mri_relabel_nonwm_hypos_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_relabel_nonwm_hypos_cargs(
     params: MriRelabelNonwmHyposParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_relabel_nonwm_hypos");
     cargs.push(
@@ -149,18 +149,18 @@ function mri_relabel_nonwm_hypos_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_relabel_nonwm_hypos_outputs(
     params: MriRelabelNonwmHyposParameters,
     execution: Execution,
 ): MriRelabelNonwmHyposOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRelabelNonwmHyposOutputs = {
         root: execution.outputFile("."),
         out_segmentation: execution.outputFile([(params["outputseg"] ?? null)].join('')),
@@ -169,22 +169,22 @@ function mri_relabel_nonwm_hypos_outputs(
 }
 
 
+/**
+ * Relabels non-WM hypointensities based on proximity to a nearby label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
+ */
 function mri_relabel_nonwm_hypos_execute(
     params: MriRelabelNonwmHyposParameters,
     execution: Execution,
 ): MriRelabelNonwmHyposOutputs {
-    /**
-     * Relabels non-WM hypointensities based on proximity to a nearby label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_relabel_nonwm_hypos_cargs(params, execution)
     const ret = mri_relabel_nonwm_hypos_outputs(params, execution)
@@ -193,6 +193,23 @@ function mri_relabel_nonwm_hypos_execute(
 }
 
 
+/**
+ * Relabels non-WM hypointensities based on proximity to a nearby label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputseg Input segmentation file with non-wm-hypos labeled as 80, 81, or 82.
+ * @param outputseg Output segmentation file with non-wm-hypos relabeled.
+ * @param segments Label hypos adjacent to specified segment as a new segment (can be used multiple times).
+ * @param seg_default Use the default relabeling scheme.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
+ */
 function mri_relabel_nonwm_hypos(
     inputseg: InputPathType,
     outputseg: string,
@@ -202,23 +219,6 @@ function mri_relabel_nonwm_hypos(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriRelabelNonwmHyposOutputs {
-    /**
-     * Relabels non-WM hypointensities based on proximity to a nearby label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputseg Input segmentation file with non-wm-hypos labeled as 80, 81, or 82.
-     * @param outputseg Output segmentation file with non-wm-hypos relabeled.
-     * @param segments Label hypos adjacent to specified segment as a new segment (can be used multiple times).
-     * @param seg_default Use the default relabeling scheme.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RELABEL_NONWM_HYPOS_METADATA);
     const params = mri_relabel_nonwm_hypos_params(inputseg, outputseg, segments, seg_default, debug, checkopts)
@@ -231,5 +231,8 @@ export {
       MriRelabelNonwmHyposOutputs,
       MriRelabelNonwmHyposParameters,
       mri_relabel_nonwm_hypos,
+      mri_relabel_nonwm_hypos_cargs,
+      mri_relabel_nonwm_hypos_execute,
+      mri_relabel_nonwm_hypos_outputs,
       mri_relabel_nonwm_hypos_params,
 };

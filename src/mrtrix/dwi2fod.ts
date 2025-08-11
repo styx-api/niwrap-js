@@ -12,40 +12,40 @@ const DWI2FOD_METADATA: Metadata = {
 
 
 interface Dwi2fodFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwi2fod.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface Dwi2fodVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.dwi2fod.VariousString";
     "obj": string;
 }
 
 
 interface Dwi2fodVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.dwi2fod.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface Dwi2fodConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dwi2fod.config";
     "key": string;
     "value": string;
 }
 
 
 interface Dwi2fodResponseOdfParameters {
-    "__STYXTYPE__": "response_odf";
+    "@type": "mrtrix.dwi2fod.response_odf";
     "response": InputPathType;
     "odf": string;
 }
 
 
 interface Dwi2fodParameters {
-    "__STYXTYPE__": "dwi2fod";
+    "@type": "mrtrix.dwi2fod";
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2fodFslgradParameters | null | undefined;
     "shells"?: Array<number> | null | undefined;
@@ -75,60 +75,60 @@ interface Dwi2fodParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwi2fod": dwi2fod_cargs,
-        "fslgrad": dwi2fod_fslgrad_cargs,
-        "VariousString": dwi2fod_various_string_cargs,
-        "VariousFile": dwi2fod_various_file_cargs,
-        "config": dwi2fod_config_cargs,
-        "response_odf": dwi2fod_response_odf_cargs,
+        "mrtrix.dwi2fod": dwi2fod_cargs,
+        "mrtrix.dwi2fod.fslgrad": dwi2fod_fslgrad_cargs,
+        "mrtrix.dwi2fod.VariousString": dwi2fod_various_string_cargs,
+        "mrtrix.dwi2fod.VariousFile": dwi2fod_various_file_cargs,
+        "mrtrix.dwi2fod.config": dwi2fod_config_cargs,
+        "mrtrix.dwi2fod.response_odf": dwi2fod_response_odf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwi2fod": dwi2fod_outputs,
-        "response_odf": dwi2fod_response_odf_outputs,
+        "mrtrix.dwi2fod": dwi2fod_outputs,
+        "mrtrix.dwi2fod.response_odf": dwi2fod_response_odf_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): Dwi2fodFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwi2fod.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -136,18 +136,18 @@ function dwi2fod_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_fslgrad_cargs(
     params: Dwi2fodFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -156,92 +156,92 @@ function dwi2fod_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_various_string_params(
     obj: string,
 ): Dwi2fodVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.dwi2fod.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_various_string_cargs(
     params: Dwi2fodVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_various_file_params(
     obj: InputPathType,
 ): Dwi2fodVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.dwi2fod.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_various_file_cargs(
     params: Dwi2fodVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_config_params(
     key: string,
     value: string,
 ): Dwi2fodConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dwi2fod.config" as const,
         "key": key,
         "value": value,
     };
@@ -249,18 +249,18 @@ function dwi2fod_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_config_cargs(
     params: Dwi2fodConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -286,20 +286,20 @@ interface Dwi2fodResponseOdfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param response input tissue response
+ * @param odf output ODF image
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_response_odf_params(
     response: InputPathType,
     odf: string,
 ): Dwi2fodResponseOdfParameters {
-    /**
-     * Build parameters.
-    
-     * @param response input tissue response
-     * @param odf output ODF image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "response_odf" as const,
+        "@type": "mrtrix.dwi2fod.response_odf" as const,
         "response": response,
         "odf": odf,
     };
@@ -307,18 +307,18 @@ function dwi2fod_response_odf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_response_odf_cargs(
     params: Dwi2fodResponseOdfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["response"] ?? null)));
     cargs.push((params["odf"] ?? null));
@@ -326,18 +326,18 @@ function dwi2fod_response_odf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2fod_response_odf_outputs(
     params: Dwi2fodResponseOdfParameters,
     execution: Execution,
 ): Dwi2fodResponseOdfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2fodResponseOdfOutputs = {
         root: execution.outputFile("."),
         odf: execution.outputFile([(params["odf"] ?? null)].join('')),
@@ -367,6 +367,39 @@ interface Dwi2fodOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param algorithm the algorithm to use for FOD estimation. (options are: csd,msmt_csd)
+ * @param dwi the input diffusion-weighted image
+ * @param response_odf pairs of input tissue response and output ODF images
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param directions specify the directions over which to apply the non-negativity constraint (by default, the built-in 300 direction set is used). These should be supplied as a text file containing [ az el ] pairs for the directions.
+ * @param lmax the maximum spherical harmonic order for the output FOD(s).For algorithms with multiple outputs, this should be provided as a comma-separated list of integers, one for each output image; for single-output algorithms, only a single integer should be provided. If omitted, the command will use the lmax of the corresponding response function (i.e based on its number of coefficients), up to a maximum of 8.
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param filter the linear frequency filtering parameters used for the initial linear spherical deconvolution step (default = [ 1 1 1 0 0 ]). These should be  supplied as a text file containing the filtering coefficients for each even harmonic order.
+ * @param neg_lambda the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1).
+ * @param norm_lambda the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1).
+ * @param threshold the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
+ * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
+ * @param norm_lambda_1 the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1e-10).
+ * @param neg_lambda_1 the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1e-10).
+ * @param predicted_signal output the predicted dwi image.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2fod_params(
     algorithm: string,
     dwi: InputPathType,
@@ -395,41 +428,8 @@ function dwi2fod_params(
     help: boolean = false,
     version: boolean = false,
 ): Dwi2fodParameters {
-    /**
-     * Build parameters.
-    
-     * @param algorithm the algorithm to use for FOD estimation. (options are: csd,msmt_csd)
-     * @param dwi the input diffusion-weighted image
-     * @param response_odf pairs of input tissue response and output ODF images
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param directions specify the directions over which to apply the non-negativity constraint (by default, the built-in 300 direction set is used). These should be supplied as a text file containing [ az el ] pairs for the directions.
-     * @param lmax the maximum spherical harmonic order for the output FOD(s).For algorithms with multiple outputs, this should be provided as a comma-separated list of integers, one for each output image; for single-output algorithms, only a single integer should be provided. If omitted, the command will use the lmax of the corresponding response function (i.e based on its number of coefficients), up to a maximum of 8.
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param filter the linear frequency filtering parameters used for the initial linear spherical deconvolution step (default = [ 1 1 1 0 0 ]). These should be  supplied as a text file containing the filtering coefficients for each even harmonic order.
-     * @param neg_lambda the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1).
-     * @param norm_lambda the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1).
-     * @param threshold the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
-     * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
-     * @param norm_lambda_1 the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1e-10).
-     * @param neg_lambda_1 the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1e-10).
-     * @param predicted_signal output the predicted dwi image.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwi2fod" as const,
+        "@type": "mrtrix.dwi2fod" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -495,18 +495,18 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2fod_cargs(
     params: Dwi2fodParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwi2fod");
     if ((params["grad"] ?? null) !== null) {
@@ -516,7 +516,7 @@ function dwi2fod_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -593,7 +593,7 @@ function dwi2fod_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -615,7 +615,7 @@ function dwi2fod_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -625,61 +625,61 @@ function dwi2fod_cargs(
     }
     cargs.push((params["algorithm"] ?? null));
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
-    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2fod_outputs(
     params: Dwi2fodParameters,
     execution: Execution,
 ): Dwi2fodOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2fodOutputs = {
         root: execution.outputFile("."),
         predicted_signal: ((params["predicted_signal"] ?? null) !== null) ? execution.outputFile([(params["predicted_signal"] ?? null)].join('')) : null,
-        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null),
+        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * * If using csd algorithm:
+ * Tournier, J.-D.; Calamante, F. & Connelly, A. Robust determination of the fibre orientation distribution in diffusion MRI: Non-negativity constrained super-resolved spherical deconvolution. NeuroImage, 2007, 35, 1459-1472
+ *
+ * * If using msmt_csd algorithm:
+ * Jeurissen, B; Tournier, J-D; Dhollander, T; Connelly, A & Sijbers, J. Multi-tissue constrained spherical deconvolution for improved analysis of multi-shell diffusion MRI data. NeuroImage, 2014, 103, 411-426
+ *
+ * Tournier, J.-D.; Calamante, F., Gadian, D.G. & Connelly, A. Direct estimation of the fiber orientation density function from diffusion-weighted MRI data using spherical deconvolution. NeuroImage, 2004, 23, 1176-1185.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
+ */
 function dwi2fod_execute(
     params: Dwi2fodParameters,
     execution: Execution,
 ): Dwi2fodOutputs {
-    /**
-     * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * * If using csd algorithm:
-     * Tournier, J.-D.; Calamante, F. & Connelly, A. Robust determination of the fibre orientation distribution in diffusion MRI: Non-negativity constrained super-resolved spherical deconvolution. NeuroImage, 2007, 35, 1459-1472
-     * 
-     * * If using msmt_csd algorithm:
-     * Jeurissen, B; Tournier, J-D; Dhollander, T; Connelly, A & Sijbers, J. Multi-tissue constrained spherical deconvolution for improved analysis of multi-shell diffusion MRI data. NeuroImage, 2014, 103, 411-426
-     * 
-     * Tournier, J.-D.; Calamante, F., Gadian, D.G. & Connelly, A. Direct estimation of the fiber orientation density function from diffusion-weighted MRI data using spherical deconvolution. NeuroImage, 2004, 23, 1176-1185.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwi2fod_cargs(params, execution)
     const ret = dwi2fod_outputs(params, execution)
@@ -688,6 +688,57 @@ function dwi2fod_execute(
 }
 
 
+/**
+ * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * * If using csd algorithm:
+ * Tournier, J.-D.; Calamante, F. & Connelly, A. Robust determination of the fibre orientation distribution in diffusion MRI: Non-negativity constrained super-resolved spherical deconvolution. NeuroImage, 2007, 35, 1459-1472
+ *
+ * * If using msmt_csd algorithm:
+ * Jeurissen, B; Tournier, J-D; Dhollander, T; Connelly, A & Sijbers, J. Multi-tissue constrained spherical deconvolution for improved analysis of multi-shell diffusion MRI data. NeuroImage, 2014, 103, 411-426
+ *
+ * Tournier, J.-D.; Calamante, F., Gadian, D.G. & Connelly, A. Direct estimation of the fiber orientation density function from diffusion-weighted MRI data using spherical deconvolution. NeuroImage, 2004, 23, 1176-1185.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param algorithm the algorithm to use for FOD estimation. (options are: csd,msmt_csd)
+ * @param dwi the input diffusion-weighted image
+ * @param response_odf pairs of input tissue response and output ODF images
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param directions specify the directions over which to apply the non-negativity constraint (by default, the built-in 300 direction set is used). These should be supplied as a text file containing [ az el ] pairs for the directions.
+ * @param lmax the maximum spherical harmonic order for the output FOD(s).For algorithms with multiple outputs, this should be provided as a comma-separated list of integers, one for each output image; for single-output algorithms, only a single integer should be provided. If omitted, the command will use the lmax of the corresponding response function (i.e based on its number of coefficients), up to a maximum of 8.
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param filter the linear frequency filtering parameters used for the initial linear spherical deconvolution step (default = [ 1 1 1 0 0 ]). These should be  supplied as a text file containing the filtering coefficients for each even harmonic order.
+ * @param neg_lambda the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1).
+ * @param norm_lambda the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1).
+ * @param threshold the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
+ * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
+ * @param norm_lambda_1 the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1e-10).
+ * @param neg_lambda_1 the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1e-10).
+ * @param predicted_signal output the predicted dwi image.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
+ */
 function dwi2fod(
     algorithm: string,
     dwi: InputPathType,
@@ -717,57 +768,6 @@ function dwi2fod(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2fodOutputs {
-    /**
-     * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * * If using csd algorithm:
-     * Tournier, J.-D.; Calamante, F. & Connelly, A. Robust determination of the fibre orientation distribution in diffusion MRI: Non-negativity constrained super-resolved spherical deconvolution. NeuroImage, 2007, 35, 1459-1472
-     * 
-     * * If using msmt_csd algorithm:
-     * Jeurissen, B; Tournier, J-D; Dhollander, T; Connelly, A & Sijbers, J. Multi-tissue constrained spherical deconvolution for improved analysis of multi-shell diffusion MRI data. NeuroImage, 2014, 103, 411-426
-     * 
-     * Tournier, J.-D.; Calamante, F., Gadian, D.G. & Connelly, A. Direct estimation of the fiber orientation density function from diffusion-weighted MRI data using spherical deconvolution. NeuroImage, 2004, 23, 1176-1185.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param algorithm the algorithm to use for FOD estimation. (options are: csd,msmt_csd)
-     * @param dwi the input diffusion-weighted image
-     * @param response_odf pairs of input tissue response and output ODF images
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param directions specify the directions over which to apply the non-negativity constraint (by default, the built-in 300 direction set is used). These should be supplied as a text file containing [ az el ] pairs for the directions.
-     * @param lmax the maximum spherical harmonic order for the output FOD(s).For algorithms with multiple outputs, this should be provided as a comma-separated list of integers, one for each output image; for single-output algorithms, only a single integer should be provided. If omitted, the command will use the lmax of the corresponding response function (i.e based on its number of coefficients), up to a maximum of 8.
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param filter the linear frequency filtering parameters used for the initial linear spherical deconvolution step (default = [ 1 1 1 0 0 ]). These should be  supplied as a text file containing the filtering coefficients for each even harmonic order.
-     * @param neg_lambda the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1).
-     * @param norm_lambda the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1).
-     * @param threshold the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
-     * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
-     * @param norm_lambda_1 the regularisation parameter lambda that controls the strength of the constraint on the norm of the solution (default = 1e-10).
-     * @param neg_lambda_1 the regularisation parameter lambda that controls the strength of the non-negativity constraint (default = 1e-10).
-     * @param predicted_signal output the predicted dwi image.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWI2FOD_METADATA);
     const params = dwi2fod_params(algorithm, dwi, response_odf, grad, fslgrad, shells, directions, lmax, mask, filter, neg_lambda, norm_lambda, threshold, niter, norm_lambda_1, neg_lambda_1, predicted_signal, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -786,10 +786,19 @@ export {
       Dwi2fodVariousFileParameters,
       Dwi2fodVariousStringParameters,
       dwi2fod,
+      dwi2fod_cargs,
+      dwi2fod_config_cargs,
       dwi2fod_config_params,
+      dwi2fod_execute,
+      dwi2fod_fslgrad_cargs,
       dwi2fod_fslgrad_params,
+      dwi2fod_outputs,
       dwi2fod_params,
+      dwi2fod_response_odf_cargs,
+      dwi2fod_response_odf_outputs,
       dwi2fod_response_odf_params,
+      dwi2fod_various_file_cargs,
       dwi2fod_various_file_params,
+      dwi2fod_various_string_cargs,
       dwi2fod_various_string_params,
 };

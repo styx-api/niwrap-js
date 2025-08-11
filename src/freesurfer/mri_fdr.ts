@@ -12,7 +12,7 @@ const MRI_FDR_METADATA: Metadata = {
 
 
 interface MriFdrParameters {
-    "__STYXTYPE__": "mri_fdr";
+    "@type": "freesurfer.mri_fdr";
     "input_files": Array<string>;
     "fdr_value": number;
     "default_frame"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface MriFdrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fdr": mri_fdr_cargs,
+        "freesurfer.mri_fdr": mri_fdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fdr": mri_fdr_outputs,
+        "freesurfer.mri_fdr": mri_fdr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface MriFdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input source volume or surface overlay. Specify mask, output, and frame as needed.
+ * @param fdr_value FDR value between 0 and 1, typically .05
+ * @param default_frame Use input frame when not specifying frame in --i
+ * @param positive_only Only consider positive voxels
+ * @param negative_only Only consider negative voxels
+ * @param all_voxels Consider all voxels regardless of sign (default)
+ * @param raw_p_values Input is raw p-values, not -log10(p)
+ * @param threshold_file Write threshold to text file
+ * @param debug Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fdr_params(
     input_files: Array<string>,
     fdr_value: number,
@@ -93,24 +109,8 @@ function mri_fdr_params(
     debug: boolean = false,
     check_options: boolean = false,
 ): MriFdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input source volume or surface overlay. Specify mask, output, and frame as needed.
-     * @param fdr_value FDR value between 0 and 1, typically .05
-     * @param default_frame Use input frame when not specifying frame in --i
-     * @param positive_only Only consider positive voxels
-     * @param negative_only Only consider negative voxels
-     * @param all_voxels Consider all voxels regardless of sign (default)
-     * @param raw_p_values Input is raw p-values, not -log10(p)
-     * @param threshold_file Write threshold to text file
-     * @param debug Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fdr" as const,
+        "@type": "freesurfer.mri_fdr" as const,
         "input_files": input_files,
         "fdr_value": fdr_value,
         "positive_only": positive_only,
@@ -130,18 +130,18 @@ function mri_fdr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fdr_cargs(
     params: MriFdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fdr");
     cargs.push(
@@ -186,18 +186,18 @@ function mri_fdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fdr_outputs(
     params: MriFdrParameters,
     execution: Execution,
 ): MriFdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFdrOutputs = {
         root: execution.outputFile("."),
         output_corrected: execution.outputFile(["<output>.mgh"].join('')),
@@ -207,22 +207,22 @@ function mri_fdr_outputs(
 }
 
 
+/**
+ * A program that performs False Discovery Rate correction.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
+ */
 function mri_fdr_execute(
     params: MriFdrParameters,
     execution: Execution,
 ): MriFdrOutputs {
-    /**
-     * A program that performs False Discovery Rate correction.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fdr_cargs(params, execution)
     const ret = mri_fdr_outputs(params, execution)
@@ -231,6 +231,27 @@ function mri_fdr_execute(
 }
 
 
+/**
+ * A program that performs False Discovery Rate correction.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input source volume or surface overlay. Specify mask, output, and frame as needed.
+ * @param fdr_value FDR value between 0 and 1, typically .05
+ * @param default_frame Use input frame when not specifying frame in --i
+ * @param positive_only Only consider positive voxels
+ * @param negative_only Only consider negative voxels
+ * @param all_voxels Consider all voxels regardless of sign (default)
+ * @param raw_p_values Input is raw p-values, not -log10(p)
+ * @param threshold_file Write threshold to text file
+ * @param debug Turn on debugging
+ * @param check_options Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
+ */
 function mri_fdr(
     input_files: Array<string>,
     fdr_value: number,
@@ -244,27 +265,6 @@ function mri_fdr(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriFdrOutputs {
-    /**
-     * A program that performs False Discovery Rate correction.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input source volume or surface overlay. Specify mask, output, and frame as needed.
-     * @param fdr_value FDR value between 0 and 1, typically .05
-     * @param default_frame Use input frame when not specifying frame in --i
-     * @param positive_only Only consider positive voxels
-     * @param negative_only Only consider negative voxels
-     * @param all_voxels Consider all voxels regardless of sign (default)
-     * @param raw_p_values Input is raw p-values, not -log10(p)
-     * @param threshold_file Write threshold to text file
-     * @param debug Turn on debugging
-     * @param check_options Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FDR_METADATA);
     const params = mri_fdr_params(input_files, fdr_value, default_frame, positive_only, negative_only, all_voxels, raw_p_values, threshold_file, debug, check_options)
@@ -277,5 +277,8 @@ export {
       MriFdrOutputs,
       MriFdrParameters,
       mri_fdr,
+      mri_fdr_cargs,
+      mri_fdr_execute,
+      mri_fdr_outputs,
       mri_fdr_params,
 };

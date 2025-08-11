@@ -12,42 +12,42 @@ const MRIS_PROFILE_CLUSTERING_METADATA: Metadata = {
 
 
 interface MrisProfileClusteringParameters {
-    "__STYXTYPE__": "mris_profileClustering";
+    "@type": "freesurfer.mris_profileClustering";
     "input_file": InputPathType;
     "output_file": string;
     "other_options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_profileClustering": mris_profile_clustering_cargs,
+        "freesurfer.mris_profileClustering": mris_profile_clustering_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_profileClustering": mris_profile_clustering_outputs,
+        "freesurfer.mris_profileClustering": mris_profile_clustering_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisProfileClusteringOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file required for clustering.
+ * @param output_file Output file to store clustering results.
+ * @param other_options Other various options for tuning the clustering process.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_profile_clustering_params(
     input_file: InputPathType,
     output_file: string,
     other_options: string | null = null,
 ): MrisProfileClusteringParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file required for clustering.
-     * @param output_file Output file to store clustering results.
-     * @param other_options Other various options for tuning the clustering process.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_profileClustering" as const,
+        "@type": "freesurfer.mris_profileClustering" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -96,18 +96,18 @@ function mris_profile_clustering_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_profile_clustering_cargs(
     params: MrisProfileClusteringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_profileClustering");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -119,18 +119,18 @@ function mris_profile_clustering_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_profile_clustering_outputs(
     params: MrisProfileClusteringParameters,
     execution: Execution,
 ): MrisProfileClusteringOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisProfileClusteringOutputs = {
         root: execution.outputFile("."),
         clustering_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -139,22 +139,22 @@ function mris_profile_clustering_outputs(
 }
 
 
+/**
+ * A tool from Freesurfer for clustering based on profile data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
+ */
 function mris_profile_clustering_execute(
     params: MrisProfileClusteringParameters,
     execution: Execution,
 ): MrisProfileClusteringOutputs {
-    /**
-     * A tool from Freesurfer for clustering based on profile data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_profile_clustering_cargs(params, execution)
     const ret = mris_profile_clustering_outputs(params, execution)
@@ -163,26 +163,26 @@ function mris_profile_clustering_execute(
 }
 
 
+/**
+ * A tool from Freesurfer for clustering based on profile data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file required for clustering.
+ * @param output_file Output file to store clustering results.
+ * @param other_options Other various options for tuning the clustering process.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
+ */
 function mris_profile_clustering(
     input_file: InputPathType,
     output_file: string,
     other_options: string | null = null,
     runner: Runner | null = null,
 ): MrisProfileClusteringOutputs {
-    /**
-     * A tool from Freesurfer for clustering based on profile data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file required for clustering.
-     * @param output_file Output file to store clustering results.
-     * @param other_options Other various options for tuning the clustering process.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PROFILE_CLUSTERING_METADATA);
     const params = mris_profile_clustering_params(input_file, output_file, other_options)
@@ -195,5 +195,8 @@ export {
       MrisProfileClusteringOutputs,
       MrisProfileClusteringParameters,
       mris_profile_clustering,
+      mris_profile_clustering_cargs,
+      mris_profile_clustering_execute,
+      mris_profile_clustering_outputs,
       mris_profile_clustering_params,
 };

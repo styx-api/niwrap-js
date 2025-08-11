@@ -12,7 +12,7 @@ const BEDPOSTX_MGH_METADATA: Metadata = {
 
 
 interface BedpostxMghParameters {
-    "__STYXTYPE__": "bedpostx_mgh";
+    "@type": "freesurfer.bedpostx_mgh";
     "subject_directory": string;
     "fibres"?: number | null | undefined;
     "ard_weight"?: number | null | undefined;
@@ -24,33 +24,33 @@ interface BedpostxMghParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bedpostx_mgh": bedpostx_mgh_cargs,
+        "freesurfer.bedpostx_mgh": bedpostx_mgh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface BedpostxMghOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_directory Subject directory containing necessary files such as bvals, bvecs, data, and nodif_brain_mask.
+ * @param fibres Number of fibres per voxel, default is 3
+ * @param ard_weight ARD weight, more weight means fewer secondary fibres per voxel, default is 1
+ * @param burnin Burnin period, default is 1000
+ * @param jumps Number of jumps, default is 1250
+ * @param sample_every Sample every n steps, default is 25
+ * @param deconv_model Deconvolution model selection. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
+ * @param gradient_nonlin Consider gradient nonlinearities, default is off
+ *
+ * @returns Parameter dictionary
+ */
 function bedpostx_mgh_params(
     subject_directory: string,
     fibres: number | null = null,
@@ -80,22 +94,8 @@ function bedpostx_mgh_params(
     deconv_model: number | null = null,
     gradient_nonlin: boolean = false,
 ): BedpostxMghParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_directory Subject directory containing necessary files such as bvals, bvecs, data, and nodif_brain_mask.
-     * @param fibres Number of fibres per voxel, default is 3
-     * @param ard_weight ARD weight, more weight means fewer secondary fibres per voxel, default is 1
-     * @param burnin Burnin period, default is 1000
-     * @param jumps Number of jumps, default is 1250
-     * @param sample_every Sample every n steps, default is 25
-     * @param deconv_model Deconvolution model selection. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
-     * @param gradient_nonlin Consider gradient nonlinearities, default is off
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bedpostx_mgh" as const,
+        "@type": "freesurfer.bedpostx_mgh" as const,
         "subject_directory": subject_directory,
         "gradient_nonlin": gradient_nonlin,
     };
@@ -121,18 +121,18 @@ function bedpostx_mgh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bedpostx_mgh_cargs(
     params: BedpostxMghParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bedpostx_mgh");
     cargs.push((params["subject_directory"] ?? null));
@@ -179,18 +179,18 @@ function bedpostx_mgh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bedpostx_mgh_outputs(
     params: BedpostxMghParameters,
     execution: Execution,
 ): BedpostxMghOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BedpostxMghOutputs = {
         root: execution.outputFile("."),
     };
@@ -198,22 +198,22 @@ function bedpostx_mgh_outputs(
 }
 
 
+/**
+ * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
+ */
 function bedpostx_mgh_execute(
     params: BedpostxMghParameters,
     execution: Execution,
 ): BedpostxMghOutputs {
-    /**
-     * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
-     */
     params = execution.params(params)
     const cargs = bedpostx_mgh_cargs(params, execution)
     const ret = bedpostx_mgh_outputs(params, execution)
@@ -222,6 +222,25 @@ function bedpostx_mgh_execute(
 }
 
 
+/**
+ * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_directory Subject directory containing necessary files such as bvals, bvecs, data, and nodif_brain_mask.
+ * @param fibres Number of fibres per voxel, default is 3
+ * @param ard_weight ARD weight, more weight means fewer secondary fibres per voxel, default is 1
+ * @param burnin Burnin period, default is 1000
+ * @param jumps Number of jumps, default is 1250
+ * @param sample_every Sample every n steps, default is 25
+ * @param deconv_model Deconvolution model selection. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
+ * @param gradient_nonlin Consider gradient nonlinearities, default is off
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
+ */
 function bedpostx_mgh(
     subject_directory: string,
     fibres: number | null = null,
@@ -233,25 +252,6 @@ function bedpostx_mgh(
     gradient_nonlin: boolean = false,
     runner: Runner | null = null,
 ): BedpostxMghOutputs {
-    /**
-     * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_directory Subject directory containing necessary files such as bvals, bvecs, data, and nodif_brain_mask.
-     * @param fibres Number of fibres per voxel, default is 3
-     * @param ard_weight ARD weight, more weight means fewer secondary fibres per voxel, default is 1
-     * @param burnin Burnin period, default is 1000
-     * @param jumps Number of jumps, default is 1250
-     * @param sample_every Sample every n steps, default is 25
-     * @param deconv_model Deconvolution model selection. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
-     * @param gradient_nonlin Consider gradient nonlinearities, default is off
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BEDPOSTX_MGH_METADATA);
     const params = bedpostx_mgh_params(subject_directory, fibres, ard_weight, burnin, jumps, sample_every, deconv_model, gradient_nonlin)
@@ -264,5 +264,8 @@ export {
       BedpostxMghOutputs,
       BedpostxMghParameters,
       bedpostx_mgh,
+      bedpostx_mgh_cargs,
+      bedpostx_mgh_execute,
+      bedpostx_mgh_outputs,
       bedpostx_mgh_params,
 };

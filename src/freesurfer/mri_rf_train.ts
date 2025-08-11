@@ -12,7 +12,7 @@ const MRI_RF_TRAIN_METADATA: Metadata = {
 
 
 interface MriRfTrainParameters {
-    "__STYXTYPE__": "mri_rf_train";
+    "@type": "freesurfer.mri_rf_train";
     "seg_volume": string;
     "atlas_transform": string;
     "mask_volume"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface MriRfTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_rf_train": mri_rf_train_cargs,
+        "freesurfer.mri_rf_train": mri_rf_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface MriRfTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param seg_volume Segmentation volume (path relative to $subject/mri).
+ * @param atlas_transform Atlas transform (path relative to $subject/mri/transforms).
+ * @param subjects Input subjects.
+ * @param output_rfa Output RFA filename.
+ * @param mask_volume Use volname as a mask (path relative to $subject/mri).
+ * @param node_spacing Spacing of classifiers in canonical space.
+ * @param prior_spacing Spacing of class priors in canonical space.
+ * @param input_training_data Specifying training data (path relative to $subject/mri). Can specify multiple inputs. If not specified, 'orig' is used.
+ * @param sanity_check Conduct sanity-check of labels for obvious edit errors.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_rf_train_params(
     seg_volume: string,
     atlas_transform: string,
@@ -82,23 +97,8 @@ function mri_rf_train_params(
     input_training_data: Array<string> | null = null,
     sanity_check: boolean = false,
 ): MriRfTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param seg_volume Segmentation volume (path relative to $subject/mri).
-     * @param atlas_transform Atlas transform (path relative to $subject/mri/transforms).
-     * @param subjects Input subjects.
-     * @param output_rfa Output RFA filename.
-     * @param mask_volume Use volname as a mask (path relative to $subject/mri).
-     * @param node_spacing Spacing of classifiers in canonical space.
-     * @param prior_spacing Spacing of class priors in canonical space.
-     * @param input_training_data Specifying training data (path relative to $subject/mri). Can specify multiple inputs. If not specified, 'orig' is used.
-     * @param sanity_check Conduct sanity-check of labels for obvious edit errors.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_rf_train" as const,
+        "@type": "freesurfer.mri_rf_train" as const,
         "seg_volume": seg_volume,
         "atlas_transform": atlas_transform,
         "sanity_check": sanity_check,
@@ -121,18 +121,18 @@ function mri_rf_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_rf_train_cargs(
     params: MriRfTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_rf_train");
     cargs.push(
@@ -176,18 +176,18 @@ function mri_rf_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_rf_train_outputs(
     params: MriRfTrainParameters,
     execution: Execution,
 ): MriRfTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRfTrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -195,22 +195,22 @@ function mri_rf_train_outputs(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects using MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRfTrainOutputs`).
+ */
 function mri_rf_train_execute(
     params: MriRfTrainParameters,
     execution: Execution,
 ): MriRfTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects using MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRfTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_rf_train_cargs(params, execution)
     const ret = mri_rf_train_outputs(params, execution)
@@ -219,6 +219,26 @@ function mri_rf_train_execute(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects using MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param seg_volume Segmentation volume (path relative to $subject/mri).
+ * @param atlas_transform Atlas transform (path relative to $subject/mri/transforms).
+ * @param subjects Input subjects.
+ * @param output_rfa Output RFA filename.
+ * @param mask_volume Use volname as a mask (path relative to $subject/mri).
+ * @param node_spacing Spacing of classifiers in canonical space.
+ * @param prior_spacing Spacing of class priors in canonical space.
+ * @param input_training_data Specifying training data (path relative to $subject/mri). Can specify multiple inputs. If not specified, 'orig' is used.
+ * @param sanity_check Conduct sanity-check of labels for obvious edit errors.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRfTrainOutputs`).
+ */
 function mri_rf_train(
     seg_volume: string,
     atlas_transform: string,
@@ -231,26 +251,6 @@ function mri_rf_train(
     sanity_check: boolean = false,
     runner: Runner | null = null,
 ): MriRfTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects using MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param seg_volume Segmentation volume (path relative to $subject/mri).
-     * @param atlas_transform Atlas transform (path relative to $subject/mri/transforms).
-     * @param subjects Input subjects.
-     * @param output_rfa Output RFA filename.
-     * @param mask_volume Use volname as a mask (path relative to $subject/mri).
-     * @param node_spacing Spacing of classifiers in canonical space.
-     * @param prior_spacing Spacing of class priors in canonical space.
-     * @param input_training_data Specifying training data (path relative to $subject/mri). Can specify multiple inputs. If not specified, 'orig' is used.
-     * @param sanity_check Conduct sanity-check of labels for obvious edit errors.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRfTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RF_TRAIN_METADATA);
     const params = mri_rf_train_params(seg_volume, atlas_transform, subjects, output_rfa, mask_volume, node_spacing, prior_spacing, input_training_data, sanity_check)
@@ -263,5 +263,8 @@ export {
       MriRfTrainOutputs,
       MriRfTrainParameters,
       mri_rf_train,
+      mri_rf_train_cargs,
+      mri_rf_train_execute,
+      mri_rf_train_outputs,
       mri_rf_train_params,
 };

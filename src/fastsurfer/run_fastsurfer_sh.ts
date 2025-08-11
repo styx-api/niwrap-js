@@ -12,7 +12,7 @@ const RUN_FASTSURFER_SH_METADATA: Metadata = {
 
 
 interface RunFastsurferShParameters {
-    "__STYXTYPE__": "run_fastsurfer.sh";
+    "@type": "fastsurfer.run_fastsurfer.sh";
     "sid": string;
     "subjects_dir": string;
     "t1_input": InputPathType;
@@ -51,35 +51,35 @@ interface RunFastsurferShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_fastsurfer.sh": run_fastsurfer_sh_cargs,
+        "fastsurfer.run_fastsurfer.sh": run_fastsurfer_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "run_fastsurfer.sh": run_fastsurfer_sh_outputs,
+        "fastsurfer.run_fastsurfer.sh": run_fastsurfer_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -118,6 +118,47 @@ interface RunFastsurferShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sid Subject ID to create directory inside SUBJECTS_DIR
+ * @param subjects_dir Output directory SUBJECTS_DIR
+ * @param t1_input T1 full head input (not bias corrected). Requires an ABSOLUTE Path!
+ * @param fs_license Path to FreeSurfer license key file
+ * @param asegdkt_segfile Name of the segmentation file including aparc+DKTatlas-aseg segmentations
+ * @param vox_size Forces processing at a specific voxel size (0.7-1 or 'min')
+ * @param seg_only Run only FastSurferVINN
+ * @param seg_log Log-file for the segmentation
+ * @param conformed_name Name of the file for the conformed input image
+ * @param norm_name Name of the biasfield corrected image
+ * @param t2_input Optional T2 full head input
+ * @param reg_mode Registration method for T1 and T2 images
+ * @param threads Set openMP and ITK threads
+ * @param device Device for inference (cpu/cuda)
+ * @param viewagg_device Device for view aggregation
+ * @param batch_size Batch size for inference
+ * @param python_cmd Command for python
+ * @param surf_only Run surface pipeline only
+ * @param no_biasfield Deactivate bias field correction and partial volume-corrected stats
+ * @param tal_reg Perform talairach registration for eTIV estimates
+ * @param no_asegdkt Skip the asegdkt segmentation
+ * @param no_cereb Skip the cerebellum segmentation
+ * @param cereb_segfile Name of DL-based segmentation file of the cerebellum
+ * @param no_hypothal Skip the hypothalamus segmentation
+ * @param qc_snap Create QC snapshots in subjects directory
+ * @param three_t Use the 3T atlas for talairach registration
+ * @param parallel Run both hemispheres in parallel
+ * @param ignore_fs_version Switch on to avoid check for FreeSurfer version
+ * @param fstess Switch on mri_tesselate for surface creation
+ * @param fsqsphere Use FreeSurfer iterative inflation for qsphere
+ * @param fsaparc Additionally create FS aparc segmentations and ribbon
+ * @param no_fs_t1 Do not generate T1.mgz
+ * @param no_surfreg Do not run Surface registration with FreeSurfer
+ * @param allow_root Allow execution as root user
+ * @param version Print version information
+ *
+ * @returns Parameter dictionary
+ */
 function run_fastsurfer_sh_params(
     sid: string,
     subjects_dir: string,
@@ -155,49 +196,8 @@ function run_fastsurfer_sh_params(
     allow_root: boolean = false,
     version: string | null = null,
 ): RunFastsurferShParameters {
-    /**
-     * Build parameters.
-    
-     * @param sid Subject ID to create directory inside SUBJECTS_DIR
-     * @param subjects_dir Output directory SUBJECTS_DIR
-     * @param t1_input T1 full head input (not bias corrected). Requires an ABSOLUTE Path!
-     * @param fs_license Path to FreeSurfer license key file
-     * @param asegdkt_segfile Name of the segmentation file including aparc+DKTatlas-aseg segmentations
-     * @param vox_size Forces processing at a specific voxel size (0.7-1 or 'min')
-     * @param seg_only Run only FastSurferVINN
-     * @param seg_log Log-file for the segmentation
-     * @param conformed_name Name of the file for the conformed input image
-     * @param norm_name Name of the biasfield corrected image
-     * @param t2_input Optional T2 full head input
-     * @param reg_mode Registration method for T1 and T2 images
-     * @param threads Set openMP and ITK threads
-     * @param device Device for inference (cpu/cuda)
-     * @param viewagg_device Device for view aggregation
-     * @param batch_size Batch size for inference
-     * @param python_cmd Command for python
-     * @param surf_only Run surface pipeline only
-     * @param no_biasfield Deactivate bias field correction and partial volume-corrected stats
-     * @param tal_reg Perform talairach registration for eTIV estimates
-     * @param no_asegdkt Skip the asegdkt segmentation
-     * @param no_cereb Skip the cerebellum segmentation
-     * @param cereb_segfile Name of DL-based segmentation file of the cerebellum
-     * @param no_hypothal Skip the hypothalamus segmentation
-     * @param qc_snap Create QC snapshots in subjects directory
-     * @param three_t Use the 3T atlas for talairach registration
-     * @param parallel Run both hemispheres in parallel
-     * @param ignore_fs_version Switch on to avoid check for FreeSurfer version
-     * @param fstess Switch on mri_tesselate for surface creation
-     * @param fsqsphere Use FreeSurfer iterative inflation for qsphere
-     * @param fsaparc Additionally create FS aparc segmentations and ribbon
-     * @param no_fs_t1 Do not generate T1.mgz
-     * @param no_surfreg Do not run Surface registration with FreeSurfer
-     * @param allow_root Allow execution as root user
-     * @param version Print version information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_fastsurfer.sh" as const,
+        "@type": "fastsurfer.run_fastsurfer.sh" as const,
         "sid": sid,
         "subjects_dir": subjects_dir,
         "t1_input": t1_input,
@@ -268,18 +268,18 @@ function run_fastsurfer_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_fastsurfer_sh_cargs(
     params: RunFastsurferShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_fastsurfer.sh");
     cargs.push(
@@ -439,18 +439,18 @@ function run_fastsurfer_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_fastsurfer_sh_outputs(
     params: RunFastsurferShParameters,
     execution: Execution,
 ): RunFastsurferShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunFastsurferShOutputs = {
         root: execution.outputFile("."),
         segmentation: execution.outputFile([(params["subjects_dir"] ?? null), "/", (params["sid"] ?? null), "/mri/aparc.DKTatlas+aseg.deep.mgz"].join('')),
@@ -463,18 +463,18 @@ function run_fastsurfer_sh_outputs(
 }
 
 
+/**
+ * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
+ */
 function run_fastsurfer_sh_execute(
     params: RunFastsurferShParameters,
     execution: Execution,
 ): RunFastsurferShOutputs {
-    /**
-     * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_fastsurfer_sh_cargs(params, execution)
     const ret = run_fastsurfer_sh_outputs(params, execution)
@@ -483,6 +483,48 @@ function run_fastsurfer_sh_execute(
 }
 
 
+/**
+ * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
+ *
+ * @param sid Subject ID to create directory inside SUBJECTS_DIR
+ * @param subjects_dir Output directory SUBJECTS_DIR
+ * @param t1_input T1 full head input (not bias corrected). Requires an ABSOLUTE Path!
+ * @param fs_license Path to FreeSurfer license key file
+ * @param asegdkt_segfile Name of the segmentation file including aparc+DKTatlas-aseg segmentations
+ * @param vox_size Forces processing at a specific voxel size (0.7-1 or 'min')
+ * @param seg_only Run only FastSurferVINN
+ * @param seg_log Log-file for the segmentation
+ * @param conformed_name Name of the file for the conformed input image
+ * @param norm_name Name of the biasfield corrected image
+ * @param t2_input Optional T2 full head input
+ * @param reg_mode Registration method for T1 and T2 images
+ * @param threads Set openMP and ITK threads
+ * @param device Device for inference (cpu/cuda)
+ * @param viewagg_device Device for view aggregation
+ * @param batch_size Batch size for inference
+ * @param python_cmd Command for python
+ * @param surf_only Run surface pipeline only
+ * @param no_biasfield Deactivate bias field correction and partial volume-corrected stats
+ * @param tal_reg Perform talairach registration for eTIV estimates
+ * @param no_asegdkt Skip the asegdkt segmentation
+ * @param no_cereb Skip the cerebellum segmentation
+ * @param cereb_segfile Name of DL-based segmentation file of the cerebellum
+ * @param no_hypothal Skip the hypothalamus segmentation
+ * @param qc_snap Create QC snapshots in subjects directory
+ * @param three_t Use the 3T atlas for talairach registration
+ * @param parallel Run both hemispheres in parallel
+ * @param ignore_fs_version Switch on to avoid check for FreeSurfer version
+ * @param fstess Switch on mri_tesselate for surface creation
+ * @param fsqsphere Use FreeSurfer iterative inflation for qsphere
+ * @param fsaparc Additionally create FS aparc segmentations and ribbon
+ * @param no_fs_t1 Do not generate T1.mgz
+ * @param no_surfreg Do not run Surface registration with FreeSurfer
+ * @param allow_root Allow execution as root user
+ * @param version Print version information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
+ */
 function run_fastsurfer_sh(
     sid: string,
     subjects_dir: string,
@@ -521,48 +563,6 @@ function run_fastsurfer_sh(
     version: string | null = null,
     runner: Runner | null = null,
 ): RunFastsurferShOutputs {
-    /**
-     * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
-    
-     * @param sid Subject ID to create directory inside SUBJECTS_DIR
-     * @param subjects_dir Output directory SUBJECTS_DIR
-     * @param t1_input T1 full head input (not bias corrected). Requires an ABSOLUTE Path!
-     * @param fs_license Path to FreeSurfer license key file
-     * @param asegdkt_segfile Name of the segmentation file including aparc+DKTatlas-aseg segmentations
-     * @param vox_size Forces processing at a specific voxel size (0.7-1 or 'min')
-     * @param seg_only Run only FastSurferVINN
-     * @param seg_log Log-file for the segmentation
-     * @param conformed_name Name of the file for the conformed input image
-     * @param norm_name Name of the biasfield corrected image
-     * @param t2_input Optional T2 full head input
-     * @param reg_mode Registration method for T1 and T2 images
-     * @param threads Set openMP and ITK threads
-     * @param device Device for inference (cpu/cuda)
-     * @param viewagg_device Device for view aggregation
-     * @param batch_size Batch size for inference
-     * @param python_cmd Command for python
-     * @param surf_only Run surface pipeline only
-     * @param no_biasfield Deactivate bias field correction and partial volume-corrected stats
-     * @param tal_reg Perform talairach registration for eTIV estimates
-     * @param no_asegdkt Skip the asegdkt segmentation
-     * @param no_cereb Skip the cerebellum segmentation
-     * @param cereb_segfile Name of DL-based segmentation file of the cerebellum
-     * @param no_hypothal Skip the hypothalamus segmentation
-     * @param qc_snap Create QC snapshots in subjects directory
-     * @param three_t Use the 3T atlas for talairach registration
-     * @param parallel Run both hemispheres in parallel
-     * @param ignore_fs_version Switch on to avoid check for FreeSurfer version
-     * @param fstess Switch on mri_tesselate for surface creation
-     * @param fsqsphere Use FreeSurfer iterative inflation for qsphere
-     * @param fsaparc Additionally create FS aparc segmentations and ribbon
-     * @param no_fs_t1 Do not generate T1.mgz
-     * @param no_surfreg Do not run Surface registration with FreeSurfer
-     * @param allow_root Allow execution as root user
-     * @param version Print version information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_FASTSURFER_SH_METADATA);
     const params = run_fastsurfer_sh_params(sid, subjects_dir, t1_input, fs_license, asegdkt_segfile, vox_size, seg_only, seg_log, conformed_name, norm_name, t2_input, reg_mode, threads, device, viewagg_device, batch_size, python_cmd, surf_only, no_biasfield, tal_reg, no_asegdkt, no_cereb, cereb_segfile, no_hypothal, qc_snap, three_t, parallel, ignore_fs_version, fstess, fsqsphere, fsaparc, no_fs_t1, no_surfreg, allow_root, version)
@@ -575,5 +575,8 @@ export {
       RunFastsurferShOutputs,
       RunFastsurferShParameters,
       run_fastsurfer_sh,
+      run_fastsurfer_sh_cargs,
+      run_fastsurfer_sh_execute,
+      run_fastsurfer_sh_outputs,
       run_fastsurfer_sh_params,
 };

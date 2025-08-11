@@ -12,7 +12,7 @@ const MRI_MODIFY_METADATA: Metadata = {
 
 
 interface MriModifyParameters {
-    "__STYXTYPE__": "mri_modify";
+    "@type": "freesurfer.mri_modify";
     "x_ras": Array<number>;
     "y_ras": Array<number>;
     "z_ras": Array<number>;
@@ -30,33 +30,33 @@ interface MriModifyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_modify": mri_modify_cargs,
+        "freesurfer.mri_modify": mri_modify_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface MriModifyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param x_ras X direction cosines (xr, xa, xs)
+ * @param y_ras Y direction cosines (yr, ya, ys)
+ * @param z_ras Z direction cosines (zr, za, zs)
+ * @param cras Center RAS coordinates (cr, ca, cs)
+ * @param x_size Size of voxel in X dimension
+ * @param y_size Size of voxel in Y dimension
+ * @param z_size Size of voxel in Z dimension
+ * @param tr Repetition time (TR)
+ * @param te Echo time (TE)
+ * @param ti Inversion time (TI)
+ * @param fa Flip angle (degrees)
+ * @param xform New transformation file name
+ * @param input_volume Input volume
+ * @param output_volume Output volume
+ *
+ * @returns Parameter dictionary
+ */
 function mri_modify_params(
     x_ras: Array<number>,
     y_ras: Array<number>,
@@ -92,28 +112,8 @@ function mri_modify_params(
     input_volume: InputPathType,
     output_volume: string,
 ): MriModifyParameters {
-    /**
-     * Build parameters.
-    
-     * @param x_ras X direction cosines (xr, xa, xs)
-     * @param y_ras Y direction cosines (yr, ya, ys)
-     * @param z_ras Z direction cosines (zr, za, zs)
-     * @param cras Center RAS coordinates (cr, ca, cs)
-     * @param x_size Size of voxel in X dimension
-     * @param y_size Size of voxel in Y dimension
-     * @param z_size Size of voxel in Z dimension
-     * @param tr Repetition time (TR)
-     * @param te Echo time (TE)
-     * @param ti Inversion time (TI)
-     * @param fa Flip angle (degrees)
-     * @param xform New transformation file name
-     * @param input_volume Input volume
-     * @param output_volume Output volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_modify" as const,
+        "@type": "freesurfer.mri_modify" as const,
         "x_ras": x_ras,
         "y_ras": y_ras,
         "z_ras": z_ras,
@@ -133,18 +133,18 @@ function mri_modify_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_modify_cargs(
     params: MriModifyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_modify");
     cargs.push(
@@ -201,18 +201,18 @@ function mri_modify_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_modify_outputs(
     params: MriModifyParameters,
     execution: Execution,
 ): MriModifyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriModifyOutputs = {
         root: execution.outputFile("."),
     };
@@ -220,22 +220,22 @@ function mri_modify_outputs(
 }
 
 
+/**
+ * Tool for modifying MRI image headers.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
+ */
 function mri_modify_execute(
     params: MriModifyParameters,
     execution: Execution,
 ): MriModifyOutputs {
-    /**
-     * Tool for modifying MRI image headers.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_modify_cargs(params, execution)
     const ret = mri_modify_outputs(params, execution)
@@ -244,6 +244,31 @@ function mri_modify_execute(
 }
 
 
+/**
+ * Tool for modifying MRI image headers.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param x_ras X direction cosines (xr, xa, xs)
+ * @param y_ras Y direction cosines (yr, ya, ys)
+ * @param z_ras Z direction cosines (zr, za, zs)
+ * @param cras Center RAS coordinates (cr, ca, cs)
+ * @param x_size Size of voxel in X dimension
+ * @param y_size Size of voxel in Y dimension
+ * @param z_size Size of voxel in Z dimension
+ * @param tr Repetition time (TR)
+ * @param te Echo time (TE)
+ * @param ti Inversion time (TI)
+ * @param fa Flip angle (degrees)
+ * @param xform New transformation file name
+ * @param input_volume Input volume
+ * @param output_volume Output volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
+ */
 function mri_modify(
     x_ras: Array<number>,
     y_ras: Array<number>,
@@ -261,31 +286,6 @@ function mri_modify(
     output_volume: string,
     runner: Runner | null = null,
 ): MriModifyOutputs {
-    /**
-     * Tool for modifying MRI image headers.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param x_ras X direction cosines (xr, xa, xs)
-     * @param y_ras Y direction cosines (yr, ya, ys)
-     * @param z_ras Z direction cosines (zr, za, zs)
-     * @param cras Center RAS coordinates (cr, ca, cs)
-     * @param x_size Size of voxel in X dimension
-     * @param y_size Size of voxel in Y dimension
-     * @param z_size Size of voxel in Z dimension
-     * @param tr Repetition time (TR)
-     * @param te Echo time (TE)
-     * @param ti Inversion time (TI)
-     * @param fa Flip angle (degrees)
-     * @param xform New transformation file name
-     * @param input_volume Input volume
-     * @param output_volume Output volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MODIFY_METADATA);
     const params = mri_modify_params(x_ras, y_ras, z_ras, cras, x_size, y_size, z_size, tr, te, ti, fa, xform, input_volume, output_volume)
@@ -298,5 +298,8 @@ export {
       MriModifyOutputs,
       MriModifyParameters,
       mri_modify,
+      mri_modify_cargs,
+      mri_modify_execute,
+      mri_modify_outputs,
       mri_modify_params,
 };

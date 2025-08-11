@@ -12,20 +12,20 @@ const CIFTI_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface CiftiEstimateFwhmWholeFileParameters {
-    "__STYXTYPE__": "whole_file";
+    "@type": "workbench.cifti-estimate-fwhm.whole_file";
     "opt_demean": boolean;
 }
 
 
 interface CiftiEstimateFwhmSurfaceParameters {
-    "__STYXTYPE__": "surface";
+    "@type": "workbench.cifti-estimate-fwhm.surface";
     "structure": string;
     "surface": InputPathType;
 }
 
 
 interface CiftiEstimateFwhmParameters {
-    "__STYXTYPE__": "cifti-estimate-fwhm";
+    "@type": "workbench.cifti-estimate-fwhm";
     "cifti": InputPathType;
     "opt_merged_volume": boolean;
     "opt_column_column"?: number | null | undefined;
@@ -34,71 +34,71 @@ interface CiftiEstimateFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-estimate-fwhm": cifti_estimate_fwhm_cargs,
-        "whole_file": cifti_estimate_fwhm_whole_file_cargs,
-        "surface": cifti_estimate_fwhm_surface_cargs,
+        "workbench.cifti-estimate-fwhm": cifti_estimate_fwhm_cargs,
+        "workbench.cifti-estimate-fwhm.whole_file": cifti_estimate_fwhm_whole_file_cargs,
+        "workbench.cifti-estimate-fwhm.surface": cifti_estimate_fwhm_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_demean subtract the mean image before estimating smoothness
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
 ): CiftiEstimateFwhmWholeFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_demean subtract the mean image before estimating smoothness
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "whole_file" as const,
+        "@type": "workbench.cifti-estimate-fwhm.whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_estimate_fwhm_whole_file_cargs(
     params: CiftiEstimateFwhmWholeFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-whole-file");
     if ((params["opt_demean"] ?? null)) {
@@ -108,20 +108,20 @@ function cifti_estimate_fwhm_whole_file_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure what structure to use this surface for
+ * @param surface the surface file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_estimate_fwhm_surface_params(
     structure: string,
     surface: InputPathType,
 ): CiftiEstimateFwhmSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure what structure to use this surface for
-     * @param surface the surface file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface" as const,
+        "@type": "workbench.cifti-estimate-fwhm.surface" as const,
         "structure": structure,
         "surface": surface,
     };
@@ -129,18 +129,18 @@ function cifti_estimate_fwhm_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_estimate_fwhm_surface_cargs(
     params: CiftiEstimateFwhmSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-surface");
     cargs.push((params["structure"] ?? null));
@@ -162,6 +162,17 @@ interface CiftiEstimateFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti file
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_column_column only output estimates for one column: the column number
+ * @param whole_file estimate for the whole file at once, not each column separately
+ * @param surface specify an input surface
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_estimate_fwhm_params(
     cifti: InputPathType,
     opt_merged_volume: boolean = false,
@@ -169,19 +180,8 @@ function cifti_estimate_fwhm_params(
     whole_file: CiftiEstimateFwhmWholeFileParameters | null = null,
     surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
 ): CiftiEstimateFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti file
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_column_column only output estimates for one column: the column number
-     * @param whole_file estimate for the whole file at once, not each column separately
-     * @param surface specify an input surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-estimate-fwhm" as const,
+        "@type": "workbench.cifti-estimate-fwhm" as const,
         "cifti": cifti,
         "opt_merged_volume": opt_merged_volume,
     };
@@ -198,18 +198,18 @@ function cifti_estimate_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_estimate_fwhm_cargs(
     params: CiftiEstimateFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-estimate-fwhm");
@@ -224,27 +224,27 @@ function cifti_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null).__STYXTYPE__)((params["whole_file"] ?? null), execution));
+        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
     }
     if ((params["surface"] ?? null) !== null) {
-        cargs.push(...(params["surface"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["surface"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_estimate_fwhm_outputs(
     params: CiftiEstimateFwhmParameters,
     execution: Execution,
 ): CiftiEstimateFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiEstimateFwhmOutputs = {
         root: execution.outputFile("."),
     };
@@ -252,60 +252,60 @@ function cifti_estimate_fwhm_outputs(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a cifti file.
+ *
+ * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.
+ *
+ * <structure> must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
+ */
 function cifti_estimate_fwhm_execute(
     params: CiftiEstimateFwhmParameters,
     execution: Execution,
 ): CiftiEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a cifti file.
-     * 
-     * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.
-     * 
-     * <structure> must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_estimate_fwhm_cargs(params, execution)
     const ret = cifti_estimate_fwhm_outputs(params, execution)
@@ -314,6 +314,60 @@ function cifti_estimate_fwhm_execute(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a cifti file.
+ *
+ * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.
+ *
+ * <structure> must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti file
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_column_column only output estimates for one column: the column number
+ * @param whole_file estimate for the whole file at once, not each column separately
+ * @param surface specify an input surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
+ */
 function cifti_estimate_fwhm(
     cifti: InputPathType,
     opt_merged_volume: boolean = false,
@@ -322,60 +376,6 @@ function cifti_estimate_fwhm(
     surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a cifti file.
-     * 
-     * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.
-     * 
-     * <structure> must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti file
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_column_column only output estimates for one column: the column number
-     * @param whole_file estimate for the whole file at once, not each column separately
-     * @param surface specify an input surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_ESTIMATE_FWHM_METADATA);
     const params = cifti_estimate_fwhm_params(cifti, opt_merged_volume, opt_column_column, whole_file, surface)
@@ -390,7 +390,12 @@ export {
       CiftiEstimateFwhmSurfaceParameters,
       CiftiEstimateFwhmWholeFileParameters,
       cifti_estimate_fwhm,
+      cifti_estimate_fwhm_cargs,
+      cifti_estimate_fwhm_execute,
+      cifti_estimate_fwhm_outputs,
       cifti_estimate_fwhm_params,
+      cifti_estimate_fwhm_surface_cargs,
       cifti_estimate_fwhm_surface_params,
+      cifti_estimate_fwhm_whole_file_cargs,
       cifti_estimate_fwhm_whole_file_params,
 };

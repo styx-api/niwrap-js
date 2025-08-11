@@ -12,7 +12,7 @@ const MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA: Metadata = {
 
 
 interface MrisMultimodalSurfacePlacementParameters {
-    "__STYXTYPE__": "mris_multimodal_surface_placement";
+    "@type": "freesurfer.mris_multimodal_surface_placement";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
     "sphere_surface": InputPathType;
@@ -32,33 +32,33 @@ interface MrisMultimodalSurfacePlacementParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_multimodal_surface_placement": mris_multimodal_surface_placement_cargs,
+        "freesurfer.mris_multimodal_surface_placement": mris_multimodal_surface_placement_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -78,6 +78,28 @@ interface MrisMultimodalSurfacePlacementOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param sphere_surface Sphere surface file
+ * @param normals Normals file in VTK format
+ * @param values Values file in VTK format
+ * @param step_size Step size
+ * @param number_of_steps Number of steps
+ * @param gradient_sigma Gradient sigma value
+ * @param aseg_aparc ASEG APARC image file
+ * @param white_surface White surface file
+ * @param prob_of_csf Probability of CSF
+ * @param t1_image T1-weighted image file
+ * @param t2_image T2-weighted image file
+ * @param flair_image FLAIR image file
+ * @param debug_vertex Debug vertex index
+ * @param min_max Toggle between min or max operation
+ *
+ * @returns Parameter dictionary
+ */
 function mris_multimodal_surface_placement_params(
     input_surface: InputPathType,
     output_surface: InputPathType,
@@ -96,30 +118,8 @@ function mris_multimodal_surface_placement_params(
     debug_vertex: number | null = null,
     min_max: boolean = false,
 ): MrisMultimodalSurfacePlacementParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param sphere_surface Sphere surface file
-     * @param normals Normals file in VTK format
-     * @param values Values file in VTK format
-     * @param step_size Step size
-     * @param number_of_steps Number of steps
-     * @param gradient_sigma Gradient sigma value
-     * @param aseg_aparc ASEG APARC image file
-     * @param white_surface White surface file
-     * @param prob_of_csf Probability of CSF
-     * @param t1_image T1-weighted image file
-     * @param t2_image T2-weighted image file
-     * @param flair_image FLAIR image file
-     * @param debug_vertex Debug vertex index
-     * @param min_max Toggle between min or max operation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_multimodal_surface_placement" as const,
+        "@type": "freesurfer.mris_multimodal_surface_placement" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "sphere_surface": sphere_surface,
@@ -143,18 +143,18 @@ function mris_multimodal_surface_placement_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_multimodal_surface_placement_cargs(
     params: MrisMultimodalSurfacePlacementParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_multimodal_surface_placement");
     cargs.push(
@@ -226,18 +226,18 @@ function mris_multimodal_surface_placement_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_multimodal_surface_placement_outputs(
     params: MrisMultimodalSurfacePlacementParameters,
     execution: Execution,
 ): MrisMultimodalSurfacePlacementOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMultimodalSurfacePlacementOutputs = {
         root: execution.outputFile("."),
     };
@@ -245,22 +245,22 @@ function mris_multimodal_surface_placement_outputs(
 }
 
 
+/**
+ * FreeSurfer command for multimodal surface placement.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
+ */
 function mris_multimodal_surface_placement_execute(
     params: MrisMultimodalSurfacePlacementParameters,
     execution: Execution,
 ): MrisMultimodalSurfacePlacementOutputs {
-    /**
-     * FreeSurfer command for multimodal surface placement.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_multimodal_surface_placement_cargs(params, execution)
     const ret = mris_multimodal_surface_placement_outputs(params, execution)
@@ -269,6 +269,33 @@ function mris_multimodal_surface_placement_execute(
 }
 
 
+/**
+ * FreeSurfer command for multimodal surface placement.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param sphere_surface Sphere surface file
+ * @param normals Normals file in VTK format
+ * @param values Values file in VTK format
+ * @param step_size Step size
+ * @param number_of_steps Number of steps
+ * @param gradient_sigma Gradient sigma value
+ * @param aseg_aparc ASEG APARC image file
+ * @param white_surface White surface file
+ * @param prob_of_csf Probability of CSF
+ * @param t1_image T1-weighted image file
+ * @param t2_image T2-weighted image file
+ * @param flair_image FLAIR image file
+ * @param debug_vertex Debug vertex index
+ * @param min_max Toggle between min or max operation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
+ */
 function mris_multimodal_surface_placement(
     input_surface: InputPathType,
     output_surface: InputPathType,
@@ -288,33 +315,6 @@ function mris_multimodal_surface_placement(
     min_max: boolean = false,
     runner: Runner | null = null,
 ): MrisMultimodalSurfacePlacementOutputs {
-    /**
-     * FreeSurfer command for multimodal surface placement.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param sphere_surface Sphere surface file
-     * @param normals Normals file in VTK format
-     * @param values Values file in VTK format
-     * @param step_size Step size
-     * @param number_of_steps Number of steps
-     * @param gradient_sigma Gradient sigma value
-     * @param aseg_aparc ASEG APARC image file
-     * @param white_surface White surface file
-     * @param prob_of_csf Probability of CSF
-     * @param t1_image T1-weighted image file
-     * @param t2_image T2-weighted image file
-     * @param flair_image FLAIR image file
-     * @param debug_vertex Debug vertex index
-     * @param min_max Toggle between min or max operation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA);
     const params = mris_multimodal_surface_placement_params(input_surface, output_surface, sphere_surface, normals, values, step_size, number_of_steps, gradient_sigma, aseg_aparc, white_surface, prob_of_csf, t1_image, t2_image, flair_image, debug_vertex, min_max)
@@ -327,5 +327,8 @@ export {
       MrisMultimodalSurfacePlacementOutputs,
       MrisMultimodalSurfacePlacementParameters,
       mris_multimodal_surface_placement,
+      mris_multimodal_surface_placement_cargs,
+      mris_multimodal_surface_placement_execute,
+      mris_multimodal_surface_placement_outputs,
       mris_multimodal_surface_placement_params,
 };

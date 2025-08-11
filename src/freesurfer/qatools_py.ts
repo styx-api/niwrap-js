@@ -12,7 +12,7 @@ const QATOOLS_PY_METADATA: Metadata = {
 
 
 interface QatoolsPyParameters {
-    "__STYXTYPE__": "qatools.py";
+    "@type": "freesurfer.qatools.py";
     "subjects_dir": string;
     "output_dir": string;
     "subjects"?: Array<string> | null | undefined;
@@ -23,35 +23,35 @@ interface QatoolsPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "qatools.py": qatools_py_cargs,
+        "freesurfer.qatools.py": qatools_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "qatools.py": qatools_py_outputs,
+        "freesurfer.qatools.py": qatools_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface QatoolsPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_dir Subjects directory containing a set of Freesurfer 6.0 processed individual datasets.
+ * @param output_dir Output directory for the generated results.
+ * @param subjects List of subject IDs. If omitted, all suitable subdirectories within the subjects directory will be used.
+ * @param screenshots Create screenshots of individual brains.
+ * @param fornix Check fornix segmentation.
+ * @param outlier Run outlier detection.
+ * @param outlier_table Specify normative values for outlier detection.
+ *
+ * @returns Parameter dictionary
+ */
 function qatools_py_params(
     subjects_dir: string,
     output_dir: string,
@@ -87,21 +100,8 @@ function qatools_py_params(
     outlier: boolean = false,
     outlier_table: InputPathType | null = null,
 ): QatoolsPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_dir Subjects directory containing a set of Freesurfer 6.0 processed individual datasets.
-     * @param output_dir Output directory for the generated results.
-     * @param subjects List of subject IDs. If omitted, all suitable subdirectories within the subjects directory will be used.
-     * @param screenshots Create screenshots of individual brains.
-     * @param fornix Check fornix segmentation.
-     * @param outlier Run outlier detection.
-     * @param outlier_table Specify normative values for outlier detection.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "qatools.py" as const,
+        "@type": "freesurfer.qatools.py" as const,
         "subjects_dir": subjects_dir,
         "output_dir": output_dir,
         "screenshots": screenshots,
@@ -118,18 +118,18 @@ function qatools_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function qatools_py_cargs(
     params: QatoolsPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("qatools.py");
     cargs.push(
@@ -165,18 +165,18 @@ function qatools_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function qatools_py_outputs(
     params: QatoolsPyParameters,
     execution: Execution,
 ): QatoolsPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QatoolsPyOutputs = {
         root: execution.outputFile("."),
         summary_csv: execution.outputFile([(params["output_dir"] ?? null), "/summary.csv"].join('')),
@@ -186,22 +186,22 @@ function qatools_py_outputs(
 }
 
 
+/**
+ * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
+ */
 function qatools_py_execute(
     params: QatoolsPyParameters,
     execution: Execution,
 ): QatoolsPyOutputs {
-    /**
-     * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = qatools_py_cargs(params, execution)
     const ret = qatools_py_outputs(params, execution)
@@ -210,6 +210,24 @@ function qatools_py_execute(
 }
 
 
+/**
+ * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_dir Subjects directory containing a set of Freesurfer 6.0 processed individual datasets.
+ * @param output_dir Output directory for the generated results.
+ * @param subjects List of subject IDs. If omitted, all suitable subdirectories within the subjects directory will be used.
+ * @param screenshots Create screenshots of individual brains.
+ * @param fornix Check fornix segmentation.
+ * @param outlier Run outlier detection.
+ * @param outlier_table Specify normative values for outlier detection.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
+ */
 function qatools_py(
     subjects_dir: string,
     output_dir: string,
@@ -220,24 +238,6 @@ function qatools_py(
     outlier_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): QatoolsPyOutputs {
-    /**
-     * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_dir Subjects directory containing a set of Freesurfer 6.0 processed individual datasets.
-     * @param output_dir Output directory for the generated results.
-     * @param subjects List of subject IDs. If omitted, all suitable subdirectories within the subjects directory will be used.
-     * @param screenshots Create screenshots of individual brains.
-     * @param fornix Check fornix segmentation.
-     * @param outlier Run outlier detection.
-     * @param outlier_table Specify normative values for outlier detection.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QATOOLS_PY_METADATA);
     const params = qatools_py_params(subjects_dir, output_dir, subjects, screenshots, fornix, outlier, outlier_table)
@@ -250,5 +250,8 @@ export {
       QatoolsPyOutputs,
       QatoolsPyParameters,
       qatools_py,
+      qatools_py_cargs,
+      qatools_py_execute,
+      qatools_py_outputs,
       qatools_py_params,
 };

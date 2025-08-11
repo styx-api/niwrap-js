@@ -12,7 +12,7 @@ const PROMPT_POPUP_METADATA: Metadata = {
 
 
 interface PromptPopupParameters {
-    "__STYXTYPE__": "prompt_popup";
+    "@type": "afni.prompt_popup";
     "message": string;
     "message_pause"?: string | null | undefined;
     "buttons"?: Array<string> | null | undefined;
@@ -22,33 +22,33 @@ interface PromptPopupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "prompt_popup": prompt_popup_cargs,
+        "afni.prompt_popup": prompt_popup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface PromptPopupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+ * @param message_pause Same as -message to match the old prompt_user.
+ * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
+ * @param buttons_b Same as -button.
+ * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
+ * @param timeout_to Same as -timeout TT.
+ *
+ * @returns Parameter dictionary
+ */
 function prompt_popup_params(
     message: string,
     message_pause: string | null = null,
@@ -76,20 +88,8 @@ function prompt_popup_params(
     timeout: number | null = null,
     timeout_to: number | null = null,
 ): PromptPopupParameters {
-    /**
-     * Build parameters.
-    
-     * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
-     * @param message_pause Same as -message to match the old prompt_user.
-     * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
-     * @param buttons_b Same as -button.
-     * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
-     * @param timeout_to Same as -timeout TT.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "prompt_popup" as const,
+        "@type": "afni.prompt_popup" as const,
         "message": message,
     };
     if (message_pause !== null) {
@@ -111,18 +111,18 @@ function prompt_popup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function prompt_popup_cargs(
     params: PromptPopupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("prompt_popup");
     cargs.push(
@@ -163,18 +163,18 @@ function prompt_popup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function prompt_popup_outputs(
     params: PromptPopupParameters,
     execution: Execution,
 ): PromptPopupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PromptPopupOutputs = {
         root: execution.outputFile("."),
     };
@@ -182,22 +182,22 @@ function prompt_popup_outputs(
 }
 
 
+/**
+ * A command-line tool that pops up a window prompting user interaction with a message and buttons.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
+ */
 function prompt_popup_execute(
     params: PromptPopupParameters,
     execution: Execution,
 ): PromptPopupOutputs {
-    /**
-     * A command-line tool that pops up a window prompting user interaction with a message and buttons.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
-     */
     params = execution.params(params)
     const cargs = prompt_popup_cargs(params, execution)
     const ret = prompt_popup_outputs(params, execution)
@@ -206,6 +206,23 @@ function prompt_popup_execute(
 }
 
 
+/**
+ * A command-line tool that pops up a window prompting user interaction with a message and buttons.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
+ * @param message_pause Same as -message to match the old prompt_user.
+ * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
+ * @param buttons_b Same as -button.
+ * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
+ * @param timeout_to Same as -timeout TT.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
+ */
 function prompt_popup(
     message: string,
     message_pause: string | null = null,
@@ -215,23 +232,6 @@ function prompt_popup(
     timeout_to: number | null = null,
     runner: Runner | null = null,
 ): PromptPopupOutputs {
-    /**
-     * A command-line tool that pops up a window prompting user interaction with a message and buttons.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param message Pops a window prompting the user with MESSAGE. If MESSAGE is '-', it is read from stdin.
-     * @param message_pause Same as -message to match the old prompt_user.
-     * @param buttons What do you want the buttons to say? You can give up to three -button for three buttons. Returns integer 1, 2, or 3. If there is no -button, there will be one button 'Ok'.
-     * @param buttons_b Same as -button.
-     * @param timeout Timeout in seconds of prompt message. Default answer is returned if TT seconds elapse without user input.
-     * @param timeout_to Same as -timeout TT.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROMPT_POPUP_METADATA);
     const params = prompt_popup_params(message, message_pause, buttons, buttons_b, timeout, timeout_to)
@@ -244,5 +244,8 @@ export {
       PromptPopupOutputs,
       PromptPopupParameters,
       prompt_popup,
+      prompt_popup_cargs,
+      prompt_popup_execute,
+      prompt_popup_outputs,
       prompt_popup_params,
 };

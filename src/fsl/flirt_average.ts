@@ -12,7 +12,7 @@ const FLIRT_AVERAGE_METADATA: Metadata = {
 
 
 interface FlirtAverageParameters {
-    "__STYXTYPE__": "flirt_average";
+    "@type": "fsl.flirt_average";
     "ninputs": number;
     "input1": InputPathType;
     "input2": InputPathType;
@@ -23,35 +23,35 @@ interface FlirtAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "flirt_average": flirt_average_cargs,
+        "fsl.flirt_average": flirt_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "flirt_average": flirt_average_outputs,
+        "fsl.flirt_average": flirt_average_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface FlirtAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ninputs Number of input images
+ * @param input1 First input image (e.g. rawT1_1.nii.gz)
+ * @param input2 Second input image (e.g. rawT1_2.nii.gz)
+ * @param output_file Output image (e.g. averageT1.nii.gz)
+ * @param input3 Third input image (e.g. rawT1_3.nii.gz)
+ * @param reference_image Reference image to use instead of first input
+ * @param flirt_options Options to be passed to FLIRT
+ *
+ * @returns Parameter dictionary
+ */
 function flirt_average_params(
     ninputs: number,
     input1: InputPathType,
@@ -83,21 +96,8 @@ function flirt_average_params(
     reference_image: InputPathType | null = null,
     flirt_options: string | null = null,
 ): FlirtAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param ninputs Number of input images
-     * @param input1 First input image (e.g. rawT1_1.nii.gz)
-     * @param input2 Second input image (e.g. rawT1_2.nii.gz)
-     * @param output_file Output image (e.g. averageT1.nii.gz)
-     * @param input3 Third input image (e.g. rawT1_3.nii.gz)
-     * @param reference_image Reference image to use instead of first input
-     * @param flirt_options Options to be passed to FLIRT
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flirt_average" as const,
+        "@type": "fsl.flirt_average" as const,
         "ninputs": ninputs,
         "input1": input1,
         "input2": input2,
@@ -116,18 +116,18 @@ function flirt_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function flirt_average_cargs(
     params: FlirtAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("flirt_average");
     cargs.push(String((params["ninputs"] ?? null)));
@@ -150,18 +150,18 @@ function flirt_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function flirt_average_outputs(
     params: FlirtAverageParameters,
     execution: Execution,
 ): FlirtAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FlirtAverageOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null), ".nii.gz"].join('')),
@@ -170,22 +170,22 @@ function flirt_average_outputs(
 }
 
 
+/**
+ * Averages multiple input images after linear registration (FLIRT).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
+ */
 function flirt_average_execute(
     params: FlirtAverageParameters,
     execution: Execution,
 ): FlirtAverageOutputs {
-    /**
-     * Averages multiple input images after linear registration (FLIRT).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = flirt_average_cargs(params, execution)
     const ret = flirt_average_outputs(params, execution)
@@ -194,6 +194,24 @@ function flirt_average_execute(
 }
 
 
+/**
+ * Averages multiple input images after linear registration (FLIRT).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param ninputs Number of input images
+ * @param input1 First input image (e.g. rawT1_1.nii.gz)
+ * @param input2 Second input image (e.g. rawT1_2.nii.gz)
+ * @param output_file Output image (e.g. averageT1.nii.gz)
+ * @param input3 Third input image (e.g. rawT1_3.nii.gz)
+ * @param reference_image Reference image to use instead of first input
+ * @param flirt_options Options to be passed to FLIRT
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
+ */
 function flirt_average(
     ninputs: number,
     input1: InputPathType,
@@ -204,24 +222,6 @@ function flirt_average(
     flirt_options: string | null = null,
     runner: Runner | null = null,
 ): FlirtAverageOutputs {
-    /**
-     * Averages multiple input images after linear registration (FLIRT).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param ninputs Number of input images
-     * @param input1 First input image (e.g. rawT1_1.nii.gz)
-     * @param input2 Second input image (e.g. rawT1_2.nii.gz)
-     * @param output_file Output image (e.g. averageT1.nii.gz)
-     * @param input3 Third input image (e.g. rawT1_3.nii.gz)
-     * @param reference_image Reference image to use instead of first input
-     * @param flirt_options Options to be passed to FLIRT
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLIRT_AVERAGE_METADATA);
     const params = flirt_average_params(ninputs, input1, input2, output_file, input3, reference_image, flirt_options)
@@ -234,5 +234,8 @@ export {
       FlirtAverageOutputs,
       FlirtAverageParameters,
       flirt_average,
+      flirt_average_cargs,
+      flirt_average_execute,
+      flirt_average_outputs,
       flirt_average_params,
 };

@@ -12,7 +12,7 @@ const SCCAN_METADATA: Metadata = {
 
 
 interface SccanParameters {
-    "__STYXTYPE__": "sccan";
+    "@type": "ants.sccan";
     "output"?: string | null | undefined;
     "n_permutations"?: number | null | undefined;
     "smoother"?: number | null | undefined;
@@ -43,33 +43,33 @@ interface SccanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sccan": sccan_cargs,
+        "ants.sccan": sccan_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -89,6 +89,39 @@ interface SccanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output Output dependent on which option is called.
+ * @param n_permutations Number of permutations to use in scca.
+ * @param smoother Smoothing function for variates.
+ * @param row_sparseness Row sparseness - if (+) then keep values (+) otherwise allow +/- values --- always L1.
+ * @param iterations Max iterations for scca optimization (min 20).
+ * @param n_eigenvectors Number of eigenvectors to compute in scca/spca.
+ * @param robustify Rank-based scca.
+ * @param covering Try to make the decomposition cover the whole domain, if possible.
+ * @param uselong Use longitudinal formulation (> 0) or not (<= 0).
+ * @param l1 Use l1 (> 0) or l0 (< 0) penalty, also sets gradient step size.
+ * @param pclusterthresh Cluster threshold on view P.
+ * @param qclusterthresh Cluster threshold on view Q.
+ * @param ridge_cca Ridge cca.
+ * @param initialization Initialization file list for Eigenanatomy - must also pass mask option.
+ * @param initialization2 Initialization file list for SCCAN-Eigenanatomy - must also pass mask option.
+ * @param mask Mask file for Eigenanatomy initialization.
+ * @param mask2 Mask file for Eigenanatomy initialization 2.
+ * @param partial_scca_option Choices for pscca: PQ, PminusRQ, PQminusR, PminusRQminusR.
+ * @param prior_weight Scalar value weight on prior between 0 (prior is weak) and 1 (prior is strong). Only engaged if initialization is used.
+ * @param get_small Find smallest eigenvectors.
+ * @param verbose Set whether output is verbose.
+ * @param imageset_to_matrix Takes a list of image files names (one per line) and converts it to a 2D matrix/image in binary or csv format.
+ * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format.
+ * @param vector_to_image Converts the 1st column vector in a csv file back to an image.
+ * @param imageset_to_projections Takes a list of image and projection files names and writes them to a csv file.
+ * @param scca Matrix-based scca operations for 2 and 3 views.
+ * @param svd A sparse SVD implementation.
+ *
+ * @returns Parameter dictionary
+ */
 function sccan_params(
     output: string | null = null,
     n_permutations: number | null = null,
@@ -118,41 +151,8 @@ function sccan_params(
     scca: string | null = null,
     svd: string | null = null,
 ): SccanParameters {
-    /**
-     * Build parameters.
-    
-     * @param output Output dependent on which option is called.
-     * @param n_permutations Number of permutations to use in scca.
-     * @param smoother Smoothing function for variates.
-     * @param row_sparseness Row sparseness - if (+) then keep values (+) otherwise allow +/- values --- always L1.
-     * @param iterations Max iterations for scca optimization (min 20).
-     * @param n_eigenvectors Number of eigenvectors to compute in scca/spca.
-     * @param robustify Rank-based scca.
-     * @param covering Try to make the decomposition cover the whole domain, if possible.
-     * @param uselong Use longitudinal formulation (> 0) or not (<= 0).
-     * @param l1 Use l1 (> 0) or l0 (< 0) penalty, also sets gradient step size.
-     * @param pclusterthresh Cluster threshold on view P.
-     * @param qclusterthresh Cluster threshold on view Q.
-     * @param ridge_cca Ridge cca.
-     * @param initialization Initialization file list for Eigenanatomy - must also pass mask option.
-     * @param initialization2 Initialization file list for SCCAN-Eigenanatomy - must also pass mask option.
-     * @param mask Mask file for Eigenanatomy initialization.
-     * @param mask2 Mask file for Eigenanatomy initialization 2.
-     * @param partial_scca_option Choices for pscca: PQ, PminusRQ, PQminusR, PminusRQminusR.
-     * @param prior_weight Scalar value weight on prior between 0 (prior is weak) and 1 (prior is strong). Only engaged if initialization is used.
-     * @param get_small Find smallest eigenvectors.
-     * @param verbose Set whether output is verbose.
-     * @param imageset_to_matrix Takes a list of image files names (one per line) and converts it to a 2D matrix/image in binary or csv format.
-     * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format.
-     * @param vector_to_image Converts the 1st column vector in a csv file back to an image.
-     * @param imageset_to_projections Takes a list of image and projection files names and writes them to a csv file.
-     * @param scca Matrix-based scca operations for 2 and 3 views.
-     * @param svd A sparse SVD implementation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sccan" as const,
+        "@type": "ants.sccan" as const,
     };
     if (output !== null) {
         params["output"] = output;
@@ -239,18 +239,18 @@ function sccan_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sccan_cargs(
     params: SccanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sccan");
     if ((params["output"] ?? null) !== null) {
@@ -419,18 +419,18 @@ function sccan_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sccan_outputs(
     params: SccanParameters,
     execution: Execution,
 ): SccanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SccanOutputs = {
         root: execution.outputFile("."),
     };
@@ -438,22 +438,22 @@ function sccan_outputs(
 }
 
 
+/**
+ * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SccanOutputs`).
+ */
 function sccan_execute(
     params: SccanParameters,
     execution: Execution,
 ): SccanOutputs {
-    /**
-     * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SccanOutputs`).
-     */
     params = execution.params(params)
     const cargs = sccan_cargs(params, execution)
     const ret = sccan_outputs(params, execution)
@@ -462,6 +462,44 @@ function sccan_execute(
 }
 
 
+/**
+ * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param output Output dependent on which option is called.
+ * @param n_permutations Number of permutations to use in scca.
+ * @param smoother Smoothing function for variates.
+ * @param row_sparseness Row sparseness - if (+) then keep values (+) otherwise allow +/- values --- always L1.
+ * @param iterations Max iterations for scca optimization (min 20).
+ * @param n_eigenvectors Number of eigenvectors to compute in scca/spca.
+ * @param robustify Rank-based scca.
+ * @param covering Try to make the decomposition cover the whole domain, if possible.
+ * @param uselong Use longitudinal formulation (> 0) or not (<= 0).
+ * @param l1 Use l1 (> 0) or l0 (< 0) penalty, also sets gradient step size.
+ * @param pclusterthresh Cluster threshold on view P.
+ * @param qclusterthresh Cluster threshold on view Q.
+ * @param ridge_cca Ridge cca.
+ * @param initialization Initialization file list for Eigenanatomy - must also pass mask option.
+ * @param initialization2 Initialization file list for SCCAN-Eigenanatomy - must also pass mask option.
+ * @param mask Mask file for Eigenanatomy initialization.
+ * @param mask2 Mask file for Eigenanatomy initialization 2.
+ * @param partial_scca_option Choices for pscca: PQ, PminusRQ, PQminusR, PminusRQminusR.
+ * @param prior_weight Scalar value weight on prior between 0 (prior is weak) and 1 (prior is strong). Only engaged if initialization is used.
+ * @param get_small Find smallest eigenvectors.
+ * @param verbose Set whether output is verbose.
+ * @param imageset_to_matrix Takes a list of image files names (one per line) and converts it to a 2D matrix/image in binary or csv format.
+ * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format.
+ * @param vector_to_image Converts the 1st column vector in a csv file back to an image.
+ * @param imageset_to_projections Takes a list of image and projection files names and writes them to a csv file.
+ * @param scca Matrix-based scca operations for 2 and 3 views.
+ * @param svd A sparse SVD implementation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SccanOutputs`).
+ */
 function sccan(
     output: string | null = null,
     n_permutations: number | null = null,
@@ -492,44 +530,6 @@ function sccan(
     svd: string | null = null,
     runner: Runner | null = null,
 ): SccanOutputs {
-    /**
-     * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param output Output dependent on which option is called.
-     * @param n_permutations Number of permutations to use in scca.
-     * @param smoother Smoothing function for variates.
-     * @param row_sparseness Row sparseness - if (+) then keep values (+) otherwise allow +/- values --- always L1.
-     * @param iterations Max iterations for scca optimization (min 20).
-     * @param n_eigenvectors Number of eigenvectors to compute in scca/spca.
-     * @param robustify Rank-based scca.
-     * @param covering Try to make the decomposition cover the whole domain, if possible.
-     * @param uselong Use longitudinal formulation (> 0) or not (<= 0).
-     * @param l1 Use l1 (> 0) or l0 (< 0) penalty, also sets gradient step size.
-     * @param pclusterthresh Cluster threshold on view P.
-     * @param qclusterthresh Cluster threshold on view Q.
-     * @param ridge_cca Ridge cca.
-     * @param initialization Initialization file list for Eigenanatomy - must also pass mask option.
-     * @param initialization2 Initialization file list for SCCAN-Eigenanatomy - must also pass mask option.
-     * @param mask Mask file for Eigenanatomy initialization.
-     * @param mask2 Mask file for Eigenanatomy initialization 2.
-     * @param partial_scca_option Choices for pscca: PQ, PminusRQ, PQminusR, PminusRQminusR.
-     * @param prior_weight Scalar value weight on prior between 0 (prior is weak) and 1 (prior is strong). Only engaged if initialization is used.
-     * @param get_small Find smallest eigenvectors.
-     * @param verbose Set whether output is verbose.
-     * @param imageset_to_matrix Takes a list of image files names (one per line) and converts it to a 2D matrix/image in binary or csv format.
-     * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format.
-     * @param vector_to_image Converts the 1st column vector in a csv file back to an image.
-     * @param imageset_to_projections Takes a list of image and projection files names and writes them to a csv file.
-     * @param scca Matrix-based scca operations for 2 and 3 views.
-     * @param svd A sparse SVD implementation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SccanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SCCAN_METADATA);
     const params = sccan_params(output, n_permutations, smoother, row_sparseness, iterations, n_eigenvectors, robustify, covering, uselong, l1, pclusterthresh, qclusterthresh, ridge_cca, initialization, initialization2, mask, mask2, partial_scca_option, prior_weight, get_small, verbose, imageset_to_matrix, timeseriesimage_to_matrix, vector_to_image, imageset_to_projections, scca, svd)
@@ -542,5 +542,8 @@ export {
       SccanOutputs,
       SccanParameters,
       sccan,
+      sccan_cargs,
+      sccan_execute,
+      sccan_outputs,
       sccan_params,
 };

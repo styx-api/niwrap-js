@@ -12,7 +12,7 @@ const V_3D_MVM_METADATA: Metadata = {
 
 
 interface V3dMvmParameters {
-    "__STYXTYPE__": "3dMVM";
+    "@type": "afni.3dMVM";
     "dbgArgs"?: string | null | undefined;
     "prefix": string;
     "jobs"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface V3dMvmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMVM": v_3d_mvm_cargs,
+        "afni.3dMVM": v_3d_mvm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMVM": v_3d_mvm_outputs,
+        "afni.3dMVM": v_3d_mvm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,27 @@ interface V3dMvmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file name prefix
+ * @param bs_vars Formula for between-subjects variables
+ * @param data_table Data table for analysis
+ * @param dbg_args Enable R to save parameters in a file for debugging
+ * @param jobs Number of jobs for parallel processing
+ * @param mask Only process voxels inside this mask
+ * @param ws_vars Formula for within-subjects variables
+ * @param q_vars Comma-separated list of quantitative variables (covariates)
+ * @param q_var_centers Comma-separated centering values for quantitative variables
+ * @param num_glt Number of general linear t-tests (GLTs)
+ * @param glt_label Label for each general linear t-test (GLT)
+ * @param glt_code Coding for each general linear t-test (GLT)
+ * @param num_glf Number of general linear F-tests (GLFs)
+ * @param glf_label Label for each general linear F-test (GLF)
+ * @param glf_code Coding for each general linear F-test (GLF)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mvm_params(
     prefix: string,
     bs_vars: string,
@@ -103,29 +124,8 @@ function v_3d_mvm_params(
     glf_label: string | null = null,
     glf_code: string | null = null,
 ): V3dMvmParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file name prefix
-     * @param bs_vars Formula for between-subjects variables
-     * @param data_table Data table for analysis
-     * @param dbg_args Enable R to save parameters in a file for debugging
-     * @param jobs Number of jobs for parallel processing
-     * @param mask Only process voxels inside this mask
-     * @param ws_vars Formula for within-subjects variables
-     * @param q_vars Comma-separated list of quantitative variables (covariates)
-     * @param q_var_centers Comma-separated centering values for quantitative variables
-     * @param num_glt Number of general linear t-tests (GLTs)
-     * @param glt_label Label for each general linear t-test (GLT)
-     * @param glt_code Coding for each general linear t-test (GLT)
-     * @param num_glf Number of general linear F-tests (GLFs)
-     * @param glf_label Label for each general linear F-test (GLF)
-     * @param glf_code Coding for each general linear F-test (GLF)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMVM" as const,
+        "@type": "afni.3dMVM" as const,
         "prefix": prefix,
         "bsVars": bs_vars,
         "dataTable": data_table,
@@ -170,18 +170,18 @@ function v_3d_mvm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mvm_cargs(
     params: V3dMvmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMVM");
     if ((params["dbgArgs"] ?? null) !== null) {
@@ -269,18 +269,18 @@ function v_3d_mvm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mvm_outputs(
     params: V3dMvmParameters,
     execution: Execution,
 ): V3dMvmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMvmOutputs = {
         root: execution.outputFile("."),
         outfile_head: execution.outputFile([(params["prefix"] ?? null), "+tlrc.HEAD"].join('')),
@@ -290,22 +290,22 @@ function v_3d_mvm_outputs(
 }
 
 
+/**
+ * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
+ */
 function v_3d_mvm_execute(
     params: V3dMvmParameters,
     execution: Execution,
 ): V3dMvmOutputs {
-    /**
-     * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mvm_cargs(params, execution)
     const ret = v_3d_mvm_outputs(params, execution)
@@ -314,6 +314,32 @@ function v_3d_mvm_execute(
 }
 
 
+/**
+ * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file name prefix
+ * @param bs_vars Formula for between-subjects variables
+ * @param data_table Data table for analysis
+ * @param dbg_args Enable R to save parameters in a file for debugging
+ * @param jobs Number of jobs for parallel processing
+ * @param mask Only process voxels inside this mask
+ * @param ws_vars Formula for within-subjects variables
+ * @param q_vars Comma-separated list of quantitative variables (covariates)
+ * @param q_var_centers Comma-separated centering values for quantitative variables
+ * @param num_glt Number of general linear t-tests (GLTs)
+ * @param glt_label Label for each general linear t-test (GLT)
+ * @param glt_code Coding for each general linear t-test (GLT)
+ * @param num_glf Number of general linear F-tests (GLFs)
+ * @param glf_label Label for each general linear F-test (GLF)
+ * @param glf_code Coding for each general linear F-test (GLF)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
+ */
 function v_3d_mvm(
     prefix: string,
     bs_vars: string,
@@ -332,32 +358,6 @@ function v_3d_mvm(
     glf_code: string | null = null,
     runner: Runner | null = null,
 ): V3dMvmOutputs {
-    /**
-     * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file name prefix
-     * @param bs_vars Formula for between-subjects variables
-     * @param data_table Data table for analysis
-     * @param dbg_args Enable R to save parameters in a file for debugging
-     * @param jobs Number of jobs for parallel processing
-     * @param mask Only process voxels inside this mask
-     * @param ws_vars Formula for within-subjects variables
-     * @param q_vars Comma-separated list of quantitative variables (covariates)
-     * @param q_var_centers Comma-separated centering values for quantitative variables
-     * @param num_glt Number of general linear t-tests (GLTs)
-     * @param glt_label Label for each general linear t-test (GLT)
-     * @param glt_code Coding for each general linear t-test (GLT)
-     * @param num_glf Number of general linear F-tests (GLFs)
-     * @param glf_label Label for each general linear F-test (GLF)
-     * @param glf_code Coding for each general linear F-test (GLF)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MVM_METADATA);
     const params = v_3d_mvm_params(prefix, bs_vars, data_table, dbg_args, jobs, mask, ws_vars, q_vars, q_var_centers, num_glt, glt_label, glt_code, num_glf, glf_label, glf_code)
@@ -370,5 +370,8 @@ export {
       V3dMvmParameters,
       V_3D_MVM_METADATA,
       v_3d_mvm,
+      v_3d_mvm_cargs,
+      v_3d_mvm_execute,
+      v_3d_mvm_outputs,
       v_3d_mvm_params,
 };

@@ -12,7 +12,7 @@ const REG_FEAT2ANAT_METADATA: Metadata = {
 
 
 interface RegFeat2anatParameters {
-    "__STYXTYPE__": "reg-feat2anat";
+    "@type": "freesurfer.reg-feat2anat";
     "feat_dir": string;
     "subject_id": string;
     "overwrite_exf2std": boolean;
@@ -32,35 +32,35 @@ interface RegFeat2anatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg-feat2anat": reg_feat2anat_cargs,
+        "freesurfer.reg-feat2anat": reg_feat2anat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg-feat2anat": reg_feat2anat_outputs,
+        "freesurfer.reg-feat2anat": reg_feat2anat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -111,6 +111,28 @@ interface RegFeat2anatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_dir Directory in which to find example_func.
+ * @param subject_id FreeSurfer subject identifier as found in SUBJECTS_DIR.
+ * @param overwrite_exf2std Replace Feat-generated example_func2standard.
+ * @param manual Interactively view/edit registration.
+ * @param manxfm_type Interactively view/edit registration for xfm type. xfmtype can be: func2anat, std2anat, or func2std.
+ * @param dof FLIRT degrees of freedom (default is 6).
+ * @param bins FLIRT number of bins (default is 256).
+ * @param cost FLIRT cost function (default is corratio).
+ * @param max_angle FLIRT maximum search angle (default is 90).
+ * @param bet Run betfunc on example_func (not with FSL 4.0).
+ * @param title Title for tkregister window.
+ * @param no_bbr Do not use boundary-based registration.
+ * @param spm Use SPM instead of FLIRT, 6 dof only.
+ * @param no_inorm Do not inorm when running tkregister2.
+ * @param fmov fmov argument for tkregister2.
+ * @param debug Turn on debugging.
+ *
+ * @returns Parameter dictionary
+ */
 function reg_feat2anat_params(
     feat_dir: string,
     subject_id: string,
@@ -129,30 +151,8 @@ function reg_feat2anat_params(
     fmov: string | null = null,
     debug: boolean = false,
 ): RegFeat2anatParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_dir Directory in which to find example_func.
-     * @param subject_id FreeSurfer subject identifier as found in SUBJECTS_DIR.
-     * @param overwrite_exf2std Replace Feat-generated example_func2standard.
-     * @param manual Interactively view/edit registration.
-     * @param manxfm_type Interactively view/edit registration for xfm type. xfmtype can be: func2anat, std2anat, or func2std.
-     * @param dof FLIRT degrees of freedom (default is 6).
-     * @param bins FLIRT number of bins (default is 256).
-     * @param cost FLIRT cost function (default is corratio).
-     * @param max_angle FLIRT maximum search angle (default is 90).
-     * @param bet Run betfunc on example_func (not with FSL 4.0).
-     * @param title Title for tkregister window.
-     * @param no_bbr Do not use boundary-based registration.
-     * @param spm Use SPM instead of FLIRT, 6 dof only.
-     * @param no_inorm Do not inorm when running tkregister2.
-     * @param fmov fmov argument for tkregister2.
-     * @param debug Turn on debugging.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg-feat2anat" as const,
+        "@type": "freesurfer.reg-feat2anat" as const,
         "feat_dir": feat_dir,
         "subject_id": subject_id,
         "overwrite_exf2std": overwrite_exf2std,
@@ -188,18 +188,18 @@ function reg_feat2anat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_feat2anat_cargs(
     params: RegFeat2anatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg-feat2anat");
     cargs.push(
@@ -277,18 +277,18 @@ function reg_feat2anat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_feat2anat_outputs(
     params: RegFeat2anatParameters,
     execution: Execution,
 ): RegFeat2anatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegFeat2anatOutputs = {
         root: execution.outputFile("."),
         anat2std_register: execution.outputFile(["featdir/reg/freesurfer/anat2std.register.dat"].join('')),
@@ -304,22 +304,22 @@ function reg_feat2anat_outputs(
 }
 
 
+/**
+ * Registers FSL-Feat example_func to FreeSurfer anatomical data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
+ */
 function reg_feat2anat_execute(
     params: RegFeat2anatParameters,
     execution: Execution,
 ): RegFeat2anatOutputs {
-    /**
-     * Registers FSL-Feat example_func to FreeSurfer anatomical data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_feat2anat_cargs(params, execution)
     const ret = reg_feat2anat_outputs(params, execution)
@@ -328,6 +328,33 @@ function reg_feat2anat_execute(
 }
 
 
+/**
+ * Registers FSL-Feat example_func to FreeSurfer anatomical data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param feat_dir Directory in which to find example_func.
+ * @param subject_id FreeSurfer subject identifier as found in SUBJECTS_DIR.
+ * @param overwrite_exf2std Replace Feat-generated example_func2standard.
+ * @param manual Interactively view/edit registration.
+ * @param manxfm_type Interactively view/edit registration for xfm type. xfmtype can be: func2anat, std2anat, or func2std.
+ * @param dof FLIRT degrees of freedom (default is 6).
+ * @param bins FLIRT number of bins (default is 256).
+ * @param cost FLIRT cost function (default is corratio).
+ * @param max_angle FLIRT maximum search angle (default is 90).
+ * @param bet Run betfunc on example_func (not with FSL 4.0).
+ * @param title Title for tkregister window.
+ * @param no_bbr Do not use boundary-based registration.
+ * @param spm Use SPM instead of FLIRT, 6 dof only.
+ * @param no_inorm Do not inorm when running tkregister2.
+ * @param fmov fmov argument for tkregister2.
+ * @param debug Turn on debugging.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
+ */
 function reg_feat2anat(
     feat_dir: string,
     subject_id: string,
@@ -347,33 +374,6 @@ function reg_feat2anat(
     debug: boolean = false,
     runner: Runner | null = null,
 ): RegFeat2anatOutputs {
-    /**
-     * Registers FSL-Feat example_func to FreeSurfer anatomical data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param feat_dir Directory in which to find example_func.
-     * @param subject_id FreeSurfer subject identifier as found in SUBJECTS_DIR.
-     * @param overwrite_exf2std Replace Feat-generated example_func2standard.
-     * @param manual Interactively view/edit registration.
-     * @param manxfm_type Interactively view/edit registration for xfm type. xfmtype can be: func2anat, std2anat, or func2std.
-     * @param dof FLIRT degrees of freedom (default is 6).
-     * @param bins FLIRT number of bins (default is 256).
-     * @param cost FLIRT cost function (default is corratio).
-     * @param max_angle FLIRT maximum search angle (default is 90).
-     * @param bet Run betfunc on example_func (not with FSL 4.0).
-     * @param title Title for tkregister window.
-     * @param no_bbr Do not use boundary-based registration.
-     * @param spm Use SPM instead of FLIRT, 6 dof only.
-     * @param no_inorm Do not inorm when running tkregister2.
-     * @param fmov fmov argument for tkregister2.
-     * @param debug Turn on debugging.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_FEAT2ANAT_METADATA);
     const params = reg_feat2anat_params(feat_dir, subject_id, overwrite_exf2std, manual, manxfm_type, dof, bins, cost, max_angle, bet, title, no_bbr, spm, no_inorm, fmov, debug)
@@ -386,5 +386,8 @@ export {
       RegFeat2anatOutputs,
       RegFeat2anatParameters,
       reg_feat2anat,
+      reg_feat2anat_cargs,
+      reg_feat2anat_execute,
+      reg_feat2anat_outputs,
       reg_feat2anat_params,
 };

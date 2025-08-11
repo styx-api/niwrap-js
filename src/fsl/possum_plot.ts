@@ -12,41 +12,41 @@ const POSSUM_PLOT_METADATA: Metadata = {
 
 
 interface PossumPlotParameters {
-    "__STYXTYPE__": "possum_plot";
+    "@type": "fsl.possum_plot";
     "input_file": InputPathType;
     "output_basename": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "possum_plot": possum_plot_cargs,
+        "fsl.possum_plot": possum_plot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "possum_plot": possum_plot_outputs,
+        "fsl.possum_plot": possum_plot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface PossumPlotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file from POSSUM simulation (e.g. simulation_results.txt)
+ * @param output_basename Basename for output files (e.g. plot_output)
+ *
+ * @returns Parameter dictionary
+ */
 function possum_plot_params(
     input_file: InputPathType,
     output_basename: string,
 ): PossumPlotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file from POSSUM simulation (e.g. simulation_results.txt)
-     * @param output_basename Basename for output files (e.g. plot_output)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "possum_plot" as const,
+        "@type": "fsl.possum_plot" as const,
         "input_file": input_file,
         "output_basename": output_basename,
     };
@@ -90,18 +90,18 @@ function possum_plot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function possum_plot_cargs(
     params: PossumPlotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("possum_plot.py");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function possum_plot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function possum_plot_outputs(
     params: PossumPlotParameters,
     execution: Execution,
 ): PossumPlotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PossumPlotOutputs = {
         root: execution.outputFile("."),
         output_plots: execution.outputFile([(params["output_basename"] ?? null), "_*.png"].join('')),
@@ -130,22 +130,22 @@ function possum_plot_outputs(
 }
 
 
+/**
+ * Tool for plotting results from POSSUM simulations in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
+ */
 function possum_plot_execute(
     params: PossumPlotParameters,
     execution: Execution,
 ): PossumPlotOutputs {
-    /**
-     * Tool for plotting results from POSSUM simulations in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
-     */
     params = execution.params(params)
     const cargs = possum_plot_cargs(params, execution)
     const ret = possum_plot_outputs(params, execution)
@@ -154,24 +154,24 @@ function possum_plot_execute(
 }
 
 
+/**
+ * Tool for plotting results from POSSUM simulations in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file from POSSUM simulation (e.g. simulation_results.txt)
+ * @param output_basename Basename for output files (e.g. plot_output)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
+ */
 function possum_plot(
     input_file: InputPathType,
     output_basename: string,
     runner: Runner | null = null,
 ): PossumPlotOutputs {
-    /**
-     * Tool for plotting results from POSSUM simulations in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file from POSSUM simulation (e.g. simulation_results.txt)
-     * @param output_basename Basename for output files (e.g. plot_output)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POSSUM_PLOT_METADATA);
     const params = possum_plot_params(input_file, output_basename)
@@ -184,5 +184,8 @@ export {
       PossumPlotOutputs,
       PossumPlotParameters,
       possum_plot,
+      possum_plot_cargs,
+      possum_plot_execute,
+      possum_plot_outputs,
       possum_plot_params,
 };

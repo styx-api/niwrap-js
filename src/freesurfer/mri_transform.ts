@@ -12,7 +12,7 @@ const MRI_TRANSFORM_METADATA: Metadata = {
 
 
 interface MriTransformParameters {
-    "__STYXTYPE__": "mri_transform";
+    "@type": "freesurfer.mri_transform";
     "input_volume": InputPathType;
     "lta_file": InputPathType;
     "output_file": string;
@@ -21,35 +21,35 @@ interface MriTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_transform": mri_transform_cargs,
+        "freesurfer.mri_transform": mri_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_transform": mri_transform_outputs,
+        "freesurfer.mri_transform": mri_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input MRI volume
+ * @param lta_file Linear Transform Array (LTA) file
+ * @param output_file Output file for the transformed MRI volume
+ * @param out_like Set output volume parameters like the reference volume
+ * @param invert Invert transform coordinates
+ *
+ * @returns Parameter dictionary
+ */
 function mri_transform_params(
     input_volume: InputPathType,
     lta_file: InputPathType,
@@ -79,19 +90,8 @@ function mri_transform_params(
     out_like: InputPathType | null = null,
     invert: boolean = false,
 ): MriTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input MRI volume
-     * @param lta_file Linear Transform Array (LTA) file
-     * @param output_file Output file for the transformed MRI volume
-     * @param out_like Set output volume parameters like the reference volume
-     * @param invert Invert transform coordinates
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_transform" as const,
+        "@type": "freesurfer.mri_transform" as const,
         "input_volume": input_volume,
         "lta_file": lta_file,
         "output_file": output_file,
@@ -104,18 +104,18 @@ function mri_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_transform_cargs(
     params: MriTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_transform");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -134,18 +134,18 @@ function mri_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_transform_outputs(
     params: MriTransformParameters,
     execution: Execution,
 ): MriTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriTransformOutputs = {
         root: execution.outputFile("."),
         transformed_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -154,22 +154,22 @@ function mri_transform_outputs(
 }
 
 
+/**
+ * Applies a linear transform to an MRI volume and writes out the result.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
+ */
 function mri_transform_execute(
     params: MriTransformParameters,
     execution: Execution,
 ): MriTransformOutputs {
-    /**
-     * Applies a linear transform to an MRI volume and writes out the result.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_transform_cargs(params, execution)
     const ret = mri_transform_outputs(params, execution)
@@ -178,6 +178,22 @@ function mri_transform_execute(
 }
 
 
+/**
+ * Applies a linear transform to an MRI volume and writes out the result.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input MRI volume
+ * @param lta_file Linear Transform Array (LTA) file
+ * @param output_file Output file for the transformed MRI volume
+ * @param out_like Set output volume parameters like the reference volume
+ * @param invert Invert transform coordinates
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
+ */
 function mri_transform(
     input_volume: InputPathType,
     lta_file: InputPathType,
@@ -186,22 +202,6 @@ function mri_transform(
     invert: boolean = false,
     runner: Runner | null = null,
 ): MriTransformOutputs {
-    /**
-     * Applies a linear transform to an MRI volume and writes out the result.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input MRI volume
-     * @param lta_file Linear Transform Array (LTA) file
-     * @param output_file Output file for the transformed MRI volume
-     * @param out_like Set output volume parameters like the reference volume
-     * @param invert Invert transform coordinates
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_TRANSFORM_METADATA);
     const params = mri_transform_params(input_volume, lta_file, output_file, out_like, invert)
@@ -214,5 +214,8 @@ export {
       MriTransformOutputs,
       MriTransformParameters,
       mri_transform,
+      mri_transform_cargs,
+      mri_transform_execute,
+      mri_transform_outputs,
       mri_transform_params,
 };

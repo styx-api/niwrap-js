@@ -12,7 +12,7 @@ const MRI_CA_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriCaNormalizeParameters {
-    "__STYXTYPE__": "mri_ca_normalize";
+    "@type": "freesurfer.mri_ca_normalize";
     "input_brain_volumes": Array<InputPathType>;
     "atlas_file": InputPathType;
     "xform_file": InputPathType;
@@ -43,35 +43,35 @@ interface MriCaNormalizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ca_normalize": mri_ca_normalize_cargs,
+        "freesurfer.mri_ca_normalize": mri_ca_normalize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ca_normalize": mri_ca_normalize_outputs,
+        "freesurfer.mri_ca_normalize": mri_ca_normalize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,39 @@ interface MriCaNormalizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_brain_volumes Input brain volume(s). Can specify multiple inputs.
+ * @param atlas_file Atlas file in GCA format.
+ * @param xform_file Transform file in LTA format.
+ * @param output_volumes Output volume(s) in either mgh or mgz format. Can specify multiple outputs.
+ * @param seg_file Aseg file to help normalization.
+ * @param sigma_value Smoothing sigma for bias field if control points specified (default=4).
+ * @param fsamples_file Write control points to filename.
+ * @param dilate_iters Dilate the brain mask niters times before masking.
+ * @param nsamples_file Write transformed normalization control points to filename.
+ * @param mask_vol Use mri_vol to mask input.
+ * @param control_points_file Define control points from filename.
+ * @param fonly_file Only use control points from filename.
+ * @param diag_file Write to log file.
+ * @param debug_voxel_coords Debug voxel. Needs x, y, z coordinates.
+ * @param debug_node_coords Debug node. Needs x, y, z coordinates.
+ * @param tr_value Set TR in msec.
+ * @param te_value Set TE in msec.
+ * @param alpha_value Set alpha in radians.
+ * @param example_mri_vol Use T1 (mri_vol) and segmentation as example.
+ * @param extra_norm_pctl Use 1+pct and 1-pct to widen the range of T1 values.
+ * @param prior_threshold Use prior threshold t (default=.6).
+ * @param n_regions Use n regions/struct for normalization.
+ * @param verbose_value Used for debugging and diagnostics.
+ * @param top_percent Use top p percent (default=.25) white matter points as control points.
+ * @param novar_flag Do not use variance estimates.
+ * @param renorm_file Renormalize using predicted intensity values in mri_vol.
+ * @param flash_flag Use FLASH forward model to predict intensity values.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ca_normalize_params(
     input_brain_volumes: Array<InputPathType>,
     atlas_file: InputPathType,
@@ -123,41 +156,8 @@ function mri_ca_normalize_params(
     renorm_file: InputPathType | null = null,
     flash_flag: boolean = false,
 ): MriCaNormalizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_brain_volumes Input brain volume(s). Can specify multiple inputs.
-     * @param atlas_file Atlas file in GCA format.
-     * @param xform_file Transform file in LTA format.
-     * @param output_volumes Output volume(s) in either mgh or mgz format. Can specify multiple outputs.
-     * @param seg_file Aseg file to help normalization.
-     * @param sigma_value Smoothing sigma for bias field if control points specified (default=4).
-     * @param fsamples_file Write control points to filename.
-     * @param dilate_iters Dilate the brain mask niters times before masking.
-     * @param nsamples_file Write transformed normalization control points to filename.
-     * @param mask_vol Use mri_vol to mask input.
-     * @param control_points_file Define control points from filename.
-     * @param fonly_file Only use control points from filename.
-     * @param diag_file Write to log file.
-     * @param debug_voxel_coords Debug voxel. Needs x, y, z coordinates.
-     * @param debug_node_coords Debug node. Needs x, y, z coordinates.
-     * @param tr_value Set TR in msec.
-     * @param te_value Set TE in msec.
-     * @param alpha_value Set alpha in radians.
-     * @param example_mri_vol Use T1 (mri_vol) and segmentation as example.
-     * @param extra_norm_pctl Use 1+pct and 1-pct to widen the range of T1 values.
-     * @param prior_threshold Use prior threshold t (default=.6).
-     * @param n_regions Use n regions/struct for normalization.
-     * @param verbose_value Used for debugging and diagnostics.
-     * @param top_percent Use top p percent (default=.25) white matter points as control points.
-     * @param novar_flag Do not use variance estimates.
-     * @param renorm_file Renormalize using predicted intensity values in mri_vol.
-     * @param flash_flag Use FLASH forward model to predict intensity values.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ca_normalize" as const,
+        "@type": "freesurfer.mri_ca_normalize" as const,
         "input_brain_volumes": input_brain_volumes,
         "atlas_file": atlas_file,
         "xform_file": xform_file,
@@ -232,18 +232,18 @@ function mri_ca_normalize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ca_normalize_cargs(
     params: MriCaNormalizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ca_normalize");
     cargs.push(...(params["input_brain_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -386,18 +386,18 @@ function mri_ca_normalize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ca_normalize_outputs(
     params: MriCaNormalizeParameters,
     execution: Execution,
 ): MriCaNormalizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCaNormalizeOutputs = {
         root: execution.outputFile("."),
         normalized_output: execution.outputFile(["output.mgh"].join('')),
@@ -406,22 +406,22 @@ function mri_ca_normalize_outputs(
 }
 
 
+/**
+ * This program creates a normalized volume using the brain volume and an input gca file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
+ */
 function mri_ca_normalize_execute(
     params: MriCaNormalizeParameters,
     execution: Execution,
 ): MriCaNormalizeOutputs {
-    /**
-     * This program creates a normalized volume using the brain volume and an input gca file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ca_normalize_cargs(params, execution)
     const ret = mri_ca_normalize_outputs(params, execution)
@@ -430,6 +430,44 @@ function mri_ca_normalize_execute(
 }
 
 
+/**
+ * This program creates a normalized volume using the brain volume and an input gca file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_brain_volumes Input brain volume(s). Can specify multiple inputs.
+ * @param atlas_file Atlas file in GCA format.
+ * @param xform_file Transform file in LTA format.
+ * @param output_volumes Output volume(s) in either mgh or mgz format. Can specify multiple outputs.
+ * @param seg_file Aseg file to help normalization.
+ * @param sigma_value Smoothing sigma for bias field if control points specified (default=4).
+ * @param fsamples_file Write control points to filename.
+ * @param dilate_iters Dilate the brain mask niters times before masking.
+ * @param nsamples_file Write transformed normalization control points to filename.
+ * @param mask_vol Use mri_vol to mask input.
+ * @param control_points_file Define control points from filename.
+ * @param fonly_file Only use control points from filename.
+ * @param diag_file Write to log file.
+ * @param debug_voxel_coords Debug voxel. Needs x, y, z coordinates.
+ * @param debug_node_coords Debug node. Needs x, y, z coordinates.
+ * @param tr_value Set TR in msec.
+ * @param te_value Set TE in msec.
+ * @param alpha_value Set alpha in radians.
+ * @param example_mri_vol Use T1 (mri_vol) and segmentation as example.
+ * @param extra_norm_pctl Use 1+pct and 1-pct to widen the range of T1 values.
+ * @param prior_threshold Use prior threshold t (default=.6).
+ * @param n_regions Use n regions/struct for normalization.
+ * @param verbose_value Used for debugging and diagnostics.
+ * @param top_percent Use top p percent (default=.25) white matter points as control points.
+ * @param novar_flag Do not use variance estimates.
+ * @param renorm_file Renormalize using predicted intensity values in mri_vol.
+ * @param flash_flag Use FLASH forward model to predict intensity values.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
+ */
 function mri_ca_normalize(
     input_brain_volumes: Array<InputPathType>,
     atlas_file: InputPathType,
@@ -460,44 +498,6 @@ function mri_ca_normalize(
     flash_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCaNormalizeOutputs {
-    /**
-     * This program creates a normalized volume using the brain volume and an input gca file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_brain_volumes Input brain volume(s). Can specify multiple inputs.
-     * @param atlas_file Atlas file in GCA format.
-     * @param xform_file Transform file in LTA format.
-     * @param output_volumes Output volume(s) in either mgh or mgz format. Can specify multiple outputs.
-     * @param seg_file Aseg file to help normalization.
-     * @param sigma_value Smoothing sigma for bias field if control points specified (default=4).
-     * @param fsamples_file Write control points to filename.
-     * @param dilate_iters Dilate the brain mask niters times before masking.
-     * @param nsamples_file Write transformed normalization control points to filename.
-     * @param mask_vol Use mri_vol to mask input.
-     * @param control_points_file Define control points from filename.
-     * @param fonly_file Only use control points from filename.
-     * @param diag_file Write to log file.
-     * @param debug_voxel_coords Debug voxel. Needs x, y, z coordinates.
-     * @param debug_node_coords Debug node. Needs x, y, z coordinates.
-     * @param tr_value Set TR in msec.
-     * @param te_value Set TE in msec.
-     * @param alpha_value Set alpha in radians.
-     * @param example_mri_vol Use T1 (mri_vol) and segmentation as example.
-     * @param extra_norm_pctl Use 1+pct and 1-pct to widen the range of T1 values.
-     * @param prior_threshold Use prior threshold t (default=.6).
-     * @param n_regions Use n regions/struct for normalization.
-     * @param verbose_value Used for debugging and diagnostics.
-     * @param top_percent Use top p percent (default=.25) white matter points as control points.
-     * @param novar_flag Do not use variance estimates.
-     * @param renorm_file Renormalize using predicted intensity values in mri_vol.
-     * @param flash_flag Use FLASH forward model to predict intensity values.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_NORMALIZE_METADATA);
     const params = mri_ca_normalize_params(input_brain_volumes, atlas_file, xform_file, output_volumes, seg_file, sigma_value, fsamples_file, dilate_iters, nsamples_file, mask_vol, control_points_file, fonly_file, diag_file, debug_voxel_coords, debug_node_coords, tr_value, te_value, alpha_value, example_mri_vol, extra_norm_pctl, prior_threshold, n_regions, verbose_value, top_percent, novar_flag, renorm_file, flash_flag)
@@ -510,5 +510,8 @@ export {
       MriCaNormalizeOutputs,
       MriCaNormalizeParameters,
       mri_ca_normalize,
+      mri_ca_normalize_cargs,
+      mri_ca_normalize_execute,
+      mri_ca_normalize_outputs,
       mri_ca_normalize_params,
 };

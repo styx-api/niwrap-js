@@ -12,7 +12,7 @@ const METRIC_MASK_METADATA: Metadata = {
 
 
 interface MetricMaskParameters {
-    "__STYXTYPE__": "metric-mask";
+    "@type": "workbench.metric-mask";
     "metric": InputPathType;
     "mask": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface MetricMaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-mask": metric_mask_cargs,
+        "workbench.metric-mask": metric_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-mask": metric_mask_outputs,
+        "workbench.metric-mask": metric_mask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MetricMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the input metric
+ * @param mask the mask metric
+ * @param metric_out the output metric
+ * @param opt_column_column select a single column: the column number or name
+ *
+ * @returns Parameter dictionary
+ */
 function metric_mask_params(
     metric: InputPathType,
     mask: InputPathType,
     metric_out: string,
     opt_column_column: string | null = null,
 ): MetricMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the input metric
-     * @param mask the mask metric
-     * @param metric_out the output metric
-     * @param opt_column_column select a single column: the column number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-mask" as const,
+        "@type": "workbench.metric-mask" as const,
         "metric": metric,
         "mask": mask,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function metric_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_mask_cargs(
     params: MetricMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-mask");
@@ -128,18 +128,18 @@ function metric_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_mask_outputs(
     params: MetricMaskParameters,
     execution: Execution,
 ): MetricMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricMaskOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function metric_mask_outputs(
 }
 
 
+/**
+ * Mask a metric file.
+ *
+ * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
+ */
 function metric_mask_execute(
     params: MetricMaskParameters,
     execution: Execution,
 ): MetricMaskOutputs {
-    /**
-     * Mask a metric file.
-     * 
-     * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_mask_cargs(params, execution)
     const ret = metric_mask_outputs(params, execution)
@@ -174,6 +174,23 @@ function metric_mask_execute(
 }
 
 
+/**
+ * Mask a metric file.
+ *
+ * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric the input metric
+ * @param mask the mask metric
+ * @param metric_out the output metric
+ * @param opt_column_column select a single column: the column number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
+ */
 function metric_mask(
     metric: InputPathType,
     mask: InputPathType,
@@ -181,23 +198,6 @@ function metric_mask(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricMaskOutputs {
-    /**
-     * Mask a metric file.
-     * 
-     * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric the input metric
-     * @param mask the mask metric
-     * @param metric_out the output metric
-     * @param opt_column_column select a single column: the column number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_MASK_METADATA);
     const params = metric_mask_params(metric, mask, metric_out, opt_column_column)
@@ -210,5 +210,8 @@ export {
       MetricMaskOutputs,
       MetricMaskParameters,
       metric_mask,
+      metric_mask_cargs,
+      metric_mask_execute,
+      metric_mask_outputs,
       metric_mask_params,
 };

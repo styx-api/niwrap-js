@@ -12,41 +12,41 @@ const FSL_GEN_3_D_METADATA: Metadata = {
 
 
 interface FslGen3DParameters {
-    "__STYXTYPE__": "fsl_gen_3D";
+    "@type": "fsl.fsl_gen_3D";
     "infile": InputPathType;
     "outfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_gen_3D": fsl_gen_3_d_cargs,
+        "fsl.fsl_gen_3D": fsl_gen_3_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_gen_3D": fsl_gen_3_d_outputs,
+        "fsl.fsl_gen_3D": fsl_gen_3_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FslGen3DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input structural image (e.g. input.nii.gz)
+ * @param outfile Output 3D snapshot image (e.g. output.png)
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_gen_3_d_params(
     infile: InputPathType,
     outfile: InputPathType,
 ): FslGen3DParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input structural image (e.g. input.nii.gz)
-     * @param outfile Output 3D snapshot image (e.g. output.png)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_gen_3D" as const,
+        "@type": "fsl.fsl_gen_3D" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -90,18 +90,18 @@ function fsl_gen_3_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_gen_3_d_cargs(
     params: FslGen3DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_gen_3D");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -110,18 +110,18 @@ function fsl_gen_3_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_gen_3_d_outputs(
     params: FslGen3DParameters,
     execution: Execution,
 ): FslGen3DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslGen3DOutputs = {
         root: execution.outputFile("."),
         output_snapshot: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
@@ -130,22 +130,22 @@ function fsl_gen_3_d_outputs(
 }
 
 
+/**
+ * Tool to generate a 3D snapshot of a structural image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
+ */
 function fsl_gen_3_d_execute(
     params: FslGen3DParameters,
     execution: Execution,
 ): FslGen3DOutputs {
-    /**
-     * Tool to generate a 3D snapshot of a structural image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_gen_3_d_cargs(params, execution)
     const ret = fsl_gen_3_d_outputs(params, execution)
@@ -154,24 +154,24 @@ function fsl_gen_3_d_execute(
 }
 
 
+/**
+ * Tool to generate a 3D snapshot of a structural image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input structural image (e.g. input.nii.gz)
+ * @param outfile Output 3D snapshot image (e.g. output.png)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
+ */
 function fsl_gen_3_d(
     infile: InputPathType,
     outfile: InputPathType,
     runner: Runner | null = null,
 ): FslGen3DOutputs {
-    /**
-     * Tool to generate a 3D snapshot of a structural image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input structural image (e.g. input.nii.gz)
-     * @param outfile Output 3D snapshot image (e.g. output.png)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_GEN_3_D_METADATA);
     const params = fsl_gen_3_d_params(infile, outfile)
@@ -184,5 +184,8 @@ export {
       FslGen3DOutputs,
       FslGen3DParameters,
       fsl_gen_3_d,
+      fsl_gen_3_d_cargs,
+      fsl_gen_3_d_execute,
+      fsl_gen_3_d_outputs,
       fsl_gen_3_d_params,
 };

@@ -12,7 +12,7 @@ const SURF_MESH_METADATA: Metadata = {
 
 
 interface SurfMeshParameters {
-    "__STYXTYPE__": "SurfMesh";
+    "@type": "afni.SurfMesh";
     "input_surface": string;
     "output_surface": string;
     "edge_fraction": number;
@@ -24,35 +24,35 @@ interface SurfMeshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfMesh": surf_mesh_cargs,
+        "afni.SurfMesh": surf_mesh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfMesh": surf_mesh_outputs,
+        "afni.SurfMesh": surf_mesh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface SurfMeshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file with specified type
+ * @param output_surface Output surface file with specified type
+ * @param edge_fraction Fraction of edges to simplify the surface
+ * @param surface_volume Surface volume file
+ * @param one_state Make all input surfaces have the same state
+ * @param anatomical_label Label all input surfaces as anatomically correct
+ * @param no_volume_registration Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
+ * @param set_env Set environment variable
+ *
+ * @returns Parameter dictionary
+ */
 function surf_mesh_params(
     input_surface: string,
     output_surface: string,
@@ -85,22 +99,8 @@ function surf_mesh_params(
     no_volume_registration: boolean = false,
     set_env: string | null = null,
 ): SurfMeshParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file with specified type
-     * @param output_surface Output surface file with specified type
-     * @param edge_fraction Fraction of edges to simplify the surface
-     * @param surface_volume Surface volume file
-     * @param one_state Make all input surfaces have the same state
-     * @param anatomical_label Label all input surfaces as anatomically correct
-     * @param no_volume_registration Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
-     * @param set_env Set environment variable
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfMesh" as const,
+        "@type": "afni.SurfMesh" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "edge_fraction": edge_fraction,
@@ -118,18 +118,18 @@ function surf_mesh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_mesh_cargs(
     params: SurfMeshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfMesh");
     cargs.push(
@@ -169,18 +169,18 @@ function surf_mesh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_mesh_outputs(
     params: SurfMeshParameters,
     execution: Execution,
 ): SurfMeshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfMeshOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null), ".surface"].join('')),
@@ -189,22 +189,22 @@ function surf_mesh_outputs(
 }
 
 
+/**
+ * Surface mesh manipulation tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
+ */
 function surf_mesh_execute(
     params: SurfMeshParameters,
     execution: Execution,
 ): SurfMeshOutputs {
-    /**
-     * Surface mesh manipulation tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_mesh_cargs(params, execution)
     const ret = surf_mesh_outputs(params, execution)
@@ -213,6 +213,25 @@ function surf_mesh_execute(
 }
 
 
+/**
+ * Surface mesh manipulation tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_surface Input surface file with specified type
+ * @param output_surface Output surface file with specified type
+ * @param edge_fraction Fraction of edges to simplify the surface
+ * @param surface_volume Surface volume file
+ * @param one_state Make all input surfaces have the same state
+ * @param anatomical_label Label all input surfaces as anatomically correct
+ * @param no_volume_registration Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
+ * @param set_env Set environment variable
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
+ */
 function surf_mesh(
     input_surface: string,
     output_surface: string,
@@ -224,25 +243,6 @@ function surf_mesh(
     set_env: string | null = null,
     runner: Runner | null = null,
 ): SurfMeshOutputs {
-    /**
-     * Surface mesh manipulation tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_surface Input surface file with specified type
-     * @param output_surface Output surface file with specified type
-     * @param edge_fraction Fraction of edges to simplify the surface
-     * @param surface_volume Surface volume file
-     * @param one_state Make all input surfaces have the same state
-     * @param anatomical_label Label all input surfaces as anatomically correct
-     * @param no_volume_registration Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume
-     * @param set_env Set environment variable
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_MESH_METADATA);
     const params = surf_mesh_params(input_surface, output_surface, edge_fraction, surface_volume, one_state, anatomical_label, no_volume_registration, set_env)
@@ -255,5 +255,8 @@ export {
       SurfMeshOutputs,
       SurfMeshParameters,
       surf_mesh,
+      surf_mesh_cargs,
+      surf_mesh_execute,
+      surf_mesh_outputs,
       surf_mesh_params,
 };

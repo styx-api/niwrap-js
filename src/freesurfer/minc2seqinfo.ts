@@ -12,41 +12,41 @@ const MINC2SEQINFO_METADATA: Metadata = {
 
 
 interface Minc2seqinfoParameters {
-    "__STYXTYPE__": "minc2seqinfo";
+    "@type": "freesurfer.minc2seqinfo";
     "mincfile": InputPathType;
     "seqinfofile": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "minc2seqinfo": minc2seqinfo_cargs,
+        "freesurfer.minc2seqinfo": minc2seqinfo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "minc2seqinfo": minc2seqinfo_outputs,
+        "freesurfer.minc2seqinfo": minc2seqinfo_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface Minc2seqinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mincfile Input MINC file from which to extract sequence information.
+ * @param seqinfofile Output file where the sequence information will be stored.
+ *
+ * @returns Parameter dictionary
+ */
 function minc2seqinfo_params(
     mincfile: InputPathType,
     seqinfofile: string,
 ): Minc2seqinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param mincfile Input MINC file from which to extract sequence information.
-     * @param seqinfofile Output file where the sequence information will be stored.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "minc2seqinfo" as const,
+        "@type": "freesurfer.minc2seqinfo" as const,
         "mincfile": mincfile,
         "seqinfofile": seqinfofile,
     };
@@ -90,18 +90,18 @@ function minc2seqinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function minc2seqinfo_cargs(
     params: Minc2seqinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("minc2seqinfo");
     cargs.push(execution.inputFile((params["mincfile"] ?? null)));
@@ -110,18 +110,18 @@ function minc2seqinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function minc2seqinfo_outputs(
     params: Minc2seqinfoParameters,
     execution: Execution,
 ): Minc2seqinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Minc2seqinfoOutputs = {
         root: execution.outputFile("."),
         out_seqinfofile: execution.outputFile([(params["seqinfofile"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function minc2seqinfo_outputs(
 }
 
 
+/**
+ * Tool for extracting sequence information from MINC files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
+ */
 function minc2seqinfo_execute(
     params: Minc2seqinfoParameters,
     execution: Execution,
 ): Minc2seqinfoOutputs {
-    /**
-     * Tool for extracting sequence information from MINC files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = minc2seqinfo_cargs(params, execution)
     const ret = minc2seqinfo_outputs(params, execution)
@@ -154,24 +154,24 @@ function minc2seqinfo_execute(
 }
 
 
+/**
+ * Tool for extracting sequence information from MINC files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mincfile Input MINC file from which to extract sequence information.
+ * @param seqinfofile Output file where the sequence information will be stored.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
+ */
 function minc2seqinfo(
     mincfile: InputPathType,
     seqinfofile: string,
     runner: Runner | null = null,
 ): Minc2seqinfoOutputs {
-    /**
-     * Tool for extracting sequence information from MINC files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mincfile Input MINC file from which to extract sequence information.
-     * @param seqinfofile Output file where the sequence information will be stored.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MINC2SEQINFO_METADATA);
     const params = minc2seqinfo_params(mincfile, seqinfofile)
@@ -184,5 +184,8 @@ export {
       Minc2seqinfoOutputs,
       Minc2seqinfoParameters,
       minc2seqinfo,
+      minc2seqinfo_cargs,
+      minc2seqinfo_execute,
+      minc2seqinfo_outputs,
       minc2seqinfo_params,
 };

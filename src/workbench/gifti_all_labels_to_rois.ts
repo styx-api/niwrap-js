@@ -12,42 +12,42 @@ const GIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 
 interface GiftiAllLabelsToRoisParameters {
-    "__STYXTYPE__": "gifti-all-labels-to-rois";
+    "@type": "workbench.gifti-all-labels-to-rois";
     "label_in": InputPathType;
     "map": string;
     "metric_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gifti-all-labels-to-rois": gifti_all_labels_to_rois_cargs,
+        "workbench.gifti-all-labels-to-rois": gifti_all_labels_to_rois_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gifti-all-labels-to-rois": gifti_all_labels_to_rois_outputs,
+        "workbench.gifti-all-labels-to-rois": gifti_all_labels_to_rois_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface GiftiAllLabelsToRoisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input gifti label file
+ * @param map the number or name of the label map to use
+ * @param metric_out the output metric file
+ *
+ * @returns Parameter dictionary
+ */
 function gifti_all_labels_to_rois_params(
     label_in: InputPathType,
     map: string,
     metric_out: string,
 ): GiftiAllLabelsToRoisParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input gifti label file
-     * @param map the number or name of the label map to use
-     * @param metric_out the output metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gifti-all-labels-to-rois" as const,
+        "@type": "workbench.gifti-all-labels-to-rois" as const,
         "label_in": label_in,
         "map": map,
         "metric_out": metric_out,
@@ -94,18 +94,18 @@ function gifti_all_labels_to_rois_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gifti_all_labels_to_rois_cargs(
     params: GiftiAllLabelsToRoisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-gifti-all-labels-to-rois");
@@ -116,18 +116,18 @@ function gifti_all_labels_to_rois_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gifti_all_labels_to_rois_outputs(
     params: GiftiAllLabelsToRoisParameters,
     execution: Execution,
 ): GiftiAllLabelsToRoisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GiftiAllLabelsToRoisOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -136,24 +136,24 @@ function gifti_all_labels_to_rois_outputs(
 }
 
 
+/**
+ * Make rois from all labels in a gifti column.
+ *
+ * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
+ */
 function gifti_all_labels_to_rois_execute(
     params: GiftiAllLabelsToRoisParameters,
     execution: Execution,
 ): GiftiAllLabelsToRoisOutputs {
-    /**
-     * Make rois from all labels in a gifti column.
-     * 
-     * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
-     */
     params = execution.params(params)
     const cargs = gifti_all_labels_to_rois_cargs(params, execution)
     const ret = gifti_all_labels_to_rois_outputs(params, execution)
@@ -162,28 +162,28 @@ function gifti_all_labels_to_rois_execute(
 }
 
 
+/**
+ * Make rois from all labels in a gifti column.
+ *
+ * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input gifti label file
+ * @param map the number or name of the label map to use
+ * @param metric_out the output metric file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
+ */
 function gifti_all_labels_to_rois(
     label_in: InputPathType,
     map: string,
     metric_out: string,
     runner: Runner | null = null,
 ): GiftiAllLabelsToRoisOutputs {
-    /**
-     * Make rois from all labels in a gifti column.
-     * 
-     * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input gifti label file
-     * @param map the number or name of the label map to use
-     * @param metric_out the output metric file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GIFTI_ALL_LABELS_TO_ROIS_METADATA);
     const params = gifti_all_labels_to_rois_params(label_in, map, metric_out)
@@ -196,5 +196,8 @@ export {
       GiftiAllLabelsToRoisOutputs,
       GiftiAllLabelsToRoisParameters,
       gifti_all_labels_to_rois,
+      gifti_all_labels_to_rois_cargs,
+      gifti_all_labels_to_rois_execute,
+      gifti_all_labels_to_rois_outputs,
       gifti_all_labels_to_rois_params,
 };

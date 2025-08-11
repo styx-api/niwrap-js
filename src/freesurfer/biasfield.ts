@@ -12,7 +12,7 @@ const BIASFIELD_METADATA: Metadata = {
 
 
 interface BiasfieldParameters {
-    "__STYXTYPE__": "biasfield";
+    "@type": "freesurfer.biasfield";
     "subject": string;
     "tmpdir"?: string | null | undefined;
     "no_cleanup": boolean;
@@ -22,35 +22,35 @@ interface BiasfieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "biasfield": biasfield_cargs,
+        "freesurfer.biasfield": biasfield_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "biasfield": biasfield_outputs,
+        "freesurfer.biasfield": biasfield_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface BiasfieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param tmpdir Temporary directory
+ * @param no_cleanup Prevent cleanup of temporary files
+ * @param help Display help information
+ * @param debug Enable debugging mode
+ * @param version Display script version info
+ *
+ * @returns Parameter dictionary
+ */
 function biasfield_params(
     subject: string,
     tmpdir: string | null = null,
@@ -85,20 +97,8 @@ function biasfield_params(
     debug: boolean = false,
     version: boolean = false,
 ): BiasfieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param tmpdir Temporary directory
-     * @param no_cleanup Prevent cleanup of temporary files
-     * @param help Display help information
-     * @param debug Enable debugging mode
-     * @param version Display script version info
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "biasfield" as const,
+        "@type": "freesurfer.biasfield" as const,
         "subject": subject,
         "no_cleanup": no_cleanup,
         "help": help,
@@ -112,18 +112,18 @@ function biasfield_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function biasfield_cargs(
     params: BiasfieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("biasfield");
     cargs.push(
@@ -152,18 +152,18 @@ function biasfield_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function biasfield_outputs(
     params: BiasfieldParameters,
     execution: Execution,
 ): BiasfieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BiasfieldOutputs = {
         root: execution.outputFile("."),
         biasfield_output: execution.outputFile(["biasfield.mgz"].join('')),
@@ -173,22 +173,22 @@ function biasfield_outputs(
 }
 
 
+/**
+ * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
+ */
 function biasfield_execute(
     params: BiasfieldParameters,
     execution: Execution,
 ): BiasfieldOutputs {
-    /**
-     * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = biasfield_cargs(params, execution)
     const ret = biasfield_outputs(params, execution)
@@ -197,6 +197,23 @@ function biasfield_execute(
 }
 
 
+/**
+ * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param tmpdir Temporary directory
+ * @param no_cleanup Prevent cleanup of temporary files
+ * @param help Display help information
+ * @param debug Enable debugging mode
+ * @param version Display script version info
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
+ */
 function biasfield(
     subject: string,
     tmpdir: string | null = null,
@@ -206,23 +223,6 @@ function biasfield(
     version: boolean = false,
     runner: Runner | null = null,
 ): BiasfieldOutputs {
-    /**
-     * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param tmpdir Temporary directory
-     * @param no_cleanup Prevent cleanup of temporary files
-     * @param help Display help information
-     * @param debug Enable debugging mode
-     * @param version Display script version info
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BIASFIELD_METADATA);
     const params = biasfield_params(subject, tmpdir, no_cleanup, help, debug, version)
@@ -235,5 +235,8 @@ export {
       BiasfieldOutputs,
       BiasfieldParameters,
       biasfield,
+      biasfield_cargs,
+      biasfield_execute,
+      biasfield_outputs,
       biasfield_params,
 };

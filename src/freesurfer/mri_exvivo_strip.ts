@@ -12,7 +12,7 @@ const MRI_EXVIVO_STRIP_METADATA: Metadata = {
 
 
 interface MriExvivoStripParameters {
-    "__STYXTYPE__": "mri_exvivo_strip";
+    "@type": "freesurfer.mri_exvivo_strip";
     "invol": InputPathType;
     "outvol": string;
     "hemi": string;
@@ -28,35 +28,35 @@ interface MriExvivoStripParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_exvivo_strip": mri_exvivo_strip_cargs,
+        "freesurfer.mri_exvivo_strip": mri_exvivo_strip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_exvivo_strip": mri_exvivo_strip_outputs,
+        "freesurfer.mri_exvivo_strip": mri_exvivo_strip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface MriExvivoStripOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param invol Input MRI volume
+ * @param outvol Output MRI volume
+ * @param hemi Hemi to process
+ * @param pred Write prediction volume
+ * @param norm Write normalized volume
+ * @param fv Bring up freeview to show results
+ * @param uthresh Specify threshold to erase above
+ * @param border Number of border voxels to set threshold at
+ * @param multichannel Specify that data has multiple channels
+ * @param model Use alternative model file
+ * @param wts Weight filename
+ * @param gpu GPU number - if not supplied, CPU is used
+ *
+ * @returns Parameter dictionary
+ */
 function mri_exvivo_strip_params(
     invol: InputPathType,
     outvol: string,
@@ -101,26 +119,8 @@ function mri_exvivo_strip_params(
     wts: InputPathType | null = null,
     gpu: number | null = null,
 ): MriExvivoStripParameters {
-    /**
-     * Build parameters.
-    
-     * @param invol Input MRI volume
-     * @param outvol Output MRI volume
-     * @param hemi Hemi to process
-     * @param pred Write prediction volume
-     * @param norm Write normalized volume
-     * @param fv Bring up freeview to show results
-     * @param uthresh Specify threshold to erase above
-     * @param border Number of border voxels to set threshold at
-     * @param multichannel Specify that data has multiple channels
-     * @param model Use alternative model file
-     * @param wts Weight filename
-     * @param gpu GPU number - if not supplied, CPU is used
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_exvivo_strip" as const,
+        "@type": "freesurfer.mri_exvivo_strip" as const,
         "invol": invol,
         "outvol": outvol,
         "hemi": hemi,
@@ -152,18 +152,18 @@ function mri_exvivo_strip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_exvivo_strip_cargs(
     params: MriExvivoStripParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_exvivo_strip");
     cargs.push(
@@ -230,18 +230,18 @@ function mri_exvivo_strip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_exvivo_strip_outputs(
     params: MriExvivoStripParameters,
     execution: Execution,
 ): MriExvivoStripOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExvivoStripOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outvol"] ?? null)].join('')),
@@ -252,22 +252,22 @@ function mri_exvivo_strip_outputs(
 }
 
 
+/**
+ * Tool for processing MRI volumes for ex vivo data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
+ */
 function mri_exvivo_strip_execute(
     params: MriExvivoStripParameters,
     execution: Execution,
 ): MriExvivoStripOutputs {
-    /**
-     * Tool for processing MRI volumes for ex vivo data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_exvivo_strip_cargs(params, execution)
     const ret = mri_exvivo_strip_outputs(params, execution)
@@ -276,6 +276,29 @@ function mri_exvivo_strip_execute(
 }
 
 
+/**
+ * Tool for processing MRI volumes for ex vivo data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param invol Input MRI volume
+ * @param outvol Output MRI volume
+ * @param hemi Hemi to process
+ * @param pred Write prediction volume
+ * @param norm Write normalized volume
+ * @param fv Bring up freeview to show results
+ * @param uthresh Specify threshold to erase above
+ * @param border Number of border voxels to set threshold at
+ * @param multichannel Specify that data has multiple channels
+ * @param model Use alternative model file
+ * @param wts Weight filename
+ * @param gpu GPU number - if not supplied, CPU is used
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
+ */
 function mri_exvivo_strip(
     invol: InputPathType,
     outvol: string,
@@ -291,29 +314,6 @@ function mri_exvivo_strip(
     gpu: number | null = null,
     runner: Runner | null = null,
 ): MriExvivoStripOutputs {
-    /**
-     * Tool for processing MRI volumes for ex vivo data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param invol Input MRI volume
-     * @param outvol Output MRI volume
-     * @param hemi Hemi to process
-     * @param pred Write prediction volume
-     * @param norm Write normalized volume
-     * @param fv Bring up freeview to show results
-     * @param uthresh Specify threshold to erase above
-     * @param border Number of border voxels to set threshold at
-     * @param multichannel Specify that data has multiple channels
-     * @param model Use alternative model file
-     * @param wts Weight filename
-     * @param gpu GPU number - if not supplied, CPU is used
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXVIVO_STRIP_METADATA);
     const params = mri_exvivo_strip_params(invol, outvol, hemi, pred, norm, fv, uthresh, border, multichannel, model, wts, gpu)
@@ -326,5 +326,8 @@ export {
       MriExvivoStripOutputs,
       MriExvivoStripParameters,
       mri_exvivo_strip,
+      mri_exvivo_strip_cargs,
+      mri_exvivo_strip_execute,
+      mri_exvivo_strip_outputs,
       mri_exvivo_strip_params,
 };

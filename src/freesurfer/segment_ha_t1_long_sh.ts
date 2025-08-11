@@ -12,41 +12,41 @@ const SEGMENT_HA_T1_LONG_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT1LongShParameters {
-    "__STYXTYPE__": "segmentHA_T1_long.sh";
+    "@type": "freesurfer.segmentHA_T1_long.sh";
     "subject_dir": string;
     "subject_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentHA_T1_long.sh": segment_ha_t1_long_sh_cargs,
+        "freesurfer.segmentHA_T1_long.sh": segment_ha_t1_long_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segmentHA_T1_long.sh": segment_ha_t1_long_sh_outputs,
+        "freesurfer.segmentHA_T1_long.sh": segment_ha_t1_long_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SegmentHaT1LongShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory containing subject data
+ * @param subject_id Identifier for the subject within the subject directory
+ *
+ * @returns Parameter dictionary
+ */
 function segment_ha_t1_long_sh_params(
     subject_dir: string,
     subject_id: string,
 ): SegmentHaT1LongShParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory containing subject data
-     * @param subject_id Identifier for the subject within the subject directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentHA_T1_long.sh" as const,
+        "@type": "freesurfer.segmentHA_T1_long.sh" as const,
         "subject_dir": subject_dir,
         "subject_id": subject_id,
     };
@@ -90,18 +90,18 @@ function segment_ha_t1_long_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_ha_t1_long_sh_cargs(
     params: SegmentHaT1LongShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentHA_T1_long.sh");
     cargs.push((params["subject_dir"] ?? null));
@@ -110,18 +110,18 @@ function segment_ha_t1_long_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_ha_t1_long_sh_outputs(
     params: SegmentHaT1LongShParameters,
     execution: Execution,
 ): SegmentHaT1LongShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentHaT1LongShOutputs = {
         root: execution.outputFile("."),
         output_dir: execution.outputFile([(params["subject_dir"] ?? null), "/", (params["subject_id"] ?? null), "_long_segment/output"].join('')),
@@ -130,22 +130,22 @@ function segment_ha_t1_long_sh_outputs(
 }
 
 
+/**
+ * A script for longitudinal segmentation of the hippocampal/amygdala regions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT1LongShOutputs`).
+ */
 function segment_ha_t1_long_sh_execute(
     params: SegmentHaT1LongShParameters,
     execution: Execution,
 ): SegmentHaT1LongShOutputs {
-    /**
-     * A script for longitudinal segmentation of the hippocampal/amygdala regions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT1LongShOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_ha_t1_long_sh_cargs(params, execution)
     const ret = segment_ha_t1_long_sh_outputs(params, execution)
@@ -154,24 +154,24 @@ function segment_ha_t1_long_sh_execute(
 }
 
 
+/**
+ * A script for longitudinal segmentation of the hippocampal/amygdala regions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Directory containing subject data
+ * @param subject_id Identifier for the subject within the subject directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT1LongShOutputs`).
+ */
 function segment_ha_t1_long_sh(
     subject_dir: string,
     subject_id: string,
     runner: Runner | null = null,
 ): SegmentHaT1LongShOutputs {
-    /**
-     * A script for longitudinal segmentation of the hippocampal/amygdala regions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Directory containing subject data
-     * @param subject_id Identifier for the subject within the subject directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT1LongShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_HA_T1_LONG_SH_METADATA);
     const params = segment_ha_t1_long_sh_params(subject_dir, subject_id)
@@ -184,5 +184,8 @@ export {
       SegmentHaT1LongShOutputs,
       SegmentHaT1LongShParameters,
       segment_ha_t1_long_sh,
+      segment_ha_t1_long_sh_cargs,
+      segment_ha_t1_long_sh_execute,
+      segment_ha_t1_long_sh_outputs,
       segment_ha_t1_long_sh_params,
 };

@@ -12,7 +12,7 @@ const ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA: Metadata = {
 
 
 interface AntsSliceRegularizedRegistrationParameters {
-    "__STYXTYPE__": "antsSliceRegularizedRegistration";
+    "@type": "ants.antsSliceRegularizedRegistration";
     "polydegree": number;
     "output": string;
     "metric": string;
@@ -26,35 +26,35 @@ interface AntsSliceRegularizedRegistrationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsSliceRegularizedRegistration": ants_slice_regularized_registration_cargs,
+        "ants.antsSliceRegularizedRegistration": ants_slice_regularized_registration_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsSliceRegularizedRegistration": ants_slice_regularized_registration_outputs,
+        "ants.antsSliceRegularizedRegistration": ants_slice_regularized_registration_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface AntsSliceRegularizedRegistrationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param polydegree Degree of polynomial up to zDimension-2. Controls the polynomial degree. 0 means no regularization.
+ * @param output Specify the output transform prefix (output format is .nii.gz). Optionally, one can choose to warp the moving image to the fixed space, and if the inverse transform exists, one can also output the warped fixed image.
+ * @param metric Four image metrics are available: GC: global correlation, CC: ANTS neighborhood cross correlation, MI: Mutual information, and MeanSquares: mean-squares intensity difference.
+ * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization.
+ * @param iterations Specify the number of iterations at each level.
+ * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
+ * @param smoothing_sigmas Specify the amount of smoothing at each level.
+ * @param mask Fixed image mask to limit voxels considered by the metric.
+ * @param interpolation Several interpolation options are available in ITK.
+ * @param verbose Verbose option.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_slice_regularized_registration_params(
     polydegree: number,
     output: string,
@@ -93,24 +109,8 @@ function ants_slice_regularized_registration_params(
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
     verbose: 0 | null = null,
 ): AntsSliceRegularizedRegistrationParameters {
-    /**
-     * Build parameters.
-    
-     * @param polydegree Degree of polynomial up to zDimension-2. Controls the polynomial degree. 0 means no regularization.
-     * @param output Specify the output transform prefix (output format is .nii.gz). Optionally, one can choose to warp the moving image to the fixed space, and if the inverse transform exists, one can also output the warped fixed image.
-     * @param metric Four image metrics are available: GC: global correlation, CC: ANTS neighborhood cross correlation, MI: Mutual information, and MeanSquares: mean-squares intensity difference.
-     * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization.
-     * @param iterations Specify the number of iterations at each level.
-     * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
-     * @param smoothing_sigmas Specify the amount of smoothing at each level.
-     * @param mask Fixed image mask to limit voxels considered by the metric.
-     * @param interpolation Several interpolation options are available in ITK.
-     * @param verbose Verbose option.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsSliceRegularizedRegistration" as const,
+        "@type": "ants.antsSliceRegularizedRegistration" as const,
         "polydegree": polydegree,
         "output": output,
         "metric": metric,
@@ -132,18 +132,18 @@ function ants_slice_regularized_registration_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_slice_regularized_registration_cargs(
     params: AntsSliceRegularizedRegistrationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsSliceRegularizedRegistration");
     cargs.push(
@@ -196,18 +196,18 @@ function ants_slice_regularized_registration_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_slice_regularized_registration_outputs(
     params: AntsSliceRegularizedRegistrationParameters,
     execution: Execution,
 ): AntsSliceRegularizedRegistrationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsSliceRegularizedRegistrationOutputs = {
         root: execution.outputFile("."),
         polynomial_fit: execution.outputFile(["[OUTPUT_PREFIX]TxTy_poly.csv"].join('')),
@@ -217,22 +217,22 @@ function ants_slice_regularized_registration_outputs(
 }
 
 
+/**
+ * This program is a user-level application for slice-by-slice translation registration. Results are regularized in z using polynomial regression. The program is targeted at spinal cord MRI. Only one stage is supported where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Specialized for 3D data: fixed image is 3D, moving image is 3D. Registration is performed slice-by-slice then regularized in z. The parameter -p controls the polynomial degree. -p 0 means no regularization.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
+ */
 function ants_slice_regularized_registration_execute(
     params: AntsSliceRegularizedRegistrationParameters,
     execution: Execution,
 ): AntsSliceRegularizedRegistrationOutputs {
-    /**
-     * This program is a user-level application for slice-by-slice translation registration. Results are regularized in z using polynomial regression. The program is targeted at spinal cord MRI. Only one stage is supported where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Specialized for 3D data: fixed image is 3D, moving image is 3D. Registration is performed slice-by-slice then regularized in z. The parameter -p controls the polynomial degree. -p 0 means no regularization.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_slice_regularized_registration_cargs(params, execution)
     const ret = ants_slice_regularized_registration_outputs(params, execution)
@@ -241,6 +241,27 @@ function ants_slice_regularized_registration_execute(
 }
 
 
+/**
+ * This program is a user-level application for slice-by-slice translation registration. Results are regularized in z using polynomial regression. The program is targeted at spinal cord MRI. Only one stage is supported where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Specialized for 3D data: fixed image is 3D, moving image is 3D. Registration is performed slice-by-slice then regularized in z. The parameter -p controls the polynomial degree. -p 0 means no regularization.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param polydegree Degree of polynomial up to zDimension-2. Controls the polynomial degree. 0 means no regularization.
+ * @param output Specify the output transform prefix (output format is .nii.gz). Optionally, one can choose to warp the moving image to the fixed space, and if the inverse transform exists, one can also output the warped fixed image.
+ * @param metric Four image metrics are available: GC: global correlation, CC: ANTS neighborhood cross correlation, MI: Mutual information, and MeanSquares: mean-squares intensity difference.
+ * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization.
+ * @param iterations Specify the number of iterations at each level.
+ * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
+ * @param smoothing_sigmas Specify the amount of smoothing at each level.
+ * @param mask Fixed image mask to limit voxels considered by the metric.
+ * @param interpolation Several interpolation options are available in ITK.
+ * @param verbose Verbose option.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
+ */
 function ants_slice_regularized_registration(
     polydegree: number,
     output: string,
@@ -254,27 +275,6 @@ function ants_slice_regularized_registration(
     verbose: 0 | null = null,
     runner: Runner | null = null,
 ): AntsSliceRegularizedRegistrationOutputs {
-    /**
-     * This program is a user-level application for slice-by-slice translation registration. Results are regularized in z using polynomial regression. The program is targeted at spinal cord MRI. Only one stage is supported where a stage consists of a transform; an image metric; and iterations, shrink factors, and smoothing sigmas for each level. Specialized for 3D data: fixed image is 3D, moving image is 3D. Registration is performed slice-by-slice then regularized in z. The parameter -p controls the polynomial degree. -p 0 means no regularization.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param polydegree Degree of polynomial up to zDimension-2. Controls the polynomial degree. 0 means no regularization.
-     * @param output Specify the output transform prefix (output format is .nii.gz). Optionally, one can choose to warp the moving image to the fixed space, and if the inverse transform exists, one can also output the warped fixed image.
-     * @param metric Four image metrics are available: GC: global correlation, CC: ANTS neighborhood cross correlation, MI: Mutual information, and MeanSquares: mean-squares intensity difference.
-     * @param transform Several transform options are available. The gradientStep or learningRate characterizes the gradient descent optimization.
-     * @param iterations Specify the number of iterations at each level.
-     * @param shrink_factors Specify the shrink factor for the virtual domain (typically the fixed image) at each level.
-     * @param smoothing_sigmas Specify the amount of smoothing at each level.
-     * @param mask Fixed image mask to limit voxels considered by the metric.
-     * @param interpolation Several interpolation options are available in ITK.
-     * @param verbose Verbose option.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA);
     const params = ants_slice_regularized_registration_params(polydegree, output, metric, transform, iterations, shrink_factors, smoothing_sigmas, mask, interpolation, verbose)
@@ -287,5 +287,8 @@ export {
       AntsSliceRegularizedRegistrationOutputs,
       AntsSliceRegularizedRegistrationParameters,
       ants_slice_regularized_registration,
+      ants_slice_regularized_registration_cargs,
+      ants_slice_regularized_registration_execute,
+      ants_slice_regularized_registration_outputs,
       ants_slice_regularized_registration_params,
 };

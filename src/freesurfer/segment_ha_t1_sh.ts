@@ -12,7 +12,7 @@ const SEGMENT_HA_T1_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT1ShParameters {
-    "__STYXTYPE__": "segmentHA_T1.sh";
+    "@type": "freesurfer.segmentHA_T1.sh";
     "input_image": InputPathType;
     "output_directory": string;
     "brain_mask"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface SegmentHaT1ShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentHA_T1.sh": segment_ha_t1_sh_cargs,
+        "freesurfer.segmentHA_T1.sh": segment_ha_t1_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segmentHA_T1.sh": segment_ha_t1_sh_outputs,
+        "freesurfer.segmentHA_T1.sh": segment_ha_t1_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface SegmentHaT1ShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image The input T1-weighted MRI image for hippocampal/amygdalar segmentation.
+ * @param output_directory The directory where the output will be saved.
+ * @param brain_mask Use a specific brain mask for segmentation.
+ * @param verbose Increase the verbosity of the output.
+ * @param debug Enable debugging mode.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_ha_t1_sh_params(
     input_image: InputPathType,
     output_directory: string,
@@ -83,19 +94,8 @@ function segment_ha_t1_sh_params(
     verbose: boolean = false,
     debug: boolean = false,
 ): SegmentHaT1ShParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image The input T1-weighted MRI image for hippocampal/amygdalar segmentation.
-     * @param output_directory The directory where the output will be saved.
-     * @param brain_mask Use a specific brain mask for segmentation.
-     * @param verbose Increase the verbosity of the output.
-     * @param debug Enable debugging mode.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentHA_T1.sh" as const,
+        "@type": "freesurfer.segmentHA_T1.sh" as const,
         "input_image": input_image,
         "output_directory": output_directory,
         "verbose": verbose,
@@ -108,18 +108,18 @@ function segment_ha_t1_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_ha_t1_sh_cargs(
     params: SegmentHaT1ShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentHA_T1.sh");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -140,18 +140,18 @@ function segment_ha_t1_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_ha_t1_sh_outputs(
     params: SegmentHaT1ShParameters,
     execution: Execution,
 ): SegmentHaT1ShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentHaT1ShOutputs = {
         root: execution.outputFile("."),
         hippocampus_aseg: execution.outputFile([(params["output_directory"] ?? null), "/hippocampus_aseg.mgz"].join('')),
@@ -161,22 +161,22 @@ function segment_ha_t1_sh_outputs(
 }
 
 
+/**
+ * Tool for hippocampal/amygdalar subfield segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT1ShOutputs`).
+ */
 function segment_ha_t1_sh_execute(
     params: SegmentHaT1ShParameters,
     execution: Execution,
 ): SegmentHaT1ShOutputs {
-    /**
-     * Tool for hippocampal/amygdalar subfield segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT1ShOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_ha_t1_sh_cargs(params, execution)
     const ret = segment_ha_t1_sh_outputs(params, execution)
@@ -185,6 +185,22 @@ function segment_ha_t1_sh_execute(
 }
 
 
+/**
+ * Tool for hippocampal/amygdalar subfield segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image The input T1-weighted MRI image for hippocampal/amygdalar segmentation.
+ * @param output_directory The directory where the output will be saved.
+ * @param brain_mask Use a specific brain mask for segmentation.
+ * @param verbose Increase the verbosity of the output.
+ * @param debug Enable debugging mode.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentHaT1ShOutputs`).
+ */
 function segment_ha_t1_sh(
     input_image: InputPathType,
     output_directory: string,
@@ -193,22 +209,6 @@ function segment_ha_t1_sh(
     debug: boolean = false,
     runner: Runner | null = null,
 ): SegmentHaT1ShOutputs {
-    /**
-     * Tool for hippocampal/amygdalar subfield segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image The input T1-weighted MRI image for hippocampal/amygdalar segmentation.
-     * @param output_directory The directory where the output will be saved.
-     * @param brain_mask Use a specific brain mask for segmentation.
-     * @param verbose Increase the verbosity of the output.
-     * @param debug Enable debugging mode.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentHaT1ShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_HA_T1_SH_METADATA);
     const params = segment_ha_t1_sh_params(input_image, output_directory, brain_mask, verbose, debug)
@@ -221,5 +221,8 @@ export {
       SegmentHaT1ShOutputs,
       SegmentHaT1ShParameters,
       segment_ha_t1_sh,
+      segment_ha_t1_sh_cargs,
+      segment_ha_t1_sh_execute,
+      segment_ha_t1_sh_outputs,
       segment_ha_t1_sh_params,
 };

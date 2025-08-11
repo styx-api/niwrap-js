@@ -12,38 +12,38 @@ const AFNI_CHECK_OMP_METADATA: Metadata = {
 
 
 interface AfniCheckOmpParameters {
-    "__STYXTYPE__": "afni_check_omp";
+    "@type": "afni.afni_check_omp";
     "iterations"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni_check_omp": afni_check_omp_cargs,
+        "afni.afni_check_omp": afni_check_omp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface AfniCheckOmpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param iterations Number of iterations to run
+ *
+ * @returns Parameter dictionary
+ */
 function afni_check_omp_params(
     iterations: number | null = null,
 ): AfniCheckOmpParameters {
-    /**
-     * Build parameters.
-    
-     * @param iterations Number of iterations to run
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni_check_omp" as const,
+        "@type": "afni.afni_check_omp" as const,
     };
     if (iterations !== null) {
         params["iterations"] = iterations;
@@ -83,18 +83,18 @@ function afni_check_omp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_check_omp_cargs(
     params: AfniCheckOmpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni_check_omp");
     if ((params["iterations"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function afni_check_omp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_check_omp_outputs(
     params: AfniCheckOmpParameters,
     execution: Execution,
 ): AfniCheckOmpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniCheckOmpOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function afni_check_omp_outputs(
 }
 
 
+/**
+ * Tool to check the OpenMP multi-threading environment for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
+ */
 function afni_check_omp_execute(
     params: AfniCheckOmpParameters,
     execution: Execution,
 ): AfniCheckOmpOutputs {
-    /**
-     * Tool to check the OpenMP multi-threading environment for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_check_omp_cargs(params, execution)
     const ret = afni_check_omp_outputs(params, execution)
@@ -147,22 +147,22 @@ function afni_check_omp_execute(
 }
 
 
+/**
+ * Tool to check the OpenMP multi-threading environment for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param iterations Number of iterations to run
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
+ */
 function afni_check_omp(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): AfniCheckOmpOutputs {
-    /**
-     * Tool to check the OpenMP multi-threading environment for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param iterations Number of iterations to run
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_CHECK_OMP_METADATA);
     const params = afni_check_omp_params(iterations)
@@ -175,5 +175,8 @@ export {
       AfniCheckOmpOutputs,
       AfniCheckOmpParameters,
       afni_check_omp,
+      afni_check_omp_cargs,
+      afni_check_omp_execute,
+      afni_check_omp_outputs,
       afni_check_omp_params,
 };

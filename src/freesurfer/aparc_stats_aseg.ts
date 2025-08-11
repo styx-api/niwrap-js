@@ -12,7 +12,7 @@ const APARC_STATS_ASEG_METADATA: Metadata = {
 
 
 interface AparcStatsAsegParameters {
-    "__STYXTYPE__": "aparc_stats_aseg";
+    "@type": "freesurfer.aparc_stats_aseg";
     "subject_name": string;
     "gcs_name": string;
     "subject_dir"?: string | null | undefined;
@@ -38,33 +38,33 @@ interface AparcStatsAsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "aparc_stats_aseg": aparc_stats_aseg_cargs,
+        "freesurfer.aparc_stats_aseg": aparc_stats_aseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -84,6 +84,34 @@ interface AparcStatsAsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name
+ * @param gcs_name GCS file name
+ * @param subject_dir Specify a subjects directory (default=/usr/local/freesurfer/subjects)
+ * @param gcs_dir GCS file directory (default=/usr/local/freesurfer/average)
+ * @param parc_name Specify the parcellation name (default=gcs name)
+ * @param output_dir Specify the output directory
+ * @param log_file Specify the log file
+ * @param lh_flag Left hemisphere only
+ * @param rh_flag Right hemisphere only
+ * @param a2009s_flag Use Christophe Destrieux cortical parcellation atlas
+ * @param no_aseg_flag Do not use aseg
+ * @param no_cortparc_flag Do not do cortical parcellation
+ * @param no_parcstats_flag Do not do surface anatomical statistics
+ * @param no_aparc2aseg_flag Do not do aparc2aseg
+ * @param random_seed Random seed (default=1234)
+ * @param th3_flag Use -th3 flag, turn on new volume calculation for mris_anatomical_stats
+ * @param no_th3_flag Use -no-th3 flag for mris_anatomical_stats
+ * @param longitudinal Longitudinal Processing
+ * @param expert_file Read-in expert options file
+ * @param expert_use_flag Use pre-existing expert options file
+ * @param expert_clean_flag Delete pre-existing expert options file
+ * @param expert_overwrite_flag Overwrite pre-existing expert options file
+ *
+ * @returns Parameter dictionary
+ */
 function aparc_stats_aseg_params(
     subject_name: string,
     gcs_name: string,
@@ -108,36 +136,8 @@ function aparc_stats_aseg_params(
     expert_clean_flag: boolean = false,
     expert_overwrite_flag: boolean = false,
 ): AparcStatsAsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name
-     * @param gcs_name GCS file name
-     * @param subject_dir Specify a subjects directory (default=/usr/local/freesurfer/subjects)
-     * @param gcs_dir GCS file directory (default=/usr/local/freesurfer/average)
-     * @param parc_name Specify the parcellation name (default=gcs name)
-     * @param output_dir Specify the output directory
-     * @param log_file Specify the log file
-     * @param lh_flag Left hemisphere only
-     * @param rh_flag Right hemisphere only
-     * @param a2009s_flag Use Christophe Destrieux cortical parcellation atlas
-     * @param no_aseg_flag Do not use aseg
-     * @param no_cortparc_flag Do not do cortical parcellation
-     * @param no_parcstats_flag Do not do surface anatomical statistics
-     * @param no_aparc2aseg_flag Do not do aparc2aseg
-     * @param random_seed Random seed (default=1234)
-     * @param th3_flag Use -th3 flag, turn on new volume calculation for mris_anatomical_stats
-     * @param no_th3_flag Use -no-th3 flag for mris_anatomical_stats
-     * @param longitudinal Longitudinal Processing
-     * @param expert_file Read-in expert options file
-     * @param expert_use_flag Use pre-existing expert options file
-     * @param expert_clean_flag Delete pre-existing expert options file
-     * @param expert_overwrite_flag Overwrite pre-existing expert options file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "aparc_stats_aseg" as const,
+        "@type": "freesurfer.aparc_stats_aseg" as const,
         "subject_name": subject_name,
         "gcs_name": gcs_name,
         "lh_flag": lh_flag,
@@ -181,18 +181,18 @@ function aparc_stats_aseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function aparc_stats_aseg_cargs(
     params: AparcStatsAsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("aparc_stats_aseg");
     cargs.push(
@@ -291,18 +291,18 @@ function aparc_stats_aseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function aparc_stats_aseg_outputs(
     params: AparcStatsAsegParameters,
     execution: Execution,
 ): AparcStatsAsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AparcStatsAsegOutputs = {
         root: execution.outputFile("."),
     };
@@ -310,22 +310,22 @@ function aparc_stats_aseg_outputs(
 }
 
 
+/**
+ * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
+ */
 function aparc_stats_aseg_execute(
     params: AparcStatsAsegParameters,
     execution: Execution,
 ): AparcStatsAsegOutputs {
-    /**
-     * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = aparc_stats_aseg_cargs(params, execution)
     const ret = aparc_stats_aseg_outputs(params, execution)
@@ -334,6 +334,39 @@ function aparc_stats_aseg_execute(
 }
 
 
+/**
+ * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name
+ * @param gcs_name GCS file name
+ * @param subject_dir Specify a subjects directory (default=/usr/local/freesurfer/subjects)
+ * @param gcs_dir GCS file directory (default=/usr/local/freesurfer/average)
+ * @param parc_name Specify the parcellation name (default=gcs name)
+ * @param output_dir Specify the output directory
+ * @param log_file Specify the log file
+ * @param lh_flag Left hemisphere only
+ * @param rh_flag Right hemisphere only
+ * @param a2009s_flag Use Christophe Destrieux cortical parcellation atlas
+ * @param no_aseg_flag Do not use aseg
+ * @param no_cortparc_flag Do not do cortical parcellation
+ * @param no_parcstats_flag Do not do surface anatomical statistics
+ * @param no_aparc2aseg_flag Do not do aparc2aseg
+ * @param random_seed Random seed (default=1234)
+ * @param th3_flag Use -th3 flag, turn on new volume calculation for mris_anatomical_stats
+ * @param no_th3_flag Use -no-th3 flag for mris_anatomical_stats
+ * @param longitudinal Longitudinal Processing
+ * @param expert_file Read-in expert options file
+ * @param expert_use_flag Use pre-existing expert options file
+ * @param expert_clean_flag Delete pre-existing expert options file
+ * @param expert_overwrite_flag Overwrite pre-existing expert options file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
+ */
 function aparc_stats_aseg(
     subject_name: string,
     gcs_name: string,
@@ -359,39 +392,6 @@ function aparc_stats_aseg(
     expert_overwrite_flag: boolean = false,
     runner: Runner | null = null,
 ): AparcStatsAsegOutputs {
-    /**
-     * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name
-     * @param gcs_name GCS file name
-     * @param subject_dir Specify a subjects directory (default=/usr/local/freesurfer/subjects)
-     * @param gcs_dir GCS file directory (default=/usr/local/freesurfer/average)
-     * @param parc_name Specify the parcellation name (default=gcs name)
-     * @param output_dir Specify the output directory
-     * @param log_file Specify the log file
-     * @param lh_flag Left hemisphere only
-     * @param rh_flag Right hemisphere only
-     * @param a2009s_flag Use Christophe Destrieux cortical parcellation atlas
-     * @param no_aseg_flag Do not use aseg
-     * @param no_cortparc_flag Do not do cortical parcellation
-     * @param no_parcstats_flag Do not do surface anatomical statistics
-     * @param no_aparc2aseg_flag Do not do aparc2aseg
-     * @param random_seed Random seed (default=1234)
-     * @param th3_flag Use -th3 flag, turn on new volume calculation for mris_anatomical_stats
-     * @param no_th3_flag Use -no-th3 flag for mris_anatomical_stats
-     * @param longitudinal Longitudinal Processing
-     * @param expert_file Read-in expert options file
-     * @param expert_use_flag Use pre-existing expert options file
-     * @param expert_clean_flag Delete pre-existing expert options file
-     * @param expert_overwrite_flag Overwrite pre-existing expert options file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APARC_STATS_ASEG_METADATA);
     const params = aparc_stats_aseg_params(subject_name, gcs_name, subject_dir, gcs_dir, parc_name, output_dir, log_file, lh_flag, rh_flag, a2009s_flag, no_aseg_flag, no_cortparc_flag, no_parcstats_flag, no_aparc2aseg_flag, random_seed, th3_flag, no_th3_flag, longitudinal, expert_file, expert_use_flag, expert_clean_flag, expert_overwrite_flag)
@@ -404,5 +404,8 @@ export {
       AparcStatsAsegOutputs,
       AparcStatsAsegParameters,
       aparc_stats_aseg,
+      aparc_stats_aseg_cargs,
+      aparc_stats_aseg_execute,
+      aparc_stats_aseg_outputs,
       aparc_stats_aseg_params,
 };

@@ -12,7 +12,7 @@ const BEDPOSTX_GPU_METADATA: Metadata = {
 
 
 interface BedpostxGpuParameters {
-    "__STYXTYPE__": "bedpostx_gpu";
+    "@type": "fsl.bedpostx_gpu";
     "subject_dir": string;
     "gpu_queue"?: string | null | undefined;
     "num_jobs"?: number | null | undefined;
@@ -26,33 +26,33 @@ interface BedpostxGpuParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bedpostx_gpu": bedpostx_gpu_cargs,
+        "fsl.bedpostx_gpu": bedpostx_gpu_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface BedpostxGpuOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory containing the subject's DWI data and associated files (bvals, bvecs, data, nodif_brain_mask).
+ * @param gpu_queue Name of the GPU(s) queue. Default: --coprocessor=cuda to let fsl_sub decide on the queue
+ * @param num_jobs Number of jobs to queue. The data is divided into this number of parts, useful for a GPU cluster. Default: 4
+ * @param num_fibers Number of fibres per voxel. Default: 3
+ * @param ard_weight Automatic Relevance Determination (ARD) weight. More weight means fewer secondary fibres per voxel. Default: 1
+ * @param burnin_period Burn-in period. Default: 1000
+ * @param num_jumps Number of jumps. Default: 1250
+ * @param sample_every Sample every N steps. Default: 25
+ * @param deconv_model Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
+ * @param grad_nonlinear Consider gradient nonlinearities. Default: off
+ *
+ * @returns Parameter dictionary
+ */
 function bedpostx_gpu_params(
     subject_dir: string,
     gpu_queue: string | null = null,
@@ -84,24 +100,8 @@ function bedpostx_gpu_params(
     deconv_model: number | null = null,
     grad_nonlinear: boolean = false,
 ): BedpostxGpuParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory containing the subject's DWI data and associated files (bvals, bvecs, data, nodif_brain_mask).
-     * @param gpu_queue Name of the GPU(s) queue. Default: --coprocessor=cuda to let fsl_sub decide on the queue
-     * @param num_jobs Number of jobs to queue. The data is divided into this number of parts, useful for a GPU cluster. Default: 4
-     * @param num_fibers Number of fibres per voxel. Default: 3
-     * @param ard_weight Automatic Relevance Determination (ARD) weight. More weight means fewer secondary fibres per voxel. Default: 1
-     * @param burnin_period Burn-in period. Default: 1000
-     * @param num_jumps Number of jumps. Default: 1250
-     * @param sample_every Sample every N steps. Default: 25
-     * @param deconv_model Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
-     * @param grad_nonlinear Consider gradient nonlinearities. Default: off
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bedpostx_gpu" as const,
+        "@type": "fsl.bedpostx_gpu" as const,
         "subject_dir": subject_dir,
         "grad_nonlinear": grad_nonlinear,
     };
@@ -133,18 +133,18 @@ function bedpostx_gpu_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bedpostx_gpu_cargs(
     params: BedpostxGpuParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bedpostx_gpu");
     cargs.push((params["subject_dir"] ?? null));
@@ -203,18 +203,18 @@ function bedpostx_gpu_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bedpostx_gpu_outputs(
     params: BedpostxGpuParameters,
     execution: Execution,
 ): BedpostxGpuOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BedpostxGpuOutputs = {
         root: execution.outputFile("."),
     };
@@ -222,22 +222,22 @@ function bedpostx_gpu_outputs(
 }
 
 
+/**
+ * Probabilistic tractography and diffusion MRI fitting tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
+ */
 function bedpostx_gpu_execute(
     params: BedpostxGpuParameters,
     execution: Execution,
 ): BedpostxGpuOutputs {
-    /**
-     * Probabilistic tractography and diffusion MRI fitting tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
-     */
     params = execution.params(params)
     const cargs = bedpostx_gpu_cargs(params, execution)
     const ret = bedpostx_gpu_outputs(params, execution)
@@ -246,6 +246,27 @@ function bedpostx_gpu_execute(
 }
 
 
+/**
+ * Probabilistic tractography and diffusion MRI fitting tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param subject_dir Directory containing the subject's DWI data and associated files (bvals, bvecs, data, nodif_brain_mask).
+ * @param gpu_queue Name of the GPU(s) queue. Default: --coprocessor=cuda to let fsl_sub decide on the queue
+ * @param num_jobs Number of jobs to queue. The data is divided into this number of parts, useful for a GPU cluster. Default: 4
+ * @param num_fibers Number of fibres per voxel. Default: 3
+ * @param ard_weight Automatic Relevance Determination (ARD) weight. More weight means fewer secondary fibres per voxel. Default: 1
+ * @param burnin_period Burn-in period. Default: 1000
+ * @param num_jumps Number of jumps. Default: 1250
+ * @param sample_every Sample every N steps. Default: 25
+ * @param deconv_model Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
+ * @param grad_nonlinear Consider gradient nonlinearities. Default: off
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
+ */
 function bedpostx_gpu(
     subject_dir: string,
     gpu_queue: string | null = null,
@@ -259,27 +280,6 @@ function bedpostx_gpu(
     grad_nonlinear: boolean = false,
     runner: Runner | null = null,
 ): BedpostxGpuOutputs {
-    /**
-     * Probabilistic tractography and diffusion MRI fitting tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param subject_dir Directory containing the subject's DWI data and associated files (bvals, bvecs, data, nodif_brain_mask).
-     * @param gpu_queue Name of the GPU(s) queue. Default: --coprocessor=cuda to let fsl_sub decide on the queue
-     * @param num_jobs Number of jobs to queue. The data is divided into this number of parts, useful for a GPU cluster. Default: 4
-     * @param num_fibers Number of fibres per voxel. Default: 3
-     * @param ard_weight Automatic Relevance Determination (ARD) weight. More weight means fewer secondary fibres per voxel. Default: 1
-     * @param burnin_period Burn-in period. Default: 1000
-     * @param num_jumps Number of jumps. Default: 1250
-     * @param sample_every Sample every N steps. Default: 25
-     * @param deconv_model Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins
-     * @param grad_nonlinear Consider gradient nonlinearities. Default: off
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BEDPOSTX_GPU_METADATA);
     const params = bedpostx_gpu_params(subject_dir, gpu_queue, num_jobs, num_fibers, ard_weight, burnin_period, num_jumps, sample_every, deconv_model, grad_nonlinear)
@@ -292,5 +292,8 @@ export {
       BedpostxGpuOutputs,
       BedpostxGpuParameters,
       bedpostx_gpu,
+      bedpostx_gpu_cargs,
+      bedpostx_gpu_execute,
+      bedpostx_gpu_outputs,
       bedpostx_gpu_params,
 };

@@ -12,7 +12,7 @@ const V_1D_RPLOT_METADATA: Metadata = {
 
 
 interface V1dRplotParameters {
-    "__STYXTYPE__": "1dRplot";
+    "@type": "afni.1dRplot";
     "input_file": InputPathType;
     "output_prefix"?: string | null | undefined;
     "save_size"?: Array<number> | null | undefined;
@@ -35,35 +35,35 @@ interface V1dRplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dRplot": v_1d_rplot_cargs,
+        "afni.1dRplot": v_1d_rplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dRplot": v_1d_rplot_outputs,
+        "afni.1dRplot": v_1d_rplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,31 @@ interface V1dRplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 1D file to plot
+ * @param output_prefix Output prefix. See also -save.
+ * @param save_size Save figure size in pixels. Default is 2000 2000.
+ * @param tr Sampling period, in seconds.
+ * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
+ * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
+ * @param legend_font_size Font size for legend text.
+ * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
+ * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
+ * @param x_axis_label Labels for the X axis.
+ * @param y_axis_label Labels for the Y axis.
+ * @param x_axis_range Range of X axis. STEP is optional.
+ * @param y_axis_range Range of Y axis. STEP is optional.
+ * @param plot_char Symbols for each column in input.
+ * @param group_labels Legends assigned to each group. Default is no labeling.
+ * @param legend_show Show legend.
+ * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
+ * @param save_plot Save plot and quit. No need for -prefix with this option.
+ * @param column_name_show Show names of column in input.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_rplot_params(
     input_file: InputPathType,
     output_prefix: string | null = null,
@@ -107,33 +132,8 @@ function v_1d_rplot_params(
     save_plot: boolean = false,
     column_name_show: boolean = false,
 ): V1dRplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 1D file to plot
-     * @param output_prefix Output prefix. See also -save.
-     * @param save_size Save figure size in pixels. Default is 2000 2000.
-     * @param tr Sampling period, in seconds.
-     * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
-     * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
-     * @param legend_font_size Font size for legend text.
-     * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
-     * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
-     * @param x_axis_label Labels for the X axis.
-     * @param y_axis_label Labels for the Y axis.
-     * @param x_axis_range Range of X axis. STEP is optional.
-     * @param y_axis_range Range of Y axis. STEP is optional.
-     * @param plot_char Symbols for each column in input.
-     * @param group_labels Legends assigned to each group. Default is no labeling.
-     * @param legend_show Show legend.
-     * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
-     * @param save_plot Save plot and quit. No need for -prefix with this option.
-     * @param column_name_show Show names of column in input.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dRplot" as const,
+        "@type": "afni.1dRplot" as const,
         "input_file": input_file,
         "legend_show": legend_show,
         "save_plot": save_plot,
@@ -188,18 +188,18 @@ function v_1d_rplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_rplot_cargs(
     params: V1dRplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dRplot");
     cargs.push(
@@ -309,18 +309,18 @@ function v_1d_rplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_rplot_outputs(
     params: V1dRplotParameters,
     execution: Execution,
 ): V1dRplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dRplotOutputs = {
         root: execution.outputFile("."),
         output_plot: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.jpg"].join('')) : null,
@@ -329,22 +329,22 @@ function v_1d_rplot_outputs(
 }
 
 
+/**
+ * Program for plotting a 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
+ */
 function v_1d_rplot_execute(
     params: V1dRplotParameters,
     execution: Execution,
 ): V1dRplotOutputs {
-    /**
-     * Program for plotting a 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_rplot_cargs(params, execution)
     const ret = v_1d_rplot_outputs(params, execution)
@@ -353,6 +353,36 @@ function v_1d_rplot_execute(
 }
 
 
+/**
+ * Program for plotting a 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input 1D file to plot
+ * @param output_prefix Output prefix. See also -save.
+ * @param save_size Save figure size in pixels. Default is 2000 2000.
+ * @param tr Sampling period, in seconds.
+ * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
+ * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
+ * @param legend_font_size Font size for legend text.
+ * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
+ * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
+ * @param x_axis_label Labels for the X axis.
+ * @param y_axis_label Labels for the Y axis.
+ * @param x_axis_range Range of X axis. STEP is optional.
+ * @param y_axis_range Range of Y axis. STEP is optional.
+ * @param plot_char Symbols for each column in input.
+ * @param group_labels Legends assigned to each group. Default is no labeling.
+ * @param legend_show Show legend.
+ * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
+ * @param save_plot Save plot and quit. No need for -prefix with this option.
+ * @param column_name_show Show names of column in input.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
+ */
 function v_1d_rplot(
     input_file: InputPathType,
     output_prefix: string | null = null,
@@ -375,36 +405,6 @@ function v_1d_rplot(
     column_name_show: boolean = false,
     runner: Runner | null = null,
 ): V1dRplotOutputs {
-    /**
-     * Program for plotting a 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input 1D file to plot
-     * @param output_prefix Output prefix. See also -save.
-     * @param save_size Save figure size in pixels. Default is 2000 2000.
-     * @param tr Sampling period, in seconds.
-     * @param title Graph title. File name is used by default. Use NONE to be sure no title is used.
-     * @param input_type Type of data in 1D file. Choose from 'VOLREG' or 'XMAT'.
-     * @param legend_font_size Font size for legend text.
-     * @param left_y_margin_text Text to be placed at left Y margin. You need one string per column.
-     * @param right_y_margin_text Text to be placed at right Y margin. You need one string per column.
-     * @param x_axis_label Labels for the X axis.
-     * @param y_axis_label Labels for the Y axis.
-     * @param x_axis_range Range of X axis. STEP is optional.
-     * @param y_axis_range Range of Y axis. STEP is optional.
-     * @param plot_char Symbols for each column in input.
-     * @param group_labels Legends assigned to each group. Default is no labeling.
-     * @param legend_show Show legend.
-     * @param legend_position Legend position. Choose from: bottomright, bottom, bottomleft, left, topleft, top, topright, right, center.
-     * @param save_plot Save plot and quit. No need for -prefix with this option.
-     * @param column_name_show Show names of column in input.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_RPLOT_METADATA);
     const params = v_1d_rplot_params(input_file, output_prefix, save_size, tr, title, input_type, legend_font_size, left_y_margin_text, right_y_margin_text, x_axis_label, y_axis_label, x_axis_range, y_axis_range, plot_char, group_labels, legend_show, legend_position, save_plot, column_name_show)
@@ -417,5 +417,8 @@ export {
       V1dRplotParameters,
       V_1D_RPLOT_METADATA,
       v_1d_rplot,
+      v_1d_rplot_cargs,
+      v_1d_rplot_execute,
+      v_1d_rplot_outputs,
       v_1d_rplot_params,
 };

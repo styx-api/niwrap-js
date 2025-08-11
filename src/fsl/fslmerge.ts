@@ -12,7 +12,7 @@ const FSLMERGE_METADATA: Metadata = {
 
 
 interface FslmergeParameters {
-    "__STYXTYPE__": "fslmerge";
+    "@type": "fsl.fslmerge";
     "merge_time": boolean;
     "merge_x": boolean;
     "merge_y": boolean;
@@ -26,35 +26,35 @@ interface FslmergeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslmerge": fslmerge_cargs,
+        "fsl.fslmerge": fslmerge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslmerge": fslmerge_outputs,
+        "fsl.fslmerge": fslmerge_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface FslmergeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output concatenated image file
+ * @param input_files Input image files to concatenate
+ * @param merge_time Concatenate images in time (4th dimension)
+ * @param merge_x Concatenate images in the x direction
+ * @param merge_y Concatenate images in the y direction
+ * @param merge_z Concatenate images in the z direction
+ * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
+ * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
+ * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
+ * @param tr_value TR value in seconds, used with the -tr flag
+ *
+ * @returns Parameter dictionary
+ */
 function fslmerge_params(
     output_file: string,
     input_files: Array<InputPathType>,
@@ -89,24 +105,8 @@ function fslmerge_params(
     volume_number: number | null = null,
     tr_value: number | null = null,
 ): FslmergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output concatenated image file
-     * @param input_files Input image files to concatenate
-     * @param merge_time Concatenate images in time (4th dimension)
-     * @param merge_x Concatenate images in the x direction
-     * @param merge_y Concatenate images in the y direction
-     * @param merge_z Concatenate images in the z direction
-     * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
-     * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
-     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
-     * @param tr_value TR value in seconds, used with the -tr flag
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslmerge" as const,
+        "@type": "fsl.fslmerge" as const,
         "merge_time": merge_time,
         "merge_x": merge_x,
         "merge_y": merge_y,
@@ -126,18 +126,18 @@ function fslmerge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslmerge_cargs(
     params: FslmergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslmerge");
     if ((params["merge_time"] ?? null)) {
@@ -173,18 +173,18 @@ function fslmerge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslmerge_outputs(
     params: FslmergeParameters,
     execution: Execution,
 ): FslmergeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslmergeOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -193,22 +193,22 @@ function fslmerge_outputs(
 }
 
 
+/**
+ * FSL tool to concatenate images in various dimensions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
+ */
 function fslmerge_execute(
     params: FslmergeParameters,
     execution: Execution,
 ): FslmergeOutputs {
-    /**
-     * FSL tool to concatenate images in various dimensions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslmerge_cargs(params, execution)
     const ret = fslmerge_outputs(params, execution)
@@ -217,6 +217,27 @@ function fslmerge_execute(
 }
 
 
+/**
+ * FSL tool to concatenate images in various dimensions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_file Output concatenated image file
+ * @param input_files Input image files to concatenate
+ * @param merge_time Concatenate images in time (4th dimension)
+ * @param merge_x Concatenate images in the x direction
+ * @param merge_y Concatenate images in the y direction
+ * @param merge_z Concatenate images in the z direction
+ * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
+ * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
+ * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
+ * @param tr_value TR value in seconds, used with the -tr flag
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
+ */
 function fslmerge(
     output_file: string,
     input_files: Array<InputPathType>,
@@ -230,27 +251,6 @@ function fslmerge(
     tr_value: number | null = null,
     runner: Runner | null = null,
 ): FslmergeOutputs {
-    /**
-     * FSL tool to concatenate images in various dimensions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_file Output concatenated image file
-     * @param input_files Input image files to concatenate
-     * @param merge_time Concatenate images in time (4th dimension)
-     * @param merge_x Concatenate images in the x direction
-     * @param merge_y Concatenate images in the y direction
-     * @param merge_z Concatenate images in the z direction
-     * @param auto_choose Auto-choose: single slices -> volume, volumes -> 4D (time series)
-     * @param merge_set_tr Concatenate images in time and set the output image tr to the provided value
-     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1)
-     * @param tr_value TR value in seconds, used with the -tr flag
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMERGE_METADATA);
     const params = fslmerge_params(output_file, input_files, merge_time, merge_x, merge_y, merge_z, auto_choose, merge_set_tr, volume_number, tr_value)
@@ -263,5 +263,8 @@ export {
       FslmergeOutputs,
       FslmergeParameters,
       fslmerge,
+      fslmerge_cargs,
+      fslmerge_execute,
+      fslmerge_outputs,
       fslmerge_params,
 };

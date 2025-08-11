@@ -12,7 +12,7 @@ const TEST_TUTORIALS_SH_METADATA: Metadata = {
 
 
 interface TestTutorialsShParameters {
-    "__STYXTYPE__": "test_tutorials.sh";
+    "@type": "freesurfer.test_tutorials.sh";
     "all_tutorials": boolean;
     "quick_test": boolean;
     "auto_quit_freeview": boolean;
@@ -32,33 +32,33 @@ interface TestTutorialsShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "test_tutorials.sh": test_tutorials_sh_cargs,
+        "freesurfer.test_tutorials.sh": test_tutorials_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -78,6 +78,28 @@ interface TestTutorialsShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param all_tutorials Run all tutorials
+ * @param quick_test Perform a quick subset of commands
+ * @param auto_quit_freeview Automatically closes freeview after opening
+ * @param skip_all_guis Skips all commands that open a GUI
+ * @param skip_tk_guis Skips commands that open a tk GUI (tkmedit, tksurfer, etc)
+ * @param skip_qdec_guis Skips commands that open qdec
+ * @param individual_subject Do Interaction with Individual Subject Data tutorial
+ * @param troubleshooting Do Troubleshooting tutorial
+ * @param group_analysis Do Group Analysis tutorial
+ * @param qdec Do QDEC tutorial
+ * @param longitudinal Do Longitudinal tutorial
+ * @param roi_analysis Do ROI Analysis tutorial
+ * @param diffusion Do Diffusion tutorial
+ * @param tracula Do TRACULA tutorial
+ * @param fsfast Do FSFASt tutorial
+ * @param multimodal Do Mulimodal tutorial
+ *
+ * @returns Parameter dictionary
+ */
 function test_tutorials_sh_params(
     all_tutorials: boolean = false,
     quick_test: boolean = false,
@@ -96,30 +118,8 @@ function test_tutorials_sh_params(
     fsfast: boolean = false,
     multimodal: boolean = false,
 ): TestTutorialsShParameters {
-    /**
-     * Build parameters.
-    
-     * @param all_tutorials Run all tutorials
-     * @param quick_test Perform a quick subset of commands
-     * @param auto_quit_freeview Automatically closes freeview after opening
-     * @param skip_all_guis Skips all commands that open a GUI
-     * @param skip_tk_guis Skips commands that open a tk GUI (tkmedit, tksurfer, etc)
-     * @param skip_qdec_guis Skips commands that open qdec
-     * @param individual_subject Do Interaction with Individual Subject Data tutorial
-     * @param troubleshooting Do Troubleshooting tutorial
-     * @param group_analysis Do Group Analysis tutorial
-     * @param qdec Do QDEC tutorial
-     * @param longitudinal Do Longitudinal tutorial
-     * @param roi_analysis Do ROI Analysis tutorial
-     * @param diffusion Do Diffusion tutorial
-     * @param tracula Do TRACULA tutorial
-     * @param fsfast Do FSFASt tutorial
-     * @param multimodal Do Mulimodal tutorial
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "test_tutorials.sh" as const,
+        "@type": "freesurfer.test_tutorials.sh" as const,
         "all_tutorials": all_tutorials,
         "quick_test": quick_test,
         "auto_quit_freeview": auto_quit_freeview,
@@ -141,18 +141,18 @@ function test_tutorials_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function test_tutorials_sh_cargs(
     params: TestTutorialsShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("test_tutorials.sh");
     if ((params["all_tutorials"] ?? null)) {
@@ -207,18 +207,18 @@ function test_tutorials_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function test_tutorials_sh_outputs(
     params: TestTutorialsShParameters,
     execution: Execution,
 ): TestTutorialsShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TestTutorialsShOutputs = {
         root: execution.outputFile("."),
     };
@@ -226,22 +226,22 @@ function test_tutorials_sh_outputs(
 }
 
 
+/**
+ * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
+ */
 function test_tutorials_sh_execute(
     params: TestTutorialsShParameters,
     execution: Execution,
 ): TestTutorialsShOutputs {
-    /**
-     * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
-     */
     params = execution.params(params)
     const cargs = test_tutorials_sh_cargs(params, execution)
     const ret = test_tutorials_sh_outputs(params, execution)
@@ -250,6 +250,33 @@ function test_tutorials_sh_execute(
 }
 
 
+/**
+ * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param all_tutorials Run all tutorials
+ * @param quick_test Perform a quick subset of commands
+ * @param auto_quit_freeview Automatically closes freeview after opening
+ * @param skip_all_guis Skips all commands that open a GUI
+ * @param skip_tk_guis Skips commands that open a tk GUI (tkmedit, tksurfer, etc)
+ * @param skip_qdec_guis Skips commands that open qdec
+ * @param individual_subject Do Interaction with Individual Subject Data tutorial
+ * @param troubleshooting Do Troubleshooting tutorial
+ * @param group_analysis Do Group Analysis tutorial
+ * @param qdec Do QDEC tutorial
+ * @param longitudinal Do Longitudinal tutorial
+ * @param roi_analysis Do ROI Analysis tutorial
+ * @param diffusion Do Diffusion tutorial
+ * @param tracula Do TRACULA tutorial
+ * @param fsfast Do FSFASt tutorial
+ * @param multimodal Do Mulimodal tutorial
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
+ */
 function test_tutorials_sh(
     all_tutorials: boolean = false,
     quick_test: boolean = false,
@@ -269,33 +296,6 @@ function test_tutorials_sh(
     multimodal: boolean = false,
     runner: Runner | null = null,
 ): TestTutorialsShOutputs {
-    /**
-     * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param all_tutorials Run all tutorials
-     * @param quick_test Perform a quick subset of commands
-     * @param auto_quit_freeview Automatically closes freeview after opening
-     * @param skip_all_guis Skips all commands that open a GUI
-     * @param skip_tk_guis Skips commands that open a tk GUI (tkmedit, tksurfer, etc)
-     * @param skip_qdec_guis Skips commands that open qdec
-     * @param individual_subject Do Interaction with Individual Subject Data tutorial
-     * @param troubleshooting Do Troubleshooting tutorial
-     * @param group_analysis Do Group Analysis tutorial
-     * @param qdec Do QDEC tutorial
-     * @param longitudinal Do Longitudinal tutorial
-     * @param roi_analysis Do ROI Analysis tutorial
-     * @param diffusion Do Diffusion tutorial
-     * @param tracula Do TRACULA tutorial
-     * @param fsfast Do FSFASt tutorial
-     * @param multimodal Do Mulimodal tutorial
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEST_TUTORIALS_SH_METADATA);
     const params = test_tutorials_sh_params(all_tutorials, quick_test, auto_quit_freeview, skip_all_guis, skip_tk_guis, skip_qdec_guis, individual_subject, troubleshooting, group_analysis, qdec, longitudinal, roi_analysis, diffusion, tracula, fsfast, multimodal)
@@ -308,5 +308,8 @@ export {
       TestTutorialsShOutputs,
       TestTutorialsShParameters,
       test_tutorials_sh,
+      test_tutorials_sh_cargs,
+      test_tutorials_sh_execute,
+      test_tutorials_sh_outputs,
       test_tutorials_sh_params,
 };

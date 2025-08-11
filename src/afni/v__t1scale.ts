@@ -12,7 +12,7 @@ const V__T1SCALE_METADATA: Metadata = {
 
 
 interface VT1scaleParameters {
-    "__STYXTYPE__": "@T1scale";
+    "@type": "afni.@T1scale";
     "t1_volume": InputPathType;
     "pd_volume"?: InputPathType | null | undefined;
     "output_directory"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface VT1scaleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@T1scale": v__t1scale_cargs,
+        "afni.@T1scale": v__t1scale_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@T1scale": v__t1scale_outputs,
+        "afni.@T1scale": v__t1scale_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface VT1scaleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_volume The T1 volume
+ * @param pd_volume The PD volume (aligned to T1)
+ * @param output_directory Directory where output gets dumped. Default is T1scale/
+ * @param align Align PD volume to T1. Without this option, PDvol is assumed in alignment with T1vol.
+ * @param mask Create mask for the output. If not specified, the script will generate one with 3dAutomask on fattened PDvol.
+ * @param head_mask Create mask using 3dSkullStrip's -head option.
+ * @param unmasked_uni Do not apply masking to uniformized volume (default)
+ * @param masked_uni Apply masking to uniformized volume
+ * @param echo Set echo
+ * @param help Display this help message and exit
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find_word Search for lines containing WORD in -help output. Search is approximate.
+ *
+ * @returns Parameter dictionary
+ */
 function v__t1scale_params(
     t1_volume: InputPathType,
     pd_volume: InputPathType | null = null,
@@ -105,28 +125,8 @@ function v__t1scale_params(
     all_opts: boolean = false,
     h_find_word: string | null = null,
 ): VT1scaleParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_volume The T1 volume
-     * @param pd_volume The PD volume (aligned to T1)
-     * @param output_directory Directory where output gets dumped. Default is T1scale/
-     * @param align Align PD volume to T1. Without this option, PDvol is assumed in alignment with T1vol.
-     * @param mask Create mask for the output. If not specified, the script will generate one with 3dAutomask on fattened PDvol.
-     * @param head_mask Create mask using 3dSkullStrip's -head option.
-     * @param unmasked_uni Do not apply masking to uniformized volume (default)
-     * @param masked_uni Apply masking to uniformized volume
-     * @param echo Set echo
-     * @param help Display this help message and exit
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find_word Search for lines containing WORD in -help output. Search is approximate.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@T1scale" as const,
+        "@type": "afni.@T1scale" as const,
         "t1_volume": t1_volume,
         "align": align,
         "head_mask": head_mask,
@@ -154,18 +154,18 @@ function v__t1scale_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__t1scale_cargs(
     params: VT1scaleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@T1scale");
     cargs.push(
@@ -227,18 +227,18 @@ function v__t1scale_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__t1scale_outputs(
     params: VT1scaleParameters,
     execution: Execution,
 ): VT1scaleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VT1scaleOutputs = {
         root: execution.outputFile("."),
         uniformized_t1_output: execution.outputFile(["T1.uni+orig"].join('')),
@@ -249,22 +249,22 @@ function v__t1scale_outputs(
 }
 
 
+/**
+ * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
+ */
 function v__t1scale_execute(
     params: VT1scaleParameters,
     execution: Execution,
 ): VT1scaleOutputs {
-    /**
-     * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__t1scale_cargs(params, execution)
     const ret = v__t1scale_outputs(params, execution)
@@ -273,6 +273,31 @@ function v__t1scale_execute(
 }
 
 
+/**
+ * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param t1_volume The T1 volume
+ * @param pd_volume The PD volume (aligned to T1)
+ * @param output_directory Directory where output gets dumped. Default is T1scale/
+ * @param align Align PD volume to T1. Without this option, PDvol is assumed in alignment with T1vol.
+ * @param mask Create mask for the output. If not specified, the script will generate one with 3dAutomask on fattened PDvol.
+ * @param head_mask Create mask using 3dSkullStrip's -head option.
+ * @param unmasked_uni Do not apply masking to uniformized volume (default)
+ * @param masked_uni Apply masking to uniformized volume
+ * @param echo Set echo
+ * @param help Display this help message and exit
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find_word Search for lines containing WORD in -help output. Search is approximate.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
+ */
 function v__t1scale(
     t1_volume: InputPathType,
     pd_volume: InputPathType | null = null,
@@ -290,31 +315,6 @@ function v__t1scale(
     h_find_word: string | null = null,
     runner: Runner | null = null,
 ): VT1scaleOutputs {
-    /**
-     * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param t1_volume The T1 volume
-     * @param pd_volume The PD volume (aligned to T1)
-     * @param output_directory Directory where output gets dumped. Default is T1scale/
-     * @param align Align PD volume to T1. Without this option, PDvol is assumed in alignment with T1vol.
-     * @param mask Create mask for the output. If not specified, the script will generate one with 3dAutomask on fattened PDvol.
-     * @param head_mask Create mask using 3dSkullStrip's -head option.
-     * @param unmasked_uni Do not apply masking to uniformized volume (default)
-     * @param masked_uni Apply masking to uniformized volume
-     * @param echo Set echo
-     * @param help Display this help message and exit
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find_word Search for lines containing WORD in -help output. Search is approximate.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__T1SCALE_METADATA);
     const params = v__t1scale_params(t1_volume, pd_volume, output_directory, align, mask, head_mask, unmasked_uni, masked_uni, echo, help, h_web, h_view, all_opts, h_find_word)
@@ -327,5 +327,8 @@ export {
       VT1scaleParameters,
       V__T1SCALE_METADATA,
       v__t1scale,
+      v__t1scale_cargs,
+      v__t1scale_execute,
+      v__t1scale_outputs,
       v__t1scale_params,
 };

@@ -12,7 +12,7 @@ const MRIS_SURFACE_STATS_METADATA: Metadata = {
 
 
 interface MrisSurfaceStatsParameters {
-    "__STYXTYPE__": "mris_surface_stats";
+    "@type": "freesurfer.mris_surface_stats";
     "nsmooth"?: number | null | undefined;
     "surf_name": InputPathType;
     "mask_name"?: InputPathType | null | undefined;
@@ -29,35 +29,35 @@ interface MrisSurfaceStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_surface_stats": mris_surface_stats_cargs,
+        "freesurfer.mris_surface_stats": mris_surface_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_surface_stats": mris_surface_stats_outputs,
+        "freesurfer.mris_surface_stats": mris_surface_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,25 @@ interface MrisSurfaceStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_name Set the surface filename
+ * @param out_name Set the output filename (standard deviation of data)
+ * @param data_files List of input data files for computation
+ * @param nsmooth Specify number of smoothing steps
+ * @param mask_name Set the filename for surface mask
+ * @param mean Set the output filename for mean
+ * @param absmean Set the output filename for absolute mean
+ * @param absstd Set the output filename for standard deviation of absolute mean
+ * @param zscore Set the output filename for z-score (only if first_group_size > 0)
+ * @param first_group_size Specify how many subjects at the beginning belong to first group
+ * @param src_type Input surface data format (default = paint)
+ * @param trg_type Output format (default = paint)
+ * @param debug Specify which surface vertex number to debug
+ *
+ * @returns Parameter dictionary
+ */
 function mris_surface_stats_params(
     surf_name: InputPathType,
     out_name: string,
@@ -111,27 +130,8 @@ function mris_surface_stats_params(
     trg_type: string | null = null,
     debug: number | null = null,
 ): MrisSurfaceStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_name Set the surface filename
-     * @param out_name Set the output filename (standard deviation of data)
-     * @param data_files List of input data files for computation
-     * @param nsmooth Specify number of smoothing steps
-     * @param mask_name Set the filename for surface mask
-     * @param mean Set the output filename for mean
-     * @param absmean Set the output filename for absolute mean
-     * @param absstd Set the output filename for standard deviation of absolute mean
-     * @param zscore Set the output filename for z-score (only if first_group_size > 0)
-     * @param first_group_size Specify how many subjects at the beginning belong to first group
-     * @param src_type Input surface data format (default = paint)
-     * @param trg_type Output format (default = paint)
-     * @param debug Specify which surface vertex number to debug
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_surface_stats" as const,
+        "@type": "freesurfer.mris_surface_stats" as const,
         "surf_name": surf_name,
         "out_name": out_name,
         "data_files": data_files,
@@ -170,18 +170,18 @@ function mris_surface_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_surface_stats_cargs(
     params: MrisSurfaceStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_surface_stats");
     if ((params["nsmooth"] ?? null) !== null) {
@@ -257,18 +257,18 @@ function mris_surface_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_surface_stats_outputs(
     params: MrisSurfaceStatsParameters,
     execution: Execution,
 ): MrisSurfaceStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSurfaceStatsOutputs = {
         root: execution.outputFile("."),
         std_output: execution.outputFile([(params["out_name"] ?? null)].join('')),
@@ -281,22 +281,22 @@ function mris_surface_stats_outputs(
 }
 
 
+/**
+ * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
+ */
 function mris_surface_stats_execute(
     params: MrisSurfaceStatsParameters,
     execution: Execution,
 ): MrisSurfaceStatsOutputs {
-    /**
-     * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_surface_stats_cargs(params, execution)
     const ret = mris_surface_stats_outputs(params, execution)
@@ -305,6 +305,30 @@ function mris_surface_stats_execute(
 }
 
 
+/**
+ * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surf_name Set the surface filename
+ * @param out_name Set the output filename (standard deviation of data)
+ * @param data_files List of input data files for computation
+ * @param nsmooth Specify number of smoothing steps
+ * @param mask_name Set the filename for surface mask
+ * @param mean Set the output filename for mean
+ * @param absmean Set the output filename for absolute mean
+ * @param absstd Set the output filename for standard deviation of absolute mean
+ * @param zscore Set the output filename for z-score (only if first_group_size > 0)
+ * @param first_group_size Specify how many subjects at the beginning belong to first group
+ * @param src_type Input surface data format (default = paint)
+ * @param trg_type Output format (default = paint)
+ * @param debug Specify which surface vertex number to debug
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
+ */
 function mris_surface_stats(
     surf_name: InputPathType,
     out_name: string,
@@ -321,30 +345,6 @@ function mris_surface_stats(
     debug: number | null = null,
     runner: Runner | null = null,
 ): MrisSurfaceStatsOutputs {
-    /**
-     * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surf_name Set the surface filename
-     * @param out_name Set the output filename (standard deviation of data)
-     * @param data_files List of input data files for computation
-     * @param nsmooth Specify number of smoothing steps
-     * @param mask_name Set the filename for surface mask
-     * @param mean Set the output filename for mean
-     * @param absmean Set the output filename for absolute mean
-     * @param absstd Set the output filename for standard deviation of absolute mean
-     * @param zscore Set the output filename for z-score (only if first_group_size > 0)
-     * @param first_group_size Specify how many subjects at the beginning belong to first group
-     * @param src_type Input surface data format (default = paint)
-     * @param trg_type Output format (default = paint)
-     * @param debug Specify which surface vertex number to debug
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SURFACE_STATS_METADATA);
     const params = mris_surface_stats_params(surf_name, out_name, data_files, nsmooth, mask_name, mean, absmean, absstd, zscore, first_group_size, src_type, trg_type, debug)
@@ -357,5 +357,8 @@ export {
       MrisSurfaceStatsOutputs,
       MrisSurfaceStatsParameters,
       mris_surface_stats,
+      mris_surface_stats_cargs,
+      mris_surface_stats_execute,
+      mris_surface_stats_outputs,
       mris_surface_stats_params,
 };

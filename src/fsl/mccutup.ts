@@ -12,7 +12,7 @@ const MCCUTUP_METADATA: Metadata = {
 
 
 interface MccutupParameters {
-    "__STYXTYPE__": "mccutup";
+    "@type": "fsl.mccutup";
     "input": InputPathType;
     "output_file"?: string | null | undefined;
     "param1"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface MccutupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mccutup": mccutup_cargs,
+        "fsl.mccutup": mccutup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mccutup": mccutup_outputs,
+        "fsl.mccutup": mccutup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MccutupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input file
+ * @param output_file Specify output file name
+ * @param param1 Parameter 1 description
+ * @param param2 Parameter 2 description
+ *
+ * @returns Parameter dictionary
+ */
 function mccutup_params(
     input: InputPathType,
     output_file: string | null = null,
     param1: string | null = null,
     param2: string | null = null,
 ): MccutupParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input file
-     * @param output_file Specify output file name
-     * @param param1 Parameter 1 description
-     * @param param2 Parameter 2 description
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mccutup" as const,
+        "@type": "fsl.mccutup" as const,
         "input": input,
     };
     if (output_file !== null) {
@@ -104,18 +104,18 @@ function mccutup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mccutup_cargs(
     params: MccutupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mccutup");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -141,18 +141,18 @@ function mccutup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mccutup_outputs(
     params: MccutupParameters,
     execution: Execution,
 ): MccutupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MccutupOutputs = {
         root: execution.outputFile("."),
         output: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -161,22 +161,22 @@ function mccutup_outputs(
 }
 
 
+/**
+ * FSL mccutup tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MccutupOutputs`).
+ */
 function mccutup_execute(
     params: MccutupParameters,
     execution: Execution,
 ): MccutupOutputs {
-    /**
-     * FSL mccutup tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MccutupOutputs`).
-     */
     params = execution.params(params)
     const cargs = mccutup_cargs(params, execution)
     const ret = mccutup_outputs(params, execution)
@@ -185,6 +185,21 @@ function mccutup_execute(
 }
 
 
+/**
+ * FSL mccutup tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input Input file
+ * @param output_file Specify output file name
+ * @param param1 Parameter 1 description
+ * @param param2 Parameter 2 description
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MccutupOutputs`).
+ */
 function mccutup(
     input: InputPathType,
     output_file: string | null = null,
@@ -192,21 +207,6 @@ function mccutup(
     param2: string | null = null,
     runner: Runner | null = null,
 ): MccutupOutputs {
-    /**
-     * FSL mccutup tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input Input file
-     * @param output_file Specify output file name
-     * @param param1 Parameter 1 description
-     * @param param2 Parameter 2 description
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MccutupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MCCUTUP_METADATA);
     const params = mccutup_params(input, output_file, param1, param2)
@@ -219,5 +219,8 @@ export {
       MccutupOutputs,
       MccutupParameters,
       mccutup,
+      mccutup_cargs,
+      mccutup_execute,
+      mccutup_outputs,
       mccutup_params,
 };

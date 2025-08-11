@@ -12,7 +12,7 @@ const ROI2DATASET_METADATA: Metadata = {
 
 
 interface Roi2datasetParameters {
-    "__STYXTYPE__": "ROI2dataset";
+    "@type": "afni.ROI2dataset";
     "prefix": string;
     "input_rois": Array<InputPathType>;
     "keep_separate": boolean;
@@ -27,33 +27,33 @@ interface Roi2datasetParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ROI2dataset": roi2dataset_cargs,
+        "afni.ROI2dataset": roi2dataset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface Roi2datasetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix of output dataset.
+ * @param input_rois ROI files to turn into a data set (space-separated list). This parameter MUST be the last one on command line.
+ * @param keep_separate Output one column (sub-brick) for each ROI value.
+ * @param nodelist Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI.
+ * @param nodelist_nodups Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI, with duplicate nodes removed.
+ * @param nodelist_with_roival Also add the ROI value as a second column in .1D files output by -nodelist.
+ * @param label_dset Write a label dataset instead of a simple dataset. Sets output format to NIML.
+ * @param output_format Output format of dataset. One of: ni_bi, ni_as, 1D
+ * @param domain_parent_id Idcode of domain parent. Only ROIs with the same domain parent are included in the output.
+ * @param pad_to_node Output a full dataset from node 0 to node max_index (total of max_index + 1 nodes).
+ * @param pad_label Use padding_label (an integer) to label nodes not part of any ROI. Default is 0.
+ *
+ * @returns Parameter dictionary
+ */
 function roi2dataset_params(
     prefix: string,
     input_rois: Array<InputPathType>,
@@ -86,25 +103,8 @@ function roi2dataset_params(
     pad_to_node: number | null = null,
     pad_label: number | null = null,
 ): Roi2datasetParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix of output dataset.
-     * @param input_rois ROI files to turn into a data set (space-separated list). This parameter MUST be the last one on command line.
-     * @param keep_separate Output one column (sub-brick) for each ROI value.
-     * @param nodelist Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI.
-     * @param nodelist_nodups Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI, with duplicate nodes removed.
-     * @param nodelist_with_roival Also add the ROI value as a second column in .1D files output by -nodelist.
-     * @param label_dset Write a label dataset instead of a simple dataset. Sets output format to NIML.
-     * @param output_format Output format of dataset. One of: ni_bi, ni_as, 1D
-     * @param domain_parent_id Idcode of domain parent. Only ROIs with the same domain parent are included in the output.
-     * @param pad_to_node Output a full dataset from node 0 to node max_index (total of max_index + 1 nodes).
-     * @param pad_label Use padding_label (an integer) to label nodes not part of any ROI. Default is 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ROI2dataset" as const,
+        "@type": "afni.ROI2dataset" as const,
         "prefix": prefix,
         "input_rois": input_rois,
         "keep_separate": keep_separate,
@@ -135,18 +135,18 @@ function roi2dataset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function roi2dataset_cargs(
     params: Roi2datasetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ROI2dataset");
     cargs.push(
@@ -206,18 +206,18 @@ function roi2dataset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function roi2dataset_outputs(
     params: Roi2datasetParameters,
     execution: Execution,
 ): Roi2datasetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Roi2datasetOutputs = {
         root: execution.outputFile("."),
     };
@@ -225,22 +225,22 @@ function roi2dataset_outputs(
 }
 
 
+/**
+ * Transforms a series of ROI files to a node dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
+ */
 function roi2dataset_execute(
     params: Roi2datasetParameters,
     execution: Execution,
 ): Roi2datasetOutputs {
-    /**
-     * Transforms a series of ROI files to a node dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
-     */
     params = execution.params(params)
     const cargs = roi2dataset_cargs(params, execution)
     const ret = roi2dataset_outputs(params, execution)
@@ -249,6 +249,28 @@ function roi2dataset_execute(
 }
 
 
+/**
+ * Transforms a series of ROI files to a node dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix of output dataset.
+ * @param input_rois ROI files to turn into a data set (space-separated list). This parameter MUST be the last one on command line.
+ * @param keep_separate Output one column (sub-brick) for each ROI value.
+ * @param nodelist Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI.
+ * @param nodelist_nodups Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI, with duplicate nodes removed.
+ * @param nodelist_with_roival Also add the ROI value as a second column in .1D files output by -nodelist.
+ * @param label_dset Write a label dataset instead of a simple dataset. Sets output format to NIML.
+ * @param output_format Output format of dataset. One of: ni_bi, ni_as, 1D
+ * @param domain_parent_id Idcode of domain parent. Only ROIs with the same domain parent are included in the output.
+ * @param pad_to_node Output a full dataset from node 0 to node max_index (total of max_index + 1 nodes).
+ * @param pad_label Use padding_label (an integer) to label nodes not part of any ROI. Default is 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
+ */
 function roi2dataset(
     prefix: string,
     input_rois: Array<InputPathType>,
@@ -263,28 +285,6 @@ function roi2dataset(
     pad_label: number | null = null,
     runner: Runner | null = null,
 ): Roi2datasetOutputs {
-    /**
-     * Transforms a series of ROI files to a node dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix of output dataset.
-     * @param input_rois ROI files to turn into a data set (space-separated list). This parameter MUST be the last one on command line.
-     * @param keep_separate Output one column (sub-brick) for each ROI value.
-     * @param nodelist Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI.
-     * @param nodelist_nodups Prefix for a set of .1D files that contain a list of node indices in the order they appear in an ROI, with duplicate nodes removed.
-     * @param nodelist_with_roival Also add the ROI value as a second column in .1D files output by -nodelist.
-     * @param label_dset Write a label dataset instead of a simple dataset. Sets output format to NIML.
-     * @param output_format Output format of dataset. One of: ni_bi, ni_as, 1D
-     * @param domain_parent_id Idcode of domain parent. Only ROIs with the same domain parent are included in the output.
-     * @param pad_to_node Output a full dataset from node 0 to node max_index (total of max_index + 1 nodes).
-     * @param pad_label Use padding_label (an integer) to label nodes not part of any ROI. Default is 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ROI2DATASET_METADATA);
     const params = roi2dataset_params(prefix, input_rois, keep_separate, nodelist, nodelist_nodups, nodelist_with_roival, label_dset, output_format, domain_parent_id, pad_to_node, pad_label)
@@ -297,5 +297,8 @@ export {
       Roi2datasetOutputs,
       Roi2datasetParameters,
       roi2dataset,
+      roi2dataset_cargs,
+      roi2dataset_execute,
+      roi2dataset_outputs,
       roi2dataset_params,
 };

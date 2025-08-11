@@ -12,38 +12,38 @@ const ANATOMI_CUTS_UTILS_METADATA: Metadata = {
 
 
 interface AnatomiCutsUtilsParameters {
-    "__STYXTYPE__": "anatomiCutsUtils";
+    "@type": "freesurfer.anatomiCutsUtils";
     "modules"?: Array<string> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "anatomiCutsUtils": anatomi_cuts_utils_cargs,
+        "freesurfer.anatomiCutsUtils": anatomi_cuts_utils_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface AnatomiCutsUtilsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param modules Specify the modules to import for processing. Ensure necessary modules like 'graph_tools' are installed.
+ *
+ * @returns Parameter dictionary
+ */
 function anatomi_cuts_utils_params(
     modules: Array<string> | null = null,
 ): AnatomiCutsUtilsParameters {
-    /**
-     * Build parameters.
-    
-     * @param modules Specify the modules to import for processing. Ensure necessary modules like 'graph_tools' are installed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "anatomiCutsUtils" as const,
+        "@type": "freesurfer.anatomiCutsUtils" as const,
     };
     if (modules !== null) {
         params["modules"] = modules;
@@ -83,18 +83,18 @@ function anatomi_cuts_utils_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function anatomi_cuts_utils_cargs(
     params: AnatomiCutsUtilsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("anatomiCutsUtils");
     if ((params["modules"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function anatomi_cuts_utils_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function anatomi_cuts_utils_outputs(
     params: AnatomiCutsUtilsParameters,
     execution: Execution,
 ): AnatomiCutsUtilsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AnatomiCutsUtilsOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function anatomi_cuts_utils_outputs(
 }
 
 
+/**
+ * A tool for anatomical segmentation using graph-based methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
+ */
 function anatomi_cuts_utils_execute(
     params: AnatomiCutsUtilsParameters,
     execution: Execution,
 ): AnatomiCutsUtilsOutputs {
-    /**
-     * A tool for anatomical segmentation using graph-based methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
-     */
     params = execution.params(params)
     const cargs = anatomi_cuts_utils_cargs(params, execution)
     const ret = anatomi_cuts_utils_outputs(params, execution)
@@ -147,22 +147,22 @@ function anatomi_cuts_utils_execute(
 }
 
 
+/**
+ * A tool for anatomical segmentation using graph-based methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param modules Specify the modules to import for processing. Ensure necessary modules like 'graph_tools' are installed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
+ */
 function anatomi_cuts_utils(
     modules: Array<string> | null = null,
     runner: Runner | null = null,
 ): AnatomiCutsUtilsOutputs {
-    /**
-     * A tool for anatomical segmentation using graph-based methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param modules Specify the modules to import for processing. Ensure necessary modules like 'graph_tools' are installed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANATOMI_CUTS_UTILS_METADATA);
     const params = anatomi_cuts_utils_params(modules)
@@ -175,5 +175,8 @@ export {
       AnatomiCutsUtilsOutputs,
       AnatomiCutsUtilsParameters,
       anatomi_cuts_utils,
+      anatomi_cuts_utils_cargs,
+      anatomi_cuts_utils_execute,
+      anatomi_cuts_utils_outputs,
       anatomi_cuts_utils_params,
 };

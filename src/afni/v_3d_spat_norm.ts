@@ -12,7 +12,7 @@ const V_3D_SPAT_NORM_METADATA: Metadata = {
 
 
 interface V3dSpatNormParameters {
-    "__STYXTYPE__": "3dSpatNorm";
+    "@type": "afni.3dSpatNorm";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "orig_space": boolean;
@@ -25,35 +25,35 @@ interface V3dSpatNormParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSpatNorm": v_3d_spat_norm_cargs,
+        "afni.3dSpatNorm": v_3d_spat_norm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSpatNorm": v_3d_spat_norm_outputs,
+        "afni.3dSpatNorm": v_3d_spat_norm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dSpatNormOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param prefix Write output dataset using 'ppp' for the prefix
+ * @param orig_space Write output dataset using the same grid as dataset
+ * @param verbose Write out progress reports
+ * @param monkey Monkey business
+ * @param marmot Marmoset head
+ * @param rat Rat head
+ * @param human Bone head (default)
+ * @param bottom_cuts Make approximate cuts at the bottom to shave non-brain areas. CUTFLAGS is a string of characters indicating which sides to cut: 'A' for anterior, 'P' for posterior, 'R' for right, 'L' for left. Example: -bottom_cuts APLR
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_spat_norm_params(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -91,23 +106,8 @@ function v_3d_spat_norm_params(
     human: boolean = false,
     bottom_cuts: string | null = null,
 ): V3dSpatNormParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param prefix Write output dataset using 'ppp' for the prefix
-     * @param orig_space Write output dataset using the same grid as dataset
-     * @param verbose Write out progress reports
-     * @param monkey Monkey business
-     * @param marmot Marmoset head
-     * @param rat Rat head
-     * @param human Bone head (default)
-     * @param bottom_cuts Make approximate cuts at the bottom to shave non-brain areas. CUTFLAGS is a string of characters indicating which sides to cut: 'A' for anterior, 'P' for posterior, 'R' for right, 'L' for left. Example: -bottom_cuts APLR
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSpatNorm" as const,
+        "@type": "afni.3dSpatNorm" as const,
         "dataset": dataset,
         "orig_space": orig_space,
         "verbose": verbose,
@@ -126,18 +126,18 @@ function v_3d_spat_norm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_spat_norm_cargs(
     params: V3dSpatNormParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSpatNorm");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -175,18 +175,18 @@ function v_3d_spat_norm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_spat_norm_outputs(
     params: V3dSpatNormParameters,
     execution: Execution,
 ): V3dSpatNormOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSpatNormOutputs = {
         root: execution.outputFile("."),
         out_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -196,22 +196,22 @@ function v_3d_spat_norm_outputs(
 }
 
 
+/**
+ * An obsolete tool for spatial normalization.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
+ */
 function v_3d_spat_norm_execute(
     params: V3dSpatNormParameters,
     execution: Execution,
 ): V3dSpatNormOutputs {
-    /**
-     * An obsolete tool for spatial normalization.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_spat_norm_cargs(params, execution)
     const ret = v_3d_spat_norm_outputs(params, execution)
@@ -220,6 +220,26 @@ function v_3d_spat_norm_execute(
 }
 
 
+/**
+ * An obsolete tool for spatial normalization.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param prefix Write output dataset using 'ppp' for the prefix
+ * @param orig_space Write output dataset using the same grid as dataset
+ * @param verbose Write out progress reports
+ * @param monkey Monkey business
+ * @param marmot Marmoset head
+ * @param rat Rat head
+ * @param human Bone head (default)
+ * @param bottom_cuts Make approximate cuts at the bottom to shave non-brain areas. CUTFLAGS is a string of characters indicating which sides to cut: 'A' for anterior, 'P' for posterior, 'R' for right, 'L' for left. Example: -bottom_cuts APLR
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
+ */
 function v_3d_spat_norm(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -232,26 +252,6 @@ function v_3d_spat_norm(
     bottom_cuts: string | null = null,
     runner: Runner | null = null,
 ): V3dSpatNormOutputs {
-    /**
-     * An obsolete tool for spatial normalization.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param prefix Write output dataset using 'ppp' for the prefix
-     * @param orig_space Write output dataset using the same grid as dataset
-     * @param verbose Write out progress reports
-     * @param monkey Monkey business
-     * @param marmot Marmoset head
-     * @param rat Rat head
-     * @param human Bone head (default)
-     * @param bottom_cuts Make approximate cuts at the bottom to shave non-brain areas. CUTFLAGS is a string of characters indicating which sides to cut: 'A' for anterior, 'P' for posterior, 'R' for right, 'L' for left. Example: -bottom_cuts APLR
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SPAT_NORM_METADATA);
     const params = v_3d_spat_norm_params(dataset, prefix, orig_space, verbose, monkey, marmot, rat, human, bottom_cuts)
@@ -264,5 +264,8 @@ export {
       V3dSpatNormParameters,
       V_3D_SPAT_NORM_METADATA,
       v_3d_spat_norm,
+      v_3d_spat_norm_cargs,
+      v_3d_spat_norm_execute,
+      v_3d_spat_norm_outputs,
       v_3d_spat_norm_params,
 };

@@ -12,14 +12,14 @@ const CONVERT_WARPFIELD_METADATA: Metadata = {
 
 
 interface ConvertWarpfieldFromWorldParameters {
-    "__STYXTYPE__": "from_world";
+    "@type": "workbench.convert-warpfield.from_world";
     "input": string;
     "opt_absolute": boolean;
 }
 
 
 interface ConvertWarpfieldFromFnirtParameters {
-    "__STYXTYPE__": "from_fnirt";
+    "@type": "workbench.convert-warpfield.from_fnirt";
     "input": string;
     "source_volume": string;
     "opt_absolute": boolean;
@@ -27,14 +27,14 @@ interface ConvertWarpfieldFromFnirtParameters {
 
 
 interface ConvertWarpfieldToFnirtParameters {
-    "__STYXTYPE__": "to_fnirt";
+    "@type": "workbench.convert-warpfield.to_fnirt";
     "output": string;
     "source_volume": string;
 }
 
 
 interface ConvertWarpfieldParameters {
-    "__STYXTYPE__": "convert-warpfield";
+    "@type": "workbench.convert-warpfield";
     "from_world"?: ConvertWarpfieldFromWorldParameters | null | undefined;
     "opt_from_itk_input"?: string | null | undefined;
     "from_fnirt"?: ConvertWarpfieldFromFnirtParameters | null | undefined;
@@ -44,56 +44,56 @@ interface ConvertWarpfieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "convert-warpfield": convert_warpfield_cargs,
-        "from_world": convert_warpfield_from_world_cargs,
-        "from_fnirt": convert_warpfield_from_fnirt_cargs,
-        "to_fnirt": convert_warpfield_to_fnirt_cargs,
+        "workbench.convert-warpfield": convert_warpfield_cargs,
+        "workbench.convert-warpfield.from_world": convert_warpfield_from_world_cargs,
+        "workbench.convert-warpfield.from_fnirt": convert_warpfield_from_fnirt_cargs,
+        "workbench.convert-warpfield.to_fnirt": convert_warpfield_to_fnirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input warpfield
+ * @param opt_absolute warpfield was written in absolute convention, rather than relative
+ *
+ * @returns Parameter dictionary
+ */
 function convert_warpfield_from_world_params(
     input: string,
     opt_absolute: boolean = false,
 ): ConvertWarpfieldFromWorldParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input warpfield
-     * @param opt_absolute warpfield was written in absolute convention, rather than relative
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_world" as const,
+        "@type": "workbench.convert-warpfield.from_world" as const,
         "input": input,
         "opt_absolute": opt_absolute,
     };
@@ -101,18 +101,18 @@ function convert_warpfield_from_world_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_warpfield_from_world_cargs(
     params: ConvertWarpfieldFromWorldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-world");
     cargs.push((params["input"] ?? null));
@@ -123,22 +123,22 @@ function convert_warpfield_from_world_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input warpfield
+ * @param source_volume the source volume used when generating the input warpfield
+ * @param opt_absolute warpfield was written in absolute convention, rather than relative
+ *
+ * @returns Parameter dictionary
+ */
 function convert_warpfield_from_fnirt_params(
     input: string,
     source_volume: string,
     opt_absolute: boolean = false,
 ): ConvertWarpfieldFromFnirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input warpfield
-     * @param source_volume the source volume used when generating the input warpfield
-     * @param opt_absolute warpfield was written in absolute convention, rather than relative
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_fnirt" as const,
+        "@type": "workbench.convert-warpfield.from_fnirt" as const,
         "input": input,
         "source_volume": source_volume,
         "opt_absolute": opt_absolute,
@@ -147,18 +147,18 @@ function convert_warpfield_from_fnirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_warpfield_from_fnirt_cargs(
     params: ConvertWarpfieldFromFnirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-fnirt");
     cargs.push((params["input"] ?? null));
@@ -170,20 +170,20 @@ function convert_warpfield_from_fnirt_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output output - the output warpfield
+ * @param source_volume the volume you want to apply the warpfield to
+ *
+ * @returns Parameter dictionary
+ */
 function convert_warpfield_to_fnirt_params(
     output: string,
     source_volume: string,
 ): ConvertWarpfieldToFnirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param output output - the output warpfield
-     * @param source_volume the volume you want to apply the warpfield to
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to_fnirt" as const,
+        "@type": "workbench.convert-warpfield.to_fnirt" as const,
         "output": output,
         "source_volume": source_volume,
     };
@@ -191,18 +191,18 @@ function convert_warpfield_to_fnirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_warpfield_to_fnirt_cargs(
     params: ConvertWarpfieldToFnirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-to-fnirt");
     cargs.push((params["output"] ?? null));
@@ -224,6 +224,18 @@ interface ConvertWarpfieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param from_world input is a NIFTI 'world' warpfield
+ * @param opt_from_itk_input input is an ITK warpfield: the input warpfield
+ * @param from_fnirt input is a fnirt warpfield
+ * @param opt_to_world_output write output as a NIFTI 'world' warpfield: output - the output warpfield
+ * @param opt_to_itk_output write output as an ITK warpfield: output - the output warpfield
+ * @param to_fnirt write output as a fnirt warpfield
+ *
+ * @returns Parameter dictionary
+ */
 function convert_warpfield_params(
     from_world: ConvertWarpfieldFromWorldParameters | null = null,
     opt_from_itk_input: string | null = null,
@@ -232,20 +244,8 @@ function convert_warpfield_params(
     opt_to_itk_output: string | null = null,
     to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
 ): ConvertWarpfieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param from_world input is a NIFTI 'world' warpfield
-     * @param opt_from_itk_input input is an ITK warpfield: the input warpfield
-     * @param from_fnirt input is a fnirt warpfield
-     * @param opt_to_world_output write output as a NIFTI 'world' warpfield: output - the output warpfield
-     * @param opt_to_itk_output write output as an ITK warpfield: output - the output warpfield
-     * @param to_fnirt write output as a fnirt warpfield
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convert-warpfield" as const,
+        "@type": "workbench.convert-warpfield" as const,
     };
     if (from_world !== null) {
         params["from_world"] = from_world;
@@ -269,23 +269,23 @@ function convert_warpfield_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_warpfield_cargs(
     params: ConvertWarpfieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-convert-warpfield");
     if ((params["from_world"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_world"] ?? null).__STYXTYPE__)((params["from_world"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_world"] ?? null)["@type"])((params["from_world"] ?? null), execution));
     }
     if ((params["opt_from_itk_input"] ?? null) !== null) {
         cargs.push(
@@ -294,7 +294,7 @@ function convert_warpfield_cargs(
         );
     }
     if ((params["from_fnirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_fnirt"] ?? null).__STYXTYPE__)((params["from_fnirt"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_fnirt"] ?? null)["@type"])((params["from_fnirt"] ?? null), execution));
     }
     if ((params["opt_to_world_output"] ?? null) !== null) {
         cargs.push(
@@ -309,24 +309,24 @@ function convert_warpfield_cargs(
         );
     }
     if ((params["to_fnirt"] ?? null) !== null) {
-        cargs.push(...(params["to_fnirt"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["to_fnirt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_warpfield_outputs(
     params: ConvertWarpfieldParameters,
     execution: Execution,
 ): ConvertWarpfieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertWarpfieldOutputs = {
         root: execution.outputFile("."),
     };
@@ -334,30 +334,30 @@ function convert_warpfield_outputs(
 }
 
 
+/**
+ * Convert a warpfield between conventions.
+ *
+ * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.
+ *
+ * NOTE: this command does not invert the warpfield, and to warp a surface, you must use the inverse of the warpfield that warps the corresponding volume.
+ *
+ * The ITK format is used by ANTS.
+ *
+ * You must specify exactly one -from option, but you may specify multiple -to options, and -to-fnirt may be specified more than once.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
+ */
 function convert_warpfield_execute(
     params: ConvertWarpfieldParameters,
     execution: Execution,
 ): ConvertWarpfieldOutputs {
-    /**
-     * Convert a warpfield between conventions.
-     * 
-     * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.
-     * 
-     * NOTE: this command does not invert the warpfield, and to warp a surface, you must use the inverse of the warpfield that warps the corresponding volume.
-     * 
-     * The ITK format is used by ANTS.
-     * 
-     * You must specify exactly one -from option, but you may specify multiple -to options, and -to-fnirt may be specified more than once.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_warpfield_cargs(params, execution)
     const ret = convert_warpfield_outputs(params, execution)
@@ -366,6 +366,31 @@ function convert_warpfield_execute(
 }
 
 
+/**
+ * Convert a warpfield between conventions.
+ *
+ * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.
+ *
+ * NOTE: this command does not invert the warpfield, and to warp a surface, you must use the inverse of the warpfield that warps the corresponding volume.
+ *
+ * The ITK format is used by ANTS.
+ *
+ * You must specify exactly one -from option, but you may specify multiple -to options, and -to-fnirt may be specified more than once.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param from_world input is a NIFTI 'world' warpfield
+ * @param opt_from_itk_input input is an ITK warpfield: the input warpfield
+ * @param from_fnirt input is a fnirt warpfield
+ * @param opt_to_world_output write output as a NIFTI 'world' warpfield: output - the output warpfield
+ * @param opt_to_itk_output write output as an ITK warpfield: output - the output warpfield
+ * @param to_fnirt write output as a fnirt warpfield
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
+ */
 function convert_warpfield(
     from_world: ConvertWarpfieldFromWorldParameters | null = null,
     opt_from_itk_input: string | null = null,
@@ -375,31 +400,6 @@ function convert_warpfield(
     to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
-    /**
-     * Convert a warpfield between conventions.
-     * 
-     * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.
-     * 
-     * NOTE: this command does not invert the warpfield, and to warp a surface, you must use the inverse of the warpfield that warps the corresponding volume.
-     * 
-     * The ITK format is used by ANTS.
-     * 
-     * You must specify exactly one -from option, but you may specify multiple -to options, and -to-fnirt may be specified more than once.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param from_world input is a NIFTI 'world' warpfield
-     * @param opt_from_itk_input input is an ITK warpfield: the input warpfield
-     * @param from_fnirt input is a fnirt warpfield
-     * @param opt_to_world_output write output as a NIFTI 'world' warpfield: output - the output warpfield
-     * @param opt_to_itk_output write output as an ITK warpfield: output - the output warpfield
-     * @param to_fnirt write output as a fnirt warpfield
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_WARPFIELD_METADATA);
     const params = convert_warpfield_params(from_world, opt_from_itk_input, from_fnirt, opt_to_world_output, opt_to_itk_output, to_fnirt)
@@ -415,8 +415,14 @@ export {
       ConvertWarpfieldParameters,
       ConvertWarpfieldToFnirtParameters,
       convert_warpfield,
+      convert_warpfield_cargs,
+      convert_warpfield_execute,
+      convert_warpfield_from_fnirt_cargs,
       convert_warpfield_from_fnirt_params,
+      convert_warpfield_from_world_cargs,
       convert_warpfield_from_world_params,
+      convert_warpfield_outputs,
       convert_warpfield_params,
+      convert_warpfield_to_fnirt_cargs,
       convert_warpfield_to_fnirt_params,
 };

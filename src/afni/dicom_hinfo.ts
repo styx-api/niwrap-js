@@ -12,7 +12,7 @@ const DICOM_HINFO_METADATA: Metadata = {
 
 
 interface DicomHinfoParameters {
-    "__STYXTYPE__": "dicom_hinfo";
+    "@type": "afni.dicom_hinfo";
     "tag": Array<string>;
     "sepstr"?: string | null | undefined;
     "full_entry": boolean;
@@ -22,33 +22,33 @@ interface DicomHinfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dicom_hinfo": dicom_hinfo_cargs,
+        "afni.dicom_hinfo": dicom_hinfo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface DicomHinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tag Specify one or more DICOM tags to print, in the format aaaa,bbbb where aaaa and bbbb are hexadecimal digits.
+ * @param files DICOM file(s) to process.
+ * @param sepstr Use the specified string to separate fields instead of space.
+ * @param full_entry Output the full entry if it is more than one word or contains white space.
+ * @param no_name Omit the filename from the output.
+ * @param namelast Place the filename last in the output instead of first.
+ *
+ * @returns Parameter dictionary
+ */
 function dicom_hinfo_params(
     tag: Array<string>,
     files: Array<InputPathType>,
@@ -76,20 +88,8 @@ function dicom_hinfo_params(
     no_name: boolean = false,
     namelast: boolean = false,
 ): DicomHinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param tag Specify one or more DICOM tags to print, in the format aaaa,bbbb where aaaa and bbbb are hexadecimal digits.
-     * @param files DICOM file(s) to process.
-     * @param sepstr Use the specified string to separate fields instead of space.
-     * @param full_entry Output the full entry if it is more than one word or contains white space.
-     * @param no_name Omit the filename from the output.
-     * @param namelast Place the filename last in the output instead of first.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dicom_hinfo" as const,
+        "@type": "afni.dicom_hinfo" as const,
         "tag": tag,
         "full_entry": full_entry,
         "no_name": no_name,
@@ -103,18 +103,18 @@ function dicom_hinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dicom_hinfo_cargs(
     params: DicomHinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dicom_hinfo");
     cargs.push(
@@ -141,18 +141,18 @@ function dicom_hinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dicom_hinfo_outputs(
     params: DicomHinfoParameters,
     execution: Execution,
 ): DicomHinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DicomHinfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -160,22 +160,22 @@ function dicom_hinfo_outputs(
 }
 
 
+/**
+ * Prints selected information from one or more DICOM files to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
+ */
 function dicom_hinfo_execute(
     params: DicomHinfoParameters,
     execution: Execution,
 ): DicomHinfoOutputs {
-    /**
-     * Prints selected information from one or more DICOM files to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = dicom_hinfo_cargs(params, execution)
     const ret = dicom_hinfo_outputs(params, execution)
@@ -184,6 +184,23 @@ function dicom_hinfo_execute(
 }
 
 
+/**
+ * Prints selected information from one or more DICOM files to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tag Specify one or more DICOM tags to print, in the format aaaa,bbbb where aaaa and bbbb are hexadecimal digits.
+ * @param files DICOM file(s) to process.
+ * @param sepstr Use the specified string to separate fields instead of space.
+ * @param full_entry Output the full entry if it is more than one word or contains white space.
+ * @param no_name Omit the filename from the output.
+ * @param namelast Place the filename last in the output instead of first.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
+ */
 function dicom_hinfo(
     tag: Array<string>,
     files: Array<InputPathType>,
@@ -193,23 +210,6 @@ function dicom_hinfo(
     namelast: boolean = false,
     runner: Runner | null = null,
 ): DicomHinfoOutputs {
-    /**
-     * Prints selected information from one or more DICOM files to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tag Specify one or more DICOM tags to print, in the format aaaa,bbbb where aaaa and bbbb are hexadecimal digits.
-     * @param files DICOM file(s) to process.
-     * @param sepstr Use the specified string to separate fields instead of space.
-     * @param full_entry Output the full entry if it is more than one word or contains white space.
-     * @param no_name Omit the filename from the output.
-     * @param namelast Place the filename last in the output instead of first.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DICOM_HINFO_METADATA);
     const params = dicom_hinfo_params(tag, files, sepstr, full_entry, no_name, namelast)
@@ -222,5 +222,8 @@ export {
       DicomHinfoOutputs,
       DicomHinfoParameters,
       dicom_hinfo,
+      dicom_hinfo_cargs,
+      dicom_hinfo_execute,
+      dicom_hinfo_outputs,
       dicom_hinfo_params,
 };

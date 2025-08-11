@@ -12,7 +12,7 @@ const MRIS_MORPH_STATS_METADATA: Metadata = {
 
 
 interface MrisMorphStatsParameters {
-    "__STYXTYPE__": "mris_morph_stats";
+    "@type": "freesurfer.mris_morph_stats";
     "subject_name": string;
     "hemisphere": "lh" | "rh";
     "morphed_surface": InputPathType;
@@ -20,35 +20,35 @@ interface MrisMorphStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_morph_stats": mris_morph_stats_cargs,
+        "freesurfer.mris_morph_stats": mris_morph_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_morph_stats": mris_morph_stats_outputs,
+        "freesurfer.mris_morph_stats": mris_morph_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisMorphStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject.
+ * @param hemisphere Hemisphere, either 'lh' for left hemisphere or 'rh' for right hemisphere.
+ * @param morphed_surface Morphed surface file.
+ * @param output_name Name of the output to be generated.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_morph_stats_params(
     subject_name: string,
     hemisphere: "lh" | "rh",
     morphed_surface: InputPathType,
     output_name: string,
 ): MrisMorphStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject.
-     * @param hemisphere Hemisphere, either 'lh' for left hemisphere or 'rh' for right hemisphere.
-     * @param morphed_surface Morphed surface file.
-     * @param output_name Name of the output to be generated.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_morph_stats" as const,
+        "@type": "freesurfer.mris_morph_stats" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "morphed_surface": morphed_surface,
@@ -98,18 +98,18 @@ function mris_morph_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_morph_stats_cargs(
     params: MrisMorphStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_morph_stats");
     cargs.push((params["subject_name"] ?? null));
@@ -120,18 +120,18 @@ function mris_morph_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_morph_stats_outputs(
     params: MrisMorphStatsParameters,
     execution: Execution,
 ): MrisMorphStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMorphStatsOutputs = {
         root: execution.outputFile("."),
         stats_output: execution.outputFile([(params["output_name"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_morph_stats_outputs(
 }
 
 
+/**
+ * This program generates statistics which characterize a surface-based deformation field.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
+ */
 function mris_morph_stats_execute(
     params: MrisMorphStatsParameters,
     execution: Execution,
 ): MrisMorphStatsOutputs {
-    /**
-     * This program generates statistics which characterize a surface-based deformation field.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_morph_stats_cargs(params, execution)
     const ret = mris_morph_stats_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_morph_stats_execute(
 }
 
 
+/**
+ * This program generates statistics which characterize a surface-based deformation field.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject.
+ * @param hemisphere Hemisphere, either 'lh' for left hemisphere or 'rh' for right hemisphere.
+ * @param morphed_surface Morphed surface file.
+ * @param output_name Name of the output to be generated.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
+ */
 function mris_morph_stats(
     subject_name: string,
     hemisphere: "lh" | "rh",
@@ -171,21 +186,6 @@ function mris_morph_stats(
     output_name: string,
     runner: Runner | null = null,
 ): MrisMorphStatsOutputs {
-    /**
-     * This program generates statistics which characterize a surface-based deformation field.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject.
-     * @param hemisphere Hemisphere, either 'lh' for left hemisphere or 'rh' for right hemisphere.
-     * @param morphed_surface Morphed surface file.
-     * @param output_name Name of the output to be generated.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MORPH_STATS_METADATA);
     const params = mris_morph_stats_params(subject_name, hemisphere, morphed_surface, output_name)
@@ -198,5 +198,8 @@ export {
       MrisMorphStatsOutputs,
       MrisMorphStatsParameters,
       mris_morph_stats,
+      mris_morph_stats_cargs,
+      mris_morph_stats_execute,
+      mris_morph_stats_outputs,
       mris_morph_stats_params,
 };

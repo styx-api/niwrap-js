@@ -12,7 +12,7 @@ const ANTS_AI_METADATA: Metadata = {
 
 
 interface AntsAiParameters {
-    "__STYXTYPE__": "antsAI";
+    "@type": "ants.antsAI";
     "dimensionality"?: 2 | 3 | null | undefined;
     "metric": "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]";
     "transform": "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass";
@@ -28,35 +28,35 @@ interface AntsAiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsAI": ants_ai_cargs,
+        "ants.antsAI": ants_ai_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsAI": ants_ai_outputs,
+        "ants.antsAI": ants_ai_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface AntsAiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
+ * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
+ * @param output Specify the output transform (output format an ITK .mat file).
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
+ * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
+ * @param align_blobs Boolean indicating alignment by a set of blobs.
+ * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
+ * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
+ * @param convergence Number of iterations.
+ * @param masks Image masks to limit voxels considered by the metric.
+ * @param random_seed Use a fixed seed for random number generation.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_ai_params(
     metric: "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]",
     transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
@@ -93,26 +111,8 @@ function ants_ai_params(
     random_seed: number | null = null,
     verbose: 0 | 1 | null = null,
 ): AntsAiParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
-     * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
-     * @param output Specify the output transform (output format an ITK .mat file).
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
-     * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
-     * @param align_blobs Boolean indicating alignment by a set of blobs.
-     * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
-     * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
-     * @param convergence Number of iterations.
-     * @param masks Image masks to limit voxels considered by the metric.
-     * @param random_seed Use a fixed seed for random number generation.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsAI" as const,
+        "@type": "ants.antsAI" as const,
         "metric": metric,
         "transform": transform,
         "output": output,
@@ -148,18 +148,18 @@ function ants_ai_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_ai_cargs(
     params: AntsAiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsAI");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -232,18 +232,18 @@ function ants_ai_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_ai_outputs(
     params: AntsAiParameters,
     execution: Execution,
 ): AntsAiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsAiOutputs = {
         root: execution.outputFile("."),
         output_transform: execution.outputFile([(params["output"] ?? null), ".mat"].join('')),
@@ -252,22 +252,22 @@ function ants_ai_outputs(
 }
 
 
+/**
+ * Program to calculate the optimal linear transform parameters for aligning two images.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
+ */
 function ants_ai_execute(
     params: AntsAiParameters,
     execution: Execution,
 ): AntsAiOutputs {
-    /**
-     * Program to calculate the optimal linear transform parameters for aligning two images.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_ai_cargs(params, execution)
     const ret = ants_ai_outputs(params, execution)
@@ -276,6 +276,29 @@ function ants_ai_execute(
 }
 
 
+/**
+ * Program to calculate the optimal linear transform parameters for aligning two images.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
+ * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
+ * @param output Specify the output transform (output format an ITK .mat file).
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
+ * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
+ * @param align_blobs Boolean indicating alignment by a set of blobs.
+ * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
+ * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
+ * @param convergence Number of iterations.
+ * @param masks Image masks to limit voxels considered by the metric.
+ * @param random_seed Use a fixed seed for random number generation.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
+ */
 function ants_ai(
     metric: "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]",
     transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
@@ -291,29 +314,6 @@ function ants_ai(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsAiOutputs {
-    /**
-     * Program to calculate the optimal linear transform parameters for aligning two images.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
-     * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
-     * @param output Specify the output transform (output format an ITK .mat file).
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
-     * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
-     * @param align_blobs Boolean indicating alignment by a set of blobs.
-     * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
-     * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
-     * @param convergence Number of iterations.
-     * @param masks Image masks to limit voxels considered by the metric.
-     * @param random_seed Use a fixed seed for random number generation.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_AI_METADATA);
     const params = ants_ai_params(metric, transform, output, dimensionality, align_principal_axes, align_blobs, search_factor, translation_search_grid, convergence, masks, random_seed, verbose)
@@ -326,5 +326,8 @@ export {
       AntsAiOutputs,
       AntsAiParameters,
       ants_ai,
+      ants_ai_cargs,
+      ants_ai_execute,
+      ants_ai_outputs,
       ants_ai_params,
 };

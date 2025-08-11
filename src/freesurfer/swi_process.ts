@@ -12,7 +12,7 @@ const SWI_PROCESS_METADATA: Metadata = {
 
 
 interface SwiProcessParameters {
-    "__STYXTYPE__": "swi_process";
+    "@type": "freesurfer.swi_process";
     "magnitude_image": InputPathType;
     "phase_image": InputPathType;
     "swi_output": string;
@@ -27,35 +27,35 @@ interface SwiProcessParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "swi_process": swi_process_cargs,
+        "freesurfer.swi_process": swi_process_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "swi_process": swi_process_outputs,
+        "freesurfer.swi_process": swi_process_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface SwiProcessOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param magnitude_image The magnitude image (Output from the PRELUDE program)
+ * @param phase_image The phase image (Output from the PRELUDE program)
+ * @param swi_output Name of the SWI processed output image
+ * @param stddev Specify the standard deviation of the Gaussian Smoothing Filter. Default is 2.0
+ * @param phase_mask_cutoff Specify the negative phase mask cutoff frequency (in radians). Default is the minimum value of the phase image.
+ * @param phase_mask_right_cutoff Specify the positive phase mask cutoff frequency (in radians). Default is the maximum value of the phase image.
+ * @param sigmoid_a Specify 'a' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 1.0. Meaningless with phase_method != sigmoid
+ * @param sigmoid_b Specify 'b' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 0.0. Meaningless with phase_method != sigmoid
+ * @param phase_multiplications Specify the number of phase multiplications. Default is 4
+ * @param mip_level Specify the number of levels of mIP across the y direction. Default is 4
+ * @param phase_mask_method Specify the phase mask method. One of negative, positive, symmetric, asymmetric, sigmoid. Default is negative
+ *
+ * @returns Parameter dictionary
+ */
 function swi_process_params(
     magnitude_image: InputPathType,
     phase_image: InputPathType,
@@ -91,25 +108,8 @@ function swi_process_params(
     mip_level: number | null = null,
     phase_mask_method: string | null = null,
 ): SwiProcessParameters {
-    /**
-     * Build parameters.
-    
-     * @param magnitude_image The magnitude image (Output from the PRELUDE program)
-     * @param phase_image The phase image (Output from the PRELUDE program)
-     * @param swi_output Name of the SWI processed output image
-     * @param stddev Specify the standard deviation of the Gaussian Smoothing Filter. Default is 2.0
-     * @param phase_mask_cutoff Specify the negative phase mask cutoff frequency (in radians). Default is the minimum value of the phase image.
-     * @param phase_mask_right_cutoff Specify the positive phase mask cutoff frequency (in radians). Default is the maximum value of the phase image.
-     * @param sigmoid_a Specify 'a' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 1.0. Meaningless with phase_method != sigmoid
-     * @param sigmoid_b Specify 'b' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 0.0. Meaningless with phase_method != sigmoid
-     * @param phase_multiplications Specify the number of phase multiplications. Default is 4
-     * @param mip_level Specify the number of levels of mIP across the y direction. Default is 4
-     * @param phase_mask_method Specify the phase mask method. One of negative, positive, symmetric, asymmetric, sigmoid. Default is negative
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "swi_process" as const,
+        "@type": "freesurfer.swi_process" as const,
         "magnitude_image": magnitude_image,
         "phase_image": phase_image,
         "swi_output": swi_output,
@@ -142,18 +142,18 @@ function swi_process_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function swi_process_cargs(
     params: SwiProcessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("swi_process");
     cargs.push(execution.inputFile((params["magnitude_image"] ?? null)));
@@ -211,18 +211,18 @@ function swi_process_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function swi_process_outputs(
     params: SwiProcessParameters,
     execution: Execution,
 ): SwiProcessOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SwiProcessOutputs = {
         root: execution.outputFile("."),
         swi_output_file: execution.outputFile([(params["swi_output"] ?? null)].join('')),
@@ -231,22 +231,22 @@ function swi_process_outputs(
 }
 
 
+/**
+ * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
+ */
 function swi_process_execute(
     params: SwiProcessParameters,
     execution: Execution,
 ): SwiProcessOutputs {
-    /**
-     * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
-     */
     params = execution.params(params)
     const cargs = swi_process_cargs(params, execution)
     const ret = swi_process_outputs(params, execution)
@@ -255,6 +255,28 @@ function swi_process_execute(
 }
 
 
+/**
+ * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param magnitude_image The magnitude image (Output from the PRELUDE program)
+ * @param phase_image The phase image (Output from the PRELUDE program)
+ * @param swi_output Name of the SWI processed output image
+ * @param stddev Specify the standard deviation of the Gaussian Smoothing Filter. Default is 2.0
+ * @param phase_mask_cutoff Specify the negative phase mask cutoff frequency (in radians). Default is the minimum value of the phase image.
+ * @param phase_mask_right_cutoff Specify the positive phase mask cutoff frequency (in radians). Default is the maximum value of the phase image.
+ * @param sigmoid_a Specify 'a' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 1.0. Meaningless with phase_method != sigmoid
+ * @param sigmoid_b Specify 'b' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 0.0. Meaningless with phase_method != sigmoid
+ * @param phase_multiplications Specify the number of phase multiplications. Default is 4
+ * @param mip_level Specify the number of levels of mIP across the y direction. Default is 4
+ * @param phase_mask_method Specify the phase mask method. One of negative, positive, symmetric, asymmetric, sigmoid. Default is negative
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
+ */
 function swi_process(
     magnitude_image: InputPathType,
     phase_image: InputPathType,
@@ -269,28 +291,6 @@ function swi_process(
     phase_mask_method: string | null = null,
     runner: Runner | null = null,
 ): SwiProcessOutputs {
-    /**
-     * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param magnitude_image The magnitude image (Output from the PRELUDE program)
-     * @param phase_image The phase image (Output from the PRELUDE program)
-     * @param swi_output Name of the SWI processed output image
-     * @param stddev Specify the standard deviation of the Gaussian Smoothing Filter. Default is 2.0
-     * @param phase_mask_cutoff Specify the negative phase mask cutoff frequency (in radians). Default is the minimum value of the phase image.
-     * @param phase_mask_right_cutoff Specify the positive phase mask cutoff frequency (in radians). Default is the maximum value of the phase image.
-     * @param sigmoid_a Specify 'a' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 1.0. Meaningless with phase_method != sigmoid
-     * @param sigmoid_b Specify 'b' for the sigmoid formula f(phase)=1/(1+exp(-a*(phase-b))). Default is 0.0. Meaningless with phase_method != sigmoid
-     * @param phase_multiplications Specify the number of phase multiplications. Default is 4
-     * @param mip_level Specify the number of levels of mIP across the y direction. Default is 4
-     * @param phase_mask_method Specify the phase mask method. One of negative, positive, symmetric, asymmetric, sigmoid. Default is negative
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SWI_PROCESS_METADATA);
     const params = swi_process_params(magnitude_image, phase_image, swi_output, stddev, phase_mask_cutoff, phase_mask_right_cutoff, sigmoid_a, sigmoid_b, phase_multiplications, mip_level, phase_mask_method)
@@ -303,5 +303,8 @@ export {
       SwiProcessOutputs,
       SwiProcessParameters,
       swi_process,
+      swi_process_cargs,
+      swi_process_execute,
+      swi_process_outputs,
       swi_process_params,
 };

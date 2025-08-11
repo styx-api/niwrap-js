@@ -12,39 +12,39 @@ const V__GET_AFNI_PREFIX_METADATA: Metadata = {
 
 
 interface VGetAfniPrefixParameters {
-    "__STYXTYPE__": "@GetAfniPrefix";
+    "@type": "afni.@GetAfniPrefix";
     "name": InputPathType;
     "suffix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniPrefix": v__get_afni_prefix_cargs,
+        "afni.@GetAfniPrefix": v__get_afni_prefix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VGetAfniPrefixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param name Input file path for which the AFNI prefix will be extracted
+ * @param suffix Suffix string to append to the returned prefix
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_prefix_params(
     name: InputPathType,
     suffix: string | null = null,
 ): VGetAfniPrefixParameters {
-    /**
-     * Build parameters.
-    
-     * @param name Input file path for which the AFNI prefix will be extracted
-     * @param suffix Suffix string to append to the returned prefix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniPrefix" as const,
+        "@type": "afni.@GetAfniPrefix" as const,
         "name": name,
     };
     if (suffix !== null) {
@@ -87,18 +87,18 @@ function v__get_afni_prefix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_prefix_cargs(
     params: VGetAfniPrefixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniPrefix");
     cargs.push(execution.inputFile((params["name"] ?? null)));
@@ -109,18 +109,18 @@ function v__get_afni_prefix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_prefix_outputs(
     params: VGetAfniPrefixParameters,
     execution: Execution,
 ): VGetAfniPrefixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniPrefixOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function v__get_afni_prefix_outputs(
 }
 
 
+/**
+ * A tool to extract AFNI prefix from a given file path.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
+ */
 function v__get_afni_prefix_execute(
     params: VGetAfniPrefixParameters,
     execution: Execution,
 ): VGetAfniPrefixOutputs {
-    /**
-     * A tool to extract AFNI prefix from a given file path.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_prefix_cargs(params, execution)
     const ret = v__get_afni_prefix_outputs(params, execution)
@@ -152,24 +152,24 @@ function v__get_afni_prefix_execute(
 }
 
 
+/**
+ * A tool to extract AFNI prefix from a given file path.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param name Input file path for which the AFNI prefix will be extracted
+ * @param suffix Suffix string to append to the returned prefix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
+ */
 function v__get_afni_prefix(
     name: InputPathType,
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VGetAfniPrefixOutputs {
-    /**
-     * A tool to extract AFNI prefix from a given file path.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param name Input file path for which the AFNI prefix will be extracted
-     * @param suffix Suffix string to append to the returned prefix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_PREFIX_METADATA);
     const params = v__get_afni_prefix_params(name, suffix)
@@ -182,5 +182,8 @@ export {
       VGetAfniPrefixParameters,
       V__GET_AFNI_PREFIX_METADATA,
       v__get_afni_prefix,
+      v__get_afni_prefix_cargs,
+      v__get_afni_prefix_execute,
+      v__get_afni_prefix_outputs,
       v__get_afni_prefix_params,
 };

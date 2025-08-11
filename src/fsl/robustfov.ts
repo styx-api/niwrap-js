@@ -12,7 +12,7 @@ const ROBUSTFOV_METADATA: Metadata = {
 
 
 interface RobustfovParameters {
-    "__STYXTYPE__": "robustfov";
+    "@type": "fsl.robustfov";
     "input_file": InputPathType;
     "output_image"?: string | null | undefined;
     "brain_size"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface RobustfovParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "robustfov": robustfov_cargs,
+        "fsl.robustfov": robustfov_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "robustfov": robustfov_outputs,
+        "fsl.robustfov": robustfov_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface RobustfovOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file
+ * @param output_image ROI volume output name
+ * @param brain_size Size of the brain in z-dimension (default 170mm)
+ * @param matrix_output Matrix output name (ROI to full FOV)
+ * @param debug_flag Turn on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function robustfov_params(
     input_file: InputPathType,
     output_image: string | null = "output",
@@ -85,20 +97,8 @@ function robustfov_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
 ): RobustfovParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file
-     * @param output_image ROI volume output name
-     * @param brain_size Size of the brain in z-dimension (default 170mm)
-     * @param matrix_output Matrix output name (ROI to full FOV)
-     * @param debug_flag Turn on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "robustfov" as const,
+        "@type": "fsl.robustfov" as const,
         "input_file": input_file,
         "debug_flag": debug_flag,
         "verbose_flag": verbose_flag,
@@ -116,18 +116,18 @@ function robustfov_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function robustfov_cargs(
     params: RobustfovParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("robustfov");
     cargs.push(
@@ -162,18 +162,18 @@ function robustfov_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function robustfov_outputs(
     params: RobustfovParameters,
     execution: Execution,
 ): RobustfovOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RobustfovOutputs = {
         root: execution.outputFile("."),
         output_roi_volume: ((params["output_image"] ?? null) !== null) ? execution.outputFile([((params["output_image"] ?? null).endsWith(".nii.gz") ? (params["output_image"] ?? null).slice(0, -7) : (params["output_image"] ?? null)), ".nii.gz"].join('')) : null,
@@ -183,22 +183,22 @@ function robustfov_outputs(
 }
 
 
+/**
+ * Reduce FOV of image to remove lower head and neck.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
+ */
 function robustfov_execute(
     params: RobustfovParameters,
     execution: Execution,
 ): RobustfovOutputs {
-    /**
-     * Reduce FOV of image to remove lower head and neck.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
-     */
     params = execution.params(params)
     const cargs = robustfov_cargs(params, execution)
     const ret = robustfov_outputs(params, execution)
@@ -207,6 +207,23 @@ function robustfov_execute(
 }
 
 
+/**
+ * Reduce FOV of image to remove lower head and neck.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file
+ * @param output_image ROI volume output name
+ * @param brain_size Size of the brain in z-dimension (default 170mm)
+ * @param matrix_output Matrix output name (ROI to full FOV)
+ * @param debug_flag Turn on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
+ */
 function robustfov(
     input_file: InputPathType,
     output_image: string | null = "output",
@@ -216,23 +233,6 @@ function robustfov(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): RobustfovOutputs {
-    /**
-     * Reduce FOV of image to remove lower head and neck.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file
-     * @param output_image ROI volume output name
-     * @param brain_size Size of the brain in z-dimension (default 170mm)
-     * @param matrix_output Matrix output name (ROI to full FOV)
-     * @param debug_flag Turn on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ROBUSTFOV_METADATA);
     const params = robustfov_params(input_file, output_image, brain_size, matrix_output, debug_flag, verbose_flag)
@@ -245,5 +245,8 @@ export {
       RobustfovOutputs,
       RobustfovParameters,
       robustfov,
+      robustfov_cargs,
+      robustfov_execute,
+      robustfov_outputs,
       robustfov_params,
 };

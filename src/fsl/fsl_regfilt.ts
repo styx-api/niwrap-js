@@ -12,7 +12,7 @@ const FSL_REGFILT_METADATA: Metadata = {
 
 
 interface FslRegfiltParameters {
-    "__STYXTYPE__": "fsl_regfilt";
+    "@type": "fsl.fsl_regfilt";
     "infile": InputPathType;
     "designfile": InputPathType;
     "outfile": string;
@@ -33,35 +33,35 @@ interface FslRegfiltParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_regfilt": fsl_regfilt_cargs,
+        "fsl.fsl_regfilt": fsl_regfilt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_regfilt": fsl_regfilt_outputs,
+        "fsl.fsl_regfilt": fsl_regfilt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,29 @@ interface FslRegfiltOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file name (4D image)
+ * @param designfile File name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix)
+ * @param outfile Output file name for the filtered data
+ * @param maskfile Mask image file name
+ * @param filter Filter out part of the regression model, e.g., -f "1,2,3"
+ * @param freq_filter_flag Filter out components based on high vs. low frequency content
+ * @param freq_ic_flag Switch off IC Z-stats filtering as part of frequency filtering
+ * @param freq_ic_smooth Smoothing width for IC Z-stats filtering as part of frequency filtering
+ * @param fthresh Frequency threshold ratio; default: 0.15
+ * @param fthresh2 Frequency filter score threshold; default: 0.02
+ * @param vn_flag Perform variance-normalisation on data
+ * @param verbose_flag Switch on diagnostic messages
+ * @param aggressive_flag Switch on aggressive filtering (full instead of partial regression)
+ * @param help_flag Display help text
+ * @param out_data Output file name for pre-processed data (prior to denoising)
+ * @param out_mix Output file name for new mixing matrix
+ * @param out_vnscales Output file name for scaling factors from variance normalisation
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_regfilt_params(
     infile: InputPathType,
     designfile: InputPathType,
@@ -115,31 +138,8 @@ function fsl_regfilt_params(
     out_mix: string | null = null,
     out_vnscales: string | null = null,
 ): FslRegfiltParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file name (4D image)
-     * @param designfile File name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix)
-     * @param outfile Output file name for the filtered data
-     * @param maskfile Mask image file name
-     * @param filter Filter out part of the regression model, e.g., -f "1,2,3"
-     * @param freq_filter_flag Filter out components based on high vs. low frequency content
-     * @param freq_ic_flag Switch off IC Z-stats filtering as part of frequency filtering
-     * @param freq_ic_smooth Smoothing width for IC Z-stats filtering as part of frequency filtering
-     * @param fthresh Frequency threshold ratio; default: 0.15
-     * @param fthresh2 Frequency filter score threshold; default: 0.02
-     * @param vn_flag Perform variance-normalisation on data
-     * @param verbose_flag Switch on diagnostic messages
-     * @param aggressive_flag Switch on aggressive filtering (full instead of partial regression)
-     * @param help_flag Display help text
-     * @param out_data Output file name for pre-processed data (prior to denoising)
-     * @param out_mix Output file name for new mixing matrix
-     * @param out_vnscales Output file name for scaling factors from variance normalisation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_regfilt" as const,
+        "@type": "fsl.fsl_regfilt" as const,
         "infile": infile,
         "designfile": designfile,
         "outfile": outfile,
@@ -178,18 +178,18 @@ function fsl_regfilt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_regfilt_cargs(
     params: FslRegfiltParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_regfilt");
     cargs.push(
@@ -274,18 +274,18 @@ function fsl_regfilt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_regfilt_outputs(
     params: FslRegfiltParameters,
     execution: Execution,
 ): FslRegfiltOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslRegfiltOutputs = {
         root: execution.outputFile("."),
         filtered_data: execution.outputFile([(params["outfile"] ?? null), ".nii.gz"].join('')),
@@ -297,22 +297,22 @@ function fsl_regfilt_outputs(
 }
 
 
+/**
+ * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslRegfiltOutputs`).
+ */
 function fsl_regfilt_execute(
     params: FslRegfiltParameters,
     execution: Execution,
 ): FslRegfiltOutputs {
-    /**
-     * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslRegfiltOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_regfilt_cargs(params, execution)
     const ret = fsl_regfilt_outputs(params, execution)
@@ -321,6 +321,34 @@ function fsl_regfilt_execute(
 }
 
 
+/**
+ * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input file name (4D image)
+ * @param designfile File name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix)
+ * @param outfile Output file name for the filtered data
+ * @param maskfile Mask image file name
+ * @param filter Filter out part of the regression model, e.g., -f "1,2,3"
+ * @param freq_filter_flag Filter out components based on high vs. low frequency content
+ * @param freq_ic_flag Switch off IC Z-stats filtering as part of frequency filtering
+ * @param freq_ic_smooth Smoothing width for IC Z-stats filtering as part of frequency filtering
+ * @param fthresh Frequency threshold ratio; default: 0.15
+ * @param fthresh2 Frequency filter score threshold; default: 0.02
+ * @param vn_flag Perform variance-normalisation on data
+ * @param verbose_flag Switch on diagnostic messages
+ * @param aggressive_flag Switch on aggressive filtering (full instead of partial regression)
+ * @param help_flag Display help text
+ * @param out_data Output file name for pre-processed data (prior to denoising)
+ * @param out_mix Output file name for new mixing matrix
+ * @param out_vnscales Output file name for scaling factors from variance normalisation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslRegfiltOutputs`).
+ */
 function fsl_regfilt(
     infile: InputPathType,
     designfile: InputPathType,
@@ -341,34 +369,6 @@ function fsl_regfilt(
     out_vnscales: string | null = null,
     runner: Runner | null = null,
 ): FslRegfiltOutputs {
-    /**
-     * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input file name (4D image)
-     * @param designfile File name of the matrix with time courses (e.g. GLM design or MELODIC mixing matrix)
-     * @param outfile Output file name for the filtered data
-     * @param maskfile Mask image file name
-     * @param filter Filter out part of the regression model, e.g., -f "1,2,3"
-     * @param freq_filter_flag Filter out components based on high vs. low frequency content
-     * @param freq_ic_flag Switch off IC Z-stats filtering as part of frequency filtering
-     * @param freq_ic_smooth Smoothing width for IC Z-stats filtering as part of frequency filtering
-     * @param fthresh Frequency threshold ratio; default: 0.15
-     * @param fthresh2 Frequency filter score threshold; default: 0.02
-     * @param vn_flag Perform variance-normalisation on data
-     * @param verbose_flag Switch on diagnostic messages
-     * @param aggressive_flag Switch on aggressive filtering (full instead of partial regression)
-     * @param help_flag Display help text
-     * @param out_data Output file name for pre-processed data (prior to denoising)
-     * @param out_mix Output file name for new mixing matrix
-     * @param out_vnscales Output file name for scaling factors from variance normalisation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslRegfiltOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_REGFILT_METADATA);
     const params = fsl_regfilt_params(infile, designfile, outfile, maskfile, filter, freq_filter_flag, freq_ic_flag, freq_ic_smooth, fthresh, fthresh2, vn_flag, verbose_flag, aggressive_flag, help_flag, out_data, out_mix, out_vnscales)
@@ -381,5 +381,8 @@ export {
       FslRegfiltOutputs,
       FslRegfiltParameters,
       fsl_regfilt,
+      fsl_regfilt_cargs,
+      fsl_regfilt_execute,
+      fsl_regfilt_outputs,
       fsl_regfilt_params,
 };

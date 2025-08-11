@@ -12,7 +12,7 @@ const REG_F3D_METADATA: Metadata = {
 
 
 interface RegF3dParameters {
-    "__STYXTYPE__": "reg_f3d";
+    "@type": "niftyreg.reg_f3d";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "affine_transform"?: InputPathType | null | undefined;
@@ -56,35 +56,35 @@ interface RegF3dParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_f3d": reg_f3d_cargs,
+        "niftyreg.reg_f3d": reg_f3d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_f3d": reg_f3d_outputs,
+        "niftyreg.reg_f3d": reg_f3d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -111,6 +111,52 @@ interface RegF3dOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Filename of the reference image
+ * @param floating_image Filename of the floating image
+ * @param affine_transform Filename which contains an affine transformation
+ * @param flirt_affine_transform Filename which contains a flirt affine transformation
+ * @param control_point_grid_input Filename of control point grid input
+ * @param output_cpp Filename of control point grid
+ * @param output_resampled_image Filename of the resampled image
+ * @param reference_mask Filename of a mask image in the reference space
+ * @param smooth_reference Smooth the reference image using the specified sigma (mm)
+ * @param smooth_floating Smooth the floating image using the specified sigma (mm)
+ * @param num_bins_joint_histogram Number of bins to use for the joint histogram (reference)
+ * @param num_bins_floating_joint_histogram Number of bins to use for the joint histogram (floating)
+ * @param lower_threshold_reference Lower threshold to apply to the reference image intensities
+ * @param upper_threshold_reference Upper threshold to apply to the reference image intensities
+ * @param lower_threshold_floating Lower threshold to apply to the floating image intensities
+ * @param upper_threshold_floating Upper threshold to apply to the floating image intensities
+ * @param spacing_x Final grid spacing along the x axis in mm (or in voxel if negative value)
+ * @param spacing_y Final grid spacing along the y axis in mm (or in voxel if negative value)
+ * @param spacing_z Final grid spacing along the z axis in mm (or in voxel if negative value)
+ * @param bending_energy Weight of the bending energy penalty term
+ * @param linear_elasticity Weights of linear elasticity penalty term
+ * @param l2_norm_displacement Weight of L2 norm displacement penalty term
+ * @param jacobian_determinant Weight of log of the Jacobian determinant penalty term
+ * @param no_approx_jl Do not approximate the JL value only at the control point position
+ * @param no_conj Do not use the conjugate gradient optimization but a simple gradient ascent
+ * @param ssd Use the SSD as the similarity measure instead of NMI
+ * @param kld Use the KL divergence as the similarity measure instead of NMI
+ * @param amc Use the additive NMI for multichannel data
+ * @param max_iterations Maximal number of iterations per level
+ * @param num_levels Number of levels to perform
+ * @param first_levels Only perform the first levels
+ * @param no_pyramid Do not use a pyramidal approach
+ * @param symmetric Use symmetric approach
+ * @param floating_mask Filename of a mask image in the floating space
+ * @param inverse_consistency Weight of the inverse consistency penalty term
+ * @param velocity_field Use velocity field integration to generate the deformation
+ * @param composition_steps Number of composition steps
+ * @param smooth_gradient Smooth the metric derivative (in mm)
+ * @param padding_value Padding value
+ * @param verbose_off Turn verbose off
+ *
+ * @returns Parameter dictionary
+ */
 function reg_f3d_params(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -153,54 +199,8 @@ function reg_f3d_params(
     padding_value: number | null = null,
     verbose_off: boolean = false,
 ): RegF3dParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Filename of the reference image
-     * @param floating_image Filename of the floating image
-     * @param affine_transform Filename which contains an affine transformation
-     * @param flirt_affine_transform Filename which contains a flirt affine transformation
-     * @param control_point_grid_input Filename of control point grid input
-     * @param output_cpp Filename of control point grid
-     * @param output_resampled_image Filename of the resampled image
-     * @param reference_mask Filename of a mask image in the reference space
-     * @param smooth_reference Smooth the reference image using the specified sigma (mm)
-     * @param smooth_floating Smooth the floating image using the specified sigma (mm)
-     * @param num_bins_joint_histogram Number of bins to use for the joint histogram (reference)
-     * @param num_bins_floating_joint_histogram Number of bins to use for the joint histogram (floating)
-     * @param lower_threshold_reference Lower threshold to apply to the reference image intensities
-     * @param upper_threshold_reference Upper threshold to apply to the reference image intensities
-     * @param lower_threshold_floating Lower threshold to apply to the floating image intensities
-     * @param upper_threshold_floating Upper threshold to apply to the floating image intensities
-     * @param spacing_x Final grid spacing along the x axis in mm (or in voxel if negative value)
-     * @param spacing_y Final grid spacing along the y axis in mm (or in voxel if negative value)
-     * @param spacing_z Final grid spacing along the z axis in mm (or in voxel if negative value)
-     * @param bending_energy Weight of the bending energy penalty term
-     * @param linear_elasticity Weights of linear elasticity penalty term
-     * @param l2_norm_displacement Weight of L2 norm displacement penalty term
-     * @param jacobian_determinant Weight of log of the Jacobian determinant penalty term
-     * @param no_approx_jl Do not approximate the JL value only at the control point position
-     * @param no_conj Do not use the conjugate gradient optimization but a simple gradient ascent
-     * @param ssd Use the SSD as the similarity measure instead of NMI
-     * @param kld Use the KL divergence as the similarity measure instead of NMI
-     * @param amc Use the additive NMI for multichannel data
-     * @param max_iterations Maximal number of iterations per level
-     * @param num_levels Number of levels to perform
-     * @param first_levels Only perform the first levels
-     * @param no_pyramid Do not use a pyramidal approach
-     * @param symmetric Use symmetric approach
-     * @param floating_mask Filename of a mask image in the floating space
-     * @param inverse_consistency Weight of the inverse consistency penalty term
-     * @param velocity_field Use velocity field integration to generate the deformation
-     * @param composition_steps Number of composition steps
-     * @param smooth_gradient Smooth the metric derivative (in mm)
-     * @param padding_value Padding value
-     * @param verbose_off Turn verbose off
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_f3d" as const,
+        "@type": "niftyreg.reg_f3d" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "no_approx_jl": no_approx_jl,
@@ -304,18 +304,18 @@ function reg_f3d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_f3d_cargs(
     params: RegF3dParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_f3d");
     cargs.push(
@@ -531,18 +531,18 @@ function reg_f3d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_f3d_outputs(
     params: RegF3dParameters,
     execution: Execution,
 ): RegF3dOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegF3dOutputs = {
         root: execution.outputFile("."),
         output_cpp_file: ((params["output_cpp"] ?? null) !== null) ? execution.outputFile([(params["output_cpp"] ?? null)].join('')) : null,
@@ -552,22 +552,22 @@ function reg_f3d_outputs(
 }
 
 
+/**
+ * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
+ */
 function reg_f3d_execute(
     params: RegF3dParameters,
     execution: Execution,
 ): RegF3dOutputs {
-    /**
-     * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_f3d_cargs(params, execution)
     const ret = reg_f3d_outputs(params, execution)
@@ -576,6 +576,57 @@ function reg_f3d_execute(
 }
 
 
+/**
+ * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param reference_image Filename of the reference image
+ * @param floating_image Filename of the floating image
+ * @param affine_transform Filename which contains an affine transformation
+ * @param flirt_affine_transform Filename which contains a flirt affine transformation
+ * @param control_point_grid_input Filename of control point grid input
+ * @param output_cpp Filename of control point grid
+ * @param output_resampled_image Filename of the resampled image
+ * @param reference_mask Filename of a mask image in the reference space
+ * @param smooth_reference Smooth the reference image using the specified sigma (mm)
+ * @param smooth_floating Smooth the floating image using the specified sigma (mm)
+ * @param num_bins_joint_histogram Number of bins to use for the joint histogram (reference)
+ * @param num_bins_floating_joint_histogram Number of bins to use for the joint histogram (floating)
+ * @param lower_threshold_reference Lower threshold to apply to the reference image intensities
+ * @param upper_threshold_reference Upper threshold to apply to the reference image intensities
+ * @param lower_threshold_floating Lower threshold to apply to the floating image intensities
+ * @param upper_threshold_floating Upper threshold to apply to the floating image intensities
+ * @param spacing_x Final grid spacing along the x axis in mm (or in voxel if negative value)
+ * @param spacing_y Final grid spacing along the y axis in mm (or in voxel if negative value)
+ * @param spacing_z Final grid spacing along the z axis in mm (or in voxel if negative value)
+ * @param bending_energy Weight of the bending energy penalty term
+ * @param linear_elasticity Weights of linear elasticity penalty term
+ * @param l2_norm_displacement Weight of L2 norm displacement penalty term
+ * @param jacobian_determinant Weight of log of the Jacobian determinant penalty term
+ * @param no_approx_jl Do not approximate the JL value only at the control point position
+ * @param no_conj Do not use the conjugate gradient optimization but a simple gradient ascent
+ * @param ssd Use the SSD as the similarity measure instead of NMI
+ * @param kld Use the KL divergence as the similarity measure instead of NMI
+ * @param amc Use the additive NMI for multichannel data
+ * @param max_iterations Maximal number of iterations per level
+ * @param num_levels Number of levels to perform
+ * @param first_levels Only perform the first levels
+ * @param no_pyramid Do not use a pyramidal approach
+ * @param symmetric Use symmetric approach
+ * @param floating_mask Filename of a mask image in the floating space
+ * @param inverse_consistency Weight of the inverse consistency penalty term
+ * @param velocity_field Use velocity field integration to generate the deformation
+ * @param composition_steps Number of composition steps
+ * @param smooth_gradient Smooth the metric derivative (in mm)
+ * @param padding_value Padding value
+ * @param verbose_off Turn verbose off
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
+ */
 function reg_f3d(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -619,57 +670,6 @@ function reg_f3d(
     verbose_off: boolean = false,
     runner: Runner | null = null,
 ): RegF3dOutputs {
-    /**
-     * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param reference_image Filename of the reference image
-     * @param floating_image Filename of the floating image
-     * @param affine_transform Filename which contains an affine transformation
-     * @param flirt_affine_transform Filename which contains a flirt affine transformation
-     * @param control_point_grid_input Filename of control point grid input
-     * @param output_cpp Filename of control point grid
-     * @param output_resampled_image Filename of the resampled image
-     * @param reference_mask Filename of a mask image in the reference space
-     * @param smooth_reference Smooth the reference image using the specified sigma (mm)
-     * @param smooth_floating Smooth the floating image using the specified sigma (mm)
-     * @param num_bins_joint_histogram Number of bins to use for the joint histogram (reference)
-     * @param num_bins_floating_joint_histogram Number of bins to use for the joint histogram (floating)
-     * @param lower_threshold_reference Lower threshold to apply to the reference image intensities
-     * @param upper_threshold_reference Upper threshold to apply to the reference image intensities
-     * @param lower_threshold_floating Lower threshold to apply to the floating image intensities
-     * @param upper_threshold_floating Upper threshold to apply to the floating image intensities
-     * @param spacing_x Final grid spacing along the x axis in mm (or in voxel if negative value)
-     * @param spacing_y Final grid spacing along the y axis in mm (or in voxel if negative value)
-     * @param spacing_z Final grid spacing along the z axis in mm (or in voxel if negative value)
-     * @param bending_energy Weight of the bending energy penalty term
-     * @param linear_elasticity Weights of linear elasticity penalty term
-     * @param l2_norm_displacement Weight of L2 norm displacement penalty term
-     * @param jacobian_determinant Weight of log of the Jacobian determinant penalty term
-     * @param no_approx_jl Do not approximate the JL value only at the control point position
-     * @param no_conj Do not use the conjugate gradient optimization but a simple gradient ascent
-     * @param ssd Use the SSD as the similarity measure instead of NMI
-     * @param kld Use the KL divergence as the similarity measure instead of NMI
-     * @param amc Use the additive NMI for multichannel data
-     * @param max_iterations Maximal number of iterations per level
-     * @param num_levels Number of levels to perform
-     * @param first_levels Only perform the first levels
-     * @param no_pyramid Do not use a pyramidal approach
-     * @param symmetric Use symmetric approach
-     * @param floating_mask Filename of a mask image in the floating space
-     * @param inverse_consistency Weight of the inverse consistency penalty term
-     * @param velocity_field Use velocity field integration to generate the deformation
-     * @param composition_steps Number of composition steps
-     * @param smooth_gradient Smooth the metric derivative (in mm)
-     * @param padding_value Padding value
-     * @param verbose_off Turn verbose off
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_F3D_METADATA);
     const params = reg_f3d_params(reference_image, floating_image, affine_transform, flirt_affine_transform, control_point_grid_input, output_cpp, output_resampled_image, reference_mask, smooth_reference, smooth_floating, num_bins_joint_histogram, num_bins_floating_joint_histogram, lower_threshold_reference, upper_threshold_reference, lower_threshold_floating, upper_threshold_floating, spacing_x, spacing_y, spacing_z, bending_energy, linear_elasticity, l2_norm_displacement, jacobian_determinant, no_approx_jl, no_conj, ssd, kld, amc, max_iterations, num_levels, first_levels, no_pyramid, symmetric, floating_mask, inverse_consistency, velocity_field, composition_steps, smooth_gradient, padding_value, verbose_off)
@@ -682,5 +682,8 @@ export {
       RegF3dOutputs,
       RegF3dParameters,
       reg_f3d,
+      reg_f3d_cargs,
+      reg_f3d_execute,
+      reg_f3d_outputs,
       reg_f3d_params,
 };

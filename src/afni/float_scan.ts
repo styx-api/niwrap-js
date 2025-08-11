@@ -12,7 +12,7 @@ const FLOAT_SCAN_METADATA: Metadata = {
 
 
 interface FloatScanParameters {
-    "__STYXTYPE__": "float_scan";
+    "@type": "afni.float_scan";
     "fix_illegal_values": boolean;
     "verbose_mode": boolean;
     "skip_count"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface FloatScanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "float_scan": float_scan_cargs,
+        "afni.float_scan": float_scan_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "float_scan": float_scan_outputs,
+        "afni.float_scan": float_scan_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface FloatScanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file containing IEEE floating point numbers
+ * @param fix_illegal_values Writes a copy of the input file to stdout, replacing illegal values with 0.
+ * @param verbose_mode Verbose mode: print out index of each illegal value.
+ * @param skip_count Skip the first n floating point locations (i.e., the first 4*n bytes) in the file
+ *
+ * @returns Parameter dictionary
+ */
 function float_scan_params(
     input_file: InputPathType,
     fix_illegal_values: boolean = false,
     verbose_mode: boolean = false,
     skip_count: number | null = null,
 ): FloatScanParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file containing IEEE floating point numbers
-     * @param fix_illegal_values Writes a copy of the input file to stdout, replacing illegal values with 0.
-     * @param verbose_mode Verbose mode: print out index of each illegal value.
-     * @param skip_count Skip the first n floating point locations (i.e., the first 4*n bytes) in the file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "float_scan" as const,
+        "@type": "afni.float_scan" as const,
         "fix_illegal_values": fix_illegal_values,
         "verbose_mode": verbose_mode,
         "input_file": input_file,
@@ -100,18 +100,18 @@ function float_scan_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function float_scan_cargs(
     params: FloatScanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("float_scan");
     if ((params["fix_illegal_values"] ?? null)) {
@@ -131,18 +131,18 @@ function float_scan_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function float_scan_outputs(
     params: FloatScanParameters,
     execution: Execution,
 ): FloatScanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FloatScanOutputs = {
         root: execution.outputFile("."),
         stdout_file: execution.outputFile(["stdout"].join('')),
@@ -151,22 +151,22 @@ function float_scan_outputs(
 }
 
 
+/**
+ * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
+ */
 function float_scan_execute(
     params: FloatScanParameters,
     execution: Execution,
 ): FloatScanOutputs {
-    /**
-     * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
-     */
     params = execution.params(params)
     const cargs = float_scan_cargs(params, execution)
     const ret = float_scan_outputs(params, execution)
@@ -175,6 +175,21 @@ function float_scan_execute(
 }
 
 
+/**
+ * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input file containing IEEE floating point numbers
+ * @param fix_illegal_values Writes a copy of the input file to stdout, replacing illegal values with 0.
+ * @param verbose_mode Verbose mode: print out index of each illegal value.
+ * @param skip_count Skip the first n floating point locations (i.e., the first 4*n bytes) in the file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
+ */
 function float_scan(
     input_file: InputPathType,
     fix_illegal_values: boolean = false,
@@ -182,21 +197,6 @@ function float_scan(
     skip_count: number | null = null,
     runner: Runner | null = null,
 ): FloatScanOutputs {
-    /**
-     * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input file containing IEEE floating point numbers
-     * @param fix_illegal_values Writes a copy of the input file to stdout, replacing illegal values with 0.
-     * @param verbose_mode Verbose mode: print out index of each illegal value.
-     * @param skip_count Skip the first n floating point locations (i.e., the first 4*n bytes) in the file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLOAT_SCAN_METADATA);
     const params = float_scan_params(input_file, fix_illegal_values, verbose_mode, skip_count)
@@ -209,5 +209,8 @@ export {
       FloatScanOutputs,
       FloatScanParameters,
       float_scan,
+      float_scan_cargs,
+      float_scan_execute,
+      float_scan_outputs,
       float_scan_params,
 };

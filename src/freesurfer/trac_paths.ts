@@ -12,7 +12,7 @@ const TRAC_PATHS_METADATA: Metadata = {
 
 
 interface TracPathsParameters {
-    "__STYXTYPE__": "trac-paths";
+    "@type": "freesurfer.trac-paths";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
     "no_log": boolean;
@@ -29,33 +29,33 @@ interface TracPathsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "trac-paths": trac_paths_cargs,
+        "freesurfer.trac-paths": trac_paths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface TracPathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dmrirc_file dmrirc file (see dmrirc.example)
+ * @param log_file Log file, default is trac-all.log in the same directory as dmrirc
+ * @param no_log Do not save a log file
+ * @param cmd_file Cmd file, default is trac-all.cmd in the same directory as dmrirc
+ * @param no_cmd Do not save a cmd file
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param umask Set Unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug Generate much more output
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ * @param help Print full contents of help
+ *
+ * @returns Parameter dictionary
+ */
 function trac_paths_params(
     dmrirc_file: InputPathType,
     log_file: string | null = null,
@@ -90,27 +109,8 @@ function trac_paths_params(
     version: boolean = false,
     help: boolean = false,
 ): TracPathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dmrirc_file dmrirc file (see dmrirc.example)
-     * @param log_file Log file, default is trac-all.log in the same directory as dmrirc
-     * @param no_log Do not save a log file
-     * @param cmd_file Cmd file, default is trac-all.cmd in the same directory as dmrirc
-     * @param no_cmd Do not save a cmd file
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param umask Set Unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug Generate much more output
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-     * @param help Print full contents of help
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trac-paths" as const,
+        "@type": "freesurfer.trac-paths" as const,
         "dmrirc_file": dmrirc_file,
         "no_log": no_log,
         "no_cmd": no_cmd,
@@ -137,18 +137,18 @@ function trac_paths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function trac_paths_cargs(
     params: TracPathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("trac-paths");
     cargs.push(
@@ -207,18 +207,18 @@ function trac_paths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function trac_paths_outputs(
     params: TracPathsParameters,
     execution: Execution,
 ): TracPathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TracPathsOutputs = {
         root: execution.outputFile("."),
     };
@@ -226,22 +226,22 @@ function trac_paths_outputs(
 }
 
 
+/**
+ * Tractography for a single subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
+ */
 function trac_paths_execute(
     params: TracPathsParameters,
     execution: Execution,
 ): TracPathsOutputs {
-    /**
-     * Tractography for a single subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = trac_paths_cargs(params, execution)
     const ret = trac_paths_outputs(params, execution)
@@ -250,6 +250,30 @@ function trac_paths_execute(
 }
 
 
+/**
+ * Tractography for a single subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dmrirc_file dmrirc file (see dmrirc.example)
+ * @param log_file Log file, default is trac-all.log in the same directory as dmrirc
+ * @param no_log Do not save a log file
+ * @param cmd_file Cmd file, default is trac-all.cmd in the same directory as dmrirc
+ * @param no_cmd Do not save a cmd file
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param umask Set Unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug Generate much more output
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ * @param help Print full contents of help
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
+ */
 function trac_paths(
     dmrirc_file: InputPathType,
     log_file: string | null = null,
@@ -266,30 +290,6 @@ function trac_paths(
     help: boolean = false,
     runner: Runner | null = null,
 ): TracPathsOutputs {
-    /**
-     * Tractography for a single subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dmrirc_file dmrirc file (see dmrirc.example)
-     * @param log_file Log file, default is trac-all.log in the same directory as dmrirc
-     * @param no_log Do not save a log file
-     * @param cmd_file Cmd file, default is trac-all.cmd in the same directory as dmrirc
-     * @param no_cmd Do not save a cmd file
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param umask Set Unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug Generate much more output
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-     * @param help Print full contents of help
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAC_PATHS_METADATA);
     const params = trac_paths_params(dmrirc_file, log_file, no_log, cmd_file, no_cmd, no_isrunning, umask, group_id, allow_core_dump, debug, dontrun, version, help)
@@ -302,5 +302,8 @@ export {
       TracPathsOutputs,
       TracPathsParameters,
       trac_paths,
+      trac_paths_cargs,
+      trac_paths_execute,
+      trac_paths_outputs,
       trac_paths_params,
 };

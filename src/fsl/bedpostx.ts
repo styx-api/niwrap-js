@@ -12,7 +12,7 @@ const BEDPOSTX_METADATA: Metadata = {
 
 
 interface BedpostxParameters {
-    "__STYXTYPE__": "bedpostx";
+    "@type": "fsl.bedpostx";
     "subject_dir": string;
     "num_fibres"?: number | null | undefined;
     "ard_weight"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface BedpostxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bedpostx": bedpostx_cargs,
+        "fsl.bedpostx": bedpostx_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bedpostx": bedpostx_outputs,
+        "fsl.bedpostx": bedpostx_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface BedpostxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Input subject directory which contains bvals, bvecs, data, and nodif_brain_mask files.
+ * @param num_fibres Number of fibres per voxel (default 3).
+ * @param ard_weight ARD weight, more weight means less secondary fibres per voxel (default 1).
+ * @param burnin Burnin period (default 1000).
+ * @param num_jumps Number of jumps (default 1250).
+ * @param sample_every Sample every (default 25).
+ * @param model_type Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins.
+ * @param grad_nonlinear Consider gradient nonlinearities, expects grad_dev in the subject directory.
+ *
+ * @returns Parameter dictionary
+ */
 function bedpostx_params(
     subject_dir: string,
     num_fibres: number | null = 3,
@@ -89,22 +103,8 @@ function bedpostx_params(
     model_type: number | null = 2,
     grad_nonlinear: boolean = false,
 ): BedpostxParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Input subject directory which contains bvals, bvecs, data, and nodif_brain_mask files.
-     * @param num_fibres Number of fibres per voxel (default 3).
-     * @param ard_weight ARD weight, more weight means less secondary fibres per voxel (default 1).
-     * @param burnin Burnin period (default 1000).
-     * @param num_jumps Number of jumps (default 1250).
-     * @param sample_every Sample every (default 25).
-     * @param model_type Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins.
-     * @param grad_nonlinear Consider gradient nonlinearities, expects grad_dev in the subject directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bedpostx" as const,
+        "@type": "fsl.bedpostx" as const,
         "subject_dir": subject_dir,
         "grad_nonlinear": grad_nonlinear,
     };
@@ -130,18 +130,18 @@ function bedpostx_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bedpostx_cargs(
     params: BedpostxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bedpostx");
     cargs.push((params["subject_dir"] ?? null));
@@ -188,18 +188,18 @@ function bedpostx_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bedpostx_outputs(
     params: BedpostxParameters,
     execution: Execution,
 ): BedpostxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BedpostxOutputs = {
         root: execution.outputFile("."),
         xfms_output: execution.outputFile([(params["subject_dir"] ?? null), "_bedpostx/xfms/*"].join('')),
@@ -209,22 +209,22 @@ function bedpostx_outputs(
 }
 
 
+/**
+ * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
+ */
 function bedpostx_execute(
     params: BedpostxParameters,
     execution: Execution,
 ): BedpostxOutputs {
-    /**
-     * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
-     */
     params = execution.params(params)
     const cargs = bedpostx_cargs(params, execution)
     const ret = bedpostx_outputs(params, execution)
@@ -233,6 +233,25 @@ function bedpostx_execute(
 }
 
 
+/**
+ * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param subject_dir Input subject directory which contains bvals, bvecs, data, and nodif_brain_mask files.
+ * @param num_fibres Number of fibres per voxel (default 3).
+ * @param ard_weight ARD weight, more weight means less secondary fibres per voxel (default 1).
+ * @param burnin Burnin period (default 1000).
+ * @param num_jumps Number of jumps (default 1250).
+ * @param sample_every Sample every (default 25).
+ * @param model_type Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins.
+ * @param grad_nonlinear Consider gradient nonlinearities, expects grad_dev in the subject directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
+ */
 function bedpostx(
     subject_dir: string,
     num_fibres: number | null = 3,
@@ -244,25 +263,6 @@ function bedpostx(
     grad_nonlinear: boolean = false,
     runner: Runner | null = null,
 ): BedpostxOutputs {
-    /**
-     * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param subject_dir Input subject directory which contains bvals, bvecs, data, and nodif_brain_mask files.
-     * @param num_fibres Number of fibres per voxel (default 3).
-     * @param ard_weight ARD weight, more weight means less secondary fibres per voxel (default 1).
-     * @param burnin Burnin period (default 1000).
-     * @param num_jumps Number of jumps (default 1250).
-     * @param sample_every Sample every (default 25).
-     * @param model_type Deconvolution model. 1: with sticks, 2: with sticks with a range of diffusivities (default), 3: with zeppelins.
-     * @param grad_nonlinear Consider gradient nonlinearities, expects grad_dev in the subject directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BEDPOSTX_METADATA);
     const params = bedpostx_params(subject_dir, num_fibres, ard_weight, burnin, num_jumps, sample_every, model_type, grad_nonlinear)
@@ -275,5 +275,8 @@ export {
       BedpostxOutputs,
       BedpostxParameters,
       bedpostx,
+      bedpostx_cargs,
+      bedpostx_execute,
+      bedpostx_outputs,
       bedpostx_params,
 };

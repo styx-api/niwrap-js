@@ -12,7 +12,7 @@ const LTA_CONVERT_METADATA: Metadata = {
 
 
 interface LtaConvertParameters {
-    "__STYXTYPE__": "lta_convert";
+    "@type": "freesurfer.lta_convert";
     "in_lta"?: InputPathType | null | undefined;
     "in_fsl"?: InputPathType | null | undefined;
     "in_mni"?: InputPathType | null | undefined;
@@ -37,35 +37,35 @@ interface LtaConvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "lta_convert": lta_convert_cargs,
+        "freesurfer.lta_convert": lta_convert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "lta_convert": lta_convert_outputs,
+        "freesurfer.lta_convert": lta_convert_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface LtaConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_lta Input transform of LTA type
+ * @param in_fsl Input transform of FSL type
+ * @param in_mni Input transform of MNI / XFM type
+ * @param in_reg Input transform of TK REG type (deprecated format)
+ * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
+ * @param in_itk Input ITK transform (inverse LPS2LPS).
+ * @param in_vox Input transform in source image space (inverse VOX2VOX)
+ * @param out_lta Output linear transform (LTA FreeSurfer format)
+ * @param out_fsl Output transform in FSL format
+ * @param out_mni Output transform in MNI/XFM format
+ * @param out_reg Output transform in REG DAT format
+ * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
+ * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
+ * @param out_vox Output transform in source image space (inverse VOX2VOX)
+ * @param invert Inverts transform
+ * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
+ * @param ltatkreg Output type REGISTER_DAT (default RAS2RAS) with --ltaout
+ * @param src_geometry Specify src image geometry (mov volume for TKREG/register.dat)
+ * @param trg_geometry Specify trg image geometry
+ * @param trg_conform Conform trg image geometry (COR standard)
+ * @param subject_name Specify subject name (overrides if input has subject name defined)
+ *
+ * @returns Parameter dictionary
+ */
 function lta_convert_params(
     in_lta: InputPathType | null = null,
     in_fsl: InputPathType | null = null,
@@ -111,35 +138,8 @@ function lta_convert_params(
     trg_conform: boolean = false,
     subject_name: string | null = null,
 ): LtaConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_lta Input transform of LTA type
-     * @param in_fsl Input transform of FSL type
-     * @param in_mni Input transform of MNI / XFM type
-     * @param in_reg Input transform of TK REG type (deprecated format)
-     * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
-     * @param in_itk Input ITK transform (inverse LPS2LPS).
-     * @param in_vox Input transform in source image space (inverse VOX2VOX)
-     * @param out_lta Output linear transform (LTA FreeSurfer format)
-     * @param out_fsl Output transform in FSL format
-     * @param out_mni Output transform in MNI/XFM format
-     * @param out_reg Output transform in REG DAT format
-     * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
-     * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
-     * @param out_vox Output transform in source image space (inverse VOX2VOX)
-     * @param invert Inverts transform
-     * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
-     * @param ltatkreg Output type REGISTER_DAT (default RAS2RAS) with --ltaout
-     * @param src_geometry Specify src image geometry (mov volume for TKREG/register.dat)
-     * @param trg_geometry Specify trg image geometry
-     * @param trg_conform Conform trg image geometry (COR standard)
-     * @param subject_name Specify subject name (overrides if input has subject name defined)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "lta_convert" as const,
+        "@type": "freesurfer.lta_convert" as const,
         "invert": invert,
         "ltavox2vox": ltavox2vox,
         "ltatkreg": ltatkreg,
@@ -200,18 +200,18 @@ function lta_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function lta_convert_cargs(
     params: LtaConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("lta_convert");
     if ((params["in_lta"] ?? null) !== null) {
@@ -332,18 +332,18 @@ function lta_convert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function lta_convert_outputs(
     params: LtaConvertParameters,
     execution: Execution,
 ): LtaConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LtaConvertOutputs = {
         root: execution.outputFile("."),
         output_transform_file: ((params["out_vox"] ?? null) !== null) ? execution.outputFile([(params["out_vox"] ?? null)].join('')) : null,
@@ -352,22 +352,22 @@ function lta_convert_outputs(
 }
 
 
+/**
+ * This program converts between different linear transform formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LtaConvertOutputs`).
+ */
 function lta_convert_execute(
     params: LtaConvertParameters,
     execution: Execution,
 ): LtaConvertOutputs {
-    /**
-     * This program converts between different linear transform formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LtaConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = lta_convert_cargs(params, execution)
     const ret = lta_convert_outputs(params, execution)
@@ -376,6 +376,38 @@ function lta_convert_execute(
 }
 
 
+/**
+ * This program converts between different linear transform formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param in_lta Input transform of LTA type
+ * @param in_fsl Input transform of FSL type
+ * @param in_mni Input transform of MNI / XFM type
+ * @param in_reg Input transform of TK REG type (deprecated format)
+ * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
+ * @param in_itk Input ITK transform (inverse LPS2LPS).
+ * @param in_vox Input transform in source image space (inverse VOX2VOX)
+ * @param out_lta Output linear transform (LTA FreeSurfer format)
+ * @param out_fsl Output transform in FSL format
+ * @param out_mni Output transform in MNI/XFM format
+ * @param out_reg Output transform in REG DAT format
+ * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
+ * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
+ * @param out_vox Output transform in source image space (inverse VOX2VOX)
+ * @param invert Inverts transform
+ * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
+ * @param ltatkreg Output type REGISTER_DAT (default RAS2RAS) with --ltaout
+ * @param src_geometry Specify src image geometry (mov volume for TKREG/register.dat)
+ * @param trg_geometry Specify trg image geometry
+ * @param trg_conform Conform trg image geometry (COR standard)
+ * @param subject_name Specify subject name (overrides if input has subject name defined)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LtaConvertOutputs`).
+ */
 function lta_convert(
     in_lta: InputPathType | null = null,
     in_fsl: InputPathType | null = null,
@@ -400,38 +432,6 @@ function lta_convert(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): LtaConvertOutputs {
-    /**
-     * This program converts between different linear transform formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param in_lta Input transform of LTA type
-     * @param in_fsl Input transform of FSL type
-     * @param in_mni Input transform of MNI / XFM type
-     * @param in_reg Input transform of TK REG type (deprecated format)
-     * @param in_niftyreg Input transform of NiftyReg type (inverse RAS2RAS)
-     * @param in_itk Input ITK transform (inverse LPS2LPS).
-     * @param in_vox Input transform in source image space (inverse VOX2VOX)
-     * @param out_lta Output linear transform (LTA FreeSurfer format)
-     * @param out_fsl Output transform in FSL format
-     * @param out_mni Output transform in MNI/XFM format
-     * @param out_reg Output transform in REG DAT format
-     * @param out_niftyreg Output transform in NiftyReg format (inverse RAS2RAS)
-     * @param out_itk Output transform in ITK TXT format (inverse LPS2LPS)
-     * @param out_vox Output transform in source image space (inverse VOX2VOX)
-     * @param invert Inverts transform
-     * @param ltavox2vox Output type VOX2VOX (default RAS2RAS) with --ltaout
-     * @param ltatkreg Output type REGISTER_DAT (default RAS2RAS) with --ltaout
-     * @param src_geometry Specify src image geometry (mov volume for TKREG/register.dat)
-     * @param trg_geometry Specify trg image geometry
-     * @param trg_conform Conform trg image geometry (COR standard)
-     * @param subject_name Specify subject name (overrides if input has subject name defined)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LtaConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LTA_CONVERT_METADATA);
     const params = lta_convert_params(in_lta, in_fsl, in_mni, in_reg, in_niftyreg, in_itk, in_vox, out_lta, out_fsl, out_mni, out_reg, out_niftyreg, out_itk, out_vox, invert, ltavox2vox, ltatkreg, src_geometry, trg_geometry, trg_conform, subject_name)
@@ -444,5 +444,8 @@ export {
       LtaConvertOutputs,
       LtaConvertParameters,
       lta_convert,
+      lta_convert_cargs,
+      lta_convert_execute,
+      lta_convert_outputs,
       lta_convert_params,
 };

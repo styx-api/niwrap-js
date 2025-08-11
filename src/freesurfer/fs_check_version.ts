@@ -12,7 +12,7 @@ const FS_CHECK_VERSION_METADATA: Metadata = {
 
 
 interface FsCheckVersionParameters {
-    "__STYXTYPE__": "fs-check-version";
+    "@type": "freesurfer.fs-check-version";
     "subjects_dir": string;
     "outfile": string;
     "subject"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface FsCheckVersionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs-check-version": fs_check_version_cargs,
+        "freesurfer.fs-check-version": fs_check_version_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fs-check-version": fs_check_version_outputs,
+        "freesurfer.fs-check-version": fs_check_version_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface FsCheckVersionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_dir Subjects directory path
+ * @param outfile Output file path where result of version check will be written
+ * @param subject Subject name (optional)
+ * @param require_match Set REQUIRE_FS_MATCH for testing
+ * @param no_require_match Unset REQUIRE_FS_MATCH for testing
+ * @param test Go through permutations for testing
+ * @param test_debug Go through permutations for debugging
+ *
+ * @returns Parameter dictionary
+ */
 function fs_check_version_params(
     subjects_dir: string,
     outfile: string,
@@ -83,21 +96,8 @@ function fs_check_version_params(
     test: boolean = false,
     test_debug: boolean = false,
 ): FsCheckVersionParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_dir Subjects directory path
-     * @param outfile Output file path where result of version check will be written
-     * @param subject Subject name (optional)
-     * @param require_match Set REQUIRE_FS_MATCH for testing
-     * @param no_require_match Unset REQUIRE_FS_MATCH for testing
-     * @param test Go through permutations for testing
-     * @param test_debug Go through permutations for debugging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs-check-version" as const,
+        "@type": "freesurfer.fs-check-version" as const,
         "subjects_dir": subjects_dir,
         "outfile": outfile,
         "require_match": require_match,
@@ -112,18 +112,18 @@ function fs_check_version_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_check_version_cargs(
     params: FsCheckVersionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs-check-version");
     cargs.push(
@@ -156,18 +156,18 @@ function fs_check_version_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_check_version_outputs(
     params: FsCheckVersionParameters,
     execution: Execution,
 ): FsCheckVersionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsCheckVersionOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -176,22 +176,22 @@ function fs_check_version_outputs(
 }
 
 
+/**
+ * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
+ */
 function fs_check_version_execute(
     params: FsCheckVersionParameters,
     execution: Execution,
 ): FsCheckVersionOutputs {
-    /**
-     * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_check_version_cargs(params, execution)
     const ret = fs_check_version_outputs(params, execution)
@@ -200,6 +200,24 @@ function fs_check_version_execute(
 }
 
 
+/**
+ * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_dir Subjects directory path
+ * @param outfile Output file path where result of version check will be written
+ * @param subject Subject name (optional)
+ * @param require_match Set REQUIRE_FS_MATCH for testing
+ * @param no_require_match Unset REQUIRE_FS_MATCH for testing
+ * @param test Go through permutations for testing
+ * @param test_debug Go through permutations for debugging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
+ */
 function fs_check_version(
     subjects_dir: string,
     outfile: string,
@@ -210,24 +228,6 @@ function fs_check_version(
     test_debug: boolean = false,
     runner: Runner | null = null,
 ): FsCheckVersionOutputs {
-    /**
-     * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_dir Subjects directory path
-     * @param outfile Output file path where result of version check will be written
-     * @param subject Subject name (optional)
-     * @param require_match Set REQUIRE_FS_MATCH for testing
-     * @param no_require_match Unset REQUIRE_FS_MATCH for testing
-     * @param test Go through permutations for testing
-     * @param test_debug Go through permutations for debugging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_CHECK_VERSION_METADATA);
     const params = fs_check_version_params(subjects_dir, outfile, subject, require_match, no_require_match, test, test_debug)
@@ -240,5 +240,8 @@ export {
       FsCheckVersionOutputs,
       FsCheckVersionParameters,
       fs_check_version,
+      fs_check_version_cargs,
+      fs_check_version_execute,
+      fs_check_version_outputs,
       fs_check_version_params,
 };

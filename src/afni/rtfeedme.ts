@@ -12,7 +12,7 @@ const RTFEEDME_METADATA: Metadata = {
 
 
 interface RtfeedmeParameters {
-    "__STYXTYPE__": "rtfeedme";
+    "@type": "afni.rtfeedme";
     "datasets": Array<InputPathType>;
     "host"?: string | null | undefined;
     "interval_ms"?: number | null | undefined;
@@ -27,33 +27,33 @@ interface RtfeedmeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rtfeedme": rtfeedme_cargs,
+        "afni.rtfeedme": rtfeedme_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface RtfeedmeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets List of datasets to send to AFNI, specified as paths to dataset files. Multiple datasets can be specified.
+ * @param host Send data via TCP/IP to AFNI running on the specified computer system 'sname'. Default is the current system using shared memory. Use 'localhost' to send on the current system using TCP/IP.
+ * @param interval_ms Inter-transmit interval in milliseconds. Default is to send data as fast as possible.
+ * @param send_3d Send data in 3D bricks. Default is 2D slices.
+ * @param buffer_mb Set the interprocess communications buffer size in megabytes when using shared memory. Has no effect if using TCP/IP. Default is 1 MB; if set to 0, a 50 KB buffer is used.
+ * @param verbose Be talkative about actions.
+ * @param swap_bytes Swap byte pairs before sending data.
+ * @param nz_fake Send 'nz' as the value of nzz for debugging purposes.
+ * @param drive_cmd Send 'cmd' as a DRIVE_AFNI command. If 'cmd' contains spaces, it must be quoted. Multiple -drive options can be used.
+ * @param note Send 'sss' as a NOTE to the realtime plugin. Multiple -note options can be used.
+ * @param yrange Send value 'v' as the y-range for realtime motion estimation graphing.
+ *
+ * @returns Parameter dictionary
+ */
 function rtfeedme_params(
     datasets: Array<InputPathType>,
     host: string | null = null,
@@ -86,25 +103,8 @@ function rtfeedme_params(
     note: Array<string> | null = null,
     yrange: number | null = null,
 ): RtfeedmeParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets List of datasets to send to AFNI, specified as paths to dataset files. Multiple datasets can be specified.
-     * @param host Send data via TCP/IP to AFNI running on the specified computer system 'sname'. Default is the current system using shared memory. Use 'localhost' to send on the current system using TCP/IP.
-     * @param interval_ms Inter-transmit interval in milliseconds. Default is to send data as fast as possible.
-     * @param send_3d Send data in 3D bricks. Default is 2D slices.
-     * @param buffer_mb Set the interprocess communications buffer size in megabytes when using shared memory. Has no effect if using TCP/IP. Default is 1 MB; if set to 0, a 50 KB buffer is used.
-     * @param verbose Be talkative about actions.
-     * @param swap_bytes Swap byte pairs before sending data.
-     * @param nz_fake Send 'nz' as the value of nzz for debugging purposes.
-     * @param drive_cmd Send 'cmd' as a DRIVE_AFNI command. If 'cmd' contains spaces, it must be quoted. Multiple -drive options can be used.
-     * @param note Send 'sss' as a NOTE to the realtime plugin. Multiple -note options can be used.
-     * @param yrange Send value 'v' as the y-range for realtime motion estimation graphing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rtfeedme" as const,
+        "@type": "afni.rtfeedme" as const,
         "datasets": datasets,
         "send_3d": send_3d,
         "verbose": verbose,
@@ -135,18 +135,18 @@ function rtfeedme_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rtfeedme_cargs(
     params: RtfeedmeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rtfeedme");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -205,18 +205,18 @@ function rtfeedme_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rtfeedme_outputs(
     params: RtfeedmeParameters,
     execution: Execution,
 ): RtfeedmeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RtfeedmeOutputs = {
         root: execution.outputFile("."),
     };
@@ -224,22 +224,22 @@ function rtfeedme_outputs(
 }
 
 
+/**
+ * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
+ */
 function rtfeedme_execute(
     params: RtfeedmeParameters,
     execution: Execution,
 ): RtfeedmeOutputs {
-    /**
-     * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
-     */
     params = execution.params(params)
     const cargs = rtfeedme_cargs(params, execution)
     const ret = rtfeedme_outputs(params, execution)
@@ -248,6 +248,28 @@ function rtfeedme_execute(
 }
 
 
+/**
+ * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets List of datasets to send to AFNI, specified as paths to dataset files. Multiple datasets can be specified.
+ * @param host Send data via TCP/IP to AFNI running on the specified computer system 'sname'. Default is the current system using shared memory. Use 'localhost' to send on the current system using TCP/IP.
+ * @param interval_ms Inter-transmit interval in milliseconds. Default is to send data as fast as possible.
+ * @param send_3d Send data in 3D bricks. Default is 2D slices.
+ * @param buffer_mb Set the interprocess communications buffer size in megabytes when using shared memory. Has no effect if using TCP/IP. Default is 1 MB; if set to 0, a 50 KB buffer is used.
+ * @param verbose Be talkative about actions.
+ * @param swap_bytes Swap byte pairs before sending data.
+ * @param nz_fake Send 'nz' as the value of nzz for debugging purposes.
+ * @param drive_cmd Send 'cmd' as a DRIVE_AFNI command. If 'cmd' contains spaces, it must be quoted. Multiple -drive options can be used.
+ * @param note Send 'sss' as a NOTE to the realtime plugin. Multiple -note options can be used.
+ * @param yrange Send value 'v' as the y-range for realtime motion estimation graphing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
+ */
 function rtfeedme(
     datasets: Array<InputPathType>,
     host: string | null = null,
@@ -262,28 +284,6 @@ function rtfeedme(
     yrange: number | null = null,
     runner: Runner | null = null,
 ): RtfeedmeOutputs {
-    /**
-     * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets List of datasets to send to AFNI, specified as paths to dataset files. Multiple datasets can be specified.
-     * @param host Send data via TCP/IP to AFNI running on the specified computer system 'sname'. Default is the current system using shared memory. Use 'localhost' to send on the current system using TCP/IP.
-     * @param interval_ms Inter-transmit interval in milliseconds. Default is to send data as fast as possible.
-     * @param send_3d Send data in 3D bricks. Default is 2D slices.
-     * @param buffer_mb Set the interprocess communications buffer size in megabytes when using shared memory. Has no effect if using TCP/IP. Default is 1 MB; if set to 0, a 50 KB buffer is used.
-     * @param verbose Be talkative about actions.
-     * @param swap_bytes Swap byte pairs before sending data.
-     * @param nz_fake Send 'nz' as the value of nzz for debugging purposes.
-     * @param drive_cmd Send 'cmd' as a DRIVE_AFNI command. If 'cmd' contains spaces, it must be quoted. Multiple -drive options can be used.
-     * @param note Send 'sss' as a NOTE to the realtime plugin. Multiple -note options can be used.
-     * @param yrange Send value 'v' as the y-range for realtime motion estimation graphing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RTFEEDME_METADATA);
     const params = rtfeedme_params(datasets, host, interval_ms, send_3d, buffer_mb, verbose, swap_bytes, nz_fake, drive_cmd, note, yrange)
@@ -296,5 +296,8 @@ export {
       RtfeedmeOutputs,
       RtfeedmeParameters,
       rtfeedme,
+      rtfeedme_cargs,
+      rtfeedme_execute,
+      rtfeedme_outputs,
       rtfeedme_params,
 };

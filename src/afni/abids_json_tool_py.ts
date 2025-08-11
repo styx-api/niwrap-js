@@ -12,7 +12,7 @@ const ABIDS_JSON_TOOL_PY_METADATA: Metadata = {
 
 
 interface AbidsJsonToolPyParameters {
-    "__STYXTYPE__": "abids_json_tool.py";
+    "@type": "afni.abids_json_tool.py";
     "input_file": InputPathType;
     "prefix": string;
     "txt2json": boolean;
@@ -29,33 +29,33 @@ interface AbidsJsonToolPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "abids_json_tool.py": abids_json_tool_py_cargs,
+        "afni.abids_json_tool.py": abids_json_tool_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface AbidsJsonToolPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file One file to convert. Enter NULL with -add_json to create new json file.
+ * @param prefix Output file name.
+ * @param txt2json Convert from ':' separated text file to json formatted file.
+ * @param json2txt Convert from json formatted file to ':' separated text file.
+ * @param add_json Add an attribute to the end of the specified json file.
+ * @param del_json Remove attribute (KEY) from the -input json file.
+ * @param force_add Use with -add_json to overwrite an existing attribute in the specified json file.
+ * @param overwrite Use caution as this will overwrite the -prefix file if it exists!!
+ * @param help Show this help and exit.
+ * @param delimiter_major Specify the new (major) delimiter to separate keys and values when using '-txt2json' opt.
+ * @param delimiter_minor Specify the new (minor) delimiter to separate value items when using '-txt2json' opt.
+ * @param literal_keys Do not replace spaces with '_', nor parentheses and brackets with ''.
+ * @param values_stay_str Each numeric or str item gets saved as a str; otherwise, guess at int and float.
+ *
+ * @returns Parameter dictionary
+ */
 function abids_json_tool_py_params(
     input_file: InputPathType,
     prefix: string,
@@ -90,27 +109,8 @@ function abids_json_tool_py_params(
     literal_keys: boolean = false,
     values_stay_str: boolean = false,
 ): AbidsJsonToolPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file One file to convert. Enter NULL with -add_json to create new json file.
-     * @param prefix Output file name.
-     * @param txt2json Convert from ':' separated text file to json formatted file.
-     * @param json2txt Convert from json formatted file to ':' separated text file.
-     * @param add_json Add an attribute to the end of the specified json file.
-     * @param del_json Remove attribute (KEY) from the -input json file.
-     * @param force_add Use with -add_json to overwrite an existing attribute in the specified json file.
-     * @param overwrite Use caution as this will overwrite the -prefix file if it exists!!
-     * @param help Show this help and exit.
-     * @param delimiter_major Specify the new (major) delimiter to separate keys and values when using '-txt2json' opt.
-     * @param delimiter_minor Specify the new (minor) delimiter to separate value items when using '-txt2json' opt.
-     * @param literal_keys Do not replace spaces with '_', nor parentheses and brackets with ''.
-     * @param values_stay_str Each numeric or str item gets saved as a str; otherwise, guess at int and float.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "abids_json_tool.py" as const,
+        "@type": "afni.abids_json_tool.py" as const,
         "input_file": input_file,
         "prefix": prefix,
         "txt2json": txt2json,
@@ -137,18 +137,18 @@ function abids_json_tool_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function abids_json_tool_py_cargs(
     params: AbidsJsonToolPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("abids_json_tool.py");
     cargs.push(
@@ -208,18 +208,18 @@ function abids_json_tool_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function abids_json_tool_py_outputs(
     params: AbidsJsonToolPyParameters,
     execution: Execution,
 ): AbidsJsonToolPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AbidsJsonToolPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -227,22 +227,22 @@ function abids_json_tool_py_outputs(
 }
 
 
+/**
+ * This script helps to manipulate json files in various ways.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
+ */
 function abids_json_tool_py_execute(
     params: AbidsJsonToolPyParameters,
     execution: Execution,
 ): AbidsJsonToolPyOutputs {
-    /**
-     * This script helps to manipulate json files in various ways.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = abids_json_tool_py_cargs(params, execution)
     const ret = abids_json_tool_py_outputs(params, execution)
@@ -251,6 +251,30 @@ function abids_json_tool_py_execute(
 }
 
 
+/**
+ * This script helps to manipulate json files in various ways.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file One file to convert. Enter NULL with -add_json to create new json file.
+ * @param prefix Output file name.
+ * @param txt2json Convert from ':' separated text file to json formatted file.
+ * @param json2txt Convert from json formatted file to ':' separated text file.
+ * @param add_json Add an attribute to the end of the specified json file.
+ * @param del_json Remove attribute (KEY) from the -input json file.
+ * @param force_add Use with -add_json to overwrite an existing attribute in the specified json file.
+ * @param overwrite Use caution as this will overwrite the -prefix file if it exists!!
+ * @param help Show this help and exit.
+ * @param delimiter_major Specify the new (major) delimiter to separate keys and values when using '-txt2json' opt.
+ * @param delimiter_minor Specify the new (minor) delimiter to separate value items when using '-txt2json' opt.
+ * @param literal_keys Do not replace spaces with '_', nor parentheses and brackets with ''.
+ * @param values_stay_str Each numeric or str item gets saved as a str; otherwise, guess at int and float.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
+ */
 function abids_json_tool_py(
     input_file: InputPathType,
     prefix: string,
@@ -267,30 +291,6 @@ function abids_json_tool_py(
     values_stay_str: boolean = false,
     runner: Runner | null = null,
 ): AbidsJsonToolPyOutputs {
-    /**
-     * This script helps to manipulate json files in various ways.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file One file to convert. Enter NULL with -add_json to create new json file.
-     * @param prefix Output file name.
-     * @param txt2json Convert from ':' separated text file to json formatted file.
-     * @param json2txt Convert from json formatted file to ':' separated text file.
-     * @param add_json Add an attribute to the end of the specified json file.
-     * @param del_json Remove attribute (KEY) from the -input json file.
-     * @param force_add Use with -add_json to overwrite an existing attribute in the specified json file.
-     * @param overwrite Use caution as this will overwrite the -prefix file if it exists!!
-     * @param help Show this help and exit.
-     * @param delimiter_major Specify the new (major) delimiter to separate keys and values when using '-txt2json' opt.
-     * @param delimiter_minor Specify the new (minor) delimiter to separate value items when using '-txt2json' opt.
-     * @param literal_keys Do not replace spaces with '_', nor parentheses and brackets with ''.
-     * @param values_stay_str Each numeric or str item gets saved as a str; otherwise, guess at int and float.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ABIDS_JSON_TOOL_PY_METADATA);
     const params = abids_json_tool_py_params(input_file, prefix, txt2json, json2txt, add_json, del_json, force_add, overwrite, help, delimiter_major, delimiter_minor, literal_keys, values_stay_str)
@@ -303,5 +303,8 @@ export {
       AbidsJsonToolPyOutputs,
       AbidsJsonToolPyParameters,
       abids_json_tool_py,
+      abids_json_tool_py_cargs,
+      abids_json_tool_py_execute,
+      abids_json_tool_py_outputs,
       abids_json_tool_py_params,
 };

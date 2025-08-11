@@ -12,7 +12,7 @@ const V_3D_ZEROPAD_METADATA: Metadata = {
 
 
 interface V3dZeropadParameters {
-    "__STYXTYPE__": "3dZeropad";
+    "@type": "afni.3dZeropad";
     "dataset": InputPathType;
     "I"?: number | null | undefined;
     "S"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface V3dZeropadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dZeropad": v_3d_zeropad_cargs,
+        "afni.3dZeropad": v_3d_zeropad_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dZeropad": v_3d_zeropad_outputs,
+        "afni.3dZeropad": v_3d_zeropad_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,27 @@ interface V3dZeropadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param i Adds 'n' planes of zero at the Inferior edge
+ * @param s Adds 'n' planes of zero at the Superior edge
+ * @param a Adds 'n' planes of zero at the Anterior edge
+ * @param p Adds 'n' planes of zero at the Posterior edge
+ * @param l Adds 'n' planes of zero at the Left edge
+ * @param r Adds 'n' planes of zero at the Right edge
+ * @param z Adds 'n' planes of zeros on EACH of the dataset z-axis (slice-direction) faces
+ * @param rl Add/cut planes symmetrically to make the resulting volume have 'a' slices in the Right/Left direction
+ * @param ap Add/cut planes symmetrically to make the resulting volume have 'b' slices in the Anterior/Posterior direction
+ * @param is Add/cut planes symmetrically to make the resulting volume have 'c' slices in the Inferior/Superior direction
+ * @param pad2even Add 0 or 1 plane in each of the R/A/S directions, giving each axis an even number of slices
+ * @param mm_flag Pad counts 'n' are in mm instead of slices.
+ * @param master_dataset Match the volume described in dataset 'mset'. 'mset' must have the same orientation and grid spacing as dataset to be padded.
+ * @param prefix Write result into dataset with prefix 'ppp'. Default is 'zeropad'.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_zeropad_params(
     dataset: InputPathType,
     i: number | null = null,
@@ -103,29 +124,8 @@ function v_3d_zeropad_params(
     master_dataset: InputPathType | null = null,
     prefix: string | null = null,
 ): V3dZeropadParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param i Adds 'n' planes of zero at the Inferior edge
-     * @param s Adds 'n' planes of zero at the Superior edge
-     * @param a Adds 'n' planes of zero at the Anterior edge
-     * @param p Adds 'n' planes of zero at the Posterior edge
-     * @param l Adds 'n' planes of zero at the Left edge
-     * @param r Adds 'n' planes of zero at the Right edge
-     * @param z Adds 'n' planes of zeros on EACH of the dataset z-axis (slice-direction) faces
-     * @param rl Add/cut planes symmetrically to make the resulting volume have 'a' slices in the Right/Left direction
-     * @param ap Add/cut planes symmetrically to make the resulting volume have 'b' slices in the Anterior/Posterior direction
-     * @param is Add/cut planes symmetrically to make the resulting volume have 'c' slices in the Inferior/Superior direction
-     * @param pad2even Add 0 or 1 plane in each of the R/A/S directions, giving each axis an even number of slices
-     * @param mm_flag Pad counts 'n' are in mm instead of slices.
-     * @param master_dataset Match the volume described in dataset 'mset'. 'mset' must have the same orientation and grid spacing as dataset to be padded.
-     * @param prefix Write result into dataset with prefix 'ppp'. Default is 'zeropad'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dZeropad" as const,
+        "@type": "afni.3dZeropad" as const,
         "dataset": dataset,
         "pad2even": pad2even,
         "mm_flag": mm_flag,
@@ -170,18 +170,18 @@ function v_3d_zeropad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_zeropad_cargs(
     params: V3dZeropadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dZeropad");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -267,18 +267,18 @@ function v_3d_zeropad_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_zeropad_outputs(
     params: V3dZeropadParameters,
     execution: Execution,
 ): V3dZeropadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dZeropadOutputs = {
         root: execution.outputFile("."),
         output_dataset_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -288,22 +288,22 @@ function v_3d_zeropad_outputs(
 }
 
 
+/**
+ * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
+ */
 function v_3d_zeropad_execute(
     params: V3dZeropadParameters,
     execution: Execution,
 ): V3dZeropadOutputs {
-    /**
-     * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_zeropad_cargs(params, execution)
     const ret = v_3d_zeropad_outputs(params, execution)
@@ -312,6 +312,32 @@ function v_3d_zeropad_execute(
 }
 
 
+/**
+ * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param i Adds 'n' planes of zero at the Inferior edge
+ * @param s Adds 'n' planes of zero at the Superior edge
+ * @param a Adds 'n' planes of zero at the Anterior edge
+ * @param p Adds 'n' planes of zero at the Posterior edge
+ * @param l Adds 'n' planes of zero at the Left edge
+ * @param r Adds 'n' planes of zero at the Right edge
+ * @param z Adds 'n' planes of zeros on EACH of the dataset z-axis (slice-direction) faces
+ * @param rl Add/cut planes symmetrically to make the resulting volume have 'a' slices in the Right/Left direction
+ * @param ap Add/cut planes symmetrically to make the resulting volume have 'b' slices in the Anterior/Posterior direction
+ * @param is Add/cut planes symmetrically to make the resulting volume have 'c' slices in the Inferior/Superior direction
+ * @param pad2even Add 0 or 1 plane in each of the R/A/S directions, giving each axis an even number of slices
+ * @param mm_flag Pad counts 'n' are in mm instead of slices.
+ * @param master_dataset Match the volume described in dataset 'mset'. 'mset' must have the same orientation and grid spacing as dataset to be padded.
+ * @param prefix Write result into dataset with prefix 'ppp'. Default is 'zeropad'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
+ */
 function v_3d_zeropad(
     dataset: InputPathType,
     i: number | null = null,
@@ -330,32 +356,6 @@ function v_3d_zeropad(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dZeropadOutputs {
-    /**
-     * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param i Adds 'n' planes of zero at the Inferior edge
-     * @param s Adds 'n' planes of zero at the Superior edge
-     * @param a Adds 'n' planes of zero at the Anterior edge
-     * @param p Adds 'n' planes of zero at the Posterior edge
-     * @param l Adds 'n' planes of zero at the Left edge
-     * @param r Adds 'n' planes of zero at the Right edge
-     * @param z Adds 'n' planes of zeros on EACH of the dataset z-axis (slice-direction) faces
-     * @param rl Add/cut planes symmetrically to make the resulting volume have 'a' slices in the Right/Left direction
-     * @param ap Add/cut planes symmetrically to make the resulting volume have 'b' slices in the Anterior/Posterior direction
-     * @param is Add/cut planes symmetrically to make the resulting volume have 'c' slices in the Inferior/Superior direction
-     * @param pad2even Add 0 or 1 plane in each of the R/A/S directions, giving each axis an even number of slices
-     * @param mm_flag Pad counts 'n' are in mm instead of slices.
-     * @param master_dataset Match the volume described in dataset 'mset'. 'mset' must have the same orientation and grid spacing as dataset to be padded.
-     * @param prefix Write result into dataset with prefix 'ppp'. Default is 'zeropad'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ZEROPAD_METADATA);
     const params = v_3d_zeropad_params(dataset, i, s, a, p, l, r, z, rl, ap, is, pad2even, mm_flag, master_dataset, prefix)
@@ -368,5 +368,8 @@ export {
       V3dZeropadParameters,
       V_3D_ZEROPAD_METADATA,
       v_3d_zeropad,
+      v_3d_zeropad_cargs,
+      v_3d_zeropad_execute,
+      v_3d_zeropad_outputs,
       v_3d_zeropad_params,
 };

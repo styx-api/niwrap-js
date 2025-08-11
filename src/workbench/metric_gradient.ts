@@ -12,21 +12,21 @@ const METRIC_GRADIENT_METADATA: Metadata = {
 
 
 interface MetricGradientPresmoothParameters {
-    "__STYXTYPE__": "presmooth";
+    "@type": "workbench.metric-gradient.presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
 
 
 interface MetricGradientRoiParameters {
-    "__STYXTYPE__": "roi";
+    "@type": "workbench.metric-gradient.roi";
     "roi_metric": InputPathType;
     "opt_match_columns": boolean;
 }
 
 
 interface MetricGradientParameters {
-    "__STYXTYPE__": "metric-gradient";
+    "@type": "workbench.metric-gradient";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
@@ -39,56 +39,56 @@ interface MetricGradientParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-gradient": metric_gradient_cargs,
-        "presmooth": metric_gradient_presmooth_cargs,
-        "roi": metric_gradient_roi_cargs,
+        "workbench.metric-gradient": metric_gradient_cargs,
+        "workbench.metric-gradient.presmooth": metric_gradient_presmooth_cargs,
+        "workbench.metric-gradient.roi": metric_gradient_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-gradient": metric_gradient_outputs,
+        "workbench.metric-gradient": metric_gradient_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param opt_fwhm kernel size is FWHM, not sigma
+ *
+ * @returns Parameter dictionary
+ */
 function metric_gradient_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
 ): MetricGradientPresmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
-     * @param opt_fwhm kernel size is FWHM, not sigma
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "presmooth" as const,
+        "@type": "workbench.metric-gradient.presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -96,18 +96,18 @@ function metric_gradient_presmooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_gradient_presmooth_cargs(
     params: MetricGradientPresmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
@@ -118,20 +118,20 @@ function metric_gradient_presmooth_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_metric the area to take the gradient within, as a metric
+ * @param opt_match_columns for each input column, use the corresponding column from the roi
+ *
+ * @returns Parameter dictionary
+ */
 function metric_gradient_roi_params(
     roi_metric: InputPathType,
     opt_match_columns: boolean = false,
 ): MetricGradientRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_metric the area to take the gradient within, as a metric
-     * @param opt_match_columns for each input column, use the corresponding column from the roi
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi" as const,
+        "@type": "workbench.metric-gradient.roi" as const,
         "roi_metric": roi_metric,
         "opt_match_columns": opt_match_columns,
     };
@@ -139,18 +139,18 @@ function metric_gradient_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_gradient_roi_cargs(
     params: MetricGradientRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
@@ -182,6 +182,21 @@ interface MetricGradientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to compute the gradient on
+ * @param metric_in the metric to compute the gradient of
+ * @param metric_out the magnitude of the gradient
+ * @param presmooth smooth the metric before computing the gradient
+ * @param roi select a region of interest to take the gradient of
+ * @param opt_vectors_vector_metric_out output gradient vectors: the vectors as a metric file
+ * @param opt_column_column select a single column to compute the gradient of: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
+ *
+ * @returns Parameter dictionary
+ */
 function metric_gradient_params(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -193,23 +208,8 @@ function metric_gradient_params(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_average_normals: boolean = false,
 ): MetricGradientParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to compute the gradient on
-     * @param metric_in the metric to compute the gradient of
-     * @param metric_out the magnitude of the gradient
-     * @param presmooth smooth the metric before computing the gradient
-     * @param roi select a region of interest to take the gradient of
-     * @param opt_vectors_vector_metric_out output gradient vectors: the vectors as a metric file
-     * @param opt_column_column select a single column to compute the gradient of: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-gradient" as const,
+        "@type": "workbench.metric-gradient" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -234,18 +234,18 @@ function metric_gradient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_gradient_cargs(
     params: MetricGradientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-gradient");
@@ -253,10 +253,10 @@ function metric_gradient_cargs(
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null).__STYXTYPE__)((params["presmooth"] ?? null), execution));
+        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null).__STYXTYPE__)((params["roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
     }
     if ((params["opt_vectors_vector_metric_out"] ?? null) !== null) {
         cargs.push(
@@ -283,18 +283,18 @@ function metric_gradient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_gradient_outputs(
     params: MetricGradientParameters,
     execution: Execution,
 ): MetricGradientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricGradientOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -304,32 +304,32 @@ function metric_gradient_outputs(
 }
 
 
+/**
+ * Surface gradient of a metric file.
+ *
+ * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.
+ *
+ * When using -corrected-areas, note that it is an approximate correction.  Doing smoothing on individual surfaces before averaging/gradient is preferred, when possible, in order to make use of the original surface structure.
+ *
+ * Specifying an ROI will restrict the gradient to only use data from where the ROI metric is positive, and output zeros anywhere the ROI metric is not positive.
+ *
+ * By default, the first column of the roi metric is used for all input columns.  When -match-columns is specified to the -roi option, the input and roi metrics must have the same number of columns, and for each input column's index, the same column index is used in the roi metric.  If the -match-columns option to -roi is used while the -column option is also used, the number of columns of the roi metric must match the input metric, and it will use the roi column with the index of the selected input column.
+ *
+ * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
+ */
 function metric_gradient_execute(
     params: MetricGradientParameters,
     execution: Execution,
 ): MetricGradientOutputs {
-    /**
-     * Surface gradient of a metric file.
-     * 
-     * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.
-     * 
-     * When using -corrected-areas, note that it is an approximate correction.  Doing smoothing on individual surfaces before averaging/gradient is preferred, when possible, in order to make use of the original surface structure.
-     * 
-     * Specifying an ROI will restrict the gradient to only use data from where the ROI metric is positive, and output zeros anywhere the ROI metric is not positive.
-     * 
-     * By default, the first column of the roi metric is used for all input columns.  When -match-columns is specified to the -roi option, the input and roi metrics must have the same number of columns, and for each input column's index, the same column index is used in the roi metric.  If the -match-columns option to -roi is used while the -column option is also used, the number of columns of the roi metric must match the input metric, and it will use the roi column with the index of the selected input column.
-     * 
-     * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_gradient_cargs(params, execution)
     const ret = metric_gradient_outputs(params, execution)
@@ -338,6 +338,36 @@ function metric_gradient_execute(
 }
 
 
+/**
+ * Surface gradient of a metric file.
+ *
+ * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.
+ *
+ * When using -corrected-areas, note that it is an approximate correction.  Doing smoothing on individual surfaces before averaging/gradient is preferred, when possible, in order to make use of the original surface structure.
+ *
+ * Specifying an ROI will restrict the gradient to only use data from where the ROI metric is positive, and output zeros anywhere the ROI metric is not positive.
+ *
+ * By default, the first column of the roi metric is used for all input columns.  When -match-columns is specified to the -roi option, the input and roi metrics must have the same number of columns, and for each input column's index, the same column index is used in the roi metric.  If the -match-columns option to -roi is used while the -column option is also used, the number of columns of the roi metric must match the input metric, and it will use the roi column with the index of the selected input column.
+ *
+ * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to compute the gradient on
+ * @param metric_in the metric to compute the gradient of
+ * @param metric_out the magnitude of the gradient
+ * @param presmooth smooth the metric before computing the gradient
+ * @param roi select a region of interest to take the gradient of
+ * @param opt_vectors_vector_metric_out output gradient vectors: the vectors as a metric file
+ * @param opt_column_column select a single column to compute the gradient of: the column number or name
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
+ */
 function metric_gradient(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -350,36 +380,6 @@ function metric_gradient(
     opt_average_normals: boolean = false,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
-    /**
-     * Surface gradient of a metric file.
-     * 
-     * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.
-     * 
-     * When using -corrected-areas, note that it is an approximate correction.  Doing smoothing on individual surfaces before averaging/gradient is preferred, when possible, in order to make use of the original surface structure.
-     * 
-     * Specifying an ROI will restrict the gradient to only use data from where the ROI metric is positive, and output zeros anywhere the ROI metric is not positive.
-     * 
-     * By default, the first column of the roi metric is used for all input columns.  When -match-columns is specified to the -roi option, the input and roi metrics must have the same number of columns, and for each input column's index, the same column index is used in the roi metric.  If the -match-columns option to -roi is used while the -column option is also used, the number of columns of the roi metric must match the input metric, and it will use the roi column with the index of the selected input column.
-     * 
-     * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to compute the gradient on
-     * @param metric_in the metric to compute the gradient of
-     * @param metric_out the magnitude of the gradient
-     * @param presmooth smooth the metric before computing the gradient
-     * @param roi select a region of interest to take the gradient of
-     * @param opt_vectors_vector_metric_out output gradient vectors: the vectors as a metric file
-     * @param opt_column_column select a single column to compute the gradient of: the column number or name
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_GRADIENT_METADATA);
     const params = metric_gradient_params(surface, metric_in, metric_out, presmooth, roi, opt_vectors_vector_metric_out, opt_column_column, opt_corrected_areas_area_metric, opt_average_normals)
@@ -394,7 +394,12 @@ export {
       MetricGradientPresmoothParameters,
       MetricGradientRoiParameters,
       metric_gradient,
+      metric_gradient_cargs,
+      metric_gradient_execute,
+      metric_gradient_outputs,
       metric_gradient_params,
+      metric_gradient_presmooth_cargs,
       metric_gradient_presmooth_params,
+      metric_gradient_roi_cargs,
       metric_gradient_roi_params,
 };

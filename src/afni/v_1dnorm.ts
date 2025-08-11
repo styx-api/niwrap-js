@@ -12,7 +12,7 @@ const V_1DNORM_METADATA: Metadata = {
 
 
 interface V1dnormParameters {
-    "__STYXTYPE__": "1dnorm";
+    "@type": "afni.1dnorm";
     "infile": InputPathType;
     "outfile": string;
     "norm1": boolean;
@@ -22,35 +22,35 @@ interface V1dnormParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dnorm": v_1dnorm_cargs,
+        "afni.1dnorm": v_1dnorm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dnorm": v_1dnorm_outputs,
+        "afni.1dnorm": v_1dnorm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V1dnormOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input AFNI *.1D file (ASCII list of numbers arranged in columns); if '-' input will be read from stdin.
+ * @param outfile Output AFNI *.1D file (normalized); if '-' output will be written to stdout.
+ * @param norm1 Normalize so sum of absolute values is 1 (L_1 norm)
+ * @param normx Normalize so that max absolute value is 1 (L_infinity norm)
+ * @param demean Subtract each column's mean before normalizing
+ * @param demed Subtract each column's median before normalizing
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dnorm_params(
     infile: InputPathType,
     outfile: string,
@@ -81,20 +93,8 @@ function v_1dnorm_params(
     demean: boolean = false,
     demed: boolean = false,
 ): V1dnormParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input AFNI *.1D file (ASCII list of numbers arranged in columns); if '-' input will be read from stdin.
-     * @param outfile Output AFNI *.1D file (normalized); if '-' output will be written to stdout.
-     * @param norm1 Normalize so sum of absolute values is 1 (L_1 norm)
-     * @param normx Normalize so that max absolute value is 1 (L_infinity norm)
-     * @param demean Subtract each column's mean before normalizing
-     * @param demed Subtract each column's median before normalizing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dnorm" as const,
+        "@type": "afni.1dnorm" as const,
         "infile": infile,
         "outfile": outfile,
         "norm1": norm1,
@@ -106,18 +106,18 @@ function v_1dnorm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dnorm_cargs(
     params: V1dnormParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dnorm");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -138,18 +138,18 @@ function v_1dnorm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dnorm_outputs(
     params: V1dnormParameters,
     execution: Execution,
 ): V1dnormOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dnormOutputs = {
         root: execution.outputFile("."),
         normalized_output: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -158,22 +158,22 @@ function v_1dnorm_outputs(
 }
 
 
+/**
+ * Normalize columns of a 1D file (AFNI ASCII list of numbers).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
+ */
 function v_1dnorm_execute(
     params: V1dnormParameters,
     execution: Execution,
 ): V1dnormOutputs {
-    /**
-     * Normalize columns of a 1D file (AFNI ASCII list of numbers).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dnorm_cargs(params, execution)
     const ret = v_1dnorm_outputs(params, execution)
@@ -182,6 +182,23 @@ function v_1dnorm_execute(
 }
 
 
+/**
+ * Normalize columns of a 1D file (AFNI ASCII list of numbers).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input AFNI *.1D file (ASCII list of numbers arranged in columns); if '-' input will be read from stdin.
+ * @param outfile Output AFNI *.1D file (normalized); if '-' output will be written to stdout.
+ * @param norm1 Normalize so sum of absolute values is 1 (L_1 norm)
+ * @param normx Normalize so that max absolute value is 1 (L_infinity norm)
+ * @param demean Subtract each column's mean before normalizing
+ * @param demed Subtract each column's median before normalizing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
+ */
 function v_1dnorm(
     infile: InputPathType,
     outfile: string,
@@ -191,23 +208,6 @@ function v_1dnorm(
     demed: boolean = false,
     runner: Runner | null = null,
 ): V1dnormOutputs {
-    /**
-     * Normalize columns of a 1D file (AFNI ASCII list of numbers).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input AFNI *.1D file (ASCII list of numbers arranged in columns); if '-' input will be read from stdin.
-     * @param outfile Output AFNI *.1D file (normalized); if '-' output will be written to stdout.
-     * @param norm1 Normalize so sum of absolute values is 1 (L_1 norm)
-     * @param normx Normalize so that max absolute value is 1 (L_infinity norm)
-     * @param demean Subtract each column's mean before normalizing
-     * @param demed Subtract each column's median before normalizing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DNORM_METADATA);
     const params = v_1dnorm_params(infile, outfile, norm1, normx, demean, demed)
@@ -220,5 +220,8 @@ export {
       V1dnormParameters,
       V_1DNORM_METADATA,
       v_1dnorm,
+      v_1dnorm_cargs,
+      v_1dnorm_execute,
+      v_1dnorm_outputs,
       v_1dnorm_params,
 };

@@ -12,7 +12,7 @@ const EXTRACTTXT_METADATA: Metadata = {
 
 
 interface ExtracttxtParameters {
-    "__STYXTYPE__": "extracttxt";
+    "@type": "fsl.extracttxt";
     "search_word": string;
     "file": InputPathType;
     "num_trailing_lines"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface ExtracttxtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "extracttxt": extracttxt_cargs,
+        "fsl.extracttxt": extracttxt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "extracttxt": extracttxt_outputs,
+        "fsl.extracttxt": extracttxt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface ExtracttxtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param search_word The word to search for in the file
+ * @param file Path to the file where text is to be extracted
+ * @param num_trailing_lines Number of trailing lines to include after the search word
+ * @param relative_start Relative start position to begin the search
+ *
+ * @returns Parameter dictionary
+ */
 function extracttxt_params(
     search_word: string,
     file: InputPathType,
     num_trailing_lines: number | null = 0,
     relative_start: number | null = 0,
 ): ExtracttxtParameters {
-    /**
-     * Build parameters.
-    
-     * @param search_word The word to search for in the file
-     * @param file Path to the file where text is to be extracted
-     * @param num_trailing_lines Number of trailing lines to include after the search word
-     * @param relative_start Relative start position to begin the search
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "extracttxt" as const,
+        "@type": "fsl.extracttxt" as const,
         "search_word": search_word,
         "file": file,
     };
@@ -102,18 +102,18 @@ function extracttxt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extracttxt_cargs(
     params: ExtracttxtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("extracttxt");
     cargs.push((params["search_word"] ?? null));
@@ -128,18 +128,18 @@ function extracttxt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function extracttxt_outputs(
     params: ExtracttxtParameters,
     execution: Execution,
 ): ExtracttxtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExtracttxtOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["output.txt"].join('')),
@@ -148,22 +148,22 @@ function extracttxt_outputs(
 }
 
 
+/**
+ * Extracts text from a file based on a search word.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
+ */
 function extracttxt_execute(
     params: ExtracttxtParameters,
     execution: Execution,
 ): ExtracttxtOutputs {
-    /**
-     * Extracts text from a file based on a search word.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
-     */
     params = execution.params(params)
     const cargs = extracttxt_cargs(params, execution)
     const ret = extracttxt_outputs(params, execution)
@@ -172,6 +172,21 @@ function extracttxt_execute(
 }
 
 
+/**
+ * Extracts text from a file based on a search word.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param search_word The word to search for in the file
+ * @param file Path to the file where text is to be extracted
+ * @param num_trailing_lines Number of trailing lines to include after the search word
+ * @param relative_start Relative start position to begin the search
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
+ */
 function extracttxt(
     search_word: string,
     file: InputPathType,
@@ -179,21 +194,6 @@ function extracttxt(
     relative_start: number | null = 0,
     runner: Runner | null = null,
 ): ExtracttxtOutputs {
-    /**
-     * Extracts text from a file based on a search word.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param search_word The word to search for in the file
-     * @param file Path to the file where text is to be extracted
-     * @param num_trailing_lines Number of trailing lines to include after the search word
-     * @param relative_start Relative start position to begin the search
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXTRACTTXT_METADATA);
     const params = extracttxt_params(search_word, file, num_trailing_lines, relative_start)
@@ -206,5 +206,8 @@ export {
       ExtracttxtOutputs,
       ExtracttxtParameters,
       extracttxt,
+      extracttxt_cargs,
+      extracttxt_execute,
+      extracttxt_outputs,
       extracttxt_params,
 };

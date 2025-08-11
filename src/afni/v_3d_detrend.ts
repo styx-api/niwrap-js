@@ -12,41 +12,41 @@ const V_3D_DETREND_METADATA: Metadata = {
 
 
 interface V3dDetrendParameters {
-    "__STYXTYPE__": "3dDetrend";
+    "@type": "afni.3dDetrend";
     "in_file": InputPathType;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDetrend": v_3d_detrend_cargs,
+        "afni.3dDetrend": v_3d_detrend_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDetrend": v_3d_detrend_outputs,
+        "afni.3dDetrend": v_3d_detrend_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface V3dDetrendOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3ddetrend.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_detrend_params(
     in_file: InputPathType,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
 ): V3dDetrendParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3ddetrend.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDetrend" as const,
+        "@type": "afni.3dDetrend" as const,
         "in_file": in_file,
     };
     if (outputtype !== null) {
@@ -96,18 +96,18 @@ function v_3d_detrend_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_detrend_cargs(
     params: V3dDetrendParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDetrend");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -118,18 +118,18 @@ function v_3d_detrend_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_detrend_outputs(
     params: V3dDetrendParameters,
     execution: Execution,
 ): V3dDetrendOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDetrendOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_detrend"].join('')),
@@ -139,22 +139,22 @@ function v_3d_detrend_outputs(
 }
 
 
+/**
+ * This program removes components from voxel time series using linear least squares.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDetrendOutputs`).
+ */
 function v_3d_detrend_execute(
     params: V3dDetrendParameters,
     execution: Execution,
 ): V3dDetrendOutputs {
-    /**
-     * This program removes components from voxel time series using linear least squares.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDetrendOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_detrend_cargs(params, execution)
     const ret = v_3d_detrend_outputs(params, execution)
@@ -163,24 +163,24 @@ function v_3d_detrend_execute(
 }
 
 
+/**
+ * This program removes components from voxel time series using linear least squares.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3ddetrend.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDetrendOutputs`).
+ */
 function v_3d_detrend(
     in_file: InputPathType,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     runner: Runner | null = null,
 ): V3dDetrendOutputs {
-    /**
-     * This program removes components from voxel time series using linear least squares.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3ddetrend.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDetrendOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DETREND_METADATA);
     const params = v_3d_detrend_params(in_file, outputtype)
@@ -193,5 +193,8 @@ export {
       V3dDetrendParameters,
       V_3D_DETREND_METADATA,
       v_3d_detrend,
+      v_3d_detrend_cargs,
+      v_3d_detrend_execute,
+      v_3d_detrend_outputs,
       v_3d_detrend_params,
 };

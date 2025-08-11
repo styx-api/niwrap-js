@@ -12,7 +12,7 @@ const TIMING_TOOL_PY_METADATA: Metadata = {
 
 
 interface TimingToolPyParameters {
-    "__STYXTYPE__": "timing_tool.py";
+    "@type": "afni.timing_tool.py";
     "timing_file"?: InputPathType | null | undefined;
     "output_file"?: string | null | undefined;
     "run_length"?: Array<number> | null | undefined;
@@ -35,35 +35,35 @@ interface TimingToolPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "timing_tool.py": timing_tool_py_cargs,
+        "afni.timing_tool.py": timing_tool_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "timing_tool.py": timing_tool_py_outputs,
+        "afni.timing_tool.py": timing_tool_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,31 @@ interface TimingToolPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timing_file Specify a stimulus timing file to load
+ * @param output_file Specify the output timing file
+ * @param run_length Specify the run duration(s), in seconds
+ * @param tr Specify the time resolution in 1D output (in seconds)
+ * @param offset Add OFFSET to every time in the main element
+ * @param extend_file Extend timing rows with those in NEW_FILE
+ * @param sort Sort the times, per row (run)
+ * @param scale_data Multiply every stim time by SCALAR
+ * @param shift_to_run_offset Shift times so first event is at start of run
+ * @param timing_to_1_d_file Convert stim_times format to stim_file
+ * @param stim_duration Specify the stimulus duration, in seconds
+ * @param multi_timing_files Specify multiple timing files to load
+ * @param multi_show_isi_stats Display timing and ISI statistics for the multiple timing files
+ * @param multi_show_timing Display info on multiple timing elements
+ * @param show_timing Display info on the main timing element
+ * @param multi_stim_duration Specify stimulus duration(s), in seconds, for multiple timing elements
+ * @param round_times_frac Round times to multiples of the TR (0.0 <= FRAC <= 1.0)
+ * @param truncate_times Truncate times to multiples of the TR
+ * @param multi_timing_event_list Create an event list file from multiple timing files
+ *
+ * @returns Parameter dictionary
+ */
 function timing_tool_py_params(
     timing_file: InputPathType | null = null,
     output_file: string | null = null,
@@ -111,33 +136,8 @@ function timing_tool_py_params(
     truncate_times: boolean = false,
     multi_timing_event_list: string | null = null,
 ): TimingToolPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param timing_file Specify a stimulus timing file to load
-     * @param output_file Specify the output timing file
-     * @param run_length Specify the run duration(s), in seconds
-     * @param tr Specify the time resolution in 1D output (in seconds)
-     * @param offset Add OFFSET to every time in the main element
-     * @param extend_file Extend timing rows with those in NEW_FILE
-     * @param sort Sort the times, per row (run)
-     * @param scale_data Multiply every stim time by SCALAR
-     * @param shift_to_run_offset Shift times so first event is at start of run
-     * @param timing_to_1_d_file Convert stim_times format to stim_file
-     * @param stim_duration Specify the stimulus duration, in seconds
-     * @param multi_timing_files Specify multiple timing files to load
-     * @param multi_show_isi_stats Display timing and ISI statistics for the multiple timing files
-     * @param multi_show_timing Display info on multiple timing elements
-     * @param show_timing Display info on the main timing element
-     * @param multi_stim_duration Specify stimulus duration(s), in seconds, for multiple timing elements
-     * @param round_times_frac Round times to multiples of the TR (0.0 <= FRAC <= 1.0)
-     * @param truncate_times Truncate times to multiples of the TR
-     * @param multi_timing_event_list Create an event list file from multiple timing files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "timing_tool.py" as const,
+        "@type": "afni.timing_tool.py" as const,
         "sort": sort,
         "multi_show_isi_stats": multi_show_isi_stats,
         "multi_show_timing": multi_show_timing,
@@ -190,18 +190,18 @@ function timing_tool_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function timing_tool_py_cargs(
     params: TimingToolPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("timing_tool.py");
     if ((params["timing_file"] ?? null) !== null) {
@@ -307,18 +307,18 @@ function timing_tool_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function timing_tool_py_outputs(
     params: TimingToolPyParameters,
     execution: Execution,
 ): TimingToolPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TimingToolPyOutputs = {
         root: execution.outputFile("."),
         output_timing_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -328,22 +328,22 @@ function timing_tool_py_outputs(
 }
 
 
+/**
+ * Tool for manipulating and evaluating stimulus timing files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
+ */
 function timing_tool_py_execute(
     params: TimingToolPyParameters,
     execution: Execution,
 ): TimingToolPyOutputs {
-    /**
-     * Tool for manipulating and evaluating stimulus timing files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = timing_tool_py_cargs(params, execution)
     const ret = timing_tool_py_outputs(params, execution)
@@ -352,6 +352,36 @@ function timing_tool_py_execute(
 }
 
 
+/**
+ * Tool for manipulating and evaluating stimulus timing files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param timing_file Specify a stimulus timing file to load
+ * @param output_file Specify the output timing file
+ * @param run_length Specify the run duration(s), in seconds
+ * @param tr Specify the time resolution in 1D output (in seconds)
+ * @param offset Add OFFSET to every time in the main element
+ * @param extend_file Extend timing rows with those in NEW_FILE
+ * @param sort Sort the times, per row (run)
+ * @param scale_data Multiply every stim time by SCALAR
+ * @param shift_to_run_offset Shift times so first event is at start of run
+ * @param timing_to_1_d_file Convert stim_times format to stim_file
+ * @param stim_duration Specify the stimulus duration, in seconds
+ * @param multi_timing_files Specify multiple timing files to load
+ * @param multi_show_isi_stats Display timing and ISI statistics for the multiple timing files
+ * @param multi_show_timing Display info on multiple timing elements
+ * @param show_timing Display info on the main timing element
+ * @param multi_stim_duration Specify stimulus duration(s), in seconds, for multiple timing elements
+ * @param round_times_frac Round times to multiples of the TR (0.0 <= FRAC <= 1.0)
+ * @param truncate_times Truncate times to multiples of the TR
+ * @param multi_timing_event_list Create an event list file from multiple timing files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
+ */
 function timing_tool_py(
     timing_file: InputPathType | null = null,
     output_file: string | null = null,
@@ -374,36 +404,6 @@ function timing_tool_py(
     multi_timing_event_list: string | null = null,
     runner: Runner | null = null,
 ): TimingToolPyOutputs {
-    /**
-     * Tool for manipulating and evaluating stimulus timing files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param timing_file Specify a stimulus timing file to load
-     * @param output_file Specify the output timing file
-     * @param run_length Specify the run duration(s), in seconds
-     * @param tr Specify the time resolution in 1D output (in seconds)
-     * @param offset Add OFFSET to every time in the main element
-     * @param extend_file Extend timing rows with those in NEW_FILE
-     * @param sort Sort the times, per row (run)
-     * @param scale_data Multiply every stim time by SCALAR
-     * @param shift_to_run_offset Shift times so first event is at start of run
-     * @param timing_to_1_d_file Convert stim_times format to stim_file
-     * @param stim_duration Specify the stimulus duration, in seconds
-     * @param multi_timing_files Specify multiple timing files to load
-     * @param multi_show_isi_stats Display timing and ISI statistics for the multiple timing files
-     * @param multi_show_timing Display info on multiple timing elements
-     * @param show_timing Display info on the main timing element
-     * @param multi_stim_duration Specify stimulus duration(s), in seconds, for multiple timing elements
-     * @param round_times_frac Round times to multiples of the TR (0.0 <= FRAC <= 1.0)
-     * @param truncate_times Truncate times to multiples of the TR
-     * @param multi_timing_event_list Create an event list file from multiple timing files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TIMING_TOOL_PY_METADATA);
     const params = timing_tool_py_params(timing_file, output_file, run_length, tr, offset, extend_file, sort, scale_data, shift_to_run_offset, timing_to_1_d_file, stim_duration, multi_timing_files, multi_show_isi_stats, multi_show_timing, show_timing, multi_stim_duration, round_times_frac, truncate_times, multi_timing_event_list)
@@ -416,5 +416,8 @@ export {
       TimingToolPyOutputs,
       TimingToolPyParameters,
       timing_tool_py,
+      timing_tool_py_cargs,
+      timing_tool_py_execute,
+      timing_tool_py_outputs,
       timing_tool_py_params,
 };

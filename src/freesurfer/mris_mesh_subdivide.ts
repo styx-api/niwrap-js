@@ -12,7 +12,7 @@ const MRIS_MESH_SUBDIVIDE_METADATA: Metadata = {
 
 
 interface MrisMeshSubdivideParameters {
-    "__STYXTYPE__": "mris_mesh_subdivide";
+    "@type": "freesurfer.mris_mesh_subdivide";
     "input_surface": InputPathType;
     "output_surface": string;
     "subdivision_method"?: "butterfly" | "loop" | "linear" | null | undefined;
@@ -20,35 +20,35 @@ interface MrisMeshSubdivideParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_mesh_subdivide": mris_mesh_subdivide_cargs,
+        "freesurfer.mris_mesh_subdivide": mris_mesh_subdivide_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_mesh_subdivide": mris_mesh_subdivide_outputs,
+        "freesurfer.mris_mesh_subdivide": mris_mesh_subdivide_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisMeshSubdivideOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Name of input surface file
+ * @param output_surface Name for output surface file (outputs to same directory as input if path not provided)
+ * @param subdivision_method Subdivision method: options are 'butterfly' (default), 'loop', or 'linear'
+ * @param iterations Number of subdivision iterations
+ *
+ * @returns Parameter dictionary
+ */
 function mris_mesh_subdivide_params(
     input_surface: InputPathType,
     output_surface: string,
     subdivision_method: "butterfly" | "loop" | "linear" | null = null,
     iterations: number | null = null,
 ): MrisMeshSubdivideParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Name of input surface file
-     * @param output_surface Name for output surface file (outputs to same directory as input if path not provided)
-     * @param subdivision_method Subdivision method: options are 'butterfly' (default), 'loop', or 'linear'
-     * @param iterations Number of subdivision iterations
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_mesh_subdivide" as const,
+        "@type": "freesurfer.mris_mesh_subdivide" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -102,18 +102,18 @@ function mris_mesh_subdivide_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_mesh_subdivide_cargs(
     params: MrisMeshSubdivideParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_mesh_subdivide");
     cargs.push(
@@ -140,18 +140,18 @@ function mris_mesh_subdivide_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_mesh_subdivide_outputs(
     params: MrisMeshSubdivideParameters,
     execution: Execution,
 ): MrisMeshSubdivideOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMeshSubdivideOutputs = {
         root: execution.outputFile("."),
         subdivided_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -160,22 +160,22 @@ function mris_mesh_subdivide_outputs(
 }
 
 
+/**
+ * This program will subdivide a triangular mesh surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
+ */
 function mris_mesh_subdivide_execute(
     params: MrisMeshSubdivideParameters,
     execution: Execution,
 ): MrisMeshSubdivideOutputs {
-    /**
-     * This program will subdivide a triangular mesh surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_mesh_subdivide_cargs(params, execution)
     const ret = mris_mesh_subdivide_outputs(params, execution)
@@ -184,6 +184,21 @@ function mris_mesh_subdivide_execute(
 }
 
 
+/**
+ * This program will subdivide a triangular mesh surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Name of input surface file
+ * @param output_surface Name for output surface file (outputs to same directory as input if path not provided)
+ * @param subdivision_method Subdivision method: options are 'butterfly' (default), 'loop', or 'linear'
+ * @param iterations Number of subdivision iterations
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
+ */
 function mris_mesh_subdivide(
     input_surface: InputPathType,
     output_surface: string,
@@ -191,21 +206,6 @@ function mris_mesh_subdivide(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisMeshSubdivideOutputs {
-    /**
-     * This program will subdivide a triangular mesh surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Name of input surface file
-     * @param output_surface Name for output surface file (outputs to same directory as input if path not provided)
-     * @param subdivision_method Subdivision method: options are 'butterfly' (default), 'loop', or 'linear'
-     * @param iterations Number of subdivision iterations
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MESH_SUBDIVIDE_METADATA);
     const params = mris_mesh_subdivide_params(input_surface, output_surface, subdivision_method, iterations)
@@ -218,5 +218,8 @@ export {
       MrisMeshSubdivideOutputs,
       MrisMeshSubdivideParameters,
       mris_mesh_subdivide,
+      mris_mesh_subdivide_cargs,
+      mris_mesh_subdivide_execute,
+      mris_mesh_subdivide_outputs,
       mris_mesh_subdivide_params,
 };

@@ -12,41 +12,41 @@ const MRI_REDUCE_METADATA: Metadata = {
 
 
 interface MriReduceParameters {
-    "__STYXTYPE__": "mri_reduce";
+    "@type": "freesurfer.mri_reduce";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_reduce": mri_reduce_cargs,
+        "freesurfer.mri_reduce": mri_reduce_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_reduce": mri_reduce_outputs,
+        "freesurfer.mri_reduce": mri_reduce_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriReduceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input MRI file
+ * @param output_file Output filename for the reduced MRI file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_reduce_params(
     input_file: InputPathType,
     output_file: string,
 ): MriReduceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input MRI file
-     * @param output_file Output filename for the reduced MRI file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_reduce" as const,
+        "@type": "freesurfer.mri_reduce" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function mri_reduce_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_reduce_cargs(
     params: MriReduceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_reduce");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function mri_reduce_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_reduce_outputs(
     params: MriReduceParameters,
     execution: Execution,
 ): MriReduceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriReduceOutputs = {
         root: execution.outputFile("."),
         reduced_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_reduce_outputs(
 }
 
 
+/**
+ * A tool to reduce MRI file dimensions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
+ */
 function mri_reduce_execute(
     params: MriReduceParameters,
     execution: Execution,
 ): MriReduceOutputs {
-    /**
-     * A tool to reduce MRI file dimensions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_reduce_cargs(params, execution)
     const ret = mri_reduce_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_reduce_execute(
 }
 
 
+/**
+ * A tool to reduce MRI file dimensions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input MRI file
+ * @param output_file Output filename for the reduced MRI file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
+ */
 function mri_reduce(
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): MriReduceOutputs {
-    /**
-     * A tool to reduce MRI file dimensions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input MRI file
-     * @param output_file Output filename for the reduced MRI file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_REDUCE_METADATA);
     const params = mri_reduce_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       MriReduceOutputs,
       MriReduceParameters,
       mri_reduce,
+      mri_reduce_cargs,
+      mri_reduce_execute,
+      mri_reduce_outputs,
       mri_reduce_params,
 };

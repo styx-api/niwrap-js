@@ -12,38 +12,38 @@ const INVFEATREG_METADATA: Metadata = {
 
 
 interface InvfeatregParameters {
-    "__STYXTYPE__": "invfeatreg";
+    "@type": "fsl.invfeatreg";
     "feat_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "invfeatreg": invfeatreg_cargs,
+        "fsl.invfeatreg": invfeatreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface InvfeatregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_directory FEAT Directory
+ *
+ * @returns Parameter dictionary
+ */
 function invfeatreg_params(
     feat_directory: string,
 ): InvfeatregParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_directory FEAT Directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "invfeatreg" as const,
+        "@type": "fsl.invfeatreg" as const,
         "feat_directory": feat_directory,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function invfeatreg_cargs(
     params: InvfeatregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("invfeatreg");
     cargs.push((params["feat_directory"] ?? null));
@@ -100,18 +100,18 @@ function invfeatreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function invfeatreg_outputs(
     params: InvfeatregParameters,
     execution: Execution,
 ): InvfeatregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InvfeatregOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function invfeatreg_outputs(
 }
 
 
+/**
+ * Inverse warp image using FNIRT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
+ */
 function invfeatreg_execute(
     params: InvfeatregParameters,
     execution: Execution,
 ): InvfeatregOutputs {
-    /**
-     * Inverse warp image using FNIRT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
-     */
     params = execution.params(params)
     const cargs = invfeatreg_cargs(params, execution)
     const ret = invfeatreg_outputs(params, execution)
@@ -143,22 +143,22 @@ function invfeatreg_execute(
 }
 
 
+/**
+ * Inverse warp image using FNIRT.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param feat_directory FEAT Directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
+ */
 function invfeatreg(
     feat_directory: string,
     runner: Runner | null = null,
 ): InvfeatregOutputs {
-    /**
-     * Inverse warp image using FNIRT.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param feat_directory FEAT Directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INVFEATREG_METADATA);
     const params = invfeatreg_params(feat_directory)
@@ -171,5 +171,8 @@ export {
       InvfeatregOutputs,
       InvfeatregParameters,
       invfeatreg,
+      invfeatreg_cargs,
+      invfeatreg_execute,
+      invfeatreg_outputs,
       invfeatreg_params,
 };

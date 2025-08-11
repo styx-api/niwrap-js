@@ -12,7 +12,7 @@ const MRI_FUSE_INTENSITY_IMAGES_METADATA: Metadata = {
 
 
 interface MriFuseIntensityImagesParameters {
-    "__STYXTYPE__": "mri_fuse_intensity_images";
+    "@type": "freesurfer.mri_fuse_intensity_images";
     "longitudinal_time_point_file": InputPathType;
     "input_volume": InputPathType;
     "transform_file": InputPathType;
@@ -20,35 +20,35 @@ interface MriFuseIntensityImagesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fuse_intensity_images": mri_fuse_intensity_images_cargs,
+        "freesurfer.mri_fuse_intensity_images": mri_fuse_intensity_images_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fuse_intensity_images": mri_fuse_intensity_images_outputs,
+        "freesurfer.mri_fuse_intensity_images": mri_fuse_intensity_images_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriFuseIntensityImagesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param longitudinal_time_point_file File containing the longitudinal time points
+ * @param input_volume Input volume to be fused
+ * @param transform_file File containing the transforms
+ * @param output_volume Output fused volume
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fuse_intensity_images_params(
     longitudinal_time_point_file: InputPathType,
     input_volume: InputPathType,
     transform_file: InputPathType,
     output_volume: string,
 ): MriFuseIntensityImagesParameters {
-    /**
-     * Build parameters.
-    
-     * @param longitudinal_time_point_file File containing the longitudinal time points
-     * @param input_volume Input volume to be fused
-     * @param transform_file File containing the transforms
-     * @param output_volume Output fused volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fuse_intensity_images" as const,
+        "@type": "freesurfer.mri_fuse_intensity_images" as const,
         "longitudinal_time_point_file": longitudinal_time_point_file,
         "input_volume": input_volume,
         "transform_file": transform_file,
@@ -98,18 +98,18 @@ function mri_fuse_intensity_images_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fuse_intensity_images_cargs(
     params: MriFuseIntensityImagesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fuse_intensity_images");
     cargs.push(execution.inputFile((params["longitudinal_time_point_file"] ?? null)));
@@ -120,18 +120,18 @@ function mri_fuse_intensity_images_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fuse_intensity_images_outputs(
     params: MriFuseIntensityImagesParameters,
     execution: Execution,
 ): MriFuseIntensityImagesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFuseIntensityImagesOutputs = {
         root: execution.outputFile("."),
         fused_intensity_image: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_fuse_intensity_images_outputs(
 }
 
 
+/**
+ * Fuses intensity images based on given transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
+ */
 function mri_fuse_intensity_images_execute(
     params: MriFuseIntensityImagesParameters,
     execution: Execution,
 ): MriFuseIntensityImagesOutputs {
-    /**
-     * Fuses intensity images based on given transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fuse_intensity_images_cargs(params, execution)
     const ret = mri_fuse_intensity_images_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_fuse_intensity_images_execute(
 }
 
 
+/**
+ * Fuses intensity images based on given transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param longitudinal_time_point_file File containing the longitudinal time points
+ * @param input_volume Input volume to be fused
+ * @param transform_file File containing the transforms
+ * @param output_volume Output fused volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
+ */
 function mri_fuse_intensity_images(
     longitudinal_time_point_file: InputPathType,
     input_volume: InputPathType,
@@ -171,21 +186,6 @@ function mri_fuse_intensity_images(
     output_volume: string,
     runner: Runner | null = null,
 ): MriFuseIntensityImagesOutputs {
-    /**
-     * Fuses intensity images based on given transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param longitudinal_time_point_file File containing the longitudinal time points
-     * @param input_volume Input volume to be fused
-     * @param transform_file File containing the transforms
-     * @param output_volume Output fused volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FUSE_INTENSITY_IMAGES_METADATA);
     const params = mri_fuse_intensity_images_params(longitudinal_time_point_file, input_volume, transform_file, output_volume)
@@ -198,5 +198,8 @@ export {
       MriFuseIntensityImagesOutputs,
       MriFuseIntensityImagesParameters,
       mri_fuse_intensity_images,
+      mri_fuse_intensity_images_cargs,
+      mri_fuse_intensity_images_execute,
+      mri_fuse_intensity_images_outputs,
       mri_fuse_intensity_images_params,
 };

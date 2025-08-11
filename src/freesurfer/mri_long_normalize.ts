@@ -12,7 +12,7 @@ const MRI_LONG_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriLongNormalizeParameters {
-    "__STYXTYPE__": "mri_long_normalize";
+    "@type": "freesurfer.mri_long_normalize";
     "input_vol": InputPathType;
     "base_tp_file": InputPathType;
     "output_vol": string;
@@ -27,35 +27,35 @@ interface MriLongNormalizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_long_normalize": mri_long_normalize_cargs,
+        "freesurfer.mri_long_normalize": mri_long_normalize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_long_normalize": mri_long_normalize_outputs,
+        "freesurfer.mri_long_normalize": mri_long_normalize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface MriLongNormalizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input MRI volume file.
+ * @param base_tp_file Base time point file.
+ * @param output_vol Output MRI volume file.
+ * @param normalization_iters Use n 3D normalization iterations (default is 2).
+ * @param disable_1d Disable 1D normalization.
+ * @param smooth_bias Smooth the bias field.
+ * @param aseg Aseg file specification.
+ * @param debug_gvx For debugging: specify Gvx, Gvy, Gvz.
+ * @param debug_gx For debugging: specify Gx, Gy, Gz.
+ * @param reading For reading: specify control points and bias field.
+ * @param print_usage Print usage information.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_long_normalize_params(
     input_vol: InputPathType,
     base_tp_file: InputPathType,
@@ -91,25 +108,8 @@ function mri_long_normalize_params(
     reading: Array<string> | null = null,
     print_usage: boolean = false,
 ): MriLongNormalizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input MRI volume file.
-     * @param base_tp_file Base time point file.
-     * @param output_vol Output MRI volume file.
-     * @param normalization_iters Use n 3D normalization iterations (default is 2).
-     * @param disable_1d Disable 1D normalization.
-     * @param smooth_bias Smooth the bias field.
-     * @param aseg Aseg file specification.
-     * @param debug_gvx For debugging: specify Gvx, Gvy, Gvz.
-     * @param debug_gx For debugging: specify Gx, Gy, Gz.
-     * @param reading For reading: specify control points and bias field.
-     * @param print_usage Print usage information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_long_normalize" as const,
+        "@type": "freesurfer.mri_long_normalize" as const,
         "input_vol": input_vol,
         "base_tp_file": base_tp_file,
         "output_vol": output_vol,
@@ -138,18 +138,18 @@ function mri_long_normalize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_long_normalize_cargs(
     params: MriLongNormalizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_long_normalize");
     cargs.push(execution.inputFile((params["input_vol"] ?? null)));
@@ -201,18 +201,18 @@ function mri_long_normalize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_long_normalize_outputs(
     params: MriLongNormalizeParameters,
     execution: Execution,
 ): MriLongNormalizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLongNormalizeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_vol"] ?? null)].join('')),
@@ -221,22 +221,22 @@ function mri_long_normalize_outputs(
 }
 
 
+/**
+ * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
+ */
 function mri_long_normalize_execute(
     params: MriLongNormalizeParameters,
     execution: Execution,
 ): MriLongNormalizeOutputs {
-    /**
-     * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_long_normalize_cargs(params, execution)
     const ret = mri_long_normalize_outputs(params, execution)
@@ -245,6 +245,28 @@ function mri_long_normalize_execute(
 }
 
 
+/**
+ * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input MRI volume file.
+ * @param base_tp_file Base time point file.
+ * @param output_vol Output MRI volume file.
+ * @param normalization_iters Use n 3D normalization iterations (default is 2).
+ * @param disable_1d Disable 1D normalization.
+ * @param smooth_bias Smooth the bias field.
+ * @param aseg Aseg file specification.
+ * @param debug_gvx For debugging: specify Gvx, Gvy, Gvz.
+ * @param debug_gx For debugging: specify Gx, Gy, Gz.
+ * @param reading For reading: specify control points and bias field.
+ * @param print_usage Print usage information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
+ */
 function mri_long_normalize(
     input_vol: InputPathType,
     base_tp_file: InputPathType,
@@ -259,28 +281,6 @@ function mri_long_normalize(
     print_usage: boolean = false,
     runner: Runner | null = null,
 ): MriLongNormalizeOutputs {
-    /**
-     * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input MRI volume file.
-     * @param base_tp_file Base time point file.
-     * @param output_vol Output MRI volume file.
-     * @param normalization_iters Use n 3D normalization iterations (default is 2).
-     * @param disable_1d Disable 1D normalization.
-     * @param smooth_bias Smooth the bias field.
-     * @param aseg Aseg file specification.
-     * @param debug_gvx For debugging: specify Gvx, Gvy, Gvz.
-     * @param debug_gx For debugging: specify Gx, Gy, Gz.
-     * @param reading For reading: specify control points and bias field.
-     * @param print_usage Print usage information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LONG_NORMALIZE_METADATA);
     const params = mri_long_normalize_params(input_vol, base_tp_file, output_vol, normalization_iters, disable_1d, smooth_bias, aseg, debug_gvx, debug_gx, reading, print_usage)
@@ -293,5 +293,8 @@ export {
       MriLongNormalizeOutputs,
       MriLongNormalizeParameters,
       mri_long_normalize,
+      mri_long_normalize_cargs,
+      mri_long_normalize_execute,
+      mri_long_normalize_outputs,
       mri_long_normalize_params,
 };

@@ -12,7 +12,7 @@ const UBER_SKEL_METADATA: Metadata = {
 
 
 interface UberSkelParameters {
-    "__STYXTYPE__": "uber_skel";
+    "@type": "afni.uber_skel";
     "qt_options"?: string | null | undefined;
     "no_gui_flag": boolean;
     "print_script": boolean;
@@ -27,33 +27,33 @@ interface UberSkelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "uber_skel": uber_skel_cargs,
+        "afni.uber_skel": uber_skel_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface UberSkelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qt_options Pass PyQt4 options directly to the GUI
+ * @param no_gui_flag Run without the GUI
+ * @param print_script Print the script
+ * @param save_script Save the script
+ * @param user_var Initialize user variables. Usage: -uvar <name> <value>
+ * @param help_howto_program Show programming comments
+ * @param help Show help
+ * @param help_gui Show help for the GUI
+ * @param history Show history
+ * @param show_valid_opts Show valid options
+ * @param version Show version
+ *
+ * @returns Parameter dictionary
+ */
 function uber_skel_params(
     qt_options: string | null = null,
     no_gui_flag: boolean = false,
@@ -86,25 +103,8 @@ function uber_skel_params(
     show_valid_opts: boolean = false,
     version: boolean = false,
 ): UberSkelParameters {
-    /**
-     * Build parameters.
-    
-     * @param qt_options Pass PyQt4 options directly to the GUI
-     * @param no_gui_flag Run without the GUI
-     * @param print_script Print the script
-     * @param save_script Save the script
-     * @param user_var Initialize user variables. Usage: -uvar <name> <value>
-     * @param help_howto_program Show programming comments
-     * @param help Show help
-     * @param help_gui Show help for the GUI
-     * @param history Show history
-     * @param show_valid_opts Show valid options
-     * @param version Show version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "uber_skel" as const,
+        "@type": "afni.uber_skel" as const,
         "no_gui_flag": no_gui_flag,
         "print_script": print_script,
         "help_howto_program": help_howto_program,
@@ -127,18 +127,18 @@ function uber_skel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function uber_skel_cargs(
     params: UberSkelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("uber_skel.py");
     if ((params["qt_options"] ?? null) !== null) {
@@ -187,18 +187,18 @@ function uber_skel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function uber_skel_outputs(
     params: UberSkelParameters,
     execution: Execution,
 ): UberSkelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UberSkelOutputs = {
         root: execution.outputFile("."),
     };
@@ -206,22 +206,22 @@ function uber_skel_outputs(
 }
 
 
+/**
+ * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
+ */
 function uber_skel_execute(
     params: UberSkelParameters,
     execution: Execution,
 ): UberSkelOutputs {
-    /**
-     * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
-     */
     params = execution.params(params)
     const cargs = uber_skel_cargs(params, execution)
     const ret = uber_skel_outputs(params, execution)
@@ -230,6 +230,28 @@ function uber_skel_execute(
 }
 
 
+/**
+ * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param qt_options Pass PyQt4 options directly to the GUI
+ * @param no_gui_flag Run without the GUI
+ * @param print_script Print the script
+ * @param save_script Save the script
+ * @param user_var Initialize user variables. Usage: -uvar <name> <value>
+ * @param help_howto_program Show programming comments
+ * @param help Show help
+ * @param help_gui Show help for the GUI
+ * @param history Show history
+ * @param show_valid_opts Show valid options
+ * @param version Show version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
+ */
 function uber_skel(
     qt_options: string | null = null,
     no_gui_flag: boolean = false,
@@ -244,28 +266,6 @@ function uber_skel(
     version: boolean = false,
     runner: Runner | null = null,
 ): UberSkelOutputs {
-    /**
-     * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param qt_options Pass PyQt4 options directly to the GUI
-     * @param no_gui_flag Run without the GUI
-     * @param print_script Print the script
-     * @param save_script Save the script
-     * @param user_var Initialize user variables. Usage: -uvar <name> <value>
-     * @param help_howto_program Show programming comments
-     * @param help Show help
-     * @param help_gui Show help for the GUI
-     * @param history Show history
-     * @param show_valid_opts Show valid options
-     * @param version Show version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UBER_SKEL_METADATA);
     const params = uber_skel_params(qt_options, no_gui_flag, print_script, save_script, user_var, help_howto_program, help, help_gui, history, show_valid_opts, version)
@@ -278,5 +278,8 @@ export {
       UberSkelOutputs,
       UberSkelParameters,
       uber_skel,
+      uber_skel_cargs,
+      uber_skel_execute,
+      uber_skel_outputs,
       uber_skel_params,
 };

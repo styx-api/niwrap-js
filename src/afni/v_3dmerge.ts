@@ -12,7 +12,7 @@ const V_3DMERGE_METADATA: Metadata = {
 
 
 interface V3dmergeParameters {
-    "__STYXTYPE__": "3dmerge";
+    "@type": "afni.3dmerge";
     "input_files": Array<InputPathType>;
     "output_file": string;
     "blur_fwhm"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface V3dmergeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmerge": v_3dmerge_cargs,
+        "afni.3dmerge": v_3dmerge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmerge": v_3dmerge_outputs,
+        "afni.3dmerge": v_3dmerge_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface V3dmergeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input dataset files
+ * @param output_file Output dataset prefix
+ * @param blur_fwhm Gaussian blur with FWHM in mm
+ * @param threshold Threshold data to censor the intensities; only valid for 'fith', 'fico', or 'fitt' datasets
+ * @param clust Form clusters with connection distance and clip off data not in clusters of a minimum volume
+ * @param dindex Specify sub-brick #j as the data source
+ * @param tindex Specify sub-brick #k as the threshold source
+ * @param absolute Take absolute values of intensities
+ * @param dxyz Force cluster editing to behave as if all voxel dimensions were set to 1 mm
+ * @param gmean Combine datasets by averaging intensities (default)
+ * @param gmax Combine datasets by taking max intensity
+ * @param quiet Reduce the number of messages shown
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmerge_params(
     input_files: Array<InputPathType>,
     output_file: string,
@@ -93,26 +111,8 @@ function v_3dmerge_params(
     gmax: boolean = false,
     quiet: boolean = false,
 ): V3dmergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input dataset files
-     * @param output_file Output dataset prefix
-     * @param blur_fwhm Gaussian blur with FWHM in mm
-     * @param threshold Threshold data to censor the intensities; only valid for 'fith', 'fico', or 'fitt' datasets
-     * @param clust Form clusters with connection distance and clip off data not in clusters of a minimum volume
-     * @param dindex Specify sub-brick #j as the data source
-     * @param tindex Specify sub-brick #k as the threshold source
-     * @param absolute Take absolute values of intensities
-     * @param dxyz Force cluster editing to behave as if all voxel dimensions were set to 1 mm
-     * @param gmean Combine datasets by averaging intensities (default)
-     * @param gmax Combine datasets by taking max intensity
-     * @param quiet Reduce the number of messages shown
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmerge" as const,
+        "@type": "afni.3dmerge" as const,
         "input_files": input_files,
         "output_file": output_file,
         "absolute": absolute,
@@ -140,18 +140,18 @@ function v_3dmerge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmerge_cargs(
     params: V3dmergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmerge");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -208,18 +208,18 @@ function v_3dmerge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmerge_outputs(
     params: V3dmergeParameters,
     execution: Execution,
 ): V3dmergeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmergeOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -228,22 +228,22 @@ function v_3dmerge_outputs(
 }
 
 
+/**
+ * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
+ */
 function v_3dmerge_execute(
     params: V3dmergeParameters,
     execution: Execution,
 ): V3dmergeOutputs {
-    /**
-     * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmerge_cargs(params, execution)
     const ret = v_3dmerge_outputs(params, execution)
@@ -252,6 +252,29 @@ function v_3dmerge_execute(
 }
 
 
+/**
+ * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input dataset files
+ * @param output_file Output dataset prefix
+ * @param blur_fwhm Gaussian blur with FWHM in mm
+ * @param threshold Threshold data to censor the intensities; only valid for 'fith', 'fico', or 'fitt' datasets
+ * @param clust Form clusters with connection distance and clip off data not in clusters of a minimum volume
+ * @param dindex Specify sub-brick #j as the data source
+ * @param tindex Specify sub-brick #k as the threshold source
+ * @param absolute Take absolute values of intensities
+ * @param dxyz Force cluster editing to behave as if all voxel dimensions were set to 1 mm
+ * @param gmean Combine datasets by averaging intensities (default)
+ * @param gmax Combine datasets by taking max intensity
+ * @param quiet Reduce the number of messages shown
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
+ */
 function v_3dmerge(
     input_files: Array<InputPathType>,
     output_file: string,
@@ -267,29 +290,6 @@ function v_3dmerge(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dmergeOutputs {
-    /**
-     * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input dataset files
-     * @param output_file Output dataset prefix
-     * @param blur_fwhm Gaussian blur with FWHM in mm
-     * @param threshold Threshold data to censor the intensities; only valid for 'fith', 'fico', or 'fitt' datasets
-     * @param clust Form clusters with connection distance and clip off data not in clusters of a minimum volume
-     * @param dindex Specify sub-brick #j as the data source
-     * @param tindex Specify sub-brick #k as the threshold source
-     * @param absolute Take absolute values of intensities
-     * @param dxyz Force cluster editing to behave as if all voxel dimensions were set to 1 mm
-     * @param gmean Combine datasets by averaging intensities (default)
-     * @param gmax Combine datasets by taking max intensity
-     * @param quiet Reduce the number of messages shown
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMERGE_METADATA);
     const params = v_3dmerge_params(input_files, output_file, blur_fwhm, threshold, clust, dindex, tindex, absolute, dxyz, gmean, gmax, quiet)
@@ -302,5 +302,8 @@ export {
       V3dmergeParameters,
       V_3DMERGE_METADATA,
       v_3dmerge,
+      v_3dmerge_cargs,
+      v_3dmerge_execute,
+      v_3dmerge_outputs,
       v_3dmerge_params,
 };

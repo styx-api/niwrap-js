@@ -12,7 +12,7 @@ const LONG_MRIS_SLOPES_METADATA: Metadata = {
 
 
 interface LongMrisSlopesParameters {
-    "__STYXTYPE__": "long_mris_slopes";
+    "@type": "freesurfer.long_mris_slopes";
     "qdec": InputPathType;
     "meas": string;
     "hemi": string;
@@ -50,33 +50,33 @@ interface LongMrisSlopesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_mris_slopes": long_mris_slopes_cargs,
+        "freesurfer.long_mris_slopes": long_mris_slopes_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -96,6 +96,46 @@ interface LongMrisSlopesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec (REQUIRED) QDEC table file specifying the subjects and time points
+ * @param meas (REQUIRED) The surface input measure (e.g. thickness)
+ * @param hemi (REQUIRED) Run one hemisphere: lh or rh or both
+ * @param sd (REQUIRED) Full path to FreeSurfer subjects directory
+ * @param do_avg Compute and output the temporal average
+ * @param do_rate Compute and output the rate
+ * @param do_pc1fit Compute and output the percent change (w.r.t. tp1 from linear fit)
+ * @param do_pc1 Compute and output the percent change (w.r.t. tp1)
+ * @param do_spc Compute and output the symmetrized percent change (w.r.t. temporal average)
+ * @param do_stack Save the stacked within subject file (time series)
+ * @param do_label Compute and output intersected cortex label
+ * @param qcache Create cache for QDEC (resample to subject <QCACHE>, e.g. fsaverage)
+ * @param resid Residual time point (pass 1 for tp1 etc., pass 0 for average) to export
+ * @param fwhm Smoothing at specific FWHM (required for percent change)
+ * @param nosmooth Do not smooth the data
+ * @param time Variable name for time column variable (e.g. age) in QDEC table
+ * @param generic_time Time points are ordered in QDEC file, assume time=1,2,3...
+ * @param in_label Use pre-existing label for smoothing and to mask the output
+ * @param jac Use this flag when mapping area or volume maps to correct Jacobian
+ * @param name_avg Filename (without hemi ?h) to store temporal average
+ * @param name_rate Filename (without hemi ?h) to store rate
+ * @param name_pc1fit Filename (without hemi ?h) to store percent change fit
+ * @param name_pc1 Filename (without hemi ?h) to store percent change
+ * @param name_spc Filename (without hemi ?h) to store symmetrized percent change
+ * @param name_resid Filename (without hemi ?h) to store residual
+ * @param out_stack Filename to store stacked measure file
+ * @param out_label Filename to store within-subject intersected cortex labels
+ * @param isec_labels Intersect labels on <qtarget> (usually cortex labels)
+ * @param stack_avg Output stacked avg maps on <qtarget>
+ * @param stack_rate Output stacked rate maps on <qtarget>
+ * @param stack_pc1fit Output stacked PC1FIT maps on <qtarget>
+ * @param stack_pc1 Output stacked PC1 maps on <qtarget>
+ * @param stack_spc Output stacked SPC maps on <qtarget>
+ * @param stack_resid Output stacked residual maps on <qtarget>
+ *
+ * @returns Parameter dictionary
+ */
 function long_mris_slopes_params(
     qdec: InputPathType,
     meas: string,
@@ -132,48 +172,8 @@ function long_mris_slopes_params(
     stack_spc: string | null = null,
     stack_resid: string | null = null,
 ): LongMrisSlopesParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec (REQUIRED) QDEC table file specifying the subjects and time points
-     * @param meas (REQUIRED) The surface input measure (e.g. thickness)
-     * @param hemi (REQUIRED) Run one hemisphere: lh or rh or both
-     * @param sd (REQUIRED) Full path to FreeSurfer subjects directory
-     * @param do_avg Compute and output the temporal average
-     * @param do_rate Compute and output the rate
-     * @param do_pc1fit Compute and output the percent change (w.r.t. tp1 from linear fit)
-     * @param do_pc1 Compute and output the percent change (w.r.t. tp1)
-     * @param do_spc Compute and output the symmetrized percent change (w.r.t. temporal average)
-     * @param do_stack Save the stacked within subject file (time series)
-     * @param do_label Compute and output intersected cortex label
-     * @param qcache Create cache for QDEC (resample to subject <QCACHE>, e.g. fsaverage)
-     * @param resid Residual time point (pass 1 for tp1 etc., pass 0 for average) to export
-     * @param fwhm Smoothing at specific FWHM (required for percent change)
-     * @param nosmooth Do not smooth the data
-     * @param time Variable name for time column variable (e.g. age) in QDEC table
-     * @param generic_time Time points are ordered in QDEC file, assume time=1,2,3...
-     * @param in_label Use pre-existing label for smoothing and to mask the output
-     * @param jac Use this flag when mapping area or volume maps to correct Jacobian
-     * @param name_avg Filename (without hemi ?h) to store temporal average
-     * @param name_rate Filename (without hemi ?h) to store rate
-     * @param name_pc1fit Filename (without hemi ?h) to store percent change fit
-     * @param name_pc1 Filename (without hemi ?h) to store percent change
-     * @param name_spc Filename (without hemi ?h) to store symmetrized percent change
-     * @param name_resid Filename (without hemi ?h) to store residual
-     * @param out_stack Filename to store stacked measure file
-     * @param out_label Filename to store within-subject intersected cortex labels
-     * @param isec_labels Intersect labels on <qtarget> (usually cortex labels)
-     * @param stack_avg Output stacked avg maps on <qtarget>
-     * @param stack_rate Output stacked rate maps on <qtarget>
-     * @param stack_pc1fit Output stacked PC1FIT maps on <qtarget>
-     * @param stack_pc1 Output stacked PC1 maps on <qtarget>
-     * @param stack_spc Output stacked SPC maps on <qtarget>
-     * @param stack_resid Output stacked residual maps on <qtarget>
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_mris_slopes" as const,
+        "@type": "freesurfer.long_mris_slopes" as const,
         "qdec": qdec,
         "meas": meas,
         "hemi": hemi,
@@ -253,18 +253,18 @@ function long_mris_slopes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_mris_slopes_cargs(
     params: LongMrisSlopesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_mris_slopes");
     cargs.push(
@@ -437,18 +437,18 @@ function long_mris_slopes_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_mris_slopes_outputs(
     params: LongMrisSlopesParameters,
     execution: Execution,
 ): LongMrisSlopesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongMrisSlopesOutputs = {
         root: execution.outputFile("."),
     };
@@ -456,22 +456,22 @@ function long_mris_slopes_outputs(
 }
 
 
+/**
+ * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
+ */
 function long_mris_slopes_execute(
     params: LongMrisSlopesParameters,
     execution: Execution,
 ): LongMrisSlopesOutputs {
-    /**
-     * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_mris_slopes_cargs(params, execution)
     const ret = long_mris_slopes_outputs(params, execution)
@@ -480,6 +480,51 @@ function long_mris_slopes_execute(
 }
 
 
+/**
+ * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec (REQUIRED) QDEC table file specifying the subjects and time points
+ * @param meas (REQUIRED) The surface input measure (e.g. thickness)
+ * @param hemi (REQUIRED) Run one hemisphere: lh or rh or both
+ * @param sd (REQUIRED) Full path to FreeSurfer subjects directory
+ * @param do_avg Compute and output the temporal average
+ * @param do_rate Compute and output the rate
+ * @param do_pc1fit Compute and output the percent change (w.r.t. tp1 from linear fit)
+ * @param do_pc1 Compute and output the percent change (w.r.t. tp1)
+ * @param do_spc Compute and output the symmetrized percent change (w.r.t. temporal average)
+ * @param do_stack Save the stacked within subject file (time series)
+ * @param do_label Compute and output intersected cortex label
+ * @param qcache Create cache for QDEC (resample to subject <QCACHE>, e.g. fsaverage)
+ * @param resid Residual time point (pass 1 for tp1 etc., pass 0 for average) to export
+ * @param fwhm Smoothing at specific FWHM (required for percent change)
+ * @param nosmooth Do not smooth the data
+ * @param time Variable name for time column variable (e.g. age) in QDEC table
+ * @param generic_time Time points are ordered in QDEC file, assume time=1,2,3...
+ * @param in_label Use pre-existing label for smoothing and to mask the output
+ * @param jac Use this flag when mapping area or volume maps to correct Jacobian
+ * @param name_avg Filename (without hemi ?h) to store temporal average
+ * @param name_rate Filename (without hemi ?h) to store rate
+ * @param name_pc1fit Filename (without hemi ?h) to store percent change fit
+ * @param name_pc1 Filename (without hemi ?h) to store percent change
+ * @param name_spc Filename (without hemi ?h) to store symmetrized percent change
+ * @param name_resid Filename (without hemi ?h) to store residual
+ * @param out_stack Filename to store stacked measure file
+ * @param out_label Filename to store within-subject intersected cortex labels
+ * @param isec_labels Intersect labels on <qtarget> (usually cortex labels)
+ * @param stack_avg Output stacked avg maps on <qtarget>
+ * @param stack_rate Output stacked rate maps on <qtarget>
+ * @param stack_pc1fit Output stacked PC1FIT maps on <qtarget>
+ * @param stack_pc1 Output stacked PC1 maps on <qtarget>
+ * @param stack_spc Output stacked SPC maps on <qtarget>
+ * @param stack_resid Output stacked residual maps on <qtarget>
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
+ */
 function long_mris_slopes(
     qdec: InputPathType,
     meas: string,
@@ -517,51 +562,6 @@ function long_mris_slopes(
     stack_resid: string | null = null,
     runner: Runner | null = null,
 ): LongMrisSlopesOutputs {
-    /**
-     * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec (REQUIRED) QDEC table file specifying the subjects and time points
-     * @param meas (REQUIRED) The surface input measure (e.g. thickness)
-     * @param hemi (REQUIRED) Run one hemisphere: lh or rh or both
-     * @param sd (REQUIRED) Full path to FreeSurfer subjects directory
-     * @param do_avg Compute and output the temporal average
-     * @param do_rate Compute and output the rate
-     * @param do_pc1fit Compute and output the percent change (w.r.t. tp1 from linear fit)
-     * @param do_pc1 Compute and output the percent change (w.r.t. tp1)
-     * @param do_spc Compute and output the symmetrized percent change (w.r.t. temporal average)
-     * @param do_stack Save the stacked within subject file (time series)
-     * @param do_label Compute and output intersected cortex label
-     * @param qcache Create cache for QDEC (resample to subject <QCACHE>, e.g. fsaverage)
-     * @param resid Residual time point (pass 1 for tp1 etc., pass 0 for average) to export
-     * @param fwhm Smoothing at specific FWHM (required for percent change)
-     * @param nosmooth Do not smooth the data
-     * @param time Variable name for time column variable (e.g. age) in QDEC table
-     * @param generic_time Time points are ordered in QDEC file, assume time=1,2,3...
-     * @param in_label Use pre-existing label for smoothing and to mask the output
-     * @param jac Use this flag when mapping area or volume maps to correct Jacobian
-     * @param name_avg Filename (without hemi ?h) to store temporal average
-     * @param name_rate Filename (without hemi ?h) to store rate
-     * @param name_pc1fit Filename (without hemi ?h) to store percent change fit
-     * @param name_pc1 Filename (without hemi ?h) to store percent change
-     * @param name_spc Filename (without hemi ?h) to store symmetrized percent change
-     * @param name_resid Filename (without hemi ?h) to store residual
-     * @param out_stack Filename to store stacked measure file
-     * @param out_label Filename to store within-subject intersected cortex labels
-     * @param isec_labels Intersect labels on <qtarget> (usually cortex labels)
-     * @param stack_avg Output stacked avg maps on <qtarget>
-     * @param stack_rate Output stacked rate maps on <qtarget>
-     * @param stack_pc1fit Output stacked PC1FIT maps on <qtarget>
-     * @param stack_pc1 Output stacked PC1 maps on <qtarget>
-     * @param stack_spc Output stacked SPC maps on <qtarget>
-     * @param stack_resid Output stacked residual maps on <qtarget>
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_MRIS_SLOPES_METADATA);
     const params = long_mris_slopes_params(qdec, meas, hemi, sd, do_avg, do_rate, do_pc1fit, do_pc1, do_spc, do_stack, do_label, qcache, resid, fwhm, nosmooth, time, generic_time, in_label, jac, name_avg, name_rate, name_pc1fit, name_pc1, name_spc, name_resid, out_stack, out_label, isec_labels, stack_avg, stack_rate, stack_pc1fit, stack_pc1, stack_spc, stack_resid)
@@ -574,5 +574,8 @@ export {
       LongMrisSlopesOutputs,
       LongMrisSlopesParameters,
       long_mris_slopes,
+      long_mris_slopes_cargs,
+      long_mris_slopes_execute,
+      long_mris_slopes_outputs,
       long_mris_slopes_params,
 };

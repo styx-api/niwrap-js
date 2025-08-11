@@ -12,38 +12,38 @@ const MRI_RF_LONG_LABEL_METADATA: Metadata = {
 
 
 interface MriRfLongLabelParameters {
-    "__STYXTYPE__": "mri_rf_long_label";
+    "@type": "freesurfer.mri_rf_long_label";
     "help_flag"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_rf_long_label": mri_rf_long_label_cargs,
+        "freesurfer.mri_rf_long_label": mri_rf_long_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface MriRfLongLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param help_flag Displays a message that the tool has been removed.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_rf_long_label_params(
     help_flag: string | null = null,
 ): MriRfLongLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param help_flag Displays a message that the tool has been removed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_rf_long_label" as const,
+        "@type": "freesurfer.mri_rf_long_label" as const,
     };
     if (help_flag !== null) {
         params["help_flag"] = help_flag;
@@ -83,18 +83,18 @@ function mri_rf_long_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_rf_long_label_cargs(
     params: MriRfLongLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_rf_long_label");
     if ((params["help_flag"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function mri_rf_long_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_rf_long_label_outputs(
     params: MriRfLongLabelParameters,
     execution: Execution,
 ): MriRfLongLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRfLongLabelOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function mri_rf_long_label_outputs(
 }
 
 
+/**
+ * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
+ */
 function mri_rf_long_label_execute(
     params: MriRfLongLabelParameters,
     execution: Execution,
 ): MriRfLongLabelOutputs {
-    /**
-     * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_rf_long_label_cargs(params, execution)
     const ret = mri_rf_long_label_outputs(params, execution)
@@ -147,22 +147,22 @@ function mri_rf_long_label_execute(
 }
 
 
+/**
+ * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param help_flag Displays a message that the tool has been removed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
+ */
 function mri_rf_long_label(
     help_flag: string | null = null,
     runner: Runner | null = null,
 ): MriRfLongLabelOutputs {
-    /**
-     * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param help_flag Displays a message that the tool has been removed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RF_LONG_LABEL_METADATA);
     const params = mri_rf_long_label_params(help_flag)
@@ -175,5 +175,8 @@ export {
       MriRfLongLabelOutputs,
       MriRfLongLabelParameters,
       mri_rf_long_label,
+      mri_rf_long_label_cargs,
+      mri_rf_long_label_execute,
+      mri_rf_long_label_outputs,
       mri_rf_long_label_params,
 };

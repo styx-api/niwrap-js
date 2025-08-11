@@ -12,7 +12,7 @@ const METRIC_TO_VOLUME_MAPPING_METADATA: Metadata = {
 
 
 interface MetricToVolumeMappingRibbonConstrainedParameters {
-    "__STYXTYPE__": "ribbon_constrained";
+    "@type": "workbench.metric-to-volume-mapping.ribbon_constrained";
     "inner_surf": InputPathType;
     "outer_surf": InputPathType;
     "opt_voxel_subdiv_subdiv_num"?: number | null | undefined;
@@ -22,7 +22,7 @@ interface MetricToVolumeMappingRibbonConstrainedParameters {
 
 
 interface MetricToVolumeMappingParameters {
-    "__STYXTYPE__": "metric-to-volume-mapping";
+    "@type": "workbench.metric-to-volume-mapping";
     "metric": InputPathType;
     "surface": InputPathType;
     "volume_space": InputPathType;
@@ -32,41 +32,52 @@ interface MetricToVolumeMappingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-to-volume-mapping": metric_to_volume_mapping_cargs,
-        "ribbon_constrained": metric_to_volume_mapping_ribbon_constrained_cargs,
+        "workbench.metric-to-volume-mapping": metric_to_volume_mapping_cargs,
+        "workbench.metric-to-volume-mapping.ribbon_constrained": metric_to_volume_mapping_ribbon_constrained_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-to-volume-mapping": metric_to_volume_mapping_outputs,
+        "workbench.metric-to-volume-mapping": metric_to_volume_mapping_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inner_surf the inner surface of the ribbon
+ * @param outer_surf the outer surface of the ribbon
+ * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
+ * @param opt_greedy instead of antialiasing partial-volumed voxels, put full metric values (legacy behavior)
+ * @param opt_thick_columns use overlapping columns (legacy method)
+ *
+ * @returns Parameter dictionary
+ */
 function metric_to_volume_mapping_ribbon_constrained_params(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
@@ -74,19 +85,8 @@ function metric_to_volume_mapping_ribbon_constrained_params(
     opt_greedy: boolean = false,
     opt_thick_columns: boolean = false,
 ): MetricToVolumeMappingRibbonConstrainedParameters {
-    /**
-     * Build parameters.
-    
-     * @param inner_surf the inner surface of the ribbon
-     * @param outer_surf the outer surface of the ribbon
-     * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
-     * @param opt_greedy instead of antialiasing partial-volumed voxels, put full metric values (legacy behavior)
-     * @param opt_thick_columns use overlapping columns (legacy method)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ribbon_constrained" as const,
+        "@type": "workbench.metric-to-volume-mapping.ribbon_constrained" as const,
         "inner_surf": inner_surf,
         "outer_surf": outer_surf,
         "opt_greedy": opt_greedy,
@@ -99,18 +99,18 @@ function metric_to_volume_mapping_ribbon_constrained_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_to_volume_mapping_ribbon_constrained_cargs(
     params: MetricToVolumeMappingRibbonConstrainedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-ribbon-constrained");
     cargs.push(execution.inputFile((params["inner_surf"] ?? null)));
@@ -148,6 +148,18 @@ interface MetricToVolumeMappingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the input metric file
+ * @param surface the surface to use coordinates from
+ * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
+ * @param opt_nearest_vertex_distance use the value from the vertex closest to the voxel center: how far from the surface to map values to voxels, in mm
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
+ *
+ * @returns Parameter dictionary
+ */
 function metric_to_volume_mapping_params(
     metric: InputPathType,
     surface: InputPathType,
@@ -156,20 +168,8 @@ function metric_to_volume_mapping_params(
     opt_nearest_vertex_distance: number | null = null,
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
 ): MetricToVolumeMappingParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the input metric file
-     * @param surface the surface to use coordinates from
-     * @param volume_space a volume file in the desired output volume space
-     * @param volume_out the output volume file
-     * @param opt_nearest_vertex_distance use the value from the vertex closest to the voxel center: how far from the surface to map values to voxels, in mm
-     * @param ribbon_constrained use ribbon constrained mapping algorithm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-to-volume-mapping" as const,
+        "@type": "workbench.metric-to-volume-mapping" as const,
         "metric": metric,
         "surface": surface,
         "volume_space": volume_space,
@@ -185,18 +185,18 @@ function metric_to_volume_mapping_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_to_volume_mapping_cargs(
     params: MetricToVolumeMappingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-to-volume-mapping");
@@ -211,24 +211,24 @@ function metric_to_volume_mapping_cargs(
         );
     }
     if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null).__STYXTYPE__)((params["ribbon_constrained"] ?? null), execution));
+        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null)["@type"])((params["ribbon_constrained"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_to_volume_mapping_outputs(
     params: MetricToVolumeMappingParameters,
     execution: Execution,
 ): MetricToVolumeMappingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricToVolumeMappingOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -237,24 +237,24 @@ function metric_to_volume_mapping_outputs(
 }
 
 
+/**
+ * Map metric file to volume.
+ *
+ * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
+ */
 function metric_to_volume_mapping_execute(
     params: MetricToVolumeMappingParameters,
     execution: Execution,
 ): MetricToVolumeMappingOutputs {
-    /**
-     * Map metric file to volume.
-     * 
-     * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_to_volume_mapping_cargs(params, execution)
     const ret = metric_to_volume_mapping_outputs(params, execution)
@@ -263,6 +263,25 @@ function metric_to_volume_mapping_execute(
 }
 
 
+/**
+ * Map metric file to volume.
+ *
+ * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric the input metric file
+ * @param surface the surface to use coordinates from
+ * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
+ * @param opt_nearest_vertex_distance use the value from the vertex closest to the voxel center: how far from the surface to map values to voxels, in mm
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
+ */
 function metric_to_volume_mapping(
     metric: InputPathType,
     surface: InputPathType,
@@ -272,25 +291,6 @@ function metric_to_volume_mapping(
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
     runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
-    /**
-     * Map metric file to volume.
-     * 
-     * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric the input metric file
-     * @param surface the surface to use coordinates from
-     * @param volume_space a volume file in the desired output volume space
-     * @param volume_out the output volume file
-     * @param opt_nearest_vertex_distance use the value from the vertex closest to the voxel center: how far from the surface to map values to voxels, in mm
-     * @param ribbon_constrained use ribbon constrained mapping algorithm
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_TO_VOLUME_MAPPING_METADATA);
     const params = metric_to_volume_mapping_params(metric, surface, volume_space, volume_out, opt_nearest_vertex_distance, ribbon_constrained)
@@ -304,6 +304,10 @@ export {
       MetricToVolumeMappingParameters,
       MetricToVolumeMappingRibbonConstrainedParameters,
       metric_to_volume_mapping,
+      metric_to_volume_mapping_cargs,
+      metric_to_volume_mapping_execute,
+      metric_to_volume_mapping_outputs,
       metric_to_volume_mapping_params,
+      metric_to_volume_mapping_ribbon_constrained_cargs,
       metric_to_volume_mapping_ribbon_constrained_params,
 };

@@ -12,7 +12,7 @@ const APQC_MAKE_TCSH_PY_METADATA: Metadata = {
 
 
 interface ApqcMakeTcshPyParameters {
-    "__STYXTYPE__": "apqc_make_tcsh.py";
+    "@type": "afni.apqc_make_tcsh.py";
     "uvar_json": InputPathType;
     "subj_dir": string;
     "review_style"?: string | null | undefined;
@@ -21,33 +21,33 @@ interface ApqcMakeTcshPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "apqc_make_tcsh.py": apqc_make_tcsh_py_cargs,
+        "afni.apqc_make_tcsh.py": apqc_make_tcsh_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface ApqcMakeTcshPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param uvar_json Text file of user variables created by gen_ss_review.py that catalogs important files in the results directory for the APQC.
+ * @param subj_dir Location of AP results directory (often '.', as this program is often run from within the AP results directory).
+ * @param review_style The 'style' of the APQC HTML output HTML. Allowed keywords are: {none, basic, pythonic}. Using 'pythonic' is recommended.
+ * @param mot_grayplot_off Turn off the grayplot generation. This option was created for a specific case with a large dataset. Not recommended to use generally.
+ * @param vstat_list Provide a list of label items to specify which volume's images should appear in the vstat QC block. Each item should correspond to subbrick label basename in the stats_dset. 'Full_Fstat' is always included. If not used, default logic picks up to 5 items to show.
+ *
+ * @returns Parameter dictionary
+ */
 function apqc_make_tcsh_py_params(
     uvar_json: InputPathType,
     subj_dir: string,
@@ -74,19 +85,8 @@ function apqc_make_tcsh_py_params(
     mot_grayplot_off: boolean = false,
     vstat_list: Array<string> | null = null,
 ): ApqcMakeTcshPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param uvar_json Text file of user variables created by gen_ss_review.py that catalogs important files in the results directory for the APQC.
-     * @param subj_dir Location of AP results directory (often '.', as this program is often run from within the AP results directory).
-     * @param review_style The 'style' of the APQC HTML output HTML. Allowed keywords are: {none, basic, pythonic}. Using 'pythonic' is recommended.
-     * @param mot_grayplot_off Turn off the grayplot generation. This option was created for a specific case with a large dataset. Not recommended to use generally.
-     * @param vstat_list Provide a list of label items to specify which volume's images should appear in the vstat QC block. Each item should correspond to subbrick label basename in the stats_dset. 'Full_Fstat' is always included. If not used, default logic picks up to 5 items to show.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "apqc_make_tcsh.py" as const,
+        "@type": "afni.apqc_make_tcsh.py" as const,
         "uvar_json": uvar_json,
         "subj_dir": subj_dir,
         "mot_grayplot_off": mot_grayplot_off,
@@ -101,18 +101,18 @@ function apqc_make_tcsh_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function apqc_make_tcsh_py_cargs(
     params: ApqcMakeTcshPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("apqc_make_tcsh.py");
     cargs.push(
@@ -142,18 +142,18 @@ function apqc_make_tcsh_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function apqc_make_tcsh_py_outputs(
     params: ApqcMakeTcshPyParameters,
     execution: Execution,
 ): ApqcMakeTcshPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApqcMakeTcshPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -161,22 +161,22 @@ function apqc_make_tcsh_py_outputs(
 }
 
 
+/**
+ * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
+ */
 function apqc_make_tcsh_py_execute(
     params: ApqcMakeTcshPyParameters,
     execution: Execution,
 ): ApqcMakeTcshPyOutputs {
-    /**
-     * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = apqc_make_tcsh_py_cargs(params, execution)
     const ret = apqc_make_tcsh_py_outputs(params, execution)
@@ -185,6 +185,22 @@ function apqc_make_tcsh_py_execute(
 }
 
 
+/**
+ * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param uvar_json Text file of user variables created by gen_ss_review.py that catalogs important files in the results directory for the APQC.
+ * @param subj_dir Location of AP results directory (often '.', as this program is often run from within the AP results directory).
+ * @param review_style The 'style' of the APQC HTML output HTML. Allowed keywords are: {none, basic, pythonic}. Using 'pythonic' is recommended.
+ * @param mot_grayplot_off Turn off the grayplot generation. This option was created for a specific case with a large dataset. Not recommended to use generally.
+ * @param vstat_list Provide a list of label items to specify which volume's images should appear in the vstat QC block. Each item should correspond to subbrick label basename in the stats_dset. 'Full_Fstat' is always included. If not used, default logic picks up to 5 items to show.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
+ */
 function apqc_make_tcsh_py(
     uvar_json: InputPathType,
     subj_dir: string,
@@ -193,22 +209,6 @@ function apqc_make_tcsh_py(
     vstat_list: Array<string> | null = null,
     runner: Runner | null = null,
 ): ApqcMakeTcshPyOutputs {
-    /**
-     * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param uvar_json Text file of user variables created by gen_ss_review.py that catalogs important files in the results directory for the APQC.
-     * @param subj_dir Location of AP results directory (often '.', as this program is often run from within the AP results directory).
-     * @param review_style The 'style' of the APQC HTML output HTML. Allowed keywords are: {none, basic, pythonic}. Using 'pythonic' is recommended.
-     * @param mot_grayplot_off Turn off the grayplot generation. This option was created for a specific case with a large dataset. Not recommended to use generally.
-     * @param vstat_list Provide a list of label items to specify which volume's images should appear in the vstat QC block. Each item should correspond to subbrick label basename in the stats_dset. 'Full_Fstat' is always included. If not used, default logic picks up to 5 items to show.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APQC_MAKE_TCSH_PY_METADATA);
     const params = apqc_make_tcsh_py_params(uvar_json, subj_dir, review_style, mot_grayplot_off, vstat_list)
@@ -221,5 +221,8 @@ export {
       ApqcMakeTcshPyOutputs,
       ApqcMakeTcshPyParameters,
       apqc_make_tcsh_py,
+      apqc_make_tcsh_py_cargs,
+      apqc_make_tcsh_py_execute,
+      apqc_make_tcsh_py_outputs,
       apqc_make_tcsh_py_params,
 };

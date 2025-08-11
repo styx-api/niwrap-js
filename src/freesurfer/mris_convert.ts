@@ -12,7 +12,7 @@ const MRIS_CONVERT_METADATA: Metadata = {
 
 
 interface MrisConvertParameters {
-    "__STYXTYPE__": "mris_convert";
+    "@type": "freesurfer.mris_convert";
     "input_file": InputPathType;
     "second_input_file"?: InputPathType | null | undefined;
     "output_file": string;
@@ -54,35 +54,35 @@ interface MrisConvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_convert": mris_convert_cargs,
+        "freesurfer.mris_convert": mris_convert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_convert": mris_convert_outputs,
+        "freesurfer.mris_convert": mris_convert_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,50 @@ interface MrisConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input filename
+ * @param output_file Output filename
+ * @param second_input_file Second input filename to be combined, required for --combinesurfs
+ * @param patch Input file is a patch file, not a full surface
+ * @param curv_overlay_files Input scalar curv overlay files
+ * @param functional_data_file Input functional time-series or other multi-frame data
+ * @param orig_positions Read orig positions
+ * @param scale Scale vertex xyz by scale
+ * @param rescale Rescale vertex xyz so total area is same as group average
+ * @param talairach_xfm Apply talairach xfm of subject to vertex xyz
+ * @param normals Output ascii file where vertex data is the surface normal vector
+ * @param neighbors Write out neighbors of a vertex in each row
+ * @param xyz Print only surface xyz to ascii file
+ * @param annotation_file Input annotation or gifti label data
+ * @param parcstats_file Input text file containing label/val pairs for parcellation
+ * @param gifti_dataarray_num Input gifti dataarray number to use
+ * @param label_file Input .label file and name for this label
+ * @param label_stats_file Output gifti file to which label stats will be written
+ * @param combine_surfs Combine surface files, two input surface files required
+ * @param merge_gifti Generate combined gifti file with surface and multiple curvature data
+ * @param split_gifti Separate surface and data array from combined gifti file
+ * @param gifti_outdir Output directory for generated gifti files
+ * @param delete_cmds Delete command lines in surface
+ * @param center Put center of surface at (0,0,0)
+ * @param vol_geom Use MRIVol to set the volume geometry
+ * @param remove_vol_geom Set the valid flag in vg to 0
+ * @param to_surf Copy coordinates from surfcoords to output (good for patches)
+ * @param to_scanner Convert coordinates from native FS (tkr) coords to scanner coords
+ * @param to_tkr Convert coordinates from scanner coords to native FS (tkr) coords
+ * @param userealras Same as --to-scanner
+ * @param usesurfras Same as --to-tkr
+ * @param upsample Upsample N times by splitting edges/faces
+ * @param volume Compute vertex-wise volume
+ * @param area Compute vertex-wise area
+ * @param angle Compute cortical orientation angles
+ * @param label_to_mask Convert a surface-based label to a binary mask
+ * @param cras_add Shift center to scanner coordinate center
+ * @param cras_subtract Shift center from scanner coordinate center
+ *
+ * @returns Parameter dictionary
+ */
 function mris_convert_params(
     input_file: InputPathType,
     output_file: string,
@@ -145,52 +189,8 @@ function mris_convert_params(
     cras_add: boolean = false,
     cras_subtract: boolean = false,
 ): MrisConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input filename
-     * @param output_file Output filename
-     * @param second_input_file Second input filename to be combined, required for --combinesurfs
-     * @param patch Input file is a patch file, not a full surface
-     * @param curv_overlay_files Input scalar curv overlay files
-     * @param functional_data_file Input functional time-series or other multi-frame data
-     * @param orig_positions Read orig positions
-     * @param scale Scale vertex xyz by scale
-     * @param rescale Rescale vertex xyz so total area is same as group average
-     * @param talairach_xfm Apply talairach xfm of subject to vertex xyz
-     * @param normals Output ascii file where vertex data is the surface normal vector
-     * @param neighbors Write out neighbors of a vertex in each row
-     * @param xyz Print only surface xyz to ascii file
-     * @param annotation_file Input annotation or gifti label data
-     * @param parcstats_file Input text file containing label/val pairs for parcellation
-     * @param gifti_dataarray_num Input gifti dataarray number to use
-     * @param label_file Input .label file and name for this label
-     * @param label_stats_file Output gifti file to which label stats will be written
-     * @param combine_surfs Combine surface files, two input surface files required
-     * @param merge_gifti Generate combined gifti file with surface and multiple curvature data
-     * @param split_gifti Separate surface and data array from combined gifti file
-     * @param gifti_outdir Output directory for generated gifti files
-     * @param delete_cmds Delete command lines in surface
-     * @param center Put center of surface at (0,0,0)
-     * @param vol_geom Use MRIVol to set the volume geometry
-     * @param remove_vol_geom Set the valid flag in vg to 0
-     * @param to_surf Copy coordinates from surfcoords to output (good for patches)
-     * @param to_scanner Convert coordinates from native FS (tkr) coords to scanner coords
-     * @param to_tkr Convert coordinates from scanner coords to native FS (tkr) coords
-     * @param userealras Same as --to-scanner
-     * @param usesurfras Same as --to-tkr
-     * @param upsample Upsample N times by splitting edges/faces
-     * @param volume Compute vertex-wise volume
-     * @param area Compute vertex-wise area
-     * @param angle Compute cortical orientation angles
-     * @param label_to_mask Convert a surface-based label to a binary mask
-     * @param cras_add Shift center to scanner coordinate center
-     * @param cras_subtract Shift center from scanner coordinate center
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_convert" as const,
+        "@type": "freesurfer.mris_convert" as const,
         "input_file": input_file,
         "output_file": output_file,
         "patch": patch,
@@ -272,18 +272,18 @@ function mris_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_convert_cargs(
     params: MrisConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_convert");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -454,18 +454,18 @@ function mris_convert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_convert_outputs(
     params: MrisConvertParameters,
     execution: Execution,
 ): MrisConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisConvertOutputs = {
         root: execution.outputFile("."),
         converted_surface: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -474,22 +474,22 @@ function mris_convert_outputs(
 }
 
 
+/**
+ * This program will convert MRI-surface data formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
+ */
 function mris_convert_execute(
     params: MrisConvertParameters,
     execution: Execution,
 ): MrisConvertOutputs {
-    /**
-     * This program will convert MRI-surface data formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_convert_cargs(params, execution)
     const ret = mris_convert_outputs(params, execution)
@@ -498,6 +498,55 @@ function mris_convert_execute(
 }
 
 
+/**
+ * This program will convert MRI-surface data formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input filename
+ * @param output_file Output filename
+ * @param second_input_file Second input filename to be combined, required for --combinesurfs
+ * @param patch Input file is a patch file, not a full surface
+ * @param curv_overlay_files Input scalar curv overlay files
+ * @param functional_data_file Input functional time-series or other multi-frame data
+ * @param orig_positions Read orig positions
+ * @param scale Scale vertex xyz by scale
+ * @param rescale Rescale vertex xyz so total area is same as group average
+ * @param talairach_xfm Apply talairach xfm of subject to vertex xyz
+ * @param normals Output ascii file where vertex data is the surface normal vector
+ * @param neighbors Write out neighbors of a vertex in each row
+ * @param xyz Print only surface xyz to ascii file
+ * @param annotation_file Input annotation or gifti label data
+ * @param parcstats_file Input text file containing label/val pairs for parcellation
+ * @param gifti_dataarray_num Input gifti dataarray number to use
+ * @param label_file Input .label file and name for this label
+ * @param label_stats_file Output gifti file to which label stats will be written
+ * @param combine_surfs Combine surface files, two input surface files required
+ * @param merge_gifti Generate combined gifti file with surface and multiple curvature data
+ * @param split_gifti Separate surface and data array from combined gifti file
+ * @param gifti_outdir Output directory for generated gifti files
+ * @param delete_cmds Delete command lines in surface
+ * @param center Put center of surface at (0,0,0)
+ * @param vol_geom Use MRIVol to set the volume geometry
+ * @param remove_vol_geom Set the valid flag in vg to 0
+ * @param to_surf Copy coordinates from surfcoords to output (good for patches)
+ * @param to_scanner Convert coordinates from native FS (tkr) coords to scanner coords
+ * @param to_tkr Convert coordinates from scanner coords to native FS (tkr) coords
+ * @param userealras Same as --to-scanner
+ * @param usesurfras Same as --to-tkr
+ * @param upsample Upsample N times by splitting edges/faces
+ * @param volume Compute vertex-wise volume
+ * @param area Compute vertex-wise area
+ * @param angle Compute cortical orientation angles
+ * @param label_to_mask Convert a surface-based label to a binary mask
+ * @param cras_add Shift center to scanner coordinate center
+ * @param cras_subtract Shift center from scanner coordinate center
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
+ */
 function mris_convert(
     input_file: InputPathType,
     output_file: string,
@@ -539,55 +588,6 @@ function mris_convert(
     cras_subtract: boolean = false,
     runner: Runner | null = null,
 ): MrisConvertOutputs {
-    /**
-     * This program will convert MRI-surface data formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input filename
-     * @param output_file Output filename
-     * @param second_input_file Second input filename to be combined, required for --combinesurfs
-     * @param patch Input file is a patch file, not a full surface
-     * @param curv_overlay_files Input scalar curv overlay files
-     * @param functional_data_file Input functional time-series or other multi-frame data
-     * @param orig_positions Read orig positions
-     * @param scale Scale vertex xyz by scale
-     * @param rescale Rescale vertex xyz so total area is same as group average
-     * @param talairach_xfm Apply talairach xfm of subject to vertex xyz
-     * @param normals Output ascii file where vertex data is the surface normal vector
-     * @param neighbors Write out neighbors of a vertex in each row
-     * @param xyz Print only surface xyz to ascii file
-     * @param annotation_file Input annotation or gifti label data
-     * @param parcstats_file Input text file containing label/val pairs for parcellation
-     * @param gifti_dataarray_num Input gifti dataarray number to use
-     * @param label_file Input .label file and name for this label
-     * @param label_stats_file Output gifti file to which label stats will be written
-     * @param combine_surfs Combine surface files, two input surface files required
-     * @param merge_gifti Generate combined gifti file with surface and multiple curvature data
-     * @param split_gifti Separate surface and data array from combined gifti file
-     * @param gifti_outdir Output directory for generated gifti files
-     * @param delete_cmds Delete command lines in surface
-     * @param center Put center of surface at (0,0,0)
-     * @param vol_geom Use MRIVol to set the volume geometry
-     * @param remove_vol_geom Set the valid flag in vg to 0
-     * @param to_surf Copy coordinates from surfcoords to output (good for patches)
-     * @param to_scanner Convert coordinates from native FS (tkr) coords to scanner coords
-     * @param to_tkr Convert coordinates from scanner coords to native FS (tkr) coords
-     * @param userealras Same as --to-scanner
-     * @param usesurfras Same as --to-tkr
-     * @param upsample Upsample N times by splitting edges/faces
-     * @param volume Compute vertex-wise volume
-     * @param area Compute vertex-wise area
-     * @param angle Compute cortical orientation angles
-     * @param label_to_mask Convert a surface-based label to a binary mask
-     * @param cras_add Shift center to scanner coordinate center
-     * @param cras_subtract Shift center from scanner coordinate center
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CONVERT_METADATA);
     const params = mris_convert_params(input_file, output_file, second_input_file, patch, curv_overlay_files, functional_data_file, orig_positions, scale, rescale, talairach_xfm, normals, neighbors, xyz, annotation_file, parcstats_file, gifti_dataarray_num, label_file, label_stats_file, combine_surfs, merge_gifti, split_gifti, gifti_outdir, delete_cmds, center, vol_geom, remove_vol_geom, to_surf, to_scanner, to_tkr, userealras, usesurfras, upsample, volume, area, angle, label_to_mask, cras_add, cras_subtract)
@@ -600,5 +600,8 @@ export {
       MrisConvertOutputs,
       MrisConvertParameters,
       mris_convert,
+      mris_convert_cargs,
+      mris_convert_execute,
+      mris_convert_outputs,
       mris_convert_params,
 };

@@ -12,7 +12,7 @@ const EASYTHRESH_METADATA: Metadata = {
 
 
 interface EasythreshParameters {
-    "__STYXTYPE__": "easythresh";
+    "@type": "fsl.easythresh";
     "raw_zstat_input": InputPathType;
     "brain_mask_input": InputPathType;
     "cluster_z_thresh_input": number;
@@ -23,35 +23,35 @@ interface EasythreshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "easythresh": easythresh_cargs,
+        "fsl.easythresh": easythresh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "easythresh": easythresh_outputs,
+        "fsl.easythresh": easythresh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface EasythreshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param raw_zstat_input Input raw z-statistics image
+ * @param brain_mask_input Brain mask image
+ * @param cluster_z_thresh_input Cluster z-threshold
+ * @param cluster_prob_thresh_input Cluster probability threshold
+ * @param background_image_input Background image for thresholding
+ * @param output_root Root of output file names
+ * @param mm_flag Flag to indicate the use of mm (millimeters)
+ *
+ * @returns Parameter dictionary
+ */
 function easythresh_params(
     raw_zstat_input: InputPathType,
     brain_mask_input: InputPathType,
@@ -83,21 +96,8 @@ function easythresh_params(
     output_root: string,
     mm_flag: boolean = false,
 ): EasythreshParameters {
-    /**
-     * Build parameters.
-    
-     * @param raw_zstat_input Input raw z-statistics image
-     * @param brain_mask_input Brain mask image
-     * @param cluster_z_thresh_input Cluster z-threshold
-     * @param cluster_prob_thresh_input Cluster probability threshold
-     * @param background_image_input Background image for thresholding
-     * @param output_root Root of output file names
-     * @param mm_flag Flag to indicate the use of mm (millimeters)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "easythresh" as const,
+        "@type": "fsl.easythresh" as const,
         "raw_zstat_input": raw_zstat_input,
         "brain_mask_input": brain_mask_input,
         "cluster_z_thresh_input": cluster_z_thresh_input,
@@ -110,18 +110,18 @@ function easythresh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function easythresh_cargs(
     params: EasythreshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("easythresh");
     cargs.push(execution.inputFile((params["raw_zstat_input"] ?? null)));
@@ -137,18 +137,18 @@ function easythresh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function easythresh_outputs(
     params: EasythreshParameters,
     execution: Execution,
 ): EasythreshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EasythreshOutputs = {
         root: execution.outputFile("."),
         output_thresh_image: execution.outputFile([(params["output_root"] ?? null), "_thresh.nii.gz"].join('')),
@@ -157,22 +157,22 @@ function easythresh_outputs(
 }
 
 
+/**
+ * Cluster-based statistical thresholding tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
+ */
 function easythresh_execute(
     params: EasythreshParameters,
     execution: Execution,
 ): EasythreshOutputs {
-    /**
-     * Cluster-based statistical thresholding tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
-     */
     params = execution.params(params)
     const cargs = easythresh_cargs(params, execution)
     const ret = easythresh_outputs(params, execution)
@@ -181,6 +181,24 @@ function easythresh_execute(
 }
 
 
+/**
+ * Cluster-based statistical thresholding tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param raw_zstat_input Input raw z-statistics image
+ * @param brain_mask_input Brain mask image
+ * @param cluster_z_thresh_input Cluster z-threshold
+ * @param cluster_prob_thresh_input Cluster probability threshold
+ * @param background_image_input Background image for thresholding
+ * @param output_root Root of output file names
+ * @param mm_flag Flag to indicate the use of mm (millimeters)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
+ */
 function easythresh(
     raw_zstat_input: InputPathType,
     brain_mask_input: InputPathType,
@@ -191,24 +209,6 @@ function easythresh(
     mm_flag: boolean = false,
     runner: Runner | null = null,
 ): EasythreshOutputs {
-    /**
-     * Cluster-based statistical thresholding tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param raw_zstat_input Input raw z-statistics image
-     * @param brain_mask_input Brain mask image
-     * @param cluster_z_thresh_input Cluster z-threshold
-     * @param cluster_prob_thresh_input Cluster probability threshold
-     * @param background_image_input Background image for thresholding
-     * @param output_root Root of output file names
-     * @param mm_flag Flag to indicate the use of mm (millimeters)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EASYTHRESH_METADATA);
     const params = easythresh_params(raw_zstat_input, brain_mask_input, cluster_z_thresh_input, cluster_prob_thresh_input, background_image_input, output_root, mm_flag)
@@ -221,5 +221,8 @@ export {
       EasythreshOutputs,
       EasythreshParameters,
       easythresh,
+      easythresh_cargs,
+      easythresh_execute,
+      easythresh_outputs,
       easythresh_params,
 };

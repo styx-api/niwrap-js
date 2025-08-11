@@ -12,7 +12,7 @@ const STAT_NORMALIZE_METADATA: Metadata = {
 
 
 interface StatNormalizeParameters {
-    "__STYXTYPE__": "stat_normalize";
+    "@type": "freesurfer.stat_normalize";
     "input_sv_prefix": string;
     "output_sv_prefix": string;
     "resolution"?: number | null | undefined;
@@ -24,33 +24,33 @@ interface StatNormalizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "stat_normalize": stat_normalize_cargs,
+        "freesurfer.stat_normalize": stat_normalize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface StatNormalizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_sv_prefix Input subject volume prefix.
+ * @param output_sv_prefix Output subject volume prefix.
+ * @param resolution Set output resolution in mm (default is 8mm).
+ * @param field_of_view Set output field of view (default is 256).
+ * @param sph_avg Average in spherical coordinates by specifying hemisphere and surface.
+ * @param xfm_file Use specified transform file (subjid/mri/transforms/xfmfile).
+ * @param fix_xfm_flag Fix transform for non-zero center of original volume.
+ * @param float2int_option Specify float to int conversion to tkregister or round.
+ *
+ * @returns Parameter dictionary
+ */
 function stat_normalize_params(
     input_sv_prefix: string,
     output_sv_prefix: string,
@@ -80,22 +94,8 @@ function stat_normalize_params(
     fix_xfm_flag: boolean = false,
     float2int_option: string | null = null,
 ): StatNormalizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_sv_prefix Input subject volume prefix.
-     * @param output_sv_prefix Output subject volume prefix.
-     * @param resolution Set output resolution in mm (default is 8mm).
-     * @param field_of_view Set output field of view (default is 256).
-     * @param sph_avg Average in spherical coordinates by specifying hemisphere and surface.
-     * @param xfm_file Use specified transform file (subjid/mri/transforms/xfmfile).
-     * @param fix_xfm_flag Fix transform for non-zero center of original volume.
-     * @param float2int_option Specify float to int conversion to tkregister or round.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stat_normalize" as const,
+        "@type": "freesurfer.stat_normalize" as const,
         "input_sv_prefix": input_sv_prefix,
         "output_sv_prefix": output_sv_prefix,
         "fix_xfm_flag": fix_xfm_flag,
@@ -119,18 +119,18 @@ function stat_normalize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function stat_normalize_cargs(
     params: StatNormalizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("stat_normalize");
     cargs.push((params["input_sv_prefix"] ?? null));
@@ -172,18 +172,18 @@ function stat_normalize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function stat_normalize_outputs(
     params: StatNormalizeParameters,
     execution: Execution,
 ): StatNormalizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: StatNormalizeOutputs = {
         root: execution.outputFile("."),
     };
@@ -191,22 +191,22 @@ function stat_normalize_outputs(
 }
 
 
+/**
+ * This program will convert and average a sequence of volume-based statistics in Talairach space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
+ */
 function stat_normalize_execute(
     params: StatNormalizeParameters,
     execution: Execution,
 ): StatNormalizeOutputs {
-    /**
-     * This program will convert and average a sequence of volume-based statistics in Talairach space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = stat_normalize_cargs(params, execution)
     const ret = stat_normalize_outputs(params, execution)
@@ -215,6 +215,25 @@ function stat_normalize_execute(
 }
 
 
+/**
+ * This program will convert and average a sequence of volume-based statistics in Talairach space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_sv_prefix Input subject volume prefix.
+ * @param output_sv_prefix Output subject volume prefix.
+ * @param resolution Set output resolution in mm (default is 8mm).
+ * @param field_of_view Set output field of view (default is 256).
+ * @param sph_avg Average in spherical coordinates by specifying hemisphere and surface.
+ * @param xfm_file Use specified transform file (subjid/mri/transforms/xfmfile).
+ * @param fix_xfm_flag Fix transform for non-zero center of original volume.
+ * @param float2int_option Specify float to int conversion to tkregister or round.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
+ */
 function stat_normalize(
     input_sv_prefix: string,
     output_sv_prefix: string,
@@ -226,25 +245,6 @@ function stat_normalize(
     float2int_option: string | null = null,
     runner: Runner | null = null,
 ): StatNormalizeOutputs {
-    /**
-     * This program will convert and average a sequence of volume-based statistics in Talairach space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_sv_prefix Input subject volume prefix.
-     * @param output_sv_prefix Output subject volume prefix.
-     * @param resolution Set output resolution in mm (default is 8mm).
-     * @param field_of_view Set output field of view (default is 256).
-     * @param sph_avg Average in spherical coordinates by specifying hemisphere and surface.
-     * @param xfm_file Use specified transform file (subjid/mri/transforms/xfmfile).
-     * @param fix_xfm_flag Fix transform for non-zero center of original volume.
-     * @param float2int_option Specify float to int conversion to tkregister or round.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STAT_NORMALIZE_METADATA);
     const params = stat_normalize_params(input_sv_prefix, output_sv_prefix, resolution, field_of_view, sph_avg, xfm_file, fix_xfm_flag, float2int_option)
@@ -257,5 +257,8 @@ export {
       StatNormalizeOutputs,
       StatNormalizeParameters,
       stat_normalize,
+      stat_normalize_cargs,
+      stat_normalize_execute,
+      stat_normalize_outputs,
       stat_normalize_params,
 };

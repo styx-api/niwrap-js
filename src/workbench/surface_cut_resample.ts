@@ -12,7 +12,7 @@ const SURFACE_CUT_RESAMPLE_METADATA: Metadata = {
 
 
 interface SurfaceCutResampleParameters {
-    "__STYXTYPE__": "surface-cut-resample";
+    "@type": "workbench.surface-cut-resample";
     "surface_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -20,35 +20,35 @@ interface SurfaceCutResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-cut-resample": surface_cut_resample_cargs,
+        "workbench.surface-cut-resample": surface_cut_resample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-cut-resample": surface_cut_resample_outputs,
+        "workbench.surface-cut-resample": surface_cut_resample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SurfaceCutResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_in the surface file to resample
+ * @param current_sphere a sphere surface with the mesh that the input surface is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param surface_out the output surface file
+ *
+ * @returns Parameter dictionary
+ */
 function surface_cut_resample_params(
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     surface_out: string,
 ): SurfaceCutResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_in the surface file to resample
-     * @param current_sphere a sphere surface with the mesh that the input surface is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param surface_out the output surface file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-cut-resample" as const,
+        "@type": "workbench.surface-cut-resample" as const,
         "surface_in": surface_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -98,18 +98,18 @@ function surface_cut_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_cut_resample_cargs(
     params: SurfaceCutResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-cut-resample");
@@ -121,18 +121,18 @@ function surface_cut_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_cut_resample_outputs(
     params: SurfaceCutResampleParameters,
     execution: Execution,
 ): SurfaceCutResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceCutResampleOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -141,24 +141,24 @@ function surface_cut_resample_outputs(
 }
 
 
+/**
+ * Resample a cut surface.
+ *
+ * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
+ */
 function surface_cut_resample_execute(
     params: SurfaceCutResampleParameters,
     execution: Execution,
 ): SurfaceCutResampleOutputs {
-    /**
-     * Resample a cut surface.
-     * 
-     * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_cut_resample_cargs(params, execution)
     const ret = surface_cut_resample_outputs(params, execution)
@@ -167,6 +167,23 @@ function surface_cut_resample_execute(
 }
 
 
+/**
+ * Resample a cut surface.
+ *
+ * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface_in the surface file to resample
+ * @param current_sphere a sphere surface with the mesh that the input surface is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param surface_out the output surface file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
+ */
 function surface_cut_resample(
     surface_in: InputPathType,
     current_sphere: InputPathType,
@@ -174,23 +191,6 @@ function surface_cut_resample(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceCutResampleOutputs {
-    /**
-     * Resample a cut surface.
-     * 
-     * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface_in the surface file to resample
-     * @param current_sphere a sphere surface with the mesh that the input surface is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param surface_out the output surface file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_CUT_RESAMPLE_METADATA);
     const params = surface_cut_resample_params(surface_in, current_sphere, new_sphere, surface_out)
@@ -203,5 +203,8 @@ export {
       SurfaceCutResampleOutputs,
       SurfaceCutResampleParameters,
       surface_cut_resample,
+      surface_cut_resample_cargs,
+      surface_cut_resample_execute,
+      surface_cut_resample_outputs,
       surface_cut_resample_params,
 };

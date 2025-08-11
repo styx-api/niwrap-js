@@ -12,7 +12,7 @@ const V_3DEDGEDOG_METADATA: Metadata = {
 
 
 interface V3dedgedogParameters {
-    "__STYXTYPE__": "3dedgedog";
+    "@type": "afni.3dedgedog";
     "input": InputPathType;
     "prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface V3dedgedogParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dedgedog": v_3dedgedog_cargs,
+        "afni.3dedgedog": v_3dedgedog_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dedgedog": v_3dedgedog_outputs,
+        "afni.3dedgedog": v_3dedgedog_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,24 @@ interface V3dedgedogOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input dataset
+ * @param prefix Output prefix name
+ * @param mask Mask dataset applied after Euclidean Distance Transform calculation
+ * @param automask Calculate mask automatically. Optionally, you can provide an integer X to dilate the initial automask X times (e.g., -automask+X)
+ * @param sigma_rad Radius for 'inner' Gaussian, in mm; must be greater than 0 (default: 1.40)
+ * @param sigma_nvox Define radius for 'inner' Gaussian by providing a multiplicative factor for voxel edge length greater than 0 (default: use sigma_rad)
+ * @param ratio_sigma Ratio of inner and outer Gaussian sigma values (default: 1.40)
+ * @param output_intermed Output intermediate datasets: DOG, EDT2, BLURS (default: not output)
+ * @param edge_bnd_nn Nearest neighbor (NN) value for connectedness of boundaries; must be 1 (face only), 2 (face+edge), or 3 (face+edge+node) (default: 1)
+ * @param edge_bnd_side Specify boundary layer to use: NEG, POS, BOTH, BOTH_SIGN (default: NEG)
+ * @param edge_bnd_scale Scale edge values to have relative magnitude between 0 and 100 (default: edge locations have value=1)
+ * @param only2d Calculate edges in 2D per plane specified by SLI: 'axi', 'cor', 'sag'
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dedgedog_params(
     input: InputPathType,
     prefix: string,
@@ -109,26 +127,8 @@ function v_3dedgedog_params(
     edge_bnd_scale: boolean = false,
     only2d: string | null = null,
 ): V3dedgedogParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input dataset
-     * @param prefix Output prefix name
-     * @param mask Mask dataset applied after Euclidean Distance Transform calculation
-     * @param automask Calculate mask automatically. Optionally, you can provide an integer X to dilate the initial automask X times (e.g., -automask+X)
-     * @param sigma_rad Radius for 'inner' Gaussian, in mm; must be greater than 0 (default: 1.40)
-     * @param sigma_nvox Define radius for 'inner' Gaussian by providing a multiplicative factor for voxel edge length greater than 0 (default: use sigma_rad)
-     * @param ratio_sigma Ratio of inner and outer Gaussian sigma values (default: 1.40)
-     * @param output_intermed Output intermediate datasets: DOG, EDT2, BLURS (default: not output)
-     * @param edge_bnd_nn Nearest neighbor (NN) value for connectedness of boundaries; must be 1 (face only), 2 (face+edge), or 3 (face+edge+node) (default: 1)
-     * @param edge_bnd_side Specify boundary layer to use: NEG, POS, BOTH, BOTH_SIGN (default: NEG)
-     * @param edge_bnd_scale Scale edge values to have relative magnitude between 0 and 100 (default: edge locations have value=1)
-     * @param only2d Calculate edges in 2D per plane specified by SLI: 'axi', 'cor', 'sag'
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dedgedog" as const,
+        "@type": "afni.3dedgedog" as const,
         "input": input,
         "prefix": prefix,
         "output_intermed": output_intermed,
@@ -162,18 +162,18 @@ function v_3dedgedog_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dedgedog_cargs(
     params: V3dedgedogParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dedgedog");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -236,18 +236,18 @@ function v_3dedgedog_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dedgedog_outputs(
     params: V3dedgedogParameters,
     execution: Execution,
 ): V3dedgedogOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dedgedogOutputs = {
         root: execution.outputFile("."),
         out_edge: execution.outputFile([(params["prefix"] ?? null), "_edge.nii.gz"].join('')),
@@ -260,22 +260,22 @@ function v_3dedgedog_outputs(
 }
 
 
+/**
+ * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
+ */
 function v_3dedgedog_execute(
     params: V3dedgedogParameters,
     execution: Execution,
 ): V3dedgedogOutputs {
-    /**
-     * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dedgedog_cargs(params, execution)
     const ret = v_3dedgedog_outputs(params, execution)
@@ -284,6 +284,29 @@ function v_3dedgedog_execute(
 }
 
 
+/**
+ * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input dataset
+ * @param prefix Output prefix name
+ * @param mask Mask dataset applied after Euclidean Distance Transform calculation
+ * @param automask Calculate mask automatically. Optionally, you can provide an integer X to dilate the initial automask X times (e.g., -automask+X)
+ * @param sigma_rad Radius for 'inner' Gaussian, in mm; must be greater than 0 (default: 1.40)
+ * @param sigma_nvox Define radius for 'inner' Gaussian by providing a multiplicative factor for voxel edge length greater than 0 (default: use sigma_rad)
+ * @param ratio_sigma Ratio of inner and outer Gaussian sigma values (default: 1.40)
+ * @param output_intermed Output intermediate datasets: DOG, EDT2, BLURS (default: not output)
+ * @param edge_bnd_nn Nearest neighbor (NN) value for connectedness of boundaries; must be 1 (face only), 2 (face+edge), or 3 (face+edge+node) (default: 1)
+ * @param edge_bnd_side Specify boundary layer to use: NEG, POS, BOTH, BOTH_SIGN (default: NEG)
+ * @param edge_bnd_scale Scale edge values to have relative magnitude between 0 and 100 (default: edge locations have value=1)
+ * @param only2d Calculate edges in 2D per plane specified by SLI: 'axi', 'cor', 'sag'
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
+ */
 function v_3dedgedog(
     input: InputPathType,
     prefix: string,
@@ -299,29 +322,6 @@ function v_3dedgedog(
     only2d: string | null = null,
     runner: Runner | null = null,
 ): V3dedgedogOutputs {
-    /**
-     * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input dataset
-     * @param prefix Output prefix name
-     * @param mask Mask dataset applied after Euclidean Distance Transform calculation
-     * @param automask Calculate mask automatically. Optionally, you can provide an integer X to dilate the initial automask X times (e.g., -automask+X)
-     * @param sigma_rad Radius for 'inner' Gaussian, in mm; must be greater than 0 (default: 1.40)
-     * @param sigma_nvox Define radius for 'inner' Gaussian by providing a multiplicative factor for voxel edge length greater than 0 (default: use sigma_rad)
-     * @param ratio_sigma Ratio of inner and outer Gaussian sigma values (default: 1.40)
-     * @param output_intermed Output intermediate datasets: DOG, EDT2, BLURS (default: not output)
-     * @param edge_bnd_nn Nearest neighbor (NN) value for connectedness of boundaries; must be 1 (face only), 2 (face+edge), or 3 (face+edge+node) (default: 1)
-     * @param edge_bnd_side Specify boundary layer to use: NEG, POS, BOTH, BOTH_SIGN (default: NEG)
-     * @param edge_bnd_scale Scale edge values to have relative magnitude between 0 and 100 (default: edge locations have value=1)
-     * @param only2d Calculate edges in 2D per plane specified by SLI: 'axi', 'cor', 'sag'
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DEDGEDOG_METADATA);
     const params = v_3dedgedog_params(input, prefix, mask, automask, sigma_rad, sigma_nvox, ratio_sigma, output_intermed, edge_bnd_nn, edge_bnd_side, edge_bnd_scale, only2d)
@@ -334,5 +334,8 @@ export {
       V3dedgedogParameters,
       V_3DEDGEDOG_METADATA,
       v_3dedgedog,
+      v_3dedgedog_cargs,
+      v_3dedgedog_execute,
+      v_3dedgedog_outputs,
       v_3dedgedog_params,
 };

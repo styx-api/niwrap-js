@@ -12,7 +12,7 @@ const PLUGOUT_DRIVE_METADATA: Metadata = {
 
 
 interface PlugoutDriveParameters {
-    "__STYXTYPE__": "plugout_drive";
+    "@type": "afni.plugout_drive";
     "host"?: string | null | undefined;
     "shm": boolean;
     "verbose": boolean;
@@ -31,33 +31,33 @@ interface PlugoutDriveParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "plugout_drive": plugout_drive_cargs,
+        "afni.plugout_drive": plugout_drive_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface PlugoutDriveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
+ * @param shm Connect to the current host using shared memory for large data transfers.
+ * @param verbose Verbose mode.
+ * @param port Use TCP/IP port number. Default is 8099.
+ * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
+ * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
+ * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
+ * @param quit Quit after executing all -com commands. Default is to wait for more commands.
+ * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
+ * @param npq Like -np but quieter in the face of adversity.
+ * @param npb Similar to -np, but using a block for easier usage.
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
+ *
+ * @returns Parameter dictionary
+ */
 function plugout_drive_params(
     host: string | null = null,
     shm: boolean = false,
@@ -94,29 +115,8 @@ function plugout_drive_params(
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
 ): PlugoutDriveParameters {
-    /**
-     * Build parameters.
-    
-     * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
-     * @param shm Connect to the current host using shared memory for large data transfers.
-     * @param verbose Verbose mode.
-     * @param port Use TCP/IP port number. Default is 8099.
-     * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
-     * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
-     * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
-     * @param quit Quit after executing all -com commands. Default is to wait for more commands.
-     * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
-     * @param npq Like -np but quieter in the face of adversity.
-     * @param npb Similar to -np, but using a block for easier usage.
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plugout_drive" as const,
+        "@type": "afni.plugout_drive" as const,
         "shm": shm,
         "verbose": verbose,
         "quit": quit,
@@ -153,18 +153,18 @@ function plugout_drive_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function plugout_drive_cargs(
     params: PlugoutDriveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("plugout_drive");
     if ((params["host"] ?? null) !== null) {
@@ -240,18 +240,18 @@ function plugout_drive_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function plugout_drive_outputs(
     params: PlugoutDriveParameters,
     execution: Execution,
 ): PlugoutDriveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PlugoutDriveOutputs = {
         root: execution.outputFile("."),
     };
@@ -259,22 +259,22 @@ function plugout_drive_outputs(
 }
 
 
+/**
+ * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
+ */
 function plugout_drive_execute(
     params: PlugoutDriveParameters,
     execution: Execution,
 ): PlugoutDriveOutputs {
-    /**
-     * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
-     */
     params = execution.params(params)
     const cargs = plugout_drive_cargs(params, execution)
     const ret = plugout_drive_outputs(params, execution)
@@ -283,6 +283,32 @@ function plugout_drive_execute(
 }
 
 
+/**
+ * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
+ * @param shm Connect to the current host using shared memory for large data transfers.
+ * @param verbose Verbose mode.
+ * @param port Use TCP/IP port number. Default is 8099.
+ * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
+ * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
+ * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
+ * @param quit Quit after executing all -com commands. Default is to wait for more commands.
+ * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
+ * @param npq Like -np but quieter in the face of adversity.
+ * @param npb Similar to -np, but using a block for easier usage.
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
+ */
 function plugout_drive(
     host: string | null = null,
     shm: boolean = false,
@@ -301,32 +327,6 @@ function plugout_drive(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutDriveOutputs {
-    /**
-     * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param host Connect to AFNI running on the specified host using TCP/IP. Default is 'localhost'.
-     * @param shm Connect to the current host using shared memory for large data transfers.
-     * @param verbose Verbose mode.
-     * @param port Use TCP/IP port number. Default is 8099.
-     * @param maxwait Maximum wait time in seconds for AFNI to connect. Default is 9 seconds.
-     * @param name Name that AFNI assigns to this plugout. Default is a pre-defined name.
-     * @param command Command to be executed on AFNI. Example: '-com "SET_FUNCTION SomeFunction"'.
-     * @param quit Quit after executing all -com commands. Default is to wait for more commands.
-     * @param np Provide a port offset to allow multiple instances of AFNI <--> SUMA, etc., on the same machine.
-     * @param npq Like -np but quieter in the face of adversity.
-     * @param npb Similar to -np, but using a block for easier usage.
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI and exit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI and exit quietly.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLUGOUT_DRIVE_METADATA);
     const params = plugout_drive_params(host, shm, verbose, port, maxwait, name, command, quit, np, npq, npb, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
@@ -339,5 +339,8 @@ export {
       PlugoutDriveOutputs,
       PlugoutDriveParameters,
       plugout_drive,
+      plugout_drive_cargs,
+      plugout_drive_execute,
+      plugout_drive_outputs,
       plugout_drive_params,
 };

@@ -12,7 +12,7 @@ const CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA: Metadata = {
 
 
 interface CiftiCreateDenseFromTemplateSeriesParameters {
-    "__STYXTYPE__": "series";
+    "@type": "workbench.cifti-create-dense-from-template.series";
     "step": number;
     "start": number;
     "opt_unit_unit"?: string | null | undefined;
@@ -20,34 +20,34 @@ interface CiftiCreateDenseFromTemplateSeriesParameters {
 
 
 interface CiftiCreateDenseFromTemplateVolumeAllParameters {
-    "__STYXTYPE__": "volume_all";
+    "@type": "workbench.cifti-create-dense-from-template.volume_all";
     "volume_in": InputPathType;
     "opt_from_cropped": boolean;
 }
 
 
 interface CiftiCreateDenseFromTemplateCiftiParameters {
-    "__STYXTYPE__": "cifti";
+    "@type": "workbench.cifti-create-dense-from-template.cifti";
     "cifti_in": InputPathType;
 }
 
 
 interface CiftiCreateDenseFromTemplateMetricParameters {
-    "__STYXTYPE__": "metric";
+    "@type": "workbench.cifti-create-dense-from-template.metric";
     "structure": string;
     "metric_in": InputPathType;
 }
 
 
 interface CiftiCreateDenseFromTemplateLabelParameters {
-    "__STYXTYPE__": "label";
+    "@type": "workbench.cifti-create-dense-from-template.label";
     "structure": string;
     "label_in": InputPathType;
 }
 
 
 interface CiftiCreateDenseFromTemplateVolumeParameters {
-    "__STYXTYPE__": "volume";
+    "@type": "workbench.cifti-create-dense-from-template.volume";
     "structure": string;
     "volume_in": InputPathType;
     "opt_from_cropped": boolean;
@@ -55,7 +55,7 @@ interface CiftiCreateDenseFromTemplateVolumeParameters {
 
 
 interface CiftiCreateDenseFromTemplateParameters {
-    "__STYXTYPE__": "cifti-create-dense-from-template";
+    "@type": "workbench.cifti-create-dense-from-template";
     "template_cifti": InputPathType;
     "cifti_out": string;
     "series"?: CiftiCreateDenseFromTemplateSeriesParameters | null | undefined;
@@ -68,62 +68,62 @@ interface CiftiCreateDenseFromTemplateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-create-dense-from-template": cifti_create_dense_from_template_cargs,
-        "series": cifti_create_dense_from_template_series_cargs,
-        "volume_all": cifti_create_dense_from_template_volume_all_cargs,
-        "cifti": cifti_create_dense_from_template_cifti_cargs,
-        "metric": cifti_create_dense_from_template_metric_cargs,
-        "label": cifti_create_dense_from_template_label_cargs,
-        "volume": cifti_create_dense_from_template_volume_cargs,
+        "workbench.cifti-create-dense-from-template": cifti_create_dense_from_template_cargs,
+        "workbench.cifti-create-dense-from-template.series": cifti_create_dense_from_template_series_cargs,
+        "workbench.cifti-create-dense-from-template.volume_all": cifti_create_dense_from_template_volume_all_cargs,
+        "workbench.cifti-create-dense-from-template.cifti": cifti_create_dense_from_template_cifti_cargs,
+        "workbench.cifti-create-dense-from-template.metric": cifti_create_dense_from_template_metric_cargs,
+        "workbench.cifti-create-dense-from-template.label": cifti_create_dense_from_template_label_cargs,
+        "workbench.cifti-create-dense-from-template.volume": cifti_create_dense_from_template_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-create-dense-from-template": cifti_create_dense_from_template_outputs,
+        "workbench.cifti-create-dense-from-template": cifti_create_dense_from_template_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param step increment between series points
+ * @param start start value of the series
+ * @param opt_unit_unit select unit for series (default SECOND): unit identifier
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_series_params(
     step: number,
     start: number,
     opt_unit_unit: string | null = null,
 ): CiftiCreateDenseFromTemplateSeriesParameters {
-    /**
-     * Build parameters.
-    
-     * @param step increment between series points
-     * @param start start value of the series
-     * @param opt_unit_unit select unit for series (default SECOND): unit identifier
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "series" as const,
+        "@type": "workbench.cifti-create-dense-from-template.series" as const,
         "step": step,
         "start": start,
     };
@@ -134,18 +134,18 @@ function cifti_create_dense_from_template_series_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_series_cargs(
     params: CiftiCreateDenseFromTemplateSeriesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-series");
     cargs.push(String((params["step"] ?? null)));
@@ -160,20 +160,20 @@ function cifti_create_dense_from_template_series_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input volume file
+ * @param opt_from_cropped the input is cropped to the size of the voxel data in the template file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_volume_all_params(
     volume_in: InputPathType,
     opt_from_cropped: boolean = false,
 ): CiftiCreateDenseFromTemplateVolumeAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input volume file
-     * @param opt_from_cropped the input is cropped to the size of the voxel data in the template file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume_all" as const,
+        "@type": "workbench.cifti-create-dense-from-template.volume_all" as const,
         "volume_in": volume_in,
         "opt_from_cropped": opt_from_cropped,
     };
@@ -181,18 +181,18 @@ function cifti_create_dense_from_template_volume_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_volume_all_cargs(
     params: CiftiCreateDenseFromTemplateVolumeAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume-all");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
@@ -203,36 +203,36 @@ function cifti_create_dense_from_template_volume_all_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in cifti file containing input data
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_cifti_params(
     cifti_in: InputPathType,
 ): CiftiCreateDenseFromTemplateCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in cifti file containing input data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti" as const,
+        "@type": "workbench.cifti-create-dense-from-template.cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_cifti_cargs(
     params: CiftiCreateDenseFromTemplateCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -240,20 +240,20 @@ function cifti_create_dense_from_template_cifti_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure which structure to put the metric file into
+ * @param metric_in input metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_metric_params(
     structure: string,
     metric_in: InputPathType,
 ): CiftiCreateDenseFromTemplateMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure which structure to put the metric file into
-     * @param metric_in input metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric" as const,
+        "@type": "workbench.cifti-create-dense-from-template.metric" as const,
         "structure": structure,
         "metric_in": metric_in,
     };
@@ -261,18 +261,18 @@ function cifti_create_dense_from_template_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_metric_cargs(
     params: CiftiCreateDenseFromTemplateMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-metric");
     cargs.push((params["structure"] ?? null));
@@ -281,20 +281,20 @@ function cifti_create_dense_from_template_metric_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure which structure to put the label file into
+ * @param label_in input label file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_label_params(
     structure: string,
     label_in: InputPathType,
 ): CiftiCreateDenseFromTemplateLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure which structure to put the label file into
-     * @param label_in input label file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label" as const,
+        "@type": "workbench.cifti-create-dense-from-template.label" as const,
         "structure": structure,
         "label_in": label_in,
     };
@@ -302,18 +302,18 @@ function cifti_create_dense_from_template_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_label_cargs(
     params: CiftiCreateDenseFromTemplateLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-label");
     cargs.push((params["structure"] ?? null));
@@ -322,22 +322,22 @@ function cifti_create_dense_from_template_label_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure which structure to put the volume file into
+ * @param volume_in the input volume file
+ * @param opt_from_cropped the input is cropped to the size of the volume structure
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_volume_params(
     structure: string,
     volume_in: InputPathType,
     opt_from_cropped: boolean = false,
 ): CiftiCreateDenseFromTemplateVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure which structure to put the volume file into
-     * @param volume_in the input volume file
-     * @param opt_from_cropped the input is cropped to the size of the volume structure
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume" as const,
+        "@type": "workbench.cifti-create-dense-from-template.volume" as const,
         "structure": structure,
         "volume_in": volume_in,
         "opt_from_cropped": opt_from_cropped,
@@ -346,18 +346,18 @@ function cifti_create_dense_from_template_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_volume_cargs(
     params: CiftiCreateDenseFromTemplateVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume");
     cargs.push((params["structure"] ?? null));
@@ -386,6 +386,21 @@ interface CiftiCreateDenseFromTemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template_cifti file to match brainordinates of
+ * @param cifti_out the output cifti file
+ * @param series make a dtseries file instead of a dscalar
+ * @param volume_all specify an input volume file for all voxel data
+ * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param cifti use input data from a cifti file
+ * @param metric use input data from a metric file
+ * @param label use input data from surface label files
+ * @param volume use a volume file for a single volume structure's data
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_from_template_params(
     template_cifti: InputPathType,
     cifti_out: string,
@@ -397,23 +412,8 @@ function cifti_create_dense_from_template_params(
     label: Array<CiftiCreateDenseFromTemplateLabelParameters> | null = null,
     volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
 ): CiftiCreateDenseFromTemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param template_cifti file to match brainordinates of
-     * @param cifti_out the output cifti file
-     * @param series make a dtseries file instead of a dscalar
-     * @param volume_all specify an input volume file for all voxel data
-     * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
-     * @param cifti use input data from a cifti file
-     * @param metric use input data from a metric file
-     * @param label use input data from surface label files
-     * @param volume use a volume file for a single volume structure's data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-create-dense-from-template" as const,
+        "@type": "workbench.cifti-create-dense-from-template" as const,
         "template_cifti": template_cifti,
         "cifti_out": cifti_out,
     };
@@ -442,28 +442,28 @@ function cifti_create_dense_from_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_from_template_cargs(
     params: CiftiCreateDenseFromTemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-create-dense-from-template");
     cargs.push(execution.inputFile((params["template_cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["series"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["series"] ?? null).__STYXTYPE__)((params["series"] ?? null), execution));
+        cargs.push(...dynCargs((params["series"] ?? null)["@type"])((params["series"] ?? null), execution));
     }
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null).__STYXTYPE__)((params["volume_all"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
     }
     if ((params["opt_label_collision_action"] ?? null) !== null) {
         cargs.push(
@@ -472,33 +472,33 @@ function cifti_create_dense_from_template_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_create_dense_from_template_outputs(
     params: CiftiCreateDenseFromTemplateParameters,
     execution: Execution,
 ): CiftiCreateDenseFromTemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCreateDenseFromTemplateOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -507,69 +507,69 @@ function cifti_create_dense_from_template_outputs(
 }
 
 
+/**
+ * Create cifti with matching dense map.
+ *
+ * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.
+ *
+ * Any structure that isn't covered by an input is filled with zeros or the unlabeled key.
+ *
+ * The <structure> argument of -metric, -label or -volume must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ *
+ * The argument to -unit must be one of the following:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
+ */
 function cifti_create_dense_from_template_execute(
     params: CiftiCreateDenseFromTemplateParameters,
     execution: Execution,
 ): CiftiCreateDenseFromTemplateOutputs {
-    /**
-     * Create cifti with matching dense map.
-     * 
-     * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.
-     * 
-     * Any structure that isn't covered by an input is filled with zeros or the unlabeled key.
-     * 
-     * The <structure> argument of -metric, -label or -volume must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * 
-     * The argument to -unit must be one of the following:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_create_dense_from_template_cargs(params, execution)
     const ret = cifti_create_dense_from_template_outputs(params, execution)
@@ -578,6 +578,73 @@ function cifti_create_dense_from_template_execute(
 }
 
 
+/**
+ * Create cifti with matching dense map.
+ *
+ * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.
+ *
+ * Any structure that isn't covered by an input is filled with zeros or the unlabeled key.
+ *
+ * The <structure> argument of -metric, -label or -volume must be one of the following:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ *
+ * The argument to -unit must be one of the following:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param template_cifti file to match brainordinates of
+ * @param cifti_out the output cifti file
+ * @param series make a dtseries file instead of a dscalar
+ * @param volume_all specify an input volume file for all voxel data
+ * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param cifti use input data from a cifti file
+ * @param metric use input data from a metric file
+ * @param label use input data from surface label files
+ * @param volume use a volume file for a single volume structure's data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
+ */
 function cifti_create_dense_from_template(
     template_cifti: InputPathType,
     cifti_out: string,
@@ -590,73 +657,6 @@ function cifti_create_dense_from_template(
     volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
-    /**
-     * Create cifti with matching dense map.
-     * 
-     * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.
-     * 
-     * Any structure that isn't covered by an input is filled with zeros or the unlabeled key.
-     * 
-     * The <structure> argument of -metric, -label or -volume must be one of the following:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * 
-     * The argument to -unit must be one of the following:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param template_cifti file to match brainordinates of
-     * @param cifti_out the output cifti file
-     * @param series make a dtseries file instead of a dscalar
-     * @param volume_all specify an input volume file for all voxel data
-     * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
-     * @param cifti use input data from a cifti file
-     * @param metric use input data from a metric file
-     * @param label use input data from surface label files
-     * @param volume use a volume file for a single volume structure's data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA);
     const params = cifti_create_dense_from_template_params(template_cifti, cifti_out, series, volume_all, opt_label_collision_action, cifti, metric, label, volume)
@@ -675,11 +675,20 @@ export {
       CiftiCreateDenseFromTemplateVolumeAllParameters,
       CiftiCreateDenseFromTemplateVolumeParameters,
       cifti_create_dense_from_template,
+      cifti_create_dense_from_template_cargs,
+      cifti_create_dense_from_template_cifti_cargs,
       cifti_create_dense_from_template_cifti_params,
+      cifti_create_dense_from_template_execute,
+      cifti_create_dense_from_template_label_cargs,
       cifti_create_dense_from_template_label_params,
+      cifti_create_dense_from_template_metric_cargs,
       cifti_create_dense_from_template_metric_params,
+      cifti_create_dense_from_template_outputs,
       cifti_create_dense_from_template_params,
+      cifti_create_dense_from_template_series_cargs,
       cifti_create_dense_from_template_series_params,
+      cifti_create_dense_from_template_volume_all_cargs,
       cifti_create_dense_from_template_volume_all_params,
+      cifti_create_dense_from_template_volume_cargs,
       cifti_create_dense_from_template_volume_params,
 };

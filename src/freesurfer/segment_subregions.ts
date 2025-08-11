@@ -12,7 +12,7 @@ const SEGMENT_SUBREGIONS_METADATA: Metadata = {
 
 
 interface SegmentSubregionsParameters {
-    "__STYXTYPE__": "segment_subregions";
+    "@type": "freesurfer.segment_subregions";
     "structure": string;
     "cross"?: string | null | undefined;
     "long_base"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface SegmentSubregionsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_subregions": segment_subregions_cargs,
+        "freesurfer.segment_subregions": segment_subregions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface SegmentSubregionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure Structure to segment. Options are: thalamus, brainstem, hippo-amygdala.
+ * @param cross Subject to segment in cross-sectional analysis.
+ * @param long_base Base subject for longitudinal analysis. Timepoints are extracted from the base-tps file.
+ * @param sd Specify subjects directory (will override SUBJECTS_DIR env variable).
+ * @param suffix Optional output file suffix.
+ * @param temp_dir Use alternative temporary directory. This will get deleted unless --debug is enabled.
+ * @param out_dir Use alternative output directory (only for cross-sectional). Default is the subject's `mri` directory.
+ * @param debug Write intermediate debugging outputs.
+ * @param threads Number of threads to use. Defaults to 1.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subregions_params(
     structure: string,
     cross: string | null = null,
@@ -82,23 +97,8 @@ function segment_subregions_params(
     debug: boolean = false,
     threads: number | null = null,
 ): SegmentSubregionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure Structure to segment. Options are: thalamus, brainstem, hippo-amygdala.
-     * @param cross Subject to segment in cross-sectional analysis.
-     * @param long_base Base subject for longitudinal analysis. Timepoints are extracted from the base-tps file.
-     * @param sd Specify subjects directory (will override SUBJECTS_DIR env variable).
-     * @param suffix Optional output file suffix.
-     * @param temp_dir Use alternative temporary directory. This will get deleted unless --debug is enabled.
-     * @param out_dir Use alternative output directory (only for cross-sectional). Default is the subject's `mri` directory.
-     * @param debug Write intermediate debugging outputs.
-     * @param threads Number of threads to use. Defaults to 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_subregions" as const,
+        "@type": "freesurfer.segment_subregions" as const,
         "structure": structure,
         "debug": debug,
     };
@@ -127,18 +127,18 @@ function segment_subregions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subregions_cargs(
     params: SegmentSubregionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_subregions");
     cargs.push((params["structure"] ?? null));
@@ -191,18 +191,18 @@ function segment_subregions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subregions_outputs(
     params: SegmentSubregionsParameters,
     execution: Execution,
 ): SegmentSubregionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubregionsOutputs = {
         root: execution.outputFile("."),
     };
@@ -210,22 +210,22 @@ function segment_subregions_outputs(
 }
 
 
+/**
+ * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
+ */
 function segment_subregions_execute(
     params: SegmentSubregionsParameters,
     execution: Execution,
 ): SegmentSubregionsOutputs {
-    /**
-     * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subregions_cargs(params, execution)
     const ret = segment_subregions_outputs(params, execution)
@@ -234,6 +234,26 @@ function segment_subregions_execute(
 }
 
 
+/**
+ * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param structure Structure to segment. Options are: thalamus, brainstem, hippo-amygdala.
+ * @param cross Subject to segment in cross-sectional analysis.
+ * @param long_base Base subject for longitudinal analysis. Timepoints are extracted from the base-tps file.
+ * @param sd Specify subjects directory (will override SUBJECTS_DIR env variable).
+ * @param suffix Optional output file suffix.
+ * @param temp_dir Use alternative temporary directory. This will get deleted unless --debug is enabled.
+ * @param out_dir Use alternative output directory (only for cross-sectional). Default is the subject's `mri` directory.
+ * @param debug Write intermediate debugging outputs.
+ * @param threads Number of threads to use. Defaults to 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
+ */
 function segment_subregions(
     structure: string,
     cross: string | null = null,
@@ -246,26 +266,6 @@ function segment_subregions(
     threads: number | null = null,
     runner: Runner | null = null,
 ): SegmentSubregionsOutputs {
-    /**
-     * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param structure Structure to segment. Options are: thalamus, brainstem, hippo-amygdala.
-     * @param cross Subject to segment in cross-sectional analysis.
-     * @param long_base Base subject for longitudinal analysis. Timepoints are extracted from the base-tps file.
-     * @param sd Specify subjects directory (will override SUBJECTS_DIR env variable).
-     * @param suffix Optional output file suffix.
-     * @param temp_dir Use alternative temporary directory. This will get deleted unless --debug is enabled.
-     * @param out_dir Use alternative output directory (only for cross-sectional). Default is the subject's `mri` directory.
-     * @param debug Write intermediate debugging outputs.
-     * @param threads Number of threads to use. Defaults to 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBREGIONS_METADATA);
     const params = segment_subregions_params(structure, cross, long_base, sd, suffix, temp_dir, out_dir, debug, threads)
@@ -278,5 +278,8 @@ export {
       SegmentSubregionsOutputs,
       SegmentSubregionsParameters,
       segment_subregions,
+      segment_subregions_cargs,
+      segment_subregions_execute,
+      segment_subregions_outputs,
       segment_subregions_params,
 };

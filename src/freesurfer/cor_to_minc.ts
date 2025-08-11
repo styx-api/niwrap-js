@@ -12,41 +12,41 @@ const COR_TO_MINC_METADATA: Metadata = {
 
 
 interface CorToMincParameters {
-    "__STYXTYPE__": "cor_to_minc";
+    "@type": "freesurfer.cor_to_minc";
     "cor_directory": string;
     "minc_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cor_to_minc": cor_to_minc_cargs,
+        "freesurfer.cor_to_minc": cor_to_minc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cor_to_minc": cor_to_minc_outputs,
+        "freesurfer.cor_to_minc": cor_to_minc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface CorToMincOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cor_directory Directory containing COR files
+ * @param minc_file Output MINC file name
+ *
+ * @returns Parameter dictionary
+ */
 function cor_to_minc_params(
     cor_directory: string,
     minc_file: string,
 ): CorToMincParameters {
-    /**
-     * Build parameters.
-    
-     * @param cor_directory Directory containing COR files
-     * @param minc_file Output MINC file name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cor_to_minc" as const,
+        "@type": "freesurfer.cor_to_minc" as const,
         "cor_directory": cor_directory,
         "minc_file": minc_file,
     };
@@ -90,18 +90,18 @@ function cor_to_minc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cor_to_minc_cargs(
     params: CorToMincParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cor_to_minc");
     cargs.push((params["cor_directory"] ?? null));
@@ -110,18 +110,18 @@ function cor_to_minc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cor_to_minc_outputs(
     params: CorToMincParameters,
     execution: Execution,
 ): CorToMincOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CorToMincOutputs = {
         root: execution.outputFile("."),
         output_minc: execution.outputFile([(params["minc_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function cor_to_minc_outputs(
 }
 
 
+/**
+ * Converts a directory of COR files to a MINC file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
+ */
 function cor_to_minc_execute(
     params: CorToMincParameters,
     execution: Execution,
 ): CorToMincOutputs {
-    /**
-     * Converts a directory of COR files to a MINC file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
-     */
     params = execution.params(params)
     const cargs = cor_to_minc_cargs(params, execution)
     const ret = cor_to_minc_outputs(params, execution)
@@ -154,24 +154,24 @@ function cor_to_minc_execute(
 }
 
 
+/**
+ * Converts a directory of COR files to a MINC file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param cor_directory Directory containing COR files
+ * @param minc_file Output MINC file name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
+ */
 function cor_to_minc(
     cor_directory: string,
     minc_file: string,
     runner: Runner | null = null,
 ): CorToMincOutputs {
-    /**
-     * Converts a directory of COR files to a MINC file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param cor_directory Directory containing COR files
-     * @param minc_file Output MINC file name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COR_TO_MINC_METADATA);
     const params = cor_to_minc_params(cor_directory, minc_file)
@@ -184,5 +184,8 @@ export {
       CorToMincOutputs,
       CorToMincParameters,
       cor_to_minc,
+      cor_to_minc_cargs,
+      cor_to_minc_execute,
+      cor_to_minc_outputs,
       cor_to_minc_params,
 };

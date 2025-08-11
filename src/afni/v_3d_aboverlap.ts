@@ -12,7 +12,7 @@ const V_3D_ABOVERLAP_METADATA: Metadata = {
 
 
 interface V3dAboverlapParameters {
-    "__STYXTYPE__": "3dABoverlap";
+    "@type": "afni.3dABoverlap";
     "dataset_a": InputPathType;
     "dataset_b": InputPathType;
     "no_automask": boolean;
@@ -21,33 +21,33 @@ interface V3dAboverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dABoverlap": v_3d_aboverlap_cargs,
+        "afni.3dABoverlap": v_3d_aboverlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface V3dAboverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset_a First input dataset
+ * @param dataset_b Second input dataset
+ * @param no_automask Consider input datasets as masks (automask does not work on mask datasets)
+ * @param quiet Be as quiet as possible (without being entirely mute)
+ * @param verbose Print out some progress reports (to stderr)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_aboverlap_params(
     dataset_a: InputPathType,
     dataset_b: InputPathType,
@@ -74,19 +85,8 @@ function v_3d_aboverlap_params(
     quiet: boolean = false,
     verbose: boolean = false,
 ): V3dAboverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset_a First input dataset
-     * @param dataset_b Second input dataset
-     * @param no_automask Consider input datasets as masks (automask does not work on mask datasets)
-     * @param quiet Be as quiet as possible (without being entirely mute)
-     * @param verbose Print out some progress reports (to stderr)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dABoverlap" as const,
+        "@type": "afni.3dABoverlap" as const,
         "dataset_a": dataset_a,
         "dataset_b": dataset_b,
         "no_automask": no_automask,
@@ -97,18 +97,18 @@ function v_3d_aboverlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_aboverlap_cargs(
     params: V3dAboverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dABoverlap");
     cargs.push(execution.inputFile((params["dataset_a"] ?? null)));
@@ -126,18 +126,18 @@ function v_3d_aboverlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_aboverlap_outputs(
     params: V3dAboverlapParameters,
     execution: Execution,
 ): V3dAboverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAboverlapOutputs = {
         root: execution.outputFile("."),
     };
@@ -145,22 +145,22 @@ function v_3d_aboverlap_outputs(
 }
 
 
+/**
+ * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
+ */
 function v_3d_aboverlap_execute(
     params: V3dAboverlapParameters,
     execution: Execution,
 ): V3dAboverlapOutputs {
-    /**
-     * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_aboverlap_cargs(params, execution)
     const ret = v_3d_aboverlap_outputs(params, execution)
@@ -169,6 +169,22 @@ function v_3d_aboverlap_execute(
 }
 
 
+/**
+ * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset_a First input dataset
+ * @param dataset_b Second input dataset
+ * @param no_automask Consider input datasets as masks (automask does not work on mask datasets)
+ * @param quiet Be as quiet as possible (without being entirely mute)
+ * @param verbose Print out some progress reports (to stderr)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
+ */
 function v_3d_aboverlap(
     dataset_a: InputPathType,
     dataset_b: InputPathType,
@@ -177,22 +193,6 @@ function v_3d_aboverlap(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dAboverlapOutputs {
-    /**
-     * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset_a First input dataset
-     * @param dataset_b Second input dataset
-     * @param no_automask Consider input datasets as masks (automask does not work on mask datasets)
-     * @param quiet Be as quiet as possible (without being entirely mute)
-     * @param verbose Print out some progress reports (to stderr)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ABOVERLAP_METADATA);
     const params = v_3d_aboverlap_params(dataset_a, dataset_b, no_automask, quiet, verbose)
@@ -205,5 +205,8 @@ export {
       V3dAboverlapParameters,
       V_3D_ABOVERLAP_METADATA,
       v_3d_aboverlap,
+      v_3d_aboverlap_cargs,
+      v_3d_aboverlap_execute,
+      v_3d_aboverlap_outputs,
       v_3d_aboverlap_params,
 };

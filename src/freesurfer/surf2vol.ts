@@ -12,7 +12,7 @@ const SURF2VOL_METADATA: Metadata = {
 
 
 interface Surf2volParameters {
-    "__STYXTYPE__": "surf2vol";
+    "@type": "freesurfer.surf2vol";
     "fixed_surface": InputPathType;
     "moving_surface": InputPathType;
     "fixed_mri": InputPathType;
@@ -33,35 +33,35 @@ interface Surf2volParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surf2vol": surf2vol_cargs,
+        "freesurfer.surf2vol": surf2vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surf2vol": surf2vol_outputs,
+        "freesurfer.surf2vol": surf2vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,29 @@ interface Surf2volOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed_surface File path for the main fixed surface.
+ * @param moving_surface File path for the main moving surface.
+ * @param fixed_mri Fixed volume file.
+ * @param moving_mri Moving volume file.
+ * @param output_file Output file for the result, default is out.mgz.
+ * @param output_field Output field file, default is out_field.mgz.
+ * @param output_affine Path for the output affine file.
+ * @param output_surf Root file name for output surfaces which will have indices appended for each surface.
+ * @param output_surf_affine Root file name for output surfaces with affine transformations.
+ * @param output_mesh File path for the output mesh.
+ * @param spacing_x Specifies the x spacing for the deformation grid.
+ * @param spacing_y Specifies the y spacing for the deformation grid.
+ * @param spacing_z Specifies the z spacing for the deformation grid.
+ * @param poisson_ratio Poisson ratio for material properties, default is 0.3.
+ * @param dirty_factor Factor for dirty regions, between 0 and 1.
+ * @param debug_output Enable debug output, writing a morph file at each iteration.
+ * @param cache_transform Path to save transformation cache for reusing in subsequent runs.
+ *
+ * @returns Parameter dictionary
+ */
 function surf2vol_params(
     fixed_surface: InputPathType,
     moving_surface: InputPathType,
@@ -107,31 +130,8 @@ function surf2vol_params(
     debug_output: boolean = false,
     cache_transform: string | null = null,
 ): Surf2volParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed_surface File path for the main fixed surface.
-     * @param moving_surface File path for the main moving surface.
-     * @param fixed_mri Fixed volume file.
-     * @param moving_mri Moving volume file.
-     * @param output_file Output file for the result, default is out.mgz.
-     * @param output_field Output field file, default is out_field.mgz.
-     * @param output_affine Path for the output affine file.
-     * @param output_surf Root file name for output surfaces which will have indices appended for each surface.
-     * @param output_surf_affine Root file name for output surfaces with affine transformations.
-     * @param output_mesh File path for the output mesh.
-     * @param spacing_x Specifies the x spacing for the deformation grid.
-     * @param spacing_y Specifies the y spacing for the deformation grid.
-     * @param spacing_z Specifies the z spacing for the deformation grid.
-     * @param poisson_ratio Poisson ratio for material properties, default is 0.3.
-     * @param dirty_factor Factor for dirty regions, between 0 and 1.
-     * @param debug_output Enable debug output, writing a morph file at each iteration.
-     * @param cache_transform Path to save transformation cache for reusing in subsequent runs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surf2vol" as const,
+        "@type": "freesurfer.surf2vol" as const,
         "fixed_surface": fixed_surface,
         "moving_surface": moving_surface,
         "fixed_mri": fixed_mri,
@@ -178,18 +178,18 @@ function surf2vol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf2vol_cargs(
     params: Surf2volParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surf2vol");
     cargs.push(
@@ -287,18 +287,18 @@ function surf2vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf2vol_outputs(
     params: Surf2volParameters,
     execution: Execution,
 ): Surf2volOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Surf2volOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -308,22 +308,22 @@ function surf2vol_outputs(
 }
 
 
+/**
+ * Diffuse surface deformation to volumes using surface and MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
+ */
 function surf2vol_execute(
     params: Surf2volParameters,
     execution: Execution,
 ): Surf2volOutputs {
-    /**
-     * Diffuse surface deformation to volumes using surface and MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf2vol_cargs(params, execution)
     const ret = surf2vol_outputs(params, execution)
@@ -332,6 +332,34 @@ function surf2vol_execute(
 }
 
 
+/**
+ * Diffuse surface deformation to volumes using surface and MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param fixed_surface File path for the main fixed surface.
+ * @param moving_surface File path for the main moving surface.
+ * @param fixed_mri Fixed volume file.
+ * @param moving_mri Moving volume file.
+ * @param output_file Output file for the result, default is out.mgz.
+ * @param output_field Output field file, default is out_field.mgz.
+ * @param output_affine Path for the output affine file.
+ * @param output_surf Root file name for output surfaces which will have indices appended for each surface.
+ * @param output_surf_affine Root file name for output surfaces with affine transformations.
+ * @param output_mesh File path for the output mesh.
+ * @param spacing_x Specifies the x spacing for the deformation grid.
+ * @param spacing_y Specifies the y spacing for the deformation grid.
+ * @param spacing_z Specifies the z spacing for the deformation grid.
+ * @param poisson_ratio Poisson ratio for material properties, default is 0.3.
+ * @param dirty_factor Factor for dirty regions, between 0 and 1.
+ * @param debug_output Enable debug output, writing a morph file at each iteration.
+ * @param cache_transform Path to save transformation cache for reusing in subsequent runs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
+ */
 function surf2vol(
     fixed_surface: InputPathType,
     moving_surface: InputPathType,
@@ -352,34 +380,6 @@ function surf2vol(
     cache_transform: string | null = null,
     runner: Runner | null = null,
 ): Surf2volOutputs {
-    /**
-     * Diffuse surface deformation to volumes using surface and MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param fixed_surface File path for the main fixed surface.
-     * @param moving_surface File path for the main moving surface.
-     * @param fixed_mri Fixed volume file.
-     * @param moving_mri Moving volume file.
-     * @param output_file Output file for the result, default is out.mgz.
-     * @param output_field Output field file, default is out_field.mgz.
-     * @param output_affine Path for the output affine file.
-     * @param output_surf Root file name for output surfaces which will have indices appended for each surface.
-     * @param output_surf_affine Root file name for output surfaces with affine transformations.
-     * @param output_mesh File path for the output mesh.
-     * @param spacing_x Specifies the x spacing for the deformation grid.
-     * @param spacing_y Specifies the y spacing for the deformation grid.
-     * @param spacing_z Specifies the z spacing for the deformation grid.
-     * @param poisson_ratio Poisson ratio for material properties, default is 0.3.
-     * @param dirty_factor Factor for dirty regions, between 0 and 1.
-     * @param debug_output Enable debug output, writing a morph file at each iteration.
-     * @param cache_transform Path to save transformation cache for reusing in subsequent runs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF2VOL_METADATA);
     const params = surf2vol_params(fixed_surface, moving_surface, fixed_mri, moving_mri, output_file, output_field, output_affine, output_surf, output_surf_affine, output_mesh, spacing_x, spacing_y, spacing_z, poisson_ratio, dirty_factor, debug_output, cache_transform)
@@ -392,5 +392,8 @@ export {
       Surf2volOutputs,
       Surf2volParameters,
       surf2vol,
+      surf2vol_cargs,
+      surf2vol_execute,
+      surf2vol_outputs,
       surf2vol_params,
 };

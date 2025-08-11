@@ -12,7 +12,7 @@ const V_3DMASKAVE_METADATA: Metadata = {
 
 
 interface V3dmaskaveParameters {
-    "__STYXTYPE__": "3dmaskave";
+    "@type": "afni.3dmaskave";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "num_threads"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface V3dmaskaveParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmaskave": v_3dmaskave_cargs,
+        "afni.3dmaskave": v_3dmaskave_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmaskave": v_3dmaskave_outputs,
+        "afni.3dmaskave": v_3dmaskave_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface V3dmaskaveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dmaskave.
+ * @param mask Matrix to align input file.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param quiet Matrix to align input file.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmaskave_params(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -83,19 +94,8 @@ function v_3dmaskave_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     quiet: boolean = false,
 ): V3dmaskaveParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dmaskave.
-     * @param mask Matrix to align input file.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param quiet Matrix to align input file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmaskave" as const,
+        "@type": "afni.3dmaskave" as const,
         "in_file": in_file,
         "quiet": quiet,
     };
@@ -112,18 +112,18 @@ function v_3dmaskave_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmaskave_cargs(
     params: V3dmaskaveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmaskave");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -146,18 +146,18 @@ function v_3dmaskave_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmaskave_outputs(
     params: V3dmaskaveParameters,
     execution: Execution,
 ): V3dmaskaveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaskaveOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_maskave.1D"].join('')),
@@ -167,22 +167,22 @@ function v_3dmaskave_outputs(
 }
 
 
+/**
+ * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
+ */
 function v_3dmaskave_execute(
     params: V3dmaskaveParameters,
     execution: Execution,
 ): V3dmaskaveOutputs {
-    /**
-     * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmaskave_cargs(params, execution)
     const ret = v_3dmaskave_outputs(params, execution)
@@ -191,6 +191,22 @@ function v_3dmaskave_execute(
 }
 
 
+/**
+ * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dmaskave.
+ * @param mask Matrix to align input file.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param quiet Matrix to align input file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
+ */
 function v_3dmaskave(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -199,22 +215,6 @@ function v_3dmaskave(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dmaskaveOutputs {
-    /**
-     * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dmaskave.
-     * @param mask Matrix to align input file.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param quiet Matrix to align input file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMASKAVE_METADATA);
     const params = v_3dmaskave_params(in_file, mask, num_threads, outputtype, quiet)
@@ -227,5 +227,8 @@ export {
       V3dmaskaveParameters,
       V_3DMASKAVE_METADATA,
       v_3dmaskave,
+      v_3dmaskave_cargs,
+      v_3dmaskave_execute,
+      v_3dmaskave_outputs,
       v_3dmaskave_params,
 };

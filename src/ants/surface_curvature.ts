@@ -12,7 +12,7 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 
 
 interface SurfaceCurvatureParameters {
-    "__STYXTYPE__": "SurfaceCurvature";
+    "@type": "ants.SurfaceCurvature";
     "filename_in": InputPathType;
     "filename_out": string;
     "sigma": number;
@@ -20,35 +20,35 @@ interface SurfaceCurvatureParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfaceCurvature": surface_curvature_cargs,
+        "ants.SurfaceCurvature": surface_curvature_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfaceCurvature": surface_curvature_outputs,
+        "ants.SurfaceCurvature": surface_curvature_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SurfaceCurvatureOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename_in The input image file in .nii format.
+ * @param filename_out The output image file in .nii format.
+ * @param sigma The sigma value for analysis.
+ * @param option The operation mode: 0 for mean curvature, 5 for surface characterization, 6 for Gaussian curvature, and 7 for surface area.
+ *
+ * @returns Parameter dictionary
+ */
 function surface_curvature_params(
     filename_in: InputPathType,
     filename_out: string,
     sigma: number,
     option: number,
 ): SurfaceCurvatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename_in The input image file in .nii format.
-     * @param filename_out The output image file in .nii format.
-     * @param sigma The sigma value for analysis.
-     * @param option The operation mode: 0 for mean curvature, 5 for surface characterization, 6 for Gaussian curvature, and 7 for surface area.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfaceCurvature" as const,
+        "@type": "ants.SurfaceCurvature" as const,
         "filename_in": filename_in,
         "filename_out": filename_out,
         "sigma": sigma,
@@ -98,18 +98,18 @@ function surface_curvature_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_curvature_cargs(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfaceCurvature");
     cargs.push(execution.inputFile((params["filename_in"] ?? null)));
@@ -120,18 +120,18 @@ function surface_curvature_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_curvature_outputs(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): SurfaceCurvatureOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceCurvatureOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["filename_out"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function surface_curvature_outputs(
 }
 
 
+/**
+ * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
+ */
 function surface_curvature_execute(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): SurfaceCurvatureOutputs {
-    /**
-     * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_curvature_cargs(params, execution)
     const ret = surface_curvature_outputs(params, execution)
@@ -164,6 +164,21 @@ function surface_curvature_execute(
 }
 
 
+/**
+ * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param filename_in The input image file in .nii format.
+ * @param filename_out The output image file in .nii format.
+ * @param sigma The sigma value for analysis.
+ * @param option The operation mode: 0 for mean curvature, 5 for surface characterization, 6 for Gaussian curvature, and 7 for surface area.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
+ */
 function surface_curvature(
     filename_in: InputPathType,
     filename_out: string,
@@ -171,21 +186,6 @@ function surface_curvature(
     option: number,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    /**
-     * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param filename_in The input image file in .nii format.
-     * @param filename_out The output image file in .nii format.
-     * @param sigma The sigma value for analysis.
-     * @param option The operation mode: 0 for mean curvature, 5 for surface characterization, 6 for Gaussian curvature, and 7 for surface area.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_CURVATURE_METADATA);
     const params = surface_curvature_params(filename_in, filename_out, sigma, option)
@@ -198,5 +198,8 @@ export {
       SurfaceCurvatureOutputs,
       SurfaceCurvatureParameters,
       surface_curvature,
+      surface_curvature_cargs,
+      surface_curvature_execute,
+      surface_curvature_outputs,
       surface_curvature_params,
 };

@@ -12,7 +12,7 @@ const HALFCOSBASIS_METADATA: Metadata = {
 
 
 interface HalfcosbasisParameters {
-    "__STYXTYPE__": "halfcosbasis";
+    "@type": "fsl.halfcosbasis";
     "hrf_param_file": InputPathType;
     "hrf_param_file_hf": InputPathType;
     "verbose_flag": boolean;
@@ -33,33 +33,33 @@ interface HalfcosbasisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "halfcosbasis": halfcosbasis_cargs,
+        "fsl.halfcosbasis": halfcosbasis_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface HalfcosbasisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hrf_param_file Half cosine HRF parameter ranges file
+ * @param hrf_param_file_hf Half cosine HRF parameter ranges file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param debug_level_debug Set debug level
+ * @param debug_level_debuglevel Set debug level
+ * @param timing_on_flag Turn timing on
+ * @param log_dir Log directory
+ * @param log_dir_ld Log directory
+ * @param log_dir_logdir Log directory
+ * @param num_hrf_samples Number of HRF samples to use (default is 1000)
+ * @param num_hrf_basis_funcs Number of HRF basis functions to use (default is 3)
+ * @param num_secs Number of seconds (default is 40)
+ * @param num_secs_nsecs Number of seconds (default is 40)
+ * @param temp_res Temporal resolution (default is 0.05)
+ * @param help_flag Display help message
+ * @param help_flag_long Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function halfcosbasis_params(
     hrf_param_file: InputPathType,
     hrf_param_file_hf: InputPathType,
@@ -98,31 +121,8 @@ function halfcosbasis_params(
     help_flag: boolean = false,
     help_flag_long: boolean = false,
 ): HalfcosbasisParameters {
-    /**
-     * Build parameters.
-    
-     * @param hrf_param_file Half cosine HRF parameter ranges file
-     * @param hrf_param_file_hf Half cosine HRF parameter ranges file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param debug_level_debug Set debug level
-     * @param debug_level_debuglevel Set debug level
-     * @param timing_on_flag Turn timing on
-     * @param log_dir Log directory
-     * @param log_dir_ld Log directory
-     * @param log_dir_logdir Log directory
-     * @param num_hrf_samples Number of HRF samples to use (default is 1000)
-     * @param num_hrf_basis_funcs Number of HRF basis functions to use (default is 3)
-     * @param num_secs Number of seconds (default is 40)
-     * @param num_secs_nsecs Number of seconds (default is 40)
-     * @param temp_res Temporal resolution (default is 0.05)
-     * @param help_flag Display help message
-     * @param help_flag_long Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "halfcosbasis" as const,
+        "@type": "fsl.halfcosbasis" as const,
         "hrf_param_file": hrf_param_file,
         "hrf_param_file_hf": hrf_param_file_hf,
         "verbose_flag": verbose_flag,
@@ -167,18 +167,18 @@ function halfcosbasis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function halfcosbasis_cargs(
     params: HalfcosbasisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("halfcosbasis");
     cargs.push(
@@ -271,18 +271,18 @@ function halfcosbasis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function halfcosbasis_outputs(
     params: HalfcosbasisParameters,
     execution: Execution,
 ): HalfcosbasisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HalfcosbasisOutputs = {
         root: execution.outputFile("."),
     };
@@ -290,22 +290,22 @@ function halfcosbasis_outputs(
 }
 
 
+/**
+ * Tool for handling half-cosine basis functions in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
+ */
 function halfcosbasis_execute(
     params: HalfcosbasisParameters,
     execution: Execution,
 ): HalfcosbasisOutputs {
-    /**
-     * Tool for handling half-cosine basis functions in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
-     */
     params = execution.params(params)
     const cargs = halfcosbasis_cargs(params, execution)
     const ret = halfcosbasis_outputs(params, execution)
@@ -314,6 +314,34 @@ function halfcosbasis_execute(
 }
 
 
+/**
+ * Tool for handling half-cosine basis functions in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param hrf_param_file Half cosine HRF parameter ranges file
+ * @param hrf_param_file_hf Half cosine HRF parameter ranges file
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_level Set debug level
+ * @param debug_level_debug Set debug level
+ * @param debug_level_debuglevel Set debug level
+ * @param timing_on_flag Turn timing on
+ * @param log_dir Log directory
+ * @param log_dir_ld Log directory
+ * @param log_dir_logdir Log directory
+ * @param num_hrf_samples Number of HRF samples to use (default is 1000)
+ * @param num_hrf_basis_funcs Number of HRF basis functions to use (default is 3)
+ * @param num_secs Number of seconds (default is 40)
+ * @param num_secs_nsecs Number of seconds (default is 40)
+ * @param temp_res Temporal resolution (default is 0.05)
+ * @param help_flag Display help message
+ * @param help_flag_long Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
+ */
 function halfcosbasis(
     hrf_param_file: InputPathType,
     hrf_param_file_hf: InputPathType,
@@ -334,34 +362,6 @@ function halfcosbasis(
     help_flag_long: boolean = false,
     runner: Runner | null = null,
 ): HalfcosbasisOutputs {
-    /**
-     * Tool for handling half-cosine basis functions in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param hrf_param_file Half cosine HRF parameter ranges file
-     * @param hrf_param_file_hf Half cosine HRF parameter ranges file
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_level Set debug level
-     * @param debug_level_debug Set debug level
-     * @param debug_level_debuglevel Set debug level
-     * @param timing_on_flag Turn timing on
-     * @param log_dir Log directory
-     * @param log_dir_ld Log directory
-     * @param log_dir_logdir Log directory
-     * @param num_hrf_samples Number of HRF samples to use (default is 1000)
-     * @param num_hrf_basis_funcs Number of HRF basis functions to use (default is 3)
-     * @param num_secs Number of seconds (default is 40)
-     * @param num_secs_nsecs Number of seconds (default is 40)
-     * @param temp_res Temporal resolution (default is 0.05)
-     * @param help_flag Display help message
-     * @param help_flag_long Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HALFCOSBASIS_METADATA);
     const params = halfcosbasis_params(hrf_param_file, hrf_param_file_hf, verbose_flag, debug_level, debug_level_debug, debug_level_debuglevel, timing_on_flag, log_dir, log_dir_ld, log_dir_logdir, num_hrf_samples, num_hrf_basis_funcs, num_secs, num_secs_nsecs, temp_res, help_flag, help_flag_long)
@@ -374,5 +374,8 @@ export {
       HalfcosbasisOutputs,
       HalfcosbasisParameters,
       halfcosbasis,
+      halfcosbasis_cargs,
+      halfcosbasis_execute,
+      halfcosbasis_outputs,
       halfcosbasis_params,
 };

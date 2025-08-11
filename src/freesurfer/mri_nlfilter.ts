@@ -12,7 +12,7 @@ const MRI_NLFILTER_METADATA: Metadata = {
 
 
 interface MriNlfilterParameters {
-    "__STYXTYPE__": "mri_nlfilter";
+    "@type": "freesurfer.mri_nlfilter";
     "input_image": InputPathType;
     "output_image": string;
     "blur_sigma"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface MriNlfilterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_nlfilter": mri_nlfilter_cargs,
+        "freesurfer.mri_nlfilter": mri_nlfilter_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_nlfilter": mri_nlfilter_outputs,
+        "freesurfer.mri_nlfilter": mri_nlfilter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface MriNlfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image The input image file to be processed.
+ * @param output_image The output image file where the processed image will be saved.
+ * @param blur_sigma Specify sigma of the blurring kernel. Default is 0.500.
+ * @param gaussian_sigma Filter with Gaussian instead of median. Requires sigma value.
+ * @param mean_flag Filter with mean instead of median.
+ * @param window_size Specify window size used for offset calculation. Default is 3.
+ * @param cplov_flag Filter with cplov.
+ * @param minmax_flag Filter with minmax.
+ * @param no_offsets_flag Don't use offsets, just apply standard filters.
+ * @param no_crop_flag Don't crop to >0 region of image.
+ * @param version_flag Display version number.
+ * @param help_flag Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_nlfilter_params(
     input_image: InputPathType,
     output_image: string,
@@ -93,26 +111,8 @@ function mri_nlfilter_params(
     version_flag: boolean = false,
     help_flag: boolean = false,
 ): MriNlfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image The input image file to be processed.
-     * @param output_image The output image file where the processed image will be saved.
-     * @param blur_sigma Specify sigma of the blurring kernel. Default is 0.500.
-     * @param gaussian_sigma Filter with Gaussian instead of median. Requires sigma value.
-     * @param mean_flag Filter with mean instead of median.
-     * @param window_size Specify window size used for offset calculation. Default is 3.
-     * @param cplov_flag Filter with cplov.
-     * @param minmax_flag Filter with minmax.
-     * @param no_offsets_flag Don't use offsets, just apply standard filters.
-     * @param no_crop_flag Don't crop to >0 region of image.
-     * @param version_flag Display version number.
-     * @param help_flag Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_nlfilter" as const,
+        "@type": "freesurfer.mri_nlfilter" as const,
         "input_image": input_image,
         "output_image": output_image,
         "mean_flag": mean_flag,
@@ -136,18 +136,18 @@ function mri_nlfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_nlfilter_cargs(
     params: MriNlfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_nlfilter");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -195,18 +195,18 @@ function mri_nlfilter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_nlfilter_outputs(
     params: MriNlfilterParameters,
     execution: Execution,
 ): MriNlfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNlfilterOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -215,22 +215,22 @@ function mri_nlfilter_outputs(
 }
 
 
+/**
+ * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
+ */
 function mri_nlfilter_execute(
     params: MriNlfilterParameters,
     execution: Execution,
 ): MriNlfilterOutputs {
-    /**
-     * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_nlfilter_cargs(params, execution)
     const ret = mri_nlfilter_outputs(params, execution)
@@ -239,6 +239,29 @@ function mri_nlfilter_execute(
 }
 
 
+/**
+ * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image The input image file to be processed.
+ * @param output_image The output image file where the processed image will be saved.
+ * @param blur_sigma Specify sigma of the blurring kernel. Default is 0.500.
+ * @param gaussian_sigma Filter with Gaussian instead of median. Requires sigma value.
+ * @param mean_flag Filter with mean instead of median.
+ * @param window_size Specify window size used for offset calculation. Default is 3.
+ * @param cplov_flag Filter with cplov.
+ * @param minmax_flag Filter with minmax.
+ * @param no_offsets_flag Don't use offsets, just apply standard filters.
+ * @param no_crop_flag Don't crop to >0 region of image.
+ * @param version_flag Display version number.
+ * @param help_flag Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
+ */
 function mri_nlfilter(
     input_image: InputPathType,
     output_image: string,
@@ -254,29 +277,6 @@ function mri_nlfilter(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriNlfilterOutputs {
-    /**
-     * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image The input image file to be processed.
-     * @param output_image The output image file where the processed image will be saved.
-     * @param blur_sigma Specify sigma of the blurring kernel. Default is 0.500.
-     * @param gaussian_sigma Filter with Gaussian instead of median. Requires sigma value.
-     * @param mean_flag Filter with mean instead of median.
-     * @param window_size Specify window size used for offset calculation. Default is 3.
-     * @param cplov_flag Filter with cplov.
-     * @param minmax_flag Filter with minmax.
-     * @param no_offsets_flag Don't use offsets, just apply standard filters.
-     * @param no_crop_flag Don't crop to >0 region of image.
-     * @param version_flag Display version number.
-     * @param help_flag Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NLFILTER_METADATA);
     const params = mri_nlfilter_params(input_image, output_image, blur_sigma, gaussian_sigma, mean_flag, window_size, cplov_flag, minmax_flag, no_offsets_flag, no_crop_flag, version_flag, help_flag)
@@ -289,5 +289,8 @@ export {
       MriNlfilterOutputs,
       MriNlfilterParameters,
       mri_nlfilter,
+      mri_nlfilter_cargs,
+      mri_nlfilter_execute,
+      mri_nlfilter_outputs,
       mri_nlfilter_params,
 };

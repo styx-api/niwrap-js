@@ -12,42 +12,42 @@ const UNCONFOUND_METADATA: Metadata = {
 
 
 interface UnconfoundParameters {
-    "__STYXTYPE__": "unconfound";
+    "@type": "fsl.unconfound";
     "in4d": InputPathType;
     "out4d": string;
     "confound_mat": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unconfound": unconfound_cargs,
+        "fsl.unconfound": unconfound_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "unconfound": unconfound_outputs,
+        "fsl.unconfound": unconfound_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface UnconfoundOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in4d Input 4D fMRI data (e.g., in4d.nii.gz)
+ * @param out4d Output 4D fMRI data after removing confounds (e.g., out4d.nii.gz)
+ * @param confound_mat Confound matrix file (e.g., confound.mat)
+ *
+ * @returns Parameter dictionary
+ */
 function unconfound_params(
     in4d: InputPathType,
     out4d: string,
     confound_mat: InputPathType,
 ): UnconfoundParameters {
-    /**
-     * Build parameters.
-    
-     * @param in4d Input 4D fMRI data (e.g., in4d.nii.gz)
-     * @param out4d Output 4D fMRI data after removing confounds (e.g., out4d.nii.gz)
-     * @param confound_mat Confound matrix file (e.g., confound.mat)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unconfound" as const,
+        "@type": "fsl.unconfound" as const,
         "in4d": in4d,
         "out4d": out4d,
         "confound_mat": confound_mat,
@@ -94,18 +94,18 @@ function unconfound_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unconfound_cargs(
     params: UnconfoundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unconfound");
     cargs.push(execution.inputFile((params["in4d"] ?? null)));
@@ -115,18 +115,18 @@ function unconfound_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unconfound_outputs(
     params: UnconfoundParameters,
     execution: Execution,
 ): UnconfoundOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnconfoundOutputs = {
         root: execution.outputFile("."),
         output_4d: execution.outputFile([(params["out4d"] ?? null), ".nii.gz"].join('')),
@@ -135,22 +135,22 @@ function unconfound_outputs(
 }
 
 
+/**
+ * Removing confounds from 4D fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
+ */
 function unconfound_execute(
     params: UnconfoundParameters,
     execution: Execution,
 ): UnconfoundOutputs {
-    /**
-     * Removing confounds from 4D fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
-     */
     params = execution.params(params)
     const cargs = unconfound_cargs(params, execution)
     const ret = unconfound_outputs(params, execution)
@@ -159,26 +159,26 @@ function unconfound_execute(
 }
 
 
+/**
+ * Removing confounds from 4D fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in4d Input 4D fMRI data (e.g., in4d.nii.gz)
+ * @param out4d Output 4D fMRI data after removing confounds (e.g., out4d.nii.gz)
+ * @param confound_mat Confound matrix file (e.g., confound.mat)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
+ */
 function unconfound(
     in4d: InputPathType,
     out4d: string,
     confound_mat: InputPathType,
     runner: Runner | null = null,
 ): UnconfoundOutputs {
-    /**
-     * Removing confounds from 4D fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in4d Input 4D fMRI data (e.g., in4d.nii.gz)
-     * @param out4d Output 4D fMRI data after removing confounds (e.g., out4d.nii.gz)
-     * @param confound_mat Confound matrix file (e.g., confound.mat)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNCONFOUND_METADATA);
     const params = unconfound_params(in4d, out4d, confound_mat)
@@ -191,5 +191,8 @@ export {
       UnconfoundOutputs,
       UnconfoundParameters,
       unconfound,
+      unconfound_cargs,
+      unconfound_execute,
+      unconfound_outputs,
       unconfound_params,
 };

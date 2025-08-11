@@ -12,7 +12,7 @@ const STRBLAST_METADATA: Metadata = {
 
 
 interface StrblastParameters {
-    "__STYXTYPE__": "strblast";
+    "@type": "afni.strblast";
     "targetstring": string;
     "input_files": Array<InputPathType>;
     "new_char"?: string | null | undefined;
@@ -23,33 +23,33 @@ interface StrblastParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "strblast": strblast_cargs,
+        "afni.strblast": strblast_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface StrblastOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param targetstring Target string to search for in the input files.
+ * @param input_files Input files to search for the target string.
+ * @param new_char Replace TARGETSTRING with CHAR (repeated)
+ * @param new_string Replace TARGETSTRING with STRING
+ * @param unescape Parse TARGETSTRING for escaped characters (includes '\t', '\n', '\r')
+ * @param quiet Do not report files with no strings found. Use -quiet -quiet to avoid any reporting.
+ * @param help Show help message and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function strblast_params(
     targetstring: string,
     input_files: Array<InputPathType>,
@@ -78,21 +91,8 @@ function strblast_params(
     quiet: boolean = false,
     help: boolean = false,
 ): StrblastParameters {
-    /**
-     * Build parameters.
-    
-     * @param targetstring Target string to search for in the input files.
-     * @param input_files Input files to search for the target string.
-     * @param new_char Replace TARGETSTRING with CHAR (repeated)
-     * @param new_string Replace TARGETSTRING with STRING
-     * @param unescape Parse TARGETSTRING for escaped characters (includes '\t', '\n', '\r')
-     * @param quiet Do not report files with no strings found. Use -quiet -quiet to avoid any reporting.
-     * @param help Show help message and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "strblast" as const,
+        "@type": "afni.strblast" as const,
         "targetstring": targetstring,
         "input_files": input_files,
         "unescape": unescape,
@@ -109,18 +109,18 @@ function strblast_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function strblast_cargs(
     params: StrblastParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("strblast");
     cargs.push((params["targetstring"] ?? null));
@@ -150,18 +150,18 @@ function strblast_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function strblast_outputs(
     params: StrblastParameters,
     execution: Execution,
 ): StrblastOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: StrblastOutputs = {
         root: execution.outputFile("."),
     };
@@ -169,22 +169,22 @@ function strblast_outputs(
 }
 
 
+/**
+ * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `StrblastOutputs`).
+ */
 function strblast_execute(
     params: StrblastParameters,
     execution: Execution,
 ): StrblastOutputs {
-    /**
-     * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `StrblastOutputs`).
-     */
     params = execution.params(params)
     const cargs = strblast_cargs(params, execution)
     const ret = strblast_outputs(params, execution)
@@ -193,6 +193,24 @@ function strblast_execute(
 }
 
 
+/**
+ * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param targetstring Target string to search for in the input files.
+ * @param input_files Input files to search for the target string.
+ * @param new_char Replace TARGETSTRING with CHAR (repeated)
+ * @param new_string Replace TARGETSTRING with STRING
+ * @param unescape Parse TARGETSTRING for escaped characters (includes '\t', '\n', '\r')
+ * @param quiet Do not report files with no strings found. Use -quiet -quiet to avoid any reporting.
+ * @param help Show help message and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `StrblastOutputs`).
+ */
 function strblast(
     targetstring: string,
     input_files: Array<InputPathType>,
@@ -203,24 +221,6 @@ function strblast(
     help: boolean = false,
     runner: Runner | null = null,
 ): StrblastOutputs {
-    /**
-     * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param targetstring Target string to search for in the input files.
-     * @param input_files Input files to search for the target string.
-     * @param new_char Replace TARGETSTRING with CHAR (repeated)
-     * @param new_string Replace TARGETSTRING with STRING
-     * @param unescape Parse TARGETSTRING for escaped characters (includes '\t', '\n', '\r')
-     * @param quiet Do not report files with no strings found. Use -quiet -quiet to avoid any reporting.
-     * @param help Show help message and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `StrblastOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STRBLAST_METADATA);
     const params = strblast_params(targetstring, input_files, new_char, new_string, unescape, quiet, help)
@@ -233,5 +233,8 @@ export {
       StrblastOutputs,
       StrblastParameters,
       strblast,
+      strblast_cargs,
+      strblast_execute,
+      strblast_outputs,
       strblast_params,
 };

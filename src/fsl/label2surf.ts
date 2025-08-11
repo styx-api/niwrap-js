@@ -12,7 +12,7 @@ const LABEL2SURF_METADATA: Metadata = {
 
 
 interface Label2surfParameters {
-    "__STYXTYPE__": "label2surf";
+    "@type": "fsl.label2surf";
     "input_surface": InputPathType;
     "output_surface": string;
     "labels": InputPathType;
@@ -21,35 +21,35 @@ interface Label2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label2surf": label2surf_cargs,
+        "fsl.label2surf": label2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label2surf": label2surf_outputs,
+        "fsl.label2surf": label2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface Label2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param labels ASCII list of label files
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function label2surf_params(
     input_surface: InputPathType,
     output_surface: string,
@@ -79,19 +90,8 @@ function label2surf_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): Label2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param labels ASCII list of label files
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label2surf" as const,
+        "@type": "fsl.label2surf" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "labels": labels,
@@ -102,18 +102,18 @@ function label2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2surf_cargs(
     params: Label2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label2surf");
     cargs.push(
@@ -138,18 +138,18 @@ function label2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label2surf_outputs(
     params: Label2surfParameters,
     execution: Execution,
 ): Label2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Label2surfOutputs = {
         root: execution.outputFile("."),
         out_surf: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -158,22 +158,22 @@ function label2surf_outputs(
 }
 
 
+/**
+ * Transform a group of labels into a surface.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
+ */
 function label2surf_execute(
     params: Label2surfParameters,
     execution: Execution,
 ): Label2surfOutputs {
-    /**
-     * Transform a group of labels into a surface.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = label2surf_cargs(params, execution)
     const ret = label2surf_outputs(params, execution)
@@ -182,6 +182,22 @@ function label2surf_execute(
 }
 
 
+/**
+ * Transform a group of labels into a surface.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param labels ASCII list of label files
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
+ */
 function label2surf(
     input_surface: InputPathType,
     output_surface: string,
@@ -190,22 +206,6 @@ function label2surf(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Label2surfOutputs {
-    /**
-     * Transform a group of labels into a surface.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param labels ASCII list of label files
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL2SURF_METADATA);
     const params = label2surf_params(input_surface, output_surface, labels, verbose_flag, help_flag)
@@ -218,5 +218,8 @@ export {
       Label2surfOutputs,
       Label2surfParameters,
       label2surf,
+      label2surf_cargs,
+      label2surf_execute,
+      label2surf_outputs,
       label2surf_params,
 };

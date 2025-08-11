@@ -12,7 +12,7 @@ const MRI_REORIENT_LR_CSH_METADATA: Metadata = {
 
 
 interface MriReorientLrCshParameters {
-    "__STYXTYPE__": "mri_reorient_LR.csh";
+    "@type": "freesurfer.mri_reorient_LR.csh";
     "input_vol": InputPathType;
     "output_vol": string;
     "display_result": boolean;
@@ -23,35 +23,35 @@ interface MriReorientLrCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_reorient_LR.csh": mri_reorient_lr_csh_cargs,
+        "freesurfer.mri_reorient_LR.csh": mri_reorient_lr_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_reorient_LR.csh": mri_reorient_lr_csh_outputs,
+        "freesurfer.mri_reorient_LR.csh": mri_reorient_lr_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriReorientLrCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input file to be reoriented
+ * @param output_vol Reoriented input file
+ * @param display_result Display registration result using FreeView
+ * @param clean_files Delete all auxiliary and registration files
+ * @param output_registration Write out the registration file that is applied to the reoriented input file (fslmat or lta)
+ * @param version Print version and exit
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_reorient_lr_csh_params(
     input_vol: InputPathType,
     output_vol: string,
@@ -83,21 +96,8 @@ function mri_reorient_lr_csh_params(
     version: boolean = false,
     help: boolean = false,
 ): MriReorientLrCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input file to be reoriented
-     * @param output_vol Reoriented input file
-     * @param display_result Display registration result using FreeView
-     * @param clean_files Delete all auxiliary and registration files
-     * @param output_registration Write out the registration file that is applied to the reoriented input file (fslmat or lta)
-     * @param version Print version and exit
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_reorient_LR.csh" as const,
+        "@type": "freesurfer.mri_reorient_LR.csh" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "display_result": display_result,
@@ -110,18 +110,18 @@ function mri_reorient_lr_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_reorient_lr_csh_cargs(
     params: MriReorientLrCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_reorient_LR.csh");
     cargs.push(
@@ -151,18 +151,18 @@ function mri_reorient_lr_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_reorient_lr_csh_outputs(
     params: MriReorientLrCshParameters,
     execution: Execution,
 ): MriReorientLrCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriReorientLrCshOutputs = {
         root: execution.outputFile("."),
         reoriented_vol: execution.outputFile([(params["output_vol"] ?? null)].join('')),
@@ -171,22 +171,22 @@ function mri_reorient_lr_csh_outputs(
 }
 
 
+/**
+ * A script to reorient MRI volumes from left-right orientation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
+ */
 function mri_reorient_lr_csh_execute(
     params: MriReorientLrCshParameters,
     execution: Execution,
 ): MriReorientLrCshOutputs {
-    /**
-     * A script to reorient MRI volumes from left-right orientation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_reorient_lr_csh_cargs(params, execution)
     const ret = mri_reorient_lr_csh_outputs(params, execution)
@@ -195,6 +195,24 @@ function mri_reorient_lr_csh_execute(
 }
 
 
+/**
+ * A script to reorient MRI volumes from left-right orientation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input file to be reoriented
+ * @param output_vol Reoriented input file
+ * @param display_result Display registration result using FreeView
+ * @param clean_files Delete all auxiliary and registration files
+ * @param output_registration Write out the registration file that is applied to the reoriented input file (fslmat or lta)
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
+ */
 function mri_reorient_lr_csh(
     input_vol: InputPathType,
     output_vol: string,
@@ -205,24 +223,6 @@ function mri_reorient_lr_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriReorientLrCshOutputs {
-    /**
-     * A script to reorient MRI volumes from left-right orientation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input file to be reoriented
-     * @param output_vol Reoriented input file
-     * @param display_result Display registration result using FreeView
-     * @param clean_files Delete all auxiliary and registration files
-     * @param output_registration Write out the registration file that is applied to the reoriented input file (fslmat or lta)
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_REORIENT_LR_CSH_METADATA);
     const params = mri_reorient_lr_csh_params(input_vol, output_vol, display_result, clean_files, output_registration, version, help)
@@ -235,5 +235,8 @@ export {
       MriReorientLrCshOutputs,
       MriReorientLrCshParameters,
       mri_reorient_lr_csh,
+      mri_reorient_lr_csh_cargs,
+      mri_reorient_lr_csh_execute,
+      mri_reorient_lr_csh_outputs,
       mri_reorient_lr_csh_params,
 };

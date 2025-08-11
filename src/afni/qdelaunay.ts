@@ -12,7 +12,7 @@ const QDELAUNAY_METADATA: Metadata = {
 
 
 interface QdelaunayParameters {
-    "__STYXTYPE__": "qdelaunay";
+    "@type": "afni.qdelaunay";
     "input_file": InputPathType;
     "furthest_site": boolean;
     "triangulated_output": boolean;
@@ -49,33 +49,33 @@ interface QdelaunayParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "qdelaunay": qdelaunay_cargs,
+        "afni.qdelaunay": qdelaunay_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -95,6 +95,45 @@ interface QdelaunayOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file containing point coordinates.
+ * @param furthest_site Compute furthest-site Delaunay triangulation
+ * @param triangulated_output Triangulated output
+ * @param joggled_input Joggled input instead of merged facets
+ * @param joggle_range Randomly joggle input in range [-n,n]
+ * @param search_simplex Search all points for the initial simplex
+ * @param point_infinity Add point-at-infinity to Delaunay triangulation
+ * @param delaunay_visible Print Delaunay region if visible from point n, -n if not
+ * @param delaunay_regions Print Delaunay regions that include point n, -n if not
+ * @param trace_level Trace at level n, 4=all, 5=mem/gauss, -1= events
+ * @param check Check frequently during execution
+ * @param statistics Print statistics
+ * @param verify Verify result: structure, convexity, and in-circle test
+ * @param output_stdout Send all output to stdout
+ * @param facets_summary Report summary when n or more facets created
+ * @param input_file_option Input data from file, no spaces or single quotes
+ * @param output_file_option Output results to file, may be enclosed in single quotes
+ * @param trace_point Turn on tracing when point n added to hull
+ * @param trace_merge Turn on tracing at merge n
+ * @param trace_merge_width Trace merge facets when width > n
+ * @param stop_point Stop Qhull after adding point n, -n for before
+ * @param stop_cone_point Stop Qhull after building cone for point n
+ * @param centrum_radius Radius of centrum (roundoff added). Merge facets if non-convex
+ * @param max_angle_cosine Cosine of maximum angle. Merge facets if cosine > n or non-convex
+ * @param perturb_factor Randomly perturb computations by a factor of [1-n,1+n]
+ * @param min_facet_width Min facet width for outside point (before roundoff)
+ * @param facet_dump Facet dump
+ * @param geomview Geomview output
+ * @param vertices_incident Vertices incident to each Delaunay region
+ * @param mathematica Mathematica output (2-d only, lifted to a paraboloid)
+ * @param off_format OFF format (dim, points, and facets as a paraboloid)
+ * @param point_coordinates Point coordinates (lifted to a paraboloid)
+ * @param summary Summary (stderr)
+ *
+ * @returns Parameter dictionary
+ */
 function qdelaunay_params(
     input_file: InputPathType,
     furthest_site: boolean = false,
@@ -130,47 +169,8 @@ function qdelaunay_params(
     point_coordinates: boolean = false,
     summary: boolean = false,
 ): QdelaunayParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file containing point coordinates.
-     * @param furthest_site Compute furthest-site Delaunay triangulation
-     * @param triangulated_output Triangulated output
-     * @param joggled_input Joggled input instead of merged facets
-     * @param joggle_range Randomly joggle input in range [-n,n]
-     * @param search_simplex Search all points for the initial simplex
-     * @param point_infinity Add point-at-infinity to Delaunay triangulation
-     * @param delaunay_visible Print Delaunay region if visible from point n, -n if not
-     * @param delaunay_regions Print Delaunay regions that include point n, -n if not
-     * @param trace_level Trace at level n, 4=all, 5=mem/gauss, -1= events
-     * @param check Check frequently during execution
-     * @param statistics Print statistics
-     * @param verify Verify result: structure, convexity, and in-circle test
-     * @param output_stdout Send all output to stdout
-     * @param facets_summary Report summary when n or more facets created
-     * @param input_file_option Input data from file, no spaces or single quotes
-     * @param output_file_option Output results to file, may be enclosed in single quotes
-     * @param trace_point Turn on tracing when point n added to hull
-     * @param trace_merge Turn on tracing at merge n
-     * @param trace_merge_width Trace merge facets when width > n
-     * @param stop_point Stop Qhull after adding point n, -n for before
-     * @param stop_cone_point Stop Qhull after building cone for point n
-     * @param centrum_radius Radius of centrum (roundoff added). Merge facets if non-convex
-     * @param max_angle_cosine Cosine of maximum angle. Merge facets if cosine > n or non-convex
-     * @param perturb_factor Randomly perturb computations by a factor of [1-n,1+n]
-     * @param min_facet_width Min facet width for outside point (before roundoff)
-     * @param facet_dump Facet dump
-     * @param geomview Geomview output
-     * @param vertices_incident Vertices incident to each Delaunay region
-     * @param mathematica Mathematica output (2-d only, lifted to a paraboloid)
-     * @param off_format OFF format (dim, points, and facets as a paraboloid)
-     * @param point_coordinates Point coordinates (lifted to a paraboloid)
-     * @param summary Summary (stderr)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "qdelaunay" as const,
+        "@type": "afni.qdelaunay" as const,
         "input_file": input_file,
         "furthest_site": furthest_site,
         "triangulated_output": triangulated_output,
@@ -241,18 +241,18 @@ function qdelaunay_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function qdelaunay_cargs(
     params: QdelaunayParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("qdelaunay");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -404,18 +404,18 @@ function qdelaunay_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function qdelaunay_outputs(
     params: QdelaunayParameters,
     execution: Execution,
 ): QdelaunayOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QdelaunayOutputs = {
         root: execution.outputFile("."),
     };
@@ -423,22 +423,22 @@ function qdelaunay_outputs(
 }
 
 
+/**
+ * Compute the Delaunay triangulation using Qhull.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
+ */
 function qdelaunay_execute(
     params: QdelaunayParameters,
     execution: Execution,
 ): QdelaunayOutputs {
-    /**
-     * Compute the Delaunay triangulation using Qhull.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
-     */
     params = execution.params(params)
     const cargs = qdelaunay_cargs(params, execution)
     const ret = qdelaunay_outputs(params, execution)
@@ -447,6 +447,50 @@ function qdelaunay_execute(
 }
 
 
+/**
+ * Compute the Delaunay triangulation using Qhull.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input file containing point coordinates.
+ * @param furthest_site Compute furthest-site Delaunay triangulation
+ * @param triangulated_output Triangulated output
+ * @param joggled_input Joggled input instead of merged facets
+ * @param joggle_range Randomly joggle input in range [-n,n]
+ * @param search_simplex Search all points for the initial simplex
+ * @param point_infinity Add point-at-infinity to Delaunay triangulation
+ * @param delaunay_visible Print Delaunay region if visible from point n, -n if not
+ * @param delaunay_regions Print Delaunay regions that include point n, -n if not
+ * @param trace_level Trace at level n, 4=all, 5=mem/gauss, -1= events
+ * @param check Check frequently during execution
+ * @param statistics Print statistics
+ * @param verify Verify result: structure, convexity, and in-circle test
+ * @param output_stdout Send all output to stdout
+ * @param facets_summary Report summary when n or more facets created
+ * @param input_file_option Input data from file, no spaces or single quotes
+ * @param output_file_option Output results to file, may be enclosed in single quotes
+ * @param trace_point Turn on tracing when point n added to hull
+ * @param trace_merge Turn on tracing at merge n
+ * @param trace_merge_width Trace merge facets when width > n
+ * @param stop_point Stop Qhull after adding point n, -n for before
+ * @param stop_cone_point Stop Qhull after building cone for point n
+ * @param centrum_radius Radius of centrum (roundoff added). Merge facets if non-convex
+ * @param max_angle_cosine Cosine of maximum angle. Merge facets if cosine > n or non-convex
+ * @param perturb_factor Randomly perturb computations by a factor of [1-n,1+n]
+ * @param min_facet_width Min facet width for outside point (before roundoff)
+ * @param facet_dump Facet dump
+ * @param geomview Geomview output
+ * @param vertices_incident Vertices incident to each Delaunay region
+ * @param mathematica Mathematica output (2-d only, lifted to a paraboloid)
+ * @param off_format OFF format (dim, points, and facets as a paraboloid)
+ * @param point_coordinates Point coordinates (lifted to a paraboloid)
+ * @param summary Summary (stderr)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
+ */
 function qdelaunay(
     input_file: InputPathType,
     furthest_site: boolean = false,
@@ -483,50 +527,6 @@ function qdelaunay(
     summary: boolean = false,
     runner: Runner | null = null,
 ): QdelaunayOutputs {
-    /**
-     * Compute the Delaunay triangulation using Qhull.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input file containing point coordinates.
-     * @param furthest_site Compute furthest-site Delaunay triangulation
-     * @param triangulated_output Triangulated output
-     * @param joggled_input Joggled input instead of merged facets
-     * @param joggle_range Randomly joggle input in range [-n,n]
-     * @param search_simplex Search all points for the initial simplex
-     * @param point_infinity Add point-at-infinity to Delaunay triangulation
-     * @param delaunay_visible Print Delaunay region if visible from point n, -n if not
-     * @param delaunay_regions Print Delaunay regions that include point n, -n if not
-     * @param trace_level Trace at level n, 4=all, 5=mem/gauss, -1= events
-     * @param check Check frequently during execution
-     * @param statistics Print statistics
-     * @param verify Verify result: structure, convexity, and in-circle test
-     * @param output_stdout Send all output to stdout
-     * @param facets_summary Report summary when n or more facets created
-     * @param input_file_option Input data from file, no spaces or single quotes
-     * @param output_file_option Output results to file, may be enclosed in single quotes
-     * @param trace_point Turn on tracing when point n added to hull
-     * @param trace_merge Turn on tracing at merge n
-     * @param trace_merge_width Trace merge facets when width > n
-     * @param stop_point Stop Qhull after adding point n, -n for before
-     * @param stop_cone_point Stop Qhull after building cone for point n
-     * @param centrum_radius Radius of centrum (roundoff added). Merge facets if non-convex
-     * @param max_angle_cosine Cosine of maximum angle. Merge facets if cosine > n or non-convex
-     * @param perturb_factor Randomly perturb computations by a factor of [1-n,1+n]
-     * @param min_facet_width Min facet width for outside point (before roundoff)
-     * @param facet_dump Facet dump
-     * @param geomview Geomview output
-     * @param vertices_incident Vertices incident to each Delaunay region
-     * @param mathematica Mathematica output (2-d only, lifted to a paraboloid)
-     * @param off_format OFF format (dim, points, and facets as a paraboloid)
-     * @param point_coordinates Point coordinates (lifted to a paraboloid)
-     * @param summary Summary (stderr)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QDELAUNAY_METADATA);
     const params = qdelaunay_params(input_file, furthest_site, triangulated_output, joggled_input, joggle_range, search_simplex, point_infinity, delaunay_visible, delaunay_regions, trace_level, check, statistics, verify, output_stdout, facets_summary, input_file_option, output_file_option, trace_point, trace_merge, trace_merge_width, stop_point, stop_cone_point, centrum_radius, max_angle_cosine, perturb_factor, min_facet_width, facet_dump, geomview, vertices_incident, mathematica, off_format, point_coordinates, summary)
@@ -539,5 +539,8 @@ export {
       QdelaunayOutputs,
       QdelaunayParameters,
       qdelaunay,
+      qdelaunay_cargs,
+      qdelaunay_execute,
+      qdelaunay_outputs,
       qdelaunay_params,
 };

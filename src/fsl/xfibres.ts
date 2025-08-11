@@ -12,7 +12,7 @@ const XFIBRES_METADATA: Metadata = {
 
 
 interface XfibresParameters {
-    "__STYXTYPE__": "xfibres";
+    "@type": "fsl.xfibres";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "bvecs": InputPathType;
@@ -43,35 +43,35 @@ interface XfibresParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xfibres": xfibres_cargs,
+        "fsl.xfibres": xfibres_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "xfibres": xfibres_outputs,
+        "fsl.xfibres": xfibres_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,39 @@ interface XfibresOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile Data file (e.g., diffusion data)
+ * @param maskfile Mask file defining brain voxels
+ * @param bvecs B vectors file
+ * @param bvals B values file
+ * @param logdir Log directory (default is logdir)
+ * @param forcedir Use the actual directory name given - i.e., don't add + to make a new directory
+ * @param max_fibres Maximum number of fibres to fit in each voxel (default 1)
+ * @param model Model to use: 1=deconv. with sticks (default), 2=deconv. with sticks and a range of diffusivities, 3=deconv. with zeppelins
+ * @param fudge ARD fudge factor
+ * @param num_jumps Number of jumps to be made by MCMC (default 1250)
+ * @param num_burnin Total number of jumps at start of MCMC to be discarded (default 1000)
+ * @param burnin_noard Number of burnin jumps before ARD is imposed (default 0)
+ * @param sampleevery Number of jumps for each sample (MCMC) (default 25)
+ * @param updateproposal Number of jumps for each update to the proposal density std (MCMC) (default 40)
+ * @param seed Seed for pseudo-random number generator
+ * @param noard Turn ARD off on all fibres
+ * @param allard Turn ARD on all fibres
+ * @param nospat Initialize with tensor, not spatially
+ * @param nonlinear Initialize with nonlinear fitting
+ * @param cnonlinear Initialize with constrained nonlinear fitting
+ * @param rician Use Rician noise modelling
+ * @param add_f0 Add to the model an unattenuated signal compartment
+ * @param ard_f0 Use ARD on F0
+ * @param rmean Set the prior mean for R of model 3 (default: 0.13 - must be <0.5)
+ * @param rstd Set the prior standard deviation for R of model 3 (default: 0.03)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function xfibres_params(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -123,41 +156,8 @@ function xfibres_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): XfibresParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile Data file (e.g., diffusion data)
-     * @param maskfile Mask file defining brain voxels
-     * @param bvecs B vectors file
-     * @param bvals B values file
-     * @param logdir Log directory (default is logdir)
-     * @param forcedir Use the actual directory name given - i.e., don't add + to make a new directory
-     * @param max_fibres Maximum number of fibres to fit in each voxel (default 1)
-     * @param model Model to use: 1=deconv. with sticks (default), 2=deconv. with sticks and a range of diffusivities, 3=deconv. with zeppelins
-     * @param fudge ARD fudge factor
-     * @param num_jumps Number of jumps to be made by MCMC (default 1250)
-     * @param num_burnin Total number of jumps at start of MCMC to be discarded (default 1000)
-     * @param burnin_noard Number of burnin jumps before ARD is imposed (default 0)
-     * @param sampleevery Number of jumps for each sample (MCMC) (default 25)
-     * @param updateproposal Number of jumps for each update to the proposal density std (MCMC) (default 40)
-     * @param seed Seed for pseudo-random number generator
-     * @param noard Turn ARD off on all fibres
-     * @param allard Turn ARD on all fibres
-     * @param nospat Initialize with tensor, not spatially
-     * @param nonlinear Initialize with nonlinear fitting
-     * @param cnonlinear Initialize with constrained nonlinear fitting
-     * @param rician Use Rician noise modelling
-     * @param add_f0 Add to the model an unattenuated signal compartment
-     * @param ard_f0 Use ARD on F0
-     * @param rmean Set the prior mean for R of model 3 (default: 0.13 - must be <0.5)
-     * @param rstd Set the prior standard deviation for R of model 3 (default: 0.03)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xfibres" as const,
+        "@type": "fsl.xfibres" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "bvecs": bvecs,
@@ -214,18 +214,18 @@ function xfibres_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xfibres_cargs(
     params: XfibresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xfibres");
     cargs.push(
@@ -353,18 +353,18 @@ function xfibres_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xfibres_outputs(
     params: XfibresParameters,
     execution: Execution,
 ): XfibresOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XfibresOutputs = {
         root: execution.outputFile("."),
         output_logdir: execution.outputFile(["logdir"].join('')),
@@ -373,22 +373,22 @@ function xfibres_outputs(
 }
 
 
+/**
+ * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XfibresOutputs`).
+ */
 function xfibres_execute(
     params: XfibresParameters,
     execution: Execution,
 ): XfibresOutputs {
-    /**
-     * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XfibresOutputs`).
-     */
     params = execution.params(params)
     const cargs = xfibres_cargs(params, execution)
     const ret = xfibres_outputs(params, execution)
@@ -397,6 +397,44 @@ function xfibres_execute(
 }
 
 
+/**
+ * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile Data file (e.g., diffusion data)
+ * @param maskfile Mask file defining brain voxels
+ * @param bvecs B vectors file
+ * @param bvals B values file
+ * @param logdir Log directory (default is logdir)
+ * @param forcedir Use the actual directory name given - i.e., don't add + to make a new directory
+ * @param max_fibres Maximum number of fibres to fit in each voxel (default 1)
+ * @param model Model to use: 1=deconv. with sticks (default), 2=deconv. with sticks and a range of diffusivities, 3=deconv. with zeppelins
+ * @param fudge ARD fudge factor
+ * @param num_jumps Number of jumps to be made by MCMC (default 1250)
+ * @param num_burnin Total number of jumps at start of MCMC to be discarded (default 1000)
+ * @param burnin_noard Number of burnin jumps before ARD is imposed (default 0)
+ * @param sampleevery Number of jumps for each sample (MCMC) (default 25)
+ * @param updateproposal Number of jumps for each update to the proposal density std (MCMC) (default 40)
+ * @param seed Seed for pseudo-random number generator
+ * @param noard Turn ARD off on all fibres
+ * @param allard Turn ARD on all fibres
+ * @param nospat Initialize with tensor, not spatially
+ * @param nonlinear Initialize with nonlinear fitting
+ * @param cnonlinear Initialize with constrained nonlinear fitting
+ * @param rician Use Rician noise modelling
+ * @param add_f0 Add to the model an unattenuated signal compartment
+ * @param ard_f0 Use ARD on F0
+ * @param rmean Set the prior mean for R of model 3 (default: 0.13 - must be <0.5)
+ * @param rstd Set the prior standard deviation for R of model 3 (default: 0.03)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XfibresOutputs`).
+ */
 function xfibres(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -427,44 +465,6 @@ function xfibres(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): XfibresOutputs {
-    /**
-     * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile Data file (e.g., diffusion data)
-     * @param maskfile Mask file defining brain voxels
-     * @param bvecs B vectors file
-     * @param bvals B values file
-     * @param logdir Log directory (default is logdir)
-     * @param forcedir Use the actual directory name given - i.e., don't add + to make a new directory
-     * @param max_fibres Maximum number of fibres to fit in each voxel (default 1)
-     * @param model Model to use: 1=deconv. with sticks (default), 2=deconv. with sticks and a range of diffusivities, 3=deconv. with zeppelins
-     * @param fudge ARD fudge factor
-     * @param num_jumps Number of jumps to be made by MCMC (default 1250)
-     * @param num_burnin Total number of jumps at start of MCMC to be discarded (default 1000)
-     * @param burnin_noard Number of burnin jumps before ARD is imposed (default 0)
-     * @param sampleevery Number of jumps for each sample (MCMC) (default 25)
-     * @param updateproposal Number of jumps for each update to the proposal density std (MCMC) (default 40)
-     * @param seed Seed for pseudo-random number generator
-     * @param noard Turn ARD off on all fibres
-     * @param allard Turn ARD on all fibres
-     * @param nospat Initialize with tensor, not spatially
-     * @param nonlinear Initialize with nonlinear fitting
-     * @param cnonlinear Initialize with constrained nonlinear fitting
-     * @param rician Use Rician noise modelling
-     * @param add_f0 Add to the model an unattenuated signal compartment
-     * @param ard_f0 Use ARD on F0
-     * @param rmean Set the prior mean for R of model 3 (default: 0.13 - must be <0.5)
-     * @param rstd Set the prior standard deviation for R of model 3 (default: 0.03)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XfibresOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XFIBRES_METADATA);
     const params = xfibres_params(datafile, maskfile, bvecs, bvals, logdir, forcedir, max_fibres, model, fudge, num_jumps, num_burnin, burnin_noard, sampleevery, updateproposal, seed, noard, allard, nospat, nonlinear, cnonlinear, rician, add_f0, ard_f0, rmean, rstd, verbose_flag, help_flag)
@@ -477,5 +477,8 @@ export {
       XfibresOutputs,
       XfibresParameters,
       xfibres,
+      xfibres_cargs,
+      xfibres_execute,
+      xfibres_outputs,
       xfibres_params,
 };

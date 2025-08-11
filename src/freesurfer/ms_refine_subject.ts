@@ -12,38 +12,38 @@ const MS_REFINE_SUBJECT_METADATA: Metadata = {
 
 
 interface MsRefineSubjectParameters {
-    "__STYXTYPE__": "ms_refine_subject";
+    "@type": "freesurfer.ms_refine_subject";
     "subjects_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ms_refine_subject": ms_refine_subject_cargs,
+        "freesurfer.ms_refine_subject": ms_refine_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MsRefineSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_dir Directory containing the subject data (e.g. /usr/local/freesurfer/subjects)
+ *
+ * @returns Parameter dictionary
+ */
 function ms_refine_subject_params(
     subjects_dir: string,
 ): MsRefineSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_dir Directory containing the subject data (e.g. /usr/local/freesurfer/subjects)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ms_refine_subject" as const,
+        "@type": "freesurfer.ms_refine_subject" as const,
         "subjects_dir": subjects_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ms_refine_subject_cargs(
     params: MsRefineSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ms_refine_subject");
     cargs.push((params["subjects_dir"] ?? null));
@@ -100,18 +100,18 @@ function ms_refine_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ms_refine_subject_outputs(
     params: MsRefineSubjectParameters,
     execution: Execution,
 ): MsRefineSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MsRefineSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function ms_refine_subject_outputs(
 }
 
 
+/**
+ * Unknown.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
+ */
 function ms_refine_subject_execute(
     params: MsRefineSubjectParameters,
     execution: Execution,
 ): MsRefineSubjectOutputs {
-    /**
-     * Unknown.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = ms_refine_subject_cargs(params, execution)
     const ret = ms_refine_subject_outputs(params, execution)
@@ -143,22 +143,22 @@ function ms_refine_subject_execute(
 }
 
 
+/**
+ * Unknown.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_dir Directory containing the subject data (e.g. /usr/local/freesurfer/subjects)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
+ */
 function ms_refine_subject(
     subjects_dir: string,
     runner: Runner | null = null,
 ): MsRefineSubjectOutputs {
-    /**
-     * Unknown.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_dir Directory containing the subject data (e.g. /usr/local/freesurfer/subjects)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MS_REFINE_SUBJECT_METADATA);
     const params = ms_refine_subject_params(subjects_dir)
@@ -171,5 +171,8 @@ export {
       MsRefineSubjectOutputs,
       MsRefineSubjectParameters,
       ms_refine_subject,
+      ms_refine_subject_cargs,
+      ms_refine_subject_execute,
+      ms_refine_subject_outputs,
       ms_refine_subject_params,
 };

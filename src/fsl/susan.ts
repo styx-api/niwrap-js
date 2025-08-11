@@ -12,7 +12,7 @@ const SUSAN_METADATA: Metadata = {
 
 
 interface SusanParameters {
-    "__STYXTYPE__": "susan";
+    "@type": "fsl.susan";
     "input_file": InputPathType;
     "brightness_threshold": number;
     "spatial_size": number;
@@ -27,35 +27,35 @@ interface SusanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "susan": susan_cargs,
+        "fsl.susan": susan_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "susan": susan_outputs,
+        "fsl.susan": susan_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface SusanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file
+ * @param brightness_threshold Brightness threshold; should be greater than noise level and less than contrast of edges to be preserved
+ * @param spatial_size Spatial size (sigma, i.e., half-width) of smoothing, in mm
+ * @param dimensionality Dimensionality (2 or 3), for within-plane (2) or fully 3D (3) smoothing
+ * @param use_median_filter Use median filter for cases where single-point noise is detected (0 or 1)
+ * @param n_usans Determine if the smoothing area is found from secondary images (0, 1 or 2)
+ * @param output_file Output image file
+ * @param usan1 First USAN image file
+ * @param brightness_threshold1 Brightness threshold for first USAN image
+ * @param usan2 Second USAN image file
+ * @param brightness_threshold2 Brightness threshold for second USAN image
+ *
+ * @returns Parameter dictionary
+ */
 function susan_params(
     input_file: InputPathType,
     brightness_threshold: number,
@@ -91,25 +108,8 @@ function susan_params(
     usan2: InputPathType | null = null,
     brightness_threshold2: number | null = null,
 ): SusanParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file
-     * @param brightness_threshold Brightness threshold; should be greater than noise level and less than contrast of edges to be preserved
-     * @param spatial_size Spatial size (sigma, i.e., half-width) of smoothing, in mm
-     * @param dimensionality Dimensionality (2 or 3), for within-plane (2) or fully 3D (3) smoothing
-     * @param use_median_filter Use median filter for cases where single-point noise is detected (0 or 1)
-     * @param n_usans Determine if the smoothing area is found from secondary images (0, 1 or 2)
-     * @param output_file Output image file
-     * @param usan1 First USAN image file
-     * @param brightness_threshold1 Brightness threshold for first USAN image
-     * @param usan2 Second USAN image file
-     * @param brightness_threshold2 Brightness threshold for second USAN image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "susan" as const,
+        "@type": "fsl.susan" as const,
         "input_file": input_file,
         "brightness_threshold": brightness_threshold,
         "spatial_size": spatial_size,
@@ -134,18 +134,18 @@ function susan_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function susan_cargs(
     params: SusanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("susan");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -171,18 +171,18 @@ function susan_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function susan_outputs(
     params: SusanParameters,
     execution: Execution,
 ): SusanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SusanOutputs = {
         root: execution.outputFile("."),
         filtered_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -191,22 +191,22 @@ function susan_outputs(
 }
 
 
+/**
+ * Non-linear noise reduction filtering tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SusanOutputs`).
+ */
 function susan_execute(
     params: SusanParameters,
     execution: Execution,
 ): SusanOutputs {
-    /**
-     * Non-linear noise reduction filtering tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SusanOutputs`).
-     */
     params = execution.params(params)
     const cargs = susan_cargs(params, execution)
     const ret = susan_outputs(params, execution)
@@ -215,6 +215,28 @@ function susan_execute(
 }
 
 
+/**
+ * Non-linear noise reduction filtering tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file
+ * @param brightness_threshold Brightness threshold; should be greater than noise level and less than contrast of edges to be preserved
+ * @param spatial_size Spatial size (sigma, i.e., half-width) of smoothing, in mm
+ * @param dimensionality Dimensionality (2 or 3), for within-plane (2) or fully 3D (3) smoothing
+ * @param use_median_filter Use median filter for cases where single-point noise is detected (0 or 1)
+ * @param n_usans Determine if the smoothing area is found from secondary images (0, 1 or 2)
+ * @param output_file Output image file
+ * @param usan1 First USAN image file
+ * @param brightness_threshold1 Brightness threshold for first USAN image
+ * @param usan2 Second USAN image file
+ * @param brightness_threshold2 Brightness threshold for second USAN image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SusanOutputs`).
+ */
 function susan(
     input_file: InputPathType,
     brightness_threshold: number,
@@ -229,28 +251,6 @@ function susan(
     brightness_threshold2: number | null = null,
     runner: Runner | null = null,
 ): SusanOutputs {
-    /**
-     * Non-linear noise reduction filtering tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file
-     * @param brightness_threshold Brightness threshold; should be greater than noise level and less than contrast of edges to be preserved
-     * @param spatial_size Spatial size (sigma, i.e., half-width) of smoothing, in mm
-     * @param dimensionality Dimensionality (2 or 3), for within-plane (2) or fully 3D (3) smoothing
-     * @param use_median_filter Use median filter for cases where single-point noise is detected (0 or 1)
-     * @param n_usans Determine if the smoothing area is found from secondary images (0, 1 or 2)
-     * @param output_file Output image file
-     * @param usan1 First USAN image file
-     * @param brightness_threshold1 Brightness threshold for first USAN image
-     * @param usan2 Second USAN image file
-     * @param brightness_threshold2 Brightness threshold for second USAN image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SusanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SUSAN_METADATA);
     const params = susan_params(input_file, brightness_threshold, spatial_size, dimensionality, use_median_filter, n_usans, output_file, usan1, brightness_threshold1, usan2, brightness_threshold2)
@@ -263,5 +263,8 @@ export {
       SusanOutputs,
       SusanParameters,
       susan,
+      susan_cargs,
+      susan_execute,
+      susan_outputs,
       susan_params,
 };

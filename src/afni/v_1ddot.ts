@@ -12,7 +12,7 @@ const V_1DDOT_METADATA: Metadata = {
 
 
 interface V1ddotParameters {
-    "__STYXTYPE__": "1ddot";
+    "@type": "afni.1ddot";
     "one_flag": boolean;
     "dem_flag": boolean;
     "cov_flag": boolean;
@@ -24,35 +24,35 @@ interface V1ddotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1ddot": v_1ddot_cargs,
+        "afni.1ddot": v_1ddot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1ddot": v_1ddot_outputs,
+        "afni.1ddot": v_1ddot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V1ddotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 1D files.
+ * @param one_flag Make 1st vector be all 1's.
+ * @param dem_flag Remove mean from all vectors (conflicts with '-one').
+ * @param cov_flag Compute with covariance matrix instead of correlation.
+ * @param inn_flag Compute with inner product matrix instead.
+ * @param rank_flag Compute Spearman rank correlation instead (also implies '-terse').
+ * @param terse_flag Output only the correlation or covariance matrix without any garnish.
+ * @param okzero_flag Do not quit if a vector is all zeros. The correlation matrix will have 0 where NaNs ought to go.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1ddot_params(
     input_files: Array<InputPathType>,
     one_flag: boolean = false,
@@ -89,22 +103,8 @@ function v_1ddot_params(
     terse_flag: boolean = false,
     okzero_flag: boolean = false,
 ): V1ddotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 1D files.
-     * @param one_flag Make 1st vector be all 1's.
-     * @param dem_flag Remove mean from all vectors (conflicts with '-one').
-     * @param cov_flag Compute with covariance matrix instead of correlation.
-     * @param inn_flag Compute with inner product matrix instead.
-     * @param rank_flag Compute Spearman rank correlation instead (also implies '-terse').
-     * @param terse_flag Output only the correlation or covariance matrix without any garnish.
-     * @param okzero_flag Do not quit if a vector is all zeros. The correlation matrix will have 0 where NaNs ought to go.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1ddot" as const,
+        "@type": "afni.1ddot" as const,
         "one_flag": one_flag,
         "dem_flag": dem_flag,
         "cov_flag": cov_flag,
@@ -118,18 +118,18 @@ function v_1ddot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1ddot_cargs(
     params: V1ddotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1ddot");
     if ((params["one_flag"] ?? null)) {
@@ -158,18 +158,18 @@ function v_1ddot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1ddot_outputs(
     params: V1ddotParameters,
     execution: Execution,
 ): V1ddotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1ddotOutputs = {
         root: execution.outputFile("."),
         stdout: [],
@@ -179,22 +179,22 @@ function v_1ddot_outputs(
 }
 
 
+/**
+ * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
+ */
 function v_1ddot_execute(
     params: V1ddotParameters,
     execution: Execution,
 ): V1ddotOutputs {
-    /**
-     * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1ddot_cargs(params, execution)
     const ret = v_1ddot_outputs(params, execution)
@@ -203,6 +203,25 @@ function v_1ddot_execute(
 }
 
 
+/**
+ * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 1D files.
+ * @param one_flag Make 1st vector be all 1's.
+ * @param dem_flag Remove mean from all vectors (conflicts with '-one').
+ * @param cov_flag Compute with covariance matrix instead of correlation.
+ * @param inn_flag Compute with inner product matrix instead.
+ * @param rank_flag Compute Spearman rank correlation instead (also implies '-terse').
+ * @param terse_flag Output only the correlation or covariance matrix without any garnish.
+ * @param okzero_flag Do not quit if a vector is all zeros. The correlation matrix will have 0 where NaNs ought to go.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
+ */
 function v_1ddot(
     input_files: Array<InputPathType>,
     one_flag: boolean = false,
@@ -214,25 +233,6 @@ function v_1ddot(
     okzero_flag: boolean = false,
     runner: Runner | null = null,
 ): V1ddotOutputs {
-    /**
-     * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 1D files.
-     * @param one_flag Make 1st vector be all 1's.
-     * @param dem_flag Remove mean from all vectors (conflicts with '-one').
-     * @param cov_flag Compute with covariance matrix instead of correlation.
-     * @param inn_flag Compute with inner product matrix instead.
-     * @param rank_flag Compute Spearman rank correlation instead (also implies '-terse').
-     * @param terse_flag Output only the correlation or covariance matrix without any garnish.
-     * @param okzero_flag Do not quit if a vector is all zeros. The correlation matrix will have 0 where NaNs ought to go.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DDOT_METADATA);
     const params = v_1ddot_params(input_files, one_flag, dem_flag, cov_flag, inn_flag, rank_flag, terse_flag, okzero_flag)
@@ -245,5 +245,8 @@ export {
       V1ddotParameters,
       V_1DDOT_METADATA,
       v_1ddot,
+      v_1ddot_cargs,
+      v_1ddot_execute,
+      v_1ddot_outputs,
       v_1ddot_params,
 };

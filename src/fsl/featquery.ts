@@ -12,7 +12,7 @@ const FEATQUERY_METADATA: Metadata = {
 
 
 interface FeatqueryParameters {
-    "__STYXTYPE__": "featquery";
+    "@type": "fsl.featquery";
     "n_featdirs": number;
     "featdirs": Array<string>;
     "n_stats": number;
@@ -30,35 +30,35 @@ interface FeatqueryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "featquery": featquery_cargs,
+        "fsl.featquery": featquery_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "featquery": featquery_outputs,
+        "fsl.featquery": featquery_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface FeatqueryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param n_featdirs Number of feat directories
+ * @param featdirs List of feat directories
+ * @param n_stats Number of stats to query
+ * @param stats List of stats
+ * @param output_rootname Root name for output files
+ * @param mask_file Mask file used as a reference for coordinates; if relative, searched within each FEAT directory
+ * @param atlas_flag Use selected atlas to generate label (etc.) information
+ * @param percent_convert_flag Convert PE / COPE values into percentages
+ * @param thresh_flag Threshold stats images
+ * @param interp_thresh Affect size of resampled masks by changing post-interpolation thresholding (default 0.5)
+ * @param timeseries_flag Create time-series plots
+ * @param weight_flag Do not binarise mask (allow weighting)
+ * @param browser_flag Popup results in browser when finished
+ * @param coords Coordinates specified in voxels (X Y Z)
+ *
+ * @returns Parameter dictionary
+ */
 function featquery_params(
     n_featdirs: number,
     featdirs: Array<string>,
@@ -97,28 +117,8 @@ function featquery_params(
     browser_flag: boolean = false,
     coords: Array<number> | null = null,
 ): FeatqueryParameters {
-    /**
-     * Build parameters.
-    
-     * @param n_featdirs Number of feat directories
-     * @param featdirs List of feat directories
-     * @param n_stats Number of stats to query
-     * @param stats List of stats
-     * @param output_rootname Root name for output files
-     * @param mask_file Mask file used as a reference for coordinates; if relative, searched within each FEAT directory
-     * @param atlas_flag Use selected atlas to generate label (etc.) information
-     * @param percent_convert_flag Convert PE / COPE values into percentages
-     * @param thresh_flag Threshold stats images
-     * @param interp_thresh Affect size of resampled masks by changing post-interpolation thresholding (default 0.5)
-     * @param timeseries_flag Create time-series plots
-     * @param weight_flag Do not binarise mask (allow weighting)
-     * @param browser_flag Popup results in browser when finished
-     * @param coords Coordinates specified in voxels (X Y Z)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "featquery" as const,
+        "@type": "fsl.featquery" as const,
         "n_featdirs": n_featdirs,
         "featdirs": featdirs,
         "n_stats": n_stats,
@@ -144,18 +144,18 @@ function featquery_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function featquery_cargs(
     params: FeatqueryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("featquery");
     cargs.push(String((params["n_featdirs"] ?? null)));
@@ -201,18 +201,18 @@ function featquery_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function featquery_outputs(
     params: FeatqueryParameters,
     execution: Execution,
 ): FeatqueryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FeatqueryOutputs = {
         root: execution.outputFile("."),
         query_report: execution.outputFile([(params["output_rootname"] ?? null), "_queryreport.txt"].join('')),
@@ -221,22 +221,22 @@ function featquery_outputs(
 }
 
 
+/**
+ * Tool to extract statistics and/or time series from FEAT directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
+ */
 function featquery_execute(
     params: FeatqueryParameters,
     execution: Execution,
 ): FeatqueryOutputs {
-    /**
-     * Tool to extract statistics and/or time series from FEAT directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
-     */
     params = execution.params(params)
     const cargs = featquery_cargs(params, execution)
     const ret = featquery_outputs(params, execution)
@@ -245,6 +245,31 @@ function featquery_execute(
 }
 
 
+/**
+ * Tool to extract statistics and/or time series from FEAT directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param n_featdirs Number of feat directories
+ * @param featdirs List of feat directories
+ * @param n_stats Number of stats to query
+ * @param stats List of stats
+ * @param output_rootname Root name for output files
+ * @param mask_file Mask file used as a reference for coordinates; if relative, searched within each FEAT directory
+ * @param atlas_flag Use selected atlas to generate label (etc.) information
+ * @param percent_convert_flag Convert PE / COPE values into percentages
+ * @param thresh_flag Threshold stats images
+ * @param interp_thresh Affect size of resampled masks by changing post-interpolation thresholding (default 0.5)
+ * @param timeseries_flag Create time-series plots
+ * @param weight_flag Do not binarise mask (allow weighting)
+ * @param browser_flag Popup results in browser when finished
+ * @param coords Coordinates specified in voxels (X Y Z)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
+ */
 function featquery(
     n_featdirs: number,
     featdirs: Array<string>,
@@ -262,31 +287,6 @@ function featquery(
     coords: Array<number> | null = null,
     runner: Runner | null = null,
 ): FeatqueryOutputs {
-    /**
-     * Tool to extract statistics and/or time series from FEAT directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param n_featdirs Number of feat directories
-     * @param featdirs List of feat directories
-     * @param n_stats Number of stats to query
-     * @param stats List of stats
-     * @param output_rootname Root name for output files
-     * @param mask_file Mask file used as a reference for coordinates; if relative, searched within each FEAT directory
-     * @param atlas_flag Use selected atlas to generate label (etc.) information
-     * @param percent_convert_flag Convert PE / COPE values into percentages
-     * @param thresh_flag Threshold stats images
-     * @param interp_thresh Affect size of resampled masks by changing post-interpolation thresholding (default 0.5)
-     * @param timeseries_flag Create time-series plots
-     * @param weight_flag Do not binarise mask (allow weighting)
-     * @param browser_flag Popup results in browser when finished
-     * @param coords Coordinates specified in voxels (X Y Z)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEATQUERY_METADATA);
     const params = featquery_params(n_featdirs, featdirs, n_stats, stats, output_rootname, mask_file, atlas_flag, percent_convert_flag, thresh_flag, interp_thresh, timeseries_flag, weight_flag, browser_flag, coords)
@@ -299,5 +299,8 @@ export {
       FeatqueryOutputs,
       FeatqueryParameters,
       featquery,
+      featquery_cargs,
+      featquery_execute,
+      featquery_outputs,
       featquery_params,
 };

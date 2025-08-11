@@ -12,42 +12,42 @@ const V__THICKNESS_MASTER_METADATA: Metadata = {
 
 
 interface VThicknessMasterParameters {
-    "__STYXTYPE__": "@thickness_master";
+    "@type": "afni.@thickness_master";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@thickness_master": v__thickness_master_cargs,
+        "afni.@thickness_master": v__thickness_master_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@thickness_master": v__thickness_master_outputs,
+        "afni.@thickness_master": v__thickness_master_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,22 +78,22 @@ interface VThicknessMasterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param maskset Mask dataset to find thickness
+ * @param surfset Surface dataset to use for normals into the volume
+ * @param outdir Output directory base name. The output will be placed in a directory with thick_base in its name (e.g., mmmm_bb, mmmm_erode, mmmm_in2out)
+ *
+ * @returns Parameter dictionary
+ */
 function v__thickness_master_params(
     maskset: InputPathType,
     surfset: InputPathType,
     outdir: string | null = null,
 ): VThicknessMasterParameters {
-    /**
-     * Build parameters.
-    
-     * @param maskset Mask dataset to find thickness
-     * @param surfset Surface dataset to use for normals into the volume
-     * @param outdir Output directory base name. The output will be placed in a directory with thick_base in its name (e.g., mmmm_bb, mmmm_erode, mmmm_in2out)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@thickness_master" as const,
+        "@type": "afni.@thickness_master" as const,
         "maskset": maskset,
         "surfset": surfset,
     };
@@ -104,18 +104,18 @@ function v__thickness_master_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__thickness_master_cargs(
     params: VThicknessMasterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@thickness_master");
     cargs.push(
@@ -136,18 +136,18 @@ function v__thickness_master_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__thickness_master_outputs(
     params: VThicknessMasterParameters,
     execution: Execution,
 ): VThicknessMasterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VThicknessMasterOutputs = {
         root: execution.outputFile("."),
         output_bb_dir: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "_bb/"].join('')) : null,
@@ -158,22 +158,22 @@ function v__thickness_master_outputs(
 }
 
 
+/**
+ * Compute cortical thickness using mask and surface datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
+ */
 function v__thickness_master_execute(
     params: VThicknessMasterParameters,
     execution: Execution,
 ): VThicknessMasterOutputs {
-    /**
-     * Compute cortical thickness using mask and surface datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__thickness_master_cargs(params, execution)
     const ret = v__thickness_master_outputs(params, execution)
@@ -182,26 +182,26 @@ function v__thickness_master_execute(
 }
 
 
+/**
+ * Compute cortical thickness using mask and surface datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param maskset Mask dataset to find thickness
+ * @param surfset Surface dataset to use for normals into the volume
+ * @param outdir Output directory base name. The output will be placed in a directory with thick_base in its name (e.g., mmmm_bb, mmmm_erode, mmmm_in2out)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
+ */
 function v__thickness_master(
     maskset: InputPathType,
     surfset: InputPathType,
     outdir: string | null = null,
     runner: Runner | null = null,
 ): VThicknessMasterOutputs {
-    /**
-     * Compute cortical thickness using mask and surface datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param maskset Mask dataset to find thickness
-     * @param surfset Surface dataset to use for normals into the volume
-     * @param outdir Output directory base name. The output will be placed in a directory with thick_base in its name (e.g., mmmm_bb, mmmm_erode, mmmm_in2out)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__THICKNESS_MASTER_METADATA);
     const params = v__thickness_master_params(maskset, surfset, outdir)
@@ -214,5 +214,8 @@ export {
       VThicknessMasterParameters,
       V__THICKNESS_MASTER_METADATA,
       v__thickness_master,
+      v__thickness_master_cargs,
+      v__thickness_master_execute,
+      v__thickness_master_outputs,
       v__thickness_master_params,
 };

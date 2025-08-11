@@ -12,40 +12,40 @@ const MORPH_ONLY_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface MorphOnlySubjectRhParameters {
-    "__STYXTYPE__": "morph_only_subject-rh";
+    "@type": "freesurfer.morph_only_subject-rh";
     "subject_dir": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_only_subject-rh": morph_only_subject_rh_cargs,
+        "freesurfer.morph_only_subject-rh": morph_only_subject_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "morph_only_subject-rh": morph_only_subject_rh_outputs,
+        "freesurfer.morph_only_subject-rh": morph_only_subject_rh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface MorphOnlySubjectRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Path to the subject's directory containing the necessary input files.
+ *
+ * @returns Parameter dictionary
+ */
 function morph_only_subject_rh_params(
     subject_dir: InputPathType,
 ): MorphOnlySubjectRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Path to the subject's directory containing the necessary input files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_only_subject-rh" as const,
+        "@type": "freesurfer.morph_only_subject-rh" as const,
         "subject_dir": subject_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_only_subject_rh_cargs(
     params: MorphOnlySubjectRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_only_subject-rh");
     cargs.push(
@@ -108,18 +108,18 @@ function morph_only_subject_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_only_subject_rh_outputs(
     params: MorphOnlySubjectRhParameters,
     execution: Execution,
 ): MorphOnlySubjectRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphOnlySubjectRhOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile(["/usr/local/freesurfer/subjects/", path.basename((params["subject_dir"] ?? null)), "/rh.morph"].join('')),
@@ -128,22 +128,22 @@ function morph_only_subject_rh_outputs(
 }
 
 
+/**
+ * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
+ */
 function morph_only_subject_rh_execute(
     params: MorphOnlySubjectRhParameters,
     execution: Execution,
 ): MorphOnlySubjectRhOutputs {
-    /**
-     * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_only_subject_rh_cargs(params, execution)
     const ret = morph_only_subject_rh_outputs(params, execution)
@@ -152,22 +152,22 @@ function morph_only_subject_rh_execute(
 }
 
 
+/**
+ * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Path to the subject's directory containing the necessary input files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
+ */
 function morph_only_subject_rh(
     subject_dir: InputPathType,
     runner: Runner | null = null,
 ): MorphOnlySubjectRhOutputs {
-    /**
-     * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Path to the subject's directory containing the necessary input files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_ONLY_SUBJECT_RH_METADATA);
     const params = morph_only_subject_rh_params(subject_dir)
@@ -180,5 +180,8 @@ export {
       MorphOnlySubjectRhOutputs,
       MorphOnlySubjectRhParameters,
       morph_only_subject_rh,
+      morph_only_subject_rh_cargs,
+      morph_only_subject_rh_execute,
+      morph_only_subject_rh_outputs,
       morph_only_subject_rh_params,
 };

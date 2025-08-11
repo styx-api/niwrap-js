@@ -12,21 +12,21 @@ const DWIGRADCHECK_METADATA: Metadata = {
 
 
 interface DwigradcheckFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwigradcheck.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface DwigradcheckExportGradFslParameters {
-    "__STYXTYPE__": "export_grad_fsl";
+    "@type": "mrtrix.dwigradcheck.export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
 
 
 interface DwigradcheckParameters {
-    "__STYXTYPE__": "dwigradcheck";
+    "@type": "mrtrix.dwigradcheck";
     "input_image": InputPathType;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: DwigradcheckFslgradParameters | null | undefined;
@@ -48,57 +48,57 @@ interface DwigradcheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwigradcheck": dwigradcheck_cargs,
-        "fslgrad": dwigradcheck_fslgrad_cargs,
-        "export_grad_fsl": dwigradcheck_export_grad_fsl_cargs,
+        "mrtrix.dwigradcheck": dwigradcheck_cargs,
+        "mrtrix.dwigradcheck.fslgrad": dwigradcheck_fslgrad_cargs,
+        "mrtrix.dwigradcheck.export_grad_fsl": dwigradcheck_export_grad_fsl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwigradcheck": dwigradcheck_outputs,
-        "export_grad_fsl": dwigradcheck_export_grad_fsl_outputs,
+        "mrtrix.dwigradcheck": dwigradcheck_outputs,
+        "mrtrix.dwigradcheck.export_grad_fsl": dwigradcheck_export_grad_fsl_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwigradcheck_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): DwigradcheckFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwigradcheck.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -106,18 +106,18 @@ function dwigradcheck_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwigradcheck_fslgrad_cargs(
     params: DwigradcheckFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -147,20 +147,20 @@ interface DwigradcheckExportGradFslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ *
+ * @returns Parameter dictionary
+ */
 function dwigradcheck_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
 ): DwigradcheckExportGradFslParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_grad_fsl" as const,
+        "@type": "mrtrix.dwigradcheck.export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -168,18 +168,18 @@ function dwigradcheck_export_grad_fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwigradcheck_export_grad_fsl_cargs(
     params: DwigradcheckExportGradFslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_grad_fsl");
     cargs.push((params["bvecs_path"] ?? null));
@@ -188,18 +188,18 @@ function dwigradcheck_export_grad_fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwigradcheck_export_grad_fsl_outputs(
     params: DwigradcheckExportGradFslParameters,
     execution: Execution,
 ): DwigradcheckExportGradFslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DwigradcheckExportGradFslOutputs = {
         root: execution.outputFile("."),
         bvecs_path: execution.outputFile([(params["bvecs_path"] ?? null)].join('')),
@@ -234,6 +234,30 @@ interface DwigradcheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image The input DWI series to be checked
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param mask_image Provide a brain mask image
+ * @param number_ Set the number of tracks to generate for each test
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config Temporarily set the value of an MRtrix config file entry
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dwigradcheck_params(
     input_image: InputPathType,
     grad: InputPathType | null = null,
@@ -254,32 +278,8 @@ function dwigradcheck_params(
     help: boolean = false,
     version: boolean = false,
 ): DwigradcheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image The input DWI series to be checked
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param mask_image Provide a brain mask image
-     * @param number_ Set the number of tracks to generate for each test
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config Temporarily set the value of an MRtrix config file entry
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwigradcheck" as const,
+        "@type": "mrtrix.dwigradcheck" as const,
         "input_image": input_image,
         "nocleanup": nocleanup,
         "info": info,
@@ -323,18 +323,18 @@ function dwigradcheck_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwigradcheck_cargs(
     params: DwigradcheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwigradcheck");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -345,7 +345,7 @@ function dwigradcheck_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask_image"] ?? null) !== null) {
         cargs.push(
@@ -366,7 +366,7 @@ function dwigradcheck_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null).__STYXTYPE__)((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["nocleanup"] ?? null)) {
         cargs.push("-nocleanup");
@@ -417,44 +417,44 @@ function dwigradcheck_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwigradcheck_outputs(
     params: DwigradcheckParameters,
     execution: Execution,
 ): DwigradcheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DwigradcheckOutputs = {
         root: execution.outputFile("."),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_grad_fsl: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl_: (dynOutputs((params["export_grad_fsl"] ?? null).__STYXTYPE__)?.((params["export_grad_fsl"] ?? null), execution) ?? null),
+        export_grad_fsl_: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Check the orientation of the diffusion gradient table.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
+ */
 function dwigradcheck_execute(
     params: DwigradcheckParameters,
     execution: Execution,
 ): DwigradcheckOutputs {
-    /**
-     * Check the orientation of the diffusion gradient table.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwigradcheck_cargs(params, execution)
     const ret = dwigradcheck_outputs(params, execution)
@@ -463,6 +463,35 @@ function dwigradcheck_execute(
 }
 
 
+/**
+ * Check the orientation of the diffusion gradient table.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input_image The input DWI series to be checked
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param mask_image Provide a brain mask image
+ * @param number_ Set the number of tracks to generate for each test
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
+ * @param scratch_dir Manually specify the path in which to generate the scratch directory
+ * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
+ * @param info Display information messages
+ * @param quiet Do not display information messages or progress status
+ * @param debug Display debugging messages
+ * @param force Force overwrite of output files
+ * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
+ * @param config Temporarily set the value of an MRtrix config file entry
+ * @param help Display help information and exit
+ * @param version Display version information and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
+ */
 function dwigradcheck(
     input_image: InputPathType,
     grad: InputPathType | null = null,
@@ -484,35 +513,6 @@ function dwigradcheck(
     version: boolean = false,
     runner: Runner | null = null,
 ): DwigradcheckOutputs {
-    /**
-     * Check the orientation of the diffusion gradient table.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input_image The input DWI series to be checked
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param mask_image Provide a brain mask image
-     * @param number_ Set the number of tracks to generate for each test
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param nocleanup Do not delete intermediate files during script execution, and do not delete scratch directory at script completion
-     * @param scratch_dir Manually specify the path in which to generate the scratch directory
-     * @param continue_scratch_dir Continue the script from a previous execution; must provide the scratch directory path
-     * @param info Display information messages
-     * @param quiet Do not display information messages or progress status
-     * @param debug Display debugging messages
-     * @param force Force overwrite of output files
-     * @param nthreads Use this number of threads in multi-threaded applications (set to 0 to disable multi-threading)
-     * @param config Temporarily set the value of an MRtrix config file entry
-     * @param help Display help information and exit
-     * @param version Display version information and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWIGRADCHECK_METADATA);
     const params = dwigradcheck_params(input_image, grad, fslgrad, mask_image, number_, export_grad_mrtrix, export_grad_fsl, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version)
@@ -528,7 +528,13 @@ export {
       DwigradcheckOutputs,
       DwigradcheckParameters,
       dwigradcheck,
+      dwigradcheck_cargs,
+      dwigradcheck_execute,
+      dwigradcheck_export_grad_fsl_cargs,
+      dwigradcheck_export_grad_fsl_outputs,
       dwigradcheck_export_grad_fsl_params,
+      dwigradcheck_fslgrad_cargs,
       dwigradcheck_fslgrad_params,
+      dwigradcheck_outputs,
       dwigradcheck_params,
 };

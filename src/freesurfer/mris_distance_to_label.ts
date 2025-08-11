@@ -12,39 +12,39 @@ const MRIS_DISTANCE_TO_LABEL_METADATA: Metadata = {
 
 
 interface MrisDistanceToLabelParameters {
-    "__STYXTYPE__": "mris_distance_to_label";
+    "@type": "freesurfer.mris_distance_to_label";
     "hemisphere": string;
     "subject_1": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_distance_to_label": mris_distance_to_label_cargs,
+        "freesurfer.mris_distance_to_label": mris_distance_to_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MrisDistanceToLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemisphere Hemisphere to process (e.g., 'lh' for left hemisphere or 'rh' for right hemisphere)
+ * @param subject_1 Subject identifier or path to the subject directory
+ *
+ * @returns Parameter dictionary
+ */
 function mris_distance_to_label_params(
     hemisphere: string,
     subject_1: string,
 ): MrisDistanceToLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemisphere Hemisphere to process (e.g., 'lh' for left hemisphere or 'rh' for right hemisphere)
-     * @param subject_1 Subject identifier or path to the subject directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_distance_to_label" as const,
+        "@type": "freesurfer.mris_distance_to_label" as const,
         "hemisphere": hemisphere,
         "subject_1": subject_1,
     };
@@ -85,18 +85,18 @@ function mris_distance_to_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_distance_to_label_cargs(
     params: MrisDistanceToLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_distance_to_label");
     cargs.push((params["hemisphere"] ?? null));
@@ -105,18 +105,18 @@ function mris_distance_to_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_distance_to_label_outputs(
     params: MrisDistanceToLabelParameters,
     execution: Execution,
 ): MrisDistanceToLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisDistanceToLabelOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mris_distance_to_label_outputs(
 }
 
 
+/**
+ * A tool for measuring the distance between vertices on a surface and a labeled region.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
+ */
 function mris_distance_to_label_execute(
     params: MrisDistanceToLabelParameters,
     execution: Execution,
 ): MrisDistanceToLabelOutputs {
-    /**
-     * A tool for measuring the distance between vertices on a surface and a labeled region.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_distance_to_label_cargs(params, execution)
     const ret = mris_distance_to_label_outputs(params, execution)
@@ -148,24 +148,24 @@ function mris_distance_to_label_execute(
 }
 
 
+/**
+ * A tool for measuring the distance between vertices on a surface and a labeled region.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemisphere Hemisphere to process (e.g., 'lh' for left hemisphere or 'rh' for right hemisphere)
+ * @param subject_1 Subject identifier or path to the subject directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
+ */
 function mris_distance_to_label(
     hemisphere: string,
     subject_1: string,
     runner: Runner | null = null,
 ): MrisDistanceToLabelOutputs {
-    /**
-     * A tool for measuring the distance between vertices on a surface and a labeled region.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemisphere Hemisphere to process (e.g., 'lh' for left hemisphere or 'rh' for right hemisphere)
-     * @param subject_1 Subject identifier or path to the subject directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_DISTANCE_TO_LABEL_METADATA);
     const params = mris_distance_to_label_params(hemisphere, subject_1)
@@ -178,5 +178,8 @@ export {
       MrisDistanceToLabelOutputs,
       MrisDistanceToLabelParameters,
       mris_distance_to_label,
+      mris_distance_to_label_cargs,
+      mris_distance_to_label_execute,
+      mris_distance_to_label_outputs,
       mris_distance_to_label_params,
 };

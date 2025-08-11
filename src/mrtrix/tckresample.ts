@@ -12,7 +12,7 @@ const TCKRESAMPLE_METADATA: Metadata = {
 
 
 interface TckresampleLineParameters {
-    "__STYXTYPE__": "line";
+    "@type": "mrtrix.tckresample.line";
     "num": number;
     "start": Array<number>;
     "end": Array<number>;
@@ -20,7 +20,7 @@ interface TckresampleLineParameters {
 
 
 interface TckresampleArcParameters {
-    "__STYXTYPE__": "arc";
+    "@type": "mrtrix.tckresample.arc";
     "num": number;
     "start": Array<number>;
     "mid": Array<number>;
@@ -29,14 +29,14 @@ interface TckresampleArcParameters {
 
 
 interface TckresampleConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckresample.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckresampleParameters {
-    "__STYXTYPE__": "tckresample";
+    "@type": "mrtrix.tckresample";
     "upsample"?: number | null | undefined;
     "downsample"?: number | null | undefined;
     "step_size"?: number | null | undefined;
@@ -57,59 +57,59 @@ interface TckresampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckresample": tckresample_cargs,
-        "line": tckresample_line_cargs,
-        "arc": tckresample_arc_cargs,
-        "config": tckresample_config_cargs,
+        "mrtrix.tckresample": tckresample_cargs,
+        "mrtrix.tckresample.line": tckresample_line_cargs,
+        "mrtrix.tckresample.arc": tckresample_arc_cargs,
+        "mrtrix.tckresample.config": tckresample_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tckresample": tckresample_outputs,
+        "mrtrix.tckresample": tckresample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param num resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param start resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param end resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ *
+ * @returns Parameter dictionary
+ */
 function tckresample_line_params(
     num: number,
     start: Array<number>,
     end: Array<number>,
 ): TckresampleLineParameters {
-    /**
-     * Build parameters.
-    
-     * @param num resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param start resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param end resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "line" as const,
+        "@type": "mrtrix.tckresample.line" as const,
         "num": num,
         "start": start,
         "end": end,
@@ -118,18 +118,18 @@ function tckresample_line_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckresample_line_cargs(
     params: TckresampleLineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-line");
     cargs.push(String((params["num"] ?? null)));
@@ -139,24 +139,24 @@ function tckresample_line_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param num resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param start resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param mid resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param end resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ *
+ * @returns Parameter dictionary
+ */
 function tckresample_arc_params(
     num: number,
     start: Array<number>,
     mid: Array<number>,
     end: Array<number>,
 ): TckresampleArcParameters {
-    /**
-     * Build parameters.
-    
-     * @param num resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param start resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param mid resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param end resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "arc" as const,
+        "@type": "mrtrix.tckresample.arc" as const,
         "num": num,
         "start": start,
         "mid": mid,
@@ -166,18 +166,18 @@ function tckresample_arc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckresample_arc_cargs(
     params: TckresampleArcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-arc");
     cargs.push(String((params["num"] ?? null)));
@@ -188,20 +188,20 @@ function tckresample_arc_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckresample_config_params(
     key: string,
     value: string,
 ): TckresampleConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckresample.config" as const,
         "key": key,
         "value": value,
     };
@@ -209,18 +209,18 @@ function tckresample_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckresample_config_cargs(
     params: TckresampleConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -246,6 +246,29 @@ interface TckresampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_tracks the input track file
+ * @param out_tracks the output resampled tracks
+ * @param upsample increase the density of points along the length of each streamline by some factor (may improve mapping streamlines to ROIs, and/or visualisation)
+ * @param downsample increase the density of points along the length of each streamline by some factor (decreases required storage space)
+ * @param step_size re-sample the streamlines to a desired step size (in mm)
+ * @param num_points re-sample each streamline to a fixed number of points
+ * @param endpoints only output the two endpoints of each streamline
+ * @param line resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param arc resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckresample_params(
     in_tracks: InputPathType,
     out_tracks: string,
@@ -265,31 +288,8 @@ function tckresample_params(
     help: boolean = false,
     version: boolean = false,
 ): TckresampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_tracks the input track file
-     * @param out_tracks the output resampled tracks
-     * @param upsample increase the density of points along the length of each streamline by some factor (may improve mapping streamlines to ROIs, and/or visualisation)
-     * @param downsample increase the density of points along the length of each streamline by some factor (decreases required storage space)
-     * @param step_size re-sample the streamlines to a desired step size (in mm)
-     * @param num_points re-sample each streamline to a fixed number of points
-     * @param endpoints only output the two endpoints of each streamline
-     * @param line resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param arc resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckresample" as const,
+        "@type": "mrtrix.tckresample" as const,
         "endpoints": endpoints,
         "info": info,
         "quiet": quiet,
@@ -328,18 +328,18 @@ function tckresample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckresample_cargs(
     params: TckresampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckresample");
     if ((params["upsample"] ?? null) !== null) {
@@ -370,10 +370,10 @@ function tckresample_cargs(
         cargs.push("-endpoints");
     }
     if ((params["line"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["line"] ?? null).__STYXTYPE__)((params["line"] ?? null), execution));
+        cargs.push(...dynCargs((params["line"] ?? null)["@type"])((params["line"] ?? null), execution));
     }
     if ((params["arc"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["arc"] ?? null).__STYXTYPE__)((params["arc"] ?? null), execution));
+        cargs.push(...dynCargs((params["arc"] ?? null)["@type"])((params["arc"] ?? null), execution));
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -394,7 +394,7 @@ function tckresample_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -408,18 +408,18 @@ function tckresample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckresample_outputs(
     params: TckresampleParameters,
     execution: Execution,
 ): TckresampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckresampleOutputs = {
         root: execution.outputFile("."),
         out_tracks: execution.outputFile([(params["out_tracks"] ?? null)].join('')),
@@ -428,30 +428,30 @@ function tckresample_outputs(
 }
 
 
+/**
+ * Resample each streamline in a track file to a new set of vertices.
+ *
+ * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.
+ *
+ * Note that because the length of a streamline is calculated based on the sums of distances between adjacent vertices, resampling a streamline to a new set of vertices will typically change the quantified length of that streamline; the magnitude of the difference will typically depend on the discrepancy in the number of vertices, with less vertices leading to a shorter length (due to taking chordal lengths of curved trajectories).
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
+ */
 function tckresample_execute(
     params: TckresampleParameters,
     execution: Execution,
 ): TckresampleOutputs {
-    /**
-     * Resample each streamline in a track file to a new set of vertices.
-     * 
-     * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.
-     * 
-     * Note that because the length of a streamline is calculated based on the sums of distances between adjacent vertices, resampling a streamline to a new set of vertices will typically change the quantified length of that streamline; the magnitude of the difference will typically depend on the discrepancy in the number of vertices, with less vertices leading to a shorter length (due to taking chordal lengths of curved trajectories).
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckresample_cargs(params, execution)
     const ret = tckresample_outputs(params, execution)
@@ -460,6 +460,42 @@ function tckresample_execute(
 }
 
 
+/**
+ * Resample each streamline in a track file to a new set of vertices.
+ *
+ * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.
+ *
+ * Note that because the length of a streamline is calculated based on the sums of distances between adjacent vertices, resampling a streamline to a new set of vertices will typically change the quantified length of that streamline; the magnitude of the difference will typically depend on the discrepancy in the number of vertices, with less vertices leading to a shorter length (due to taking chordal lengths of curved trajectories).
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_tracks the input track file
+ * @param out_tracks the output resampled tracks
+ * @param upsample increase the density of points along the length of each streamline by some factor (may improve mapping streamlines to ROIs, and/or visualisation)
+ * @param downsample increase the density of points along the length of each streamline by some factor (decreases required storage space)
+ * @param step_size re-sample the streamlines to a desired step size (in mm)
+ * @param num_points re-sample each streamline to a fixed number of points
+ * @param endpoints only output the two endpoints of each streamline
+ * @param line resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param arc resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
+ */
 function tckresample(
     in_tracks: InputPathType,
     out_tracks: string,
@@ -480,42 +516,6 @@ function tckresample(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckresampleOutputs {
-    /**
-     * Resample each streamline in a track file to a new set of vertices.
-     * 
-     * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.
-     * 
-     * Note that because the length of a streamline is calculated based on the sums of distances between adjacent vertices, resampling a streamline to a new set of vertices will typically change the quantified length of that streamline; the magnitude of the difference will typically depend on the discrepancy in the number of vertices, with less vertices leading to a shorter length (due to taking chordal lengths of curved trajectories).
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_tracks the input track file
-     * @param out_tracks the output resampled tracks
-     * @param upsample increase the density of points along the length of each streamline by some factor (may improve mapping streamlines to ROIs, and/or visualisation)
-     * @param downsample increase the density of points along the length of each streamline by some factor (decreases required storage space)
-     * @param step_size re-sample the streamlines to a desired step size (in mm)
-     * @param num_points re-sample each streamline to a fixed number of points
-     * @param endpoints only output the two endpoints of each streamline
-     * @param line resample tracks at 'num' equidistant locations along a line between 'start' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param arc resample tracks at 'num' equidistant locations along a circular arc specified by points 'start', 'mid' and 'end' (specified as comma-separated 3-vectors in scanner coordinates)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKRESAMPLE_METADATA);
     const params = tckresample_params(in_tracks, out_tracks, upsample, downsample, step_size, num_points, endpoints, line, arc, info, quiet, debug, force, nthreads, config, help, version)
@@ -531,8 +531,14 @@ export {
       TckresampleOutputs,
       TckresampleParameters,
       tckresample,
+      tckresample_arc_cargs,
       tckresample_arc_params,
+      tckresample_cargs,
+      tckresample_config_cargs,
       tckresample_config_params,
+      tckresample_execute,
+      tckresample_line_cargs,
       tckresample_line_params,
+      tckresample_outputs,
       tckresample_params,
 };

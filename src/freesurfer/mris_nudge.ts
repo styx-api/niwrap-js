@@ -12,7 +12,7 @@ const MRIS_NUDGE_METADATA: Metadata = {
 
 
 interface MrisNudgeParameters {
-    "__STYXTYPE__": "mris_nudge";
+    "@type": "freesurfer.mris_nudge";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
     "vertex": number;
@@ -21,35 +21,35 @@ interface MrisNudgeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_nudge": mris_nudge_cargs,
+        "freesurfer.mris_nudge": mris_nudge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_nudge": mris_nudge_outputs,
+        "freesurfer.mris_nudge": mris_nudge_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MrisNudgeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file for nudging
+ * @param input_volume Input volume file
+ * @param vertex Vertex to nudge
+ * @param target_val Target value for nudging
+ * @param nbhd Neighborhood size for nudge operation
+ *
+ * @returns Parameter dictionary
+ */
 function mris_nudge_params(
     input_surface: InputPathType,
     input_volume: InputPathType,
@@ -79,19 +90,8 @@ function mris_nudge_params(
     target_val: number,
     nbhd: number,
 ): MrisNudgeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file for nudging
-     * @param input_volume Input volume file
-     * @param vertex Vertex to nudge
-     * @param target_val Target value for nudging
-     * @param nbhd Neighborhood size for nudge operation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_nudge" as const,
+        "@type": "freesurfer.mris_nudge" as const,
         "input_surface": input_surface,
         "input_volume": input_volume,
         "vertex": vertex,
@@ -102,18 +102,18 @@ function mris_nudge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_nudge_cargs(
     params: MrisNudgeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_nudge");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -125,18 +125,18 @@ function mris_nudge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_nudge_outputs(
     params: MrisNudgeParameters,
     execution: Execution,
 ): MrisNudgeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisNudgeOutputs = {
         root: execution.outputFile("."),
         output_surface: execution.outputFile(["[OUTPUT_SURF]"].join('')),
@@ -145,22 +145,22 @@ function mris_nudge_outputs(
 }
 
 
+/**
+ * A tool to nudge vertex positions on a surface using a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
+ */
 function mris_nudge_execute(
     params: MrisNudgeParameters,
     execution: Execution,
 ): MrisNudgeOutputs {
-    /**
-     * A tool to nudge vertex positions on a surface using a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_nudge_cargs(params, execution)
     const ret = mris_nudge_outputs(params, execution)
@@ -169,6 +169,22 @@ function mris_nudge_execute(
 }
 
 
+/**
+ * A tool to nudge vertex positions on a surface using a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file for nudging
+ * @param input_volume Input volume file
+ * @param vertex Vertex to nudge
+ * @param target_val Target value for nudging
+ * @param nbhd Neighborhood size for nudge operation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
+ */
 function mris_nudge(
     input_surface: InputPathType,
     input_volume: InputPathType,
@@ -177,22 +193,6 @@ function mris_nudge(
     nbhd: number,
     runner: Runner | null = null,
 ): MrisNudgeOutputs {
-    /**
-     * A tool to nudge vertex positions on a surface using a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file for nudging
-     * @param input_volume Input volume file
-     * @param vertex Vertex to nudge
-     * @param target_val Target value for nudging
-     * @param nbhd Neighborhood size for nudge operation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_NUDGE_METADATA);
     const params = mris_nudge_params(input_surface, input_volume, vertex, target_val, nbhd)
@@ -205,5 +205,8 @@ export {
       MrisNudgeOutputs,
       MrisNudgeParameters,
       mris_nudge,
+      mris_nudge_cargs,
+      mris_nudge_execute,
+      mris_nudge_outputs,
       mris_nudge_params,
 };

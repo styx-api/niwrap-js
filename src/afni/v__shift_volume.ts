@@ -12,7 +12,7 @@ const V__SHIFT_VOLUME_METADATA: Metadata = {
 
 
 interface VShiftVolumeParameters {
-    "__STYXTYPE__": "@Shift_Volume";
+    "@type": "afni.@Shift_Volume";
     "rai_shift_vector"?: Array<number> | null | undefined;
     "mni_anat_to_mni": boolean;
     "mni_to_mni_anat": boolean;
@@ -22,35 +22,35 @@ interface VShiftVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Shift_Volume": v__shift_volume_cargs,
+        "afni.@Shift_Volume": v__shift_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@Shift_Volume": v__shift_volume_outputs,
+        "afni.@Shift_Volume": v__shift_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VShiftVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Input dataset, typically an anatomical dataset to be aligned to BASE.
+ * @param prefix Prefix for the output dataset.
+ * @param rai_shift_vector Move dataset by dR, dA, dI mm (RAI coordinate system)
+ * @param mni_anat_to_mni Move dataset from MNI Anatomical space to MNI space (equivalent to -rai_shift 0 -4 -5)
+ * @param mni_to_mni_anat Move dataset from MNI space to MNI Anatomical space (equivalent to -rai_shift 0 4 5)
+ * @param no_cp Do not create new data, shift the existing ones (use with caution).
+ *
+ * @returns Parameter dictionary
+ */
 function v__shift_volume_params(
     dset: InputPathType,
     prefix: string,
@@ -81,20 +93,8 @@ function v__shift_volume_params(
     mni_to_mni_anat: boolean = false,
     no_cp: boolean = false,
 ): VShiftVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Input dataset, typically an anatomical dataset to be aligned to BASE.
-     * @param prefix Prefix for the output dataset.
-     * @param rai_shift_vector Move dataset by dR, dA, dI mm (RAI coordinate system)
-     * @param mni_anat_to_mni Move dataset from MNI Anatomical space to MNI space (equivalent to -rai_shift 0 -4 -5)
-     * @param mni_to_mni_anat Move dataset from MNI space to MNI Anatomical space (equivalent to -rai_shift 0 4 5)
-     * @param no_cp Do not create new data, shift the existing ones (use with caution).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Shift_Volume" as const,
+        "@type": "afni.@Shift_Volume" as const,
         "mni_anat_to_mni": mni_anat_to_mni,
         "mni_to_mni_anat": mni_to_mni_anat,
         "dset": dset,
@@ -108,18 +108,18 @@ function v__shift_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__shift_volume_cargs(
     params: VShiftVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Shift_Volume");
     if ((params["rai_shift_vector"] ?? null) !== null) {
@@ -149,18 +149,18 @@ function v__shift_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__shift_volume_outputs(
     params: VShiftVolumeParameters,
     execution: Execution,
 ): VShiftVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VShiftVolumeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -169,22 +169,22 @@ function v__shift_volume_outputs(
 }
 
 
+/**
+ * Tool to shift a dataset in the RAI coordinate system or between MNI anatomical space and MNI space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
+ */
 function v__shift_volume_execute(
     params: VShiftVolumeParameters,
     execution: Execution,
 ): VShiftVolumeOutputs {
-    /**
-     * Tool to shift a dataset in the RAI coordinate system or between MNI anatomical space and MNI space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__shift_volume_cargs(params, execution)
     const ret = v__shift_volume_outputs(params, execution)
@@ -193,6 +193,23 @@ function v__shift_volume_execute(
 }
 
 
+/**
+ * Tool to shift a dataset in the RAI coordinate system or between MNI anatomical space and MNI space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Input dataset, typically an anatomical dataset to be aligned to BASE.
+ * @param prefix Prefix for the output dataset.
+ * @param rai_shift_vector Move dataset by dR, dA, dI mm (RAI coordinate system)
+ * @param mni_anat_to_mni Move dataset from MNI Anatomical space to MNI space (equivalent to -rai_shift 0 -4 -5)
+ * @param mni_to_mni_anat Move dataset from MNI space to MNI Anatomical space (equivalent to -rai_shift 0 4 5)
+ * @param no_cp Do not create new data, shift the existing ones (use with caution).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
+ */
 function v__shift_volume(
     dset: InputPathType,
     prefix: string,
@@ -202,23 +219,6 @@ function v__shift_volume(
     no_cp: boolean = false,
     runner: Runner | null = null,
 ): VShiftVolumeOutputs {
-    /**
-     * Tool to shift a dataset in the RAI coordinate system or between MNI anatomical space and MNI space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Input dataset, typically an anatomical dataset to be aligned to BASE.
-     * @param prefix Prefix for the output dataset.
-     * @param rai_shift_vector Move dataset by dR, dA, dI mm (RAI coordinate system)
-     * @param mni_anat_to_mni Move dataset from MNI Anatomical space to MNI space (equivalent to -rai_shift 0 -4 -5)
-     * @param mni_to_mni_anat Move dataset from MNI space to MNI Anatomical space (equivalent to -rai_shift 0 4 5)
-     * @param no_cp Do not create new data, shift the existing ones (use with caution).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SHIFT_VOLUME_METADATA);
     const params = v__shift_volume_params(dset, prefix, rai_shift_vector, mni_anat_to_mni, mni_to_mni_anat, no_cp)
@@ -231,5 +231,8 @@ export {
       VShiftVolumeParameters,
       V__SHIFT_VOLUME_METADATA,
       v__shift_volume,
+      v__shift_volume_cargs,
+      v__shift_volume_execute,
+      v__shift_volume_outputs,
       v__shift_volume_params,
 };

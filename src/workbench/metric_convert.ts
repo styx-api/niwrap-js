@@ -12,14 +12,14 @@ const METRIC_CONVERT_METADATA: Metadata = {
 
 
 interface MetricConvertToNiftiParameters {
-    "__STYXTYPE__": "to_nifti";
+    "@type": "workbench.metric-convert.to_nifti";
     "metric_in": InputPathType;
     "nifti_out": string;
 }
 
 
 interface MetricConvertFromNiftiParameters {
-    "__STYXTYPE__": "from_nifti";
+    "@type": "workbench.metric-convert.from_nifti";
     "nifti_in": InputPathType;
     "surface_in": InputPathType;
     "metric_out": string;
@@ -27,45 +27,45 @@ interface MetricConvertFromNiftiParameters {
 
 
 interface MetricConvertParameters {
-    "__STYXTYPE__": "metric-convert";
+    "@type": "workbench.metric-convert";
     "to_nifti"?: MetricConvertToNiftiParameters | null | undefined;
     "from_nifti"?: MetricConvertFromNiftiParameters | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-convert": metric_convert_cargs,
-        "to_nifti": metric_convert_to_nifti_cargs,
-        "from_nifti": metric_convert_from_nifti_cargs,
+        "workbench.metric-convert": metric_convert_cargs,
+        "workbench.metric-convert.to_nifti": metric_convert_to_nifti_cargs,
+        "workbench.metric-convert.from_nifti": metric_convert_from_nifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-convert": metric_convert_outputs,
-        "to_nifti": metric_convert_to_nifti_outputs,
-        "from_nifti": metric_convert_from_nifti_outputs,
+        "workbench.metric-convert": metric_convert_outputs,
+        "workbench.metric-convert.to_nifti": metric_convert_to_nifti_outputs,
+        "workbench.metric-convert.from_nifti": metric_convert_from_nifti_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,20 +88,20 @@ interface MetricConvertToNiftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_in the metric to convert
+ * @param nifti_out the output nifti file
+ *
+ * @returns Parameter dictionary
+ */
 function metric_convert_to_nifti_params(
     metric_in: InputPathType,
     nifti_out: string,
 ): MetricConvertToNiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_in the metric to convert
-     * @param nifti_out the output nifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to_nifti" as const,
+        "@type": "workbench.metric-convert.to_nifti" as const,
         "metric_in": metric_in,
         "nifti_out": nifti_out,
     };
@@ -109,18 +109,18 @@ function metric_convert_to_nifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_convert_to_nifti_cargs(
     params: MetricConvertToNiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-to-nifti");
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
@@ -129,18 +129,18 @@ function metric_convert_to_nifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_convert_to_nifti_outputs(
     params: MetricConvertToNiftiParameters,
     execution: Execution,
 ): MetricConvertToNiftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricConvertToNiftiOutputs = {
         root: execution.outputFile("."),
         nifti_out: execution.outputFile([(params["nifti_out"] ?? null)].join('')),
@@ -166,22 +166,22 @@ interface MetricConvertFromNiftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nifti_in the nifti file to convert
+ * @param surface_in surface file to use number of vertices and structure from
+ * @param metric_out the output metric file
+ *
+ * @returns Parameter dictionary
+ */
 function metric_convert_from_nifti_params(
     nifti_in: InputPathType,
     surface_in: InputPathType,
     metric_out: string,
 ): MetricConvertFromNiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param nifti_in the nifti file to convert
-     * @param surface_in surface file to use number of vertices and structure from
-     * @param metric_out the output metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_nifti" as const,
+        "@type": "workbench.metric-convert.from_nifti" as const,
         "nifti_in": nifti_in,
         "surface_in": surface_in,
         "metric_out": metric_out,
@@ -190,18 +190,18 @@ function metric_convert_from_nifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_convert_from_nifti_cargs(
     params: MetricConvertFromNiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-nifti");
     cargs.push(execution.inputFile((params["nifti_in"] ?? null)));
@@ -211,18 +211,18 @@ function metric_convert_from_nifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_convert_from_nifti_outputs(
     params: MetricConvertFromNiftiParameters,
     execution: Execution,
 ): MetricConvertFromNiftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricConvertFromNiftiOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -252,20 +252,20 @@ interface MetricConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param to_nifti convert metric to nifti
+ * @param from_nifti convert nifti to metric
+ *
+ * @returns Parameter dictionary
+ */
 function metric_convert_params(
     to_nifti: MetricConvertToNiftiParameters | null = null,
     from_nifti: MetricConvertFromNiftiParameters | null = null,
 ): MetricConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param to_nifti convert metric to nifti
-     * @param from_nifti convert nifti to metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-convert" as const,
+        "@type": "workbench.metric-convert" as const,
     };
     if (to_nifti !== null) {
         params["to_nifti"] = to_nifti;
@@ -277,70 +277,70 @@ function metric_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_convert_cargs(
     params: MetricConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-convert");
     if ((params["to_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_nifti"] ?? null).__STYXTYPE__)((params["to_nifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["to_nifti"] ?? null)["@type"])((params["to_nifti"] ?? null), execution));
     }
     if ((params["from_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_nifti"] ?? null).__STYXTYPE__)((params["from_nifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_nifti"] ?? null)["@type"])((params["from_nifti"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_convert_outputs(
     params: MetricConvertParameters,
     execution: Execution,
 ): MetricConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricConvertOutputs = {
         root: execution.outputFile("."),
-        to_nifti: (dynOutputs((params["to_nifti"] ?? null).__STYXTYPE__)?.((params["to_nifti"] ?? null), execution) ?? null),
-        from_nifti: (dynOutputs((params["from_nifti"] ?? null).__STYXTYPE__)?.((params["from_nifti"] ?? null), execution) ?? null),
+        to_nifti: (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null),
+        from_nifti: (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Convert metric file to fake nifti.
+ *
+ * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
+ */
 function metric_convert_execute(
     params: MetricConvertParameters,
     execution: Execution,
 ): MetricConvertOutputs {
-    /**
-     * Convert metric file to fake nifti.
-     * 
-     * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_convert_cargs(params, execution)
     const ret = metric_convert_outputs(params, execution)
@@ -349,26 +349,26 @@ function metric_convert_execute(
 }
 
 
+/**
+ * Convert metric file to fake nifti.
+ *
+ * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param to_nifti convert metric to nifti
+ * @param from_nifti convert nifti to metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
+ */
 function metric_convert(
     to_nifti: MetricConvertToNiftiParameters | null = null,
     from_nifti: MetricConvertFromNiftiParameters | null = null,
     runner: Runner | null = null,
 ): MetricConvertOutputs {
-    /**
-     * Convert metric file to fake nifti.
-     * 
-     * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param to_nifti convert metric to nifti
-     * @param from_nifti convert nifti to metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_CONVERT_METADATA);
     const params = metric_convert_params(to_nifti, from_nifti)
@@ -385,7 +385,14 @@ export {
       MetricConvertToNiftiOutputs,
       MetricConvertToNiftiParameters,
       metric_convert,
+      metric_convert_cargs,
+      metric_convert_execute,
+      metric_convert_from_nifti_cargs,
+      metric_convert_from_nifti_outputs,
       metric_convert_from_nifti_params,
+      metric_convert_outputs,
       metric_convert_params,
+      metric_convert_to_nifti_cargs,
+      metric_convert_to_nifti_outputs,
       metric_convert_to_nifti_params,
 };

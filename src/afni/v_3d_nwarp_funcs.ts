@@ -12,7 +12,7 @@ const V_3D_NWARP_FUNCS_METADATA: Metadata = {
 
 
 interface V3dNwarpFuncsParameters {
-    "__STYXTYPE__": "3dNwarpFuncs";
+    "@type": "afni.3dNwarpFuncs";
     "input_warp": InputPathType;
     "output_prefix": string;
     "bulk_flag": boolean;
@@ -22,35 +22,35 @@ interface V3dNwarpFuncsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNwarpFuncs": v_3d_nwarp_funcs_cargs,
+        "afni.3dNwarpFuncs": v_3d_nwarp_funcs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNwarpFuncs": v_3d_nwarp_funcs_outputs,
+        "afni.3dNwarpFuncs": v_3d_nwarp_funcs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dNwarpFuncsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_warp 'www' is the name of the 3D warp dataset (mandatory option).
+ * @param output_prefix 'ppp' is the name of the new output dataset.
+ * @param bulk_flag Compute the (fractional) bulk volume change (Jacobian determinant minus 1).
+ * @param shear_flag Compute the shear energy.
+ * @param vorticity_flag Compute the vorticity energy.
+ * @param all_flag Compute all 3 functions: bulk, shear, and vorticity.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nwarp_funcs_params(
     input_warp: InputPathType,
     output_prefix: string,
@@ -81,20 +93,8 @@ function v_3d_nwarp_funcs_params(
     vorticity_flag: boolean = false,
     all_flag: boolean = false,
 ): V3dNwarpFuncsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_warp 'www' is the name of the 3D warp dataset (mandatory option).
-     * @param output_prefix 'ppp' is the name of the new output dataset.
-     * @param bulk_flag Compute the (fractional) bulk volume change (Jacobian determinant minus 1).
-     * @param shear_flag Compute the shear energy.
-     * @param vorticity_flag Compute the vorticity energy.
-     * @param all_flag Compute all 3 functions: bulk, shear, and vorticity.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNwarpFuncs" as const,
+        "@type": "afni.3dNwarpFuncs" as const,
         "input_warp": input_warp,
         "output_prefix": output_prefix,
         "bulk_flag": bulk_flag,
@@ -106,18 +106,18 @@ function v_3d_nwarp_funcs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nwarp_funcs_cargs(
     params: V3dNwarpFuncsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNwarpFuncs");
     cargs.push(
@@ -144,18 +144,18 @@ function v_3d_nwarp_funcs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nwarp_funcs_outputs(
     params: V3dNwarpFuncsParameters,
     execution: Execution,
 ): V3dNwarpFuncsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNwarpFuncsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null), "_output.nii.gz"].join('')),
@@ -164,22 +164,22 @@ function v_3d_nwarp_funcs_outputs(
 }
 
 
+/**
+ * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
+ */
 function v_3d_nwarp_funcs_execute(
     params: V3dNwarpFuncsParameters,
     execution: Execution,
 ): V3dNwarpFuncsOutputs {
-    /**
-     * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nwarp_funcs_cargs(params, execution)
     const ret = v_3d_nwarp_funcs_outputs(params, execution)
@@ -188,6 +188,23 @@ function v_3d_nwarp_funcs_execute(
 }
 
 
+/**
+ * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_warp 'www' is the name of the 3D warp dataset (mandatory option).
+ * @param output_prefix 'ppp' is the name of the new output dataset.
+ * @param bulk_flag Compute the (fractional) bulk volume change (Jacobian determinant minus 1).
+ * @param shear_flag Compute the shear energy.
+ * @param vorticity_flag Compute the vorticity energy.
+ * @param all_flag Compute all 3 functions: bulk, shear, and vorticity.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
+ */
 function v_3d_nwarp_funcs(
     input_warp: InputPathType,
     output_prefix: string,
@@ -197,23 +214,6 @@ function v_3d_nwarp_funcs(
     all_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dNwarpFuncsOutputs {
-    /**
-     * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_warp 'www' is the name of the 3D warp dataset (mandatory option).
-     * @param output_prefix 'ppp' is the name of the new output dataset.
-     * @param bulk_flag Compute the (fractional) bulk volume change (Jacobian determinant minus 1).
-     * @param shear_flag Compute the shear energy.
-     * @param vorticity_flag Compute the vorticity energy.
-     * @param all_flag Compute all 3 functions: bulk, shear, and vorticity.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NWARP_FUNCS_METADATA);
     const params = v_3d_nwarp_funcs_params(input_warp, output_prefix, bulk_flag, shear_flag, vorticity_flag, all_flag)
@@ -226,5 +226,8 @@ export {
       V3dNwarpFuncsParameters,
       V_3D_NWARP_FUNCS_METADATA,
       v_3d_nwarp_funcs,
+      v_3d_nwarp_funcs_cargs,
+      v_3d_nwarp_funcs_execute,
+      v_3d_nwarp_funcs_outputs,
       v_3d_nwarp_funcs_params,
 };

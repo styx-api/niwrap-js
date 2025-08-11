@@ -12,41 +12,41 @@ const OLD_BETALL_METADATA: Metadata = {
 
 
 interface OldBetallParameters {
-    "__STYXTYPE__": "old_betall";
+    "@type": "fsl.old_betall";
     "t1_filerout": string;
     "t2_filerout": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "old_betall": old_betall_cargs,
+        "fsl.old_betall": old_betall_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "old_betall": old_betall_outputs,
+        "fsl.old_betall": old_betall_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface OldBetallOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_filerout Input T1 image file root (e.g. img_t1.nii.gz)
+ * @param t2_filerout Input T2 image file root (e.g. img_t2.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function old_betall_params(
     t1_filerout: string,
     t2_filerout: string,
 ): OldBetallParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_filerout Input T1 image file root (e.g. img_t1.nii.gz)
-     * @param t2_filerout Input T2 image file root (e.g. img_t2.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "old_betall" as const,
+        "@type": "fsl.old_betall" as const,
         "t1_filerout": t1_filerout,
         "t2_filerout": t2_filerout,
     };
@@ -94,18 +94,18 @@ function old_betall_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function old_betall_cargs(
     params: OldBetallParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("old_betall");
     cargs.push((params["t1_filerout"] ?? null));
@@ -114,18 +114,18 @@ function old_betall_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function old_betall_outputs(
     params: OldBetallParameters,
     execution: Execution,
 ): OldBetallOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: OldBetallOutputs = {
         root: execution.outputFile("."),
         output_t1: execution.outputFile([(params["t1_filerout"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function old_betall_outputs(
 }
 
 
+/**
+ * Automated brain extraction tool for FSL involving both T1 and T2 images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
+ */
 function old_betall_execute(
     params: OldBetallParameters,
     execution: Execution,
 ): OldBetallOutputs {
-    /**
-     * Automated brain extraction tool for FSL involving both T1 and T2 images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
-     */
     params = execution.params(params)
     const cargs = old_betall_cargs(params, execution)
     const ret = old_betall_outputs(params, execution)
@@ -159,24 +159,24 @@ function old_betall_execute(
 }
 
 
+/**
+ * Automated brain extraction tool for FSL involving both T1 and T2 images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param t1_filerout Input T1 image file root (e.g. img_t1.nii.gz)
+ * @param t2_filerout Input T2 image file root (e.g. img_t2.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
+ */
 function old_betall(
     t1_filerout: string,
     t2_filerout: string,
     runner: Runner | null = null,
 ): OldBetallOutputs {
-    /**
-     * Automated brain extraction tool for FSL involving both T1 and T2 images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param t1_filerout Input T1 image file root (e.g. img_t1.nii.gz)
-     * @param t2_filerout Input T2 image file root (e.g. img_t2.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(OLD_BETALL_METADATA);
     const params = old_betall_params(t1_filerout, t2_filerout)
@@ -189,5 +189,8 @@ export {
       OldBetallOutputs,
       OldBetallParameters,
       old_betall,
+      old_betall_cargs,
+      old_betall_execute,
+      old_betall_outputs,
       old_betall_params,
 };

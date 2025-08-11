@@ -12,40 +12,40 @@ const MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA: Metadata = {
 
 
 interface MrisInitGlobalTractographyParameters {
-    "__STYXTYPE__": "mris_init_global_tractography";
+    "@type": "freesurfer.mris_init_global_tractography";
     "subject": string;
     "parcellation": string;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_init_global_tractography": mris_init_global_tractography_cargs,
+        "freesurfer.mris_init_global_tractography": mris_init_global_tractography_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MrisInitGlobalTractographyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject on which to perform tractography.
+ * @param parcellation The parcellation to use for tractography.
+ * @param output_volume Output volume of the initialized global tractography.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_init_global_tractography_params(
     subject: string,
     parcellation: string,
     output_volume: string,
 ): MrisInitGlobalTractographyParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject on which to perform tractography.
-     * @param parcellation The parcellation to use for tractography.
-     * @param output_volume Output volume of the initialized global tractography.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_init_global_tractography" as const,
+        "@type": "freesurfer.mris_init_global_tractography" as const,
         "subject": subject,
         "parcellation": parcellation,
         "output_volume": output_volume,
@@ -89,18 +89,18 @@ function mris_init_global_tractography_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_init_global_tractography_cargs(
     params: MrisInitGlobalTractographyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_init_global_tractography");
     cargs.push((params["subject"] ?? null));
@@ -110,18 +110,18 @@ function mris_init_global_tractography_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_init_global_tractography_outputs(
     params: MrisInitGlobalTractographyParameters,
     execution: Execution,
 ): MrisInitGlobalTractographyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisInitGlobalTractographyOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function mris_init_global_tractography_outputs(
 }
 
 
+/**
+ * Initializes global tractography for a given subject and parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
+ */
 function mris_init_global_tractography_execute(
     params: MrisInitGlobalTractographyParameters,
     execution: Execution,
 ): MrisInitGlobalTractographyOutputs {
-    /**
-     * Initializes global tractography for a given subject and parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_init_global_tractography_cargs(params, execution)
     const ret = mris_init_global_tractography_outputs(params, execution)
@@ -153,26 +153,26 @@ function mris_init_global_tractography_execute(
 }
 
 
+/**
+ * Initializes global tractography for a given subject and parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject on which to perform tractography.
+ * @param parcellation The parcellation to use for tractography.
+ * @param output_volume Output volume of the initialized global tractography.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
+ */
 function mris_init_global_tractography(
     subject: string,
     parcellation: string,
     output_volume: string,
     runner: Runner | null = null,
 ): MrisInitGlobalTractographyOutputs {
-    /**
-     * Initializes global tractography for a given subject and parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject on which to perform tractography.
-     * @param parcellation The parcellation to use for tractography.
-     * @param output_volume Output volume of the initialized global tractography.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA);
     const params = mris_init_global_tractography_params(subject, parcellation, output_volume)
@@ -185,5 +185,8 @@ export {
       MrisInitGlobalTractographyOutputs,
       MrisInitGlobalTractographyParameters,
       mris_init_global_tractography,
+      mris_init_global_tractography_cargs,
+      mris_init_global_tractography_execute,
+      mris_init_global_tractography_outputs,
       mris_init_global_tractography_params,
 };

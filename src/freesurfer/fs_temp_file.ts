@@ -12,7 +12,7 @@ const FS_TEMP_FILE_METADATA: Metadata = {
 
 
 interface FsTempFileParameters {
-    "__STYXTYPE__": "fs_temp_file";
+    "@type": "freesurfer.fs_temp_file";
     "base_dir"?: string | null | undefined;
     "base_dir_alt"?: string | null | undefined;
     "suffix"?: string | null | undefined;
@@ -23,33 +23,33 @@ interface FsTempFileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_temp_file": fs_temp_file_cargs,
+        "freesurfer.fs_temp_file": fs_temp_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface FsTempFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_dir Manually specify base temporary directory.
+ * @param base_dir_alt Manually specify base temporary directory.
+ * @param suffix Optional file suffix.
+ * @param suffix_alt Optional file suffix.
+ * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
+ * @param help Print help text and exit.
+ * @param help_alt Print help text and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fs_temp_file_params(
     base_dir: string | null = null,
     base_dir_alt: string | null = null,
@@ -78,21 +91,8 @@ function fs_temp_file_params(
     help: boolean = false,
     help_alt: boolean = false,
 ): FsTempFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_dir Manually specify base temporary directory.
-     * @param base_dir_alt Manually specify base temporary directory.
-     * @param suffix Optional file suffix.
-     * @param suffix_alt Optional file suffix.
-     * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
-     * @param help Print help text and exit.
-     * @param help_alt Print help text and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_temp_file" as const,
+        "@type": "freesurfer.fs_temp_file" as const,
         "scratch": scratch,
         "help": help,
         "help_alt": help_alt,
@@ -113,18 +113,18 @@ function fs_temp_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_temp_file_cargs(
     params: FsTempFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_temp_file");
     if ((params["base_dir"] ?? null) !== null) {
@@ -164,18 +164,18 @@ function fs_temp_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_temp_file_outputs(
     params: FsTempFileParameters,
     execution: Execution,
 ): FsTempFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsTempFileOutputs = {
         root: execution.outputFile("."),
     };
@@ -183,22 +183,22 @@ function fs_temp_file_outputs(
 }
 
 
+/**
+ * Generates and creates an empty temporary file, printing the resulting path to stdout.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
+ */
 function fs_temp_file_execute(
     params: FsTempFileParameters,
     execution: Execution,
 ): FsTempFileOutputs {
-    /**
-     * Generates and creates an empty temporary file, printing the resulting path to stdout.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_temp_file_cargs(params, execution)
     const ret = fs_temp_file_outputs(params, execution)
@@ -207,6 +207,24 @@ function fs_temp_file_execute(
 }
 
 
+/**
+ * Generates and creates an empty temporary file, printing the resulting path to stdout.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_dir Manually specify base temporary directory.
+ * @param base_dir_alt Manually specify base temporary directory.
+ * @param suffix Optional file suffix.
+ * @param suffix_alt Optional file suffix.
+ * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
+ * @param help Print help text and exit.
+ * @param help_alt Print help text and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
+ */
 function fs_temp_file(
     base_dir: string | null = null,
     base_dir_alt: string | null = null,
@@ -217,24 +235,6 @@ function fs_temp_file(
     help_alt: boolean = false,
     runner: Runner | null = null,
 ): FsTempFileOutputs {
-    /**
-     * Generates and creates an empty temporary file, printing the resulting path to stdout.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_dir Manually specify base temporary directory.
-     * @param base_dir_alt Manually specify base temporary directory.
-     * @param suffix Optional file suffix.
-     * @param suffix_alt Optional file suffix.
-     * @param scratch Use /scratch directory if available, but FS_TMPDIR takes priority.
-     * @param help Print help text and exit.
-     * @param help_alt Print help text and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_TEMP_FILE_METADATA);
     const params = fs_temp_file_params(base_dir, base_dir_alt, suffix, suffix_alt, scratch, help, help_alt)
@@ -247,5 +247,8 @@ export {
       FsTempFileOutputs,
       FsTempFileParameters,
       fs_temp_file,
+      fs_temp_file_cargs,
+      fs_temp_file_execute,
+      fs_temp_file_outputs,
       fs_temp_file_params,
 };

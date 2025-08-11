@@ -12,7 +12,7 @@ const V_2PERM_METADATA: Metadata = {
 
 
 interface V2permParameters {
-    "__STYXTYPE__": "2perm";
+    "@type": "afni.2perm";
     "prefix"?: string | null | undefined;
     "comma": boolean;
     "bottom_int": number;
@@ -22,35 +22,35 @@ interface V2permParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "2perm": v_2perm_cargs,
+        "afni.2perm": v_2perm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "2perm": v_2perm_outputs,
+        "afni.2perm": v_2perm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface V2permOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bottom_int Bottom integer of the range
+ * @param top_int Top integer of the range
+ * @param prefix Prefix for output files (default 'AFNIroolz')
+ * @param comma Write each file as a single row of comma-separated numbers
+ * @param subset1_size Size of the first subset (optional, default is half the range)
+ * @param subset2_size Size of the second subset (optional, default is half the range)
+ *
+ * @returns Parameter dictionary
+ */
 function v_2perm_params(
     bottom_int: number,
     top_int: number,
@@ -85,20 +97,8 @@ function v_2perm_params(
     subset1_size: number | null = null,
     subset2_size: number | null = null,
 ): V2permParameters {
-    /**
-     * Build parameters.
-    
-     * @param bottom_int Bottom integer of the range
-     * @param top_int Top integer of the range
-     * @param prefix Prefix for output files (default 'AFNIroolz')
-     * @param comma Write each file as a single row of comma-separated numbers
-     * @param subset1_size Size of the first subset (optional, default is half the range)
-     * @param subset2_size Size of the second subset (optional, default is half the range)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "2perm" as const,
+        "@type": "afni.2perm" as const,
         "comma": comma,
         "bottom_int": bottom_int,
         "top_int": top_int,
@@ -116,18 +116,18 @@ function v_2perm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_2perm_cargs(
     params: V2permParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("2perm");
     if ((params["prefix"] ?? null) !== null) {
@@ -151,18 +151,18 @@ function v_2perm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_2perm_outputs(
     params: V2permParameters,
     execution: Execution,
 ): V2permOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2permOutputs = {
         root: execution.outputFile("."),
         file_a: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_A"].join('')) : null,
@@ -172,22 +172,22 @@ function v_2perm_outputs(
 }
 
 
+/**
+ * Generates two random non-overlapping subsets of a given set of integers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2permOutputs`).
+ */
 function v_2perm_execute(
     params: V2permParameters,
     execution: Execution,
 ): V2permOutputs {
-    /**
-     * Generates two random non-overlapping subsets of a given set of integers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2permOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_2perm_cargs(params, execution)
     const ret = v_2perm_outputs(params, execution)
@@ -196,6 +196,23 @@ function v_2perm_execute(
 }
 
 
+/**
+ * Generates two random non-overlapping subsets of a given set of integers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param bottom_int Bottom integer of the range
+ * @param top_int Top integer of the range
+ * @param prefix Prefix for output files (default 'AFNIroolz')
+ * @param comma Write each file as a single row of comma-separated numbers
+ * @param subset1_size Size of the first subset (optional, default is half the range)
+ * @param subset2_size Size of the second subset (optional, default is half the range)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2permOutputs`).
+ */
 function v_2perm(
     bottom_int: number,
     top_int: number,
@@ -205,23 +222,6 @@ function v_2perm(
     subset2_size: number | null = null,
     runner: Runner | null = null,
 ): V2permOutputs {
-    /**
-     * Generates two random non-overlapping subsets of a given set of integers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param bottom_int Bottom integer of the range
-     * @param top_int Top integer of the range
-     * @param prefix Prefix for output files (default 'AFNIroolz')
-     * @param comma Write each file as a single row of comma-separated numbers
-     * @param subset1_size Size of the first subset (optional, default is half the range)
-     * @param subset2_size Size of the second subset (optional, default is half the range)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2permOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_2PERM_METADATA);
     const params = v_2perm_params(bottom_int, top_int, prefix, comma, subset1_size, subset2_size)
@@ -234,5 +234,8 @@ export {
       V2permParameters,
       V_2PERM_METADATA,
       v_2perm,
+      v_2perm_cargs,
+      v_2perm_execute,
+      v_2perm_outputs,
       v_2perm_params,
 };

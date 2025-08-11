@@ -12,40 +12,40 @@ const POLYORDER_METADATA: Metadata = {
 
 
 interface PolyorderParameters {
-    "__STYXTYPE__": "polyorder";
+    "@type": "freesurfer.polyorder";
     "ntp": number;
     "tr": number;
     "cutoff": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "polyorder": polyorder_cargs,
+        "freesurfer.polyorder": polyorder_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface PolyorderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ntp Number of time points (i.e., number of TRs).
+ * @param tr TR in seconds.
+ * @param cutoff Cutoff frequency in Hz.
+ *
+ * @returns Parameter dictionary
+ */
 function polyorder_params(
     ntp: number,
     tr: number,
     cutoff: number,
 ): PolyorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param ntp Number of time points (i.e., number of TRs).
-     * @param tr TR in seconds.
-     * @param cutoff Cutoff frequency in Hz.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "polyorder" as const,
+        "@type": "freesurfer.polyorder" as const,
         "ntp": ntp,
         "tr": tr,
         "cutoff": cutoff,
@@ -89,18 +89,18 @@ function polyorder_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function polyorder_cargs(
     params: PolyorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("polyorder");
     cargs.push(
@@ -119,18 +119,18 @@ function polyorder_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function polyorder_outputs(
     params: PolyorderParameters,
     execution: Execution,
 ): PolyorderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PolyorderOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function polyorder_outputs(
 }
 
 
+/**
+ * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
+ */
 function polyorder_execute(
     params: PolyorderParameters,
     execution: Execution,
 ): PolyorderOutputs {
-    /**
-     * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
-     */
     params = execution.params(params)
     const cargs = polyorder_cargs(params, execution)
     const ret = polyorder_outputs(params, execution)
@@ -162,26 +162,26 @@ function polyorder_execute(
 }
 
 
+/**
+ * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param ntp Number of time points (i.e., number of TRs).
+ * @param tr TR in seconds.
+ * @param cutoff Cutoff frequency in Hz.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
+ */
 function polyorder(
     ntp: number,
     tr: number,
     cutoff: number,
     runner: Runner | null = null,
 ): PolyorderOutputs {
-    /**
-     * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param ntp Number of time points (i.e., number of TRs).
-     * @param tr TR in seconds.
-     * @param cutoff Cutoff frequency in Hz.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POLYORDER_METADATA);
     const params = polyorder_params(ntp, tr, cutoff)
@@ -194,5 +194,8 @@ export {
       PolyorderOutputs,
       PolyorderParameters,
       polyorder,
+      polyorder_cargs,
+      polyorder_execute,
+      polyorder_outputs,
       polyorder_params,
 };

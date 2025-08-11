@@ -12,7 +12,7 @@ const MRIS_APPLY_REG_METADATA: Metadata = {
 
 
 interface MrisApplyRegParameters {
-    "__STYXTYPE__": "mris_apply_reg";
+    "@type": "freesurfer.mris_apply_reg";
     "src_input": InputPathType;
     "trg_output": string;
     "streg_pair": string;
@@ -39,35 +39,35 @@ interface MrisApplyRegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_apply_reg": mris_apply_reg_cargs,
+        "freesurfer.mris_apply_reg": mris_apply_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_apply_reg": mris_apply_reg_outputs,
+        "freesurfer.mris_apply_reg": mris_apply_reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,35 @@ interface MrisApplyRegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_input Source values (surface overlay)
+ * @param trg_output Target output file
+ * @param streg_pair Source and target registration file pair
+ * @param src_label Source label file (implies --no-rev)
+ * @param src_annotation Source annotation file (implies --no-rev)
+ * @param src_xyz XYZ coordinates from the given surface file as input
+ * @param jacobian Use jacobian correction
+ * @param no_reverse Do not do reverse mapping
+ * @param rand_noise Replace input with white Gaussian noise
+ * @param replace_ones Replace input with ones
+ * @param center_output Place the center of the output surface at (0,0,0)
+ * @param curv_format Save output in curvature file format
+ * @param lta_transform Apply LTA transform to the surface
+ * @param lta_patch_transform Apply LTA transform to surface patch
+ * @param reverse_surface LR reverse surface with optional patch
+ * @param patch_apply Apply patch for each --streg
+ * @param save_vertex_pair Save vertex pairs from source and target surfaces
+ * @param m3z_transform Apply M3Z transform
+ * @param inv_m3z_transform Apply inverse M3Z transform
+ * @param src_reg_scale Scale the coordinates of the first surface
+ * @param trg_reg_scale Scale the coordinates of the last surface
+ * @param debug_mode Turn on debugging
+ * @param check_options Check options without executing anything
+ *
+ * @returns Parameter dictionary
+ */
 function mris_apply_reg_params(
     src_input: InputPathType,
     trg_output: string,
@@ -115,37 +144,8 @@ function mris_apply_reg_params(
     debug_mode: boolean = false,
     check_options: boolean = false,
 ): MrisApplyRegParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_input Source values (surface overlay)
-     * @param trg_output Target output file
-     * @param streg_pair Source and target registration file pair
-     * @param src_label Source label file (implies --no-rev)
-     * @param src_annotation Source annotation file (implies --no-rev)
-     * @param src_xyz XYZ coordinates from the given surface file as input
-     * @param jacobian Use jacobian correction
-     * @param no_reverse Do not do reverse mapping
-     * @param rand_noise Replace input with white Gaussian noise
-     * @param replace_ones Replace input with ones
-     * @param center_output Place the center of the output surface at (0,0,0)
-     * @param curv_format Save output in curvature file format
-     * @param lta_transform Apply LTA transform to the surface
-     * @param lta_patch_transform Apply LTA transform to surface patch
-     * @param reverse_surface LR reverse surface with optional patch
-     * @param patch_apply Apply patch for each --streg
-     * @param save_vertex_pair Save vertex pairs from source and target surfaces
-     * @param m3z_transform Apply M3Z transform
-     * @param inv_m3z_transform Apply inverse M3Z transform
-     * @param src_reg_scale Scale the coordinates of the first surface
-     * @param trg_reg_scale Scale the coordinates of the last surface
-     * @param debug_mode Turn on debugging
-     * @param check_options Check options without executing anything
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_apply_reg" as const,
+        "@type": "freesurfer.mris_apply_reg" as const,
         "src_input": src_input,
         "trg_output": trg_output,
         "streg_pair": streg_pair,
@@ -198,18 +198,18 @@ function mris_apply_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_apply_reg_cargs(
     params: MrisApplyRegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_apply_reg");
     cargs.push(
@@ -324,18 +324,18 @@ function mris_apply_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_apply_reg_outputs(
     params: MrisApplyRegParameters,
     execution: Execution,
 ): MrisApplyRegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisApplyRegOutputs = {
         root: execution.outputFile("."),
         output_result: execution.outputFile([(params["trg_output"] ?? null)].join('')),
@@ -344,22 +344,22 @@ function mris_apply_reg_outputs(
 }
 
 
+/**
+ * Apply surface registration in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
+ */
 function mris_apply_reg_execute(
     params: MrisApplyRegParameters,
     execution: Execution,
 ): MrisApplyRegOutputs {
-    /**
-     * Apply surface registration in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_apply_reg_cargs(params, execution)
     const ret = mris_apply_reg_outputs(params, execution)
@@ -368,6 +368,40 @@ function mris_apply_reg_execute(
 }
 
 
+/**
+ * Apply surface registration in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_input Source values (surface overlay)
+ * @param trg_output Target output file
+ * @param streg_pair Source and target registration file pair
+ * @param src_label Source label file (implies --no-rev)
+ * @param src_annotation Source annotation file (implies --no-rev)
+ * @param src_xyz XYZ coordinates from the given surface file as input
+ * @param jacobian Use jacobian correction
+ * @param no_reverse Do not do reverse mapping
+ * @param rand_noise Replace input with white Gaussian noise
+ * @param replace_ones Replace input with ones
+ * @param center_output Place the center of the output surface at (0,0,0)
+ * @param curv_format Save output in curvature file format
+ * @param lta_transform Apply LTA transform to the surface
+ * @param lta_patch_transform Apply LTA transform to surface patch
+ * @param reverse_surface LR reverse surface with optional patch
+ * @param patch_apply Apply patch for each --streg
+ * @param save_vertex_pair Save vertex pairs from source and target surfaces
+ * @param m3z_transform Apply M3Z transform
+ * @param inv_m3z_transform Apply inverse M3Z transform
+ * @param src_reg_scale Scale the coordinates of the first surface
+ * @param trg_reg_scale Scale the coordinates of the last surface
+ * @param debug_mode Turn on debugging
+ * @param check_options Check options without executing anything
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
+ */
 function mris_apply_reg(
     src_input: InputPathType,
     trg_output: string,
@@ -394,40 +428,6 @@ function mris_apply_reg(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MrisApplyRegOutputs {
-    /**
-     * Apply surface registration in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_input Source values (surface overlay)
-     * @param trg_output Target output file
-     * @param streg_pair Source and target registration file pair
-     * @param src_label Source label file (implies --no-rev)
-     * @param src_annotation Source annotation file (implies --no-rev)
-     * @param src_xyz XYZ coordinates from the given surface file as input
-     * @param jacobian Use jacobian correction
-     * @param no_reverse Do not do reverse mapping
-     * @param rand_noise Replace input with white Gaussian noise
-     * @param replace_ones Replace input with ones
-     * @param center_output Place the center of the output surface at (0,0,0)
-     * @param curv_format Save output in curvature file format
-     * @param lta_transform Apply LTA transform to the surface
-     * @param lta_patch_transform Apply LTA transform to surface patch
-     * @param reverse_surface LR reverse surface with optional patch
-     * @param patch_apply Apply patch for each --streg
-     * @param save_vertex_pair Save vertex pairs from source and target surfaces
-     * @param m3z_transform Apply M3Z transform
-     * @param inv_m3z_transform Apply inverse M3Z transform
-     * @param src_reg_scale Scale the coordinates of the first surface
-     * @param trg_reg_scale Scale the coordinates of the last surface
-     * @param debug_mode Turn on debugging
-     * @param check_options Check options without executing anything
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_APPLY_REG_METADATA);
     const params = mris_apply_reg_params(src_input, trg_output, streg_pair, src_label, src_annotation, src_xyz, jacobian, no_reverse, rand_noise, replace_ones, center_output, curv_format, lta_transform, lta_patch_transform, reverse_surface, patch_apply, save_vertex_pair, m3z_transform, inv_m3z_transform, src_reg_scale, trg_reg_scale, debug_mode, check_options)
@@ -440,5 +440,8 @@ export {
       MrisApplyRegOutputs,
       MrisApplyRegParameters,
       mris_apply_reg,
+      mris_apply_reg_cargs,
+      mris_apply_reg_execute,
+      mris_apply_reg_outputs,
       mris_apply_reg_params,
 };

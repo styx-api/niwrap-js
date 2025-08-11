@@ -12,40 +12,40 @@ const V__DO_EXAMPLES_METADATA: Metadata = {
 
 
 interface VDoExamplesParameters {
-    "__STYXTYPE__": "@DO.examples";
+    "@type": "afni.@DO.examples";
     "auto_test": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@DO.examples": v__do_examples_cargs,
+        "afni.@DO.examples": v__do_examples_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@DO.examples": v__do_examples_outputs,
+        "afni.@DO.examples": v__do_examples_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VDoExamplesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param auto_test Run this script in test mode where user prompts are timed out at 2 seconds, and the command output log is preserved in a file called __testlog.txt
+ *
+ * @returns Parameter dictionary
+ */
 function v__do_examples_params(
     auto_test: boolean = false,
 ): VDoExamplesParameters {
-    /**
-     * Build parameters.
-    
-     * @param auto_test Run this script in test mode where user prompts are timed out at 2 seconds, and the command output log is preserved in a file called __testlog.txt
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@DO.examples" as const,
+        "@type": "afni.@DO.examples" as const,
         "auto_test": auto_test,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__do_examples_cargs(
     params: VDoExamplesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@DO.examples");
     if ((params["auto_test"] ?? null)) {
@@ -107,18 +107,18 @@ function v__do_examples_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__do_examples_outputs(
     params: VDoExamplesParameters,
     execution: Execution,
 ): VDoExamplesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDoExamplesOutputs = {
         root: execution.outputFile("."),
         output_log: execution.outputFile(["__testlog.txt"].join('')),
@@ -127,22 +127,22 @@ function v__do_examples_outputs(
 }
 
 
+/**
+ * A script to illustrate the use of Displayable Objects in SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
+ */
 function v__do_examples_execute(
     params: VDoExamplesParameters,
     execution: Execution,
 ): VDoExamplesOutputs {
-    /**
-     * A script to illustrate the use of Displayable Objects in SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__do_examples_cargs(params, execution)
     const ret = v__do_examples_outputs(params, execution)
@@ -151,22 +151,22 @@ function v__do_examples_execute(
 }
 
 
+/**
+ * A script to illustrate the use of Displayable Objects in SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param auto_test Run this script in test mode where user prompts are timed out at 2 seconds, and the command output log is preserved in a file called __testlog.txt
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
+ */
 function v__do_examples(
     auto_test: boolean = false,
     runner: Runner | null = null,
 ): VDoExamplesOutputs {
-    /**
-     * A script to illustrate the use of Displayable Objects in SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param auto_test Run this script in test mode where user prompts are timed out at 2 seconds, and the command output log is preserved in a file called __testlog.txt
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DO_EXAMPLES_METADATA);
     const params = v__do_examples_params(auto_test)
@@ -179,5 +179,8 @@ export {
       VDoExamplesParameters,
       V__DO_EXAMPLES_METADATA,
       v__do_examples,
+      v__do_examples_cargs,
+      v__do_examples_execute,
+      v__do_examples_outputs,
       v__do_examples_params,
 };

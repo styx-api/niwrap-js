@@ -12,7 +12,7 @@ const MATCH_SMOOTHING_METADATA: Metadata = {
 
 
 interface MatchSmoothingParameters {
-    "__STYXTYPE__": "match_smoothing";
+    "@type": "fsl.match_smoothing";
     "example_func": InputPathType;
     "func_smoothing_FWHM": number;
     "example_structural": InputPathType;
@@ -20,33 +20,33 @@ interface MatchSmoothingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "match_smoothing": match_smoothing_cargs,
+        "fsl.match_smoothing": match_smoothing_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MatchSmoothingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param example_func Path to the example functional image file.
+ * @param func_smoothing_fwhm Full-width at half maximum (FWHM) of the smoothing kernel applied to the functional data, in millimeters.
+ * @param example_structural Path to the example structural image file.
+ * @param standard_space_resolution Resolution of the standard space, in millimeters.
+ *
+ * @returns Parameter dictionary
+ */
 function match_smoothing_params(
     example_func: InputPathType,
     func_smoothing_fwhm: number,
     example_structural: InputPathType,
     standard_space_resolution: number,
 ): MatchSmoothingParameters {
-    /**
-     * Build parameters.
-    
-     * @param example_func Path to the example functional image file.
-     * @param func_smoothing_fwhm Full-width at half maximum (FWHM) of the smoothing kernel applied to the functional data, in millimeters.
-     * @param example_structural Path to the example structural image file.
-     * @param standard_space_resolution Resolution of the standard space, in millimeters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "match_smoothing" as const,
+        "@type": "fsl.match_smoothing" as const,
         "example_func": example_func,
         "func_smoothing_FWHM": func_smoothing_fwhm,
         "example_structural": example_structural,
@@ -93,18 +93,18 @@ function match_smoothing_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function match_smoothing_cargs(
     params: MatchSmoothingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("match_smoothing");
     cargs.push(execution.inputFile((params["example_func"] ?? null)));
@@ -115,18 +115,18 @@ function match_smoothing_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function match_smoothing_outputs(
     params: MatchSmoothingParameters,
     execution: Execution,
 ): MatchSmoothingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MatchSmoothingOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function match_smoothing_outputs(
 }
 
 
+/**
+ * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
+ */
 function match_smoothing_execute(
     params: MatchSmoothingParameters,
     execution: Execution,
 ): MatchSmoothingOutputs {
-    /**
-     * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
-     */
     params = execution.params(params)
     const cargs = match_smoothing_cargs(params, execution)
     const ret = match_smoothing_outputs(params, execution)
@@ -158,6 +158,21 @@ function match_smoothing_execute(
 }
 
 
+/**
+ * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param example_func Path to the example functional image file.
+ * @param func_smoothing_fwhm Full-width at half maximum (FWHM) of the smoothing kernel applied to the functional data, in millimeters.
+ * @param example_structural Path to the example structural image file.
+ * @param standard_space_resolution Resolution of the standard space, in millimeters.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
+ */
 function match_smoothing(
     example_func: InputPathType,
     func_smoothing_fwhm: number,
@@ -165,21 +180,6 @@ function match_smoothing(
     standard_space_resolution: number,
     runner: Runner | null = null,
 ): MatchSmoothingOutputs {
-    /**
-     * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param example_func Path to the example functional image file.
-     * @param func_smoothing_fwhm Full-width at half maximum (FWHM) of the smoothing kernel applied to the functional data, in millimeters.
-     * @param example_structural Path to the example structural image file.
-     * @param standard_space_resolution Resolution of the standard space, in millimeters.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MATCH_SMOOTHING_METADATA);
     const params = match_smoothing_params(example_func, func_smoothing_fwhm, example_structural, standard_space_resolution)
@@ -192,5 +192,8 @@ export {
       MatchSmoothingOutputs,
       MatchSmoothingParameters,
       match_smoothing,
+      match_smoothing_cargs,
+      match_smoothing_execute,
+      match_smoothing_outputs,
       match_smoothing_params,
 };

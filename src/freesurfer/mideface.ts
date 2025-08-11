@@ -12,7 +12,7 @@ const MIDEFACE_METADATA: Metadata = {
 
 
 interface MidefaceParameters {
-    "__STYXTYPE__": "mideface";
+    "@type": "freesurfer.mideface";
     "input_volume": InputPathType;
     "output_volume": string;
     "facemask"?: InputPathType | null | undefined;
@@ -46,35 +46,35 @@ interface MidefaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mideface": mideface_cargs,
+        "freesurfer.mideface": mideface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mideface": mideface_outputs,
+        "freesurfer.mideface": mideface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -101,6 +101,42 @@ interface MidefaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Volume to deface
+ * @param output_volume Defaced output volume
+ * @param facemask Facemask to apply
+ * @param output_dir Directory for outputs, activates PostHeadSurf
+ * @param exclusion_mask Mask to exclude certain regions from defacing
+ * @param samseg_ndilations Number of dilations for Samseg segmentation
+ * @param samseg_json JSON configuration for Samseg
+ * @param samseg_fast Configure Samseg to run quickly
+ * @param no_samseg_fast Do not configure Samseg to run quickly
+ * @param init_reg Initial registration file for Samseg
+ * @param synthseg_ndilations Number of dilations for Synthseg segmentation
+ * @param fill_const Constants for filling regions
+ * @param fill_zero Fill regions with zero
+ * @param fhi FHI value for MRIchangeType()
+ * @param no_ears Do not include ears in the defacing
+ * @param back_of_head Include back of head in defacing
+ * @param forehead Include forehead in defacing (risks removing brain)
+ * @param pics Take pictures of the defaced result
+ * @param code Embed code name in pictures
+ * @param image_convert Path to ImageMagick convert binary for pictures
+ * @param no_post Do not make a head surface after defacing
+ * @param threads Number of threads to use
+ * @param force Force reprocessing (only applicable if output directory is used)
+ * @param output_format Output file format
+ * @param atlas Directory containing atlas files
+ * @param expert Additional expert options
+ * @param display_no Xvfb display number for taking pictures
+ * @param apply_volume Apply midface output to a second volume
+ * @param check_volume Volume to check if defaced
+ * @param check_output_file Optional output file for check result
+ *
+ * @returns Parameter dictionary
+ */
 function mideface_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -133,44 +169,8 @@ function mideface_params(
     check_volume: InputPathType | null = null,
     check_output_file: InputPathType | null = null,
 ): MidefaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Volume to deface
-     * @param output_volume Defaced output volume
-     * @param facemask Facemask to apply
-     * @param output_dir Directory for outputs, activates PostHeadSurf
-     * @param exclusion_mask Mask to exclude certain regions from defacing
-     * @param samseg_ndilations Number of dilations for Samseg segmentation
-     * @param samseg_json JSON configuration for Samseg
-     * @param samseg_fast Configure Samseg to run quickly
-     * @param no_samseg_fast Do not configure Samseg to run quickly
-     * @param init_reg Initial registration file for Samseg
-     * @param synthseg_ndilations Number of dilations for Synthseg segmentation
-     * @param fill_const Constants for filling regions
-     * @param fill_zero Fill regions with zero
-     * @param fhi FHI value for MRIchangeType()
-     * @param no_ears Do not include ears in the defacing
-     * @param back_of_head Include back of head in defacing
-     * @param forehead Include forehead in defacing (risks removing brain)
-     * @param pics Take pictures of the defaced result
-     * @param code Embed code name in pictures
-     * @param image_convert Path to ImageMagick convert binary for pictures
-     * @param no_post Do not make a head surface after defacing
-     * @param threads Number of threads to use
-     * @param force Force reprocessing (only applicable if output directory is used)
-     * @param output_format Output file format
-     * @param atlas Directory containing atlas files
-     * @param expert Additional expert options
-     * @param display_no Xvfb display number for taking pictures
-     * @param apply_volume Apply midface output to a second volume
-     * @param check_volume Volume to check if defaced
-     * @param check_output_file Optional output file for check result
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mideface" as const,
+        "@type": "freesurfer.mideface" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "samseg_fast": samseg_fast,
@@ -244,18 +244,18 @@ function mideface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mideface_cargs(
     params: MidefaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mideface");
     cargs.push(
@@ -411,18 +411,18 @@ function mideface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mideface_outputs(
     params: MidefaceParameters,
     execution: Execution,
 ): MidefaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MidefaceOutputs = {
         root: execution.outputFile("."),
         defaced_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -432,22 +432,22 @@ function mideface_outputs(
 }
 
 
+/**
+ * Minimally invasive defacing tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
+ */
 function mideface_execute(
     params: MidefaceParameters,
     execution: Execution,
 ): MidefaceOutputs {
-    /**
-     * Minimally invasive defacing tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mideface_cargs(params, execution)
     const ret = mideface_outputs(params, execution)
@@ -456,6 +456,47 @@ function mideface_execute(
 }
 
 
+/**
+ * Minimally invasive defacing tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Volume to deface
+ * @param output_volume Defaced output volume
+ * @param facemask Facemask to apply
+ * @param output_dir Directory for outputs, activates PostHeadSurf
+ * @param exclusion_mask Mask to exclude certain regions from defacing
+ * @param samseg_ndilations Number of dilations for Samseg segmentation
+ * @param samseg_json JSON configuration for Samseg
+ * @param samseg_fast Configure Samseg to run quickly
+ * @param no_samseg_fast Do not configure Samseg to run quickly
+ * @param init_reg Initial registration file for Samseg
+ * @param synthseg_ndilations Number of dilations for Synthseg segmentation
+ * @param fill_const Constants for filling regions
+ * @param fill_zero Fill regions with zero
+ * @param fhi FHI value for MRIchangeType()
+ * @param no_ears Do not include ears in the defacing
+ * @param back_of_head Include back of head in defacing
+ * @param forehead Include forehead in defacing (risks removing brain)
+ * @param pics Take pictures of the defaced result
+ * @param code Embed code name in pictures
+ * @param image_convert Path to ImageMagick convert binary for pictures
+ * @param no_post Do not make a head surface after defacing
+ * @param threads Number of threads to use
+ * @param force Force reprocessing (only applicable if output directory is used)
+ * @param output_format Output file format
+ * @param atlas Directory containing atlas files
+ * @param expert Additional expert options
+ * @param display_no Xvfb display number for taking pictures
+ * @param apply_volume Apply midface output to a second volume
+ * @param check_volume Volume to check if defaced
+ * @param check_output_file Optional output file for check result
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
+ */
 function mideface(
     input_volume: InputPathType,
     output_volume: string,
@@ -489,47 +530,6 @@ function mideface(
     check_output_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MidefaceOutputs {
-    /**
-     * Minimally invasive defacing tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Volume to deface
-     * @param output_volume Defaced output volume
-     * @param facemask Facemask to apply
-     * @param output_dir Directory for outputs, activates PostHeadSurf
-     * @param exclusion_mask Mask to exclude certain regions from defacing
-     * @param samseg_ndilations Number of dilations for Samseg segmentation
-     * @param samseg_json JSON configuration for Samseg
-     * @param samseg_fast Configure Samseg to run quickly
-     * @param no_samseg_fast Do not configure Samseg to run quickly
-     * @param init_reg Initial registration file for Samseg
-     * @param synthseg_ndilations Number of dilations for Synthseg segmentation
-     * @param fill_const Constants for filling regions
-     * @param fill_zero Fill regions with zero
-     * @param fhi FHI value for MRIchangeType()
-     * @param no_ears Do not include ears in the defacing
-     * @param back_of_head Include back of head in defacing
-     * @param forehead Include forehead in defacing (risks removing brain)
-     * @param pics Take pictures of the defaced result
-     * @param code Embed code name in pictures
-     * @param image_convert Path to ImageMagick convert binary for pictures
-     * @param no_post Do not make a head surface after defacing
-     * @param threads Number of threads to use
-     * @param force Force reprocessing (only applicable if output directory is used)
-     * @param output_format Output file format
-     * @param atlas Directory containing atlas files
-     * @param expert Additional expert options
-     * @param display_no Xvfb display number for taking pictures
-     * @param apply_volume Apply midface output to a second volume
-     * @param check_volume Volume to check if defaced
-     * @param check_output_file Optional output file for check result
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MIDEFACE_METADATA);
     const params = mideface_params(input_volume, output_volume, facemask, output_dir, exclusion_mask, samseg_ndilations, samseg_json, samseg_fast, no_samseg_fast, init_reg, synthseg_ndilations, fill_const, fill_zero, fhi, no_ears, back_of_head, forehead, pics, code, image_convert, no_post, threads, force, output_format, atlas, expert, display_no, apply_volume, check_volume, check_output_file)
@@ -542,5 +542,8 @@ export {
       MidefaceOutputs,
       MidefaceParameters,
       mideface,
+      mideface_cargs,
+      mideface_execute,
+      mideface_outputs,
       mideface_params,
 };

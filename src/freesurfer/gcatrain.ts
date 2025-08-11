@@ -12,7 +12,7 @@ const GCATRAIN_METADATA: Metadata = {
 
 
 interface GcatrainParameters {
-    "__STYXTYPE__": "gcatrain";
+    "@type": "freesurfer.gcatrain";
     "gcadir": string;
     "subjectlistfile": InputPathType;
     "init_subject_transform": Array<string>;
@@ -35,33 +35,33 @@ interface GcatrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gcatrain": gcatrain_cargs,
+        "freesurfer.gcatrain": gcatrain_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -81,6 +81,31 @@ interface GcatrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gcadir Directory for the new SUBJECTS_DIR.
+ * @param subjectlistfile The list of subjects to include.
+ * @param init_subject_transform Initialization subject and its talairach transform.
+ * @param seg_file Segmentation file (e.g. seg_edited.mgz).
+ * @param source_subjects_dir Source SUBJECTS_DIR for data.
+ * @param num_iters Number of iterations.
+ * @param num_threads Number of threads to use.
+ * @param exclude_file File listing subjects to exclude, useful for jackknifing.
+ * @param exclude_subject Exclude a single subject, useful for jackknifing.
+ * @param symmetric_atlas Create a symmetric atlas.
+ * @param color_table Colortable for segmentation labels (not needed).
+ * @param no_submit Run serially without pbsubmit.
+ * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
+ * @param no_strict Do not require FS build stamps to match across iterations.
+ * @param gcareg_iters Set to 1 for testing.
+ * @param prep_only Execute preparation steps only.
+ * @param nu10_flag Run with nu10 settings.
+ * @param nu12_flag Run with nu12 settings (default).
+ * @param no_emreg Do not use mri_em_register.
+ *
+ * @returns Parameter dictionary
+ */
 function gcatrain_params(
     gcadir: string,
     subjectlistfile: InputPathType,
@@ -102,33 +127,8 @@ function gcatrain_params(
     nu12_flag: boolean = false,
     no_emreg: boolean = false,
 ): GcatrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param gcadir Directory for the new SUBJECTS_DIR.
-     * @param subjectlistfile The list of subjects to include.
-     * @param init_subject_transform Initialization subject and its talairach transform.
-     * @param seg_file Segmentation file (e.g. seg_edited.mgz).
-     * @param source_subjects_dir Source SUBJECTS_DIR for data.
-     * @param num_iters Number of iterations.
-     * @param num_threads Number of threads to use.
-     * @param exclude_file File listing subjects to exclude, useful for jackknifing.
-     * @param exclude_subject Exclude a single subject, useful for jackknifing.
-     * @param symmetric_atlas Create a symmetric atlas.
-     * @param color_table Colortable for segmentation labels (not needed).
-     * @param no_submit Run serially without pbsubmit.
-     * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
-     * @param no_strict Do not require FS build stamps to match across iterations.
-     * @param gcareg_iters Set to 1 for testing.
-     * @param prep_only Execute preparation steps only.
-     * @param nu10_flag Run with nu10 settings.
-     * @param nu12_flag Run with nu12 settings (default).
-     * @param no_emreg Do not use mri_em_register.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gcatrain" as const,
+        "@type": "freesurfer.gcatrain" as const,
         "gcadir": gcadir,
         "subjectlistfile": subjectlistfile,
         "init_subject_transform": init_subject_transform,
@@ -163,18 +163,18 @@ function gcatrain_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gcatrain_cargs(
     params: GcatrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gcatrain");
     cargs.push(
@@ -258,18 +258,18 @@ function gcatrain_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gcatrain_outputs(
     params: GcatrainParameters,
     execution: Execution,
 ): GcatrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GcatrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -277,22 +277,22 @@ function gcatrain_outputs(
 }
 
 
+/**
+ * GCA training tool for building a GCA from a group of manually labeled subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
+ */
 function gcatrain_execute(
     params: GcatrainParameters,
     execution: Execution,
 ): GcatrainOutputs {
-    /**
-     * GCA training tool for building a GCA from a group of manually labeled subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = gcatrain_cargs(params, execution)
     const ret = gcatrain_outputs(params, execution)
@@ -301,6 +301,36 @@ function gcatrain_execute(
 }
 
 
+/**
+ * GCA training tool for building a GCA from a group of manually labeled subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gcadir Directory for the new SUBJECTS_DIR.
+ * @param subjectlistfile The list of subjects to include.
+ * @param init_subject_transform Initialization subject and its talairach transform.
+ * @param seg_file Segmentation file (e.g. seg_edited.mgz).
+ * @param source_subjects_dir Source SUBJECTS_DIR for data.
+ * @param num_iters Number of iterations.
+ * @param num_threads Number of threads to use.
+ * @param exclude_file File listing subjects to exclude, useful for jackknifing.
+ * @param exclude_subject Exclude a single subject, useful for jackknifing.
+ * @param symmetric_atlas Create a symmetric atlas.
+ * @param color_table Colortable for segmentation labels (not needed).
+ * @param no_submit Run serially without pbsubmit.
+ * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
+ * @param no_strict Do not require FS build stamps to match across iterations.
+ * @param gcareg_iters Set to 1 for testing.
+ * @param prep_only Execute preparation steps only.
+ * @param nu10_flag Run with nu10 settings.
+ * @param nu12_flag Run with nu12 settings (default).
+ * @param no_emreg Do not use mri_em_register.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
+ */
 function gcatrain(
     gcadir: string,
     subjectlistfile: InputPathType,
@@ -323,36 +353,6 @@ function gcatrain(
     no_emreg: boolean = false,
     runner: Runner | null = null,
 ): GcatrainOutputs {
-    /**
-     * GCA training tool for building a GCA from a group of manually labeled subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gcadir Directory for the new SUBJECTS_DIR.
-     * @param subjectlistfile The list of subjects to include.
-     * @param init_subject_transform Initialization subject and its talairach transform.
-     * @param seg_file Segmentation file (e.g. seg_edited.mgz).
-     * @param source_subjects_dir Source SUBJECTS_DIR for data.
-     * @param num_iters Number of iterations.
-     * @param num_threads Number of threads to use.
-     * @param exclude_file File listing subjects to exclude, useful for jackknifing.
-     * @param exclude_subject Exclude a single subject, useful for jackknifing.
-     * @param symmetric_atlas Create a symmetric atlas.
-     * @param color_table Colortable for segmentation labels (not needed).
-     * @param no_submit Run serially without pbsubmit.
-     * @param mail_flag Mail to user when jobs are pbsubmitted or finished.
-     * @param no_strict Do not require FS build stamps to match across iterations.
-     * @param gcareg_iters Set to 1 for testing.
-     * @param prep_only Execute preparation steps only.
-     * @param nu10_flag Run with nu10 settings.
-     * @param nu12_flag Run with nu12 settings (default).
-     * @param no_emreg Do not use mri_em_register.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GCATRAIN_METADATA);
     const params = gcatrain_params(gcadir, subjectlistfile, init_subject_transform, seg_file, source_subjects_dir, num_iters, num_threads, exclude_file, exclude_subject, symmetric_atlas, color_table, no_submit, mail_flag, no_strict, gcareg_iters, prep_only, nu10_flag, nu12_flag, no_emreg)
@@ -365,5 +365,8 @@ export {
       GcatrainOutputs,
       GcatrainParameters,
       gcatrain,
+      gcatrain_cargs,
+      gcatrain_execute,
+      gcatrain_outputs,
       gcatrain_params,
 };

@@ -12,7 +12,7 @@ const V_3D_ACOST_METADATA: Metadata = {
 
 
 interface V3dAcostParameters {
-    "__STYXTYPE__": "3dAcost";
+    "@type": "afni.3dAcost";
     "infile": InputPathType;
     "basefile": InputPathType;
     "outfile": string;
@@ -20,35 +20,35 @@ interface V3dAcostParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAcost": v_3d_acost_cargs,
+        "afni.3dAcost": v_3d_acost_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAcost": v_3d_acost_outputs,
+        "afni.3dAcost": v_3d_acost_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface V3dAcostOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input dataset for allineation
+ * @param basefile Base dataset for allineation
+ * @param outfile Prefix for the output dataset
+ * @param all_cost Prints all alignment cost metrics
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_acost_params(
     infile: InputPathType,
     basefile: InputPathType,
     outfile: string,
     all_cost: boolean = false,
 ): V3dAcostParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input dataset for allineation
-     * @param basefile Base dataset for allineation
-     * @param outfile Prefix for the output dataset
-     * @param all_cost Prints all alignment cost metrics
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAcost" as const,
+        "@type": "afni.3dAcost" as const,
         "infile": infile,
         "basefile": basefile,
         "outfile": outfile,
@@ -102,18 +102,18 @@ function v_3d_acost_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_acost_cargs(
     params: V3dAcostParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAcost");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -132,18 +132,18 @@ function v_3d_acost_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_acost_outputs(
     params: V3dAcostParameters,
     execution: Execution,
 ): V3dAcostOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAcostOutputs = {
         root: execution.outputFile("."),
         output_head: execution.outputFile([(params["outfile"] ?? null), "+orig.HEAD"].join('')),
@@ -153,22 +153,22 @@ function v_3d_acost_outputs(
 }
 
 
+/**
+ * Allineate dataset to a base dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
+ */
 function v_3d_acost_execute(
     params: V3dAcostParameters,
     execution: Execution,
 ): V3dAcostOutputs {
-    /**
-     * Allineate dataset to a base dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_acost_cargs(params, execution)
     const ret = v_3d_acost_outputs(params, execution)
@@ -177,6 +177,21 @@ function v_3d_acost_execute(
 }
 
 
+/**
+ * Allineate dataset to a base dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input dataset for allineation
+ * @param basefile Base dataset for allineation
+ * @param outfile Prefix for the output dataset
+ * @param all_cost Prints all alignment cost metrics
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
+ */
 function v_3d_acost(
     infile: InputPathType,
     basefile: InputPathType,
@@ -184,21 +199,6 @@ function v_3d_acost(
     all_cost: boolean = false,
     runner: Runner | null = null,
 ): V3dAcostOutputs {
-    /**
-     * Allineate dataset to a base dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input dataset for allineation
-     * @param basefile Base dataset for allineation
-     * @param outfile Prefix for the output dataset
-     * @param all_cost Prints all alignment cost metrics
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ACOST_METADATA);
     const params = v_3d_acost_params(infile, basefile, outfile, all_cost)
@@ -211,5 +211,8 @@ export {
       V3dAcostParameters,
       V_3D_ACOST_METADATA,
       v_3d_acost,
+      v_3d_acost_cargs,
+      v_3d_acost_execute,
+      v_3d_acost_outputs,
       v_3d_acost_params,
 };

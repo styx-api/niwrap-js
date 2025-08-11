@@ -12,14 +12,14 @@ const V_5TT2GMWMI_METADATA: Metadata = {
 
 
 interface V5tt2gmwmiConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.5tt2gmwmi.config";
     "key": string;
     "value": string;
 }
 
 
 interface V5tt2gmwmiParameters {
-    "__STYXTYPE__": "5tt2gmwmi";
+    "@type": "mrtrix.5tt2gmwmi";
     "mask_in"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface V5tt2gmwmiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "5tt2gmwmi": v_5tt2gmwmi_cargs,
-        "config": v_5tt2gmwmi_config_cargs,
+        "mrtrix.5tt2gmwmi": v_5tt2gmwmi_cargs,
+        "mrtrix.5tt2gmwmi.config": v_5tt2gmwmi_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "5tt2gmwmi": v_5tt2gmwmi_outputs,
+        "mrtrix.5tt2gmwmi": v_5tt2gmwmi_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5tt2gmwmi_config_params(
     key: string,
     value: string,
 ): V5tt2gmwmiConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.5tt2gmwmi.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function v_5tt2gmwmi_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5tt2gmwmi_config_cargs(
     params: V5tt2gmwmiConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface V5tt2gmwmiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param v_5tt_in the input 5TT segmented anatomical image
+ * @param mask_out the output mask image
+ * @param mask_in Filter an input mask image according to those voxels that lie upon the grey matter - white matter boundary. If no input mask is provided, the output will be a whole-brain mask image calculated using the anatomical image only.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5tt2gmwmi_params(
     v_5tt_in: InputPathType,
     mask_out: string,
@@ -140,25 +157,8 @@ function v_5tt2gmwmi_params(
     help: boolean = false,
     version: boolean = false,
 ): V5tt2gmwmiParameters {
-    /**
-     * Build parameters.
-    
-     * @param v_5tt_in the input 5TT segmented anatomical image
-     * @param mask_out the output mask image
-     * @param mask_in Filter an input mask image according to those voxels that lie upon the grey matter - white matter boundary. If no input mask is provided, the output will be a whole-brain mask image calculated using the anatomical image only.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "5tt2gmwmi" as const,
+        "@type": "mrtrix.5tt2gmwmi" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -181,18 +181,18 @@ function v_5tt2gmwmi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5tt2gmwmi_cargs(
     params: V5tt2gmwmiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("5tt2gmwmi");
     if ((params["mask_in"] ?? null) !== null) {
@@ -220,7 +220,7 @@ function v_5tt2gmwmi_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -234,18 +234,18 @@ function v_5tt2gmwmi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_5tt2gmwmi_outputs(
     params: V5tt2gmwmiParameters,
     execution: Execution,
 ): V5tt2gmwmiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V5tt2gmwmiOutputs = {
         root: execution.outputFile("."),
         mask_out: execution.outputFile([(params["mask_out"] ?? null)].join('')),
@@ -254,28 +254,28 @@ function v_5tt2gmwmi_outputs(
 }
 
 
+/**
+ * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography:Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
+ */
 function v_5tt2gmwmi_execute(
     params: V5tt2gmwmiParameters,
     execution: Execution,
 ): V5tt2gmwmiOutputs {
-    /**
-     * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography:Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_5tt2gmwmi_cargs(params, execution)
     const ret = v_5tt2gmwmi_outputs(params, execution)
@@ -284,6 +284,34 @@ function v_5tt2gmwmi_execute(
 }
 
 
+/**
+ * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography:Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param v_5tt_in the input 5TT segmented anatomical image
+ * @param mask_out the output mask image
+ * @param mask_in Filter an input mask image according to those voxels that lie upon the grey matter - white matter boundary. If no input mask is provided, the output will be a whole-brain mask image calculated using the anatomical image only.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
+ */
 function v_5tt2gmwmi(
     v_5tt_in: InputPathType,
     mask_out: string,
@@ -298,34 +326,6 @@ function v_5tt2gmwmi(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tt2gmwmiOutputs {
-    /**
-     * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. Anatomically-constrained tractography:Improved diffusion MRI streamlines tractography through effective use of anatomical information. NeuroImage, 2012, 62, 1924-1938.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param v_5tt_in the input 5TT segmented anatomical image
-     * @param mask_out the output mask image
-     * @param mask_in Filter an input mask image according to those voxels that lie upon the grey matter - white matter boundary. If no input mask is provided, the output will be a whole-brain mask image calculated using the anatomical image only.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_5TT2GMWMI_METADATA);
     const params = v_5tt2gmwmi_params(v_5tt_in, mask_out, mask_in, info, quiet, debug, force, nthreads, config, help, version)
@@ -339,6 +339,10 @@ export {
       V5tt2gmwmiParameters,
       V_5TT2GMWMI_METADATA,
       v_5tt2gmwmi,
+      v_5tt2gmwmi_cargs,
+      v_5tt2gmwmi_config_cargs,
       v_5tt2gmwmi_config_params,
+      v_5tt2gmwmi_execute,
+      v_5tt2gmwmi_outputs,
       v_5tt2gmwmi_params,
 };

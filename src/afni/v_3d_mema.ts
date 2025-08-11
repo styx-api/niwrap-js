@@ -12,7 +12,7 @@ const V_3D_MEMA_METADATA: Metadata = {
 
 
 interface V3dMemaParameters {
-    "__STYXTYPE__": "3dMEMA";
+    "@type": "afni.3dMEMA";
     "prefix": string;
     "jobs"?: number | null | undefined;
     "set": Array<string>;
@@ -43,35 +43,35 @@ interface V3dMemaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMEMA": v_3d_mema_cargs,
+        "afni.3dMEMA": v_3d_mema_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMEMA": v_3d_mema_outputs,
+        "afni.3dMEMA": v_3d_mema_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,39 @@ interface V3dMemaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output prefix (just prefix, no view+suffix needed)
+ * @param set_ Set data for one of the test variables
+ * @param jobs Number of jobs for parallel computing
+ * @param covariates Specify the name of a text file containing a table for the covariate(s).
+ * @param covariates_center Specify the center values for covariates.
+ * @param covariates_model Specify how covariates should be modeled.
+ * @param covariates_name Specify the name of each covariate.
+ * @param groups Label of groups, used for output naming.
+ * @param cio Use AFNI's C io functions.
+ * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
+ * @param mask Only process voxels inside the specified mask.
+ * @param max_zeros Specify how many beta/t-statistics can be zero.
+ * @param missing_data Specify missing data handling.
+ * @param model_outliers Model outliers with a Laplace distribution.
+ * @param n_nonzero Number of non-zero beta values required.
+ * @param no_hktest Specify not to use Hartung-Knapp adjustment.
+ * @param no_model_outliers Specify not to model outliers.
+ * @param no_residual_z Do not output residuals and their Z values.
+ * @param residual_z Output residuals and their Z values.
+ * @param rio Use R's io functions.
+ * @param equal_variance Assume same cross-subjects variability between groups.
+ * @param unequal_variance Model cross-subject variability difference between groups.
+ * @param verb Specify verbosity level
+ * @param dbg_args Output missing data debug file.
+ * @param help Show help message
+ * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
+ * @param no_tstat Do not compute t-statistics
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mema_params(
     prefix: string,
     set_: Array<string>,
@@ -123,41 +156,8 @@ function v_3d_mema_params(
     conditions: Array<string> | null = null,
     no_tstat: boolean = false,
 ): V3dMemaParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output prefix (just prefix, no view+suffix needed)
-     * @param set_ Set data for one of the test variables
-     * @param jobs Number of jobs for parallel computing
-     * @param covariates Specify the name of a text file containing a table for the covariate(s).
-     * @param covariates_center Specify the center values for covariates.
-     * @param covariates_model Specify how covariates should be modeled.
-     * @param covariates_name Specify the name of each covariate.
-     * @param groups Label of groups, used for output naming.
-     * @param cio Use AFNI's C io functions.
-     * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
-     * @param mask Only process voxels inside the specified mask.
-     * @param max_zeros Specify how many beta/t-statistics can be zero.
-     * @param missing_data Specify missing data handling.
-     * @param model_outliers Model outliers with a Laplace distribution.
-     * @param n_nonzero Number of non-zero beta values required.
-     * @param no_hktest Specify not to use Hartung-Knapp adjustment.
-     * @param no_model_outliers Specify not to model outliers.
-     * @param no_residual_z Do not output residuals and their Z values.
-     * @param residual_z Output residuals and their Z values.
-     * @param rio Use R's io functions.
-     * @param equal_variance Assume same cross-subjects variability between groups.
-     * @param unequal_variance Model cross-subject variability difference between groups.
-     * @param verb Specify verbosity level
-     * @param dbg_args Output missing data debug file.
-     * @param help Show help message
-     * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
-     * @param no_tstat Do not compute t-statistics
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMEMA" as const,
+        "@type": "afni.3dMEMA" as const,
         "prefix": prefix,
         "set": set_,
         "cio": cio,
@@ -214,18 +214,18 @@ function v_3d_mema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mema_cargs(
     params: V3dMemaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMEMA");
     cargs.push(
@@ -351,18 +351,18 @@ function v_3d_mema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mema_outputs(
     params: V3dMemaParameters,
     execution: Execution,
 ): V3dMemaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMemaOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -371,22 +371,22 @@ function v_3d_mema_outputs(
 }
 
 
+/**
+ * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
+ */
 function v_3d_mema_execute(
     params: V3dMemaParameters,
     execution: Execution,
 ): V3dMemaOutputs {
-    /**
-     * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mema_cargs(params, execution)
     const ret = v_3d_mema_outputs(params, execution)
@@ -395,6 +395,44 @@ function v_3d_mema_execute(
 }
 
 
+/**
+ * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output prefix (just prefix, no view+suffix needed)
+ * @param set_ Set data for one of the test variables
+ * @param jobs Number of jobs for parallel computing
+ * @param covariates Specify the name of a text file containing a table for the covariate(s).
+ * @param covariates_center Specify the center values for covariates.
+ * @param covariates_model Specify how covariates should be modeled.
+ * @param covariates_name Specify the name of each covariate.
+ * @param groups Label of groups, used for output naming.
+ * @param cio Use AFNI's C io functions.
+ * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
+ * @param mask Only process voxels inside the specified mask.
+ * @param max_zeros Specify how many beta/t-statistics can be zero.
+ * @param missing_data Specify missing data handling.
+ * @param model_outliers Model outliers with a Laplace distribution.
+ * @param n_nonzero Number of non-zero beta values required.
+ * @param no_hktest Specify not to use Hartung-Knapp adjustment.
+ * @param no_model_outliers Specify not to model outliers.
+ * @param no_residual_z Do not output residuals and their Z values.
+ * @param residual_z Output residuals and their Z values.
+ * @param rio Use R's io functions.
+ * @param equal_variance Assume same cross-subjects variability between groups.
+ * @param unequal_variance Model cross-subject variability difference between groups.
+ * @param verb Specify verbosity level
+ * @param dbg_args Output missing data debug file.
+ * @param help Show help message
+ * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
+ * @param no_tstat Do not compute t-statistics
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
+ */
 function v_3d_mema(
     prefix: string,
     set_: Array<string>,
@@ -425,44 +463,6 @@ function v_3d_mema(
     no_tstat: boolean = false,
     runner: Runner | null = null,
 ): V3dMemaOutputs {
-    /**
-     * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output prefix (just prefix, no view+suffix needed)
-     * @param set_ Set data for one of the test variables
-     * @param jobs Number of jobs for parallel computing
-     * @param covariates Specify the name of a text file containing a table for the covariate(s).
-     * @param covariates_center Specify the center values for covariates.
-     * @param covariates_model Specify how covariates should be modeled.
-     * @param covariates_name Specify the name of each covariate.
-     * @param groups Label of groups, used for output naming.
-     * @param cio Use AFNI's C io functions.
-     * @param hktest Perform Hartung-Knapp adjustment for the output t-statistic.
-     * @param mask Only process voxels inside the specified mask.
-     * @param max_zeros Specify how many beta/t-statistics can be zero.
-     * @param missing_data Specify missing data handling.
-     * @param model_outliers Model outliers with a Laplace distribution.
-     * @param n_nonzero Number of non-zero beta values required.
-     * @param no_hktest Specify not to use Hartung-Knapp adjustment.
-     * @param no_model_outliers Specify not to model outliers.
-     * @param no_residual_z Do not output residuals and their Z values.
-     * @param residual_z Output residuals and their Z values.
-     * @param rio Use R's io functions.
-     * @param equal_variance Assume same cross-subjects variability between groups.
-     * @param unequal_variance Model cross-subject variability difference between groups.
-     * @param verb Specify verbosity level
-     * @param dbg_args Output missing data debug file.
-     * @param help Show help message
-     * @param conditions Name of 1 or 2 conditions, tasks, or GLTs
-     * @param no_tstat Do not compute t-statistics
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MEMA_METADATA);
     const params = v_3d_mema_params(prefix, set_, jobs, covariates, covariates_center, covariates_model, covariates_name, groups, cio, hktest, mask, max_zeros, missing_data, model_outliers, n_nonzero, no_hktest, no_model_outliers, no_residual_z, residual_z, rio, equal_variance, unequal_variance, verb, dbg_args, help, conditions, no_tstat)
@@ -475,5 +475,8 @@ export {
       V3dMemaParameters,
       V_3D_MEMA_METADATA,
       v_3d_mema,
+      v_3d_mema_cargs,
+      v_3d_mema_execute,
+      v_3d_mema_outputs,
       v_3d_mema_params,
 };

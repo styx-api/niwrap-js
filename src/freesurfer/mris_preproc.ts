@@ -12,7 +12,7 @@ const MRIS_PREPROC_METADATA: Metadata = {
 
 
 interface MrisPreprocParameters {
-    "__STYXTYPE__": "mris_preproc";
+    "@type": "freesurfer.mris_preproc";
     "outfile": string;
     "target_subject": string;
     "hemi": string;
@@ -65,33 +65,33 @@ interface MrisPreprocParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_preproc": mris_preproc_cargs,
+        "freesurfer.mris_preproc": mris_preproc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -111,6 +111,61 @@ interface MrisPreprocOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile Save output here.
+ * @param target_subject Subject to use as the common-space. All input data will be resampled to the surface of this subject.
+ * @param hemi Use hemisphere for source and target surfaces. Can be lh or rh.
+ * @param meas Use subject/surf/hemi.surfmeasure as input. Implies --srcfmt curv.
+ * @param label Look in label/hemi.annotname.(annot,mgz) and use mapmethod nnf.
+ * @param measdir Look in subdir instead of surf.
+ * @param subjects Specify an input subject on the command-line. All subjects must be specified in this way.
+ * @param fsgd Specify the list of input subjects from the fsgd file.
+ * @param subjectlist List all subjects separated by white space in subjlistfile.
+ * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
+ * @param qdec_long Specify list of subjects via longitudinal qdec table file.
+ * @param surfmeasfile Specify full path to input surface measure file.
+ * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
+ * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
+ * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
+ * @param projfrac_avg Compute average along projection for vol2surf.
+ * @param no_mask_non_cortex Do not mask out non-cortex in vol2surf.
+ * @param session_file FS-FAST session file.
+ * @param dir_file FS-FAST session directory file.
+ * @param analysis FS-FAST analysis.
+ * @param contrast FS-FAST contrast.
+ * @param cvar_flag Use fsfast contrast variance (cesvar).
+ * @param offset_flag Use fsfast mean offset (h-offset).
+ * @param map Use fsfast contrast/map.
+ * @param etiv_flag Divide each subject's value by the Estimated Total Intra Cranial Volume as found in aseg.stats.
+ * @param fwhm Smooth by fwhm mm on the target surface.
+ * @param fwhm_src Smooth by fwhm mm on the source surface.
+ * @param niters Smooth by niters on the target surface.
+ * @param niters_src Smooth by niters on the source surface.
+ * @param cortex_only Exclude medial wall.
+ * @param mgz_flag Use mgz format internally.
+ * @param no_jac_flag Turn off jacobian correction.
+ * @param paired_diff_flag Compute paired differences after concatenating all inputs together.
+ * @param cache_out Cache the output in the specified cache file.
+ * @param cache_in Use the pre-computed cached data from the specified cache file.
+ * @param cache_out_only Cache data without actually creating an output.
+ * @param no_prune_flag Do not prune the inputs.
+ * @param mean_flag Compute the mean of all inputs.
+ * @param std_flag Compute the standard deviation of all inputs.
+ * @param reshape_flag Reshape spatial dimensions.
+ * @param surfreg Use specified surface registration to the common space.
+ * @param subjects_dir Set SUBJECTS_DIR environment variable.
+ * @param synth_flag Synthesize the input data with white gaussian noise.
+ * @param tmpdir Use specified temporary directory.
+ * @param nocleanup_flag Do not delete temporary files.
+ * @param cleanup_flag Delete temporary files (default).
+ * @param log Specify log file.
+ * @param nolog_flag Do not create a log file.
+ * @param debug_flag Enable debug mode.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_preproc_params(
     outfile: string,
     target_subject: string,
@@ -162,63 +217,8 @@ function mris_preproc_params(
     nolog_flag: boolean = false,
     debug_flag: boolean = false,
 ): MrisPreprocParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile Save output here.
-     * @param target_subject Subject to use as the common-space. All input data will be resampled to the surface of this subject.
-     * @param hemi Use hemisphere for source and target surfaces. Can be lh or rh.
-     * @param meas Use subject/surf/hemi.surfmeasure as input. Implies --srcfmt curv.
-     * @param label Look in label/hemi.annotname.(annot,mgz) and use mapmethod nnf.
-     * @param measdir Look in subdir instead of surf.
-     * @param subjects Specify an input subject on the command-line. All subjects must be specified in this way.
-     * @param fsgd Specify the list of input subjects from the fsgd file.
-     * @param subjectlist List all subjects separated by white space in subjlistfile.
-     * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
-     * @param qdec_long Specify list of subjects via longitudinal qdec table file.
-     * @param surfmeasfile Specify full path to input surface measure file.
-     * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
-     * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
-     * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
-     * @param projfrac_avg Compute average along projection for vol2surf.
-     * @param no_mask_non_cortex Do not mask out non-cortex in vol2surf.
-     * @param session_file FS-FAST session file.
-     * @param dir_file FS-FAST session directory file.
-     * @param analysis FS-FAST analysis.
-     * @param contrast FS-FAST contrast.
-     * @param cvar_flag Use fsfast contrast variance (cesvar).
-     * @param offset_flag Use fsfast mean offset (h-offset).
-     * @param map Use fsfast contrast/map.
-     * @param etiv_flag Divide each subject's value by the Estimated Total Intra Cranial Volume as found in aseg.stats.
-     * @param fwhm Smooth by fwhm mm on the target surface.
-     * @param fwhm_src Smooth by fwhm mm on the source surface.
-     * @param niters Smooth by niters on the target surface.
-     * @param niters_src Smooth by niters on the source surface.
-     * @param cortex_only Exclude medial wall.
-     * @param mgz_flag Use mgz format internally.
-     * @param no_jac_flag Turn off jacobian correction.
-     * @param paired_diff_flag Compute paired differences after concatenating all inputs together.
-     * @param cache_out Cache the output in the specified cache file.
-     * @param cache_in Use the pre-computed cached data from the specified cache file.
-     * @param cache_out_only Cache data without actually creating an output.
-     * @param no_prune_flag Do not prune the inputs.
-     * @param mean_flag Compute the mean of all inputs.
-     * @param std_flag Compute the standard deviation of all inputs.
-     * @param reshape_flag Reshape spatial dimensions.
-     * @param surfreg Use specified surface registration to the common space.
-     * @param subjects_dir Set SUBJECTS_DIR environment variable.
-     * @param synth_flag Synthesize the input data with white gaussian noise.
-     * @param tmpdir Use specified temporary directory.
-     * @param nocleanup_flag Do not delete temporary files.
-     * @param cleanup_flag Delete temporary files (default).
-     * @param log Specify log file.
-     * @param nolog_flag Do not create a log file.
-     * @param debug_flag Enable debug mode.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_preproc" as const,
+        "@type": "freesurfer.mris_preproc" as const,
         "outfile": outfile,
         "target_subject": target_subject,
         "hemi": hemi,
@@ -331,18 +331,18 @@ function mris_preproc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_preproc_cargs(
     params: MrisPreprocParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_preproc");
     cargs.push(
@@ -586,18 +586,18 @@ function mris_preproc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_preproc_outputs(
     params: MrisPreprocParameters,
     execution: Execution,
 ): MrisPreprocOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisPreprocOutputs = {
         root: execution.outputFile("."),
     };
@@ -605,22 +605,22 @@ function mris_preproc_outputs(
 }
 
 
+/**
+ * Script to prepare surface-based data for high-level analysis by resampling surface or volume source data to a common subject and concatenating them into one file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
+ */
 function mris_preproc_execute(
     params: MrisPreprocParameters,
     execution: Execution,
 ): MrisPreprocOutputs {
-    /**
-     * Script to prepare surface-based data for high-level analysis by resampling surface or volume source data to a common subject and concatenating them into one file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_preproc_cargs(params, execution)
     const ret = mris_preproc_outputs(params, execution)
@@ -629,6 +629,66 @@ function mris_preproc_execute(
 }
 
 
+/**
+ * Script to prepare surface-based data for high-level analysis by resampling surface or volume source data to a common subject and concatenating them into one file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outfile Save output here.
+ * @param target_subject Subject to use as the common-space. All input data will be resampled to the surface of this subject.
+ * @param hemi Use hemisphere for source and target surfaces. Can be lh or rh.
+ * @param meas Use subject/surf/hemi.surfmeasure as input. Implies --srcfmt curv.
+ * @param label Look in label/hemi.annotname.(annot,mgz) and use mapmethod nnf.
+ * @param measdir Look in subdir instead of surf.
+ * @param subjects Specify an input subject on the command-line. All subjects must be specified in this way.
+ * @param fsgd Specify the list of input subjects from the fsgd file.
+ * @param subjectlist List all subjects separated by white space in subjlistfile.
+ * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
+ * @param qdec_long Specify list of subjects via longitudinal qdec table file.
+ * @param surfmeasfile Specify full path to input surface measure file.
+ * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
+ * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
+ * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
+ * @param projfrac_avg Compute average along projection for vol2surf.
+ * @param no_mask_non_cortex Do not mask out non-cortex in vol2surf.
+ * @param session_file FS-FAST session file.
+ * @param dir_file FS-FAST session directory file.
+ * @param analysis FS-FAST analysis.
+ * @param contrast FS-FAST contrast.
+ * @param cvar_flag Use fsfast contrast variance (cesvar).
+ * @param offset_flag Use fsfast mean offset (h-offset).
+ * @param map Use fsfast contrast/map.
+ * @param etiv_flag Divide each subject's value by the Estimated Total Intra Cranial Volume as found in aseg.stats.
+ * @param fwhm Smooth by fwhm mm on the target surface.
+ * @param fwhm_src Smooth by fwhm mm on the source surface.
+ * @param niters Smooth by niters on the target surface.
+ * @param niters_src Smooth by niters on the source surface.
+ * @param cortex_only Exclude medial wall.
+ * @param mgz_flag Use mgz format internally.
+ * @param no_jac_flag Turn off jacobian correction.
+ * @param paired_diff_flag Compute paired differences after concatenating all inputs together.
+ * @param cache_out Cache the output in the specified cache file.
+ * @param cache_in Use the pre-computed cached data from the specified cache file.
+ * @param cache_out_only Cache data without actually creating an output.
+ * @param no_prune_flag Do not prune the inputs.
+ * @param mean_flag Compute the mean of all inputs.
+ * @param std_flag Compute the standard deviation of all inputs.
+ * @param reshape_flag Reshape spatial dimensions.
+ * @param surfreg Use specified surface registration to the common space.
+ * @param subjects_dir Set SUBJECTS_DIR environment variable.
+ * @param synth_flag Synthesize the input data with white gaussian noise.
+ * @param tmpdir Use specified temporary directory.
+ * @param nocleanup_flag Do not delete temporary files.
+ * @param cleanup_flag Delete temporary files (default).
+ * @param log Specify log file.
+ * @param nolog_flag Do not create a log file.
+ * @param debug_flag Enable debug mode.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
+ */
 function mris_preproc(
     outfile: string,
     target_subject: string,
@@ -681,66 +741,6 @@ function mris_preproc(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisPreprocOutputs {
-    /**
-     * Script to prepare surface-based data for high-level analysis by resampling surface or volume source data to a common subject and concatenating them into one file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outfile Save output here.
-     * @param target_subject Subject to use as the common-space. All input data will be resampled to the surface of this subject.
-     * @param hemi Use hemisphere for source and target surfaces. Can be lh or rh.
-     * @param meas Use subject/surf/hemi.surfmeasure as input. Implies --srcfmt curv.
-     * @param label Look in label/hemi.annotname.(annot,mgz) and use mapmethod nnf.
-     * @param measdir Look in subdir instead of surf.
-     * @param subjects Specify an input subject on the command-line. All subjects must be specified in this way.
-     * @param fsgd Specify the list of input subjects from the fsgd file.
-     * @param subjectlist List all subjects separated by white space in subjlistfile.
-     * @param qdec Specify list of subjects via qdec table file. Assumes the first column is the "fsid".
-     * @param qdec_long Specify list of subjects via longitudinal qdec table file.
-     * @param surfmeasfile Specify full path to input surface measure file.
-     * @param volmeasfile_reg Specify full path to a volume file and its registration matrix file.
-     * @param projfrac When sampling a volume onto the surface, sample a fraction of the thickness along the surface normal.
-     * @param projfrac_max When sampling a volume onto the surface, find max along projection for vol2surf.
-     * @param projfrac_avg Compute average along projection for vol2surf.
-     * @param no_mask_non_cortex Do not mask out non-cortex in vol2surf.
-     * @param session_file FS-FAST session file.
-     * @param dir_file FS-FAST session directory file.
-     * @param analysis FS-FAST analysis.
-     * @param contrast FS-FAST contrast.
-     * @param cvar_flag Use fsfast contrast variance (cesvar).
-     * @param offset_flag Use fsfast mean offset (h-offset).
-     * @param map Use fsfast contrast/map.
-     * @param etiv_flag Divide each subject's value by the Estimated Total Intra Cranial Volume as found in aseg.stats.
-     * @param fwhm Smooth by fwhm mm on the target surface.
-     * @param fwhm_src Smooth by fwhm mm on the source surface.
-     * @param niters Smooth by niters on the target surface.
-     * @param niters_src Smooth by niters on the source surface.
-     * @param cortex_only Exclude medial wall.
-     * @param mgz_flag Use mgz format internally.
-     * @param no_jac_flag Turn off jacobian correction.
-     * @param paired_diff_flag Compute paired differences after concatenating all inputs together.
-     * @param cache_out Cache the output in the specified cache file.
-     * @param cache_in Use the pre-computed cached data from the specified cache file.
-     * @param cache_out_only Cache data without actually creating an output.
-     * @param no_prune_flag Do not prune the inputs.
-     * @param mean_flag Compute the mean of all inputs.
-     * @param std_flag Compute the standard deviation of all inputs.
-     * @param reshape_flag Reshape spatial dimensions.
-     * @param surfreg Use specified surface registration to the common space.
-     * @param subjects_dir Set SUBJECTS_DIR environment variable.
-     * @param synth_flag Synthesize the input data with white gaussian noise.
-     * @param tmpdir Use specified temporary directory.
-     * @param nocleanup_flag Do not delete temporary files.
-     * @param cleanup_flag Delete temporary files (default).
-     * @param log Specify log file.
-     * @param nolog_flag Do not create a log file.
-     * @param debug_flag Enable debug mode.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PREPROC_METADATA);
     const params = mris_preproc_params(outfile, target_subject, hemi, meas, label, measdir, subjects, fsgd, subjectlist, qdec, qdec_long, surfmeasfile, volmeasfile_reg, projfrac, projfrac_max, projfrac_avg, no_mask_non_cortex, session_file, dir_file, analysis, contrast, cvar_flag, offset_flag, map, etiv_flag, fwhm, fwhm_src, niters, niters_src, cortex_only, mgz_flag, no_jac_flag, paired_diff_flag, cache_out, cache_in, cache_out_only, no_prune_flag, mean_flag, std_flag, reshape_flag, surfreg, subjects_dir, synth_flag, tmpdir, nocleanup_flag, cleanup_flag, log, nolog_flag, debug_flag)
@@ -753,5 +753,8 @@ export {
       MrisPreprocOutputs,
       MrisPreprocParameters,
       mris_preproc,
+      mris_preproc_cargs,
+      mris_preproc_execute,
+      mris_preproc_outputs,
       mris_preproc_params,
 };

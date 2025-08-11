@@ -12,7 +12,7 @@ const SLICESDIR_METADATA: Metadata = {
 
 
 interface SlicesdirParameters {
-    "__STYXTYPE__": "slicesdir";
+    "@type": "fsl.slicesdir";
     "flag_filelist": boolean;
     "outline_image"?: InputPathType | null | undefined;
     "edge_threshold"?: number | null | undefined;
@@ -21,33 +21,33 @@ interface SlicesdirParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slicesdir": slicesdir_cargs,
+        "fsl.slicesdir": slicesdir_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface SlicesdirOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filelist List of image files to process
+ * @param flag_filelist Filelist contains pairs of images (underlying and red-outline images)
+ * @param outline_image Use the specified image as the red-outline image on top of all images in the file list
+ * @param edge_threshold Use specified threshold for edges. If >0, use this proportion of max-min; if <0, use the absolute value
+ * @param slice_option Output every second axial slice instead of 9 ortho slices
+ *
+ * @returns Parameter dictionary
+ */
 function slicesdir_params(
     filelist: Array<string>,
     flag_filelist: boolean = false,
@@ -74,19 +85,8 @@ function slicesdir_params(
     edge_threshold: number | null = null,
     slice_option: boolean = false,
 ): SlicesdirParameters {
-    /**
-     * Build parameters.
-    
-     * @param filelist List of image files to process
-     * @param flag_filelist Filelist contains pairs of images (underlying and red-outline images)
-     * @param outline_image Use the specified image as the red-outline image on top of all images in the file list
-     * @param edge_threshold Use specified threshold for edges. If >0, use this proportion of max-min; if <0, use the absolute value
-     * @param slice_option Output every second axial slice instead of 9 ortho slices
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slicesdir" as const,
+        "@type": "fsl.slicesdir" as const,
         "flag_filelist": flag_filelist,
         "slice_option": slice_option,
         "filelist": filelist,
@@ -101,18 +101,18 @@ function slicesdir_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slicesdir_cargs(
     params: SlicesdirParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slicesdir");
     if ((params["flag_filelist"] ?? null)) {
@@ -138,18 +138,18 @@ function slicesdir_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slicesdir_outputs(
     params: SlicesdirParameters,
     execution: Execution,
 ): SlicesdirOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicesdirOutputs = {
         root: execution.outputFile("."),
     };
@@ -157,22 +157,22 @@ function slicesdir_outputs(
 }
 
 
+/**
+ * slicesdir generates a directory containing orthogonal slices through a set of images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
+ */
 function slicesdir_execute(
     params: SlicesdirParameters,
     execution: Execution,
 ): SlicesdirOutputs {
-    /**
-     * slicesdir generates a directory containing orthogonal slices through a set of images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
-     */
     params = execution.params(params)
     const cargs = slicesdir_cargs(params, execution)
     const ret = slicesdir_outputs(params, execution)
@@ -181,6 +181,22 @@ function slicesdir_execute(
 }
 
 
+/**
+ * slicesdir generates a directory containing orthogonal slices through a set of images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param filelist List of image files to process
+ * @param flag_filelist Filelist contains pairs of images (underlying and red-outline images)
+ * @param outline_image Use the specified image as the red-outline image on top of all images in the file list
+ * @param edge_threshold Use specified threshold for edges. If >0, use this proportion of max-min; if <0, use the absolute value
+ * @param slice_option Output every second axial slice instead of 9 ortho slices
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
+ */
 function slicesdir(
     filelist: Array<string>,
     flag_filelist: boolean = false,
@@ -189,22 +205,6 @@ function slicesdir(
     slice_option: boolean = false,
     runner: Runner | null = null,
 ): SlicesdirOutputs {
-    /**
-     * slicesdir generates a directory containing orthogonal slices through a set of images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param filelist List of image files to process
-     * @param flag_filelist Filelist contains pairs of images (underlying and red-outline images)
-     * @param outline_image Use the specified image as the red-outline image on top of all images in the file list
-     * @param edge_threshold Use specified threshold for edges. If >0, use this proportion of max-min; if <0, use the absolute value
-     * @param slice_option Output every second axial slice instead of 9 ortho slices
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICESDIR_METADATA);
     const params = slicesdir_params(filelist, flag_filelist, outline_image, edge_threshold, slice_option)
@@ -217,5 +217,8 @@ export {
       SlicesdirOutputs,
       SlicesdirParameters,
       slicesdir,
+      slicesdir_cargs,
+      slicesdir_execute,
+      slicesdir_outputs,
       slicesdir_params,
 };

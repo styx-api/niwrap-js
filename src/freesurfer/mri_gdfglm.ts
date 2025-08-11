@@ -12,40 +12,40 @@ const MRI_GDFGLM_METADATA: Metadata = {
 
 
 interface MriGdfglmParameters {
-    "__STYXTYPE__": "mri_gdfglm";
+    "@type": "freesurfer.mri_gdfglm";
     "inputs"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gdfglm": mri_gdfglm_cargs,
+        "freesurfer.mri_gdfglm": mri_gdfglm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gdfglm": mri_gdfglm_outputs,
+        "freesurfer.mri_gdfglm": mri_gdfglm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,18 +68,18 @@ interface MriGdfglmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputs Input parameters are not available because the command has been removed.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gdfglm_params(
     inputs: string | null = null,
 ): MriGdfglmParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputs Input parameters are not available because the command has been removed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gdfglm" as const,
+        "@type": "freesurfer.mri_gdfglm" as const,
     };
     if (inputs !== null) {
         params["inputs"] = inputs;
@@ -88,18 +88,18 @@ function mri_gdfglm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gdfglm_cargs(
     params: MriGdfglmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gdfglm");
     if ((params["inputs"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function mri_gdfglm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gdfglm_outputs(
     params: MriGdfglmParameters,
     execution: Execution,
 ): MriGdfglmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGdfglmOutputs = {
         root: execution.outputFile("."),
         outputs: execution.outputFile(["[OUTPUT]"].join('')),
@@ -129,22 +129,22 @@ function mri_gdfglm_outputs(
 }
 
 
+/**
+ * The mri_gdfglm command has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
+ */
 function mri_gdfglm_execute(
     params: MriGdfglmParameters,
     execution: Execution,
 ): MriGdfglmOutputs {
-    /**
-     * The mri_gdfglm command has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gdfglm_cargs(params, execution)
     const ret = mri_gdfglm_outputs(params, execution)
@@ -153,22 +153,22 @@ function mri_gdfglm_execute(
 }
 
 
+/**
+ * The mri_gdfglm command has been removed from the current version of FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputs Input parameters are not available because the command has been removed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
+ */
 function mri_gdfglm(
     inputs: string | null = null,
     runner: Runner | null = null,
 ): MriGdfglmOutputs {
-    /**
-     * The mri_gdfglm command has been removed from the current version of FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputs Input parameters are not available because the command has been removed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GDFGLM_METADATA);
     const params = mri_gdfglm_params(inputs)
@@ -181,5 +181,8 @@ export {
       MriGdfglmOutputs,
       MriGdfglmParameters,
       mri_gdfglm,
+      mri_gdfglm_cargs,
+      mri_gdfglm_execute,
+      mri_gdfglm_outputs,
       mri_gdfglm_params,
 };

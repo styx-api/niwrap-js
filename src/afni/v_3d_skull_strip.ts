@@ -12,42 +12,42 @@ const V_3D_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface V3dSkullStripParameters {
-    "__STYXTYPE__": "3dSkullStrip";
+    "@type": "afni.3dSkullStrip";
     "in_file": InputPathType;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSkullStrip": v_3d_skull_strip_cargs,
+        "afni.3dSkullStrip": v_3d_skull_strip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSkullStrip": v_3d_skull_strip_outputs,
+        "afni.3dSkullStrip": v_3d_skull_strip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface V3dSkullStripOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dskullstrip.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_skull_strip_params(
     in_file: InputPathType,
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
 ): V3dSkullStripParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dskullstrip.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSkullStrip" as const,
+        "@type": "afni.3dSkullStrip" as const,
         "in_file": in_file,
     };
     if (num_threads !== null) {
@@ -102,18 +102,18 @@ function v_3d_skull_strip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_skull_strip_cargs(
     params: V3dSkullStripParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSkullStrip");
     cargs.push(
@@ -130,18 +130,18 @@ function v_3d_skull_strip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_skull_strip_outputs(
     params: V3dSkullStripParameters,
     execution: Execution,
 ): V3dSkullStripOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSkullStripOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_skullstrip"].join('')),
@@ -151,22 +151,22 @@ function v_3d_skull_strip_outputs(
 }
 
 
+/**
+ * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
+ */
 function v_3d_skull_strip_execute(
     params: V3dSkullStripParameters,
     execution: Execution,
 ): V3dSkullStripOutputs {
-    /**
-     * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_skull_strip_cargs(params, execution)
     const ret = v_3d_skull_strip_outputs(params, execution)
@@ -175,26 +175,26 @@ function v_3d_skull_strip_execute(
 }
 
 
+/**
+ * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dskullstrip.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
+ */
 function v_3d_skull_strip(
     in_file: InputPathType,
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     runner: Runner | null = null,
 ): V3dSkullStripOutputs {
-    /**
-     * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dskullstrip.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SKULL_STRIP_METADATA);
     const params = v_3d_skull_strip_params(in_file, num_threads, outputtype)
@@ -207,5 +207,8 @@ export {
       V3dSkullStripParameters,
       V_3D_SKULL_STRIP_METADATA,
       v_3d_skull_strip,
+      v_3d_skull_strip_cargs,
+      v_3d_skull_strip_execute,
+      v_3d_skull_strip_outputs,
       v_3d_skull_strip_params,
 };

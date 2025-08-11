@@ -12,7 +12,7 @@ const VNO_MATCH_CHECK_METADATA: Metadata = {
 
 
 interface VnoMatchCheckParameters {
-    "__STYXTYPE__": "vno_match_check";
+    "@type": "freesurfer.vno_match_check";
     "subjid": string;
     "debug": boolean;
     "right_hemi": boolean;
@@ -20,33 +20,33 @@ interface VnoMatchCheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vno_match_check": vno_match_check_cargs,
+        "freesurfer.vno_match_check": vno_match_check_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface VnoMatchCheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Subject ID for which the vertex number check is performed
+ * @param debug Prints progress text
+ * @param right_hemi Checks only the right hemisphere
+ * @param left_hemi Checks only the left hemisphere
+ *
+ * @returns Parameter dictionary
+ */
 function vno_match_check_params(
     subjid: string,
     debug: boolean = false,
     right_hemi: boolean = false,
     left_hemi: boolean = false,
 ): VnoMatchCheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Subject ID for which the vertex number check is performed
-     * @param debug Prints progress text
-     * @param right_hemi Checks only the right hemisphere
-     * @param left_hemi Checks only the left hemisphere
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vno_match_check" as const,
+        "@type": "freesurfer.vno_match_check" as const,
         "subjid": subjid,
         "debug": debug,
         "right_hemi": right_hemi,
@@ -93,18 +93,18 @@ function vno_match_check_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vno_match_check_cargs(
     params: VnoMatchCheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vno_match_check");
     cargs.push((params["subjid"] ?? null));
@@ -121,18 +121,18 @@ function vno_match_check_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vno_match_check_outputs(
     params: VnoMatchCheckParameters,
     execution: Execution,
 ): VnoMatchCheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VnoMatchCheckOutputs = {
         root: execution.outputFile("."),
     };
@@ -140,22 +140,22 @@ function vno_match_check_outputs(
 }
 
 
+/**
+ * Checks that all surfaces and surface data files for a subject have the same number of vertices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
+ */
 function vno_match_check_execute(
     params: VnoMatchCheckParameters,
     execution: Execution,
 ): VnoMatchCheckOutputs {
-    /**
-     * Checks that all surfaces and surface data files for a subject have the same number of vertices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = vno_match_check_cargs(params, execution)
     const ret = vno_match_check_outputs(params, execution)
@@ -164,6 +164,21 @@ function vno_match_check_execute(
 }
 
 
+/**
+ * Checks that all surfaces and surface data files for a subject have the same number of vertices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Subject ID for which the vertex number check is performed
+ * @param debug Prints progress text
+ * @param right_hemi Checks only the right hemisphere
+ * @param left_hemi Checks only the left hemisphere
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
+ */
 function vno_match_check(
     subjid: string,
     debug: boolean = false,
@@ -171,21 +186,6 @@ function vno_match_check(
     left_hemi: boolean = false,
     runner: Runner | null = null,
 ): VnoMatchCheckOutputs {
-    /**
-     * Checks that all surfaces and surface data files for a subject have the same number of vertices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Subject ID for which the vertex number check is performed
-     * @param debug Prints progress text
-     * @param right_hemi Checks only the right hemisphere
-     * @param left_hemi Checks only the left hemisphere
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VNO_MATCH_CHECK_METADATA);
     const params = vno_match_check_params(subjid, debug, right_hemi, left_hemi)
@@ -198,5 +198,8 @@ export {
       VnoMatchCheckOutputs,
       VnoMatchCheckParameters,
       vno_match_check,
+      vno_match_check_cargs,
+      vno_match_check_execute,
+      vno_match_check_outputs,
       vno_match_check_params,
 };

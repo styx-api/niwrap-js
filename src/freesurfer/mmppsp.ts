@@ -12,7 +12,7 @@ const MMPPSP_METADATA: Metadata = {
 
 
 interface MmppspParameters {
-    "__STYXTYPE__": "mmppsp";
+    "@type": "freesurfer.mmppsp";
     "samseg_dir": string;
     "outdir": string;
     "lh_flag": boolean;
@@ -27,35 +27,35 @@ interface MmppspParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mmppsp": mmppsp_cargs,
+        "freesurfer.mmppsp": mmppsp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mmppsp": mmppsp_outputs,
+        "freesurfer.mmppsp": mmppsp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface MmppspOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param samseg_dir Directory containing Samseg output
+ * @param outdir Output directory for the results
+ * @param lh_flag Process left hemisphere
+ * @param rh_flag Process right hemisphere
+ * @param likelihood_flag Use likelihood for surface placement
+ * @param posterior_flag Use posteriors instead of likelihood for surface placement
+ * @param force_update_flag Force update the surface placement
+ * @param threads Number of threads to use
+ * @param no_initsphreg_flag Do not use talairach.lta to initialize rotation
+ * @param stop_after Stop the processing after a specified step
+ * @param wexpanddist Distance to expand white surface to initialize pial (in mm)
+ *
+ * @returns Parameter dictionary
+ */
 function mmppsp_params(
     samseg_dir: string,
     outdir: string,
@@ -91,25 +108,8 @@ function mmppsp_params(
     stop_after: string | null = null,
     wexpanddist: number | null = null,
 ): MmppspParameters {
-    /**
-     * Build parameters.
-    
-     * @param samseg_dir Directory containing Samseg output
-     * @param outdir Output directory for the results
-     * @param lh_flag Process left hemisphere
-     * @param rh_flag Process right hemisphere
-     * @param likelihood_flag Use likelihood for surface placement
-     * @param posterior_flag Use posteriors instead of likelihood for surface placement
-     * @param force_update_flag Force update the surface placement
-     * @param threads Number of threads to use
-     * @param no_initsphreg_flag Do not use talairach.lta to initialize rotation
-     * @param stop_after Stop the processing after a specified step
-     * @param wexpanddist Distance to expand white surface to initialize pial (in mm)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mmppsp" as const,
+        "@type": "freesurfer.mmppsp" as const,
         "samseg_dir": samseg_dir,
         "outdir": outdir,
         "lh_flag": lh_flag,
@@ -132,18 +132,18 @@ function mmppsp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mmppsp_cargs(
     params: MmppspParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mmppsp");
     cargs.push(
@@ -194,18 +194,18 @@ function mmppsp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mmppsp_outputs(
     params: MmppspParameters,
     execution: Execution,
 ): MmppspOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MmppspOutputs = {
         root: execution.outputFile("."),
         output_surface: execution.outputFile([(params["outdir"] ?? null), "/surf"].join('')),
@@ -214,22 +214,22 @@ function mmppsp_outputs(
 }
 
 
+/**
+ * MultiModal Posterior Probability Surface Placement.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MmppspOutputs`).
+ */
 function mmppsp_execute(
     params: MmppspParameters,
     execution: Execution,
 ): MmppspOutputs {
-    /**
-     * MultiModal Posterior Probability Surface Placement.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MmppspOutputs`).
-     */
     params = execution.params(params)
     const cargs = mmppsp_cargs(params, execution)
     const ret = mmppsp_outputs(params, execution)
@@ -238,6 +238,28 @@ function mmppsp_execute(
 }
 
 
+/**
+ * MultiModal Posterior Probability Surface Placement.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param samseg_dir Directory containing Samseg output
+ * @param outdir Output directory for the results
+ * @param lh_flag Process left hemisphere
+ * @param rh_flag Process right hemisphere
+ * @param likelihood_flag Use likelihood for surface placement
+ * @param posterior_flag Use posteriors instead of likelihood for surface placement
+ * @param force_update_flag Force update the surface placement
+ * @param threads Number of threads to use
+ * @param no_initsphreg_flag Do not use talairach.lta to initialize rotation
+ * @param stop_after Stop the processing after a specified step
+ * @param wexpanddist Distance to expand white surface to initialize pial (in mm)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MmppspOutputs`).
+ */
 function mmppsp(
     samseg_dir: string,
     outdir: string,
@@ -252,28 +274,6 @@ function mmppsp(
     wexpanddist: number | null = null,
     runner: Runner | null = null,
 ): MmppspOutputs {
-    /**
-     * MultiModal Posterior Probability Surface Placement.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param samseg_dir Directory containing Samseg output
-     * @param outdir Output directory for the results
-     * @param lh_flag Process left hemisphere
-     * @param rh_flag Process right hemisphere
-     * @param likelihood_flag Use likelihood for surface placement
-     * @param posterior_flag Use posteriors instead of likelihood for surface placement
-     * @param force_update_flag Force update the surface placement
-     * @param threads Number of threads to use
-     * @param no_initsphreg_flag Do not use talairach.lta to initialize rotation
-     * @param stop_after Stop the processing after a specified step
-     * @param wexpanddist Distance to expand white surface to initialize pial (in mm)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MmppspOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MMPPSP_METADATA);
     const params = mmppsp_params(samseg_dir, outdir, lh_flag, rh_flag, likelihood_flag, posterior_flag, force_update_flag, threads, no_initsphreg_flag, stop_after, wexpanddist)
@@ -286,5 +286,8 @@ export {
       MmppspOutputs,
       MmppspParameters,
       mmppsp,
+      mmppsp_cargs,
+      mmppsp_execute,
+      mmppsp_outputs,
       mmppsp_params,
 };

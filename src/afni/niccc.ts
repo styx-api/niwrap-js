@@ -12,7 +12,7 @@ const NICCC_METADATA: Metadata = {
 
 
 interface NicccParameters {
-    "__STYXTYPE__": "niccc";
+    "@type": "afni.niccc";
     "streamspec": string;
     "duplicate": boolean;
     "nodata": boolean;
@@ -28,35 +28,35 @@ interface NicccParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "niccc": niccc_cargs,
+        "afni.niccc": niccc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "niccc": niccc_outputs,
+        "afni.niccc": niccc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface NicccOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param streamspec A string defining a NIML stream
+ * @param duplicate Duplicate the element before showing it. This is to test NI_duplicate function.
+ * @param nodata Show header parts only in output
+ * @param attribute Dump the value of attribute ATTR
+ * @param match Match attribute: If MATCH is exact, then attribute name is matched exactly. If MATCH is partial, then a match of all the characters in ATTR is enough.
+ * @param file Streamspec is a filename.
+ * @param string_ Streamspec is an element string like: '<T font=9 coords="2.3 23 2"/>'
+ * @param stdout Write elements to stdout, instead of stderr
+ * @param hash Put the # at the beginning of lines with no data
+ * @param quiet Quiet stderr messages, and don't echo attribute name with -attribute option
+ * @param find_attr Only output elements that have an attribute ATTR of value ATTRVAL.
+ * @param skip_attr Do not output elements that have an attribute ATTR of value ATTRVAL.
+ *
+ * @returns Parameter dictionary
+ */
 function niccc_params(
     streamspec: string,
     duplicate: boolean = false,
@@ -93,26 +111,8 @@ function niccc_params(
     find_attr: Array<string> | null = null,
     skip_attr: Array<string> | null = null,
 ): NicccParameters {
-    /**
-     * Build parameters.
-    
-     * @param streamspec A string defining a NIML stream
-     * @param duplicate Duplicate the element before showing it. This is to test NI_duplicate function.
-     * @param nodata Show header parts only in output
-     * @param attribute Dump the value of attribute ATTR
-     * @param match Match attribute: If MATCH is exact, then attribute name is matched exactly. If MATCH is partial, then a match of all the characters in ATTR is enough.
-     * @param file Streamspec is a filename.
-     * @param string_ Streamspec is an element string like: '<T font=9 coords="2.3 23 2"/>'
-     * @param stdout Write elements to stdout, instead of stderr
-     * @param hash Put the # at the beginning of lines with no data
-     * @param quiet Quiet stderr messages, and don't echo attribute name with -attribute option
-     * @param find_attr Only output elements that have an attribute ATTR of value ATTRVAL.
-     * @param skip_attr Do not output elements that have an attribute ATTR of value ATTRVAL.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "niccc" as const,
+        "@type": "afni.niccc" as const,
         "streamspec": streamspec,
         "duplicate": duplicate,
         "nodata": nodata,
@@ -138,18 +138,18 @@ function niccc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function niccc_cargs(
     params: NicccParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("niccc");
     cargs.push((params["streamspec"] ?? null));
@@ -202,18 +202,18 @@ function niccc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function niccc_outputs(
     params: NicccParameters,
     execution: Execution,
 ): NicccOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NicccOutputs = {
         root: execution.outputFile("."),
         stderr_output: execution.outputFile(["stderr"].join('')),
@@ -222,22 +222,22 @@ function niccc_outputs(
 }
 
 
+/**
+ * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NicccOutputs`).
+ */
 function niccc_execute(
     params: NicccParameters,
     execution: Execution,
 ): NicccOutputs {
-    /**
-     * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NicccOutputs`).
-     */
     params = execution.params(params)
     const cargs = niccc_cargs(params, execution)
     const ret = niccc_outputs(params, execution)
@@ -246,6 +246,29 @@ function niccc_execute(
 }
 
 
+/**
+ * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param streamspec A string defining a NIML stream
+ * @param duplicate Duplicate the element before showing it. This is to test NI_duplicate function.
+ * @param nodata Show header parts only in output
+ * @param attribute Dump the value of attribute ATTR
+ * @param match Match attribute: If MATCH is exact, then attribute name is matched exactly. If MATCH is partial, then a match of all the characters in ATTR is enough.
+ * @param file Streamspec is a filename.
+ * @param string_ Streamspec is an element string like: '<T font=9 coords="2.3 23 2"/>'
+ * @param stdout Write elements to stdout, instead of stderr
+ * @param hash Put the # at the beginning of lines with no data
+ * @param quiet Quiet stderr messages, and don't echo attribute name with -attribute option
+ * @param find_attr Only output elements that have an attribute ATTR of value ATTRVAL.
+ * @param skip_attr Do not output elements that have an attribute ATTR of value ATTRVAL.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NicccOutputs`).
+ */
 function niccc(
     streamspec: string,
     duplicate: boolean = false,
@@ -261,29 +284,6 @@ function niccc(
     skip_attr: Array<string> | null = null,
     runner: Runner | null = null,
 ): NicccOutputs {
-    /**
-     * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param streamspec A string defining a NIML stream
-     * @param duplicate Duplicate the element before showing it. This is to test NI_duplicate function.
-     * @param nodata Show header parts only in output
-     * @param attribute Dump the value of attribute ATTR
-     * @param match Match attribute: If MATCH is exact, then attribute name is matched exactly. If MATCH is partial, then a match of all the characters in ATTR is enough.
-     * @param file Streamspec is a filename.
-     * @param string_ Streamspec is an element string like: '<T font=9 coords="2.3 23 2"/>'
-     * @param stdout Write elements to stdout, instead of stderr
-     * @param hash Put the # at the beginning of lines with no data
-     * @param quiet Quiet stderr messages, and don't echo attribute name with -attribute option
-     * @param find_attr Only output elements that have an attribute ATTR of value ATTRVAL.
-     * @param skip_attr Do not output elements that have an attribute ATTR of value ATTRVAL.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NicccOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NICCC_METADATA);
     const params = niccc_params(streamspec, duplicate, nodata, attribute, match, file, string_, stdout, hash, quiet, find_attr, skip_attr)
@@ -296,5 +296,8 @@ export {
       NicccOutputs,
       NicccParameters,
       niccc,
+      niccc_cargs,
+      niccc_execute,
+      niccc_outputs,
       niccc_params,
 };

@@ -12,7 +12,7 @@ const MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA: Metadata = {
 
 
 interface MriSegmentHypothalamicSubunitsParameters {
-    "__STYXTYPE__": "mri_segment_hypothalamic_subunits";
+    "@type": "freesurfer.mri_segment_hypothalamic_subunits";
     "subjects"?: Array<string> | null | undefined;
     "subjects_dir"?: string | null | undefined;
     "write_posteriors": boolean;
@@ -27,35 +27,35 @@ interface MriSegmentHypothalamicSubunitsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_cargs,
+        "freesurfer.mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_outputs,
+        "freesurfer.mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,23 @@ interface MriSegmentHypothalamicSubunitsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects (required in FS mode) Name of one or several subjects in $SUBJECTS_DIR on which to run the module, assuming recon-all has been run on the specified subjects.
+ * @param subjects_dir (FS mode, optional) Override current $SUBJECTS_DIR.
+ * @param write_posteriors (FS mode, optional) Save posteriors; default is False.
+ * @param image_input (required in T1 mode) Image(s) to segment. Can be a path to a single image or to a folder.
+ * @param output (required in T1 mode) Segmentation output(s). Must be a folder if --i designates a folder.
+ * @param posteriors (T1 mode, optional) Posteriors output(s). Must be a folder if --i designates a folder.
+ * @param resample (T1 mode, optional) Resampled image(s). Must be a folder if --i designates a folder.
+ * @param volume_output (T1 mode, optional) Output CSV file with volumes for all structures and subjects.
+ * @param crop_size (both modes, optional) Size of the central patch to analyse (must be divisible by 8). The whole image is analysed by default.
+ * @param threads (both modes, optional) Number of cores to be used. Default uses 1 core.
+ * @param cpu (both modes, optional) Enforce running with CPU rather than GPU.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segment_hypothalamic_subunits_params(
     subjects: Array<string> | null = null,
     subjects_dir: string | null = null,
@@ -103,25 +120,8 @@ function mri_segment_hypothalamic_subunits_params(
     threads: number | null = null,
     cpu: boolean = false,
 ): MriSegmentHypothalamicSubunitsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects (required in FS mode) Name of one or several subjects in $SUBJECTS_DIR on which to run the module, assuming recon-all has been run on the specified subjects.
-     * @param subjects_dir (FS mode, optional) Override current $SUBJECTS_DIR.
-     * @param write_posteriors (FS mode, optional) Save posteriors; default is False.
-     * @param image_input (required in T1 mode) Image(s) to segment. Can be a path to a single image or to a folder.
-     * @param output (required in T1 mode) Segmentation output(s). Must be a folder if --i designates a folder.
-     * @param posteriors (T1 mode, optional) Posteriors output(s). Must be a folder if --i designates a folder.
-     * @param resample (T1 mode, optional) Resampled image(s). Must be a folder if --i designates a folder.
-     * @param volume_output (T1 mode, optional) Output CSV file with volumes for all structures and subjects.
-     * @param crop_size (both modes, optional) Size of the central patch to analyse (must be divisible by 8). The whole image is analysed by default.
-     * @param threads (both modes, optional) Number of cores to be used. Default uses 1 core.
-     * @param cpu (both modes, optional) Enforce running with CPU rather than GPU.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segment_hypothalamic_subunits" as const,
+        "@type": "freesurfer.mri_segment_hypothalamic_subunits" as const,
         "write_posteriors": write_posteriors,
         "cpu": cpu,
     };
@@ -156,18 +156,18 @@ function mri_segment_hypothalamic_subunits_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segment_hypothalamic_subunits_cargs(
     params: MriSegmentHypothalamicSubunitsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segment_hypothalamic_subunits");
     if ((params["subjects"] ?? null) !== null) {
@@ -234,18 +234,18 @@ function mri_segment_hypothalamic_subunits_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segment_hypothalamic_subunits_outputs(
     params: MriSegmentHypothalamicSubunitsParameters,
     execution: Execution,
 ): MriSegmentHypothalamicSubunitsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegmentHypothalamicSubunitsOutputs = {
         root: execution.outputFile("."),
         segmentation_output_files: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -257,22 +257,22 @@ function mri_segment_hypothalamic_subunits_outputs(
 }
 
 
+/**
+ * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
+ */
 function mri_segment_hypothalamic_subunits_execute(
     params: MriSegmentHypothalamicSubunitsParameters,
     execution: Execution,
 ): MriSegmentHypothalamicSubunitsOutputs {
-    /**
-     * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segment_hypothalamic_subunits_cargs(params, execution)
     const ret = mri_segment_hypothalamic_subunits_outputs(params, execution)
@@ -281,6 +281,28 @@ function mri_segment_hypothalamic_subunits_execute(
 }
 
 
+/**
+ * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects (required in FS mode) Name of one or several subjects in $SUBJECTS_DIR on which to run the module, assuming recon-all has been run on the specified subjects.
+ * @param subjects_dir (FS mode, optional) Override current $SUBJECTS_DIR.
+ * @param write_posteriors (FS mode, optional) Save posteriors; default is False.
+ * @param image_input (required in T1 mode) Image(s) to segment. Can be a path to a single image or to a folder.
+ * @param output (required in T1 mode) Segmentation output(s). Must be a folder if --i designates a folder.
+ * @param posteriors (T1 mode, optional) Posteriors output(s). Must be a folder if --i designates a folder.
+ * @param resample (T1 mode, optional) Resampled image(s). Must be a folder if --i designates a folder.
+ * @param volume_output (T1 mode, optional) Output CSV file with volumes for all structures and subjects.
+ * @param crop_size (both modes, optional) Size of the central patch to analyse (must be divisible by 8). The whole image is analysed by default.
+ * @param threads (both modes, optional) Number of cores to be used. Default uses 1 core.
+ * @param cpu (both modes, optional) Enforce running with CPU rather than GPU.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
+ */
 function mri_segment_hypothalamic_subunits(
     subjects: Array<string> | null = null,
     subjects_dir: string | null = null,
@@ -295,28 +317,6 @@ function mri_segment_hypothalamic_subunits(
     cpu: boolean = false,
     runner: Runner | null = null,
 ): MriSegmentHypothalamicSubunitsOutputs {
-    /**
-     * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects (required in FS mode) Name of one or several subjects in $SUBJECTS_DIR on which to run the module, assuming recon-all has been run on the specified subjects.
-     * @param subjects_dir (FS mode, optional) Override current $SUBJECTS_DIR.
-     * @param write_posteriors (FS mode, optional) Save posteriors; default is False.
-     * @param image_input (required in T1 mode) Image(s) to segment. Can be a path to a single image or to a folder.
-     * @param output (required in T1 mode) Segmentation output(s). Must be a folder if --i designates a folder.
-     * @param posteriors (T1 mode, optional) Posteriors output(s). Must be a folder if --i designates a folder.
-     * @param resample (T1 mode, optional) Resampled image(s). Must be a folder if --i designates a folder.
-     * @param volume_output (T1 mode, optional) Output CSV file with volumes for all structures and subjects.
-     * @param crop_size (both modes, optional) Size of the central patch to analyse (must be divisible by 8). The whole image is analysed by default.
-     * @param threads (both modes, optional) Number of cores to be used. Default uses 1 core.
-     * @param cpu (both modes, optional) Enforce running with CPU rather than GPU.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA);
     const params = mri_segment_hypothalamic_subunits_params(subjects, subjects_dir, write_posteriors, image_input, output, posteriors, resample, volume_output, crop_size, threads, cpu)
@@ -329,5 +329,8 @@ export {
       MriSegmentHypothalamicSubunitsOutputs,
       MriSegmentHypothalamicSubunitsParameters,
       mri_segment_hypothalamic_subunits,
+      mri_segment_hypothalamic_subunits_cargs,
+      mri_segment_hypothalamic_subunits_execute,
+      mri_segment_hypothalamic_subunits_outputs,
       mri_segment_hypothalamic_subunits_params,
 };

@@ -12,21 +12,21 @@ const V_3D_ANOVA3_METADATA: Metadata = {
 
 
 interface V3dAnova3OutfileAbcontrParameters {
-    "__STYXTYPE__": "outfile_abcontr";
+    "@type": "afni.3dANOVA3.outfile_abcontr";
     "outfile_abcontr"?: string | null | undefined;
     "outfile_Abcontr"?: string | null | undefined;
 }
 
 
 interface V3dAnova3OutfileAbcontr1Parameters {
-    "__STYXTYPE__": "outfile_abcontr_1";
+    "@type": "afni.3dANOVA3.outfile_abdiff";
     "outfile_abdiff"?: string | null | undefined;
     "outfile_Abdiff"?: string | null | undefined;
 }
 
 
 interface V3dAnova3Parameters {
-    "__STYXTYPE__": "3dANOVA3";
+    "@type": "afni.3dANOVA3";
     "type": number;
     "alevels": number;
     "blevels": number;
@@ -61,56 +61,56 @@ interface V3dAnova3Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dANOVA3": v_3d_anova3_cargs,
-        "outfile_abcontr": v_3d_anova3_outfile_abcontr_cargs,
-        "outfile_abcontr_1": v_3d_anova3_outfile_abcontr_1_cargs,
+        "afni.3dANOVA3": v_3d_anova3_cargs,
+        "afni.3dANOVA3.outfile_abcontr": v_3d_anova3_outfile_abcontr_cargs,
+        "afni.3dANOVA3.outfile_abdiff": v_3d_anova3_outfile_abcontr_1_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dANOVA3": v_3d_anova3_outputs,
+        "afni.3dANOVA3": v_3d_anova3_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+ * @param outfile_abcontr_ Specify the output file for the interaction contrast results between A and B (case-sensitive).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anova3_outfile_abcontr_params(
     outfile_abcontr: string | null = null,
     outfile_abcontr_: string | null = null,
 ): V3dAnova3OutfileAbcontrParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
-     * @param outfile_abcontr_ Specify the output file for the interaction contrast results between A and B (case-sensitive).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "outfile_abcontr" as const,
+        "@type": "afni.3dANOVA3.outfile_abcontr" as const,
     };
     if (outfile_abcontr !== null) {
         params["outfile_abcontr"] = outfile_abcontr;
@@ -122,18 +122,18 @@ function v_3d_anova3_outfile_abcontr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anova3_outfile_abcontr_cargs(
     params: V3dAnova3OutfileAbcontrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["outfile_abcontr"] ?? null) !== null) {
         cargs.push(
@@ -151,20 +151,20 @@ function v_3d_anova3_outfile_abcontr_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile_abdiff Specify the output file for the interaction difference results between A and B.
+ * @param outfile_abdiff_ Specify the output file for the interaction difference results between A and B (case-sensitive).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anova3_outfile_abcontr_1_params(
     outfile_abdiff: string | null = null,
     outfile_abdiff_: string | null = null,
 ): V3dAnova3OutfileAbcontr1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile_abdiff Specify the output file for the interaction difference results between A and B.
-     * @param outfile_abdiff_ Specify the output file for the interaction difference results between A and B (case-sensitive).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "outfile_abcontr_1" as const,
+        "@type": "afni.3dANOVA3.outfile_abdiff" as const,
     };
     if (outfile_abdiff !== null) {
         params["outfile_abdiff"] = outfile_abdiff;
@@ -176,18 +176,18 @@ function v_3d_anova3_outfile_abcontr_1_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anova3_outfile_abcontr_1_cargs(
     params: V3dAnova3OutfileAbcontr1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["outfile_abdiff"] ?? null) !== null) {
         cargs.push(
@@ -254,6 +254,43 @@ interface V3dAnova3Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param type_ Type of ANOVA model to be used. k = 1: A,B,C fixed; AxBxC, k = 2: A,B,C random; AxBxC, k = 3: A fixed; B,C random; AxBxC, k = 4: A,B fixed; C random; AxBxC, k = 5: A,B fixed; C random; AxB,BxC,C(A)
+ * @param alevels Number of levels for factor A.
+ * @param blevels Number of levels for factor B.
+ * @param clevels Number of levels for factor C.
+ * @param dsets Input data sets for specific levels of factors A, B, and C.
+ * @param voxel_num Screen output for specified voxel number.
+ * @param diskspace Print out disk space required for program execution.
+ * @param mask Use sub-brick #0 of dataset to define which voxels to process.
+ * @param outfile_fa Specify the output file for the main ANOVA result.
+ * @param outfile_fb Specify the output file for the main B ANOVA result.
+ * @param outfile_fc Specify the output file for the main C ANOVA result.
+ * @param outfile_fab Specify the output file for the interaction between A and B.
+ * @param outfile_fac Specify the output file for the interaction between A and C.
+ * @param outfile_fbc Specify the output file for the interaction between B and C.
+ * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
+ * @param outfile_amean Specify the output file for the A mean results.
+ * @param outfile_bmean Specify the output file for the B mean results.
+ * @param outfile_cmean Specify the output file for the C mean results.
+ * @param outfile_xmean Specify the output file for the overall mean results.
+ * @param outfile_adiff Specify the output file for the A difference results.
+ * @param outfile_bdiff Specify the output file for the B difference results.
+ * @param outfile_cdiff Specify the output file for the C difference results.
+ * @param outfile_xdiff Specify the output file for the overall difference results.
+ * @param outfile_acontr Specify the output file for the A contrast results.
+ * @param outfile_bcontr Specify the output file for the B contrast results.
+ * @param outfile_ccontr Specify the output file for the C contrast results.
+ * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+ * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
+ * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
+ * @param outfile_bucket Specify the output file for the bucket (combined) results.
+ * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anova3_params(
     type_: number,
     alevels: number,
@@ -287,45 +324,8 @@ function v_3d_anova3_params(
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
 ): V3dAnova3Parameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ Type of ANOVA model to be used. k = 1: A,B,C fixed; AxBxC, k = 2: A,B,C random; AxBxC, k = 3: A fixed; B,C random; AxBxC, k = 4: A,B fixed; C random; AxBxC, k = 5: A,B fixed; C random; AxB,BxC,C(A)
-     * @param alevels Number of levels for factor A.
-     * @param blevels Number of levels for factor B.
-     * @param clevels Number of levels for factor C.
-     * @param dsets Input data sets for specific levels of factors A, B, and C.
-     * @param voxel_num Screen output for specified voxel number.
-     * @param diskspace Print out disk space required for program execution.
-     * @param mask Use sub-brick #0 of dataset to define which voxels to process.
-     * @param outfile_fa Specify the output file for the main ANOVA result.
-     * @param outfile_fb Specify the output file for the main B ANOVA result.
-     * @param outfile_fc Specify the output file for the main C ANOVA result.
-     * @param outfile_fab Specify the output file for the interaction between A and B.
-     * @param outfile_fac Specify the output file for the interaction between A and C.
-     * @param outfile_fbc Specify the output file for the interaction between B and C.
-     * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
-     * @param outfile_amean Specify the output file for the A mean results.
-     * @param outfile_bmean Specify the output file for the B mean results.
-     * @param outfile_cmean Specify the output file for the C mean results.
-     * @param outfile_xmean Specify the output file for the overall mean results.
-     * @param outfile_adiff Specify the output file for the A difference results.
-     * @param outfile_bdiff Specify the output file for the B difference results.
-     * @param outfile_cdiff Specify the output file for the C difference results.
-     * @param outfile_xdiff Specify the output file for the overall difference results.
-     * @param outfile_acontr Specify the output file for the A contrast results.
-     * @param outfile_bcontr Specify the output file for the B contrast results.
-     * @param outfile_ccontr Specify the output file for the C contrast results.
-     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
-     * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
-     * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
-     * @param outfile_bucket Specify the output file for the bucket (combined) results.
-     * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dANOVA3" as const,
+        "@type": "afni.3dANOVA3" as const,
         "type": type_,
         "alevels": alevels,
         "blevels": blevels,
@@ -412,18 +412,18 @@ function v_3d_anova3_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anova3_cargs(
     params: V3dAnova3Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dANOVA3");
     cargs.push(
@@ -570,10 +570,10 @@ function v_3d_anova3_cargs(
         );
     }
     if ((params["outfile_abcontr"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["outfile_abcontr"] ?? null).__STYXTYPE__)((params["outfile_abcontr"] ?? null), execution));
+        cargs.push(...dynCargs((params["outfile_abcontr"] ?? null)["@type"])((params["outfile_abcontr"] ?? null), execution));
     }
     if ((params["outfile_abdiff"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["outfile_abdiff"] ?? null).__STYXTYPE__)((params["outfile_abdiff"] ?? null), execution));
+        cargs.push(...dynCargs((params["outfile_abdiff"] ?? null)["@type"])((params["outfile_abdiff"] ?? null), execution));
     }
     if ((params["outfile_abmean"] ?? null) !== null) {
         cargs.push(
@@ -597,18 +597,18 @@ function v_3d_anova3_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_anova3_outputs(
     params: V3dAnova3Parameters,
     execution: Execution,
 ): V3dAnova3Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAnova3Outputs = {
         root: execution.outputFile("."),
         outfile_fa: ((params["outfile_fa"] ?? null) !== null) ? execution.outputFile([(params["outfile_fa"] ?? null)].join('')) : null,
@@ -625,22 +625,22 @@ function v_3d_anova3_outputs(
 }
 
 
+/**
+ * Performs three-factor ANOVA on 3D data sets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
+ */
 function v_3d_anova3_execute(
     params: V3dAnova3Parameters,
     execution: Execution,
 ): V3dAnova3Outputs {
-    /**
-     * Performs three-factor ANOVA on 3D data sets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_anova3_cargs(params, execution)
     const ret = v_3d_anova3_outputs(params, execution)
@@ -649,6 +649,48 @@ function v_3d_anova3_execute(
 }
 
 
+/**
+ * Performs three-factor ANOVA on 3D data sets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param type_ Type of ANOVA model to be used. k = 1: A,B,C fixed; AxBxC, k = 2: A,B,C random; AxBxC, k = 3: A fixed; B,C random; AxBxC, k = 4: A,B fixed; C random; AxBxC, k = 5: A,B fixed; C random; AxB,BxC,C(A)
+ * @param alevels Number of levels for factor A.
+ * @param blevels Number of levels for factor B.
+ * @param clevels Number of levels for factor C.
+ * @param dsets Input data sets for specific levels of factors A, B, and C.
+ * @param voxel_num Screen output for specified voxel number.
+ * @param diskspace Print out disk space required for program execution.
+ * @param mask Use sub-brick #0 of dataset to define which voxels to process.
+ * @param outfile_fa Specify the output file for the main ANOVA result.
+ * @param outfile_fb Specify the output file for the main B ANOVA result.
+ * @param outfile_fc Specify the output file for the main C ANOVA result.
+ * @param outfile_fab Specify the output file for the interaction between A and B.
+ * @param outfile_fac Specify the output file for the interaction between A and C.
+ * @param outfile_fbc Specify the output file for the interaction between B and C.
+ * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
+ * @param outfile_amean Specify the output file for the A mean results.
+ * @param outfile_bmean Specify the output file for the B mean results.
+ * @param outfile_cmean Specify the output file for the C mean results.
+ * @param outfile_xmean Specify the output file for the overall mean results.
+ * @param outfile_adiff Specify the output file for the A difference results.
+ * @param outfile_bdiff Specify the output file for the B difference results.
+ * @param outfile_cdiff Specify the output file for the C difference results.
+ * @param outfile_xdiff Specify the output file for the overall difference results.
+ * @param outfile_acontr Specify the output file for the A contrast results.
+ * @param outfile_bcontr Specify the output file for the B contrast results.
+ * @param outfile_ccontr Specify the output file for the C contrast results.
+ * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
+ * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
+ * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
+ * @param outfile_bucket Specify the output file for the bucket (combined) results.
+ * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
+ */
 function v_3d_anova3(
     type_: number,
     alevels: number,
@@ -683,48 +725,6 @@ function v_3d_anova3(
     anova_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dAnova3Outputs {
-    /**
-     * Performs three-factor ANOVA on 3D data sets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param type_ Type of ANOVA model to be used. k = 1: A,B,C fixed; AxBxC, k = 2: A,B,C random; AxBxC, k = 3: A fixed; B,C random; AxBxC, k = 4: A,B fixed; C random; AxBxC, k = 5: A,B fixed; C random; AxB,BxC,C(A)
-     * @param alevels Number of levels for factor A.
-     * @param blevels Number of levels for factor B.
-     * @param clevels Number of levels for factor C.
-     * @param dsets Input data sets for specific levels of factors A, B, and C.
-     * @param voxel_num Screen output for specified voxel number.
-     * @param diskspace Print out disk space required for program execution.
-     * @param mask Use sub-brick #0 of dataset to define which voxels to process.
-     * @param outfile_fa Specify the output file for the main ANOVA result.
-     * @param outfile_fb Specify the output file for the main B ANOVA result.
-     * @param outfile_fc Specify the output file for the main C ANOVA result.
-     * @param outfile_fab Specify the output file for the interaction between A and B.
-     * @param outfile_fac Specify the output file for the interaction between A and C.
-     * @param outfile_fbc Specify the output file for the interaction between B and C.
-     * @param outfile_fabc Specify the output file for the interaction between A, B, and C.
-     * @param outfile_amean Specify the output file for the A mean results.
-     * @param outfile_bmean Specify the output file for the B mean results.
-     * @param outfile_cmean Specify the output file for the C mean results.
-     * @param outfile_xmean Specify the output file for the overall mean results.
-     * @param outfile_adiff Specify the output file for the A difference results.
-     * @param outfile_bdiff Specify the output file for the B difference results.
-     * @param outfile_cdiff Specify the output file for the C difference results.
-     * @param outfile_xdiff Specify the output file for the overall difference results.
-     * @param outfile_acontr Specify the output file for the A contrast results.
-     * @param outfile_bcontr Specify the output file for the B contrast results.
-     * @param outfile_ccontr Specify the output file for the C contrast results.
-     * @param outfile_abcontr Specify the output file for the interaction contrast results between A and B.
-     * @param outfile_abdiff Specify the output file for the interaction contrast results between A and B.
-     * @param outfile_abmean Specify the output file for the mean results of the interaction between A and B.
-     * @param outfile_bucket Specify the output file for the bucket (combined) results.
-     * @param anova_options Modified ANOVA computation options. See: https://afni.nimh.nih.gov/sscc/gangc/ANOVA_Mod.html
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ANOVA3_METADATA);
     const params = v_3d_anova3_params(type_, alevels, blevels, clevels, dsets, voxel_num, diskspace, mask, outfile_fa, outfile_fb, outfile_fc, outfile_fab, outfile_fac, outfile_fbc, outfile_fabc, outfile_amean, outfile_bmean, outfile_cmean, outfile_xmean, outfile_adiff, outfile_bdiff, outfile_cdiff, outfile_xdiff, outfile_acontr, outfile_bcontr, outfile_ccontr, outfile_abcontr, outfile_abdiff, outfile_abmean, outfile_bucket, anova_options)
@@ -739,7 +739,12 @@ export {
       V3dAnova3Parameters,
       V_3D_ANOVA3_METADATA,
       v_3d_anova3,
+      v_3d_anova3_cargs,
+      v_3d_anova3_execute,
+      v_3d_anova3_outfile_abcontr_1_cargs,
       v_3d_anova3_outfile_abcontr_1_params,
+      v_3d_anova3_outfile_abcontr_cargs,
       v_3d_anova3_outfile_abcontr_params,
+      v_3d_anova3_outputs,
       v_3d_anova3_params,
 };

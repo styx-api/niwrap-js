@@ -12,7 +12,7 @@ const EXVIVO_HEMI_PROC_METADATA: Metadata = {
 
 
 interface ExvivoHemiProcParameters {
-    "__STYXTYPE__": "exvivo-hemi-proc";
+    "@type": "freesurfer.exvivo-hemi-proc";
     "flashdir": string;
     "outdir": string;
     "subject": string;
@@ -31,33 +31,33 @@ interface ExvivoHemiProcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "exvivo-hemi-proc": exvivo_hemi_proc_cargs,
+        "freesurfer.exvivo-hemi-proc": exvivo_hemi_proc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface ExvivoHemiProcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param flashdir Path to the FLASH data directory.
+ * @param outdir Output directory where results will be saved.
+ * @param subject Full path to the subject.
+ * @param left_hemi Process left hemisphere.
+ * @param right_hemi Process right hemisphere.
+ * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
+ * @param no_rotate Indicate rotation is not needed.
+ * @param t1thresh T1 threshold, default is 415.
+ * @param threads Number of threads to use.
+ * @param check_only Only perform check, without further processing.
+ * @param prep_only Only run up to manual rotation.
+ * @param mask_only Only run up to creation of masks.
+ * @param samseg_only Only run up to samseg.
+ * @param stop_mmppsp_after Stop processing after a specific step {tess,fix,preaparc,sphere,spherereg,white,pial}.
+ * @param force Force the execution, overriding checks.
+ *
+ * @returns Parameter dictionary
+ */
 function exvivo_hemi_proc_params(
     flashdir: string,
     outdir: string,
@@ -94,29 +115,8 @@ function exvivo_hemi_proc_params(
     stop_mmppsp_after: string | null = null,
     force: boolean = false,
 ): ExvivoHemiProcParameters {
-    /**
-     * Build parameters.
-    
-     * @param flashdir Path to the FLASH data directory.
-     * @param outdir Output directory where results will be saved.
-     * @param subject Full path to the subject.
-     * @param left_hemi Process left hemisphere.
-     * @param right_hemi Process right hemisphere.
-     * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
-     * @param no_rotate Indicate rotation is not needed.
-     * @param t1thresh T1 threshold, default is 415.
-     * @param threads Number of threads to use.
-     * @param check_only Only perform check, without further processing.
-     * @param prep_only Only run up to manual rotation.
-     * @param mask_only Only run up to creation of masks.
-     * @param samseg_only Only run up to samseg.
-     * @param stop_mmppsp_after Stop processing after a specific step {tess,fix,preaparc,sphere,spherereg,white,pial}.
-     * @param force Force the execution, overriding checks.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exvivo-hemi-proc" as const,
+        "@type": "freesurfer.exvivo-hemi-proc" as const,
         "flashdir": flashdir,
         "outdir": outdir,
         "subject": subject,
@@ -143,18 +143,18 @@ function exvivo_hemi_proc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function exvivo_hemi_proc_cargs(
     params: ExvivoHemiProcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("exvivo-hemi-proc");
     cargs.push(
@@ -218,18 +218,18 @@ function exvivo_hemi_proc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function exvivo_hemi_proc_outputs(
     params: ExvivoHemiProcParameters,
     execution: Execution,
 ): ExvivoHemiProcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExvivoHemiProcOutputs = {
         root: execution.outputFile("."),
     };
@@ -237,22 +237,22 @@ function exvivo_hemi_proc_outputs(
 }
 
 
+/**
+ * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
+ */
 function exvivo_hemi_proc_execute(
     params: ExvivoHemiProcParameters,
     execution: Execution,
 ): ExvivoHemiProcOutputs {
-    /**
-     * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
-     */
     params = execution.params(params)
     const cargs = exvivo_hemi_proc_cargs(params, execution)
     const ret = exvivo_hemi_proc_outputs(params, execution)
@@ -261,6 +261,32 @@ function exvivo_hemi_proc_execute(
 }
 
 
+/**
+ * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param flashdir Path to the FLASH data directory.
+ * @param outdir Output directory where results will be saved.
+ * @param subject Full path to the subject.
+ * @param left_hemi Process left hemisphere.
+ * @param right_hemi Process right hemisphere.
+ * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
+ * @param no_rotate Indicate rotation is not needed.
+ * @param t1thresh T1 threshold, default is 415.
+ * @param threads Number of threads to use.
+ * @param check_only Only perform check, without further processing.
+ * @param prep_only Only run up to manual rotation.
+ * @param mask_only Only run up to creation of masks.
+ * @param samseg_only Only run up to samseg.
+ * @param stop_mmppsp_after Stop processing after a specific step {tess,fix,preaparc,sphere,spherereg,white,pial}.
+ * @param force Force the execution, overriding checks.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
+ */
 function exvivo_hemi_proc(
     flashdir: string,
     outdir: string,
@@ -279,32 +305,6 @@ function exvivo_hemi_proc(
     force: boolean = false,
     runner: Runner | null = null,
 ): ExvivoHemiProcOutputs {
-    /**
-     * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param flashdir Path to the FLASH data directory.
-     * @param outdir Output directory where results will be saved.
-     * @param subject Full path to the subject.
-     * @param left_hemi Process left hemisphere.
-     * @param right_hemi Process right hemisphere.
-     * @param suptent Indicate no tentorium (cblum and bstem) in the sample.
-     * @param no_rotate Indicate rotation is not needed.
-     * @param t1thresh T1 threshold, default is 415.
-     * @param threads Number of threads to use.
-     * @param check_only Only perform check, without further processing.
-     * @param prep_only Only run up to manual rotation.
-     * @param mask_only Only run up to creation of masks.
-     * @param samseg_only Only run up to samseg.
-     * @param stop_mmppsp_after Stop processing after a specific step {tess,fix,preaparc,sphere,spherereg,white,pial}.
-     * @param force Force the execution, overriding checks.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXVIVO_HEMI_PROC_METADATA);
     const params = exvivo_hemi_proc_params(flashdir, outdir, subject, left_hemi, right_hemi, suptent, no_rotate, t1thresh, threads, check_only, prep_only, mask_only, samseg_only, stop_mmppsp_after, force)
@@ -317,5 +317,8 @@ export {
       ExvivoHemiProcOutputs,
       ExvivoHemiProcParameters,
       exvivo_hemi_proc,
+      exvivo_hemi_proc_cargs,
+      exvivo_hemi_proc_execute,
+      exvivo_hemi_proc_outputs,
       exvivo_hemi_proc_params,
 };

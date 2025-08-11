@@ -12,7 +12,7 @@ const V_1DSOUND_METADATA: Metadata = {
 
 
 interface V1dsoundParameters {
-    "__STYXTYPE__": "1dsound";
+    "@type": "afni.1dsound";
     "tsfile": InputPathType;
     "prefix"?: string | null | undefined;
     "encoding_16PCM": boolean;
@@ -27,35 +27,35 @@ interface V1dsoundParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dsound": v_1dsound_cargs,
+        "afni.1dsound": v_1dsound_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dsound": v_1dsound_outputs,
+        "afni.1dsound": v_1dsound_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V1dsoundOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tsfile The input 1D time series file containing the data to transform into sound.
+ * @param prefix Prefix for the output filename, which will have '.au' extension.
+ * @param encoding_16_pcm Output in 16-bit linear PCM encoding (uncompressed).
+ * @param encoding_8_pcm Output in 8-bit linear PCM encoding.
+ * @param encoding_8ulaw Output in 8-bit mu-law encoding.
+ * @param tper_option Time in seconds per time point in 'tsfile'. Allowed range is 0.01 to 1.0 (inclusive). [default is 0.2s]
+ * @param fm_option Output sound is frequency modulated between 110 and 1760 Hz from min to max in the input 1D file.
+ * @param notes_option Output sound is a sequence of notes, low to high pitch based on min to max in the input 1D file. Uses pentatonic scale.
+ * @param notewave_option Shape of the notes used. Select from [sine, sqsine, square, triangle].
+ * @param despike_option Apply a simple despiking algorithm to avoid artifacts from large/small values in the input.
+ * @param play_option Plays the sound file after it is written.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dsound_params(
     tsfile: InputPathType,
     prefix: string | null = null,
@@ -91,25 +108,8 @@ function v_1dsound_params(
     despike_option: boolean = false,
     play_option: boolean = false,
 ): V1dsoundParameters {
-    /**
-     * Build parameters.
-    
-     * @param tsfile The input 1D time series file containing the data to transform into sound.
-     * @param prefix Prefix for the output filename, which will have '.au' extension.
-     * @param encoding_16_pcm Output in 16-bit linear PCM encoding (uncompressed).
-     * @param encoding_8_pcm Output in 8-bit linear PCM encoding.
-     * @param encoding_8ulaw Output in 8-bit mu-law encoding.
-     * @param tper_option Time in seconds per time point in 'tsfile'. Allowed range is 0.01 to 1.0 (inclusive). [default is 0.2s]
-     * @param fm_option Output sound is frequency modulated between 110 and 1760 Hz from min to max in the input 1D file.
-     * @param notes_option Output sound is a sequence of notes, low to high pitch based on min to max in the input 1D file. Uses pentatonic scale.
-     * @param notewave_option Shape of the notes used. Select from [sine, sqsine, square, triangle].
-     * @param despike_option Apply a simple despiking algorithm to avoid artifacts from large/small values in the input.
-     * @param play_option Plays the sound file after it is written.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dsound" as const,
+        "@type": "afni.1dsound" as const,
         "tsfile": tsfile,
         "encoding_16PCM": encoding_16_pcm,
         "encoding_8PCM": encoding_8_pcm,
@@ -132,18 +132,18 @@ function v_1dsound_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dsound_cargs(
     params: V1dsoundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dsound");
     cargs.push(execution.inputFile((params["tsfile"] ?? null)));
@@ -190,18 +190,18 @@ function v_1dsound_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dsound_outputs(
     params: V1dsoundParameters,
     execution: Execution,
 ): V1dsoundOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dsoundOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".au"].join('')) : null,
@@ -210,22 +210,22 @@ function v_1dsound_outputs(
 }
 
 
+/**
+ * Program to create a sound file from a 1D file (column of numbers).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
+ */
 function v_1dsound_execute(
     params: V1dsoundParameters,
     execution: Execution,
 ): V1dsoundOutputs {
-    /**
-     * Program to create a sound file from a 1D file (column of numbers).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dsound_cargs(params, execution)
     const ret = v_1dsound_outputs(params, execution)
@@ -234,6 +234,28 @@ function v_1dsound_execute(
 }
 
 
+/**
+ * Program to create a sound file from a 1D file (column of numbers).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tsfile The input 1D time series file containing the data to transform into sound.
+ * @param prefix Prefix for the output filename, which will have '.au' extension.
+ * @param encoding_16_pcm Output in 16-bit linear PCM encoding (uncompressed).
+ * @param encoding_8_pcm Output in 8-bit linear PCM encoding.
+ * @param encoding_8ulaw Output in 8-bit mu-law encoding.
+ * @param tper_option Time in seconds per time point in 'tsfile'. Allowed range is 0.01 to 1.0 (inclusive). [default is 0.2s]
+ * @param fm_option Output sound is frequency modulated between 110 and 1760 Hz from min to max in the input 1D file.
+ * @param notes_option Output sound is a sequence of notes, low to high pitch based on min to max in the input 1D file. Uses pentatonic scale.
+ * @param notewave_option Shape of the notes used. Select from [sine, sqsine, square, triangle].
+ * @param despike_option Apply a simple despiking algorithm to avoid artifacts from large/small values in the input.
+ * @param play_option Plays the sound file after it is written.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
+ */
 function v_1dsound(
     tsfile: InputPathType,
     prefix: string | null = null,
@@ -248,28 +270,6 @@ function v_1dsound(
     play_option: boolean = false,
     runner: Runner | null = null,
 ): V1dsoundOutputs {
-    /**
-     * Program to create a sound file from a 1D file (column of numbers).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tsfile The input 1D time series file containing the data to transform into sound.
-     * @param prefix Prefix for the output filename, which will have '.au' extension.
-     * @param encoding_16_pcm Output in 16-bit linear PCM encoding (uncompressed).
-     * @param encoding_8_pcm Output in 8-bit linear PCM encoding.
-     * @param encoding_8ulaw Output in 8-bit mu-law encoding.
-     * @param tper_option Time in seconds per time point in 'tsfile'. Allowed range is 0.01 to 1.0 (inclusive). [default is 0.2s]
-     * @param fm_option Output sound is frequency modulated between 110 and 1760 Hz from min to max in the input 1D file.
-     * @param notes_option Output sound is a sequence of notes, low to high pitch based on min to max in the input 1D file. Uses pentatonic scale.
-     * @param notewave_option Shape of the notes used. Select from [sine, sqsine, square, triangle].
-     * @param despike_option Apply a simple despiking algorithm to avoid artifacts from large/small values in the input.
-     * @param play_option Plays the sound file after it is written.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DSOUND_METADATA);
     const params = v_1dsound_params(tsfile, prefix, encoding_16_pcm, encoding_8_pcm, encoding_8ulaw, tper_option, fm_option, notes_option, notewave_option, despike_option, play_option)
@@ -282,5 +282,8 @@ export {
       V1dsoundParameters,
       V_1DSOUND_METADATA,
       v_1dsound,
+      v_1dsound_cargs,
+      v_1dsound_execute,
+      v_1dsound_outputs,
       v_1dsound_params,
 };

@@ -12,38 +12,38 @@ const FREEVIEW_METADATA: Metadata = {
 
 
 interface FreeviewParameters {
-    "__STYXTYPE__": "freeview";
+    "@type": "freesurfer.freeview";
     "args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "freeview": freeview_cargs,
+        "freesurfer.freeview": freeview_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface FreeviewOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param args Arguments for freeview
+ *
+ * @returns Parameter dictionary
+ */
 function freeview_params(
     args: string | null = null,
 ): FreeviewParameters {
-    /**
-     * Build parameters.
-    
-     * @param args Arguments for freeview
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "freeview" as const,
+        "@type": "freesurfer.freeview" as const,
     };
     if (args !== null) {
         params["args"] = args;
@@ -83,18 +83,18 @@ function freeview_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function freeview_cargs(
     params: FreeviewParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("freeview");
     if ((params["args"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function freeview_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function freeview_outputs(
     params: FreeviewParameters,
     execution: Execution,
 ): FreeviewOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FreeviewOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function freeview_outputs(
 }
 
 
+/**
+ * Freeview is a 3D/2D brain visualization tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
+ */
 function freeview_execute(
     params: FreeviewParameters,
     execution: Execution,
 ): FreeviewOutputs {
-    /**
-     * Freeview is a 3D/2D brain visualization tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
-     */
     params = execution.params(params)
     const cargs = freeview_cargs(params, execution)
     const ret = freeview_outputs(params, execution)
@@ -147,22 +147,22 @@ function freeview_execute(
 }
 
 
+/**
+ * Freeview is a 3D/2D brain visualization tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param args Arguments for freeview
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
+ */
 function freeview(
     args: string | null = null,
     runner: Runner | null = null,
 ): FreeviewOutputs {
-    /**
-     * Freeview is a 3D/2D brain visualization tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param args Arguments for freeview
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FREEVIEW_METADATA);
     const params = freeview_params(args)
@@ -175,5 +175,8 @@ export {
       FreeviewOutputs,
       FreeviewParameters,
       freeview,
+      freeview_cargs,
+      freeview_execute,
+      freeview_outputs,
       freeview_params,
 };

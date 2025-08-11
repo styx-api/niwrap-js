@@ -12,7 +12,7 @@ const TSPLOT_METADATA: Metadata = {
 
 
 interface TsplotParameters {
-    "__STYXTYPE__": "tsplot";
+    "@type": "fsl.tsplot";
     "input_directory": string;
     "main_filtered_data"?: InputPathType | null | undefined;
     "coordinates"?: Array<number> | null | undefined;
@@ -25,35 +25,35 @@ interface TsplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tsplot": tsplot_cargs,
+        "fsl.tsplot": tsplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tsplot": tsplot_outputs,
+        "fsl.tsplot": tsplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface TsplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory Input FEAT directory (e.g. feat_directory.feat)
+ * @param main_filtered_data Input main filtered data, in case it's not <feat_directory.feat>/filtered_func_data
+ * @param coordinates Use X, Y, Z instead of max Z stat position
+ * @param coordinates_output Use X,Y,Z to output time series only - no stats or modelling
+ * @param mask Use mask image instead of thresholded activation images
+ * @param output_directory Change output directory from default of input FEAT directory
+ * @param no_weight_flag Don't weight cluster averaging with Z stats
+ * @param prewhiten_flag Prewhiten data and model timeseries before plotting
+ * @param no_raw_flag Don't keep raw data text files
+ *
+ * @returns Parameter dictionary
+ */
 function tsplot_params(
     input_directory: string,
     main_filtered_data: InputPathType | null = null,
@@ -87,23 +102,8 @@ function tsplot_params(
     prewhiten_flag: boolean = false,
     no_raw_flag: boolean = false,
 ): TsplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory Input FEAT directory (e.g. feat_directory.feat)
-     * @param main_filtered_data Input main filtered data, in case it's not <feat_directory.feat>/filtered_func_data
-     * @param coordinates Use X, Y, Z instead of max Z stat position
-     * @param coordinates_output Use X,Y,Z to output time series only - no stats or modelling
-     * @param mask Use mask image instead of thresholded activation images
-     * @param output_directory Change output directory from default of input FEAT directory
-     * @param no_weight_flag Don't weight cluster averaging with Z stats
-     * @param prewhiten_flag Prewhiten data and model timeseries before plotting
-     * @param no_raw_flag Don't keep raw data text files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tsplot" as const,
+        "@type": "fsl.tsplot" as const,
         "input_directory": input_directory,
         "no_weight_flag": no_weight_flag,
         "prewhiten_flag": prewhiten_flag,
@@ -128,18 +128,18 @@ function tsplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tsplot_cargs(
     params: TsplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tsplot");
     cargs.push((params["input_directory"] ?? null));
@@ -186,18 +186,18 @@ function tsplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tsplot_outputs(
     params: TsplotParameters,
     execution: Execution,
 ): TsplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TsplotOutputs = {
         root: execution.outputFile("."),
         timeseries_output: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/timeseries.txt"].join('')) : null,
@@ -206,22 +206,22 @@ function tsplot_outputs(
 }
 
 
+/**
+ * Time series plotting tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TsplotOutputs`).
+ */
 function tsplot_execute(
     params: TsplotParameters,
     execution: Execution,
 ): TsplotOutputs {
-    /**
-     * Time series plotting tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TsplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = tsplot_cargs(params, execution)
     const ret = tsplot_outputs(params, execution)
@@ -230,6 +230,26 @@ function tsplot_execute(
 }
 
 
+/**
+ * Time series plotting tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_directory Input FEAT directory (e.g. feat_directory.feat)
+ * @param main_filtered_data Input main filtered data, in case it's not <feat_directory.feat>/filtered_func_data
+ * @param coordinates Use X, Y, Z instead of max Z stat position
+ * @param coordinates_output Use X,Y,Z to output time series only - no stats or modelling
+ * @param mask Use mask image instead of thresholded activation images
+ * @param output_directory Change output directory from default of input FEAT directory
+ * @param no_weight_flag Don't weight cluster averaging with Z stats
+ * @param prewhiten_flag Prewhiten data and model timeseries before plotting
+ * @param no_raw_flag Don't keep raw data text files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TsplotOutputs`).
+ */
 function tsplot(
     input_directory: string,
     main_filtered_data: InputPathType | null = null,
@@ -242,26 +262,6 @@ function tsplot(
     no_raw_flag: boolean = false,
     runner: Runner | null = null,
 ): TsplotOutputs {
-    /**
-     * Time series plotting tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_directory Input FEAT directory (e.g. feat_directory.feat)
-     * @param main_filtered_data Input main filtered data, in case it's not <feat_directory.feat>/filtered_func_data
-     * @param coordinates Use X, Y, Z instead of max Z stat position
-     * @param coordinates_output Use X,Y,Z to output time series only - no stats or modelling
-     * @param mask Use mask image instead of thresholded activation images
-     * @param output_directory Change output directory from default of input FEAT directory
-     * @param no_weight_flag Don't weight cluster averaging with Z stats
-     * @param prewhiten_flag Prewhiten data and model timeseries before plotting
-     * @param no_raw_flag Don't keep raw data text files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TsplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TSPLOT_METADATA);
     const params = tsplot_params(input_directory, main_filtered_data, coordinates, coordinates_output, mask, output_directory, no_weight_flag, prewhiten_flag, no_raw_flag)
@@ -274,5 +274,8 @@ export {
       TsplotOutputs,
       TsplotParameters,
       tsplot,
+      tsplot_cargs,
+      tsplot_execute,
+      tsplot_outputs,
       tsplot_params,
 };

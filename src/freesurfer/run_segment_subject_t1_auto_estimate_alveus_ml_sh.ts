@@ -12,39 +12,39 @@ const RUN_SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubjectT1AutoEstimateAlveusMlShParameters {
-    "__STYXTYPE__": "run_segmentSubjectT1_autoEstimateAlveusML.sh";
+    "@type": "freesurfer.run_segmentSubjectT1_autoEstimateAlveusML.sh";
     "deployed_mcr_root": string;
     "additional_args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_segmentSubjectT1_autoEstimateAlveusML.sh": run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs,
+        "freesurfer.run_segmentSubjectT1_autoEstimateAlveusML.sh": run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param deployed_mcr_root The root directory of the deployed MATLAB Runtime
+ * @param additional_args Additional arguments for the script
+ *
+ * @returns Parameter dictionary
+ */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh_params(
     deployed_mcr_root: string,
     additional_args: string | null = null,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShParameters {
-    /**
-     * Build parameters.
-    
-     * @param deployed_mcr_root The root directory of the deployed MATLAB Runtime
-     * @param additional_args Additional arguments for the script
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_segmentSubjectT1_autoEstimateAlveusML.sh" as const,
+        "@type": "freesurfer.run_segmentSubjectT1_autoEstimateAlveusML.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
     };
     if (additional_args !== null) {
@@ -87,18 +87,18 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs(
     params: RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_segmentSubjectT1_autoEstimateAlveusML.sh");
     cargs.push((params["deployed_mcr_root"] ?? null));
@@ -109,18 +109,18 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(
     params: RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
     execution: Execution,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(
 }
 
 
+/**
+ * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs`).
+ */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(
     params: RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
     execution: Execution,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
-    /**
-     * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs(params, execution)
     const ret = run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(params, execution)
@@ -152,24 +152,24 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(
 }
 
 
+/**
+ * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param deployed_mcr_root The root directory of the deployed MATLAB Runtime
+ * @param additional_args Additional arguments for the script
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs`).
+ */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh(
     deployed_mcr_root: string,
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
-    /**
-     * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param deployed_mcr_root The root directory of the deployed MATLAB Runtime
-     * @param additional_args Additional arguments for the script
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA);
     const params = run_segment_subject_t1_auto_estimate_alveus_ml_sh_params(deployed_mcr_root, additional_args)
@@ -182,5 +182,8 @@ export {
       RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs,
       RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
       run_segment_subject_t1_auto_estimate_alveus_ml_sh,
+      run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs,
+      run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute,
+      run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs,
       run_segment_subject_t1_auto_estimate_alveus_ml_sh_params,
 };

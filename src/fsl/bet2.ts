@@ -12,7 +12,7 @@ const BET2_METADATA: Metadata = {
 
 
 interface Bet2Parameters {
-    "__STYXTYPE__": "bet2";
+    "@type": "fsl.bet2";
     "input_fileroot": string;
     "output_fileroot": string;
     "fractional_intensity"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface Bet2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bet2": bet2_cargs,
+        "fsl.bet2": bet2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bet2": bet2_outputs,
+        "fsl.bet2": bet2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,27 @@ interface Bet2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_fileroot Input file root (e.g. img)
+ * @param output_fileroot Output file root (e.g. img_bet)
+ * @param fractional_intensity Fractional intensity threshold (0->1); default=0.5; smaller values give larger brain outline estimates
+ * @param vertical_gradient Vertical gradient in fractional intensity threshold (-1->1); default=0; positive values give larger brain outline at bottom, smaller at top
+ * @param center_of_gravity The xyz coordinates of the center of gravity (voxels, not mm) of initial mesh surface. Must have exactly three numerical entries in the list (3-vector).
+ * @param outline_flag Generate brain surface outline overlaid onto original image
+ * @param mask_flag Generate binary brain mask
+ * @param skull_flag Generate approximate skull image
+ * @param no_output_flag Don't generate segmented brain image output
+ * @param mesh_flag Generate brain surface as mesh in vtk format
+ * @param head_radius Head radius (mm not voxels); initial surface sphere is set to half of this
+ * @param smooth_factor Smoothness factor; default=1; values smaller than 1 produce more detailed brain surface, values larger than one produce smoother, less detailed surface
+ * @param threshold_flag Apply thresholding to segmented brain image and mask
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message and exit
+ *
+ * @returns Parameter dictionary
+ */
 function bet2_params(
     input_fileroot: string,
     output_fileroot: string,
@@ -111,29 +132,8 @@ function bet2_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): Bet2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param input_fileroot Input file root (e.g. img)
-     * @param output_fileroot Output file root (e.g. img_bet)
-     * @param fractional_intensity Fractional intensity threshold (0->1); default=0.5; smaller values give larger brain outline estimates
-     * @param vertical_gradient Vertical gradient in fractional intensity threshold (-1->1); default=0; positive values give larger brain outline at bottom, smaller at top
-     * @param center_of_gravity The xyz coordinates of the center of gravity (voxels, not mm) of initial mesh surface. Must have exactly three numerical entries in the list (3-vector).
-     * @param outline_flag Generate brain surface outline overlaid onto original image
-     * @param mask_flag Generate binary brain mask
-     * @param skull_flag Generate approximate skull image
-     * @param no_output_flag Don't generate segmented brain image output
-     * @param mesh_flag Generate brain surface as mesh in vtk format
-     * @param head_radius Head radius (mm not voxels); initial surface sphere is set to half of this
-     * @param smooth_factor Smoothness factor; default=1; values smaller than 1 produce more detailed brain surface, values larger than one produce smoother, less detailed surface
-     * @param threshold_flag Apply thresholding to segmented brain image and mask
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bet2" as const,
+        "@type": "fsl.bet2" as const,
         "input_fileroot": input_fileroot,
         "output_fileroot": output_fileroot,
         "outline_flag": outline_flag,
@@ -164,18 +164,18 @@ function bet2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bet2_cargs(
     params: Bet2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bet2");
     cargs.push((params["input_fileroot"] ?? null));
@@ -238,18 +238,18 @@ function bet2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bet2_outputs(
     params: Bet2Parameters,
     execution: Execution,
 ): Bet2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Bet2Outputs = {
         root: execution.outputFile("."),
         output_mask: execution.outputFile([(params["output_fileroot"] ?? null), "_mask.nii.gz"].join('')),
@@ -261,22 +261,22 @@ function bet2_outputs(
 }
 
 
+/**
+ * Automated brain extraction tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Bet2Outputs`).
+ */
 function bet2_execute(
     params: Bet2Parameters,
     execution: Execution,
 ): Bet2Outputs {
-    /**
-     * Automated brain extraction tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Bet2Outputs`).
-     */
     params = execution.params(params)
     const cargs = bet2_cargs(params, execution)
     const ret = bet2_outputs(params, execution)
@@ -285,6 +285,32 @@ function bet2_execute(
 }
 
 
+/**
+ * Automated brain extraction tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_fileroot Input file root (e.g. img)
+ * @param output_fileroot Output file root (e.g. img_bet)
+ * @param fractional_intensity Fractional intensity threshold (0->1); default=0.5; smaller values give larger brain outline estimates
+ * @param vertical_gradient Vertical gradient in fractional intensity threshold (-1->1); default=0; positive values give larger brain outline at bottom, smaller at top
+ * @param center_of_gravity The xyz coordinates of the center of gravity (voxels, not mm) of initial mesh surface. Must have exactly three numerical entries in the list (3-vector).
+ * @param outline_flag Generate brain surface outline overlaid onto original image
+ * @param mask_flag Generate binary brain mask
+ * @param skull_flag Generate approximate skull image
+ * @param no_output_flag Don't generate segmented brain image output
+ * @param mesh_flag Generate brain surface as mesh in vtk format
+ * @param head_radius Head radius (mm not voxels); initial surface sphere is set to half of this
+ * @param smooth_factor Smoothness factor; default=1; values smaller than 1 produce more detailed brain surface, values larger than one produce smoother, less detailed surface
+ * @param threshold_flag Apply thresholding to segmented brain image and mask
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Bet2Outputs`).
+ */
 function bet2(
     input_fileroot: string,
     output_fileroot: string,
@@ -303,32 +329,6 @@ function bet2(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Bet2Outputs {
-    /**
-     * Automated brain extraction tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_fileroot Input file root (e.g. img)
-     * @param output_fileroot Output file root (e.g. img_bet)
-     * @param fractional_intensity Fractional intensity threshold (0->1); default=0.5; smaller values give larger brain outline estimates
-     * @param vertical_gradient Vertical gradient in fractional intensity threshold (-1->1); default=0; positive values give larger brain outline at bottom, smaller at top
-     * @param center_of_gravity The xyz coordinates of the center of gravity (voxels, not mm) of initial mesh surface. Must have exactly three numerical entries in the list (3-vector).
-     * @param outline_flag Generate brain surface outline overlaid onto original image
-     * @param mask_flag Generate binary brain mask
-     * @param skull_flag Generate approximate skull image
-     * @param no_output_flag Don't generate segmented brain image output
-     * @param mesh_flag Generate brain surface as mesh in vtk format
-     * @param head_radius Head radius (mm not voxels); initial surface sphere is set to half of this
-     * @param smooth_factor Smoothness factor; default=1; values smaller than 1 produce more detailed brain surface, values larger than one produce smoother, less detailed surface
-     * @param threshold_flag Apply thresholding to segmented brain image and mask
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Bet2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BET2_METADATA);
     const params = bet2_params(input_fileroot, output_fileroot, fractional_intensity, vertical_gradient, center_of_gravity, outline_flag, mask_flag, skull_flag, no_output_flag, mesh_flag, head_radius, smooth_factor, threshold_flag, verbose_flag, help_flag)
@@ -341,5 +341,8 @@ export {
       Bet2Outputs,
       Bet2Parameters,
       bet2,
+      bet2_cargs,
+      bet2_execute,
+      bet2_outputs,
       bet2_params,
 };

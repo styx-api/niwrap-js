@@ -12,7 +12,7 @@ const MRI_COR2LABEL_METADATA: Metadata = {
 
 
 interface MriCor2labelParameters {
-    "__STYXTYPE__": "mri_cor2label";
+    "@type": "freesurfer.mri_cor2label";
     "input_file": InputPathType;
     "label_id": number;
     "label_file": string;
@@ -28,35 +28,35 @@ interface MriCor2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_cor2label": mri_cor2label_cargs,
+        "freesurfer.mri_cor2label": mri_cor2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_cor2label": mri_cor2label_outputs,
+        "freesurfer.mri_cor2label": mri_cor2label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,24 @@ interface MriCor2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume or surface overlay file.
+ * @param label_id Value to match in the input data.
+ * @param label_file Name of the output label file.
+ * @param threshold Threshold the input to make label, e.g., input values must be greater than the threshold.
+ * @param volume_file Write the label volume to a file.
+ * @param surface_overlay Interpret input as a surface overlay, specifying subject, hemisphere, and surface.
+ * @param surface_path Specify surface path rather than subject/hemisphere.
+ * @param optimize Treat input as a probability map and optimize thresholding.
+ * @param remove_holes_islands Remove holes in label and islands (only valid with --surf).
+ * @param dilate Dilate label with specified number of dilations (only valid with --surf).
+ * @param erode Erode label with specified number of erosions (only valid with --surf).
+ * @param help Display help information.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_cor2label_params(
     input_file: InputPathType,
     label_id: number,
@@ -97,26 +115,8 @@ function mri_cor2label_params(
     erode: number | null = null,
     help: boolean = false,
 ): MriCor2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume or surface overlay file.
-     * @param label_id Value to match in the input data.
-     * @param label_file Name of the output label file.
-     * @param threshold Threshold the input to make label, e.g., input values must be greater than the threshold.
-     * @param volume_file Write the label volume to a file.
-     * @param surface_overlay Interpret input as a surface overlay, specifying subject, hemisphere, and surface.
-     * @param surface_path Specify surface path rather than subject/hemisphere.
-     * @param optimize Treat input as a probability map and optimize thresholding.
-     * @param remove_holes_islands Remove holes in label and islands (only valid with --surf).
-     * @param dilate Dilate label with specified number of dilations (only valid with --surf).
-     * @param erode Erode label with specified number of erosions (only valid with --surf).
-     * @param help Display help information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_cor2label" as const,
+        "@type": "freesurfer.mri_cor2label" as const,
         "input_file": input_file,
         "label_id": label_id,
         "label_file": label_file,
@@ -148,18 +148,18 @@ function mri_cor2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_cor2label_cargs(
     params: MriCor2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_cor2label");
     cargs.push(
@@ -226,18 +226,18 @@ function mri_cor2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_cor2label_outputs(
     params: MriCor2labelParameters,
     execution: Execution,
 ): MriCor2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCor2labelOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([(params["label_file"] ?? null)].join('')),
@@ -247,22 +247,22 @@ function mri_cor2label_outputs(
 }
 
 
+/**
+ * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
+ */
 function mri_cor2label_execute(
     params: MriCor2labelParameters,
     execution: Execution,
 ): MriCor2labelOutputs {
-    /**
-     * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_cor2label_cargs(params, execution)
     const ret = mri_cor2label_outputs(params, execution)
@@ -271,6 +271,29 @@ function mri_cor2label_execute(
 }
 
 
+/**
+ * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume or surface overlay file.
+ * @param label_id Value to match in the input data.
+ * @param label_file Name of the output label file.
+ * @param threshold Threshold the input to make label, e.g., input values must be greater than the threshold.
+ * @param volume_file Write the label volume to a file.
+ * @param surface_overlay Interpret input as a surface overlay, specifying subject, hemisphere, and surface.
+ * @param surface_path Specify surface path rather than subject/hemisphere.
+ * @param optimize Treat input as a probability map and optimize thresholding.
+ * @param remove_holes_islands Remove holes in label and islands (only valid with --surf).
+ * @param dilate Dilate label with specified number of dilations (only valid with --surf).
+ * @param erode Erode label with specified number of erosions (only valid with --surf).
+ * @param help Display help information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
+ */
 function mri_cor2label(
     input_file: InputPathType,
     label_id: number,
@@ -286,29 +309,6 @@ function mri_cor2label(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriCor2labelOutputs {
-    /**
-     * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume or surface overlay file.
-     * @param label_id Value to match in the input data.
-     * @param label_file Name of the output label file.
-     * @param threshold Threshold the input to make label, e.g., input values must be greater than the threshold.
-     * @param volume_file Write the label volume to a file.
-     * @param surface_overlay Interpret input as a surface overlay, specifying subject, hemisphere, and surface.
-     * @param surface_path Specify surface path rather than subject/hemisphere.
-     * @param optimize Treat input as a probability map and optimize thresholding.
-     * @param remove_holes_islands Remove holes in label and islands (only valid with --surf).
-     * @param dilate Dilate label with specified number of dilations (only valid with --surf).
-     * @param erode Erode label with specified number of erosions (only valid with --surf).
-     * @param help Display help information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COR2LABEL_METADATA);
     const params = mri_cor2label_params(input_file, label_id, label_file, threshold, volume_file, surface_overlay, surface_path, optimize, remove_holes_islands, dilate, erode, help)
@@ -321,5 +321,8 @@ export {
       MriCor2labelOutputs,
       MriCor2labelParameters,
       mri_cor2label,
+      mri_cor2label_cargs,
+      mri_cor2label_execute,
+      mri_cor2label_outputs,
       mri_cor2label_params,
 };

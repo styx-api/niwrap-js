@@ -12,7 +12,7 @@ const MERGE_STATS_TABLES_METADATA: Metadata = {
 
 
 interface MergeStatsTablesParameters {
-    "__STYXTYPE__": "merge_stats_tables";
+    "@type": "freesurfer.merge_stats_tables";
     "subjects"?: Array<string> | null | undefined;
     "subject"?: string | null | undefined;
     "subjectsfile"?: InputPathType | null | undefined;
@@ -31,35 +31,35 @@ interface MergeStatsTablesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "merge_stats_tables": merge_stats_tables_cargs,
+        "freesurfer.merge_stats_tables": merge_stats_tables_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "merge_stats_tables": merge_stats_tables_outputs,
+        "freesurfer.merge_stats_tables": merge_stats_tables_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface MergeStatsTablesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outputfile The output table file
+ * @param meas Measure to write in output table
+ * @param subjects Specify the subjects names
+ * @param subject Specify a single subject name
+ * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
+ * @param inputs Specify all the input stat files
+ * @param input Specify a single input stat file
+ * @param common_segs Output only the common segmentations of all the statsfiles given
+ * @param all_segs Output all the segmentations of the statsfiles given
+ * @param intable Use `fname` as input (REQUIRED when passing subject ids)
+ * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
+ * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
+ * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
+ * @param skip If a subject does not have a stats file, skip it instead of exiting.
+ * @param debug Increase verbosity for debugging purposes.
+ *
+ * @returns Parameter dictionary
+ */
 function merge_stats_tables_params(
     outputfile: string,
     meas: string,
@@ -99,29 +120,8 @@ function merge_stats_tables_params(
     skip: boolean = false,
     debug: boolean = false,
 ): MergeStatsTablesParameters {
-    /**
-     * Build parameters.
-    
-     * @param outputfile The output table file
-     * @param meas Measure to write in output table
-     * @param subjects Specify the subjects names
-     * @param subject Specify a single subject name
-     * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
-     * @param inputs Specify all the input stat files
-     * @param input Specify a single input stat file
-     * @param common_segs Output only the common segmentations of all the statsfiles given
-     * @param all_segs Output all the segmentations of the statsfiles given
-     * @param intable Use `fname` as input (REQUIRED when passing subject ids)
-     * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
-     * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
-     * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
-     * @param skip If a subject does not have a stats file, skip it instead of exiting.
-     * @param debug Increase verbosity for debugging purposes.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "merge_stats_tables" as const,
+        "@type": "freesurfer.merge_stats_tables" as const,
         "outputfile": outputfile,
         "meas": meas,
         "common_segs": common_segs,
@@ -158,18 +158,18 @@ function merge_stats_tables_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function merge_stats_tables_cargs(
     params: MergeStatsTablesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("merge_stats_tables");
     if ((params["subjects"] ?? null) !== null) {
@@ -247,18 +247,18 @@ function merge_stats_tables_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function merge_stats_tables_outputs(
     params: MergeStatsTablesParameters,
     execution: Execution,
 ): MergeStatsTablesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MergeStatsTablesOutputs = {
         root: execution.outputFile("."),
         merged_stats_table: execution.outputFile([(params["outputfile"] ?? null)].join('')),
@@ -267,22 +267,22 @@ function merge_stats_tables_outputs(
 }
 
 
+/**
+ * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
+ */
 function merge_stats_tables_execute(
     params: MergeStatsTablesParameters,
     execution: Execution,
 ): MergeStatsTablesOutputs {
-    /**
-     * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
-     */
     params = execution.params(params)
     const cargs = merge_stats_tables_cargs(params, execution)
     const ret = merge_stats_tables_outputs(params, execution)
@@ -291,6 +291,32 @@ function merge_stats_tables_execute(
 }
 
 
+/**
+ * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outputfile The output table file
+ * @param meas Measure to write in output table
+ * @param subjects Specify the subjects names
+ * @param subject Specify a single subject name
+ * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
+ * @param inputs Specify all the input stat files
+ * @param input Specify a single input stat file
+ * @param common_segs Output only the common segmentations of all the statsfiles given
+ * @param all_segs Output all the segmentations of the statsfiles given
+ * @param intable Use `fname` as input (REQUIRED when passing subject ids)
+ * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
+ * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
+ * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
+ * @param skip If a subject does not have a stats file, skip it instead of exiting.
+ * @param debug Increase verbosity for debugging purposes.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
+ */
 function merge_stats_tables(
     outputfile: string,
     meas: string,
@@ -309,32 +335,6 @@ function merge_stats_tables(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MergeStatsTablesOutputs {
-    /**
-     * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outputfile The output table file
-     * @param meas Measure to write in output table
-     * @param subjects Specify the subjects names
-     * @param subject Specify a single subject name
-     * @param subjectsfile Name of the file which has the list of subjects (one subject per line)
-     * @param inputs Specify all the input stat files
-     * @param input Specify a single input stat file
-     * @param common_segs Output only the common segmentations of all the statsfiles given
-     * @param all_segs Output all the segmentations of the statsfiles given
-     * @param intable Use `fname` as input (REQUIRED when passing subject ids)
-     * @param subdir Use `subdir` instead of default "stats/" when passing subject ids
-     * @param delimiter Delimiter between measures in the table. Options are 'tab', 'space', 'comma', and 'semicolon'. Default is 'space'.
-     * @param transpose Transpose the table (default is subjects in rows and segmentations in cols)
-     * @param skip If a subject does not have a stats file, skip it instead of exiting.
-     * @param debug Increase verbosity for debugging purposes.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MERGE_STATS_TABLES_METADATA);
     const params = merge_stats_tables_params(outputfile, meas, subjects, subject, subjectsfile, inputs, input, common_segs, all_segs, intable, subdir, delimiter, transpose, skip, debug)
@@ -347,5 +347,8 @@ export {
       MergeStatsTablesOutputs,
       MergeStatsTablesParameters,
       merge_stats_tables,
+      merge_stats_tables_cargs,
+      merge_stats_tables_execute,
+      merge_stats_tables_outputs,
       merge_stats_tables_params,
 };

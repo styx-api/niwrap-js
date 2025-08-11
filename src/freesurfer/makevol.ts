@@ -12,7 +12,7 @@ const MAKEVOL_METADATA: Metadata = {
 
 
 interface MakevolParameters {
-    "__STYXTYPE__": "makevol";
+    "@type": "freesurfer.makevol";
     "filename"?: string | null | undefined;
     "width"?: number | null | undefined;
     "height"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface MakevolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "makevol": makevol_cargs,
+        "freesurfer.makevol": makevol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "makevol": makevol_outputs,
+        "freesurfer.makevol": makevol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MakevolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename Write volume to the given file name, implying type.
+ * @param width Use integer WIDTH as the x dimension.
+ * @param height Use integer HEIGHT as the y dimension.
+ * @param depth Use integer DEPTH as the z dimension.
+ * @param sizex Use float SIZEX as the x resolution.
+ * @param sizey Use float SIZEY as the y resolution.
+ * @param sizez Use float SIZEZ as the z resolution.
+ * @param set_method Use METHOD to fill the values. Methods: xyz, random, constant.
+ *
+ * @returns Parameter dictionary
+ */
 function makevol_params(
     filename: string | null = "new_volume.mgz",
     width: number | null = 256,
@@ -85,22 +99,8 @@ function makevol_params(
     sizez: number | null = 1.0,
     set_method: string | null = "xyz",
 ): MakevolParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename Write volume to the given file name, implying type.
-     * @param width Use integer WIDTH as the x dimension.
-     * @param height Use integer HEIGHT as the y dimension.
-     * @param depth Use integer DEPTH as the z dimension.
-     * @param sizex Use float SIZEX as the x resolution.
-     * @param sizey Use float SIZEY as the y resolution.
-     * @param sizez Use float SIZEZ as the z resolution.
-     * @param set_method Use METHOD to fill the values. Methods: xyz, random, constant.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "makevol" as const,
+        "@type": "freesurfer.makevol" as const,
     };
     if (filename !== null) {
         params["filename"] = filename;
@@ -130,18 +130,18 @@ function makevol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function makevol_cargs(
     params: MakevolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("makevol");
     if ((params["filename"] ?? null) !== null) {
@@ -196,18 +196,18 @@ function makevol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function makevol_outputs(
     params: MakevolParameters,
     execution: Execution,
 ): MakevolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakevolOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["filename"] ?? null) !== null) ? execution.outputFile([(params["filename"] ?? null)].join('')) : null,
@@ -216,22 +216,22 @@ function makevol_outputs(
 }
 
 
+/**
+ * A tool to create a volume with given parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakevolOutputs`).
+ */
 function makevol_execute(
     params: MakevolParameters,
     execution: Execution,
 ): MakevolOutputs {
-    /**
-     * A tool to create a volume with given parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakevolOutputs`).
-     */
     params = execution.params(params)
     const cargs = makevol_cargs(params, execution)
     const ret = makevol_outputs(params, execution)
@@ -240,6 +240,25 @@ function makevol_execute(
 }
 
 
+/**
+ * A tool to create a volume with given parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param filename Write volume to the given file name, implying type.
+ * @param width Use integer WIDTH as the x dimension.
+ * @param height Use integer HEIGHT as the y dimension.
+ * @param depth Use integer DEPTH as the z dimension.
+ * @param sizex Use float SIZEX as the x resolution.
+ * @param sizey Use float SIZEY as the y resolution.
+ * @param sizez Use float SIZEZ as the z resolution.
+ * @param set_method Use METHOD to fill the values. Methods: xyz, random, constant.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakevolOutputs`).
+ */
 function makevol(
     filename: string | null = "new_volume.mgz",
     width: number | null = 256,
@@ -251,25 +270,6 @@ function makevol(
     set_method: string | null = "xyz",
     runner: Runner | null = null,
 ): MakevolOutputs {
-    /**
-     * A tool to create a volume with given parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param filename Write volume to the given file name, implying type.
-     * @param width Use integer WIDTH as the x dimension.
-     * @param height Use integer HEIGHT as the y dimension.
-     * @param depth Use integer DEPTH as the z dimension.
-     * @param sizex Use float SIZEX as the x resolution.
-     * @param sizey Use float SIZEY as the y resolution.
-     * @param sizez Use float SIZEZ as the z resolution.
-     * @param set_method Use METHOD to fill the values. Methods: xyz, random, constant.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakevolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKEVOL_METADATA);
     const params = makevol_params(filename, width, height, depth, sizex, sizey, sizez, set_method)
@@ -282,5 +282,8 @@ export {
       MakevolOutputs,
       MakevolParameters,
       makevol,
+      makevol_cargs,
+      makevol_execute,
+      makevol_outputs,
       makevol_params,
 };

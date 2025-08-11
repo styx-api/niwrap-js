@@ -12,7 +12,7 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA: Metada
 
 
 interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
-    "__STYXTYPE__": "ANTSUseLandmarkImagesToGetBSplineDisplacementField";
+    "@type": "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField";
     "fixed_image_with_labeled_landmarks": InputPathType;
     "moving_image_with_labeled_landmarks": InputPathType;
     "output_displacement_field": string;
@@ -24,35 +24,35 @@ interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_cargs,
+        "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_outputs,
+        "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed_image_with_labeled_landmarks The fixed image with labeled landmarks.
+ * @param moving_image_with_labeled_landmarks The moving image with labeled landmarks.
+ * @param output_displacement_field The output displacement field file.
+ * @param mesh_size The mesh size specified as meshSize[0]xmeshSize[1]x...
+ * @param number_of_levels The number of levels in the B-spline hierarchy.
+ * @param order The order of the B-spline (default is 3).
+ * @param enforce_stationary_boundaries Whether to enforce stationary boundaries (default is 1).
+ * @param landmark_weights Optional text file containing landmark weights. Each row is either "label,labelWeight" or "labelWeight". If the latter format is used, the weights are assumed to be arranged in ascending order by label.
+ *
+ * @returns Parameter dictionary
+ */
 function antsuse_landmark_images_to_get_bspline_displacement_field_params(
     fixed_image_with_labeled_landmarks: InputPathType,
     moving_image_with_labeled_landmarks: InputPathType,
@@ -85,22 +99,8 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
     enforce_stationary_boundaries: number | null = 1,
     landmark_weights: InputPathType | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed_image_with_labeled_landmarks The fixed image with labeled landmarks.
-     * @param moving_image_with_labeled_landmarks The moving image with labeled landmarks.
-     * @param output_displacement_field The output displacement field file.
-     * @param mesh_size The mesh size specified as meshSize[0]xmeshSize[1]x...
-     * @param number_of_levels The number of levels in the B-spline hierarchy.
-     * @param order The order of the B-spline (default is 3).
-     * @param enforce_stationary_boundaries Whether to enforce stationary boundaries (default is 1).
-     * @param landmark_weights Optional text file containing landmark weights. Each row is either "label,labelWeight" or "labelWeight". If the latter format is used, the weights are assumed to be arranged in ascending order by label.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ANTSUseLandmarkImagesToGetBSplineDisplacementField" as const,
+        "@type": "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField" as const,
         "fixed_image_with_labeled_landmarks": fixed_image_with_labeled_landmarks,
         "moving_image_with_labeled_landmarks": moving_image_with_labeled_landmarks,
         "output_displacement_field": output_displacement_field,
@@ -120,18 +120,18 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function antsuse_landmark_images_to_get_bspline_displacement_field_cargs(
     params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ANTSUseLandmarkImagesToGetBSplineDisplacementField");
     cargs.push(execution.inputFile((params["fixed_image_with_labeled_landmarks"] ?? null)));
@@ -152,18 +152,18 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function antsuse_landmark_images_to_get_bspline_displacement_field_outputs(
     params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs = {
         root: execution.outputFile("."),
         displacement_field: execution.outputFile([(params["output_displacement_field"] ?? null)].join('')),
@@ -172,22 +172,22 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_outputs(
 }
 
 
+/**
+ * We expect the input images to be (1) N-ary (2) in the same physical space as the images you want to register and (3) to have the same landmark points defined within them. Landmarks will be defined from the center of mass of the labels in the input images. You can use ITK-snap to generate the label images. The optional landmarks weights are read from a text file where each row is either: "label,labelWeight" or "labelWeight". If the latter format is used, the label weights are assumed to be arranged in ascending order by label.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
+ */
 function antsuse_landmark_images_to_get_bspline_displacement_field_execute(
     params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
-    /**
-     * We expect the input images to be (1) N-ary (2) in the same physical space as the images you want to register and (3) to have the same landmark points defined within them. Landmarks will be defined from the center of mass of the labels in the input images. You can use ITK-snap to generate the label images. The optional landmarks weights are read from a text file where each row is either: "label,labelWeight" or "labelWeight". If the latter format is used, the label weights are assumed to be arranged in ascending order by label.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = antsuse_landmark_images_to_get_bspline_displacement_field_cargs(params, execution)
     const ret = antsuse_landmark_images_to_get_bspline_displacement_field_outputs(params, execution)
@@ -196,6 +196,25 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_execute(
 }
 
 
+/**
+ * We expect the input images to be (1) N-ary (2) in the same physical space as the images you want to register and (3) to have the same landmark points defined within them. Landmarks will be defined from the center of mass of the labels in the input images. You can use ITK-snap to generate the label images. The optional landmarks weights are read from a text file where each row is either: "label,labelWeight" or "labelWeight". If the latter format is used, the label weights are assumed to be arranged in ascending order by label.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param fixed_image_with_labeled_landmarks The fixed image with labeled landmarks.
+ * @param moving_image_with_labeled_landmarks The moving image with labeled landmarks.
+ * @param output_displacement_field The output displacement field file.
+ * @param mesh_size The mesh size specified as meshSize[0]xmeshSize[1]x...
+ * @param number_of_levels The number of levels in the B-spline hierarchy.
+ * @param order The order of the B-spline (default is 3).
+ * @param enforce_stationary_boundaries Whether to enforce stationary boundaries (default is 1).
+ * @param landmark_weights Optional text file containing landmark weights. Each row is either "label,labelWeight" or "labelWeight". If the latter format is used, the weights are assumed to be arranged in ascending order by label.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
+ */
 function antsuse_landmark_images_to_get_bspline_displacement_field(
     fixed_image_with_labeled_landmarks: InputPathType,
     moving_image_with_labeled_landmarks: InputPathType,
@@ -207,25 +226,6 @@ function antsuse_landmark_images_to_get_bspline_displacement_field(
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
-    /**
-     * We expect the input images to be (1) N-ary (2) in the same physical space as the images you want to register and (3) to have the same landmark points defined within them. Landmarks will be defined from the center of mass of the labels in the input images. You can use ITK-snap to generate the label images. The optional landmarks weights are read from a text file where each row is either: "label,labelWeight" or "labelWeight". If the latter format is used, the label weights are assumed to be arranged in ascending order by label.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param fixed_image_with_labeled_landmarks The fixed image with labeled landmarks.
-     * @param moving_image_with_labeled_landmarks The moving image with labeled landmarks.
-     * @param output_displacement_field The output displacement field file.
-     * @param mesh_size The mesh size specified as meshSize[0]xmeshSize[1]x...
-     * @param number_of_levels The number of levels in the B-spline hierarchy.
-     * @param order The order of the B-spline (default is 3).
-     * @param enforce_stationary_boundaries Whether to enforce stationary boundaries (default is 1).
-     * @param landmark_weights Optional text file containing landmark weights. Each row is either "label,labelWeight" or "labelWeight". If the latter format is used, the weights are assumed to be arranged in ascending order by label.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA);
     const params = antsuse_landmark_images_to_get_bspline_displacement_field_params(fixed_image_with_labeled_landmarks, moving_image_with_labeled_landmarks, output_displacement_field, mesh_size, number_of_levels, order, enforce_stationary_boundaries, landmark_weights)
@@ -238,5 +238,8 @@ export {
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs,
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
       antsuse_landmark_images_to_get_bspline_displacement_field,
+      antsuse_landmark_images_to_get_bspline_displacement_field_cargs,
+      antsuse_landmark_images_to_get_bspline_displacement_field_execute,
+      antsuse_landmark_images_to_get_bspline_displacement_field_outputs,
       antsuse_landmark_images_to_get_bspline_displacement_field_params,
 };

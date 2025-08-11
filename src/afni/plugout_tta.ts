@@ -12,7 +12,7 @@ const PLUGOUT_TTA_METADATA: Metadata = {
 
 
 interface PlugoutTtaParameters {
-    "__STYXTYPE__": "plugout_tta";
+    "@type": "afni.plugout_tta";
     "host"?: string | null | undefined;
     "port"?: number | null | undefined;
     "verbose": boolean;
@@ -26,33 +26,33 @@ interface PlugoutTtaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "plugout_tta": plugout_tta_cargs,
+        "afni.plugout_tta": plugout_tta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface PlugoutTtaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param host Connect to AFNI running on the specified computer using TCP/IP. Use '-host localhost' to connect on current host with TCP/IP.
+ * @param port Use TCP/IP port number 'pp'. Default is 8005.
+ * @param verbose Verbose mode: prints out progress reports.
+ * @param port_offset Provide a port offset to allow multiple instances of programs to communicate on the same machine. All ports are assigned numbers relative to PORT_OFFSET. Range: [1025, 65500].
+ * @param port_offset_quiet Like -np, but more quiet in the face of adversity.
+ * @param port_offset_bloc Provide a port offset block. Easier to use than -np. Range: [0, MAX_BLOC]. Using this reduces chances of port conflicts.
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI then quit quietly.
+ *
+ * @returns Parameter dictionary
+ */
 function plugout_tta_params(
     host: string | null = null,
     port: number | null = null,
@@ -84,24 +100,8 @@ function plugout_tta_params(
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
 ): PlugoutTtaParameters {
-    /**
-     * Build parameters.
-    
-     * @param host Connect to AFNI running on the specified computer using TCP/IP. Use '-host localhost' to connect on current host with TCP/IP.
-     * @param port Use TCP/IP port number 'pp'. Default is 8005.
-     * @param verbose Verbose mode: prints out progress reports.
-     * @param port_offset Provide a port offset to allow multiple instances of programs to communicate on the same machine. All ports are assigned numbers relative to PORT_OFFSET. Range: [1025, 65500].
-     * @param port_offset_quiet Like -np, but more quiet in the face of adversity.
-     * @param port_offset_bloc Provide a port offset block. Easier to use than -np. Range: [0, MAX_BLOC]. Using this reduces chances of port conflicts.
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI then quit quietly.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plugout_tta" as const,
+        "@type": "afni.plugout_tta" as const,
         "verbose": verbose,
         "max_port_bloc": max_port_bloc,
         "max_port_bloc_quiet": max_port_bloc_quiet,
@@ -127,18 +127,18 @@ function plugout_tta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function plugout_tta_cargs(
     params: PlugoutTtaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("plugout_tta");
     if ((params["host"] ?? null) !== null) {
@@ -190,18 +190,18 @@ function plugout_tta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function plugout_tta_outputs(
     params: PlugoutTtaParameters,
     execution: Execution,
 ): PlugoutTtaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PlugoutTtaOutputs = {
         root: execution.outputFile("."),
     };
@@ -209,22 +209,22 @@ function plugout_tta_outputs(
 }
 
 
+/**
+ * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
+ */
 function plugout_tta_execute(
     params: PlugoutTtaParameters,
     execution: Execution,
 ): PlugoutTtaOutputs {
-    /**
-     * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
-     */
     params = execution.params(params)
     const cargs = plugout_tta_cargs(params, execution)
     const ret = plugout_tta_outputs(params, execution)
@@ -233,6 +233,27 @@ function plugout_tta_execute(
 }
 
 
+/**
+ * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param host Connect to AFNI running on the specified computer using TCP/IP. Use '-host localhost' to connect on current host with TCP/IP.
+ * @param port Use TCP/IP port number 'pp'. Default is 8005.
+ * @param verbose Verbose mode: prints out progress reports.
+ * @param port_offset Provide a port offset to allow multiple instances of programs to communicate on the same machine. All ports are assigned numbers relative to PORT_OFFSET. Range: [1025, 65500].
+ * @param port_offset_quiet Like -np, but more quiet in the face of adversity.
+ * @param port_offset_bloc Provide a port offset block. Easier to use than -np. Range: [0, MAX_BLOC]. Using this reduces chances of port conflicts.
+ * @param max_port_bloc Print the current value of MAX_BLOC and exit.
+ * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
+ * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
+ * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI then quit quietly.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
+ */
 function plugout_tta(
     host: string | null = null,
     port: number | null = null,
@@ -246,27 +267,6 @@ function plugout_tta(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutTtaOutputs {
-    /**
-     * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param host Connect to AFNI running on the specified computer using TCP/IP. Use '-host localhost' to connect on current host with TCP/IP.
-     * @param port Use TCP/IP port number 'pp'. Default is 8005.
-     * @param verbose Verbose mode: prints out progress reports.
-     * @param port_offset Provide a port offset to allow multiple instances of programs to communicate on the same machine. All ports are assigned numbers relative to PORT_OFFSET. Range: [1025, 65500].
-     * @param port_offset_quiet Like -np, but more quiet in the face of adversity.
-     * @param port_offset_bloc Provide a port offset block. Easier to use than -np. Range: [0, MAX_BLOC]. Using this reduces chances of port conflicts.
-     * @param max_port_bloc Print the current value of MAX_BLOC and exit.
-     * @param max_port_bloc_quiet Print MAX_BLOC value and exit quietly.
-     * @param num_assigned_ports Print the number of assigned ports used by AFNI then quit.
-     * @param num_assigned_ports_quiet Print the number of assigned ports used by AFNI then quit quietly.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PLUGOUT_TTA_METADATA);
     const params = plugout_tta_params(host, port, verbose, port_offset, port_offset_quiet, port_offset_bloc, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
@@ -279,5 +279,8 @@ export {
       PlugoutTtaOutputs,
       PlugoutTtaParameters,
       plugout_tta,
+      plugout_tta_cargs,
+      plugout_tta_execute,
+      plugout_tta_outputs,
       plugout_tta_params,
 };

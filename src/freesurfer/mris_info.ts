@@ -12,7 +12,7 @@ const MRIS_INFO_METADATA: Metadata = {
 
 
 interface MrisInfoParameters {
-    "__STYXTYPE__": "mris_info";
+    "@type": "freesurfer.mris_info";
     "surfacefile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
     "subject_hemi_surfname"?: string | null | undefined;
@@ -39,35 +39,35 @@ interface MrisInfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_info": mris_info_cargs,
+        "freesurfer.mris_info": mris_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_info": mris_info_outputs,
+        "freesurfer.mris_info": mris_info_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,35 @@ interface MrisInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surfacefile Surface file to process
+ * @param outfile Save some data to outfile
+ * @param subject_hemi_surfname Instead of surfacefile
+ * @param talairach_xfm_flag Apply talairach xfm before reporting info
+ * @param rescale_flag Rescale group surface to match average metrics
+ * @param patchfile Load patch before reporting
+ * @param vertex_number Print out vertex information for vertex vnum
+ * @param extended_vertex_number Print out extended vertex information for vertex vnum
+ * @param curvfile Check if curvature file vertices match surface vertices
+ * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
+ * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
+ * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
+ * @param edge_number Print out extended information about edge
+ * @param vtxno Write Matlab file to plot vertex neighborhood
+ * @param matrix_format Set format for matrix printing (e.g., %12.8f)
+ * @param quality_stats_flag Print out surface quality stats
+ * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
+ * @param mask_file Only compute edge and area stats using vertices in mask
+ * @param label_file Only compute edge and area stats using vertices in label
+ * @param edge_file Print edge info for all edges into file
+ * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
+ * @param version_flag Print version and exits
+ * @param help_flag No clue what this does
+ *
+ * @returns Parameter dictionary
+ */
 function mris_info_params(
     surfacefile: InputPathType,
     outfile: InputPathType | null = null,
@@ -119,37 +148,8 @@ function mris_info_params(
     version_flag: boolean = false,
     help_flag: boolean = false,
 ): MrisInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param surfacefile Surface file to process
-     * @param outfile Save some data to outfile
-     * @param subject_hemi_surfname Instead of surfacefile
-     * @param talairach_xfm_flag Apply talairach xfm before reporting info
-     * @param rescale_flag Rescale group surface to match average metrics
-     * @param patchfile Load patch before reporting
-     * @param vertex_number Print out vertex information for vertex vnum
-     * @param extended_vertex_number Print out extended vertex information for vertex vnum
-     * @param curvfile Check if curvature file vertices match surface vertices
-     * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
-     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
-     * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
-     * @param edge_number Print out extended information about edge
-     * @param vtxno Write Matlab file to plot vertex neighborhood
-     * @param matrix_format Set format for matrix printing (e.g., %12.8f)
-     * @param quality_stats_flag Print out surface quality stats
-     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
-     * @param mask_file Only compute edge and area stats using vertices in mask
-     * @param label_file Only compute edge and area stats using vertices in label
-     * @param edge_file Print edge info for all edges into file
-     * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
-     * @param version_flag Print version and exits
-     * @param help_flag No clue what this does
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_info" as const,
+        "@type": "freesurfer.mris_info" as const,
         "surfacefile": surfacefile,
         "talairach_xfm_flag": talairach_xfm_flag,
         "rescale_flag": rescale_flag,
@@ -206,18 +206,18 @@ function mris_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_info_cargs(
     params: MrisInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_info");
     cargs.push(execution.inputFile((params["surfacefile"] ?? null)));
@@ -333,18 +333,18 @@ function mris_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_info_outputs(
     params: MrisInfoParameters,
     execution: Execution,
 ): MrisInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisInfoOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
@@ -354,22 +354,22 @@ function mris_info_outputs(
 }
 
 
+/**
+ * Prints out information about a surface file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
+ */
 function mris_info_execute(
     params: MrisInfoParameters,
     execution: Execution,
 ): MrisInfoOutputs {
-    /**
-     * Prints out information about a surface file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_info_cargs(params, execution)
     const ret = mris_info_outputs(params, execution)
@@ -378,6 +378,40 @@ function mris_info_execute(
 }
 
 
+/**
+ * Prints out information about a surface file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surfacefile Surface file to process
+ * @param outfile Save some data to outfile
+ * @param subject_hemi_surfname Instead of surfacefile
+ * @param talairach_xfm_flag Apply talairach xfm before reporting info
+ * @param rescale_flag Rescale group surface to match average metrics
+ * @param patchfile Load patch before reporting
+ * @param vertex_number Print out vertex information for vertex vnum
+ * @param extended_vertex_number Print out extended vertex information for vertex vnum
+ * @param curvfile Check if curvature file vertices match surface vertices
+ * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
+ * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
+ * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
+ * @param edge_number Print out extended information about edge
+ * @param vtxno Write Matlab file to plot vertex neighborhood
+ * @param matrix_format Set format for matrix printing (e.g., %12.8f)
+ * @param quality_stats_flag Print out surface quality stats
+ * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
+ * @param mask_file Only compute edge and area stats using vertices in mask
+ * @param label_file Only compute edge and area stats using vertices in label
+ * @param edge_file Print edge info for all edges into file
+ * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
+ * @param version_flag Print version and exits
+ * @param help_flag No clue what this does
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
+ */
 function mris_info(
     surfacefile: InputPathType,
     outfile: InputPathType | null = null,
@@ -404,40 +438,6 @@ function mris_info(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisInfoOutputs {
-    /**
-     * Prints out information about a surface file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surfacefile Surface file to process
-     * @param outfile Save some data to outfile
-     * @param subject_hemi_surfname Instead of surfacefile
-     * @param talairach_xfm_flag Apply talairach xfm before reporting info
-     * @param rescale_flag Rescale group surface to match average metrics
-     * @param patchfile Load patch before reporting
-     * @param vertex_number Print out vertex information for vertex vnum
-     * @param extended_vertex_number Print out extended vertex information for vertex vnum
-     * @param curvfile Check if curvature file vertices match surface vertices
-     * @param annotfile Check if annotation file vertices match surface vertices; dump colortable
-     * @param area_stats_flag Compute stats on triangle area (n, mean, std, min, max)
-     * @param edge_stats_id Compute stats on edge metric (n, mean, std, min, max); id=0=length, id=1=dot, id=2=angle, id<0= all
-     * @param edge_number Print out extended information about edge
-     * @param vtxno Write Matlab file to plot vertex neighborhood
-     * @param matrix_format Set format for matrix printing (e.g., %12.8f)
-     * @param quality_stats_flag Print out surface quality stats
-     * @param intersections_flag Print the number of vertices that belong to a face that intersects another face
-     * @param mask_file Only compute edge and area stats using vertices in mask
-     * @param label_file Only compute edge and area stats using vertices in label
-     * @param edge_file Print edge info for all edges into file
-     * @param nogifti_flag No dump of GIFTI struct, read .gii as surface instead
-     * @param version_flag Print version and exits
-     * @param help_flag No clue what this does
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INFO_METADATA);
     const params = mris_info_params(surfacefile, outfile, subject_hemi_surfname, talairach_xfm_flag, rescale_flag, patchfile, vertex_number, extended_vertex_number, curvfile, annotfile, area_stats_flag, edge_stats_id, edge_number, vtxno, matrix_format, quality_stats_flag, intersections_flag, mask_file, label_file, edge_file, nogifti_flag, version_flag, help_flag)
@@ -450,5 +450,8 @@ export {
       MrisInfoOutputs,
       MrisInfoParameters,
       mris_info,
+      mris_info_cargs,
+      mris_info_execute,
+      mris_info_outputs,
       mris_info_params,
 };

@@ -12,7 +12,7 @@ const V__ROI_CORR_MAT_METADATA: Metadata = {
 
 
 interface VRoiCorrMatParameters {
-    "__STYXTYPE__": "@ROI_Corr_Mat";
+    "@type": "afni.@ROI_Corr_Mat";
     "ts_vol": InputPathType;
     "roi_vol": InputPathType;
     "prefix": string;
@@ -26,35 +26,35 @@ interface VRoiCorrMatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ROI_Corr_Mat": v__roi_corr_mat_cargs,
+        "afni.@ROI_Corr_Mat": v__roi_corr_mat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ROI_Corr_Mat": v__roi_corr_mat_outputs,
+        "afni.@ROI_Corr_Mat": v__roi_corr_mat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface VRoiCorrMatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ts_vol Time series volume
+ * @param roi_vol ROI volume
+ * @param prefix Use output for a prefix
+ * @param roisel Force processing of ROI label (integers) listed in ROISEL 1D file
+ * @param zval Output a zscore version of the correlation matrix
+ * @param mat_opt Output matrix in different manners
+ * @param dirty Keep temporary files
+ * @param keep_tmp Keep temporary files
+ * @param echo Set echo (echo all commands to screen)
+ * @param verb Verbose flag
+ *
+ * @returns Parameter dictionary
+ */
 function v__roi_corr_mat_params(
     ts_vol: InputPathType,
     roi_vol: InputPathType,
@@ -93,24 +109,8 @@ function v__roi_corr_mat_params(
     echo: boolean = false,
     verb: boolean = false,
 ): VRoiCorrMatParameters {
-    /**
-     * Build parameters.
-    
-     * @param ts_vol Time series volume
-     * @param roi_vol ROI volume
-     * @param prefix Use output for a prefix
-     * @param roisel Force processing of ROI label (integers) listed in ROISEL 1D file
-     * @param zval Output a zscore version of the correlation matrix
-     * @param mat_opt Output matrix in different manners
-     * @param dirty Keep temporary files
-     * @param keep_tmp Keep temporary files
-     * @param echo Set echo (echo all commands to screen)
-     * @param verb Verbose flag
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ROI_Corr_Mat" as const,
+        "@type": "afni.@ROI_Corr_Mat" as const,
         "ts_vol": ts_vol,
         "roi_vol": roi_vol,
         "prefix": prefix,
@@ -130,18 +130,18 @@ function v__roi_corr_mat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__roi_corr_mat_cargs(
     params: VRoiCorrMatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ROI_Corr_Mat");
     cargs.push(
@@ -187,18 +187,18 @@ function v__roi_corr_mat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__roi_corr_mat_outputs(
     params: VRoiCorrMatParameters,
     execution: Execution,
 ): VRoiCorrMatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRoiCorrMatOutputs = {
         root: execution.outputFile("."),
         matrix_1d: execution.outputFile([(params["prefix"] ?? null), "_matrix.1D"].join('')),
@@ -208,22 +208,22 @@ function v__roi_corr_mat_outputs(
 }
 
 
+/**
+ * Script to produce an NxN ROI correlation matrix of N ROIs.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
+ */
 function v__roi_corr_mat_execute(
     params: VRoiCorrMatParameters,
     execution: Execution,
 ): VRoiCorrMatOutputs {
-    /**
-     * Script to produce an NxN ROI correlation matrix of N ROIs.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__roi_corr_mat_cargs(params, execution)
     const ret = v__roi_corr_mat_outputs(params, execution)
@@ -232,6 +232,27 @@ function v__roi_corr_mat_execute(
 }
 
 
+/**
+ * Script to produce an NxN ROI correlation matrix of N ROIs.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param ts_vol Time series volume
+ * @param roi_vol ROI volume
+ * @param prefix Use output for a prefix
+ * @param roisel Force processing of ROI label (integers) listed in ROISEL 1D file
+ * @param zval Output a zscore version of the correlation matrix
+ * @param mat_opt Output matrix in different manners
+ * @param dirty Keep temporary files
+ * @param keep_tmp Keep temporary files
+ * @param echo Set echo (echo all commands to screen)
+ * @param verb Verbose flag
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
+ */
 function v__roi_corr_mat(
     ts_vol: InputPathType,
     roi_vol: InputPathType,
@@ -245,27 +266,6 @@ function v__roi_corr_mat(
     verb: boolean = false,
     runner: Runner | null = null,
 ): VRoiCorrMatOutputs {
-    /**
-     * Script to produce an NxN ROI correlation matrix of N ROIs.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param ts_vol Time series volume
-     * @param roi_vol ROI volume
-     * @param prefix Use output for a prefix
-     * @param roisel Force processing of ROI label (integers) listed in ROISEL 1D file
-     * @param zval Output a zscore version of the correlation matrix
-     * @param mat_opt Output matrix in different manners
-     * @param dirty Keep temporary files
-     * @param keep_tmp Keep temporary files
-     * @param echo Set echo (echo all commands to screen)
-     * @param verb Verbose flag
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ROI_CORR_MAT_METADATA);
     const params = v__roi_corr_mat_params(ts_vol, roi_vol, prefix, roisel, zval, mat_opt, dirty, keep_tmp, echo, verb)
@@ -278,5 +278,8 @@ export {
       VRoiCorrMatParameters,
       V__ROI_CORR_MAT_METADATA,
       v__roi_corr_mat,
+      v__roi_corr_mat_cargs,
+      v__roi_corr_mat_execute,
+      v__roi_corr_mat_outputs,
       v__roi_corr_mat_params,
 };

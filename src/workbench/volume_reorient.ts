@@ -12,40 +12,40 @@ const VOLUME_REORIENT_METADATA: Metadata = {
 
 
 interface VolumeReorientParameters {
-    "__STYXTYPE__": "volume-reorient";
+    "@type": "workbench.volume-reorient";
     "volume": InputPathType;
     "orient_string": string;
     "volume_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-reorient": volume_reorient_cargs,
+        "workbench.volume-reorient": volume_reorient_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface VolumeReorientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume the volume to reorient
+ * @param orient_string the desired orientation
+ * @param volume_out out - the reoriented volume
+ *
+ * @returns Parameter dictionary
+ */
 function volume_reorient_params(
     volume: InputPathType,
     orient_string: string,
     volume_out: string,
 ): VolumeReorientParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume the volume to reorient
-     * @param orient_string the desired orientation
-     * @param volume_out out - the reoriented volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-reorient" as const,
+        "@type": "workbench.volume-reorient" as const,
         "volume": volume,
         "orient_string": orient_string,
         "volume_out": volume_out,
@@ -89,18 +89,18 @@ function volume_reorient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_reorient_cargs(
     params: VolumeReorientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-reorient");
@@ -111,18 +111,18 @@ function volume_reorient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_reorient_outputs(
     params: VolumeReorientParameters,
     execution: Execution,
 ): VolumeReorientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeReorientOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,31 +130,31 @@ function volume_reorient_outputs(
 }
 
 
+/**
+ * Change voxel order of a volume file.
+ *
+ * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
+ *
+ * L      left to right
+ * R      right to left
+ * P      posterior to anterior
+ * A      anterior to posterior
+ * I      inferior to superior
+ * S      superior to inferior.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
+ */
 function volume_reorient_execute(
     params: VolumeReorientParameters,
     execution: Execution,
 ): VolumeReorientOutputs {
-    /**
-     * Change voxel order of a volume file.
-     * 
-     * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
-     * 
-     * L      left to right
-     * R      right to left
-     * P      posterior to anterior
-     * A      anterior to posterior
-     * I      inferior to superior
-     * S      superior to inferior.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_reorient_cargs(params, execution)
     const ret = volume_reorient_outputs(params, execution)
@@ -163,35 +163,35 @@ function volume_reorient_execute(
 }
 
 
+/**
+ * Change voxel order of a volume file.
+ *
+ * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
+ *
+ * L      left to right
+ * R      right to left
+ * P      posterior to anterior
+ * A      anterior to posterior
+ * I      inferior to superior
+ * S      superior to inferior.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume the volume to reorient
+ * @param orient_string the desired orientation
+ * @param volume_out out - the reoriented volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
+ */
 function volume_reorient(
     volume: InputPathType,
     orient_string: string,
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeReorientOutputs {
-    /**
-     * Change voxel order of a volume file.
-     * 
-     * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
-     * 
-     * L      left to right
-     * R      right to left
-     * P      posterior to anterior
-     * A      anterior to posterior
-     * I      inferior to superior
-     * S      superior to inferior.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume the volume to reorient
-     * @param orient_string the desired orientation
-     * @param volume_out out - the reoriented volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_REORIENT_METADATA);
     const params = volume_reorient_params(volume, orient_string, volume_out)
@@ -204,5 +204,8 @@ export {
       VolumeReorientOutputs,
       VolumeReorientParameters,
       volume_reorient,
+      volume_reorient_cargs,
+      volume_reorient_execute,
+      volume_reorient_outputs,
       volume_reorient_params,
 };

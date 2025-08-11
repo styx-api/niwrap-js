@@ -12,7 +12,7 @@ const V__EXAMINE_GEN_FEAT_DISTS_METADATA: Metadata = {
 
 
 interface VExamineGenFeatDistsParameters {
-    "__STYXTYPE__": "@ExamineGenFeatDists";
+    "@type": "afni.@ExamineGenFeatDists";
     "features_dir": string;
     "wildcards"?: Array<string> | null | undefined;
     "output_suffix"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface VExamineGenFeatDistsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ExamineGenFeatDists": v__examine_gen_feat_dists_cargs,
+        "afni.@ExamineGenFeatDists": v__examine_gen_feat_dists_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface VExamineGenFeatDistsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param features_dir Output directory of 3dGenFeatDists
+ * @param wildcards Wildcards used to select feature histograms under the directory.
+ * @param output_suffix Output suffix, added to output images. Default is 'nosuff'.
+ * @param exclude_features Exclude following features. String matching is partial.
+ * @param exclude_classes Exclude following classes. String matching is partial.
+ * @param output_dir Output directory, default is the same as -fdir.
+ * @param panels_horizontal Set number of panels along the horizontal direction.
+ * @param echo Set echo.
+ * @param help Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function v__examine_gen_feat_dists_params(
     features_dir: string,
     wildcards: Array<string> | null = null,
@@ -82,23 +97,8 @@ function v__examine_gen_feat_dists_params(
     echo: boolean = false,
     help: boolean = false,
 ): VExamineGenFeatDistsParameters {
-    /**
-     * Build parameters.
-    
-     * @param features_dir Output directory of 3dGenFeatDists
-     * @param wildcards Wildcards used to select feature histograms under the directory.
-     * @param output_suffix Output suffix, added to output images. Default is 'nosuff'.
-     * @param exclude_features Exclude following features. String matching is partial.
-     * @param exclude_classes Exclude following classes. String matching is partial.
-     * @param output_dir Output directory, default is the same as -fdir.
-     * @param panels_horizontal Set number of panels along the horizontal direction.
-     * @param echo Set echo.
-     * @param help Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ExamineGenFeatDists" as const,
+        "@type": "afni.@ExamineGenFeatDists" as const,
         "features_dir": features_dir,
         "echo": echo,
         "help": help,
@@ -125,18 +125,18 @@ function v__examine_gen_feat_dists_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__examine_gen_feat_dists_cargs(
     params: VExamineGenFeatDistsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ExamineGenFeatDists");
     cargs.push(
@@ -189,18 +189,18 @@ function v__examine_gen_feat_dists_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__examine_gen_feat_dists_outputs(
     params: VExamineGenFeatDistsParameters,
     execution: Execution,
 ): VExamineGenFeatDistsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VExamineGenFeatDistsOutputs = {
         root: execution.outputFile("."),
     };
@@ -208,22 +208,22 @@ function v__examine_gen_feat_dists_outputs(
 }
 
 
+/**
+ * Examine histograms produced by 3dGenFeatDists.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
+ */
 function v__examine_gen_feat_dists_execute(
     params: VExamineGenFeatDistsParameters,
     execution: Execution,
 ): VExamineGenFeatDistsOutputs {
-    /**
-     * Examine histograms produced by 3dGenFeatDists.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__examine_gen_feat_dists_cargs(params, execution)
     const ret = v__examine_gen_feat_dists_outputs(params, execution)
@@ -232,6 +232,26 @@ function v__examine_gen_feat_dists_execute(
 }
 
 
+/**
+ * Examine histograms produced by 3dGenFeatDists.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param features_dir Output directory of 3dGenFeatDists
+ * @param wildcards Wildcards used to select feature histograms under the directory.
+ * @param output_suffix Output suffix, added to output images. Default is 'nosuff'.
+ * @param exclude_features Exclude following features. String matching is partial.
+ * @param exclude_classes Exclude following classes. String matching is partial.
+ * @param output_dir Output directory, default is the same as -fdir.
+ * @param panels_horizontal Set number of panels along the horizontal direction.
+ * @param echo Set echo.
+ * @param help Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
+ */
 function v__examine_gen_feat_dists(
     features_dir: string,
     wildcards: Array<string> | null = null,
@@ -244,26 +264,6 @@ function v__examine_gen_feat_dists(
     help: boolean = false,
     runner: Runner | null = null,
 ): VExamineGenFeatDistsOutputs {
-    /**
-     * Examine histograms produced by 3dGenFeatDists.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param features_dir Output directory of 3dGenFeatDists
-     * @param wildcards Wildcards used to select feature histograms under the directory.
-     * @param output_suffix Output suffix, added to output images. Default is 'nosuff'.
-     * @param exclude_features Exclude following features. String matching is partial.
-     * @param exclude_classes Exclude following classes. String matching is partial.
-     * @param output_dir Output directory, default is the same as -fdir.
-     * @param panels_horizontal Set number of panels along the horizontal direction.
-     * @param echo Set echo.
-     * @param help Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__EXAMINE_GEN_FEAT_DISTS_METADATA);
     const params = v__examine_gen_feat_dists_params(features_dir, wildcards, output_suffix, exclude_features, exclude_classes, output_dir, panels_horizontal, echo, help)
@@ -276,5 +276,8 @@ export {
       VExamineGenFeatDistsParameters,
       V__EXAMINE_GEN_FEAT_DISTS_METADATA,
       v__examine_gen_feat_dists,
+      v__examine_gen_feat_dists_cargs,
+      v__examine_gen_feat_dists_execute,
+      v__examine_gen_feat_dists_outputs,
       v__examine_gen_feat_dists_params,
 };

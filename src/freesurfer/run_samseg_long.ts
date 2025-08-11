@@ -12,7 +12,7 @@ const RUN_SAMSEG_LONG_METADATA: Metadata = {
 
 
 interface RunSamsegLongParameters {
-    "__STYXTYPE__": "run_samseg_long";
+    "@type": "freesurfer.run_samseg_long";
     "timepoint": Array<InputPathType>;
     "output": string;
     "lesion": boolean;
@@ -38,33 +38,33 @@ interface RunSamsegLongParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_samseg_long": run_samseg_long_cargs,
+        "freesurfer.run_samseg_long": run_samseg_long_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -84,6 +84,34 @@ interface RunSamsegLongOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timepoint Configure a timepoint with multiple inputs.
+ * @param output Output directory.
+ * @param lesion Enable lesion segmentation (requires tensorflow).
+ * @param threshold Lesion threshold for final segmentation. Requires lesion segmentation.
+ * @param samples Number of samples for lesion segmentation. Requires lesion segmentation.
+ * @param burnin Number of burn-in samples for lesion segmentation. Requires lesion segmentation.
+ * @param lesion_mask_structure Intensity mask brain structure. Requires lesion segmentation.
+ * @param lesion_mask_pattern Lesion mask list: -1 below lesion mask structure mean, +1 above, 0 no mask. Requires lesion segmentation.
+ * @param mode Output basenames for the input image mode.
+ * @param atlas Point to an alternative atlas directory.
+ * @param deformation_hyperprior Strength of the latent deformation hyperprior.
+ * @param gmm_hyperprior Strength of the latent GMM hyperprior.
+ * @param save_warp Save the image->template warp fields.
+ * @param save_mesh Save the final mesh of each timepoint in template space.
+ * @param save_posteriors Save posterior volumes to the 'posteriors' subdirectory.
+ * @param pallidum_separate Move pallidum outside of global white matter class. Use with T2/flair.
+ * @param threads Number of threads to use. Defaults to OMP_NUM_THREADS or 1.
+ * @param tp_to_base_transform Transformation file for each time point to base.
+ * @param force_different_resolutions Force run even if time points have different resolutions.
+ * @param history Save history.
+ * @param showfigs Show figures during run.
+ * @param movie Show history as arrow key controlled time sequence.
+ *
+ * @returns Parameter dictionary
+ */
 function run_samseg_long_params(
     timepoint: Array<InputPathType>,
     output: string,
@@ -108,36 +136,8 @@ function run_samseg_long_params(
     showfigs: boolean = false,
     movie: boolean = false,
 ): RunSamsegLongParameters {
-    /**
-     * Build parameters.
-    
-     * @param timepoint Configure a timepoint with multiple inputs.
-     * @param output Output directory.
-     * @param lesion Enable lesion segmentation (requires tensorflow).
-     * @param threshold Lesion threshold for final segmentation. Requires lesion segmentation.
-     * @param samples Number of samples for lesion segmentation. Requires lesion segmentation.
-     * @param burnin Number of burn-in samples for lesion segmentation. Requires lesion segmentation.
-     * @param lesion_mask_structure Intensity mask brain structure. Requires lesion segmentation.
-     * @param lesion_mask_pattern Lesion mask list: -1 below lesion mask structure mean, +1 above, 0 no mask. Requires lesion segmentation.
-     * @param mode Output basenames for the input image mode.
-     * @param atlas Point to an alternative atlas directory.
-     * @param deformation_hyperprior Strength of the latent deformation hyperprior.
-     * @param gmm_hyperprior Strength of the latent GMM hyperprior.
-     * @param save_warp Save the image->template warp fields.
-     * @param save_mesh Save the final mesh of each timepoint in template space.
-     * @param save_posteriors Save posterior volumes to the 'posteriors' subdirectory.
-     * @param pallidum_separate Move pallidum outside of global white matter class. Use with T2/flair.
-     * @param threads Number of threads to use. Defaults to OMP_NUM_THREADS or 1.
-     * @param tp_to_base_transform Transformation file for each time point to base.
-     * @param force_different_resolutions Force run even if time points have different resolutions.
-     * @param history Save history.
-     * @param showfigs Show figures during run.
-     * @param movie Show history as arrow key controlled time sequence.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_samseg_long" as const,
+        "@type": "freesurfer.run_samseg_long" as const,
         "timepoint": timepoint,
         "output": output,
         "lesion": lesion,
@@ -189,18 +189,18 @@ function run_samseg_long_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_samseg_long_cargs(
     params: RunSamsegLongParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_samseg_long");
     cargs.push(
@@ -311,18 +311,18 @@ function run_samseg_long_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_samseg_long_outputs(
     params: RunSamsegLongParameters,
     execution: Execution,
 ): RunSamsegLongOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunSamsegLongOutputs = {
         root: execution.outputFile("."),
     };
@@ -330,22 +330,22 @@ function run_samseg_long_outputs(
 }
 
 
+/**
+ * Longitudinal image segmentation using SAMSEG.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
+ */
 function run_samseg_long_execute(
     params: RunSamsegLongParameters,
     execution: Execution,
 ): RunSamsegLongOutputs {
-    /**
-     * Longitudinal image segmentation using SAMSEG.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_samseg_long_cargs(params, execution)
     const ret = run_samseg_long_outputs(params, execution)
@@ -354,6 +354,39 @@ function run_samseg_long_execute(
 }
 
 
+/**
+ * Longitudinal image segmentation using SAMSEG.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param timepoint Configure a timepoint with multiple inputs.
+ * @param output Output directory.
+ * @param lesion Enable lesion segmentation (requires tensorflow).
+ * @param threshold Lesion threshold for final segmentation. Requires lesion segmentation.
+ * @param samples Number of samples for lesion segmentation. Requires lesion segmentation.
+ * @param burnin Number of burn-in samples for lesion segmentation. Requires lesion segmentation.
+ * @param lesion_mask_structure Intensity mask brain structure. Requires lesion segmentation.
+ * @param lesion_mask_pattern Lesion mask list: -1 below lesion mask structure mean, +1 above, 0 no mask. Requires lesion segmentation.
+ * @param mode Output basenames for the input image mode.
+ * @param atlas Point to an alternative atlas directory.
+ * @param deformation_hyperprior Strength of the latent deformation hyperprior.
+ * @param gmm_hyperprior Strength of the latent GMM hyperprior.
+ * @param save_warp Save the image->template warp fields.
+ * @param save_mesh Save the final mesh of each timepoint in template space.
+ * @param save_posteriors Save posterior volumes to the 'posteriors' subdirectory.
+ * @param pallidum_separate Move pallidum outside of global white matter class. Use with T2/flair.
+ * @param threads Number of threads to use. Defaults to OMP_NUM_THREADS or 1.
+ * @param tp_to_base_transform Transformation file for each time point to base.
+ * @param force_different_resolutions Force run even if time points have different resolutions.
+ * @param history Save history.
+ * @param showfigs Show figures during run.
+ * @param movie Show history as arrow key controlled time sequence.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
+ */
 function run_samseg_long(
     timepoint: Array<InputPathType>,
     output: string,
@@ -379,39 +412,6 @@ function run_samseg_long(
     movie: boolean = false,
     runner: Runner | null = null,
 ): RunSamsegLongOutputs {
-    /**
-     * Longitudinal image segmentation using SAMSEG.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param timepoint Configure a timepoint with multiple inputs.
-     * @param output Output directory.
-     * @param lesion Enable lesion segmentation (requires tensorflow).
-     * @param threshold Lesion threshold for final segmentation. Requires lesion segmentation.
-     * @param samples Number of samples for lesion segmentation. Requires lesion segmentation.
-     * @param burnin Number of burn-in samples for lesion segmentation. Requires lesion segmentation.
-     * @param lesion_mask_structure Intensity mask brain structure. Requires lesion segmentation.
-     * @param lesion_mask_pattern Lesion mask list: -1 below lesion mask structure mean, +1 above, 0 no mask. Requires lesion segmentation.
-     * @param mode Output basenames for the input image mode.
-     * @param atlas Point to an alternative atlas directory.
-     * @param deformation_hyperprior Strength of the latent deformation hyperprior.
-     * @param gmm_hyperprior Strength of the latent GMM hyperprior.
-     * @param save_warp Save the image->template warp fields.
-     * @param save_mesh Save the final mesh of each timepoint in template space.
-     * @param save_posteriors Save posterior volumes to the 'posteriors' subdirectory.
-     * @param pallidum_separate Move pallidum outside of global white matter class. Use with T2/flair.
-     * @param threads Number of threads to use. Defaults to OMP_NUM_THREADS or 1.
-     * @param tp_to_base_transform Transformation file for each time point to base.
-     * @param force_different_resolutions Force run even if time points have different resolutions.
-     * @param history Save history.
-     * @param showfigs Show figures during run.
-     * @param movie Show history as arrow key controlled time sequence.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_SAMSEG_LONG_METADATA);
     const params = run_samseg_long_params(timepoint, output, lesion, threshold, samples, burnin, lesion_mask_structure, lesion_mask_pattern, mode, atlas, deformation_hyperprior, gmm_hyperprior, save_warp, save_mesh, save_posteriors, pallidum_separate, threads, tp_to_base_transform, force_different_resolutions, history, showfigs, movie)
@@ -424,5 +424,8 @@ export {
       RunSamsegLongOutputs,
       RunSamsegLongParameters,
       run_samseg_long,
+      run_samseg_long_cargs,
+      run_samseg_long_execute,
+      run_samseg_long_outputs,
       run_samseg_long_params,
 };

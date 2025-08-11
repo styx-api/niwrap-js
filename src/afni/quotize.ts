@@ -12,42 +12,42 @@ const QUOTIZE_METADATA: Metadata = {
 
 
 interface QuotizeParameters {
-    "__STYXTYPE__": "quotize";
+    "@type": "afni.quotize";
     "name": string;
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quotize": quotize_cargs,
+        "afni.quotize": quotize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quotize": quotize_outputs,
+        "afni.quotize": quotize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface QuotizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param name The name to be used for the array of strings.
+ * @param input_file Input text file to be converted.
+ * @param output_file Output file which will contain the C array of strings.
+ *
+ * @returns Parameter dictionary
+ */
 function quotize_params(
     name: string,
     input_file: InputPathType,
     output_file: string,
 ): QuotizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param name The name to be used for the array of strings.
-     * @param input_file Input text file to be converted.
-     * @param output_file Output file which will contain the C array of strings.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quotize" as const,
+        "@type": "afni.quotize" as const,
         "name": name,
         "input_file": input_file,
         "output_file": output_file,
@@ -94,18 +94,18 @@ function quotize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quotize_cargs(
     params: QuotizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quotize");
     cargs.push((params["name"] ?? null));
@@ -115,18 +115,18 @@ function quotize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quotize_outputs(
     params: QuotizeParameters,
     execution: Execution,
 ): QuotizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuotizeOutputs = {
         root: execution.outputFile("."),
         array_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function quotize_outputs(
 }
 
 
+/**
+ * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
+ */
 function quotize_execute(
     params: QuotizeParameters,
     execution: Execution,
 ): QuotizeOutputs {
-    /**
-     * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = quotize_cargs(params, execution)
     const ret = quotize_outputs(params, execution)
@@ -159,26 +159,26 @@ function quotize_execute(
 }
 
 
+/**
+ * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param name The name to be used for the array of strings.
+ * @param input_file Input text file to be converted.
+ * @param output_file Output file which will contain the C array of strings.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
+ */
 function quotize(
     name: string,
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): QuotizeOutputs {
-    /**
-     * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param name The name to be used for the array of strings.
-     * @param input_file Input text file to be converted.
-     * @param output_file Output file which will contain the C array of strings.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUOTIZE_METADATA);
     const params = quotize_params(name, input_file, output_file)
@@ -191,5 +191,8 @@ export {
       QuotizeOutputs,
       QuotizeParameters,
       quotize,
+      quotize_cargs,
+      quotize_execute,
+      quotize_outputs,
       quotize_params,
 };

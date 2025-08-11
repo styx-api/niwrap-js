@@ -12,38 +12,38 @@ const IS_SURFACE_METADATA: Metadata = {
 
 
 interface IsSurfaceParameters {
-    "__STYXTYPE__": "is-surface";
+    "@type": "freesurfer.is-surface";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "is-surface": is_surface_cargs,
+        "freesurfer.is-surface": is_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface IsSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file to check if it's a surface
+ *
+ * @returns Parameter dictionary
+ */
 function is_surface_params(
     infile: InputPathType,
 ): IsSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file to check if it's a surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "is-surface" as const,
+        "@type": "freesurfer.is-surface" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function is_surface_cargs(
     params: IsSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("is-surface");
     cargs.push(
@@ -103,18 +103,18 @@ function is_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function is_surface_outputs(
     params: IsSurfaceParameters,
     execution: Execution,
 ): IsSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsSurfaceOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function is_surface_outputs(
 }
 
 
+/**
+ * Determines whether a file is a volume-encoded surface file by examining its dimensions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
+ */
 function is_surface_execute(
     params: IsSurfaceParameters,
     execution: Execution,
 ): IsSurfaceOutputs {
-    /**
-     * Determines whether a file is a volume-encoded surface file by examining its dimensions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = is_surface_cargs(params, execution)
     const ret = is_surface_outputs(params, execution)
@@ -146,22 +146,22 @@ function is_surface_execute(
 }
 
 
+/**
+ * Determines whether a file is a volume-encoded surface file by examining its dimensions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input file to check if it's a surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
+ */
 function is_surface(
     infile: InputPathType,
     runner: Runner | null = null,
 ): IsSurfaceOutputs {
-    /**
-     * Determines whether a file is a volume-encoded surface file by examining its dimensions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input file to check if it's a surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IS_SURFACE_METADATA);
     const params = is_surface_params(infile)
@@ -174,5 +174,8 @@ export {
       IsSurfaceOutputs,
       IsSurfaceParameters,
       is_surface,
+      is_surface_cargs,
+      is_surface_execute,
+      is_surface_outputs,
       is_surface_params,
 };

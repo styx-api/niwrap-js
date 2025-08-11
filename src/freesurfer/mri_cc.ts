@@ -12,7 +12,7 @@ const MRI_CC_METADATA: Metadata = {
 
 
 interface MriCcParameters {
-    "__STYXTYPE__": "mri_cc";
+    "@type": "freesurfer.mri_cc";
     "subject_name": string;
     "output_file"?: string | null | undefined;
     "aseg_file"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface MriCcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_cc": mri_cc_cargs,
+        "freesurfer.mri_cc": mri_cc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_cc": mri_cc_outputs,
+        "freesurfer.mri_cc": mri_cc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface MriCcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name used in processing
+ * @param output_file Write aseg including CC to SDIR/mri/<fname>
+ * @param aseg_file Read aseg from SDIR/mri/<fname>
+ * @param norm_file Read norm from SDIR/mri/<fname>
+ * @param sdir Set SUBJECTS_DIR to <dname>
+ * @param rotation_lta Write rotation lta to global <fname>
+ * @param force_flag Process regardless of existing CC in input
+ * @param include_fornix Include fornix in segmentation
+ * @param compartments Subdivide into <int> compartments
+ * @param thickness Setting CC thickness to <int> mm
+ * @param skip_voxels Skipping <int> voxels in rotational align
+ * @param max_rotation Set max of rotations to be searched (default=7deg)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_cc_params(
     subject_name: string,
     output_file: string | null = null,
@@ -93,26 +111,8 @@ function mri_cc_params(
     skip_voxels: number | null = null,
     max_rotation: number | null = 7.0,
 ): MriCcParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name used in processing
-     * @param output_file Write aseg including CC to SDIR/mri/<fname>
-     * @param aseg_file Read aseg from SDIR/mri/<fname>
-     * @param norm_file Read norm from SDIR/mri/<fname>
-     * @param sdir Set SUBJECTS_DIR to <dname>
-     * @param rotation_lta Write rotation lta to global <fname>
-     * @param force_flag Process regardless of existing CC in input
-     * @param include_fornix Include fornix in segmentation
-     * @param compartments Subdivide into <int> compartments
-     * @param thickness Setting CC thickness to <int> mm
-     * @param skip_voxels Skipping <int> voxels in rotational align
-     * @param max_rotation Set max of rotations to be searched (default=7deg)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_cc" as const,
+        "@type": "freesurfer.mri_cc" as const,
         "subject_name": subject_name,
         "force_flag": force_flag,
         "include_fornix": include_fornix,
@@ -148,18 +148,18 @@ function mri_cc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_cc_cargs(
     params: MriCcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_cc");
     cargs.push((params["subject_name"] ?? null));
@@ -227,18 +227,18 @@ function mri_cc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_cc_outputs(
     params: MriCcParameters,
     execution: Execution,
 ): MriCcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCcOutputs = {
         root: execution.outputFile("."),
         output_volume: ((params["output_file"] ?? null) !== null) ? execution.outputFile(["SDIR/mri/", (params["output_file"] ?? null)].join('')) : null,
@@ -247,22 +247,22 @@ function mri_cc_outputs(
 }
 
 
+/**
+ * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCcOutputs`).
+ */
 function mri_cc_execute(
     params: MriCcParameters,
     execution: Execution,
 ): MriCcOutputs {
-    /**
-     * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_cc_cargs(params, execution)
     const ret = mri_cc_outputs(params, execution)
@@ -271,6 +271,29 @@ function mri_cc_execute(
 }
 
 
+/**
+ * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name used in processing
+ * @param output_file Write aseg including CC to SDIR/mri/<fname>
+ * @param aseg_file Read aseg from SDIR/mri/<fname>
+ * @param norm_file Read norm from SDIR/mri/<fname>
+ * @param sdir Set SUBJECTS_DIR to <dname>
+ * @param rotation_lta Write rotation lta to global <fname>
+ * @param force_flag Process regardless of existing CC in input
+ * @param include_fornix Include fornix in segmentation
+ * @param compartments Subdivide into <int> compartments
+ * @param thickness Setting CC thickness to <int> mm
+ * @param skip_voxels Skipping <int> voxels in rotational align
+ * @param max_rotation Set max of rotations to be searched (default=7deg)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCcOutputs`).
+ */
 function mri_cc(
     subject_name: string,
     output_file: string | null = null,
@@ -286,29 +309,6 @@ function mri_cc(
     max_rotation: number | null = 7.0,
     runner: Runner | null = null,
 ): MriCcOutputs {
-    /**
-     * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name used in processing
-     * @param output_file Write aseg including CC to SDIR/mri/<fname>
-     * @param aseg_file Read aseg from SDIR/mri/<fname>
-     * @param norm_file Read norm from SDIR/mri/<fname>
-     * @param sdir Set SUBJECTS_DIR to <dname>
-     * @param rotation_lta Write rotation lta to global <fname>
-     * @param force_flag Process regardless of existing CC in input
-     * @param include_fornix Include fornix in segmentation
-     * @param compartments Subdivide into <int> compartments
-     * @param thickness Setting CC thickness to <int> mm
-     * @param skip_voxels Skipping <int> voxels in rotational align
-     * @param max_rotation Set max of rotations to be searched (default=7deg)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CC_METADATA);
     const params = mri_cc_params(subject_name, output_file, aseg_file, norm_file, sdir, rotation_lta, force_flag, include_fornix, compartments, thickness, skip_voxels, max_rotation)
@@ -321,5 +321,8 @@ export {
       MriCcOutputs,
       MriCcParameters,
       mri_cc,
+      mri_cc_cargs,
+      mri_cc_execute,
+      mri_cc_outputs,
       mri_cc_params,
 };

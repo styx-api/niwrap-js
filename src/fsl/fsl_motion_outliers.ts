@@ -12,7 +12,7 @@ const FSL_MOTION_OUTLIERS_METADATA: Metadata = {
 
 
 interface FslMotionOutliersParameters {
-    "__STYXTYPE__": "fsl_motion_outliers";
+    "@type": "fsl.fsl_motion_outliers";
     "input_4d_image": InputPathType;
     "output_confound_file": string;
     "mask_image"?: InputPathType | null | undefined;
@@ -31,35 +31,35 @@ interface FslMotionOutliersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_motion_outliers": fsl_motion_outliers_cargs,
+        "fsl.fsl_motion_outliers": fsl_motion_outliers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_motion_outliers": fsl_motion_outliers_outputs,
+        "fsl.fsl_motion_outliers": fsl_motion_outliers_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,27 @@ interface FslMotionOutliersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_4d_image Input 4D image (e.g. 4D.nii.gz)
+ * @param output_confound_file Output confound file (e.g. confounds.txt)
+ * @param mask_image Use supplied mask image for calculating metric
+ * @param save_metric_file Save metric values (e.g. DVARS) as text into specified file
+ * @param save_metric_plot Save metric values (e.g. DVARS) as a graphical plot (png format)
+ * @param temp_path [Optional] Path to the location where temporary files should be created. Defaults to /tmp
+ * @param refrms_flag Use RMS intensity difference to reference volume as metric
+ * @param dvars_flag Use DVARS as metric
+ * @param refmse_flag Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)
+ * @param fd_flag Use FD (framewise displacement) as metric
+ * @param fdrms_flag Use FD with RMS matrix calculation as metric
+ * @param abs_thresh Specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)
+ * @param no_moco_flag Do not run motion correction (assumed already done)
+ * @param dummy_scans Specify number of dummy scans to delete (before running anything and creating EVs)
+ * @param verbose_flag Verbose mode
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_motion_outliers_params(
     input_4d_image: InputPathType,
     output_confound_file: string,
@@ -107,29 +128,8 @@ function fsl_motion_outliers_params(
     dummy_scans: number | null = null,
     verbose_flag: boolean = false,
 ): FslMotionOutliersParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_4d_image Input 4D image (e.g. 4D.nii.gz)
-     * @param output_confound_file Output confound file (e.g. confounds.txt)
-     * @param mask_image Use supplied mask image for calculating metric
-     * @param save_metric_file Save metric values (e.g. DVARS) as text into specified file
-     * @param save_metric_plot Save metric values (e.g. DVARS) as a graphical plot (png format)
-     * @param temp_path [Optional] Path to the location where temporary files should be created. Defaults to /tmp
-     * @param refrms_flag Use RMS intensity difference to reference volume as metric
-     * @param dvars_flag Use DVARS as metric
-     * @param refmse_flag Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)
-     * @param fd_flag Use FD (framewise displacement) as metric
-     * @param fdrms_flag Use FD with RMS matrix calculation as metric
-     * @param abs_thresh Specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)
-     * @param no_moco_flag Do not run motion correction (assumed already done)
-     * @param dummy_scans Specify number of dummy scans to delete (before running anything and creating EVs)
-     * @param verbose_flag Verbose mode
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_motion_outliers" as const,
+        "@type": "fsl.fsl_motion_outliers" as const,
         "input_4d_image": input_4d_image,
         "output_confound_file": output_confound_file,
         "refrms_flag": refrms_flag,
@@ -162,18 +162,18 @@ function fsl_motion_outliers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_motion_outliers_cargs(
     params: FslMotionOutliersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_motion_outliers");
     cargs.push(
@@ -245,18 +245,18 @@ function fsl_motion_outliers_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_motion_outliers_outputs(
     params: FslMotionOutliersParameters,
     execution: Execution,
 ): FslMotionOutliersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslMotionOutliersOutputs = {
         root: execution.outputFile("."),
         output_confound_file: execution.outputFile([(params["output_confound_file"] ?? null)].join('')),
@@ -267,22 +267,22 @@ function fsl_motion_outliers_outputs(
 }
 
 
+/**
+ * FSL tool used to calculate motion outliers in 4D image data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
+ */
 function fsl_motion_outliers_execute(
     params: FslMotionOutliersParameters,
     execution: Execution,
 ): FslMotionOutliersOutputs {
-    /**
-     * FSL tool used to calculate motion outliers in 4D image data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_motion_outliers_cargs(params, execution)
     const ret = fsl_motion_outliers_outputs(params, execution)
@@ -291,6 +291,32 @@ function fsl_motion_outliers_execute(
 }
 
 
+/**
+ * FSL tool used to calculate motion outliers in 4D image data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_4d_image Input 4D image (e.g. 4D.nii.gz)
+ * @param output_confound_file Output confound file (e.g. confounds.txt)
+ * @param mask_image Use supplied mask image for calculating metric
+ * @param save_metric_file Save metric values (e.g. DVARS) as text into specified file
+ * @param save_metric_plot Save metric values (e.g. DVARS) as a graphical plot (png format)
+ * @param temp_path [Optional] Path to the location where temporary files should be created. Defaults to /tmp
+ * @param refrms_flag Use RMS intensity difference to reference volume as metric
+ * @param dvars_flag Use DVARS as metric
+ * @param refmse_flag Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)
+ * @param fd_flag Use FD (framewise displacement) as metric
+ * @param fdrms_flag Use FD with RMS matrix calculation as metric
+ * @param abs_thresh Specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)
+ * @param no_moco_flag Do not run motion correction (assumed already done)
+ * @param dummy_scans Specify number of dummy scans to delete (before running anything and creating EVs)
+ * @param verbose_flag Verbose mode
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
+ */
 function fsl_motion_outliers(
     input_4d_image: InputPathType,
     output_confound_file: string,
@@ -309,32 +335,6 @@ function fsl_motion_outliers(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FslMotionOutliersOutputs {
-    /**
-     * FSL tool used to calculate motion outliers in 4D image data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_4d_image Input 4D image (e.g. 4D.nii.gz)
-     * @param output_confound_file Output confound file (e.g. confounds.txt)
-     * @param mask_image Use supplied mask image for calculating metric
-     * @param save_metric_file Save metric values (e.g. DVARS) as text into specified file
-     * @param save_metric_plot Save metric values (e.g. DVARS) as a graphical plot (png format)
-     * @param temp_path [Optional] Path to the location where temporary files should be created. Defaults to /tmp
-     * @param refrms_flag Use RMS intensity difference to reference volume as metric
-     * @param dvars_flag Use DVARS as metric
-     * @param refmse_flag Mean Square Error version of --refrms (used in original version of fsl_motion_outliers)
-     * @param fd_flag Use FD (framewise displacement) as metric
-     * @param fdrms_flag Use FD with RMS matrix calculation as metric
-     * @param abs_thresh Specify absolute threshold value (otherwise use box-plot cutoff = P75 + 1.5*IQR)
-     * @param no_moco_flag Do not run motion correction (assumed already done)
-     * @param dummy_scans Specify number of dummy scans to delete (before running anything and creating EVs)
-     * @param verbose_flag Verbose mode
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_MOTION_OUTLIERS_METADATA);
     const params = fsl_motion_outliers_params(input_4d_image, output_confound_file, mask_image, save_metric_file, save_metric_plot, temp_path, refrms_flag, dvars_flag, refmse_flag, fd_flag, fdrms_flag, abs_thresh, no_moco_flag, dummy_scans, verbose_flag)
@@ -347,5 +347,8 @@ export {
       FslMotionOutliersOutputs,
       FslMotionOutliersParameters,
       fsl_motion_outliers,
+      fsl_motion_outliers_cargs,
+      fsl_motion_outliers_execute,
+      fsl_motion_outliers_outputs,
       fsl_motion_outliers_params,
 };

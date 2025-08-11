@@ -12,7 +12,7 @@ const SUMA_CHANGE_SPEC_METADATA: Metadata = {
 
 
 interface SumaChangeSpecParameters {
-    "__STYXTYPE__": "suma_change_spec";
+    "@type": "afni.suma_change_spec";
     "input": InputPathType;
     "state": string;
     "domainparent"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface SumaChangeSpecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "suma_change_spec": suma_change_spec_cargs,
+        "afni.suma_change_spec": suma_change_spec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "suma_change_spec": suma_change_spec_outputs,
+        "afni.suma_change_spec": suma_change_spec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface SumaChangeSpecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input SUMA Spec file to change
+ * @param state State within the Spec file to change
+ * @param domainparent New Domain Parent for the state within the Spec file
+ * @param output Name to which the new Spec file will be temporarily written
+ * @param remove Remove the automatically created backup
+ * @param anatomical Add 'Anatomical = Y' to the selected SurfaceState
+ *
+ * @returns Parameter dictionary
+ */
 function suma_change_spec_params(
     input: InputPathType,
     state: string,
@@ -85,20 +97,8 @@ function suma_change_spec_params(
     remove: boolean = false,
     anatomical: boolean = false,
 ): SumaChangeSpecParameters {
-    /**
-     * Build parameters.
-    
-     * @param input SUMA Spec file to change
-     * @param state State within the Spec file to change
-     * @param domainparent New Domain Parent for the state within the Spec file
-     * @param output Name to which the new Spec file will be temporarily written
-     * @param remove Remove the automatically created backup
-     * @param anatomical Add 'Anatomical = Y' to the selected SurfaceState
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "suma_change_spec" as const,
+        "@type": "afni.suma_change_spec" as const,
         "input": input,
         "state": state,
         "remove": remove,
@@ -114,18 +114,18 @@ function suma_change_spec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function suma_change_spec_cargs(
     params: SumaChangeSpecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("suma_change_spec");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -146,18 +146,18 @@ function suma_change_spec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function suma_change_spec_outputs(
     params: SumaChangeSpecParameters,
     execution: Execution,
 ): SumaChangeSpecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SumaChangeSpecOutputs = {
         root: execution.outputFile("."),
         output_spec: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -167,22 +167,22 @@ function suma_change_spec_outputs(
 }
 
 
+/**
+ * This program changes SUMA's surface specification (Spec) files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
+ */
 function suma_change_spec_execute(
     params: SumaChangeSpecParameters,
     execution: Execution,
 ): SumaChangeSpecOutputs {
-    /**
-     * This program changes SUMA's surface specification (Spec) files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
-     */
     params = execution.params(params)
     const cargs = suma_change_spec_cargs(params, execution)
     const ret = suma_change_spec_outputs(params, execution)
@@ -191,6 +191,23 @@ function suma_change_spec_execute(
 }
 
 
+/**
+ * This program changes SUMA's surface specification (Spec) files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input SUMA Spec file to change
+ * @param state State within the Spec file to change
+ * @param domainparent New Domain Parent for the state within the Spec file
+ * @param output Name to which the new Spec file will be temporarily written
+ * @param remove Remove the automatically created backup
+ * @param anatomical Add 'Anatomical = Y' to the selected SurfaceState
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
+ */
 function suma_change_spec(
     input: InputPathType,
     state: string,
@@ -200,23 +217,6 @@ function suma_change_spec(
     anatomical: boolean = false,
     runner: Runner | null = null,
 ): SumaChangeSpecOutputs {
-    /**
-     * This program changes SUMA's surface specification (Spec) files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input SUMA Spec file to change
-     * @param state State within the Spec file to change
-     * @param domainparent New Domain Parent for the state within the Spec file
-     * @param output Name to which the new Spec file will be temporarily written
-     * @param remove Remove the automatically created backup
-     * @param anatomical Add 'Anatomical = Y' to the selected SurfaceState
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SUMA_CHANGE_SPEC_METADATA);
     const params = suma_change_spec_params(input, state, domainparent, output, remove, anatomical)
@@ -229,5 +229,8 @@ export {
       SumaChangeSpecOutputs,
       SumaChangeSpecParameters,
       suma_change_spec,
+      suma_change_spec_cargs,
+      suma_change_spec_execute,
+      suma_change_spec_outputs,
       suma_change_spec_params,
 };

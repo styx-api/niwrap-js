@@ -12,39 +12,39 @@ const REINFLATE_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface ReinflateSubjectRhParameters {
-    "__STYXTYPE__": "reinflate_subject-rh";
+    "@type": "freesurfer.reinflate_subject-rh";
     "subject_dir": string;
     "additional_options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reinflate_subject-rh": reinflate_subject_rh_cargs,
+        "freesurfer.reinflate_subject-rh": reinflate_subject_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface ReinflateSubjectRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory of the subject within FreeSurfer environment
+ * @param additional_options Additional options for the reinflate_subject-rh command
+ *
+ * @returns Parameter dictionary
+ */
 function reinflate_subject_rh_params(
     subject_dir: string,
     additional_options: string | null = null,
 ): ReinflateSubjectRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory of the subject within FreeSurfer environment
-     * @param additional_options Additional options for the reinflate_subject-rh command
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reinflate_subject-rh" as const,
+        "@type": "freesurfer.reinflate_subject-rh" as const,
         "subject_dir": subject_dir,
     };
     if (additional_options !== null) {
@@ -87,18 +87,18 @@ function reinflate_subject_rh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reinflate_subject_rh_cargs(
     params: ReinflateSubjectRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reinflate_subject-rh");
     cargs.push(
@@ -112,18 +112,18 @@ function reinflate_subject_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reinflate_subject_rh_outputs(
     params: ReinflateSubjectRhParameters,
     execution: Execution,
 ): ReinflateSubjectRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReinflateSubjectRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function reinflate_subject_rh_outputs(
 }
 
 
+/**
+ * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReinflateSubjectRhOutputs`).
+ */
 function reinflate_subject_rh_execute(
     params: ReinflateSubjectRhParameters,
     execution: Execution,
 ): ReinflateSubjectRhOutputs {
-    /**
-     * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReinflateSubjectRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = reinflate_subject_rh_cargs(params, execution)
     const ret = reinflate_subject_rh_outputs(params, execution)
@@ -155,24 +155,24 @@ function reinflate_subject_rh_execute(
 }
 
 
+/**
+ * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Directory of the subject within FreeSurfer environment
+ * @param additional_options Additional options for the reinflate_subject-rh command
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReinflateSubjectRhOutputs`).
+ */
 function reinflate_subject_rh(
     subject_dir: string,
     additional_options: string | null = null,
     runner: Runner | null = null,
 ): ReinflateSubjectRhOutputs {
-    /**
-     * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Directory of the subject within FreeSurfer environment
-     * @param additional_options Additional options for the reinflate_subject-rh command
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReinflateSubjectRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REINFLATE_SUBJECT_RH_METADATA);
     const params = reinflate_subject_rh_params(subject_dir, additional_options)
@@ -185,5 +185,8 @@ export {
       ReinflateSubjectRhOutputs,
       ReinflateSubjectRhParameters,
       reinflate_subject_rh,
+      reinflate_subject_rh_cargs,
+      reinflate_subject_rh_execute,
+      reinflate_subject_rh_outputs,
       reinflate_subject_rh_params,
 };

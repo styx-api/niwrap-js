@@ -12,7 +12,7 @@ const FSL_LABEL2VOXEL_METADATA: Metadata = {
 
 
 interface FslLabel2voxelParameters {
-    "__STYXTYPE__": "fsl_label2voxel";
+    "@type": "freesurfer.fsl_label2voxel";
     "label_value": number;
     "labeled_volume": InputPathType;
     "src_volume": InputPathType;
@@ -20,35 +20,35 @@ interface FslLabel2voxelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_label2voxel": fsl_label2voxel_cargs,
+        "freesurfer.fsl_label2voxel": fsl_label2voxel_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_label2voxel": fsl_label2voxel_outputs,
+        "freesurfer.fsl_label2voxel": fsl_label2voxel_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface FslLabel2voxelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_value Label value to convert
+ * @param labeled_volume Labeled volume file
+ * @param src_volume Source volume file
+ * @param output_filename Output filename for voxel data
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_label2voxel_params(
     label_value: number,
     labeled_volume: InputPathType,
     src_volume: InputPathType,
     output_filename: string,
 ): FslLabel2voxelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_value Label value to convert
-     * @param labeled_volume Labeled volume file
-     * @param src_volume Source volume file
-     * @param output_filename Output filename for voxel data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_label2voxel" as const,
+        "@type": "freesurfer.fsl_label2voxel" as const,
         "label_value": label_value,
         "labeled_volume": labeled_volume,
         "src_volume": src_volume,
@@ -98,18 +98,18 @@ function fsl_label2voxel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_label2voxel_cargs(
     params: FslLabel2voxelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_label2voxel");
     cargs.push(String((params["label_value"] ?? null)));
@@ -120,18 +120,18 @@ function fsl_label2voxel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_label2voxel_outputs(
     params: FslLabel2voxelParameters,
     execution: Execution,
 ): FslLabel2voxelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslLabel2voxelOutputs = {
         root: execution.outputFile("."),
         output_voxel_data: execution.outputFile([(params["output_filename"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function fsl_label2voxel_outputs(
 }
 
 
+/**
+ * Converts labeled volumes to voxels based on specified labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
+ */
 function fsl_label2voxel_execute(
     params: FslLabel2voxelParameters,
     execution: Execution,
 ): FslLabel2voxelOutputs {
-    /**
-     * Converts labeled volumes to voxels based on specified labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_label2voxel_cargs(params, execution)
     const ret = fsl_label2voxel_outputs(params, execution)
@@ -164,6 +164,21 @@ function fsl_label2voxel_execute(
 }
 
 
+/**
+ * Converts labeled volumes to voxels based on specified labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label_value Label value to convert
+ * @param labeled_volume Labeled volume file
+ * @param src_volume Source volume file
+ * @param output_filename Output filename for voxel data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
+ */
 function fsl_label2voxel(
     label_value: number,
     labeled_volume: InputPathType,
@@ -171,21 +186,6 @@ function fsl_label2voxel(
     output_filename: string,
     runner: Runner | null = null,
 ): FslLabel2voxelOutputs {
-    /**
-     * Converts labeled volumes to voxels based on specified labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label_value Label value to convert
-     * @param labeled_volume Labeled volume file
-     * @param src_volume Source volume file
-     * @param output_filename Output filename for voxel data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_LABEL2VOXEL_METADATA);
     const params = fsl_label2voxel_params(label_value, labeled_volume, src_volume, output_filename)
@@ -198,5 +198,8 @@ export {
       FslLabel2voxelOutputs,
       FslLabel2voxelParameters,
       fsl_label2voxel,
+      fsl_label2voxel_cargs,
+      fsl_label2voxel_execute,
+      fsl_label2voxel_outputs,
       fsl_label2voxel_params,
 };

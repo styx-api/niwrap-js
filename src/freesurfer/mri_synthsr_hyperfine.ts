@@ -12,7 +12,7 @@ const MRI_SYNTHSR_HYPERFINE_METADATA: Metadata = {
 
 
 interface MriSynthsrHyperfineParameters {
-    "__STYXTYPE__": "mri_synthsr_hyperfine";
+    "@type": "freesurfer.mri_synthsr_hyperfine";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
     "output": string;
@@ -21,35 +21,35 @@ interface MriSynthsrHyperfineParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthsr_hyperfine": mri_synthsr_hyperfine_cargs,
+        "freesurfer.mri_synthsr_hyperfine": mri_synthsr_hyperfine_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_synthsr_hyperfine": mri_synthsr_hyperfine_outputs,
+        "freesurfer.mri_synthsr_hyperfine": mri_synthsr_hyperfine_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriSynthsrHyperfineOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_image T1 image(s) to super-resolve, at native 1.5x1.5x5 axial resolution. Can be a path to an image or to a folder.
+ * @param t2_image T2 image(s). Must be a folder if --t1 designates a folder. These must be registered to the T1s, in physical coordinates (i.e., with the headers, do NOT resample when registering; see instructions on FreeSurfer wiki)
+ * @param output Output(s), i.e. synthetic 1mm MP-RAGE(s). Must be a folder if --t1 designates a folder.
+ * @param threads (optional) Number of cores to be used. Default is 1.
+ * @param cpu (optional) Enforce running with CPU rather than GPU.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthsr_hyperfine_params(
     t1_image: InputPathType,
     t2_image: InputPathType,
@@ -79,19 +90,8 @@ function mri_synthsr_hyperfine_params(
     threads: number | null = 1,
     cpu: boolean = false,
 ): MriSynthsrHyperfineParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_image T1 image(s) to super-resolve, at native 1.5x1.5x5 axial resolution. Can be a path to an image or to a folder.
-     * @param t2_image T2 image(s). Must be a folder if --t1 designates a folder. These must be registered to the T1s, in physical coordinates (i.e., with the headers, do NOT resample when registering; see instructions on FreeSurfer wiki)
-     * @param output Output(s), i.e. synthetic 1mm MP-RAGE(s). Must be a folder if --t1 designates a folder.
-     * @param threads (optional) Number of cores to be used. Default is 1.
-     * @param cpu (optional) Enforce running with CPU rather than GPU.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthsr_hyperfine" as const,
+        "@type": "freesurfer.mri_synthsr_hyperfine" as const,
         "t1_image": t1_image,
         "t2_image": t2_image,
         "output": output,
@@ -104,18 +104,18 @@ function mri_synthsr_hyperfine_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthsr_hyperfine_cargs(
     params: MriSynthsrHyperfineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthsr_hyperfine");
     cargs.push(
@@ -143,18 +143,18 @@ function mri_synthsr_hyperfine_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthsr_hyperfine_outputs(
     params: MriSynthsrHyperfineParameters,
     execution: Execution,
 ): MriSynthsrHyperfineOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthsrHyperfineOutputs = {
         root: execution.outputFile("."),
         synthetic_mprage: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -163,22 +163,22 @@ function mri_synthsr_hyperfine_outputs(
 }
 
 
+/**
+ * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
+ */
 function mri_synthsr_hyperfine_execute(
     params: MriSynthsrHyperfineParameters,
     execution: Execution,
 ): MriSynthsrHyperfineOutputs {
-    /**
-     * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthsr_hyperfine_cargs(params, execution)
     const ret = mri_synthsr_hyperfine_outputs(params, execution)
@@ -187,6 +187,22 @@ function mri_synthsr_hyperfine_execute(
 }
 
 
+/**
+ * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_image T1 image(s) to super-resolve, at native 1.5x1.5x5 axial resolution. Can be a path to an image or to a folder.
+ * @param t2_image T2 image(s). Must be a folder if --t1 designates a folder. These must be registered to the T1s, in physical coordinates (i.e., with the headers, do NOT resample when registering; see instructions on FreeSurfer wiki)
+ * @param output Output(s), i.e. synthetic 1mm MP-RAGE(s). Must be a folder if --t1 designates a folder.
+ * @param threads (optional) Number of cores to be used. Default is 1.
+ * @param cpu (optional) Enforce running with CPU rather than GPU.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
+ */
 function mri_synthsr_hyperfine(
     t1_image: InputPathType,
     t2_image: InputPathType,
@@ -195,22 +211,6 @@ function mri_synthsr_hyperfine(
     cpu: boolean = false,
     runner: Runner | null = null,
 ): MriSynthsrHyperfineOutputs {
-    /**
-     * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_image T1 image(s) to super-resolve, at native 1.5x1.5x5 axial resolution. Can be a path to an image or to a folder.
-     * @param t2_image T2 image(s). Must be a folder if --t1 designates a folder. These must be registered to the T1s, in physical coordinates (i.e., with the headers, do NOT resample when registering; see instructions on FreeSurfer wiki)
-     * @param output Output(s), i.e. synthetic 1mm MP-RAGE(s). Must be a folder if --t1 designates a folder.
-     * @param threads (optional) Number of cores to be used. Default is 1.
-     * @param cpu (optional) Enforce running with CPU rather than GPU.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHSR_HYPERFINE_METADATA);
     const params = mri_synthsr_hyperfine_params(t1_image, t2_image, output, threads, cpu)
@@ -223,5 +223,8 @@ export {
       MriSynthsrHyperfineOutputs,
       MriSynthsrHyperfineParameters,
       mri_synthsr_hyperfine,
+      mri_synthsr_hyperfine_cargs,
+      mri_synthsr_hyperfine_execute,
+      mri_synthsr_hyperfine_outputs,
       mri_synthsr_hyperfine_params,
 };

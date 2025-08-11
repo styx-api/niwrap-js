@@ -12,7 +12,7 @@ const V_3D_MULTI_THRESH_METADATA: Metadata = {
 
 
 interface V3dMultiThreshParameters {
-    "__STYXTYPE__": "3dMultiThresh";
+    "@type": "afni.3dMultiThresh";
     "mthresh_file": InputPathType;
     "input_file": InputPathType;
     "index"?: number | null | undefined;
@@ -27,35 +27,35 @@ interface V3dMultiThreshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMultiThresh": v_3d_multi_thresh_cargs,
+        "afni.3dMultiThresh": v_3d_multi_thresh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMultiThresh": v_3d_multi_thresh_outputs,
+        "afni.3dMultiThresh": v_3d_multi_thresh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface V3dMultiThreshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mthresh_file Multi-threshold dataset from 3dXClustSim, usually via running '3dttest++ -ETAC'.
+ * @param input_file Dataset to threshold.
+ * @param index Index (sub-brick) on which to threshold.
+ * @param signed_flag Indicates if the .mthresh.nii file from 3dXClustSim was created using 1-sided thresholding. Choose sign + or -.
+ * @param positive_sign_flag Same as '-signed +'.
+ * @param negative_sign_flag Same as '-signed -'.
+ * @param prefix Prefix for output dataset. Can be 'NULL' to get no output dataset.
+ * @param mask_only_flag Instead of outputting a thresholded version of the input dataset, just output a 0/1 mask dataset of voxels that survive the process.
+ * @param all_mask Write out a multi-volume dataset with prefix 'qqq' where each volume is the binary mask of voxels that pass ONE of the tests.
+ * @param no_zero_flag Prevents the output of a dataset if it would be all zero.
+ * @param quiet_flag Turn off progress report messages.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_multi_thresh_params(
     mthresh_file: InputPathType,
     input_file: InputPathType,
@@ -99,25 +116,8 @@ function v_3d_multi_thresh_params(
     no_zero_flag: boolean = false,
     quiet_flag: boolean = false,
 ): V3dMultiThreshParameters {
-    /**
-     * Build parameters.
-    
-     * @param mthresh_file Multi-threshold dataset from 3dXClustSim, usually via running '3dttest++ -ETAC'.
-     * @param input_file Dataset to threshold.
-     * @param index Index (sub-brick) on which to threshold.
-     * @param signed_flag Indicates if the .mthresh.nii file from 3dXClustSim was created using 1-sided thresholding. Choose sign + or -.
-     * @param positive_sign_flag Same as '-signed +'.
-     * @param negative_sign_flag Same as '-signed -'.
-     * @param prefix Prefix for output dataset. Can be 'NULL' to get no output dataset.
-     * @param mask_only_flag Instead of outputting a thresholded version of the input dataset, just output a 0/1 mask dataset of voxels that survive the process.
-     * @param all_mask Write out a multi-volume dataset with prefix 'qqq' where each volume is the binary mask of voxels that pass ONE of the tests.
-     * @param no_zero_flag Prevents the output of a dataset if it would be all zero.
-     * @param quiet_flag Turn off progress report messages.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMultiThresh" as const,
+        "@type": "afni.3dMultiThresh" as const,
         "mthresh_file": mthresh_file,
         "input_file": input_file,
         "positive_sign_flag": positive_sign_flag,
@@ -142,18 +142,18 @@ function v_3d_multi_thresh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_multi_thresh_cargs(
     params: V3dMultiThreshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMultiThresh");
     cargs.push(
@@ -207,18 +207,18 @@ function v_3d_multi_thresh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_multi_thresh_outputs(
     params: V3dMultiThreshParameters,
     execution: Execution,
 ): V3dMultiThreshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMultiThreshOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -229,22 +229,22 @@ function v_3d_multi_thresh_outputs(
 }
 
 
+/**
+ * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
+ */
 function v_3d_multi_thresh_execute(
     params: V3dMultiThreshParameters,
     execution: Execution,
 ): V3dMultiThreshOutputs {
-    /**
-     * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_multi_thresh_cargs(params, execution)
     const ret = v_3d_multi_thresh_outputs(params, execution)
@@ -253,6 +253,28 @@ function v_3d_multi_thresh_execute(
 }
 
 
+/**
+ * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param mthresh_file Multi-threshold dataset from 3dXClustSim, usually via running '3dttest++ -ETAC'.
+ * @param input_file Dataset to threshold.
+ * @param index Index (sub-brick) on which to threshold.
+ * @param signed_flag Indicates if the .mthresh.nii file from 3dXClustSim was created using 1-sided thresholding. Choose sign + or -.
+ * @param positive_sign_flag Same as '-signed +'.
+ * @param negative_sign_flag Same as '-signed -'.
+ * @param prefix Prefix for output dataset. Can be 'NULL' to get no output dataset.
+ * @param mask_only_flag Instead of outputting a thresholded version of the input dataset, just output a 0/1 mask dataset of voxels that survive the process.
+ * @param all_mask Write out a multi-volume dataset with prefix 'qqq' where each volume is the binary mask of voxels that pass ONE of the tests.
+ * @param no_zero_flag Prevents the output of a dataset if it would be all zero.
+ * @param quiet_flag Turn off progress report messages.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
+ */
 function v_3d_multi_thresh(
     mthresh_file: InputPathType,
     input_file: InputPathType,
@@ -267,28 +289,6 @@ function v_3d_multi_thresh(
     quiet_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dMultiThreshOutputs {
-    /**
-     * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param mthresh_file Multi-threshold dataset from 3dXClustSim, usually via running '3dttest++ -ETAC'.
-     * @param input_file Dataset to threshold.
-     * @param index Index (sub-brick) on which to threshold.
-     * @param signed_flag Indicates if the .mthresh.nii file from 3dXClustSim was created using 1-sided thresholding. Choose sign + or -.
-     * @param positive_sign_flag Same as '-signed +'.
-     * @param negative_sign_flag Same as '-signed -'.
-     * @param prefix Prefix for output dataset. Can be 'NULL' to get no output dataset.
-     * @param mask_only_flag Instead of outputting a thresholded version of the input dataset, just output a 0/1 mask dataset of voxels that survive the process.
-     * @param all_mask Write out a multi-volume dataset with prefix 'qqq' where each volume is the binary mask of voxels that pass ONE of the tests.
-     * @param no_zero_flag Prevents the output of a dataset if it would be all zero.
-     * @param quiet_flag Turn off progress report messages.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MULTI_THRESH_METADATA);
     const params = v_3d_multi_thresh_params(mthresh_file, input_file, index, signed_flag, positive_sign_flag, negative_sign_flag, prefix, mask_only_flag, all_mask, no_zero_flag, quiet_flag)
@@ -301,5 +301,8 @@ export {
       V3dMultiThreshParameters,
       V_3D_MULTI_THRESH_METADATA,
       v_3d_multi_thresh,
+      v_3d_multi_thresh_cargs,
+      v_3d_multi_thresh_execute,
+      v_3d_multi_thresh_outputs,
       v_3d_multi_thresh_params,
 };

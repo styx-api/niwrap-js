@@ -12,7 +12,7 @@ const MRI_TWOCLASS_METADATA: Metadata = {
 
 
 interface MriTwoclassParameters {
-    "__STYXTYPE__": "mri_twoclass";
+    "@type": "freesurfer.mri_twoclass";
     "segmentation_volume": InputPathType;
     "output_subject": string;
     "output_volume": string;
@@ -23,35 +23,35 @@ interface MriTwoclassParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_twoclass": mri_twoclass_cargs,
+        "freesurfer.mri_twoclass": mri_twoclass_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_twoclass": mri_twoclass_outputs,
+        "freesurfer.mri_twoclass": mri_twoclass_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriTwoclassOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param segmentation_volume Input segmentation volume
+ * @param output_subject Output subject name
+ * @param output_volume Output volume
+ * @param c1_subjects List of subjects from class 1
+ * @param c2_subjects List of subjects from class 2
+ * @param f_threshold Specify F threshold
+ * @param bonferroni_correction Perform Bonferroni correction
+ *
+ * @returns Parameter dictionary
+ */
 function mri_twoclass_params(
     segmentation_volume: InputPathType,
     output_subject: string,
@@ -83,21 +96,8 @@ function mri_twoclass_params(
     f_threshold: number | null = null,
     bonferroni_correction: boolean = false,
 ): MriTwoclassParameters {
-    /**
-     * Build parameters.
-    
-     * @param segmentation_volume Input segmentation volume
-     * @param output_subject Output subject name
-     * @param output_volume Output volume
-     * @param c1_subjects List of subjects from class 1
-     * @param c2_subjects List of subjects from class 2
-     * @param f_threshold Specify F threshold
-     * @param bonferroni_correction Perform Bonferroni correction
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_twoclass" as const,
+        "@type": "freesurfer.mri_twoclass" as const,
         "segmentation_volume": segmentation_volume,
         "output_subject": output_subject,
         "output_volume": output_volume,
@@ -112,18 +112,18 @@ function mri_twoclass_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_twoclass_cargs(
     params: MriTwoclassParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_twoclass");
     cargs.push(execution.inputFile((params["segmentation_volume"] ?? null)));
@@ -144,18 +144,18 @@ function mri_twoclass_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_twoclass_outputs(
     params: MriTwoclassParameters,
     execution: Execution,
 ): MriTwoclassOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriTwoclassOutputs = {
         root: execution.outputFile("."),
         result_volume: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -164,22 +164,22 @@ function mri_twoclass_outputs(
 }
 
 
+/**
+ * Compute cross-subject statistics of two sets of labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
+ */
 function mri_twoclass_execute(
     params: MriTwoclassParameters,
     execution: Execution,
 ): MriTwoclassOutputs {
-    /**
-     * Compute cross-subject statistics of two sets of labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_twoclass_cargs(params, execution)
     const ret = mri_twoclass_outputs(params, execution)
@@ -188,6 +188,24 @@ function mri_twoclass_execute(
 }
 
 
+/**
+ * Compute cross-subject statistics of two sets of labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param segmentation_volume Input segmentation volume
+ * @param output_subject Output subject name
+ * @param output_volume Output volume
+ * @param c1_subjects List of subjects from class 1
+ * @param c2_subjects List of subjects from class 2
+ * @param f_threshold Specify F threshold
+ * @param bonferroni_correction Perform Bonferroni correction
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
+ */
 function mri_twoclass(
     segmentation_volume: InputPathType,
     output_subject: string,
@@ -198,24 +216,6 @@ function mri_twoclass(
     bonferroni_correction: boolean = false,
     runner: Runner | null = null,
 ): MriTwoclassOutputs {
-    /**
-     * Compute cross-subject statistics of two sets of labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param segmentation_volume Input segmentation volume
-     * @param output_subject Output subject name
-     * @param output_volume Output volume
-     * @param c1_subjects List of subjects from class 1
-     * @param c2_subjects List of subjects from class 2
-     * @param f_threshold Specify F threshold
-     * @param bonferroni_correction Perform Bonferroni correction
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_TWOCLASS_METADATA);
     const params = mri_twoclass_params(segmentation_volume, output_subject, output_volume, c1_subjects, c2_subjects, f_threshold, bonferroni_correction)
@@ -228,5 +228,8 @@ export {
       MriTwoclassOutputs,
       MriTwoclassParameters,
       mri_twoclass,
+      mri_twoclass_cargs,
+      mri_twoclass_execute,
+      mri_twoclass_outputs,
       mri_twoclass_params,
 };

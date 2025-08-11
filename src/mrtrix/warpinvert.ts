@@ -12,14 +12,14 @@ const WARPINVERT_METADATA: Metadata = {
 
 
 interface WarpinvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.warpinvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface WarpinvertParameters {
-    "__STYXTYPE__": "warpinvert";
+    "@type": "mrtrix.warpinvert";
     "template"?: InputPathType | null | undefined;
     "displacement": boolean;
     "info": boolean;
@@ -35,55 +35,55 @@ interface WarpinvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "warpinvert": warpinvert_cargs,
-        "config": warpinvert_config_cargs,
+        "mrtrix.warpinvert": warpinvert_cargs,
+        "mrtrix.warpinvert.config": warpinvert_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "warpinvert": warpinvert_outputs,
+        "mrtrix.warpinvert": warpinvert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function warpinvert_config_params(
     key: string,
     value: string,
 ): WarpinvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.warpinvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function warpinvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpinvert_config_cargs(
     params: WarpinvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface WarpinvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input warp image.
+ * @param out the output warp image.
+ * @param template define a template image grid for the output warp
+ * @param displacement indicates that the input warp field is a displacement field; the output will also be a displacement field
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function warpinvert_params(
     in_: InputPathType,
     out: string,
@@ -142,26 +160,8 @@ function warpinvert_params(
     help: boolean = false,
     version: boolean = false,
 ): WarpinvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input warp image.
-     * @param out the output warp image.
-     * @param template define a template image grid for the output warp
-     * @param displacement indicates that the input warp field is a displacement field; the output will also be a displacement field
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warpinvert" as const,
+        "@type": "mrtrix.warpinvert" as const,
         "displacement": displacement,
         "info": info,
         "quiet": quiet,
@@ -185,18 +185,18 @@ function warpinvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpinvert_cargs(
     params: WarpinvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("warpinvert");
     if ((params["template"] ?? null) !== null) {
@@ -227,7 +227,7 @@ function warpinvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -241,18 +241,18 @@ function warpinvert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function warpinvert_outputs(
     params: WarpinvertParameters,
     execution: Execution,
 ): WarpinvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WarpinvertOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -261,28 +261,28 @@ function warpinvert_outputs(
 }
 
 
+/**
+ * Invert a non-linear warp field.
+ *
+ * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
+ */
 function warpinvert_execute(
     params: WarpinvertParameters,
     execution: Execution,
 ): WarpinvertOutputs {
-    /**
-     * Invert a non-linear warp field.
-     * 
-     * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = warpinvert_cargs(params, execution)
     const ret = warpinvert_outputs(params, execution)
@@ -291,6 +291,35 @@ function warpinvert_execute(
 }
 
 
+/**
+ * Invert a non-linear warp field.
+ *
+ * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input warp image.
+ * @param out the output warp image.
+ * @param template define a template image grid for the output warp
+ * @param displacement indicates that the input warp field is a displacement field; the output will also be a displacement field
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
+ */
 function warpinvert(
     in_: InputPathType,
     out: string,
@@ -306,35 +335,6 @@ function warpinvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpinvertOutputs {
-    /**
-     * Invert a non-linear warp field.
-     * 
-     * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input warp image.
-     * @param out the output warp image.
-     * @param template define a template image grid for the output warp
-     * @param displacement indicates that the input warp field is a displacement field; the output will also be a displacement field
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARPINVERT_METADATA);
     const params = warpinvert_params(in_, out, template, displacement, info, quiet, debug, force, nthreads, config, help, version)
@@ -348,6 +348,10 @@ export {
       WarpinvertOutputs,
       WarpinvertParameters,
       warpinvert,
+      warpinvert_cargs,
+      warpinvert_config_cargs,
       warpinvert_config_params,
+      warpinvert_execute,
+      warpinvert_outputs,
       warpinvert_params,
 };

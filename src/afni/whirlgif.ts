@@ -12,7 +12,7 @@ const WHIRLGIF_METADATA: Metadata = {
 
 
 interface WhirlgifParameters {
-    "__STYXTYPE__": "whirlgif";
+    "@type": "afni.whirlgif";
     "verbose": boolean;
     "loop"?: string | null | undefined;
     "transparency_index"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface WhirlgifParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "whirlgif": whirlgif_cargs,
+        "afni.whirlgif": whirlgif_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "whirlgif": whirlgif_outputs,
+        "afni.whirlgif": whirlgif_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface WhirlgifOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gif_files Input GIF files to be combined into a single GIF file.
+ * @param verbose Verbose mode
+ * @param loop Add the Netscape 'loop' extension. Optionally specify a loop count.
+ * @param transparency_index Set the colormap index 'index' to be transparent.
+ * @param inter_frame_delay Inter-frame timing delay.
+ * @param outfile Specify the output file to write the results to.
+ * @param infile Read a list of filenames from a file.
+ *
+ * @returns Parameter dictionary
+ */
 function whirlgif_params(
     gif_files: Array<InputPathType>,
     verbose: boolean = false,
@@ -83,21 +96,8 @@ function whirlgif_params(
     outfile: string | null = null,
     infile: InputPathType | null = null,
 ): WhirlgifParameters {
-    /**
-     * Build parameters.
-    
-     * @param gif_files Input GIF files to be combined into a single GIF file.
-     * @param verbose Verbose mode
-     * @param loop Add the Netscape 'loop' extension. Optionally specify a loop count.
-     * @param transparency_index Set the colormap index 'index' to be transparent.
-     * @param inter_frame_delay Inter-frame timing delay.
-     * @param outfile Specify the output file to write the results to.
-     * @param infile Read a list of filenames from a file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "whirlgif" as const,
+        "@type": "afni.whirlgif" as const,
         "verbose": verbose,
         "gif_files": gif_files,
     };
@@ -120,18 +120,18 @@ function whirlgif_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function whirlgif_cargs(
     params: WhirlgifParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("whirlgif");
     if ((params["verbose"] ?? null)) {
@@ -172,18 +172,18 @@ function whirlgif_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function whirlgif_outputs(
     params: WhirlgifParameters,
     execution: Execution,
 ): WhirlgifOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WhirlgifOutputs = {
         root: execution.outputFile("."),
         output_gif: ((params["outfile"] ?? null) !== null) ? execution.outputFile([(params["outfile"] ?? null)].join('')) : null,
@@ -192,22 +192,22 @@ function whirlgif_outputs(
 }
 
 
+/**
+ * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
+ */
 function whirlgif_execute(
     params: WhirlgifParameters,
     execution: Execution,
 ): WhirlgifOutputs {
-    /**
-     * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
-     */
     params = execution.params(params)
     const cargs = whirlgif_cargs(params, execution)
     const ret = whirlgif_outputs(params, execution)
@@ -216,6 +216,24 @@ function whirlgif_execute(
 }
 
 
+/**
+ * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param gif_files Input GIF files to be combined into a single GIF file.
+ * @param verbose Verbose mode
+ * @param loop Add the Netscape 'loop' extension. Optionally specify a loop count.
+ * @param transparency_index Set the colormap index 'index' to be transparent.
+ * @param inter_frame_delay Inter-frame timing delay.
+ * @param outfile Specify the output file to write the results to.
+ * @param infile Read a list of filenames from a file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
+ */
 function whirlgif(
     gif_files: Array<InputPathType>,
     verbose: boolean = false,
@@ -226,24 +244,6 @@ function whirlgif(
     infile: InputPathType | null = null,
     runner: Runner | null = null,
 ): WhirlgifOutputs {
-    /**
-     * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param gif_files Input GIF files to be combined into a single GIF file.
-     * @param verbose Verbose mode
-     * @param loop Add the Netscape 'loop' extension. Optionally specify a loop count.
-     * @param transparency_index Set the colormap index 'index' to be transparent.
-     * @param inter_frame_delay Inter-frame timing delay.
-     * @param outfile Specify the output file to write the results to.
-     * @param infile Read a list of filenames from a file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WHIRLGIF_METADATA);
     const params = whirlgif_params(gif_files, verbose, loop, transparency_index, inter_frame_delay, outfile, infile)
@@ -256,5 +256,8 @@ export {
       WhirlgifOutputs,
       WhirlgifParameters,
       whirlgif,
+      whirlgif_cargs,
+      whirlgif_execute,
+      whirlgif_outputs,
       whirlgif_params,
 };

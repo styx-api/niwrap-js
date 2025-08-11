@@ -12,42 +12,42 @@ const MRIS_SHRINKWRAP_METADATA: Metadata = {
 
 
 interface MrisShrinkwrapParameters {
-    "__STYXTYPE__": "mris_shrinkwrap";
+    "@type": "freesurfer.mris_shrinkwrap";
     "volume": InputPathType;
     "output_name": string;
     "threshold"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_shrinkwrap": mris_shrinkwrap_cargs,
+        "freesurfer.mris_shrinkwrap": mris_shrinkwrap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_shrinkwrap": mris_shrinkwrap_outputs,
+        "freesurfer.mris_shrinkwrap": mris_shrinkwrap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,22 +78,22 @@ interface MrisShrinkwrapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume Input image volume for shrink wrap.
+ * @param output_name Base name for output surface files.
+ * @param threshold Apply threshold to image before deforming on distance transform.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_shrinkwrap_params(
     volume: InputPathType,
     output_name: string,
     threshold: number | null = null,
 ): MrisShrinkwrapParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume Input image volume for shrink wrap.
-     * @param output_name Base name for output surface files.
-     * @param threshold Apply threshold to image before deforming on distance transform.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_shrinkwrap" as const,
+        "@type": "freesurfer.mris_shrinkwrap" as const,
         "volume": volume,
         "output_name": output_name,
     };
@@ -104,18 +104,18 @@ function mris_shrinkwrap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_shrinkwrap_cargs(
     params: MrisShrinkwrapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_shrinkwrap");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -130,18 +130,18 @@ function mris_shrinkwrap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_shrinkwrap_outputs(
     params: MrisShrinkwrapParameters,
     execution: Execution,
 ): MrisShrinkwrapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisShrinkwrapOutputs = {
         root: execution.outputFile("."),
         inner_skull: execution.outputFile([(params["output_name"] ?? null), "_inner_skull.tri"].join('')),
@@ -152,22 +152,22 @@ function mris_shrinkwrap_outputs(
 }
 
 
+/**
+ * Generate shrink-wrapped tessellations of the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
+ */
 function mris_shrinkwrap_execute(
     params: MrisShrinkwrapParameters,
     execution: Execution,
 ): MrisShrinkwrapOutputs {
-    /**
-     * Generate shrink-wrapped tessellations of the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_shrinkwrap_cargs(params, execution)
     const ret = mris_shrinkwrap_outputs(params, execution)
@@ -176,26 +176,26 @@ function mris_shrinkwrap_execute(
 }
 
 
+/**
+ * Generate shrink-wrapped tessellations of the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume Input image volume for shrink wrap.
+ * @param output_name Base name for output surface files.
+ * @param threshold Apply threshold to image before deforming on distance transform.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
+ */
 function mris_shrinkwrap(
     volume: InputPathType,
     output_name: string,
     threshold: number | null = null,
     runner: Runner | null = null,
 ): MrisShrinkwrapOutputs {
-    /**
-     * Generate shrink-wrapped tessellations of the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume Input image volume for shrink wrap.
-     * @param output_name Base name for output surface files.
-     * @param threshold Apply threshold to image before deforming on distance transform.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SHRINKWRAP_METADATA);
     const params = mris_shrinkwrap_params(volume, output_name, threshold)
@@ -208,5 +208,8 @@ export {
       MrisShrinkwrapOutputs,
       MrisShrinkwrapParameters,
       mris_shrinkwrap,
+      mris_shrinkwrap_cargs,
+      mris_shrinkwrap_execute,
+      mris_shrinkwrap_outputs,
       mris_shrinkwrap_params,
 };

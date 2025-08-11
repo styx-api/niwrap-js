@@ -12,7 +12,7 @@ const LABEL_MODIFY_KEYS_METADATA: Metadata = {
 
 
 interface LabelModifyKeysParameters {
-    "__STYXTYPE__": "label-modify-keys";
+    "@type": "workbench.label-modify-keys";
     "label_in": InputPathType;
     "remap_file": string;
     "label_out": string;
@@ -20,35 +20,35 @@ interface LabelModifyKeysParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-modify-keys": label_modify_keys_cargs,
+        "workbench.label-modify-keys": label_modify_keys_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-modify-keys": label_modify_keys_outputs,
+        "workbench.label-modify-keys": label_modify_keys_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface LabelModifyKeysOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input label file
+ * @param remap_file text file with old and new key values
+ * @param label_out output label file
+ * @param opt_column_column select a single column to use: the column number or name
+ *
+ * @returns Parameter dictionary
+ */
 function label_modify_keys_params(
     label_in: InputPathType,
     remap_file: string,
     label_out: string,
     opt_column_column: string | null = null,
 ): LabelModifyKeysParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input label file
-     * @param remap_file text file with old and new key values
-     * @param label_out output label file
-     * @param opt_column_column select a single column to use: the column number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-modify-keys" as const,
+        "@type": "workbench.label-modify-keys" as const,
         "label_in": label_in,
         "remap_file": remap_file,
         "label_out": label_out,
@@ -100,18 +100,18 @@ function label_modify_keys_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_modify_keys_cargs(
     params: LabelModifyKeysParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-modify-keys");
@@ -128,18 +128,18 @@ function label_modify_keys_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_modify_keys_outputs(
     params: LabelModifyKeysParameters,
     execution: Execution,
 ): LabelModifyKeysOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelModifyKeysOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -148,30 +148,30 @@ function label_modify_keys_outputs(
 }
 
 
+/**
+ * Change key values in a label file.
+ *
+ * <remap-file> should have lines of the form 'oldkey newkey', like so:
+ *
+ * 3 5
+ * 5 8
+ * 8 2
+ *
+ * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
+ */
 function label_modify_keys_execute(
     params: LabelModifyKeysParameters,
     execution: Execution,
 ): LabelModifyKeysOutputs {
-    /**
-     * Change key values in a label file.
-     * 
-     * <remap-file> should have lines of the form 'oldkey newkey', like so:
-     * 
-     * 3 5
-     * 5 8
-     * 8 2
-     * 
-     * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_modify_keys_cargs(params, execution)
     const ret = label_modify_keys_outputs(params, execution)
@@ -180,6 +180,29 @@ function label_modify_keys_execute(
 }
 
 
+/**
+ * Change key values in a label file.
+ *
+ * <remap-file> should have lines of the form 'oldkey newkey', like so:
+ *
+ * 3 5
+ * 5 8
+ * 8 2
+ *
+ * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input label file
+ * @param remap_file text file with old and new key values
+ * @param label_out output label file
+ * @param opt_column_column select a single column to use: the column number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
+ */
 function label_modify_keys(
     label_in: InputPathType,
     remap_file: string,
@@ -187,29 +210,6 @@ function label_modify_keys(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelModifyKeysOutputs {
-    /**
-     * Change key values in a label file.
-     * 
-     * <remap-file> should have lines of the form 'oldkey newkey', like so:
-     * 
-     * 3 5
-     * 5 8
-     * 8 2
-     * 
-     * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input label file
-     * @param remap_file text file with old and new key values
-     * @param label_out output label file
-     * @param opt_column_column select a single column to use: the column number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_MODIFY_KEYS_METADATA);
     const params = label_modify_keys_params(label_in, remap_file, label_out, opt_column_column)
@@ -222,5 +222,8 @@ export {
       LabelModifyKeysOutputs,
       LabelModifyKeysParameters,
       label_modify_keys,
+      label_modify_keys_cargs,
+      label_modify_keys_execute,
+      label_modify_keys_outputs,
       label_modify_keys_params,
 };

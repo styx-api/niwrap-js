@@ -12,41 +12,41 @@ const MORPH_KERNEL_METADATA: Metadata = {
 
 
 interface MorphKernelParameters {
-    "__STYXTYPE__": "morph_kernel";
+    "@type": "fsl.morph_kernel";
     "cube_side_length": number;
     "sphere_radius": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_kernel": morph_kernel_cargs,
+        "fsl.morph_kernel": morph_kernel_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "morph_kernel": morph_kernel_outputs,
+        "fsl.morph_kernel": morph_kernel_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MorphKernelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cube_side_length Side length of the cube (e.g., 11)
+ * @param sphere_radius Radius of the sphere (e.g., 5.5)
+ *
+ * @returns Parameter dictionary
+ */
 function morph_kernel_params(
     cube_side_length: number,
     sphere_radius: number,
 ): MorphKernelParameters {
-    /**
-     * Build parameters.
-    
-     * @param cube_side_length Side length of the cube (e.g., 11)
-     * @param sphere_radius Radius of the sphere (e.g., 5.5)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_kernel" as const,
+        "@type": "fsl.morph_kernel" as const,
         "cube_side_length": cube_side_length,
         "sphere_radius": sphere_radius,
     };
@@ -90,18 +90,18 @@ function morph_kernel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_kernel_cargs(
     params: MorphKernelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_kernel");
     cargs.push(String((params["cube_side_length"] ?? null)));
@@ -110,18 +110,18 @@ function morph_kernel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_kernel_outputs(
     params: MorphKernelParameters,
     execution: Execution,
 ): MorphKernelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphKernelOutputs = {
         root: execution.outputFile("."),
         morph_kernel_output: execution.outputFile(["sphere[OUTPUT_PREFIX].ker"].join('')),
@@ -130,22 +130,22 @@ function morph_kernel_outputs(
 }
 
 
+/**
+ * Tool to generate morphological kernels.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
+ */
 function morph_kernel_execute(
     params: MorphKernelParameters,
     execution: Execution,
 ): MorphKernelOutputs {
-    /**
-     * Tool to generate morphological kernels.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_kernel_cargs(params, execution)
     const ret = morph_kernel_outputs(params, execution)
@@ -154,24 +154,24 @@ function morph_kernel_execute(
 }
 
 
+/**
+ * Tool to generate morphological kernels.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param cube_side_length Side length of the cube (e.g., 11)
+ * @param sphere_radius Radius of the sphere (e.g., 5.5)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
+ */
 function morph_kernel(
     cube_side_length: number,
     sphere_radius: number,
     runner: Runner | null = null,
 ): MorphKernelOutputs {
-    /**
-     * Tool to generate morphological kernels.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param cube_side_length Side length of the cube (e.g., 11)
-     * @param sphere_radius Radius of the sphere (e.g., 5.5)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_KERNEL_METADATA);
     const params = morph_kernel_params(cube_side_length, sphere_radius)
@@ -184,5 +184,8 @@ export {
       MorphKernelOutputs,
       MorphKernelParameters,
       morph_kernel,
+      morph_kernel_cargs,
+      morph_kernel_execute,
+      morph_kernel_outputs,
       morph_kernel_params,
 };

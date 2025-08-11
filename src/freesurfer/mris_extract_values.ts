@@ -12,7 +12,7 @@ const MRIS_EXTRACT_VALUES_METADATA: Metadata = {
 
 
 interface MrisExtractValuesParameters {
-    "__STYXTYPE__": "mris_extract_values";
+    "@type": "freesurfer.mris_extract_values";
     "surface": InputPathType;
     "overlay": InputPathType;
     "annotation": InputPathType;
@@ -22,35 +22,35 @@ interface MrisExtractValuesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_extract_values": mris_extract_values_cargs,
+        "freesurfer.mris_extract_values": mris_extract_values_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_extract_values": mris_extract_values_outputs,
+        "freesurfer.mris_extract_values": mris_extract_values_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisExtractValuesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Path to the surface file
+ * @param overlay Path to the overlay file
+ * @param annotation Path to the annotation file
+ * @param csvfile Name of the output CSV file
+ * @param num_images Number of image files to process
+ * @param image_files List of image files
+ *
+ * @returns Parameter dictionary
+ */
 function mris_extract_values_params(
     surface: InputPathType,
     overlay: InputPathType,
@@ -81,20 +93,8 @@ function mris_extract_values_params(
     num_images: number,
     image_files: Array<InputPathType>,
 ): MrisExtractValuesParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Path to the surface file
-     * @param overlay Path to the overlay file
-     * @param annotation Path to the annotation file
-     * @param csvfile Name of the output CSV file
-     * @param num_images Number of image files to process
-     * @param image_files List of image files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_extract_values" as const,
+        "@type": "freesurfer.mris_extract_values" as const,
         "surface": surface,
         "overlay": overlay,
         "annotation": annotation,
@@ -106,18 +106,18 @@ function mris_extract_values_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_extract_values_cargs(
     params: MrisExtractValuesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_extract_values");
     cargs.push(
@@ -148,18 +148,18 @@ function mris_extract_values_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_extract_values_outputs(
     params: MrisExtractValuesParameters,
     execution: Execution,
 ): MrisExtractValuesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisExtractValuesOutputs = {
         root: execution.outputFile("."),
         output_csv: execution.outputFile([(params["csvfile"] ?? null)].join('')),
@@ -168,22 +168,22 @@ function mris_extract_values_outputs(
 }
 
 
+/**
+ * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
+ */
 function mris_extract_values_execute(
     params: MrisExtractValuesParameters,
     execution: Execution,
 ): MrisExtractValuesOutputs {
-    /**
-     * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_extract_values_cargs(params, execution)
     const ret = mris_extract_values_outputs(params, execution)
@@ -192,6 +192,23 @@ function mris_extract_values_execute(
 }
 
 
+/**
+ * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Path to the surface file
+ * @param overlay Path to the overlay file
+ * @param annotation Path to the annotation file
+ * @param csvfile Name of the output CSV file
+ * @param num_images Number of image files to process
+ * @param image_files List of image files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
+ */
 function mris_extract_values(
     surface: InputPathType,
     overlay: InputPathType,
@@ -201,23 +218,6 @@ function mris_extract_values(
     image_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): MrisExtractValuesOutputs {
-    /**
-     * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Path to the surface file
-     * @param overlay Path to the overlay file
-     * @param annotation Path to the annotation file
-     * @param csvfile Name of the output CSV file
-     * @param num_images Number of image files to process
-     * @param image_files List of image files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_EXTRACT_VALUES_METADATA);
     const params = mris_extract_values_params(surface, overlay, annotation, csvfile, num_images, image_files)
@@ -230,5 +230,8 @@ export {
       MrisExtractValuesOutputs,
       MrisExtractValuesParameters,
       mris_extract_values,
+      mris_extract_values_cargs,
+      mris_extract_values_execute,
+      mris_extract_values_outputs,
       mris_extract_values_params,
 };

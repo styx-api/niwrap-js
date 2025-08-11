@@ -12,7 +12,7 @@ const MRI_TESSELLATE_METADATA: Metadata = {
 
 
 interface MriTessellateParameters {
-    "__STYXTYPE__": "mri_tessellate";
+    "@type": "freesurfer.mri_tessellate";
     "input_volume": InputPathType;
     "label_value": number;
     "output_surf": string;
@@ -22,35 +22,35 @@ interface MriTessellateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_tessellate": mri_tessellate_cargs,
+        "freesurfer.mri_tessellate": mri_tessellate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_tessellate": mri_tessellate_outputs,
+        "freesurfer.mri_tessellate": mri_tessellate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriTessellateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume (e.g., a filled MRI image).
+ * @param label_value Label value for the tessellation. Integer value, if input is filled volume, 127 is rh, 255 is lh.
+ * @param output_surf Binary surface of the tessellation, output file.
+ * @param different_labels Tessellate the surface of all voxels with different labels.
+ * @param max_vertices Set the max number of vertices to nvertices, and the max number of faces to (2 * nvertices).
+ * @param real_ras Save surface with real RAS coordinates where c_(r,a,s) != 0.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_tessellate_params(
     input_volume: InputPathType,
     label_value: number,
@@ -81,20 +93,8 @@ function mri_tessellate_params(
     max_vertices: number | null = null,
     real_ras: boolean = false,
 ): MriTessellateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume (e.g., a filled MRI image).
-     * @param label_value Label value for the tessellation. Integer value, if input is filled volume, 127 is rh, 255 is lh.
-     * @param output_surf Binary surface of the tessellation, output file.
-     * @param different_labels Tessellate the surface of all voxels with different labels.
-     * @param max_vertices Set the max number of vertices to nvertices, and the max number of faces to (2 * nvertices).
-     * @param real_ras Save surface with real RAS coordinates where c_(r,a,s) != 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_tessellate" as const,
+        "@type": "freesurfer.mri_tessellate" as const,
         "input_volume": input_volume,
         "label_value": label_value,
         "output_surf": output_surf,
@@ -108,18 +108,18 @@ function mri_tessellate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_tessellate_cargs(
     params: MriTessellateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_tessellate");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -141,18 +141,18 @@ function mri_tessellate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_tessellate_outputs(
     params: MriTessellateParameters,
     execution: Execution,
 ): MriTessellateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriTessellateOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surf"] ?? null)].join('')),
@@ -161,22 +161,22 @@ function mri_tessellate_outputs(
 }
 
 
+/**
+ * This program creates a surface by tessellating a given input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
+ */
 function mri_tessellate_execute(
     params: MriTessellateParameters,
     execution: Execution,
 ): MriTessellateOutputs {
-    /**
-     * This program creates a surface by tessellating a given input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_tessellate_cargs(params, execution)
     const ret = mri_tessellate_outputs(params, execution)
@@ -185,6 +185,23 @@ function mri_tessellate_execute(
 }
 
 
+/**
+ * This program creates a surface by tessellating a given input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume (e.g., a filled MRI image).
+ * @param label_value Label value for the tessellation. Integer value, if input is filled volume, 127 is rh, 255 is lh.
+ * @param output_surf Binary surface of the tessellation, output file.
+ * @param different_labels Tessellate the surface of all voxels with different labels.
+ * @param max_vertices Set the max number of vertices to nvertices, and the max number of faces to (2 * nvertices).
+ * @param real_ras Save surface with real RAS coordinates where c_(r,a,s) != 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
+ */
 function mri_tessellate(
     input_volume: InputPathType,
     label_value: number,
@@ -194,23 +211,6 @@ function mri_tessellate(
     real_ras: boolean = false,
     runner: Runner | null = null,
 ): MriTessellateOutputs {
-    /**
-     * This program creates a surface by tessellating a given input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume (e.g., a filled MRI image).
-     * @param label_value Label value for the tessellation. Integer value, if input is filled volume, 127 is rh, 255 is lh.
-     * @param output_surf Binary surface of the tessellation, output file.
-     * @param different_labels Tessellate the surface of all voxels with different labels.
-     * @param max_vertices Set the max number of vertices to nvertices, and the max number of faces to (2 * nvertices).
-     * @param real_ras Save surface with real RAS coordinates where c_(r,a,s) != 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_TESSELLATE_METADATA);
     const params = mri_tessellate_params(input_volume, label_value, output_surf, different_labels, max_vertices, real_ras)
@@ -223,5 +223,8 @@ export {
       MriTessellateOutputs,
       MriTessellateParameters,
       mri_tessellate,
+      mri_tessellate_cargs,
+      mri_tessellate_execute,
+      mri_tessellate_outputs,
       mri_tessellate_params,
 };

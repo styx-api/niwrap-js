@@ -12,7 +12,7 @@ const SPHARM_RECO_METADATA: Metadata = {
 
 
 interface SpharmRecoParameters {
-    "__STYXTYPE__": "SpharmReco";
+    "@type": "afni.SpharmReco";
     "input_surface": string;
     "decomposition_order": number;
     "bases_prefix": string;
@@ -24,33 +24,33 @@ interface SpharmRecoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SpharmReco": spharm_reco_cargs,
+        "afni.SpharmReco": spharm_reco_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface SpharmRecoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Surface that provides the topology of the mesh (nodes' connections). TYPE specifies the input surface type.
+ * @param decomposition_order Decomposition order
+ * @param bases_prefix Prefix of files containing the bases functions (spherical harmonics). These files are generated with SpharmDeco.
+ * @param coefficients Coefficients files used to recompose data columns. Multiple coefficient files can be specified by repeating the option.
+ * @param output_prefix Write out the reconstructed data into dataset PREFIX. The output contains N columns; one for each COEF file.
+ * @param output_surface Write out a new surface with reconstructed coordinates. Requires N to be a multiple of 3.
+ * @param debug Debug levels (1-3)
+ * @param smoothing Smoothing parameter (0 .. 0.001) weighing the contribution of higher order harmonics
+ *
+ * @returns Parameter dictionary
+ */
 function spharm_reco_params(
     input_surface: string,
     decomposition_order: number,
@@ -80,22 +94,8 @@ function spharm_reco_params(
     debug: number | null = null,
     smoothing: number | null = null,
 ): SpharmRecoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Surface that provides the topology of the mesh (nodes' connections). TYPE specifies the input surface type.
-     * @param decomposition_order Decomposition order
-     * @param bases_prefix Prefix of files containing the bases functions (spherical harmonics). These files are generated with SpharmDeco.
-     * @param coefficients Coefficients files used to recompose data columns. Multiple coefficient files can be specified by repeating the option.
-     * @param output_prefix Write out the reconstructed data into dataset PREFIX. The output contains N columns; one for each COEF file.
-     * @param output_surface Write out a new surface with reconstructed coordinates. Requires N to be a multiple of 3.
-     * @param debug Debug levels (1-3)
-     * @param smoothing Smoothing parameter (0 .. 0.001) weighing the contribution of higher order harmonics
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SpharmReco" as const,
+        "@type": "afni.SpharmReco" as const,
         "input_surface": input_surface,
         "decomposition_order": decomposition_order,
         "bases_prefix": bases_prefix,
@@ -117,18 +117,18 @@ function spharm_reco_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spharm_reco_cargs(
     params: SpharmRecoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SpharmReco");
     cargs.push(
@@ -175,18 +175,18 @@ function spharm_reco_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spharm_reco_outputs(
     params: SpharmRecoParameters,
     execution: Execution,
 ): SpharmRecoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpharmRecoOutputs = {
         root: execution.outputFile("."),
     };
@@ -194,22 +194,22 @@ function spharm_reco_outputs(
 }
 
 
+/**
+ * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
+ */
 function spharm_reco_execute(
     params: SpharmRecoParameters,
     execution: Execution,
 ): SpharmRecoOutputs {
-    /**
-     * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
-     */
     params = execution.params(params)
     const cargs = spharm_reco_cargs(params, execution)
     const ret = spharm_reco_outputs(params, execution)
@@ -218,6 +218,25 @@ function spharm_reco_execute(
 }
 
 
+/**
+ * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_surface Surface that provides the topology of the mesh (nodes' connections). TYPE specifies the input surface type.
+ * @param decomposition_order Decomposition order
+ * @param bases_prefix Prefix of files containing the bases functions (spherical harmonics). These files are generated with SpharmDeco.
+ * @param coefficients Coefficients files used to recompose data columns. Multiple coefficient files can be specified by repeating the option.
+ * @param output_prefix Write out the reconstructed data into dataset PREFIX. The output contains N columns; one for each COEF file.
+ * @param output_surface Write out a new surface with reconstructed coordinates. Requires N to be a multiple of 3.
+ * @param debug Debug levels (1-3)
+ * @param smoothing Smoothing parameter (0 .. 0.001) weighing the contribution of higher order harmonics
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
+ */
 function spharm_reco(
     input_surface: string,
     decomposition_order: number,
@@ -229,25 +248,6 @@ function spharm_reco(
     smoothing: number | null = null,
     runner: Runner | null = null,
 ): SpharmRecoOutputs {
-    /**
-     * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_surface Surface that provides the topology of the mesh (nodes' connections). TYPE specifies the input surface type.
-     * @param decomposition_order Decomposition order
-     * @param bases_prefix Prefix of files containing the bases functions (spherical harmonics). These files are generated with SpharmDeco.
-     * @param coefficients Coefficients files used to recompose data columns. Multiple coefficient files can be specified by repeating the option.
-     * @param output_prefix Write out the reconstructed data into dataset PREFIX. The output contains N columns; one for each COEF file.
-     * @param output_surface Write out a new surface with reconstructed coordinates. Requires N to be a multiple of 3.
-     * @param debug Debug levels (1-3)
-     * @param smoothing Smoothing parameter (0 .. 0.001) weighing the contribution of higher order harmonics
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPHARM_RECO_METADATA);
     const params = spharm_reco_params(input_surface, decomposition_order, bases_prefix, coefficients, output_prefix, output_surface, debug, smoothing)
@@ -260,5 +260,8 @@ export {
       SpharmRecoOutputs,
       SpharmRecoParameters,
       spharm_reco,
+      spharm_reco_cargs,
+      spharm_reco_execute,
+      spharm_reco_outputs,
       spharm_reco_params,
 };

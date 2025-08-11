@@ -12,28 +12,28 @@ const CIFTI_GRADIENT_METADATA: Metadata = {
 
 
 interface CiftiGradientLeftSurfaceParameters {
-    "__STYXTYPE__": "left_surface";
+    "@type": "workbench.cifti-gradient.left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiGradientRightSurfaceParameters {
-    "__STYXTYPE__": "right_surface";
+    "@type": "workbench.cifti-gradient.right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiGradientCerebellumSurfaceParameters {
-    "__STYXTYPE__": "cerebellum_surface";
+    "@type": "workbench.cifti-gradient.cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiGradientParameters {
-    "__STYXTYPE__": "cifti-gradient";
+    "@type": "workbench.cifti-gradient";
     "cifti": InputPathType;
     "direction": string;
     "cifti_out": string;
@@ -48,57 +48,57 @@ interface CiftiGradientParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-gradient": cifti_gradient_cargs,
-        "left_surface": cifti_gradient_left_surface_cargs,
-        "right_surface": cifti_gradient_right_surface_cargs,
-        "cerebellum_surface": cifti_gradient_cerebellum_surface_cargs,
+        "workbench.cifti-gradient": cifti_gradient_cargs,
+        "workbench.cifti-gradient.left_surface": cifti_gradient_left_surface_cargs,
+        "workbench.cifti-gradient.right_surface": cifti_gradient_right_surface_cargs,
+        "workbench.cifti-gradient.cerebellum_surface": cifti_gradient_cerebellum_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-gradient": cifti_gradient_outputs,
+        "workbench.cifti-gradient": cifti_gradient_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the left surface file
+ * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_gradient_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiGradientLeftSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the left surface file
-     * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_surface" as const,
+        "@type": "workbench.cifti-gradient.left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -108,18 +108,18 @@ function cifti_gradient_left_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_gradient_left_surface_cargs(
     params: CiftiGradientLeftSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -133,20 +133,20 @@ function cifti_gradient_left_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the right surface file
+ * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_gradient_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiGradientRightSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the right surface file
-     * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_surface" as const,
+        "@type": "workbench.cifti-gradient.right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -156,18 +156,18 @@ function cifti_gradient_right_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_gradient_right_surface_cargs(
     params: CiftiGradientRightSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -181,20 +181,20 @@ function cifti_gradient_right_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the cerebellum surface file
+ * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_gradient_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiGradientCerebellumSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the cerebellum surface file
-     * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_surface" as const,
+        "@type": "workbench.cifti-gradient.cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -204,18 +204,18 @@ function cifti_gradient_cerebellum_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_gradient_cerebellum_surface_cargs(
     params: CiftiGradientCerebellumSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -250,6 +250,23 @@ interface CiftiGradientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti
+ * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth on the surface before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param opt_average_output output the average of the gradient magnitude maps instead of each gradient map separately
+ * @param opt_vectors_vectors_out output gradient vectors: the vectors, as a dscalar file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_gradient_params(
     cifti: InputPathType,
     direction: string,
@@ -263,25 +280,8 @@ function cifti_gradient_params(
     opt_average_output: boolean = false,
     opt_vectors_vectors_out: string | null = null,
 ): CiftiGradientParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti
-     * @param direction which dimension to take the gradient along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth on the surface before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
-     * @param opt_average_output output the average of the gradient magnitude maps instead of each gradient map separately
-     * @param opt_vectors_vectors_out output gradient vectors: the vectors, as a dscalar file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-gradient" as const,
+        "@type": "workbench.cifti-gradient" as const,
         "cifti": cifti,
         "direction": direction,
         "cifti_out": cifti_out,
@@ -310,18 +310,18 @@ function cifti_gradient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_gradient_cargs(
     params: CiftiGradientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-gradient");
@@ -329,13 +329,13 @@ function cifti_gradient_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null).__STYXTYPE__)((params["left_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null).__STYXTYPE__)((params["right_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null).__STYXTYPE__)((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_surface_presmooth_surface_kernel"] ?? null) !== null) {
         cargs.push(
@@ -365,18 +365,18 @@ function cifti_gradient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_gradient_outputs(
     params: CiftiGradientParameters,
     execution: Execution,
 ): CiftiGradientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiGradientOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -386,24 +386,24 @@ function cifti_gradient_outputs(
 }
 
 
+/**
+ * Take gradient of a cifti file.
+ *
+ * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
+ */
 function cifti_gradient_execute(
     params: CiftiGradientParameters,
     execution: Execution,
 ): CiftiGradientOutputs {
-    /**
-     * Take gradient of a cifti file.
-     * 
-     * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_gradient_cargs(params, execution)
     const ret = cifti_gradient_outputs(params, execution)
@@ -412,6 +412,30 @@ function cifti_gradient_execute(
 }
 
 
+/**
+ * Take gradient of a cifti file.
+ *
+ * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti
+ * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth on the surface before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param opt_average_output output the average of the gradient magnitude maps instead of each gradient map separately
+ * @param opt_vectors_vectors_out output gradient vectors: the vectors, as a dscalar file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
+ */
 function cifti_gradient(
     cifti: InputPathType,
     direction: string,
@@ -426,30 +450,6 @@ function cifti_gradient(
     opt_vectors_vectors_out: string | null = null,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
-    /**
-     * Take gradient of a cifti file.
-     * 
-     * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti
-     * @param direction which dimension to take the gradient along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth on the surface before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
-     * @param opt_average_output output the average of the gradient magnitude maps instead of each gradient map separately
-     * @param opt_vectors_vectors_out output gradient vectors: the vectors, as a dscalar file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_GRADIENT_METADATA);
     const params = cifti_gradient_params(cifti, direction, cifti_out, left_surface, right_surface, cerebellum_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, opt_average_output, opt_vectors_vectors_out)
@@ -465,8 +465,14 @@ export {
       CiftiGradientParameters,
       CiftiGradientRightSurfaceParameters,
       cifti_gradient,
+      cifti_gradient_cargs,
+      cifti_gradient_cerebellum_surface_cargs,
       cifti_gradient_cerebellum_surface_params,
+      cifti_gradient_execute,
+      cifti_gradient_left_surface_cargs,
       cifti_gradient_left_surface_params,
+      cifti_gradient_outputs,
       cifti_gradient_params,
+      cifti_gradient_right_surface_cargs,
       cifti_gradient_right_surface_params,
 };

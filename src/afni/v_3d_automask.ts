@@ -12,7 +12,7 @@ const V_3D_AUTOMASK_METADATA: Metadata = {
 
 
 interface V3dAutomaskParameters {
-    "__STYXTYPE__": "3dAutomask";
+    "@type": "afni.3dAutomask";
     "prefix"?: string | null | undefined;
     "apply_prefix"?: string | null | undefined;
     "clfrac"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface V3dAutomaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAutomask": v_3d_automask_cargs,
+        "afni.3dAutomask": v_3d_automask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAutomask": v_3d_automask_outputs,
+        "afni.3dAutomask": v_3d_automask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface V3dAutomaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dautomask.
+ * @param prefix Write mask into dataset with prefix 'ppp'. [Default == 'automask']
+ * @param apply_prefix Apply mask to input dataset and save masked dataset.
+ * @param clfrac Sets the clip level fraction (must be 0.1-0.9). a small value will tend to make the mask larger [default = 0.5].
+ * @param dilate Dilate the mask outwards.
+ * @param erode Erode the mask inwards.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_automask_params(
     in_file: InputPathType,
     prefix: string | null = null,
@@ -87,21 +100,8 @@ function v_3d_automask_params(
     erode: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
 ): V3dAutomaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dautomask.
-     * @param prefix Write mask into dataset with prefix 'ppp'. [Default == 'automask']
-     * @param apply_prefix Apply mask to input dataset and save masked dataset.
-     * @param clfrac Sets the clip level fraction (must be 0.1-0.9). a small value will tend to make the mask larger [default = 0.5].
-     * @param dilate Dilate the mask outwards.
-     * @param erode Erode the mask inwards.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAutomask" as const,
+        "@type": "afni.3dAutomask" as const,
         "in_file": in_file,
     };
     if (prefix !== null) {
@@ -126,18 +126,18 @@ function v_3d_automask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_automask_cargs(
     params: V3dAutomaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAutomask");
     if ((params["prefix"] ?? null) !== null) {
@@ -178,18 +178,18 @@ function v_3d_automask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_automask_outputs(
     params: V3dAutomaskParameters,
     execution: Execution,
 ): V3dAutomaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAutomaskOutputs = {
         root: execution.outputFile("."),
         brain_file: ((params["apply_prefix"] ?? null) !== null) ? execution.outputFile([(params["apply_prefix"] ?? null)].join('')) : null,
@@ -199,22 +199,22 @@ function v_3d_automask_outputs(
 }
 
 
+/**
+ * Create a brain-only mask of the image using AFNI 3dAutomask command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAutomaskOutputs`).
+ */
 function v_3d_automask_execute(
     params: V3dAutomaskParameters,
     execution: Execution,
 ): V3dAutomaskOutputs {
-    /**
-     * Create a brain-only mask of the image using AFNI 3dAutomask command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAutomaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_automask_cargs(params, execution)
     const ret = v_3d_automask_outputs(params, execution)
@@ -223,6 +223,24 @@ function v_3d_automask_execute(
 }
 
 
+/**
+ * Create a brain-only mask of the image using AFNI 3dAutomask command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dautomask.
+ * @param prefix Write mask into dataset with prefix 'ppp'. [Default == 'automask']
+ * @param apply_prefix Apply mask to input dataset and save masked dataset.
+ * @param clfrac Sets the clip level fraction (must be 0.1-0.9). a small value will tend to make the mask larger [default = 0.5].
+ * @param dilate Dilate the mask outwards.
+ * @param erode Erode the mask inwards.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAutomaskOutputs`).
+ */
 function v_3d_automask(
     in_file: InputPathType,
     prefix: string | null = null,
@@ -233,24 +251,6 @@ function v_3d_automask(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     runner: Runner | null = null,
 ): V3dAutomaskOutputs {
-    /**
-     * Create a brain-only mask of the image using AFNI 3dAutomask command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dautomask.
-     * @param prefix Write mask into dataset with prefix 'ppp'. [Default == 'automask']
-     * @param apply_prefix Apply mask to input dataset and save masked dataset.
-     * @param clfrac Sets the clip level fraction (must be 0.1-0.9). a small value will tend to make the mask larger [default = 0.5].
-     * @param dilate Dilate the mask outwards.
-     * @param erode Erode the mask inwards.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAutomaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AUTOMASK_METADATA);
     const params = v_3d_automask_params(in_file, prefix, apply_prefix, clfrac, dilate, erode, outputtype)
@@ -263,5 +263,8 @@ export {
       V3dAutomaskParameters,
       V_3D_AUTOMASK_METADATA,
       v_3d_automask,
+      v_3d_automask_cargs,
+      v_3d_automask_execute,
+      v_3d_automask_outputs,
       v_3d_automask_params,
 };

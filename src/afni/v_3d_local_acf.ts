@@ -12,7 +12,7 @@ const V_3D_LOCAL_ACF_METADATA: Metadata = {
 
 
 interface V3dLocalAcfParameters {
-    "__STYXTYPE__": "3dLocalACF";
+    "@type": "afni.3dLocalACF";
     "prefix": string;
     "input_file": InputPathType;
     "neighborhood"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface V3dLocalAcfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLocalACF": v_3d_local_acf_cargs,
+        "afni.3dLocalACF": v_3d_local_acf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLocalACF": v_3d_local_acf_outputs,
+        "afni.3dLocalACF": v_3d_local_acf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dLocalAcfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output dataset
+ * @param input_file Input time series dataset
+ * @param neighborhood Neighborhood specification (e.g., SPHERE(25))
+ * @param mask_file Dataset to mask the analysis
+ * @param auto_mask Automatically generate brain mask from input dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_local_acf_params(
     prefix: string,
     input_file: InputPathType,
@@ -79,19 +90,8 @@ function v_3d_local_acf_params(
     mask_file: InputPathType | null = null,
     auto_mask: boolean = false,
 ): V3dLocalAcfParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output dataset
-     * @param input_file Input time series dataset
-     * @param neighborhood Neighborhood specification (e.g., SPHERE(25))
-     * @param mask_file Dataset to mask the analysis
-     * @param auto_mask Automatically generate brain mask from input dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLocalACF" as const,
+        "@type": "afni.3dLocalACF" as const,
         "prefix": prefix,
         "input_file": input_file,
         "auto_mask": auto_mask,
@@ -106,18 +106,18 @@ function v_3d_local_acf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_local_acf_cargs(
     params: V3dLocalAcfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLocalACF");
     cargs.push(
@@ -144,18 +144,18 @@ function v_3d_local_acf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_local_acf_outputs(
     params: V3dLocalAcfParameters,
     execution: Execution,
 ): V3dLocalAcfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLocalAcfOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -164,22 +164,22 @@ function v_3d_local_acf_outputs(
 }
 
 
+/**
+ * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalAcfOutputs`).
+ */
 function v_3d_local_acf_execute(
     params: V3dLocalAcfParameters,
     execution: Execution,
 ): V3dLocalAcfOutputs {
-    /**
-     * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalAcfOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_local_acf_cargs(params, execution)
     const ret = v_3d_local_acf_outputs(params, execution)
@@ -188,6 +188,22 @@ function v_3d_local_acf_execute(
 }
 
 
+/**
+ * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output dataset
+ * @param input_file Input time series dataset
+ * @param neighborhood Neighborhood specification (e.g., SPHERE(25))
+ * @param mask_file Dataset to mask the analysis
+ * @param auto_mask Automatically generate brain mask from input dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalAcfOutputs`).
+ */
 function v_3d_local_acf(
     prefix: string,
     input_file: InputPathType,
@@ -196,22 +212,6 @@ function v_3d_local_acf(
     auto_mask: boolean = false,
     runner: Runner | null = null,
 ): V3dLocalAcfOutputs {
-    /**
-     * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output dataset
-     * @param input_file Input time series dataset
-     * @param neighborhood Neighborhood specification (e.g., SPHERE(25))
-     * @param mask_file Dataset to mask the analysis
-     * @param auto_mask Automatically generate brain mask from input dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalAcfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_ACF_METADATA);
     const params = v_3d_local_acf_params(prefix, input_file, neighborhood, mask_file, auto_mask)
@@ -224,5 +224,8 @@ export {
       V3dLocalAcfParameters,
       V_3D_LOCAL_ACF_METADATA,
       v_3d_local_acf,
+      v_3d_local_acf_cargs,
+      v_3d_local_acf_execute,
+      v_3d_local_acf_outputs,
       v_3d_local_acf_params,
 };

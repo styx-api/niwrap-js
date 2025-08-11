@@ -12,7 +12,7 @@ const MRI_LABEL_VOLUME_METADATA: Metadata = {
 
 
 interface MriLabelVolumeParameters {
-    "__STYXTYPE__": "mri_label_volume";
+    "@type": "freesurfer.mri_label_volume";
     "volume": InputPathType;
     "labels": Array<string>;
     "partial_volume_effects"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface MriLabelVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_label_volume": mri_label_volume_cargs,
+        "freesurfer.mri_label_volume": mri_label_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_label_volume": mri_label_volume_outputs,
+        "freesurfer.mri_label_volume": mri_label_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,28 @@ interface MriLabelVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume Volume file (e.g., volume.mgz) to analyze
+ * @param labels Labels to compute volume for
+ * @param partial_volume_effects Compute partial volume effects using intensity volume
+ * @param intracranial_volume Normalize by the intracranial volume in provided file
+ * @param spreadsheet_subject Output in spreadsheet mode, including subject name
+ * @param non_zero_voxels Compute volume of all non-zero voxels (e.g. for computing brain volume)
+ * @param replace_label_in Replace label <in> with label <out>.
+ * @param replace_label_out Label to replace with
+ * @param brain_volume Compute the brain volume from provided brain volume file and normalize by it
+ * @param percentage Compute volume as a percentage of all non-zero labels
+ * @param log_results Log results to provided file
+ * @param atlas_transform_file Specify LTA or XFM atlas transform file and scale factor to use for ICV correction
+ * @param atlas_scalefactor Scale factor for ICV correction
+ * @param etiv_transform_file Same as -atlas_icv
+ * @param etiv_scalefactor eTIV scale factor
+ * @param etiv_subject Same as -eTIV, and generate MATLAB data appending subject to structure
+ *
+ * @returns Parameter dictionary
+ */
 function mri_label_volume_params(
     volume: InputPathType,
     labels: Array<string>,
@@ -105,30 +127,8 @@ function mri_label_volume_params(
     etiv_scalefactor: number | null = null,
     etiv_subject: string | null = null,
 ): MriLabelVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume Volume file (e.g., volume.mgz) to analyze
-     * @param labels Labels to compute volume for
-     * @param partial_volume_effects Compute partial volume effects using intensity volume
-     * @param intracranial_volume Normalize by the intracranial volume in provided file
-     * @param spreadsheet_subject Output in spreadsheet mode, including subject name
-     * @param non_zero_voxels Compute volume of all non-zero voxels (e.g. for computing brain volume)
-     * @param replace_label_in Replace label <in> with label <out>.
-     * @param replace_label_out Label to replace with
-     * @param brain_volume Compute the brain volume from provided brain volume file and normalize by it
-     * @param percentage Compute volume as a percentage of all non-zero labels
-     * @param log_results Log results to provided file
-     * @param atlas_transform_file Specify LTA or XFM atlas transform file and scale factor to use for ICV correction
-     * @param atlas_scalefactor Scale factor for ICV correction
-     * @param etiv_transform_file Same as -atlas_icv
-     * @param etiv_scalefactor eTIV scale factor
-     * @param etiv_subject Same as -eTIV, and generate MATLAB data appending subject to structure
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_label_volume" as const,
+        "@type": "freesurfer.mri_label_volume" as const,
         "volume": volume,
         "labels": labels,
         "non_zero_voxels": non_zero_voxels,
@@ -174,18 +174,18 @@ function mri_label_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_label_volume_cargs(
     params: MriLabelVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_label_volume");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -263,18 +263,18 @@ function mri_label_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_label_volume_outputs(
     params: MriLabelVolumeParameters,
     execution: Execution,
 ): MriLabelVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLabelVolumeOutputs = {
         root: execution.outputFile("."),
         output_volume_results: execution.outputFile(["volume_label_results.txt"].join('')),
@@ -284,22 +284,22 @@ function mri_label_volume_outputs(
 }
 
 
+/**
+ * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
+ */
 function mri_label_volume_execute(
     params: MriLabelVolumeParameters,
     execution: Execution,
 ): MriLabelVolumeOutputs {
-    /**
-     * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_label_volume_cargs(params, execution)
     const ret = mri_label_volume_outputs(params, execution)
@@ -308,6 +308,33 @@ function mri_label_volume_execute(
 }
 
 
+/**
+ * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume Volume file (e.g., volume.mgz) to analyze
+ * @param labels Labels to compute volume for
+ * @param partial_volume_effects Compute partial volume effects using intensity volume
+ * @param intracranial_volume Normalize by the intracranial volume in provided file
+ * @param spreadsheet_subject Output in spreadsheet mode, including subject name
+ * @param non_zero_voxels Compute volume of all non-zero voxels (e.g. for computing brain volume)
+ * @param replace_label_in Replace label <in> with label <out>.
+ * @param replace_label_out Label to replace with
+ * @param brain_volume Compute the brain volume from provided brain volume file and normalize by it
+ * @param percentage Compute volume as a percentage of all non-zero labels
+ * @param log_results Log results to provided file
+ * @param atlas_transform_file Specify LTA or XFM atlas transform file and scale factor to use for ICV correction
+ * @param atlas_scalefactor Scale factor for ICV correction
+ * @param etiv_transform_file Same as -atlas_icv
+ * @param etiv_scalefactor eTIV scale factor
+ * @param etiv_subject Same as -eTIV, and generate MATLAB data appending subject to structure
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
+ */
 function mri_label_volume(
     volume: InputPathType,
     labels: Array<string>,
@@ -327,33 +354,6 @@ function mri_label_volume(
     etiv_subject: string | null = null,
     runner: Runner | null = null,
 ): MriLabelVolumeOutputs {
-    /**
-     * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume Volume file (e.g., volume.mgz) to analyze
-     * @param labels Labels to compute volume for
-     * @param partial_volume_effects Compute partial volume effects using intensity volume
-     * @param intracranial_volume Normalize by the intracranial volume in provided file
-     * @param spreadsheet_subject Output in spreadsheet mode, including subject name
-     * @param non_zero_voxels Compute volume of all non-zero voxels (e.g. for computing brain volume)
-     * @param replace_label_in Replace label <in> with label <out>.
-     * @param replace_label_out Label to replace with
-     * @param brain_volume Compute the brain volume from provided brain volume file and normalize by it
-     * @param percentage Compute volume as a percentage of all non-zero labels
-     * @param log_results Log results to provided file
-     * @param atlas_transform_file Specify LTA or XFM atlas transform file and scale factor to use for ICV correction
-     * @param atlas_scalefactor Scale factor for ICV correction
-     * @param etiv_transform_file Same as -atlas_icv
-     * @param etiv_scalefactor eTIV scale factor
-     * @param etiv_subject Same as -eTIV, and generate MATLAB data appending subject to structure
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LABEL_VOLUME_METADATA);
     const params = mri_label_volume_params(volume, labels, partial_volume_effects, intracranial_volume, spreadsheet_subject, non_zero_voxels, replace_label_in, replace_label_out, brain_volume, percentage, log_results, atlas_transform_file, atlas_scalefactor, etiv_transform_file, etiv_scalefactor, etiv_subject)
@@ -366,5 +366,8 @@ export {
       MriLabelVolumeOutputs,
       MriLabelVolumeParameters,
       mri_label_volume,
+      mri_label_volume_cargs,
+      mri_label_volume_execute,
+      mri_label_volume_outputs,
       mri_label_volume_params,
 };

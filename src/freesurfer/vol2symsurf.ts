@@ -12,7 +12,7 @@ const VOL2SYMSURF_METADATA: Metadata = {
 
 
 interface Vol2symsurfParameters {
-    "__STYXTYPE__": "vol2symsurf";
+    "@type": "freesurfer.vol2symsurf";
     "registration_file": InputPathType;
     "input_volume": InputPathType;
     "fwhm": number;
@@ -24,35 +24,35 @@ interface Vol2symsurfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vol2symsurf": vol2symsurf_cargs,
+        "freesurfer.vol2symsurf": vol2symsurf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vol2symsurf": vol2symsurf_outputs,
+        "freesurfer.vol2symsurf": vol2symsurf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,20 @@ interface Vol2symsurfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param registration_file Registration file
+ * @param input_volume Input volume in NIfTI format
+ * @param fwhm Full width at half maximum for surface smoothing
+ * @param output_stem Output stem
+ * @param regheader Subject for regheader
+ * @param projection_fraction Projection fraction
+ * @param no_diff Do not compute left-right hemisphere difference
+ * @param laterality_index Compute laterality index instead of simple difference
+ *
+ * @returns Parameter dictionary
+ */
 function vol2symsurf_params(
     registration_file: InputPathType,
     input_volume: InputPathType,
@@ -97,22 +111,8 @@ function vol2symsurf_params(
     no_diff: boolean = false,
     laterality_index: boolean = false,
 ): Vol2symsurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param registration_file Registration file
-     * @param input_volume Input volume in NIfTI format
-     * @param fwhm Full width at half maximum for surface smoothing
-     * @param output_stem Output stem
-     * @param regheader Subject for regheader
-     * @param projection_fraction Projection fraction
-     * @param no_diff Do not compute left-right hemisphere difference
-     * @param laterality_index Compute laterality index instead of simple difference
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vol2symsurf" as const,
+        "@type": "freesurfer.vol2symsurf" as const,
         "registration_file": registration_file,
         "input_volume": input_volume,
         "fwhm": fwhm,
@@ -132,18 +132,18 @@ function vol2symsurf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vol2symsurf_cargs(
     params: Vol2symsurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vol2symsurf");
     cargs.push(
@@ -186,18 +186,18 @@ function vol2symsurf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vol2symsurf_outputs(
     params: Vol2symsurfParameters,
     execution: Execution,
 ): Vol2symsurfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Vol2symsurfOutputs = {
         root: execution.outputFile("."),
         output_lh: ((params["output_stem"] ?? null) !== null) ? execution.outputFile([(params["output_stem"] ?? null), ".lh.nii"].join('')) : null,
@@ -209,22 +209,22 @@ function vol2symsurf_outputs(
 }
 
 
+/**
+ * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
+ */
 function vol2symsurf_execute(
     params: Vol2symsurfParameters,
     execution: Execution,
 ): Vol2symsurfOutputs {
-    /**
-     * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
-     */
     params = execution.params(params)
     const cargs = vol2symsurf_cargs(params, execution)
     const ret = vol2symsurf_outputs(params, execution)
@@ -233,6 +233,25 @@ function vol2symsurf_execute(
 }
 
 
+/**
+ * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param registration_file Registration file
+ * @param input_volume Input volume in NIfTI format
+ * @param fwhm Full width at half maximum for surface smoothing
+ * @param output_stem Output stem
+ * @param regheader Subject for regheader
+ * @param projection_fraction Projection fraction
+ * @param no_diff Do not compute left-right hemisphere difference
+ * @param laterality_index Compute laterality index instead of simple difference
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
+ */
 function vol2symsurf(
     registration_file: InputPathType,
     input_volume: InputPathType,
@@ -244,25 +263,6 @@ function vol2symsurf(
     laterality_index: boolean = false,
     runner: Runner | null = null,
 ): Vol2symsurfOutputs {
-    /**
-     * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param registration_file Registration file
-     * @param input_volume Input volume in NIfTI format
-     * @param fwhm Full width at half maximum for surface smoothing
-     * @param output_stem Output stem
-     * @param regheader Subject for regheader
-     * @param projection_fraction Projection fraction
-     * @param no_diff Do not compute left-right hemisphere difference
-     * @param laterality_index Compute laterality index instead of simple difference
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOL2SYMSURF_METADATA);
     const params = vol2symsurf_params(registration_file, input_volume, fwhm, output_stem, regheader, projection_fraction, no_diff, laterality_index)
@@ -275,5 +275,8 @@ export {
       Vol2symsurfOutputs,
       Vol2symsurfParameters,
       vol2symsurf,
+      vol2symsurf_cargs,
+      vol2symsurf_execute,
+      vol2symsurf_outputs,
       vol2symsurf_params,
 };

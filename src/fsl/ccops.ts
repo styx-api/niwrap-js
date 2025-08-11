@@ -12,7 +12,7 @@ const CCOPS_METADATA: Metadata = {
 
 
 interface CcopsParameters {
-    "__STYXTYPE__": "ccops";
+    "@type": "fsl.ccops";
     "basename": string;
     "infile"?: InputPathType | null | undefined;
     "tract_dir"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface CcopsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ccops": ccops_cargs,
+        "fsl.ccops": ccops_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ccops": ccops_outputs,
+        "fsl.ccops": ccops_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface CcopsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param basename Output basename
+ * @param infile Input matrix
+ * @param tract_dir Tractography Results Directory
+ * @param exclusion_mask Exclusion mask (in tract space)
+ * @param reorder_seedspace Do seedspace reordering (default no)
+ * @param reorder_tractspace Do tractspace reordering (default no)
+ * @param tract_reord Propagate seed reordering onto tract space
+ * @param connexity_constraint Add connexity constraint - value between 0 and 1 (0 is no constraint). Default is 0
+ * @param binarise_val Binarise at (default 0 - no binarisation)
+ * @param matrix_power Power to raise the correlation matrix to (default 1)
+ * @param brain_mask Brain mask used to output the clustered ROI mask (not necessary if --dir set)
+ * @param scheme Reordering algorithm. Can be either spectral (default), kmeans or fuzzy
+ * @param nclusters Number of clusters to be used in kmeans or fuzzy
+ * @param help Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function ccops_params(
     basename: string,
     infile: InputPathType | null = null,
@@ -97,28 +117,8 @@ function ccops_params(
     nclusters: number | null = null,
     help: boolean = false,
 ): CcopsParameters {
-    /**
-     * Build parameters.
-    
-     * @param basename Output basename
-     * @param infile Input matrix
-     * @param tract_dir Tractography Results Directory
-     * @param exclusion_mask Exclusion mask (in tract space)
-     * @param reorder_seedspace Do seedspace reordering (default no)
-     * @param reorder_tractspace Do tractspace reordering (default no)
-     * @param tract_reord Propagate seed reordering onto tract space
-     * @param connexity_constraint Add connexity constraint - value between 0 and 1 (0 is no constraint). Default is 0
-     * @param binarise_val Binarise at (default 0 - no binarisation)
-     * @param matrix_power Power to raise the correlation matrix to (default 1)
-     * @param brain_mask Brain mask used to output the clustered ROI mask (not necessary if --dir set)
-     * @param scheme Reordering algorithm. Can be either spectral (default), kmeans or fuzzy
-     * @param nclusters Number of clusters to be used in kmeans or fuzzy
-     * @param help Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ccops" as const,
+        "@type": "fsl.ccops" as const,
         "basename": basename,
         "reorder_seedspace": reorder_seedspace,
         "reorder_tractspace": reorder_tractspace,
@@ -156,18 +156,18 @@ function ccops_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ccops_cargs(
     params: CcopsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ccops");
     cargs.push(
@@ -244,18 +244,18 @@ function ccops_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ccops_outputs(
     params: CcopsParameters,
     execution: Execution,
 ): CcopsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CcopsOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["basename"] ?? null), "_output.nii.gz"].join('')),
@@ -264,22 +264,22 @@ function ccops_outputs(
 }
 
 
+/**
+ * ccops - Clustering of Connectomes Using Probabilistic Tractography.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CcopsOutputs`).
+ */
 function ccops_execute(
     params: CcopsParameters,
     execution: Execution,
 ): CcopsOutputs {
-    /**
-     * ccops - Clustering of Connectomes Using Probabilistic Tractography.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CcopsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ccops_cargs(params, execution)
     const ret = ccops_outputs(params, execution)
@@ -288,6 +288,31 @@ function ccops_execute(
 }
 
 
+/**
+ * ccops - Clustering of Connectomes Using Probabilistic Tractography.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param basename Output basename
+ * @param infile Input matrix
+ * @param tract_dir Tractography Results Directory
+ * @param exclusion_mask Exclusion mask (in tract space)
+ * @param reorder_seedspace Do seedspace reordering (default no)
+ * @param reorder_tractspace Do tractspace reordering (default no)
+ * @param tract_reord Propagate seed reordering onto tract space
+ * @param connexity_constraint Add connexity constraint - value between 0 and 1 (0 is no constraint). Default is 0
+ * @param binarise_val Binarise at (default 0 - no binarisation)
+ * @param matrix_power Power to raise the correlation matrix to (default 1)
+ * @param brain_mask Brain mask used to output the clustered ROI mask (not necessary if --dir set)
+ * @param scheme Reordering algorithm. Can be either spectral (default), kmeans or fuzzy
+ * @param nclusters Number of clusters to be used in kmeans or fuzzy
+ * @param help Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CcopsOutputs`).
+ */
 function ccops(
     basename: string,
     infile: InputPathType | null = null,
@@ -305,31 +330,6 @@ function ccops(
     help: boolean = false,
     runner: Runner | null = null,
 ): CcopsOutputs {
-    /**
-     * ccops - Clustering of Connectomes Using Probabilistic Tractography.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param basename Output basename
-     * @param infile Input matrix
-     * @param tract_dir Tractography Results Directory
-     * @param exclusion_mask Exclusion mask (in tract space)
-     * @param reorder_seedspace Do seedspace reordering (default no)
-     * @param reorder_tractspace Do tractspace reordering (default no)
-     * @param tract_reord Propagate seed reordering onto tract space
-     * @param connexity_constraint Add connexity constraint - value between 0 and 1 (0 is no constraint). Default is 0
-     * @param binarise_val Binarise at (default 0 - no binarisation)
-     * @param matrix_power Power to raise the correlation matrix to (default 1)
-     * @param brain_mask Brain mask used to output the clustered ROI mask (not necessary if --dir set)
-     * @param scheme Reordering algorithm. Can be either spectral (default), kmeans or fuzzy
-     * @param nclusters Number of clusters to be used in kmeans or fuzzy
-     * @param help Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CcopsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CCOPS_METADATA);
     const params = ccops_params(basename, infile, tract_dir, exclusion_mask, reorder_seedspace, reorder_tractspace, tract_reord, connexity_constraint, binarise_val, matrix_power, brain_mask, scheme, nclusters, help)
@@ -342,5 +342,8 @@ export {
       CcopsOutputs,
       CcopsParameters,
       ccops,
+      ccops_cargs,
+      ccops_execute,
+      ccops_outputs,
       ccops_params,
 };

@@ -12,7 +12,7 @@ const MRI_DEFACER_METADATA: Metadata = {
 
 
 interface MriDefacerParameters {
-    "__STYXTYPE__": "mri_defacer";
+    "@type": "freesurfer.mri_defacer";
     "input_volume": InputPathType;
     "headmask": InputPathType;
     "tempsurf": InputPathType;
@@ -40,33 +40,33 @@ interface MriDefacerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_defacer": mri_defacer_cargs,
+        "freesurfer.mri_defacer": mri_defacer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface MriDefacerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume
+ * @param headmask Head mask volume
+ * @param tempsurf Template surface file
+ * @param defaced_volume Output defaced volume
+ * @param templabel Template label, specify one or multiple labels
+ * @param watermark Watermark density
+ * @param facemask Face mask volume
+ * @param fill_constants Constants for filling within/outside the mask
+ * @param exclude_mask Mask to exclude from defacing
+ * @param tempreg Registration file to apply to surface
+ * @param minsurfpath Output minimum surface path
+ * @param maxsurfpath Output maximum surface path
+ * @param distbounds File with distance bounds for each label
+ * @param distoverlay Overlay file showing distance for each vertex
+ * @param distdat File with distances for each vertex
+ * @param statspath Statistics path for nxmask with means and modes
+ * @param output_tempsurf Output template surface after watermark/ripple
+ * @param apply_to_volume Apply face mask and registration to another volume
+ * @param ripple_center Center of ripple effect
+ * @param apply_ripple Apply ripple effect on surface
+ * @param diagnostic_level Set diagnostic level
+ * @param debug Turn on debugging
+ * @param checkopts Check options and exit without executing
+ * @param version Print version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_defacer_params(
     input_volume: InputPathType,
     headmask: InputPathType,
@@ -112,38 +142,8 @@ function mri_defacer_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): MriDefacerParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume
-     * @param headmask Head mask volume
-     * @param tempsurf Template surface file
-     * @param defaced_volume Output defaced volume
-     * @param templabel Template label, specify one or multiple labels
-     * @param watermark Watermark density
-     * @param facemask Face mask volume
-     * @param fill_constants Constants for filling within/outside the mask
-     * @param exclude_mask Mask to exclude from defacing
-     * @param tempreg Registration file to apply to surface
-     * @param minsurfpath Output minimum surface path
-     * @param maxsurfpath Output maximum surface path
-     * @param distbounds File with distance bounds for each label
-     * @param distoverlay Overlay file showing distance for each vertex
-     * @param distdat File with distances for each vertex
-     * @param statspath Statistics path for nxmask with means and modes
-     * @param output_tempsurf Output template surface after watermark/ripple
-     * @param apply_to_volume Apply face mask and registration to another volume
-     * @param ripple_center Center of ripple effect
-     * @param apply_ripple Apply ripple effect on surface
-     * @param diagnostic_level Set diagnostic level
-     * @param debug Turn on debugging
-     * @param checkopts Check options and exit without executing
-     * @param version Print version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_defacer" as const,
+        "@type": "freesurfer.mri_defacer" as const,
         "input_volume": input_volume,
         "headmask": headmask,
         "tempsurf": tempsurf,
@@ -207,18 +207,18 @@ function mri_defacer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_defacer_cargs(
     params: MriDefacerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_defacer");
     cargs.push(
@@ -352,18 +352,18 @@ function mri_defacer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_defacer_outputs(
     params: MriDefacerParameters,
     execution: Execution,
 ): MriDefacerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDefacerOutputs = {
         root: execution.outputFile("."),
     };
@@ -371,22 +371,22 @@ function mri_defacer_outputs(
 }
 
 
+/**
+ * Tool for defacing MRI images to remove facial features.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
+ */
 function mri_defacer_execute(
     params: MriDefacerParameters,
     execution: Execution,
 ): MriDefacerOutputs {
-    /**
-     * Tool for defacing MRI images to remove facial features.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_defacer_cargs(params, execution)
     const ret = mri_defacer_outputs(params, execution)
@@ -395,6 +395,41 @@ function mri_defacer_execute(
 }
 
 
+/**
+ * Tool for defacing MRI images to remove facial features.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume
+ * @param headmask Head mask volume
+ * @param tempsurf Template surface file
+ * @param defaced_volume Output defaced volume
+ * @param templabel Template label, specify one or multiple labels
+ * @param watermark Watermark density
+ * @param facemask Face mask volume
+ * @param fill_constants Constants for filling within/outside the mask
+ * @param exclude_mask Mask to exclude from defacing
+ * @param tempreg Registration file to apply to surface
+ * @param minsurfpath Output minimum surface path
+ * @param maxsurfpath Output maximum surface path
+ * @param distbounds File with distance bounds for each label
+ * @param distoverlay Overlay file showing distance for each vertex
+ * @param distdat File with distances for each vertex
+ * @param statspath Statistics path for nxmask with means and modes
+ * @param output_tempsurf Output template surface after watermark/ripple
+ * @param apply_to_volume Apply face mask and registration to another volume
+ * @param ripple_center Center of ripple effect
+ * @param apply_ripple Apply ripple effect on surface
+ * @param diagnostic_level Set diagnostic level
+ * @param debug Turn on debugging
+ * @param checkopts Check options and exit without executing
+ * @param version Print version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
+ */
 function mri_defacer(
     input_volume: InputPathType,
     headmask: InputPathType,
@@ -422,41 +457,6 @@ function mri_defacer(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriDefacerOutputs {
-    /**
-     * Tool for defacing MRI images to remove facial features.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume
-     * @param headmask Head mask volume
-     * @param tempsurf Template surface file
-     * @param defaced_volume Output defaced volume
-     * @param templabel Template label, specify one or multiple labels
-     * @param watermark Watermark density
-     * @param facemask Face mask volume
-     * @param fill_constants Constants for filling within/outside the mask
-     * @param exclude_mask Mask to exclude from defacing
-     * @param tempreg Registration file to apply to surface
-     * @param minsurfpath Output minimum surface path
-     * @param maxsurfpath Output maximum surface path
-     * @param distbounds File with distance bounds for each label
-     * @param distoverlay Overlay file showing distance for each vertex
-     * @param distdat File with distances for each vertex
-     * @param statspath Statistics path for nxmask with means and modes
-     * @param output_tempsurf Output template surface after watermark/ripple
-     * @param apply_to_volume Apply face mask and registration to another volume
-     * @param ripple_center Center of ripple effect
-     * @param apply_ripple Apply ripple effect on surface
-     * @param diagnostic_level Set diagnostic level
-     * @param debug Turn on debugging
-     * @param checkopts Check options and exit without executing
-     * @param version Print version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DEFACER_METADATA);
     const params = mri_defacer_params(input_volume, headmask, tempsurf, defaced_volume, templabel, watermark, facemask, fill_constants, exclude_mask, tempreg, minsurfpath, maxsurfpath, distbounds, distoverlay, distdat, statspath, output_tempsurf, apply_to_volume, ripple_center, apply_ripple, diagnostic_level, debug, checkopts, version)
@@ -469,5 +469,8 @@ export {
       MriDefacerOutputs,
       MriDefacerParameters,
       mri_defacer,
+      mri_defacer_cargs,
+      mri_defacer_execute,
+      mri_defacer_outputs,
       mri_defacer_params,
 };

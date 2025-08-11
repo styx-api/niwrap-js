@@ -12,40 +12,40 @@ const V_3D_AFNITO_RAW_METADATA: Metadata = {
 
 
 interface V3dAfnitoRawParameters {
-    "__STYXTYPE__": "3dAFNItoRaw";
+    "@type": "afni.3dAFNItoRaw";
     "output_file"?: string | null | undefined;
     "force_float": boolean;
     "dataset": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAFNItoRaw": v_3d_afnito_raw_cargs,
+        "afni.3dAFNItoRaw": v_3d_afnito_raw_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface V3dAfnitoRawOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input AFNI dataset with possible modifiers for sub-brick and sub-range selection.
+ * @param output_file Name of the output file (not an AFNI dataset prefix). Default is rawxyz.dat.
+ * @param force_float Force floating point output. Floating point forced if any sub-brik scale factors not equal to 1.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_afnito_raw_params(
     dataset: string,
     output_file: string | null = null,
     force_float: boolean = false,
 ): V3dAfnitoRawParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input AFNI dataset with possible modifiers for sub-brick and sub-range selection.
-     * @param output_file Name of the output file (not an AFNI dataset prefix). Default is rawxyz.dat.
-     * @param force_float Force floating point output. Floating point forced if any sub-brik scale factors not equal to 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAFNItoRaw" as const,
+        "@type": "afni.3dAFNItoRaw" as const,
         "force_float": force_float,
         "dataset": dataset,
     };
@@ -91,18 +91,18 @@ function v_3d_afnito_raw_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_afnito_raw_cargs(
     params: V3dAfnitoRawParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAFNItoRaw");
     if ((params["output_file"] ?? null) !== null) {
@@ -119,18 +119,18 @@ function v_3d_afnito_raw_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_afnito_raw_outputs(
     params: V3dAfnitoRawParameters,
     execution: Execution,
 ): V3dAfnitoRawOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAfnitoRawOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function v_3d_afnito_raw_outputs(
 }
 
 
+/**
+ * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoRawOutputs`).
+ */
 function v_3d_afnito_raw_execute(
     params: V3dAfnitoRawParameters,
     execution: Execution,
 ): V3dAfnitoRawOutputs {
-    /**
-     * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoRawOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_afnito_raw_cargs(params, execution)
     const ret = v_3d_afnito_raw_outputs(params, execution)
@@ -162,26 +162,26 @@ function v_3d_afnito_raw_execute(
 }
 
 
+/**
+ * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input AFNI dataset with possible modifiers for sub-brick and sub-range selection.
+ * @param output_file Name of the output file (not an AFNI dataset prefix). Default is rawxyz.dat.
+ * @param force_float Force floating point output. Floating point forced if any sub-brik scale factors not equal to 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoRawOutputs`).
+ */
 function v_3d_afnito_raw(
     dataset: string,
     output_file: string | null = null,
     force_float: boolean = false,
     runner: Runner | null = null,
 ): V3dAfnitoRawOutputs {
-    /**
-     * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input AFNI dataset with possible modifiers for sub-brick and sub-range selection.
-     * @param output_file Name of the output file (not an AFNI dataset prefix). Default is rawxyz.dat.
-     * @param force_float Force floating point output. Floating point forced if any sub-brik scale factors not equal to 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoRawOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AFNITO_RAW_METADATA);
     const params = v_3d_afnito_raw_params(dataset, output_file, force_float)
@@ -194,5 +194,8 @@ export {
       V3dAfnitoRawParameters,
       V_3D_AFNITO_RAW_METADATA,
       v_3d_afnito_raw,
+      v_3d_afnito_raw_cargs,
+      v_3d_afnito_raw_execute,
+      v_3d_afnito_raw_outputs,
       v_3d_afnito_raw_params,
 };

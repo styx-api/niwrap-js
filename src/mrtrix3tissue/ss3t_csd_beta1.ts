@@ -12,21 +12,21 @@ const SS3T_CSD_BETA1_METADATA: Metadata = {
 
 
 interface Ss3tCsdBeta1ConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix3tissue.ss3t_csd_beta1.config";
     "key": string;
     "value": string;
 }
 
 
 interface Ss3tCsdBeta1ResponseOdfParameters {
-    "__STYXTYPE__": "response_odf";
+    "@type": "mrtrix3tissue.ss3t_csd_beta1.response_odf";
     "response": InputPathType;
     "odf": string;
 }
 
 
 interface Ss3tCsdBeta1Parameters {
-    "__STYXTYPE__": "ss3t_csd_beta1";
+    "@type": "mrtrix3tissue.ss3t_csd_beta1";
     "mask"?: InputPathType | null | undefined;
     "bzero_pct"?: number | null | undefined;
     "niter"?: number | null | undefined;
@@ -43,57 +43,57 @@ interface Ss3tCsdBeta1Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ss3t_csd_beta1": ss3t_csd_beta1_cargs,
-        "config": ss3t_csd_beta1_config_cargs,
-        "response_odf": ss3t_csd_beta1_response_odf_cargs,
+        "mrtrix3tissue.ss3t_csd_beta1": ss3t_csd_beta1_cargs,
+        "mrtrix3tissue.ss3t_csd_beta1.config": ss3t_csd_beta1_config_cargs,
+        "mrtrix3tissue.ss3t_csd_beta1.response_odf": ss3t_csd_beta1_response_odf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ss3t_csd_beta1": ss3t_csd_beta1_outputs,
-        "response_odf": ss3t_csd_beta1_response_odf_outputs,
+        "mrtrix3tissue.ss3t_csd_beta1": ss3t_csd_beta1_outputs,
+        "mrtrix3tissue.ss3t_csd_beta1.response_odf": ss3t_csd_beta1_response_odf_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function ss3t_csd_beta1_config_params(
     key: string,
     value: string,
 ): Ss3tCsdBeta1ConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix3tissue.ss3t_csd_beta1.config" as const,
         "key": key,
         "value": value,
     };
@@ -101,18 +101,18 @@ function ss3t_csd_beta1_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ss3t_csd_beta1_config_cargs(
     params: Ss3tCsdBeta1ConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -138,20 +138,20 @@ interface Ss3tCsdBeta1ResponseOdfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param response input tissue response
+ * @param odf output ODF image
+ *
+ * @returns Parameter dictionary
+ */
 function ss3t_csd_beta1_response_odf_params(
     response: InputPathType,
     odf: string,
 ): Ss3tCsdBeta1ResponseOdfParameters {
-    /**
-     * Build parameters.
-    
-     * @param response input tissue response
-     * @param odf output ODF image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "response_odf" as const,
+        "@type": "mrtrix3tissue.ss3t_csd_beta1.response_odf" as const,
         "response": response,
         "odf": odf,
     };
@@ -159,18 +159,18 @@ function ss3t_csd_beta1_response_odf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ss3t_csd_beta1_response_odf_cargs(
     params: Ss3tCsdBeta1ResponseOdfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["response"] ?? null)));
     cargs.push((params["odf"] ?? null));
@@ -178,18 +178,18 @@ function ss3t_csd_beta1_response_odf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ss3t_csd_beta1_response_odf_outputs(
     params: Ss3tCsdBeta1ResponseOdfParameters,
     execution: Execution,
 ): Ss3tCsdBeta1ResponseOdfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Ss3tCsdBeta1ResponseOdfOutputs = {
         root: execution.outputFile("."),
         odf: execution.outputFile([(params["odf"] ?? null)].join('')),
@@ -215,6 +215,25 @@ interface Ss3tCsdBeta1Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dwi the input diffusion-weighted image
+ * @param response_odf pairs of input tissue response and output ODF images
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param bzero_pct the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
+ * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function ss3t_csd_beta1_params(
     dwi: InputPathType,
     response_odf: Array<Ss3tCsdBeta1ResponseOdfParameters>,
@@ -230,27 +249,8 @@ function ss3t_csd_beta1_params(
     help: boolean = false,
     version: boolean = false,
 ): Ss3tCsdBeta1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param dwi the input diffusion-weighted image
-     * @param response_odf pairs of input tissue response and output ODF images
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param bzero_pct the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
-     * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ss3t_csd_beta1" as const,
+        "@type": "mrtrix3tissue.ss3t_csd_beta1" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -279,18 +279,18 @@ function ss3t_csd_beta1_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ss3t_csd_beta1_cargs(
     params: Ss3tCsdBeta1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ss3t_csd_beta1");
     if ((params["mask"] ?? null) !== null) {
@@ -330,7 +330,7 @@ function ss3t_csd_beta1_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -339,49 +339,49 @@ function ss3t_csd_beta1_cargs(
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
-    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ss3t_csd_beta1_outputs(
     params: Ss3tCsdBeta1Parameters,
     execution: Execution,
 ): Ss3tCsdBeta1Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Ss3tCsdBeta1Outputs = {
         root: execution.outputFile("."),
-        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null),
+        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * SS3T-CSD: beta 1 implementation
+ *
+ * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.
+ *
+ * Author: MRTrix3Tissue Developers
+ *
+ * URL: https://3tissue.github.io/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
+ */
 function ss3t_csd_beta1_execute(
     params: Ss3tCsdBeta1Parameters,
     execution: Execution,
 ): Ss3tCsdBeta1Outputs {
-    /**
-     * SS3T-CSD: beta 1 implementation
-     * 
-     * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.
-     * 
-     * Author: MRTrix3Tissue Developers
-     * 
-     * URL: https://3tissue.github.io/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
-     */
     params = execution.params(params)
     const cargs = ss3t_csd_beta1_cargs(params, execution)
     const ret = ss3t_csd_beta1_outputs(params, execution)
@@ -390,6 +390,32 @@ function ss3t_csd_beta1_execute(
 }
 
 
+/**
+ * SS3T-CSD: beta 1 implementation
+ *
+ * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.
+ *
+ * Author: MRTrix3Tissue Developers
+ *
+ * URL: https://3tissue.github.io/
+ *
+ * @param dwi the input diffusion-weighted image
+ * @param response_odf pairs of input tissue response and output ODF images
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param bzero_pct the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
+ * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
+ */
 function ss3t_csd_beta1(
     dwi: InputPathType,
     response_odf: Array<Ss3tCsdBeta1ResponseOdfParameters>,
@@ -406,32 +432,6 @@ function ss3t_csd_beta1(
     version: boolean = false,
     runner: Runner | null = null,
 ): Ss3tCsdBeta1Outputs {
-    /**
-     * SS3T-CSD: beta 1 implementation
-     * 
-     * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.
-     * 
-     * Author: MRTrix3Tissue Developers
-     * 
-     * URL: https://3tissue.github.io/
-    
-     * @param dwi the input diffusion-weighted image
-     * @param response_odf pairs of input tissue response and output ODF images
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param bzero_pct the threshold below which the amplitude of the FOD is assumed to be zero, expressed as an absolute amplitude (default = 0).
-     * @param niter the maximum number of iterations to perform for each voxel (default = 50). Use '-niter 0' for a linear unconstrained spherical deconvolution.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SS3T_CSD_BETA1_METADATA);
     const params = ss3t_csd_beta1_params(dwi, response_odf, mask, bzero_pct, niter, info, quiet, debug, force, nthreads, config, help, version)
@@ -447,7 +447,13 @@ export {
       Ss3tCsdBeta1ResponseOdfOutputs,
       Ss3tCsdBeta1ResponseOdfParameters,
       ss3t_csd_beta1,
+      ss3t_csd_beta1_cargs,
+      ss3t_csd_beta1_config_cargs,
       ss3t_csd_beta1_config_params,
+      ss3t_csd_beta1_execute,
+      ss3t_csd_beta1_outputs,
       ss3t_csd_beta1_params,
+      ss3t_csd_beta1_response_odf_cargs,
+      ss3t_csd_beta1_response_odf_outputs,
       ss3t_csd_beta1_response_odf_params,
 };

@@ -12,7 +12,7 @@ const ADJUNCT_APQC_TSNR_GENERAL_METADATA: Metadata = {
 
 
 interface AdjunctApqcTsnrGeneralParameters {
-    "__STYXTYPE__": "adjunct_apqc_tsnr_general";
+    "@type": "afni.adjunct_apqc_tsnr_general";
     "montgap"?: string | null | undefined;
     "montcolor"?: string | null | undefined;
     "montx"?: string | null | undefined;
@@ -39,33 +39,33 @@ interface AdjunctApqcTsnrGeneralParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_apqc_tsnr_general": adjunct_apqc_tsnr_general_cargs,
+        "afni.adjunct_apqc_tsnr_general": adjunct_apqc_tsnr_general_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -85,6 +85,35 @@ interface AdjunctApqcTsnrGeneralOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param montgap Specify montage gap.
+ * @param montcolor Specify montage color.
+ * @param montx Specify montage x coordinate.
+ * @param monty Specify montage y coordinate.
+ * @param opacity Specify overlay opacity.
+ * @param blowup Specify blowup factor.
+ * @param save_ftype Specify save file type.
+ * @param set_dicom_xyz Set DICOM x, y, z coordinates.
+ * @param set_ijk Set IJK coordinates.
+ * @param set_subbricks Set sub-bricks.
+ * @param olay_alpha Specify overlay alpha.
+ * @param olay_boxed Specify boxed overlay.
+ * @param thr_olay Specify threshold for overlay.
+ * @param ulay_range_nz Specify non-zero range for underlay.
+ * @param ulay_range Specify range for underlay.
+ * @param delta_slices Specify delta slices.
+ * @param olay_disc_hot_range Specify discrete hot range for overlay.
+ * @param olay_cont_max Specify continuous max for overlay.
+ * @param cbar_cont Specify continuous color bar.
+ * @param no_cor No coronal view.
+ * @param no_sag No sagittal view.
+ * @param no_axi No axial view.
+ * @param echo Echo the command line arguments.
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_apqc_tsnr_general_params(
     montgap: string | null = null,
     montcolor: string | null = null,
@@ -110,37 +139,8 @@ function adjunct_apqc_tsnr_general_params(
     no_axi: boolean = false,
     echo: boolean = false,
 ): AdjunctApqcTsnrGeneralParameters {
-    /**
-     * Build parameters.
-    
-     * @param montgap Specify montage gap.
-     * @param montcolor Specify montage color.
-     * @param montx Specify montage x coordinate.
-     * @param monty Specify montage y coordinate.
-     * @param opacity Specify overlay opacity.
-     * @param blowup Specify blowup factor.
-     * @param save_ftype Specify save file type.
-     * @param set_dicom_xyz Set DICOM x, y, z coordinates.
-     * @param set_ijk Set IJK coordinates.
-     * @param set_subbricks Set sub-bricks.
-     * @param olay_alpha Specify overlay alpha.
-     * @param olay_boxed Specify boxed overlay.
-     * @param thr_olay Specify threshold for overlay.
-     * @param ulay_range_nz Specify non-zero range for underlay.
-     * @param ulay_range Specify range for underlay.
-     * @param delta_slices Specify delta slices.
-     * @param olay_disc_hot_range Specify discrete hot range for overlay.
-     * @param olay_cont_max Specify continuous max for overlay.
-     * @param cbar_cont Specify continuous color bar.
-     * @param no_cor No coronal view.
-     * @param no_sag No sagittal view.
-     * @param no_axi No axial view.
-     * @param echo Echo the command line arguments.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_apqc_tsnr_general" as const,
+        "@type": "afni.adjunct_apqc_tsnr_general" as const,
         "no_cor": no_cor,
         "no_sag": no_sag,
         "no_axi": no_axi,
@@ -207,18 +207,18 @@ function adjunct_apqc_tsnr_general_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_apqc_tsnr_general_cargs(
     params: AdjunctApqcTsnrGeneralParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_apqc_tsnr_general");
     if ((params["montgap"] ?? null) !== null) {
@@ -351,18 +351,18 @@ function adjunct_apqc_tsnr_general_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_apqc_tsnr_general_outputs(
     params: AdjunctApqcTsnrGeneralParameters,
     execution: Execution,
 ): AdjunctApqcTsnrGeneralOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctApqcTsnrGeneralOutputs = {
         root: execution.outputFile("."),
     };
@@ -370,22 +370,22 @@ function adjunct_apqc_tsnr_general_outputs(
 }
 
 
+/**
+ * An adjunct program for making TSNR plots for APQC.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
+ */
 function adjunct_apqc_tsnr_general_execute(
     params: AdjunctApqcTsnrGeneralParameters,
     execution: Execution,
 ): AdjunctApqcTsnrGeneralOutputs {
-    /**
-     * An adjunct program for making TSNR plots for APQC.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_apqc_tsnr_general_cargs(params, execution)
     const ret = adjunct_apqc_tsnr_general_outputs(params, execution)
@@ -394,6 +394,40 @@ function adjunct_apqc_tsnr_general_execute(
 }
 
 
+/**
+ * An adjunct program for making TSNR plots for APQC.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param montgap Specify montage gap.
+ * @param montcolor Specify montage color.
+ * @param montx Specify montage x coordinate.
+ * @param monty Specify montage y coordinate.
+ * @param opacity Specify overlay opacity.
+ * @param blowup Specify blowup factor.
+ * @param save_ftype Specify save file type.
+ * @param set_dicom_xyz Set DICOM x, y, z coordinates.
+ * @param set_ijk Set IJK coordinates.
+ * @param set_subbricks Set sub-bricks.
+ * @param olay_alpha Specify overlay alpha.
+ * @param olay_boxed Specify boxed overlay.
+ * @param thr_olay Specify threshold for overlay.
+ * @param ulay_range_nz Specify non-zero range for underlay.
+ * @param ulay_range Specify range for underlay.
+ * @param delta_slices Specify delta slices.
+ * @param olay_disc_hot_range Specify discrete hot range for overlay.
+ * @param olay_cont_max Specify continuous max for overlay.
+ * @param cbar_cont Specify continuous color bar.
+ * @param no_cor No coronal view.
+ * @param no_sag No sagittal view.
+ * @param no_axi No axial view.
+ * @param echo Echo the command line arguments.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
+ */
 function adjunct_apqc_tsnr_general(
     montgap: string | null = null,
     montcolor: string | null = null,
@@ -420,40 +454,6 @@ function adjunct_apqc_tsnr_general(
     echo: boolean = false,
     runner: Runner | null = null,
 ): AdjunctApqcTsnrGeneralOutputs {
-    /**
-     * An adjunct program for making TSNR plots for APQC.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param montgap Specify montage gap.
-     * @param montcolor Specify montage color.
-     * @param montx Specify montage x coordinate.
-     * @param monty Specify montage y coordinate.
-     * @param opacity Specify overlay opacity.
-     * @param blowup Specify blowup factor.
-     * @param save_ftype Specify save file type.
-     * @param set_dicom_xyz Set DICOM x, y, z coordinates.
-     * @param set_ijk Set IJK coordinates.
-     * @param set_subbricks Set sub-bricks.
-     * @param olay_alpha Specify overlay alpha.
-     * @param olay_boxed Specify boxed overlay.
-     * @param thr_olay Specify threshold for overlay.
-     * @param ulay_range_nz Specify non-zero range for underlay.
-     * @param ulay_range Specify range for underlay.
-     * @param delta_slices Specify delta slices.
-     * @param olay_disc_hot_range Specify discrete hot range for overlay.
-     * @param olay_cont_max Specify continuous max for overlay.
-     * @param cbar_cont Specify continuous color bar.
-     * @param no_cor No coronal view.
-     * @param no_sag No sagittal view.
-     * @param no_axi No axial view.
-     * @param echo Echo the command line arguments.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_APQC_TSNR_GENERAL_METADATA);
     const params = adjunct_apqc_tsnr_general_params(montgap, montcolor, montx, monty, opacity, blowup, save_ftype, set_dicom_xyz, set_ijk, set_subbricks, olay_alpha, olay_boxed, thr_olay, ulay_range_nz, ulay_range, delta_slices, olay_disc_hot_range, olay_cont_max, cbar_cont, no_cor, no_sag, no_axi, echo)
@@ -466,5 +466,8 @@ export {
       AdjunctApqcTsnrGeneralOutputs,
       AdjunctApqcTsnrGeneralParameters,
       adjunct_apqc_tsnr_general,
+      adjunct_apqc_tsnr_general_cargs,
+      adjunct_apqc_tsnr_general_execute,
+      adjunct_apqc_tsnr_general_outputs,
       adjunct_apqc_tsnr_general_params,
 };

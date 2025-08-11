@@ -12,7 +12,7 @@ const MRIS_DIFF_METADATA: Metadata = {
 
 
 interface MrisDiffParameters {
-    "__STYXTYPE__": "mris_diff";
+    "@type": "freesurfer.mris_diff";
     "surface1": InputPathType;
     "surface2": InputPathType;
     "subject1": string;
@@ -45,33 +45,33 @@ interface MrisDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_diff": mris_diff_cargs,
+        "freesurfer.mris_diff": mris_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -91,6 +91,41 @@ interface MrisDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface1 First surface file
+ * @param surface2 Second surface file
+ * @param subject1 Subject 1 name
+ * @param subject2 Subject 2 name
+ * @param hemisphere Hemisphere (rh or lh)
+ * @param subj_dir1 Directory for Subject 1 (default is SUBJECTS_DIR)
+ * @param subj_dir2 Directory for Subject 2 (default is SUBJECTS_DIR)
+ * @param surf Compare surface
+ * @param curv Compare curvature
+ * @param aparc Compare aparc annotation
+ * @param aparc2 Optional different name to compare to aparc
+ * @param simple Simple comparison of two surfaces to just report differences
+ * @param simple_patch Simple comparison of two patches
+ * @param thresh Threshold (default=0) [Note: Not currently implemented!]
+ * @param maxerrs Stop looping after N errors (default=10)
+ * @param renumbered Vertices or faces may have been renumbered and a few deleted
+ * @param worst_bucket Compute the worst histogram bucket each vertex is in
+ * @param grid Label the vertices of edges that span a grid based on the provided spacing float
+ * @param no_check_xyz Do not check vertex xyz
+ * @param no_check_nxyz Do not check vertex normals
+ * @param xyz_rms Compute and save RMS diff between xyz
+ * @param angle_rms Compute angle on sphere between xyz
+ * @param seed Set random seed for degenerate normals
+ * @param min_dist Compute vertex-by-vertex RMS distance between surfaces
+ * @param debug Enable debugging output
+ * @param gdiag_no Specify Gdiag_no
+ * @param check_opts Only check options and exit
+ * @param help Display help information
+ * @param version Display version information
+ *
+ * @returns Parameter dictionary
+ */
 function mris_diff_params(
     surface1: InputPathType,
     surface2: InputPathType,
@@ -122,43 +157,8 @@ function mris_diff_params(
     help: boolean = false,
     version: boolean = false,
 ): MrisDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface1 First surface file
-     * @param surface2 Second surface file
-     * @param subject1 Subject 1 name
-     * @param subject2 Subject 2 name
-     * @param hemisphere Hemisphere (rh or lh)
-     * @param subj_dir1 Directory for Subject 1 (default is SUBJECTS_DIR)
-     * @param subj_dir2 Directory for Subject 2 (default is SUBJECTS_DIR)
-     * @param surf Compare surface
-     * @param curv Compare curvature
-     * @param aparc Compare aparc annotation
-     * @param aparc2 Optional different name to compare to aparc
-     * @param simple Simple comparison of two surfaces to just report differences
-     * @param simple_patch Simple comparison of two patches
-     * @param thresh Threshold (default=0) [Note: Not currently implemented!]
-     * @param maxerrs Stop looping after N errors (default=10)
-     * @param renumbered Vertices or faces may have been renumbered and a few deleted
-     * @param worst_bucket Compute the worst histogram bucket each vertex is in
-     * @param grid Label the vertices of edges that span a grid based on the provided spacing float
-     * @param no_check_xyz Do not check vertex xyz
-     * @param no_check_nxyz Do not check vertex normals
-     * @param xyz_rms Compute and save RMS diff between xyz
-     * @param angle_rms Compute angle on sphere between xyz
-     * @param seed Set random seed for degenerate normals
-     * @param min_dist Compute vertex-by-vertex RMS distance between surfaces
-     * @param debug Enable debugging output
-     * @param gdiag_no Specify Gdiag_no
-     * @param check_opts Only check options and exit
-     * @param help Display help information
-     * @param version Display version information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_diff" as const,
+        "@type": "freesurfer.mris_diff" as const,
         "surface1": surface1,
         "surface2": surface2,
         "subject1": subject1,
@@ -223,18 +223,18 @@ function mris_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_diff_cargs(
     params: MrisDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_diff");
     cargs.push(execution.inputFile((params["surface1"] ?? null)));
@@ -372,18 +372,18 @@ function mris_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_diff_outputs(
     params: MrisDiffParameters,
     execution: Execution,
 ): MrisDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -391,22 +391,22 @@ function mris_diff_outputs(
 }
 
 
+/**
+ * A tool for comparing differences between surface files in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
+ */
 function mris_diff_execute(
     params: MrisDiffParameters,
     execution: Execution,
 ): MrisDiffOutputs {
-    /**
-     * A tool for comparing differences between surface files in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_diff_cargs(params, execution)
     const ret = mris_diff_outputs(params, execution)
@@ -415,6 +415,46 @@ function mris_diff_execute(
 }
 
 
+/**
+ * A tool for comparing differences between surface files in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface1 First surface file
+ * @param surface2 Second surface file
+ * @param subject1 Subject 1 name
+ * @param subject2 Subject 2 name
+ * @param hemisphere Hemisphere (rh or lh)
+ * @param subj_dir1 Directory for Subject 1 (default is SUBJECTS_DIR)
+ * @param subj_dir2 Directory for Subject 2 (default is SUBJECTS_DIR)
+ * @param surf Compare surface
+ * @param curv Compare curvature
+ * @param aparc Compare aparc annotation
+ * @param aparc2 Optional different name to compare to aparc
+ * @param simple Simple comparison of two surfaces to just report differences
+ * @param simple_patch Simple comparison of two patches
+ * @param thresh Threshold (default=0) [Note: Not currently implemented!]
+ * @param maxerrs Stop looping after N errors (default=10)
+ * @param renumbered Vertices or faces may have been renumbered and a few deleted
+ * @param worst_bucket Compute the worst histogram bucket each vertex is in
+ * @param grid Label the vertices of edges that span a grid based on the provided spacing float
+ * @param no_check_xyz Do not check vertex xyz
+ * @param no_check_nxyz Do not check vertex normals
+ * @param xyz_rms Compute and save RMS diff between xyz
+ * @param angle_rms Compute angle on sphere between xyz
+ * @param seed Set random seed for degenerate normals
+ * @param min_dist Compute vertex-by-vertex RMS distance between surfaces
+ * @param debug Enable debugging output
+ * @param gdiag_no Specify Gdiag_no
+ * @param check_opts Only check options and exit
+ * @param help Display help information
+ * @param version Display version information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
+ */
 function mris_diff(
     surface1: InputPathType,
     surface2: InputPathType,
@@ -447,46 +487,6 @@ function mris_diff(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisDiffOutputs {
-    /**
-     * A tool for comparing differences between surface files in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface1 First surface file
-     * @param surface2 Second surface file
-     * @param subject1 Subject 1 name
-     * @param subject2 Subject 2 name
-     * @param hemisphere Hemisphere (rh or lh)
-     * @param subj_dir1 Directory for Subject 1 (default is SUBJECTS_DIR)
-     * @param subj_dir2 Directory for Subject 2 (default is SUBJECTS_DIR)
-     * @param surf Compare surface
-     * @param curv Compare curvature
-     * @param aparc Compare aparc annotation
-     * @param aparc2 Optional different name to compare to aparc
-     * @param simple Simple comparison of two surfaces to just report differences
-     * @param simple_patch Simple comparison of two patches
-     * @param thresh Threshold (default=0) [Note: Not currently implemented!]
-     * @param maxerrs Stop looping after N errors (default=10)
-     * @param renumbered Vertices or faces may have been renumbered and a few deleted
-     * @param worst_bucket Compute the worst histogram bucket each vertex is in
-     * @param grid Label the vertices of edges that span a grid based on the provided spacing float
-     * @param no_check_xyz Do not check vertex xyz
-     * @param no_check_nxyz Do not check vertex normals
-     * @param xyz_rms Compute and save RMS diff between xyz
-     * @param angle_rms Compute angle on sphere between xyz
-     * @param seed Set random seed for degenerate normals
-     * @param min_dist Compute vertex-by-vertex RMS distance between surfaces
-     * @param debug Enable debugging output
-     * @param gdiag_no Specify Gdiag_no
-     * @param check_opts Only check options and exit
-     * @param help Display help information
-     * @param version Display version information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_DIFF_METADATA);
     const params = mris_diff_params(surface1, surface2, subject1, subject2, hemisphere, subj_dir1, subj_dir2, surf, curv, aparc, aparc2, simple, simple_patch, thresh, maxerrs, renumbered, worst_bucket, grid, no_check_xyz, no_check_nxyz, xyz_rms, angle_rms, seed, min_dist, debug, gdiag_no, check_opts, help, version)
@@ -499,5 +499,8 @@ export {
       MrisDiffOutputs,
       MrisDiffParameters,
       mris_diff,
+      mris_diff_cargs,
+      mris_diff_execute,
+      mris_diff_outputs,
       mris_diff_params,
 };

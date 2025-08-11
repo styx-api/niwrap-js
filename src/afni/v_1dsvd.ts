@@ -12,7 +12,7 @@ const V_1DSVD_METADATA: Metadata = {
 
 
 interface V1dsvdParameters {
-    "__STYXTYPE__": "1dsvd";
+    "@type": "afni.1dsvd";
     "one": boolean;
     "vmean": boolean;
     "vnorm": boolean;
@@ -27,35 +27,35 @@ interface V1dsvdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dsvd": v_1dsvd_cargs,
+        "afni.1dsvd": v_1dsvd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dsvd": v_1dsvd_outputs,
+        "afni.1dsvd": v_1dsvd_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V1dsvdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 1D file(s) for SVD computation
+ * @param one Make 1st vector be all 1's
+ * @param vmean Remove mean from each vector (cannot be used with -one)
+ * @param vnorm Make L2-norm of each vector = 1 before SVD
+ * @param cond Only print condition number (ratio of extremes)
+ * @param sing Only print singular values
+ * @param sort Sort singular values in descending order (default)
+ * @param nosort Don't sort singular values
+ * @param asort Sort singular values in ascending order
+ * @param left_eigenvectors Only output left eigenvectors in .1D format
+ * @param num_eigenvectors Specify number of left eigenvectors to output
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dsvd_params(
     input_files: Array<InputPathType>,
     one: boolean = false,
@@ -91,25 +108,8 @@ function v_1dsvd_params(
     left_eigenvectors: boolean = false,
     num_eigenvectors: string | null = null,
 ): V1dsvdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 1D file(s) for SVD computation
-     * @param one Make 1st vector be all 1's
-     * @param vmean Remove mean from each vector (cannot be used with -one)
-     * @param vnorm Make L2-norm of each vector = 1 before SVD
-     * @param cond Only print condition number (ratio of extremes)
-     * @param sing Only print singular values
-     * @param sort Sort singular values in descending order (default)
-     * @param nosort Don't sort singular values
-     * @param asort Sort singular values in ascending order
-     * @param left_eigenvectors Only output left eigenvectors in .1D format
-     * @param num_eigenvectors Specify number of left eigenvectors to output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dsvd" as const,
+        "@type": "afni.1dsvd" as const,
         "one": one,
         "vmean": vmean,
         "vnorm": vnorm,
@@ -128,18 +128,18 @@ function v_1dsvd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dsvd_cargs(
     params: V1dsvdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dsvd");
     if ((params["one"] ?? null)) {
@@ -180,18 +180,18 @@ function v_1dsvd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dsvd_outputs(
     params: V1dsvdParameters,
     execution: Execution,
 ): V1dsvdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dsvdOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout"].join('')),
@@ -200,22 +200,22 @@ function v_1dsvd_outputs(
 }
 
 
+/**
+ * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
+ */
 function v_1dsvd_execute(
     params: V1dsvdParameters,
     execution: Execution,
 ): V1dsvdOutputs {
-    /**
-     * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dsvd_cargs(params, execution)
     const ret = v_1dsvd_outputs(params, execution)
@@ -224,6 +224,28 @@ function v_1dsvd_execute(
 }
 
 
+/**
+ * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 1D file(s) for SVD computation
+ * @param one Make 1st vector be all 1's
+ * @param vmean Remove mean from each vector (cannot be used with -one)
+ * @param vnorm Make L2-norm of each vector = 1 before SVD
+ * @param cond Only print condition number (ratio of extremes)
+ * @param sing Only print singular values
+ * @param sort Sort singular values in descending order (default)
+ * @param nosort Don't sort singular values
+ * @param asort Sort singular values in ascending order
+ * @param left_eigenvectors Only output left eigenvectors in .1D format
+ * @param num_eigenvectors Specify number of left eigenvectors to output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
+ */
 function v_1dsvd(
     input_files: Array<InputPathType>,
     one: boolean = false,
@@ -238,28 +260,6 @@ function v_1dsvd(
     num_eigenvectors: string | null = null,
     runner: Runner | null = null,
 ): V1dsvdOutputs {
-    /**
-     * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 1D file(s) for SVD computation
-     * @param one Make 1st vector be all 1's
-     * @param vmean Remove mean from each vector (cannot be used with -one)
-     * @param vnorm Make L2-norm of each vector = 1 before SVD
-     * @param cond Only print condition number (ratio of extremes)
-     * @param sing Only print singular values
-     * @param sort Sort singular values in descending order (default)
-     * @param nosort Don't sort singular values
-     * @param asort Sort singular values in ascending order
-     * @param left_eigenvectors Only output left eigenvectors in .1D format
-     * @param num_eigenvectors Specify number of left eigenvectors to output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DSVD_METADATA);
     const params = v_1dsvd_params(input_files, one, vmean, vnorm, cond, sing, sort, nosort, asort, left_eigenvectors, num_eigenvectors)
@@ -272,5 +272,8 @@ export {
       V1dsvdParameters,
       V_1DSVD_METADATA,
       v_1dsvd,
+      v_1dsvd_cargs,
+      v_1dsvd_execute,
+      v_1dsvd_outputs,
       v_1dsvd_params,
 };

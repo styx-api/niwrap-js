@@ -12,42 +12,42 @@ const V__SUMA_MAKE_SPEC_SF_METADATA: Metadata = {
 
 
 interface VSumaMakeSpecSfParameters {
-    "__STYXTYPE__": "@SUMA_Make_Spec_SF";
+    "@type": "afni.@SUMA_Make_Spec_SF";
     "debug_level"?: number | null | undefined;
     "surface_path"?: string | null | undefined;
     "subject_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SUMA_Make_Spec_SF": v__suma_make_spec_sf_cargs,
+        "afni.@SUMA_Make_Spec_SF": v__suma_make_spec_sf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SUMA_Make_Spec_SF": v__suma_make_spec_sf_outputs,
+        "afni.@SUMA_Make_Spec_SF": v__suma_make_spec_sf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface VSumaMakeSpecSfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Required subject ID for file naming
+ * @param debug_level Print debug information along the way
+ * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_make_spec_sf_params(
     subject_id: string,
     debug_level: number | null = null,
     surface_path: string | null = null,
 ): VSumaMakeSpecSfParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Required subject ID for file naming
-     * @param debug_level Print debug information along the way
-     * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SUMA_Make_Spec_SF" as const,
+        "@type": "afni.@SUMA_Make_Spec_SF" as const,
         "subject_id": subject_id,
     };
     if (debug_level !== null) {
@@ -98,18 +98,18 @@ function v__suma_make_spec_sf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_make_spec_sf_cargs(
     params: VSumaMakeSpecSfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SUMA_Make_Spec_SF");
     if ((params["debug_level"] ?? null) !== null) {
@@ -132,18 +132,18 @@ function v__suma_make_spec_sf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_make_spec_sf_outputs(
     params: VSumaMakeSpecSfParameters,
     execution: Execution,
 ): VSumaMakeSpecSfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaMakeSpecSfOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile(["SURFACES/*"].join('')),
@@ -152,22 +152,22 @@ function v__suma_make_spec_sf_outputs(
 }
 
 
+/**
+ * Prepare for surface viewing in SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
+ */
 function v__suma_make_spec_sf_execute(
     params: VSumaMakeSpecSfParameters,
     execution: Execution,
 ): VSumaMakeSpecSfOutputs {
-    /**
-     * Prepare for surface viewing in SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_make_spec_sf_cargs(params, execution)
     const ret = v__suma_make_spec_sf_outputs(params, execution)
@@ -176,26 +176,26 @@ function v__suma_make_spec_sf_execute(
 }
 
 
+/**
+ * Prepare for surface viewing in SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param subject_id Required subject ID for file naming
+ * @param debug_level Print debug information along the way
+ * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
+ */
 function v__suma_make_spec_sf(
     subject_id: string,
     debug_level: number | null = null,
     surface_path: string | null = null,
     runner: Runner | null = null,
 ): VSumaMakeSpecSfOutputs {
-    /**
-     * Prepare for surface viewing in SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param subject_id Required subject ID for file naming
-     * @param debug_level Print debug information along the way
-     * @param surface_path Path to directory containing 'SURFACES' and AFNI volume used in creating the surfaces
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_MAKE_SPEC_SF_METADATA);
     const params = v__suma_make_spec_sf_params(subject_id, debug_level, surface_path)
@@ -208,5 +208,8 @@ export {
       VSumaMakeSpecSfParameters,
       V__SUMA_MAKE_SPEC_SF_METADATA,
       v__suma_make_spec_sf,
+      v__suma_make_spec_sf_cargs,
+      v__suma_make_spec_sf_execute,
+      v__suma_make_spec_sf_outputs,
       v__suma_make_spec_sf_params,
 };

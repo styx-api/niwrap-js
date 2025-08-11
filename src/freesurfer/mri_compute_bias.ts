@@ -12,41 +12,41 @@ const MRI_COMPUTE_BIAS_METADATA: Metadata = {
 
 
 interface MriComputeBiasParameters {
-    "__STYXTYPE__": "mri_compute_bias";
+    "@type": "freesurfer.mri_compute_bias";
     "subjects": Array<string>;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_bias": mri_compute_bias_cargs,
+        "freesurfer.mri_compute_bias": mri_compute_bias_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_bias": mri_compute_bias_outputs,
+        "freesurfer.mri_compute_bias": mri_compute_bias_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriComputeBiasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subjects for which bias correction is calculated.
+ * @param output_volume Output volume where the result will be stored.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_bias_params(
     subjects: Array<string>,
     output_volume: string,
 ): MriComputeBiasParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subjects for which bias correction is calculated.
-     * @param output_volume Output volume where the result will be stored.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_bias" as const,
+        "@type": "freesurfer.mri_compute_bias" as const,
         "subjects": subjects,
         "output_volume": output_volume,
     };
@@ -90,18 +90,18 @@ function mri_compute_bias_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_bias_cargs(
     params: MriComputeBiasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_bias");
     cargs.push(...(params["subjects"] ?? null));
@@ -110,18 +110,18 @@ function mri_compute_bias_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_bias_outputs(
     params: MriComputeBiasParameters,
     execution: Execution,
 ): MriComputeBiasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeBiasOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_compute_bias_outputs(
 }
 
 
+/**
+ * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
+ */
 function mri_compute_bias_execute(
     params: MriComputeBiasParameters,
     execution: Execution,
 ): MriComputeBiasOutputs {
-    /**
-     * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_bias_cargs(params, execution)
     const ret = mri_compute_bias_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_compute_bias_execute(
 }
 
 
+/**
+ * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subjects for which bias correction is calculated.
+ * @param output_volume Output volume where the result will be stored.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
+ */
 function mri_compute_bias(
     subjects: Array<string>,
     output_volume: string,
     runner: Runner | null = null,
 ): MriComputeBiasOutputs {
-    /**
-     * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subjects for which bias correction is calculated.
-     * @param output_volume Output volume where the result will be stored.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_BIAS_METADATA);
     const params = mri_compute_bias_params(subjects, output_volume)
@@ -184,5 +184,8 @@ export {
       MriComputeBiasOutputs,
       MriComputeBiasParameters,
       mri_compute_bias,
+      mri_compute_bias_cargs,
+      mri_compute_bias_execute,
+      mri_compute_bias_outputs,
       mri_compute_bias_params,
 };

@@ -12,7 +12,7 @@ const V_1DGRAYPLOT_METADATA: Metadata = {
 
 
 interface V1dgrayplotParameters {
-    "__STYXTYPE__": "1dgrayplot";
+    "@type": "afni.1dgrayplot";
     "tsfile": InputPathType;
     "install": boolean;
     "ignore"?: number | null | undefined;
@@ -23,33 +23,33 @@ interface V1dgrayplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dgrayplot": v_1dgrayplot_cargs,
+        "afni.1dgrayplot": v_1dgrayplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface V1dgrayplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tsfile Input time series file (*.1D format)
+ * @param install Install a new X11 colormap (for X11 PseudoColor)
+ * @param ignore Skip first 'nn' rows in the input file [default = 0]
+ * @param flip Plot x and y axes interchanged [default: data columns plotted DOWN the screen]
+ * @param sep Separate scales for each column
+ * @param use Plot 'mm' points [default: all of them]
+ * @param ps Don't draw plot in a window; write it to stdout in PostScript format.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dgrayplot_params(
     tsfile: InputPathType,
     install: boolean = false,
@@ -78,21 +91,8 @@ function v_1dgrayplot_params(
     use: number | null = null,
     ps: boolean = false,
 ): V1dgrayplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param tsfile Input time series file (*.1D format)
-     * @param install Install a new X11 colormap (for X11 PseudoColor)
-     * @param ignore Skip first 'nn' rows in the input file [default = 0]
-     * @param flip Plot x and y axes interchanged [default: data columns plotted DOWN the screen]
-     * @param sep Separate scales for each column
-     * @param use Plot 'mm' points [default: all of them]
-     * @param ps Don't draw plot in a window; write it to stdout in PostScript format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dgrayplot" as const,
+        "@type": "afni.1dgrayplot" as const,
         "tsfile": tsfile,
         "install": install,
         "flip": flip,
@@ -109,18 +109,18 @@ function v_1dgrayplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dgrayplot_cargs(
     params: V1dgrayplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dgrayplot");
     cargs.push(execution.inputFile((params["tsfile"] ?? null)));
@@ -152,18 +152,18 @@ function v_1dgrayplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dgrayplot_outputs(
     params: V1dgrayplotParameters,
     execution: Execution,
 ): V1dgrayplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dgrayplotOutputs = {
         root: execution.outputFile("."),
     };
@@ -171,22 +171,22 @@ function v_1dgrayplot_outputs(
 }
 
 
+/**
+ * Graphs the columns of a *.1D type time series file to the screen in grayscale.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dgrayplotOutputs`).
+ */
 function v_1dgrayplot_execute(
     params: V1dgrayplotParameters,
     execution: Execution,
 ): V1dgrayplotOutputs {
-    /**
-     * Graphs the columns of a *.1D type time series file to the screen in grayscale.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dgrayplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dgrayplot_cargs(params, execution)
     const ret = v_1dgrayplot_outputs(params, execution)
@@ -195,6 +195,24 @@ function v_1dgrayplot_execute(
 }
 
 
+/**
+ * Graphs the columns of a *.1D type time series file to the screen in grayscale.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tsfile Input time series file (*.1D format)
+ * @param install Install a new X11 colormap (for X11 PseudoColor)
+ * @param ignore Skip first 'nn' rows in the input file [default = 0]
+ * @param flip Plot x and y axes interchanged [default: data columns plotted DOWN the screen]
+ * @param sep Separate scales for each column
+ * @param use Plot 'mm' points [default: all of them]
+ * @param ps Don't draw plot in a window; write it to stdout in PostScript format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dgrayplotOutputs`).
+ */
 function v_1dgrayplot(
     tsfile: InputPathType,
     install: boolean = false,
@@ -205,24 +223,6 @@ function v_1dgrayplot(
     ps: boolean = false,
     runner: Runner | null = null,
 ): V1dgrayplotOutputs {
-    /**
-     * Graphs the columns of a *.1D type time series file to the screen in grayscale.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tsfile Input time series file (*.1D format)
-     * @param install Install a new X11 colormap (for X11 PseudoColor)
-     * @param ignore Skip first 'nn' rows in the input file [default = 0]
-     * @param flip Plot x and y axes interchanged [default: data columns plotted DOWN the screen]
-     * @param sep Separate scales for each column
-     * @param use Plot 'mm' points [default: all of them]
-     * @param ps Don't draw plot in a window; write it to stdout in PostScript format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dgrayplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DGRAYPLOT_METADATA);
     const params = v_1dgrayplot_params(tsfile, install, ignore, flip, sep, use, ps)
@@ -235,5 +235,8 @@ export {
       V1dgrayplotParameters,
       V_1DGRAYPLOT_METADATA,
       v_1dgrayplot,
+      v_1dgrayplot_cargs,
+      v_1dgrayplot_execute,
+      v_1dgrayplot_outputs,
       v_1dgrayplot_params,
 };

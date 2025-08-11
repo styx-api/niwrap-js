@@ -12,7 +12,7 @@ const MRIS_THICKNESS_COMPARISON_METADATA: Metadata = {
 
 
 interface MrisThicknessComparisonParameters {
-    "__STYXTYPE__": "mris_thickness_comparison";
+    "@type": "freesurfer.mris_thickness_comparison";
     "subject": string;
     "hemi": string;
     "thickness_file": InputPathType;
@@ -21,33 +21,33 @@ interface MrisThicknessComparisonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_thickness_comparison": mris_thickness_comparison_cargs,
+        "freesurfer.mris_thickness_comparison": mris_thickness_comparison_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface MrisThicknessComparisonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier.
+ * @param hemi Hemisphere (e.g., lh or rh).
+ * @param thickness_file File containing thickness measurements.
+ * @param w_file W file for cortical thickness comparison.
+ * @param labels List of labels to compare, separated by spaces.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_thickness_comparison_params(
     subject: string,
     hemi: string,
@@ -74,19 +85,8 @@ function mris_thickness_comparison_params(
     w_file: InputPathType,
     labels: Array<string>,
 ): MrisThicknessComparisonParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier.
-     * @param hemi Hemisphere (e.g., lh or rh).
-     * @param thickness_file File containing thickness measurements.
-     * @param w_file W file for cortical thickness comparison.
-     * @param labels List of labels to compare, separated by spaces.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_thickness_comparison" as const,
+        "@type": "freesurfer.mris_thickness_comparison" as const,
         "subject": subject,
         "hemi": hemi,
         "thickness_file": thickness_file,
@@ -97,18 +97,18 @@ function mris_thickness_comparison_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_thickness_comparison_cargs(
     params: MrisThicknessComparisonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_thickness_comparison");
     cargs.push((params["subject"] ?? null));
@@ -120,18 +120,18 @@ function mris_thickness_comparison_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_thickness_comparison_outputs(
     params: MrisThicknessComparisonParameters,
     execution: Execution,
 ): MrisThicknessComparisonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisThicknessComparisonOutputs = {
         root: execution.outputFile("."),
     };
@@ -139,22 +139,22 @@ function mris_thickness_comparison_outputs(
 }
 
 
+/**
+ * Tool to compare cortical thickness measurements between two or more specified labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
+ */
 function mris_thickness_comparison_execute(
     params: MrisThicknessComparisonParameters,
     execution: Execution,
 ): MrisThicknessComparisonOutputs {
-    /**
-     * Tool to compare cortical thickness measurements between two or more specified labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_thickness_comparison_cargs(params, execution)
     const ret = mris_thickness_comparison_outputs(params, execution)
@@ -163,6 +163,22 @@ function mris_thickness_comparison_execute(
 }
 
 
+/**
+ * Tool to compare cortical thickness measurements between two or more specified labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier.
+ * @param hemi Hemisphere (e.g., lh or rh).
+ * @param thickness_file File containing thickness measurements.
+ * @param w_file W file for cortical thickness comparison.
+ * @param labels List of labels to compare, separated by spaces.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
+ */
 function mris_thickness_comparison(
     subject: string,
     hemi: string,
@@ -171,22 +187,6 @@ function mris_thickness_comparison(
     labels: Array<string>,
     runner: Runner | null = null,
 ): MrisThicknessComparisonOutputs {
-    /**
-     * Tool to compare cortical thickness measurements between two or more specified labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier.
-     * @param hemi Hemisphere (e.g., lh or rh).
-     * @param thickness_file File containing thickness measurements.
-     * @param w_file W file for cortical thickness comparison.
-     * @param labels List of labels to compare, separated by spaces.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_THICKNESS_COMPARISON_METADATA);
     const params = mris_thickness_comparison_params(subject, hemi, thickness_file, w_file, labels)
@@ -199,5 +199,8 @@ export {
       MrisThicknessComparisonOutputs,
       MrisThicknessComparisonParameters,
       mris_thickness_comparison,
+      mris_thickness_comparison_cargs,
+      mris_thickness_comparison_execute,
+      mris_thickness_comparison_outputs,
       mris_thickness_comparison_params,
 };

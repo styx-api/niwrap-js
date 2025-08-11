@@ -12,14 +12,14 @@ const WARPCORRECT_METADATA: Metadata = {
 
 
 interface WarpcorrectConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.warpcorrect.config";
     "key": string;
     "value": string;
 }
 
 
 interface WarpcorrectParameters {
-    "__STYXTYPE__": "warpcorrect";
+    "@type": "mrtrix.warpcorrect";
     "marker"?: Array<number> | null | undefined;
     "tolerance"?: number | null | undefined;
     "info": boolean;
@@ -35,55 +35,55 @@ interface WarpcorrectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "warpcorrect": warpcorrect_cargs,
-        "config": warpcorrect_config_cargs,
+        "mrtrix.warpcorrect": warpcorrect_cargs,
+        "mrtrix.warpcorrect.config": warpcorrect_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "warpcorrect": warpcorrect_outputs,
+        "mrtrix.warpcorrect": warpcorrect_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function warpcorrect_config_params(
     key: string,
     value: string,
 ): WarpcorrectConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.warpcorrect.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function warpcorrect_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpcorrect_config_cargs(
     params: WarpcorrectConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface WarpcorrectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input warp image.
+ * @param out the output warp image.
+ * @param marker single value or a comma separated list of values that define out of bounds voxels in the input warp image. Default: (0,0,0).
+ * @param tolerance numerical precision used for L2 matrix norm comparison. Default: 9.99999975e-06.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function warpcorrect_params(
     in_: InputPathType,
     out: string,
@@ -142,26 +160,8 @@ function warpcorrect_params(
     help: boolean = false,
     version: boolean = false,
 ): WarpcorrectParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input warp image.
-     * @param out the output warp image.
-     * @param marker single value or a comma separated list of values that define out of bounds voxels in the input warp image. Default: (0,0,0).
-     * @param tolerance numerical precision used for L2 matrix norm comparison. Default: 9.99999975e-06.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warpcorrect" as const,
+        "@type": "mrtrix.warpcorrect" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -187,18 +187,18 @@ function warpcorrect_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpcorrect_cargs(
     params: WarpcorrectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("warpcorrect");
     if ((params["marker"] ?? null) !== null) {
@@ -232,7 +232,7 @@ function warpcorrect_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -246,18 +246,18 @@ function warpcorrect_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function warpcorrect_outputs(
     params: WarpcorrectParameters,
     execution: Execution,
 ): WarpcorrectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WarpcorrectOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -266,28 +266,28 @@ function warpcorrect_outputs(
 }
 
 
+/**
+ * Replaces voxels in a deformation field that point to a specific out of bounds location with nan,nan,nan.
+ *
+ * This can be used in conjunction with the warpinit command to compute a MRtrix compatible deformation field from non-linear transformations generated by any other registration package.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
+ */
 function warpcorrect_execute(
     params: WarpcorrectParameters,
     execution: Execution,
 ): WarpcorrectOutputs {
-    /**
-     * Replaces voxels in a deformation field that point to a specific out of bounds location with nan,nan,nan.
-     * 
-     * This can be used in conjunction with the warpinit command to compute a MRtrix compatible deformation field from non-linear transformations generated by any other registration package.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
-     */
     params = execution.params(params)
     const cargs = warpcorrect_cargs(params, execution)
     const ret = warpcorrect_outputs(params, execution)
@@ -296,6 +296,35 @@ function warpcorrect_execute(
 }
 
 
+/**
+ * Replaces voxels in a deformation field that point to a specific out of bounds location with nan,nan,nan.
+ *
+ * This can be used in conjunction with the warpinit command to compute a MRtrix compatible deformation field from non-linear transformations generated by any other registration package.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input warp image.
+ * @param out the output warp image.
+ * @param marker single value or a comma separated list of values that define out of bounds voxels in the input warp image. Default: (0,0,0).
+ * @param tolerance numerical precision used for L2 matrix norm comparison. Default: 9.99999975e-06.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
+ */
 function warpcorrect(
     in_: InputPathType,
     out: string,
@@ -311,35 +340,6 @@ function warpcorrect(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpcorrectOutputs {
-    /**
-     * Replaces voxels in a deformation field that point to a specific out of bounds location with nan,nan,nan.
-     * 
-     * This can be used in conjunction with the warpinit command to compute a MRtrix compatible deformation field from non-linear transformations generated by any other registration package.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input warp image.
-     * @param out the output warp image.
-     * @param marker single value or a comma separated list of values that define out of bounds voxels in the input warp image. Default: (0,0,0).
-     * @param tolerance numerical precision used for L2 matrix norm comparison. Default: 9.99999975e-06.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARPCORRECT_METADATA);
     const params = warpcorrect_params(in_, out, marker, tolerance, info, quiet, debug, force, nthreads, config, help, version)
@@ -353,6 +353,10 @@ export {
       WarpcorrectOutputs,
       WarpcorrectParameters,
       warpcorrect,
+      warpcorrect_cargs,
+      warpcorrect_config_cargs,
       warpcorrect_config_params,
+      warpcorrect_execute,
+      warpcorrect_outputs,
       warpcorrect_params,
 };

@@ -12,7 +12,7 @@ const MRI_MATRIX_MULTIPLY_METADATA: Metadata = {
 
 
 interface MriMatrixMultiplyParameters {
-    "__STYXTYPE__": "mri_matrix_multiply";
+    "@type": "freesurfer.mri_matrix_multiply";
     "input_matrices": Array<InputPathType>;
     "inverted_input_matrices"?: Array<InputPathType> | null | undefined;
     "output_matrix": string;
@@ -23,35 +23,35 @@ interface MriMatrixMultiplyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_matrix_multiply": mri_matrix_multiply_cargs,
+        "freesurfer.mri_matrix_multiply": mri_matrix_multiply_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_matrix_multiply": mri_matrix_multiply_outputs,
+        "freesurfer.mri_matrix_multiply": mri_matrix_multiply_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriMatrixMultiplyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_matrices Input matrix files for multiplication.
+ * @param output_matrix Output matrix file.
+ * @param inverted_input_matrices Input matrix files to be inverted before multiplication.
+ * @param verbose Verbose output.
+ * @param fsl Assume input/output are FSL-style matrix files.
+ * @param binarize 'Binarize' the output matrix.
+ * @param subject_name Subject name for output reg.dat files.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_matrix_multiply_params(
     input_matrices: Array<InputPathType>,
     output_matrix: string,
@@ -83,21 +96,8 @@ function mri_matrix_multiply_params(
     binarize: boolean = false,
     subject_name: string | null = null,
 ): MriMatrixMultiplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_matrices Input matrix files for multiplication.
-     * @param output_matrix Output matrix file.
-     * @param inverted_input_matrices Input matrix files to be inverted before multiplication.
-     * @param verbose Verbose output.
-     * @param fsl Assume input/output are FSL-style matrix files.
-     * @param binarize 'Binarize' the output matrix.
-     * @param subject_name Subject name for output reg.dat files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_matrix_multiply" as const,
+        "@type": "freesurfer.mri_matrix_multiply" as const,
         "input_matrices": input_matrices,
         "output_matrix": output_matrix,
         "verbose": verbose,
@@ -114,18 +114,18 @@ function mri_matrix_multiply_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_matrix_multiply_cargs(
     params: MriMatrixMultiplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_matrix_multiply");
     cargs.push(
@@ -161,18 +161,18 @@ function mri_matrix_multiply_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_matrix_multiply_outputs(
     params: MriMatrixMultiplyParameters,
     execution: Execution,
 ): MriMatrixMultiplyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMatrixMultiplyOutputs = {
         root: execution.outputFile("."),
         output_matrix_file: execution.outputFile([(params["output_matrix"] ?? null)].join('')),
@@ -181,22 +181,22 @@ function mri_matrix_multiply_outputs(
 }
 
 
+/**
+ * Command-line tool for multiplying and manipulating MRI transformation matrices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
+ */
 function mri_matrix_multiply_execute(
     params: MriMatrixMultiplyParameters,
     execution: Execution,
 ): MriMatrixMultiplyOutputs {
-    /**
-     * Command-line tool for multiplying and manipulating MRI transformation matrices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_matrix_multiply_cargs(params, execution)
     const ret = mri_matrix_multiply_outputs(params, execution)
@@ -205,6 +205,24 @@ function mri_matrix_multiply_execute(
 }
 
 
+/**
+ * Command-line tool for multiplying and manipulating MRI transformation matrices.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_matrices Input matrix files for multiplication.
+ * @param output_matrix Output matrix file.
+ * @param inverted_input_matrices Input matrix files to be inverted before multiplication.
+ * @param verbose Verbose output.
+ * @param fsl Assume input/output are FSL-style matrix files.
+ * @param binarize 'Binarize' the output matrix.
+ * @param subject_name Subject name for output reg.dat files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
+ */
 function mri_matrix_multiply(
     input_matrices: Array<InputPathType>,
     output_matrix: string,
@@ -215,24 +233,6 @@ function mri_matrix_multiply(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): MriMatrixMultiplyOutputs {
-    /**
-     * Command-line tool for multiplying and manipulating MRI transformation matrices.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_matrices Input matrix files for multiplication.
-     * @param output_matrix Output matrix file.
-     * @param inverted_input_matrices Input matrix files to be inverted before multiplication.
-     * @param verbose Verbose output.
-     * @param fsl Assume input/output are FSL-style matrix files.
-     * @param binarize 'Binarize' the output matrix.
-     * @param subject_name Subject name for output reg.dat files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MATRIX_MULTIPLY_METADATA);
     const params = mri_matrix_multiply_params(input_matrices, output_matrix, inverted_input_matrices, verbose, fsl, binarize, subject_name)
@@ -245,5 +245,8 @@ export {
       MriMatrixMultiplyOutputs,
       MriMatrixMultiplyParameters,
       mri_matrix_multiply,
+      mri_matrix_multiply_cargs,
+      mri_matrix_multiply_execute,
+      mri_matrix_multiply_outputs,
       mri_matrix_multiply_params,
 };

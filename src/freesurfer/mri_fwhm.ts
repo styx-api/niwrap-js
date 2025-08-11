@@ -12,7 +12,7 @@ const MRI_FWHM_METADATA: Metadata = {
 
 
 interface MriFwhmParameters {
-    "__STYXTYPE__": "mri_fwhm";
+    "@type": "freesurfer.mri_fwhm";
     "inputvol": InputPathType;
     "outputvol": string;
     "save_detrended": boolean;
@@ -51,35 +51,35 @@ interface MriFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fwhm": mri_fwhm_cargs,
+        "freesurfer.mri_fwhm": mri_fwhm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fwhm": mri_fwhm_outputs,
+        "freesurfer.mri_fwhm": mri_fwhm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -126,6 +126,47 @@ interface MriFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputvol Input volume file. Format must be something readable by mri_convert (e.g., mgh, mgz, img, nii, nii.gz).
+ * @param outputvol Output volume file: save input after smoothing.
+ * @param save_detrended Save input after smoothing and detrending.
+ * @param save_unmasked Do not mask output volume.
+ * @param smooth_only Smooth and save, do not compute fwhm.
+ * @param mask Binary mask file.
+ * @param mask_thresh Threshold for mask (default is 0.5).
+ * @param auto_mask Auto compute mask based on global mean threshold.
+ * @param nerode Erode mask n times prior to FWHM computation.
+ * @param mask_inv Invert mask.
+ * @param out_mask Save final mask to outmaskvol.
+ * @param detrend_matrix Detrending matrix file in MATLAB4 format.
+ * @param detrend_order Polynomial detrending order (default 0).
+ * @param square_input Compute square of input before smoothing.
+ * @param smooth_by_fwhm Smooth BY fwhm before measuring.
+ * @param smooth_by_gstd Smooth using gstd (equivalent to --fwhm).
+ * @param median_filter Perform median filtering instead of Gaussian.
+ * @param smooth_to_fwhm Smooth TO this FWHM.
+ * @param to_fwhm_tol Tolerance for smoothing to FWHM (default 0.5mm).
+ * @param to_fwhm_nmax Maximum iterations for smoothing to FWHM (default 20).
+ * @param to_fwhm_file Save smoothing to FWHM parameters to file.
+ * @param summary_file Summary/log file.
+ * @param dat_file Prints only the final FWHM estimate into this file.
+ * @param fwhm_dat_file Compute and save the FWHM of each dimension.
+ * @param fwhm_vol_mean_file Compute and save the FWHM of each dimension based on fwhmvol.
+ * @param fwhm_vol Save FWHM volume.
+ * @param synth Synthesize input with white Gaussian noise.
+ * @param synth_frames Number of frames for synthesized input (default is 10).
+ * @param nframes_min Require at least this many frames.
+ * @param ispm Input is SPM-analyze.
+ * @param nspm_zero_padding Zero-padding for SPM-analyze.
+ * @param threads Set OPEN MP threads.
+ * @param debug Turn on debugging.
+ * @param checkopts Check options and exit without running.
+ * @param version Print version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fwhm_params(
     inputvol: InputPathType,
     outputvol: string,
@@ -163,49 +204,8 @@ function mri_fwhm_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): MriFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputvol Input volume file. Format must be something readable by mri_convert (e.g., mgh, mgz, img, nii, nii.gz).
-     * @param outputvol Output volume file: save input after smoothing.
-     * @param save_detrended Save input after smoothing and detrending.
-     * @param save_unmasked Do not mask output volume.
-     * @param smooth_only Smooth and save, do not compute fwhm.
-     * @param mask Binary mask file.
-     * @param mask_thresh Threshold for mask (default is 0.5).
-     * @param auto_mask Auto compute mask based on global mean threshold.
-     * @param nerode Erode mask n times prior to FWHM computation.
-     * @param mask_inv Invert mask.
-     * @param out_mask Save final mask to outmaskvol.
-     * @param detrend_matrix Detrending matrix file in MATLAB4 format.
-     * @param detrend_order Polynomial detrending order (default 0).
-     * @param square_input Compute square of input before smoothing.
-     * @param smooth_by_fwhm Smooth BY fwhm before measuring.
-     * @param smooth_by_gstd Smooth using gstd (equivalent to --fwhm).
-     * @param median_filter Perform median filtering instead of Gaussian.
-     * @param smooth_to_fwhm Smooth TO this FWHM.
-     * @param to_fwhm_tol Tolerance for smoothing to FWHM (default 0.5mm).
-     * @param to_fwhm_nmax Maximum iterations for smoothing to FWHM (default 20).
-     * @param to_fwhm_file Save smoothing to FWHM parameters to file.
-     * @param summary_file Summary/log file.
-     * @param dat_file Prints only the final FWHM estimate into this file.
-     * @param fwhm_dat_file Compute and save the FWHM of each dimension.
-     * @param fwhm_vol_mean_file Compute and save the FWHM of each dimension based on fwhmvol.
-     * @param fwhm_vol Save FWHM volume.
-     * @param synth Synthesize input with white Gaussian noise.
-     * @param synth_frames Number of frames for synthesized input (default is 10).
-     * @param nframes_min Require at least this many frames.
-     * @param ispm Input is SPM-analyze.
-     * @param nspm_zero_padding Zero-padding for SPM-analyze.
-     * @param threads Set OPEN MP threads.
-     * @param debug Turn on debugging.
-     * @param checkopts Check options and exit without running.
-     * @param version Print version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fwhm" as const,
+        "@type": "freesurfer.mri_fwhm" as const,
         "inputvol": inputvol,
         "outputvol": outputvol,
         "save_detrended": save_detrended,
@@ -292,18 +292,18 @@ function mri_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fwhm_cargs(
     params: MriFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fwhm");
     cargs.push(
@@ -486,18 +486,18 @@ function mri_fwhm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fwhm_outputs(
     params: MriFwhmParameters,
     execution: Execution,
 ): MriFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFwhmOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["outputvol"] ?? null)].join('')),
@@ -512,22 +512,22 @@ function mri_fwhm_outputs(
 }
 
 
+/**
+ * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
+ */
 function mri_fwhm_execute(
     params: MriFwhmParameters,
     execution: Execution,
 ): MriFwhmOutputs {
-    /**
-     * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fwhm_cargs(params, execution)
     const ret = mri_fwhm_outputs(params, execution)
@@ -536,6 +536,52 @@ function mri_fwhm_execute(
 }
 
 
+/**
+ * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputvol Input volume file. Format must be something readable by mri_convert (e.g., mgh, mgz, img, nii, nii.gz).
+ * @param outputvol Output volume file: save input after smoothing.
+ * @param save_detrended Save input after smoothing and detrending.
+ * @param save_unmasked Do not mask output volume.
+ * @param smooth_only Smooth and save, do not compute fwhm.
+ * @param mask Binary mask file.
+ * @param mask_thresh Threshold for mask (default is 0.5).
+ * @param auto_mask Auto compute mask based on global mean threshold.
+ * @param nerode Erode mask n times prior to FWHM computation.
+ * @param mask_inv Invert mask.
+ * @param out_mask Save final mask to outmaskvol.
+ * @param detrend_matrix Detrending matrix file in MATLAB4 format.
+ * @param detrend_order Polynomial detrending order (default 0).
+ * @param square_input Compute square of input before smoothing.
+ * @param smooth_by_fwhm Smooth BY fwhm before measuring.
+ * @param smooth_by_gstd Smooth using gstd (equivalent to --fwhm).
+ * @param median_filter Perform median filtering instead of Gaussian.
+ * @param smooth_to_fwhm Smooth TO this FWHM.
+ * @param to_fwhm_tol Tolerance for smoothing to FWHM (default 0.5mm).
+ * @param to_fwhm_nmax Maximum iterations for smoothing to FWHM (default 20).
+ * @param to_fwhm_file Save smoothing to FWHM parameters to file.
+ * @param summary_file Summary/log file.
+ * @param dat_file Prints only the final FWHM estimate into this file.
+ * @param fwhm_dat_file Compute and save the FWHM of each dimension.
+ * @param fwhm_vol_mean_file Compute and save the FWHM of each dimension based on fwhmvol.
+ * @param fwhm_vol Save FWHM volume.
+ * @param synth Synthesize input with white Gaussian noise.
+ * @param synth_frames Number of frames for synthesized input (default is 10).
+ * @param nframes_min Require at least this many frames.
+ * @param ispm Input is SPM-analyze.
+ * @param nspm_zero_padding Zero-padding for SPM-analyze.
+ * @param threads Set OPEN MP threads.
+ * @param debug Turn on debugging.
+ * @param checkopts Check options and exit without running.
+ * @param version Print version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
+ */
 function mri_fwhm(
     inputvol: InputPathType,
     outputvol: string,
@@ -574,52 +620,6 @@ function mri_fwhm(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriFwhmOutputs {
-    /**
-     * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputvol Input volume file. Format must be something readable by mri_convert (e.g., mgh, mgz, img, nii, nii.gz).
-     * @param outputvol Output volume file: save input after smoothing.
-     * @param save_detrended Save input after smoothing and detrending.
-     * @param save_unmasked Do not mask output volume.
-     * @param smooth_only Smooth and save, do not compute fwhm.
-     * @param mask Binary mask file.
-     * @param mask_thresh Threshold for mask (default is 0.5).
-     * @param auto_mask Auto compute mask based on global mean threshold.
-     * @param nerode Erode mask n times prior to FWHM computation.
-     * @param mask_inv Invert mask.
-     * @param out_mask Save final mask to outmaskvol.
-     * @param detrend_matrix Detrending matrix file in MATLAB4 format.
-     * @param detrend_order Polynomial detrending order (default 0).
-     * @param square_input Compute square of input before smoothing.
-     * @param smooth_by_fwhm Smooth BY fwhm before measuring.
-     * @param smooth_by_gstd Smooth using gstd (equivalent to --fwhm).
-     * @param median_filter Perform median filtering instead of Gaussian.
-     * @param smooth_to_fwhm Smooth TO this FWHM.
-     * @param to_fwhm_tol Tolerance for smoothing to FWHM (default 0.5mm).
-     * @param to_fwhm_nmax Maximum iterations for smoothing to FWHM (default 20).
-     * @param to_fwhm_file Save smoothing to FWHM parameters to file.
-     * @param summary_file Summary/log file.
-     * @param dat_file Prints only the final FWHM estimate into this file.
-     * @param fwhm_dat_file Compute and save the FWHM of each dimension.
-     * @param fwhm_vol_mean_file Compute and save the FWHM of each dimension based on fwhmvol.
-     * @param fwhm_vol Save FWHM volume.
-     * @param synth Synthesize input with white Gaussian noise.
-     * @param synth_frames Number of frames for synthesized input (default is 10).
-     * @param nframes_min Require at least this many frames.
-     * @param ispm Input is SPM-analyze.
-     * @param nspm_zero_padding Zero-padding for SPM-analyze.
-     * @param threads Set OPEN MP threads.
-     * @param debug Turn on debugging.
-     * @param checkopts Check options and exit without running.
-     * @param version Print version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FWHM_METADATA);
     const params = mri_fwhm_params(inputvol, outputvol, save_detrended, save_unmasked, smooth_only, mask, mask_thresh, auto_mask, nerode, mask_inv, out_mask, detrend_matrix, detrend_order, square_input, smooth_by_fwhm, smooth_by_gstd, median_filter, smooth_to_fwhm, to_fwhm_tol, to_fwhm_nmax, to_fwhm_file, summary_file, dat_file, fwhm_dat_file, fwhm_vol_mean_file, fwhm_vol, synth, synth_frames, nframes_min, ispm, nspm_zero_padding, threads, debug, checkopts, version)
@@ -632,5 +632,8 @@ export {
       MriFwhmOutputs,
       MriFwhmParameters,
       mri_fwhm,
+      mri_fwhm_cargs,
+      mri_fwhm_execute,
+      mri_fwhm_outputs,
       mri_fwhm_params,
 };

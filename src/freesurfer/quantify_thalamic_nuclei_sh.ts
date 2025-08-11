@@ -12,42 +12,42 @@ const QUANTIFY_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 
 
 interface QuantifyThalamicNucleiShParameters {
-    "__STYXTYPE__": "quantifyThalamicNuclei.sh";
+    "@type": "freesurfer.quantifyThalamicNuclei.sh";
     "output_file": string;
     "analysis_id": string;
     "subjects_directory"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_cargs,
+        "freesurfer.quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_outputs,
+        "freesurfer.quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface QuantifyThalamicNucleiShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output file for the results.
+ * @param analysis_id Analysis ID for specificity.
+ * @param subjects_directory Directory containing subject data.
+ *
+ * @returns Parameter dictionary
+ */
 function quantify_thalamic_nuclei_sh_params(
     output_file: string,
     analysis_id: string,
     subjects_directory: string | null = null,
 ): QuantifyThalamicNucleiShParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output file for the results.
-     * @param analysis_id Analysis ID for specificity.
-     * @param subjects_directory Directory containing subject data.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quantifyThalamicNuclei.sh" as const,
+        "@type": "freesurfer.quantifyThalamicNuclei.sh" as const,
         "output_file": output_file,
         "analysis_id": analysis_id,
     };
@@ -96,18 +96,18 @@ function quantify_thalamic_nuclei_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quantify_thalamic_nuclei_sh_cargs(
     params: QuantifyThalamicNucleiShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quantifyThalamicNuclei.sh");
     cargs.push((params["output_file"] ?? null));
@@ -119,18 +119,18 @@ function quantify_thalamic_nuclei_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quantify_thalamic_nuclei_sh_outputs(
     params: QuantifyThalamicNucleiShParameters,
     execution: Execution,
 ): QuantifyThalamicNucleiShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuantifyThalamicNucleiShOutputs = {
         root: execution.outputFile("."),
         results_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -139,22 +139,22 @@ function quantify_thalamic_nuclei_sh_outputs(
 }
 
 
+/**
+ * Command-line tool to quantify thalamic nuclei using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
+ */
 function quantify_thalamic_nuclei_sh_execute(
     params: QuantifyThalamicNucleiShParameters,
     execution: Execution,
 ): QuantifyThalamicNucleiShOutputs {
-    /**
-     * Command-line tool to quantify thalamic nuclei using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
-     */
     params = execution.params(params)
     const cargs = quantify_thalamic_nuclei_sh_cargs(params, execution)
     const ret = quantify_thalamic_nuclei_sh_outputs(params, execution)
@@ -163,26 +163,26 @@ function quantify_thalamic_nuclei_sh_execute(
 }
 
 
+/**
+ * Command-line tool to quantify thalamic nuclei using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_file Output file for the results.
+ * @param analysis_id Analysis ID for specificity.
+ * @param subjects_directory Directory containing subject data.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
+ */
 function quantify_thalamic_nuclei_sh(
     output_file: string,
     analysis_id: string,
     subjects_directory: string | null = null,
     runner: Runner | null = null,
 ): QuantifyThalamicNucleiShOutputs {
-    /**
-     * Command-line tool to quantify thalamic nuclei using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_file Output file for the results.
-     * @param analysis_id Analysis ID for specificity.
-     * @param subjects_directory Directory containing subject data.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUANTIFY_THALAMIC_NUCLEI_SH_METADATA);
     const params = quantify_thalamic_nuclei_sh_params(output_file, analysis_id, subjects_directory)
@@ -195,5 +195,8 @@ export {
       QuantifyThalamicNucleiShOutputs,
       QuantifyThalamicNucleiShParameters,
       quantify_thalamic_nuclei_sh,
+      quantify_thalamic_nuclei_sh_cargs,
+      quantify_thalamic_nuclei_sh_execute,
+      quantify_thalamic_nuclei_sh_outputs,
       quantify_thalamic_nuclei_sh_params,
 };

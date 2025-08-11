@@ -12,7 +12,7 @@ const MRIS_THICKNESS_METADATA: Metadata = {
 
 
 interface MrisThicknessParameters {
-    "__STYXTYPE__": "mris_thickness";
+    "@type": "freesurfer.mris_thickness";
     "subject_name": string;
     "hemi": string;
     "thickness_file": string;
@@ -23,35 +23,35 @@ interface MrisThicknessParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_thickness": mris_thickness_cargs,
+        "freesurfer.mris_thickness": mris_thickness_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_thickness": mris_thickness_outputs,
+        "freesurfer.mris_thickness": mris_thickness_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisThicknessOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name The subject name for processing.
+ * @param hemi The hemisphere to process (e.g., lh or rh).
+ * @param thickness_file Output file for thickness measurements.
+ * @param max_threshold Use a maximum threshold for thickness (default is 5mm).
+ * @param fill_holes Fill in thickness in holes in the cortex label using fsaverage cortex label.
+ * @param thickness_from_seg Compute thickness from segmentation. Requires the following parameters: surf label, seg.mgz, dmaxmm, ddeltamm, and output.mgz.
+ * @param vector Compute the thickness using a variationally derived vector field.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_thickness_params(
     subject_name: string,
     hemi: string,
@@ -83,21 +96,8 @@ function mris_thickness_params(
     thickness_from_seg: Array<string> | null = null,
     vector: boolean = false,
 ): MrisThicknessParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name The subject name for processing.
-     * @param hemi The hemisphere to process (e.g., lh or rh).
-     * @param thickness_file Output file for thickness measurements.
-     * @param max_threshold Use a maximum threshold for thickness (default is 5mm).
-     * @param fill_holes Fill in thickness in holes in the cortex label using fsaverage cortex label.
-     * @param thickness_from_seg Compute thickness from segmentation. Requires the following parameters: surf label, seg.mgz, dmaxmm, ddeltamm, and output.mgz.
-     * @param vector Compute the thickness using a variationally derived vector field.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_thickness" as const,
+        "@type": "freesurfer.mris_thickness" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "thickness_file": thickness_file,
@@ -116,18 +116,18 @@ function mris_thickness_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_thickness_cargs(
     params: MrisThicknessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_thickness");
     cargs.push((params["subject_name"] ?? null));
@@ -158,18 +158,18 @@ function mris_thickness_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_thickness_outputs(
     params: MrisThicknessParameters,
     execution: Execution,
 ): MrisThicknessOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisThicknessOutputs = {
         root: execution.outputFile("."),
         output_thickness_file: execution.outputFile([(params["thickness_file"] ?? null)].join('')),
@@ -178,22 +178,22 @@ function mris_thickness_outputs(
 }
 
 
+/**
+ * Measures the thickness of the cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
+ */
 function mris_thickness_execute(
     params: MrisThicknessParameters,
     execution: Execution,
 ): MrisThicknessOutputs {
-    /**
-     * Measures the thickness of the cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_thickness_cargs(params, execution)
     const ret = mris_thickness_outputs(params, execution)
@@ -202,6 +202,24 @@ function mris_thickness_execute(
 }
 
 
+/**
+ * Measures the thickness of the cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name The subject name for processing.
+ * @param hemi The hemisphere to process (e.g., lh or rh).
+ * @param thickness_file Output file for thickness measurements.
+ * @param max_threshold Use a maximum threshold for thickness (default is 5mm).
+ * @param fill_holes Fill in thickness in holes in the cortex label using fsaverage cortex label.
+ * @param thickness_from_seg Compute thickness from segmentation. Requires the following parameters: surf label, seg.mgz, dmaxmm, ddeltamm, and output.mgz.
+ * @param vector Compute the thickness using a variationally derived vector field.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
+ */
 function mris_thickness(
     subject_name: string,
     hemi: string,
@@ -212,24 +230,6 @@ function mris_thickness(
     vector: boolean = false,
     runner: Runner | null = null,
 ): MrisThicknessOutputs {
-    /**
-     * Measures the thickness of the cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name The subject name for processing.
-     * @param hemi The hemisphere to process (e.g., lh or rh).
-     * @param thickness_file Output file for thickness measurements.
-     * @param max_threshold Use a maximum threshold for thickness (default is 5mm).
-     * @param fill_holes Fill in thickness in holes in the cortex label using fsaverage cortex label.
-     * @param thickness_from_seg Compute thickness from segmentation. Requires the following parameters: surf label, seg.mgz, dmaxmm, ddeltamm, and output.mgz.
-     * @param vector Compute the thickness using a variationally derived vector field.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_THICKNESS_METADATA);
     const params = mris_thickness_params(subject_name, hemi, thickness_file, max_threshold, fill_holes, thickness_from_seg, vector)
@@ -242,5 +242,8 @@ export {
       MrisThicknessOutputs,
       MrisThicknessParameters,
       mris_thickness,
+      mris_thickness_cargs,
+      mris_thickness_execute,
+      mris_thickness_outputs,
       mris_thickness_params,
 };

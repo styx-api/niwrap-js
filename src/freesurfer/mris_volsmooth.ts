@@ -12,7 +12,7 @@ const MRIS_VOLSMOOTH_METADATA: Metadata = {
 
 
 interface MrisVolsmoothParameters {
-    "__STYXTYPE__": "mris_volsmooth";
+    "@type": "freesurfer.mris_volsmooth";
     "input_volume": InputPathType;
     "output_volume": string;
     "registration": InputPathType;
@@ -29,35 +29,35 @@ interface MrisVolsmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_volsmooth": mris_volsmooth_cargs,
+        "freesurfer.mris_volsmooth": mris_volsmooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_volsmooth": mris_volsmooth_outputs,
+        "freesurfer.mris_volsmooth": mris_volsmooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,25 @@ interface MrisVolsmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Source volume with values that will be smoothed on the surface.
+ * @param output_volume Output volume.
+ * @param registration TKRegister-style registration matrix that maps between the input/output volumes and the FreeSurfer surface anatomical.
+ * @param projfrac Fraction of thickness to project along surface normal.
+ * @param projfrac_avg Average sampling along normal, specified by min, max, and delta.
+ * @param fill_ribbon Fill ribbon.
+ * @param surf_out Save smoothed surfaces as basename.?h.mgh
+ * @param fwhm Surface smoothing by full-width/half-max in mm.
+ * @param niters Specify surface smoothing by number of nearest neighbor smoothing iterations.
+ * @param vol_fwhm Volume smoothing outside of the surface. Surface voxels and non-surface voxels are smoothed separately.
+ * @param log Explicitly set log file.
+ * @param nocleanup Do not delete temporary files.
+ * @param debug Turn on debugging.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_volsmooth_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -103,27 +122,8 @@ function mris_volsmooth_params(
     nocleanup: boolean = false,
     debug: boolean = false,
 ): MrisVolsmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Source volume with values that will be smoothed on the surface.
-     * @param output_volume Output volume.
-     * @param registration TKRegister-style registration matrix that maps between the input/output volumes and the FreeSurfer surface anatomical.
-     * @param projfrac Fraction of thickness to project along surface normal.
-     * @param projfrac_avg Average sampling along normal, specified by min, max, and delta.
-     * @param fill_ribbon Fill ribbon.
-     * @param surf_out Save smoothed surfaces as basename.?h.mgh
-     * @param fwhm Surface smoothing by full-width/half-max in mm.
-     * @param niters Specify surface smoothing by number of nearest neighbor smoothing iterations.
-     * @param vol_fwhm Volume smoothing outside of the surface. Surface voxels and non-surface voxels are smoothed separately.
-     * @param log Explicitly set log file.
-     * @param nocleanup Do not delete temporary files.
-     * @param debug Turn on debugging.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_volsmooth" as const,
+        "@type": "freesurfer.mris_volsmooth" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "registration": registration,
@@ -156,18 +156,18 @@ function mris_volsmooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_volsmooth_cargs(
     params: MrisVolsmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_volsmooth");
     cargs.push(
@@ -237,18 +237,18 @@ function mris_volsmooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_volsmooth_outputs(
     params: MrisVolsmoothParameters,
     execution: Execution,
 ): MrisVolsmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisVolsmoothOutputs = {
         root: execution.outputFile("."),
         outvol_file: execution.outputFile([(params["output_volume"] ?? null), ".mgh"].join('')),
@@ -259,22 +259,22 @@ function mris_volsmooth_outputs(
 }
 
 
+/**
+ * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
+ */
 function mris_volsmooth_execute(
     params: MrisVolsmoothParameters,
     execution: Execution,
 ): MrisVolsmoothOutputs {
-    /**
-     * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_volsmooth_cargs(params, execution)
     const ret = mris_volsmooth_outputs(params, execution)
@@ -283,6 +283,30 @@ function mris_volsmooth_execute(
 }
 
 
+/**
+ * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Source volume with values that will be smoothed on the surface.
+ * @param output_volume Output volume.
+ * @param registration TKRegister-style registration matrix that maps between the input/output volumes and the FreeSurfer surface anatomical.
+ * @param projfrac Fraction of thickness to project along surface normal.
+ * @param projfrac_avg Average sampling along normal, specified by min, max, and delta.
+ * @param fill_ribbon Fill ribbon.
+ * @param surf_out Save smoothed surfaces as basename.?h.mgh
+ * @param fwhm Surface smoothing by full-width/half-max in mm.
+ * @param niters Specify surface smoothing by number of nearest neighbor smoothing iterations.
+ * @param vol_fwhm Volume smoothing outside of the surface. Surface voxels and non-surface voxels are smoothed separately.
+ * @param log Explicitly set log file.
+ * @param nocleanup Do not delete temporary files.
+ * @param debug Turn on debugging.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
+ */
 function mris_volsmooth(
     input_volume: InputPathType,
     output_volume: string,
@@ -299,30 +323,6 @@ function mris_volsmooth(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MrisVolsmoothOutputs {
-    /**
-     * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Source volume with values that will be smoothed on the surface.
-     * @param output_volume Output volume.
-     * @param registration TKRegister-style registration matrix that maps between the input/output volumes and the FreeSurfer surface anatomical.
-     * @param projfrac Fraction of thickness to project along surface normal.
-     * @param projfrac_avg Average sampling along normal, specified by min, max, and delta.
-     * @param fill_ribbon Fill ribbon.
-     * @param surf_out Save smoothed surfaces as basename.?h.mgh
-     * @param fwhm Surface smoothing by full-width/half-max in mm.
-     * @param niters Specify surface smoothing by number of nearest neighbor smoothing iterations.
-     * @param vol_fwhm Volume smoothing outside of the surface. Surface voxels and non-surface voxels are smoothed separately.
-     * @param log Explicitly set log file.
-     * @param nocleanup Do not delete temporary files.
-     * @param debug Turn on debugging.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_VOLSMOOTH_METADATA);
     const params = mris_volsmooth_params(input_volume, output_volume, registration, projfrac, projfrac_avg, fill_ribbon, surf_out, fwhm, niters, vol_fwhm, log, nocleanup, debug)
@@ -335,5 +335,8 @@ export {
       MrisVolsmoothOutputs,
       MrisVolsmoothParameters,
       mris_volsmooth,
+      mris_volsmooth_cargs,
+      mris_volsmooth_execute,
+      mris_volsmooth_outputs,
       mris_volsmooth_params,
 };

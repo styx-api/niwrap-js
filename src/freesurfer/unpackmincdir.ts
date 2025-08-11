@@ -12,7 +12,7 @@ const UNPACKMINCDIR_METADATA: Metadata = {
 
 
 interface UnpackmincdirParameters {
-    "__STYXTYPE__": "unpackmincdir";
+    "@type": "freesurfer.unpackmincdir";
     "source_directory": string;
     "target_directory": string;
     "scan_sequence_info"?: string | null | undefined;
@@ -24,33 +24,33 @@ interface UnpackmincdirParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpackmincdir": unpackmincdir_cargs,
+        "freesurfer.unpackmincdir": unpackmincdir_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface UnpackmincdirOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_directory Source directory containing the MINC files.
+ * @param target_directory Target directory to unpack the contents to.
+ * @param scan_sequence_info Scan sequence directives file, e.g., freesurfer_alpha/scanseq.info.
+ * @param functional_sequence Use seqname for functionals (example: ep2d_fid_ts_20b2604).
+ * @param functional_subdirectory Functional subdirectory, e.g., bold.
+ * @param minc_only Do not unpack into bshorts.
+ * @param no_copy Create directories but do not copy/convert data.
+ * @param umask Unix file permission mask (default: 22).
+ *
+ * @returns Parameter dictionary
+ */
 function unpackmincdir_params(
     source_directory: string,
     target_directory: string,
@@ -80,22 +94,8 @@ function unpackmincdir_params(
     no_copy: boolean = false,
     umask: string | null = null,
 ): UnpackmincdirParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_directory Source directory containing the MINC files.
-     * @param target_directory Target directory to unpack the contents to.
-     * @param scan_sequence_info Scan sequence directives file, e.g., freesurfer_alpha/scanseq.info.
-     * @param functional_sequence Use seqname for functionals (example: ep2d_fid_ts_20b2604).
-     * @param functional_subdirectory Functional subdirectory, e.g., bold.
-     * @param minc_only Do not unpack into bshorts.
-     * @param no_copy Create directories but do not copy/convert data.
-     * @param umask Unix file permission mask (default: 22).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpackmincdir" as const,
+        "@type": "freesurfer.unpackmincdir" as const,
         "source_directory": source_directory,
         "target_directory": target_directory,
         "minc_only": minc_only,
@@ -117,18 +117,18 @@ function unpackmincdir_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpackmincdir_cargs(
     params: UnpackmincdirParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpackmincdir");
     cargs.push(
@@ -173,18 +173,18 @@ function unpackmincdir_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpackmincdir_outputs(
     params: UnpackmincdirParameters,
     execution: Execution,
 ): UnpackmincdirOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnpackmincdirOutputs = {
         root: execution.outputFile("."),
     };
@@ -192,22 +192,22 @@ function unpackmincdir_outputs(
 }
 
 
+/**
+ * Tool for unpacking directories with MINC files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
+ */
 function unpackmincdir_execute(
     params: UnpackmincdirParameters,
     execution: Execution,
 ): UnpackmincdirOutputs {
-    /**
-     * Tool for unpacking directories with MINC files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
-     */
     params = execution.params(params)
     const cargs = unpackmincdir_cargs(params, execution)
     const ret = unpackmincdir_outputs(params, execution)
@@ -216,6 +216,25 @@ function unpackmincdir_execute(
 }
 
 
+/**
+ * Tool for unpacking directories with MINC files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_directory Source directory containing the MINC files.
+ * @param target_directory Target directory to unpack the contents to.
+ * @param scan_sequence_info Scan sequence directives file, e.g., freesurfer_alpha/scanseq.info.
+ * @param functional_sequence Use seqname for functionals (example: ep2d_fid_ts_20b2604).
+ * @param functional_subdirectory Functional subdirectory, e.g., bold.
+ * @param minc_only Do not unpack into bshorts.
+ * @param no_copy Create directories but do not copy/convert data.
+ * @param umask Unix file permission mask (default: 22).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
+ */
 function unpackmincdir(
     source_directory: string,
     target_directory: string,
@@ -227,25 +246,6 @@ function unpackmincdir(
     umask: string | null = null,
     runner: Runner | null = null,
 ): UnpackmincdirOutputs {
-    /**
-     * Tool for unpacking directories with MINC files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_directory Source directory containing the MINC files.
-     * @param target_directory Target directory to unpack the contents to.
-     * @param scan_sequence_info Scan sequence directives file, e.g., freesurfer_alpha/scanseq.info.
-     * @param functional_sequence Use seqname for functionals (example: ep2d_fid_ts_20b2604).
-     * @param functional_subdirectory Functional subdirectory, e.g., bold.
-     * @param minc_only Do not unpack into bshorts.
-     * @param no_copy Create directories but do not copy/convert data.
-     * @param umask Unix file permission mask (default: 22).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACKMINCDIR_METADATA);
     const params = unpackmincdir_params(source_directory, target_directory, scan_sequence_info, functional_sequence, functional_subdirectory, minc_only, no_copy, umask)
@@ -258,5 +258,8 @@ export {
       UnpackmincdirOutputs,
       UnpackmincdirParameters,
       unpackmincdir,
+      unpackmincdir_cargs,
+      unpackmincdir_execute,
+      unpackmincdir_outputs,
       unpackmincdir_params,
 };

@@ -12,33 +12,33 @@ const MRGRID_METADATA: Metadata = {
 
 
 interface MrgridAxisParameters {
-    "__STYXTYPE__": "axis";
+    "@type": "mrtrix.mrgrid.axis";
     "index": number;
     "spec": string;
 }
 
 
 interface MrgridVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.mrgrid.VariousString";
     "obj": string;
 }
 
 
 interface MrgridVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.mrgrid.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrgridConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrgrid.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrgridParameters {
-    "__STYXTYPE__": "mrgrid";
+    "@type": "mrtrix.mrgrid";
     "template"?: InputPathType | null | undefined;
     "size"?: Array<number> | null | undefined;
     "voxel"?: Array<number> | null | undefined;
@@ -68,58 +68,58 @@ interface MrgridParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrgrid": mrgrid_cargs,
-        "axis": mrgrid_axis_cargs,
-        "VariousString": mrgrid_various_string_cargs,
-        "VariousFile": mrgrid_various_file_cargs,
-        "config": mrgrid_config_cargs,
+        "mrtrix.mrgrid": mrgrid_cargs,
+        "mrtrix.mrgrid.axis": mrgrid_axis_cargs,
+        "mrtrix.mrgrid.VariousString": mrgrid_various_string_cargs,
+        "mrtrix.mrgrid.VariousFile": mrgrid_various_file_cargs,
+        "mrtrix.mrgrid.config": mrgrid_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrgrid": mrgrid_outputs,
+        "mrtrix.mrgrid": mrgrid_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param index pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
+ * @param spec pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
+ *
+ * @returns Parameter dictionary
+ */
 function mrgrid_axis_params(
     index: number,
     spec: string,
 ): MrgridAxisParameters {
-    /**
-     * Build parameters.
-    
-     * @param index pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
-     * @param spec pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "axis" as const,
+        "@type": "mrtrix.mrgrid.axis" as const,
         "index": index,
         "spec": spec,
     };
@@ -127,18 +127,18 @@ function mrgrid_axis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrgrid_axis_cargs(
     params: MrgridAxisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-axis");
     cargs.push(String((params["index"] ?? null)));
@@ -147,92 +147,92 @@ function mrgrid_axis_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrgrid_various_string_params(
     obj: string,
 ): MrgridVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.mrgrid.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrgrid_various_string_cargs(
     params: MrgridVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrgrid_various_file_params(
     obj: InputPathType,
 ): MrgridVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.mrgrid.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrgrid_various_file_cargs(
     params: MrgridVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrgrid_config_params(
     key: string,
     value: string,
 ): MrgridConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrgrid.config" as const,
         "key": key,
         "value": value,
     };
@@ -240,18 +240,18 @@ function mrgrid_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrgrid_config_cargs(
     params: MrgridConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -277,6 +277,38 @@ interface MrgridOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input input image to be regridded.
+ * @param operation the operation to be performed, one of: regrid, crop, pad.
+ * @param output the output image.
+ * @param template match the input image grid (voxel spacing, image size, header transformation) to that of a reference image. The image resolution relative to the template image can be changed with one of -size, -voxel, -scale.
+ * @param size define the size (number of voxels) in each spatial dimension for the output image. This should be specified as a comma-separated list.
+ * @param voxel define the new voxel size for the output image. This can be specified either as a single value to be used for all spatial dimensions, or as a comma-separated list of the size for each voxel dimension.
+ * @param scale scale the image resolution by the supplied factor. This can be specified either as a single value to be used for all dimensions, or as a comma-separated list of scale factors for each dimension.
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
+ * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
+ * @param as pad or crop the input image on the upper bound to match the specified reference image grid. This operation ignores differences in image transformation between input and reference image.
+ * @param uniform pad or crop the input image by a uniform number of voxels on all sides
+ * @param mask crop the input image according to the spatial extent of a mask image. The mask must share a common voxel grid with the input image but differences in image transformations are ignored. Note that even though only 3 dimensions are cropped when using a mask, the bounds are computed by checking the extent for all dimensions. Note that by default a gap of 1 voxel is left at all edges of the image to allow valid trilinear interpolation. This gap can be modified with the -uniform option but by default it does not extend beyond the FOV unless -crop_unbound is used.
+ * @param crop_unbound Allow padding beyond the original FOV when cropping.
+ * @param axis pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
+ * @param all_axes Crop or pad all, not just spatial axes.
+ * @param fill Use number as the out of bounds value. nan, inf and -inf are valid arguments. (Default: 0.0)
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrgrid_params(
     input: InputPathType,
     operation: string,
@@ -305,40 +337,8 @@ function mrgrid_params(
     help: boolean = false,
     version: boolean = false,
 ): MrgridParameters {
-    /**
-     * Build parameters.
-    
-     * @param input input image to be regridded.
-     * @param operation the operation to be performed, one of: regrid, crop, pad.
-     * @param output the output image.
-     * @param template match the input image grid (voxel spacing, image size, header transformation) to that of a reference image. The image resolution relative to the template image can be changed with one of -size, -voxel, -scale.
-     * @param size define the size (number of voxels) in each spatial dimension for the output image. This should be specified as a comma-separated list.
-     * @param voxel define the new voxel size for the output image. This can be specified either as a single value to be used for all spatial dimensions, or as a comma-separated list of the size for each voxel dimension.
-     * @param scale scale the image resolution by the supplied factor. This can be specified either as a single value to be used for all dimensions, or as a comma-separated list of scale factors for each dimension.
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
-     * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
-     * @param as pad or crop the input image on the upper bound to match the specified reference image grid. This operation ignores differences in image transformation between input and reference image.
-     * @param uniform pad or crop the input image by a uniform number of voxels on all sides
-     * @param mask crop the input image according to the spatial extent of a mask image. The mask must share a common voxel grid with the input image but differences in image transformations are ignored. Note that even though only 3 dimensions are cropped when using a mask, the bounds are computed by checking the extent for all dimensions. Note that by default a gap of 1 voxel is left at all edges of the image to allow valid trilinear interpolation. This gap can be modified with the -uniform option but by default it does not extend beyond the FOV unless -crop_unbound is used.
-     * @param crop_unbound Allow padding beyond the original FOV when cropping.
-     * @param axis pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
-     * @param all_axes Crop or pad all, not just spatial axes.
-     * @param fill Use number as the out of bounds value. nan, inf and -inf are valid arguments. (Default: 0.0)
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrgrid" as const,
+        "@type": "mrtrix.mrgrid" as const,
         "crop_unbound": crop_unbound,
         "all_axes": all_axes,
         "info": info,
@@ -400,18 +400,18 @@ function mrgrid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrgrid_cargs(
     params: MrgridParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrgrid");
     if ((params["template"] ?? null) !== null) {
@@ -472,7 +472,7 @@ function mrgrid_cargs(
         cargs.push("-crop_unbound");
     }
     if ((params["axis"] ?? null) !== null) {
-        cargs.push(...(params["axis"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["axis"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["all_axes"] ?? null)) {
         cargs.push("-all_axes");
@@ -486,7 +486,7 @@ function mrgrid_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -514,7 +514,7 @@ function mrgrid_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -529,18 +529,18 @@ function mrgrid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrgrid_outputs(
     params: MrgridParameters,
     execution: Execution,
 ): MrgridOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrgridOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -549,34 +549,34 @@ function mrgrid_outputs(
 }
 
 
+/**
+ * Modify the grid of an image without interpolation (cropping or padding) or by regridding to an image grid with modified orientation, location and or resolution. The image content remains in place in real world coordinates..
+ *
+ * - regrid: This operation performs changes of the voxel grid that require interpolation of the image such as changing the resolution or location and orientation of the voxel grid. If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing unless nearest neighbour interpolation is selected or oversample is changed explicitly. The resolution can only be changed for spatial dimensions. 
+ *
+ * - crop: The image extent after cropping, can be specified either manually for each axis dimensions, or via a mask or reference image. The image can be cropped to the extent of a mask. This is useful for axially-acquired brain images, where the image size can be reduced by a factor of 2 by removing the empty space on either side of the brain. Note that cropping does not extend the image beyond the original FOV unless explicitly specified (via -crop_unbound or negative -axis extent).
+ *
+ * - pad: Analogously to cropping, padding increases the FOV of an image without image interpolation. Pad and crop can be performed simultaneously by specifying signed specifier argument values to the -axis option.
+ *
+ * This command encapsulates and extends the functionality of the superseded commands 'mrpad', 'mrcrop' and 'mrresize'. Note the difference in -axis convention used for 'mrcrop' and 'mrpad' (see -axis option description).
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrgridOutputs`).
+ */
 function mrgrid_execute(
     params: MrgridParameters,
     execution: Execution,
 ): MrgridOutputs {
-    /**
-     * Modify the grid of an image without interpolation (cropping or padding) or by regridding to an image grid with modified orientation, location and or resolution. The image content remains in place in real world coordinates..
-     * 
-     * - regrid: This operation performs changes of the voxel grid that require interpolation of the image such as changing the resolution or location and orientation of the voxel grid. If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing unless nearest neighbour interpolation is selected or oversample is changed explicitly. The resolution can only be changed for spatial dimensions. 
-     * 
-     * - crop: The image extent after cropping, can be specified either manually for each axis dimensions, or via a mask or reference image. The image can be cropped to the extent of a mask. This is useful for axially-acquired brain images, where the image size can be reduced by a factor of 2 by removing the empty space on either side of the brain. Note that cropping does not extend the image beyond the original FOV unless explicitly specified (via -crop_unbound or negative -axis extent).
-     * 
-     * - pad: Analogously to cropping, padding increases the FOV of an image without image interpolation. Pad and crop can be performed simultaneously by specifying signed specifier argument values to the -axis option.
-     * 
-     * This command encapsulates and extends the functionality of the superseded commands 'mrpad', 'mrcrop' and 'mrresize'. Note the difference in -axis convention used for 'mrcrop' and 'mrpad' (see -axis option description).
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrgridOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrgrid_cargs(params, execution)
     const ret = mrgrid_outputs(params, execution)
@@ -585,6 +585,55 @@ function mrgrid_execute(
 }
 
 
+/**
+ * Modify the grid of an image without interpolation (cropping or padding) or by regridding to an image grid with modified orientation, location and or resolution. The image content remains in place in real world coordinates..
+ *
+ * - regrid: This operation performs changes of the voxel grid that require interpolation of the image such as changing the resolution or location and orientation of the voxel grid. If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing unless nearest neighbour interpolation is selected or oversample is changed explicitly. The resolution can only be changed for spatial dimensions. 
+ *
+ * - crop: The image extent after cropping, can be specified either manually for each axis dimensions, or via a mask or reference image. The image can be cropped to the extent of a mask. This is useful for axially-acquired brain images, where the image size can be reduced by a factor of 2 by removing the empty space on either side of the brain. Note that cropping does not extend the image beyond the original FOV unless explicitly specified (via -crop_unbound or negative -axis extent).
+ *
+ * - pad: Analogously to cropping, padding increases the FOV of an image without image interpolation. Pad and crop can be performed simultaneously by specifying signed specifier argument values to the -axis option.
+ *
+ * This command encapsulates and extends the functionality of the superseded commands 'mrpad', 'mrcrop' and 'mrresize'. Note the difference in -axis convention used for 'mrcrop' and 'mrpad' (see -axis option description).
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input input image to be regridded.
+ * @param operation the operation to be performed, one of: regrid, crop, pad.
+ * @param output the output image.
+ * @param template match the input image grid (voxel spacing, image size, header transformation) to that of a reference image. The image resolution relative to the template image can be changed with one of -size, -voxel, -scale.
+ * @param size define the size (number of voxels) in each spatial dimension for the output image. This should be specified as a comma-separated list.
+ * @param voxel define the new voxel size for the output image. This can be specified either as a single value to be used for all spatial dimensions, or as a comma-separated list of the size for each voxel dimension.
+ * @param scale scale the image resolution by the supplied factor. This can be specified either as a single value to be used for all dimensions, or as a comma-separated list of scale factors for each dimension.
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
+ * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
+ * @param as pad or crop the input image on the upper bound to match the specified reference image grid. This operation ignores differences in image transformation between input and reference image.
+ * @param uniform pad or crop the input image by a uniform number of voxels on all sides
+ * @param mask crop the input image according to the spatial extent of a mask image. The mask must share a common voxel grid with the input image but differences in image transformations are ignored. Note that even though only 3 dimensions are cropped when using a mask, the bounds are computed by checking the extent for all dimensions. Note that by default a gap of 1 voxel is left at all edges of the image to allow valid trilinear interpolation. This gap can be modified with the -uniform option but by default it does not extend beyond the FOV unless -crop_unbound is used.
+ * @param crop_unbound Allow padding beyond the original FOV when cropping.
+ * @param axis pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
+ * @param all_axes Crop or pad all, not just spatial axes.
+ * @param fill Use number as the out of bounds value. nan, inf and -inf are valid arguments. (Default: 0.0)
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrgridOutputs`).
+ */
 function mrgrid(
     input: InputPathType,
     operation: string,
@@ -614,55 +663,6 @@ function mrgrid(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrgridOutputs {
-    /**
-     * Modify the grid of an image without interpolation (cropping or padding) or by regridding to an image grid with modified orientation, location and or resolution. The image content remains in place in real world coordinates..
-     * 
-     * - regrid: This operation performs changes of the voxel grid that require interpolation of the image such as changing the resolution or location and orientation of the voxel grid. If the image is down-sampled, the appropriate smoothing is automatically applied using Gaussian smoothing unless nearest neighbour interpolation is selected or oversample is changed explicitly. The resolution can only be changed for spatial dimensions. 
-     * 
-     * - crop: The image extent after cropping, can be specified either manually for each axis dimensions, or via a mask or reference image. The image can be cropped to the extent of a mask. This is useful for axially-acquired brain images, where the image size can be reduced by a factor of 2 by removing the empty space on either side of the brain. Note that cropping does not extend the image beyond the original FOV unless explicitly specified (via -crop_unbound or negative -axis extent).
-     * 
-     * - pad: Analogously to cropping, padding increases the FOV of an image without image interpolation. Pad and crop can be performed simultaneously by specifying signed specifier argument values to the -axis option.
-     * 
-     * This command encapsulates and extends the functionality of the superseded commands 'mrpad', 'mrcrop' and 'mrresize'. Note the difference in -axis convention used for 'mrcrop' and 'mrpad' (see -axis option description).
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input input image to be regridded.
-     * @param operation the operation to be performed, one of: regrid, crop, pad.
-     * @param output the output image.
-     * @param template match the input image grid (voxel spacing, image size, header transformation) to that of a reference image. The image resolution relative to the template image can be changed with one of -size, -voxel, -scale.
-     * @param size define the size (number of voxels) in each spatial dimension for the output image. This should be specified as a comma-separated list.
-     * @param voxel define the new voxel size for the output image. This can be specified either as a single value to be used for all spatial dimensions, or as a comma-separated list of the size for each voxel dimension.
-     * @param scale scale the image resolution by the supplied factor. This can be specified either as a single value to be used for all dimensions, or as a comma-separated list of scale factors for each dimension.
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
-     * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
-     * @param as pad or crop the input image on the upper bound to match the specified reference image grid. This operation ignores differences in image transformation between input and reference image.
-     * @param uniform pad or crop the input image by a uniform number of voxels on all sides
-     * @param mask crop the input image according to the spatial extent of a mask image. The mask must share a common voxel grid with the input image but differences in image transformations are ignored. Note that even though only 3 dimensions are cropped when using a mask, the bounds are computed by checking the extent for all dimensions. Note that by default a gap of 1 voxel is left at all edges of the image to allow valid trilinear interpolation. This gap can be modified with the -uniform option but by default it does not extend beyond the FOV unless -crop_unbound is used.
-     * @param crop_unbound Allow padding beyond the original FOV when cropping.
-     * @param axis pad or crop the input image along the provided axis (defined by index). The specifier argument defines the number of voxels added or removed on the lower or upper end of the axis (-axis index delta_lower,delta_upper) or acts as a voxel selection range (-axis index start:stop). In both modes, values are relative to the input image (overriding all other extent-specifying options). Negative delta specifier values trigger the inverse operation (pad instead of crop and vice versa) and negative range specifier trigger padding. Note that the deprecated commands 'mrcrop' and 'mrpad' used range-based and delta-based -axis indices, respectively.
-     * @param all_axes Crop or pad all, not just spatial axes.
-     * @param fill Use number as the out of bounds value. nan, inf and -inf are valid arguments. (Default: 0.0)
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrgridOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRGRID_METADATA);
     const params = mrgrid_params(input, operation, output, template, size, voxel, scale, interp, oversample, as, uniform, mask, crop_unbound, axis, all_axes, fill, strides, datatype, info, quiet, debug, force, nthreads, config, help, version)
@@ -679,9 +679,16 @@ export {
       MrgridVariousFileParameters,
       MrgridVariousStringParameters,
       mrgrid,
+      mrgrid_axis_cargs,
       mrgrid_axis_params,
+      mrgrid_cargs,
+      mrgrid_config_cargs,
       mrgrid_config_params,
+      mrgrid_execute,
+      mrgrid_outputs,
       mrgrid_params,
+      mrgrid_various_file_cargs,
       mrgrid_various_file_params,
+      mrgrid_various_string_cargs,
       mrgrid_various_string_params,
 };

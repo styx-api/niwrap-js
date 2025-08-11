@@ -12,7 +12,7 @@ const RUN_FIRST_ALL_METADATA: Metadata = {
 
 
 interface RunFirstAllParameters {
-    "__STYXTYPE__": "run_first_all";
+    "@type": "fsl.run_first_all";
     "method"?: "auto" | "fast" | "none" | null | undefined;
     "brainextract_flag": boolean;
     "structure"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface RunFirstAllParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_first_all": run_first_all_cargs,
+        "fsl.run_first_all": run_first_all_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "run_first_all": run_first_all_outputs,
+        "fsl.run_first_all": run_first_all_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface RunFirstAllOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image file
+ * @param output_image Output image file
+ * @param method Method for brain extraction (auto, fast, none or a numerical threshold value)
+ * @param brainextract_flag Input is already brain extracted
+ * @param structure Run only on one specified structure (e.g. L_Hipp) or a comma separated list (no spaces)
+ * @param affine_matrix Use affine matrix (do not re-run registration)
+ * @param threestage_flag Use 3-stage affine registration (only currently for hippocampus)
+ * @param debug_flag Do not cleanup image output files (useful for debugging)
+ * @param verbose_flag Verbose output
+ *
+ * @returns Parameter dictionary
+ */
 function run_first_all_params(
     input_image: InputPathType,
     output_image: string,
@@ -87,23 +102,8 @@ function run_first_all_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
 ): RunFirstAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image file
-     * @param output_image Output image file
-     * @param method Method for brain extraction (auto, fast, none or a numerical threshold value)
-     * @param brainextract_flag Input is already brain extracted
-     * @param structure Run only on one specified structure (e.g. L_Hipp) or a comma separated list (no spaces)
-     * @param affine_matrix Use affine matrix (do not re-run registration)
-     * @param threestage_flag Use 3-stage affine registration (only currently for hippocampus)
-     * @param debug_flag Do not cleanup image output files (useful for debugging)
-     * @param verbose_flag Verbose output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_first_all" as const,
+        "@type": "fsl.run_first_all" as const,
         "brainextract_flag": brainextract_flag,
         "threestage_flag": threestage_flag,
         "debug_flag": debug_flag,
@@ -124,18 +124,18 @@ function run_first_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_first_all_cargs(
     params: RunFirstAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_first_all");
     if ((params["method"] ?? null) !== null) {
@@ -180,18 +180,18 @@ function run_first_all_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_first_all_outputs(
     params: RunFirstAllParameters,
     execution: Execution,
 ): RunFirstAllOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunFirstAllOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -200,22 +200,22 @@ function run_first_all_outputs(
 }
 
 
+/**
+ * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
+ */
 function run_first_all_execute(
     params: RunFirstAllParameters,
     execution: Execution,
 ): RunFirstAllOutputs {
-    /**
-     * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_first_all_cargs(params, execution)
     const ret = run_first_all_outputs(params, execution)
@@ -224,6 +224,26 @@ function run_first_all_execute(
 }
 
 
+/**
+ * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image file
+ * @param output_image Output image file
+ * @param method Method for brain extraction (auto, fast, none or a numerical threshold value)
+ * @param brainextract_flag Input is already brain extracted
+ * @param structure Run only on one specified structure (e.g. L_Hipp) or a comma separated list (no spaces)
+ * @param affine_matrix Use affine matrix (do not re-run registration)
+ * @param threestage_flag Use 3-stage affine registration (only currently for hippocampus)
+ * @param debug_flag Do not cleanup image output files (useful for debugging)
+ * @param verbose_flag Verbose output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
+ */
 function run_first_all(
     input_image: InputPathType,
     output_image: string,
@@ -236,26 +256,6 @@ function run_first_all(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): RunFirstAllOutputs {
-    /**
-     * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image file
-     * @param output_image Output image file
-     * @param method Method for brain extraction (auto, fast, none or a numerical threshold value)
-     * @param brainextract_flag Input is already brain extracted
-     * @param structure Run only on one specified structure (e.g. L_Hipp) or a comma separated list (no spaces)
-     * @param affine_matrix Use affine matrix (do not re-run registration)
-     * @param threestage_flag Use 3-stage affine registration (only currently for hippocampus)
-     * @param debug_flag Do not cleanup image output files (useful for debugging)
-     * @param verbose_flag Verbose output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_FIRST_ALL_METADATA);
     const params = run_first_all_params(input_image, output_image, method, brainextract_flag, structure, affine_matrix, threestage_flag, debug_flag, verbose_flag)
@@ -268,5 +268,8 @@ export {
       RunFirstAllOutputs,
       RunFirstAllParameters,
       run_first_all,
+      run_first_all_cargs,
+      run_first_all_execute,
+      run_first_all_outputs,
       run_first_all_params,
 };

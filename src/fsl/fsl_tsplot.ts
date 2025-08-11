@@ -12,7 +12,7 @@ const FSL_TSPLOT_METADATA: Metadata = {
 
 
 interface FslTsplotParameters {
-    "__STYXTYPE__": "fsl_tsplot";
+    "@type": "fsl.fsl_tsplot";
     "input_files": string;
     "output_file": string;
     "title"?: string | null | undefined;
@@ -32,35 +32,35 @@ interface FslTsplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_tsplot": fsl_tsplot_cargs,
+        "fsl.fsl_tsplot": fsl_tsplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_tsplot": fsl_tsplot_outputs,
+        "fsl.fsl_tsplot": fsl_tsplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface FslTsplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Comma-separated list of input file names (ASCII text matrix, one column per timecourse)
+ * @param output_file Output filename for the PNG file
+ * @param title Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param labels Comma-separated list of labels
+ * @param ymin Minimum y-value
+ * @param ymax Maximum y-value
+ * @param xlabel X-axis label
+ * @param ylabel Y-axis label
+ * @param height Plot height in pixels (default 150)
+ * @param width Plot width in pixels (default 600)
+ * @param unit Scaling units for x-axis (default 1...length of infile)
+ * @param precision Precision of x-axis labels
+ * @param sci_flag Switch on scientific notation
+ * @param start_col Position of first column to plot
+ * @param end_col Position of final column to plot
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_tsplot_params(
     input_files: string,
     output_file: string,
@@ -101,30 +123,8 @@ function fsl_tsplot_params(
     start_col: number | null = null,
     end_col: number | null = null,
 ): FslTsplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Comma-separated list of input file names (ASCII text matrix, one column per timecourse)
-     * @param output_file Output filename for the PNG file
-     * @param title Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param labels Comma-separated list of labels
-     * @param ymin Minimum y-value
-     * @param ymax Maximum y-value
-     * @param xlabel X-axis label
-     * @param ylabel Y-axis label
-     * @param height Plot height in pixels (default 150)
-     * @param width Plot width in pixels (default 600)
-     * @param unit Scaling units for x-axis (default 1...length of infile)
-     * @param precision Precision of x-axis labels
-     * @param sci_flag Switch on scientific notation
-     * @param start_col Position of first column to plot
-     * @param end_col Position of final column to plot
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_tsplot" as const,
+        "@type": "fsl.fsl_tsplot" as const,
         "input_files": input_files,
         "output_file": output_file,
         "sci_flag": sci_flag,
@@ -172,18 +172,18 @@ function fsl_tsplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_tsplot_cargs(
     params: FslTsplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_tsplot");
     cargs.push(
@@ -279,18 +279,18 @@ function fsl_tsplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_tsplot_outputs(
     params: FslTsplotParameters,
     execution: Execution,
 ): FslTsplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslTsplotOutputs = {
         root: execution.outputFile("."),
         output_png: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -299,22 +299,22 @@ function fsl_tsplot_outputs(
 }
 
 
+/**
+ * Timeseries plotting tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
+ */
 function fsl_tsplot_execute(
     params: FslTsplotParameters,
     execution: Execution,
 ): FslTsplotOutputs {
-    /**
-     * Timeseries plotting tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_tsplot_cargs(params, execution)
     const ret = fsl_tsplot_outputs(params, execution)
@@ -323,6 +323,33 @@ function fsl_tsplot_execute(
 }
 
 
+/**
+ * Timeseries plotting tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_files Comma-separated list of input file names (ASCII text matrix, one column per timecourse)
+ * @param output_file Output filename for the PNG file
+ * @param title Plot title
+ * @param legend_file File name of ASCII text file, one row per legend entry
+ * @param labels Comma-separated list of labels
+ * @param ymin Minimum y-value
+ * @param ymax Maximum y-value
+ * @param xlabel X-axis label
+ * @param ylabel Y-axis label
+ * @param height Plot height in pixels (default 150)
+ * @param width Plot width in pixels (default 600)
+ * @param unit Scaling units for x-axis (default 1...length of infile)
+ * @param precision Precision of x-axis labels
+ * @param sci_flag Switch on scientific notation
+ * @param start_col Position of first column to plot
+ * @param end_col Position of final column to plot
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
+ */
 function fsl_tsplot(
     input_files: string,
     output_file: string,
@@ -342,33 +369,6 @@ function fsl_tsplot(
     end_col: number | null = null,
     runner: Runner | null = null,
 ): FslTsplotOutputs {
-    /**
-     * Timeseries plotting tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_files Comma-separated list of input file names (ASCII text matrix, one column per timecourse)
-     * @param output_file Output filename for the PNG file
-     * @param title Plot title
-     * @param legend_file File name of ASCII text file, one row per legend entry
-     * @param labels Comma-separated list of labels
-     * @param ymin Minimum y-value
-     * @param ymax Maximum y-value
-     * @param xlabel X-axis label
-     * @param ylabel Y-axis label
-     * @param height Plot height in pixels (default 150)
-     * @param width Plot width in pixels (default 600)
-     * @param unit Scaling units for x-axis (default 1...length of infile)
-     * @param precision Precision of x-axis labels
-     * @param sci_flag Switch on scientific notation
-     * @param start_col Position of first column to plot
-     * @param end_col Position of final column to plot
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_TSPLOT_METADATA);
     const params = fsl_tsplot_params(input_files, output_file, title, legend_file, labels, ymin, ymax, xlabel, ylabel, height, width, unit, precision, sci_flag, start_col, end_col)
@@ -381,5 +381,8 @@ export {
       FslTsplotOutputs,
       FslTsplotParameters,
       fsl_tsplot,
+      fsl_tsplot_cargs,
+      fsl_tsplot_execute,
+      fsl_tsplot_outputs,
       fsl_tsplot_params,
 };

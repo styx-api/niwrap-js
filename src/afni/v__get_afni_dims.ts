@@ -12,40 +12,40 @@ const V__GET_AFNI_DIMS_METADATA: Metadata = {
 
 
 interface VGetAfniDimsParameters {
-    "__STYXTYPE__": "@GetAfniDims";
+    "@type": "afni.@GetAfniDims";
     "input_dset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniDims": v__get_afni_dims_cargs,
+        "afni.@GetAfniDims": v__get_afni_dims_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@GetAfniDims": v__get_afni_dims_outputs,
+        "afni.@GetAfniDims": v__get_afni_dims_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VGetAfniDimsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dset Input AFNI dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_dims_params(
     input_dset: InputPathType,
 ): VGetAfniDimsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dset Input AFNI dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniDims" as const,
+        "@type": "afni.@GetAfniDims" as const,
         "input_dset": input_dset,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_dims_cargs(
     params: VGetAfniDimsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniDims");
     cargs.push(execution.inputFile((params["input_dset"] ?? null)));
@@ -105,18 +105,18 @@ function v__get_afni_dims_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_dims_outputs(
     params: VGetAfniDimsParameters,
     execution: Execution,
 ): VGetAfniDimsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniDimsOutputs = {
         root: execution.outputFile("."),
         dims_output: execution.outputFile(["dims_output.txt"].join('')),
@@ -125,22 +125,22 @@ function v__get_afni_dims_outputs(
 }
 
 
+/**
+ * A utility tool to return dimensions of AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
+ */
 function v__get_afni_dims_execute(
     params: VGetAfniDimsParameters,
     execution: Execution,
 ): VGetAfniDimsOutputs {
-    /**
-     * A utility tool to return dimensions of AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_dims_cargs(params, execution)
     const ret = v__get_afni_dims_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__get_afni_dims_execute(
 }
 
 
+/**
+ * A utility tool to return dimensions of AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dset Input AFNI dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
+ */
 function v__get_afni_dims(
     input_dset: InputPathType,
     runner: Runner | null = null,
 ): VGetAfniDimsOutputs {
-    /**
-     * A utility tool to return dimensions of AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dset Input AFNI dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_DIMS_METADATA);
     const params = v__get_afni_dims_params(input_dset)
@@ -177,5 +177,8 @@ export {
       VGetAfniDimsParameters,
       V__GET_AFNI_DIMS_METADATA,
       v__get_afni_dims,
+      v__get_afni_dims_cargs,
+      v__get_afni_dims_execute,
+      v__get_afni_dims_outputs,
       v__get_afni_dims_params,
 };

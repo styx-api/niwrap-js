@@ -12,7 +12,7 @@ const LABEL2FLAT_METADATA: Metadata = {
 
 
 interface Label2flatParameters {
-    "__STYXTYPE__": "label2flat";
+    "@type": "freesurfer.label2flat";
     "subject_name": string;
     "label_file": InputPathType;
     "patch_file": InputPathType;
@@ -20,35 +20,35 @@ interface Label2flatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label2flat": label2flat_cargs,
+        "freesurfer.label2flat": label2flat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label2flat": label2flat_outputs,
+        "freesurfer.label2flat": label2flat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface Label2flatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name The name of the subject.
+ * @param label_file The label file path.
+ * @param patch_file The patch file path.
+ * @param output_file The output file path.
+ *
+ * @returns Parameter dictionary
+ */
 function label2flat_params(
     subject_name: string,
     label_file: InputPathType,
     patch_file: InputPathType,
     output_file: string,
 ): Label2flatParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name The name of the subject.
-     * @param label_file The label file path.
-     * @param patch_file The patch file path.
-     * @param output_file The output file path.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label2flat" as const,
+        "@type": "freesurfer.label2flat" as const,
         "subject_name": subject_name,
         "label_file": label_file,
         "patch_file": patch_file,
@@ -98,18 +98,18 @@ function label2flat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2flat_cargs(
     params: Label2flatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label2flat");
     cargs.push((params["subject_name"] ?? null));
@@ -120,18 +120,18 @@ function label2flat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label2flat_outputs(
     params: Label2flatParameters,
     execution: Execution,
 ): Label2flatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Label2flatOutputs = {
         root: execution.outputFile("."),
         result_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function label2flat_outputs(
 }
 
 
+/**
+ * A tool used in FreeSurfer to process labeling and patch files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
+ */
 function label2flat_execute(
     params: Label2flatParameters,
     execution: Execution,
 ): Label2flatOutputs {
-    /**
-     * A tool used in FreeSurfer to process labeling and patch files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
-     */
     params = execution.params(params)
     const cargs = label2flat_cargs(params, execution)
     const ret = label2flat_outputs(params, execution)
@@ -164,6 +164,21 @@ function label2flat_execute(
 }
 
 
+/**
+ * A tool used in FreeSurfer to process labeling and patch files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name The name of the subject.
+ * @param label_file The label file path.
+ * @param patch_file The patch file path.
+ * @param output_file The output file path.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
+ */
 function label2flat(
     subject_name: string,
     label_file: InputPathType,
@@ -171,21 +186,6 @@ function label2flat(
     output_file: string,
     runner: Runner | null = null,
 ): Label2flatOutputs {
-    /**
-     * A tool used in FreeSurfer to process labeling and patch files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name The name of the subject.
-     * @param label_file The label file path.
-     * @param patch_file The patch file path.
-     * @param output_file The output file path.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL2FLAT_METADATA);
     const params = label2flat_params(subject_name, label_file, patch_file, output_file)
@@ -198,5 +198,8 @@ export {
       Label2flatOutputs,
       Label2flatParameters,
       label2flat,
+      label2flat_cargs,
+      label2flat_execute,
+      label2flat_outputs,
       label2flat_params,
 };

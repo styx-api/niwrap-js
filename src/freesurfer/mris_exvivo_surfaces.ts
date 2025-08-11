@@ -12,7 +12,7 @@ const MRIS_EXVIVO_SURFACES_METADATA: Metadata = {
 
 
 interface MrisExvivoSurfacesParameters {
-    "__STYXTYPE__": "mris_exvivo_surfaces";
+    "@type": "freesurfer.mris_exvivo_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "omit_self_intersection": boolean;
@@ -23,35 +23,35 @@ interface MrisExvivoSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_exvivo_surfaces": mris_exvivo_surfaces_cargs,
+        "freesurfer.mris_exvivo_surfaces": mris_exvivo_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_exvivo_surfaces": mris_exvivo_surfaces_outputs,
+        "freesurfer.mris_exvivo_surfaces": mris_exvivo_surfaces_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,19 @@ interface MrisExvivoSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Hemisphere (e.g., lh or rh)
+ * @param omit_self_intersection Omit self-intersection check and only generate gray/white surface.
+ * @param create_curvature_area Create curvature and area files from white matter surface.
+ * @param average_curvature Average curvature values a specified number of times.
+ * @param white_only Only generate the white matter surface.
+ * @param formalin Assume hemisphere is in formalin, with provided value indicating presence (0,1).
+ *
+ * @returns Parameter dictionary
+ */
 function mris_exvivo_surfaces_params(
     subject_name: string,
     hemisphere: string,
@@ -95,21 +108,8 @@ function mris_exvivo_surfaces_params(
     white_only: boolean = false,
     formalin: number | null = null,
 ): MrisExvivoSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Hemisphere (e.g., lh or rh)
-     * @param omit_self_intersection Omit self-intersection check and only generate gray/white surface.
-     * @param create_curvature_area Create curvature and area files from white matter surface.
-     * @param average_curvature Average curvature values a specified number of times.
-     * @param white_only Only generate the white matter surface.
-     * @param formalin Assume hemisphere is in formalin, with provided value indicating presence (0,1).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_exvivo_surfaces" as const,
+        "@type": "freesurfer.mris_exvivo_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "omit_self_intersection": omit_self_intersection,
@@ -126,18 +126,18 @@ function mris_exvivo_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_exvivo_surfaces_cargs(
     params: MrisExvivoSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_exvivo_surfaces");
     cargs.push((params["subject_name"] ?? null));
@@ -167,18 +167,18 @@ function mris_exvivo_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_exvivo_surfaces_outputs(
     params: MrisExvivoSurfacesParameters,
     execution: Execution,
 ): MrisExvivoSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisExvivoSurfacesOutputs = {
         root: execution.outputFile("."),
         white_surface: execution.outputFile(["<subject_name>_<hemisphere>_white"].join('')),
@@ -190,22 +190,22 @@ function mris_exvivo_surfaces_outputs(
 }
 
 
+/**
+ * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
+ */
 function mris_exvivo_surfaces_execute(
     params: MrisExvivoSurfacesParameters,
     execution: Execution,
 ): MrisExvivoSurfacesOutputs {
-    /**
-     * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_exvivo_surfaces_cargs(params, execution)
     const ret = mris_exvivo_surfaces_outputs(params, execution)
@@ -214,6 +214,24 @@ function mris_exvivo_surfaces_execute(
 }
 
 
+/**
+ * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Hemisphere (e.g., lh or rh)
+ * @param omit_self_intersection Omit self-intersection check and only generate gray/white surface.
+ * @param create_curvature_area Create curvature and area files from white matter surface.
+ * @param average_curvature Average curvature values a specified number of times.
+ * @param white_only Only generate the white matter surface.
+ * @param formalin Assume hemisphere is in formalin, with provided value indicating presence (0,1).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
+ */
 function mris_exvivo_surfaces(
     subject_name: string,
     hemisphere: string,
@@ -224,24 +242,6 @@ function mris_exvivo_surfaces(
     formalin: number | null = null,
     runner: Runner | null = null,
 ): MrisExvivoSurfacesOutputs {
-    /**
-     * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Hemisphere (e.g., lh or rh)
-     * @param omit_self_intersection Omit self-intersection check and only generate gray/white surface.
-     * @param create_curvature_area Create curvature and area files from white matter surface.
-     * @param average_curvature Average curvature values a specified number of times.
-     * @param white_only Only generate the white matter surface.
-     * @param formalin Assume hemisphere is in formalin, with provided value indicating presence (0,1).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_EXVIVO_SURFACES_METADATA);
     const params = mris_exvivo_surfaces_params(subject_name, hemisphere, omit_self_intersection, create_curvature_area, average_curvature, white_only, formalin)
@@ -254,5 +254,8 @@ export {
       MrisExvivoSurfacesOutputs,
       MrisExvivoSurfacesParameters,
       mris_exvivo_surfaces,
+      mris_exvivo_surfaces_cargs,
+      mris_exvivo_surfaces_execute,
+      mris_exvivo_surfaces_outputs,
       mris_exvivo_surfaces_params,
 };

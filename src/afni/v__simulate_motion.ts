@@ -12,7 +12,7 @@ const V__SIMULATE_MOTION_METADATA: Metadata = {
 
 
 interface VSimulateMotionParameters {
-    "__STYXTYPE__": "@simulate_motion";
+    "@type": "afni.@simulate_motion";
     "epi": InputPathType;
     "motion_file": InputPathType;
     "epi_timing"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface VSimulateMotionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@simulate_motion": v__simulate_motion_cargs,
+        "afni.@simulate_motion": v__simulate_motion_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@simulate_motion": v__simulate_motion_outputs,
+        "afni.@simulate_motion": v__simulate_motion_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface VSimulateMotionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param epi Input EPI volume or time series (only a volreg base is needed, though more is okay).
+ * @param motion_file Motion parameter file (as output by 3dvolreg).
+ * @param epi_timing Provide EPI dataset with slice timing.
+ * @param prefix Prefix for data results (default = motion_sim.NUM_TRS).
+ * @param save_workdir Do not remove the 'work' directory.
+ * @param test Only test running the program, do not create a simulated motion dataset.
+ * @param verb_level Specify a verbose level (default = 1).
+ * @param vr_base 0-based index of volreg base in EPI dataset.
+ * @param warp_method Specify a method for forward alignment/transform.
+ * @param warp_1_d Specify a 12 parameter affine transformation.
+ * @param warp_master Specify a grid master dataset for the -warp_1D transform.
+ * @param wsinc5 Use wsinc5 interpolation in 3dAllineate.
+ * @param help Show help message.
+ * @param hist Show program modification history.
+ * @param todo Show current todo list.
+ * @param ver Show program version.
+ *
+ * @returns Parameter dictionary
+ */
 function v__simulate_motion_params(
     epi: InputPathType,
     motion_file: InputPathType,
@@ -101,30 +123,8 @@ function v__simulate_motion_params(
     todo: boolean = false,
     ver: boolean = false,
 ): VSimulateMotionParameters {
-    /**
-     * Build parameters.
-    
-     * @param epi Input EPI volume or time series (only a volreg base is needed, though more is okay).
-     * @param motion_file Motion parameter file (as output by 3dvolreg).
-     * @param epi_timing Provide EPI dataset with slice timing.
-     * @param prefix Prefix for data results (default = motion_sim.NUM_TRS).
-     * @param save_workdir Do not remove the 'work' directory.
-     * @param test Only test running the program, do not create a simulated motion dataset.
-     * @param verb_level Specify a verbose level (default = 1).
-     * @param vr_base 0-based index of volreg base in EPI dataset.
-     * @param warp_method Specify a method for forward alignment/transform.
-     * @param warp_1_d Specify a 12 parameter affine transformation.
-     * @param warp_master Specify a grid master dataset for the -warp_1D transform.
-     * @param wsinc5 Use wsinc5 interpolation in 3dAllineate.
-     * @param help Show help message.
-     * @param hist Show program modification history.
-     * @param todo Show current todo list.
-     * @param ver Show program version.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@simulate_motion" as const,
+        "@type": "afni.@simulate_motion" as const,
         "epi": epi,
         "motion_file": motion_file,
         "save_workdir": save_workdir,
@@ -160,18 +160,18 @@ function v__simulate_motion_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__simulate_motion_cargs(
     params: VSimulateMotionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@simulate_motion");
     cargs.push(
@@ -249,18 +249,18 @@ function v__simulate_motion_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__simulate_motion_outputs(
     params: VSimulateMotionParameters,
     execution: Execution,
 ): VSimulateMotionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSimulateMotionOutputs = {
         root: execution.outputFile("."),
         simulated_motion_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_simulated_motion.nii.gz"].join('')) : null,
@@ -269,22 +269,22 @@ function v__simulate_motion_outputs(
 }
 
 
+/**
+ * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
+ */
 function v__simulate_motion_execute(
     params: VSimulateMotionParameters,
     execution: Execution,
 ): VSimulateMotionOutputs {
-    /**
-     * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__simulate_motion_cargs(params, execution)
     const ret = v__simulate_motion_outputs(params, execution)
@@ -293,6 +293,33 @@ function v__simulate_motion_execute(
 }
 
 
+/**
+ * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param epi Input EPI volume or time series (only a volreg base is needed, though more is okay).
+ * @param motion_file Motion parameter file (as output by 3dvolreg).
+ * @param epi_timing Provide EPI dataset with slice timing.
+ * @param prefix Prefix for data results (default = motion_sim.NUM_TRS).
+ * @param save_workdir Do not remove the 'work' directory.
+ * @param test Only test running the program, do not create a simulated motion dataset.
+ * @param verb_level Specify a verbose level (default = 1).
+ * @param vr_base 0-based index of volreg base in EPI dataset.
+ * @param warp_method Specify a method for forward alignment/transform.
+ * @param warp_1_d Specify a 12 parameter affine transformation.
+ * @param warp_master Specify a grid master dataset for the -warp_1D transform.
+ * @param wsinc5 Use wsinc5 interpolation in 3dAllineate.
+ * @param help Show help message.
+ * @param hist Show program modification history.
+ * @param todo Show current todo list.
+ * @param ver Show program version.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
+ */
 function v__simulate_motion(
     epi: InputPathType,
     motion_file: InputPathType,
@@ -312,33 +339,6 @@ function v__simulate_motion(
     ver: boolean = false,
     runner: Runner | null = null,
 ): VSimulateMotionOutputs {
-    /**
-     * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param epi Input EPI volume or time series (only a volreg base is needed, though more is okay).
-     * @param motion_file Motion parameter file (as output by 3dvolreg).
-     * @param epi_timing Provide EPI dataset with slice timing.
-     * @param prefix Prefix for data results (default = motion_sim.NUM_TRS).
-     * @param save_workdir Do not remove the 'work' directory.
-     * @param test Only test running the program, do not create a simulated motion dataset.
-     * @param verb_level Specify a verbose level (default = 1).
-     * @param vr_base 0-based index of volreg base in EPI dataset.
-     * @param warp_method Specify a method for forward alignment/transform.
-     * @param warp_1_d Specify a 12 parameter affine transformation.
-     * @param warp_master Specify a grid master dataset for the -warp_1D transform.
-     * @param wsinc5 Use wsinc5 interpolation in 3dAllineate.
-     * @param help Show help message.
-     * @param hist Show program modification history.
-     * @param todo Show current todo list.
-     * @param ver Show program version.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SIMULATE_MOTION_METADATA);
     const params = v__simulate_motion_params(epi, motion_file, epi_timing, prefix, save_workdir, test, verb_level, vr_base, warp_method, warp_1_d, warp_master, wsinc5, help, hist, todo, ver)
@@ -351,5 +351,8 @@ export {
       VSimulateMotionParameters,
       V__SIMULATE_MOTION_METADATA,
       v__simulate_motion,
+      v__simulate_motion_cargs,
+      v__simulate_motion_execute,
+      v__simulate_motion_outputs,
       v__simulate_motion_params,
 };

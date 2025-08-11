@@ -12,40 +12,40 @@ const V__SHOW_DYNAMIC_RANGE_METADATA: Metadata = {
 
 
 interface VShowDynamicRangeParameters {
-    "__STYXTYPE__": "@ShowDynamicRange";
+    "@type": "afni.@ShowDynamicRange";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ShowDynamicRange": v__show_dynamic_range_cargs,
+        "afni.@ShowDynamicRange": v__show_dynamic_range_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ShowDynamicRange": v__show_dynamic_range_outputs,
+        "afni.@ShowDynamicRange": v__show_dynamic_range_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,36 +72,36 @@ interface VShowDynamicRangeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input EPI time series dataset (e.g. epi.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function v__show_dynamic_range_params(
     infile: InputPathType,
 ): VShowDynamicRangeParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input EPI time series dataset (e.g. epi.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ShowDynamicRange" as const,
+        "@type": "afni.@ShowDynamicRange" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__show_dynamic_range_cargs(
     params: VShowDynamicRangeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ShowDynamicRange");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -109,18 +109,18 @@ function v__show_dynamic_range_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__show_dynamic_range_outputs(
     params: VShowDynamicRangeParameters,
     execution: Execution,
 ): VShowDynamicRangeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VShowDynamicRangeOutputs = {
         root: execution.outputFile("."),
         minpercchange_file: execution.outputFile([path.basename((params["infile"] ?? null)), "_minpercchange.nii.gz"].join('')),
@@ -130,22 +130,22 @@ function v__show_dynamic_range_outputs(
 }
 
 
+/**
+ * The script checks the dynamic range of the time series data at locations inside the brain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
+ */
 function v__show_dynamic_range_execute(
     params: VShowDynamicRangeParameters,
     execution: Execution,
 ): VShowDynamicRangeOutputs {
-    /**
-     * The script checks the dynamic range of the time series data at locations inside the brain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__show_dynamic_range_cargs(params, execution)
     const ret = v__show_dynamic_range_outputs(params, execution)
@@ -154,22 +154,22 @@ function v__show_dynamic_range_execute(
 }
 
 
+/**
+ * The script checks the dynamic range of the time series data at locations inside the brain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input EPI time series dataset (e.g. epi.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
+ */
 function v__show_dynamic_range(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VShowDynamicRangeOutputs {
-    /**
-     * The script checks the dynamic range of the time series data at locations inside the brain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input EPI time series dataset (e.g. epi.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SHOW_DYNAMIC_RANGE_METADATA);
     const params = v__show_dynamic_range_params(infile)
@@ -182,5 +182,8 @@ export {
       VShowDynamicRangeParameters,
       V__SHOW_DYNAMIC_RANGE_METADATA,
       v__show_dynamic_range,
+      v__show_dynamic_range_cargs,
+      v__show_dynamic_range_execute,
+      v__show_dynamic_range_outputs,
       v__show_dynamic_range_params,
 };

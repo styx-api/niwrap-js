@@ -12,7 +12,7 @@ const MRI_CA_TISSUE_PARMS_METADATA: Metadata = {
 
 
 interface MriCaTissueParmsParameters {
-    "__STYXTYPE__": "mri_ca_tissue_parms";
+    "@type": "freesurfer.mri_ca_tissue_parms";
     "subjects": Array<string>;
     "output_file": string;
     "spacing_flag": boolean;
@@ -20,35 +20,35 @@ interface MriCaTissueParmsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ca_tissue_parms": mri_ca_tissue_parms_cargs,
+        "freesurfer.mri_ca_tissue_parms": mri_ca_tissue_parms_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ca_tissue_parms": mri_ca_tissue_parms_outputs,
+        "freesurfer.mri_ca_tissue_parms": mri_ca_tissue_parms_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriCaTissueParmsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subjects for processing.
+ * @param output_file Output file for storing results.
+ * @param spacing_flag Specify spacing of classifiers in canonical space.
+ * @param gradient_flag Use intensity gradient as input to classifier.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ca_tissue_parms_params(
     subjects: Array<string>,
     output_file: string,
     spacing_flag: boolean = false,
     gradient_flag: boolean = false,
 ): MriCaTissueParmsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subjects for processing.
-     * @param output_file Output file for storing results.
-     * @param spacing_flag Specify spacing of classifiers in canonical space.
-     * @param gradient_flag Use intensity gradient as input to classifier.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ca_tissue_parms" as const,
+        "@type": "freesurfer.mri_ca_tissue_parms" as const,
         "subjects": subjects,
         "output_file": output_file,
         "spacing_flag": spacing_flag,
@@ -98,18 +98,18 @@ function mri_ca_tissue_parms_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ca_tissue_parms_cargs(
     params: MriCaTissueParmsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ca_tissue_parms");
     cargs.push(...(params["subjects"] ?? null));
@@ -124,18 +124,18 @@ function mri_ca_tissue_parms_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ca_tissue_parms_outputs(
     params: MriCaTissueParmsParameters,
     execution: Execution,
 ): MriCaTissueParmsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCaTissueParmsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -144,22 +144,22 @@ function mri_ca_tissue_parms_outputs(
 }
 
 
+/**
+ * Tool for computing tissue parameters in canonical space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
+ */
 function mri_ca_tissue_parms_execute(
     params: MriCaTissueParmsParameters,
     execution: Execution,
 ): MriCaTissueParmsOutputs {
-    /**
-     * Tool for computing tissue parameters in canonical space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ca_tissue_parms_cargs(params, execution)
     const ret = mri_ca_tissue_parms_outputs(params, execution)
@@ -168,6 +168,21 @@ function mri_ca_tissue_parms_execute(
 }
 
 
+/**
+ * Tool for computing tissue parameters in canonical space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subjects for processing.
+ * @param output_file Output file for storing results.
+ * @param spacing_flag Specify spacing of classifiers in canonical space.
+ * @param gradient_flag Use intensity gradient as input to classifier.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
+ */
 function mri_ca_tissue_parms(
     subjects: Array<string>,
     output_file: string,
@@ -175,21 +190,6 @@ function mri_ca_tissue_parms(
     gradient_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCaTissueParmsOutputs {
-    /**
-     * Tool for computing tissue parameters in canonical space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subjects for processing.
-     * @param output_file Output file for storing results.
-     * @param spacing_flag Specify spacing of classifiers in canonical space.
-     * @param gradient_flag Use intensity gradient as input to classifier.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_TISSUE_PARMS_METADATA);
     const params = mri_ca_tissue_parms_params(subjects, output_file, spacing_flag, gradient_flag)
@@ -202,5 +202,8 @@ export {
       MriCaTissueParmsOutputs,
       MriCaTissueParmsParameters,
       mri_ca_tissue_parms,
+      mri_ca_tissue_parms_cargs,
+      mri_ca_tissue_parms_execute,
+      mri_ca_tissue_parms_outputs,
       mri_ca_tissue_parms_params,
 };

@@ -12,7 +12,7 @@ const V_3DMAXIMA_METADATA: Metadata = {
 
 
 interface V3dmaximaParameters {
-    "__STYXTYPE__": "3dmaxima";
+    "@type": "afni.3dmaxima";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
     "threshold"?: number | null | undefined;
@@ -36,35 +36,35 @@ interface V3dmaximaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmaxima": v_3dmaxima_cargs,
+        "afni.3dmaxima": v_3dmaxima_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmaxima": v_3dmaxima_outputs,
+        "afni.3dmaxima": v_3dmaxima_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface V3dmaximaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Specify input dataset (e.g. func+orig'[7]')
+ * @param output_prefix Prefix for an output mask dataset (e.g. -prefix maskNto1)
+ * @param threshold Provides a cutoff value for extrema (e.g. -thresh 17.4)
+ * @param min_dist Minimum acceptable distance between extrema in voxels (e.g. -min_dist 4)
+ * @param out_rad Set the output radius around extrema voxels in voxel units (e.g. -out_rad 9)
+ * @param input_flag Specify input dataset (e.g. -input func+orig'[7]')
+ * @param spheres_1_flag Set all output values to 1
+ * @param spheres_1to_n_flag Output values will range from 1 to N
+ * @param spheres_nto1_flag Output values will range from N to 1
+ * @param neg_ext_flag Search for negative extrema (minima)
+ * @param true_max_flag Extrema may not have equal neighbors
+ * @param dset_coords_flag Display output in the dataset orientation
+ * @param no_text_flag Do not display the extrema points as text
+ * @param coords_only_flag Only output coordinates (no text or values)
+ * @param n_style_sort_flag Use 'Sort-n-Remove' style (default)
+ * @param n_style_weight_ave_flag Use 'Weighted-Average' style
+ * @param debug_level Output extra information to the terminal (e.g. -debug 2)
+ * @param help_flag Display help information
+ * @param hist_flag Display module history
+ * @param ver_flag Display version number
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmaxima_params(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -109,34 +135,8 @@ function v_3dmaxima_params(
     hist_flag: boolean = false,
     ver_flag: boolean = false,
 ): V3dmaximaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Specify input dataset (e.g. func+orig'[7]')
-     * @param output_prefix Prefix for an output mask dataset (e.g. -prefix maskNto1)
-     * @param threshold Provides a cutoff value for extrema (e.g. -thresh 17.4)
-     * @param min_dist Minimum acceptable distance between extrema in voxels (e.g. -min_dist 4)
-     * @param out_rad Set the output radius around extrema voxels in voxel units (e.g. -out_rad 9)
-     * @param input_flag Specify input dataset (e.g. -input func+orig'[7]')
-     * @param spheres_1_flag Set all output values to 1
-     * @param spheres_1to_n_flag Output values will range from 1 to N
-     * @param spheres_nto1_flag Output values will range from N to 1
-     * @param neg_ext_flag Search for negative extrema (minima)
-     * @param true_max_flag Extrema may not have equal neighbors
-     * @param dset_coords_flag Display output in the dataset orientation
-     * @param no_text_flag Do not display the extrema points as text
-     * @param coords_only_flag Only output coordinates (no text or values)
-     * @param n_style_sort_flag Use 'Sort-n-Remove' style (default)
-     * @param n_style_weight_ave_flag Use 'Weighted-Average' style
-     * @param debug_level Output extra information to the terminal (e.g. -debug 2)
-     * @param help_flag Display help information
-     * @param hist_flag Display module history
-     * @param ver_flag Display version number
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmaxima" as const,
+        "@type": "afni.3dmaxima" as const,
         "input_dataset": input_dataset,
         "input_flag": input_flag,
         "spheres_1_flag": spheres_1_flag,
@@ -172,18 +172,18 @@ function v_3dmaxima_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmaxima_cargs(
     params: V3dmaximaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmaxima");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -263,18 +263,18 @@ function v_3dmaxima_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmaxima_outputs(
     params: V3dmaximaParameters,
     execution: Execution,
 ): V3dmaximaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaximaOutputs = {
         root: execution.outputFile("."),
         output_mask: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_mask+orig.[HEAD | BRIK]"].join('')) : null,
@@ -283,22 +283,22 @@ function v_3dmaxima_outputs(
 }
 
 
+/**
+ * Locate extrema in a functional dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
+ */
 function v_3dmaxima_execute(
     params: V3dmaximaParameters,
     execution: Execution,
 ): V3dmaximaOutputs {
-    /**
-     * Locate extrema in a functional dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmaxima_cargs(params, execution)
     const ret = v_3dmaxima_outputs(params, execution)
@@ -307,6 +307,37 @@ function v_3dmaxima_execute(
 }
 
 
+/**
+ * Locate extrema in a functional dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Specify input dataset (e.g. func+orig'[7]')
+ * @param output_prefix Prefix for an output mask dataset (e.g. -prefix maskNto1)
+ * @param threshold Provides a cutoff value for extrema (e.g. -thresh 17.4)
+ * @param min_dist Minimum acceptable distance between extrema in voxels (e.g. -min_dist 4)
+ * @param out_rad Set the output radius around extrema voxels in voxel units (e.g. -out_rad 9)
+ * @param input_flag Specify input dataset (e.g. -input func+orig'[7]')
+ * @param spheres_1_flag Set all output values to 1
+ * @param spheres_1to_n_flag Output values will range from 1 to N
+ * @param spheres_nto1_flag Output values will range from N to 1
+ * @param neg_ext_flag Search for negative extrema (minima)
+ * @param true_max_flag Extrema may not have equal neighbors
+ * @param dset_coords_flag Display output in the dataset orientation
+ * @param no_text_flag Do not display the extrema points as text
+ * @param coords_only_flag Only output coordinates (no text or values)
+ * @param n_style_sort_flag Use 'Sort-n-Remove' style (default)
+ * @param n_style_weight_ave_flag Use 'Weighted-Average' style
+ * @param debug_level Output extra information to the terminal (e.g. -debug 2)
+ * @param help_flag Display help information
+ * @param hist_flag Display module history
+ * @param ver_flag Display version number
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
+ */
 function v_3dmaxima(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -330,37 +361,6 @@ function v_3dmaxima(
     ver_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dmaximaOutputs {
-    /**
-     * Locate extrema in a functional dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Specify input dataset (e.g. func+orig'[7]')
-     * @param output_prefix Prefix for an output mask dataset (e.g. -prefix maskNto1)
-     * @param threshold Provides a cutoff value for extrema (e.g. -thresh 17.4)
-     * @param min_dist Minimum acceptable distance between extrema in voxels (e.g. -min_dist 4)
-     * @param out_rad Set the output radius around extrema voxels in voxel units (e.g. -out_rad 9)
-     * @param input_flag Specify input dataset (e.g. -input func+orig'[7]')
-     * @param spheres_1_flag Set all output values to 1
-     * @param spheres_1to_n_flag Output values will range from 1 to N
-     * @param spheres_nto1_flag Output values will range from N to 1
-     * @param neg_ext_flag Search for negative extrema (minima)
-     * @param true_max_flag Extrema may not have equal neighbors
-     * @param dset_coords_flag Display output in the dataset orientation
-     * @param no_text_flag Do not display the extrema points as text
-     * @param coords_only_flag Only output coordinates (no text or values)
-     * @param n_style_sort_flag Use 'Sort-n-Remove' style (default)
-     * @param n_style_weight_ave_flag Use 'Weighted-Average' style
-     * @param debug_level Output extra information to the terminal (e.g. -debug 2)
-     * @param help_flag Display help information
-     * @param hist_flag Display module history
-     * @param ver_flag Display version number
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMAXIMA_METADATA);
     const params = v_3dmaxima_params(input_dataset, output_prefix, threshold, min_dist, out_rad, input_flag, spheres_1_flag, spheres_1to_n_flag, spheres_nto1_flag, neg_ext_flag, true_max_flag, dset_coords_flag, no_text_flag, coords_only_flag, n_style_sort_flag, n_style_weight_ave_flag, debug_level, help_flag, hist_flag, ver_flag)
@@ -373,5 +373,8 @@ export {
       V3dmaximaParameters,
       V_3DMAXIMA_METADATA,
       v_3dmaxima,
+      v_3dmaxima_cargs,
+      v_3dmaxima_execute,
+      v_3dmaxima_outputs,
       v_3dmaxima_params,
 };

@@ -12,7 +12,7 @@ const DIMON_METADATA: Metadata = {
 
 
 interface DimonParameters {
-    "__STYXTYPE__": "Dimon";
+    "@type": "afni.Dimon";
     "infile_prefix": string;
     "infile_pattern"?: string | null | undefined;
     "infile_list"?: InputPathType | null | undefined;
@@ -25,35 +25,35 @@ interface DimonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "Dimon": dimon_cargs,
+        "afni.Dimon": dimon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "Dimon": dimon_outputs,
+        "afni.Dimon": dimon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface DimonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile_prefix Prefix matching input files
+ * @param infile_pattern Pattern for input files
+ * @param infile_list List of filenames
+ * @param rt_cmd Send COMMAND(s) to realtime plugin
+ * @param host Specify the host for afni communication
+ * @param drive_afni Send 'drive afni' command, CMND
+ * @param drive_wait Send delayed 'drive afni' command, CMND
+ * @param te_list Specify a list of echo times
+ * @param sort_method Apply sorting method to image structures
+ *
+ * @returns Parameter dictionary
+ */
 function dimon_params(
     infile_prefix: string,
     infile_pattern: string | null = null,
@@ -91,23 +106,8 @@ function dimon_params(
     te_list: string | null = null,
     sort_method: string | null = null,
 ): DimonParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile_prefix Prefix matching input files
-     * @param infile_pattern Pattern for input files
-     * @param infile_list List of filenames
-     * @param rt_cmd Send COMMAND(s) to realtime plugin
-     * @param host Specify the host for afni communication
-     * @param drive_afni Send 'drive afni' command, CMND
-     * @param drive_wait Send delayed 'drive afni' command, CMND
-     * @param te_list Specify a list of echo times
-     * @param sort_method Apply sorting method to image structures
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "Dimon" as const,
+        "@type": "afni.Dimon" as const,
         "infile_prefix": infile_prefix,
     };
     if (infile_pattern !== null) {
@@ -138,18 +138,18 @@ function dimon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dimon_cargs(
     params: DimonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Dimon");
     cargs.push(
@@ -208,18 +208,18 @@ function dimon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dimon_outputs(
     params: DimonParameters,
     execution: Execution,
 ): DimonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DimonOutputs = {
         root: execution.outputFile("."),
         sorted_files: execution.outputFile([(params["infile_prefix"] ?? null), "*"].join('')),
@@ -229,22 +229,22 @@ function dimon_outputs(
 }
 
 
+/**
+ * Monitor real-time acquisition of DICOM image files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DimonOutputs`).
+ */
 function dimon_execute(
     params: DimonParameters,
     execution: Execution,
 ): DimonOutputs {
-    /**
-     * Monitor real-time acquisition of DICOM image files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DimonOutputs`).
-     */
     params = execution.params(params)
     const cargs = dimon_cargs(params, execution)
     const ret = dimon_outputs(params, execution)
@@ -253,6 +253,26 @@ function dimon_execute(
 }
 
 
+/**
+ * Monitor real-time acquisition of DICOM image files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile_prefix Prefix matching input files
+ * @param infile_pattern Pattern for input files
+ * @param infile_list List of filenames
+ * @param rt_cmd Send COMMAND(s) to realtime plugin
+ * @param host Specify the host for afni communication
+ * @param drive_afni Send 'drive afni' command, CMND
+ * @param drive_wait Send delayed 'drive afni' command, CMND
+ * @param te_list Specify a list of echo times
+ * @param sort_method Apply sorting method to image structures
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DimonOutputs`).
+ */
 function dimon(
     infile_prefix: string,
     infile_pattern: string | null = null,
@@ -265,26 +285,6 @@ function dimon(
     sort_method: string | null = null,
     runner: Runner | null = null,
 ): DimonOutputs {
-    /**
-     * Monitor real-time acquisition of DICOM image files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile_prefix Prefix matching input files
-     * @param infile_pattern Pattern for input files
-     * @param infile_list List of filenames
-     * @param rt_cmd Send COMMAND(s) to realtime plugin
-     * @param host Specify the host for afni communication
-     * @param drive_afni Send 'drive afni' command, CMND
-     * @param drive_wait Send delayed 'drive afni' command, CMND
-     * @param te_list Specify a list of echo times
-     * @param sort_method Apply sorting method to image structures
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DimonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIMON_METADATA);
     const params = dimon_params(infile_prefix, infile_pattern, infile_list, rt_cmd, host, drive_afni, drive_wait, te_list, sort_method)
@@ -297,5 +297,8 @@ export {
       DimonOutputs,
       DimonParameters,
       dimon,
+      dimon_cargs,
+      dimon_execute,
+      dimon_outputs,
       dimon_params,
 };

@@ -12,7 +12,7 @@ const V_3D_LSS_METADATA: Metadata = {
 
 
 interface V3dLssParameters {
-    "__STYXTYPE__": "3dLSS";
+    "@type": "afni.3dLSS";
     "matrix": InputPathType;
     "input"?: InputPathType | null | undefined;
     "nodata": boolean;
@@ -24,35 +24,35 @@ interface V3dLssParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLSS": v_3d_lss_cargs,
+        "afni.3dLSS": v_3d_lss_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLSS": v_3d_lss_outputs,
+        "afni.3dLSS": v_3d_lss_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dLssOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
+ * @param input Read time series dataset 'ddd'.
+ * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
+ * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
+ * @param automask If you don't know what this does by now, please don't use this program.
+ * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
+ * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
+ * @param verbose Write out progress reports.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lss_params(
     matrix: InputPathType,
     input: InputPathType | null = null,
@@ -89,22 +103,8 @@ function v_3d_lss_params(
     save1_d: string | null = null,
     verbose: boolean = false,
 ): V3dLssParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
-     * @param input Read time series dataset 'ddd'.
-     * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
-     * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
-     * @param automask If you don't know what this does by now, please don't use this program.
-     * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
-     * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
-     * @param verbose Write out progress reports.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLSS" as const,
+        "@type": "afni.3dLSS" as const,
         "matrix": matrix,
         "nodata": nodata,
         "automask": automask,
@@ -126,18 +126,18 @@ function v_3d_lss_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lss_cargs(
     params: V3dLssParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLSS");
     cargs.push(
@@ -181,18 +181,18 @@ function v_3d_lss_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lss_outputs(
     params: V3dLssParameters,
     execution: Execution,
 ): V3dLssOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLssOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile(["LSSout+orig.HEAD"].join('')),
@@ -202,22 +202,22 @@ function v_3d_lss_outputs(
 }
 
 
+/**
+ * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
+ */
 function v_3d_lss_execute(
     params: V3dLssParameters,
     execution: Execution,
 ): V3dLssOutputs {
-    /**
-     * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lss_cargs(params, execution)
     const ret = v_3d_lss_outputs(params, execution)
@@ -226,6 +226,25 @@ function v_3d_lss_execute(
 }
 
 
+/**
+ * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
+ * @param input Read time series dataset 'ddd'.
+ * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
+ * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
+ * @param automask If you don't know what this does by now, please don't use this program.
+ * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
+ * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
+ * @param verbose Write out progress reports.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
+ */
 function v_3d_lss(
     matrix: InputPathType,
     input: InputPathType | null = null,
@@ -237,25 +256,6 @@ function v_3d_lss(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dLssOutputs {
-    /**
-     * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param matrix Read the matrix 'mmm', which should have been output from 3dDeconvolve via the '-x1D' option. It should have included exactly one '-stim_times_IM' option.
-     * @param input Read time series dataset 'ddd'.
-     * @param nodata Just compute the estimator matrix -- to be saved with '-save1D'.
-     * @param mask Dataset 'MMM' will be used as a mask for the input; voxels outside the mask will not be fit by the regression model.
-     * @param automask If you don't know what this does by now, please don't use this program.
-     * @param prefix Prefix name for the output dataset; this dataset will contain ONLY the LSS estimates of the beta weights for the '-stim_times_IM' stimuli.
-     * @param save1_d Save the estimator vectors to a 1D formatted file named 'qqq'.
-     * @param verbose Write out progress reports.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LSS_METADATA);
     const params = v_3d_lss_params(matrix, input, nodata, mask, automask, prefix, save1_d, verbose)
@@ -268,5 +268,8 @@ export {
       V3dLssParameters,
       V_3D_LSS_METADATA,
       v_3d_lss,
+      v_3d_lss_cargs,
+      v_3d_lss_execute,
+      v_3d_lss_outputs,
       v_3d_lss_params,
 };

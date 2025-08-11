@@ -12,7 +12,7 @@ const ZIP_SPEC_FILE_METADATA: Metadata = {
 
 
 interface ZipSpecFileParameters {
-    "__STYXTYPE__": "zip-spec-file";
+    "@type": "workbench.zip-spec-file";
     "spec_file": string;
     "extract_folder": string;
     "zip_file": string;
@@ -21,33 +21,33 @@ interface ZipSpecFileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "zip-spec-file": zip_spec_file_cargs,
+        "workbench.zip-spec-file": zip_spec_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface ZipSpecFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file the specification file to add to zip file
+ * @param extract_folder the name of the folder created when the zip file is unzipped
+ * @param zip_file out - the zip file that will be created
+ * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
+ * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ *
+ * @returns Parameter dictionary
+ */
 function zip_spec_file_params(
     spec_file: string,
     extract_folder: string,
@@ -74,19 +85,8 @@ function zip_spec_file_params(
     opt_base_dir_directory: string | null = null,
     opt_skip_missing: boolean = false,
 ): ZipSpecFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file the specification file to add to zip file
-     * @param extract_folder the name of the folder created when the zip file is unzipped
-     * @param zip_file out - the zip file that will be created
-     * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
-     * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "zip-spec-file" as const,
+        "@type": "workbench.zip-spec-file" as const,
         "spec_file": spec_file,
         "extract_folder": extract_folder,
         "zip_file": zip_file,
@@ -99,18 +99,18 @@ function zip_spec_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function zip_spec_file_cargs(
     params: ZipSpecFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-zip-spec-file");
@@ -130,18 +130,18 @@ function zip_spec_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function zip_spec_file_outputs(
     params: ZipSpecFileParameters,
     execution: Execution,
 ): ZipSpecFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ZipSpecFileOutputs = {
         root: execution.outputFile("."),
     };
@@ -149,24 +149,24 @@ function zip_spec_file_outputs(
 }
 
 
+/**
+ * Zip a spec file and its data files.
+ *
+ * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
+ */
 function zip_spec_file_execute(
     params: ZipSpecFileParameters,
     execution: Execution,
 ): ZipSpecFileOutputs {
-    /**
-     * Zip a spec file and its data files.
-     * 
-     * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = zip_spec_file_cargs(params, execution)
     const ret = zip_spec_file_outputs(params, execution)
@@ -175,6 +175,24 @@ function zip_spec_file_execute(
 }
 
 
+/**
+ * Zip a spec file and its data files.
+ *
+ * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param spec_file the specification file to add to zip file
+ * @param extract_folder the name of the folder created when the zip file is unzipped
+ * @param zip_file out - the zip file that will be created
+ * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
+ * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
+ */
 function zip_spec_file(
     spec_file: string,
     extract_folder: string,
@@ -183,24 +201,6 @@ function zip_spec_file(
     opt_skip_missing: boolean = false,
     runner: Runner | null = null,
 ): ZipSpecFileOutputs {
-    /**
-     * Zip a spec file and its data files.
-     * 
-     * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param spec_file the specification file to add to zip file
-     * @param extract_folder the name of the folder created when the zip file is unzipped
-     * @param zip_file out - the zip file that will be created
-     * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
-     * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ZIP_SPEC_FILE_METADATA);
     const params = zip_spec_file_params(spec_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing)
@@ -213,5 +213,8 @@ export {
       ZipSpecFileOutputs,
       ZipSpecFileParameters,
       zip_spec_file,
+      zip_spec_file_cargs,
+      zip_spec_file_execute,
+      zip_spec_file_outputs,
       zip_spec_file_params,
 };

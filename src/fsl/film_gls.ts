@@ -12,7 +12,7 @@ const FILM_GLS_METADATA: Metadata = {
 
 
 interface FilmGlsParameters {
-    "__STYXTYPE__": "film_gls";
+    "@type": "fsl.film_gls";
     "infile": InputPathType;
     "ac_flag": boolean;
     "threshold"?: number | null | undefined;
@@ -39,35 +39,35 @@ interface FilmGlsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "film_gls": film_gls_cargs,
+        "fsl.film_gls": film_gls_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "film_gls": film_gls_outputs,
+        "fsl.film_gls": film_gls_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,35 @@ interface FilmGlsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input data file (NIFTI for volumetric, GIFTI for surface)
+ * @param ac_flag Perform autocorrelation estimation only
+ * @param threshold Initial threshold to apply to input data
+ * @param ar_flag Fits autoregressive model - default is to use tukey with M=sqrt(numvols)
+ * @param noest_flag Do not estimate autocorrelations
+ * @param output_pw_flag Output prewhitened data and average design matrix
+ * @param pava_flag Estimates autocorrelation using PAVA - default is to use tukey with M=sqrt(numvols)
+ * @param sa_flag Smooths autocorrelation estimates
+ * @param verbose_flag Outputs full data
+ * @param results_dir Directory name to store results in, default is results
+ * @param mode Analysis mode, options are volumetric (default) or surface. Caution: surface-based functionality is still BETA
+ * @param input_surface Input surface for autocorrelation smoothing in surface-based analyses
+ * @param mean_func_file Re-estimate mean_func baseline - for use with perfusion subtraction
+ * @param min_timepoint_file Minimum timepoint file
+ * @param paradigm_file Paradigm file
+ * @param t_contrasts_file T-contrasts file
+ * @param f_contrasts_file F-contrasts file
+ * @param epith SUSAN brightness threshold for volumetric analysis/smoothing sigma for surface analysis
+ * @param ms SUSAN mask size for volumetric analysis/smoothing extent for surface analysis
+ * @param tukey Uses tukey window to estimate autocorrelation with window size num - default is to use tukey with M=sqrt(numvols)
+ * @param mt Uses multitapering with slepian tapers and num is the time-bandwidth product - default is to use tukey with M=sqrt(numvols)
+ * @param ven List of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). Caution BETA option, only use with volumetric analysis.
+ * @param vef List of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). Caution BETA option, only use with volumetric analysis.
+ *
+ * @returns Parameter dictionary
+ */
 function film_gls_params(
     infile: InputPathType,
     ac_flag: boolean = false,
@@ -123,37 +152,8 @@ function film_gls_params(
     ven: Array<string> | null = null,
     vef: Array<InputPathType> | null = null,
 ): FilmGlsParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input data file (NIFTI for volumetric, GIFTI for surface)
-     * @param ac_flag Perform autocorrelation estimation only
-     * @param threshold Initial threshold to apply to input data
-     * @param ar_flag Fits autoregressive model - default is to use tukey with M=sqrt(numvols)
-     * @param noest_flag Do not estimate autocorrelations
-     * @param output_pw_flag Output prewhitened data and average design matrix
-     * @param pava_flag Estimates autocorrelation using PAVA - default is to use tukey with M=sqrt(numvols)
-     * @param sa_flag Smooths autocorrelation estimates
-     * @param verbose_flag Outputs full data
-     * @param results_dir Directory name to store results in, default is results
-     * @param mode Analysis mode, options are volumetric (default) or surface. Caution: surface-based functionality is still BETA
-     * @param input_surface Input surface for autocorrelation smoothing in surface-based analyses
-     * @param mean_func_file Re-estimate mean_func baseline - for use with perfusion subtraction
-     * @param min_timepoint_file Minimum timepoint file
-     * @param paradigm_file Paradigm file
-     * @param t_contrasts_file T-contrasts file
-     * @param f_contrasts_file F-contrasts file
-     * @param epith SUSAN brightness threshold for volumetric analysis/smoothing sigma for surface analysis
-     * @param ms SUSAN mask size for volumetric analysis/smoothing extent for surface analysis
-     * @param tukey Uses tukey window to estimate autocorrelation with window size num - default is to use tukey with M=sqrt(numvols)
-     * @param mt Uses multitapering with slepian tapers and num is the time-bandwidth product - default is to use tukey with M=sqrt(numvols)
-     * @param ven List of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). Caution BETA option, only use with volumetric analysis.
-     * @param vef List of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). Caution BETA option, only use with volumetric analysis.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "film_gls" as const,
+        "@type": "fsl.film_gls" as const,
         "infile": infile,
         "ac_flag": ac_flag,
         "ar_flag": ar_flag,
@@ -212,18 +212,18 @@ function film_gls_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function film_gls_cargs(
     params: FilmGlsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("film_gls");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -342,18 +342,18 @@ function film_gls_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function film_gls_outputs(
     params: FilmGlsParameters,
     execution: Execution,
 ): FilmGlsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FilmGlsOutputs = {
         root: execution.outputFile("."),
         prewhitened_data: execution.outputFile(["[rn]/prewhitened_data.nii.gz"].join('')),
@@ -364,22 +364,22 @@ function film_gls_outputs(
 }
 
 
+/**
+ * General Linear Model fitting with autocorrelation in FMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
+ */
 function film_gls_execute(
     params: FilmGlsParameters,
     execution: Execution,
 ): FilmGlsOutputs {
-    /**
-     * General Linear Model fitting with autocorrelation in FMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
-     */
     params = execution.params(params)
     const cargs = film_gls_cargs(params, execution)
     const ret = film_gls_outputs(params, execution)
@@ -388,6 +388,40 @@ function film_gls_execute(
 }
 
 
+/**
+ * General Linear Model fitting with autocorrelation in FMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input data file (NIFTI for volumetric, GIFTI for surface)
+ * @param ac_flag Perform autocorrelation estimation only
+ * @param threshold Initial threshold to apply to input data
+ * @param ar_flag Fits autoregressive model - default is to use tukey with M=sqrt(numvols)
+ * @param noest_flag Do not estimate autocorrelations
+ * @param output_pw_flag Output prewhitened data and average design matrix
+ * @param pava_flag Estimates autocorrelation using PAVA - default is to use tukey with M=sqrt(numvols)
+ * @param sa_flag Smooths autocorrelation estimates
+ * @param verbose_flag Outputs full data
+ * @param results_dir Directory name to store results in, default is results
+ * @param mode Analysis mode, options are volumetric (default) or surface. Caution: surface-based functionality is still BETA
+ * @param input_surface Input surface for autocorrelation smoothing in surface-based analyses
+ * @param mean_func_file Re-estimate mean_func baseline - for use with perfusion subtraction
+ * @param min_timepoint_file Minimum timepoint file
+ * @param paradigm_file Paradigm file
+ * @param t_contrasts_file T-contrasts file
+ * @param f_contrasts_file F-contrasts file
+ * @param epith SUSAN brightness threshold for volumetric analysis/smoothing sigma for surface analysis
+ * @param ms SUSAN mask size for volumetric analysis/smoothing extent for surface analysis
+ * @param tukey Uses tukey window to estimate autocorrelation with window size num - default is to use tukey with M=sqrt(numvols)
+ * @param mt Uses multitapering with slepian tapers and num is the time-bandwidth product - default is to use tukey with M=sqrt(numvols)
+ * @param ven List of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). Caution BETA option, only use with volumetric analysis.
+ * @param vef List of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). Caution BETA option, only use with volumetric analysis.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
+ */
 function film_gls(
     infile: InputPathType,
     ac_flag: boolean = false,
@@ -414,40 +448,6 @@ function film_gls(
     vef: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): FilmGlsOutputs {
-    /**
-     * General Linear Model fitting with autocorrelation in FMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input data file (NIFTI for volumetric, GIFTI for surface)
-     * @param ac_flag Perform autocorrelation estimation only
-     * @param threshold Initial threshold to apply to input data
-     * @param ar_flag Fits autoregressive model - default is to use tukey with M=sqrt(numvols)
-     * @param noest_flag Do not estimate autocorrelations
-     * @param output_pw_flag Output prewhitened data and average design matrix
-     * @param pava_flag Estimates autocorrelation using PAVA - default is to use tukey with M=sqrt(numvols)
-     * @param sa_flag Smooths autocorrelation estimates
-     * @param verbose_flag Outputs full data
-     * @param results_dir Directory name to store results in, default is results
-     * @param mode Analysis mode, options are volumetric (default) or surface. Caution: surface-based functionality is still BETA
-     * @param input_surface Input surface for autocorrelation smoothing in surface-based analyses
-     * @param mean_func_file Re-estimate mean_func baseline - for use with perfusion subtraction
-     * @param min_timepoint_file Minimum timepoint file
-     * @param paradigm_file Paradigm file
-     * @param t_contrasts_file T-contrasts file
-     * @param f_contrasts_file F-contrasts file
-     * @param epith SUSAN brightness threshold for volumetric analysis/smoothing sigma for surface analysis
-     * @param ms SUSAN mask size for volumetric analysis/smoothing extent for surface analysis
-     * @param tukey Uses tukey window to estimate autocorrelation with window size num - default is to use tukey with M=sqrt(numvols)
-     * @param mt Uses multitapering with slepian tapers and num is the time-bandwidth product - default is to use tukey with M=sqrt(numvols)
-     * @param ven List of numbers indicating voxelwise EVs position in the design matrix (list order corresponds to files in vxf option). Caution BETA option, only use with volumetric analysis.
-     * @param vef List of 4D images containing voxelwise EVs (list order corresponds to numbers in vxl option). Caution BETA option, only use with volumetric analysis.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILM_GLS_METADATA);
     const params = film_gls_params(infile, ac_flag, threshold, ar_flag, noest_flag, output_pw_flag, pava_flag, sa_flag, verbose_flag, results_dir, mode, input_surface, mean_func_file, min_timepoint_file, paradigm_file, t_contrasts_file, f_contrasts_file, epith, ms, tukey, mt, ven, vef)
@@ -460,5 +460,8 @@ export {
       FilmGlsOutputs,
       FilmGlsParameters,
       film_gls,
+      film_gls_cargs,
+      film_gls_execute,
+      film_gls_outputs,
       film_gls_params,
 };

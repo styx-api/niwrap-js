@@ -12,7 +12,7 @@ const ROIGROW_METADATA: Metadata = {
 
 
 interface RoigrowParameters {
-    "__STYXTYPE__": "ROIgrow";
+    "@type": "afni.ROIgrow";
     "input_surface": string;
     "roi_labels": string;
     "lim_distance": number;
@@ -24,35 +24,35 @@ interface RoigrowParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ROIgrow": roigrow_cargs,
+        "afni.ROIgrow": roigrow_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ROIgrow": roigrow_outputs,
+        "afni.ROIgrow": roigrow_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface RoigrowOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Specify input surface. You can also use -t* and -spec and -surf methods to input surfaces.
+ * @param roi_labels Data column containing integer labels of ROIs. Each integer label gets grown separately.
+ * @param lim_distance Distance to cover from each node. The units of LIM are those of the surface's node coordinates. Distances are calculated along the surface's mesh.
+ * @param output_prefix Prefix of 1D output dataset. Default is ROIgrow
+ * @param full_list Output a row for each node on the surface. Nodes not in the grown ROI, receive a 0 for a label. This option is ONLY for use with -roi_labels.
+ * @param grow_from_edge Grow ROIs from their edges rather than the brute force default. This might make the program faster on large ROIs and large surfaces.
+ * @param insphere_diameter Diameter of the sphere inside which nodes are added instead of growing along the surface.
+ * @param inbox_edges Use a box of edge widths E1, E2, E3 instead of DIA.
+ *
+ * @returns Parameter dictionary
+ */
 function roigrow_params(
     input_surface: string,
     roi_labels: string,
@@ -85,22 +99,8 @@ function roigrow_params(
     insphere_diameter: number | null = null,
     inbox_edges: Array<number> | null = null,
 ): RoigrowParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Specify input surface. You can also use -t* and -spec and -surf methods to input surfaces.
-     * @param roi_labels Data column containing integer labels of ROIs. Each integer label gets grown separately.
-     * @param lim_distance Distance to cover from each node. The units of LIM are those of the surface's node coordinates. Distances are calculated along the surface's mesh.
-     * @param output_prefix Prefix of 1D output dataset. Default is ROIgrow
-     * @param full_list Output a row for each node on the surface. Nodes not in the grown ROI, receive a 0 for a label. This option is ONLY for use with -roi_labels.
-     * @param grow_from_edge Grow ROIs from their edges rather than the brute force default. This might make the program faster on large ROIs and large surfaces.
-     * @param insphere_diameter Diameter of the sphere inside which nodes are added instead of growing along the surface.
-     * @param inbox_edges Use a box of edge widths E1, E2, E3 instead of DIA.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ROIgrow" as const,
+        "@type": "afni.ROIgrow" as const,
         "input_surface": input_surface,
         "roi_labels": roi_labels,
         "lim_distance": lim_distance,
@@ -120,18 +120,18 @@ function roigrow_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function roigrow_cargs(
     params: RoigrowParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ROIgrow");
     cargs.push(
@@ -174,18 +174,18 @@ function roigrow_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function roigrow_outputs(
     params: RoigrowParameters,
     execution: Execution,
 ): RoigrowOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RoigrowOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".1D"].join('')) : null,
@@ -194,22 +194,22 @@ function roigrow_outputs(
 }
 
 
+/**
+ * A program to expand an ROI on the surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
+ */
 function roigrow_execute(
     params: RoigrowParameters,
     execution: Execution,
 ): RoigrowOutputs {
-    /**
-     * A program to expand an ROI on the surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
-     */
     params = execution.params(params)
     const cargs = roigrow_cargs(params, execution)
     const ret = roigrow_outputs(params, execution)
@@ -218,6 +218,25 @@ function roigrow_execute(
 }
 
 
+/**
+ * A program to expand an ROI on the surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_surface Specify input surface. You can also use -t* and -spec and -surf methods to input surfaces.
+ * @param roi_labels Data column containing integer labels of ROIs. Each integer label gets grown separately.
+ * @param lim_distance Distance to cover from each node. The units of LIM are those of the surface's node coordinates. Distances are calculated along the surface's mesh.
+ * @param output_prefix Prefix of 1D output dataset. Default is ROIgrow
+ * @param full_list Output a row for each node on the surface. Nodes not in the grown ROI, receive a 0 for a label. This option is ONLY for use with -roi_labels.
+ * @param grow_from_edge Grow ROIs from their edges rather than the brute force default. This might make the program faster on large ROIs and large surfaces.
+ * @param insphere_diameter Diameter of the sphere inside which nodes are added instead of growing along the surface.
+ * @param inbox_edges Use a box of edge widths E1, E2, E3 instead of DIA.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
+ */
 function roigrow(
     input_surface: string,
     roi_labels: string,
@@ -229,25 +248,6 @@ function roigrow(
     inbox_edges: Array<number> | null = null,
     runner: Runner | null = null,
 ): RoigrowOutputs {
-    /**
-     * A program to expand an ROI on the surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_surface Specify input surface. You can also use -t* and -spec and -surf methods to input surfaces.
-     * @param roi_labels Data column containing integer labels of ROIs. Each integer label gets grown separately.
-     * @param lim_distance Distance to cover from each node. The units of LIM are those of the surface's node coordinates. Distances are calculated along the surface's mesh.
-     * @param output_prefix Prefix of 1D output dataset. Default is ROIgrow
-     * @param full_list Output a row for each node on the surface. Nodes not in the grown ROI, receive a 0 for a label. This option is ONLY for use with -roi_labels.
-     * @param grow_from_edge Grow ROIs from their edges rather than the brute force default. This might make the program faster on large ROIs and large surfaces.
-     * @param insphere_diameter Diameter of the sphere inside which nodes are added instead of growing along the surface.
-     * @param inbox_edges Use a box of edge widths E1, E2, E3 instead of DIA.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ROIGROW_METADATA);
     const params = roigrow_params(input_surface, roi_labels, lim_distance, output_prefix, full_list, grow_from_edge, insphere_diameter, inbox_edges)
@@ -260,5 +260,8 @@ export {
       RoigrowOutputs,
       RoigrowParameters,
       roigrow,
+      roigrow_cargs,
+      roigrow_execute,
+      roigrow_outputs,
       roigrow_params,
 };

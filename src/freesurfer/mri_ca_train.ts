@@ -12,7 +12,7 @@ const MRI_CA_TRAIN_METADATA: Metadata = {
 
 
 interface MriCaTrainParameters {
-    "__STYXTYPE__": "mri_ca_train";
+    "@type": "freesurfer.mri_ca_train";
     "subjects": Array<string>;
     "output_gca": string;
     "segmentation": string;
@@ -30,33 +30,33 @@ interface MriCaTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ca_train": mri_ca_train_cargs,
+        "freesurfer.mri_ca_train": mri_ca_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface MriCaTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subject directories under the SUBJECTS_DIR. Each is a path relative to the subject's MRI directory.
+ * @param output_gca Output GCA file name.
+ * @param segmentation Segmentation volume directory relative to each subject's MRI path.
+ * @param transform Atlas transform path relative to each subject's MRI transforms directory.
+ * @param mask_volume Volume name used as a mask, path relative to each subject's MRI directory.
+ * @param node_spacing Spacing of classifiers in canonical space
+ * @param prior_spacing Spacing of class priors in canonical space
+ * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
+ * @param symmetrize Symmetrize the atlas after creation
+ * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
+ * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
+ * @param sanity_check Conduct sanity-check of labels for obvious edit errors
+ * @param threads Specify number of threads to use (also known as -nthreads)
+ * @param done_file Create DoneFile when done (contents: 0=ok, 1=error)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ca_train_params(
     subjects: Array<string>,
     output_gca: string,
@@ -92,28 +112,8 @@ function mri_ca_train_params(
     threads: number | null = null,
     done_file: string | null = null,
 ): MriCaTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subject directories under the SUBJECTS_DIR. Each is a path relative to the subject's MRI directory.
-     * @param output_gca Output GCA file name.
-     * @param segmentation Segmentation volume directory relative to each subject's MRI path.
-     * @param transform Atlas transform path relative to each subject's MRI transforms directory.
-     * @param mask_volume Volume name used as a mask, path relative to each subject's MRI directory.
-     * @param node_spacing Spacing of classifiers in canonical space
-     * @param prior_spacing Spacing of class priors in canonical space
-     * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
-     * @param symmetrize Symmetrize the atlas after creation
-     * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
-     * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
-     * @param sanity_check Conduct sanity-check of labels for obvious edit errors
-     * @param threads Specify number of threads to use (also known as -nthreads)
-     * @param done_file Create DoneFile when done (contents: 0=ok, 1=error)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ca_train" as const,
+        "@type": "freesurfer.mri_ca_train" as const,
         "subjects": subjects,
         "output_gca": output_gca,
         "segmentation": segmentation,
@@ -151,18 +151,18 @@ function mri_ca_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ca_train_cargs(
     params: MriCaTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ca_train");
     cargs.push(...(params["subjects"] ?? null));
@@ -235,18 +235,18 @@ function mri_ca_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ca_train_outputs(
     params: MriCaTrainParameters,
     execution: Execution,
 ): MriCaTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCaTrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -254,22 +254,22 @@ function mri_ca_train_outputs(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
+ */
 function mri_ca_train_execute(
     params: MriCaTrainParameters,
     execution: Execution,
 ): MriCaTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ca_train_cargs(params, execution)
     const ret = mri_ca_train_outputs(params, execution)
@@ -278,6 +278,31 @@ function mri_ca_train_execute(
 }
 
 
+/**
+ * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subject directories under the SUBJECTS_DIR. Each is a path relative to the subject's MRI directory.
+ * @param output_gca Output GCA file name.
+ * @param segmentation Segmentation volume directory relative to each subject's MRI path.
+ * @param transform Atlas transform path relative to each subject's MRI transforms directory.
+ * @param mask_volume Volume name used as a mask, path relative to each subject's MRI directory.
+ * @param node_spacing Spacing of classifiers in canonical space
+ * @param prior_spacing Spacing of class priors in canonical space
+ * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
+ * @param symmetrize Symmetrize the atlas after creation
+ * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
+ * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
+ * @param sanity_check Conduct sanity-check of labels for obvious edit errors
+ * @param threads Specify number of threads to use (also known as -nthreads)
+ * @param done_file Create DoneFile when done (contents: 0=ok, 1=error)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
+ */
 function mri_ca_train(
     subjects: Array<string>,
     output_gca: string,
@@ -295,31 +320,6 @@ function mri_ca_train(
     done_file: string | null = null,
     runner: Runner | null = null,
 ): MriCaTrainOutputs {
-    /**
-     * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subject directories under the SUBJECTS_DIR. Each is a path relative to the subject's MRI directory.
-     * @param output_gca Output GCA file name.
-     * @param segmentation Segmentation volume directory relative to each subject's MRI path.
-     * @param transform Atlas transform path relative to each subject's MRI transforms directory.
-     * @param mask_volume Volume name used as a mask, path relative to each subject's MRI directory.
-     * @param node_spacing Spacing of classifiers in canonical space
-     * @param prior_spacing Spacing of class priors in canonical space
-     * @param input_training Specifying training data, path relative to each subject's MRI directory. Can specify multiple inputs.
-     * @param symmetrize Symmetrize the atlas after creation
-     * @param makesym Symmetrize an already existing atlas. Specify input GCA and symmetrized GCA.
-     * @param check_symmetry Check the symmetry of an already existing atlas. Specify input GCA and symmetrized GCA.
-     * @param sanity_check Conduct sanity-check of labels for obvious edit errors
-     * @param threads Specify number of threads to use (also known as -nthreads)
-     * @param done_file Create DoneFile when done (contents: 0=ok, 1=error)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_TRAIN_METADATA);
     const params = mri_ca_train_params(subjects, output_gca, segmentation, transform, mask_volume, node_spacing, prior_spacing, input_training, symmetrize, makesym, check_symmetry, sanity_check, threads, done_file)
@@ -332,5 +332,8 @@ export {
       MriCaTrainOutputs,
       MriCaTrainParameters,
       mri_ca_train,
+      mri_ca_train_cargs,
+      mri_ca_train_execute,
+      mri_ca_train_outputs,
       mri_ca_train_params,
 };

@@ -12,41 +12,41 @@ const LABEL_SUBJECT_METADATA: Metadata = {
 
 
 interface LabelSubjectParameters {
-    "__STYXTYPE__": "label_subject";
+    "@type": "freesurfer.label_subject";
     "nu_file"?: InputPathType | null | undefined;
     "orig_dir"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label_subject": label_subject_cargs,
+        "freesurfer.label_subject": label_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label_subject": label_subject_outputs,
+        "freesurfer.label_subject": label_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface LabelSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nu_file Path to the nu.mgz file. If not provided, defaults to nu.mgz.
+ * @param orig_dir The original MRI data directory. If the nu file is not found, it will search in the given directory.
+ *
+ * @returns Parameter dictionary
+ */
 function label_subject_params(
     nu_file: InputPathType | null = null,
     orig_dir: string | null = "/usr/local/freesurfer/subjects",
 ): LabelSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param nu_file Path to the nu.mgz file. If not provided, defaults to nu.mgz.
-     * @param orig_dir The original MRI data directory. If the nu file is not found, it will search in the given directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_subject" as const,
+        "@type": "freesurfer.label_subject" as const,
     };
     if (nu_file !== null) {
         params["nu_file"] = nu_file;
@@ -94,18 +94,18 @@ function label_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_subject_cargs(
     params: LabelSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label_subject");
     if ((params["nu_file"] ?? null) !== null) {
@@ -118,18 +118,18 @@ function label_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_subject_outputs(
     params: LabelSubjectParameters,
     execution: Execution,
 ): LabelSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelSubjectOutputs = {
         root: execution.outputFile("."),
         converted_mnc: execution.outputFile(["/tmp/nu*.mnc"].join('')),
@@ -138,22 +138,22 @@ function label_subject_outputs(
 }
 
 
+/**
+ * A tool for labeling subject MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
+ */
 function label_subject_execute(
     params: LabelSubjectParameters,
     execution: Execution,
 ): LabelSubjectOutputs {
-    /**
-     * A tool for labeling subject MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_subject_cargs(params, execution)
     const ret = label_subject_outputs(params, execution)
@@ -162,24 +162,24 @@ function label_subject_execute(
 }
 
 
+/**
+ * A tool for labeling subject MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param nu_file Path to the nu.mgz file. If not provided, defaults to nu.mgz.
+ * @param orig_dir The original MRI data directory. If the nu file is not found, it will search in the given directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
+ */
 function label_subject(
     nu_file: InputPathType | null = null,
     orig_dir: string | null = "/usr/local/freesurfer/subjects",
     runner: Runner | null = null,
 ): LabelSubjectOutputs {
-    /**
-     * A tool for labeling subject MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param nu_file Path to the nu.mgz file. If not provided, defaults to nu.mgz.
-     * @param orig_dir The original MRI data directory. If the nu file is not found, it will search in the given directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_SUBJECT_METADATA);
     const params = label_subject_params(nu_file, orig_dir)
@@ -192,5 +192,8 @@ export {
       LabelSubjectOutputs,
       LabelSubjectParameters,
       label_subject,
+      label_subject_cargs,
+      label_subject_execute,
+      label_subject_outputs,
       label_subject_params,
 };

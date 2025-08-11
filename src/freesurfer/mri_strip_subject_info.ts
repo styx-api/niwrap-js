@@ -12,39 +12,39 @@ const MRI_STRIP_SUBJECT_INFO_METADATA: Metadata = {
 
 
 interface MriStripSubjectInfoParameters {
-    "__STYXTYPE__": "mri_strip_subject_info";
+    "@type": "freesurfer.mri_strip_subject_info";
     "input_files": Array<InputPathType>;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_strip_subject_info": mri_strip_subject_info_cargs,
+        "freesurfer.mri_strip_subject_info": mri_strip_subject_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MriStripSubjectInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input file(s) containing MRI data
+ * @param output_directory Directory where stripped files will be saved
+ *
+ * @returns Parameter dictionary
+ */
 function mri_strip_subject_info_params(
     input_files: Array<InputPathType>,
     output_directory: string,
 ): MriStripSubjectInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input file(s) containing MRI data
-     * @param output_directory Directory where stripped files will be saved
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_strip_subject_info" as const,
+        "@type": "freesurfer.mri_strip_subject_info" as const,
         "input_files": input_files,
         "output_directory": output_directory,
     };
@@ -85,18 +85,18 @@ function mri_strip_subject_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_strip_subject_info_cargs(
     params: MriStripSubjectInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_strip_subject_info");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function mri_strip_subject_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_strip_subject_info_outputs(
     params: MriStripSubjectInfoParameters,
     execution: Execution,
 ): MriStripSubjectInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriStripSubjectInfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mri_strip_subject_info_outputs(
 }
 
 
+/**
+ * A tool to strip subject information from MRI data files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
+ */
 function mri_strip_subject_info_execute(
     params: MriStripSubjectInfoParameters,
     execution: Execution,
 ): MriStripSubjectInfoOutputs {
-    /**
-     * A tool to strip subject information from MRI data files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_strip_subject_info_cargs(params, execution)
     const ret = mri_strip_subject_info_outputs(params, execution)
@@ -148,24 +148,24 @@ function mri_strip_subject_info_execute(
 }
 
 
+/**
+ * A tool to strip subject information from MRI data files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input file(s) containing MRI data
+ * @param output_directory Directory where stripped files will be saved
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
+ */
 function mri_strip_subject_info(
     input_files: Array<InputPathType>,
     output_directory: string,
     runner: Runner | null = null,
 ): MriStripSubjectInfoOutputs {
-    /**
-     * A tool to strip subject information from MRI data files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input file(s) containing MRI data
-     * @param output_directory Directory where stripped files will be saved
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_STRIP_SUBJECT_INFO_METADATA);
     const params = mri_strip_subject_info_params(input_files, output_directory)
@@ -178,5 +178,8 @@ export {
       MriStripSubjectInfoOutputs,
       MriStripSubjectInfoParameters,
       mri_strip_subject_info,
+      mri_strip_subject_info_cargs,
+      mri_strip_subject_info_execute,
+      mri_strip_subject_info_outputs,
       mri_strip_subject_info_params,
 };

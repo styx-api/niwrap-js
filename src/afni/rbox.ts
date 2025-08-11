@@ -12,7 +12,7 @@ const RBOX_METADATA: Metadata = {
 
 
 interface RboxParameters {
-    "__STYXTYPE__": "rbox";
+    "@type": "afni.rbox";
     "number_points": string;
     "dimension"?: string | null | undefined;
     "unit_cube": boolean;
@@ -37,33 +37,33 @@ interface RboxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rbox": rbox_cargs,
+        "afni.rbox": rbox_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -83,6 +83,33 @@ interface RboxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param number_points Number of random points in cube, lens, spiral, sphere or grid
+ * @param dimension Dimension (e.g., D3 for 3-d)
+ * @param unit_cube Add a unit cube to the output (optional: 'c G2.0' sets size)
+ * @param unit_diamond Add a unit diamond to the output (optional: 'd G2.0' sets size)
+ * @param spiral Generate a regular 3-d spiral
+ * @param regular_polygon Generate a regular polygon (optional: 'r s Z1 G0.1' makes a cone)
+ * @param cospherical_points Generate cospherical points
+ * @param simplex_points Generate random points in simplex, may use 'r' or 'Wn'
+ * @param simplex_plus_points Same as 'x', plus simplex
+ * @param add_point Add point [n,m,r] first, pads with 0
+ * @param lens_distribution Lens distribution of radius n. Also 's', 'r', 'G', 'W'.
+ * @param random_within Random distribution within 0.1 of the cube's or sphere's surface
+ * @param random_disk Random points in a 0.5 disk projected to a sphere, optional gap size (e.g., 'Z0.5 s G0.6')
+ * @param bounding_box Bounding box coordinates, default 0.5
+ * @param homogeneous_coordinates Output as homogeneous coordinates for cdd
+ * @param remove_command_line Remove command line from the first line of output
+ * @param time_seed Use time as the random number seed (default is command line)
+ * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
+ * @param offset Offset coordinates by n
+ * @param user_seed Use n as the random number seed
+ * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
+ *
+ * @returns Parameter dictionary
+ */
 function rbox_params(
     number_points: string,
     dimension: string | null = null,
@@ -106,35 +133,8 @@ function rbox_params(
     user_seed: number | null = null,
     mesh_lattice: Array<string> | null = null,
 ): RboxParameters {
-    /**
-     * Build parameters.
-    
-     * @param number_points Number of random points in cube, lens, spiral, sphere or grid
-     * @param dimension Dimension (e.g., D3 for 3-d)
-     * @param unit_cube Add a unit cube to the output (optional: 'c G2.0' sets size)
-     * @param unit_diamond Add a unit diamond to the output (optional: 'd G2.0' sets size)
-     * @param spiral Generate a regular 3-d spiral
-     * @param regular_polygon Generate a regular polygon (optional: 'r s Z1 G0.1' makes a cone)
-     * @param cospherical_points Generate cospherical points
-     * @param simplex_points Generate random points in simplex, may use 'r' or 'Wn'
-     * @param simplex_plus_points Same as 'x', plus simplex
-     * @param add_point Add point [n,m,r] first, pads with 0
-     * @param lens_distribution Lens distribution of radius n. Also 's', 'r', 'G', 'W'.
-     * @param random_within Random distribution within 0.1 of the cube's or sphere's surface
-     * @param random_disk Random points in a 0.5 disk projected to a sphere, optional gap size (e.g., 'Z0.5 s G0.6')
-     * @param bounding_box Bounding box coordinates, default 0.5
-     * @param homogeneous_coordinates Output as homogeneous coordinates for cdd
-     * @param remove_command_line Remove command line from the first line of output
-     * @param time_seed Use time as the random number seed (default is command line)
-     * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
-     * @param offset Offset coordinates by n
-     * @param user_seed Use n as the random number seed
-     * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rbox" as const,
+        "@type": "afni.rbox" as const,
         "number_points": number_points,
         "unit_cube": unit_cube,
         "unit_diamond": unit_diamond,
@@ -177,18 +177,18 @@ function rbox_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rbox_cargs(
     params: RboxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rbox");
     cargs.push((params["number_points"] ?? null));
@@ -277,18 +277,18 @@ function rbox_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rbox_outputs(
     params: RboxParameters,
     execution: Execution,
 ): RboxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RboxOutputs = {
         root: execution.outputFile("."),
     };
@@ -296,22 +296,22 @@ function rbox_outputs(
 }
 
 
+/**
+ * Generate various point distributions. Default is random in cube.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RboxOutputs`).
+ */
 function rbox_execute(
     params: RboxParameters,
     execution: Execution,
 ): RboxOutputs {
-    /**
-     * Generate various point distributions. Default is random in cube.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RboxOutputs`).
-     */
     params = execution.params(params)
     const cargs = rbox_cargs(params, execution)
     const ret = rbox_outputs(params, execution)
@@ -320,6 +320,38 @@ function rbox_execute(
 }
 
 
+/**
+ * Generate various point distributions. Default is random in cube.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param number_points Number of random points in cube, lens, spiral, sphere or grid
+ * @param dimension Dimension (e.g., D3 for 3-d)
+ * @param unit_cube Add a unit cube to the output (optional: 'c G2.0' sets size)
+ * @param unit_diamond Add a unit diamond to the output (optional: 'd G2.0' sets size)
+ * @param spiral Generate a regular 3-d spiral
+ * @param regular_polygon Generate a regular polygon (optional: 'r s Z1 G0.1' makes a cone)
+ * @param cospherical_points Generate cospherical points
+ * @param simplex_points Generate random points in simplex, may use 'r' or 'Wn'
+ * @param simplex_plus_points Same as 'x', plus simplex
+ * @param add_point Add point [n,m,r] first, pads with 0
+ * @param lens_distribution Lens distribution of radius n. Also 's', 'r', 'G', 'W'.
+ * @param random_within Random distribution within 0.1 of the cube's or sphere's surface
+ * @param random_disk Random points in a 0.5 disk projected to a sphere, optional gap size (e.g., 'Z0.5 s G0.6')
+ * @param bounding_box Bounding box coordinates, default 0.5
+ * @param homogeneous_coordinates Output as homogeneous coordinates for cdd
+ * @param remove_command_line Remove command line from the first line of output
+ * @param time_seed Use time as the random number seed (default is command line)
+ * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
+ * @param offset Offset coordinates by n
+ * @param user_seed Use n as the random number seed
+ * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RboxOutputs`).
+ */
 function rbox(
     number_points: string,
     dimension: string | null = null,
@@ -344,38 +376,6 @@ function rbox(
     mesh_lattice: Array<string> | null = null,
     runner: Runner | null = null,
 ): RboxOutputs {
-    /**
-     * Generate various point distributions. Default is random in cube.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param number_points Number of random points in cube, lens, spiral, sphere or grid
-     * @param dimension Dimension (e.g., D3 for 3-d)
-     * @param unit_cube Add a unit cube to the output (optional: 'c G2.0' sets size)
-     * @param unit_diamond Add a unit diamond to the output (optional: 'd G2.0' sets size)
-     * @param spiral Generate a regular 3-d spiral
-     * @param regular_polygon Generate a regular polygon (optional: 'r s Z1 G0.1' makes a cone)
-     * @param cospherical_points Generate cospherical points
-     * @param simplex_points Generate random points in simplex, may use 'r' or 'Wn'
-     * @param simplex_plus_points Same as 'x', plus simplex
-     * @param add_point Add point [n,m,r] first, pads with 0
-     * @param lens_distribution Lens distribution of radius n. Also 's', 'r', 'G', 'W'.
-     * @param random_within Random distribution within 0.1 of the cube's or sphere's surface
-     * @param random_disk Random points in a 0.5 disk projected to a sphere, optional gap size (e.g., 'Z0.5 s G0.6')
-     * @param bounding_box Bounding box coordinates, default 0.5
-     * @param homogeneous_coordinates Output as homogeneous coordinates for cdd
-     * @param remove_command_line Remove command line from the first line of output
-     * @param time_seed Use time as the random number seed (default is command line)
-     * @param integer_coordinates Print integer coordinates, default 'Bn' is 1e+06
-     * @param offset Offset coordinates by n
-     * @param user_seed Use n as the random number seed
-     * @param mesh_lattice Lattice (Mesh) rotated by [n,-m,0], [m,n,0], [0,0,r], ...
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RboxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RBOX_METADATA);
     const params = rbox_params(number_points, dimension, unit_cube, unit_diamond, spiral, regular_polygon, cospherical_points, simplex_points, simplex_plus_points, add_point, lens_distribution, random_within, random_disk, bounding_box, homogeneous_coordinates, remove_command_line, time_seed, integer_coordinates, offset, user_seed, mesh_lattice)
@@ -388,5 +388,8 @@ export {
       RboxOutputs,
       RboxParameters,
       rbox,
+      rbox_cargs,
+      rbox_execute,
+      rbox_outputs,
       rbox_params,
 };

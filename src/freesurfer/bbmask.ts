@@ -12,7 +12,7 @@ const BBMASK_METADATA: Metadata = {
 
 
 interface BbmaskParameters {
-    "__STYXTYPE__": "bbmask";
+    "@type": "freesurfer.bbmask";
     "mask": Array<InputPathType>;
     "src_volumes"?: Array<InputPathType> | null | undefined;
     "npad"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface BbmaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bbmask": bbmask_cargs,
+        "freesurfer.bbmask": bbmask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bbmask": bbmask_outputs,
+        "freesurfer.bbmask": bbmask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,18 @@ interface BbmaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mask Input and output for the mask volume.
+ * @param src_volumes Input and output volumes to be reduced to the bounding box.
+ * @param npad Number of voxels to expand the bounding box.
+ * @param registration Input and output registration files.
+ * @param regheader Output registration file from header.
+ * @param sub2src Output file for sub-source registration.
+ *
+ * @returns Parameter dictionary
+ */
 function bbmask_params(
     mask: Array<InputPathType>,
     src_volumes: Array<InputPathType> | null = null,
@@ -97,20 +109,8 @@ function bbmask_params(
     regheader: InputPathType | null = null,
     sub2src: InputPathType | null = null,
 ): BbmaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param mask Input and output for the mask volume.
-     * @param src_volumes Input and output volumes to be reduced to the bounding box.
-     * @param npad Number of voxels to expand the bounding box.
-     * @param registration Input and output registration files.
-     * @param regheader Output registration file from header.
-     * @param sub2src Output file for sub-source registration.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bbmask" as const,
+        "@type": "freesurfer.bbmask" as const,
         "mask": mask,
     };
     if (src_volumes !== null) {
@@ -132,18 +132,18 @@ function bbmask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bbmask_cargs(
     params: BbmaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bbmask");
     cargs.push(
@@ -184,18 +184,18 @@ function bbmask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bbmask_outputs(
     params: BbmaskParameters,
     execution: Execution,
 ): BbmaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BbmaskOutputs = {
         root: execution.outputFile("."),
         mask_output_file: execution.outputFile(["[MASK_OUTPUT]"].join('')),
@@ -208,22 +208,22 @@ function bbmask_outputs(
 }
 
 
+/**
+ * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
+ */
 function bbmask_execute(
     params: BbmaskParameters,
     execution: Execution,
 ): BbmaskOutputs {
-    /**
-     * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = bbmask_cargs(params, execution)
     const ret = bbmask_outputs(params, execution)
@@ -232,6 +232,23 @@ function bbmask_execute(
 }
 
 
+/**
+ * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mask Input and output for the mask volume.
+ * @param src_volumes Input and output volumes to be reduced to the bounding box.
+ * @param npad Number of voxels to expand the bounding box.
+ * @param registration Input and output registration files.
+ * @param regheader Output registration file from header.
+ * @param sub2src Output file for sub-source registration.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
+ */
 function bbmask(
     mask: Array<InputPathType>,
     src_volumes: Array<InputPathType> | null = null,
@@ -241,23 +258,6 @@ function bbmask(
     sub2src: InputPathType | null = null,
     runner: Runner | null = null,
 ): BbmaskOutputs {
-    /**
-     * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mask Input and output for the mask volume.
-     * @param src_volumes Input and output volumes to be reduced to the bounding box.
-     * @param npad Number of voxels to expand the bounding box.
-     * @param registration Input and output registration files.
-     * @param regheader Output registration file from header.
-     * @param sub2src Output file for sub-source registration.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BBMASK_METADATA);
     const params = bbmask_params(mask, src_volumes, npad, registration, regheader, sub2src)
@@ -270,5 +270,8 @@ export {
       BbmaskOutputs,
       BbmaskParameters,
       bbmask,
+      bbmask_cargs,
+      bbmask_execute,
+      bbmask_outputs,
       bbmask_params,
 };

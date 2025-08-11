@@ -12,7 +12,7 @@ const FILE_CONVERT_METADATA: Metadata = {
 
 
 interface FileConvertBorderVersionConvertParameters {
-    "__STYXTYPE__": "border_version_convert";
+    "@type": "workbench.file-convert.border_version_convert";
     "border_in": InputPathType;
     "out_version": number;
     "border_out": string;
@@ -21,7 +21,7 @@ interface FileConvertBorderVersionConvertParameters {
 
 
 interface FileConvertNiftiVersionConvertParameters {
-    "__STYXTYPE__": "nifti_version_convert";
+    "@type": "workbench.file-convert.nifti_version_convert";
     "input": string;
     "version": number;
     "output": string;
@@ -29,7 +29,7 @@ interface FileConvertNiftiVersionConvertParameters {
 
 
 interface FileConvertCiftiVersionConvertParameters {
-    "__STYXTYPE__": "cifti_version_convert";
+    "@type": "workbench.file-convert.cifti_version_convert";
     "cifti_in": InputPathType;
     "version": string;
     "cifti_out": string;
@@ -37,67 +37,67 @@ interface FileConvertCiftiVersionConvertParameters {
 
 
 interface FileConvertParameters {
-    "__STYXTYPE__": "file-convert";
+    "@type": "workbench.file-convert";
     "border_version_convert"?: FileConvertBorderVersionConvertParameters | null | undefined;
     "nifti_version_convert"?: FileConvertNiftiVersionConvertParameters | null | undefined;
     "cifti_version_convert"?: FileConvertCiftiVersionConvertParameters | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "file-convert": file_convert_cargs,
-        "border_version_convert": file_convert_border_version_convert_cargs,
-        "nifti_version_convert": file_convert_nifti_version_convert_cargs,
-        "cifti_version_convert": file_convert_cifti_version_convert_cargs,
+        "workbench.file-convert": file_convert_cargs,
+        "workbench.file-convert.border_version_convert": file_convert_border_version_convert_cargs,
+        "workbench.file-convert.nifti_version_convert": file_convert_nifti_version_convert_cargs,
+        "workbench.file-convert.cifti_version_convert": file_convert_cifti_version_convert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param border_in the input border file
+ * @param out_version the format version to write as, 1 or 3 (2 doesn't exist)
+ * @param border_out output - the output border file
+ * @param opt_surface_surface must be specified if the input is version 1: use this surface file for structure and number of vertices, ignore borders on other structures
+ *
+ * @returns Parameter dictionary
+ */
 function file_convert_border_version_convert_params(
     border_in: InputPathType,
     out_version: number,
     border_out: string,
     opt_surface_surface: InputPathType | null = null,
 ): FileConvertBorderVersionConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param border_in the input border file
-     * @param out_version the format version to write as, 1 or 3 (2 doesn't exist)
-     * @param border_out output - the output border file
-     * @param opt_surface_surface must be specified if the input is version 1: use this surface file for structure and number of vertices, ignore borders on other structures
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "border_version_convert" as const,
+        "@type": "workbench.file-convert.border_version_convert" as const,
         "border_in": border_in,
         "out_version": out_version,
         "border_out": border_out,
@@ -109,18 +109,18 @@ function file_convert_border_version_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_convert_border_version_convert_cargs(
     params: FileConvertBorderVersionConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-border-version-convert");
     cargs.push(execution.inputFile((params["border_in"] ?? null)));
@@ -136,22 +136,22 @@ function file_convert_border_version_convert_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input nifti file
+ * @param version the nifti version to write as
+ * @param output output - the output nifti file
+ *
+ * @returns Parameter dictionary
+ */
 function file_convert_nifti_version_convert_params(
     input: string,
     version: number,
     output: string,
 ): FileConvertNiftiVersionConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input nifti file
-     * @param version the nifti version to write as
-     * @param output output - the output nifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nifti_version_convert" as const,
+        "@type": "workbench.file-convert.nifti_version_convert" as const,
         "input": input,
         "version": version,
         "output": output,
@@ -160,18 +160,18 @@ function file_convert_nifti_version_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_convert_nifti_version_convert_cargs(
     params: FileConvertNiftiVersionConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-nifti-version-convert");
     cargs.push((params["input"] ?? null));
@@ -181,22 +181,22 @@ function file_convert_nifti_version_convert_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param version the cifti version to write as
+ * @param cifti_out output - the output cifti file
+ *
+ * @returns Parameter dictionary
+ */
 function file_convert_cifti_version_convert_params(
     cifti_in: InputPathType,
     version: string,
     cifti_out: string,
 ): FileConvertCiftiVersionConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param version the cifti version to write as
-     * @param cifti_out output - the output cifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti_version_convert" as const,
+        "@type": "workbench.file-convert.cifti_version_convert" as const,
         "cifti_in": cifti_in,
         "version": version,
         "cifti_out": cifti_out,
@@ -205,18 +205,18 @@ function file_convert_cifti_version_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_convert_cifti_version_convert_cargs(
     params: FileConvertCiftiVersionConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti-version-convert");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -239,22 +239,22 @@ interface FileConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param border_version_convert write a border file with a different version
+ * @param nifti_version_convert write a nifti file with a different version
+ * @param cifti_version_convert write a cifti file with a different version
+ *
+ * @returns Parameter dictionary
+ */
 function file_convert_params(
     border_version_convert: FileConvertBorderVersionConvertParameters | null = null,
     nifti_version_convert: FileConvertNiftiVersionConvertParameters | null = null,
     cifti_version_convert: FileConvertCiftiVersionConvertParameters | null = null,
 ): FileConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param border_version_convert write a border file with a different version
-     * @param nifti_version_convert write a nifti file with a different version
-     * @param cifti_version_convert write a cifti file with a different version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "file-convert" as const,
+        "@type": "workbench.file-convert" as const,
     };
     if (border_version_convert !== null) {
         params["border_version_convert"] = border_version_convert;
@@ -269,46 +269,46 @@ function file_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_convert_cargs(
     params: FileConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-file-convert");
     if ((params["border_version_convert"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["border_version_convert"] ?? null).__STYXTYPE__)((params["border_version_convert"] ?? null), execution));
+        cargs.push(...dynCargs((params["border_version_convert"] ?? null)["@type"])((params["border_version_convert"] ?? null), execution));
     }
     if ((params["nifti_version_convert"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["nifti_version_convert"] ?? null).__STYXTYPE__)((params["nifti_version_convert"] ?? null), execution));
+        cargs.push(...dynCargs((params["nifti_version_convert"] ?? null)["@type"])((params["nifti_version_convert"] ?? null), execution));
     }
     if ((params["cifti_version_convert"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cifti_version_convert"] ?? null).__STYXTYPE__)((params["cifti_version_convert"] ?? null), execution));
+        cargs.push(...dynCargs((params["cifti_version_convert"] ?? null)["@type"])((params["cifti_version_convert"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function file_convert_outputs(
     params: FileConvertParameters,
     execution: Execution,
 ): FileConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FileConvertOutputs = {
         root: execution.outputFile("."),
     };
@@ -316,24 +316,24 @@ function file_convert_outputs(
 }
 
 
+/**
+ * Change version of file format.
+ *
+ * You may only specify one top-level option.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
+ */
 function file_convert_execute(
     params: FileConvertParameters,
     execution: Execution,
 ): FileConvertOutputs {
-    /**
-     * Change version of file format.
-     * 
-     * You may only specify one top-level option.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = file_convert_cargs(params, execution)
     const ret = file_convert_outputs(params, execution)
@@ -342,28 +342,28 @@ function file_convert_execute(
 }
 
 
+/**
+ * Change version of file format.
+ *
+ * You may only specify one top-level option.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param border_version_convert write a border file with a different version
+ * @param nifti_version_convert write a nifti file with a different version
+ * @param cifti_version_convert write a cifti file with a different version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
+ */
 function file_convert(
     border_version_convert: FileConvertBorderVersionConvertParameters | null = null,
     nifti_version_convert: FileConvertNiftiVersionConvertParameters | null = null,
     cifti_version_convert: FileConvertCiftiVersionConvertParameters | null = null,
     runner: Runner | null = null,
 ): FileConvertOutputs {
-    /**
-     * Change version of file format.
-     * 
-     * You may only specify one top-level option.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param border_version_convert write a border file with a different version
-     * @param nifti_version_convert write a nifti file with a different version
-     * @param cifti_version_convert write a cifti file with a different version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILE_CONVERT_METADATA);
     const params = file_convert_params(border_version_convert, nifti_version_convert, cifti_version_convert)
@@ -379,8 +379,14 @@ export {
       FileConvertOutputs,
       FileConvertParameters,
       file_convert,
+      file_convert_border_version_convert_cargs,
       file_convert_border_version_convert_params,
+      file_convert_cargs,
+      file_convert_cifti_version_convert_cargs,
       file_convert_cifti_version_convert_params,
+      file_convert_execute,
+      file_convert_nifti_version_convert_cargs,
       file_convert_nifti_version_convert_params,
+      file_convert_outputs,
       file_convert_params,
 };

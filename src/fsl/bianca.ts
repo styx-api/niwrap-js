@@ -12,7 +12,7 @@ const BIANCA_METADATA: Metadata = {
 
 
 interface BiancaParameters {
-    "__STYXTYPE__": "bianca";
+    "@type": "fsl.bianca";
     "master_file": InputPathType;
     "label_feature_num": number;
     "brain_mask_feature_num": number;
@@ -33,35 +33,35 @@ interface BiancaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bianca": bianca_cargs,
+        "fsl.bianca": bianca_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bianca": bianca_outputs,
+        "fsl.bianca": bianca_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface BiancaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param master_file Name of the master file
+ * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
+ * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
+ * @param query_subject_num Row number of query subject (in masterlistfile)
+ * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
+ * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
+ * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
+ * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
+ * @param patch_sizes List of patch sizes for local averaging
+ * @param patch_3d Use 3D patches (default is 2D)
+ * @param select_pts "any" (default) or "surround" or "noborder"
+ * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
+ * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
+ * @param load_classifier_data Load training data from file
+ * @param save_classifier_data Save training data to file
+ * @param verbose_flag Use verbose mode
+ * @param out_name Specify (base) output name of files
+ *
+ * @returns Parameter dictionary
+ */
 function bianca_params(
     master_file: InputPathType,
     label_feature_num: number,
@@ -103,31 +126,8 @@ function bianca_params(
     verbose_flag: boolean = false,
     out_name: string | null = "output_bianca",
 ): BiancaParameters {
-    /**
-     * Build parameters.
-    
-     * @param master_file Name of the master file
-     * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
-     * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
-     * @param query_subject_num Row number of query subject (in masterlistfile)
-     * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
-     * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
-     * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
-     * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
-     * @param patch_sizes List of patch sizes for local averaging
-     * @param patch_3d Use 3D patches (default is 2D)
-     * @param select_pts "any" (default) or "surround" or "noborder"
-     * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
-     * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
-     * @param load_classifier_data Load training data from file
-     * @param save_classifier_data Save training data to file
-     * @param verbose_flag Use verbose mode
-     * @param out_name Specify (base) output name of files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bianca" as const,
+        "@type": "fsl.bianca" as const,
         "master_file": master_file,
         "label_feature_num": label_feature_num,
         "brain_mask_feature_num": brain_mask_feature_num,
@@ -172,18 +172,18 @@ function bianca_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bianca_cargs(
     params: BiancaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bianca");
     cargs.push(["--singlefile=", execution.inputFile((params["master_file"] ?? null))].join(''));
@@ -236,18 +236,18 @@ function bianca_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bianca_outputs(
     params: BiancaParameters,
     execution: Execution,
 ): BiancaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BiancaOutputs = {
         root: execution.outputFile("."),
         base_output: ((params["out_name"] ?? null) !== null) ? execution.outputFile([(params["out_name"] ?? null), "_bianca"].join('')) : null,
@@ -256,22 +256,22 @@ function bianca_outputs(
 }
 
 
+/**
+ * BIANCA: Brain Intensity AbNormality Classification Algorithm.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BiancaOutputs`).
+ */
 function bianca_execute(
     params: BiancaParameters,
     execution: Execution,
 ): BiancaOutputs {
-    /**
-     * BIANCA: Brain Intensity AbNormality Classification Algorithm.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BiancaOutputs`).
-     */
     params = execution.params(params)
     const cargs = bianca_cargs(params, execution)
     const ret = bianca_outputs(params, execution)
@@ -280,6 +280,34 @@ function bianca_execute(
 }
 
 
+/**
+ * BIANCA: Brain Intensity AbNormality Classification Algorithm.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param master_file Name of the master file
+ * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
+ * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
+ * @param query_subject_num Row number of query subject (in masterlistfile)
+ * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
+ * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
+ * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
+ * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
+ * @param patch_sizes List of patch sizes for local averaging
+ * @param patch_3d Use 3D patches (default is 2D)
+ * @param select_pts "any" (default) or "surround" or "noborder"
+ * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
+ * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
+ * @param load_classifier_data Load training data from file
+ * @param save_classifier_data Save training data to file
+ * @param verbose_flag Use verbose mode
+ * @param out_name Specify (base) output name of files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BiancaOutputs`).
+ */
 function bianca(
     master_file: InputPathType,
     label_feature_num: number,
@@ -300,34 +328,6 @@ function bianca(
     out_name: string | null = "output_bianca",
     runner: Runner | null = null,
 ): BiancaOutputs {
-    /**
-     * BIANCA: Brain Intensity AbNormality Classification Algorithm.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param master_file Name of the master file
-     * @param label_feature_num Column number (in the master file) of the manual masks (or any placeholder name for query subjects)
-     * @param brain_mask_feature_num Column number (in the master file) of images to derive non-zero mask from
-     * @param query_subject_num Row number of query subject (in masterlistfile)
-     * @param training_nums Subjects to be used in training. List of row numbers (comma separated, no spaces) or 'all' to use all the subjects in the master file
-     * @param feature_subset Set of column numbers (comma separated and no spaces) for features/images to use (default: use all available modalities as intensity features). The image used to derive non-zero mask from must be part of the features subset
-     * @param mat_feature_num Column number of matrix files (in masterlistfile). Needed to extract spatial features (MNI coordinates)
-     * @param spatial_weight Weighting for spatial coordinates (default = 1, i.e., variance-normalized MNI coordinates). Requires --matfeaturenum to be specified
-     * @param patch_sizes List of patch sizes for local averaging
-     * @param patch_3d Use 3D patches (default is 2D)
-     * @param select_pts "any" (default) or "surround" or "noborder"
-     * @param training_pts Number (max) of (lesion) points to use (per training subject) or "equalpoints" to select all lesion points and equal number of non-lesion points
-     * @param non_les_pts Number (max) of non-lesion points to use. If not specified will be set to the same amount of lesion points
-     * @param load_classifier_data Load training data from file
-     * @param save_classifier_data Save training data to file
-     * @param verbose_flag Use verbose mode
-     * @param out_name Specify (base) output name of files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BiancaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BIANCA_METADATA);
     const params = bianca_params(master_file, label_feature_num, brain_mask_feature_num, query_subject_num, training_nums, feature_subset, mat_feature_num, spatial_weight, patch_sizes, patch_3d, select_pts, training_pts, non_les_pts, load_classifier_data, save_classifier_data, verbose_flag, out_name)
@@ -340,5 +340,8 @@ export {
       BiancaOutputs,
       BiancaParameters,
       bianca,
+      bianca_cargs,
+      bianca_execute,
+      bianca_outputs,
       bianca_params,
 };

@@ -12,7 +12,7 @@ const FABBER_DWI_METADATA: Metadata = {
 
 
 interface FabberDwiParameters {
-    "__STYXTYPE__": "fabber_dwi";
+    "@type": "fsl.fabber_dwi";
     "output_dir": string;
     "method": string;
     "model": string;
@@ -52,35 +52,35 @@ interface FabberDwiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fabber_dwi": fabber_dwi_cargs,
+        "fsl.fabber_dwi": fabber_dwi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fabber_dwi": fabber_dwi_outputs,
+        "fsl.fabber_dwi": fabber_dwi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -103,6 +103,48 @@ interface FabberDwiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_dir Directory for output files (including logfile)
+ * @param method Use this inference method
+ * @param model Use this forward model
+ * @param data_file Specify a single input data file
+ * @param help_flag Print this usage method. If given with --method or --model, display relevant method/model usage information
+ * @param listmethods_flag List all known inference methods
+ * @param listmodels_flag List all known forward models
+ * @param listparams_flag List model parameters (requires model configuration options to be given)
+ * @param descparams_flag Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
+ * @param listoutputs_flag List additional model outputs (requires model configuration options to be given)
+ * @param evaluate Evaluate the model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param simple_output_flag Instead of usual standard output, simply output a series of lines each giving progress as a percentage
+ * @param overwrite_flag If set, will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_to_latest_flag Try to create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param multiple_data_files Specify multiple data files for n=1, 2, 3...
+ * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other, interleave = first record from each file, then second, etc.
+ * @param mask_file Mask file. Inference will only be performed where mask value > 0
+ * @param masked_timepoints List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param supp_data 'Supplemental' timeseries data, required for some models
+ * @param dump_param_names_flag Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit_flag Output the model prediction as a 4d volume
+ * @param save_residuals_flag Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras_flag Output any additional model-specific timeseries data
+ * @param save_mvn_flag Output the final MVN distributions
+ * @param save_mean_flag Output the parameter means
+ * @param save_std_flag Output the parameter standard deviations
+ * @param save_var_flag Output the parameter variances
+ * @param save_zstat_flag Output the parameter Z stats
+ * @param save_noise_mean_flag Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std_flag Output the noise standard deviations
+ * @param save_free_energy_flag Output the free energy, if calculated
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug_flag Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ *
+ * @returns Parameter dictionary
+ */
 function fabber_dwi_params(
     output_dir: string,
     method: string,
@@ -141,50 +183,8 @@ function fabber_dwi_params(
     optfile: InputPathType | null = null,
     debug_flag: boolean = false,
 ): FabberDwiParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_dir Directory for output files (including logfile)
-     * @param method Use this inference method
-     * @param model Use this forward model
-     * @param data_file Specify a single input data file
-     * @param help_flag Print this usage method. If given with --method or --model, display relevant method/model usage information
-     * @param listmethods_flag List all known inference methods
-     * @param listmodels_flag List all known forward models
-     * @param listparams_flag List model parameters (requires model configuration options to be given)
-     * @param descparams_flag Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
-     * @param listoutputs_flag List additional model outputs (requires model configuration options to be given)
-     * @param evaluate Evaluate the model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param simple_output_flag Instead of usual standard output, simply output a series of lines each giving progress as a percentage
-     * @param overwrite_flag If set, will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_to_latest_flag Try to create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param multiple_data_files Specify multiple data files for n=1, 2, 3...
-     * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other, interleave = first record from each file, then second, etc.
-     * @param mask_file Mask file. Inference will only be performed where mask value > 0
-     * @param masked_timepoints List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param supp_data 'Supplemental' timeseries data, required for some models
-     * @param dump_param_names_flag Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit_flag Output the model prediction as a 4d volume
-     * @param save_residuals_flag Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras_flag Output any additional model-specific timeseries data
-     * @param save_mvn_flag Output the final MVN distributions
-     * @param save_mean_flag Output the parameter means
-     * @param save_std_flag Output the parameter standard deviations
-     * @param save_var_flag Output the parameter variances
-     * @param save_zstat_flag Output the parameter Z stats
-     * @param save_noise_mean_flag Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std_flag Output the noise standard deviations
-     * @param save_free_energy_flag Output the free energy, if calculated
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug_flag Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fabber_dwi" as const,
+        "@type": "fsl.fabber_dwi" as const,
         "output_dir": output_dir,
         "method": method,
         "model": model,
@@ -246,18 +246,18 @@ function fabber_dwi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fabber_dwi_cargs(
     params: FabberDwiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fabber_dwi");
     cargs.push(
@@ -406,18 +406,18 @@ function fabber_dwi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fabber_dwi_outputs(
     params: FabberDwiParameters,
     execution: Execution,
 ): FabberDwiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FabberDwiOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["output_dir"] ?? null), "/*"].join('')),
@@ -426,22 +426,22 @@ function fabber_dwi_outputs(
 }
 
 
+/**
+ * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
+ */
 function fabber_dwi_execute(
     params: FabberDwiParameters,
     execution: Execution,
 ): FabberDwiOutputs {
-    /**
-     * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
-     */
     params = execution.params(params)
     const cargs = fabber_dwi_cargs(params, execution)
     const ret = fabber_dwi_outputs(params, execution)
@@ -450,6 +450,53 @@ function fabber_dwi_execute(
 }
 
 
+/**
+ * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_dir Directory for output files (including logfile)
+ * @param method Use this inference method
+ * @param model Use this forward model
+ * @param data_file Specify a single input data file
+ * @param help_flag Print this usage method. If given with --method or --model, display relevant method/model usage information
+ * @param listmethods_flag List all known inference methods
+ * @param listmodels_flag List all known forward models
+ * @param listparams_flag List model parameters (requires model configuration options to be given)
+ * @param descparams_flag Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
+ * @param listoutputs_flag List additional model outputs (requires model configuration options to be given)
+ * @param evaluate Evaluate the model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
+ * @param evaluate_params List of parameter values for evaluation
+ * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
+ * @param simple_output_flag Instead of usual standard output, simply output a series of lines each giving progress as a percentage
+ * @param overwrite_flag If set, will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
+ * @param link_to_latest_flag Try to create a link to the most recent output directory with the prefix _latest
+ * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
+ * @param multiple_data_files Specify multiple data files for n=1, 2, 3...
+ * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other, interleave = first record from each file, then second, etc.
+ * @param mask_file Mask file. Inference will only be performed where mask value > 0
+ * @param masked_timepoints List of masked time points, indexed from 1. These will be ignored in the parameter updates
+ * @param supp_data 'Supplemental' timeseries data, required for some models
+ * @param dump_param_names_flag Write the file paramnames.txt containing the names of the model parameters
+ * @param save_model_fit_flag Output the model prediction as a 4d volume
+ * @param save_residuals_flag Output the residuals (difference between the data and the model prediction)
+ * @param save_model_extras_flag Output any additional model-specific timeseries data
+ * @param save_mvn_flag Output the final MVN distributions
+ * @param save_mean_flag Output the parameter means
+ * @param save_std_flag Output the parameter standard deviations
+ * @param save_var_flag Output the parameter variances
+ * @param save_zstat_flag Output the parameter Z stats
+ * @param save_noise_mean_flag Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
+ * @param save_noise_std_flag Output the noise standard deviations
+ * @param save_free_energy_flag Output the free energy, if calculated
+ * @param optfile File containing additional options, one per line, in the same form as specified on the command line
+ * @param debug_flag Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
+ */
 function fabber_dwi(
     output_dir: string,
     method: string,
@@ -489,53 +536,6 @@ function fabber_dwi(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): FabberDwiOutputs {
-    /**
-     * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_dir Directory for output files (including logfile)
-     * @param method Use this inference method
-     * @param model Use this forward model
-     * @param data_file Specify a single input data file
-     * @param help_flag Print this usage method. If given with --method or --model, display relevant method/model usage information
-     * @param listmethods_flag List all known inference methods
-     * @param listmodels_flag List all known forward models
-     * @param listparams_flag List model parameters (requires model configuration options to be given)
-     * @param descparams_flag Describe model parameters (name, description, units) - requires model configuration options to be given. Note that not all models provide parameter descriptions
-     * @param listoutputs_flag List additional model outputs (requires model configuration options to be given)
-     * @param evaluate Evaluate the model. Set to name of output required or blank for default output. Requires model configuration options, --evaluate-params and --evaluate-nt
-     * @param evaluate_params List of parameter values for evaluation
-     * @param evaluate_nt Number of time points for evaluation - must be consistent with model options where appropriate
-     * @param simple_output_flag Instead of usual standard output, simply output a series of lines each giving progress as a percentage
-     * @param overwrite_flag If set, will overwrite existing output. If not set, new output directories will be created by appending '+' to the directory name
-     * @param link_to_latest_flag Try to create a link to the most recent output directory with the prefix _latest
-     * @param loadmodels Load models dynamically from the specified filename, which should be a DLL/shared library
-     * @param multiple_data_files Specify multiple data files for n=1, 2, 3...
-     * @param data_order If multiple data files are specified, how they will be handled: concatenate = one after the other, interleave = first record from each file, then second, etc.
-     * @param mask_file Mask file. Inference will only be performed where mask value > 0
-     * @param masked_timepoints List of masked time points, indexed from 1. These will be ignored in the parameter updates
-     * @param supp_data 'Supplemental' timeseries data, required for some models
-     * @param dump_param_names_flag Write the file paramnames.txt containing the names of the model parameters
-     * @param save_model_fit_flag Output the model prediction as a 4d volume
-     * @param save_residuals_flag Output the residuals (difference between the data and the model prediction)
-     * @param save_model_extras_flag Output any additional model-specific timeseries data
-     * @param save_mvn_flag Output the final MVN distributions
-     * @param save_mean_flag Output the parameter means
-     * @param save_std_flag Output the parameter standard deviations
-     * @param save_var_flag Output the parameter variances
-     * @param save_zstat_flag Output the parameter Z stats
-     * @param save_noise_mean_flag Output the noise means. The noise distribution inferred is the precision of a Gaussian noise source
-     * @param save_noise_std_flag Output the noise standard deviations
-     * @param save_free_energy_flag Output the free energy, if calculated
-     * @param optfile File containing additional options, one per line, in the same form as specified on the command line
-     * @param debug_flag Output large amounts of debug information. ONLY USE WITH VERY SMALL NUMBERS OF VOXELS
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FABBER_DWI_METADATA);
     const params = fabber_dwi_params(output_dir, method, model, data_file, help_flag, listmethods_flag, listmodels_flag, listparams_flag, descparams_flag, listoutputs_flag, evaluate, evaluate_params, evaluate_nt, simple_output_flag, overwrite_flag, link_to_latest_flag, loadmodels, multiple_data_files, data_order, mask_file, masked_timepoints, supp_data, dump_param_names_flag, save_model_fit_flag, save_residuals_flag, save_model_extras_flag, save_mvn_flag, save_mean_flag, save_std_flag, save_var_flag, save_zstat_flag, save_noise_mean_flag, save_noise_std_flag, save_free_energy_flag, optfile, debug_flag)
@@ -548,5 +548,8 @@ export {
       FabberDwiOutputs,
       FabberDwiParameters,
       fabber_dwi,
+      fabber_dwi_cargs,
+      fabber_dwi_execute,
+      fabber_dwi_outputs,
       fabber_dwi_params,
 };

@@ -12,7 +12,7 @@ const LABEL_SUBJECT_FLASH_METADATA: Metadata = {
 
 
 interface LabelSubjectFlashParameters {
-    "__STYXTYPE__": "label_subject_flash";
+    "@type": "freesurfer.label_subject_flash";
     "tissue_params": InputPathType;
     "norm_volume": InputPathType;
     "transform_file": InputPathType;
@@ -21,35 +21,35 @@ interface LabelSubjectFlashParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label_subject_flash": label_subject_flash_cargs,
+        "freesurfer.label_subject_flash": label_subject_flash_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label_subject_flash": label_subject_flash_outputs,
+        "freesurfer.label_subject_flash": label_subject_flash_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface LabelSubjectFlashOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tissue_params Path to the tissue parameter file for FLASH sequences.
+ * @param norm_volume Path to the normalized T1 volume.
+ * @param transform_file Talairach linear transform file.
+ * @param classifier_array Path to the classifier array in GCA format.
+ * @param aseg_output Output path for the automatic segmentation (aseg) file.
+ *
+ * @returns Parameter dictionary
+ */
 function label_subject_flash_params(
     tissue_params: InputPathType,
     norm_volume: InputPathType,
@@ -79,19 +90,8 @@ function label_subject_flash_params(
     classifier_array: InputPathType,
     aseg_output: string,
 ): LabelSubjectFlashParameters {
-    /**
-     * Build parameters.
-    
-     * @param tissue_params Path to the tissue parameter file for FLASH sequences.
-     * @param norm_volume Path to the normalized T1 volume.
-     * @param transform_file Talairach linear transform file.
-     * @param classifier_array Path to the classifier array in GCA format.
-     * @param aseg_output Output path for the automatic segmentation (aseg) file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_subject_flash" as const,
+        "@type": "freesurfer.label_subject_flash" as const,
         "tissue_params": tissue_params,
         "norm_volume": norm_volume,
         "transform_file": transform_file,
@@ -102,18 +102,18 @@ function label_subject_flash_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_subject_flash_cargs(
     params: LabelSubjectFlashParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label_subject_flash");
     cargs.push(
@@ -128,18 +128,18 @@ function label_subject_flash_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_subject_flash_outputs(
     params: LabelSubjectFlashParameters,
     execution: Execution,
 ): LabelSubjectFlashOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelSubjectFlashOutputs = {
         root: execution.outputFile("."),
         aseg_outfile: execution.outputFile([(params["aseg_output"] ?? null)].join('')),
@@ -148,22 +148,22 @@ function label_subject_flash_outputs(
 }
 
 
+/**
+ * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
+ */
 function label_subject_flash_execute(
     params: LabelSubjectFlashParameters,
     execution: Execution,
 ): LabelSubjectFlashOutputs {
-    /**
-     * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_subject_flash_cargs(params, execution)
     const ret = label_subject_flash_outputs(params, execution)
@@ -172,6 +172,22 @@ function label_subject_flash_execute(
 }
 
 
+/**
+ * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param tissue_params Path to the tissue parameter file for FLASH sequences.
+ * @param norm_volume Path to the normalized T1 volume.
+ * @param transform_file Talairach linear transform file.
+ * @param classifier_array Path to the classifier array in GCA format.
+ * @param aseg_output Output path for the automatic segmentation (aseg) file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
+ */
 function label_subject_flash(
     tissue_params: InputPathType,
     norm_volume: InputPathType,
@@ -180,22 +196,6 @@ function label_subject_flash(
     aseg_output: string,
     runner: Runner | null = null,
 ): LabelSubjectFlashOutputs {
-    /**
-     * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param tissue_params Path to the tissue parameter file for FLASH sequences.
-     * @param norm_volume Path to the normalized T1 volume.
-     * @param transform_file Talairach linear transform file.
-     * @param classifier_array Path to the classifier array in GCA format.
-     * @param aseg_output Output path for the automatic segmentation (aseg) file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_SUBJECT_FLASH_METADATA);
     const params = label_subject_flash_params(tissue_params, norm_volume, transform_file, classifier_array, aseg_output)
@@ -208,5 +208,8 @@ export {
       LabelSubjectFlashOutputs,
       LabelSubjectFlashParameters,
       label_subject_flash,
+      label_subject_flash_cargs,
+      label_subject_flash_execute,
+      label_subject_flash_outputs,
       label_subject_flash_params,
 };

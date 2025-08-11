@@ -12,7 +12,7 @@ const FSLVBM_2_TEMPLATE_METADATA: Metadata = {
 
 
 interface Fslvbm2TemplateParameters {
-    "__STYXTYPE__": "fslvbm_2_template";
+    "@type": "fsl.fslvbm_2_template";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: string | null | undefined;
@@ -40,33 +40,33 @@ interface Fslvbm2TemplateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslvbm_2_template": fslvbm_2_template_cargs,
+        "fsl.fslvbm_2_template": fslvbm_2_template_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -86,6 +86,36 @@ interface Fslvbm2TemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param arch Specify architecture
+ * @param coprocessor Specify coprocessor type
+ * @param coprocessor_multi Specify multiple coprocessors
+ * @param coprocessor_class Specify coprocessor class
+ * @param coprocessor_toolkit Specify coprocessor toolkit
+ * @param jobhold Hold job until specified job ID is completed
+ * @param array_hold Hold array job until specified job ID is completed
+ * @param logdir Specify log directory
+ * @param mailoptions Specify mail options
+ * @param mailto Specify email address for notifications
+ * @param name Specify job name
+ * @param priority Specify job priority
+ * @param queue Specify queue
+ * @param resource Specify resources
+ * @param delete_job Delete specified job
+ * @param memory_gb Specify memory in GB
+ * @param parallel_env Specify parallel environment and threads
+ * @param array_task Specify array task
+ * @param array_native Specify array native task
+ * @param num_tasks Specify number of tasks
+ * @param coprocessor_name Specify coprocessor name
+ * @param project Specify project
+ * @param runtime_limit Specify runtime limit in minutes
+ * @param job_file Specify job script file
+ *
+ * @returns Parameter dictionary
+ */
 function fslvbm_2_template_params(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -112,38 +142,8 @@ function fslvbm_2_template_params(
     runtime_limit: number | null = null,
     job_file: InputPathType | null = null,
 ): Fslvbm2TemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param arch Specify architecture
-     * @param coprocessor Specify coprocessor type
-     * @param coprocessor_multi Specify multiple coprocessors
-     * @param coprocessor_class Specify coprocessor class
-     * @param coprocessor_toolkit Specify coprocessor toolkit
-     * @param jobhold Hold job until specified job ID is completed
-     * @param array_hold Hold array job until specified job ID is completed
-     * @param logdir Specify log directory
-     * @param mailoptions Specify mail options
-     * @param mailto Specify email address for notifications
-     * @param name Specify job name
-     * @param priority Specify job priority
-     * @param queue Specify queue
-     * @param resource Specify resources
-     * @param delete_job Delete specified job
-     * @param memory_gb Specify memory in GB
-     * @param parallel_env Specify parallel environment and threads
-     * @param array_task Specify array task
-     * @param array_native Specify array native task
-     * @param num_tasks Specify number of tasks
-     * @param coprocessor_name Specify coprocessor name
-     * @param project Specify project
-     * @param runtime_limit Specify runtime limit in minutes
-     * @param job_file Specify job script file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslvbm_2_template" as const,
+        "@type": "fsl.fslvbm_2_template" as const,
     };
     if (arch !== null) {
         params["arch"] = arch;
@@ -221,18 +221,18 @@ function fslvbm_2_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslvbm_2_template_cargs(
     params: Fslvbm2TemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslvbm_2_template");
     if ((params["arch"] ?? null) !== null) {
@@ -383,18 +383,18 @@ function fslvbm_2_template_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslvbm_2_template_outputs(
     params: Fslvbm2TemplateParameters,
     execution: Execution,
 ): Fslvbm2TemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fslvbm2TemplateOutputs = {
         root: execution.outputFile("."),
     };
@@ -402,22 +402,22 @@ function fslvbm_2_template_outputs(
 }
 
 
+/**
+ * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
+ */
 function fslvbm_2_template_execute(
     params: Fslvbm2TemplateParameters,
     execution: Execution,
 ): Fslvbm2TemplateOutputs {
-    /**
-     * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslvbm_2_template_cargs(params, execution)
     const ret = fslvbm_2_template_outputs(params, execution)
@@ -426,6 +426,41 @@ function fslvbm_2_template_execute(
 }
 
 
+/**
+ * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param arch Specify architecture
+ * @param coprocessor Specify coprocessor type
+ * @param coprocessor_multi Specify multiple coprocessors
+ * @param coprocessor_class Specify coprocessor class
+ * @param coprocessor_toolkit Specify coprocessor toolkit
+ * @param jobhold Hold job until specified job ID is completed
+ * @param array_hold Hold array job until specified job ID is completed
+ * @param logdir Specify log directory
+ * @param mailoptions Specify mail options
+ * @param mailto Specify email address for notifications
+ * @param name Specify job name
+ * @param priority Specify job priority
+ * @param queue Specify queue
+ * @param resource Specify resources
+ * @param delete_job Delete specified job
+ * @param memory_gb Specify memory in GB
+ * @param parallel_env Specify parallel environment and threads
+ * @param array_task Specify array task
+ * @param array_native Specify array native task
+ * @param num_tasks Specify number of tasks
+ * @param coprocessor_name Specify coprocessor name
+ * @param project Specify project
+ * @param runtime_limit Specify runtime limit in minutes
+ * @param job_file Specify job script file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
+ */
 function fslvbm_2_template(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -453,41 +488,6 @@ function fslvbm_2_template(
     job_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): Fslvbm2TemplateOutputs {
-    /**
-     * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param arch Specify architecture
-     * @param coprocessor Specify coprocessor type
-     * @param coprocessor_multi Specify multiple coprocessors
-     * @param coprocessor_class Specify coprocessor class
-     * @param coprocessor_toolkit Specify coprocessor toolkit
-     * @param jobhold Hold job until specified job ID is completed
-     * @param array_hold Hold array job until specified job ID is completed
-     * @param logdir Specify log directory
-     * @param mailoptions Specify mail options
-     * @param mailto Specify email address for notifications
-     * @param name Specify job name
-     * @param priority Specify job priority
-     * @param queue Specify queue
-     * @param resource Specify resources
-     * @param delete_job Delete specified job
-     * @param memory_gb Specify memory in GB
-     * @param parallel_env Specify parallel environment and threads
-     * @param array_task Specify array task
-     * @param array_native Specify array native task
-     * @param num_tasks Specify number of tasks
-     * @param coprocessor_name Specify coprocessor name
-     * @param project Specify project
-     * @param runtime_limit Specify runtime limit in minutes
-     * @param job_file Specify job script file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLVBM_2_TEMPLATE_METADATA);
     const params = fslvbm_2_template_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_toolkit, jobhold, array_hold, logdir, mailoptions, mailto, name, priority, queue, resource, delete_job, memory_gb, parallel_env, array_task, array_native, num_tasks, coprocessor_name, project, runtime_limit, job_file)
@@ -500,5 +500,8 @@ export {
       Fslvbm2TemplateOutputs,
       Fslvbm2TemplateParameters,
       fslvbm_2_template,
+      fslvbm_2_template_cargs,
+      fslvbm_2_template_execute,
+      fslvbm_2_template_outputs,
       fslvbm_2_template_params,
 };

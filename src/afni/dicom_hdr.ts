@@ -12,7 +12,7 @@ const DICOM_HDR_METADATA: Metadata = {
 
 
 interface DicomHdrParameters {
-    "__STYXTYPE__": "dicom_hdr";
+    "@type": "afni.dicom_hdr";
     "files": Array<InputPathType>;
     "hex": boolean;
     "noname": boolean;
@@ -26,33 +26,33 @@ interface DicomHdrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dicom_hdr": dicom_hdr_cargs,
+        "afni.dicom_hdr": dicom_hdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface DicomHdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files DICOM file(s) to read
+ * @param hex Include hexadecimal printout for integer values.
+ * @param noname Don't include element names in the printout.
+ * @param sexinfo Dump Siemens EXtra INFO text (0029 1020), if present (can be VERY lengthy).
+ * @param mulfram Dump multi-frame information, if present (1 line per frame, plus an XML-style header/footer). This option also implies -noname.
+ * @param v_dump Dump n words of binary data also.
+ * @param no_length Skip lengths and offsets (helps diffs).
+ * @param slice_times Show slice times from Siemens mosaic images.
+ * @param slice_times_verb Show slice times from Siemens mosaic images verbosely. (multiple uses increase verbosity, can dump CSA data)
+ * @param siemens_csa_data Same as 3 -slice_times_verb opts.
+ *
+ * @returns Parameter dictionary
+ */
 function dicom_hdr_params(
     files: Array<InputPathType>,
     hex: boolean = false,
@@ -84,24 +100,8 @@ function dicom_hdr_params(
     slice_times_verb: boolean = false,
     siemens_csa_data: boolean = false,
 ): DicomHdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param files DICOM file(s) to read
-     * @param hex Include hexadecimal printout for integer values.
-     * @param noname Don't include element names in the printout.
-     * @param sexinfo Dump Siemens EXtra INFO text (0029 1020), if present (can be VERY lengthy).
-     * @param mulfram Dump multi-frame information, if present (1 line per frame, plus an XML-style header/footer). This option also implies -noname.
-     * @param v_dump Dump n words of binary data also.
-     * @param no_length Skip lengths and offsets (helps diffs).
-     * @param slice_times Show slice times from Siemens mosaic images.
-     * @param slice_times_verb Show slice times from Siemens mosaic images verbosely. (multiple uses increase verbosity, can dump CSA data)
-     * @param siemens_csa_data Same as 3 -slice_times_verb opts.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dicom_hdr" as const,
+        "@type": "afni.dicom_hdr" as const,
         "files": files,
         "hex": hex,
         "noname": noname,
@@ -119,18 +119,18 @@ function dicom_hdr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dicom_hdr_cargs(
     params: DicomHdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dicom_hdr");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -168,18 +168,18 @@ function dicom_hdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dicom_hdr_outputs(
     params: DicomHdrParameters,
     execution: Execution,
 ): DicomHdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DicomHdrOutputs = {
         root: execution.outputFile("."),
     };
@@ -187,22 +187,22 @@ function dicom_hdr_outputs(
 }
 
 
+/**
+ * A tool to print DICOM file information to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
+ */
 function dicom_hdr_execute(
     params: DicomHdrParameters,
     execution: Execution,
 ): DicomHdrOutputs {
-    /**
-     * A tool to print DICOM file information to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = dicom_hdr_cargs(params, execution)
     const ret = dicom_hdr_outputs(params, execution)
@@ -211,6 +211,27 @@ function dicom_hdr_execute(
 }
 
 
+/**
+ * A tool to print DICOM file information to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files DICOM file(s) to read
+ * @param hex Include hexadecimal printout for integer values.
+ * @param noname Don't include element names in the printout.
+ * @param sexinfo Dump Siemens EXtra INFO text (0029 1020), if present (can be VERY lengthy).
+ * @param mulfram Dump multi-frame information, if present (1 line per frame, plus an XML-style header/footer). This option also implies -noname.
+ * @param v_dump Dump n words of binary data also.
+ * @param no_length Skip lengths and offsets (helps diffs).
+ * @param slice_times Show slice times from Siemens mosaic images.
+ * @param slice_times_verb Show slice times from Siemens mosaic images verbosely. (multiple uses increase verbosity, can dump CSA data)
+ * @param siemens_csa_data Same as 3 -slice_times_verb opts.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
+ */
 function dicom_hdr(
     files: Array<InputPathType>,
     hex: boolean = false,
@@ -224,27 +245,6 @@ function dicom_hdr(
     siemens_csa_data: boolean = false,
     runner: Runner | null = null,
 ): DicomHdrOutputs {
-    /**
-     * A tool to print DICOM file information to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files DICOM file(s) to read
-     * @param hex Include hexadecimal printout for integer values.
-     * @param noname Don't include element names in the printout.
-     * @param sexinfo Dump Siemens EXtra INFO text (0029 1020), if present (can be VERY lengthy).
-     * @param mulfram Dump multi-frame information, if present (1 line per frame, plus an XML-style header/footer). This option also implies -noname.
-     * @param v_dump Dump n words of binary data also.
-     * @param no_length Skip lengths and offsets (helps diffs).
-     * @param slice_times Show slice times from Siemens mosaic images.
-     * @param slice_times_verb Show slice times from Siemens mosaic images verbosely. (multiple uses increase verbosity, can dump CSA data)
-     * @param siemens_csa_data Same as 3 -slice_times_verb opts.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DICOM_HDR_METADATA);
     const params = dicom_hdr_params(files, hex, noname, sexinfo, mulfram, v_dump, no_length, slice_times, slice_times_verb, siemens_csa_data)
@@ -257,5 +257,8 @@ export {
       DicomHdrOutputs,
       DicomHdrParameters,
       dicom_hdr,
+      dicom_hdr_cargs,
+      dicom_hdr_execute,
+      dicom_hdr_outputs,
       dicom_hdr_params,
 };

@@ -12,7 +12,7 @@ const REG_TRANSFORM_METADATA: Metadata = {
 
 
 interface RegTransformParameters {
-    "__STYXTYPE__": "reg_transform";
+    "@type": "niftyreg.reg_transform";
     "reference_image": InputPathType;
     "cpp2def_input"?: InputPathType | null | undefined;
     "cpp2def_output"?: string | null | undefined;
@@ -44,35 +44,35 @@ interface RegTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_transform": reg_transform_cargs,
+        "niftyreg.reg_transform": reg_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_transform": reg_transform_outputs,
+        "niftyreg.reg_transform": reg_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -131,6 +131,40 @@ interface RegTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Filename of the reference image
+ * @param cpp2def_input Conversion from control point position to deformation field. Filename of input lattice of control point positions (CPP).
+ * @param cpp2def_output Filename of the output deformation field image (DEF).
+ * @param comp1_cpp2 Composition of two lattices of control points. CPP2(CPP1(x)). Filename of lattice of control point that contains the second deformation (CPP2).
+ * @param comp1_cpp1 Filename of lattice of control point that contains the initial deformation (CPP1).
+ * @param comp1_output Filename of the output deformation field.
+ * @param comp2_cpp Composition of a deformation field with a lattice of control points. CPP(DEF(x)). Filename of lattice of control point that contains the second deformation (CPP).
+ * @param comp2_def Filename of the deformation field to be used as initial deformation (DEF).
+ * @param comp2_output Filename of the output deformation field.
+ * @param comp3_def2 Composition of two deformation fields. DEF2(DEF1(x)). Filename of the second deformation field (DEF2).
+ * @param comp3_def1 Filename of the first deformation field (DEF1).
+ * @param comp3_output Filename of the output deformation field.
+ * @param def2disp_input Convert a deformation field into a displacement field. Filename of deformation field x'=T(x).
+ * @param def2disp_output Filename of displacement field x'=x+T(x).
+ * @param disp2def_input Convert a displacement field into a deformation field. Filename of displacement field x'=x+T(x).
+ * @param disp2def_output Filename of deformation field x'=T(x).
+ * @param upd_sform_image Update the sform of a floating (source) image using an affine transformation. Filename of image to be updated.
+ * @param upd_sform_affine Affine transformation defined as Affine x Reference = Floating. Filename of affine transformation.
+ * @param upd_sform_output Updated image filename.
+ * @param aff2def_affine Compose a non-rigid with an affine. Filename of affine transformation.
+ * @param aff2def_target Image used as a target for the non-rigid step.
+ * @param aff2def_cpp_or_def Reference image (B). Filename of control point position or deformation field.
+ * @param aff2def_output Output deformation field filename.
+ * @param inv_affine_input Invert an affine transformation matrix. Filename of input affine matrix.
+ * @param inv_affine_output Filename of inverted affine matrix.
+ * @param comp_aff_1st Compose two affine transformation matrices. Filename of first affine matrix.
+ * @param comp_aff_2nd Filename of second affine matrix.
+ * @param comp_aff_output Filename of composed affine matrix result.
+ *
+ * @returns Parameter dictionary
+ */
 function reg_transform_params(
     reference_image: InputPathType,
     cpp2def_input: InputPathType | null = null,
@@ -161,42 +195,8 @@ function reg_transform_params(
     comp_aff_2nd: InputPathType | null = null,
     comp_aff_output: string | null = null,
 ): RegTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Filename of the reference image
-     * @param cpp2def_input Conversion from control point position to deformation field. Filename of input lattice of control point positions (CPP).
-     * @param cpp2def_output Filename of the output deformation field image (DEF).
-     * @param comp1_cpp2 Composition of two lattices of control points. CPP2(CPP1(x)). Filename of lattice of control point that contains the second deformation (CPP2).
-     * @param comp1_cpp1 Filename of lattice of control point that contains the initial deformation (CPP1).
-     * @param comp1_output Filename of the output deformation field.
-     * @param comp2_cpp Composition of a deformation field with a lattice of control points. CPP(DEF(x)). Filename of lattice of control point that contains the second deformation (CPP).
-     * @param comp2_def Filename of the deformation field to be used as initial deformation (DEF).
-     * @param comp2_output Filename of the output deformation field.
-     * @param comp3_def2 Composition of two deformation fields. DEF2(DEF1(x)). Filename of the second deformation field (DEF2).
-     * @param comp3_def1 Filename of the first deformation field (DEF1).
-     * @param comp3_output Filename of the output deformation field.
-     * @param def2disp_input Convert a deformation field into a displacement field. Filename of deformation field x'=T(x).
-     * @param def2disp_output Filename of displacement field x'=x+T(x).
-     * @param disp2def_input Convert a displacement field into a deformation field. Filename of displacement field x'=x+T(x).
-     * @param disp2def_output Filename of deformation field x'=T(x).
-     * @param upd_sform_image Update the sform of a floating (source) image using an affine transformation. Filename of image to be updated.
-     * @param upd_sform_affine Affine transformation defined as Affine x Reference = Floating. Filename of affine transformation.
-     * @param upd_sform_output Updated image filename.
-     * @param aff2def_affine Compose a non-rigid with an affine. Filename of affine transformation.
-     * @param aff2def_target Image used as a target for the non-rigid step.
-     * @param aff2def_cpp_or_def Reference image (B). Filename of control point position or deformation field.
-     * @param aff2def_output Output deformation field filename.
-     * @param inv_affine_input Invert an affine transformation matrix. Filename of input affine matrix.
-     * @param inv_affine_output Filename of inverted affine matrix.
-     * @param comp_aff_1st Compose two affine transformation matrices. Filename of first affine matrix.
-     * @param comp_aff_2nd Filename of second affine matrix.
-     * @param comp_aff_output Filename of composed affine matrix result.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_transform" as const,
+        "@type": "niftyreg.reg_transform" as const,
         "reference_image": reference_image,
     };
     if (cpp2def_input !== null) {
@@ -284,18 +284,18 @@ function reg_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_transform_cargs(
     params: RegTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_transform");
     cargs.push(
@@ -417,18 +417,18 @@ function reg_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_transform_outputs(
     params: RegTransformParameters,
     execution: Execution,
 ): RegTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegTransformOutputs = {
         root: execution.outputFile("."),
         cpp2def_output_file: ((params["cpp2def_output"] ?? null) !== null) ? execution.outputFile([(params["cpp2def_output"] ?? null)].join('')) : null,
@@ -446,22 +446,22 @@ function reg_transform_outputs(
 }
 
 
+/**
+ * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
+ */
 function reg_transform_execute(
     params: RegTransformParameters,
     execution: Execution,
 ): RegTransformOutputs {
-    /**
-     * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_transform_cargs(params, execution)
     const ret = reg_transform_outputs(params, execution)
@@ -470,6 +470,45 @@ function reg_transform_execute(
 }
 
 
+/**
+ * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param reference_image Filename of the reference image
+ * @param cpp2def_input Conversion from control point position to deformation field. Filename of input lattice of control point positions (CPP).
+ * @param cpp2def_output Filename of the output deformation field image (DEF).
+ * @param comp1_cpp2 Composition of two lattices of control points. CPP2(CPP1(x)). Filename of lattice of control point that contains the second deformation (CPP2).
+ * @param comp1_cpp1 Filename of lattice of control point that contains the initial deformation (CPP1).
+ * @param comp1_output Filename of the output deformation field.
+ * @param comp2_cpp Composition of a deformation field with a lattice of control points. CPP(DEF(x)). Filename of lattice of control point that contains the second deformation (CPP).
+ * @param comp2_def Filename of the deformation field to be used as initial deformation (DEF).
+ * @param comp2_output Filename of the output deformation field.
+ * @param comp3_def2 Composition of two deformation fields. DEF2(DEF1(x)). Filename of the second deformation field (DEF2).
+ * @param comp3_def1 Filename of the first deformation field (DEF1).
+ * @param comp3_output Filename of the output deformation field.
+ * @param def2disp_input Convert a deformation field into a displacement field. Filename of deformation field x'=T(x).
+ * @param def2disp_output Filename of displacement field x'=x+T(x).
+ * @param disp2def_input Convert a displacement field into a deformation field. Filename of displacement field x'=x+T(x).
+ * @param disp2def_output Filename of deformation field x'=T(x).
+ * @param upd_sform_image Update the sform of a floating (source) image using an affine transformation. Filename of image to be updated.
+ * @param upd_sform_affine Affine transformation defined as Affine x Reference = Floating. Filename of affine transformation.
+ * @param upd_sform_output Updated image filename.
+ * @param aff2def_affine Compose a non-rigid with an affine. Filename of affine transformation.
+ * @param aff2def_target Image used as a target for the non-rigid step.
+ * @param aff2def_cpp_or_def Reference image (B). Filename of control point position or deformation field.
+ * @param aff2def_output Output deformation field filename.
+ * @param inv_affine_input Invert an affine transformation matrix. Filename of input affine matrix.
+ * @param inv_affine_output Filename of inverted affine matrix.
+ * @param comp_aff_1st Compose two affine transformation matrices. Filename of first affine matrix.
+ * @param comp_aff_2nd Filename of second affine matrix.
+ * @param comp_aff_output Filename of composed affine matrix result.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
+ */
 function reg_transform(
     reference_image: InputPathType,
     cpp2def_input: InputPathType | null = null,
@@ -501,45 +540,6 @@ function reg_transform(
     comp_aff_output: string | null = null,
     runner: Runner | null = null,
 ): RegTransformOutputs {
-    /**
-     * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param reference_image Filename of the reference image
-     * @param cpp2def_input Conversion from control point position to deformation field. Filename of input lattice of control point positions (CPP).
-     * @param cpp2def_output Filename of the output deformation field image (DEF).
-     * @param comp1_cpp2 Composition of two lattices of control points. CPP2(CPP1(x)). Filename of lattice of control point that contains the second deformation (CPP2).
-     * @param comp1_cpp1 Filename of lattice of control point that contains the initial deformation (CPP1).
-     * @param comp1_output Filename of the output deformation field.
-     * @param comp2_cpp Composition of a deformation field with a lattice of control points. CPP(DEF(x)). Filename of lattice of control point that contains the second deformation (CPP).
-     * @param comp2_def Filename of the deformation field to be used as initial deformation (DEF).
-     * @param comp2_output Filename of the output deformation field.
-     * @param comp3_def2 Composition of two deformation fields. DEF2(DEF1(x)). Filename of the second deformation field (DEF2).
-     * @param comp3_def1 Filename of the first deformation field (DEF1).
-     * @param comp3_output Filename of the output deformation field.
-     * @param def2disp_input Convert a deformation field into a displacement field. Filename of deformation field x'=T(x).
-     * @param def2disp_output Filename of displacement field x'=x+T(x).
-     * @param disp2def_input Convert a displacement field into a deformation field. Filename of displacement field x'=x+T(x).
-     * @param disp2def_output Filename of deformation field x'=T(x).
-     * @param upd_sform_image Update the sform of a floating (source) image using an affine transformation. Filename of image to be updated.
-     * @param upd_sform_affine Affine transformation defined as Affine x Reference = Floating. Filename of affine transformation.
-     * @param upd_sform_output Updated image filename.
-     * @param aff2def_affine Compose a non-rigid with an affine. Filename of affine transformation.
-     * @param aff2def_target Image used as a target for the non-rigid step.
-     * @param aff2def_cpp_or_def Reference image (B). Filename of control point position or deformation field.
-     * @param aff2def_output Output deformation field filename.
-     * @param inv_affine_input Invert an affine transformation matrix. Filename of input affine matrix.
-     * @param inv_affine_output Filename of inverted affine matrix.
-     * @param comp_aff_1st Compose two affine transformation matrices. Filename of first affine matrix.
-     * @param comp_aff_2nd Filename of second affine matrix.
-     * @param comp_aff_output Filename of composed affine matrix result.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_TRANSFORM_METADATA);
     const params = reg_transform_params(reference_image, cpp2def_input, cpp2def_output, comp1_cpp2, comp1_cpp1, comp1_output, comp2_cpp, comp2_def, comp2_output, comp3_def2, comp3_def1, comp3_output, def2disp_input, def2disp_output, disp2def_input, disp2def_output, upd_sform_image, upd_sform_affine, upd_sform_output, aff2def_affine, aff2def_target, aff2def_cpp_or_def, aff2def_output, inv_affine_input, inv_affine_output, comp_aff_1st, comp_aff_2nd, comp_aff_output)
@@ -552,5 +552,8 @@ export {
       RegTransformOutputs,
       RegTransformParameters,
       reg_transform,
+      reg_transform_cargs,
+      reg_transform_execute,
+      reg_transform_outputs,
       reg_transform_params,
 };

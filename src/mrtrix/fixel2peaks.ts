@@ -12,26 +12,26 @@ const FIXEL2PEAKS_METADATA: Metadata = {
 
 
 interface Fixel2peaksConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixel2peaks.config";
     "key": string;
     "value": string;
 }
 
 
 interface Fixel2peaksVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.fixel2peaks.VariousString";
     "obj": string;
 }
 
 
 interface Fixel2peaksVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.fixel2peaks.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface Fixel2peaksParameters {
-    "__STYXTYPE__": "fixel2peaks";
+    "@type": "mrtrix.fixel2peaks";
     "number"?: number | null | undefined;
     "nan": boolean;
     "info": boolean;
@@ -47,57 +47,57 @@ interface Fixel2peaksParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixel2peaks": fixel2peaks_cargs,
-        "config": fixel2peaks_config_cargs,
-        "VariousString": fixel2peaks_various_string_cargs,
-        "VariousFile": fixel2peaks_various_file_cargs,
+        "mrtrix.fixel2peaks": fixel2peaks_cargs,
+        "mrtrix.fixel2peaks.config": fixel2peaks_config_cargs,
+        "mrtrix.fixel2peaks.VariousString": fixel2peaks_various_string_cargs,
+        "mrtrix.fixel2peaks.VariousFile": fixel2peaks_various_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixel2peaks": fixel2peaks_outputs,
+        "mrtrix.fixel2peaks": fixel2peaks_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2peaks_config_params(
     key: string,
     value: string,
 ): Fixel2peaksConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixel2peaks.config" as const,
         "key": key,
         "value": value,
     };
@@ -105,18 +105,18 @@ function fixel2peaks_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2peaks_config_cargs(
     params: Fixel2peaksConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -125,72 +125,72 @@ function fixel2peaks_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2peaks_various_string_params(
     obj: string,
 ): Fixel2peaksVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.fixel2peaks.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2peaks_various_string_cargs(
     params: Fixel2peaksVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2peaks_various_file_params(
     obj: InputPathType,
 ): Fixel2peaksVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.fixel2peaks.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2peaks_various_file_cargs(
     params: Fixel2peaksVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -214,6 +214,24 @@ interface Fixel2peaksOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_ the input fixel information
+ * @param out the output peaks image
+ * @param number_ maximum number of fixels in each voxel (default: based on input data)
+ * @param nan fill excess peak data with NaNs rather than zeroes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2peaks_params(
     in_: Fixel2peaksVariousStringParameters | Fixel2peaksVariousFileParameters,
     out: string,
@@ -228,26 +246,8 @@ function fixel2peaks_params(
     help: boolean = false,
     version: boolean = false,
 ): Fixel2peaksParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_ the input fixel information
-     * @param out the output peaks image
-     * @param number_ maximum number of fixels in each voxel (default: based on input data)
-     * @param nan fill excess peak data with NaNs rather than zeroes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixel2peaks" as const,
+        "@type": "mrtrix.fixel2peaks" as const,
         "nan": nan,
         "info": info,
         "quiet": quiet,
@@ -271,18 +271,18 @@ function fixel2peaks_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2peaks_cargs(
     params: Fixel2peaksParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixel2peaks");
     if ((params["number"] ?? null) !== null) {
@@ -313,7 +313,7 @@ function fixel2peaks_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -321,24 +321,24 @@ function fixel2peaks_cargs(
     if ((params["version"] ?? null)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["in"] ?? null).__STYXTYPE__)((params["in"] ?? null), execution));
+    cargs.push(...dynCargs((params["in"] ?? null)["@type"])((params["in"] ?? null), execution));
     cargs.push((params["out"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixel2peaks_outputs(
     params: Fixel2peaksParameters,
     execution: Execution,
 ): Fixel2peaksOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fixel2peaksOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -347,28 +347,28 @@ function fixel2peaks_outputs(
 }
 
 
+/**
+ * Convert data in the fixel directory format into a 4D image of 3-vectors.
+ *
+ * If a fixel data file is provided as input, then the 3-vectors in the output image will be scaled based on the data in that file. If the input is instead the fixel directory, or the index or directions file, then all output 3-vectors will possess unit norm.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
+ */
 function fixel2peaks_execute(
     params: Fixel2peaksParameters,
     execution: Execution,
 ): Fixel2peaksOutputs {
-    /**
-     * Convert data in the fixel directory format into a 4D image of 3-vectors.
-     * 
-     * If a fixel data file is provided as input, then the 3-vectors in the output image will be scaled based on the data in that file. If the input is instead the fixel directory, or the index or directions file, then all output 3-vectors will possess unit norm.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixel2peaks_cargs(params, execution)
     const ret = fixel2peaks_outputs(params, execution)
@@ -377,6 +377,35 @@ function fixel2peaks_execute(
 }
 
 
+/**
+ * Convert data in the fixel directory format into a 4D image of 3-vectors.
+ *
+ * If a fixel data file is provided as input, then the 3-vectors in the output image will be scaled based on the data in that file. If the input is instead the fixel directory, or the index or directions file, then all output 3-vectors will possess unit norm.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_ the input fixel information
+ * @param out the output peaks image
+ * @param number_ maximum number of fixels in each voxel (default: based on input data)
+ * @param nan fill excess peak data with NaNs rather than zeroes
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
+ */
 function fixel2peaks(
     in_: Fixel2peaksVariousStringParameters | Fixel2peaksVariousFileParameters,
     out: string,
@@ -392,35 +421,6 @@ function fixel2peaks(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2peaksOutputs {
-    /**
-     * Convert data in the fixel directory format into a 4D image of 3-vectors.
-     * 
-     * If a fixel data file is provided as input, then the 3-vectors in the output image will be scaled based on the data in that file. If the input is instead the fixel directory, or the index or directions file, then all output 3-vectors will possess unit norm.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_ the input fixel information
-     * @param out the output peaks image
-     * @param number_ maximum number of fixels in each voxel (default: based on input data)
-     * @param nan fill excess peak data with NaNs rather than zeroes
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXEL2PEAKS_METADATA);
     const params = fixel2peaks_params(in_, out, number_, nan, info, quiet, debug, force, nthreads, config, help, version)
@@ -436,8 +436,14 @@ export {
       Fixel2peaksVariousFileParameters,
       Fixel2peaksVariousStringParameters,
       fixel2peaks,
+      fixel2peaks_cargs,
+      fixel2peaks_config_cargs,
       fixel2peaks_config_params,
+      fixel2peaks_execute,
+      fixel2peaks_outputs,
       fixel2peaks_params,
+      fixel2peaks_various_file_cargs,
       fixel2peaks_various_file_params,
+      fixel2peaks_various_string_cargs,
       fixel2peaks_various_string_params,
 };

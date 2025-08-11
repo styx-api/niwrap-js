@@ -12,7 +12,7 @@ const FOCI_CREATE_METADATA: Metadata = {
 
 
 interface FociCreateClassParameters {
-    "__STYXTYPE__": "class";
+    "@type": "workbench.foci-create.class";
     "class_name": string;
     "foci_list_file": string;
     "surface": InputPathType;
@@ -20,63 +20,63 @@ interface FociCreateClassParameters {
 
 
 interface FociCreateParameters {
-    "__STYXTYPE__": "foci-create";
+    "@type": "workbench.foci-create";
     "output": string;
     "class"?: Array<FociCreateClassParameters> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "foci-create": foci_create_cargs,
-        "class": foci_create_class_cargs,
+        "workbench.foci-create": foci_create_cargs,
+        "workbench.foci-create.class": foci_create_class_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "foci-create": foci_create_outputs,
+        "workbench.foci-create": foci_create_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param class_name name of class
+ * @param foci_list_file text file containing foci names, coordinates, and colors
+ * @param surface surface file for projection of foci list file
+ *
+ * @returns Parameter dictionary
+ */
 function foci_create_class_params(
     class_name: string,
     foci_list_file: string,
     surface: InputPathType,
 ): FociCreateClassParameters {
-    /**
-     * Build parameters.
-    
-     * @param class_name name of class
-     * @param foci_list_file text file containing foci names, coordinates, and colors
-     * @param surface surface file for projection of foci list file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "class" as const,
+        "@type": "workbench.foci-create.class" as const,
         "class_name": class_name,
         "foci_list_file": foci_list_file,
         "surface": surface,
@@ -85,18 +85,18 @@ function foci_create_class_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function foci_create_class_cargs(
     params: FociCreateClassParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-class");
     cargs.push((params["class_name"] ?? null));
@@ -123,20 +123,20 @@ interface FociCreateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output the output foci file
+ * @param class_ specify class input data
+ *
+ * @returns Parameter dictionary
+ */
 function foci_create_params(
     output: string,
     class_: Array<FociCreateClassParameters> | null = null,
 ): FociCreateParameters {
-    /**
-     * Build parameters.
-    
-     * @param output the output foci file
-     * @param class_ specify class input data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "foci-create" as const,
+        "@type": "workbench.foci-create" as const,
         "output": output,
     };
     if (class_ !== null) {
@@ -146,41 +146,41 @@ function foci_create_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function foci_create_cargs(
     params: FociCreateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-foci-create");
     cargs.push((params["output"] ?? null));
     if ((params["class"] ?? null) !== null) {
-        cargs.push(...(params["class"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["class"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function foci_create_outputs(
     params: FociCreateParameters,
     execution: Execution,
 ): FociCreateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FociCreateOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -189,34 +189,34 @@ function foci_create_outputs(
 }
 
 
+/**
+ * Create a foci file.
+ *
+ * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
+ *
+ * <focus-name>
+ * <red> <green> <blue> <x> <y> <z> 
+ * ...
+ *
+ * Foci names are specified on a separate line from their coordinates and color, in order to let foci names contain spaces.  Whitespace is trimmed from both ends of the foci name, but is kept if it is in the middle of a name.  The values of <red>, <green>, <blue> and must be integers from 0 to 255, and will specify the color the foci is drawn as.
+ *
+ * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
+ *
+ * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
+ */
 function foci_create_execute(
     params: FociCreateParameters,
     execution: Execution,
 ): FociCreateOutputs {
-    /**
-     * Create a foci file.
-     * 
-     * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
-     * 
-     * <focus-name>
-     * <red> <green> <blue> <x> <y> <z> 
-     * ...
-     * 
-     * Foci names are specified on a separate line from their coordinates and color, in order to let foci names contain spaces.  Whitespace is trimmed from both ends of the foci name, but is kept if it is in the middle of a name.  The values of <red>, <green>, <blue> and must be integers from 0 to 255, and will specify the color the foci is drawn as.
-     * 
-     * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
-     * 
-     * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
-     */
     params = execution.params(params)
     const cargs = foci_create_cargs(params, execution)
     const ret = foci_create_outputs(params, execution)
@@ -225,36 +225,36 @@ function foci_create_execute(
 }
 
 
+/**
+ * Create a foci file.
+ *
+ * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
+ *
+ * <focus-name>
+ * <red> <green> <blue> <x> <y> <z> 
+ * ...
+ *
+ * Foci names are specified on a separate line from their coordinates and color, in order to let foci names contain spaces.  Whitespace is trimmed from both ends of the foci name, but is kept if it is in the middle of a name.  The values of <red>, <green>, <blue> and must be integers from 0 to 255, and will specify the color the foci is drawn as.
+ *
+ * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
+ *
+ * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param output the output foci file
+ * @param class_ specify class input data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
+ */
 function foci_create(
     output: string,
     class_: Array<FociCreateClassParameters> | null = null,
     runner: Runner | null = null,
 ): FociCreateOutputs {
-    /**
-     * Create a foci file.
-     * 
-     * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
-     * 
-     * <focus-name>
-     * <red> <green> <blue> <x> <y> <z> 
-     * ...
-     * 
-     * Foci names are specified on a separate line from their coordinates and color, in order to let foci names contain spaces.  Whitespace is trimmed from both ends of the foci name, but is kept if it is in the middle of a name.  The values of <red>, <green>, <blue> and must be integers from 0 to 255, and will specify the color the foci is drawn as.
-     * 
-     * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
-     * 
-     * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param output the output foci file
-     * @param class_ specify class input data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FOCI_CREATE_METADATA);
     const params = foci_create_params(output, class_)
@@ -268,6 +268,10 @@ export {
       FociCreateOutputs,
       FociCreateParameters,
       foci_create,
+      foci_create_cargs,
+      foci_create_class_cargs,
       foci_create_class_params,
+      foci_create_execute,
+      foci_create_outputs,
       foci_create_params,
 };

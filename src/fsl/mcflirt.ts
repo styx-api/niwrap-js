@@ -12,7 +12,7 @@ const MCFLIRT_METADATA: Metadata = {
 
 
 interface McflirtParameters {
-    "__STYXTYPE__": "mcflirt";
+    "@type": "fsl.mcflirt";
     "in_file": InputPathType;
     "bins"?: number | null | undefined;
     "cost"?: "mutualinfo" | "woods" | "corratio" | "normcorr" | "normmi" | "leastsquares" | null | undefined;
@@ -37,35 +37,35 @@ interface McflirtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mcflirt": mcflirt_cargs,
+        "fsl.mcflirt": mcflirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mcflirt": mcflirt_outputs,
+        "fsl.mcflirt": mcflirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -116,6 +116,33 @@ interface McflirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Timeseries to motion-correct.
+ * @param bins Number of histogram bins.
+ * @param cost 'mutualinfo' or 'woods' or 'corratio' or 'normcorr' or 'normmi' or 'leastsquares'. Cost function to optimize.
+ * @param dof Degrees of freedom for the transformation.
+ * @param init Initial transformation matrix.
+ * @param interpolation 'spline' or 'nn' or 'sinc'. Interpolation method for transformation.
+ * @param mean_vol Register to mean volume.
+ * @param out_file File to write.
+ * @param ref_file Target image for motion correction.
+ * @param ref_vol Volume to align frames to.
+ * @param rotation Scaling factor for rotation tolerances.
+ * @param save_mats Save transformation matrices.
+ * @param save_plots Save transformation parameters.
+ * @param save_rmsabs Save rms displacement parameters.
+ * @param save_rmsrel Save relative rms displacement parameters.
+ * @param scaling Scaling factor to use.
+ * @param smooth Smoothing factor for the cost function.
+ * @param stages Stages (if 4, perform final search with sinc interpolation.
+ * @param stats_imgs Produce variance and std. dev. images.
+ * @param use_contour Run search on contour images.
+ * @param use_gradient Run search on gradient images.
+ *
+ * @returns Parameter dictionary
+ */
 function mcflirt_params(
     in_file: InputPathType,
     bins: number | null = null,
@@ -139,35 +166,8 @@ function mcflirt_params(
     use_contour: boolean = false,
     use_gradient: boolean = false,
 ): McflirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Timeseries to motion-correct.
-     * @param bins Number of histogram bins.
-     * @param cost 'mutualinfo' or 'woods' or 'corratio' or 'normcorr' or 'normmi' or 'leastsquares'. Cost function to optimize.
-     * @param dof Degrees of freedom for the transformation.
-     * @param init Initial transformation matrix.
-     * @param interpolation 'spline' or 'nn' or 'sinc'. Interpolation method for transformation.
-     * @param mean_vol Register to mean volume.
-     * @param out_file File to write.
-     * @param ref_file Target image for motion correction.
-     * @param ref_vol Volume to align frames to.
-     * @param rotation Scaling factor for rotation tolerances.
-     * @param save_mats Save transformation matrices.
-     * @param save_plots Save transformation parameters.
-     * @param save_rmsabs Save rms displacement parameters.
-     * @param save_rmsrel Save relative rms displacement parameters.
-     * @param scaling Scaling factor to use.
-     * @param smooth Smoothing factor for the cost function.
-     * @param stages Stages (if 4, perform final search with sinc interpolation.
-     * @param stats_imgs Produce variance and std. dev. images.
-     * @param use_contour Run search on contour images.
-     * @param use_gradient Run search on gradient images.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mcflirt" as const,
+        "@type": "fsl.mcflirt" as const,
         "in_file": in_file,
         "mean_vol": mean_vol,
         "save_mats": save_mats,
@@ -218,18 +218,18 @@ function mcflirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mcflirt_cargs(
     params: McflirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mcflirt");
     cargs.push(
@@ -333,18 +333,18 @@ function mcflirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mcflirt_outputs(
     params: McflirtParameters,
     execution: Execution,
 ): McflirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: McflirtOutputs = {
         root: execution.outputFile("."),
         mat_file: execution.outputFile(["MAT_*"].join('')),
@@ -360,22 +360,22 @@ function mcflirt_outputs(
 }
 
 
+/**
+ * MCFLIRT is an intra-modal motion correction tool designed for use on fMRI time series and based on optimization and registration techniques used in FLIRT, a fully automated robust and accurate tool for linear (affine) inter- and inter-modal brain image registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `McflirtOutputs`).
+ */
 function mcflirt_execute(
     params: McflirtParameters,
     execution: Execution,
 ): McflirtOutputs {
-    /**
-     * MCFLIRT is an intra-modal motion correction tool designed for use on fMRI time series and based on optimization and registration techniques used in FLIRT, a fully automated robust and accurate tool for linear (affine) inter- and inter-modal brain image registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `McflirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = mcflirt_cargs(params, execution)
     const ret = mcflirt_outputs(params, execution)
@@ -384,6 +384,38 @@ function mcflirt_execute(
 }
 
 
+/**
+ * MCFLIRT is an intra-modal motion correction tool designed for use on fMRI time series and based on optimization and registration techniques used in FLIRT, a fully automated robust and accurate tool for linear (affine) inter- and inter-modal brain image registration.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Timeseries to motion-correct.
+ * @param bins Number of histogram bins.
+ * @param cost 'mutualinfo' or 'woods' or 'corratio' or 'normcorr' or 'normmi' or 'leastsquares'. Cost function to optimize.
+ * @param dof Degrees of freedom for the transformation.
+ * @param init Initial transformation matrix.
+ * @param interpolation 'spline' or 'nn' or 'sinc'. Interpolation method for transformation.
+ * @param mean_vol Register to mean volume.
+ * @param out_file File to write.
+ * @param ref_file Target image for motion correction.
+ * @param ref_vol Volume to align frames to.
+ * @param rotation Scaling factor for rotation tolerances.
+ * @param save_mats Save transformation matrices.
+ * @param save_plots Save transformation parameters.
+ * @param save_rmsabs Save rms displacement parameters.
+ * @param save_rmsrel Save relative rms displacement parameters.
+ * @param scaling Scaling factor to use.
+ * @param smooth Smoothing factor for the cost function.
+ * @param stages Stages (if 4, perform final search with sinc interpolation.
+ * @param stats_imgs Produce variance and std. dev. images.
+ * @param use_contour Run search on contour images.
+ * @param use_gradient Run search on gradient images.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `McflirtOutputs`).
+ */
 function mcflirt(
     in_file: InputPathType,
     bins: number | null = null,
@@ -408,38 +440,6 @@ function mcflirt(
     use_gradient: boolean = false,
     runner: Runner | null = null,
 ): McflirtOutputs {
-    /**
-     * MCFLIRT is an intra-modal motion correction tool designed for use on fMRI time series and based on optimization and registration techniques used in FLIRT, a fully automated robust and accurate tool for linear (affine) inter- and inter-modal brain image registration.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Timeseries to motion-correct.
-     * @param bins Number of histogram bins.
-     * @param cost 'mutualinfo' or 'woods' or 'corratio' or 'normcorr' or 'normmi' or 'leastsquares'. Cost function to optimize.
-     * @param dof Degrees of freedom for the transformation.
-     * @param init Initial transformation matrix.
-     * @param interpolation 'spline' or 'nn' or 'sinc'. Interpolation method for transformation.
-     * @param mean_vol Register to mean volume.
-     * @param out_file File to write.
-     * @param ref_file Target image for motion correction.
-     * @param ref_vol Volume to align frames to.
-     * @param rotation Scaling factor for rotation tolerances.
-     * @param save_mats Save transformation matrices.
-     * @param save_plots Save transformation parameters.
-     * @param save_rmsabs Save rms displacement parameters.
-     * @param save_rmsrel Save relative rms displacement parameters.
-     * @param scaling Scaling factor to use.
-     * @param smooth Smoothing factor for the cost function.
-     * @param stages Stages (if 4, perform final search with sinc interpolation.
-     * @param stats_imgs Produce variance and std. dev. images.
-     * @param use_contour Run search on contour images.
-     * @param use_gradient Run search on gradient images.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `McflirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MCFLIRT_METADATA);
     const params = mcflirt_params(in_file, bins, cost, dof, init, interpolation, mean_vol, out_file, ref_file, ref_vol, rotation, save_mats, save_plots, save_rmsabs, save_rmsrel, scaling, smooth, stages, stats_imgs, use_contour, use_gradient)
@@ -452,5 +452,8 @@ export {
       McflirtOutputs,
       McflirtParameters,
       mcflirt,
+      mcflirt_cargs,
+      mcflirt_execute,
+      mcflirt_outputs,
       mcflirt_params,
 };

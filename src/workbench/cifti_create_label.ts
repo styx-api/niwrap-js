@@ -12,35 +12,35 @@ const CIFTI_CREATE_LABEL_METADATA: Metadata = {
 
 
 interface CiftiCreateLabelVolumeParameters {
-    "__STYXTYPE__": "volume";
+    "@type": "workbench.cifti-create-label.volume";
     "label_volume": InputPathType;
     "structure_label_volume": InputPathType;
 }
 
 
 interface CiftiCreateLabelLeftLabelParameters {
-    "__STYXTYPE__": "left_label";
+    "@type": "workbench.cifti-create-label.left_label";
     "label": InputPathType;
     "opt_roi_left_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateLabelRightLabelParameters {
-    "__STYXTYPE__": "right_label";
+    "@type": "workbench.cifti-create-label.right_label";
     "label": InputPathType;
     "opt_roi_right_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateLabelCerebellumLabelParameters {
-    "__STYXTYPE__": "cerebellum_label";
+    "@type": "workbench.cifti-create-label.cerebellum_label";
     "label": InputPathType;
     "opt_roi_cerebellum_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateLabelParameters {
-    "__STYXTYPE__": "cifti-create-label";
+    "@type": "workbench.cifti-create-label";
     "cifti_out": string;
     "volume"?: CiftiCreateLabelVolumeParameters | null | undefined;
     "left_label"?: CiftiCreateLabelLeftLabelParameters | null | undefined;
@@ -49,58 +49,58 @@ interface CiftiCreateLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-create-label": cifti_create_label_cargs,
-        "volume": cifti_create_label_volume_cargs,
-        "left_label": cifti_create_label_left_label_cargs,
-        "right_label": cifti_create_label_right_label_cargs,
-        "cerebellum_label": cifti_create_label_cerebellum_label_cargs,
+        "workbench.cifti-create-label": cifti_create_label_cargs,
+        "workbench.cifti-create-label.volume": cifti_create_label_volume_cargs,
+        "workbench.cifti-create-label.left_label": cifti_create_label_left_label_cargs,
+        "workbench.cifti-create-label.right_label": cifti_create_label_right_label_cargs,
+        "workbench.cifti-create-label.cerebellum_label": cifti_create_label_cerebellum_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-create-label": cifti_create_label_outputs,
+        "workbench.cifti-create-label": cifti_create_label_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_volume label volume file containing the data to be copied
+ * @param structure_label_volume label volume file that defines which voxels to use
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_label_volume_params(
     label_volume: InputPathType,
     structure_label_volume: InputPathType,
 ): CiftiCreateLabelVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_volume label volume file containing the data to be copied
-     * @param structure_label_volume label volume file that defines which voxels to use
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume" as const,
+        "@type": "workbench.cifti-create-label.volume" as const,
         "label_volume": label_volume,
         "structure_label_volume": structure_label_volume,
     };
@@ -108,18 +108,18 @@ function cifti_create_label_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_label_volume_cargs(
     params: CiftiCreateLabelVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume");
     cargs.push(execution.inputFile((params["label_volume"] ?? null)));
@@ -128,20 +128,20 @@ function cifti_create_label_volume_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the label file
+ * @param opt_roi_left_roi_metric roi of vertices to use from left surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_label_left_label_params(
     label: InputPathType,
     opt_roi_left_roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelLeftLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the label file
-     * @param opt_roi_left_roi_metric roi of vertices to use from left surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_label" as const,
+        "@type": "workbench.cifti-create-label.left_label" as const,
         "label": label,
     };
     if (opt_roi_left_roi_metric !== null) {
@@ -151,18 +151,18 @@ function cifti_create_label_left_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_label_left_label_cargs(
     params: CiftiCreateLabelLeftLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-label");
     cargs.push(execution.inputFile((params["label"] ?? null)));
@@ -176,20 +176,20 @@ function cifti_create_label_left_label_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the label file
+ * @param opt_roi_right_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_label_right_label_params(
     label: InputPathType,
     opt_roi_right_roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelRightLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the label file
-     * @param opt_roi_right_roi_metric roi of vertices to use from right surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_label" as const,
+        "@type": "workbench.cifti-create-label.right_label" as const,
         "label": label,
     };
     if (opt_roi_right_roi_metric !== null) {
@@ -199,18 +199,18 @@ function cifti_create_label_right_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_label_right_label_cargs(
     params: CiftiCreateLabelRightLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-label");
     cargs.push(execution.inputFile((params["label"] ?? null)));
@@ -224,20 +224,20 @@ function cifti_create_label_right_label_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the label file
+ * @param opt_roi_cerebellum_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_label_cerebellum_label_params(
     label: InputPathType,
     opt_roi_cerebellum_roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelCerebellumLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the label file
-     * @param opt_roi_cerebellum_roi_metric roi of vertices to use from right surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_label" as const,
+        "@type": "workbench.cifti-create-label.cerebellum_label" as const,
         "label": label,
     };
     if (opt_roi_cerebellum_roi_metric !== null) {
@@ -247,18 +247,18 @@ function cifti_create_label_cerebellum_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_label_cerebellum_label_cargs(
     params: CiftiCreateLabelCerebellumLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-label");
     cargs.push(execution.inputFile((params["label"] ?? null)));
@@ -289,6 +289,17 @@ interface CiftiCreateLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_label label file for left surface
+ * @param right_label label for left surface
+ * @param cerebellum_label label for the cerebellum
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_label_params(
     cifti_out: string,
     volume: CiftiCreateLabelVolumeParameters | null = null,
@@ -296,19 +307,8 @@ function cifti_create_label_params(
     right_label: CiftiCreateLabelRightLabelParameters | null = null,
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
 ): CiftiCreateLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_out the output cifti file
-     * @param volume volume component
-     * @param left_label label file for left surface
-     * @param right_label label for left surface
-     * @param cerebellum_label label for the cerebellum
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-create-label" as const,
+        "@type": "workbench.cifti-create-label" as const,
         "cifti_out": cifti_out,
     };
     if (volume !== null) {
@@ -327,50 +327,50 @@ function cifti_create_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_label_cargs(
     params: CiftiCreateLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-create-label");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume"] ?? null).__STYXTYPE__)((params["volume"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume"] ?? null)["@type"])((params["volume"] ?? null), execution));
     }
     if ((params["left_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_label"] ?? null).__STYXTYPE__)((params["left_label"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_label"] ?? null)["@type"])((params["left_label"] ?? null), execution));
     }
     if ((params["right_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_label"] ?? null).__STYXTYPE__)((params["right_label"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_label"] ?? null)["@type"])((params["right_label"] ?? null), execution));
     }
     if ((params["cerebellum_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_label"] ?? null).__STYXTYPE__)((params["cerebellum_label"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_label"] ?? null)["@type"])((params["cerebellum_label"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_create_label_outputs(
     params: CiftiCreateLabelParameters,
     execution: Execution,
 ): CiftiCreateLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCreateLabelOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -379,60 +379,60 @@ function cifti_create_label_outputs(
 }
 
 
+/**
+ * Create a cifti label file.
+ *
+ * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
+ *
+ * The -volume option requires two volume arguments, the label-volume argument contains all labels you want to display (e.g. nuclei of the thalamus), whereas the structure-label-volume argument contains all CIFTI voxel-based structures you want to include data within (e.g. THALAMUS_LEFT, THALAMUS_RIGHT, etc).  See -volume-label-import and -volume-help for format details of label volume files.  If you just want the labels in voxels to be the structure names, you may use the same file for both arguments.  The structure-label-volume must use some of the label names from this list, all other label names in the structure-label-volume will be ignored:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
+ */
 function cifti_create_label_execute(
     params: CiftiCreateLabelParameters,
     execution: Execution,
 ): CiftiCreateLabelOutputs {
-    /**
-     * Create a cifti label file.
-     * 
-     * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
-     * 
-     * The -volume option requires two volume arguments, the label-volume argument contains all labels you want to display (e.g. nuclei of the thalamus), whereas the structure-label-volume argument contains all CIFTI voxel-based structures you want to include data within (e.g. THALAMUS_LEFT, THALAMUS_RIGHT, etc).  See -volume-label-import and -volume-help for format details of label volume files.  If you just want the labels in voxels to be the structure names, you may use the same file for both arguments.  The structure-label-volume must use some of the label names from this list, all other label names in the structure-label-volume will be ignored:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_create_label_cargs(params, execution)
     const ret = cifti_create_label_outputs(params, execution)
@@ -441,6 +441,60 @@ function cifti_create_label_execute(
 }
 
 
+/**
+ * Create a cifti label file.
+ *
+ * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
+ *
+ * The -volume option requires two volume arguments, the label-volume argument contains all labels you want to display (e.g. nuclei of the thalamus), whereas the structure-label-volume argument contains all CIFTI voxel-based structures you want to include data within (e.g. THALAMUS_LEFT, THALAMUS_RIGHT, etc).  See -volume-label-import and -volume-help for format details of label volume files.  If you just want the labels in voxels to be the structure names, you may use the same file for both arguments.  The structure-label-volume must use some of the label names from this list, all other label names in the structure-label-volume will be ignored:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_label label file for left surface
+ * @param right_label label for left surface
+ * @param cerebellum_label label for the cerebellum
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
+ */
 function cifti_create_label(
     cifti_out: string,
     volume: CiftiCreateLabelVolumeParameters | null = null,
@@ -449,60 +503,6 @@ function cifti_create_label(
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
-    /**
-     * Create a cifti label file.
-     * 
-     * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
-     * 
-     * The -volume option requires two volume arguments, the label-volume argument contains all labels you want to display (e.g. nuclei of the thalamus), whereas the structure-label-volume argument contains all CIFTI voxel-based structures you want to include data within (e.g. THALAMUS_LEFT, THALAMUS_RIGHT, etc).  See -volume-label-import and -volume-help for format details of label volume files.  If you just want the labels in voxels to be the structure names, you may use the same file for both arguments.  The structure-label-volume must use some of the label names from this list, all other label names in the structure-label-volume will be ignored:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_out the output cifti file
-     * @param volume volume component
-     * @param left_label label file for left surface
-     * @param right_label label for left surface
-     * @param cerebellum_label label for the cerebellum
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CREATE_LABEL_METADATA);
     const params = cifti_create_label_params(cifti_out, volume, left_label, right_label, cerebellum_label)
@@ -519,9 +519,16 @@ export {
       CiftiCreateLabelRightLabelParameters,
       CiftiCreateLabelVolumeParameters,
       cifti_create_label,
+      cifti_create_label_cargs,
+      cifti_create_label_cerebellum_label_cargs,
       cifti_create_label_cerebellum_label_params,
+      cifti_create_label_execute,
+      cifti_create_label_left_label_cargs,
       cifti_create_label_left_label_params,
+      cifti_create_label_outputs,
       cifti_create_label_params,
+      cifti_create_label_right_label_cargs,
       cifti_create_label_right_label_params,
+      cifti_create_label_volume_cargs,
       cifti_create_label_volume_params,
 };

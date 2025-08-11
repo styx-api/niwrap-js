@@ -12,7 +12,7 @@ const EXAMINE_XMAT_METADATA: Metadata = {
 
 
 interface ExamineXmatParameters {
-    "__STYXTYPE__": "ExamineXmat";
+    "@type": "afni.ExamineXmat";
     "input_file"?: InputPathType | null | undefined;
     "interactive": boolean;
     "prefix"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface ExamineXmatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ExamineXmat": examine_xmat_cargs,
+        "afni.ExamineXmat": examine_xmat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ExamineXmat": examine_xmat_outputs,
+        "afni.ExamineXmat": examine_xmat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,20 @@ interface ExamineXmatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file xmat file to plot
+ * @param interactive Run ExamineXmat in interactive mode. This is the default if -prefix is not given. If -interactive is used with -prefix, the last plot you see is the plot saved to file.
+ * @param prefix Prefix of plot image and cor image
+ * @param cprefix Prefix of cor image only
+ * @param pprefix Prefix of plot image only
+ * @param select What to plot. Selection strings to specify regressors.
+ * @param msg_trace Output trace information along with errors and notices.
+ * @param verbosity Verbosity level. 0 for quiet, 1 or more for talkative.
+ *
+ * @returns Parameter dictionary
+ */
 function examine_xmat_params(
     input_file: InputPathType | null = null,
     interactive: boolean = false,
@@ -101,22 +115,8 @@ function examine_xmat_params(
     msg_trace: boolean = false,
     verbosity: number | null = null,
 ): ExamineXmatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file xmat file to plot
-     * @param interactive Run ExamineXmat in interactive mode. This is the default if -prefix is not given. If -interactive is used with -prefix, the last plot you see is the plot saved to file.
-     * @param prefix Prefix of plot image and cor image
-     * @param cprefix Prefix of cor image only
-     * @param pprefix Prefix of plot image only
-     * @param select What to plot. Selection strings to specify regressors.
-     * @param msg_trace Output trace information along with errors and notices.
-     * @param verbosity Verbosity level. 0 for quiet, 1 or more for talkative.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ExamineXmat" as const,
+        "@type": "afni.ExamineXmat" as const,
         "interactive": interactive,
         "msg_trace": msg_trace,
     };
@@ -142,18 +142,18 @@ function examine_xmat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function examine_xmat_cargs(
     params: ExamineXmatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ExamineXmat");
     if ((params["input_file"] ?? null) !== null) {
@@ -202,18 +202,18 @@ function examine_xmat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function examine_xmat_outputs(
     params: ExamineXmatParameters,
     execution: Execution,
 ): ExamineXmatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExamineXmatOutputs = {
         root: execution.outputFile("."),
         plot_image: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".jpg"].join('')) : null,
@@ -226,22 +226,22 @@ function examine_xmat_outputs(
 }
 
 
+/**
+ * A program for examining the design matrix generated by 3dDeconvolve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
+ */
 function examine_xmat_execute(
     params: ExamineXmatParameters,
     execution: Execution,
 ): ExamineXmatOutputs {
-    /**
-     * A program for examining the design matrix generated by 3dDeconvolve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
-     */
     params = execution.params(params)
     const cargs = examine_xmat_cargs(params, execution)
     const ret = examine_xmat_outputs(params, execution)
@@ -250,6 +250,25 @@ function examine_xmat_execute(
 }
 
 
+/**
+ * A program for examining the design matrix generated by 3dDeconvolve.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file xmat file to plot
+ * @param interactive Run ExamineXmat in interactive mode. This is the default if -prefix is not given. If -interactive is used with -prefix, the last plot you see is the plot saved to file.
+ * @param prefix Prefix of plot image and cor image
+ * @param cprefix Prefix of cor image only
+ * @param pprefix Prefix of plot image only
+ * @param select What to plot. Selection strings to specify regressors.
+ * @param msg_trace Output trace information along with errors and notices.
+ * @param verbosity Verbosity level. 0 for quiet, 1 or more for talkative.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
+ */
 function examine_xmat(
     input_file: InputPathType | null = null,
     interactive: boolean = false,
@@ -261,25 +280,6 @@ function examine_xmat(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): ExamineXmatOutputs {
-    /**
-     * A program for examining the design matrix generated by 3dDeconvolve.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file xmat file to plot
-     * @param interactive Run ExamineXmat in interactive mode. This is the default if -prefix is not given. If -interactive is used with -prefix, the last plot you see is the plot saved to file.
-     * @param prefix Prefix of plot image and cor image
-     * @param cprefix Prefix of cor image only
-     * @param pprefix Prefix of plot image only
-     * @param select What to plot. Selection strings to specify regressors.
-     * @param msg_trace Output trace information along with errors and notices.
-     * @param verbosity Verbosity level. 0 for quiet, 1 or more for talkative.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXAMINE_XMAT_METADATA);
     const params = examine_xmat_params(input_file, interactive, prefix, cprefix, pprefix, select, msg_trace, verbosity)
@@ -292,5 +292,8 @@ export {
       ExamineXmatOutputs,
       ExamineXmatParameters,
       examine_xmat,
+      examine_xmat_cargs,
+      examine_xmat_execute,
+      examine_xmat_outputs,
       examine_xmat_params,
 };

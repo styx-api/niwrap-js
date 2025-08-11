@@ -12,14 +12,14 @@ const CONNECTOME2TCK_METADATA: Metadata = {
 
 
 interface Connectome2tckConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.connectome2tck.config";
     "key": string;
     "value": string;
 }
 
 
 interface Connectome2tckParameters {
-    "__STYXTYPE__": "connectome2tck";
+    "@type": "mrtrix.connectome2tck";
     "nodes"?: Array<number> | null | undefined;
     "exclusive": boolean;
     "files"?: string | null | undefined;
@@ -42,54 +42,54 @@ interface Connectome2tckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "connectome2tck": connectome2tck_cargs,
-        "config": connectome2tck_config_cargs,
+        "mrtrix.connectome2tck": connectome2tck_cargs,
+        "mrtrix.connectome2tck.config": connectome2tck_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function connectome2tck_config_params(
     key: string,
     value: string,
 ): Connectome2tckConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.connectome2tck.config" as const,
         "key": key,
         "value": value,
     };
@@ -97,18 +97,18 @@ function connectome2tck_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connectome2tck_config_cargs(
     params: Connectome2tckConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -130,6 +130,31 @@ interface Connectome2tckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks_in the input track file
+ * @param assignments_in input text file containing the node assignments for each streamline
+ * @param prefix_out the output file / prefix
+ * @param nodes only select tracks that involve a set of nodes of interest (provide as a comma-separated list of integers)
+ * @param exclusive only select tracks that exclusively connect nodes from within the list of nodes of interest
+ * @param files select how the resulting streamlines will be grouped in output files. Options are: per_edge, per_node, single (default: per_edge)
+ * @param exemplars generate a mean connection exemplar per edge, rather than keeping all streamlines (the parcellation node image must be provided in order to constrain the exemplar endpoints)
+ * @param keep_unassigned by default, the program discards those streamlines that are not successfully assigned to a node. Set this option to generate corresponding outputs containing these streamlines (labelled as node index 0)
+ * @param keep_self by default, the program will not output streamlines that connect to the same node at both ends. Set this option to instead keep these self-connections.
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param prefix_tck_weights_out provide a prefix for outputting a text file corresponding to each output file, each containing only the streamline weights relevant for that track file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function connectome2tck_params(
     tracks_in: InputPathType,
     assignments_in: InputPathType,
@@ -151,33 +176,8 @@ function connectome2tck_params(
     help: boolean = false,
     version: boolean = false,
 ): Connectome2tckParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks_in the input track file
-     * @param assignments_in input text file containing the node assignments for each streamline
-     * @param prefix_out the output file / prefix
-     * @param nodes only select tracks that involve a set of nodes of interest (provide as a comma-separated list of integers)
-     * @param exclusive only select tracks that exclusively connect nodes from within the list of nodes of interest
-     * @param files select how the resulting streamlines will be grouped in output files. Options are: per_edge, per_node, single (default: per_edge)
-     * @param exemplars generate a mean connection exemplar per edge, rather than keeping all streamlines (the parcellation node image must be provided in order to constrain the exemplar endpoints)
-     * @param keep_unassigned by default, the program discards those streamlines that are not successfully assigned to a node. Set this option to generate corresponding outputs containing these streamlines (labelled as node index 0)
-     * @param keep_self by default, the program will not output streamlines that connect to the same node at both ends. Set this option to instead keep these self-connections.
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param prefix_tck_weights_out provide a prefix for outputting a text file corresponding to each output file, each containing only the streamline weights relevant for that track file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "connectome2tck" as const,
+        "@type": "mrtrix.connectome2tck" as const,
         "exclusive": exclusive,
         "keep_unassigned": keep_unassigned,
         "keep_self": keep_self,
@@ -216,18 +216,18 @@ function connectome2tck_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connectome2tck_cargs(
     params: Connectome2tckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("connectome2tck");
     if ((params["nodes"] ?? null) !== null) {
@@ -288,7 +288,7 @@ function connectome2tck_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -303,18 +303,18 @@ function connectome2tck_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function connectome2tck_outputs(
     params: Connectome2tckParameters,
     execution: Execution,
 ): Connectome2tckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Connectome2tckOutputs = {
         root: execution.outputFile("."),
     };
@@ -322,28 +322,28 @@ function connectome2tck_outputs(
 }
 
 
+/**
+ * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
+ *
+ * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Connectome2tckOutputs`).
+ */
 function connectome2tck_execute(
     params: Connectome2tckParameters,
     execution: Execution,
 ): Connectome2tckOutputs {
-    /**
-     * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
-     * 
-     * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Connectome2tckOutputs`).
-     */
     params = execution.params(params)
     const cargs = connectome2tck_cargs(params, execution)
     const ret = connectome2tck_outputs(params, execution)
@@ -352,6 +352,42 @@ function connectome2tck_execute(
 }
 
 
+/**
+ * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
+ *
+ * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks_in the input track file
+ * @param assignments_in input text file containing the node assignments for each streamline
+ * @param prefix_out the output file / prefix
+ * @param nodes only select tracks that involve a set of nodes of interest (provide as a comma-separated list of integers)
+ * @param exclusive only select tracks that exclusively connect nodes from within the list of nodes of interest
+ * @param files select how the resulting streamlines will be grouped in output files. Options are: per_edge, per_node, single (default: per_edge)
+ * @param exemplars generate a mean connection exemplar per edge, rather than keeping all streamlines (the parcellation node image must be provided in order to constrain the exemplar endpoints)
+ * @param keep_unassigned by default, the program discards those streamlines that are not successfully assigned to a node. Set this option to generate corresponding outputs containing these streamlines (labelled as node index 0)
+ * @param keep_self by default, the program will not output streamlines that connect to the same node at both ends. Set this option to instead keep these self-connections.
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param prefix_tck_weights_out provide a prefix for outputting a text file corresponding to each output file, each containing only the streamline weights relevant for that track file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Connectome2tckOutputs`).
+ */
 function connectome2tck(
     tracks_in: InputPathType,
     assignments_in: InputPathType,
@@ -374,42 +410,6 @@ function connectome2tck(
     version: boolean = false,
     runner: Runner | null = null,
 ): Connectome2tckOutputs {
-    /**
-     * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
-     * 
-     * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks_in the input track file
-     * @param assignments_in input text file containing the node assignments for each streamline
-     * @param prefix_out the output file / prefix
-     * @param nodes only select tracks that involve a set of nodes of interest (provide as a comma-separated list of integers)
-     * @param exclusive only select tracks that exclusively connect nodes from within the list of nodes of interest
-     * @param files select how the resulting streamlines will be grouped in output files. Options are: per_edge, per_node, single (default: per_edge)
-     * @param exemplars generate a mean connection exemplar per edge, rather than keeping all streamlines (the parcellation node image must be provided in order to constrain the exemplar endpoints)
-     * @param keep_unassigned by default, the program discards those streamlines that are not successfully assigned to a node. Set this option to generate corresponding outputs containing these streamlines (labelled as node index 0)
-     * @param keep_self by default, the program will not output streamlines that connect to the same node at both ends. Set this option to instead keep these self-connections.
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param prefix_tck_weights_out provide a prefix for outputting a text file corresponding to each output file, each containing only the streamline weights relevant for that track file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Connectome2tckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONNECTOME2TCK_METADATA);
     const params = connectome2tck_params(tracks_in, assignments_in, prefix_out, nodes, exclusive, files, exemplars, keep_unassigned, keep_self, tck_weights_in, prefix_tck_weights_out, info, quiet, debug, force, nthreads, config, help, version)
@@ -423,6 +423,10 @@ export {
       Connectome2tckOutputs,
       Connectome2tckParameters,
       connectome2tck,
+      connectome2tck_cargs,
+      connectome2tck_config_cargs,
       connectome2tck_config_params,
+      connectome2tck_execute,
+      connectome2tck_outputs,
       connectome2tck_params,
 };

@@ -12,7 +12,7 @@ const GIFTI_TOOL_METADATA: Metadata = {
 
 
 interface GiftiToolParameters {
-    "__STYXTYPE__": "gifti_tool";
+    "@type": "afni.gifti_tool";
     "infile": InputPathType;
     "new_numda"?: number | null | undefined;
     "new_dtype"?: string | null | undefined;
@@ -38,35 +38,35 @@ interface GiftiToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gifti_tool": gifti_tool_cargs,
+        "afni.gifti_tool": gifti_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gifti_tool": gifti_tool_outputs,
+        "afni.gifti_tool": gifti_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,34 @@ interface GiftiToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Specify one or more GIFTI datasets as input
+ * @param write_gifti Write out dataset as gifti image
+ * @param new_numda New dataset will have NUMDA DataArray elements
+ * @param new_dtype Set data type to TYPE
+ * @param new_intent DA elements will have intent INTENT
+ * @param new_ndim Set Dimensionality to NUMDIMS
+ * @param new_dims Set dims[] to these 6 values
+ * @param set_extern_filelist Store data in external files
+ * @param mod_add_data Add data to empty DataArray elements
+ * @param verb Set verbose level
+ * @param show_gifti Show final gifti image
+ * @param read_das Read DataArray list indices
+ * @param mod_gim_atr Set the GIFTI NAME=VALUE attribute pair at GIFTI level
+ * @param mod_gim_meta Add this pair to the GIFTI MetaData
+ * @param mod_da_atr Set the DataArray NAME=VALUE attribute pair
+ * @param mod_da_meta Set the DataArray NAME=VALUE pair in DA's MetaData
+ * @param mod_das Specify the set of DataArrays to modify
+ * @param new_dset Create a new GIFTI dataset
+ * @param compare_gifti Compare two GIFTI datasets
+ * @param compare_data Flag to request comparison of the data
+ * @param compare_verb Set the verbose level of comparisons
+ * @param approx_gifti Approximate comparison of GIFTI datasets
+ *
+ * @returns Parameter dictionary
+ */
 function gifti_tool_params(
     infile: InputPathType,
     write_gifti: string,
@@ -113,36 +141,8 @@ function gifti_tool_params(
     compare_verb: number | null = null,
     approx_gifti: boolean = false,
 ): GiftiToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Specify one or more GIFTI datasets as input
-     * @param write_gifti Write out dataset as gifti image
-     * @param new_numda New dataset will have NUMDA DataArray elements
-     * @param new_dtype Set data type to TYPE
-     * @param new_intent DA elements will have intent INTENT
-     * @param new_ndim Set Dimensionality to NUMDIMS
-     * @param new_dims Set dims[] to these 6 values
-     * @param set_extern_filelist Store data in external files
-     * @param mod_add_data Add data to empty DataArray elements
-     * @param verb Set verbose level
-     * @param show_gifti Show final gifti image
-     * @param read_das Read DataArray list indices
-     * @param mod_gim_atr Set the GIFTI NAME=VALUE attribute pair at GIFTI level
-     * @param mod_gim_meta Add this pair to the GIFTI MetaData
-     * @param mod_da_atr Set the DataArray NAME=VALUE attribute pair
-     * @param mod_da_meta Set the DataArray NAME=VALUE pair in DA's MetaData
-     * @param mod_das Specify the set of DataArrays to modify
-     * @param new_dset Create a new GIFTI dataset
-     * @param compare_gifti Compare two GIFTI datasets
-     * @param compare_data Flag to request comparison of the data
-     * @param compare_verb Set the verbose level of comparisons
-     * @param approx_gifti Approximate comparison of GIFTI datasets
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gifti_tool" as const,
+        "@type": "afni.gifti_tool" as const,
         "infile": infile,
         "write_gifti": write_gifti,
         "mod_add_data": mod_add_data,
@@ -198,18 +198,18 @@ function gifti_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gifti_tool_cargs(
     params: GiftiToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gifti_tool");
     cargs.push(
@@ -326,18 +326,18 @@ function gifti_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gifti_tool_outputs(
     params: GiftiToolParameters,
     execution: Execution,
 ): GiftiToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GiftiToolOutputs = {
         root: execution.outputFile("."),
         output_gifti: execution.outputFile([(params["write_gifti"] ?? null)].join('')),
@@ -346,22 +346,22 @@ function gifti_tool_outputs(
 }
 
 
+/**
+ * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
+ */
 function gifti_tool_execute(
     params: GiftiToolParameters,
     execution: Execution,
 ): GiftiToolOutputs {
-    /**
-     * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = gifti_tool_cargs(params, execution)
     const ret = gifti_tool_outputs(params, execution)
@@ -370,6 +370,39 @@ function gifti_tool_execute(
 }
 
 
+/**
+ * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Specify one or more GIFTI datasets as input
+ * @param write_gifti Write out dataset as gifti image
+ * @param new_numda New dataset will have NUMDA DataArray elements
+ * @param new_dtype Set data type to TYPE
+ * @param new_intent DA elements will have intent INTENT
+ * @param new_ndim Set Dimensionality to NUMDIMS
+ * @param new_dims Set dims[] to these 6 values
+ * @param set_extern_filelist Store data in external files
+ * @param mod_add_data Add data to empty DataArray elements
+ * @param verb Set verbose level
+ * @param show_gifti Show final gifti image
+ * @param read_das Read DataArray list indices
+ * @param mod_gim_atr Set the GIFTI NAME=VALUE attribute pair at GIFTI level
+ * @param mod_gim_meta Add this pair to the GIFTI MetaData
+ * @param mod_da_atr Set the DataArray NAME=VALUE attribute pair
+ * @param mod_da_meta Set the DataArray NAME=VALUE pair in DA's MetaData
+ * @param mod_das Specify the set of DataArrays to modify
+ * @param new_dset Create a new GIFTI dataset
+ * @param compare_gifti Compare two GIFTI datasets
+ * @param compare_data Flag to request comparison of the data
+ * @param compare_verb Set the verbose level of comparisons
+ * @param approx_gifti Approximate comparison of GIFTI datasets
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
+ */
 function gifti_tool(
     infile: InputPathType,
     write_gifti: string,
@@ -395,39 +428,6 @@ function gifti_tool(
     approx_gifti: boolean = false,
     runner: Runner | null = null,
 ): GiftiToolOutputs {
-    /**
-     * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Specify one or more GIFTI datasets as input
-     * @param write_gifti Write out dataset as gifti image
-     * @param new_numda New dataset will have NUMDA DataArray elements
-     * @param new_dtype Set data type to TYPE
-     * @param new_intent DA elements will have intent INTENT
-     * @param new_ndim Set Dimensionality to NUMDIMS
-     * @param new_dims Set dims[] to these 6 values
-     * @param set_extern_filelist Store data in external files
-     * @param mod_add_data Add data to empty DataArray elements
-     * @param verb Set verbose level
-     * @param show_gifti Show final gifti image
-     * @param read_das Read DataArray list indices
-     * @param mod_gim_atr Set the GIFTI NAME=VALUE attribute pair at GIFTI level
-     * @param mod_gim_meta Add this pair to the GIFTI MetaData
-     * @param mod_da_atr Set the DataArray NAME=VALUE attribute pair
-     * @param mod_da_meta Set the DataArray NAME=VALUE pair in DA's MetaData
-     * @param mod_das Specify the set of DataArrays to modify
-     * @param new_dset Create a new GIFTI dataset
-     * @param compare_gifti Compare two GIFTI datasets
-     * @param compare_data Flag to request comparison of the data
-     * @param compare_verb Set the verbose level of comparisons
-     * @param approx_gifti Approximate comparison of GIFTI datasets
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GIFTI_TOOL_METADATA);
     const params = gifti_tool_params(infile, write_gifti, new_numda, new_dtype, new_intent, new_ndim, new_dims, set_extern_filelist, mod_add_data, verb, show_gifti, read_das, mod_gim_atr, mod_gim_meta, mod_da_atr, mod_da_meta, mod_das, new_dset, compare_gifti, compare_data, compare_verb, approx_gifti)
@@ -440,5 +440,8 @@ export {
       GiftiToolOutputs,
       GiftiToolParameters,
       gifti_tool,
+      gifti_tool_cargs,
+      gifti_tool_execute,
+      gifti_tool_outputs,
       gifti_tool_params,
 };

@@ -12,7 +12,7 @@ const BUGR_METADATA: Metadata = {
 
 
 interface BugrParameters {
-    "__STYXTYPE__": "bugr";
+    "@type": "freesurfer.bugr";
     "subject_name": string;
     "command_line": string;
     "error_message": string;
@@ -20,33 +20,33 @@ interface BugrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bugr": bugr_cargs,
+        "freesurfer.bugr": bugr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface BugrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name to include in the bug report
+ * @param command_line The entire command-line executed
+ * @param error_message The error message generated
+ * @param log_file Log file path of the subject's recon-all process
+ *
+ * @returns Parameter dictionary
+ */
 function bugr_params(
     subject_name: string,
     command_line: string,
     error_message: string,
     log_file: InputPathType | null = null,
 ): BugrParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name to include in the bug report
-     * @param command_line The entire command-line executed
-     * @param error_message The error message generated
-     * @param log_file Log file path of the subject's recon-all process
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bugr" as const,
+        "@type": "freesurfer.bugr" as const,
         "subject_name": subject_name,
         "command_line": command_line,
         "error_message": error_message,
@@ -95,18 +95,18 @@ function bugr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bugr_cargs(
     params: BugrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bugr");
     cargs.push(
@@ -131,18 +131,18 @@ function bugr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bugr_outputs(
     params: BugrParameters,
     execution: Execution,
 ): BugrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BugrOutputs = {
         root: execution.outputFile("."),
     };
@@ -150,22 +150,22 @@ function bugr_outputs(
 }
 
 
+/**
+ * Utility for generating and reporting FreeSurfer bugs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BugrOutputs`).
+ */
 function bugr_execute(
     params: BugrParameters,
     execution: Execution,
 ): BugrOutputs {
-    /**
-     * Utility for generating and reporting FreeSurfer bugs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BugrOutputs`).
-     */
     params = execution.params(params)
     const cargs = bugr_cargs(params, execution)
     const ret = bugr_outputs(params, execution)
@@ -174,6 +174,21 @@ function bugr_execute(
 }
 
 
+/**
+ * Utility for generating and reporting FreeSurfer bugs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name to include in the bug report
+ * @param command_line The entire command-line executed
+ * @param error_message The error message generated
+ * @param log_file Log file path of the subject's recon-all process
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BugrOutputs`).
+ */
 function bugr(
     subject_name: string,
     command_line: string,
@@ -181,21 +196,6 @@ function bugr(
     log_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): BugrOutputs {
-    /**
-     * Utility for generating and reporting FreeSurfer bugs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name to include in the bug report
-     * @param command_line The entire command-line executed
-     * @param error_message The error message generated
-     * @param log_file Log file path of the subject's recon-all process
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BugrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BUGR_METADATA);
     const params = bugr_params(subject_name, command_line, error_message, log_file)
@@ -208,5 +208,8 @@ export {
       BugrOutputs,
       BugrParameters,
       bugr,
+      bugr_cargs,
+      bugr_execute,
+      bugr_outputs,
       bugr_params,
 };

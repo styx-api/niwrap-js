@@ -12,7 +12,7 @@ const V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA: Metadata = {
 
 
 interface VDjunctSswIntermedEdgeImgsParameters {
-    "__STYXTYPE__": "@djunct_ssw_intermed_edge_imgs";
+    "@type": "afni.@djunct_ssw_intermed_edge_imgs";
     "prefix": string;
     "ulay": InputPathType;
     "olay": InputPathType;
@@ -29,33 +29,33 @@ interface VDjunctSswIntermedEdgeImgsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_ssw_intermed_edge_imgs": v__djunct_ssw_intermed_edge_imgs_cargs,
+        "afni.@djunct_ssw_intermed_edge_imgs": v__djunct_ssw_intermed_edge_imgs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface VDjunctSswIntermedEdgeImgsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for generated output files
+ * @param ulay Underlay dataset
+ * @param olay Overlay dataset
+ * @param box_focus_slices Slices of interest for focus box
+ * @param montgap Gap between montage slices
+ * @param cbar Color bar specification for AFNI
+ * @param ulay_range Range for underlay data mapping
+ * @param montx Number of slices along x dimension in montage
+ * @param monty Number of slices along y dimension in montage
+ * @param help_view View help file in viewer
+ * @param help Displays help information
+ * @param version Displays version information
+ * @param no_clean Don't clean up intermediate files
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_ssw_intermed_edge_imgs_params(
     prefix: string,
     ulay: InputPathType,
@@ -90,27 +109,8 @@ function v__djunct_ssw_intermed_edge_imgs_params(
     version: boolean = false,
     no_clean: boolean = false,
 ): VDjunctSswIntermedEdgeImgsParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for generated output files
-     * @param ulay Underlay dataset
-     * @param olay Overlay dataset
-     * @param box_focus_slices Slices of interest for focus box
-     * @param montgap Gap between montage slices
-     * @param cbar Color bar specification for AFNI
-     * @param ulay_range Range for underlay data mapping
-     * @param montx Number of slices along x dimension in montage
-     * @param monty Number of slices along y dimension in montage
-     * @param help_view View help file in viewer
-     * @param help Displays help information
-     * @param version Displays version information
-     * @param no_clean Don't clean up intermediate files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_ssw_intermed_edge_imgs" as const,
+        "@type": "afni.@djunct_ssw_intermed_edge_imgs" as const,
         "prefix": prefix,
         "ulay": ulay,
         "olay": olay,
@@ -141,18 +141,18 @@ function v__djunct_ssw_intermed_edge_imgs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_ssw_intermed_edge_imgs_cargs(
     params: VDjunctSswIntermedEdgeImgsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_ssw_intermed_edge_imgs");
     cargs.push(
@@ -219,18 +219,18 @@ function v__djunct_ssw_intermed_edge_imgs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_ssw_intermed_edge_imgs_outputs(
     params: VDjunctSswIntermedEdgeImgsParameters,
     execution: Execution,
 ): VDjunctSswIntermedEdgeImgsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctSswIntermedEdgeImgsOutputs = {
         root: execution.outputFile("."),
     };
@@ -238,22 +238,22 @@ function v__djunct_ssw_intermed_edge_imgs_outputs(
 }
 
 
+/**
+ * Helper script to generate intermediate edge images for SSW-related processing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
+ */
 function v__djunct_ssw_intermed_edge_imgs_execute(
     params: VDjunctSswIntermedEdgeImgsParameters,
     execution: Execution,
 ): VDjunctSswIntermedEdgeImgsOutputs {
-    /**
-     * Helper script to generate intermediate edge images for SSW-related processing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_ssw_intermed_edge_imgs_cargs(params, execution)
     const ret = v__djunct_ssw_intermed_edge_imgs_outputs(params, execution)
@@ -262,6 +262,30 @@ function v__djunct_ssw_intermed_edge_imgs_execute(
 }
 
 
+/**
+ * Helper script to generate intermediate edge images for SSW-related processing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for generated output files
+ * @param ulay Underlay dataset
+ * @param olay Overlay dataset
+ * @param box_focus_slices Slices of interest for focus box
+ * @param montgap Gap between montage slices
+ * @param cbar Color bar specification for AFNI
+ * @param ulay_range Range for underlay data mapping
+ * @param montx Number of slices along x dimension in montage
+ * @param monty Number of slices along y dimension in montage
+ * @param help_view View help file in viewer
+ * @param help Displays help information
+ * @param version Displays version information
+ * @param no_clean Don't clean up intermediate files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
+ */
 function v__djunct_ssw_intermed_edge_imgs(
     prefix: string,
     ulay: InputPathType,
@@ -278,30 +302,6 @@ function v__djunct_ssw_intermed_edge_imgs(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctSswIntermedEdgeImgsOutputs {
-    /**
-     * Helper script to generate intermediate edge images for SSW-related processing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for generated output files
-     * @param ulay Underlay dataset
-     * @param olay Overlay dataset
-     * @param box_focus_slices Slices of interest for focus box
-     * @param montgap Gap between montage slices
-     * @param cbar Color bar specification for AFNI
-     * @param ulay_range Range for underlay data mapping
-     * @param montx Number of slices along x dimension in montage
-     * @param monty Number of slices along y dimension in montage
-     * @param help_view View help file in viewer
-     * @param help Displays help information
-     * @param version Displays version information
-     * @param no_clean Don't clean up intermediate files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA);
     const params = v__djunct_ssw_intermed_edge_imgs_params(prefix, ulay, olay, box_focus_slices, montgap, cbar, ulay_range, montx, monty, help_view, help, version, no_clean)
@@ -314,5 +314,8 @@ export {
       VDjunctSswIntermedEdgeImgsParameters,
       V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA,
       v__djunct_ssw_intermed_edge_imgs,
+      v__djunct_ssw_intermed_edge_imgs_cargs,
+      v__djunct_ssw_intermed_edge_imgs_execute,
+      v__djunct_ssw_intermed_edge_imgs_outputs,
       v__djunct_ssw_intermed_edge_imgs_params,
 };

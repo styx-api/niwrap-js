@@ -12,7 +12,7 @@ const MRI_SYNTHMORPH_METADATA: Metadata = {
 
 
 interface MriSynthmorphParameters {
-    "__STYXTYPE__": "mri_synthmorph";
+    "@type": "freesurfer.mri_synthmorph";
     "moving_image": InputPathType;
     "fixed_image": InputPathType;
     "moved_output"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface MriSynthmorphParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthmorph": mri_synthmorph_cargs,
+        "freesurfer.mri_synthmorph": mri_synthmorph_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_synthmorph": mri_synthmorph_outputs,
+        "freesurfer.mri_synthmorph": mri_synthmorph_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface MriSynthmorphOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param moving_image The moving input image, which will be registered to the fixed image.
+ * @param fixed_image The fixed input image, which is used as the reference for registration.
+ * @param moved_output The resulting image after registration.
+ * @param transform_output Output transform file for registration. Can be a text file for linear or an image file for deformable registration.
+ * @param header_only Adjust the voxel-to-world matrix instead of resampling. Linear registration only.
+ * @param transformation_model Specifies the registration transformation model. Options include 'deform', 'affine', and 'rigid'.
+ * @param init_transform Initial linear transform for registration.
+ * @param threads Number of TensorFlow threads to utilize. Defaults to the number of cores.
+ * @param gpu_flag Utilize the GPU specified by CUDA_VISIBLE_DEVICES or GPU 0 if unset or empty.
+ * @param smooth Regularization parameter for deformable registration. Higher values indicate smoother displacement fields.
+ * @param extent Isotropic extent of the registration space in unit voxels.
+ * @param model_weights Alternative model weights as an H5 file.
+ * @param inspect_directory Save model inputs resampled into network space for inspection.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthmorph_params(
     moving_image: InputPathType,
     fixed_image: InputPathType,
@@ -99,27 +118,8 @@ function mri_synthmorph_params(
     model_weights: InputPathType | null = null,
     inspect_directory: string | null = null,
 ): MriSynthmorphParameters {
-    /**
-     * Build parameters.
-    
-     * @param moving_image The moving input image, which will be registered to the fixed image.
-     * @param fixed_image The fixed input image, which is used as the reference for registration.
-     * @param moved_output The resulting image after registration.
-     * @param transform_output Output transform file for registration. Can be a text file for linear or an image file for deformable registration.
-     * @param header_only Adjust the voxel-to-world matrix instead of resampling. Linear registration only.
-     * @param transformation_model Specifies the registration transformation model. Options include 'deform', 'affine', and 'rigid'.
-     * @param init_transform Initial linear transform for registration.
-     * @param threads Number of TensorFlow threads to utilize. Defaults to the number of cores.
-     * @param gpu_flag Utilize the GPU specified by CUDA_VISIBLE_DEVICES or GPU 0 if unset or empty.
-     * @param smooth Regularization parameter for deformable registration. Higher values indicate smoother displacement fields.
-     * @param extent Isotropic extent of the registration space in unit voxels.
-     * @param model_weights Alternative model weights as an H5 file.
-     * @param inspect_directory Save model inputs resampled into network space for inspection.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthmorph" as const,
+        "@type": "freesurfer.mri_synthmorph" as const,
         "moving_image": moving_image,
         "fixed_image": fixed_image,
         "header_only": header_only,
@@ -156,18 +156,18 @@ function mri_synthmorph_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthmorph_cargs(
     params: MriSynthmorphParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthmorph");
     cargs.push(execution.inputFile((params["moving_image"] ?? null)));
@@ -236,18 +236,18 @@ function mri_synthmorph_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthmorph_outputs(
     params: MriSynthmorphParameters,
     execution: Execution,
 ): MriSynthmorphOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthmorphOutputs = {
         root: execution.outputFile("."),
         moved_output_file: ((params["moved_output"] ?? null) !== null) ? execution.outputFile([(params["moved_output"] ?? null)].join('')) : null,
@@ -257,22 +257,22 @@ function mri_synthmorph_outputs(
 }
 
 
+/**
+ * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
+ */
 function mri_synthmorph_execute(
     params: MriSynthmorphParameters,
     execution: Execution,
 ): MriSynthmorphOutputs {
-    /**
-     * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthmorph_cargs(params, execution)
     const ret = mri_synthmorph_outputs(params, execution)
@@ -281,6 +281,30 @@ function mri_synthmorph_execute(
 }
 
 
+/**
+ * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param moving_image The moving input image, which will be registered to the fixed image.
+ * @param fixed_image The fixed input image, which is used as the reference for registration.
+ * @param moved_output The resulting image after registration.
+ * @param transform_output Output transform file for registration. Can be a text file for linear or an image file for deformable registration.
+ * @param header_only Adjust the voxel-to-world matrix instead of resampling. Linear registration only.
+ * @param transformation_model Specifies the registration transformation model. Options include 'deform', 'affine', and 'rigid'.
+ * @param init_transform Initial linear transform for registration.
+ * @param threads Number of TensorFlow threads to utilize. Defaults to the number of cores.
+ * @param gpu_flag Utilize the GPU specified by CUDA_VISIBLE_DEVICES or GPU 0 if unset or empty.
+ * @param smooth Regularization parameter for deformable registration. Higher values indicate smoother displacement fields.
+ * @param extent Isotropic extent of the registration space in unit voxels.
+ * @param model_weights Alternative model weights as an H5 file.
+ * @param inspect_directory Save model inputs resampled into network space for inspection.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
+ */
 function mri_synthmorph(
     moving_image: InputPathType,
     fixed_image: InputPathType,
@@ -297,30 +321,6 @@ function mri_synthmorph(
     inspect_directory: string | null = null,
     runner: Runner | null = null,
 ): MriSynthmorphOutputs {
-    /**
-     * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param moving_image The moving input image, which will be registered to the fixed image.
-     * @param fixed_image The fixed input image, which is used as the reference for registration.
-     * @param moved_output The resulting image after registration.
-     * @param transform_output Output transform file for registration. Can be a text file for linear or an image file for deformable registration.
-     * @param header_only Adjust the voxel-to-world matrix instead of resampling. Linear registration only.
-     * @param transformation_model Specifies the registration transformation model. Options include 'deform', 'affine', and 'rigid'.
-     * @param init_transform Initial linear transform for registration.
-     * @param threads Number of TensorFlow threads to utilize. Defaults to the number of cores.
-     * @param gpu_flag Utilize the GPU specified by CUDA_VISIBLE_DEVICES or GPU 0 if unset or empty.
-     * @param smooth Regularization parameter for deformable registration. Higher values indicate smoother displacement fields.
-     * @param extent Isotropic extent of the registration space in unit voxels.
-     * @param model_weights Alternative model weights as an H5 file.
-     * @param inspect_directory Save model inputs resampled into network space for inspection.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHMORPH_METADATA);
     const params = mri_synthmorph_params(moving_image, fixed_image, moved_output, transform_output, header_only, transformation_model, init_transform, threads, gpu_flag, smooth, extent, model_weights, inspect_directory)
@@ -333,5 +333,8 @@ export {
       MriSynthmorphOutputs,
       MriSynthmorphParameters,
       mri_synthmorph,
+      mri_synthmorph_cargs,
+      mri_synthmorph_execute,
+      mri_synthmorph_outputs,
       mri_synthmorph_params,
 };

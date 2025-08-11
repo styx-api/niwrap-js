@@ -12,7 +12,7 @@ const TFIM_METADATA: Metadata = {
 
 
 interface TfimParameters {
-    "__STYXTYPE__": "tfim";
+    "@type": "afni.tfim";
     "prefix"?: string | null | undefined;
     "pthresh"?: number | null | undefined;
     "eqcorr"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface TfimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tfim": tfim_cargs,
+        "afni.tfim": tfim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tfim": tfim_outputs,
+        "afni.tfim": tfim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,19 @@ interface TfimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param set1_images First set of image files.
+ * @param set2_images Second set of image files.
+ * @param prefix Prefix for output filenames. Default is 'tfim'.
+ * @param pthresh Significance level (per voxel) to threshold the output with. Voxels with t-statistic less significant than this will have their diff output zeroed. Default is no threshold.
+ * @param eqcorr Write out the equivalent correlation statistic. The number 'dval' is the value to use for 'dof'. Default is not to write this file.
+ * @param paired Compare -set1 and -set2 using a paired sample t-test. Illegal with the -base1 option.
+ * @param base1_value Base value for the first set of images. Used for Usage 2.
+ *
+ * @returns Parameter dictionary
+ */
 function tfim_params(
     set1_images: Array<InputPathType>,
     set2_images: Array<InputPathType>,
@@ -91,21 +104,8 @@ function tfim_params(
     paired: boolean = false,
     base1_value: number | null = null,
 ): TfimParameters {
-    /**
-     * Build parameters.
-    
-     * @param set1_images First set of image files.
-     * @param set2_images Second set of image files.
-     * @param prefix Prefix for output filenames. Default is 'tfim'.
-     * @param pthresh Significance level (per voxel) to threshold the output with. Voxels with t-statistic less significant than this will have their diff output zeroed. Default is no threshold.
-     * @param eqcorr Write out the equivalent correlation statistic. The number 'dval' is the value to use for 'dof'. Default is not to write this file.
-     * @param paired Compare -set1 and -set2 using a paired sample t-test. Illegal with the -base1 option.
-     * @param base1_value Base value for the first set of images. Used for Usage 2.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tfim" as const,
+        "@type": "afni.tfim" as const,
         "paired": paired,
         "set1_images": set1_images,
         "set2_images": set2_images,
@@ -126,18 +126,18 @@ function tfim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tfim_cargs(
     params: TfimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tfim");
     if ((params["prefix"] ?? null) !== null) {
@@ -179,18 +179,18 @@ function tfim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tfim_outputs(
     params: TfimParameters,
     execution: Execution,
 ): TfimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TfimOutputs = {
         root: execution.outputFile("."),
         diff_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".diff"].join('')) : null,
@@ -201,22 +201,22 @@ function tfim_outputs(
 }
 
 
+/**
+ * MCW TFIM: t-tests on sets of functional images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TfimOutputs`).
+ */
 function tfim_execute(
     params: TfimParameters,
     execution: Execution,
 ): TfimOutputs {
-    /**
-     * MCW TFIM: t-tests on sets of functional images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TfimOutputs`).
-     */
     params = execution.params(params)
     const cargs = tfim_cargs(params, execution)
     const ret = tfim_outputs(params, execution)
@@ -225,6 +225,24 @@ function tfim_execute(
 }
 
 
+/**
+ * MCW TFIM: t-tests on sets of functional images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param set1_images First set of image files.
+ * @param set2_images Second set of image files.
+ * @param prefix Prefix for output filenames. Default is 'tfim'.
+ * @param pthresh Significance level (per voxel) to threshold the output with. Voxels with t-statistic less significant than this will have their diff output zeroed. Default is no threshold.
+ * @param eqcorr Write out the equivalent correlation statistic. The number 'dval' is the value to use for 'dof'. Default is not to write this file.
+ * @param paired Compare -set1 and -set2 using a paired sample t-test. Illegal with the -base1 option.
+ * @param base1_value Base value for the first set of images. Used for Usage 2.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TfimOutputs`).
+ */
 function tfim(
     set1_images: Array<InputPathType>,
     set2_images: Array<InputPathType>,
@@ -235,24 +253,6 @@ function tfim(
     base1_value: number | null = null,
     runner: Runner | null = null,
 ): TfimOutputs {
-    /**
-     * MCW TFIM: t-tests on sets of functional images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param set1_images First set of image files.
-     * @param set2_images Second set of image files.
-     * @param prefix Prefix for output filenames. Default is 'tfim'.
-     * @param pthresh Significance level (per voxel) to threshold the output with. Voxels with t-statistic less significant than this will have their diff output zeroed. Default is no threshold.
-     * @param eqcorr Write out the equivalent correlation statistic. The number 'dval' is the value to use for 'dof'. Default is not to write this file.
-     * @param paired Compare -set1 and -set2 using a paired sample t-test. Illegal with the -base1 option.
-     * @param base1_value Base value for the first set of images. Used for Usage 2.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TfimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TFIM_METADATA);
     const params = tfim_params(set1_images, set2_images, prefix, pthresh, eqcorr, paired, base1_value)
@@ -265,5 +265,8 @@ export {
       TfimOutputs,
       TfimParameters,
       tfim,
+      tfim_cargs,
+      tfim_execute,
+      tfim_outputs,
       tfim_params,
 };

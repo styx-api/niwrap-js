@@ -12,7 +12,7 @@ const MRI_PARSE_SDCMDIR_METADATA: Metadata = {
 
 
 interface MriParseSdcmdirParameters {
-    "__STYXTYPE__": "mri_parse_sdcmdir";
+    "@type": "freesurfer.mri_parse_sdcmdir";
     "sdicomdir": string;
     "outfile"?: string | null | undefined;
     "sortbyrun": boolean;
@@ -21,33 +21,33 @@ interface MriParseSdcmdirParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_parse_sdcmdir": mri_parse_sdcmdir_cargs,
+        "freesurfer.mri_parse_sdcmdir": mri_parse_sdcmdir_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface MriParseSdcmdirOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sdicomdir Path to Siemens DICOM directory
+ * @param outfile Name of a file to which the results will be printed. If unspecified, the results will be printed to stdout.
+ * @param sortbyrun Assign run numbers
+ * @param summarize Only print out info for run leaders
+ * @param dwi Try to read DWI params. Generally no need to.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_parse_sdcmdir_params(
     sdicomdir: string,
     outfile: string | null = null,
@@ -74,19 +85,8 @@ function mri_parse_sdcmdir_params(
     summarize: boolean = false,
     dwi: boolean = false,
 ): MriParseSdcmdirParameters {
-    /**
-     * Build parameters.
-    
-     * @param sdicomdir Path to Siemens DICOM directory
-     * @param outfile Name of a file to which the results will be printed. If unspecified, the results will be printed to stdout.
-     * @param sortbyrun Assign run numbers
-     * @param summarize Only print out info for run leaders
-     * @param dwi Try to read DWI params. Generally no need to.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_parse_sdcmdir" as const,
+        "@type": "freesurfer.mri_parse_sdcmdir" as const,
         "sdicomdir": sdicomdir,
         "sortbyrun": sortbyrun,
         "summarize": summarize,
@@ -99,18 +99,18 @@ function mri_parse_sdcmdir_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_parse_sdcmdir_cargs(
     params: MriParseSdcmdirParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_parse_sdcmdir");
     cargs.push(
@@ -136,18 +136,18 @@ function mri_parse_sdcmdir_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_parse_sdcmdir_outputs(
     params: MriParseSdcmdirParameters,
     execution: Execution,
 ): MriParseSdcmdirOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriParseSdcmdirOutputs = {
         root: execution.outputFile("."),
     };
@@ -155,22 +155,22 @@ function mri_parse_sdcmdir_outputs(
 }
 
 
+/**
+ * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
+ */
 function mri_parse_sdcmdir_execute(
     params: MriParseSdcmdirParameters,
     execution: Execution,
 ): MriParseSdcmdirOutputs {
-    /**
-     * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_parse_sdcmdir_cargs(params, execution)
     const ret = mri_parse_sdcmdir_outputs(params, execution)
@@ -179,6 +179,22 @@ function mri_parse_sdcmdir_execute(
 }
 
 
+/**
+ * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param sdicomdir Path to Siemens DICOM directory
+ * @param outfile Name of a file to which the results will be printed. If unspecified, the results will be printed to stdout.
+ * @param sortbyrun Assign run numbers
+ * @param summarize Only print out info for run leaders
+ * @param dwi Try to read DWI params. Generally no need to.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
+ */
 function mri_parse_sdcmdir(
     sdicomdir: string,
     outfile: string | null = null,
@@ -187,22 +203,6 @@ function mri_parse_sdcmdir(
     dwi: boolean = false,
     runner: Runner | null = null,
 ): MriParseSdcmdirOutputs {
-    /**
-     * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param sdicomdir Path to Siemens DICOM directory
-     * @param outfile Name of a file to which the results will be printed. If unspecified, the results will be printed to stdout.
-     * @param sortbyrun Assign run numbers
-     * @param summarize Only print out info for run leaders
-     * @param dwi Try to read DWI params. Generally no need to.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PARSE_SDCMDIR_METADATA);
     const params = mri_parse_sdcmdir_params(sdicomdir, outfile, sortbyrun, summarize, dwi)
@@ -215,5 +215,8 @@ export {
       MriParseSdcmdirOutputs,
       MriParseSdcmdirParameters,
       mri_parse_sdcmdir,
+      mri_parse_sdcmdir_cargs,
+      mri_parse_sdcmdir_execute,
+      mri_parse_sdcmdir_outputs,
       mri_parse_sdcmdir_params,
 };

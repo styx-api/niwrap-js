@@ -12,7 +12,7 @@ const LABEL_TO_VOLUME_MAPPING_METADATA: Metadata = {
 
 
 interface LabelToVolumeMappingRibbonConstrainedParameters {
-    "__STYXTYPE__": "ribbon_constrained";
+    "@type": "workbench.label-to-volume-mapping.ribbon_constrained";
     "inner_surf": InputPathType;
     "outer_surf": InputPathType;
     "opt_voxel_subdiv_subdiv_num"?: number | null | undefined;
@@ -22,7 +22,7 @@ interface LabelToVolumeMappingRibbonConstrainedParameters {
 
 
 interface LabelToVolumeMappingParameters {
-    "__STYXTYPE__": "label-to-volume-mapping";
+    "@type": "workbench.label-to-volume-mapping";
     "label": InputPathType;
     "surface": InputPathType;
     "volume_space": InputPathType;
@@ -32,41 +32,52 @@ interface LabelToVolumeMappingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-to-volume-mapping": label_to_volume_mapping_cargs,
-        "ribbon_constrained": label_to_volume_mapping_ribbon_constrained_cargs,
+        "workbench.label-to-volume-mapping": label_to_volume_mapping_cargs,
+        "workbench.label-to-volume-mapping.ribbon_constrained": label_to_volume_mapping_ribbon_constrained_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-to-volume-mapping": label_to_volume_mapping_outputs,
+        "workbench.label-to-volume-mapping": label_to_volume_mapping_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inner_surf the inner surface of the ribbon
+ * @param outer_surf the outer surface of the ribbon
+ * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
+ * @param opt_greedy also put labels in voxels with less than 50% partial volume (legacy behavior)
+ * @param opt_thick_columns use overlapping columns (legacy method)
+ *
+ * @returns Parameter dictionary
+ */
 function label_to_volume_mapping_ribbon_constrained_params(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
@@ -74,19 +85,8 @@ function label_to_volume_mapping_ribbon_constrained_params(
     opt_greedy: boolean = false,
     opt_thick_columns: boolean = false,
 ): LabelToVolumeMappingRibbonConstrainedParameters {
-    /**
-     * Build parameters.
-    
-     * @param inner_surf the inner surface of the ribbon
-     * @param outer_surf the outer surface of the ribbon
-     * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
-     * @param opt_greedy also put labels in voxels with less than 50% partial volume (legacy behavior)
-     * @param opt_thick_columns use overlapping columns (legacy method)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ribbon_constrained" as const,
+        "@type": "workbench.label-to-volume-mapping.ribbon_constrained" as const,
         "inner_surf": inner_surf,
         "outer_surf": outer_surf,
         "opt_greedy": opt_greedy,
@@ -99,18 +99,18 @@ function label_to_volume_mapping_ribbon_constrained_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_to_volume_mapping_ribbon_constrained_cargs(
     params: LabelToVolumeMappingRibbonConstrainedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-ribbon-constrained");
     cargs.push(execution.inputFile((params["inner_surf"] ?? null)));
@@ -148,6 +148,18 @@ interface LabelToVolumeMappingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label the input label file
+ * @param surface the surface to use coordinates from
+ * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
+ * @param opt_nearest_vertex_distance use the label from the vertex closest to the voxel center: how far from the surface to map labels to voxels, in mm
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
+ *
+ * @returns Parameter dictionary
+ */
 function label_to_volume_mapping_params(
     label: InputPathType,
     surface: InputPathType,
@@ -156,20 +168,8 @@ function label_to_volume_mapping_params(
     opt_nearest_vertex_distance: number | null = null,
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParameters | null = null,
 ): LabelToVolumeMappingParameters {
-    /**
-     * Build parameters.
-    
-     * @param label the input label file
-     * @param surface the surface to use coordinates from
-     * @param volume_space a volume file in the desired output volume space
-     * @param volume_out the output volume file
-     * @param opt_nearest_vertex_distance use the label from the vertex closest to the voxel center: how far from the surface to map labels to voxels, in mm
-     * @param ribbon_constrained use ribbon constrained mapping algorithm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-to-volume-mapping" as const,
+        "@type": "workbench.label-to-volume-mapping" as const,
         "label": label,
         "surface": surface,
         "volume_space": volume_space,
@@ -185,18 +185,18 @@ function label_to_volume_mapping_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_to_volume_mapping_cargs(
     params: LabelToVolumeMappingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-to-volume-mapping");
@@ -211,24 +211,24 @@ function label_to_volume_mapping_cargs(
         );
     }
     if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null).__STYXTYPE__)((params["ribbon_constrained"] ?? null), execution));
+        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null)["@type"])((params["ribbon_constrained"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_to_volume_mapping_outputs(
     params: LabelToVolumeMappingParameters,
     execution: Execution,
 ): LabelToVolumeMappingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelToVolumeMappingOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -237,24 +237,24 @@ function label_to_volume_mapping_outputs(
 }
 
 
+/**
+ * Map label file to volume.
+ *
+ * Maps labels from a gifti label file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the label from the vertex closest to the voxel center.  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse, with popularity logic to decide on a label to use.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
+ */
 function label_to_volume_mapping_execute(
     params: LabelToVolumeMappingParameters,
     execution: Execution,
 ): LabelToVolumeMappingOutputs {
-    /**
-     * Map label file to volume.
-     * 
-     * Maps labels from a gifti label file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the label from the vertex closest to the voxel center.  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse, with popularity logic to decide on a label to use.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_to_volume_mapping_cargs(params, execution)
     const ret = label_to_volume_mapping_outputs(params, execution)
@@ -263,6 +263,25 @@ function label_to_volume_mapping_execute(
 }
 
 
+/**
+ * Map label file to volume.
+ *
+ * Maps labels from a gifti label file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the label from the vertex closest to the voxel center.  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse, with popularity logic to decide on a label to use.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label the input label file
+ * @param surface the surface to use coordinates from
+ * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
+ * @param opt_nearest_vertex_distance use the label from the vertex closest to the voxel center: how far from the surface to map labels to voxels, in mm
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
+ */
 function label_to_volume_mapping(
     label: InputPathType,
     surface: InputPathType,
@@ -272,25 +291,6 @@ function label_to_volume_mapping(
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParameters | null = null,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
-    /**
-     * Map label file to volume.
-     * 
-     * Maps labels from a gifti label file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the label from the vertex closest to the voxel center.  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse, with popularity logic to decide on a label to use.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label the input label file
-     * @param surface the surface to use coordinates from
-     * @param volume_space a volume file in the desired output volume space
-     * @param volume_out the output volume file
-     * @param opt_nearest_vertex_distance use the label from the vertex closest to the voxel center: how far from the surface to map labels to voxels, in mm
-     * @param ribbon_constrained use ribbon constrained mapping algorithm
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_TO_VOLUME_MAPPING_METADATA);
     const params = label_to_volume_mapping_params(label, surface, volume_space, volume_out, opt_nearest_vertex_distance, ribbon_constrained)
@@ -304,6 +304,10 @@ export {
       LabelToVolumeMappingParameters,
       LabelToVolumeMappingRibbonConstrainedParameters,
       label_to_volume_mapping,
+      label_to_volume_mapping_cargs,
+      label_to_volume_mapping_execute,
+      label_to_volume_mapping_outputs,
       label_to_volume_mapping_params,
+      label_to_volume_mapping_ribbon_constrained_cargs,
       label_to_volume_mapping_ribbon_constrained_params,
 };

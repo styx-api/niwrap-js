@@ -12,7 +12,7 @@ const MRIS_REGISTER_LABEL_MAP_METADATA: Metadata = {
 
 
 interface MrisRegisterLabelMapParameters {
-    "__STYXTYPE__": "mris_register_label_map";
+    "@type": "freesurfer.mris_register_label_map";
     "subjects_list": string;
     "target_subject": string;
     "prior": string;
@@ -27,33 +27,33 @@ interface MrisRegisterLabelMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_register_label_map": mris_register_label_map_cargs,
+        "freesurfer.mris_register_label_map": mris_register_label_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface MrisRegisterLabelMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_list List of training subjects
+ * @param target_subject Name of target subject
+ * @param prior Name of prior surface overlay
+ * @param label Name of label for each subject
+ * @param template_volume Template volume file
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param subjects_dir SUBJECTS_DIR
+ * @param version Print out version and exit
+ * @param vno Debug this vertex
+ *
+ * @returns Parameter dictionary
+ */
 function mris_register_label_map_params(
     subjects_list: string,
     target_subject: string,
@@ -86,25 +103,8 @@ function mris_register_label_map_params(
     version: boolean = false,
     vno: number | null = null,
 ): MrisRegisterLabelMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_list List of training subjects
-     * @param target_subject Name of target subject
-     * @param prior Name of prior surface overlay
-     * @param label Name of label for each subject
-     * @param template_volume Template volume file
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param subjects_dir SUBJECTS_DIR
-     * @param version Print out version and exit
-     * @param vno Debug this vertex
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_register_label_map" as const,
+        "@type": "freesurfer.mris_register_label_map" as const,
         "subjects_list": subjects_list,
         "target_subject": target_subject,
         "prior": prior,
@@ -125,18 +125,18 @@ function mris_register_label_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_register_label_map_cargs(
     params: MrisRegisterLabelMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_register_label_map");
     cargs.push(
@@ -187,18 +187,18 @@ function mris_register_label_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_register_label_map_outputs(
     params: MrisRegisterLabelMapParameters,
     execution: Execution,
 ): MrisRegisterLabelMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRegisterLabelMapOutputs = {
         root: execution.outputFile("."),
     };
@@ -206,22 +206,22 @@ function mris_register_label_map_outputs(
 }
 
 
+/**
+ * Tool for registering label maps in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
+ */
 function mris_register_label_map_execute(
     params: MrisRegisterLabelMapParameters,
     execution: Execution,
 ): MrisRegisterLabelMapOutputs {
-    /**
-     * Tool for registering label maps in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_register_label_map_cargs(params, execution)
     const ret = mris_register_label_map_outputs(params, execution)
@@ -230,6 +230,28 @@ function mris_register_label_map_execute(
 }
 
 
+/**
+ * Tool for registering label maps in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_list List of training subjects
+ * @param target_subject Name of target subject
+ * @param prior Name of prior surface overlay
+ * @param label Name of label for each subject
+ * @param template_volume Template volume file
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param subjects_dir SUBJECTS_DIR
+ * @param version Print out version and exit
+ * @param vno Debug this vertex
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
+ */
 function mris_register_label_map(
     subjects_list: string,
     target_subject: string,
@@ -244,28 +266,6 @@ function mris_register_label_map(
     vno: number | null = null,
     runner: Runner | null = null,
 ): MrisRegisterLabelMapOutputs {
-    /**
-     * Tool for registering label maps in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_list List of training subjects
-     * @param target_subject Name of target subject
-     * @param prior Name of prior surface overlay
-     * @param label Name of label for each subject
-     * @param template_volume Template volume file
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param subjects_dir SUBJECTS_DIR
-     * @param version Print out version and exit
-     * @param vno Debug this vertex
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REGISTER_LABEL_MAP_METADATA);
     const params = mris_register_label_map_params(subjects_list, target_subject, prior, label, template_volume, debug, check_opts, help, subjects_dir, version, vno)
@@ -278,5 +278,8 @@ export {
       MrisRegisterLabelMapOutputs,
       MrisRegisterLabelMapParameters,
       mris_register_label_map,
+      mris_register_label_map_cargs,
+      mris_register_label_map_execute,
+      mris_register_label_map_outputs,
       mris_register_label_map_params,
 };

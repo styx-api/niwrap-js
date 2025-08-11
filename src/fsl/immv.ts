@@ -12,39 +12,39 @@ const IMMV_METADATA: Metadata = {
 
 
 interface ImmvParameters {
-    "__STYXTYPE__": "immv";
+    "@type": "fsl.immv";
     "source_files": Array<InputPathType>;
     "destination": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "immv": immv_cargs,
+        "fsl.immv": immv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface ImmvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_files Source files to be moved. Recognized file extensions: .nii.gz, .nii, .img, .hdr, .img.gz, .hdr.gz
+ * @param destination Destination file or directory.
+ *
+ * @returns Parameter dictionary
+ */
 function immv_params(
     source_files: Array<InputPathType>,
     destination: string,
 ): ImmvParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_files Source files to be moved. Recognized file extensions: .nii.gz, .nii, .img, .hdr, .img.gz, .hdr.gz
-     * @param destination Destination file or directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "immv" as const,
+        "@type": "fsl.immv" as const,
         "source_files": source_files,
         "destination": destination,
     };
@@ -85,18 +85,18 @@ function immv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function immv_cargs(
     params: ImmvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("immv");
     cargs.push(...(params["source_files"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function immv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function immv_outputs(
     params: ImmvParameters,
     execution: Execution,
 ): ImmvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImmvOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function immv_outputs(
 }
 
 
+/**
+ * Moves images from one file or directory to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImmvOutputs`).
+ */
 function immv_execute(
     params: ImmvParameters,
     execution: Execution,
 ): ImmvOutputs {
-    /**
-     * Moves images from one file or directory to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImmvOutputs`).
-     */
     params = execution.params(params)
     const cargs = immv_cargs(params, execution)
     const ret = immv_outputs(params, execution)
@@ -148,24 +148,24 @@ function immv_execute(
 }
 
 
+/**
+ * Moves images from one file or directory to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param source_files Source files to be moved. Recognized file extensions: .nii.gz, .nii, .img, .hdr, .img.gz, .hdr.gz
+ * @param destination Destination file or directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImmvOutputs`).
+ */
 function immv(
     source_files: Array<InputPathType>,
     destination: string,
     runner: Runner | null = null,
 ): ImmvOutputs {
-    /**
-     * Moves images from one file or directory to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param source_files Source files to be moved. Recognized file extensions: .nii.gz, .nii, .img, .hdr, .img.gz, .hdr.gz
-     * @param destination Destination file or directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImmvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMMV_METADATA);
     const params = immv_params(source_files, destination)
@@ -178,5 +178,8 @@ export {
       ImmvOutputs,
       ImmvParameters,
       immv,
+      immv_cargs,
+      immv_execute,
+      immv_outputs,
       immv_params,
 };

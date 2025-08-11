@@ -12,7 +12,7 @@ const GEN_GROUP_COMMAND_METADATA: Metadata = {
 
 
 interface GenGroupCommandParameters {
-    "__STYXTYPE__": "gen_group_command";
+    "@type": "afni.gen_group_command";
     "command_name": string;
     "datasets": Array<string>;
     "prefix"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface GenGroupCommandParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gen_group_command": gen_group_command_cargs,
+        "afni.gen_group_command": gen_group_command_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gen_group_command": gen_group_command_outputs,
+        "afni.gen_group_command": gen_group_command_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface GenGroupCommandOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param command_name Resulting command, such as 3dttest++
+ * @param datasets List of datasets, can be used multiple times for different groups
+ * @param prefix Prefix for the output file names
+ * @param set_labels Labels corresponding to datasets entries
+ * @param subj_prefix Prefix for subject names
+ * @param subj_suffix Suffix for subject names
+ * @param subs_betas Sub-bricks for beta weights
+ * @param subs_tstats Sub-bricks for t-stats (3dMEMA)
+ * @param type_ Specify the type of test to perform
+ * @param verb Set the verbosity level
+ * @param write_script Write command script to specified file name
+ * @param other_options List of options to pass along to result
+ *
+ * @returns Parameter dictionary
+ */
 function gen_group_command_params(
     command_name: string,
     datasets: Array<string>,
@@ -93,26 +111,8 @@ function gen_group_command_params(
     write_script: string | null = null,
     other_options: Array<string> | null = null,
 ): GenGroupCommandParameters {
-    /**
-     * Build parameters.
-    
-     * @param command_name Resulting command, such as 3dttest++
-     * @param datasets List of datasets, can be used multiple times for different groups
-     * @param prefix Prefix for the output file names
-     * @param set_labels Labels corresponding to datasets entries
-     * @param subj_prefix Prefix for subject names
-     * @param subj_suffix Suffix for subject names
-     * @param subs_betas Sub-bricks for beta weights
-     * @param subs_tstats Sub-bricks for t-stats (3dMEMA)
-     * @param type_ Specify the type of test to perform
-     * @param verb Set the verbosity level
-     * @param write_script Write command script to specified file name
-     * @param other_options List of options to pass along to result
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gen_group_command" as const,
+        "@type": "afni.gen_group_command" as const,
         "command_name": command_name,
         "datasets": datasets,
     };
@@ -150,18 +150,18 @@ function gen_group_command_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gen_group_command_cargs(
     params: GenGroupCommandParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gen_group_command.py");
     cargs.push(
@@ -236,18 +236,18 @@ function gen_group_command_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gen_group_command_outputs(
     params: GenGroupCommandParameters,
     execution: Execution,
 ): GenGroupCommandOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GenGroupCommandOutputs = {
         root: execution.outputFile("."),
         output_script: ((params["write_script"] ?? null) !== null) ? execution.outputFile([(params["write_script"] ?? null)].join('')) : null,
@@ -256,22 +256,22 @@ function gen_group_command_outputs(
 }
 
 
+/**
+ * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
+ */
 function gen_group_command_execute(
     params: GenGroupCommandParameters,
     execution: Execution,
 ): GenGroupCommandOutputs {
-    /**
-     * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
-     */
     params = execution.params(params)
     const cargs = gen_group_command_cargs(params, execution)
     const ret = gen_group_command_outputs(params, execution)
@@ -280,6 +280,29 @@ function gen_group_command_execute(
 }
 
 
+/**
+ * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param command_name Resulting command, such as 3dttest++
+ * @param datasets List of datasets, can be used multiple times for different groups
+ * @param prefix Prefix for the output file names
+ * @param set_labels Labels corresponding to datasets entries
+ * @param subj_prefix Prefix for subject names
+ * @param subj_suffix Suffix for subject names
+ * @param subs_betas Sub-bricks for beta weights
+ * @param subs_tstats Sub-bricks for t-stats (3dMEMA)
+ * @param type_ Specify the type of test to perform
+ * @param verb Set the verbosity level
+ * @param write_script Write command script to specified file name
+ * @param other_options List of options to pass along to result
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
+ */
 function gen_group_command(
     command_name: string,
     datasets: Array<string>,
@@ -295,29 +318,6 @@ function gen_group_command(
     other_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): GenGroupCommandOutputs {
-    /**
-     * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param command_name Resulting command, such as 3dttest++
-     * @param datasets List of datasets, can be used multiple times for different groups
-     * @param prefix Prefix for the output file names
-     * @param set_labels Labels corresponding to datasets entries
-     * @param subj_prefix Prefix for subject names
-     * @param subj_suffix Suffix for subject names
-     * @param subs_betas Sub-bricks for beta weights
-     * @param subs_tstats Sub-bricks for t-stats (3dMEMA)
-     * @param type_ Specify the type of test to perform
-     * @param verb Set the verbosity level
-     * @param write_script Write command script to specified file name
-     * @param other_options List of options to pass along to result
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GEN_GROUP_COMMAND_METADATA);
     const params = gen_group_command_params(command_name, datasets, prefix, set_labels, subj_prefix, subj_suffix, subs_betas, subs_tstats, type_, verb, write_script, other_options)
@@ -330,5 +330,8 @@ export {
       GenGroupCommandOutputs,
       GenGroupCommandParameters,
       gen_group_command,
+      gen_group_command_cargs,
+      gen_group_command_execute,
+      gen_group_command_outputs,
       gen_group_command_params,
 };

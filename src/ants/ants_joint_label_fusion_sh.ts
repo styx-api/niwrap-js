@@ -12,7 +12,7 @@ const ANTS_JOINT_LABEL_FUSION_SH_METADATA: Metadata = {
 
 
 interface AntsJointLabelFusionShParameters {
-    "__STYXTYPE__": "antsJointLabelFusion.sh";
+    "@type": "ants.antsJointLabelFusion.sh";
     "dimensionality"?: 2 | 3 | null | undefined;
     "output"?: string | null | undefined;
     "atlas_image_mrf"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface AntsJointLabelFusionShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsJointLabelFusion.sh": ants_joint_label_fusion_sh_cargs,
+        "ants.antsJointLabelFusion.sh": ants_joint_label_fusion_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsJointLabelFusion.sh": ants_joint_label_fusion_sh_outputs,
+        "ants.antsJointLabelFusion.sh": ants_joint_label_fusion_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface AntsJointLabelFusionShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param target_image Image to segment.
+ * @param mask_image Mask image.
+ * @param dimensionality Image dimensionality (2 or 3).
+ * @param output Root directory for the output segmentation.
+ * @param atlas_image_mrf Atlas image(s) to be used for MRF initialization.
+ * @param atlas_segmentation_mrf Atlas segmentation(s) to be used for MRF initialization.
+ * @param rigid_transform Rigid transform initialization.
+ * @param similarity_metric Metric used for calculating similarity.
+ * @param other_options Additional options for label fusion.
+ * @param verbose Verbose output.
+ * @param rigid_transform_additional_options Additional options for rigid transform.
+ * @param similarity_metric_additional_options Additional options for similarity metric.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_joint_label_fusion_sh_params(
     target_image: string,
     mask_image: string,
@@ -93,26 +111,8 @@ function ants_joint_label_fusion_sh_params(
     rigid_transform_additional_options: string | null = null,
     similarity_metric_additional_options: string | null = null,
 ): AntsJointLabelFusionShParameters {
-    /**
-     * Build parameters.
-    
-     * @param target_image Image to segment.
-     * @param mask_image Mask image.
-     * @param dimensionality Image dimensionality (2 or 3).
-     * @param output Root directory for the output segmentation.
-     * @param atlas_image_mrf Atlas image(s) to be used for MRF initialization.
-     * @param atlas_segmentation_mrf Atlas segmentation(s) to be used for MRF initialization.
-     * @param rigid_transform Rigid transform initialization.
-     * @param similarity_metric Metric used for calculating similarity.
-     * @param other_options Additional options for label fusion.
-     * @param verbose Verbose output.
-     * @param rigid_transform_additional_options Additional options for rigid transform.
-     * @param similarity_metric_additional_options Additional options for similarity metric.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsJointLabelFusion.sh" as const,
+        "@type": "ants.antsJointLabelFusion.sh" as const,
         "target_image": target_image,
         "mask_image": mask_image,
     };
@@ -150,18 +150,18 @@ function ants_joint_label_fusion_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_joint_label_fusion_sh_cargs(
     params: AntsJointLabelFusionShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsJointLabelFusion.sh");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -236,18 +236,18 @@ function ants_joint_label_fusion_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_joint_label_fusion_sh_outputs(
     params: AntsJointLabelFusionShParameters,
     execution: Execution,
 ): AntsJointLabelFusionShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsJointLabelFusionShOutputs = {
         root: execution.outputFile("."),
         segmentation_output: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null), ".nii.gz"].join('')) : null,
@@ -256,22 +256,22 @@ function ants_joint_label_fusion_sh_outputs(
 }
 
 
+/**
+ * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
+ */
 function ants_joint_label_fusion_sh_execute(
     params: AntsJointLabelFusionShParameters,
     execution: Execution,
 ): AntsJointLabelFusionShOutputs {
-    /**
-     * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_joint_label_fusion_sh_cargs(params, execution)
     const ret = ants_joint_label_fusion_sh_outputs(params, execution)
@@ -280,6 +280,29 @@ function ants_joint_label_fusion_sh_execute(
 }
 
 
+/**
+ * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param target_image Image to segment.
+ * @param mask_image Mask image.
+ * @param dimensionality Image dimensionality (2 or 3).
+ * @param output Root directory for the output segmentation.
+ * @param atlas_image_mrf Atlas image(s) to be used for MRF initialization.
+ * @param atlas_segmentation_mrf Atlas segmentation(s) to be used for MRF initialization.
+ * @param rigid_transform Rigid transform initialization.
+ * @param similarity_metric Metric used for calculating similarity.
+ * @param other_options Additional options for label fusion.
+ * @param verbose Verbose output.
+ * @param rigid_transform_additional_options Additional options for rigid transform.
+ * @param similarity_metric_additional_options Additional options for similarity metric.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
+ */
 function ants_joint_label_fusion_sh(
     target_image: string,
     mask_image: string,
@@ -295,29 +318,6 @@ function ants_joint_label_fusion_sh(
     similarity_metric_additional_options: string | null = null,
     runner: Runner | null = null,
 ): AntsJointLabelFusionShOutputs {
-    /**
-     * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param target_image Image to segment.
-     * @param mask_image Mask image.
-     * @param dimensionality Image dimensionality (2 or 3).
-     * @param output Root directory for the output segmentation.
-     * @param atlas_image_mrf Atlas image(s) to be used for MRF initialization.
-     * @param atlas_segmentation_mrf Atlas segmentation(s) to be used for MRF initialization.
-     * @param rigid_transform Rigid transform initialization.
-     * @param similarity_metric Metric used for calculating similarity.
-     * @param other_options Additional options for label fusion.
-     * @param verbose Verbose output.
-     * @param rigid_transform_additional_options Additional options for rigid transform.
-     * @param similarity_metric_additional_options Additional options for similarity metric.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_JOINT_LABEL_FUSION_SH_METADATA);
     const params = ants_joint_label_fusion_sh_params(target_image, mask_image, dimensionality, output, atlas_image_mrf, atlas_segmentation_mrf, rigid_transform, similarity_metric, other_options, verbose, rigid_transform_additional_options, similarity_metric_additional_options)
@@ -330,5 +330,8 @@ export {
       AntsJointLabelFusionShOutputs,
       AntsJointLabelFusionShParameters,
       ants_joint_label_fusion_sh,
+      ants_joint_label_fusion_sh_cargs,
+      ants_joint_label_fusion_sh_execute,
+      ants_joint_label_fusion_sh_outputs,
       ants_joint_label_fusion_sh_params,
 };

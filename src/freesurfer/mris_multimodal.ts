@@ -12,7 +12,7 @@ const MRIS_MULTIMODAL_METADATA: Metadata = {
 
 
 interface MrisMultimodalParameters {
-    "__STYXTYPE__": "mris_multimodal";
+    "@type": "freesurfer.mris_multimodal";
     "input_surface": InputPathType;
     "target_surface": InputPathType;
     "output_surface": string;
@@ -26,35 +26,35 @@ interface MrisMultimodalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_multimodal": mris_multimodal_cargs,
+        "freesurfer.mris_multimodal": mris_multimodal_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_multimodal": mris_multimodal_outputs,
+        "freesurfer.mris_multimodal": mris_multimodal_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,22 @@ interface MrisMultimodalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file.
+ * @param target_surface Target surface file.
+ * @param output_surface Output surface file.
+ * @param annotation_output Output file for annotation data.
+ * @param overlay_output Output file for overlay data.
+ * @param csv_output Output CSV file.
+ * @param fill_holes Flag to fill holes in the surface.
+ * @param curvature Flag to process curvature data.
+ * @param thickness Flag to process thickness data.
+ * @param vtk_output Flag to output VTK file format.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_multimodal_params(
     input_surface: InputPathType,
     target_surface: InputPathType,
@@ -101,24 +117,8 @@ function mris_multimodal_params(
     thickness: boolean = false,
     vtk_output: boolean = false,
 ): MrisMultimodalParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file.
-     * @param target_surface Target surface file.
-     * @param output_surface Output surface file.
-     * @param annotation_output Output file for annotation data.
-     * @param overlay_output Output file for overlay data.
-     * @param csv_output Output CSV file.
-     * @param fill_holes Flag to fill holes in the surface.
-     * @param curvature Flag to process curvature data.
-     * @param thickness Flag to process thickness data.
-     * @param vtk_output Flag to output VTK file format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_multimodal" as const,
+        "@type": "freesurfer.mris_multimodal" as const,
         "input_surface": input_surface,
         "target_surface": target_surface,
         "output_surface": output_surface,
@@ -134,18 +134,18 @@ function mris_multimodal_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_multimodal_cargs(
     params: MrisMultimodalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_multimodal");
     cargs.push(
@@ -188,18 +188,18 @@ function mris_multimodal_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_multimodal_outputs(
     params: MrisMultimodalParameters,
     execution: Execution,
 ): MrisMultimodalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMultimodalOutputs = {
         root: execution.outputFile("."),
         processed_output_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -211,22 +211,22 @@ function mris_multimodal_outputs(
 }
 
 
+/**
+ * A FreeSurfer tool for processing multimodal surface data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
+ */
 function mris_multimodal_execute(
     params: MrisMultimodalParameters,
     execution: Execution,
 ): MrisMultimodalOutputs {
-    /**
-     * A FreeSurfer tool for processing multimodal surface data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_multimodal_cargs(params, execution)
     const ret = mris_multimodal_outputs(params, execution)
@@ -235,6 +235,27 @@ function mris_multimodal_execute(
 }
 
 
+/**
+ * A FreeSurfer tool for processing multimodal surface data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file.
+ * @param target_surface Target surface file.
+ * @param output_surface Output surface file.
+ * @param annotation_output Output file for annotation data.
+ * @param overlay_output Output file for overlay data.
+ * @param csv_output Output CSV file.
+ * @param fill_holes Flag to fill holes in the surface.
+ * @param curvature Flag to process curvature data.
+ * @param thickness Flag to process thickness data.
+ * @param vtk_output Flag to output VTK file format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
+ */
 function mris_multimodal(
     input_surface: InputPathType,
     target_surface: InputPathType,
@@ -248,27 +269,6 @@ function mris_multimodal(
     vtk_output: boolean = false,
     runner: Runner | null = null,
 ): MrisMultimodalOutputs {
-    /**
-     * A FreeSurfer tool for processing multimodal surface data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file.
-     * @param target_surface Target surface file.
-     * @param output_surface Output surface file.
-     * @param annotation_output Output file for annotation data.
-     * @param overlay_output Output file for overlay data.
-     * @param csv_output Output CSV file.
-     * @param fill_holes Flag to fill holes in the surface.
-     * @param curvature Flag to process curvature data.
-     * @param thickness Flag to process thickness data.
-     * @param vtk_output Flag to output VTK file format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MULTIMODAL_METADATA);
     const params = mris_multimodal_params(input_surface, target_surface, output_surface, annotation_output, overlay_output, csv_output, fill_holes, curvature, thickness, vtk_output)
@@ -281,5 +281,8 @@ export {
       MrisMultimodalOutputs,
       MrisMultimodalParameters,
       mris_multimodal,
+      mris_multimodal_cargs,
+      mris_multimodal_execute,
+      mris_multimodal_outputs,
       mris_multimodal_params,
 };

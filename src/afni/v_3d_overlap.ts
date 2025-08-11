@@ -12,42 +12,42 @@ const V_3D_OVERLAP_METADATA: Metadata = {
 
 
 interface V3dOverlapParameters {
-    "__STYXTYPE__": "3dOverlap";
+    "@type": "afni.3dOverlap";
     "dataset1": InputPathType;
     "dataset2": Array<InputPathType>;
     "save_prefix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dOverlap": v_3d_overlap_cargs,
+        "afni.3dOverlap": v_3d_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dOverlap": v_3d_overlap_outputs,
+        "afni.3dOverlap": v_3d_overlap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface V3dOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset1 First input dataset (e.g. dset1+orig)
+ * @param dataset2 Second input dataset (e.g. dset2+orig)
+ * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_overlap_params(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
     save_prefix: string | null = null,
 ): V3dOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset1 First input dataset (e.g. dset1+orig)
-     * @param dataset2 Second input dataset (e.g. dset2+orig)
-     * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dOverlap" as const,
+        "@type": "afni.3dOverlap" as const,
         "dataset1": dataset1,
         "dataset2": dataset2,
     };
@@ -100,18 +100,18 @@ function v_3d_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_overlap_cargs(
     params: V3dOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dOverlap");
     cargs.push(execution.inputFile((params["dataset1"] ?? null)));
@@ -126,18 +126,18 @@ function v_3d_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_overlap_outputs(
     params: V3dOverlapParameters,
     execution: Execution,
 ): V3dOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dOverlapOutputs = {
         root: execution.outputFile("."),
         output_brik: ((params["save_prefix"] ?? null) !== null) ? execution.outputFile([(params["save_prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -147,22 +147,22 @@ function v_3d_overlap_outputs(
 }
 
 
+/**
+ * Counts the number of voxels that are nonzero in all input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
+ */
 function v_3d_overlap_execute(
     params: V3dOverlapParameters,
     execution: Execution,
 ): V3dOverlapOutputs {
-    /**
-     * Counts the number of voxels that are nonzero in all input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_overlap_cargs(params, execution)
     const ret = v_3d_overlap_outputs(params, execution)
@@ -171,26 +171,26 @@ function v_3d_overlap_execute(
 }
 
 
+/**
+ * Counts the number of voxels that are nonzero in all input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset1 First input dataset (e.g. dset1+orig)
+ * @param dataset2 Second input dataset (e.g. dset2+orig)
+ * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
+ */
 function v_3d_overlap(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
     save_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dOverlapOutputs {
-    /**
-     * Counts the number of voxels that are nonzero in all input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset1 First input dataset (e.g. dset1+orig)
-     * @param dataset2 Second input dataset (e.g. dset2+orig)
-     * @param save_prefix Save the count of overlaps at each voxel into a dataset with the given prefix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_OVERLAP_METADATA);
     const params = v_3d_overlap_params(dataset1, dataset2, save_prefix)
@@ -203,5 +203,8 @@ export {
       V3dOverlapParameters,
       V_3D_OVERLAP_METADATA,
       v_3d_overlap,
+      v_3d_overlap_cargs,
+      v_3d_overlap_execute,
+      v_3d_overlap_outputs,
       v_3d_overlap_params,
 };

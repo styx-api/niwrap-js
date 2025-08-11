@@ -12,7 +12,7 @@ const DICOM_RENAME_METADATA: Metadata = {
 
 
 interface DicomRenameParameters {
-    "__STYXTYPE__": "dicom-rename";
+    "@type": "freesurfer.dicom-rename";
     "input_files": Array<InputPathType>;
     "output_base": string;
     "version": boolean;
@@ -20,35 +20,35 @@ interface DicomRenameParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dicom-rename": dicom_rename_cargs,
+        "freesurfer.dicom-rename": dicom_rename_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dicom-rename": dicom_rename_outputs,
+        "freesurfer.dicom-rename": dicom_rename_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface DicomRenameOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input DICOM files to be renamed.
+ * @param output_base Base name for output files that includes series and image numbers.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dicom_rename_params(
     input_files: Array<InputPathType>,
     output_base: string,
     version: boolean = false,
     help: boolean = false,
 ): DicomRenameParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input DICOM files to be renamed.
-     * @param output_base Base name for output files that includes series and image numbers.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dicom-rename" as const,
+        "@type": "freesurfer.dicom-rename" as const,
         "input_files": input_files,
         "output_base": output_base,
         "version": version,
@@ -98,18 +98,18 @@ function dicom_rename_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dicom_rename_cargs(
     params: DicomRenameParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dicom-rename");
     cargs.push(
@@ -130,18 +130,18 @@ function dicom_rename_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dicom_rename_outputs(
     params: DicomRenameParameters,
     execution: Execution,
 ): DicomRenameOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DicomRenameOutputs = {
         root: execution.outputFile("."),
         renamed_dicom: execution.outputFile([(params["output_base"] ?? null), "-SSS-IIIII.dcm"].join('')),
@@ -150,22 +150,22 @@ function dicom_rename_outputs(
 }
 
 
+/**
+ * Copies dicom file(s) to new path with more meaningful names.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
+ */
 function dicom_rename_execute(
     params: DicomRenameParameters,
     execution: Execution,
 ): DicomRenameOutputs {
-    /**
-     * Copies dicom file(s) to new path with more meaningful names.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
-     */
     params = execution.params(params)
     const cargs = dicom_rename_cargs(params, execution)
     const ret = dicom_rename_outputs(params, execution)
@@ -174,6 +174,21 @@ function dicom_rename_execute(
 }
 
 
+/**
+ * Copies dicom file(s) to new path with more meaningful names.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input DICOM files to be renamed.
+ * @param output_base Base name for output files that includes series and image numbers.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
+ */
 function dicom_rename(
     input_files: Array<InputPathType>,
     output_base: string,
@@ -181,21 +196,6 @@ function dicom_rename(
     help: boolean = false,
     runner: Runner | null = null,
 ): DicomRenameOutputs {
-    /**
-     * Copies dicom file(s) to new path with more meaningful names.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input DICOM files to be renamed.
-     * @param output_base Base name for output files that includes series and image numbers.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DICOM_RENAME_METADATA);
     const params = dicom_rename_params(input_files, output_base, version, help)
@@ -208,5 +208,8 @@ export {
       DicomRenameOutputs,
       DicomRenameParameters,
       dicom_rename,
+      dicom_rename_cargs,
+      dicom_rename_execute,
+      dicom_rename_outputs,
       dicom_rename_params,
 };

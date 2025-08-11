@@ -12,7 +12,7 @@ const MRI_XVOLAVG_METADATA: Metadata = {
 
 
 interface MriXvolavgParameters {
-    "__STYXTYPE__": "mri_xvolavg";
+    "@type": "freesurfer.mri_xvolavg";
     "input_volumes": Array<InputPathType>;
     "vol_type": string;
     "output_volume": string;
@@ -20,35 +20,35 @@ interface MriXvolavgParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_xvolavg": mri_xvolavg_cargs,
+        "freesurfer.mri_xvolavg": mri_xvolavg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_xvolavg": mri_xvolavg_outputs,
+        "freesurfer.mri_xvolavg": mri_xvolavg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriXvolavgOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Path(s) to input volume(s). This option can be repeated for each input volume.
+ * @param vol_type Format type of all input volumes.
+ * @param output_volume Path to output volume.
+ * @param output_type Format type of the output volume (default is that of input volumes).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_xvolavg_params(
     input_volumes: Array<InputPathType>,
     vol_type: string,
     output_volume: string,
     output_type: string | null = null,
 ): MriXvolavgParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Path(s) to input volume(s). This option can be repeated for each input volume.
-     * @param vol_type Format type of all input volumes.
-     * @param output_volume Path to output volume.
-     * @param output_type Format type of the output volume (default is that of input volumes).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_xvolavg" as const,
+        "@type": "freesurfer.mri_xvolavg" as const,
         "input_volumes": input_volumes,
         "vol_type": vol_type,
         "output_volume": output_volume,
@@ -100,18 +100,18 @@ function mri_xvolavg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_xvolavg_cargs(
     params: MriXvolavgParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_xvolavg");
     cargs.push(
@@ -136,18 +136,18 @@ function mri_xvolavg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_xvolavg_outputs(
     params: MriXvolavgParameters,
     execution: Execution,
 ): MriXvolavgOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriXvolavgOutputs = {
         root: execution.outputFile("."),
         averaged_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -156,22 +156,22 @@ function mri_xvolavg_outputs(
 }
 
 
+/**
+ * Tool to average multiple volumes together (including 4D volumes).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
+ */
 function mri_xvolavg_execute(
     params: MriXvolavgParameters,
     execution: Execution,
 ): MriXvolavgOutputs {
-    /**
-     * Tool to average multiple volumes together (including 4D volumes).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_xvolavg_cargs(params, execution)
     const ret = mri_xvolavg_outputs(params, execution)
@@ -180,6 +180,21 @@ function mri_xvolavg_execute(
 }
 
 
+/**
+ * Tool to average multiple volumes together (including 4D volumes).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Path(s) to input volume(s). This option can be repeated for each input volume.
+ * @param vol_type Format type of all input volumes.
+ * @param output_volume Path to output volume.
+ * @param output_type Format type of the output volume (default is that of input volumes).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
+ */
 function mri_xvolavg(
     input_volumes: Array<InputPathType>,
     vol_type: string,
@@ -187,21 +202,6 @@ function mri_xvolavg(
     output_type: string | null = null,
     runner: Runner | null = null,
 ): MriXvolavgOutputs {
-    /**
-     * Tool to average multiple volumes together (including 4D volumes).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Path(s) to input volume(s). This option can be repeated for each input volume.
-     * @param vol_type Format type of all input volumes.
-     * @param output_volume Path to output volume.
-     * @param output_type Format type of the output volume (default is that of input volumes).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_XVOLAVG_METADATA);
     const params = mri_xvolavg_params(input_volumes, vol_type, output_volume, output_type)
@@ -214,5 +214,8 @@ export {
       MriXvolavgOutputs,
       MriXvolavgParameters,
       mri_xvolavg,
+      mri_xvolavg_cargs,
+      mri_xvolavg_execute,
+      mri_xvolavg_outputs,
       mri_xvolavg_params,
 };

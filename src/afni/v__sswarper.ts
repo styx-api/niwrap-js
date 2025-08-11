@@ -12,7 +12,7 @@ const V__SSWARPER_METADATA: Metadata = {
 
 
 interface VSswarperParameters {
-    "__STYXTYPE__": "@SSwarper";
+    "@type": "afni.@SSwarper";
     "input_file": InputPathType;
     "base_template": InputPathType;
     "subject_id": string;
@@ -39,35 +39,35 @@ interface VSswarperParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SSwarper": v__sswarper_cargs,
+        "afni.@SSwarper": v__sswarper_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SSwarper": v__sswarper_outputs,
+        "afni.@SSwarper": v__sswarper_outputs,
     };
     return outputsFuncs[t];
 }
@@ -142,6 +142,35 @@ interface VSswarperOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file An anatomical dataset, not skull-stripped, with about 1 mm resolution.
+ * @param base_template A base template dataset with similar contrast to the input dataset.
+ * @param subject_id Name code for output datasets (e.g., 'sub007').
+ * @param output_dir Output directory for all files from this program.
+ * @param min_patch_size Minimum patch size on final 3dQwarp.
+ * @param no_lite Do not use the '-lite' option with 3dQwarp.
+ * @param skip_warp Do not compute past the output of anatSS.<subid>.nii.
+ * @param unifize_off Do not start with a 3dUnifize command.
+ * @param init_skullstr_off Do not preprocess with a 3dSkullstrip command.
+ * @param extra_qc_off Do not make extra QC images.
+ * @param jump_to_extra_qc Just make the two QC*jpg images from a previous run.
+ * @param cost_nl_init Specify cost function for initial nonlinear (3dQwarp) part of alignment.
+ * @param cost_nl_final Specify cost function for final nonlinear (3dQwarp) parts of alignment.
+ * @param deoblique Apply obliquity information to deoblique the input volume.
+ * @param deoblique_refitly Purge obliquity information to deoblique the input volume.
+ * @param warp_scale Control flexibility of warps in 3dQwarp.
+ * @param ssopt_flag Append a string of options for 3dSkullStrip.
+ * @param aniso_off Do not preprocess with a 3danisosmooth command.
+ * @param ceil_off Turn off capping on values after anisosmoothing.
+ * @param tmp_name_nice Use nicer, non-random intermediate file prefix for temporary files.
+ * @param echo Run the script with 'set echo' for extra verbosity in the terminal output.
+ * @param verbose Apply the '-verb' option to 3dQwarp for verbose progress information.
+ * @param noclean Do not delete the 'junk' files at the end of computations.
+ *
+ * @returns Parameter dictionary
+ */
 function v__sswarper_params(
     input_file: InputPathType,
     base_template: InputPathType,
@@ -167,37 +196,8 @@ function v__sswarper_params(
     verbose: boolean = false,
     noclean: boolean = false,
 ): VSswarperParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file An anatomical dataset, not skull-stripped, with about 1 mm resolution.
-     * @param base_template A base template dataset with similar contrast to the input dataset.
-     * @param subject_id Name code for output datasets (e.g., 'sub007').
-     * @param output_dir Output directory for all files from this program.
-     * @param min_patch_size Minimum patch size on final 3dQwarp.
-     * @param no_lite Do not use the '-lite' option with 3dQwarp.
-     * @param skip_warp Do not compute past the output of anatSS.<subid>.nii.
-     * @param unifize_off Do not start with a 3dUnifize command.
-     * @param init_skullstr_off Do not preprocess with a 3dSkullstrip command.
-     * @param extra_qc_off Do not make extra QC images.
-     * @param jump_to_extra_qc Just make the two QC*jpg images from a previous run.
-     * @param cost_nl_init Specify cost function for initial nonlinear (3dQwarp) part of alignment.
-     * @param cost_nl_final Specify cost function for final nonlinear (3dQwarp) parts of alignment.
-     * @param deoblique Apply obliquity information to deoblique the input volume.
-     * @param deoblique_refitly Purge obliquity information to deoblique the input volume.
-     * @param warp_scale Control flexibility of warps in 3dQwarp.
-     * @param ssopt_flag Append a string of options for 3dSkullStrip.
-     * @param aniso_off Do not preprocess with a 3danisosmooth command.
-     * @param ceil_off Turn off capping on values after anisosmoothing.
-     * @param tmp_name_nice Use nicer, non-random intermediate file prefix for temporary files.
-     * @param echo Run the script with 'set echo' for extra verbosity in the terminal output.
-     * @param verbose Apply the '-verb' option to 3dQwarp for verbose progress information.
-     * @param noclean Do not delete the 'junk' files at the end of computations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SSwarper" as const,
+        "@type": "afni.@SSwarper" as const,
         "input_file": input_file,
         "base_template": base_template,
         "subject_id": subject_id,
@@ -238,18 +238,18 @@ function v__sswarper_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__sswarper_cargs(
     params: VSswarperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SSwarper");
     cargs.push(
@@ -346,18 +346,18 @@ function v__sswarper_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__sswarper_outputs(
     params: VSswarperParameters,
     execution: Execution,
 ): VSswarperOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSswarperOutputs = {
         root: execution.outputFile("."),
         anat_do: execution.outputFile(["anatDO.", (params["subject_id"] ?? null), ".nii"].join('')),
@@ -379,22 +379,22 @@ function v__sswarper_outputs(
 }
 
 
+/**
+ * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
+ */
 function v__sswarper_execute(
     params: VSswarperParameters,
     execution: Execution,
 ): VSswarperOutputs {
-    /**
-     * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__sswarper_cargs(params, execution)
     const ret = v__sswarper_outputs(params, execution)
@@ -403,6 +403,40 @@ function v__sswarper_execute(
 }
 
 
+/**
+ * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file An anatomical dataset, not skull-stripped, with about 1 mm resolution.
+ * @param base_template A base template dataset with similar contrast to the input dataset.
+ * @param subject_id Name code for output datasets (e.g., 'sub007').
+ * @param output_dir Output directory for all files from this program.
+ * @param min_patch_size Minimum patch size on final 3dQwarp.
+ * @param no_lite Do not use the '-lite' option with 3dQwarp.
+ * @param skip_warp Do not compute past the output of anatSS.<subid>.nii.
+ * @param unifize_off Do not start with a 3dUnifize command.
+ * @param init_skullstr_off Do not preprocess with a 3dSkullstrip command.
+ * @param extra_qc_off Do not make extra QC images.
+ * @param jump_to_extra_qc Just make the two QC*jpg images from a previous run.
+ * @param cost_nl_init Specify cost function for initial nonlinear (3dQwarp) part of alignment.
+ * @param cost_nl_final Specify cost function for final nonlinear (3dQwarp) parts of alignment.
+ * @param deoblique Apply obliquity information to deoblique the input volume.
+ * @param deoblique_refitly Purge obliquity information to deoblique the input volume.
+ * @param warp_scale Control flexibility of warps in 3dQwarp.
+ * @param ssopt_flag Append a string of options for 3dSkullStrip.
+ * @param aniso_off Do not preprocess with a 3danisosmooth command.
+ * @param ceil_off Turn off capping on values after anisosmoothing.
+ * @param tmp_name_nice Use nicer, non-random intermediate file prefix for temporary files.
+ * @param echo Run the script with 'set echo' for extra verbosity in the terminal output.
+ * @param verbose Apply the '-verb' option to 3dQwarp for verbose progress information.
+ * @param noclean Do not delete the 'junk' files at the end of computations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
+ */
 function v__sswarper(
     input_file: InputPathType,
     base_template: InputPathType,
@@ -429,40 +463,6 @@ function v__sswarper(
     noclean: boolean = false,
     runner: Runner | null = null,
 ): VSswarperOutputs {
-    /**
-     * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file An anatomical dataset, not skull-stripped, with about 1 mm resolution.
-     * @param base_template A base template dataset with similar contrast to the input dataset.
-     * @param subject_id Name code for output datasets (e.g., 'sub007').
-     * @param output_dir Output directory for all files from this program.
-     * @param min_patch_size Minimum patch size on final 3dQwarp.
-     * @param no_lite Do not use the '-lite' option with 3dQwarp.
-     * @param skip_warp Do not compute past the output of anatSS.<subid>.nii.
-     * @param unifize_off Do not start with a 3dUnifize command.
-     * @param init_skullstr_off Do not preprocess with a 3dSkullstrip command.
-     * @param extra_qc_off Do not make extra QC images.
-     * @param jump_to_extra_qc Just make the two QC*jpg images from a previous run.
-     * @param cost_nl_init Specify cost function for initial nonlinear (3dQwarp) part of alignment.
-     * @param cost_nl_final Specify cost function for final nonlinear (3dQwarp) parts of alignment.
-     * @param deoblique Apply obliquity information to deoblique the input volume.
-     * @param deoblique_refitly Purge obliquity information to deoblique the input volume.
-     * @param warp_scale Control flexibility of warps in 3dQwarp.
-     * @param ssopt_flag Append a string of options for 3dSkullStrip.
-     * @param aniso_off Do not preprocess with a 3danisosmooth command.
-     * @param ceil_off Turn off capping on values after anisosmoothing.
-     * @param tmp_name_nice Use nicer, non-random intermediate file prefix for temporary files.
-     * @param echo Run the script with 'set echo' for extra verbosity in the terminal output.
-     * @param verbose Apply the '-verb' option to 3dQwarp for verbose progress information.
-     * @param noclean Do not delete the 'junk' files at the end of computations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SSWARPER_METADATA);
     const params = v__sswarper_params(input_file, base_template, subject_id, output_dir, min_patch_size, no_lite, skip_warp, unifize_off, init_skullstr_off, extra_qc_off, jump_to_extra_qc, cost_nl_init, cost_nl_final, deoblique, deoblique_refitly, warp_scale, ssopt_flag, aniso_off, ceil_off, tmp_name_nice, echo, verbose, noclean)
@@ -475,5 +475,8 @@ export {
       VSswarperParameters,
       V__SSWARPER_METADATA,
       v__sswarper,
+      v__sswarper_cargs,
+      v__sswarper_execute,
+      v__sswarper_outputs,
       v__sswarper_params,
 };

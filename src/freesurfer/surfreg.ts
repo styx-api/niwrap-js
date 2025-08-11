@@ -12,7 +12,7 @@ const SURFREG_METADATA: Metadata = {
 
 
 interface SurfregParameters {
-    "__STYXTYPE__": "surfreg";
+    "@type": "freesurfer.surfreg";
     "subject": string;
     "target": string;
     "cross_hemi": boolean;
@@ -32,35 +32,35 @@ interface SurfregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surfreg": surfreg_cargs,
+        "freesurfer.surfreg": surfreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surfreg": surfreg_outputs,
+        "freesurfer.surfreg": surfreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface SurfregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject to register
+ * @param target Target average subject to use as a registration target
+ * @param cross_hemi Perform cross-hemi registration
+ * @param reg_lh Register left hemisphere only
+ * @param reg_rh Register right hemisphere only
+ * @param reg_both Register both left and right hemispheres
+ * @param no_annot Do not use annot to rip
+ * @param annot Use specified annotation name
+ * @param aparc Set annotation name to aparc.annot
+ * @param noneg Option flag with unspecified behavior in the provided help text
+ * @param init_reg Initial registration name, default is sphere
+ * @param lta Apply rotational components of affine registration
+ * @param init_from_tal Use talaiach.xfm.lta for initial spherical registration
+ * @param outsurf Output surface name, default depends on the target
+ * @param no_set_vol_geom Do not set volume geometry and center the sphere
+ * @param threads Number of threads to run in parallel
+ *
+ * @returns Parameter dictionary
+ */
 function surfreg_params(
     subject: string,
     target: string,
@@ -101,30 +123,8 @@ function surfreg_params(
     no_set_vol_geom: boolean = false,
     threads: number | null = null,
 ): SurfregParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject to register
-     * @param target Target average subject to use as a registration target
-     * @param cross_hemi Perform cross-hemi registration
-     * @param reg_lh Register left hemisphere only
-     * @param reg_rh Register right hemisphere only
-     * @param reg_both Register both left and right hemispheres
-     * @param no_annot Do not use annot to rip
-     * @param annot Use specified annotation name
-     * @param aparc Set annotation name to aparc.annot
-     * @param noneg Option flag with unspecified behavior in the provided help text
-     * @param init_reg Initial registration name, default is sphere
-     * @param lta Apply rotational components of affine registration
-     * @param init_from_tal Use talaiach.xfm.lta for initial spherical registration
-     * @param outsurf Output surface name, default depends on the target
-     * @param no_set_vol_geom Do not set volume geometry and center the sphere
-     * @param threads Number of threads to run in parallel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surfreg" as const,
+        "@type": "freesurfer.surfreg" as const,
         "subject": subject,
         "target": target,
         "cross_hemi": cross_hemi,
@@ -156,18 +156,18 @@ function surfreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surfreg_cargs(
     params: SurfregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surfreg");
     cargs.push(
@@ -239,18 +239,18 @@ function surfreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surfreg_outputs(
     params: SurfregParameters,
     execution: Execution,
 ): SurfregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfregOutputs = {
         root: execution.outputFile("."),
         output_surface: execution.outputFile(["subject/surf/hemi.target.sphere.reg"].join('')),
@@ -259,22 +259,22 @@ function surfreg_outputs(
 }
 
 
+/**
+ * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfregOutputs`).
+ */
 function surfreg_execute(
     params: SurfregParameters,
     execution: Execution,
 ): SurfregOutputs {
-    /**
-     * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfregOutputs`).
-     */
     params = execution.params(params)
     const cargs = surfreg_cargs(params, execution)
     const ret = surfreg_outputs(params, execution)
@@ -283,6 +283,33 @@ function surfreg_execute(
 }
 
 
+/**
+ * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject to register
+ * @param target Target average subject to use as a registration target
+ * @param cross_hemi Perform cross-hemi registration
+ * @param reg_lh Register left hemisphere only
+ * @param reg_rh Register right hemisphere only
+ * @param reg_both Register both left and right hemispheres
+ * @param no_annot Do not use annot to rip
+ * @param annot Use specified annotation name
+ * @param aparc Set annotation name to aparc.annot
+ * @param noneg Option flag with unspecified behavior in the provided help text
+ * @param init_reg Initial registration name, default is sphere
+ * @param lta Apply rotational components of affine registration
+ * @param init_from_tal Use talaiach.xfm.lta for initial spherical registration
+ * @param outsurf Output surface name, default depends on the target
+ * @param no_set_vol_geom Do not set volume geometry and center the sphere
+ * @param threads Number of threads to run in parallel
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfregOutputs`).
+ */
 function surfreg(
     subject: string,
     target: string,
@@ -302,33 +329,6 @@ function surfreg(
     threads: number | null = null,
     runner: Runner | null = null,
 ): SurfregOutputs {
-    /**
-     * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject to register
-     * @param target Target average subject to use as a registration target
-     * @param cross_hemi Perform cross-hemi registration
-     * @param reg_lh Register left hemisphere only
-     * @param reg_rh Register right hemisphere only
-     * @param reg_both Register both left and right hemispheres
-     * @param no_annot Do not use annot to rip
-     * @param annot Use specified annotation name
-     * @param aparc Set annotation name to aparc.annot
-     * @param noneg Option flag with unspecified behavior in the provided help text
-     * @param init_reg Initial registration name, default is sphere
-     * @param lta Apply rotational components of affine registration
-     * @param init_from_tal Use talaiach.xfm.lta for initial spherical registration
-     * @param outsurf Output surface name, default depends on the target
-     * @param no_set_vol_geom Do not set volume geometry and center the sphere
-     * @param threads Number of threads to run in parallel
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFREG_METADATA);
     const params = surfreg_params(subject, target, cross_hemi, reg_lh, reg_rh, reg_both, no_annot, annot, aparc, noneg, init_reg, lta, init_from_tal, outsurf, no_set_vol_geom, threads)
@@ -341,5 +341,8 @@ export {
       SurfregOutputs,
       SurfregParameters,
       surfreg,
+      surfreg_cargs,
+      surfreg_execute,
+      surfreg_outputs,
       surfreg_params,
 };

@@ -12,7 +12,7 @@ const V_4DFPTOANALYZE_METADATA: Metadata = {
 
 
 interface V4dfptoanalyzeParameters {
-    "__STYXTYPE__": "4dfptoanalyze";
+    "@type": "freesurfer.4dfptoanalyze";
     "input_file": InputPathType;
     "scale_factor"?: number | null | undefined;
     "output_8bit": boolean;
@@ -21,35 +21,35 @@ interface V4dfptoanalyzeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "4dfptoanalyze": v_4dfptoanalyze_cargs,
+        "freesurfer.4dfptoanalyze": v_4dfptoanalyze_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "4dfptoanalyze": v_4dfptoanalyze_outputs,
+        "freesurfer.4dfptoanalyze": v_4dfptoanalyze_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface V4dfptoanalyzeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 4dfp filename
+ * @param scale_factor Scale output values by specified factor
+ * @param output_8bit Output 8 bit unsigned char
+ * @param spm99 Include origin and scale in hdr
+ * @param endianness Output big or little endian (default CPU endian)
+ *
+ * @returns Parameter dictionary
+ */
 function v_4dfptoanalyze_params(
     input_file: InputPathType,
     scale_factor: number | null = null,
@@ -83,19 +94,8 @@ function v_4dfptoanalyze_params(
     spm99: boolean = false,
     endianness: string | null = null,
 ): V4dfptoanalyzeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 4dfp filename
-     * @param scale_factor Scale output values by specified factor
-     * @param output_8bit Output 8 bit unsigned char
-     * @param spm99 Include origin and scale in hdr
-     * @param endianness Output big or little endian (default CPU endian)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "4dfptoanalyze" as const,
+        "@type": "freesurfer.4dfptoanalyze" as const,
         "input_file": input_file,
         "output_8bit": output_8bit,
         "spm99": spm99,
@@ -110,18 +110,18 @@ function v_4dfptoanalyze_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_4dfptoanalyze_cargs(
     params: V4dfptoanalyzeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("4dfptoanalyze");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -147,18 +147,18 @@ function v_4dfptoanalyze_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_4dfptoanalyze_outputs(
     params: V4dfptoanalyzeParameters,
     execution: Execution,
 ): V4dfptoanalyzeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V4dfptoanalyzeOutputs = {
         root: execution.outputFile("."),
         analyze_hdr: execution.outputFile([path.basename((params["input_file"] ?? null)), "_analyze.hdr"].join('')),
@@ -168,22 +168,22 @@ function v_4dfptoanalyze_outputs(
 }
 
 
+/**
+ * Converts 4dfp formatted files to Analyze format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
+ */
 function v_4dfptoanalyze_execute(
     params: V4dfptoanalyzeParameters,
     execution: Execution,
 ): V4dfptoanalyzeOutputs {
-    /**
-     * Converts 4dfp formatted files to Analyze format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_4dfptoanalyze_cargs(params, execution)
     const ret = v_4dfptoanalyze_outputs(params, execution)
@@ -192,6 +192,22 @@ function v_4dfptoanalyze_execute(
 }
 
 
+/**
+ * Converts 4dfp formatted files to Analyze format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input 4dfp filename
+ * @param scale_factor Scale output values by specified factor
+ * @param output_8bit Output 8 bit unsigned char
+ * @param spm99 Include origin and scale in hdr
+ * @param endianness Output big or little endian (default CPU endian)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
+ */
 function v_4dfptoanalyze(
     input_file: InputPathType,
     scale_factor: number | null = null,
@@ -200,22 +216,6 @@ function v_4dfptoanalyze(
     endianness: string | null = null,
     runner: Runner | null = null,
 ): V4dfptoanalyzeOutputs {
-    /**
-     * Converts 4dfp formatted files to Analyze format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input 4dfp filename
-     * @param scale_factor Scale output values by specified factor
-     * @param output_8bit Output 8 bit unsigned char
-     * @param spm99 Include origin and scale in hdr
-     * @param endianness Output big or little endian (default CPU endian)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_4DFPTOANALYZE_METADATA);
     const params = v_4dfptoanalyze_params(input_file, scale_factor, output_8bit, spm99, endianness)
@@ -228,5 +228,8 @@ export {
       V4dfptoanalyzeParameters,
       V_4DFPTOANALYZE_METADATA,
       v_4dfptoanalyze,
+      v_4dfptoanalyze_cargs,
+      v_4dfptoanalyze_execute,
+      v_4dfptoanalyze_outputs,
       v_4dfptoanalyze_params,
 };

@@ -12,40 +12,40 @@ const FEAT_METADATA: Metadata = {
 
 
 interface FeatParameters {
-    "__STYXTYPE__": "feat";
+    "@type": "fsl.feat";
     "design_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "feat": feat_cargs,
+        "fsl.feat": feat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "feat": feat_outputs,
+        "fsl.feat": feat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface FeatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param design_file FEAT design file (e.g. design.fsf)
+ *
+ * @returns Parameter dictionary
+ */
 function feat_params(
     design_file: InputPathType,
 ): FeatParameters {
-    /**
-     * Build parameters.
-    
-     * @param design_file FEAT design file (e.g. design.fsf)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "feat" as const,
+        "@type": "fsl.feat" as const,
         "design_file": design_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function feat_cargs(
     params: FeatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("feat");
     cargs.push(execution.inputFile((params["design_file"] ?? null)));
@@ -105,18 +105,18 @@ function feat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function feat_outputs(
     params: FeatParameters,
     execution: Execution,
 ): FeatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FeatOutputs = {
         root: execution.outputFile("."),
         output_dir: execution.outputFile(["design.feat"].join('')),
@@ -125,22 +125,22 @@ function feat_outputs(
 }
 
 
+/**
+ * fMRI Expert Analysis Tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FeatOutputs`).
+ */
 function feat_execute(
     params: FeatParameters,
     execution: Execution,
 ): FeatOutputs {
-    /**
-     * fMRI Expert Analysis Tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FeatOutputs`).
-     */
     params = execution.params(params)
     const cargs = feat_cargs(params, execution)
     const ret = feat_outputs(params, execution)
@@ -149,22 +149,22 @@ function feat_execute(
 }
 
 
+/**
+ * fMRI Expert Analysis Tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param design_file FEAT design file (e.g. design.fsf)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FeatOutputs`).
+ */
 function feat(
     design_file: InputPathType,
     runner: Runner | null = null,
 ): FeatOutputs {
-    /**
-     * fMRI Expert Analysis Tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param design_file FEAT design file (e.g. design.fsf)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FeatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEAT_METADATA);
     const params = feat_params(design_file)
@@ -177,5 +177,8 @@ export {
       FeatOutputs,
       FeatParameters,
       feat,
+      feat_cargs,
+      feat_execute,
+      feat_outputs,
       feat_params,
 };

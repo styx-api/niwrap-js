@@ -12,40 +12,40 @@ const FSLCPGEOM_METADATA: Metadata = {
 
 
 interface FslcpgeomParameters {
-    "__STYXTYPE__": "fslcpgeom";
+    "@type": "fsl.fslcpgeom";
     "source_file": InputPathType;
     "destination_file": InputPathType;
     "dimensions_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslcpgeom": fslcpgeom_cargs,
+        "fsl.fslcpgeom": fslcpgeom_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface FslcpgeomOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_file Source image file (e.g. img1.nii.gz)
+ * @param destination_file Destination image file (e.g. img2.nii.gz)
+ * @param dimensions_flag Don't copy image dimensions
+ *
+ * @returns Parameter dictionary
+ */
 function fslcpgeom_params(
     source_file: InputPathType,
     destination_file: InputPathType,
     dimensions_flag: boolean = false,
 ): FslcpgeomParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_file Source image file (e.g. img1.nii.gz)
-     * @param destination_file Destination image file (e.g. img2.nii.gz)
-     * @param dimensions_flag Don't copy image dimensions
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslcpgeom" as const,
+        "@type": "fsl.fslcpgeom" as const,
         "source_file": source_file,
         "destination_file": destination_file,
         "dimensions_flag": dimensions_flag,
@@ -89,18 +89,18 @@ function fslcpgeom_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslcpgeom_cargs(
     params: FslcpgeomParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslcpgeom");
     cargs.push(execution.inputFile((params["source_file"] ?? null)));
@@ -112,18 +112,18 @@ function fslcpgeom_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslcpgeom_outputs(
     params: FslcpgeomParameters,
     execution: Execution,
 ): FslcpgeomOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslcpgeomOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function fslcpgeom_outputs(
 }
 
 
+/**
+ * FSL tool to copy image geometry from one file to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
+ */
 function fslcpgeom_execute(
     params: FslcpgeomParameters,
     execution: Execution,
 ): FslcpgeomOutputs {
-    /**
-     * FSL tool to copy image geometry from one file to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslcpgeom_cargs(params, execution)
     const ret = fslcpgeom_outputs(params, execution)
@@ -155,26 +155,26 @@ function fslcpgeom_execute(
 }
 
 
+/**
+ * FSL tool to copy image geometry from one file to another.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param source_file Source image file (e.g. img1.nii.gz)
+ * @param destination_file Destination image file (e.g. img2.nii.gz)
+ * @param dimensions_flag Don't copy image dimensions
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
+ */
 function fslcpgeom(
     source_file: InputPathType,
     destination_file: InputPathType,
     dimensions_flag: boolean = false,
     runner: Runner | null = null,
 ): FslcpgeomOutputs {
-    /**
-     * FSL tool to copy image geometry from one file to another.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param source_file Source image file (e.g. img1.nii.gz)
-     * @param destination_file Destination image file (e.g. img2.nii.gz)
-     * @param dimensions_flag Don't copy image dimensions
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLCPGEOM_METADATA);
     const params = fslcpgeom_params(source_file, destination_file, dimensions_flag)
@@ -187,5 +187,8 @@ export {
       FslcpgeomOutputs,
       FslcpgeomParameters,
       fslcpgeom,
+      fslcpgeom_cargs,
+      fslcpgeom_execute,
+      fslcpgeom_outputs,
       fslcpgeom_params,
 };

@@ -12,39 +12,39 @@ const MRI_OR_METADATA: Metadata = {
 
 
 interface MriOrParameters {
-    "__STYXTYPE__": "mri_or";
+    "@type": "freesurfer.mri_or";
     "original_labels": boolean;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_or": mri_or_cargs,
+        "freesurfer.mri_or": mri_or_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MriOrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image files on which to perform the logical OR operation
+ * @param original_labels Keeps the original label values in the input files when creating the output
+ *
+ * @returns Parameter dictionary
+ */
 function mri_or_params(
     input_files: Array<InputPathType>,
     original_labels: boolean = false,
 ): MriOrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image files on which to perform the logical OR operation
-     * @param original_labels Keeps the original label values in the input files when creating the output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_or" as const,
+        "@type": "freesurfer.mri_or" as const,
         "original_labels": original_labels,
         "input_files": input_files,
     };
@@ -85,18 +85,18 @@ function mri_or_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_or_cargs(
     params: MriOrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_or");
     if ((params["original_labels"] ?? null)) {
@@ -107,18 +107,18 @@ function mri_or_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_or_outputs(
     params: MriOrParameters,
     execution: Execution,
 ): MriOrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriOrOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function mri_or_outputs(
 }
 
 
+/**
+ * Performs a logical voxel-wise OR on a series of volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriOrOutputs`).
+ */
 function mri_or_execute(
     params: MriOrParameters,
     execution: Execution,
 ): MriOrOutputs {
-    /**
-     * Performs a logical voxel-wise OR on a series of volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriOrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_or_cargs(params, execution)
     const ret = mri_or_outputs(params, execution)
@@ -150,24 +150,24 @@ function mri_or_execute(
 }
 
 
+/**
+ * Performs a logical voxel-wise OR on a series of volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input image files on which to perform the logical OR operation
+ * @param original_labels Keeps the original label values in the input files when creating the output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriOrOutputs`).
+ */
 function mri_or(
     input_files: Array<InputPathType>,
     original_labels: boolean = false,
     runner: Runner | null = null,
 ): MriOrOutputs {
-    /**
-     * Performs a logical voxel-wise OR on a series of volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input image files on which to perform the logical OR operation
-     * @param original_labels Keeps the original label values in the input files when creating the output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriOrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_OR_METADATA);
     const params = mri_or_params(input_files, original_labels)
@@ -180,5 +180,8 @@ export {
       MriOrOutputs,
       MriOrParameters,
       mri_or,
+      mri_or_cargs,
+      mri_or_execute,
+      mri_or_outputs,
       mri_or_params,
 };

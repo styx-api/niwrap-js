@@ -12,7 +12,7 @@ const GROUPSTATS_METADATA: Metadata = {
 
 
 interface GroupstatsParameters {
-    "__STYXTYPE__": "groupstats";
+    "@type": "freesurfer.groupstats";
     "outdir": string;
     "group_fsgd"?: InputPathType | null | undefined;
     "subjectfile"?: InputPathType | null | undefined;
@@ -33,35 +33,35 @@ interface GroupstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "groupstats": groupstats_cargs,
+        "freesurfer.groupstats": groupstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "groupstats": groupstats_outputs,
+        "freesurfer.groupstats": groupstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface GroupstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outdir Output folder
+ * @param group_fsgd Specify the FSGD file for the group
+ * @param subjectfile Subject list file
+ * @param fwhm Specify smoothing level(s)
+ * @param subject_dir Subject directory
+ * @param mapname Use the given map name
+ * @param srcsurfreg Source surface registration (default is sphere.reg)
+ * @param no_maps Only analyze ROI data
+ * @param lh_only Only analyze left hemisphere
+ * @param rh_only Only analyze right hemisphere
+ * @param no_aparcstats Do not compute aparcstats
+ * @param no_asegstats Do not compute asegstats
+ * @param no_wparcstats Do not compute wmparcstats
+ * @param no_stats Do not perform any ROI stats
+ * @param new_ Append .new.mris_make_surfaces to map names
+ * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
+ * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
+ *
+ * @returns Parameter dictionary
+ */
 function groupstats_params(
     outdir: string,
     group_fsgd: InputPathType | null = null,
@@ -103,31 +126,8 @@ function groupstats_params(
     base: boolean = false,
     keep53: boolean = false,
 ): GroupstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param outdir Output folder
-     * @param group_fsgd Specify the FSGD file for the group
-     * @param subjectfile Subject list file
-     * @param fwhm Specify smoothing level(s)
-     * @param subject_dir Subject directory
-     * @param mapname Use the given map name
-     * @param srcsurfreg Source surface registration (default is sphere.reg)
-     * @param no_maps Only analyze ROI data
-     * @param lh_only Only analyze left hemisphere
-     * @param rh_only Only analyze right hemisphere
-     * @param no_aparcstats Do not compute aparcstats
-     * @param no_asegstats Do not compute asegstats
-     * @param no_wparcstats Do not compute wmparcstats
-     * @param no_stats Do not perform any ROI stats
-     * @param new_ Append .new.mris_make_surfaces to map names
-     * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
-     * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "groupstats" as const,
+        "@type": "freesurfer.groupstats" as const,
         "outdir": outdir,
         "no_maps": no_maps,
         "lh_only": lh_only,
@@ -162,18 +162,18 @@ function groupstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function groupstats_cargs(
     params: GroupstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("groupstats");
     cargs.push(
@@ -250,18 +250,18 @@ function groupstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function groupstats_outputs(
     params: GroupstatsParameters,
     execution: Execution,
 ): GroupstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GroupstatsOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["outdir"] ?? null), "/<output_file>.ext"].join('')),
@@ -270,22 +270,22 @@ function groupstats_outputs(
 }
 
 
+/**
+ * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
+ */
 function groupstats_execute(
     params: GroupstatsParameters,
     execution: Execution,
 ): GroupstatsOutputs {
-    /**
-     * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = groupstats_cargs(params, execution)
     const ret = groupstats_outputs(params, execution)
@@ -294,6 +294,34 @@ function groupstats_execute(
 }
 
 
+/**
+ * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outdir Output folder
+ * @param group_fsgd Specify the FSGD file for the group
+ * @param subjectfile Subject list file
+ * @param fwhm Specify smoothing level(s)
+ * @param subject_dir Subject directory
+ * @param mapname Use the given map name
+ * @param srcsurfreg Source surface registration (default is sphere.reg)
+ * @param no_maps Only analyze ROI data
+ * @param lh_only Only analyze left hemisphere
+ * @param rh_only Only analyze right hemisphere
+ * @param no_aparcstats Do not compute aparcstats
+ * @param no_asegstats Do not compute asegstats
+ * @param no_wparcstats Do not compute wmparcstats
+ * @param no_stats Do not perform any ROI stats
+ * @param new_ Append .new.mris_make_surfaces to map names
+ * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
+ * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
+ */
 function groupstats(
     outdir: string,
     group_fsgd: InputPathType | null = null,
@@ -314,34 +342,6 @@ function groupstats(
     keep53: boolean = false,
     runner: Runner | null = null,
 ): GroupstatsOutputs {
-    /**
-     * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outdir Output folder
-     * @param group_fsgd Specify the FSGD file for the group
-     * @param subjectfile Subject list file
-     * @param fwhm Specify smoothing level(s)
-     * @param subject_dir Subject directory
-     * @param mapname Use the given map name
-     * @param srcsurfreg Source surface registration (default is sphere.reg)
-     * @param no_maps Only analyze ROI data
-     * @param lh_only Only analyze left hemisphere
-     * @param rh_only Only analyze right hemisphere
-     * @param no_aparcstats Do not compute aparcstats
-     * @param no_asegstats Do not compute asegstats
-     * @param no_wparcstats Do not compute wmparcstats
-     * @param no_stats Do not perform any ROI stats
-     * @param new_ Append .new.mris_make_surfaces to map names
-     * @param base Sets measure thickness area volume curvature sulcus (excludes white-gray percentage)
-     * @param keep53 Keep 5.3 aseg names (e.g., Thalamus-Proper)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GROUPSTATS_METADATA);
     const params = groupstats_params(outdir, group_fsgd, subjectfile, fwhm, subject_dir, mapname, srcsurfreg, no_maps, lh_only, rh_only, no_aparcstats, no_asegstats, no_wparcstats, no_stats, new_, base, keep53)
@@ -354,5 +354,8 @@ export {
       GroupstatsOutputs,
       GroupstatsParameters,
       groupstats,
+      groupstats_cargs,
+      groupstats_execute,
+      groupstats_outputs,
       groupstats_params,
 };

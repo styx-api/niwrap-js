@@ -12,7 +12,7 @@ const POPP_METADATA: Metadata = {
 
 
 interface PoppParameters {
-    "__STYXTYPE__": "popp";
+    "@type": "fsl.popp";
     "input_file": InputPathType;
     "output_basename": string;
     "sampling_rate"?: number | null | undefined;
@@ -49,35 +49,35 @@ interface PoppParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "popp": popp_cargs,
+        "fsl.popp": popp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "popp": popp_outputs,
+        "fsl.popp": popp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -112,6 +112,45 @@ interface PoppOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input physiological data filename (text format)
+ * @param output_basename Output basename for physiological data and timing/triggers (no extensions)
+ * @param sampling_rate Sampling rate in Hz (default is 100Hz)
+ * @param tr_value TR value in seconds
+ * @param resp_column Specify column number of respiratory input
+ * @param cardiac_column Specify column number of cardiac input
+ * @param trigger_column Specify column number of trigger input
+ * @param rvt_flag Generate RVT data
+ * @param heart_rate_flag Generate heartrate data
+ * @param pulseox_trigger_flag Specify that cardiac data is a trigger
+ * @param smooth_card Specify smoothing amount for cardiac (in seconds)
+ * @param smooth_resp Specify smoothing amount for respiratory (in seconds)
+ * @param high_freq_cutoff High frequency cut off for respiratory filter in Hz (default is 5Hz)
+ * @param low_freq_cutoff Low frequency cut off for respiratory filter in Hz (default is 0.1Hz)
+ * @param init_thresh_c Initial threshold percentile for cardiac (default 90)
+ * @param n_thresh_c Neighbourhood exclusion threshold percentile for cardiac (default 60)
+ * @param init_thresh_r Initial threshold percentile for respiratory (default 80)
+ * @param n_thresh_r Neighbourhood exclusion threshold percentile for respiratory (default 80)
+ * @param invert_resp_flag Invert respiratory trace
+ * @param invert_cardiac_flag Invert cardiac trace
+ * @param noclean1_flag Turn off cleanup phase 1
+ * @param noclean2_flag Turn off cleanup phase 2
+ * @param load_card_phase Input cardiac phase for reprocessing (text format)
+ * @param load_resp_phase Input respiratory phase for reprocessing (text format)
+ * @param vol_file Input volumetric image (EPI) filename
+ * @param start_sample Set sample number of the starting time (t=0)
+ * @param resp_add Comma separated list of times (in sec) to add to respiratory peak list (uses nearest local max)
+ * @param resp_del Comma separated list of times (in sec) to delete from respiratory peak list (uses nearest existing peak)
+ * @param card_add Comma separated list of times (in sec) to add to cardiac peak list (uses nearest local max)
+ * @param card_del Comma separated list of times (in sec) to delete from cardiac peak list (uses nearest existing peak)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_flag Output debugging information
+ * @param help_flag Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function popp_params(
     input_file: InputPathType,
     output_basename: string,
@@ -147,47 +186,8 @@ function popp_params(
     debug_flag: boolean = false,
     help_flag: boolean = false,
 ): PoppParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input physiological data filename (text format)
-     * @param output_basename Output basename for physiological data and timing/triggers (no extensions)
-     * @param sampling_rate Sampling rate in Hz (default is 100Hz)
-     * @param tr_value TR value in seconds
-     * @param resp_column Specify column number of respiratory input
-     * @param cardiac_column Specify column number of cardiac input
-     * @param trigger_column Specify column number of trigger input
-     * @param rvt_flag Generate RVT data
-     * @param heart_rate_flag Generate heartrate data
-     * @param pulseox_trigger_flag Specify that cardiac data is a trigger
-     * @param smooth_card Specify smoothing amount for cardiac (in seconds)
-     * @param smooth_resp Specify smoothing amount for respiratory (in seconds)
-     * @param high_freq_cutoff High frequency cut off for respiratory filter in Hz (default is 5Hz)
-     * @param low_freq_cutoff Low frequency cut off for respiratory filter in Hz (default is 0.1Hz)
-     * @param init_thresh_c Initial threshold percentile for cardiac (default 90)
-     * @param n_thresh_c Neighbourhood exclusion threshold percentile for cardiac (default 60)
-     * @param init_thresh_r Initial threshold percentile for respiratory (default 80)
-     * @param n_thresh_r Neighbourhood exclusion threshold percentile for respiratory (default 80)
-     * @param invert_resp_flag Invert respiratory trace
-     * @param invert_cardiac_flag Invert cardiac trace
-     * @param noclean1_flag Turn off cleanup phase 1
-     * @param noclean2_flag Turn off cleanup phase 2
-     * @param load_card_phase Input cardiac phase for reprocessing (text format)
-     * @param load_resp_phase Input respiratory phase for reprocessing (text format)
-     * @param vol_file Input volumetric image (EPI) filename
-     * @param start_sample Set sample number of the starting time (t=0)
-     * @param resp_add Comma separated list of times (in sec) to add to respiratory peak list (uses nearest local max)
-     * @param resp_del Comma separated list of times (in sec) to delete from respiratory peak list (uses nearest existing peak)
-     * @param card_add Comma separated list of times (in sec) to add to cardiac peak list (uses nearest local max)
-     * @param card_del Comma separated list of times (in sec) to delete from cardiac peak list (uses nearest existing peak)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_flag Output debugging information
-     * @param help_flag Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "popp" as const,
+        "@type": "fsl.popp" as const,
         "input_file": input_file,
         "output_basename": output_basename,
         "rvt_flag": rvt_flag,
@@ -268,18 +268,18 @@ function popp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function popp_cargs(
     params: PoppParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("popp");
     cargs.push(
@@ -450,18 +450,18 @@ function popp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function popp_outputs(
     params: PoppParameters,
     execution: Execution,
 ): PoppOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PoppOutputs = {
         root: execution.outputFile("."),
         processed_data_output: execution.outputFile([(params["output_basename"] ?? null), "_processed.txt"].join('')),
@@ -473,22 +473,22 @@ function popp_outputs(
 }
 
 
+/**
+ * Physiological data processing tool of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PoppOutputs`).
+ */
 function popp_execute(
     params: PoppParameters,
     execution: Execution,
 ): PoppOutputs {
-    /**
-     * Physiological data processing tool of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PoppOutputs`).
-     */
     params = execution.params(params)
     const cargs = popp_cargs(params, execution)
     const ret = popp_outputs(params, execution)
@@ -497,6 +497,50 @@ function popp_execute(
 }
 
 
+/**
+ * Physiological data processing tool of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input physiological data filename (text format)
+ * @param output_basename Output basename for physiological data and timing/triggers (no extensions)
+ * @param sampling_rate Sampling rate in Hz (default is 100Hz)
+ * @param tr_value TR value in seconds
+ * @param resp_column Specify column number of respiratory input
+ * @param cardiac_column Specify column number of cardiac input
+ * @param trigger_column Specify column number of trigger input
+ * @param rvt_flag Generate RVT data
+ * @param heart_rate_flag Generate heartrate data
+ * @param pulseox_trigger_flag Specify that cardiac data is a trigger
+ * @param smooth_card Specify smoothing amount for cardiac (in seconds)
+ * @param smooth_resp Specify smoothing amount for respiratory (in seconds)
+ * @param high_freq_cutoff High frequency cut off for respiratory filter in Hz (default is 5Hz)
+ * @param low_freq_cutoff Low frequency cut off for respiratory filter in Hz (default is 0.1Hz)
+ * @param init_thresh_c Initial threshold percentile for cardiac (default 90)
+ * @param n_thresh_c Neighbourhood exclusion threshold percentile for cardiac (default 60)
+ * @param init_thresh_r Initial threshold percentile for respiratory (default 80)
+ * @param n_thresh_r Neighbourhood exclusion threshold percentile for respiratory (default 80)
+ * @param invert_resp_flag Invert respiratory trace
+ * @param invert_cardiac_flag Invert cardiac trace
+ * @param noclean1_flag Turn off cleanup phase 1
+ * @param noclean2_flag Turn off cleanup phase 2
+ * @param load_card_phase Input cardiac phase for reprocessing (text format)
+ * @param load_resp_phase Input respiratory phase for reprocessing (text format)
+ * @param vol_file Input volumetric image (EPI) filename
+ * @param start_sample Set sample number of the starting time (t=0)
+ * @param resp_add Comma separated list of times (in sec) to add to respiratory peak list (uses nearest local max)
+ * @param resp_del Comma separated list of times (in sec) to delete from respiratory peak list (uses nearest existing peak)
+ * @param card_add Comma separated list of times (in sec) to add to cardiac peak list (uses nearest local max)
+ * @param card_del Comma separated list of times (in sec) to delete from cardiac peak list (uses nearest existing peak)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param debug_flag Output debugging information
+ * @param help_flag Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PoppOutputs`).
+ */
 function popp(
     input_file: InputPathType,
     output_basename: string,
@@ -533,50 +577,6 @@ function popp(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): PoppOutputs {
-    /**
-     * Physiological data processing tool of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input physiological data filename (text format)
-     * @param output_basename Output basename for physiological data and timing/triggers (no extensions)
-     * @param sampling_rate Sampling rate in Hz (default is 100Hz)
-     * @param tr_value TR value in seconds
-     * @param resp_column Specify column number of respiratory input
-     * @param cardiac_column Specify column number of cardiac input
-     * @param trigger_column Specify column number of trigger input
-     * @param rvt_flag Generate RVT data
-     * @param heart_rate_flag Generate heartrate data
-     * @param pulseox_trigger_flag Specify that cardiac data is a trigger
-     * @param smooth_card Specify smoothing amount for cardiac (in seconds)
-     * @param smooth_resp Specify smoothing amount for respiratory (in seconds)
-     * @param high_freq_cutoff High frequency cut off for respiratory filter in Hz (default is 5Hz)
-     * @param low_freq_cutoff Low frequency cut off for respiratory filter in Hz (default is 0.1Hz)
-     * @param init_thresh_c Initial threshold percentile for cardiac (default 90)
-     * @param n_thresh_c Neighbourhood exclusion threshold percentile for cardiac (default 60)
-     * @param init_thresh_r Initial threshold percentile for respiratory (default 80)
-     * @param n_thresh_r Neighbourhood exclusion threshold percentile for respiratory (default 80)
-     * @param invert_resp_flag Invert respiratory trace
-     * @param invert_cardiac_flag Invert cardiac trace
-     * @param noclean1_flag Turn off cleanup phase 1
-     * @param noclean2_flag Turn off cleanup phase 2
-     * @param load_card_phase Input cardiac phase for reprocessing (text format)
-     * @param load_resp_phase Input respiratory phase for reprocessing (text format)
-     * @param vol_file Input volumetric image (EPI) filename
-     * @param start_sample Set sample number of the starting time (t=0)
-     * @param resp_add Comma separated list of times (in sec) to add to respiratory peak list (uses nearest local max)
-     * @param resp_del Comma separated list of times (in sec) to delete from respiratory peak list (uses nearest existing peak)
-     * @param card_add Comma separated list of times (in sec) to add to cardiac peak list (uses nearest local max)
-     * @param card_del Comma separated list of times (in sec) to delete from cardiac peak list (uses nearest existing peak)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param debug_flag Output debugging information
-     * @param help_flag Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PoppOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POPP_METADATA);
     const params = popp_params(input_file, output_basename, sampling_rate, tr_value, resp_column, cardiac_column, trigger_column, rvt_flag, heart_rate_flag, pulseox_trigger_flag, smooth_card, smooth_resp, high_freq_cutoff, low_freq_cutoff, init_thresh_c, n_thresh_c, init_thresh_r, n_thresh_r, invert_resp_flag, invert_cardiac_flag, noclean1_flag, noclean2_flag, load_card_phase, load_resp_phase, vol_file, start_sample, resp_add, resp_del, card_add, card_del, verbose_flag, debug_flag, help_flag)
@@ -589,5 +589,8 @@ export {
       PoppOutputs,
       PoppParameters,
       popp,
+      popp_cargs,
+      popp_execute,
+      popp_outputs,
       popp_params,
 };

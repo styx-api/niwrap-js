@@ -12,39 +12,39 @@ const SPM_T_TO_B_METADATA: Metadata = {
 
 
 interface SpmTToBParameters {
-    "__STYXTYPE__": "spm_t_to_b";
+    "@type": "freesurfer.spm_t_to_b";
     "spm_stem_format": string;
     "bshort_stem": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "spm_t_to_b": spm_t_to_b_cargs,
+        "freesurfer.spm_t_to_b": spm_t_to_b_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface SpmTToBOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spm_stem_format Input SPM stem format.
+ * @param bshort_stem Output bshort stem.
+ *
+ * @returns Parameter dictionary
+ */
 function spm_t_to_b_params(
     spm_stem_format: string,
     bshort_stem: string,
 ): SpmTToBParameters {
-    /**
-     * Build parameters.
-    
-     * @param spm_stem_format Input SPM stem format.
-     * @param bshort_stem Output bshort stem.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spm_t_to_b" as const,
+        "@type": "freesurfer.spm_t_to_b" as const,
         "spm_stem_format": spm_stem_format,
         "bshort_stem": bshort_stem,
     };
@@ -85,18 +85,18 @@ function spm_t_to_b_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spm_t_to_b_cargs(
     params: SpmTToBParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("spm_t_to_b");
     cargs.push((params["spm_stem_format"] ?? null));
@@ -105,18 +105,18 @@ function spm_t_to_b_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spm_t_to_b_outputs(
     params: SpmTToBParameters,
     execution: Execution,
 ): SpmTToBOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpmTToBOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function spm_t_to_b_outputs(
 }
 
 
+/**
+ * Converts SPM format to Bshort format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
+ */
 function spm_t_to_b_execute(
     params: SpmTToBParameters,
     execution: Execution,
 ): SpmTToBOutputs {
-    /**
-     * Converts SPM format to Bshort format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
-     */
     params = execution.params(params)
     const cargs = spm_t_to_b_cargs(params, execution)
     const ret = spm_t_to_b_outputs(params, execution)
@@ -148,24 +148,24 @@ function spm_t_to_b_execute(
 }
 
 
+/**
+ * Converts SPM format to Bshort format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param spm_stem_format Input SPM stem format.
+ * @param bshort_stem Output bshort stem.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
+ */
 function spm_t_to_b(
     spm_stem_format: string,
     bshort_stem: string,
     runner: Runner | null = null,
 ): SpmTToBOutputs {
-    /**
-     * Converts SPM format to Bshort format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param spm_stem_format Input SPM stem format.
-     * @param bshort_stem Output bshort stem.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPM_T_TO_B_METADATA);
     const params = spm_t_to_b_params(spm_stem_format, bshort_stem)
@@ -178,5 +178,8 @@ export {
       SpmTToBOutputs,
       SpmTToBParameters,
       spm_t_to_b,
+      spm_t_to_b_cargs,
+      spm_t_to_b_execute,
+      spm_t_to_b_outputs,
       spm_t_to_b_params,
 };

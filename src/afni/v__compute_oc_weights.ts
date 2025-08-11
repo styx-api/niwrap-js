@@ -12,7 +12,7 @@ const V__COMPUTE_OC_WEIGHTS_METADATA: Metadata = {
 
 
 interface VComputeOcWeightsParameters {
-    "__STYXTYPE__": "@compute_OC_weights";
+    "@type": "afni.@compute_OC_weights";
     "echo_times"?: string | null | undefined;
     "echo_times_file"?: InputPathType | null | undefined;
     "echo_dsets": Array<string>;
@@ -26,35 +26,35 @@ interface VComputeOcWeightsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@compute_OC_weights": v__compute_oc_weights_cargs,
+        "afni.@compute_OC_weights": v__compute_oc_weights_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@compute_OC_weights": v__compute_oc_weights_outputs,
+        "afni.@compute_OC_weights": v__compute_oc_weights_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface VComputeOcWeightsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param echo_dsets Specify one run of multi-echo EPI data.
+ * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
+ * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
+ * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
+ * @param def_to_equal Specify whether to default to equal weights (default = no).
+ * @param oc_method Specify which OC method to employ (default = OC_A).
+ * @param sum_weight_tolerance Tolerance for summed weight difference from 1.0 (default = 0.001).
+ * @param t2_star_limit Specify limit for T2* values (default = 300).
+ * @param work_dir Specify directory to compute results in.
+ * @param verbosity Increase verbosity of output.
+ *
+ * @returns Parameter dictionary
+ */
 function v__compute_oc_weights_params(
     echo_dsets: Array<string>,
     echo_times: string | null = null,
@@ -89,24 +105,8 @@ function v__compute_oc_weights_params(
     work_dir: string | null = null,
     verbosity: boolean = false,
 ): VComputeOcWeightsParameters {
-    /**
-     * Build parameters.
-    
-     * @param echo_dsets Specify one run of multi-echo EPI data.
-     * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
-     * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
-     * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
-     * @param def_to_equal Specify whether to default to equal weights (default = no).
-     * @param oc_method Specify which OC method to employ (default = OC_A).
-     * @param sum_weight_tolerance Tolerance for summed weight difference from 1.0 (default = 0.001).
-     * @param t2_star_limit Specify limit for T2* values (default = 300).
-     * @param work_dir Specify directory to compute results in.
-     * @param verbosity Increase verbosity of output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@compute_OC_weights" as const,
+        "@type": "afni.@compute_OC_weights" as const,
         "echo_dsets": echo_dsets,
         "verbosity": verbosity,
     };
@@ -138,18 +138,18 @@ function v__compute_oc_weights_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__compute_oc_weights_cargs(
     params: VComputeOcWeightsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@compute_OC_weights");
     if ((params["echo_times"] ?? null) !== null) {
@@ -211,18 +211,18 @@ function v__compute_oc_weights_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__compute_oc_weights_outputs(
     params: VComputeOcWeightsParameters,
     execution: Execution,
 ): VComputeOcWeightsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VComputeOcWeightsOutputs = {
         root: execution.outputFile("."),
         output_oc_weights: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+tlrc.HEAD"].join('')) : null,
@@ -231,22 +231,22 @@ function v__compute_oc_weights_outputs(
 }
 
 
+/**
+ * Compute optimal combined weights dataset for multi-echo EPI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
+ */
 function v__compute_oc_weights_execute(
     params: VComputeOcWeightsParameters,
     execution: Execution,
 ): VComputeOcWeightsOutputs {
-    /**
-     * Compute optimal combined weights dataset for multi-echo EPI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__compute_oc_weights_cargs(params, execution)
     const ret = v__compute_oc_weights_outputs(params, execution)
@@ -255,6 +255,27 @@ function v__compute_oc_weights_execute(
 }
 
 
+/**
+ * Compute optimal combined weights dataset for multi-echo EPI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param echo_dsets Specify one run of multi-echo EPI data.
+ * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
+ * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
+ * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
+ * @param def_to_equal Specify whether to default to equal weights (default = no).
+ * @param oc_method Specify which OC method to employ (default = OC_A).
+ * @param sum_weight_tolerance Tolerance for summed weight difference from 1.0 (default = 0.001).
+ * @param t2_star_limit Specify limit for T2* values (default = 300).
+ * @param work_dir Specify directory to compute results in.
+ * @param verbosity Increase verbosity of output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
+ */
 function v__compute_oc_weights(
     echo_dsets: Array<string>,
     echo_times: string | null = null,
@@ -268,27 +289,6 @@ function v__compute_oc_weights(
     verbosity: boolean = false,
     runner: Runner | null = null,
 ): VComputeOcWeightsOutputs {
-    /**
-     * Compute optimal combined weights dataset for multi-echo EPI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param echo_dsets Specify one run of multi-echo EPI data.
-     * @param echo_times Specify echo times as list (e.g., "15 30.5 41"). Use either -echo_times or -echo_times_files.
-     * @param echo_times_file Specify file with echo times. Use either -echo_times or -echo_times_files.
-     * @param prefix Specify prefix of resulting OC weights dataset (e.g., OC.weights.SUBJ).
-     * @param def_to_equal Specify whether to default to equal weights (default = no).
-     * @param oc_method Specify which OC method to employ (default = OC_A).
-     * @param sum_weight_tolerance Tolerance for summed weight difference from 1.0 (default = 0.001).
-     * @param t2_star_limit Specify limit for T2* values (default = 300).
-     * @param work_dir Specify directory to compute results in.
-     * @param verbosity Increase verbosity of output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__COMPUTE_OC_WEIGHTS_METADATA);
     const params = v__compute_oc_weights_params(echo_dsets, echo_times, echo_times_file, prefix, def_to_equal, oc_method, sum_weight_tolerance, t2_star_limit, work_dir, verbosity)
@@ -301,5 +301,8 @@ export {
       VComputeOcWeightsParameters,
       V__COMPUTE_OC_WEIGHTS_METADATA,
       v__compute_oc_weights,
+      v__compute_oc_weights_cargs,
+      v__compute_oc_weights_execute,
+      v__compute_oc_weights_outputs,
       v__compute_oc_weights_params,
 };

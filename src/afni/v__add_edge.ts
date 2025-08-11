@@ -12,7 +12,7 @@ const V__ADD_EDGE_METADATA: Metadata = {
 
 
 interface VAddEdgeParameters {
-    "__STYXTYPE__": "@AddEdge";
+    "@type": "afni.@AddEdge";
     "input_files": Array<InputPathType>;
     "examine_list"?: string | null | undefined;
     "ax_mont"?: string | null | undefined;
@@ -31,35 +31,35 @@ interface VAddEdgeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@AddEdge": v__add_edge_cargs,
+        "afni.@AddEdge": v__add_edge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@AddEdge": v__add_edge_outputs,
+        "afni.@AddEdge": v__add_edge_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,27 @@ interface VAddEdgeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets
+ * @param examine_list Use list of paired datasets from file
+ * @param ax_mont Axial montage string (default='2x2:24')
+ * @param ax_geom Axial image window geometry (default='777x702+433+334')
+ * @param sag_geom Sagittal image window geometry (default='540x360+4+436')
+ * @param layout_file Use AFNI layout file for display
+ * @param no_layout Do not use layout. Use AFNI as it is open.
+ * @param edge_percentile Specify edge threshold value (default=30%)
+ * @param single_edge Show only a single edge in composite image
+ * @param opacity Set opacity of overlay (default=9 opaque)
+ * @param keep_temp Do not remove temporary files
+ * @param no_deoblique Do not deoblique any data to show overlap
+ * @param auto_record Save JPEG files of current slices without prompting
+ * @param auto Closes old AFNI sessions and relaunches a new one ready to listen to @AddEdge in review mode.
+ * @param no_auto Opposite of -auto
+ *
+ * @returns Parameter dictionary
+ */
 function v__add_edge_params(
     input_files: Array<InputPathType>,
     examine_list: string | null = null,
@@ -111,29 +132,8 @@ function v__add_edge_params(
     auto: boolean = false,
     no_auto: boolean = false,
 ): VAddEdgeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets
-     * @param examine_list Use list of paired datasets from file
-     * @param ax_mont Axial montage string (default='2x2:24')
-     * @param ax_geom Axial image window geometry (default='777x702+433+334')
-     * @param sag_geom Sagittal image window geometry (default='540x360+4+436')
-     * @param layout_file Use AFNI layout file for display
-     * @param no_layout Do not use layout. Use AFNI as it is open.
-     * @param edge_percentile Specify edge threshold value (default=30%)
-     * @param single_edge Show only a single edge in composite image
-     * @param opacity Set opacity of overlay (default=9 opaque)
-     * @param keep_temp Do not remove temporary files
-     * @param no_deoblique Do not deoblique any data to show overlap
-     * @param auto_record Save JPEG files of current slices without prompting
-     * @param auto Closes old AFNI sessions and relaunches a new one ready to listen to @AddEdge in review mode.
-     * @param no_auto Opposite of -auto
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@AddEdge" as const,
+        "@type": "afni.@AddEdge" as const,
         "input_files": input_files,
         "no_layout": no_layout,
         "single_edge": single_edge,
@@ -168,18 +168,18 @@ function v__add_edge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__add_edge_cargs(
     params: VAddEdgeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@AddEdge");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -250,18 +250,18 @@ function v__add_edge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__add_edge_outputs(
     params: VAddEdgeParameters,
     execution: Execution,
 ): VAddEdgeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAddEdgeOutputs = {
         root: execution.outputFile("."),
         dset_nn_ec: execution.outputFile(["dset_nn_ec"].join('')),
@@ -273,22 +273,22 @@ function v__add_edge_outputs(
 }
 
 
+/**
+ * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
+ */
 function v__add_edge_execute(
     params: VAddEdgeParameters,
     execution: Execution,
 ): VAddEdgeOutputs {
-    /**
-     * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__add_edge_cargs(params, execution)
     const ret = v__add_edge_outputs(params, execution)
@@ -297,6 +297,32 @@ function v__add_edge_execute(
 }
 
 
+/**
+ * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets
+ * @param examine_list Use list of paired datasets from file
+ * @param ax_mont Axial montage string (default='2x2:24')
+ * @param ax_geom Axial image window geometry (default='777x702+433+334')
+ * @param sag_geom Sagittal image window geometry (default='540x360+4+436')
+ * @param layout_file Use AFNI layout file for display
+ * @param no_layout Do not use layout. Use AFNI as it is open.
+ * @param edge_percentile Specify edge threshold value (default=30%)
+ * @param single_edge Show only a single edge in composite image
+ * @param opacity Set opacity of overlay (default=9 opaque)
+ * @param keep_temp Do not remove temporary files
+ * @param no_deoblique Do not deoblique any data to show overlap
+ * @param auto_record Save JPEG files of current slices without prompting
+ * @param auto Closes old AFNI sessions and relaunches a new one ready to listen to @AddEdge in review mode.
+ * @param no_auto Opposite of -auto
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
+ */
 function v__add_edge(
     input_files: Array<InputPathType>,
     examine_list: string | null = null,
@@ -315,32 +341,6 @@ function v__add_edge(
     no_auto: boolean = false,
     runner: Runner | null = null,
 ): VAddEdgeOutputs {
-    /**
-     * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets
-     * @param examine_list Use list of paired datasets from file
-     * @param ax_mont Axial montage string (default='2x2:24')
-     * @param ax_geom Axial image window geometry (default='777x702+433+334')
-     * @param sag_geom Sagittal image window geometry (default='540x360+4+436')
-     * @param layout_file Use AFNI layout file for display
-     * @param no_layout Do not use layout. Use AFNI as it is open.
-     * @param edge_percentile Specify edge threshold value (default=30%)
-     * @param single_edge Show only a single edge in composite image
-     * @param opacity Set opacity of overlay (default=9 opaque)
-     * @param keep_temp Do not remove temporary files
-     * @param no_deoblique Do not deoblique any data to show overlap
-     * @param auto_record Save JPEG files of current slices without prompting
-     * @param auto Closes old AFNI sessions and relaunches a new one ready to listen to @AddEdge in review mode.
-     * @param no_auto Opposite of -auto
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ADD_EDGE_METADATA);
     const params = v__add_edge_params(input_files, examine_list, ax_mont, ax_geom, sag_geom, layout_file, no_layout, edge_percentile, single_edge, opacity, keep_temp, no_deoblique, auto_record, auto, no_auto)
@@ -353,5 +353,8 @@ export {
       VAddEdgeParameters,
       V__ADD_EDGE_METADATA,
       v__add_edge,
+      v__add_edge_cargs,
+      v__add_edge_execute,
+      v__add_edge_outputs,
       v__add_edge_params,
 };

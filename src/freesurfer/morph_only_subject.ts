@@ -12,38 +12,38 @@ const MORPH_ONLY_SUBJECT_METADATA: Metadata = {
 
 
 interface MorphOnlySubjectParameters {
-    "__STYXTYPE__": "morph_only_subject";
+    "@type": "freesurfer.morph_only_subject";
     "placeholder_input"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_only_subject": morph_only_subject_cargs,
+        "freesurfer.morph_only_subject": morph_only_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface MorphOnlySubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param placeholder_input Placeholder input argument for morph_only_subject tool.
+ *
+ * @returns Parameter dictionary
+ */
 function morph_only_subject_params(
     placeholder_input: string | null = null,
 ): MorphOnlySubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param placeholder_input Placeholder input argument for morph_only_subject tool.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_only_subject" as const,
+        "@type": "freesurfer.morph_only_subject" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -83,18 +83,18 @@ function morph_only_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_only_subject_cargs(
     params: MorphOnlySubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_only_subject");
     if ((params["placeholder_input"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function morph_only_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_only_subject_outputs(
     params: MorphOnlySubjectParameters,
     execution: Execution,
 ): MorphOnlySubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphOnlySubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function morph_only_subject_outputs(
 }
 
 
+/**
+ * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphOnlySubjectOutputs`).
+ */
 function morph_only_subject_execute(
     params: MorphOnlySubjectParameters,
     execution: Execution,
 ): MorphOnlySubjectOutputs {
-    /**
-     * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphOnlySubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_only_subject_cargs(params, execution)
     const ret = morph_only_subject_outputs(params, execution)
@@ -147,22 +147,22 @@ function morph_only_subject_execute(
 }
 
 
+/**
+ * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param placeholder_input Placeholder input argument for morph_only_subject tool.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphOnlySubjectOutputs`).
+ */
 function morph_only_subject(
     placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): MorphOnlySubjectOutputs {
-    /**
-     * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param placeholder_input Placeholder input argument for morph_only_subject tool.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphOnlySubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_ONLY_SUBJECT_METADATA);
     const params = morph_only_subject_params(placeholder_input)
@@ -175,5 +175,8 @@ export {
       MorphOnlySubjectOutputs,
       MorphOnlySubjectParameters,
       morph_only_subject,
+      morph_only_subject_cargs,
+      morph_only_subject_execute,
+      morph_only_subject_outputs,
       morph_only_subject_params,
 };

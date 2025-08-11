@@ -12,7 +12,7 @@ const BMEDITS2SURF_METADATA: Metadata = {
 
 
 interface Bmedits2surfParameters {
-    "__STYXTYPE__": "bmedits2surf";
+    "@type": "freesurfer.bmedits2surf";
     "subject": string;
     "self": boolean;
     "overwrite": boolean;
@@ -26,35 +26,35 @@ interface Bmedits2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bmedits2surf": bmedits2surf_cargs,
+        "freesurfer.bmedits2surf": bmedits2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bmedits2surf": bmedits2surf_outputs,
+        "freesurfer.bmedits2surf": bmedits2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,21 @@ interface Bmedits2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject for which the binary map will be computed.
+ * @param overwrite Force overwriting of existing results.
+ * @param tmp_dir Temporary directory.
+ * @param cleanup Clean up temporary files.
+ * @param no_cleanup Do not clean up temporary files.
+ * @param debug Enable debug mode.
+ * @param left_hemisphere Perform operation only on the left hemisphere.
+ * @param right_hemisphere Perform operation only on the right hemisphere.
+ * @param no_surfs Do not compute surfaces, only statistics.
+ *
+ * @returns Parameter dictionary
+ */
 function bmedits2surf_params(
     subject: string,
     self: boolean = false,
@@ -109,23 +124,8 @@ function bmedits2surf_params(
     right_hemisphere: boolean = false,
     no_surfs: boolean = false,
 ): Bmedits2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject for which the binary map will be computed.
-     * @param overwrite Force overwriting of existing results.
-     * @param tmp_dir Temporary directory.
-     * @param cleanup Clean up temporary files.
-     * @param no_cleanup Do not clean up temporary files.
-     * @param debug Enable debug mode.
-     * @param left_hemisphere Perform operation only on the left hemisphere.
-     * @param right_hemisphere Perform operation only on the right hemisphere.
-     * @param no_surfs Do not compute surfaces, only statistics.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bmedits2surf" as const,
+        "@type": "freesurfer.bmedits2surf" as const,
         "subject": subject,
         "self": self,
         "overwrite": overwrite,
@@ -143,18 +143,18 @@ function bmedits2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bmedits2surf_cargs(
     params: Bmedits2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bmedits2surf");
     cargs.push(
@@ -195,18 +195,18 @@ function bmedits2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bmedits2surf_outputs(
     params: Bmedits2surfParameters,
     execution: Execution,
 ): Bmedits2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Bmedits2surfOutputs = {
         root: execution.outputFile("."),
         lh_bmerase: execution.outputFile([(params["subject"] ?? null), "/surf/lh.bmerase.fsa.mgh"].join('')),
@@ -220,22 +220,22 @@ function bmedits2surf_outputs(
 }
 
 
+/**
+ * Computes a binary map of surface locations where the brainmask.mgz has been edited.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
+ */
 function bmedits2surf_execute(
     params: Bmedits2surfParameters,
     execution: Execution,
 ): Bmedits2surfOutputs {
-    /**
-     * Computes a binary map of surface locations where the brainmask.mgz has been edited.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = bmedits2surf_cargs(params, execution)
     const ret = bmedits2surf_outputs(params, execution)
@@ -244,6 +244,26 @@ function bmedits2surf_execute(
 }
 
 
+/**
+ * Computes a binary map of surface locations where the brainmask.mgz has been edited.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject for which the binary map will be computed.
+ * @param overwrite Force overwriting of existing results.
+ * @param tmp_dir Temporary directory.
+ * @param cleanup Clean up temporary files.
+ * @param no_cleanup Do not clean up temporary files.
+ * @param debug Enable debug mode.
+ * @param left_hemisphere Perform operation only on the left hemisphere.
+ * @param right_hemisphere Perform operation only on the right hemisphere.
+ * @param no_surfs Do not compute surfaces, only statistics.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
+ */
 function bmedits2surf(
     subject: string,
     self: boolean = false,
@@ -257,26 +277,6 @@ function bmedits2surf(
     no_surfs: boolean = false,
     runner: Runner | null = null,
 ): Bmedits2surfOutputs {
-    /**
-     * Computes a binary map of surface locations where the brainmask.mgz has been edited.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject for which the binary map will be computed.
-     * @param overwrite Force overwriting of existing results.
-     * @param tmp_dir Temporary directory.
-     * @param cleanup Clean up temporary files.
-     * @param no_cleanup Do not clean up temporary files.
-     * @param debug Enable debug mode.
-     * @param left_hemisphere Perform operation only on the left hemisphere.
-     * @param right_hemisphere Perform operation only on the right hemisphere.
-     * @param no_surfs Do not compute surfaces, only statistics.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BMEDITS2SURF_METADATA);
     const params = bmedits2surf_params(subject, self, overwrite, tmp_dir, cleanup, no_cleanup, debug, left_hemisphere, right_hemisphere, no_surfs)
@@ -289,5 +289,8 @@ export {
       Bmedits2surfOutputs,
       Bmedits2surfParameters,
       bmedits2surf,
+      bmedits2surf_cargs,
+      bmedits2surf_execute,
+      bmedits2surf_outputs,
       bmedits2surf_params,
 };

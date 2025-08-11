@@ -12,42 +12,42 @@ const LABELS_DISJOINT_METADATA: Metadata = {
 
 
 interface LabelsDisjointParameters {
-    "__STYXTYPE__": "labels_disjoint";
+    "@type": "freesurfer.labels_disjoint";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "labels_disjoint": labels_disjoint_cargs,
+        "freesurfer.labels_disjoint": labels_disjoint_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "labels_disjoint": labels_disjoint_outputs,
+        "freesurfer.labels_disjoint": labels_disjoint_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface LabelsDisjointOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label1 First label file (e.g., rh.Occ.label).
+ * @param label2 Second label file to subtract from the first (e.g., rh.V1.label).
+ * @param outputname Output label file name where the result will be saved (e.g., rh.Occ_V1.label).
+ *
+ * @returns Parameter dictionary
+ */
 function labels_disjoint_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
 ): LabelsDisjointParameters {
-    /**
-     * Build parameters.
-    
-     * @param label1 First label file (e.g., rh.Occ.label).
-     * @param label2 Second label file to subtract from the first (e.g., rh.V1.label).
-     * @param outputname Output label file name where the result will be saved (e.g., rh.Occ_V1.label).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "labels_disjoint" as const,
+        "@type": "freesurfer.labels_disjoint" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -94,18 +94,18 @@ function labels_disjoint_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labels_disjoint_cargs(
     params: LabelsDisjointParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("labels_disjoint");
     cargs.push(execution.inputFile((params["label1"] ?? null)));
@@ -115,18 +115,18 @@ function labels_disjoint_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function labels_disjoint_outputs(
     params: LabelsDisjointParameters,
     execution: Execution,
 ): LabelsDisjointOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelsDisjointOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outputname"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function labels_disjoint_outputs(
 }
 
 
+/**
+ * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
+ */
 function labels_disjoint_execute(
     params: LabelsDisjointParameters,
     execution: Execution,
 ): LabelsDisjointOutputs {
-    /**
-     * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
-     */
     params = execution.params(params)
     const cargs = labels_disjoint_cargs(params, execution)
     const ret = labels_disjoint_outputs(params, execution)
@@ -159,26 +159,26 @@ function labels_disjoint_execute(
 }
 
 
+/**
+ * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label1 First label file (e.g., rh.Occ.label).
+ * @param label2 Second label file to subtract from the first (e.g., rh.V1.label).
+ * @param outputname Output label file name where the result will be saved (e.g., rh.Occ_V1.label).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
+ */
 function labels_disjoint(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
     runner: Runner | null = null,
 ): LabelsDisjointOutputs {
-    /**
-     * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label1 First label file (e.g., rh.Occ.label).
-     * @param label2 Second label file to subtract from the first (e.g., rh.V1.label).
-     * @param outputname Output label file name where the result will be saved (e.g., rh.Occ_V1.label).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABELS_DISJOINT_METADATA);
     const params = labels_disjoint_params(label1, label2, outputname)
@@ -191,5 +191,8 @@ export {
       LabelsDisjointOutputs,
       LabelsDisjointParameters,
       labels_disjoint,
+      labels_disjoint_cargs,
+      labels_disjoint_execute,
+      labels_disjoint_outputs,
       labels_disjoint_params,
 };

@@ -12,7 +12,7 @@ const MRIS_THICKNESS_DIFF_METADATA: Metadata = {
 
 
 interface MrisThicknessDiffParameters {
-    "__STYXTYPE__": "mris_thickness_diff";
+    "@type": "freesurfer.mris_thickness_diff";
     "src_type"?: string | null | undefined;
     "trg_type"?: string | null | undefined;
     "out_file": string;
@@ -29,35 +29,35 @@ interface MrisThicknessDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_thickness_diff": mris_thickness_diff_cargs,
+        "freesurfer.mris_thickness_diff": mris_thickness_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_thickness_diff": mris_thickness_diff_outputs,
+        "freesurfer.mris_thickness_diff": mris_thickness_diff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface MrisThicknessDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param out_file Output file name
+ * @param src_type Input surface data format (curv, paint or w)
+ * @param trg_type Output format (paint or w)
+ * @param out_resampled Output resampled thickness
+ * @param nsmooth Number of smoothing steps
+ * @param register Perform ICP rigid registration
+ * @param xform Apply LTA transform to align input surface1 to surface2
+ * @param invert Reversely apply -xform
+ * @param src_volume Source volume for -xform
+ * @param dst_volume Target volume for -xform
+ * @param abs Compute the std of abs-thickness-diff
+ * @param log_file Log file name
+ * @param subject_name Subject name (to be recorded in logfile)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_thickness_diff_params(
     out_file: string,
     src_type: string | null = null,
@@ -99,27 +118,8 @@ function mris_thickness_diff_params(
     log_file: InputPathType | null = null,
     subject_name: string | null = null,
 ): MrisThicknessDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param out_file Output file name
-     * @param src_type Input surface data format (curv, paint or w)
-     * @param trg_type Output format (paint or w)
-     * @param out_resampled Output resampled thickness
-     * @param nsmooth Number of smoothing steps
-     * @param register Perform ICP rigid registration
-     * @param xform Apply LTA transform to align input surface1 to surface2
-     * @param invert Reversely apply -xform
-     * @param src_volume Source volume for -xform
-     * @param dst_volume Target volume for -xform
-     * @param abs Compute the std of abs-thickness-diff
-     * @param log_file Log file name
-     * @param subject_name Subject name (to be recorded in logfile)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_thickness_diff" as const,
+        "@type": "freesurfer.mris_thickness_diff" as const,
         "out_file": out_file,
         "register": register,
         "invert": invert,
@@ -156,18 +156,18 @@ function mris_thickness_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_thickness_diff_cargs(
     params: MrisThicknessDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_thickness_diff");
     if ((params["src_type"] ?? null) !== null) {
@@ -241,18 +241,18 @@ function mris_thickness_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_thickness_diff_outputs(
     params: MrisThicknessDiffParameters,
     execution: Execution,
 ): MrisThicknessDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisThicknessDiffOutputs = {
         root: execution.outputFile("."),
         output_difference: execution.outputFile([(params["out_file"] ?? null)].join('')),
@@ -262,22 +262,22 @@ function mris_thickness_diff_outputs(
 }
 
 
+/**
+ * Computes the difference of two surface data sets defined on two surface meshes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
+ */
 function mris_thickness_diff_execute(
     params: MrisThicknessDiffParameters,
     execution: Execution,
 ): MrisThicknessDiffOutputs {
-    /**
-     * Computes the difference of two surface data sets defined on two surface meshes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_thickness_diff_cargs(params, execution)
     const ret = mris_thickness_diff_outputs(params, execution)
@@ -286,6 +286,30 @@ function mris_thickness_diff_execute(
 }
 
 
+/**
+ * Computes the difference of two surface data sets defined on two surface meshes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param out_file Output file name
+ * @param src_type Input surface data format (curv, paint or w)
+ * @param trg_type Output format (paint or w)
+ * @param out_resampled Output resampled thickness
+ * @param nsmooth Number of smoothing steps
+ * @param register Perform ICP rigid registration
+ * @param xform Apply LTA transform to align input surface1 to surface2
+ * @param invert Reversely apply -xform
+ * @param src_volume Source volume for -xform
+ * @param dst_volume Target volume for -xform
+ * @param abs Compute the std of abs-thickness-diff
+ * @param log_file Log file name
+ * @param subject_name Subject name (to be recorded in logfile)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
+ */
 function mris_thickness_diff(
     out_file: string,
     src_type: string | null = null,
@@ -302,30 +326,6 @@ function mris_thickness_diff(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): MrisThicknessDiffOutputs {
-    /**
-     * Computes the difference of two surface data sets defined on two surface meshes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param out_file Output file name
-     * @param src_type Input surface data format (curv, paint or w)
-     * @param trg_type Output format (paint or w)
-     * @param out_resampled Output resampled thickness
-     * @param nsmooth Number of smoothing steps
-     * @param register Perform ICP rigid registration
-     * @param xform Apply LTA transform to align input surface1 to surface2
-     * @param invert Reversely apply -xform
-     * @param src_volume Source volume for -xform
-     * @param dst_volume Target volume for -xform
-     * @param abs Compute the std of abs-thickness-diff
-     * @param log_file Log file name
-     * @param subject_name Subject name (to be recorded in logfile)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_THICKNESS_DIFF_METADATA);
     const params = mris_thickness_diff_params(out_file, src_type, trg_type, out_resampled, nsmooth, register, xform, invert, src_volume, dst_volume, abs, log_file, subject_name)
@@ -338,5 +338,8 @@ export {
       MrisThicknessDiffOutputs,
       MrisThicknessDiffParameters,
       mris_thickness_diff,
+      mris_thickness_diff_cargs,
+      mris_thickness_diff_execute,
+      mris_thickness_diff_outputs,
       mris_thickness_diff_params,
 };

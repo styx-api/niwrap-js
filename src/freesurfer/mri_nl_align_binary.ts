@@ -12,42 +12,42 @@ const MRI_NL_ALIGN_BINARY_METADATA: Metadata = {
 
 
 interface MriNlAlignBinaryParameters {
-    "__STYXTYPE__": "mri_nl_align_binary";
+    "@type": "freesurfer.mri_nl_align_binary";
     "source_file": InputPathType;
     "target_file": InputPathType;
     "warp_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_nl_align_binary": mri_nl_align_binary_cargs,
+        "freesurfer.mri_nl_align_binary": mri_nl_align_binary_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_nl_align_binary": mri_nl_align_binary_outputs,
+        "freesurfer.mri_nl_align_binary": mri_nl_align_binary_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriNlAlignBinaryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_file Source image file for alignment
+ * @param target_file Target image file for alignment
+ * @param warp_file Output warp file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_nl_align_binary_params(
     source_file: InputPathType,
     target_file: InputPathType,
     warp_file: string,
 ): MriNlAlignBinaryParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_file Source image file for alignment
-     * @param target_file Target image file for alignment
-     * @param warp_file Output warp file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_nl_align_binary" as const,
+        "@type": "freesurfer.mri_nl_align_binary" as const,
         "source_file": source_file,
         "target_file": target_file,
         "warp_file": warp_file,
@@ -94,18 +94,18 @@ function mri_nl_align_binary_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_nl_align_binary_cargs(
     params: MriNlAlignBinaryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_nl_align_binary");
     cargs.push(execution.inputFile((params["source_file"] ?? null)));
@@ -115,18 +115,18 @@ function mri_nl_align_binary_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_nl_align_binary_outputs(
     params: MriNlAlignBinaryParameters,
     execution: Execution,
 ): MriNlAlignBinaryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNlAlignBinaryOutputs = {
         root: execution.outputFile("."),
         output_warp: execution.outputFile([(params["warp_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_nl_align_binary_outputs(
 }
 
 
+/**
+ * Non-linear alignment tool for MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNlAlignBinaryOutputs`).
+ */
 function mri_nl_align_binary_execute(
     params: MriNlAlignBinaryParameters,
     execution: Execution,
 ): MriNlAlignBinaryOutputs {
-    /**
-     * Non-linear alignment tool for MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNlAlignBinaryOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_nl_align_binary_cargs(params, execution)
     const ret = mri_nl_align_binary_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_nl_align_binary_execute(
 }
 
 
+/**
+ * Non-linear alignment tool for MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_file Source image file for alignment
+ * @param target_file Target image file for alignment
+ * @param warp_file Output warp file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNlAlignBinaryOutputs`).
+ */
 function mri_nl_align_binary(
     source_file: InputPathType,
     target_file: InputPathType,
     warp_file: string,
     runner: Runner | null = null,
 ): MriNlAlignBinaryOutputs {
-    /**
-     * Non-linear alignment tool for MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_file Source image file for alignment
-     * @param target_file Target image file for alignment
-     * @param warp_file Output warp file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNlAlignBinaryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NL_ALIGN_BINARY_METADATA);
     const params = mri_nl_align_binary_params(source_file, target_file, warp_file)
@@ -191,5 +191,8 @@ export {
       MriNlAlignBinaryOutputs,
       MriNlAlignBinaryParameters,
       mri_nl_align_binary,
+      mri_nl_align_binary_cargs,
+      mri_nl_align_binary_execute,
+      mri_nl_align_binary_outputs,
       mri_nl_align_binary_params,
 };

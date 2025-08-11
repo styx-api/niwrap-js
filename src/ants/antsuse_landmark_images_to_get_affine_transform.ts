@@ -12,7 +12,7 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 
 
 interface AntsuseLandmarkImagesToGetAffineTransformParameters {
-    "__STYXTYPE__": "ANTSUseLandmarkImagesToGetAffineTransform";
+    "@type": "ants.ANTSUseLandmarkImagesToGetAffineTransform";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "transform_type": "rigid" | "affine";
@@ -20,35 +20,35 @@ interface AntsuseLandmarkImagesToGetAffineTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_cargs,
+        "ants.ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_outputs,
+        "ants.ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface AntsuseLandmarkImagesToGetAffineTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed_image The fixed image containing labeled landmarks (N-ary image).
+ * @param moving_image The moving image containing labeled landmarks (N-ary image).
+ * @param transform_type Type of transform to compute: 'rigid' or 'affine'.
+ * @param output_affine The output file for the affine transform matrix (e.g., OutAffine.txt).
+ *
+ * @returns Parameter dictionary
+ */
 function antsuse_landmark_images_to_get_affine_transform_params(
     fixed_image: InputPathType,
     moving_image: InputPathType,
     transform_type: "rigid" | "affine",
     output_affine: string,
 ): AntsuseLandmarkImagesToGetAffineTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed_image The fixed image containing labeled landmarks (N-ary image).
-     * @param moving_image The moving image containing labeled landmarks (N-ary image).
-     * @param transform_type Type of transform to compute: 'rigid' or 'affine'.
-     * @param output_affine The output file for the affine transform matrix (e.g., OutAffine.txt).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ANTSUseLandmarkImagesToGetAffineTransform" as const,
+        "@type": "ants.ANTSUseLandmarkImagesToGetAffineTransform" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "transform_type": transform_type,
@@ -98,18 +98,18 @@ function antsuse_landmark_images_to_get_affine_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function antsuse_landmark_images_to_get_affine_transform_cargs(
     params: AntsuseLandmarkImagesToGetAffineTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ANTSUseLandmarkImagesToGetAffineTransform");
     cargs.push(execution.inputFile((params["fixed_image"] ?? null)));
@@ -120,18 +120,18 @@ function antsuse_landmark_images_to_get_affine_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function antsuse_landmark_images_to_get_affine_transform_outputs(
     params: AntsuseLandmarkImagesToGetAffineTransformParameters,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsuseLandmarkImagesToGetAffineTransformOutputs = {
         root: execution.outputFile("."),
         affine_transform_matrix: execution.outputFile([(params["output_affine"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function antsuse_landmark_images_to_get_affine_transform_outputs(
 }
 
 
+/**
+ * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
+ */
 function antsuse_landmark_images_to_get_affine_transform_execute(
     params: AntsuseLandmarkImagesToGetAffineTransformParameters,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
-    /**
-     * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = antsuse_landmark_images_to_get_affine_transform_cargs(params, execution)
     const ret = antsuse_landmark_images_to_get_affine_transform_outputs(params, execution)
@@ -164,6 +164,21 @@ function antsuse_landmark_images_to_get_affine_transform_execute(
 }
 
 
+/**
+ * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param fixed_image The fixed image containing labeled landmarks (N-ary image).
+ * @param moving_image The moving image containing labeled landmarks (N-ary image).
+ * @param transform_type Type of transform to compute: 'rigid' or 'affine'.
+ * @param output_affine The output file for the affine transform matrix (e.g., OutAffine.txt).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
+ */
 function antsuse_landmark_images_to_get_affine_transform(
     fixed_image: InputPathType,
     moving_image: InputPathType,
@@ -171,21 +186,6 @@ function antsuse_landmark_images_to_get_affine_transform(
     output_affine: string,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
-    /**
-     * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param fixed_image The fixed image containing labeled landmarks (N-ary image).
-     * @param moving_image The moving image containing labeled landmarks (N-ary image).
-     * @param transform_type Type of transform to compute: 'rigid' or 'affine'.
-     * @param output_affine The output file for the affine transform matrix (e.g., OutAffine.txt).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA);
     const params = antsuse_landmark_images_to_get_affine_transform_params(fixed_image, moving_image, transform_type, output_affine)
@@ -198,5 +198,8 @@ export {
       AntsuseLandmarkImagesToGetAffineTransformOutputs,
       AntsuseLandmarkImagesToGetAffineTransformParameters,
       antsuse_landmark_images_to_get_affine_transform,
+      antsuse_landmark_images_to_get_affine_transform_cargs,
+      antsuse_landmark_images_to_get_affine_transform_execute,
+      antsuse_landmark_images_to_get_affine_transform_outputs,
       antsuse_landmark_images_to_get_affine_transform_params,
 };

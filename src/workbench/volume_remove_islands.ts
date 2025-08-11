@@ -12,41 +12,41 @@ const VOLUME_REMOVE_ISLANDS_METADATA: Metadata = {
 
 
 interface VolumeRemoveIslandsParameters {
-    "__STYXTYPE__": "volume-remove-islands";
+    "@type": "workbench.volume-remove-islands";
     "volume_in": InputPathType;
     "volume_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-remove-islands": volume_remove_islands_cargs,
+        "workbench.volume-remove-islands": volume_remove_islands_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-remove-islands": volume_remove_islands_outputs,
+        "workbench.volume-remove-islands": volume_remove_islands_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VolumeRemoveIslandsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
+ *
+ * @returns Parameter dictionary
+ */
 function volume_remove_islands_params(
     volume_in: InputPathType,
     volume_out: string,
 ): VolumeRemoveIslandsParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input ROI volume
-     * @param volume_out the output ROI volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-remove-islands" as const,
+        "@type": "workbench.volume-remove-islands" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -90,18 +90,18 @@ function volume_remove_islands_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_remove_islands_cargs(
     params: VolumeRemoveIslandsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-remove-islands");
@@ -111,18 +111,18 @@ function volume_remove_islands_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_remove_islands_outputs(
     params: VolumeRemoveIslandsParameters,
     execution: Execution,
 ): VolumeRemoveIslandsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeRemoveIslandsOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -131,24 +131,24 @@ function volume_remove_islands_outputs(
 }
 
 
+/**
+ * Remove islands from an roi volume.
+ *
+ * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
+ */
 function volume_remove_islands_execute(
     params: VolumeRemoveIslandsParameters,
     execution: Execution,
 ): VolumeRemoveIslandsOutputs {
-    /**
-     * Remove islands from an roi volume.
-     * 
-     * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_remove_islands_cargs(params, execution)
     const ret = volume_remove_islands_outputs(params, execution)
@@ -157,26 +157,26 @@ function volume_remove_islands_execute(
 }
 
 
+/**
+ * Remove islands from an roi volume.
+ *
+ * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
+ */
 function volume_remove_islands(
     volume_in: InputPathType,
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeRemoveIslandsOutputs {
-    /**
-     * Remove islands from an roi volume.
-     * 
-     * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input ROI volume
-     * @param volume_out the output ROI volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_REMOVE_ISLANDS_METADATA);
     const params = volume_remove_islands_params(volume_in, volume_out)
@@ -189,5 +189,8 @@ export {
       VolumeRemoveIslandsOutputs,
       VolumeRemoveIslandsParameters,
       volume_remove_islands,
+      volume_remove_islands_cargs,
+      volume_remove_islands_execute,
+      volume_remove_islands_outputs,
       volume_remove_islands_params,
 };

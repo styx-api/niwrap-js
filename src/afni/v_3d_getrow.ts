@@ -12,7 +12,7 @@ const V_3D_GETROW_METADATA: Metadata = {
 
 
 interface V3dGetrowParameters {
-    "__STYXTYPE__": "3dGetrow";
+    "@type": "afni.3dGetrow";
     "xrow"?: Array<number> | null | undefined;
     "yrow"?: Array<number> | null | undefined;
     "zrow"?: Array<number> | null | undefined;
@@ -21,35 +21,35 @@ interface V3dGetrowParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dGetrow": v_3d_getrow_cargs,
+        "afni.3dGetrow": v_3d_getrow_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dGetrow": v_3d_getrow_outputs,
+        "afni.3dGetrow": v_3d_getrow_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dGetrowOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xrow Extract row along the x-direction at fixed y-index of j and fixed z-index of k
+ * @param yrow Extract row along the y-direction at fixed x-index of i and fixed z-index of k
+ * @param zrow Extract row along the z-direction at fixed x-index of i and fixed y-index of j
+ * @param input_file Read input from dataset 'ddd' (instead of putting dataset name at end of command line)
+ * @param output_file Filename for output .1D ASCII file will be 'ff' (if 'ff' is '-', then output is to stdout, the default)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_getrow_params(
     xrow: Array<number> | null = null,
     yrow: Array<number> | null = null,
@@ -79,19 +90,8 @@ function v_3d_getrow_params(
     input_file: InputPathType | null = null,
     output_file: string | null = null,
 ): V3dGetrowParameters {
-    /**
-     * Build parameters.
-    
-     * @param xrow Extract row along the x-direction at fixed y-index of j and fixed z-index of k
-     * @param yrow Extract row along the y-direction at fixed x-index of i and fixed z-index of k
-     * @param zrow Extract row along the z-direction at fixed x-index of i and fixed y-index of j
-     * @param input_file Read input from dataset 'ddd' (instead of putting dataset name at end of command line)
-     * @param output_file Filename for output .1D ASCII file will be 'ff' (if 'ff' is '-', then output is to stdout, the default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dGetrow" as const,
+        "@type": "afni.3dGetrow" as const,
     };
     if (xrow !== null) {
         params["xrow"] = xrow;
@@ -112,18 +112,18 @@ function v_3d_getrow_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_getrow_cargs(
     params: V3dGetrowParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dGetrow");
     if ((params["xrow"] ?? null) !== null) {
@@ -160,18 +160,18 @@ function v_3d_getrow_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_getrow_outputs(
     params: V3dGetrowParameters,
     execution: Execution,
 ): V3dGetrowOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dGetrowOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null), ".1D"].join('')) : null,
@@ -180,22 +180,22 @@ function v_3d_getrow_outputs(
 }
 
 
+/**
+ * Program to extract 1 row from a dataset and write it as a .1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
+ */
 function v_3d_getrow_execute(
     params: V3dGetrowParameters,
     execution: Execution,
 ): V3dGetrowOutputs {
-    /**
-     * Program to extract 1 row from a dataset and write it as a .1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_getrow_cargs(params, execution)
     const ret = v_3d_getrow_outputs(params, execution)
@@ -204,6 +204,22 @@ function v_3d_getrow_execute(
 }
 
 
+/**
+ * Program to extract 1 row from a dataset and write it as a .1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param xrow Extract row along the x-direction at fixed y-index of j and fixed z-index of k
+ * @param yrow Extract row along the y-direction at fixed x-index of i and fixed z-index of k
+ * @param zrow Extract row along the z-direction at fixed x-index of i and fixed y-index of j
+ * @param input_file Read input from dataset 'ddd' (instead of putting dataset name at end of command line)
+ * @param output_file Filename for output .1D ASCII file will be 'ff' (if 'ff' is '-', then output is to stdout, the default)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
+ */
 function v_3d_getrow(
     xrow: Array<number> | null = null,
     yrow: Array<number> | null = null,
@@ -212,22 +228,6 @@ function v_3d_getrow(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): V3dGetrowOutputs {
-    /**
-     * Program to extract 1 row from a dataset and write it as a .1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param xrow Extract row along the x-direction at fixed y-index of j and fixed z-index of k
-     * @param yrow Extract row along the y-direction at fixed x-index of i and fixed z-index of k
-     * @param zrow Extract row along the z-direction at fixed x-index of i and fixed y-index of j
-     * @param input_file Read input from dataset 'ddd' (instead of putting dataset name at end of command line)
-     * @param output_file Filename for output .1D ASCII file will be 'ff' (if 'ff' is '-', then output is to stdout, the default)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_GETROW_METADATA);
     const params = v_3d_getrow_params(xrow, yrow, zrow, input_file, output_file)
@@ -240,5 +240,8 @@ export {
       V3dGetrowParameters,
       V_3D_GETROW_METADATA,
       v_3d_getrow,
+      v_3d_getrow_cargs,
+      v_3d_getrow_execute,
+      v_3d_getrow_outputs,
       v_3d_getrow_params,
 };

@@ -12,42 +12,42 @@ const V_3DSVM_LINPREDICT_METADATA: Metadata = {
 
 
 interface V3dsvmLinpredictParameters {
-    "__STYXTYPE__": "3dsvm_linpredict";
+    "@type": "afni.3dsvm_linpredict";
     "mask_dataset"?: InputPathType | null | undefined;
     "weight_vector": InputPathType;
     "input_dataset": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dsvm_linpredict": v_3dsvm_linpredict_cargs,
+        "afni.3dsvm_linpredict": v_3dsvm_linpredict_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dsvm_linpredict": v_3dsvm_linpredict_outputs,
+        "afni.3dsvm_linpredict": v_3dsvm_linpredict_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dsvmLinpredictOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param weight_vector Weight vector dataset
+ * @param input_dataset Input dataset, potentially with sub-brick and/or sub-range selectors
+ * @param mask_dataset Dataset to be used as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. The mask dataset and the input dataset must have the same number of voxels.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dsvm_linpredict_params(
     weight_vector: InputPathType,
     input_dataset: string,
     mask_dataset: InputPathType | null = null,
 ): V3dsvmLinpredictParameters {
-    /**
-     * Build parameters.
-    
-     * @param weight_vector Weight vector dataset
-     * @param input_dataset Input dataset, potentially with sub-brick and/or sub-range selectors
-     * @param mask_dataset Dataset to be used as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. The mask dataset and the input dataset must have the same number of voxels.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dsvm_linpredict" as const,
+        "@type": "afni.3dsvm_linpredict" as const,
         "weight_vector": weight_vector,
         "input_dataset": input_dataset,
     };
@@ -96,18 +96,18 @@ function v_3dsvm_linpredict_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dsvm_linpredict_cargs(
     params: V3dsvmLinpredictParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dsvm_linpredict");
     if ((params["mask_dataset"] ?? null) !== null) {
@@ -122,18 +122,18 @@ function v_3dsvm_linpredict_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dsvm_linpredict_outputs(
     params: V3dsvmLinpredictParameters,
     execution: Execution,
 ): V3dsvmLinpredictOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dsvmLinpredictOutputs = {
         root: execution.outputFile("."),
         stdout_output: execution.outputFile(["stdout"].join('')),
@@ -142,22 +142,22 @@ function v_3dsvm_linpredict_outputs(
 }
 
 
+/**
+ * Linear prediction for weights from 3dsvm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
+ */
 function v_3dsvm_linpredict_execute(
     params: V3dsvmLinpredictParameters,
     execution: Execution,
 ): V3dsvmLinpredictOutputs {
-    /**
-     * Linear prediction for weights from 3dsvm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dsvm_linpredict_cargs(params, execution)
     const ret = v_3dsvm_linpredict_outputs(params, execution)
@@ -166,26 +166,26 @@ function v_3dsvm_linpredict_execute(
 }
 
 
+/**
+ * Linear prediction for weights from 3dsvm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param weight_vector Weight vector dataset
+ * @param input_dataset Input dataset, potentially with sub-brick and/or sub-range selectors
+ * @param mask_dataset Dataset to be used as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. The mask dataset and the input dataset must have the same number of voxels.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
+ */
 function v_3dsvm_linpredict(
     weight_vector: InputPathType,
     input_dataset: string,
     mask_dataset: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dsvmLinpredictOutputs {
-    /**
-     * Linear prediction for weights from 3dsvm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param weight_vector Weight vector dataset
-     * @param input_dataset Input dataset, potentially with sub-brick and/or sub-range selectors
-     * @param mask_dataset Dataset to be used as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. The mask dataset and the input dataset must have the same number of voxels.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DSVM_LINPREDICT_METADATA);
     const params = v_3dsvm_linpredict_params(weight_vector, input_dataset, mask_dataset)
@@ -198,5 +198,8 @@ export {
       V3dsvmLinpredictParameters,
       V_3DSVM_LINPREDICT_METADATA,
       v_3dsvm_linpredict,
+      v_3dsvm_linpredict_cargs,
+      v_3dsvm_linpredict_execute,
+      v_3dsvm_linpredict_outputs,
       v_3dsvm_linpredict_params,
 };

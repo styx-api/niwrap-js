@@ -12,7 +12,7 @@ const V__ANATICOR_METADATA: Metadata = {
 
 
 interface VAnaticorParameters {
-    "__STYXTYPE__": "@ANATICOR";
+    "@type": "afni.@ANATICOR";
     "ts": InputPathType;
     "polort": string;
     "motion": InputPathType;
@@ -30,35 +30,35 @@ interface VAnaticorParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ANATICOR": v__anaticor_cargs,
+        "afni.@ANATICOR": v__anaticor_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ANATICOR": v__anaticor_outputs,
+        "afni.@ANATICOR": v__anaticor_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface VAnaticorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ts Time series volume which should have already undergone preprocessing steps such as despiking, RetroIcor, RVT correction, time shifting, and volume registration.
+ * @param polort Polynomial for linear trend removal. Use the same order as for afni_proc.py
+ * @param motion Head motion parameters from 3dvolreg, also created by afni_proc.py
+ * @param aseg Aseg file from FreeSurfer's segmentation. This aseg volume must be in register with the EPI time series.
+ * @param prefix Use output (residual time series) for a prefix
+ * @param radius The radius of a local sphere mask in mm. Default is 15 mm for high resolution 1.7x1.7x3mm data.
+ * @param view Set the view of the output data. Default is +orig. Choose from +orig, +acpc, or +tlrc.
+ * @param nuisance Other nuisance regressors. Each regressor is a column in .1D file
+ * @param no_ventricles Do not include LVe regressor
+ * @param rsq_wme Produce an explained variance map for WMeLOCAL regressor.
+ * @param coverage Produce a spatial coverage map of WMeLOCAL regressor
+ * @param verb Verbose flag
+ * @param dirty Keep temporary files
+ * @param echo Echo each script command for debugging
+ *
+ * @returns Parameter dictionary
+ */
 function v__anaticor_params(
     ts: InputPathType,
     polort: string,
@@ -97,28 +117,8 @@ function v__anaticor_params(
     dirty: boolean = false,
     echo: boolean = false,
 ): VAnaticorParameters {
-    /**
-     * Build parameters.
-    
-     * @param ts Time series volume which should have already undergone preprocessing steps such as despiking, RetroIcor, RVT correction, time shifting, and volume registration.
-     * @param polort Polynomial for linear trend removal. Use the same order as for afni_proc.py
-     * @param motion Head motion parameters from 3dvolreg, also created by afni_proc.py
-     * @param aseg Aseg file from FreeSurfer's segmentation. This aseg volume must be in register with the EPI time series.
-     * @param prefix Use output (residual time series) for a prefix
-     * @param radius The radius of a local sphere mask in mm. Default is 15 mm for high resolution 1.7x1.7x3mm data.
-     * @param view Set the view of the output data. Default is +orig. Choose from +orig, +acpc, or +tlrc.
-     * @param nuisance Other nuisance regressors. Each regressor is a column in .1D file
-     * @param no_ventricles Do not include LVe regressor
-     * @param rsq_wme Produce an explained variance map for WMeLOCAL regressor.
-     * @param coverage Produce a spatial coverage map of WMeLOCAL regressor
-     * @param verb Verbose flag
-     * @param dirty Keep temporary files
-     * @param echo Echo each script command for debugging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ANATICOR" as const,
+        "@type": "afni.@ANATICOR" as const,
         "ts": ts,
         "polort": polort,
         "motion": motion,
@@ -144,18 +144,18 @@ function v__anaticor_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__anaticor_cargs(
     params: VAnaticorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ANATICOR");
     cargs.push(
@@ -212,18 +212,18 @@ function v__anaticor_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__anaticor_outputs(
     params: VAnaticorParameters,
     execution: Execution,
 ): VAnaticorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAnaticorOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -232,22 +232,22 @@ function v__anaticor_outputs(
 }
 
 
+/**
+ * Script to produce a residual time series cleaned by ANATICOR model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
+ */
 function v__anaticor_execute(
     params: VAnaticorParameters,
     execution: Execution,
 ): VAnaticorOutputs {
-    /**
-     * Script to produce a residual time series cleaned by ANATICOR model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__anaticor_cargs(params, execution)
     const ret = v__anaticor_outputs(params, execution)
@@ -256,6 +256,31 @@ function v__anaticor_execute(
 }
 
 
+/**
+ * Script to produce a residual time series cleaned by ANATICOR model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param ts Time series volume which should have already undergone preprocessing steps such as despiking, RetroIcor, RVT correction, time shifting, and volume registration.
+ * @param polort Polynomial for linear trend removal. Use the same order as for afni_proc.py
+ * @param motion Head motion parameters from 3dvolreg, also created by afni_proc.py
+ * @param aseg Aseg file from FreeSurfer's segmentation. This aseg volume must be in register with the EPI time series.
+ * @param prefix Use output (residual time series) for a prefix
+ * @param radius The radius of a local sphere mask in mm. Default is 15 mm for high resolution 1.7x1.7x3mm data.
+ * @param view Set the view of the output data. Default is +orig. Choose from +orig, +acpc, or +tlrc.
+ * @param nuisance Other nuisance regressors. Each regressor is a column in .1D file
+ * @param no_ventricles Do not include LVe regressor
+ * @param rsq_wme Produce an explained variance map for WMeLOCAL regressor.
+ * @param coverage Produce a spatial coverage map of WMeLOCAL regressor
+ * @param verb Verbose flag
+ * @param dirty Keep temporary files
+ * @param echo Echo each script command for debugging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
+ */
 function v__anaticor(
     ts: InputPathType,
     polort: string,
@@ -273,31 +298,6 @@ function v__anaticor(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VAnaticorOutputs {
-    /**
-     * Script to produce a residual time series cleaned by ANATICOR model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param ts Time series volume which should have already undergone preprocessing steps such as despiking, RetroIcor, RVT correction, time shifting, and volume registration.
-     * @param polort Polynomial for linear trend removal. Use the same order as for afni_proc.py
-     * @param motion Head motion parameters from 3dvolreg, also created by afni_proc.py
-     * @param aseg Aseg file from FreeSurfer's segmentation. This aseg volume must be in register with the EPI time series.
-     * @param prefix Use output (residual time series) for a prefix
-     * @param radius The radius of a local sphere mask in mm. Default is 15 mm for high resolution 1.7x1.7x3mm data.
-     * @param view Set the view of the output data. Default is +orig. Choose from +orig, +acpc, or +tlrc.
-     * @param nuisance Other nuisance regressors. Each regressor is a column in .1D file
-     * @param no_ventricles Do not include LVe regressor
-     * @param rsq_wme Produce an explained variance map for WMeLOCAL regressor.
-     * @param coverage Produce a spatial coverage map of WMeLOCAL regressor
-     * @param verb Verbose flag
-     * @param dirty Keep temporary files
-     * @param echo Echo each script command for debugging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ANATICOR_METADATA);
     const params = v__anaticor_params(ts, polort, motion, aseg, prefix, radius, view, nuisance, no_ventricles, rsq_wme, coverage, verb, dirty, echo)
@@ -310,5 +310,8 @@ export {
       VAnaticorParameters,
       V__ANATICOR_METADATA,
       v__anaticor,
+      v__anaticor_cargs,
+      v__anaticor_execute,
+      v__anaticor_outputs,
       v__anaticor_params,
 };

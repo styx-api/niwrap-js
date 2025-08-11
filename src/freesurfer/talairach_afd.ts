@@ -12,7 +12,7 @@ const TALAIRACH_AFD_METADATA: Metadata = {
 
 
 interface TalairachAfdParameters {
-    "__STYXTYPE__": "talairach_afd";
+    "@type": "freesurfer.talairach_afd";
     "subject_name"?: string | null | undefined;
     "xfm_file"?: InputPathType | null | undefined;
     "p_value_threshold"?: number | null | undefined;
@@ -21,33 +21,33 @@ interface TalairachAfdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talairach_afd": talairach_afd_cargs,
+        "freesurfer.talairach_afd": talairach_afd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface TalairachAfdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Specify subject's name
+ * @param xfm_file Specify the talairach.xfm file to check
+ * @param p_value_threshold Threshold the p-values at #; Talairach transforms for subjects with p-values <= T are considered as very unlikely
+ * @param afd_directory Specify directory containing .afd data files
+ * @param verbose Enable verbose output
+ *
+ * @returns Parameter dictionary
+ */
 function talairach_afd_params(
     subject_name: string | null = null,
     xfm_file: InputPathType | null = null,
@@ -74,19 +85,8 @@ function talairach_afd_params(
     afd_directory: string | null = null,
     verbose: boolean = false,
 ): TalairachAfdParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Specify subject's name
-     * @param xfm_file Specify the talairach.xfm file to check
-     * @param p_value_threshold Threshold the p-values at #; Talairach transforms for subjects with p-values <= T are considered as very unlikely
-     * @param afd_directory Specify directory containing .afd data files
-     * @param verbose Enable verbose output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talairach_afd" as const,
+        "@type": "freesurfer.talairach_afd" as const,
         "verbose": verbose,
     };
     if (subject_name !== null) {
@@ -105,18 +105,18 @@ function talairach_afd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talairach_afd_cargs(
     params: TalairachAfdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talairach_afd");
     if ((params["subject_name"] ?? null) !== null) {
@@ -150,18 +150,18 @@ function talairach_afd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talairach_afd_outputs(
     params: TalairachAfdParameters,
     execution: Execution,
 ): TalairachAfdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalairachAfdOutputs = {
         root: execution.outputFile("."),
     };
@@ -169,22 +169,22 @@ function talairach_afd_outputs(
 }
 
 
+/**
+ * Detects Talairach alignment failures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
+ */
 function talairach_afd_execute(
     params: TalairachAfdParameters,
     execution: Execution,
 ): TalairachAfdOutputs {
-    /**
-     * Detects Talairach alignment failures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
-     */
     params = execution.params(params)
     const cargs = talairach_afd_cargs(params, execution)
     const ret = talairach_afd_outputs(params, execution)
@@ -193,6 +193,22 @@ function talairach_afd_execute(
 }
 
 
+/**
+ * Detects Talairach alignment failures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Specify subject's name
+ * @param xfm_file Specify the talairach.xfm file to check
+ * @param p_value_threshold Threshold the p-values at #; Talairach transforms for subjects with p-values <= T are considered as very unlikely
+ * @param afd_directory Specify directory containing .afd data files
+ * @param verbose Enable verbose output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
+ */
 function talairach_afd(
     subject_name: string | null = null,
     xfm_file: InputPathType | null = null,
@@ -201,22 +217,6 @@ function talairach_afd(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): TalairachAfdOutputs {
-    /**
-     * Detects Talairach alignment failures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Specify subject's name
-     * @param xfm_file Specify the talairach.xfm file to check
-     * @param p_value_threshold Threshold the p-values at #; Talairach transforms for subjects with p-values <= T are considered as very unlikely
-     * @param afd_directory Specify directory containing .afd data files
-     * @param verbose Enable verbose output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALAIRACH_AFD_METADATA);
     const params = talairach_afd_params(subject_name, xfm_file, p_value_threshold, afd_directory, verbose)
@@ -229,5 +229,8 @@ export {
       TalairachAfdOutputs,
       TalairachAfdParameters,
       talairach_afd,
+      talairach_afd_cargs,
+      talairach_afd_execute,
+      talairach_afd_outputs,
       talairach_afd_params,
 };

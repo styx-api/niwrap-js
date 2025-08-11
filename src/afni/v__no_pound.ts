@@ -12,38 +12,38 @@ const V__NO_POUND_METADATA: Metadata = {
 
 
 interface VNoPoundParameters {
-    "__STYXTYPE__": "@NoPound";
+    "@type": "afni.@NoPound";
     "afni_files": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@NoPound": v__no_pound_cargs,
+        "afni.@NoPound": v__no_pound_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface VNoPoundOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param afni_files List of AFNI files where # characters should be replaced with -.
+ *
+ * @returns Parameter dictionary
+ */
 function v__no_pound_params(
     afni_files: Array<string>,
 ): VNoPoundParameters {
-    /**
-     * Build parameters.
-    
-     * @param afni_files List of AFNI files where # characters should be replaced with -.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@NoPound" as const,
+        "@type": "afni.@NoPound" as const,
         "afni_files": afni_files,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__no_pound_cargs(
     params: VNoPoundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@NoPound");
     cargs.push(...(params["afni_files"] ?? null));
@@ -100,18 +100,18 @@ function v__no_pound_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__no_pound_outputs(
     params: VNoPoundParameters,
     execution: Execution,
 ): VNoPoundOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VNoPoundOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function v__no_pound_outputs(
 }
 
 
+/**
+ * Replaces all # characters in AFNI filenames with a -.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
+ */
 function v__no_pound_execute(
     params: VNoPoundParameters,
     execution: Execution,
 ): VNoPoundOutputs {
-    /**
-     * Replaces all # characters in AFNI filenames with a -.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__no_pound_cargs(params, execution)
     const ret = v__no_pound_outputs(params, execution)
@@ -143,22 +143,22 @@ function v__no_pound_execute(
 }
 
 
+/**
+ * Replaces all # characters in AFNI filenames with a -.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param afni_files List of AFNI files where # characters should be replaced with -.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
+ */
 function v__no_pound(
     afni_files: Array<string>,
     runner: Runner | null = null,
 ): VNoPoundOutputs {
-    /**
-     * Replaces all # characters in AFNI filenames with a -.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param afni_files List of AFNI files where # characters should be replaced with -.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__NO_POUND_METADATA);
     const params = v__no_pound_params(afni_files)
@@ -171,5 +171,8 @@ export {
       VNoPoundParameters,
       V__NO_POUND_METADATA,
       v__no_pound,
+      v__no_pound_cargs,
+      v__no_pound_execute,
+      v__no_pound_outputs,
       v__no_pound_params,
 };

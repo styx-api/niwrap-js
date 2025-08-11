@@ -12,7 +12,7 @@ const V_3D_TSTAT_METADATA: Metadata = {
 
 
 interface V3dTstatParameters {
-    "__STYXTYPE__": "3dTstat";
+    "@type": "afni.3dTstat";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "num_threads"?: number | null | undefined;
@@ -77,35 +77,35 @@ interface V3dTstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTstat": v_3d_tstat_cargs,
+        "afni.3dTstat": v_3d_tstat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTstat": v_3d_tstat_outputs,
+        "afni.3dTstat": v_3d_tstat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -128,6 +128,73 @@ interface V3dTstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dtstat.
+ * @param mask Mask file.
+ * @param num_threads Set number of threads.
+ * @param options Selected statistical output.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param sum Compute sum of input voxels.
+ * @param abssum Compute absolute sum of input voxels.
+ * @param sos Compute sum of squares.
+ * @param l2norm Compute L2 norm (sqrt(sum squares)).
+ * @param mean Compute mean of input voxels.
+ * @param slope Compute the slope of input voxels vs. time.
+ * @param stdev Compute standard deviation of input voxels.
+ * @param stdev_nod Compute standard deviation of input voxels without detrending.
+ * @param cvar Compute coefficient of variation of input voxels.
+ * @param cvar_nod Compute coefficient of variation of input voxels without detrending.
+ * @param cvarinv Compute inverse coefficient of variation of input voxels.
+ * @param cvarinv_nod Compute inverse coefficient of variation of input voxels without detrending.
+ * @param tsnr Compute temporal signal to noise ratio.
+ * @param mad Compute median absolute deviation of input voxels.
+ * @param dw Compute Durbin-Watson Statistic of input voxels.
+ * @param median Compute median of input voxels.
+ * @param nzmedian Compute median of non-zero input voxels.
+ * @param nzstdev Compute standard deviation of non-zero input voxels.
+ * @param bmv Compute biweight midvariance of input voxels.
+ * @param mssd Compute mean of successive squared differences of input voxels.
+ * @param mssdsqrt Compute square root of mean of successive squared differences of input voxels.
+ * @param masdx Compute median of absolute values of first time differences of input voxels.
+ * @param min Compute minimum of input voxels.
+ * @param max Compute maximum of input voxels.
+ * @param absmax Compute absolute maximum of input voxels.
+ * @param signed_absmax Compute signed absolute maximum of input voxels.
+ * @param percentile Compute the P-th percentile point of the data in each voxel time series.
+ * @param argmin Compute index of minimum of input voxels.
+ * @param argmin1 Compute index + 1 of minimum of input voxels.
+ * @param argmax Compute index of maximum of input voxels.
+ * @param argmax1 Compute index + 1 of maximum of input voxels.
+ * @param argabsmax Compute index of absolute maximum of input voxels.
+ * @param argabsmax1 Compute index + 1 of absolute maximum of input voxels.
+ * @param duration Compute number of points around max above a threshold.
+ * @param onset Compute beginning of duration around max where value exceeds basepercent.
+ * @param offset Compute end of duration around max where value exceeds basepercent.
+ * @param centroid Compute centroid of data time curves.
+ * @param centduration Compute duration using centroid's index as center.
+ * @param nzmean Compute mean of non-zero voxels.
+ * @param zcount Count number of zero values at each voxel.
+ * @param nzcount Count number of non-zero values at each voxel.
+ * @param autocorr Compute autocorrelation function and return first n coefficients.
+ * @param autoreg Compute autoregression coefficients and return first n coefficients.
+ * @param accumulate Accumulate time series values (partial sums).
+ * @param centromean Compute mean of middle 50% of voxel values.
+ * @param skewness Measure of asymmetry in distribution.
+ * @param kurtosis Measure of the 'tailedness' of the probability distribution.
+ * @param firstvalue First value in dataset.
+ * @param tdiff Take the first difference of each time series before further processing.
+ * @param prefix Use string 'p' for the prefix of the output dataset [DEFAULT = 'stat'].
+ * @param datum Use data type 'd' for the type of storage of the output, where 'd' is one of 'byte', 'short', or 'float' [DEFAULT=float].
+ * @param nscale Do not scale output values when datum is byte or short. Scaling is done by default.
+ * @param basepercent Percentage of maximum for duration calculation.
+ * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
+ * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
+ * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tstat_params(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -191,75 +258,8 @@ function v_3d_tstat_params(
     mrange: string | null = null,
     cmask: string | null = null,
 ): V3dTstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dtstat.
-     * @param mask Mask file.
-     * @param num_threads Set number of threads.
-     * @param options Selected statistical output.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param sum Compute sum of input voxels.
-     * @param abssum Compute absolute sum of input voxels.
-     * @param sos Compute sum of squares.
-     * @param l2norm Compute L2 norm (sqrt(sum squares)).
-     * @param mean Compute mean of input voxels.
-     * @param slope Compute the slope of input voxels vs. time.
-     * @param stdev Compute standard deviation of input voxels.
-     * @param stdev_nod Compute standard deviation of input voxels without detrending.
-     * @param cvar Compute coefficient of variation of input voxels.
-     * @param cvar_nod Compute coefficient of variation of input voxels without detrending.
-     * @param cvarinv Compute inverse coefficient of variation of input voxels.
-     * @param cvarinv_nod Compute inverse coefficient of variation of input voxels without detrending.
-     * @param tsnr Compute temporal signal to noise ratio.
-     * @param mad Compute median absolute deviation of input voxels.
-     * @param dw Compute Durbin-Watson Statistic of input voxels.
-     * @param median Compute median of input voxels.
-     * @param nzmedian Compute median of non-zero input voxels.
-     * @param nzstdev Compute standard deviation of non-zero input voxels.
-     * @param bmv Compute biweight midvariance of input voxels.
-     * @param mssd Compute mean of successive squared differences of input voxels.
-     * @param mssdsqrt Compute square root of mean of successive squared differences of input voxels.
-     * @param masdx Compute median of absolute values of first time differences of input voxels.
-     * @param min Compute minimum of input voxels.
-     * @param max Compute maximum of input voxels.
-     * @param absmax Compute absolute maximum of input voxels.
-     * @param signed_absmax Compute signed absolute maximum of input voxels.
-     * @param percentile Compute the P-th percentile point of the data in each voxel time series.
-     * @param argmin Compute index of minimum of input voxels.
-     * @param argmin1 Compute index + 1 of minimum of input voxels.
-     * @param argmax Compute index of maximum of input voxels.
-     * @param argmax1 Compute index + 1 of maximum of input voxels.
-     * @param argabsmax Compute index of absolute maximum of input voxels.
-     * @param argabsmax1 Compute index + 1 of absolute maximum of input voxels.
-     * @param duration Compute number of points around max above a threshold.
-     * @param onset Compute beginning of duration around max where value exceeds basepercent.
-     * @param offset Compute end of duration around max where value exceeds basepercent.
-     * @param centroid Compute centroid of data time curves.
-     * @param centduration Compute duration using centroid's index as center.
-     * @param nzmean Compute mean of non-zero voxels.
-     * @param zcount Count number of zero values at each voxel.
-     * @param nzcount Count number of non-zero values at each voxel.
-     * @param autocorr Compute autocorrelation function and return first n coefficients.
-     * @param autoreg Compute autoregression coefficients and return first n coefficients.
-     * @param accumulate Accumulate time series values (partial sums).
-     * @param centromean Compute mean of middle 50% of voxel values.
-     * @param skewness Measure of asymmetry in distribution.
-     * @param kurtosis Measure of the 'tailedness' of the probability distribution.
-     * @param firstvalue First value in dataset.
-     * @param tdiff Take the first difference of each time series before further processing.
-     * @param prefix Use string 'p' for the prefix of the output dataset [DEFAULT = 'stat'].
-     * @param datum Use data type 'd' for the type of storage of the output, where 'd' is one of 'byte', 'short', or 'float' [DEFAULT=float].
-     * @param nscale Do not scale output values when datum is byte or short. Scaling is done by default.
-     * @param basepercent Percentage of maximum for duration calculation.
-     * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
-     * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
-     * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTstat" as const,
+        "@type": "afni.3dTstat" as const,
         "in_file": in_file,
         "sum": sum,
         "abssum": abssum,
@@ -346,18 +346,18 @@ function v_3d_tstat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tstat_cargs(
     params: V3dTstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTstat");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -566,18 +566,18 @@ function v_3d_tstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tstat_outputs(
     params: V3dTstatParameters,
     execution: Execution,
 ): V3dTstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTstatOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -586,22 +586,22 @@ function v_3d_tstat_outputs(
 }
 
 
+/**
+ * Compute voxel-wise statistics using AFNI 3dTstat command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
+ */
 function v_3d_tstat_execute(
     params: V3dTstatParameters,
     execution: Execution,
 ): V3dTstatOutputs {
-    /**
-     * Compute voxel-wise statistics using AFNI 3dTstat command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tstat_cargs(params, execution)
     const ret = v_3d_tstat_outputs(params, execution)
@@ -610,6 +610,78 @@ function v_3d_tstat_execute(
 }
 
 
+/**
+ * Compute voxel-wise statistics using AFNI 3dTstat command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dtstat.
+ * @param mask Mask file.
+ * @param num_threads Set number of threads.
+ * @param options Selected statistical output.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param sum Compute sum of input voxels.
+ * @param abssum Compute absolute sum of input voxels.
+ * @param sos Compute sum of squares.
+ * @param l2norm Compute L2 norm (sqrt(sum squares)).
+ * @param mean Compute mean of input voxels.
+ * @param slope Compute the slope of input voxels vs. time.
+ * @param stdev Compute standard deviation of input voxels.
+ * @param stdev_nod Compute standard deviation of input voxels without detrending.
+ * @param cvar Compute coefficient of variation of input voxels.
+ * @param cvar_nod Compute coefficient of variation of input voxels without detrending.
+ * @param cvarinv Compute inverse coefficient of variation of input voxels.
+ * @param cvarinv_nod Compute inverse coefficient of variation of input voxels without detrending.
+ * @param tsnr Compute temporal signal to noise ratio.
+ * @param mad Compute median absolute deviation of input voxels.
+ * @param dw Compute Durbin-Watson Statistic of input voxels.
+ * @param median Compute median of input voxels.
+ * @param nzmedian Compute median of non-zero input voxels.
+ * @param nzstdev Compute standard deviation of non-zero input voxels.
+ * @param bmv Compute biweight midvariance of input voxels.
+ * @param mssd Compute mean of successive squared differences of input voxels.
+ * @param mssdsqrt Compute square root of mean of successive squared differences of input voxels.
+ * @param masdx Compute median of absolute values of first time differences of input voxels.
+ * @param min Compute minimum of input voxels.
+ * @param max Compute maximum of input voxels.
+ * @param absmax Compute absolute maximum of input voxels.
+ * @param signed_absmax Compute signed absolute maximum of input voxels.
+ * @param percentile Compute the P-th percentile point of the data in each voxel time series.
+ * @param argmin Compute index of minimum of input voxels.
+ * @param argmin1 Compute index + 1 of minimum of input voxels.
+ * @param argmax Compute index of maximum of input voxels.
+ * @param argmax1 Compute index + 1 of maximum of input voxels.
+ * @param argabsmax Compute index of absolute maximum of input voxels.
+ * @param argabsmax1 Compute index + 1 of absolute maximum of input voxels.
+ * @param duration Compute number of points around max above a threshold.
+ * @param onset Compute beginning of duration around max where value exceeds basepercent.
+ * @param offset Compute end of duration around max where value exceeds basepercent.
+ * @param centroid Compute centroid of data time curves.
+ * @param centduration Compute duration using centroid's index as center.
+ * @param nzmean Compute mean of non-zero voxels.
+ * @param zcount Count number of zero values at each voxel.
+ * @param nzcount Count number of non-zero values at each voxel.
+ * @param autocorr Compute autocorrelation function and return first n coefficients.
+ * @param autoreg Compute autoregression coefficients and return first n coefficients.
+ * @param accumulate Accumulate time series values (partial sums).
+ * @param centromean Compute mean of middle 50% of voxel values.
+ * @param skewness Measure of asymmetry in distribution.
+ * @param kurtosis Measure of the 'tailedness' of the probability distribution.
+ * @param firstvalue First value in dataset.
+ * @param tdiff Take the first difference of each time series before further processing.
+ * @param prefix Use string 'p' for the prefix of the output dataset [DEFAULT = 'stat'].
+ * @param datum Use data type 'd' for the type of storage of the output, where 'd' is one of 'byte', 'short', or 'float' [DEFAULT=float].
+ * @param nscale Do not scale output values when datum is byte or short. Scaling is done by default.
+ * @param basepercent Percentage of maximum for duration calculation.
+ * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
+ * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
+ * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
+ */
 function v_3d_tstat(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -674,78 +746,6 @@ function v_3d_tstat(
     cmask: string | null = null,
     runner: Runner | null = null,
 ): V3dTstatOutputs {
-    /**
-     * Compute voxel-wise statistics using AFNI 3dTstat command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dtstat.
-     * @param mask Mask file.
-     * @param num_threads Set number of threads.
-     * @param options Selected statistical output.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param sum Compute sum of input voxels.
-     * @param abssum Compute absolute sum of input voxels.
-     * @param sos Compute sum of squares.
-     * @param l2norm Compute L2 norm (sqrt(sum squares)).
-     * @param mean Compute mean of input voxels.
-     * @param slope Compute the slope of input voxels vs. time.
-     * @param stdev Compute standard deviation of input voxels.
-     * @param stdev_nod Compute standard deviation of input voxels without detrending.
-     * @param cvar Compute coefficient of variation of input voxels.
-     * @param cvar_nod Compute coefficient of variation of input voxels without detrending.
-     * @param cvarinv Compute inverse coefficient of variation of input voxels.
-     * @param cvarinv_nod Compute inverse coefficient of variation of input voxels without detrending.
-     * @param tsnr Compute temporal signal to noise ratio.
-     * @param mad Compute median absolute deviation of input voxels.
-     * @param dw Compute Durbin-Watson Statistic of input voxels.
-     * @param median Compute median of input voxels.
-     * @param nzmedian Compute median of non-zero input voxels.
-     * @param nzstdev Compute standard deviation of non-zero input voxels.
-     * @param bmv Compute biweight midvariance of input voxels.
-     * @param mssd Compute mean of successive squared differences of input voxels.
-     * @param mssdsqrt Compute square root of mean of successive squared differences of input voxels.
-     * @param masdx Compute median of absolute values of first time differences of input voxels.
-     * @param min Compute minimum of input voxels.
-     * @param max Compute maximum of input voxels.
-     * @param absmax Compute absolute maximum of input voxels.
-     * @param signed_absmax Compute signed absolute maximum of input voxels.
-     * @param percentile Compute the P-th percentile point of the data in each voxel time series.
-     * @param argmin Compute index of minimum of input voxels.
-     * @param argmin1 Compute index + 1 of minimum of input voxels.
-     * @param argmax Compute index of maximum of input voxels.
-     * @param argmax1 Compute index + 1 of maximum of input voxels.
-     * @param argabsmax Compute index of absolute maximum of input voxels.
-     * @param argabsmax1 Compute index + 1 of absolute maximum of input voxels.
-     * @param duration Compute number of points around max above a threshold.
-     * @param onset Compute beginning of duration around max where value exceeds basepercent.
-     * @param offset Compute end of duration around max where value exceeds basepercent.
-     * @param centroid Compute centroid of data time curves.
-     * @param centduration Compute duration using centroid's index as center.
-     * @param nzmean Compute mean of non-zero voxels.
-     * @param zcount Count number of zero values at each voxel.
-     * @param nzcount Count number of non-zero values at each voxel.
-     * @param autocorr Compute autocorrelation function and return first n coefficients.
-     * @param autoreg Compute autoregression coefficients and return first n coefficients.
-     * @param accumulate Accumulate time series values (partial sums).
-     * @param centromean Compute mean of middle 50% of voxel values.
-     * @param skewness Measure of asymmetry in distribution.
-     * @param kurtosis Measure of the 'tailedness' of the probability distribution.
-     * @param firstvalue First value in dataset.
-     * @param tdiff Take the first difference of each time series before further processing.
-     * @param prefix Use string 'p' for the prefix of the output dataset [DEFAULT = 'stat'].
-     * @param datum Use data type 'd' for the type of storage of the output, where 'd' is one of 'byte', 'short', or 'float' [DEFAULT=float].
-     * @param nscale Do not scale output values when datum is byte or short. Scaling is done by default.
-     * @param basepercent Percentage of maximum for duration calculation.
-     * @param mask_mset Use the dataset 'mset' as a mask. Only voxels with nonzero values in 'mset' will be printed from 'dataset'.
-     * @param mrange Further restrict the voxels from 'mset' so that only those mask values between 'a' and 'b' (inclusive) will be used.
-     * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program, and produce a mask from the resulting 3D brick.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSTAT_METADATA);
     const params = v_3d_tstat_params(in_file, mask, num_threads, options, outputtype, sum, abssum, sos, l2norm, mean, slope, stdev, stdev_nod, cvar, cvar_nod, cvarinv, cvarinv_nod, tsnr, mad, dw, median, nzmedian, nzstdev, bmv, mssd, mssdsqrt, masdx, min, max, absmax, signed_absmax, percentile, argmin, argmin1, argmax, argmax1, argabsmax, argabsmax1, duration, onset, offset, centroid, centduration, nzmean, zcount, nzcount, autocorr, autoreg, accumulate, centromean, skewness, kurtosis, firstvalue, tdiff, prefix, datum, nscale, basepercent, mask_mset, mrange, cmask)
@@ -758,5 +758,8 @@ export {
       V3dTstatParameters,
       V_3D_TSTAT_METADATA,
       v_3d_tstat,
+      v_3d_tstat_cargs,
+      v_3d_tstat_execute,
+      v_3d_tstat_outputs,
       v_3d_tstat_params,
 };

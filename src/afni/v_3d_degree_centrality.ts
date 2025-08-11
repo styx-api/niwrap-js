@@ -12,7 +12,7 @@ const V_3D_DEGREE_CENTRALITY_METADATA: Metadata = {
 
 
 interface V3dDegreeCentralityParameters {
-    "__STYXTYPE__": "3dDegreeCentrality";
+    "@type": "afni.3dDegreeCentrality";
     "autoclip": boolean;
     "automask": boolean;
     "in_file": InputPathType;
@@ -24,35 +24,35 @@ interface V3dDegreeCentralityParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDegreeCentrality": v_3d_degree_centrality_cargs,
+        "afni.3dDegreeCentrality": v_3d_degree_centrality_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDegreeCentrality": v_3d_degree_centrality_outputs,
+        "afni.3dDegreeCentrality": v_3d_degree_centrality_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dDegreeCentralityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3ddegreecentrality.
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Mask the dataset to target brain-only voxels.
+ * @param mask Mask file to mask input data.
+ * @param oned_file Output filepath to text dump of correlation matrix.
+ * @param polort No description provided.
+ * @param sparsity Only take the top percent of connections.
+ * @param thresh Threshold to exclude connections where corr <= thresh.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_degree_centrality_params(
     in_file: InputPathType,
     autoclip: boolean = false,
@@ -89,22 +103,8 @@ function v_3d_degree_centrality_params(
     sparsity: number | null = null,
     thresh: number | null = null,
 ): V3dDegreeCentralityParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3ddegreecentrality.
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Mask the dataset to target brain-only voxels.
-     * @param mask Mask file to mask input data.
-     * @param oned_file Output filepath to text dump of correlation matrix.
-     * @param polort No description provided.
-     * @param sparsity Only take the top percent of connections.
-     * @param thresh Threshold to exclude connections where corr <= thresh.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDegreeCentrality" as const,
+        "@type": "afni.3dDegreeCentrality" as const,
         "autoclip": autoclip,
         "automask": automask,
         "in_file": in_file,
@@ -128,18 +128,18 @@ function v_3d_degree_centrality_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_degree_centrality_cargs(
     params: V3dDegreeCentralityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDegreeCentrality");
     if ((params["autoclip"] ?? null)) {
@@ -183,18 +183,18 @@ function v_3d_degree_centrality_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_degree_centrality_outputs(
     params: V3dDegreeCentralityParameters,
     execution: Execution,
 ): V3dDegreeCentralityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDegreeCentralityOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["in_file"] ?? null))].join('')),
@@ -204,22 +204,22 @@ function v_3d_degree_centrality_outputs(
 }
 
 
+/**
+ * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
+ */
 function v_3d_degree_centrality_execute(
     params: V3dDegreeCentralityParameters,
     execution: Execution,
 ): V3dDegreeCentralityOutputs {
-    /**
-     * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_degree_centrality_cargs(params, execution)
     const ret = v_3d_degree_centrality_outputs(params, execution)
@@ -228,6 +228,25 @@ function v_3d_degree_centrality_execute(
 }
 
 
+/**
+ * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3ddegreecentrality.
+ * @param autoclip Clip off low-intensity regions in the dataset.
+ * @param automask Mask the dataset to target brain-only voxels.
+ * @param mask Mask file to mask input data.
+ * @param oned_file Output filepath to text dump of correlation matrix.
+ * @param polort No description provided.
+ * @param sparsity Only take the top percent of connections.
+ * @param thresh Threshold to exclude connections where corr <= thresh.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
+ */
 function v_3d_degree_centrality(
     in_file: InputPathType,
     autoclip: boolean = false,
@@ -239,25 +258,6 @@ function v_3d_degree_centrality(
     thresh: number | null = null,
     runner: Runner | null = null,
 ): V3dDegreeCentralityOutputs {
-    /**
-     * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3ddegreecentrality.
-     * @param autoclip Clip off low-intensity regions in the dataset.
-     * @param automask Mask the dataset to target brain-only voxels.
-     * @param mask Mask file to mask input data.
-     * @param oned_file Output filepath to text dump of correlation matrix.
-     * @param polort No description provided.
-     * @param sparsity Only take the top percent of connections.
-     * @param thresh Threshold to exclude connections where corr <= thresh.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DEGREE_CENTRALITY_METADATA);
     const params = v_3d_degree_centrality_params(in_file, autoclip, automask, mask, oned_file, polort, sparsity, thresh)
@@ -270,5 +270,8 @@ export {
       V3dDegreeCentralityParameters,
       V_3D_DEGREE_CENTRALITY_METADATA,
       v_3d_degree_centrality,
+      v_3d_degree_centrality_cargs,
+      v_3d_degree_centrality_execute,
+      v_3d_degree_centrality_outputs,
       v_3d_degree_centrality_params,
 };

@@ -12,7 +12,7 @@ const FDRVAL_METADATA: Metadata = {
 
 
 interface FdrvalParameters {
-    "__STYXTYPE__": "fdrval";
+    "@type": "afni.fdrval";
     "dset": InputPathType;
     "sub": number;
     "val_list": Array<number>;
@@ -24,35 +24,35 @@ interface FdrvalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fdrval": fdrval_cargs,
+        "afni.fdrval": fdrval_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fdrval": fdrval_outputs,
+        "afni.fdrval": fdrval_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface FdrvalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Input dataset
+ * @param sub Sub-brick number
+ * @param val_list List of threshold values
+ * @param pval Output the p-value (on the same line, after q)
+ * @param ponly Don't output q-values, just p-values
+ * @param qonly Don't output p-values, just q-values
+ * @param qinput The 'val' inputs are taken to be q-values and then the outputs are the corresponding statistical thresholds.
+ * @param inverse Inverse of the usual operation. 'Val' inputs must be between 0 and 1 (exclusive). Cannot be used with '-ponly' or '-pval'.
+ *
+ * @returns Parameter dictionary
+ */
 function fdrval_params(
     dset: InputPathType,
     sub: number,
@@ -85,22 +99,8 @@ function fdrval_params(
     qinput: boolean = false,
     inverse: boolean = false,
 ): FdrvalParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Input dataset
-     * @param sub Sub-brick number
-     * @param val_list List of threshold values
-     * @param pval Output the p-value (on the same line, after q)
-     * @param ponly Don't output q-values, just p-values
-     * @param qonly Don't output p-values, just q-values
-     * @param qinput The 'val' inputs are taken to be q-values and then the outputs are the corresponding statistical thresholds.
-     * @param inverse Inverse of the usual operation. 'Val' inputs must be between 0 and 1 (exclusive). Cannot be used with '-ponly' or '-pval'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fdrval" as const,
+        "@type": "afni.fdrval" as const,
         "dset": dset,
         "sub": sub,
         "val_list": val_list,
@@ -114,18 +114,18 @@ function fdrval_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fdrval_cargs(
     params: FdrvalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fdrval");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
@@ -150,18 +150,18 @@ function fdrval_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fdrval_outputs(
     params: FdrvalParameters,
     execution: Execution,
 ): FdrvalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FdrvalOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["stdout.txt"].join('')),
@@ -170,22 +170,22 @@ function fdrval_outputs(
 }
 
 
+/**
+ * Computes q-values from FDR curve data stored in dataset headers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
+ */
 function fdrval_execute(
     params: FdrvalParameters,
     execution: Execution,
 ): FdrvalOutputs {
-    /**
-     * Computes q-values from FDR curve data stored in dataset headers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
-     */
     params = execution.params(params)
     const cargs = fdrval_cargs(params, execution)
     const ret = fdrval_outputs(params, execution)
@@ -194,6 +194,25 @@ function fdrval_execute(
 }
 
 
+/**
+ * Computes q-values from FDR curve data stored in dataset headers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Input dataset
+ * @param sub Sub-brick number
+ * @param val_list List of threshold values
+ * @param pval Output the p-value (on the same line, after q)
+ * @param ponly Don't output q-values, just p-values
+ * @param qonly Don't output p-values, just q-values
+ * @param qinput The 'val' inputs are taken to be q-values and then the outputs are the corresponding statistical thresholds.
+ * @param inverse Inverse of the usual operation. 'Val' inputs must be between 0 and 1 (exclusive). Cannot be used with '-ponly' or '-pval'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
+ */
 function fdrval(
     dset: InputPathType,
     sub: number,
@@ -205,25 +224,6 @@ function fdrval(
     inverse: boolean = false,
     runner: Runner | null = null,
 ): FdrvalOutputs {
-    /**
-     * Computes q-values from FDR curve data stored in dataset headers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Input dataset
-     * @param sub Sub-brick number
-     * @param val_list List of threshold values
-     * @param pval Output the p-value (on the same line, after q)
-     * @param ponly Don't output q-values, just p-values
-     * @param qonly Don't output p-values, just q-values
-     * @param qinput The 'val' inputs are taken to be q-values and then the outputs are the corresponding statistical thresholds.
-     * @param inverse Inverse of the usual operation. 'Val' inputs must be between 0 and 1 (exclusive). Cannot be used with '-ponly' or '-pval'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FDRVAL_METADATA);
     const params = fdrval_params(dset, sub, val_list, pval, ponly, qonly, qinput, inverse)
@@ -236,5 +236,8 @@ export {
       FdrvalOutputs,
       FdrvalParameters,
       fdrval,
+      fdrval_cargs,
+      fdrval_execute,
+      fdrval_outputs,
       fdrval_params,
 };

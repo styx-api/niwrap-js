@@ -12,7 +12,7 @@ const DCMEDIT_METADATA: Metadata = {
 
 
 interface DcmeditTagParameters {
-    "__STYXTYPE__": "tag";
+    "@type": "mrtrix.dcmedit.tag";
     "group": string;
     "element": string;
     "newvalue": string;
@@ -20,14 +20,14 @@ interface DcmeditTagParameters {
 
 
 interface DcmeditConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dcmedit.config";
     "key": string;
     "value": string;
 }
 
 
 interface DcmeditParameters {
-    "__STYXTYPE__": "dcmedit";
+    "@type": "mrtrix.dcmedit";
     "anonymise": boolean;
     "id"?: string | null | undefined;
     "tag"?: Array<DcmeditTagParameters> | null | undefined;
@@ -43,57 +43,57 @@ interface DcmeditParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmedit": dcmedit_cargs,
-        "tag": dcmedit_tag_cargs,
-        "config": dcmedit_config_cargs,
+        "mrtrix.dcmedit": dcmedit_cargs,
+        "mrtrix.dcmedit.tag": dcmedit_tag_cargs,
+        "mrtrix.dcmedit.config": dcmedit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param group replace specific tag.
+ * @param element replace specific tag.
+ * @param newvalue replace specific tag.
+ *
+ * @returns Parameter dictionary
+ */
 function dcmedit_tag_params(
     group: string,
     element: string,
     newvalue: string,
 ): DcmeditTagParameters {
-    /**
-     * Build parameters.
-    
-     * @param group replace specific tag.
-     * @param element replace specific tag.
-     * @param newvalue replace specific tag.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tag" as const,
+        "@type": "mrtrix.dcmedit.tag" as const,
         "group": group,
         "element": element,
         "newvalue": newvalue,
@@ -102,18 +102,18 @@ function dcmedit_tag_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmedit_tag_cargs(
     params: DcmeditTagParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-tag");
     cargs.push((params["group"] ?? null));
@@ -123,20 +123,20 @@ function dcmedit_tag_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dcmedit_config_params(
     key: string,
     value: string,
 ): DcmeditConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dcmedit.config" as const,
         "key": key,
         "value": value,
     };
@@ -144,18 +144,18 @@ function dcmedit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmedit_config_cargs(
     params: DcmeditConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -177,6 +177,27 @@ interface DcmeditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param file the DICOM file to be edited.
+ * @param anonymise remove any identifiable information, by replacing the following tags:
+- any tag with Value Representation PN will be replaced with 'anonymous'
+- tag (0010,0030) PatientBirthDate will be replaced with an empty string
+WARNING: there is no guarantee that this command will remove all identiable information, since such information may be contained in any number of private vendor-specific tags. You will need to double-check the results independently if you need to ensure anonymity.
+ * @param id replace all ID tags with string supplied. This consists of tags (0010, 0020) PatientID and (0010, 1000) OtherPatientIDs
+ * @param tag replace specific tag.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dcmedit_params(
     file: InputPathType,
     anonymise: boolean = false,
@@ -191,29 +212,8 @@ function dcmedit_params(
     help: boolean = false,
     version: boolean = false,
 ): DcmeditParameters {
-    /**
-     * Build parameters.
-    
-     * @param file the DICOM file to be edited.
-     * @param anonymise remove any identifiable information, by replacing the following tags:
-- any tag with Value Representation PN will be replaced with 'anonymous'
-- tag (0010,0030) PatientBirthDate will be replaced with an empty string
-WARNING: there is no guarantee that this command will remove all identiable information, since such information may be contained in any number of private vendor-specific tags. You will need to double-check the results independently if you need to ensure anonymity.
-     * @param id replace all ID tags with string supplied. This consists of tags (0010, 0020) PatientID and (0010, 1000) OtherPatientIDs
-     * @param tag replace specific tag.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmedit" as const,
+        "@type": "mrtrix.dcmedit" as const,
         "anonymise": anonymise,
         "info": info,
         "quiet": quiet,
@@ -239,18 +239,18 @@ WARNING: there is no guarantee that this command will remove all identiable info
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmedit_cargs(
     params: DcmeditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmedit");
     if ((params["anonymise"] ?? null)) {
@@ -263,7 +263,7 @@ function dcmedit_cargs(
         );
     }
     if ((params["tag"] ?? null) !== null) {
-        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -284,7 +284,7 @@ function dcmedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -297,18 +297,18 @@ function dcmedit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmedit_outputs(
     params: DcmeditParameters,
     execution: Execution,
 ): DcmeditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmeditOutputs = {
         root: execution.outputFile("."),
     };
@@ -316,30 +316,30 @@ function dcmedit_outputs(
 }
 
 
+/**
+ * Edit DICOM file in-place.
+ *
+ * Note that this command simply replaces the existing values without modifying the DICOM structure in any way. Replacement text will be truncated if it is too long to fit inside the existing tag.
+ *
+ * WARNING: this command will modify existing data! It is recommended to run this command on a copy of the original data set to avoid loss of data.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
+ */
 function dcmedit_execute(
     params: DcmeditParameters,
     execution: Execution,
 ): DcmeditOutputs {
-    /**
-     * Edit DICOM file in-place.
-     * 
-     * Note that this command simply replaces the existing values without modifying the DICOM structure in any way. Replacement text will be truncated if it is too long to fit inside the existing tag.
-     * 
-     * WARNING: this command will modify existing data! It is recommended to run this command on a copy of the original data set to avoid loss of data.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmedit_cargs(params, execution)
     const ret = dcmedit_outputs(params, execution)
@@ -348,6 +348,40 @@ function dcmedit_execute(
 }
 
 
+/**
+ * Edit DICOM file in-place.
+ *
+ * Note that this command simply replaces the existing values without modifying the DICOM structure in any way. Replacement text will be truncated if it is too long to fit inside the existing tag.
+ *
+ * WARNING: this command will modify existing data! It is recommended to run this command on a copy of the original data set to avoid loss of data.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param file the DICOM file to be edited.
+ * @param anonymise remove any identifiable information, by replacing the following tags:
+- any tag with Value Representation PN will be replaced with 'anonymous'
+- tag (0010,0030) PatientBirthDate will be replaced with an empty string
+WARNING: there is no guarantee that this command will remove all identiable information, since such information may be contained in any number of private vendor-specific tags. You will need to double-check the results independently if you need to ensure anonymity.
+ * @param id replace all ID tags with string supplied. This consists of tags (0010, 0020) PatientID and (0010, 1000) OtherPatientIDs
+ * @param tag replace specific tag.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
+ */
 function dcmedit(
     file: InputPathType,
     anonymise: boolean = false,
@@ -363,40 +397,6 @@ function dcmedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): DcmeditOutputs {
-    /**
-     * Edit DICOM file in-place.
-     * 
-     * Note that this command simply replaces the existing values without modifying the DICOM structure in any way. Replacement text will be truncated if it is too long to fit inside the existing tag.
-     * 
-     * WARNING: this command will modify existing data! It is recommended to run this command on a copy of the original data set to avoid loss of data.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param file the DICOM file to be edited.
-     * @param anonymise remove any identifiable information, by replacing the following tags:
-- any tag with Value Representation PN will be replaced with 'anonymous'
-- tag (0010,0030) PatientBirthDate will be replaced with an empty string
-WARNING: there is no guarantee that this command will remove all identiable information, since such information may be contained in any number of private vendor-specific tags. You will need to double-check the results independently if you need to ensure anonymity.
-     * @param id replace all ID tags with string supplied. This consists of tags (0010, 0020) PatientID and (0010, 1000) OtherPatientIDs
-     * @param tag replace specific tag.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMEDIT_METADATA);
     const params = dcmedit_params(file, anonymise, id, tag, info, quiet, debug, force, nthreads, config, help, version)
@@ -411,7 +411,12 @@ export {
       DcmeditParameters,
       DcmeditTagParameters,
       dcmedit,
+      dcmedit_cargs,
+      dcmedit_config_cargs,
       dcmedit_config_params,
+      dcmedit_execute,
+      dcmedit_outputs,
       dcmedit_params,
+      dcmedit_tag_cargs,
       dcmedit_tag_params,
 };

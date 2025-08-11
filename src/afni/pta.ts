@@ -12,7 +12,7 @@ const PTA_METADATA: Metadata = {
 
 
 interface PtaParameters {
-    "__STYXTYPE__": "PTA";
+    "@type": "afni.PTA";
     "prefix": string;
     "input_file": InputPathType;
     "model_formula": string;
@@ -24,35 +24,35 @@ interface PtaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "PTA": pta_cargs,
+        "afni.PTA": pta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "PTA": pta_outputs,
+        "afni.PTA": pta_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface PtaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output files
+ * @param input_file Input data file in table format (data frame structure of long format in R)
+ * @param model_formula Model formulation through multilevel smoothing splines
+ * @param vt_formulation Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation (e.g., s(age,subject)).
+ * @param prediction_table Data table to generate predicted values for graphical illustration
+ * @param verbosity_level Verbosity level (0 for quiet, 1 or more for talkative)
+ * @param response_var Column name designated as the response/outcome variable (default is 'Y')
+ * @param dbg_args Enable R to save parameters for debugging
+ *
+ * @returns Parameter dictionary
+ */
 function pta_params(
     prefix: string,
     input_file: InputPathType,
@@ -89,22 +103,8 @@ function pta_params(
     response_var: string | null = null,
     dbg_args: boolean = false,
 ): PtaParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output files
-     * @param input_file Input data file in table format (data frame structure of long format in R)
-     * @param model_formula Model formulation through multilevel smoothing splines
-     * @param vt_formulation Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation (e.g., s(age,subject)).
-     * @param prediction_table Data table to generate predicted values for graphical illustration
-     * @param verbosity_level Verbosity level (0 for quiet, 1 or more for talkative)
-     * @param response_var Column name designated as the response/outcome variable (default is 'Y')
-     * @param dbg_args Enable R to save parameters for debugging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "PTA" as const,
+        "@type": "afni.PTA" as const,
         "prefix": prefix,
         "input_file": input_file,
         "model_formula": model_formula,
@@ -126,18 +126,18 @@ function pta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pta_cargs(
     params: PtaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("PTA");
     cargs.push(
@@ -183,18 +183,18 @@ function pta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pta_outputs(
     params: PtaParameters,
     execution: Execution,
 ): PtaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PtaOutputs = {
         root: execution.outputFile("."),
         stat_output: execution.outputFile([(params["prefix"] ?? null), "-stat.txt"].join('')),
@@ -204,22 +204,22 @@ function pta_outputs(
 }
 
 
+/**
+ * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PtaOutputs`).
+ */
 function pta_execute(
     params: PtaParameters,
     execution: Execution,
 ): PtaOutputs {
-    /**
-     * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PtaOutputs`).
-     */
     params = execution.params(params)
     const cargs = pta_cargs(params, execution)
     const ret = pta_outputs(params, execution)
@@ -228,6 +228,25 @@ function pta_execute(
 }
 
 
+/**
+ * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output files
+ * @param input_file Input data file in table format (data frame structure of long format in R)
+ * @param model_formula Model formulation through multilevel smoothing splines
+ * @param vt_formulation Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation (e.g., s(age,subject)).
+ * @param prediction_table Data table to generate predicted values for graphical illustration
+ * @param verbosity_level Verbosity level (0 for quiet, 1 or more for talkative)
+ * @param response_var Column name designated as the response/outcome variable (default is 'Y')
+ * @param dbg_args Enable R to save parameters for debugging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PtaOutputs`).
+ */
 function pta(
     prefix: string,
     input_file: InputPathType,
@@ -239,25 +258,6 @@ function pta(
     dbg_args: boolean = false,
     runner: Runner | null = null,
 ): PtaOutputs {
-    /**
-     * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output files
-     * @param input_file Input data file in table format (data frame structure of long format in R)
-     * @param model_formula Model formulation through multilevel smoothing splines
-     * @param vt_formulation Specify varying smoothing terms. Two components are required: the first one 'var' indicates the variable (e.g., subject) around which the smoothing will vary while the second component specifies the smoothing formulation (e.g., s(age,subject)).
-     * @param prediction_table Data table to generate predicted values for graphical illustration
-     * @param verbosity_level Verbosity level (0 for quiet, 1 or more for talkative)
-     * @param response_var Column name designated as the response/outcome variable (default is 'Y')
-     * @param dbg_args Enable R to save parameters for debugging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PtaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PTA_METADATA);
     const params = pta_params(prefix, input_file, model_formula, vt_formulation, prediction_table, verbosity_level, response_var, dbg_args)
@@ -270,5 +270,8 @@ export {
       PtaOutputs,
       PtaParameters,
       pta,
+      pta_cargs,
+      pta_execute,
+      pta_outputs,
       pta_params,
 };

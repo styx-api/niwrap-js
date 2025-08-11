@@ -12,7 +12,7 @@ const ANATOMICAL_AVERAGE_METADATA: Metadata = {
 
 
 interface AnatomicalAverageParameters {
-    "__STYXTYPE__": "AnatomicalAverage";
+    "@type": "fsl.AnatomicalAverage";
     "output_basename": string;
     "input_images": Array<InputPathType>;
     "standard_image"?: InputPathType | null | undefined;
@@ -25,35 +25,35 @@ interface AnatomicalAverageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AnatomicalAverage": anatomical_average_cargs,
+        "fsl.AnatomicalAverage": anatomical_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "AnatomicalAverage": anatomical_average_outputs,
+        "fsl.AnatomicalAverage": anatomical_average_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface AnatomicalAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_basename Output basename
+ * @param input_images List of input images
+ * @param standard_image Standard image (default is MNI152_T1_2mm)
+ * @param standard_brain_mask Standard brain mask (default is MNI152_T1_2mm_brain_mask_dil)
+ * @param no_crop_flag Do not crop images
+ * @param work_dir Local, temporary working directory (to be cleaned up - i.e. deleted)
+ * @param brainsize Specify brainsize in mm for internal ROI (via robustfov)
+ * @param noclean_flag Do not run the cleanup
+ * @param verbose_flag Verbose output
+ *
+ * @returns Parameter dictionary
+ */
 function anatomical_average_params(
     output_basename: string,
     input_images: Array<InputPathType>,
@@ -87,23 +102,8 @@ function anatomical_average_params(
     noclean_flag: boolean = false,
     verbose_flag: boolean = false,
 ): AnatomicalAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_basename Output basename
-     * @param input_images List of input images
-     * @param standard_image Standard image (default is MNI152_T1_2mm)
-     * @param standard_brain_mask Standard brain mask (default is MNI152_T1_2mm_brain_mask_dil)
-     * @param no_crop_flag Do not crop images
-     * @param work_dir Local, temporary working directory (to be cleaned up - i.e. deleted)
-     * @param brainsize Specify brainsize in mm for internal ROI (via robustfov)
-     * @param noclean_flag Do not run the cleanup
-     * @param verbose_flag Verbose output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AnatomicalAverage" as const,
+        "@type": "fsl.AnatomicalAverage" as const,
         "output_basename": output_basename,
         "input_images": input_images,
         "no_crop_flag": no_crop_flag,
@@ -126,18 +126,18 @@ function anatomical_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function anatomical_average_cargs(
     params: AnatomicalAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AnatomicalAverage");
     cargs.push(
@@ -182,18 +182,18 @@ function anatomical_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function anatomical_average_outputs(
     params: AnatomicalAverageParameters,
     execution: Execution,
 ): AnatomicalAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AnatomicalAverageOutputs = {
         root: execution.outputFile("."),
         avg_output: execution.outputFile([(params["output_basename"] ?? null), "_avg.nii.gz"].join('')),
@@ -202,22 +202,22 @@ function anatomical_average_outputs(
 }
 
 
+/**
+ * Tool to create an anatomical average of input brain images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
+ */
 function anatomical_average_execute(
     params: AnatomicalAverageParameters,
     execution: Execution,
 ): AnatomicalAverageOutputs {
-    /**
-     * Tool to create an anatomical average of input brain images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = anatomical_average_cargs(params, execution)
     const ret = anatomical_average_outputs(params, execution)
@@ -226,6 +226,26 @@ function anatomical_average_execute(
 }
 
 
+/**
+ * Tool to create an anatomical average of input brain images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_basename Output basename
+ * @param input_images List of input images
+ * @param standard_image Standard image (default is MNI152_T1_2mm)
+ * @param standard_brain_mask Standard brain mask (default is MNI152_T1_2mm_brain_mask_dil)
+ * @param no_crop_flag Do not crop images
+ * @param work_dir Local, temporary working directory (to be cleaned up - i.e. deleted)
+ * @param brainsize Specify brainsize in mm for internal ROI (via robustfov)
+ * @param noclean_flag Do not run the cleanup
+ * @param verbose_flag Verbose output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
+ */
 function anatomical_average(
     output_basename: string,
     input_images: Array<InputPathType>,
@@ -238,26 +258,6 @@ function anatomical_average(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): AnatomicalAverageOutputs {
-    /**
-     * Tool to create an anatomical average of input brain images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_basename Output basename
-     * @param input_images List of input images
-     * @param standard_image Standard image (default is MNI152_T1_2mm)
-     * @param standard_brain_mask Standard brain mask (default is MNI152_T1_2mm_brain_mask_dil)
-     * @param no_crop_flag Do not crop images
-     * @param work_dir Local, temporary working directory (to be cleaned up - i.e. deleted)
-     * @param brainsize Specify brainsize in mm for internal ROI (via robustfov)
-     * @param noclean_flag Do not run the cleanup
-     * @param verbose_flag Verbose output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANATOMICAL_AVERAGE_METADATA);
     const params = anatomical_average_params(output_basename, input_images, standard_image, standard_brain_mask, no_crop_flag, work_dir, brainsize, noclean_flag, verbose_flag)
@@ -270,5 +270,8 @@ export {
       AnatomicalAverageOutputs,
       AnatomicalAverageParameters,
       anatomical_average,
+      anatomical_average_cargs,
+      anatomical_average_execute,
+      anatomical_average_outputs,
       anatomical_average_params,
 };

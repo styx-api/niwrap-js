@@ -12,7 +12,7 @@ const MRI_COMPUTE_LAYER_FRACTIONS_METADATA: Metadata = {
 
 
 interface MriComputeLayerFractionsParameters {
-    "__STYXTYPE__": "mri_compute_layer_fractions";
+    "@type": "freesurfer.mri_compute_layer_fractions";
     "reg_file": InputPathType;
     "input_volume": InputPathType;
     "output_stem": string;
@@ -30,35 +30,35 @@ interface MriComputeLayerFractionsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_layer_fractions": mri_compute_layer_fractions_cargs,
+        "freesurfer.mri_compute_layer_fractions": mri_compute_layer_fractions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_layer_fractions": mri_compute_layer_fractions_outputs,
+        "freesurfer.mri_compute_layer_fractions": mri_compute_layer_fractions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface MriComputeLayerFractionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reg_file Input registration file
+ * @param input_volume Input volume file
+ * @param output_stem Output stem for generated files
+ * @param output_directory Output directory specified by SUBJECTS_DIR
+ * @param aseg_file Input ASEG file for synthesis
+ * @param target_volume Target volume for analysis
+ * @param hemi_flag Specify hemisphere processing
+ * @param fs_names_flag Flag to use FreeSurfer names
+ * @param subject_id Subject ID for processing
+ * @param n_layers Number of layers for volume fraction computation
+ * @param synth_flag Flag to combine with the ASEG for a single segmentation volume
+ * @param thickness Specify cortical thickness fraction
+ * @param random_file Specify random volume file
+ * @param identity_file Specify identity file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_layer_fractions_params(
     reg_file: InputPathType,
     input_volume: InputPathType,
@@ -101,28 +121,8 @@ function mri_compute_layer_fractions_params(
     random_file: InputPathType | null = null,
     identity_file: string | null = null,
 ): MriComputeLayerFractionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param reg_file Input registration file
-     * @param input_volume Input volume file
-     * @param output_stem Output stem for generated files
-     * @param output_directory Output directory specified by SUBJECTS_DIR
-     * @param aseg_file Input ASEG file for synthesis
-     * @param target_volume Target volume for analysis
-     * @param hemi_flag Specify hemisphere processing
-     * @param fs_names_flag Flag to use FreeSurfer names
-     * @param subject_id Subject ID for processing
-     * @param n_layers Number of layers for volume fraction computation
-     * @param synth_flag Flag to combine with the ASEG for a single segmentation volume
-     * @param thickness Specify cortical thickness fraction
-     * @param random_file Specify random volume file
-     * @param identity_file Specify identity file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_layer_fractions" as const,
+        "@type": "freesurfer.mri_compute_layer_fractions" as const,
         "reg_file": reg_file,
         "input_volume": input_volume,
         "output_stem": output_stem,
@@ -158,18 +158,18 @@ function mri_compute_layer_fractions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_layer_fractions_cargs(
     params: MriComputeLayerFractionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_layer_fractions");
     cargs.push(execution.inputFile((params["reg_file"] ?? null)));
@@ -230,18 +230,18 @@ function mri_compute_layer_fractions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_layer_fractions_outputs(
     params: MriComputeLayerFractionsParameters,
     execution: Execution,
 ): MriComputeLayerFractionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeLayerFractionsOutputs = {
         root: execution.outputFile("."),
         layer_fractions_output: execution.outputFile([(params["output_stem"] ?? null), "_layer_fractions.mgz"].join('')),
@@ -251,22 +251,22 @@ function mri_compute_layer_fractions_outputs(
 }
 
 
+/**
+ * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
+ */
 function mri_compute_layer_fractions_execute(
     params: MriComputeLayerFractionsParameters,
     execution: Execution,
 ): MriComputeLayerFractionsOutputs {
-    /**
-     * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_layer_fractions_cargs(params, execution)
     const ret = mri_compute_layer_fractions_outputs(params, execution)
@@ -275,6 +275,31 @@ function mri_compute_layer_fractions_execute(
 }
 
 
+/**
+ * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param reg_file Input registration file
+ * @param input_volume Input volume file
+ * @param output_stem Output stem for generated files
+ * @param output_directory Output directory specified by SUBJECTS_DIR
+ * @param aseg_file Input ASEG file for synthesis
+ * @param target_volume Target volume for analysis
+ * @param hemi_flag Specify hemisphere processing
+ * @param fs_names_flag Flag to use FreeSurfer names
+ * @param subject_id Subject ID for processing
+ * @param n_layers Number of layers for volume fraction computation
+ * @param synth_flag Flag to combine with the ASEG for a single segmentation volume
+ * @param thickness Specify cortical thickness fraction
+ * @param random_file Specify random volume file
+ * @param identity_file Specify identity file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
+ */
 function mri_compute_layer_fractions(
     reg_file: InputPathType,
     input_volume: InputPathType,
@@ -292,31 +317,6 @@ function mri_compute_layer_fractions(
     identity_file: string | null = null,
     runner: Runner | null = null,
 ): MriComputeLayerFractionsOutputs {
-    /**
-     * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param reg_file Input registration file
-     * @param input_volume Input volume file
-     * @param output_stem Output stem for generated files
-     * @param output_directory Output directory specified by SUBJECTS_DIR
-     * @param aseg_file Input ASEG file for synthesis
-     * @param target_volume Target volume for analysis
-     * @param hemi_flag Specify hemisphere processing
-     * @param fs_names_flag Flag to use FreeSurfer names
-     * @param subject_id Subject ID for processing
-     * @param n_layers Number of layers for volume fraction computation
-     * @param synth_flag Flag to combine with the ASEG for a single segmentation volume
-     * @param thickness Specify cortical thickness fraction
-     * @param random_file Specify random volume file
-     * @param identity_file Specify identity file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_LAYER_FRACTIONS_METADATA);
     const params = mri_compute_layer_fractions_params(reg_file, input_volume, output_stem, output_directory, aseg_file, target_volume, hemi_flag, fs_names_flag, subject_id, n_layers, synth_flag, thickness, random_file, identity_file)
@@ -329,5 +329,8 @@ export {
       MriComputeLayerFractionsOutputs,
       MriComputeLayerFractionsParameters,
       mri_compute_layer_fractions,
+      mri_compute_layer_fractions_cargs,
+      mri_compute_layer_fractions_execute,
+      mri_compute_layer_fractions_outputs,
       mri_compute_layer_fractions_params,
 };

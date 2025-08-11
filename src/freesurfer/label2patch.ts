@@ -12,7 +12,7 @@ const LABEL2PATCH_METADATA: Metadata = {
 
 
 interface Label2patchParameters {
-    "__STYXTYPE__": "label2patch";
+    "@type": "freesurfer.label2patch";
     "subject_name": string;
     "hemisphere": string;
     "label_file": InputPathType;
@@ -26,33 +26,33 @@ interface Label2patchParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label2patch": label2patch_cargs,
+        "freesurfer.label2patch": label2patch_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface Label2patchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name
+ * @param hemisphere Hemisphere (e.g. lh or rh)
+ * @param label_file Label file name
+ * @param output_patch Output patch file
+ * @param dilate Dilate the label n times before creating the patch
+ * @param erode Erode the label n times before creating the patch
+ * @param close Close the label n times before creating the patch
+ * @param subjects_dir Use path as the SUBJECTS_DIR instead of environment
+ * @param surface_name Use name as the surface (default 'inflated')
+ * @param write_surface Write output to a surface file (not a patch). Use .stl in filename to only write the mesh covered by the label, saving it in FS format will save full surface
+ *
+ * @returns Parameter dictionary
+ */
 function label2patch_params(
     subject_name: string,
     hemisphere: string,
@@ -84,24 +100,8 @@ function label2patch_params(
     surface_name: string | null = null,
     write_surface: boolean = false,
 ): Label2patchParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name
-     * @param hemisphere Hemisphere (e.g. lh or rh)
-     * @param label_file Label file name
-     * @param output_patch Output patch file
-     * @param dilate Dilate the label n times before creating the patch
-     * @param erode Erode the label n times before creating the patch
-     * @param close Close the label n times before creating the patch
-     * @param subjects_dir Use path as the SUBJECTS_DIR instead of environment
-     * @param surface_name Use name as the surface (default 'inflated')
-     * @param write_surface Write output to a surface file (not a patch). Use .stl in filename to only write the mesh covered by the label, saving it in FS format will save full surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label2patch" as const,
+        "@type": "freesurfer.label2patch" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "label_file": label_file,
@@ -127,18 +127,18 @@ function label2patch_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2patch_cargs(
     params: Label2patchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label2patch");
     cargs.push((params["subject_name"] ?? null));
@@ -182,18 +182,18 @@ function label2patch_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label2patch_outputs(
     params: Label2patchParameters,
     execution: Execution,
 ): Label2patchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Label2patchOutputs = {
         root: execution.outputFile("."),
     };
@@ -201,22 +201,22 @@ function label2patch_outputs(
 }
 
 
+/**
+ * Utility to create patches from label files in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
+ */
 function label2patch_execute(
     params: Label2patchParameters,
     execution: Execution,
 ): Label2patchOutputs {
-    /**
-     * Utility to create patches from label files in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
-     */
     params = execution.params(params)
     const cargs = label2patch_cargs(params, execution)
     const ret = label2patch_outputs(params, execution)
@@ -225,6 +225,27 @@ function label2patch_execute(
 }
 
 
+/**
+ * Utility to create patches from label files in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name
+ * @param hemisphere Hemisphere (e.g. lh or rh)
+ * @param label_file Label file name
+ * @param output_patch Output patch file
+ * @param dilate Dilate the label n times before creating the patch
+ * @param erode Erode the label n times before creating the patch
+ * @param close Close the label n times before creating the patch
+ * @param subjects_dir Use path as the SUBJECTS_DIR instead of environment
+ * @param surface_name Use name as the surface (default 'inflated')
+ * @param write_surface Write output to a surface file (not a patch). Use .stl in filename to only write the mesh covered by the label, saving it in FS format will save full surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
+ */
 function label2patch(
     subject_name: string,
     hemisphere: string,
@@ -238,27 +259,6 @@ function label2patch(
     write_surface: boolean = false,
     runner: Runner | null = null,
 ): Label2patchOutputs {
-    /**
-     * Utility to create patches from label files in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name
-     * @param hemisphere Hemisphere (e.g. lh or rh)
-     * @param label_file Label file name
-     * @param output_patch Output patch file
-     * @param dilate Dilate the label n times before creating the patch
-     * @param erode Erode the label n times before creating the patch
-     * @param close Close the label n times before creating the patch
-     * @param subjects_dir Use path as the SUBJECTS_DIR instead of environment
-     * @param surface_name Use name as the surface (default 'inflated')
-     * @param write_surface Write output to a surface file (not a patch). Use .stl in filename to only write the mesh covered by the label, saving it in FS format will save full surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL2PATCH_METADATA);
     const params = label2patch_params(subject_name, hemisphere, label_file, output_patch, dilate, erode, close, subjects_dir, surface_name, write_surface)
@@ -271,5 +271,8 @@ export {
       Label2patchOutputs,
       Label2patchParameters,
       label2patch,
+      label2patch_cargs,
+      label2patch_execute,
+      label2patch_outputs,
       label2patch_params,
 };

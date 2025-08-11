@@ -12,7 +12,7 @@ const V_3D_PAR2_AFNI_METADATA: Metadata = {
 
 
 interface V3dPar2AfniParameters {
-    "__STYXTYPE__": "3dPAR2AFNI";
+    "@type": "afni.3dPAR2AFNI";
     "input_file": InputPathType;
     "skip_outliers_test": boolean;
     "output_nifti": boolean;
@@ -26,35 +26,35 @@ interface V3dPar2AfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPAR2AFNI": v_3d_par2_afni_cargs,
+        "afni.3dPAR2AFNI": v_3d_par2_afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPAR2AFNI": v_3d_par2_afni_outputs,
+        "afni.3dPAR2AFNI": v_3d_par2_afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface V3dPar2AfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input PAR file (e.g., subject1.PAR)
+ * @param skip_outliers_test Skip the outliers test when converting 4D files. The default is to perform the outliers test.
+ * @param output_nifti Output NIfTI files instead of HEAD/BRIK. The default is to create HEAD/BRIK files.
+ * @param output_analyze Output ANALYZE files instead of HEAD/BRIK.
+ * @param output_dir The name of the directory where the created files should be placed. If this directory does not exist, the program exits without performing any conversion.
+ * @param verbose_flag Be verbose in operation.
+ * @param gzip_files Gzip the files created. The default is not to gzip the files.
+ * @param byte_swap_2 2-Byte-swap the files created. The default is not to 2 byte-swap.
+ * @param byte_swap_4 4-Byte-swap the files created. The default is not to 4 byte-swap.
+ * @param help_flag Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_par2_afni_params(
     input_file: InputPathType,
     skip_outliers_test: boolean = false,
@@ -89,24 +105,8 @@ function v_3d_par2_afni_params(
     byte_swap_4: boolean = false,
     help_flag: boolean = false,
 ): V3dPar2AfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input PAR file (e.g., subject1.PAR)
-     * @param skip_outliers_test Skip the outliers test when converting 4D files. The default is to perform the outliers test.
-     * @param output_nifti Output NIfTI files instead of HEAD/BRIK. The default is to create HEAD/BRIK files.
-     * @param output_analyze Output ANALYZE files instead of HEAD/BRIK.
-     * @param output_dir The name of the directory where the created files should be placed. If this directory does not exist, the program exits without performing any conversion.
-     * @param verbose_flag Be verbose in operation.
-     * @param gzip_files Gzip the files created. The default is not to gzip the files.
-     * @param byte_swap_2 2-Byte-swap the files created. The default is not to 2 byte-swap.
-     * @param byte_swap_4 4-Byte-swap the files created. The default is not to 4 byte-swap.
-     * @param help_flag Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPAR2AFNI" as const,
+        "@type": "afni.3dPAR2AFNI" as const,
         "input_file": input_file,
         "skip_outliers_test": skip_outliers_test,
         "output_nifti": output_nifti,
@@ -124,18 +124,18 @@ function v_3d_par2_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_par2_afni_cargs(
     params: V3dPar2AfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPAR2AFNI.pl");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -173,18 +173,18 @@ function v_3d_par2_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_par2_afni_outputs(
     params: V3dPar2AfniParameters,
     execution: Execution,
 ): V3dPar2AfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPar2AfniOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([path.basename((params["input_file"] ?? null)), "_converted"].join('')),
@@ -193,22 +193,22 @@ function v_3d_par2_afni_outputs(
 }
 
 
+/**
+ * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
+ */
 function v_3d_par2_afni_execute(
     params: V3dPar2AfniParameters,
     execution: Execution,
 ): V3dPar2AfniOutputs {
-    /**
-     * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_par2_afni_cargs(params, execution)
     const ret = v_3d_par2_afni_outputs(params, execution)
@@ -217,6 +217,27 @@ function v_3d_par2_afni_execute(
 }
 
 
+/**
+ * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input PAR file (e.g., subject1.PAR)
+ * @param skip_outliers_test Skip the outliers test when converting 4D files. The default is to perform the outliers test.
+ * @param output_nifti Output NIfTI files instead of HEAD/BRIK. The default is to create HEAD/BRIK files.
+ * @param output_analyze Output ANALYZE files instead of HEAD/BRIK.
+ * @param output_dir The name of the directory where the created files should be placed. If this directory does not exist, the program exits without performing any conversion.
+ * @param verbose_flag Be verbose in operation.
+ * @param gzip_files Gzip the files created. The default is not to gzip the files.
+ * @param byte_swap_2 2-Byte-swap the files created. The default is not to 2 byte-swap.
+ * @param byte_swap_4 4-Byte-swap the files created. The default is not to 4 byte-swap.
+ * @param help_flag Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
+ */
 function v_3d_par2_afni(
     input_file: InputPathType,
     skip_outliers_test: boolean = false,
@@ -230,27 +251,6 @@ function v_3d_par2_afni(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dPar2AfniOutputs {
-    /**
-     * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input PAR file (e.g., subject1.PAR)
-     * @param skip_outliers_test Skip the outliers test when converting 4D files. The default is to perform the outliers test.
-     * @param output_nifti Output NIfTI files instead of HEAD/BRIK. The default is to create HEAD/BRIK files.
-     * @param output_analyze Output ANALYZE files instead of HEAD/BRIK.
-     * @param output_dir The name of the directory where the created files should be placed. If this directory does not exist, the program exits without performing any conversion.
-     * @param verbose_flag Be verbose in operation.
-     * @param gzip_files Gzip the files created. The default is not to gzip the files.
-     * @param byte_swap_2 2-Byte-swap the files created. The default is not to 2 byte-swap.
-     * @param byte_swap_4 4-Byte-swap the files created. The default is not to 4 byte-swap.
-     * @param help_flag Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PAR2_AFNI_METADATA);
     const params = v_3d_par2_afni_params(input_file, skip_outliers_test, output_nifti, output_analyze, output_dir, verbose_flag, gzip_files, byte_swap_2, byte_swap_4, help_flag)
@@ -263,5 +263,8 @@ export {
       V3dPar2AfniParameters,
       V_3D_PAR2_AFNI_METADATA,
       v_3d_par2_afni,
+      v_3d_par2_afni_cargs,
+      v_3d_par2_afni_execute,
+      v_3d_par2_afni_outputs,
       v_3d_par2_afni_params,
 };

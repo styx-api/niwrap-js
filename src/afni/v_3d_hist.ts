@@ -12,7 +12,7 @@ const V_3D_HIST_METADATA: Metadata = {
 
 
 interface V3dHistParameters {
-    "__STYXTYPE__": "3dHist";
+    "@type": "afni.3dHist";
     "input": InputPathType;
     "dind_subbrick"?: number | null | undefined;
     "mask_dset"?: InputPathType | null | undefined;
@@ -36,33 +36,33 @@ interface V3dHistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dHist": v_3d_hist_cargs,
+        "afni.3dHist": v_3d_hist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -82,6 +82,32 @@ interface V3dHistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Dataset providing values for histogram.
+ * @param dind_subbrick Use sub-brick SB from the input rather than 0
+ * @param mask_dset Provide mask dataset to select subset of input.
+ * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
+ * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
+ * @param hist_file Read this previously created histogram instead of forming one from DSET.
+ * @param prefix Write histogram to niml file called PREF.niml.hist
+ * @param equalized Write a histogram equalized version of the input dataset.
+ * @param nbin Use K bins.
+ * @param min Minimum intensity.
+ * @param max Maximum intensity.
+ * @param binwidth Bin width.
+ * @param ignore_out Do not count samples outside the user specified range.
+ * @param range_hist Use previously created histogram to set range and binwidth parameters.
+ * @param showhist Display histogram to stdout.
+ * @param at_val Set the value at which you want histogram values.
+ * @param get_params Return the desired properties at a given value. You can select multiple properties.
+ * @param voxvol Specify voxel volume in mm^3. To be used with upvol.
+ * @param val_at Return the value where histogram property PAR is equal to PARVAL. PAR can be: cdf, rcdf, ncdf, nrcdf, upvol.
+ * @param quiet Return a concise output to simplify parsing.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_hist_params(
     input: InputPathType,
     dind_subbrick: number | null = null,
@@ -104,34 +130,8 @@ function v_3d_hist_params(
     val_at: string | null = null,
     quiet: boolean = false,
 ): V3dHistParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Dataset providing values for histogram.
-     * @param dind_subbrick Use sub-brick SB from the input rather than 0
-     * @param mask_dset Provide mask dataset to select subset of input.
-     * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
-     * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
-     * @param hist_file Read this previously created histogram instead of forming one from DSET.
-     * @param prefix Write histogram to niml file called PREF.niml.hist
-     * @param equalized Write a histogram equalized version of the input dataset.
-     * @param nbin Use K bins.
-     * @param min Minimum intensity.
-     * @param max Maximum intensity.
-     * @param binwidth Bin width.
-     * @param ignore_out Do not count samples outside the user specified range.
-     * @param range_hist Use previously created histogram to set range and binwidth parameters.
-     * @param showhist Display histogram to stdout.
-     * @param at_val Set the value at which you want histogram values.
-     * @param get_params Return the desired properties at a given value. You can select multiple properties.
-     * @param voxvol Specify voxel volume in mm^3. To be used with upvol.
-     * @param val_at Return the value where histogram property PAR is equal to PARVAL. PAR can be: cdf, rcdf, ncdf, nrcdf, upvol.
-     * @param quiet Return a concise output to simplify parsing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dHist" as const,
+        "@type": "afni.3dHist" as const,
         "input": input,
         "ignore_out": ignore_out,
         "showhist": showhist,
@@ -189,18 +189,18 @@ function v_3d_hist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_hist_cargs(
     params: V3dHistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dHist");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -313,18 +313,18 @@ function v_3d_hist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_hist_outputs(
     params: V3dHistParameters,
     execution: Execution,
 ): V3dHistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dHistOutputs = {
         root: execution.outputFile("."),
     };
@@ -332,22 +332,22 @@ function v_3d_hist_outputs(
 }
 
 
+/**
+ * Computes histograms using functions for generating priors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
+ */
 function v_3d_hist_execute(
     params: V3dHistParameters,
     execution: Execution,
 ): V3dHistOutputs {
-    /**
-     * Computes histograms using functions for generating priors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_hist_cargs(params, execution)
     const ret = v_3d_hist_outputs(params, execution)
@@ -356,6 +356,37 @@ function v_3d_hist_execute(
 }
 
 
+/**
+ * Computes histograms using functions for generating priors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Dataset providing values for histogram.
+ * @param dind_subbrick Use sub-brick SB from the input rather than 0
+ * @param mask_dset Provide mask dataset to select subset of input.
+ * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
+ * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
+ * @param hist_file Read this previously created histogram instead of forming one from DSET.
+ * @param prefix Write histogram to niml file called PREF.niml.hist
+ * @param equalized Write a histogram equalized version of the input dataset.
+ * @param nbin Use K bins.
+ * @param min Minimum intensity.
+ * @param max Maximum intensity.
+ * @param binwidth Bin width.
+ * @param ignore_out Do not count samples outside the user specified range.
+ * @param range_hist Use previously created histogram to set range and binwidth parameters.
+ * @param showhist Display histogram to stdout.
+ * @param at_val Set the value at which you want histogram values.
+ * @param get_params Return the desired properties at a given value. You can select multiple properties.
+ * @param voxvol Specify voxel volume in mm^3. To be used with upvol.
+ * @param val_at Return the value where histogram property PAR is equal to PARVAL. PAR can be: cdf, rcdf, ncdf, nrcdf, upvol.
+ * @param quiet Return a concise output to simplify parsing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
+ */
 function v_3d_hist(
     input: InputPathType,
     dind_subbrick: number | null = null,
@@ -379,37 +410,6 @@ function v_3d_hist(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dHistOutputs {
-    /**
-     * Computes histograms using functions for generating priors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Dataset providing values for histogram.
-     * @param dind_subbrick Use sub-brick SB from the input rather than 0
-     * @param mask_dset Provide mask dataset to select subset of input.
-     * @param mask_range Specify the range of values to consider from MSET. Default is anything non-zero
-     * @param cmask Provide cmask expression. Voxels where expression is 0 are excluded from computations.
-     * @param hist_file Read this previously created histogram instead of forming one from DSET.
-     * @param prefix Write histogram to niml file called PREF.niml.hist
-     * @param equalized Write a histogram equalized version of the input dataset.
-     * @param nbin Use K bins.
-     * @param min Minimum intensity.
-     * @param max Maximum intensity.
-     * @param binwidth Bin width.
-     * @param ignore_out Do not count samples outside the user specified range.
-     * @param range_hist Use previously created histogram to set range and binwidth parameters.
-     * @param showhist Display histogram to stdout.
-     * @param at_val Set the value at which you want histogram values.
-     * @param get_params Return the desired properties at a given value. You can select multiple properties.
-     * @param voxvol Specify voxel volume in mm^3. To be used with upvol.
-     * @param val_at Return the value where histogram property PAR is equal to PARVAL. PAR can be: cdf, rcdf, ncdf, nrcdf, upvol.
-     * @param quiet Return a concise output to simplify parsing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_HIST_METADATA);
     const params = v_3d_hist_params(input, dind_subbrick, mask_dset, mask_range, cmask, hist_file, prefix, equalized, nbin, min, max, binwidth, ignore_out, range_hist, showhist, at_val, get_params, voxvol, val_at, quiet)
@@ -422,5 +422,8 @@ export {
       V3dHistParameters,
       V_3D_HIST_METADATA,
       v_3d_hist,
+      v_3d_hist_cargs,
+      v_3d_hist_execute,
+      v_3d_hist_outputs,
       v_3d_hist_params,
 };

@@ -12,14 +12,14 @@ const TCKTRANSFORM_METADATA: Metadata = {
 
 
 interface TcktransformConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tcktransform.config";
     "key": string;
     "value": string;
 }
 
 
 interface TcktransformParameters {
-    "__STYXTYPE__": "tcktransform";
+    "@type": "mrtrix.tcktransform";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface TcktransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tcktransform": tcktransform_cargs,
-        "config": tcktransform_config_cargs,
+        "mrtrix.tcktransform": tcktransform_cargs,
+        "mrtrix.tcktransform.config": tcktransform_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tcktransform": tcktransform_outputs,
+        "mrtrix.tcktransform": tcktransform_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tcktransform_config_params(
     key: string,
     value: string,
 ): TcktransformConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tcktransform.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function tcktransform_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcktransform_config_cargs(
     params: TcktransformConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface TcktransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks the input track file.
+ * @param transform the image containing the transform.
+ * @param output the output track file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tcktransform_params(
     tracks: InputPathType,
     transform: InputPathType,
@@ -140,25 +157,8 @@ function tcktransform_params(
     help: boolean = false,
     version: boolean = false,
 ): TcktransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks the input track file.
-     * @param transform the image containing the transform.
-     * @param output the output track file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tcktransform" as const,
+        "@type": "mrtrix.tcktransform" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function tcktransform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcktransform_cargs(
     params: TcktransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tcktransform");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function tcktransform_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function tcktransform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tcktransform_outputs(
     params: TcktransformParameters,
     execution: Execution,
 ): TcktransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TcktransformOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function tcktransform_outputs(
 }
 
 
+/**
+ * Apply a spatial transformation to a tracks file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
+ */
 function tcktransform_execute(
     params: TcktransformParameters,
     execution: Execution,
 ): TcktransformOutputs {
-    /**
-     * Apply a spatial transformation to a tracks file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = tcktransform_cargs(params, execution)
     const ret = tcktransform_outputs(params, execution)
@@ -277,6 +277,34 @@ function tcktransform_execute(
 }
 
 
+/**
+ * Apply a spatial transformation to a tracks file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks the input track file.
+ * @param transform the image containing the transform.
+ * @param output the output track file
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
+ */
 function tcktransform(
     tracks: InputPathType,
     transform: InputPathType,
@@ -291,34 +319,6 @@ function tcktransform(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcktransformOutputs {
-    /**
-     * Apply a spatial transformation to a tracks file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks the input track file.
-     * @param transform the image containing the transform.
-     * @param output the output track file
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKTRANSFORM_METADATA);
     const params = tcktransform_params(tracks, transform, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       TcktransformOutputs,
       TcktransformParameters,
       tcktransform,
+      tcktransform_cargs,
+      tcktransform_config_cargs,
       tcktransform_config_params,
+      tcktransform_execute,
+      tcktransform_outputs,
       tcktransform_params,
 };

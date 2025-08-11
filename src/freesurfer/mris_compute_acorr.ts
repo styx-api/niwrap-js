@@ -12,7 +12,7 @@ const MRIS_COMPUTE_ACORR_METADATA: Metadata = {
 
 
 interface MrisComputeAcorrParameters {
-    "__STYXTYPE__": "mris_compute_acorr";
+    "@type": "freesurfer.mris_compute_acorr";
     "output_subject": string;
     "hemi": string;
     "surf": InputPathType;
@@ -22,33 +22,33 @@ interface MrisComputeAcorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_acorr": mris_compute_acorr_cargs,
+        "freesurfer.mris_compute_acorr": mris_compute_acorr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface MrisComputeAcorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_subject The output subject file.
+ * @param hemi Specify the hemisphere for processing.
+ * @param surf The surface file which must be a spherical surface suitable for computing geodesics.
+ * @param curv The input curvature file.
+ * @param c1_subjects List of subjects from one class.
+ * @param c2_subjects List of subjects from another class.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_acorr_params(
     output_subject: string,
     hemi: string,
@@ -76,20 +88,8 @@ function mris_compute_acorr_params(
     c1_subjects: Array<string>,
     c2_subjects: Array<string>,
 ): MrisComputeAcorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_subject The output subject file.
-     * @param hemi Specify the hemisphere for processing.
-     * @param surf The surface file which must be a spherical surface suitable for computing geodesics.
-     * @param curv The input curvature file.
-     * @param c1_subjects List of subjects from one class.
-     * @param c2_subjects List of subjects from another class.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_acorr" as const,
+        "@type": "freesurfer.mris_compute_acorr" as const,
         "output_subject": output_subject,
         "hemi": hemi,
         "surf": surf,
@@ -101,18 +101,18 @@ function mris_compute_acorr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_acorr_cargs(
     params: MrisComputeAcorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_acorr");
     cargs.push(
@@ -128,18 +128,18 @@ function mris_compute_acorr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_acorr_outputs(
     params: MrisComputeAcorrParameters,
     execution: Execution,
 ): MrisComputeAcorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeAcorrOutputs = {
         root: execution.outputFile("."),
     };
@@ -147,22 +147,22 @@ function mris_compute_acorr_outputs(
 }
 
 
+/**
+ * Compute the autocorrelation function of a curvature file on a spherical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
+ */
 function mris_compute_acorr_execute(
     params: MrisComputeAcorrParameters,
     execution: Execution,
 ): MrisComputeAcorrOutputs {
-    /**
-     * Compute the autocorrelation function of a curvature file on a spherical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_acorr_cargs(params, execution)
     const ret = mris_compute_acorr_outputs(params, execution)
@@ -171,6 +171,23 @@ function mris_compute_acorr_execute(
 }
 
 
+/**
+ * Compute the autocorrelation function of a curvature file on a spherical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_subject The output subject file.
+ * @param hemi Specify the hemisphere for processing.
+ * @param surf The surface file which must be a spherical surface suitable for computing geodesics.
+ * @param curv The input curvature file.
+ * @param c1_subjects List of subjects from one class.
+ * @param c2_subjects List of subjects from another class.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
+ */
 function mris_compute_acorr(
     output_subject: string,
     hemi: string,
@@ -180,23 +197,6 @@ function mris_compute_acorr(
     c2_subjects: Array<string>,
     runner: Runner | null = null,
 ): MrisComputeAcorrOutputs {
-    /**
-     * Compute the autocorrelation function of a curvature file on a spherical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_subject The output subject file.
-     * @param hemi Specify the hemisphere for processing.
-     * @param surf The surface file which must be a spherical surface suitable for computing geodesics.
-     * @param curv The input curvature file.
-     * @param c1_subjects List of subjects from one class.
-     * @param c2_subjects List of subjects from another class.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_ACORR_METADATA);
     const params = mris_compute_acorr_params(output_subject, hemi, surf, curv, c1_subjects, c2_subjects)
@@ -209,5 +209,8 @@ export {
       MrisComputeAcorrOutputs,
       MrisComputeAcorrParameters,
       mris_compute_acorr,
+      mris_compute_acorr_cargs,
+      mris_compute_acorr_execute,
+      mris_compute_acorr_outputs,
       mris_compute_acorr_params,
 };

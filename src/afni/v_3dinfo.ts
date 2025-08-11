@@ -12,7 +12,7 @@ const V_3DINFO_METADATA: Metadata = {
 
 
 interface V3dinfoParameters {
-    "__STYXTYPE__": "3dinfo";
+    "@type": "afni.3dinfo";
     "orient": boolean;
     "Lextent": boolean;
     "Rextent": boolean;
@@ -129,33 +129,33 @@ interface V3dinfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dinfo": v_3dinfo_cargs,
+        "afni.3dinfo": v_3dinfo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -179,6 +179,125 @@ interface V3dinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Datasets to retrieve information from
+ * @param orient Value of orientation string. For example, LPI means: i direction grows from Left(negative) to Right(positive). j direction grows from Posterior (neg.) to Anterior (pos.) k direction grows from Inferior (neg.) to Superior (pos.)
+ * @param lextent Extent along L
+ * @param rextent Extent along R
+ * @param aextent Extent along A
+ * @param pextent Extent along P
+ * @param iextent Extent along I
+ * @param sextent Extent along S
+ * @param all_names Value of various dset structures handling filenames
+ * @param verb Print out lots of information
+ * @param very_verbose Print out even more information including slice time offsets
+ * @param short Print out less information (default)
+ * @param no_hist Omit the HISTORY text
+ * @param h Mini help
+ * @param help Display entire help output
+ * @param extreme_help Extreme help
+ * @param h_view Open help in text editor
+ * @param h_web Open help in web browser
+ * @param h_find Look for lines in help output that match WORD
+ * @param h_raw Display unedited help string
+ * @param h_spx Help string in sphinx format without autoformatting options
+ * @param h_aspx Help string in sphinx format with autoformatting options
+ * @param all_opts Try to identify all options for the program from the help output
+ * @param label2index Output index corresponding to label
+ * @param niml_hdr Output entire NIML-formatted header
+ * @param subbrick_info Output only sub-brick part of information
+ * @param exists 1 if dset is loadable, 0 otherwise. This works on prefix also.
+ * @param id Idcodestring of dset
+ * @param is_atlas 1 if dset is an atlas.
+ * @param is_atlas_or_labeltable 1 if dset has an atlas or labeltable.
+ * @param is_nifti 1 if dset is NIFTI format, 0 otherwise
+ * @param dset_extension Show filename extension for valid dataset (e.g. .nii.gz)
+ * @param storage_mode Show internal storage mode of dataset (e.g. NIFTI)
+ * @param space Dataset's space
+ * @param gen_space Dataset's generic space
+ * @param av_space AFNI format's view extension for the space
+ * @param nifti_code What AFNI would use for an output NIFTI (q)sform_code
+ * @param is_oblique 1 if dset is oblique
+ * @param handedness L if orientation is Left handed, R if it is right handed
+ * @param obliquity Angle from plumb direction. Angles of 0 (or close) are for cardinal orientations
+ * @param prefix Return the prefix
+ * @param prefix_noext Return the prefix without extensions
+ * @param ni Return the number of voxels in i dimension
+ * @param nj Return the number of voxels in j dimension
+ * @param nk Return the number of voxels in k dimension
+ * @param nijk Return ni*nj*nk
+ * @param nv Return number of points in time or the number of sub-bricks
+ * @param nt Same as -nv
+ * @param n4 Same as -ni -nj -nk -nv
+ * @param nvi The maximum sub-brick index (= nv -1 )
+ * @param nti Same as -nvi
+ * @param ntimes Return number of sub-bricks points in time. This is an option for debugging use, stay away from it.
+ * @param max_node For a surface-based dset, return the maximum node index
+ * @param di Signed displacement per voxel along i direction, aka dx
+ * @param dj Signed displacement per voxel along j direction, aka dy
+ * @param dk Signed displacement per voxel along k direction, aka dz
+ * @param d3 Same as -di -dj -dk
+ * @param adi Voxel size along i direction (abs(di))
+ * @param adj Voxel size along j direction (abs(dj))
+ * @param adk Voxel size along k direction (abs(dk))
+ * @param ad3 Same as -adi -adj -adk
+ * @param voxvol Voxel volume in cubic millimeters
+ * @param oi Volume origin along the i direction
+ * @param oj Volume origin along the j direction
+ * @param ok Volume origin along the k direction
+ * @param o3 Same as -oi -oj -ok
+ * @param dcx Volumetric center in x direction (DICOM coordinates)
+ * @param dcy Volumetric center in y direction (DICOM coordinates)
+ * @param dcz Volumetric center in z direction (DICOM coordinates)
+ * @param dc3 Same as -dcx -dcy -dcz
+ * @param tr The TR value in seconds.
+ * @param dmin The dataset's minimum value, scaled by fac
+ * @param dmax The dataset's maximum value, scaled by fac
+ * @param dminus The dataset's minimum value, unscaled.
+ * @param dmaxus The dataset's maximum value, unscaled.
+ * @param smode Dset storage mode string.
+ * @param header_name Value of dset structure (sub)field 'header_name'
+ * @param brick_name Value of dset structure (sub)field 'brick_name'
+ * @param iname Name of dset as input on the command line
+ * @param extent The spatial extent of the dataset along R, L, A, P, I and S
+ * @param fac Return the float scaling factor
+ * @param label The label of each sub-brick
+ * @param datum The data storage type
+ * @param min The minimum value, scaled by fac
+ * @param max The maximum value, scaled by fac
+ * @param minus The minimum value, unscaled
+ * @param maxus The maximum value, unscaled
+ * @param labeltable Show label table, if any
+ * @param labeltable_as_atlas_points Show label table in atlas point format
+ * @param atlas_points Show atlas points list, if any
+ * @param history History note
+ * @param slice_timing Show slice timing
+ * @param header_line Output as the first line the names of attributes in each field (column)
+ * @param hdr Same as -header_line
+ * @param sb_delim Delimiter string between sub-brick values. Default SB_DELIM is '|'
+ * @param na_flag String to use when a field is not found or not applicable. Default is 'NA'
+ * @param atr_delim Delimiter string between attributes. Default ATR_DELIM is the tab character
+ * @param aform_real Display full 3x4 'aform_real' matrix (AFNI's RAI equivalent of the sform matrix in NIFTI, may contain obliquity info), with comment line first
+ * @param aform_real_oneline Display full 'aform_real' matrix (see '-aform_real') as 1 row of 12 numbers. No additional comment
+ * @param aform_real_refit_ori Display full 3x4 'aform_real' matrix (see '-aform_real') *if* the dset were reoriented (via 3drefit) to new orient XXX. Includes comment line first
+ * @param is_aform_real_orth If true, aform_real == aform_orth, which should be a very common occurrence
+ * @param aform_orth Display full 3x4 'aform_orth' matrix (AFNI's RAI matrix equivalent of the NIFTI quaternion, which may contain obliquity info), with comment line first. This matrix is the orthogonalized form of aform_real, and very often AFNI-produced dsets, we will have: aform_orth == aform_real
+ * @param perm_to_orient Display 3x3 permutation matrix to go from the dset's current orientation to the YYY orient
+ * @param same_grid Output 1 if the grid is identical between two dsets, 0 otherwise. For -same_grid to be 1, all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl must return 1
+ * @param same_dim 1 if dimensions (nx, ny, nz) are the same between dset pairs
+ * @param same_delta 1 if voxel sizes are the same between dset pairs
+ * @param same_orient 1 if orientation is the same between dset pairs
+ * @param same_center 1 if geometric center is the same between dset pairs
+ * @param same_obl 1 if obliquity is the same between dset pairs
+ * @param same_all_grid Equivalent to listing all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl on the command line
+ * @param val_diff Output the sum of absolute differences of all voxels in the dataset pair. A -1.0 value indicates a grid mismatch between volume pairs
+ * @param sval_diff Same as -val_diff, but the sum is divided (scaled) by the total number of voxels that are not zero in at least one of the two datasets
+ * @param monog_pairs Instead of pairing each dset with the first, pair each couple separately. This requires you to have an even number of dsets on the command line
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dinfo_params(
     dataset: Array<InputPathType>,
     orient: boolean = false,
@@ -294,127 +413,8 @@ function v_3dinfo_params(
     sval_diff: boolean = false,
     monog_pairs: boolean = false,
 ): V3dinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Datasets to retrieve information from
-     * @param orient Value of orientation string. For example, LPI means: i direction grows from Left(negative) to Right(positive). j direction grows from Posterior (neg.) to Anterior (pos.) k direction grows from Inferior (neg.) to Superior (pos.)
-     * @param lextent Extent along L
-     * @param rextent Extent along R
-     * @param aextent Extent along A
-     * @param pextent Extent along P
-     * @param iextent Extent along I
-     * @param sextent Extent along S
-     * @param all_names Value of various dset structures handling filenames
-     * @param verb Print out lots of information
-     * @param very_verbose Print out even more information including slice time offsets
-     * @param short Print out less information (default)
-     * @param no_hist Omit the HISTORY text
-     * @param h Mini help
-     * @param help Display entire help output
-     * @param extreme_help Extreme help
-     * @param h_view Open help in text editor
-     * @param h_web Open help in web browser
-     * @param h_find Look for lines in help output that match WORD
-     * @param h_raw Display unedited help string
-     * @param h_spx Help string in sphinx format without autoformatting options
-     * @param h_aspx Help string in sphinx format with autoformatting options
-     * @param all_opts Try to identify all options for the program from the help output
-     * @param label2index Output index corresponding to label
-     * @param niml_hdr Output entire NIML-formatted header
-     * @param subbrick_info Output only sub-brick part of information
-     * @param exists 1 if dset is loadable, 0 otherwise. This works on prefix also.
-     * @param id Idcodestring of dset
-     * @param is_atlas 1 if dset is an atlas.
-     * @param is_atlas_or_labeltable 1 if dset has an atlas or labeltable.
-     * @param is_nifti 1 if dset is NIFTI format, 0 otherwise
-     * @param dset_extension Show filename extension for valid dataset (e.g. .nii.gz)
-     * @param storage_mode Show internal storage mode of dataset (e.g. NIFTI)
-     * @param space Dataset's space
-     * @param gen_space Dataset's generic space
-     * @param av_space AFNI format's view extension for the space
-     * @param nifti_code What AFNI would use for an output NIFTI (q)sform_code
-     * @param is_oblique 1 if dset is oblique
-     * @param handedness L if orientation is Left handed, R if it is right handed
-     * @param obliquity Angle from plumb direction. Angles of 0 (or close) are for cardinal orientations
-     * @param prefix Return the prefix
-     * @param prefix_noext Return the prefix without extensions
-     * @param ni Return the number of voxels in i dimension
-     * @param nj Return the number of voxels in j dimension
-     * @param nk Return the number of voxels in k dimension
-     * @param nijk Return ni*nj*nk
-     * @param nv Return number of points in time or the number of sub-bricks
-     * @param nt Same as -nv
-     * @param n4 Same as -ni -nj -nk -nv
-     * @param nvi The maximum sub-brick index (= nv -1 )
-     * @param nti Same as -nvi
-     * @param ntimes Return number of sub-bricks points in time. This is an option for debugging use, stay away from it.
-     * @param max_node For a surface-based dset, return the maximum node index
-     * @param di Signed displacement per voxel along i direction, aka dx
-     * @param dj Signed displacement per voxel along j direction, aka dy
-     * @param dk Signed displacement per voxel along k direction, aka dz
-     * @param d3 Same as -di -dj -dk
-     * @param adi Voxel size along i direction (abs(di))
-     * @param adj Voxel size along j direction (abs(dj))
-     * @param adk Voxel size along k direction (abs(dk))
-     * @param ad3 Same as -adi -adj -adk
-     * @param voxvol Voxel volume in cubic millimeters
-     * @param oi Volume origin along the i direction
-     * @param oj Volume origin along the j direction
-     * @param ok Volume origin along the k direction
-     * @param o3 Same as -oi -oj -ok
-     * @param dcx Volumetric center in x direction (DICOM coordinates)
-     * @param dcy Volumetric center in y direction (DICOM coordinates)
-     * @param dcz Volumetric center in z direction (DICOM coordinates)
-     * @param dc3 Same as -dcx -dcy -dcz
-     * @param tr The TR value in seconds.
-     * @param dmin The dataset's minimum value, scaled by fac
-     * @param dmax The dataset's maximum value, scaled by fac
-     * @param dminus The dataset's minimum value, unscaled.
-     * @param dmaxus The dataset's maximum value, unscaled.
-     * @param smode Dset storage mode string.
-     * @param header_name Value of dset structure (sub)field 'header_name'
-     * @param brick_name Value of dset structure (sub)field 'brick_name'
-     * @param iname Name of dset as input on the command line
-     * @param extent The spatial extent of the dataset along R, L, A, P, I and S
-     * @param fac Return the float scaling factor
-     * @param label The label of each sub-brick
-     * @param datum The data storage type
-     * @param min The minimum value, scaled by fac
-     * @param max The maximum value, scaled by fac
-     * @param minus The minimum value, unscaled
-     * @param maxus The maximum value, unscaled
-     * @param labeltable Show label table, if any
-     * @param labeltable_as_atlas_points Show label table in atlas point format
-     * @param atlas_points Show atlas points list, if any
-     * @param history History note
-     * @param slice_timing Show slice timing
-     * @param header_line Output as the first line the names of attributes in each field (column)
-     * @param hdr Same as -header_line
-     * @param sb_delim Delimiter string between sub-brick values. Default SB_DELIM is '|'
-     * @param na_flag String to use when a field is not found or not applicable. Default is 'NA'
-     * @param atr_delim Delimiter string between attributes. Default ATR_DELIM is the tab character
-     * @param aform_real Display full 3x4 'aform_real' matrix (AFNI's RAI equivalent of the sform matrix in NIFTI, may contain obliquity info), with comment line first
-     * @param aform_real_oneline Display full 'aform_real' matrix (see '-aform_real') as 1 row of 12 numbers. No additional comment
-     * @param aform_real_refit_ori Display full 3x4 'aform_real' matrix (see '-aform_real') *if* the dset were reoriented (via 3drefit) to new orient XXX. Includes comment line first
-     * @param is_aform_real_orth If true, aform_real == aform_orth, which should be a very common occurrence
-     * @param aform_orth Display full 3x4 'aform_orth' matrix (AFNI's RAI matrix equivalent of the NIFTI quaternion, which may contain obliquity info), with comment line first. This matrix is the orthogonalized form of aform_real, and very often AFNI-produced dsets, we will have: aform_orth == aform_real
-     * @param perm_to_orient Display 3x3 permutation matrix to go from the dset's current orientation to the YYY orient
-     * @param same_grid Output 1 if the grid is identical between two dsets, 0 otherwise. For -same_grid to be 1, all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl must return 1
-     * @param same_dim 1 if dimensions (nx, ny, nz) are the same between dset pairs
-     * @param same_delta 1 if voxel sizes are the same between dset pairs
-     * @param same_orient 1 if orientation is the same between dset pairs
-     * @param same_center 1 if geometric center is the same between dset pairs
-     * @param same_obl 1 if obliquity is the same between dset pairs
-     * @param same_all_grid Equivalent to listing all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl on the command line
-     * @param val_diff Output the sum of absolute differences of all voxels in the dataset pair. A -1.0 value indicates a grid mismatch between volume pairs
-     * @param sval_diff Same as -val_diff, but the sum is divided (scaled) by the total number of voxels that are not zero in at least one of the two datasets
-     * @param monog_pairs Instead of pairing each dset with the first, pair each couple separately. This requires you to have an even number of dsets on the command line
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dinfo" as const,
+        "@type": "afni.3dinfo" as const,
         "orient": orient,
         "Lextent": lextent,
         "Rextent": rextent,
@@ -545,18 +545,18 @@ function v_3dinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dinfo_cargs(
     params: V3dinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dinfo");
     if ((params["orient"] ?? null)) {
@@ -918,18 +918,18 @@ function v_3dinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dinfo_outputs(
     params: V3dinfoParameters,
     execution: Execution,
 ): V3dinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dinfoOutputs = {
         root: execution.outputFile("."),
         info: [],
@@ -938,22 +938,22 @@ function v_3dinfo_outputs(
 }
 
 
+/**
+ * Prints out sort-of-useful information from a 3D dataset's header.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
+ */
 function v_3dinfo_execute(
     params: V3dinfoParameters,
     execution: Execution,
 ): V3dinfoOutputs {
-    /**
-     * Prints out sort-of-useful information from a 3D dataset's header.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dinfo_cargs(params, execution)
     const ret = v_3dinfo_outputs(params, execution)
@@ -962,6 +962,130 @@ function v_3dinfo_execute(
 }
 
 
+/**
+ * Prints out sort-of-useful information from a 3D dataset's header.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Datasets to retrieve information from
+ * @param orient Value of orientation string. For example, LPI means: i direction grows from Left(negative) to Right(positive). j direction grows from Posterior (neg.) to Anterior (pos.) k direction grows from Inferior (neg.) to Superior (pos.)
+ * @param lextent Extent along L
+ * @param rextent Extent along R
+ * @param aextent Extent along A
+ * @param pextent Extent along P
+ * @param iextent Extent along I
+ * @param sextent Extent along S
+ * @param all_names Value of various dset structures handling filenames
+ * @param verb Print out lots of information
+ * @param very_verbose Print out even more information including slice time offsets
+ * @param short Print out less information (default)
+ * @param no_hist Omit the HISTORY text
+ * @param h Mini help
+ * @param help Display entire help output
+ * @param extreme_help Extreme help
+ * @param h_view Open help in text editor
+ * @param h_web Open help in web browser
+ * @param h_find Look for lines in help output that match WORD
+ * @param h_raw Display unedited help string
+ * @param h_spx Help string in sphinx format without autoformatting options
+ * @param h_aspx Help string in sphinx format with autoformatting options
+ * @param all_opts Try to identify all options for the program from the help output
+ * @param label2index Output index corresponding to label
+ * @param niml_hdr Output entire NIML-formatted header
+ * @param subbrick_info Output only sub-brick part of information
+ * @param exists 1 if dset is loadable, 0 otherwise. This works on prefix also.
+ * @param id Idcodestring of dset
+ * @param is_atlas 1 if dset is an atlas.
+ * @param is_atlas_or_labeltable 1 if dset has an atlas or labeltable.
+ * @param is_nifti 1 if dset is NIFTI format, 0 otherwise
+ * @param dset_extension Show filename extension for valid dataset (e.g. .nii.gz)
+ * @param storage_mode Show internal storage mode of dataset (e.g. NIFTI)
+ * @param space Dataset's space
+ * @param gen_space Dataset's generic space
+ * @param av_space AFNI format's view extension for the space
+ * @param nifti_code What AFNI would use for an output NIFTI (q)sform_code
+ * @param is_oblique 1 if dset is oblique
+ * @param handedness L if orientation is Left handed, R if it is right handed
+ * @param obliquity Angle from plumb direction. Angles of 0 (or close) are for cardinal orientations
+ * @param prefix Return the prefix
+ * @param prefix_noext Return the prefix without extensions
+ * @param ni Return the number of voxels in i dimension
+ * @param nj Return the number of voxels in j dimension
+ * @param nk Return the number of voxels in k dimension
+ * @param nijk Return ni*nj*nk
+ * @param nv Return number of points in time or the number of sub-bricks
+ * @param nt Same as -nv
+ * @param n4 Same as -ni -nj -nk -nv
+ * @param nvi The maximum sub-brick index (= nv -1 )
+ * @param nti Same as -nvi
+ * @param ntimes Return number of sub-bricks points in time. This is an option for debugging use, stay away from it.
+ * @param max_node For a surface-based dset, return the maximum node index
+ * @param di Signed displacement per voxel along i direction, aka dx
+ * @param dj Signed displacement per voxel along j direction, aka dy
+ * @param dk Signed displacement per voxel along k direction, aka dz
+ * @param d3 Same as -di -dj -dk
+ * @param adi Voxel size along i direction (abs(di))
+ * @param adj Voxel size along j direction (abs(dj))
+ * @param adk Voxel size along k direction (abs(dk))
+ * @param ad3 Same as -adi -adj -adk
+ * @param voxvol Voxel volume in cubic millimeters
+ * @param oi Volume origin along the i direction
+ * @param oj Volume origin along the j direction
+ * @param ok Volume origin along the k direction
+ * @param o3 Same as -oi -oj -ok
+ * @param dcx Volumetric center in x direction (DICOM coordinates)
+ * @param dcy Volumetric center in y direction (DICOM coordinates)
+ * @param dcz Volumetric center in z direction (DICOM coordinates)
+ * @param dc3 Same as -dcx -dcy -dcz
+ * @param tr The TR value in seconds.
+ * @param dmin The dataset's minimum value, scaled by fac
+ * @param dmax The dataset's maximum value, scaled by fac
+ * @param dminus The dataset's minimum value, unscaled.
+ * @param dmaxus The dataset's maximum value, unscaled.
+ * @param smode Dset storage mode string.
+ * @param header_name Value of dset structure (sub)field 'header_name'
+ * @param brick_name Value of dset structure (sub)field 'brick_name'
+ * @param iname Name of dset as input on the command line
+ * @param extent The spatial extent of the dataset along R, L, A, P, I and S
+ * @param fac Return the float scaling factor
+ * @param label The label of each sub-brick
+ * @param datum The data storage type
+ * @param min The minimum value, scaled by fac
+ * @param max The maximum value, scaled by fac
+ * @param minus The minimum value, unscaled
+ * @param maxus The maximum value, unscaled
+ * @param labeltable Show label table, if any
+ * @param labeltable_as_atlas_points Show label table in atlas point format
+ * @param atlas_points Show atlas points list, if any
+ * @param history History note
+ * @param slice_timing Show slice timing
+ * @param header_line Output as the first line the names of attributes in each field (column)
+ * @param hdr Same as -header_line
+ * @param sb_delim Delimiter string between sub-brick values. Default SB_DELIM is '|'
+ * @param na_flag String to use when a field is not found or not applicable. Default is 'NA'
+ * @param atr_delim Delimiter string between attributes. Default ATR_DELIM is the tab character
+ * @param aform_real Display full 3x4 'aform_real' matrix (AFNI's RAI equivalent of the sform matrix in NIFTI, may contain obliquity info), with comment line first
+ * @param aform_real_oneline Display full 'aform_real' matrix (see '-aform_real') as 1 row of 12 numbers. No additional comment
+ * @param aform_real_refit_ori Display full 3x4 'aform_real' matrix (see '-aform_real') *if* the dset were reoriented (via 3drefit) to new orient XXX. Includes comment line first
+ * @param is_aform_real_orth If true, aform_real == aform_orth, which should be a very common occurrence
+ * @param aform_orth Display full 3x4 'aform_orth' matrix (AFNI's RAI matrix equivalent of the NIFTI quaternion, which may contain obliquity info), with comment line first. This matrix is the orthogonalized form of aform_real, and very often AFNI-produced dsets, we will have: aform_orth == aform_real
+ * @param perm_to_orient Display 3x3 permutation matrix to go from the dset's current orientation to the YYY orient
+ * @param same_grid Output 1 if the grid is identical between two dsets, 0 otherwise. For -same_grid to be 1, all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl must return 1
+ * @param same_dim 1 if dimensions (nx, ny, nz) are the same between dset pairs
+ * @param same_delta 1 if voxel sizes are the same between dset pairs
+ * @param same_orient 1 if orientation is the same between dset pairs
+ * @param same_center 1 if geometric center is the same between dset pairs
+ * @param same_obl 1 if obliquity is the same between dset pairs
+ * @param same_all_grid Equivalent to listing all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl on the command line
+ * @param val_diff Output the sum of absolute differences of all voxels in the dataset pair. A -1.0 value indicates a grid mismatch between volume pairs
+ * @param sval_diff Same as -val_diff, but the sum is divided (scaled) by the total number of voxels that are not zero in at least one of the two datasets
+ * @param monog_pairs Instead of pairing each dset with the first, pair each couple separately. This requires you to have an even number of dsets on the command line
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
+ */
 function v_3dinfo(
     dataset: Array<InputPathType>,
     orient: boolean = false,
@@ -1078,130 +1202,6 @@ function v_3dinfo(
     monog_pairs: boolean = false,
     runner: Runner | null = null,
 ): V3dinfoOutputs {
-    /**
-     * Prints out sort-of-useful information from a 3D dataset's header.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Datasets to retrieve information from
-     * @param orient Value of orientation string. For example, LPI means: i direction grows from Left(negative) to Right(positive). j direction grows from Posterior (neg.) to Anterior (pos.) k direction grows from Inferior (neg.) to Superior (pos.)
-     * @param lextent Extent along L
-     * @param rextent Extent along R
-     * @param aextent Extent along A
-     * @param pextent Extent along P
-     * @param iextent Extent along I
-     * @param sextent Extent along S
-     * @param all_names Value of various dset structures handling filenames
-     * @param verb Print out lots of information
-     * @param very_verbose Print out even more information including slice time offsets
-     * @param short Print out less information (default)
-     * @param no_hist Omit the HISTORY text
-     * @param h Mini help
-     * @param help Display entire help output
-     * @param extreme_help Extreme help
-     * @param h_view Open help in text editor
-     * @param h_web Open help in web browser
-     * @param h_find Look for lines in help output that match WORD
-     * @param h_raw Display unedited help string
-     * @param h_spx Help string in sphinx format without autoformatting options
-     * @param h_aspx Help string in sphinx format with autoformatting options
-     * @param all_opts Try to identify all options for the program from the help output
-     * @param label2index Output index corresponding to label
-     * @param niml_hdr Output entire NIML-formatted header
-     * @param subbrick_info Output only sub-brick part of information
-     * @param exists 1 if dset is loadable, 0 otherwise. This works on prefix also.
-     * @param id Idcodestring of dset
-     * @param is_atlas 1 if dset is an atlas.
-     * @param is_atlas_or_labeltable 1 if dset has an atlas or labeltable.
-     * @param is_nifti 1 if dset is NIFTI format, 0 otherwise
-     * @param dset_extension Show filename extension for valid dataset (e.g. .nii.gz)
-     * @param storage_mode Show internal storage mode of dataset (e.g. NIFTI)
-     * @param space Dataset's space
-     * @param gen_space Dataset's generic space
-     * @param av_space AFNI format's view extension for the space
-     * @param nifti_code What AFNI would use for an output NIFTI (q)sform_code
-     * @param is_oblique 1 if dset is oblique
-     * @param handedness L if orientation is Left handed, R if it is right handed
-     * @param obliquity Angle from plumb direction. Angles of 0 (or close) are for cardinal orientations
-     * @param prefix Return the prefix
-     * @param prefix_noext Return the prefix without extensions
-     * @param ni Return the number of voxels in i dimension
-     * @param nj Return the number of voxels in j dimension
-     * @param nk Return the number of voxels in k dimension
-     * @param nijk Return ni*nj*nk
-     * @param nv Return number of points in time or the number of sub-bricks
-     * @param nt Same as -nv
-     * @param n4 Same as -ni -nj -nk -nv
-     * @param nvi The maximum sub-brick index (= nv -1 )
-     * @param nti Same as -nvi
-     * @param ntimes Return number of sub-bricks points in time. This is an option for debugging use, stay away from it.
-     * @param max_node For a surface-based dset, return the maximum node index
-     * @param di Signed displacement per voxel along i direction, aka dx
-     * @param dj Signed displacement per voxel along j direction, aka dy
-     * @param dk Signed displacement per voxel along k direction, aka dz
-     * @param d3 Same as -di -dj -dk
-     * @param adi Voxel size along i direction (abs(di))
-     * @param adj Voxel size along j direction (abs(dj))
-     * @param adk Voxel size along k direction (abs(dk))
-     * @param ad3 Same as -adi -adj -adk
-     * @param voxvol Voxel volume in cubic millimeters
-     * @param oi Volume origin along the i direction
-     * @param oj Volume origin along the j direction
-     * @param ok Volume origin along the k direction
-     * @param o3 Same as -oi -oj -ok
-     * @param dcx Volumetric center in x direction (DICOM coordinates)
-     * @param dcy Volumetric center in y direction (DICOM coordinates)
-     * @param dcz Volumetric center in z direction (DICOM coordinates)
-     * @param dc3 Same as -dcx -dcy -dcz
-     * @param tr The TR value in seconds.
-     * @param dmin The dataset's minimum value, scaled by fac
-     * @param dmax The dataset's maximum value, scaled by fac
-     * @param dminus The dataset's minimum value, unscaled.
-     * @param dmaxus The dataset's maximum value, unscaled.
-     * @param smode Dset storage mode string.
-     * @param header_name Value of dset structure (sub)field 'header_name'
-     * @param brick_name Value of dset structure (sub)field 'brick_name'
-     * @param iname Name of dset as input on the command line
-     * @param extent The spatial extent of the dataset along R, L, A, P, I and S
-     * @param fac Return the float scaling factor
-     * @param label The label of each sub-brick
-     * @param datum The data storage type
-     * @param min The minimum value, scaled by fac
-     * @param max The maximum value, scaled by fac
-     * @param minus The minimum value, unscaled
-     * @param maxus The maximum value, unscaled
-     * @param labeltable Show label table, if any
-     * @param labeltable_as_atlas_points Show label table in atlas point format
-     * @param atlas_points Show atlas points list, if any
-     * @param history History note
-     * @param slice_timing Show slice timing
-     * @param header_line Output as the first line the names of attributes in each field (column)
-     * @param hdr Same as -header_line
-     * @param sb_delim Delimiter string between sub-brick values. Default SB_DELIM is '|'
-     * @param na_flag String to use when a field is not found or not applicable. Default is 'NA'
-     * @param atr_delim Delimiter string between attributes. Default ATR_DELIM is the tab character
-     * @param aform_real Display full 3x4 'aform_real' matrix (AFNI's RAI equivalent of the sform matrix in NIFTI, may contain obliquity info), with comment line first
-     * @param aform_real_oneline Display full 'aform_real' matrix (see '-aform_real') as 1 row of 12 numbers. No additional comment
-     * @param aform_real_refit_ori Display full 3x4 'aform_real' matrix (see '-aform_real') *if* the dset were reoriented (via 3drefit) to new orient XXX. Includes comment line first
-     * @param is_aform_real_orth If true, aform_real == aform_orth, which should be a very common occurrence
-     * @param aform_orth Display full 3x4 'aform_orth' matrix (AFNI's RAI matrix equivalent of the NIFTI quaternion, which may contain obliquity info), with comment line first. This matrix is the orthogonalized form of aform_real, and very often AFNI-produced dsets, we will have: aform_orth == aform_real
-     * @param perm_to_orient Display 3x3 permutation matrix to go from the dset's current orientation to the YYY orient
-     * @param same_grid Output 1 if the grid is identical between two dsets, 0 otherwise. For -same_grid to be 1, all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl must return 1
-     * @param same_dim 1 if dimensions (nx, ny, nz) are the same between dset pairs
-     * @param same_delta 1 if voxel sizes are the same between dset pairs
-     * @param same_orient 1 if orientation is the same between dset pairs
-     * @param same_center 1 if geometric center is the same between dset pairs
-     * @param same_obl 1 if obliquity is the same between dset pairs
-     * @param same_all_grid Equivalent to listing all of -same_dim, -same_delta, -same_orient, -same_center, and -same_obl on the command line
-     * @param val_diff Output the sum of absolute differences of all voxels in the dataset pair. A -1.0 value indicates a grid mismatch between volume pairs
-     * @param sval_diff Same as -val_diff, but the sum is divided (scaled) by the total number of voxels that are not zero in at least one of the two datasets
-     * @param monog_pairs Instead of pairing each dset with the first, pair each couple separately. This requires you to have an even number of dsets on the command line
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DINFO_METADATA);
     const params = v_3dinfo_params(dataset, orient, lextent, rextent, aextent, pextent, iextent, sextent, all_names, verb, very_verbose, short, no_hist, h, help, extreme_help, h_view, h_web, h_find, h_raw, h_spx, h_aspx, all_opts, label2index, niml_hdr, subbrick_info, exists, id, is_atlas, is_atlas_or_labeltable, is_nifti, dset_extension, storage_mode, space, gen_space, av_space, nifti_code, is_oblique, handedness, obliquity, prefix, prefix_noext, ni, nj, nk, nijk, nv, nt, n4, nvi, nti, ntimes, max_node, di, dj, dk, d3, adi, adj, adk, ad3, voxvol, oi, oj, ok, o3, dcx, dcy, dcz, dc3, tr, dmin, dmax, dminus, dmaxus, smode, header_name, brick_name, iname, extent, fac, label, datum, min, max, minus, maxus, labeltable, labeltable_as_atlas_points, atlas_points, history, slice_timing, header_line, hdr, sb_delim, na_flag, atr_delim, aform_real, aform_real_oneline, aform_real_refit_ori, is_aform_real_orth, aform_orth, perm_to_orient, same_grid, same_dim, same_delta, same_orient, same_center, same_obl, same_all_grid, val_diff, sval_diff, monog_pairs)
@@ -1214,5 +1214,8 @@ export {
       V3dinfoParameters,
       V_3DINFO_METADATA,
       v_3dinfo,
+      v_3dinfo_cargs,
+      v_3dinfo_execute,
+      v_3dinfo_outputs,
       v_3dinfo_params,
 };

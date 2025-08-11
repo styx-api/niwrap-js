@@ -12,42 +12,42 @@ const V_1D_UPSAMPLE_METADATA: Metadata = {
 
 
 interface V1dUpsampleParameters {
-    "__STYXTYPE__": "1dUpsample";
+    "@type": "afni.1dUpsample";
     "upsample_factor": number;
     "input_file": InputPathType;
     "linear_interpolation": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dUpsample": v_1d_upsample_cargs,
+        "afni.1dUpsample": v_1d_upsample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dUpsample": v_1d_upsample_outputs,
+        "afni.1dUpsample": v_1d_upsample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V1dUpsampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param upsample_factor Upsample factor (integer from 2..32)
+ * @param input_file Input 1D time series file
+ * @param linear_interpolation Use 1st order polynomials (i.e., linear interpolation) instead of 7th order polynomials
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_upsample_params(
     upsample_factor: number,
     input_file: InputPathType,
     linear_interpolation: boolean = false,
 ): V1dUpsampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param upsample_factor Upsample factor (integer from 2..32)
-     * @param input_file Input 1D time series file
-     * @param linear_interpolation Use 1st order polynomials (i.e., linear interpolation) instead of 7th order polynomials
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dUpsample" as const,
+        "@type": "afni.1dUpsample" as const,
         "upsample_factor": upsample_factor,
         "input_file": input_file,
         "linear_interpolation": linear_interpolation,
@@ -94,18 +94,18 @@ function v_1d_upsample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_upsample_cargs(
     params: V1dUpsampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dUpsample");
     cargs.push(String((params["upsample_factor"] ?? null)));
@@ -117,18 +117,18 @@ function v_1d_upsample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_upsample_outputs(
     params: V1dUpsampleParameters,
     execution: Execution,
 ): V1dUpsampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dUpsampleOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["ethel.1D"].join('')),
@@ -137,22 +137,22 @@ function v_1d_upsample_outputs(
 }
 
 
+/**
+ * Upsamples a 1D time series to a finer time grid.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
+ */
 function v_1d_upsample_execute(
     params: V1dUpsampleParameters,
     execution: Execution,
 ): V1dUpsampleOutputs {
-    /**
-     * Upsamples a 1D time series to a finer time grid.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_upsample_cargs(params, execution)
     const ret = v_1d_upsample_outputs(params, execution)
@@ -161,26 +161,26 @@ function v_1d_upsample_execute(
 }
 
 
+/**
+ * Upsamples a 1D time series to a finer time grid.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param upsample_factor Upsample factor (integer from 2..32)
+ * @param input_file Input 1D time series file
+ * @param linear_interpolation Use 1st order polynomials (i.e., linear interpolation) instead of 7th order polynomials
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
+ */
 function v_1d_upsample(
     upsample_factor: number,
     input_file: InputPathType,
     linear_interpolation: boolean = false,
     runner: Runner | null = null,
 ): V1dUpsampleOutputs {
-    /**
-     * Upsamples a 1D time series to a finer time grid.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param upsample_factor Upsample factor (integer from 2..32)
-     * @param input_file Input 1D time series file
-     * @param linear_interpolation Use 1st order polynomials (i.e., linear interpolation) instead of 7th order polynomials
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_UPSAMPLE_METADATA);
     const params = v_1d_upsample_params(upsample_factor, input_file, linear_interpolation)
@@ -193,5 +193,8 @@ export {
       V1dUpsampleParameters,
       V_1D_UPSAMPLE_METADATA,
       v_1d_upsample,
+      v_1d_upsample_cargs,
+      v_1d_upsample_execute,
+      v_1d_upsample_outputs,
       v_1d_upsample_params,
 };

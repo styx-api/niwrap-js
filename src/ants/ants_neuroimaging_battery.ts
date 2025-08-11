@@ -12,7 +12,7 @@ const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
 
 
 interface AntsNeuroimagingBatteryParameters {
-    "__STYXTYPE__": "antsNeuroimagingBattery";
+    "@type": "ants.antsNeuroimagingBattery";
     "input_directory": string;
     "output_directory": string;
     "output_name": string;
@@ -35,35 +35,35 @@ interface AntsNeuroimagingBatteryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsNeuroimagingBattery": ants_neuroimaging_battery_cargs,
+        "ants.antsNeuroimagingBattery": ants_neuroimaging_battery_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsNeuroimagingBattery": ants_neuroimaging_battery_outputs,
+        "ants.antsNeuroimagingBattery": ants_neuroimaging_battery_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,31 @@ interface AntsNeuroimagingBatteryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory Directory where to look for modality images.
+ * @param output_directory Directory where output goes (where antsCorticalThickness output lives).
+ * @param output_name File prefix for outputs.
+ * @param anatomical_image Reference subject image (usually T1).
+ * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
+ * @param template Template image.
+ * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
+ * @param template_labels Labels in template space.
+ * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
+ * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
+ * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
+ * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
+ * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
+ * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
+ * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
+ * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
+ * @param temp_directory Temporary directory.
+ * @param help Display help information.
+ * @param info_only Look for inputs, output what is there, but don't process any data.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_neuroimaging_battery_params(
     input_directory: string,
     output_directory: string,
@@ -107,33 +132,8 @@ function ants_neuroimaging_battery_params(
     help: boolean = false,
     info_only: boolean = false,
 ): AntsNeuroimagingBatteryParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory Directory where to look for modality images.
-     * @param output_directory Directory where output goes (where antsCorticalThickness output lives).
-     * @param output_name File prefix for outputs.
-     * @param anatomical_image Reference subject image (usually T1).
-     * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
-     * @param template Template image.
-     * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
-     * @param template_labels Labels in template space.
-     * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
-     * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
-     * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
-     * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
-     * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
-     * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
-     * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
-     * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
-     * @param temp_directory Temporary directory.
-     * @param help Display help information.
-     * @param info_only Look for inputs, output what is there, but don't process any data.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsNeuroimagingBattery" as const,
+        "@type": "ants.antsNeuroimagingBattery" as const,
         "input_directory": input_directory,
         "output_directory": output_directory,
         "output_name": output_name,
@@ -182,18 +182,18 @@ function ants_neuroimaging_battery_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_neuroimaging_battery_cargs(
     params: AntsNeuroimagingBatteryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsNeuroimagingBattery");
     cargs.push(
@@ -298,18 +298,18 @@ function ants_neuroimaging_battery_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_neuroimaging_battery_outputs(
     params: AntsNeuroimagingBatteryParameters,
     execution: Execution,
 ): AntsNeuroimagingBatteryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsNeuroimagingBatteryOutputs = {
         root: execution.outputFile("."),
         output_transform: execution.outputFile([(params["output_directory"] ?? null), "/", (params["output_name"] ?? null), ".*"].join('')),
@@ -318,22 +318,22 @@ function ants_neuroimaging_battery_outputs(
 }
 
 
+/**
+ * Align MR modalities to a common within-subject (and optional template) space.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
+ */
 function ants_neuroimaging_battery_execute(
     params: AntsNeuroimagingBatteryParameters,
     execution: Execution,
 ): AntsNeuroimagingBatteryOutputs {
-    /**
-     * Align MR modalities to a common within-subject (and optional template) space.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_neuroimaging_battery_cargs(params, execution)
     const ret = ants_neuroimaging_battery_outputs(params, execution)
@@ -342,6 +342,36 @@ function ants_neuroimaging_battery_execute(
 }
 
 
+/**
+ * Align MR modalities to a common within-subject (and optional template) space.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_directory Directory where to look for modality images.
+ * @param output_directory Directory where output goes (where antsCorticalThickness output lives).
+ * @param output_name File prefix for outputs.
+ * @param anatomical_image Reference subject image (usually T1).
+ * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
+ * @param template Template image.
+ * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
+ * @param template_labels Labels in template space.
+ * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
+ * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
+ * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
+ * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
+ * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
+ * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
+ * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
+ * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
+ * @param temp_directory Temporary directory.
+ * @param help Display help information.
+ * @param info_only Look for inputs, output what is there, but don't process any data.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
+ */
 function ants_neuroimaging_battery(
     input_directory: string,
     output_directory: string,
@@ -364,36 +394,6 @@ function ants_neuroimaging_battery(
     info_only: boolean = false,
     runner: Runner | null = null,
 ): AntsNeuroimagingBatteryOutputs {
-    /**
-     * Align MR modalities to a common within-subject (and optional template) space.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_directory Directory where to look for modality images.
-     * @param output_directory Directory where output goes (where antsCorticalThickness output lives).
-     * @param output_name File prefix for outputs.
-     * @param anatomical_image Reference subject image (usually T1).
-     * @param anatomical_mask Mask of anatomical image, should contain cerebrum, cerebellum, and brainstem.
-     * @param template Template image.
-     * @param template_transform_name Basename of transforms from anatomical to template space (must be in output base dir).
-     * @param template_labels Labels in template space.
-     * @param dti_flag DTI flag in DIRNAME/fileflag/outid format.
-     * @param pcasl_flag pCASL flag in DIRNAME/fileflag/outid format.
-     * @param pasl_flag PASL flag in DIRNAME/fileflag/outid format.
-     * @param pasl_m0_flag PASL M0 flag in DIRNAME/fileflag/outid format.
-     * @param bold_flag BOLD flag in DIRNAME/fileflag/outid format.
-     * @param rsbold_flag RSBOLD flag in DIRNAME/fileflag/outid format.
-     * @param mt_flag MT flag in DIRNAME/fileflag/outid format.
-     * @param no_mt_flag No MT flag in DIRNAME/fileflag/outid format.
-     * @param temp_directory Temporary directory.
-     * @param help Display help information.
-     * @param info_only Look for inputs, output what is there, but don't process any data.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_NEUROIMAGING_BATTERY_METADATA);
     const params = ants_neuroimaging_battery_params(input_directory, output_directory, output_name, anatomical_image, anatomical_mask, template, template_transform_name, template_labels, dti_flag, pcasl_flag, pasl_flag, pasl_m0_flag, bold_flag, rsbold_flag, mt_flag, no_mt_flag, temp_directory, help, info_only)
@@ -406,5 +406,8 @@ export {
       AntsNeuroimagingBatteryOutputs,
       AntsNeuroimagingBatteryParameters,
       ants_neuroimaging_battery,
+      ants_neuroimaging_battery_cargs,
+      ants_neuroimaging_battery_execute,
+      ants_neuroimaging_battery_outputs,
       ants_neuroimaging_battery_params,
 };

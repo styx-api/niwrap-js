@@ -12,41 +12,41 @@ const VOLUME_FILL_HOLES_METADATA: Metadata = {
 
 
 interface VolumeFillHolesParameters {
-    "__STYXTYPE__": "volume-fill-holes";
+    "@type": "workbench.volume-fill-holes";
     "volume_in": InputPathType;
     "volume_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-fill-holes": volume_fill_holes_cargs,
+        "workbench.volume-fill-holes": volume_fill_holes_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-fill-holes": volume_fill_holes_outputs,
+        "workbench.volume-fill-holes": volume_fill_holes_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VolumeFillHolesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
+ *
+ * @returns Parameter dictionary
+ */
 function volume_fill_holes_params(
     volume_in: InputPathType,
     volume_out: string,
 ): VolumeFillHolesParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input ROI volume
-     * @param volume_out the output ROI volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-fill-holes" as const,
+        "@type": "workbench.volume-fill-holes" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -90,18 +90,18 @@ function volume_fill_holes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_fill_holes_cargs(
     params: VolumeFillHolesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-fill-holes");
@@ -111,18 +111,18 @@ function volume_fill_holes_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_fill_holes_outputs(
     params: VolumeFillHolesParameters,
     execution: Execution,
 ): VolumeFillHolesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeFillHolesOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -131,24 +131,24 @@ function volume_fill_holes_outputs(
 }
 
 
+/**
+ * Fill holes in an roi volume.
+ *
+ * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
+ */
 function volume_fill_holes_execute(
     params: VolumeFillHolesParameters,
     execution: Execution,
 ): VolumeFillHolesOutputs {
-    /**
-     * Fill holes in an roi volume.
-     * 
-     * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_fill_holes_cargs(params, execution)
     const ret = volume_fill_holes_outputs(params, execution)
@@ -157,26 +157,26 @@ function volume_fill_holes_execute(
 }
 
 
+/**
+ * Fill holes in an roi volume.
+ *
+ * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
+ */
 function volume_fill_holes(
     volume_in: InputPathType,
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeFillHolesOutputs {
-    /**
-     * Fill holes in an roi volume.
-     * 
-     * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input ROI volume
-     * @param volume_out the output ROI volume
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_FILL_HOLES_METADATA);
     const params = volume_fill_holes_params(volume_in, volume_out)
@@ -189,5 +189,8 @@ export {
       VolumeFillHolesOutputs,
       VolumeFillHolesParameters,
       volume_fill_holes,
+      volume_fill_holes_cargs,
+      volume_fill_holes_execute,
+      volume_fill_holes_outputs,
       volume_fill_holes_params,
 };

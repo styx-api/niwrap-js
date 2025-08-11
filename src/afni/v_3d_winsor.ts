@@ -12,7 +12,7 @@ const V_3D_WINSOR_METADATA: Metadata = {
 
 
 interface V3dWinsorParameters {
-    "__STYXTYPE__": "3dWinsor";
+    "@type": "afni.3dWinsor";
     "irad"?: number | null | undefined;
     "cbot"?: number | null | undefined;
     "ctop"?: number | null | undefined;
@@ -25,35 +25,35 @@ interface V3dWinsorParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dWinsor": v_3d_winsor_cargs,
+        "afni.3dWinsor": v_3d_winsor_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dWinsor": v_3d_winsor_outputs,
+        "afni.3dWinsor": v_3d_winsor_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dWinsorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset to apply the filter on.
+ * @param irad Include all points within 'distance' rr in the operation, where distance is defined as sqrt(i*i+j*j+k*k), and (i,j,k) are voxel index offsets.
+ * @param cbot Set bottom clip index to bb.
+ * @param ctop Set top clip index to tt.
+ * @param nrep Repeat filter nn times. If nn < 0, means to repeat filter until less than abs(n) voxels change.
+ * @param keepzero Don't filter voxels that are zero.
+ * @param clip Set voxels at or below 'xx' to zero.
+ * @param prefix Use 'pp' as the prefix for the output dataset.
+ * @param mask Use 'mmm' as a mask dataset - voxels NOT in the mask won't be filtered.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_winsor_params(
     dataset: InputPathType,
     irad: number | null = null,
@@ -91,23 +106,8 @@ function v_3d_winsor_params(
     prefix: string | null = null,
     mask: InputPathType | null = null,
 ): V3dWinsorParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset to apply the filter on.
-     * @param irad Include all points within 'distance' rr in the operation, where distance is defined as sqrt(i*i+j*j+k*k), and (i,j,k) are voxel index offsets.
-     * @param cbot Set bottom clip index to bb.
-     * @param ctop Set top clip index to tt.
-     * @param nrep Repeat filter nn times. If nn < 0, means to repeat filter until less than abs(n) voxels change.
-     * @param keepzero Don't filter voxels that are zero.
-     * @param clip Set voxels at or below 'xx' to zero.
-     * @param prefix Use 'pp' as the prefix for the output dataset.
-     * @param mask Use 'mmm' as a mask dataset - voxels NOT in the mask won't be filtered.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dWinsor" as const,
+        "@type": "afni.3dWinsor" as const,
         "keepzero": keepzero,
         "dataset": dataset,
     };
@@ -136,18 +136,18 @@ function v_3d_winsor_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_winsor_cargs(
     params: V3dWinsorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dWinsor");
     if ((params["irad"] ?? null) !== null) {
@@ -200,18 +200,18 @@ function v_3d_winsor_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_winsor_outputs(
     params: V3dWinsorParameters,
     execution: Execution,
 ): V3dWinsorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dWinsorOutputs = {
         root: execution.outputFile("."),
         outfile_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+*.HEAD"].join('')) : null,
@@ -221,22 +221,22 @@ function v_3d_winsor_outputs(
 }
 
 
+/**
+ * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
+ */
 function v_3d_winsor_execute(
     params: V3dWinsorParameters,
     execution: Execution,
 ): V3dWinsorOutputs {
-    /**
-     * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_winsor_cargs(params, execution)
     const ret = v_3d_winsor_outputs(params, execution)
@@ -245,6 +245,26 @@ function v_3d_winsor_execute(
 }
 
 
+/**
+ * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset to apply the filter on.
+ * @param irad Include all points within 'distance' rr in the operation, where distance is defined as sqrt(i*i+j*j+k*k), and (i,j,k) are voxel index offsets.
+ * @param cbot Set bottom clip index to bb.
+ * @param ctop Set top clip index to tt.
+ * @param nrep Repeat filter nn times. If nn < 0, means to repeat filter until less than abs(n) voxels change.
+ * @param keepzero Don't filter voxels that are zero.
+ * @param clip Set voxels at or below 'xx' to zero.
+ * @param prefix Use 'pp' as the prefix for the output dataset.
+ * @param mask Use 'mmm' as a mask dataset - voxels NOT in the mask won't be filtered.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
+ */
 function v_3d_winsor(
     dataset: InputPathType,
     irad: number | null = null,
@@ -257,26 +277,6 @@ function v_3d_winsor(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dWinsorOutputs {
-    /**
-     * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset to apply the filter on.
-     * @param irad Include all points within 'distance' rr in the operation, where distance is defined as sqrt(i*i+j*j+k*k), and (i,j,k) are voxel index offsets.
-     * @param cbot Set bottom clip index to bb.
-     * @param ctop Set top clip index to tt.
-     * @param nrep Repeat filter nn times. If nn < 0, means to repeat filter until less than abs(n) voxels change.
-     * @param keepzero Don't filter voxels that are zero.
-     * @param clip Set voxels at or below 'xx' to zero.
-     * @param prefix Use 'pp' as the prefix for the output dataset.
-     * @param mask Use 'mmm' as a mask dataset - voxels NOT in the mask won't be filtered.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_WINSOR_METADATA);
     const params = v_3d_winsor_params(dataset, irad, cbot, ctop, nrep, keepzero, clip, prefix, mask)
@@ -289,5 +289,8 @@ export {
       V3dWinsorParameters,
       V_3D_WINSOR_METADATA,
       v_3d_winsor,
+      v_3d_winsor_cargs,
+      v_3d_winsor_execute,
+      v_3d_winsor_outputs,
       v_3d_winsor_params,
 };

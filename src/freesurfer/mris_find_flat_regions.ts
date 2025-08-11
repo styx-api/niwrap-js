@@ -12,42 +12,42 @@ const MRIS_FIND_FLAT_REGIONS_METADATA: Metadata = {
 
 
 interface MrisFindFlatRegionsParameters {
-    "__STYXTYPE__": "mris_find_flat_regions";
+    "@type": "freesurfer.mris_find_flat_regions";
     "surface": InputPathType;
     "wfile": string;
     "threshold"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_find_flat_regions": mris_find_flat_regions_cargs,
+        "freesurfer.mris_find_flat_regions": mris_find_flat_regions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_find_flat_regions": mris_find_flat_regions_outputs,
+        "freesurfer.mris_find_flat_regions": mris_find_flat_regions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisFindFlatRegionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface input file
+ * @param wfile Output label file
+ * @param threshold Threshold to use (default=0.990)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_find_flat_regions_params(
     surface: InputPathType,
     wfile: string,
     threshold: number | null = 0.99,
 ): MrisFindFlatRegionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface input file
-     * @param wfile Output label file
-     * @param threshold Threshold to use (default=0.990)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_find_flat_regions" as const,
+        "@type": "freesurfer.mris_find_flat_regions" as const,
         "surface": surface,
         "wfile": wfile,
     };
@@ -96,18 +96,18 @@ function mris_find_flat_regions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_find_flat_regions_cargs(
     params: MrisFindFlatRegionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_find_flat_regions");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -122,18 +122,18 @@ function mris_find_flat_regions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_find_flat_regions_outputs(
     params: MrisFindFlatRegionsParameters,
     execution: Execution,
 ): MrisFindFlatRegionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisFindFlatRegionsOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([(params["wfile"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function mris_find_flat_regions_outputs(
 }
 
 
+/**
+ * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
+ */
 function mris_find_flat_regions_execute(
     params: MrisFindFlatRegionsParameters,
     execution: Execution,
 ): MrisFindFlatRegionsOutputs {
-    /**
-     * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_find_flat_regions_cargs(params, execution)
     const ret = mris_find_flat_regions_outputs(params, execution)
@@ -166,26 +166,26 @@ function mris_find_flat_regions_execute(
 }
 
 
+/**
+ * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Surface input file
+ * @param wfile Output label file
+ * @param threshold Threshold to use (default=0.990)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
+ */
 function mris_find_flat_regions(
     surface: InputPathType,
     wfile: string,
     threshold: number | null = 0.99,
     runner: Runner | null = null,
 ): MrisFindFlatRegionsOutputs {
-    /**
-     * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Surface input file
-     * @param wfile Output label file
-     * @param threshold Threshold to use (default=0.990)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_FIND_FLAT_REGIONS_METADATA);
     const params = mris_find_flat_regions_params(surface, wfile, threshold)
@@ -198,5 +198,8 @@ export {
       MrisFindFlatRegionsOutputs,
       MrisFindFlatRegionsParameters,
       mris_find_flat_regions,
+      mris_find_flat_regions_cargs,
+      mris_find_flat_regions_execute,
+      mris_find_flat_regions_outputs,
       mris_find_flat_regions_params,
 };

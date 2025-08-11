@@ -12,7 +12,7 @@ const MRISP_WRITE_METADATA: Metadata = {
 
 
 interface MrispWriteParameters {
-    "__STYXTYPE__": "mrisp_write";
+    "@type": "freesurfer.mrisp_write";
     "input_surface": InputPathType;
     "overlay_filename": InputPathType;
     "output_name": string;
@@ -27,35 +27,35 @@ interface MrispWriteParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrisp_write": mrisp_write_cargs,
+        "freesurfer.mrisp_write": mrisp_write_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrisp_write": mrisp_write_outputs,
+        "freesurfer.mrisp_write": mrisp_write_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface MrispWriteOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Full path to input surface.
+ * @param overlay_filename Full path to the overlay to map.
+ * @param output_name Output file name. Can be full path to a .tif or .mgz file.
+ * @param subjects_dir Set SUBJECTS_DIR. Default: uses environment variable.
+ * @param coords Treat overlay as a surface and write it into a 3 frame parameterization.
+ * @param average_curvature Average curvature patterns navgs times.
+ * @param correlation_matrix Use the overlay to compute the correlation matrix within the specified label.
+ * @param scale_factor Scale factor to adjust resolution of the spherical map.
+ * @param normalize_curvature Normalize curvature by variance.
+ * @param verbose_vertex Invoke diagnostics for specified vertex number.
+ * @param write_diagnostics Write some diagnostics.
+ *
+ * @returns Parameter dictionary
+ */
 function mrisp_write_params(
     input_surface: InputPathType,
     overlay_filename: InputPathType,
@@ -91,25 +108,8 @@ function mrisp_write_params(
     verbose_vertex: number | null = null,
     write_diagnostics: boolean = false,
 ): MrispWriteParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Full path to input surface.
-     * @param overlay_filename Full path to the overlay to map.
-     * @param output_name Output file name. Can be full path to a .tif or .mgz file.
-     * @param subjects_dir Set SUBJECTS_DIR. Default: uses environment variable.
-     * @param coords Treat overlay as a surface and write it into a 3 frame parameterization.
-     * @param average_curvature Average curvature patterns navgs times.
-     * @param correlation_matrix Use the overlay to compute the correlation matrix within the specified label.
-     * @param scale_factor Scale factor to adjust resolution of the spherical map.
-     * @param normalize_curvature Normalize curvature by variance.
-     * @param verbose_vertex Invoke diagnostics for specified vertex number.
-     * @param write_diagnostics Write some diagnostics.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrisp_write" as const,
+        "@type": "freesurfer.mrisp_write" as const,
         "input_surface": input_surface,
         "overlay_filename": overlay_filename,
         "output_name": output_name,
@@ -138,18 +138,18 @@ function mrisp_write_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrisp_write_cargs(
     params: MrispWriteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrisp_write");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -201,18 +201,18 @@ function mrisp_write_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrisp_write_outputs(
     params: MrispWriteParameters,
     execution: Execution,
 ): MrispWriteOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrispWriteOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_name"] ?? null)].join('')),
@@ -221,22 +221,22 @@ function mrisp_write_outputs(
 }
 
 
+/**
+ * This tool converts a surface overlay on a sphere into spherical coordinates.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
+ */
 function mrisp_write_execute(
     params: MrispWriteParameters,
     execution: Execution,
 ): MrispWriteOutputs {
-    /**
-     * This tool converts a surface overlay on a sphere into spherical coordinates.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrisp_write_cargs(params, execution)
     const ret = mrisp_write_outputs(params, execution)
@@ -245,6 +245,28 @@ function mrisp_write_execute(
 }
 
 
+/**
+ * This tool converts a surface overlay on a sphere into spherical coordinates.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Full path to input surface.
+ * @param overlay_filename Full path to the overlay to map.
+ * @param output_name Output file name. Can be full path to a .tif or .mgz file.
+ * @param subjects_dir Set SUBJECTS_DIR. Default: uses environment variable.
+ * @param coords Treat overlay as a surface and write it into a 3 frame parameterization.
+ * @param average_curvature Average curvature patterns navgs times.
+ * @param correlation_matrix Use the overlay to compute the correlation matrix within the specified label.
+ * @param scale_factor Scale factor to adjust resolution of the spherical map.
+ * @param normalize_curvature Normalize curvature by variance.
+ * @param verbose_vertex Invoke diagnostics for specified vertex number.
+ * @param write_diagnostics Write some diagnostics.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
+ */
 function mrisp_write(
     input_surface: InputPathType,
     overlay_filename: InputPathType,
@@ -259,28 +281,6 @@ function mrisp_write(
     write_diagnostics: boolean = false,
     runner: Runner | null = null,
 ): MrispWriteOutputs {
-    /**
-     * This tool converts a surface overlay on a sphere into spherical coordinates.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Full path to input surface.
-     * @param overlay_filename Full path to the overlay to map.
-     * @param output_name Output file name. Can be full path to a .tif or .mgz file.
-     * @param subjects_dir Set SUBJECTS_DIR. Default: uses environment variable.
-     * @param coords Treat overlay as a surface and write it into a 3 frame parameterization.
-     * @param average_curvature Average curvature patterns navgs times.
-     * @param correlation_matrix Use the overlay to compute the correlation matrix within the specified label.
-     * @param scale_factor Scale factor to adjust resolution of the spherical map.
-     * @param normalize_curvature Normalize curvature by variance.
-     * @param verbose_vertex Invoke diagnostics for specified vertex number.
-     * @param write_diagnostics Write some diagnostics.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRISP_WRITE_METADATA);
     const params = mrisp_write_params(input_surface, overlay_filename, output_name, subjects_dir, coords, average_curvature, correlation_matrix, scale_factor, normalize_curvature, verbose_vertex, write_diagnostics)
@@ -293,5 +293,8 @@ export {
       MrispWriteOutputs,
       MrispWriteParameters,
       mrisp_write,
+      mrisp_write_cargs,
+      mrisp_write_execute,
+      mrisp_write_outputs,
       mrisp_write_params,
 };

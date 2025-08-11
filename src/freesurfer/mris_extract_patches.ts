@@ -12,39 +12,39 @@ const MRIS_EXTRACT_PATCHES_METADATA: Metadata = {
 
 
 interface MrisExtractPatchesParameters {
-    "__STYXTYPE__": "mris_extract_patches";
+    "@type": "freesurfer.mris_extract_patches";
     "subject": string;
     "output_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_extract_patches": mris_extract_patches_cargs,
+        "freesurfer.mris_extract_patches": mris_extract_patches_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MrisExtractPatchesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject from which patches are to be extracted
+ * @param output_dir Output directory where patches will be saved
+ *
+ * @returns Parameter dictionary
+ */
 function mris_extract_patches_params(
     subject: string,
     output_dir: string,
 ): MrisExtractPatchesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject from which patches are to be extracted
-     * @param output_dir Output directory where patches will be saved
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_extract_patches" as const,
+        "@type": "freesurfer.mris_extract_patches" as const,
         "subject": subject,
         "output_dir": output_dir,
     };
@@ -85,18 +85,18 @@ function mris_extract_patches_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_extract_patches_cargs(
     params: MrisExtractPatchesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_extract_patches");
     cargs.push((params["subject"] ?? null));
@@ -105,18 +105,18 @@ function mris_extract_patches_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_extract_patches_outputs(
     params: MrisExtractPatchesParameters,
     execution: Execution,
 ): MrisExtractPatchesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisExtractPatchesOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mris_extract_patches_outputs(
 }
 
 
+/**
+ * A tool for extracting patches from brain surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
+ */
 function mris_extract_patches_execute(
     params: MrisExtractPatchesParameters,
     execution: Execution,
 ): MrisExtractPatchesOutputs {
-    /**
-     * A tool for extracting patches from brain surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_extract_patches_cargs(params, execution)
     const ret = mris_extract_patches_outputs(params, execution)
@@ -148,24 +148,24 @@ function mris_extract_patches_execute(
 }
 
 
+/**
+ * A tool for extracting patches from brain surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject from which patches are to be extracted
+ * @param output_dir Output directory where patches will be saved
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
+ */
 function mris_extract_patches(
     subject: string,
     output_dir: string,
     runner: Runner | null = null,
 ): MrisExtractPatchesOutputs {
-    /**
-     * A tool for extracting patches from brain surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject from which patches are to be extracted
-     * @param output_dir Output directory where patches will be saved
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_EXTRACT_PATCHES_METADATA);
     const params = mris_extract_patches_params(subject, output_dir)
@@ -178,5 +178,8 @@ export {
       MrisExtractPatchesOutputs,
       MrisExtractPatchesParameters,
       mris_extract_patches,
+      mris_extract_patches_cargs,
+      mris_extract_patches_execute,
+      mris_extract_patches_outputs,
       mris_extract_patches_params,
 };

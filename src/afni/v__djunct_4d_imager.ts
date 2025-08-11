@@ -12,7 +12,7 @@ const V__DJUNCT_4D_IMAGER_METADATA: Metadata = {
 
 
 interface VDjunct4dImagerParameters {
-    "__STYXTYPE__": "@djunct_4d_imager";
+    "@type": "afni.@djunct_4d_imager";
     "inset": InputPathType;
     "prefix": string;
     "do_movie"?: "MPEG" | "AGIF" | null | undefined;
@@ -20,35 +20,35 @@ interface VDjunct4dImagerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_4d_imager": v__djunct_4d_imager_cargs,
+        "afni.@djunct_4d_imager": v__djunct_4d_imager_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@djunct_4d_imager": v__djunct_4d_imager_outputs,
+        "afni.@djunct_4d_imager": v__djunct_4d_imager_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,24 +91,24 @@ interface VDjunct4dImagerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset ULay dataset, probably 4D (required)
+ * @param prefix Prefix for output files (required)
+ * @param do_movie Specify type of movie file. Options: MPEG, AGIF
+ * @param no_clean Keep the final intermediate files
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_4d_imager_params(
     inset: InputPathType,
     prefix: string,
     do_movie: "MPEG" | "AGIF" | null = null,
     no_clean: boolean = false,
 ): VDjunct4dImagerParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset ULay dataset, probably 4D (required)
-     * @param prefix Prefix for output files (required)
-     * @param do_movie Specify type of movie file. Options: MPEG, AGIF
-     * @param no_clean Keep the final intermediate files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_4d_imager" as const,
+        "@type": "afni.@djunct_4d_imager" as const,
         "inset": inset,
         "prefix": prefix,
         "no_clean": no_clean,
@@ -120,18 +120,18 @@ function v__djunct_4d_imager_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_4d_imager_cargs(
     params: VDjunct4dImagerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_4d_imager");
     cargs.push(execution.inputFile((params["inset"] ?? null)));
@@ -149,18 +149,18 @@ function v__djunct_4d_imager_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_4d_imager_outputs(
     params: VDjunct4dImagerParameters,
     execution: Execution,
 ): VDjunct4dImagerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunct4dImagerOutputs = {
         root: execution.outputFile("."),
         onescl_png: execution.outputFile([(params["prefix"] ?? null), "_onescl.png"].join('')),
@@ -174,22 +174,22 @@ function v__djunct_4d_imager_outputs(
 }
 
 
+/**
+ * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
+ */
 function v__djunct_4d_imager_execute(
     params: VDjunct4dImagerParameters,
     execution: Execution,
 ): VDjunct4dImagerOutputs {
-    /**
-     * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_4d_imager_cargs(params, execution)
     const ret = v__djunct_4d_imager_outputs(params, execution)
@@ -198,6 +198,21 @@ function v__djunct_4d_imager_execute(
 }
 
 
+/**
+ * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset ULay dataset, probably 4D (required)
+ * @param prefix Prefix for output files (required)
+ * @param do_movie Specify type of movie file. Options: MPEG, AGIF
+ * @param no_clean Keep the final intermediate files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
+ */
 function v__djunct_4d_imager(
     inset: InputPathType,
     prefix: string,
@@ -205,21 +220,6 @@ function v__djunct_4d_imager(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunct4dImagerOutputs {
-    /**
-     * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset ULay dataset, probably 4D (required)
-     * @param prefix Prefix for output files (required)
-     * @param do_movie Specify type of movie file. Options: MPEG, AGIF
-     * @param no_clean Keep the final intermediate files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_4D_IMAGER_METADATA);
     const params = v__djunct_4d_imager_params(inset, prefix, do_movie, no_clean)
@@ -232,5 +232,8 @@ export {
       VDjunct4dImagerParameters,
       V__DJUNCT_4D_IMAGER_METADATA,
       v__djunct_4d_imager,
+      v__djunct_4d_imager_cargs,
+      v__djunct_4d_imager_execute,
+      v__djunct_4d_imager_outputs,
       v__djunct_4d_imager_params,
 };

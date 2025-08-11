@@ -12,7 +12,7 @@ const FS_UPDATE_METADATA: Metadata = {
 
 
 interface FsUpdateParameters {
-    "__STYXTYPE__": "fs_update";
+    "@type": "freesurfer.fs_update";
     "update_path"?: string | null | undefined;
     "help_short": boolean;
     "help_medium": boolean;
@@ -20,33 +20,33 @@ interface FsUpdateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_update": fs_update_cargs,
+        "freesurfer.fs_update": fs_update_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,22 +66,22 @@ interface FsUpdateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param update_path Path to specific files or directories to update, copied recursively
+ * @param help_short Show help
+ *
+ * @returns Parameter dictionary
+ */
 function fs_update_params(
     update_path: string | null = null,
     help_short: boolean = false,
     help_medium: boolean = false,
     help_long: boolean = false,
 ): FsUpdateParameters {
-    /**
-     * Build parameters.
-    
-     * @param update_path Path to specific files or directories to update, copied recursively
-     * @param help_short Show help
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_update" as const,
+        "@type": "freesurfer.fs_update" as const,
         "help_short": help_short,
         "help_medium": help_medium,
         "help_long": help_long,
@@ -93,18 +93,18 @@ function fs_update_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_update_cargs(
     params: FsUpdateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_update");
     if ((params["update_path"] ?? null) !== null) {
@@ -123,18 +123,18 @@ function fs_update_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_update_outputs(
     params: FsUpdateParameters,
     execution: Execution,
 ): FsUpdateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsUpdateOutputs = {
         root: execution.outputFile("."),
     };
@@ -142,22 +142,22 @@ function fs_update_outputs(
 }
 
 
+/**
+ * Utility to update the FreeSurfer installation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
+ */
 function fs_update_execute(
     params: FsUpdateParameters,
     execution: Execution,
 ): FsUpdateOutputs {
-    /**
-     * Utility to update the FreeSurfer installation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_update_cargs(params, execution)
     const ret = fs_update_outputs(params, execution)
@@ -166,6 +166,19 @@ function fs_update_execute(
 }
 
 
+/**
+ * Utility to update the FreeSurfer installation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param update_path Path to specific files or directories to update, copied recursively
+ * @param help_short Show help
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
+ */
 function fs_update(
     update_path: string | null = null,
     help_short: boolean = false,
@@ -173,19 +186,6 @@ function fs_update(
     help_long: boolean = false,
     runner: Runner | null = null,
 ): FsUpdateOutputs {
-    /**
-     * Utility to update the FreeSurfer installation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param update_path Path to specific files or directories to update, copied recursively
-     * @param help_short Show help
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_UPDATE_METADATA);
     const params = fs_update_params(update_path, help_short, help_medium, help_long)
@@ -198,5 +198,8 @@ export {
       FsUpdateOutputs,
       FsUpdateParameters,
       fs_update,
+      fs_update_cargs,
+      fs_update_execute,
+      fs_update_outputs,
       fs_update_params,
 };

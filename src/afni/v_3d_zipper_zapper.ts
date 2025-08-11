@@ -12,7 +12,7 @@ const V_3D_ZIPPER_ZAPPER_METADATA: Metadata = {
 
 
 interface V3dZipperZapperParameters {
-    "__STYXTYPE__": "3dZipperZapper";
+    "@type": "afni.3dZipperZapper";
     "input_file": InputPathType;
     "output_prefix": string;
     "mask_file"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface V3dZipperZapperParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dZipperZapper": v_3d_zipper_zapper_cargs,
+        "afni.3dZipperZapper": v_3d_zipper_zapper_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dZipperZapper": v_3d_zipper_zapper_outputs,
+        "afni.3dZipperZapper": v_3d_zipper_zapper_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,28 @@ interface V3dZipperZapperOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input 3D+time file of DWIs or EPIs.
+ * @param output_prefix Prefix for output file name.
+ * @param mask_file Optional input of a single volume mask file, which gets applied to each volume in the input file.
+ * @param min_slice_nvox Set the minimum number of voxels to be in the mask for a given slice to be included in the calculations.
+ * @param min_streak_len Minimum number of slices in a row to look for fluctuations within.
+ * @param do_out_slice_param Output the map of slice parameters.
+ * @param no_out_bad_mask Do not output the mask of 'bad' slices.
+ * @param no_out_text_vals Do not output the 1D files of the slice parameter values.
+ * @param dont_use_streak Turn off the 'streak' criterion for identifying bad slices.
+ * @param dont_use_drop Turn off the 'drop' criterion for identifying bad slices.
+ * @param dont_use_corr Turn off the 'corr' criterion for identifying bad slices.
+ * @param min_streak_val Minimum magnitude of voxelwise relative differences to perhaps be problematic.
+ * @param min_drop_frac Minimum fraction for judging if the change in 'slice parameter' differences between neighboring slices might be a sign of badness.
+ * @param min_drop_diff Minimum 'slice parameter' value within a single slice that might be considered a bad sign.
+ * @param min_corr_len Minimum number of slices in a row to look for consecutive anticorrelations in brightness differences.
+ * @param min_corr_corr Threshold for the magnitude of anticorrelations to be considered potentially bad.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_zipper_zapper_params(
     input_file: InputPathType,
     output_prefix: string,
@@ -117,30 +139,8 @@ function v_3d_zipper_zapper_params(
     min_corr_len: number | null = null,
     min_corr_corr: number | null = null,
 ): V3dZipperZapperParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input 3D+time file of DWIs or EPIs.
-     * @param output_prefix Prefix for output file name.
-     * @param mask_file Optional input of a single volume mask file, which gets applied to each volume in the input file.
-     * @param min_slice_nvox Set the minimum number of voxels to be in the mask for a given slice to be included in the calculations.
-     * @param min_streak_len Minimum number of slices in a row to look for fluctuations within.
-     * @param do_out_slice_param Output the map of slice parameters.
-     * @param no_out_bad_mask Do not output the mask of 'bad' slices.
-     * @param no_out_text_vals Do not output the 1D files of the slice parameter values.
-     * @param dont_use_streak Turn off the 'streak' criterion for identifying bad slices.
-     * @param dont_use_drop Turn off the 'drop' criterion for identifying bad slices.
-     * @param dont_use_corr Turn off the 'corr' criterion for identifying bad slices.
-     * @param min_streak_val Minimum magnitude of voxelwise relative differences to perhaps be problematic.
-     * @param min_drop_frac Minimum fraction for judging if the change in 'slice parameter' differences between neighboring slices might be a sign of badness.
-     * @param min_drop_diff Minimum 'slice parameter' value within a single slice that might be considered a bad sign.
-     * @param min_corr_len Minimum number of slices in a row to look for consecutive anticorrelations in brightness differences.
-     * @param min_corr_corr Threshold for the magnitude of anticorrelations to be considered potentially bad.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dZipperZapper" as const,
+        "@type": "afni.3dZipperZapper" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "do_out_slice_param": do_out_slice_param,
@@ -178,18 +178,18 @@ function v_3d_zipper_zapper_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_zipper_zapper_cargs(
     params: V3dZipperZapperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dZipperZapper");
     cargs.push(
@@ -270,18 +270,18 @@ function v_3d_zipper_zapper_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_zipper_zapper_outputs(
     params: V3dZipperZapperParameters,
     execution: Execution,
 ): V3dZipperZapperOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dZipperZapperOutputs = {
         root: execution.outputFile("."),
         bad_slice_mask: execution.outputFile([(params["output_prefix"] ?? null), "_badmask.nii.gz"].join('')),
@@ -294,22 +294,22 @@ function v_3d_zipper_zapper_outputs(
 }
 
 
+/**
+ * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
+ */
 function v_3d_zipper_zapper_execute(
     params: V3dZipperZapperParameters,
     execution: Execution,
 ): V3dZipperZapperOutputs {
-    /**
-     * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_zipper_zapper_cargs(params, execution)
     const ret = v_3d_zipper_zapper_outputs(params, execution)
@@ -318,6 +318,33 @@ function v_3d_zipper_zapper_execute(
 }
 
 
+/**
+ * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input 3D+time file of DWIs or EPIs.
+ * @param output_prefix Prefix for output file name.
+ * @param mask_file Optional input of a single volume mask file, which gets applied to each volume in the input file.
+ * @param min_slice_nvox Set the minimum number of voxels to be in the mask for a given slice to be included in the calculations.
+ * @param min_streak_len Minimum number of slices in a row to look for fluctuations within.
+ * @param do_out_slice_param Output the map of slice parameters.
+ * @param no_out_bad_mask Do not output the mask of 'bad' slices.
+ * @param no_out_text_vals Do not output the 1D files of the slice parameter values.
+ * @param dont_use_streak Turn off the 'streak' criterion for identifying bad slices.
+ * @param dont_use_drop Turn off the 'drop' criterion for identifying bad slices.
+ * @param dont_use_corr Turn off the 'corr' criterion for identifying bad slices.
+ * @param min_streak_val Minimum magnitude of voxelwise relative differences to perhaps be problematic.
+ * @param min_drop_frac Minimum fraction for judging if the change in 'slice parameter' differences between neighboring slices might be a sign of badness.
+ * @param min_drop_diff Minimum 'slice parameter' value within a single slice that might be considered a bad sign.
+ * @param min_corr_len Minimum number of slices in a row to look for consecutive anticorrelations in brightness differences.
+ * @param min_corr_corr Threshold for the magnitude of anticorrelations to be considered potentially bad.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
+ */
 function v_3d_zipper_zapper(
     input_file: InputPathType,
     output_prefix: string,
@@ -337,33 +364,6 @@ function v_3d_zipper_zapper(
     min_corr_corr: number | null = null,
     runner: Runner | null = null,
 ): V3dZipperZapperOutputs {
-    /**
-     * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input 3D+time file of DWIs or EPIs.
-     * @param output_prefix Prefix for output file name.
-     * @param mask_file Optional input of a single volume mask file, which gets applied to each volume in the input file.
-     * @param min_slice_nvox Set the minimum number of voxels to be in the mask for a given slice to be included in the calculations.
-     * @param min_streak_len Minimum number of slices in a row to look for fluctuations within.
-     * @param do_out_slice_param Output the map of slice parameters.
-     * @param no_out_bad_mask Do not output the mask of 'bad' slices.
-     * @param no_out_text_vals Do not output the 1D files of the slice parameter values.
-     * @param dont_use_streak Turn off the 'streak' criterion for identifying bad slices.
-     * @param dont_use_drop Turn off the 'drop' criterion for identifying bad slices.
-     * @param dont_use_corr Turn off the 'corr' criterion for identifying bad slices.
-     * @param min_streak_val Minimum magnitude of voxelwise relative differences to perhaps be problematic.
-     * @param min_drop_frac Minimum fraction for judging if the change in 'slice parameter' differences between neighboring slices might be a sign of badness.
-     * @param min_drop_diff Minimum 'slice parameter' value within a single slice that might be considered a bad sign.
-     * @param min_corr_len Minimum number of slices in a row to look for consecutive anticorrelations in brightness differences.
-     * @param min_corr_corr Threshold for the magnitude of anticorrelations to be considered potentially bad.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ZIPPER_ZAPPER_METADATA);
     const params = v_3d_zipper_zapper_params(input_file, output_prefix, mask_file, min_slice_nvox, min_streak_len, do_out_slice_param, no_out_bad_mask, no_out_text_vals, dont_use_streak, dont_use_drop, dont_use_corr, min_streak_val, min_drop_frac, min_drop_diff, min_corr_len, min_corr_corr)
@@ -376,5 +376,8 @@ export {
       V3dZipperZapperParameters,
       V_3D_ZIPPER_ZAPPER_METADATA,
       v_3d_zipper_zapper,
+      v_3d_zipper_zapper_cargs,
+      v_3d_zipper_zapper_execute,
+      v_3d_zipper_zapper_outputs,
       v_3d_zipper_zapper_params,
 };

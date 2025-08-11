@@ -12,42 +12,42 @@ const V_1D_MARRY_METADATA: Metadata = {
 
 
 interface V1dMarryParameters {
-    "__STYXTYPE__": "1dMarry";
+    "@type": "afni.1dMarry";
     "sep"?: string | null | undefined;
     "divorce": boolean;
     "files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dMarry": v_1d_marry_cargs,
+        "afni.1dMarry": v_1d_marry_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dMarry": v_1d_marry_outputs,
+        "afni.1dMarry": v_1d_marry_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,22 +78,22 @@ interface V1dMarryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param files Input file(s) to be married or divorced.
+ * @param sep Separator(s) for marrying files. The first character is used as the separator between values 1 and 2, the second character between values 2 and 3, etc.
+ * @param divorce Divorce mode: splits married file into separate files.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_marry_params(
     files: Array<InputPathType>,
     sep: string | null = null,
     divorce: boolean = false,
 ): V1dMarryParameters {
-    /**
-     * Build parameters.
-    
-     * @param files Input file(s) to be married or divorced.
-     * @param sep Separator(s) for marrying files. The first character is used as the separator between values 1 and 2, the second character between values 2 and 3, etc.
-     * @param divorce Divorce mode: splits married file into separate files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dMarry" as const,
+        "@type": "afni.1dMarry" as const,
         "divorce": divorce,
         "files": files,
     };
@@ -104,18 +104,18 @@ function v_1d_marry_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_marry_cargs(
     params: V1dMarryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dMarry");
     if ((params["sep"] ?? null) !== null) {
@@ -132,18 +132,18 @@ function v_1d_marry_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_marry_outputs(
     params: V1dMarryParameters,
     execution: Execution,
 ): V1dMarryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dMarryOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["stdout"].join('')),
@@ -154,22 +154,22 @@ function v_1d_marry_outputs(
 }
 
 
+/**
+ * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
+ */
 function v_1d_marry_execute(
     params: V1dMarryParameters,
     execution: Execution,
 ): V1dMarryOutputs {
-    /**
-     * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_marry_cargs(params, execution)
     const ret = v_1d_marry_outputs(params, execution)
@@ -178,26 +178,26 @@ function v_1d_marry_execute(
 }
 
 
+/**
+ * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param files Input file(s) to be married or divorced.
+ * @param sep Separator(s) for marrying files. The first character is used as the separator between values 1 and 2, the second character between values 2 and 3, etc.
+ * @param divorce Divorce mode: splits married file into separate files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
+ */
 function v_1d_marry(
     files: Array<InputPathType>,
     sep: string | null = null,
     divorce: boolean = false,
     runner: Runner | null = null,
 ): V1dMarryOutputs {
-    /**
-     * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param files Input file(s) to be married or divorced.
-     * @param sep Separator(s) for marrying files. The first character is used as the separator between values 1 and 2, the second character between values 2 and 3, etc.
-     * @param divorce Divorce mode: splits married file into separate files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_MARRY_METADATA);
     const params = v_1d_marry_params(files, sep, divorce)
@@ -210,5 +210,8 @@ export {
       V1dMarryParameters,
       V_1D_MARRY_METADATA,
       v_1d_marry,
+      v_1d_marry_cargs,
+      v_1d_marry_execute,
+      v_1d_marry_outputs,
       v_1d_marry_params,
 };

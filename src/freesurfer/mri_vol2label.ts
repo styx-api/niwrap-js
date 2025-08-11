@@ -12,7 +12,7 @@ const MRI_VOL2LABEL_METADATA: Metadata = {
 
 
 interface MriVol2labelParameters {
-    "__STYXTYPE__": "mri_vol2label";
+    "@type": "freesurfer.mri_vol2label";
     "input": InputPathType;
     "label_id"?: number | null | undefined;
     "threshold"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface MriVol2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_vol2label": mri_vol2label_cargs,
+        "freesurfer.mri_vol2label": mri_vol2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_vol2label": mri_vol2label_outputs,
+        "freesurfer.mri_vol2label": mri_vol2label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,24 @@ interface MriVol2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input volume or surface overlay.
+ * @param label_file Name of output label file.
+ * @param label_id Value to match in the input.
+ * @param threshold Threshold the input to make label (i.e., input > threshold) instead of using Label ID.
+ * @param vol_file Write label volume in this file.
+ * @param surf_subject_hemi Interpret input as surface overlay with the given subject and hemisphere (optionally with surface).
+ * @param surf_path Specify surface path instead of subject/hemi.
+ * @param opt_params Treats input as a probability map. Format: target delta valmap.
+ * @param remove_holes Remove holes in label and islands (with --surf only).
+ * @param dilations Dilate label (with --surf only).
+ * @param erosions Erode label (with --surf only).
+ * @param help Print out help information.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_vol2label_params(
     input: InputPathType,
     label_file: string,
@@ -97,26 +115,8 @@ function mri_vol2label_params(
     erosions: number | null = null,
     help: boolean = false,
 ): MriVol2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input volume or surface overlay.
-     * @param label_file Name of output label file.
-     * @param label_id Value to match in the input.
-     * @param threshold Threshold the input to make label (i.e., input > threshold) instead of using Label ID.
-     * @param vol_file Write label volume in this file.
-     * @param surf_subject_hemi Interpret input as surface overlay with the given subject and hemisphere (optionally with surface).
-     * @param surf_path Specify surface path instead of subject/hemi.
-     * @param opt_params Treats input as a probability map. Format: target delta valmap.
-     * @param remove_holes Remove holes in label and islands (with --surf only).
-     * @param dilations Dilate label (with --surf only).
-     * @param erosions Erode label (with --surf only).
-     * @param help Print out help information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_vol2label" as const,
+        "@type": "freesurfer.mri_vol2label" as const,
         "input": input,
         "label_file": label_file,
         "remove_holes": remove_holes,
@@ -150,18 +150,18 @@ function mri_vol2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_vol2label_cargs(
     params: MriVol2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_vol2label");
     cargs.push(
@@ -230,18 +230,18 @@ function mri_vol2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_vol2label_outputs(
     params: MriVol2labelParameters,
     execution: Execution,
 ): MriVol2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVol2labelOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([(params["label_file"] ?? null)].join('')),
@@ -251,22 +251,22 @@ function mri_vol2label_outputs(
 }
 
 
+/**
+ * Converts values in a volume or surface overlay to a label using specified parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
+ */
 function mri_vol2label_execute(
     params: MriVol2labelParameters,
     execution: Execution,
 ): MriVol2labelOutputs {
-    /**
-     * Converts values in a volume or surface overlay to a label using specified parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_vol2label_cargs(params, execution)
     const ret = mri_vol2label_outputs(params, execution)
@@ -275,6 +275,29 @@ function mri_vol2label_execute(
 }
 
 
+/**
+ * Converts values in a volume or surface overlay to a label using specified parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input Input volume or surface overlay.
+ * @param label_file Name of output label file.
+ * @param label_id Value to match in the input.
+ * @param threshold Threshold the input to make label (i.e., input > threshold) instead of using Label ID.
+ * @param vol_file Write label volume in this file.
+ * @param surf_subject_hemi Interpret input as surface overlay with the given subject and hemisphere (optionally with surface).
+ * @param surf_path Specify surface path instead of subject/hemi.
+ * @param opt_params Treats input as a probability map. Format: target delta valmap.
+ * @param remove_holes Remove holes in label and islands (with --surf only).
+ * @param dilations Dilate label (with --surf only).
+ * @param erosions Erode label (with --surf only).
+ * @param help Print out help information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
+ */
 function mri_vol2label(
     input: InputPathType,
     label_file: string,
@@ -290,29 +313,6 @@ function mri_vol2label(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriVol2labelOutputs {
-    /**
-     * Converts values in a volume or surface overlay to a label using specified parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input Input volume or surface overlay.
-     * @param label_file Name of output label file.
-     * @param label_id Value to match in the input.
-     * @param threshold Threshold the input to make label (i.e., input > threshold) instead of using Label ID.
-     * @param vol_file Write label volume in this file.
-     * @param surf_subject_hemi Interpret input as surface overlay with the given subject and hemisphere (optionally with surface).
-     * @param surf_path Specify surface path instead of subject/hemi.
-     * @param opt_params Treats input as a probability map. Format: target delta valmap.
-     * @param remove_holes Remove holes in label and islands (with --surf only).
-     * @param dilations Dilate label (with --surf only).
-     * @param erosions Erode label (with --surf only).
-     * @param help Print out help information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOL2LABEL_METADATA);
     const params = mri_vol2label_params(input, label_file, label_id, threshold, vol_file, surf_subject_hemi, surf_path, opt_params, remove_holes, dilations, erosions, help)
@@ -325,5 +325,8 @@ export {
       MriVol2labelOutputs,
       MriVol2labelParameters,
       mri_vol2label,
+      mri_vol2label_cargs,
+      mri_vol2label_execute,
+      mri_vol2label_outputs,
       mri_vol2label_params,
 };

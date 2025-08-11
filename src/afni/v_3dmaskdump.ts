@@ -12,7 +12,7 @@ const V_3DMASKDUMP_METADATA: Metadata = {
 
 
 interface V3dmaskdumpParameters {
-    "__STYXTYPE__": "3dmaskdump";
+    "@type": "afni.3dmaskdump";
     "input_files": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
     "mask_range"?: Array<string> | null | undefined;
@@ -36,35 +36,35 @@ interface V3dmaskdumpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmaskdump": v_3dmaskdump_cargs,
+        "afni.3dmaskdump": v_3dmaskdump_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmaskdump": v_3dmaskdump_outputs,
+        "afni.3dmaskdump": v_3dmaskdump_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface V3dmaskdumpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets to dump voxel values
+ * @param mask_dataset Use the dataset as a mask. Only voxels with nonzero values in the mask will be printed from the input dataset.
+ * @param mask_range Further restrict the voxels from mask dataset to those mask values between 'a' and 'b' (inclusive).
+ * @param output_index Write out the dataset index values.
+ * @param output_noijk Do not write out the i,j,k values.
+ * @param output_xyz Write the x,y,z coordinates from the first input dataset at the start of each output line.
+ * @param output_filename Write output to specified file.
+ * @param calc_mask_opts Execute options enclosed as a 3dcalc-like program to produce a mask from the resulting 3D brick.
+ * @param xbox_coords Put a 'mask' at dataset coordinates 'x y z' mm.
+ * @param dbox_coords Put a 'mask' at RAI/DICOM coordinates of 'x y z' mm.
+ * @param nbox_coords Put a 'mask' at LPI/SPM coordinates of 'x y z' mm.
+ * @param ibox_coords Put a 'mask' at voxel indexes 'i j k'.
+ * @param xball_coords Put a ball (sphere) mask at dataset coordinates (x,y,z) with radius r.
+ * @param dball_coords Put a ball (sphere) mask at RAI/DICOM coordinates (x,y,z) with radius r.
+ * @param nball_coords Put a ball (sphere) mask at LPI/SPM coordinates (x,y,z) with radius r.
+ * @param nozero_output Skip output of any voxel where all the data values are zero.
+ * @param random_voxels Keep only N_RAND randomly selected voxels from what would have been the output.
+ * @param random_seed Seed the random number generator with SEED.
+ * @param output_niml Output data in the XML/NIML format compatible with input back to AFNI via the READ_NIML_FILE command.
+ * @param quiet_mode Do not print progress messages to stderr.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmaskdump_params(
     input_files: Array<InputPathType>,
     mask_dataset: InputPathType | null = null,
@@ -109,34 +135,8 @@ function v_3dmaskdump_params(
     output_niml: string | null = null,
     quiet_mode: boolean = false,
 ): V3dmaskdumpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets to dump voxel values
-     * @param mask_dataset Use the dataset as a mask. Only voxels with nonzero values in the mask will be printed from the input dataset.
-     * @param mask_range Further restrict the voxels from mask dataset to those mask values between 'a' and 'b' (inclusive).
-     * @param output_index Write out the dataset index values.
-     * @param output_noijk Do not write out the i,j,k values.
-     * @param output_xyz Write the x,y,z coordinates from the first input dataset at the start of each output line.
-     * @param output_filename Write output to specified file.
-     * @param calc_mask_opts Execute options enclosed as a 3dcalc-like program to produce a mask from the resulting 3D brick.
-     * @param xbox_coords Put a 'mask' at dataset coordinates 'x y z' mm.
-     * @param dbox_coords Put a 'mask' at RAI/DICOM coordinates of 'x y z' mm.
-     * @param nbox_coords Put a 'mask' at LPI/SPM coordinates of 'x y z' mm.
-     * @param ibox_coords Put a 'mask' at voxel indexes 'i j k'.
-     * @param xball_coords Put a ball (sphere) mask at dataset coordinates (x,y,z) with radius r.
-     * @param dball_coords Put a ball (sphere) mask at RAI/DICOM coordinates (x,y,z) with radius r.
-     * @param nball_coords Put a ball (sphere) mask at LPI/SPM coordinates (x,y,z) with radius r.
-     * @param nozero_output Skip output of any voxel where all the data values are zero.
-     * @param random_voxels Keep only N_RAND randomly selected voxels from what would have been the output.
-     * @param random_seed Seed the random number generator with SEED.
-     * @param output_niml Output data in the XML/NIML format compatible with input back to AFNI via the READ_NIML_FILE command.
-     * @param quiet_mode Do not print progress messages to stderr.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmaskdump" as const,
+        "@type": "afni.3dmaskdump" as const,
         "input_files": input_files,
         "output_index": output_index,
         "output_noijk": output_noijk,
@@ -190,18 +190,18 @@ function v_3dmaskdump_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmaskdump_cargs(
     params: V3dmaskdumpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmaskdump");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -308,18 +308,18 @@ function v_3dmaskdump_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmaskdump_outputs(
     params: V3dmaskdumpParameters,
     execution: Execution,
 ): V3dmaskdumpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaskdumpOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_filename"] ?? null) !== null) ? execution.outputFile([(params["output_filename"] ?? null)].join('')) : null,
@@ -328,22 +328,22 @@ function v_3dmaskdump_outputs(
 }
 
 
+/**
+ * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
+ */
 function v_3dmaskdump_execute(
     params: V3dmaskdumpParameters,
     execution: Execution,
 ): V3dmaskdumpOutputs {
-    /**
-     * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmaskdump_cargs(params, execution)
     const ret = v_3dmaskdump_outputs(params, execution)
@@ -352,6 +352,37 @@ function v_3dmaskdump_execute(
 }
 
 
+/**
+ * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets to dump voxel values
+ * @param mask_dataset Use the dataset as a mask. Only voxels with nonzero values in the mask will be printed from the input dataset.
+ * @param mask_range Further restrict the voxels from mask dataset to those mask values between 'a' and 'b' (inclusive).
+ * @param output_index Write out the dataset index values.
+ * @param output_noijk Do not write out the i,j,k values.
+ * @param output_xyz Write the x,y,z coordinates from the first input dataset at the start of each output line.
+ * @param output_filename Write output to specified file.
+ * @param calc_mask_opts Execute options enclosed as a 3dcalc-like program to produce a mask from the resulting 3D brick.
+ * @param xbox_coords Put a 'mask' at dataset coordinates 'x y z' mm.
+ * @param dbox_coords Put a 'mask' at RAI/DICOM coordinates of 'x y z' mm.
+ * @param nbox_coords Put a 'mask' at LPI/SPM coordinates of 'x y z' mm.
+ * @param ibox_coords Put a 'mask' at voxel indexes 'i j k'.
+ * @param xball_coords Put a ball (sphere) mask at dataset coordinates (x,y,z) with radius r.
+ * @param dball_coords Put a ball (sphere) mask at RAI/DICOM coordinates (x,y,z) with radius r.
+ * @param nball_coords Put a ball (sphere) mask at LPI/SPM coordinates (x,y,z) with radius r.
+ * @param nozero_output Skip output of any voxel where all the data values are zero.
+ * @param random_voxels Keep only N_RAND randomly selected voxels from what would have been the output.
+ * @param random_seed Seed the random number generator with SEED.
+ * @param output_niml Output data in the XML/NIML format compatible with input back to AFNI via the READ_NIML_FILE command.
+ * @param quiet_mode Do not print progress messages to stderr.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
+ */
 function v_3dmaskdump(
     input_files: Array<InputPathType>,
     mask_dataset: InputPathType | null = null,
@@ -375,37 +406,6 @@ function v_3dmaskdump(
     quiet_mode: boolean = false,
     runner: Runner | null = null,
 ): V3dmaskdumpOutputs {
-    /**
-     * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets to dump voxel values
-     * @param mask_dataset Use the dataset as a mask. Only voxels with nonzero values in the mask will be printed from the input dataset.
-     * @param mask_range Further restrict the voxels from mask dataset to those mask values between 'a' and 'b' (inclusive).
-     * @param output_index Write out the dataset index values.
-     * @param output_noijk Do not write out the i,j,k values.
-     * @param output_xyz Write the x,y,z coordinates from the first input dataset at the start of each output line.
-     * @param output_filename Write output to specified file.
-     * @param calc_mask_opts Execute options enclosed as a 3dcalc-like program to produce a mask from the resulting 3D brick.
-     * @param xbox_coords Put a 'mask' at dataset coordinates 'x y z' mm.
-     * @param dbox_coords Put a 'mask' at RAI/DICOM coordinates of 'x y z' mm.
-     * @param nbox_coords Put a 'mask' at LPI/SPM coordinates of 'x y z' mm.
-     * @param ibox_coords Put a 'mask' at voxel indexes 'i j k'.
-     * @param xball_coords Put a ball (sphere) mask at dataset coordinates (x,y,z) with radius r.
-     * @param dball_coords Put a ball (sphere) mask at RAI/DICOM coordinates (x,y,z) with radius r.
-     * @param nball_coords Put a ball (sphere) mask at LPI/SPM coordinates (x,y,z) with radius r.
-     * @param nozero_output Skip output of any voxel where all the data values are zero.
-     * @param random_voxels Keep only N_RAND randomly selected voxels from what would have been the output.
-     * @param random_seed Seed the random number generator with SEED.
-     * @param output_niml Output data in the XML/NIML format compatible with input back to AFNI via the READ_NIML_FILE command.
-     * @param quiet_mode Do not print progress messages to stderr.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMASKDUMP_METADATA);
     const params = v_3dmaskdump_params(input_files, mask_dataset, mask_range, output_index, output_noijk, output_xyz, output_filename, calc_mask_opts, xbox_coords, dbox_coords, nbox_coords, ibox_coords, xball_coords, dball_coords, nball_coords, nozero_output, random_voxels, random_seed, output_niml, quiet_mode)
@@ -418,5 +418,8 @@ export {
       V3dmaskdumpParameters,
       V_3DMASKDUMP_METADATA,
       v_3dmaskdump,
+      v_3dmaskdump_cargs,
+      v_3dmaskdump_execute,
+      v_3dmaskdump_outputs,
       v_3dmaskdump_params,
 };

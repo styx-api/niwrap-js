@@ -12,40 +12,40 @@ const V__GET_AFNI_VIEW_METADATA: Metadata = {
 
 
 interface VGetAfniViewParameters {
-    "__STYXTYPE__": "@GetAfniView";
+    "@type": "afni.@GetAfniView";
     "dataset_name": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniView": v__get_afni_view_cargs,
+        "afni.@GetAfniView": v__get_afni_view_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@GetAfniView": v__get_afni_view_outputs,
+        "afni.@GetAfniView": v__get_afni_view_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VGetAfniViewOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset_name Name of the dataset (including path) from which to retrieve the AFNI view (+orig, +acpc, etc.)
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_view_params(
     dataset_name: string,
 ): VGetAfniViewParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset_name Name of the dataset (including path) from which to retrieve the AFNI view (+orig, +acpc, etc.)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniView" as const,
+        "@type": "afni.@GetAfniView" as const,
         "dataset_name": dataset_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_view_cargs(
     params: VGetAfniViewParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniView");
     cargs.push((params["dataset_name"] ?? null));
@@ -105,18 +105,18 @@ function v__get_afni_view_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_view_outputs(
     params: VGetAfniViewParameters,
     execution: Execution,
 ): VGetAfniViewOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniViewOutputs = {
         root: execution.outputFile("."),
         afni_view: execution.outputFile(["view_extension.txt"].join('')),
@@ -125,22 +125,22 @@ function v__get_afni_view_outputs(
 }
 
 
+/**
+ * A tool to retrieve the AFNI view of a given dataset name.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
+ */
 function v__get_afni_view_execute(
     params: VGetAfniViewParameters,
     execution: Execution,
 ): VGetAfniViewOutputs {
-    /**
-     * A tool to retrieve the AFNI view of a given dataset name.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_view_cargs(params, execution)
     const ret = v__get_afni_view_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__get_afni_view_execute(
 }
 
 
+/**
+ * A tool to retrieve the AFNI view of a given dataset name.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset_name Name of the dataset (including path) from which to retrieve the AFNI view (+orig, +acpc, etc.)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
+ */
 function v__get_afni_view(
     dataset_name: string,
     runner: Runner | null = null,
 ): VGetAfniViewOutputs {
-    /**
-     * A tool to retrieve the AFNI view of a given dataset name.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset_name Name of the dataset (including path) from which to retrieve the AFNI view (+orig, +acpc, etc.)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_VIEW_METADATA);
     const params = v__get_afni_view_params(dataset_name)
@@ -177,5 +177,8 @@ export {
       VGetAfniViewParameters,
       V__GET_AFNI_VIEW_METADATA,
       v__get_afni_view,
+      v__get_afni_view_cargs,
+      v__get_afni_view_execute,
+      v__get_afni_view_outputs,
       v__get_afni_view_params,
 };

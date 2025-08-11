@@ -12,40 +12,40 @@ const V_3DNVALS_METADATA: Metadata = {
 
 
 interface V3dnvalsParameters {
-    "__STYXTYPE__": "3dnvals";
+    "@type": "afni.3dnvals";
     "datasets": Array<InputPathType>;
     "all_flag": boolean;
     "verbose_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dnvals": v_3dnvals_cargs,
+        "afni.3dnvals": v_3dnvals_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface V3dnvalsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input 3D dataset(s)
+ * @param all_flag Print out all 4 dimensions: Nx, Ny, Nz, Nvals
+ * @param verbose_flag Print the header name of the dataset first
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dnvals_params(
     datasets: Array<InputPathType>,
     all_flag: boolean = false,
     verbose_flag: boolean = false,
 ): V3dnvalsParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input 3D dataset(s)
-     * @param all_flag Print out all 4 dimensions: Nx, Ny, Nz, Nvals
-     * @param verbose_flag Print the header name of the dataset first
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dnvals" as const,
+        "@type": "afni.3dnvals" as const,
         "datasets": datasets,
         "all_flag": all_flag,
         "verbose_flag": verbose_flag,
@@ -89,18 +89,18 @@ function v_3dnvals_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dnvals_cargs(
     params: V3dnvalsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dnvals");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -114,18 +114,18 @@ function v_3dnvals_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dnvals_outputs(
     params: V3dnvalsParameters,
     execution: Execution,
 ): V3dnvalsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dnvalsOutputs = {
         root: execution.outputFile("."),
     };
@@ -133,22 +133,22 @@ function v_3dnvals_outputs(
 }
 
 
+/**
+ * Tool to print the number of sub-bricks in a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dnvalsOutputs`).
+ */
 function v_3dnvals_execute(
     params: V3dnvalsParameters,
     execution: Execution,
 ): V3dnvalsOutputs {
-    /**
-     * Tool to print the number of sub-bricks in a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dnvalsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dnvals_cargs(params, execution)
     const ret = v_3dnvals_outputs(params, execution)
@@ -157,26 +157,26 @@ function v_3dnvals_execute(
 }
 
 
+/**
+ * Tool to print the number of sub-bricks in a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input 3D dataset(s)
+ * @param all_flag Print out all 4 dimensions: Nx, Ny, Nz, Nvals
+ * @param verbose_flag Print the header name of the dataset first
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dnvalsOutputs`).
+ */
 function v_3dnvals(
     datasets: Array<InputPathType>,
     all_flag: boolean = false,
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dnvalsOutputs {
-    /**
-     * Tool to print the number of sub-bricks in a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input 3D dataset(s)
-     * @param all_flag Print out all 4 dimensions: Nx, Ny, Nz, Nvals
-     * @param verbose_flag Print the header name of the dataset first
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dnvalsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DNVALS_METADATA);
     const params = v_3dnvals_params(datasets, all_flag, verbose_flag)
@@ -189,5 +189,8 @@ export {
       V3dnvalsParameters,
       V_3DNVALS_METADATA,
       v_3dnvals,
+      v_3dnvals_cargs,
+      v_3dnvals_execute,
+      v_3dnvals_outputs,
       v_3dnvals_params,
 };

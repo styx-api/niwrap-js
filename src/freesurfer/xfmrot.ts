@@ -12,42 +12,42 @@ const XFMROT_METADATA: Metadata = {
 
 
 interface XfmrotParameters {
-    "__STYXTYPE__": "xfmrot";
+    "@type": "freesurfer.xfmrot";
     "transform_file": InputPathType;
     "input_vector_file": InputPathType;
     "output_vector_file"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xfmrot": xfmrot_cargs,
+        "freesurfer.xfmrot": xfmrot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "xfmrot": xfmrot_outputs,
+        "freesurfer.xfmrot": xfmrot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface XfmrotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform_file Transform file, can be an eddy_correct/eddy log file or a .mat file.
+ * @param input_vector_file Input vector file which can be formatted in 3 rows or 3 columns.
+ * @param output_vector_file Output vector file will have the same format as input.
+ *
+ * @returns Parameter dictionary
+ */
 function xfmrot_params(
     transform_file: InputPathType,
     input_vector_file: InputPathType,
     output_vector_file: string | null = null,
 ): XfmrotParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform_file Transform file, can be an eddy_correct/eddy log file or a .mat file.
-     * @param input_vector_file Input vector file which can be formatted in 3 rows or 3 columns.
-     * @param output_vector_file Output vector file will have the same format as input.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xfmrot" as const,
+        "@type": "freesurfer.xfmrot" as const,
         "transform_file": transform_file,
         "input_vector_file": input_vector_file,
     };
@@ -96,18 +96,18 @@ function xfmrot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xfmrot_cargs(
     params: XfmrotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xfmrot");
     cargs.push(execution.inputFile((params["transform_file"] ?? null)));
@@ -119,18 +119,18 @@ function xfmrot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xfmrot_outputs(
     params: XfmrotParameters,
     execution: Execution,
 ): XfmrotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XfmrotOutputs = {
         root: execution.outputFile("."),
         transformed_vector: ((params["output_vector_file"] ?? null) !== null) ? execution.outputFile([(params["output_vector_file"] ?? null)].join('')) : null,
@@ -139,22 +139,22 @@ function xfmrot_outputs(
 }
 
 
+/**
+ * Tool to apply a transformation defined in a transform file to an input vector file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
+ */
 function xfmrot_execute(
     params: XfmrotParameters,
     execution: Execution,
 ): XfmrotOutputs {
-    /**
-     * Tool to apply a transformation defined in a transform file to an input vector file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
-     */
     params = execution.params(params)
     const cargs = xfmrot_cargs(params, execution)
     const ret = xfmrot_outputs(params, execution)
@@ -163,26 +163,26 @@ function xfmrot_execute(
 }
 
 
+/**
+ * Tool to apply a transformation defined in a transform file to an input vector file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param transform_file Transform file, can be an eddy_correct/eddy log file or a .mat file.
+ * @param input_vector_file Input vector file which can be formatted in 3 rows or 3 columns.
+ * @param output_vector_file Output vector file will have the same format as input.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
+ */
 function xfmrot(
     transform_file: InputPathType,
     input_vector_file: InputPathType,
     output_vector_file: string | null = null,
     runner: Runner | null = null,
 ): XfmrotOutputs {
-    /**
-     * Tool to apply a transformation defined in a transform file to an input vector file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param transform_file Transform file, can be an eddy_correct/eddy log file or a .mat file.
-     * @param input_vector_file Input vector file which can be formatted in 3 rows or 3 columns.
-     * @param output_vector_file Output vector file will have the same format as input.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XFMROT_METADATA);
     const params = xfmrot_params(transform_file, input_vector_file, output_vector_file)
@@ -195,5 +195,8 @@ export {
       XfmrotOutputs,
       XfmrotParameters,
       xfmrot,
+      xfmrot_cargs,
+      xfmrot_execute,
+      xfmrot_outputs,
       xfmrot_params,
 };

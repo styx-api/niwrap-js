@@ -12,7 +12,7 @@ const VOLUME_SET_SPACE_METADATA: Metadata = {
 
 
 interface VolumeSetSpacePlumbParameters {
-    "__STYXTYPE__": "plumb";
+    "@type": "workbench.volume-set-space.plumb";
     "axis_order": string;
     "x_spacing": number;
     "y_spacing": number;
@@ -24,7 +24,7 @@ interface VolumeSetSpacePlumbParameters {
 
 
 interface VolumeSetSpaceSformParameters {
-    "__STYXTYPE__": "sform";
+    "@type": "workbench.volume-set-space.sform";
     "xi_spacing": number;
     "xj_spacing": number;
     "xk_spacing": number;
@@ -41,14 +41,14 @@ interface VolumeSetSpaceSformParameters {
 
 
 interface VolumeSetSpaceFileParameters {
-    "__STYXTYPE__": "file";
+    "@type": "workbench.volume-set-space.file";
     "volume_ref": string;
     "opt_ignore_dims": boolean;
 }
 
 
 interface VolumeSetSpaceParameters {
-    "__STYXTYPE__": "volume-set-space";
+    "@type": "workbench.volume-set-space";
     "volume_in": InputPathType;
     "volume_out": string;
     "plumb"?: VolumeSetSpacePlumbParameters | null | undefined;
@@ -57,42 +57,55 @@ interface VolumeSetSpaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-set-space": volume_set_space_cargs,
-        "plumb": volume_set_space_plumb_cargs,
-        "sform": volume_set_space_sform_cargs,
-        "file": volume_set_space_file_cargs,
+        "workbench.volume-set-space": volume_set_space_cargs,
+        "workbench.volume-set-space.plumb": volume_set_space_plumb_cargs,
+        "workbench.volume-set-space.sform": volume_set_space_sform_cargs,
+        "workbench.volume-set-space.file": volume_set_space_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param axis_order a string like 'XYZ' that specifies which index is along which spatial dimension
+ * @param x_spacing change in x-coordinate from incrementing the relevant index
+ * @param y_spacing change in y-coordinate from incrementing the relevant index
+ * @param z_spacing change in z-coordinate from incrementing the relevant index
+ * @param x_offset the x-coordinate of the first voxel
+ * @param y_offset the y-coordinate of the first voxel
+ * @param z_offset the z-coordinate of the first voxel
+ *
+ * @returns Parameter dictionary
+ */
 function volume_set_space_plumb_params(
     axis_order: string,
     x_spacing: number,
@@ -102,21 +115,8 @@ function volume_set_space_plumb_params(
     y_offset: number,
     z_offset: number,
 ): VolumeSetSpacePlumbParameters {
-    /**
-     * Build parameters.
-    
-     * @param axis_order a string like 'XYZ' that specifies which index is along which spatial dimension
-     * @param x_spacing change in x-coordinate from incrementing the relevant index
-     * @param y_spacing change in y-coordinate from incrementing the relevant index
-     * @param z_spacing change in z-coordinate from incrementing the relevant index
-     * @param x_offset the x-coordinate of the first voxel
-     * @param y_offset the y-coordinate of the first voxel
-     * @param z_offset the z-coordinate of the first voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plumb" as const,
+        "@type": "workbench.volume-set-space.plumb" as const,
         "axis_order": axis_order,
         "x_spacing": x_spacing,
         "y_spacing": y_spacing,
@@ -129,18 +129,18 @@ function volume_set_space_plumb_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_set_space_plumb_cargs(
     params: VolumeSetSpacePlumbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-plumb");
     cargs.push((params["axis_order"] ?? null));
@@ -154,6 +154,24 @@ function volume_set_space_plumb_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xi_spacing increase in x coordinate from incrementing the i index
+ * @param xj_spacing increase in x coordinate from incrementing the j index
+ * @param xk_spacing increase in x coordinate from incrementing the k index
+ * @param x_offset x coordinate of first voxel
+ * @param yi_spacing increase in y coordinate from incrementing the i index
+ * @param yj_spacing increase in y coordinate from incrementing the j index
+ * @param yk_spacing increase in y coordinate from incrementing the k index
+ * @param y_offset y coordinate of first voxel
+ * @param zi_spacing increase in z coordinate from incrementing the i index
+ * @param zj_spacing increase in z coordinate from incrementing the j index
+ * @param zk_spacing increase in z coordinate from incrementing the k index
+ * @param z_offset z coordinate of first voxel
+ *
+ * @returns Parameter dictionary
+ */
 function volume_set_space_sform_params(
     xi_spacing: number,
     xj_spacing: number,
@@ -168,26 +186,8 @@ function volume_set_space_sform_params(
     zk_spacing: number,
     z_offset: number,
 ): VolumeSetSpaceSformParameters {
-    /**
-     * Build parameters.
-    
-     * @param xi_spacing increase in x coordinate from incrementing the i index
-     * @param xj_spacing increase in x coordinate from incrementing the j index
-     * @param xk_spacing increase in x coordinate from incrementing the k index
-     * @param x_offset x coordinate of first voxel
-     * @param yi_spacing increase in y coordinate from incrementing the i index
-     * @param yj_spacing increase in y coordinate from incrementing the j index
-     * @param yk_spacing increase in y coordinate from incrementing the k index
-     * @param y_offset y coordinate of first voxel
-     * @param zi_spacing increase in z coordinate from incrementing the i index
-     * @param zj_spacing increase in z coordinate from incrementing the j index
-     * @param zk_spacing increase in z coordinate from incrementing the k index
-     * @param z_offset z coordinate of first voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sform" as const,
+        "@type": "workbench.volume-set-space.sform" as const,
         "xi_spacing": xi_spacing,
         "xj_spacing": xj_spacing,
         "xk_spacing": xk_spacing,
@@ -205,18 +205,18 @@ function volume_set_space_sform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_set_space_sform_cargs(
     params: VolumeSetSpaceSformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sform");
     cargs.push(String((params["xi_spacing"] ?? null)));
@@ -235,20 +235,20 @@ function volume_set_space_sform_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_ref volume file to use for reference space
+ * @param opt_ignore_dims copy the spacing info even if the dimensions don't match
+ *
+ * @returns Parameter dictionary
+ */
 function volume_set_space_file_params(
     volume_ref: string,
     opt_ignore_dims: boolean = false,
 ): VolumeSetSpaceFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_ref volume file to use for reference space
-     * @param opt_ignore_dims copy the spacing info even if the dimensions don't match
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "file" as const,
+        "@type": "workbench.volume-set-space.file" as const,
         "volume_ref": volume_ref,
         "opt_ignore_dims": opt_ignore_dims,
     };
@@ -256,18 +256,18 @@ function volume_set_space_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_set_space_file_cargs(
     params: VolumeSetSpaceFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-file");
     cargs.push((params["volume_ref"] ?? null));
@@ -291,6 +291,17 @@ interface VolumeSetSpaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input volume
+ * @param volume_out output - the output volume
+ * @param plumb set via axis order and spacing/offset
+ * @param sform set via a nifti sform
+ * @param file copy spacing info from volume file with matching dimensions
+ *
+ * @returns Parameter dictionary
+ */
 function volume_set_space_params(
     volume_in: InputPathType,
     volume_out: string,
@@ -298,19 +309,8 @@ function volume_set_space_params(
     sform: VolumeSetSpaceSformParameters | null = null,
     file: VolumeSetSpaceFileParameters | null = null,
 ): VolumeSetSpaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input volume
-     * @param volume_out output - the output volume
-     * @param plumb set via axis order and spacing/offset
-     * @param sform set via a nifti sform
-     * @param file copy spacing info from volume file with matching dimensions
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-set-space" as const,
+        "@type": "workbench.volume-set-space" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -327,48 +327,48 @@ function volume_set_space_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_set_space_cargs(
     params: VolumeSetSpaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-set-space");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["plumb"] ?? null).__STYXTYPE__)((params["plumb"] ?? null), execution));
+        cargs.push(...dynCargs((params["plumb"] ?? null)["@type"])((params["plumb"] ?? null), execution));
     }
     if ((params["sform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["sform"] ?? null).__STYXTYPE__)((params["sform"] ?? null), execution));
+        cargs.push(...dynCargs((params["sform"] ?? null)["@type"])((params["sform"] ?? null), execution));
     }
     if ((params["file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["file"] ?? null).__STYXTYPE__)((params["file"] ?? null), execution));
+        cargs.push(...dynCargs((params["file"] ?? null)["@type"])((params["file"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_set_space_outputs(
     params: VolumeSetSpaceParameters,
     execution: Execution,
 ): VolumeSetSpaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeSetSpaceOutputs = {
         root: execution.outputFile("."),
     };
@@ -376,24 +376,24 @@ function volume_set_space_outputs(
 }
 
 
+/**
+ * Change volume space information.
+ *
+ * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
+ */
 function volume_set_space_execute(
     params: VolumeSetSpaceParameters,
     execution: Execution,
 ): VolumeSetSpaceOutputs {
-    /**
-     * Change volume space information.
-     * 
-     * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_set_space_cargs(params, execution)
     const ret = volume_set_space_outputs(params, execution)
@@ -402,6 +402,24 @@ function volume_set_space_execute(
 }
 
 
+/**
+ * Change volume space information.
+ *
+ * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input volume
+ * @param volume_out output - the output volume
+ * @param plumb set via axis order and spacing/offset
+ * @param sform set via a nifti sform
+ * @param file copy spacing info from volume file with matching dimensions
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
+ */
 function volume_set_space(
     volume_in: InputPathType,
     volume_out: string,
@@ -410,24 +428,6 @@ function volume_set_space(
     file: VolumeSetSpaceFileParameters | null = null,
     runner: Runner | null = null,
 ): VolumeSetSpaceOutputs {
-    /**
-     * Change volume space information.
-     * 
-     * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input volume
-     * @param volume_out output - the output volume
-     * @param plumb set via axis order and spacing/offset
-     * @param sform set via a nifti sform
-     * @param file copy spacing info from volume file with matching dimensions
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_SET_SPACE_METADATA);
     const params = volume_set_space_params(volume_in, volume_out, plumb, sform, file)
@@ -443,8 +443,14 @@ export {
       VolumeSetSpacePlumbParameters,
       VolumeSetSpaceSformParameters,
       volume_set_space,
+      volume_set_space_cargs,
+      volume_set_space_execute,
+      volume_set_space_file_cargs,
       volume_set_space_file_params,
+      volume_set_space_outputs,
       volume_set_space_params,
+      volume_set_space_plumb_cargs,
       volume_set_space_plumb_params,
+      volume_set_space_sform_cargs,
       volume_set_space_sform_params,
 };

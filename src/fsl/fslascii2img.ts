@@ -12,7 +12,7 @@ const FSLASCII2IMG_METADATA: Metadata = {
 
 
 interface Fslascii2imgParameters {
-    "__STYXTYPE__": "fslascii2img";
+    "@type": "fsl.fslascii2img";
     "infile": InputPathType;
     "xsize": number;
     "ysize": number;
@@ -26,35 +26,35 @@ interface Fslascii2imgParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslascii2img": fslascii2img_cargs,
+        "fsl.fslascii2img": fslascii2img_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslascii2img": fslascii2img_outputs,
+        "fsl.fslascii2img": fslascii2img_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface Fslascii2imgOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input ASCII file
+ * @param xsize Size in the x dimension (in voxels)
+ * @param ysize Size in the y dimension (in voxels)
+ * @param zsize Size in the z dimension (in voxels)
+ * @param tsize Size in the t dimension (in voxels)
+ * @param xdim Dimension size in the x dimension (in mm)
+ * @param ydim Dimension size in the y dimension (in mm)
+ * @param zdim Dimension size in the z dimension (in mm)
+ * @param tr Repetition time (TR) in seconds
+ * @param outfile Output NIfTI file
+ *
+ * @returns Parameter dictionary
+ */
 function fslascii2img_params(
     infile: InputPathType,
     xsize: number,
@@ -89,24 +105,8 @@ function fslascii2img_params(
     tr: number,
     outfile: string = "output",
 ): Fslascii2imgParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input ASCII file
-     * @param xsize Size in the x dimension (in voxels)
-     * @param ysize Size in the y dimension (in voxels)
-     * @param zsize Size in the z dimension (in voxels)
-     * @param tsize Size in the t dimension (in voxels)
-     * @param xdim Dimension size in the x dimension (in mm)
-     * @param ydim Dimension size in the y dimension (in mm)
-     * @param zdim Dimension size in the z dimension (in mm)
-     * @param tr Repetition time (TR) in seconds
-     * @param outfile Output NIfTI file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslascii2img" as const,
+        "@type": "fsl.fslascii2img" as const,
         "infile": infile,
         "xsize": xsize,
         "ysize": ysize,
@@ -122,18 +122,18 @@ function fslascii2img_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslascii2img_cargs(
     params: Fslascii2imgParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslascii2img");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -150,18 +150,18 @@ function fslascii2img_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslascii2img_outputs(
     params: Fslascii2imgParameters,
     execution: Execution,
 ): Fslascii2imgOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fslascii2imgOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -170,22 +170,22 @@ function fslascii2img_outputs(
 }
 
 
+/**
+ * Convert data from ASCII format to NIfTI format.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
+ */
 function fslascii2img_execute(
     params: Fslascii2imgParameters,
     execution: Execution,
 ): Fslascii2imgOutputs {
-    /**
-     * Convert data from ASCII format to NIfTI format.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslascii2img_cargs(params, execution)
     const ret = fslascii2img_outputs(params, execution)
@@ -194,6 +194,27 @@ function fslascii2img_execute(
 }
 
 
+/**
+ * Convert data from ASCII format to NIfTI format.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input ASCII file
+ * @param xsize Size in the x dimension (in voxels)
+ * @param ysize Size in the y dimension (in voxels)
+ * @param zsize Size in the z dimension (in voxels)
+ * @param tsize Size in the t dimension (in voxels)
+ * @param xdim Dimension size in the x dimension (in mm)
+ * @param ydim Dimension size in the y dimension (in mm)
+ * @param zdim Dimension size in the z dimension (in mm)
+ * @param tr Repetition time (TR) in seconds
+ * @param outfile Output NIfTI file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
+ */
 function fslascii2img(
     infile: InputPathType,
     xsize: number,
@@ -207,27 +228,6 @@ function fslascii2img(
     outfile: string = "output",
     runner: Runner | null = null,
 ): Fslascii2imgOutputs {
-    /**
-     * Convert data from ASCII format to NIfTI format.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input ASCII file
-     * @param xsize Size in the x dimension (in voxels)
-     * @param ysize Size in the y dimension (in voxels)
-     * @param zsize Size in the z dimension (in voxels)
-     * @param tsize Size in the t dimension (in voxels)
-     * @param xdim Dimension size in the x dimension (in mm)
-     * @param ydim Dimension size in the y dimension (in mm)
-     * @param zdim Dimension size in the z dimension (in mm)
-     * @param tr Repetition time (TR) in seconds
-     * @param outfile Output NIfTI file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLASCII2IMG_METADATA);
     const params = fslascii2img_params(infile, xsize, ysize, zsize, tsize, xdim, ydim, zdim, tr, outfile)
@@ -240,5 +240,8 @@ export {
       Fslascii2imgOutputs,
       Fslascii2imgParameters,
       fslascii2img,
+      fslascii2img_cargs,
+      fslascii2img_execute,
+      fslascii2img_outputs,
       fslascii2img_params,
 };

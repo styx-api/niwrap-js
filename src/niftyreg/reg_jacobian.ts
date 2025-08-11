@@ -12,7 +12,7 @@ const REG_JACOBIAN_METADATA: Metadata = {
 
 
 interface RegJacobianParameters {
-    "__STYXTYPE__": "reg_jacobian";
+    "@type": "niftyreg.reg_jacobian";
     "reference_image": InputPathType;
     "deformation_field"?: InputPathType | null | undefined;
     "control_point_lattice"?: InputPathType | null | undefined;
@@ -23,35 +23,35 @@ interface RegJacobianParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_jacobian": reg_jacobian_cargs,
+        "niftyreg.reg_jacobian": reg_jacobian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_jacobian": reg_jacobian_outputs,
+        "niftyreg.reg_jacobian": reg_jacobian_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,19 @@ interface RegJacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Filename of the reference image
+ * @param deformation_field Filename of the deformation field (from reg_transform)
+ * @param control_point_lattice Filename of the control point position lattice (from reg_f3d)
+ * @param output_jacobian Filename of the Jacobian determinant map
+ * @param output_jacobian_matrix Filename of the Jacobian matrix map (9 or 4 values stored as a 5D nifti)
+ * @param output_log_jacobian Filename of the Log of the Jacobian determinant map
+ * @param affine_matrix Filename of the affine matrix to modulate the Jacobian determinant map
+ *
+ * @returns Parameter dictionary
+ */
 function reg_jacobian_params(
     reference_image: InputPathType,
     deformation_field: InputPathType | null = null,
@@ -91,21 +104,8 @@ function reg_jacobian_params(
     output_log_jacobian: string | null = null,
     affine_matrix: InputPathType | null = null,
 ): RegJacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Filename of the reference image
-     * @param deformation_field Filename of the deformation field (from reg_transform)
-     * @param control_point_lattice Filename of the control point position lattice (from reg_f3d)
-     * @param output_jacobian Filename of the Jacobian determinant map
-     * @param output_jacobian_matrix Filename of the Jacobian matrix map (9 or 4 values stored as a 5D nifti)
-     * @param output_log_jacobian Filename of the Log of the Jacobian determinant map
-     * @param affine_matrix Filename of the affine matrix to modulate the Jacobian determinant map
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_jacobian" as const,
+        "@type": "niftyreg.reg_jacobian" as const,
         "reference_image": reference_image,
     };
     if (deformation_field !== null) {
@@ -130,18 +130,18 @@ function reg_jacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_jacobian_cargs(
     params: RegJacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_jacobian");
     cargs.push(
@@ -188,18 +188,18 @@ function reg_jacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_jacobian_outputs(
     params: RegJacobianParameters,
     execution: Execution,
 ): RegJacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegJacobianOutputs = {
         root: execution.outputFile("."),
         output_jacobian_file: ((params["output_jacobian"] ?? null) !== null) ? execution.outputFile([(params["output_jacobian"] ?? null)].join('')) : null,
@@ -210,22 +210,22 @@ function reg_jacobian_outputs(
 }
 
 
+/**
+ * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
+ */
 function reg_jacobian_execute(
     params: RegJacobianParameters,
     execution: Execution,
 ): RegJacobianOutputs {
-    /**
-     * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_jacobian_cargs(params, execution)
     const ret = reg_jacobian_outputs(params, execution)
@@ -234,6 +234,24 @@ function reg_jacobian_execute(
 }
 
 
+/**
+ * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param reference_image Filename of the reference image
+ * @param deformation_field Filename of the deformation field (from reg_transform)
+ * @param control_point_lattice Filename of the control point position lattice (from reg_f3d)
+ * @param output_jacobian Filename of the Jacobian determinant map
+ * @param output_jacobian_matrix Filename of the Jacobian matrix map (9 or 4 values stored as a 5D nifti)
+ * @param output_log_jacobian Filename of the Log of the Jacobian determinant map
+ * @param affine_matrix Filename of the affine matrix to modulate the Jacobian determinant map
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
+ */
 function reg_jacobian(
     reference_image: InputPathType,
     deformation_field: InputPathType | null = null,
@@ -244,24 +262,6 @@ function reg_jacobian(
     affine_matrix: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegJacobianOutputs {
-    /**
-     * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param reference_image Filename of the reference image
-     * @param deformation_field Filename of the deformation field (from reg_transform)
-     * @param control_point_lattice Filename of the control point position lattice (from reg_f3d)
-     * @param output_jacobian Filename of the Jacobian determinant map
-     * @param output_jacobian_matrix Filename of the Jacobian matrix map (9 or 4 values stored as a 5D nifti)
-     * @param output_log_jacobian Filename of the Log of the Jacobian determinant map
-     * @param affine_matrix Filename of the affine matrix to modulate the Jacobian determinant map
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_JACOBIAN_METADATA);
     const params = reg_jacobian_params(reference_image, deformation_field, control_point_lattice, output_jacobian, output_jacobian_matrix, output_log_jacobian, affine_matrix)
@@ -274,5 +274,8 @@ export {
       RegJacobianOutputs,
       RegJacobianParameters,
       reg_jacobian,
+      reg_jacobian_cargs,
+      reg_jacobian_execute,
+      reg_jacobian_outputs,
       reg_jacobian_params,
 };

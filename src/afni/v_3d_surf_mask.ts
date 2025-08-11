@@ -12,7 +12,7 @@ const V_3D_SURF_MASK_METADATA: Metadata = {
 
 
 interface V3dSurfMaskParameters {
-    "__STYXTYPE__": "3dSurfMask";
+    "@type": "afni.3dSurfMask";
     "surface_type": string;
     "surface_file": InputPathType;
     "prefix": string;
@@ -25,35 +25,35 @@ interface V3dSurfMaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSurfMask": v_3d_surf_mask_cargs,
+        "afni.3dSurfMask": v_3d_surf_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSurfMask": v_3d_surf_mask_outputs,
+        "afni.3dSurfMask": v_3d_surf_mask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dSurfMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_type Specify input surface.
+ * @param surface_file Specify input surface filename.
+ * @param prefix Prefix of output dataset.
+ * @param grid_parent Specifies the grid for the output volume.
+ * @param fill_method Fill method: SLOW or FAST (default: FAST).
+ * @param surface_volume Specify the surface volume.
+ * @param mask_only Produce an output dataset where voxels are 1 inside the surface and 0 outside.
+ * @param flip_orientation Flip triangle winding of surface mesh.
+ * @param no_distance Do not compute the distances, just the mask from the first step.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_surf_mask_params(
     surface_type: string,
     surface_file: InputPathType,
@@ -91,23 +106,8 @@ function v_3d_surf_mask_params(
     flip_orientation: boolean = false,
     no_distance: boolean = false,
 ): V3dSurfMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_type Specify input surface.
-     * @param surface_file Specify input surface filename.
-     * @param prefix Prefix of output dataset.
-     * @param grid_parent Specifies the grid for the output volume.
-     * @param fill_method Fill method: SLOW or FAST (default: FAST).
-     * @param surface_volume Specify the surface volume.
-     * @param mask_only Produce an output dataset where voxels are 1 inside the surface and 0 outside.
-     * @param flip_orientation Flip triangle winding of surface mesh.
-     * @param no_distance Do not compute the distances, just the mask from the first step.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSurfMask" as const,
+        "@type": "afni.3dSurfMask" as const,
         "surface_type": surface_type,
         "surface_file": surface_file,
         "prefix": prefix,
@@ -126,18 +126,18 @@ function v_3d_surf_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_surf_mask_cargs(
     params: V3dSurfMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSurfMask");
     cargs.push((params["surface_type"] ?? null));
@@ -169,18 +169,18 @@ function v_3d_surf_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_surf_mask_outputs(
     params: V3dSurfMaskParameters,
     execution: Execution,
 ): V3dSurfMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSurfMaskOutputs = {
         root: execution.outputFile("."),
         output_mask: execution.outputFile([(params["prefix"] ?? null), ".m+orig.BRIK"].join('')),
@@ -190,22 +190,22 @@ function v_3d_surf_mask_outputs(
 }
 
 
+/**
+ * Creates volumetric datasets marking voxels based on their location relative to a surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
+ */
 function v_3d_surf_mask_execute(
     params: V3dSurfMaskParameters,
     execution: Execution,
 ): V3dSurfMaskOutputs {
-    /**
-     * Creates volumetric datasets marking voxels based on their location relative to a surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_surf_mask_cargs(params, execution)
     const ret = v_3d_surf_mask_outputs(params, execution)
@@ -214,6 +214,26 @@ function v_3d_surf_mask_execute(
 }
 
 
+/**
+ * Creates volumetric datasets marking voxels based on their location relative to a surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface_type Specify input surface.
+ * @param surface_file Specify input surface filename.
+ * @param prefix Prefix of output dataset.
+ * @param grid_parent Specifies the grid for the output volume.
+ * @param fill_method Fill method: SLOW or FAST (default: FAST).
+ * @param surface_volume Specify the surface volume.
+ * @param mask_only Produce an output dataset where voxels are 1 inside the surface and 0 outside.
+ * @param flip_orientation Flip triangle winding of surface mesh.
+ * @param no_distance Do not compute the distances, just the mask from the first step.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
+ */
 function v_3d_surf_mask(
     surface_type: string,
     surface_file: InputPathType,
@@ -226,26 +246,6 @@ function v_3d_surf_mask(
     no_distance: boolean = false,
     runner: Runner | null = null,
 ): V3dSurfMaskOutputs {
-    /**
-     * Creates volumetric datasets marking voxels based on their location relative to a surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface_type Specify input surface.
-     * @param surface_file Specify input surface filename.
-     * @param prefix Prefix of output dataset.
-     * @param grid_parent Specifies the grid for the output volume.
-     * @param fill_method Fill method: SLOW or FAST (default: FAST).
-     * @param surface_volume Specify the surface volume.
-     * @param mask_only Produce an output dataset where voxels are 1 inside the surface and 0 outside.
-     * @param flip_orientation Flip triangle winding of surface mesh.
-     * @param no_distance Do not compute the distances, just the mask from the first step.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SURF_MASK_METADATA);
     const params = v_3d_surf_mask_params(surface_type, surface_file, prefix, grid_parent, fill_method, surface_volume, mask_only, flip_orientation, no_distance)
@@ -258,5 +258,8 @@ export {
       V3dSurfMaskParameters,
       V_3D_SURF_MASK_METADATA,
       v_3d_surf_mask,
+      v_3d_surf_mask_cargs,
+      v_3d_surf_mask_execute,
+      v_3d_surf_mask_outputs,
       v_3d_surf_mask_params,
 };

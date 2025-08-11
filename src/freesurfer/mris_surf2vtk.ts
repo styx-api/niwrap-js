@@ -12,41 +12,41 @@ const MRIS_SURF2VTK_METADATA: Metadata = {
 
 
 interface MrisSurf2vtkParameters {
-    "__STYXTYPE__": "mris_surf2vtk";
+    "@type": "freesurfer.mris_surf2vtk";
     "input_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_surf2vtk": mris_surf2vtk_cargs,
+        "freesurfer.mris_surf2vtk": mris_surf2vtk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_surf2vtk": mris_surf2vtk_outputs,
+        "freesurfer.mris_surf2vtk": mris_surf2vtk_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MrisSurf2vtkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file in VTK format
+ *
+ * @returns Parameter dictionary
+ */
 function mris_surf2vtk_params(
     input_surface: InputPathType,
     output_surface: string,
 ): MrisSurf2vtkParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file in VTK format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_surf2vtk" as const,
+        "@type": "freesurfer.mris_surf2vtk" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -90,18 +90,18 @@ function mris_surf2vtk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_surf2vtk_cargs(
     params: MrisSurf2vtkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_surf2vtk");
     cargs.push(
@@ -116,18 +116,18 @@ function mris_surf2vtk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_surf2vtk_outputs(
     params: MrisSurf2vtkParameters,
     execution: Execution,
 ): MrisSurf2vtkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSurf2vtkOutputs = {
         root: execution.outputFile("."),
         vtk_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -136,22 +136,22 @@ function mris_surf2vtk_outputs(
 }
 
 
+/**
+ * Conversion tool to convert surface files to VTK format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
+ */
 function mris_surf2vtk_execute(
     params: MrisSurf2vtkParameters,
     execution: Execution,
 ): MrisSurf2vtkOutputs {
-    /**
-     * Conversion tool to convert surface files to VTK format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_surf2vtk_cargs(params, execution)
     const ret = mris_surf2vtk_outputs(params, execution)
@@ -160,24 +160,24 @@ function mris_surf2vtk_execute(
 }
 
 
+/**
+ * Conversion tool to convert surface files to VTK format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file in VTK format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
+ */
 function mris_surf2vtk(
     input_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): MrisSurf2vtkOutputs {
-    /**
-     * Conversion tool to convert surface files to VTK format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file in VTK format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SURF2VTK_METADATA);
     const params = mris_surf2vtk_params(input_surface, output_surface)
@@ -190,5 +190,8 @@ export {
       MrisSurf2vtkOutputs,
       MrisSurf2vtkParameters,
       mris_surf2vtk,
+      mris_surf2vtk_cargs,
+      mris_surf2vtk_execute,
+      mris_surf2vtk_outputs,
       mris_surf2vtk_params,
 };

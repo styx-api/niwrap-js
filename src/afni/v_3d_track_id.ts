@@ -12,7 +12,7 @@ const V_3D_TRACK_ID_METADATA: Metadata = {
 
 
 interface V3dTrackIdParameters {
-    "__STYXTYPE__": "3dTrackID";
+    "@type": "afni.3dTrackID";
     "mode": "DET" | "MINIP" | "PROB";
     "netrois": InputPathType;
     "prefix": string;
@@ -60,35 +60,35 @@ interface V3dTrackIdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTrackID": v_3d_track_id_cargs,
+        "afni.3dTrackID": v_3d_track_id_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTrackID": v_3d_track_id_outputs,
+        "afni.3dTrackID": v_3d_track_id_outputs,
     };
     return outputsFuncs[t];
 }
@@ -143,6 +143,56 @@ interface V3dTrackIdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mode The mode of tracking: DET, MINIP, or PROB
+ * @param netrois Network ROI mask(s)
+ * @param prefix Prefix for output files
+ * @param logic Control logic connections among target ROIs per network
+ * @param dti_in Input DTI volumes basename
+ * @param dti_list Alternative way to specify DTI input files, a NIML-formatted text file
+ * @param dti_extra Option for extra scalar for WM skeleton thresholding
+ * @param dti_search_no Turn off automatic search for additional scalar files to include in output
+ * @param hardi_gfa Single brik dataset with generalized FA (GFA) info
+ * @param hardi_dirs Directions file for HARDI data containing directions components
+ * @param hardi_pars Prefix to search for scalar files naming format
+ * @param mask Mask within which tracking is done. Optional but highly recommended.
+ * @param thru_mask Extra restrictor mask through which paths are strictly required to pass
+ * @param targ_surf_stop Make tracts stop at outer surfaces of the target ROIs
+ * @param targ_surf_twixt Make tracts stop just before entering target surfaces
+ * @param mini_num Number of whole brain Monte Carlo iterations for mini-probabilistic tracking
+ * @param uncert Uncertainty values file
+ * @param unc_min_fa Minimum stdev for perturbing FA
+ * @param unc_min_v Minimum stdev for perturbing direction-vectors
+ * @param algopt Specify tracking parameter quantities file in ASCII
+ * @param alg_thresh_fa Set threshold for FA map or other WM proxy
+ * @param alg_thresh_ang Set maximum angle for turning during propagation
+ * @param alg_thresh_len Set minimum physical length of tracts to keep
+ * @param alg_nseed_x Number of seeds per voxel in x-direction
+ * @param alg_nseed_y Number of seeds per voxel in y-direction
+ * @param alg_nseed_z Number of seeds per voxel in z-direction
+ * @param alg_thresh_frac Value for thresholding the fraction of tracks through a voxel for a given connection
+ * @param alg_nseed_vox Number of seeds per voxel per Monte Carlo iteration
+ * @param alg_nmonte Number of Monte Carlo iterations
+ * @param extra_tr_par Run three extra track parameter scalings for each connection
+ * @param uncut_at_rois Keep entire track even if overshoots a target
+ * @param dump_rois Output individual masks of ROI connections
+ * @param dump_no_labtab Turn off label table use in ROI dump output
+ * @param dump_lab_consec DON'T apply numerical labels of original ROIs in dump output
+ * @param posteriori Output individual files with number of tracks per voxel per pair
+ * @param rec_orig Record dataset origin in header of *.trk file
+ * @param do_trk_out Output *.trk files for viewing in TrackVis
+ * @param trk_opp_orient Oppositize voxel_order for TRK files
+ * @param nifti Output files in *.nii.gz format
+ * @param no_indipair_out Do not output INDIMAP and PAIRMAP volumes
+ * @param write_rois Write out ROI labels
+ * @param write_opts Write out all option values
+ * @param pair_out_power Switch to use powers of two labelling for PAIRMAP
+ * @param verb Set verbosity level
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_track_id_params(
     mode: "DET" | "MINIP" | "PROB",
     netrois: InputPathType,
@@ -189,58 +239,8 @@ function v_3d_track_id_params(
     pair_out_power: boolean = false,
     verb: number | null = null,
 ): V3dTrackIdParameters {
-    /**
-     * Build parameters.
-    
-     * @param mode The mode of tracking: DET, MINIP, or PROB
-     * @param netrois Network ROI mask(s)
-     * @param prefix Prefix for output files
-     * @param logic Control logic connections among target ROIs per network
-     * @param dti_in Input DTI volumes basename
-     * @param dti_list Alternative way to specify DTI input files, a NIML-formatted text file
-     * @param dti_extra Option for extra scalar for WM skeleton thresholding
-     * @param dti_search_no Turn off automatic search for additional scalar files to include in output
-     * @param hardi_gfa Single brik dataset with generalized FA (GFA) info
-     * @param hardi_dirs Directions file for HARDI data containing directions components
-     * @param hardi_pars Prefix to search for scalar files naming format
-     * @param mask Mask within which tracking is done. Optional but highly recommended.
-     * @param thru_mask Extra restrictor mask through which paths are strictly required to pass
-     * @param targ_surf_stop Make tracts stop at outer surfaces of the target ROIs
-     * @param targ_surf_twixt Make tracts stop just before entering target surfaces
-     * @param mini_num Number of whole brain Monte Carlo iterations for mini-probabilistic tracking
-     * @param uncert Uncertainty values file
-     * @param unc_min_fa Minimum stdev for perturbing FA
-     * @param unc_min_v Minimum stdev for perturbing direction-vectors
-     * @param algopt Specify tracking parameter quantities file in ASCII
-     * @param alg_thresh_fa Set threshold for FA map or other WM proxy
-     * @param alg_thresh_ang Set maximum angle for turning during propagation
-     * @param alg_thresh_len Set minimum physical length of tracts to keep
-     * @param alg_nseed_x Number of seeds per voxel in x-direction
-     * @param alg_nseed_y Number of seeds per voxel in y-direction
-     * @param alg_nseed_z Number of seeds per voxel in z-direction
-     * @param alg_thresh_frac Value for thresholding the fraction of tracks through a voxel for a given connection
-     * @param alg_nseed_vox Number of seeds per voxel per Monte Carlo iteration
-     * @param alg_nmonte Number of Monte Carlo iterations
-     * @param extra_tr_par Run three extra track parameter scalings for each connection
-     * @param uncut_at_rois Keep entire track even if overshoots a target
-     * @param dump_rois Output individual masks of ROI connections
-     * @param dump_no_labtab Turn off label table use in ROI dump output
-     * @param dump_lab_consec DON'T apply numerical labels of original ROIs in dump output
-     * @param posteriori Output individual files with number of tracks per voxel per pair
-     * @param rec_orig Record dataset origin in header of *.trk file
-     * @param do_trk_out Output *.trk files for viewing in TrackVis
-     * @param trk_opp_orient Oppositize voxel_order for TRK files
-     * @param nifti Output files in *.nii.gz format
-     * @param no_indipair_out Do not output INDIMAP and PAIRMAP volumes
-     * @param write_rois Write out ROI labels
-     * @param write_opts Write out all option values
-     * @param pair_out_power Switch to use powers of two labelling for PAIRMAP
-     * @param verb Set verbosity level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTrackID" as const,
+        "@type": "afni.3dTrackID" as const,
         "mode": mode,
         "netrois": netrois,
         "prefix": prefix,
@@ -338,18 +338,18 @@ function v_3d_track_id_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_track_id_cargs(
     params: V3dTrackIdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTrackID");
     cargs.push((params["mode"] ?? null));
@@ -480,18 +480,18 @@ function v_3d_track_id_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_track_id_outputs(
     params: V3dTrackIdParameters,
     execution: Execution,
 ): V3dTrackIdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTrackIdOutputs = {
         root: execution.outputFile("."),
         indimap: execution.outputFile([(params["prefix"] ?? null), "_INDIMAP.nii.gz"].join('')),
@@ -508,22 +508,22 @@ function v_3d_track_id_outputs(
 }
 
 
+/**
+ * FACTID-based tractography code for AFNI, part of FATCAT.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
+ */
 function v_3d_track_id_execute(
     params: V3dTrackIdParameters,
     execution: Execution,
 ): V3dTrackIdOutputs {
-    /**
-     * FACTID-based tractography code for AFNI, part of FATCAT.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_track_id_cargs(params, execution)
     const ret = v_3d_track_id_outputs(params, execution)
@@ -532,6 +532,61 @@ function v_3d_track_id_execute(
 }
 
 
+/**
+ * FACTID-based tractography code for AFNI, part of FATCAT.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param mode The mode of tracking: DET, MINIP, or PROB
+ * @param netrois Network ROI mask(s)
+ * @param prefix Prefix for output files
+ * @param logic Control logic connections among target ROIs per network
+ * @param dti_in Input DTI volumes basename
+ * @param dti_list Alternative way to specify DTI input files, a NIML-formatted text file
+ * @param dti_extra Option for extra scalar for WM skeleton thresholding
+ * @param dti_search_no Turn off automatic search for additional scalar files to include in output
+ * @param hardi_gfa Single brik dataset with generalized FA (GFA) info
+ * @param hardi_dirs Directions file for HARDI data containing directions components
+ * @param hardi_pars Prefix to search for scalar files naming format
+ * @param mask Mask within which tracking is done. Optional but highly recommended.
+ * @param thru_mask Extra restrictor mask through which paths are strictly required to pass
+ * @param targ_surf_stop Make tracts stop at outer surfaces of the target ROIs
+ * @param targ_surf_twixt Make tracts stop just before entering target surfaces
+ * @param mini_num Number of whole brain Monte Carlo iterations for mini-probabilistic tracking
+ * @param uncert Uncertainty values file
+ * @param unc_min_fa Minimum stdev for perturbing FA
+ * @param unc_min_v Minimum stdev for perturbing direction-vectors
+ * @param algopt Specify tracking parameter quantities file in ASCII
+ * @param alg_thresh_fa Set threshold for FA map or other WM proxy
+ * @param alg_thresh_ang Set maximum angle for turning during propagation
+ * @param alg_thresh_len Set minimum physical length of tracts to keep
+ * @param alg_nseed_x Number of seeds per voxel in x-direction
+ * @param alg_nseed_y Number of seeds per voxel in y-direction
+ * @param alg_nseed_z Number of seeds per voxel in z-direction
+ * @param alg_thresh_frac Value for thresholding the fraction of tracks through a voxel for a given connection
+ * @param alg_nseed_vox Number of seeds per voxel per Monte Carlo iteration
+ * @param alg_nmonte Number of Monte Carlo iterations
+ * @param extra_tr_par Run three extra track parameter scalings for each connection
+ * @param uncut_at_rois Keep entire track even if overshoots a target
+ * @param dump_rois Output individual masks of ROI connections
+ * @param dump_no_labtab Turn off label table use in ROI dump output
+ * @param dump_lab_consec DON'T apply numerical labels of original ROIs in dump output
+ * @param posteriori Output individual files with number of tracks per voxel per pair
+ * @param rec_orig Record dataset origin in header of *.trk file
+ * @param do_trk_out Output *.trk files for viewing in TrackVis
+ * @param trk_opp_orient Oppositize voxel_order for TRK files
+ * @param nifti Output files in *.nii.gz format
+ * @param no_indipair_out Do not output INDIMAP and PAIRMAP volumes
+ * @param write_rois Write out ROI labels
+ * @param write_opts Write out all option values
+ * @param pair_out_power Switch to use powers of two labelling for PAIRMAP
+ * @param verb Set verbosity level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
+ */
 function v_3d_track_id(
     mode: "DET" | "MINIP" | "PROB",
     netrois: InputPathType,
@@ -579,61 +634,6 @@ function v_3d_track_id(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dTrackIdOutputs {
-    /**
-     * FACTID-based tractography code for AFNI, part of FATCAT.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param mode The mode of tracking: DET, MINIP, or PROB
-     * @param netrois Network ROI mask(s)
-     * @param prefix Prefix for output files
-     * @param logic Control logic connections among target ROIs per network
-     * @param dti_in Input DTI volumes basename
-     * @param dti_list Alternative way to specify DTI input files, a NIML-formatted text file
-     * @param dti_extra Option for extra scalar for WM skeleton thresholding
-     * @param dti_search_no Turn off automatic search for additional scalar files to include in output
-     * @param hardi_gfa Single brik dataset with generalized FA (GFA) info
-     * @param hardi_dirs Directions file for HARDI data containing directions components
-     * @param hardi_pars Prefix to search for scalar files naming format
-     * @param mask Mask within which tracking is done. Optional but highly recommended.
-     * @param thru_mask Extra restrictor mask through which paths are strictly required to pass
-     * @param targ_surf_stop Make tracts stop at outer surfaces of the target ROIs
-     * @param targ_surf_twixt Make tracts stop just before entering target surfaces
-     * @param mini_num Number of whole brain Monte Carlo iterations for mini-probabilistic tracking
-     * @param uncert Uncertainty values file
-     * @param unc_min_fa Minimum stdev for perturbing FA
-     * @param unc_min_v Minimum stdev for perturbing direction-vectors
-     * @param algopt Specify tracking parameter quantities file in ASCII
-     * @param alg_thresh_fa Set threshold for FA map or other WM proxy
-     * @param alg_thresh_ang Set maximum angle for turning during propagation
-     * @param alg_thresh_len Set minimum physical length of tracts to keep
-     * @param alg_nseed_x Number of seeds per voxel in x-direction
-     * @param alg_nseed_y Number of seeds per voxel in y-direction
-     * @param alg_nseed_z Number of seeds per voxel in z-direction
-     * @param alg_thresh_frac Value for thresholding the fraction of tracks through a voxel for a given connection
-     * @param alg_nseed_vox Number of seeds per voxel per Monte Carlo iteration
-     * @param alg_nmonte Number of Monte Carlo iterations
-     * @param extra_tr_par Run three extra track parameter scalings for each connection
-     * @param uncut_at_rois Keep entire track even if overshoots a target
-     * @param dump_rois Output individual masks of ROI connections
-     * @param dump_no_labtab Turn off label table use in ROI dump output
-     * @param dump_lab_consec DON'T apply numerical labels of original ROIs in dump output
-     * @param posteriori Output individual files with number of tracks per voxel per pair
-     * @param rec_orig Record dataset origin in header of *.trk file
-     * @param do_trk_out Output *.trk files for viewing in TrackVis
-     * @param trk_opp_orient Oppositize voxel_order for TRK files
-     * @param nifti Output files in *.nii.gz format
-     * @param no_indipair_out Do not output INDIMAP and PAIRMAP volumes
-     * @param write_rois Write out ROI labels
-     * @param write_opts Write out all option values
-     * @param pair_out_power Switch to use powers of two labelling for PAIRMAP
-     * @param verb Set verbosity level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TRACK_ID_METADATA);
     const params = v_3d_track_id_params(mode, netrois, prefix, logic, dti_in, dti_list, dti_extra, dti_search_no, hardi_gfa, hardi_dirs, hardi_pars, mask, thru_mask, targ_surf_stop, targ_surf_twixt, mini_num, uncert, unc_min_fa, unc_min_v, algopt, alg_thresh_fa, alg_thresh_ang, alg_thresh_len, alg_nseed_x, alg_nseed_y, alg_nseed_z, alg_thresh_frac, alg_nseed_vox, alg_nmonte, extra_tr_par, uncut_at_rois, dump_rois, dump_no_labtab, dump_lab_consec, posteriori, rec_orig, do_trk_out, trk_opp_orient, nifti, no_indipair_out, write_rois, write_opts, pair_out_power, verb)
@@ -646,5 +646,8 @@ export {
       V3dTrackIdParameters,
       V_3D_TRACK_ID_METADATA,
       v_3d_track_id,
+      v_3d_track_id_cargs,
+      v_3d_track_id_execute,
+      v_3d_track_id_outputs,
       v_3d_track_id_params,
 };

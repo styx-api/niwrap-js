@@ -12,42 +12,42 @@ const HISTO_COMPUTE_JOINT_DENSITY_METADATA: Metadata = {
 
 
 interface HistoComputeJointDensityParameters {
-    "__STYXTYPE__": "histo_compute_joint_density";
+    "@type": "freesurfer.histo_compute_joint_density";
     "volume1": InputPathType;
     "volume2": InputPathType;
     "joint_density_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "histo_compute_joint_density": histo_compute_joint_density_cargs,
+        "freesurfer.histo_compute_joint_density": histo_compute_joint_density_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "histo_compute_joint_density": histo_compute_joint_density_outputs,
+        "freesurfer.histo_compute_joint_density": histo_compute_joint_density_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface HistoComputeJointDensityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume1 Input volume 1
+ * @param volume2 Input volume 2
+ * @param joint_density_file Output joint density file
+ *
+ * @returns Parameter dictionary
+ */
 function histo_compute_joint_density_params(
     volume1: InputPathType,
     volume2: InputPathType,
     joint_density_file: string,
 ): HistoComputeJointDensityParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume1 Input volume 1
-     * @param volume2 Input volume 2
-     * @param joint_density_file Output joint density file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "histo_compute_joint_density" as const,
+        "@type": "freesurfer.histo_compute_joint_density" as const,
         "volume1": volume1,
         "volume2": volume2,
         "joint_density_file": joint_density_file,
@@ -94,18 +94,18 @@ function histo_compute_joint_density_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function histo_compute_joint_density_cargs(
     params: HistoComputeJointDensityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("histo_compute_joint_density");
     cargs.push(execution.inputFile((params["volume1"] ?? null)));
@@ -115,18 +115,18 @@ function histo_compute_joint_density_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function histo_compute_joint_density_outputs(
     params: HistoComputeJointDensityParameters,
     execution: Execution,
 ): HistoComputeJointDensityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HistoComputeJointDensityOutputs = {
         root: execution.outputFile("."),
         output_joint_density: execution.outputFile([(params["joint_density_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function histo_compute_joint_density_outputs(
 }
 
 
+/**
+ * A tool to compute the joint density of two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
+ */
 function histo_compute_joint_density_execute(
     params: HistoComputeJointDensityParameters,
     execution: Execution,
 ): HistoComputeJointDensityOutputs {
-    /**
-     * A tool to compute the joint density of two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
-     */
     params = execution.params(params)
     const cargs = histo_compute_joint_density_cargs(params, execution)
     const ret = histo_compute_joint_density_outputs(params, execution)
@@ -159,26 +159,26 @@ function histo_compute_joint_density_execute(
 }
 
 
+/**
+ * A tool to compute the joint density of two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volume1 Input volume 1
+ * @param volume2 Input volume 2
+ * @param joint_density_file Output joint density file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
+ */
 function histo_compute_joint_density(
     volume1: InputPathType,
     volume2: InputPathType,
     joint_density_file: string,
     runner: Runner | null = null,
 ): HistoComputeJointDensityOutputs {
-    /**
-     * A tool to compute the joint density of two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volume1 Input volume 1
-     * @param volume2 Input volume 2
-     * @param joint_density_file Output joint density file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HISTO_COMPUTE_JOINT_DENSITY_METADATA);
     const params = histo_compute_joint_density_params(volume1, volume2, joint_density_file)
@@ -191,5 +191,8 @@ export {
       HistoComputeJointDensityOutputs,
       HistoComputeJointDensityParameters,
       histo_compute_joint_density,
+      histo_compute_joint_density_cargs,
+      histo_compute_joint_density_execute,
+      histo_compute_joint_density_outputs,
       histo_compute_joint_density_params,
 };

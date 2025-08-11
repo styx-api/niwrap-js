@@ -12,7 +12,7 @@ const MRIS_RF_LABEL_METADATA: Metadata = {
 
 
 interface MrisRfLabelParameters {
-    "__STYXTYPE__": "mris_rf_label";
+    "@type": "freesurfer.mris_rf_label";
     "subject": string;
     "rf_classifier": string;
     "output_name": string;
@@ -21,33 +21,33 @@ interface MrisRfLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_rf_label": mris_rf_label_cargs,
+        "freesurfer.mris_rf_label": mris_rf_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface MrisRfLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param rf_classifier Random Forest classifier
+ * @param output_name Output name
+ * @param hemi Process specified hemisphere instead of default (lh).
+ * @param surf Change default surface name from 'white' to specified surface.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_rf_label_params(
     subject: string,
     rf_classifier: string,
@@ -74,19 +85,8 @@ function mris_rf_label_params(
     hemi: string | null = null,
     surf: string | null = null,
 ): MrisRfLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param rf_classifier Random Forest classifier
-     * @param output_name Output name
-     * @param hemi Process specified hemisphere instead of default (lh).
-     * @param surf Change default surface name from 'white' to specified surface.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_rf_label" as const,
+        "@type": "freesurfer.mris_rf_label" as const,
         "subject": subject,
         "rf_classifier": rf_classifier,
         "output_name": output_name,
@@ -101,18 +101,18 @@ function mris_rf_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_rf_label_cargs(
     params: MrisRfLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_rf_label");
     cargs.push((params["subject"] ?? null));
@@ -134,18 +134,18 @@ function mris_rf_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_rf_label_outputs(
     params: MrisRfLabelParameters,
     execution: Execution,
 ): MrisRfLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRfLabelOutputs = {
         root: execution.outputFile("."),
     };
@@ -153,22 +153,22 @@ function mris_rf_label_outputs(
 }
 
 
+/**
+ * A tool for labeling regions of a surface using random forest classification.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
+ */
 function mris_rf_label_execute(
     params: MrisRfLabelParameters,
     execution: Execution,
 ): MrisRfLabelOutputs {
-    /**
-     * A tool for labeling regions of a surface using random forest classification.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_rf_label_cargs(params, execution)
     const ret = mris_rf_label_outputs(params, execution)
@@ -177,6 +177,22 @@ function mris_rf_label_execute(
 }
 
 
+/**
+ * A tool for labeling regions of a surface using random forest classification.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param rf_classifier Random Forest classifier
+ * @param output_name Output name
+ * @param hemi Process specified hemisphere instead of default (lh).
+ * @param surf Change default surface name from 'white' to specified surface.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
+ */
 function mris_rf_label(
     subject: string,
     rf_classifier: string,
@@ -185,22 +201,6 @@ function mris_rf_label(
     surf: string | null = null,
     runner: Runner | null = null,
 ): MrisRfLabelOutputs {
-    /**
-     * A tool for labeling regions of a surface using random forest classification.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param rf_classifier Random Forest classifier
-     * @param output_name Output name
-     * @param hemi Process specified hemisphere instead of default (lh).
-     * @param surf Change default surface name from 'white' to specified surface.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_RF_LABEL_METADATA);
     const params = mris_rf_label_params(subject, rf_classifier, output_name, hemi, surf)
@@ -213,5 +213,8 @@ export {
       MrisRfLabelOutputs,
       MrisRfLabelParameters,
       mris_rf_label,
+      mris_rf_label_cargs,
+      mris_rf_label_execute,
+      mris_rf_label_outputs,
       mris_rf_label_params,
 };

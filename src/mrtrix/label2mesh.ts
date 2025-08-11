@@ -12,14 +12,14 @@ const LABEL2MESH_METADATA: Metadata = {
 
 
 interface Label2meshConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.label2mesh.config";
     "key": string;
     "value": string;
 }
 
 
 interface Label2meshParameters {
-    "__STYXTYPE__": "label2mesh";
+    "@type": "mrtrix.label2mesh";
     "blocky": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface Label2meshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label2mesh": label2mesh_cargs,
-        "config": label2mesh_config_cargs,
+        "mrtrix.label2mesh": label2mesh_cargs,
+        "mrtrix.label2mesh.config": label2mesh_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label2mesh": label2mesh_outputs,
+        "mrtrix.label2mesh": label2mesh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function label2mesh_config_params(
     key: string,
     value: string,
 ): Label2meshConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.label2mesh.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function label2mesh_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2mesh_config_cargs(
     params: Label2meshConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface Label2meshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nodes_in the input node parcellation image
+ * @param mesh_out the output mesh file
+ * @param blocky generate 'blocky' meshes with precise delineation of voxel edges, rather than the default Marching Cubes approach
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function label2mesh_params(
     nodes_in: InputPathType,
     mesh_out: string,
@@ -140,25 +157,8 @@ function label2mesh_params(
     help: boolean = false,
     version: boolean = false,
 ): Label2meshParameters {
-    /**
-     * Build parameters.
-    
-     * @param nodes_in the input node parcellation image
-     * @param mesh_out the output mesh file
-     * @param blocky generate 'blocky' meshes with precise delineation of voxel edges, rather than the default Marching Cubes approach
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label2mesh" as const,
+        "@type": "mrtrix.label2mesh" as const,
         "blocky": blocky,
         "info": info,
         "quiet": quiet,
@@ -179,18 +179,18 @@ function label2mesh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2mesh_cargs(
     params: Label2meshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label2mesh");
     if ((params["blocky"] ?? null)) {
@@ -215,7 +215,7 @@ function label2mesh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -229,18 +229,18 @@ function label2mesh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label2mesh_outputs(
     params: Label2meshParameters,
     execution: Execution,
 ): Label2meshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Label2meshOutputs = {
         root: execution.outputFile("."),
         mesh_out: execution.outputFile([(params["mesh_out"] ?? null)].join('')),
@@ -249,28 +249,28 @@ function label2mesh_outputs(
 }
 
 
+/**
+ * Generate meshes from a label image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
+ */
 function label2mesh_execute(
     params: Label2meshParameters,
     execution: Execution,
 ): Label2meshOutputs {
-    /**
-     * Generate meshes from a label image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
-     */
     params = execution.params(params)
     const cargs = label2mesh_cargs(params, execution)
     const ret = label2mesh_outputs(params, execution)
@@ -279,6 +279,34 @@ function label2mesh_execute(
 }
 
 
+/**
+ * Generate meshes from a label image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param nodes_in the input node parcellation image
+ * @param mesh_out the output mesh file
+ * @param blocky generate 'blocky' meshes with precise delineation of voxel edges, rather than the default Marching Cubes approach
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
+ */
 function label2mesh(
     nodes_in: InputPathType,
     mesh_out: string,
@@ -293,34 +321,6 @@ function label2mesh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Label2meshOutputs {
-    /**
-     * Generate meshes from a label image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param nodes_in the input node parcellation image
-     * @param mesh_out the output mesh file
-     * @param blocky generate 'blocky' meshes with precise delineation of voxel edges, rather than the default Marching Cubes approach
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL2MESH_METADATA);
     const params = label2mesh_params(nodes_in, mesh_out, blocky, info, quiet, debug, force, nthreads, config, help, version)
@@ -334,6 +334,10 @@ export {
       Label2meshOutputs,
       Label2meshParameters,
       label2mesh,
+      label2mesh_cargs,
+      label2mesh_config_cargs,
       label2mesh_config_params,
+      label2mesh_execute,
+      label2mesh_outputs,
       label2mesh_params,
 };

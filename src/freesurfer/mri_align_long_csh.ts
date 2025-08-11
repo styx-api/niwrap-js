@@ -12,40 +12,40 @@ const MRI_ALIGN_LONG_CSH_METADATA: Metadata = {
 
 
 interface MriAlignLongCshParameters {
-    "__STYXTYPE__": "mri_align_long.csh";
+    "@type": "freesurfer.mri_align_long.csh";
     "base_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_align_long.csh": mri_align_long_csh_cargs,
+        "freesurfer.mri_align_long.csh": mri_align_long_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_align_long.csh": mri_align_long_csh_outputs,
+        "freesurfer.mri_align_long.csh": mri_align_long_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,36 +72,36 @@ interface MriAlignLongCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_id Identifier for the base subject
+ *
+ * @returns Parameter dictionary
+ */
 function mri_align_long_csh_params(
     base_id: string,
 ): MriAlignLongCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_id Identifier for the base subject
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_align_long.csh" as const,
+        "@type": "freesurfer.mri_align_long.csh" as const,
         "base_id": base_id,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_align_long_csh_cargs(
     params: MriAlignLongCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_align_long.csh");
     cargs.push((params["base_id"] ?? null));
@@ -109,18 +109,18 @@ function mri_align_long_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_align_long_csh_outputs(
     params: MriAlignLongCshParameters,
     execution: Execution,
 ): MriAlignLongCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAlignLongCshOutputs = {
         root: execution.outputFile("."),
         aligned_norm: execution.outputFile(["[base_id].long.base/mri/norm-base.mgz"].join('')),
@@ -130,22 +130,22 @@ function mri_align_long_csh_outputs(
 }
 
 
+/**
+ * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
+ */
 function mri_align_long_csh_execute(
     params: MriAlignLongCshParameters,
     execution: Execution,
 ): MriAlignLongCshOutputs {
-    /**
-     * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_align_long_csh_cargs(params, execution)
     const ret = mri_align_long_csh_outputs(params, execution)
@@ -154,22 +154,22 @@ function mri_align_long_csh_execute(
 }
 
 
+/**
+ * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_id Identifier for the base subject
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
+ */
 function mri_align_long_csh(
     base_id: string,
     runner: Runner | null = null,
 ): MriAlignLongCshOutputs {
-    /**
-     * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_id Identifier for the base subject
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ALIGN_LONG_CSH_METADATA);
     const params = mri_align_long_csh_params(base_id)
@@ -182,5 +182,8 @@ export {
       MriAlignLongCshOutputs,
       MriAlignLongCshParameters,
       mri_align_long_csh,
+      mri_align_long_csh_cargs,
+      mri_align_long_csh_execute,
+      mri_align_long_csh_outputs,
       mri_align_long_csh_params,
 };

@@ -12,7 +12,7 @@ const MRIS_SAMPLE_PARC_METADATA: Metadata = {
 
 
 interface MrisSampleParcParameters {
-    "__STYXTYPE__": "mris_sample_parc";
+    "@type": "freesurfer.mris_sample_parc";
     "subject_name": string;
     "hemisphere": string;
     "parc_name": string;
@@ -39,35 +39,35 @@ interface MrisSampleParcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_sample_parc": mris_sample_parc_cargs,
+        "freesurfer.mris_sample_parc": mris_sample_parc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_sample_parc": mris_sample_parc_outputs,
+        "freesurfer.mris_sample_parc": mris_sample_parc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,35 @@ interface MrisSampleParcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name The subject ID.
+ * @param hemisphere Hemisphere: rh or lh.
+ * @param parc_name Parcellation filename.
+ * @param output_annot Output annotation filename.
+ * @param sdir Use as subjects directory (default: $SUBJECTS_DIR).
+ * @param surf Use as surface (default: 'white').
+ * @param fix Fix topology of all labels smaller than the specified number of vertices (default=-1, do all).
+ * @param replace Replace label with deeper ones.
+ * @param trans Translate one label number to another.
+ * @param cortex Mask regions outside of the specified cortex label.
+ * @param projmm Project the specified number of millimeters along surface normal (default=0.0).
+ * @param proj Same as -projmm.
+ * @param projfrac Project the specified percent along surface normal (default=0.5).
+ * @param file Use as translation file (default: 'cma_parcellation_colors.txt').
+ * @param ct Embed color table into output annotation file.
+ * @param v_level Diagnostic level (default=0).
+ * @param filter Apply mode filter a specified number of times to parcellation (default=0).
+ * @param smooth Smooth surface a specified number of times (default=0).
+ * @param w_size Use window size for sampling (default=7).
+ * @param thickness Use thickness file (default: 'thickness').
+ * @param change_unknown Change largest connected unknown region to specified label (default: don't change).
+ * @param help Print help info.
+ * @param version Print version info.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_sample_parc_params(
     subject_name: string,
     hemisphere: string,
@@ -115,37 +144,8 @@ function mris_sample_parc_params(
     help: boolean = false,
     version: boolean = false,
 ): MrisSampleParcParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name The subject ID.
-     * @param hemisphere Hemisphere: rh or lh.
-     * @param parc_name Parcellation filename.
-     * @param output_annot Output annotation filename.
-     * @param sdir Use as subjects directory (default: $SUBJECTS_DIR).
-     * @param surf Use as surface (default: 'white').
-     * @param fix Fix topology of all labels smaller than the specified number of vertices (default=-1, do all).
-     * @param replace Replace label with deeper ones.
-     * @param trans Translate one label number to another.
-     * @param cortex Mask regions outside of the specified cortex label.
-     * @param projmm Project the specified number of millimeters along surface normal (default=0.0).
-     * @param proj Same as -projmm.
-     * @param projfrac Project the specified percent along surface normal (default=0.5).
-     * @param file Use as translation file (default: 'cma_parcellation_colors.txt').
-     * @param ct Embed color table into output annotation file.
-     * @param v_level Diagnostic level (default=0).
-     * @param filter Apply mode filter a specified number of times to parcellation (default=0).
-     * @param smooth Smooth surface a specified number of times (default=0).
-     * @param w_size Use window size for sampling (default=7).
-     * @param thickness Use thickness file (default: 'thickness').
-     * @param change_unknown Change largest connected unknown region to specified label (default: don't change).
-     * @param help Print help info.
-     * @param version Print version info.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_sample_parc" as const,
+        "@type": "freesurfer.mris_sample_parc" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "parc_name": parc_name,
@@ -208,18 +208,18 @@ function mris_sample_parc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_sample_parc_cargs(
     params: MrisSampleParcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_sample_parc");
     cargs.push((params["subject_name"] ?? null));
@@ -338,18 +338,18 @@ function mris_sample_parc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_sample_parc_outputs(
     params: MrisSampleParcParameters,
     execution: Execution,
 ): MrisSampleParcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSampleParcOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_annot"] ?? null)].join('')),
@@ -358,22 +358,22 @@ function mris_sample_parc_outputs(
 }
 
 
+/**
+ * This program samples a volumetric parcellation onto a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
+ */
 function mris_sample_parc_execute(
     params: MrisSampleParcParameters,
     execution: Execution,
 ): MrisSampleParcOutputs {
-    /**
-     * This program samples a volumetric parcellation onto a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_sample_parc_cargs(params, execution)
     const ret = mris_sample_parc_outputs(params, execution)
@@ -382,6 +382,40 @@ function mris_sample_parc_execute(
 }
 
 
+/**
+ * This program samples a volumetric parcellation onto a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name The subject ID.
+ * @param hemisphere Hemisphere: rh or lh.
+ * @param parc_name Parcellation filename.
+ * @param output_annot Output annotation filename.
+ * @param sdir Use as subjects directory (default: $SUBJECTS_DIR).
+ * @param surf Use as surface (default: 'white').
+ * @param fix Fix topology of all labels smaller than the specified number of vertices (default=-1, do all).
+ * @param replace Replace label with deeper ones.
+ * @param trans Translate one label number to another.
+ * @param cortex Mask regions outside of the specified cortex label.
+ * @param projmm Project the specified number of millimeters along surface normal (default=0.0).
+ * @param proj Same as -projmm.
+ * @param projfrac Project the specified percent along surface normal (default=0.5).
+ * @param file Use as translation file (default: 'cma_parcellation_colors.txt').
+ * @param ct Embed color table into output annotation file.
+ * @param v_level Diagnostic level (default=0).
+ * @param filter Apply mode filter a specified number of times to parcellation (default=0).
+ * @param smooth Smooth surface a specified number of times (default=0).
+ * @param w_size Use window size for sampling (default=7).
+ * @param thickness Use thickness file (default: 'thickness').
+ * @param change_unknown Change largest connected unknown region to specified label (default: don't change).
+ * @param help Print help info.
+ * @param version Print version info.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
+ */
 function mris_sample_parc(
     subject_name: string,
     hemisphere: string,
@@ -408,40 +442,6 @@ function mris_sample_parc(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisSampleParcOutputs {
-    /**
-     * This program samples a volumetric parcellation onto a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name The subject ID.
-     * @param hemisphere Hemisphere: rh or lh.
-     * @param parc_name Parcellation filename.
-     * @param output_annot Output annotation filename.
-     * @param sdir Use as subjects directory (default: $SUBJECTS_DIR).
-     * @param surf Use as surface (default: 'white').
-     * @param fix Fix topology of all labels smaller than the specified number of vertices (default=-1, do all).
-     * @param replace Replace label with deeper ones.
-     * @param trans Translate one label number to another.
-     * @param cortex Mask regions outside of the specified cortex label.
-     * @param projmm Project the specified number of millimeters along surface normal (default=0.0).
-     * @param proj Same as -projmm.
-     * @param projfrac Project the specified percent along surface normal (default=0.5).
-     * @param file Use as translation file (default: 'cma_parcellation_colors.txt').
-     * @param ct Embed color table into output annotation file.
-     * @param v_level Diagnostic level (default=0).
-     * @param filter Apply mode filter a specified number of times to parcellation (default=0).
-     * @param smooth Smooth surface a specified number of times (default=0).
-     * @param w_size Use window size for sampling (default=7).
-     * @param thickness Use thickness file (default: 'thickness').
-     * @param change_unknown Change largest connected unknown region to specified label (default: don't change).
-     * @param help Print help info.
-     * @param version Print version info.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SAMPLE_PARC_METADATA);
     const params = mris_sample_parc_params(subject_name, hemisphere, parc_name, output_annot, sdir, surf, fix, replace, trans, cortex, projmm, proj, projfrac, file, ct, v_level, filter, smooth, w_size, thickness, change_unknown, help, version)
@@ -454,5 +454,8 @@ export {
       MrisSampleParcOutputs,
       MrisSampleParcParameters,
       mris_sample_parc,
+      mris_sample_parc_cargs,
+      mris_sample_parc_execute,
+      mris_sample_parc_outputs,
       mris_sample_parc_params,
 };

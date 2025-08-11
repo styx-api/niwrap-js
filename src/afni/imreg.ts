@@ -12,7 +12,7 @@ const IMREG_METADATA: Metadata = {
 
 
 interface ImregParameters {
-    "__STYXTYPE__": "imreg";
+    "@type": "afni.imreg";
     "base_image": string;
     "image_sequence": Array<InputPathType>;
     "nowrite": boolean;
@@ -36,35 +36,35 @@ interface ImregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imreg": imreg_cargs,
+        "afni.imreg": imreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imreg": imreg_outputs,
+        "afni.imreg": imreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,32 @@ interface ImregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_image Base image or method to determine base image ('+AVER' or '+count')
+ * @param image_sequence Sequence of images to be registered
+ * @param nowrite Don't write outputs, just print progress reports
+ * @param prefix Prefix for output file names
+ * @param suffix Suffix for output file names
+ * @param start Start index for output file names
+ * @param step Step size for output file indices
+ * @param flim Write output in mrilib floating point format
+ * @param keepsize Preserve the original image size on output
+ * @param quiet Don't write progress report messages
+ * @param debug Write lots of debugging output
+ * @param dprefix Prefix for dx, dy, and phi files
+ * @param bilinear Use bilinear interpolation
+ * @param modes Interpolation modes during coarse, fine, and registration phases
+ * @param mlcf Equivalent to '-modes bilinear bicubic Fourier'
+ * @param wtim Weighting image file
+ * @param dfspace Use difiterated differential spatial method
+ * @param cmass Align centers of mass of the images
+ * @param fine Fine fit parameters: blur, dxy, dphi
+ * @param nofine Turn off the 'fine' fit algorithm
+ *
+ * @returns Parameter dictionary
+ */
 function imreg_params(
     base_image: string,
     image_sequence: Array<InputPathType>,
@@ -121,34 +147,8 @@ function imreg_params(
     fine: Array<number> | null = null,
     nofine: boolean = false,
 ): ImregParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_image Base image or method to determine base image ('+AVER' or '+count')
-     * @param image_sequence Sequence of images to be registered
-     * @param nowrite Don't write outputs, just print progress reports
-     * @param prefix Prefix for output file names
-     * @param suffix Suffix for output file names
-     * @param start Start index for output file names
-     * @param step Step size for output file indices
-     * @param flim Write output in mrilib floating point format
-     * @param keepsize Preserve the original image size on output
-     * @param quiet Don't write progress report messages
-     * @param debug Write lots of debugging output
-     * @param dprefix Prefix for dx, dy, and phi files
-     * @param bilinear Use bilinear interpolation
-     * @param modes Interpolation modes during coarse, fine, and registration phases
-     * @param mlcf Equivalent to '-modes bilinear bicubic Fourier'
-     * @param wtim Weighting image file
-     * @param dfspace Use difiterated differential spatial method
-     * @param cmass Align centers of mass of the images
-     * @param fine Fine fit parameters: blur, dxy, dphi
-     * @param nofine Turn off the 'fine' fit algorithm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imreg" as const,
+        "@type": "afni.imreg" as const,
         "base_image": base_image,
         "image_sequence": image_sequence,
         "nowrite": nowrite,
@@ -190,18 +190,18 @@ function imreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imreg_cargs(
     params: ImregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imreg");
     cargs.push((params["base_image"] ?? null));
@@ -288,18 +288,18 @@ function imreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imreg_outputs(
     params: ImregParameters,
     execution: Execution,
 ): ImregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImregOutputs = {
         root: execution.outputFile("."),
         registered_images: ((params["prefix"] ?? null) !== null && (params["suffix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".[INDEX].", (params["suffix"] ?? null)].join('')) : null,
@@ -311,22 +311,22 @@ function imreg_outputs(
 }
 
 
+/**
+ * Registers each 2D image in 'image_sequence' to 'base_image'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImregOutputs`).
+ */
 function imreg_execute(
     params: ImregParameters,
     execution: Execution,
 ): ImregOutputs {
-    /**
-     * Registers each 2D image in 'image_sequence' to 'base_image'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImregOutputs`).
-     */
     params = execution.params(params)
     const cargs = imreg_cargs(params, execution)
     const ret = imreg_outputs(params, execution)
@@ -335,6 +335,37 @@ function imreg_execute(
 }
 
 
+/**
+ * Registers each 2D image in 'image_sequence' to 'base_image'.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param base_image Base image or method to determine base image ('+AVER' or '+count')
+ * @param image_sequence Sequence of images to be registered
+ * @param nowrite Don't write outputs, just print progress reports
+ * @param prefix Prefix for output file names
+ * @param suffix Suffix for output file names
+ * @param start Start index for output file names
+ * @param step Step size for output file indices
+ * @param flim Write output in mrilib floating point format
+ * @param keepsize Preserve the original image size on output
+ * @param quiet Don't write progress report messages
+ * @param debug Write lots of debugging output
+ * @param dprefix Prefix for dx, dy, and phi files
+ * @param bilinear Use bilinear interpolation
+ * @param modes Interpolation modes during coarse, fine, and registration phases
+ * @param mlcf Equivalent to '-modes bilinear bicubic Fourier'
+ * @param wtim Weighting image file
+ * @param dfspace Use difiterated differential spatial method
+ * @param cmass Align centers of mass of the images
+ * @param fine Fine fit parameters: blur, dxy, dphi
+ * @param nofine Turn off the 'fine' fit algorithm
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImregOutputs`).
+ */
 function imreg(
     base_image: string,
     image_sequence: Array<InputPathType>,
@@ -358,37 +389,6 @@ function imreg(
     nofine: boolean = false,
     runner: Runner | null = null,
 ): ImregOutputs {
-    /**
-     * Registers each 2D image in 'image_sequence' to 'base_image'.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param base_image Base image or method to determine base image ('+AVER' or '+count')
-     * @param image_sequence Sequence of images to be registered
-     * @param nowrite Don't write outputs, just print progress reports
-     * @param prefix Prefix for output file names
-     * @param suffix Suffix for output file names
-     * @param start Start index for output file names
-     * @param step Step size for output file indices
-     * @param flim Write output in mrilib floating point format
-     * @param keepsize Preserve the original image size on output
-     * @param quiet Don't write progress report messages
-     * @param debug Write lots of debugging output
-     * @param dprefix Prefix for dx, dy, and phi files
-     * @param bilinear Use bilinear interpolation
-     * @param modes Interpolation modes during coarse, fine, and registration phases
-     * @param mlcf Equivalent to '-modes bilinear bicubic Fourier'
-     * @param wtim Weighting image file
-     * @param dfspace Use difiterated differential spatial method
-     * @param cmass Align centers of mass of the images
-     * @param fine Fine fit parameters: blur, dxy, dphi
-     * @param nofine Turn off the 'fine' fit algorithm
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMREG_METADATA);
     const params = imreg_params(base_image, image_sequence, nowrite, prefix, suffix, start, step, flim, keepsize, quiet, debug, dprefix, bilinear, modes, mlcf, wtim, dfspace, cmass, fine, nofine)
@@ -401,5 +401,8 @@ export {
       ImregOutputs,
       ImregParameters,
       imreg,
+      imreg_cargs,
+      imreg_execute,
+      imreg_outputs,
       imreg_params,
 };

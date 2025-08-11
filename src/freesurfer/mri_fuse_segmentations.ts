@@ -12,7 +12,7 @@ const MRI_FUSE_SEGMENTATIONS_METADATA: Metadata = {
 
 
 interface MriFuseSegmentationsParameters {
-    "__STYXTYPE__": "mri_fuse_segmentations";
+    "@type": "freesurfer.mri_fuse_segmentations";
     "asegs": Array<InputPathType>;
     "nocc_asegs": Array<InputPathType>;
     "norm_volumes": Array<InputPathType>;
@@ -23,35 +23,35 @@ interface MriFuseSegmentationsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fuse_segmentations": mri_fuse_segmentations_cargs,
+        "freesurfer.mri_fuse_segmentations": mri_fuse_segmentations_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fuse_segmentations": mri_fuse_segmentations_outputs,
+        "freesurfer.mri_fuse_segmentations": mri_fuse_segmentations_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriFuseSegmentationsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param asegs Path to aseg.mgz files, one per TP
+ * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
+ * @param norm_volumes Path to norm.mgz files, one per TP
+ * @param input_file Input norm.mgz file
+ * @param output_file Resulting fused segmentation as aseg.fused.mgz file
+ * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
+ * @param sigma Cross-time sigma (default 3.0)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fuse_segmentations_params(
     asegs: Array<InputPathType>,
     nocc_asegs: Array<InputPathType>,
@@ -83,21 +96,8 @@ function mri_fuse_segmentations_params(
     transforms: Array<InputPathType> | null = null,
     sigma: number | null = 3.0,
 ): MriFuseSegmentationsParameters {
-    /**
-     * Build parameters.
-    
-     * @param asegs Path to aseg.mgz files, one per TP
-     * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
-     * @param norm_volumes Path to norm.mgz files, one per TP
-     * @param input_file Input norm.mgz file
-     * @param output_file Resulting fused segmentation as aseg.fused.mgz file
-     * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
-     * @param sigma Cross-time sigma (default 3.0)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fuse_segmentations" as const,
+        "@type": "freesurfer.mri_fuse_segmentations" as const,
         "asegs": asegs,
         "nocc_asegs": nocc_asegs,
         "norm_volumes": norm_volumes,
@@ -114,18 +114,18 @@ function mri_fuse_segmentations_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fuse_segmentations_cargs(
     params: MriFuseSegmentationsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fuse_segmentations");
     cargs.push(
@@ -158,18 +158,18 @@ function mri_fuse_segmentations_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fuse_segmentations_outputs(
     params: MriFuseSegmentationsParameters,
     execution: Execution,
 ): MriFuseSegmentationsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFuseSegmentationsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -178,22 +178,22 @@ function mri_fuse_segmentations_outputs(
 }
 
 
+/**
+ * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
+ */
 function mri_fuse_segmentations_execute(
     params: MriFuseSegmentationsParameters,
     execution: Execution,
 ): MriFuseSegmentationsOutputs {
-    /**
-     * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fuse_segmentations_cargs(params, execution)
     const ret = mri_fuse_segmentations_outputs(params, execution)
@@ -202,6 +202,24 @@ function mri_fuse_segmentations_execute(
 }
 
 
+/**
+ * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param asegs Path to aseg.mgz files, one per TP
+ * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
+ * @param norm_volumes Path to norm.mgz files, one per TP
+ * @param input_file Input norm.mgz file
+ * @param output_file Resulting fused segmentation as aseg.fused.mgz file
+ * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
+ * @param sigma Cross-time sigma (default 3.0)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
+ */
 function mri_fuse_segmentations(
     asegs: Array<InputPathType>,
     nocc_asegs: Array<InputPathType>,
@@ -212,24 +230,6 @@ function mri_fuse_segmentations(
     sigma: number | null = 3.0,
     runner: Runner | null = null,
 ): MriFuseSegmentationsOutputs {
-    /**
-     * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param asegs Path to aseg.mgz files, one per TP
-     * @param nocc_asegs Path to aseg.auto_noCCseg.mgz files without CC labels, one per TP
-     * @param norm_volumes Path to norm.mgz files, one per TP
-     * @param input_file Input norm.mgz file
-     * @param output_file Resulting fused segmentation as aseg.fused.mgz file
-     * @param transforms Transform files from each TP to the input norm.mgz, can be LTA, M3Z or identity.nofile
-     * @param sigma Cross-time sigma (default 3.0)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FUSE_SEGMENTATIONS_METADATA);
     const params = mri_fuse_segmentations_params(asegs, nocc_asegs, norm_volumes, input_file, output_file, transforms, sigma)
@@ -242,5 +242,8 @@ export {
       MriFuseSegmentationsOutputs,
       MriFuseSegmentationsParameters,
       mri_fuse_segmentations,
+      mri_fuse_segmentations_cargs,
+      mri_fuse_segmentations_execute,
+      mri_fuse_segmentations_outputs,
       mri_fuse_segmentations_params,
 };

@@ -12,7 +12,7 @@ const MRI_RIBBON_METADATA: Metadata = {
 
 
 interface MriRibbonParameters {
-    "__STYXTYPE__": "mri_ribbon";
+    "@type": "freesurfer.mri_ribbon";
     "label_file"?: InputPathType | null | undefined;
     "inner_surface": InputPathType;
     "outer_surface": InputPathType;
@@ -21,35 +21,35 @@ interface MriRibbonParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ribbon": mri_ribbon_cargs,
+        "freesurfer.mri_ribbon": mri_ribbon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ribbon": mri_ribbon_outputs,
+        "freesurfer.mri_ribbon": mri_ribbon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriRibbonOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inner_surface File name of the inner surface
+ * @param outer_surface File name of the outer surface
+ * @param input_volume Prefix for the input volume file
+ * @param output_volume Prefix for the output volume file
+ * @param label_file Label file specifying regions of interest (optional)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ribbon_params(
     inner_surface: InputPathType,
     outer_surface: InputPathType,
@@ -79,19 +90,8 @@ function mri_ribbon_params(
     output_volume: string,
     label_file: InputPathType | null = null,
 ): MriRibbonParameters {
-    /**
-     * Build parameters.
-    
-     * @param inner_surface File name of the inner surface
-     * @param outer_surface File name of the outer surface
-     * @param input_volume Prefix for the input volume file
-     * @param output_volume Prefix for the output volume file
-     * @param label_file Label file specifying regions of interest (optional)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ribbon" as const,
+        "@type": "freesurfer.mri_ribbon" as const,
         "inner_surface": inner_surface,
         "outer_surface": outer_surface,
         "input_volume": input_volume,
@@ -104,18 +104,18 @@ function mri_ribbon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ribbon_cargs(
     params: MriRibbonParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ribbon");
     if ((params["label_file"] ?? null) !== null) {
@@ -132,18 +132,18 @@ function mri_ribbon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ribbon_outputs(
     params: MriRibbonParameters,
     execution: Execution,
 ): MriRibbonOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRibbonOutputs = {
         root: execution.outputFile("."),
         ribbon_output: execution.outputFile([(params["output_volume"] ?? null), "_ribbon.nii.gz"].join('')),
@@ -152,22 +152,22 @@ function mri_ribbon_outputs(
 }
 
 
+/**
+ * MRI Ribbon tool to create ribbon volumes from surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
+ */
 function mri_ribbon_execute(
     params: MriRibbonParameters,
     execution: Execution,
 ): MriRibbonOutputs {
-    /**
-     * MRI Ribbon tool to create ribbon volumes from surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ribbon_cargs(params, execution)
     const ret = mri_ribbon_outputs(params, execution)
@@ -176,6 +176,22 @@ function mri_ribbon_execute(
 }
 
 
+/**
+ * MRI Ribbon tool to create ribbon volumes from surface files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inner_surface File name of the inner surface
+ * @param outer_surface File name of the outer surface
+ * @param input_volume Prefix for the input volume file
+ * @param output_volume Prefix for the output volume file
+ * @param label_file Label file specifying regions of interest (optional)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
+ */
 function mri_ribbon(
     inner_surface: InputPathType,
     outer_surface: InputPathType,
@@ -184,22 +200,6 @@ function mri_ribbon(
     label_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriRibbonOutputs {
-    /**
-     * MRI Ribbon tool to create ribbon volumes from surface files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inner_surface File name of the inner surface
-     * @param outer_surface File name of the outer surface
-     * @param input_volume Prefix for the input volume file
-     * @param output_volume Prefix for the output volume file
-     * @param label_file Label file specifying regions of interest (optional)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RIBBON_METADATA);
     const params = mri_ribbon_params(inner_surface, outer_surface, input_volume, output_volume, label_file)
@@ -212,5 +212,8 @@ export {
       MriRibbonOutputs,
       MriRibbonParameters,
       mri_ribbon,
+      mri_ribbon_cargs,
+      mri_ribbon_execute,
+      mri_ribbon_outputs,
       mri_ribbon_params,
 };

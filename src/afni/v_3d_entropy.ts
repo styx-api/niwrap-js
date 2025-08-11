@@ -12,39 +12,39 @@ const V_3D_ENTROPY_METADATA: Metadata = {
 
 
 interface V3dEntropyParameters {
-    "__STYXTYPE__": "3dEntropy";
+    "@type": "afni.3dEntropy";
     "zskip": boolean;
     "input_dataset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dEntropy": v_3d_entropy_cargs,
+        "afni.3dEntropy": v_3d_entropy_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface V3dEntropyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (stored as 16 bit shorts)
+ * @param zskip Skip 0 values in the entropy computation
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_entropy_params(
     input_dataset: InputPathType,
     zskip: boolean = false,
 ): V3dEntropyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (stored as 16 bit shorts)
-     * @param zskip Skip 0 values in the entropy computation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dEntropy" as const,
+        "@type": "afni.3dEntropy" as const,
         "zskip": zskip,
         "input_dataset": input_dataset,
     };
@@ -85,18 +85,18 @@ function v_3d_entropy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_entropy_cargs(
     params: V3dEntropyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dEntropy");
     if ((params["zskip"] ?? null)) {
@@ -107,18 +107,18 @@ function v_3d_entropy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_entropy_outputs(
     params: V3dEntropyParameters,
     execution: Execution,
 ): V3dEntropyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dEntropyOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function v_3d_entropy_outputs(
 }
 
 
+/**
+ * Computes entropy for a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
+ */
 function v_3d_entropy_execute(
     params: V3dEntropyParameters,
     execution: Execution,
 ): V3dEntropyOutputs {
-    /**
-     * Computes entropy for a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_entropy_cargs(params, execution)
     const ret = v_3d_entropy_outputs(params, execution)
@@ -150,24 +150,24 @@ function v_3d_entropy_execute(
 }
 
 
+/**
+ * Computes entropy for a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (stored as 16 bit shorts)
+ * @param zskip Skip 0 values in the entropy computation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
+ */
 function v_3d_entropy(
     input_dataset: InputPathType,
     zskip: boolean = false,
     runner: Runner | null = null,
 ): V3dEntropyOutputs {
-    /**
-     * Computes entropy for a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (stored as 16 bit shorts)
-     * @param zskip Skip 0 values in the entropy computation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ENTROPY_METADATA);
     const params = v_3d_entropy_params(input_dataset, zskip)
@@ -180,5 +180,8 @@ export {
       V3dEntropyParameters,
       V_3D_ENTROPY_METADATA,
       v_3d_entropy,
+      v_3d_entropy_cargs,
+      v_3d_entropy_execute,
+      v_3d_entropy_outputs,
       v_3d_entropy_params,
 };

@@ -12,7 +12,7 @@ const V_3D_DECONVOLVE_METADATA: Metadata = {
 
 
 interface V3dDeconvolveParameters {
-    "__STYXTYPE__": "3dDeconvolve";
+    "@type": "afni.3dDeconvolve";
     "input_dataset": InputPathType;
     "mask_dataset"?: InputPathType | null | undefined;
     "num_stimts"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface V3dDeconvolveParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDeconvolve": v_3d_deconvolve_cargs,
+        "afni.3dDeconvolve": v_3d_deconvolve_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDeconvolve": v_3d_deconvolve_outputs,
+        "afni.3dDeconvolve": v_3d_deconvolve_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,27 @@ interface V3dDeconvolveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Filename of 3D+time input dataset.
+ * @param mask_dataset Filename of 3D mask dataset.
+ * @param num_stimts Number of input stimulus time series.
+ * @param stim_file Filename of kth time series input stimulus.
+ * @param stim_label Label for kth input stimulus.
+ * @param stim_base Kth input stimulus is part of the baseline model.
+ * @param stim_times Deconvolution response model for kth stimulus.
+ * @param iresp Prefix for 3D+time output dataset which will contain the kth estimated impulse response.
+ * @param fitts Prefix for 3D+time output dataset which will contain the (full model) time series fit to the input data.
+ * @param fout Flag to output the F-statistics for each stimulus.
+ * @param tout Flag to output the t-statistics.
+ * @param bucket Create one AFNI 'bucket' dataset containing various parameters of interest.
+ * @param cbucket Save the regression coefficients (no statistics) into a dataset.
+ * @param x1_d Save X matrix to a .xmat.1D (ASCII) file.
+ * @param jobs Run the program with multiple jobs (sub-processes).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_deconvolve_params(
     input_dataset: InputPathType,
     mask_dataset: InputPathType | null = null,
@@ -115,29 +136,8 @@ function v_3d_deconvolve_params(
     x1_d: string | null = null,
     jobs: number | null = null,
 ): V3dDeconvolveParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Filename of 3D+time input dataset.
-     * @param mask_dataset Filename of 3D mask dataset.
-     * @param num_stimts Number of input stimulus time series.
-     * @param stim_file Filename of kth time series input stimulus.
-     * @param stim_label Label for kth input stimulus.
-     * @param stim_base Kth input stimulus is part of the baseline model.
-     * @param stim_times Deconvolution response model for kth stimulus.
-     * @param iresp Prefix for 3D+time output dataset which will contain the kth estimated impulse response.
-     * @param fitts Prefix for 3D+time output dataset which will contain the (full model) time series fit to the input data.
-     * @param fout Flag to output the F-statistics for each stimulus.
-     * @param tout Flag to output the t-statistics.
-     * @param bucket Create one AFNI 'bucket' dataset containing various parameters of interest.
-     * @param cbucket Save the regression coefficients (no statistics) into a dataset.
-     * @param x1_d Save X matrix to a .xmat.1D (ASCII) file.
-     * @param jobs Run the program with multiple jobs (sub-processes).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDeconvolve" as const,
+        "@type": "afni.3dDeconvolve" as const,
         "input_dataset": input_dataset,
         "stim_base": stim_base,
         "fout": fout,
@@ -180,18 +180,18 @@ function v_3d_deconvolve_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_deconvolve_cargs(
     params: V3dDeconvolveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDeconvolve");
     cargs.push(
@@ -277,18 +277,18 @@ function v_3d_deconvolve_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_deconvolve_outputs(
     params: V3dDeconvolveParameters,
     execution: Execution,
 ): V3dDeconvolveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDeconvolveOutputs = {
         root: execution.outputFile("."),
         bucket_output: ((params["bucket"] ?? null) !== null) ? execution.outputFile([(params["bucket"] ?? null), ".HEAD"].join('')) : null,
@@ -301,22 +301,22 @@ function v_3d_deconvolve_outputs(
 }
 
 
+/**
+ * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
+ */
 function v_3d_deconvolve_execute(
     params: V3dDeconvolveParameters,
     execution: Execution,
 ): V3dDeconvolveOutputs {
-    /**
-     * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_deconvolve_cargs(params, execution)
     const ret = v_3d_deconvolve_outputs(params, execution)
@@ -325,6 +325,32 @@ function v_3d_deconvolve_execute(
 }
 
 
+/**
+ * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Filename of 3D+time input dataset.
+ * @param mask_dataset Filename of 3D mask dataset.
+ * @param num_stimts Number of input stimulus time series.
+ * @param stim_file Filename of kth time series input stimulus.
+ * @param stim_label Label for kth input stimulus.
+ * @param stim_base Kth input stimulus is part of the baseline model.
+ * @param stim_times Deconvolution response model for kth stimulus.
+ * @param iresp Prefix for 3D+time output dataset which will contain the kth estimated impulse response.
+ * @param fitts Prefix for 3D+time output dataset which will contain the (full model) time series fit to the input data.
+ * @param fout Flag to output the F-statistics for each stimulus.
+ * @param tout Flag to output the t-statistics.
+ * @param bucket Create one AFNI 'bucket' dataset containing various parameters of interest.
+ * @param cbucket Save the regression coefficients (no statistics) into a dataset.
+ * @param x1_d Save X matrix to a .xmat.1D (ASCII) file.
+ * @param jobs Run the program with multiple jobs (sub-processes).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
+ */
 function v_3d_deconvolve(
     input_dataset: InputPathType,
     mask_dataset: InputPathType | null = null,
@@ -343,32 +369,6 @@ function v_3d_deconvolve(
     jobs: number | null = null,
     runner: Runner | null = null,
 ): V3dDeconvolveOutputs {
-    /**
-     * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Filename of 3D+time input dataset.
-     * @param mask_dataset Filename of 3D mask dataset.
-     * @param num_stimts Number of input stimulus time series.
-     * @param stim_file Filename of kth time series input stimulus.
-     * @param stim_label Label for kth input stimulus.
-     * @param stim_base Kth input stimulus is part of the baseline model.
-     * @param stim_times Deconvolution response model for kth stimulus.
-     * @param iresp Prefix for 3D+time output dataset which will contain the kth estimated impulse response.
-     * @param fitts Prefix for 3D+time output dataset which will contain the (full model) time series fit to the input data.
-     * @param fout Flag to output the F-statistics for each stimulus.
-     * @param tout Flag to output the t-statistics.
-     * @param bucket Create one AFNI 'bucket' dataset containing various parameters of interest.
-     * @param cbucket Save the regression coefficients (no statistics) into a dataset.
-     * @param x1_d Save X matrix to a .xmat.1D (ASCII) file.
-     * @param jobs Run the program with multiple jobs (sub-processes).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DECONVOLVE_METADATA);
     const params = v_3d_deconvolve_params(input_dataset, mask_dataset, num_stimts, stim_file, stim_label, stim_base, stim_times, iresp, fitts, fout, tout, bucket, cbucket, x1_d, jobs)
@@ -381,5 +381,8 @@ export {
       V3dDeconvolveParameters,
       V_3D_DECONVOLVE_METADATA,
       v_3d_deconvolve,
+      v_3d_deconvolve_cargs,
+      v_3d_deconvolve_execute,
+      v_3d_deconvolve_outputs,
       v_3d_deconvolve_params,
 };

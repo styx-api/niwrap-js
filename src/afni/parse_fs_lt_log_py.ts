@@ -12,7 +12,7 @@ const PARSE_FS_LT_LOG_PY_METADATA: Metadata = {
 
 
 interface ParseFsLtLogPyParameters {
-    "__STYXTYPE__": "parse_fs_lt_log.py";
+    "@type": "afni.parse_fs_lt_log.py";
     "logfile": InputPathType;
     "labels": Array<string>;
     "show_orig": boolean;
@@ -21,33 +21,33 @@ interface ParseFsLtLogPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "parse_fs_lt_log.py": parse_fs_lt_log_py_cargs,
+        "afni.parse_fs_lt_log.py": parse_fs_lt_log_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface ParseFsLtLogPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param logfile Specify rank log file.
+ * @param labels Specify a list of labels to search for.
+ * @param show_orig Show original label indices.
+ * @param show_all_orig Show all original label indices.
+ * @param verbosity Specify verbosity level.
+ *
+ * @returns Parameter dictionary
+ */
 function parse_fs_lt_log_py_params(
     logfile: InputPathType,
     labels: Array<string>,
@@ -74,19 +85,8 @@ function parse_fs_lt_log_py_params(
     show_all_orig: boolean = false,
     verbosity: number | null = null,
 ): ParseFsLtLogPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param logfile Specify rank log file.
-     * @param labels Specify a list of labels to search for.
-     * @param show_orig Show original label indices.
-     * @param show_all_orig Show all original label indices.
-     * @param verbosity Specify verbosity level.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "parse_fs_lt_log.py" as const,
+        "@type": "afni.parse_fs_lt_log.py" as const,
         "logfile": logfile,
         "labels": labels,
         "show_orig": show_orig,
@@ -99,18 +99,18 @@ function parse_fs_lt_log_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function parse_fs_lt_log_py_cargs(
     params: ParseFsLtLogPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("parse_fs_lt_log.py");
     cargs.push(
@@ -137,18 +137,18 @@ function parse_fs_lt_log_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function parse_fs_lt_log_py_outputs(
     params: ParseFsLtLogPyParameters,
     execution: Execution,
 ): ParseFsLtLogPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ParseFsLtLogPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -156,22 +156,22 @@ function parse_fs_lt_log_py_outputs(
 }
 
 
+/**
+ * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
+ */
 function parse_fs_lt_log_py_execute(
     params: ParseFsLtLogPyParameters,
     execution: Execution,
 ): ParseFsLtLogPyOutputs {
-    /**
-     * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = parse_fs_lt_log_py_cargs(params, execution)
     const ret = parse_fs_lt_log_py_outputs(params, execution)
@@ -180,6 +180,22 @@ function parse_fs_lt_log_py_execute(
 }
 
 
+/**
+ * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param logfile Specify rank log file.
+ * @param labels Specify a list of labels to search for.
+ * @param show_orig Show original label indices.
+ * @param show_all_orig Show all original label indices.
+ * @param verbosity Specify verbosity level.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
+ */
 function parse_fs_lt_log_py(
     logfile: InputPathType,
     labels: Array<string>,
@@ -188,22 +204,6 @@ function parse_fs_lt_log_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): ParseFsLtLogPyOutputs {
-    /**
-     * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param logfile Specify rank log file.
-     * @param labels Specify a list of labels to search for.
-     * @param show_orig Show original label indices.
-     * @param show_all_orig Show all original label indices.
-     * @param verbosity Specify verbosity level.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PARSE_FS_LT_LOG_PY_METADATA);
     const params = parse_fs_lt_log_py_params(logfile, labels, show_orig, show_all_orig, verbosity)
@@ -216,5 +216,8 @@ export {
       ParseFsLtLogPyOutputs,
       ParseFsLtLogPyParameters,
       parse_fs_lt_log_py,
+      parse_fs_lt_log_py_cargs,
+      parse_fs_lt_log_py_execute,
+      parse_fs_lt_log_py_outputs,
       parse_fs_lt_log_py_params,
 };

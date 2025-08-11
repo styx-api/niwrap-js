@@ -12,13 +12,13 @@ const CIFTI_MERGE_DENSE_METADATA: Metadata = {
 
 
 interface CiftiMergeDenseCiftiParameters {
-    "__STYXTYPE__": "cifti";
+    "@type": "workbench.cifti-merge-dense.cifti";
     "cifti_in": InputPathType;
 }
 
 
 interface CiftiMergeDenseParameters {
-    "__STYXTYPE__": "cifti-merge-dense";
+    "@type": "workbench.cifti-merge-dense";
     "direction": string;
     "cifti_out": string;
     "opt_label_collision_action"?: string | null | undefined;
@@ -26,71 +26,71 @@ interface CiftiMergeDenseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-merge-dense": cifti_merge_dense_cargs,
-        "cifti": cifti_merge_dense_cifti_cargs,
+        "workbench.cifti-merge-dense": cifti_merge_dense_cargs,
+        "workbench.cifti-merge-dense.cifti": cifti_merge_dense_cifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-merge-dense": cifti_merge_dense_outputs,
+        "workbench.cifti-merge-dense": cifti_merge_dense_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in a cifti file to merge
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_merge_dense_cifti_params(
     cifti_in: InputPathType,
 ): CiftiMergeDenseCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in a cifti file to merge
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti" as const,
+        "@type": "workbench.cifti-merge-dense.cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_merge_dense_cifti_cargs(
     params: CiftiMergeDenseCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -115,24 +115,24 @@ interface CiftiMergeDenseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti_out the output cifti file
+ * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param cifti specify an input cifti file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_merge_dense_params(
     direction: string,
     cifti_out: string,
     opt_label_collision_action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
 ): CiftiMergeDenseParameters {
-    /**
-     * Build parameters.
-    
-     * @param direction which dimension to merge along, ROW or COLUMN
-     * @param cifti_out the output cifti file
-     * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
-     * @param cifti specify an input cifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-merge-dense" as const,
+        "@type": "workbench.cifti-merge-dense" as const,
         "direction": direction,
         "cifti_out": cifti_out,
     };
@@ -146,18 +146,18 @@ function cifti_merge_dense_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_merge_dense_cargs(
     params: CiftiMergeDenseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-merge-dense");
@@ -170,24 +170,24 @@ function cifti_merge_dense_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_merge_dense_outputs(
     params: CiftiMergeDenseParameters,
     execution: Execution,
 ): CiftiMergeDenseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiMergeDenseOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -196,24 +196,24 @@ function cifti_merge_dense_outputs(
 }
 
 
+/**
+ * Merge cifti files along dense dimension.
+ *
+ * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
+ */
 function cifti_merge_dense_execute(
     params: CiftiMergeDenseParameters,
     execution: Execution,
 ): CiftiMergeDenseOutputs {
-    /**
-     * Merge cifti files along dense dimension.
-     * 
-     * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_merge_dense_cargs(params, execution)
     const ret = cifti_merge_dense_outputs(params, execution)
@@ -222,6 +222,23 @@ function cifti_merge_dense_execute(
 }
 
 
+/**
+ * Merge cifti files along dense dimension.
+ *
+ * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti_out the output cifti file
+ * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param cifti specify an input cifti file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
+ */
 function cifti_merge_dense(
     direction: string,
     cifti_out: string,
@@ -229,23 +246,6 @@ function cifti_merge_dense(
     cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
-    /**
-     * Merge cifti files along dense dimension.
-     * 
-     * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param direction which dimension to merge along, ROW or COLUMN
-     * @param cifti_out the output cifti file
-     * @param opt_label_collision_action how to handle conflicts between label keys: 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
-     * @param cifti specify an input cifti file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_MERGE_DENSE_METADATA);
     const params = cifti_merge_dense_params(direction, cifti_out, opt_label_collision_action, cifti)
@@ -259,6 +259,10 @@ export {
       CiftiMergeDenseOutputs,
       CiftiMergeDenseParameters,
       cifti_merge_dense,
+      cifti_merge_dense_cargs,
+      cifti_merge_dense_cifti_cargs,
       cifti_merge_dense_cifti_params,
+      cifti_merge_dense_execute,
+      cifti_merge_dense_outputs,
       cifti_merge_dense_params,
 };

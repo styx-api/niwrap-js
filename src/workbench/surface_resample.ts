@@ -12,21 +12,21 @@ const SURFACE_RESAMPLE_METADATA: Metadata = {
 
 
 interface SurfaceResampleAreaSurfsParameters {
-    "__STYXTYPE__": "area_surfs";
+    "@type": "workbench.surface-resample.area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface SurfaceResampleAreaMetricsParameters {
-    "__STYXTYPE__": "area_metrics";
+    "@type": "workbench.surface-resample.area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface SurfaceResampleParameters {
-    "__STYXTYPE__": "surface-resample";
+    "@type": "workbench.surface-resample";
     "surface_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -38,56 +38,56 @@ interface SurfaceResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-resample": surface_resample_cargs,
-        "area_surfs": surface_resample_area_surfs_cargs,
-        "area_metrics": surface_resample_area_metrics_cargs,
+        "workbench.surface-resample": surface_resample_cargs,
+        "workbench.surface-resample.area_surfs": surface_resample_area_surfs_cargs,
+        "workbench.surface-resample.area_metrics": surface_resample_area_metrics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-resample": surface_resample_outputs,
+        "workbench.surface-resample": surface_resample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant surface with <current-sphere> mesh
+ * @param new_area a relevant surface with <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function surface_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): SurfaceResampleAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant surface with <current-sphere> mesh
-     * @param new_area a relevant surface with <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_surfs" as const,
+        "@type": "workbench.surface-resample.area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -95,18 +95,18 @@ function surface_resample_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_resample_area_surfs_cargs(
     params: SurfaceResampleAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -115,20 +115,20 @@ function surface_resample_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for <current-sphere> mesh
+ * @param new_area a metric file with vertex areas for <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function surface_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): SurfaceResampleAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for <current-sphere> mesh
-     * @param new_area a metric file with vertex areas for <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_metrics" as const,
+        "@type": "workbench.surface-resample.area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -136,18 +136,18 @@ function surface_resample_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_resample_area_metrics_cargs(
     params: SurfaceResampleAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -173,6 +173,20 @@ interface SurfaceResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_in the surface file to resample
+ * @param current_sphere a sphere surface with the mesh that the input surface is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param surface_out the output surface file
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ *
+ * @returns Parameter dictionary
+ */
 function surface_resample_params(
     surface_in: InputPathType,
     current_sphere: InputPathType,
@@ -183,22 +197,8 @@ function surface_resample_params(
     area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
     opt_bypass_sphere_check: boolean = false,
 ): SurfaceResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_in the surface file to resample
-     * @param current_sphere a sphere surface with the mesh that the input surface is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param surface_out the output surface file
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-resample" as const,
+        "@type": "workbench.surface-resample" as const,
         "surface_in": surface_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -216,18 +216,18 @@ function surface_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_resample_cargs(
     params: SurfaceResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-resample");
@@ -237,10 +237,10 @@ function surface_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["surface_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null).__STYXTYPE__)((params["area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null).__STYXTYPE__)((params["area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
     }
     if ((params["opt_bypass_sphere_check"] ?? null)) {
         cargs.push("-bypass-sphere-check");
@@ -249,18 +249,18 @@ function surface_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_resample_outputs(
     params: SurfaceResampleParameters,
     execution: Execution,
 ): SurfaceResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceResampleOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -269,36 +269,36 @@ function surface_resample_outputs(
 }
 
 
+/**
+ * Resample a surface to a different mesh.
+ *
+ * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
+ *
+ * The BARYCENTRIC method is generally recommended for anatomical surfaces, in order to minimize smoothing.
+ *
+ * For cut surfaces (including flatmaps), use -surface-cut-resample.
+ *
+ * Instead of resampling a spherical surface, the -surface-sphere-project-unproject command is recommended.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
+ */
 function surface_resample_execute(
     params: SurfaceResampleParameters,
     execution: Execution,
 ): SurfaceResampleOutputs {
-    /**
-     * Resample a surface to a different mesh.
-     * 
-     * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
-     * 
-     * The BARYCENTRIC method is generally recommended for anatomical surfaces, in order to minimize smoothing.
-     * 
-     * For cut surfaces (including flatmaps), use -surface-cut-resample.
-     * 
-     * Instead of resampling a spherical surface, the -surface-sphere-project-unproject command is recommended.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_resample_cargs(params, execution)
     const ret = surface_resample_outputs(params, execution)
@@ -307,6 +307,39 @@ function surface_resample_execute(
 }
 
 
+/**
+ * Resample a surface to a different mesh.
+ *
+ * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
+ *
+ * The BARYCENTRIC method is generally recommended for anatomical surfaces, in order to minimize smoothing.
+ *
+ * For cut surfaces (including flatmaps), use -surface-cut-resample.
+ *
+ * Instead of resampling a spherical surface, the -surface-sphere-project-unproject command is recommended.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface_in the surface file to resample
+ * @param current_sphere a sphere surface with the mesh that the input surface is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param surface_out the output surface file
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
+ */
 function surface_resample(
     surface_in: InputPathType,
     current_sphere: InputPathType,
@@ -318,39 +351,6 @@ function surface_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): SurfaceResampleOutputs {
-    /**
-     * Resample a surface to a different mesh.
-     * 
-     * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
-     * 
-     * The BARYCENTRIC method is generally recommended for anatomical surfaces, in order to minimize smoothing.
-     * 
-     * For cut surfaces (including flatmaps), use -surface-cut-resample.
-     * 
-     * Instead of resampling a spherical surface, the -surface-sphere-project-unproject command is recommended.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface_in the surface file to resample
-     * @param current_sphere a sphere surface with the mesh that the input surface is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param surface_out the output surface file
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_RESAMPLE_METADATA);
     const params = surface_resample_params(surface_in, current_sphere, new_sphere, method, surface_out, area_surfs, area_metrics, opt_bypass_sphere_check)
@@ -365,7 +365,12 @@ export {
       SurfaceResampleOutputs,
       SurfaceResampleParameters,
       surface_resample,
+      surface_resample_area_metrics_cargs,
       surface_resample_area_metrics_params,
+      surface_resample_area_surfs_cargs,
       surface_resample_area_surfs_params,
+      surface_resample_cargs,
+      surface_resample_execute,
+      surface_resample_outputs,
       surface_resample_params,
 };

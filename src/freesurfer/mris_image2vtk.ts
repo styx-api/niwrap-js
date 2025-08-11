@@ -12,7 +12,7 @@ const MRIS_IMAGE2VTK_METADATA: Metadata = {
 
 
 interface MrisImage2vtkParameters {
-    "__STYXTYPE__": "mris_image2vtk";
+    "@type": "freesurfer.mris_image2vtk";
     "input_filename": InputPathType;
     "output_filename": string;
     "lower_threshold": number;
@@ -23,35 +23,35 @@ interface MrisImage2vtkParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_image2vtk": mris_image2vtk_cargs,
+        "freesurfer.mris_image2vtk": mris_image2vtk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_image2vtk": mris_image2vtk_outputs,
+        "freesurfer.mris_image2vtk": mris_image2vtk_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisImage2vtkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_filename Input image file name
+ * @param output_filename Output VTK file name
+ * @param lower_threshold Lower threshold for image conversion
+ * @param upper_threshold Upper threshold for image conversion
+ * @param vtk_smoothing_iters Number of VTK smoothing iterations
+ * @param image_smoothing_size Image smoothing size
+ * @param reduction_percent Reduction percentage for the conversion
+ *
+ * @returns Parameter dictionary
+ */
 function mris_image2vtk_params(
     input_filename: InputPathType,
     output_filename: string,
@@ -83,21 +96,8 @@ function mris_image2vtk_params(
     image_smoothing_size: number,
     reduction_percent: number,
 ): MrisImage2vtkParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_filename Input image file name
-     * @param output_filename Output VTK file name
-     * @param lower_threshold Lower threshold for image conversion
-     * @param upper_threshold Upper threshold for image conversion
-     * @param vtk_smoothing_iters Number of VTK smoothing iterations
-     * @param image_smoothing_size Image smoothing size
-     * @param reduction_percent Reduction percentage for the conversion
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_image2vtk" as const,
+        "@type": "freesurfer.mris_image2vtk" as const,
         "input_filename": input_filename,
         "output_filename": output_filename,
         "lower_threshold": lower_threshold,
@@ -110,18 +110,18 @@ function mris_image2vtk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_image2vtk_cargs(
     params: MrisImage2vtkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_image2vtk");
     cargs.push(execution.inputFile((params["input_filename"] ?? null)));
@@ -135,18 +135,18 @@ function mris_image2vtk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_image2vtk_outputs(
     params: MrisImage2vtkParameters,
     execution: Execution,
 ): MrisImage2vtkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisImage2vtkOutputs = {
         root: execution.outputFile("."),
         output_vtk_file: execution.outputFile([(params["output_filename"] ?? null)].join('')),
@@ -155,22 +155,22 @@ function mris_image2vtk_outputs(
 }
 
 
+/**
+ * Convert image to VTK format with specified thresholds and smoothing parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
+ */
 function mris_image2vtk_execute(
     params: MrisImage2vtkParameters,
     execution: Execution,
 ): MrisImage2vtkOutputs {
-    /**
-     * Convert image to VTK format with specified thresholds and smoothing parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_image2vtk_cargs(params, execution)
     const ret = mris_image2vtk_outputs(params, execution)
@@ -179,6 +179,24 @@ function mris_image2vtk_execute(
 }
 
 
+/**
+ * Convert image to VTK format with specified thresholds and smoothing parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_filename Input image file name
+ * @param output_filename Output VTK file name
+ * @param lower_threshold Lower threshold for image conversion
+ * @param upper_threshold Upper threshold for image conversion
+ * @param vtk_smoothing_iters Number of VTK smoothing iterations
+ * @param image_smoothing_size Image smoothing size
+ * @param reduction_percent Reduction percentage for the conversion
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
+ */
 function mris_image2vtk(
     input_filename: InputPathType,
     output_filename: string,
@@ -189,24 +207,6 @@ function mris_image2vtk(
     reduction_percent: number,
     runner: Runner | null = null,
 ): MrisImage2vtkOutputs {
-    /**
-     * Convert image to VTK format with specified thresholds and smoothing parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_filename Input image file name
-     * @param output_filename Output VTK file name
-     * @param lower_threshold Lower threshold for image conversion
-     * @param upper_threshold Upper threshold for image conversion
-     * @param vtk_smoothing_iters Number of VTK smoothing iterations
-     * @param image_smoothing_size Image smoothing size
-     * @param reduction_percent Reduction percentage for the conversion
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_IMAGE2VTK_METADATA);
     const params = mris_image2vtk_params(input_filename, output_filename, lower_threshold, upper_threshold, vtk_smoothing_iters, image_smoothing_size, reduction_percent)
@@ -219,5 +219,8 @@ export {
       MrisImage2vtkOutputs,
       MrisImage2vtkParameters,
       mris_image2vtk,
+      mris_image2vtk_cargs,
+      mris_image2vtk_execute,
+      mris_image2vtk_outputs,
       mris_image2vtk_params,
 };

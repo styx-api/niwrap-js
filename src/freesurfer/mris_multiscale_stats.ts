@@ -12,7 +12,7 @@ const MRIS_MULTISCALE_STATS_METADATA: Metadata = {
 
 
 interface MrisMultiscaleStatsParameters {
-    "__STYXTYPE__": "mris_multiscale_stats";
+    "@type": "freesurfer.mris_multiscale_stats";
     "output_subject": string;
     "hemi": string;
     "surf": InputPathType;
@@ -22,33 +22,33 @@ interface MrisMultiscaleStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_multiscale_stats": mris_multiscale_stats_cargs,
+        "freesurfer.mris_multiscale_stats": mris_multiscale_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface MrisMultiscaleStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_subject The output subject identifier.
+ * @param hemi Specify which hemisphere to use.
+ * @param surf A spherical surface file suitable for computing geodesics.
+ * @param curv The curvature file to be processed.
+ * @param class1_subjects List of subjects from one class.
+ * @param class2_subjects List of subjects from another class.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_multiscale_stats_params(
     output_subject: string,
     hemi: string,
@@ -76,20 +88,8 @@ function mris_multiscale_stats_params(
     class1_subjects: Array<string>,
     class2_subjects: Array<string>,
 ): MrisMultiscaleStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_subject The output subject identifier.
-     * @param hemi Specify which hemisphere to use.
-     * @param surf A spherical surface file suitable for computing geodesics.
-     * @param curv The curvature file to be processed.
-     * @param class1_subjects List of subjects from one class.
-     * @param class2_subjects List of subjects from another class.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_multiscale_stats" as const,
+        "@type": "freesurfer.mris_multiscale_stats" as const,
         "output_subject": output_subject,
         "hemi": hemi,
         "surf": surf,
@@ -101,18 +101,18 @@ function mris_multiscale_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_multiscale_stats_cargs(
     params: MrisMultiscaleStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_multiscale_stats");
     cargs.push(
@@ -128,18 +128,18 @@ function mris_multiscale_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_multiscale_stats_outputs(
     params: MrisMultiscaleStatsParameters,
     execution: Execution,
 ): MrisMultiscaleStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMultiscaleStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -147,22 +147,22 @@ function mris_multiscale_stats_outputs(
 }
 
 
+/**
+ * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
+ */
 function mris_multiscale_stats_execute(
     params: MrisMultiscaleStatsParameters,
     execution: Execution,
 ): MrisMultiscaleStatsOutputs {
-    /**
-     * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_multiscale_stats_cargs(params, execution)
     const ret = mris_multiscale_stats_outputs(params, execution)
@@ -171,6 +171,23 @@ function mris_multiscale_stats_execute(
 }
 
 
+/**
+ * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_subject The output subject identifier.
+ * @param hemi Specify which hemisphere to use.
+ * @param surf A spherical surface file suitable for computing geodesics.
+ * @param curv The curvature file to be processed.
+ * @param class1_subjects List of subjects from one class.
+ * @param class2_subjects List of subjects from another class.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
+ */
 function mris_multiscale_stats(
     output_subject: string,
     hemi: string,
@@ -180,23 +197,6 @@ function mris_multiscale_stats(
     class2_subjects: Array<string>,
     runner: Runner | null = null,
 ): MrisMultiscaleStatsOutputs {
-    /**
-     * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_subject The output subject identifier.
-     * @param hemi Specify which hemisphere to use.
-     * @param surf A spherical surface file suitable for computing geodesics.
-     * @param curv The curvature file to be processed.
-     * @param class1_subjects List of subjects from one class.
-     * @param class2_subjects List of subjects from another class.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MULTISCALE_STATS_METADATA);
     const params = mris_multiscale_stats_params(output_subject, hemi, surf, curv, class1_subjects, class2_subjects)
@@ -209,5 +209,8 @@ export {
       MrisMultiscaleStatsOutputs,
       MrisMultiscaleStatsParameters,
       mris_multiscale_stats,
+      mris_multiscale_stats_cargs,
+      mris_multiscale_stats_execute,
+      mris_multiscale_stats_outputs,
       mris_multiscale_stats_params,
 };

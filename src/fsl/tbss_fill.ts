@@ -12,7 +12,7 @@ const TBSS_FILL_METADATA: Metadata = {
 
 
 interface TbssFillParameters {
-    "__STYXTYPE__": "tbss_fill";
+    "@type": "fsl.tbss_fill";
     "stats_image": InputPathType;
     "threshold": number;
     "mean_fa": InputPathType;
@@ -21,35 +21,35 @@ interface TbssFillParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_fill": tbss_fill_cargs,
+        "fsl.tbss_fill": tbss_fill_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tbss_fill": tbss_fill_outputs,
+        "fsl.tbss_fill": tbss_fill_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface TbssFillOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stats_image Stats image
+ * @param threshold Threshold value
+ * @param mean_fa Mean FA image
+ * @param output Output image
+ * @param include_negative_flag Include negative stat values (below -threshold)
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_fill_params(
     stats_image: InputPathType,
     threshold: number,
@@ -79,19 +90,8 @@ function tbss_fill_params(
     output: string,
     include_negative_flag: boolean = false,
 ): TbssFillParameters {
-    /**
-     * Build parameters.
-    
-     * @param stats_image Stats image
-     * @param threshold Threshold value
-     * @param mean_fa Mean FA image
-     * @param output Output image
-     * @param include_negative_flag Include negative stat values (below -threshold)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_fill" as const,
+        "@type": "fsl.tbss_fill" as const,
         "stats_image": stats_image,
         "threshold": threshold,
         "mean_fa": mean_fa,
@@ -102,18 +102,18 @@ function tbss_fill_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_fill_cargs(
     params: TbssFillParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_fill");
     cargs.push(execution.inputFile((params["stats_image"] ?? null)));
@@ -127,18 +127,18 @@ function tbss_fill_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_fill_outputs(
     params: TbssFillParameters,
     execution: Execution,
 ): TbssFillOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TbssFillOutputs = {
         root: execution.outputFile("."),
         filled_skeleton: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function tbss_fill_outputs(
 }
 
 
+/**
+ * Tool for filling skeletonized FA images in TBSS.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
+ */
 function tbss_fill_execute(
     params: TbssFillParameters,
     execution: Execution,
 ): TbssFillOutputs {
-    /**
-     * Tool for filling skeletonized FA images in TBSS.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_fill_cargs(params, execution)
     const ret = tbss_fill_outputs(params, execution)
@@ -171,6 +171,22 @@ function tbss_fill_execute(
 }
 
 
+/**
+ * Tool for filling skeletonized FA images in TBSS.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param stats_image Stats image
+ * @param threshold Threshold value
+ * @param mean_fa Mean FA image
+ * @param output Output image
+ * @param include_negative_flag Include negative stat values (below -threshold)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
+ */
 function tbss_fill(
     stats_image: InputPathType,
     threshold: number,
@@ -179,22 +195,6 @@ function tbss_fill(
     include_negative_flag: boolean = false,
     runner: Runner | null = null,
 ): TbssFillOutputs {
-    /**
-     * Tool for filling skeletonized FA images in TBSS.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param stats_image Stats image
-     * @param threshold Threshold value
-     * @param mean_fa Mean FA image
-     * @param output Output image
-     * @param include_negative_flag Include negative stat values (below -threshold)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_FILL_METADATA);
     const params = tbss_fill_params(stats_image, threshold, mean_fa, output, include_negative_flag)
@@ -207,5 +207,8 @@ export {
       TbssFillOutputs,
       TbssFillParameters,
       tbss_fill,
+      tbss_fill_cargs,
+      tbss_fill_execute,
+      tbss_fill_outputs,
       tbss_fill_params,
 };

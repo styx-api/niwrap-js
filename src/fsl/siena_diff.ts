@@ -12,7 +12,7 @@ const SIENA_DIFF_METADATA: Metadata = {
 
 
 interface SienaDiffParameters {
-    "__STYXTYPE__": "siena_diff";
+    "@type": "fsl.siena_diff";
     "input1_basename": string;
     "input2_basename": string;
     "debug_flag": boolean;
@@ -24,33 +24,33 @@ interface SienaDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "siena_diff": siena_diff_cargs,
+        "fsl.siena_diff": siena_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface SienaDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1_basename Input image 1 basename
+ * @param input2_basename Input image 2 basename
+ * @param debug_flag Debug - generate edge images and don't remove temporary images
+ * @param no_seg_flag Don't segment grey+white separately (because there is poor grey-white contrast)
+ * @param self_corr_factor Apply self-calibrating correction factor
+ * @param ignore_z_flow_flag Ignore flow in z (may be beneficial if top of brain is missing)
+ * @param apply_std_mask_flag Apply <input1_basename>_stdmask to brain edge points
+ * @param segment_options Options to be passed to segmentation (type 'fast' to get these)
+ *
+ * @returns Parameter dictionary
+ */
 function siena_diff_params(
     input1_basename: string,
     input2_basename: string,
@@ -80,22 +94,8 @@ function siena_diff_params(
     apply_std_mask_flag: boolean = false,
     segment_options: string | null = null,
 ): SienaDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1_basename Input image 1 basename
-     * @param input2_basename Input image 2 basename
-     * @param debug_flag Debug - generate edge images and don't remove temporary images
-     * @param no_seg_flag Don't segment grey+white separately (because there is poor grey-white contrast)
-     * @param self_corr_factor Apply self-calibrating correction factor
-     * @param ignore_z_flow_flag Ignore flow in z (may be beneficial if top of brain is missing)
-     * @param apply_std_mask_flag Apply <input1_basename>_stdmask to brain edge points
-     * @param segment_options Options to be passed to segmentation (type 'fast' to get these)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "siena_diff" as const,
+        "@type": "fsl.siena_diff" as const,
         "input1_basename": input1_basename,
         "input2_basename": input2_basename,
         "debug_flag": debug_flag,
@@ -113,18 +113,18 @@ function siena_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function siena_diff_cargs(
     params: SienaDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("siena_diff");
     cargs.push((params["input1_basename"] ?? null));
@@ -157,18 +157,18 @@ function siena_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function siena_diff_outputs(
     params: SienaDiffParameters,
     execution: Execution,
 ): SienaDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SienaDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -176,22 +176,22 @@ function siena_diff_outputs(
 }
 
 
+/**
+ * SIENA_diff: Analysis of longitudinal brain image differences.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
+ */
 function siena_diff_execute(
     params: SienaDiffParameters,
     execution: Execution,
 ): SienaDiffOutputs {
-    /**
-     * SIENA_diff: Analysis of longitudinal brain image differences.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = siena_diff_cargs(params, execution)
     const ret = siena_diff_outputs(params, execution)
@@ -200,6 +200,25 @@ function siena_diff_execute(
 }
 
 
+/**
+ * SIENA_diff: Analysis of longitudinal brain image differences.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input1_basename Input image 1 basename
+ * @param input2_basename Input image 2 basename
+ * @param debug_flag Debug - generate edge images and don't remove temporary images
+ * @param no_seg_flag Don't segment grey+white separately (because there is poor grey-white contrast)
+ * @param self_corr_factor Apply self-calibrating correction factor
+ * @param ignore_z_flow_flag Ignore flow in z (may be beneficial if top of brain is missing)
+ * @param apply_std_mask_flag Apply <input1_basename>_stdmask to brain edge points
+ * @param segment_options Options to be passed to segmentation (type 'fast' to get these)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
+ */
 function siena_diff(
     input1_basename: string,
     input2_basename: string,
@@ -211,25 +230,6 @@ function siena_diff(
     segment_options: string | null = null,
     runner: Runner | null = null,
 ): SienaDiffOutputs {
-    /**
-     * SIENA_diff: Analysis of longitudinal brain image differences.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input1_basename Input image 1 basename
-     * @param input2_basename Input image 2 basename
-     * @param debug_flag Debug - generate edge images and don't remove temporary images
-     * @param no_seg_flag Don't segment grey+white separately (because there is poor grey-white contrast)
-     * @param self_corr_factor Apply self-calibrating correction factor
-     * @param ignore_z_flow_flag Ignore flow in z (may be beneficial if top of brain is missing)
-     * @param apply_std_mask_flag Apply <input1_basename>_stdmask to brain edge points
-     * @param segment_options Options to be passed to segmentation (type 'fast' to get these)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIENA_DIFF_METADATA);
     const params = siena_diff_params(input1_basename, input2_basename, debug_flag, no_seg_flag, self_corr_factor, ignore_z_flow_flag, apply_std_mask_flag, segment_options)
@@ -242,5 +242,8 @@ export {
       SienaDiffOutputs,
       SienaDiffParameters,
       siena_diff,
+      siena_diff_cargs,
+      siena_diff_execute,
+      siena_diff_outputs,
       siena_diff_params,
 };

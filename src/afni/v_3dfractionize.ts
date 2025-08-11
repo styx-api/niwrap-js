@@ -12,7 +12,7 @@ const V_3DFRACTIONIZE_METADATA: Metadata = {
 
 
 interface V3dfractionizeParameters {
-    "__STYXTYPE__": "3dfractionize";
+    "@type": "afni.3dfractionize";
     "template": InputPathType;
     "input": InputPathType;
     "prefix"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface V3dfractionizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dfractionize": v_3dfractionize_cargs,
+        "afni.3dfractionize": v_3dfractionize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dfractionize": v_3dfractionize_outputs,
+        "afni.3dfractionize": v_3dfractionize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface V3dfractionizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template Use dataset as a template for the output. The output dataset will be on the same grid as this dataset.
+ * @param input Use dataset for the input. Only the sub-brick #0 of the input is used.
+ * @param prefix Prefix for the output dataset.
+ * @param clip Clip off voxels that are less than the specified occupancy fraction.
+ * @param warp Dataset that provides a transformation (warp) from +orig coordinates to the coordinates of the input dataset.
+ * @param preserve Preserve the nonzero values of input voxels in the output dataset rather than creating a fractional mask.
+ * @param vote Vote for which input value to preserve when using the preserve flag.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dfractionize_params(
     template: InputPathType,
     input: InputPathType,
@@ -83,21 +96,8 @@ function v_3dfractionize_params(
     preserve: boolean = false,
     vote: boolean = false,
 ): V3dfractionizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param template Use dataset as a template for the output. The output dataset will be on the same grid as this dataset.
-     * @param input Use dataset for the input. Only the sub-brick #0 of the input is used.
-     * @param prefix Prefix for the output dataset.
-     * @param clip Clip off voxels that are less than the specified occupancy fraction.
-     * @param warp Dataset that provides a transformation (warp) from +orig coordinates to the coordinates of the input dataset.
-     * @param preserve Preserve the nonzero values of input voxels in the output dataset rather than creating a fractional mask.
-     * @param vote Vote for which input value to preserve when using the preserve flag.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dfractionize" as const,
+        "@type": "afni.3dfractionize" as const,
         "template": template,
         "input": input,
         "preserve": preserve,
@@ -116,18 +116,18 @@ function v_3dfractionize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dfractionize_cargs(
     params: V3dfractionizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dfractionize");
     cargs.push(
@@ -166,18 +166,18 @@ function v_3dfractionize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dfractionize_outputs(
     params: V3dfractionizeParameters,
     execution: Execution,
 ): V3dfractionizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dfractionizeOutputs = {
         root: execution.outputFile("."),
         output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -186,22 +186,22 @@ function v_3dfractionize_outputs(
 }
 
 
+/**
+ * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
+ */
 function v_3dfractionize_execute(
     params: V3dfractionizeParameters,
     execution: Execution,
 ): V3dfractionizeOutputs {
-    /**
-     * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dfractionize_cargs(params, execution)
     const ret = v_3dfractionize_outputs(params, execution)
@@ -210,6 +210,24 @@ function v_3dfractionize_execute(
 }
 
 
+/**
+ * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param template Use dataset as a template for the output. The output dataset will be on the same grid as this dataset.
+ * @param input Use dataset for the input. Only the sub-brick #0 of the input is used.
+ * @param prefix Prefix for the output dataset.
+ * @param clip Clip off voxels that are less than the specified occupancy fraction.
+ * @param warp Dataset that provides a transformation (warp) from +orig coordinates to the coordinates of the input dataset.
+ * @param preserve Preserve the nonzero values of input voxels in the output dataset rather than creating a fractional mask.
+ * @param vote Vote for which input value to preserve when using the preserve flag.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
+ */
 function v_3dfractionize(
     template: InputPathType,
     input: InputPathType,
@@ -220,24 +238,6 @@ function v_3dfractionize(
     vote: boolean = false,
     runner: Runner | null = null,
 ): V3dfractionizeOutputs {
-    /**
-     * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param template Use dataset as a template for the output. The output dataset will be on the same grid as this dataset.
-     * @param input Use dataset for the input. Only the sub-brick #0 of the input is used.
-     * @param prefix Prefix for the output dataset.
-     * @param clip Clip off voxels that are less than the specified occupancy fraction.
-     * @param warp Dataset that provides a transformation (warp) from +orig coordinates to the coordinates of the input dataset.
-     * @param preserve Preserve the nonzero values of input voxels in the output dataset rather than creating a fractional mask.
-     * @param vote Vote for which input value to preserve when using the preserve flag.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DFRACTIONIZE_METADATA);
     const params = v_3dfractionize_params(template, input, prefix, clip, warp, preserve, vote)
@@ -250,5 +250,8 @@ export {
       V3dfractionizeParameters,
       V_3DFRACTIONIZE_METADATA,
       v_3dfractionize,
+      v_3dfractionize_cargs,
+      v_3dfractionize_execute,
+      v_3dfractionize_outputs,
       v_3dfractionize_params,
 };

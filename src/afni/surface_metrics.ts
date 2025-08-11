@@ -12,7 +12,7 @@ const SURFACE_METRICS_METADATA: Metadata = {
 
 
 interface SurfaceMetricsParameters {
-    "__STYXTYPE__": "SurfaceMetrics";
+    "@type": "afni.SurfaceMetrics";
     "volume": boolean;
     "convexity": boolean;
     "closest_node"?: InputPathType | null | undefined;
@@ -39,33 +39,33 @@ interface SurfaceMetricsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfaceMetrics": surface_metrics_cargs,
+        "afni.SurfaceMetrics": surface_metrics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -85,6 +85,35 @@ interface SurfaceMetricsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf1 Specifies the input surface.
+ * @param volume Calculates the volume of a surface.
+ * @param convexity Output surface convexity at each node.
+ * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
+ * @param area Output area of each triangle.
+ * @param tri_sines Output sine of angles at nodes forming triangles.
+ * @param tri_cosines Output cosine of angles at nodes forming triangles.
+ * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
+ * @param tri_angles Unsigned angles in radians of triangles.
+ * @param node_angles Unsigned angles in radians at nodes of surface.
+ * @param curvature Output curvature at each node.
+ * @param edges Outputs info on each edge.
+ * @param node_normals Outputs segments along node normals.
+ * @param face_normals Outputs segments along triangle normals.
+ * @param normals_scale Scale the normals by a given factor.
+ * @param coords Output coordinates of each node after any transformation.
+ * @param sph_coords Output spherical coordinates of each node.
+ * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
+ * @param boundary_nodes Output nodes that form a boundary of a surface.
+ * @param boundary_triangles Output triangles that form a boundary of a surface.
+ * @param internal_nodes Output nodes that are not a boundary.
+ * @param tlrc Apply Talairach transform to surface.
+ * @param prefix Use prefix for output files.
+ *
+ * @returns Parameter dictionary
+ */
 function surface_metrics_params(
     surf1: string,
     volume: boolean = false,
@@ -110,37 +139,8 @@ function surface_metrics_params(
     tlrc: boolean = false,
     prefix: string | null = null,
 ): SurfaceMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf1 Specifies the input surface.
-     * @param volume Calculates the volume of a surface.
-     * @param convexity Output surface convexity at each node.
-     * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
-     * @param area Output area of each triangle.
-     * @param tri_sines Output sine of angles at nodes forming triangles.
-     * @param tri_cosines Output cosine of angles at nodes forming triangles.
-     * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
-     * @param tri_angles Unsigned angles in radians of triangles.
-     * @param node_angles Unsigned angles in radians at nodes of surface.
-     * @param curvature Output curvature at each node.
-     * @param edges Outputs info on each edge.
-     * @param node_normals Outputs segments along node normals.
-     * @param face_normals Outputs segments along triangle normals.
-     * @param normals_scale Scale the normals by a given factor.
-     * @param coords Output coordinates of each node after any transformation.
-     * @param sph_coords Output spherical coordinates of each node.
-     * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
-     * @param boundary_nodes Output nodes that form a boundary of a surface.
-     * @param boundary_triangles Output triangles that form a boundary of a surface.
-     * @param internal_nodes Output nodes that are not a boundary.
-     * @param tlrc Apply Talairach transform to surface.
-     * @param prefix Use prefix for output files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfaceMetrics" as const,
+        "@type": "afni.SurfaceMetrics" as const,
         "volume": volume,
         "convexity": convexity,
         "area": area,
@@ -177,18 +177,18 @@ function surface_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_metrics_cargs(
     params: SurfaceMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfaceMetrics");
     if ((params["volume"] ?? null)) {
@@ -277,18 +277,18 @@ function surface_metrics_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_metrics_outputs(
     params: SurfaceMetricsParameters,
     execution: Execution,
 ): SurfaceMetricsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceMetricsOutputs = {
         root: execution.outputFile("."),
     };
@@ -296,22 +296,22 @@ function surface_metrics_outputs(
 }
 
 
+/**
+ * Outputs information about a surface's mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
+ */
 function surface_metrics_execute(
     params: SurfaceMetricsParameters,
     execution: Execution,
 ): SurfaceMetricsOutputs {
-    /**
-     * Outputs information about a surface's mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_metrics_cargs(params, execution)
     const ret = surface_metrics_outputs(params, execution)
@@ -320,6 +320,40 @@ function surface_metrics_execute(
 }
 
 
+/**
+ * Outputs information about a surface's mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surf1 Specifies the input surface.
+ * @param volume Calculates the volume of a surface.
+ * @param convexity Output surface convexity at each node.
+ * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
+ * @param area Output area of each triangle.
+ * @param tri_sines Output sine of angles at nodes forming triangles.
+ * @param tri_cosines Output cosine of angles at nodes forming triangles.
+ * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
+ * @param tri_angles Unsigned angles in radians of triangles.
+ * @param node_angles Unsigned angles in radians at nodes of surface.
+ * @param curvature Output curvature at each node.
+ * @param edges Outputs info on each edge.
+ * @param node_normals Outputs segments along node normals.
+ * @param face_normals Outputs segments along triangle normals.
+ * @param normals_scale Scale the normals by a given factor.
+ * @param coords Output coordinates of each node after any transformation.
+ * @param sph_coords Output spherical coordinates of each node.
+ * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
+ * @param boundary_nodes Output nodes that form a boundary of a surface.
+ * @param boundary_triangles Output triangles that form a boundary of a surface.
+ * @param internal_nodes Output nodes that are not a boundary.
+ * @param tlrc Apply Talairach transform to surface.
+ * @param prefix Use prefix for output files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
+ */
 function surface_metrics(
     surf1: string,
     volume: boolean = false,
@@ -346,40 +380,6 @@ function surface_metrics(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): SurfaceMetricsOutputs {
-    /**
-     * Outputs information about a surface's mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surf1 Specifies the input surface.
-     * @param volume Calculates the volume of a surface.
-     * @param convexity Output surface convexity at each node.
-     * @param closest_node Find the closest node to each XYZ triplet in XYZ_LIST.1D.
-     * @param area Output area of each triangle.
-     * @param tri_sines Output sine of angles at nodes forming triangles.
-     * @param tri_cosines Output cosine of angles at nodes forming triangles.
-     * @param tri_co_sines Output both cosines and sines of angles at nodes forming triangles.
-     * @param tri_angles Unsigned angles in radians of triangles.
-     * @param node_angles Unsigned angles in radians at nodes of surface.
-     * @param curvature Output curvature at each node.
-     * @param edges Outputs info on each edge.
-     * @param node_normals Outputs segments along node normals.
-     * @param face_normals Outputs segments along triangle normals.
-     * @param normals_scale Scale the normals by a given factor.
-     * @param coords Output coordinates of each node after any transformation.
-     * @param sph_coords Output spherical coordinates of each node.
-     * @param sph_coords_center Shift each node by x y z before calculating spherical coordinates.
-     * @param boundary_nodes Output nodes that form a boundary of a surface.
-     * @param boundary_triangles Output triangles that form a boundary of a surface.
-     * @param internal_nodes Output nodes that are not a boundary.
-     * @param tlrc Apply Talairach transform to surface.
-     * @param prefix Use prefix for output files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_METRICS_METADATA);
     const params = surface_metrics_params(surf1, volume, convexity, closest_node, area, tri_sines, tri_cosines, tri_co_sines, tri_angles, node_angles, curvature, edges, node_normals, face_normals, normals_scale, coords, sph_coords, sph_coords_center, boundary_nodes, boundary_triangles, internal_nodes, tlrc, prefix)
@@ -392,5 +392,8 @@ export {
       SurfaceMetricsOutputs,
       SurfaceMetricsParameters,
       surface_metrics,
+      surface_metrics_cargs,
+      surface_metrics_execute,
+      surface_metrics_outputs,
       surface_metrics_params,
 };

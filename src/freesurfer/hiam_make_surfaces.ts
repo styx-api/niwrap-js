@@ -12,39 +12,39 @@ const HIAM_MAKE_SURFACES_METADATA: Metadata = {
 
 
 interface HiamMakeSurfacesParameters {
-    "__STYXTYPE__": "hiam_make_surfaces";
+    "@type": "freesurfer.hiam_make_surfaces";
     "subject_name": string;
     "structure": "RA" | "LA" | "RH" | "LH";
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "hiam_make_surfaces": hiam_make_surfaces_cargs,
+        "freesurfer.hiam_make_surfaces": hiam_make_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface HiamMakeSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Subject name for which surfaces are to be created
+ * @param structure Structure for which surfaces will be created. Valid values are RA, LA, RH, and LH.
+ *
+ * @returns Parameter dictionary
+ */
 function hiam_make_surfaces_params(
     subject_name: string,
     structure: "RA" | "LA" | "RH" | "LH",
 ): HiamMakeSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Subject name for which surfaces are to be created
-     * @param structure Structure for which surfaces will be created. Valid values are RA, LA, RH, and LH.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "hiam_make_surfaces" as const,
+        "@type": "freesurfer.hiam_make_surfaces" as const,
         "subject_name": subject_name,
         "structure": structure,
     };
@@ -85,18 +85,18 @@ function hiam_make_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function hiam_make_surfaces_cargs(
     params: HiamMakeSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("hiam_make_surfaces");
     cargs.push((params["subject_name"] ?? null));
@@ -105,18 +105,18 @@ function hiam_make_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function hiam_make_surfaces_outputs(
     params: HiamMakeSurfacesParameters,
     execution: Execution,
 ): HiamMakeSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HiamMakeSurfacesOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function hiam_make_surfaces_outputs(
 }
 
 
+/**
+ * Surface creation tool for specified brain structures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
+ */
 function hiam_make_surfaces_execute(
     params: HiamMakeSurfacesParameters,
     execution: Execution,
 ): HiamMakeSurfacesOutputs {
-    /**
-     * Surface creation tool for specified brain structures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = hiam_make_surfaces_cargs(params, execution)
     const ret = hiam_make_surfaces_outputs(params, execution)
@@ -148,24 +148,24 @@ function hiam_make_surfaces_execute(
 }
 
 
+/**
+ * Surface creation tool for specified brain structures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Subject name for which surfaces are to be created
+ * @param structure Structure for which surfaces will be created. Valid values are RA, LA, RH, and LH.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
+ */
 function hiam_make_surfaces(
     subject_name: string,
     structure: "RA" | "LA" | "RH" | "LH",
     runner: Runner | null = null,
 ): HiamMakeSurfacesOutputs {
-    /**
-     * Surface creation tool for specified brain structures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Subject name for which surfaces are to be created
-     * @param structure Structure for which surfaces will be created. Valid values are RA, LA, RH, and LH.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HIAM_MAKE_SURFACES_METADATA);
     const params = hiam_make_surfaces_params(subject_name, structure)
@@ -178,5 +178,8 @@ export {
       HiamMakeSurfacesOutputs,
       HiamMakeSurfacesParameters,
       hiam_make_surfaces,
+      hiam_make_surfaces_cargs,
+      hiam_make_surfaces_execute,
+      hiam_make_surfaces_outputs,
       hiam_make_surfaces_params,
 };

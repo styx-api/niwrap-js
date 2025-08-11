@@ -12,7 +12,7 @@ const TKSURFERFV_METADATA: Metadata = {
 
 
 interface TksurferfvParameters {
-    "__STYXTYPE__": "tksurferfv";
+    "@type": "freesurfer.tksurferfv";
     "subject": string;
     "hemi": string;
     "surface": string;
@@ -27,33 +27,33 @@ interface TksurferfvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tksurferfv": tksurferfv_cargs,
+        "freesurfer.tksurferfv": tksurferfv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface TksurferfvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier.
+ * @param hemi Hemisphere (e.g., lh or rh).
+ * @param surface Surface type.
+ * @param tksurfer Use tksurfer instead of freeview.
+ * @param all_surfaces Load white, pial, and inflated surfaces.
+ * @param vgl Run freeview with /usr/pubsw/bin/vglrun.
+ * @param no_vgl Do not run freeview with /usr/pubsw/bin/vglrun.
+ * @param no_outline Do not show annotations as outlines.
+ * @param neuro_orientation Use neurological orientation instead of radiological.
+ * @param rotate_around_cursor Rotate around cursor in 3D view.
+ * @param heat_scale Overlay heat scale (options: linear, linearopaque, piecewise, min_to_max).
+ *
+ * @returns Parameter dictionary
+ */
 function tksurferfv_params(
     subject: string,
     hemi: string,
@@ -86,25 +103,8 @@ function tksurferfv_params(
     rotate_around_cursor: boolean = false,
     heat_scale: string | null = "min_to_max",
 ): TksurferfvParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier.
-     * @param hemi Hemisphere (e.g., lh or rh).
-     * @param surface Surface type.
-     * @param tksurfer Use tksurfer instead of freeview.
-     * @param all_surfaces Load white, pial, and inflated surfaces.
-     * @param vgl Run freeview with /usr/pubsw/bin/vglrun.
-     * @param no_vgl Do not run freeview with /usr/pubsw/bin/vglrun.
-     * @param no_outline Do not show annotations as outlines.
-     * @param neuro_orientation Use neurological orientation instead of radiological.
-     * @param rotate_around_cursor Rotate around cursor in 3D view.
-     * @param heat_scale Overlay heat scale (options: linear, linearopaque, piecewise, min_to_max).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tksurferfv" as const,
+        "@type": "freesurfer.tksurferfv" as const,
         "subject": subject,
         "hemi": hemi,
         "surface": surface,
@@ -123,18 +123,18 @@ function tksurferfv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tksurferfv_cargs(
     params: TksurferfvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tksurferfv");
     cargs.push((params["subject"] ?? null));
@@ -168,18 +168,18 @@ function tksurferfv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tksurferfv_outputs(
     params: TksurferfvParameters,
     execution: Execution,
 ): TksurferfvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TksurferfvOutputs = {
         root: execution.outputFile("."),
     };
@@ -187,22 +187,22 @@ function tksurferfv_outputs(
 }
 
 
+/**
+ * A script that runs freeview with arguments similar to tksurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
+ */
 function tksurferfv_execute(
     params: TksurferfvParameters,
     execution: Execution,
 ): TksurferfvOutputs {
-    /**
-     * A script that runs freeview with arguments similar to tksurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
-     */
     params = execution.params(params)
     const cargs = tksurferfv_cargs(params, execution)
     const ret = tksurferfv_outputs(params, execution)
@@ -211,6 +211,28 @@ function tksurferfv_execute(
 }
 
 
+/**
+ * A script that runs freeview with arguments similar to tksurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier.
+ * @param hemi Hemisphere (e.g., lh or rh).
+ * @param surface Surface type.
+ * @param tksurfer Use tksurfer instead of freeview.
+ * @param all_surfaces Load white, pial, and inflated surfaces.
+ * @param vgl Run freeview with /usr/pubsw/bin/vglrun.
+ * @param no_vgl Do not run freeview with /usr/pubsw/bin/vglrun.
+ * @param no_outline Do not show annotations as outlines.
+ * @param neuro_orientation Use neurological orientation instead of radiological.
+ * @param rotate_around_cursor Rotate around cursor in 3D view.
+ * @param heat_scale Overlay heat scale (options: linear, linearopaque, piecewise, min_to_max).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
+ */
 function tksurferfv(
     subject: string,
     hemi: string,
@@ -225,28 +247,6 @@ function tksurferfv(
     heat_scale: string | null = "min_to_max",
     runner: Runner | null = null,
 ): TksurferfvOutputs {
-    /**
-     * A script that runs freeview with arguments similar to tksurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier.
-     * @param hemi Hemisphere (e.g., lh or rh).
-     * @param surface Surface type.
-     * @param tksurfer Use tksurfer instead of freeview.
-     * @param all_surfaces Load white, pial, and inflated surfaces.
-     * @param vgl Run freeview with /usr/pubsw/bin/vglrun.
-     * @param no_vgl Do not run freeview with /usr/pubsw/bin/vglrun.
-     * @param no_outline Do not show annotations as outlines.
-     * @param neuro_orientation Use neurological orientation instead of radiological.
-     * @param rotate_around_cursor Rotate around cursor in 3D view.
-     * @param heat_scale Overlay heat scale (options: linear, linearopaque, piecewise, min_to_max).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKSURFERFV_METADATA);
     const params = tksurferfv_params(subject, hemi, surface, tksurfer, all_surfaces, vgl, no_vgl, no_outline, neuro_orientation, rotate_around_cursor, heat_scale)
@@ -259,5 +259,8 @@ export {
       TksurferfvOutputs,
       TksurferfvParameters,
       tksurferfv,
+      tksurferfv_cargs,
+      tksurferfv_execute,
+      tksurferfv_outputs,
       tksurferfv_params,
 };

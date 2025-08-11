@@ -12,7 +12,7 @@ const INIT_USER_DOTFILES_PY_METADATA: Metadata = {
 
 
 interface InitUserDotfilesPyParameters {
-    "__STYXTYPE__": "init_user_dotfiles.py";
+    "@type": "afni.init_user_dotfiles.py";
     "help": boolean;
     "help_dotfiles_all": boolean;
     "help_dotfiles_mod": boolean;
@@ -33,33 +33,33 @@ interface InitUserDotfilesPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "init_user_dotfiles.py": init_user_dotfiles_py_cargs,
+        "afni.init_user_dotfiles.py": init_user_dotfiles_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface InitUserDotfilesPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param help Show this help
+ * @param help_dotfiles_all Display dot files known by the program
+ * @param help_dotfiles_mod Display modifiable dot files
+ * @param help_shells Display shells known by the program
+ * @param hist Show module history
+ * @param show_valid_opts List valid options
+ * @param ver Show current version
+ * @param dot_files_list Specify dot files to focus on (default from -help_dotfiles_mod)
+ * @param dir_bin Specify bin directory to add to PATH (default comes from `which afni_proc.py`)
+ * @param dir_dot Specify directory containing dot files.
+ * @param do_updates Specify which updates to make (default is nothing)
+ * @param dry_run Do not modify files, but see what would happen
+ * @param force Force edits, whether they seem needed or not
+ * @param make_backup Specify whether to make backups of originals (default is yes)
+ * @param shell_list Specify shells instead of using -dflist
+ * @param test Just test the files for potential changes
+ * @param verbosity_level Set the verbosity level (default 1)
+ *
+ * @returns Parameter dictionary
+ */
 function init_user_dotfiles_py_params(
     help: boolean = false,
     help_dotfiles_all: boolean = false,
@@ -98,31 +121,8 @@ function init_user_dotfiles_py_params(
     test: boolean = false,
     verbosity_level: number | null = null,
 ): InitUserDotfilesPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param help Show this help
-     * @param help_dotfiles_all Display dot files known by the program
-     * @param help_dotfiles_mod Display modifiable dot files
-     * @param help_shells Display shells known by the program
-     * @param hist Show module history
-     * @param show_valid_opts List valid options
-     * @param ver Show current version
-     * @param dot_files_list Specify dot files to focus on (default from -help_dotfiles_mod)
-     * @param dir_bin Specify bin directory to add to PATH (default comes from `which afni_proc.py`)
-     * @param dir_dot Specify directory containing dot files.
-     * @param do_updates Specify which updates to make (default is nothing)
-     * @param dry_run Do not modify files, but see what would happen
-     * @param force Force edits, whether they seem needed or not
-     * @param make_backup Specify whether to make backups of originals (default is yes)
-     * @param shell_list Specify shells instead of using -dflist
-     * @param test Just test the files for potential changes
-     * @param verbosity_level Set the verbosity level (default 1)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "init_user_dotfiles.py" as const,
+        "@type": "afni.init_user_dotfiles.py" as const,
         "help": help,
         "help_dotfiles_all": help_dotfiles_all,
         "help_dotfiles_mod": help_dotfiles_mod,
@@ -159,18 +159,18 @@ function init_user_dotfiles_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function init_user_dotfiles_py_cargs(
     params: InitUserDotfilesPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("init_user_dotfiles.py");
     if ((params["help"] ?? null)) {
@@ -249,18 +249,18 @@ function init_user_dotfiles_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function init_user_dotfiles_py_outputs(
     params: InitUserDotfilesPyParameters,
     execution: Execution,
 ): InitUserDotfilesPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InitUserDotfilesPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -268,22 +268,22 @@ function init_user_dotfiles_py_outputs(
 }
 
 
+/**
+ * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
+ */
 function init_user_dotfiles_py_execute(
     params: InitUserDotfilesPyParameters,
     execution: Execution,
 ): InitUserDotfilesPyOutputs {
-    /**
-     * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = init_user_dotfiles_py_cargs(params, execution)
     const ret = init_user_dotfiles_py_outputs(params, execution)
@@ -292,6 +292,34 @@ function init_user_dotfiles_py_execute(
 }
 
 
+/**
+ * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param help Show this help
+ * @param help_dotfiles_all Display dot files known by the program
+ * @param help_dotfiles_mod Display modifiable dot files
+ * @param help_shells Display shells known by the program
+ * @param hist Show module history
+ * @param show_valid_opts List valid options
+ * @param ver Show current version
+ * @param dot_files_list Specify dot files to focus on (default from -help_dotfiles_mod)
+ * @param dir_bin Specify bin directory to add to PATH (default comes from `which afni_proc.py`)
+ * @param dir_dot Specify directory containing dot files.
+ * @param do_updates Specify which updates to make (default is nothing)
+ * @param dry_run Do not modify files, but see what would happen
+ * @param force Force edits, whether they seem needed or not
+ * @param make_backup Specify whether to make backups of originals (default is yes)
+ * @param shell_list Specify shells instead of using -dflist
+ * @param test Just test the files for potential changes
+ * @param verbosity_level Set the verbosity level (default 1)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
+ */
 function init_user_dotfiles_py(
     help: boolean = false,
     help_dotfiles_all: boolean = false,
@@ -312,34 +340,6 @@ function init_user_dotfiles_py(
     verbosity_level: number | null = null,
     runner: Runner | null = null,
 ): InitUserDotfilesPyOutputs {
-    /**
-     * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param help Show this help
-     * @param help_dotfiles_all Display dot files known by the program
-     * @param help_dotfiles_mod Display modifiable dot files
-     * @param help_shells Display shells known by the program
-     * @param hist Show module history
-     * @param show_valid_opts List valid options
-     * @param ver Show current version
-     * @param dot_files_list Specify dot files to focus on (default from -help_dotfiles_mod)
-     * @param dir_bin Specify bin directory to add to PATH (default comes from `which afni_proc.py`)
-     * @param dir_dot Specify directory containing dot files.
-     * @param do_updates Specify which updates to make (default is nothing)
-     * @param dry_run Do not modify files, but see what would happen
-     * @param force Force edits, whether they seem needed or not
-     * @param make_backup Specify whether to make backups of originals (default is yes)
-     * @param shell_list Specify shells instead of using -dflist
-     * @param test Just test the files for potential changes
-     * @param verbosity_level Set the verbosity level (default 1)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INIT_USER_DOTFILES_PY_METADATA);
     const params = init_user_dotfiles_py_params(help, help_dotfiles_all, help_dotfiles_mod, help_shells, hist, show_valid_opts, ver, dot_files_list, dir_bin, dir_dot, do_updates, dry_run, force, make_backup, shell_list, test, verbosity_level)
@@ -352,5 +352,8 @@ export {
       InitUserDotfilesPyOutputs,
       InitUserDotfilesPyParameters,
       init_user_dotfiles_py,
+      init_user_dotfiles_py_cargs,
+      init_user_dotfiles_py_execute,
+      init_user_dotfiles_py_outputs,
       init_user_dotfiles_py_params,
 };

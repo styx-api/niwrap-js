@@ -12,42 +12,42 @@ const UNPACK_MNC_TCL_METADATA: Metadata = {
 
 
 interface UnpackMncTclParameters {
-    "__STYXTYPE__": "unpack_mnc.tcl";
+    "@type": "freesurfer.unpack_mnc.tcl";
     "verbose": boolean;
     "output_dir"?: string | null | undefined;
     "input_file"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpack_mnc.tcl": unpack_mnc_tcl_cargs,
+        "freesurfer.unpack_mnc.tcl": unpack_mnc_tcl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "unpack_mnc.tcl": unpack_mnc_tcl_outputs,
+        "freesurfer.unpack_mnc.tcl": unpack_mnc_tcl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface UnpackMncTclOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param verbose Verbose output messages
+ * @param output_dir Output directory for unpacked files
+ * @param input_file Specify a custom input file for unpacking
+ *
+ * @returns Parameter dictionary
+ */
 function unpack_mnc_tcl_params(
     verbose: boolean = false,
     output_dir: string | null = null,
     input_file: InputPathType | null = null,
 ): UnpackMncTclParameters {
-    /**
-     * Build parameters.
-    
-     * @param verbose Verbose output messages
-     * @param output_dir Output directory for unpacked files
-     * @param input_file Specify a custom input file for unpacking
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpack_mnc.tcl" as const,
+        "@type": "freesurfer.unpack_mnc.tcl" as const,
         "verbose": verbose,
     };
     if (output_dir !== null) {
@@ -98,18 +98,18 @@ function unpack_mnc_tcl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpack_mnc_tcl_cargs(
     params: UnpackMncTclParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpack_mnc.tcl");
     if ((params["verbose"] ?? null)) {
@@ -131,18 +131,18 @@ function unpack_mnc_tcl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpack_mnc_tcl_outputs(
     params: UnpackMncTclParameters,
     execution: Execution,
 ): UnpackMncTclOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnpackMncTclOutputs = {
         root: execution.outputFile("."),
         unpacked_file: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/unpacked_data.mnc"].join('')) : null,
@@ -151,22 +151,22 @@ function unpack_mnc_tcl_outputs(
 }
 
 
+/**
+ * A tool for unpacking MINC format images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
+ */
 function unpack_mnc_tcl_execute(
     params: UnpackMncTclParameters,
     execution: Execution,
 ): UnpackMncTclOutputs {
-    /**
-     * A tool for unpacking MINC format images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
-     */
     params = execution.params(params)
     const cargs = unpack_mnc_tcl_cargs(params, execution)
     const ret = unpack_mnc_tcl_outputs(params, execution)
@@ -175,26 +175,26 @@ function unpack_mnc_tcl_execute(
 }
 
 
+/**
+ * A tool for unpacking MINC format images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param verbose Verbose output messages
+ * @param output_dir Output directory for unpacked files
+ * @param input_file Specify a custom input file for unpacking
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
+ */
 function unpack_mnc_tcl(
     verbose: boolean = false,
     output_dir: string | null = null,
     input_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): UnpackMncTclOutputs {
-    /**
-     * A tool for unpacking MINC format images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param verbose Verbose output messages
-     * @param output_dir Output directory for unpacked files
-     * @param input_file Specify a custom input file for unpacking
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACK_MNC_TCL_METADATA);
     const params = unpack_mnc_tcl_params(verbose, output_dir, input_file)
@@ -207,5 +207,8 @@ export {
       UnpackMncTclOutputs,
       UnpackMncTclParameters,
       unpack_mnc_tcl,
+      unpack_mnc_tcl_cargs,
+      unpack_mnc_tcl_execute,
+      unpack_mnc_tcl_outputs,
       unpack_mnc_tcl_params,
 };

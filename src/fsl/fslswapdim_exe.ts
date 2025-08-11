@@ -12,7 +12,7 @@ const FSLSWAPDIM_EXE_METADATA: Metadata = {
 
 
 interface FslswapdimExeParameters {
-    "__STYXTYPE__": "fslswapdim_exe";
+    "@type": "fsl.fslswapdim_exe";
     "input_file": InputPathType;
     "axis_a": string;
     "axis_b": string;
@@ -22,35 +22,35 @@ interface FslswapdimExeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslswapdim_exe": fslswapdim_exe_cargs,
+        "fsl.fslswapdim_exe": fslswapdim_exe_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslswapdim_exe": fslswapdim_exe_outputs,
+        "fsl.fslswapdim_exe": fslswapdim_exe_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface FslswapdimExeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file (e.g., input.nii.gz)
+ * @param axis_a New x-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param axis_b New y-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param axis_c New z-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param output_file Output image file (optional, cannot be used with --checkLR flag)
+ * @param check_lr_flag Option to check if the specified arguments lead to a Left-Right swap or not, cannot be used with an output name
+ *
+ * @returns Parameter dictionary
+ */
 function fslswapdim_exe_params(
     input_file: InputPathType,
     axis_a: string,
@@ -81,20 +93,8 @@ function fslswapdim_exe_params(
     output_file: string | null = null,
     check_lr_flag: boolean = false,
 ): FslswapdimExeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file (e.g., input.nii.gz)
-     * @param axis_a New x-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param axis_b New y-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param axis_c New z-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param output_file Output image file (optional, cannot be used with --checkLR flag)
-     * @param check_lr_flag Option to check if the specified arguments lead to a Left-Right swap or not, cannot be used with an output name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslswapdim_exe" as const,
+        "@type": "fsl.fslswapdim_exe" as const,
         "input_file": input_file,
         "axis_a": axis_a,
         "axis_b": axis_b,
@@ -108,18 +108,18 @@ function fslswapdim_exe_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslswapdim_exe_cargs(
     params: FslswapdimExeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslswapdim_exe");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -136,18 +136,18 @@ function fslswapdim_exe_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslswapdim_exe_outputs(
     params: FslswapdimExeParameters,
     execution: Execution,
 ): FslswapdimExeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslswapdimExeOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -156,22 +156,22 @@ function fslswapdim_exe_outputs(
 }
 
 
+/**
+ * Tool to swap the x, y, z axes dimensions of an image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslswapdimExeOutputs`).
+ */
 function fslswapdim_exe_execute(
     params: FslswapdimExeParameters,
     execution: Execution,
 ): FslswapdimExeOutputs {
-    /**
-     * Tool to swap the x, y, z axes dimensions of an image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslswapdimExeOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslswapdim_exe_cargs(params, execution)
     const ret = fslswapdim_exe_outputs(params, execution)
@@ -180,6 +180,23 @@ function fslswapdim_exe_execute(
 }
 
 
+/**
+ * Tool to swap the x, y, z axes dimensions of an image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file (e.g., input.nii.gz)
+ * @param axis_a New x-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param axis_b New y-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param axis_c New z-axis in terms of old axes (-x, x, y, -y, z, -z)
+ * @param output_file Output image file (optional, cannot be used with --checkLR flag)
+ * @param check_lr_flag Option to check if the specified arguments lead to a Left-Right swap or not, cannot be used with an output name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslswapdimExeOutputs`).
+ */
 function fslswapdim_exe(
     input_file: InputPathType,
     axis_a: string,
@@ -189,23 +206,6 @@ function fslswapdim_exe(
     check_lr_flag: boolean = false,
     runner: Runner | null = null,
 ): FslswapdimExeOutputs {
-    /**
-     * Tool to swap the x, y, z axes dimensions of an image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file (e.g., input.nii.gz)
-     * @param axis_a New x-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param axis_b New y-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param axis_c New z-axis in terms of old axes (-x, x, y, -y, z, -z)
-     * @param output_file Output image file (optional, cannot be used with --checkLR flag)
-     * @param check_lr_flag Option to check if the specified arguments lead to a Left-Right swap or not, cannot be used with an output name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslswapdimExeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSWAPDIM_EXE_METADATA);
     const params = fslswapdim_exe_params(input_file, axis_a, axis_b, axis_c, output_file, check_lr_flag)
@@ -218,5 +218,8 @@ export {
       FslswapdimExeOutputs,
       FslswapdimExeParameters,
       fslswapdim_exe,
+      fslswapdim_exe_cargs,
+      fslswapdim_exe_execute,
+      fslswapdim_exe_outputs,
       fslswapdim_exe_params,
 };

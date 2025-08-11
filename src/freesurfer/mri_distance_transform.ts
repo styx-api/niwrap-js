@@ -12,7 +12,7 @@ const MRI_DISTANCE_TRANSFORM_METADATA: Metadata = {
 
 
 interface MriDistanceTransformParameters {
-    "__STYXTYPE__": "mri_distance_transform";
+    "@type": "freesurfer.mri_distance_transform";
     "input_volume": InputPathType;
     "label": number;
     "max_distance": number;
@@ -21,35 +21,35 @@ interface MriDistanceTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_distance_transform": mri_distance_transform_cargs,
+        "freesurfer.mri_distance_transform": mri_distance_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_distance_transform": mri_distance_transform_outputs,
+        "freesurfer.mri_distance_transform": mri_distance_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriDistanceTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file
+ * @param label Label value for distance transform calculation
+ * @param max_distance Maximum distance for the transform
+ * @param output_volume Output volume file
+ * @param mode Mode of the distance transform: 1 = outside, 2 = inside, 3 = both, 4 = both unsigned
+ *
+ * @returns Parameter dictionary
+ */
 function mri_distance_transform_params(
     input_volume: InputPathType,
     label: number,
@@ -79,19 +90,8 @@ function mri_distance_transform_params(
     output_volume: string,
     mode: number | null = 1,
 ): MriDistanceTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file
-     * @param label Label value for distance transform calculation
-     * @param max_distance Maximum distance for the transform
-     * @param output_volume Output volume file
-     * @param mode Mode of the distance transform: 1 = outside, 2 = inside, 3 = both, 4 = both unsigned
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_distance_transform" as const,
+        "@type": "freesurfer.mri_distance_transform" as const,
         "input_volume": input_volume,
         "label": label,
         "max_distance": max_distance,
@@ -104,18 +104,18 @@ function mri_distance_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_distance_transform_cargs(
     params: MriDistanceTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_distance_transform");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -129,18 +129,18 @@ function mri_distance_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_distance_transform_outputs(
     params: MriDistanceTransformParameters,
     execution: Execution,
 ): MriDistanceTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDistanceTransformOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -149,22 +149,22 @@ function mri_distance_transform_outputs(
 }
 
 
+/**
+ * Tool to compute distance transforms on MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
+ */
 function mri_distance_transform_execute(
     params: MriDistanceTransformParameters,
     execution: Execution,
 ): MriDistanceTransformOutputs {
-    /**
-     * Tool to compute distance transforms on MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_distance_transform_cargs(params, execution)
     const ret = mri_distance_transform_outputs(params, execution)
@@ -173,6 +173,22 @@ function mri_distance_transform_execute(
 }
 
 
+/**
+ * Tool to compute distance transforms on MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file
+ * @param label Label value for distance transform calculation
+ * @param max_distance Maximum distance for the transform
+ * @param output_volume Output volume file
+ * @param mode Mode of the distance transform: 1 = outside, 2 = inside, 3 = both, 4 = both unsigned
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
+ */
 function mri_distance_transform(
     input_volume: InputPathType,
     label: number,
@@ -181,22 +197,6 @@ function mri_distance_transform(
     mode: number | null = 1,
     runner: Runner | null = null,
 ): MriDistanceTransformOutputs {
-    /**
-     * Tool to compute distance transforms on MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file
-     * @param label Label value for distance transform calculation
-     * @param max_distance Maximum distance for the transform
-     * @param output_volume Output volume file
-     * @param mode Mode of the distance transform: 1 = outside, 2 = inside, 3 = both, 4 = both unsigned
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DISTANCE_TRANSFORM_METADATA);
     const params = mri_distance_transform_params(input_volume, label, max_distance, output_volume, mode)
@@ -209,5 +209,8 @@ export {
       MriDistanceTransformOutputs,
       MriDistanceTransformParameters,
       mri_distance_transform,
+      mri_distance_transform_cargs,
+      mri_distance_transform_execute,
+      mri_distance_transform_outputs,
       mri_distance_transform_params,
 };

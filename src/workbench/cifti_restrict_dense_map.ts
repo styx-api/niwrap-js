@@ -12,7 +12,7 @@ const CIFTI_RESTRICT_DENSE_MAP_METADATA: Metadata = {
 
 
 interface CiftiRestrictDenseMapParameters {
-    "__STYXTYPE__": "cifti-restrict-dense-map";
+    "@type": "workbench.cifti-restrict-dense-map";
     "cifti_in": InputPathType;
     "direction": string;
     "cifti_out": string;
@@ -24,35 +24,35 @@ interface CiftiRestrictDenseMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-restrict-dense-map": cifti_restrict_dense_map_cargs,
+        "workbench.cifti-restrict-dense-map": cifti_restrict_dense_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-restrict-dense-map": cifti_restrict_dense_map_outputs,
+        "workbench.cifti-restrict-dense-map": cifti_restrict_dense_map_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface CiftiRestrictDenseMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti
+ * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
+ * @param cifti_out the output cifti
+ * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
+ * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_restrict_dense_map_params(
     cifti_in: InputPathType,
     direction: string,
@@ -85,22 +99,8 @@ function cifti_restrict_dense_map_params(
     opt_cerebellum_roi_roi_metric: InputPathType | null = null,
     opt_vol_roi_roi_vol: InputPathType | null = null,
 ): CiftiRestrictDenseMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti
-     * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
-     * @param cifti_out the output cifti
-     * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
-     * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-restrict-dense-map" as const,
+        "@type": "workbench.cifti-restrict-dense-map" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "cifti_out": cifti_out,
@@ -124,18 +124,18 @@ function cifti_restrict_dense_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_restrict_dense_map_cargs(
     params: CiftiRestrictDenseMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-restrict-dense-map");
@@ -176,18 +176,18 @@ function cifti_restrict_dense_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_restrict_dense_map_outputs(
     params: CiftiRestrictDenseMapParameters,
     execution: Execution,
 ): CiftiRestrictDenseMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiRestrictDenseMapOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -196,24 +196,24 @@ function cifti_restrict_dense_map_outputs(
 }
 
 
+/**
+ * Exclude brainordinates from a cifti file.
+ *
+ * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
+ */
 function cifti_restrict_dense_map_execute(
     params: CiftiRestrictDenseMapParameters,
     execution: Execution,
 ): CiftiRestrictDenseMapOutputs {
-    /**
-     * Exclude brainordinates from a cifti file.
-     * 
-     * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_restrict_dense_map_cargs(params, execution)
     const ret = cifti_restrict_dense_map_outputs(params, execution)
@@ -222,6 +222,27 @@ function cifti_restrict_dense_map_execute(
 }
 
 
+/**
+ * Exclude brainordinates from a cifti file.
+ *
+ * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the input cifti
+ * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
+ * @param cifti_out the output cifti
+ * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
+ * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
+ */
 function cifti_restrict_dense_map(
     cifti_in: InputPathType,
     direction: string,
@@ -233,27 +254,6 @@ function cifti_restrict_dense_map(
     opt_vol_roi_roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
-    /**
-     * Exclude brainordinates from a cifti file.
-     * 
-     * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the input cifti
-     * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
-     * @param cifti_out the output cifti
-     * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
-     * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_RESTRICT_DENSE_MAP_METADATA);
     const params = cifti_restrict_dense_map_params(cifti_in, direction, cifti_out, opt_cifti_roi_roi_cifti, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol)
@@ -266,5 +266,8 @@ export {
       CiftiRestrictDenseMapOutputs,
       CiftiRestrictDenseMapParameters,
       cifti_restrict_dense_map,
+      cifti_restrict_dense_map_cargs,
+      cifti_restrict_dense_map_execute,
+      cifti_restrict_dense_map_outputs,
       cifti_restrict_dense_map_params,
 };

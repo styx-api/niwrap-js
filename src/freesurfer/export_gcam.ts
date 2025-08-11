@@ -12,7 +12,7 @@ const EXPORT_GCAM_METADATA: Metadata = {
 
 
 interface ExportGcamParameters {
-    "__STYXTYPE__": "exportGcam";
+    "@type": "freesurfer.exportGcam";
     "fixed": InputPathType;
     "moving": InputPathType;
     "morph": InputPathType;
@@ -24,35 +24,35 @@ interface ExportGcamParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "exportGcam": export_gcam_cargs,
+        "freesurfer.exportGcam": export_gcam_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "exportGcam": export_gcam_outputs,
+        "freesurfer.exportGcam": export_gcam_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface ExportGcamOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixed Fixed volume.
+ * @param moving Moving volume.
+ * @param morph Morph.
+ * @param out_gcam Output GCAM (Geodesic Coordinate-based Anatomic Mapping).
+ * @param zlib_buffer Zlib buffer pre-allocation multiplier.
+ * @param bbox_threshold Threshold for bounding box. If absent, no bbox will be used.
+ * @param interp_method Interpolation method. Choices: linear, nearest. Default is linear.
+ * @param test Write out test files to verify the equivalence of tm3d and gcam morphs.
+ *
+ * @returns Parameter dictionary
+ */
 function export_gcam_params(
     fixed: InputPathType,
     moving: InputPathType,
@@ -85,22 +99,8 @@ function export_gcam_params(
     interp_method: "linear" | "nearest" | null = "linear",
     test: boolean = false,
 ): ExportGcamParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixed Fixed volume.
-     * @param moving Moving volume.
-     * @param morph Morph.
-     * @param out_gcam Output GCAM (Geodesic Coordinate-based Anatomic Mapping).
-     * @param zlib_buffer Zlib buffer pre-allocation multiplier.
-     * @param bbox_threshold Threshold for bounding box. If absent, no bbox will be used.
-     * @param interp_method Interpolation method. Choices: linear, nearest. Default is linear.
-     * @param test Write out test files to verify the equivalence of tm3d and gcam morphs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exportGcam" as const,
+        "@type": "freesurfer.exportGcam" as const,
         "fixed": fixed,
         "moving": moving,
         "morph": morph,
@@ -120,18 +120,18 @@ function export_gcam_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function export_gcam_cargs(
     params: ExportGcamParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("exportGcam");
     cargs.push(
@@ -175,18 +175,18 @@ function export_gcam_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function export_gcam_outputs(
     params: ExportGcamParameters,
     execution: Execution,
 ): ExportGcamOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExportGcamOutputs = {
         root: execution.outputFile("."),
         output_gcam_file: execution.outputFile([(params["out_gcam"] ?? null)].join('')),
@@ -195,22 +195,22 @@ function export_gcam_outputs(
 }
 
 
+/**
+ * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
+ */
 function export_gcam_execute(
     params: ExportGcamParameters,
     execution: Execution,
 ): ExportGcamOutputs {
-    /**
-     * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
-     */
     params = execution.params(params)
     const cargs = export_gcam_cargs(params, execution)
     const ret = export_gcam_outputs(params, execution)
@@ -219,6 +219,25 @@ function export_gcam_execute(
 }
 
 
+/**
+ * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param fixed Fixed volume.
+ * @param moving Moving volume.
+ * @param morph Morph.
+ * @param out_gcam Output GCAM (Geodesic Coordinate-based Anatomic Mapping).
+ * @param zlib_buffer Zlib buffer pre-allocation multiplier.
+ * @param bbox_threshold Threshold for bounding box. If absent, no bbox will be used.
+ * @param interp_method Interpolation method. Choices: linear, nearest. Default is linear.
+ * @param test Write out test files to verify the equivalence of tm3d and gcam morphs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
+ */
 function export_gcam(
     fixed: InputPathType,
     moving: InputPathType,
@@ -230,25 +249,6 @@ function export_gcam(
     test: boolean = false,
     runner: Runner | null = null,
 ): ExportGcamOutputs {
-    /**
-     * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param fixed Fixed volume.
-     * @param moving Moving volume.
-     * @param morph Morph.
-     * @param out_gcam Output GCAM (Geodesic Coordinate-based Anatomic Mapping).
-     * @param zlib_buffer Zlib buffer pre-allocation multiplier.
-     * @param bbox_threshold Threshold for bounding box. If absent, no bbox will be used.
-     * @param interp_method Interpolation method. Choices: linear, nearest. Default is linear.
-     * @param test Write out test files to verify the equivalence of tm3d and gcam morphs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXPORT_GCAM_METADATA);
     const params = export_gcam_params(fixed, moving, morph, out_gcam, zlib_buffer, bbox_threshold, interp_method, test)
@@ -261,5 +261,8 @@ export {
       ExportGcamOutputs,
       ExportGcamParameters,
       export_gcam,
+      export_gcam_cargs,
+      export_gcam_execute,
+      export_gcam_outputs,
       export_gcam_params,
 };

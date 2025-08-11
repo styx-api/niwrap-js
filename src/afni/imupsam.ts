@@ -12,7 +12,7 @@ const IMUPSAM_METADATA: Metadata = {
 
 
 interface ImupsamParameters {
-    "__STYXTYPE__": "imupsam";
+    "@type": "afni.imupsam";
     "ascii_flag": boolean;
     "factor": number;
     "input_image": InputPathType;
@@ -20,35 +20,35 @@ interface ImupsamParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imupsam": imupsam_cargs,
+        "afni.imupsam": imupsam_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imupsam": imupsam_outputs,
+        "afni.imupsam": imupsam_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface ImupsamOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param factor Upsampling factor; must be an integer in the range 2 to 30
+ * @param input_image Path of the input 2D image file
+ * @param output_image Path of the output upsampled image file. Use '-' to write to stdout.
+ * @param ascii_flag Write the result in ASCII format: all numbers for the file are output, with no header info
+ *
+ * @returns Parameter dictionary
+ */
 function imupsam_params(
     factor: number,
     input_image: InputPathType,
     output_image: string,
     ascii_flag: boolean = false,
 ): ImupsamParameters {
-    /**
-     * Build parameters.
-    
-     * @param factor Upsampling factor; must be an integer in the range 2 to 30
-     * @param input_image Path of the input 2D image file
-     * @param output_image Path of the output upsampled image file. Use '-' to write to stdout.
-     * @param ascii_flag Write the result in ASCII format: all numbers for the file are output, with no header info
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imupsam" as const,
+        "@type": "afni.imupsam" as const,
         "ascii_flag": ascii_flag,
         "factor": factor,
         "input_image": input_image,
@@ -98,18 +98,18 @@ function imupsam_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imupsam_cargs(
     params: ImupsamParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imupsam");
     if ((params["ascii_flag"] ?? null)) {
@@ -122,18 +122,18 @@ function imupsam_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imupsam_outputs(
     params: ImupsamParameters,
     execution: Execution,
 ): ImupsamOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImupsamOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function imupsam_outputs(
 }
 
 
+/**
+ * Upsamples a 2D image by a specified factor.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
+ */
 function imupsam_execute(
     params: ImupsamParameters,
     execution: Execution,
 ): ImupsamOutputs {
-    /**
-     * Upsamples a 2D image by a specified factor.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
-     */
     params = execution.params(params)
     const cargs = imupsam_cargs(params, execution)
     const ret = imupsam_outputs(params, execution)
@@ -166,6 +166,21 @@ function imupsam_execute(
 }
 
 
+/**
+ * Upsamples a 2D image by a specified factor.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param factor Upsampling factor; must be an integer in the range 2 to 30
+ * @param input_image Path of the input 2D image file
+ * @param output_image Path of the output upsampled image file. Use '-' to write to stdout.
+ * @param ascii_flag Write the result in ASCII format: all numbers for the file are output, with no header info
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
+ */
 function imupsam(
     factor: number,
     input_image: InputPathType,
@@ -173,21 +188,6 @@ function imupsam(
     ascii_flag: boolean = false,
     runner: Runner | null = null,
 ): ImupsamOutputs {
-    /**
-     * Upsamples a 2D image by a specified factor.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param factor Upsampling factor; must be an integer in the range 2 to 30
-     * @param input_image Path of the input 2D image file
-     * @param output_image Path of the output upsampled image file. Use '-' to write to stdout.
-     * @param ascii_flag Write the result in ASCII format: all numbers for the file are output, with no header info
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMUPSAM_METADATA);
     const params = imupsam_params(factor, input_image, output_image, ascii_flag)
@@ -200,5 +200,8 @@ export {
       ImupsamOutputs,
       ImupsamParameters,
       imupsam,
+      imupsam_cargs,
+      imupsam_execute,
+      imupsam_outputs,
       imupsam_params,
 };

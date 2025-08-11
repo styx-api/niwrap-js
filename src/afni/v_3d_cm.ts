@@ -12,7 +12,7 @@ const V_3D_CM_METADATA: Metadata = {
 
 
 interface V3dCmParameters {
-    "__STYXTYPE__": "3dCM";
+    "@type": "afni.3dCM";
     "dset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -25,35 +25,35 @@ interface V3dCmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dCM": v_3d_cm_cargs,
+        "afni.3dCM": v_3d_cm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dCM": v_3d_cm_outputs,
+        "afni.3dCM": v_3d_cm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dCmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Input dataset.
+ * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
+ * @param automask Generate the mask automatically.
+ * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
+ * @param local_ijk Output values as (i,j,k) in local orientation.
+ * @param roi_vals Compute center of mass for each blob with specified voxel values.
+ * @param all_rois Automatically find all ROI values and compute their centers of mass.
+ * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
+ * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_cm_params(
     dset: InputPathType,
     mask: InputPathType | null = null,
@@ -87,23 +102,8 @@ function v_3d_cm_params(
     icent: boolean = false,
     dcent: boolean = false,
 ): V3dCmParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Input dataset.
-     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
-     * @param automask Generate the mask automatically.
-     * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
-     * @param local_ijk Output values as (i,j,k) in local orientation.
-     * @param roi_vals Compute center of mass for each blob with specified voxel values.
-     * @param all_rois Automatically find all ROI values and compute their centers of mass.
-     * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
-     * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dCM" as const,
+        "@type": "afni.3dCM" as const,
         "dset": dset,
         "automask": automask,
         "local_ijk": local_ijk,
@@ -124,18 +124,18 @@ function v_3d_cm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_cm_cargs(
     params: V3dCmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dCM");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
@@ -176,18 +176,18 @@ function v_3d_cm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_cm_outputs(
     params: V3dCmParameters,
     execution: Execution,
 ): V3dCmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dCmOutputs = {
         root: execution.outputFile("."),
         center_of_mass: execution.outputFile(["<stdout>"].join('')),
@@ -196,22 +196,22 @@ function v_3d_cm_outputs(
 }
 
 
+/**
+ * Tool for computing the center of mass of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
+ */
 function v_3d_cm_execute(
     params: V3dCmParameters,
     execution: Execution,
 ): V3dCmOutputs {
-    /**
-     * Tool for computing the center of mass of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_cm_cargs(params, execution)
     const ret = v_3d_cm_outputs(params, execution)
@@ -220,6 +220,26 @@ function v_3d_cm_execute(
 }
 
 
+/**
+ * Tool for computing the center of mass of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Input dataset.
+ * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
+ * @param automask Generate the mask automatically.
+ * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
+ * @param local_ijk Output values as (i,j,k) in local orientation.
+ * @param roi_vals Compute center of mass for each blob with specified voxel values.
+ * @param all_rois Automatically find all ROI values and compute their centers of mass.
+ * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
+ * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
+ */
 function v_3d_cm(
     dset: InputPathType,
     mask: InputPathType | null = null,
@@ -232,26 +252,6 @@ function v_3d_cm(
     dcent: boolean = false,
     runner: Runner | null = null,
 ): V3dCmOutputs {
-    /**
-     * Tool for computing the center of mass of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Input dataset.
-     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in 'mset' will be averaged from 'dataset'. Both datasets must have the same number of voxels.
-     * @param automask Generate the mask automatically.
-     * @param set_origin After computing the CM of the dataset, set the origin fields in the header so that the CM will be at (x,y,z) in DICOM coordinates.
-     * @param local_ijk Output values as (i,j,k) in local orientation.
-     * @param roi_vals Compute center of mass for each blob with specified voxel values.
-     * @param all_rois Automatically find all ROI values and compute their centers of mass.
-     * @param icent Compute Internal Center, which finds the center voxel closest to the center of mass.
-     * @param dcent Compute Distance Center, the center voxel with the shortest average distance to all other voxels. This is computationally expensive.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CM_METADATA);
     const params = v_3d_cm_params(dset, mask, automask, set_origin, local_ijk, roi_vals, all_rois, icent, dcent)
@@ -264,5 +264,8 @@ export {
       V3dCmParameters,
       V_3D_CM_METADATA,
       v_3d_cm,
+      v_3d_cm_cargs,
+      v_3d_cm_execute,
+      v_3d_cm_outputs,
       v_3d_cm_params,
 };

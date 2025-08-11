@@ -12,7 +12,7 @@ const MRI_WBC_METADATA: Metadata = {
 
 
 interface MriWbcParameters {
-    "__STYXTYPE__": "mri_wbc";
+    "@type": "freesurfer.mri_wbc";
     "functional_volume": InputPathType;
     "volume_mask"?: InputPathType | null | undefined;
     "lh_functional_surface": InputPathType;
@@ -33,33 +33,33 @@ interface MriWbcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_wbc": mri_wbc_cargs,
+        "freesurfer.mri_wbc": mri_wbc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface MriWbcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param functional_volume Functional volume file
+ * @param lh_functional_surface Left hemisphere functional surface file
+ * @param lh_surface Left hemisphere surface file
+ * @param rh_functional_surface Right hemisphere functional surface file
+ * @param rh_surface Right hemisphere surface file
+ * @param volume_mask Mask for functional volume
+ * @param lh_inflated Optional left hemisphere inflated surface file
+ * @param lh_mask Mask for left hemisphere functional surface
+ * @param lh_label Label mask for left hemisphere functional surface
+ * @param rh_inflated Optional right hemisphere inflated surface file
+ * @param rh_mask Mask for right hemisphere functional surface
+ * @param rh_label Label mask for right hemisphere functional surface
+ * @param rho_threshold Rho threshold value
+ * @param dist_threshold Distance threshold value
+ * @param threads Number of threads to use
+ * @param debug Turn on debugging
+ * @param checkopts Check options and exit without running
+ *
+ * @returns Parameter dictionary
+ */
 function mri_wbc_params(
     functional_volume: InputPathType,
     lh_functional_surface: InputPathType,
@@ -98,31 +121,8 @@ function mri_wbc_params(
     debug: boolean = false,
     checkopts: boolean = false,
 ): MriWbcParameters {
-    /**
-     * Build parameters.
-    
-     * @param functional_volume Functional volume file
-     * @param lh_functional_surface Left hemisphere functional surface file
-     * @param lh_surface Left hemisphere surface file
-     * @param rh_functional_surface Right hemisphere functional surface file
-     * @param rh_surface Right hemisphere surface file
-     * @param volume_mask Mask for functional volume
-     * @param lh_inflated Optional left hemisphere inflated surface file
-     * @param lh_mask Mask for left hemisphere functional surface
-     * @param lh_label Label mask for left hemisphere functional surface
-     * @param rh_inflated Optional right hemisphere inflated surface file
-     * @param rh_mask Mask for right hemisphere functional surface
-     * @param rh_label Label mask for right hemisphere functional surface
-     * @param rho_threshold Rho threshold value
-     * @param dist_threshold Distance threshold value
-     * @param threads Number of threads to use
-     * @param debug Turn on debugging
-     * @param checkopts Check options and exit without running
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_wbc" as const,
+        "@type": "freesurfer.mri_wbc" as const,
         "functional_volume": functional_volume,
         "lh_functional_surface": lh_functional_surface,
         "lh_surface": lh_surface,
@@ -165,18 +165,18 @@ function mri_wbc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_wbc_cargs(
     params: MriWbcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_wbc");
     cargs.push(
@@ -269,18 +269,18 @@ function mri_wbc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_wbc_outputs(
     params: MriWbcParameters,
     execution: Execution,
 ): MriWbcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriWbcOutputs = {
         root: execution.outputFile("."),
     };
@@ -288,22 +288,22 @@ function mri_wbc_outputs(
 }
 
 
+/**
+ * A tool for working with functional brain imaging data on surfaces and volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
+ */
 function mri_wbc_execute(
     params: MriWbcParameters,
     execution: Execution,
 ): MriWbcOutputs {
-    /**
-     * A tool for working with functional brain imaging data on surfaces and volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_wbc_cargs(params, execution)
     const ret = mri_wbc_outputs(params, execution)
@@ -312,6 +312,34 @@ function mri_wbc_execute(
 }
 
 
+/**
+ * A tool for working with functional brain imaging data on surfaces and volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param functional_volume Functional volume file
+ * @param lh_functional_surface Left hemisphere functional surface file
+ * @param lh_surface Left hemisphere surface file
+ * @param rh_functional_surface Right hemisphere functional surface file
+ * @param rh_surface Right hemisphere surface file
+ * @param volume_mask Mask for functional volume
+ * @param lh_inflated Optional left hemisphere inflated surface file
+ * @param lh_mask Mask for left hemisphere functional surface
+ * @param lh_label Label mask for left hemisphere functional surface
+ * @param rh_inflated Optional right hemisphere inflated surface file
+ * @param rh_mask Mask for right hemisphere functional surface
+ * @param rh_label Label mask for right hemisphere functional surface
+ * @param rho_threshold Rho threshold value
+ * @param dist_threshold Distance threshold value
+ * @param threads Number of threads to use
+ * @param debug Turn on debugging
+ * @param checkopts Check options and exit without running
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
+ */
 function mri_wbc(
     functional_volume: InputPathType,
     lh_functional_surface: InputPathType,
@@ -332,34 +360,6 @@ function mri_wbc(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriWbcOutputs {
-    /**
-     * A tool for working with functional brain imaging data on surfaces and volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param functional_volume Functional volume file
-     * @param lh_functional_surface Left hemisphere functional surface file
-     * @param lh_surface Left hemisphere surface file
-     * @param rh_functional_surface Right hemisphere functional surface file
-     * @param rh_surface Right hemisphere surface file
-     * @param volume_mask Mask for functional volume
-     * @param lh_inflated Optional left hemisphere inflated surface file
-     * @param lh_mask Mask for left hemisphere functional surface
-     * @param lh_label Label mask for left hemisphere functional surface
-     * @param rh_inflated Optional right hemisphere inflated surface file
-     * @param rh_mask Mask for right hemisphere functional surface
-     * @param rh_label Label mask for right hemisphere functional surface
-     * @param rho_threshold Rho threshold value
-     * @param dist_threshold Distance threshold value
-     * @param threads Number of threads to use
-     * @param debug Turn on debugging
-     * @param checkopts Check options and exit without running
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_WBC_METADATA);
     const params = mri_wbc_params(functional_volume, lh_functional_surface, lh_surface, rh_functional_surface, rh_surface, volume_mask, lh_inflated, lh_mask, lh_label, rh_inflated, rh_mask, rh_label, rho_threshold, dist_threshold, threads, debug, checkopts)
@@ -372,5 +372,8 @@ export {
       MriWbcOutputs,
       MriWbcParameters,
       mri_wbc,
+      mri_wbc_cargs,
+      mri_wbc_execute,
+      mri_wbc_outputs,
       mri_wbc_params,
 };

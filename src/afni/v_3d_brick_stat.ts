@@ -12,7 +12,7 @@ const V_3D_BRICK_STAT_METADATA: Metadata = {
 
 
 interface V3dBrickStatParameters {
-    "__STYXTYPE__": "3dBrickStat";
+    "@type": "afni.3dBrickStat";
     "dataset": string;
     "quick": boolean;
     "slow": boolean;
@@ -46,35 +46,35 @@ interface V3dBrickStatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBrickStat": v_3d_brick_stat_cargs,
+        "afni.3dBrickStat": v_3d_brick_stat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBrickStat": v_3d_brick_stat_outputs,
+        "afni.3dBrickStat": v_3d_brick_stat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,42 @@ interface V3dBrickStatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param quick Get the information from the header only (default)
+ * @param slow Read the whole dataset to find the min and max values
+ * @param min Print the minimum value in dataset
+ * @param max Print the maximum value in dataset (default)
+ * @param mean Print the mean value in dataset
+ * @param sum Print the sum of values in the dataset
+ * @param var_ Print the variance in the dataset
+ * @param stdev Print the standard deviation in the dataset
+ * @param count Print the number of voxels included
+ * @param volume Print the volume of voxels included in microliters
+ * @param positive Include only positive voxel values
+ * @param negative Include only negative voxel values
+ * @param zero Include only zero voxel values
+ * @param non_positive Include only voxel values 0 or negative
+ * @param non_negative Include only voxel values 0 or greater
+ * @param non_zero Include only voxel values not equal to 0
+ * @param absolute Use absolute value of voxel values for all calculations
+ * @param nan Include only voxel values that are NaN or inf. Forces -slow mode.
+ * @param nonan Exclude voxel values that are NaN or inf.
+ * @param mask Use the specified dataset as mask to include/exclude voxels
+ * @param mrange Only accept values between MIN and MAX (inclusive) from the mask
+ * @param mvalue Only accept values equal to VAL from the mask
+ * @param automask Automatically compute mask for dataset. Cannot be combined with -mask.
+ * @param percentile Compute and print percentile values from p0% to p1% at a step of ps%. Only one sub-brick is accepted as input with this option.
+ * @param perclist Like -percentile, but output the given percentiles
+ * @param median Shortcut for -percentile 50 1 50 (or -perclist 1 50)
+ * @param perc_quiet Only print percentile results, not input percentile cutoffs
+ * @param ver Print author and version info
+ * @param help Print help screen
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_brick_stat_params(
     dataset: string,
     quick: boolean = false,
@@ -129,44 +165,8 @@ function v_3d_brick_stat_params(
     ver: boolean = false,
     help: boolean = false,
 ): V3dBrickStatParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param quick Get the information from the header only (default)
-     * @param slow Read the whole dataset to find the min and max values
-     * @param min Print the minimum value in dataset
-     * @param max Print the maximum value in dataset (default)
-     * @param mean Print the mean value in dataset
-     * @param sum Print the sum of values in the dataset
-     * @param var_ Print the variance in the dataset
-     * @param stdev Print the standard deviation in the dataset
-     * @param count Print the number of voxels included
-     * @param volume Print the volume of voxels included in microliters
-     * @param positive Include only positive voxel values
-     * @param negative Include only negative voxel values
-     * @param zero Include only zero voxel values
-     * @param non_positive Include only voxel values 0 or negative
-     * @param non_negative Include only voxel values 0 or greater
-     * @param non_zero Include only voxel values not equal to 0
-     * @param absolute Use absolute value of voxel values for all calculations
-     * @param nan Include only voxel values that are NaN or inf. Forces -slow mode.
-     * @param nonan Exclude voxel values that are NaN or inf.
-     * @param mask Use the specified dataset as mask to include/exclude voxels
-     * @param mrange Only accept values between MIN and MAX (inclusive) from the mask
-     * @param mvalue Only accept values equal to VAL from the mask
-     * @param automask Automatically compute mask for dataset. Cannot be combined with -mask.
-     * @param percentile Compute and print percentile values from p0% to p1% at a step of ps%. Only one sub-brick is accepted as input with this option.
-     * @param perclist Like -percentile, but output the given percentiles
-     * @param median Shortcut for -percentile 50 1 50 (or -perclist 1 50)
-     * @param perc_quiet Only print percentile results, not input percentile cutoffs
-     * @param ver Print author and version info
-     * @param help Print help screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBrickStat" as const,
+        "@type": "afni.3dBrickStat" as const,
         "dataset": dataset,
         "quick": quick,
         "slow": slow,
@@ -212,18 +212,18 @@ function v_3d_brick_stat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_brick_stat_cargs(
     params: V3dBrickStatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBrickStat");
     cargs.push((params["dataset"] ?? null));
@@ -333,18 +333,18 @@ function v_3d_brick_stat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_brick_stat_outputs(
     params: V3dBrickStatParameters,
     execution: Execution,
 ): V3dBrickStatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBrickStatOutputs = {
         root: execution.outputFile("."),
         console_output: execution.outputFile(["output.txt"].join('')),
@@ -353,22 +353,22 @@ function v_3d_brick_stat_outputs(
 }
 
 
+/**
+ * Compute voxel statistics of an input dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
+ */
 function v_3d_brick_stat_execute(
     params: V3dBrickStatParameters,
     execution: Execution,
 ): V3dBrickStatOutputs {
-    /**
-     * Compute voxel statistics of an input dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_brick_stat_cargs(params, execution)
     const ret = v_3d_brick_stat_outputs(params, execution)
@@ -377,6 +377,47 @@ function v_3d_brick_stat_execute(
 }
 
 
+/**
+ * Compute voxel statistics of an input dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param quick Get the information from the header only (default)
+ * @param slow Read the whole dataset to find the min and max values
+ * @param min Print the minimum value in dataset
+ * @param max Print the maximum value in dataset (default)
+ * @param mean Print the mean value in dataset
+ * @param sum Print the sum of values in the dataset
+ * @param var_ Print the variance in the dataset
+ * @param stdev Print the standard deviation in the dataset
+ * @param count Print the number of voxels included
+ * @param volume Print the volume of voxels included in microliters
+ * @param positive Include only positive voxel values
+ * @param negative Include only negative voxel values
+ * @param zero Include only zero voxel values
+ * @param non_positive Include only voxel values 0 or negative
+ * @param non_negative Include only voxel values 0 or greater
+ * @param non_zero Include only voxel values not equal to 0
+ * @param absolute Use absolute value of voxel values for all calculations
+ * @param nan Include only voxel values that are NaN or inf. Forces -slow mode.
+ * @param nonan Exclude voxel values that are NaN or inf.
+ * @param mask Use the specified dataset as mask to include/exclude voxels
+ * @param mrange Only accept values between MIN and MAX (inclusive) from the mask
+ * @param mvalue Only accept values equal to VAL from the mask
+ * @param automask Automatically compute mask for dataset. Cannot be combined with -mask.
+ * @param percentile Compute and print percentile values from p0% to p1% at a step of ps%. Only one sub-brick is accepted as input with this option.
+ * @param perclist Like -percentile, but output the given percentiles
+ * @param median Shortcut for -percentile 50 1 50 (or -perclist 1 50)
+ * @param perc_quiet Only print percentile results, not input percentile cutoffs
+ * @param ver Print author and version info
+ * @param help Print help screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
+ */
 function v_3d_brick_stat(
     dataset: string,
     quick: boolean = false,
@@ -410,47 +451,6 @@ function v_3d_brick_stat(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dBrickStatOutputs {
-    /**
-     * Compute voxel statistics of an input dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param quick Get the information from the header only (default)
-     * @param slow Read the whole dataset to find the min and max values
-     * @param min Print the minimum value in dataset
-     * @param max Print the maximum value in dataset (default)
-     * @param mean Print the mean value in dataset
-     * @param sum Print the sum of values in the dataset
-     * @param var_ Print the variance in the dataset
-     * @param stdev Print the standard deviation in the dataset
-     * @param count Print the number of voxels included
-     * @param volume Print the volume of voxels included in microliters
-     * @param positive Include only positive voxel values
-     * @param negative Include only negative voxel values
-     * @param zero Include only zero voxel values
-     * @param non_positive Include only voxel values 0 or negative
-     * @param non_negative Include only voxel values 0 or greater
-     * @param non_zero Include only voxel values not equal to 0
-     * @param absolute Use absolute value of voxel values for all calculations
-     * @param nan Include only voxel values that are NaN or inf. Forces -slow mode.
-     * @param nonan Exclude voxel values that are NaN or inf.
-     * @param mask Use the specified dataset as mask to include/exclude voxels
-     * @param mrange Only accept values between MIN and MAX (inclusive) from the mask
-     * @param mvalue Only accept values equal to VAL from the mask
-     * @param automask Automatically compute mask for dataset. Cannot be combined with -mask.
-     * @param percentile Compute and print percentile values from p0% to p1% at a step of ps%. Only one sub-brick is accepted as input with this option.
-     * @param perclist Like -percentile, but output the given percentiles
-     * @param median Shortcut for -percentile 50 1 50 (or -perclist 1 50)
-     * @param perc_quiet Only print percentile results, not input percentile cutoffs
-     * @param ver Print author and version info
-     * @param help Print help screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BRICK_STAT_METADATA);
     const params = v_3d_brick_stat_params(dataset, quick, slow, min, max, mean, sum, var_, stdev, count, volume, positive, negative, zero, non_positive, non_negative, non_zero, absolute, nan, nonan, mask, mrange, mvalue, automask, percentile, perclist, median, perc_quiet, ver, help)
@@ -463,5 +463,8 @@ export {
       V3dBrickStatParameters,
       V_3D_BRICK_STAT_METADATA,
       v_3d_brick_stat,
+      v_3d_brick_stat_cargs,
+      v_3d_brick_stat_execute,
+      v_3d_brick_stat_outputs,
       v_3d_brick_stat_params,
 };

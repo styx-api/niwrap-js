@@ -12,7 +12,7 @@ const V_3D_BANDPASS_METADATA: Metadata = {
 
 
 interface V3dBandpassParameters {
-    "__STYXTYPE__": "3dBandpass";
+    "@type": "afni.3dBandpass";
     "prefix"?: string | null | undefined;
     "automask": boolean;
     "blur"?: number | null | undefined;
@@ -33,35 +33,35 @@ interface V3dBandpassParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBandpass": v_3d_bandpass_cargs,
+        "afni.3dBandpass": v_3d_bandpass_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBandpass": v_3d_bandpass_outputs,
+        "afni.3dBandpass": v_3d_bandpass_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface V3dBandpassOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param highpass Highpass.
+ * @param lowpass Lowpass.
+ * @param in_file Input file to 3dbandpass.
+ * @param prefix Prefix for output file.
+ * @param automask Create a mask from the input dataset.
+ * @param blur Blur (inside the mask only) with a filter width (fwhm) of 'fff' millimeters.
+ * @param despike Despike each time series before other processing. hopefully, you don't actually need to do this, which is why it is optional.
+ * @param local_pv Replace each vector by the local principal vector (aka first singular vector) from a neighborhood of radius 'rrr' millimeters. note that the pv time series is l2 normalized. this option is mostly for bob cox to have fun with.
+ * @param mask Mask file.
+ * @param nfft Set the fft length [must be a legal value].
+ * @param no_detrend Skip the quadratic detrending of the input that occurs before the fft-based bandpassing. you would only want to do this if the dataset had been detrended already in some other program.
+ * @param normalize Make all output time series have l2 norm = 1 (i.e., sum of squares = 1).
+ * @param notrans Don't check for initial positive transients in the data. the test is a little slow, so skipping it is ok, if you know the data time series are transient-free.
+ * @param orthogonalize_dset Orthogonalize each voxel to the corresponding voxel time series in dataset 'fset', which must have the same spatial and temporal grid structure as the main input dataset. at present, only one '-dsort' option is allowed.
+ * @param orthogonalize_file Also orthogonalize input to columns in f.1d. multiple '-ort' options are allowed.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param tr Set time step (tr) in sec [default=from dataset header].
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_bandpass_params(
     highpass: number,
     lowpass: number,
@@ -103,31 +126,8 @@ function v_3d_bandpass_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     tr: number | null = null,
 ): V3dBandpassParameters {
-    /**
-     * Build parameters.
-    
-     * @param highpass Highpass.
-     * @param lowpass Lowpass.
-     * @param in_file Input file to 3dbandpass.
-     * @param prefix Prefix for output file.
-     * @param automask Create a mask from the input dataset.
-     * @param blur Blur (inside the mask only) with a filter width (fwhm) of 'fff' millimeters.
-     * @param despike Despike each time series before other processing. hopefully, you don't actually need to do this, which is why it is optional.
-     * @param local_pv Replace each vector by the local principal vector (aka first singular vector) from a neighborhood of radius 'rrr' millimeters. note that the pv time series is l2 normalized. this option is mostly for bob cox to have fun with.
-     * @param mask Mask file.
-     * @param nfft Set the fft length [must be a legal value].
-     * @param no_detrend Skip the quadratic detrending of the input that occurs before the fft-based bandpassing. you would only want to do this if the dataset had been detrended already in some other program.
-     * @param normalize Make all output time series have l2 norm = 1 (i.e., sum of squares = 1).
-     * @param notrans Don't check for initial positive transients in the data. the test is a little slow, so skipping it is ok, if you know the data time series are transient-free.
-     * @param orthogonalize_dset Orthogonalize each voxel to the corresponding voxel time series in dataset 'fset', which must have the same spatial and temporal grid structure as the main input dataset. at present, only one '-dsort' option is allowed.
-     * @param orthogonalize_file Also orthogonalize input to columns in f.1d. multiple '-ort' options are allowed.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param tr Set time step (tr) in sec [default=from dataset header].
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBandpass" as const,
+        "@type": "afni.3dBandpass" as const,
         "automask": automask,
         "despike": despike,
         "highpass": highpass,
@@ -168,18 +168,18 @@ function v_3d_bandpass_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_bandpass_cargs(
     params: V3dBandpassParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBandpass");
     if ((params["prefix"] ?? null) !== null) {
@@ -255,18 +255,18 @@ function v_3d_bandpass_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_bandpass_outputs(
     params: V3dBandpassParameters,
     execution: Execution,
 ): V3dBandpassOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBandpassOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -275,22 +275,22 @@ function v_3d_bandpass_outputs(
 }
 
 
+/**
+ * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
+ */
 function v_3d_bandpass_execute(
     params: V3dBandpassParameters,
     execution: Execution,
 ): V3dBandpassOutputs {
-    /**
-     * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_bandpass_cargs(params, execution)
     const ret = v_3d_bandpass_outputs(params, execution)
@@ -299,6 +299,34 @@ function v_3d_bandpass_execute(
 }
 
 
+/**
+ * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param highpass Highpass.
+ * @param lowpass Lowpass.
+ * @param in_file Input file to 3dbandpass.
+ * @param prefix Prefix for output file.
+ * @param automask Create a mask from the input dataset.
+ * @param blur Blur (inside the mask only) with a filter width (fwhm) of 'fff' millimeters.
+ * @param despike Despike each time series before other processing. hopefully, you don't actually need to do this, which is why it is optional.
+ * @param local_pv Replace each vector by the local principal vector (aka first singular vector) from a neighborhood of radius 'rrr' millimeters. note that the pv time series is l2 normalized. this option is mostly for bob cox to have fun with.
+ * @param mask Mask file.
+ * @param nfft Set the fft length [must be a legal value].
+ * @param no_detrend Skip the quadratic detrending of the input that occurs before the fft-based bandpassing. you would only want to do this if the dataset had been detrended already in some other program.
+ * @param normalize Make all output time series have l2 norm = 1 (i.e., sum of squares = 1).
+ * @param notrans Don't check for initial positive transients in the data. the test is a little slow, so skipping it is ok, if you know the data time series are transient-free.
+ * @param orthogonalize_dset Orthogonalize each voxel to the corresponding voxel time series in dataset 'fset', which must have the same spatial and temporal grid structure as the main input dataset. at present, only one '-dsort' option is allowed.
+ * @param orthogonalize_file Also orthogonalize input to columns in f.1d. multiple '-ort' options are allowed.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param tr Set time step (tr) in sec [default=from dataset header].
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
+ */
 function v_3d_bandpass(
     highpass: number,
     lowpass: number,
@@ -319,34 +347,6 @@ function v_3d_bandpass(
     tr: number | null = null,
     runner: Runner | null = null,
 ): V3dBandpassOutputs {
-    /**
-     * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param highpass Highpass.
-     * @param lowpass Lowpass.
-     * @param in_file Input file to 3dbandpass.
-     * @param prefix Prefix for output file.
-     * @param automask Create a mask from the input dataset.
-     * @param blur Blur (inside the mask only) with a filter width (fwhm) of 'fff' millimeters.
-     * @param despike Despike each time series before other processing. hopefully, you don't actually need to do this, which is why it is optional.
-     * @param local_pv Replace each vector by the local principal vector (aka first singular vector) from a neighborhood of radius 'rrr' millimeters. note that the pv time series is l2 normalized. this option is mostly for bob cox to have fun with.
-     * @param mask Mask file.
-     * @param nfft Set the fft length [must be a legal value].
-     * @param no_detrend Skip the quadratic detrending of the input that occurs before the fft-based bandpassing. you would only want to do this if the dataset had been detrended already in some other program.
-     * @param normalize Make all output time series have l2 norm = 1 (i.e., sum of squares = 1).
-     * @param notrans Don't check for initial positive transients in the data. the test is a little slow, so skipping it is ok, if you know the data time series are transient-free.
-     * @param orthogonalize_dset Orthogonalize each voxel to the corresponding voxel time series in dataset 'fset', which must have the same spatial and temporal grid structure as the main input dataset. at present, only one '-dsort' option is allowed.
-     * @param orthogonalize_file Also orthogonalize input to columns in f.1d. multiple '-ort' options are allowed.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param tr Set time step (tr) in sec [default=from dataset header].
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BANDPASS_METADATA);
     const params = v_3d_bandpass_params(highpass, lowpass, in_file, prefix, automask, blur, despike, local_pv, mask, nfft, no_detrend, normalize, notrans, orthogonalize_dset, orthogonalize_file, outputtype, tr)
@@ -359,5 +359,8 @@ export {
       V3dBandpassParameters,
       V_3D_BANDPASS_METADATA,
       v_3d_bandpass,
+      v_3d_bandpass_cargs,
+      v_3d_bandpass_execute,
+      v_3d_bandpass_outputs,
       v_3d_bandpass_params,
 };

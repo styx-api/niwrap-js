@@ -12,40 +12,40 @@ const V__PARSE_AFNI_NAME_METADATA: Metadata = {
 
 
 interface VParseAfniNameParameters {
-    "__STYXTYPE__": "@parse_afni_name";
+    "@type": "afni.@parse_afni_name";
     "afni_name": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@parse_afni_name": v__parse_afni_name_cargs,
+        "afni.@parse_afni_name": v__parse_afni_name_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@parse_afni_name": v__parse_afni_name_outputs,
+        "afni.@parse_afni_name": v__parse_afni_name_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,36 +80,36 @@ interface VParseAfniNameOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param afni_name The AFNI name to be parsed
+ *
+ * @returns Parameter dictionary
+ */
 function v__parse_afni_name_params(
     afni_name: string,
 ): VParseAfniNameParameters {
-    /**
-     * Build parameters.
-    
-     * @param afni_name The AFNI name to be parsed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@parse_afni_name" as const,
+        "@type": "afni.@parse_afni_name" as const,
         "afni_name": afni_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__parse_afni_name_cargs(
     params: VParseAfniNameParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@parse_afni_name");
     cargs.push((params["afni_name"] ?? null));
@@ -117,18 +117,18 @@ function v__parse_afni_name_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__parse_afni_name_outputs(
     params: VParseAfniNameParameters,
     execution: Execution,
 ): VParseAfniNameOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VParseAfniNameOutputs = {
         root: execution.outputFile("."),
         output_path: execution.outputFile(["parsed_name_path.txt"].join('')),
@@ -140,22 +140,22 @@ function v__parse_afni_name_outputs(
 }
 
 
+/**
+ * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
+ */
 function v__parse_afni_name_execute(
     params: VParseAfniNameParameters,
     execution: Execution,
 ): VParseAfniNameOutputs {
-    /**
-     * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__parse_afni_name_cargs(params, execution)
     const ret = v__parse_afni_name_outputs(params, execution)
@@ -164,22 +164,22 @@ function v__parse_afni_name_execute(
 }
 
 
+/**
+ * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param afni_name The AFNI name to be parsed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
+ */
 function v__parse_afni_name(
     afni_name: string,
     runner: Runner | null = null,
 ): VParseAfniNameOutputs {
-    /**
-     * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param afni_name The AFNI name to be parsed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__PARSE_AFNI_NAME_METADATA);
     const params = v__parse_afni_name_params(afni_name)
@@ -192,5 +192,8 @@ export {
       VParseAfniNameParameters,
       V__PARSE_AFNI_NAME_METADATA,
       v__parse_afni_name,
+      v__parse_afni_name_cargs,
+      v__parse_afni_name_execute,
+      v__parse_afni_name_outputs,
       v__parse_afni_name_params,
 };

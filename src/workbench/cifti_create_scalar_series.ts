@@ -12,7 +12,7 @@ const CIFTI_CREATE_SCALAR_SERIES_METADATA: Metadata = {
 
 
 interface CiftiCreateScalarSeriesSeriesParameters {
-    "__STYXTYPE__": "series";
+    "@type": "workbench.cifti-create-scalar-series.series";
     "unit": string;
     "start": number;
     "step": number;
@@ -20,7 +20,7 @@ interface CiftiCreateScalarSeriesSeriesParameters {
 
 
 interface CiftiCreateScalarSeriesParameters {
-    "__STYXTYPE__": "cifti-create-scalar-series";
+    "@type": "workbench.cifti-create-scalar-series";
     "input": string;
     "cifti_out": string;
     "opt_transpose": boolean;
@@ -29,57 +29,57 @@ interface CiftiCreateScalarSeriesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-create-scalar-series": cifti_create_scalar_series_cargs,
-        "series": cifti_create_scalar_series_series_cargs,
+        "workbench.cifti-create-scalar-series": cifti_create_scalar_series_cargs,
+        "workbench.cifti-create-scalar-series.series": cifti_create_scalar_series_series_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-create-scalar-series": cifti_create_scalar_series_outputs,
+        "workbench.cifti-create-scalar-series": cifti_create_scalar_series_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param unit the unit to use
+ * @param start the value at the first series point
+ * @param step the interval between series points
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_scalar_series_series_params(
     unit: string,
     start: number,
     step: number,
 ): CiftiCreateScalarSeriesSeriesParameters {
-    /**
-     * Build parameters.
-    
-     * @param unit the unit to use
-     * @param start the value at the first series point
-     * @param step the interval between series points
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "series" as const,
+        "@type": "workbench.cifti-create-scalar-series.series" as const,
         "unit": unit,
         "start": start,
         "step": step,
@@ -88,18 +88,18 @@ function cifti_create_scalar_series_series_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_scalar_series_series_cargs(
     params: CiftiCreateScalarSeriesSeriesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-series");
     cargs.push((params["unit"] ?? null));
@@ -126,6 +126,17 @@ interface CiftiCreateScalarSeriesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input input file
+ * @param cifti_out output cifti file
+ * @param opt_transpose use if the rows of the text file are along the scalar dimension
+ * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
+ * @param series set the units and values of the series
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_scalar_series_params(
     input: string,
     cifti_out: string,
@@ -133,19 +144,8 @@ function cifti_create_scalar_series_params(
     opt_name_file_file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
 ): CiftiCreateScalarSeriesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input input file
-     * @param cifti_out output cifti file
-     * @param opt_transpose use if the rows of the text file are along the scalar dimension
-     * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
-     * @param series set the units and values of the series
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-create-scalar-series" as const,
+        "@type": "workbench.cifti-create-scalar-series" as const,
         "input": input,
         "cifti_out": cifti_out,
         "opt_transpose": opt_transpose,
@@ -160,18 +160,18 @@ function cifti_create_scalar_series_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_scalar_series_cargs(
     params: CiftiCreateScalarSeriesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-create-scalar-series");
@@ -187,24 +187,24 @@ function cifti_create_scalar_series_cargs(
         );
     }
     if ((params["series"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["series"] ?? null).__STYXTYPE__)((params["series"] ?? null), execution));
+        cargs.push(...dynCargs((params["series"] ?? null)["@type"])((params["series"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_create_scalar_series_outputs(
     params: CiftiCreateScalarSeriesParameters,
     execution: Execution,
 ): CiftiCreateScalarSeriesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCreateScalarSeriesOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -213,31 +213,31 @@ function cifti_create_scalar_series_outputs(
 }
 
 
+/**
+ * Import series data into cifti.
+ *
+ * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
+ *
+ * The <unit> argument must be one of the following:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
+ */
 function cifti_create_scalar_series_execute(
     params: CiftiCreateScalarSeriesParameters,
     execution: Execution,
 ): CiftiCreateScalarSeriesOutputs {
-    /**
-     * Import series data into cifti.
-     * 
-     * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
-     * 
-     * The <unit> argument must be one of the following:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_create_scalar_series_cargs(params, execution)
     const ret = cifti_create_scalar_series_outputs(params, execution)
@@ -246,6 +246,31 @@ function cifti_create_scalar_series_execute(
 }
 
 
+/**
+ * Import series data into cifti.
+ *
+ * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
+ *
+ * The <unit> argument must be one of the following:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input input file
+ * @param cifti_out output cifti file
+ * @param opt_transpose use if the rows of the text file are along the scalar dimension
+ * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
+ * @param series set the units and values of the series
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
+ */
 function cifti_create_scalar_series(
     input: string,
     cifti_out: string,
@@ -254,31 +279,6 @@ function cifti_create_scalar_series(
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
-    /**
-     * Import series data into cifti.
-     * 
-     * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
-     * 
-     * The <unit> argument must be one of the following:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input input file
-     * @param cifti_out output cifti file
-     * @param opt_transpose use if the rows of the text file are along the scalar dimension
-     * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
-     * @param series set the units and values of the series
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CREATE_SCALAR_SERIES_METADATA);
     const params = cifti_create_scalar_series_params(input, cifti_out, opt_transpose, opt_name_file_file, series)
@@ -292,6 +292,10 @@ export {
       CiftiCreateScalarSeriesParameters,
       CiftiCreateScalarSeriesSeriesParameters,
       cifti_create_scalar_series,
+      cifti_create_scalar_series_cargs,
+      cifti_create_scalar_series_execute,
+      cifti_create_scalar_series_outputs,
       cifti_create_scalar_series_params,
+      cifti_create_scalar_series_series_cargs,
       cifti_create_scalar_series_series_params,
 };

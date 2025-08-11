@@ -12,40 +12,40 @@ const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 
 interface VolumeLabelExportTableParameters {
-    "__STYXTYPE__": "volume-label-export-table";
+    "@type": "workbench.volume-label-export-table";
     "label_in": InputPathType;
     "map": string;
     "table_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-label-export-table": volume_label_export_table_cargs,
+        "workbench.volume-label-export-table": volume_label_export_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface VolumeLabelExportTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input volume label file
+ * @param map the number or name of the label map to use
+ * @param table_out output - the output text file
+ *
+ * @returns Parameter dictionary
+ */
 function volume_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
 ): VolumeLabelExportTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input volume label file
-     * @param map the number or name of the label map to use
-     * @param table_out output - the output text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-label-export-table" as const,
+        "@type": "workbench.volume-label-export-table" as const,
         "label_in": label_in,
         "map": map,
         "table_out": table_out,
@@ -89,18 +89,18 @@ function volume_label_export_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_label_export_table_cargs(
     params: VolumeLabelExportTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-label-export-table");
@@ -111,18 +111,18 @@ function volume_label_export_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_label_export_table_outputs(
     params: VolumeLabelExportTableParameters,
     execution: Execution,
 ): VolumeLabelExportTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeLabelExportTableOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function volume_label_export_table_outputs(
 }
 
 
+/**
+ * Export label table from volume as text.
+ *
+ * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
+ */
 function volume_label_export_table_execute(
     params: VolumeLabelExportTableParameters,
     execution: Execution,
 ): VolumeLabelExportTableOutputs {
-    /**
-     * Export label table from volume as text.
-     * 
-     * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_label_export_table_cargs(params, execution)
     const ret = volume_label_export_table_outputs(params, execution)
@@ -156,28 +156,28 @@ function volume_label_export_table_execute(
 }
 
 
+/**
+ * Export label table from volume as text.
+ *
+ * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input volume label file
+ * @param map the number or name of the label map to use
+ * @param table_out output - the output text file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
+ */
 function volume_label_export_table(
     label_in: InputPathType,
     map: string,
     table_out: string,
     runner: Runner | null = null,
 ): VolumeLabelExportTableOutputs {
-    /**
-     * Export label table from volume as text.
-     * 
-     * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input volume label file
-     * @param map the number or name of the label map to use
-     * @param table_out output - the output text file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_LABEL_EXPORT_TABLE_METADATA);
     const params = volume_label_export_table_params(label_in, map, table_out)
@@ -190,5 +190,8 @@ export {
       VolumeLabelExportTableOutputs,
       VolumeLabelExportTableParameters,
       volume_label_export_table,
+      volume_label_export_table_cargs,
+      volume_label_export_table_execute,
+      volume_label_export_table_outputs,
       volume_label_export_table_params,
 };

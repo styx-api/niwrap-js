@@ -12,7 +12,7 @@ const MRIS_MS_REFINE_METADATA: Metadata = {
 
 
 interface MrisMsRefineParameters {
-    "__STYXTYPE__": "mris_ms_refine";
+    "@type": "freesurfer.mris_ms_refine";
     "subject_name": string;
     "hemisphere": string;
     "xform": InputPathType;
@@ -25,35 +25,35 @@ interface MrisMsRefineParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_ms_refine": mris_ms_refine_cargs,
+        "freesurfer.mris_ms_refine": mris_ms_refine_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_ms_refine": mris_ms_refine_outputs,
+        "freesurfer.mris_ms_refine": mris_ms_refine_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,21 @@ interface MrisMsRefineOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name The name of the subject
+ * @param hemisphere The hemisphere to process ('lh' or 'rh')
+ * @param xform The transform file
+ * @param flash_files Flash images
+ * @param residuals Residuals file
+ * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
+ * @param create_curvature_files Create curvature and area files from white matter surface.
+ * @param average_curvature Average curvature values a specified number of times.
+ * @param white_only Only generate white matter surface.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_ms_refine_params(
     subject_name: string,
     hemisphere: string,
@@ -99,23 +114,8 @@ function mris_ms_refine_params(
     average_curvature: number | null = 10,
     white_only: boolean = false,
 ): MrisMsRefineParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name The name of the subject
-     * @param hemisphere The hemisphere to process ('lh' or 'rh')
-     * @param xform The transform file
-     * @param flash_files Flash images
-     * @param residuals Residuals file
-     * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
-     * @param create_curvature_files Create curvature and area files from white matter surface.
-     * @param average_curvature Average curvature values a specified number of times.
-     * @param white_only Only generate white matter surface.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_ms_refine" as const,
+        "@type": "freesurfer.mris_ms_refine" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "xform": xform,
@@ -132,18 +132,18 @@ function mris_ms_refine_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_ms_refine_cargs(
     params: MrisMsRefineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_ms_refine");
     cargs.push((params["subject_name"] ?? null));
@@ -170,18 +170,18 @@ function mris_ms_refine_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_ms_refine_outputs(
     params: MrisMsRefineParameters,
     execution: Execution,
 ): MrisMsRefineOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMsRefineOutputs = {
         root: execution.outputFile("."),
         white_surface: execution.outputFile(["<subject name>/<hemisphere>.white"].join('')),
@@ -193,22 +193,22 @@ function mris_ms_refine_outputs(
 }
 
 
+/**
+ * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface. It generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
+ */
 function mris_ms_refine_execute(
     params: MrisMsRefineParameters,
     execution: Execution,
 ): MrisMsRefineOutputs {
-    /**
-     * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface. It generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_ms_refine_cargs(params, execution)
     const ret = mris_ms_refine_outputs(params, execution)
@@ -217,6 +217,26 @@ function mris_ms_refine_execute(
 }
 
 
+/**
+ * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface. It generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name The name of the subject
+ * @param hemisphere The hemisphere to process ('lh' or 'rh')
+ * @param xform The transform file
+ * @param flash_files Flash images
+ * @param residuals Residuals file
+ * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
+ * @param create_curvature_files Create curvature and area files from white matter surface.
+ * @param average_curvature Average curvature values a specified number of times.
+ * @param white_only Only generate white matter surface.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
+ */
 function mris_ms_refine(
     subject_name: string,
     hemisphere: string,
@@ -229,26 +249,6 @@ function mris_ms_refine(
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisMsRefineOutputs {
-    /**
-     * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface. It generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name The name of the subject
-     * @param hemisphere The hemisphere to process ('lh' or 'rh')
-     * @param xform The transform file
-     * @param flash_files Flash images
-     * @param residuals Residuals file
-     * @param omit_self_intersection Omit self-intersection and only generate gray/white surface.
-     * @param create_curvature_files Create curvature and area files from white matter surface.
-     * @param average_curvature Average curvature values a specified number of times.
-     * @param white_only Only generate white matter surface.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MS_REFINE_METADATA);
     const params = mris_ms_refine_params(subject_name, hemisphere, xform, flash_files, residuals, omit_self_intersection, create_curvature_files, average_curvature, white_only)
@@ -261,5 +261,8 @@ export {
       MrisMsRefineOutputs,
       MrisMsRefineParameters,
       mris_ms_refine,
+      mris_ms_refine_cargs,
+      mris_ms_refine_execute,
+      mris_ms_refine_outputs,
       mris_ms_refine_params,
 };

@@ -12,7 +12,7 @@ const V_3D_SYNTHESIZE_METADATA: Metadata = {
 
 
 interface V3dSynthesizeParameters {
-    "__STYXTYPE__": "3dSynthesize";
+    "@type": "afni.3dSynthesize";
     "c_bucket": InputPathType;
     "matrix": InputPathType;
     "select": string;
@@ -23,33 +23,33 @@ interface V3dSynthesizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSynthesize": v_3d_synthesize_cargs,
+        "afni.3dSynthesize": v_3d_synthesize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface V3dSynthesizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param c_bucket Input dataset from 3dDeconvolve via the '-cbucket' option.
+ * @param matrix Matrix file from 3dDeconvolve via the '-x1D' option.
+ * @param select Select columns from the matrix and corresponding sub-bricks from the cbucket. Can use forms like 'baseline', 'polort', 'allfunc', 'allstim', 'all', 'something', or numbers/ranges.
+ * @param prefix Output result into dataset with the specified name.
+ * @param dry_flag Don't compute the output, just check the inputs.
+ * @param tr Set TR in the output to the specified value.
+ * @param cenfill How censored time points from 3dDeconvolve will be filled (options: 'zero', 'nbhr', 'none').
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_synthesize_params(
     c_bucket: InputPathType,
     matrix: InputPathType,
@@ -78,21 +91,8 @@ function v_3d_synthesize_params(
     tr: number | null = null,
     cenfill: "zero" | "nbhr" | "none" | null = null,
 ): V3dSynthesizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param c_bucket Input dataset from 3dDeconvolve via the '-cbucket' option.
-     * @param matrix Matrix file from 3dDeconvolve via the '-x1D' option.
-     * @param select Select columns from the matrix and corresponding sub-bricks from the cbucket. Can use forms like 'baseline', 'polort', 'allfunc', 'allstim', 'all', 'something', or numbers/ranges.
-     * @param prefix Output result into dataset with the specified name.
-     * @param dry_flag Don't compute the output, just check the inputs.
-     * @param tr Set TR in the output to the specified value.
-     * @param cenfill How censored time points from 3dDeconvolve will be filled (options: 'zero', 'nbhr', 'none').
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSynthesize" as const,
+        "@type": "afni.3dSynthesize" as const,
         "c_bucket": c_bucket,
         "matrix": matrix,
         "select": select,
@@ -109,18 +109,18 @@ function v_3d_synthesize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_synthesize_cargs(
     params: V3dSynthesizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSynthesize");
     cargs.push(
@@ -158,18 +158,18 @@ function v_3d_synthesize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_synthesize_outputs(
     params: V3dSynthesizeParameters,
     execution: Execution,
 ): V3dSynthesizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSynthesizeOutputs = {
         root: execution.outputFile("."),
     };
@@ -177,22 +177,22 @@ function v_3d_synthesize_outputs(
 }
 
 
+/**
+ * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
+ */
 function v_3d_synthesize_execute(
     params: V3dSynthesizeParameters,
     execution: Execution,
 ): V3dSynthesizeOutputs {
-    /**
-     * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_synthesize_cargs(params, execution)
     const ret = v_3d_synthesize_outputs(params, execution)
@@ -201,6 +201,24 @@ function v_3d_synthesize_execute(
 }
 
 
+/**
+ * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param c_bucket Input dataset from 3dDeconvolve via the '-cbucket' option.
+ * @param matrix Matrix file from 3dDeconvolve via the '-x1D' option.
+ * @param select Select columns from the matrix and corresponding sub-bricks from the cbucket. Can use forms like 'baseline', 'polort', 'allfunc', 'allstim', 'all', 'something', or numbers/ranges.
+ * @param prefix Output result into dataset with the specified name.
+ * @param dry_flag Don't compute the output, just check the inputs.
+ * @param tr Set TR in the output to the specified value.
+ * @param cenfill How censored time points from 3dDeconvolve will be filled (options: 'zero', 'nbhr', 'none').
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
+ */
 function v_3d_synthesize(
     c_bucket: InputPathType,
     matrix: InputPathType,
@@ -211,24 +229,6 @@ function v_3d_synthesize(
     cenfill: "zero" | "nbhr" | "none" | null = null,
     runner: Runner | null = null,
 ): V3dSynthesizeOutputs {
-    /**
-     * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param c_bucket Input dataset from 3dDeconvolve via the '-cbucket' option.
-     * @param matrix Matrix file from 3dDeconvolve via the '-x1D' option.
-     * @param select Select columns from the matrix and corresponding sub-bricks from the cbucket. Can use forms like 'baseline', 'polort', 'allfunc', 'allstim', 'all', 'something', or numbers/ranges.
-     * @param prefix Output result into dataset with the specified name.
-     * @param dry_flag Don't compute the output, just check the inputs.
-     * @param tr Set TR in the output to the specified value.
-     * @param cenfill How censored time points from 3dDeconvolve will be filled (options: 'zero', 'nbhr', 'none').
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SYNTHESIZE_METADATA);
     const params = v_3d_synthesize_params(c_bucket, matrix, select, prefix, dry_flag, tr, cenfill)
@@ -241,5 +241,8 @@ export {
       V3dSynthesizeParameters,
       V_3D_SYNTHESIZE_METADATA,
       v_3d_synthesize,
+      v_3d_synthesize_cargs,
+      v_3d_synthesize_execute,
+      v_3d_synthesize_outputs,
       v_3d_synthesize_params,
 };

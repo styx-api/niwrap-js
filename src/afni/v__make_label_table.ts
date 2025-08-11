@@ -12,7 +12,7 @@ const V__MAKE_LABEL_TABLE_METADATA: Metadata = {
 
 
 interface VMakeLabelTableParameters {
-    "__STYXTYPE__": "@MakeLabelTable";
+    "@type": "afni.@MakeLabelTable";
     "labeltable": string;
     "atlas_pointlist"?: string | null | undefined;
     "lab_r"?: Array<string> | null | undefined;
@@ -51,35 +51,35 @@ interface VMakeLabelTableParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@MakeLabelTable": v__make_label_table_cargs,
+        "afni.@MakeLabelTable": v__make_label_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@MakeLabelTable": v__make_label_table_outputs,
+        "afni.@MakeLabelTable": v__make_label_table_outputs,
     };
     return outputsFuncs[t];
 }
@@ -114,6 +114,47 @@ interface VMakeLabelTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param labeltable Name of output label table
+ * @param atlas_pointlist Instead of a label table, produce an atlas point list
+ * @param lab_r Define a label with its minimum and maximum key values
+ * @param lab_v Define a label and its value
+ * @param lab_file_delim Set column delimiter for -lab_file option
+ * @param lab_file Specify labels and keys from a text file
+ * @param dset Attach the label table (or atlas point list) to dataset
+ * @param longnames Allow for another column of long names for regions
+ * @param last_longname_col Limit long names to nth column
+ * @param centers Compute center of mass location for each ROI
+ * @param centertype Different ways to compute centers (Icent, Dcent, cm)
+ * @param centermask Calculate center of mass locations using a subset of voxels
+ * @param skip_novoxels Skip regions without voxels
+ * @param all_labels Return a listing of all labels
+ * @param all_keys Return a listing of all keys
+ * @param lkeys Return the keys whose labels match a given label
+ * @param rkeys Return the range (min max) of keys whose labels match a given label
+ * @param klabel Return the label associated with a given key
+ * @param match_label Return labels matching a given label
+ * @param labeltable_of_dset Dump the labeltable from a dataset
+ * @param word_label_match Use word matching for labels
+ * @param quiet_death Do not give error messages when failing
+ * @param lt_to_atlas_pl Transform Label Table to Atlas Point List
+ * @param dset_lt_to_atlas_pl Get Label Table in dataset and write as an Atlas Point List
+ * @param lt_to_csv Transform Label Table to CSV format
+ * @param atlasize_labeled_dset Transform a labeled ROI dataset into an atlas
+ * @param atlas_file Specify the name of the NIML file where atlas attributes are stored
+ * @param atlas_name Name of the Atlas
+ * @param atlas_description Description of the Atlas, which appears in AFNI's whereami window
+ * @param replace Replace existing Atlas if the name already exists in the NIML file
+ * @param add_atlas_dset Add an existing atlas to an atlas file
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find Search for lines containing a specific word in the help output
+ *
+ * @returns Parameter dictionary
+ */
 function v__make_label_table_params(
     labeltable: string,
     atlas_pointlist: string | null = null,
@@ -151,49 +192,8 @@ function v__make_label_table_params(
     all_opts: boolean = false,
     h_find: string | null = null,
 ): VMakeLabelTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param labeltable Name of output label table
-     * @param atlas_pointlist Instead of a label table, produce an atlas point list
-     * @param lab_r Define a label with its minimum and maximum key values
-     * @param lab_v Define a label and its value
-     * @param lab_file_delim Set column delimiter for -lab_file option
-     * @param lab_file Specify labels and keys from a text file
-     * @param dset Attach the label table (or atlas point list) to dataset
-     * @param longnames Allow for another column of long names for regions
-     * @param last_longname_col Limit long names to nth column
-     * @param centers Compute center of mass location for each ROI
-     * @param centertype Different ways to compute centers (Icent, Dcent, cm)
-     * @param centermask Calculate center of mass locations using a subset of voxels
-     * @param skip_novoxels Skip regions without voxels
-     * @param all_labels Return a listing of all labels
-     * @param all_keys Return a listing of all keys
-     * @param lkeys Return the keys whose labels match a given label
-     * @param rkeys Return the range (min max) of keys whose labels match a given label
-     * @param klabel Return the label associated with a given key
-     * @param match_label Return labels matching a given label
-     * @param labeltable_of_dset Dump the labeltable from a dataset
-     * @param word_label_match Use word matching for labels
-     * @param quiet_death Do not give error messages when failing
-     * @param lt_to_atlas_pl Transform Label Table to Atlas Point List
-     * @param dset_lt_to_atlas_pl Get Label Table in dataset and write as an Atlas Point List
-     * @param lt_to_csv Transform Label Table to CSV format
-     * @param atlasize_labeled_dset Transform a labeled ROI dataset into an atlas
-     * @param atlas_file Specify the name of the NIML file where atlas attributes are stored
-     * @param atlas_name Name of the Atlas
-     * @param atlas_description Description of the Atlas, which appears in AFNI's whereami window
-     * @param replace Replace existing Atlas if the name already exists in the NIML file
-     * @param add_atlas_dset Add an existing atlas to an atlas file
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find Search for lines containing a specific word in the help output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@MakeLabelTable" as const,
+        "@type": "afni.@MakeLabelTable" as const,
         "labeltable": labeltable,
         "centers": centers,
         "skip_novoxels": skip_novoxels,
@@ -282,18 +282,18 @@ function v__make_label_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__make_label_table_cargs(
     params: VMakeLabelTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@MakeLabelTable");
     cargs.push(
@@ -478,18 +478,18 @@ function v__make_label_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__make_label_table_outputs(
     params: VMakeLabelTableParameters,
     execution: Execution,
 ): VMakeLabelTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMakeLabelTableOutputs = {
         root: execution.outputFile("."),
         output_labeltable: execution.outputFile([(params["labeltable"] ?? null), ".niml.lt"].join('')),
@@ -501,22 +501,22 @@ function v__make_label_table_outputs(
 }
 
 
+/**
+ * Script used to create, modify, and transform label tables.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
+ */
 function v__make_label_table_execute(
     params: VMakeLabelTableParameters,
     execution: Execution,
 ): VMakeLabelTableOutputs {
-    /**
-     * Script used to create, modify, and transform label tables.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__make_label_table_cargs(params, execution)
     const ret = v__make_label_table_outputs(params, execution)
@@ -525,6 +525,52 @@ function v__make_label_table_execute(
 }
 
 
+/**
+ * Script used to create, modify, and transform label tables.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param labeltable Name of output label table
+ * @param atlas_pointlist Instead of a label table, produce an atlas point list
+ * @param lab_r Define a label with its minimum and maximum key values
+ * @param lab_v Define a label and its value
+ * @param lab_file_delim Set column delimiter for -lab_file option
+ * @param lab_file Specify labels and keys from a text file
+ * @param dset Attach the label table (or atlas point list) to dataset
+ * @param longnames Allow for another column of long names for regions
+ * @param last_longname_col Limit long names to nth column
+ * @param centers Compute center of mass location for each ROI
+ * @param centertype Different ways to compute centers (Icent, Dcent, cm)
+ * @param centermask Calculate center of mass locations using a subset of voxels
+ * @param skip_novoxels Skip regions without voxels
+ * @param all_labels Return a listing of all labels
+ * @param all_keys Return a listing of all keys
+ * @param lkeys Return the keys whose labels match a given label
+ * @param rkeys Return the range (min max) of keys whose labels match a given label
+ * @param klabel Return the label associated with a given key
+ * @param match_label Return labels matching a given label
+ * @param labeltable_of_dset Dump the labeltable from a dataset
+ * @param word_label_match Use word matching for labels
+ * @param quiet_death Do not give error messages when failing
+ * @param lt_to_atlas_pl Transform Label Table to Atlas Point List
+ * @param dset_lt_to_atlas_pl Get Label Table in dataset and write as an Atlas Point List
+ * @param lt_to_csv Transform Label Table to CSV format
+ * @param atlasize_labeled_dset Transform a labeled ROI dataset into an atlas
+ * @param atlas_file Specify the name of the NIML file where atlas attributes are stored
+ * @param atlas_name Name of the Atlas
+ * @param atlas_description Description of the Atlas, which appears in AFNI's whereami window
+ * @param replace Replace existing Atlas if the name already exists in the NIML file
+ * @param add_atlas_dset Add an existing atlas to an atlas file
+ * @param h_web Open webpage with help for this program
+ * @param h_view Open -help output in a GUI editor
+ * @param all_opts List all of the options for this script
+ * @param h_find Search for lines containing a specific word in the help output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
+ */
 function v__make_label_table(
     labeltable: string,
     atlas_pointlist: string | null = null,
@@ -563,52 +609,6 @@ function v__make_label_table(
     h_find: string | null = null,
     runner: Runner | null = null,
 ): VMakeLabelTableOutputs {
-    /**
-     * Script used to create, modify, and transform label tables.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param labeltable Name of output label table
-     * @param atlas_pointlist Instead of a label table, produce an atlas point list
-     * @param lab_r Define a label with its minimum and maximum key values
-     * @param lab_v Define a label and its value
-     * @param lab_file_delim Set column delimiter for -lab_file option
-     * @param lab_file Specify labels and keys from a text file
-     * @param dset Attach the label table (or atlas point list) to dataset
-     * @param longnames Allow for another column of long names for regions
-     * @param last_longname_col Limit long names to nth column
-     * @param centers Compute center of mass location for each ROI
-     * @param centertype Different ways to compute centers (Icent, Dcent, cm)
-     * @param centermask Calculate center of mass locations using a subset of voxels
-     * @param skip_novoxels Skip regions without voxels
-     * @param all_labels Return a listing of all labels
-     * @param all_keys Return a listing of all keys
-     * @param lkeys Return the keys whose labels match a given label
-     * @param rkeys Return the range (min max) of keys whose labels match a given label
-     * @param klabel Return the label associated with a given key
-     * @param match_label Return labels matching a given label
-     * @param labeltable_of_dset Dump the labeltable from a dataset
-     * @param word_label_match Use word matching for labels
-     * @param quiet_death Do not give error messages when failing
-     * @param lt_to_atlas_pl Transform Label Table to Atlas Point List
-     * @param dset_lt_to_atlas_pl Get Label Table in dataset and write as an Atlas Point List
-     * @param lt_to_csv Transform Label Table to CSV format
-     * @param atlasize_labeled_dset Transform a labeled ROI dataset into an atlas
-     * @param atlas_file Specify the name of the NIML file where atlas attributes are stored
-     * @param atlas_name Name of the Atlas
-     * @param atlas_description Description of the Atlas, which appears in AFNI's whereami window
-     * @param replace Replace existing Atlas if the name already exists in the NIML file
-     * @param add_atlas_dset Add an existing atlas to an atlas file
-     * @param h_web Open webpage with help for this program
-     * @param h_view Open -help output in a GUI editor
-     * @param all_opts List all of the options for this script
-     * @param h_find Search for lines containing a specific word in the help output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MAKE_LABEL_TABLE_METADATA);
     const params = v__make_label_table_params(labeltable, atlas_pointlist, lab_r, lab_v, lab_file_delim, lab_file, dset, longnames, last_longname_col, centers, centertype, centermask, skip_novoxels, all_labels, all_keys, lkeys, rkeys, klabel, match_label, labeltable_of_dset, word_label_match, quiet_death, lt_to_atlas_pl, dset_lt_to_atlas_pl, lt_to_csv, atlasize_labeled_dset, atlas_file, atlas_name, atlas_description, replace, add_atlas_dset, h_web, h_view, all_opts, h_find)
@@ -621,5 +621,8 @@ export {
       VMakeLabelTableParameters,
       V__MAKE_LABEL_TABLE_METADATA,
       v__make_label_table,
+      v__make_label_table_cargs,
+      v__make_label_table_execute,
+      v__make_label_table_outputs,
       v__make_label_table_params,
 };

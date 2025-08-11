@@ -12,7 +12,7 @@ const MRI_MOTION_CORRECT2_METADATA: Metadata = {
 
 
 interface MriMotionCorrect2Parameters {
-    "__STYXTYPE__": "mri_motion_correct2";
+    "@type": "freesurfer.mri_motion_correct2";
     "output_spec": string;
     "input_files": Array<InputPathType>;
     "target"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface MriMotionCorrect2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_motion_correct2": mri_motion_correct2_cargs,
+        "freesurfer.mri_motion_correct2": mri_motion_correct2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_motion_correct2": mri_motion_correct2_outputs,
+        "freesurfer.mri_motion_correct2": mri_motion_correct2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface MriMotionCorrect2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_spec Output file or directory (for COR format)
+ * @param input_files Input volume files, specified multiple times for multiple files
+ * @param target Use the specified target instead of the first input file
+ * @param wild Assume unmatched arguments are input files
+ * @param tmp_dir Directory for temporary files
+ * @param nocleanup Do not delete temporary files
+ * @param umask Set UNIX file permission mask
+ * @param cm Make COR volumes conform to minimum voxel size
+ * @param version Print version information and exit
+ * @param debug Print detailed debug information to screen
+ *
+ * @returns Parameter dictionary
+ */
 function mri_motion_correct2_params(
     output_spec: string,
     input_files: Array<InputPathType>,
@@ -89,24 +105,8 @@ function mri_motion_correct2_params(
     version: boolean = false,
     debug: boolean = false,
 ): MriMotionCorrect2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param output_spec Output file or directory (for COR format)
-     * @param input_files Input volume files, specified multiple times for multiple files
-     * @param target Use the specified target instead of the first input file
-     * @param wild Assume unmatched arguments are input files
-     * @param tmp_dir Directory for temporary files
-     * @param nocleanup Do not delete temporary files
-     * @param umask Set UNIX file permission mask
-     * @param cm Make COR volumes conform to minimum voxel size
-     * @param version Print version information and exit
-     * @param debug Print detailed debug information to screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_motion_correct2" as const,
+        "@type": "freesurfer.mri_motion_correct2" as const,
         "output_spec": output_spec,
         "input_files": input_files,
         "wild": wild,
@@ -128,18 +128,18 @@ function mri_motion_correct2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_motion_correct2_cargs(
     params: MriMotionCorrect2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_motion_correct2");
     cargs.push(
@@ -187,18 +187,18 @@ function mri_motion_correct2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_motion_correct2_outputs(
     params: MriMotionCorrect2Parameters,
     execution: Execution,
 ): MriMotionCorrect2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMotionCorrect2Outputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_spec"] ?? null)].join('')),
@@ -207,22 +207,22 @@ function mri_motion_correct2_outputs(
 }
 
 
+/**
+ * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMotionCorrect2Outputs`).
+ */
 function mri_motion_correct2_execute(
     params: MriMotionCorrect2Parameters,
     execution: Execution,
 ): MriMotionCorrect2Outputs {
-    /**
-     * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMotionCorrect2Outputs`).
-     */
     params = execution.params(params)
     const cargs = mri_motion_correct2_cargs(params, execution)
     const ret = mri_motion_correct2_outputs(params, execution)
@@ -231,6 +231,27 @@ function mri_motion_correct2_execute(
 }
 
 
+/**
+ * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_spec Output file or directory (for COR format)
+ * @param input_files Input volume files, specified multiple times for multiple files
+ * @param target Use the specified target instead of the first input file
+ * @param wild Assume unmatched arguments are input files
+ * @param tmp_dir Directory for temporary files
+ * @param nocleanup Do not delete temporary files
+ * @param umask Set UNIX file permission mask
+ * @param cm Make COR volumes conform to minimum voxel size
+ * @param version Print version information and exit
+ * @param debug Print detailed debug information to screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMotionCorrect2Outputs`).
+ */
 function mri_motion_correct2(
     output_spec: string,
     input_files: Array<InputPathType>,
@@ -244,27 +265,6 @@ function mri_motion_correct2(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MriMotionCorrect2Outputs {
-    /**
-     * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_spec Output file or directory (for COR format)
-     * @param input_files Input volume files, specified multiple times for multiple files
-     * @param target Use the specified target instead of the first input file
-     * @param wild Assume unmatched arguments are input files
-     * @param tmp_dir Directory for temporary files
-     * @param nocleanup Do not delete temporary files
-     * @param umask Set UNIX file permission mask
-     * @param cm Make COR volumes conform to minimum voxel size
-     * @param version Print version information and exit
-     * @param debug Print detailed debug information to screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMotionCorrect2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MOTION_CORRECT2_METADATA);
     const params = mri_motion_correct2_params(output_spec, input_files, target, wild, tmp_dir, nocleanup, umask, cm, version, debug)
@@ -277,5 +277,8 @@ export {
       MriMotionCorrect2Outputs,
       MriMotionCorrect2Parameters,
       mri_motion_correct2,
+      mri_motion_correct2_cargs,
+      mri_motion_correct2_execute,
+      mri_motion_correct2_outputs,
       mri_motion_correct2_params,
 };

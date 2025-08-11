@@ -12,7 +12,7 @@ const SURF_FWHM_METADATA: Metadata = {
 
 
 interface SurfFwhmParameters {
-    "__STYXTYPE__": "SurfFWHM";
+    "@type": "afni.SurfFWHM";
     "input_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "surf_1"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface SurfFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfFWHM": surf_fwhm_cargs,
+        "afni.SurfFWHM": surf_fwhm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfFWHM": surf_fwhm_outputs,
+        "afni.SurfFWHM": surf_fwhm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,26 @@ interface SurfFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Dataset for which the FWHM is to be calculated.
+ * @param mask Node mask so that only nodes in the mask are used to obtain estimates.
+ * @param surf_1 Option for specifying the surface over which the input dataset is defined.
+ * @param surf_sphere Spherical version of -SURF_1 for Local FWHM estimates.
+ * @param clean Strip text from output to simplify parsing.
+ * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30.
+ * @param detpoly Detrend with polynomials of order p.
+ * @param detprefix Save the detrended file into a dataset with prefix 'd'.
+ * @param prefix Prefix of output data set.
+ * @param vox_size Specify the nominal voxel size in mm.
+ * @param neighborhood Neighborhood radius R for local FWHM estimates.
+ * @param ok_warn Flag to set the mode to ok_warn.
+ * @param examples Show command line examples and quit.
+ * @param slice Use the contours from planar intersections to estimate gradients. For testing and development purposes only.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_fwhm_params(
     input_file: InputPathType,
     mask: InputPathType | null = null,
@@ -109,28 +129,8 @@ function surf_fwhm_params(
     examples: boolean = false,
     slice: boolean = false,
 ): SurfFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Dataset for which the FWHM is to be calculated.
-     * @param mask Node mask so that only nodes in the mask are used to obtain estimates.
-     * @param surf_1 Option for specifying the surface over which the input dataset is defined.
-     * @param surf_sphere Spherical version of -SURF_1 for Local FWHM estimates.
-     * @param clean Strip text from output to simplify parsing.
-     * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30.
-     * @param detpoly Detrend with polynomials of order p.
-     * @param detprefix Save the detrended file into a dataset with prefix 'd'.
-     * @param prefix Prefix of output data set.
-     * @param vox_size Specify the nominal voxel size in mm.
-     * @param neighborhood Neighborhood radius R for local FWHM estimates.
-     * @param ok_warn Flag to set the mode to ok_warn.
-     * @param examples Show command line examples and quit.
-     * @param slice Use the contours from planar intersections to estimate gradients. For testing and development purposes only.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfFWHM" as const,
+        "@type": "afni.SurfFWHM" as const,
         "input_file": input_file,
         "clean": clean,
         "ok_warn": ok_warn,
@@ -168,18 +168,18 @@ function surf_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_fwhm_cargs(
     params: SurfFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfFWHM");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -253,18 +253,18 @@ function surf_fwhm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_fwhm_outputs(
     params: SurfFwhmParameters,
     execution: Execution,
 ): SurfFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfFwhmOutputs = {
         root: execution.outputFile("."),
         detrended_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".1D.dset"].join('')) : null,
@@ -276,22 +276,22 @@ function surf_fwhm_outputs(
 }
 
 
+/**
+ * A program for calculating local and global FWHM.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
+ */
 function surf_fwhm_execute(
     params: SurfFwhmParameters,
     execution: Execution,
 ): SurfFwhmOutputs {
-    /**
-     * A program for calculating local and global FWHM.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_fwhm_cargs(params, execution)
     const ret = surf_fwhm_outputs(params, execution)
@@ -300,6 +300,31 @@ function surf_fwhm_execute(
 }
 
 
+/**
+ * A program for calculating local and global FWHM.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Dataset for which the FWHM is to be calculated.
+ * @param mask Node mask so that only nodes in the mask are used to obtain estimates.
+ * @param surf_1 Option for specifying the surface over which the input dataset is defined.
+ * @param surf_sphere Spherical version of -SURF_1 for Local FWHM estimates.
+ * @param clean Strip text from output to simplify parsing.
+ * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30.
+ * @param detpoly Detrend with polynomials of order p.
+ * @param detprefix Save the detrended file into a dataset with prefix 'd'.
+ * @param prefix Prefix of output data set.
+ * @param vox_size Specify the nominal voxel size in mm.
+ * @param neighborhood Neighborhood radius R for local FWHM estimates.
+ * @param ok_warn Flag to set the mode to ok_warn.
+ * @param examples Show command line examples and quit.
+ * @param slice Use the contours from planar intersections to estimate gradients. For testing and development purposes only.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
+ */
 function surf_fwhm(
     input_file: InputPathType,
     mask: InputPathType | null = null,
@@ -317,31 +342,6 @@ function surf_fwhm(
     slice: boolean = false,
     runner: Runner | null = null,
 ): SurfFwhmOutputs {
-    /**
-     * A program for calculating local and global FWHM.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Dataset for which the FWHM is to be calculated.
-     * @param mask Node mask so that only nodes in the mask are used to obtain estimates.
-     * @param surf_1 Option for specifying the surface over which the input dataset is defined.
-     * @param surf_sphere Spherical version of -SURF_1 for Local FWHM estimates.
-     * @param clean Strip text from output to simplify parsing.
-     * @param detrend Detrend to order 'q'. If q is not given, the program picks q=NT/30.
-     * @param detpoly Detrend with polynomials of order p.
-     * @param detprefix Save the detrended file into a dataset with prefix 'd'.
-     * @param prefix Prefix of output data set.
-     * @param vox_size Specify the nominal voxel size in mm.
-     * @param neighborhood Neighborhood radius R for local FWHM estimates.
-     * @param ok_warn Flag to set the mode to ok_warn.
-     * @param examples Show command line examples and quit.
-     * @param slice Use the contours from planar intersections to estimate gradients. For testing and development purposes only.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_FWHM_METADATA);
     const params = surf_fwhm_params(input_file, mask, surf_1, surf_sphere, clean, detrend, detpoly, detprefix, prefix, vox_size, neighborhood, ok_warn, examples, slice)
@@ -354,5 +354,8 @@ export {
       SurfFwhmOutputs,
       SurfFwhmParameters,
       surf_fwhm,
+      surf_fwhm_cargs,
+      surf_fwhm_execute,
+      surf_fwhm_outputs,
       surf_fwhm_params,
 };

@@ -12,7 +12,7 @@ const TBSS_NON_FA_METADATA: Metadata = {
 
 
 interface TbssNonFaParameters {
-    "__STYXTYPE__": "tbss_non_FA";
+    "@type": "fsl.tbss_non_FA";
     "concat_auto": boolean;
     "output_file": string;
     "input_files": Array<InputPathType>;
@@ -25,35 +25,35 @@ interface TbssNonFaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_non_FA": tbss_non_fa_cargs,
+        "fsl.tbss_non_FA": tbss_non_fa_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tbss_non_FA": tbss_non_fa_outputs,
+        "fsl.tbss_non_FA": tbss_non_fa_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface TbssNonFaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output file for merged images.
+ * @param input_files Images to concatenate.
+ * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
+ * @param concat_x Concatenate images in the x direction.
+ * @param concat_y Concatenate images in the y direction.
+ * @param concat_z Concatenate images in the z direction.
+ * @param concat_t Concatenate images in time.
+ * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
+ * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_non_fa_params(
     output_file: string,
     input_files: Array<InputPathType>,
@@ -87,23 +102,8 @@ function tbss_non_fa_params(
     concat_tr: number | null = 0,
     volume_number: number | null = null,
 ): TbssNonFaParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output file for merged images.
-     * @param input_files Images to concatenate.
-     * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
-     * @param concat_x Concatenate images in the x direction.
-     * @param concat_y Concatenate images in the y direction.
-     * @param concat_z Concatenate images in the z direction.
-     * @param concat_t Concatenate images in time.
-     * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
-     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_non_FA" as const,
+        "@type": "fsl.tbss_non_FA" as const,
         "concat_auto": concat_auto,
         "output_file": output_file,
         "input_files": input_files,
@@ -122,18 +122,18 @@ function tbss_non_fa_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_non_fa_cargs(
     params: TbssNonFaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_non_FA");
     if ((params["concat_auto"] ?? null)) {
@@ -169,18 +169,18 @@ function tbss_non_fa_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_non_fa_outputs(
     params: TbssNonFaParameters,
     execution: Execution,
 ): TbssNonFaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TbssNonFaOutputs = {
         root: execution.outputFile("."),
         merged_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -189,22 +189,22 @@ function tbss_non_fa_outputs(
 }
 
 
+/**
+ * TBSS processing for non-FA images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
+ */
 function tbss_non_fa_execute(
     params: TbssNonFaParameters,
     execution: Execution,
 ): TbssNonFaOutputs {
-    /**
-     * TBSS processing for non-FA images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_non_fa_cargs(params, execution)
     const ret = tbss_non_fa_outputs(params, execution)
@@ -213,6 +213,26 @@ function tbss_non_fa_execute(
 }
 
 
+/**
+ * TBSS processing for non-FA images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_file Output file for merged images.
+ * @param input_files Images to concatenate.
+ * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
+ * @param concat_x Concatenate images in the x direction.
+ * @param concat_y Concatenate images in the y direction.
+ * @param concat_z Concatenate images in the z direction.
+ * @param concat_t Concatenate images in time.
+ * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
+ * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
+ */
 function tbss_non_fa(
     output_file: string,
     input_files: Array<InputPathType>,
@@ -225,26 +245,6 @@ function tbss_non_fa(
     volume_number: number | null = null,
     runner: Runner | null = null,
 ): TbssNonFaOutputs {
-    /**
-     * TBSS processing for non-FA images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_file Output file for merged images.
-     * @param input_files Images to concatenate.
-     * @param concat_auto Auto-choose: single slices -> volume, volumes -> 4D (time series).
-     * @param concat_x Concatenate images in the x direction.
-     * @param concat_y Concatenate images in the y direction.
-     * @param concat_z Concatenate images in the z direction.
-     * @param concat_t Concatenate images in time.
-     * @param concat_tr Concatenate images in time and set the output image TR (repetition time) to the final option value.
-     * @param volume_number Only use volume <N> from each input file (first volume is 0 not 1).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_NON_FA_METADATA);
     const params = tbss_non_fa_params(output_file, input_files, concat_auto, concat_x, concat_y, concat_z, concat_t, concat_tr, volume_number)
@@ -257,5 +257,8 @@ export {
       TbssNonFaOutputs,
       TbssNonFaParameters,
       tbss_non_fa,
+      tbss_non_fa_cargs,
+      tbss_non_fa_execute,
+      tbss_non_fa_outputs,
       tbss_non_fa_params,
 };

@@ -12,41 +12,41 @@ const MORPH_TABLES_LH_METADATA: Metadata = {
 
 
 interface MorphTablesLhParameters {
-    "__STYXTYPE__": "morph_tables-lh";
+    "@type": "freesurfer.morph_tables-lh";
     "input_file": InputPathType;
     "some_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_tables-lh": morph_tables_lh_cargs,
+        "freesurfer.morph_tables-lh": morph_tables_lh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "morph_tables-lh": morph_tables_lh_outputs,
+        "freesurfer.morph_tables-lh": morph_tables_lh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MorphTablesLhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file for morphological analysis
+ * @param some_flag Example flag (replace with actual options from tool if known)
+ *
+ * @returns Parameter dictionary
+ */
 function morph_tables_lh_params(
     input_file: InputPathType,
     some_flag: boolean = false,
 ): MorphTablesLhParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file for morphological analysis
-     * @param some_flag Example flag (replace with actual options from tool if known)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_tables-lh" as const,
+        "@type": "freesurfer.morph_tables-lh" as const,
         "input_file": input_file,
         "some_flag": some_flag,
     };
@@ -90,18 +90,18 @@ function morph_tables_lh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_tables_lh_cargs(
     params: MorphTablesLhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_tables-lh");
     cargs.push(
@@ -115,18 +115,18 @@ function morph_tables_lh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_tables_lh_outputs(
     params: MorphTablesLhParameters,
     execution: Execution,
 ): MorphTablesLhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphTablesLhOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([path.basename((params["input_file"] ?? null)), "_output.txt"].join('')),
@@ -135,22 +135,22 @@ function morph_tables_lh_outputs(
 }
 
 
+/**
+ * Morphological analysis tool for left hemisphere in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
+ */
 function morph_tables_lh_execute(
     params: MorphTablesLhParameters,
     execution: Execution,
 ): MorphTablesLhOutputs {
-    /**
-     * Morphological analysis tool for left hemisphere in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_tables_lh_cargs(params, execution)
     const ret = morph_tables_lh_outputs(params, execution)
@@ -159,24 +159,24 @@ function morph_tables_lh_execute(
 }
 
 
+/**
+ * Morphological analysis tool for left hemisphere in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file for morphological analysis
+ * @param some_flag Example flag (replace with actual options from tool if known)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
+ */
 function morph_tables_lh(
     input_file: InputPathType,
     some_flag: boolean = false,
     runner: Runner | null = null,
 ): MorphTablesLhOutputs {
-    /**
-     * Morphological analysis tool for left hemisphere in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file for morphological analysis
-     * @param some_flag Example flag (replace with actual options from tool if known)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_TABLES_LH_METADATA);
     const params = morph_tables_lh_params(input_file, some_flag)
@@ -189,5 +189,8 @@ export {
       MorphTablesLhOutputs,
       MorphTablesLhParameters,
       morph_tables_lh,
+      morph_tables_lh_cargs,
+      morph_tables_lh_execute,
+      morph_tables_lh_outputs,
       morph_tables_lh_params,
 };

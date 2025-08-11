@@ -12,40 +12,40 @@ const V__DEMO_PROMPT_METADATA: Metadata = {
 
 
 interface VDemoPromptParameters {
-    "__STYXTYPE__": "@demo_prompt";
+    "@type": "afni.@demo_prompt";
     "message": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@demo_prompt": v__demo_prompt_cargs,
+        "afni.@demo_prompt": v__demo_prompt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@demo_prompt": v__demo_prompt_outputs,
+        "afni.@demo_prompt": v__demo_prompt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VDemoPromptOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param message The message to display in the prompt
+ *
+ * @returns Parameter dictionary
+ */
 function v__demo_prompt_params(
     message: string,
 ): VDemoPromptParameters {
-    /**
-     * Build parameters.
-    
-     * @param message The message to display in the prompt
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@demo_prompt" as const,
+        "@type": "afni.@demo_prompt" as const,
         "message": message,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__demo_prompt_cargs(
     params: VDemoPromptParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@demo_prompt");
     cargs.push((params["message"] ?? null));
@@ -105,18 +105,18 @@ function v__demo_prompt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__demo_prompt_outputs(
     params: VDemoPromptParameters,
     execution: Execution,
 ): VDemoPromptOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDemoPromptOutputs = {
         root: execution.outputFile("."),
         status: execution.outputFile(["status"].join('')),
@@ -125,22 +125,22 @@ function v__demo_prompt_outputs(
 }
 
 
+/**
+ * Prompts user with a message and waits for acknowledgment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
+ */
 function v__demo_prompt_execute(
     params: VDemoPromptParameters,
     execution: Execution,
 ): VDemoPromptOutputs {
-    /**
-     * Prompts user with a message and waits for acknowledgment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__demo_prompt_cargs(params, execution)
     const ret = v__demo_prompt_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__demo_prompt_execute(
 }
 
 
+/**
+ * Prompts user with a message and waits for acknowledgment.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param message The message to display in the prompt
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
+ */
 function v__demo_prompt(
     message: string,
     runner: Runner | null = null,
 ): VDemoPromptOutputs {
-    /**
-     * Prompts user with a message and waits for acknowledgment.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param message The message to display in the prompt
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DEMO_PROMPT_METADATA);
     const params = v__demo_prompt_params(message)
@@ -177,5 +177,8 @@ export {
       VDemoPromptParameters,
       V__DEMO_PROMPT_METADATA,
       v__demo_prompt,
+      v__demo_prompt_cargs,
+      v__demo_prompt_execute,
+      v__demo_prompt_outputs,
       v__demo_prompt_params,
 };

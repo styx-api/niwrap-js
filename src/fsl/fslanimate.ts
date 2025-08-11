@@ -12,42 +12,42 @@ const FSLANIMATE_METADATA: Metadata = {
 
 
 interface FslanimateParameters {
-    "__STYXTYPE__": "fslanimate";
+    "@type": "fsl.fslanimate";
     "input_file": InputPathType;
     "output_file": string;
     "tmp_dir"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslanimate": fslanimate_cargs,
+        "fsl.fslanimate": fslanimate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslanimate": fslanimate_outputs,
+        "fsl.fslanimate": fslanimate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface FslanimateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file (e.g., input.nii.gz)
+ * @param output_file Output file (e.g., output.gif)
+ * @param tmp_dir Temporary directory for intermediate files
+ *
+ * @returns Parameter dictionary
+ */
 function fslanimate_params(
     input_file: InputPathType,
     output_file: string,
     tmp_dir: string | null = null,
 ): FslanimateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file (e.g., input.nii.gz)
-     * @param output_file Output file (e.g., output.gif)
-     * @param tmp_dir Temporary directory for intermediate files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslanimate" as const,
+        "@type": "fsl.fslanimate" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -96,18 +96,18 @@ function fslanimate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslanimate_cargs(
     params: FslanimateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslanimate");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -119,18 +119,18 @@ function fslanimate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslanimate_outputs(
     params: FslanimateParameters,
     execution: Execution,
 ): FslanimateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslanimateOutputs = {
         root: execution.outputFile("."),
         output_animation: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -139,22 +139,22 @@ function fslanimate_outputs(
 }
 
 
+/**
+ * Tool for creating animations from imaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
+ */
 function fslanimate_execute(
     params: FslanimateParameters,
     execution: Execution,
 ): FslanimateOutputs {
-    /**
-     * Tool for creating animations from imaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslanimate_cargs(params, execution)
     const ret = fslanimate_outputs(params, execution)
@@ -163,26 +163,26 @@ function fslanimate_execute(
 }
 
 
+/**
+ * Tool for creating animations from imaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file (e.g., input.nii.gz)
+ * @param output_file Output file (e.g., output.gif)
+ * @param tmp_dir Temporary directory for intermediate files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
+ */
 function fslanimate(
     input_file: InputPathType,
     output_file: string,
     tmp_dir: string | null = null,
     runner: Runner | null = null,
 ): FslanimateOutputs {
-    /**
-     * Tool for creating animations from imaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file (e.g., input.nii.gz)
-     * @param output_file Output file (e.g., output.gif)
-     * @param tmp_dir Temporary directory for intermediate files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLANIMATE_METADATA);
     const params = fslanimate_params(input_file, output_file, tmp_dir)
@@ -195,5 +195,8 @@ export {
       FslanimateOutputs,
       FslanimateParameters,
       fslanimate,
+      fslanimate_cargs,
+      fslanimate_execute,
+      fslanimate_outputs,
       fslanimate_params,
 };

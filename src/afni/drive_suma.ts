@@ -12,7 +12,7 @@ const DRIVE_SUMA_METADATA: Metadata = {
 
 
 interface DriveSumaParameters {
-    "__STYXTYPE__": "DriveSuma";
+    "@type": "afni.DriveSuma";
     "command": string;
     "surf_label"?: string | null | undefined;
     "surface_file"?: InputPathType | null | undefined;
@@ -47,33 +47,33 @@ interface DriveSumaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "DriveSuma": drive_suma_cargs,
+        "afni.DriveSuma": drive_suma_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -93,6 +93,43 @@ interface DriveSumaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param command Command to be sent to SUMA.
+ * @param surf_label A label (identifier) to assign to the surface
+ * @param surface_file Name of surface file
+ * @param surf_state Name the state of that surface
+ * @param surf_winding Winding of triangles (ccw or cw)
+ * @param coordinates A 1D formatted file containing new coordinates for nodes
+ * @param autorecord Set the autorecord prefix
+ * @param background_color Set the background color (R G B)
+ * @param view_file Load a previously saved view file
+ * @param do_file Load a displayable object file
+ * @param do_draw_mask Restrict where DO node-based objects are displayed
+ * @param fixed_do Load a fixed coordinate type NIML DO
+ * @param mobile_do Mobile version of fixed_do
+ * @param key_press Act as if a key press was applied in the viewer
+ * @param viewer Specify which viewer should be acted upon
+ * @param anim_dup Save DUP copies of each frame into movie
+ * @param save_as Save image(s) in recorder in specified format
+ * @param save_index Save one image indexed IND
+ * @param save_range Save images from FROM to TO
+ * @param save_last Save last image
+ * @param save_last_n Save last N images
+ * @param save_all Save all images
+ * @param echo_edu Echoes the entire command line for edification purposes
+ * @param echo_nel_stdout Spit out the NIML object being sent to SUMA to stdout
+ * @param echo_nel_stderr Spit out the NIML object being sent to SUMA to stderr
+ * @param examples Show all the sample commands and exit
+ * @param help Show the help in detail
+ * @param h Show help with slightly less detail
+ * @param help_nido Show the help for NIML Displayable Objects and exit
+ * @param c_demo Execute a preset number of commands to illustrate how one can communicate with SUMA from one's own C code
+ * @param viewer_cont Apply settings to viewer or viewer controller
+ *
+ * @returns Parameter dictionary
+ */
 function drive_suma_params(
     command: string,
     surf_label: string | null = null,
@@ -126,45 +163,8 @@ function drive_suma_params(
     c_demo: boolean = false,
     viewer_cont: boolean = false,
 ): DriveSumaParameters {
-    /**
-     * Build parameters.
-    
-     * @param command Command to be sent to SUMA.
-     * @param surf_label A label (identifier) to assign to the surface
-     * @param surface_file Name of surface file
-     * @param surf_state Name the state of that surface
-     * @param surf_winding Winding of triangles (ccw or cw)
-     * @param coordinates A 1D formatted file containing new coordinates for nodes
-     * @param autorecord Set the autorecord prefix
-     * @param background_color Set the background color (R G B)
-     * @param view_file Load a previously saved view file
-     * @param do_file Load a displayable object file
-     * @param do_draw_mask Restrict where DO node-based objects are displayed
-     * @param fixed_do Load a fixed coordinate type NIML DO
-     * @param mobile_do Mobile version of fixed_do
-     * @param key_press Act as if a key press was applied in the viewer
-     * @param viewer Specify which viewer should be acted upon
-     * @param anim_dup Save DUP copies of each frame into movie
-     * @param save_as Save image(s) in recorder in specified format
-     * @param save_index Save one image indexed IND
-     * @param save_range Save images from FROM to TO
-     * @param save_last Save last image
-     * @param save_last_n Save last N images
-     * @param save_all Save all images
-     * @param echo_edu Echoes the entire command line for edification purposes
-     * @param echo_nel_stdout Spit out the NIML object being sent to SUMA to stdout
-     * @param echo_nel_stderr Spit out the NIML object being sent to SUMA to stderr
-     * @param examples Show all the sample commands and exit
-     * @param help Show the help in detail
-     * @param h Show help with slightly less detail
-     * @param help_nido Show the help for NIML Displayable Objects and exit
-     * @param c_demo Execute a preset number of commands to illustrate how one can communicate with SUMA from one's own C code
-     * @param viewer_cont Apply settings to viewer or viewer controller
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "DriveSuma" as const,
+        "@type": "afni.DriveSuma" as const,
         "command": command,
         "save_last": save_last,
         "save_all": save_all,
@@ -239,18 +239,18 @@ function drive_suma_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function drive_suma_cargs(
     params: DriveSumaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("DriveSuma");
     cargs.push((params["command"] ?? null));
@@ -405,18 +405,18 @@ function drive_suma_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function drive_suma_outputs(
     params: DriveSumaParameters,
     execution: Execution,
 ): DriveSumaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DriveSumaOutputs = {
         root: execution.outputFile("."),
     };
@@ -424,22 +424,22 @@ function drive_suma_outputs(
 }
 
 
+/**
+ * A program to drive suma from the command line.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
+ */
 function drive_suma_execute(
     params: DriveSumaParameters,
     execution: Execution,
 ): DriveSumaOutputs {
-    /**
-     * A program to drive suma from the command line.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
-     */
     params = execution.params(params)
     const cargs = drive_suma_cargs(params, execution)
     const ret = drive_suma_outputs(params, execution)
@@ -448,6 +448,48 @@ function drive_suma_execute(
 }
 
 
+/**
+ * A program to drive suma from the command line.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param command Command to be sent to SUMA.
+ * @param surf_label A label (identifier) to assign to the surface
+ * @param surface_file Name of surface file
+ * @param surf_state Name the state of that surface
+ * @param surf_winding Winding of triangles (ccw or cw)
+ * @param coordinates A 1D formatted file containing new coordinates for nodes
+ * @param autorecord Set the autorecord prefix
+ * @param background_color Set the background color (R G B)
+ * @param view_file Load a previously saved view file
+ * @param do_file Load a displayable object file
+ * @param do_draw_mask Restrict where DO node-based objects are displayed
+ * @param fixed_do Load a fixed coordinate type NIML DO
+ * @param mobile_do Mobile version of fixed_do
+ * @param key_press Act as if a key press was applied in the viewer
+ * @param viewer Specify which viewer should be acted upon
+ * @param anim_dup Save DUP copies of each frame into movie
+ * @param save_as Save image(s) in recorder in specified format
+ * @param save_index Save one image indexed IND
+ * @param save_range Save images from FROM to TO
+ * @param save_last Save last image
+ * @param save_last_n Save last N images
+ * @param save_all Save all images
+ * @param echo_edu Echoes the entire command line for edification purposes
+ * @param echo_nel_stdout Spit out the NIML object being sent to SUMA to stdout
+ * @param echo_nel_stderr Spit out the NIML object being sent to SUMA to stderr
+ * @param examples Show all the sample commands and exit
+ * @param help Show the help in detail
+ * @param h Show help with slightly less detail
+ * @param help_nido Show the help for NIML Displayable Objects and exit
+ * @param c_demo Execute a preset number of commands to illustrate how one can communicate with SUMA from one's own C code
+ * @param viewer_cont Apply settings to viewer or viewer controller
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
+ */
 function drive_suma(
     command: string,
     surf_label: string | null = null,
@@ -482,48 +524,6 @@ function drive_suma(
     viewer_cont: boolean = false,
     runner: Runner | null = null,
 ): DriveSumaOutputs {
-    /**
-     * A program to drive suma from the command line.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param command Command to be sent to SUMA.
-     * @param surf_label A label (identifier) to assign to the surface
-     * @param surface_file Name of surface file
-     * @param surf_state Name the state of that surface
-     * @param surf_winding Winding of triangles (ccw or cw)
-     * @param coordinates A 1D formatted file containing new coordinates for nodes
-     * @param autorecord Set the autorecord prefix
-     * @param background_color Set the background color (R G B)
-     * @param view_file Load a previously saved view file
-     * @param do_file Load a displayable object file
-     * @param do_draw_mask Restrict where DO node-based objects are displayed
-     * @param fixed_do Load a fixed coordinate type NIML DO
-     * @param mobile_do Mobile version of fixed_do
-     * @param key_press Act as if a key press was applied in the viewer
-     * @param viewer Specify which viewer should be acted upon
-     * @param anim_dup Save DUP copies of each frame into movie
-     * @param save_as Save image(s) in recorder in specified format
-     * @param save_index Save one image indexed IND
-     * @param save_range Save images from FROM to TO
-     * @param save_last Save last image
-     * @param save_last_n Save last N images
-     * @param save_all Save all images
-     * @param echo_edu Echoes the entire command line for edification purposes
-     * @param echo_nel_stdout Spit out the NIML object being sent to SUMA to stdout
-     * @param echo_nel_stderr Spit out the NIML object being sent to SUMA to stderr
-     * @param examples Show all the sample commands and exit
-     * @param help Show the help in detail
-     * @param h Show help with slightly less detail
-     * @param help_nido Show the help for NIML Displayable Objects and exit
-     * @param c_demo Execute a preset number of commands to illustrate how one can communicate with SUMA from one's own C code
-     * @param viewer_cont Apply settings to viewer or viewer controller
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DRIVE_SUMA_METADATA);
     const params = drive_suma_params(command, surf_label, surface_file, surf_state, surf_winding, coordinates, autorecord, background_color, view_file, do_file, do_draw_mask, fixed_do, mobile_do, key_press, viewer, anim_dup, save_as, save_index, save_range, save_last, save_last_n, save_all, echo_edu, echo_nel_stdout, echo_nel_stderr, examples, help, h, help_nido, c_demo, viewer_cont)
@@ -536,5 +536,8 @@ export {
       DriveSumaOutputs,
       DriveSumaParameters,
       drive_suma,
+      drive_suma_cargs,
+      drive_suma_execute,
+      drive_suma_outputs,
       drive_suma_params,
 };

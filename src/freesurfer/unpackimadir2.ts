@@ -12,38 +12,38 @@ const UNPACKIMADIR2_METADATA: Metadata = {
 
 
 interface Unpackimadir2Parameters {
-    "__STYXTYPE__": "unpackimadir2";
+    "@type": "freesurfer.unpackimadir2";
     "directory": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpackimadir2": unpackimadir2_cargs,
+        "freesurfer.unpackimadir2": unpackimadir2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Unpackimadir2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directory Image directory to unpack.
+ *
+ * @returns Parameter dictionary
+ */
 function unpackimadir2_params(
     directory: InputPathType,
 ): Unpackimadir2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param directory Image directory to unpack.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpackimadir2" as const,
+        "@type": "freesurfer.unpackimadir2" as const,
         "directory": directory,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpackimadir2_cargs(
     params: Unpackimadir2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpackimadir2");
     cargs.push(execution.inputFile((params["directory"] ?? null)));
@@ -100,18 +100,18 @@ function unpackimadir2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpackimadir2_outputs(
     params: Unpackimadir2Parameters,
     execution: Execution,
 ): Unpackimadir2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Unpackimadir2Outputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function unpackimadir2_outputs(
 }
 
 
+/**
+ * Tool to unpack image directories, from FreeSurfer suite.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
+ */
 function unpackimadir2_execute(
     params: Unpackimadir2Parameters,
     execution: Execution,
 ): Unpackimadir2Outputs {
-    /**
-     * Tool to unpack image directories, from FreeSurfer suite.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
-     */
     params = execution.params(params)
     const cargs = unpackimadir2_cargs(params, execution)
     const ret = unpackimadir2_outputs(params, execution)
@@ -143,22 +143,22 @@ function unpackimadir2_execute(
 }
 
 
+/**
+ * Tool to unpack image directories, from FreeSurfer suite.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param directory Image directory to unpack.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
+ */
 function unpackimadir2(
     directory: InputPathType,
     runner: Runner | null = null,
 ): Unpackimadir2Outputs {
-    /**
-     * Tool to unpack image directories, from FreeSurfer suite.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param directory Image directory to unpack.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACKIMADIR2_METADATA);
     const params = unpackimadir2_params(directory)
@@ -171,5 +171,8 @@ export {
       Unpackimadir2Outputs,
       Unpackimadir2Parameters,
       unpackimadir2,
+      unpackimadir2_cargs,
+      unpackimadir2_execute,
+      unpackimadir2_outputs,
       unpackimadir2_params,
 };

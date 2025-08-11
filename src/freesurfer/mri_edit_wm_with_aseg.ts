@@ -12,7 +12,7 @@ const MRI_EDIT_WM_WITH_ASEG_METADATA: Metadata = {
 
 
 interface MriEditWmWithAsegParameters {
-    "__STYXTYPE__": "mri_edit_wm_with_aseg";
+    "@type": "freesurfer.mri_edit_wm_with_aseg";
     "input_wm": InputPathType;
     "input_t1_brain": InputPathType;
     "aseg": InputPathType;
@@ -30,35 +30,35 @@ interface MriEditWmWithAsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_cargs,
+        "freesurfer.mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_outputs,
+        "freesurfer.mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface MriEditWmWithAsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_wm Input white matter file
+ * @param input_t1_brain Input T1/brain file
+ * @param aseg Anatomical segmentation file
+ * @param output_wm Output white matter file
+ * @param fillven Fill ventricular system
+ * @param fix_scm_ha Remove voxels in amygdala, ILV, and parts of hippocampus
+ * @param fix_scm_ha_only Standalone: fix SCM using aseg.presurf.mgz
+ * @param keep Keep edits as found in output volume
+ * @param keep_in Keep edits as found in input volume
+ * @param lh Erase right hemisphere labels from output
+ * @param rh Erase left hemisphere labels from output
+ * @param fix_ento_wm Insert lhval rhval where {3,4}006 and {3,4}201 in entowm volume
+ * @param sa_fix_ento_wm Standalone version of fix ento-WM
+ * @param debug_voxel Specify a voxel to edit with coordinates Gx Gy Gz
+ *
+ * @returns Parameter dictionary
+ */
 function mri_edit_wm_with_aseg_params(
     input_wm: InputPathType,
     input_t1_brain: InputPathType,
@@ -97,28 +117,8 @@ function mri_edit_wm_with_aseg_params(
     sa_fix_ento_wm: string | null = null,
     debug_voxel: Array<number> | null = null,
 ): MriEditWmWithAsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_wm Input white matter file
-     * @param input_t1_brain Input T1/brain file
-     * @param aseg Anatomical segmentation file
-     * @param output_wm Output white matter file
-     * @param fillven Fill ventricular system
-     * @param fix_scm_ha Remove voxels in amygdala, ILV, and parts of hippocampus
-     * @param fix_scm_ha_only Standalone: fix SCM using aseg.presurf.mgz
-     * @param keep Keep edits as found in output volume
-     * @param keep_in Keep edits as found in input volume
-     * @param lh Erase right hemisphere labels from output
-     * @param rh Erase left hemisphere labels from output
-     * @param fix_ento_wm Insert lhval rhval where {3,4}006 and {3,4}201 in entowm volume
-     * @param sa_fix_ento_wm Standalone version of fix ento-WM
-     * @param debug_voxel Specify a voxel to edit with coordinates Gx Gy Gz
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_edit_wm_with_aseg" as const,
+        "@type": "freesurfer.mri_edit_wm_with_aseg" as const,
         "input_wm": input_wm,
         "input_t1_brain": input_t1_brain,
         "aseg": aseg,
@@ -148,18 +148,18 @@ function mri_edit_wm_with_aseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_edit_wm_with_aseg_cargs(
     params: MriEditWmWithAsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_edit_wm_with_aseg");
     cargs.push(execution.inputFile((params["input_wm"] ?? null)));
@@ -215,18 +215,18 @@ function mri_edit_wm_with_aseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_edit_wm_with_aseg_outputs(
     params: MriEditWmWithAsegParameters,
     execution: Execution,
 ): MriEditWmWithAsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEditWmWithAsegOutputs = {
         root: execution.outputFile("."),
         output_wm_file: execution.outputFile([(params["output_wm"] ?? null)].join('')),
@@ -235,22 +235,22 @@ function mri_edit_wm_with_aseg_outputs(
 }
 
 
+/**
+ * A tool for editing white matter with anatomical segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
+ */
 function mri_edit_wm_with_aseg_execute(
     params: MriEditWmWithAsegParameters,
     execution: Execution,
 ): MriEditWmWithAsegOutputs {
-    /**
-     * A tool for editing white matter with anatomical segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_edit_wm_with_aseg_cargs(params, execution)
     const ret = mri_edit_wm_with_aseg_outputs(params, execution)
@@ -259,6 +259,31 @@ function mri_edit_wm_with_aseg_execute(
 }
 
 
+/**
+ * A tool for editing white matter with anatomical segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_wm Input white matter file
+ * @param input_t1_brain Input T1/brain file
+ * @param aseg Anatomical segmentation file
+ * @param output_wm Output white matter file
+ * @param fillven Fill ventricular system
+ * @param fix_scm_ha Remove voxels in amygdala, ILV, and parts of hippocampus
+ * @param fix_scm_ha_only Standalone: fix SCM using aseg.presurf.mgz
+ * @param keep Keep edits as found in output volume
+ * @param keep_in Keep edits as found in input volume
+ * @param lh Erase right hemisphere labels from output
+ * @param rh Erase left hemisphere labels from output
+ * @param fix_ento_wm Insert lhval rhval where {3,4}006 and {3,4}201 in entowm volume
+ * @param sa_fix_ento_wm Standalone version of fix ento-WM
+ * @param debug_voxel Specify a voxel to edit with coordinates Gx Gy Gz
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
+ */
 function mri_edit_wm_with_aseg(
     input_wm: InputPathType,
     input_t1_brain: InputPathType,
@@ -276,31 +301,6 @@ function mri_edit_wm_with_aseg(
     debug_voxel: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriEditWmWithAsegOutputs {
-    /**
-     * A tool for editing white matter with anatomical segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_wm Input white matter file
-     * @param input_t1_brain Input T1/brain file
-     * @param aseg Anatomical segmentation file
-     * @param output_wm Output white matter file
-     * @param fillven Fill ventricular system
-     * @param fix_scm_ha Remove voxels in amygdala, ILV, and parts of hippocampus
-     * @param fix_scm_ha_only Standalone: fix SCM using aseg.presurf.mgz
-     * @param keep Keep edits as found in output volume
-     * @param keep_in Keep edits as found in input volume
-     * @param lh Erase right hemisphere labels from output
-     * @param rh Erase left hemisphere labels from output
-     * @param fix_ento_wm Insert lhval rhval where {3,4}006 and {3,4}201 in entowm volume
-     * @param sa_fix_ento_wm Standalone version of fix ento-WM
-     * @param debug_voxel Specify a voxel to edit with coordinates Gx Gy Gz
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EDIT_WM_WITH_ASEG_METADATA);
     const params = mri_edit_wm_with_aseg_params(input_wm, input_t1_brain, aseg, output_wm, fillven, fix_scm_ha, fix_scm_ha_only, keep, keep_in, lh, rh, fix_ento_wm, sa_fix_ento_wm, debug_voxel)
@@ -313,5 +313,8 @@ export {
       MriEditWmWithAsegOutputs,
       MriEditWmWithAsegParameters,
       mri_edit_wm_with_aseg,
+      mri_edit_wm_with_aseg_cargs,
+      mri_edit_wm_with_aseg_execute,
+      mri_edit_wm_with_aseg_outputs,
       mri_edit_wm_with_aseg_params,
 };

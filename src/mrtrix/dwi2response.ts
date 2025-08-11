@@ -12,7 +12,7 @@ const DWI2RESPONSE_METADATA: Metadata = {
 
 
 interface Dwi2responseDhollanderParameters {
-    "__STYXTYPE__": "dhollander";
+    "@type": "mrtrix.dwi2response.dhollander";
     "input": InputPathType;
     "out_sfwm": string;
     "out_gm": string;
@@ -27,7 +27,7 @@ interface Dwi2responseDhollanderParameters {
 
 
 interface Dwi2responseFaParameters {
-    "__STYXTYPE__": "fa";
+    "@type": "mrtrix.dwi2response.fa";
     "input": InputPathType;
     "output": string;
     "erode"?: number | null | undefined;
@@ -37,7 +37,7 @@ interface Dwi2responseFaParameters {
 
 
 interface Dwi2responseManualParameters {
-    "__STYXTYPE__": "manual";
+    "@type": "mrtrix.dwi2response.manual";
     "input": InputPathType;
     "in_voxels": InputPathType;
     "output": string;
@@ -46,7 +46,7 @@ interface Dwi2responseManualParameters {
 
 
 interface Dwi2responseMsmt5ttParameters {
-    "__STYXTYPE__": "msmt_5tt";
+    "@type": "mrtrix.dwi2response.msmt_5tt";
     "input": InputPathType;
     "in_5tt": InputPathType;
     "out_wm": string;
@@ -61,7 +61,7 @@ interface Dwi2responseMsmt5ttParameters {
 
 
 interface Dwi2responseTaxParameters {
-    "__STYXTYPE__": "tax";
+    "@type": "mrtrix.dwi2response.tax";
     "input": InputPathType;
     "output": string;
     "peak_ratio"?: number | null | undefined;
@@ -71,7 +71,7 @@ interface Dwi2responseTaxParameters {
 
 
 interface Dwi2responseTournierParameters {
-    "__STYXTYPE__": "tournier";
+    "@type": "mrtrix.dwi2response.tournier";
     "input": InputPathType;
     "output": string;
     "number"?: number | null | undefined;
@@ -82,21 +82,21 @@ interface Dwi2responseTournierParameters {
 
 
 interface Dwi2responseFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dwi2response.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface Dwi2responseConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dwi2response.config";
     "key": string;
     "value": string;
 }
 
 
 interface Dwi2responseParameters {
-    "__STYXTYPE__": "dwi2response";
+    "@type": "mrtrix.dwi2response";
     "algorithm": Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2responseFslgradParameters | null | undefined;
@@ -118,49 +118,49 @@ interface Dwi2responseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dwi2response": dwi2response_cargs,
-        "dhollander": dwi2response_dhollander_cargs,
-        "fa": dwi2response_fa_cargs,
-        "manual": dwi2response_manual_cargs,
-        "msmt_5tt": dwi2response_msmt_5tt_cargs,
-        "tax": dwi2response_tax_cargs,
-        "tournier": dwi2response_tournier_cargs,
-        "fslgrad": dwi2response_fslgrad_cargs,
-        "config": dwi2response_config_cargs,
+        "mrtrix.dwi2response": dwi2response_cargs,
+        "mrtrix.dwi2response.dhollander": dwi2response_dhollander_cargs,
+        "mrtrix.dwi2response.fa": dwi2response_fa_cargs,
+        "mrtrix.dwi2response.manual": dwi2response_manual_cargs,
+        "mrtrix.dwi2response.msmt_5tt": dwi2response_msmt_5tt_cargs,
+        "mrtrix.dwi2response.tax": dwi2response_tax_cargs,
+        "mrtrix.dwi2response.tournier": dwi2response_tournier_cargs,
+        "mrtrix.dwi2response.fslgrad": dwi2response_fslgrad_cargs,
+        "mrtrix.dwi2response.config": dwi2response_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dwi2response": dwi2response_outputs,
-        "dhollander": dwi2response_dhollander_outputs,
-        "fa": dwi2response_fa_outputs,
-        "manual": dwi2response_manual_outputs,
-        "msmt_5tt": dwi2response_msmt_5tt_outputs,
-        "tax": dwi2response_tax_outputs,
-        "tournier": dwi2response_tournier_outputs,
+        "mrtrix.dwi2response": dwi2response_outputs,
+        "mrtrix.dwi2response.dhollander": dwi2response_dhollander_outputs,
+        "mrtrix.dwi2response.fa": dwi2response_fa_outputs,
+        "mrtrix.dwi2response.manual": dwi2response_manual_outputs,
+        "mrtrix.dwi2response.msmt_5tt": dwi2response_msmt_5tt_outputs,
+        "mrtrix.dwi2response.tax": dwi2response_tax_outputs,
+        "mrtrix.dwi2response.tournier": dwi2response_tournier_outputs,
     };
     return outputsFuncs[t];
 }
@@ -191,6 +191,22 @@ interface Dwi2responseDhollanderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input DWI dataset
+ * @param out_sfwm Output single-fibre WM response function text file
+ * @param out_gm Output GM response function text file
+ * @param out_csf Output CSF response function text file
+ * @param erode Number of erosion passes to apply to initial (whole brain) mask. Set to 0 to not erode the brain mask. (default: 3)
+ * @param fa FA threshold for crude WM versus GM-CSF separation. (default: 0.2)
+ * @param sfwm Final number of single-fibre WM voxels to select, as a percentage of refined WM. (default: 0.5 per cent)
+ * @param gm Final number of GM voxels to select, as a percentage of refined GM. (default: 2 per cent)
+ * @param csf Final number of CSF voxels to select, as a percentage of refined CSF. (default: 10 per cent)
+ * @param wm_algo Use external dwi2response algorithm for WM single-fibre voxel selection (options: fa, tax, tournier) (default: built-in Dhollander 2019)
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_dhollander_params(
     input: InputPathType,
     out_sfwm: string,
@@ -203,24 +219,8 @@ function dwi2response_dhollander_params(
     csf: number | null = null,
     wm_algo: "fa" | "tax" | "tournier" | null = null,
 ): Dwi2responseDhollanderParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input DWI dataset
-     * @param out_sfwm Output single-fibre WM response function text file
-     * @param out_gm Output GM response function text file
-     * @param out_csf Output CSF response function text file
-     * @param erode Number of erosion passes to apply to initial (whole brain) mask. Set to 0 to not erode the brain mask. (default: 3)
-     * @param fa FA threshold for crude WM versus GM-CSF separation. (default: 0.2)
-     * @param sfwm Final number of single-fibre WM voxels to select, as a percentage of refined WM. (default: 0.5 per cent)
-     * @param gm Final number of GM voxels to select, as a percentage of refined GM. (default: 2 per cent)
-     * @param csf Final number of CSF voxels to select, as a percentage of refined CSF. (default: 10 per cent)
-     * @param wm_algo Use external dwi2response algorithm for WM single-fibre voxel selection (options: fa, tax, tournier) (default: built-in Dhollander 2019)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dhollander" as const,
+        "@type": "mrtrix.dwi2response.dhollander" as const,
         "input": input,
         "out_sfwm": out_sfwm,
         "out_gm": out_gm,
@@ -248,18 +248,18 @@ function dwi2response_dhollander_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_dhollander_cargs(
     params: Dwi2responseDhollanderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dhollander");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -306,18 +306,18 @@ function dwi2response_dhollander_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_dhollander_outputs(
     params: Dwi2responseDhollanderParameters,
     execution: Execution,
 ): Dwi2responseDhollanderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseDhollanderOutputs = {
         root: execution.outputFile("."),
         out_sfwm: execution.outputFile([(params["out_sfwm"] ?? null)].join('')),
@@ -345,6 +345,17 @@ interface Dwi2responseFaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input DWI
+ * @param output The output response function text file
+ * @param erode Number of brain mask erosion steps to apply prior to threshold (not used if mask is provided manually)
+ * @param number_ The number of highest-FA voxels to use
+ * @param threshold Apply a hard FA threshold, rather than selecting the top voxels
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_fa_params(
     input: InputPathType,
     output: string,
@@ -352,19 +363,8 @@ function dwi2response_fa_params(
     number_: number | null = null,
     threshold: number | null = null,
 ): Dwi2responseFaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input DWI
-     * @param output The output response function text file
-     * @param erode Number of brain mask erosion steps to apply prior to threshold (not used if mask is provided manually)
-     * @param number_ The number of highest-FA voxels to use
-     * @param threshold Apply a hard FA threshold, rather than selecting the top voxels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fa" as const,
+        "@type": "mrtrix.dwi2response.fa" as const,
         "input": input,
         "output": output,
     };
@@ -381,18 +381,18 @@ function dwi2response_fa_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_fa_cargs(
     params: Dwi2responseFaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fa");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -419,18 +419,18 @@ function dwi2response_fa_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_fa_outputs(
     params: Dwi2responseFaParameters,
     execution: Execution,
 ): Dwi2responseFaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseFaOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -456,24 +456,24 @@ interface Dwi2responseManualOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input DWI
+ * @param in_voxels Input voxel selection mask
+ * @param output Output response function text file
+ * @param dirs Manually provide the fibre direction in each voxel (a tensor fit will be used otherwise)
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_manual_params(
     input: InputPathType,
     in_voxels: InputPathType,
     output: string,
     dirs: InputPathType | null = null,
 ): Dwi2responseManualParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input DWI
-     * @param in_voxels Input voxel selection mask
-     * @param output Output response function text file
-     * @param dirs Manually provide the fibre direction in each voxel (a tensor fit will be used otherwise)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "manual" as const,
+        "@type": "mrtrix.dwi2response.manual" as const,
         "input": input,
         "in_voxels": in_voxels,
         "output": output,
@@ -485,18 +485,18 @@ function dwi2response_manual_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_manual_cargs(
     params: Dwi2responseManualParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("manual");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -512,18 +512,18 @@ function dwi2response_manual_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_manual_outputs(
     params: Dwi2responseManualParameters,
     execution: Execution,
 ): Dwi2responseManualOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseManualOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -557,6 +557,22 @@ interface Dwi2responseMsmt5ttOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input DWI
+ * @param in_5tt Input co-registered 5TT image
+ * @param out_wm Output WM response text file
+ * @param out_gm Output GM response text file
+ * @param out_csf Output CSF response text file
+ * @param dirs Manually provide the fibre direction in each voxel (a tensor fit will be used otherwise)
+ * @param fa Upper fractional anisotropy threshold for GM and CSF voxel selection (default: 0.2)
+ * @param pvf Partial volume fraction threshold for tissue voxel selection (default: 0.95)
+ * @param wm_algo algorithm dwi2response algorithm to use for WM single-fibre voxel selection (options: fa, tax, tournier; default: tournier)
+ * @param sfwm_fa_threshold Sets -wm_algo to fa and allows to specify a hard FA threshold for single-fibre WM voxels, which is passed to the -threshold option of the fa algorithm (warning: overrides -wm_algo option)
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_msmt_5tt_params(
     input: InputPathType,
     in_5tt: InputPathType,
@@ -569,24 +585,8 @@ function dwi2response_msmt_5tt_params(
     wm_algo: "fa" | "tax" | "tournier" | null = null,
     sfwm_fa_threshold: number | null = null,
 ): Dwi2responseMsmt5ttParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input DWI
-     * @param in_5tt Input co-registered 5TT image
-     * @param out_wm Output WM response text file
-     * @param out_gm Output GM response text file
-     * @param out_csf Output CSF response text file
-     * @param dirs Manually provide the fibre direction in each voxel (a tensor fit will be used otherwise)
-     * @param fa Upper fractional anisotropy threshold for GM and CSF voxel selection (default: 0.2)
-     * @param pvf Partial volume fraction threshold for tissue voxel selection (default: 0.95)
-     * @param wm_algo algorithm dwi2response algorithm to use for WM single-fibre voxel selection (options: fa, tax, tournier; default: tournier)
-     * @param sfwm_fa_threshold Sets -wm_algo to fa and allows to specify a hard FA threshold for single-fibre WM voxels, which is passed to the -threshold option of the fa algorithm (warning: overrides -wm_algo option)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "msmt_5tt" as const,
+        "@type": "mrtrix.dwi2response.msmt_5tt" as const,
         "input": input,
         "in_5tt": in_5tt,
         "out_wm": out_wm,
@@ -612,18 +612,18 @@ function dwi2response_msmt_5tt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_msmt_5tt_cargs(
     params: Dwi2responseMsmt5ttParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("msmt_5tt");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -665,18 +665,18 @@ function dwi2response_msmt_5tt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_msmt_5tt_outputs(
     params: Dwi2responseMsmt5ttParameters,
     execution: Execution,
 ): Dwi2responseMsmt5ttOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseMsmt5ttOutputs = {
         root: execution.outputFile("."),
         out_wm: execution.outputFile([(params["out_wm"] ?? null)].join('')),
@@ -704,6 +704,17 @@ interface Dwi2responseTaxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input DWI
+ * @param output The output response function text file
+ * @param peak_ratio Second-to-first-peak amplitude ratio threshold
+ * @param max_iters Maximum number of iterations
+ * @param convergence Percentile change in any RF coefficient required to continue iterating
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_tax_params(
     input: InputPathType,
     output: string,
@@ -711,19 +722,8 @@ function dwi2response_tax_params(
     max_iters: number | null = null,
     convergence: number | null = null,
 ): Dwi2responseTaxParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input DWI
-     * @param output The output response function text file
-     * @param peak_ratio Second-to-first-peak amplitude ratio threshold
-     * @param max_iters Maximum number of iterations
-     * @param convergence Percentile change in any RF coefficient required to continue iterating
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tax" as const,
+        "@type": "mrtrix.dwi2response.tax" as const,
         "input": input,
         "output": output,
     };
@@ -740,18 +740,18 @@ function dwi2response_tax_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_tax_cargs(
     params: Dwi2responseTaxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tax");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -778,18 +778,18 @@ function dwi2response_tax_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_tax_outputs(
     params: Dwi2responseTaxParameters,
     execution: Execution,
 ): Dwi2responseTaxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseTaxOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -815,6 +815,18 @@ interface Dwi2responseTournierOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input The input DWI
+ * @param output The output response function text file
+ * @param number_ Number of single-fibre voxels to use when calculating response function
+ * @param iter_voxels Number of single-fibre voxels to select when preparing for the next iteration (default = 10 x value given in -number)
+ * @param dilate Number of mask dilation steps to apply when deriving voxel mask to test in the next iteration
+ * @param max_iters Maximum number of iterations
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_tournier_params(
     input: InputPathType,
     output: string,
@@ -823,20 +835,8 @@ function dwi2response_tournier_params(
     dilate: number | null = null,
     max_iters: number | null = null,
 ): Dwi2responseTournierParameters {
-    /**
-     * Build parameters.
-    
-     * @param input The input DWI
-     * @param output The output response function text file
-     * @param number_ Number of single-fibre voxels to use when calculating response function
-     * @param iter_voxels Number of single-fibre voxels to select when preparing for the next iteration (default = 10 x value given in -number)
-     * @param dilate Number of mask dilation steps to apply when deriving voxel mask to test in the next iteration
-     * @param max_iters Maximum number of iterations
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tournier" as const,
+        "@type": "mrtrix.dwi2response.tournier" as const,
         "input": input,
         "output": output,
     };
@@ -856,18 +856,18 @@ function dwi2response_tournier_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_tournier_cargs(
     params: Dwi2responseTournierParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tournier");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -900,18 +900,18 @@ function dwi2response_tournier_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_tournier_outputs(
     params: Dwi2responseTournierParameters,
     execution: Execution,
 ): Dwi2responseTournierOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseTournierOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -920,20 +920,20 @@ function dwi2response_tournier_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): Dwi2responseFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dwi2response.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -941,18 +941,18 @@ function dwi2response_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_fslgrad_cargs(
     params: Dwi2responseFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -961,20 +961,20 @@ function dwi2response_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_config_params(
     key: string,
     value: string,
 ): Dwi2responseConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dwi2response.config" as const,
         "key": key,
         "value": value,
     };
@@ -982,18 +982,18 @@ function dwi2response_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_config_cargs(
     params: Dwi2responseConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -1019,6 +1019,30 @@ interface Dwi2responseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param algorithm Select the algorithm to be used to complete the script operation; additional details and options become available once an algorithm is nominated. Options are: dhollander, fa, manual, msmt_5tt, tax, tournier.
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion gradient table in FSL bvecs/bvals format
+ * @param mask Only process voxels within the specified binary brain mask image.
+ * @param voxels Output an image showing the final voxel selection(s)
+ * @param shells b-value(s) to use in response function estimation (comma-separated list in case of multiple b-values, b=0 must be included explicitly)
+ * @param lmax maximum harmonic degree(s) for response function estimation (comma-separated list in case of multiple b-values).
+ * @param nocleanup do not delete intermediate files during script execution, and do not delete scratch directory at script completion.
+ * @param scratch manually specify the path in which to generate the scratch directory.
+ * @param continue_ continue the script from a previous execution; must provide the scratch directory path, and the name of the last successfully-generated file.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dwi2response_params(
     algorithm: Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters,
     grad: InputPathType | null = null,
@@ -1039,32 +1063,8 @@ function dwi2response_params(
     help: boolean = false,
     version: boolean = false,
 ): Dwi2responseParameters {
-    /**
-     * Build parameters.
-    
-     * @param algorithm Select the algorithm to be used to complete the script operation; additional details and options become available once an algorithm is nominated. Options are: dhollander, fa, manual, msmt_5tt, tax, tournier.
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion gradient table in FSL bvecs/bvals format
-     * @param mask Only process voxels within the specified binary brain mask image.
-     * @param voxels Output an image showing the final voxel selection(s)
-     * @param shells b-value(s) to use in response function estimation (comma-separated list in case of multiple b-values, b=0 must be included explicitly)
-     * @param lmax maximum harmonic degree(s) for response function estimation (comma-separated list in case of multiple b-values).
-     * @param nocleanup do not delete intermediate files during script execution, and do not delete scratch directory at script completion.
-     * @param scratch manually specify the path in which to generate the scratch directory.
-     * @param continue_ continue the script from a previous execution; must provide the scratch directory path, and the name of the last successfully-generated file.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dwi2response" as const,
+        "@type": "mrtrix.dwi2response" as const,
         "algorithm": algorithm,
         "nocleanup": nocleanup,
         "info": info,
@@ -1108,21 +1108,21 @@ function dwi2response_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dwi2response_cargs(
     params: Dwi2responseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dwi2response");
-    cargs.push(...dynCargs((params["algorithm"] ?? null).__STYXTYPE__)((params["algorithm"] ?? null), execution));
+    cargs.push(...dynCargs((params["algorithm"] ?? null)["@type"])((params["algorithm"] ?? null), execution));
     if ((params["grad"] ?? null) !== null) {
         cargs.push(
             "-grad",
@@ -1130,7 +1130,7 @@ function dwi2response_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
@@ -1190,7 +1190,7 @@ function dwi2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -1202,44 +1202,44 @@ function dwi2response_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dwi2response_outputs(
     params: Dwi2responseParameters,
     execution: Execution,
 ): Dwi2responseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dwi2responseOutputs = {
         root: execution.outputFile("."),
-        algorithm: dynOutputs((params["algorithm"] ?? null).__STYXTYPE__)?.((params["algorithm"] ?? null), execution),
+        algorithm: dynOutputs((params["algorithm"] ?? null)["@type"])?.((params["algorithm"] ?? null), execution),
     };
     return ret;
 }
 
 
+/**
+ * Estimate response function(s) for spherical deconvolution.
+ * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
+ * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
+ */
 function dwi2response_execute(
     params: Dwi2responseParameters,
     execution: Execution,
 ): Dwi2responseOutputs {
-    /**
-     * Estimate response function(s) for spherical deconvolution.
-     * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
-     * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
-     */
     params = execution.params(params)
     const cargs = dwi2response_cargs(params, execution)
     const ret = dwi2response_outputs(params, execution)
@@ -1248,6 +1248,37 @@ function dwi2response_execute(
 }
 
 
+/**
+ * Estimate response function(s) for spherical deconvolution.
+ * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
+ * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param algorithm Select the algorithm to be used to complete the script operation; additional details and options become available once an algorithm is nominated. Options are: dhollander, fa, manual, msmt_5tt, tax, tournier.
+ * @param grad Provide the diffusion gradient table in MRtrix format
+ * @param fslgrad Provide the diffusion gradient table in FSL bvecs/bvals format
+ * @param mask Only process voxels within the specified binary brain mask image.
+ * @param voxels Output an image showing the final voxel selection(s)
+ * @param shells b-value(s) to use in response function estimation (comma-separated list in case of multiple b-values, b=0 must be included explicitly)
+ * @param lmax maximum harmonic degree(s) for response function estimation (comma-separated list in case of multiple b-values).
+ * @param nocleanup do not delete intermediate files during script execution, and do not delete scratch directory at script completion.
+ * @param scratch manually specify the path in which to generate the scratch directory.
+ * @param continue_ continue the script from a previous execution; must provide the scratch directory path, and the name of the last successfully-generated file.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
+ */
 function dwi2response(
     algorithm: Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters,
     grad: InputPathType | null = null,
@@ -1269,37 +1300,6 @@ function dwi2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2responseOutputs {
-    /**
-     * Estimate response function(s) for spherical deconvolution.
-     * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
-     * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param algorithm Select the algorithm to be used to complete the script operation; additional details and options become available once an algorithm is nominated. Options are: dhollander, fa, manual, msmt_5tt, tax, tournier.
-     * @param grad Provide the diffusion gradient table in MRtrix format
-     * @param fslgrad Provide the diffusion gradient table in FSL bvecs/bvals format
-     * @param mask Only process voxels within the specified binary brain mask image.
-     * @param voxels Output an image showing the final voxel selection(s)
-     * @param shells b-value(s) to use in response function estimation (comma-separated list in case of multiple b-values, b=0 must be included explicitly)
-     * @param lmax maximum harmonic degree(s) for response function estimation (comma-separated list in case of multiple b-values).
-     * @param nocleanup do not delete intermediate files during script execution, and do not delete scratch directory at script completion.
-     * @param scratch manually specify the path in which to generate the scratch directory.
-     * @param continue_ continue the script from a previous execution; must provide the scratch directory path, and the name of the last successfully-generated file.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DWI2RESPONSE_METADATA);
     const params = dwi2response_params(algorithm, grad, fslgrad, mask, voxels, shells, lmax, nocleanup, scratch, continue_, info, quiet, debug, force, nthreads, config, help, version)
@@ -1326,13 +1326,30 @@ export {
       Dwi2responseTournierOutputs,
       Dwi2responseTournierParameters,
       dwi2response,
+      dwi2response_cargs,
+      dwi2response_config_cargs,
       dwi2response_config_params,
+      dwi2response_dhollander_cargs,
+      dwi2response_dhollander_outputs,
       dwi2response_dhollander_params,
+      dwi2response_execute,
+      dwi2response_fa_cargs,
+      dwi2response_fa_outputs,
       dwi2response_fa_params,
+      dwi2response_fslgrad_cargs,
       dwi2response_fslgrad_params,
+      dwi2response_manual_cargs,
+      dwi2response_manual_outputs,
       dwi2response_manual_params,
+      dwi2response_msmt_5tt_cargs,
+      dwi2response_msmt_5tt_outputs,
       dwi2response_msmt_5tt_params,
+      dwi2response_outputs,
       dwi2response_params,
+      dwi2response_tax_cargs,
+      dwi2response_tax_outputs,
       dwi2response_tax_params,
+      dwi2response_tournier_cargs,
+      dwi2response_tournier_outputs,
       dwi2response_tournier_params,
 };

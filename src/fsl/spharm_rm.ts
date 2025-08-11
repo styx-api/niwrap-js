@@ -12,7 +12,7 @@ const SPHARM_RM_METADATA: Metadata = {
 
 
 interface SpharmRmParameters {
-    "__STYXTYPE__": "spharm_rm";
+    "@type": "fsl.spharm_rm";
     "input_file": InputPathType;
     "output_file": string;
     "mask_file"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface SpharmRmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "spharm_rm": spharm_rm_cargs,
+        "fsl.spharm_rm": spharm_rm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "spharm_rm": spharm_rm_outputs,
+        "fsl.spharm_rm": spharm_rm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface SpharmRmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image filename
+ * @param output_file Output image filename
+ * @param mask_file Mask filename
+ * @param number_of_terms Number of terms to remove (order is 1,x,y,z,z^2+(x^2+y^2)/2,zx,zy,xy,x^2-y^2)
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function spharm_rm_params(
     input_file: InputPathType,
     output_file: string,
@@ -79,19 +90,8 @@ function spharm_rm_params(
     number_of_terms: number | null = null,
     verbose_flag: boolean = false,
 ): SpharmRmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image filename
-     * @param output_file Output image filename
-     * @param mask_file Mask filename
-     * @param number_of_terms Number of terms to remove (order is 1,x,y,z,z^2+(x^2+y^2)/2,zx,zy,xy,x^2-y^2)
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spharm_rm" as const,
+        "@type": "fsl.spharm_rm" as const,
         "input_file": input_file,
         "output_file": output_file,
         "verbose_flag": verbose_flag,
@@ -106,18 +106,18 @@ function spharm_rm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spharm_rm_cargs(
     params: SpharmRmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("spharm_rm");
     cargs.push(
@@ -147,18 +147,18 @@ function spharm_rm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spharm_rm_outputs(
     params: SpharmRmParameters,
     execution: Execution,
 ): SpharmRmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpharmRmOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -167,22 +167,22 @@ function spharm_rm_outputs(
 }
 
 
+/**
+ * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
+ */
 function spharm_rm_execute(
     params: SpharmRmParameters,
     execution: Execution,
 ): SpharmRmOutputs {
-    /**
-     * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
-     */
     params = execution.params(params)
     const cargs = spharm_rm_cargs(params, execution)
     const ret = spharm_rm_outputs(params, execution)
@@ -191,6 +191,22 @@ function spharm_rm_execute(
 }
 
 
+/**
+ * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image filename
+ * @param output_file Output image filename
+ * @param mask_file Mask filename
+ * @param number_of_terms Number of terms to remove (order is 1,x,y,z,z^2+(x^2+y^2)/2,zx,zy,xy,x^2-y^2)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
+ */
 function spharm_rm(
     input_file: InputPathType,
     output_file: string,
@@ -199,22 +215,6 @@ function spharm_rm(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SpharmRmOutputs {
-    /**
-     * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image filename
-     * @param output_file Output image filename
-     * @param mask_file Mask filename
-     * @param number_of_terms Number of terms to remove (order is 1,x,y,z,z^2+(x^2+y^2)/2,zx,zy,xy,x^2-y^2)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPHARM_RM_METADATA);
     const params = spharm_rm_params(input_file, output_file, mask_file, number_of_terms, verbose_flag)
@@ -227,5 +227,8 @@ export {
       SpharmRmOutputs,
       SpharmRmParameters,
       spharm_rm,
+      spharm_rm_cargs,
+      spharm_rm_execute,
+      spharm_rm_outputs,
       spharm_rm_params,
 };

@@ -12,38 +12,38 @@ const TBSS_4_PRESTATS_METADATA: Metadata = {
 
 
 interface Tbss4PrestatsParameters {
-    "__STYXTYPE__": "tbss_4_prestats";
+    "@type": "fsl.tbss_4_prestats";
     "threshold": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_4_prestats": tbss_4_prestats_cargs,
+        "fsl.tbss_4_prestats": tbss_4_prestats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Tbss4PrestatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param threshold Thresholding value for the Mean FA Skeleton; recommended value is 0.2
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_4_prestats_params(
     threshold: number = 0.2,
 ): Tbss4PrestatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param threshold Thresholding value for the Mean FA Skeleton; recommended value is 0.2
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_4_prestats" as const,
+        "@type": "fsl.tbss_4_prestats" as const,
         "threshold": threshold,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_4_prestats_cargs(
     params: Tbss4PrestatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_4_prestats");
     cargs.push(String((params["threshold"] ?? null)));
@@ -100,18 +100,18 @@ function tbss_4_prestats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_4_prestats_outputs(
     params: Tbss4PrestatsParameters,
     execution: Execution,
 ): Tbss4PrestatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tbss4PrestatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function tbss_4_prestats_outputs(
 }
 
 
+/**
+ * A tool for thresholding the Mean FA Skeleton in TBSS analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
+ */
 function tbss_4_prestats_execute(
     params: Tbss4PrestatsParameters,
     execution: Execution,
 ): Tbss4PrestatsOutputs {
-    /**
-     * A tool for thresholding the Mean FA Skeleton in TBSS analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_4_prestats_cargs(params, execution)
     const ret = tbss_4_prestats_outputs(params, execution)
@@ -143,22 +143,22 @@ function tbss_4_prestats_execute(
 }
 
 
+/**
+ * A tool for thresholding the Mean FA Skeleton in TBSS analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param threshold Thresholding value for the Mean FA Skeleton; recommended value is 0.2
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
+ */
 function tbss_4_prestats(
     threshold: number = 0.2,
     runner: Runner | null = null,
 ): Tbss4PrestatsOutputs {
-    /**
-     * A tool for thresholding the Mean FA Skeleton in TBSS analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param threshold Thresholding value for the Mean FA Skeleton; recommended value is 0.2
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_4_PRESTATS_METADATA);
     const params = tbss_4_prestats_params(threshold)
@@ -171,5 +171,8 @@ export {
       Tbss4PrestatsOutputs,
       Tbss4PrestatsParameters,
       tbss_4_prestats,
+      tbss_4_prestats_cargs,
+      tbss_4_prestats_execute,
+      tbss_4_prestats_outputs,
       tbss_4_prestats_params,
 };

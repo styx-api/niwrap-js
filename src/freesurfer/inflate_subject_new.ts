@@ -12,38 +12,38 @@ const INFLATE_SUBJECT_NEW_METADATA: Metadata = {
 
 
 interface InflateSubjectNewParameters {
-    "__STYXTYPE__": "inflate_subject_new";
+    "@type": "freesurfer.inflate_subject_new";
     "subject_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "inflate_subject_new": inflate_subject_new_cargs,
+        "freesurfer.inflate_subject_new": inflate_subject_new_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface InflateSubjectNewOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory containing the subject data to be inflated.
+ *
+ * @returns Parameter dictionary
+ */
 function inflate_subject_new_params(
     subject_dir: string,
 ): InflateSubjectNewParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory containing the subject data to be inflated.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inflate_subject_new" as const,
+        "@type": "freesurfer.inflate_subject_new" as const,
         "subject_dir": subject_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function inflate_subject_new_cargs(
     params: InflateSubjectNewParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("inflate_subject_new");
     cargs.push((params["subject_dir"] ?? null));
@@ -100,18 +100,18 @@ function inflate_subject_new_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function inflate_subject_new_outputs(
     params: InflateSubjectNewParameters,
     execution: Execution,
 ): InflateSubjectNewOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InflateSubjectNewOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function inflate_subject_new_outputs(
 }
 
 
+/**
+ * Tool to inflate subject surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
+ */
 function inflate_subject_new_execute(
     params: InflateSubjectNewParameters,
     execution: Execution,
 ): InflateSubjectNewOutputs {
-    /**
-     * Tool to inflate subject surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
-     */
     params = execution.params(params)
     const cargs = inflate_subject_new_cargs(params, execution)
     const ret = inflate_subject_new_outputs(params, execution)
@@ -143,22 +143,22 @@ function inflate_subject_new_execute(
 }
 
 
+/**
+ * Tool to inflate subject surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Directory containing the subject data to be inflated.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
+ */
 function inflate_subject_new(
     subject_dir: string,
     runner: Runner | null = null,
 ): InflateSubjectNewOutputs {
-    /**
-     * Tool to inflate subject surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Directory containing the subject data to be inflated.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INFLATE_SUBJECT_NEW_METADATA);
     const params = inflate_subject_new_params(subject_dir)
@@ -171,5 +171,8 @@ export {
       InflateSubjectNewOutputs,
       InflateSubjectNewParameters,
       inflate_subject_new,
+      inflate_subject_new_cargs,
+      inflate_subject_new_execute,
+      inflate_subject_new_outputs,
       inflate_subject_new_params,
 };

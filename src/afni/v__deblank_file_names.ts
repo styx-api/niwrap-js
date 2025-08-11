@@ -12,7 +12,7 @@ const V__DEBLANK_FILE_NAMES_METADATA: Metadata = {
 
 
 interface VDeblankFileNamesParameters {
-    "__STYXTYPE__": "@DeblankFileNames";
+    "@type": "afni.@DeblankFileNames";
     "move": boolean;
     "nobrac": boolean;
     "demo_set": boolean;
@@ -22,33 +22,33 @@ interface VDeblankFileNamesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@DeblankFileNames": v__deblank_file_names_cargs,
+        "afni.@DeblankFileNames": v__deblank_file_names_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface VDeblankFileNamesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param move Actually rename the files (opposite of -dry_run).
+ * @param nobrac Do not replace () and [] in filenames, just spaces.
+ * @param demo_set Create a toy directory with bad names for testing.
+ * @param echo Turn on script echo.
+ * @param help Display help message.
+ * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
+ *
+ * @returns Parameter dictionary
+ */
 function v__deblank_file_names_params(
     move: boolean = false,
     nobrac: boolean = false,
@@ -76,20 +88,8 @@ function v__deblank_file_names_params(
     help: boolean = false,
     files: Array<InputPathType> | null = null,
 ): VDeblankFileNamesParameters {
-    /**
-     * Build parameters.
-    
-     * @param move Actually rename the files (opposite of -dry_run).
-     * @param nobrac Do not replace () and [] in filenames, just spaces.
-     * @param demo_set Create a toy directory with bad names for testing.
-     * @param echo Turn on script echo.
-     * @param help Display help message.
-     * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@DeblankFileNames" as const,
+        "@type": "afni.@DeblankFileNames" as const,
         "move": move,
         "nobrac": nobrac,
         "demo_set": demo_set,
@@ -103,18 +103,18 @@ function v__deblank_file_names_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__deblank_file_names_cargs(
     params: VDeblankFileNamesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@DeblankFileNames");
     if ((params["move"] ?? null)) {
@@ -139,18 +139,18 @@ function v__deblank_file_names_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__deblank_file_names_outputs(
     params: VDeblankFileNamesParameters,
     execution: Execution,
 ): VDeblankFileNamesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDeblankFileNamesOutputs = {
         root: execution.outputFile("."),
     };
@@ -158,22 +158,22 @@ function v__deblank_file_names_outputs(
 }
 
 
+/**
+ * A script to remove blanks and other annoying characters ([], ()) from filenames.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
+ */
 function v__deblank_file_names_execute(
     params: VDeblankFileNamesParameters,
     execution: Execution,
 ): VDeblankFileNamesOutputs {
-    /**
-     * A script to remove blanks and other annoying characters ([], ()) from filenames.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__deblank_file_names_cargs(params, execution)
     const ret = v__deblank_file_names_outputs(params, execution)
@@ -182,6 +182,23 @@ function v__deblank_file_names_execute(
 }
 
 
+/**
+ * A script to remove blanks and other annoying characters ([], ()) from filenames.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param move Actually rename the files (opposite of -dry_run).
+ * @param nobrac Do not replace () and [] in filenames, just spaces.
+ * @param demo_set Create a toy directory with bad names for testing.
+ * @param echo Turn on script echo.
+ * @param help Display help message.
+ * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
+ */
 function v__deblank_file_names(
     move: boolean = false,
     nobrac: boolean = false,
@@ -191,23 +208,6 @@ function v__deblank_file_names(
     files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): VDeblankFileNamesOutputs {
-    /**
-     * A script to remove blanks and other annoying characters ([], ()) from filenames.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param move Actually rename the files (opposite of -dry_run).
-     * @param nobrac Do not replace () and [] in filenames, just spaces.
-     * @param demo_set Create a toy directory with bad names for testing.
-     * @param echo Turn on script echo.
-     * @param help Display help message.
-     * @param files Specify files to fix as opposed to letting it fix all the names in the current directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DEBLANK_FILE_NAMES_METADATA);
     const params = v__deblank_file_names_params(move, nobrac, demo_set, echo, help, files)
@@ -220,5 +220,8 @@ export {
       VDeblankFileNamesParameters,
       V__DEBLANK_FILE_NAMES_METADATA,
       v__deblank_file_names,
+      v__deblank_file_names_cargs,
+      v__deblank_file_names_execute,
+      v__deblank_file_names_outputs,
       v__deblank_file_names_params,
 };

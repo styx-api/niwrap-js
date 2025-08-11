@@ -12,7 +12,7 @@ const DCMDJPEG_FS_METADATA: Metadata = {
 
 
 interface DcmdjpegFsParameters {
-    "__STYXTYPE__": "dcmdjpeg.fs";
+    "@type": "freesurfer.dcmdjpeg.fs";
     "input_file": InputPathType;
     "output_file": string;
     "help": boolean;
@@ -57,35 +57,35 @@ interface DcmdjpegFsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmdjpeg.fs": dcmdjpeg_fs_cargs,
+        "freesurfer.dcmdjpeg.fs": dcmdjpeg_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dcmdjpeg.fs": dcmdjpeg_fs_outputs,
+        "freesurfer.dcmdjpeg.fs": dcmdjpeg_fs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -108,6 +108,53 @@ interface DcmdjpegFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file DICOM input filename to be converted
+ * @param output_file DICOM output filename
+ * @param help Print this help text and exit
+ * @param version Print version information and exit
+ * @param arguments_ Print expanded command line arguments
+ * @param quiet Quiet mode, print no warnings and errors
+ * @param verbose Verbose mode, print processing details
+ * @param debug Debug mode, print debug information
+ * @param log_level Use level l for the logger (fatal, error, warn, info, debug, trace)
+ * @param log_config Use config file f for the logger
+ * @param read_file Read file format or data set (default)
+ * @param read_file_only Read file format only
+ * @param read_dataset Read data set without file meta information
+ * @param conv_photometric Convert if YCbCr photometric interpretation (default)
+ * @param conv_lossy Convert YCbCr to RGB if lossy JPEG
+ * @param conv_guess Convert to RGB if YCbCr is guessed by library
+ * @param conv_guess_lossy Convert to RGB if lossy JPEG and YCbCr is guessed
+ * @param conv_always Always convert YCbCr to RGB
+ * @param conv_never Never convert color space
+ * @param planar_auto Automatically determine planar configuration from SOP class and color space (default)
+ * @param color_by_pixel Always store color-by-pixel
+ * @param color_by_plane Always store color-by-plane
+ * @param uid_default Keep same SOP Instance UID (default)
+ * @param uid_always Always assign new UID
+ * @param workaround_pred6 Enable workaround for JPEG lossless images with overflow in predictor 6
+ * @param workaround_incpl Enable workaround for incomplete JPEG data
+ * @param write_file Write file format (default)
+ * @param write_dataset Write data set without file meta information
+ * @param write_xfer_little Write with explicit VR little endian (default)
+ * @param write_xfer_big Write with explicit VR big endian TS
+ * @param write_xfer_implicit Write with implicit VR little endian TS
+ * @param enable_new_vr Enable support for new VRs (UN/UT) (default)
+ * @param disable_new_vr Disable support for new VRs, convert to OB
+ * @param group_length_recalc Recalculate group lengths if present (default)
+ * @param group_length_create Always write with group length elements
+ * @param group_length_remove Always write without group length elements
+ * @param length_explicit Write with explicit lengths (default)
+ * @param length_undefined Write with undefined lengths
+ * @param padding_retain Do not change padding (default if not --write-dataset)
+ * @param padding_off No padding (implicit if --write-dataset)
+ * @param padding_create Align file on multiple of f bytes and items on multiple of i bytes
+ *
+ * @returns Parameter dictionary
+ */
 function dcmdjpeg_fs_params(
     input_file: InputPathType,
     output_file: string,
@@ -151,55 +198,8 @@ function dcmdjpeg_fs_params(
     padding_off: boolean = false,
     padding_create: Array<number> | null = null,
 ): DcmdjpegFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file DICOM input filename to be converted
-     * @param output_file DICOM output filename
-     * @param help Print this help text and exit
-     * @param version Print version information and exit
-     * @param arguments_ Print expanded command line arguments
-     * @param quiet Quiet mode, print no warnings and errors
-     * @param verbose Verbose mode, print processing details
-     * @param debug Debug mode, print debug information
-     * @param log_level Use level l for the logger (fatal, error, warn, info, debug, trace)
-     * @param log_config Use config file f for the logger
-     * @param read_file Read file format or data set (default)
-     * @param read_file_only Read file format only
-     * @param read_dataset Read data set without file meta information
-     * @param conv_photometric Convert if YCbCr photometric interpretation (default)
-     * @param conv_lossy Convert YCbCr to RGB if lossy JPEG
-     * @param conv_guess Convert to RGB if YCbCr is guessed by library
-     * @param conv_guess_lossy Convert to RGB if lossy JPEG and YCbCr is guessed
-     * @param conv_always Always convert YCbCr to RGB
-     * @param conv_never Never convert color space
-     * @param planar_auto Automatically determine planar configuration from SOP class and color space (default)
-     * @param color_by_pixel Always store color-by-pixel
-     * @param color_by_plane Always store color-by-plane
-     * @param uid_default Keep same SOP Instance UID (default)
-     * @param uid_always Always assign new UID
-     * @param workaround_pred6 Enable workaround for JPEG lossless images with overflow in predictor 6
-     * @param workaround_incpl Enable workaround for incomplete JPEG data
-     * @param write_file Write file format (default)
-     * @param write_dataset Write data set without file meta information
-     * @param write_xfer_little Write with explicit VR little endian (default)
-     * @param write_xfer_big Write with explicit VR big endian TS
-     * @param write_xfer_implicit Write with implicit VR little endian TS
-     * @param enable_new_vr Enable support for new VRs (UN/UT) (default)
-     * @param disable_new_vr Disable support for new VRs, convert to OB
-     * @param group_length_recalc Recalculate group lengths if present (default)
-     * @param group_length_create Always write with group length elements
-     * @param group_length_remove Always write without group length elements
-     * @param length_explicit Write with explicit lengths (default)
-     * @param length_undefined Write with undefined lengths
-     * @param padding_retain Do not change padding (default if not --write-dataset)
-     * @param padding_off No padding (implicit if --write-dataset)
-     * @param padding_create Align file on multiple of f bytes and items on multiple of i bytes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmdjpeg.fs" as const,
+        "@type": "freesurfer.dcmdjpeg.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "help": help,
@@ -252,18 +252,18 @@ function dcmdjpeg_fs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmdjpeg_fs_cargs(
     params: DcmdjpegFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmdjpeg.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -398,18 +398,18 @@ function dcmdjpeg_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmdjpeg_fs_outputs(
     params: DcmdjpegFsParameters,
     execution: Execution,
 ): DcmdjpegFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmdjpegFsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -418,22 +418,22 @@ function dcmdjpeg_fs_outputs(
 }
 
 
+/**
+ * A tool to decode JPEG-compressed DICOM files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
+ */
 function dcmdjpeg_fs_execute(
     params: DcmdjpegFsParameters,
     execution: Execution,
 ): DcmdjpegFsOutputs {
-    /**
-     * A tool to decode JPEG-compressed DICOM files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmdjpeg_fs_cargs(params, execution)
     const ret = dcmdjpeg_fs_outputs(params, execution)
@@ -442,6 +442,58 @@ function dcmdjpeg_fs_execute(
 }
 
 
+/**
+ * A tool to decode JPEG-compressed DICOM files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file DICOM input filename to be converted
+ * @param output_file DICOM output filename
+ * @param help Print this help text and exit
+ * @param version Print version information and exit
+ * @param arguments_ Print expanded command line arguments
+ * @param quiet Quiet mode, print no warnings and errors
+ * @param verbose Verbose mode, print processing details
+ * @param debug Debug mode, print debug information
+ * @param log_level Use level l for the logger (fatal, error, warn, info, debug, trace)
+ * @param log_config Use config file f for the logger
+ * @param read_file Read file format or data set (default)
+ * @param read_file_only Read file format only
+ * @param read_dataset Read data set without file meta information
+ * @param conv_photometric Convert if YCbCr photometric interpretation (default)
+ * @param conv_lossy Convert YCbCr to RGB if lossy JPEG
+ * @param conv_guess Convert to RGB if YCbCr is guessed by library
+ * @param conv_guess_lossy Convert to RGB if lossy JPEG and YCbCr is guessed
+ * @param conv_always Always convert YCbCr to RGB
+ * @param conv_never Never convert color space
+ * @param planar_auto Automatically determine planar configuration from SOP class and color space (default)
+ * @param color_by_pixel Always store color-by-pixel
+ * @param color_by_plane Always store color-by-plane
+ * @param uid_default Keep same SOP Instance UID (default)
+ * @param uid_always Always assign new UID
+ * @param workaround_pred6 Enable workaround for JPEG lossless images with overflow in predictor 6
+ * @param workaround_incpl Enable workaround for incomplete JPEG data
+ * @param write_file Write file format (default)
+ * @param write_dataset Write data set without file meta information
+ * @param write_xfer_little Write with explicit VR little endian (default)
+ * @param write_xfer_big Write with explicit VR big endian TS
+ * @param write_xfer_implicit Write with implicit VR little endian TS
+ * @param enable_new_vr Enable support for new VRs (UN/UT) (default)
+ * @param disable_new_vr Disable support for new VRs, convert to OB
+ * @param group_length_recalc Recalculate group lengths if present (default)
+ * @param group_length_create Always write with group length elements
+ * @param group_length_remove Always write without group length elements
+ * @param length_explicit Write with explicit lengths (default)
+ * @param length_undefined Write with undefined lengths
+ * @param padding_retain Do not change padding (default if not --write-dataset)
+ * @param padding_off No padding (implicit if --write-dataset)
+ * @param padding_create Align file on multiple of f bytes and items on multiple of i bytes
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
+ */
 function dcmdjpeg_fs(
     input_file: InputPathType,
     output_file: string,
@@ -486,58 +538,6 @@ function dcmdjpeg_fs(
     padding_create: Array<number> | null = null,
     runner: Runner | null = null,
 ): DcmdjpegFsOutputs {
-    /**
-     * A tool to decode JPEG-compressed DICOM files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file DICOM input filename to be converted
-     * @param output_file DICOM output filename
-     * @param help Print this help text and exit
-     * @param version Print version information and exit
-     * @param arguments_ Print expanded command line arguments
-     * @param quiet Quiet mode, print no warnings and errors
-     * @param verbose Verbose mode, print processing details
-     * @param debug Debug mode, print debug information
-     * @param log_level Use level l for the logger (fatal, error, warn, info, debug, trace)
-     * @param log_config Use config file f for the logger
-     * @param read_file Read file format or data set (default)
-     * @param read_file_only Read file format only
-     * @param read_dataset Read data set without file meta information
-     * @param conv_photometric Convert if YCbCr photometric interpretation (default)
-     * @param conv_lossy Convert YCbCr to RGB if lossy JPEG
-     * @param conv_guess Convert to RGB if YCbCr is guessed by library
-     * @param conv_guess_lossy Convert to RGB if lossy JPEG and YCbCr is guessed
-     * @param conv_always Always convert YCbCr to RGB
-     * @param conv_never Never convert color space
-     * @param planar_auto Automatically determine planar configuration from SOP class and color space (default)
-     * @param color_by_pixel Always store color-by-pixel
-     * @param color_by_plane Always store color-by-plane
-     * @param uid_default Keep same SOP Instance UID (default)
-     * @param uid_always Always assign new UID
-     * @param workaround_pred6 Enable workaround for JPEG lossless images with overflow in predictor 6
-     * @param workaround_incpl Enable workaround for incomplete JPEG data
-     * @param write_file Write file format (default)
-     * @param write_dataset Write data set without file meta information
-     * @param write_xfer_little Write with explicit VR little endian (default)
-     * @param write_xfer_big Write with explicit VR big endian TS
-     * @param write_xfer_implicit Write with implicit VR little endian TS
-     * @param enable_new_vr Enable support for new VRs (UN/UT) (default)
-     * @param disable_new_vr Disable support for new VRs, convert to OB
-     * @param group_length_recalc Recalculate group lengths if present (default)
-     * @param group_length_create Always write with group length elements
-     * @param group_length_remove Always write without group length elements
-     * @param length_explicit Write with explicit lengths (default)
-     * @param length_undefined Write with undefined lengths
-     * @param padding_retain Do not change padding (default if not --write-dataset)
-     * @param padding_off No padding (implicit if --write-dataset)
-     * @param padding_create Align file on multiple of f bytes and items on multiple of i bytes
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMDJPEG_FS_METADATA);
     const params = dcmdjpeg_fs_params(input_file, output_file, help, version, arguments_, quiet, verbose, debug, log_level, log_config, read_file, read_file_only, read_dataset, conv_photometric, conv_lossy, conv_guess, conv_guess_lossy, conv_always, conv_never, planar_auto, color_by_pixel, color_by_plane, uid_default, uid_always, workaround_pred6, workaround_incpl, write_file, write_dataset, write_xfer_little, write_xfer_big, write_xfer_implicit, enable_new_vr, disable_new_vr, group_length_recalc, group_length_create, group_length_remove, length_explicit, length_undefined, padding_retain, padding_off, padding_create)
@@ -550,5 +550,8 @@ export {
       DcmdjpegFsOutputs,
       DcmdjpegFsParameters,
       dcmdjpeg_fs,
+      dcmdjpeg_fs_cargs,
+      dcmdjpeg_fs_execute,
+      dcmdjpeg_fs_outputs,
       dcmdjpeg_fs_params,
 };

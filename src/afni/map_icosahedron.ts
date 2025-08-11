@@ -12,7 +12,7 @@ const MAP_ICOSAHEDRON_METADATA: Metadata = {
 
 
 interface MapIcosahedronParameters {
-    "__STYXTYPE__": "MapIcosahedron";
+    "@type": "afni.MapIcosahedron";
     "spec_file": InputPathType;
     "rec_depth"?: number | null | undefined;
     "lin_depth"?: number | null | undefined;
@@ -27,33 +27,33 @@ interface MapIcosahedronParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "MapIcosahedron": map_icosahedron_cargs,
+        "afni.MapIcosahedron": map_icosahedron_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface MapIcosahedronOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file Spec file containing original-mesh surfaces.
+ * @param rec_depth Recursive (binary) tessellation depth for icosahedron (default: 3).
+ * @param lin_depth Number of edge divides for linear icosahedron tessellation.
+ * @param morph_surf Specifies the morphSurf surface.
+ * @param num_it Number of smoothing iterations.
+ * @param prefix Prefix for output files (default: 'std.').
+ * @param nn_dset Map DSET onto the new mesh using Nearest Neighbor interpolation.
+ * @param dset Map DSET onto the new mesh using barycentric interpolation.
+ * @param fix_cut_surfaces Check and fix standard-mesh surfaces with cuts for cross-cut connections.
+ * @param verbosity Enable verbose output.
+ * @param help Display the help text.
+ *
+ * @returns Parameter dictionary
+ */
 function map_icosahedron_params(
     spec_file: InputPathType,
     rec_depth: number | null = null,
@@ -86,25 +103,8 @@ function map_icosahedron_params(
     verbosity: boolean = false,
     help: boolean = false,
 ): MapIcosahedronParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file Spec file containing original-mesh surfaces.
-     * @param rec_depth Recursive (binary) tessellation depth for icosahedron (default: 3).
-     * @param lin_depth Number of edge divides for linear icosahedron tessellation.
-     * @param morph_surf Specifies the morphSurf surface.
-     * @param num_it Number of smoothing iterations.
-     * @param prefix Prefix for output files (default: 'std.').
-     * @param nn_dset Map DSET onto the new mesh using Nearest Neighbor interpolation.
-     * @param dset Map DSET onto the new mesh using barycentric interpolation.
-     * @param fix_cut_surfaces Check and fix standard-mesh surfaces with cuts for cross-cut connections.
-     * @param verbosity Enable verbose output.
-     * @param help Display the help text.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "MapIcosahedron" as const,
+        "@type": "afni.MapIcosahedron" as const,
         "spec_file": spec_file,
         "fix_cut_surfaces": fix_cut_surfaces,
         "verbosity": verbosity,
@@ -135,18 +135,18 @@ function map_icosahedron_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function map_icosahedron_cargs(
     params: MapIcosahedronParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("MapIcosahedron");
     cargs.push(execution.inputFile((params["spec_file"] ?? null)));
@@ -205,18 +205,18 @@ function map_icosahedron_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function map_icosahedron_outputs(
     params: MapIcosahedronParameters,
     execution: Execution,
 ): MapIcosahedronOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MapIcosahedronOutputs = {
         root: execution.outputFile("."),
     };
@@ -224,22 +224,22 @@ function map_icosahedron_outputs(
 }
 
 
+/**
+ * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MapIcosahedronOutputs`).
+ */
 function map_icosahedron_execute(
     params: MapIcosahedronParameters,
     execution: Execution,
 ): MapIcosahedronOutputs {
-    /**
-     * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MapIcosahedronOutputs`).
-     */
     params = execution.params(params)
     const cargs = map_icosahedron_cargs(params, execution)
     const ret = map_icosahedron_outputs(params, execution)
@@ -248,6 +248,28 @@ function map_icosahedron_execute(
 }
 
 
+/**
+ * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file Spec file containing original-mesh surfaces.
+ * @param rec_depth Recursive (binary) tessellation depth for icosahedron (default: 3).
+ * @param lin_depth Number of edge divides for linear icosahedron tessellation.
+ * @param morph_surf Specifies the morphSurf surface.
+ * @param num_it Number of smoothing iterations.
+ * @param prefix Prefix for output files (default: 'std.').
+ * @param nn_dset Map DSET onto the new mesh using Nearest Neighbor interpolation.
+ * @param dset Map DSET onto the new mesh using barycentric interpolation.
+ * @param fix_cut_surfaces Check and fix standard-mesh surfaces with cuts for cross-cut connections.
+ * @param verbosity Enable verbose output.
+ * @param help Display the help text.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MapIcosahedronOutputs`).
+ */
 function map_icosahedron(
     spec_file: InputPathType,
     rec_depth: number | null = null,
@@ -262,28 +284,6 @@ function map_icosahedron(
     help: boolean = false,
     runner: Runner | null = null,
 ): MapIcosahedronOutputs {
-    /**
-     * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file Spec file containing original-mesh surfaces.
-     * @param rec_depth Recursive (binary) tessellation depth for icosahedron (default: 3).
-     * @param lin_depth Number of edge divides for linear icosahedron tessellation.
-     * @param morph_surf Specifies the morphSurf surface.
-     * @param num_it Number of smoothing iterations.
-     * @param prefix Prefix for output files (default: 'std.').
-     * @param nn_dset Map DSET onto the new mesh using Nearest Neighbor interpolation.
-     * @param dset Map DSET onto the new mesh using barycentric interpolation.
-     * @param fix_cut_surfaces Check and fix standard-mesh surfaces with cuts for cross-cut connections.
-     * @param verbosity Enable verbose output.
-     * @param help Display the help text.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MapIcosahedronOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_ICOSAHEDRON_METADATA);
     const params = map_icosahedron_params(spec_file, rec_depth, lin_depth, morph_surf, num_it, prefix, nn_dset, dset, fix_cut_surfaces, verbosity, help)
@@ -296,5 +296,8 @@ export {
       MapIcosahedronOutputs,
       MapIcosahedronParameters,
       map_icosahedron,
+      map_icosahedron_cargs,
+      map_icosahedron_execute,
+      map_icosahedron_outputs,
       map_icosahedron_params,
 };

@@ -12,7 +12,7 @@ const OXFORD_ASL_METADATA: Metadata = {
 
 
 interface OxfordAslParameters {
-    "__STYXTYPE__": "oxford_asl";
+    "@type": "fsl.oxford_asl";
     "asl_data": InputPathType;
     "output_dir_name": string;
     "mask"?: InputPathType | null | undefined;
@@ -45,35 +45,35 @@ interface OxfordAslParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "oxford_asl": oxford_asl_cargs,
+        "fsl.oxford_asl": oxford_asl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "oxford_asl": oxford_asl_outputs,
+        "fsl.oxford_asl": oxford_asl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,41 @@ interface OxfordAslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param asl_data Input ASL data
+ * @param output_dir_name Output directory name
+ * @param mask Mask in native space of ASL data
+ * @param spatial_smoothing Use adaptive spatial smoothing on perfusion
+ * @param white_paper_analysis Analysis that conforms to the 'white paper' (Alsop et al. 2014)
+ * @param motion_correction Apply motion correction using mcflirt
+ * @param input_asl_format Input ASL format: diff, tc, ct
+ * @param input_block_format Input block format (for multi-TI): rpt, tis
+ * @param inversion_times Comma separated list of inversion times
+ * @param ti_image 4D image containing voxelwise TI values
+ * @param casl ASL acquisition is pseudo cASL (pcASL) rather than pASL
+ * @param arterial_suppression Arterial suppression (vascular crushing) was used
+ * @param bolus_duration Bolus duration
+ * @param bat Bolus arrival time
+ * @param tissue_t1 Tissue T1 value
+ * @param blood_t1 Blood T1 value
+ * @param slice_timing_difference Timing difference between slices
+ * @param slice_band Number of slices per band in a multi-band setup
+ * @param flip_angle Flip angle for Look-Locker readout correction
+ * @param fsl_anat_dir An fsl_anat directory from structural image
+ * @param structural_image Structural image (whole head)
+ * @param bet_structural_image Structural image (already BETed)
+ * @param fast_segmentation_images Images from a FAST segmentation
+ * @param sensitivity_correction Use bias field (from segmentation) for sensitivity correction
+ * @param precomputed_m0_value Single precomputed M0 value
+ * @param inversion_efficiency Inversion efficiency
+ * @param tr_calibration_data TR of calibration data
+ * @param calibration_image M0 calibration image (proton density or mean control image)
+ * @param calibration_method Calibration method: single or voxel
+ *
+ * @returns Parameter dictionary
+ */
 function oxford_asl_params(
     asl_data: InputPathType,
     output_dir_name: string,
@@ -127,43 +162,8 @@ function oxford_asl_params(
     calibration_image: InputPathType | null = null,
     calibration_method: string | null = null,
 ): OxfordAslParameters {
-    /**
-     * Build parameters.
-    
-     * @param asl_data Input ASL data
-     * @param output_dir_name Output directory name
-     * @param mask Mask in native space of ASL data
-     * @param spatial_smoothing Use adaptive spatial smoothing on perfusion
-     * @param white_paper_analysis Analysis that conforms to the 'white paper' (Alsop et al. 2014)
-     * @param motion_correction Apply motion correction using mcflirt
-     * @param input_asl_format Input ASL format: diff, tc, ct
-     * @param input_block_format Input block format (for multi-TI): rpt, tis
-     * @param inversion_times Comma separated list of inversion times
-     * @param ti_image 4D image containing voxelwise TI values
-     * @param casl ASL acquisition is pseudo cASL (pcASL) rather than pASL
-     * @param arterial_suppression Arterial suppression (vascular crushing) was used
-     * @param bolus_duration Bolus duration
-     * @param bat Bolus arrival time
-     * @param tissue_t1 Tissue T1 value
-     * @param blood_t1 Blood T1 value
-     * @param slice_timing_difference Timing difference between slices
-     * @param slice_band Number of slices per band in a multi-band setup
-     * @param flip_angle Flip angle for Look-Locker readout correction
-     * @param fsl_anat_dir An fsl_anat directory from structural image
-     * @param structural_image Structural image (whole head)
-     * @param bet_structural_image Structural image (already BETed)
-     * @param fast_segmentation_images Images from a FAST segmentation
-     * @param sensitivity_correction Use bias field (from segmentation) for sensitivity correction
-     * @param precomputed_m0_value Single precomputed M0 value
-     * @param inversion_efficiency Inversion efficiency
-     * @param tr_calibration_data TR of calibration data
-     * @param calibration_image M0 calibration image (proton density or mean control image)
-     * @param calibration_method Calibration method: single or voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "oxford_asl" as const,
+        "@type": "fsl.oxford_asl" as const,
         "asl_data": asl_data,
         "output_dir_name": output_dir_name,
         "spatial_smoothing": spatial_smoothing,
@@ -240,18 +240,18 @@ function oxford_asl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function oxford_asl_cargs(
     params: OxfordAslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("oxford_asl");
     cargs.push(
@@ -410,18 +410,18 @@ function oxford_asl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function oxford_asl_outputs(
     params: OxfordAslParameters,
     execution: Execution,
 ): OxfordAslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: OxfordAslOutputs = {
         root: execution.outputFile("."),
         output_dir: execution.outputFile([(params["output_dir_name"] ?? null)].join('')),
@@ -430,22 +430,22 @@ function oxford_asl_outputs(
 }
 
 
+/**
+ * Calculate perfusion maps from ASL data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
+ */
 function oxford_asl_execute(
     params: OxfordAslParameters,
     execution: Execution,
 ): OxfordAslOutputs {
-    /**
-     * Calculate perfusion maps from ASL data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
-     */
     params = execution.params(params)
     const cargs = oxford_asl_cargs(params, execution)
     const ret = oxford_asl_outputs(params, execution)
@@ -454,6 +454,46 @@ function oxford_asl_execute(
 }
 
 
+/**
+ * Calculate perfusion maps from ASL data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param asl_data Input ASL data
+ * @param output_dir_name Output directory name
+ * @param mask Mask in native space of ASL data
+ * @param spatial_smoothing Use adaptive spatial smoothing on perfusion
+ * @param white_paper_analysis Analysis that conforms to the 'white paper' (Alsop et al. 2014)
+ * @param motion_correction Apply motion correction using mcflirt
+ * @param input_asl_format Input ASL format: diff, tc, ct
+ * @param input_block_format Input block format (for multi-TI): rpt, tis
+ * @param inversion_times Comma separated list of inversion times
+ * @param ti_image 4D image containing voxelwise TI values
+ * @param casl ASL acquisition is pseudo cASL (pcASL) rather than pASL
+ * @param arterial_suppression Arterial suppression (vascular crushing) was used
+ * @param bolus_duration Bolus duration
+ * @param bat Bolus arrival time
+ * @param tissue_t1 Tissue T1 value
+ * @param blood_t1 Blood T1 value
+ * @param slice_timing_difference Timing difference between slices
+ * @param slice_band Number of slices per band in a multi-band setup
+ * @param flip_angle Flip angle for Look-Locker readout correction
+ * @param fsl_anat_dir An fsl_anat directory from structural image
+ * @param structural_image Structural image (whole head)
+ * @param bet_structural_image Structural image (already BETed)
+ * @param fast_segmentation_images Images from a FAST segmentation
+ * @param sensitivity_correction Use bias field (from segmentation) for sensitivity correction
+ * @param precomputed_m0_value Single precomputed M0 value
+ * @param inversion_efficiency Inversion efficiency
+ * @param tr_calibration_data TR of calibration data
+ * @param calibration_image M0 calibration image (proton density or mean control image)
+ * @param calibration_method Calibration method: single or voxel
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
+ */
 function oxford_asl(
     asl_data: InputPathType,
     output_dir_name: string,
@@ -486,46 +526,6 @@ function oxford_asl(
     calibration_method: string | null = null,
     runner: Runner | null = null,
 ): OxfordAslOutputs {
-    /**
-     * Calculate perfusion maps from ASL data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param asl_data Input ASL data
-     * @param output_dir_name Output directory name
-     * @param mask Mask in native space of ASL data
-     * @param spatial_smoothing Use adaptive spatial smoothing on perfusion
-     * @param white_paper_analysis Analysis that conforms to the 'white paper' (Alsop et al. 2014)
-     * @param motion_correction Apply motion correction using mcflirt
-     * @param input_asl_format Input ASL format: diff, tc, ct
-     * @param input_block_format Input block format (for multi-TI): rpt, tis
-     * @param inversion_times Comma separated list of inversion times
-     * @param ti_image 4D image containing voxelwise TI values
-     * @param casl ASL acquisition is pseudo cASL (pcASL) rather than pASL
-     * @param arterial_suppression Arterial suppression (vascular crushing) was used
-     * @param bolus_duration Bolus duration
-     * @param bat Bolus arrival time
-     * @param tissue_t1 Tissue T1 value
-     * @param blood_t1 Blood T1 value
-     * @param slice_timing_difference Timing difference between slices
-     * @param slice_band Number of slices per band in a multi-band setup
-     * @param flip_angle Flip angle for Look-Locker readout correction
-     * @param fsl_anat_dir An fsl_anat directory from structural image
-     * @param structural_image Structural image (whole head)
-     * @param bet_structural_image Structural image (already BETed)
-     * @param fast_segmentation_images Images from a FAST segmentation
-     * @param sensitivity_correction Use bias field (from segmentation) for sensitivity correction
-     * @param precomputed_m0_value Single precomputed M0 value
-     * @param inversion_efficiency Inversion efficiency
-     * @param tr_calibration_data TR of calibration data
-     * @param calibration_image M0 calibration image (proton density or mean control image)
-     * @param calibration_method Calibration method: single or voxel
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(OXFORD_ASL_METADATA);
     const params = oxford_asl_params(asl_data, output_dir_name, mask, spatial_smoothing, white_paper_analysis, motion_correction, input_asl_format, input_block_format, inversion_times, ti_image, casl, arterial_suppression, bolus_duration, bat, tissue_t1, blood_t1, slice_timing_difference, slice_band, flip_angle, fsl_anat_dir, structural_image, bet_structural_image, fast_segmentation_images, sensitivity_correction, precomputed_m0_value, inversion_efficiency, tr_calibration_data, calibration_image, calibration_method)
@@ -538,5 +538,8 @@ export {
       OxfordAslOutputs,
       OxfordAslParameters,
       oxford_asl,
+      oxford_asl_cargs,
+      oxford_asl_execute,
+      oxford_asl_outputs,
       oxford_asl_params,
 };

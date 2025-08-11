@@ -12,7 +12,7 @@ const MAP_TO_BASE_METADATA: Metadata = {
 
 
 interface MapToBaseParameters {
-    "__STYXTYPE__": "map_to_base";
+    "@type": "freesurfer.map_to_base";
     "baseid": string;
     "tpid": string;
     "input_image": string;
@@ -21,35 +21,35 @@ interface MapToBaseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "map_to_base": map_to_base_cargs,
+        "freesurfer.map_to_base": map_to_base_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "map_to_base": map_to_base_outputs,
+        "freesurfer.map_to_base": map_to_base_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,17 @@ interface MapToBaseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param baseid Identifier of the base.
+ * @param tpid Identifier of the time point, without the '.long.baseid' suffix.
+ * @param input_image Input image, e.g., norm.mgz, aseg.mgz, lh.white.
+ * @param resample_type Resample type. 'interpolate' for norm, T1, orig; 'nearest' for aseg; 'surface' for surfaces.
+ * @param cross If '1', input is from cross sectionals; default is to use longitudinal directories.
+ *
+ * @returns Parameter dictionary
+ */
 function map_to_base_params(
     baseid: string,
     tpid: string,
@@ -91,19 +102,8 @@ function map_to_base_params(
     resample_type: string,
     cross: string | null = null,
 ): MapToBaseParameters {
-    /**
-     * Build parameters.
-    
-     * @param baseid Identifier of the base.
-     * @param tpid Identifier of the time point, without the '.long.baseid' suffix.
-     * @param input_image Input image, e.g., norm.mgz, aseg.mgz, lh.white.
-     * @param resample_type Resample type. 'interpolate' for norm, T1, orig; 'nearest' for aseg; 'surface' for surfaces.
-     * @param cross If '1', input is from cross sectionals; default is to use longitudinal directories.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "map_to_base" as const,
+        "@type": "freesurfer.map_to_base" as const,
         "baseid": baseid,
         "tpid": tpid,
         "input_image": input_image,
@@ -116,18 +116,18 @@ function map_to_base_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function map_to_base_cargs(
     params: MapToBaseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("map_to_base");
     cargs.push((params["baseid"] ?? null));
@@ -141,18 +141,18 @@ function map_to_base_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function map_to_base_outputs(
     params: MapToBaseParameters,
     execution: Execution,
 ): MapToBaseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MapToBaseOutputs = {
         root: execution.outputFile("."),
         output_long_mri: execution.outputFile([(params["baseid"] ?? null), "/mri/", (params["tpid"] ?? null), "-long.", (params["input_image"] ?? null)].join('')),
@@ -164,22 +164,22 @@ function map_to_base_outputs(
 }
 
 
+/**
+ * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
+ */
 function map_to_base_execute(
     params: MapToBaseParameters,
     execution: Execution,
 ): MapToBaseOutputs {
-    /**
-     * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
-     */
     params = execution.params(params)
     const cargs = map_to_base_cargs(params, execution)
     const ret = map_to_base_outputs(params, execution)
@@ -188,6 +188,22 @@ function map_to_base_execute(
 }
 
 
+/**
+ * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param baseid Identifier of the base.
+ * @param tpid Identifier of the time point, without the '.long.baseid' suffix.
+ * @param input_image Input image, e.g., norm.mgz, aseg.mgz, lh.white.
+ * @param resample_type Resample type. 'interpolate' for norm, T1, orig; 'nearest' for aseg; 'surface' for surfaces.
+ * @param cross If '1', input is from cross sectionals; default is to use longitudinal directories.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
+ */
 function map_to_base(
     baseid: string,
     tpid: string,
@@ -196,22 +212,6 @@ function map_to_base(
     cross: string | null = null,
     runner: Runner | null = null,
 ): MapToBaseOutputs {
-    /**
-     * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param baseid Identifier of the base.
-     * @param tpid Identifier of the time point, without the '.long.baseid' suffix.
-     * @param input_image Input image, e.g., norm.mgz, aseg.mgz, lh.white.
-     * @param resample_type Resample type. 'interpolate' for norm, T1, orig; 'nearest' for aseg; 'surface' for surfaces.
-     * @param cross If '1', input is from cross sectionals; default is to use longitudinal directories.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_TO_BASE_METADATA);
     const params = map_to_base_params(baseid, tpid, input_image, resample_type, cross)
@@ -224,5 +224,8 @@ export {
       MapToBaseOutputs,
       MapToBaseParameters,
       map_to_base,
+      map_to_base_cargs,
+      map_to_base_execute,
+      map_to_base_outputs,
       map_to_base_params,
 };

@@ -12,42 +12,42 @@ const ANTS_DENOISE_IMAGE_FS_METADATA: Metadata = {
 
 
 interface AntsDenoiseImageFsParameters {
-    "__STYXTYPE__": "AntsDenoiseImageFs";
+    "@type": "freesurfer.AntsDenoiseImageFs";
     "input_image": InputPathType;
     "output_image": string;
     "rician_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AntsDenoiseImageFs": ants_denoise_image_fs_cargs,
+        "freesurfer.AntsDenoiseImageFs": ants_denoise_image_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "AntsDenoiseImageFs": ants_denoise_image_fs_outputs,
+        "freesurfer.AntsDenoiseImageFs": ants_denoise_image_fs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface AntsDenoiseImageFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input volume file
+ * @param output_image Denoised volume file
+ * @param rician_flag Enable Rician noise model (otherwise Gaussian is used)
+ *
+ * @returns Parameter dictionary
+ */
 function ants_denoise_image_fs_params(
     input_image: InputPathType,
     output_image: string = "output.nii",
     rician_flag: boolean = false,
 ): AntsDenoiseImageFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input volume file
-     * @param output_image Denoised volume file
-     * @param rician_flag Enable Rician noise model (otherwise Gaussian is used)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AntsDenoiseImageFs" as const,
+        "@type": "freesurfer.AntsDenoiseImageFs" as const,
         "input_image": input_image,
         "output_image": output_image,
         "rician_flag": rician_flag,
@@ -94,18 +94,18 @@ function ants_denoise_image_fs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_denoise_image_fs_cargs(
     params: AntsDenoiseImageFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AntsDenoiseImageFs");
     cargs.push(
@@ -123,18 +123,18 @@ function ants_denoise_image_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_denoise_image_fs_outputs(
     params: AntsDenoiseImageFsParameters,
     execution: Execution,
 ): AntsDenoiseImageFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsDenoiseImageFsOutputs = {
         root: execution.outputFile("."),
         denoised_output: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -143,22 +143,22 @@ function ants_denoise_image_fs_outputs(
 }
 
 
+/**
+ * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
+ */
 function ants_denoise_image_fs_execute(
     params: AntsDenoiseImageFsParameters,
     execution: Execution,
 ): AntsDenoiseImageFsOutputs {
-    /**
-     * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_denoise_image_fs_cargs(params, execution)
     const ret = ants_denoise_image_fs_outputs(params, execution)
@@ -167,26 +167,26 @@ function ants_denoise_image_fs_execute(
 }
 
 
+/**
+ * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input volume file
+ * @param output_image Denoised volume file
+ * @param rician_flag Enable Rician noise model (otherwise Gaussian is used)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
+ */
 function ants_denoise_image_fs(
     input_image: InputPathType,
     output_image: string = "output.nii",
     rician_flag: boolean = false,
     runner: Runner | null = null,
 ): AntsDenoiseImageFsOutputs {
-    /**
-     * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input volume file
-     * @param output_image Denoised volume file
-     * @param rician_flag Enable Rician noise model (otherwise Gaussian is used)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_DENOISE_IMAGE_FS_METADATA);
     const params = ants_denoise_image_fs_params(input_image, output_image, rician_flag)
@@ -199,5 +199,8 @@ export {
       AntsDenoiseImageFsOutputs,
       AntsDenoiseImageFsParameters,
       ants_denoise_image_fs,
+      ants_denoise_image_fs_cargs,
+      ants_denoise_image_fs_execute,
+      ants_denoise_image_fs_outputs,
       ants_denoise_image_fs_params,
 };

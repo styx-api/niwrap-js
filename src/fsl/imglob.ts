@@ -12,40 +12,40 @@ const IMGLOB_METADATA: Metadata = {
 
 
 interface ImglobParameters {
-    "__STYXTYPE__": "imglob";
+    "@type": "fsl.imglob";
     "multiple_extensions": boolean;
     "input_list": Array<string>;
     "single_extension": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imglob": imglob_cargs,
+        "fsl.imglob": imglob_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface ImglobOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_list List of image names or file paths
+ * @param multiple_extensions Output list of images with full extensions
+ * @param single_extension Output one image with full extension
+ *
+ * @returns Parameter dictionary
+ */
 function imglob_params(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
     single_extension: boolean = false,
 ): ImglobParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_list List of image names or file paths
-     * @param multiple_extensions Output list of images with full extensions
-     * @param single_extension Output one image with full extension
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imglob" as const,
+        "@type": "fsl.imglob" as const,
         "multiple_extensions": multiple_extensions,
         "input_list": input_list,
         "single_extension": single_extension,
@@ -89,18 +89,18 @@ function imglob_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imglob_cargs(
     params: ImglobParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imglob");
     if ((params["multiple_extensions"] ?? null)) {
@@ -114,18 +114,18 @@ function imglob_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imglob_outputs(
     params: ImglobParameters,
     execution: Execution,
 ): ImglobOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImglobOutputs = {
         root: execution.outputFile("."),
     };
@@ -133,22 +133,22 @@ function imglob_outputs(
 }
 
 
+/**
+ * Tool for generating image lists with specific extensions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImglobOutputs`).
+ */
 function imglob_execute(
     params: ImglobParameters,
     execution: Execution,
 ): ImglobOutputs {
-    /**
-     * Tool for generating image lists with specific extensions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImglobOutputs`).
-     */
     params = execution.params(params)
     const cargs = imglob_cargs(params, execution)
     const ret = imglob_outputs(params, execution)
@@ -157,26 +157,26 @@ function imglob_execute(
 }
 
 
+/**
+ * Tool for generating image lists with specific extensions.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_list List of image names or file paths
+ * @param multiple_extensions Output list of images with full extensions
+ * @param single_extension Output one image with full extension
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImglobOutputs`).
+ */
 function imglob(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
     single_extension: boolean = false,
     runner: Runner | null = null,
 ): ImglobOutputs {
-    /**
-     * Tool for generating image lists with specific extensions.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_list List of image names or file paths
-     * @param multiple_extensions Output list of images with full extensions
-     * @param single_extension Output one image with full extension
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImglobOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMGLOB_METADATA);
     const params = imglob_params(input_list, multiple_extensions, single_extension)
@@ -189,5 +189,8 @@ export {
       ImglobOutputs,
       ImglobParameters,
       imglob,
+      imglob_cargs,
+      imglob_execute,
+      imglob_outputs,
       imglob_params,
 };

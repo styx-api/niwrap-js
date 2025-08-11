@@ -12,7 +12,7 @@ const SLICES_METADATA: Metadata = {
 
 
 interface SlicesParameters {
-    "__STYXTYPE__": "slices";
+    "@type": "fsl.slices";
     "primary_input": InputPathType;
     "secondary_input"?: InputPathType | null | undefined;
     "scale_factor"?: number | null | undefined;
@@ -21,33 +21,33 @@ interface SlicesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slices": slices_cargs,
+        "fsl.slices": slices_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface SlicesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param primary_input Primary input image file (e.g. img1.nii.gz)
+ * @param secondary_input Secondary input image file (e.g. img2.nii.gz)
+ * @param scale_factor Scale factor to apply to images.
+ * @param intensity_range Intensity range to consider (minimum and maximum values).
+ * @param output_gif Output GIF file.
+ *
+ * @returns Parameter dictionary
+ */
 function slices_params(
     primary_input: InputPathType,
     secondary_input: InputPathType | null = null,
@@ -74,19 +85,8 @@ function slices_params(
     intensity_range: Array<number> | null = null,
     output_gif: string | null = null,
 ): SlicesParameters {
-    /**
-     * Build parameters.
-    
-     * @param primary_input Primary input image file (e.g. img1.nii.gz)
-     * @param secondary_input Secondary input image file (e.g. img2.nii.gz)
-     * @param scale_factor Scale factor to apply to images.
-     * @param intensity_range Intensity range to consider (minimum and maximum values).
-     * @param output_gif Output GIF file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slices" as const,
+        "@type": "fsl.slices" as const,
         "primary_input": primary_input,
     };
     if (secondary_input !== null) {
@@ -105,18 +105,18 @@ function slices_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slices_cargs(
     params: SlicesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slices");
     cargs.push(execution.inputFile((params["primary_input"] ?? null)));
@@ -145,18 +145,18 @@ function slices_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slices_outputs(
     params: SlicesParameters,
     execution: Execution,
 ): SlicesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicesOutputs = {
         root: execution.outputFile("."),
     };
@@ -164,22 +164,22 @@ function slices_outputs(
 }
 
 
+/**
+ * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicesOutputs`).
+ */
 function slices_execute(
     params: SlicesParameters,
     execution: Execution,
 ): SlicesOutputs {
-    /**
-     * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicesOutputs`).
-     */
     params = execution.params(params)
     const cargs = slices_cargs(params, execution)
     const ret = slices_outputs(params, execution)
@@ -188,6 +188,22 @@ function slices_execute(
 }
 
 
+/**
+ * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param primary_input Primary input image file (e.g. img1.nii.gz)
+ * @param secondary_input Secondary input image file (e.g. img2.nii.gz)
+ * @param scale_factor Scale factor to apply to images.
+ * @param intensity_range Intensity range to consider (minimum and maximum values).
+ * @param output_gif Output GIF file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicesOutputs`).
+ */
 function slices(
     primary_input: InputPathType,
     secondary_input: InputPathType | null = null,
@@ -196,22 +212,6 @@ function slices(
     output_gif: string | null = null,
     runner: Runner | null = null,
 ): SlicesOutputs {
-    /**
-     * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param primary_input Primary input image file (e.g. img1.nii.gz)
-     * @param secondary_input Secondary input image file (e.g. img2.nii.gz)
-     * @param scale_factor Scale factor to apply to images.
-     * @param intensity_range Intensity range to consider (minimum and maximum values).
-     * @param output_gif Output GIF file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICES_METADATA);
     const params = slices_params(primary_input, secondary_input, scale_factor, intensity_range, output_gif)
@@ -224,5 +224,8 @@ export {
       SlicesOutputs,
       SlicesParameters,
       slices,
+      slices_cargs,
+      slices_execute,
+      slices_outputs,
       slices_params,
 };

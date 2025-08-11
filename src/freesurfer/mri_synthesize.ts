@@ -12,7 +12,7 @@ const MRI_SYNTHESIZE_METADATA: Metadata = {
 
 
 interface MriSynthesizeParameters {
-    "__STYXTYPE__": "mri_synthesize";
+    "@type": "freesurfer.mri_synthesize";
     "tr": number;
     "alpha": number;
     "te": number;
@@ -23,35 +23,35 @@ interface MriSynthesizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthesize": mri_synthesize_cargs,
+        "freesurfer.mri_synthesize": mri_synthesize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_synthesize": mri_synthesize_outputs,
+        "freesurfer.mri_synthesize": mri_synthesize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriSynthesizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tr Repetition time (TR) for the synthesis.
+ * @param alpha Flip angle (alpha) in degrees.
+ * @param te Echo time (TE) for the synthesis.
+ * @param t1_volume Path to the T1 volume.
+ * @param pd_volume Path to the PD volume.
+ * @param output_volume Path for the output volume.
+ * @param fixed_weight Use a fixed weighting to generate an output volume with optimal gray/white contrast.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthesize_params(
     tr: number,
     alpha: number,
@@ -83,21 +96,8 @@ function mri_synthesize_params(
     output_volume: string,
     fixed_weight: boolean = false,
 ): MriSynthesizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param tr Repetition time (TR) for the synthesis.
-     * @param alpha Flip angle (alpha) in degrees.
-     * @param te Echo time (TE) for the synthesis.
-     * @param t1_volume Path to the T1 volume.
-     * @param pd_volume Path to the PD volume.
-     * @param output_volume Path for the output volume.
-     * @param fixed_weight Use a fixed weighting to generate an output volume with optimal gray/white contrast.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthesize" as const,
+        "@type": "freesurfer.mri_synthesize" as const,
         "tr": tr,
         "alpha": alpha,
         "te": te,
@@ -110,18 +110,18 @@ function mri_synthesize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthesize_cargs(
     params: MriSynthesizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthesize");
     cargs.push(String((params["tr"] ?? null)));
@@ -137,18 +137,18 @@ function mri_synthesize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthesize_outputs(
     params: MriSynthesizeParameters,
     execution: Execution,
 ): MriSynthesizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthesizeOutputs = {
         root: execution.outputFile("."),
         synthesized_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -157,22 +157,22 @@ function mri_synthesize_outputs(
 }
 
 
+/**
+ * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
+ */
 function mri_synthesize_execute(
     params: MriSynthesizeParameters,
     execution: Execution,
 ): MriSynthesizeOutputs {
-    /**
-     * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthesize_cargs(params, execution)
     const ret = mri_synthesize_outputs(params, execution)
@@ -181,6 +181,24 @@ function mri_synthesize_execute(
 }
 
 
+/**
+ * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param tr Repetition time (TR) for the synthesis.
+ * @param alpha Flip angle (alpha) in degrees.
+ * @param te Echo time (TE) for the synthesis.
+ * @param t1_volume Path to the T1 volume.
+ * @param pd_volume Path to the PD volume.
+ * @param output_volume Path for the output volume.
+ * @param fixed_weight Use a fixed weighting to generate an output volume with optimal gray/white contrast.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
+ */
 function mri_synthesize(
     tr: number,
     alpha: number,
@@ -191,24 +209,6 @@ function mri_synthesize(
     fixed_weight: boolean = false,
     runner: Runner | null = null,
 ): MriSynthesizeOutputs {
-    /**
-     * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param tr Repetition time (TR) for the synthesis.
-     * @param alpha Flip angle (alpha) in degrees.
-     * @param te Echo time (TE) for the synthesis.
-     * @param t1_volume Path to the T1 volume.
-     * @param pd_volume Path to the PD volume.
-     * @param output_volume Path for the output volume.
-     * @param fixed_weight Use a fixed weighting to generate an output volume with optimal gray/white contrast.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHESIZE_METADATA);
     const params = mri_synthesize_params(tr, alpha, te, t1_volume, pd_volume, output_volume, fixed_weight)
@@ -221,5 +221,8 @@ export {
       MriSynthesizeOutputs,
       MriSynthesizeParameters,
       mri_synthesize,
+      mri_synthesize_cargs,
+      mri_synthesize_execute,
+      mri_synthesize_outputs,
       mri_synthesize_params,
 };

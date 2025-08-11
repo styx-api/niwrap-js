@@ -12,7 +12,7 @@ const SAMSEGMESH2SURF_METADATA: Metadata = {
 
 
 interface Samsegmesh2surfParameters {
-    "__STYXTYPE__": "samsegmesh2surf";
+    "@type": "freesurfer.samsegmesh2surf";
     "atlas_mesh": InputPathType;
     "template"?: InputPathType | null | undefined;
     "lta_transform"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface Samsegmesh2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "samsegmesh2surf": samsegmesh2surf_cargs,
+        "freesurfer.samsegmesh2surf": samsegmesh2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "samsegmesh2surf": samsegmesh2surf_outputs,
+        "freesurfer.samsegmesh2surf": samsegmesh2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface Samsegmesh2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param atlas_mesh Input SAMSEG atlas mesh collection file
+ * @param template Input atlas template volume
+ * @param lta_transform Input LTA transform to be applied to surface
+ * @param output_surface Output FreeSurfer surface file
+ * @param output_priors Output priors as MRI volume
+ * @param invert_flag Invert LTA transform
+ *
+ * @returns Parameter dictionary
+ */
 function samsegmesh2surf_params(
     atlas_mesh: InputPathType,
     template: InputPathType | null = null,
@@ -85,20 +97,8 @@ function samsegmesh2surf_params(
     output_priors: string | null = null,
     invert_flag: boolean = false,
 ): Samsegmesh2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param atlas_mesh Input SAMSEG atlas mesh collection file
-     * @param template Input atlas template volume
-     * @param lta_transform Input LTA transform to be applied to surface
-     * @param output_surface Output FreeSurfer surface file
-     * @param output_priors Output priors as MRI volume
-     * @param invert_flag Invert LTA transform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "samsegmesh2surf" as const,
+        "@type": "freesurfer.samsegmesh2surf" as const,
         "atlas_mesh": atlas_mesh,
         "invert_flag": invert_flag,
     };
@@ -118,18 +118,18 @@ function samsegmesh2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function samsegmesh2surf_cargs(
     params: Samsegmesh2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("samsegmesh2surf");
     cargs.push(
@@ -167,18 +167,18 @@ function samsegmesh2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function samsegmesh2surf_outputs(
     params: Samsegmesh2surfParameters,
     execution: Execution,
 ): Samsegmesh2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Samsegmesh2surfOutputs = {
         root: execution.outputFile("."),
         output_surface_file: ((params["output_surface"] ?? null) !== null) ? execution.outputFile([(params["output_surface"] ?? null)].join('')) : null,
@@ -188,22 +188,22 @@ function samsegmesh2surf_outputs(
 }
 
 
+/**
+ * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
+ */
 function samsegmesh2surf_execute(
     params: Samsegmesh2surfParameters,
     execution: Execution,
 ): Samsegmesh2surfOutputs {
-    /**
-     * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = samsegmesh2surf_cargs(params, execution)
     const ret = samsegmesh2surf_outputs(params, execution)
@@ -212,6 +212,23 @@ function samsegmesh2surf_execute(
 }
 
 
+/**
+ * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param atlas_mesh Input SAMSEG atlas mesh collection file
+ * @param template Input atlas template volume
+ * @param lta_transform Input LTA transform to be applied to surface
+ * @param output_surface Output FreeSurfer surface file
+ * @param output_priors Output priors as MRI volume
+ * @param invert_flag Invert LTA transform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
+ */
 function samsegmesh2surf(
     atlas_mesh: InputPathType,
     template: InputPathType | null = null,
@@ -221,23 +238,6 @@ function samsegmesh2surf(
     invert_flag: boolean = false,
     runner: Runner | null = null,
 ): Samsegmesh2surfOutputs {
-    /**
-     * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param atlas_mesh Input SAMSEG atlas mesh collection file
-     * @param template Input atlas template volume
-     * @param lta_transform Input LTA transform to be applied to surface
-     * @param output_surface Output FreeSurfer surface file
-     * @param output_priors Output priors as MRI volume
-     * @param invert_flag Invert LTA transform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEGMESH2SURF_METADATA);
     const params = samsegmesh2surf_params(atlas_mesh, template, lta_transform, output_surface, output_priors, invert_flag)
@@ -250,5 +250,8 @@ export {
       Samsegmesh2surfOutputs,
       Samsegmesh2surfParameters,
       samsegmesh2surf,
+      samsegmesh2surf_cargs,
+      samsegmesh2surf_execute,
+      samsegmesh2surf_outputs,
       samsegmesh2surf_params,
 };

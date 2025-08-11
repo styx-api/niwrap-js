@@ -12,7 +12,7 @@ const MRIS_MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 
 
 interface MrisMakeAverageSurfaceParameters {
-    "__STYXTYPE__": "mris_make_average_surface";
+    "@type": "freesurfer.mris_make_average_surface";
     "hemi": string;
     "outsurfname": string;
     "cansurfname": string;
@@ -31,35 +31,35 @@ interface MrisMakeAverageSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_make_average_surface": mris_make_average_surface_cargs,
+        "freesurfer.mris_make_average_surface": mris_make_average_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_make_average_surface": mris_make_average_surface_outputs,
+        "freesurfer.mris_make_average_surface": mris_make_average_surface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface MrisMakeAverageSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere, lh or rh
+ * @param outsurfname Output surface name (e.g., avg_orig)
+ * @param cansurfname Registration surface (e.g., sphere.reg)
+ * @param outsubject Name of subject to store the results in
+ * @param subjects List of subjects to average
+ * @param sdir Use sdir instead of SUBJECTS_DIR
+ * @param sdir_out Save results in sdirout/outsubject instead of SUBJECTS_DIR/outsubject
+ * @param nonorm_flag Do not normalize area
+ * @param icoorder Use given icosahedron order (default is 7)
+ * @param xfmname Use transforms/xfmname instead of talairach.xfm
+ * @param templatename Volume to use as geometry template for output surfaces
+ * @param surfname Use surfname instead of orig
+ * @param surf2surf_flag Use surf2surf transform instead of parametric surface
+ * @param simple Compute an average surface from the list of surfaces. All surfaces must have same number of vertices.
+ * @param diagno Set Gdiag_no to diagno
+ *
+ * @returns Parameter dictionary
+ */
 function mris_make_average_surface_params(
     hemi: string,
     outsurfname: string,
@@ -99,29 +120,8 @@ function mris_make_average_surface_params(
     simple: Array<string> | null = null,
     diagno: number | null = null,
 ): MrisMakeAverageSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere, lh or rh
-     * @param outsurfname Output surface name (e.g., avg_orig)
-     * @param cansurfname Registration surface (e.g., sphere.reg)
-     * @param outsubject Name of subject to store the results in
-     * @param subjects List of subjects to average
-     * @param sdir Use sdir instead of SUBJECTS_DIR
-     * @param sdir_out Save results in sdirout/outsubject instead of SUBJECTS_DIR/outsubject
-     * @param nonorm_flag Do not normalize area
-     * @param icoorder Use given icosahedron order (default is 7)
-     * @param xfmname Use transforms/xfmname instead of talairach.xfm
-     * @param templatename Volume to use as geometry template for output surfaces
-     * @param surfname Use surfname instead of orig
-     * @param surf2surf_flag Use surf2surf transform instead of parametric surface
-     * @param simple Compute an average surface from the list of surfaces. All surfaces must have same number of vertices.
-     * @param diagno Set Gdiag_no to diagno
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_make_average_surface" as const,
+        "@type": "freesurfer.mris_make_average_surface" as const,
         "hemi": hemi,
         "outsurfname": outsurfname,
         "cansurfname": cansurfname,
@@ -158,18 +158,18 @@ function mris_make_average_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_make_average_surface_cargs(
     params: MrisMakeAverageSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_make_average_surface");
     cargs.push((params["hemi"] ?? null));
@@ -235,18 +235,18 @@ function mris_make_average_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_make_average_surface_outputs(
     params: MrisMakeAverageSurfaceParameters,
     execution: Execution,
 ): MrisMakeAverageSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMakeAverageSurfaceOutputs = {
         root: execution.outputFile("."),
         output_surface: ((params["sdir_out"] ?? null) !== null) ? execution.outputFile([(params["sdir_out"] ?? null), "/", (params["outsubject"] ?? null), "/", (params["outsurfname"] ?? null)].join('')) : null,
@@ -255,22 +255,22 @@ function mris_make_average_surface_outputs(
 }
 
 
+/**
+ * A program to average the orig surfaces from the given subject list into a single surface using Talairach coords and the spherical transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
+ */
 function mris_make_average_surface_execute(
     params: MrisMakeAverageSurfaceParameters,
     execution: Execution,
 ): MrisMakeAverageSurfaceOutputs {
-    /**
-     * A program to average the orig surfaces from the given subject list into a single surface using Talairach coords and the spherical transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_make_average_surface_cargs(params, execution)
     const ret = mris_make_average_surface_outputs(params, execution)
@@ -279,6 +279,32 @@ function mris_make_average_surface_execute(
 }
 
 
+/**
+ * A program to average the orig surfaces from the given subject list into a single surface using Talairach coords and the spherical transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere, lh or rh
+ * @param outsurfname Output surface name (e.g., avg_orig)
+ * @param cansurfname Registration surface (e.g., sphere.reg)
+ * @param outsubject Name of subject to store the results in
+ * @param subjects List of subjects to average
+ * @param sdir Use sdir instead of SUBJECTS_DIR
+ * @param sdir_out Save results in sdirout/outsubject instead of SUBJECTS_DIR/outsubject
+ * @param nonorm_flag Do not normalize area
+ * @param icoorder Use given icosahedron order (default is 7)
+ * @param xfmname Use transforms/xfmname instead of talairach.xfm
+ * @param templatename Volume to use as geometry template for output surfaces
+ * @param surfname Use surfname instead of orig
+ * @param surf2surf_flag Use surf2surf transform instead of parametric surface
+ * @param simple Compute an average surface from the list of surfaces. All surfaces must have same number of vertices.
+ * @param diagno Set Gdiag_no to diagno
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
+ */
 function mris_make_average_surface(
     hemi: string,
     outsurfname: string,
@@ -297,32 +323,6 @@ function mris_make_average_surface(
     diagno: number | null = null,
     runner: Runner | null = null,
 ): MrisMakeAverageSurfaceOutputs {
-    /**
-     * A program to average the orig surfaces from the given subject list into a single surface using Talairach coords and the spherical transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere, lh or rh
-     * @param outsurfname Output surface name (e.g., avg_orig)
-     * @param cansurfname Registration surface (e.g., sphere.reg)
-     * @param outsubject Name of subject to store the results in
-     * @param subjects List of subjects to average
-     * @param sdir Use sdir instead of SUBJECTS_DIR
-     * @param sdir_out Save results in sdirout/outsubject instead of SUBJECTS_DIR/outsubject
-     * @param nonorm_flag Do not normalize area
-     * @param icoorder Use given icosahedron order (default is 7)
-     * @param xfmname Use transforms/xfmname instead of talairach.xfm
-     * @param templatename Volume to use as geometry template for output surfaces
-     * @param surfname Use surfname instead of orig
-     * @param surf2surf_flag Use surf2surf transform instead of parametric surface
-     * @param simple Compute an average surface from the list of surfaces. All surfaces must have same number of vertices.
-     * @param diagno Set Gdiag_no to diagno
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MAKE_AVERAGE_SURFACE_METADATA);
     const params = mris_make_average_surface_params(hemi, outsurfname, cansurfname, outsubject, subjects, sdir, sdir_out, nonorm_flag, icoorder, xfmname, templatename, surfname, surf2surf_flag, simple, diagno)
@@ -335,5 +335,8 @@ export {
       MrisMakeAverageSurfaceOutputs,
       MrisMakeAverageSurfaceParameters,
       mris_make_average_surface,
+      mris_make_average_surface_cargs,
+      mris_make_average_surface_execute,
+      mris_make_average_surface_outputs,
       mris_make_average_surface_params,
 };

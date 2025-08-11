@@ -12,7 +12,7 @@ const ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA: Metadata = {
 
 
 interface IsolateLabelsKeeporigvalCshParameters {
-    "__STYXTYPE__": "isolate_labels_keeporigval.csh";
+    "@type": "freesurfer.isolate_labels_keeporigval.csh";
     "vol": InputPathType;
     "outprefix": string;
     "label"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface IsolateLabelsKeeporigvalCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_cargs,
+        "freesurfer.isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_outputs,
+        "freesurfer.isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface IsolateLabelsKeeporigvalCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol Label volume to be analyzed
+ * @param outprefix Prefix for output binary label file(s)
+ * @param label The particular label to be analyzed. By default, it is ALL labels in the volume.
+ * @param version Print version and exit
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function isolate_labels_keeporigval_csh_params(
     vol: InputPathType,
     outprefix: string,
@@ -79,19 +90,8 @@ function isolate_labels_keeporigval_csh_params(
     version: boolean = false,
     help: boolean = false,
 ): IsolateLabelsKeeporigvalCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol Label volume to be analyzed
-     * @param outprefix Prefix for output binary label file(s)
-     * @param label The particular label to be analyzed. By default, it is ALL labels in the volume.
-     * @param version Print version and exit
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isolate_labels_keeporigval.csh" as const,
+        "@type": "freesurfer.isolate_labels_keeporigval.csh" as const,
         "vol": vol,
         "outprefix": outprefix,
         "version": version,
@@ -104,18 +104,18 @@ function isolate_labels_keeporigval_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function isolate_labels_keeporigval_csh_cargs(
     params: IsolateLabelsKeeporigvalCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("isolate_labels_keeporigval.csh");
     cargs.push(
@@ -142,18 +142,18 @@ function isolate_labels_keeporigval_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function isolate_labels_keeporigval_csh_outputs(
     params: IsolateLabelsKeeporigvalCshParameters,
     execution: Execution,
 ): IsolateLabelsKeeporigvalCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsolateLabelsKeeporigvalCshOutputs = {
         root: execution.outputFile("."),
         output_label_files: execution.outputFile([(params["outprefix"] ?? null), "_label*.nii.gz"].join('')),
@@ -162,22 +162,22 @@ function isolate_labels_keeporigval_csh_outputs(
 }
 
 
+/**
+ * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
+ */
 function isolate_labels_keeporigval_csh_execute(
     params: IsolateLabelsKeeporigvalCshParameters,
     execution: Execution,
 ): IsolateLabelsKeeporigvalCshOutputs {
-    /**
-     * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = isolate_labels_keeporigval_csh_cargs(params, execution)
     const ret = isolate_labels_keeporigval_csh_outputs(params, execution)
@@ -186,6 +186,22 @@ function isolate_labels_keeporigval_csh_execute(
 }
 
 
+/**
+ * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param vol Label volume to be analyzed
+ * @param outprefix Prefix for output binary label file(s)
+ * @param label The particular label to be analyzed. By default, it is ALL labels in the volume.
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
+ */
 function isolate_labels_keeporigval_csh(
     vol: InputPathType,
     outprefix: string,
@@ -194,22 +210,6 @@ function isolate_labels_keeporigval_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): IsolateLabelsKeeporigvalCshOutputs {
-    /**
-     * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param vol Label volume to be analyzed
-     * @param outprefix Prefix for output binary label file(s)
-     * @param label The particular label to be analyzed. By default, it is ALL labels in the volume.
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA);
     const params = isolate_labels_keeporigval_csh_params(vol, outprefix, label, version, help)
@@ -222,5 +222,8 @@ export {
       IsolateLabelsKeeporigvalCshOutputs,
       IsolateLabelsKeeporigvalCshParameters,
       isolate_labels_keeporigval_csh,
+      isolate_labels_keeporigval_csh_cargs,
+      isolate_labels_keeporigval_csh_execute,
+      isolate_labels_keeporigval_csh_outputs,
       isolate_labels_keeporigval_csh_params,
 };

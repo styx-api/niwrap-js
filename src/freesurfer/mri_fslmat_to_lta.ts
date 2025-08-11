@@ -12,7 +12,7 @@ const MRI_FSLMAT_TO_LTA_METADATA: Metadata = {
 
 
 interface MriFslmatToLtaParameters {
-    "__STYXTYPE__": "mri_fslmat_to_lta";
+    "@type": "freesurfer.mri_fslmat_to_lta";
     "src_vol": InputPathType;
     "target_vol": InputPathType;
     "fslmat_file": InputPathType;
@@ -20,35 +20,35 @@ interface MriFslmatToLtaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_fslmat_to_lta": mri_fslmat_to_lta_cargs,
+        "freesurfer.mri_fslmat_to_lta": mri_fslmat_to_lta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_fslmat_to_lta": mri_fslmat_to_lta_outputs,
+        "freesurfer.mri_fslmat_to_lta": mri_fslmat_to_lta_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriFslmatToLtaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_vol Source volume file
+ * @param target_vol Target volume file
+ * @param fslmat_file FSL transformation matrix file
+ * @param lta_file Output LTA transformation file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_fslmat_to_lta_params(
     src_vol: InputPathType,
     target_vol: InputPathType,
     fslmat_file: InputPathType,
     lta_file: string,
 ): MriFslmatToLtaParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_vol Source volume file
-     * @param target_vol Target volume file
-     * @param fslmat_file FSL transformation matrix file
-     * @param lta_file Output LTA transformation file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_fslmat_to_lta" as const,
+        "@type": "freesurfer.mri_fslmat_to_lta" as const,
         "src_vol": src_vol,
         "target_vol": target_vol,
         "fslmat_file": fslmat_file,
@@ -98,18 +98,18 @@ function mri_fslmat_to_lta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_fslmat_to_lta_cargs(
     params: MriFslmatToLtaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_fslmat_to_lta");
     cargs.push(execution.inputFile((params["src_vol"] ?? null)));
@@ -120,18 +120,18 @@ function mri_fslmat_to_lta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_fslmat_to_lta_outputs(
     params: MriFslmatToLtaParameters,
     execution: Execution,
 ): MriFslmatToLtaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFslmatToLtaOutputs = {
         root: execution.outputFile("."),
         output_lta_file: execution.outputFile([(params["lta_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_fslmat_to_lta_outputs(
 }
 
 
+/**
+ * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
+ */
 function mri_fslmat_to_lta_execute(
     params: MriFslmatToLtaParameters,
     execution: Execution,
 ): MriFslmatToLtaOutputs {
-    /**
-     * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_fslmat_to_lta_cargs(params, execution)
     const ret = mri_fslmat_to_lta_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_fslmat_to_lta_execute(
 }
 
 
+/**
+ * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_vol Source volume file
+ * @param target_vol Target volume file
+ * @param fslmat_file FSL transformation matrix file
+ * @param lta_file Output LTA transformation file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
+ */
 function mri_fslmat_to_lta(
     src_vol: InputPathType,
     target_vol: InputPathType,
@@ -171,21 +186,6 @@ function mri_fslmat_to_lta(
     lta_file: string,
     runner: Runner | null = null,
 ): MriFslmatToLtaOutputs {
-    /**
-     * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_vol Source volume file
-     * @param target_vol Target volume file
-     * @param fslmat_file FSL transformation matrix file
-     * @param lta_file Output LTA transformation file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FSLMAT_TO_LTA_METADATA);
     const params = mri_fslmat_to_lta_params(src_vol, target_vol, fslmat_file, lta_file)
@@ -198,5 +198,8 @@ export {
       MriFslmatToLtaOutputs,
       MriFslmatToLtaParameters,
       mri_fslmat_to_lta,
+      mri_fslmat_to_lta_cargs,
+      mri_fslmat_to_lta_execute,
+      mri_fslmat_to_lta_outputs,
       mri_fslmat_to_lta_params,
 };

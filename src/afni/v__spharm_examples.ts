@@ -12,7 +12,7 @@ const V__SPHARM_EXAMPLES_METADATA: Metadata = {
 
 
 interface VSpharmExamplesParameters {
-    "__STYXTYPE__": "@Spharm.examples";
+    "@type": "afni.@Spharm.examples";
     "help_web": boolean;
     "help_web_alias": boolean;
     "help_view": boolean;
@@ -22,33 +22,33 @@ interface VSpharmExamplesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Spharm.examples": v__spharm_examples_cargs,
+        "afni.@Spharm.examples": v__spharm_examples_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface VSpharmExamplesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param help_web Open webpage with help for this program
+ * @param help_web_alias Same as -h_web
+ * @param help_view Open -help output in a GUI editor
+ * @param help_view_alias Same as -h_view
+ * @param all_opts List all of the options for this script
+ * @param help_find Search for lines containing WORD in -help output. Search is approximate.
+ *
+ * @returns Parameter dictionary
+ */
 function v__spharm_examples_params(
     help_web: boolean = false,
     help_web_alias: boolean = false,
@@ -76,20 +88,8 @@ function v__spharm_examples_params(
     all_opts: boolean = false,
     help_find: string | null = null,
 ): VSpharmExamplesParameters {
-    /**
-     * Build parameters.
-    
-     * @param help_web Open webpage with help for this program
-     * @param help_web_alias Same as -h_web
-     * @param help_view Open -help output in a GUI editor
-     * @param help_view_alias Same as -h_view
-     * @param all_opts List all of the options for this script
-     * @param help_find Search for lines containing WORD in -help output. Search is approximate.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Spharm.examples" as const,
+        "@type": "afni.@Spharm.examples" as const,
         "help_web": help_web,
         "help_web_alias": help_web_alias,
         "help_view": help_view,
@@ -103,18 +103,18 @@ function v__spharm_examples_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__spharm_examples_cargs(
     params: VSpharmExamplesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Spharm.examples");
     if ((params["help_web"] ?? null)) {
@@ -142,18 +142,18 @@ function v__spharm_examples_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__spharm_examples_outputs(
     params: VSpharmExamplesParameters,
     execution: Execution,
 ): VSpharmExamplesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSpharmExamplesOutputs = {
         root: execution.outputFile("."),
     };
@@ -161,22 +161,22 @@ function v__spharm_examples_outputs(
 }
 
 
+/**
+ * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
+ */
 function v__spharm_examples_execute(
     params: VSpharmExamplesParameters,
     execution: Execution,
 ): VSpharmExamplesOutputs {
-    /**
-     * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__spharm_examples_cargs(params, execution)
     const ret = v__spharm_examples_outputs(params, execution)
@@ -185,6 +185,23 @@ function v__spharm_examples_execute(
 }
 
 
+/**
+ * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param help_web Open webpage with help for this program
+ * @param help_web_alias Same as -h_web
+ * @param help_view Open -help output in a GUI editor
+ * @param help_view_alias Same as -h_view
+ * @param all_opts List all of the options for this script
+ * @param help_find Search for lines containing WORD in -help output. Search is approximate.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
+ */
 function v__spharm_examples(
     help_web: boolean = false,
     help_web_alias: boolean = false,
@@ -194,23 +211,6 @@ function v__spharm_examples(
     help_find: string | null = null,
     runner: Runner | null = null,
 ): VSpharmExamplesOutputs {
-    /**
-     * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param help_web Open webpage with help for this program
-     * @param help_web_alias Same as -h_web
-     * @param help_view Open -help output in a GUI editor
-     * @param help_view_alias Same as -h_view
-     * @param all_opts List all of the options for this script
-     * @param help_find Search for lines containing WORD in -help output. Search is approximate.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SPHARM_EXAMPLES_METADATA);
     const params = v__spharm_examples_params(help_web, help_web_alias, help_view, help_view_alias, all_opts, help_find)
@@ -223,5 +223,8 @@ export {
       VSpharmExamplesParameters,
       V__SPHARM_EXAMPLES_METADATA,
       v__spharm_examples,
+      v__spharm_examples_cargs,
+      v__spharm_examples_execute,
+      v__spharm_examples_outputs,
       v__spharm_examples_params,
 };

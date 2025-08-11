@@ -12,7 +12,7 @@ const V_3D_CLUSTERIZE_METADATA: Metadata = {
 
 
 interface V3dClusterizeParameters {
-    "__STYXTYPE__": "3dClusterize";
+    "@type": "afni.3dClusterize";
     "inset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "mask_from_hdr": boolean;
@@ -40,35 +40,35 @@ interface V3dClusterizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dClusterize": v_3d_clusterize_cargs,
+        "afni.3dClusterize": v_3d_clusterize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dClusterize": v_3d_clusterize_outputs,
+        "afni.3dClusterize": v_3d_clusterize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,6 +99,36 @@ interface V3dClusterizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset Load in a dataset for thresholding and clusterizing
+ * @param ithr Specify the sub-brick to use as the threshold source
+ * @param nn Specify the number of voxel neighbors (1: 6, 2: 18, 3: 26)
+ * @param mask Load in a dataset to use as a mask
+ * @param mask_from_hdr Use internal mask from dataset header
+ * @param out_mask Specify to dump the utilized mask as a dataset
+ * @param idat Specify the sub-brick to use as the data source
+ * @param onesided Perform one-sided testing
+ * @param twosided Perform two-sided testing
+ * @param bisided Perform bisided testing
+ * @param within_range Keep values within the range [AA, BB]
+ * @param clust_nvox Specify the minimum cluster size in terms of number of voxels
+ * @param clust_vol Specify the minimum cluster size by volume in microliters
+ * @param pref_map Prefix/filename of the output map of cluster ROIs
+ * @param pref_dat Output a cluster-masked version of the data volume
+ * @param one_d_format Write output in 1D format
+ * @param no_one_d_format Do not write output in 1D format
+ * @param summarize Write out only the total nonzero voxel count and volume for each dataset
+ * @param nosum Suppress printout of the totals
+ * @param quiet Suppress all non-essential output
+ * @param outvol_if_no_clust Output an empty volume if no clusters are found
+ * @param orient Coordinate order in the output report table (default: RAI)
+ * @param abs_table_data Use absolute values for mean and SEM in report table
+ * @param binary Turn output map of cluster ROIs into a binary mask
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_clusterize_params(
     inset: InputPathType,
     ithr: string,
@@ -125,38 +155,8 @@ function v_3d_clusterize_params(
     abs_table_data: boolean = false,
     binary: boolean = false,
 ): V3dClusterizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset Load in a dataset for thresholding and clusterizing
-     * @param ithr Specify the sub-brick to use as the threshold source
-     * @param nn Specify the number of voxel neighbors (1: 6, 2: 18, 3: 26)
-     * @param mask Load in a dataset to use as a mask
-     * @param mask_from_hdr Use internal mask from dataset header
-     * @param out_mask Specify to dump the utilized mask as a dataset
-     * @param idat Specify the sub-brick to use as the data source
-     * @param onesided Perform one-sided testing
-     * @param twosided Perform two-sided testing
-     * @param bisided Perform bisided testing
-     * @param within_range Keep values within the range [AA, BB]
-     * @param clust_nvox Specify the minimum cluster size in terms of number of voxels
-     * @param clust_vol Specify the minimum cluster size by volume in microliters
-     * @param pref_map Prefix/filename of the output map of cluster ROIs
-     * @param pref_dat Output a cluster-masked version of the data volume
-     * @param one_d_format Write output in 1D format
-     * @param no_one_d_format Do not write output in 1D format
-     * @param summarize Write out only the total nonzero voxel count and volume for each dataset
-     * @param nosum Suppress printout of the totals
-     * @param quiet Suppress all non-essential output
-     * @param outvol_if_no_clust Output an empty volume if no clusters are found
-     * @param orient Coordinate order in the output report table (default: RAI)
-     * @param abs_table_data Use absolute values for mean and SEM in report table
-     * @param binary Turn output map of cluster ROIs into a binary mask
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dClusterize" as const,
+        "@type": "afni.3dClusterize" as const,
         "inset": inset,
         "mask_from_hdr": mask_from_hdr,
         "ithr": ithr,
@@ -210,18 +210,18 @@ function v_3d_clusterize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_clusterize_cargs(
     params: V3dClusterizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dClusterize");
     cargs.push(
@@ -339,18 +339,18 @@ function v_3d_clusterize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_clusterize_outputs(
     params: V3dClusterizeParameters,
     execution: Execution,
 ): V3dClusterizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dClusterizeOutputs = {
         root: execution.outputFile("."),
         out_map_file: ((params["pref_map"] ?? null) !== null) ? execution.outputFile([(params["pref_map"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -361,22 +361,22 @@ function v_3d_clusterize_outputs(
 }
 
 
+/**
+ * A tool for voxelwise thresholding and clusterizing of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
+ */
 function v_3d_clusterize_execute(
     params: V3dClusterizeParameters,
     execution: Execution,
 ): V3dClusterizeOutputs {
-    /**
-     * A tool for voxelwise thresholding and clusterizing of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_clusterize_cargs(params, execution)
     const ret = v_3d_clusterize_outputs(params, execution)
@@ -385,6 +385,41 @@ function v_3d_clusterize_execute(
 }
 
 
+/**
+ * A tool for voxelwise thresholding and clusterizing of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset Load in a dataset for thresholding and clusterizing
+ * @param ithr Specify the sub-brick to use as the threshold source
+ * @param nn Specify the number of voxel neighbors (1: 6, 2: 18, 3: 26)
+ * @param mask Load in a dataset to use as a mask
+ * @param mask_from_hdr Use internal mask from dataset header
+ * @param out_mask Specify to dump the utilized mask as a dataset
+ * @param idat Specify the sub-brick to use as the data source
+ * @param onesided Perform one-sided testing
+ * @param twosided Perform two-sided testing
+ * @param bisided Perform bisided testing
+ * @param within_range Keep values within the range [AA, BB]
+ * @param clust_nvox Specify the minimum cluster size in terms of number of voxels
+ * @param clust_vol Specify the minimum cluster size by volume in microliters
+ * @param pref_map Prefix/filename of the output map of cluster ROIs
+ * @param pref_dat Output a cluster-masked version of the data volume
+ * @param one_d_format Write output in 1D format
+ * @param no_one_d_format Do not write output in 1D format
+ * @param summarize Write out only the total nonzero voxel count and volume for each dataset
+ * @param nosum Suppress printout of the totals
+ * @param quiet Suppress all non-essential output
+ * @param outvol_if_no_clust Output an empty volume if no clusters are found
+ * @param orient Coordinate order in the output report table (default: RAI)
+ * @param abs_table_data Use absolute values for mean and SEM in report table
+ * @param binary Turn output map of cluster ROIs into a binary mask
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
+ */
 function v_3d_clusterize(
     inset: InputPathType,
     ithr: string,
@@ -412,41 +447,6 @@ function v_3d_clusterize(
     binary: boolean = false,
     runner: Runner | null = null,
 ): V3dClusterizeOutputs {
-    /**
-     * A tool for voxelwise thresholding and clusterizing of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset Load in a dataset for thresholding and clusterizing
-     * @param ithr Specify the sub-brick to use as the threshold source
-     * @param nn Specify the number of voxel neighbors (1: 6, 2: 18, 3: 26)
-     * @param mask Load in a dataset to use as a mask
-     * @param mask_from_hdr Use internal mask from dataset header
-     * @param out_mask Specify to dump the utilized mask as a dataset
-     * @param idat Specify the sub-brick to use as the data source
-     * @param onesided Perform one-sided testing
-     * @param twosided Perform two-sided testing
-     * @param bisided Perform bisided testing
-     * @param within_range Keep values within the range [AA, BB]
-     * @param clust_nvox Specify the minimum cluster size in terms of number of voxels
-     * @param clust_vol Specify the minimum cluster size by volume in microliters
-     * @param pref_map Prefix/filename of the output map of cluster ROIs
-     * @param pref_dat Output a cluster-masked version of the data volume
-     * @param one_d_format Write output in 1D format
-     * @param no_one_d_format Do not write output in 1D format
-     * @param summarize Write out only the total nonzero voxel count and volume for each dataset
-     * @param nosum Suppress printout of the totals
-     * @param quiet Suppress all non-essential output
-     * @param outvol_if_no_clust Output an empty volume if no clusters are found
-     * @param orient Coordinate order in the output report table (default: RAI)
-     * @param abs_table_data Use absolute values for mean and SEM in report table
-     * @param binary Turn output map of cluster ROIs into a binary mask
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CLUSTERIZE_METADATA);
     const params = v_3d_clusterize_params(inset, ithr, nn, mask, mask_from_hdr, out_mask, idat, onesided, twosided, bisided, within_range, clust_nvox, clust_vol, pref_map, pref_dat, one_d_format, no_one_d_format, summarize, nosum, quiet, outvol_if_no_clust, orient, abs_table_data, binary)
@@ -459,5 +459,8 @@ export {
       V3dClusterizeParameters,
       V_3D_CLUSTERIZE_METADATA,
       v_3d_clusterize,
+      v_3d_clusterize_cargs,
+      v_3d_clusterize_execute,
+      v_3d_clusterize_outputs,
       v_3d_clusterize_params,
 };

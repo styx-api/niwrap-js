@@ -12,7 +12,7 @@ const SET_SPACING_METADATA: Metadata = {
 
 
 interface SetSpacingParameters {
-    "__STYXTYPE__": "SetSpacing";
+    "@type": "ants.SetSpacing";
     "dimension": number;
     "input_file": InputPathType;
     "output_file": string;
@@ -20,35 +20,35 @@ interface SetSpacingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SetSpacing": set_spacing_cargs,
+        "ants.SetSpacing": set_spacing_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SetSpacing": set_spacing_outputs,
+        "ants.SetSpacing": set_spacing_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SetSpacingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimension The dimensionality of the image (e.g., 2 or 3).
+ * @param input_file The input image file in HDR format.
+ * @param output_file The output image file in NII format.
+ * @param spacing Spacing values for each dimension. Requires SpacingX, SpacingY, and optionally SpacingZ.
+ *
+ * @returns Parameter dictionary
+ */
 function set_spacing_params(
     dimension: number,
     input_file: InputPathType,
     output_file: string,
     spacing: Array<number>,
 ): SetSpacingParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimension The dimensionality of the image (e.g., 2 or 3).
-     * @param input_file The input image file in HDR format.
-     * @param output_file The output image file in NII format.
-     * @param spacing Spacing values for each dimension. Requires SpacingX, SpacingY, and optionally SpacingZ.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SetSpacing" as const,
+        "@type": "ants.SetSpacing" as const,
         "dimension": dimension,
         "input_file": input_file,
         "output_file": output_file,
@@ -98,18 +98,18 @@ function set_spacing_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function set_spacing_cargs(
     params: SetSpacingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SetSpacing");
     cargs.push(String((params["dimension"] ?? null)));
@@ -120,18 +120,18 @@ function set_spacing_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function set_spacing_outputs(
     params: SetSpacingParameters,
     execution: Execution,
 ): SetSpacingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SetSpacingOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function set_spacing_outputs(
 }
 
 
+/**
+ * A tool to set the spacing of an image in each dimension.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
+ */
 function set_spacing_execute(
     params: SetSpacingParameters,
     execution: Execution,
 ): SetSpacingOutputs {
-    /**
-     * A tool to set the spacing of an image in each dimension.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
-     */
     params = execution.params(params)
     const cargs = set_spacing_cargs(params, execution)
     const ret = set_spacing_outputs(params, execution)
@@ -164,6 +164,21 @@ function set_spacing_execute(
 }
 
 
+/**
+ * A tool to set the spacing of an image in each dimension.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimension The dimensionality of the image (e.g., 2 or 3).
+ * @param input_file The input image file in HDR format.
+ * @param output_file The output image file in NII format.
+ * @param spacing Spacing values for each dimension. Requires SpacingX, SpacingY, and optionally SpacingZ.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
+ */
 function set_spacing(
     dimension: number,
     input_file: InputPathType,
@@ -171,21 +186,6 @@ function set_spacing(
     spacing: Array<number>,
     runner: Runner | null = null,
 ): SetSpacingOutputs {
-    /**
-     * A tool to set the spacing of an image in each dimension.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimension The dimensionality of the image (e.g., 2 or 3).
-     * @param input_file The input image file in HDR format.
-     * @param output_file The output image file in NII format.
-     * @param spacing Spacing values for each dimension. Requires SpacingX, SpacingY, and optionally SpacingZ.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SET_SPACING_METADATA);
     const params = set_spacing_params(dimension, input_file, output_file, spacing)
@@ -198,5 +198,8 @@ export {
       SetSpacingOutputs,
       SetSpacingParameters,
       set_spacing,
+      set_spacing_cargs,
+      set_spacing_execute,
+      set_spacing_outputs,
       set_spacing_params,
 };

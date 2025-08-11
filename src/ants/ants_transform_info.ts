@@ -12,40 +12,40 @@ const ANTS_TRANSFORM_INFO_METADATA: Metadata = {
 
 
 interface AntsTransformInfoParameters {
-    "__STYXTYPE__": "antsTransformInfo";
+    "@type": "ants.antsTransformInfo";
     "transform_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsTransformInfo": ants_transform_info_cargs,
+        "ants.antsTransformInfo": ants_transform_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsTransformInfo": ants_transform_info_outputs,
+        "ants.antsTransformInfo": ants_transform_info_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface AntsTransformInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform_file The transform file to read. Supported formats include HDF5, MINC, Matlab, and Txt.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_transform_info_params(
     transform_file: InputPathType,
 ): AntsTransformInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform_file The transform file to read. Supported formats include HDF5, MINC, Matlab, and Txt.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsTransformInfo" as const,
+        "@type": "ants.antsTransformInfo" as const,
         "transform_file": transform_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_transform_info_cargs(
     params: AntsTransformInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsTransformInfo");
     cargs.push(
@@ -108,18 +108,18 @@ function ants_transform_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_transform_info_outputs(
     params: AntsTransformInfoParameters,
     execution: Execution,
 ): AntsTransformInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsTransformInfoOutputs = {
         root: execution.outputFile("."),
         output_info: execution.outputFile(["transform_info.txt"].join('')),
@@ -128,22 +128,22 @@ function ants_transform_info_outputs(
 }
 
 
+/**
+ * Provide information about an ITK transform file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
+ */
 function ants_transform_info_execute(
     params: AntsTransformInfoParameters,
     execution: Execution,
 ): AntsTransformInfoOutputs {
-    /**
-     * Provide information about an ITK transform file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_transform_info_cargs(params, execution)
     const ret = ants_transform_info_outputs(params, execution)
@@ -152,22 +152,22 @@ function ants_transform_info_execute(
 }
 
 
+/**
+ * Provide information about an ITK transform file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param transform_file The transform file to read. Supported formats include HDF5, MINC, Matlab, and Txt.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
+ */
 function ants_transform_info(
     transform_file: InputPathType,
     runner: Runner | null = null,
 ): AntsTransformInfoOutputs {
-    /**
-     * Provide information about an ITK transform file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param transform_file The transform file to read. Supported formats include HDF5, MINC, Matlab, and Txt.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_TRANSFORM_INFO_METADATA);
     const params = ants_transform_info_params(transform_file)
@@ -180,5 +180,8 @@ export {
       AntsTransformInfoOutputs,
       AntsTransformInfoParameters,
       ants_transform_info,
+      ants_transform_info_cargs,
+      ants_transform_info_execute,
+      ants_transform_info_outputs,
       ants_transform_info_params,
 };

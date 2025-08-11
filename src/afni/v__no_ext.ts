@@ -12,41 +12,41 @@ const V__NO_EXT_METADATA: Metadata = {
 
 
 interface VNoExtParameters {
-    "__STYXTYPE__": "@NoExt";
+    "@type": "afni.@NoExt";
     "inputfile": string;
     "extensions"?: Array<string> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@NoExt": v__no_ext_cargs,
+        "afni.@NoExt": v__no_ext_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@NoExt": v__no_ext_outputs,
+        "afni.@NoExt": v__no_ext_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VNoExtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputfile Input file name with extension
+ * @param extensions Extensions to be removed
+ *
+ * @returns Parameter dictionary
+ */
 function v__no_ext_params(
     inputfile: string,
     extensions: Array<string> | null = null,
 ): VNoExtParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputfile Input file name with extension
-     * @param extensions Extensions to be removed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@NoExt" as const,
+        "@type": "afni.@NoExt" as const,
         "inputfile": inputfile,
     };
     if (extensions !== null) {
@@ -92,18 +92,18 @@ function v__no_ext_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__no_ext_cargs(
     params: VNoExtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@NoExt");
     cargs.push((params["inputfile"] ?? null));
@@ -114,18 +114,18 @@ function v__no_ext_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__no_ext_outputs(
     params: VNoExtParameters,
     execution: Execution,
 ): VNoExtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VNoExtOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["output"].join('')),
@@ -134,22 +134,22 @@ function v__no_ext_outputs(
 }
 
 
+/**
+ * Tool for removing specified extensions from filenames.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
+ */
 function v__no_ext_execute(
     params: VNoExtParameters,
     execution: Execution,
 ): VNoExtOutputs {
-    /**
-     * Tool for removing specified extensions from filenames.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__no_ext_cargs(params, execution)
     const ret = v__no_ext_outputs(params, execution)
@@ -158,24 +158,24 @@ function v__no_ext_execute(
 }
 
 
+/**
+ * Tool for removing specified extensions from filenames.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inputfile Input file name with extension
+ * @param extensions Extensions to be removed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
+ */
 function v__no_ext(
     inputfile: string,
     extensions: Array<string> | null = null,
     runner: Runner | null = null,
 ): VNoExtOutputs {
-    /**
-     * Tool for removing specified extensions from filenames.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inputfile Input file name with extension
-     * @param extensions Extensions to be removed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__NO_EXT_METADATA);
     const params = v__no_ext_params(inputfile, extensions)
@@ -188,5 +188,8 @@ export {
       VNoExtParameters,
       V__NO_EXT_METADATA,
       v__no_ext,
+      v__no_ext_cargs,
+      v__no_ext_execute,
+      v__no_ext_outputs,
       v__no_ext_params,
 };

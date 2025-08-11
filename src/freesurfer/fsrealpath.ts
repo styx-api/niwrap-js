@@ -12,39 +12,39 @@ const FSREALPATH_METADATA: Metadata = {
 
 
 interface FsrealpathParameters {
-    "__STYXTYPE__": "fsrealpath";
+    "@type": "freesurfer.fsrealpath";
     "path": string;
     "help": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsrealpath": fsrealpath_cargs,
+        "freesurfer.fsrealpath": fsrealpath_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface FsrealpathOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param path The path to resolve
+ * @param help Show this help message and exit
+ *
+ * @returns Parameter dictionary
+ */
 function fsrealpath_params(
     path: string,
     help: boolean = false,
 ): FsrealpathParameters {
-    /**
-     * Build parameters.
-    
-     * @param path The path to resolve
-     * @param help Show this help message and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsrealpath" as const,
+        "@type": "freesurfer.fsrealpath" as const,
         "path": path,
         "help": help,
     };
@@ -85,18 +85,18 @@ function fsrealpath_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsrealpath_cargs(
     params: FsrealpathParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsrealpath");
     cargs.push((params["path"] ?? null));
@@ -107,18 +107,18 @@ function fsrealpath_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsrealpath_outputs(
     params: FsrealpathParameters,
     execution: Execution,
 ): FsrealpathOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsrealpathOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function fsrealpath_outputs(
 }
 
 
+/**
+ * Resolve symbolic links in a path.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
+ */
 function fsrealpath_execute(
     params: FsrealpathParameters,
     execution: Execution,
 ): FsrealpathOutputs {
-    /**
-     * Resolve symbolic links in a path.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsrealpath_cargs(params, execution)
     const ret = fsrealpath_outputs(params, execution)
@@ -150,24 +150,24 @@ function fsrealpath_execute(
 }
 
 
+/**
+ * Resolve symbolic links in a path.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param path The path to resolve
+ * @param help Show this help message and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
+ */
 function fsrealpath(
     path: string,
     help: boolean = false,
     runner: Runner | null = null,
 ): FsrealpathOutputs {
-    /**
-     * Resolve symbolic links in a path.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param path The path to resolve
-     * @param help Show this help message and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSREALPATH_METADATA);
     const params = fsrealpath_params(path, help)
@@ -180,5 +180,8 @@ export {
       FsrealpathOutputs,
       FsrealpathParameters,
       fsrealpath,
+      fsrealpath_cargs,
+      fsrealpath_execute,
+      fsrealpath_outputs,
       fsrealpath_params,
 };

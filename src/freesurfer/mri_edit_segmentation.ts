@@ -12,42 +12,42 @@ const MRI_EDIT_SEGMENTATION_METADATA: Metadata = {
 
 
 interface MriEditSegmentationParameters {
-    "__STYXTYPE__": "mri_edit_segmentation";
+    "@type": "freesurfer.mri_edit_segmentation";
     "input_segmentation": InputPathType;
     "t1_volume": InputPathType;
     "output_segmentation": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_edit_segmentation": mri_edit_segmentation_cargs,
+        "freesurfer.mri_edit_segmentation": mri_edit_segmentation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_edit_segmentation": mri_edit_segmentation_outputs,
+        "freesurfer.mri_edit_segmentation": mri_edit_segmentation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriEditSegmentationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_segmentation Input segmentation file.
+ * @param t1_volume T1 volume file.
+ * @param output_segmentation Output segmentation file.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_edit_segmentation_params(
     input_segmentation: InputPathType,
     t1_volume: InputPathType,
     output_segmentation: string,
 ): MriEditSegmentationParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_segmentation Input segmentation file.
-     * @param t1_volume T1 volume file.
-     * @param output_segmentation Output segmentation file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_edit_segmentation" as const,
+        "@type": "freesurfer.mri_edit_segmentation" as const,
         "input_segmentation": input_segmentation,
         "t1_volume": t1_volume,
         "output_segmentation": output_segmentation,
@@ -94,18 +94,18 @@ function mri_edit_segmentation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_edit_segmentation_cargs(
     params: MriEditSegmentationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_edit_segmentation");
     cargs.push(execution.inputFile((params["input_segmentation"] ?? null)));
@@ -115,18 +115,18 @@ function mri_edit_segmentation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_edit_segmentation_outputs(
     params: MriEditSegmentationParameters,
     execution: Execution,
 ): MriEditSegmentationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEditSegmentationOutputs = {
         root: execution.outputFile("."),
         output_segmentation_file: execution.outputFile([(params["output_segmentation"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_edit_segmentation_outputs(
 }
 
 
+/**
+ * A tool used for editing segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
+ */
 function mri_edit_segmentation_execute(
     params: MriEditSegmentationParameters,
     execution: Execution,
 ): MriEditSegmentationOutputs {
-    /**
-     * A tool used for editing segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_edit_segmentation_cargs(params, execution)
     const ret = mri_edit_segmentation_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_edit_segmentation_execute(
 }
 
 
+/**
+ * A tool used for editing segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_segmentation Input segmentation file.
+ * @param t1_volume T1 volume file.
+ * @param output_segmentation Output segmentation file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
+ */
 function mri_edit_segmentation(
     input_segmentation: InputPathType,
     t1_volume: InputPathType,
     output_segmentation: string,
     runner: Runner | null = null,
 ): MriEditSegmentationOutputs {
-    /**
-     * A tool used for editing segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_segmentation Input segmentation file.
-     * @param t1_volume T1 volume file.
-     * @param output_segmentation Output segmentation file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_METADATA);
     const params = mri_edit_segmentation_params(input_segmentation, t1_volume, output_segmentation)
@@ -191,5 +191,8 @@ export {
       MriEditSegmentationOutputs,
       MriEditSegmentationParameters,
       mri_edit_segmentation,
+      mri_edit_segmentation_cargs,
+      mri_edit_segmentation_execute,
+      mri_edit_segmentation_outputs,
       mri_edit_segmentation_params,
 };

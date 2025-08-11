@@ -12,7 +12,7 @@ const RECON_ALL_CLINICAL_SH_METADATA: Metadata = {
 
 
 interface ReconAllClinicalShParameters {
-    "__STYXTYPE__": "recon-all-clinical.sh";
+    "@type": "freesurfer.recon-all-clinical.sh";
     "input_scan": InputPathType;
     "subject_id": string;
     "threads": number;
@@ -20,33 +20,33 @@ interface ReconAllClinicalShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "recon-all-clinical.sh": recon_all_clinical_sh_cargs,
+        "freesurfer.recon-all-clinical.sh": recon_all_clinical_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface ReconAllClinicalShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_scan Input scan file to be processed.
+ * @param subject_id Identifier for the subject being processed.
+ * @param threads Number of threads to use for processing.
+ * @param subject_dir Optional subjects directory. Only necessary if the environment variable SUBJECTS_DIR is not set or needs to be overridden.
+ *
+ * @returns Parameter dictionary
+ */
 function recon_all_clinical_sh_params(
     input_scan: InputPathType,
     subject_id: string,
     threads: number,
     subject_dir: string | null = null,
 ): ReconAllClinicalShParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_scan Input scan file to be processed.
-     * @param subject_id Identifier for the subject being processed.
-     * @param threads Number of threads to use for processing.
-     * @param subject_dir Optional subjects directory. Only necessary if the environment variable SUBJECTS_DIR is not set or needs to be overridden.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "recon-all-clinical.sh" as const,
+        "@type": "freesurfer.recon-all-clinical.sh" as const,
         "input_scan": input_scan,
         "subject_id": subject_id,
         "threads": threads,
@@ -95,18 +95,18 @@ function recon_all_clinical_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function recon_all_clinical_sh_cargs(
     params: ReconAllClinicalShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("recon-all-clinical.sh");
     cargs.push(execution.inputFile((params["input_scan"] ?? null)));
@@ -119,18 +119,18 @@ function recon_all_clinical_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function recon_all_clinical_sh_outputs(
     params: ReconAllClinicalShParameters,
     execution: Execution,
 ): ReconAllClinicalShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReconAllClinicalShOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function recon_all_clinical_sh_outputs(
 }
 
 
+/**
+ * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
+ */
 function recon_all_clinical_sh_execute(
     params: ReconAllClinicalShParameters,
     execution: Execution,
 ): ReconAllClinicalShOutputs {
-    /**
-     * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
-     */
     params = execution.params(params)
     const cargs = recon_all_clinical_sh_cargs(params, execution)
     const ret = recon_all_clinical_sh_outputs(params, execution)
@@ -162,6 +162,21 @@ function recon_all_clinical_sh_execute(
 }
 
 
+/**
+ * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_scan Input scan file to be processed.
+ * @param subject_id Identifier for the subject being processed.
+ * @param threads Number of threads to use for processing.
+ * @param subject_dir Optional subjects directory. Only necessary if the environment variable SUBJECTS_DIR is not set or needs to be overridden.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
+ */
 function recon_all_clinical_sh(
     input_scan: InputPathType,
     subject_id: string,
@@ -169,21 +184,6 @@ function recon_all_clinical_sh(
     subject_dir: string | null = null,
     runner: Runner | null = null,
 ): ReconAllClinicalShOutputs {
-    /**
-     * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_scan Input scan file to be processed.
-     * @param subject_id Identifier for the subject being processed.
-     * @param threads Number of threads to use for processing.
-     * @param subject_dir Optional subjects directory. Only necessary if the environment variable SUBJECTS_DIR is not set or needs to be overridden.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RECON_ALL_CLINICAL_SH_METADATA);
     const params = recon_all_clinical_sh_params(input_scan, subject_id, threads, subject_dir)
@@ -196,5 +196,8 @@ export {
       ReconAllClinicalShOutputs,
       ReconAllClinicalShParameters,
       recon_all_clinical_sh,
+      recon_all_clinical_sh_cargs,
+      recon_all_clinical_sh_execute,
+      recon_all_clinical_sh_outputs,
       recon_all_clinical_sh_params,
 };

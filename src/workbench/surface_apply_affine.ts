@@ -12,14 +12,14 @@ const SURFACE_APPLY_AFFINE_METADATA: Metadata = {
 
 
 interface SurfaceApplyAffineFlirtParameters {
-    "__STYXTYPE__": "flirt";
+    "@type": "workbench.surface-apply-affine.flirt";
     "source_volume": string;
     "target_volume": string;
 }
 
 
 interface SurfaceApplyAffineParameters {
-    "__STYXTYPE__": "surface-apply-affine";
+    "@type": "workbench.surface-apply-affine";
     "in_surf": InputPathType;
     "affine": string;
     "out_surf": string;
@@ -27,55 +27,55 @@ interface SurfaceApplyAffineParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-apply-affine": surface_apply_affine_cargs,
-        "flirt": surface_apply_affine_flirt_cargs,
+        "workbench.surface-apply-affine": surface_apply_affine_cargs,
+        "workbench.surface-apply-affine.flirt": surface_apply_affine_flirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-apply-affine": surface_apply_affine_outputs,
+        "workbench.surface-apply-affine": surface_apply_affine_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_volume the source volume used when generating the affine
+ * @param target_volume the target volume used when generating the affine
+ *
+ * @returns Parameter dictionary
+ */
 function surface_apply_affine_flirt_params(
     source_volume: string,
     target_volume: string,
 ): SurfaceApplyAffineFlirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_volume the source volume used when generating the affine
-     * @param target_volume the target volume used when generating the affine
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flirt" as const,
+        "@type": "workbench.surface-apply-affine.flirt" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -83,18 +83,18 @@ function surface_apply_affine_flirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_apply_affine_flirt_cargs(
     params: SurfaceApplyAffineFlirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-flirt");
     cargs.push((params["source_volume"] ?? null));
@@ -120,24 +120,24 @@ interface SurfaceApplyAffineOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_surf the surface to transform
+ * @param affine the affine file
+ * @param out_surf the output transformed surface
+ * @param flirt MUST be used if affine is a flirt affine
+ *
+ * @returns Parameter dictionary
+ */
 function surface_apply_affine_params(
     in_surf: InputPathType,
     affine: string,
     out_surf: string,
     flirt: SurfaceApplyAffineFlirtParameters | null = null,
 ): SurfaceApplyAffineParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_surf the surface to transform
-     * @param affine the affine file
-     * @param out_surf the output transformed surface
-     * @param flirt MUST be used if affine is a flirt affine
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-apply-affine" as const,
+        "@type": "workbench.surface-apply-affine" as const,
         "in_surf": in_surf,
         "affine": affine,
         "out_surf": out_surf,
@@ -149,18 +149,18 @@ function surface_apply_affine_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_apply_affine_cargs(
     params: SurfaceApplyAffineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-apply-affine");
@@ -168,24 +168,24 @@ function surface_apply_affine_cargs(
     cargs.push((params["affine"] ?? null));
     cargs.push((params["out_surf"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt"] ?? null).__STYXTYPE__)((params["flirt"] ?? null), execution));
+        cargs.push(...dynCargs((params["flirt"] ?? null)["@type"])((params["flirt"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_apply_affine_outputs(
     params: SurfaceApplyAffineParameters,
     execution: Execution,
 ): SurfaceApplyAffineOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceApplyAffineOutputs = {
         root: execution.outputFile("."),
         out_surf: execution.outputFile([(params["out_surf"] ?? null)].join('')),
@@ -194,24 +194,24 @@ function surface_apply_affine_outputs(
 }
 
 
+/**
+ * Apply affine transform to surface file.
+ *
+ * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
+ */
 function surface_apply_affine_execute(
     params: SurfaceApplyAffineParameters,
     execution: Execution,
 ): SurfaceApplyAffineOutputs {
-    /**
-     * Apply affine transform to surface file.
-     * 
-     * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_apply_affine_cargs(params, execution)
     const ret = surface_apply_affine_outputs(params, execution)
@@ -220,6 +220,23 @@ function surface_apply_affine_execute(
 }
 
 
+/**
+ * Apply affine transform to surface file.
+ *
+ * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param in_surf the surface to transform
+ * @param affine the affine file
+ * @param out_surf the output transformed surface
+ * @param flirt MUST be used if affine is a flirt affine
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
+ */
 function surface_apply_affine(
     in_surf: InputPathType,
     affine: string,
@@ -227,23 +244,6 @@ function surface_apply_affine(
     flirt: SurfaceApplyAffineFlirtParameters | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
-    /**
-     * Apply affine transform to surface file.
-     * 
-     * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param in_surf the surface to transform
-     * @param affine the affine file
-     * @param out_surf the output transformed surface
-     * @param flirt MUST be used if affine is a flirt affine
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_APPLY_AFFINE_METADATA);
     const params = surface_apply_affine_params(in_surf, affine, out_surf, flirt)
@@ -257,6 +257,10 @@ export {
       SurfaceApplyAffineOutputs,
       SurfaceApplyAffineParameters,
       surface_apply_affine,
+      surface_apply_affine_cargs,
+      surface_apply_affine_execute,
+      surface_apply_affine_flirt_cargs,
       surface_apply_affine_flirt_params,
+      surface_apply_affine_outputs,
       surface_apply_affine_params,
 };

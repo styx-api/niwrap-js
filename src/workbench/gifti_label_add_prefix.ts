@@ -12,42 +12,42 @@ const GIFTI_LABEL_ADD_PREFIX_METADATA: Metadata = {
 
 
 interface GiftiLabelAddPrefixParameters {
-    "__STYXTYPE__": "gifti-label-add-prefix";
+    "@type": "workbench.gifti-label-add-prefix";
     "label_in": InputPathType;
     "prefix": string;
     "label_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gifti-label-add-prefix": gifti_label_add_prefix_cargs,
+        "workbench.gifti-label-add-prefix": gifti_label_add_prefix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gifti-label-add-prefix": gifti_label_add_prefix_outputs,
+        "workbench.gifti-label-add-prefix": gifti_label_add_prefix_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface GiftiLabelAddPrefixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input label file
+ * @param prefix the prefix string to add
+ * @param label_out the output label file
+ *
+ * @returns Parameter dictionary
+ */
 function gifti_label_add_prefix_params(
     label_in: InputPathType,
     prefix: string,
     label_out: string,
 ): GiftiLabelAddPrefixParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input label file
-     * @param prefix the prefix string to add
-     * @param label_out the output label file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gifti-label-add-prefix" as const,
+        "@type": "workbench.gifti-label-add-prefix" as const,
         "label_in": label_in,
         "prefix": prefix,
         "label_out": label_out,
@@ -94,18 +94,18 @@ function gifti_label_add_prefix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gifti_label_add_prefix_cargs(
     params: GiftiLabelAddPrefixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-gifti-label-add-prefix");
@@ -116,18 +116,18 @@ function gifti_label_add_prefix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gifti_label_add_prefix_outputs(
     params: GiftiLabelAddPrefixParameters,
     execution: Execution,
 ): GiftiLabelAddPrefixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GiftiLabelAddPrefixOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -136,24 +136,24 @@ function gifti_label_add_prefix_outputs(
 }
 
 
+/**
+ * Add prefix to all label names in a gifti label file.
+ *
+ * For each label other than '???', prepend <prefix> to the label name.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
+ */
 function gifti_label_add_prefix_execute(
     params: GiftiLabelAddPrefixParameters,
     execution: Execution,
 ): GiftiLabelAddPrefixOutputs {
-    /**
-     * Add prefix to all label names in a gifti label file.
-     * 
-     * For each label other than '???', prepend <prefix> to the label name.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
-     */
     params = execution.params(params)
     const cargs = gifti_label_add_prefix_cargs(params, execution)
     const ret = gifti_label_add_prefix_outputs(params, execution)
@@ -162,28 +162,28 @@ function gifti_label_add_prefix_execute(
 }
 
 
+/**
+ * Add prefix to all label names in a gifti label file.
+ *
+ * For each label other than '???', prepend <prefix> to the label name.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input label file
+ * @param prefix the prefix string to add
+ * @param label_out the output label file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
+ */
 function gifti_label_add_prefix(
     label_in: InputPathType,
     prefix: string,
     label_out: string,
     runner: Runner | null = null,
 ): GiftiLabelAddPrefixOutputs {
-    /**
-     * Add prefix to all label names in a gifti label file.
-     * 
-     * For each label other than '???', prepend <prefix> to the label name.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input label file
-     * @param prefix the prefix string to add
-     * @param label_out the output label file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GIFTI_LABEL_ADD_PREFIX_METADATA);
     const params = gifti_label_add_prefix_params(label_in, prefix, label_out)
@@ -196,5 +196,8 @@ export {
       GiftiLabelAddPrefixOutputs,
       GiftiLabelAddPrefixParameters,
       gifti_label_add_prefix,
+      gifti_label_add_prefix_cargs,
+      gifti_label_add_prefix_execute,
+      gifti_label_add_prefix_outputs,
       gifti_label_add_prefix_params,
 };

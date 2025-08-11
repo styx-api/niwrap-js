@@ -12,7 +12,7 @@ const VECWARP_METADATA: Metadata = {
 
 
 interface VecwarpParameters {
-    "__STYXTYPE__": "Vecwarp";
+    "@type": "afni.Vecwarp";
     "apar"?: InputPathType | null | undefined;
     "matvec"?: InputPathType | null | undefined;
     "forward": boolean;
@@ -23,35 +23,35 @@ interface VecwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "Vecwarp": vecwarp_cargs,
+        "afni.Vecwarp": vecwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "Vecwarp": vecwarp_outputs,
+        "afni.Vecwarp": vecwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VecwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param apar Use the AFNI dataset 'aaa' as the source of the transformation; this dataset must be in +acpc or +tlrc coordinates, and must contain the attributes WARP_TYPE and WARP_DATA which describe the forward transformation from +orig coordinates to the 'aaa' coordinate system.
+ * @param matvec Read an affine transformation matrix-vector from file 'mmm', which must be in the specified format.
+ * @param forward To apply the forward transformation. If neither -forward nor -backward is given, -forward is the default.
+ * @param backward To apply the backward transformation.
+ * @param input Read input 3-vectors from the file 'iii' (from stdin if 'iii' is '-' or the -input option is missing).
+ * @param output Write the output to file 'ooo' (to stdout if 'ooo' is '-', or if the -output option is missing).
+ * @param force If the output file already exists, use -force to overwrite it. If -force is used, it must come before -output on the command line.
+ *
+ * @returns Parameter dictionary
+ */
 function vecwarp_params(
     apar: InputPathType | null = null,
     matvec: InputPathType | null = null,
@@ -83,21 +96,8 @@ function vecwarp_params(
     output: string | null = null,
     force: boolean = false,
 ): VecwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param apar Use the AFNI dataset 'aaa' as the source of the transformation; this dataset must be in +acpc or +tlrc coordinates, and must contain the attributes WARP_TYPE and WARP_DATA which describe the forward transformation from +orig coordinates to the 'aaa' coordinate system.
-     * @param matvec Read an affine transformation matrix-vector from file 'mmm', which must be in the specified format.
-     * @param forward To apply the forward transformation. If neither -forward nor -backward is given, -forward is the default.
-     * @param backward To apply the backward transformation.
-     * @param input Read input 3-vectors from the file 'iii' (from stdin if 'iii' is '-' or the -input option is missing).
-     * @param output Write the output to file 'ooo' (to stdout if 'ooo' is '-', or if the -output option is missing).
-     * @param force If the output file already exists, use -force to overwrite it. If -force is used, it must come before -output on the command line.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "Vecwarp" as const,
+        "@type": "afni.Vecwarp" as const,
         "forward": forward,
         "backward": backward,
         "force": force,
@@ -118,18 +118,18 @@ function vecwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vecwarp_cargs(
     params: VecwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Vecwarp");
     if ((params["apar"] ?? null) !== null) {
@@ -169,18 +169,18 @@ function vecwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vecwarp_outputs(
     params: VecwarpParameters,
     execution: Execution,
 ): VecwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VecwarpOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -189,22 +189,22 @@ function vecwarp_outputs(
 }
 
 
+/**
+ * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
+ */
 function vecwarp_execute(
     params: VecwarpParameters,
     execution: Execution,
 ): VecwarpOutputs {
-    /**
-     * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = vecwarp_cargs(params, execution)
     const ret = vecwarp_outputs(params, execution)
@@ -213,6 +213,24 @@ function vecwarp_execute(
 }
 
 
+/**
+ * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param apar Use the AFNI dataset 'aaa' as the source of the transformation; this dataset must be in +acpc or +tlrc coordinates, and must contain the attributes WARP_TYPE and WARP_DATA which describe the forward transformation from +orig coordinates to the 'aaa' coordinate system.
+ * @param matvec Read an affine transformation matrix-vector from file 'mmm', which must be in the specified format.
+ * @param forward To apply the forward transformation. If neither -forward nor -backward is given, -forward is the default.
+ * @param backward To apply the backward transformation.
+ * @param input Read input 3-vectors from the file 'iii' (from stdin if 'iii' is '-' or the -input option is missing).
+ * @param output Write the output to file 'ooo' (to stdout if 'ooo' is '-', or if the -output option is missing).
+ * @param force If the output file already exists, use -force to overwrite it. If -force is used, it must come before -output on the command line.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
+ */
 function vecwarp(
     apar: InputPathType | null = null,
     matvec: InputPathType | null = null,
@@ -223,24 +241,6 @@ function vecwarp(
     force: boolean = false,
     runner: Runner | null = null,
 ): VecwarpOutputs {
-    /**
-     * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param apar Use the AFNI dataset 'aaa' as the source of the transformation; this dataset must be in +acpc or +tlrc coordinates, and must contain the attributes WARP_TYPE and WARP_DATA which describe the forward transformation from +orig coordinates to the 'aaa' coordinate system.
-     * @param matvec Read an affine transformation matrix-vector from file 'mmm', which must be in the specified format.
-     * @param forward To apply the forward transformation. If neither -forward nor -backward is given, -forward is the default.
-     * @param backward To apply the backward transformation.
-     * @param input Read input 3-vectors from the file 'iii' (from stdin if 'iii' is '-' or the -input option is missing).
-     * @param output Write the output to file 'ooo' (to stdout if 'ooo' is '-', or if the -output option is missing).
-     * @param force If the output file already exists, use -force to overwrite it. If -force is used, it must come before -output on the command line.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VECWARP_METADATA);
     const params = vecwarp_params(apar, matvec, forward, backward, input, output, force)
@@ -253,5 +253,8 @@ export {
       VecwarpOutputs,
       VecwarpParameters,
       vecwarp,
+      vecwarp_cargs,
+      vecwarp_execute,
+      vecwarp_outputs,
       vecwarp_params,
 };

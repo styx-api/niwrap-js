@@ -12,7 +12,7 @@ const REALTIME_RECEIVER_METADATA: Metadata = {
 
 
 interface RealtimeReceiverParameters {
-    "__STYXTYPE__": "realtime_receiver";
+    "@type": "afni.realtime_receiver";
     "show_data"?: "yes" | "no" | null | undefined;
     "write_text_data"?: string | null | undefined;
     "data_choice"?: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null | undefined;
@@ -28,33 +28,33 @@ interface RealtimeReceiverParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "realtime_receiver": realtime_receiver_cargs,
+        "afni.realtime_receiver": realtime_receiver_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface RealtimeReceiverOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param show_data Display incoming data in terminal window
+ * @param write_text_data Write data to text file
+ * @param data_choice Pick which data to send as feedback
+ * @param serial_port Specify serial port file for feedback data
+ * @param show_demo_gui Demonstrate a feedback GUI
+ * @param dc_params Set data_choice parameters, e.g. for diff_ratio, params P1 P2
+ * @param extras_on_one_line Show 'extras' on one line only
+ * @param show_comm_times Display communication times
+ * @param show_demo_data Display feedback data in terminal window
+ * @param swap Swap bytes of incoming data
+ * @param tcp_port Specify TCP port for incoming connections
+ * @param verbosity Set the verbosity level
+ *
+ * @returns Parameter dictionary
+ */
 function realtime_receiver_params(
     show_data: "yes" | "no" | null = null,
     write_text_data: string | null = null,
@@ -88,26 +106,8 @@ function realtime_receiver_params(
     tcp_port: number | null = null,
     verbosity: number | null = null,
 ): RealtimeReceiverParameters {
-    /**
-     * Build parameters.
-    
-     * @param show_data Display incoming data in terminal window
-     * @param write_text_data Write data to text file
-     * @param data_choice Pick which data to send as feedback
-     * @param serial_port Specify serial port file for feedback data
-     * @param show_demo_gui Demonstrate a feedback GUI
-     * @param dc_params Set data_choice parameters, e.g. for diff_ratio, params P1 P2
-     * @param extras_on_one_line Show 'extras' on one line only
-     * @param show_comm_times Display communication times
-     * @param show_demo_data Display feedback data in terminal window
-     * @param swap Swap bytes of incoming data
-     * @param tcp_port Specify TCP port for incoming connections
-     * @param verbosity Set the verbosity level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "realtime_receiver" as const,
+        "@type": "afni.realtime_receiver" as const,
         "show_comm_times": show_comm_times,
         "show_demo_data": show_demo_data,
         "swap": swap,
@@ -143,18 +143,18 @@ function realtime_receiver_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function realtime_receiver_cargs(
     params: RealtimeReceiverParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("realtime_receiver.py");
     if ((params["show_data"] ?? null) !== null) {
@@ -224,18 +224,18 @@ function realtime_receiver_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function realtime_receiver_outputs(
     params: RealtimeReceiverParameters,
     execution: Execution,
 ): RealtimeReceiverOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RealtimeReceiverOutputs = {
         root: execution.outputFile("."),
     };
@@ -243,22 +243,22 @@ function realtime_receiver_outputs(
 }
 
 
+/**
+ * Program to receive and display real-time plugin data from AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
+ */
 function realtime_receiver_execute(
     params: RealtimeReceiverParameters,
     execution: Execution,
 ): RealtimeReceiverOutputs {
-    /**
-     * Program to receive and display real-time plugin data from AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
-     */
     params = execution.params(params)
     const cargs = realtime_receiver_cargs(params, execution)
     const ret = realtime_receiver_outputs(params, execution)
@@ -267,6 +267,29 @@ function realtime_receiver_execute(
 }
 
 
+/**
+ * Program to receive and display real-time plugin data from AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param show_data Display incoming data in terminal window
+ * @param write_text_data Write data to text file
+ * @param data_choice Pick which data to send as feedback
+ * @param serial_port Specify serial port file for feedback data
+ * @param show_demo_gui Demonstrate a feedback GUI
+ * @param dc_params Set data_choice parameters, e.g. for diff_ratio, params P1 P2
+ * @param extras_on_one_line Show 'extras' on one line only
+ * @param show_comm_times Display communication times
+ * @param show_demo_data Display feedback data in terminal window
+ * @param swap Swap bytes of incoming data
+ * @param tcp_port Specify TCP port for incoming connections
+ * @param verbosity Set the verbosity level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
+ */
 function realtime_receiver(
     show_data: "yes" | "no" | null = null,
     write_text_data: string | null = null,
@@ -282,29 +305,6 @@ function realtime_receiver(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): RealtimeReceiverOutputs {
-    /**
-     * Program to receive and display real-time plugin data from AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param show_data Display incoming data in terminal window
-     * @param write_text_data Write data to text file
-     * @param data_choice Pick which data to send as feedback
-     * @param serial_port Specify serial port file for feedback data
-     * @param show_demo_gui Demonstrate a feedback GUI
-     * @param dc_params Set data_choice parameters, e.g. for diff_ratio, params P1 P2
-     * @param extras_on_one_line Show 'extras' on one line only
-     * @param show_comm_times Display communication times
-     * @param show_demo_data Display feedback data in terminal window
-     * @param swap Swap bytes of incoming data
-     * @param tcp_port Specify TCP port for incoming connections
-     * @param verbosity Set the verbosity level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REALTIME_RECEIVER_METADATA);
     const params = realtime_receiver_params(show_data, write_text_data, data_choice, serial_port, show_demo_gui, dc_params, extras_on_one_line, show_comm_times, show_demo_data, swap, tcp_port, verbosity)
@@ -317,5 +317,8 @@ export {
       RealtimeReceiverOutputs,
       RealtimeReceiverParameters,
       realtime_receiver,
+      realtime_receiver_cargs,
+      realtime_receiver_execute,
+      realtime_receiver_outputs,
       realtime_receiver_params,
 };

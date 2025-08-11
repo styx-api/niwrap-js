@@ -12,7 +12,7 @@ const V__AFNI_ENV_METADATA: Metadata = {
 
 
 interface VAfniEnvParameters {
-    "__STYXTYPE__": "@AfniEnv";
+    "@type": "afni.@AfniEnv";
     "set_flag"?: Array<string> | null | undefined;
     "unset_flag"?: string | null | undefined;
     "get_flag"?: string | null | undefined;
@@ -26,33 +26,33 @@ interface VAfniEnvParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@AfniEnv": v__afni_env_cargs,
+        "afni.@AfniEnv": v__afni_env_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface VAfniEnvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param set_flag Set environment variable NAME to value VALUE
+ * @param unset_flag Unset environment variable NAME
+ * @param get_flag Get the value of environment variable NAME
+ * @param help_flag Display the help message for @AfniEnv script
+ * @param help_web_flag Open webpage with help for this program
+ * @param help_web_flag_alias Same as -h_web
+ * @param help_view_flag Open -help output in a GUI editor
+ * @param help_view_flag_alias Same as -h_view
+ * @param all_opts_flag List all of the options for this script
+ * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_env_params(
     set_flag: Array<string> | null = null,
     unset_flag: string | null = null,
@@ -84,24 +100,8 @@ function v__afni_env_params(
     all_opts_flag: boolean = false,
     help_find_flag: string | null = null,
 ): VAfniEnvParameters {
-    /**
-     * Build parameters.
-    
-     * @param set_flag Set environment variable NAME to value VALUE
-     * @param unset_flag Unset environment variable NAME
-     * @param get_flag Get the value of environment variable NAME
-     * @param help_flag Display the help message for @AfniEnv script
-     * @param help_web_flag Open webpage with help for this program
-     * @param help_web_flag_alias Same as -h_web
-     * @param help_view_flag Open -help output in a GUI editor
-     * @param help_view_flag_alias Same as -h_view
-     * @param all_opts_flag List all of the options for this script
-     * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@AfniEnv" as const,
+        "@type": "afni.@AfniEnv" as const,
         "help_flag": help_flag,
         "help_web_flag": help_web_flag,
         "help_web_flag_alias": help_web_flag_alias,
@@ -125,18 +125,18 @@ function v__afni_env_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_env_cargs(
     params: VAfniEnvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@AfniEnv");
     if ((params["set_flag"] ?? null) !== null) {
@@ -185,18 +185,18 @@ function v__afni_env_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_env_outputs(
     params: VAfniEnvParameters,
     execution: Execution,
 ): VAfniEnvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniEnvOutputs = {
         root: execution.outputFile("."),
     };
@@ -204,22 +204,22 @@ function v__afni_env_outputs(
 }
 
 
+/**
+ * Script to set or unset an AFNI environment variable in your .afnirc file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
+ */
 function v__afni_env_execute(
     params: VAfniEnvParameters,
     execution: Execution,
 ): VAfniEnvOutputs {
-    /**
-     * Script to set or unset an AFNI environment variable in your .afnirc file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_env_cargs(params, execution)
     const ret = v__afni_env_outputs(params, execution)
@@ -228,6 +228,27 @@ function v__afni_env_execute(
 }
 
 
+/**
+ * Script to set or unset an AFNI environment variable in your .afnirc file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param set_flag Set environment variable NAME to value VALUE
+ * @param unset_flag Unset environment variable NAME
+ * @param get_flag Get the value of environment variable NAME
+ * @param help_flag Display the help message for @AfniEnv script
+ * @param help_web_flag Open webpage with help for this program
+ * @param help_web_flag_alias Same as -h_web
+ * @param help_view_flag Open -help output in a GUI editor
+ * @param help_view_flag_alias Same as -h_view
+ * @param all_opts_flag List all of the options for this script
+ * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
+ */
 function v__afni_env(
     set_flag: Array<string> | null = null,
     unset_flag: string | null = null,
@@ -241,27 +262,6 @@ function v__afni_env(
     help_find_flag: string | null = null,
     runner: Runner | null = null,
 ): VAfniEnvOutputs {
-    /**
-     * Script to set or unset an AFNI environment variable in your .afnirc file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param set_flag Set environment variable NAME to value VALUE
-     * @param unset_flag Unset environment variable NAME
-     * @param get_flag Get the value of environment variable NAME
-     * @param help_flag Display the help message for @AfniEnv script
-     * @param help_web_flag Open webpage with help for this program
-     * @param help_web_flag_alias Same as -h_web
-     * @param help_view_flag Open -help output in a GUI editor
-     * @param help_view_flag_alias Same as -h_view
-     * @param all_opts_flag List all of the options for this script
-     * @param help_find_flag Search for lines containing WORD in -help output. Search is approximate.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_ENV_METADATA);
     const params = v__afni_env_params(set_flag, unset_flag, get_flag, help_flag, help_web_flag, help_web_flag_alias, help_view_flag, help_view_flag_alias, all_opts_flag, help_find_flag)
@@ -274,5 +274,8 @@ export {
       VAfniEnvParameters,
       V__AFNI_ENV_METADATA,
       v__afni_env,
+      v__afni_env_cargs,
+      v__afni_env_execute,
+      v__afni_env_outputs,
       v__afni_env_params,
 };

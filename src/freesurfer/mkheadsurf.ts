@@ -12,7 +12,7 @@ const MKHEADSURF_METADATA: Metadata = {
 
 
 interface MkheadsurfParameters {
-    "__STYXTYPE__": "mkheadsurf";
+    "@type": "freesurfer.mkheadsurf";
     "input_vol": InputPathType;
     "output_vol": string;
     "output_surf": string;
@@ -43,33 +43,33 @@ interface MkheadsurfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mkheadsurf": mkheadsurf_cargs,
+        "freesurfer.mkheadsurf": mkheadsurf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -89,6 +89,39 @@ interface MkheadsurfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input volume
+ * @param output_vol Output volume
+ * @param output_surf Output surface
+ * @param subject_id Subject ID
+ * @param nsmooth Number of smoothing iterations (default 10)
+ * @param noseghead Do not segment the head, only tessellate and smooth existing
+ * @param thresh1 Threshold 1 value (default 20)
+ * @param thresh2 Threshold 2 value (default 20)
+ * @param nhitsmin Minimum number of hits (default 2)
+ * @param ndilate Number of dilations (default 0)
+ * @param nerode Number of erosions (default 0)
+ * @param fillval Fill value (default 1)
+ * @param fhi FHI for MRIchangeType; default is to use default in mri_seghead
+ * @param no_rescale Do not rescale input when converting to uchar
+ * @param no_fill_holes_islands Do not fill holes and remove islands
+ * @param or_mask Include all voxels in ormask in the head seg
+ * @param tessellation_method Tessellation method using mri_tessellate or mri_mc (default is -mc)
+ * @param inflate Inflate and compute sulc
+ * @param curv Compute curv with smoothing
+ * @param srcvol Source volume ID (default is T1)
+ * @param headvol Head volume ID (default is seghead)
+ * @param headsurf Head surface ID (default is seghead)
+ * @param smheadsurf Smoothed head surface ID (default is smseghead)
+ * @param hemi Hemisphere (default is lh)
+ * @param subjects_dir Subjects directory (default is SUBJECTS_DIR)
+ * @param umask Umask setting (default is 2)
+ * @param logfile Log file
+ *
+ * @returns Parameter dictionary
+ */
 function mkheadsurf_params(
     input_vol: InputPathType,
     output_vol: string,
@@ -118,41 +151,8 @@ function mkheadsurf_params(
     umask: number | null = null,
     logfile: string | null = null,
 ): MkheadsurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input volume
-     * @param output_vol Output volume
-     * @param output_surf Output surface
-     * @param subject_id Subject ID
-     * @param nsmooth Number of smoothing iterations (default 10)
-     * @param noseghead Do not segment the head, only tessellate and smooth existing
-     * @param thresh1 Threshold 1 value (default 20)
-     * @param thresh2 Threshold 2 value (default 20)
-     * @param nhitsmin Minimum number of hits (default 2)
-     * @param ndilate Number of dilations (default 0)
-     * @param nerode Number of erosions (default 0)
-     * @param fillval Fill value (default 1)
-     * @param fhi FHI for MRIchangeType; default is to use default in mri_seghead
-     * @param no_rescale Do not rescale input when converting to uchar
-     * @param no_fill_holes_islands Do not fill holes and remove islands
-     * @param or_mask Include all voxels in ormask in the head seg
-     * @param tessellation_method Tessellation method using mri_tessellate or mri_mc (default is -mc)
-     * @param inflate Inflate and compute sulc
-     * @param curv Compute curv with smoothing
-     * @param srcvol Source volume ID (default is T1)
-     * @param headvol Head volume ID (default is seghead)
-     * @param headsurf Head surface ID (default is seghead)
-     * @param smheadsurf Smoothed head surface ID (default is smseghead)
-     * @param hemi Hemisphere (default is lh)
-     * @param subjects_dir Subjects directory (default is SUBJECTS_DIR)
-     * @param umask Umask setting (default is 2)
-     * @param logfile Log file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mkheadsurf" as const,
+        "@type": "freesurfer.mkheadsurf" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "output_surf": output_surf,
@@ -221,18 +221,18 @@ function mkheadsurf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mkheadsurf_cargs(
     params: MkheadsurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mkheadsurf");
     cargs.push(
@@ -378,18 +378,18 @@ function mkheadsurf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mkheadsurf_outputs(
     params: MkheadsurfParameters,
     execution: Execution,
 ): MkheadsurfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MkheadsurfOutputs = {
         root: execution.outputFile("."),
     };
@@ -397,22 +397,22 @@ function mkheadsurf_outputs(
 }
 
 
+/**
+ * Segment and create a surface representation of the head for visualization and further processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
+ */
 function mkheadsurf_execute(
     params: MkheadsurfParameters,
     execution: Execution,
 ): MkheadsurfOutputs {
-    /**
-     * Segment and create a surface representation of the head for visualization and further processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
-     */
     params = execution.params(params)
     const cargs = mkheadsurf_cargs(params, execution)
     const ret = mkheadsurf_outputs(params, execution)
@@ -421,6 +421,44 @@ function mkheadsurf_execute(
 }
 
 
+/**
+ * Segment and create a surface representation of the head for visualization and further processing.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input volume
+ * @param output_vol Output volume
+ * @param output_surf Output surface
+ * @param subject_id Subject ID
+ * @param nsmooth Number of smoothing iterations (default 10)
+ * @param noseghead Do not segment the head, only tessellate and smooth existing
+ * @param thresh1 Threshold 1 value (default 20)
+ * @param thresh2 Threshold 2 value (default 20)
+ * @param nhitsmin Minimum number of hits (default 2)
+ * @param ndilate Number of dilations (default 0)
+ * @param nerode Number of erosions (default 0)
+ * @param fillval Fill value (default 1)
+ * @param fhi FHI for MRIchangeType; default is to use default in mri_seghead
+ * @param no_rescale Do not rescale input when converting to uchar
+ * @param no_fill_holes_islands Do not fill holes and remove islands
+ * @param or_mask Include all voxels in ormask in the head seg
+ * @param tessellation_method Tessellation method using mri_tessellate or mri_mc (default is -mc)
+ * @param inflate Inflate and compute sulc
+ * @param curv Compute curv with smoothing
+ * @param srcvol Source volume ID (default is T1)
+ * @param headvol Head volume ID (default is seghead)
+ * @param headsurf Head surface ID (default is seghead)
+ * @param smheadsurf Smoothed head surface ID (default is smseghead)
+ * @param hemi Hemisphere (default is lh)
+ * @param subjects_dir Subjects directory (default is SUBJECTS_DIR)
+ * @param umask Umask setting (default is 2)
+ * @param logfile Log file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
+ */
 function mkheadsurf(
     input_vol: InputPathType,
     output_vol: string,
@@ -451,44 +489,6 @@ function mkheadsurf(
     logfile: string | null = null,
     runner: Runner | null = null,
 ): MkheadsurfOutputs {
-    /**
-     * Segment and create a surface representation of the head for visualization and further processing.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input volume
-     * @param output_vol Output volume
-     * @param output_surf Output surface
-     * @param subject_id Subject ID
-     * @param nsmooth Number of smoothing iterations (default 10)
-     * @param noseghead Do not segment the head, only tessellate and smooth existing
-     * @param thresh1 Threshold 1 value (default 20)
-     * @param thresh2 Threshold 2 value (default 20)
-     * @param nhitsmin Minimum number of hits (default 2)
-     * @param ndilate Number of dilations (default 0)
-     * @param nerode Number of erosions (default 0)
-     * @param fillval Fill value (default 1)
-     * @param fhi FHI for MRIchangeType; default is to use default in mri_seghead
-     * @param no_rescale Do not rescale input when converting to uchar
-     * @param no_fill_holes_islands Do not fill holes and remove islands
-     * @param or_mask Include all voxels in ormask in the head seg
-     * @param tessellation_method Tessellation method using mri_tessellate or mri_mc (default is -mc)
-     * @param inflate Inflate and compute sulc
-     * @param curv Compute curv with smoothing
-     * @param srcvol Source volume ID (default is T1)
-     * @param headvol Head volume ID (default is seghead)
-     * @param headsurf Head surface ID (default is seghead)
-     * @param smheadsurf Smoothed head surface ID (default is smseghead)
-     * @param hemi Hemisphere (default is lh)
-     * @param subjects_dir Subjects directory (default is SUBJECTS_DIR)
-     * @param umask Umask setting (default is 2)
-     * @param logfile Log file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKHEADSURF_METADATA);
     const params = mkheadsurf_params(input_vol, output_vol, output_surf, subject_id, nsmooth, noseghead, thresh1, thresh2, nhitsmin, ndilate, nerode, fillval, fhi, no_rescale, no_fill_holes_islands, or_mask, tessellation_method, inflate, curv, srcvol, headvol, headsurf, smheadsurf, hemi, subjects_dir, umask, logfile)
@@ -501,5 +501,8 @@ export {
       MkheadsurfOutputs,
       MkheadsurfParameters,
       mkheadsurf,
+      mkheadsurf_cargs,
+      mkheadsurf_execute,
+      mkheadsurf_outputs,
       mkheadsurf_params,
 };

@@ -12,40 +12,40 @@ const SURFACE_FDR_METADATA: Metadata = {
 
 
 interface SurfaceFdrParameters {
-    "__STYXTYPE__": "surface_fdr";
+    "@type": "fsl.surface_fdr";
     "input_vtk": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface_fdr": surface_fdr_cargs,
+        "fsl.surface_fdr": surface_fdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface_fdr": surface_fdr_outputs,
+        "fsl.surface_fdr": surface_fdr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,36 +76,36 @@ interface SurfaceFdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vtk Input VTK file from vertex analysis
+ *
+ * @returns Parameter dictionary
+ */
 function surface_fdr_params(
     input_vtk: InputPathType,
 ): SurfaceFdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vtk Input VTK file from vertex analysis
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface_fdr" as const,
+        "@type": "fsl.surface_fdr" as const,
         "input_vtk": input_vtk,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_fdr_cargs(
     params: SurfaceFdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surface_fdr");
     cargs.push(execution.inputFile((params["input_vtk"] ?? null)));
@@ -113,18 +113,18 @@ function surface_fdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_fdr_outputs(
     params: SurfaceFdrParameters,
     execution: Execution,
 ): SurfaceFdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceFdrOutputs = {
         root: execution.outputFile("."),
         pvals_vtk: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_pvals.vtk"].join('')),
@@ -135,22 +135,22 @@ function surface_fdr_outputs(
 }
 
 
+/**
+ * Tool to calculate surface FDR correction for vertex analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFdrOutputs`).
+ */
 function surface_fdr_execute(
     params: SurfaceFdrParameters,
     execution: Execution,
 ): SurfaceFdrOutputs {
-    /**
-     * Tool to calculate surface FDR correction for vertex analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_fdr_cargs(params, execution)
     const ret = surface_fdr_outputs(params, execution)
@@ -159,22 +159,22 @@ function surface_fdr_execute(
 }
 
 
+/**
+ * Tool to calculate surface FDR correction for vertex analysis.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_vtk Input VTK file from vertex analysis
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceFdrOutputs`).
+ */
 function surface_fdr(
     input_vtk: InputPathType,
     runner: Runner | null = null,
 ): SurfaceFdrOutputs {
-    /**
-     * Tool to calculate surface FDR correction for vertex analysis.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_vtk Input VTK file from vertex analysis
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceFdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_FDR_METADATA);
     const params = surface_fdr_params(input_vtk)
@@ -187,5 +187,8 @@ export {
       SurfaceFdrOutputs,
       SurfaceFdrParameters,
       surface_fdr,
+      surface_fdr_cargs,
+      surface_fdr_execute,
+      surface_fdr_outputs,
       surface_fdr_params,
 };

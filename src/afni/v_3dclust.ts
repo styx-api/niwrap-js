@@ -12,7 +12,7 @@ const V_3DCLUST_METADATA: Metadata = {
 
 
 interface V3dclustParameters {
-    "__STYXTYPE__": "3dclust";
+    "@type": "afni.3dclust";
     "rmm"?: number | null | undefined;
     "vmul"?: number | null | undefined;
     "datasets": Array<InputPathType>;
@@ -36,35 +36,35 @@ interface V3dclustParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dclust": v_3dclust_cargs,
+        "afni.3dclust": v_3dclust_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dclust": v_3dclust_outputs,
+        "afni.3dclust": v_3dclust_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,32 @@ interface V3dclustOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input dataset(s). More than one allowed, but only the first sub-brick of the dataset.
+ * @param rmm Cluster connection radius in millimeters.
+ * @param vmul Minimum cluster volume in micro-liters or minimum number of voxels if negative.
+ * @param nn1 1st nearest-neighbor clustering (faces touching).
+ * @param nn2 2nd nearest-neighbor clustering (edges touching).
+ * @param nn3 3rd nearest-neighbor clustering (corners touching).
+ * @param noabs Use the signed voxel intensities for calculations.
+ * @param summarize Write out only the total nonzero voxel count and volume for each dataset.
+ * @param nosum Suppress printout of the totals.
+ * @param verb Print out a progress report to stderr as computations proceed.
+ * @param oned_format Write output in 1D format (default).
+ * @param no_oned_format Do not write output in 1D format.
+ * @param quiet Suppress all non-essential output.
+ * @param mni Transform output xyz-coordinates from TLRC to MNI space if the input dataset has the +tlrc view.
+ * @param isovalue Clusters will be formed only from contiguous voxels that also have the same value.
+ * @param isomerge Clusters will be formed from each distinct value in the dataset; spatial contiguity will not be used.
+ * @param inmask Use an internal mask from the dataset to eliminate voxels before clustering.
+ * @param prefix Write a new dataset that is a copy of the input, but with all voxels not in a cluster set to zero; provide a prefix for the new dataset.
+ * @param savemask Write a new dataset that is an ordered mask where the largest cluster is labeled '1', the next largest '2', and so forth.
+ * @param binary Turn the output of '-savemask' into a binary (0 or 1) mask.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dclust_params(
     datasets: Array<InputPathType>,
     rmm: number | null = null,
@@ -113,34 +139,8 @@ function v_3dclust_params(
     savemask: string | null = null,
     binary: boolean = false,
 ): V3dclustParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input dataset(s). More than one allowed, but only the first sub-brick of the dataset.
-     * @param rmm Cluster connection radius in millimeters.
-     * @param vmul Minimum cluster volume in micro-liters or minimum number of voxels if negative.
-     * @param nn1 1st nearest-neighbor clustering (faces touching).
-     * @param nn2 2nd nearest-neighbor clustering (edges touching).
-     * @param nn3 3rd nearest-neighbor clustering (corners touching).
-     * @param noabs Use the signed voxel intensities for calculations.
-     * @param summarize Write out only the total nonzero voxel count and volume for each dataset.
-     * @param nosum Suppress printout of the totals.
-     * @param verb Print out a progress report to stderr as computations proceed.
-     * @param oned_format Write output in 1D format (default).
-     * @param no_oned_format Do not write output in 1D format.
-     * @param quiet Suppress all non-essential output.
-     * @param mni Transform output xyz-coordinates from TLRC to MNI space if the input dataset has the +tlrc view.
-     * @param isovalue Clusters will be formed only from contiguous voxels that also have the same value.
-     * @param isomerge Clusters will be formed from each distinct value in the dataset; spatial contiguity will not be used.
-     * @param inmask Use an internal mask from the dataset to eliminate voxels before clustering.
-     * @param prefix Write a new dataset that is a copy of the input, but with all voxels not in a cluster set to zero; provide a prefix for the new dataset.
-     * @param savemask Write a new dataset that is an ordered mask where the largest cluster is labeled '1', the next largest '2', and so forth.
-     * @param binary Turn the output of '-savemask' into a binary (0 or 1) mask.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dclust" as const,
+        "@type": "afni.3dclust" as const,
         "datasets": datasets,
         "nn1": nn1,
         "nn2": nn2,
@@ -174,18 +174,18 @@ function v_3dclust_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dclust_cargs(
     params: V3dclustParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dclust");
     if ((params["rmm"] ?? null) !== null) {
@@ -256,18 +256,18 @@ function v_3dclust_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dclust_outputs(
     params: V3dclustParameters,
     execution: Execution,
 ): V3dclustOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dclustOutputs = {
         root: execution.outputFile("."),
         prefixed_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -277,22 +277,22 @@ function v_3dclust_outputs(
 }
 
 
+/**
+ * Performs simple-minded cluster detection in 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dclustOutputs`).
+ */
 function v_3dclust_execute(
     params: V3dclustParameters,
     execution: Execution,
 ): V3dclustOutputs {
-    /**
-     * Performs simple-minded cluster detection in 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dclustOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dclust_cargs(params, execution)
     const ret = v_3dclust_outputs(params, execution)
@@ -301,6 +301,37 @@ function v_3dclust_execute(
 }
 
 
+/**
+ * Performs simple-minded cluster detection in 3D datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input dataset(s). More than one allowed, but only the first sub-brick of the dataset.
+ * @param rmm Cluster connection radius in millimeters.
+ * @param vmul Minimum cluster volume in micro-liters or minimum number of voxels if negative.
+ * @param nn1 1st nearest-neighbor clustering (faces touching).
+ * @param nn2 2nd nearest-neighbor clustering (edges touching).
+ * @param nn3 3rd nearest-neighbor clustering (corners touching).
+ * @param noabs Use the signed voxel intensities for calculations.
+ * @param summarize Write out only the total nonzero voxel count and volume for each dataset.
+ * @param nosum Suppress printout of the totals.
+ * @param verb Print out a progress report to stderr as computations proceed.
+ * @param oned_format Write output in 1D format (default).
+ * @param no_oned_format Do not write output in 1D format.
+ * @param quiet Suppress all non-essential output.
+ * @param mni Transform output xyz-coordinates from TLRC to MNI space if the input dataset has the +tlrc view.
+ * @param isovalue Clusters will be formed only from contiguous voxels that also have the same value.
+ * @param isomerge Clusters will be formed from each distinct value in the dataset; spatial contiguity will not be used.
+ * @param inmask Use an internal mask from the dataset to eliminate voxels before clustering.
+ * @param prefix Write a new dataset that is a copy of the input, but with all voxels not in a cluster set to zero; provide a prefix for the new dataset.
+ * @param savemask Write a new dataset that is an ordered mask where the largest cluster is labeled '1', the next largest '2', and so forth.
+ * @param binary Turn the output of '-savemask' into a binary (0 or 1) mask.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dclustOutputs`).
+ */
 function v_3dclust(
     datasets: Array<InputPathType>,
     rmm: number | null = null,
@@ -324,37 +355,6 @@ function v_3dclust(
     binary: boolean = false,
     runner: Runner | null = null,
 ): V3dclustOutputs {
-    /**
-     * Performs simple-minded cluster detection in 3D datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input dataset(s). More than one allowed, but only the first sub-brick of the dataset.
-     * @param rmm Cluster connection radius in millimeters.
-     * @param vmul Minimum cluster volume in micro-liters or minimum number of voxels if negative.
-     * @param nn1 1st nearest-neighbor clustering (faces touching).
-     * @param nn2 2nd nearest-neighbor clustering (edges touching).
-     * @param nn3 3rd nearest-neighbor clustering (corners touching).
-     * @param noabs Use the signed voxel intensities for calculations.
-     * @param summarize Write out only the total nonzero voxel count and volume for each dataset.
-     * @param nosum Suppress printout of the totals.
-     * @param verb Print out a progress report to stderr as computations proceed.
-     * @param oned_format Write output in 1D format (default).
-     * @param no_oned_format Do not write output in 1D format.
-     * @param quiet Suppress all non-essential output.
-     * @param mni Transform output xyz-coordinates from TLRC to MNI space if the input dataset has the +tlrc view.
-     * @param isovalue Clusters will be formed only from contiguous voxels that also have the same value.
-     * @param isomerge Clusters will be formed from each distinct value in the dataset; spatial contiguity will not be used.
-     * @param inmask Use an internal mask from the dataset to eliminate voxels before clustering.
-     * @param prefix Write a new dataset that is a copy of the input, but with all voxels not in a cluster set to zero; provide a prefix for the new dataset.
-     * @param savemask Write a new dataset that is an ordered mask where the largest cluster is labeled '1', the next largest '2', and so forth.
-     * @param binary Turn the output of '-savemask' into a binary (0 or 1) mask.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dclustOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DCLUST_METADATA);
     const params = v_3dclust_params(datasets, rmm, vmul, nn1, nn2, nn3, noabs, summarize, nosum, verb, oned_format, no_oned_format, quiet, mni, isovalue, isomerge, inmask, prefix, savemask, binary)
@@ -367,5 +367,8 @@ export {
       V3dclustParameters,
       V_3DCLUST_METADATA,
       v_3dclust,
+      v_3dclust_cargs,
+      v_3dclust_execute,
+      v_3dclust_outputs,
       v_3dclust_params,
 };

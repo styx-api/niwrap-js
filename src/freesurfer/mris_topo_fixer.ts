@@ -12,41 +12,41 @@ const MRIS_TOPO_FIXER_METADATA: Metadata = {
 
 
 interface MrisTopoFixerParameters {
-    "__STYXTYPE__": "mris_topo_fixer";
+    "@type": "freesurfer.mris_topo_fixer";
     "input_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_topo_fixer": mris_topo_fixer_cargs,
+        "freesurfer.mris_topo_fixer": mris_topo_fixer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_topo_fixer": mris_topo_fixer_outputs,
+        "freesurfer.mris_topo_fixer": mris_topo_fixer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MrisTopoFixerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file that needs topological fixing.
+ * @param output_surface Output surface file with fixed topology.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_topo_fixer_params(
     input_surface: InputPathType,
     output_surface: string,
 ): MrisTopoFixerParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file that needs topological fixing.
-     * @param output_surface Output surface file with fixed topology.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_topo_fixer" as const,
+        "@type": "freesurfer.mris_topo_fixer" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -90,18 +90,18 @@ function mris_topo_fixer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_topo_fixer_cargs(
     params: MrisTopoFixerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_topo_fixer");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -110,18 +110,18 @@ function mris_topo_fixer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_topo_fixer_outputs(
     params: MrisTopoFixerParameters,
     execution: Execution,
 ): MrisTopoFixerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTopoFixerOutputs = {
         root: execution.outputFile("."),
         fixed_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mris_topo_fixer_outputs(
 }
 
 
+/**
+ * FreeSurfer tool for fixing topological defects in cortical surface meshes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
+ */
 function mris_topo_fixer_execute(
     params: MrisTopoFixerParameters,
     execution: Execution,
 ): MrisTopoFixerOutputs {
-    /**
-     * FreeSurfer tool for fixing topological defects in cortical surface meshes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_topo_fixer_cargs(params, execution)
     const ret = mris_topo_fixer_outputs(params, execution)
@@ -154,24 +154,24 @@ function mris_topo_fixer_execute(
 }
 
 
+/**
+ * FreeSurfer tool for fixing topological defects in cortical surface meshes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file that needs topological fixing.
+ * @param output_surface Output surface file with fixed topology.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
+ */
 function mris_topo_fixer(
     input_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): MrisTopoFixerOutputs {
-    /**
-     * FreeSurfer tool for fixing topological defects in cortical surface meshes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file that needs topological fixing.
-     * @param output_surface Output surface file with fixed topology.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TOPO_FIXER_METADATA);
     const params = mris_topo_fixer_params(input_surface, output_surface)
@@ -184,5 +184,8 @@ export {
       MrisTopoFixerOutputs,
       MrisTopoFixerParameters,
       mris_topo_fixer,
+      mris_topo_fixer_cargs,
+      mris_topo_fixer_execute,
+      mris_topo_fixer_outputs,
       mris_topo_fixer_params,
 };

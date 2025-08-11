@@ -12,7 +12,7 @@ const MRIS_TRANSFORM_METADATA: Metadata = {
 
 
 interface MrisTransformParameters {
-    "__STYXTYPE__": "mris_transform";
+    "@type": "freesurfer.mris_transform";
     "input_surface": InputPathType;
     "transform": InputPathType;
     "output_surface": string;
@@ -22,35 +22,35 @@ interface MrisTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_transform": mris_transform_cargs,
+        "freesurfer.mris_transform": mris_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_transform": mris_transform_outputs,
+        "freesurfer.mris_transform": mris_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file, e.g., lh.pial.
+ * @param transform Image-to-image transform file, e.g., LTA or M3Z.
+ * @param output_surface Output surface file, e.g., lh.out.pial.
+ * @param trx_src Specify the source geometry if the transform was created by MNI/mritotal or FSL/flirt.
+ * @param trx_dst Specify the destination geometry if the transform does not include this information or the path in the M3Z is invalid.
+ * @param is_inverse Use this option when using a transform from destination to source space.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_transform_params(
     input_surface: InputPathType,
     transform: InputPathType,
@@ -81,20 +93,8 @@ function mris_transform_params(
     trx_dst: InputPathType | null = null,
     is_inverse: boolean = false,
 ): MrisTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file, e.g., lh.pial.
-     * @param transform Image-to-image transform file, e.g., LTA or M3Z.
-     * @param output_surface Output surface file, e.g., lh.out.pial.
-     * @param trx_src Specify the source geometry if the transform was created by MNI/mritotal or FSL/flirt.
-     * @param trx_dst Specify the destination geometry if the transform does not include this information or the path in the M3Z is invalid.
-     * @param is_inverse Use this option when using a transform from destination to source space.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_transform" as const,
+        "@type": "freesurfer.mris_transform" as const,
         "input_surface": input_surface,
         "transform": transform,
         "output_surface": output_surface,
@@ -110,18 +110,18 @@ function mris_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_transform_cargs(
     params: MrisTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_transform");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -146,18 +146,18 @@ function mris_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_transform_outputs(
     params: MrisTransformParameters,
     execution: Execution,
 ): MrisTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTransformOutputs = {
         root: execution.outputFile("."),
         transformed_output_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -166,22 +166,22 @@ function mris_transform_outputs(
 }
 
 
+/**
+ * A tool to transform surfaces from one space to another using image transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
+ */
 function mris_transform_execute(
     params: MrisTransformParameters,
     execution: Execution,
 ): MrisTransformOutputs {
-    /**
-     * A tool to transform surfaces from one space to another using image transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_transform_cargs(params, execution)
     const ret = mris_transform_outputs(params, execution)
@@ -190,6 +190,23 @@ function mris_transform_execute(
 }
 
 
+/**
+ * A tool to transform surfaces from one space to another using image transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file, e.g., lh.pial.
+ * @param transform Image-to-image transform file, e.g., LTA or M3Z.
+ * @param output_surface Output surface file, e.g., lh.out.pial.
+ * @param trx_src Specify the source geometry if the transform was created by MNI/mritotal or FSL/flirt.
+ * @param trx_dst Specify the destination geometry if the transform does not include this information or the path in the M3Z is invalid.
+ * @param is_inverse Use this option when using a transform from destination to source space.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
+ */
 function mris_transform(
     input_surface: InputPathType,
     transform: InputPathType,
@@ -199,23 +216,6 @@ function mris_transform(
     is_inverse: boolean = false,
     runner: Runner | null = null,
 ): MrisTransformOutputs {
-    /**
-     * A tool to transform surfaces from one space to another using image transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file, e.g., lh.pial.
-     * @param transform Image-to-image transform file, e.g., LTA or M3Z.
-     * @param output_surface Output surface file, e.g., lh.out.pial.
-     * @param trx_src Specify the source geometry if the transform was created by MNI/mritotal or FSL/flirt.
-     * @param trx_dst Specify the destination geometry if the transform does not include this information or the path in the M3Z is invalid.
-     * @param is_inverse Use this option when using a transform from destination to source space.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TRANSFORM_METADATA);
     const params = mris_transform_params(input_surface, transform, output_surface, trx_src, trx_dst, is_inverse)
@@ -228,5 +228,8 @@ export {
       MrisTransformOutputs,
       MrisTransformParameters,
       mris_transform,
+      mris_transform_cargs,
+      mris_transform_execute,
+      mris_transform_outputs,
       mris_transform_params,
 };

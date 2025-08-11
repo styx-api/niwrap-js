@@ -12,7 +12,7 @@ const V_3D_TCORR_MAP_METADATA: Metadata = {
 
 
 interface V3dTcorrMapParameters {
-    "__STYXTYPE__": "3dTcorrMap";
+    "@type": "afni.3dTcorrMap";
     "input": InputPathType;
     "seed"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -33,33 +33,33 @@ interface V3dTcorrMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTcorrMap": v_3d_tcorr_map_cargs,
+        "afni.3dTcorrMap": v_3d_tcorr_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface V3dTcorrMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Read 3D+time dataset 'dd'. This provides the time series to be correlated en masse. This is a mandatory option.
+ * @param seed Read 3D+time dataset 'bb'. It correlates the -seed voxel time series with every voxel in the -input dataset.
+ * @param mask Read dataset 'mmm' as a voxel mask.
+ * @param automask Create a mask from the input dataset.
+ * @param mean Save average correlations into dataset prefix 'pp'.
+ * @param zmean Save tanh of mean arctanh(correlation) into 'pp'.
+ * @param qmean Save RMS(correlation) into 'pp'.
+ * @param pmean Save average of squared positive correlations into 'pp'.
+ * @param thresh Save the COUNT of how many voxels survived thresholding at level abs(correlation) >= tt.
+ * @param varthresh Save the COUNT of how many voxels survive thresholding at multiple levels abs(correlation) >= tt.
+ * @param norm_varthresh Like '-VarThresh', but the output counts are 'Normalized'.
+ * @param corrmap Output at each voxel the entire correlation map, into a dataset with prefix 'pp'.
+ * @param corrmask By default, -CorrMap outputs a sub-brick for EACH input dataset voxel. Eliminates these sub-bricks using this option.
+ * @param aexpr For each correlation 'r', compute the calc-style expression 'expr', and average these values to get the output that goes into dataset 'ppp'.
+ * @param cexpr As in '-Aexpr', but only average together nonzero values computed by 'expr'.
+ * @param sexpr As above, but the sum of the expressions is computed rather than the average.
+ * @param hist For each voxel, save a histogram of the correlation coefficients into dataset ppp.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tcorr_map_params(
     input: InputPathType,
     seed: InputPathType | null = null,
@@ -98,31 +121,8 @@ function v_3d_tcorr_map_params(
     sexpr: string | null = null,
     hist: string | null = null,
 ): V3dTcorrMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Read 3D+time dataset 'dd'. This provides the time series to be correlated en masse. This is a mandatory option.
-     * @param seed Read 3D+time dataset 'bb'. It correlates the -seed voxel time series with every voxel in the -input dataset.
-     * @param mask Read dataset 'mmm' as a voxel mask.
-     * @param automask Create a mask from the input dataset.
-     * @param mean Save average correlations into dataset prefix 'pp'.
-     * @param zmean Save tanh of mean arctanh(correlation) into 'pp'.
-     * @param qmean Save RMS(correlation) into 'pp'.
-     * @param pmean Save average of squared positive correlations into 'pp'.
-     * @param thresh Save the COUNT of how many voxels survived thresholding at level abs(correlation) >= tt.
-     * @param varthresh Save the COUNT of how many voxels survive thresholding at multiple levels abs(correlation) >= tt.
-     * @param norm_varthresh Like '-VarThresh', but the output counts are 'Normalized'.
-     * @param corrmap Output at each voxel the entire correlation map, into a dataset with prefix 'pp'.
-     * @param corrmask By default, -CorrMap outputs a sub-brick for EACH input dataset voxel. Eliminates these sub-bricks using this option.
-     * @param aexpr For each correlation 'r', compute the calc-style expression 'expr', and average these values to get the output that goes into dataset 'ppp'.
-     * @param cexpr As in '-Aexpr', but only average together nonzero values computed by 'expr'.
-     * @param sexpr As above, but the sum of the expressions is computed rather than the average.
-     * @param hist For each voxel, save a histogram of the correlation coefficients into dataset ppp.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTcorrMap" as const,
+        "@type": "afni.3dTcorrMap" as const,
         "input": input,
         "automask": automask,
         "corrmask": corrmask,
@@ -173,18 +173,18 @@ function v_3d_tcorr_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tcorr_map_cargs(
     params: V3dTcorrMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTcorrMap");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -282,18 +282,18 @@ function v_3d_tcorr_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tcorr_map_outputs(
     params: V3dTcorrMapParameters,
     execution: Execution,
 ): V3dTcorrMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTcorrMapOutputs = {
         root: execution.outputFile("."),
     };
@@ -301,22 +301,22 @@ function v_3d_tcorr_map_outputs(
 }
 
 
+/**
+ * AFNI program to compute correlation maps of input time series data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
+ */
 function v_3d_tcorr_map_execute(
     params: V3dTcorrMapParameters,
     execution: Execution,
 ): V3dTcorrMapOutputs {
-    /**
-     * AFNI program to compute correlation maps of input time series data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tcorr_map_cargs(params, execution)
     const ret = v_3d_tcorr_map_outputs(params, execution)
@@ -325,6 +325,34 @@ function v_3d_tcorr_map_execute(
 }
 
 
+/**
+ * AFNI program to compute correlation maps of input time series data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Read 3D+time dataset 'dd'. This provides the time series to be correlated en masse. This is a mandatory option.
+ * @param seed Read 3D+time dataset 'bb'. It correlates the -seed voxel time series with every voxel in the -input dataset.
+ * @param mask Read dataset 'mmm' as a voxel mask.
+ * @param automask Create a mask from the input dataset.
+ * @param mean Save average correlations into dataset prefix 'pp'.
+ * @param zmean Save tanh of mean arctanh(correlation) into 'pp'.
+ * @param qmean Save RMS(correlation) into 'pp'.
+ * @param pmean Save average of squared positive correlations into 'pp'.
+ * @param thresh Save the COUNT of how many voxels survived thresholding at level abs(correlation) >= tt.
+ * @param varthresh Save the COUNT of how many voxels survive thresholding at multiple levels abs(correlation) >= tt.
+ * @param norm_varthresh Like '-VarThresh', but the output counts are 'Normalized'.
+ * @param corrmap Output at each voxel the entire correlation map, into a dataset with prefix 'pp'.
+ * @param corrmask By default, -CorrMap outputs a sub-brick for EACH input dataset voxel. Eliminates these sub-bricks using this option.
+ * @param aexpr For each correlation 'r', compute the calc-style expression 'expr', and average these values to get the output that goes into dataset 'ppp'.
+ * @param cexpr As in '-Aexpr', but only average together nonzero values computed by 'expr'.
+ * @param sexpr As above, but the sum of the expressions is computed rather than the average.
+ * @param hist For each voxel, save a histogram of the correlation coefficients into dataset ppp.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
+ */
 function v_3d_tcorr_map(
     input: InputPathType,
     seed: InputPathType | null = null,
@@ -345,34 +373,6 @@ function v_3d_tcorr_map(
     hist: string | null = null,
     runner: Runner | null = null,
 ): V3dTcorrMapOutputs {
-    /**
-     * AFNI program to compute correlation maps of input time series data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Read 3D+time dataset 'dd'. This provides the time series to be correlated en masse. This is a mandatory option.
-     * @param seed Read 3D+time dataset 'bb'. It correlates the -seed voxel time series with every voxel in the -input dataset.
-     * @param mask Read dataset 'mmm' as a voxel mask.
-     * @param automask Create a mask from the input dataset.
-     * @param mean Save average correlations into dataset prefix 'pp'.
-     * @param zmean Save tanh of mean arctanh(correlation) into 'pp'.
-     * @param qmean Save RMS(correlation) into 'pp'.
-     * @param pmean Save average of squared positive correlations into 'pp'.
-     * @param thresh Save the COUNT of how many voxels survived thresholding at level abs(correlation) >= tt.
-     * @param varthresh Save the COUNT of how many voxels survive thresholding at multiple levels abs(correlation) >= tt.
-     * @param norm_varthresh Like '-VarThresh', but the output counts are 'Normalized'.
-     * @param corrmap Output at each voxel the entire correlation map, into a dataset with prefix 'pp'.
-     * @param corrmask By default, -CorrMap outputs a sub-brick for EACH input dataset voxel. Eliminates these sub-bricks using this option.
-     * @param aexpr For each correlation 'r', compute the calc-style expression 'expr', and average these values to get the output that goes into dataset 'ppp'.
-     * @param cexpr As in '-Aexpr', but only average together nonzero values computed by 'expr'.
-     * @param sexpr As above, but the sum of the expressions is computed rather than the average.
-     * @param hist For each voxel, save a histogram of the correlation coefficients into dataset ppp.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TCORR_MAP_METADATA);
     const params = v_3d_tcorr_map_params(input, seed, mask, automask, mean, zmean, qmean, pmean, thresh, varthresh, norm_varthresh, corrmap, corrmask, aexpr, cexpr, sexpr, hist)
@@ -385,5 +385,8 @@ export {
       V3dTcorrMapParameters,
       V_3D_TCORR_MAP_METADATA,
       v_3d_tcorr_map,
+      v_3d_tcorr_map_cargs,
+      v_3d_tcorr_map_execute,
+      v_3d_tcorr_map_outputs,
       v_3d_tcorr_map_params,
 };

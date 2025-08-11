@@ -12,40 +12,40 @@ const CP_DICOM_METADATA: Metadata = {
 
 
 interface CpDicomParameters {
-    "__STYXTYPE__": "cp-dicom";
+    "@type": "freesurfer.cp-dicom";
     "dicom_dir": string;
     "output_dir": string;
     "debug": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cp-dicom": cp_dicom_cargs,
+        "freesurfer.cp-dicom": cp_dicom_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface CpDicomOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dicom_dir Directory containing DICOM files
+ * @param output_dir Output directory where sorted DICOM files will be stored
+ * @param debug Print additional debug information
+ *
+ * @returns Parameter dictionary
+ */
 function cp_dicom_params(
     dicom_dir: string,
     output_dir: string,
     debug: boolean = false,
 ): CpDicomParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_dir Directory containing DICOM files
-     * @param output_dir Output directory where sorted DICOM files will be stored
-     * @param debug Print additional debug information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cp-dicom" as const,
+        "@type": "freesurfer.cp-dicom" as const,
         "dicom_dir": dicom_dir,
         "output_dir": output_dir,
         "debug": debug,
@@ -89,18 +89,18 @@ function cp_dicom_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cp_dicom_cargs(
     params: CpDicomParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cp-dicom");
     cargs.push(
@@ -118,18 +118,18 @@ function cp_dicom_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cp_dicom_outputs(
     params: CpDicomParameters,
     execution: Execution,
 ): CpDicomOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CpDicomOutputs = {
         root: execution.outputFile("."),
     };
@@ -137,22 +137,22 @@ function cp_dicom_outputs(
 }
 
 
+/**
+ * Copies DICOM files into separate directories for each series based on DICOM headers.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
+ */
 function cp_dicom_execute(
     params: CpDicomParameters,
     execution: Execution,
 ): CpDicomOutputs {
-    /**
-     * Copies DICOM files into separate directories for each series based on DICOM headers.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
-     */
     params = execution.params(params)
     const cargs = cp_dicom_cargs(params, execution)
     const ret = cp_dicom_outputs(params, execution)
@@ -161,26 +161,26 @@ function cp_dicom_execute(
 }
 
 
+/**
+ * Copies DICOM files into separate directories for each series based on DICOM headers.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dicom_dir Directory containing DICOM files
+ * @param output_dir Output directory where sorted DICOM files will be stored
+ * @param debug Print additional debug information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
+ */
 function cp_dicom(
     dicom_dir: string,
     output_dir: string,
     debug: boolean = false,
     runner: Runner | null = null,
 ): CpDicomOutputs {
-    /**
-     * Copies DICOM files into separate directories for each series based on DICOM headers.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dicom_dir Directory containing DICOM files
-     * @param output_dir Output directory where sorted DICOM files will be stored
-     * @param debug Print additional debug information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CP_DICOM_METADATA);
     const params = cp_dicom_params(dicom_dir, output_dir, debug)
@@ -193,5 +193,8 @@ export {
       CpDicomOutputs,
       CpDicomParameters,
       cp_dicom,
+      cp_dicom_cargs,
+      cp_dicom_execute,
+      cp_dicom_outputs,
       cp_dicom_params,
 };

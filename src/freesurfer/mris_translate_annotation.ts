@@ -12,7 +12,7 @@ const MRIS_TRANSLATE_ANNOTATION_METADATA: Metadata = {
 
 
 interface MrisTranslateAnnotationParameters {
-    "__STYXTYPE__": "mris_translate_annotation";
+    "@type": "freesurfer.mris_translate_annotation";
     "subject": string;
     "hemi": string;
     "in_annot": InputPathType;
@@ -21,35 +21,35 @@ interface MrisTranslateAnnotationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_translate_annotation": mris_translate_annotation_cargs,
+        "freesurfer.mris_translate_annotation": mris_translate_annotation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_translate_annotation": mris_translate_annotation_outputs,
+        "freesurfer.mris_translate_annotation": mris_translate_annotation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MrisTranslateAnnotationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject identifier.
+ * @param hemi Hemisphere identifier (e.g., lh or rh).
+ * @param in_annot Input annotation file.
+ * @param translation_file Translation table file.
+ * @param out_annot Output annotation file.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_translate_annotation_params(
     subject: string,
     hemi: string,
@@ -79,19 +90,8 @@ function mris_translate_annotation_params(
     translation_file: InputPathType,
     out_annot: string,
 ): MrisTranslateAnnotationParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject identifier.
-     * @param hemi Hemisphere identifier (e.g., lh or rh).
-     * @param in_annot Input annotation file.
-     * @param translation_file Translation table file.
-     * @param out_annot Output annotation file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_translate_annotation" as const,
+        "@type": "freesurfer.mris_translate_annotation" as const,
         "subject": subject,
         "hemi": hemi,
         "in_annot": in_annot,
@@ -102,18 +102,18 @@ function mris_translate_annotation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_translate_annotation_cargs(
     params: MrisTranslateAnnotationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_translate_annotation");
     cargs.push((params["subject"] ?? null));
@@ -125,18 +125,18 @@ function mris_translate_annotation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_translate_annotation_outputs(
     params: MrisTranslateAnnotationParameters,
     execution: Execution,
 ): MrisTranslateAnnotationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTranslateAnnotationOutputs = {
         root: execution.outputFile("."),
         output_annotation: execution.outputFile([(params["out_annot"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function mris_translate_annotation_outputs(
 }
 
 
+/**
+ * This program applies a translation table to an annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
+ */
 function mris_translate_annotation_execute(
     params: MrisTranslateAnnotationParameters,
     execution: Execution,
 ): MrisTranslateAnnotationOutputs {
-    /**
-     * This program applies a translation table to an annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_translate_annotation_cargs(params, execution)
     const ret = mris_translate_annotation_outputs(params, execution)
@@ -169,6 +169,22 @@ function mris_translate_annotation_execute(
 }
 
 
+/**
+ * This program applies a translation table to an annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject identifier.
+ * @param hemi Hemisphere identifier (e.g., lh or rh).
+ * @param in_annot Input annotation file.
+ * @param translation_file Translation table file.
+ * @param out_annot Output annotation file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
+ */
 function mris_translate_annotation(
     subject: string,
     hemi: string,
@@ -177,22 +193,6 @@ function mris_translate_annotation(
     out_annot: string,
     runner: Runner | null = null,
 ): MrisTranslateAnnotationOutputs {
-    /**
-     * This program applies a translation table to an annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject identifier.
-     * @param hemi Hemisphere identifier (e.g., lh or rh).
-     * @param in_annot Input annotation file.
-     * @param translation_file Translation table file.
-     * @param out_annot Output annotation file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TRANSLATE_ANNOTATION_METADATA);
     const params = mris_translate_annotation_params(subject, hemi, in_annot, translation_file, out_annot)
@@ -205,5 +205,8 @@ export {
       MrisTranslateAnnotationOutputs,
       MrisTranslateAnnotationParameters,
       mris_translate_annotation,
+      mris_translate_annotation_cargs,
+      mris_translate_annotation_execute,
+      mris_translate_annotation_outputs,
       mris_translate_annotation_params,
 };

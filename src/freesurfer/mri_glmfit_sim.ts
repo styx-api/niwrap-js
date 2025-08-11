@@ -12,7 +12,7 @@ const MRI_GLMFIT_SIM_METADATA: Metadata = {
 
 
 interface MriGlmfitSimParameters {
-    "__STYXTYPE__": "mri_glmfit-sim";
+    "@type": "freesurfer.mri_glmfit-sim";
     "glmdir": string;
     "cwp"?: number | null | undefined;
     "mczsim"?: string | null | undefined;
@@ -45,35 +45,35 @@ interface MriGlmfitSimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_glmfit-sim": mri_glmfit_sim_cargs,
+        "freesurfer.mri_glmfit-sim": mri_glmfit_sim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_glmfit-sim": mri_glmfit_sim_outputs,
+        "freesurfer.mri_glmfit-sim": mri_glmfit_sim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -120,6 +120,41 @@ interface MriGlmfitSimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param glmdir Path to GLM directory.
+ * @param cwp Cluster-wise p-value threshold, default is 0.05.
+ * @param mczsim Use pre-computed z-based Monte Carlo simulations. Requires vwthreshold and sign.
+ * @param mczsim_dir Directory for custom Monte Carlo simulations, default is FREESURFER_HOME/average/mult-comp-cor.
+ * @param mczsim_label Label for custom Monte Carlo simulations, default is cortex.
+ * @param perm Use permutation simulation with nsim iterations, cluster forming threshold (CFT), and sign.
+ * @param perm_resid Use permutation on the residual instead of raw data for non-orthogonal designs.
+ * @param perm_signflip Use sign flipping instead of shuffling for permutation.
+ * @param grf Use Gaussian Random Fields (GRF) method, with vwthreshold and sign.
+ * @param spaces_2 Apply additional Bonferroni correction across 2 spaces.
+ * @param spaces_3 Apply additional Bonferroni correction across 3 spaces.
+ * @param overwrite Delete previous CSDs.
+ * @param bg Divide simulation into njobs and put in background.
+ * @param sleep Number of seconds to sleep between background polls.
+ * @param a2009s Use aparc.a2009s instead of aparc for region of vertex max.
+ * @param annot Use specific annotation for region of vertex max.
+ * @param log Specify logfile, default is csdbase.mri_glmfit-sim.log.
+ * @param base Override csdbase name.
+ * @param no_sim Do not simulate, only run cluster.
+ * @param seed Set simulation random number generator seed.
+ * @param fwhm_override Override fwhm in glmdir.
+ * @param fwhm_add Add fwhmAdd to the estimated fwhm.
+ * @param uniform Use uniform PDF instead of gaussian, specify min and max.
+ * @param no_out_annot Do not output a cluster annotation.
+ * @param no_cluster_mean Do not compute means of each subject in each cluster.
+ * @param y_file Specify the GLM input y file.
+ * @param centroid Report the coordinates/annotation of the centroid instead of max.
+ * @param spatial_sum Compute the sum over voxels in the cluster rather than the average.
+ * @param help Show the help message and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_glmfit_sim_params(
     glmdir: string,
     cwp: number | null = null,
@@ -151,43 +186,8 @@ function mri_glmfit_sim_params(
     spatial_sum: boolean = false,
     help: boolean = false,
 ): MriGlmfitSimParameters {
-    /**
-     * Build parameters.
-    
-     * @param glmdir Path to GLM directory.
-     * @param cwp Cluster-wise p-value threshold, default is 0.05.
-     * @param mczsim Use pre-computed z-based Monte Carlo simulations. Requires vwthreshold and sign.
-     * @param mczsim_dir Directory for custom Monte Carlo simulations, default is FREESURFER_HOME/average/mult-comp-cor.
-     * @param mczsim_label Label for custom Monte Carlo simulations, default is cortex.
-     * @param perm Use permutation simulation with nsim iterations, cluster forming threshold (CFT), and sign.
-     * @param perm_resid Use permutation on the residual instead of raw data for non-orthogonal designs.
-     * @param perm_signflip Use sign flipping instead of shuffling for permutation.
-     * @param grf Use Gaussian Random Fields (GRF) method, with vwthreshold and sign.
-     * @param spaces_2 Apply additional Bonferroni correction across 2 spaces.
-     * @param spaces_3 Apply additional Bonferroni correction across 3 spaces.
-     * @param overwrite Delete previous CSDs.
-     * @param bg Divide simulation into njobs and put in background.
-     * @param sleep Number of seconds to sleep between background polls.
-     * @param a2009s Use aparc.a2009s instead of aparc for region of vertex max.
-     * @param annot Use specific annotation for region of vertex max.
-     * @param log Specify logfile, default is csdbase.mri_glmfit-sim.log.
-     * @param base Override csdbase name.
-     * @param no_sim Do not simulate, only run cluster.
-     * @param seed Set simulation random number generator seed.
-     * @param fwhm_override Override fwhm in glmdir.
-     * @param fwhm_add Add fwhmAdd to the estimated fwhm.
-     * @param uniform Use uniform PDF instead of gaussian, specify min and max.
-     * @param no_out_annot Do not output a cluster annotation.
-     * @param no_cluster_mean Do not compute means of each subject in each cluster.
-     * @param y_file Specify the GLM input y file.
-     * @param centroid Report the coordinates/annotation of the centroid instead of max.
-     * @param spatial_sum Compute the sum over voxels in the cluster rather than the average.
-     * @param help Show the help message and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_glmfit-sim" as const,
+        "@type": "freesurfer.mri_glmfit-sim" as const,
         "glmdir": glmdir,
         "perm_resid": perm_resid,
         "perm_signflip": perm_signflip,
@@ -256,18 +256,18 @@ function mri_glmfit_sim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_glmfit_sim_cargs(
     params: MriGlmfitSimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_glmfit-sim");
     cargs.push(
@@ -413,18 +413,18 @@ function mri_glmfit_sim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_glmfit_sim_outputs(
     params: MriGlmfitSimParameters,
     execution: Execution,
 ): MriGlmfitSimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGlmfitSimOutputs = {
         root: execution.outputFile("."),
         sig_voxel_mgh: ((params["base"] ?? null) !== null) ? execution.outputFile([(params["base"] ?? null), ".sig.voxel.mgh"].join('')) : null,
@@ -439,22 +439,22 @@ function mri_glmfit_sim_outputs(
 }
 
 
+/**
+ * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
+ */
 function mri_glmfit_sim_execute(
     params: MriGlmfitSimParameters,
     execution: Execution,
 ): MriGlmfitSimOutputs {
-    /**
-     * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_glmfit_sim_cargs(params, execution)
     const ret = mri_glmfit_sim_outputs(params, execution)
@@ -463,6 +463,46 @@ function mri_glmfit_sim_execute(
 }
 
 
+/**
+ * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param glmdir Path to GLM directory.
+ * @param cwp Cluster-wise p-value threshold, default is 0.05.
+ * @param mczsim Use pre-computed z-based Monte Carlo simulations. Requires vwthreshold and sign.
+ * @param mczsim_dir Directory for custom Monte Carlo simulations, default is FREESURFER_HOME/average/mult-comp-cor.
+ * @param mczsim_label Label for custom Monte Carlo simulations, default is cortex.
+ * @param perm Use permutation simulation with nsim iterations, cluster forming threshold (CFT), and sign.
+ * @param perm_resid Use permutation on the residual instead of raw data for non-orthogonal designs.
+ * @param perm_signflip Use sign flipping instead of shuffling for permutation.
+ * @param grf Use Gaussian Random Fields (GRF) method, with vwthreshold and sign.
+ * @param spaces_2 Apply additional Bonferroni correction across 2 spaces.
+ * @param spaces_3 Apply additional Bonferroni correction across 3 spaces.
+ * @param overwrite Delete previous CSDs.
+ * @param bg Divide simulation into njobs and put in background.
+ * @param sleep Number of seconds to sleep between background polls.
+ * @param a2009s Use aparc.a2009s instead of aparc for region of vertex max.
+ * @param annot Use specific annotation for region of vertex max.
+ * @param log Specify logfile, default is csdbase.mri_glmfit-sim.log.
+ * @param base Override csdbase name.
+ * @param no_sim Do not simulate, only run cluster.
+ * @param seed Set simulation random number generator seed.
+ * @param fwhm_override Override fwhm in glmdir.
+ * @param fwhm_add Add fwhmAdd to the estimated fwhm.
+ * @param uniform Use uniform PDF instead of gaussian, specify min and max.
+ * @param no_out_annot Do not output a cluster annotation.
+ * @param no_cluster_mean Do not compute means of each subject in each cluster.
+ * @param y_file Specify the GLM input y file.
+ * @param centroid Report the coordinates/annotation of the centroid instead of max.
+ * @param spatial_sum Compute the sum over voxels in the cluster rather than the average.
+ * @param help Show the help message and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
+ */
 function mri_glmfit_sim(
     glmdir: string,
     cwp: number | null = null,
@@ -495,46 +535,6 @@ function mri_glmfit_sim(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriGlmfitSimOutputs {
-    /**
-     * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param glmdir Path to GLM directory.
-     * @param cwp Cluster-wise p-value threshold, default is 0.05.
-     * @param mczsim Use pre-computed z-based Monte Carlo simulations. Requires vwthreshold and sign.
-     * @param mczsim_dir Directory for custom Monte Carlo simulations, default is FREESURFER_HOME/average/mult-comp-cor.
-     * @param mczsim_label Label for custom Monte Carlo simulations, default is cortex.
-     * @param perm Use permutation simulation with nsim iterations, cluster forming threshold (CFT), and sign.
-     * @param perm_resid Use permutation on the residual instead of raw data for non-orthogonal designs.
-     * @param perm_signflip Use sign flipping instead of shuffling for permutation.
-     * @param grf Use Gaussian Random Fields (GRF) method, with vwthreshold and sign.
-     * @param spaces_2 Apply additional Bonferroni correction across 2 spaces.
-     * @param spaces_3 Apply additional Bonferroni correction across 3 spaces.
-     * @param overwrite Delete previous CSDs.
-     * @param bg Divide simulation into njobs and put in background.
-     * @param sleep Number of seconds to sleep between background polls.
-     * @param a2009s Use aparc.a2009s instead of aparc for region of vertex max.
-     * @param annot Use specific annotation for region of vertex max.
-     * @param log Specify logfile, default is csdbase.mri_glmfit-sim.log.
-     * @param base Override csdbase name.
-     * @param no_sim Do not simulate, only run cluster.
-     * @param seed Set simulation random number generator seed.
-     * @param fwhm_override Override fwhm in glmdir.
-     * @param fwhm_add Add fwhmAdd to the estimated fwhm.
-     * @param uniform Use uniform PDF instead of gaussian, specify min and max.
-     * @param no_out_annot Do not output a cluster annotation.
-     * @param no_cluster_mean Do not compute means of each subject in each cluster.
-     * @param y_file Specify the GLM input y file.
-     * @param centroid Report the coordinates/annotation of the centroid instead of max.
-     * @param spatial_sum Compute the sum over voxels in the cluster rather than the average.
-     * @param help Show the help message and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GLMFIT_SIM_METADATA);
     const params = mri_glmfit_sim_params(glmdir, cwp, mczsim, mczsim_dir, mczsim_label, perm, perm_resid, perm_signflip, grf, spaces_2, spaces_3, overwrite, bg, sleep, a2009s, annot, log, base, no_sim, seed, fwhm_override, fwhm_add, uniform, no_out_annot, no_cluster_mean, y_file, centroid, spatial_sum, help)
@@ -547,5 +547,8 @@ export {
       MriGlmfitSimOutputs,
       MriGlmfitSimParameters,
       mri_glmfit_sim,
+      mri_glmfit_sim_cargs,
+      mri_glmfit_sim_execute,
+      mri_glmfit_sim_outputs,
       mri_glmfit_sim_params,
 };

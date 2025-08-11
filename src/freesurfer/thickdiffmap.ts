@@ -12,7 +12,7 @@ const THICKDIFFMAP_METADATA: Metadata = {
 
 
 interface ThickdiffmapParameters {
-    "__STYXTYPE__": "thickdiffmap";
+    "@type": "freesurfer.thickdiffmap";
     "subjscan1": InputPathType;
     "subjscan2": InputPathType;
     "commonsubj": string;
@@ -21,33 +21,33 @@ interface ThickdiffmapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "thickdiffmap": thickdiffmap_cargs,
+        "freesurfer.thickdiffmap": thickdiffmap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface ThickdiffmapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjscan1 First scan of a subject
+ * @param subjscan2 Second (later) scan of the same subject
+ * @param commonsubj Subject to use as the common template
+ * @param hemi Hemisphere to process
+ * @param steps Stages of processing
+ *
+ * @returns Parameter dictionary
+ */
 function thickdiffmap_params(
     subjscan1: InputPathType,
     subjscan2: InputPathType,
@@ -74,19 +85,8 @@ function thickdiffmap_params(
     hemi: string,
     steps: Array<string> | null = null,
 ): ThickdiffmapParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjscan1 First scan of a subject
-     * @param subjscan2 Second (later) scan of the same subject
-     * @param commonsubj Subject to use as the common template
-     * @param hemi Hemisphere to process
-     * @param steps Stages of processing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "thickdiffmap" as const,
+        "@type": "freesurfer.thickdiffmap" as const,
         "subjscan1": subjscan1,
         "subjscan2": subjscan2,
         "commonsubj": commonsubj,
@@ -99,18 +99,18 @@ function thickdiffmap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function thickdiffmap_cargs(
     params: ThickdiffmapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("thickdiffmap");
     cargs.push(execution.inputFile((params["subjscan1"] ?? null)));
@@ -124,18 +124,18 @@ function thickdiffmap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function thickdiffmap_outputs(
     params: ThickdiffmapParameters,
     execution: Execution,
 ): ThickdiffmapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ThickdiffmapOutputs = {
         root: execution.outputFile("."),
     };
@@ -143,22 +143,22 @@ function thickdiffmap_outputs(
 }
 
 
+/**
+ * Compute and analyze cortical thickness difference maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
+ */
 function thickdiffmap_execute(
     params: ThickdiffmapParameters,
     execution: Execution,
 ): ThickdiffmapOutputs {
-    /**
-     * Compute and analyze cortical thickness difference maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
-     */
     params = execution.params(params)
     const cargs = thickdiffmap_cargs(params, execution)
     const ret = thickdiffmap_outputs(params, execution)
@@ -167,6 +167,22 @@ function thickdiffmap_execute(
 }
 
 
+/**
+ * Compute and analyze cortical thickness difference maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjscan1 First scan of a subject
+ * @param subjscan2 Second (later) scan of the same subject
+ * @param commonsubj Subject to use as the common template
+ * @param hemi Hemisphere to process
+ * @param steps Stages of processing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
+ */
 function thickdiffmap(
     subjscan1: InputPathType,
     subjscan2: InputPathType,
@@ -175,22 +191,6 @@ function thickdiffmap(
     steps: Array<string> | null = null,
     runner: Runner | null = null,
 ): ThickdiffmapOutputs {
-    /**
-     * Compute and analyze cortical thickness difference maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjscan1 First scan of a subject
-     * @param subjscan2 Second (later) scan of the same subject
-     * @param commonsubj Subject to use as the common template
-     * @param hemi Hemisphere to process
-     * @param steps Stages of processing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(THICKDIFFMAP_METADATA);
     const params = thickdiffmap_params(subjscan1, subjscan2, commonsubj, hemi, steps)
@@ -203,5 +203,8 @@ export {
       ThickdiffmapOutputs,
       ThickdiffmapParameters,
       thickdiffmap,
+      thickdiffmap_cargs,
+      thickdiffmap_execute,
+      thickdiffmap_outputs,
       thickdiffmap_params,
 };

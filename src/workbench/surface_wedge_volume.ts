@@ -12,42 +12,42 @@ const SURFACE_WEDGE_VOLUME_METADATA: Metadata = {
 
 
 interface SurfaceWedgeVolumeParameters {
-    "__STYXTYPE__": "surface-wedge-volume";
+    "@type": "workbench.surface-wedge-volume";
     "inner_surface": InputPathType;
     "outer_surface": InputPathType;
     "metric": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-wedge-volume": surface_wedge_volume_cargs,
+        "workbench.surface-wedge-volume": surface_wedge_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-wedge-volume": surface_wedge_volume_outputs,
+        "workbench.surface-wedge-volume": surface_wedge_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SurfaceWedgeVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inner_surface the inner surface
+ * @param outer_surface the outer surface
+ * @param metric the output metric
+ *
+ * @returns Parameter dictionary
+ */
 function surface_wedge_volume_params(
     inner_surface: InputPathType,
     outer_surface: InputPathType,
     metric: string,
 ): SurfaceWedgeVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param inner_surface the inner surface
-     * @param outer_surface the outer surface
-     * @param metric the output metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-wedge-volume" as const,
+        "@type": "workbench.surface-wedge-volume" as const,
         "inner_surface": inner_surface,
         "outer_surface": outer_surface,
         "metric": metric,
@@ -94,18 +94,18 @@ function surface_wedge_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_wedge_volume_cargs(
     params: SurfaceWedgeVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-wedge-volume");
@@ -116,18 +116,18 @@ function surface_wedge_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_wedge_volume_outputs(
     params: SurfaceWedgeVolumeParameters,
     execution: Execution,
 ): SurfaceWedgeVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceWedgeVolumeOutputs = {
         root: execution.outputFile("."),
         metric: execution.outputFile([(params["metric"] ?? null)].join('')),
@@ -136,24 +136,24 @@ function surface_wedge_volume_outputs(
 }
 
 
+/**
+ * Measure per-vertex volume between surfaces.
+ *
+ * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
+ */
 function surface_wedge_volume_execute(
     params: SurfaceWedgeVolumeParameters,
     execution: Execution,
 ): SurfaceWedgeVolumeOutputs {
-    /**
-     * Measure per-vertex volume between surfaces.
-     * 
-     * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_wedge_volume_cargs(params, execution)
     const ret = surface_wedge_volume_outputs(params, execution)
@@ -162,28 +162,28 @@ function surface_wedge_volume_execute(
 }
 
 
+/**
+ * Measure per-vertex volume between surfaces.
+ *
+ * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param inner_surface the inner surface
+ * @param outer_surface the outer surface
+ * @param metric the output metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
+ */
 function surface_wedge_volume(
     inner_surface: InputPathType,
     outer_surface: InputPathType,
     metric: string,
     runner: Runner | null = null,
 ): SurfaceWedgeVolumeOutputs {
-    /**
-     * Measure per-vertex volume between surfaces.
-     * 
-     * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param inner_surface the inner surface
-     * @param outer_surface the outer surface
-     * @param metric the output metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_WEDGE_VOLUME_METADATA);
     const params = surface_wedge_volume_params(inner_surface, outer_surface, metric)
@@ -196,5 +196,8 @@ export {
       SurfaceWedgeVolumeOutputs,
       SurfaceWedgeVolumeParameters,
       surface_wedge_volume,
+      surface_wedge_volume_cargs,
+      surface_wedge_volume_execute,
+      surface_wedge_volume_outputs,
       surface_wedge_volume_params,
 };

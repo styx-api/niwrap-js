@@ -12,7 +12,7 @@ const V_3D_MEPFM_METADATA: Metadata = {
 
 
 interface V3dMepfmParameters {
-    "__STYXTYPE__": "3dMEPFM";
+    "@type": "afni.3dMEPFM";
     "input_files": Array<string>;
     "dbgArgs": boolean;
     "mask"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface V3dMepfmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMEPFM": v_3d_mepfm_cargs,
+        "afni.3dMEPFM": v_3d_mepfm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMEPFM": v_3d_mepfm_outputs,
+        "afni.3dMEPFM": v_3d_mepfm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,17 @@ interface V3dMepfmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Dataset to analyze with Multiecho Paradigm Free Mapping, along with the echo time
+ * @param dbg_args Enable R to save the parameters in .3dMEPFM.dbg.AFNI.args in the current directory
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param hrf_model Haemodynamic response function used for deconvolution
+ * @param verbosity Verbosity level. 0 for quiet, 1 (default) or more: talkative.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mepfm_params(
     input_files: Array<string>,
     dbg_args: boolean = false,
@@ -99,19 +110,8 @@ function v_3d_mepfm_params(
     hrf_model: string | null = null,
     verbosity: number | null = null,
 ): V3dMepfmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Dataset to analyze with Multiecho Paradigm Free Mapping, along with the echo time
-     * @param dbg_args Enable R to save the parameters in .3dMEPFM.dbg.AFNI.args in the current directory
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param hrf_model Haemodynamic response function used for deconvolution
-     * @param verbosity Verbosity level. 0 for quiet, 1 (default) or more: talkative.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMEPFM" as const,
+        "@type": "afni.3dMEPFM" as const,
         "input_files": input_files,
         "dbgArgs": dbg_args,
     };
@@ -128,18 +128,18 @@ function v_3d_mepfm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mepfm_cargs(
     params: V3dMepfmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMEPFM");
     cargs.push(
@@ -171,18 +171,18 @@ function v_3d_mepfm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mepfm_outputs(
     params: V3dMepfmParameters,
     execution: Execution,
 ): V3dMepfmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMepfmOutputs = {
         root: execution.outputFile("."),
         dr2_output: execution.outputFile(["DR2_[PREFIX]_*.nii.gz"].join('')),
@@ -196,22 +196,22 @@ function v_3d_mepfm_outputs(
 }
 
 
+/**
+ * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
+ */
 function v_3d_mepfm_execute(
     params: V3dMepfmParameters,
     execution: Execution,
 ): V3dMepfmOutputs {
-    /**
-     * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mepfm_cargs(params, execution)
     const ret = v_3d_mepfm_outputs(params, execution)
@@ -220,6 +220,22 @@ function v_3d_mepfm_execute(
 }
 
 
+/**
+ * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Dataset to analyze with Multiecho Paradigm Free Mapping, along with the echo time
+ * @param dbg_args Enable R to save the parameters in .3dMEPFM.dbg.AFNI.args in the current directory
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param hrf_model Haemodynamic response function used for deconvolution
+ * @param verbosity Verbosity level. 0 for quiet, 1 (default) or more: talkative.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
+ */
 function v_3d_mepfm(
     input_files: Array<string>,
     dbg_args: boolean = false,
@@ -228,22 +244,6 @@ function v_3d_mepfm(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): V3dMepfmOutputs {
-    /**
-     * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Dataset to analyze with Multiecho Paradigm Free Mapping, along with the echo time
-     * @param dbg_args Enable R to save the parameters in .3dMEPFM.dbg.AFNI.args in the current directory
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param hrf_model Haemodynamic response function used for deconvolution
-     * @param verbosity Verbosity level. 0 for quiet, 1 (default) or more: talkative.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MEPFM_METADATA);
     const params = v_3d_mepfm_params(input_files, dbg_args, mask, hrf_model, verbosity)
@@ -256,5 +256,8 @@ export {
       V3dMepfmParameters,
       V_3D_MEPFM_METADATA,
       v_3d_mepfm,
+      v_3d_mepfm_cargs,
+      v_3d_mepfm_execute,
+      v_3d_mepfm_outputs,
       v_3d_mepfm_params,
 };

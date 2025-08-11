@@ -12,7 +12,7 @@ const APPLY_MORPH_METADATA: Metadata = {
 
 
 interface ApplyMorphParameters {
-    "__STYXTYPE__": "applyMorph";
+    "@type": "freesurfer.applyMorph";
     "inputs": Array<InputPathType>;
     "template": InputPathType;
     "transform": InputPathType;
@@ -21,33 +21,33 @@ interface ApplyMorphParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "applyMorph": apply_morph_cargs,
+        "freesurfer.applyMorph": apply_morph_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface ApplyMorphOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputs Input files.
+ * @param template Template volume.
+ * @param transform Transform file.
+ * @param zlib_buffer Zlib buffer pre-allocation multiplier.
+ * @param dbg_coords Debugging coordinates.
+ *
+ * @returns Parameter dictionary
+ */
 function apply_morph_params(
     inputs: Array<InputPathType>,
     template: InputPathType,
@@ -74,19 +85,8 @@ function apply_morph_params(
     zlib_buffer: number | null = null,
     dbg_coords: Array<number> | null = null,
 ): ApplyMorphParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputs Input files.
-     * @param template Template volume.
-     * @param transform Transform file.
-     * @param zlib_buffer Zlib buffer pre-allocation multiplier.
-     * @param dbg_coords Debugging coordinates.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "applyMorph" as const,
+        "@type": "freesurfer.applyMorph" as const,
         "inputs": inputs,
         "template": template,
         "transform": transform,
@@ -101,18 +101,18 @@ function apply_morph_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function apply_morph_cargs(
     params: ApplyMorphParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("applyMorph");
     cargs.push(...(params["inputs"] ?? null).map(f => execution.inputFile(f)));
@@ -140,18 +140,18 @@ function apply_morph_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function apply_morph_outputs(
     params: ApplyMorphParameters,
     execution: Execution,
 ): ApplyMorphOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApplyMorphOutputs = {
         root: execution.outputFile("."),
     };
@@ -159,22 +159,22 @@ function apply_morph_outputs(
 }
 
 
+/**
+ * A tool for applying a morph to a volume using a template and a transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
+ */
 function apply_morph_execute(
     params: ApplyMorphParameters,
     execution: Execution,
 ): ApplyMorphOutputs {
-    /**
-     * A tool for applying a morph to a volume using a template and a transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
-     */
     params = execution.params(params)
     const cargs = apply_morph_cargs(params, execution)
     const ret = apply_morph_outputs(params, execution)
@@ -183,6 +183,22 @@ function apply_morph_execute(
 }
 
 
+/**
+ * A tool for applying a morph to a volume using a template and a transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputs Input files.
+ * @param template Template volume.
+ * @param transform Transform file.
+ * @param zlib_buffer Zlib buffer pre-allocation multiplier.
+ * @param dbg_coords Debugging coordinates.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
+ */
 function apply_morph(
     inputs: Array<InputPathType>,
     template: InputPathType,
@@ -191,22 +207,6 @@ function apply_morph(
     dbg_coords: Array<number> | null = null,
     runner: Runner | null = null,
 ): ApplyMorphOutputs {
-    /**
-     * A tool for applying a morph to a volume using a template and a transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputs Input files.
-     * @param template Template volume.
-     * @param transform Transform file.
-     * @param zlib_buffer Zlib buffer pre-allocation multiplier.
-     * @param dbg_coords Debugging coordinates.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLY_MORPH_METADATA);
     const params = apply_morph_params(inputs, template, transform, zlib_buffer, dbg_coords)
@@ -219,5 +219,8 @@ export {
       ApplyMorphOutputs,
       ApplyMorphParameters,
       apply_morph,
+      apply_morph_cargs,
+      apply_morph_execute,
+      apply_morph_outputs,
       apply_morph_params,
 };

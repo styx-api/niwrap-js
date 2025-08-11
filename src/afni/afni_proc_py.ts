@@ -12,7 +12,7 @@ const AFNI_PROC_PY_METADATA: Metadata = {
 
 
 interface AfniProcPyParameters {
-    "__STYXTYPE__": "afni_proc.py";
+    "@type": "afni.afni_proc.py";
     "dsets": Array<InputPathType>;
     "subj_id": string;
     "out_dir"?: string | null | undefined;
@@ -27,35 +27,35 @@ interface AfniProcPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni_proc.py": afni_proc_py_cargs,
+        "afni.afni_proc.py": afni_proc_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "afni_proc.py": afni_proc_py_outputs,
+        "afni.afni_proc.py": afni_proc_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface AfniProcPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dsets Specify the EPI dataset files. (e.g. epi_run1+orig, epi_run2+orig)
+ * @param subj_id Specify the subject ID for the script.
+ * @param anat Specify the anatomical dataset.
+ * @param out_dir Specify the output directory for the script.
+ * @param blocks Specify the processing blocks to apply (e.g. tshift volreg blur mask scale regress).
+ * @param echo_times Specify echo times for multi-echo data processing.
+ * @param stim_times Specify files used for stimulus timing in -stim_times.
+ * @param stim_files Specify TR-locked stim files for 3dDeconvolve -stim_file instead of -stim_times.
+ * @param copy_files Specify additional files to be copied to the results directory.
+ * @param copy_anat Copy the anatomical dataset(s) to the results directory.
+ * @param regress_params Specify extra options for 3dDeconvolve.
+ *
+ * @returns Parameter dictionary
+ */
 function afni_proc_py_params(
     dsets: Array<InputPathType>,
     subj_id: string,
@@ -91,25 +108,8 @@ function afni_proc_py_params(
     copy_anat: InputPathType | null = null,
     regress_params: Array<string> | null = null,
 ): AfniProcPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param dsets Specify the EPI dataset files. (e.g. epi_run1+orig, epi_run2+orig)
-     * @param subj_id Specify the subject ID for the script.
-     * @param anat Specify the anatomical dataset.
-     * @param out_dir Specify the output directory for the script.
-     * @param blocks Specify the processing blocks to apply (e.g. tshift volreg blur mask scale regress).
-     * @param echo_times Specify echo times for multi-echo data processing.
-     * @param stim_times Specify files used for stimulus timing in -stim_times.
-     * @param stim_files Specify TR-locked stim files for 3dDeconvolve -stim_file instead of -stim_times.
-     * @param copy_files Specify additional files to be copied to the results directory.
-     * @param copy_anat Copy the anatomical dataset(s) to the results directory.
-     * @param regress_params Specify extra options for 3dDeconvolve.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni_proc.py" as const,
+        "@type": "afni.afni_proc.py" as const,
         "dsets": dsets,
         "subj_id": subj_id,
         "anat": anat,
@@ -142,18 +142,18 @@ function afni_proc_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_proc_py_cargs(
     params: AfniProcPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni_proc.py");
     cargs.push(...(params["dsets"] ?? null).map(f => execution.inputFile(f)));
@@ -190,18 +190,18 @@ function afni_proc_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_proc_py_outputs(
     params: AfniProcPyParameters,
     execution: Execution,
 ): AfniProcPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniProcPyOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["out_dir"] ?? null) !== null) ? execution.outputFile([(params["out_dir"] ?? null), "/*"].join('')) : null,
@@ -210,22 +210,22 @@ function afni_proc_py_outputs(
 }
 
 
+/**
+ * Generate a tcsh script for an AFNI single subject processing stream.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
+ */
 function afni_proc_py_execute(
     params: AfniProcPyParameters,
     execution: Execution,
 ): AfniProcPyOutputs {
-    /**
-     * Generate a tcsh script for an AFNI single subject processing stream.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_proc_py_cargs(params, execution)
     const ret = afni_proc_py_outputs(params, execution)
@@ -234,6 +234,28 @@ function afni_proc_py_execute(
 }
 
 
+/**
+ * Generate a tcsh script for an AFNI single subject processing stream.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dsets Specify the EPI dataset files. (e.g. epi_run1+orig, epi_run2+orig)
+ * @param subj_id Specify the subject ID for the script.
+ * @param anat Specify the anatomical dataset.
+ * @param out_dir Specify the output directory for the script.
+ * @param blocks Specify the processing blocks to apply (e.g. tshift volreg blur mask scale regress).
+ * @param echo_times Specify echo times for multi-echo data processing.
+ * @param stim_times Specify files used for stimulus timing in -stim_times.
+ * @param stim_files Specify TR-locked stim files for 3dDeconvolve -stim_file instead of -stim_times.
+ * @param copy_files Specify additional files to be copied to the results directory.
+ * @param copy_anat Copy the anatomical dataset(s) to the results directory.
+ * @param regress_params Specify extra options for 3dDeconvolve.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
+ */
 function afni_proc_py(
     dsets: Array<InputPathType>,
     subj_id: string,
@@ -248,28 +270,6 @@ function afni_proc_py(
     regress_params: Array<string> | null = null,
     runner: Runner | null = null,
 ): AfniProcPyOutputs {
-    /**
-     * Generate a tcsh script for an AFNI single subject processing stream.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dsets Specify the EPI dataset files. (e.g. epi_run1+orig, epi_run2+orig)
-     * @param subj_id Specify the subject ID for the script.
-     * @param anat Specify the anatomical dataset.
-     * @param out_dir Specify the output directory for the script.
-     * @param blocks Specify the processing blocks to apply (e.g. tshift volreg blur mask scale regress).
-     * @param echo_times Specify echo times for multi-echo data processing.
-     * @param stim_times Specify files used for stimulus timing in -stim_times.
-     * @param stim_files Specify TR-locked stim files for 3dDeconvolve -stim_file instead of -stim_times.
-     * @param copy_files Specify additional files to be copied to the results directory.
-     * @param copy_anat Copy the anatomical dataset(s) to the results directory.
-     * @param regress_params Specify extra options for 3dDeconvolve.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_PROC_PY_METADATA);
     const params = afni_proc_py_params(dsets, subj_id, anat, out_dir, blocks, echo_times, stim_times, stim_files, copy_files, copy_anat, regress_params)
@@ -282,5 +282,8 @@ export {
       AfniProcPyOutputs,
       AfniProcPyParameters,
       afni_proc_py,
+      afni_proc_py_cargs,
+      afni_proc_py_execute,
+      afni_proc_py_outputs,
       afni_proc_py_params,
 };

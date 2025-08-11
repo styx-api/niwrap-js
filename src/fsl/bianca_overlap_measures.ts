@@ -12,42 +12,42 @@ const BIANCA_OVERLAP_MEASURES_METADATA: Metadata = {
 
 
 interface BiancaOverlapMeasuresParameters {
-    "__STYXTYPE__": "bianca_overlap_measures";
+    "@type": "fsl.bianca_overlap_measures";
     "lesion_mask": InputPathType;
     "manual_mask": InputPathType;
     "output_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bianca_overlap_measures": bianca_overlap_measures_cargs,
+        "fsl.bianca_overlap_measures": bianca_overlap_measures_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bianca_overlap_measures": bianca_overlap_measures_outputs,
+        "fsl.bianca_overlap_measures": bianca_overlap_measures_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,22 +98,22 @@ interface BiancaOverlapMeasuresOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param lesion_mask Lesion mask image file
+ * @param manual_mask Manual mask image file
+ * @param output_dir Output directory for generated files
+ *
+ * @returns Parameter dictionary
+ */
 function bianca_overlap_measures_params(
     lesion_mask: InputPathType,
     manual_mask: InputPathType,
     output_dir: string,
 ): BiancaOverlapMeasuresParameters {
-    /**
-     * Build parameters.
-    
-     * @param lesion_mask Lesion mask image file
-     * @param manual_mask Manual mask image file
-     * @param output_dir Output directory for generated files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bianca_overlap_measures" as const,
+        "@type": "fsl.bianca_overlap_measures" as const,
         "lesion_mask": lesion_mask,
         "manual_mask": manual_mask,
         "output_dir": output_dir,
@@ -122,18 +122,18 @@ function bianca_overlap_measures_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bianca_overlap_measures_cargs(
     params: BiancaOverlapMeasuresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bianca_overlap_measures");
     cargs.push(execution.inputFile((params["lesion_mask"] ?? null)));
@@ -143,18 +143,18 @@ function bianca_overlap_measures_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bianca_overlap_measures_outputs(
     params: BiancaOverlapMeasuresParameters,
     execution: Execution,
 ): BiancaOverlapMeasuresOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BiancaOverlapMeasuresOutputs = {
         root: execution.outputFile("."),
         tp_auto: execution.outputFile(["{OUTPUT_DIR}/TPauto.nii.gz"].join('')),
@@ -170,22 +170,22 @@ function bianca_overlap_measures_outputs(
 }
 
 
+/**
+ * BIANCA overlap measures script for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
+ */
 function bianca_overlap_measures_execute(
     params: BiancaOverlapMeasuresParameters,
     execution: Execution,
 ): BiancaOverlapMeasuresOutputs {
-    /**
-     * BIANCA overlap measures script for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
-     */
     params = execution.params(params)
     const cargs = bianca_overlap_measures_cargs(params, execution)
     const ret = bianca_overlap_measures_outputs(params, execution)
@@ -194,26 +194,26 @@ function bianca_overlap_measures_execute(
 }
 
 
+/**
+ * BIANCA overlap measures script for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param lesion_mask Lesion mask image file
+ * @param manual_mask Manual mask image file
+ * @param output_dir Output directory for generated files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
+ */
 function bianca_overlap_measures(
     lesion_mask: InputPathType,
     manual_mask: InputPathType,
     output_dir: string,
     runner: Runner | null = null,
 ): BiancaOverlapMeasuresOutputs {
-    /**
-     * BIANCA overlap measures script for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param lesion_mask Lesion mask image file
-     * @param manual_mask Manual mask image file
-     * @param output_dir Output directory for generated files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BIANCA_OVERLAP_MEASURES_METADATA);
     const params = bianca_overlap_measures_params(lesion_mask, manual_mask, output_dir)
@@ -226,5 +226,8 @@ export {
       BiancaOverlapMeasuresOutputs,
       BiancaOverlapMeasuresParameters,
       bianca_overlap_measures,
+      bianca_overlap_measures_cargs,
+      bianca_overlap_measures_execute,
+      bianca_overlap_measures_outputs,
       bianca_overlap_measures_params,
 };

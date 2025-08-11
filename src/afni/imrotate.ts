@@ -12,7 +12,7 @@ const IMROTATE_METADATA: Metadata = {
 
 
 interface ImrotateParameters {
-    "__STYXTYPE__": "imrotate";
+    "@type": "afni.imrotate";
     "linear_interpolation": boolean;
     "fourier_interpolation": boolean;
     "dx": number;
@@ -23,35 +23,35 @@ interface ImrotateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imrotate": imrotate_cargs,
+        "afni.imrotate": imrotate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imrotate": imrotate_outputs,
+        "afni.imrotate": imrotate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface ImrotateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dx Pixels to shift rightwards (can be non-integer)
+ * @param dy Pixels to shift downwards (can be non-integer)
+ * @param phi Degrees to rotate clockwise
+ * @param input_image Input image file
+ * @param output_image Output image file
+ * @param linear_interpolation Use bilinear interpolation (default is bicubic)
+ * @param fourier_interpolation Use Fourier interpolation
+ *
+ * @returns Parameter dictionary
+ */
 function imrotate_params(
     dx: number,
     dy: number,
@@ -83,21 +96,8 @@ function imrotate_params(
     linear_interpolation: boolean = false,
     fourier_interpolation: boolean = false,
 ): ImrotateParameters {
-    /**
-     * Build parameters.
-    
-     * @param dx Pixels to shift rightwards (can be non-integer)
-     * @param dy Pixels to shift downwards (can be non-integer)
-     * @param phi Degrees to rotate clockwise
-     * @param input_image Input image file
-     * @param output_image Output image file
-     * @param linear_interpolation Use bilinear interpolation (default is bicubic)
-     * @param fourier_interpolation Use Fourier interpolation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imrotate" as const,
+        "@type": "afni.imrotate" as const,
         "linear_interpolation": linear_interpolation,
         "fourier_interpolation": fourier_interpolation,
         "dx": dx,
@@ -110,18 +110,18 @@ function imrotate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imrotate_cargs(
     params: ImrotateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imrotate");
     if ((params["linear_interpolation"] ?? null)) {
@@ -139,18 +139,18 @@ function imrotate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imrotate_outputs(
     params: ImrotateParameters,
     execution: Execution,
 ): ImrotateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImrotateOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -159,22 +159,22 @@ function imrotate_outputs(
 }
 
 
+/**
+ * Shifts and rotates an image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
+ */
 function imrotate_execute(
     params: ImrotateParameters,
     execution: Execution,
 ): ImrotateOutputs {
-    /**
-     * Shifts and rotates an image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
-     */
     params = execution.params(params)
     const cargs = imrotate_cargs(params, execution)
     const ret = imrotate_outputs(params, execution)
@@ -183,6 +183,24 @@ function imrotate_execute(
 }
 
 
+/**
+ * Shifts and rotates an image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dx Pixels to shift rightwards (can be non-integer)
+ * @param dy Pixels to shift downwards (can be non-integer)
+ * @param phi Degrees to rotate clockwise
+ * @param input_image Input image file
+ * @param output_image Output image file
+ * @param linear_interpolation Use bilinear interpolation (default is bicubic)
+ * @param fourier_interpolation Use Fourier interpolation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
+ */
 function imrotate(
     dx: number,
     dy: number,
@@ -193,24 +211,6 @@ function imrotate(
     fourier_interpolation: boolean = false,
     runner: Runner | null = null,
 ): ImrotateOutputs {
-    /**
-     * Shifts and rotates an image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dx Pixels to shift rightwards (can be non-integer)
-     * @param dy Pixels to shift downwards (can be non-integer)
-     * @param phi Degrees to rotate clockwise
-     * @param input_image Input image file
-     * @param output_image Output image file
-     * @param linear_interpolation Use bilinear interpolation (default is bicubic)
-     * @param fourier_interpolation Use Fourier interpolation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMROTATE_METADATA);
     const params = imrotate_params(dx, dy, phi, input_image, output_image, linear_interpolation, fourier_interpolation)
@@ -223,5 +223,8 @@ export {
       ImrotateOutputs,
       ImrotateParameters,
       imrotate,
+      imrotate_cargs,
+      imrotate_execute,
+      imrotate_outputs,
       imrotate_params,
 };

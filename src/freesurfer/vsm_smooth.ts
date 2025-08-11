@@ -12,7 +12,7 @@ const VSM_SMOOTH_METADATA: Metadata = {
 
 
 interface VsmSmoothParameters {
-    "__STYXTYPE__": "vsm-smooth";
+    "@type": "freesurfer.vsm-smooth";
     "input_file": InputPathType;
     "output_file": string;
     "fwhm_value": number;
@@ -20,35 +20,35 @@ interface VsmSmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vsm-smooth": vsm_smooth_cargs,
+        "freesurfer.vsm-smooth": vsm_smooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vsm-smooth": vsm_smooth_outputs,
+        "freesurfer.vsm-smooth": vsm_smooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface VsmSmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input voxel shift map (vsm).
+ * @param output_file Output smoothed voxel shift map.
+ * @param fwhm_value Full width at half maximum for smoothing.
+ * @param temp_dir Directory for temporary files.
+ *
+ * @returns Parameter dictionary
+ */
 function vsm_smooth_params(
     input_file: InputPathType,
     output_file: string,
     fwhm_value: number,
     temp_dir: string,
 ): VsmSmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input voxel shift map (vsm).
-     * @param output_file Output smoothed voxel shift map.
-     * @param fwhm_value Full width at half maximum for smoothing.
-     * @param temp_dir Directory for temporary files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vsm-smooth" as const,
+        "@type": "freesurfer.vsm-smooth" as const,
         "input_file": input_file,
         "output_file": output_file,
         "fwhm_value": fwhm_value,
@@ -98,18 +98,18 @@ function vsm_smooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vsm_smooth_cargs(
     params: VsmSmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vsm-smooth");
     cargs.push(
@@ -132,18 +132,18 @@ function vsm_smooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vsm_smooth_outputs(
     params: VsmSmoothParameters,
     execution: Execution,
 ): VsmSmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VsmSmoothOutputs = {
         root: execution.outputFile("."),
         output_vsm: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -152,22 +152,22 @@ function vsm_smooth_outputs(
 }
 
 
+/**
+ * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
+ */
 function vsm_smooth_execute(
     params: VsmSmoothParameters,
     execution: Execution,
 ): VsmSmoothOutputs {
-    /**
-     * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = vsm_smooth_cargs(params, execution)
     const ret = vsm_smooth_outputs(params, execution)
@@ -176,6 +176,21 @@ function vsm_smooth_execute(
 }
 
 
+/**
+ * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input voxel shift map (vsm).
+ * @param output_file Output smoothed voxel shift map.
+ * @param fwhm_value Full width at half maximum for smoothing.
+ * @param temp_dir Directory for temporary files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
+ */
 function vsm_smooth(
     input_file: InputPathType,
     output_file: string,
@@ -183,21 +198,6 @@ function vsm_smooth(
     temp_dir: string,
     runner: Runner | null = null,
 ): VsmSmoothOutputs {
-    /**
-     * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input voxel shift map (vsm).
-     * @param output_file Output smoothed voxel shift map.
-     * @param fwhm_value Full width at half maximum for smoothing.
-     * @param temp_dir Directory for temporary files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VSM_SMOOTH_METADATA);
     const params = vsm_smooth_params(input_file, output_file, fwhm_value, temp_dir)
@@ -210,5 +210,8 @@ export {
       VsmSmoothOutputs,
       VsmSmoothParameters,
       vsm_smooth,
+      vsm_smooth_cargs,
+      vsm_smooth_execute,
+      vsm_smooth_outputs,
       vsm_smooth_params,
 };

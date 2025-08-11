@@ -12,41 +12,41 @@ const REG_AVERAGE_METADATA: Metadata = {
 
 
 interface RegAverageParameters {
-    "__STYXTYPE__": "reg_average";
+    "@type": "niftyreg.reg_average";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_average": reg_average_cargs,
+        "niftyreg.reg_average": reg_average_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_average": reg_average_outputs,
+        "niftyreg.reg_average": reg_average_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface RegAverageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Filename of the output image or affine transformation
+ * @param input_files Input file names (images or affine matrices) to be averaged
+ *
+ * @returns Parameter dictionary
+ */
 function reg_average_params(
     output_file: string,
     input_files: Array<InputPathType>,
 ): RegAverageParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Filename of the output image or affine transformation
-     * @param input_files Input file names (images or affine matrices) to be averaged
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_average" as const,
+        "@type": "niftyreg.reg_average" as const,
         "output_file": output_file,
         "input_files": input_files,
     };
@@ -90,18 +90,18 @@ function reg_average_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_average_cargs(
     params: RegAverageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_average");
     cargs.push((params["output_file"] ?? null));
@@ -110,18 +110,18 @@ function reg_average_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_average_outputs(
     params: RegAverageParameters,
     execution: Execution,
 ): RegAverageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegAverageOutputs = {
         root: execution.outputFile("."),
         output_file_location: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function reg_average_outputs(
 }
 
 
+/**
+ * Command line program to average either images or affine transformations.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
+ */
 function reg_average_execute(
     params: RegAverageParameters,
     execution: Execution,
 ): RegAverageOutputs {
-    /**
-     * Command line program to average either images or affine transformations.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_average_cargs(params, execution)
     const ret = reg_average_outputs(params, execution)
@@ -154,24 +154,24 @@ function reg_average_execute(
 }
 
 
+/**
+ * Command line program to average either images or affine transformations.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param output_file Filename of the output image or affine transformation
+ * @param input_files Input file names (images or affine matrices) to be averaged
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
+ */
 function reg_average(
     output_file: string,
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): RegAverageOutputs {
-    /**
-     * Command line program to average either images or affine transformations.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param output_file Filename of the output image or affine transformation
-     * @param input_files Input file names (images or affine matrices) to be averaged
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_AVERAGE_METADATA);
     const params = reg_average_params(output_file, input_files)
@@ -184,5 +184,8 @@ export {
       RegAverageOutputs,
       RegAverageParameters,
       reg_average,
+      reg_average_cargs,
+      reg_average_execute,
+      reg_average_outputs,
       reg_average_params,
 };

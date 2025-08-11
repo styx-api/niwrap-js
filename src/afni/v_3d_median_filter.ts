@@ -12,7 +12,7 @@ const V_3D_MEDIAN_FILTER_METADATA: Metadata = {
 
 
 interface V3dMedianFilterParameters {
-    "__STYXTYPE__": "3dMedianFilter";
+    "@type": "afni.3dMedianFilter";
     "irad"?: number | null | undefined;
     "iter"?: number | null | undefined;
     "verbose": boolean;
@@ -22,35 +22,35 @@ interface V3dMedianFilterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMedianFilter": v_3d_median_filter_cargs,
+        "afni.3dMedianFilter": v_3d_median_filter_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMedianFilter": v_3d_median_filter_outputs,
+        "afni.3dMedianFilter": v_3d_median_filter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface V3dMedianFilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param irad Radius in voxels of spherical regions
+ * @param iter Iterate 'n' times [default=1]
+ * @param verbose Be verbose during run
+ * @param prefix Use 'pp' for prefix of output dataset
+ * @param automask Create a mask (a la 3dAutomask)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_median_filter_params(
     dataset: InputPathType,
     irad: number | null = null,
@@ -85,20 +97,8 @@ function v_3d_median_filter_params(
     prefix: string | null = null,
     automask: boolean = false,
 ): V3dMedianFilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param irad Radius in voxels of spherical regions
-     * @param iter Iterate 'n' times [default=1]
-     * @param verbose Be verbose during run
-     * @param prefix Use 'pp' for prefix of output dataset
-     * @param automask Create a mask (a la 3dAutomask)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMedianFilter" as const,
+        "@type": "afni.3dMedianFilter" as const,
         "verbose": verbose,
         "automask": automask,
         "dataset": dataset,
@@ -116,18 +116,18 @@ function v_3d_median_filter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_median_filter_cargs(
     params: V3dMedianFilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMedianFilter");
     if ((params["irad"] ?? null) !== null) {
@@ -159,18 +159,18 @@ function v_3d_median_filter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_median_filter_outputs(
     params: V3dMedianFilterParameters,
     execution: Execution,
 ): V3dMedianFilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMedianFilterOutputs = {
         root: execution.outputFile("."),
         output_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+tlrc.BRIK"].join('')) : null,
@@ -180,22 +180,22 @@ function v_3d_median_filter_outputs(
 }
 
 
+/**
+ * Computes the median in a spherical neighborhood around each point in the input to produce the output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
+ */
 function v_3d_median_filter_execute(
     params: V3dMedianFilterParameters,
     execution: Execution,
 ): V3dMedianFilterOutputs {
-    /**
-     * Computes the median in a spherical neighborhood around each point in the input to produce the output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_median_filter_cargs(params, execution)
     const ret = v_3d_median_filter_outputs(params, execution)
@@ -204,6 +204,23 @@ function v_3d_median_filter_execute(
 }
 
 
+/**
+ * Computes the median in a spherical neighborhood around each point in the input to produce the output.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param irad Radius in voxels of spherical regions
+ * @param iter Iterate 'n' times [default=1]
+ * @param verbose Be verbose during run
+ * @param prefix Use 'pp' for prefix of output dataset
+ * @param automask Create a mask (a la 3dAutomask)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
+ */
 function v_3d_median_filter(
     dataset: InputPathType,
     irad: number | null = null,
@@ -213,23 +230,6 @@ function v_3d_median_filter(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dMedianFilterOutputs {
-    /**
-     * Computes the median in a spherical neighborhood around each point in the input to produce the output.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param irad Radius in voxels of spherical regions
-     * @param iter Iterate 'n' times [default=1]
-     * @param verbose Be verbose during run
-     * @param prefix Use 'pp' for prefix of output dataset
-     * @param automask Create a mask (a la 3dAutomask)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MEDIAN_FILTER_METADATA);
     const params = v_3d_median_filter_params(dataset, irad, iter, verbose, prefix, automask)
@@ -242,5 +242,8 @@ export {
       V3dMedianFilterParameters,
       V_3D_MEDIAN_FILTER_METADATA,
       v_3d_median_filter,
+      v_3d_median_filter_cargs,
+      v_3d_median_filter_execute,
+      v_3d_median_filter_outputs,
       v_3d_median_filter_params,
 };

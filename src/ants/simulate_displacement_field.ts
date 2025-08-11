@@ -12,20 +12,20 @@ const SIMULATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 
 
 interface SimulateDisplacementFieldBsplineOptionsParameters {
-    "__STYXTYPE__": "bspline_options";
+    "@type": "ants.SimulateDisplacementField.bspline_options";
     "number_of_fitting_levels"?: number | null | undefined;
     "number_of_control_points"?: number | null | undefined;
 }
 
 
 interface SimulateDisplacementFieldExponentialOptionsParameters {
-    "__STYXTYPE__": "exponential_options";
+    "@type": "ants.SimulateDisplacementField.exponential_options";
     "smoothing_standard_deviation"?: number | null | undefined;
 }
 
 
 interface SimulateDisplacementFieldParameters {
-    "__STYXTYPE__": "SimulateDisplacementField";
+    "@type": "ants.SimulateDisplacementField";
     "image_dimension": number;
     "displacement_field_type": "BSpline" | "Exponential";
     "domain_image": InputPathType;
@@ -37,56 +37,56 @@ interface SimulateDisplacementFieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SimulateDisplacementField": simulate_displacement_field_cargs,
-        "bspline_options": simulate_displacement_field_bspline_options_cargs,
-        "exponential_options": simulate_displacement_field_exponential_options_cargs,
+        "ants.SimulateDisplacementField": simulate_displacement_field_cargs,
+        "ants.SimulateDisplacementField.bspline_options": simulate_displacement_field_bspline_options_cargs,
+        "ants.SimulateDisplacementField.exponential_options": simulate_displacement_field_exponential_options_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SimulateDisplacementField": simulate_displacement_field_outputs,
+        "ants.SimulateDisplacementField": simulate_displacement_field_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param number_of_fitting_levels Number of fitting levels for BSpline.
+ * @param number_of_control_points Number of control points for BSpline.
+ *
+ * @returns Parameter dictionary
+ */
 function simulate_displacement_field_bspline_options_params(
     number_of_fitting_levels: number | null = 4,
     number_of_control_points: number | null = 4,
 ): SimulateDisplacementFieldBsplineOptionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param number_of_fitting_levels Number of fitting levels for BSpline.
-     * @param number_of_control_points Number of control points for BSpline.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bspline_options" as const,
+        "@type": "ants.SimulateDisplacementField.bspline_options" as const,
     };
     if (number_of_fitting_levels !== null) {
         params["number_of_fitting_levels"] = number_of_fitting_levels;
@@ -98,18 +98,18 @@ function simulate_displacement_field_bspline_options_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function simulate_displacement_field_bspline_options_cargs(
     params: SimulateDisplacementFieldBsplineOptionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["number_of_fitting_levels"] ?? null) !== null) {
         cargs.push(String((params["number_of_fitting_levels"] ?? null)));
@@ -121,18 +121,18 @@ function simulate_displacement_field_bspline_options_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param smoothing_standard_deviation Smoothing standard deviation for Exponential.
+ *
+ * @returns Parameter dictionary
+ */
 function simulate_displacement_field_exponential_options_params(
     smoothing_standard_deviation: number | null = 4,
 ): SimulateDisplacementFieldExponentialOptionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param smoothing_standard_deviation Smoothing standard deviation for Exponential.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exponential_options" as const,
+        "@type": "ants.SimulateDisplacementField.exponential_options" as const,
     };
     if (smoothing_standard_deviation !== null) {
         params["smoothing_standard_deviation"] = smoothing_standard_deviation;
@@ -141,18 +141,18 @@ function simulate_displacement_field_exponential_options_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function simulate_displacement_field_exponential_options_cargs(
     params: SimulateDisplacementFieldExponentialOptionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["smoothing_standard_deviation"] ?? null) !== null) {
         cargs.push(String((params["smoothing_standard_deviation"] ?? null)));
@@ -178,6 +178,20 @@ interface SimulateDisplacementFieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimensionality of the image.
+ * @param displacement_field_type Type of displacement field to simulate.
+ * @param domain_image Image defining the domain for the displacement field.
+ * @param output_field Path to save the output displacement field.
+ * @param number_of_random_points Number of random points to use in the simulation.
+ * @param standard_deviation_displacement_field Standard deviation for the displacement field.
+ * @param enforce_stationary_boundary Boolean flag indicating whether to enforce stationary boundary.
+ * @param displacement_specific_options Options specific to the type of displacement field simulation.
+ *
+ * @returns Parameter dictionary
+ */
 function simulate_displacement_field_params(
     image_dimension: number,
     displacement_field_type: "BSpline" | "Exponential",
@@ -188,22 +202,8 @@ function simulate_displacement_field_params(
     enforce_stationary_boundary: number | null = 1,
     displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
 ): SimulateDisplacementFieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimensionality of the image.
-     * @param displacement_field_type Type of displacement field to simulate.
-     * @param domain_image Image defining the domain for the displacement field.
-     * @param output_field Path to save the output displacement field.
-     * @param number_of_random_points Number of random points to use in the simulation.
-     * @param standard_deviation_displacement_field Standard deviation for the displacement field.
-     * @param enforce_stationary_boundary Boolean flag indicating whether to enforce stationary boundary.
-     * @param displacement_specific_options Options specific to the type of displacement field simulation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SimulateDisplacementField" as const,
+        "@type": "ants.SimulateDisplacementField" as const,
         "image_dimension": image_dimension,
         "displacement_field_type": displacement_field_type,
         "domain_image": domain_image,
@@ -225,18 +225,18 @@ function simulate_displacement_field_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function simulate_displacement_field_cargs(
     params: SimulateDisplacementFieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SimulateDisplacementField");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -253,24 +253,24 @@ function simulate_displacement_field_cargs(
         cargs.push(String((params["enforce_stationary_boundary"] ?? null)));
     }
     if ((params["displacement_specific_options"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["displacement_specific_options"] ?? null).__STYXTYPE__)((params["displacement_specific_options"] ?? null), execution));
+        cargs.push(...dynCargs((params["displacement_specific_options"] ?? null)["@type"])((params["displacement_specific_options"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function simulate_displacement_field_outputs(
     params: SimulateDisplacementFieldParameters,
     execution: Execution,
 ): SimulateDisplacementFieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SimulateDisplacementFieldOutputs = {
         root: execution.outputFile("."),
         output_displacement_field: execution.outputFile([(params["output_field"] ?? null)].join('')),
@@ -279,22 +279,22 @@ function simulate_displacement_field_outputs(
 }
 
 
+/**
+ * Simulate displacement fields using various methods such as BSpline or Exponential.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
+ */
 function simulate_displacement_field_execute(
     params: SimulateDisplacementFieldParameters,
     execution: Execution,
 ): SimulateDisplacementFieldOutputs {
-    /**
-     * Simulate displacement fields using various methods such as BSpline or Exponential.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = simulate_displacement_field_cargs(params, execution)
     const ret = simulate_displacement_field_outputs(params, execution)
@@ -303,6 +303,25 @@ function simulate_displacement_field_execute(
 }
 
 
+/**
+ * Simulate displacement fields using various methods such as BSpline or Exponential.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimensionality of the image.
+ * @param displacement_field_type Type of displacement field to simulate.
+ * @param domain_image Image defining the domain for the displacement field.
+ * @param output_field Path to save the output displacement field.
+ * @param number_of_random_points Number of random points to use in the simulation.
+ * @param standard_deviation_displacement_field Standard deviation for the displacement field.
+ * @param enforce_stationary_boundary Boolean flag indicating whether to enforce stationary boundary.
+ * @param displacement_specific_options Options specific to the type of displacement field simulation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
+ */
 function simulate_displacement_field(
     image_dimension: number,
     displacement_field_type: "BSpline" | "Exponential",
@@ -314,25 +333,6 @@ function simulate_displacement_field(
     displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
-    /**
-     * Simulate displacement fields using various methods such as BSpline or Exponential.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimensionality of the image.
-     * @param displacement_field_type Type of displacement field to simulate.
-     * @param domain_image Image defining the domain for the displacement field.
-     * @param output_field Path to save the output displacement field.
-     * @param number_of_random_points Number of random points to use in the simulation.
-     * @param standard_deviation_displacement_field Standard deviation for the displacement field.
-     * @param enforce_stationary_boundary Boolean flag indicating whether to enforce stationary boundary.
-     * @param displacement_specific_options Options specific to the type of displacement field simulation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIMULATE_DISPLACEMENT_FIELD_METADATA);
     const params = simulate_displacement_field_params(image_dimension, displacement_field_type, domain_image, output_field, number_of_random_points, standard_deviation_displacement_field, enforce_stationary_boundary, displacement_specific_options)
@@ -347,7 +347,12 @@ export {
       SimulateDisplacementFieldOutputs,
       SimulateDisplacementFieldParameters,
       simulate_displacement_field,
+      simulate_displacement_field_bspline_options_cargs,
       simulate_displacement_field_bspline_options_params,
+      simulate_displacement_field_cargs,
+      simulate_displacement_field_execute,
+      simulate_displacement_field_exponential_options_cargs,
       simulate_displacement_field_exponential_options_params,
+      simulate_displacement_field_outputs,
       simulate_displacement_field_params,
 };

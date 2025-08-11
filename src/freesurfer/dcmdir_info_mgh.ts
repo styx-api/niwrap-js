@@ -12,7 +12,7 @@ const DCMDIR_INFO_MGH_METADATA: Metadata = {
 
 
 interface DcmdirInfoMghParameters {
-    "__STYXTYPE__": "dcmdir-info-mgh";
+    "@type": "freesurfer.dcmdir-info-mgh";
     "dicomdir": string;
     "unpackdir"?: string | null | undefined;
     "version": boolean;
@@ -21,35 +21,35 @@ interface DcmdirInfoMghParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmdir-info-mgh": dcmdir_info_mgh_cargs,
+        "freesurfer.dcmdir-info-mgh": dcmdir_info_mgh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dcmdir-info-mgh": dcmdir_info_mgh_outputs,
+        "freesurfer.dcmdir-info-mgh": dcmdir_info_mgh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface DcmdirInfoMghOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dicomdir Input DICOM directory.
+ * @param unpackdir Directory where the unpacked data will be stored (optional). If specified, DICOM files are converted to MGZ format.
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param nopre Do not assume filenames use the NNNNNN- prefix convention
+ *
+ * @returns Parameter dictionary
+ */
 function dcmdir_info_mgh_params(
     dicomdir: string,
     unpackdir: string | null = null,
@@ -79,19 +90,8 @@ function dcmdir_info_mgh_params(
     help: boolean = false,
     nopre: boolean = false,
 ): DcmdirInfoMghParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicomdir Input DICOM directory.
-     * @param unpackdir Directory where the unpacked data will be stored (optional). If specified, DICOM files are converted to MGZ format.
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param nopre Do not assume filenames use the NNNNNN- prefix convention
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmdir-info-mgh" as const,
+        "@type": "freesurfer.dcmdir-info-mgh" as const,
         "dicomdir": dicomdir,
         "version": version,
         "help": help,
@@ -104,18 +104,18 @@ function dcmdir_info_mgh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmdir_info_mgh_cargs(
     params: DcmdirInfoMghParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmdir-info-mgh");
     cargs.push(
@@ -138,18 +138,18 @@ function dcmdir_info_mgh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmdir_info_mgh_outputs(
     params: DcmdirInfoMghParameters,
     execution: Execution,
 ): DcmdirInfoMghOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmdirInfoMghOutputs = {
         root: execution.outputFile("."),
         converted_mgz_files: execution.outputFile(["sequencename_run*.mgz"].join('')),
@@ -158,22 +158,22 @@ function dcmdir_info_mgh_outputs(
 }
 
 
+/**
+ * Scans a DICOM directory and extracts information about each series.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
+ */
 function dcmdir_info_mgh_execute(
     params: DcmdirInfoMghParameters,
     execution: Execution,
 ): DcmdirInfoMghOutputs {
-    /**
-     * Scans a DICOM directory and extracts information about each series.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmdir_info_mgh_cargs(params, execution)
     const ret = dcmdir_info_mgh_outputs(params, execution)
@@ -182,6 +182,22 @@ function dcmdir_info_mgh_execute(
 }
 
 
+/**
+ * Scans a DICOM directory and extracts information about each series.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dicomdir Input DICOM directory.
+ * @param unpackdir Directory where the unpacked data will be stored (optional). If specified, DICOM files are converted to MGZ format.
+ * @param version Print version and exit
+ * @param help Print help and exit
+ * @param nopre Do not assume filenames use the NNNNNN- prefix convention
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
+ */
 function dcmdir_info_mgh(
     dicomdir: string,
     unpackdir: string | null = null,
@@ -190,22 +206,6 @@ function dcmdir_info_mgh(
     nopre: boolean = false,
     runner: Runner | null = null,
 ): DcmdirInfoMghOutputs {
-    /**
-     * Scans a DICOM directory and extracts information about each series.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dicomdir Input DICOM directory.
-     * @param unpackdir Directory where the unpacked data will be stored (optional). If specified, DICOM files are converted to MGZ format.
-     * @param version Print version and exit
-     * @param help Print help and exit
-     * @param nopre Do not assume filenames use the NNNNNN- prefix convention
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMDIR_INFO_MGH_METADATA);
     const params = dcmdir_info_mgh_params(dicomdir, unpackdir, version, help, nopre)
@@ -218,5 +218,8 @@ export {
       DcmdirInfoMghOutputs,
       DcmdirInfoMghParameters,
       dcmdir_info_mgh,
+      dcmdir_info_mgh_cargs,
+      dcmdir_info_mgh_execute,
+      dcmdir_info_mgh_outputs,
       dcmdir_info_mgh_params,
 };

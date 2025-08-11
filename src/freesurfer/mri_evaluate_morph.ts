@@ -12,42 +12,42 @@ const MRI_EVALUATE_MORPH_METADATA: Metadata = {
 
 
 interface MriEvaluateMorphParameters {
-    "__STYXTYPE__": "mri_evaluate_morph";
+    "@type": "freesurfer.mri_evaluate_morph";
     "xform_name": InputPathType;
     "segmentation_files": Array<InputPathType>;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_evaluate_morph": mri_evaluate_morph_cargs,
+        "freesurfer.mri_evaluate_morph": mri_evaluate_morph_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_evaluate_morph": mri_evaluate_morph_outputs,
+        "freesurfer.mri_evaluate_morph": mri_evaluate_morph_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriEvaluateMorphOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xform_name Transformation file name.
+ * @param segmentation_files Input segmentation files.
+ * @param output_file Output file.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_evaluate_morph_params(
     xform_name: InputPathType,
     segmentation_files: Array<InputPathType>,
     output_file: string,
 ): MriEvaluateMorphParameters {
-    /**
-     * Build parameters.
-    
-     * @param xform_name Transformation file name.
-     * @param segmentation_files Input segmentation files.
-     * @param output_file Output file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_evaluate_morph" as const,
+        "@type": "freesurfer.mri_evaluate_morph" as const,
         "xform_name": xform_name,
         "segmentation_files": segmentation_files,
         "output_file": output_file,
@@ -94,18 +94,18 @@ function mri_evaluate_morph_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_evaluate_morph_cargs(
     params: MriEvaluateMorphParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_evaluate_morph");
     cargs.push(execution.inputFile((params["xform_name"] ?? null)));
@@ -115,18 +115,18 @@ function mri_evaluate_morph_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_evaluate_morph_outputs(
     params: MriEvaluateMorphParameters,
     execution: Execution,
 ): MriEvaluateMorphOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEvaluateMorphOutputs = {
         root: execution.outputFile("."),
         output_overlap_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_evaluate_morph_outputs(
 }
 
 
+/**
+ * This program computes the overlap of a set of segmentations for a given morph using an xform file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
+ */
 function mri_evaluate_morph_execute(
     params: MriEvaluateMorphParameters,
     execution: Execution,
 ): MriEvaluateMorphOutputs {
-    /**
-     * This program computes the overlap of a set of segmentations for a given morph using an xform file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_evaluate_morph_cargs(params, execution)
     const ret = mri_evaluate_morph_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_evaluate_morph_execute(
 }
 
 
+/**
+ * This program computes the overlap of a set of segmentations for a given morph using an xform file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param xform_name Transformation file name.
+ * @param segmentation_files Input segmentation files.
+ * @param output_file Output file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
+ */
 function mri_evaluate_morph(
     xform_name: InputPathType,
     segmentation_files: Array<InputPathType>,
     output_file: string,
     runner: Runner | null = null,
 ): MriEvaluateMorphOutputs {
-    /**
-     * This program computes the overlap of a set of segmentations for a given morph using an xform file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param xform_name Transformation file name.
-     * @param segmentation_files Input segmentation files.
-     * @param output_file Output file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EVALUATE_MORPH_METADATA);
     const params = mri_evaluate_morph_params(xform_name, segmentation_files, output_file)
@@ -191,5 +191,8 @@ export {
       MriEvaluateMorphOutputs,
       MriEvaluateMorphParameters,
       mri_evaluate_morph,
+      mri_evaluate_morph_cargs,
+      mri_evaluate_morph_execute,
+      mri_evaluate_morph_outputs,
       mri_evaluate_morph_params,
 };

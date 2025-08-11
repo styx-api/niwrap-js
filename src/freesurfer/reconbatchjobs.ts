@@ -12,39 +12,39 @@ const RECONBATCHJOBS_METADATA: Metadata = {
 
 
 interface ReconbatchjobsParameters {
-    "__STYXTYPE__": "reconbatchjobs";
+    "@type": "freesurfer.reconbatchjobs";
     "logfile": string;
     "cmdfiles": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reconbatchjobs": reconbatchjobs_cargs,
+        "freesurfer.reconbatchjobs": reconbatchjobs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface ReconbatchjobsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param logfile Log file to capture output of batch jobs
+ * @param cmdfiles Command files for batch processing
+ *
+ * @returns Parameter dictionary
+ */
 function reconbatchjobs_params(
     logfile: string,
     cmdfiles: Array<string>,
 ): ReconbatchjobsParameters {
-    /**
-     * Build parameters.
-    
-     * @param logfile Log file to capture output of batch jobs
-     * @param cmdfiles Command files for batch processing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reconbatchjobs" as const,
+        "@type": "freesurfer.reconbatchjobs" as const,
         "logfile": logfile,
         "cmdfiles": cmdfiles,
     };
@@ -85,18 +85,18 @@ function reconbatchjobs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reconbatchjobs_cargs(
     params: ReconbatchjobsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reconbatchjobs");
     cargs.push((params["logfile"] ?? null));
@@ -105,18 +105,18 @@ function reconbatchjobs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reconbatchjobs_outputs(
     params: ReconbatchjobsParameters,
     execution: Execution,
 ): ReconbatchjobsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReconbatchjobsOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function reconbatchjobs_outputs(
 }
 
 
+/**
+ * Batch job processor for reconstruction scripts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
+ */
 function reconbatchjobs_execute(
     params: ReconbatchjobsParameters,
     execution: Execution,
 ): ReconbatchjobsOutputs {
-    /**
-     * Batch job processor for reconstruction scripts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
-     */
     params = execution.params(params)
     const cargs = reconbatchjobs_cargs(params, execution)
     const ret = reconbatchjobs_outputs(params, execution)
@@ -148,24 +148,24 @@ function reconbatchjobs_execute(
 }
 
 
+/**
+ * Batch job processor for reconstruction scripts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param logfile Log file to capture output of batch jobs
+ * @param cmdfiles Command files for batch processing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
+ */
 function reconbatchjobs(
     logfile: string,
     cmdfiles: Array<string>,
     runner: Runner | null = null,
 ): ReconbatchjobsOutputs {
-    /**
-     * Batch job processor for reconstruction scripts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param logfile Log file to capture output of batch jobs
-     * @param cmdfiles Command files for batch processing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RECONBATCHJOBS_METADATA);
     const params = reconbatchjobs_params(logfile, cmdfiles)
@@ -178,5 +178,8 @@ export {
       ReconbatchjobsOutputs,
       ReconbatchjobsParameters,
       reconbatchjobs,
+      reconbatchjobs_cargs,
+      reconbatchjobs_execute,
+      reconbatchjobs_outputs,
       reconbatchjobs_params,
 };

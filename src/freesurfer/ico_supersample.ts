@@ -12,42 +12,42 @@ const ICO_SUPERSAMPLE_METADATA: Metadata = {
 
 
 interface IcoSupersampleParameters {
-    "__STYXTYPE__": "ico_supersample";
+    "@type": "freesurfer.ico_supersample";
     "refine": boolean;
     "radius"?: number | null | undefined;
     "projection_point"?: Array<number> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ico_supersample": ico_supersample_cargs,
+        "freesurfer.ico_supersample": ico_supersample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ico_supersample": ico_supersample_outputs,
+        "freesurfer.ico_supersample": ico_supersample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface IcoSupersampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param refine Refine the icosahedron mesh
+ * @param radius Radius of the sphere onto which the icosahedron is projected
+ * @param projection_point Projection point for the icosahedron refinement. Enter three floating point values separated by spaces.
+ *
+ * @returns Parameter dictionary
+ */
 function ico_supersample_params(
     refine: boolean = false,
     radius: number | null = null,
     projection_point: Array<number> | null = null,
 ): IcoSupersampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param refine Refine the icosahedron mesh
-     * @param radius Radius of the sphere onto which the icosahedron is projected
-     * @param projection_point Projection point for the icosahedron refinement. Enter three floating point values separated by spaces.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ico_supersample" as const,
+        "@type": "freesurfer.ico_supersample" as const,
         "refine": refine,
     };
     if (radius !== null) {
@@ -98,18 +98,18 @@ function ico_supersample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ico_supersample_cargs(
     params: IcoSupersampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ico_supersample");
     if ((params["refine"] ?? null)) {
@@ -125,18 +125,18 @@ function ico_supersample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ico_supersample_outputs(
     params: IcoSupersampleParameters,
     execution: Execution,
 ): IcoSupersampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IcoSupersampleOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["refined_icosahedron.obj"].join('')),
@@ -145,22 +145,22 @@ function ico_supersample_outputs(
 }
 
 
+/**
+ * A tool for refining icosahedron meshes with user-specified parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
+ */
 function ico_supersample_execute(
     params: IcoSupersampleParameters,
     execution: Execution,
 ): IcoSupersampleOutputs {
-    /**
-     * A tool for refining icosahedron meshes with user-specified parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = ico_supersample_cargs(params, execution)
     const ret = ico_supersample_outputs(params, execution)
@@ -169,26 +169,26 @@ function ico_supersample_execute(
 }
 
 
+/**
+ * A tool for refining icosahedron meshes with user-specified parameters.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param refine Refine the icosahedron mesh
+ * @param radius Radius of the sphere onto which the icosahedron is projected
+ * @param projection_point Projection point for the icosahedron refinement. Enter three floating point values separated by spaces.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
+ */
 function ico_supersample(
     refine: boolean = false,
     radius: number | null = null,
     projection_point: Array<number> | null = null,
     runner: Runner | null = null,
 ): IcoSupersampleOutputs {
-    /**
-     * A tool for refining icosahedron meshes with user-specified parameters.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param refine Refine the icosahedron mesh
-     * @param radius Radius of the sphere onto which the icosahedron is projected
-     * @param projection_point Projection point for the icosahedron refinement. Enter three floating point values separated by spaces.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ICO_SUPERSAMPLE_METADATA);
     const params = ico_supersample_params(refine, radius, projection_point)
@@ -201,5 +201,8 @@ export {
       IcoSupersampleOutputs,
       IcoSupersampleParameters,
       ico_supersample,
+      ico_supersample_cargs,
+      ico_supersample_execute,
+      ico_supersample_outputs,
       ico_supersample_params,
 };

@@ -12,38 +12,38 @@ const BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA: Metadata = {
 
 
 interface BuildDesikanKillianyGcsCshParameters {
-    "__STYXTYPE__": "build_desikan_killiany_gcs.csh";
+    "@type": "freesurfer.build_desikan_killiany_gcs.csh";
     "hemi": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "build_desikan_killiany_gcs.csh": build_desikan_killiany_gcs_csh_cargs,
+        "freesurfer.build_desikan_killiany_gcs.csh": build_desikan_killiany_gcs_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface BuildDesikanKillianyGcsCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere designation for the operation. Should be 'rh' for right hemisphere or 'lh' for left hemisphere.
+ *
+ * @returns Parameter dictionary
+ */
 function build_desikan_killiany_gcs_csh_params(
     hemi: string,
 ): BuildDesikanKillianyGcsCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere designation for the operation. Should be 'rh' for right hemisphere or 'lh' for left hemisphere.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "build_desikan_killiany_gcs.csh" as const,
+        "@type": "freesurfer.build_desikan_killiany_gcs.csh" as const,
         "hemi": hemi,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function build_desikan_killiany_gcs_csh_cargs(
     params: BuildDesikanKillianyGcsCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("build_desikan_killiany_gcs.csh");
     cargs.push((params["hemi"] ?? null));
@@ -100,18 +100,18 @@ function build_desikan_killiany_gcs_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function build_desikan_killiany_gcs_csh_outputs(
     params: BuildDesikanKillianyGcsCshParameters,
     execution: Execution,
 ): BuildDesikanKillianyGcsCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BuildDesikanKillianyGcsCshOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function build_desikan_killiany_gcs_csh_outputs(
 }
 
 
+/**
+ * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
+ */
 function build_desikan_killiany_gcs_csh_execute(
     params: BuildDesikanKillianyGcsCshParameters,
     execution: Execution,
 ): BuildDesikanKillianyGcsCshOutputs {
-    /**
-     * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = build_desikan_killiany_gcs_csh_cargs(params, execution)
     const ret = build_desikan_killiany_gcs_csh_outputs(params, execution)
@@ -143,22 +143,22 @@ function build_desikan_killiany_gcs_csh_execute(
 }
 
 
+/**
+ * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere designation for the operation. Should be 'rh' for right hemisphere or 'lh' for left hemisphere.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
+ */
 function build_desikan_killiany_gcs_csh(
     hemi: string,
     runner: Runner | null = null,
 ): BuildDesikanKillianyGcsCshOutputs {
-    /**
-     * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere designation for the operation. Should be 'rh' for right hemisphere or 'lh' for left hemisphere.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA);
     const params = build_desikan_killiany_gcs_csh_params(hemi)
@@ -171,5 +171,8 @@ export {
       BuildDesikanKillianyGcsCshOutputs,
       BuildDesikanKillianyGcsCshParameters,
       build_desikan_killiany_gcs_csh,
+      build_desikan_killiany_gcs_csh_cargs,
+      build_desikan_killiany_gcs_csh_execute,
+      build_desikan_killiany_gcs_csh_outputs,
       build_desikan_killiany_gcs_csh_params,
 };

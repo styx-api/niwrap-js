@@ -12,40 +12,40 @@ const V_1DMATCALC_METADATA: Metadata = {
 
 
 interface V1dmatcalcParameters {
-    "__STYXTYPE__": "1dmatcalc";
+    "@type": "afni.1dmatcalc";
     "expression"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dmatcalc": v_1dmatcalc_cargs,
+        "afni.1dmatcalc": v_1dmatcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dmatcalc": v_1dmatcalc_outputs,
+        "afni.1dmatcalc": v_1dmatcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,18 +68,18 @@ interface V1dmatcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param expression Expression to evaluate the RPN matrix-valued operations
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dmatcalc_params(
     expression: string | null = null,
 ): V1dmatcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param expression Expression to evaluate the RPN matrix-valued operations
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dmatcalc" as const,
+        "@type": "afni.1dmatcalc" as const,
     };
     if (expression !== null) {
         params["expression"] = expression;
@@ -88,18 +88,18 @@ function v_1dmatcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dmatcalc_cargs(
     params: V1dmatcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dmatcalc");
     if ((params["expression"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function v_1dmatcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dmatcalc_outputs(
     params: V1dmatcalcParameters,
     execution: Execution,
 ): V1dmatcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dmatcalcOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["[OUTPUT_FILE]"].join('')),
@@ -129,22 +129,22 @@ function v_1dmatcalc_outputs(
 }
 
 
+/**
+ * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
+ */
 function v_1dmatcalc_execute(
     params: V1dmatcalcParameters,
     execution: Execution,
 ): V1dmatcalcOutputs {
-    /**
-     * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dmatcalc_cargs(params, execution)
     const ret = v_1dmatcalc_outputs(params, execution)
@@ -153,22 +153,22 @@ function v_1dmatcalc_execute(
 }
 
 
+/**
+ * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param expression Expression to evaluate the RPN matrix-valued operations
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
+ */
 function v_1dmatcalc(
     expression: string | null = null,
     runner: Runner | null = null,
 ): V1dmatcalcOutputs {
-    /**
-     * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param expression Expression to evaluate the RPN matrix-valued operations
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DMATCALC_METADATA);
     const params = v_1dmatcalc_params(expression)
@@ -181,5 +181,8 @@ export {
       V1dmatcalcParameters,
       V_1DMATCALC_METADATA,
       v_1dmatcalc,
+      v_1dmatcalc_cargs,
+      v_1dmatcalc_execute,
+      v_1dmatcalc_outputs,
       v_1dmatcalc_params,
 };

@@ -12,7 +12,7 @@ const SIGNAL2IMAGE_METADATA: Metadata = {
 
 
 interface Signal2imageParameters {
-    "__STYXTYPE__": "signal2image";
+    "@type": "fsl.signal2image";
     "pulse_sequence": InputPathType;
     "input_signal"?: InputPathType | null | undefined;
     "output_image"?: string | null | undefined;
@@ -29,35 +29,35 @@ interface Signal2imageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "signal2image": signal2image_cargs,
+        "fsl.signal2image": signal2image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "signal2image": signal2image_outputs,
+        "fsl.signal2image": signal2image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface Signal2imageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pulse_sequence 8-column pulse_sequence matrix. Expects to find all other pulse sequence files in the same directory.
+ * @param input_signal Input signal file.
+ * @param output_image Output image file.
+ * @param kspace_coordinates K-space coordinates file.
+ * @param output_kspace Output k-space file.
+ * @param abs_flag Save absolute magnitude and phase.
+ * @param homodyne_flag Do the homodyne reconstruction.
+ * @param verbose_flag Switch on diagnostic messages.
+ * @param apodize_flag Do apodization.
+ * @param cutoff Apodization with this cutoff; default 100.
+ * @param rolloff Apodization with this rolloff; default 10.
+ * @param save_flag Save window as ASCII matrix (DEBUG!)
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function signal2image_params(
     pulse_sequence: InputPathType,
     input_signal: InputPathType | null = null,
@@ -99,27 +118,8 @@ function signal2image_params(
     save_flag: boolean = false,
     help_flag: boolean = false,
 ): Signal2imageParameters {
-    /**
-     * Build parameters.
-    
-     * @param pulse_sequence 8-column pulse_sequence matrix. Expects to find all other pulse sequence files in the same directory.
-     * @param input_signal Input signal file.
-     * @param output_image Output image file.
-     * @param kspace_coordinates K-space coordinates file.
-     * @param output_kspace Output k-space file.
-     * @param abs_flag Save absolute magnitude and phase.
-     * @param homodyne_flag Do the homodyne reconstruction.
-     * @param verbose_flag Switch on diagnostic messages.
-     * @param apodize_flag Do apodization.
-     * @param cutoff Apodization with this cutoff; default 100.
-     * @param rolloff Apodization with this rolloff; default 10.
-     * @param save_flag Save window as ASCII matrix (DEBUG!)
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "signal2image" as const,
+        "@type": "fsl.signal2image" as const,
         "pulse_sequence": pulse_sequence,
         "abs_flag": abs_flag,
         "homodyne_flag": homodyne_flag,
@@ -150,18 +150,18 @@ function signal2image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function signal2image_cargs(
     params: Signal2imageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("signal2image");
     cargs.push(
@@ -226,18 +226,18 @@ function signal2image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function signal2image_outputs(
     params: Signal2imageParameters,
     execution: Execution,
 ): Signal2imageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Signal2imageOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
@@ -247,22 +247,22 @@ function signal2image_outputs(
 }
 
 
+/**
+ * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
+ */
 function signal2image_execute(
     params: Signal2imageParameters,
     execution: Execution,
 ): Signal2imageOutputs {
-    /**
-     * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
-     */
     params = execution.params(params)
     const cargs = signal2image_cargs(params, execution)
     const ret = signal2image_outputs(params, execution)
@@ -271,6 +271,30 @@ function signal2image_execute(
 }
 
 
+/**
+ * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param pulse_sequence 8-column pulse_sequence matrix. Expects to find all other pulse sequence files in the same directory.
+ * @param input_signal Input signal file.
+ * @param output_image Output image file.
+ * @param kspace_coordinates K-space coordinates file.
+ * @param output_kspace Output k-space file.
+ * @param abs_flag Save absolute magnitude and phase.
+ * @param homodyne_flag Do the homodyne reconstruction.
+ * @param verbose_flag Switch on diagnostic messages.
+ * @param apodize_flag Do apodization.
+ * @param cutoff Apodization with this cutoff; default 100.
+ * @param rolloff Apodization with this rolloff; default 10.
+ * @param save_flag Save window as ASCII matrix (DEBUG!)
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
+ */
 function signal2image(
     pulse_sequence: InputPathType,
     input_signal: InputPathType | null = null,
@@ -287,30 +311,6 @@ function signal2image(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Signal2imageOutputs {
-    /**
-     * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param pulse_sequence 8-column pulse_sequence matrix. Expects to find all other pulse sequence files in the same directory.
-     * @param input_signal Input signal file.
-     * @param output_image Output image file.
-     * @param kspace_coordinates K-space coordinates file.
-     * @param output_kspace Output k-space file.
-     * @param abs_flag Save absolute magnitude and phase.
-     * @param homodyne_flag Do the homodyne reconstruction.
-     * @param verbose_flag Switch on diagnostic messages.
-     * @param apodize_flag Do apodization.
-     * @param cutoff Apodization with this cutoff; default 100.
-     * @param rolloff Apodization with this rolloff; default 10.
-     * @param save_flag Save window as ASCII matrix (DEBUG!)
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIGNAL2IMAGE_METADATA);
     const params = signal2image_params(pulse_sequence, input_signal, output_image, kspace_coordinates, output_kspace, abs_flag, homodyne_flag, verbose_flag, apodize_flag, cutoff, rolloff, save_flag, help_flag)
@@ -323,5 +323,8 @@ export {
       Signal2imageOutputs,
       Signal2imageParameters,
       signal2image,
+      signal2image_cargs,
+      signal2image_execute,
+      signal2image_outputs,
       signal2image_params,
 };

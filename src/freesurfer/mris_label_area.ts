@@ -12,7 +12,7 @@ const MRIS_LABEL_AREA_METADATA: Metadata = {
 
 
 interface MrisLabelAreaParameters {
-    "__STYXTYPE__": "mris_label_area";
+    "@type": "freesurfer.mris_label_area";
     "pct_flag": boolean;
     "log_file"?: string | null | undefined;
     "brain_vol"?: string | null | undefined;
@@ -24,33 +24,33 @@ interface MrisLabelAreaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_label_area": mris_label_area_cargs,
+        "freesurfer.mris_label_area": mris_label_area_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MrisLabelAreaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject
+ * @param hemi Hemisphere, typically 'lh' or 'rh'
+ * @param surf_name Surface name
+ * @param annot_name Annotation name
+ * @param labels Labels to calculate area for
+ * @param pct_flag Compute brain area as a percentage of all brain labels
+ * @param log_file Log results to file (use %d to include label number)
+ * @param brain_vol Load brain volume and use it to normalize areas
+ *
+ * @returns Parameter dictionary
+ */
 function mris_label_area_params(
     subject_name: string,
     hemi: string,
@@ -80,22 +94,8 @@ function mris_label_area_params(
     log_file: string | null = null,
     brain_vol: string | null = null,
 ): MrisLabelAreaParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject
-     * @param hemi Hemisphere, typically 'lh' or 'rh'
-     * @param surf_name Surface name
-     * @param annot_name Annotation name
-     * @param labels Labels to calculate area for
-     * @param pct_flag Compute brain area as a percentage of all brain labels
-     * @param log_file Log results to file (use %d to include label number)
-     * @param brain_vol Load brain volume and use it to normalize areas
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_label_area" as const,
+        "@type": "freesurfer.mris_label_area" as const,
         "pct_flag": pct_flag,
         "subject_name": subject_name,
         "hemi": hemi,
@@ -113,18 +113,18 @@ function mris_label_area_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_label_area_cargs(
     params: MrisLabelAreaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_label_area");
     if ((params["pct_flag"] ?? null)) {
@@ -151,18 +151,18 @@ function mris_label_area_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_label_area_outputs(
     params: MrisLabelAreaParameters,
     execution: Execution,
 ): MrisLabelAreaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisLabelAreaOutputs = {
         root: execution.outputFile("."),
     };
@@ -170,22 +170,22 @@ function mris_label_area_outputs(
 }
 
 
+/**
+ * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
+ */
 function mris_label_area_execute(
     params: MrisLabelAreaParameters,
     execution: Execution,
 ): MrisLabelAreaOutputs {
-    /**
-     * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_label_area_cargs(params, execution)
     const ret = mris_label_area_outputs(params, execution)
@@ -194,6 +194,25 @@ function mris_label_area_execute(
 }
 
 
+/**
+ * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject
+ * @param hemi Hemisphere, typically 'lh' or 'rh'
+ * @param surf_name Surface name
+ * @param annot_name Annotation name
+ * @param labels Labels to calculate area for
+ * @param pct_flag Compute brain area as a percentage of all brain labels
+ * @param log_file Log results to file (use %d to include label number)
+ * @param brain_vol Load brain volume and use it to normalize areas
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
+ */
 function mris_label_area(
     subject_name: string,
     hemi: string,
@@ -205,25 +224,6 @@ function mris_label_area(
     brain_vol: string | null = null,
     runner: Runner | null = null,
 ): MrisLabelAreaOutputs {
-    /**
-     * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject
-     * @param hemi Hemisphere, typically 'lh' or 'rh'
-     * @param surf_name Surface name
-     * @param annot_name Annotation name
-     * @param labels Labels to calculate area for
-     * @param pct_flag Compute brain area as a percentage of all brain labels
-     * @param log_file Log results to file (use %d to include label number)
-     * @param brain_vol Load brain volume and use it to normalize areas
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LABEL_AREA_METADATA);
     const params = mris_label_area_params(subject_name, hemi, surf_name, annot_name, labels, pct_flag, log_file, brain_vol)
@@ -236,5 +236,8 @@ export {
       MrisLabelAreaOutputs,
       MrisLabelAreaParameters,
       mris_label_area,
+      mris_label_area_cargs,
+      mris_label_area_execute,
+      mris_label_area_outputs,
       mris_label_area_params,
 };

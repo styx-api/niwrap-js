@@ -12,40 +12,40 @@ const V__1D_DIFF_MAG_METADATA: Metadata = {
 
 
 interface V1dDiffMagParameters {
-    "__STYXTYPE__": "@1dDiffMag";
+    "@type": "afni.@1dDiffMag";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@1dDiffMag": v__1d_diff_mag_cargs,
+        "afni.@1dDiffMag": v__1d_diff_mag_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@1dDiffMag": v__1d_diff_mag_outputs,
+        "afni.@1dDiffMag": v__1d_diff_mag_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface V1dDiffMagOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile 1D input file to compute the magnitude estimate of the first differences.
+ *
+ * @returns Parameter dictionary
+ */
 function v__1d_diff_mag_params(
     infile: InputPathType,
 ): V1dDiffMagParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile 1D input file to compute the magnitude estimate of the first differences.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@1dDiffMag" as const,
+        "@type": "afni.@1dDiffMag" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__1d_diff_mag_cargs(
     params: V1dDiffMagParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@1dDiffMag");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -105,18 +105,18 @@ function v__1d_diff_mag_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__1d_diff_mag_outputs(
     params: V1dDiffMagParameters,
     execution: Execution,
 ): V1dDiffMagOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dDiffMagOutputs = {
         root: execution.outputFile("."),
         result_stdout: execution.outputFile(["stdout"].join('')),
@@ -125,22 +125,22 @@ function v__1d_diff_mag_outputs(
 }
 
 
+/**
+ * Computes a magnitude estimate of the first differences of a 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
+ */
 function v__1d_diff_mag_execute(
     params: V1dDiffMagParameters,
     execution: Execution,
 ): V1dDiffMagOutputs {
-    /**
-     * Computes a magnitude estimate of the first differences of a 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__1d_diff_mag_cargs(params, execution)
     const ret = v__1d_diff_mag_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__1d_diff_mag_execute(
 }
 
 
+/**
+ * Computes a magnitude estimate of the first differences of a 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile 1D input file to compute the magnitude estimate of the first differences.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
+ */
 function v__1d_diff_mag(
     infile: InputPathType,
     runner: Runner | null = null,
 ): V1dDiffMagOutputs {
-    /**
-     * Computes a magnitude estimate of the first differences of a 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile 1D input file to compute the magnitude estimate of the first differences.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__1D_DIFF_MAG_METADATA);
     const params = v__1d_diff_mag_params(infile)
@@ -177,5 +177,8 @@ export {
       V1dDiffMagParameters,
       V__1D_DIFF_MAG_METADATA,
       v__1d_diff_mag,
+      v__1d_diff_mag_cargs,
+      v__1d_diff_mag_execute,
+      v__1d_diff_mag_outputs,
       v__1d_diff_mag_params,
 };

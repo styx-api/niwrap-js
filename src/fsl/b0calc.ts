@@ -12,7 +12,7 @@ const B0CALC_METADATA: Metadata = {
 
 
 interface B0calcParameters {
-    "__STYXTYPE__": "b0calc";
+    "@type": "fsl.b0calc";
     "input_file": InputPathType;
     "output_file": string;
     "zero_order_x"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface B0calcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "b0calc": b0calc_cargs,
+        "fsl.b0calc": b0calc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "b0calc": b0calc_outputs,
+        "fsl.b0calc": b0calc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,27 @@ interface B0calcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of input image (usually a tissue/air segmentation)
+ * @param output_file Filename of B0 output volume
+ * @param zero_order_x Value for zeroth-order x-gradient field (per mm); default=0
+ * @param zero_order_y Value for zeroth-order y-gradient field (per mm); default=0
+ * @param zero_order_z Value for zeroth-order z-gradient field (per mm); default=0
+ * @param b0_x Value for zeroth-order B0 field (x-component); default=0
+ * @param b0_y Value for zeroth-order B0 field (y-component); default=0
+ * @param b0_z Value for zeroth-order B0 field (z-component); default=1
+ * @param delta Delta value (chi_tissue - chi_air); default=-9.45e-6
+ * @param chi0 Value for susceptibility of air; default=+4e-7
+ * @param xyz_flag Calculate and save all 3 field components (i.e. x,y,z)
+ * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
+ * @param direct_conv Use direct (image space) convolution, not FFT
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function b0calc_params(
     input_file: InputPathType,
     output_file: string,
@@ -111,29 +132,8 @@ function b0calc_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): B0calcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of input image (usually a tissue/air segmentation)
-     * @param output_file Filename of B0 output volume
-     * @param zero_order_x Value for zeroth-order x-gradient field (per mm); default=0
-     * @param zero_order_y Value for zeroth-order y-gradient field (per mm); default=0
-     * @param zero_order_z Value for zeroth-order z-gradient field (per mm); default=0
-     * @param b0_x Value for zeroth-order B0 field (x-component); default=0
-     * @param b0_y Value for zeroth-order B0 field (y-component); default=0
-     * @param b0_z Value for zeroth-order B0 field (z-component); default=1
-     * @param delta Delta value (chi_tissue - chi_air); default=-9.45e-6
-     * @param chi0 Value for susceptibility of air; default=+4e-7
-     * @param xyz_flag Calculate and save all 3 field components (i.e. x,y,z)
-     * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
-     * @param direct_conv Use direct (image space) convolution, not FFT
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "b0calc" as const,
+        "@type": "fsl.b0calc" as const,
         "input_file": input_file,
         "output_file": output_file,
         "xyz_flag": xyz_flag,
@@ -172,18 +172,18 @@ function b0calc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function b0calc_cargs(
     params: B0calcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("b0calc");
     cargs.push(
@@ -264,18 +264,18 @@ function b0calc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function b0calc_outputs(
     params: B0calcParameters,
     execution: Execution,
 ): B0calcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: B0calcOutputs = {
         root: execution.outputFile("."),
         b0_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -287,22 +287,22 @@ function b0calc_outputs(
 }
 
 
+/**
+ * B0 field calculation program.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `B0calcOutputs`).
+ */
 function b0calc_execute(
     params: B0calcParameters,
     execution: Execution,
 ): B0calcOutputs {
-    /**
-     * B0 field calculation program.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `B0calcOutputs`).
-     */
     params = execution.params(params)
     const cargs = b0calc_cargs(params, execution)
     const ret = b0calc_outputs(params, execution)
@@ -311,6 +311,32 @@ function b0calc_execute(
 }
 
 
+/**
+ * B0 field calculation program.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Filename of input image (usually a tissue/air segmentation)
+ * @param output_file Filename of B0 output volume
+ * @param zero_order_x Value for zeroth-order x-gradient field (per mm); default=0
+ * @param zero_order_y Value for zeroth-order y-gradient field (per mm); default=0
+ * @param zero_order_z Value for zeroth-order z-gradient field (per mm); default=0
+ * @param b0_x Value for zeroth-order B0 field (x-component); default=0
+ * @param b0_y Value for zeroth-order B0 field (y-component); default=0
+ * @param b0_z Value for zeroth-order B0 field (z-component); default=1
+ * @param delta Delta value (chi_tissue - chi_air); default=-9.45e-6
+ * @param chi0 Value for susceptibility of air; default=+4e-7
+ * @param xyz_flag Calculate and save all 3 field components (i.e. x,y,z)
+ * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
+ * @param direct_conv Use direct (image space) convolution, not FFT
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `B0calcOutputs`).
+ */
 function b0calc(
     input_file: InputPathType,
     output_file: string,
@@ -329,32 +355,6 @@ function b0calc(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): B0calcOutputs {
-    /**
-     * B0 field calculation program.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Filename of input image (usually a tissue/air segmentation)
-     * @param output_file Filename of B0 output volume
-     * @param zero_order_x Value for zeroth-order x-gradient field (per mm); default=0
-     * @param zero_order_y Value for zeroth-order y-gradient field (per mm); default=0
-     * @param zero_order_z Value for zeroth-order z-gradient field (per mm); default=0
-     * @param b0_x Value for zeroth-order B0 field (x-component); default=0
-     * @param b0_y Value for zeroth-order B0 field (y-component); default=0
-     * @param b0_z Value for zeroth-order B0 field (z-component); default=1
-     * @param delta Delta value (chi_tissue - chi_air); default=-9.45e-6
-     * @param chi0 Value for susceptibility of air; default=+4e-7
-     * @param xyz_flag Calculate and save all 3 field components (i.e. x,y,z)
-     * @param extend_boundary Relative proportion to extend voxels at boundary; default=1
-     * @param direct_conv Use direct (image space) convolution, not FFT
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `B0calcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(B0CALC_METADATA);
     const params = b0calc_params(input_file, output_file, zero_order_x, zero_order_y, zero_order_z, b0_x, b0_y, b0_z, delta, chi0, xyz_flag, extend_boundary, direct_conv, verbose_flag, help_flag)
@@ -367,5 +367,8 @@ export {
       B0calcOutputs,
       B0calcParameters,
       b0calc,
+      b0calc_cargs,
+      b0calc_execute,
+      b0calc_outputs,
       b0calc_params,
 };

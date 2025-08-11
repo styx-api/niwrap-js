@@ -12,14 +12,14 @@ const LABELSTATS_METADATA: Metadata = {
 
 
 interface LabelstatsConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.labelstats.config";
     "key": string;
     "value": string;
 }
 
 
 interface LabelstatsParameters {
-    "__STYXTYPE__": "labelstats";
+    "@type": "mrtrix.labelstats";
     "output"?: string | null | undefined;
     "voxelspace": boolean;
     "info": boolean;
@@ -34,54 +34,54 @@ interface LabelstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "labelstats": labelstats_cargs,
-        "config": labelstats_config_cargs,
+        "mrtrix.labelstats": labelstats_cargs,
+        "mrtrix.labelstats.config": labelstats_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function labelstats_config_params(
     key: string,
     value: string,
 ): LabelstatsConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.labelstats.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function labelstats_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labelstats_config_cargs(
     params: LabelstatsConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -122,6 +122,23 @@ interface LabelstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input label image
+ * @param output output only the field specified; options are: mass,centre
+ * @param voxelspace report parcel centres of mass in voxel space rather than scanner space
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function labelstats_params(
     input: InputPathType,
     output: string | null = null,
@@ -135,25 +152,8 @@ function labelstats_params(
     help: boolean = false,
     version: boolean = false,
 ): LabelstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input label image
-     * @param output output only the field specified; options are: mass,centre
-     * @param voxelspace report parcel centres of mass in voxel space rather than scanner space
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "labelstats" as const,
+        "@type": "mrtrix.labelstats" as const,
         "voxelspace": voxelspace,
         "info": info,
         "quiet": quiet,
@@ -176,18 +176,18 @@ function labelstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labelstats_cargs(
     params: LabelstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("labelstats");
     if ((params["output"] ?? null) !== null) {
@@ -218,7 +218,7 @@ function labelstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -231,18 +231,18 @@ function labelstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function labelstats_outputs(
     params: LabelstatsParameters,
     execution: Execution,
 ): LabelstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelstatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -250,28 +250,28 @@ function labelstats_outputs(
 }
 
 
+/**
+ * Compute statistics of parcels within a label image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
+ */
 function labelstats_execute(
     params: LabelstatsParameters,
     execution: Execution,
 ): LabelstatsOutputs {
-    /**
-     * Compute statistics of parcels within a label image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = labelstats_cargs(params, execution)
     const ret = labelstats_outputs(params, execution)
@@ -280,6 +280,34 @@ function labelstats_execute(
 }
 
 
+/**
+ * Compute statistics of parcels within a label image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input label image
+ * @param output output only the field specified; options are: mass,centre
+ * @param voxelspace report parcel centres of mass in voxel space rather than scanner space
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
+ */
 function labelstats(
     input: InputPathType,
     output: string | null = null,
@@ -294,34 +322,6 @@ function labelstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): LabelstatsOutputs {
-    /**
-     * Compute statistics of parcels within a label image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input label image
-     * @param output output only the field specified; options are: mass,centre
-     * @param voxelspace report parcel centres of mass in voxel space rather than scanner space
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABELSTATS_METADATA);
     const params = labelstats_params(input, output, voxelspace, info, quiet, debug, force, nthreads, config, help, version)
@@ -335,6 +335,10 @@ export {
       LabelstatsOutputs,
       LabelstatsParameters,
       labelstats,
+      labelstats_cargs,
+      labelstats_config_cargs,
       labelstats_config_params,
+      labelstats_execute,
+      labelstats_outputs,
       labelstats_params,
 };

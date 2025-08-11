@@ -12,7 +12,7 @@ const RESAMPLE_IMAGE_METADATA: Metadata = {
 
 
 interface ResampleImageParameters {
-    "__STYXTYPE__": "ResampleImage";
+    "@type": "ants.ResampleImage";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
@@ -22,35 +22,35 @@ interface ResampleImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ResampleImage": resample_image_cargs,
+        "ants.ResampleImage": resample_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ResampleImage": resample_image_outputs,
+        "ants.ResampleImage": resample_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface ResampleImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimension of the image to be resampled.
+ * @param input_image The image file to be resampled.
+ * @param output_image The output image file after resampling.
+ * @param size_spacing Resampling size and spacing specification, e.g., 'MxNxO'.
+ * @param interpolate_type Specifies the interpolation type. 0: linear (default), 1: nearest-neighbor, 2: gaussian, 3: windowedSinc, 4: B-Spline.
+ * @param pixeltype Specifies the pixel type of the output image. 0: char, 1: unsigned char, 2: short, 3: unsigned short, 4: int, 5: unsigned int, 6: float (default), 7: double.
+ *
+ * @returns Parameter dictionary
+ */
 function resample_image_params(
     image_dimension: number,
     input_image: InputPathType,
@@ -81,20 +93,8 @@ function resample_image_params(
     interpolate_type: "0" | "1" | "2" | "3" | "4" | null = null,
     pixeltype: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null = null,
 ): ResampleImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimension of the image to be resampled.
-     * @param input_image The image file to be resampled.
-     * @param output_image The output image file after resampling.
-     * @param size_spacing Resampling size and spacing specification, e.g., 'MxNxO'.
-     * @param interpolate_type Specifies the interpolation type. 0: linear (default), 1: nearest-neighbor, 2: gaussian, 3: windowedSinc, 4: B-Spline.
-     * @param pixeltype Specifies the pixel type of the output image. 0: char, 1: unsigned char, 2: short, 3: unsigned short, 4: int, 5: unsigned int, 6: float (default), 7: double.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ResampleImage" as const,
+        "@type": "ants.ResampleImage" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -110,18 +110,18 @@ function resample_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function resample_image_cargs(
     params: ResampleImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ResampleImage");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -138,18 +138,18 @@ function resample_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function resample_image_outputs(
     params: ResampleImageParameters,
     execution: Execution,
 ): ResampleImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ResampleImageOutputs = {
         root: execution.outputFile("."),
         resampled_output_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -158,22 +158,22 @@ function resample_image_outputs(
 }
 
 
+/**
+ * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
+ */
 function resample_image_execute(
     params: ResampleImageParameters,
     execution: Execution,
 ): ResampleImageOutputs {
-    /**
-     * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = resample_image_cargs(params, execution)
     const ret = resample_image_outputs(params, execution)
@@ -182,6 +182,23 @@ function resample_image_execute(
 }
 
 
+/**
+ * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimension of the image to be resampled.
+ * @param input_image The image file to be resampled.
+ * @param output_image The output image file after resampling.
+ * @param size_spacing Resampling size and spacing specification, e.g., 'MxNxO'.
+ * @param interpolate_type Specifies the interpolation type. 0: linear (default), 1: nearest-neighbor, 2: gaussian, 3: windowedSinc, 4: B-Spline.
+ * @param pixeltype Specifies the pixel type of the output image. 0: char, 1: unsigned char, 2: short, 3: unsigned short, 4: int, 5: unsigned int, 6: float (default), 7: double.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
+ */
 function resample_image(
     image_dimension: number,
     input_image: InputPathType,
@@ -191,23 +208,6 @@ function resample_image(
     pixeltype: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null = null,
     runner: Runner | null = null,
 ): ResampleImageOutputs {
-    /**
-     * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimension of the image to be resampled.
-     * @param input_image The image file to be resampled.
-     * @param output_image The output image file after resampling.
-     * @param size_spacing Resampling size and spacing specification, e.g., 'MxNxO'.
-     * @param interpolate_type Specifies the interpolation type. 0: linear (default), 1: nearest-neighbor, 2: gaussian, 3: windowedSinc, 4: B-Spline.
-     * @param pixeltype Specifies the pixel type of the output image. 0: char, 1: unsigned char, 2: short, 3: unsigned short, 4: int, 5: unsigned int, 6: float (default), 7: double.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RESAMPLE_IMAGE_METADATA);
     const params = resample_image_params(image_dimension, input_image, output_image, size_spacing, interpolate_type, pixeltype)
@@ -220,5 +220,8 @@ export {
       ResampleImageOutputs,
       ResampleImageParameters,
       resample_image,
+      resample_image_cargs,
+      resample_image_execute,
+      resample_image_outputs,
       resample_image_params,
 };

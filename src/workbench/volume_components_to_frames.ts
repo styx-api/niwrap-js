@@ -12,41 +12,41 @@ const VOLUME_COMPONENTS_TO_FRAMES_METADATA: Metadata = {
 
 
 interface VolumeComponentsToFramesParameters {
-    "__STYXTYPE__": "volume-components-to-frames";
+    "@type": "workbench.volume-components-to-frames";
     "input": InputPathType;
     "output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-components-to-frames": volume_components_to_frames_cargs,
+        "workbench.volume-components-to-frames": volume_components_to_frames_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-components-to-frames": volume_components_to_frames_outputs,
+        "workbench.volume-components-to-frames": volume_components_to_frames_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VolumeComponentsToFramesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the RGB/complex-type volume
+ * @param output the input volume converted to multiple frames of scalar type
+ *
+ * @returns Parameter dictionary
+ */
 function volume_components_to_frames_params(
     input: InputPathType,
     output: string,
 ): VolumeComponentsToFramesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the RGB/complex-type volume
-     * @param output the input volume converted to multiple frames of scalar type
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-components-to-frames" as const,
+        "@type": "workbench.volume-components-to-frames" as const,
         "input": input,
         "output": output,
     };
@@ -90,18 +90,18 @@ function volume_components_to_frames_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_components_to_frames_cargs(
     params: VolumeComponentsToFramesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-components-to-frames");
@@ -111,18 +111,18 @@ function volume_components_to_frames_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_components_to_frames_outputs(
     params: VolumeComponentsToFramesParameters,
     execution: Execution,
 ): VolumeComponentsToFramesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeComponentsToFramesOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -131,24 +131,24 @@ function volume_components_to_frames_outputs(
 }
 
 
+/**
+ * Convert rgb/complex volume to frames.
+ *
+ * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
+ */
 function volume_components_to_frames_execute(
     params: VolumeComponentsToFramesParameters,
     execution: Execution,
 ): VolumeComponentsToFramesOutputs {
-    /**
-     * Convert rgb/complex volume to frames.
-     * 
-     * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_components_to_frames_cargs(params, execution)
     const ret = volume_components_to_frames_outputs(params, execution)
@@ -157,26 +157,26 @@ function volume_components_to_frames_execute(
 }
 
 
+/**
+ * Convert rgb/complex volume to frames.
+ *
+ * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input the RGB/complex-type volume
+ * @param output the input volume converted to multiple frames of scalar type
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
+ */
 function volume_components_to_frames(
     input: InputPathType,
     output: string,
     runner: Runner | null = null,
 ): VolumeComponentsToFramesOutputs {
-    /**
-     * Convert rgb/complex volume to frames.
-     * 
-     * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input the RGB/complex-type volume
-     * @param output the input volume converted to multiple frames of scalar type
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_COMPONENTS_TO_FRAMES_METADATA);
     const params = volume_components_to_frames_params(input, output)
@@ -189,5 +189,8 @@ export {
       VolumeComponentsToFramesOutputs,
       VolumeComponentsToFramesParameters,
       volume_components_to_frames,
+      volume_components_to_frames_cargs,
+      volume_components_to_frames_execute,
+      volume_components_to_frames_outputs,
       volume_components_to_frames_params,
 };

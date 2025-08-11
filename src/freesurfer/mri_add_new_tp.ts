@@ -12,39 +12,39 @@ const MRI_ADD_NEW_TP_METADATA: Metadata = {
 
 
 interface MriAddNewTpParameters {
-    "__STYXTYPE__": "mri_add_new_tp";
+    "@type": "freesurfer.mri_add_new_tp";
     "base_id": string;
     "newtp_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_add_new_tp": mri_add_new_tp_cargs,
+        "freesurfer.mri_add_new_tp": mri_add_new_tp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MriAddNewTpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_id The ID of the base template.
+ * @param newtp_id The ID of the new time point to be added.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_add_new_tp_params(
     base_id: string,
     newtp_id: string,
 ): MriAddNewTpParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_id The ID of the base template.
-     * @param newtp_id The ID of the new time point to be added.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_add_new_tp" as const,
+        "@type": "freesurfer.mri_add_new_tp" as const,
         "base_id": base_id,
         "newtp_id": newtp_id,
     };
@@ -85,18 +85,18 @@ function mri_add_new_tp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_add_new_tp_cargs(
     params: MriAddNewTpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_add_new_tp");
     cargs.push((params["base_id"] ?? null));
@@ -105,18 +105,18 @@ function mri_add_new_tp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_add_new_tp_outputs(
     params: MriAddNewTpParameters,
     execution: Execution,
 ): MriAddNewTpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAddNewTpOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mri_add_new_tp_outputs(
 }
 
 
+/**
+ * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
+ */
 function mri_add_new_tp_execute(
     params: MriAddNewTpParameters,
     execution: Execution,
 ): MriAddNewTpOutputs {
-    /**
-     * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_add_new_tp_cargs(params, execution)
     const ret = mri_add_new_tp_outputs(params, execution)
@@ -148,24 +148,24 @@ function mri_add_new_tp_execute(
 }
 
 
+/**
+ * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_id The ID of the base template.
+ * @param newtp_id The ID of the new time point to be added.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
+ */
 function mri_add_new_tp(
     base_id: string,
     newtp_id: string,
     runner: Runner | null = null,
 ): MriAddNewTpOutputs {
-    /**
-     * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_id The ID of the base template.
-     * @param newtp_id The ID of the new time point to be added.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ADD_NEW_TP_METADATA);
     const params = mri_add_new_tp_params(base_id, newtp_id)
@@ -178,5 +178,8 @@ export {
       MriAddNewTpOutputs,
       MriAddNewTpParameters,
       mri_add_new_tp,
+      mri_add_new_tp_cargs,
+      mri_add_new_tp_execute,
+      mri_add_new_tp_outputs,
       mri_add_new_tp_params,
 };

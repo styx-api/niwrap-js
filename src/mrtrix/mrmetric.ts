@@ -12,14 +12,14 @@ const MRMETRIC_METADATA: Metadata = {
 
 
 interface MrmetricConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrmetric.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrmetricParameters {
-    "__STYXTYPE__": "mrmetric";
+    "@type": "mrtrix.mrmetric";
     "space"?: string | null | undefined;
     "interp"?: string | null | undefined;
     "metric"?: string | null | undefined;
@@ -40,54 +40,54 @@ interface MrmetricParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrmetric": mrmetric_cargs,
-        "config": mrmetric_config_cargs,
+        "mrtrix.mrmetric": mrmetric_cargs,
+        "mrtrix.mrmetric.config": mrmetric_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrmetric_config_params(
     key: string,
     value: string,
 ): MrmetricConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrmetric.config" as const,
         "key": key,
         "value": value,
     };
@@ -95,18 +95,18 @@ function mrmetric_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrmetric_config_cargs(
     params: MrmetricConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,29 @@ interface MrmetricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image1 the first input image.
+ * @param image2 the second input image.
+ * @param space voxel (default): per voxel image1: scanner space of image 1 image2: scanner space of image 2 average: scanner space of the average affine transformation of image 1 and 2 
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: linear).
+ * @param metric define the dissimilarity metric used to calculate the cost. Choices: diff (squared differences), cc (non-normalised negative cross correlation aka negative cross covariance). Default: diff). cc is only implemented for -space average and -interp linear and cubic.
+ * @param mask1 mask for image 1
+ * @param mask2 mask for image 2
+ * @param nonormalisation do not normalise the dissimilarity metric to the number of voxels.
+ * @param overlap output number of voxels that were used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrmetric_params(
     image1: InputPathType,
     image2: InputPathType,
@@ -147,31 +170,8 @@ function mrmetric_params(
     help: boolean = false,
     version: boolean = false,
 ): MrmetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param image1 the first input image.
-     * @param image2 the second input image.
-     * @param space voxel (default): per voxel image1: scanner space of image 1 image2: scanner space of image 2 average: scanner space of the average affine transformation of image 1 and 2 
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: linear).
-     * @param metric define the dissimilarity metric used to calculate the cost. Choices: diff (squared differences), cc (non-normalised negative cross correlation aka negative cross covariance). Default: diff). cc is only implemented for -space average and -interp linear and cubic.
-     * @param mask1 mask for image 1
-     * @param mask2 mask for image 2
-     * @param nonormalisation do not normalise the dissimilarity metric to the number of voxels.
-     * @param overlap output number of voxels that were used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrmetric" as const,
+        "@type": "mrtrix.mrmetric" as const,
         "nonormalisation": nonormalisation,
         "overlap": overlap,
         "info": info,
@@ -208,18 +208,18 @@ function mrmetric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrmetric_cargs(
     params: MrmetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrmetric");
     if ((params["space"] ?? null) !== null) {
@@ -277,7 +277,7 @@ function mrmetric_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -291,18 +291,18 @@ function mrmetric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrmetric_outputs(
     params: MrmetricParameters,
     execution: Execution,
 ): MrmetricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrmetricOutputs = {
         root: execution.outputFile("."),
     };
@@ -310,28 +310,28 @@ function mrmetric_outputs(
 }
 
 
+/**
+ * Computes a dissimilarity metric between two images.
+ *
+ * Currently only the mean squared difference is fully implemented.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
+ */
 function mrmetric_execute(
     params: MrmetricParameters,
     execution: Execution,
 ): MrmetricOutputs {
-    /**
-     * Computes a dissimilarity metric between two images.
-     * 
-     * Currently only the mean squared difference is fully implemented.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrmetric_cargs(params, execution)
     const ret = mrmetric_outputs(params, execution)
@@ -340,6 +340,40 @@ function mrmetric_execute(
 }
 
 
+/**
+ * Computes a dissimilarity metric between two images.
+ *
+ * Currently only the mean squared difference is fully implemented.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image1 the first input image.
+ * @param image2 the second input image.
+ * @param space voxel (default): per voxel image1: scanner space of image 1 image2: scanner space of image 2 average: scanner space of the average affine transformation of image 1 and 2 
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: linear).
+ * @param metric define the dissimilarity metric used to calculate the cost. Choices: diff (squared differences), cc (non-normalised negative cross correlation aka negative cross covariance). Default: diff). cc is only implemented for -space average and -interp linear and cubic.
+ * @param mask1 mask for image 1
+ * @param mask2 mask for image 2
+ * @param nonormalisation do not normalise the dissimilarity metric to the number of voxels.
+ * @param overlap output number of voxels that were used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
+ */
 function mrmetric(
     image1: InputPathType,
     image2: InputPathType,
@@ -360,40 +394,6 @@ function mrmetric(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrmetricOutputs {
-    /**
-     * Computes a dissimilarity metric between two images.
-     * 
-     * Currently only the mean squared difference is fully implemented.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image1 the first input image.
-     * @param image2 the second input image.
-     * @param space voxel (default): per voxel image1: scanner space of image 1 image2: scanner space of image 2 average: scanner space of the average affine transformation of image 1 and 2 
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: linear).
-     * @param metric define the dissimilarity metric used to calculate the cost. Choices: diff (squared differences), cc (non-normalised negative cross correlation aka negative cross covariance). Default: diff). cc is only implemented for -space average and -interp linear and cubic.
-     * @param mask1 mask for image 1
-     * @param mask2 mask for image 2
-     * @param nonormalisation do not normalise the dissimilarity metric to the number of voxels.
-     * @param overlap output number of voxels that were used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRMETRIC_METADATA);
     const params = mrmetric_params(image1, image2, space, interp, metric, mask1, mask2, nonormalisation, overlap, info, quiet, debug, force, nthreads, config, help, version)
@@ -407,6 +407,10 @@ export {
       MrmetricOutputs,
       MrmetricParameters,
       mrmetric,
+      mrmetric_cargs,
+      mrmetric_config_cargs,
       mrmetric_config_params,
+      mrmetric_execute,
+      mrmetric_outputs,
       mrmetric_params,
 };

@@ -12,7 +12,7 @@ const FAT_PROC_AXIALIZE_ANAT_METADATA: Metadata = {
 
 
 interface FatProcAxializeAnatParameters {
-    "__STYXTYPE__": "fat_proc_axialize_anat";
+    "@type": "afni.fat_proc_axialize_anat";
     "in_file": InputPathType;
     "ref_file": InputPathType;
     "prefix": string;
@@ -38,35 +38,35 @@ interface FatProcAxializeAnatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_axialize_anat": fat_proc_axialize_anat_cargs,
+        "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_axialize_anat": fat_proc_axialize_anat_outputs,
+        "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,34 @@ interface FatProcAxializeAnatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input anatomical volume full name
+ * @param ref_file Reference volume full name, such as TT or MNI
+ * @param prefix Output prefix for files and snapshots
+ * @param mode_t2w Switch for T2-weighted image processing
+ * @param mode_t1w Switch for T1-weighted image processing
+ * @param workdir Name of the working subdirectory in the output directory
+ * @param out_match_ref Match the final output volume space FOV and spatial resolution to the reference file
+ * @param do_ceil_out Apply a ceiling based on the 98%ile value within an automasked volume
+ * @param extra_al_wtmask Extra weight mask to emphasize specific parts for alignment
+ * @param extra_al_cost Specify a cost function for 3dAllineate to use (default 'lpa')
+ * @param extra_al_opts Extra options for 3dAllineate when applying the warp
+ * @param focus_mask Input mask to focus processing and alignment
+ * @param focus_by_ss Make a mask by simply skullstripping input data set
+ * @param remove_inf_sli Remove a number of slices from the inferior part of the FOV
+ * @param pre_align_center_mass Pre-align the centers of mass of the volumes
+ * @param pre_center_mass Pre-recenter input center of mass to (0, 0, 0)
+ * @param post_lr_symm Apply post-alignment left-right symmetrization
+ * @param no_pre_lr_symm Turn off pre-alignment left-right symmetrization
+ * @param no_clean Do not remove working directory '__WORKING_axialize_anat'
+ * @param qc_ulay_range Provide a min (UMIN) and max (UMAX) range for underlay grayscale bar
+ * @param no_qc_view Turn off default QC image saving/viewing
+ * @param qc_prefix Provide a prefix for QC outputs separate from the main prefix
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_axialize_anat_params(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -117,36 +145,8 @@ function fat_proc_axialize_anat_params(
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
 ): FatProcAxializeAnatParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input anatomical volume full name
-     * @param ref_file Reference volume full name, such as TT or MNI
-     * @param prefix Output prefix for files and snapshots
-     * @param mode_t2w Switch for T2-weighted image processing
-     * @param mode_t1w Switch for T1-weighted image processing
-     * @param workdir Name of the working subdirectory in the output directory
-     * @param out_match_ref Match the final output volume space FOV and spatial resolution to the reference file
-     * @param do_ceil_out Apply a ceiling based on the 98%ile value within an automasked volume
-     * @param extra_al_wtmask Extra weight mask to emphasize specific parts for alignment
-     * @param extra_al_cost Specify a cost function for 3dAllineate to use (default 'lpa')
-     * @param extra_al_opts Extra options for 3dAllineate when applying the warp
-     * @param focus_mask Input mask to focus processing and alignment
-     * @param focus_by_ss Make a mask by simply skullstripping input data set
-     * @param remove_inf_sli Remove a number of slices from the inferior part of the FOV
-     * @param pre_align_center_mass Pre-align the centers of mass of the volumes
-     * @param pre_center_mass Pre-recenter input center of mass to (0, 0, 0)
-     * @param post_lr_symm Apply post-alignment left-right symmetrization
-     * @param no_pre_lr_symm Turn off pre-alignment left-right symmetrization
-     * @param no_clean Do not remove working directory '__WORKING_axialize_anat'
-     * @param qc_ulay_range Provide a min (UMIN) and max (UMAX) range for underlay grayscale bar
-     * @param no_qc_view Turn off default QC image saving/viewing
-     * @param qc_prefix Provide a prefix for QC outputs separate from the main prefix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_axialize_anat" as const,
+        "@type": "afni.fat_proc_axialize_anat" as const,
         "in_file": in_file,
         "ref_file": ref_file,
         "prefix": prefix,
@@ -190,18 +190,18 @@ function fat_proc_axialize_anat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_axialize_anat_cargs(
     params: FatProcAxializeAnatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_axialize_anat");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -292,18 +292,18 @@ function fat_proc_axialize_anat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_axialize_anat_outputs(
     params: FatProcAxializeAnatParameters,
     execution: Execution,
 ): FatProcAxializeAnatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcAxializeAnatOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -313,22 +313,22 @@ function fat_proc_axialize_anat_outputs(
 }
 
 
+/**
+ * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
+ */
 function fat_proc_axialize_anat_execute(
     params: FatProcAxializeAnatParameters,
     execution: Execution,
 ): FatProcAxializeAnatOutputs {
-    /**
-     * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_axialize_anat_cargs(params, execution)
     const ret = fat_proc_axialize_anat_outputs(params, execution)
@@ -337,6 +337,39 @@ function fat_proc_axialize_anat_execute(
 }
 
 
+/**
+ * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input anatomical volume full name
+ * @param ref_file Reference volume full name, such as TT or MNI
+ * @param prefix Output prefix for files and snapshots
+ * @param mode_t2w Switch for T2-weighted image processing
+ * @param mode_t1w Switch for T1-weighted image processing
+ * @param workdir Name of the working subdirectory in the output directory
+ * @param out_match_ref Match the final output volume space FOV and spatial resolution to the reference file
+ * @param do_ceil_out Apply a ceiling based on the 98%ile value within an automasked volume
+ * @param extra_al_wtmask Extra weight mask to emphasize specific parts for alignment
+ * @param extra_al_cost Specify a cost function for 3dAllineate to use (default 'lpa')
+ * @param extra_al_opts Extra options for 3dAllineate when applying the warp
+ * @param focus_mask Input mask to focus processing and alignment
+ * @param focus_by_ss Make a mask by simply skullstripping input data set
+ * @param remove_inf_sli Remove a number of slices from the inferior part of the FOV
+ * @param pre_align_center_mass Pre-align the centers of mass of the volumes
+ * @param pre_center_mass Pre-recenter input center of mass to (0, 0, 0)
+ * @param post_lr_symm Apply post-alignment left-right symmetrization
+ * @param no_pre_lr_symm Turn off pre-alignment left-right symmetrization
+ * @param no_clean Do not remove working directory '__WORKING_axialize_anat'
+ * @param qc_ulay_range Provide a min (UMIN) and max (UMAX) range for underlay grayscale bar
+ * @param no_qc_view Turn off default QC image saving/viewing
+ * @param qc_prefix Provide a prefix for QC outputs separate from the main prefix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
+ */
 function fat_proc_axialize_anat(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -362,39 +395,6 @@ function fat_proc_axialize_anat(
     qc_prefix: string | null = null,
     runner: Runner | null = null,
 ): FatProcAxializeAnatOutputs {
-    /**
-     * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input anatomical volume full name
-     * @param ref_file Reference volume full name, such as TT or MNI
-     * @param prefix Output prefix for files and snapshots
-     * @param mode_t2w Switch for T2-weighted image processing
-     * @param mode_t1w Switch for T1-weighted image processing
-     * @param workdir Name of the working subdirectory in the output directory
-     * @param out_match_ref Match the final output volume space FOV and spatial resolution to the reference file
-     * @param do_ceil_out Apply a ceiling based on the 98%ile value within an automasked volume
-     * @param extra_al_wtmask Extra weight mask to emphasize specific parts for alignment
-     * @param extra_al_cost Specify a cost function for 3dAllineate to use (default 'lpa')
-     * @param extra_al_opts Extra options for 3dAllineate when applying the warp
-     * @param focus_mask Input mask to focus processing and alignment
-     * @param focus_by_ss Make a mask by simply skullstripping input data set
-     * @param remove_inf_sli Remove a number of slices from the inferior part of the FOV
-     * @param pre_align_center_mass Pre-align the centers of mass of the volumes
-     * @param pre_center_mass Pre-recenter input center of mass to (0, 0, 0)
-     * @param post_lr_symm Apply post-alignment left-right symmetrization
-     * @param no_pre_lr_symm Turn off pre-alignment left-right symmetrization
-     * @param no_clean Do not remove working directory '__WORKING_axialize_anat'
-     * @param qc_ulay_range Provide a min (UMIN) and max (UMAX) range for underlay grayscale bar
-     * @param no_qc_view Turn off default QC image saving/viewing
-     * @param qc_prefix Provide a prefix for QC outputs separate from the main prefix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_AXIALIZE_ANAT_METADATA);
     const params = fat_proc_axialize_anat_params(in_file, ref_file, prefix, mode_t2w, mode_t1w, workdir, out_match_ref, do_ceil_out, extra_al_wtmask, extra_al_cost, extra_al_opts, focus_mask, focus_by_ss, remove_inf_sli, pre_align_center_mass, pre_center_mass, post_lr_symm, no_pre_lr_symm, no_clean, qc_ulay_range, no_qc_view, qc_prefix)
@@ -407,5 +407,8 @@ export {
       FatProcAxializeAnatOutputs,
       FatProcAxializeAnatParameters,
       fat_proc_axialize_anat,
+      fat_proc_axialize_anat_cargs,
+      fat_proc_axialize_anat_execute,
+      fat_proc_axialize_anat_outputs,
       fat_proc_axialize_anat_params,
 };

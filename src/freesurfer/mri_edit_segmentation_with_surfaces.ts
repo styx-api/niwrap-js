@@ -12,7 +12,7 @@ const MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA: Metadata = {
 
 
 interface MriEditSegmentationWithSurfacesParameters {
-    "__STYXTYPE__": "mri_edit_segmentation_with_surfaces";
+    "@type": "freesurfer.mri_edit_segmentation_with_surfaces";
     "aseg_name": InputPathType;
     "surface_dir": string;
     "norm_volume": InputPathType;
@@ -25,35 +25,35 @@ interface MriEditSegmentationWithSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_cargs,
+        "freesurfer.mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_outputs,
+        "freesurfer.mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MriEditSegmentationWithSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param aseg_name The aseg file to be edited
+ * @param surface_dir Directory containing surface files
+ * @param norm_volume Normalized volume file
+ * @param output_volume Output volume file
+ * @param label_file Limit calculations to specified label
+ * @param hypo_flag Turn hypointensity editing on/off (1=on, 0=off)
+ * @param cerebellum_flag Turn cerebellum editing on/off (1=on, 0=off)
+ * @param cortex_flag Turn cortex editing on/off (1=on, 0=off)
+ * @param annotation_file Compute properties for each label in the annotation file separately
+ *
+ * @returns Parameter dictionary
+ */
 function mri_edit_segmentation_with_surfaces_params(
     aseg_name: InputPathType,
     surface_dir: string,
@@ -87,23 +102,8 @@ function mri_edit_segmentation_with_surfaces_params(
     cortex_flag: "1" | "0" | null = null,
     annotation_file: InputPathType | null = null,
 ): MriEditSegmentationWithSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param aseg_name The aseg file to be edited
-     * @param surface_dir Directory containing surface files
-     * @param norm_volume Normalized volume file
-     * @param output_volume Output volume file
-     * @param label_file Limit calculations to specified label
-     * @param hypo_flag Turn hypointensity editing on/off (1=on, 0=off)
-     * @param cerebellum_flag Turn cerebellum editing on/off (1=on, 0=off)
-     * @param cortex_flag Turn cortex editing on/off (1=on, 0=off)
-     * @param annotation_file Compute properties for each label in the annotation file separately
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_edit_segmentation_with_surfaces" as const,
+        "@type": "freesurfer.mri_edit_segmentation_with_surfaces" as const,
         "aseg_name": aseg_name,
         "surface_dir": surface_dir,
         "norm_volume": norm_volume,
@@ -128,18 +128,18 @@ function mri_edit_segmentation_with_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_edit_segmentation_with_surfaces_cargs(
     params: MriEditSegmentationWithSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_edit_segmentation_with_surfaces");
     cargs.push(execution.inputFile((params["aseg_name"] ?? null)));
@@ -180,18 +180,18 @@ function mri_edit_segmentation_with_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_edit_segmentation_with_surfaces_outputs(
     params: MriEditSegmentationWithSurfacesParameters,
     execution: Execution,
 ): MriEditSegmentationWithSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEditSegmentationWithSurfacesOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -200,22 +200,22 @@ function mri_edit_segmentation_with_surfaces_outputs(
 }
 
 
+/**
+ * This program edits an aseg with the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
+ */
 function mri_edit_segmentation_with_surfaces_execute(
     params: MriEditSegmentationWithSurfacesParameters,
     execution: Execution,
 ): MriEditSegmentationWithSurfacesOutputs {
-    /**
-     * This program edits an aseg with the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_edit_segmentation_with_surfaces_cargs(params, execution)
     const ret = mri_edit_segmentation_with_surfaces_outputs(params, execution)
@@ -224,6 +224,26 @@ function mri_edit_segmentation_with_surfaces_execute(
 }
 
 
+/**
+ * This program edits an aseg with the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param aseg_name The aseg file to be edited
+ * @param surface_dir Directory containing surface files
+ * @param norm_volume Normalized volume file
+ * @param output_volume Output volume file
+ * @param label_file Limit calculations to specified label
+ * @param hypo_flag Turn hypointensity editing on/off (1=on, 0=off)
+ * @param cerebellum_flag Turn cerebellum editing on/off (1=on, 0=off)
+ * @param cortex_flag Turn cortex editing on/off (1=on, 0=off)
+ * @param annotation_file Compute properties for each label in the annotation file separately
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
+ */
 function mri_edit_segmentation_with_surfaces(
     aseg_name: InputPathType,
     surface_dir: string,
@@ -236,26 +256,6 @@ function mri_edit_segmentation_with_surfaces(
     annotation_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriEditSegmentationWithSurfacesOutputs {
-    /**
-     * This program edits an aseg with the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param aseg_name The aseg file to be edited
-     * @param surface_dir Directory containing surface files
-     * @param norm_volume Normalized volume file
-     * @param output_volume Output volume file
-     * @param label_file Limit calculations to specified label
-     * @param hypo_flag Turn hypointensity editing on/off (1=on, 0=off)
-     * @param cerebellum_flag Turn cerebellum editing on/off (1=on, 0=off)
-     * @param cortex_flag Turn cortex editing on/off (1=on, 0=off)
-     * @param annotation_file Compute properties for each label in the annotation file separately
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA);
     const params = mri_edit_segmentation_with_surfaces_params(aseg_name, surface_dir, norm_volume, output_volume, label_file, hypo_flag, cerebellum_flag, cortex_flag, annotation_file)
@@ -268,5 +268,8 @@ export {
       MriEditSegmentationWithSurfacesOutputs,
       MriEditSegmentationWithSurfacesParameters,
       mri_edit_segmentation_with_surfaces,
+      mri_edit_segmentation_with_surfaces_cargs,
+      mri_edit_segmentation_with_surfaces_execute,
+      mri_edit_segmentation_with_surfaces_outputs,
       mri_edit_segmentation_with_surfaces_params,
 };

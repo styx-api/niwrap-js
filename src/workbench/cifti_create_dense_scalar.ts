@@ -12,35 +12,35 @@ const CIFTI_CREATE_DENSE_SCALAR_METADATA: Metadata = {
 
 
 interface CiftiCreateDenseScalarVolumeParameters {
-    "__STYXTYPE__": "volume";
+    "@type": "workbench.cifti-create-dense-scalar.volume";
     "volume_data": InputPathType;
     "structure_label_volume": InputPathType;
 }
 
 
 interface CiftiCreateDenseScalarLeftMetricParameters {
-    "__STYXTYPE__": "left_metric";
+    "@type": "workbench.cifti-create-dense-scalar.left_metric";
     "metric": InputPathType;
     "opt_roi_left_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateDenseScalarRightMetricParameters {
-    "__STYXTYPE__": "right_metric";
+    "@type": "workbench.cifti-create-dense-scalar.right_metric";
     "metric": InputPathType;
     "opt_roi_right_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateDenseScalarCerebellumMetricParameters {
-    "__STYXTYPE__": "cerebellum_metric";
+    "@type": "workbench.cifti-create-dense-scalar.cerebellum_metric";
     "metric": InputPathType;
     "opt_roi_cerebellum_roi_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCreateDenseScalarParameters {
-    "__STYXTYPE__": "cifti-create-dense-scalar";
+    "@type": "workbench.cifti-create-dense-scalar";
     "cifti_out": string;
     "volume"?: CiftiCreateDenseScalarVolumeParameters | null | undefined;
     "left_metric"?: CiftiCreateDenseScalarLeftMetricParameters | null | undefined;
@@ -50,58 +50,58 @@ interface CiftiCreateDenseScalarParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-create-dense-scalar": cifti_create_dense_scalar_cargs,
-        "volume": cifti_create_dense_scalar_volume_cargs,
-        "left_metric": cifti_create_dense_scalar_left_metric_cargs,
-        "right_metric": cifti_create_dense_scalar_right_metric_cargs,
-        "cerebellum_metric": cifti_create_dense_scalar_cerebellum_metric_cargs,
+        "workbench.cifti-create-dense-scalar": cifti_create_dense_scalar_cargs,
+        "workbench.cifti-create-dense-scalar.volume": cifti_create_dense_scalar_volume_cargs,
+        "workbench.cifti-create-dense-scalar.left_metric": cifti_create_dense_scalar_left_metric_cargs,
+        "workbench.cifti-create-dense-scalar.right_metric": cifti_create_dense_scalar_right_metric_cargs,
+        "workbench.cifti-create-dense-scalar.cerebellum_metric": cifti_create_dense_scalar_cerebellum_metric_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-create-dense-scalar": cifti_create_dense_scalar_outputs,
+        "workbench.cifti-create-dense-scalar": cifti_create_dense_scalar_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_data volume file containing all voxel data for all volume structures
+ * @param structure_label_volume label volume file containing labels for cifti structures
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_scalar_volume_params(
     volume_data: InputPathType,
     structure_label_volume: InputPathType,
 ): CiftiCreateDenseScalarVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_data volume file containing all voxel data for all volume structures
-     * @param structure_label_volume label volume file containing labels for cifti structures
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume" as const,
+        "@type": "workbench.cifti-create-dense-scalar.volume" as const,
         "volume_data": volume_data,
         "structure_label_volume": structure_label_volume,
     };
@@ -109,18 +109,18 @@ function cifti_create_dense_scalar_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_scalar_volume_cargs(
     params: CiftiCreateDenseScalarVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume");
     cargs.push(execution.inputFile((params["volume_data"] ?? null)));
@@ -129,20 +129,20 @@ function cifti_create_dense_scalar_volume_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the metric file
+ * @param opt_roi_left_roi_metric roi of vertices to use from left surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_scalar_left_metric_params(
     metric: InputPathType,
     opt_roi_left_roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarLeftMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the metric file
-     * @param opt_roi_left_roi_metric roi of vertices to use from left surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_metric" as const,
+        "@type": "workbench.cifti-create-dense-scalar.left_metric" as const,
         "metric": metric,
     };
     if (opt_roi_left_roi_metric !== null) {
@@ -152,18 +152,18 @@ function cifti_create_dense_scalar_left_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_scalar_left_metric_cargs(
     params: CiftiCreateDenseScalarLeftMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-metric");
     cargs.push(execution.inputFile((params["metric"] ?? null)));
@@ -177,20 +177,20 @@ function cifti_create_dense_scalar_left_metric_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the metric file
+ * @param opt_roi_right_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_scalar_right_metric_params(
     metric: InputPathType,
     opt_roi_right_roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarRightMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the metric file
-     * @param opt_roi_right_roi_metric roi of vertices to use from right surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_metric" as const,
+        "@type": "workbench.cifti-create-dense-scalar.right_metric" as const,
         "metric": metric,
     };
     if (opt_roi_right_roi_metric !== null) {
@@ -200,18 +200,18 @@ function cifti_create_dense_scalar_right_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_scalar_right_metric_cargs(
     params: CiftiCreateDenseScalarRightMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-metric");
     cargs.push(execution.inputFile((params["metric"] ?? null)));
@@ -225,20 +225,20 @@ function cifti_create_dense_scalar_right_metric_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the metric file
+ * @param opt_roi_cerebellum_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_scalar_cerebellum_metric_params(
     metric: InputPathType,
     opt_roi_cerebellum_roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarCerebellumMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the metric file
-     * @param opt_roi_cerebellum_roi_metric roi of vertices to use from right surface: the ROI as a metric file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_metric" as const,
+        "@type": "workbench.cifti-create-dense-scalar.cerebellum_metric" as const,
         "metric": metric,
     };
     if (opt_roi_cerebellum_roi_metric !== null) {
@@ -248,18 +248,18 @@ function cifti_create_dense_scalar_cerebellum_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_scalar_cerebellum_metric_cargs(
     params: CiftiCreateDenseScalarCerebellumMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-metric");
     cargs.push(execution.inputFile((params["metric"] ?? null)));
@@ -290,6 +290,18 @@ interface CiftiCreateDenseScalarOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_metric metric for left surface
+ * @param right_metric metric for right surface
+ * @param cerebellum_metric metric for the cerebellum
+ * @param opt_name_file_file use a text file to set all map names: text file containing map names, one per line
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_create_dense_scalar_params(
     cifti_out: string,
     volume: CiftiCreateDenseScalarVolumeParameters | null = null,
@@ -298,20 +310,8 @@ function cifti_create_dense_scalar_params(
     cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParameters | null = null,
     opt_name_file_file: string | null = null,
 ): CiftiCreateDenseScalarParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_out the output cifti file
-     * @param volume volume component
-     * @param left_metric metric for left surface
-     * @param right_metric metric for right surface
-     * @param cerebellum_metric metric for the cerebellum
-     * @param opt_name_file_file use a text file to set all map names: text file containing map names, one per line
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-create-dense-scalar" as const,
+        "@type": "workbench.cifti-create-dense-scalar" as const,
         "cifti_out": cifti_out,
     };
     if (volume !== null) {
@@ -333,33 +333,33 @@ function cifti_create_dense_scalar_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_create_dense_scalar_cargs(
     params: CiftiCreateDenseScalarParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-create-dense-scalar");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume"] ?? null).__STYXTYPE__)((params["volume"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume"] ?? null)["@type"])((params["volume"] ?? null), execution));
     }
     if ((params["left_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_metric"] ?? null).__STYXTYPE__)((params["left_metric"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_metric"] ?? null)["@type"])((params["left_metric"] ?? null), execution));
     }
     if ((params["right_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_metric"] ?? null).__STYXTYPE__)((params["right_metric"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_metric"] ?? null)["@type"])((params["right_metric"] ?? null), execution));
     }
     if ((params["cerebellum_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_metric"] ?? null).__STYXTYPE__)((params["cerebellum_metric"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_metric"] ?? null)["@type"])((params["cerebellum_metric"] ?? null), execution));
     }
     if ((params["opt_name_file_file"] ?? null) !== null) {
         cargs.push(
@@ -371,18 +371,18 @@ function cifti_create_dense_scalar_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_create_dense_scalar_outputs(
     params: CiftiCreateDenseScalarParameters,
     execution: Execution,
 ): CiftiCreateDenseScalarOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCreateDenseScalarOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -391,60 +391,60 @@ function cifti_create_dense_scalar_outputs(
 }
 
 
+/**
+ * Create a cifti dense scalar file.
+ *
+ * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.
+ *
+ * See -volume-label-import and -volume-help for format details of label volume files.  The structure-label-volume should have some of the label names from this list, all other label names will be ignored:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
+ */
 function cifti_create_dense_scalar_execute(
     params: CiftiCreateDenseScalarParameters,
     execution: Execution,
 ): CiftiCreateDenseScalarOutputs {
-    /**
-     * Create a cifti dense scalar file.
-     * 
-     * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.
-     * 
-     * See -volume-label-import and -volume-help for format details of label volume files.  The structure-label-volume should have some of the label names from this list, all other label names will be ignored:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_create_dense_scalar_cargs(params, execution)
     const ret = cifti_create_dense_scalar_outputs(params, execution)
@@ -453,6 +453,61 @@ function cifti_create_dense_scalar_execute(
 }
 
 
+/**
+ * Create a cifti dense scalar file.
+ *
+ * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.
+ *
+ * See -volume-label-import and -volume-help for format details of label volume files.  The structure-label-volume should have some of the label names from this list, all other label names will be ignored:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_metric metric for left surface
+ * @param right_metric metric for right surface
+ * @param cerebellum_metric metric for the cerebellum
+ * @param opt_name_file_file use a text file to set all map names: text file containing map names, one per line
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
+ */
 function cifti_create_dense_scalar(
     cifti_out: string,
     volume: CiftiCreateDenseScalarVolumeParameters | null = null,
@@ -462,61 +517,6 @@ function cifti_create_dense_scalar(
     opt_name_file_file: string | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
-    /**
-     * Create a cifti dense scalar file.
-     * 
-     * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.
-     * 
-     * See -volume-label-import and -volume-help for format details of label volume files.  The structure-label-volume should have some of the label names from this list, all other label names will be ignored:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_out the output cifti file
-     * @param volume volume component
-     * @param left_metric metric for left surface
-     * @param right_metric metric for right surface
-     * @param cerebellum_metric metric for the cerebellum
-     * @param opt_name_file_file use a text file to set all map names: text file containing map names, one per line
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CREATE_DENSE_SCALAR_METADATA);
     const params = cifti_create_dense_scalar_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, opt_name_file_file)
@@ -533,9 +533,16 @@ export {
       CiftiCreateDenseScalarRightMetricParameters,
       CiftiCreateDenseScalarVolumeParameters,
       cifti_create_dense_scalar,
+      cifti_create_dense_scalar_cargs,
+      cifti_create_dense_scalar_cerebellum_metric_cargs,
       cifti_create_dense_scalar_cerebellum_metric_params,
+      cifti_create_dense_scalar_execute,
+      cifti_create_dense_scalar_left_metric_cargs,
       cifti_create_dense_scalar_left_metric_params,
+      cifti_create_dense_scalar_outputs,
       cifti_create_dense_scalar_params,
+      cifti_create_dense_scalar_right_metric_cargs,
       cifti_create_dense_scalar_right_metric_params,
+      cifti_create_dense_scalar_volume_cargs,
       cifti_create_dense_scalar_volume_params,
 };

@@ -12,7 +12,7 @@ const EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA: Metadata = {
 
 
 interface ExtractRegionFromImageByMaskParameters {
-    "__STYXTYPE__": "ExtractRegionFromImageByMask";
+    "@type": "ants.ExtractRegionFromImageByMask";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": InputPathType;
@@ -22,33 +22,33 @@ interface ExtractRegionFromImageByMaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ExtractRegionFromImageByMask": extract_region_from_image_by_mask_cargs,
+        "ants.ExtractRegionFromImageByMask": extract_region_from_image_by_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface ExtractRegionFromImageByMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimension of the input image.
+ * @param input_image The input image from which a region will be extracted.
+ * @param output_image The output image containing the extracted region.
+ * @param label_mask_image The label mask image used to extract the bounding box.
+ * @param label The label value used to extract the sub-region.
+ * @param pad_radius Optional padding radius to be added around the bounding box.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_by_mask_params(
     image_dimension: number,
     input_image: InputPathType,
@@ -76,20 +88,8 @@ function extract_region_from_image_by_mask_params(
     label: number | null = 1,
     pad_radius: number | null = 0,
 ): ExtractRegionFromImageByMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimension of the input image.
-     * @param input_image The input image from which a region will be extracted.
-     * @param output_image The output image containing the extracted region.
-     * @param label_mask_image The label mask image used to extract the bounding box.
-     * @param label The label value used to extract the sub-region.
-     * @param pad_radius Optional padding radius to be added around the bounding box.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ExtractRegionFromImageByMask" as const,
+        "@type": "ants.ExtractRegionFromImageByMask" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -105,18 +105,18 @@ function extract_region_from_image_by_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_by_mask_cargs(
     params: ExtractRegionFromImageByMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ExtractRegionFromImageByMask");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -133,18 +133,18 @@ function extract_region_from_image_by_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function extract_region_from_image_by_mask_outputs(
     params: ExtractRegionFromImageByMaskParameters,
     execution: Execution,
 ): ExtractRegionFromImageByMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExtractRegionFromImageByMaskOutputs = {
         root: execution.outputFile("."),
     };
@@ -152,22 +152,22 @@ function extract_region_from_image_by_mask_outputs(
 }
 
 
+/**
+ * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
+ */
 function extract_region_from_image_by_mask_execute(
     params: ExtractRegionFromImageByMaskParameters,
     execution: Execution,
 ): ExtractRegionFromImageByMaskOutputs {
-    /**
-     * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = extract_region_from_image_by_mask_cargs(params, execution)
     const ret = extract_region_from_image_by_mask_outputs(params, execution)
@@ -176,6 +176,23 @@ function extract_region_from_image_by_mask_execute(
 }
 
 
+/**
+ * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimension of the input image.
+ * @param input_image The input image from which a region will be extracted.
+ * @param output_image The output image containing the extracted region.
+ * @param label_mask_image The label mask image used to extract the bounding box.
+ * @param label The label value used to extract the sub-region.
+ * @param pad_radius Optional padding radius to be added around the bounding box.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
+ */
 function extract_region_from_image_by_mask(
     image_dimension: number,
     input_image: InputPathType,
@@ -185,23 +202,6 @@ function extract_region_from_image_by_mask(
     pad_radius: number | null = 0,
     runner: Runner | null = null,
 ): ExtractRegionFromImageByMaskOutputs {
-    /**
-     * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimension of the input image.
-     * @param input_image The input image from which a region will be extracted.
-     * @param output_image The output image containing the extracted region.
-     * @param label_mask_image The label mask image used to extract the bounding box.
-     * @param label The label value used to extract the sub-region.
-     * @param pad_radius Optional padding radius to be added around the bounding box.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA);
     const params = extract_region_from_image_by_mask_params(image_dimension, input_image, output_image, label_mask_image, label, pad_radius)
@@ -214,5 +214,8 @@ export {
       ExtractRegionFromImageByMaskOutputs,
       ExtractRegionFromImageByMaskParameters,
       extract_region_from_image_by_mask,
+      extract_region_from_image_by_mask_cargs,
+      extract_region_from_image_by_mask_execute,
+      extract_region_from_image_by_mask_outputs,
       extract_region_from_image_by_mask_params,
 };

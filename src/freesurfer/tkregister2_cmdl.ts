@@ -12,7 +12,7 @@ const TKREGISTER2_CMDL_METADATA: Metadata = {
 
 
 interface Tkregister2CmdlParameters {
-    "__STYXTYPE__": "tkregister2_cmdl";
+    "@type": "freesurfer.tkregister2_cmdl";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
     "fstarg_flag": boolean;
@@ -76,33 +76,33 @@ interface Tkregister2CmdlParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tkregister2_cmdl": tkregister2_cmdl_cargs,
+        "freesurfer.tkregister2_cmdl": tkregister2_cmdl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -122,6 +122,72 @@ interface Tkregister2CmdlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param movable_volume Path to the movable volume.
+ * @param target_volume Path to the target volume.
+ * @param fstarg_flag Target is relative to subjectid/mri.
+ * @param reg_file Path to input/output registration file.
+ * @param check_reg_flag Only check, no --reg needed.
+ * @param regheader_flag Compute registration from headers.
+ * @param regheader_center_flag Same as --regheader but aligns volume centers.
+ * @param fsl_targ_flag Use FSLDIR/data/standard/avg152T1.nii.gz.
+ * @param fsl_targ_lr_flag Use FSLDIR/data/standard/avg152T1_LR-marked.nii.gz.
+ * @param gca_subject Subject ID for linear GCA registration check.
+ * @param gca_skull_subject Subject ID for linear 'with skull' GCA registration check.
+ * @param no_zero_cras_flag Do not zero target cras (done with --fstal).
+ * @param movbright Brightness of movable volume.
+ * @param no_inorm_flag Turn off intensity normalization.
+ * @param fmov Set movable volume brightness.
+ * @param fmov_targ_flag Apply movable brightness to the target.
+ * @param plane Startup view plane: cor, sag, ax.
+ * @param slice Startup slice number.
+ * @param volview Startup with targ or mov.
+ * @param fov Window FOV in mm (default is 256).
+ * @param movscale Scale size of movable volume by scale.
+ * @param surf Display surface as an overlay.
+ * @param surf_rgb Set surface color (0-255) for R G B.
+ * @param lh_only_flag Only load/display left hemisphere.
+ * @param rh_only_flag Only load/display right hemisphere.
+ * @param fstal_flag Set movable to be tal and reg to be taliarach.xfm.
+ * @param talxfmname Set movable to be tal and reg to be talxfmname.
+ * @param ixfm MNI-style inverse registration input matrix.
+ * @param xfm MNI-style registration input matrix.
+ * @param xfmout MNI-style registration output matrix.
+ * @param fsl FSL-style registration input matrix.
+ * @param fslregout FSL-Style registration output matrix.
+ * @param freeview FreeView registration output matrix.
+ * @param vox2vox Vox2vox matrix in ascii.
+ * @param lta Linear Transform Array file.
+ * @param lta_inv Read in LTA and invert.
+ * @param ltaout Output a Linear Transform Array.
+ * @param ltaout_inv_flag Invert transform in ltaoutfile.
+ * @param feat Check example_func2standard registration.
+ * @param fsfeat Check reg/freesurfer/register.dat registration.
+ * @param identity_flag Use identity as registration matrix.
+ * @param subject_id Set subject id.
+ * @param subjects_dir Use specified directory as SUBJECTS_DIR.
+ * @param nofix_flag Don't fix old tkregister matrices.
+ * @param float2int Specify old tkregister float2int.
+ * @param title Set window title.
+ * @param tag_flag Tag movable volume near the col/row origin.
+ * @param mov_orientation Supply orientation string for movable volume.
+ * @param targ_orientation Supply orientation string for target volume.
+ * @param int Use registration from intermediate volume.
+ * @param double_window_size_flag Double window size.
+ * @param window_scale Scale window by specified scale.
+ * @param det Save determinant of registration matrix to specified file.
+ * @param aseg_flag Load aseg and hit 'd' to toggle.
+ * @param aparc_flag Load aparc+aseg and hit 'c' to toggle.
+ * @param wmparc_flag Load wmparc and hit 'c' to toggle.
+ * @param gdiagno Set debug level.
+ * @param trans Translation (mm) to apply to registration matrix.
+ * @param rot Rotation angles (deg) to apply to registration matrix.
+ * @param conf_targ_flag Conform target (assumes reg computed to conform target, eg, GCA).
+ *
+ * @returns Parameter dictionary
+ */
 function tkregister2_cmdl_params(
     movable_volume: InputPathType,
     target_volume: InputPathType,
@@ -184,74 +250,8 @@ function tkregister2_cmdl_params(
     rot: Array<number> | null = null,
     conf_targ_flag: boolean = false,
 ): Tkregister2CmdlParameters {
-    /**
-     * Build parameters.
-    
-     * @param movable_volume Path to the movable volume.
-     * @param target_volume Path to the target volume.
-     * @param fstarg_flag Target is relative to subjectid/mri.
-     * @param reg_file Path to input/output registration file.
-     * @param check_reg_flag Only check, no --reg needed.
-     * @param regheader_flag Compute registration from headers.
-     * @param regheader_center_flag Same as --regheader but aligns volume centers.
-     * @param fsl_targ_flag Use FSLDIR/data/standard/avg152T1.nii.gz.
-     * @param fsl_targ_lr_flag Use FSLDIR/data/standard/avg152T1_LR-marked.nii.gz.
-     * @param gca_subject Subject ID for linear GCA registration check.
-     * @param gca_skull_subject Subject ID for linear 'with skull' GCA registration check.
-     * @param no_zero_cras_flag Do not zero target cras (done with --fstal).
-     * @param movbright Brightness of movable volume.
-     * @param no_inorm_flag Turn off intensity normalization.
-     * @param fmov Set movable volume brightness.
-     * @param fmov_targ_flag Apply movable brightness to the target.
-     * @param plane Startup view plane: cor, sag, ax.
-     * @param slice Startup slice number.
-     * @param volview Startup with targ or mov.
-     * @param fov Window FOV in mm (default is 256).
-     * @param movscale Scale size of movable volume by scale.
-     * @param surf Display surface as an overlay.
-     * @param surf_rgb Set surface color (0-255) for R G B.
-     * @param lh_only_flag Only load/display left hemisphere.
-     * @param rh_only_flag Only load/display right hemisphere.
-     * @param fstal_flag Set movable to be tal and reg to be taliarach.xfm.
-     * @param talxfmname Set movable to be tal and reg to be talxfmname.
-     * @param ixfm MNI-style inverse registration input matrix.
-     * @param xfm MNI-style registration input matrix.
-     * @param xfmout MNI-style registration output matrix.
-     * @param fsl FSL-style registration input matrix.
-     * @param fslregout FSL-Style registration output matrix.
-     * @param freeview FreeView registration output matrix.
-     * @param vox2vox Vox2vox matrix in ascii.
-     * @param lta Linear Transform Array file.
-     * @param lta_inv Read in LTA and invert.
-     * @param ltaout Output a Linear Transform Array.
-     * @param ltaout_inv_flag Invert transform in ltaoutfile.
-     * @param feat Check example_func2standard registration.
-     * @param fsfeat Check reg/freesurfer/register.dat registration.
-     * @param identity_flag Use identity as registration matrix.
-     * @param subject_id Set subject id.
-     * @param subjects_dir Use specified directory as SUBJECTS_DIR.
-     * @param nofix_flag Don't fix old tkregister matrices.
-     * @param float2int Specify old tkregister float2int.
-     * @param title Set window title.
-     * @param tag_flag Tag movable volume near the col/row origin.
-     * @param mov_orientation Supply orientation string for movable volume.
-     * @param targ_orientation Supply orientation string for target volume.
-     * @param int Use registration from intermediate volume.
-     * @param double_window_size_flag Double window size.
-     * @param window_scale Scale window by specified scale.
-     * @param det Save determinant of registration matrix to specified file.
-     * @param aseg_flag Load aseg and hit 'd' to toggle.
-     * @param aparc_flag Load aparc+aseg and hit 'c' to toggle.
-     * @param wmparc_flag Load wmparc and hit 'c' to toggle.
-     * @param gdiagno Set debug level.
-     * @param trans Translation (mm) to apply to registration matrix.
-     * @param rot Rotation angles (deg) to apply to registration matrix.
-     * @param conf_targ_flag Conform target (assumes reg computed to conform target, eg, GCA).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tkregister2_cmdl" as const,
+        "@type": "freesurfer.tkregister2_cmdl" as const,
         "movable_volume": movable_volume,
         "target_volume": target_volume,
         "fstarg_flag": fstarg_flag,
@@ -391,18 +391,18 @@ function tkregister2_cmdl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tkregister2_cmdl_cargs(
     params: Tkregister2CmdlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tkregister2_cmdl");
     cargs.push(
@@ -702,18 +702,18 @@ function tkregister2_cmdl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tkregister2_cmdl_outputs(
     params: Tkregister2CmdlParameters,
     execution: Execution,
 ): Tkregister2CmdlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tkregister2CmdlOutputs = {
         root: execution.outputFile("."),
     };
@@ -721,22 +721,22 @@ function tkregister2_cmdl_outputs(
 }
 
 
+/**
+ * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
+ */
 function tkregister2_cmdl_execute(
     params: Tkregister2CmdlParameters,
     execution: Execution,
 ): Tkregister2CmdlOutputs {
-    /**
-     * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
-     */
     params = execution.params(params)
     const cargs = tkregister2_cmdl_cargs(params, execution)
     const ret = tkregister2_cmdl_outputs(params, execution)
@@ -745,6 +745,77 @@ function tkregister2_cmdl_execute(
 }
 
 
+/**
+ * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param movable_volume Path to the movable volume.
+ * @param target_volume Path to the target volume.
+ * @param fstarg_flag Target is relative to subjectid/mri.
+ * @param reg_file Path to input/output registration file.
+ * @param check_reg_flag Only check, no --reg needed.
+ * @param regheader_flag Compute registration from headers.
+ * @param regheader_center_flag Same as --regheader but aligns volume centers.
+ * @param fsl_targ_flag Use FSLDIR/data/standard/avg152T1.nii.gz.
+ * @param fsl_targ_lr_flag Use FSLDIR/data/standard/avg152T1_LR-marked.nii.gz.
+ * @param gca_subject Subject ID for linear GCA registration check.
+ * @param gca_skull_subject Subject ID for linear 'with skull' GCA registration check.
+ * @param no_zero_cras_flag Do not zero target cras (done with --fstal).
+ * @param movbright Brightness of movable volume.
+ * @param no_inorm_flag Turn off intensity normalization.
+ * @param fmov Set movable volume brightness.
+ * @param fmov_targ_flag Apply movable brightness to the target.
+ * @param plane Startup view plane: cor, sag, ax.
+ * @param slice Startup slice number.
+ * @param volview Startup with targ or mov.
+ * @param fov Window FOV in mm (default is 256).
+ * @param movscale Scale size of movable volume by scale.
+ * @param surf Display surface as an overlay.
+ * @param surf_rgb Set surface color (0-255) for R G B.
+ * @param lh_only_flag Only load/display left hemisphere.
+ * @param rh_only_flag Only load/display right hemisphere.
+ * @param fstal_flag Set movable to be tal and reg to be taliarach.xfm.
+ * @param talxfmname Set movable to be tal and reg to be talxfmname.
+ * @param ixfm MNI-style inverse registration input matrix.
+ * @param xfm MNI-style registration input matrix.
+ * @param xfmout MNI-style registration output matrix.
+ * @param fsl FSL-style registration input matrix.
+ * @param fslregout FSL-Style registration output matrix.
+ * @param freeview FreeView registration output matrix.
+ * @param vox2vox Vox2vox matrix in ascii.
+ * @param lta Linear Transform Array file.
+ * @param lta_inv Read in LTA and invert.
+ * @param ltaout Output a Linear Transform Array.
+ * @param ltaout_inv_flag Invert transform in ltaoutfile.
+ * @param feat Check example_func2standard registration.
+ * @param fsfeat Check reg/freesurfer/register.dat registration.
+ * @param identity_flag Use identity as registration matrix.
+ * @param subject_id Set subject id.
+ * @param subjects_dir Use specified directory as SUBJECTS_DIR.
+ * @param nofix_flag Don't fix old tkregister matrices.
+ * @param float2int Specify old tkregister float2int.
+ * @param title Set window title.
+ * @param tag_flag Tag movable volume near the col/row origin.
+ * @param mov_orientation Supply orientation string for movable volume.
+ * @param targ_orientation Supply orientation string for target volume.
+ * @param int Use registration from intermediate volume.
+ * @param double_window_size_flag Double window size.
+ * @param window_scale Scale window by specified scale.
+ * @param det Save determinant of registration matrix to specified file.
+ * @param aseg_flag Load aseg and hit 'd' to toggle.
+ * @param aparc_flag Load aparc+aseg and hit 'c' to toggle.
+ * @param wmparc_flag Load wmparc and hit 'c' to toggle.
+ * @param gdiagno Set debug level.
+ * @param trans Translation (mm) to apply to registration matrix.
+ * @param rot Rotation angles (deg) to apply to registration matrix.
+ * @param conf_targ_flag Conform target (assumes reg computed to conform target, eg, GCA).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
+ */
 function tkregister2_cmdl(
     movable_volume: InputPathType,
     target_volume: InputPathType,
@@ -808,77 +879,6 @@ function tkregister2_cmdl(
     conf_targ_flag: boolean = false,
     runner: Runner | null = null,
 ): Tkregister2CmdlOutputs {
-    /**
-     * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param movable_volume Path to the movable volume.
-     * @param target_volume Path to the target volume.
-     * @param fstarg_flag Target is relative to subjectid/mri.
-     * @param reg_file Path to input/output registration file.
-     * @param check_reg_flag Only check, no --reg needed.
-     * @param regheader_flag Compute registration from headers.
-     * @param regheader_center_flag Same as --regheader but aligns volume centers.
-     * @param fsl_targ_flag Use FSLDIR/data/standard/avg152T1.nii.gz.
-     * @param fsl_targ_lr_flag Use FSLDIR/data/standard/avg152T1_LR-marked.nii.gz.
-     * @param gca_subject Subject ID for linear GCA registration check.
-     * @param gca_skull_subject Subject ID for linear 'with skull' GCA registration check.
-     * @param no_zero_cras_flag Do not zero target cras (done with --fstal).
-     * @param movbright Brightness of movable volume.
-     * @param no_inorm_flag Turn off intensity normalization.
-     * @param fmov Set movable volume brightness.
-     * @param fmov_targ_flag Apply movable brightness to the target.
-     * @param plane Startup view plane: cor, sag, ax.
-     * @param slice Startup slice number.
-     * @param volview Startup with targ or mov.
-     * @param fov Window FOV in mm (default is 256).
-     * @param movscale Scale size of movable volume by scale.
-     * @param surf Display surface as an overlay.
-     * @param surf_rgb Set surface color (0-255) for R G B.
-     * @param lh_only_flag Only load/display left hemisphere.
-     * @param rh_only_flag Only load/display right hemisphere.
-     * @param fstal_flag Set movable to be tal and reg to be taliarach.xfm.
-     * @param talxfmname Set movable to be tal and reg to be talxfmname.
-     * @param ixfm MNI-style inverse registration input matrix.
-     * @param xfm MNI-style registration input matrix.
-     * @param xfmout MNI-style registration output matrix.
-     * @param fsl FSL-style registration input matrix.
-     * @param fslregout FSL-Style registration output matrix.
-     * @param freeview FreeView registration output matrix.
-     * @param vox2vox Vox2vox matrix in ascii.
-     * @param lta Linear Transform Array file.
-     * @param lta_inv Read in LTA and invert.
-     * @param ltaout Output a Linear Transform Array.
-     * @param ltaout_inv_flag Invert transform in ltaoutfile.
-     * @param feat Check example_func2standard registration.
-     * @param fsfeat Check reg/freesurfer/register.dat registration.
-     * @param identity_flag Use identity as registration matrix.
-     * @param subject_id Set subject id.
-     * @param subjects_dir Use specified directory as SUBJECTS_DIR.
-     * @param nofix_flag Don't fix old tkregister matrices.
-     * @param float2int Specify old tkregister float2int.
-     * @param title Set window title.
-     * @param tag_flag Tag movable volume near the col/row origin.
-     * @param mov_orientation Supply orientation string for movable volume.
-     * @param targ_orientation Supply orientation string for target volume.
-     * @param int Use registration from intermediate volume.
-     * @param double_window_size_flag Double window size.
-     * @param window_scale Scale window by specified scale.
-     * @param det Save determinant of registration matrix to specified file.
-     * @param aseg_flag Load aseg and hit 'd' to toggle.
-     * @param aparc_flag Load aparc+aseg and hit 'c' to toggle.
-     * @param wmparc_flag Load wmparc and hit 'c' to toggle.
-     * @param gdiagno Set debug level.
-     * @param trans Translation (mm) to apply to registration matrix.
-     * @param rot Rotation angles (deg) to apply to registration matrix.
-     * @param conf_targ_flag Conform target (assumes reg computed to conform target, eg, GCA).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TKREGISTER2_CMDL_METADATA);
     const params = tkregister2_cmdl_params(movable_volume, target_volume, fstarg_flag, reg_file, check_reg_flag, regheader_flag, regheader_center_flag, fsl_targ_flag, fsl_targ_lr_flag, gca_subject, gca_skull_subject, no_zero_cras_flag, movbright, no_inorm_flag, fmov, fmov_targ_flag, plane, slice, volview, fov, movscale, surf, surf_rgb, lh_only_flag, rh_only_flag, fstal_flag, talxfmname, ixfm, xfm, xfmout, fsl, fslregout, freeview, vox2vox, lta, lta_inv, ltaout, ltaout_inv_flag, feat, fsfeat, identity_flag, subject_id, subjects_dir, nofix_flag, float2int, title, tag_flag, mov_orientation, targ_orientation, int, double_window_size_flag, window_scale, det, aseg_flag, aparc_flag, wmparc_flag, gdiagno, trans, rot, conf_targ_flag)
@@ -891,5 +891,8 @@ export {
       Tkregister2CmdlOutputs,
       Tkregister2CmdlParameters,
       tkregister2_cmdl,
+      tkregister2_cmdl_cargs,
+      tkregister2_cmdl_execute,
+      tkregister2_cmdl_outputs,
       tkregister2_cmdl_params,
 };

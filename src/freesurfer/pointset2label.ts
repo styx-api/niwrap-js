@@ -12,7 +12,7 @@ const POINTSET2LABEL_METADATA: Metadata = {
 
 
 interface Pointset2labelParameters {
-    "__STYXTYPE__": "pointset2label";
+    "@type": "freesurfer.pointset2label";
     "waypoint_file": InputPathType;
     "input_volume": InputPathType;
     "label_value": number;
@@ -21,35 +21,35 @@ interface Pointset2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pointset2label": pointset2label_cargs,
+        "freesurfer.pointset2label": pointset2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pointset2label": pointset2label_outputs,
+        "freesurfer.pointset2label": pointset2label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface Pointset2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param waypoint_file Path to the waypoint file.
+ * @param input_volume Path to the input volume file.
+ * @param label_value Label value to apply at the waypoints.
+ * @param output_volume Path to the output volume label file.
+ * @param clear_option Clear the input volume before processing.
+ *
+ * @returns Parameter dictionary
+ */
 function pointset2label_params(
     waypoint_file: InputPathType,
     input_volume: InputPathType,
@@ -79,19 +90,8 @@ function pointset2label_params(
     output_volume: string,
     clear_option: boolean = false,
 ): Pointset2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param waypoint_file Path to the waypoint file.
-     * @param input_volume Path to the input volume file.
-     * @param label_value Label value to apply at the waypoints.
-     * @param output_volume Path to the output volume label file.
-     * @param clear_option Clear the input volume before processing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pointset2label" as const,
+        "@type": "freesurfer.pointset2label" as const,
         "waypoint_file": waypoint_file,
         "input_volume": input_volume,
         "label_value": label_value,
@@ -102,18 +102,18 @@ function pointset2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pointset2label_cargs(
     params: Pointset2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pointset2label");
     cargs.push(execution.inputFile((params["waypoint_file"] ?? null)));
@@ -127,18 +127,18 @@ function pointset2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pointset2label_outputs(
     params: Pointset2labelParameters,
     execution: Execution,
 ): Pointset2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Pointset2labelOutputs = {
         root: execution.outputFile("."),
         output_label_volume: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function pointset2label_outputs(
 }
 
 
+/**
+ * Tool for applying waypoint labels to a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
+ */
 function pointset2label_execute(
     params: Pointset2labelParameters,
     execution: Execution,
 ): Pointset2labelOutputs {
-    /**
-     * Tool for applying waypoint labels to a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = pointset2label_cargs(params, execution)
     const ret = pointset2label_outputs(params, execution)
@@ -171,6 +171,22 @@ function pointset2label_execute(
 }
 
 
+/**
+ * Tool for applying waypoint labels to a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param waypoint_file Path to the waypoint file.
+ * @param input_volume Path to the input volume file.
+ * @param label_value Label value to apply at the waypoints.
+ * @param output_volume Path to the output volume label file.
+ * @param clear_option Clear the input volume before processing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
+ */
 function pointset2label(
     waypoint_file: InputPathType,
     input_volume: InputPathType,
@@ -179,22 +195,6 @@ function pointset2label(
     clear_option: boolean = false,
     runner: Runner | null = null,
 ): Pointset2labelOutputs {
-    /**
-     * Tool for applying waypoint labels to a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param waypoint_file Path to the waypoint file.
-     * @param input_volume Path to the input volume file.
-     * @param label_value Label value to apply at the waypoints.
-     * @param output_volume Path to the output volume label file.
-     * @param clear_option Clear the input volume before processing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POINTSET2LABEL_METADATA);
     const params = pointset2label_params(waypoint_file, input_volume, label_value, output_volume, clear_option)
@@ -207,5 +207,8 @@ export {
       Pointset2labelOutputs,
       Pointset2labelParameters,
       pointset2label,
+      pointset2label_cargs,
+      pointset2label_execute,
+      pointset2label_outputs,
       pointset2label_params,
 };

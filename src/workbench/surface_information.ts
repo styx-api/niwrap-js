@@ -12,38 +12,38 @@ const SURFACE_INFORMATION_METADATA: Metadata = {
 
 
 interface SurfaceInformationParameters {
-    "__STYXTYPE__": "surface-information";
+    "@type": "workbench.surface-information";
     "surface_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-information": surface_information_cargs,
+        "workbench.surface-information": surface_information_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SurfaceInformationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_file Surface for which information is displayed
+ *
+ * @returns Parameter dictionary
+ */
 function surface_information_params(
     surface_file: InputPathType,
 ): SurfaceInformationParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_file Surface for which information is displayed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-information" as const,
+        "@type": "workbench.surface-information" as const,
         "surface_file": surface_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_information_cargs(
     params: SurfaceInformationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-information");
@@ -101,18 +101,18 @@ function surface_information_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_information_outputs(
     params: SurfaceInformationParameters,
     execution: Execution,
 ): SurfaceInformationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceInformationOutputs = {
         root: execution.outputFile("."),
     };
@@ -120,25 +120,25 @@ function surface_information_outputs(
 }
 
 
+/**
+ * Display information about a surface.
+ *
+ * Information about surface is displayed including vertices, 
+ * triangles, bounding box, and spacing.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
+ */
 function surface_information_execute(
     params: SurfaceInformationParameters,
     execution: Execution,
 ): SurfaceInformationOutputs {
-    /**
-     * Display information about a surface.
-     * 
-     * Information about surface is displayed including vertices, 
-     * triangles, bounding box, and spacing.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_information_cargs(params, execution)
     const ret = surface_information_outputs(params, execution)
@@ -147,25 +147,25 @@ function surface_information_execute(
 }
 
 
+/**
+ * Display information about a surface.
+ *
+ * Information about surface is displayed including vertices, 
+ * triangles, bounding box, and spacing.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface_file Surface for which information is displayed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
+ */
 function surface_information(
     surface_file: InputPathType,
     runner: Runner | null = null,
 ): SurfaceInformationOutputs {
-    /**
-     * Display information about a surface.
-     * 
-     * Information about surface is displayed including vertices, 
-     * triangles, bounding box, and spacing.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface_file Surface for which information is displayed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_INFORMATION_METADATA);
     const params = surface_information_params(surface_file)
@@ -178,5 +178,8 @@ export {
       SurfaceInformationOutputs,
       SurfaceInformationParameters,
       surface_information,
+      surface_information_cargs,
+      surface_information_execute,
+      surface_information_outputs,
       surface_information_params,
 };

@@ -12,7 +12,7 @@ const CIFTI_VECTOR_OPERATION_METADATA: Metadata = {
 
 
 interface CiftiVectorOperationParameters {
-    "__STYXTYPE__": "cifti-vector-operation";
+    "@type": "workbench.cifti-vector-operation";
     "vectors_a": InputPathType;
     "vectors_b": InputPathType;
     "operation": string;
@@ -24,35 +24,35 @@ interface CiftiVectorOperationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-vector-operation": cifti_vector_operation_cargs,
+        "workbench.cifti-vector-operation": cifti_vector_operation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-vector-operation": cifti_vector_operation_outputs,
+        "workbench.cifti-vector-operation": cifti_vector_operation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface CiftiVectorOperationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vectors_a first vector input file
+ * @param vectors_b second vector input file
+ * @param operation what vector operation to do
+ * @param cifti_out the output file
+ * @param opt_normalize_a normalize vectors of first input
+ * @param opt_normalize_b normalize vectors of second input
+ * @param opt_normalize_output normalize output vectors (not valid for dot product)
+ * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_vector_operation_params(
     vectors_a: InputPathType,
     vectors_b: InputPathType,
@@ -85,22 +99,8 @@ function cifti_vector_operation_params(
     opt_normalize_output: boolean = false,
     opt_magnitude: boolean = false,
 ): CiftiVectorOperationParameters {
-    /**
-     * Build parameters.
-    
-     * @param vectors_a first vector input file
-     * @param vectors_b second vector input file
-     * @param operation what vector operation to do
-     * @param cifti_out the output file
-     * @param opt_normalize_a normalize vectors of first input
-     * @param opt_normalize_b normalize vectors of second input
-     * @param opt_normalize_output normalize output vectors (not valid for dot product)
-     * @param opt_magnitude output the magnitude of the result (not valid for dot product)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-vector-operation" as const,
+        "@type": "workbench.cifti-vector-operation" as const,
         "vectors_a": vectors_a,
         "vectors_b": vectors_b,
         "operation": operation,
@@ -114,18 +114,18 @@ function cifti_vector_operation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_vector_operation_cargs(
     params: CiftiVectorOperationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-vector-operation");
@@ -149,18 +149,18 @@ function cifti_vector_operation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_vector_operation_outputs(
     params: CiftiVectorOperationParameters,
     execution: Execution,
 ): CiftiVectorOperationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiVectorOperationOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -169,29 +169,29 @@ function cifti_vector_operation_outputs(
 }
 
 
+/**
+ * Do a vector operation on cifti files.
+ *
+ * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
+ *
+ * DOT
+ * CROSS
+ * ADD
+ * SUBTRACT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
+ */
 function cifti_vector_operation_execute(
     params: CiftiVectorOperationParameters,
     execution: Execution,
 ): CiftiVectorOperationOutputs {
-    /**
-     * Do a vector operation on cifti files.
-     * 
-     * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
-     * 
-     * DOT
-     * CROSS
-     * ADD
-     * SUBTRACT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_vector_operation_cargs(params, execution)
     const ret = cifti_vector_operation_outputs(params, execution)
@@ -200,6 +200,32 @@ function cifti_vector_operation_execute(
 }
 
 
+/**
+ * Do a vector operation on cifti files.
+ *
+ * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
+ *
+ * DOT
+ * CROSS
+ * ADD
+ * SUBTRACT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param vectors_a first vector input file
+ * @param vectors_b second vector input file
+ * @param operation what vector operation to do
+ * @param cifti_out the output file
+ * @param opt_normalize_a normalize vectors of first input
+ * @param opt_normalize_b normalize vectors of second input
+ * @param opt_normalize_output normalize output vectors (not valid for dot product)
+ * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
+ */
 function cifti_vector_operation(
     vectors_a: InputPathType,
     vectors_b: InputPathType,
@@ -211,32 +237,6 @@ function cifti_vector_operation(
     opt_magnitude: boolean = false,
     runner: Runner | null = null,
 ): CiftiVectorOperationOutputs {
-    /**
-     * Do a vector operation on cifti files.
-     * 
-     * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
-     * 
-     * DOT
-     * CROSS
-     * ADD
-     * SUBTRACT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param vectors_a first vector input file
-     * @param vectors_b second vector input file
-     * @param operation what vector operation to do
-     * @param cifti_out the output file
-     * @param opt_normalize_a normalize vectors of first input
-     * @param opt_normalize_b normalize vectors of second input
-     * @param opt_normalize_output normalize output vectors (not valid for dot product)
-     * @param opt_magnitude output the magnitude of the result (not valid for dot product)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_VECTOR_OPERATION_METADATA);
     const params = cifti_vector_operation_params(vectors_a, vectors_b, operation, cifti_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
@@ -249,5 +249,8 @@ export {
       CiftiVectorOperationOutputs,
       CiftiVectorOperationParameters,
       cifti_vector_operation,
+      cifti_vector_operation_cargs,
+      cifti_vector_operation_execute,
+      cifti_vector_operation_outputs,
       cifti_vector_operation_params,
 };

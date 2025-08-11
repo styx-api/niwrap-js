@@ -12,7 +12,7 @@ const ADD_NOISE_TO_IMAGE_METADATA: Metadata = {
 
 
 interface AddNoiseToImageParameters {
-    "__STYXTYPE__": "AddNoiseToImage";
+    "@type": "ants.AddNoiseToImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "noise_model": "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle";
@@ -21,35 +21,35 @@ interface AddNoiseToImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AddNoiseToImage": add_noise_to_image_cargs,
+        "ants.AddNoiseToImage": add_noise_to_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "AddNoiseToImage": add_noise_to_image_outputs,
+        "ants.AddNoiseToImage": add_noise_to_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface AddNoiseToImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image A scalar image is expected as input for noise correction.
+ * @param noise_model Use different noise models each with its own (default) parameters.
+ * @param output The output consists of the noise corrupted version of the input image.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function add_noise_to_image_params(
     input_image: InputPathType,
     noise_model: "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle",
@@ -79,19 +90,8 @@ function add_noise_to_image_params(
     image_dimensionality: 2 | 3 | 4 | null = null,
     verbose: 0 | 1 | null = null,
 ): AddNoiseToImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image A scalar image is expected as input for noise correction.
-     * @param noise_model Use different noise models each with its own (default) parameters.
-     * @param output The output consists of the noise corrupted version of the input image.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AddNoiseToImage" as const,
+        "@type": "ants.AddNoiseToImage" as const,
         "input_image": input_image,
         "noise_model": noise_model,
         "output": output,
@@ -106,18 +106,18 @@ function add_noise_to_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function add_noise_to_image_cargs(
     params: AddNoiseToImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AddNoiseToImage");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -148,18 +148,18 @@ function add_noise_to_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function add_noise_to_image_outputs(
     params: AddNoiseToImageParameters,
     execution: Execution,
 ): AddNoiseToImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AddNoiseToImageOutputs = {
         root: execution.outputFile("."),
         noise_corrupted_image: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -168,22 +168,22 @@ function add_noise_to_image_outputs(
 }
 
 
+/**
+ * Add various types of noise to an image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
+ */
 function add_noise_to_image_execute(
     params: AddNoiseToImageParameters,
     execution: Execution,
 ): AddNoiseToImageOutputs {
-    /**
-     * Add various types of noise to an image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = add_noise_to_image_cargs(params, execution)
     const ret = add_noise_to_image_outputs(params, execution)
@@ -192,6 +192,22 @@ function add_noise_to_image_execute(
 }
 
 
+/**
+ * Add various types of noise to an image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_image A scalar image is expected as input for noise correction.
+ * @param noise_model Use different noise models each with its own (default) parameters.
+ * @param output The output consists of the noise corrupted version of the input image.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
+ */
 function add_noise_to_image(
     input_image: InputPathType,
     noise_model: "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle",
@@ -200,22 +216,6 @@ function add_noise_to_image(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AddNoiseToImageOutputs {
-    /**
-     * Add various types of noise to an image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_image A scalar image is expected as input for noise correction.
-     * @param noise_model Use different noise models each with its own (default) parameters.
-     * @param output The output consists of the noise corrupted version of the input image.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADD_NOISE_TO_IMAGE_METADATA);
     const params = add_noise_to_image_params(input_image, noise_model, output, image_dimensionality, verbose)
@@ -228,5 +228,8 @@ export {
       AddNoiseToImageOutputs,
       AddNoiseToImageParameters,
       add_noise_to_image,
+      add_noise_to_image_cargs,
+      add_noise_to_image_execute,
+      add_noise_to_image_outputs,
       add_noise_to_image_params,
 };

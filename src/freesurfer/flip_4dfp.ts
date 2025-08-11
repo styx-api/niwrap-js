@@ -12,7 +12,7 @@ const FLIP_4DFP_METADATA: Metadata = {
 
 
 interface Flip4dfpParameters {
-    "__STYXTYPE__": "flip_4dfp";
+    "@type": "freesurfer.flip_4dfp";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "flip_x": boolean;
@@ -22,35 +22,35 @@ interface Flip4dfpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "flip_4dfp": flip_4dfp_cargs,
+        "freesurfer.flip_4dfp": flip_4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "flip_4dfp": flip_4dfp_outputs,
+        "freesurfer.flip_4dfp": flip_4dfp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface Flip4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input 4dfp image file
+ * @param output_image Output 4dfp image file. Default is input image root with '_flip' suffix.
+ * @param flip_x Flip along x-axis
+ * @param flip_y Flip along y-axis
+ * @param flip_z Flip along z-axis
+ * @param endianness Specify output endianness: 'b' for big endian, 'l' for little endian. Default is input endianness.
+ *
+ * @returns Parameter dictionary
+ */
 function flip_4dfp_params(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -81,20 +93,8 @@ function flip_4dfp_params(
     flip_z: boolean = false,
     endianness: "b" | "l" | null = null,
 ): Flip4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input 4dfp image file
-     * @param output_image Output 4dfp image file. Default is input image root with '_flip' suffix.
-     * @param flip_x Flip along x-axis
-     * @param flip_y Flip along y-axis
-     * @param flip_z Flip along z-axis
-     * @param endianness Specify output endianness: 'b' for big endian, 'l' for little endian. Default is input endianness.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flip_4dfp" as const,
+        "@type": "freesurfer.flip_4dfp" as const,
         "input_image": input_image,
         "flip_x": flip_x,
         "flip_y": flip_y,
@@ -110,18 +110,18 @@ function flip_4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function flip_4dfp_cargs(
     params: Flip4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("flip_4dfp");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -147,18 +147,18 @@ function flip_4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function flip_4dfp_outputs(
     params: Flip4dfpParameters,
     execution: Execution,
 ): Flip4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Flip4dfpOutputs = {
         root: execution.outputFile("."),
         flipped_image: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null), ".4dfp.img"].join('')) : null,
@@ -167,22 +167,22 @@ function flip_4dfp_outputs(
 }
 
 
+/**
+ * A tool to flip 4dfp images along specified axes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
+ */
 function flip_4dfp_execute(
     params: Flip4dfpParameters,
     execution: Execution,
 ): Flip4dfpOutputs {
-    /**
-     * A tool to flip 4dfp images along specified axes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = flip_4dfp_cargs(params, execution)
     const ret = flip_4dfp_outputs(params, execution)
@@ -191,6 +191,23 @@ function flip_4dfp_execute(
 }
 
 
+/**
+ * A tool to flip 4dfp images along specified axes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input 4dfp image file
+ * @param output_image Output 4dfp image file. Default is input image root with '_flip' suffix.
+ * @param flip_x Flip along x-axis
+ * @param flip_y Flip along y-axis
+ * @param flip_z Flip along z-axis
+ * @param endianness Specify output endianness: 'b' for big endian, 'l' for little endian. Default is input endianness.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
+ */
 function flip_4dfp(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -200,23 +217,6 @@ function flip_4dfp(
     endianness: "b" | "l" | null = null,
     runner: Runner | null = null,
 ): Flip4dfpOutputs {
-    /**
-     * A tool to flip 4dfp images along specified axes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input 4dfp image file
-     * @param output_image Output 4dfp image file. Default is input image root with '_flip' suffix.
-     * @param flip_x Flip along x-axis
-     * @param flip_y Flip along y-axis
-     * @param flip_z Flip along z-axis
-     * @param endianness Specify output endianness: 'b' for big endian, 'l' for little endian. Default is input endianness.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FLIP_4DFP_METADATA);
     const params = flip_4dfp_params(input_image, output_image, flip_x, flip_y, flip_z, endianness)
@@ -229,5 +229,8 @@ export {
       Flip4dfpOutputs,
       Flip4dfpParameters,
       flip_4dfp,
+      flip_4dfp_cargs,
+      flip_4dfp_execute,
+      flip_4dfp_outputs,
       flip_4dfp_params,
 };

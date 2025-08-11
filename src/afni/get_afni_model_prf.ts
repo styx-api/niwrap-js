@@ -12,7 +12,7 @@ const GET_AFNI_MODEL_PRF_METADATA: Metadata = {
 
 
 interface GetAfniModelPrfParameters {
-    "__STYXTYPE__": "get_afni_model_PRF";
+    "@type": "afni.get_afni_model_PRF";
     "amplitude": number;
     "x_coord": number;
     "y_coord": number;
@@ -20,33 +20,33 @@ interface GetAfniModelPrfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "get_afni_model_PRF": get_afni_model_prf_cargs,
+        "afni.get_afni_model_PRF": get_afni_model_prf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface GetAfniModelPrfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param amplitude Amplitude for the AFNI model
+ * @param x_coord X-coordinate for the AFNI model
+ * @param y_coord Y-coordinate for the AFNI model
+ * @param sigma Sigma value for the AFNI model
+ *
+ * @returns Parameter dictionary
+ */
 function get_afni_model_prf_params(
     amplitude: number,
     x_coord: number,
     y_coord: number,
     sigma: number,
 ): GetAfniModelPrfParameters {
-    /**
-     * Build parameters.
-    
-     * @param amplitude Amplitude for the AFNI model
-     * @param x_coord X-coordinate for the AFNI model
-     * @param y_coord Y-coordinate for the AFNI model
-     * @param sigma Sigma value for the AFNI model
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "get_afni_model_PRF" as const,
+        "@type": "afni.get_afni_model_PRF" as const,
         "amplitude": amplitude,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -93,18 +93,18 @@ function get_afni_model_prf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function get_afni_model_prf_cargs(
     params: GetAfniModelPrfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("get_afni_model_PRF");
     cargs.push(String((params["amplitude"] ?? null)));
@@ -115,18 +115,18 @@ function get_afni_model_prf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function get_afni_model_prf_outputs(
     params: GetAfniModelPrfParameters,
     execution: Execution,
 ): GetAfniModelPrfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GetAfniModelPrfOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function get_afni_model_prf_outputs(
 }
 
 
+/**
+ * A tool to get AFNI model parameters assuming a PRF framework.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
+ */
 function get_afni_model_prf_execute(
     params: GetAfniModelPrfParameters,
     execution: Execution,
 ): GetAfniModelPrfOutputs {
-    /**
-     * A tool to get AFNI model parameters assuming a PRF framework.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
-     */
     params = execution.params(params)
     const cargs = get_afni_model_prf_cargs(params, execution)
     const ret = get_afni_model_prf_outputs(params, execution)
@@ -158,6 +158,21 @@ function get_afni_model_prf_execute(
 }
 
 
+/**
+ * A tool to get AFNI model parameters assuming a PRF framework.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param amplitude Amplitude for the AFNI model
+ * @param x_coord X-coordinate for the AFNI model
+ * @param y_coord Y-coordinate for the AFNI model
+ * @param sigma Sigma value for the AFNI model
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
+ */
 function get_afni_model_prf(
     amplitude: number,
     x_coord: number,
@@ -165,21 +180,6 @@ function get_afni_model_prf(
     sigma: number,
     runner: Runner | null = null,
 ): GetAfniModelPrfOutputs {
-    /**
-     * A tool to get AFNI model parameters assuming a PRF framework.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param amplitude Amplitude for the AFNI model
-     * @param x_coord X-coordinate for the AFNI model
-     * @param y_coord Y-coordinate for the AFNI model
-     * @param sigma Sigma value for the AFNI model
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GET_AFNI_MODEL_PRF_METADATA);
     const params = get_afni_model_prf_params(amplitude, x_coord, y_coord, sigma)
@@ -192,5 +192,8 @@ export {
       GetAfniModelPrfOutputs,
       GetAfniModelPrfParameters,
       get_afni_model_prf,
+      get_afni_model_prf_cargs,
+      get_afni_model_prf_execute,
+      get_afni_model_prf_outputs,
       get_afni_model_prf_params,
 };

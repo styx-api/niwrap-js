@@ -12,7 +12,7 @@ const FROM3D_METADATA: Metadata = {
 
 
 interface From3dParameters {
-    "__STYXTYPE__": "from3d";
+    "@type": "afni.from3d";
     "verbose": boolean;
     "nsize": boolean;
     "raw": boolean;
@@ -26,35 +26,35 @@ interface From3dParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "from3d": from3d_cargs,
+        "afni.from3d": from3d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "from3d": from3d_outputs,
+        "afni.from3d": from3d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface From3dOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Read 3D dataset from file 'fname'
+ * @param prefix Write 2D images using prefix 'rname'
+ * @param verbose Print out verbose information during the run
+ * @param nsize Adjust size of 2D data file to be NxN, by padding with zeros, where N is a power of 2.
+ * @param raw Write images in 'raw' format (just the data bytes). There will be no header information saying what the image dimensions are.
+ * @param float Write images as floats, no matter what they are in the dataset itself.
+ * @param zfirst Set 'num' = number of first z slice to be extracted (default = 1).
+ * @param zlast Set 'num' = number of last z slice to be extracted (default = largest).
+ * @param tfirst Set 'num' = number of first time slice to be extracted (default = 1).
+ * @param tlast Set 'num' = number of last time slice to be extracted (default = largest).
+ *
+ * @returns Parameter dictionary
+ */
 function from3d_params(
     input: InputPathType,
     prefix: string,
@@ -89,24 +105,8 @@ function from3d_params(
     tfirst: number | null = null,
     tlast: number | null = null,
 ): From3dParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Read 3D dataset from file 'fname'
-     * @param prefix Write 2D images using prefix 'rname'
-     * @param verbose Print out verbose information during the run
-     * @param nsize Adjust size of 2D data file to be NxN, by padding with zeros, where N is a power of 2.
-     * @param raw Write images in 'raw' format (just the data bytes). There will be no header information saying what the image dimensions are.
-     * @param float Write images as floats, no matter what they are in the dataset itself.
-     * @param zfirst Set 'num' = number of first z slice to be extracted (default = 1).
-     * @param zlast Set 'num' = number of last z slice to be extracted (default = largest).
-     * @param tfirst Set 'num' = number of first time slice to be extracted (default = 1).
-     * @param tlast Set 'num' = number of last time slice to be extracted (default = largest).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from3d" as const,
+        "@type": "afni.from3d" as const,
         "verbose": verbose,
         "nsize": nsize,
         "raw": raw,
@@ -130,18 +130,18 @@ function from3d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function from3d_cargs(
     params: From3dParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("from3d");
     if ((params["verbose"] ?? null)) {
@@ -192,18 +192,18 @@ function from3d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function from3d_outputs(
     params: From3dParameters,
     execution: Execution,
 ): From3dOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: From3dOutputs = {
         root: execution.outputFile("."),
         extracted_images: execution.outputFile([(params["prefix"] ?? null), "*.img"].join('')),
@@ -212,22 +212,22 @@ function from3d_outputs(
 }
 
 
+/**
+ * Extract 2D image files from a 3D AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `From3dOutputs`).
+ */
 function from3d_execute(
     params: From3dParameters,
     execution: Execution,
 ): From3dOutputs {
-    /**
-     * Extract 2D image files from a 3D AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `From3dOutputs`).
-     */
     params = execution.params(params)
     const cargs = from3d_cargs(params, execution)
     const ret = from3d_outputs(params, execution)
@@ -236,6 +236,27 @@ function from3d_execute(
 }
 
 
+/**
+ * Extract 2D image files from a 3D AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Read 3D dataset from file 'fname'
+ * @param prefix Write 2D images using prefix 'rname'
+ * @param verbose Print out verbose information during the run
+ * @param nsize Adjust size of 2D data file to be NxN, by padding with zeros, where N is a power of 2.
+ * @param raw Write images in 'raw' format (just the data bytes). There will be no header information saying what the image dimensions are.
+ * @param float Write images as floats, no matter what they are in the dataset itself.
+ * @param zfirst Set 'num' = number of first z slice to be extracted (default = 1).
+ * @param zlast Set 'num' = number of last z slice to be extracted (default = largest).
+ * @param tfirst Set 'num' = number of first time slice to be extracted (default = 1).
+ * @param tlast Set 'num' = number of last time slice to be extracted (default = largest).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `From3dOutputs`).
+ */
 function from3d(
     input: InputPathType,
     prefix: string,
@@ -249,27 +270,6 @@ function from3d(
     tlast: number | null = null,
     runner: Runner | null = null,
 ): From3dOutputs {
-    /**
-     * Extract 2D image files from a 3D AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Read 3D dataset from file 'fname'
-     * @param prefix Write 2D images using prefix 'rname'
-     * @param verbose Print out verbose information during the run
-     * @param nsize Adjust size of 2D data file to be NxN, by padding with zeros, where N is a power of 2.
-     * @param raw Write images in 'raw' format (just the data bytes). There will be no header information saying what the image dimensions are.
-     * @param float Write images as floats, no matter what they are in the dataset itself.
-     * @param zfirst Set 'num' = number of first z slice to be extracted (default = 1).
-     * @param zlast Set 'num' = number of last z slice to be extracted (default = largest).
-     * @param tfirst Set 'num' = number of first time slice to be extracted (default = 1).
-     * @param tlast Set 'num' = number of last time slice to be extracted (default = largest).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `From3dOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FROM3D_METADATA);
     const params = from3d_params(input, prefix, verbose, nsize, raw, float, zfirst, zlast, tfirst, tlast)
@@ -282,5 +282,8 @@ export {
       From3dOutputs,
       From3dParameters,
       from3d,
+      from3d_cargs,
+      from3d_execute,
+      from3d_outputs,
       from3d_params,
 };

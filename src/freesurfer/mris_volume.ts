@@ -12,39 +12,39 @@ const MRIS_VOLUME_METADATA: Metadata = {
 
 
 interface MrisVolumeParameters {
-    "__STYXTYPE__": "mris_volume";
+    "@type": "freesurfer.mris_volume";
     "surface_file": InputPathType;
     "verbose_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_volume": mris_volume_cargs,
+        "freesurfer.mris_volume": mris_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MrisVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_file The closed surface file whose volume is to be computed.
+ * @param verbose_flag Output more messages for verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_volume_params(
     surface_file: InputPathType,
     verbose_flag: boolean = false,
 ): MrisVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_file The closed surface file whose volume is to be computed.
-     * @param verbose_flag Output more messages for verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_volume" as const,
+        "@type": "freesurfer.mris_volume" as const,
         "surface_file": surface_file,
         "verbose_flag": verbose_flag,
     };
@@ -85,18 +85,18 @@ function mris_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_volume_cargs(
     params: MrisVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_volume");
     cargs.push(execution.inputFile((params["surface_file"] ?? null)));
@@ -107,18 +107,18 @@ function mris_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_volume_outputs(
     params: MrisVolumeParameters,
     execution: Execution,
 ): MrisVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisVolumeOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function mris_volume_outputs(
 }
 
 
+/**
+ * A tool for computing the volume of a closed surface using a divergence formula.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
+ */
 function mris_volume_execute(
     params: MrisVolumeParameters,
     execution: Execution,
 ): MrisVolumeOutputs {
-    /**
-     * A tool for computing the volume of a closed surface using a divergence formula.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_volume_cargs(params, execution)
     const ret = mris_volume_outputs(params, execution)
@@ -150,24 +150,24 @@ function mris_volume_execute(
 }
 
 
+/**
+ * A tool for computing the volume of a closed surface using a divergence formula.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface_file The closed surface file whose volume is to be computed.
+ * @param verbose_flag Output more messages for verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
+ */
 function mris_volume(
     surface_file: InputPathType,
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisVolumeOutputs {
-    /**
-     * A tool for computing the volume of a closed surface using a divergence formula.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface_file The closed surface file whose volume is to be computed.
-     * @param verbose_flag Output more messages for verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_VOLUME_METADATA);
     const params = mris_volume_params(surface_file, verbose_flag)
@@ -180,5 +180,8 @@ export {
       MrisVolumeOutputs,
       MrisVolumeParameters,
       mris_volume,
+      mris_volume_cargs,
+      mris_volume_execute,
+      mris_volume_outputs,
       mris_volume_params,
 };

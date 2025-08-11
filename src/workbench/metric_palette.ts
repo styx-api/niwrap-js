@@ -12,35 +12,35 @@ const METRIC_PALETTE_METADATA: Metadata = {
 
 
 interface MetricPalettePosPercentParameters {
-    "__STYXTYPE__": "pos_percent";
+    "@type": "workbench.metric-palette.pos_percent";
     "pos_min__": number;
     "pos_max__": number;
 }
 
 
 interface MetricPaletteNegPercentParameters {
-    "__STYXTYPE__": "neg_percent";
+    "@type": "workbench.metric-palette.neg_percent";
     "neg_min__": number;
     "neg_max__": number;
 }
 
 
 interface MetricPalettePosUserParameters {
-    "__STYXTYPE__": "pos_user";
+    "@type": "workbench.metric-palette.pos_user";
     "pos_min_user": number;
     "pos_max_user": number;
 }
 
 
 interface MetricPaletteNegUserParameters {
-    "__STYXTYPE__": "neg_user";
+    "@type": "workbench.metric-palette.neg_user";
     "neg_min_user": number;
     "neg_max_user": number;
 }
 
 
 interface MetricPaletteThresholdingParameters {
-    "__STYXTYPE__": "thresholding";
+    "@type": "workbench.metric-palette.thresholding";
     "type": string;
     "test": string;
     "min": number;
@@ -49,7 +49,7 @@ interface MetricPaletteThresholdingParameters {
 
 
 interface MetricPaletteParameters {
-    "__STYXTYPE__": "metric-palette";
+    "@type": "workbench.metric-palette";
     "metric": string;
     "mode": string;
     "opt_column_column"?: string | null | undefined;
@@ -67,58 +67,58 @@ interface MetricPaletteParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-palette": metric_palette_cargs,
-        "pos_percent": metric_palette_pos_percent_cargs,
-        "neg_percent": metric_palette_neg_percent_cargs,
-        "pos_user": metric_palette_pos_user_cargs,
-        "neg_user": metric_palette_neg_user_cargs,
-        "thresholding": metric_palette_thresholding_cargs,
+        "workbench.metric-palette": metric_palette_cargs,
+        "workbench.metric-palette.pos_percent": metric_palette_pos_percent_cargs,
+        "workbench.metric-palette.neg_percent": metric_palette_neg_percent_cargs,
+        "workbench.metric-palette.pos_user": metric_palette_pos_user_cargs,
+        "workbench.metric-palette.neg_user": metric_palette_neg_user_cargs,
+        "workbench.metric-palette.thresholding": metric_palette_thresholding_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pos_min__ the percentile for the least positive data
+ * @param pos_max__ the percentile for the most positive data
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_pos_percent_params(
     pos_min__: number,
     pos_max__: number,
 ): MetricPalettePosPercentParameters {
-    /**
-     * Build parameters.
-    
-     * @param pos_min__ the percentile for the least positive data
-     * @param pos_max__ the percentile for the most positive data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pos_percent" as const,
+        "@type": "workbench.metric-palette.pos_percent" as const,
         "pos_min__": pos_min__,
         "pos_max__": pos_max__,
     };
@@ -126,18 +126,18 @@ function metric_palette_pos_percent_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_pos_percent_cargs(
     params: MetricPalettePosPercentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-pos-percent");
     cargs.push(String((params["pos_min__"] ?? null)));
@@ -146,20 +146,20 @@ function metric_palette_pos_percent_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param neg_min__ the percentile for the least negative data
+ * @param neg_max__ the percentile for the most negative data
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_neg_percent_params(
     neg_min__: number,
     neg_max__: number,
 ): MetricPaletteNegPercentParameters {
-    /**
-     * Build parameters.
-    
-     * @param neg_min__ the percentile for the least negative data
-     * @param neg_max__ the percentile for the most negative data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neg_percent" as const,
+        "@type": "workbench.metric-palette.neg_percent" as const,
         "neg_min__": neg_min__,
         "neg_max__": neg_max__,
     };
@@ -167,18 +167,18 @@ function metric_palette_neg_percent_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_neg_percent_cargs(
     params: MetricPaletteNegPercentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neg-percent");
     cargs.push(String((params["neg_min__"] ?? null)));
@@ -187,20 +187,20 @@ function metric_palette_neg_percent_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pos_min_user the value for the least positive data
+ * @param pos_max_user the value for the most positive data
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_pos_user_params(
     pos_min_user: number,
     pos_max_user: number,
 ): MetricPalettePosUserParameters {
-    /**
-     * Build parameters.
-    
-     * @param pos_min_user the value for the least positive data
-     * @param pos_max_user the value for the most positive data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pos_user" as const,
+        "@type": "workbench.metric-palette.pos_user" as const,
         "pos_min_user": pos_min_user,
         "pos_max_user": pos_max_user,
     };
@@ -208,18 +208,18 @@ function metric_palette_pos_user_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_pos_user_cargs(
     params: MetricPalettePosUserParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-pos-user");
     cargs.push(String((params["pos_min_user"] ?? null)));
@@ -228,20 +228,20 @@ function metric_palette_pos_user_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param neg_min_user the value for the least negative data
+ * @param neg_max_user the value for the most negative data
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_neg_user_params(
     neg_min_user: number,
     neg_max_user: number,
 ): MetricPaletteNegUserParameters {
-    /**
-     * Build parameters.
-    
-     * @param neg_min_user the value for the least negative data
-     * @param neg_max_user the value for the most negative data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neg_user" as const,
+        "@type": "workbench.metric-palette.neg_user" as const,
         "neg_min_user": neg_min_user,
         "neg_max_user": neg_max_user,
     };
@@ -249,18 +249,18 @@ function metric_palette_neg_user_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_neg_user_cargs(
     params: MetricPaletteNegUserParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neg-user");
     cargs.push(String((params["neg_min_user"] ?? null)));
@@ -269,24 +269,24 @@ function metric_palette_neg_user_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param type_ thresholding setting
+ * @param test show values inside or outside thresholds
+ * @param min lower threshold
+ * @param max upper threshold
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_thresholding_params(
     type_: string,
     test: string,
     min: number,
     max: number,
 ): MetricPaletteThresholdingParameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ thresholding setting
-     * @param test show values inside or outside thresholds
-     * @param min lower threshold
-     * @param max upper threshold
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "thresholding" as const,
+        "@type": "workbench.metric-palette.thresholding" as const,
         "type": type_,
         "test": test,
         "min": min,
@@ -296,18 +296,18 @@ function metric_palette_thresholding_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_thresholding_cargs(
     params: MetricPaletteThresholdingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-thresholding");
     cargs.push((params["type"] ?? null));
@@ -331,6 +331,26 @@ interface MetricPaletteOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric the metric to modify
+ * @param mode the mapping mode
+ * @param opt_column_column select a single column: the column number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
+ * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
+ * @param opt_disp_pos_display display positive data: boolean, whether to display
+ * @param opt_disp_neg_display display positive data: boolean, whether to display
+ * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
+ * @param opt_palette_name_name set the palette used: the name of the palette
+ * @param thresholding set the thresholding
+ * @param opt_inversion_type specify palette inversion: the type of inversion
+ *
+ * @returns Parameter dictionary
+ */
 function metric_palette_params(
     metric: string,
     mode: string,
@@ -347,28 +367,8 @@ function metric_palette_params(
     thresholding: MetricPaletteThresholdingParameters | null = null,
     opt_inversion_type: string | null = null,
 ): MetricPaletteParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric the metric to modify
-     * @param mode the mapping mode
-     * @param opt_column_column select a single column: the column number or name
-     * @param pos_percent percentage min/max for positive data coloring
-     * @param neg_percent percentage min/max for negative data coloring
-     * @param pos_user user min/max values for positive data coloring
-     * @param neg_user user min/max values for negative data coloring
-     * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
-     * @param opt_disp_pos_display display positive data: boolean, whether to display
-     * @param opt_disp_neg_display display positive data: boolean, whether to display
-     * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
-     * @param opt_palette_name_name set the palette used: the name of the palette
-     * @param thresholding set the thresholding
-     * @param opt_inversion_type specify palette inversion: the type of inversion
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-palette" as const,
+        "@type": "workbench.metric-palette" as const,
         "metric": metric,
         "mode": mode,
     };
@@ -412,18 +412,18 @@ function metric_palette_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_palette_cargs(
     params: MetricPaletteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-palette");
@@ -436,16 +436,16 @@ function metric_palette_cargs(
         );
     }
     if ((params["pos_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_percent"] ?? null).__STYXTYPE__)((params["pos_percent"] ?? null), execution));
+        cargs.push(...dynCargs((params["pos_percent"] ?? null)["@type"])((params["pos_percent"] ?? null), execution));
     }
     if ((params["neg_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_percent"] ?? null).__STYXTYPE__)((params["neg_percent"] ?? null), execution));
+        cargs.push(...dynCargs((params["neg_percent"] ?? null)["@type"])((params["neg_percent"] ?? null), execution));
     }
     if ((params["pos_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_user"] ?? null).__STYXTYPE__)((params["pos_user"] ?? null), execution));
+        cargs.push(...dynCargs((params["pos_user"] ?? null)["@type"])((params["pos_user"] ?? null), execution));
     }
     if ((params["neg_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_user"] ?? null).__STYXTYPE__)((params["neg_user"] ?? null), execution));
+        cargs.push(...dynCargs((params["neg_user"] ?? null)["@type"])((params["neg_user"] ?? null), execution));
     }
     if ((params["opt_interpolate_interpolate"] ?? null) !== null) {
         cargs.push(
@@ -478,7 +478,7 @@ function metric_palette_cargs(
         );
     }
     if ((params["thresholding"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thresholding"] ?? null).__STYXTYPE__)((params["thresholding"] ?? null), execution));
+        cargs.push(...dynCargs((params["thresholding"] ?? null)["@type"])((params["thresholding"] ?? null), execution));
     }
     if ((params["opt_inversion_type"] ?? null) !== null) {
         cargs.push(
@@ -490,18 +490,18 @@ function metric_palette_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_palette_outputs(
     params: MetricPaletteParameters,
     execution: Execution,
 ): MetricPaletteOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricPaletteOutputs = {
         root: execution.outputFile("."),
     };
@@ -509,94 +509,94 @@ function metric_palette_outputs(
 }
 
 
+/**
+ * Set the palette of a metric file.
+ *
+ * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:
+ *
+ * MODE_AUTO_SCALE
+ * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
+ * MODE_AUTO_SCALE_PERCENTAGE
+ * MODE_USER_SCALE
+ *
+ * The <name> argument to -palette-name must be one of the following:
+ *
+ * ROY-BIG-BL
+ * videen_style
+ * Gray_Interp_Positive
+ * Gray_Interp
+ * PSYCH-FIXED
+ * RBGYR20
+ * RBGYR20P
+ * RYGBR4_positive
+ * RGRBR_mirror90_pos
+ * Orange-Yellow
+ * POS_NEG_ZERO
+ * red-yellow
+ * blue-lightblue
+ * FSL
+ * power_surf
+ * black-red
+ * black-green
+ * black-blue
+ * black-red-positive
+ * black-green-positive
+ * black-blue-positive
+ * blue-black-green
+ * blue-black-red
+ * red-black-green
+ * fsl_red
+ * fsl_green
+ * fsl_blue
+ * fsl_yellow
+ * RedWhiteBlue
+ * cool-warm
+ * spectral
+ * RY-BC-BL
+ * magma
+ * JET256
+ * PSYCH
+ * PSYCH-NO-NONE
+ * ROY-BIG
+ * clear_brain
+ * fidl
+ * raich4_clrmid
+ * raich6_clrmid
+ * HSB8_clrmid
+ * POS_NEG
+ * Special-RGB-Volume
+ *
+ * The <type> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TYPE_OFF
+ * THRESHOLD_TYPE_NORMAL
+ * THRESHOLD_TYPE_FILE
+ *
+ * The <test> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TEST_SHOW_OUTSIDE
+ * THRESHOLD_TEST_SHOW_INSIDE
+ *
+ * The <type> argument to -inversion must be one of the following:
+ *
+ * OFF
+ * POSITIVE_WITH_NEGATIVE
+ * POSITIVE_NEGATIVE_SEPARATE
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
+ */
 function metric_palette_execute(
     params: MetricPaletteParameters,
     execution: Execution,
 ): MetricPaletteOutputs {
-    /**
-     * Set the palette of a metric file.
-     * 
-     * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:
-     * 
-     * MODE_AUTO_SCALE
-     * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
-     * MODE_AUTO_SCALE_PERCENTAGE
-     * MODE_USER_SCALE
-     * 
-     * The <name> argument to -palette-name must be one of the following:
-     * 
-     * ROY-BIG-BL
-     * videen_style
-     * Gray_Interp_Positive
-     * Gray_Interp
-     * PSYCH-FIXED
-     * RBGYR20
-     * RBGYR20P
-     * RYGBR4_positive
-     * RGRBR_mirror90_pos
-     * Orange-Yellow
-     * POS_NEG_ZERO
-     * red-yellow
-     * blue-lightblue
-     * FSL
-     * power_surf
-     * black-red
-     * black-green
-     * black-blue
-     * black-red-positive
-     * black-green-positive
-     * black-blue-positive
-     * blue-black-green
-     * blue-black-red
-     * red-black-green
-     * fsl_red
-     * fsl_green
-     * fsl_blue
-     * fsl_yellow
-     * RedWhiteBlue
-     * cool-warm
-     * spectral
-     * RY-BC-BL
-     * magma
-     * JET256
-     * PSYCH
-     * PSYCH-NO-NONE
-     * ROY-BIG
-     * clear_brain
-     * fidl
-     * raich4_clrmid
-     * raich6_clrmid
-     * HSB8_clrmid
-     * POS_NEG
-     * Special-RGB-Volume
-     * 
-     * The <type> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TYPE_OFF
-     * THRESHOLD_TYPE_NORMAL
-     * THRESHOLD_TYPE_FILE
-     * 
-     * The <test> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TEST_SHOW_OUTSIDE
-     * THRESHOLD_TEST_SHOW_INSIDE
-     * 
-     * The <type> argument to -inversion must be one of the following:
-     * 
-     * OFF
-     * POSITIVE_WITH_NEGATIVE
-     * POSITIVE_NEGATIVE_SEPARATE
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_palette_cargs(params, execution)
     const ret = metric_palette_outputs(params, execution)
@@ -605,6 +605,103 @@ function metric_palette_execute(
 }
 
 
+/**
+ * Set the palette of a metric file.
+ *
+ * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:
+ *
+ * MODE_AUTO_SCALE
+ * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
+ * MODE_AUTO_SCALE_PERCENTAGE
+ * MODE_USER_SCALE
+ *
+ * The <name> argument to -palette-name must be one of the following:
+ *
+ * ROY-BIG-BL
+ * videen_style
+ * Gray_Interp_Positive
+ * Gray_Interp
+ * PSYCH-FIXED
+ * RBGYR20
+ * RBGYR20P
+ * RYGBR4_positive
+ * RGRBR_mirror90_pos
+ * Orange-Yellow
+ * POS_NEG_ZERO
+ * red-yellow
+ * blue-lightblue
+ * FSL
+ * power_surf
+ * black-red
+ * black-green
+ * black-blue
+ * black-red-positive
+ * black-green-positive
+ * black-blue-positive
+ * blue-black-green
+ * blue-black-red
+ * red-black-green
+ * fsl_red
+ * fsl_green
+ * fsl_blue
+ * fsl_yellow
+ * RedWhiteBlue
+ * cool-warm
+ * spectral
+ * RY-BC-BL
+ * magma
+ * JET256
+ * PSYCH
+ * PSYCH-NO-NONE
+ * ROY-BIG
+ * clear_brain
+ * fidl
+ * raich4_clrmid
+ * raich6_clrmid
+ * HSB8_clrmid
+ * POS_NEG
+ * Special-RGB-Volume
+ *
+ * The <type> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TYPE_OFF
+ * THRESHOLD_TYPE_NORMAL
+ * THRESHOLD_TYPE_FILE
+ *
+ * The <test> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TEST_SHOW_OUTSIDE
+ * THRESHOLD_TEST_SHOW_INSIDE
+ *
+ * The <type> argument to -inversion must be one of the following:
+ *
+ * OFF
+ * POSITIVE_WITH_NEGATIVE
+ * POSITIVE_NEGATIVE_SEPARATE
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric the metric to modify
+ * @param mode the mapping mode
+ * @param opt_column_column select a single column: the column number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
+ * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
+ * @param opt_disp_pos_display display positive data: boolean, whether to display
+ * @param opt_disp_neg_display display positive data: boolean, whether to display
+ * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
+ * @param opt_palette_name_name set the palette used: the name of the palette
+ * @param thresholding set the thresholding
+ * @param opt_inversion_type specify palette inversion: the type of inversion
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
+ */
 function metric_palette(
     metric: string,
     mode: string,
@@ -622,103 +719,6 @@ function metric_palette(
     opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): MetricPaletteOutputs {
-    /**
-     * Set the palette of a metric file.
-     * 
-     * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:
-     * 
-     * MODE_AUTO_SCALE
-     * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
-     * MODE_AUTO_SCALE_PERCENTAGE
-     * MODE_USER_SCALE
-     * 
-     * The <name> argument to -palette-name must be one of the following:
-     * 
-     * ROY-BIG-BL
-     * videen_style
-     * Gray_Interp_Positive
-     * Gray_Interp
-     * PSYCH-FIXED
-     * RBGYR20
-     * RBGYR20P
-     * RYGBR4_positive
-     * RGRBR_mirror90_pos
-     * Orange-Yellow
-     * POS_NEG_ZERO
-     * red-yellow
-     * blue-lightblue
-     * FSL
-     * power_surf
-     * black-red
-     * black-green
-     * black-blue
-     * black-red-positive
-     * black-green-positive
-     * black-blue-positive
-     * blue-black-green
-     * blue-black-red
-     * red-black-green
-     * fsl_red
-     * fsl_green
-     * fsl_blue
-     * fsl_yellow
-     * RedWhiteBlue
-     * cool-warm
-     * spectral
-     * RY-BC-BL
-     * magma
-     * JET256
-     * PSYCH
-     * PSYCH-NO-NONE
-     * ROY-BIG
-     * clear_brain
-     * fidl
-     * raich4_clrmid
-     * raich6_clrmid
-     * HSB8_clrmid
-     * POS_NEG
-     * Special-RGB-Volume
-     * 
-     * The <type> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TYPE_OFF
-     * THRESHOLD_TYPE_NORMAL
-     * THRESHOLD_TYPE_FILE
-     * 
-     * The <test> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TEST_SHOW_OUTSIDE
-     * THRESHOLD_TEST_SHOW_INSIDE
-     * 
-     * The <type> argument to -inversion must be one of the following:
-     * 
-     * OFF
-     * POSITIVE_WITH_NEGATIVE
-     * POSITIVE_NEGATIVE_SEPARATE
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric the metric to modify
-     * @param mode the mapping mode
-     * @param opt_column_column select a single column: the column number or name
-     * @param pos_percent percentage min/max for positive data coloring
-     * @param neg_percent percentage min/max for negative data coloring
-     * @param pos_user user min/max values for positive data coloring
-     * @param neg_user user min/max values for negative data coloring
-     * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
-     * @param opt_disp_pos_display display positive data: boolean, whether to display
-     * @param opt_disp_neg_display display positive data: boolean, whether to display
-     * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
-     * @param opt_palette_name_name set the palette used: the name of the palette
-     * @param thresholding set the thresholding
-     * @param opt_inversion_type specify palette inversion: the type of inversion
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_PALETTE_METADATA);
     const params = metric_palette_params(metric, mode, opt_column_column, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
@@ -736,10 +736,18 @@ export {
       MetricPalettePosUserParameters,
       MetricPaletteThresholdingParameters,
       metric_palette,
+      metric_palette_cargs,
+      metric_palette_execute,
+      metric_palette_neg_percent_cargs,
       metric_palette_neg_percent_params,
+      metric_palette_neg_user_cargs,
       metric_palette_neg_user_params,
+      metric_palette_outputs,
       metric_palette_params,
+      metric_palette_pos_percent_cargs,
       metric_palette_pos_percent_params,
+      metric_palette_pos_user_cargs,
       metric_palette_pos_user_params,
+      metric_palette_thresholding_cargs,
       metric_palette_thresholding_params,
 };

@@ -12,40 +12,40 @@ const STEM2FNAME_METADATA: Metadata = {
 
 
 interface Stem2fnameParameters {
-    "__STYXTYPE__": "stem2fname";
+    "@type": "freesurfer.stem2fname";
     "stem": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "stem2fname": stem2fname_cargs,
+        "freesurfer.stem2fname": stem2fname_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "stem2fname": stem2fname_outputs,
+        "freesurfer.stem2fname": stem2fname_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface Stem2fnameOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stem The stem of the file (without extension).
+ *
+ * @returns Parameter dictionary
+ */
 function stem2fname_params(
     stem: string,
 ): Stem2fnameParameters {
-    /**
-     * Build parameters.
-    
-     * @param stem The stem of the file (without extension).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stem2fname" as const,
+        "@type": "freesurfer.stem2fname" as const,
         "stem": stem,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function stem2fname_cargs(
     params: Stem2fnameParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("stem2fname");
     cargs.push((params["stem"] ?? null));
@@ -105,18 +105,18 @@ function stem2fname_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function stem2fname_outputs(
     params: Stem2fnameParameters,
     execution: Execution,
 ): Stem2fnameOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Stem2fnameOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["stem"] ?? null), ".[FORMAT]"].join('')),
@@ -125,22 +125,22 @@ function stem2fname_outputs(
 }
 
 
+/**
+ * Determines the full filename with extension for a given file stem by checking various formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
+ */
 function stem2fname_execute(
     params: Stem2fnameParameters,
     execution: Execution,
 ): Stem2fnameOutputs {
-    /**
-     * Determines the full filename with extension for a given file stem by checking various formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
-     */
     params = execution.params(params)
     const cargs = stem2fname_cargs(params, execution)
     const ret = stem2fname_outputs(params, execution)
@@ -149,22 +149,22 @@ function stem2fname_execute(
 }
 
 
+/**
+ * Determines the full filename with extension for a given file stem by checking various formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param stem The stem of the file (without extension).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
+ */
 function stem2fname(
     stem: string,
     runner: Runner | null = null,
 ): Stem2fnameOutputs {
-    /**
-     * Determines the full filename with extension for a given file stem by checking various formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param stem The stem of the file (without extension).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STEM2FNAME_METADATA);
     const params = stem2fname_params(stem)
@@ -177,5 +177,8 @@ export {
       Stem2fnameOutputs,
       Stem2fnameParameters,
       stem2fname,
+      stem2fname_cargs,
+      stem2fname_execute,
+      stem2fname_outputs,
       stem2fname_params,
 };

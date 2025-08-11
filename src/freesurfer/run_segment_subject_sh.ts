@@ -12,41 +12,41 @@ const RUN_SEGMENT_SUBJECT_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubjectShParameters {
-    "__STYXTYPE__": "run_SegmentSubject.sh";
+    "@type": "freesurfer.run_SegmentSubject.sh";
     "deployedMCRroot": string;
     "arguments"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_SegmentSubject.sh": run_segment_subject_sh_cargs,
+        "freesurfer.run_SegmentSubject.sh": run_segment_subject_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "run_SegmentSubject.sh": run_segment_subject_sh_outputs,
+        "freesurfer.run_SegmentSubject.sh": run_segment_subject_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface RunSegmentSubjectShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param deployed_mcrroot The root directory of the deployed MATLAB Compiler Runtime.
+ * @param arguments_ Additional arguments to be passed to the SegmentSubject script.
+ *
+ * @returns Parameter dictionary
+ */
 function run_segment_subject_sh_params(
     deployed_mcrroot: string,
     arguments_: string | null = null,
 ): RunSegmentSubjectShParameters {
-    /**
-     * Build parameters.
-    
-     * @param deployed_mcrroot The root directory of the deployed MATLAB Compiler Runtime.
-     * @param arguments_ Additional arguments to be passed to the SegmentSubject script.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_SegmentSubject.sh" as const,
+        "@type": "freesurfer.run_SegmentSubject.sh" as const,
         "deployedMCRroot": deployed_mcrroot,
     };
     if (arguments_ !== null) {
@@ -92,18 +92,18 @@ function run_segment_subject_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_segment_subject_sh_cargs(
     params: RunSegmentSubjectShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_SegmentSubject.sh");
     cargs.push((params["deployedMCRroot"] ?? null));
@@ -114,18 +114,18 @@ function run_segment_subject_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_segment_subject_sh_outputs(
     params: RunSegmentSubjectShParameters,
     execution: Execution,
 ): RunSegmentSubjectShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunSegmentSubjectShOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["outputFileName"].join('')),
@@ -134,22 +134,22 @@ function run_segment_subject_sh_outputs(
 }
 
 
+/**
+ * A command-line tool for subject segmentation in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
+ */
 function run_segment_subject_sh_execute(
     params: RunSegmentSubjectShParameters,
     execution: Execution,
 ): RunSegmentSubjectShOutputs {
-    /**
-     * A command-line tool for subject segmentation in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_segment_subject_sh_cargs(params, execution)
     const ret = run_segment_subject_sh_outputs(params, execution)
@@ -158,24 +158,24 @@ function run_segment_subject_sh_execute(
 }
 
 
+/**
+ * A command-line tool for subject segmentation in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param deployed_mcrroot The root directory of the deployed MATLAB Compiler Runtime.
+ * @param arguments_ Additional arguments to be passed to the SegmentSubject script.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
+ */
 function run_segment_subject_sh(
     deployed_mcrroot: string,
     arguments_: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubjectShOutputs {
-    /**
-     * A command-line tool for subject segmentation in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param deployed_mcrroot The root directory of the deployed MATLAB Compiler Runtime.
-     * @param arguments_ Additional arguments to be passed to the SegmentSubject script.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_SH_METADATA);
     const params = run_segment_subject_sh_params(deployed_mcrroot, arguments_)
@@ -188,5 +188,8 @@ export {
       RunSegmentSubjectShOutputs,
       RunSegmentSubjectShParameters,
       run_segment_subject_sh,
+      run_segment_subject_sh_cargs,
+      run_segment_subject_sh_execute,
+      run_segment_subject_sh_outputs,
       run_segment_subject_sh_params,
 };

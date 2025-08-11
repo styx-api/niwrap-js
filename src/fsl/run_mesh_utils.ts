@@ -12,7 +12,7 @@ const RUN_MESH_UTILS_METADATA: Metadata = {
 
 
 interface RunMeshUtilsParameters {
-    "__STYXTYPE__": "run_mesh_utils";
+    "@type": "fsl.run_mesh_utils";
     "base_mesh": InputPathType;
     "output_image": string;
     "input_image"?: InputPathType | null | undefined;
@@ -33,35 +33,35 @@ interface RunMeshUtilsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_mesh_utils": run_mesh_utils_cargs,
+        "fsl.run_mesh_utils": run_mesh_utils_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "run_mesh_utils": run_mesh_utils_outputs,
+        "fsl.run_mesh_utils": run_mesh_utils_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface RunMeshUtilsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_mesh Filename of base mesh
+ * @param output_image Filename of output image
+ * @param input_image Filename of input image
+ * @param second_input_image Filename of second input image
+ * @param weighting_image_force Weighting image force
+ * @param do_uncentre_model Do UnCentre Model
+ * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
+ * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
+ * @param base_mesh2 Filename of base mesh2
+ * @param use_sc2 Use SC2
+ * @param flirt_matrix Filename of flirt matrix
+ * @param do_mesh_reg Do Mesh Registration
+ * @param threshold Threshold
+ * @param degrees_of_freedom Degrees of freedom
+ * @param inverse Inverse Operation
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function run_mesh_utils_params(
     base_mesh: InputPathType,
     output_image: string,
@@ -103,31 +126,8 @@ function run_mesh_utils_params(
     verbose: boolean = false,
     help: boolean = false,
 ): RunMeshUtilsParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_mesh Filename of base mesh
-     * @param output_image Filename of output image
-     * @param input_image Filename of input image
-     * @param second_input_image Filename of second input image
-     * @param weighting_image_force Weighting image force
-     * @param do_uncentre_model Do UnCentre Model
-     * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
-     * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
-     * @param base_mesh2 Filename of base mesh2
-     * @param use_sc2 Use SC2
-     * @param flirt_matrix Filename of flirt matrix
-     * @param do_mesh_reg Do Mesh Registration
-     * @param threshold Threshold
-     * @param degrees_of_freedom Degrees of freedom
-     * @param inverse Inverse Operation
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_mesh_utils" as const,
+        "@type": "fsl.run_mesh_utils" as const,
         "base_mesh": base_mesh,
         "output_image": output_image,
         "do_uncentre_model": do_uncentre_model,
@@ -164,18 +164,18 @@ function run_mesh_utils_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_mesh_utils_cargs(
     params: RunMeshUtilsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_mesh_utils");
     cargs.push(execution.inputFile((params["base_mesh"] ?? null)));
@@ -253,18 +253,18 @@ function run_mesh_utils_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_mesh_utils_outputs(
     params: RunMeshUtilsParameters,
     execution: Execution,
 ): RunMeshUtilsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunMeshUtilsOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -273,22 +273,22 @@ function run_mesh_utils_outputs(
 }
 
 
+/**
+ * A tool for various mesh operations as part of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
+ */
 function run_mesh_utils_execute(
     params: RunMeshUtilsParameters,
     execution: Execution,
 ): RunMeshUtilsOutputs {
-    /**
-     * A tool for various mesh operations as part of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_mesh_utils_cargs(params, execution)
     const ret = run_mesh_utils_outputs(params, execution)
@@ -297,6 +297,34 @@ function run_mesh_utils_execute(
 }
 
 
+/**
+ * A tool for various mesh operations as part of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param base_mesh Filename of base mesh
+ * @param output_image Filename of output image
+ * @param input_image Filename of input image
+ * @param second_input_image Filename of second input image
+ * @param weighting_image_force Weighting image force
+ * @param do_uncentre_model Do UnCentre Model
+ * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
+ * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
+ * @param base_mesh2 Filename of base mesh2
+ * @param use_sc2 Use SC2
+ * @param flirt_matrix Filename of flirt matrix
+ * @param do_mesh_reg Do Mesh Registration
+ * @param threshold Threshold
+ * @param degrees_of_freedom Degrees of freedom
+ * @param inverse Inverse Operation
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
+ */
 function run_mesh_utils(
     base_mesh: InputPathType,
     output_image: string,
@@ -317,34 +345,6 @@ function run_mesh_utils(
     help: boolean = false,
     runner: Runner | null = null,
 ): RunMeshUtilsOutputs {
-    /**
-     * A tool for various mesh operations as part of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param base_mesh Filename of base mesh
-     * @param output_image Filename of output image
-     * @param input_image Filename of input image
-     * @param second_input_image Filename of second input image
-     * @param weighting_image_force Weighting image force
-     * @param do_uncentre_model Do UnCentre Model
-     * @param do_subtract_constant_from_scalars Do Subtract Constant From Scalars
-     * @param do_vertex_scalars_to_image_volume Do Vertex Scalars To Image Volume
-     * @param base_mesh2 Filename of base mesh2
-     * @param use_sc2 Use SC2
-     * @param flirt_matrix Filename of flirt matrix
-     * @param do_mesh_reg Do Mesh Registration
-     * @param threshold Threshold
-     * @param degrees_of_freedom Degrees of freedom
-     * @param inverse Inverse Operation
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_MESH_UTILS_METADATA);
     const params = run_mesh_utils_params(base_mesh, output_image, input_image, second_input_image, weighting_image_force, do_uncentre_model, do_subtract_constant_from_scalars, do_vertex_scalars_to_image_volume, base_mesh2, use_sc2, flirt_matrix, do_mesh_reg, threshold, degrees_of_freedom, inverse, verbose, help)
@@ -357,5 +357,8 @@ export {
       RunMeshUtilsOutputs,
       RunMeshUtilsParameters,
       run_mesh_utils,
+      run_mesh_utils_cargs,
+      run_mesh_utils_execute,
+      run_mesh_utils_outputs,
       run_mesh_utils_params,
 };

@@ -12,7 +12,7 @@ const FSL_GLM_METADATA: Metadata = {
 
 
 interface FslGlmParameters {
-    "__STYXTYPE__": "fsl_glm";
+    "@type": "fsl.fsl_glm";
     "input_file": InputPathType;
     "design_matrix": InputPathType;
     "output_file"?: string | null | undefined;
@@ -40,35 +40,35 @@ interface FslGlmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_glm": fsl_glm_cargs,
+        "fsl.fsl_glm": fsl_glm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_glm": fsl_glm_outputs,
+        "fsl.fsl_glm": fsl_glm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -135,6 +135,36 @@ interface FslGlmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file name (text matrix or 3D/4D image file)
+ * @param design_matrix File name of the GLM design matrix (text time courses for temporal regression or an image file for spatial regression)
+ * @param output_file Output file name for GLM parameter estimates (GLM betas)
+ * @param contrasts Matrix of t-statistics contrasts
+ * @param mask_file Mask image file name if input is image
+ * @param dof Set degrees-of-freedom explicitly
+ * @param design_norm_flag Switch on normalisation of the design matrix columns to unit std. deviation
+ * @param data_norm_flag Switch on normalisation of the data time series to unit std. deviation
+ * @param vn_flag Perform MELODIC variance-normalisation on data
+ * @param demean_flag Switch on de-meaning of design and data
+ * @param output_copes Output file name for COPEs (either as text file or image)
+ * @param output_zstats Output file name for Z-stats (either as text file or image)
+ * @param output_tstats Output file name for t-stats (either as text file or image)
+ * @param output_pvals Output file name for p-values of Z-stats (either as text file or image)
+ * @param output_fvals Output file name for F-value of full model fit
+ * @param output_pfvals Output file name for p-value for full model fit
+ * @param output_residuals Output file name for residuals
+ * @param output_varcb Output file name for variance of COPEs
+ * @param output_sigsq Output file name for residual noise variance sigma-square
+ * @param output_data Output file name for pre-processed data
+ * @param output_vnscales Output file name for scaling factors for variance normalisation
+ * @param vx_text List of text files containing text matrix confounds. Caution, BETA option.
+ * @param vx_images List of 4D images containing voxelwise confounds. Caution, BETA option.
+ * @param help_flag Display this help text
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_glm_params(
     input_file: InputPathType,
     design_matrix: InputPathType,
@@ -161,38 +191,8 @@ function fsl_glm_params(
     vx_images: Array<InputPathType> | null = null,
     help_flag: boolean = false,
 ): FslGlmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file name (text matrix or 3D/4D image file)
-     * @param design_matrix File name of the GLM design matrix (text time courses for temporal regression or an image file for spatial regression)
-     * @param output_file Output file name for GLM parameter estimates (GLM betas)
-     * @param contrasts Matrix of t-statistics contrasts
-     * @param mask_file Mask image file name if input is image
-     * @param dof Set degrees-of-freedom explicitly
-     * @param design_norm_flag Switch on normalisation of the design matrix columns to unit std. deviation
-     * @param data_norm_flag Switch on normalisation of the data time series to unit std. deviation
-     * @param vn_flag Perform MELODIC variance-normalisation on data
-     * @param demean_flag Switch on de-meaning of design and data
-     * @param output_copes Output file name for COPEs (either as text file or image)
-     * @param output_zstats Output file name for Z-stats (either as text file or image)
-     * @param output_tstats Output file name for t-stats (either as text file or image)
-     * @param output_pvals Output file name for p-values of Z-stats (either as text file or image)
-     * @param output_fvals Output file name for F-value of full model fit
-     * @param output_pfvals Output file name for p-value for full model fit
-     * @param output_residuals Output file name for residuals
-     * @param output_varcb Output file name for variance of COPEs
-     * @param output_sigsq Output file name for residual noise variance sigma-square
-     * @param output_data Output file name for pre-processed data
-     * @param output_vnscales Output file name for scaling factors for variance normalisation
-     * @param vx_text List of text files containing text matrix confounds. Caution, BETA option.
-     * @param vx_images List of 4D images containing voxelwise confounds. Caution, BETA option.
-     * @param help_flag Display this help text
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_glm" as const,
+        "@type": "fsl.fsl_glm" as const,
         "input_file": input_file,
         "design_matrix": design_matrix,
         "design_norm_flag": design_norm_flag,
@@ -256,18 +256,18 @@ function fsl_glm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_glm_cargs(
     params: FslGlmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_glm");
     cargs.push(
@@ -399,18 +399,18 @@ function fsl_glm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_glm_outputs(
     params: FslGlmParameters,
     execution: Execution,
 ): FslGlmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslGlmOutputs = {
         root: execution.outputFile("."),
         output_file_out: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null), ".nii.gz"].join('')) : null,
@@ -430,22 +430,22 @@ function fsl_glm_outputs(
 }
 
 
+/**
+ * Simple GLM allowing temporal or spatial regression on either text data or images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
+ */
 function fsl_glm_execute(
     params: FslGlmParameters,
     execution: Execution,
 ): FslGlmOutputs {
-    /**
-     * Simple GLM allowing temporal or spatial regression on either text data or images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_glm_cargs(params, execution)
     const ret = fsl_glm_outputs(params, execution)
@@ -454,6 +454,41 @@ function fsl_glm_execute(
 }
 
 
+/**
+ * Simple GLM allowing temporal or spatial regression on either text data or images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file name (text matrix or 3D/4D image file)
+ * @param design_matrix File name of the GLM design matrix (text time courses for temporal regression or an image file for spatial regression)
+ * @param output_file Output file name for GLM parameter estimates (GLM betas)
+ * @param contrasts Matrix of t-statistics contrasts
+ * @param mask_file Mask image file name if input is image
+ * @param dof Set degrees-of-freedom explicitly
+ * @param design_norm_flag Switch on normalisation of the design matrix columns to unit std. deviation
+ * @param data_norm_flag Switch on normalisation of the data time series to unit std. deviation
+ * @param vn_flag Perform MELODIC variance-normalisation on data
+ * @param demean_flag Switch on de-meaning of design and data
+ * @param output_copes Output file name for COPEs (either as text file or image)
+ * @param output_zstats Output file name for Z-stats (either as text file or image)
+ * @param output_tstats Output file name for t-stats (either as text file or image)
+ * @param output_pvals Output file name for p-values of Z-stats (either as text file or image)
+ * @param output_fvals Output file name for F-value of full model fit
+ * @param output_pfvals Output file name for p-value for full model fit
+ * @param output_residuals Output file name for residuals
+ * @param output_varcb Output file name for variance of COPEs
+ * @param output_sigsq Output file name for residual noise variance sigma-square
+ * @param output_data Output file name for pre-processed data
+ * @param output_vnscales Output file name for scaling factors for variance normalisation
+ * @param vx_text List of text files containing text matrix confounds. Caution, BETA option.
+ * @param vx_images List of 4D images containing voxelwise confounds. Caution, BETA option.
+ * @param help_flag Display this help text
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
+ */
 function fsl_glm(
     input_file: InputPathType,
     design_matrix: InputPathType,
@@ -481,41 +516,6 @@ function fsl_glm(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslGlmOutputs {
-    /**
-     * Simple GLM allowing temporal or spatial regression on either text data or images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file name (text matrix or 3D/4D image file)
-     * @param design_matrix File name of the GLM design matrix (text time courses for temporal regression or an image file for spatial regression)
-     * @param output_file Output file name for GLM parameter estimates (GLM betas)
-     * @param contrasts Matrix of t-statistics contrasts
-     * @param mask_file Mask image file name if input is image
-     * @param dof Set degrees-of-freedom explicitly
-     * @param design_norm_flag Switch on normalisation of the design matrix columns to unit std. deviation
-     * @param data_norm_flag Switch on normalisation of the data time series to unit std. deviation
-     * @param vn_flag Perform MELODIC variance-normalisation on data
-     * @param demean_flag Switch on de-meaning of design and data
-     * @param output_copes Output file name for COPEs (either as text file or image)
-     * @param output_zstats Output file name for Z-stats (either as text file or image)
-     * @param output_tstats Output file name for t-stats (either as text file or image)
-     * @param output_pvals Output file name for p-values of Z-stats (either as text file or image)
-     * @param output_fvals Output file name for F-value of full model fit
-     * @param output_pfvals Output file name for p-value for full model fit
-     * @param output_residuals Output file name for residuals
-     * @param output_varcb Output file name for variance of COPEs
-     * @param output_sigsq Output file name for residual noise variance sigma-square
-     * @param output_data Output file name for pre-processed data
-     * @param output_vnscales Output file name for scaling factors for variance normalisation
-     * @param vx_text List of text files containing text matrix confounds. Caution, BETA option.
-     * @param vx_images List of 4D images containing voxelwise confounds. Caution, BETA option.
-     * @param help_flag Display this help text
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_GLM_METADATA);
     const params = fsl_glm_params(input_file, design_matrix, output_file, contrasts, mask_file, dof, design_norm_flag, data_norm_flag, vn_flag, demean_flag, output_copes, output_zstats, output_tstats, output_pvals, output_fvals, output_pfvals, output_residuals, output_varcb, output_sigsq, output_data, output_vnscales, vx_text, vx_images, help_flag)
@@ -528,5 +528,8 @@ export {
       FslGlmOutputs,
       FslGlmParameters,
       fsl_glm,
+      fsl_glm_cargs,
+      fsl_glm_execute,
+      fsl_glm_outputs,
       fsl_glm_params,
 };

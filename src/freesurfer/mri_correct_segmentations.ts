@@ -12,39 +12,39 @@ const MRI_CORRECT_SEGMENTATIONS_METADATA: Metadata = {
 
 
 interface MriCorrectSegmentationsParameters {
-    "__STYXTYPE__": "mri_correct_segmentations";
+    "@type": "freesurfer.mri_correct_segmentations";
     "input_file_1": InputPathType;
     "input_file_2": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_correct_segmentations": mri_correct_segmentations_cargs,
+        "freesurfer.mri_correct_segmentations": mri_correct_segmentations_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MriCorrectSegmentationsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file_1 First input file for correction (e.g. segmentation file).
+ * @param input_file_2 Second input file for correction (e.g. reference file).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_correct_segmentations_params(
     input_file_1: InputPathType,
     input_file_2: InputPathType,
 ): MriCorrectSegmentationsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file_1 First input file for correction (e.g. segmentation file).
-     * @param input_file_2 Second input file for correction (e.g. reference file).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_correct_segmentations" as const,
+        "@type": "freesurfer.mri_correct_segmentations" as const,
         "input_file_1": input_file_1,
         "input_file_2": input_file_2,
     };
@@ -85,18 +85,18 @@ function mri_correct_segmentations_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_correct_segmentations_cargs(
     params: MriCorrectSegmentationsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_correct_segmentations");
     cargs.push(execution.inputFile((params["input_file_1"] ?? null)));
@@ -105,18 +105,18 @@ function mri_correct_segmentations_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_correct_segmentations_outputs(
     params: MriCorrectSegmentationsParameters,
     execution: Execution,
 ): MriCorrectSegmentationsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCorrectSegmentationsOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mri_correct_segmentations_outputs(
 }
 
 
+/**
+ * Tool for correcting automated infant segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
+ */
 function mri_correct_segmentations_execute(
     params: MriCorrectSegmentationsParameters,
     execution: Execution,
 ): MriCorrectSegmentationsOutputs {
-    /**
-     * Tool for correcting automated infant segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_correct_segmentations_cargs(params, execution)
     const ret = mri_correct_segmentations_outputs(params, execution)
@@ -148,24 +148,24 @@ function mri_correct_segmentations_execute(
 }
 
 
+/**
+ * Tool for correcting automated infant segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file_1 First input file for correction (e.g. segmentation file).
+ * @param input_file_2 Second input file for correction (e.g. reference file).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
+ */
 function mri_correct_segmentations(
     input_file_1: InputPathType,
     input_file_2: InputPathType,
     runner: Runner | null = null,
 ): MriCorrectSegmentationsOutputs {
-    /**
-     * Tool for correcting automated infant segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file_1 First input file for correction (e.g. segmentation file).
-     * @param input_file_2 Second input file for correction (e.g. reference file).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CORRECT_SEGMENTATIONS_METADATA);
     const params = mri_correct_segmentations_params(input_file_1, input_file_2)
@@ -178,5 +178,8 @@ export {
       MriCorrectSegmentationsOutputs,
       MriCorrectSegmentationsParameters,
       mri_correct_segmentations,
+      mri_correct_segmentations_cargs,
+      mri_correct_segmentations_execute,
+      mri_correct_segmentations_outputs,
       mri_correct_segmentations_params,
 };

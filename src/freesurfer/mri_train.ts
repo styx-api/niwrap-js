@@ -12,41 +12,41 @@ const MRI_TRAIN_METADATA: Metadata = {
 
 
 interface MriTrainParameters {
-    "__STYXTYPE__": "mri_train";
+    "@type": "freesurfer.mri_train";
     "training_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_train": mri_train_cargs,
+        "freesurfer.mri_train": mri_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_train": mri_train_outputs,
+        "freesurfer.mri_train": mri_train_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param training_file Input training file name
+ * @param output_file Output file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_train_params(
     training_file: InputPathType,
     output_file: string,
 ): MriTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param training_file Input training file name
-     * @param output_file Output file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_train" as const,
+        "@type": "freesurfer.mri_train" as const,
         "training_file": training_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function mri_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_train_cargs(
     params: MriTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_train");
     cargs.push(execution.inputFile((params["training_file"] ?? null)));
@@ -110,18 +110,18 @@ function mri_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_train_outputs(
     params: MriTrainParameters,
     execution: Execution,
 ): MriTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriTrainOutputs = {
         root: execution.outputFile("."),
         output_file_generated: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_train_outputs(
 }
 
 
+/**
+ * Tool for training with MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
+ */
 function mri_train_execute(
     params: MriTrainParameters,
     execution: Execution,
 ): MriTrainOutputs {
-    /**
-     * Tool for training with MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_train_cargs(params, execution)
     const ret = mri_train_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_train_execute(
 }
 
 
+/**
+ * Tool for training with MRI data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param training_file Input training file name
+ * @param output_file Output file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
+ */
 function mri_train(
     training_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): MriTrainOutputs {
-    /**
-     * Tool for training with MRI data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param training_file Input training file name
-     * @param output_file Output file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_TRAIN_METADATA);
     const params = mri_train_params(training_file, output_file)
@@ -184,5 +184,8 @@ export {
       MriTrainOutputs,
       MriTrainParameters,
       mri_train,
+      mri_train_cargs,
+      mri_train_execute,
+      mri_train_outputs,
       mri_train_params,
 };

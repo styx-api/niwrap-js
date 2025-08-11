@@ -12,40 +12,40 @@ const DICOM_TO_RAW_METADATA: Metadata = {
 
 
 interface DicomToRawParameters {
-    "__STYXTYPE__": "dicom_to_raw";
+    "@type": "afni.dicom_to_raw";
     "input_dicom": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dicom_to_raw": dicom_to_raw_cargs,
+        "afni.dicom_to_raw": dicom_to_raw_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dicom_to_raw": dicom_to_raw_outputs,
+        "afni.dicom_to_raw": dicom_to_raw_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface DicomToRawOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dicom Input DICOM file
+ *
+ * @returns Parameter dictionary
+ */
 function dicom_to_raw_params(
     input_dicom: InputPathType,
 ): DicomToRawParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dicom Input DICOM file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dicom_to_raw" as const,
+        "@type": "afni.dicom_to_raw" as const,
         "input_dicom": input_dicom,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dicom_to_raw_cargs(
     params: DicomToRawParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dicom_to_raw");
     cargs.push(execution.inputFile((params["input_dicom"] ?? null)));
@@ -105,18 +105,18 @@ function dicom_to_raw_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dicom_to_raw_outputs(
     params: DicomToRawParameters,
     execution: Execution,
 ): DicomToRawOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DicomToRawOutputs = {
         root: execution.outputFile("."),
         output_raw_file: execution.outputFile([path.basename((params["input_dicom"] ?? null)), ".raw.0001"].join('')),
@@ -125,22 +125,22 @@ function dicom_to_raw_outputs(
 }
 
 
+/**
+ * Reads images from DICOM file and writes them to raw file(s).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
+ */
 function dicom_to_raw_execute(
     params: DicomToRawParameters,
     execution: Execution,
 ): DicomToRawOutputs {
-    /**
-     * Reads images from DICOM file and writes them to raw file(s).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
-     */
     params = execution.params(params)
     const cargs = dicom_to_raw_cargs(params, execution)
     const ret = dicom_to_raw_outputs(params, execution)
@@ -149,22 +149,22 @@ function dicom_to_raw_execute(
 }
 
 
+/**
+ * Reads images from DICOM file and writes them to raw file(s).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dicom Input DICOM file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
+ */
 function dicom_to_raw(
     input_dicom: InputPathType,
     runner: Runner | null = null,
 ): DicomToRawOutputs {
-    /**
-     * Reads images from DICOM file and writes them to raw file(s).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dicom Input DICOM file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DICOM_TO_RAW_METADATA);
     const params = dicom_to_raw_params(input_dicom)
@@ -177,5 +177,8 @@ export {
       DicomToRawOutputs,
       DicomToRawParameters,
       dicom_to_raw,
+      dicom_to_raw_cargs,
+      dicom_to_raw_execute,
+      dicom_to_raw_outputs,
       dicom_to_raw_params,
 };

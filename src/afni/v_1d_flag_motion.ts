@@ -12,42 +12,42 @@ const V_1D_FLAG_MOTION_METADATA: Metadata = {
 
 
 interface V1dFlagMotionParameters {
-    "__STYXTYPE__": "1dFlagMotion";
+    "@type": "afni.1dFlagMotion";
     "input_motion_file": InputPathType;
     "max_translation"?: number | null | undefined;
     "max_rotation"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dFlagMotion": v_1d_flag_motion_cargs,
+        "afni.1dFlagMotion": v_1d_flag_motion_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dFlagMotion": v_1d_flag_motion_outputs,
+        "afni.1dFlagMotion": v_1d_flag_motion_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V1dFlagMotionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_motion_file Input file with EXACTLY 6 columns: roll pitch yaw delta-SI delta-LR delta-AP (angles in degrees followed by translations in mm)
+ * @param max_translation Maximum translation allowed in any direction (defaults to 1.5mm)
+ * @param max_rotation Maximum rotation allowed in any direction (defaults to 1.25 degrees)
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_flag_motion_params(
     input_motion_file: InputPathType,
     max_translation: number | null = null,
     max_rotation: number | null = null,
 ): V1dFlagMotionParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_motion_file Input file with EXACTLY 6 columns: roll pitch yaw delta-SI delta-LR delta-AP (angles in degrees followed by translations in mm)
-     * @param max_translation Maximum translation allowed in any direction (defaults to 1.5mm)
-     * @param max_rotation Maximum rotation allowed in any direction (defaults to 1.25 degrees)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dFlagMotion" as const,
+        "@type": "afni.1dFlagMotion" as const,
         "input_motion_file": input_motion_file,
     };
     if (max_translation !== null) {
@@ -98,18 +98,18 @@ function v_1d_flag_motion_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_flag_motion_cargs(
     params: V1dFlagMotionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dFlagMotion");
     cargs.push(execution.inputFile((params["input_motion_file"] ?? null)));
@@ -129,18 +129,18 @@ function v_1d_flag_motion_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_flag_motion_outputs(
     params: V1dFlagMotionParameters,
     execution: Execution,
 ): V1dFlagMotionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dFlagMotionOutputs = {
         root: execution.outputFile("."),
         output_points: execution.outputFile(["output_motion_points.1D"].join('')),
@@ -149,22 +149,22 @@ function v_1d_flag_motion_outputs(
 }
 
 
+/**
+ * Produces a list of time points with excessive motion relative to the previous time point.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
+ */
 function v_1d_flag_motion_execute(
     params: V1dFlagMotionParameters,
     execution: Execution,
 ): V1dFlagMotionOutputs {
-    /**
-     * Produces a list of time points with excessive motion relative to the previous time point.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_flag_motion_cargs(params, execution)
     const ret = v_1d_flag_motion_outputs(params, execution)
@@ -173,26 +173,26 @@ function v_1d_flag_motion_execute(
 }
 
 
+/**
+ * Produces a list of time points with excessive motion relative to the previous time point.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_motion_file Input file with EXACTLY 6 columns: roll pitch yaw delta-SI delta-LR delta-AP (angles in degrees followed by translations in mm)
+ * @param max_translation Maximum translation allowed in any direction (defaults to 1.5mm)
+ * @param max_rotation Maximum rotation allowed in any direction (defaults to 1.25 degrees)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
+ */
 function v_1d_flag_motion(
     input_motion_file: InputPathType,
     max_translation: number | null = null,
     max_rotation: number | null = null,
     runner: Runner | null = null,
 ): V1dFlagMotionOutputs {
-    /**
-     * Produces a list of time points with excessive motion relative to the previous time point.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_motion_file Input file with EXACTLY 6 columns: roll pitch yaw delta-SI delta-LR delta-AP (angles in degrees followed by translations in mm)
-     * @param max_translation Maximum translation allowed in any direction (defaults to 1.5mm)
-     * @param max_rotation Maximum rotation allowed in any direction (defaults to 1.25 degrees)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_FLAG_MOTION_METADATA);
     const params = v_1d_flag_motion_params(input_motion_file, max_translation, max_rotation)
@@ -205,5 +205,8 @@ export {
       V1dFlagMotionParameters,
       V_1D_FLAG_MOTION_METADATA,
       v_1d_flag_motion,
+      v_1d_flag_motion_cargs,
+      v_1d_flag_motion_execute,
+      v_1d_flag_motion_outputs,
       v_1d_flag_motion_params,
 };

@@ -12,7 +12,7 @@ const SWE_METADATA: Metadata = {
 
 
 interface SweParameters {
-    "__STYXTYPE__": "swe";
+    "@type": "fsl.swe";
     "input_file": InputPathType;
     "output_root": string;
     "design_mat": InputPathType;
@@ -50,35 +50,35 @@ interface SweParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "swe": swe_cargs,
+        "fsl.swe": swe_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "swe": swe_outputs,
+        "fsl.swe": swe_outputs,
     };
     return outputsFuncs[t];
 }
@@ -129,6 +129,46 @@ interface SweOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file 4D input image
+ * @param output_root Output file root name
+ * @param design_mat Design matrix file
+ * @param design_con T contrasts file
+ * @param design_sub Subjects file
+ * @param mask Mask image
+ * @param fcon F contrasts file
+ * @param modified Use the modified 'Homogeneous' SwE instead of the classic 'Heterogeneous' SwE
+ * @param wild_bootstrap Inference using a non-parametric Wild Bootstrap procedure
+ * @param logp Return -log_10(p) images instead of 1-p images
+ * @param nboot Number of bootstraps (default 999)
+ * @param corrp Output voxelwise corrected p-value images
+ * @param fonly Calculate f-statistics only
+ * @param tfce Threshold-Free Cluster Enhancement
+ * @param tfce_2d Threshold-Free Cluster Enhancement with 2D optimisation, e.g. for TBSS data (H=2, E=1, C=26)
+ * @param cluster_t Cluster-extent-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_t_mass Cluster-mass-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_f Cluster-extent-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_f_mass Cluster-mass-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
+ * @param quiet Switch off diagnostic messages
+ * @param raw Output raw voxelwise statistic images
+ * @param equiv Output equivalent z or chi-squared statistic images
+ * @param dof Output effective number of degrees of freedom images
+ * @param uncorr_p Output uncorrected p-value images
+ * @param null_dist Output null distribution text files
+ * @param no_rc_mask Don't remove constant voxels from mask
+ * @param seed Specific integer seed for random number generator
+ * @param tfce_h TFCE height parameter (default=2)
+ * @param tfce_d TFCE delta parameter override
+ * @param tfce_e TFCE extent parameter (default=0.5)
+ * @param tfce_c TFCE connectivity (6 or 26; default=6)
+ * @param voxelwise_ev List of numbers indicating voxelwise EVs position in the design matrix
+ * @param voxelwise_evs List of 4D images containing voxelwise EVs
+ * @param glm_output Output GLM information (pe, cope, & varcope)
+ *
+ * @returns Parameter dictionary
+ */
 function swe_params(
     input_file: InputPathType,
     output_root: string,
@@ -165,48 +205,8 @@ function swe_params(
     voxelwise_evs: Array<InputPathType> | null = null,
     glm_output: boolean = false,
 ): SweParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file 4D input image
-     * @param output_root Output file root name
-     * @param design_mat Design matrix file
-     * @param design_con T contrasts file
-     * @param design_sub Subjects file
-     * @param mask Mask image
-     * @param fcon F contrasts file
-     * @param modified Use the modified 'Homogeneous' SwE instead of the classic 'Heterogeneous' SwE
-     * @param wild_bootstrap Inference using a non-parametric Wild Bootstrap procedure
-     * @param logp Return -log_10(p) images instead of 1-p images
-     * @param nboot Number of bootstraps (default 999)
-     * @param corrp Output voxelwise corrected p-value images
-     * @param fonly Calculate f-statistics only
-     * @param tfce Threshold-Free Cluster Enhancement
-     * @param tfce_2d Threshold-Free Cluster Enhancement with 2D optimisation, e.g. for TBSS data (H=2, E=1, C=26)
-     * @param cluster_t Cluster-extent-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_t_mass Cluster-mass-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_f Cluster-extent-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_f_mass Cluster-mass-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
-     * @param quiet Switch off diagnostic messages
-     * @param raw Output raw voxelwise statistic images
-     * @param equiv Output equivalent z or chi-squared statistic images
-     * @param dof Output effective number of degrees of freedom images
-     * @param uncorr_p Output uncorrected p-value images
-     * @param null_dist Output null distribution text files
-     * @param no_rc_mask Don't remove constant voxels from mask
-     * @param seed Specific integer seed for random number generator
-     * @param tfce_h TFCE height parameter (default=2)
-     * @param tfce_d TFCE delta parameter override
-     * @param tfce_e TFCE extent parameter (default=0.5)
-     * @param tfce_c TFCE connectivity (6 or 26; default=6)
-     * @param voxelwise_ev List of numbers indicating voxelwise EVs position in the design matrix
-     * @param voxelwise_evs List of 4D images containing voxelwise EVs
-     * @param glm_output Output GLM information (pe, cope, & varcope)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "swe" as const,
+        "@type": "fsl.swe" as const,
         "input_file": input_file,
         "output_root": output_root,
         "design_mat": design_mat,
@@ -274,18 +274,18 @@ function swe_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function swe_cargs(
     params: SweParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("swe");
     cargs.push(
@@ -441,18 +441,18 @@ function swe_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function swe_outputs(
     params: SweParameters,
     execution: Execution,
 ): SweOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SweOutputs = {
         root: execution.outputFile("."),
         logp_img: execution.outputFile([(params["output_root"] ?? null), "_logp.nii.gz"].join('')),
@@ -468,22 +468,22 @@ function swe_outputs(
 }
 
 
+/**
+ * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SweOutputs`).
+ */
 function swe_execute(
     params: SweParameters,
     execution: Execution,
 ): SweOutputs {
-    /**
-     * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SweOutputs`).
-     */
     params = execution.params(params)
     const cargs = swe_cargs(params, execution)
     const ret = swe_outputs(params, execution)
@@ -492,6 +492,51 @@ function swe_execute(
 }
 
 
+/**
+ * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file 4D input image
+ * @param output_root Output file root name
+ * @param design_mat Design matrix file
+ * @param design_con T contrasts file
+ * @param design_sub Subjects file
+ * @param mask Mask image
+ * @param fcon F contrasts file
+ * @param modified Use the modified 'Homogeneous' SwE instead of the classic 'Heterogeneous' SwE
+ * @param wild_bootstrap Inference using a non-parametric Wild Bootstrap procedure
+ * @param logp Return -log_10(p) images instead of 1-p images
+ * @param nboot Number of bootstraps (default 999)
+ * @param corrp Output voxelwise corrected p-value images
+ * @param fonly Calculate f-statistics only
+ * @param tfce Threshold-Free Cluster Enhancement
+ * @param tfce_2d Threshold-Free Cluster Enhancement with 2D optimisation, e.g. for TBSS data (H=2, E=1, C=26)
+ * @param cluster_t Cluster-extent-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_t_mass Cluster-mass-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_f Cluster-extent-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
+ * @param cluster_f_mass Cluster-mass-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
+ * @param quiet Switch off diagnostic messages
+ * @param raw Output raw voxelwise statistic images
+ * @param equiv Output equivalent z or chi-squared statistic images
+ * @param dof Output effective number of degrees of freedom images
+ * @param uncorr_p Output uncorrected p-value images
+ * @param null_dist Output null distribution text files
+ * @param no_rc_mask Don't remove constant voxels from mask
+ * @param seed Specific integer seed for random number generator
+ * @param tfce_h TFCE height parameter (default=2)
+ * @param tfce_d TFCE delta parameter override
+ * @param tfce_e TFCE extent parameter (default=0.5)
+ * @param tfce_c TFCE connectivity (6 or 26; default=6)
+ * @param voxelwise_ev List of numbers indicating voxelwise EVs position in the design matrix
+ * @param voxelwise_evs List of 4D images containing voxelwise EVs
+ * @param glm_output Output GLM information (pe, cope, & varcope)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SweOutputs`).
+ */
 function swe(
     input_file: InputPathType,
     output_root: string,
@@ -529,51 +574,6 @@ function swe(
     glm_output: boolean = false,
     runner: Runner | null = null,
 ): SweOutputs {
-    /**
-     * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file 4D input image
-     * @param output_root Output file root name
-     * @param design_mat Design matrix file
-     * @param design_con T contrasts file
-     * @param design_sub Subjects file
-     * @param mask Mask image
-     * @param fcon F contrasts file
-     * @param modified Use the modified 'Homogeneous' SwE instead of the classic 'Heterogeneous' SwE
-     * @param wild_bootstrap Inference using a non-parametric Wild Bootstrap procedure
-     * @param logp Return -log_10(p) images instead of 1-p images
-     * @param nboot Number of bootstraps (default 999)
-     * @param corrp Output voxelwise corrected p-value images
-     * @param fonly Calculate f-statistics only
-     * @param tfce Threshold-Free Cluster Enhancement
-     * @param tfce_2d Threshold-Free Cluster Enhancement with 2D optimisation, e.g. for TBSS data (H=2, E=1, C=26)
-     * @param cluster_t Cluster-extent-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_t_mass Cluster-mass-based inference for t-contrasts with specified cluster-forming threshold (z-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_f Cluster-extent-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
-     * @param cluster_f_mass Cluster-mass-based inference for f-contrasts with specified cluster-forming threshold (chi-squared-score if >= 1, uncorrected p-value if < 1)
-     * @param quiet Switch off diagnostic messages
-     * @param raw Output raw voxelwise statistic images
-     * @param equiv Output equivalent z or chi-squared statistic images
-     * @param dof Output effective number of degrees of freedom images
-     * @param uncorr_p Output uncorrected p-value images
-     * @param null_dist Output null distribution text files
-     * @param no_rc_mask Don't remove constant voxels from mask
-     * @param seed Specific integer seed for random number generator
-     * @param tfce_h TFCE height parameter (default=2)
-     * @param tfce_d TFCE delta parameter override
-     * @param tfce_e TFCE extent parameter (default=0.5)
-     * @param tfce_c TFCE connectivity (6 or 26; default=6)
-     * @param voxelwise_ev List of numbers indicating voxelwise EVs position in the design matrix
-     * @param voxelwise_evs List of 4D images containing voxelwise EVs
-     * @param glm_output Output GLM information (pe, cope, & varcope)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SweOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SWE_METADATA);
     const params = swe_params(input_file, output_root, design_mat, design_con, design_sub, mask, fcon, modified, wild_bootstrap, logp, nboot, corrp, fonly, tfce, tfce_2d, cluster_t, cluster_t_mass, cluster_f, cluster_f_mass, quiet, raw, equiv, dof, uncorr_p, null_dist, no_rc_mask, seed, tfce_h, tfce_d, tfce_e, tfce_c, voxelwise_ev, voxelwise_evs, glm_output)
@@ -586,5 +586,8 @@ export {
       SweOutputs,
       SweParameters,
       swe,
+      swe_cargs,
+      swe_execute,
+      swe_outputs,
       swe_params,
 };

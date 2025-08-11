@@ -12,7 +12,7 @@ const TALAIRACH_METADATA: Metadata = {
 
 
 interface TalairachParameters {
-    "__STYXTYPE__": "talairach";
+    "@type": "freesurfer.talairach";
     "input_volume": InputPathType;
     "output_transform": string;
     "log_flag": boolean;
@@ -20,35 +20,35 @@ interface TalairachParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talairach": talairach_cargs,
+        "freesurfer.talairach": talairach_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "talairach": talairach_outputs,
+        "freesurfer.talairach": talairach_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface TalairachOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume.
+ * @param output_transform Output transform file (xfm).
+ * @param log_flag Specify log file. Default is outdir/talarach.log.
+ * @param debug_flag Turn on debugging.
+ *
+ * @returns Parameter dictionary
+ */
 function talairach_params(
     input_volume: InputPathType,
     output_transform: string,
     log_flag: boolean = false,
     debug_flag: boolean = false,
 ): TalairachParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume.
-     * @param output_transform Output transform file (xfm).
-     * @param log_flag Specify log file. Default is outdir/talarach.log.
-     * @param debug_flag Turn on debugging.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talairach" as const,
+        "@type": "freesurfer.talairach" as const,
         "input_volume": input_volume,
         "output_transform": output_transform,
         "log_flag": log_flag,
@@ -98,18 +98,18 @@ function talairach_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talairach_cargs(
     params: TalairachParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talairach");
     cargs.push(
@@ -130,18 +130,18 @@ function talairach_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talairach_outputs(
     params: TalairachParameters,
     execution: Execution,
 ): TalairachOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalairachOutputs = {
         root: execution.outputFile("."),
         xfm_output: execution.outputFile([(params["output_transform"] ?? null)].join('')),
@@ -150,22 +150,22 @@ function talairach_outputs(
 }
 
 
+/**
+ * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalairachOutputs`).
+ */
 function talairach_execute(
     params: TalairachParameters,
     execution: Execution,
 ): TalairachOutputs {
-    /**
-     * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalairachOutputs`).
-     */
     params = execution.params(params)
     const cargs = talairach_cargs(params, execution)
     const ret = talairach_outputs(params, execution)
@@ -174,6 +174,21 @@ function talairach_execute(
 }
 
 
+/**
+ * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume.
+ * @param output_transform Output transform file (xfm).
+ * @param log_flag Specify log file. Default is outdir/talarach.log.
+ * @param debug_flag Turn on debugging.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalairachOutputs`).
+ */
 function talairach(
     input_volume: InputPathType,
     output_transform: string,
@@ -181,21 +196,6 @@ function talairach(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): TalairachOutputs {
-    /**
-     * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume.
-     * @param output_transform Output transform file (xfm).
-     * @param log_flag Specify log file. Default is outdir/talarach.log.
-     * @param debug_flag Turn on debugging.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalairachOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALAIRACH_METADATA);
     const params = talairach_params(input_volume, output_transform, log_flag, debug_flag)
@@ -208,5 +208,8 @@ export {
       TalairachOutputs,
       TalairachParameters,
       talairach,
+      talairach_cargs,
+      talairach_execute,
+      talairach_outputs,
       talairach_params,
 };

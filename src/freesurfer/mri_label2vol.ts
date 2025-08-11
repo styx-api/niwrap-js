@@ -12,7 +12,7 @@ const MRI_LABEL2VOL_METADATA: Metadata = {
 
 
 interface MriLabel2volParameters {
-    "__STYXTYPE__": "mri_label2vol";
+    "@type": "freesurfer.mri_label2vol";
     "labels"?: Array<string> | null | undefined;
     "annotation"?: InputPathType | null | undefined;
     "segmentation"?: InputPathType | null | undefined;
@@ -34,35 +34,35 @@ interface MriLabel2volParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_label2vol": mri_label2vol_cargs,
+        "freesurfer.mri_label2vol": mri_label2vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_label2vol": mri_label2vol_outputs,
+        "freesurfer.mri_label2vol": mri_label2vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,30 @@ interface MriLabel2volOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template Template volume; the output will have the same size and geometry.
+ * @param output_volume Output volume in which each voxel will have the number of the label to which it is assigned.
+ * @param labels Enter the name of the label file. For multiple labels, use multiple --label flags.
+ * @param annotation Surface annotation file. Use this to input annotations directly.
+ * @param segmentation Path to input segmentation.
+ * @param registration tkregister-style registration matrix mapping LabelXYZ to VolXYZ.
+ * @param identity_flag Use the identity matrix as the registration.
+ * @param fill_threshold Threshold for voxel fill; a value between 0 and 1.
+ * @param label_vox_vol Volume of each label point; default is 1mm³.
+ * @param projection Project the label along the surface normal. Type can be abs or frac.
+ * @param subject FREESURFER subject identifier; needed with --proj.
+ * @param hemisphere Hemisphere to use for --proj or --annot. Legal values are lh and rh.
+ * @param hits_volume Hit volume, a multi-frame volume with one frame per label showing the number of hits per voxel.
+ * @param label_stat_volume Map the label stats field into the volume.
+ * @param stat_threshold Only use label point where stat > thresh.
+ * @param offset Add offset to the segmentation numbers.
+ * @param defects Creates a segmentation volume of the surface defects.
+ * @param native_vox2ras_flag Use native voxel-to-RAS transform instead of tkregister-style.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_label2vol_params(
     template: InputPathType,
     output_volume: string,
@@ -113,32 +137,8 @@ function mri_label2vol_params(
     defects: string | null = null,
     native_vox2ras_flag: boolean = false,
 ): MriLabel2volParameters {
-    /**
-     * Build parameters.
-    
-     * @param template Template volume; the output will have the same size and geometry.
-     * @param output_volume Output volume in which each voxel will have the number of the label to which it is assigned.
-     * @param labels Enter the name of the label file. For multiple labels, use multiple --label flags.
-     * @param annotation Surface annotation file. Use this to input annotations directly.
-     * @param segmentation Path to input segmentation.
-     * @param registration tkregister-style registration matrix mapping LabelXYZ to VolXYZ.
-     * @param identity_flag Use the identity matrix as the registration.
-     * @param fill_threshold Threshold for voxel fill; a value between 0 and 1.
-     * @param label_vox_vol Volume of each label point; default is 1mm³.
-     * @param projection Project the label along the surface normal. Type can be abs or frac.
-     * @param subject FREESURFER subject identifier; needed with --proj.
-     * @param hemisphere Hemisphere to use for --proj or --annot. Legal values are lh and rh.
-     * @param hits_volume Hit volume, a multi-frame volume with one frame per label showing the number of hits per voxel.
-     * @param label_stat_volume Map the label stats field into the volume.
-     * @param stat_threshold Only use label point where stat > thresh.
-     * @param offset Add offset to the segmentation numbers.
-     * @param defects Creates a segmentation volume of the surface defects.
-     * @param native_vox2ras_flag Use native voxel-to-RAS transform instead of tkregister-style.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_label2vol" as const,
+        "@type": "freesurfer.mri_label2vol" as const,
         "template": template,
         "identity_flag": identity_flag,
         "output_volume": output_volume,
@@ -190,18 +190,18 @@ function mri_label2vol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_label2vol_cargs(
     params: MriLabel2volParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_label2vol");
     if ((params["labels"] ?? null) !== null) {
@@ -306,18 +306,18 @@ function mri_label2vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_label2vol_outputs(
     params: MriLabel2volParameters,
     execution: Execution,
 ): MriLabel2volOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLabel2volOutputs = {
         root: execution.outputFile("."),
         output_vol: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -328,22 +328,22 @@ function mri_label2vol_outputs(
 }
 
 
+/**
+ * Converts a label or a set of labels into a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
+ */
 function mri_label2vol_execute(
     params: MriLabel2volParameters,
     execution: Execution,
 ): MriLabel2volOutputs {
-    /**
-     * Converts a label or a set of labels into a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_label2vol_cargs(params, execution)
     const ret = mri_label2vol_outputs(params, execution)
@@ -352,6 +352,35 @@ function mri_label2vol_execute(
 }
 
 
+/**
+ * Converts a label or a set of labels into a volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param template Template volume; the output will have the same size and geometry.
+ * @param output_volume Output volume in which each voxel will have the number of the label to which it is assigned.
+ * @param labels Enter the name of the label file. For multiple labels, use multiple --label flags.
+ * @param annotation Surface annotation file. Use this to input annotations directly.
+ * @param segmentation Path to input segmentation.
+ * @param registration tkregister-style registration matrix mapping LabelXYZ to VolXYZ.
+ * @param identity_flag Use the identity matrix as the registration.
+ * @param fill_threshold Threshold for voxel fill; a value between 0 and 1.
+ * @param label_vox_vol Volume of each label point; default is 1mm³.
+ * @param projection Project the label along the surface normal. Type can be abs or frac.
+ * @param subject FREESURFER subject identifier; needed with --proj.
+ * @param hemisphere Hemisphere to use for --proj or --annot. Legal values are lh and rh.
+ * @param hits_volume Hit volume, a multi-frame volume with one frame per label showing the number of hits per voxel.
+ * @param label_stat_volume Map the label stats field into the volume.
+ * @param stat_threshold Only use label point where stat > thresh.
+ * @param offset Add offset to the segmentation numbers.
+ * @param defects Creates a segmentation volume of the surface defects.
+ * @param native_vox2ras_flag Use native voxel-to-RAS transform instead of tkregister-style.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
+ */
 function mri_label2vol(
     template: InputPathType,
     output_volume: string,
@@ -373,35 +402,6 @@ function mri_label2vol(
     native_vox2ras_flag: boolean = false,
     runner: Runner | null = null,
 ): MriLabel2volOutputs {
-    /**
-     * Converts a label or a set of labels into a volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param template Template volume; the output will have the same size and geometry.
-     * @param output_volume Output volume in which each voxel will have the number of the label to which it is assigned.
-     * @param labels Enter the name of the label file. For multiple labels, use multiple --label flags.
-     * @param annotation Surface annotation file. Use this to input annotations directly.
-     * @param segmentation Path to input segmentation.
-     * @param registration tkregister-style registration matrix mapping LabelXYZ to VolXYZ.
-     * @param identity_flag Use the identity matrix as the registration.
-     * @param fill_threshold Threshold for voxel fill; a value between 0 and 1.
-     * @param label_vox_vol Volume of each label point; default is 1mm³.
-     * @param projection Project the label along the surface normal. Type can be abs or frac.
-     * @param subject FREESURFER subject identifier; needed with --proj.
-     * @param hemisphere Hemisphere to use for --proj or --annot. Legal values are lh and rh.
-     * @param hits_volume Hit volume, a multi-frame volume with one frame per label showing the number of hits per voxel.
-     * @param label_stat_volume Map the label stats field into the volume.
-     * @param stat_threshold Only use label point where stat > thresh.
-     * @param offset Add offset to the segmentation numbers.
-     * @param defects Creates a segmentation volume of the surface defects.
-     * @param native_vox2ras_flag Use native voxel-to-RAS transform instead of tkregister-style.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LABEL2VOL_METADATA);
     const params = mri_label2vol_params(template, output_volume, labels, annotation, segmentation, registration, identity_flag, fill_threshold, label_vox_vol, projection, subject, hemisphere, hits_volume, label_stat_volume, stat_threshold, offset, defects, native_vox2ras_flag)
@@ -414,5 +414,8 @@ export {
       MriLabel2volOutputs,
       MriLabel2volParameters,
       mri_label2vol,
+      mri_label2vol_cargs,
+      mri_label2vol_execute,
+      mri_label2vol_outputs,
       mri_label2vol_params,
 };

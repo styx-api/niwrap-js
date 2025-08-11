@@ -12,7 +12,7 @@ const FSLMEANTS_METADATA: Metadata = {
 
 
 interface FslmeantsParameters {
-    "__STYXTYPE__": "fslmeants";
+    "@type": "fsl.fslmeants";
     "input_image": InputPathType;
     "output"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface FslmeantsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslmeants": fslmeants_cargs,
+        "fsl.fslmeants": fslmeants_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslmeants": fslmeants_outputs,
+        "fsl.fslmeants": fslmeants_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface FslmeantsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input 4D image
+ * @param output Output text matrix
+ * @param mask Input 3D mask
+ * @param coordinates Requested spatial coordinate (instead of mask). Must have exactly three numerical entries in the list (3-vector).
+ * @param usemm_flag Use mm instead of voxel coordinates (for -c option)
+ * @param showall_flag Show all voxel time series (within mask) instead of averaging
+ * @param eigenv_flag Calculate Eigenvariate(s) instead of mean (output will have 0 mean)
+ * @param eigenvariates_order Select number of Eigenvariates (default 1)
+ * @param no_bin_flag Do not binarise the mask for calculation of Eigenvariates
+ * @param label_image Input 3D label image (generate separate mean for each integer label value - cannot be used with showall)
+ * @param transpose_flag Output results in transpose format (one row per voxel/mean)
+ * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display the help message
+ *
+ * @returns Parameter dictionary
+ */
 function fslmeants_params(
     input_image: InputPathType,
     output: string | null = null,
@@ -97,28 +117,8 @@ function fslmeants_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): FslmeantsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input 4D image
-     * @param output Output text matrix
-     * @param mask Input 3D mask
-     * @param coordinates Requested spatial coordinate (instead of mask). Must have exactly three numerical entries in the list (3-vector).
-     * @param usemm_flag Use mm instead of voxel coordinates (for -c option)
-     * @param showall_flag Show all voxel time series (within mask) instead of averaging
-     * @param eigenv_flag Calculate Eigenvariate(s) instead of mean (output will have 0 mean)
-     * @param eigenvariates_order Select number of Eigenvariates (default 1)
-     * @param no_bin_flag Do not binarise the mask for calculation of Eigenvariates
-     * @param label_image Input 3D label image (generate separate mean for each integer label value - cannot be used with showall)
-     * @param transpose_flag Output results in transpose format (one row per voxel/mean)
-     * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display the help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslmeants" as const,
+        "@type": "fsl.fslmeants" as const,
         "input_image": input_image,
         "usemm_flag": usemm_flag,
         "showall_flag": showall_flag,
@@ -148,18 +148,18 @@ function fslmeants_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslmeants_cargs(
     params: FslmeantsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslmeants");
     cargs.push(
@@ -224,18 +224,18 @@ function fslmeants_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslmeants_outputs(
     params: FslmeantsParameters,
     execution: Execution,
 ): FslmeantsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslmeantsOutputs = {
         root: execution.outputFile("."),
         output_text_matrix: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -244,22 +244,22 @@ function fslmeants_outputs(
 }
 
 
+/**
+ * Prints average timeseries (intensities) to the screen (or saves to a file).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
+ */
 function fslmeants_execute(
     params: FslmeantsParameters,
     execution: Execution,
 ): FslmeantsOutputs {
-    /**
-     * Prints average timeseries (intensities) to the screen (or saves to a file).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslmeants_cargs(params, execution)
     const ret = fslmeants_outputs(params, execution)
@@ -268,6 +268,31 @@ function fslmeants_execute(
 }
 
 
+/**
+ * Prints average timeseries (intensities) to the screen (or saves to a file).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input 4D image
+ * @param output Output text matrix
+ * @param mask Input 3D mask
+ * @param coordinates Requested spatial coordinate (instead of mask). Must have exactly three numerical entries in the list (3-vector).
+ * @param usemm_flag Use mm instead of voxel coordinates (for -c option)
+ * @param showall_flag Show all voxel time series (within mask) instead of averaging
+ * @param eigenv_flag Calculate Eigenvariate(s) instead of mean (output will have 0 mean)
+ * @param eigenvariates_order Select number of Eigenvariates (default 1)
+ * @param no_bin_flag Do not binarise the mask for calculation of Eigenvariates
+ * @param label_image Input 3D label image (generate separate mean for each integer label value - cannot be used with showall)
+ * @param transpose_flag Output results in transpose format (one row per voxel/mean)
+ * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display the help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
+ */
 function fslmeants(
     input_image: InputPathType,
     output: string | null = null,
@@ -285,31 +310,6 @@ function fslmeants(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslmeantsOutputs {
-    /**
-     * Prints average timeseries (intensities) to the screen (or saves to a file).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input 4D image
-     * @param output Output text matrix
-     * @param mask Input 3D mask
-     * @param coordinates Requested spatial coordinate (instead of mask). Must have exactly three numerical entries in the list (3-vector).
-     * @param usemm_flag Use mm instead of voxel coordinates (for -c option)
-     * @param showall_flag Show all voxel time series (within mask) instead of averaging
-     * @param eigenv_flag Calculate Eigenvariate(s) instead of mean (output will have 0 mean)
-     * @param eigenvariates_order Select number of Eigenvariates (default 1)
-     * @param no_bin_flag Do not binarise the mask for calculation of Eigenvariates
-     * @param label_image Input 3D label image (generate separate mean for each integer label value - cannot be used with showall)
-     * @param transpose_flag Output results in transpose format (one row per voxel/mean)
-     * @param weighted_mean_flag Output weighted mean, using mask values as weights, and exit.
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display the help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMEANTS_METADATA);
     const params = fslmeants_params(input_image, output, mask, coordinates, usemm_flag, showall_flag, eigenv_flag, eigenvariates_order, no_bin_flag, label_image, transpose_flag, weighted_mean_flag, verbose_flag, help_flag)
@@ -322,5 +322,8 @@ export {
       FslmeantsOutputs,
       FslmeantsParameters,
       fslmeants,
+      fslmeants_cargs,
+      fslmeants_execute,
+      fslmeants_outputs,
       fslmeants_params,
 };

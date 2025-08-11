@@ -12,14 +12,14 @@ const FOD2FIXEL_METADATA: Metadata = {
 
 
 interface Fod2fixelConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fod2fixel.config";
     "key": string;
     "value": string;
 }
 
 
 interface Fod2fixelParameters {
-    "__STYXTYPE__": "fod2fixel";
+    "@type": "mrtrix.fod2fixel";
     "afd"?: string | null | undefined;
     "peak_amp"?: string | null | undefined;
     "disp"?: string | null | undefined;
@@ -44,55 +44,55 @@ interface Fod2fixelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fod2fixel": fod2fixel_cargs,
-        "config": fod2fixel_config_cargs,
+        "mrtrix.fod2fixel": fod2fixel_cargs,
+        "mrtrix.fod2fixel.config": fod2fixel_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fod2fixel": fod2fixel_outputs,
+        "mrtrix.fod2fixel": fod2fixel_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fod2fixel_config_params(
     key: string,
     value: string,
 ): Fod2fixelConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fod2fixel.config" as const,
         "key": key,
         "value": value,
     };
@@ -100,18 +100,18 @@ function fod2fixel_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fod2fixel_config_cargs(
     params: Fod2fixelConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -149,6 +149,33 @@ interface Fod2fixelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fod the input fod image.
+ * @param fixel_directory the output fixel directory
+ * @param afd output the total Apparent Fibre Density per fixel (integral of FOD lobe)
+ * @param peak_amp output the amplitude of the FOD at the maximal peak per fixel
+ * @param disp output a measure of dispersion per fixel as the ratio between FOD lobe integral and maximal peak amplitude
+ * @param fmls_integral threshold absolute numerical integral of positive FOD lobes. Any lobe for which the integral is smaller than this threshold will be discarded. Default: 0.
+ * @param fmls_peak_value threshold peak amplitude of positive FOD lobes. Any lobe for which the maximal peak amplitude is smaller than this threshold will be discarded. Default: 0.1.
+ * @param fmls_no_thresholds disable all FOD lobe thresholding; every lobe where the FOD is positive will be retained.
+ * @param fmls_lobe_merge_ratio Specify the ratio between a given FOD amplitude sample between two lobes, and the smallest peak amplitude of the adjacent lobes, above which those lobes will be merged. This is the amplitude of the FOD at the 'bridge' point between the two lobes, divided by the peak amplitude of the smaller of the two adjoining lobes. A value of 1.0 will never merge two lobes into one; a value of 0.0 will always merge lobes unless they are bisected by a zero-valued crossing. Default: 1.
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param maxnum maximum number of fixels to output for any particular voxel (default: no limit)
+ * @param nii output the directions and index file in nii format (instead of the default mif)
+ * @param dirpeak define the fixel direction as that of the lobe's maximal peak as opposed to its weighted mean direction (the default)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fod2fixel_params(
     fod: InputPathType,
     fixel_directory: string,
@@ -172,35 +199,8 @@ function fod2fixel_params(
     help: boolean = false,
     version: boolean = false,
 ): Fod2fixelParameters {
-    /**
-     * Build parameters.
-    
-     * @param fod the input fod image.
-     * @param fixel_directory the output fixel directory
-     * @param afd output the total Apparent Fibre Density per fixel (integral of FOD lobe)
-     * @param peak_amp output the amplitude of the FOD at the maximal peak per fixel
-     * @param disp output a measure of dispersion per fixel as the ratio between FOD lobe integral and maximal peak amplitude
-     * @param fmls_integral threshold absolute numerical integral of positive FOD lobes. Any lobe for which the integral is smaller than this threshold will be discarded. Default: 0.
-     * @param fmls_peak_value threshold peak amplitude of positive FOD lobes. Any lobe for which the maximal peak amplitude is smaller than this threshold will be discarded. Default: 0.1.
-     * @param fmls_no_thresholds disable all FOD lobe thresholding; every lobe where the FOD is positive will be retained.
-     * @param fmls_lobe_merge_ratio Specify the ratio between a given FOD amplitude sample between two lobes, and the smallest peak amplitude of the adjacent lobes, above which those lobes will be merged. This is the amplitude of the FOD at the 'bridge' point between the two lobes, divided by the peak amplitude of the smaller of the two adjoining lobes. A value of 1.0 will never merge two lobes into one; a value of 0.0 will always merge lobes unless they are bisected by a zero-valued crossing. Default: 1.
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param maxnum maximum number of fixels to output for any particular voxel (default: no limit)
-     * @param nii output the directions and index file in nii format (instead of the default mif)
-     * @param dirpeak define the fixel direction as that of the lobe's maximal peak as opposed to its weighted mean direction (the default)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fod2fixel" as const,
+        "@type": "mrtrix.fod2fixel" as const,
         "fmls_no_thresholds": fmls_no_thresholds,
         "nii": nii,
         "dirpeak": dirpeak,
@@ -247,18 +247,18 @@ function fod2fixel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fod2fixel_cargs(
     params: Fod2fixelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fod2fixel");
     if ((params["afd"] ?? null) !== null) {
@@ -337,7 +337,7 @@ function fod2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -351,18 +351,18 @@ function fod2fixel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fod2fixel_outputs(
     params: Fod2fixelParameters,
     execution: Execution,
 ): Fod2fixelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fod2fixelOutputs = {
         root: execution.outputFile("."),
         fixel_directory: execution.outputFile([(params["fixel_directory"] ?? null)].join('')),
@@ -374,32 +374,32 @@ function fod2fixel_outputs(
 }
 
 
+/**
+ * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
+ *
+ *
+ *
+ * References:
+ *
+ * * Reference for the FOD segmentation method:
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312 (Appendix 2)
+ *
+ * * Reference for Apparent Fibre Density (AFD):
+ * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A. Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images.Neuroimage, 2012, 15;59(4), 3976-94.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
+ */
 function fod2fixel_execute(
     params: Fod2fixelParameters,
     execution: Execution,
 ): Fod2fixelOutputs {
-    /**
-     * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * * Reference for the FOD segmentation method:
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312 (Appendix 2)
-     * 
-     * * Reference for Apparent Fibre Density (AFD):
-     * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A. Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images.Neuroimage, 2012, 15;59(4), 3976-94.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
-     */
     params = execution.params(params)
     const cargs = fod2fixel_cargs(params, execution)
     const ret = fod2fixel_outputs(params, execution)
@@ -408,6 +408,48 @@ function fod2fixel_execute(
 }
 
 
+/**
+ * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
+ *
+ *
+ *
+ * References:
+ *
+ * * Reference for the FOD segmentation method:
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312 (Appendix 2)
+ *
+ * * Reference for Apparent Fibre Density (AFD):
+ * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A. Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images.Neuroimage, 2012, 15;59(4), 3976-94.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fod the input fod image.
+ * @param fixel_directory the output fixel directory
+ * @param afd output the total Apparent Fibre Density per fixel (integral of FOD lobe)
+ * @param peak_amp output the amplitude of the FOD at the maximal peak per fixel
+ * @param disp output a measure of dispersion per fixel as the ratio between FOD lobe integral and maximal peak amplitude
+ * @param fmls_integral threshold absolute numerical integral of positive FOD lobes. Any lobe for which the integral is smaller than this threshold will be discarded. Default: 0.
+ * @param fmls_peak_value threshold peak amplitude of positive FOD lobes. Any lobe for which the maximal peak amplitude is smaller than this threshold will be discarded. Default: 0.1.
+ * @param fmls_no_thresholds disable all FOD lobe thresholding; every lobe where the FOD is positive will be retained.
+ * @param fmls_lobe_merge_ratio Specify the ratio between a given FOD amplitude sample between two lobes, and the smallest peak amplitude of the adjacent lobes, above which those lobes will be merged. This is the amplitude of the FOD at the 'bridge' point between the two lobes, divided by the peak amplitude of the smaller of the two adjoining lobes. A value of 1.0 will never merge two lobes into one; a value of 0.0 will always merge lobes unless they are bisected by a zero-valued crossing. Default: 1.
+ * @param mask only perform computation within the specified binary brain mask image.
+ * @param maxnum maximum number of fixels to output for any particular voxel (default: no limit)
+ * @param nii output the directions and index file in nii format (instead of the default mif)
+ * @param dirpeak define the fixel direction as that of the lobe's maximal peak as opposed to its weighted mean direction (the default)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
+ */
 function fod2fixel(
     fod: InputPathType,
     fixel_directory: string,
@@ -432,48 +474,6 @@ function fod2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fod2fixelOutputs {
-    /**
-     * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * * Reference for the FOD segmentation method:
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT: Spherical-deconvolution informed filtering of tractograms. NeuroImage, 2013, 67, 298-312 (Appendix 2)
-     * 
-     * * Reference for Apparent Fibre Density (AFD):
-     * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A. Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images.Neuroimage, 2012, 15;59(4), 3976-94.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fod the input fod image.
-     * @param fixel_directory the output fixel directory
-     * @param afd output the total Apparent Fibre Density per fixel (integral of FOD lobe)
-     * @param peak_amp output the amplitude of the FOD at the maximal peak per fixel
-     * @param disp output a measure of dispersion per fixel as the ratio between FOD lobe integral and maximal peak amplitude
-     * @param fmls_integral threshold absolute numerical integral of positive FOD lobes. Any lobe for which the integral is smaller than this threshold will be discarded. Default: 0.
-     * @param fmls_peak_value threshold peak amplitude of positive FOD lobes. Any lobe for which the maximal peak amplitude is smaller than this threshold will be discarded. Default: 0.1.
-     * @param fmls_no_thresholds disable all FOD lobe thresholding; every lobe where the FOD is positive will be retained.
-     * @param fmls_lobe_merge_ratio Specify the ratio between a given FOD amplitude sample between two lobes, and the smallest peak amplitude of the adjacent lobes, above which those lobes will be merged. This is the amplitude of the FOD at the 'bridge' point between the two lobes, divided by the peak amplitude of the smaller of the two adjoining lobes. A value of 1.0 will never merge two lobes into one; a value of 0.0 will always merge lobes unless they are bisected by a zero-valued crossing. Default: 1.
-     * @param mask only perform computation within the specified binary brain mask image.
-     * @param maxnum maximum number of fixels to output for any particular voxel (default: no limit)
-     * @param nii output the directions and index file in nii format (instead of the default mif)
-     * @param dirpeak define the fixel direction as that of the lobe's maximal peak as opposed to its weighted mean direction (the default)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FOD2FIXEL_METADATA);
     const params = fod2fixel_params(fod, fixel_directory, afd, peak_amp, disp, fmls_integral, fmls_peak_value, fmls_no_thresholds, fmls_lobe_merge_ratio, mask, maxnum, nii, dirpeak, info, quiet, debug, force, nthreads, config, help, version)
@@ -487,6 +487,10 @@ export {
       Fod2fixelOutputs,
       Fod2fixelParameters,
       fod2fixel,
+      fod2fixel_cargs,
+      fod2fixel_config_cargs,
       fod2fixel_config_params,
+      fod2fixel_execute,
+      fod2fixel_outputs,
       fod2fixel_params,
 };

@@ -12,7 +12,7 @@ const FAT_MVM_SCRIPTER_PY_METADATA: Metadata = {
 
 
 interface FatMvmScripterPyParameters {
-    "__STYXTYPE__": "fat_mvm_scripter.py";
+    "@type": "afni.fat_mvm_scripter.py";
     "prefix": string;
     "table": InputPathType;
     "log": InputPathType;
@@ -29,35 +29,35 @@ interface FatMvmScripterPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mvm_scripter.py": fat_mvm_scripter_py_cargs,
+        "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mvm_scripter.py": fat_mvm_scripter_py_outputs,
+        "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface FatMvmScripterPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output prefix for the script file, which will ultimately create a PREFIX_MVM.txt file of statistical results from 3dMVM.
+ * @param table Text file containing columns of subject data, one subject per row, formatted as a *_MVMtbl.txt output by fat_mvm_prep.py.
+ * @param log File formatted according to fat_mvm_prep.py containing commented headings and lists of cross-group ROIs and parameters.
+ * @param vars List of variables for the 3dMVM model. Names must be separated with whitespace. Categorical variables will be detected automatically by the presence of nonnumeric characters in their columns.
+ * @param file_vars Second method for supplying a list of variables for 3dMVM. VAR_FILE is a text file with a single column of variable names.
+ * @param pars List of parameters (names of matrices) to run in distinct 3dMVM models. Names must be separated with whitespace.
+ * @param file_pars Second method for supplying a list of parameters for 3dMVM runs. PAR_FILE is a text file with a single column of parameter names.
+ * @param rois Optional command to select a subset of available network ROIs. Names must be separated with whitespace.
+ * @param file_rois Second method for supplying a subset of ROIs for 3dMVM runs. ROI_FILE is a text file with a single column of variable names.
+ * @param no_posthoc Switch to turn off the automatic generation of per-ROI post hoc tests.
+ * @param na_warn_off Switch to turn off the automatic warnings as the data table is created. 3dMVM will excise subjects with NA values, so there shouldn't be NA values in columns you want to model.
+ * @param subnet_pref Name SUBPR for the new table file that is created when a subnetwork list of ROIs is used.
+ * @param cat_pair_off Switch to turn off the test for categorical variables undergoing posthoc testing.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mvm_scripter_py_params(
     prefix: string,
     table: InputPathType,
@@ -99,27 +118,8 @@ function fat_mvm_scripter_py_params(
     subnet_pref: string | null = null,
     cat_pair_off: boolean = false,
 ): FatMvmScripterPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output prefix for the script file, which will ultimately create a PREFIX_MVM.txt file of statistical results from 3dMVM.
-     * @param table Text file containing columns of subject data, one subject per row, formatted as a *_MVMtbl.txt output by fat_mvm_prep.py.
-     * @param log File formatted according to fat_mvm_prep.py containing commented headings and lists of cross-group ROIs and parameters.
-     * @param vars List of variables for the 3dMVM model. Names must be separated with whitespace. Categorical variables will be detected automatically by the presence of nonnumeric characters in their columns.
-     * @param file_vars Second method for supplying a list of variables for 3dMVM. VAR_FILE is a text file with a single column of variable names.
-     * @param pars List of parameters (names of matrices) to run in distinct 3dMVM models. Names must be separated with whitespace.
-     * @param file_pars Second method for supplying a list of parameters for 3dMVM runs. PAR_FILE is a text file with a single column of parameter names.
-     * @param rois Optional command to select a subset of available network ROIs. Names must be separated with whitespace.
-     * @param file_rois Second method for supplying a subset of ROIs for 3dMVM runs. ROI_FILE is a text file with a single column of variable names.
-     * @param no_posthoc Switch to turn off the automatic generation of per-ROI post hoc tests.
-     * @param na_warn_off Switch to turn off the automatic warnings as the data table is created. 3dMVM will excise subjects with NA values, so there shouldn't be NA values in columns you want to model.
-     * @param subnet_pref Name SUBPR for the new table file that is created when a subnetwork list of ROIs is used.
-     * @param cat_pair_off Switch to turn off the test for categorical variables undergoing posthoc testing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mvm_scripter.py" as const,
+        "@type": "afni.fat_mvm_scripter.py" as const,
         "prefix": prefix,
         "table": table,
         "log": log,
@@ -152,18 +152,18 @@ function fat_mvm_scripter_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mvm_scripter_py_cargs(
     params: FatMvmScripterPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mvm_scripter.py");
     cargs.push(
@@ -233,18 +233,18 @@ function fat_mvm_scripter_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mvm_scripter_py_outputs(
     params: FatMvmScripterPyParameters,
     execution: Execution,
 ): FatMvmScripterPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMvmScripterPyOutputs = {
         root: execution.outputFile("."),
         generated_script: execution.outputFile([(params["prefix"] ?? null), "_scri.tcsh"].join('')),
@@ -254,22 +254,22 @@ function fat_mvm_scripter_py_outputs(
 }
 
 
+/**
+ * Automated tool to create command scripts for 3dMVM statistical modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
+ */
 function fat_mvm_scripter_py_execute(
     params: FatMvmScripterPyParameters,
     execution: Execution,
 ): FatMvmScripterPyOutputs {
-    /**
-     * Automated tool to create command scripts for 3dMVM statistical modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mvm_scripter_py_cargs(params, execution)
     const ret = fat_mvm_scripter_py_outputs(params, execution)
@@ -278,6 +278,30 @@ function fat_mvm_scripter_py_execute(
 }
 
 
+/**
+ * Automated tool to create command scripts for 3dMVM statistical modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output prefix for the script file, which will ultimately create a PREFIX_MVM.txt file of statistical results from 3dMVM.
+ * @param table Text file containing columns of subject data, one subject per row, formatted as a *_MVMtbl.txt output by fat_mvm_prep.py.
+ * @param log File formatted according to fat_mvm_prep.py containing commented headings and lists of cross-group ROIs and parameters.
+ * @param vars List of variables for the 3dMVM model. Names must be separated with whitespace. Categorical variables will be detected automatically by the presence of nonnumeric characters in their columns.
+ * @param file_vars Second method for supplying a list of variables for 3dMVM. VAR_FILE is a text file with a single column of variable names.
+ * @param pars List of parameters (names of matrices) to run in distinct 3dMVM models. Names must be separated with whitespace.
+ * @param file_pars Second method for supplying a list of parameters for 3dMVM runs. PAR_FILE is a text file with a single column of parameter names.
+ * @param rois Optional command to select a subset of available network ROIs. Names must be separated with whitespace.
+ * @param file_rois Second method for supplying a subset of ROIs for 3dMVM runs. ROI_FILE is a text file with a single column of variable names.
+ * @param no_posthoc Switch to turn off the automatic generation of per-ROI post hoc tests.
+ * @param na_warn_off Switch to turn off the automatic warnings as the data table is created. 3dMVM will excise subjects with NA values, so there shouldn't be NA values in columns you want to model.
+ * @param subnet_pref Name SUBPR for the new table file that is created when a subnetwork list of ROIs is used.
+ * @param cat_pair_off Switch to turn off the test for categorical variables undergoing posthoc testing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
+ */
 function fat_mvm_scripter_py(
     prefix: string,
     table: InputPathType,
@@ -294,30 +318,6 @@ function fat_mvm_scripter_py(
     cat_pair_off: boolean = false,
     runner: Runner | null = null,
 ): FatMvmScripterPyOutputs {
-    /**
-     * Automated tool to create command scripts for 3dMVM statistical modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output prefix for the script file, which will ultimately create a PREFIX_MVM.txt file of statistical results from 3dMVM.
-     * @param table Text file containing columns of subject data, one subject per row, formatted as a *_MVMtbl.txt output by fat_mvm_prep.py.
-     * @param log File formatted according to fat_mvm_prep.py containing commented headings and lists of cross-group ROIs and parameters.
-     * @param vars List of variables for the 3dMVM model. Names must be separated with whitespace. Categorical variables will be detected automatically by the presence of nonnumeric characters in their columns.
-     * @param file_vars Second method for supplying a list of variables for 3dMVM. VAR_FILE is a text file with a single column of variable names.
-     * @param pars List of parameters (names of matrices) to run in distinct 3dMVM models. Names must be separated with whitespace.
-     * @param file_pars Second method for supplying a list of parameters for 3dMVM runs. PAR_FILE is a text file with a single column of parameter names.
-     * @param rois Optional command to select a subset of available network ROIs. Names must be separated with whitespace.
-     * @param file_rois Second method for supplying a subset of ROIs for 3dMVM runs. ROI_FILE is a text file with a single column of variable names.
-     * @param no_posthoc Switch to turn off the automatic generation of per-ROI post hoc tests.
-     * @param na_warn_off Switch to turn off the automatic warnings as the data table is created. 3dMVM will excise subjects with NA values, so there shouldn't be NA values in columns you want to model.
-     * @param subnet_pref Name SUBPR for the new table file that is created when a subnetwork list of ROIs is used.
-     * @param cat_pair_off Switch to turn off the test for categorical variables undergoing posthoc testing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MVM_SCRIPTER_PY_METADATA);
     const params = fat_mvm_scripter_py_params(prefix, table, log, vars, file_vars, pars, file_pars, rois, file_rois, no_posthoc, na_warn_off, subnet_pref, cat_pair_off)
@@ -330,5 +330,8 @@ export {
       FatMvmScripterPyOutputs,
       FatMvmScripterPyParameters,
       fat_mvm_scripter_py,
+      fat_mvm_scripter_py_cargs,
+      fat_mvm_scripter_py_execute,
+      fat_mvm_scripter_py_outputs,
       fat_mvm_scripter_py_params,
 };

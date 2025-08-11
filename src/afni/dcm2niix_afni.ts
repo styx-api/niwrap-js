@@ -12,7 +12,7 @@ const DCM2NIIX_AFNI_METADATA: Metadata = {
 
 
 interface Dcm2niixAfniParameters {
-    "__STYXTYPE__": "dcm2niix_afni";
+    "@type": "afni.dcm2niix_afni";
     "input_folder": string;
     "compression_level"?: number | null | undefined;
     "adjacent_dicoms"?: string | null | undefined;
@@ -45,35 +45,35 @@ interface Dcm2niixAfniParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcm2niix_afni": dcm2niix_afni_cargs,
+        "afni.dcm2niix_afni": dcm2niix_afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dcm2niix_afni": dcm2niix_afni_outputs,
+        "afni.dcm2niix_afni": dcm2niix_afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,41 @@ interface Dcm2niixAfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_folder Folder containing DICOM files
+ * @param compression_level GZ compression level (1=fastest..9=smallest, default 6)
+ * @param adjacent_dicoms Adjacent DICOMs (images from same series always in same folder) for faster conversion (n/y, default n)
+ * @param bids_sidecar BIDS sidecar (y/n/o [o=only: no NIfTI], default y)
+ * @param anonymize_bids Anonymize BIDS (y/n, default y)
+ * @param comment Comment stored in NIfTI aux_file (provide up to 24 characters e.g. '-c first_visit')
+ * @param directory_search_depth Directory search depth. Convert DICOMs in sub-folders of in_folder? (0..9, default 5)
+ * @param export_format Export as NRRD (y) or MGH (o) instead of NIfTI (y/n/o, default n)
+ * @param filename_template Filename template for output (default '%f_%p_%t_%s')
+ * @param generate_defaults Generate defaults file (y/n/o/i [o=only: reset and write defaults; i=ignore: reset defaults], default n)
+ * @param ignore_images Ignore derived, localizer and 2D images (y/n, default n)
+ * @param lossless_scale Losslessly scale 16-bit integers to use dynamic range (y/n/o, default o)
+ * @param merge_slices Merge 2D slices from same series regardless of echo, exposure, etc. (n/y or 0/1/2, default 2)
+ * @param series_crc_number Only convert this series CRC number - can be used up to 16 times (default convert all)
+ * @param output_directory Output directory (omit to save to input folder)
+ * @param phillips_scaling Philips precise float (not display) scaling (y/n, default y)
+ * @param rename_dicoms Rename instead of convert DICOMs (y/n, default n)
+ * @param single_file_mode Single file mode, do not convert other images in folder (y/n, default n)
+ * @param up_to_date Up-to-date check
+ * @param verbose Verbose (n/y or 0/1/2, default 0)
+ * @param write_behavior Write behavior for name conflicts (0=skip duplicates, 1=overwrite, 2=add suffix)
+ * @param crop_3d Crop 3D acquisitions (y/n/i, default n, use 'i'gnore to neither crop nor rotate 3D acquisitions)
+ * @param gz_compress GZ compress images (y/o/i/n/3, default n) [y=pigz, o=optimal pigz, i=internal:miniz, n=no, 3=no,3D]
+ * @param big_endian Byte order (y/n/o, default o) [y=big-endian, n=little-endian, o=optimal/native]
+ * @param progress Slicer format progress information (y/n, default n)
+ * @param ignore_trigger_times Disregard values in 0018, 1060 and 0020, 9153
+ * @param terse Omit filename post-fixes (can cause overwrites)
+ * @param version Report version
+ * @param xml Slicer format features
+ *
+ * @returns Parameter dictionary
+ */
 function dcm2niix_afni_params(
     input_folder: string,
     compression_level: number | null = null,
@@ -127,43 +162,8 @@ function dcm2niix_afni_params(
     version: boolean = false,
     xml: boolean = false,
 ): Dcm2niixAfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_folder Folder containing DICOM files
-     * @param compression_level GZ compression level (1=fastest..9=smallest, default 6)
-     * @param adjacent_dicoms Adjacent DICOMs (images from same series always in same folder) for faster conversion (n/y, default n)
-     * @param bids_sidecar BIDS sidecar (y/n/o [o=only: no NIfTI], default y)
-     * @param anonymize_bids Anonymize BIDS (y/n, default y)
-     * @param comment Comment stored in NIfTI aux_file (provide up to 24 characters e.g. '-c first_visit')
-     * @param directory_search_depth Directory search depth. Convert DICOMs in sub-folders of in_folder? (0..9, default 5)
-     * @param export_format Export as NRRD (y) or MGH (o) instead of NIfTI (y/n/o, default n)
-     * @param filename_template Filename template for output (default '%f_%p_%t_%s')
-     * @param generate_defaults Generate defaults file (y/n/o/i [o=only: reset and write defaults; i=ignore: reset defaults], default n)
-     * @param ignore_images Ignore derived, localizer and 2D images (y/n, default n)
-     * @param lossless_scale Losslessly scale 16-bit integers to use dynamic range (y/n/o, default o)
-     * @param merge_slices Merge 2D slices from same series regardless of echo, exposure, etc. (n/y or 0/1/2, default 2)
-     * @param series_crc_number Only convert this series CRC number - can be used up to 16 times (default convert all)
-     * @param output_directory Output directory (omit to save to input folder)
-     * @param phillips_scaling Philips precise float (not display) scaling (y/n, default y)
-     * @param rename_dicoms Rename instead of convert DICOMs (y/n, default n)
-     * @param single_file_mode Single file mode, do not convert other images in folder (y/n, default n)
-     * @param up_to_date Up-to-date check
-     * @param verbose Verbose (n/y or 0/1/2, default 0)
-     * @param write_behavior Write behavior for name conflicts (0=skip duplicates, 1=overwrite, 2=add suffix)
-     * @param crop_3d Crop 3D acquisitions (y/n/i, default n, use 'i'gnore to neither crop nor rotate 3D acquisitions)
-     * @param gz_compress GZ compress images (y/o/i/n/3, default n) [y=pigz, o=optimal pigz, i=internal:miniz, n=no, 3=no,3D]
-     * @param big_endian Byte order (y/n/o, default o) [y=big-endian, n=little-endian, o=optimal/native]
-     * @param progress Slicer format progress information (y/n, default n)
-     * @param ignore_trigger_times Disregard values in 0018, 1060 and 0020, 9153
-     * @param terse Omit filename post-fixes (can cause overwrites)
-     * @param version Report version
-     * @param xml Slicer format features
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcm2niix_afni" as const,
+        "@type": "afni.dcm2niix_afni" as const,
         "input_folder": input_folder,
         "up_to_date": up_to_date,
         "ignore_trigger_times": ignore_trigger_times,
@@ -244,18 +244,18 @@ function dcm2niix_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcm2niix_afni_cargs(
     params: Dcm2niixAfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcm2niix_afni");
     cargs.push((params["input_folder"] ?? null));
@@ -416,18 +416,18 @@ function dcm2niix_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcm2niix_afni_outputs(
     params: Dcm2niixAfniParameters,
     execution: Execution,
 ): Dcm2niixAfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dcm2niixAfniOutputs = {
         root: execution.outputFile("."),
         nifti_files: execution.outputFile(["<OUTPUT_DIRECTORY>/*.nii"].join('')),
@@ -436,22 +436,22 @@ function dcm2niix_afni_outputs(
 }
 
 
+/**
+ * DICOM to NIfTI converter optimized for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
+ */
 function dcm2niix_afni_execute(
     params: Dcm2niixAfniParameters,
     execution: Execution,
 ): Dcm2niixAfniOutputs {
-    /**
-     * DICOM to NIfTI converter optimized for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcm2niix_afni_cargs(params, execution)
     const ret = dcm2niix_afni_outputs(params, execution)
@@ -460,6 +460,46 @@ function dcm2niix_afni_execute(
 }
 
 
+/**
+ * DICOM to NIfTI converter optimized for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_folder Folder containing DICOM files
+ * @param compression_level GZ compression level (1=fastest..9=smallest, default 6)
+ * @param adjacent_dicoms Adjacent DICOMs (images from same series always in same folder) for faster conversion (n/y, default n)
+ * @param bids_sidecar BIDS sidecar (y/n/o [o=only: no NIfTI], default y)
+ * @param anonymize_bids Anonymize BIDS (y/n, default y)
+ * @param comment Comment stored in NIfTI aux_file (provide up to 24 characters e.g. '-c first_visit')
+ * @param directory_search_depth Directory search depth. Convert DICOMs in sub-folders of in_folder? (0..9, default 5)
+ * @param export_format Export as NRRD (y) or MGH (o) instead of NIfTI (y/n/o, default n)
+ * @param filename_template Filename template for output (default '%f_%p_%t_%s')
+ * @param generate_defaults Generate defaults file (y/n/o/i [o=only: reset and write defaults; i=ignore: reset defaults], default n)
+ * @param ignore_images Ignore derived, localizer and 2D images (y/n, default n)
+ * @param lossless_scale Losslessly scale 16-bit integers to use dynamic range (y/n/o, default o)
+ * @param merge_slices Merge 2D slices from same series regardless of echo, exposure, etc. (n/y or 0/1/2, default 2)
+ * @param series_crc_number Only convert this series CRC number - can be used up to 16 times (default convert all)
+ * @param output_directory Output directory (omit to save to input folder)
+ * @param phillips_scaling Philips precise float (not display) scaling (y/n, default y)
+ * @param rename_dicoms Rename instead of convert DICOMs (y/n, default n)
+ * @param single_file_mode Single file mode, do not convert other images in folder (y/n, default n)
+ * @param up_to_date Up-to-date check
+ * @param verbose Verbose (n/y or 0/1/2, default 0)
+ * @param write_behavior Write behavior for name conflicts (0=skip duplicates, 1=overwrite, 2=add suffix)
+ * @param crop_3d Crop 3D acquisitions (y/n/i, default n, use 'i'gnore to neither crop nor rotate 3D acquisitions)
+ * @param gz_compress GZ compress images (y/o/i/n/3, default n) [y=pigz, o=optimal pigz, i=internal:miniz, n=no, 3=no,3D]
+ * @param big_endian Byte order (y/n/o, default o) [y=big-endian, n=little-endian, o=optimal/native]
+ * @param progress Slicer format progress information (y/n, default n)
+ * @param ignore_trigger_times Disregard values in 0018, 1060 and 0020, 9153
+ * @param terse Omit filename post-fixes (can cause overwrites)
+ * @param version Report version
+ * @param xml Slicer format features
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
+ */
 function dcm2niix_afni(
     input_folder: string,
     compression_level: number | null = null,
@@ -492,46 +532,6 @@ function dcm2niix_afni(
     xml: boolean = false,
     runner: Runner | null = null,
 ): Dcm2niixAfniOutputs {
-    /**
-     * DICOM to NIfTI converter optimized for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_folder Folder containing DICOM files
-     * @param compression_level GZ compression level (1=fastest..9=smallest, default 6)
-     * @param adjacent_dicoms Adjacent DICOMs (images from same series always in same folder) for faster conversion (n/y, default n)
-     * @param bids_sidecar BIDS sidecar (y/n/o [o=only: no NIfTI], default y)
-     * @param anonymize_bids Anonymize BIDS (y/n, default y)
-     * @param comment Comment stored in NIfTI aux_file (provide up to 24 characters e.g. '-c first_visit')
-     * @param directory_search_depth Directory search depth. Convert DICOMs in sub-folders of in_folder? (0..9, default 5)
-     * @param export_format Export as NRRD (y) or MGH (o) instead of NIfTI (y/n/o, default n)
-     * @param filename_template Filename template for output (default '%f_%p_%t_%s')
-     * @param generate_defaults Generate defaults file (y/n/o/i [o=only: reset and write defaults; i=ignore: reset defaults], default n)
-     * @param ignore_images Ignore derived, localizer and 2D images (y/n, default n)
-     * @param lossless_scale Losslessly scale 16-bit integers to use dynamic range (y/n/o, default o)
-     * @param merge_slices Merge 2D slices from same series regardless of echo, exposure, etc. (n/y or 0/1/2, default 2)
-     * @param series_crc_number Only convert this series CRC number - can be used up to 16 times (default convert all)
-     * @param output_directory Output directory (omit to save to input folder)
-     * @param phillips_scaling Philips precise float (not display) scaling (y/n, default y)
-     * @param rename_dicoms Rename instead of convert DICOMs (y/n, default n)
-     * @param single_file_mode Single file mode, do not convert other images in folder (y/n, default n)
-     * @param up_to_date Up-to-date check
-     * @param verbose Verbose (n/y or 0/1/2, default 0)
-     * @param write_behavior Write behavior for name conflicts (0=skip duplicates, 1=overwrite, 2=add suffix)
-     * @param crop_3d Crop 3D acquisitions (y/n/i, default n, use 'i'gnore to neither crop nor rotate 3D acquisitions)
-     * @param gz_compress GZ compress images (y/o/i/n/3, default n) [y=pigz, o=optimal pigz, i=internal:miniz, n=no, 3=no,3D]
-     * @param big_endian Byte order (y/n/o, default o) [y=big-endian, n=little-endian, o=optimal/native]
-     * @param progress Slicer format progress information (y/n, default n)
-     * @param ignore_trigger_times Disregard values in 0018, 1060 and 0020, 9153
-     * @param terse Omit filename post-fixes (can cause overwrites)
-     * @param version Report version
-     * @param xml Slicer format features
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCM2NIIX_AFNI_METADATA);
     const params = dcm2niix_afni_params(input_folder, compression_level, adjacent_dicoms, bids_sidecar, anonymize_bids, comment, directory_search_depth, export_format, filename_template, generate_defaults, ignore_images, lossless_scale, merge_slices, series_crc_number, output_directory, phillips_scaling, rename_dicoms, single_file_mode, up_to_date, verbose, write_behavior, crop_3d, gz_compress, big_endian, progress, ignore_trigger_times, terse, version, xml)
@@ -544,5 +544,8 @@ export {
       Dcm2niixAfniOutputs,
       Dcm2niixAfniParameters,
       dcm2niix_afni,
+      dcm2niix_afni_cargs,
+      dcm2niix_afni_execute,
+      dcm2niix_afni_outputs,
       dcm2niix_afni_params,
 };

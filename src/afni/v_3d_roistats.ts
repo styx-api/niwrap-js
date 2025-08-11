@@ -12,7 +12,7 @@ const V_3D_ROISTATS_METADATA: Metadata = {
 
 
 interface V3dRoistatsParameters {
-    "__STYXTYPE__": "3dROIstats";
+    "@type": "afni.3dROIstats";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "debug": boolean;
@@ -30,33 +30,33 @@ interface V3dRoistatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dROIstats": v_3d_roistats_cargs,
+        "afni.3dROIstats": v_3d_roistats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -80,6 +80,26 @@ interface V3dRoistatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input dataset.
+ * @param mask Input mask.
+ * @param debug Print debug information.
+ * @param format1_d Output results in a 1d format that includes commented labels.
+ * @param format1_dr Output results in a 1d format that includes uncommented labels. may not work optimally with typical 1d functions, but is useful for r functions.
+ * @param mask_f2short Tells the program to convert a float mask to short integers, by simple rounding.
+ * @param mask_file Input mask.
+ * @param nobriklab Do not print the sub-brick label next to its index.
+ * @param nomeanout Do not include the (zero-inclusive) mean among computed stats.
+ * @param num_roi Forces the assumption that the mask dataset's rois are denoted by 1 to n inclusive.  normally, the program figures out the rois on its own.  this option is useful if a) you are certain that the mask dataset has no values outside the range [0 n], b) there may be some rois missing between [1 n] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3droistats.
+ * @param quiet Execute quietly.
+ * @param roisel Only considers rois denoted by values found in the specified file. note that the order of the rois as specified in the file is not preserved. so an sel.1d of '2 8 20' produces the same output as '8 20 2'.
+ * @param stat A list of items which are 'mean' or 'sum' or 'voxels' or 'minmax' or 'sigma' or 'median' or 'mode' or 'summary' or 'zerominmax' or 'zerosigma' or 'zeromedian' or 'zeromode'. Statistics to compute. options include: * mean       =   compute the mean using only non_zero voxels.                  implies the opposite for the mean computed                  by default. * median     =   compute the median of nonzero voxels * mode       =   compute the mode of nonzero voxels.                  (integral valued sets only) * minmax     =   compute the min/max of nonzero voxels * sum        =   compute the sum using only nonzero voxels. * voxels     =   compute the number of nonzero voxels * sigma      =   compute the standard deviation of nonzero                  voxelsstatistics that include zero-valued voxels: * zerominmax =   compute the min/max of all voxels. * zerosigma  =   compute the standard deviation of all                  voxels. * zeromedian =   compute the median of all voxels. * zeromode   =   compute the mode of all voxels. * summary    =   only output a summary line with the grand                  mean across all briks in the input dataset.                  this option cannot be used with nomeanout.more that one option can be specified.
+ * @param zerofill For roi labels not found, use the provided string instead of a '0' in the output file. only active if `num_roi` is enabled.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_roistats_params(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -96,28 +116,8 @@ function v_3d_roistats_params(
     stat: Array<InputPathType> | null = null,
     zerofill: string | null = null,
 ): V3dRoistatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input dataset.
-     * @param mask Input mask.
-     * @param debug Print debug information.
-     * @param format1_d Output results in a 1d format that includes commented labels.
-     * @param format1_dr Output results in a 1d format that includes uncommented labels. may not work optimally with typical 1d functions, but is useful for r functions.
-     * @param mask_f2short Tells the program to convert a float mask to short integers, by simple rounding.
-     * @param mask_file Input mask.
-     * @param nobriklab Do not print the sub-brick label next to its index.
-     * @param nomeanout Do not include the (zero-inclusive) mean among computed stats.
-     * @param num_roi Forces the assumption that the mask dataset's rois are denoted by 1 to n inclusive.  normally, the program figures out the rois on its own.  this option is useful if a) you are certain that the mask dataset has no values outside the range [0 n], b) there may be some rois missing between [1 n] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3droistats.
-     * @param quiet Execute quietly.
-     * @param roisel Only considers rois denoted by values found in the specified file. note that the order of the rois as specified in the file is not preserved. so an sel.1d of '2 8 20' produces the same output as '8 20 2'.
-     * @param stat A list of items which are 'mean' or 'sum' or 'voxels' or 'minmax' or 'sigma' or 'median' or 'mode' or 'summary' or 'zerominmax' or 'zerosigma' or 'zeromedian' or 'zeromode'. Statistics to compute. options include: * mean       =   compute the mean using only non_zero voxels.                  implies the opposite for the mean computed                  by default. * median     =   compute the median of nonzero voxels * mode       =   compute the mode of nonzero voxels.                  (integral valued sets only) * minmax     =   compute the min/max of nonzero voxels * sum        =   compute the sum using only nonzero voxels. * voxels     =   compute the number of nonzero voxels * sigma      =   compute the standard deviation of nonzero                  voxelsstatistics that include zero-valued voxels: * zerominmax =   compute the min/max of all voxels. * zerosigma  =   compute the standard deviation of all                  voxels. * zeromedian =   compute the median of all voxels. * zeromode   =   compute the mode of all voxels. * summary    =   only output a summary line with the grand                  mean across all briks in the input dataset.                  this option cannot be used with nomeanout.more that one option can be specified.
-     * @param zerofill For roi labels not found, use the provided string instead of a '0' in the output file. only active if `num_roi` is enabled.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dROIstats" as const,
+        "@type": "afni.3dROIstats" as const,
         "in_file": in_file,
         "debug": debug,
         "format1D": format1_d,
@@ -149,18 +149,18 @@ function v_3d_roistats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_roistats_cargs(
     params: V3dRoistatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dROIstats");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -222,18 +222,18 @@ function v_3d_roistats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_roistats_outputs(
     params: V3dRoistatsParameters,
     execution: Execution,
 ): V3dRoistatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRoistatsOutputs = {
         root: execution.outputFile("."),
         stats: [],
@@ -242,22 +242,22 @@ function v_3d_roistats_outputs(
 }
 
 
+/**
+ * Display statistics over masked regions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
+ */
 function v_3d_roistats_execute(
     params: V3dRoistatsParameters,
     execution: Execution,
 ): V3dRoistatsOutputs {
-    /**
-     * Display statistics over masked regions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_roistats_cargs(params, execution)
     const ret = v_3d_roistats_outputs(params, execution)
@@ -266,6 +266,31 @@ function v_3d_roistats_execute(
 }
 
 
+/**
+ * Display statistics over masked regions.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input dataset.
+ * @param mask Input mask.
+ * @param debug Print debug information.
+ * @param format1_d Output results in a 1d format that includes commented labels.
+ * @param format1_dr Output results in a 1d format that includes uncommented labels. may not work optimally with typical 1d functions, but is useful for r functions.
+ * @param mask_f2short Tells the program to convert a float mask to short integers, by simple rounding.
+ * @param mask_file Input mask.
+ * @param nobriklab Do not print the sub-brick label next to its index.
+ * @param nomeanout Do not include the (zero-inclusive) mean among computed stats.
+ * @param num_roi Forces the assumption that the mask dataset's rois are denoted by 1 to n inclusive.  normally, the program figures out the rois on its own.  this option is useful if a) you are certain that the mask dataset has no values outside the range [0 n], b) there may be some rois missing between [1 n] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3droistats.
+ * @param quiet Execute quietly.
+ * @param roisel Only considers rois denoted by values found in the specified file. note that the order of the rois as specified in the file is not preserved. so an sel.1d of '2 8 20' produces the same output as '8 20 2'.
+ * @param stat A list of items which are 'mean' or 'sum' or 'voxels' or 'minmax' or 'sigma' or 'median' or 'mode' or 'summary' or 'zerominmax' or 'zerosigma' or 'zeromedian' or 'zeromode'. Statistics to compute. options include: * mean       =   compute the mean using only non_zero voxels.                  implies the opposite for the mean computed                  by default. * median     =   compute the median of nonzero voxels * mode       =   compute the mode of nonzero voxels.                  (integral valued sets only) * minmax     =   compute the min/max of nonzero voxels * sum        =   compute the sum using only nonzero voxels. * voxels     =   compute the number of nonzero voxels * sigma      =   compute the standard deviation of nonzero                  voxelsstatistics that include zero-valued voxels: * zerominmax =   compute the min/max of all voxels. * zerosigma  =   compute the standard deviation of all                  voxels. * zeromedian =   compute the median of all voxels. * zeromode   =   compute the mode of all voxels. * summary    =   only output a summary line with the grand                  mean across all briks in the input dataset.                  this option cannot be used with nomeanout.more that one option can be specified.
+ * @param zerofill For roi labels not found, use the provided string instead of a '0' in the output file. only active if `num_roi` is enabled.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
+ */
 function v_3d_roistats(
     in_file: InputPathType,
     mask: InputPathType | null = null,
@@ -283,31 +308,6 @@ function v_3d_roistats(
     zerofill: string | null = null,
     runner: Runner | null = null,
 ): V3dRoistatsOutputs {
-    /**
-     * Display statistics over masked regions.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input dataset.
-     * @param mask Input mask.
-     * @param debug Print debug information.
-     * @param format1_d Output results in a 1d format that includes commented labels.
-     * @param format1_dr Output results in a 1d format that includes uncommented labels. may not work optimally with typical 1d functions, but is useful for r functions.
-     * @param mask_f2short Tells the program to convert a float mask to short integers, by simple rounding.
-     * @param mask_file Input mask.
-     * @param nobriklab Do not print the sub-brick label next to its index.
-     * @param nomeanout Do not include the (zero-inclusive) mean among computed stats.
-     * @param num_roi Forces the assumption that the mask dataset's rois are denoted by 1 to n inclusive.  normally, the program figures out the rois on its own.  this option is useful if a) you are certain that the mask dataset has no values outside the range [0 n], b) there may be some rois missing between [1 n] in the mask data-set and c) you want those columns in the output any-way so the output lines up with the output from other invocations of 3droistats.
-     * @param quiet Execute quietly.
-     * @param roisel Only considers rois denoted by values found in the specified file. note that the order of the rois as specified in the file is not preserved. so an sel.1d of '2 8 20' produces the same output as '8 20 2'.
-     * @param stat A list of items which are 'mean' or 'sum' or 'voxels' or 'minmax' or 'sigma' or 'median' or 'mode' or 'summary' or 'zerominmax' or 'zerosigma' or 'zeromedian' or 'zeromode'. Statistics to compute. options include: * mean       =   compute the mean using only non_zero voxels.                  implies the opposite for the mean computed                  by default. * median     =   compute the median of nonzero voxels * mode       =   compute the mode of nonzero voxels.                  (integral valued sets only) * minmax     =   compute the min/max of nonzero voxels * sum        =   compute the sum using only nonzero voxels. * voxels     =   compute the number of nonzero voxels * sigma      =   compute the standard deviation of nonzero                  voxelsstatistics that include zero-valued voxels: * zerominmax =   compute the min/max of all voxels. * zerosigma  =   compute the standard deviation of all                  voxels. * zeromedian =   compute the median of all voxels. * zeromode   =   compute the mode of all voxels. * summary    =   only output a summary line with the grand                  mean across all briks in the input dataset.                  this option cannot be used with nomeanout.more that one option can be specified.
-     * @param zerofill For roi labels not found, use the provided string instead of a '0' in the output file. only active if `num_roi` is enabled.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ROISTATS_METADATA);
     const params = v_3d_roistats_params(in_file, mask, debug, format1_d, format1_dr, mask_f2short, mask_file, nobriklab, nomeanout, num_roi, quiet, roisel, stat, zerofill)
@@ -320,5 +320,8 @@ export {
       V3dRoistatsParameters,
       V_3D_ROISTATS_METADATA,
       v_3d_roistats,
+      v_3d_roistats_cargs,
+      v_3d_roistats_execute,
+      v_3d_roistats_outputs,
       v_3d_roistats_params,
 };

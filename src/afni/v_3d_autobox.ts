@@ -12,7 +12,7 @@ const V_3D_AUTOBOX_METADATA: Metadata = {
 
 
 interface V3dAutoboxParameters {
-    "__STYXTYPE__": "3dAutobox";
+    "@type": "afni.3dAutobox";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
     "alt_input"?: InputPathType | null | undefined;
@@ -30,33 +30,33 @@ interface V3dAutoboxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAutobox": v_3d_autobox_cargs,
+        "afni.3dAutobox": v_3d_autobox_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface V3dAutoboxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input dataset
+ * @param prefix Crop the input dataset to the size of the box, and write an output dataset with PREFIX for the name. If not used, no new volume is written out.
+ * @param alt_input An alternate way to specify the input dataset.
+ * @param noclust Don't do any clustering to find the box. Any non-zero voxel will be preserved in the cropped volume.
+ * @param extent Write to standard out the spatial extent of the box.
+ * @param extent_ijk Write out the 6 auto bbox ijk slice numbers to screen: imin imax jmin jmax kmin kmax.
+ * @param extent_ijk_to_file Write out the 6 auto bbox ijk slice numbers to a simple-formatted text file FF: imin imax jmin jmax kmin kmax.
+ * @param extent_ijk_midslice Write out the 3 ijk midslices of the autobox to the screen: imid jmid kmid.
+ * @param extent_ijkord Write out the 6 auto bbox ijk slice numbers to screen in a particular order and format. Useful for scripting.
+ * @param extent_ijkord_to_file Write out the 6 auto bbox ijk slice numbers to a file in a particular order and format. Useful for 3dcalc expressions.
+ * @param extent_xyz_to_file Write out the 6 auto bbox xyz coordinates to a simple-formatted text file GG: xmin xmax ymin ymax zmin zmax.
+ * @param extent_xyz_midslice Write out the 3 xyz midslices of the autobox to the screen: xmid ymid zmid.
+ * @param npad Number of extra voxels to pad on each side of box.
+ * @param npad_safety_on Constrain npad-ded extents to be within dataset.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_autobox_params(
     input: InputPathType,
     prefix: string | null = null,
@@ -92,28 +112,8 @@ function v_3d_autobox_params(
     npad: number | null = null,
     npad_safety_on: boolean = false,
 ): V3dAutoboxParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input dataset
-     * @param prefix Crop the input dataset to the size of the box, and write an output dataset with PREFIX for the name. If not used, no new volume is written out.
-     * @param alt_input An alternate way to specify the input dataset.
-     * @param noclust Don't do any clustering to find the box. Any non-zero voxel will be preserved in the cropped volume.
-     * @param extent Write to standard out the spatial extent of the box.
-     * @param extent_ijk Write out the 6 auto bbox ijk slice numbers to screen: imin imax jmin jmax kmin kmax.
-     * @param extent_ijk_to_file Write out the 6 auto bbox ijk slice numbers to a simple-formatted text file FF: imin imax jmin jmax kmin kmax.
-     * @param extent_ijk_midslice Write out the 3 ijk midslices of the autobox to the screen: imid jmid kmid.
-     * @param extent_ijkord Write out the 6 auto bbox ijk slice numbers to screen in a particular order and format. Useful for scripting.
-     * @param extent_ijkord_to_file Write out the 6 auto bbox ijk slice numbers to a file in a particular order and format. Useful for 3dcalc expressions.
-     * @param extent_xyz_to_file Write out the 6 auto bbox xyz coordinates to a simple-formatted text file GG: xmin xmax ymin ymax zmin zmax.
-     * @param extent_xyz_midslice Write out the 3 xyz midslices of the autobox to the screen: xmid ymid zmid.
-     * @param npad Number of extra voxels to pad on each side of box.
-     * @param npad_safety_on Constrain npad-ded extents to be within dataset.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAutobox" as const,
+        "@type": "afni.3dAutobox" as const,
         "input": input,
         "noclust": noclust,
         "extent": extent,
@@ -145,18 +145,18 @@ function v_3d_autobox_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_autobox_cargs(
     params: V3dAutoboxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAutobox");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -221,18 +221,18 @@ function v_3d_autobox_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_autobox_outputs(
     params: V3dAutoboxParameters,
     execution: Execution,
 ): V3dAutoboxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAutoboxOutputs = {
         root: execution.outputFile("."),
     };
@@ -240,22 +240,22 @@ function v_3d_autobox_outputs(
 }
 
 
+/**
+ * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
+ */
 function v_3d_autobox_execute(
     params: V3dAutoboxParameters,
     execution: Execution,
 ): V3dAutoboxOutputs {
-    /**
-     * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_autobox_cargs(params, execution)
     const ret = v_3d_autobox_outputs(params, execution)
@@ -264,6 +264,31 @@ function v_3d_autobox_execute(
 }
 
 
+/**
+ * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input dataset
+ * @param prefix Crop the input dataset to the size of the box, and write an output dataset with PREFIX for the name. If not used, no new volume is written out.
+ * @param alt_input An alternate way to specify the input dataset.
+ * @param noclust Don't do any clustering to find the box. Any non-zero voxel will be preserved in the cropped volume.
+ * @param extent Write to standard out the spatial extent of the box.
+ * @param extent_ijk Write out the 6 auto bbox ijk slice numbers to screen: imin imax jmin jmax kmin kmax.
+ * @param extent_ijk_to_file Write out the 6 auto bbox ijk slice numbers to a simple-formatted text file FF: imin imax jmin jmax kmin kmax.
+ * @param extent_ijk_midslice Write out the 3 ijk midslices of the autobox to the screen: imid jmid kmid.
+ * @param extent_ijkord Write out the 6 auto bbox ijk slice numbers to screen in a particular order and format. Useful for scripting.
+ * @param extent_ijkord_to_file Write out the 6 auto bbox ijk slice numbers to a file in a particular order and format. Useful for 3dcalc expressions.
+ * @param extent_xyz_to_file Write out the 6 auto bbox xyz coordinates to a simple-formatted text file GG: xmin xmax ymin ymax zmin zmax.
+ * @param extent_xyz_midslice Write out the 3 xyz midslices of the autobox to the screen: xmid ymid zmid.
+ * @param npad Number of extra voxels to pad on each side of box.
+ * @param npad_safety_on Constrain npad-ded extents to be within dataset.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
+ */
 function v_3d_autobox(
     input: InputPathType,
     prefix: string | null = null,
@@ -281,31 +306,6 @@ function v_3d_autobox(
     npad_safety_on: boolean = false,
     runner: Runner | null = null,
 ): V3dAutoboxOutputs {
-    /**
-     * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input dataset
-     * @param prefix Crop the input dataset to the size of the box, and write an output dataset with PREFIX for the name. If not used, no new volume is written out.
-     * @param alt_input An alternate way to specify the input dataset.
-     * @param noclust Don't do any clustering to find the box. Any non-zero voxel will be preserved in the cropped volume.
-     * @param extent Write to standard out the spatial extent of the box.
-     * @param extent_ijk Write out the 6 auto bbox ijk slice numbers to screen: imin imax jmin jmax kmin kmax.
-     * @param extent_ijk_to_file Write out the 6 auto bbox ijk slice numbers to a simple-formatted text file FF: imin imax jmin jmax kmin kmax.
-     * @param extent_ijk_midslice Write out the 3 ijk midslices of the autobox to the screen: imid jmid kmid.
-     * @param extent_ijkord Write out the 6 auto bbox ijk slice numbers to screen in a particular order and format. Useful for scripting.
-     * @param extent_ijkord_to_file Write out the 6 auto bbox ijk slice numbers to a file in a particular order and format. Useful for 3dcalc expressions.
-     * @param extent_xyz_to_file Write out the 6 auto bbox xyz coordinates to a simple-formatted text file GG: xmin xmax ymin ymax zmin zmax.
-     * @param extent_xyz_midslice Write out the 3 xyz midslices of the autobox to the screen: xmid ymid zmid.
-     * @param npad Number of extra voxels to pad on each side of box.
-     * @param npad_safety_on Constrain npad-ded extents to be within dataset.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AUTOBOX_METADATA);
     const params = v_3d_autobox_params(input, prefix, alt_input, noclust, extent, extent_ijk, extent_ijk_to_file, extent_ijk_midslice, extent_ijkord, extent_ijkord_to_file, extent_xyz_to_file, extent_xyz_midslice, npad, npad_safety_on)
@@ -318,5 +318,8 @@ export {
       V3dAutoboxParameters,
       V_3D_AUTOBOX_METADATA,
       v_3d_autobox,
+      v_3d_autobox_cargs,
+      v_3d_autobox_execute,
+      v_3d_autobox_outputs,
       v_3d_autobox_params,
 };

@@ -12,7 +12,7 @@ const V_3D_LMER_METADATA: Metadata = {
 
 
 interface V3dLmerParameters {
-    "__STYXTYPE__": "3dLMEr";
+    "@type": "afni.3dLMEr";
     "bound_lower"?: number | null | undefined;
     "bound_upper"?: number | null | undefined;
     "cio": boolean;
@@ -38,35 +38,35 @@ interface V3dLmerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLMEr": v_3d_lmer_cargs,
+        "afni.3dLMEr": v_3d_lmer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLMEr": v_3d_lmer_outputs,
+        "afni.3dLMEr": v_3d_lmer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,34 @@ interface V3dLmerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_table List the data structure with a header as the first line
+ * @param model Specify the model structure for all the variables
+ * @param prefix Output file name
+ * @param bound_lower Specify the lower and upper bounds for outlier removal
+ * @param bound_upper Specify the lower and upper bounds for outlier removal
+ * @param cio Use AFNI's C io functions
+ * @param debug_args Enable R to save the parameters for debugging
+ * @param glf_code Specify a general linear F-style (GLF) formulation
+ * @param glt_code Specify the label and weights of interest in a general linear t-style (GLT) formulation
+ * @param help Display the help message
+ * @param input_file_column Specify the column name for input files of effect estimate
+ * @param jobs Number of jobs for parallel computing
+ * @param mask Process voxels inside this mask only
+ * @param qvar_centers Specify centering values for quantitative variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param resid Output file name for the residuals
+ * @param rio Use R's io functions
+ * @param show_options List of allowed options
+ * @param ss_type Specify the type for sums of squares in the F-statistics
+ * @param trr Perform test-retest reliability analysis
+ * @param vvar_centers Specify centering values for voxel-wise covariates
+ * @param vvars Identify voxel-wise covariates
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lmer_params(
     data_table: InputPathType,
     model: string,
@@ -117,36 +145,8 @@ function v_3d_lmer_params(
     vvar_centers: string | null = null,
     vvars: string | null = null,
 ): V3dLmerParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_table List the data structure with a header as the first line
-     * @param model Specify the model structure for all the variables
-     * @param prefix Output file name
-     * @param bound_lower Specify the lower and upper bounds for outlier removal
-     * @param bound_upper Specify the lower and upper bounds for outlier removal
-     * @param cio Use AFNI's C io functions
-     * @param debug_args Enable R to save the parameters for debugging
-     * @param glf_code Specify a general linear F-style (GLF) formulation
-     * @param glt_code Specify the label and weights of interest in a general linear t-style (GLT) formulation
-     * @param help Display the help message
-     * @param input_file_column Specify the column name for input files of effect estimate
-     * @param jobs Number of jobs for parallel computing
-     * @param mask Process voxels inside this mask only
-     * @param qvar_centers Specify centering values for quantitative variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param resid Output file name for the residuals
-     * @param rio Use R's io functions
-     * @param show_options List of allowed options
-     * @param ss_type Specify the type for sums of squares in the F-statistics
-     * @param trr Perform test-retest reliability analysis
-     * @param vvar_centers Specify centering values for voxel-wise covariates
-     * @param vvars Identify voxel-wise covariates
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLMEr" as const,
+        "@type": "afni.3dLMEr" as const,
         "cio": cio,
         "data_table": data_table,
         "debug_args": debug_args,
@@ -200,18 +200,18 @@ function v_3d_lmer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lmer_cargs(
     params: V3dLmerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLMEr");
     if ((params["bound_lower"] ?? null) !== null) {
@@ -320,18 +320,18 @@ function v_3d_lmer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lmer_outputs(
     params: V3dLmerParameters,
     execution: Execution,
 ): V3dLmerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLmerOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -341,22 +341,22 @@ function v_3d_lmer_outputs(
 }
 
 
+/**
+ * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
+ */
 function v_3d_lmer_execute(
     params: V3dLmerParameters,
     execution: Execution,
 ): V3dLmerOutputs {
-    /**
-     * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lmer_cargs(params, execution)
     const ret = v_3d_lmer_outputs(params, execution)
@@ -365,6 +365,39 @@ function v_3d_lmer_execute(
 }
 
 
+/**
+ * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param data_table List the data structure with a header as the first line
+ * @param model Specify the model structure for all the variables
+ * @param prefix Output file name
+ * @param bound_lower Specify the lower and upper bounds for outlier removal
+ * @param bound_upper Specify the lower and upper bounds for outlier removal
+ * @param cio Use AFNI's C io functions
+ * @param debug_args Enable R to save the parameters for debugging
+ * @param glf_code Specify a general linear F-style (GLF) formulation
+ * @param glt_code Specify the label and weights of interest in a general linear t-style (GLT) formulation
+ * @param help Display the help message
+ * @param input_file_column Specify the column name for input files of effect estimate
+ * @param jobs Number of jobs for parallel computing
+ * @param mask Process voxels inside this mask only
+ * @param qvar_centers Specify centering values for quantitative variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param resid Output file name for the residuals
+ * @param rio Use R's io functions
+ * @param show_options List of allowed options
+ * @param ss_type Specify the type for sums of squares in the F-statistics
+ * @param trr Perform test-retest reliability analysis
+ * @param vvar_centers Specify centering values for voxel-wise covariates
+ * @param vvars Identify voxel-wise covariates
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
+ */
 function v_3d_lmer(
     data_table: InputPathType,
     model: string,
@@ -390,39 +423,6 @@ function v_3d_lmer(
     vvars: string | null = null,
     runner: Runner | null = null,
 ): V3dLmerOutputs {
-    /**
-     * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param data_table List the data structure with a header as the first line
-     * @param model Specify the model structure for all the variables
-     * @param prefix Output file name
-     * @param bound_lower Specify the lower and upper bounds for outlier removal
-     * @param bound_upper Specify the lower and upper bounds for outlier removal
-     * @param cio Use AFNI's C io functions
-     * @param debug_args Enable R to save the parameters for debugging
-     * @param glf_code Specify a general linear F-style (GLF) formulation
-     * @param glt_code Specify the label and weights of interest in a general linear t-style (GLT) formulation
-     * @param help Display the help message
-     * @param input_file_column Specify the column name for input files of effect estimate
-     * @param jobs Number of jobs for parallel computing
-     * @param mask Process voxels inside this mask only
-     * @param qvar_centers Specify centering values for quantitative variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param resid Output file name for the residuals
-     * @param rio Use R's io functions
-     * @param show_options List of allowed options
-     * @param ss_type Specify the type for sums of squares in the F-statistics
-     * @param trr Perform test-retest reliability analysis
-     * @param vvar_centers Specify centering values for voxel-wise covariates
-     * @param vvars Identify voxel-wise covariates
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LMER_METADATA);
     const params = v_3d_lmer_params(data_table, model, prefix, bound_lower, bound_upper, cio, debug_args, glf_code, glt_code, help, input_file_column, jobs, mask, qvar_centers, qvars, resid, rio, show_options, ss_type, trr, vvar_centers, vvars)
@@ -435,5 +435,8 @@ export {
       V3dLmerParameters,
       V_3D_LMER_METADATA,
       v_3d_lmer,
+      v_3d_lmer_cargs,
+      v_3d_lmer_execute,
+      v_3d_lmer_outputs,
       v_3d_lmer_params,
 };

@@ -12,41 +12,41 @@ const V__TO_MNI_QWARPAR_METADATA: Metadata = {
 
 
 interface VToMniQwarparParameters {
-    "__STYXTYPE__": "@toMNI_Qwarpar";
+    "@type": "afni.@toMNI_Qwarpar";
     "numcpu": number;
     "numjob": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@toMNI_Qwarpar": v__to_mni_qwarpar_cargs,
+        "afni.@toMNI_Qwarpar": v__to_mni_qwarpar_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@toMNI_Qwarpar": v__to_mni_qwarpar_outputs,
+        "afni.@toMNI_Qwarpar": v__to_mni_qwarpar_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VToMniQwarparOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param numcpu TOTAL NUMBER OF CPUS TO USE; should not exceed the number of CPUs (cores) on the system.
+ * @param numjob MAX NUMBER OF JOBS TO USE; often set to the same value as numcpu so that 1 dataset is processed in 1 core.
+ *
+ * @returns Parameter dictionary
+ */
 function v__to_mni_qwarpar_params(
     numcpu: number,
     numjob: number,
 ): VToMniQwarparParameters {
-    /**
-     * Build parameters.
-    
-     * @param numcpu TOTAL NUMBER OF CPUS TO USE; should not exceed the number of CPUs (cores) on the system.
-     * @param numjob MAX NUMBER OF JOBS TO USE; often set to the same value as numcpu so that 1 dataset is processed in 1 core.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@toMNI_Qwarpar" as const,
+        "@type": "afni.@toMNI_Qwarpar" as const,
         "numcpu": numcpu,
         "numjob": numjob,
     };
@@ -90,18 +90,18 @@ function v__to_mni_qwarpar_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__to_mni_qwarpar_cargs(
     params: VToMniQwarparParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@toMNI_Qwarpar");
     cargs.push(String((params["numcpu"] ?? null)));
@@ -110,18 +110,18 @@ function v__to_mni_qwarpar_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__to_mni_qwarpar_outputs(
     params: VToMniQwarparParameters,
     execution: Execution,
 ): VToMniQwarparOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VToMniQwarparOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["*_uni+tlrc.HEAD"].join('')),
@@ -130,22 +130,22 @@ function v__to_mni_qwarpar_outputs(
 }
 
 
+/**
+ * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
+ */
 function v__to_mni_qwarpar_execute(
     params: VToMniQwarparParameters,
     execution: Execution,
 ): VToMniQwarparOutputs {
-    /**
-     * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__to_mni_qwarpar_cargs(params, execution)
     const ret = v__to_mni_qwarpar_outputs(params, execution)
@@ -154,24 +154,24 @@ function v__to_mni_qwarpar_execute(
 }
 
 
+/**
+ * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param numcpu TOTAL NUMBER OF CPUS TO USE; should not exceed the number of CPUs (cores) on the system.
+ * @param numjob MAX NUMBER OF JOBS TO USE; often set to the same value as numcpu so that 1 dataset is processed in 1 core.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
+ */
 function v__to_mni_qwarpar(
     numcpu: number,
     numjob: number,
     runner: Runner | null = null,
 ): VToMniQwarparOutputs {
-    /**
-     * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param numcpu TOTAL NUMBER OF CPUS TO USE; should not exceed the number of CPUs (cores) on the system.
-     * @param numjob MAX NUMBER OF JOBS TO USE; often set to the same value as numcpu so that 1 dataset is processed in 1 core.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__TO_MNI_QWARPAR_METADATA);
     const params = v__to_mni_qwarpar_params(numcpu, numjob)
@@ -184,5 +184,8 @@ export {
       VToMniQwarparParameters,
       V__TO_MNI_QWARPAR_METADATA,
       v__to_mni_qwarpar,
+      v__to_mni_qwarpar_cargs,
+      v__to_mni_qwarpar_execute,
+      v__to_mni_qwarpar_outputs,
       v__to_mni_qwarpar_params,
 };

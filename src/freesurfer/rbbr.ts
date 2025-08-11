@@ -12,7 +12,7 @@ const RBBR_METADATA: Metadata = {
 
 
 interface RbbrParameters {
-    "__STYXTYPE__": "rbbr";
+    "@type": "freesurfer.rbbr";
     "subject"?: string | null | undefined;
     "moving_image": string;
     "t1_contrast": boolean;
@@ -38,35 +38,35 @@ interface RbbrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rbbr": rbbr_cargs,
+        "freesurfer.rbbr": rbbr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "rbbr": rbbr_outputs,
+        "freesurfer.rbbr": rbbr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,34 @@ interface RbbrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param moving_image Input moving image
+ * @param subject FreeSurfer subject (not needed with --init-reg)
+ * @param t1_contrast Use T1 tissue contrast
+ * @param t2_contrast Use T2 tissue contrast
+ * @param init_reg Initialize registration
+ * @param init_spm Initialize with SPM
+ * @param init_fsl Initialize with FSL
+ * @param init_header Initialize using header
+ * @param cost_threshold Cost threshold to define outlier
+ * @param gtm_synthesize Use GTM to synthesize
+ * @param tt_reduce Reduce GTM Seg to tissue types for faster processing
+ * @param iterations Number of iterations
+ * @param output_reg Output registration file
+ * @param output_lta Output LTA file
+ * @param left_hemi Only use left hemisphere
+ * @param right_hemi Only use right hemisphere
+ * @param gm_proj_frac GM projection fraction
+ * @param gm_proj_abs GM projection absolute
+ * @param wm_proj_abs WM projection absolute
+ * @param frame_no Use 0-based frame number as template
+ * @param output_template Save template as an output
+ * @param no_merge Do not merge GTM Ids
+ *
+ * @returns Parameter dictionary
+ */
 function rbbr_params(
     moving_image: string,
     subject: string | null = null,
@@ -121,36 +149,8 @@ function rbbr_params(
     output_template: string | null = null,
     no_merge: boolean = false,
 ): RbbrParameters {
-    /**
-     * Build parameters.
-    
-     * @param moving_image Input moving image
-     * @param subject FreeSurfer subject (not needed with --init-reg)
-     * @param t1_contrast Use T1 tissue contrast
-     * @param t2_contrast Use T2 tissue contrast
-     * @param init_reg Initialize registration
-     * @param init_spm Initialize with SPM
-     * @param init_fsl Initialize with FSL
-     * @param init_header Initialize using header
-     * @param cost_threshold Cost threshold to define outlier
-     * @param gtm_synthesize Use GTM to synthesize
-     * @param tt_reduce Reduce GTM Seg to tissue types for faster processing
-     * @param iterations Number of iterations
-     * @param output_reg Output registration file
-     * @param output_lta Output LTA file
-     * @param left_hemi Only use left hemisphere
-     * @param right_hemi Only use right hemisphere
-     * @param gm_proj_frac GM projection fraction
-     * @param gm_proj_abs GM projection absolute
-     * @param wm_proj_abs WM projection absolute
-     * @param frame_no Use 0-based frame number as template
-     * @param output_template Save template as an output
-     * @param no_merge Do not merge GTM Ids
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rbbr" as const,
+        "@type": "freesurfer.rbbr" as const,
         "moving_image": moving_image,
         "t1_contrast": t1_contrast,
         "t2_contrast": t2_contrast,
@@ -200,18 +200,18 @@ function rbbr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rbbr_cargs(
     params: RbbrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rbbr");
     if ((params["subject"] ?? null) !== null) {
@@ -318,18 +318,18 @@ function rbbr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rbbr_outputs(
     params: RbbrParameters,
     execution: Execution,
 ): RbbrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RbbrOutputs = {
         root: execution.outputFile("."),
         output_reg_file: ((params["output_reg"] ?? null) !== null) ? execution.outputFile([(params["output_reg"] ?? null)].join('')) : null,
@@ -340,22 +340,22 @@ function rbbr_outputs(
 }
 
 
+/**
+ * Robust version of bbregister.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RbbrOutputs`).
+ */
 function rbbr_execute(
     params: RbbrParameters,
     execution: Execution,
 ): RbbrOutputs {
-    /**
-     * Robust version of bbregister.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RbbrOutputs`).
-     */
     params = execution.params(params)
     const cargs = rbbr_cargs(params, execution)
     const ret = rbbr_outputs(params, execution)
@@ -364,6 +364,39 @@ function rbbr_execute(
 }
 
 
+/**
+ * Robust version of bbregister.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param moving_image Input moving image
+ * @param subject FreeSurfer subject (not needed with --init-reg)
+ * @param t1_contrast Use T1 tissue contrast
+ * @param t2_contrast Use T2 tissue contrast
+ * @param init_reg Initialize registration
+ * @param init_spm Initialize with SPM
+ * @param init_fsl Initialize with FSL
+ * @param init_header Initialize using header
+ * @param cost_threshold Cost threshold to define outlier
+ * @param gtm_synthesize Use GTM to synthesize
+ * @param tt_reduce Reduce GTM Seg to tissue types for faster processing
+ * @param iterations Number of iterations
+ * @param output_reg Output registration file
+ * @param output_lta Output LTA file
+ * @param left_hemi Only use left hemisphere
+ * @param right_hemi Only use right hemisphere
+ * @param gm_proj_frac GM projection fraction
+ * @param gm_proj_abs GM projection absolute
+ * @param wm_proj_abs WM projection absolute
+ * @param frame_no Use 0-based frame number as template
+ * @param output_template Save template as an output
+ * @param no_merge Do not merge GTM Ids
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RbbrOutputs`).
+ */
 function rbbr(
     moving_image: string,
     subject: string | null = null,
@@ -389,39 +422,6 @@ function rbbr(
     no_merge: boolean = false,
     runner: Runner | null = null,
 ): RbbrOutputs {
-    /**
-     * Robust version of bbregister.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param moving_image Input moving image
-     * @param subject FreeSurfer subject (not needed with --init-reg)
-     * @param t1_contrast Use T1 tissue contrast
-     * @param t2_contrast Use T2 tissue contrast
-     * @param init_reg Initialize registration
-     * @param init_spm Initialize with SPM
-     * @param init_fsl Initialize with FSL
-     * @param init_header Initialize using header
-     * @param cost_threshold Cost threshold to define outlier
-     * @param gtm_synthesize Use GTM to synthesize
-     * @param tt_reduce Reduce GTM Seg to tissue types for faster processing
-     * @param iterations Number of iterations
-     * @param output_reg Output registration file
-     * @param output_lta Output LTA file
-     * @param left_hemi Only use left hemisphere
-     * @param right_hemi Only use right hemisphere
-     * @param gm_proj_frac GM projection fraction
-     * @param gm_proj_abs GM projection absolute
-     * @param wm_proj_abs WM projection absolute
-     * @param frame_no Use 0-based frame number as template
-     * @param output_template Save template as an output
-     * @param no_merge Do not merge GTM Ids
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RbbrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RBBR_METADATA);
     const params = rbbr_params(moving_image, subject, t1_contrast, t2_contrast, init_reg, init_spm, init_fsl, init_header, cost_threshold, gtm_synthesize, tt_reduce, iterations, output_reg, output_lta, left_hemi, right_hemi, gm_proj_frac, gm_proj_abs, wm_proj_abs, frame_no, output_template, no_merge)
@@ -434,5 +434,8 @@ export {
       RbbrOutputs,
       RbbrParameters,
       rbbr,
+      rbbr_cargs,
+      rbbr_execute,
+      rbbr_outputs,
       rbbr_params,
 };

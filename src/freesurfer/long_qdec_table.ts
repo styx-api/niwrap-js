@@ -12,7 +12,7 @@ const LONG_QDEC_TABLE_METADATA: Metadata = {
 
 
 interface LongQdecTableParameters {
-    "__STYXTYPE__": "long_qdec_table";
+    "@type": "freesurfer.long_qdec_table";
     "qdec_table": InputPathType;
     "split"?: string | null | undefined;
     "cross_flag": boolean;
@@ -21,35 +21,35 @@ interface LongQdecTableParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_qdec_table": long_qdec_table_cargs,
+        "freesurfer.long_qdec_table": long_qdec_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "long_qdec_table": long_qdec_table_outputs,
+        "freesurfer.long_qdec_table": long_qdec_table_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface LongQdecTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec_table QDEC table file specifying the subjects and time points
+ * @param split Split table based on column (e.g., use 'fsid-base' to separate subjects)
+ * @param cross_flag Collapse table to cross sectional (one line per subject)
+ * @param sort Sort table based on column within subject (e.g., 'age')
+ * @param out Output file name for operations producing a single table
+ *
+ * @returns Parameter dictionary
+ */
 function long_qdec_table_params(
     qdec_table: InputPathType,
     split: string | null = null,
@@ -79,19 +90,8 @@ function long_qdec_table_params(
     sort: string | null = null,
     out: string | null = null,
 ): LongQdecTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec_table QDEC table file specifying the subjects and time points
-     * @param split Split table based on column (e.g., use 'fsid-base' to separate subjects)
-     * @param cross_flag Collapse table to cross sectional (one line per subject)
-     * @param sort Sort table based on column within subject (e.g., 'age')
-     * @param out Output file name for operations producing a single table
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_qdec_table" as const,
+        "@type": "freesurfer.long_qdec_table" as const,
         "qdec_table": qdec_table,
         "cross_flag": cross_flag,
     };
@@ -108,18 +108,18 @@ function long_qdec_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_qdec_table_cargs(
     params: LongQdecTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_qdec_table");
     cargs.push(
@@ -151,18 +151,18 @@ function long_qdec_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_qdec_table_outputs(
     params: LongQdecTableParameters,
     execution: Execution,
 ): LongQdecTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongQdecTableOutputs = {
         root: execution.outputFile("."),
         output_table: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null)].join('')) : null,
@@ -171,22 +171,22 @@ function long_qdec_table_outputs(
 }
 
 
+/**
+ * Tool to operate on longitudinal QDEC tables.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
+ */
 function long_qdec_table_execute(
     params: LongQdecTableParameters,
     execution: Execution,
 ): LongQdecTableOutputs {
-    /**
-     * Tool to operate on longitudinal QDEC tables.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_qdec_table_cargs(params, execution)
     const ret = long_qdec_table_outputs(params, execution)
@@ -195,6 +195,22 @@ function long_qdec_table_execute(
 }
 
 
+/**
+ * Tool to operate on longitudinal QDEC tables.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec_table QDEC table file specifying the subjects and time points
+ * @param split Split table based on column (e.g., use 'fsid-base' to separate subjects)
+ * @param cross_flag Collapse table to cross sectional (one line per subject)
+ * @param sort Sort table based on column within subject (e.g., 'age')
+ * @param out Output file name for operations producing a single table
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
+ */
 function long_qdec_table(
     qdec_table: InputPathType,
     split: string | null = null,
@@ -203,22 +219,6 @@ function long_qdec_table(
     out: string | null = null,
     runner: Runner | null = null,
 ): LongQdecTableOutputs {
-    /**
-     * Tool to operate on longitudinal QDEC tables.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec_table QDEC table file specifying the subjects and time points
-     * @param split Split table based on column (e.g., use 'fsid-base' to separate subjects)
-     * @param cross_flag Collapse table to cross sectional (one line per subject)
-     * @param sort Sort table based on column within subject (e.g., 'age')
-     * @param out Output file name for operations producing a single table
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_QDEC_TABLE_METADATA);
     const params = long_qdec_table_params(qdec_table, split, cross_flag, sort, out)
@@ -231,5 +231,8 @@ export {
       LongQdecTableOutputs,
       LongQdecTableParameters,
       long_qdec_table,
+      long_qdec_table_cargs,
+      long_qdec_table_execute,
+      long_qdec_table_outputs,
       long_qdec_table_params,
 };

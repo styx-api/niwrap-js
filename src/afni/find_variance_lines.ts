@@ -12,7 +12,7 @@ const FIND_VARIANCE_LINES_METADATA: Metadata = {
 
 
 interface FindVarianceLinesParameters {
-    "__STYXTYPE__": "find_variance_lines";
+    "@type": "afni.find_variance_lines";
     "input_files": Array<InputPathType>;
     "mask"?: string | null | undefined;
     "min_cvox"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface FindVarianceLinesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "find_variance_lines": find_variance_lines_cargs,
+        "afni.find_variance_lines": find_variance_lines_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "find_variance_lines": find_variance_lines_outputs,
+        "afni.find_variance_lines": find_variance_lines_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,27 @@ interface FindVarianceLinesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input EPI datasets
+ * @param mask Mask for computations (default=AUTO)
+ * @param min_cvox Minimum voxels for valid mask column (default=5)
+ * @param min_nt Minimum number of time points required (default=10)
+ * @param nerode How much to erode input or auto-mask (default=0)
+ * @param nfirst Discard the first VAL time points (default=0)
+ * @param percentile Percentile of variance values to scale to (default=90)
+ * @param polort Polynomial detrending degree (default=A)
+ * @param output_dir Name of the output directory (default=vlines.result)
+ * @param do_clean Do we clean up a little? (default=1)
+ * @param do_img Make vline images? (default=1)
+ * @param echo Run script with shell 'echo' set (default=no)
+ * @param help Show this help
+ * @param hist Show the version history
+ * @param ver Show the current version
+ *
+ * @returns Parameter dictionary
+ */
 function find_variance_lines_params(
     input_files: Array<InputPathType>,
     mask: string | null = null,
@@ -111,29 +132,8 @@ function find_variance_lines_params(
     hist: boolean = false,
     ver: boolean = false,
 ): FindVarianceLinesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input EPI datasets
-     * @param mask Mask for computations (default=AUTO)
-     * @param min_cvox Minimum voxels for valid mask column (default=5)
-     * @param min_nt Minimum number of time points required (default=10)
-     * @param nerode How much to erode input or auto-mask (default=0)
-     * @param nfirst Discard the first VAL time points (default=0)
-     * @param percentile Percentile of variance values to scale to (default=90)
-     * @param polort Polynomial detrending degree (default=A)
-     * @param output_dir Name of the output directory (default=vlines.result)
-     * @param do_clean Do we clean up a little? (default=1)
-     * @param do_img Make vline images? (default=1)
-     * @param echo Run script with shell 'echo' set (default=no)
-     * @param help Show this help
-     * @param hist Show the version history
-     * @param ver Show the current version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "find_variance_lines" as const,
+        "@type": "afni.find_variance_lines" as const,
         "input_files": input_files,
         "echo": echo,
         "help": help,
@@ -174,18 +174,18 @@ function find_variance_lines_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function find_variance_lines_cargs(
     params: FindVarianceLinesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("find_variance_lines.tcsh");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -265,18 +265,18 @@ function find_variance_lines_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function find_variance_lines_outputs(
     params: FindVarianceLinesParameters,
     execution: Execution,
 ): FindVarianceLinesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FindVarianceLinesOutputs = {
         root: execution.outputFile("."),
         variance_maps: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/variance_map_run*.nii.gz"].join('')) : null,
@@ -288,22 +288,22 @@ function find_variance_lines_outputs(
 }
 
 
+/**
+ * Look for bars of high variance that might suggest scanner interference in EPI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
+ */
 function find_variance_lines_execute(
     params: FindVarianceLinesParameters,
     execution: Execution,
 ): FindVarianceLinesOutputs {
-    /**
-     * Look for bars of high variance that might suggest scanner interference in EPI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
-     */
     params = execution.params(params)
     const cargs = find_variance_lines_cargs(params, execution)
     const ret = find_variance_lines_outputs(params, execution)
@@ -312,6 +312,32 @@ function find_variance_lines_execute(
 }
 
 
+/**
+ * Look for bars of high variance that might suggest scanner interference in EPI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input EPI datasets
+ * @param mask Mask for computations (default=AUTO)
+ * @param min_cvox Minimum voxels for valid mask column (default=5)
+ * @param min_nt Minimum number of time points required (default=10)
+ * @param nerode How much to erode input or auto-mask (default=0)
+ * @param nfirst Discard the first VAL time points (default=0)
+ * @param percentile Percentile of variance values to scale to (default=90)
+ * @param polort Polynomial detrending degree (default=A)
+ * @param output_dir Name of the output directory (default=vlines.result)
+ * @param do_clean Do we clean up a little? (default=1)
+ * @param do_img Make vline images? (default=1)
+ * @param echo Run script with shell 'echo' set (default=no)
+ * @param help Show this help
+ * @param hist Show the version history
+ * @param ver Show the current version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
+ */
 function find_variance_lines(
     input_files: Array<InputPathType>,
     mask: string | null = null,
@@ -330,32 +356,6 @@ function find_variance_lines(
     ver: boolean = false,
     runner: Runner | null = null,
 ): FindVarianceLinesOutputs {
-    /**
-     * Look for bars of high variance that might suggest scanner interference in EPI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input EPI datasets
-     * @param mask Mask for computations (default=AUTO)
-     * @param min_cvox Minimum voxels for valid mask column (default=5)
-     * @param min_nt Minimum number of time points required (default=10)
-     * @param nerode How much to erode input or auto-mask (default=0)
-     * @param nfirst Discard the first VAL time points (default=0)
-     * @param percentile Percentile of variance values to scale to (default=90)
-     * @param polort Polynomial detrending degree (default=A)
-     * @param output_dir Name of the output directory (default=vlines.result)
-     * @param do_clean Do we clean up a little? (default=1)
-     * @param do_img Make vline images? (default=1)
-     * @param echo Run script with shell 'echo' set (default=no)
-     * @param help Show this help
-     * @param hist Show the version history
-     * @param ver Show the current version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIND_VARIANCE_LINES_METADATA);
     const params = find_variance_lines_params(input_files, mask, min_cvox, min_nt, nerode, nfirst, percentile, polort, output_dir, do_clean, do_img, echo, help, hist, ver)
@@ -368,5 +368,8 @@ export {
       FindVarianceLinesOutputs,
       FindVarianceLinesParameters,
       find_variance_lines,
+      find_variance_lines_cargs,
+      find_variance_lines_execute,
+      find_variance_lines_outputs,
       find_variance_lines_params,
 };

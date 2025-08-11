@@ -12,14 +12,14 @@ const TCKINFO_METADATA: Metadata = {
 
 
 interface TckinfoConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tckinfo.config";
     "key": string;
     "value": string;
 }
 
 
 interface TckinfoParameters {
-    "__STYXTYPE__": "tckinfo";
+    "@type": "mrtrix.tckinfo";
     "count": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -33,54 +33,54 @@ interface TckinfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tckinfo": tckinfo_cargs,
-        "config": tckinfo_config_cargs,
+        "mrtrix.tckinfo": tckinfo_cargs,
+        "mrtrix.tckinfo.config": tckinfo_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tckinfo_config_params(
     key: string,
     value: string,
 ): TckinfoConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tckinfo.config" as const,
         "key": key,
         "value": value,
     };
@@ -88,18 +88,18 @@ function tckinfo_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckinfo_config_cargs(
     params: TckinfoConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -121,6 +121,22 @@ interface TckinfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks the input track file.
+ * @param count count number of tracks in file explicitly, ignoring the header
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tckinfo_params(
     tracks: Array<InputPathType>,
     count: boolean = false,
@@ -133,24 +149,8 @@ function tckinfo_params(
     help: boolean = false,
     version: boolean = false,
 ): TckinfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks the input track file.
-     * @param count count number of tracks in file explicitly, ignoring the header
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tckinfo" as const,
+        "@type": "mrtrix.tckinfo" as const,
         "count": count,
         "info": info,
         "quiet": quiet,
@@ -170,18 +170,18 @@ function tckinfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tckinfo_cargs(
     params: TckinfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tckinfo");
     if ((params["count"] ?? null)) {
@@ -206,7 +206,7 @@ function tckinfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -219,18 +219,18 @@ function tckinfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tckinfo_outputs(
     params: TckinfoParameters,
     execution: Execution,
 ): TckinfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TckinfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -238,28 +238,28 @@ function tckinfo_outputs(
 }
 
 
+/**
+ * Print out information about a track file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
+ */
 function tckinfo_execute(
     params: TckinfoParameters,
     execution: Execution,
 ): TckinfoOutputs {
-    /**
-     * Print out information about a track file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = tckinfo_cargs(params, execution)
     const ret = tckinfo_outputs(params, execution)
@@ -268,6 +268,33 @@ function tckinfo_execute(
 }
 
 
+/**
+ * Print out information about a track file.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks the input track file.
+ * @param count count number of tracks in file explicitly, ignoring the header
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
+ */
 function tckinfo(
     tracks: Array<InputPathType>,
     count: boolean = false,
@@ -281,33 +308,6 @@ function tckinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckinfoOutputs {
-    /**
-     * Print out information about a track file.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks the input track file.
-     * @param count count number of tracks in file explicitly, ignoring the header
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKINFO_METADATA);
     const params = tckinfo_params(tracks, count, info, quiet, debug, force, nthreads, config, help, version)
@@ -321,6 +321,10 @@ export {
       TckinfoOutputs,
       TckinfoParameters,
       tckinfo,
+      tckinfo_cargs,
+      tckinfo_config_cargs,
       tckinfo_config_params,
+      tckinfo_execute,
+      tckinfo_outputs,
       tckinfo_params,
 };

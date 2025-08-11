@@ -12,7 +12,7 @@ const MEICA_PY_METADATA: Metadata = {
 
 
 interface MeicaPyParameters {
-    "__STYXTYPE__": "meica.py";
+    "@type": "afni.meica.py";
     "infile": InputPathType;
     "echo_times": string;
     "affine": string;
@@ -24,35 +24,35 @@ interface MeicaPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "meica.py": meica_py_cargs,
+        "afni.meica.py": meica_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "meica.py": meica_py_outputs,
+        "afni.meica.py": meica_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface MeicaPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image dataset (e.g. dataset.nii.gz)
+ * @param echo_times Echo times (e.g. 15.0,30.0,45.0)
+ * @param affine Affine registration matrix
+ * @param output_directory Output directory
+ * @param components Number of components for ICA
+ * @param talairach Apply standard Talairach transformation
+ * @param threshold Threshold value for masking
+ * @param debug Enable debug mode
+ *
+ * @returns Parameter dictionary
+ */
 function meica_py_params(
     infile: InputPathType,
     echo_times: string,
@@ -89,22 +103,8 @@ function meica_py_params(
     threshold: number | null = null,
     debug: boolean = false,
 ): MeicaPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image dataset (e.g. dataset.nii.gz)
-     * @param echo_times Echo times (e.g. 15.0,30.0,45.0)
-     * @param affine Affine registration matrix
-     * @param output_directory Output directory
-     * @param components Number of components for ICA
-     * @param talairach Apply standard Talairach transformation
-     * @param threshold Threshold value for masking
-     * @param debug Enable debug mode
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "meica.py" as const,
+        "@type": "afni.meica.py" as const,
         "infile": infile,
         "echo_times": echo_times,
         "affine": affine,
@@ -122,18 +122,18 @@ function meica_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function meica_py_cargs(
     params: MeicaPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("meica.py");
     cargs.push(
@@ -174,18 +174,18 @@ function meica_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function meica_py_outputs(
     params: MeicaPyParameters,
     execution: Execution,
 ): MeicaPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MeicaPyOutputs = {
         root: execution.outputFile("."),
         cleaned_bold: execution.outputFile([(params["output_directory"] ?? null), "/cleaned_bold.nii.gz"].join('')),
@@ -195,22 +195,22 @@ function meica_py_outputs(
 }
 
 
+/**
+ * Multi-Echo Independent Component Analysis for fMRI denoising.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
+ */
 function meica_py_execute(
     params: MeicaPyParameters,
     execution: Execution,
 ): MeicaPyOutputs {
-    /**
-     * Multi-Echo Independent Component Analysis for fMRI denoising.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = meica_py_cargs(params, execution)
     const ret = meica_py_outputs(params, execution)
@@ -219,6 +219,25 @@ function meica_py_execute(
 }
 
 
+/**
+ * Multi-Echo Independent Component Analysis for fMRI denoising.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input image dataset (e.g. dataset.nii.gz)
+ * @param echo_times Echo times (e.g. 15.0,30.0,45.0)
+ * @param affine Affine registration matrix
+ * @param output_directory Output directory
+ * @param components Number of components for ICA
+ * @param talairach Apply standard Talairach transformation
+ * @param threshold Threshold value for masking
+ * @param debug Enable debug mode
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
+ */
 function meica_py(
     infile: InputPathType,
     echo_times: string,
@@ -230,25 +249,6 @@ function meica_py(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MeicaPyOutputs {
-    /**
-     * Multi-Echo Independent Component Analysis for fMRI denoising.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input image dataset (e.g. dataset.nii.gz)
-     * @param echo_times Echo times (e.g. 15.0,30.0,45.0)
-     * @param affine Affine registration matrix
-     * @param output_directory Output directory
-     * @param components Number of components for ICA
-     * @param talairach Apply standard Talairach transformation
-     * @param threshold Threshold value for masking
-     * @param debug Enable debug mode
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MEICA_PY_METADATA);
     const params = meica_py_params(infile, echo_times, affine, output_directory, components, talairach, threshold, debug)
@@ -261,5 +261,8 @@ export {
       MeicaPyOutputs,
       MeicaPyParameters,
       meica_py,
+      meica_py_cargs,
+      meica_py_execute,
+      meica_py_outputs,
       meica_py_params,
 };

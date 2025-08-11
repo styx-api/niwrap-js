@@ -12,7 +12,7 @@ const BORDER_LENGTH_METADATA: Metadata = {
 
 
 interface BorderLengthParameters {
-    "__STYXTYPE__": "border-length";
+    "@type": "workbench.border-length";
     "border": InputPathType;
     "surface": InputPathType;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
@@ -21,33 +21,33 @@ interface BorderLengthParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "border-length": border_length_cargs,
+        "workbench.border-length": border_length_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface BorderLengthOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param border the input border file
+ * @param surface the surface to measure the borders on
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_separate_pieces report lengths for multi-part borders as separate numbers
+ * @param opt_hide_border_name don't print border name before each output
+ *
+ * @returns Parameter dictionary
+ */
 function border_length_params(
     border: InputPathType,
     surface: InputPathType,
@@ -74,19 +85,8 @@ function border_length_params(
     opt_separate_pieces: boolean = false,
     opt_hide_border_name: boolean = false,
 ): BorderLengthParameters {
-    /**
-     * Build parameters.
-    
-     * @param border the input border file
-     * @param surface the surface to measure the borders on
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_separate_pieces report lengths for multi-part borders as separate numbers
-     * @param opt_hide_border_name don't print border name before each output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "border-length" as const,
+        "@type": "workbench.border-length" as const,
         "border": border,
         "surface": surface,
         "opt_separate_pieces": opt_separate_pieces,
@@ -99,18 +99,18 @@ function border_length_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function border_length_cargs(
     params: BorderLengthParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-border-length");
@@ -132,18 +132,18 @@ function border_length_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function border_length_outputs(
     params: BorderLengthParameters,
     execution: Execution,
 ): BorderLengthOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BorderLengthOutputs = {
         root: execution.outputFile("."),
     };
@@ -151,26 +151,26 @@ function border_length_outputs(
 }
 
 
+/**
+ * Report length of borders.
+ *
+ * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.
+ *
+ * The -corrected-areas option is intended for when the length is not meaningfully measurable on individual surfaces, it is only an approximate correction for the reduction in structure of a group average surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
+ */
 function border_length_execute(
     params: BorderLengthParameters,
     execution: Execution,
 ): BorderLengthOutputs {
-    /**
-     * Report length of borders.
-     * 
-     * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.
-     * 
-     * The -corrected-areas option is intended for when the length is not meaningfully measurable on individual surfaces, it is only an approximate correction for the reduction in structure of a group average surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
-     */
     params = execution.params(params)
     const cargs = border_length_cargs(params, execution)
     const ret = border_length_outputs(params, execution)
@@ -179,6 +179,26 @@ function border_length_execute(
 }
 
 
+/**
+ * Report length of borders.
+ *
+ * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.
+ *
+ * The -corrected-areas option is intended for when the length is not meaningfully measurable on individual surfaces, it is only an approximate correction for the reduction in structure of a group average surface.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param border the input border file
+ * @param surface the surface to measure the borders on
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_separate_pieces report lengths for multi-part borders as separate numbers
+ * @param opt_hide_border_name don't print border name before each output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
+ */
 function border_length(
     border: InputPathType,
     surface: InputPathType,
@@ -187,26 +207,6 @@ function border_length(
     opt_hide_border_name: boolean = false,
     runner: Runner | null = null,
 ): BorderLengthOutputs {
-    /**
-     * Report length of borders.
-     * 
-     * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.
-     * 
-     * The -corrected-areas option is intended for when the length is not meaningfully measurable on individual surfaces, it is only an approximate correction for the reduction in structure of a group average surface.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param border the input border file
-     * @param surface the surface to measure the borders on
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_separate_pieces report lengths for multi-part borders as separate numbers
-     * @param opt_hide_border_name don't print border name before each output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BORDER_LENGTH_METADATA);
     const params = border_length_params(border, surface, opt_corrected_areas_area_metric, opt_separate_pieces, opt_hide_border_name)
@@ -219,5 +219,8 @@ export {
       BorderLengthOutputs,
       BorderLengthParameters,
       border_length,
+      border_length_cargs,
+      border_length_execute,
+      border_length_outputs,
       border_length_params,
 };

@@ -12,40 +12,40 @@ const SEGMENT_SUBJECT_NOTAL2_METADATA: Metadata = {
 
 
 interface SegmentSubjectNotal2Parameters {
-    "__STYXTYPE__": "segment_subject_notal2";
+    "@type": "freesurfer.segment_subject_notal2";
     "license_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_subject_notal2": segment_subject_notal2_cargs,
+        "freesurfer.segment_subject_notal2": segment_subject_notal2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segment_subject_notal2": segment_subject_notal2_outputs,
+        "freesurfer.segment_subject_notal2": segment_subject_notal2_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface SegmentSubjectNotal2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param license_file FreeSurfer license file is required to run the application. Obtain from http://surfer.nmr.mgh.harvard.edu/registration.html.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_notal2_params(
     license_file: InputPathType,
 ): SegmentSubjectNotal2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param license_file FreeSurfer license file is required to run the application. Obtain from http://surfer.nmr.mgh.harvard.edu/registration.html.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_subject_notal2" as const,
+        "@type": "freesurfer.segment_subject_notal2" as const,
         "license_file": license_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_notal2_cargs(
     params: SegmentSubjectNotal2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_subject_notal2");
     cargs.push(
@@ -108,18 +108,18 @@ function segment_subject_notal2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_notal2_outputs(
     params: SegmentSubjectNotal2Parameters,
     execution: Execution,
 ): SegmentSubjectNotal2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectNotal2Outputs = {
         root: execution.outputFile("."),
         output_dir: execution.outputFile(["segmented_output"].join('')),
@@ -128,22 +128,22 @@ function segment_subject_notal2_outputs(
 }
 
 
+/**
+ * FreeSurfer tool for segmenting subject data using notal2 algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
+ */
 function segment_subject_notal2_execute(
     params: SegmentSubjectNotal2Parameters,
     execution: Execution,
 ): SegmentSubjectNotal2Outputs {
-    /**
-     * FreeSurfer tool for segmenting subject data using notal2 algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_notal2_cargs(params, execution)
     const ret = segment_subject_notal2_outputs(params, execution)
@@ -152,22 +152,22 @@ function segment_subject_notal2_execute(
 }
 
 
+/**
+ * FreeSurfer tool for segmenting subject data using notal2 algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param license_file FreeSurfer license file is required to run the application. Obtain from http://surfer.nmr.mgh.harvard.edu/registration.html.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
+ */
 function segment_subject_notal2(
     license_file: InputPathType,
     runner: Runner | null = null,
 ): SegmentSubjectNotal2Outputs {
-    /**
-     * FreeSurfer tool for segmenting subject data using notal2 algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param license_file FreeSurfer license file is required to run the application. Obtain from http://surfer.nmr.mgh.harvard.edu/registration.html.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL2_METADATA);
     const params = segment_subject_notal2_params(license_file)
@@ -180,5 +180,8 @@ export {
       SegmentSubjectNotal2Outputs,
       SegmentSubjectNotal2Parameters,
       segment_subject_notal2,
+      segment_subject_notal2_cargs,
+      segment_subject_notal2_execute,
+      segment_subject_notal2_outputs,
       segment_subject_notal2_params,
 };

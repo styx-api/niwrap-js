@@ -12,13 +12,13 @@ const FILE_INFORMATION_METADATA: Metadata = {
 
 
 interface FileInformationOnlyMetadataParameters {
-    "__STYXTYPE__": "only_metadata";
+    "@type": "workbench.file-information.only_metadata";
     "opt_key_key"?: string | null | undefined;
 }
 
 
 interface FileInformationParameters {
-    "__STYXTYPE__": "file-information";
+    "@type": "workbench.file-information";
     "data_file": string;
     "opt_no_map_info": boolean;
     "opt_only_step_interval": boolean;
@@ -32,52 +32,52 @@ interface FileInformationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "file-information": file_information_cargs,
-        "only_metadata": file_information_only_metadata_cargs,
+        "workbench.file-information": file_information_cargs,
+        "workbench.file-information.only_metadata": file_information_only_metadata_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_key_key only print the metadata for one key, with no formatting: the metadata key
+ *
+ * @returns Parameter dictionary
+ */
 function file_information_only_metadata_params(
     opt_key_key: string | null = null,
 ): FileInformationOnlyMetadataParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_key_key only print the metadata for one key, with no formatting: the metadata key
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "only_metadata" as const,
+        "@type": "workbench.file-information.only_metadata" as const,
     };
     if (opt_key_key !== null) {
         params["opt_key_key"] = opt_key_key;
@@ -86,18 +86,18 @@ function file_information_only_metadata_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_information_only_metadata_cargs(
     params: FileInformationOnlyMetadataParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-only-metadata");
     if ((params["opt_key_key"] ?? null) !== null) {
@@ -123,6 +123,22 @@ interface FileInformationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file data file
+ * @param opt_no_map_info do not show map information for files that support maps
+ * @param opt_only_step_interval suppress normal output, print the interval between maps
+ * @param opt_only_number_of_maps suppress normal output, print the number of maps
+ * @param opt_only_map_names suppress normal output, print the names of all maps
+ * @param only_metadata suppress normal output, print file metadata
+ * @param opt_only_cifti_xml suppress normal output, print the cifti xml if the file type has it
+ * @param opt_czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
+ * @param opt_czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
+ * @param opt_czi_xml show XML from CZI file
+ *
+ * @returns Parameter dictionary
+ */
 function file_information_params(
     data_file: string,
     opt_no_map_info: boolean = false,
@@ -135,24 +151,8 @@ function file_information_params(
     opt_czi_all_sub_blocks: boolean = false,
     opt_czi_xml: boolean = false,
 ): FileInformationParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file data file
-     * @param opt_no_map_info do not show map information for files that support maps
-     * @param opt_only_step_interval suppress normal output, print the interval between maps
-     * @param opt_only_number_of_maps suppress normal output, print the number of maps
-     * @param opt_only_map_names suppress normal output, print the names of all maps
-     * @param only_metadata suppress normal output, print file metadata
-     * @param opt_only_cifti_xml suppress normal output, print the cifti xml if the file type has it
-     * @param opt_czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
-     * @param opt_czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
-     * @param opt_czi_xml show XML from CZI file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "file-information" as const,
+        "@type": "workbench.file-information" as const,
         "data_file": data_file,
         "opt_no_map_info": opt_no_map_info,
         "opt_only_step_interval": opt_only_step_interval,
@@ -170,18 +170,18 @@ function file_information_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_information_cargs(
     params: FileInformationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-file-information");
@@ -199,7 +199,7 @@ function file_information_cargs(
         cargs.push("-only-map-names");
     }
     if ((params["only_metadata"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["only_metadata"] ?? null).__STYXTYPE__)((params["only_metadata"] ?? null), execution));
+        cargs.push(...dynCargs((params["only_metadata"] ?? null)["@type"])((params["only_metadata"] ?? null), execution));
     }
     if ((params["opt_only_cifti_xml"] ?? null)) {
         cargs.push("-only-cifti-xml");
@@ -217,18 +217,18 @@ function file_information_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function file_information_outputs(
     params: FileInformationParameters,
     execution: Execution,
 ): FileInformationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FileInformationOutputs = {
         root: execution.outputFile("."),
     };
@@ -236,62 +236,62 @@ function file_information_outputs(
 }
 
 
+/**
+ * List information about a file's content.
+ *
+ * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.
+ *
+ * Library paths:
+ *    /usr/lib/x86_64-linux-gnu/qt5/plugins
+ *    /mnt/c/Users/floru/Projects/cmi/nopype/extraction/workbench/source/build/CommandLine
+ *
+ *
+ * File and extensions for reading and writing:
+ *    Annotation: wb_annot
+ *    Annotation Text Substitution: wb_annsub.csv
+ *    Border: border, wb_border
+ *    CIFTI - Dense: dconn.nii
+ *    CIFTI - Dense Label: dlabel.nii
+ *    CIFTI - Dense Parcel: dpconn.nii
+ *    CIFTI - Dense Scalar: dscalar.nii
+ *    CIFTI - Dense Data Series: dtseries.nii
+ *    CIFTI - Fiber Orientations TEMPORARY: fiberTEMP.nii
+ *    CIFTI - Fiber Trajectory TEMPORARY: trajTEMP.wbsparse
+ *    CIFTI - Parcel: pconn.nii
+ *    CIFTI - Parcel Dense: pdconn.nii
+ *    CIFTI - Parcel Label: plabel.nii
+ *    CIFTI - Parcel Scalar: pscalar.nii
+ *    CIFTI - Parcel Series: ptseries.nii
+ *    CIFTI - Scalar Data Series: sdseries.nii
+ *    CZI Image: czi
+ *    Foci: foci, wb_foci
+ *    Histology Slices: metaczi, meta-image
+ *    Image Read: bmp, gif, jpeg, jpg, png, ppm
+ *         Write: bmp, jpeg, jpg, png, ppm
+ *    Label: label.gii
+ *    Metric: func.gii, shape.gii
+ *    Palette: palette, wb_palette
+ *    RGBA: rgba.gii
+ *    Samples: wb_samples
+ *    Scene: scene, wb_scene
+ *    Specification: spec, wb_spec
+ *    Surface: surf.gii
+ *    Volume: nii, nii.gz
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
+ */
 function file_information_execute(
     params: FileInformationParameters,
     execution: Execution,
 ): FileInformationOutputs {
-    /**
-     * List information about a file's content.
-     * 
-     * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.
-     * 
-     * Library paths:
-     *    /usr/lib/x86_64-linux-gnu/qt5/plugins
-     *    /mnt/c/Users/floru/Projects/cmi/nopype/extraction/workbench/source/build/CommandLine
-     * 
-     * 
-     * File and extensions for reading and writing:
-     *    Annotation: wb_annot
-     *    Annotation Text Substitution: wb_annsub.csv
-     *    Border: border, wb_border
-     *    CIFTI - Dense: dconn.nii
-     *    CIFTI - Dense Label: dlabel.nii
-     *    CIFTI - Dense Parcel: dpconn.nii
-     *    CIFTI - Dense Scalar: dscalar.nii
-     *    CIFTI - Dense Data Series: dtseries.nii
-     *    CIFTI - Fiber Orientations TEMPORARY: fiberTEMP.nii
-     *    CIFTI - Fiber Trajectory TEMPORARY: trajTEMP.wbsparse
-     *    CIFTI - Parcel: pconn.nii
-     *    CIFTI - Parcel Dense: pdconn.nii
-     *    CIFTI - Parcel Label: plabel.nii
-     *    CIFTI - Parcel Scalar: pscalar.nii
-     *    CIFTI - Parcel Series: ptseries.nii
-     *    CIFTI - Scalar Data Series: sdseries.nii
-     *    CZI Image: czi
-     *    Foci: foci, wb_foci
-     *    Histology Slices: metaczi, meta-image
-     *    Image Read: bmp, gif, jpeg, jpg, png, ppm
-     *         Write: bmp, jpeg, jpg, png, ppm
-     *    Label: label.gii
-     *    Metric: func.gii, shape.gii
-     *    Palette: palette, wb_palette
-     *    RGBA: rgba.gii
-     *    Samples: wb_samples
-     *    Scene: scene, wb_scene
-     *    Specification: spec, wb_spec
-     *    Surface: surf.gii
-     *    Volume: nii, nii.gz
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
-     */
     params = execution.params(params)
     const cargs = file_information_cargs(params, execution)
     const ret = file_information_outputs(params, execution)
@@ -300,6 +300,67 @@ function file_information_execute(
 }
 
 
+/**
+ * List information about a file's content.
+ *
+ * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.
+ *
+ * Library paths:
+ *    /usr/lib/x86_64-linux-gnu/qt5/plugins
+ *    /mnt/c/Users/floru/Projects/cmi/nopype/extraction/workbench/source/build/CommandLine
+ *
+ *
+ * File and extensions for reading and writing:
+ *    Annotation: wb_annot
+ *    Annotation Text Substitution: wb_annsub.csv
+ *    Border: border, wb_border
+ *    CIFTI - Dense: dconn.nii
+ *    CIFTI - Dense Label: dlabel.nii
+ *    CIFTI - Dense Parcel: dpconn.nii
+ *    CIFTI - Dense Scalar: dscalar.nii
+ *    CIFTI - Dense Data Series: dtseries.nii
+ *    CIFTI - Fiber Orientations TEMPORARY: fiberTEMP.nii
+ *    CIFTI - Fiber Trajectory TEMPORARY: trajTEMP.wbsparse
+ *    CIFTI - Parcel: pconn.nii
+ *    CIFTI - Parcel Dense: pdconn.nii
+ *    CIFTI - Parcel Label: plabel.nii
+ *    CIFTI - Parcel Scalar: pscalar.nii
+ *    CIFTI - Parcel Series: ptseries.nii
+ *    CIFTI - Scalar Data Series: sdseries.nii
+ *    CZI Image: czi
+ *    Foci: foci, wb_foci
+ *    Histology Slices: metaczi, meta-image
+ *    Image Read: bmp, gif, jpeg, jpg, png, ppm
+ *         Write: bmp, jpeg, jpg, png, ppm
+ *    Label: label.gii
+ *    Metric: func.gii, shape.gii
+ *    Palette: palette, wb_palette
+ *    RGBA: rgba.gii
+ *    Samples: wb_samples
+ *    Scene: scene, wb_scene
+ *    Specification: spec, wb_spec
+ *    Surface: surf.gii
+ *    Volume: nii, nii.gz
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param data_file data file
+ * @param opt_no_map_info do not show map information for files that support maps
+ * @param opt_only_step_interval suppress normal output, print the interval between maps
+ * @param opt_only_number_of_maps suppress normal output, print the number of maps
+ * @param opt_only_map_names suppress normal output, print the names of all maps
+ * @param only_metadata suppress normal output, print file metadata
+ * @param opt_only_cifti_xml suppress normal output, print the cifti xml if the file type has it
+ * @param opt_czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
+ * @param opt_czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
+ * @param opt_czi_xml show XML from CZI file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
+ */
 function file_information(
     data_file: string,
     opt_no_map_info: boolean = false,
@@ -313,67 +374,6 @@ function file_information(
     opt_czi_xml: boolean = false,
     runner: Runner | null = null,
 ): FileInformationOutputs {
-    /**
-     * List information about a file's content.
-     * 
-     * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.
-     * 
-     * Library paths:
-     *    /usr/lib/x86_64-linux-gnu/qt5/plugins
-     *    /mnt/c/Users/floru/Projects/cmi/nopype/extraction/workbench/source/build/CommandLine
-     * 
-     * 
-     * File and extensions for reading and writing:
-     *    Annotation: wb_annot
-     *    Annotation Text Substitution: wb_annsub.csv
-     *    Border: border, wb_border
-     *    CIFTI - Dense: dconn.nii
-     *    CIFTI - Dense Label: dlabel.nii
-     *    CIFTI - Dense Parcel: dpconn.nii
-     *    CIFTI - Dense Scalar: dscalar.nii
-     *    CIFTI - Dense Data Series: dtseries.nii
-     *    CIFTI - Fiber Orientations TEMPORARY: fiberTEMP.nii
-     *    CIFTI - Fiber Trajectory TEMPORARY: trajTEMP.wbsparse
-     *    CIFTI - Parcel: pconn.nii
-     *    CIFTI - Parcel Dense: pdconn.nii
-     *    CIFTI - Parcel Label: plabel.nii
-     *    CIFTI - Parcel Scalar: pscalar.nii
-     *    CIFTI - Parcel Series: ptseries.nii
-     *    CIFTI - Scalar Data Series: sdseries.nii
-     *    CZI Image: czi
-     *    Foci: foci, wb_foci
-     *    Histology Slices: metaczi, meta-image
-     *    Image Read: bmp, gif, jpeg, jpg, png, ppm
-     *         Write: bmp, jpeg, jpg, png, ppm
-     *    Label: label.gii
-     *    Metric: func.gii, shape.gii
-     *    Palette: palette, wb_palette
-     *    RGBA: rgba.gii
-     *    Samples: wb_samples
-     *    Scene: scene, wb_scene
-     *    Specification: spec, wb_spec
-     *    Surface: surf.gii
-     *    Volume: nii, nii.gz
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param data_file data file
-     * @param opt_no_map_info do not show map information for files that support maps
-     * @param opt_only_step_interval suppress normal output, print the interval between maps
-     * @param opt_only_number_of_maps suppress normal output, print the number of maps
-     * @param opt_only_map_names suppress normal output, print the names of all maps
-     * @param only_metadata suppress normal output, print file metadata
-     * @param opt_only_cifti_xml suppress normal output, print the cifti xml if the file type has it
-     * @param opt_czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
-     * @param opt_czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
-     * @param opt_czi_xml show XML from CZI file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILE_INFORMATION_METADATA);
     const params = file_information_params(data_file, opt_no_map_info, opt_only_step_interval, opt_only_number_of_maps, opt_only_map_names, only_metadata, opt_only_cifti_xml, opt_czi, opt_czi_all_sub_blocks, opt_czi_xml)
@@ -387,6 +387,10 @@ export {
       FileInformationOutputs,
       FileInformationParameters,
       file_information,
+      file_information_cargs,
+      file_information_execute,
+      file_information_only_metadata_cargs,
       file_information_only_metadata_params,
+      file_information_outputs,
       file_information_params,
 };

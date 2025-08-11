@@ -12,7 +12,7 @@ const MRI_SURF2VOL_METADATA: Metadata = {
 
 
 interface MriSurf2volParameters {
-    "__STYXTYPE__": "mri_surf2vol";
+    "@type": "freesurfer.mri_surf2vol";
     "surface_overlay"?: Array<string> | null | undefined;
     "ltafile"?: InputPathType | null | undefined;
     "outfile": string;
@@ -45,35 +45,35 @@ interface MriSurf2volParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_surf2vol": mri_surf2vol_cargs,
+        "freesurfer.mri_surf2vol": mri_surf2vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_surf2vol": mri_surf2vol_outputs,
+        "freesurfer.mri_surf2vol": mri_surf2vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -100,6 +100,41 @@ interface MriSurf2volOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile Path to output volume
+ * @param surface_overlay Specify path to a surface and matching overlay
+ * @param ltafile Specify registration file
+ * @param subject Specify subject name
+ * @param ribbonfile Specify path to ribbon file
+ * @param merge_volume Merge with this volume, replacing surface values
+ * @param surface_values Source of surface values, optionally with format
+ * @param mkmask Create a binary mask instead of loading surfval
+ * @param hemi Hemisphere for the surface values (lh or rh)
+ * @param surfname Surface name in surf directory (default is white)
+ * @param projfrac Fraction for thickness projection
+ * @param fill_ribbon Fill the entire ribbon
+ * @param fill_projfrac Fill ribbon by iterating projfrac
+ * @param reg_volume Volume registration file
+ * @param identity Use identity matrix for volume registration (requires subject name)
+ * @param template_volume Template volume for output configuration
+ * @param fstal_res Use fs Talairach registration with specified resolution
+ * @param vtxvol Vertex map volume path
+ * @param flat2mri Options for flat surface to MRI mapping
+ * @param sphpvf Spherical point to voxel function options
+ * @param mask_to_cortex Mask to cortex label
+ * @param mask_to_label Mask to specified label file
+ * @param surface_mask Mask to specified surface mask
+ * @param add_const Add constant value to each non-zero output voxel
+ * @param copy_ctab Copy color table header
+ * @param subjects_dir FreeSurfer subjects directory
+ * @param gdiagno Set diagnostic level
+ * @param version Print version and exit
+ * @param help Display help information
+ *
+ * @returns Parameter dictionary
+ */
 function mri_surf2vol_params(
     outfile: string,
     surface_overlay: Array<string> | null = null,
@@ -131,43 +166,8 @@ function mri_surf2vol_params(
     version: boolean = false,
     help: boolean = false,
 ): MriSurf2volParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile Path to output volume
-     * @param surface_overlay Specify path to a surface and matching overlay
-     * @param ltafile Specify registration file
-     * @param subject Specify subject name
-     * @param ribbonfile Specify path to ribbon file
-     * @param merge_volume Merge with this volume, replacing surface values
-     * @param surface_values Source of surface values, optionally with format
-     * @param mkmask Create a binary mask instead of loading surfval
-     * @param hemi Hemisphere for the surface values (lh or rh)
-     * @param surfname Surface name in surf directory (default is white)
-     * @param projfrac Fraction for thickness projection
-     * @param fill_ribbon Fill the entire ribbon
-     * @param fill_projfrac Fill ribbon by iterating projfrac
-     * @param reg_volume Volume registration file
-     * @param identity Use identity matrix for volume registration (requires subject name)
-     * @param template_volume Template volume for output configuration
-     * @param fstal_res Use fs Talairach registration with specified resolution
-     * @param vtxvol Vertex map volume path
-     * @param flat2mri Options for flat surface to MRI mapping
-     * @param sphpvf Spherical point to voxel function options
-     * @param mask_to_cortex Mask to cortex label
-     * @param mask_to_label Mask to specified label file
-     * @param surface_mask Mask to specified surface mask
-     * @param add_const Add constant value to each non-zero output voxel
-     * @param copy_ctab Copy color table header
-     * @param subjects_dir FreeSurfer subjects directory
-     * @param gdiagno Set diagnostic level
-     * @param version Print version and exit
-     * @param help Display help information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_surf2vol" as const,
+        "@type": "freesurfer.mri_surf2vol" as const,
         "outfile": outfile,
         "mkmask": mkmask,
         "fill_ribbon": fill_ribbon,
@@ -246,18 +246,18 @@ function mri_surf2vol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_surf2vol_cargs(
     params: MriSurf2volParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_surf2vol");
     if ((params["surface_overlay"] ?? null) !== null) {
@@ -418,18 +418,18 @@ function mri_surf2vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_surf2vol_outputs(
     params: MriSurf2volParameters,
     execution: Execution,
 ): MriSurf2volOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSurf2volOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -439,22 +439,22 @@ function mri_surf2vol_outputs(
 }
 
 
+/**
+ * Resamples a surface into a volume using one of two methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
+ */
 function mri_surf2vol_execute(
     params: MriSurf2volParameters,
     execution: Execution,
 ): MriSurf2volOutputs {
-    /**
-     * Resamples a surface into a volume using one of two methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_surf2vol_cargs(params, execution)
     const ret = mri_surf2vol_outputs(params, execution)
@@ -463,6 +463,46 @@ function mri_surf2vol_execute(
 }
 
 
+/**
+ * Resamples a surface into a volume using one of two methods.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outfile Path to output volume
+ * @param surface_overlay Specify path to a surface and matching overlay
+ * @param ltafile Specify registration file
+ * @param subject Specify subject name
+ * @param ribbonfile Specify path to ribbon file
+ * @param merge_volume Merge with this volume, replacing surface values
+ * @param surface_values Source of surface values, optionally with format
+ * @param mkmask Create a binary mask instead of loading surfval
+ * @param hemi Hemisphere for the surface values (lh or rh)
+ * @param surfname Surface name in surf directory (default is white)
+ * @param projfrac Fraction for thickness projection
+ * @param fill_ribbon Fill the entire ribbon
+ * @param fill_projfrac Fill ribbon by iterating projfrac
+ * @param reg_volume Volume registration file
+ * @param identity Use identity matrix for volume registration (requires subject name)
+ * @param template_volume Template volume for output configuration
+ * @param fstal_res Use fs Talairach registration with specified resolution
+ * @param vtxvol Vertex map volume path
+ * @param flat2mri Options for flat surface to MRI mapping
+ * @param sphpvf Spherical point to voxel function options
+ * @param mask_to_cortex Mask to cortex label
+ * @param mask_to_label Mask to specified label file
+ * @param surface_mask Mask to specified surface mask
+ * @param add_const Add constant value to each non-zero output voxel
+ * @param copy_ctab Copy color table header
+ * @param subjects_dir FreeSurfer subjects directory
+ * @param gdiagno Set diagnostic level
+ * @param version Print version and exit
+ * @param help Display help information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
+ */
 function mri_surf2vol(
     outfile: string,
     surface_overlay: Array<string> | null = null,
@@ -495,46 +535,6 @@ function mri_surf2vol(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriSurf2volOutputs {
-    /**
-     * Resamples a surface into a volume using one of two methods.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outfile Path to output volume
-     * @param surface_overlay Specify path to a surface and matching overlay
-     * @param ltafile Specify registration file
-     * @param subject Specify subject name
-     * @param ribbonfile Specify path to ribbon file
-     * @param merge_volume Merge with this volume, replacing surface values
-     * @param surface_values Source of surface values, optionally with format
-     * @param mkmask Create a binary mask instead of loading surfval
-     * @param hemi Hemisphere for the surface values (lh or rh)
-     * @param surfname Surface name in surf directory (default is white)
-     * @param projfrac Fraction for thickness projection
-     * @param fill_ribbon Fill the entire ribbon
-     * @param fill_projfrac Fill ribbon by iterating projfrac
-     * @param reg_volume Volume registration file
-     * @param identity Use identity matrix for volume registration (requires subject name)
-     * @param template_volume Template volume for output configuration
-     * @param fstal_res Use fs Talairach registration with specified resolution
-     * @param vtxvol Vertex map volume path
-     * @param flat2mri Options for flat surface to MRI mapping
-     * @param sphpvf Spherical point to voxel function options
-     * @param mask_to_cortex Mask to cortex label
-     * @param mask_to_label Mask to specified label file
-     * @param surface_mask Mask to specified surface mask
-     * @param add_const Add constant value to each non-zero output voxel
-     * @param copy_ctab Copy color table header
-     * @param subjects_dir FreeSurfer subjects directory
-     * @param gdiagno Set diagnostic level
-     * @param version Print version and exit
-     * @param help Display help information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SURF2VOL_METADATA);
     const params = mri_surf2vol_params(outfile, surface_overlay, ltafile, subject, ribbonfile, merge_volume, surface_values, mkmask, hemi, surfname, projfrac, fill_ribbon, fill_projfrac, reg_volume, identity, template_volume, fstal_res, vtxvol, flat2mri, sphpvf, mask_to_cortex, mask_to_label, surface_mask, add_const, copy_ctab, subjects_dir, gdiagno, version, help)
@@ -547,5 +547,8 @@ export {
       MriSurf2volOutputs,
       MriSurf2volParameters,
       mri_surf2vol,
+      mri_surf2vol_cargs,
+      mri_surf2vol_execute,
+      mri_surf2vol_outputs,
       mri_surf2vol_params,
 };

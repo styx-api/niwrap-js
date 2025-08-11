@@ -12,7 +12,7 @@ const GEMS_COMPUTE_ATLAS_PROBS_METADATA: Metadata = {
 
 
 interface GemsComputeAtlasProbsParameters {
-    "__STYXTYPE__": "gems_compute_atlas_probs";
+    "@type": "freesurfer.gems_compute_atlas_probs";
     "subjects_dir": string;
     "mesh_collections": Array<string>;
     "out_dir": string;
@@ -32,33 +32,33 @@ interface GemsComputeAtlasProbsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gems_compute_atlas_probs": gems_compute_atlas_probs_cargs,
+        "freesurfer.gems_compute_atlas_probs": gems_compute_atlas_probs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -78,6 +78,28 @@ interface GemsComputeAtlasProbsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_dir Directory with saved SAMSEG runs with --history flag.
+ * @param mesh_collections Mesh collection file(s).
+ * @param out_dir Output directory.
+ * @param segmentations_dir Directory with GT segmentations.
+ * @param gt_from_fs GT from FreeSurfer segmentations.
+ * @param segmentation_name Filename of the segmentations, assumed to be the same for each subject.
+ * @param multi_structure Estimate alphas from more than 1 structure.
+ * @param labels Label numbers for multi-structure estimation.
+ * @param from_samseg SAMSEG runs obtained from command samseg instead of run_samseg.
+ * @param em_iterations Number of EM iterations.
+ * @param show_figs Show figures during the run.
+ * @param save_figs Save rasterized prior of each subject.
+ * @param save_average_figs Save average rasterized prior.
+ * @param subjects_file Text file with list of subjects.
+ * @param labels_file Text file with list of labels (instead of --labels).
+ * @param samseg_subdir Name of samseg subdir in subject/mri folder.
+ *
+ * @returns Parameter dictionary
+ */
 function gems_compute_atlas_probs_params(
     subjects_dir: string,
     mesh_collections: Array<string>,
@@ -96,30 +118,8 @@ function gems_compute_atlas_probs_params(
     labels_file: string | null = null,
     samseg_subdir: string | null = null,
 ): GemsComputeAtlasProbsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_dir Directory with saved SAMSEG runs with --history flag.
-     * @param mesh_collections Mesh collection file(s).
-     * @param out_dir Output directory.
-     * @param segmentations_dir Directory with GT segmentations.
-     * @param gt_from_fs GT from FreeSurfer segmentations.
-     * @param segmentation_name Filename of the segmentations, assumed to be the same for each subject.
-     * @param multi_structure Estimate alphas from more than 1 structure.
-     * @param labels Label numbers for multi-structure estimation.
-     * @param from_samseg SAMSEG runs obtained from command samseg instead of run_samseg.
-     * @param em_iterations Number of EM iterations.
-     * @param show_figs Show figures during the run.
-     * @param save_figs Save rasterized prior of each subject.
-     * @param save_average_figs Save average rasterized prior.
-     * @param subjects_file Text file with list of subjects.
-     * @param labels_file Text file with list of labels (instead of --labels).
-     * @param samseg_subdir Name of samseg subdir in subject/mri folder.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gems_compute_atlas_probs" as const,
+        "@type": "freesurfer.gems_compute_atlas_probs" as const,
         "subjects_dir": subjects_dir,
         "mesh_collections": mesh_collections,
         "out_dir": out_dir,
@@ -155,18 +155,18 @@ function gems_compute_atlas_probs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gems_compute_atlas_probs_cargs(
     params: GemsComputeAtlasProbsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gems_compute_atlas_probs");
     cargs.push(
@@ -245,18 +245,18 @@ function gems_compute_atlas_probs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gems_compute_atlas_probs_outputs(
     params: GemsComputeAtlasProbsParameters,
     execution: Execution,
 ): GemsComputeAtlasProbsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GemsComputeAtlasProbsOutputs = {
         root: execution.outputFile("."),
     };
@@ -264,22 +264,22 @@ function gems_compute_atlas_probs_outputs(
 }
 
 
+/**
+ * Tool to compute atlas probabilities using SAMSEG results.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
+ */
 function gems_compute_atlas_probs_execute(
     params: GemsComputeAtlasProbsParameters,
     execution: Execution,
 ): GemsComputeAtlasProbsOutputs {
-    /**
-     * Tool to compute atlas probabilities using SAMSEG results.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
-     */
     params = execution.params(params)
     const cargs = gems_compute_atlas_probs_cargs(params, execution)
     const ret = gems_compute_atlas_probs_outputs(params, execution)
@@ -288,6 +288,33 @@ function gems_compute_atlas_probs_execute(
 }
 
 
+/**
+ * Tool to compute atlas probabilities using SAMSEG results.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_dir Directory with saved SAMSEG runs with --history flag.
+ * @param mesh_collections Mesh collection file(s).
+ * @param out_dir Output directory.
+ * @param segmentations_dir Directory with GT segmentations.
+ * @param gt_from_fs GT from FreeSurfer segmentations.
+ * @param segmentation_name Filename of the segmentations, assumed to be the same for each subject.
+ * @param multi_structure Estimate alphas from more than 1 structure.
+ * @param labels Label numbers for multi-structure estimation.
+ * @param from_samseg SAMSEG runs obtained from command samseg instead of run_samseg.
+ * @param em_iterations Number of EM iterations.
+ * @param show_figs Show figures during the run.
+ * @param save_figs Save rasterized prior of each subject.
+ * @param save_average_figs Save average rasterized prior.
+ * @param subjects_file Text file with list of subjects.
+ * @param labels_file Text file with list of labels (instead of --labels).
+ * @param samseg_subdir Name of samseg subdir in subject/mri folder.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
+ */
 function gems_compute_atlas_probs(
     subjects_dir: string,
     mesh_collections: Array<string>,
@@ -307,33 +334,6 @@ function gems_compute_atlas_probs(
     samseg_subdir: string | null = null,
     runner: Runner | null = null,
 ): GemsComputeAtlasProbsOutputs {
-    /**
-     * Tool to compute atlas probabilities using SAMSEG results.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_dir Directory with saved SAMSEG runs with --history flag.
-     * @param mesh_collections Mesh collection file(s).
-     * @param out_dir Output directory.
-     * @param segmentations_dir Directory with GT segmentations.
-     * @param gt_from_fs GT from FreeSurfer segmentations.
-     * @param segmentation_name Filename of the segmentations, assumed to be the same for each subject.
-     * @param multi_structure Estimate alphas from more than 1 structure.
-     * @param labels Label numbers for multi-structure estimation.
-     * @param from_samseg SAMSEG runs obtained from command samseg instead of run_samseg.
-     * @param em_iterations Number of EM iterations.
-     * @param show_figs Show figures during the run.
-     * @param save_figs Save rasterized prior of each subject.
-     * @param save_average_figs Save average rasterized prior.
-     * @param subjects_file Text file with list of subjects.
-     * @param labels_file Text file with list of labels (instead of --labels).
-     * @param samseg_subdir Name of samseg subdir in subject/mri folder.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GEMS_COMPUTE_ATLAS_PROBS_METADATA);
     const params = gems_compute_atlas_probs_params(subjects_dir, mesh_collections, out_dir, segmentations_dir, gt_from_fs, segmentation_name, multi_structure, labels, from_samseg, em_iterations, show_figs, save_figs, save_average_figs, subjects_file, labels_file, samseg_subdir)
@@ -346,5 +346,8 @@ export {
       GemsComputeAtlasProbsOutputs,
       GemsComputeAtlasProbsParameters,
       gems_compute_atlas_probs,
+      gems_compute_atlas_probs_cargs,
+      gems_compute_atlas_probs_execute,
+      gems_compute_atlas_probs_outputs,
       gems_compute_atlas_probs_params,
 };

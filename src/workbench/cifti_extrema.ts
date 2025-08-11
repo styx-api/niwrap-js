@@ -12,14 +12,14 @@ const CIFTI_EXTREMA_METADATA: Metadata = {
 
 
 interface CiftiExtremaThresholdParameters {
-    "__STYXTYPE__": "threshold";
+    "@type": "workbench.cifti-extrema.threshold";
     "low": number;
     "high": number;
 }
 
 
 interface CiftiExtremaParameters {
-    "__STYXTYPE__": "cifti-extrema";
+    "@type": "workbench.cifti-extrema";
     "cifti": InputPathType;
     "surface_distance": number;
     "volume_distance": number;
@@ -40,55 +40,55 @@ interface CiftiExtremaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-extrema": cifti_extrema_cargs,
-        "threshold": cifti_extrema_threshold_cargs,
+        "workbench.cifti-extrema": cifti_extrema_cargs,
+        "workbench.cifti-extrema.threshold": cifti_extrema_threshold_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-extrema": cifti_extrema_outputs,
+        "workbench.cifti-extrema": cifti_extrema_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param low the largest value to consider for being a minimum
+ * @param high the smallest value to consider for being a maximum
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_extrema_threshold_params(
     low: number,
     high: number,
 ): CiftiExtremaThresholdParameters {
-    /**
-     * Build parameters.
-    
-     * @param low the largest value to consider for being a minimum
-     * @param high the smallest value to consider for being a maximum
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "threshold" as const,
+        "@type": "workbench.cifti-extrema.threshold" as const,
         "low": low,
         "high": high,
     };
@@ -96,18 +96,18 @@ function cifti_extrema_threshold_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_extrema_threshold_cargs(
     params: CiftiExtremaThresholdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-threshold");
     cargs.push(String((params["low"] ?? null)));
@@ -133,6 +133,29 @@ interface CiftiExtremaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti
+ * @param surface_distance the minimum distance between extrema of the same type, for surface components
+ * @param volume_distance the minimum distance between extrema of the same type, for volume components
+ * @param direction which dimension to find extrema along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_left_surface_surface specify the left surface to use: the left surface file
+ * @param opt_right_surface_surface specify the right surface to use: the right surface file
+ * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
+ * @param threshold ignore small extrema
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
+ * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param opt_only_maxima only find the maxima
+ * @param opt_only_minima only find the minima
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_extrema_params(
     cifti: InputPathType,
     surface_distance: number,
@@ -152,31 +175,8 @@ function cifti_extrema_params(
     opt_only_maxima: boolean = false,
     opt_only_minima: boolean = false,
 ): CiftiExtremaParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti
-     * @param surface_distance the minimum distance between extrema of the same type, for surface components
-     * @param volume_distance the minimum distance between extrema of the same type, for volume components
-     * @param direction which dimension to find extrema along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_left_surface_surface specify the left surface to use: the left surface file
-     * @param opt_right_surface_surface specify the right surface to use: the right surface file
-     * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
-     * @param threshold ignore small extrema
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
-     * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
-     * @param opt_only_maxima only find the maxima
-     * @param opt_only_minima only find the minima
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-extrema" as const,
+        "@type": "workbench.cifti-extrema" as const,
         "cifti": cifti,
         "surface_distance": surface_distance,
         "volume_distance": volume_distance,
@@ -211,18 +211,18 @@ function cifti_extrema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_extrema_cargs(
     params: CiftiExtremaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-extrema");
@@ -265,7 +265,7 @@ function cifti_extrema_cargs(
         cargs.push("-presmooth-fwhm");
     }
     if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["threshold"] ?? null).__STYXTYPE__)((params["threshold"] ?? null), execution));
+        cargs.push(...dynCargs((params["threshold"] ?? null)["@type"])((params["threshold"] ?? null), execution));
     }
     if ((params["opt_merged_volume"] ?? null)) {
         cargs.push("-merged-volume");
@@ -286,18 +286,18 @@ function cifti_extrema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_extrema_outputs(
     params: CiftiExtremaParameters,
     execution: Execution,
 ): CiftiExtremaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiExtremaOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -306,24 +306,24 @@ function cifti_extrema_outputs(
 }
 
 
+/**
+ * Find extrema in a cifti file.
+ *
+ * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
+ */
 function cifti_extrema_execute(
     params: CiftiExtremaParameters,
     execution: Execution,
 ): CiftiExtremaOutputs {
-    /**
-     * Find extrema in a cifti file.
-     * 
-     * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_extrema_cargs(params, execution)
     const ret = cifti_extrema_outputs(params, execution)
@@ -332,6 +332,36 @@ function cifti_extrema_execute(
 }
 
 
+/**
+ * Find extrema in a cifti file.
+ *
+ * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti
+ * @param surface_distance the minimum distance between extrema of the same type, for surface components
+ * @param volume_distance the minimum distance between extrema of the same type, for volume components
+ * @param direction which dimension to find extrema along, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_left_surface_surface specify the left surface to use: the left surface file
+ * @param opt_right_surface_surface specify the right surface to use: the right surface file
+ * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
+ * @param threshold ignore small extrema
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
+ * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param opt_only_maxima only find the maxima
+ * @param opt_only_minima only find the minima
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
+ */
 function cifti_extrema(
     cifti: InputPathType,
     surface_distance: number,
@@ -352,36 +382,6 @@ function cifti_extrema(
     opt_only_minima: boolean = false,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
-    /**
-     * Find extrema in a cifti file.
-     * 
-     * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti
-     * @param surface_distance the minimum distance between extrema of the same type, for surface components
-     * @param volume_distance the minimum distance between extrema of the same type, for volume components
-     * @param direction which dimension to find extrema along, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_left_surface_surface specify the left surface to use: the left surface file
-     * @param opt_right_surface_surface specify the right surface to use: the right surface file
-     * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
-     * @param threshold ignore small extrema
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
-     * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
-     * @param opt_only_maxima only find the maxima
-     * @param opt_only_minima only find the minima
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_EXTREMA_METADATA);
     const params = cifti_extrema_params(cifti, surface_distance, volume_distance, direction, cifti_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, threshold, opt_merged_volume, opt_sum_maps, opt_consolidate_mode, opt_only_maxima, opt_only_minima)
@@ -395,6 +395,10 @@ export {
       CiftiExtremaParameters,
       CiftiExtremaThresholdParameters,
       cifti_extrema,
+      cifti_extrema_cargs,
+      cifti_extrema_execute,
+      cifti_extrema_outputs,
       cifti_extrema_params,
+      cifti_extrema_threshold_cargs,
       cifti_extrema_threshold_params,
 };

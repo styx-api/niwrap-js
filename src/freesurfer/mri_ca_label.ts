@@ -12,7 +12,7 @@ const MRI_CA_LABEL_METADATA: Metadata = {
 
 
 interface MriCaLabelParameters {
-    "__STYXTYPE__": "mri_ca_label";
+    "@type": "freesurfer.mri_ca_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
     "gca_file": InputPathType;
@@ -68,35 +68,35 @@ interface MriCaLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ca_label": mri_ca_label_cargs,
+        "freesurfer.mri_ca_label": mri_ca_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ca_label": mri_ca_label_outputs,
+        "freesurfer.mri_ca_label": mri_ca_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -119,6 +119,64 @@ interface MriCaLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Input MRI volumes.
+ * @param transform_file Transform file for the registration.
+ * @param gca_file GCA file for the atlas.
+ * @param output_volume Output labeled volume.
+ * @param cross_sequence Label a volume acquired with sequence different than atlas
+ * @param no_gibbs Disable gibbs priors
+ * @param wm_segmentation Use wm segmentation
+ * @param conform Interpolate volume to be isotropic 1mm^3
+ * @param topo_dist_thresh Ventricle segments distance threshold
+ * @param topo_volume_thresh1 First ventricle segments volume threshold
+ * @param topo_volume_thresh2 Second ventricle segments volume threshold
+ * @param norm_pd Normalize PD image to GCA means
+ * @param thin_temporal_lobe Use file to label thin temporal lobe
+ * @param debug_voxel Debug voxel coordinates
+ * @param debug_node Debug node coordinates
+ * @param debug_label Debug label
+ * @param tr Set TR in msec
+ * @param te Set TE in msec
+ * @param alpha Set alpha in radians
+ * @param example Use T1 and segmentation as example
+ * @param pthresh P threshold for adaptive renormalization
+ * @param niter Number of iterations for max likelihood
+ * @param write_probs Write label probabilities to filename
+ * @param novar Do not use variance in classification
+ * @param regularize Regularize variance to be sigma+nC(noise)
+ * @param nohippo Do not auto-edit hippocampus
+ * @param fixed_white_matter Use fixed white matter segmentation
+ * @param mri Write most likely MR volume to file
+ * @param histogram_equalization Use histogram equalization from volume
+ * @param renorm Renormalize using predicted intensity values
+ * @param flash Use FLASH forward model to predict intensity values
+ * @param flash_params Use FLASH forward model and tissue params to predict
+ * @param renormalize Renormalize class means iter times after initial label with window of wsize
+ * @param set_input_volume Set input volume
+ * @param histogram_normalize Use GCA to histogram normalize input image
+ * @param mean_filter Mean filter n time to conditional densities
+ * @param write_snapshots Write snapshots of gibbs process every n times to filename
+ * @param mask_final_labeling Use mri_vol to mask final labeling
+ * @param expand Expand
+ * @param max_iterations Set max iterations
+ * @param filter_labeled_volume Filter labeled volume with threshold t
+ * @param longitudinal_processing Longitudinal processing with registrations
+ * @param relabel_unlikely Reclassify unlikely voxels
+ * @param disables_wmsa Disables WMSA labels
+ * @param fix_ventricle Fix underlabeled ventricle
+ * @param insert_wm_bet_putctx Insert WM between putamen and cortex
+ * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
+ * @param insert_from_seg Insert given indices from segmentation volume
+ * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
+ * @param cblum_from_seg Insert indices into segmentation volume with default label set
+ * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
+ * @param threads Set the number of open mp threads
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ca_label_params(
     input_volumes: Array<InputPathType>,
     transform_file: InputPathType,
@@ -173,66 +231,8 @@ function mri_ca_label_params(
     sa_cblum_from_seg: string | null = null,
     threads: number | null = null,
 ): MriCaLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Input MRI volumes.
-     * @param transform_file Transform file for the registration.
-     * @param gca_file GCA file for the atlas.
-     * @param output_volume Output labeled volume.
-     * @param cross_sequence Label a volume acquired with sequence different than atlas
-     * @param no_gibbs Disable gibbs priors
-     * @param wm_segmentation Use wm segmentation
-     * @param conform Interpolate volume to be isotropic 1mm^3
-     * @param topo_dist_thresh Ventricle segments distance threshold
-     * @param topo_volume_thresh1 First ventricle segments volume threshold
-     * @param topo_volume_thresh2 Second ventricle segments volume threshold
-     * @param norm_pd Normalize PD image to GCA means
-     * @param thin_temporal_lobe Use file to label thin temporal lobe
-     * @param debug_voxel Debug voxel coordinates
-     * @param debug_node Debug node coordinates
-     * @param debug_label Debug label
-     * @param tr Set TR in msec
-     * @param te Set TE in msec
-     * @param alpha Set alpha in radians
-     * @param example Use T1 and segmentation as example
-     * @param pthresh P threshold for adaptive renormalization
-     * @param niter Number of iterations for max likelihood
-     * @param write_probs Write label probabilities to filename
-     * @param novar Do not use variance in classification
-     * @param regularize Regularize variance to be sigma+nC(noise)
-     * @param nohippo Do not auto-edit hippocampus
-     * @param fixed_white_matter Use fixed white matter segmentation
-     * @param mri Write most likely MR volume to file
-     * @param histogram_equalization Use histogram equalization from volume
-     * @param renorm Renormalize using predicted intensity values
-     * @param flash Use FLASH forward model to predict intensity values
-     * @param flash_params Use FLASH forward model and tissue params to predict
-     * @param renormalize Renormalize class means iter times after initial label with window of wsize
-     * @param set_input_volume Set input volume
-     * @param histogram_normalize Use GCA to histogram normalize input image
-     * @param mean_filter Mean filter n time to conditional densities
-     * @param write_snapshots Write snapshots of gibbs process every n times to filename
-     * @param mask_final_labeling Use mri_vol to mask final labeling
-     * @param expand Expand
-     * @param max_iterations Set max iterations
-     * @param filter_labeled_volume Filter labeled volume with threshold t
-     * @param longitudinal_processing Longitudinal processing with registrations
-     * @param relabel_unlikely Reclassify unlikely voxels
-     * @param disables_wmsa Disables WMSA labels
-     * @param fix_ventricle Fix underlabeled ventricle
-     * @param insert_wm_bet_putctx Insert WM between putamen and cortex
-     * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
-     * @param insert_from_seg Insert given indices from segmentation volume
-     * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
-     * @param cblum_from_seg Insert indices into segmentation volume with default label set
-     * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
-     * @param threads Set the number of open mp threads
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ca_label" as const,
+        "@type": "freesurfer.mri_ca_label" as const,
         "input_volumes": input_volumes,
         "transform_file": transform_file,
         "gca_file": gca_file,
@@ -368,18 +368,18 @@ function mri_ca_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ca_label_cargs(
     params: MriCaLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ca_label");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -651,18 +651,18 @@ function mri_ca_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ca_label_outputs(
     params: MriCaLabelParameters,
     execution: Execution,
 ): MriCaLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCaLabelOutputs = {
         root: execution.outputFile("."),
         output_vol: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -671,22 +671,22 @@ function mri_ca_label_outputs(
 }
 
 
+/**
+ * MRI cortical annotation labeler using atlas prior (GCA).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
+ */
 function mri_ca_label_execute(
     params: MriCaLabelParameters,
     execution: Execution,
 ): MriCaLabelOutputs {
-    /**
-     * MRI cortical annotation labeler using atlas prior (GCA).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ca_label_cargs(params, execution)
     const ret = mri_ca_label_outputs(params, execution)
@@ -695,6 +695,69 @@ function mri_ca_label_execute(
 }
 
 
+/**
+ * MRI cortical annotation labeler using atlas prior (GCA).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Input MRI volumes.
+ * @param transform_file Transform file for the registration.
+ * @param gca_file GCA file for the atlas.
+ * @param output_volume Output labeled volume.
+ * @param cross_sequence Label a volume acquired with sequence different than atlas
+ * @param no_gibbs Disable gibbs priors
+ * @param wm_segmentation Use wm segmentation
+ * @param conform Interpolate volume to be isotropic 1mm^3
+ * @param topo_dist_thresh Ventricle segments distance threshold
+ * @param topo_volume_thresh1 First ventricle segments volume threshold
+ * @param topo_volume_thresh2 Second ventricle segments volume threshold
+ * @param norm_pd Normalize PD image to GCA means
+ * @param thin_temporal_lobe Use file to label thin temporal lobe
+ * @param debug_voxel Debug voxel coordinates
+ * @param debug_node Debug node coordinates
+ * @param debug_label Debug label
+ * @param tr Set TR in msec
+ * @param te Set TE in msec
+ * @param alpha Set alpha in radians
+ * @param example Use T1 and segmentation as example
+ * @param pthresh P threshold for adaptive renormalization
+ * @param niter Number of iterations for max likelihood
+ * @param write_probs Write label probabilities to filename
+ * @param novar Do not use variance in classification
+ * @param regularize Regularize variance to be sigma+nC(noise)
+ * @param nohippo Do not auto-edit hippocampus
+ * @param fixed_white_matter Use fixed white matter segmentation
+ * @param mri Write most likely MR volume to file
+ * @param histogram_equalization Use histogram equalization from volume
+ * @param renorm Renormalize using predicted intensity values
+ * @param flash Use FLASH forward model to predict intensity values
+ * @param flash_params Use FLASH forward model and tissue params to predict
+ * @param renormalize Renormalize class means iter times after initial label with window of wsize
+ * @param set_input_volume Set input volume
+ * @param histogram_normalize Use GCA to histogram normalize input image
+ * @param mean_filter Mean filter n time to conditional densities
+ * @param write_snapshots Write snapshots of gibbs process every n times to filename
+ * @param mask_final_labeling Use mri_vol to mask final labeling
+ * @param expand Expand
+ * @param max_iterations Set max iterations
+ * @param filter_labeled_volume Filter labeled volume with threshold t
+ * @param longitudinal_processing Longitudinal processing with registrations
+ * @param relabel_unlikely Reclassify unlikely voxels
+ * @param disables_wmsa Disables WMSA labels
+ * @param fix_ventricle Fix underlabeled ventricle
+ * @param insert_wm_bet_putctx Insert WM between putamen and cortex
+ * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
+ * @param insert_from_seg Insert given indices from segmentation volume
+ * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
+ * @param cblum_from_seg Insert indices into segmentation volume with default label set
+ * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
+ * @param threads Set the number of open mp threads
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
+ */
 function mri_ca_label(
     input_volumes: Array<InputPathType>,
     transform_file: InputPathType,
@@ -750,69 +813,6 @@ function mri_ca_label(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriCaLabelOutputs {
-    /**
-     * MRI cortical annotation labeler using atlas prior (GCA).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Input MRI volumes.
-     * @param transform_file Transform file for the registration.
-     * @param gca_file GCA file for the atlas.
-     * @param output_volume Output labeled volume.
-     * @param cross_sequence Label a volume acquired with sequence different than atlas
-     * @param no_gibbs Disable gibbs priors
-     * @param wm_segmentation Use wm segmentation
-     * @param conform Interpolate volume to be isotropic 1mm^3
-     * @param topo_dist_thresh Ventricle segments distance threshold
-     * @param topo_volume_thresh1 First ventricle segments volume threshold
-     * @param topo_volume_thresh2 Second ventricle segments volume threshold
-     * @param norm_pd Normalize PD image to GCA means
-     * @param thin_temporal_lobe Use file to label thin temporal lobe
-     * @param debug_voxel Debug voxel coordinates
-     * @param debug_node Debug node coordinates
-     * @param debug_label Debug label
-     * @param tr Set TR in msec
-     * @param te Set TE in msec
-     * @param alpha Set alpha in radians
-     * @param example Use T1 and segmentation as example
-     * @param pthresh P threshold for adaptive renormalization
-     * @param niter Number of iterations for max likelihood
-     * @param write_probs Write label probabilities to filename
-     * @param novar Do not use variance in classification
-     * @param regularize Regularize variance to be sigma+nC(noise)
-     * @param nohippo Do not auto-edit hippocampus
-     * @param fixed_white_matter Use fixed white matter segmentation
-     * @param mri Write most likely MR volume to file
-     * @param histogram_equalization Use histogram equalization from volume
-     * @param renorm Renormalize using predicted intensity values
-     * @param flash Use FLASH forward model to predict intensity values
-     * @param flash_params Use FLASH forward model and tissue params to predict
-     * @param renormalize Renormalize class means iter times after initial label with window of wsize
-     * @param set_input_volume Set input volume
-     * @param histogram_normalize Use GCA to histogram normalize input image
-     * @param mean_filter Mean filter n time to conditional densities
-     * @param write_snapshots Write snapshots of gibbs process every n times to filename
-     * @param mask_final_labeling Use mri_vol to mask final labeling
-     * @param expand Expand
-     * @param max_iterations Set max iterations
-     * @param filter_labeled_volume Filter labeled volume with threshold t
-     * @param longitudinal_processing Longitudinal processing with registrations
-     * @param relabel_unlikely Reclassify unlikely voxels
-     * @param disables_wmsa Disables WMSA labels
-     * @param fix_ventricle Fix underlabeled ventricle
-     * @param insert_wm_bet_putctx Insert WM between putamen and cortex
-     * @param sa_insert_wm_bet_putctx Stand-alone operation to insert WM between putamen and cortex
-     * @param insert_from_seg Insert given indices from segmentation volume
-     * @param sa_insert_from_seg Stand-alone insert given indices from segmentation volume
-     * @param cblum_from_seg Insert indices into segmentation volume with default label set
-     * @param sa_cblum_from_seg Stand-alone operation to insert indices into segmentation with default label set
-     * @param threads Set the number of open mp threads
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_LABEL_METADATA);
     const params = mri_ca_label_params(input_volumes, transform_file, gca_file, output_volume, cross_sequence, no_gibbs, wm_segmentation, conform, topo_dist_thresh, topo_volume_thresh1, topo_volume_thresh2, norm_pd, thin_temporal_lobe, debug_voxel, debug_node, debug_label, tr, te, alpha, example, pthresh, niter, write_probs, novar, regularize, nohippo, fixed_white_matter, mri, histogram_equalization, renorm, flash, flash_params, renormalize, set_input_volume, histogram_normalize, mean_filter, write_snapshots, mask_final_labeling, expand, max_iterations, filter_labeled_volume, longitudinal_processing, relabel_unlikely, disables_wmsa, fix_ventricle, insert_wm_bet_putctx, sa_insert_wm_bet_putctx, insert_from_seg, sa_insert_from_seg, cblum_from_seg, sa_cblum_from_seg, threads)
@@ -825,5 +825,8 @@ export {
       MriCaLabelOutputs,
       MriCaLabelParameters,
       mri_ca_label,
+      mri_ca_label_cargs,
+      mri_ca_label_execute,
+      mri_ca_label_outputs,
       mri_ca_label_params,
 };

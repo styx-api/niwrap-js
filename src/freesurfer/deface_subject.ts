@@ -12,7 +12,7 @@ const DEFACE_SUBJECT_METADATA: Metadata = {
 
 
 interface DefaceSubjectParameters {
-    "__STYXTYPE__": "deface_subject";
+    "@type": "freesurfer.deface_subject";
     "subjects_dir": string;
     "subject_id": string;
     "volume_input": InputPathType;
@@ -20,35 +20,35 @@ interface DefaceSubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "deface_subject": deface_subject_cargs,
+        "freesurfer.deface_subject": deface_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "deface_subject": deface_subject_outputs,
+        "freesurfer.deface_subject": deface_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface DefaceSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects_dir Directory containing FreeSurfer subject directories.
+ * @param subject_id Subject ID that specifies the subject directory.
+ * @param volume_input Input volume to be defaced.
+ * @param volume_output Output volume after defacing.
+ *
+ * @returns Parameter dictionary
+ */
 function deface_subject_params(
     subjects_dir: string,
     subject_id: string,
     volume_input: InputPathType,
     volume_output: string,
 ): DefaceSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects_dir Directory containing FreeSurfer subject directories.
-     * @param subject_id Subject ID that specifies the subject directory.
-     * @param volume_input Input volume to be defaced.
-     * @param volume_output Output volume after defacing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "deface_subject" as const,
+        "@type": "freesurfer.deface_subject" as const,
         "subjects_dir": subjects_dir,
         "subject_id": subject_id,
         "volume_input": volume_input,
@@ -98,18 +98,18 @@ function deface_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function deface_subject_cargs(
     params: DefaceSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("deface_subject");
     cargs.push(
@@ -132,18 +132,18 @@ function deface_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function deface_subject_outputs(
     params: DefaceSubjectParameters,
     execution: Execution,
 ): DefaceSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DefaceSubjectOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["volume_output"] ?? null)].join('')),
@@ -152,22 +152,22 @@ function deface_subject_outputs(
 }
 
 
+/**
+ * Tool for defacing MRI images to anonymize patient data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
+ */
 function deface_subject_execute(
     params: DefaceSubjectParameters,
     execution: Execution,
 ): DefaceSubjectOutputs {
-    /**
-     * Tool for defacing MRI images to anonymize patient data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = deface_subject_cargs(params, execution)
     const ret = deface_subject_outputs(params, execution)
@@ -176,6 +176,21 @@ function deface_subject_execute(
 }
 
 
+/**
+ * Tool for defacing MRI images to anonymize patient data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects_dir Directory containing FreeSurfer subject directories.
+ * @param subject_id Subject ID that specifies the subject directory.
+ * @param volume_input Input volume to be defaced.
+ * @param volume_output Output volume after defacing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
+ */
 function deface_subject(
     subjects_dir: string,
     subject_id: string,
@@ -183,21 +198,6 @@ function deface_subject(
     volume_output: string,
     runner: Runner | null = null,
 ): DefaceSubjectOutputs {
-    /**
-     * Tool for defacing MRI images to anonymize patient data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects_dir Directory containing FreeSurfer subject directories.
-     * @param subject_id Subject ID that specifies the subject directory.
-     * @param volume_input Input volume to be defaced.
-     * @param volume_output Output volume after defacing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DEFACE_SUBJECT_METADATA);
     const params = deface_subject_params(subjects_dir, subject_id, volume_input, volume_output)
@@ -210,5 +210,8 @@ export {
       DefaceSubjectOutputs,
       DefaceSubjectParameters,
       deface_subject,
+      deface_subject_cargs,
+      deface_subject_execute,
+      deface_subject_outputs,
       deface_subject_params,
 };

@@ -12,7 +12,7 @@ const SURF_TO_SURF_METADATA: Metadata = {
 
 
 interface SurfToSurfParameters {
-    "__STYXTYPE__": "SurfToSurf";
+    "@type": "afni.SurfToSurf";
     "input_surface_1": InputPathType;
     "input_surface_2": InputPathType;
     "surface_volume"?: InputPathType | null | undefined;
@@ -29,35 +29,35 @@ interface SurfToSurfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfToSurf": surf_to_surf_cargs,
+        "afni.SurfToSurf": surf_to_surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfToSurf": surf_to_surf_outputs,
+        "afni.SurfToSurf": surf_to_surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface SurfToSurfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface_1 First input surface file (S1)
+ * @param input_surface_2 Second input surface file (S2)
+ * @param surface_volume Specify the surface volume (SV1)
+ * @param prefix Specify prefix for the output file
+ * @param output_params List of mapping parameters to include in output
+ * @param node_indices 1D file containing node indices of S1 to consider
+ * @param proj_dir 1D file containing projection directions
+ * @param data 1D file containing data to be interpolated
+ * @param node_debug Node index for debugging purposes
+ * @param debug_level Debugging level
+ * @param make_consistent Force a consistency check and correct triangle orientation
+ * @param dset Dataset file for data interpolation; mutually exclusive with -data
+ * @param mapfile File containing mapping parameters between surfaces S2 and S1
+ *
+ * @returns Parameter dictionary
+ */
 function surf_to_surf_params(
     input_surface_1: InputPathType,
     input_surface_2: InputPathType,
@@ -95,27 +114,8 @@ function surf_to_surf_params(
     dset: InputPathType | null = null,
     mapfile: InputPathType | null = null,
 ): SurfToSurfParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface_1 First input surface file (S1)
-     * @param input_surface_2 Second input surface file (S2)
-     * @param surface_volume Specify the surface volume (SV1)
-     * @param prefix Specify prefix for the output file
-     * @param output_params List of mapping parameters to include in output
-     * @param node_indices 1D file containing node indices of S1 to consider
-     * @param proj_dir 1D file containing projection directions
-     * @param data 1D file containing data to be interpolated
-     * @param node_debug Node index for debugging purposes
-     * @param debug_level Debugging level
-     * @param make_consistent Force a consistency check and correct triangle orientation
-     * @param dset Dataset file for data interpolation; mutually exclusive with -data
-     * @param mapfile File containing mapping parameters between surfaces S2 and S1
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfToSurf" as const,
+        "@type": "afni.SurfToSurf" as const,
         "input_surface_1": input_surface_1,
         "input_surface_2": input_surface_2,
         "make_consistent": make_consistent,
@@ -154,18 +154,18 @@ function surf_to_surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_to_surf_cargs(
     params: SurfToSurfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfToSurf");
     cargs.push(execution.inputFile((params["input_surface_1"] ?? null)));
@@ -237,18 +237,18 @@ function surf_to_surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_to_surf_outputs(
     params: SurfToSurfParameters,
     execution: Execution,
 ): SurfToSurfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfToSurfOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".1D"].join('')) : null,
@@ -257,22 +257,22 @@ function surf_to_surf_outputs(
 }
 
 
+/**
+ * Interpolate data from one surface to another.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
+ */
 function surf_to_surf_execute(
     params: SurfToSurfParameters,
     execution: Execution,
 ): SurfToSurfOutputs {
-    /**
-     * Interpolate data from one surface to another.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_to_surf_cargs(params, execution)
     const ret = surf_to_surf_outputs(params, execution)
@@ -281,6 +281,30 @@ function surf_to_surf_execute(
 }
 
 
+/**
+ * Interpolate data from one surface to another.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_surface_1 First input surface file (S1)
+ * @param input_surface_2 Second input surface file (S2)
+ * @param surface_volume Specify the surface volume (SV1)
+ * @param prefix Specify prefix for the output file
+ * @param output_params List of mapping parameters to include in output
+ * @param node_indices 1D file containing node indices of S1 to consider
+ * @param proj_dir 1D file containing projection directions
+ * @param data 1D file containing data to be interpolated
+ * @param node_debug Node index for debugging purposes
+ * @param debug_level Debugging level
+ * @param make_consistent Force a consistency check and correct triangle orientation
+ * @param dset Dataset file for data interpolation; mutually exclusive with -data
+ * @param mapfile File containing mapping parameters between surfaces S2 and S1
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
+ */
 function surf_to_surf(
     input_surface_1: InputPathType,
     input_surface_2: InputPathType,
@@ -297,30 +321,6 @@ function surf_to_surf(
     mapfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfToSurfOutputs {
-    /**
-     * Interpolate data from one surface to another.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_surface_1 First input surface file (S1)
-     * @param input_surface_2 Second input surface file (S2)
-     * @param surface_volume Specify the surface volume (SV1)
-     * @param prefix Specify prefix for the output file
-     * @param output_params List of mapping parameters to include in output
-     * @param node_indices 1D file containing node indices of S1 to consider
-     * @param proj_dir 1D file containing projection directions
-     * @param data 1D file containing data to be interpolated
-     * @param node_debug Node index for debugging purposes
-     * @param debug_level Debugging level
-     * @param make_consistent Force a consistency check and correct triangle orientation
-     * @param dset Dataset file for data interpolation; mutually exclusive with -data
-     * @param mapfile File containing mapping parameters between surfaces S2 and S1
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_TO_SURF_METADATA);
     const params = surf_to_surf_params(input_surface_1, input_surface_2, surface_volume, prefix, output_params, node_indices, proj_dir, data, node_debug, debug_level, make_consistent, dset, mapfile)
@@ -333,5 +333,8 @@ export {
       SurfToSurfOutputs,
       SurfToSurfParameters,
       surf_to_surf,
+      surf_to_surf_cargs,
+      surf_to_surf_execute,
+      surf_to_surf_outputs,
       surf_to_surf_params,
 };

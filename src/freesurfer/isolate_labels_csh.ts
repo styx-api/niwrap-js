@@ -12,7 +12,7 @@ const ISOLATE_LABELS_CSH_METADATA: Metadata = {
 
 
 interface IsolateLabelsCshParameters {
-    "__STYXTYPE__": "isolate_labels.csh";
+    "@type": "freesurfer.isolate_labels.csh";
     "label_volume": InputPathType;
     "output_prefix": string;
     "label_option"?: string | null | undefined;
@@ -23,33 +23,33 @@ interface IsolateLabelsCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "isolate_labels.csh": isolate_labels_csh_cargs,
+        "freesurfer.isolate_labels.csh": isolate_labels_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface IsolateLabelsCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_volume Label volume to be analyzed
+ * @param output_prefix Prefix of binary label file(s)
+ * @param label_option The particular label to be analyzed; default is all labels.
+ * @param lowercase_label_option The particular label to be analyzed; default is all labels.
+ * @param version Print version and exit
+ * @param keepval Keeps original label values
+ * @param help Print help and exit
+ *
+ * @returns Parameter dictionary
+ */
 function isolate_labels_csh_params(
     label_volume: InputPathType,
     output_prefix: string,
@@ -78,21 +91,8 @@ function isolate_labels_csh_params(
     keepval: boolean = false,
     help: boolean = false,
 ): IsolateLabelsCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_volume Label volume to be analyzed
-     * @param output_prefix Prefix of binary label file(s)
-     * @param label_option The particular label to be analyzed; default is all labels.
-     * @param lowercase_label_option The particular label to be analyzed; default is all labels.
-     * @param version Print version and exit
-     * @param keepval Keeps original label values
-     * @param help Print help and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isolate_labels.csh" as const,
+        "@type": "freesurfer.isolate_labels.csh" as const,
         "label_volume": label_volume,
         "output_prefix": output_prefix,
         "version": version,
@@ -109,18 +109,18 @@ function isolate_labels_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function isolate_labels_csh_cargs(
     params: IsolateLabelsCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("isolate_labels.csh");
     cargs.push(
@@ -156,18 +156,18 @@ function isolate_labels_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function isolate_labels_csh_outputs(
     params: IsolateLabelsCshParameters,
     execution: Execution,
 ): IsolateLabelsCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsolateLabelsCshOutputs = {
         root: execution.outputFile("."),
     };
@@ -175,22 +175,22 @@ function isolate_labels_csh_outputs(
 }
 
 
+/**
+ * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
+ */
 function isolate_labels_csh_execute(
     params: IsolateLabelsCshParameters,
     execution: Execution,
 ): IsolateLabelsCshOutputs {
-    /**
-     * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = isolate_labels_csh_cargs(params, execution)
     const ret = isolate_labels_csh_outputs(params, execution)
@@ -199,6 +199,24 @@ function isolate_labels_csh_execute(
 }
 
 
+/**
+ * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label_volume Label volume to be analyzed
+ * @param output_prefix Prefix of binary label file(s)
+ * @param label_option The particular label to be analyzed; default is all labels.
+ * @param lowercase_label_option The particular label to be analyzed; default is all labels.
+ * @param version Print version and exit
+ * @param keepval Keeps original label values
+ * @param help Print help and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
+ */
 function isolate_labels_csh(
     label_volume: InputPathType,
     output_prefix: string,
@@ -209,24 +227,6 @@ function isolate_labels_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): IsolateLabelsCshOutputs {
-    /**
-     * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label_volume Label volume to be analyzed
-     * @param output_prefix Prefix of binary label file(s)
-     * @param label_option The particular label to be analyzed; default is all labels.
-     * @param lowercase_label_option The particular label to be analyzed; default is all labels.
-     * @param version Print version and exit
-     * @param keepval Keeps original label values
-     * @param help Print help and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISOLATE_LABELS_CSH_METADATA);
     const params = isolate_labels_csh_params(label_volume, output_prefix, label_option, lowercase_label_option, version, keepval, help)
@@ -239,5 +239,8 @@ export {
       IsolateLabelsCshOutputs,
       IsolateLabelsCshParameters,
       isolate_labels_csh,
+      isolate_labels_csh_cargs,
+      isolate_labels_csh_execute,
+      isolate_labels_csh_outputs,
       isolate_labels_csh_params,
 };

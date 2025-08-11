@@ -12,7 +12,7 @@ const MRI_MC_METADATA: Metadata = {
 
 
 interface MriMcParameters {
-    "__STYXTYPE__": "mri_mc";
+    "@type": "freesurfer.mri_mc";
     "input_volume": InputPathType;
     "label_value": number;
     "output_surface": string;
@@ -20,35 +20,35 @@ interface MriMcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mc": mri_mc_cargs,
+        "freesurfer.mri_mc": mri_mc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_mc": mri_mc_outputs,
+        "freesurfer.mri_mc": mri_mc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriMcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume The input volume from which to extract the surface.
+ * @param label_value The label value of the structure to extract.
+ * @param output_surface The file where the extracted surface mesh will be saved.
+ * @param connectivity The connectivity used for Marching Cubes. Options are: 1=6+, 2=18, 3=6, 4=26.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mc_params(
     input_volume: InputPathType,
     label_value: number,
     output_surface: string,
     connectivity: number | null = 1,
 ): MriMcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume The input volume from which to extract the surface.
-     * @param label_value The label value of the structure to extract.
-     * @param output_surface The file where the extracted surface mesh will be saved.
-     * @param connectivity The connectivity used for Marching Cubes. Options are: 1=6+, 2=18, 3=6, 4=26.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mc" as const,
+        "@type": "freesurfer.mri_mc" as const,
         "input_volume": input_volume,
         "label_value": label_value,
         "output_surface": output_surface,
@@ -100,18 +100,18 @@ function mri_mc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mc_cargs(
     params: MriMcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mc");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -123,18 +123,18 @@ function mri_mc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mc_outputs(
     params: MriMcParameters,
     execution: Execution,
 ): MriMcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMcOutputs = {
         root: execution.outputFile("."),
         extracted_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -143,22 +143,22 @@ function mri_mc_outputs(
 }
 
 
+/**
+ * Extract a surface from a label volume using Marching Cubes algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMcOutputs`).
+ */
 function mri_mc_execute(
     params: MriMcParameters,
     execution: Execution,
 ): MriMcOutputs {
-    /**
-     * Extract a surface from a label volume using Marching Cubes algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mc_cargs(params, execution)
     const ret = mri_mc_outputs(params, execution)
@@ -167,6 +167,21 @@ function mri_mc_execute(
 }
 
 
+/**
+ * Extract a surface from a label volume using Marching Cubes algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume The input volume from which to extract the surface.
+ * @param label_value The label value of the structure to extract.
+ * @param output_surface The file where the extracted surface mesh will be saved.
+ * @param connectivity The connectivity used for Marching Cubes. Options are: 1=6+, 2=18, 3=6, 4=26.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMcOutputs`).
+ */
 function mri_mc(
     input_volume: InputPathType,
     label_value: number,
@@ -174,21 +189,6 @@ function mri_mc(
     connectivity: number | null = 1,
     runner: Runner | null = null,
 ): MriMcOutputs {
-    /**
-     * Extract a surface from a label volume using Marching Cubes algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume The input volume from which to extract the surface.
-     * @param label_value The label value of the structure to extract.
-     * @param output_surface The file where the extracted surface mesh will be saved.
-     * @param connectivity The connectivity used for Marching Cubes. Options are: 1=6+, 2=18, 3=6, 4=26.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MC_METADATA);
     const params = mri_mc_params(input_volume, label_value, output_surface, connectivity)
@@ -201,5 +201,8 @@ export {
       MriMcOutputs,
       MriMcParameters,
       mri_mc,
+      mri_mc_cargs,
+      mri_mc_execute,
+      mri_mc_outputs,
       mri_mc_params,
 };

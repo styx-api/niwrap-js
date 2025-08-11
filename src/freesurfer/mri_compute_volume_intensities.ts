@@ -12,42 +12,42 @@ const MRI_COMPUTE_VOLUME_INTENSITIES_METADATA: Metadata = {
 
 
 interface MriComputeVolumeIntensitiesParameters {
-    "__STYXTYPE__": "mri_compute_volume_intensities";
+    "@type": "freesurfer.mri_compute_volume_intensities";
     "input_intensity": InputPathType;
     "volume_fraction_stem": string;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_compute_volume_intensities": mri_compute_volume_intensities_cargs,
+        "freesurfer.mri_compute_volume_intensities": mri_compute_volume_intensities_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_compute_volume_intensities": mri_compute_volume_intensities_outputs,
+        "freesurfer.mri_compute_volume_intensities": mri_compute_volume_intensities_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriComputeVolumeIntensitiesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_intensity Input intensity volume
+ * @param volume_fraction_stem Volume fraction stem
+ * @param output_volume Output volume file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_compute_volume_intensities_params(
     input_intensity: InputPathType,
     volume_fraction_stem: string,
     output_volume: string,
 ): MriComputeVolumeIntensitiesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_intensity Input intensity volume
-     * @param volume_fraction_stem Volume fraction stem
-     * @param output_volume Output volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_compute_volume_intensities" as const,
+        "@type": "freesurfer.mri_compute_volume_intensities" as const,
         "input_intensity": input_intensity,
         "volume_fraction_stem": volume_fraction_stem,
         "output_volume": output_volume,
@@ -94,18 +94,18 @@ function mri_compute_volume_intensities_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_compute_volume_intensities_cargs(
     params: MriComputeVolumeIntensitiesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_compute_volume_intensities");
     cargs.push(execution.inputFile((params["input_intensity"] ?? null)));
@@ -115,18 +115,18 @@ function mri_compute_volume_intensities_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_compute_volume_intensities_outputs(
     params: MriComputeVolumeIntensitiesParameters,
     execution: Execution,
 ): MriComputeVolumeIntensitiesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriComputeVolumeIntensitiesOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_compute_volume_intensities_outputs(
 }
 
 
+/**
+ * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
+ */
 function mri_compute_volume_intensities_execute(
     params: MriComputeVolumeIntensitiesParameters,
     execution: Execution,
 ): MriComputeVolumeIntensitiesOutputs {
-    /**
-     * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_compute_volume_intensities_cargs(params, execution)
     const ret = mri_compute_volume_intensities_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_compute_volume_intensities_execute(
 }
 
 
+/**
+ * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_intensity Input intensity volume
+ * @param volume_fraction_stem Volume fraction stem
+ * @param output_volume Output volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
+ */
 function mri_compute_volume_intensities(
     input_intensity: InputPathType,
     volume_fraction_stem: string,
     output_volume: string,
     runner: Runner | null = null,
 ): MriComputeVolumeIntensitiesOutputs {
-    /**
-     * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_intensity Input intensity volume
-     * @param volume_fraction_stem Volume fraction stem
-     * @param output_volume Output volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COMPUTE_VOLUME_INTENSITIES_METADATA);
     const params = mri_compute_volume_intensities_params(input_intensity, volume_fraction_stem, output_volume)
@@ -191,5 +191,8 @@ export {
       MriComputeVolumeIntensitiesOutputs,
       MriComputeVolumeIntensitiesParameters,
       mri_compute_volume_intensities,
+      mri_compute_volume_intensities_cargs,
+      mri_compute_volume_intensities_execute,
+      mri_compute_volume_intensities_outputs,
       mri_compute_volume_intensities_params,
 };

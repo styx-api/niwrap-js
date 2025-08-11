@@ -12,7 +12,7 @@ const MRIS_SEG2ANNOT_METADATA: Metadata = {
 
 
 interface MrisSeg2annotParameters {
-    "__STYXTYPE__": "mris_seg2annot";
+    "@type": "freesurfer.mris_seg2annot";
     "surfseg": InputPathType;
     "colortable"?: InputPathType | null | undefined;
     "auto_ctab"?: string | null | undefined;
@@ -27,35 +27,35 @@ interface MrisSeg2annotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_seg2annot": mris_seg2annot_cargs,
+        "freesurfer.mris_seg2annot": mris_seg2annot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_seg2annot": mris_seg2annot_outputs,
+        "freesurfer.mris_seg2annot": mris_seg2annot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface MrisSeg2annotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surfseg Volume-encoded surface segmentation. Values are indices into the color table.
+ * @param subject Subject name.
+ * @param hemi Surface hemifield.
+ * @param output_annotation Output annotation file. E.g., lh.aparc.annot
+ * @param colortable Color table used to map segmentation index to name and color.
+ * @param auto_ctab Create a random color table and optionally save it.
+ * @param surf Surface name, default is white.
+ * @param debug Turn on debugging.
+ * @param debug_vertex Turn on debugging for vertex.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param version Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_seg2annot_params(
     surfseg: InputPathType,
     subject: string,
@@ -91,25 +108,8 @@ function mris_seg2annot_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): MrisSeg2annotParameters {
-    /**
-     * Build parameters.
-    
-     * @param surfseg Volume-encoded surface segmentation. Values are indices into the color table.
-     * @param subject Subject name.
-     * @param hemi Surface hemifield.
-     * @param output_annotation Output annotation file. E.g., lh.aparc.annot
-     * @param colortable Color table used to map segmentation index to name and color.
-     * @param auto_ctab Create a random color table and optionally save it.
-     * @param surf Surface name, default is white.
-     * @param debug Turn on debugging.
-     * @param debug_vertex Turn on debugging for vertex.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param version Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_seg2annot" as const,
+        "@type": "freesurfer.mris_seg2annot" as const,
         "surfseg": surfseg,
         "subject": subject,
         "hemi": hemi,
@@ -134,18 +134,18 @@ function mris_seg2annot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_seg2annot_cargs(
     params: MrisSeg2annotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_seg2annot");
     cargs.push(
@@ -201,18 +201,18 @@ function mris_seg2annot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_seg2annot_outputs(
     params: MrisSeg2annotParameters,
     execution: Execution,
 ): MrisSeg2annotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSeg2annotOutputs = {
         root: execution.outputFile("."),
         annotation_file: execution.outputFile([(params["output_annotation"] ?? null)].join('')),
@@ -221,22 +221,22 @@ function mris_seg2annot_outputs(
 }
 
 
+/**
+ * Converts a surface-based segmentation into a custom annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
+ */
 function mris_seg2annot_execute(
     params: MrisSeg2annotParameters,
     execution: Execution,
 ): MrisSeg2annotOutputs {
-    /**
-     * Converts a surface-based segmentation into a custom annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_seg2annot_cargs(params, execution)
     const ret = mris_seg2annot_outputs(params, execution)
@@ -245,6 +245,28 @@ function mris_seg2annot_execute(
 }
 
 
+/**
+ * Converts a surface-based segmentation into a custom annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surfseg Volume-encoded surface segmentation. Values are indices into the color table.
+ * @param subject Subject name.
+ * @param hemi Surface hemifield.
+ * @param output_annotation Output annotation file. E.g., lh.aparc.annot
+ * @param colortable Color table used to map segmentation index to name and color.
+ * @param auto_ctab Create a random color table and optionally save it.
+ * @param surf Surface name, default is white.
+ * @param debug Turn on debugging.
+ * @param debug_vertex Turn on debugging for vertex.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param version Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
+ */
 function mris_seg2annot(
     surfseg: InputPathType,
     subject: string,
@@ -259,28 +281,6 @@ function mris_seg2annot(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisSeg2annotOutputs {
-    /**
-     * Converts a surface-based segmentation into a custom annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surfseg Volume-encoded surface segmentation. Values are indices into the color table.
-     * @param subject Subject name.
-     * @param hemi Surface hemifield.
-     * @param output_annotation Output annotation file. E.g., lh.aparc.annot
-     * @param colortable Color table used to map segmentation index to name and color.
-     * @param auto_ctab Create a random color table and optionally save it.
-     * @param surf Surface name, default is white.
-     * @param debug Turn on debugging.
-     * @param debug_vertex Turn on debugging for vertex.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param version Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SEG2ANNOT_METADATA);
     const params = mris_seg2annot_params(surfseg, subject, hemi, output_annotation, colortable, auto_ctab, surf, debug, debug_vertex, checkopts, version)
@@ -293,5 +293,8 @@ export {
       MrisSeg2annotOutputs,
       MrisSeg2annotParameters,
       mris_seg2annot,
+      mris_seg2annot_cargs,
+      mris_seg2annot_execute,
+      mris_seg2annot_outputs,
       mris_seg2annot_params,
 };

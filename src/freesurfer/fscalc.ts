@@ -12,7 +12,7 @@ const FSCALC_METADATA: Metadata = {
 
 
 interface FscalcParameters {
-    "__STYXTYPE__": "fscalc";
+    "@type": "freesurfer.fscalc";
     "input1": string;
     "operation": string;
     "input2"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface FscalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fscalc": fscalc_cargs,
+        "freesurfer.fscalc": fscalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fscalc": fscalc_outputs,
+        "freesurfer.fscalc": fscalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface FscalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 First input image or constant.
+ * @param operation Operation to perform between input volumes.
+ * @param output_file Output volume file.
+ * @param input2 Second input image or constant. Optional for some unary operations.
+ * @param output_data_type Specify output data type (uchar, short, int, float).
+ * @param debug Enable debug mode.
+ * @param tmpdir Temporary directory for processing.
+ * @param nocleanup Prevent cleanup of temporary files.
+ * @param log_file Specify a log file for operation log.
+ *
+ * @returns Parameter dictionary
+ */
 function fscalc_params(
     input1: string,
     operation: string,
@@ -87,23 +102,8 @@ function fscalc_params(
     nocleanup: boolean = false,
     log_file: string | null = null,
 ): FscalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 First input image or constant.
-     * @param operation Operation to perform between input volumes.
-     * @param output_file Output volume file.
-     * @param input2 Second input image or constant. Optional for some unary operations.
-     * @param output_data_type Specify output data type (uchar, short, int, float).
-     * @param debug Enable debug mode.
-     * @param tmpdir Temporary directory for processing.
-     * @param nocleanup Prevent cleanup of temporary files.
-     * @param log_file Specify a log file for operation log.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fscalc" as const,
+        "@type": "freesurfer.fscalc" as const,
         "input1": input1,
         "operation": operation,
         "output_file": output_file,
@@ -126,18 +126,18 @@ function fscalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fscalc_cargs(
     params: FscalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fscalc");
     cargs.push((params["input1"] ?? null));
@@ -177,18 +177,18 @@ function fscalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fscalc_outputs(
     params: FscalcParameters,
     execution: Execution,
 ): FscalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FscalcOutputs = {
         root: execution.outputFile("."),
         result_vol: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -197,22 +197,22 @@ function fscalc_outputs(
 }
 
 
+/**
+ * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FscalcOutputs`).
+ */
 function fscalc_execute(
     params: FscalcParameters,
     execution: Execution,
 ): FscalcOutputs {
-    /**
-     * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FscalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = fscalc_cargs(params, execution)
     const ret = fscalc_outputs(params, execution)
@@ -221,6 +221,26 @@ function fscalc_execute(
 }
 
 
+/**
+ * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input1 First input image or constant.
+ * @param operation Operation to perform between input volumes.
+ * @param output_file Output volume file.
+ * @param input2 Second input image or constant. Optional for some unary operations.
+ * @param output_data_type Specify output data type (uchar, short, int, float).
+ * @param debug Enable debug mode.
+ * @param tmpdir Temporary directory for processing.
+ * @param nocleanup Prevent cleanup of temporary files.
+ * @param log_file Specify a log file for operation log.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FscalcOutputs`).
+ */
 function fscalc(
     input1: string,
     operation: string,
@@ -233,26 +253,6 @@ function fscalc(
     log_file: string | null = null,
     runner: Runner | null = null,
 ): FscalcOutputs {
-    /**
-     * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input1 First input image or constant.
-     * @param operation Operation to perform between input volumes.
-     * @param output_file Output volume file.
-     * @param input2 Second input image or constant. Optional for some unary operations.
-     * @param output_data_type Specify output data type (uchar, short, int, float).
-     * @param debug Enable debug mode.
-     * @param tmpdir Temporary directory for processing.
-     * @param nocleanup Prevent cleanup of temporary files.
-     * @param log_file Specify a log file for operation log.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FscalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSCALC_METADATA);
     const params = fscalc_params(input1, operation, output_file, input2, output_data_type, debug, tmpdir, nocleanup, log_file)
@@ -265,5 +265,8 @@ export {
       FscalcOutputs,
       FscalcParameters,
       fscalc,
+      fscalc_cargs,
+      fscalc_execute,
+      fscalc_outputs,
       fscalc_params,
 };

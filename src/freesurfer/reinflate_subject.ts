@@ -12,38 +12,38 @@ const REINFLATE_SUBJECT_METADATA: Metadata = {
 
 
 interface ReinflateSubjectParameters {
-    "__STYXTYPE__": "reinflate_subject";
+    "@type": "freesurfer.reinflate_subject";
     "args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reinflate_subject": reinflate_subject_cargs,
+        "freesurfer.reinflate_subject": reinflate_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface ReinflateSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param args Arguments for reinflate_subject
+ *
+ * @returns Parameter dictionary
+ */
 function reinflate_subject_params(
     args: string | null = null,
 ): ReinflateSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param args Arguments for reinflate_subject
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reinflate_subject" as const,
+        "@type": "freesurfer.reinflate_subject" as const,
     };
     if (args !== null) {
         params["args"] = args;
@@ -83,18 +83,18 @@ function reinflate_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reinflate_subject_cargs(
     params: ReinflateSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reinflate_subject");
     if ((params["args"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function reinflate_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reinflate_subject_outputs(
     params: ReinflateSubjectParameters,
     execution: Execution,
 ): ReinflateSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReinflateSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function reinflate_subject_outputs(
 }
 
 
+/**
+ * Tool for reinflating brain surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
+ */
 function reinflate_subject_execute(
     params: ReinflateSubjectParameters,
     execution: Execution,
 ): ReinflateSubjectOutputs {
-    /**
-     * Tool for reinflating brain surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = reinflate_subject_cargs(params, execution)
     const ret = reinflate_subject_outputs(params, execution)
@@ -147,22 +147,22 @@ function reinflate_subject_execute(
 }
 
 
+/**
+ * Tool for reinflating brain surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param args Arguments for reinflate_subject
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
+ */
 function reinflate_subject(
     args: string | null = null,
     runner: Runner | null = null,
 ): ReinflateSubjectOutputs {
-    /**
-     * Tool for reinflating brain surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param args Arguments for reinflate_subject
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REINFLATE_SUBJECT_METADATA);
     const params = reinflate_subject_params(args)
@@ -175,5 +175,8 @@ export {
       ReinflateSubjectOutputs,
       ReinflateSubjectParameters,
       reinflate_subject,
+      reinflate_subject_cargs,
+      reinflate_subject_execute,
+      reinflate_subject_outputs,
       reinflate_subject_params,
 };

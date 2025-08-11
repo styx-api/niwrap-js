@@ -12,42 +12,42 @@ const V_3D_ZCUTUP_METADATA: Metadata = {
 
 
 interface V3dZcutupParameters {
-    "__STYXTYPE__": "3dZcutup";
+    "@type": "afni.3dZcutup";
     "keep_slices": string;
     "prefix"?: string | null | undefined;
     "dataset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dZcutup": v_3d_zcutup_cargs,
+        "afni.3dZcutup": v_3d_zcutup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dZcutup": v_3d_zcutup_outputs,
+        "afni.3dZcutup": v_3d_zcutup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface V3dZcutupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param keep_slices Keep slices numbered 'b' through 't', inclusive. This is a mandatory option. Slice numbers start at 0.
+ * @param dataset The input dataset (e.g., epi07+orig). You can use a sub-brick selector on the input dataset.
+ * @param prefix Write result into dataset with the given prefix [default = 'zcutup']
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_zcutup_params(
     keep_slices: string,
     dataset: InputPathType,
     prefix: string | null = null,
 ): V3dZcutupParameters {
-    /**
-     * Build parameters.
-    
-     * @param keep_slices Keep slices numbered 'b' through 't', inclusive. This is a mandatory option. Slice numbers start at 0.
-     * @param dataset The input dataset (e.g., epi07+orig). You can use a sub-brick selector on the input dataset.
-     * @param prefix Write result into dataset with the given prefix [default = 'zcutup']
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dZcutup" as const,
+        "@type": "afni.3dZcutup" as const,
         "keep_slices": keep_slices,
         "dataset": dataset,
     };
@@ -100,18 +100,18 @@ function v_3d_zcutup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_zcutup_cargs(
     params: V3dZcutupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dZcutup");
     cargs.push(
@@ -129,18 +129,18 @@ function v_3d_zcutup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_zcutup_outputs(
     params: V3dZcutupParameters,
     execution: Execution,
 ): V3dZcutupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dZcutupOutputs = {
         root: execution.outputFile("."),
         output_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -150,22 +150,22 @@ function v_3d_zcutup_outputs(
 }
 
 
+/**
+ * Cut slices off a dataset in its z-direction and write a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
+ */
 function v_3d_zcutup_execute(
     params: V3dZcutupParameters,
     execution: Execution,
 ): V3dZcutupOutputs {
-    /**
-     * Cut slices off a dataset in its z-direction and write a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_zcutup_cargs(params, execution)
     const ret = v_3d_zcutup_outputs(params, execution)
@@ -174,26 +174,26 @@ function v_3d_zcutup_execute(
 }
 
 
+/**
+ * Cut slices off a dataset in its z-direction and write a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param keep_slices Keep slices numbered 'b' through 't', inclusive. This is a mandatory option. Slice numbers start at 0.
+ * @param dataset The input dataset (e.g., epi07+orig). You can use a sub-brick selector on the input dataset.
+ * @param prefix Write result into dataset with the given prefix [default = 'zcutup']
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
+ */
 function v_3d_zcutup(
     keep_slices: string,
     dataset: InputPathType,
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dZcutupOutputs {
-    /**
-     * Cut slices off a dataset in its z-direction and write a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param keep_slices Keep slices numbered 'b' through 't', inclusive. This is a mandatory option. Slice numbers start at 0.
-     * @param dataset The input dataset (e.g., epi07+orig). You can use a sub-brick selector on the input dataset.
-     * @param prefix Write result into dataset with the given prefix [default = 'zcutup']
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ZCUTUP_METADATA);
     const params = v_3d_zcutup_params(keep_slices, dataset, prefix)
@@ -206,5 +206,8 @@ export {
       V3dZcutupParameters,
       V_3D_ZCUTUP_METADATA,
       v_3d_zcutup,
+      v_3d_zcutup_cargs,
+      v_3d_zcutup_execute,
+      v_3d_zcutup_outputs,
       v_3d_zcutup_params,
 };

@@ -12,7 +12,7 @@ const MRI_MASK_METADATA: Metadata = {
 
 
 interface MriMaskParameters {
-    "__STYXTYPE__": "mri_mask";
+    "@type": "freesurfer.mri_mask";
     "input_volume": InputPathType;
     "mask_volume": InputPathType;
     "output_volume": string;
@@ -37,35 +37,35 @@ interface MriMaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_mask": mri_mask_cargs,
+        "freesurfer.mri_mask": mri_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_mask": mri_mask_outputs,
+        "freesurfer.mri_mask": mri_mask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface MriMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file
+ * @param mask_volume Mask volume file
+ * @param output_volume Output volume file
+ * @param xform Apply M3Z/LTA to transform mask to the space of input volume (identity.nofile possible, will invert if needed)
+ * @param lta_src Source volume for -xform (if not available from the xform file)
+ * @param lta_dst Destination volume for -xform (if not available from the xform file)
+ * @param threshold Threshold mask volume at a given threshold (values <= threshold considered zero)
+ * @param npad Create a bounding box around the mask expanded by npad voxels in each direction
+ * @param npad_vector Create a bounding box around the mask expanded by npad1 npad2 npad3 voxels in each direction
+ * @param npad_multi_vector Create a bounding box around the mask, expanded by npad1a npad1b npad2a npad2b npad3a npad3b in each direction
+ * @param abs Take absolute value before applying threshold
+ * @param invert Invert mask
+ * @param no_invert Turn off inversion of mask
+ * @param rh_labels Set mask in right hemisphere labels to 1 (assumes input mask is an aseg)
+ * @param lh_labels Set mask in left hemisphere labels to 1 (assumes input mask is an aseg)
+ * @param dilate Dilate mask N times before applying
+ * @param no_cerebellum Remove cerebellum from aseg mask (assumes input mask is an aseg)
+ * @param oval_value Use specified oval value as output instead of 0
+ * @param transfer_value Transfer only the specified voxel value from mask to output
+ * @param keep_mask_deletion_edits Transfer voxel-deletion edits (voxels=1) from mask to output volume
+ * @param samseg Assume mask is a SAMSEG segmentation and mask all non-brain labels
+ *
+ * @returns Parameter dictionary
+ */
 function mri_mask_params(
     input_volume: InputPathType,
     mask_volume: InputPathType,
@@ -111,35 +138,8 @@ function mri_mask_params(
     keep_mask_deletion_edits: boolean = false,
     samseg: boolean = false,
 ): MriMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file
-     * @param mask_volume Mask volume file
-     * @param output_volume Output volume file
-     * @param xform Apply M3Z/LTA to transform mask to the space of input volume (identity.nofile possible, will invert if needed)
-     * @param lta_src Source volume for -xform (if not available from the xform file)
-     * @param lta_dst Destination volume for -xform (if not available from the xform file)
-     * @param threshold Threshold mask volume at a given threshold (values <= threshold considered zero)
-     * @param npad Create a bounding box around the mask expanded by npad voxels in each direction
-     * @param npad_vector Create a bounding box around the mask expanded by npad1 npad2 npad3 voxels in each direction
-     * @param npad_multi_vector Create a bounding box around the mask, expanded by npad1a npad1b npad2a npad2b npad3a npad3b in each direction
-     * @param abs Take absolute value before applying threshold
-     * @param invert Invert mask
-     * @param no_invert Turn off inversion of mask
-     * @param rh_labels Set mask in right hemisphere labels to 1 (assumes input mask is an aseg)
-     * @param lh_labels Set mask in left hemisphere labels to 1 (assumes input mask is an aseg)
-     * @param dilate Dilate mask N times before applying
-     * @param no_cerebellum Remove cerebellum from aseg mask (assumes input mask is an aseg)
-     * @param oval_value Use specified oval value as output instead of 0
-     * @param transfer_value Transfer only the specified voxel value from mask to output
-     * @param keep_mask_deletion_edits Transfer voxel-deletion edits (voxels=1) from mask to output volume
-     * @param samseg Assume mask is a SAMSEG segmentation and mask all non-brain labels
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_mask" as const,
+        "@type": "freesurfer.mri_mask" as const,
         "input_volume": input_volume,
         "mask_volume": mask_volume,
         "output_volume": output_volume,
@@ -186,18 +186,18 @@ function mri_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_mask_cargs(
     params: MriMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_mask");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -291,18 +291,18 @@ function mri_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_mask_outputs(
     params: MriMaskParameters,
     execution: Execution,
 ): MriMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMaskOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -311,22 +311,22 @@ function mri_mask_outputs(
 }
 
 
+/**
+ * Applies a mask volume (typically skull stripped).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
+ */
 function mri_mask_execute(
     params: MriMaskParameters,
     execution: Execution,
 ): MriMaskOutputs {
-    /**
-     * Applies a mask volume (typically skull stripped).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_mask_cargs(params, execution)
     const ret = mri_mask_outputs(params, execution)
@@ -335,6 +335,38 @@ function mri_mask_execute(
 }
 
 
+/**
+ * Applies a mask volume (typically skull stripped).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file
+ * @param mask_volume Mask volume file
+ * @param output_volume Output volume file
+ * @param xform Apply M3Z/LTA to transform mask to the space of input volume (identity.nofile possible, will invert if needed)
+ * @param lta_src Source volume for -xform (if not available from the xform file)
+ * @param lta_dst Destination volume for -xform (if not available from the xform file)
+ * @param threshold Threshold mask volume at a given threshold (values <= threshold considered zero)
+ * @param npad Create a bounding box around the mask expanded by npad voxels in each direction
+ * @param npad_vector Create a bounding box around the mask expanded by npad1 npad2 npad3 voxels in each direction
+ * @param npad_multi_vector Create a bounding box around the mask, expanded by npad1a npad1b npad2a npad2b npad3a npad3b in each direction
+ * @param abs Take absolute value before applying threshold
+ * @param invert Invert mask
+ * @param no_invert Turn off inversion of mask
+ * @param rh_labels Set mask in right hemisphere labels to 1 (assumes input mask is an aseg)
+ * @param lh_labels Set mask in left hemisphere labels to 1 (assumes input mask is an aseg)
+ * @param dilate Dilate mask N times before applying
+ * @param no_cerebellum Remove cerebellum from aseg mask (assumes input mask is an aseg)
+ * @param oval_value Use specified oval value as output instead of 0
+ * @param transfer_value Transfer only the specified voxel value from mask to output
+ * @param keep_mask_deletion_edits Transfer voxel-deletion edits (voxels=1) from mask to output volume
+ * @param samseg Assume mask is a SAMSEG segmentation and mask all non-brain labels
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
+ */
 function mri_mask(
     input_volume: InputPathType,
     mask_volume: InputPathType,
@@ -359,38 +391,6 @@ function mri_mask(
     samseg: boolean = false,
     runner: Runner | null = null,
 ): MriMaskOutputs {
-    /**
-     * Applies a mask volume (typically skull stripped).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file
-     * @param mask_volume Mask volume file
-     * @param output_volume Output volume file
-     * @param xform Apply M3Z/LTA to transform mask to the space of input volume (identity.nofile possible, will invert if needed)
-     * @param lta_src Source volume for -xform (if not available from the xform file)
-     * @param lta_dst Destination volume for -xform (if not available from the xform file)
-     * @param threshold Threshold mask volume at a given threshold (values <= threshold considered zero)
-     * @param npad Create a bounding box around the mask expanded by npad voxels in each direction
-     * @param npad_vector Create a bounding box around the mask expanded by npad1 npad2 npad3 voxels in each direction
-     * @param npad_multi_vector Create a bounding box around the mask, expanded by npad1a npad1b npad2a npad2b npad3a npad3b in each direction
-     * @param abs Take absolute value before applying threshold
-     * @param invert Invert mask
-     * @param no_invert Turn off inversion of mask
-     * @param rh_labels Set mask in right hemisphere labels to 1 (assumes input mask is an aseg)
-     * @param lh_labels Set mask in left hemisphere labels to 1 (assumes input mask is an aseg)
-     * @param dilate Dilate mask N times before applying
-     * @param no_cerebellum Remove cerebellum from aseg mask (assumes input mask is an aseg)
-     * @param oval_value Use specified oval value as output instead of 0
-     * @param transfer_value Transfer only the specified voxel value from mask to output
-     * @param keep_mask_deletion_edits Transfer voxel-deletion edits (voxels=1) from mask to output volume
-     * @param samseg Assume mask is a SAMSEG segmentation and mask all non-brain labels
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MASK_METADATA);
     const params = mri_mask_params(input_volume, mask_volume, output_volume, xform, lta_src, lta_dst, threshold, npad, npad_vector, npad_multi_vector, abs, invert, no_invert, rh_labels, lh_labels, dilate, no_cerebellum, oval_value, transfer_value, keep_mask_deletion_edits, samseg)
@@ -403,5 +403,8 @@ export {
       MriMaskOutputs,
       MriMaskParameters,
       mri_mask,
+      mri_mask_cargs,
+      mri_mask_execute,
+      mri_mask_outputs,
       mri_mask_params,
 };

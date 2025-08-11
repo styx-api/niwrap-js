@@ -12,7 +12,7 @@ const MRI_CONCAT_METADATA: Metadata = {
 
 
 interface MriConcatParameters {
-    "__STYXTYPE__": "mri_concat";
+    "@type": "freesurfer.mri_concat";
     "input_files": Array<InputPathType>;
     "output_file": string;
     "file_list"?: string | null | undefined;
@@ -64,33 +64,33 @@ interface MriConcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_concat": mri_concat_cargs,
+        "freesurfer.mri_concat": mri_concat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -110,6 +110,60 @@ interface MriConcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image files (e.g. file1.mgh file2.mgh ...).
+ * @param output_file Output file name (e.g. output.mgh).
+ * @param file_list List file containing a text list of files to process (up to 400000 files).
+ * @param paired_sum Compute paired sum (1+2, 3+4, etc).
+ * @param paired_avg Compute paired average (1+2, 3+4, etc).
+ * @param paired_diff Compute paired difference (1-2, 3-4, etc).
+ * @param paired_diff_norm Compute paired difference normalized by TP1,2 average.
+ * @param paired_diff_norm1 Compute paired difference normalized by TP1.
+ * @param paired_diff_norm2 Compute paired difference normalized by TP2.
+ * @param norm_mean Normalize frames by mean of all time points.
+ * @param norm1 Normalize frames by first time point (TP1).
+ * @param matrix Multiply by matrix from ASCII file.
+ * @param frame_weight Weight each frame by values in ASCII file (one value per frame).
+ * @param norm_weight Normalize frames to sum to 1 after weighting.
+ * @param group_mean Create matrix to average Ng groups, Nper=Ntot/Ng.
+ * @param combine Average frames from non-zero voxels.
+ * @param keep_datatype Write output in the same datatype as input (default is Float format).
+ * @param abs Take absolute value of input.
+ * @param pos Set input negatives to 0.
+ * @param neg Set input positives to 0.
+ * @param mean Compute mean of concatenated volumes.
+ * @param median Compute median of concatenated volumes.
+ * @param mean_div_n Compute mean divided by number of frames.
+ * @param sum Compute sum of concatenated volumes.
+ * @param var_ Compute variance of concatenated volumes.
+ * @param std Compute standard deviation of concatenated volumes.
+ * @param max Compute maximum of concatenated volumes.
+ * @param max_index Compute index of maximum of concatenated volumes.
+ * @param max_index_prune Set max index to 0 where all frames are 0.
+ * @param max_index_add Add value to non-zero max indices.
+ * @param min Compute minimum of concatenated volumes.
+ * @param replicate_times Replicate N times over frames.
+ * @param fnorm Normalize time series at each voxel.
+ * @param conjunction Compute voxel-wise conjunction of concatenated volumes.
+ * @param vote Most frequent value at each voxel and fraction of occurrences.
+ * @param sort Sort each voxel by ascending frame value.
+ * @param temporal_ar1 Compute temporal AR1 with degree of freedom adjustment.
+ * @param prune Set voxel value to 0 unless all frames are non-zero.
+ * @param pca Compute and output principal component analysis (PCA).
+ * @param pca_mask Mask used to select voxels for PCA (mask > 0.5).
+ * @param scm Compute spatial covariance matrix.
+ * @param zconcat Concatenate in slice direction skipping nskip slices.
+ * @param max_bonfcor Compute maximum and Bonferroni correct.
+ * @param multiply Multiply volumes by value.
+ * @param add Add value to volumes.
+ * @param mask_file Mask file used with vote or sort.
+ * @param rms Compute root mean square of concatenated volumes.
+ * @param no_check Do not check inputs.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_concat_params(
     input_files: Array<InputPathType>,
     output_file: string,
@@ -160,62 +214,8 @@ function mri_concat_params(
     rms: boolean = false,
     no_check: boolean = false,
 ): MriConcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image files (e.g. file1.mgh file2.mgh ...).
-     * @param output_file Output file name (e.g. output.mgh).
-     * @param file_list List file containing a text list of files to process (up to 400000 files).
-     * @param paired_sum Compute paired sum (1+2, 3+4, etc).
-     * @param paired_avg Compute paired average (1+2, 3+4, etc).
-     * @param paired_diff Compute paired difference (1-2, 3-4, etc).
-     * @param paired_diff_norm Compute paired difference normalized by TP1,2 average.
-     * @param paired_diff_norm1 Compute paired difference normalized by TP1.
-     * @param paired_diff_norm2 Compute paired difference normalized by TP2.
-     * @param norm_mean Normalize frames by mean of all time points.
-     * @param norm1 Normalize frames by first time point (TP1).
-     * @param matrix Multiply by matrix from ASCII file.
-     * @param frame_weight Weight each frame by values in ASCII file (one value per frame).
-     * @param norm_weight Normalize frames to sum to 1 after weighting.
-     * @param group_mean Create matrix to average Ng groups, Nper=Ntot/Ng.
-     * @param combine Average frames from non-zero voxels.
-     * @param keep_datatype Write output in the same datatype as input (default is Float format).
-     * @param abs Take absolute value of input.
-     * @param pos Set input negatives to 0.
-     * @param neg Set input positives to 0.
-     * @param mean Compute mean of concatenated volumes.
-     * @param median Compute median of concatenated volumes.
-     * @param mean_div_n Compute mean divided by number of frames.
-     * @param sum Compute sum of concatenated volumes.
-     * @param var_ Compute variance of concatenated volumes.
-     * @param std Compute standard deviation of concatenated volumes.
-     * @param max Compute maximum of concatenated volumes.
-     * @param max_index Compute index of maximum of concatenated volumes.
-     * @param max_index_prune Set max index to 0 where all frames are 0.
-     * @param max_index_add Add value to non-zero max indices.
-     * @param min Compute minimum of concatenated volumes.
-     * @param replicate_times Replicate N times over frames.
-     * @param fnorm Normalize time series at each voxel.
-     * @param conjunction Compute voxel-wise conjunction of concatenated volumes.
-     * @param vote Most frequent value at each voxel and fraction of occurrences.
-     * @param sort Sort each voxel by ascending frame value.
-     * @param temporal_ar1 Compute temporal AR1 with degree of freedom adjustment.
-     * @param prune Set voxel value to 0 unless all frames are non-zero.
-     * @param pca Compute and output principal component analysis (PCA).
-     * @param pca_mask Mask used to select voxels for PCA (mask > 0.5).
-     * @param scm Compute spatial covariance matrix.
-     * @param zconcat Concatenate in slice direction skipping nskip slices.
-     * @param max_bonfcor Compute maximum and Bonferroni correct.
-     * @param multiply Multiply volumes by value.
-     * @param add Add value to volumes.
-     * @param mask_file Mask file used with vote or sort.
-     * @param rms Compute root mean square of concatenated volumes.
-     * @param no_check Do not check inputs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_concat" as const,
+        "@type": "freesurfer.mri_concat" as const,
         "input_files": input_files,
         "output_file": output_file,
         "paired_sum": paired_sum,
@@ -293,18 +293,18 @@ function mri_concat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_concat_cargs(
     params: MriConcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_concat");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -490,18 +490,18 @@ function mri_concat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_concat_outputs(
     params: MriConcatParameters,
     execution: Execution,
 ): MriConcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriConcatOutputs = {
         root: execution.outputFile("."),
     };
@@ -509,22 +509,22 @@ function mri_concat_outputs(
 }
 
 
+/**
+ * Concatenates input data sets.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
+ */
 function mri_concat_execute(
     params: MriConcatParameters,
     execution: Execution,
 ): MriConcatOutputs {
-    /**
-     * Concatenates input data sets.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_concat_cargs(params, execution)
     const ret = mri_concat_outputs(params, execution)
@@ -533,6 +533,65 @@ function mri_concat_execute(
 }
 
 
+/**
+ * Concatenates input data sets.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input image files (e.g. file1.mgh file2.mgh ...).
+ * @param output_file Output file name (e.g. output.mgh).
+ * @param file_list List file containing a text list of files to process (up to 400000 files).
+ * @param paired_sum Compute paired sum (1+2, 3+4, etc).
+ * @param paired_avg Compute paired average (1+2, 3+4, etc).
+ * @param paired_diff Compute paired difference (1-2, 3-4, etc).
+ * @param paired_diff_norm Compute paired difference normalized by TP1,2 average.
+ * @param paired_diff_norm1 Compute paired difference normalized by TP1.
+ * @param paired_diff_norm2 Compute paired difference normalized by TP2.
+ * @param norm_mean Normalize frames by mean of all time points.
+ * @param norm1 Normalize frames by first time point (TP1).
+ * @param matrix Multiply by matrix from ASCII file.
+ * @param frame_weight Weight each frame by values in ASCII file (one value per frame).
+ * @param norm_weight Normalize frames to sum to 1 after weighting.
+ * @param group_mean Create matrix to average Ng groups, Nper=Ntot/Ng.
+ * @param combine Average frames from non-zero voxels.
+ * @param keep_datatype Write output in the same datatype as input (default is Float format).
+ * @param abs Take absolute value of input.
+ * @param pos Set input negatives to 0.
+ * @param neg Set input positives to 0.
+ * @param mean Compute mean of concatenated volumes.
+ * @param median Compute median of concatenated volumes.
+ * @param mean_div_n Compute mean divided by number of frames.
+ * @param sum Compute sum of concatenated volumes.
+ * @param var_ Compute variance of concatenated volumes.
+ * @param std Compute standard deviation of concatenated volumes.
+ * @param max Compute maximum of concatenated volumes.
+ * @param max_index Compute index of maximum of concatenated volumes.
+ * @param max_index_prune Set max index to 0 where all frames are 0.
+ * @param max_index_add Add value to non-zero max indices.
+ * @param min Compute minimum of concatenated volumes.
+ * @param replicate_times Replicate N times over frames.
+ * @param fnorm Normalize time series at each voxel.
+ * @param conjunction Compute voxel-wise conjunction of concatenated volumes.
+ * @param vote Most frequent value at each voxel and fraction of occurrences.
+ * @param sort Sort each voxel by ascending frame value.
+ * @param temporal_ar1 Compute temporal AR1 with degree of freedom adjustment.
+ * @param prune Set voxel value to 0 unless all frames are non-zero.
+ * @param pca Compute and output principal component analysis (PCA).
+ * @param pca_mask Mask used to select voxels for PCA (mask > 0.5).
+ * @param scm Compute spatial covariance matrix.
+ * @param zconcat Concatenate in slice direction skipping nskip slices.
+ * @param max_bonfcor Compute maximum and Bonferroni correct.
+ * @param multiply Multiply volumes by value.
+ * @param add Add value to volumes.
+ * @param mask_file Mask file used with vote or sort.
+ * @param rms Compute root mean square of concatenated volumes.
+ * @param no_check Do not check inputs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
+ */
 function mri_concat(
     input_files: Array<InputPathType>,
     output_file: string,
@@ -584,65 +643,6 @@ function mri_concat(
     no_check: boolean = false,
     runner: Runner | null = null,
 ): MriConcatOutputs {
-    /**
-     * Concatenates input data sets.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input image files (e.g. file1.mgh file2.mgh ...).
-     * @param output_file Output file name (e.g. output.mgh).
-     * @param file_list List file containing a text list of files to process (up to 400000 files).
-     * @param paired_sum Compute paired sum (1+2, 3+4, etc).
-     * @param paired_avg Compute paired average (1+2, 3+4, etc).
-     * @param paired_diff Compute paired difference (1-2, 3-4, etc).
-     * @param paired_diff_norm Compute paired difference normalized by TP1,2 average.
-     * @param paired_diff_norm1 Compute paired difference normalized by TP1.
-     * @param paired_diff_norm2 Compute paired difference normalized by TP2.
-     * @param norm_mean Normalize frames by mean of all time points.
-     * @param norm1 Normalize frames by first time point (TP1).
-     * @param matrix Multiply by matrix from ASCII file.
-     * @param frame_weight Weight each frame by values in ASCII file (one value per frame).
-     * @param norm_weight Normalize frames to sum to 1 after weighting.
-     * @param group_mean Create matrix to average Ng groups, Nper=Ntot/Ng.
-     * @param combine Average frames from non-zero voxels.
-     * @param keep_datatype Write output in the same datatype as input (default is Float format).
-     * @param abs Take absolute value of input.
-     * @param pos Set input negatives to 0.
-     * @param neg Set input positives to 0.
-     * @param mean Compute mean of concatenated volumes.
-     * @param median Compute median of concatenated volumes.
-     * @param mean_div_n Compute mean divided by number of frames.
-     * @param sum Compute sum of concatenated volumes.
-     * @param var_ Compute variance of concatenated volumes.
-     * @param std Compute standard deviation of concatenated volumes.
-     * @param max Compute maximum of concatenated volumes.
-     * @param max_index Compute index of maximum of concatenated volumes.
-     * @param max_index_prune Set max index to 0 where all frames are 0.
-     * @param max_index_add Add value to non-zero max indices.
-     * @param min Compute minimum of concatenated volumes.
-     * @param replicate_times Replicate N times over frames.
-     * @param fnorm Normalize time series at each voxel.
-     * @param conjunction Compute voxel-wise conjunction of concatenated volumes.
-     * @param vote Most frequent value at each voxel and fraction of occurrences.
-     * @param sort Sort each voxel by ascending frame value.
-     * @param temporal_ar1 Compute temporal AR1 with degree of freedom adjustment.
-     * @param prune Set voxel value to 0 unless all frames are non-zero.
-     * @param pca Compute and output principal component analysis (PCA).
-     * @param pca_mask Mask used to select voxels for PCA (mask > 0.5).
-     * @param scm Compute spatial covariance matrix.
-     * @param zconcat Concatenate in slice direction skipping nskip slices.
-     * @param max_bonfcor Compute maximum and Bonferroni correct.
-     * @param multiply Multiply volumes by value.
-     * @param add Add value to volumes.
-     * @param mask_file Mask file used with vote or sort.
-     * @param rms Compute root mean square of concatenated volumes.
-     * @param no_check Do not check inputs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CONCAT_METADATA);
     const params = mri_concat_params(input_files, output_file, file_list, paired_sum, paired_avg, paired_diff, paired_diff_norm, paired_diff_norm1, paired_diff_norm2, norm_mean, norm1, matrix, frame_weight, norm_weight, group_mean, combine, keep_datatype, abs, pos, neg, mean, median, mean_div_n, sum, var_, std, max, max_index, max_index_prune, max_index_add, min, replicate_times, fnorm, conjunction, vote, sort, temporal_ar1, prune, pca, pca_mask, scm, zconcat, max_bonfcor, multiply, add, mask_file, rms, no_check)
@@ -655,5 +655,8 @@ export {
       MriConcatOutputs,
       MriConcatParameters,
       mri_concat,
+      mri_concat_cargs,
+      mri_concat_execute,
+      mri_concat_outputs,
       mri_concat_params,
 };

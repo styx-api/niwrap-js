@@ -12,7 +12,7 @@ const V_3D_ANHIST_METADATA: Metadata = {
 
 
 interface V3dAnhistParameters {
-    "__STYXTYPE__": "3dAnhist";
+    "@type": "afni.3dAnhist";
     "dataset": InputPathType;
     "quiet": boolean;
     "dump_histogram": boolean;
@@ -24,35 +24,35 @@ interface V3dAnhistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAnhist": v_3d_anhist_cargs,
+        "afni.3dAnhist": v_3d_anhist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAnhist": v_3d_anhist_outputs,
+        "afni.3dAnhist": v_3d_anhist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dAnhistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset, should be T1-weighted high-res brain image (shorts only).
+ * @param quiet Suppress progress reports.
+ * @param dump_histogram Dump histogram data to Anhist.1D and plot to Anhist.ps.
+ * @param no_scurve Do not fit histogram with curves.
+ * @param winsorize Apply Winsorizing filter prior to histogram scan. Can specify number of times (e.g., -w7).
+ * @param top_2peaks Analyze top 2 peaks only, for overlap, etc.
+ * @param label Use specified label for Anhist.ps plot file instead of the input dataset filename.
+ * @param filename Use specified filename instead of 'Anhist'.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_anhist_params(
     dataset: InputPathType,
     quiet: boolean = false,
@@ -89,22 +103,8 @@ function v_3d_anhist_params(
     label: string | null = null,
     filename: string | null = null,
 ): V3dAnhistParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset, should be T1-weighted high-res brain image (shorts only).
-     * @param quiet Suppress progress reports.
-     * @param dump_histogram Dump histogram data to Anhist.1D and plot to Anhist.ps.
-     * @param no_scurve Do not fit histogram with curves.
-     * @param winsorize Apply Winsorizing filter prior to histogram scan. Can specify number of times (e.g., -w7).
-     * @param top_2peaks Analyze top 2 peaks only, for overlap, etc.
-     * @param label Use specified label for Anhist.ps plot file instead of the input dataset filename.
-     * @param filename Use specified filename instead of 'Anhist'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAnhist" as const,
+        "@type": "afni.3dAnhist" as const,
         "dataset": dataset,
         "quiet": quiet,
         "dump_histogram": dump_histogram,
@@ -124,18 +124,18 @@ function v_3d_anhist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_anhist_cargs(
     params: V3dAnhistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAnhist");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -173,18 +173,18 @@ function v_3d_anhist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_anhist_outputs(
     params: V3dAnhistParameters,
     execution: Execution,
 ): V3dAnhistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAnhistOutputs = {
         root: execution.outputFile("."),
         output_1_d: execution.outputFile(["Anhist.1D"].join('')),
@@ -194,22 +194,22 @@ function v_3d_anhist_outputs(
 }
 
 
+/**
+ * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
+ */
 function v_3d_anhist_execute(
     params: V3dAnhistParameters,
     execution: Execution,
 ): V3dAnhistOutputs {
-    /**
-     * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_anhist_cargs(params, execution)
     const ret = v_3d_anhist_outputs(params, execution)
@@ -218,6 +218,25 @@ function v_3d_anhist_execute(
 }
 
 
+/**
+ * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset, should be T1-weighted high-res brain image (shorts only).
+ * @param quiet Suppress progress reports.
+ * @param dump_histogram Dump histogram data to Anhist.1D and plot to Anhist.ps.
+ * @param no_scurve Do not fit histogram with curves.
+ * @param winsorize Apply Winsorizing filter prior to histogram scan. Can specify number of times (e.g., -w7).
+ * @param top_2peaks Analyze top 2 peaks only, for overlap, etc.
+ * @param label Use specified label for Anhist.ps plot file instead of the input dataset filename.
+ * @param filename Use specified filename instead of 'Anhist'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
+ */
 function v_3d_anhist(
     dataset: InputPathType,
     quiet: boolean = false,
@@ -229,25 +248,6 @@ function v_3d_anhist(
     filename: string | null = null,
     runner: Runner | null = null,
 ): V3dAnhistOutputs {
-    /**
-     * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset, should be T1-weighted high-res brain image (shorts only).
-     * @param quiet Suppress progress reports.
-     * @param dump_histogram Dump histogram data to Anhist.1D and plot to Anhist.ps.
-     * @param no_scurve Do not fit histogram with curves.
-     * @param winsorize Apply Winsorizing filter prior to histogram scan. Can specify number of times (e.g., -w7).
-     * @param top_2peaks Analyze top 2 peaks only, for overlap, etc.
-     * @param label Use specified label for Anhist.ps plot file instead of the input dataset filename.
-     * @param filename Use specified filename instead of 'Anhist'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ANHIST_METADATA);
     const params = v_3d_anhist_params(dataset, quiet, dump_histogram, no_scurve, winsorize, top_2peaks, label, filename)
@@ -260,5 +260,8 @@ export {
       V3dAnhistParameters,
       V_3D_ANHIST_METADATA,
       v_3d_anhist,
+      v_3d_anhist_cargs,
+      v_3d_anhist_execute,
+      v_3d_anhist_outputs,
       v_3d_anhist_params,
 };

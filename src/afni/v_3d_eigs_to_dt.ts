@@ -12,7 +12,7 @@ const V_3D_EIGS_TO_DT_METADATA: Metadata = {
 
 
 interface V3dEigsToDtParameters {
-    "__STYXTYPE__": "3dEigsToDT";
+    "@type": "afni.3dEigsToDT";
     "eig_vals": string;
     "eig_vecs": string;
     "prefix": string;
@@ -24,35 +24,35 @@ interface V3dEigsToDtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dEigsToDT": v_3d_eigs_to_dt_cargs,
+        "afni.3dEigsToDT": v_3d_eigs_to_dt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dEigsToDT": v_3d_eigs_to_dt_outputs,
+        "afni.3dEigsToDT": v_3d_eigs_to_dt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dEigsToDtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param eig_vals Searchable descriptor for finding all three required eigenvalue files. It should list all three eigenvalue files in descending order of magnitude.
+ * @param eig_vecs Searchable descriptor for finding all three required eigenvector files. It should list all three eigenvector files in order matching the eigenvalue files.
+ * @param prefix Prefix for the output file name. It is recommended to include a 'DT' label in it.
+ * @param mask Optional mask within which to calculate uncertainty. If not provided, the data should be masked already.
+ * @param flip_x Change sign of the first element of eigenvectors.
+ * @param flip_y Change sign of the second element of eigenvectors.
+ * @param flip_z Change sign of the third element of eigenvectors.
+ * @param scale_eigs Rescale the eigenvalues by dividing by a number X > 0.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_eigs_to_dt_params(
     eig_vals: string,
     eig_vecs: string,
@@ -89,22 +103,8 @@ function v_3d_eigs_to_dt_params(
     flip_z: boolean = false,
     scale_eigs: number | null = null,
 ): V3dEigsToDtParameters {
-    /**
-     * Build parameters.
-    
-     * @param eig_vals Searchable descriptor for finding all three required eigenvalue files. It should list all three eigenvalue files in descending order of magnitude.
-     * @param eig_vecs Searchable descriptor for finding all three required eigenvector files. It should list all three eigenvector files in order matching the eigenvalue files.
-     * @param prefix Prefix for the output file name. It is recommended to include a 'DT' label in it.
-     * @param mask Optional mask within which to calculate uncertainty. If not provided, the data should be masked already.
-     * @param flip_x Change sign of the first element of eigenvectors.
-     * @param flip_y Change sign of the second element of eigenvectors.
-     * @param flip_z Change sign of the third element of eigenvectors.
-     * @param scale_eigs Rescale the eigenvalues by dividing by a number X > 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dEigsToDT" as const,
+        "@type": "afni.3dEigsToDT" as const,
         "eig_vals": eig_vals,
         "eig_vecs": eig_vecs,
         "prefix": prefix,
@@ -122,18 +122,18 @@ function v_3d_eigs_to_dt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_eigs_to_dt_cargs(
     params: V3dEigsToDtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dEigsToDT");
     cargs.push(
@@ -173,18 +173,18 @@ function v_3d_eigs_to_dt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_eigs_to_dt_outputs(
     params: V3dEigsToDtParameters,
     execution: Execution,
 ): V3dEigsToDtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dEigsToDtOutputs = {
         root: execution.outputFile("."),
         dt_brik_output: execution.outputFile([(params["prefix"] ?? null), "_DT+orig.BRIK"].join('')),
@@ -194,22 +194,22 @@ function v_3d_eigs_to_dt_outputs(
 }
 
 
+/**
+ * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dEigsToDtOutputs`).
+ */
 function v_3d_eigs_to_dt_execute(
     params: V3dEigsToDtParameters,
     execution: Execution,
 ): V3dEigsToDtOutputs {
-    /**
-     * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dEigsToDtOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_eigs_to_dt_cargs(params, execution)
     const ret = v_3d_eigs_to_dt_outputs(params, execution)
@@ -218,6 +218,25 @@ function v_3d_eigs_to_dt_execute(
 }
 
 
+/**
+ * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param eig_vals Searchable descriptor for finding all three required eigenvalue files. It should list all three eigenvalue files in descending order of magnitude.
+ * @param eig_vecs Searchable descriptor for finding all three required eigenvector files. It should list all three eigenvector files in order matching the eigenvalue files.
+ * @param prefix Prefix for the output file name. It is recommended to include a 'DT' label in it.
+ * @param mask Optional mask within which to calculate uncertainty. If not provided, the data should be masked already.
+ * @param flip_x Change sign of the first element of eigenvectors.
+ * @param flip_y Change sign of the second element of eigenvectors.
+ * @param flip_z Change sign of the third element of eigenvectors.
+ * @param scale_eigs Rescale the eigenvalues by dividing by a number X > 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dEigsToDtOutputs`).
+ */
 function v_3d_eigs_to_dt(
     eig_vals: string,
     eig_vecs: string,
@@ -229,25 +248,6 @@ function v_3d_eigs_to_dt(
     scale_eigs: number | null = null,
     runner: Runner | null = null,
 ): V3dEigsToDtOutputs {
-    /**
-     * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param eig_vals Searchable descriptor for finding all three required eigenvalue files. It should list all three eigenvalue files in descending order of magnitude.
-     * @param eig_vecs Searchable descriptor for finding all three required eigenvector files. It should list all three eigenvector files in order matching the eigenvalue files.
-     * @param prefix Prefix for the output file name. It is recommended to include a 'DT' label in it.
-     * @param mask Optional mask within which to calculate uncertainty. If not provided, the data should be masked already.
-     * @param flip_x Change sign of the first element of eigenvectors.
-     * @param flip_y Change sign of the second element of eigenvectors.
-     * @param flip_z Change sign of the third element of eigenvectors.
-     * @param scale_eigs Rescale the eigenvalues by dividing by a number X > 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dEigsToDtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_EIGS_TO_DT_METADATA);
     const params = v_3d_eigs_to_dt_params(eig_vals, eig_vecs, prefix, mask, flip_x, flip_y, flip_z, scale_eigs)
@@ -260,5 +260,8 @@ export {
       V3dEigsToDtParameters,
       V_3D_EIGS_TO_DT_METADATA,
       v_3d_eigs_to_dt,
+      v_3d_eigs_to_dt_cargs,
+      v_3d_eigs_to_dt_execute,
+      v_3d_eigs_to_dt_outputs,
       v_3d_eigs_to_dt_params,
 };

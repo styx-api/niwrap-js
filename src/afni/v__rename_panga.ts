@@ -12,7 +12,7 @@ const V__RENAME_PANGA_METADATA: Metadata = {
 
 
 interface VRenamePangaParameters {
-    "__STYXTYPE__": "@RenamePanga";
+    "@type": "afni.@RenamePanga";
     "dir_number": string;
     "first_image_number": string;
     "num_slices": number;
@@ -26,35 +26,35 @@ interface VRenamePangaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@RenamePanga": v__rename_panga_cargs,
+        "afni.@RenamePanga": v__rename_panga_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@RenamePanga": v__rename_panga_outputs,
+        "afni.@RenamePanga": v__rename_panga_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface VRenamePangaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dir_number The directory number where the first image of the series is stored
+ * @param first_image_number The number of the first image in the series
+ * @param num_slices The number of slices making up the imaged volume
+ * @param num_reps The number of samples in your time series
+ * @param output_root The prefix for the output brick
+ * @param keep_prefix Forces @RenamePanga to use the prefix you designate without modification
+ * @param interactive Launches to3d in interactive mode. This allows you to double check the automated settings.
+ * @param outliers_check Performs outliers check and writes the outliers to a .1D file placed in the output directory
+ * @param slice_pattern Sets the slice acquisition pattern. The default option is alt+z.
+ * @param output_directory Directory where the output (bricks and 1D files) will be stored. The default directory is ./afni
+ *
+ * @returns Parameter dictionary
+ */
 function v__rename_panga_params(
     dir_number: string,
     first_image_number: string,
@@ -97,24 +113,8 @@ function v__rename_panga_params(
     slice_pattern: string | null = null,
     output_directory: string | null = null,
 ): VRenamePangaParameters {
-    /**
-     * Build parameters.
-    
-     * @param dir_number The directory number where the first image of the series is stored
-     * @param first_image_number The number of the first image in the series
-     * @param num_slices The number of slices making up the imaged volume
-     * @param num_reps The number of samples in your time series
-     * @param output_root The prefix for the output brick
-     * @param keep_prefix Forces @RenamePanga to use the prefix you designate without modification
-     * @param interactive Launches to3d in interactive mode. This allows you to double check the automated settings.
-     * @param outliers_check Performs outliers check and writes the outliers to a .1D file placed in the output directory
-     * @param slice_pattern Sets the slice acquisition pattern. The default option is alt+z.
-     * @param output_directory Directory where the output (bricks and 1D files) will be stored. The default directory is ./afni
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@RenamePanga" as const,
+        "@type": "afni.@RenamePanga" as const,
         "dir_number": dir_number,
         "first_image_number": first_image_number,
         "num_slices": num_slices,
@@ -134,18 +134,18 @@ function v__rename_panga_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__rename_panga_cargs(
     params: VRenamePangaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@RenamePanga");
     cargs.push((params["dir_number"] ?? null));
@@ -178,18 +178,18 @@ function v__rename_panga_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__rename_panga_outputs(
     params: VRenamePangaParameters,
     execution: Execution,
 ): VRenamePangaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRenamePangaOutputs = {
         root: execution.outputFile("."),
         head_file: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/", (params["output_root"] ?? null), "_r#.HEAD"].join('')) : null,
@@ -200,22 +200,22 @@ function v__rename_panga_outputs(
 }
 
 
+/**
+ * Creates AFNI bricks from RealTime GE EPI series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
+ */
 function v__rename_panga_execute(
     params: VRenamePangaParameters,
     execution: Execution,
 ): VRenamePangaOutputs {
-    /**
-     * Creates AFNI bricks from RealTime GE EPI series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__rename_panga_cargs(params, execution)
     const ret = v__rename_panga_outputs(params, execution)
@@ -224,6 +224,27 @@ function v__rename_panga_execute(
 }
 
 
+/**
+ * Creates AFNI bricks from RealTime GE EPI series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dir_number The directory number where the first image of the series is stored
+ * @param first_image_number The number of the first image in the series
+ * @param num_slices The number of slices making up the imaged volume
+ * @param num_reps The number of samples in your time series
+ * @param output_root The prefix for the output brick
+ * @param keep_prefix Forces @RenamePanga to use the prefix you designate without modification
+ * @param interactive Launches to3d in interactive mode. This allows you to double check the automated settings.
+ * @param outliers_check Performs outliers check and writes the outliers to a .1D file placed in the output directory
+ * @param slice_pattern Sets the slice acquisition pattern. The default option is alt+z.
+ * @param output_directory Directory where the output (bricks and 1D files) will be stored. The default directory is ./afni
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
+ */
 function v__rename_panga(
     dir_number: string,
     first_image_number: string,
@@ -237,27 +258,6 @@ function v__rename_panga(
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): VRenamePangaOutputs {
-    /**
-     * Creates AFNI bricks from RealTime GE EPI series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dir_number The directory number where the first image of the series is stored
-     * @param first_image_number The number of the first image in the series
-     * @param num_slices The number of slices making up the imaged volume
-     * @param num_reps The number of samples in your time series
-     * @param output_root The prefix for the output brick
-     * @param keep_prefix Forces @RenamePanga to use the prefix you designate without modification
-     * @param interactive Launches to3d in interactive mode. This allows you to double check the automated settings.
-     * @param outliers_check Performs outliers check and writes the outliers to a .1D file placed in the output directory
-     * @param slice_pattern Sets the slice acquisition pattern. The default option is alt+z.
-     * @param output_directory Directory where the output (bricks and 1D files) will be stored. The default directory is ./afni
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__RENAME_PANGA_METADATA);
     const params = v__rename_panga_params(dir_number, first_image_number, num_slices, num_reps, output_root, keep_prefix, interactive, outliers_check, slice_pattern, output_directory)
@@ -270,5 +270,8 @@ export {
       VRenamePangaParameters,
       V__RENAME_PANGA_METADATA,
       v__rename_panga,
+      v__rename_panga_cargs,
+      v__rename_panga_execute,
+      v__rename_panga_outputs,
       v__rename_panga_params,
 };

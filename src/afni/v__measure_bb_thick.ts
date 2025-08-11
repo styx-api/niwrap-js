@@ -12,7 +12,7 @@ const V__MEASURE_BB_THICK_METADATA: Metadata = {
 
 
 interface VMeasureBbThickParameters {
-    "__STYXTYPE__": "@measure_bb_thick";
+    "@type": "afni.@measure_bb_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface VMeasureBbThickParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@measure_bb_thick": v__measure_bb_thick_cargs,
+        "afni.@measure_bb_thick": v__measure_bb_thick_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@measure_bb_thick": v__measure_bb_thick_outputs,
+        "afni.@measure_bb_thick": v__measure_bb_thick_outputs,
     };
     return outputsFuncs[t];
 }
@@ -111,6 +111,24 @@ interface VMeasureBbThickOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param maskset Mask dataset for input
+ * @param surfset Surface dataset onto which to map thickness (e.g., pial/gray matter surface)
+ * @param outdir Output directory
+ * @param resample Resample input to mm in millimeters (e.g., half a voxel or 'auto'). No resampling is done by default.
+ * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
+ * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depth_search Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param keep_temp_files Do not delete the intermediate files (for testing)
+ * @param balls_only Calculate only with spheres and skip boxes
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
+ *
+ * @returns Parameter dictionary
+ */
 function v__measure_bb_thick_params(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -125,26 +143,8 @@ function v__measure_bb_thick_params(
     balls_only: boolean = false,
     surfsmooth_method: string | null = null,
 ): VMeasureBbThickParameters {
-    /**
-     * Build parameters.
-    
-     * @param maskset Mask dataset for input
-     * @param surfset Surface dataset onto which to map thickness (e.g., pial/gray matter surface)
-     * @param outdir Output directory
-     * @param resample Resample input to mm in millimeters (e.g., half a voxel or 'auto'). No resampling is done by default.
-     * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
-     * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depth_search Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param keep_temp_files Do not delete the intermediate files (for testing)
-     * @param balls_only Calculate only with spheres and skip boxes
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@measure_bb_thick" as const,
+        "@type": "afni.@measure_bb_thick" as const,
         "maskset": maskset,
         "surfset": surfset,
         "keep_temp_files": keep_temp_files,
@@ -178,18 +178,18 @@ function v__measure_bb_thick_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__measure_bb_thick_cargs(
     params: VMeasureBbThickParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@measure_bb_thick");
     cargs.push(
@@ -258,18 +258,18 @@ function v__measure_bb_thick_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__measure_bb_thick_outputs(
     params: VMeasureBbThickParameters,
     execution: Execution,
 ): VMeasureBbThickOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMeasureBbThickOutputs = {
         root: execution.outputFile("."),
         maxfill: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/maxfill.nii.gz"].join('')) : null,
@@ -286,22 +286,22 @@ function v__measure_bb_thick_outputs(
 }
 
 
+/**
+ * Compute thickness of mask using ball and box method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
+ */
 function v__measure_bb_thick_execute(
     params: VMeasureBbThickParameters,
     execution: Execution,
 ): VMeasureBbThickOutputs {
-    /**
-     * Compute thickness of mask using ball and box method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__measure_bb_thick_cargs(params, execution)
     const ret = v__measure_bb_thick_outputs(params, execution)
@@ -310,6 +310,29 @@ function v__measure_bb_thick_execute(
 }
 
 
+/**
+ * Compute thickness of mask using ball and box method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param maskset Mask dataset for input
+ * @param surfset Surface dataset onto which to map thickness (e.g., pial/gray matter surface)
+ * @param outdir Output directory
+ * @param resample Resample input to mm in millimeters (e.g., half a voxel or 'auto'). No resampling is done by default.
+ * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
+ * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depth_search Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param keep_temp_files Do not delete the intermediate files (for testing)
+ * @param balls_only Calculate only with spheres and skip boxes
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
+ */
 function v__measure_bb_thick(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -325,29 +348,6 @@ function v__measure_bb_thick(
     surfsmooth_method: string | null = null,
     runner: Runner | null = null,
 ): VMeasureBbThickOutputs {
-    /**
-     * Compute thickness of mask using ball and box method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param maskset Mask dataset for input
-     * @param surfset Surface dataset onto which to map thickness (e.g., pial/gray matter surface)
-     * @param outdir Output directory
-     * @param resample Resample input to mm in millimeters (e.g., half a voxel or 'auto'). No resampling is done by default.
-     * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
-     * @param smoothmm Smooth volume by mm FWHM in mask. Default is 2*voxelsize of mask or resampled mask.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depth_search Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param keep_temp_files Do not delete the intermediate files (for testing)
-     * @param balls_only Calculate only with spheres and skip boxes
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for models.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MEASURE_BB_THICK_METADATA);
     const params = v__measure_bb_thick_params(maskset, surfset, outdir, resample, increment, surfsmooth, smoothmm, maxthick, depth_search, keep_temp_files, balls_only, surfsmooth_method)
@@ -360,5 +360,8 @@ export {
       VMeasureBbThickParameters,
       V__MEASURE_BB_THICK_METADATA,
       v__measure_bb_thick,
+      v__measure_bb_thick_cargs,
+      v__measure_bb_thick_execute,
+      v__measure_bb_thick_outputs,
       v__measure_bb_thick_params,
 };

@@ -12,7 +12,7 @@ const MRIS_SMOOTH_METADATA: Metadata = {
 
 
 interface MrisSmoothParameters {
-    "__STYXTYPE__": "mris_smooth";
+    "@type": "freesurfer.mris_smooth";
     "input_surface": InputPathType;
     "output_surface": string;
     "average_iters"?: number | null | undefined;
@@ -27,35 +27,35 @@ interface MrisSmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_smooth": mris_smooth_cargs,
+        "freesurfer.mris_smooth": mris_smooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_smooth": mris_smooth_outputs,
+        "freesurfer.mris_smooth": mris_smooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,23 @@ interface MrisSmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file for smoothing.
+ * @param output_surface Output surface file after smoothing.
+ * @param average_iters Specify number of curvature averaging iterations (default is 10).
+ * @param smoothing_iters Specify number of smoothing iterations (default is 10).
+ * @param no_write Disable writing of curvature and area estimates.
+ * @param curvature_name Write curvature to a specified file name (default 'curv').
+ * @param area_name Write area to a specified file name (default 'area').
+ * @param gaussian_params Use Gaussian curvature smoothing with specified norm and steps.
+ * @param normalize_area Normalize area after smoothing.
+ * @param momentum Set momentum value.
+ * @param snapshot_interval Write snapshot every specified number of iterations.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_smooth_params(
     input_surface: InputPathType,
     output_surface: string,
@@ -99,25 +116,8 @@ function mris_smooth_params(
     momentum: number | null = null,
     snapshot_interval: number | null = null,
 ): MrisSmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file for smoothing.
-     * @param output_surface Output surface file after smoothing.
-     * @param average_iters Specify number of curvature averaging iterations (default is 10).
-     * @param smoothing_iters Specify number of smoothing iterations (default is 10).
-     * @param no_write Disable writing of curvature and area estimates.
-     * @param curvature_name Write curvature to a specified file name (default 'curv').
-     * @param area_name Write area to a specified file name (default 'area').
-     * @param gaussian_params Use Gaussian curvature smoothing with specified norm and steps.
-     * @param normalize_area Normalize area after smoothing.
-     * @param momentum Set momentum value.
-     * @param snapshot_interval Write snapshot every specified number of iterations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_smooth" as const,
+        "@type": "freesurfer.mris_smooth" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "no_write": no_write,
@@ -148,18 +148,18 @@ function mris_smooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_smooth_cargs(
     params: MrisSmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_smooth");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -216,18 +216,18 @@ function mris_smooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_smooth_outputs(
     params: MrisSmoothParameters,
     execution: Execution,
 ): MrisSmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSmoothOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -238,22 +238,22 @@ function mris_smooth_outputs(
 }
 
 
+/**
+ * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
+ */
 function mris_smooth_execute(
     params: MrisSmoothParameters,
     execution: Execution,
 ): MrisSmoothOutputs {
-    /**
-     * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_smooth_cargs(params, execution)
     const ret = mris_smooth_outputs(params, execution)
@@ -262,6 +262,28 @@ function mris_smooth_execute(
 }
 
 
+/**
+ * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file for smoothing.
+ * @param output_surface Output surface file after smoothing.
+ * @param average_iters Specify number of curvature averaging iterations (default is 10).
+ * @param smoothing_iters Specify number of smoothing iterations (default is 10).
+ * @param no_write Disable writing of curvature and area estimates.
+ * @param curvature_name Write curvature to a specified file name (default 'curv').
+ * @param area_name Write area to a specified file name (default 'area').
+ * @param gaussian_params Use Gaussian curvature smoothing with specified norm and steps.
+ * @param normalize_area Normalize area after smoothing.
+ * @param momentum Set momentum value.
+ * @param snapshot_interval Write snapshot every specified number of iterations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
+ */
 function mris_smooth(
     input_surface: InputPathType,
     output_surface: string,
@@ -276,28 +298,6 @@ function mris_smooth(
     snapshot_interval: number | null = null,
     runner: Runner | null = null,
 ): MrisSmoothOutputs {
-    /**
-     * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file for smoothing.
-     * @param output_surface Output surface file after smoothing.
-     * @param average_iters Specify number of curvature averaging iterations (default is 10).
-     * @param smoothing_iters Specify number of smoothing iterations (default is 10).
-     * @param no_write Disable writing of curvature and area estimates.
-     * @param curvature_name Write curvature to a specified file name (default 'curv').
-     * @param area_name Write area to a specified file name (default 'area').
-     * @param gaussian_params Use Gaussian curvature smoothing with specified norm and steps.
-     * @param normalize_area Normalize area after smoothing.
-     * @param momentum Set momentum value.
-     * @param snapshot_interval Write snapshot every specified number of iterations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SMOOTH_METADATA);
     const params = mris_smooth_params(input_surface, output_surface, average_iters, smoothing_iters, no_write, curvature_name, area_name, gaussian_params, normalize_area, momentum, snapshot_interval)
@@ -310,5 +310,8 @@ export {
       MrisSmoothOutputs,
       MrisSmoothParameters,
       mris_smooth,
+      mris_smooth_cargs,
+      mris_smooth_execute,
+      mris_smooth_outputs,
       mris_smooth_params,
 };

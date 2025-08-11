@@ -12,7 +12,7 @@ const POSSUM_METADATA: Metadata = {
 
 
 interface PossumParameters {
-    "__STYXTYPE__": "possum";
+    "@type": "fsl.possum";
     "input_volume": InputPathType;
     "mr_parameters": InputPathType;
     "motion_matrix": InputPathType;
@@ -40,35 +40,35 @@ interface PossumParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "possum": possum_cargs,
+        "fsl.possum": possum_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "possum": possum_outputs,
+        "fsl.possum": possum_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,36 @@ interface PossumOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input 4D volume filename
+ * @param mr_parameters Input matrix filename containing MR parameters
+ * @param motion_matrix Input motion matrix filename (time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad))
+ * @param pulse_sequence Input matrix basename for pulse sequence files (.posx, .posy, etc.)
+ * @param rf_slice_profile Input matrix filename containing RF slice profile
+ * @param output_signal Output matrix filename for the signal
+ * @param event_matrix Main event matrix file [(t(s), rf_ang(rad), rf_freq_band(Hz), rf_cent_freq(Hz), ...)]
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param kcoord Save the k-space coordinates
+ * @param b0_inhomogeneities B0 inhomogeneities due to susceptibility differences (basename)
+ * @param extra_b0_inhomogeneities B0 inhomogeneities due to an extra field
+ * @param b0_inhomogeneities_timecourse B0 inhomogeneities timecourse file
+ * @param rf_inhomogeneity_receive RF inhomogeneity - receive
+ * @param rf_inhomogeneity_transmit RF inhomogeneity - transmit
+ * @param activation_volume Activation volume file
+ * @param activation_timecourse Activation time course file
+ * @param activation_4d_volume Activation 4D volume file
+ * @param activation_4d_timecourse Activation 4D time course file
+ * @param level Level of processing: 1.no motion//basic B0, 2.motion//basic B0, 3.motion//full B0, 4.no motion//time changing B0
+ * @param num_procs Number of processors available for parallelisation
+ * @param proc_id ID of the processor
+ * @param no_speedup If ON, will not do the speedup but perform signal calculation for all slices for each voxel
+ * @param rf_average If ON, it will use RF angle averaging
+ *
+ * @returns Parameter dictionary
+ */
 function possum_params(
     input_volume: InputPathType,
     mr_parameters: InputPathType,
@@ -117,38 +147,8 @@ function possum_params(
     no_speedup: boolean = false,
     rf_average: boolean = false,
 ): PossumParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input 4D volume filename
-     * @param mr_parameters Input matrix filename containing MR parameters
-     * @param motion_matrix Input motion matrix filename (time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad))
-     * @param pulse_sequence Input matrix basename for pulse sequence files (.posx, .posy, etc.)
-     * @param rf_slice_profile Input matrix filename containing RF slice profile
-     * @param output_signal Output matrix filename for the signal
-     * @param event_matrix Main event matrix file [(t(s), rf_ang(rad), rf_freq_band(Hz), rf_cent_freq(Hz), ...)]
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param kcoord Save the k-space coordinates
-     * @param b0_inhomogeneities B0 inhomogeneities due to susceptibility differences (basename)
-     * @param extra_b0_inhomogeneities B0 inhomogeneities due to an extra field
-     * @param b0_inhomogeneities_timecourse B0 inhomogeneities timecourse file
-     * @param rf_inhomogeneity_receive RF inhomogeneity - receive
-     * @param rf_inhomogeneity_transmit RF inhomogeneity - transmit
-     * @param activation_volume Activation volume file
-     * @param activation_timecourse Activation time course file
-     * @param activation_4d_volume Activation 4D volume file
-     * @param activation_4d_timecourse Activation 4D time course file
-     * @param level Level of processing: 1.no motion//basic B0, 2.motion//basic B0, 3.motion//full B0, 4.no motion//time changing B0
-     * @param num_procs Number of processors available for parallelisation
-     * @param proc_id ID of the processor
-     * @param no_speedup If ON, will not do the speedup but perform signal calculation for all slices for each voxel
-     * @param rf_average If ON, it will use RF angle averaging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "possum" as const,
+        "@type": "fsl.possum" as const,
         "input_volume": input_volume,
         "mr_parameters": mr_parameters,
         "motion_matrix": motion_matrix,
@@ -202,18 +202,18 @@ function possum_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function possum_cargs(
     params: PossumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("possum");
     cargs.push(
@@ -335,18 +335,18 @@ function possum_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function possum_outputs(
     params: PossumParameters,
     execution: Execution,
 ): PossumOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PossumOutputs = {
         root: execution.outputFile("."),
         output_matrix: execution.outputFile(["[OUTPUT_MATRIX].mat"].join('')),
@@ -355,22 +355,22 @@ function possum_outputs(
 }
 
 
+/**
+ * Positron emission tomography (PET) simulation tool as part of FSL suite.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PossumOutputs`).
+ */
 function possum_execute(
     params: PossumParameters,
     execution: Execution,
 ): PossumOutputs {
-    /**
-     * Positron emission tomography (PET) simulation tool as part of FSL suite.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PossumOutputs`).
-     */
     params = execution.params(params)
     const cargs = possum_cargs(params, execution)
     const ret = possum_outputs(params, execution)
@@ -379,6 +379,41 @@ function possum_execute(
 }
 
 
+/**
+ * Positron emission tomography (PET) simulation tool as part of FSL suite.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_volume Input 4D volume filename
+ * @param mr_parameters Input matrix filename containing MR parameters
+ * @param motion_matrix Input motion matrix filename (time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad))
+ * @param pulse_sequence Input matrix basename for pulse sequence files (.posx, .posy, etc.)
+ * @param rf_slice_profile Input matrix filename containing RF slice profile
+ * @param output_signal Output matrix filename for the signal
+ * @param event_matrix Main event matrix file [(t(s), rf_ang(rad), rf_freq_band(Hz), rf_cent_freq(Hz), ...)]
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param kcoord Save the k-space coordinates
+ * @param b0_inhomogeneities B0 inhomogeneities due to susceptibility differences (basename)
+ * @param extra_b0_inhomogeneities B0 inhomogeneities due to an extra field
+ * @param b0_inhomogeneities_timecourse B0 inhomogeneities timecourse file
+ * @param rf_inhomogeneity_receive RF inhomogeneity - receive
+ * @param rf_inhomogeneity_transmit RF inhomogeneity - transmit
+ * @param activation_volume Activation volume file
+ * @param activation_timecourse Activation time course file
+ * @param activation_4d_volume Activation 4D volume file
+ * @param activation_4d_timecourse Activation 4D time course file
+ * @param level Level of processing: 1.no motion//basic B0, 2.motion//basic B0, 3.motion//full B0, 4.no motion//time changing B0
+ * @param num_procs Number of processors available for parallelisation
+ * @param proc_id ID of the processor
+ * @param no_speedup If ON, will not do the speedup but perform signal calculation for all slices for each voxel
+ * @param rf_average If ON, it will use RF angle averaging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PossumOutputs`).
+ */
 function possum(
     input_volume: InputPathType,
     mr_parameters: InputPathType,
@@ -406,41 +441,6 @@ function possum(
     rf_average: boolean = false,
     runner: Runner | null = null,
 ): PossumOutputs {
-    /**
-     * Positron emission tomography (PET) simulation tool as part of FSL suite.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_volume Input 4D volume filename
-     * @param mr_parameters Input matrix filename containing MR parameters
-     * @param motion_matrix Input motion matrix filename (time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad))
-     * @param pulse_sequence Input matrix basename for pulse sequence files (.posx, .posy, etc.)
-     * @param rf_slice_profile Input matrix filename containing RF slice profile
-     * @param output_signal Output matrix filename for the signal
-     * @param event_matrix Main event matrix file [(t(s), rf_ang(rad), rf_freq_band(Hz), rf_cent_freq(Hz), ...)]
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param kcoord Save the k-space coordinates
-     * @param b0_inhomogeneities B0 inhomogeneities due to susceptibility differences (basename)
-     * @param extra_b0_inhomogeneities B0 inhomogeneities due to an extra field
-     * @param b0_inhomogeneities_timecourse B0 inhomogeneities timecourse file
-     * @param rf_inhomogeneity_receive RF inhomogeneity - receive
-     * @param rf_inhomogeneity_transmit RF inhomogeneity - transmit
-     * @param activation_volume Activation volume file
-     * @param activation_timecourse Activation time course file
-     * @param activation_4d_volume Activation 4D volume file
-     * @param activation_4d_timecourse Activation 4D time course file
-     * @param level Level of processing: 1.no motion//basic B0, 2.motion//basic B0, 3.motion//full B0, 4.no motion//time changing B0
-     * @param num_procs Number of processors available for parallelisation
-     * @param proc_id ID of the processor
-     * @param no_speedup If ON, will not do the speedup but perform signal calculation for all slices for each voxel
-     * @param rf_average If ON, it will use RF angle averaging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PossumOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POSSUM_METADATA);
     const params = possum_params(input_volume, mr_parameters, motion_matrix, pulse_sequence, rf_slice_profile, output_signal, event_matrix, verbose, help, kcoord, b0_inhomogeneities, extra_b0_inhomogeneities, b0_inhomogeneities_timecourse, rf_inhomogeneity_receive, rf_inhomogeneity_transmit, activation_volume, activation_timecourse, activation_4d_volume, activation_4d_timecourse, level, num_procs, proc_id, no_speedup, rf_average)
@@ -453,5 +453,8 @@ export {
       PossumOutputs,
       PossumParameters,
       possum,
+      possum_cargs,
+      possum_execute,
+      possum_outputs,
       possum_params,
 };

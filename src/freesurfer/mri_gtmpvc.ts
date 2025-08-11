@@ -12,7 +12,7 @@ const MRI_GTMPVC_METADATA: Metadata = {
 
 
 interface MriGtmpvcParameters {
-    "__STYXTYPE__": "mri_gtmpvc";
+    "@type": "freesurfer.mri_gtmpvc";
     "input_volume": InputPathType;
     "frame"?: number | null | undefined;
     "psf": number;
@@ -78,35 +78,35 @@ interface MriGtmpvcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gtmpvc": mri_gtmpvc_cargs,
+        "freesurfer.mri_gtmpvc": mri_gtmpvc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gtmpvc": mri_gtmpvc_outputs,
+        "freesurfer.mri_gtmpvc": mri_gtmpvc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -173,6 +173,74 @@ interface MriGtmpvcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume: source data to PVC
+ * @param psf Scanner PSF FWHM in mm
+ * @param segmentation Anatomical segmentation to define regions for GTM
+ * @param output_directory Output directory
+ * @param frame Only process 0-based frame F from input volume
+ * @param registration LTA registration file that maps PET to anatomical
+ * @param regheader Assume input and seg share scanner space
+ * @param reg_identity Assume that input is in anatomical space
+ * @param mask Ignore areas outside of the mask (in input vol space)
+ * @param auto_mask Automatically compute mask with FWHM and threshold
+ * @param no_reduce_fov Do not reduce FoV to encompass mask
+ * @param reduce_fov_eqodd Reduce FoV to encompass mask but force nc=nr and ns to be odd
+ * @param contrast_matrix Univariate contrast to test
+ * @param default_seg_merge Default schema for merging ROIs
+ * @param merge_hypos Merge left and right hypointensites into ROI
+ * @param merge_cblum_wm_gyri Cerebellum WM gyri back into cerebellum WM
+ * @param tt_reduce Reduce segmentation to that of a tissue type
+ * @param replace_seg Replace seg Id1 with seg Id2
+ * @param replace_file File with a list of Ids to replace
+ * @param rescale Specify reference region(s) used to rescale (default is pons)
+ * @param no_rescale Do not global rescale such that mean of reference region is scaleref
+ * @param scale_refval Scale such that mean in reference region is refval
+ * @param ctab Specify color table explicitly
+ * @param ctab_default Use default color table
+ * @param tt_update Changes tissue type of VentralDC, BrainStem, and Pons to be SubcortGM
+ * @param lateralization Lateralize tissue types
+ * @param no_tfe Do not correct for tissue fraction effect
+ * @param no_pvc Turns off PVC entirely
+ * @param segpvfres Set the tissue fraction resolution parameter (default is 0.5)
+ * @param rbv Perform RBV PVC
+ * @param rbv_res Set RBV voxel resolution
+ * @param mueller_pvc Perform Mueller-Gaertner PVC
+ * @param mg_ref_cerebral_wm Set MG RefIds to 2 and 41
+ * @param mg_ref_lobes_wm Set MG RefIds to those for lobes when using wm subseg
+ * @param glm_mg_pvc GLM-based Mueller-Gaertner PVC
+ * @param km_ref Compute reference TAC for KM as mean of given RefIds
+ * @param km_hb Compute HiBinding TAC for KM as mean of given RefIds
+ * @param steady_state Steady-state analysis spec blood plasma concentration, unit scale, and decay correction factor.
+ * @param save_x Save X matrix in matlab4 format as X.mat
+ * @param save_y Save y matrix in matlab4 format as y.mat
+ * @param save_beta Save beta matrix in matlab4 format as beta.mat
+ * @param save_x0 Save X0 matrix in matlab4 format as X0.mat
+ * @param save_input Saves rescaled input as input.rescaled.nii.gz
+ * @param save_eres Saves residual error
+ * @param save_yhat Saves yhat
+ * @param save_yhat_noise Saves yhat with noise, seed < 0 for TOD
+ * @param save_yhat_full_fov Saves yhat in full FoV (if FoV was reduced)
+ * @param save_yhat0 Saves yhat prior to smoothing
+ * @param synth Synthesize volume with gtmbeta as input
+ * @param synth_only Exit after doing synthesis (implies --synth-save)
+ * @param synth_save With --synth saves synthesized volume to outdir/synth.nii.gz
+ * @param save_text Save demeaned GTM values out to text files named after the seg
+ * @param threads Use N threads (with Open MP)
+ * @param max_threads Use the maximum allowable number of threads for this computer
+ * @param max_threads_minus_one Use one less than the maximum allowable number of threads for this computer
+ * @param subjects_dir Specify SUBJECTS_DIR
+ * @param vg_thresh Threshold for LTAconcat error
+ * @param gdiag Set diagnostic level
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gtmpvc_params(
     input_volume: InputPathType,
     psf: number,
@@ -237,76 +305,8 @@ function mri_gtmpvc_params(
     help: boolean = false,
     version: boolean = false,
 ): MriGtmpvcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume: source data to PVC
-     * @param psf Scanner PSF FWHM in mm
-     * @param segmentation Anatomical segmentation to define regions for GTM
-     * @param output_directory Output directory
-     * @param frame Only process 0-based frame F from input volume
-     * @param registration LTA registration file that maps PET to anatomical
-     * @param regheader Assume input and seg share scanner space
-     * @param reg_identity Assume that input is in anatomical space
-     * @param mask Ignore areas outside of the mask (in input vol space)
-     * @param auto_mask Automatically compute mask with FWHM and threshold
-     * @param no_reduce_fov Do not reduce FoV to encompass mask
-     * @param reduce_fov_eqodd Reduce FoV to encompass mask but force nc=nr and ns to be odd
-     * @param contrast_matrix Univariate contrast to test
-     * @param default_seg_merge Default schema for merging ROIs
-     * @param merge_hypos Merge left and right hypointensites into ROI
-     * @param merge_cblum_wm_gyri Cerebellum WM gyri back into cerebellum WM
-     * @param tt_reduce Reduce segmentation to that of a tissue type
-     * @param replace_seg Replace seg Id1 with seg Id2
-     * @param replace_file File with a list of Ids to replace
-     * @param rescale Specify reference region(s) used to rescale (default is pons)
-     * @param no_rescale Do not global rescale such that mean of reference region is scaleref
-     * @param scale_refval Scale such that mean in reference region is refval
-     * @param ctab Specify color table explicitly
-     * @param ctab_default Use default color table
-     * @param tt_update Changes tissue type of VentralDC, BrainStem, and Pons to be SubcortGM
-     * @param lateralization Lateralize tissue types
-     * @param no_tfe Do not correct for tissue fraction effect
-     * @param no_pvc Turns off PVC entirely
-     * @param segpvfres Set the tissue fraction resolution parameter (default is 0.5)
-     * @param rbv Perform RBV PVC
-     * @param rbv_res Set RBV voxel resolution
-     * @param mueller_pvc Perform Mueller-Gaertner PVC
-     * @param mg_ref_cerebral_wm Set MG RefIds to 2 and 41
-     * @param mg_ref_lobes_wm Set MG RefIds to those for lobes when using wm subseg
-     * @param glm_mg_pvc GLM-based Mueller-Gaertner PVC
-     * @param km_ref Compute reference TAC for KM as mean of given RefIds
-     * @param km_hb Compute HiBinding TAC for KM as mean of given RefIds
-     * @param steady_state Steady-state analysis spec blood plasma concentration, unit scale, and decay correction factor.
-     * @param save_x Save X matrix in matlab4 format as X.mat
-     * @param save_y Save y matrix in matlab4 format as y.mat
-     * @param save_beta Save beta matrix in matlab4 format as beta.mat
-     * @param save_x0 Save X0 matrix in matlab4 format as X0.mat
-     * @param save_input Saves rescaled input as input.rescaled.nii.gz
-     * @param save_eres Saves residual error
-     * @param save_yhat Saves yhat
-     * @param save_yhat_noise Saves yhat with noise, seed < 0 for TOD
-     * @param save_yhat_full_fov Saves yhat in full FoV (if FoV was reduced)
-     * @param save_yhat0 Saves yhat prior to smoothing
-     * @param synth Synthesize volume with gtmbeta as input
-     * @param synth_only Exit after doing synthesis (implies --synth-save)
-     * @param synth_save With --synth saves synthesized volume to outdir/synth.nii.gz
-     * @param save_text Save demeaned GTM values out to text files named after the seg
-     * @param threads Use N threads (with Open MP)
-     * @param max_threads Use the maximum allowable number of threads for this computer
-     * @param max_threads_minus_one Use one less than the maximum allowable number of threads for this computer
-     * @param subjects_dir Specify SUBJECTS_DIR
-     * @param vg_thresh Threshold for LTAconcat error
-     * @param gdiag Set diagnostic level
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gtmpvc" as const,
+        "@type": "freesurfer.mri_gtmpvc" as const,
         "input_volume": input_volume,
         "psf": psf,
         "segmentation": segmentation,
@@ -420,18 +420,18 @@ function mri_gtmpvc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gtmpvc_cargs(
     params: MriGtmpvcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gtmpvc");
     cargs.push(
@@ -697,18 +697,18 @@ function mri_gtmpvc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gtmpvc_outputs(
     params: MriGtmpvcParameters,
     execution: Execution,
 ): MriGtmpvcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGtmpvcOutputs = {
         root: execution.outputFile("."),
         synthesized_volume: execution.outputFile([(params["output_directory"] ?? null), "/synth.nii.gz"].join('')),
@@ -728,22 +728,22 @@ function mri_gtmpvc_outputs(
 }
 
 
+/**
+ * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
+ */
 function mri_gtmpvc_execute(
     params: MriGtmpvcParameters,
     execution: Execution,
 ): MriGtmpvcOutputs {
-    /**
-     * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gtmpvc_cargs(params, execution)
     const ret = mri_gtmpvc_outputs(params, execution)
@@ -752,6 +752,79 @@ function mri_gtmpvc_execute(
 }
 
 
+/**
+ * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume: source data to PVC
+ * @param psf Scanner PSF FWHM in mm
+ * @param segmentation Anatomical segmentation to define regions for GTM
+ * @param output_directory Output directory
+ * @param frame Only process 0-based frame F from input volume
+ * @param registration LTA registration file that maps PET to anatomical
+ * @param regheader Assume input and seg share scanner space
+ * @param reg_identity Assume that input is in anatomical space
+ * @param mask Ignore areas outside of the mask (in input vol space)
+ * @param auto_mask Automatically compute mask with FWHM and threshold
+ * @param no_reduce_fov Do not reduce FoV to encompass mask
+ * @param reduce_fov_eqodd Reduce FoV to encompass mask but force nc=nr and ns to be odd
+ * @param contrast_matrix Univariate contrast to test
+ * @param default_seg_merge Default schema for merging ROIs
+ * @param merge_hypos Merge left and right hypointensites into ROI
+ * @param merge_cblum_wm_gyri Cerebellum WM gyri back into cerebellum WM
+ * @param tt_reduce Reduce segmentation to that of a tissue type
+ * @param replace_seg Replace seg Id1 with seg Id2
+ * @param replace_file File with a list of Ids to replace
+ * @param rescale Specify reference region(s) used to rescale (default is pons)
+ * @param no_rescale Do not global rescale such that mean of reference region is scaleref
+ * @param scale_refval Scale such that mean in reference region is refval
+ * @param ctab Specify color table explicitly
+ * @param ctab_default Use default color table
+ * @param tt_update Changes tissue type of VentralDC, BrainStem, and Pons to be SubcortGM
+ * @param lateralization Lateralize tissue types
+ * @param no_tfe Do not correct for tissue fraction effect
+ * @param no_pvc Turns off PVC entirely
+ * @param segpvfres Set the tissue fraction resolution parameter (default is 0.5)
+ * @param rbv Perform RBV PVC
+ * @param rbv_res Set RBV voxel resolution
+ * @param mueller_pvc Perform Mueller-Gaertner PVC
+ * @param mg_ref_cerebral_wm Set MG RefIds to 2 and 41
+ * @param mg_ref_lobes_wm Set MG RefIds to those for lobes when using wm subseg
+ * @param glm_mg_pvc GLM-based Mueller-Gaertner PVC
+ * @param km_ref Compute reference TAC for KM as mean of given RefIds
+ * @param km_hb Compute HiBinding TAC for KM as mean of given RefIds
+ * @param steady_state Steady-state analysis spec blood plasma concentration, unit scale, and decay correction factor.
+ * @param save_x Save X matrix in matlab4 format as X.mat
+ * @param save_y Save y matrix in matlab4 format as y.mat
+ * @param save_beta Save beta matrix in matlab4 format as beta.mat
+ * @param save_x0 Save X0 matrix in matlab4 format as X0.mat
+ * @param save_input Saves rescaled input as input.rescaled.nii.gz
+ * @param save_eres Saves residual error
+ * @param save_yhat Saves yhat
+ * @param save_yhat_noise Saves yhat with noise, seed < 0 for TOD
+ * @param save_yhat_full_fov Saves yhat in full FoV (if FoV was reduced)
+ * @param save_yhat0 Saves yhat prior to smoothing
+ * @param synth Synthesize volume with gtmbeta as input
+ * @param synth_only Exit after doing synthesis (implies --synth-save)
+ * @param synth_save With --synth saves synthesized volume to outdir/synth.nii.gz
+ * @param save_text Save demeaned GTM values out to text files named after the seg
+ * @param threads Use N threads (with Open MP)
+ * @param max_threads Use the maximum allowable number of threads for this computer
+ * @param max_threads_minus_one Use one less than the maximum allowable number of threads for this computer
+ * @param subjects_dir Specify SUBJECTS_DIR
+ * @param vg_thresh Threshold for LTAconcat error
+ * @param gdiag Set diagnostic level
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
+ */
 function mri_gtmpvc(
     input_volume: InputPathType,
     psf: number,
@@ -817,79 +890,6 @@ function mri_gtmpvc(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriGtmpvcOutputs {
-    /**
-     * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume: source data to PVC
-     * @param psf Scanner PSF FWHM in mm
-     * @param segmentation Anatomical segmentation to define regions for GTM
-     * @param output_directory Output directory
-     * @param frame Only process 0-based frame F from input volume
-     * @param registration LTA registration file that maps PET to anatomical
-     * @param regheader Assume input and seg share scanner space
-     * @param reg_identity Assume that input is in anatomical space
-     * @param mask Ignore areas outside of the mask (in input vol space)
-     * @param auto_mask Automatically compute mask with FWHM and threshold
-     * @param no_reduce_fov Do not reduce FoV to encompass mask
-     * @param reduce_fov_eqodd Reduce FoV to encompass mask but force nc=nr and ns to be odd
-     * @param contrast_matrix Univariate contrast to test
-     * @param default_seg_merge Default schema for merging ROIs
-     * @param merge_hypos Merge left and right hypointensites into ROI
-     * @param merge_cblum_wm_gyri Cerebellum WM gyri back into cerebellum WM
-     * @param tt_reduce Reduce segmentation to that of a tissue type
-     * @param replace_seg Replace seg Id1 with seg Id2
-     * @param replace_file File with a list of Ids to replace
-     * @param rescale Specify reference region(s) used to rescale (default is pons)
-     * @param no_rescale Do not global rescale such that mean of reference region is scaleref
-     * @param scale_refval Scale such that mean in reference region is refval
-     * @param ctab Specify color table explicitly
-     * @param ctab_default Use default color table
-     * @param tt_update Changes tissue type of VentralDC, BrainStem, and Pons to be SubcortGM
-     * @param lateralization Lateralize tissue types
-     * @param no_tfe Do not correct for tissue fraction effect
-     * @param no_pvc Turns off PVC entirely
-     * @param segpvfres Set the tissue fraction resolution parameter (default is 0.5)
-     * @param rbv Perform RBV PVC
-     * @param rbv_res Set RBV voxel resolution
-     * @param mueller_pvc Perform Mueller-Gaertner PVC
-     * @param mg_ref_cerebral_wm Set MG RefIds to 2 and 41
-     * @param mg_ref_lobes_wm Set MG RefIds to those for lobes when using wm subseg
-     * @param glm_mg_pvc GLM-based Mueller-Gaertner PVC
-     * @param km_ref Compute reference TAC for KM as mean of given RefIds
-     * @param km_hb Compute HiBinding TAC for KM as mean of given RefIds
-     * @param steady_state Steady-state analysis spec blood plasma concentration, unit scale, and decay correction factor.
-     * @param save_x Save X matrix in matlab4 format as X.mat
-     * @param save_y Save y matrix in matlab4 format as y.mat
-     * @param save_beta Save beta matrix in matlab4 format as beta.mat
-     * @param save_x0 Save X0 matrix in matlab4 format as X0.mat
-     * @param save_input Saves rescaled input as input.rescaled.nii.gz
-     * @param save_eres Saves residual error
-     * @param save_yhat Saves yhat
-     * @param save_yhat_noise Saves yhat with noise, seed < 0 for TOD
-     * @param save_yhat_full_fov Saves yhat in full FoV (if FoV was reduced)
-     * @param save_yhat0 Saves yhat prior to smoothing
-     * @param synth Synthesize volume with gtmbeta as input
-     * @param synth_only Exit after doing synthesis (implies --synth-save)
-     * @param synth_save With --synth saves synthesized volume to outdir/synth.nii.gz
-     * @param save_text Save demeaned GTM values out to text files named after the seg
-     * @param threads Use N threads (with Open MP)
-     * @param max_threads Use the maximum allowable number of threads for this computer
-     * @param max_threads_minus_one Use one less than the maximum allowable number of threads for this computer
-     * @param subjects_dir Specify SUBJECTS_DIR
-     * @param vg_thresh Threshold for LTAconcat error
-     * @param gdiag Set diagnostic level
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GTMPVC_METADATA);
     const params = mri_gtmpvc_params(input_volume, psf, segmentation, output_directory, frame, registration, regheader, reg_identity, mask, auto_mask, no_reduce_fov, reduce_fov_eqodd, contrast_matrix, default_seg_merge, merge_hypos, merge_cblum_wm_gyri, tt_reduce, replace_seg, replace_file, rescale, no_rescale, scale_refval, ctab, ctab_default, tt_update, lateralization, no_tfe, no_pvc, segpvfres, rbv, rbv_res, mueller_pvc, mg_ref_cerebral_wm, mg_ref_lobes_wm, glm_mg_pvc, km_ref, km_hb, steady_state, save_x, save_y, save_beta, save_x0, save_input, save_eres, save_yhat, save_yhat_noise, save_yhat_full_fov, save_yhat0, synth, synth_only, synth_save, save_text, threads, max_threads, max_threads_minus_one, subjects_dir, vg_thresh, gdiag, debug, checkopts, help, version)
@@ -902,5 +902,8 @@ export {
       MriGtmpvcOutputs,
       MriGtmpvcParameters,
       mri_gtmpvc,
+      mri_gtmpvc_cargs,
+      mri_gtmpvc_execute,
+      mri_gtmpvc_outputs,
       mri_gtmpvc_params,
 };

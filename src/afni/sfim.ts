@@ -12,7 +12,7 @@ const SFIM_METADATA: Metadata = {
 
 
 interface SfimParameters {
-    "__STYXTYPE__": "sfim";
+    "@type": "afni.sfim";
     "input_images": Array<InputPathType>;
     "sfint_file"?: string | null | undefined;
     "baseline_state"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface SfimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sfim": sfim_cargs,
+        "afni.sfim": sfim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sfim": sfim_outputs,
+        "afni.sfim": sfim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface SfimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_images Input image files in formats accepted by AFNI
+ * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
+ * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
+ * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
+ * @param output_prefix Prefix for output image filenames for all states. The i'th interval with task state name 'fred' will be written to file 'pname.fred.i'. Default is 'sfim'.
+ *
+ * @returns Parameter dictionary
+ */
 function sfim_params(
     input_images: Array<InputPathType>,
     sfint_file: string | null = null,
@@ -79,19 +90,8 @@ function sfim_params(
     local_base_option: boolean = false,
     output_prefix: string | null = null,
 ): SfimParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_images Input image files in formats accepted by AFNI
-     * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
-     * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
-     * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
-     * @param output_prefix Prefix for output image filenames for all states. The i'th interval with task state name 'fred' will be written to file 'pname.fred.i'. Default is 'sfim'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sfim" as const,
+        "@type": "afni.sfim" as const,
         "input_images": input_images,
         "local_base_option": local_base_option,
     };
@@ -108,18 +108,18 @@ function sfim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sfim_cargs(
     params: SfimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sfim");
     cargs.push(...(params["input_images"] ?? null).map(f => execution.inputFile(f)));
@@ -148,18 +148,18 @@ function sfim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sfim_outputs(
     params: SfimParameters,
     execution: Execution,
 ): SfimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SfimOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".*.i"].join('')) : null,
@@ -168,22 +168,22 @@ function sfim_outputs(
 }
 
 
+/**
+ * Stepwise Functional IMages.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SfimOutputs`).
+ */
 function sfim_execute(
     params: SfimParameters,
     execution: Execution,
 ): SfimOutputs {
-    /**
-     * Stepwise Functional IMages.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SfimOutputs`).
-     */
     params = execution.params(params)
     const cargs = sfim_cargs(params, execution)
     const ret = sfim_outputs(params, execution)
@@ -192,6 +192,22 @@ function sfim_execute(
 }
 
 
+/**
+ * Stepwise Functional IMages.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_images Input image files in formats accepted by AFNI
+ * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
+ * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
+ * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
+ * @param output_prefix Prefix for output image filenames for all states. The i'th interval with task state name 'fred' will be written to file 'pname.fred.i'. Default is 'sfim'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SfimOutputs`).
+ */
 function sfim(
     input_images: Array<InputPathType>,
     sfint_file: string | null = null,
@@ -200,22 +216,6 @@ function sfim(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): SfimOutputs {
-    /**
-     * Stepwise Functional IMages.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_images Input image files in formats accepted by AFNI
-     * @param sfint_file Filename which contains the interval definitions. Default is 'sfint'. Example: '3*# 5*rest 4*A 5*rest 4*B 5*rest 4*A 5*rest'
-     * @param baseline_state Task state name to use as the baseline. Default is 'rest'.
-     * @param local_base_option Flag to indicate if each non-base task state interval should have the mean of the two nearest base intervals subtracted instead of the grand mean of all the base task intervals.
-     * @param output_prefix Prefix for output image filenames for all states. The i'th interval with task state name 'fred' will be written to file 'pname.fred.i'. Default is 'sfim'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SfimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SFIM_METADATA);
     const params = sfim_params(input_images, sfint_file, baseline_state, local_base_option, output_prefix)
@@ -228,5 +228,8 @@ export {
       SfimOutputs,
       SfimParameters,
       sfim,
+      sfim_cargs,
+      sfim_execute,
+      sfim_outputs,
       sfim_params,
 };

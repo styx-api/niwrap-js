@@ -12,41 +12,41 @@ const ROTCOM_METADATA: Metadata = {
 
 
 interface RotcomParameters {
-    "__STYXTYPE__": "rotcom";
+    "@type": "afni.rotcom";
     "rotate_ashift": string;
     "dataset"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rotcom": rotcom_cargs,
+        "afni.rotcom": rotcom_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "rotcom": rotcom_outputs,
+        "afni.rotcom": rotcom_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface RotcomOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rotate_ashift Combination of rotate and ashift options in a single quoted string (e.g., '-rotate 10I 0R 0A -ashift 5S 0 0')
+ * @param dataset Input dataset for determining coordinate order
+ *
+ * @returns Parameter dictionary
+ */
 function rotcom_params(
     rotate_ashift: string,
     dataset: InputPathType | null = null,
 ): RotcomParameters {
-    /**
-     * Build parameters.
-    
-     * @param rotate_ashift Combination of rotate and ashift options in a single quoted string (e.g., '-rotate 10I 0R 0A -ashift 5S 0 0')
-     * @param dataset Input dataset for determining coordinate order
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rotcom" as const,
+        "@type": "afni.rotcom" as const,
         "rotate_ashift": rotate_ashift,
     };
     if (dataset !== null) {
@@ -92,18 +92,18 @@ function rotcom_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rotcom_cargs(
     params: RotcomParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rotcom");
     cargs.push((params["rotate_ashift"] ?? null));
@@ -114,18 +114,18 @@ function rotcom_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rotcom_outputs(
     params: RotcomParameters,
     execution: Execution,
 ): RotcomOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RotcomOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout"].join('')),
@@ -134,22 +134,22 @@ function rotcom_outputs(
 }
 
 
+/**
+ * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RotcomOutputs`).
+ */
 function rotcom_execute(
     params: RotcomParameters,
     execution: Execution,
 ): RotcomOutputs {
-    /**
-     * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RotcomOutputs`).
-     */
     params = execution.params(params)
     const cargs = rotcom_cargs(params, execution)
     const ret = rotcom_outputs(params, execution)
@@ -158,24 +158,24 @@ function rotcom_execute(
 }
 
 
+/**
+ * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param rotate_ashift Combination of rotate and ashift options in a single quoted string (e.g., '-rotate 10I 0R 0A -ashift 5S 0 0')
+ * @param dataset Input dataset for determining coordinate order
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RotcomOutputs`).
+ */
 function rotcom(
     rotate_ashift: string,
     dataset: InputPathType | null = null,
     runner: Runner | null = null,
 ): RotcomOutputs {
-    /**
-     * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param rotate_ashift Combination of rotate and ashift options in a single quoted string (e.g., '-rotate 10I 0R 0A -ashift 5S 0 0')
-     * @param dataset Input dataset for determining coordinate order
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RotcomOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ROTCOM_METADATA);
     const params = rotcom_params(rotate_ashift, dataset)
@@ -188,5 +188,8 @@ export {
       RotcomOutputs,
       RotcomParameters,
       rotcom,
+      rotcom_cargs,
+      rotcom_execute,
+      rotcom_outputs,
       rotcom_params,
 };

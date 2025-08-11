@@ -12,27 +12,27 @@ const VOLUME_WEIGHTED_STATS_METADATA: Metadata = {
 
 
 interface VolumeWeightedStatsWeightVolumeParameters {
-    "__STYXTYPE__": "weight_volume";
+    "@type": "workbench.volume-weighted-stats.weight_volume";
     "weight_volume": InputPathType;
     "opt_match_maps": boolean;
 }
 
 
 interface VolumeWeightedStatsRoiParameters {
-    "__STYXTYPE__": "roi";
+    "@type": "workbench.volume-weighted-stats.roi";
     "roi_volume": InputPathType;
     "opt_match_maps": boolean;
 }
 
 
 interface VolumeWeightedStatsStdevParameters {
-    "__STYXTYPE__": "stdev";
+    "@type": "workbench.volume-weighted-stats.stdev";
     "opt_sample": boolean;
 }
 
 
 interface VolumeWeightedStatsParameters {
-    "__STYXTYPE__": "volume-weighted-stats";
+    "@type": "workbench.volume-weighted-stats";
     "volume_in": InputPathType;
     "weight_volume"?: VolumeWeightedStatsWeightVolumeParameters | null | undefined;
     "opt_subvolume_subvolume"?: string | null | undefined;
@@ -45,56 +45,56 @@ interface VolumeWeightedStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-weighted-stats": volume_weighted_stats_cargs,
-        "weight_volume": volume_weighted_stats_weight_volume_cargs,
-        "roi": volume_weighted_stats_roi_cargs,
-        "stdev": volume_weighted_stats_stdev_cargs,
+        "workbench.volume-weighted-stats": volume_weighted_stats_cargs,
+        "workbench.volume-weighted-stats.weight_volume": volume_weighted_stats_weight_volume_cargs,
+        "workbench.volume-weighted-stats.roi": volume_weighted_stats_roi_cargs,
+        "workbench.volume-weighted-stats.stdev": volume_weighted_stats_stdev_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param weight_volume volume file containing the weights
+ * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the weights file
+ *
+ * @returns Parameter dictionary
+ */
 function volume_weighted_stats_weight_volume_params(
     weight_volume: InputPathType,
     opt_match_maps: boolean = false,
 ): VolumeWeightedStatsWeightVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param weight_volume volume file containing the weights
-     * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the weights file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "weight_volume" as const,
+        "@type": "workbench.volume-weighted-stats.weight_volume" as const,
         "weight_volume": weight_volume,
         "opt_match_maps": opt_match_maps,
     };
@@ -102,18 +102,18 @@ function volume_weighted_stats_weight_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_weighted_stats_weight_volume_cargs(
     params: VolumeWeightedStatsWeightVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-weight-volume");
     cargs.push(execution.inputFile((params["weight_volume"] ?? null)));
@@ -124,20 +124,20 @@ function volume_weighted_stats_weight_volume_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_volume the roi, as a volume file
+ * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the roi file
+ *
+ * @returns Parameter dictionary
+ */
 function volume_weighted_stats_roi_params(
     roi_volume: InputPathType,
     opt_match_maps: boolean = false,
 ): VolumeWeightedStatsRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_volume the roi, as a volume file
-     * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the roi file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi" as const,
+        "@type": "workbench.volume-weighted-stats.roi" as const,
         "roi_volume": roi_volume,
         "opt_match_maps": opt_match_maps,
     };
@@ -145,18 +145,18 @@ function volume_weighted_stats_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_weighted_stats_roi_cargs(
     params: VolumeWeightedStatsRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
@@ -167,36 +167,36 @@ function volume_weighted_stats_roi_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_sample estimate population stdev from the sample
+ *
+ * @returns Parameter dictionary
+ */
 function volume_weighted_stats_stdev_params(
     opt_sample: boolean = false,
 ): VolumeWeightedStatsStdevParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_sample estimate population stdev from the sample
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stdev" as const,
+        "@type": "workbench.volume-weighted-stats.stdev" as const,
         "opt_sample": opt_sample,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_weighted_stats_stdev_cargs(
     params: VolumeWeightedStatsStdevParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-stdev");
     if ((params["opt_sample"] ?? null)) {
@@ -219,6 +219,21 @@ interface VolumeWeightedStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input volume
+ * @param weight_volume use weights from a volume file
+ * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ *
+ * @returns Parameter dictionary
+ */
 function volume_weighted_stats_params(
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
@@ -230,23 +245,8 @@ function volume_weighted_stats_params(
     opt_sum: boolean = false,
     opt_show_map_name: boolean = false,
 ): VolumeWeightedStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input volume
-     * @param weight_volume use weights from a volume file
-     * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-weighted-stats" as const,
+        "@type": "workbench.volume-weighted-stats" as const,
         "volume_in": volume_in,
         "opt_mean": opt_mean,
         "opt_sum": opt_sum,
@@ -271,24 +271,24 @@ function volume_weighted_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_weighted_stats_cargs(
     params: VolumeWeightedStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-weighted-stats");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     if ((params["weight_volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["weight_volume"] ?? null).__STYXTYPE__)((params["weight_volume"] ?? null), execution));
+        cargs.push(...dynCargs((params["weight_volume"] ?? null)["@type"])((params["weight_volume"] ?? null), execution));
     }
     if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
         cargs.push(
@@ -297,13 +297,13 @@ function volume_weighted_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null).__STYXTYPE__)((params["roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
     }
     if ((params["opt_mean"] ?? null)) {
         cargs.push("-mean");
     }
     if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["stdev"] ?? null).__STYXTYPE__)((params["stdev"] ?? null), execution));
+        cargs.push(...dynCargs((params["stdev"] ?? null)["@type"])((params["stdev"] ?? null), execution));
     }
     if ((params["opt_percentile_percent"] ?? null) !== null) {
         cargs.push(
@@ -321,18 +321,18 @@ function volume_weighted_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_weighted_stats_outputs(
     params: VolumeWeightedStatsParameters,
     execution: Execution,
 ): VolumeWeightedStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeWeightedStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -340,26 +340,26 @@ function volume_weighted_stats_outputs(
 }
 
 
+/**
+ * Weighted spatial statistics on a volume file.
+ *
+ * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
+ */
 function volume_weighted_stats_execute(
     params: VolumeWeightedStatsParameters,
     execution: Execution,
 ): VolumeWeightedStatsOutputs {
-    /**
-     * Weighted spatial statistics on a volume file.
-     * 
-     * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_weighted_stats_cargs(params, execution)
     const ret = volume_weighted_stats_outputs(params, execution)
@@ -368,6 +368,30 @@ function volume_weighted_stats_execute(
 }
 
 
+/**
+ * Weighted spatial statistics on a volume file.
+ *
+ * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input volume
+ * @param weight_volume use weights from a volume file
+ * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
+ */
 function volume_weighted_stats(
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
@@ -380,30 +404,6 @@ function volume_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
-    /**
-     * Weighted spatial statistics on a volume file.
-     * 
-     * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input volume
-     * @param weight_volume use weights from a volume file
-     * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_WEIGHTED_STATS_METADATA);
     const params = volume_weighted_stats_params(volume_in, weight_volume, opt_subvolume_subvolume, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
@@ -419,8 +419,14 @@ export {
       VolumeWeightedStatsStdevParameters,
       VolumeWeightedStatsWeightVolumeParameters,
       volume_weighted_stats,
+      volume_weighted_stats_cargs,
+      volume_weighted_stats_execute,
+      volume_weighted_stats_outputs,
       volume_weighted_stats_params,
+      volume_weighted_stats_roi_cargs,
       volume_weighted_stats_roi_params,
+      volume_weighted_stats_stdev_cargs,
       volume_weighted_stats_stdev_params,
+      volume_weighted_stats_weight_volume_cargs,
       volume_weighted_stats_weight_volume_params,
 };

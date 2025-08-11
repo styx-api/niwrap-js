@@ -12,7 +12,7 @@ const LTA_DIFF_METADATA: Metadata = {
 
 
 interface LtaDiffParameters {
-    "__STYXTYPE__": "lta_diff";
+    "@type": "freesurfer.lta_diff";
     "transform1": InputPathType;
     "transform2"?: InputPathType | null | undefined;
     "dist_type"?: number | null | undefined;
@@ -24,33 +24,33 @@ interface LtaDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "lta_diff": lta_diff_cargs,
+        "freesurfer.lta_diff": lta_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface LtaDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform1 First transform file
+ * @param transform2 Second transform file
+ * @param dist_type Distance type: 1 (Rigid Trans. Dist.), 2 (Affine Transform Distance), 3 (8-corners mean distance), 4 (Max Displacement), 5 (Determinant scaling), 6 (Interpolation Smoothing), 7 (Decomposition). Default is 2.
+ * @param invert1 Invert first transform before computing difference matrix D
+ * @param invert2 Invert second transform before computing difference matrix D
+ * @param vox Compute distance in vox coordinates, after adjusting for voxel sizes. Default is RAS coordinates.
+ * @param normdiv Divide final distance by this value for step adjustment.
+ * @param radius Radius in mm, used for RMS distance. Default is 100 to include the head.
+ *
+ * @returns Parameter dictionary
+ */
 function lta_diff_params(
     transform1: InputPathType,
     transform2: InputPathType | null = null,
@@ -80,22 +94,8 @@ function lta_diff_params(
     normdiv: number | null = null,
     radius: number | null = null,
 ): LtaDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform1 First transform file
-     * @param transform2 Second transform file
-     * @param dist_type Distance type: 1 (Rigid Trans. Dist.), 2 (Affine Transform Distance), 3 (8-corners mean distance), 4 (Max Displacement), 5 (Determinant scaling), 6 (Interpolation Smoothing), 7 (Decomposition). Default is 2.
-     * @param invert1 Invert first transform before computing difference matrix D
-     * @param invert2 Invert second transform before computing difference matrix D
-     * @param vox Compute distance in vox coordinates, after adjusting for voxel sizes. Default is RAS coordinates.
-     * @param normdiv Divide final distance by this value for step adjustment.
-     * @param radius Radius in mm, used for RMS distance. Default is 100 to include the head.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "lta_diff" as const,
+        "@type": "freesurfer.lta_diff" as const,
         "transform1": transform1,
         "invert1": invert1,
         "invert2": invert2,
@@ -117,18 +117,18 @@ function lta_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function lta_diff_cargs(
     params: LtaDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("lta_diff");
     cargs.push(execution.inputFile((params["transform1"] ?? null)));
@@ -166,18 +166,18 @@ function lta_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function lta_diff_outputs(
     params: LtaDiffParameters,
     execution: Execution,
 ): LtaDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LtaDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -185,22 +185,22 @@ function lta_diff_outputs(
 }
 
 
+/**
+ * A tool to compute different distance norms for a single transform or for the difference between two transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
+ */
 function lta_diff_execute(
     params: LtaDiffParameters,
     execution: Execution,
 ): LtaDiffOutputs {
-    /**
-     * A tool to compute different distance norms for a single transform or for the difference between two transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = lta_diff_cargs(params, execution)
     const ret = lta_diff_outputs(params, execution)
@@ -209,6 +209,25 @@ function lta_diff_execute(
 }
 
 
+/**
+ * A tool to compute different distance norms for a single transform or for the difference between two transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param transform1 First transform file
+ * @param transform2 Second transform file
+ * @param dist_type Distance type: 1 (Rigid Trans. Dist.), 2 (Affine Transform Distance), 3 (8-corners mean distance), 4 (Max Displacement), 5 (Determinant scaling), 6 (Interpolation Smoothing), 7 (Decomposition). Default is 2.
+ * @param invert1 Invert first transform before computing difference matrix D
+ * @param invert2 Invert second transform before computing difference matrix D
+ * @param vox Compute distance in vox coordinates, after adjusting for voxel sizes. Default is RAS coordinates.
+ * @param normdiv Divide final distance by this value for step adjustment.
+ * @param radius Radius in mm, used for RMS distance. Default is 100 to include the head.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
+ */
 function lta_diff(
     transform1: InputPathType,
     transform2: InputPathType | null = null,
@@ -220,25 +239,6 @@ function lta_diff(
     radius: number | null = null,
     runner: Runner | null = null,
 ): LtaDiffOutputs {
-    /**
-     * A tool to compute different distance norms for a single transform or for the difference between two transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param transform1 First transform file
-     * @param transform2 Second transform file
-     * @param dist_type Distance type: 1 (Rigid Trans. Dist.), 2 (Affine Transform Distance), 3 (8-corners mean distance), 4 (Max Displacement), 5 (Determinant scaling), 6 (Interpolation Smoothing), 7 (Decomposition). Default is 2.
-     * @param invert1 Invert first transform before computing difference matrix D
-     * @param invert2 Invert second transform before computing difference matrix D
-     * @param vox Compute distance in vox coordinates, after adjusting for voxel sizes. Default is RAS coordinates.
-     * @param normdiv Divide final distance by this value for step adjustment.
-     * @param radius Radius in mm, used for RMS distance. Default is 100 to include the head.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LTA_DIFF_METADATA);
     const params = lta_diff_params(transform1, transform2, dist_type, invert1, invert2, vox, normdiv, radius)
@@ -251,5 +251,8 @@ export {
       LtaDiffOutputs,
       LtaDiffParameters,
       lta_diff,
+      lta_diff_cargs,
+      lta_diff_execute,
+      lta_diff_outputs,
       lta_diff_params,
 };

@@ -12,42 +12,42 @@ const IMSTACK_METADATA: Metadata = {
 
 
 interface ImstackParameters {
-    "__STYXTYPE__": "imstack";
+    "@type": "afni.imstack";
     "image_files": Array<InputPathType>;
     "data_type"?: "short" | "float" | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imstack": imstack_cargs,
+        "afni.imstack": imstack_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imstack": imstack_outputs,
+        "afni.imstack": imstack_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface ImstackOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_files Input image filenames
+ * @param data_type Converts the output data file to be 'type', which is either 'short' or 'float'. The default type is the type of the first image.
+ * @param output_prefix Names the output files to be 'name'.b'type' and 'name'.hdr. The default name is 'obi-wan-kenobi'.
+ *
+ * @returns Parameter dictionary
+ */
 function imstack_params(
     image_files: Array<InputPathType>,
     data_type: "short" | "float" | null = null,
     output_prefix: string | null = null,
 ): ImstackParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_files Input image filenames
-     * @param data_type Converts the output data file to be 'type', which is either 'short' or 'float'. The default type is the type of the first image.
-     * @param output_prefix Names the output files to be 'name'.b'type' and 'name'.hdr. The default name is 'obi-wan-kenobi'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imstack" as const,
+        "@type": "afni.imstack" as const,
         "image_files": image_files,
     };
     if (data_type !== null) {
@@ -102,18 +102,18 @@ function imstack_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imstack_cargs(
     params: ImstackParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imstack");
     cargs.push(...(params["image_files"] ?? null).map(f => execution.inputFile(f)));
@@ -133,18 +133,18 @@ function imstack_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imstack_outputs(
     params: ImstackParameters,
     execution: Execution,
 ): ImstackOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImstackOutputs = {
         root: execution.outputFile("."),
         output_data_file: ((params["output_prefix"] ?? null) !== null && (params["data_type"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".b", (params["data_type"] ?? null)].join('')) : null,
@@ -154,22 +154,22 @@ function imstack_outputs(
 }
 
 
+/**
+ * Stacks up a set of 2D images into one big file (a la MGH).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImstackOutputs`).
+ */
 function imstack_execute(
     params: ImstackParameters,
     execution: Execution,
 ): ImstackOutputs {
-    /**
-     * Stacks up a set of 2D images into one big file (a la MGH).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImstackOutputs`).
-     */
     params = execution.params(params)
     const cargs = imstack_cargs(params, execution)
     const ret = imstack_outputs(params, execution)
@@ -178,26 +178,26 @@ function imstack_execute(
 }
 
 
+/**
+ * Stacks up a set of 2D images into one big file (a la MGH).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param image_files Input image filenames
+ * @param data_type Converts the output data file to be 'type', which is either 'short' or 'float'. The default type is the type of the first image.
+ * @param output_prefix Names the output files to be 'name'.b'type' and 'name'.hdr. The default name is 'obi-wan-kenobi'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImstackOutputs`).
+ */
 function imstack(
     image_files: Array<InputPathType>,
     data_type: "short" | "float" | null = null,
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): ImstackOutputs {
-    /**
-     * Stacks up a set of 2D images into one big file (a la MGH).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param image_files Input image filenames
-     * @param data_type Converts the output data file to be 'type', which is either 'short' or 'float'. The default type is the type of the first image.
-     * @param output_prefix Names the output files to be 'name'.b'type' and 'name'.hdr. The default name is 'obi-wan-kenobi'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImstackOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMSTACK_METADATA);
     const params = imstack_params(image_files, data_type, output_prefix)
@@ -210,5 +210,8 @@ export {
       ImstackOutputs,
       ImstackParameters,
       imstack,
+      imstack_cargs,
+      imstack_execute,
+      imstack_outputs,
       imstack_params,
 };

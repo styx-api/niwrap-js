@@ -12,7 +12,7 @@ const CREATE_TILED_MOSAIC_METADATA: Metadata = {
 
 
 interface CreateTiledMosaicParameters {
-    "__STYXTYPE__": "CreateTiledMosaic";
+    "@type": "ants.CreateTiledMosaic";
     "input_image": InputPathType;
     "rgb_image"?: InputPathType | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface CreateTiledMosaicParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "CreateTiledMosaic": create_tiled_mosaic_cargs,
+        "ants.CreateTiledMosaic": create_tiled_mosaic_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "CreateTiledMosaic": create_tiled_mosaic_outputs,
+        "ants.CreateTiledMosaic": create_tiled_mosaic_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface CreateTiledMosaicOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Main input is a 3-D grayscale image.
+ * @param output The output is the tiled mosaic image. The format must support the specific data type: floating point images without RGB overlays, Rgb images with intensities scaled to [0,255] if overlays are present.
+ * @param rgb_image An optional Rgb image can be added as an overlay. It must have the same image geometry as the input grayscale image.
+ * @param mask_image Specifies the ROI of the RGB voxels used.
+ * @param alpha If an Rgb image is provided, render the overlay using the specified alpha parameter.
+ * @param functional_overlay A functional overlay can be specified using both and rgb image and a mask specifying where that rgb image should be applied. Both images must have the same image geometry as the input image. Optionally, an alpha parameter can be specified.
+ * @param tile_geometry The tile geometry specifies the number of rows and columns in the output image. For example, specifying '5x10' renders 5 rows by 10 columns of slices.
+ * @param direction Specifies the direction of the slices. Can be based on image storage in memory or aligned physical space. Defaults to z-direction if unspecified.
+ * @param pad_or_crop Specify padding or cropping with a voxel-width boundary for each slice. Padding uses a specified constant value. Cropping pads with negative voxel-widths.
+ * @param slices Control over which slices to render. Specify slices directly or incrementally with optional start and end slices.
+ * @param flip_slice Flip individual slice images horizontally and/or vertically.
+ * @param permute_axes Permute (or swap) the axes of the individual slice images.
+ *
+ * @returns Parameter dictionary
+ */
 function create_tiled_mosaic_params(
     input_image: InputPathType,
     output: string,
@@ -93,26 +111,8 @@ function create_tiled_mosaic_params(
     flip_slice: string | null = null,
     permute_axes: 0 | 1 | null = null,
 ): CreateTiledMosaicParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Main input is a 3-D grayscale image.
-     * @param output The output is the tiled mosaic image. The format must support the specific data type: floating point images without RGB overlays, Rgb images with intensities scaled to [0,255] if overlays are present.
-     * @param rgb_image An optional Rgb image can be added as an overlay. It must have the same image geometry as the input grayscale image.
-     * @param mask_image Specifies the ROI of the RGB voxels used.
-     * @param alpha If an Rgb image is provided, render the overlay using the specified alpha parameter.
-     * @param functional_overlay A functional overlay can be specified using both and rgb image and a mask specifying where that rgb image should be applied. Both images must have the same image geometry as the input image. Optionally, an alpha parameter can be specified.
-     * @param tile_geometry The tile geometry specifies the number of rows and columns in the output image. For example, specifying '5x10' renders 5 rows by 10 columns of slices.
-     * @param direction Specifies the direction of the slices. Can be based on image storage in memory or aligned physical space. Defaults to z-direction if unspecified.
-     * @param pad_or_crop Specify padding or cropping with a voxel-width boundary for each slice. Padding uses a specified constant value. Cropping pads with negative voxel-widths.
-     * @param slices Control over which slices to render. Specify slices directly or incrementally with optional start and end slices.
-     * @param flip_slice Flip individual slice images horizontally and/or vertically.
-     * @param permute_axes Permute (or swap) the axes of the individual slice images.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "CreateTiledMosaic" as const,
+        "@type": "ants.CreateTiledMosaic" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -150,18 +150,18 @@ function create_tiled_mosaic_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_tiled_mosaic_cargs(
     params: CreateTiledMosaicParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CreateTiledMosaic");
     cargs.push(
@@ -236,18 +236,18 @@ function create_tiled_mosaic_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_tiled_mosaic_outputs(
     params: CreateTiledMosaicParameters,
     execution: Execution,
 ): CreateTiledMosaicOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateTiledMosaicOutputs = {
         root: execution.outputFile("."),
         tiled_mosaic_image: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -256,22 +256,22 @@ function create_tiled_mosaic_outputs(
 }
 
 
+/**
+ * Render a 3-D image volume with optional Rgb overlay.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
+ */
 function create_tiled_mosaic_execute(
     params: CreateTiledMosaicParameters,
     execution: Execution,
 ): CreateTiledMosaicOutputs {
-    /**
-     * Render a 3-D image volume with optional Rgb overlay.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_tiled_mosaic_cargs(params, execution)
     const ret = create_tiled_mosaic_outputs(params, execution)
@@ -280,6 +280,29 @@ function create_tiled_mosaic_execute(
 }
 
 
+/**
+ * Render a 3-D image volume with optional Rgb overlay.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_image Main input is a 3-D grayscale image.
+ * @param output The output is the tiled mosaic image. The format must support the specific data type: floating point images without RGB overlays, Rgb images with intensities scaled to [0,255] if overlays are present.
+ * @param rgb_image An optional Rgb image can be added as an overlay. It must have the same image geometry as the input grayscale image.
+ * @param mask_image Specifies the ROI of the RGB voxels used.
+ * @param alpha If an Rgb image is provided, render the overlay using the specified alpha parameter.
+ * @param functional_overlay A functional overlay can be specified using both and rgb image and a mask specifying where that rgb image should be applied. Both images must have the same image geometry as the input image. Optionally, an alpha parameter can be specified.
+ * @param tile_geometry The tile geometry specifies the number of rows and columns in the output image. For example, specifying '5x10' renders 5 rows by 10 columns of slices.
+ * @param direction Specifies the direction of the slices. Can be based on image storage in memory or aligned physical space. Defaults to z-direction if unspecified.
+ * @param pad_or_crop Specify padding or cropping with a voxel-width boundary for each slice. Padding uses a specified constant value. Cropping pads with negative voxel-widths.
+ * @param slices Control over which slices to render. Specify slices directly or incrementally with optional start and end slices.
+ * @param flip_slice Flip individual slice images horizontally and/or vertically.
+ * @param permute_axes Permute (or swap) the axes of the individual slice images.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
+ */
 function create_tiled_mosaic(
     input_image: InputPathType,
     output: string,
@@ -295,29 +318,6 @@ function create_tiled_mosaic(
     permute_axes: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): CreateTiledMosaicOutputs {
-    /**
-     * Render a 3-D image volume with optional Rgb overlay.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_image Main input is a 3-D grayscale image.
-     * @param output The output is the tiled mosaic image. The format must support the specific data type: floating point images without RGB overlays, Rgb images with intensities scaled to [0,255] if overlays are present.
-     * @param rgb_image An optional Rgb image can be added as an overlay. It must have the same image geometry as the input grayscale image.
-     * @param mask_image Specifies the ROI of the RGB voxels used.
-     * @param alpha If an Rgb image is provided, render the overlay using the specified alpha parameter.
-     * @param functional_overlay A functional overlay can be specified using both and rgb image and a mask specifying where that rgb image should be applied. Both images must have the same image geometry as the input image. Optionally, an alpha parameter can be specified.
-     * @param tile_geometry The tile geometry specifies the number of rows and columns in the output image. For example, specifying '5x10' renders 5 rows by 10 columns of slices.
-     * @param direction Specifies the direction of the slices. Can be based on image storage in memory or aligned physical space. Defaults to z-direction if unspecified.
-     * @param pad_or_crop Specify padding or cropping with a voxel-width boundary for each slice. Padding uses a specified constant value. Cropping pads with negative voxel-widths.
-     * @param slices Control over which slices to render. Specify slices directly or incrementally with optional start and end slices.
-     * @param flip_slice Flip individual slice images horizontally and/or vertically.
-     * @param permute_axes Permute (or swap) the axes of the individual slice images.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_TILED_MOSAIC_METADATA);
     const params = create_tiled_mosaic_params(input_image, output, rgb_image, mask_image, alpha, functional_overlay, tile_geometry, direction, pad_or_crop, slices, flip_slice, permute_axes)
@@ -330,5 +330,8 @@ export {
       CreateTiledMosaicOutputs,
       CreateTiledMosaicParameters,
       create_tiled_mosaic,
+      create_tiled_mosaic_cargs,
+      create_tiled_mosaic_execute,
+      create_tiled_mosaic_outputs,
       create_tiled_mosaic_params,
 };

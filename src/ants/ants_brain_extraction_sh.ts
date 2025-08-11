@@ -12,7 +12,7 @@ const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
 
 
 interface AntsBrainExtractionShParameters {
-    "__STYXTYPE__": "antsBrainExtraction.sh";
+    "@type": "ants.antsBrainExtraction.sh";
     "image_dimension": number;
     "anatomical_image": InputPathType;
     "template": InputPathType;
@@ -31,35 +31,35 @@ interface AntsBrainExtractionShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsBrainExtraction.sh": ants_brain_extraction_sh_cargs,
+        "ants.antsBrainExtraction.sh": ants_brain_extraction_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsBrainExtraction.sh": ants_brain_extraction_sh_outputs,
+        "ants.antsBrainExtraction.sh": ants_brain_extraction_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,27 @@ interface AntsBrainExtractionShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param anatomical_image Anatomical image (Structural image, typically T1)
+ * @param template Brain extraction template (Anatomical template)
+ * @param probability_mask Brain extraction probability mask
+ * @param image_dimension Image dimension (2 or 3)
+ * @param tissue_classification Tissue classification
+ * @param brain_extraction_registration_mask Brain extraction registration mask
+ * @param keep_temporary_files Keep temporary files
+ * @param single_floating_point_precision Use single floating point precision
+ * @param initial_moving_transform Initial moving transform
+ * @param rotation_search_params Rotation search parameters
+ * @param image_file_suffix Image file suffix
+ * @param translation_search_params Translation search parameters
+ * @param random_seeding Use random seeding
+ * @param debug_mode Test / debug mode
+ * @param output_prefix Output prefix
+ *
+ * @returns Parameter dictionary
+ */
 function ants_brain_extraction_sh_params(
     anatomical_image: InputPathType,
     template: InputPathType,
@@ -107,29 +128,8 @@ function ants_brain_extraction_sh_params(
     debug_mode: boolean = false,
     output_prefix: string | null = "output",
 ): AntsBrainExtractionShParameters {
-    /**
-     * Build parameters.
-    
-     * @param anatomical_image Anatomical image (Structural image, typically T1)
-     * @param template Brain extraction template (Anatomical template)
-     * @param probability_mask Brain extraction probability mask
-     * @param image_dimension Image dimension (2 or 3)
-     * @param tissue_classification Tissue classification
-     * @param brain_extraction_registration_mask Brain extraction registration mask
-     * @param keep_temporary_files Keep temporary files
-     * @param single_floating_point_precision Use single floating point precision
-     * @param initial_moving_transform Initial moving transform
-     * @param rotation_search_params Rotation search parameters
-     * @param image_file_suffix Image file suffix
-     * @param translation_search_params Translation search parameters
-     * @param random_seeding Use random seeding
-     * @param debug_mode Test / debug mode
-     * @param output_prefix Output prefix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsBrainExtraction.sh" as const,
+        "@type": "ants.antsBrainExtraction.sh" as const,
         "image_dimension": image_dimension,
         "anatomical_image": anatomical_image,
         "template": template,
@@ -164,18 +164,18 @@ function ants_brain_extraction_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_brain_extraction_sh_cargs(
     params: AntsBrainExtractionShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsBrainExtraction.sh");
     cargs.push(
@@ -252,18 +252,18 @@ function ants_brain_extraction_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_brain_extraction_sh_outputs(
     params: AntsBrainExtractionShParameters,
     execution: Execution,
 ): AntsBrainExtractionShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsBrainExtractionShOutputs = {
         root: execution.outputFile("."),
         brain_extracted_image: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_BrainExtractionBrain.nii.gz"].join('')) : null,
@@ -274,22 +274,22 @@ function ants_brain_extraction_sh_outputs(
 }
 
 
+/**
+ * antsBrainExtraction.sh performs template-based brain extraction.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
+ */
 function ants_brain_extraction_sh_execute(
     params: AntsBrainExtractionShParameters,
     execution: Execution,
 ): AntsBrainExtractionShOutputs {
-    /**
-     * antsBrainExtraction.sh performs template-based brain extraction.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_brain_extraction_sh_cargs(params, execution)
     const ret = ants_brain_extraction_sh_outputs(params, execution)
@@ -298,6 +298,32 @@ function ants_brain_extraction_sh_execute(
 }
 
 
+/**
+ * antsBrainExtraction.sh performs template-based brain extraction.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param anatomical_image Anatomical image (Structural image, typically T1)
+ * @param template Brain extraction template (Anatomical template)
+ * @param probability_mask Brain extraction probability mask
+ * @param image_dimension Image dimension (2 or 3)
+ * @param tissue_classification Tissue classification
+ * @param brain_extraction_registration_mask Brain extraction registration mask
+ * @param keep_temporary_files Keep temporary files
+ * @param single_floating_point_precision Use single floating point precision
+ * @param initial_moving_transform Initial moving transform
+ * @param rotation_search_params Rotation search parameters
+ * @param image_file_suffix Image file suffix
+ * @param translation_search_params Translation search parameters
+ * @param random_seeding Use random seeding
+ * @param debug_mode Test / debug mode
+ * @param output_prefix Output prefix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
+ */
 function ants_brain_extraction_sh(
     anatomical_image: InputPathType,
     template: InputPathType,
@@ -316,32 +342,6 @@ function ants_brain_extraction_sh(
     output_prefix: string | null = "output",
     runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
-    /**
-     * antsBrainExtraction.sh performs template-based brain extraction.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param anatomical_image Anatomical image (Structural image, typically T1)
-     * @param template Brain extraction template (Anatomical template)
-     * @param probability_mask Brain extraction probability mask
-     * @param image_dimension Image dimension (2 or 3)
-     * @param tissue_classification Tissue classification
-     * @param brain_extraction_registration_mask Brain extraction registration mask
-     * @param keep_temporary_files Keep temporary files
-     * @param single_floating_point_precision Use single floating point precision
-     * @param initial_moving_transform Initial moving transform
-     * @param rotation_search_params Rotation search parameters
-     * @param image_file_suffix Image file suffix
-     * @param translation_search_params Translation search parameters
-     * @param random_seeding Use random seeding
-     * @param debug_mode Test / debug mode
-     * @param output_prefix Output prefix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_BRAIN_EXTRACTION_SH_METADATA);
     const params = ants_brain_extraction_sh_params(anatomical_image, template, probability_mask, image_dimension, tissue_classification, brain_extraction_registration_mask, keep_temporary_files, single_floating_point_precision, initial_moving_transform, rotation_search_params, image_file_suffix, translation_search_params, random_seeding, debug_mode, output_prefix)
@@ -354,5 +354,8 @@ export {
       AntsBrainExtractionShOutputs,
       AntsBrainExtractionShParameters,
       ants_brain_extraction_sh,
+      ants_brain_extraction_sh_cargs,
+      ants_brain_extraction_sh_execute,
+      ants_brain_extraction_sh_outputs,
       ants_brain_extraction_sh_params,
 };

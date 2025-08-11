@@ -12,7 +12,7 @@ const MRI_EASYREG_METADATA: Metadata = {
 
 
 interface MriEasyregParameters {
-    "__STYXTYPE__": "mri_easyreg";
+    "@type": "freesurfer.mri_easyreg";
     "reference_image": InputPathType;
     "reference_segmentation"?: InputPathType | null | undefined;
     "floating_image": InputPathType;
@@ -26,35 +26,35 @@ interface MriEasyregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_easyreg": mri_easyreg_cargs,
+        "freesurfer.mri_easyreg": mri_easyreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_easyreg": mri_easyreg_outputs,
+        "freesurfer.mri_easyreg": mri_easyreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,22 @@ interface MriEasyregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Reference image
+ * @param floating_image Floating image
+ * @param reference_segmentation Reference SynthSeg segmentation (will be created if it does not exist)
+ * @param floating_segmentation Floating SynthSeg segmentation (will be created if it does not exist)
+ * @param registered_reference (optional) Registered reference
+ * @param registered_floating (optional) Registered floating images (in space of reference)
+ * @param forward_field (optional) Forward field
+ * @param inverse_field (optional) Inverse field
+ * @param affine_only (optional) Skips nonlinear part
+ * @param threads (optional) Number of cores to be used. Default is 1. You can use -1 to use all available cores
+ *
+ * @returns Parameter dictionary
+ */
 function mri_easyreg_params(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -101,24 +117,8 @@ function mri_easyreg_params(
     affine_only: boolean = false,
     threads: number | null = null,
 ): MriEasyregParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Reference image
-     * @param floating_image Floating image
-     * @param reference_segmentation Reference SynthSeg segmentation (will be created if it does not exist)
-     * @param floating_segmentation Floating SynthSeg segmentation (will be created if it does not exist)
-     * @param registered_reference (optional) Registered reference
-     * @param registered_floating (optional) Registered floating images (in space of reference)
-     * @param forward_field (optional) Forward field
-     * @param inverse_field (optional) Inverse field
-     * @param affine_only (optional) Skips nonlinear part
-     * @param threads (optional) Number of cores to be used. Default is 1. You can use -1 to use all available cores
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_easyreg" as const,
+        "@type": "freesurfer.mri_easyreg" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "affine_only": affine_only,
@@ -148,18 +148,18 @@ function mri_easyreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_easyreg_cargs(
     params: MriEasyregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_easyreg");
     cargs.push(
@@ -219,18 +219,18 @@ function mri_easyreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_easyreg_outputs(
     params: MriEasyregParameters,
     execution: Execution,
 ): MriEasyregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriEasyregOutputs = {
         root: execution.outputFile("."),
         registered_reference_output: execution.outputFile(["registered_reference.nii.gz"].join('')),
@@ -242,22 +242,22 @@ function mri_easyreg_outputs(
 }
 
 
+/**
+ * EasyReg: deep learning registration simple and easy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
+ */
 function mri_easyreg_execute(
     params: MriEasyregParameters,
     execution: Execution,
 ): MriEasyregOutputs {
-    /**
-     * EasyReg: deep learning registration simple and easy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_easyreg_cargs(params, execution)
     const ret = mri_easyreg_outputs(params, execution)
@@ -266,6 +266,27 @@ function mri_easyreg_execute(
 }
 
 
+/**
+ * EasyReg: deep learning registration simple and easy.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param reference_image Reference image
+ * @param floating_image Floating image
+ * @param reference_segmentation Reference SynthSeg segmentation (will be created if it does not exist)
+ * @param floating_segmentation Floating SynthSeg segmentation (will be created if it does not exist)
+ * @param registered_reference (optional) Registered reference
+ * @param registered_floating (optional) Registered floating images (in space of reference)
+ * @param forward_field (optional) Forward field
+ * @param inverse_field (optional) Inverse field
+ * @param affine_only (optional) Skips nonlinear part
+ * @param threads (optional) Number of cores to be used. Default is 1. You can use -1 to use all available cores
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
+ */
 function mri_easyreg(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -279,27 +300,6 @@ function mri_easyreg(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriEasyregOutputs {
-    /**
-     * EasyReg: deep learning registration simple and easy.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param reference_image Reference image
-     * @param floating_image Floating image
-     * @param reference_segmentation Reference SynthSeg segmentation (will be created if it does not exist)
-     * @param floating_segmentation Floating SynthSeg segmentation (will be created if it does not exist)
-     * @param registered_reference (optional) Registered reference
-     * @param registered_floating (optional) Registered floating images (in space of reference)
-     * @param forward_field (optional) Forward field
-     * @param inverse_field (optional) Inverse field
-     * @param affine_only (optional) Skips nonlinear part
-     * @param threads (optional) Number of cores to be used. Default is 1. You can use -1 to use all available cores
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EASYREG_METADATA);
     const params = mri_easyreg_params(reference_image, floating_image, reference_segmentation, floating_segmentation, registered_reference, registered_floating, forward_field, inverse_field, affine_only, threads)
@@ -312,5 +312,8 @@ export {
       MriEasyregOutputs,
       MriEasyregParameters,
       mri_easyreg,
+      mri_easyreg_cargs,
+      mri_easyreg_execute,
+      mri_easyreg_outputs,
       mri_easyreg_params,
 };

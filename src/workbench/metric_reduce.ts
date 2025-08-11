@@ -12,14 +12,14 @@ const METRIC_REDUCE_METADATA: Metadata = {
 
 
 interface MetricReduceExcludeOutliersParameters {
-    "__STYXTYPE__": "exclude_outliers";
+    "@type": "workbench.metric-reduce.exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
 
 
 interface MetricReduceParameters {
-    "__STYXTYPE__": "metric-reduce";
+    "@type": "workbench.metric-reduce";
     "metric_in": InputPathType;
     "operation": string;
     "metric_out": string;
@@ -28,55 +28,55 @@ interface MetricReduceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-reduce": metric_reduce_cargs,
-        "exclude_outliers": metric_reduce_exclude_outliers_cargs,
+        "workbench.metric-reduce": metric_reduce_cargs,
+        "workbench.metric-reduce.exclude_outliers": metric_reduce_exclude_outliers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-reduce": metric_reduce_outputs,
+        "workbench.metric-reduce": metric_reduce_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma_below number of standard deviations below the mean to include
+ * @param sigma_above number of standard deviations above the mean to include
+ *
+ * @returns Parameter dictionary
+ */
 function metric_reduce_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
 ): MetricReduceExcludeOutliersParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma_below number of standard deviations below the mean to include
-     * @param sigma_above number of standard deviations above the mean to include
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exclude_outliers" as const,
+        "@type": "workbench.metric-reduce.exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -84,18 +84,18 @@ function metric_reduce_exclude_outliers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_reduce_exclude_outliers_cargs(
     params: MetricReduceExcludeOutliersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exclude-outliers");
     cargs.push(String((params["sigma_below"] ?? null)));
@@ -121,6 +121,17 @@ interface MetricReduceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_in the metric to reduce
+ * @param operation the reduction operator to use
+ * @param metric_out the output metric
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ *
+ * @returns Parameter dictionary
+ */
 function metric_reduce_params(
     metric_in: InputPathType,
     operation: string,
@@ -128,19 +139,8 @@ function metric_reduce_params(
     exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
     opt_only_numeric: boolean = false,
 ): MetricReduceParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_in the metric to reduce
-     * @param operation the reduction operator to use
-     * @param metric_out the output metric
-     * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-reduce" as const,
+        "@type": "workbench.metric-reduce" as const,
         "metric_in": metric_in,
         "operation": operation,
         "metric_out": metric_out,
@@ -153,18 +153,18 @@ function metric_reduce_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_reduce_cargs(
     params: MetricReduceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-reduce");
@@ -172,7 +172,7 @@ function metric_reduce_cargs(
     cargs.push((params["operation"] ?? null));
     cargs.push((params["metric_out"] ?? null));
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null).__STYXTYPE__)((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
     }
     if ((params["opt_only_numeric"] ?? null)) {
         cargs.push("-only-numeric");
@@ -181,18 +181,18 @@ function metric_reduce_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_reduce_outputs(
     params: MetricReduceParameters,
     execution: Execution,
 ): MetricReduceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricReduceOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -201,42 +201,42 @@ function metric_reduce_outputs(
 }
 
 
+/**
+ * Perform reduction operation across metric columns.
+ *
+ * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
+ */
 function metric_reduce_execute(
     params: MetricReduceParameters,
     execution: Execution,
 ): MetricReduceOutputs {
-    /**
-     * Perform reduction operation across metric columns.
-     * 
-     * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_reduce_cargs(params, execution)
     const ret = metric_reduce_outputs(params, execution)
@@ -245,6 +245,42 @@ function metric_reduce_execute(
 }
 
 
+/**
+ * Perform reduction operation across metric columns.
+ *
+ * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric_in the metric to reduce
+ * @param operation the reduction operator to use
+ * @param metric_out the output metric
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
+ */
 function metric_reduce(
     metric_in: InputPathType,
     operation: string,
@@ -253,42 +289,6 @@ function metric_reduce(
     opt_only_numeric: boolean = false,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
-    /**
-     * Perform reduction operation across metric columns.
-     * 
-     * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric_in the metric to reduce
-     * @param operation the reduction operator to use
-     * @param metric_out the output metric
-     * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_REDUCE_METADATA);
     const params = metric_reduce_params(metric_in, operation, metric_out, exclude_outliers, opt_only_numeric)
@@ -302,6 +302,10 @@ export {
       MetricReduceOutputs,
       MetricReduceParameters,
       metric_reduce,
+      metric_reduce_cargs,
+      metric_reduce_exclude_outliers_cargs,
       metric_reduce_exclude_outliers_params,
+      metric_reduce_execute,
+      metric_reduce_outputs,
       metric_reduce_params,
 };

@@ -12,7 +12,7 @@ const MRI_CVS_REGISTER_METADATA: Metadata = {
 
 
 interface MriCvsRegisterParameters {
-    "__STYXTYPE__": "mri_cvs_register";
+    "@type": "freesurfer.mri_cvs_register";
     "mov_subjid": string;
     "template_subjid"?: string | null | undefined;
     "templatedir"?: string | null | undefined;
@@ -43,35 +43,35 @@ interface MriCvsRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_cvs_register": mri_cvs_register_cargs,
+        "freesurfer.mri_cvs_register": mri_cvs_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_cvs_register": mri_cvs_register_outputs,
+        "freesurfer.mri_cvs_register": mri_cvs_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -110,6 +110,39 @@ interface MriCvsRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mov_subjid FreeSurfer subject name as found in $SUBJECTS_DIR. This identifies the subject that is to be moved / registered to the target.
+ * @param template_subjid FreeSurfer subject name as found in $SUBJECTS_DIR (or --templatedir). This identifies the subject that is to be kept fixed (template).
+ * @param templatedir Directory of the template subject's SUBJECTS_DIR if different from that of the moving subject.
+ * @param mni_flag Use the CVS atlas in MNI152 space as a target for registration.
+ * @param outdir Name of the output directory where all the registration results are written.
+ * @param asegfname Name of the segmentation volume used in volumetric registration step. Do not use the file extension.
+ * @param voltype Changes the input from norm.mgz to voltype.mgz.
+ * @param step1_flag Only do step 1 (spherical registration).
+ * @param step2_flag Only do step 2 (elastic registration).
+ * @param step3_flag Only do step 3 (volumetric registration).
+ * @param noaseg_flag Do not use aseg volumes in the volumetric registration pipeline.
+ * @param nointensity_flag Do not use intensity volumes in the volumetric registration pipeline.
+ * @param hemi_flag Run CVS registration only on one hemisphere.
+ * @param masktargethemi_flag Use with --hemi when hemi is registered to full brain target.
+ * @param maskmovinghemi_flag Use with --hemi when full brain is registered to single hemi target.
+ * @param nocleanup_flag Do not delete temporary files.
+ * @param keepelreg_flag Do not delete elastic registration outcomes.
+ * @param keepallm3z_flag Do not delete m3z morph files computed during CVS.
+ * @param cleanall_flag Overwrite / recompute all CVS-related morphs.
+ * @param cleansurfreg_flag Overwrite/recompute CVS-related surface registration morphs.
+ * @param cleanelreg_flag Overwrite / recompute CVS-related elastic registration morph.
+ * @param cleanvolreg_flag Overwrite / recompute CVS-related volumetric morphs.
+ * @param m3d_flag Use m3d instead of m3z for registration morphs.
+ * @param openmp Assign the number of nodes for openmp runs.
+ * @param nolog_flag Do not produce a log file.
+ * @param version_flag Print version and exit.
+ * @param help_flag Print help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_cvs_register_params(
     mov_subjid: string,
     template_subjid: string | null = null,
@@ -139,41 +172,8 @@ function mri_cvs_register_params(
     version_flag: boolean = false,
     help_flag: boolean = false,
 ): MriCvsRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param mov_subjid FreeSurfer subject name as found in $SUBJECTS_DIR. This identifies the subject that is to be moved / registered to the target.
-     * @param template_subjid FreeSurfer subject name as found in $SUBJECTS_DIR (or --templatedir). This identifies the subject that is to be kept fixed (template).
-     * @param templatedir Directory of the template subject's SUBJECTS_DIR if different from that of the moving subject.
-     * @param mni_flag Use the CVS atlas in MNI152 space as a target for registration.
-     * @param outdir Name of the output directory where all the registration results are written.
-     * @param asegfname Name of the segmentation volume used in volumetric registration step. Do not use the file extension.
-     * @param voltype Changes the input from norm.mgz to voltype.mgz.
-     * @param step1_flag Only do step 1 (spherical registration).
-     * @param step2_flag Only do step 2 (elastic registration).
-     * @param step3_flag Only do step 3 (volumetric registration).
-     * @param noaseg_flag Do not use aseg volumes in the volumetric registration pipeline.
-     * @param nointensity_flag Do not use intensity volumes in the volumetric registration pipeline.
-     * @param hemi_flag Run CVS registration only on one hemisphere.
-     * @param masktargethemi_flag Use with --hemi when hemi is registered to full brain target.
-     * @param maskmovinghemi_flag Use with --hemi when full brain is registered to single hemi target.
-     * @param nocleanup_flag Do not delete temporary files.
-     * @param keepelreg_flag Do not delete elastic registration outcomes.
-     * @param keepallm3z_flag Do not delete m3z morph files computed during CVS.
-     * @param cleanall_flag Overwrite / recompute all CVS-related morphs.
-     * @param cleansurfreg_flag Overwrite/recompute CVS-related surface registration morphs.
-     * @param cleanelreg_flag Overwrite / recompute CVS-related elastic registration morph.
-     * @param cleanvolreg_flag Overwrite / recompute CVS-related volumetric morphs.
-     * @param m3d_flag Use m3d instead of m3z for registration morphs.
-     * @param openmp Assign the number of nodes for openmp runs.
-     * @param nolog_flag Do not produce a log file.
-     * @param version_flag Print version and exit.
-     * @param help_flag Print help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_cvs_register" as const,
+        "@type": "freesurfer.mri_cvs_register" as const,
         "mov_subjid": mov_subjid,
         "mni_flag": mni_flag,
         "step1_flag": step1_flag,
@@ -218,18 +218,18 @@ function mri_cvs_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_cvs_register_cargs(
     params: MriCvsRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_cvs_register");
     cargs.push(
@@ -336,18 +336,18 @@ function mri_cvs_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_cvs_register_outputs(
     params: MriCvsRegisterParameters,
     execution: Execution,
 ): MriCvsRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCvsRegisterOutputs = {
         root: execution.outputFile("."),
         final_cvs_morph: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/final_CVSmorph_toTEMPLATE.m3z"].join('')) : null,
@@ -360,22 +360,22 @@ function mri_cvs_register_outputs(
 }
 
 
+/**
+ * Combined Volume and Surface Registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
+ */
 function mri_cvs_register_execute(
     params: MriCvsRegisterParameters,
     execution: Execution,
 ): MriCvsRegisterOutputs {
-    /**
-     * Combined Volume and Surface Registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_cvs_register_cargs(params, execution)
     const ret = mri_cvs_register_outputs(params, execution)
@@ -384,6 +384,44 @@ function mri_cvs_register_execute(
 }
 
 
+/**
+ * Combined Volume and Surface Registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mov_subjid FreeSurfer subject name as found in $SUBJECTS_DIR. This identifies the subject that is to be moved / registered to the target.
+ * @param template_subjid FreeSurfer subject name as found in $SUBJECTS_DIR (or --templatedir). This identifies the subject that is to be kept fixed (template).
+ * @param templatedir Directory of the template subject's SUBJECTS_DIR if different from that of the moving subject.
+ * @param mni_flag Use the CVS atlas in MNI152 space as a target for registration.
+ * @param outdir Name of the output directory where all the registration results are written.
+ * @param asegfname Name of the segmentation volume used in volumetric registration step. Do not use the file extension.
+ * @param voltype Changes the input from norm.mgz to voltype.mgz.
+ * @param step1_flag Only do step 1 (spherical registration).
+ * @param step2_flag Only do step 2 (elastic registration).
+ * @param step3_flag Only do step 3 (volumetric registration).
+ * @param noaseg_flag Do not use aseg volumes in the volumetric registration pipeline.
+ * @param nointensity_flag Do not use intensity volumes in the volumetric registration pipeline.
+ * @param hemi_flag Run CVS registration only on one hemisphere.
+ * @param masktargethemi_flag Use with --hemi when hemi is registered to full brain target.
+ * @param maskmovinghemi_flag Use with --hemi when full brain is registered to single hemi target.
+ * @param nocleanup_flag Do not delete temporary files.
+ * @param keepelreg_flag Do not delete elastic registration outcomes.
+ * @param keepallm3z_flag Do not delete m3z morph files computed during CVS.
+ * @param cleanall_flag Overwrite / recompute all CVS-related morphs.
+ * @param cleansurfreg_flag Overwrite/recompute CVS-related surface registration morphs.
+ * @param cleanelreg_flag Overwrite / recompute CVS-related elastic registration morph.
+ * @param cleanvolreg_flag Overwrite / recompute CVS-related volumetric morphs.
+ * @param m3d_flag Use m3d instead of m3z for registration morphs.
+ * @param openmp Assign the number of nodes for openmp runs.
+ * @param nolog_flag Do not produce a log file.
+ * @param version_flag Print version and exit.
+ * @param help_flag Print help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
+ */
 function mri_cvs_register(
     mov_subjid: string,
     template_subjid: string | null = null,
@@ -414,44 +452,6 @@ function mri_cvs_register(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCvsRegisterOutputs {
-    /**
-     * Combined Volume and Surface Registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mov_subjid FreeSurfer subject name as found in $SUBJECTS_DIR. This identifies the subject that is to be moved / registered to the target.
-     * @param template_subjid FreeSurfer subject name as found in $SUBJECTS_DIR (or --templatedir). This identifies the subject that is to be kept fixed (template).
-     * @param templatedir Directory of the template subject's SUBJECTS_DIR if different from that of the moving subject.
-     * @param mni_flag Use the CVS atlas in MNI152 space as a target for registration.
-     * @param outdir Name of the output directory where all the registration results are written.
-     * @param asegfname Name of the segmentation volume used in volumetric registration step. Do not use the file extension.
-     * @param voltype Changes the input from norm.mgz to voltype.mgz.
-     * @param step1_flag Only do step 1 (spherical registration).
-     * @param step2_flag Only do step 2 (elastic registration).
-     * @param step3_flag Only do step 3 (volumetric registration).
-     * @param noaseg_flag Do not use aseg volumes in the volumetric registration pipeline.
-     * @param nointensity_flag Do not use intensity volumes in the volumetric registration pipeline.
-     * @param hemi_flag Run CVS registration only on one hemisphere.
-     * @param masktargethemi_flag Use with --hemi when hemi is registered to full brain target.
-     * @param maskmovinghemi_flag Use with --hemi when full brain is registered to single hemi target.
-     * @param nocleanup_flag Do not delete temporary files.
-     * @param keepelreg_flag Do not delete elastic registration outcomes.
-     * @param keepallm3z_flag Do not delete m3z morph files computed during CVS.
-     * @param cleanall_flag Overwrite / recompute all CVS-related morphs.
-     * @param cleansurfreg_flag Overwrite/recompute CVS-related surface registration morphs.
-     * @param cleanelreg_flag Overwrite / recompute CVS-related elastic registration morph.
-     * @param cleanvolreg_flag Overwrite / recompute CVS-related volumetric morphs.
-     * @param m3d_flag Use m3d instead of m3z for registration morphs.
-     * @param openmp Assign the number of nodes for openmp runs.
-     * @param nolog_flag Do not produce a log file.
-     * @param version_flag Print version and exit.
-     * @param help_flag Print help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CVS_REGISTER_METADATA);
     const params = mri_cvs_register_params(mov_subjid, template_subjid, templatedir, mni_flag, outdir, asegfname, voltype, step1_flag, step2_flag, step3_flag, noaseg_flag, nointensity_flag, hemi_flag, masktargethemi_flag, maskmovinghemi_flag, nocleanup_flag, keepelreg_flag, keepallm3z_flag, cleanall_flag, cleansurfreg_flag, cleanelreg_flag, cleanvolreg_flag, m3d_flag, openmp, nolog_flag, version_flag, help_flag)
@@ -464,5 +464,8 @@ export {
       MriCvsRegisterOutputs,
       MriCvsRegisterParameters,
       mri_cvs_register,
+      mri_cvs_register_cargs,
+      mri_cvs_register_execute,
+      mri_cvs_register_outputs,
       mri_cvs_register_params,
 };

@@ -12,7 +12,7 @@ const V_3DMATCALC_METADATA: Metadata = {
 
 
 interface V3dmatcalcParameters {
-    "__STYXTYPE__": "3dmatcalc";
+    "@type": "afni.3dmatcalc";
     "input_dataset": InputPathType;
     "input_matrix": InputPathType;
     "output_dataset": string;
@@ -20,35 +20,35 @@ interface V3dmatcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmatcalc": v_3dmatcalc_cargs,
+        "afni.3dmatcalc": v_3dmatcalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmatcalc": v_3dmatcalc_outputs,
+        "afni.3dmatcalc": v_3dmatcalc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface V3dmatcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset to be processed.
+ * @param input_matrix The matrix to be applied, specified as a .1D file or as an expression in the syntax of 1dmatcalc.
+ * @param output_dataset Prefix for the output dataset.
+ * @param mask Apply the matrix only to voxels in the mask; other voxels will be set to all zeroes.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmatcalc_params(
     input_dataset: InputPathType,
     input_matrix: InputPathType,
     output_dataset: string,
     mask: InputPathType | null = null,
 ): V3dmatcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset to be processed.
-     * @param input_matrix The matrix to be applied, specified as a .1D file or as an expression in the syntax of 1dmatcalc.
-     * @param output_dataset Prefix for the output dataset.
-     * @param mask Apply the matrix only to voxels in the mask; other voxels will be set to all zeroes.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmatcalc" as const,
+        "@type": "afni.3dmatcalc" as const,
         "input_dataset": input_dataset,
         "input_matrix": input_matrix,
         "output_dataset": output_dataset,
@@ -104,18 +104,18 @@ function v_3dmatcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmatcalc_cargs(
     params: V3dmatcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmatcalc");
     cargs.push(
@@ -140,18 +140,18 @@ function v_3dmatcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmatcalc_outputs(
     params: V3dmatcalcParameters,
     execution: Execution,
 ): V3dmatcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmatcalcOutputs = {
         root: execution.outputFile("."),
         output_header: execution.outputFile([(params["output_dataset"] ?? null), "+tlrc.HEAD"].join('')),
@@ -161,22 +161,22 @@ function v_3dmatcalc_outputs(
 }
 
 
+/**
+ * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
+ */
 function v_3dmatcalc_execute(
     params: V3dmatcalcParameters,
     execution: Execution,
 ): V3dmatcalcOutputs {
-    /**
-     * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmatcalc_cargs(params, execution)
     const ret = v_3dmatcalc_outputs(params, execution)
@@ -185,6 +185,21 @@ function v_3dmatcalc_execute(
 }
 
 
+/**
+ * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset to be processed.
+ * @param input_matrix The matrix to be applied, specified as a .1D file or as an expression in the syntax of 1dmatcalc.
+ * @param output_dataset Prefix for the output dataset.
+ * @param mask Apply the matrix only to voxels in the mask; other voxels will be set to all zeroes.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
+ */
 function v_3dmatcalc(
     input_dataset: InputPathType,
     input_matrix: InputPathType,
@@ -192,21 +207,6 @@ function v_3dmatcalc(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dmatcalcOutputs {
-    /**
-     * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset to be processed.
-     * @param input_matrix The matrix to be applied, specified as a .1D file or as an expression in the syntax of 1dmatcalc.
-     * @param output_dataset Prefix for the output dataset.
-     * @param mask Apply the matrix only to voxels in the mask; other voxels will be set to all zeroes.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMATCALC_METADATA);
     const params = v_3dmatcalc_params(input_dataset, input_matrix, output_dataset, mask)
@@ -219,5 +219,8 @@ export {
       V3dmatcalcParameters,
       V_3DMATCALC_METADATA,
       v_3dmatcalc,
+      v_3dmatcalc_cargs,
+      v_3dmatcalc_execute,
+      v_3dmatcalc_outputs,
       v_3dmatcalc_params,
 };

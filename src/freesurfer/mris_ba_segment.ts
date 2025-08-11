@@ -12,7 +12,7 @@ const MRIS_BA_SEGMENT_METADATA: Metadata = {
 
 
 interface MrisBaSegmentParameters {
-    "__STYXTYPE__": "mris_BA_segment";
+    "@type": "freesurfer.mris_BA_segment";
     "surface": InputPathType;
     "profiles": InputPathType;
     "prior_label": InputPathType;
@@ -20,35 +20,35 @@ interface MrisBaSegmentParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_BA_segment": mris_ba_segment_cargs,
+        "freesurfer.mris_BA_segment": mris_ba_segment_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_BA_segment": mris_ba_segment_outputs,
+        "freesurfer.mris_BA_segment": mris_ba_segment_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisBaSegmentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Input surface file
+ * @param profiles Input profiles file
+ * @param prior_label Input prior label file
+ * @param output_label Output label file
+ *
+ * @returns Parameter dictionary
+ */
 function mris_ba_segment_params(
     surface: InputPathType,
     profiles: InputPathType,
     prior_label: InputPathType,
     output_label: string,
 ): MrisBaSegmentParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Input surface file
-     * @param profiles Input profiles file
-     * @param prior_label Input prior label file
-     * @param output_label Output label file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_BA_segment" as const,
+        "@type": "freesurfer.mris_BA_segment" as const,
         "surface": surface,
         "profiles": profiles,
         "prior_label": prior_label,
@@ -98,18 +98,18 @@ function mris_ba_segment_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_ba_segment_cargs(
     params: MrisBaSegmentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_BA_segment");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -120,18 +120,18 @@ function mris_ba_segment_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_ba_segment_outputs(
     params: MrisBaSegmentParameters,
     execution: Execution,
 ): MrisBaSegmentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisBaSegmentOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([(params["output_label"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_ba_segment_outputs(
 }
 
 
+/**
+ * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
+ */
 function mris_ba_segment_execute(
     params: MrisBaSegmentParameters,
     execution: Execution,
 ): MrisBaSegmentOutputs {
-    /**
-     * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_ba_segment_cargs(params, execution)
     const ret = mris_ba_segment_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_ba_segment_execute(
 }
 
 
+/**
+ * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Input surface file
+ * @param profiles Input profiles file
+ * @param prior_label Input prior label file
+ * @param output_label Output label file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
+ */
 function mris_ba_segment(
     surface: InputPathType,
     profiles: InputPathType,
@@ -171,21 +186,6 @@ function mris_ba_segment(
     output_label: string,
     runner: Runner | null = null,
 ): MrisBaSegmentOutputs {
-    /**
-     * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Input surface file
-     * @param profiles Input profiles file
-     * @param prior_label Input prior label file
-     * @param output_label Output label file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_BA_SEGMENT_METADATA);
     const params = mris_ba_segment_params(surface, profiles, prior_label, output_label)
@@ -198,5 +198,8 @@ export {
       MrisBaSegmentOutputs,
       MrisBaSegmentParameters,
       mris_ba_segment,
+      mris_ba_segment_cargs,
+      mris_ba_segment_execute,
+      mris_ba_segment_outputs,
       mris_ba_segment_params,
 };

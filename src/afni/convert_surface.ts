@@ -12,7 +12,7 @@ const CONVERT_SURFACE_METADATA: Metadata = {
 
 
 interface ConvertSurfaceParameters {
-    "__STYXTYPE__": "ConvertSurface";
+    "@type": "afni.ConvertSurface";
     "input_surface": string;
     "output_surface": string;
     "surface_volume"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface ConvertSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvertSurface": convert_surface_cargs,
+        "afni.ConvertSurface": convert_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ConvertSurface": convert_surface_outputs,
+        "afni.ConvertSurface": convert_surface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface ConvertSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Specifies the input surface.
+ * @param output_surface Specifies the output surface.
+ * @param surface_volume Specifies a surface volume.
+ * @param transform_tlrc Apply Talairach transform.
+ * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
+ * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
+ * @param xmat_1_d Apply transformation specified in 1D file.
+ * @param ixmat_1_d Apply inverse transformation specified in 1D file.
+ * @param seed Specify SEED to seed the random number generator for random matrix generation.
+ * @param native Write the output surface in the coordinate system native to its format.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_surface_params(
     input_surface: string,
     output_surface: string,
@@ -89,24 +105,8 @@ function convert_surface_params(
     seed: string | null = null,
     native: boolean = false,
 ): ConvertSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Specifies the input surface.
-     * @param output_surface Specifies the output surface.
-     * @param surface_volume Specifies a surface volume.
-     * @param transform_tlrc Apply Talairach transform.
-     * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
-     * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
-     * @param xmat_1_d Apply transformation specified in 1D file.
-     * @param ixmat_1_d Apply inverse transformation specified in 1D file.
-     * @param seed Specify SEED to seed the random number generator for random matrix generation.
-     * @param native Write the output surface in the coordinate system native to its format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvertSurface" as const,
+        "@type": "afni.ConvertSurface" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "transform_tlrc": transform_tlrc,
@@ -130,18 +130,18 @@ function convert_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_surface_cargs(
     params: ConvertSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvertSurface");
     cargs.push(
@@ -192,18 +192,18 @@ function convert_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_surface_outputs(
     params: ConvertSurfaceParameters,
     execution: Execution,
 ): ConvertSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertSurfaceOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -212,22 +212,22 @@ function convert_surface_outputs(
 }
 
 
+/**
+ * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
+ */
 function convert_surface_execute(
     params: ConvertSurfaceParameters,
     execution: Execution,
 ): ConvertSurfaceOutputs {
-    /**
-     * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_surface_cargs(params, execution)
     const ret = convert_surface_outputs(params, execution)
@@ -236,6 +236,27 @@ function convert_surface_execute(
 }
 
 
+/**
+ * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_surface Specifies the input surface.
+ * @param output_surface Specifies the output surface.
+ * @param surface_volume Specifies a surface volume.
+ * @param transform_tlrc Apply Talairach transform.
+ * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
+ * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
+ * @param xmat_1_d Apply transformation specified in 1D file.
+ * @param ixmat_1_d Apply inverse transformation specified in 1D file.
+ * @param seed Specify SEED to seed the random number generator for random matrix generation.
+ * @param native Write the output surface in the coordinate system native to its format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
+ */
 function convert_surface(
     input_surface: string,
     output_surface: string,
@@ -249,27 +270,6 @@ function convert_surface(
     native: boolean = false,
     runner: Runner | null = null,
 ): ConvertSurfaceOutputs {
-    /**
-     * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_surface Specifies the input surface.
-     * @param output_surface Specifies the output surface.
-     * @param surface_volume Specifies a surface volume.
-     * @param transform_tlrc Apply Talairach transform.
-     * @param mni_rai Turn AFNI tlrc coordinates (RAI) into MNI coord space in RAI.
-     * @param mni_lpi Turn AFNI tlrc coordinates (RAI) into MNI coord space in LPI.
-     * @param xmat_1_d Apply transformation specified in 1D file.
-     * @param ixmat_1_d Apply inverse transformation specified in 1D file.
-     * @param seed Specify SEED to seed the random number generator for random matrix generation.
-     * @param native Write the output surface in the coordinate system native to its format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_SURFACE_METADATA);
     const params = convert_surface_params(input_surface, output_surface, surface_volume, transform_tlrc, mni_rai, mni_lpi, xmat_1_d, ixmat_1_d, seed, native)
@@ -282,5 +282,8 @@ export {
       ConvertSurfaceOutputs,
       ConvertSurfaceParameters,
       convert_surface,
+      convert_surface_cargs,
+      convert_surface_execute,
+      convert_surface_outputs,
       convert_surface_params,
 };

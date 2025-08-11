@@ -12,7 +12,7 @@ const BRAIN_SKIN_METADATA: Metadata = {
 
 
 interface BrainSkinParameters {
-    "__STYXTYPE__": "BrainSkin";
+    "@type": "afni.BrainSkin";
     "surface": string;
     "skingrid_volume": InputPathType;
     "prefix": string;
@@ -29,35 +29,35 @@ interface BrainSkinParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "BrainSkin": brain_skin_cargs,
+        "afni.BrainSkin": brain_skin_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "BrainSkin": brain_skin_outputs,
+        "afni.BrainSkin": brain_skin_outputs,
     };
     return outputsFuncs[t];
 }
@@ -120,6 +120,25 @@ interface BrainSkinOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface to smooth or the domain over which DSET is defined.
+ * @param skingrid_volume A high-res volume to provide a grid for voxelization steps.
+ * @param prefix Prefix to use for variety of output files.
+ * @param plimit Maximum length of path along surface in mm for node pairing.
+ * @param dlimit Maximum length of Euclidean distance in mm for node pairing.
+ * @param segdo Output a displayable object file that contains segments between paired nodes.
+ * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
+ * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
+ * @param out_file Output intermediary results from skin forming step.
+ * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
+ * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
+ * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
+ * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
+ *
+ * @returns Parameter dictionary
+ */
 function brain_skin_params(
     surface: string,
     skingrid_volume: InputPathType,
@@ -135,27 +154,8 @@ function brain_skin_params(
     no_zero_attraction: boolean = false,
     node_dbg: number | null = null,
 ): BrainSkinParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface to smooth or the domain over which DSET is defined.
-     * @param skingrid_volume A high-res volume to provide a grid for voxelization steps.
-     * @param prefix Prefix to use for variety of output files.
-     * @param plimit Maximum length of path along surface in mm for node pairing.
-     * @param dlimit Maximum length of Euclidean distance in mm for node pairing.
-     * @param segdo Output a displayable object file that contains segments between paired nodes.
-     * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
-     * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
-     * @param out_file Output intermediary results from skin forming step.
-     * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
-     * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
-     * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
-     * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "BrainSkin" as const,
+        "@type": "afni.BrainSkin" as const,
         "surface": surface,
         "skingrid_volume": skingrid_volume,
         "prefix": prefix,
@@ -192,18 +192,18 @@ function brain_skin_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function brain_skin_cargs(
     params: BrainSkinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("BrainSkin");
     cargs.push((params["surface"] ?? null));
@@ -276,18 +276,18 @@ function brain_skin_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function brain_skin_outputs(
     params: BrainSkinParameters,
     execution: Execution,
 ): BrainSkinOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BrainSkinOutputs = {
         root: execution.outputFile("."),
         stitch_surface: execution.outputFile([(params["prefix"] ?? null), ".stitch.gii"].join('')),
@@ -306,22 +306,22 @@ function brain_skin_outputs(
 }
 
 
+/**
+ * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
+ */
 function brain_skin_execute(
     params: BrainSkinParameters,
     execution: Execution,
 ): BrainSkinOutputs {
-    /**
-     * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
-     */
     params = execution.params(params)
     const cargs = brain_skin_cargs(params, execution)
     const ret = brain_skin_outputs(params, execution)
@@ -330,6 +330,30 @@ function brain_skin_execute(
 }
 
 
+/**
+ * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Surface to smooth or the domain over which DSET is defined.
+ * @param skingrid_volume A high-res volume to provide a grid for voxelization steps.
+ * @param prefix Prefix to use for variety of output files.
+ * @param plimit Maximum length of path along surface in mm for node pairing.
+ * @param dlimit Maximum length of Euclidean distance in mm for node pairing.
+ * @param segdo Output a displayable object file that contains segments between paired nodes.
+ * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
+ * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
+ * @param out_file Output intermediary results from skin forming step.
+ * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
+ * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
+ * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
+ * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
+ */
 function brain_skin(
     surface: string,
     skingrid_volume: InputPathType,
@@ -346,30 +370,6 @@ function brain_skin(
     node_dbg: number | null = null,
     runner: Runner | null = null,
 ): BrainSkinOutputs {
-    /**
-     * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Surface to smooth or the domain over which DSET is defined.
-     * @param skingrid_volume A high-res volume to provide a grid for voxelization steps.
-     * @param prefix Prefix to use for variety of output files.
-     * @param plimit Maximum length of path along surface in mm for node pairing.
-     * @param dlimit Maximum length of Euclidean distance in mm for node pairing.
-     * @param segdo Output a displayable object file that contains segments between paired nodes.
-     * @param voxelize Voxelization method. Choose from: slow: Sure footed but slow, fast: Faster and works OK, mask: Fastest and works OK too (default).
-     * @param infill Infill method. Choose from: slow: proper infill, but not needed, fast: brutish infill, all we need (default).
-     * @param out_file Output intermediary results from skin forming step.
-     * @param vol_skin Deform an Icosahedron to match the outer boundary of a mask volume.
-     * @param vol_hull Deform an Icosahedron to match the convex hull of a mask volume.
-     * @param no_zero_attraction With vol_skin, the surface will try to shrink aggressively, even if there is no promise of non-zero values below.
-     * @param node_dbg Output debugging information for node N for -vol_skin and -vol_hull options.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BRAIN_SKIN_METADATA);
     const params = brain_skin_params(surface, skingrid_volume, prefix, plimit, dlimit, segdo, voxelize, infill, out_file, vol_skin, vol_hull, no_zero_attraction, node_dbg)
@@ -382,5 +382,8 @@ export {
       BrainSkinOutputs,
       BrainSkinParameters,
       brain_skin,
+      brain_skin_cargs,
+      brain_skin_execute,
+      brain_skin_outputs,
       brain_skin_params,
 };

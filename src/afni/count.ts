@@ -12,7 +12,7 @@ const COUNT_METADATA: Metadata = {
 
 
 interface CountParameters {
-    "__STYXTYPE__": "count";
+    "@type": "afni.count";
     "bot": string;
     "top": string;
     "step"?: string | null | undefined;
@@ -30,33 +30,33 @@ interface CountParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "count": count_cargs,
+        "afni.count": count_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -76,6 +76,26 @@ interface CountOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bot Starting number or character
+ * @param top Ending number or character
+ * @param step Stride step or mode (integer step size, R#, S# or S)
+ * @param seed Seed number for random number generator
+ * @param sseed Seed string for random number generator
+ * @param column Write output, one number per line
+ * @param digits Number of digits to print
+ * @param form Custom format string for printing the numbers
+ * @param root String to print before the number
+ * @param sep Separator character between the numbers
+ * @param suffix String to print after the number
+ * @param scale Scale factor to multiply each number
+ * @param comma Put commas between the outputs
+ * @param skipnmodm Skip numbers with modulus
+ *
+ * @returns Parameter dictionary
+ */
 function count_params(
     bot: string,
     top: string,
@@ -92,28 +112,8 @@ function count_params(
     comma: boolean = false,
     skipnmodm: string | null = null,
 ): CountParameters {
-    /**
-     * Build parameters.
-    
-     * @param bot Starting number or character
-     * @param top Ending number or character
-     * @param step Stride step or mode (integer step size, R#, S# or S)
-     * @param seed Seed number for random number generator
-     * @param sseed Seed string for random number generator
-     * @param column Write output, one number per line
-     * @param digits Number of digits to print
-     * @param form Custom format string for printing the numbers
-     * @param root String to print before the number
-     * @param sep Separator character between the numbers
-     * @param suffix String to print after the number
-     * @param scale Scale factor to multiply each number
-     * @param comma Put commas between the outputs
-     * @param skipnmodm Skip numbers with modulus
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "count" as const,
+        "@type": "afni.count" as const,
         "bot": bot,
         "top": top,
         "column": column,
@@ -153,18 +153,18 @@ function count_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function count_cargs(
     params: CountParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("count");
     cargs.push((params["bot"] ?? null));
@@ -236,18 +236,18 @@ function count_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function count_outputs(
     params: CountParameters,
     execution: Execution,
 ): CountOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CountOutputs = {
         root: execution.outputFile("."),
     };
@@ -255,22 +255,22 @@ function count_outputs(
 }
 
 
+/**
+ * Numbered copies generator with custom format support and random sequence options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CountOutputs`).
+ */
 function count_execute(
     params: CountParameters,
     execution: Execution,
 ): CountOutputs {
-    /**
-     * Numbered copies generator with custom format support and random sequence options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CountOutputs`).
-     */
     params = execution.params(params)
     const cargs = count_cargs(params, execution)
     const ret = count_outputs(params, execution)
@@ -279,6 +279,31 @@ function count_execute(
 }
 
 
+/**
+ * Numbered copies generator with custom format support and random sequence options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param bot Starting number or character
+ * @param top Ending number or character
+ * @param step Stride step or mode (integer step size, R#, S# or S)
+ * @param seed Seed number for random number generator
+ * @param sseed Seed string for random number generator
+ * @param column Write output, one number per line
+ * @param digits Number of digits to print
+ * @param form Custom format string for printing the numbers
+ * @param root String to print before the number
+ * @param sep Separator character between the numbers
+ * @param suffix String to print after the number
+ * @param scale Scale factor to multiply each number
+ * @param comma Put commas between the outputs
+ * @param skipnmodm Skip numbers with modulus
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CountOutputs`).
+ */
 function count(
     bot: string,
     top: string,
@@ -296,31 +321,6 @@ function count(
     skipnmodm: string | null = null,
     runner: Runner | null = null,
 ): CountOutputs {
-    /**
-     * Numbered copies generator with custom format support and random sequence options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param bot Starting number or character
-     * @param top Ending number or character
-     * @param step Stride step or mode (integer step size, R#, S# or S)
-     * @param seed Seed number for random number generator
-     * @param sseed Seed string for random number generator
-     * @param column Write output, one number per line
-     * @param digits Number of digits to print
-     * @param form Custom format string for printing the numbers
-     * @param root String to print before the number
-     * @param sep Separator character between the numbers
-     * @param suffix String to print after the number
-     * @param scale Scale factor to multiply each number
-     * @param comma Put commas between the outputs
-     * @param skipnmodm Skip numbers with modulus
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CountOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(COUNT_METADATA);
     const params = count_params(bot, top, step, seed, sseed, column, digits, form, root, sep, suffix, scale, comma, skipnmodm)
@@ -333,5 +333,8 @@ export {
       CountOutputs,
       CountParameters,
       count,
+      count_cargs,
+      count_execute,
+      count_outputs,
       count_params,
 };

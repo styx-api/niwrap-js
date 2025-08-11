@@ -12,7 +12,7 @@ const V_3D_TNORM_METADATA: Metadata = {
 
 
 interface V3dTnormParameters {
-    "__STYXTYPE__": "3dTnorm";
+    "@type": "afni.3dTnorm";
     "prefix"?: string | null | undefined;
     "norm2": boolean;
     "normR": boolean;
@@ -24,35 +24,35 @@ interface V3dTnormParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTnorm": v_3d_tnorm_cargs,
+        "afni.3dTnorm": v_3d_tnorm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTnorm": v_3d_tnorm_outputs,
+        "afni.3dTnorm": v_3d_tnorm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dTnormOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g. data.nii)
+ * @param prefix Prefix for the output dataset
+ * @param norm2 L2 normalize (sum of squares = 1)
+ * @param norm_r Normalize so sum of squares = number of time points
+ * @param norm1 L1 normalize (sum of absolute values = 1)
+ * @param normx Scale so max absolute value = 1 (L_infinity norm)
+ * @param polort Detrend with polynomials of order p before normalizing
+ * @param l1fit Detrend with L1 regression (L2 is default)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tnorm_params(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -85,22 +99,8 @@ function v_3d_tnorm_params(
     polort: number | null = null,
     l1fit: boolean = false,
 ): V3dTnormParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g. data.nii)
-     * @param prefix Prefix for the output dataset
-     * @param norm2 L2 normalize (sum of squares = 1)
-     * @param norm_r Normalize so sum of squares = number of time points
-     * @param norm1 L1 normalize (sum of absolute values = 1)
-     * @param normx Scale so max absolute value = 1 (L_infinity norm)
-     * @param polort Detrend with polynomials of order p before normalizing
-     * @param l1fit Detrend with L1 regression (L2 is default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTnorm" as const,
+        "@type": "afni.3dTnorm" as const,
         "norm2": norm2,
         "normR": norm_r,
         "norm1": norm1,
@@ -118,18 +118,18 @@ function v_3d_tnorm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tnorm_cargs(
     params: V3dTnormParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTnorm");
     if ((params["prefix"] ?? null) !== null) {
@@ -164,18 +164,18 @@ function v_3d_tnorm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tnorm_outputs(
     params: V3dTnormParameters,
     execution: Execution,
 ): V3dTnormOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTnormOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')) : null,
@@ -184,22 +184,22 @@ function v_3d_tnorm_outputs(
 }
 
 
+/**
+ * Normalizes each voxel time series by multiplicative scaling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
+ */
 function v_3d_tnorm_execute(
     params: V3dTnormParameters,
     execution: Execution,
 ): V3dTnormOutputs {
-    /**
-     * Normalizes each voxel time series by multiplicative scaling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tnorm_cargs(params, execution)
     const ret = v_3d_tnorm_outputs(params, execution)
@@ -208,6 +208,25 @@ function v_3d_tnorm_execute(
 }
 
 
+/**
+ * Normalizes each voxel time series by multiplicative scaling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g. data.nii)
+ * @param prefix Prefix for the output dataset
+ * @param norm2 L2 normalize (sum of squares = 1)
+ * @param norm_r Normalize so sum of squares = number of time points
+ * @param norm1 L1 normalize (sum of absolute values = 1)
+ * @param normx Scale so max absolute value = 1 (L_infinity norm)
+ * @param polort Detrend with polynomials of order p before normalizing
+ * @param l1fit Detrend with L1 regression (L2 is default)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
+ */
 function v_3d_tnorm(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -219,25 +238,6 @@ function v_3d_tnorm(
     l1fit: boolean = false,
     runner: Runner | null = null,
 ): V3dTnormOutputs {
-    /**
-     * Normalizes each voxel time series by multiplicative scaling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g. data.nii)
-     * @param prefix Prefix for the output dataset
-     * @param norm2 L2 normalize (sum of squares = 1)
-     * @param norm_r Normalize so sum of squares = number of time points
-     * @param norm1 L1 normalize (sum of absolute values = 1)
-     * @param normx Scale so max absolute value = 1 (L_infinity norm)
-     * @param polort Detrend with polynomials of order p before normalizing
-     * @param l1fit Detrend with L1 regression (L2 is default)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TNORM_METADATA);
     const params = v_3d_tnorm_params(input_dataset, prefix, norm2, norm_r, norm1, normx, polort, l1fit)
@@ -250,5 +250,8 @@ export {
       V3dTnormParameters,
       V_3D_TNORM_METADATA,
       v_3d_tnorm,
+      v_3d_tnorm_cargs,
+      v_3d_tnorm_execute,
+      v_3d_tnorm_outputs,
       v_3d_tnorm_params,
 };

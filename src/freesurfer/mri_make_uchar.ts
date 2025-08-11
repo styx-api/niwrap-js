@@ -12,7 +12,7 @@ const MRI_MAKE_UCHAR_METADATA: Metadata = {
 
 
 interface MriMakeUcharParameters {
-    "__STYXTYPE__": "mri_make_uchar";
+    "@type": "freesurfer.mri_make_uchar";
     "input_volume": InputPathType;
     "talairach_xform": InputPathType;
     "output_volume": string;
@@ -24,35 +24,35 @@ interface MriMakeUcharParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_make_uchar": mri_make_uchar_cargs,
+        "freesurfer.mri_make_uchar": mri_make_uchar_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_make_uchar": mri_make_uchar_outputs,
+        "freesurfer.mri_make_uchar": mri_make_uchar_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MriMakeUcharOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file.
+ * @param talairach_xform Talairach transformation file.
+ * @param output_volume Output volume file.
+ * @param first_percentile First percentile for histogram calculation (default 0.01).
+ * @param wm_percentile White matter percentile for histogram calculation (default 0.9).
+ * @param max_radius Maximum radius for voxel consideration (default 50).
+ * @param cumulative_histo Cumulative histogram file.
+ * @param vradvol Volume file where everything outside MAX_R is set to 0.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_make_uchar_params(
     input_volume: InputPathType,
     talairach_xform: InputPathType,
@@ -85,22 +99,8 @@ function mri_make_uchar_params(
     cumulative_histo: string | null = null,
     vradvol: string | null = null,
 ): MriMakeUcharParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file.
-     * @param talairach_xform Talairach transformation file.
-     * @param output_volume Output volume file.
-     * @param first_percentile First percentile for histogram calculation (default 0.01).
-     * @param wm_percentile White matter percentile for histogram calculation (default 0.9).
-     * @param max_radius Maximum radius for voxel consideration (default 50).
-     * @param cumulative_histo Cumulative histogram file.
-     * @param vradvol Volume file where everything outside MAX_R is set to 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_make_uchar" as const,
+        "@type": "freesurfer.mri_make_uchar" as const,
         "input_volume": input_volume,
         "talairach_xform": talairach_xform,
         "output_volume": output_volume,
@@ -124,18 +124,18 @@ function mri_make_uchar_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_make_uchar_cargs(
     params: MriMakeUcharParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_make_uchar");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -175,18 +175,18 @@ function mri_make_uchar_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_make_uchar_outputs(
     params: MriMakeUcharParameters,
     execution: Execution,
 ): MriMakeUcharOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMakeUcharOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -195,22 +195,22 @@ function mri_make_uchar_outputs(
 }
 
 
+/**
+ * Tool to adjust intensity of brain MRI images using a Talairach transformation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
+ */
 function mri_make_uchar_execute(
     params: MriMakeUcharParameters,
     execution: Execution,
 ): MriMakeUcharOutputs {
-    /**
-     * Tool to adjust intensity of brain MRI images using a Talairach transformation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_make_uchar_cargs(params, execution)
     const ret = mri_make_uchar_outputs(params, execution)
@@ -219,6 +219,25 @@ function mri_make_uchar_execute(
 }
 
 
+/**
+ * Tool to adjust intensity of brain MRI images using a Talairach transformation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file.
+ * @param talairach_xform Talairach transformation file.
+ * @param output_volume Output volume file.
+ * @param first_percentile First percentile for histogram calculation (default 0.01).
+ * @param wm_percentile White matter percentile for histogram calculation (default 0.9).
+ * @param max_radius Maximum radius for voxel consideration (default 50).
+ * @param cumulative_histo Cumulative histogram file.
+ * @param vradvol Volume file where everything outside MAX_R is set to 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
+ */
 function mri_make_uchar(
     input_volume: InputPathType,
     talairach_xform: InputPathType,
@@ -230,25 +249,6 @@ function mri_make_uchar(
     vradvol: string | null = null,
     runner: Runner | null = null,
 ): MriMakeUcharOutputs {
-    /**
-     * Tool to adjust intensity of brain MRI images using a Talairach transformation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file.
-     * @param talairach_xform Talairach transformation file.
-     * @param output_volume Output volume file.
-     * @param first_percentile First percentile for histogram calculation (default 0.01).
-     * @param wm_percentile White matter percentile for histogram calculation (default 0.9).
-     * @param max_radius Maximum radius for voxel consideration (default 50).
-     * @param cumulative_histo Cumulative histogram file.
-     * @param vradvol Volume file where everything outside MAX_R is set to 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MAKE_UCHAR_METADATA);
     const params = mri_make_uchar_params(input_volume, talairach_xform, output_volume, first_percentile, wm_percentile, max_radius, cumulative_histo, vradvol)
@@ -261,5 +261,8 @@ export {
       MriMakeUcharOutputs,
       MriMakeUcharParameters,
       mri_make_uchar,
+      mri_make_uchar_cargs,
+      mri_make_uchar_execute,
+      mri_make_uchar_outputs,
       mri_make_uchar_params,
 };

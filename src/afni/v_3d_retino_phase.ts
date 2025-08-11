@@ -12,7 +12,7 @@ const V_3D_RETINO_PHASE_METADATA: Metadata = {
 
 
 interface V3dRetinoPhaseParameters {
-    "__STYXTYPE__": "3dRetinoPhase";
+    "@type": "afni.3dRetinoPhase";
     "prefix": string;
     "dataset": InputPathType;
     "exp"?: string | null | undefined;
@@ -32,35 +32,35 @@ interface V3dRetinoPhaseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRetinoPhase": v_3d_retino_phase_cargs,
+        "afni.3dRetinoPhase": v_3d_retino_phase_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRetinoPhase": v_3d_retino_phase_outputs,
+        "afni.3dRetinoPhase": v_3d_retino_phase_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,28 @@ interface V3dRetinoPhaseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix of output datasets.
+ * @param dataset Time series from a retinotopy stimulus.
+ * @param exp Expanding rings stimulus.
+ * @param con Contracting rings stimulus.
+ * @param clw Clockwise moving polar angle mapping stimulus.
+ * @param ccw Counterclockwise moving polar angle mapping stimulus.
+ * @param spectra Output amplitude and phase spectra datasets.
+ * @param tstim Period of stimulus in seconds.
+ * @param nrings Number of rings in the stimulus. Default is 1.
+ * @param nwedges Number of wedges in the stimulus. Default is 1.
+ * @param ort_adjust Number of DOF lost in detrending outside of this program.
+ * @param pre_stim Blank period, in seconds, before stimulus began.
+ * @param sum_adjust Adjust sum of angles for wrapping based on the angle difference. Default is 'y'.
+ * @param phase_estimate Method of phase estimation.
+ * @param ref_ts 0 lag reference time series of response for DELAY phase estimation method.
+ * @param multi_ref_ts Multiple 0 lag reference time series. This allows you to test multiple regressors.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_retino_phase_params(
     prefix: string,
     dataset: InputPathType,
@@ -113,30 +135,8 @@ function v_3d_retino_phase_params(
     ref_ts: InputPathType | null = null,
     multi_ref_ts: InputPathType | null = null,
 ): V3dRetinoPhaseParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix of output datasets.
-     * @param dataset Time series from a retinotopy stimulus.
-     * @param exp Expanding rings stimulus.
-     * @param con Contracting rings stimulus.
-     * @param clw Clockwise moving polar angle mapping stimulus.
-     * @param ccw Counterclockwise moving polar angle mapping stimulus.
-     * @param spectra Output amplitude and phase spectra datasets.
-     * @param tstim Period of stimulus in seconds.
-     * @param nrings Number of rings in the stimulus. Default is 1.
-     * @param nwedges Number of wedges in the stimulus. Default is 1.
-     * @param ort_adjust Number of DOF lost in detrending outside of this program.
-     * @param pre_stim Blank period, in seconds, before stimulus began.
-     * @param sum_adjust Adjust sum of angles for wrapping based on the angle difference. Default is 'y'.
-     * @param phase_estimate Method of phase estimation.
-     * @param ref_ts 0 lag reference time series of response for DELAY phase estimation method.
-     * @param multi_ref_ts Multiple 0 lag reference time series. This allows you to test multiple regressors.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRetinoPhase" as const,
+        "@type": "afni.3dRetinoPhase" as const,
         "prefix": prefix,
         "dataset": dataset,
         "spectra": spectra,
@@ -184,18 +184,18 @@ function v_3d_retino_phase_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_retino_phase_cargs(
     params: V3dRetinoPhaseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRetinoPhase");
     cargs.push((params["prefix"] ?? null));
@@ -285,18 +285,18 @@ function v_3d_retino_phase_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_retino_phase_outputs(
     params: V3dRetinoPhaseParameters,
     execution: Execution,
 ): V3dRetinoPhaseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRetinoPhaseOutputs = {
         root: execution.outputFile("."),
         ecc_plus: execution.outputFile([(params["prefix"] ?? null), ".ecc+"].join('')),
@@ -308,22 +308,22 @@ function v_3d_retino_phase_outputs(
 }
 
 
+/**
+ * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
+ */
 function v_3d_retino_phase_execute(
     params: V3dRetinoPhaseParameters,
     execution: Execution,
 ): V3dRetinoPhaseOutputs {
-    /**
-     * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_retino_phase_cargs(params, execution)
     const ret = v_3d_retino_phase_outputs(params, execution)
@@ -332,6 +332,33 @@ function v_3d_retino_phase_execute(
 }
 
 
+/**
+ * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix of output datasets.
+ * @param dataset Time series from a retinotopy stimulus.
+ * @param exp Expanding rings stimulus.
+ * @param con Contracting rings stimulus.
+ * @param clw Clockwise moving polar angle mapping stimulus.
+ * @param ccw Counterclockwise moving polar angle mapping stimulus.
+ * @param spectra Output amplitude and phase spectra datasets.
+ * @param tstim Period of stimulus in seconds.
+ * @param nrings Number of rings in the stimulus. Default is 1.
+ * @param nwedges Number of wedges in the stimulus. Default is 1.
+ * @param ort_adjust Number of DOF lost in detrending outside of this program.
+ * @param pre_stim Blank period, in seconds, before stimulus began.
+ * @param sum_adjust Adjust sum of angles for wrapping based on the angle difference. Default is 'y'.
+ * @param phase_estimate Method of phase estimation.
+ * @param ref_ts 0 lag reference time series of response for DELAY phase estimation method.
+ * @param multi_ref_ts Multiple 0 lag reference time series. This allows you to test multiple regressors.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
+ */
 function v_3d_retino_phase(
     prefix: string,
     dataset: InputPathType,
@@ -351,33 +378,6 @@ function v_3d_retino_phase(
     multi_ref_ts: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dRetinoPhaseOutputs {
-    /**
-     * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix of output datasets.
-     * @param dataset Time series from a retinotopy stimulus.
-     * @param exp Expanding rings stimulus.
-     * @param con Contracting rings stimulus.
-     * @param clw Clockwise moving polar angle mapping stimulus.
-     * @param ccw Counterclockwise moving polar angle mapping stimulus.
-     * @param spectra Output amplitude and phase spectra datasets.
-     * @param tstim Period of stimulus in seconds.
-     * @param nrings Number of rings in the stimulus. Default is 1.
-     * @param nwedges Number of wedges in the stimulus. Default is 1.
-     * @param ort_adjust Number of DOF lost in detrending outside of this program.
-     * @param pre_stim Blank period, in seconds, before stimulus began.
-     * @param sum_adjust Adjust sum of angles for wrapping based on the angle difference. Default is 'y'.
-     * @param phase_estimate Method of phase estimation.
-     * @param ref_ts 0 lag reference time series of response for DELAY phase estimation method.
-     * @param multi_ref_ts Multiple 0 lag reference time series. This allows you to test multiple regressors.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RETINO_PHASE_METADATA);
     const params = v_3d_retino_phase_params(prefix, dataset, exp, con, clw, ccw, spectra, tstim, nrings, nwedges, ort_adjust, pre_stim, sum_adjust, phase_estimate, ref_ts, multi_ref_ts)
@@ -390,5 +390,8 @@ export {
       V3dRetinoPhaseParameters,
       V_3D_RETINO_PHASE_METADATA,
       v_3d_retino_phase,
+      v_3d_retino_phase_cargs,
+      v_3d_retino_phase_execute,
+      v_3d_retino_phase_outputs,
       v_3d_retino_phase_params,
 };

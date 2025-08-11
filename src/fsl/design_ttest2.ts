@@ -12,7 +12,7 @@ const DESIGN_TTEST2_METADATA: Metadata = {
 
 
 interface DesignTtest2Parameters {
-    "__STYXTYPE__": "design_ttest2";
+    "@type": "fsl.design_ttest2";
     "design_files_rootname": string;
     "ngroupa": number;
     "ngroupb": number;
@@ -20,33 +20,33 @@ interface DesignTtest2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "design_ttest2": design_ttest2_cargs,
+        "fsl.design_ttest2": design_ttest2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface DesignTtest2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param design_files_rootname Root name for design files
+ * @param ngroupa Number of subjects in group A
+ * @param ngroupb Number of subjects in group B
+ * @param include_mean_contrasts Include individual group mean contrasts
+ *
+ * @returns Parameter dictionary
+ */
 function design_ttest2_params(
     design_files_rootname: string,
     ngroupa: number,
     ngroupb: number,
     include_mean_contrasts: boolean = false,
 ): DesignTtest2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param design_files_rootname Root name for design files
-     * @param ngroupa Number of subjects in group A
-     * @param ngroupb Number of subjects in group B
-     * @param include_mean_contrasts Include individual group mean contrasts
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "design_ttest2" as const,
+        "@type": "fsl.design_ttest2" as const,
         "design_files_rootname": design_files_rootname,
         "ngroupa": ngroupa,
         "ngroupb": ngroupb,
@@ -93,18 +93,18 @@ function design_ttest2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function design_ttest2_cargs(
     params: DesignTtest2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("design_ttest2");
     cargs.push((params["design_files_rootname"] ?? null));
@@ -117,18 +117,18 @@ function design_ttest2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function design_ttest2_outputs(
     params: DesignTtest2Parameters,
     execution: Execution,
 ): DesignTtest2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DesignTtest2Outputs = {
         root: execution.outputFile("."),
     };
@@ -136,22 +136,22 @@ function design_ttest2_outputs(
 }
 
 
+/**
+ * Command for generating group mean contrasts for a two-sample t-test design.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
+ */
 function design_ttest2_execute(
     params: DesignTtest2Parameters,
     execution: Execution,
 ): DesignTtest2Outputs {
-    /**
-     * Command for generating group mean contrasts for a two-sample t-test design.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
-     */
     params = execution.params(params)
     const cargs = design_ttest2_cargs(params, execution)
     const ret = design_ttest2_outputs(params, execution)
@@ -160,6 +160,21 @@ function design_ttest2_execute(
 }
 
 
+/**
+ * Command for generating group mean contrasts for a two-sample t-test design.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param design_files_rootname Root name for design files
+ * @param ngroupa Number of subjects in group A
+ * @param ngroupb Number of subjects in group B
+ * @param include_mean_contrasts Include individual group mean contrasts
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
+ */
 function design_ttest2(
     design_files_rootname: string,
     ngroupa: number,
@@ -167,21 +182,6 @@ function design_ttest2(
     include_mean_contrasts: boolean = false,
     runner: Runner | null = null,
 ): DesignTtest2Outputs {
-    /**
-     * Command for generating group mean contrasts for a two-sample t-test design.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param design_files_rootname Root name for design files
-     * @param ngroupa Number of subjects in group A
-     * @param ngroupb Number of subjects in group B
-     * @param include_mean_contrasts Include individual group mean contrasts
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DESIGN_TTEST2_METADATA);
     const params = design_ttest2_params(design_files_rootname, ngroupa, ngroupb, include_mean_contrasts)
@@ -194,5 +194,8 @@ export {
       DesignTtest2Outputs,
       DesignTtest2Parameters,
       design_ttest2,
+      design_ttest2_cargs,
+      design_ttest2_execute,
+      design_ttest2_outputs,
       design_ttest2_params,
 };

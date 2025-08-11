@@ -12,42 +12,42 @@ const MAKE_UPRIGHT_METADATA: Metadata = {
 
 
 interface MakeUprightParameters {
-    "__STYXTYPE__": "make_upright";
+    "@type": "freesurfer.make_upright";
     "input_image": InputPathType;
     "output_image": string;
     "transformation_map": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_upright": make_upright_cargs,
+        "freesurfer.make_upright": make_upright_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_upright": make_upright_outputs,
+        "freesurfer.make_upright": make_upright_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MakeUprightOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input MRI image file in .mgz format
+ * @param output_image Output MRI image file in .mgz format
+ * @param transformation_map Transformation map file in .lta format
+ *
+ * @returns Parameter dictionary
+ */
 function make_upright_params(
     input_image: InputPathType,
     output_image: string,
     transformation_map: InputPathType,
 ): MakeUprightParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input MRI image file in .mgz format
-     * @param output_image Output MRI image file in .mgz format
-     * @param transformation_map Transformation map file in .lta format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_upright" as const,
+        "@type": "freesurfer.make_upright" as const,
         "input_image": input_image,
         "output_image": output_image,
         "transformation_map": transformation_map,
@@ -94,18 +94,18 @@ function make_upright_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_upright_cargs(
     params: MakeUprightParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_upright");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -115,18 +115,18 @@ function make_upright_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_upright_outputs(
     params: MakeUprightParameters,
     execution: Execution,
 ): MakeUprightOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeUprightOutputs = {
         root: execution.outputFile("."),
         registered_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function make_upright_outputs(
 }
 
 
+/**
+ * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
+ */
 function make_upright_execute(
     params: MakeUprightParameters,
     execution: Execution,
 ): MakeUprightOutputs {
-    /**
-     * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_upright_cargs(params, execution)
     const ret = make_upright_outputs(params, execution)
@@ -159,26 +159,26 @@ function make_upright_execute(
 }
 
 
+/**
+ * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input MRI image file in .mgz format
+ * @param output_image Output MRI image file in .mgz format
+ * @param transformation_map Transformation map file in .lta format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
+ */
 function make_upright(
     input_image: InputPathType,
     output_image: string,
     transformation_map: InputPathType,
     runner: Runner | null = null,
 ): MakeUprightOutputs {
-    /**
-     * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input MRI image file in .mgz format
-     * @param output_image Output MRI image file in .mgz format
-     * @param transformation_map Transformation map file in .lta format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_UPRIGHT_METADATA);
     const params = make_upright_params(input_image, output_image, transformation_map)
@@ -191,5 +191,8 @@ export {
       MakeUprightOutputs,
       MakeUprightParameters,
       make_upright,
+      make_upright_cargs,
+      make_upright_execute,
+      make_upright_outputs,
       make_upright_params,
 };

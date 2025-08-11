@@ -12,7 +12,7 @@ const V_3D_DWITO_DT_METADATA: Metadata = {
 
 
 interface V3dDwitoDtParameters {
-    "__STYXTYPE__": "3dDWItoDT";
+    "@type": "afni.3dDWItoDT";
     "gradient_file": InputPathType;
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -42,35 +42,35 @@ interface V3dDwitoDtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDWItoDT": v_3d_dwito_dt_cargs,
+        "afni.3dDWItoDT": v_3d_dwito_dt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDWItoDT": v_3d_dwito_dt_outputs,
+        "afni.3dDWItoDT": v_3d_dwito_dt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,38 @@ interface V3dDwitoDtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gradient_file A 1D file of the gradient vectors with lines of ASCII floats (Gxi, Gyi, Gzi) or a 1D file of b-matrix elements.
+ * @param dataset A 3D bucket dataset with Np+1 sub-briks where the first sub-brik is the volume acquired with no diffusion weighting.
+ * @param prefix Output dataset prefix name. Default is 'DT'.
+ * @param automask Mask dataset so that tensors are computed only for high-intensity (presumably brain) voxels.
+ * @param mask Use this dataset as mask to include/exclude voxels.
+ * @param bmatrix_nz Input dataset is b-matrix, not gradient directions, and there is no row of zeros at the top of the file.
+ * @param bmatrix_z Similar to '-bmatrix_NZ' but first row of the file is all zeros.
+ * @param bmatrix_full Same as '-bmatrix_Z' but with a more intuitive name.
+ * @param scale_out_1000 Increase output parameters with physical units by multiplying them by 1000.
+ * @param bmax_ref Flag the reference b-value if it is greater than zero.
+ * @param nonlinear Compute iterative solution to avoid negative eigenvalues. This is the default method.
+ * @param linear Compute simple linear solution.
+ * @param reweight Recompute weight factors at end of iterations and restart.
+ * @param max_iter Maximum number of iterations for convergence. Default is 10.
+ * @param max_iter_rw Max number of iterations after reweighting. Default is 5.
+ * @param eigs Compute eigenvalues, eigenvectors, fractional anisotropy, and mean diffusivity in sub-briks 6-19.
+ * @param debug_briks Add sub-briks with error functional, original error, number of steps to convergence, and modeled B0 volume.
+ * @param cumulative_wts Show overall weight factors for each gradient level.
+ * @param verbose Print convergence steps every nnnnn voxels.
+ * @param drive_afni Show convergence graphs every nnnnn voxels. AFNI must have NIML communications on.
+ * @param sep_dsets Save tensor, eigenvalues, vectors, FA, MD in separate datasets.
+ * @param csf_val Assign diffusivity value to DWI data where the mean values for b=0 volumes is less than the mean of the remaining volumes at each voxel.
+ * @param min_bad_md Change the min MD value used as a 'badness check' for tensor fits.
+ * @param csf_fa Assign a specific FA value to CSF voxels.
+ * @param opt Optimization method: 'powell', 'gradient', or 'hybrid'.
+ * @param mean_b0 Use mean of all b=0 volumes for linear computation and initial linear for nonlinear method.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_dwito_dt_params(
     gradient_file: InputPathType,
     dataset: InputPathType,
@@ -121,40 +153,8 @@ function v_3d_dwito_dt_params(
     opt: string | null = null,
     mean_b0: boolean = false,
 ): V3dDwitoDtParameters {
-    /**
-     * Build parameters.
-    
-     * @param gradient_file A 1D file of the gradient vectors with lines of ASCII floats (Gxi, Gyi, Gzi) or a 1D file of b-matrix elements.
-     * @param dataset A 3D bucket dataset with Np+1 sub-briks where the first sub-brik is the volume acquired with no diffusion weighting.
-     * @param prefix Output dataset prefix name. Default is 'DT'.
-     * @param automask Mask dataset so that tensors are computed only for high-intensity (presumably brain) voxels.
-     * @param mask Use this dataset as mask to include/exclude voxels.
-     * @param bmatrix_nz Input dataset is b-matrix, not gradient directions, and there is no row of zeros at the top of the file.
-     * @param bmatrix_z Similar to '-bmatrix_NZ' but first row of the file is all zeros.
-     * @param bmatrix_full Same as '-bmatrix_Z' but with a more intuitive name.
-     * @param scale_out_1000 Increase output parameters with physical units by multiplying them by 1000.
-     * @param bmax_ref Flag the reference b-value if it is greater than zero.
-     * @param nonlinear Compute iterative solution to avoid negative eigenvalues. This is the default method.
-     * @param linear Compute simple linear solution.
-     * @param reweight Recompute weight factors at end of iterations and restart.
-     * @param max_iter Maximum number of iterations for convergence. Default is 10.
-     * @param max_iter_rw Max number of iterations after reweighting. Default is 5.
-     * @param eigs Compute eigenvalues, eigenvectors, fractional anisotropy, and mean diffusivity in sub-briks 6-19.
-     * @param debug_briks Add sub-briks with error functional, original error, number of steps to convergence, and modeled B0 volume.
-     * @param cumulative_wts Show overall weight factors for each gradient level.
-     * @param verbose Print convergence steps every nnnnn voxels.
-     * @param drive_afni Show convergence graphs every nnnnn voxels. AFNI must have NIML communications on.
-     * @param sep_dsets Save tensor, eigenvalues, vectors, FA, MD in separate datasets.
-     * @param csf_val Assign diffusivity value to DWI data where the mean values for b=0 volumes is less than the mean of the remaining volumes at each voxel.
-     * @param min_bad_md Change the min MD value used as a 'badness check' for tensor fits.
-     * @param csf_fa Assign a specific FA value to CSF voxels.
-     * @param opt Optimization method: 'powell', 'gradient', or 'hybrid'.
-     * @param mean_b0 Use mean of all b=0 volumes for linear computation and initial linear for nonlinear method.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDWItoDT" as const,
+        "@type": "afni.3dDWItoDT" as const,
         "gradient_file": gradient_file,
         "dataset": dataset,
         "automask": automask,
@@ -214,18 +214,18 @@ function v_3d_dwito_dt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_dwito_dt_cargs(
     params: V3dDwitoDtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDWItoDT");
     cargs.push(execution.inputFile((params["gradient_file"] ?? null)));
@@ -348,18 +348,18 @@ function v_3d_dwito_dt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_dwito_dt_outputs(
     params: V3dDwitoDtParameters,
     execution: Execution,
 ): V3dDwitoDtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDwitoDtOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile(["<PREFIX>.*"].join('')),
@@ -368,22 +368,22 @@ function v_3d_dwito_dt_outputs(
 }
 
 
+/**
+ * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
+ */
 function v_3d_dwito_dt_execute(
     params: V3dDwitoDtParameters,
     execution: Execution,
 ): V3dDwitoDtOutputs {
-    /**
-     * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_dwito_dt_cargs(params, execution)
     const ret = v_3d_dwito_dt_outputs(params, execution)
@@ -392,6 +392,43 @@ function v_3d_dwito_dt_execute(
 }
 
 
+/**
+ * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param gradient_file A 1D file of the gradient vectors with lines of ASCII floats (Gxi, Gyi, Gzi) or a 1D file of b-matrix elements.
+ * @param dataset A 3D bucket dataset with Np+1 sub-briks where the first sub-brik is the volume acquired with no diffusion weighting.
+ * @param prefix Output dataset prefix name. Default is 'DT'.
+ * @param automask Mask dataset so that tensors are computed only for high-intensity (presumably brain) voxels.
+ * @param mask Use this dataset as mask to include/exclude voxels.
+ * @param bmatrix_nz Input dataset is b-matrix, not gradient directions, and there is no row of zeros at the top of the file.
+ * @param bmatrix_z Similar to '-bmatrix_NZ' but first row of the file is all zeros.
+ * @param bmatrix_full Same as '-bmatrix_Z' but with a more intuitive name.
+ * @param scale_out_1000 Increase output parameters with physical units by multiplying them by 1000.
+ * @param bmax_ref Flag the reference b-value if it is greater than zero.
+ * @param nonlinear Compute iterative solution to avoid negative eigenvalues. This is the default method.
+ * @param linear Compute simple linear solution.
+ * @param reweight Recompute weight factors at end of iterations and restart.
+ * @param max_iter Maximum number of iterations for convergence. Default is 10.
+ * @param max_iter_rw Max number of iterations after reweighting. Default is 5.
+ * @param eigs Compute eigenvalues, eigenvectors, fractional anisotropy, and mean diffusivity in sub-briks 6-19.
+ * @param debug_briks Add sub-briks with error functional, original error, number of steps to convergence, and modeled B0 volume.
+ * @param cumulative_wts Show overall weight factors for each gradient level.
+ * @param verbose Print convergence steps every nnnnn voxels.
+ * @param drive_afni Show convergence graphs every nnnnn voxels. AFNI must have NIML communications on.
+ * @param sep_dsets Save tensor, eigenvalues, vectors, FA, MD in separate datasets.
+ * @param csf_val Assign diffusivity value to DWI data where the mean values for b=0 volumes is less than the mean of the remaining volumes at each voxel.
+ * @param min_bad_md Change the min MD value used as a 'badness check' for tensor fits.
+ * @param csf_fa Assign a specific FA value to CSF voxels.
+ * @param opt Optimization method: 'powell', 'gradient', or 'hybrid'.
+ * @param mean_b0 Use mean of all b=0 volumes for linear computation and initial linear for nonlinear method.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
+ */
 function v_3d_dwito_dt(
     gradient_file: InputPathType,
     dataset: InputPathType,
@@ -421,43 +458,6 @@ function v_3d_dwito_dt(
     mean_b0: boolean = false,
     runner: Runner | null = null,
 ): V3dDwitoDtOutputs {
-    /**
-     * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param gradient_file A 1D file of the gradient vectors with lines of ASCII floats (Gxi, Gyi, Gzi) or a 1D file of b-matrix elements.
-     * @param dataset A 3D bucket dataset with Np+1 sub-briks where the first sub-brik is the volume acquired with no diffusion weighting.
-     * @param prefix Output dataset prefix name. Default is 'DT'.
-     * @param automask Mask dataset so that tensors are computed only for high-intensity (presumably brain) voxels.
-     * @param mask Use this dataset as mask to include/exclude voxels.
-     * @param bmatrix_nz Input dataset is b-matrix, not gradient directions, and there is no row of zeros at the top of the file.
-     * @param bmatrix_z Similar to '-bmatrix_NZ' but first row of the file is all zeros.
-     * @param bmatrix_full Same as '-bmatrix_Z' but with a more intuitive name.
-     * @param scale_out_1000 Increase output parameters with physical units by multiplying them by 1000.
-     * @param bmax_ref Flag the reference b-value if it is greater than zero.
-     * @param nonlinear Compute iterative solution to avoid negative eigenvalues. This is the default method.
-     * @param linear Compute simple linear solution.
-     * @param reweight Recompute weight factors at end of iterations and restart.
-     * @param max_iter Maximum number of iterations for convergence. Default is 10.
-     * @param max_iter_rw Max number of iterations after reweighting. Default is 5.
-     * @param eigs Compute eigenvalues, eigenvectors, fractional anisotropy, and mean diffusivity in sub-briks 6-19.
-     * @param debug_briks Add sub-briks with error functional, original error, number of steps to convergence, and modeled B0 volume.
-     * @param cumulative_wts Show overall weight factors for each gradient level.
-     * @param verbose Print convergence steps every nnnnn voxels.
-     * @param drive_afni Show convergence graphs every nnnnn voxels. AFNI must have NIML communications on.
-     * @param sep_dsets Save tensor, eigenvalues, vectors, FA, MD in separate datasets.
-     * @param csf_val Assign diffusivity value to DWI data where the mean values for b=0 volumes is less than the mean of the remaining volumes at each voxel.
-     * @param min_bad_md Change the min MD value used as a 'badness check' for tensor fits.
-     * @param csf_fa Assign a specific FA value to CSF voxels.
-     * @param opt Optimization method: 'powell', 'gradient', or 'hybrid'.
-     * @param mean_b0 Use mean of all b=0 volumes for linear computation and initial linear for nonlinear method.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DWITO_DT_METADATA);
     const params = v_3d_dwito_dt_params(gradient_file, dataset, prefix, automask, mask, bmatrix_nz, bmatrix_z, bmatrix_full, scale_out_1000, bmax_ref, nonlinear, linear, reweight, max_iter, max_iter_rw, eigs, debug_briks, cumulative_wts, verbose, drive_afni, sep_dsets, csf_val, min_bad_md, csf_fa, opt, mean_b0)
@@ -470,5 +470,8 @@ export {
       V3dDwitoDtParameters,
       V_3D_DWITO_DT_METADATA,
       v_3d_dwito_dt,
+      v_3d_dwito_dt_cargs,
+      v_3d_dwito_dt_execute,
+      v_3d_dwito_dt_outputs,
       v_3d_dwito_dt_params,
 };

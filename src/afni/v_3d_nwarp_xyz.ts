@@ -12,7 +12,7 @@ const V_3D_NWARP_XYZ_METADATA: Metadata = {
 
 
 interface V3dNwarpXyzParameters {
-    "__STYXTYPE__": "3dNwarpXYZ";
+    "@type": "afni.3dNwarpXYZ";
     "xyzfile": InputPathType;
     "warp_spec": string;
     "iwarp": boolean;
@@ -20,35 +20,35 @@ interface V3dNwarpXyzParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNwarpXYZ": v_3d_nwarp_xyz_cargs,
+        "afni.3dNwarpXYZ": v_3d_nwarp_xyz_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNwarpXYZ": v_3d_nwarp_xyz_outputs,
+        "afni.3dNwarpXYZ": v_3d_nwarp_xyz_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3dNwarpXyzOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xyzfile XYZ coordinate file containing 3 columns
+ * @param warp_spec Warp specification as in 3dNwarpApply
+ * @param output_file Warped XYZ coordinates output file
+ * @param iwarp Compute the inverse warp for each input (x,y,z) triple
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nwarp_xyz_params(
     xyzfile: InputPathType,
     warp_spec: string,
     output_file: string,
     iwarp: boolean = false,
 ): V3dNwarpXyzParameters {
-    /**
-     * Build parameters.
-    
-     * @param xyzfile XYZ coordinate file containing 3 columns
-     * @param warp_spec Warp specification as in 3dNwarpApply
-     * @param output_file Warped XYZ coordinates output file
-     * @param iwarp Compute the inverse warp for each input (x,y,z) triple
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNwarpXYZ" as const,
+        "@type": "afni.3dNwarpXYZ" as const,
         "xyzfile": xyzfile,
         "warp_spec": warp_spec,
         "iwarp": iwarp,
@@ -98,18 +98,18 @@ function v_3d_nwarp_xyz_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nwarp_xyz_cargs(
     params: V3dNwarpXyzParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNwarpXYZ");
     cargs.push(execution.inputFile((params["xyzfile"] ?? null)));
@@ -125,18 +125,18 @@ function v_3d_nwarp_xyz_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nwarp_xyz_outputs(
     params: V3dNwarpXyzParameters,
     execution: Execution,
 ): V3dNwarpXyzOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNwarpXyzOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function v_3d_nwarp_xyz_outputs(
 }
 
 
+/**
+ * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
+ */
 function v_3d_nwarp_xyz_execute(
     params: V3dNwarpXyzParameters,
     execution: Execution,
 ): V3dNwarpXyzOutputs {
-    /**
-     * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nwarp_xyz_cargs(params, execution)
     const ret = v_3d_nwarp_xyz_outputs(params, execution)
@@ -169,6 +169,21 @@ function v_3d_nwarp_xyz_execute(
 }
 
 
+/**
+ * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param xyzfile XYZ coordinate file containing 3 columns
+ * @param warp_spec Warp specification as in 3dNwarpApply
+ * @param output_file Warped XYZ coordinates output file
+ * @param iwarp Compute the inverse warp for each input (x,y,z) triple
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
+ */
 function v_3d_nwarp_xyz(
     xyzfile: InputPathType,
     warp_spec: string,
@@ -176,21 +191,6 @@ function v_3d_nwarp_xyz(
     iwarp: boolean = false,
     runner: Runner | null = null,
 ): V3dNwarpXyzOutputs {
-    /**
-     * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param xyzfile XYZ coordinate file containing 3 columns
-     * @param warp_spec Warp specification as in 3dNwarpApply
-     * @param output_file Warped XYZ coordinates output file
-     * @param iwarp Compute the inverse warp for each input (x,y,z) triple
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NWARP_XYZ_METADATA);
     const params = v_3d_nwarp_xyz_params(xyzfile, warp_spec, output_file, iwarp)
@@ -203,5 +203,8 @@ export {
       V3dNwarpXyzParameters,
       V_3D_NWARP_XYZ_METADATA,
       v_3d_nwarp_xyz,
+      v_3d_nwarp_xyz_cargs,
+      v_3d_nwarp_xyz_execute,
+      v_3d_nwarp_xyz_outputs,
       v_3d_nwarp_xyz_params,
 };

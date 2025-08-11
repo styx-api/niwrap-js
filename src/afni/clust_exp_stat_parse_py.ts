@@ -12,7 +12,7 @@ const CLUST_EXP_STAT_PARSE_PY_METADATA: Metadata = {
 
 
 interface ClustExpStatParsePyParameters {
-    "__STYXTYPE__": "ClustExp_StatParse.py";
+    "@type": "afni.ClustExp_StatParse.py";
     "statdset": InputPathType;
     "meanbrik": number;
     "threshbrik": number;
@@ -29,35 +29,35 @@ interface ClustExpStatParsePyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ClustExp_StatParse.py": clust_exp_stat_parse_py_cargs,
+        "afni.ClustExp_StatParse.py": clust_exp_stat_parse_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ClustExp_StatParse.py": clust_exp_stat_parse_py_outputs,
+        "afni.ClustExp_StatParse.py": clust_exp_stat_parse_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -108,6 +108,25 @@ interface ClustExpStatParsePyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param statdset Statistics dataset.
+ * @param meanbrik Mean subbrik (integer >= 0).
+ * @param threshbrik Threshold subbrik. Might be the same as MeanBrik (integer >= 0).
+ * @param subjdset Labeled dataset with all subjects (from @ClustExp_CatLab).
+ * @param subjtable Table with subject labels and input datasets.
+ * @param master Master data set for underlay.
+ * @param prefix Name for output (no path).
+ * @param pval Uncorrected p value for thresholding.
+ * @param minvox Minimum voxels in cluster.
+ * @param atlas Atlas name for lookup (list at: whereami -help).
+ * @param session Output parent folder if you don't want the current working directory.
+ * @param noshiny Do not create shiny app.
+ * @param overwrite Remove previous folder with same PREFIX.
+ *
+ * @returns Parameter dictionary
+ */
 function clust_exp_stat_parse_py_params(
     statdset: InputPathType,
     meanbrik: number,
@@ -123,27 +142,8 @@ function clust_exp_stat_parse_py_params(
     noshiny: boolean = false,
     overwrite: boolean = false,
 ): ClustExpStatParsePyParameters {
-    /**
-     * Build parameters.
-    
-     * @param statdset Statistics dataset.
-     * @param meanbrik Mean subbrik (integer >= 0).
-     * @param threshbrik Threshold subbrik. Might be the same as MeanBrik (integer >= 0).
-     * @param subjdset Labeled dataset with all subjects (from @ClustExp_CatLab).
-     * @param subjtable Table with subject labels and input datasets.
-     * @param master Master data set for underlay.
-     * @param prefix Name for output (no path).
-     * @param pval Uncorrected p value for thresholding.
-     * @param minvox Minimum voxels in cluster.
-     * @param atlas Atlas name for lookup (list at: whereami -help).
-     * @param session Output parent folder if you don't want the current working directory.
-     * @param noshiny Do not create shiny app.
-     * @param overwrite Remove previous folder with same PREFIX.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ClustExp_StatParse.py" as const,
+        "@type": "afni.ClustExp_StatParse.py" as const,
         "statdset": statdset,
         "meanbrik": meanbrik,
         "threshbrik": threshbrik,
@@ -172,18 +172,18 @@ function clust_exp_stat_parse_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function clust_exp_stat_parse_py_cargs(
     params: ClustExpStatParsePyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ClustExp_StatParse.py");
     cargs.push(
@@ -250,18 +250,18 @@ function clust_exp_stat_parse_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function clust_exp_stat_parse_py_outputs(
     params: ClustExpStatParsePyParameters,
     execution: Execution,
 ): ClustExpStatParsePyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ClustExpStatParsePyOutputs = {
         root: execution.outputFile("."),
         table_mean: ((params["prefix"] ?? null) !== null && (params["pval"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_p_uncor_", String((params["pval"] ?? null)), "_mean.csv"].join('')) : null,
@@ -277,22 +277,22 @@ function clust_exp_stat_parse_py_outputs(
 }
 
 
+/**
+ * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
+ */
 function clust_exp_stat_parse_py_execute(
     params: ClustExpStatParsePyParameters,
     execution: Execution,
 ): ClustExpStatParsePyOutputs {
-    /**
-     * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
-     */
     params = execution.params(params)
     const cargs = clust_exp_stat_parse_py_cargs(params, execution)
     const ret = clust_exp_stat_parse_py_outputs(params, execution)
@@ -301,6 +301,30 @@ function clust_exp_stat_parse_py_execute(
 }
 
 
+/**
+ * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param statdset Statistics dataset.
+ * @param meanbrik Mean subbrik (integer >= 0).
+ * @param threshbrik Threshold subbrik. Might be the same as MeanBrik (integer >= 0).
+ * @param subjdset Labeled dataset with all subjects (from @ClustExp_CatLab).
+ * @param subjtable Table with subject labels and input datasets.
+ * @param master Master data set for underlay.
+ * @param prefix Name for output (no path).
+ * @param pval Uncorrected p value for thresholding.
+ * @param minvox Minimum voxels in cluster.
+ * @param atlas Atlas name for lookup (list at: whereami -help).
+ * @param session Output parent folder if you don't want the current working directory.
+ * @param noshiny Do not create shiny app.
+ * @param overwrite Remove previous folder with same PREFIX.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
+ */
 function clust_exp_stat_parse_py(
     statdset: InputPathType,
     meanbrik: number,
@@ -317,30 +341,6 @@ function clust_exp_stat_parse_py(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): ClustExpStatParsePyOutputs {
-    /**
-     * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param statdset Statistics dataset.
-     * @param meanbrik Mean subbrik (integer >= 0).
-     * @param threshbrik Threshold subbrik. Might be the same as MeanBrik (integer >= 0).
-     * @param subjdset Labeled dataset with all subjects (from @ClustExp_CatLab).
-     * @param subjtable Table with subject labels and input datasets.
-     * @param master Master data set for underlay.
-     * @param prefix Name for output (no path).
-     * @param pval Uncorrected p value for thresholding.
-     * @param minvox Minimum voxels in cluster.
-     * @param atlas Atlas name for lookup (list at: whereami -help).
-     * @param session Output parent folder if you don't want the current working directory.
-     * @param noshiny Do not create shiny app.
-     * @param overwrite Remove previous folder with same PREFIX.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CLUST_EXP_STAT_PARSE_PY_METADATA);
     const params = clust_exp_stat_parse_py_params(statdset, meanbrik, threshbrik, subjdset, subjtable, master, prefix, pval, minvox, atlas, session, noshiny, overwrite)
@@ -353,5 +353,8 @@ export {
       ClustExpStatParsePyOutputs,
       ClustExpStatParsePyParameters,
       clust_exp_stat_parse_py,
+      clust_exp_stat_parse_py_cargs,
+      clust_exp_stat_parse_py_execute,
+      clust_exp_stat_parse_py_outputs,
       clust_exp_stat_parse_py_params,
 };

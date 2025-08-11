@@ -12,7 +12,7 @@ const V_3D_RANKIZER_METADATA: Metadata = {
 
 
 interface V3dRankizerParameters {
-    "__STYXTYPE__": "3dRankizer";
+    "@type": "afni.3dRankizer";
     "dataset": InputPathType;
     "base_rank"?: number | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface V3dRankizerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRankizer": v_3d_rankizer_cargs,
+        "afni.3dRankizer": v_3d_rankizer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRankizer": v_3d_rankizer_outputs,
+        "afni.3dRankizer": v_3d_rankizer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dRankizerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input MRI dataset
+ * @param prefix Write results into float-format output dataset
+ * @param base_rank Set the 'base' rank instead of 1
+ * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in this mask will be used from the input dataset. Voxels outside the mask will get rank 0.
+ * @param percentize Divide rank by the number of voxels in the dataset and multiply by 100.0
+ * @param percentize_mask Divide rank by the number of voxels in the mask and multiply by 100.0
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_rankizer_params(
     dataset: InputPathType,
     prefix: string,
@@ -81,20 +93,8 @@ function v_3d_rankizer_params(
     percentize: boolean = false,
     percentize_mask: boolean = false,
 ): V3dRankizerParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input MRI dataset
-     * @param prefix Write results into float-format output dataset
-     * @param base_rank Set the 'base' rank instead of 1
-     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in this mask will be used from the input dataset. Voxels outside the mask will get rank 0.
-     * @param percentize Divide rank by the number of voxels in the dataset and multiply by 100.0
-     * @param percentize_mask Divide rank by the number of voxels in the mask and multiply by 100.0
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRankizer" as const,
+        "@type": "afni.3dRankizer" as const,
         "dataset": dataset,
         "prefix": prefix,
         "percentize": percentize,
@@ -110,18 +110,18 @@ function v_3d_rankizer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_rankizer_cargs(
     params: V3dRankizerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRankizer");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -151,18 +151,18 @@ function v_3d_rankizer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_rankizer_outputs(
     params: V3dRankizerParameters,
     execution: Execution,
 ): V3dRankizerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRankizerOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["prefix"] ?? null), "+tlrc.HEAD"].join('')),
@@ -171,22 +171,22 @@ function v_3d_rankizer_outputs(
 }
 
 
+/**
+ * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
+ */
 function v_3d_rankizer_execute(
     params: V3dRankizerParameters,
     execution: Execution,
 ): V3dRankizerOutputs {
-    /**
-     * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_rankizer_cargs(params, execution)
     const ret = v_3d_rankizer_outputs(params, execution)
@@ -195,6 +195,23 @@ function v_3d_rankizer_execute(
 }
 
 
+/**
+ * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input MRI dataset
+ * @param prefix Write results into float-format output dataset
+ * @param base_rank Set the 'base' rank instead of 1
+ * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in this mask will be used from the input dataset. Voxels outside the mask will get rank 0.
+ * @param percentize Divide rank by the number of voxels in the dataset and multiply by 100.0
+ * @param percentize_mask Divide rank by the number of voxels in the mask and multiply by 100.0
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
+ */
 function v_3d_rankizer(
     dataset: InputPathType,
     prefix: string,
@@ -204,23 +221,6 @@ function v_3d_rankizer(
     percentize_mask: boolean = false,
     runner: Runner | null = null,
 ): V3dRankizerOutputs {
-    /**
-     * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input MRI dataset
-     * @param prefix Write results into float-format output dataset
-     * @param base_rank Set the 'base' rank instead of 1
-     * @param mask Use the specified dataset as a mask. Only voxels with nonzero values in this mask will be used from the input dataset. Voxels outside the mask will get rank 0.
-     * @param percentize Divide rank by the number of voxels in the dataset and multiply by 100.0
-     * @param percentize_mask Divide rank by the number of voxels in the mask and multiply by 100.0
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RANKIZER_METADATA);
     const params = v_3d_rankizer_params(dataset, prefix, base_rank, mask, percentize, percentize_mask)
@@ -233,5 +233,8 @@ export {
       V3dRankizerParameters,
       V_3D_RANKIZER_METADATA,
       v_3d_rankizer,
+      v_3d_rankizer_cargs,
+      v_3d_rankizer_execute,
+      v_3d_rankizer_outputs,
       v_3d_rankizer_params,
 };

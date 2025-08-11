@@ -12,7 +12,7 @@ const V__SUMA_REPREFIXIZE_SPEC_METADATA: Metadata = {
 
 
 interface VSumaReprefixizeSpecParameters {
-    "__STYXTYPE__": "@suma_reprefixize_spec";
+    "@type": "afni.@suma_reprefixize_spec";
     "input_file": InputPathType;
     "prefix": string;
     "output_dir": string;
@@ -21,35 +21,35 @@ interface VSumaReprefixizeSpecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@suma_reprefixize_spec": v__suma_reprefixize_spec_cargs,
+        "afni.@suma_reprefixize_spec": v__suma_reprefixize_spec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@suma_reprefixize_spec": v__suma_reprefixize_spec_outputs,
+        "afni.@suma_reprefixize_spec": v__suma_reprefixize_spec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface VSumaReprefixizeSpecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input SUMA specification file
+ * @param prefix Prefix to be added to the file names
+ * @param output_dir Output directory where the prefixed files will be saved
+ * @param work_dir Working directory for temporary files
+ * @param no_clean Flag to avoid cleaning temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_reprefixize_spec_params(
     input_file: InputPathType,
     prefix: string,
@@ -79,19 +90,8 @@ function v__suma_reprefixize_spec_params(
     work_dir: string,
     no_clean: boolean = false,
 ): VSumaReprefixizeSpecParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input SUMA specification file
-     * @param prefix Prefix to be added to the file names
-     * @param output_dir Output directory where the prefixed files will be saved
-     * @param work_dir Working directory for temporary files
-     * @param no_clean Flag to avoid cleaning temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@suma_reprefixize_spec" as const,
+        "@type": "afni.@suma_reprefixize_spec" as const,
         "input_file": input_file,
         "prefix": prefix,
         "output_dir": output_dir,
@@ -102,18 +102,18 @@ function v__suma_reprefixize_spec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_reprefixize_spec_cargs(
     params: VSumaReprefixizeSpecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@suma_reprefixize_spec");
     cargs.push(
@@ -139,18 +139,18 @@ function v__suma_reprefixize_spec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_reprefixize_spec_outputs(
     params: VSumaReprefixizeSpecParameters,
     execution: Execution,
 ): VSumaReprefixizeSpecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaReprefixizeSpecOutputs = {
         root: execution.outputFile("."),
         prefixed_spec_files: execution.outputFile([(params["output_dir"] ?? null), "/*.spec"].join('')),
@@ -159,22 +159,22 @@ function v__suma_reprefixize_spec_outputs(
 }
 
 
+/**
+ * A tool for prefixing and working with SUMA specification files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
+ */
 function v__suma_reprefixize_spec_execute(
     params: VSumaReprefixizeSpecParameters,
     execution: Execution,
 ): VSumaReprefixizeSpecOutputs {
-    /**
-     * A tool for prefixing and working with SUMA specification files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_reprefixize_spec_cargs(params, execution)
     const ret = v__suma_reprefixize_spec_outputs(params, execution)
@@ -183,6 +183,22 @@ function v__suma_reprefixize_spec_execute(
 }
 
 
+/**
+ * A tool for prefixing and working with SUMA specification files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input SUMA specification file
+ * @param prefix Prefix to be added to the file names
+ * @param output_dir Output directory where the prefixed files will be saved
+ * @param work_dir Working directory for temporary files
+ * @param no_clean Flag to avoid cleaning temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
+ */
 function v__suma_reprefixize_spec(
     input_file: InputPathType,
     prefix: string,
@@ -191,22 +207,6 @@ function v__suma_reprefixize_spec(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VSumaReprefixizeSpecOutputs {
-    /**
-     * A tool for prefixing and working with SUMA specification files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input SUMA specification file
-     * @param prefix Prefix to be added to the file names
-     * @param output_dir Output directory where the prefixed files will be saved
-     * @param work_dir Working directory for temporary files
-     * @param no_clean Flag to avoid cleaning temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_REPREFIXIZE_SPEC_METADATA);
     const params = v__suma_reprefixize_spec_params(input_file, prefix, output_dir, work_dir, no_clean)
@@ -219,5 +219,8 @@ export {
       VSumaReprefixizeSpecParameters,
       V__SUMA_REPREFIXIZE_SPEC_METADATA,
       v__suma_reprefixize_spec,
+      v__suma_reprefixize_spec_cargs,
+      v__suma_reprefixize_spec_execute,
+      v__suma_reprefixize_spec_outputs,
       v__suma_reprefixize_spec_params,
 };

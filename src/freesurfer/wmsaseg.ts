@@ -12,7 +12,7 @@ const WMSASEG_METADATA: Metadata = {
 
 
 interface WmsasegParameters {
-    "__STYXTYPE__": "wmsaseg";
+    "@type": "freesurfer.wmsaseg";
     "subject": string;
     "source_orig"?: string | null | undefined;
     "source_long": boolean;
@@ -27,35 +27,35 @@ interface WmsasegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "wmsaseg": wmsaseg_cargs,
+        "freesurfer.wmsaseg": wmsaseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "wmsaseg": wmsaseg_outputs,
+        "freesurfer.wmsaseg": wmsaseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,23 @@ interface WmsasegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param source_orig Use T2 and PD images from original subject
+ * @param source_long Use T2 and PD images from longitudinal subject
+ * @param output_subdir Output subdirectory name (default is wmsa)
+ * @param gca_file GCA file path
+ * @param no_reg Do not register mode to anatomical image
+ * @param no_canorm Do not run mri_ca_normalize
+ * @param init_spm Initialize SPM (default is FSL)
+ * @param reg_only Only perform registration
+ * @param halo1 Halo 1 option
+ * @param halo2 Halo 2 option
+ *
+ * @returns Parameter dictionary
+ */
 function wmsaseg_params(
     subject: string,
     source_orig: string | null = null,
@@ -95,25 +112,8 @@ function wmsaseg_params(
     halo1: boolean = false,
     halo2: boolean = false,
 ): WmsasegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param source_orig Use T2 and PD images from original subject
-     * @param source_long Use T2 and PD images from longitudinal subject
-     * @param output_subdir Output subdirectory name (default is wmsa)
-     * @param gca_file GCA file path
-     * @param no_reg Do not register mode to anatomical image
-     * @param no_canorm Do not run mri_ca_normalize
-     * @param init_spm Initialize SPM (default is FSL)
-     * @param reg_only Only perform registration
-     * @param halo1 Halo 1 option
-     * @param halo2 Halo 2 option
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wmsaseg" as const,
+        "@type": "freesurfer.wmsaseg" as const,
         "subject": subject,
         "source_long": source_long,
         "no_reg": no_reg,
@@ -136,18 +136,18 @@ function wmsaseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wmsaseg_cargs(
     params: WmsasegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wmsaseg");
     cargs.push(
@@ -197,18 +197,18 @@ function wmsaseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function wmsaseg_outputs(
     params: WmsasegParameters,
     execution: Execution,
 ): WmsasegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WmsasegOutputs = {
         root: execution.outputFile("."),
         t1_canorm: ((params["output_subdir"] ?? null) !== null) ? execution.outputFile([(params["output_subdir"] ?? null), "/T1.canorm.mgz"].join('')) : null,
@@ -218,22 +218,22 @@ function wmsaseg_outputs(
 }
 
 
+/**
+ * White Matter Hyperintensity Segmentation Tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
+ */
 function wmsaseg_execute(
     params: WmsasegParameters,
     execution: Execution,
 ): WmsasegOutputs {
-    /**
-     * White Matter Hyperintensity Segmentation Tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
-     */
     params = execution.params(params)
     const cargs = wmsaseg_cargs(params, execution)
     const ret = wmsaseg_outputs(params, execution)
@@ -242,6 +242,28 @@ function wmsaseg_execute(
 }
 
 
+/**
+ * White Matter Hyperintensity Segmentation Tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param source_orig Use T2 and PD images from original subject
+ * @param source_long Use T2 and PD images from longitudinal subject
+ * @param output_subdir Output subdirectory name (default is wmsa)
+ * @param gca_file GCA file path
+ * @param no_reg Do not register mode to anatomical image
+ * @param no_canorm Do not run mri_ca_normalize
+ * @param init_spm Initialize SPM (default is FSL)
+ * @param reg_only Only perform registration
+ * @param halo1 Halo 1 option
+ * @param halo2 Halo 2 option
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
+ */
 function wmsaseg(
     subject: string,
     source_orig: string | null = null,
@@ -256,28 +278,6 @@ function wmsaseg(
     halo2: boolean = false,
     runner: Runner | null = null,
 ): WmsasegOutputs {
-    /**
-     * White Matter Hyperintensity Segmentation Tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param source_orig Use T2 and PD images from original subject
-     * @param source_long Use T2 and PD images from longitudinal subject
-     * @param output_subdir Output subdirectory name (default is wmsa)
-     * @param gca_file GCA file path
-     * @param no_reg Do not register mode to anatomical image
-     * @param no_canorm Do not run mri_ca_normalize
-     * @param init_spm Initialize SPM (default is FSL)
-     * @param reg_only Only perform registration
-     * @param halo1 Halo 1 option
-     * @param halo2 Halo 2 option
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WMSASEG_METADATA);
     const params = wmsaseg_params(subject, source_orig, source_long, output_subdir, gca_file, no_reg, no_canorm, init_spm, reg_only, halo1, halo2)
@@ -290,5 +290,8 @@ export {
       WmsasegOutputs,
       WmsasegParameters,
       wmsaseg,
+      wmsaseg_cargs,
+      wmsaseg_execute,
+      wmsaseg_outputs,
       wmsaseg_params,
 };

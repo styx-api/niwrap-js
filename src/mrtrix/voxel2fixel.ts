@@ -12,14 +12,14 @@ const VOXEL2FIXEL_METADATA: Metadata = {
 
 
 interface Voxel2fixelConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.voxel2fixel.config";
     "key": string;
     "value": string;
 }
 
 
 interface Voxel2fixelParameters {
-    "__STYXTYPE__": "voxel2fixel";
+    "@type": "mrtrix.voxel2fixel";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -35,54 +35,54 @@ interface Voxel2fixelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "voxel2fixel": voxel2fixel_cargs,
-        "config": voxel2fixel_config_cargs,
+        "mrtrix.voxel2fixel": voxel2fixel_cargs,
+        "mrtrix.voxel2fixel.config": voxel2fixel_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function voxel2fixel_config_params(
     key: string,
     value: string,
 ): Voxel2fixelConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.voxel2fixel.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function voxel2fixel_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function voxel2fixel_config_cargs(
     params: Voxel2fixelConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -123,6 +123,24 @@ interface Voxel2fixelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_in the input image.
+ * @param fixel_directory_in the input fixel directory. Used to define the fixels and their directions
+ * @param fixel_directory_out the fixel directory where the output will be written. This can be the same as the input directory if desired
+ * @param fixel_data_out the name of the fixel data image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function voxel2fixel_params(
     image_in: InputPathType,
     fixel_directory_in: InputPathType,
@@ -137,26 +155,8 @@ function voxel2fixel_params(
     help: boolean = false,
     version: boolean = false,
 ): Voxel2fixelParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_in the input image.
-     * @param fixel_directory_in the input fixel directory. Used to define the fixels and their directions
-     * @param fixel_directory_out the fixel directory where the output will be written. This can be the same as the input directory if desired
-     * @param fixel_data_out the name of the fixel data image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "voxel2fixel" as const,
+        "@type": "mrtrix.voxel2fixel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -178,18 +178,18 @@ function voxel2fixel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function voxel2fixel_cargs(
     params: Voxel2fixelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("voxel2fixel");
     if ((params["info"] ?? null)) {
@@ -211,7 +211,7 @@ function voxel2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function voxel2fixel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function voxel2fixel_outputs(
     params: Voxel2fixelParameters,
     execution: Execution,
 ): Voxel2fixelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Voxel2fixelOutputs = {
         root: execution.outputFile("."),
     };
@@ -246,28 +246,28 @@ function voxel2fixel_outputs(
 }
 
 
+/**
+ * Map the scalar value in each voxel to all fixels within that voxel.
+ *
+ * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Voxel2fixelOutputs`).
+ */
 function voxel2fixel_execute(
     params: Voxel2fixelParameters,
     execution: Execution,
 ): Voxel2fixelOutputs {
-    /**
-     * Map the scalar value in each voxel to all fixels within that voxel.
-     * 
-     * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Voxel2fixelOutputs`).
-     */
     params = execution.params(params)
     const cargs = voxel2fixel_cargs(params, execution)
     const ret = voxel2fixel_outputs(params, execution)
@@ -276,6 +276,35 @@ function voxel2fixel_execute(
 }
 
 
+/**
+ * Map the scalar value in each voxel to all fixels within that voxel.
+ *
+ * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image_in the input image.
+ * @param fixel_directory_in the input fixel directory. Used to define the fixels and their directions
+ * @param fixel_directory_out the fixel directory where the output will be written. This can be the same as the input directory if desired
+ * @param fixel_data_out the name of the fixel data image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Voxel2fixelOutputs`).
+ */
 function voxel2fixel(
     image_in: InputPathType,
     fixel_directory_in: InputPathType,
@@ -291,35 +320,6 @@ function voxel2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Voxel2fixelOutputs {
-    /**
-     * Map the scalar value in each voxel to all fixels within that voxel.
-     * 
-     * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image_in the input image.
-     * @param fixel_directory_in the input fixel directory. Used to define the fixels and their directions
-     * @param fixel_directory_out the fixel directory where the output will be written. This can be the same as the input directory if desired
-     * @param fixel_data_out the name of the fixel data image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Voxel2fixelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOXEL2FIXEL_METADATA);
     const params = voxel2fixel_params(image_in, fixel_directory_in, fixel_directory_out, fixel_data_out, info, quiet, debug, force, nthreads, config, help, version)
@@ -333,6 +333,10 @@ export {
       Voxel2fixelOutputs,
       Voxel2fixelParameters,
       voxel2fixel,
+      voxel2fixel_cargs,
+      voxel2fixel_config_cargs,
       voxel2fixel_config_params,
+      voxel2fixel_execute,
+      voxel2fixel_outputs,
       voxel2fixel_params,
 };

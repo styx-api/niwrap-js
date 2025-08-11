@@ -12,7 +12,7 @@ const V__RADIAL_CORRELATE_METADATA: Metadata = {
 
 
 interface VRadialCorrelateParameters {
-    "__STYXTYPE__": "@radial_correlate";
+    "@type": "afni.@radial_correlate";
     "input_files": Array<InputPathType>;
     "results_dir"?: string | null | undefined;
     "do_corr"?: string | null | undefined;
@@ -36,35 +36,35 @@ interface VRadialCorrelateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@radial_correlate": v__radial_correlate_cargs,
+        "afni.@radial_correlate": v__radial_correlate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@radial_correlate": v__radial_correlate_outputs,
+        "afni.@radial_correlate": v__radial_correlate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface VRadialCorrelateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files A list of EPI datasets
+ * @param results_dir Results directory for correlations
+ * @param do_corr Create correlation volumes (yes/no)
+ * @param do_clust Cluster correlation volumes (yes/no)
+ * @param mask_dset Specify a mask dataset to replace automask
+ * @param cthresh Threshold on correlation values
+ * @param frac_limit Minimum mask fraction surviving cluster
+ * @param sphere_rad Generate correlations within voxel spheres
+ * @param use_3dmerge Use 3dmerge rather than 3dLocalstat (yes/no)
+ * @param percentile Percentile to use as threshold
+ * @param min_thr Minimum percentile threshold to be considered
+ * @param nfirst Number of initial TRs to remove
+ * @param ver Show version number
+ * @param verbose Make verbose: set echo
+ * @param help Show help
+ * @param hist Show modification history
+ * @param corr_mask Mask time series before correlation blurring (yes/no)
+ * @param do_clean Clean up at end, leaving only correlations (yes/no)
+ * @param polort Detrend time series with given polynomial degree
+ * @param merge_frad Specify a radius fraction for 3dmerge blurring
+ *
+ * @returns Parameter dictionary
+ */
 function v__radial_correlate_params(
     input_files: Array<InputPathType>,
     results_dir: string | null = null,
@@ -109,34 +135,8 @@ function v__radial_correlate_params(
     polort: number | null = null,
     merge_frad: number | null = null,
 ): VRadialCorrelateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files A list of EPI datasets
-     * @param results_dir Results directory for correlations
-     * @param do_corr Create correlation volumes (yes/no)
-     * @param do_clust Cluster correlation volumes (yes/no)
-     * @param mask_dset Specify a mask dataset to replace automask
-     * @param cthresh Threshold on correlation values
-     * @param frac_limit Minimum mask fraction surviving cluster
-     * @param sphere_rad Generate correlations within voxel spheres
-     * @param use_3dmerge Use 3dmerge rather than 3dLocalstat (yes/no)
-     * @param percentile Percentile to use as threshold
-     * @param min_thr Minimum percentile threshold to be considered
-     * @param nfirst Number of initial TRs to remove
-     * @param ver Show version number
-     * @param verbose Make verbose: set echo
-     * @param help Show help
-     * @param hist Show modification history
-     * @param corr_mask Mask time series before correlation blurring (yes/no)
-     * @param do_clean Clean up at end, leaving only correlations (yes/no)
-     * @param polort Detrend time series with given polynomial degree
-     * @param merge_frad Specify a radius fraction for 3dmerge blurring
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@radial_correlate" as const,
+        "@type": "afni.@radial_correlate" as const,
         "input_files": input_files,
         "ver": ver,
         "verbose": verbose,
@@ -192,18 +192,18 @@ function v__radial_correlate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__radial_correlate_cargs(
     params: VRadialCorrelateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@radial_correlate");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -313,18 +313,18 @@ function v__radial_correlate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__radial_correlate_outputs(
     params: VRadialCorrelateParameters,
     execution: Execution,
 ): VRadialCorrelateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRadialCorrelateOutputs = {
         root: execution.outputFile("."),
         corr_volumes: ((params["results_dir"] ?? null) !== null) ? execution.outputFile([(params["results_dir"] ?? null), "/correlation_volumes"].join('')) : null,
@@ -333,22 +333,22 @@ function v__radial_correlate_outputs(
 }
 
 
+/**
+ * Check datasets for correlation artifacts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
+ */
 function v__radial_correlate_execute(
     params: VRadialCorrelateParameters,
     execution: Execution,
 ): VRadialCorrelateOutputs {
-    /**
-     * Check datasets for correlation artifacts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__radial_correlate_cargs(params, execution)
     const ret = v__radial_correlate_outputs(params, execution)
@@ -357,6 +357,37 @@ function v__radial_correlate_execute(
 }
 
 
+/**
+ * Check datasets for correlation artifacts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files A list of EPI datasets
+ * @param results_dir Results directory for correlations
+ * @param do_corr Create correlation volumes (yes/no)
+ * @param do_clust Cluster correlation volumes (yes/no)
+ * @param mask_dset Specify a mask dataset to replace automask
+ * @param cthresh Threshold on correlation values
+ * @param frac_limit Minimum mask fraction surviving cluster
+ * @param sphere_rad Generate correlations within voxel spheres
+ * @param use_3dmerge Use 3dmerge rather than 3dLocalstat (yes/no)
+ * @param percentile Percentile to use as threshold
+ * @param min_thr Minimum percentile threshold to be considered
+ * @param nfirst Number of initial TRs to remove
+ * @param ver Show version number
+ * @param verbose Make verbose: set echo
+ * @param help Show help
+ * @param hist Show modification history
+ * @param corr_mask Mask time series before correlation blurring (yes/no)
+ * @param do_clean Clean up at end, leaving only correlations (yes/no)
+ * @param polort Detrend time series with given polynomial degree
+ * @param merge_frad Specify a radius fraction for 3dmerge blurring
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
+ */
 function v__radial_correlate(
     input_files: Array<InputPathType>,
     results_dir: string | null = null,
@@ -380,37 +411,6 @@ function v__radial_correlate(
     merge_frad: number | null = null,
     runner: Runner | null = null,
 ): VRadialCorrelateOutputs {
-    /**
-     * Check datasets for correlation artifacts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files A list of EPI datasets
-     * @param results_dir Results directory for correlations
-     * @param do_corr Create correlation volumes (yes/no)
-     * @param do_clust Cluster correlation volumes (yes/no)
-     * @param mask_dset Specify a mask dataset to replace automask
-     * @param cthresh Threshold on correlation values
-     * @param frac_limit Minimum mask fraction surviving cluster
-     * @param sphere_rad Generate correlations within voxel spheres
-     * @param use_3dmerge Use 3dmerge rather than 3dLocalstat (yes/no)
-     * @param percentile Percentile to use as threshold
-     * @param min_thr Minimum percentile threshold to be considered
-     * @param nfirst Number of initial TRs to remove
-     * @param ver Show version number
-     * @param verbose Make verbose: set echo
-     * @param help Show help
-     * @param hist Show modification history
-     * @param corr_mask Mask time series before correlation blurring (yes/no)
-     * @param do_clean Clean up at end, leaving only correlations (yes/no)
-     * @param polort Detrend time series with given polynomial degree
-     * @param merge_frad Specify a radius fraction for 3dmerge blurring
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__RADIAL_CORRELATE_METADATA);
     const params = v__radial_correlate_params(input_files, results_dir, do_corr, do_clust, mask_dset, cthresh, frac_limit, sphere_rad, use_3dmerge, percentile, min_thr, nfirst, ver, verbose, help, hist, corr_mask, do_clean, polort, merge_frad)
@@ -423,5 +423,8 @@ export {
       VRadialCorrelateParameters,
       V__RADIAL_CORRELATE_METADATA,
       v__radial_correlate,
+      v__radial_correlate_cargs,
+      v__radial_correlate_execute,
+      v__radial_correlate_outputs,
       v__radial_correlate_params,
 };

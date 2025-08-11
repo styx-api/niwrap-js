@@ -12,7 +12,7 @@ const QUICKSPEC_SL_METADATA: Metadata = {
 
 
 interface QuickspecSlParameters {
-    "__STYXTYPE__": "quickspecSL";
+    "@type": "afni.quickspecSL";
     "surf_A": InputPathType;
     "surf_B": InputPathType;
     "surf_intermed_pref"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface QuickspecSlParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quickspecSL": quickspec_sl_cargs,
+        "afni.quickspecSL": quickspec_sl_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quickspecSL": quickspec_sl_outputs,
+        "afni.quickspecSL": quickspec_sl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface QuickspecSlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_a Inner (anatomically-correct) boundary surface dataset (e.g. smoothwm.gii)
+ * @param surf_b Outer (anatomically-correct) boundary surface dataset (e.g. pial.gii)
+ * @param surf_intermed_pref Prefix for (anatomically-correct) intermediate surfaces, typically output by SurfLayers (default: isurf)
+ * @param infl_surf_a Inner (inflated) boundary surface dataset (e.g. infl.smoothwm.gii)
+ * @param infl_surf_b Outer (inflated) boundary surface dataset (e.g. infl.pial.gii)
+ * @param infl_surf_intermed_pref Prefix for (inflated) intermediate surfaces, typically output by SurfLayers (default: infl.isurf)
+ * @param both_lr_flag Specify an output spec for both hemispheres if surfaces for both exist
+ * @param out_spec Name for output *.spec file (default: newspec.spec)
+ *
+ * @returns Parameter dictionary
+ */
 function quickspec_sl_params(
     surf_a: InputPathType,
     surf_b: InputPathType,
@@ -85,22 +99,8 @@ function quickspec_sl_params(
     both_lr_flag: boolean = false,
     out_spec: string | null = null,
 ): QuickspecSlParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_a Inner (anatomically-correct) boundary surface dataset (e.g. smoothwm.gii)
-     * @param surf_b Outer (anatomically-correct) boundary surface dataset (e.g. pial.gii)
-     * @param surf_intermed_pref Prefix for (anatomically-correct) intermediate surfaces, typically output by SurfLayers (default: isurf)
-     * @param infl_surf_a Inner (inflated) boundary surface dataset (e.g. infl.smoothwm.gii)
-     * @param infl_surf_b Outer (inflated) boundary surface dataset (e.g. infl.pial.gii)
-     * @param infl_surf_intermed_pref Prefix for (inflated) intermediate surfaces, typically output by SurfLayers (default: infl.isurf)
-     * @param both_lr_flag Specify an output spec for both hemispheres if surfaces for both exist
-     * @param out_spec Name for output *.spec file (default: newspec.spec)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quickspecSL" as const,
+        "@type": "afni.quickspecSL" as const,
         "surf_A": surf_a,
         "surf_B": surf_b,
         "both_lr_flag": both_lr_flag,
@@ -124,18 +124,18 @@ function quickspec_sl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quickspec_sl_cargs(
     params: QuickspecSlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quickspecSL");
     cargs.push(
@@ -183,18 +183,18 @@ function quickspec_sl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quickspec_sl_outputs(
     params: QuickspecSlParameters,
     execution: Execution,
 ): QuickspecSlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuickspecSlOutputs = {
         root: execution.outputFile("."),
         output_spec_file: ((params["out_spec"] ?? null) !== null) ? execution.outputFile([(params["out_spec"] ?? null)].join('')) : null,
@@ -203,22 +203,22 @@ function quickspec_sl_outputs(
 }
 
 
+/**
+ * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
+ */
 function quickspec_sl_execute(
     params: QuickspecSlParameters,
     execution: Execution,
 ): QuickspecSlOutputs {
-    /**
-     * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
-     */
     params = execution.params(params)
     const cargs = quickspec_sl_cargs(params, execution)
     const ret = quickspec_sl_outputs(params, execution)
@@ -227,6 +227,25 @@ function quickspec_sl_execute(
 }
 
 
+/**
+ * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surf_a Inner (anatomically-correct) boundary surface dataset (e.g. smoothwm.gii)
+ * @param surf_b Outer (anatomically-correct) boundary surface dataset (e.g. pial.gii)
+ * @param surf_intermed_pref Prefix for (anatomically-correct) intermediate surfaces, typically output by SurfLayers (default: isurf)
+ * @param infl_surf_a Inner (inflated) boundary surface dataset (e.g. infl.smoothwm.gii)
+ * @param infl_surf_b Outer (inflated) boundary surface dataset (e.g. infl.pial.gii)
+ * @param infl_surf_intermed_pref Prefix for (inflated) intermediate surfaces, typically output by SurfLayers (default: infl.isurf)
+ * @param both_lr_flag Specify an output spec for both hemispheres if surfaces for both exist
+ * @param out_spec Name for output *.spec file (default: newspec.spec)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
+ */
 function quickspec_sl(
     surf_a: InputPathType,
     surf_b: InputPathType,
@@ -238,25 +257,6 @@ function quickspec_sl(
     out_spec: string | null = null,
     runner: Runner | null = null,
 ): QuickspecSlOutputs {
-    /**
-     * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surf_a Inner (anatomically-correct) boundary surface dataset (e.g. smoothwm.gii)
-     * @param surf_b Outer (anatomically-correct) boundary surface dataset (e.g. pial.gii)
-     * @param surf_intermed_pref Prefix for (anatomically-correct) intermediate surfaces, typically output by SurfLayers (default: isurf)
-     * @param infl_surf_a Inner (inflated) boundary surface dataset (e.g. infl.smoothwm.gii)
-     * @param infl_surf_b Outer (inflated) boundary surface dataset (e.g. infl.pial.gii)
-     * @param infl_surf_intermed_pref Prefix for (inflated) intermediate surfaces, typically output by SurfLayers (default: infl.isurf)
-     * @param both_lr_flag Specify an output spec for both hemispheres if surfaces for both exist
-     * @param out_spec Name for output *.spec file (default: newspec.spec)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUICKSPEC_SL_METADATA);
     const params = quickspec_sl_params(surf_a, surf_b, surf_intermed_pref, infl_surf_a, infl_surf_b, infl_surf_intermed_pref, both_lr_flag, out_spec)
@@ -269,5 +269,8 @@ export {
       QuickspecSlOutputs,
       QuickspecSlParameters,
       quickspec_sl,
+      quickspec_sl_cargs,
+      quickspec_sl_execute,
+      quickspec_sl_outputs,
       quickspec_sl_params,
 };

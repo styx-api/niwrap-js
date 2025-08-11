@@ -12,40 +12,40 @@ const REGISTER_SUBJECT_FLASH_METADATA: Metadata = {
 
 
 interface RegisterSubjectFlashParameters {
-    "__STYXTYPE__": "register_subject_flash";
+    "@type": "freesurfer.register_subject_flash";
     "input_volumes": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "register_subject_flash": register_subject_flash_cargs,
+        "freesurfer.register_subject_flash": register_subject_flash_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "register_subject_flash": register_subject_flash_outputs,
+        "freesurfer.register_subject_flash": register_subject_flash_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface RegisterSubjectFlashOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Input volumes to register.
+ *
+ * @returns Parameter dictionary
+ */
 function register_subject_flash_params(
     input_volumes: Array<InputPathType>,
 ): RegisterSubjectFlashParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Input volumes to register.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "register_subject_flash" as const,
+        "@type": "freesurfer.register_subject_flash" as const,
         "input_volumes": input_volumes,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function register_subject_flash_cargs(
     params: RegisterSubjectFlashParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("register_subject_flash");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function register_subject_flash_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function register_subject_flash_outputs(
     params: RegisterSubjectFlashParameters,
     execution: Execution,
 ): RegisterSubjectFlashOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegisterSubjectFlashOutputs = {
         root: execution.outputFile("."),
         log_file: execution.outputFile(["talairach.log"].join('')),
@@ -125,22 +125,22 @@ function register_subject_flash_outputs(
 }
 
 
+/**
+ * Register subject using the FLASH forward model to predict intensity values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
+ */
 function register_subject_flash_execute(
     params: RegisterSubjectFlashParameters,
     execution: Execution,
 ): RegisterSubjectFlashOutputs {
-    /**
-     * Register subject using the FLASH forward model to predict intensity values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
-     */
     params = execution.params(params)
     const cargs = register_subject_flash_cargs(params, execution)
     const ret = register_subject_flash_outputs(params, execution)
@@ -149,22 +149,22 @@ function register_subject_flash_execute(
 }
 
 
+/**
+ * Register subject using the FLASH forward model to predict intensity values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Input volumes to register.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
+ */
 function register_subject_flash(
     input_volumes: Array<InputPathType>,
     runner: Runner | null = null,
 ): RegisterSubjectFlashOutputs {
-    /**
-     * Register subject using the FLASH forward model to predict intensity values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Input volumes to register.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGISTER_SUBJECT_FLASH_METADATA);
     const params = register_subject_flash_params(input_volumes)
@@ -177,5 +177,8 @@ export {
       RegisterSubjectFlashOutputs,
       RegisterSubjectFlashParameters,
       register_subject_flash,
+      register_subject_flash_cargs,
+      register_subject_flash_execute,
+      register_subject_flash_outputs,
       register_subject_flash_params,
 };

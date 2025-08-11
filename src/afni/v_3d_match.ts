@@ -12,7 +12,7 @@ const V_3D_MATCH_METADATA: Metadata = {
 
 
 interface V3dMatchParameters {
-    "__STYXTYPE__": "3dMatch";
+    "@type": "afni.3dMatch";
     "inset": InputPathType;
     "refset": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -25,35 +25,35 @@ interface V3dMatchParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMatch": v_3d_match_cargs,
+        "afni.3dMatch": v_3d_match_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMatch": v_3d_match_outputs,
+        "afni.3dMatch": v_3d_match_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,21 @@ interface V3dMatchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset File with M subbricks of data to match against another file.
+ * @param refset File with N subbricks, serving as a reference for INPUT_FILE.
+ * @param prefix Prefix for output name for BRIK/HEAD files and *_coeff.vals text files.
+ * @param mask A mask of regions to include in the correlation of datasets.
+ * @param in_min Threshold below which values in INPUT_FILE will be zeroed during analysis.
+ * @param in_max Threshold above which values in INPUT_FILE will be zeroed during analysis.
+ * @param ref_min Threshold below which values in REF_FILE will be zeroed during analysis.
+ * @param ref_max Threshold above which values in REF_FILE will be zeroed during analysis.
+ * @param only_dice_thr Apply thresholding only during Dice evaluation, not during spatial correlation.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_match_params(
     inset: InputPathType,
     refset: InputPathType,
@@ -99,23 +114,8 @@ function v_3d_match_params(
     ref_max: number | null = null,
     only_dice_thr: boolean = false,
 ): V3dMatchParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset File with M subbricks of data to match against another file.
-     * @param refset File with N subbricks, serving as a reference for INPUT_FILE.
-     * @param prefix Prefix for output name for BRIK/HEAD files and *_coeff.vals text files.
-     * @param mask A mask of regions to include in the correlation of datasets.
-     * @param in_min Threshold below which values in INPUT_FILE will be zeroed during analysis.
-     * @param in_max Threshold above which values in INPUT_FILE will be zeroed during analysis.
-     * @param ref_min Threshold below which values in REF_FILE will be zeroed during analysis.
-     * @param ref_max Threshold above which values in REF_FILE will be zeroed during analysis.
-     * @param only_dice_thr Apply thresholding only during Dice evaluation, not during spatial correlation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMatch" as const,
+        "@type": "afni.3dMatch" as const,
         "inset": inset,
         "refset": refset,
         "prefix": prefix,
@@ -140,18 +140,18 @@ function v_3d_match_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_match_cargs(
     params: V3dMatchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMatch");
     cargs.push(
@@ -203,18 +203,18 @@ function v_3d_match_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_match_outputs(
     params: V3dMatchParameters,
     execution: Execution,
 ): V3dMatchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMatchOutputs = {
         root: execution.outputFile("."),
         ref_brik: execution.outputFile([(params["prefix"] ?? null), "_REF+orig.BRIK"].join('')),
@@ -226,22 +226,22 @@ function v_3d_match_outputs(
 }
 
 
+/**
+ * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
+ */
 function v_3d_match_execute(
     params: V3dMatchParameters,
     execution: Execution,
 ): V3dMatchOutputs {
-    /**
-     * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_match_cargs(params, execution)
     const ret = v_3d_match_outputs(params, execution)
@@ -250,6 +250,26 @@ function v_3d_match_execute(
 }
 
 
+/**
+ * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset File with M subbricks of data to match against another file.
+ * @param refset File with N subbricks, serving as a reference for INPUT_FILE.
+ * @param prefix Prefix for output name for BRIK/HEAD files and *_coeff.vals text files.
+ * @param mask A mask of regions to include in the correlation of datasets.
+ * @param in_min Threshold below which values in INPUT_FILE will be zeroed during analysis.
+ * @param in_max Threshold above which values in INPUT_FILE will be zeroed during analysis.
+ * @param ref_min Threshold below which values in REF_FILE will be zeroed during analysis.
+ * @param ref_max Threshold above which values in REF_FILE will be zeroed during analysis.
+ * @param only_dice_thr Apply thresholding only during Dice evaluation, not during spatial correlation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
+ */
 function v_3d_match(
     inset: InputPathType,
     refset: InputPathType,
@@ -262,26 +282,6 @@ function v_3d_match(
     only_dice_thr: boolean = false,
     runner: Runner | null = null,
 ): V3dMatchOutputs {
-    /**
-     * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset File with M subbricks of data to match against another file.
-     * @param refset File with N subbricks, serving as a reference for INPUT_FILE.
-     * @param prefix Prefix for output name for BRIK/HEAD files and *_coeff.vals text files.
-     * @param mask A mask of regions to include in the correlation of datasets.
-     * @param in_min Threshold below which values in INPUT_FILE will be zeroed during analysis.
-     * @param in_max Threshold above which values in INPUT_FILE will be zeroed during analysis.
-     * @param ref_min Threshold below which values in REF_FILE will be zeroed during analysis.
-     * @param ref_max Threshold above which values in REF_FILE will be zeroed during analysis.
-     * @param only_dice_thr Apply thresholding only during Dice evaluation, not during spatial correlation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MATCH_METADATA);
     const params = v_3d_match_params(inset, refset, prefix, mask, in_min, in_max, ref_min, ref_max, only_dice_thr)
@@ -294,5 +294,8 @@ export {
       V3dMatchParameters,
       V_3D_MATCH_METADATA,
       v_3d_match,
+      v_3d_match_cargs,
+      v_3d_match_execute,
+      v_3d_match_outputs,
       v_3d_match_params,
 };

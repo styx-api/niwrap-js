@@ -12,40 +12,40 @@ const PTOZ_METADATA: Metadata = {
 
 
 interface PtozParameters {
-    "__STYXTYPE__": "ptoz";
+    "@type": "fsl.ptoz";
     "p_value": number;
     "tail_flag": boolean;
     "grf_flag"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ptoz": ptoz_cargs,
+        "fsl.ptoz": ptoz_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface PtozOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param p_value p-value to convert
+ * @param tail_flag Use 2-tailed conversion
+ * @param grf_flag Use GRF maximum-height theory instead of Gaussian pdf
+ *
+ * @returns Parameter dictionary
+ */
 function ptoz_params(
     p_value: number,
     tail_flag: boolean = false,
     grf_flag: number | null = null,
 ): PtozParameters {
-    /**
-     * Build parameters.
-    
-     * @param p_value p-value to convert
-     * @param tail_flag Use 2-tailed conversion
-     * @param grf_flag Use GRF maximum-height theory instead of Gaussian pdf
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ptoz" as const,
+        "@type": "fsl.ptoz" as const,
         "p_value": p_value,
         "tail_flag": tail_flag,
     };
@@ -91,18 +91,18 @@ function ptoz_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ptoz_cargs(
     params: PtozParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ptoz");
     cargs.push(String((params["p_value"] ?? null)));
@@ -119,18 +119,18 @@ function ptoz_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ptoz_outputs(
     params: PtozParameters,
     execution: Execution,
 ): PtozOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PtozOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function ptoz_outputs(
 }
 
 
+/**
+ * Convert p-values to z-values.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PtozOutputs`).
+ */
 function ptoz_execute(
     params: PtozParameters,
     execution: Execution,
 ): PtozOutputs {
-    /**
-     * Convert p-values to z-values.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PtozOutputs`).
-     */
     params = execution.params(params)
     const cargs = ptoz_cargs(params, execution)
     const ret = ptoz_outputs(params, execution)
@@ -162,26 +162,26 @@ function ptoz_execute(
 }
 
 
+/**
+ * Convert p-values to z-values.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param p_value p-value to convert
+ * @param tail_flag Use 2-tailed conversion
+ * @param grf_flag Use GRF maximum-height theory instead of Gaussian pdf
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PtozOutputs`).
+ */
 function ptoz(
     p_value: number,
     tail_flag: boolean = false,
     grf_flag: number | null = null,
     runner: Runner | null = null,
 ): PtozOutputs {
-    /**
-     * Convert p-values to z-values.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param p_value p-value to convert
-     * @param tail_flag Use 2-tailed conversion
-     * @param grf_flag Use GRF maximum-height theory instead of Gaussian pdf
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PtozOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PTOZ_METADATA);
     const params = ptoz_params(p_value, tail_flag, grf_flag)
@@ -194,5 +194,8 @@ export {
       PtozOutputs,
       PtozParameters,
       ptoz,
+      ptoz_cargs,
+      ptoz_execute,
+      ptoz_outputs,
       ptoz_params,
 };

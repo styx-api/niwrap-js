@@ -12,7 +12,7 @@ const V_3D_SURF2_VOL_METADATA: Metadata = {
 
 
 interface V3dSurf2VolParameters {
-    "__STYXTYPE__": "3dSurf2Vol";
+    "@type": "afni.3dSurf2Vol";
     "spec": InputPathType;
     "surface_volume": InputPathType;
     "surf_a": string;
@@ -41,35 +41,35 @@ interface V3dSurf2VolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSurf2Vol": v_3d_surf2_vol_cargs,
+        "afni.3dSurf2Vol": v_3d_surf2_vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSurf2Vol": v_3d_surf2_vol_outputs,
+        "afni.3dSurf2Vol": v_3d_surf2_vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface V3dSurf2VolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec SUMA spec file
+ * @param surface_volume AFNI surface volume dataset
+ * @param surf_a Specify surface A from spec file
+ * @param grid_parent AFNI grid parent dataset
+ * @param map_func Surface to dataset function
+ * @param prefix Prefix for the output dataset
+ * @param surf_b Specify surface B from spec file
+ * @param surf_xyz_1d 1D coordinate file
+ * @param sdata_1d 1D sub-surface data file
+ * @param sdata NIML or GIFTI formatted dataset
+ * @param f_steps Partition segments into this many steps
+ * @param f_index Index by points or voxels
+ * @param f_p1_fr Offset p1 by a fraction of the length
+ * @param f_pn_fr Offset pn by a fraction of the length
+ * @param f_p1_mm Offset p1 by a distance in mm
+ * @param f_pn_mm Offset pn by a distance in mm
+ * @param stop_gap Stop when a zero gap has been hit
+ * @param cmask Command for dataset mask
+ * @param data_expr Apply expression to surface input
+ * @param datum Set data type in output dataset
+ * @param debug Verbose output level
+ * @param dnode Extra output for specified node
+ * @param dvoxel Extra output for specified voxel
+ * @param noscale No scale factor in output dataset
+ * @param sxyz_orient_as_gpar Assume grid parent orientation for surface xyz
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_surf2_vol_params(
     spec: InputPathType,
     surface_volume: InputPathType,
@@ -119,39 +150,8 @@ function v_3d_surf2_vol_params(
     noscale: boolean = false,
     sxyz_orient_as_gpar: boolean = false,
 ): V3dSurf2VolParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec SUMA spec file
-     * @param surface_volume AFNI surface volume dataset
-     * @param surf_a Specify surface A from spec file
-     * @param grid_parent AFNI grid parent dataset
-     * @param map_func Surface to dataset function
-     * @param prefix Prefix for the output dataset
-     * @param surf_b Specify surface B from spec file
-     * @param surf_xyz_1d 1D coordinate file
-     * @param sdata_1d 1D sub-surface data file
-     * @param sdata NIML or GIFTI formatted dataset
-     * @param f_steps Partition segments into this many steps
-     * @param f_index Index by points or voxels
-     * @param f_p1_fr Offset p1 by a fraction of the length
-     * @param f_pn_fr Offset pn by a fraction of the length
-     * @param f_p1_mm Offset p1 by a distance in mm
-     * @param f_pn_mm Offset pn by a distance in mm
-     * @param stop_gap Stop when a zero gap has been hit
-     * @param cmask Command for dataset mask
-     * @param data_expr Apply expression to surface input
-     * @param datum Set data type in output dataset
-     * @param debug Verbose output level
-     * @param dnode Extra output for specified node
-     * @param dvoxel Extra output for specified voxel
-     * @param noscale No scale factor in output dataset
-     * @param sxyz_orient_as_gpar Assume grid parent orientation for surface xyz
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSurf2Vol" as const,
+        "@type": "afni.3dSurf2Vol" as const,
         "spec": spec,
         "surface_volume": surface_volume,
         "surf_a": surf_a,
@@ -214,18 +214,18 @@ function v_3d_surf2_vol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_surf2_vol_cargs(
     params: V3dSurf2VolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSurf2Vol");
     cargs.push(
@@ -361,18 +361,18 @@ function v_3d_surf2_vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_surf2_vol_outputs(
     params: V3dSurf2VolParameters,
     execution: Execution,
 ): V3dSurf2VolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSurf2VolOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), "+*[gz]"].join('')),
@@ -381,22 +381,22 @@ function v_3d_surf2_vol_outputs(
 }
 
 
+/**
+ * Map data from a surface domain to an AFNI volume domain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSurf2VolOutputs`).
+ */
 function v_3d_surf2_vol_execute(
     params: V3dSurf2VolParameters,
     execution: Execution,
 ): V3dSurf2VolOutputs {
-    /**
-     * Map data from a surface domain to an AFNI volume domain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSurf2VolOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_surf2_vol_cargs(params, execution)
     const ret = v_3d_surf2_vol_outputs(params, execution)
@@ -405,6 +405,42 @@ function v_3d_surf2_vol_execute(
 }
 
 
+/**
+ * Map data from a surface domain to an AFNI volume domain.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec SUMA spec file
+ * @param surface_volume AFNI surface volume dataset
+ * @param surf_a Specify surface A from spec file
+ * @param grid_parent AFNI grid parent dataset
+ * @param map_func Surface to dataset function
+ * @param prefix Prefix for the output dataset
+ * @param surf_b Specify surface B from spec file
+ * @param surf_xyz_1d 1D coordinate file
+ * @param sdata_1d 1D sub-surface data file
+ * @param sdata NIML or GIFTI formatted dataset
+ * @param f_steps Partition segments into this many steps
+ * @param f_index Index by points or voxels
+ * @param f_p1_fr Offset p1 by a fraction of the length
+ * @param f_pn_fr Offset pn by a fraction of the length
+ * @param f_p1_mm Offset p1 by a distance in mm
+ * @param f_pn_mm Offset pn by a distance in mm
+ * @param stop_gap Stop when a zero gap has been hit
+ * @param cmask Command for dataset mask
+ * @param data_expr Apply expression to surface input
+ * @param datum Set data type in output dataset
+ * @param debug Verbose output level
+ * @param dnode Extra output for specified node
+ * @param dvoxel Extra output for specified voxel
+ * @param noscale No scale factor in output dataset
+ * @param sxyz_orient_as_gpar Assume grid parent orientation for surface xyz
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSurf2VolOutputs`).
+ */
 function v_3d_surf2_vol(
     spec: InputPathType,
     surface_volume: InputPathType,
@@ -433,42 +469,6 @@ function v_3d_surf2_vol(
     sxyz_orient_as_gpar: boolean = false,
     runner: Runner | null = null,
 ): V3dSurf2VolOutputs {
-    /**
-     * Map data from a surface domain to an AFNI volume domain.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec SUMA spec file
-     * @param surface_volume AFNI surface volume dataset
-     * @param surf_a Specify surface A from spec file
-     * @param grid_parent AFNI grid parent dataset
-     * @param map_func Surface to dataset function
-     * @param prefix Prefix for the output dataset
-     * @param surf_b Specify surface B from spec file
-     * @param surf_xyz_1d 1D coordinate file
-     * @param sdata_1d 1D sub-surface data file
-     * @param sdata NIML or GIFTI formatted dataset
-     * @param f_steps Partition segments into this many steps
-     * @param f_index Index by points or voxels
-     * @param f_p1_fr Offset p1 by a fraction of the length
-     * @param f_pn_fr Offset pn by a fraction of the length
-     * @param f_p1_mm Offset p1 by a distance in mm
-     * @param f_pn_mm Offset pn by a distance in mm
-     * @param stop_gap Stop when a zero gap has been hit
-     * @param cmask Command for dataset mask
-     * @param data_expr Apply expression to surface input
-     * @param datum Set data type in output dataset
-     * @param debug Verbose output level
-     * @param dnode Extra output for specified node
-     * @param dvoxel Extra output for specified voxel
-     * @param noscale No scale factor in output dataset
-     * @param sxyz_orient_as_gpar Assume grid parent orientation for surface xyz
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSurf2VolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SURF2_VOL_METADATA);
     const params = v_3d_surf2_vol_params(spec, surface_volume, surf_a, grid_parent, map_func, prefix, surf_b, surf_xyz_1d, sdata_1d, sdata, f_steps, f_index, f_p1_fr, f_pn_fr, f_p1_mm, f_pn_mm, stop_gap, cmask, data_expr, datum, debug, dnode, dvoxel, noscale, sxyz_orient_as_gpar)
@@ -481,5 +481,8 @@ export {
       V3dSurf2VolParameters,
       V_3D_SURF2_VOL_METADATA,
       v_3d_surf2_vol,
+      v_3d_surf2_vol_cargs,
+      v_3d_surf2_vol_execute,
+      v_3d_surf2_vol_outputs,
       v_3d_surf2_vol_params,
 };

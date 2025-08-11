@@ -12,7 +12,7 @@ const MRIS_INFLATE_METADATA: Metadata = {
 
 
 interface MrisInflateParameters {
-    "__STYXTYPE__": "mris_inflate";
+    "@type": "freesurfer.mris_inflate";
     "input_surface": InputPathType;
     "output_surface": string;
     "max_iterations"?: number | null | undefined;
@@ -25,35 +25,35 @@ interface MrisInflateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_inflate": mris_inflate_cargs,
+        "freesurfer.mris_inflate": mris_inflate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_inflate": mris_inflate_outputs,
+        "freesurfer.mris_inflate": mris_inflate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MrisInflateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param max_iterations Set the maximum number of iterations (default: 10)
+ * @param snapshot_interval Write out a snapshot of the inflation every specified time step
+ * @param dist_coefficient Specify the relative strength of the metric preserving term in the cost functional versus the smoothing term (default: 0.1)
+ * @param no_save_sulc Do not save ?h.sulc
+ * @param sulcname Save to ?h.sulcname
+ * @param mm_flag Compute sulc in mm without zero meaning or scaling
+ * @param scale_flag Disable or enable scaling of inflated brain
+ *
+ * @returns Parameter dictionary
+ */
 function mris_inflate_params(
     input_surface: InputPathType,
     output_surface: string,
@@ -87,23 +102,8 @@ function mris_inflate_params(
     mm_flag: boolean = false,
     scale_flag: number | null = null,
 ): MrisInflateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param max_iterations Set the maximum number of iterations (default: 10)
-     * @param snapshot_interval Write out a snapshot of the inflation every specified time step
-     * @param dist_coefficient Specify the relative strength of the metric preserving term in the cost functional versus the smoothing term (default: 0.1)
-     * @param no_save_sulc Do not save ?h.sulc
-     * @param sulcname Save to ?h.sulcname
-     * @param mm_flag Compute sulc in mm without zero meaning or scaling
-     * @param scale_flag Disable or enable scaling of inflated brain
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_inflate" as const,
+        "@type": "freesurfer.mris_inflate" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "no_save_sulc": no_save_sulc,
@@ -128,18 +128,18 @@ function mris_inflate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_inflate_cargs(
     params: MrisInflateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_inflate");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -184,18 +184,18 @@ function mris_inflate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_inflate_outputs(
     params: MrisInflateParameters,
     execution: Execution,
 ): MrisInflateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisInflateOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -204,22 +204,22 @@ function mris_inflate_outputs(
 }
 
 
+/**
+ * Cortical surface inflation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
+ */
 function mris_inflate_execute(
     params: MrisInflateParameters,
     execution: Execution,
 ): MrisInflateOutputs {
-    /**
-     * Cortical surface inflation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_inflate_cargs(params, execution)
     const ret = mris_inflate_outputs(params, execution)
@@ -228,6 +228,26 @@ function mris_inflate_execute(
 }
 
 
+/**
+ * Cortical surface inflation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file
+ * @param output_surface Output surface file
+ * @param max_iterations Set the maximum number of iterations (default: 10)
+ * @param snapshot_interval Write out a snapshot of the inflation every specified time step
+ * @param dist_coefficient Specify the relative strength of the metric preserving term in the cost functional versus the smoothing term (default: 0.1)
+ * @param no_save_sulc Do not save ?h.sulc
+ * @param sulcname Save to ?h.sulcname
+ * @param mm_flag Compute sulc in mm without zero meaning or scaling
+ * @param scale_flag Disable or enable scaling of inflated brain
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
+ */
 function mris_inflate(
     input_surface: InputPathType,
     output_surface: string,
@@ -240,26 +260,6 @@ function mris_inflate(
     scale_flag: number | null = null,
     runner: Runner | null = null,
 ): MrisInflateOutputs {
-    /**
-     * Cortical surface inflation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file
-     * @param output_surface Output surface file
-     * @param max_iterations Set the maximum number of iterations (default: 10)
-     * @param snapshot_interval Write out a snapshot of the inflation every specified time step
-     * @param dist_coefficient Specify the relative strength of the metric preserving term in the cost functional versus the smoothing term (default: 0.1)
-     * @param no_save_sulc Do not save ?h.sulc
-     * @param sulcname Save to ?h.sulcname
-     * @param mm_flag Compute sulc in mm without zero meaning or scaling
-     * @param scale_flag Disable or enable scaling of inflated brain
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_INFLATE_METADATA);
     const params = mris_inflate_params(input_surface, output_surface, max_iterations, snapshot_interval, dist_coefficient, no_save_sulc, sulcname, mm_flag, scale_flag)
@@ -272,5 +272,8 @@ export {
       MrisInflateOutputs,
       MrisInflateParameters,
       mris_inflate,
+      mris_inflate_cargs,
+      mris_inflate_execute,
+      mris_inflate_outputs,
       mris_inflate_params,
 };

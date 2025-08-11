@@ -12,7 +12,7 @@ const MRI_JACOBIAN_METADATA: Metadata = {
 
 
 interface MriJacobianParameters {
-    "__STYXTYPE__": "mri_jacobian";
+    "@type": "freesurfer.mri_jacobian";
     "morph_file": InputPathType;
     "template_vol": InputPathType;
     "output_vol": string;
@@ -30,35 +30,35 @@ interface MriJacobianParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_jacobian": mri_jacobian_cargs,
+        "freesurfer.mri_jacobian": mri_jacobian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_jacobian": mri_jacobian_outputs,
+        "freesurfer.mri_jacobian": mri_jacobian_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface MriJacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param morph_file 3D morph input file
+ * @param template_vol Template volume file
+ * @param output_vol Output volume file
+ * @param atlas_coord Output is written in atlas coordinate system
+ * @param write_area_vols Writing area volumes
+ * @param log_jacobian Taking log of Jacobian values before saving
+ * @param smooth_sigma Smoothing Jacobian volume with sigma
+ * @param zero_mean_log Make log Jacobian zero mean
+ * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
+ * @param help1 Writing out help
+ * @param help2 Writing out help
+ * @param dt DT option (description not provided in help text)
+ * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
+ * @param remove Remove option (description not provided in help text)
+ *
+ * @returns Parameter dictionary
+ */
 function mri_jacobian_params(
     morph_file: InputPathType,
     template_vol: InputPathType,
@@ -97,28 +117,8 @@ function mri_jacobian_params(
     debug_voxel: Array<number> | null = null,
     remove: boolean = false,
 ): MriJacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param morph_file 3D morph input file
-     * @param template_vol Template volume file
-     * @param output_vol Output volume file
-     * @param atlas_coord Output is written in atlas coordinate system
-     * @param write_area_vols Writing area volumes
-     * @param log_jacobian Taking log of Jacobian values before saving
-     * @param smooth_sigma Smoothing Jacobian volume with sigma
-     * @param zero_mean_log Make log Jacobian zero mean
-     * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
-     * @param help1 Writing out help
-     * @param help2 Writing out help
-     * @param dt DT option (description not provided in help text)
-     * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
-     * @param remove Remove option (description not provided in help text)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_jacobian" as const,
+        "@type": "freesurfer.mri_jacobian" as const,
         "morph_file": morph_file,
         "template_vol": template_vol,
         "output_vol": output_vol,
@@ -142,18 +142,18 @@ function mri_jacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_jacobian_cargs(
     params: MriJacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_jacobian");
     cargs.push(execution.inputFile((params["morph_file"] ?? null)));
@@ -202,18 +202,18 @@ function mri_jacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_jacobian_outputs(
     params: MriJacobianParameters,
     execution: Execution,
 ): MriJacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriJacobianOutputs = {
         root: execution.outputFile("."),
         result_vol: execution.outputFile([(params["output_vol"] ?? null)].join('')),
@@ -222,22 +222,22 @@ function mri_jacobian_outputs(
 }
 
 
+/**
+ * Compute the Jacobian of a morph with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
+ */
 function mri_jacobian_execute(
     params: MriJacobianParameters,
     execution: Execution,
 ): MriJacobianOutputs {
-    /**
-     * Compute the Jacobian of a morph with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_jacobian_cargs(params, execution)
     const ret = mri_jacobian_outputs(params, execution)
@@ -246,6 +246,31 @@ function mri_jacobian_execute(
 }
 
 
+/**
+ * Compute the Jacobian of a morph with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param morph_file 3D morph input file
+ * @param template_vol Template volume file
+ * @param output_vol Output volume file
+ * @param atlas_coord Output is written in atlas coordinate system
+ * @param write_area_vols Writing area volumes
+ * @param log_jacobian Taking log of Jacobian values before saving
+ * @param smooth_sigma Smoothing Jacobian volume with sigma
+ * @param zero_mean_log Make log Jacobian zero mean
+ * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
+ * @param help1 Writing out help
+ * @param help2 Writing out help
+ * @param dt DT option (description not provided in help text)
+ * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
+ * @param remove Remove option (description not provided in help text)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
+ */
 function mri_jacobian(
     morph_file: InputPathType,
     template_vol: InputPathType,
@@ -263,31 +288,6 @@ function mri_jacobian(
     remove: boolean = false,
     runner: Runner | null = null,
 ): MriJacobianOutputs {
-    /**
-     * Compute the Jacobian of a morph with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param morph_file 3D morph input file
-     * @param template_vol Template volume file
-     * @param output_vol Output volume file
-     * @param atlas_coord Output is written in atlas coordinate system
-     * @param write_area_vols Writing area volumes
-     * @param log_jacobian Taking log of Jacobian values before saving
-     * @param smooth_sigma Smoothing Jacobian volume with sigma
-     * @param zero_mean_log Make log Jacobian zero mean
-     * @param tm3d The input morph (m3z) originated from tm3d (mri_cvs_register)
-     * @param help1 Writing out help
-     * @param help2 Writing out help
-     * @param dt DT option (description not provided in help text)
-     * @param debug_voxel Debug voxel with specified Gx, Gy, Gz coordinates
-     * @param remove Remove option (description not provided in help text)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_JACOBIAN_METADATA);
     const params = mri_jacobian_params(morph_file, template_vol, output_vol, atlas_coord, write_area_vols, log_jacobian, smooth_sigma, zero_mean_log, tm3d, help1, help2, dt, debug_voxel, remove)
@@ -300,5 +300,8 @@ export {
       MriJacobianOutputs,
       MriJacobianParameters,
       mri_jacobian,
+      mri_jacobian_cargs,
+      mri_jacobian_execute,
+      mri_jacobian_outputs,
       mri_jacobian_params,
 };

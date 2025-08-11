@@ -12,33 +12,33 @@ const EXTRACT_REGION_FROM_IMAGE_METADATA: Metadata = {
 
 
 interface ExtractRegionFromImageRegionMinMaxIndexParameters {
-    "__STYXTYPE__": "region_min_max_index";
+    "@type": "ants.ExtractRegionFromImage.region_min_max_index";
     "min_index": string;
     "max_index": string;
 }
 
 
 interface ExtractRegionFromImageRegionLabelParameters {
-    "__STYXTYPE__": "region_label";
+    "@type": "ants.ExtractRegionFromImage.region_label";
     "label": string;
 }
 
 
 interface ExtractRegionFromImageRegionDomainImageParameters {
-    "__STYXTYPE__": "region_domain_image";
+    "@type": "ants.ExtractRegionFromImage.region_domain_image";
     "domain_image": InputPathType;
 }
 
 
 interface ExtractRegionFromImageRegionLabelWithImageParameters {
-    "__STYXTYPE__": "region_label_with_image";
+    "@type": "ants.ExtractRegionFromImage.region_label_with_image";
     "label": string;
     "label_image": InputPathType;
 }
 
 
 interface ExtractRegionFromImageParameters {
-    "__STYXTYPE__": "ExtractRegionFromImage";
+    "@type": "ants.ExtractRegionFromImage";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
@@ -46,58 +46,58 @@ interface ExtractRegionFromImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ExtractRegionFromImage": extract_region_from_image_cargs,
-        "region_min_max_index": extract_region_from_image_region_min_max_index_cargs,
-        "region_label": extract_region_from_image_region_label_cargs,
-        "region_domain_image": extract_region_from_image_region_domain_image_cargs,
-        "region_label_with_image": extract_region_from_image_region_label_with_image_cargs,
+        "ants.ExtractRegionFromImage": extract_region_from_image_cargs,
+        "ants.ExtractRegionFromImage.region_min_max_index": extract_region_from_image_region_min_max_index_cargs,
+        "ants.ExtractRegionFromImage.region_label": extract_region_from_image_region_label_cargs,
+        "ants.ExtractRegionFromImage.region_domain_image": extract_region_from_image_region_domain_image_cargs,
+        "ants.ExtractRegionFromImage.region_label_with_image": extract_region_from_image_region_label_with_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ExtractRegionFromImage": extract_region_from_image_outputs,
+        "ants.ExtractRegionFromImage": extract_region_from_image_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param min_index Minimum index to define the starting point of the region.
+ * @param max_index Maximum index to define the endpoint of the region.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_region_min_max_index_params(
     min_index: string,
     max_index: string,
 ): ExtractRegionFromImageRegionMinMaxIndexParameters {
-    /**
-     * Build parameters.
-    
-     * @param min_index Minimum index to define the starting point of the region.
-     * @param max_index Maximum index to define the endpoint of the region.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "region_min_max_index" as const,
+        "@type": "ants.ExtractRegionFromImage.region_min_max_index" as const,
         "min_index": min_index,
         "max_index": max_index,
     };
@@ -105,18 +105,18 @@ function extract_region_from_image_region_min_max_index_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_region_min_max_index_cargs(
     params: ExtractRegionFromImageRegionMinMaxIndexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["min_index"] ?? null));
     cargs.push((params["max_index"] ?? null));
@@ -124,92 +124,92 @@ function extract_region_from_image_region_min_max_index_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label Label value to extract the region corresponding to the specified label.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_region_label_params(
     label: string,
 ): ExtractRegionFromImageRegionLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param label Label value to extract the region corresponding to the specified label.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "region_label" as const,
+        "@type": "ants.ExtractRegionFromImage.region_label" as const,
         "label": label,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_region_label_cargs(
     params: ExtractRegionFromImageRegionLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["label"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param domain_image Image defining the domain from which to extract the region.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_region_domain_image_params(
     domain_image: InputPathType,
 ): ExtractRegionFromImageRegionDomainImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param domain_image Image defining the domain from which to extract the region.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "region_domain_image" as const,
+        "@type": "ants.ExtractRegionFromImage.region_domain_image" as const,
         "domain_image": domain_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_region_domain_image_cargs(
     params: ExtractRegionFromImageRegionDomainImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["domain_image"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label Label value used for the region extraction.
+ * @param label_image Image containing label information.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_region_label_with_image_params(
     label: string,
     label_image: InputPathType,
 ): ExtractRegionFromImageRegionLabelWithImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param label Label value used for the region extraction.
-     * @param label_image Image containing label information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "region_label_with_image" as const,
+        "@type": "ants.ExtractRegionFromImage.region_label_with_image" as const,
         "label": label,
         "label_image": label_image,
     };
@@ -217,18 +217,18 @@ function extract_region_from_image_region_label_with_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_region_label_with_image_cargs(
     params: ExtractRegionFromImageRegionLabelWithImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["label"] ?? null));
     cargs.push(execution.inputFile((params["label_image"] ?? null)));
@@ -254,24 +254,24 @@ interface ExtractRegionFromImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the image.
+ * @param input_image Path to the input image from which the region will be extracted.
+ * @param output_image Path to the output image where the extracted region will be saved.
+ * @param region_specification Specify the region to extract using indices, label, domain image, or label with label image.
+ *
+ * @returns Parameter dictionary
+ */
 function extract_region_from_image_params(
     image_dimension: number,
     input_image: InputPathType,
     output_image: string,
     region_specification: ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters,
 ): ExtractRegionFromImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the image.
-     * @param input_image Path to the input image from which the region will be extracted.
-     * @param output_image Path to the output image where the extracted region will be saved.
-     * @param region_specification Specify the region to extract using indices, label, domain image, or label with label image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ExtractRegionFromImage" as const,
+        "@type": "ants.ExtractRegionFromImage" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -281,40 +281,40 @@ function extract_region_from_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function extract_region_from_image_cargs(
     params: ExtractRegionFromImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ExtractRegionFromImage");
     cargs.push(String((params["image_dimension"] ?? null)));
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
-    cargs.push(...dynCargs((params["region_specification"] ?? null).__STYXTYPE__)((params["region_specification"] ?? null), execution));
+    cargs.push(...dynCargs((params["region_specification"] ?? null)["@type"])((params["region_specification"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function extract_region_from_image_outputs(
     params: ExtractRegionFromImageParameters,
     execution: Execution,
 ): ExtractRegionFromImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ExtractRegionFromImageOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -323,22 +323,22 @@ function extract_region_from_image_outputs(
 }
 
 
+/**
+ * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ExtractRegionFromImageOutputs`).
+ */
 function extract_region_from_image_execute(
     params: ExtractRegionFromImageParameters,
     execution: Execution,
 ): ExtractRegionFromImageOutputs {
-    /**
-     * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ExtractRegionFromImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = extract_region_from_image_cargs(params, execution)
     const ret = extract_region_from_image_outputs(params, execution)
@@ -347,6 +347,21 @@ function extract_region_from_image_execute(
 }
 
 
+/**
+ * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the image.
+ * @param input_image Path to the input image from which the region will be extracted.
+ * @param output_image Path to the output image where the extracted region will be saved.
+ * @param region_specification Specify the region to extract using indices, label, domain image, or label with label image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ExtractRegionFromImageOutputs`).
+ */
 function extract_region_from_image(
     image_dimension: number,
     input_image: InputPathType,
@@ -354,21 +369,6 @@ function extract_region_from_image(
     region_specification: ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters,
     runner: Runner | null = null,
 ): ExtractRegionFromImageOutputs {
-    /**
-     * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the image.
-     * @param input_image Path to the input image from which the region will be extracted.
-     * @param output_image Path to the output image where the extracted region will be saved.
-     * @param region_specification Specify the region to extract using indices, label, domain image, or label with label image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ExtractRegionFromImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_METADATA);
     const params = extract_region_from_image_params(image_dimension, input_image, output_image, region_specification)
@@ -385,9 +385,16 @@ export {
       ExtractRegionFromImageRegionLabelWithImageParameters,
       ExtractRegionFromImageRegionMinMaxIndexParameters,
       extract_region_from_image,
+      extract_region_from_image_cargs,
+      extract_region_from_image_execute,
+      extract_region_from_image_outputs,
       extract_region_from_image_params,
+      extract_region_from_image_region_domain_image_cargs,
       extract_region_from_image_region_domain_image_params,
+      extract_region_from_image_region_label_cargs,
       extract_region_from_image_region_label_params,
+      extract_region_from_image_region_label_with_image_cargs,
       extract_region_from_image_region_label_with_image_params,
+      extract_region_from_image_region_min_max_index_cargs,
       extract_region_from_image_region_min_max_index_params,
 };

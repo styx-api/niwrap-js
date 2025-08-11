@@ -12,7 +12,7 @@ const CBLUMWMGYRI_METADATA: Metadata = {
 
 
 interface CblumwmgyriParameters {
-    "__STYXTYPE__": "cblumwmgyri";
+    "@type": "freesurfer.cblumwmgyri";
     "subject": string;
     "source_seg"?: InputPathType | null | undefined;
     "n_erodes_dilates"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface CblumwmgyriParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cblumwmgyri": cblumwmgyri_cargs,
+        "freesurfer.cblumwmgyri": cblumwmgyri_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cblumwmgyri": cblumwmgyri_outputs,
+        "freesurfer.cblumwmgyri": cblumwmgyri_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface CblumwmgyriOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param source_seg Source segmentation file (default: aparc+aseg.mgz)
+ * @param n_erodes_dilates Number of erosions/dilations (default: 2)
+ * @param out_seg Output segmentation file (default: sourceseg+cblumwmgyri.mgz)
+ * @param no_segstats Do not compute segmentation statistics
+ * @param subjects_dir Subjects directory
+ *
+ * @returns Parameter dictionary
+ */
 function cblumwmgyri_params(
     subject: string,
     source_seg: InputPathType | null = null,
@@ -81,20 +93,8 @@ function cblumwmgyri_params(
     no_segstats: boolean = false,
     subjects_dir: string | null = null,
 ): CblumwmgyriParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param source_seg Source segmentation file (default: aparc+aseg.mgz)
-     * @param n_erodes_dilates Number of erosions/dilations (default: 2)
-     * @param out_seg Output segmentation file (default: sourceseg+cblumwmgyri.mgz)
-     * @param no_segstats Do not compute segmentation statistics
-     * @param subjects_dir Subjects directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cblumwmgyri" as const,
+        "@type": "freesurfer.cblumwmgyri" as const,
         "subject": subject,
         "no_segstats": no_segstats,
     };
@@ -114,18 +114,18 @@ function cblumwmgyri_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cblumwmgyri_cargs(
     params: CblumwmgyriParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cblumwmgyri");
     cargs.push(
@@ -163,18 +163,18 @@ function cblumwmgyri_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cblumwmgyri_outputs(
     params: CblumwmgyriParameters,
     execution: Execution,
 ): CblumwmgyriOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CblumwmgyriOutputs = {
         root: execution.outputFile("."),
         output_seg_file: ((params["out_seg"] ?? null) !== null) ? execution.outputFile([(params["out_seg"] ?? null)].join('')) : null,
@@ -183,22 +183,22 @@ function cblumwmgyri_outputs(
 }
 
 
+/**
+ * Segments cerebellar white matter into gyral and core components using geometrical constraints.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
+ */
 function cblumwmgyri_execute(
     params: CblumwmgyriParameters,
     execution: Execution,
 ): CblumwmgyriOutputs {
-    /**
-     * Segments cerebellar white matter into gyral and core components using geometrical constraints.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
-     */
     params = execution.params(params)
     const cargs = cblumwmgyri_cargs(params, execution)
     const ret = cblumwmgyri_outputs(params, execution)
@@ -207,6 +207,23 @@ function cblumwmgyri_execute(
 }
 
 
+/**
+ * Segments cerebellar white matter into gyral and core components using geometrical constraints.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param source_seg Source segmentation file (default: aparc+aseg.mgz)
+ * @param n_erodes_dilates Number of erosions/dilations (default: 2)
+ * @param out_seg Output segmentation file (default: sourceseg+cblumwmgyri.mgz)
+ * @param no_segstats Do not compute segmentation statistics
+ * @param subjects_dir Subjects directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
+ */
 function cblumwmgyri(
     subject: string,
     source_seg: InputPathType | null = null,
@@ -216,23 +233,6 @@ function cblumwmgyri(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): CblumwmgyriOutputs {
-    /**
-     * Segments cerebellar white matter into gyral and core components using geometrical constraints.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param source_seg Source segmentation file (default: aparc+aseg.mgz)
-     * @param n_erodes_dilates Number of erosions/dilations (default: 2)
-     * @param out_seg Output segmentation file (default: sourceseg+cblumwmgyri.mgz)
-     * @param no_segstats Do not compute segmentation statistics
-     * @param subjects_dir Subjects directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CBLUMWMGYRI_METADATA);
     const params = cblumwmgyri_params(subject, source_seg, n_erodes_dilates, out_seg, no_segstats, subjects_dir)
@@ -245,5 +245,8 @@ export {
       CblumwmgyriOutputs,
       CblumwmgyriParameters,
       cblumwmgyri,
+      cblumwmgyri_cargs,
+      cblumwmgyri_execute,
+      cblumwmgyri_outputs,
       cblumwmgyri_params,
 };

@@ -12,7 +12,7 @@ const FILE_TOOL_METADATA: Metadata = {
 
 
 interface FileToolParameters {
-    "__STYXTYPE__": "file_tool";
+    "@type": "afni.file_tool";
     "help": boolean;
     "version": boolean;
     "hist": boolean;
@@ -58,35 +58,35 @@ interface FileToolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "file_tool": file_tool_cargs,
+        "afni.file_tool": file_tool_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "file_tool": file_tool_outputs,
+        "afni.file_tool": file_tool_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,6 +109,54 @@ interface FileToolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infiles Specify input files to display or modify
+ * @param help Show help information
+ * @param version Show version information
+ * @param hist Show the program's modification history
+ * @param debug Print extra info along the way, default is 0, max is 2
+ * @param ge_all Display GE header and extras info
+ * @param ge_header Display GE header info
+ * @param ge_extras Display extra GE image info
+ * @param ge_uv17 Display the value of uv17 (the run #)
+ * @param ge_run Display the value of uv17 (the run #)
+ * @param ge_off Display file offsets for various fields
+ * @param ge4_all Display GEMS 4.x series and image headers
+ * @param ge4_image Display GEMS 4.x image header
+ * @param ge4_series Display GEMS 4.x series header
+ * @param ge4_study Display GEMS 4.x study header
+ * @param def_ana_hdr Display the definition of an ANALYZE header
+ * @param diff_ana_hdrs Display field differences between 2 headers
+ * @param disp_ana_hdr Display ANALYZE headers
+ * @param hex Display field values in hexadecimal
+ * @param mod_ana_hdr Modify ANALYZE headers
+ * @param mod_field Specify a field and value(s) to modify
+ * @param prefix Specify an output filename
+ * @param overwrite Specify to overwrite the input file(s)
+ * @param show_bad_all Show lines with whitespace after '\'
+ * @param show_bad_backslash Show lines with whitespace after '\'
+ * @param show_bad_char Show any non-printable characters
+ * @param show_file_type Print file type of UNIX, Mac or DOS
+ * @param fix_rich_quotes Replace rich-text quotes with ASCII
+ * @param test Short for -show_bad_all. Check script files for known issues
+ * @param length Specify the number of bytes to print/modify
+ * @param mod_data Specify a string to modify the data to
+ * @param mod_type Specify the data type to write to the file
+ * @param offset Specify the offset into each file
+ * @param quiet Do not output header information
+ * @param disp_hex Display bytes in hex
+ * @param disp_hex1 Display bytes in hex
+ * @param disp_hex2 Display 2-byte integers in hex
+ * @param disp_hex4 Display 4-byte integers in hex
+ * @param disp_int2 Display 2-byte integers
+ * @param disp_int4 Display 4-byte integers
+ * @param disp_real4 Display 4-byte real numbers
+ * @param swap_bytes Use byte-swapping on numbers
+ *
+ * @returns Parameter dictionary
+ */
 function file_tool_params(
     infiles: Array<InputPathType>,
     help: boolean = false,
@@ -153,56 +201,8 @@ function file_tool_params(
     disp_real4: boolean = false,
     swap_bytes: boolean = false,
 ): FileToolParameters {
-    /**
-     * Build parameters.
-    
-     * @param infiles Specify input files to display or modify
-     * @param help Show help information
-     * @param version Show version information
-     * @param hist Show the program's modification history
-     * @param debug Print extra info along the way, default is 0, max is 2
-     * @param ge_all Display GE header and extras info
-     * @param ge_header Display GE header info
-     * @param ge_extras Display extra GE image info
-     * @param ge_uv17 Display the value of uv17 (the run #)
-     * @param ge_run Display the value of uv17 (the run #)
-     * @param ge_off Display file offsets for various fields
-     * @param ge4_all Display GEMS 4.x series and image headers
-     * @param ge4_image Display GEMS 4.x image header
-     * @param ge4_series Display GEMS 4.x series header
-     * @param ge4_study Display GEMS 4.x study header
-     * @param def_ana_hdr Display the definition of an ANALYZE header
-     * @param diff_ana_hdrs Display field differences between 2 headers
-     * @param disp_ana_hdr Display ANALYZE headers
-     * @param hex Display field values in hexadecimal
-     * @param mod_ana_hdr Modify ANALYZE headers
-     * @param mod_field Specify a field and value(s) to modify
-     * @param prefix Specify an output filename
-     * @param overwrite Specify to overwrite the input file(s)
-     * @param show_bad_all Show lines with whitespace after '\'
-     * @param show_bad_backslash Show lines with whitespace after '\'
-     * @param show_bad_char Show any non-printable characters
-     * @param show_file_type Print file type of UNIX, Mac or DOS
-     * @param fix_rich_quotes Replace rich-text quotes with ASCII
-     * @param test Short for -show_bad_all. Check script files for known issues
-     * @param length Specify the number of bytes to print/modify
-     * @param mod_data Specify a string to modify the data to
-     * @param mod_type Specify the data type to write to the file
-     * @param offset Specify the offset into each file
-     * @param quiet Do not output header information
-     * @param disp_hex Display bytes in hex
-     * @param disp_hex1 Display bytes in hex
-     * @param disp_hex2 Display 2-byte integers in hex
-     * @param disp_hex4 Display 4-byte integers in hex
-     * @param disp_int2 Display 2-byte integers
-     * @param disp_int4 Display 4-byte integers
-     * @param disp_real4 Display 4-byte real numbers
-     * @param swap_bytes Use byte-swapping on numbers
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "file_tool" as const,
+        "@type": "afni.file_tool" as const,
         "help": help,
         "version": version,
         "hist": hist,
@@ -266,18 +266,18 @@ function file_tool_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function file_tool_cargs(
     params: FileToolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("file_tool");
     if ((params["help"] ?? null)) {
@@ -435,18 +435,18 @@ function file_tool_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function file_tool_outputs(
     params: FileToolParameters,
     execution: Execution,
 ): FileToolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FileToolOutputs = {
         root: execution.outputFile("."),
         modified_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -455,22 +455,22 @@ function file_tool_outputs(
 }
 
 
+/**
+ * Program to display or modify sections of a file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FileToolOutputs`).
+ */
 function file_tool_execute(
     params: FileToolParameters,
     execution: Execution,
 ): FileToolOutputs {
-    /**
-     * Program to display or modify sections of a file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FileToolOutputs`).
-     */
     params = execution.params(params)
     const cargs = file_tool_cargs(params, execution)
     const ret = file_tool_outputs(params, execution)
@@ -479,6 +479,59 @@ function file_tool_execute(
 }
 
 
+/**
+ * Program to display or modify sections of a file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infiles Specify input files to display or modify
+ * @param help Show help information
+ * @param version Show version information
+ * @param hist Show the program's modification history
+ * @param debug Print extra info along the way, default is 0, max is 2
+ * @param ge_all Display GE header and extras info
+ * @param ge_header Display GE header info
+ * @param ge_extras Display extra GE image info
+ * @param ge_uv17 Display the value of uv17 (the run #)
+ * @param ge_run Display the value of uv17 (the run #)
+ * @param ge_off Display file offsets for various fields
+ * @param ge4_all Display GEMS 4.x series and image headers
+ * @param ge4_image Display GEMS 4.x image header
+ * @param ge4_series Display GEMS 4.x series header
+ * @param ge4_study Display GEMS 4.x study header
+ * @param def_ana_hdr Display the definition of an ANALYZE header
+ * @param diff_ana_hdrs Display field differences between 2 headers
+ * @param disp_ana_hdr Display ANALYZE headers
+ * @param hex Display field values in hexadecimal
+ * @param mod_ana_hdr Modify ANALYZE headers
+ * @param mod_field Specify a field and value(s) to modify
+ * @param prefix Specify an output filename
+ * @param overwrite Specify to overwrite the input file(s)
+ * @param show_bad_all Show lines with whitespace after '\'
+ * @param show_bad_backslash Show lines with whitespace after '\'
+ * @param show_bad_char Show any non-printable characters
+ * @param show_file_type Print file type of UNIX, Mac or DOS
+ * @param fix_rich_quotes Replace rich-text quotes with ASCII
+ * @param test Short for -show_bad_all. Check script files for known issues
+ * @param length Specify the number of bytes to print/modify
+ * @param mod_data Specify a string to modify the data to
+ * @param mod_type Specify the data type to write to the file
+ * @param offset Specify the offset into each file
+ * @param quiet Do not output header information
+ * @param disp_hex Display bytes in hex
+ * @param disp_hex1 Display bytes in hex
+ * @param disp_hex2 Display 2-byte integers in hex
+ * @param disp_hex4 Display 4-byte integers in hex
+ * @param disp_int2 Display 2-byte integers
+ * @param disp_int4 Display 4-byte integers
+ * @param disp_real4 Display 4-byte real numbers
+ * @param swap_bytes Use byte-swapping on numbers
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FileToolOutputs`).
+ */
 function file_tool(
     infiles: Array<InputPathType>,
     help: boolean = false,
@@ -524,59 +577,6 @@ function file_tool(
     swap_bytes: boolean = false,
     runner: Runner | null = null,
 ): FileToolOutputs {
-    /**
-     * Program to display or modify sections of a file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infiles Specify input files to display or modify
-     * @param help Show help information
-     * @param version Show version information
-     * @param hist Show the program's modification history
-     * @param debug Print extra info along the way, default is 0, max is 2
-     * @param ge_all Display GE header and extras info
-     * @param ge_header Display GE header info
-     * @param ge_extras Display extra GE image info
-     * @param ge_uv17 Display the value of uv17 (the run #)
-     * @param ge_run Display the value of uv17 (the run #)
-     * @param ge_off Display file offsets for various fields
-     * @param ge4_all Display GEMS 4.x series and image headers
-     * @param ge4_image Display GEMS 4.x image header
-     * @param ge4_series Display GEMS 4.x series header
-     * @param ge4_study Display GEMS 4.x study header
-     * @param def_ana_hdr Display the definition of an ANALYZE header
-     * @param diff_ana_hdrs Display field differences between 2 headers
-     * @param disp_ana_hdr Display ANALYZE headers
-     * @param hex Display field values in hexadecimal
-     * @param mod_ana_hdr Modify ANALYZE headers
-     * @param mod_field Specify a field and value(s) to modify
-     * @param prefix Specify an output filename
-     * @param overwrite Specify to overwrite the input file(s)
-     * @param show_bad_all Show lines with whitespace after '\'
-     * @param show_bad_backslash Show lines with whitespace after '\'
-     * @param show_bad_char Show any non-printable characters
-     * @param show_file_type Print file type of UNIX, Mac or DOS
-     * @param fix_rich_quotes Replace rich-text quotes with ASCII
-     * @param test Short for -show_bad_all. Check script files for known issues
-     * @param length Specify the number of bytes to print/modify
-     * @param mod_data Specify a string to modify the data to
-     * @param mod_type Specify the data type to write to the file
-     * @param offset Specify the offset into each file
-     * @param quiet Do not output header information
-     * @param disp_hex Display bytes in hex
-     * @param disp_hex1 Display bytes in hex
-     * @param disp_hex2 Display 2-byte integers in hex
-     * @param disp_hex4 Display 4-byte integers in hex
-     * @param disp_int2 Display 2-byte integers
-     * @param disp_int4 Display 4-byte integers
-     * @param disp_real4 Display 4-byte real numbers
-     * @param swap_bytes Use byte-swapping on numbers
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FileToolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FILE_TOOL_METADATA);
     const params = file_tool_params(infiles, help, version, hist, debug, ge_all, ge_header, ge_extras, ge_uv17, ge_run, ge_off, ge4_all, ge4_image, ge4_series, ge4_study, def_ana_hdr, diff_ana_hdrs, disp_ana_hdr, hex, mod_ana_hdr, mod_field, prefix, overwrite, show_bad_all, show_bad_backslash, show_bad_char, show_file_type, fix_rich_quotes, test, length, mod_data, mod_type, offset, quiet, disp_hex, disp_hex1, disp_hex2, disp_hex4, disp_int2, disp_int4, disp_real4, swap_bytes)
@@ -589,5 +589,8 @@ export {
       FileToolOutputs,
       FileToolParameters,
       file_tool,
+      file_tool_cargs,
+      file_tool_execute,
+      file_tool_outputs,
       file_tool_params,
 };

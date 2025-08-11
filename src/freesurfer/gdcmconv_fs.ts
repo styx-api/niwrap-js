@@ -12,7 +12,7 @@ const GDCMCONV_FS_METADATA: Metadata = {
 
 
 interface GdcmconvFsParameters {
-    "__STYXTYPE__": "gdcmconv.fs";
+    "@type": "freesurfer.gdcmconv.fs";
     "input_file": InputPathType;
     "output_file": string;
     "explicit_flag": boolean;
@@ -56,33 +56,33 @@ interface GdcmconvFsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gdcmconv.fs": gdcmconv_fs_cargs,
+        "freesurfer.gdcmconv.fs": gdcmconv_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -102,6 +102,52 @@ interface GdcmconvFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input DICOM filename
+ * @param output_file Output DICOM filename
+ * @param explicit_flag Change Transfer Syntax to explicit.
+ * @param implicit_flag Change Transfer Syntax to implicit.
+ * @param use_dict_flag Use dict for VR (only public by default).
+ * @param with_private_dict_flag Use private dict for VR (advanced user only).
+ * @param check_meta_flag Check File Meta Information (advanced user only).
+ * @param root_uid Root UID.
+ * @param remove_gl_flag Remove group length (deprecated in DICOM 2008).
+ * @param remove_private_tags_flag Remove private tags.
+ * @param remove_retired_flag Remove retired tags.
+ * @param apply_lut_flag Apply LUT (non-standard, advanced user only).
+ * @param photometric_interpretation Change Photometric Interpretation (when possible).
+ * @param raw_flag Decompress image.
+ * @param deflated_flag Compress using deflated (gzip).
+ * @param jpeg_flag Compress image in jpeg.
+ * @param j2k_flag Compress image in j2k.
+ * @param jpegls_flag Compress image in jpeg-ls.
+ * @param rle_flag Compress image in rle (lossless only).
+ * @param force_flag Force decompression/merging before recompression/splitting.
+ * @param generate_icon_flag Generate icon.
+ * @param icon_minmax Min/Max value for icon.
+ * @param icon_auto_minmax_flag Automatically compute best Min/Max values for icon.
+ * @param compress_icon_flag Decide whether icon follows main Transfer Syntax or remains uncompressed.
+ * @param planar_configuration Change planar configuration.
+ * @param lossy_flag Use the lossy (if possible) compressor.
+ * @param split Write 2D image with multiple fragments (using max size).
+ * @param verbose_flag More verbose (warning+error).
+ * @param warning_flag Print warning info.
+ * @param debug_flag Print debug info.
+ * @param error_flag Print error info.
+ * @param quiet_flag Do not print to stdout.
+ * @param jpeg_quality Set JPEG quality.
+ * @param lossy_error Set JPEG-LS lossy error.
+ * @param rate Set J2K rate.
+ * @param j2k_quality Set J2K quality.
+ * @param tile Set J2K tile size.
+ * @param number_resolution Set number of resolution.
+ * @param irreversible_flag Set irreversible.
+ * @param ignore_errors_flag Convert even if file is corrupted (advanced users only, see disclaimers).
+ *
+ * @returns Parameter dictionary
+ */
 function gdcmconv_fs_params(
     input_file: InputPathType,
     output_file: string,
@@ -144,54 +190,8 @@ function gdcmconv_fs_params(
     irreversible_flag: boolean = false,
     ignore_errors_flag: boolean = false,
 ): GdcmconvFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input DICOM filename
-     * @param output_file Output DICOM filename
-     * @param explicit_flag Change Transfer Syntax to explicit.
-     * @param implicit_flag Change Transfer Syntax to implicit.
-     * @param use_dict_flag Use dict for VR (only public by default).
-     * @param with_private_dict_flag Use private dict for VR (advanced user only).
-     * @param check_meta_flag Check File Meta Information (advanced user only).
-     * @param root_uid Root UID.
-     * @param remove_gl_flag Remove group length (deprecated in DICOM 2008).
-     * @param remove_private_tags_flag Remove private tags.
-     * @param remove_retired_flag Remove retired tags.
-     * @param apply_lut_flag Apply LUT (non-standard, advanced user only).
-     * @param photometric_interpretation Change Photometric Interpretation (when possible).
-     * @param raw_flag Decompress image.
-     * @param deflated_flag Compress using deflated (gzip).
-     * @param jpeg_flag Compress image in jpeg.
-     * @param j2k_flag Compress image in j2k.
-     * @param jpegls_flag Compress image in jpeg-ls.
-     * @param rle_flag Compress image in rle (lossless only).
-     * @param force_flag Force decompression/merging before recompression/splitting.
-     * @param generate_icon_flag Generate icon.
-     * @param icon_minmax Min/Max value for icon.
-     * @param icon_auto_minmax_flag Automatically compute best Min/Max values for icon.
-     * @param compress_icon_flag Decide whether icon follows main Transfer Syntax or remains uncompressed.
-     * @param planar_configuration Change planar configuration.
-     * @param lossy_flag Use the lossy (if possible) compressor.
-     * @param split Write 2D image with multiple fragments (using max size).
-     * @param verbose_flag More verbose (warning+error).
-     * @param warning_flag Print warning info.
-     * @param debug_flag Print debug info.
-     * @param error_flag Print error info.
-     * @param quiet_flag Do not print to stdout.
-     * @param jpeg_quality Set JPEG quality.
-     * @param lossy_error Set JPEG-LS lossy error.
-     * @param rate Set J2K rate.
-     * @param j2k_quality Set J2K quality.
-     * @param tile Set J2K tile size.
-     * @param number_resolution Set number of resolution.
-     * @param irreversible_flag Set irreversible.
-     * @param ignore_errors_flag Convert even if file is corrupted (advanced users only, see disclaimers).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gdcmconv.fs" as const,
+        "@type": "freesurfer.gdcmconv.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "explicit_flag": explicit_flag,
@@ -259,18 +259,18 @@ function gdcmconv_fs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gdcmconv_fs_cargs(
     params: GdcmconvFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gdcmconv.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -426,18 +426,18 @@ function gdcmconv_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gdcmconv_fs_outputs(
     params: GdcmconvFsParameters,
     execution: Execution,
 ): GdcmconvFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GdcmconvFsOutputs = {
         root: execution.outputFile("."),
     };
@@ -445,22 +445,22 @@ function gdcmconv_fs_outputs(
 }
 
 
+/**
+ * Convert a DICOM file into another DICOM file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
+ */
 function gdcmconv_fs_execute(
     params: GdcmconvFsParameters,
     execution: Execution,
 ): GdcmconvFsOutputs {
-    /**
-     * Convert a DICOM file into another DICOM file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = gdcmconv_fs_cargs(params, execution)
     const ret = gdcmconv_fs_outputs(params, execution)
@@ -469,6 +469,57 @@ function gdcmconv_fs_execute(
 }
 
 
+/**
+ * Convert a DICOM file into another DICOM file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input DICOM filename
+ * @param output_file Output DICOM filename
+ * @param explicit_flag Change Transfer Syntax to explicit.
+ * @param implicit_flag Change Transfer Syntax to implicit.
+ * @param use_dict_flag Use dict for VR (only public by default).
+ * @param with_private_dict_flag Use private dict for VR (advanced user only).
+ * @param check_meta_flag Check File Meta Information (advanced user only).
+ * @param root_uid Root UID.
+ * @param remove_gl_flag Remove group length (deprecated in DICOM 2008).
+ * @param remove_private_tags_flag Remove private tags.
+ * @param remove_retired_flag Remove retired tags.
+ * @param apply_lut_flag Apply LUT (non-standard, advanced user only).
+ * @param photometric_interpretation Change Photometric Interpretation (when possible).
+ * @param raw_flag Decompress image.
+ * @param deflated_flag Compress using deflated (gzip).
+ * @param jpeg_flag Compress image in jpeg.
+ * @param j2k_flag Compress image in j2k.
+ * @param jpegls_flag Compress image in jpeg-ls.
+ * @param rle_flag Compress image in rle (lossless only).
+ * @param force_flag Force decompression/merging before recompression/splitting.
+ * @param generate_icon_flag Generate icon.
+ * @param icon_minmax Min/Max value for icon.
+ * @param icon_auto_minmax_flag Automatically compute best Min/Max values for icon.
+ * @param compress_icon_flag Decide whether icon follows main Transfer Syntax or remains uncompressed.
+ * @param planar_configuration Change planar configuration.
+ * @param lossy_flag Use the lossy (if possible) compressor.
+ * @param split Write 2D image with multiple fragments (using max size).
+ * @param verbose_flag More verbose (warning+error).
+ * @param warning_flag Print warning info.
+ * @param debug_flag Print debug info.
+ * @param error_flag Print error info.
+ * @param quiet_flag Do not print to stdout.
+ * @param jpeg_quality Set JPEG quality.
+ * @param lossy_error Set JPEG-LS lossy error.
+ * @param rate Set J2K rate.
+ * @param j2k_quality Set J2K quality.
+ * @param tile Set J2K tile size.
+ * @param number_resolution Set number of resolution.
+ * @param irreversible_flag Set irreversible.
+ * @param ignore_errors_flag Convert even if file is corrupted (advanced users only, see disclaimers).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
+ */
 function gdcmconv_fs(
     input_file: InputPathType,
     output_file: string,
@@ -512,57 +563,6 @@ function gdcmconv_fs(
     ignore_errors_flag: boolean = false,
     runner: Runner | null = null,
 ): GdcmconvFsOutputs {
-    /**
-     * Convert a DICOM file into another DICOM file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input DICOM filename
-     * @param output_file Output DICOM filename
-     * @param explicit_flag Change Transfer Syntax to explicit.
-     * @param implicit_flag Change Transfer Syntax to implicit.
-     * @param use_dict_flag Use dict for VR (only public by default).
-     * @param with_private_dict_flag Use private dict for VR (advanced user only).
-     * @param check_meta_flag Check File Meta Information (advanced user only).
-     * @param root_uid Root UID.
-     * @param remove_gl_flag Remove group length (deprecated in DICOM 2008).
-     * @param remove_private_tags_flag Remove private tags.
-     * @param remove_retired_flag Remove retired tags.
-     * @param apply_lut_flag Apply LUT (non-standard, advanced user only).
-     * @param photometric_interpretation Change Photometric Interpretation (when possible).
-     * @param raw_flag Decompress image.
-     * @param deflated_flag Compress using deflated (gzip).
-     * @param jpeg_flag Compress image in jpeg.
-     * @param j2k_flag Compress image in j2k.
-     * @param jpegls_flag Compress image in jpeg-ls.
-     * @param rle_flag Compress image in rle (lossless only).
-     * @param force_flag Force decompression/merging before recompression/splitting.
-     * @param generate_icon_flag Generate icon.
-     * @param icon_minmax Min/Max value for icon.
-     * @param icon_auto_minmax_flag Automatically compute best Min/Max values for icon.
-     * @param compress_icon_flag Decide whether icon follows main Transfer Syntax or remains uncompressed.
-     * @param planar_configuration Change planar configuration.
-     * @param lossy_flag Use the lossy (if possible) compressor.
-     * @param split Write 2D image with multiple fragments (using max size).
-     * @param verbose_flag More verbose (warning+error).
-     * @param warning_flag Print warning info.
-     * @param debug_flag Print debug info.
-     * @param error_flag Print error info.
-     * @param quiet_flag Do not print to stdout.
-     * @param jpeg_quality Set JPEG quality.
-     * @param lossy_error Set JPEG-LS lossy error.
-     * @param rate Set J2K rate.
-     * @param j2k_quality Set J2K quality.
-     * @param tile Set J2K tile size.
-     * @param number_resolution Set number of resolution.
-     * @param irreversible_flag Set irreversible.
-     * @param ignore_errors_flag Convert even if file is corrupted (advanced users only, see disclaimers).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GDCMCONV_FS_METADATA);
     const params = gdcmconv_fs_params(input_file, output_file, explicit_flag, implicit_flag, use_dict_flag, with_private_dict_flag, check_meta_flag, root_uid, remove_gl_flag, remove_private_tags_flag, remove_retired_flag, apply_lut_flag, photometric_interpretation, raw_flag, deflated_flag, jpeg_flag, j2k_flag, jpegls_flag, rle_flag, force_flag, generate_icon_flag, icon_minmax, icon_auto_minmax_flag, compress_icon_flag, planar_configuration, lossy_flag, split, verbose_flag, warning_flag, debug_flag, error_flag, quiet_flag, jpeg_quality, lossy_error, rate, j2k_quality, tile, number_resolution, irreversible_flag, ignore_errors_flag)
@@ -575,5 +575,8 @@ export {
       GdcmconvFsOutputs,
       GdcmconvFsParameters,
       gdcmconv_fs,
+      gdcmconv_fs_cargs,
+      gdcmconv_fs_execute,
+      gdcmconv_fs_outputs,
       gdcmconv_fs_params,
 };

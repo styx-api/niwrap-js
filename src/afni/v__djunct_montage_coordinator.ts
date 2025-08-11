@@ -12,7 +12,7 @@ const V__DJUNCT_MONTAGE_COORDINATOR_METADATA: Metadata = {
 
 
 interface VDjunctMontageCoordinatorParameters {
-    "__STYXTYPE__": "@djunct_montage_coordinator";
+    "@type": "afni.@djunct_montage_coordinator";
     "input_file": InputPathType;
     "montx": number;
     "monty": number;
@@ -23,35 +23,35 @@ interface VDjunctMontageCoordinatorParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_montage_coordinator": v__djunct_montage_coordinator_cargs,
+        "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@djunct_montage_coordinator": v__djunct_montage_coordinator_outputs,
+        "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VDjunctMontageCoordinatorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Name of input dataset
+ * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
+ * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
+ * @param out_ijk Make program output 'I J K' values.
+ * @param out_xyz Make program output 'X Y Z' values.
+ * @param help See helpfile.
+ * @param version See version number.
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_montage_coordinator_params(
     input_file: InputPathType,
     montx: number,
@@ -83,21 +96,8 @@ function v__djunct_montage_coordinator_params(
     help: boolean = false,
     version: boolean = false,
 ): VDjunctMontageCoordinatorParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Name of input dataset
-     * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
-     * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
-     * @param out_ijk Make program output 'I J K' values.
-     * @param out_xyz Make program output 'X Y Z' values.
-     * @param help See helpfile.
-     * @param version See version number.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_montage_coordinator" as const,
+        "@type": "afni.@djunct_montage_coordinator" as const,
         "input_file": input_file,
         "montx": montx,
         "monty": monty,
@@ -110,18 +110,18 @@ function v__djunct_montage_coordinator_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_montage_coordinator_cargs(
     params: VDjunctMontageCoordinatorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_montage_coordinator");
     cargs.push(
@@ -152,18 +152,18 @@ function v__djunct_montage_coordinator_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_montage_coordinator_outputs(
     params: VDjunctMontageCoordinatorParameters,
     execution: Execution,
 ): VDjunctMontageCoordinatorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctMontageCoordinatorOutputs = {
         root: execution.outputFile("."),
         output_coords: execution.outputFile(["output.txt"].join('')),
@@ -172,22 +172,22 @@ function v__djunct_montage_coordinator_outputs(
 }
 
 
+/**
+ * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
+ */
 function v__djunct_montage_coordinator_execute(
     params: VDjunctMontageCoordinatorParameters,
     execution: Execution,
 ): VDjunctMontageCoordinatorOutputs {
-    /**
-     * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_montage_coordinator_cargs(params, execution)
     const ret = v__djunct_montage_coordinator_outputs(params, execution)
@@ -196,6 +196,24 @@ function v__djunct_montage_coordinator_execute(
 }
 
 
+/**
+ * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Name of input dataset
+ * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
+ * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
+ * @param out_ijk Make program output 'I J K' values.
+ * @param out_xyz Make program output 'X Y Z' values.
+ * @param help See helpfile.
+ * @param version See version number.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
+ */
 function v__djunct_montage_coordinator(
     input_file: InputPathType,
     montx: number,
@@ -206,24 +224,6 @@ function v__djunct_montage_coordinator(
     version: boolean = false,
     runner: Runner | null = null,
 ): VDjunctMontageCoordinatorOutputs {
-    /**
-     * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Name of input dataset
-     * @param montx Montage dimension: number of panels along x-axis (i.e., number of cols)
-     * @param monty Montage dimension: number of panels along y-axis (i.e., number of rows)
-     * @param out_ijk Make program output 'I J K' values.
-     * @param out_xyz Make program output 'X Y Z' values.
-     * @param help See helpfile.
-     * @param version See version number.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_MONTAGE_COORDINATOR_METADATA);
     const params = v__djunct_montage_coordinator_params(input_file, montx, monty, out_ijk, out_xyz, help, version)
@@ -236,5 +236,8 @@ export {
       VDjunctMontageCoordinatorParameters,
       V__DJUNCT_MONTAGE_COORDINATOR_METADATA,
       v__djunct_montage_coordinator,
+      v__djunct_montage_coordinator_cargs,
+      v__djunct_montage_coordinator_execute,
+      v__djunct_montage_coordinator_outputs,
       v__djunct_montage_coordinator_params,
 };

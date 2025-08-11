@@ -12,7 +12,7 @@ const ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA: Metadata = {
 
 
 interface AdjunctTortPlotDpAlignParameters {
-    "__STYXTYPE__": "adjunct_tort_plot_dp_align";
+    "@type": "afni.adjunct_tort_plot_dp_align";
     "input_file": InputPathType;
     "output_prefix": string;
     "enorm_max"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface AdjunctTortPlotDpAlignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_cargs,
+        "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_outputs,
+        "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,17 @@ interface AdjunctTortPlotDpAlignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Name of DIFFPREP-produced file to parse, probably ending in '_transformations.txt'.
+ * @param output_prefix Base of output files; can contain path information. Should *not* include any extension.
+ * @param enorm_max Specify max value of y-axis of enorm plot in SVG image. Useful for having a constant value across a study.
+ * @param enorm_hline Specify value of a horizontal, dotted, bright cyan line for the enorm plot in SVG image. Can help with visualization.
+ * @param no_svg Opt to turn off even checking to plot an SVG version of the figure.
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_tort_plot_dp_align_params(
     input_file: InputPathType,
     output_prefix: string,
@@ -91,19 +102,8 @@ function adjunct_tort_plot_dp_align_params(
     enorm_hline: number | null = null,
     no_svg: boolean = false,
 ): AdjunctTortPlotDpAlignParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Name of DIFFPREP-produced file to parse, probably ending in '_transformations.txt'.
-     * @param output_prefix Base of output files; can contain path information. Should *not* include any extension.
-     * @param enorm_max Specify max value of y-axis of enorm plot in SVG image. Useful for having a constant value across a study.
-     * @param enorm_hline Specify value of a horizontal, dotted, bright cyan line for the enorm plot in SVG image. Can help with visualization.
-     * @param no_svg Opt to turn off even checking to plot an SVG version of the figure.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_tort_plot_dp_align" as const,
+        "@type": "afni.adjunct_tort_plot_dp_align" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "no_svg": no_svg,
@@ -118,18 +118,18 @@ function adjunct_tort_plot_dp_align_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_tort_plot_dp_align_cargs(
     params: AdjunctTortPlotDpAlignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_tort_plot_dp_align");
     cargs.push(
@@ -159,18 +159,18 @@ function adjunct_tort_plot_dp_align_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_tort_plot_dp_align_outputs(
     params: AdjunctTortPlotDpAlignParameters,
     execution: Execution,
 ): AdjunctTortPlotDpAlignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctTortPlotDpAlignOutputs = {
         root: execution.outputFile("."),
         align_params: execution.outputFile([(params["output_prefix"] ?? null), "_align.1D"].join('')),
@@ -182,22 +182,22 @@ function adjunct_tort_plot_dp_align_outputs(
 }
 
 
+/**
+ * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
+ */
 function adjunct_tort_plot_dp_align_execute(
     params: AdjunctTortPlotDpAlignParameters,
     execution: Execution,
 ): AdjunctTortPlotDpAlignOutputs {
-    /**
-     * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_tort_plot_dp_align_cargs(params, execution)
     const ret = adjunct_tort_plot_dp_align_outputs(params, execution)
@@ -206,6 +206,22 @@ function adjunct_tort_plot_dp_align_execute(
 }
 
 
+/**
+ * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Name of DIFFPREP-produced file to parse, probably ending in '_transformations.txt'.
+ * @param output_prefix Base of output files; can contain path information. Should *not* include any extension.
+ * @param enorm_max Specify max value of y-axis of enorm plot in SVG image. Useful for having a constant value across a study.
+ * @param enorm_hline Specify value of a horizontal, dotted, bright cyan line for the enorm plot in SVG image. Can help with visualization.
+ * @param no_svg Opt to turn off even checking to plot an SVG version of the figure.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
+ */
 function adjunct_tort_plot_dp_align(
     input_file: InputPathType,
     output_prefix: string,
@@ -214,22 +230,6 @@ function adjunct_tort_plot_dp_align(
     no_svg: boolean = false,
     runner: Runner | null = null,
 ): AdjunctTortPlotDpAlignOutputs {
-    /**
-     * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Name of DIFFPREP-produced file to parse, probably ending in '_transformations.txt'.
-     * @param output_prefix Base of output files; can contain path information. Should *not* include any extension.
-     * @param enorm_max Specify max value of y-axis of enorm plot in SVG image. Useful for having a constant value across a study.
-     * @param enorm_hline Specify value of a horizontal, dotted, bright cyan line for the enorm plot in SVG image. Can help with visualization.
-     * @param no_svg Opt to turn off even checking to plot an SVG version of the figure.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA);
     const params = adjunct_tort_plot_dp_align_params(input_file, output_prefix, enorm_max, enorm_hline, no_svg)
@@ -242,5 +242,8 @@ export {
       AdjunctTortPlotDpAlignOutputs,
       AdjunctTortPlotDpAlignParameters,
       adjunct_tort_plot_dp_align,
+      adjunct_tort_plot_dp_align_cargs,
+      adjunct_tort_plot_dp_align_execute,
+      adjunct_tort_plot_dp_align_outputs,
       adjunct_tort_plot_dp_align_params,
 };

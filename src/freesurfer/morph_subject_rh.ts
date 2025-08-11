@@ -12,38 +12,38 @@ const MORPH_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface MorphSubjectRhParameters {
-    "__STYXTYPE__": "morph_subject-rh";
+    "@type": "freesurfer.morph_subject-rh";
     "subject_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_subject-rh": morph_subject_rh_cargs,
+        "freesurfer.morph_subject-rh": morph_subject_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MorphSubjectRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID to morph the right hemisphere.
+ *
+ * @returns Parameter dictionary
+ */
 function morph_subject_rh_params(
     subject_id: string,
 ): MorphSubjectRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID to morph the right hemisphere.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_subject-rh" as const,
+        "@type": "freesurfer.morph_subject-rh" as const,
         "subject_id": subject_id,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_subject_rh_cargs(
     params: MorphSubjectRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_subject-rh");
     cargs.push(
@@ -103,18 +103,18 @@ function morph_subject_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_subject_rh_outputs(
     params: MorphSubjectRhParameters,
     execution: Execution,
 ): MorphSubjectRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphSubjectRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function morph_subject_rh_outputs(
 }
 
 
+/**
+ * A tool for morphing the right hemisphere of subject data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphSubjectRhOutputs`).
+ */
 function morph_subject_rh_execute(
     params: MorphSubjectRhParameters,
     execution: Execution,
 ): MorphSubjectRhOutputs {
-    /**
-     * A tool for morphing the right hemisphere of subject data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphSubjectRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_subject_rh_cargs(params, execution)
     const ret = morph_subject_rh_outputs(params, execution)
@@ -146,22 +146,22 @@ function morph_subject_rh_execute(
 }
 
 
+/**
+ * A tool for morphing the right hemisphere of subject data in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject ID to morph the right hemisphere.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphSubjectRhOutputs`).
+ */
 function morph_subject_rh(
     subject_id: string,
     runner: Runner | null = null,
 ): MorphSubjectRhOutputs {
-    /**
-     * A tool for morphing the right hemisphere of subject data in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject ID to morph the right hemisphere.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphSubjectRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_SUBJECT_RH_METADATA);
     const params = morph_subject_rh_params(subject_id)
@@ -174,5 +174,8 @@ export {
       MorphSubjectRhOutputs,
       MorphSubjectRhParameters,
       morph_subject_rh,
+      morph_subject_rh_cargs,
+      morph_subject_rh_execute,
+      morph_subject_rh_outputs,
       morph_subject_rh_params,
 };

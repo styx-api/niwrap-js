@@ -12,13 +12,13 @@ const VOLUME_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface VolumeEstimateFwhmWholeFileParameters {
-    "__STYXTYPE__": "whole_file";
+    "@type": "workbench.volume-estimate-fwhm.whole_file";
     "opt_demean": boolean;
 }
 
 
 interface VolumeEstimateFwhmParameters {
-    "__STYXTYPE__": "volume-estimate-fwhm";
+    "@type": "workbench.volume-estimate-fwhm";
     "volume": InputPathType;
     "opt_roi_roivol"?: InputPathType | null | undefined;
     "opt_subvolume_subvol"?: string | null | undefined;
@@ -26,70 +26,70 @@ interface VolumeEstimateFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-estimate-fwhm": volume_estimate_fwhm_cargs,
-        "whole_file": volume_estimate_fwhm_whole_file_cargs,
+        "workbench.volume-estimate-fwhm": volume_estimate_fwhm_cargs,
+        "workbench.volume-estimate-fwhm.whole_file": volume_estimate_fwhm_whole_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_demean subtract the mean image before estimating smoothness
+ *
+ * @returns Parameter dictionary
+ */
 function volume_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
 ): VolumeEstimateFwhmWholeFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_demean subtract the mean image before estimating smoothness
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "whole_file" as const,
+        "@type": "workbench.volume-estimate-fwhm.whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_estimate_fwhm_whole_file_cargs(
     params: VolumeEstimateFwhmWholeFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-whole-file");
     if ((params["opt_demean"] ?? null)) {
@@ -112,24 +112,24 @@ interface VolumeEstimateFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume the input volume
+ * @param opt_roi_roivol use only data within an ROI: the volume to use as an ROI
+ * @param opt_subvolume_subvol select a single subvolume to estimate smoothness of: the subvolume number or name
+ * @param whole_file estimate for the whole file at once, not each subvolume separately
+ *
+ * @returns Parameter dictionary
+ */
 function volume_estimate_fwhm_params(
     volume: InputPathType,
     opt_roi_roivol: InputPathType | null = null,
     opt_subvolume_subvol: string | null = null,
     whole_file: VolumeEstimateFwhmWholeFileParameters | null = null,
 ): VolumeEstimateFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume the input volume
-     * @param opt_roi_roivol use only data within an ROI: the volume to use as an ROI
-     * @param opt_subvolume_subvol select a single subvolume to estimate smoothness of: the subvolume number or name
-     * @param whole_file estimate for the whole file at once, not each subvolume separately
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-estimate-fwhm" as const,
+        "@type": "workbench.volume-estimate-fwhm" as const,
         "volume": volume,
     };
     if (opt_roi_roivol !== null) {
@@ -145,18 +145,18 @@ function volume_estimate_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_estimate_fwhm_cargs(
     params: VolumeEstimateFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-estimate-fwhm");
@@ -174,24 +174,24 @@ function volume_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null).__STYXTYPE__)((params["whole_file"] ?? null), execution));
+        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_estimate_fwhm_outputs(
     params: VolumeEstimateFwhmParameters,
     execution: Execution,
 ): VolumeEstimateFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeEstimateFwhmOutputs = {
         root: execution.outputFile("."),
     };
@@ -199,24 +199,24 @@ function volume_estimate_fwhm_outputs(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a volume.
+ *
+ * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
+ */
 function volume_estimate_fwhm_execute(
     params: VolumeEstimateFwhmParameters,
     execution: Execution,
 ): VolumeEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a volume.
-     * 
-     * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_estimate_fwhm_cargs(params, execution)
     const ret = volume_estimate_fwhm_outputs(params, execution)
@@ -225,6 +225,23 @@ function volume_estimate_fwhm_execute(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a volume.
+ *
+ * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume the input volume
+ * @param opt_roi_roivol use only data within an ROI: the volume to use as an ROI
+ * @param opt_subvolume_subvol select a single subvolume to estimate smoothness of: the subvolume number or name
+ * @param whole_file estimate for the whole file at once, not each subvolume separately
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
+ */
 function volume_estimate_fwhm(
     volume: InputPathType,
     opt_roi_roivol: InputPathType | null = null,
@@ -232,23 +249,6 @@ function volume_estimate_fwhm(
     whole_file: VolumeEstimateFwhmWholeFileParameters | null = null,
     runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a volume.
-     * 
-     * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume the input volume
-     * @param opt_roi_roivol use only data within an ROI: the volume to use as an ROI
-     * @param opt_subvolume_subvol select a single subvolume to estimate smoothness of: the subvolume number or name
-     * @param whole_file estimate for the whole file at once, not each subvolume separately
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_ESTIMATE_FWHM_METADATA);
     const params = volume_estimate_fwhm_params(volume, opt_roi_roivol, opt_subvolume_subvol, whole_file)
@@ -262,6 +262,10 @@ export {
       VolumeEstimateFwhmParameters,
       VolumeEstimateFwhmWholeFileParameters,
       volume_estimate_fwhm,
+      volume_estimate_fwhm_cargs,
+      volume_estimate_fwhm_execute,
+      volume_estimate_fwhm_outputs,
       volume_estimate_fwhm_params,
+      volume_estimate_fwhm_whole_file_cargs,
       volume_estimate_fwhm_whole_file_params,
 };

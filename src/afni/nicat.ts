@@ -12,7 +12,7 @@ const NICAT_METADATA: Metadata = {
 
 
 interface NicatParameters {
-    "__STYXTYPE__": "nicat";
+    "@type": "afni.nicat";
     "stream_spec": string;
     "reopen"?: string | null | undefined;
     "copy_stream": boolean;
@@ -20,33 +20,33 @@ interface NicatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "nicat": nicat_cargs,
+        "afni.nicat": nicat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface NicatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stream_spec Stream specification (e.g., tcp:localhost:4444)
+ * @param reopen Reopen the stream after connection to the stream specified by the given value.
+ * @param copy_stream Copy the stream to stdout instead; the 'streamspec' will be opened for reading.
+ * @param read_only Read the stream but don't copy to stdout.
+ *
+ * @returns Parameter dictionary
+ */
 function nicat_params(
     stream_spec: string,
     reopen: string | null = null,
     copy_stream: boolean = false,
     read_only: boolean = false,
 ): NicatParameters {
-    /**
-     * Build parameters.
-    
-     * @param stream_spec Stream specification (e.g., tcp:localhost:4444)
-     * @param reopen Reopen the stream after connection to the stream specified by the given value.
-     * @param copy_stream Copy the stream to stdout instead; the 'streamspec' will be opened for reading.
-     * @param read_only Read the stream but don't copy to stdout.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nicat" as const,
+        "@type": "afni.nicat" as const,
         "stream_spec": stream_spec,
         "copy_stream": copy_stream,
         "read_only": read_only,
@@ -95,18 +95,18 @@ function nicat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function nicat_cargs(
     params: NicatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("nicat");
     cargs.push((params["stream_spec"] ?? null));
@@ -126,18 +126,18 @@ function nicat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function nicat_outputs(
     params: NicatParameters,
     execution: Execution,
 ): NicatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NicatOutputs = {
         root: execution.outputFile("."),
     };
@@ -145,22 +145,22 @@ function nicat_outputs(
 }
 
 
+/**
+ * Copies stdin to the NIML stream, which will be opened for writing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NicatOutputs`).
+ */
 function nicat_execute(
     params: NicatParameters,
     execution: Execution,
 ): NicatOutputs {
-    /**
-     * Copies stdin to the NIML stream, which will be opened for writing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NicatOutputs`).
-     */
     params = execution.params(params)
     const cargs = nicat_cargs(params, execution)
     const ret = nicat_outputs(params, execution)
@@ -169,6 +169,21 @@ function nicat_execute(
 }
 
 
+/**
+ * Copies stdin to the NIML stream, which will be opened for writing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param stream_spec Stream specification (e.g., tcp:localhost:4444)
+ * @param reopen Reopen the stream after connection to the stream specified by the given value.
+ * @param copy_stream Copy the stream to stdout instead; the 'streamspec' will be opened for reading.
+ * @param read_only Read the stream but don't copy to stdout.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NicatOutputs`).
+ */
 function nicat(
     stream_spec: string,
     reopen: string | null = null,
@@ -176,21 +191,6 @@ function nicat(
     read_only: boolean = false,
     runner: Runner | null = null,
 ): NicatOutputs {
-    /**
-     * Copies stdin to the NIML stream, which will be opened for writing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param stream_spec Stream specification (e.g., tcp:localhost:4444)
-     * @param reopen Reopen the stream after connection to the stream specified by the given value.
-     * @param copy_stream Copy the stream to stdout instead; the 'streamspec' will be opened for reading.
-     * @param read_only Read the stream but don't copy to stdout.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NicatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NICAT_METADATA);
     const params = nicat_params(stream_spec, reopen, copy_stream, read_only)
@@ -203,5 +203,8 @@ export {
       NicatOutputs,
       NicatParameters,
       nicat,
+      nicat_cargs,
+      nicat_execute,
+      nicat_outputs,
       nicat_params,
 };

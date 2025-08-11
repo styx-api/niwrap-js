@@ -12,7 +12,7 @@ const FAT_PROC_IMIT2W_FROM_T1W_METADATA: Metadata = {
 
 
 interface FatProcImit2wFromT1wParameters {
-    "__STYXTYPE__": "fat_proc_imit2w_from_t1w";
+    "@type": "afni.fat_proc_imit2w_from_t1w";
     "t1_file": InputPathType;
     "prefix": string;
     "workdir"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface FatProcImit2wFromT1wParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_cargs,
+        "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_outputs,
+        "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,20 @@ interface FatProcImit2wFromT1wOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_file Full name of the input T1w volume
+ * @param prefix Output prefix for files and snapshots
+ * @param workdir Specify a working directory, which can be removed (default: __WORKING_imit2w_from_t1w)
+ * @param mask Optional input of a pre-skullstripped T1_FILE (either mask or skull-stripped volume)
+ * @param ss_blur_fwhm Optional, add in blurring during the 3dSkullStrip part (in mm, default: 2 FWHM)
+ * @param no_clean Optional switch to NOT remove working directory '__WORKING_imit2w_from_t1w' (default: remove working dir)
+ * @param no_qc_view Turn off the automatic creation of QC montages (default: on)
+ * @param qc_prefix Change the prefix of the QC images (default: use prefix of volumes)
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_imit2w_from_t1w_params(
     t1_file: InputPathType,
     prefix: string,
@@ -97,22 +111,8 @@ function fat_proc_imit2w_from_t1w_params(
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
 ): FatProcImit2wFromT1wParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_file Full name of the input T1w volume
-     * @param prefix Output prefix for files and snapshots
-     * @param workdir Specify a working directory, which can be removed (default: __WORKING_imit2w_from_t1w)
-     * @param mask Optional input of a pre-skullstripped T1_FILE (either mask or skull-stripped volume)
-     * @param ss_blur_fwhm Optional, add in blurring during the 3dSkullStrip part (in mm, default: 2 FWHM)
-     * @param no_clean Optional switch to NOT remove working directory '__WORKING_imit2w_from_t1w' (default: remove working dir)
-     * @param no_qc_view Turn off the automatic creation of QC montages (default: on)
-     * @param qc_prefix Change the prefix of the QC images (default: use prefix of volumes)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_imit2w_from_t1w" as const,
+        "@type": "afni.fat_proc_imit2w_from_t1w" as const,
         "t1_file": t1_file,
         "prefix": prefix,
         "no_clean": no_clean,
@@ -134,18 +134,18 @@ function fat_proc_imit2w_from_t1w_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_imit2w_from_t1w_cargs(
     params: FatProcImit2wFromT1wParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_imit2w_from_t1w");
     cargs.push(
@@ -190,18 +190,18 @@ function fat_proc_imit2w_from_t1w_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_imit2w_from_t1w_outputs(
     params: FatProcImit2wFromT1wParameters,
     execution: Execution,
 ): FatProcImit2wFromT1wOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcImit2wFromT1wOutputs = {
         root: execution.outputFile("."),
         t2w_contrast_volume: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -213,22 +213,22 @@ function fat_proc_imit2w_from_t1w_outputs(
 }
 
 
+/**
+ * Process T1w anatomical images to generate an imitation T2w-contrast image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
+ */
 function fat_proc_imit2w_from_t1w_execute(
     params: FatProcImit2wFromT1wParameters,
     execution: Execution,
 ): FatProcImit2wFromT1wOutputs {
-    /**
-     * Process T1w anatomical images to generate an imitation T2w-contrast image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_imit2w_from_t1w_cargs(params, execution)
     const ret = fat_proc_imit2w_from_t1w_outputs(params, execution)
@@ -237,6 +237,25 @@ function fat_proc_imit2w_from_t1w_execute(
 }
 
 
+/**
+ * Process T1w anatomical images to generate an imitation T2w-contrast image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param t1_file Full name of the input T1w volume
+ * @param prefix Output prefix for files and snapshots
+ * @param workdir Specify a working directory, which can be removed (default: __WORKING_imit2w_from_t1w)
+ * @param mask Optional input of a pre-skullstripped T1_FILE (either mask or skull-stripped volume)
+ * @param ss_blur_fwhm Optional, add in blurring during the 3dSkullStrip part (in mm, default: 2 FWHM)
+ * @param no_clean Optional switch to NOT remove working directory '__WORKING_imit2w_from_t1w' (default: remove working dir)
+ * @param no_qc_view Turn off the automatic creation of QC montages (default: on)
+ * @param qc_prefix Change the prefix of the QC images (default: use prefix of volumes)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
+ */
 function fat_proc_imit2w_from_t1w(
     t1_file: InputPathType,
     prefix: string,
@@ -248,25 +267,6 @@ function fat_proc_imit2w_from_t1w(
     qc_prefix: string | null = null,
     runner: Runner | null = null,
 ): FatProcImit2wFromT1wOutputs {
-    /**
-     * Process T1w anatomical images to generate an imitation T2w-contrast image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param t1_file Full name of the input T1w volume
-     * @param prefix Output prefix for files and snapshots
-     * @param workdir Specify a working directory, which can be removed (default: __WORKING_imit2w_from_t1w)
-     * @param mask Optional input of a pre-skullstripped T1_FILE (either mask or skull-stripped volume)
-     * @param ss_blur_fwhm Optional, add in blurring during the 3dSkullStrip part (in mm, default: 2 FWHM)
-     * @param no_clean Optional switch to NOT remove working directory '__WORKING_imit2w_from_t1w' (default: remove working dir)
-     * @param no_qc_view Turn off the automatic creation of QC montages (default: on)
-     * @param qc_prefix Change the prefix of the QC images (default: use prefix of volumes)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_IMIT2W_FROM_T1W_METADATA);
     const params = fat_proc_imit2w_from_t1w_params(t1_file, prefix, workdir, mask, ss_blur_fwhm, no_clean, no_qc_view, qc_prefix)
@@ -279,5 +279,8 @@ export {
       FatProcImit2wFromT1wOutputs,
       FatProcImit2wFromT1wParameters,
       fat_proc_imit2w_from_t1w,
+      fat_proc_imit2w_from_t1w_cargs,
+      fat_proc_imit2w_from_t1w_execute,
+      fat_proc_imit2w_from_t1w_outputs,
       fat_proc_imit2w_from_t1w_params,
 };

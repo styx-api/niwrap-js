@@ -12,7 +12,7 @@ const V__FSLABEL2DSET_METADATA: Metadata = {
 
 
 interface VFslabel2dsetParameters {
-    "__STYXTYPE__": "@FSlabel2dset";
+    "@type": "afni.@FSlabel2dset";
     "fs_label_file": InputPathType;
     "val"?: number | null | undefined;
     "help": boolean;
@@ -21,33 +21,33 @@ interface VFslabel2dsetParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@FSlabel2dset": v__fslabel2dset_cargs,
+        "afni.@FSlabel2dset": v__fslabel2dset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -67,6 +67,17 @@ interface VFslabel2dsetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fs_label_file Specify the ASCII label file from FreeSurfer
+ * @param val Assign integer VAL to the nodes in FS_LABEL_FILE (Default is 1)
+ * @param help Display help message
+ * @param echo Turn echo for debugging
+ * @param keep_tmp Don't cleanup temp files
+ *
+ * @returns Parameter dictionary
+ */
 function v__fslabel2dset_params(
     fs_label_file: InputPathType,
     val: number | null = null,
@@ -74,19 +85,8 @@ function v__fslabel2dset_params(
     echo: boolean = false,
     keep_tmp: boolean = false,
 ): VFslabel2dsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param fs_label_file Specify the ASCII label file from FreeSurfer
-     * @param val Assign integer VAL to the nodes in FS_LABEL_FILE (Default is 1)
-     * @param help Display help message
-     * @param echo Turn echo for debugging
-     * @param keep_tmp Don't cleanup temp files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@FSlabel2dset" as const,
+        "@type": "afni.@FSlabel2dset" as const,
         "fs_label_file": fs_label_file,
         "help": help,
         "echo": echo,
@@ -99,18 +99,18 @@ function v__fslabel2dset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__fslabel2dset_cargs(
     params: VFslabel2dsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@FSlabel2dset");
     cargs.push(
@@ -136,18 +136,18 @@ function v__fslabel2dset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__fslabel2dset_outputs(
     params: VFslabel2dsetParameters,
     execution: Execution,
 ): VFslabel2dsetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFslabel2dsetOutputs = {
         root: execution.outputFile("."),
     };
@@ -155,22 +155,22 @@ function v__fslabel2dset_outputs(
 }
 
 
+/**
+ * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
+ */
 function v__fslabel2dset_execute(
     params: VFslabel2dsetParameters,
     execution: Execution,
 ): VFslabel2dsetOutputs {
-    /**
-     * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__fslabel2dset_cargs(params, execution)
     const ret = v__fslabel2dset_outputs(params, execution)
@@ -179,6 +179,22 @@ function v__fslabel2dset_execute(
 }
 
 
+/**
+ * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fs_label_file Specify the ASCII label file from FreeSurfer
+ * @param val Assign integer VAL to the nodes in FS_LABEL_FILE (Default is 1)
+ * @param help Display help message
+ * @param echo Turn echo for debugging
+ * @param keep_tmp Don't cleanup temp files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
+ */
 function v__fslabel2dset(
     fs_label_file: InputPathType,
     val: number | null = null,
@@ -187,22 +203,6 @@ function v__fslabel2dset(
     keep_tmp: boolean = false,
     runner: Runner | null = null,
 ): VFslabel2dsetOutputs {
-    /**
-     * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fs_label_file Specify the ASCII label file from FreeSurfer
-     * @param val Assign integer VAL to the nodes in FS_LABEL_FILE (Default is 1)
-     * @param help Display help message
-     * @param echo Turn echo for debugging
-     * @param keep_tmp Don't cleanup temp files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FSLABEL2DSET_METADATA);
     const params = v__fslabel2dset_params(fs_label_file, val, help, echo, keep_tmp)
@@ -215,5 +215,8 @@ export {
       VFslabel2dsetParameters,
       V__FSLABEL2DSET_METADATA,
       v__fslabel2dset,
+      v__fslabel2dset_cargs,
+      v__fslabel2dset_execute,
+      v__fslabel2dset_outputs,
       v__fslabel2dset_params,
 };

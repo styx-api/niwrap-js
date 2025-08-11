@@ -12,7 +12,7 @@ const MRI_HAUSDORFF_DIST_METADATA: Metadata = {
 
 
 interface MriHausdorffDistParameters {
-    "__STYXTYPE__": "mri_hausdorff_dist";
+    "@type": "freesurfer.mri_hausdorff_dist";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "output_text_file": string;
@@ -24,35 +24,35 @@ interface MriHausdorffDistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_hausdorff_dist": mri_hausdorff_dist_cargs,
+        "freesurfer.mri_hausdorff_dist": mri_hausdorff_dist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_hausdorff_dist": mri_hausdorff_dist_outputs,
+        "freesurfer.mri_hausdorff_dist": mri_hausdorff_dist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MriHausdorffDistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol1 First input volume
+ * @param vol2 Second input volume
+ * @param output_text_file Output text file
+ * @param threshold Binarize input volumes with given threshold
+ * @param input_file_flag Read volumes from an input file (first argument is the input filename)
+ * @param blur_sigma Blur the input image with Gaussian of specified sigma
+ * @param max_flag Compute the maximum of the minimum distances instead of the mean
+ * @param label_index Use specified label index as the target label
+ *
+ * @returns Parameter dictionary
+ */
 function mri_hausdorff_dist_params(
     vol1: InputPathType,
     vol2: InputPathType,
@@ -85,22 +99,8 @@ function mri_hausdorff_dist_params(
     max_flag: boolean = false,
     label_index: number | null = null,
 ): MriHausdorffDistParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol1 First input volume
-     * @param vol2 Second input volume
-     * @param output_text_file Output text file
-     * @param threshold Binarize input volumes with given threshold
-     * @param input_file_flag Read volumes from an input file (first argument is the input filename)
-     * @param blur_sigma Blur the input image with Gaussian of specified sigma
-     * @param max_flag Compute the maximum of the minimum distances instead of the mean
-     * @param label_index Use specified label index as the target label
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_hausdorff_dist" as const,
+        "@type": "freesurfer.mri_hausdorff_dist" as const,
         "vol1": vol1,
         "vol2": vol2,
         "output_text_file": output_text_file,
@@ -120,18 +120,18 @@ function mri_hausdorff_dist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_hausdorff_dist_cargs(
     params: MriHausdorffDistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_hausdorff_dist");
     cargs.push(execution.inputFile((params["vol1"] ?? null)));
@@ -165,18 +165,18 @@ function mri_hausdorff_dist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_hausdorff_dist_outputs(
     params: MriHausdorffDistParameters,
     execution: Execution,
 ): MriHausdorffDistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriHausdorffDistOutputs = {
         root: execution.outputFile("."),
         output_text: execution.outputFile([(params["output_text_file"] ?? null)].join('')),
@@ -185,22 +185,22 @@ function mri_hausdorff_dist_outputs(
 }
 
 
+/**
+ * Tool for computing the mean or max of the minimum distances between point sets in 3D volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
+ */
 function mri_hausdorff_dist_execute(
     params: MriHausdorffDistParameters,
     execution: Execution,
 ): MriHausdorffDistOutputs {
-    /**
-     * Tool for computing the mean or max of the minimum distances between point sets in 3D volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_hausdorff_dist_cargs(params, execution)
     const ret = mri_hausdorff_dist_outputs(params, execution)
@@ -209,6 +209,25 @@ function mri_hausdorff_dist_execute(
 }
 
 
+/**
+ * Tool for computing the mean or max of the minimum distances between point sets in 3D volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param vol1 First input volume
+ * @param vol2 Second input volume
+ * @param output_text_file Output text file
+ * @param threshold Binarize input volumes with given threshold
+ * @param input_file_flag Read volumes from an input file (first argument is the input filename)
+ * @param blur_sigma Blur the input image with Gaussian of specified sigma
+ * @param max_flag Compute the maximum of the minimum distances instead of the mean
+ * @param label_index Use specified label index as the target label
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
+ */
 function mri_hausdorff_dist(
     vol1: InputPathType,
     vol2: InputPathType,
@@ -220,25 +239,6 @@ function mri_hausdorff_dist(
     label_index: number | null = null,
     runner: Runner | null = null,
 ): MriHausdorffDistOutputs {
-    /**
-     * Tool for computing the mean or max of the minimum distances between point sets in 3D volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param vol1 First input volume
-     * @param vol2 Second input volume
-     * @param output_text_file Output text file
-     * @param threshold Binarize input volumes with given threshold
-     * @param input_file_flag Read volumes from an input file (first argument is the input filename)
-     * @param blur_sigma Blur the input image with Gaussian of specified sigma
-     * @param max_flag Compute the maximum of the minimum distances instead of the mean
-     * @param label_index Use specified label index as the target label
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_HAUSDORFF_DIST_METADATA);
     const params = mri_hausdorff_dist_params(vol1, vol2, output_text_file, threshold, input_file_flag, blur_sigma, max_flag, label_index)
@@ -251,5 +251,8 @@ export {
       MriHausdorffDistOutputs,
       MriHausdorffDistParameters,
       mri_hausdorff_dist,
+      mri_hausdorff_dist_cargs,
+      mri_hausdorff_dist_execute,
+      mri_hausdorff_dist_outputs,
       mri_hausdorff_dist_params,
 };

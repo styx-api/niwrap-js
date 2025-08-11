@@ -12,41 +12,41 @@ const MRI_MOTION_CORRECT_METADATA: Metadata = {
 
 
 interface MriMotionCorrectParameters {
-    "__STYXTYPE__": "mri_motion_correct";
+    "@type": "freesurfer.mri_motion_correct";
     "outfile": string;
     "infiles": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_motion_correct": mri_motion_correct_cargs,
+        "freesurfer.mri_motion_correct": mri_motion_correct_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_motion_correct": mri_motion_correct_outputs,
+        "freesurfer.mri_motion_correct": mri_motion_correct_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriMotionCorrectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile Output file where the corrected MRI image(s) will be stored.
+ * @param infiles Input MRI image files to be corrected.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_motion_correct_params(
     outfile: string,
     infiles: Array<InputPathType>,
 ): MriMotionCorrectParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile Output file where the corrected MRI image(s) will be stored.
-     * @param infiles Input MRI image files to be corrected.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_motion_correct" as const,
+        "@type": "freesurfer.mri_motion_correct" as const,
         "outfile": outfile,
         "infiles": infiles,
     };
@@ -90,18 +90,18 @@ function mri_motion_correct_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_motion_correct_cargs(
     params: MriMotionCorrectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_motion_correct");
     cargs.push((params["outfile"] ?? null));
@@ -110,18 +110,18 @@ function mri_motion_correct_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_motion_correct_outputs(
     params: MriMotionCorrectParameters,
     execution: Execution,
 ): MriMotionCorrectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMotionCorrectOutputs = {
         root: execution.outputFile("."),
         corrected_outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_motion_correct_outputs(
 }
 
 
+/**
+ * Tool for correcting motion in MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
+ */
 function mri_motion_correct_execute(
     params: MriMotionCorrectParameters,
     execution: Execution,
 ): MriMotionCorrectOutputs {
-    /**
-     * Tool for correcting motion in MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_motion_correct_cargs(params, execution)
     const ret = mri_motion_correct_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_motion_correct_execute(
 }
 
 
+/**
+ * Tool for correcting motion in MRI scans.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outfile Output file where the corrected MRI image(s) will be stored.
+ * @param infiles Input MRI image files to be corrected.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
+ */
 function mri_motion_correct(
     outfile: string,
     infiles: Array<InputPathType>,
     runner: Runner | null = null,
 ): MriMotionCorrectOutputs {
-    /**
-     * Tool for correcting motion in MRI scans.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outfile Output file where the corrected MRI image(s) will be stored.
-     * @param infiles Input MRI image files to be corrected.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MOTION_CORRECT_METADATA);
     const params = mri_motion_correct_params(outfile, infiles)
@@ -184,5 +184,8 @@ export {
       MriMotionCorrectOutputs,
       MriMotionCorrectParameters,
       mri_motion_correct,
+      mri_motion_correct_cargs,
+      mri_motion_correct_execute,
+      mri_motion_correct_outputs,
       mri_motion_correct_params,
 };

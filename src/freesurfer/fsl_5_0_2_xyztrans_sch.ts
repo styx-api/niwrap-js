@@ -12,40 +12,40 @@ const FSL_5_0_2_XYZTRANS_SCH_METADATA: Metadata = {
 
 
 interface Fsl502XyztransSchParameters {
-    "__STYXTYPE__": "fsl.5.0.2.xyztrans.sch";
+    "@type": "freesurfer.fsl.5.0.2.xyztrans.sch";
     "term_option"?: string | null | undefined;
     "version_flag": boolean;
     "no_scrollback_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl.5.0.2.xyztrans.sch": fsl_5_0_2_xyztrans_sch_cargs,
+        "freesurfer.fsl.5.0.2.xyztrans.sch": fsl_5_0_2_xyztrans_sch_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface Fsl502XyztransSchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param term_option Use this instead of the $TERM environment variable.
+ * @param version_flag Print the curses library version used.
+ * @param no_scrollback_flag Do not try to clear the scrollback buffer.
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_5_0_2_xyztrans_sch_params(
     term_option: string | null = null,
     version_flag: boolean = false,
     no_scrollback_flag: boolean = false,
 ): Fsl502XyztransSchParameters {
-    /**
-     * Build parameters.
-    
-     * @param term_option Use this instead of the $TERM environment variable.
-     * @param version_flag Print the curses library version used.
-     * @param no_scrollback_flag Do not try to clear the scrollback buffer.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl.5.0.2.xyztrans.sch" as const,
+        "@type": "freesurfer.fsl.5.0.2.xyztrans.sch" as const,
         "version_flag": version_flag,
         "no_scrollback_flag": no_scrollback_flag,
     };
@@ -91,18 +91,18 @@ function fsl_5_0_2_xyztrans_sch_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_5_0_2_xyztrans_sch_cargs(
     params: Fsl502XyztransSchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl.5.0.2.xyztrans.sch");
     if ((params["term_option"] ?? null) !== null) {
@@ -121,18 +121,18 @@ function fsl_5_0_2_xyztrans_sch_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_5_0_2_xyztrans_sch_outputs(
     params: Fsl502XyztransSchParameters,
     execution: Execution,
 ): Fsl502XyztransSchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fsl502XyztransSchOutputs = {
         root: execution.outputFile("."),
     };
@@ -140,22 +140,22 @@ function fsl_5_0_2_xyztrans_sch_outputs(
 }
 
 
+/**
+ * A script with unclear functionality, potentially related to terminal operations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
+ */
 function fsl_5_0_2_xyztrans_sch_execute(
     params: Fsl502XyztransSchParameters,
     execution: Execution,
 ): Fsl502XyztransSchOutputs {
-    /**
-     * A script with unclear functionality, potentially related to terminal operations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_5_0_2_xyztrans_sch_cargs(params, execution)
     const ret = fsl_5_0_2_xyztrans_sch_outputs(params, execution)
@@ -164,26 +164,26 @@ function fsl_5_0_2_xyztrans_sch_execute(
 }
 
 
+/**
+ * A script with unclear functionality, potentially related to terminal operations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param term_option Use this instead of the $TERM environment variable.
+ * @param version_flag Print the curses library version used.
+ * @param no_scrollback_flag Do not try to clear the scrollback buffer.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
+ */
 function fsl_5_0_2_xyztrans_sch(
     term_option: string | null = null,
     version_flag: boolean = false,
     no_scrollback_flag: boolean = false,
     runner: Runner | null = null,
 ): Fsl502XyztransSchOutputs {
-    /**
-     * A script with unclear functionality, potentially related to terminal operations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param term_option Use this instead of the $TERM environment variable.
-     * @param version_flag Print the curses library version used.
-     * @param no_scrollback_flag Do not try to clear the scrollback buffer.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_5_0_2_XYZTRANS_SCH_METADATA);
     const params = fsl_5_0_2_xyztrans_sch_params(term_option, version_flag, no_scrollback_flag)
@@ -196,5 +196,8 @@ export {
       Fsl502XyztransSchOutputs,
       Fsl502XyztransSchParameters,
       fsl_5_0_2_xyztrans_sch,
+      fsl_5_0_2_xyztrans_sch_cargs,
+      fsl_5_0_2_xyztrans_sch_execute,
+      fsl_5_0_2_xyztrans_sch_outputs,
       fsl_5_0_2_xyztrans_sch_params,
 };

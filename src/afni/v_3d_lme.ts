@@ -12,7 +12,7 @@ const V_3D_LME_METADATA: Metadata = {
 
 
 interface V3dLmeParameters {
-    "__STYXTYPE__": "3dLME";
+    "@type": "afni.3dLME";
     "PREFIX": string;
     "MODEL": string;
     "DATA_TABLE": string;
@@ -46,35 +46,35 @@ interface V3dLmeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLME": v_3d_lme_cargs,
+        "afni.3dLME": v_3d_lme_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLME": v_3d_lme_outputs,
+        "afni.3dLME": v_3d_lme_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,42 @@ interface V3dLmeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output files
+ * @param model Model formula describing the fixed effects
+ * @param data_table Data table description
+ * @param bounds Lower and upper bounds for outlier removal
+ * @param cio_flag Use AFNI's C io functions (default) or R's io functions with -Rio
+ * @param cor_str Specify the correlation structure of the residuals
+ * @param cutoff Specify the cutoff value for accuracy in logistic regression analysis
+ * @param dbg_args_flag Enable saving parameters for debugging
+ * @param jobs Number of jobs for parallel computing
+ * @param glt_code General linear test coding
+ * @param glt_label Label for general linear test
+ * @param glf_label Label for general linear F-test
+ * @param glf_code General linear F-test coding
+ * @param icc_flag Compute voxel-wise intra-class correlation
+ * @param iccb_flag Compute voxel-wise intra-class correlation with Bayesian approach
+ * @param log_lik_flag Include voxel-wise log likelihood in the output
+ * @param logit_flag Perform voxel-wise logistic modeling
+ * @param ml_flag Use Maximum Likelihood estimation instead of REML
+ * @param qvars_centers Centering values for quantitative variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param raneff Specify the random effects
+ * @param mask Mask file for voxel processing
+ * @param num_glf Number of general linear F-tests
+ * @param num_glt Number of general linear t-tests
+ * @param resid Prefix for residuals output file
+ * @param re List of variables whose random effects are saved in the output
+ * @param reprefix Prefix for random effects output file
+ * @param rio_flag Use R's io functions instead of AFNI's C io functions
+ * @param show_options_flag List of allowed options
+ * @param ss_type Specify the type for sums of squares in the F-statistics
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lme_params(
     prefix: string,
     model: string,
@@ -129,44 +165,8 @@ function v_3d_lme_params(
     show_options_flag: boolean = false,
     ss_type: number | null = null,
 ): V3dLmeParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output files
-     * @param model Model formula describing the fixed effects
-     * @param data_table Data table description
-     * @param bounds Lower and upper bounds for outlier removal
-     * @param cio_flag Use AFNI's C io functions (default) or R's io functions with -Rio
-     * @param cor_str Specify the correlation structure of the residuals
-     * @param cutoff Specify the cutoff value for accuracy in logistic regression analysis
-     * @param dbg_args_flag Enable saving parameters for debugging
-     * @param jobs Number of jobs for parallel computing
-     * @param glt_code General linear test coding
-     * @param glt_label Label for general linear test
-     * @param glf_label Label for general linear F-test
-     * @param glf_code General linear F-test coding
-     * @param icc_flag Compute voxel-wise intra-class correlation
-     * @param iccb_flag Compute voxel-wise intra-class correlation with Bayesian approach
-     * @param log_lik_flag Include voxel-wise log likelihood in the output
-     * @param logit_flag Perform voxel-wise logistic modeling
-     * @param ml_flag Use Maximum Likelihood estimation instead of REML
-     * @param qvars_centers Centering values for quantitative variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param raneff Specify the random effects
-     * @param mask Mask file for voxel processing
-     * @param num_glf Number of general linear F-tests
-     * @param num_glt Number of general linear t-tests
-     * @param resid Prefix for residuals output file
-     * @param re List of variables whose random effects are saved in the output
-     * @param reprefix Prefix for random effects output file
-     * @param rio_flag Use R's io functions instead of AFNI's C io functions
-     * @param show_options_flag List of allowed options
-     * @param ss_type Specify the type for sums of squares in the F-statistics
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLME" as const,
+        "@type": "afni.3dLME" as const,
         "PREFIX": prefix,
         "MODEL": model,
         "DATA_TABLE": data_table,
@@ -238,18 +238,18 @@ function v_3d_lme_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lme_cargs(
     params: V3dLmeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLME");
     cargs.push(
@@ -403,18 +403,18 @@ function v_3d_lme_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lme_outputs(
     params: V3dLmeParameters,
     execution: Execution,
 ): V3dLmeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLmeOutputs = {
         root: execution.outputFile("."),
         output_nifti: execution.outputFile([(params["PREFIX"] ?? null), ".nii"].join('')),
@@ -423,22 +423,22 @@ function v_3d_lme_outputs(
 }
 
 
+/**
+ * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
+ */
 function v_3d_lme_execute(
     params: V3dLmeParameters,
     execution: Execution,
 ): V3dLmeOutputs {
-    /**
-     * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lme_cargs(params, execution)
     const ret = v_3d_lme_outputs(params, execution)
@@ -447,6 +447,47 @@ function v_3d_lme_execute(
 }
 
 
+/**
+ * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output files
+ * @param model Model formula describing the fixed effects
+ * @param data_table Data table description
+ * @param bounds Lower and upper bounds for outlier removal
+ * @param cio_flag Use AFNI's C io functions (default) or R's io functions with -Rio
+ * @param cor_str Specify the correlation structure of the residuals
+ * @param cutoff Specify the cutoff value for accuracy in logistic regression analysis
+ * @param dbg_args_flag Enable saving parameters for debugging
+ * @param jobs Number of jobs for parallel computing
+ * @param glt_code General linear test coding
+ * @param glt_label Label for general linear test
+ * @param glf_label Label for general linear F-test
+ * @param glf_code General linear F-test coding
+ * @param icc_flag Compute voxel-wise intra-class correlation
+ * @param iccb_flag Compute voxel-wise intra-class correlation with Bayesian approach
+ * @param log_lik_flag Include voxel-wise log likelihood in the output
+ * @param logit_flag Perform voxel-wise logistic modeling
+ * @param ml_flag Use Maximum Likelihood estimation instead of REML
+ * @param qvars_centers Centering values for quantitative variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param raneff Specify the random effects
+ * @param mask Mask file for voxel processing
+ * @param num_glf Number of general linear F-tests
+ * @param num_glt Number of general linear t-tests
+ * @param resid Prefix for residuals output file
+ * @param re List of variables whose random effects are saved in the output
+ * @param reprefix Prefix for random effects output file
+ * @param rio_flag Use R's io functions instead of AFNI's C io functions
+ * @param show_options_flag List of allowed options
+ * @param ss_type Specify the type for sums of squares in the F-statistics
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
+ */
 function v_3d_lme(
     prefix: string,
     model: string,
@@ -480,47 +521,6 @@ function v_3d_lme(
     ss_type: number | null = null,
     runner: Runner | null = null,
 ): V3dLmeOutputs {
-    /**
-     * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output files
-     * @param model Model formula describing the fixed effects
-     * @param data_table Data table description
-     * @param bounds Lower and upper bounds for outlier removal
-     * @param cio_flag Use AFNI's C io functions (default) or R's io functions with -Rio
-     * @param cor_str Specify the correlation structure of the residuals
-     * @param cutoff Specify the cutoff value for accuracy in logistic regression analysis
-     * @param dbg_args_flag Enable saving parameters for debugging
-     * @param jobs Number of jobs for parallel computing
-     * @param glt_code General linear test coding
-     * @param glt_label Label for general linear test
-     * @param glf_label Label for general linear F-test
-     * @param glf_code General linear F-test coding
-     * @param icc_flag Compute voxel-wise intra-class correlation
-     * @param iccb_flag Compute voxel-wise intra-class correlation with Bayesian approach
-     * @param log_lik_flag Include voxel-wise log likelihood in the output
-     * @param logit_flag Perform voxel-wise logistic modeling
-     * @param ml_flag Use Maximum Likelihood estimation instead of REML
-     * @param qvars_centers Centering values for quantitative variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param raneff Specify the random effects
-     * @param mask Mask file for voxel processing
-     * @param num_glf Number of general linear F-tests
-     * @param num_glt Number of general linear t-tests
-     * @param resid Prefix for residuals output file
-     * @param re List of variables whose random effects are saved in the output
-     * @param reprefix Prefix for random effects output file
-     * @param rio_flag Use R's io functions instead of AFNI's C io functions
-     * @param show_options_flag List of allowed options
-     * @param ss_type Specify the type for sums of squares in the F-statistics
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LME_METADATA);
     const params = v_3d_lme_params(prefix, model, data_table, bounds, cio_flag, cor_str, cutoff, dbg_args_flag, jobs, glt_code, glt_label, glf_label, glf_code, icc_flag, iccb_flag, log_lik_flag, logit_flag, ml_flag, qvars_centers, qvars, raneff, mask, num_glf, num_glt, resid, re, reprefix, rio_flag, show_options_flag, ss_type)
@@ -533,5 +533,8 @@ export {
       V3dLmeParameters,
       V_3D_LME_METADATA,
       v_3d_lme,
+      v_3d_lme_cargs,
+      v_3d_lme_execute,
+      v_3d_lme_outputs,
       v_3d_lme_params,
 };

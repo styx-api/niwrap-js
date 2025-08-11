@@ -12,7 +12,7 @@ const V_3D_EXCHANGE_METADATA: Metadata = {
 
 
 interface V3dExchangeParameters {
-    "__STYXTYPE__": "3dExchange";
+    "@type": "afni.3dExchange";
     "prefix": string;
     "infile": InputPathType;
     "mapfile": InputPathType;
@@ -21,35 +21,35 @@ interface V3dExchangeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dExchange": v_3d_exchange_cargs,
+        "afni.3dExchange": v_3d_exchange_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dExchange": v_3d_exchange_outputs,
+        "afni.3dExchange": v_3d_exchange_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface V3dExchangeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output prefix
+ * @param infile Input dataset. Acceptable data types are byte, short, and floats.
+ * @param mapfile Mapping columns. Input values in the first column, output values in the second column
+ * @param version Print author and version info
+ * @param help Print this help screen
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_exchange_params(
     prefix: string,
     infile: InputPathType,
@@ -83,19 +94,8 @@ function v_3d_exchange_params(
     version: boolean = false,
     help: boolean = false,
 ): V3dExchangeParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output prefix
-     * @param infile Input dataset. Acceptable data types are byte, short, and floats.
-     * @param mapfile Mapping columns. Input values in the first column, output values in the second column
-     * @param version Print author and version info
-     * @param help Print this help screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dExchange" as const,
+        "@type": "afni.3dExchange" as const,
         "prefix": prefix,
         "infile": infile,
         "mapfile": mapfile,
@@ -106,18 +106,18 @@ function v_3d_exchange_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_exchange_cargs(
     params: V3dExchangeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dExchange");
     cargs.push(
@@ -142,18 +142,18 @@ function v_3d_exchange_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_exchange_outputs(
     params: V3dExchangeParameters,
     execution: Execution,
 ): V3dExchangeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dExchangeOutputs = {
         root: execution.outputFile("."),
         output_head: execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')),
@@ -163,22 +163,22 @@ function v_3d_exchange_outputs(
 }
 
 
+/**
+ * Replaces voxel values using a mapping file with specified columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
+ */
 function v_3d_exchange_execute(
     params: V3dExchangeParameters,
     execution: Execution,
 ): V3dExchangeOutputs {
-    /**
-     * Replaces voxel values using a mapping file with specified columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_exchange_cargs(params, execution)
     const ret = v_3d_exchange_outputs(params, execution)
@@ -187,6 +187,22 @@ function v_3d_exchange_execute(
 }
 
 
+/**
+ * Replaces voxel values using a mapping file with specified columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output prefix
+ * @param infile Input dataset. Acceptable data types are byte, short, and floats.
+ * @param mapfile Mapping columns. Input values in the first column, output values in the second column
+ * @param version Print author and version info
+ * @param help Print this help screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
+ */
 function v_3d_exchange(
     prefix: string,
     infile: InputPathType,
@@ -195,22 +211,6 @@ function v_3d_exchange(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dExchangeOutputs {
-    /**
-     * Replaces voxel values using a mapping file with specified columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output prefix
-     * @param infile Input dataset. Acceptable data types are byte, short, and floats.
-     * @param mapfile Mapping columns. Input values in the first column, output values in the second column
-     * @param version Print author and version info
-     * @param help Print this help screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_EXCHANGE_METADATA);
     const params = v_3d_exchange_params(prefix, infile, mapfile, version, help)
@@ -223,5 +223,8 @@ export {
       V3dExchangeParameters,
       V_3D_EXCHANGE_METADATA,
       v_3d_exchange,
+      v_3d_exchange_cargs,
+      v_3d_exchange_execute,
+      v_3d_exchange_outputs,
       v_3d_exchange_params,
 };

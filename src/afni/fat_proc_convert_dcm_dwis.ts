@@ -12,7 +12,7 @@ const FAT_PROC_CONVERT_DCM_DWIS_METADATA: Metadata = {
 
 
 interface FatProcConvertDcmDwisParameters {
-    "__STYXTYPE__": "fat_proc_convert_dcm_dwis";
+    "@type": "afni.fat_proc_convert_dcm_dwis";
     "dicom_dir": string;
     "output_prefix": string;
     "nifti_files"?: Array<InputPathType> | null | undefined;
@@ -34,35 +34,35 @@ interface FatProcConvertDcmDwisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_cargs,
+        "afni.fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_outputs,
+        "afni.fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,30 @@ interface FatProcConvertDcmDwisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dicom_dir Directory of DICOM files of the DWI data with 'AP' phase encoding. Can contain a wildcard expression for several directories.
+ * @param output_prefix Prefix (and path) for output data (e.g., *.nii.gz, *.bvec, *.bval files). Required.
+ * @param nifti_files One or more NIFTI files of DWIs.
+ * @param bvec_files One or more row-wise, gradient (unit-magnitude) files (e.g., *.bvec).
+ * @param bval_files One or more bvalue files (e.g., *.bval).
+ * @param work_dir Optional working directory for intermediate files.
+ * @param orientation Optional chance to reset orientation of the volume files (default is currently 'RAI').
+ * @param origin_xyz Explicit origin coordinates (X, Y, Z).
+ * @param flip_x Flip gradients along the X-axis.
+ * @param flip_y Flip gradients along the Y-axis.
+ * @param flip_z Flip gradients along the Z-axis.
+ * @param no_flip Prevent flipping of gradients (default).
+ * @param qc_prefix Set the prefix for QC image files separately (default is '').
+ * @param reorient_off Turn off reorigin calculation and reorientation.
+ * @param no_clean Do not remove the working directory of intermediate files (default is to delete it).
+ * @param no_cmd_out Do not save the command line call and location where it was run.
+ * @param no_qc_view Do not generate QC image files.
+ * @param do_movie Generate a movie of the newly created dataset (AGIF or MPEG).
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_convert_dcm_dwis_params(
     dicom_dir: string,
     output_prefix: string,
@@ -125,32 +149,8 @@ function fat_proc_convert_dcm_dwis_params(
     no_qc_view: boolean = false,
     do_movie: string | null = null,
 ): FatProcConvertDcmDwisParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_dir Directory of DICOM files of the DWI data with 'AP' phase encoding. Can contain a wildcard expression for several directories.
-     * @param output_prefix Prefix (and path) for output data (e.g., *.nii.gz, *.bvec, *.bval files). Required.
-     * @param nifti_files One or more NIFTI files of DWIs.
-     * @param bvec_files One or more row-wise, gradient (unit-magnitude) files (e.g., *.bvec).
-     * @param bval_files One or more bvalue files (e.g., *.bval).
-     * @param work_dir Optional working directory for intermediate files.
-     * @param orientation Optional chance to reset orientation of the volume files (default is currently 'RAI').
-     * @param origin_xyz Explicit origin coordinates (X, Y, Z).
-     * @param flip_x Flip gradients along the X-axis.
-     * @param flip_y Flip gradients along the Y-axis.
-     * @param flip_z Flip gradients along the Z-axis.
-     * @param no_flip Prevent flipping of gradients (default).
-     * @param qc_prefix Set the prefix for QC image files separately (default is '').
-     * @param reorient_off Turn off reorigin calculation and reorientation.
-     * @param no_clean Do not remove the working directory of intermediate files (default is to delete it).
-     * @param no_cmd_out Do not save the command line call and location where it was run.
-     * @param no_qc_view Do not generate QC image files.
-     * @param do_movie Generate a movie of the newly created dataset (AGIF or MPEG).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_convert_dcm_dwis" as const,
+        "@type": "afni.fat_proc_convert_dcm_dwis" as const,
         "dicom_dir": dicom_dir,
         "output_prefix": output_prefix,
         "flip_x": flip_x,
@@ -190,18 +190,18 @@ function fat_proc_convert_dcm_dwis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_convert_dcm_dwis_cargs(
     params: FatProcConvertDcmDwisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_convert_dcm_dwis");
     cargs.push((params["dicom_dir"] ?? null));
@@ -261,18 +261,18 @@ function fat_proc_convert_dcm_dwis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_convert_dcm_dwis_outputs(
     params: FatProcConvertDcmDwisParameters,
     execution: Execution,
 ): FatProcConvertDcmDwisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcConvertDcmDwisOutputs = {
         root: execution.outputFile("."),
         output_nifti: execution.outputFile([(params["output_prefix"] ?? null), ".nii.gz"].join('')),
@@ -286,22 +286,22 @@ function fat_proc_convert_dcm_dwis_outputs(
 }
 
 
+/**
+ * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
+ */
 function fat_proc_convert_dcm_dwis_execute(
     params: FatProcConvertDcmDwisParameters,
     execution: Execution,
 ): FatProcConvertDcmDwisOutputs {
-    /**
-     * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_convert_dcm_dwis_cargs(params, execution)
     const ret = fat_proc_convert_dcm_dwis_outputs(params, execution)
@@ -310,6 +310,35 @@ function fat_proc_convert_dcm_dwis_execute(
 }
 
 
+/**
+ * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dicom_dir Directory of DICOM files of the DWI data with 'AP' phase encoding. Can contain a wildcard expression for several directories.
+ * @param output_prefix Prefix (and path) for output data (e.g., *.nii.gz, *.bvec, *.bval files). Required.
+ * @param nifti_files One or more NIFTI files of DWIs.
+ * @param bvec_files One or more row-wise, gradient (unit-magnitude) files (e.g., *.bvec).
+ * @param bval_files One or more bvalue files (e.g., *.bval).
+ * @param work_dir Optional working directory for intermediate files.
+ * @param orientation Optional chance to reset orientation of the volume files (default is currently 'RAI').
+ * @param origin_xyz Explicit origin coordinates (X, Y, Z).
+ * @param flip_x Flip gradients along the X-axis.
+ * @param flip_y Flip gradients along the Y-axis.
+ * @param flip_z Flip gradients along the Z-axis.
+ * @param no_flip Prevent flipping of gradients (default).
+ * @param qc_prefix Set the prefix for QC image files separately (default is '').
+ * @param reorient_off Turn off reorigin calculation and reorientation.
+ * @param no_clean Do not remove the working directory of intermediate files (default is to delete it).
+ * @param no_cmd_out Do not save the command line call and location where it was run.
+ * @param no_qc_view Do not generate QC image files.
+ * @param do_movie Generate a movie of the newly created dataset (AGIF or MPEG).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
+ */
 function fat_proc_convert_dcm_dwis(
     dicom_dir: string,
     output_prefix: string,
@@ -331,35 +360,6 @@ function fat_proc_convert_dcm_dwis(
     do_movie: string | null = null,
     runner: Runner | null = null,
 ): FatProcConvertDcmDwisOutputs {
-    /**
-     * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dicom_dir Directory of DICOM files of the DWI data with 'AP' phase encoding. Can contain a wildcard expression for several directories.
-     * @param output_prefix Prefix (and path) for output data (e.g., *.nii.gz, *.bvec, *.bval files). Required.
-     * @param nifti_files One or more NIFTI files of DWIs.
-     * @param bvec_files One or more row-wise, gradient (unit-magnitude) files (e.g., *.bvec).
-     * @param bval_files One or more bvalue files (e.g., *.bval).
-     * @param work_dir Optional working directory for intermediate files.
-     * @param orientation Optional chance to reset orientation of the volume files (default is currently 'RAI').
-     * @param origin_xyz Explicit origin coordinates (X, Y, Z).
-     * @param flip_x Flip gradients along the X-axis.
-     * @param flip_y Flip gradients along the Y-axis.
-     * @param flip_z Flip gradients along the Z-axis.
-     * @param no_flip Prevent flipping of gradients (default).
-     * @param qc_prefix Set the prefix for QC image files separately (default is '').
-     * @param reorient_off Turn off reorigin calculation and reorientation.
-     * @param no_clean Do not remove the working directory of intermediate files (default is to delete it).
-     * @param no_cmd_out Do not save the command line call and location where it was run.
-     * @param no_qc_view Do not generate QC image files.
-     * @param do_movie Generate a movie of the newly created dataset (AGIF or MPEG).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_DWIS_METADATA);
     const params = fat_proc_convert_dcm_dwis_params(dicom_dir, output_prefix, nifti_files, bvec_files, bval_files, work_dir, orientation, origin_xyz, flip_x, flip_y, flip_z, no_flip, qc_prefix, reorient_off, no_clean, no_cmd_out, no_qc_view, do_movie)
@@ -372,5 +372,8 @@ export {
       FatProcConvertDcmDwisOutputs,
       FatProcConvertDcmDwisParameters,
       fat_proc_convert_dcm_dwis,
+      fat_proc_convert_dcm_dwis_cargs,
+      fat_proc_convert_dcm_dwis_execute,
+      fat_proc_convert_dcm_dwis_outputs,
       fat_proc_convert_dcm_dwis_params,
 };

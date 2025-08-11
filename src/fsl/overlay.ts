@@ -12,7 +12,7 @@ const OVERLAY_METADATA: Metadata = {
 
 
 interface OverlayParameters {
-    "__STYXTYPE__": "overlay";
+    "@type": "fsl.overlay";
     "auto_thresh_bg": boolean;
     "background_image": InputPathType;
     "bg_thresh": Array<number>;
@@ -28,35 +28,35 @@ interface OverlayParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "overlay": overlay_cargs,
+        "fsl.overlay": overlay_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "overlay": overlay_outputs,
+        "fsl.overlay": overlay_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface OverlayOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param background_image Image to use as background.
+ * @param bg_thresh (a float, a float). Min and max values for background intensity.
+ * @param stat_image Statistical image to overlay in color.
+ * @param stat_thresh (a float, a float). Min and max values for the statistical overlay.
+ * @param auto_thresh_bg Automatically threshold the background image.
+ * @param full_bg_range Use full range of background image.
+ * @param out_file Combined image volume.
+ * @param out_type 'float' or 'int'. Write output with float or int.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param stat_image2 Second statistical image to overlay in color.
+ * @param stat_thresh2 (a float, a float). Min and max values for second statistical overlay.
+ * @param use_checkerboard Use checkerboard mask for overlay.
+ *
+ * @returns Parameter dictionary
+ */
 function overlay_params(
     background_image: InputPathType,
     bg_thresh: Array<number>,
@@ -93,26 +111,8 @@ function overlay_params(
     stat_thresh2: Array<number> | null = null,
     use_checkerboard: boolean = false,
 ): OverlayParameters {
-    /**
-     * Build parameters.
-    
-     * @param background_image Image to use as background.
-     * @param bg_thresh (a float, a float). Min and max values for background intensity.
-     * @param stat_image Statistical image to overlay in color.
-     * @param stat_thresh (a float, a float). Min and max values for the statistical overlay.
-     * @param auto_thresh_bg Automatically threshold the background image.
-     * @param full_bg_range Use full range of background image.
-     * @param out_file Combined image volume.
-     * @param out_type 'float' or 'int'. Write output with float or int.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param stat_image2 Second statistical image to overlay in color.
-     * @param stat_thresh2 (a float, a float). Min and max values for second statistical overlay.
-     * @param use_checkerboard Use checkerboard mask for overlay.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "overlay" as const,
+        "@type": "fsl.overlay" as const,
         "auto_thresh_bg": auto_thresh_bg,
         "background_image": background_image,
         "bg_thresh": bg_thresh,
@@ -140,18 +140,18 @@ function overlay_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function overlay_cargs(
     params: OverlayParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("overlay");
     if ((params["auto_thresh_bg"] ?? null)) {
@@ -186,18 +186,18 @@ function overlay_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function overlay_outputs(
     params: OverlayParameters,
     execution: Execution,
 ): OverlayOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: OverlayOutputs = {
         root: execution.outputFile("."),
         out_file_outfile: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null)].join('')) : null,
@@ -206,22 +206,22 @@ function overlay_outputs(
 }
 
 
+/**
+ * Use FSL's overlay command to combine background and statistical images into one volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `OverlayOutputs`).
+ */
 function overlay_execute(
     params: OverlayParameters,
     execution: Execution,
 ): OverlayOutputs {
-    /**
-     * Use FSL's overlay command to combine background and statistical images into one volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `OverlayOutputs`).
-     */
     params = execution.params(params)
     const cargs = overlay_cargs(params, execution)
     const ret = overlay_outputs(params, execution)
@@ -230,6 +230,29 @@ function overlay_execute(
 }
 
 
+/**
+ * Use FSL's overlay command to combine background and statistical images into one volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param background_image Image to use as background.
+ * @param bg_thresh (a float, a float). Min and max values for background intensity.
+ * @param stat_image Statistical image to overlay in color.
+ * @param stat_thresh (a float, a float). Min and max values for the statistical overlay.
+ * @param auto_thresh_bg Automatically threshold the background image.
+ * @param full_bg_range Use full range of background image.
+ * @param out_file Combined image volume.
+ * @param out_type 'float' or 'int'. Write output with float or int.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param stat_image2 Second statistical image to overlay in color.
+ * @param stat_thresh2 (a float, a float). Min and max values for second statistical overlay.
+ * @param use_checkerboard Use checkerboard mask for overlay.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `OverlayOutputs`).
+ */
 function overlay(
     background_image: InputPathType,
     bg_thresh: Array<number>,
@@ -245,29 +268,6 @@ function overlay(
     use_checkerboard: boolean = false,
     runner: Runner | null = null,
 ): OverlayOutputs {
-    /**
-     * Use FSL's overlay command to combine background and statistical images into one volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param background_image Image to use as background.
-     * @param bg_thresh (a float, a float). Min and max values for background intensity.
-     * @param stat_image Statistical image to overlay in color.
-     * @param stat_thresh (a float, a float). Min and max values for the statistical overlay.
-     * @param auto_thresh_bg Automatically threshold the background image.
-     * @param full_bg_range Use full range of background image.
-     * @param out_file Combined image volume.
-     * @param out_type 'float' or 'int'. Write output with float or int.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param stat_image2 Second statistical image to overlay in color.
-     * @param stat_thresh2 (a float, a float). Min and max values for second statistical overlay.
-     * @param use_checkerboard Use checkerboard mask for overlay.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `OverlayOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(OVERLAY_METADATA);
     const params = overlay_params(background_image, bg_thresh, stat_image, stat_thresh, auto_thresh_bg, full_bg_range, out_file, out_type, output_type, stat_image2, stat_thresh2, use_checkerboard)
@@ -280,5 +280,8 @@ export {
       OverlayOutputs,
       OverlayParameters,
       overlay,
+      overlay_cargs,
+      overlay_execute,
+      overlay_outputs,
       overlay_params,
 };

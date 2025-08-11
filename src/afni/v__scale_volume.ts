@@ -12,7 +12,7 @@ const V__SCALE_VOLUME_METADATA: Metadata = {
 
 
 interface VScaleVolumeParameters {
-    "__STYXTYPE__": "@ScaleVolume";
+    "@type": "afni.@ScaleVolume";
     "input_dset": InputPathType;
     "prefix": string;
     "val_clip"?: Array<number> | null | undefined;
@@ -24,35 +24,35 @@ interface VScaleVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ScaleVolume": v__scale_volume_cargs,
+        "afni.@ScaleVolume": v__scale_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ScaleVolume": v__scale_volume_outputs,
+        "afni.@ScaleVolume": v__scale_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface VScaleVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dset Dataset to scale
+ * @param prefix Prefix of output
+ * @param val_clip Min and Max of output dataset. Default V0 = 0 and V1 = 255
+ * @param perc_clip Set lowest P0 percentile to Min and highest P1 percentile to Max. Default P0 = 2 and P1 = 98
+ * @param scale_by_mean Divide each sub-brick by mean of non-zero voxels
+ * @param scale_by_median Divide each sub-brick by median of non-zero voxels
+ * @param norm For each time series T, Tnorm = (T - mean(T)) / stdev(T)
+ * @param mask Restrict to non-zero values of given mask dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v__scale_volume_params(
     input_dset: InputPathType,
     prefix: string,
@@ -85,22 +99,8 @@ function v__scale_volume_params(
     norm: boolean = false,
     mask: InputPathType | null = null,
 ): VScaleVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dset Dataset to scale
-     * @param prefix Prefix of output
-     * @param val_clip Min and Max of output dataset. Default V0 = 0 and V1 = 255
-     * @param perc_clip Set lowest P0 percentile to Min and highest P1 percentile to Max. Default P0 = 2 and P1 = 98
-     * @param scale_by_mean Divide each sub-brick by mean of non-zero voxels
-     * @param scale_by_median Divide each sub-brick by median of non-zero voxels
-     * @param norm For each time series T, Tnorm = (T - mean(T)) / stdev(T)
-     * @param mask Restrict to non-zero values of given mask dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ScaleVolume" as const,
+        "@type": "afni.@ScaleVolume" as const,
         "input_dset": input_dset,
         "prefix": prefix,
         "scale_by_mean": scale_by_mean,
@@ -120,18 +120,18 @@ function v__scale_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__scale_volume_cargs(
     params: VScaleVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ScaleVolume");
     cargs.push(execution.inputFile((params["input_dset"] ?? null)));
@@ -167,18 +167,18 @@ function v__scale_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__scale_volume_outputs(
     params: VScaleVolumeParameters,
     execution: Execution,
 ): VScaleVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VScaleVolumeOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["<-prefix PREFIX>_scaled"].join('')),
@@ -187,22 +187,22 @@ function v__scale_volume_outputs(
 }
 
 
+/**
+ * A tool to scale the volume of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
+ */
 function v__scale_volume_execute(
     params: VScaleVolumeParameters,
     execution: Execution,
 ): VScaleVolumeOutputs {
-    /**
-     * A tool to scale the volume of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__scale_volume_cargs(params, execution)
     const ret = v__scale_volume_outputs(params, execution)
@@ -211,6 +211,25 @@ function v__scale_volume_execute(
 }
 
 
+/**
+ * A tool to scale the volume of datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dset Dataset to scale
+ * @param prefix Prefix of output
+ * @param val_clip Min and Max of output dataset. Default V0 = 0 and V1 = 255
+ * @param perc_clip Set lowest P0 percentile to Min and highest P1 percentile to Max. Default P0 = 2 and P1 = 98
+ * @param scale_by_mean Divide each sub-brick by mean of non-zero voxels
+ * @param scale_by_median Divide each sub-brick by median of non-zero voxels
+ * @param norm For each time series T, Tnorm = (T - mean(T)) / stdev(T)
+ * @param mask Restrict to non-zero values of given mask dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
+ */
 function v__scale_volume(
     input_dset: InputPathType,
     prefix: string,
@@ -222,25 +241,6 @@ function v__scale_volume(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): VScaleVolumeOutputs {
-    /**
-     * A tool to scale the volume of datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dset Dataset to scale
-     * @param prefix Prefix of output
-     * @param val_clip Min and Max of output dataset. Default V0 = 0 and V1 = 255
-     * @param perc_clip Set lowest P0 percentile to Min and highest P1 percentile to Max. Default P0 = 2 and P1 = 98
-     * @param scale_by_mean Divide each sub-brick by mean of non-zero voxels
-     * @param scale_by_median Divide each sub-brick by median of non-zero voxels
-     * @param norm For each time series T, Tnorm = (T - mean(T)) / stdev(T)
-     * @param mask Restrict to non-zero values of given mask dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SCALE_VOLUME_METADATA);
     const params = v__scale_volume_params(input_dset, prefix, val_clip, perc_clip, scale_by_mean, scale_by_median, norm, mask)
@@ -253,5 +253,8 @@ export {
       VScaleVolumeParameters,
       V__SCALE_VOLUME_METADATA,
       v__scale_volume,
+      v__scale_volume_cargs,
+      v__scale_volume_execute,
+      v__scale_volume_outputs,
       v__scale_volume_params,
 };

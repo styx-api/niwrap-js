@@ -12,7 +12,7 @@ const RMSDIFF_METADATA: Metadata = {
 
 
 interface RmsdiffParameters {
-    "__STYXTYPE__": "rmsdiff";
+    "@type": "fsl.rmsdiff";
     "matrixfile1": InputPathType;
     "matrixfile2": InputPathType;
     "refvol": InputPathType;
@@ -20,33 +20,33 @@ interface RmsdiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rmsdiff": rmsdiff_cargs,
+        "fsl.rmsdiff": rmsdiff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface RmsdiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrixfile1 First matrix file
+ * @param matrixfile2 Second matrix file
+ * @param refvol Reference volume
+ * @param mask Optional mask
+ *
+ * @returns Parameter dictionary
+ */
 function rmsdiff_params(
     matrixfile1: InputPathType,
     matrixfile2: InputPathType,
     refvol: InputPathType,
     mask: InputPathType | null = null,
 ): RmsdiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrixfile1 First matrix file
-     * @param matrixfile2 Second matrix file
-     * @param refvol Reference volume
-     * @param mask Optional mask
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rmsdiff" as const,
+        "@type": "fsl.rmsdiff" as const,
         "matrixfile1": matrixfile1,
         "matrixfile2": matrixfile2,
         "refvol": refvol,
@@ -95,18 +95,18 @@ function rmsdiff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rmsdiff_cargs(
     params: RmsdiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rmsdiff");
     cargs.push(execution.inputFile((params["matrixfile1"] ?? null)));
@@ -119,18 +119,18 @@ function rmsdiff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rmsdiff_outputs(
     params: RmsdiffParameters,
     execution: Execution,
 ): RmsdiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RmsdiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function rmsdiff_outputs(
 }
 
 
+/**
+ * Outputs RMS deviation between matrices (in mm).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
+ */
 function rmsdiff_execute(
     params: RmsdiffParameters,
     execution: Execution,
 ): RmsdiffOutputs {
-    /**
-     * Outputs RMS deviation between matrices (in mm).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = rmsdiff_cargs(params, execution)
     const ret = rmsdiff_outputs(params, execution)
@@ -162,6 +162,21 @@ function rmsdiff_execute(
 }
 
 
+/**
+ * Outputs RMS deviation between matrices (in mm).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param matrixfile1 First matrix file
+ * @param matrixfile2 Second matrix file
+ * @param refvol Reference volume
+ * @param mask Optional mask
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
+ */
 function rmsdiff(
     matrixfile1: InputPathType,
     matrixfile2: InputPathType,
@@ -169,21 +184,6 @@ function rmsdiff(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): RmsdiffOutputs {
-    /**
-     * Outputs RMS deviation between matrices (in mm).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param matrixfile1 First matrix file
-     * @param matrixfile2 Second matrix file
-     * @param refvol Reference volume
-     * @param mask Optional mask
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RMSDIFF_METADATA);
     const params = rmsdiff_params(matrixfile1, matrixfile2, refvol, mask)
@@ -196,5 +196,8 @@ export {
       RmsdiffOutputs,
       RmsdiffParameters,
       rmsdiff,
+      rmsdiff_cargs,
+      rmsdiff_execute,
+      rmsdiff_outputs,
       rmsdiff_params,
 };

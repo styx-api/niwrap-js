@@ -12,7 +12,7 @@ const V_3D_RPROG_DEMO_METADATA: Metadata = {
 
 
 interface V3dRprogDemoParameters {
-    "__STYXTYPE__": "3dRprogDemo";
+    "@type": "afni.3dRprogDemo";
     "input_dsets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
     "scale": number;
@@ -27,35 +27,35 @@ interface V3dRprogDemoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRprogDemo": v_3d_rprog_demo_cargs,
+        "afni.3dRprogDemo": v_3d_rprog_demo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRprogDemo": v_3d_rprog_demo_outputs,
+        "afni.3dRprogDemo": v_3d_rprog_demo_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V3dRprogDemoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dsets Input dataset(s) to be scaled.
+ * @param scale Multiply each voxel by SS
+ * @param prefix Output prefix (just prefix, no view+suffix needed).
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param help_aspx Display help message with autolabeling.
+ * @param help_raw Display raw help message as in the code.
+ * @param help_spx Display help message in sphinx format.
+ * @param help_txt Display help message in simple text.
+ * @param help Display help message in simple text.
+ * @param show_allowed_options List of allowed options.
+ * @param verbosity_level Verbosity level. 0 for quiet (Default). 1 or more: talkative.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_rprog_demo_params(
     input_dsets: Array<InputPathType>,
     scale: number,
@@ -91,25 +108,8 @@ function v_3d_rprog_demo_params(
     show_allowed_options: boolean = false,
     verbosity_level: number | null = null,
 ): V3dRprogDemoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dsets Input dataset(s) to be scaled.
-     * @param scale Multiply each voxel by SS
-     * @param prefix Output prefix (just prefix, no view+suffix needed).
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param help_aspx Display help message with autolabeling.
-     * @param help_raw Display raw help message as in the code.
-     * @param help_spx Display help message in sphinx format.
-     * @param help_txt Display help message in simple text.
-     * @param help Display help message in simple text.
-     * @param show_allowed_options List of allowed options.
-     * @param verbosity_level Verbosity level. 0 for quiet (Default). 1 or more: talkative.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRprogDemo" as const,
+        "@type": "afni.3dRprogDemo" as const,
         "input_dsets": input_dsets,
         "scale": scale,
         "prefix": prefix,
@@ -130,18 +130,18 @@ function v_3d_rprog_demo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_rprog_demo_cargs(
     params: V3dRprogDemoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRprogDemo");
     cargs.push(...(params["input_dsets"] ?? null).map(f => execution.inputFile(f)));
@@ -187,18 +187,18 @@ function v_3d_rprog_demo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_rprog_demo_outputs(
     params: V3dRprogDemoParameters,
     execution: Execution,
 ): V3dRprogDemoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRprogDemoOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["prefix"] ?? null), ".nii"].join('')),
@@ -207,22 +207,22 @@ function v_3d_rprog_demo_outputs(
 }
 
 
+/**
+ * Template program to help users write their own R processing routines on MRI volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
+ */
 function v_3d_rprog_demo_execute(
     params: V3dRprogDemoParameters,
     execution: Execution,
 ): V3dRprogDemoOutputs {
-    /**
-     * Template program to help users write their own R processing routines on MRI volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_rprog_demo_cargs(params, execution)
     const ret = v_3d_rprog_demo_outputs(params, execution)
@@ -231,6 +231,28 @@ function v_3d_rprog_demo_execute(
 }
 
 
+/**
+ * Template program to help users write their own R processing routines on MRI volumes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dsets Input dataset(s) to be scaled.
+ * @param scale Multiply each voxel by SS
+ * @param prefix Output prefix (just prefix, no view+suffix needed).
+ * @param mask Process voxels inside this mask only. Default is no masking.
+ * @param help_aspx Display help message with autolabeling.
+ * @param help_raw Display raw help message as in the code.
+ * @param help_spx Display help message in sphinx format.
+ * @param help_txt Display help message in simple text.
+ * @param help Display help message in simple text.
+ * @param show_allowed_options List of allowed options.
+ * @param verbosity_level Verbosity level. 0 for quiet (Default). 1 or more: talkative.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
+ */
 function v_3d_rprog_demo(
     input_dsets: Array<InputPathType>,
     scale: number,
@@ -245,28 +267,6 @@ function v_3d_rprog_demo(
     verbosity_level: number | null = null,
     runner: Runner | null = null,
 ): V3dRprogDemoOutputs {
-    /**
-     * Template program to help users write their own R processing routines on MRI volumes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dsets Input dataset(s) to be scaled.
-     * @param scale Multiply each voxel by SS
-     * @param prefix Output prefix (just prefix, no view+suffix needed).
-     * @param mask Process voxels inside this mask only. Default is no masking.
-     * @param help_aspx Display help message with autolabeling.
-     * @param help_raw Display raw help message as in the code.
-     * @param help_spx Display help message in sphinx format.
-     * @param help_txt Display help message in simple text.
-     * @param help Display help message in simple text.
-     * @param show_allowed_options List of allowed options.
-     * @param verbosity_level Verbosity level. 0 for quiet (Default). 1 or more: talkative.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RPROG_DEMO_METADATA);
     const params = v_3d_rprog_demo_params(input_dsets, scale, prefix, mask, help_aspx, help_raw, help_spx, help_txt, help, show_allowed_options, verbosity_level)
@@ -279,5 +279,8 @@ export {
       V3dRprogDemoParameters,
       V_3D_RPROG_DEMO_METADATA,
       v_3d_rprog_demo,
+      v_3d_rprog_demo_cargs,
+      v_3d_rprog_demo_execute,
+      v_3d_rprog_demo_outputs,
       v_3d_rprog_demo_params,
 };

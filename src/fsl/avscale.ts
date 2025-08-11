@@ -12,7 +12,7 @@ const AVSCALE_METADATA: Metadata = {
 
 
 interface AvscaleParameters {
-    "__STYXTYPE__": "avscale";
+    "@type": "fsl.avscale";
     "allparams_flag": boolean;
     "inverteddies_flag": boolean;
     "matrix_file": InputPathType;
@@ -20,33 +20,33 @@ interface AvscaleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "avscale": avscale_cargs,
+        "fsl.avscale": avscale_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,24 +70,24 @@ interface AvscaleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix_file The path to the matrix file.
+ * @param allparams_flag Flag for all parameters.
+ * @param inverteddies_flag Flag for inverted eddies.
+ * @param non_reference_volume The path to the non-reference volume.
+ *
+ * @returns Parameter dictionary
+ */
 function avscale_params(
     matrix_file: InputPathType,
     allparams_flag: boolean = false,
     inverteddies_flag: boolean = false,
     non_reference_volume: InputPathType | null = null,
 ): AvscaleParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix_file The path to the matrix file.
-     * @param allparams_flag Flag for all parameters.
-     * @param inverteddies_flag Flag for inverted eddies.
-     * @param non_reference_volume The path to the non-reference volume.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "avscale" as const,
+        "@type": "fsl.avscale" as const,
         "allparams_flag": allparams_flag,
         "inverteddies_flag": inverteddies_flag,
         "matrix_file": matrix_file,
@@ -99,18 +99,18 @@ function avscale_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function avscale_cargs(
     params: AvscaleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("avscale");
     if ((params["allparams_flag"] ?? null)) {
@@ -127,18 +127,18 @@ function avscale_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function avscale_outputs(
     params: AvscaleParameters,
     execution: Execution,
 ): AvscaleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AvscaleOutputs = {
         root: execution.outputFile("."),
         output: [],
@@ -147,22 +147,22 @@ function avscale_outputs(
 }
 
 
+/**
+ * A command line tool for computing affine transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
+ */
 function avscale_execute(
     params: AvscaleParameters,
     execution: Execution,
 ): AvscaleOutputs {
-    /**
-     * A command line tool for computing affine transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
-     */
     params = execution.params(params)
     const cargs = avscale_cargs(params, execution)
     const ret = avscale_outputs(params, execution)
@@ -171,6 +171,21 @@ function avscale_execute(
 }
 
 
+/**
+ * A command line tool for computing affine transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param matrix_file The path to the matrix file.
+ * @param allparams_flag Flag for all parameters.
+ * @param inverteddies_flag Flag for inverted eddies.
+ * @param non_reference_volume The path to the non-reference volume.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
+ */
 function avscale(
     matrix_file: InputPathType,
     allparams_flag: boolean = false,
@@ -178,21 +193,6 @@ function avscale(
     non_reference_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): AvscaleOutputs {
-    /**
-     * A command line tool for computing affine transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param matrix_file The path to the matrix file.
-     * @param allparams_flag Flag for all parameters.
-     * @param inverteddies_flag Flag for inverted eddies.
-     * @param non_reference_volume The path to the non-reference volume.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AVSCALE_METADATA);
     const params = avscale_params(matrix_file, allparams_flag, inverteddies_flag, non_reference_volume)
@@ -205,5 +205,8 @@ export {
       AvscaleOutputs,
       AvscaleParameters,
       avscale,
+      avscale_cargs,
+      avscale_execute,
+      avscale_outputs,
       avscale_params,
 };

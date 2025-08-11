@@ -12,7 +12,7 @@ const DMRI_PROJECT_END_POINTS_METADATA: Metadata = {
 
 
 interface DmriProjectEndPointsParameters {
-    "__STYXTYPE__": "dmri_projectEndPoints";
+    "@type": "freesurfer.dmri_projectEndPoints";
     "streamline_file": InputPathType;
     "left_surface_file": InputPathType;
     "right_surface_file": InputPathType;
@@ -22,35 +22,35 @@ interface DmriProjectEndPointsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_projectEndPoints": dmri_project_end_points_cargs,
+        "freesurfer.dmri_projectEndPoints": dmri_project_end_points_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_projectEndPoints": dmri_project_end_points_outputs,
+        "freesurfer.dmri_projectEndPoints": dmri_project_end_points_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface DmriProjectEndPointsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param streamline_file Input streamline file (e.g. streamlineFile.trk)
+ * @param left_surface_file Left hemisphere surface file (e.g. surfaceFile_lh.orig)
+ * @param right_surface_file Right hemisphere surface file (e.g. surfaceFile_rh.orig)
+ * @param left_overlay_file Output overlay file for left hemisphere
+ * @param right_overlay_file Output overlay file for right hemisphere
+ * @param reference_image Reference image for the projections
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_project_end_points_params(
     streamline_file: InputPathType,
     left_surface_file: InputPathType,
@@ -85,20 +97,8 @@ function dmri_project_end_points_params(
     right_overlay_file: string,
     reference_image: InputPathType,
 ): DmriProjectEndPointsParameters {
-    /**
-     * Build parameters.
-    
-     * @param streamline_file Input streamline file (e.g. streamlineFile.trk)
-     * @param left_surface_file Left hemisphere surface file (e.g. surfaceFile_lh.orig)
-     * @param right_surface_file Right hemisphere surface file (e.g. surfaceFile_rh.orig)
-     * @param left_overlay_file Output overlay file for left hemisphere
-     * @param right_overlay_file Output overlay file for right hemisphere
-     * @param reference_image Reference image for the projections
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_projectEndPoints" as const,
+        "@type": "freesurfer.dmri_projectEndPoints" as const,
         "streamline_file": streamline_file,
         "left_surface_file": left_surface_file,
         "right_surface_file": right_surface_file,
@@ -110,18 +110,18 @@ function dmri_project_end_points_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_project_end_points_cargs(
     params: DmriProjectEndPointsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_projectEndPoints");
     cargs.push(
@@ -152,18 +152,18 @@ function dmri_project_end_points_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_project_end_points_outputs(
     params: DmriProjectEndPointsParameters,
     execution: Execution,
 ): DmriProjectEndPointsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriProjectEndPointsOutputs = {
         root: execution.outputFile("."),
         out_left_overlay: execution.outputFile([(params["left_overlay_file"] ?? null)].join('')),
@@ -173,22 +173,22 @@ function dmri_project_end_points_outputs(
 }
 
 
+/**
+ * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
+ */
 function dmri_project_end_points_execute(
     params: DmriProjectEndPointsParameters,
     execution: Execution,
 ): DmriProjectEndPointsOutputs {
-    /**
-     * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_project_end_points_cargs(params, execution)
     const ret = dmri_project_end_points_outputs(params, execution)
@@ -197,6 +197,23 @@ function dmri_project_end_points_execute(
 }
 
 
+/**
+ * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param streamline_file Input streamline file (e.g. streamlineFile.trk)
+ * @param left_surface_file Left hemisphere surface file (e.g. surfaceFile_lh.orig)
+ * @param right_surface_file Right hemisphere surface file (e.g. surfaceFile_rh.orig)
+ * @param left_overlay_file Output overlay file for left hemisphere
+ * @param right_overlay_file Output overlay file for right hemisphere
+ * @param reference_image Reference image for the projections
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
+ */
 function dmri_project_end_points(
     streamline_file: InputPathType,
     left_surface_file: InputPathType,
@@ -206,23 +223,6 @@ function dmri_project_end_points(
     reference_image: InputPathType,
     runner: Runner | null = null,
 ): DmriProjectEndPointsOutputs {
-    /**
-     * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param streamline_file Input streamline file (e.g. streamlineFile.trk)
-     * @param left_surface_file Left hemisphere surface file (e.g. surfaceFile_lh.orig)
-     * @param right_surface_file Right hemisphere surface file (e.g. surfaceFile_rh.orig)
-     * @param left_overlay_file Output overlay file for left hemisphere
-     * @param right_overlay_file Output overlay file for right hemisphere
-     * @param reference_image Reference image for the projections
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_PROJECT_END_POINTS_METADATA);
     const params = dmri_project_end_points_params(streamline_file, left_surface_file, right_surface_file, left_overlay_file, right_overlay_file, reference_image)
@@ -235,5 +235,8 @@ export {
       DmriProjectEndPointsOutputs,
       DmriProjectEndPointsParameters,
       dmri_project_end_points,
+      dmri_project_end_points_cargs,
+      dmri_project_end_points_execute,
+      dmri_project_end_points_outputs,
       dmri_project_end_points_params,
 };

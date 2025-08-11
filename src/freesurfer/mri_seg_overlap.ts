@@ -12,7 +12,7 @@ const MRI_SEG_OVERLAP_METADATA: Metadata = {
 
 
 interface MriSegOverlapParameters {
-    "__STYXTYPE__": "mri_seg_overlap";
+    "@type": "freesurfer.mri_seg_overlap";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "out_file"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface MriSegOverlapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_seg_overlap": mri_seg_overlap_cargs,
+        "freesurfer.mri_seg_overlap": mri_seg_overlap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_seg_overlap": mri_seg_overlap_outputs,
+        "freesurfer.mri_seg_overlap": mri_seg_overlap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface MriSegOverlapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol1 First segmentation volume input
+ * @param vol2 Second segmentation volume input
+ * @param out_file Save detailed overlap report to a JSON file.
+ * @param measures List of measures to compute. Options include: dice, jaccard, voldiff.
+ * @param labels Space-separated list of label values to include.
+ * @param label_names Custom label names corresponding to the values specified with the --labels flag.
+ * @param label_file Text file specifying the label values to include. Must be in the format of a freesurfer lookup-table.
+ * @param no_names_flag Do not report label names.
+ * @param seg_flag Compute overlap between the major segmentation structures.
+ * @param quiet_flag Quiet mode - do not print results to stdout.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_seg_overlap_params(
     vol1: InputPathType,
     vol2: InputPathType,
@@ -89,24 +105,8 @@ function mri_seg_overlap_params(
     seg_flag: boolean = false,
     quiet_flag: boolean = false,
 ): MriSegOverlapParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol1 First segmentation volume input
-     * @param vol2 Second segmentation volume input
-     * @param out_file Save detailed overlap report to a JSON file.
-     * @param measures List of measures to compute. Options include: dice, jaccard, voldiff.
-     * @param labels Space-separated list of label values to include.
-     * @param label_names Custom label names corresponding to the values specified with the --labels flag.
-     * @param label_file Text file specifying the label values to include. Must be in the format of a freesurfer lookup-table.
-     * @param no_names_flag Do not report label names.
-     * @param seg_flag Compute overlap between the major segmentation structures.
-     * @param quiet_flag Quiet mode - do not print results to stdout.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_seg_overlap" as const,
+        "@type": "freesurfer.mri_seg_overlap" as const,
         "vol1": vol1,
         "vol2": vol2,
         "no_names_flag": no_names_flag,
@@ -132,18 +132,18 @@ function mri_seg_overlap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_seg_overlap_cargs(
     params: MriSegOverlapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_seg_overlap");
     cargs.push(execution.inputFile((params["vol1"] ?? null)));
@@ -191,18 +191,18 @@ function mri_seg_overlap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_seg_overlap_outputs(
     params: MriSegOverlapParameters,
     execution: Execution,
 ): MriSegOverlapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegOverlapOutputs = {
         root: execution.outputFile("."),
         overlap_report: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null)].join('')) : null,
@@ -211,22 +211,22 @@ function mri_seg_overlap_outputs(
 }
 
 
+/**
+ * Compute the structural overlap between two segmentation volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
+ */
 function mri_seg_overlap_execute(
     params: MriSegOverlapParameters,
     execution: Execution,
 ): MriSegOverlapOutputs {
-    /**
-     * Compute the structural overlap between two segmentation volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_seg_overlap_cargs(params, execution)
     const ret = mri_seg_overlap_outputs(params, execution)
@@ -235,6 +235,27 @@ function mri_seg_overlap_execute(
 }
 
 
+/**
+ * Compute the structural overlap between two segmentation volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param vol1 First segmentation volume input
+ * @param vol2 Second segmentation volume input
+ * @param out_file Save detailed overlap report to a JSON file.
+ * @param measures List of measures to compute. Options include: dice, jaccard, voldiff.
+ * @param labels Space-separated list of label values to include.
+ * @param label_names Custom label names corresponding to the values specified with the --labels flag.
+ * @param label_file Text file specifying the label values to include. Must be in the format of a freesurfer lookup-table.
+ * @param no_names_flag Do not report label names.
+ * @param seg_flag Compute overlap between the major segmentation structures.
+ * @param quiet_flag Quiet mode - do not print results to stdout.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
+ */
 function mri_seg_overlap(
     vol1: InputPathType,
     vol2: InputPathType,
@@ -248,27 +269,6 @@ function mri_seg_overlap(
     quiet_flag: boolean = false,
     runner: Runner | null = null,
 ): MriSegOverlapOutputs {
-    /**
-     * Compute the structural overlap between two segmentation volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param vol1 First segmentation volume input
-     * @param vol2 Second segmentation volume input
-     * @param out_file Save detailed overlap report to a JSON file.
-     * @param measures List of measures to compute. Options include: dice, jaccard, voldiff.
-     * @param labels Space-separated list of label values to include.
-     * @param label_names Custom label names corresponding to the values specified with the --labels flag.
-     * @param label_file Text file specifying the label values to include. Must be in the format of a freesurfer lookup-table.
-     * @param no_names_flag Do not report label names.
-     * @param seg_flag Compute overlap between the major segmentation structures.
-     * @param quiet_flag Quiet mode - do not print results to stdout.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEG_OVERLAP_METADATA);
     const params = mri_seg_overlap_params(vol1, vol2, out_file, measures, labels, label_names, label_file, no_names_flag, seg_flag, quiet_flag)
@@ -281,5 +281,8 @@ export {
       MriSegOverlapOutputs,
       MriSegOverlapParameters,
       mri_seg_overlap,
+      mri_seg_overlap_cargs,
+      mri_seg_overlap_execute,
+      mri_seg_overlap_outputs,
       mri_seg_overlap_params,
 };

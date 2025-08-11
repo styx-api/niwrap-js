@@ -12,7 +12,7 @@ const MSM_METADATA: Metadata = {
 
 
 interface MsmParameters {
-    "__STYXTYPE__": "msm";
+    "@type": "fsl.msm";
     "inmesh": InputPathType;
     "out": string;
     "refmesh"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface MsmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "msm": msm_cargs,
+        "fsl.msm": msm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "msm": msm_outputs,
+        "fsl.msm": msm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface MsmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inmesh Input mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere
+ * @param out Output basename
+ * @param refmesh Reference mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere. If not included algorithm assumes reference mesh is equivalent input
+ * @param indata Scalar or multivariate data for input - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
+ * @param refdata Scalar or multivariate data for reference - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
+ * @param trans Transformed source mesh (output of a previous registration). Use this to initialise the current registration.
+ * @param in_register Input mesh at data resolution. Used to resample data onto input mesh if data is supplied at a different resolution. Note this mesh HAS to be in alignment with either the input_mesh of (if supplied) the transformed source mesh. Use with supreme caution.
+ * @param inweight Cost function weighting for input - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
+ * @param refweight Cost function weighting for reference - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
+ * @param format Format of output files, can be: GIFTI, VTK, ASCII or ASCII_MAT (for full details of output file formats see MSM wiki)
+ * @param conf Configuration file
+ * @param levels Number of resolution levels (default = number of resolution levels specified by --opt in config file)
+ * @param smoothout Smooth transformed output with this sigma (default=0)
+ * @param help Display help message
+ * @param verbose Switch on diagnostic messages
+ * @param printoptions Print configuration file options
+ *
+ * @returns Parameter dictionary
+ */
 function msm_params(
     inmesh: InputPathType,
     out: string,
@@ -101,30 +123,8 @@ function msm_params(
     verbose: boolean = false,
     printoptions: boolean = false,
 ): MsmParameters {
-    /**
-     * Build parameters.
-    
-     * @param inmesh Input mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere
-     * @param out Output basename
-     * @param refmesh Reference mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere. If not included algorithm assumes reference mesh is equivalent input
-     * @param indata Scalar or multivariate data for input - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
-     * @param refdata Scalar or multivariate data for reference - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
-     * @param trans Transformed source mesh (output of a previous registration). Use this to initialise the current registration.
-     * @param in_register Input mesh at data resolution. Used to resample data onto input mesh if data is supplied at a different resolution. Note this mesh HAS to be in alignment with either the input_mesh of (if supplied) the transformed source mesh. Use with supreme caution.
-     * @param inweight Cost function weighting for input - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
-     * @param refweight Cost function weighting for reference - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
-     * @param format Format of output files, can be: GIFTI, VTK, ASCII or ASCII_MAT (for full details of output file formats see MSM wiki)
-     * @param conf Configuration file
-     * @param levels Number of resolution levels (default = number of resolution levels specified by --opt in config file)
-     * @param smoothout Smooth transformed output with this sigma (default=0)
-     * @param help Display help message
-     * @param verbose Switch on diagnostic messages
-     * @param printoptions Print configuration file options
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "msm" as const,
+        "@type": "fsl.msm" as const,
         "inmesh": inmesh,
         "out": out,
         "help": help,
@@ -168,18 +168,18 @@ function msm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function msm_cargs(
     params: MsmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("msm");
     cargs.push(execution.inputFile((params["inmesh"] ?? null)));
@@ -263,18 +263,18 @@ function msm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function msm_outputs(
     params: MsmParameters,
     execution: Execution,
 ): MsmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MsmOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["out"] ?? null), "_output.ext"].join('')),
@@ -283,22 +283,22 @@ function msm_outputs(
 }
 
 
+/**
+ * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MsmOutputs`).
+ */
 function msm_execute(
     params: MsmParameters,
     execution: Execution,
 ): MsmOutputs {
-    /**
-     * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MsmOutputs`).
-     */
     params = execution.params(params)
     const cargs = msm_cargs(params, execution)
     const ret = msm_outputs(params, execution)
@@ -307,6 +307,33 @@ function msm_execute(
 }
 
 
+/**
+ * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param inmesh Input mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere
+ * @param out Output basename
+ * @param refmesh Reference mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere. If not included algorithm assumes reference mesh is equivalent input
+ * @param indata Scalar or multivariate data for input - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
+ * @param refdata Scalar or multivariate data for reference - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
+ * @param trans Transformed source mesh (output of a previous registration). Use this to initialise the current registration.
+ * @param in_register Input mesh at data resolution. Used to resample data onto input mesh if data is supplied at a different resolution. Note this mesh HAS to be in alignment with either the input_mesh of (if supplied) the transformed source mesh. Use with supreme caution.
+ * @param inweight Cost function weighting for input - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
+ * @param refweight Cost function weighting for reference - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
+ * @param format Format of output files, can be: GIFTI, VTK, ASCII or ASCII_MAT (for full details of output file formats see MSM wiki)
+ * @param conf Configuration file
+ * @param levels Number of resolution levels (default = number of resolution levels specified by --opt in config file)
+ * @param smoothout Smooth transformed output with this sigma (default=0)
+ * @param help Display help message
+ * @param verbose Switch on diagnostic messages
+ * @param printoptions Print configuration file options
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MsmOutputs`).
+ */
 function msm(
     inmesh: InputPathType,
     out: string,
@@ -326,33 +353,6 @@ function msm(
     printoptions: boolean = false,
     runner: Runner | null = null,
 ): MsmOutputs {
-    /**
-     * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param inmesh Input mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere
-     * @param out Output basename
-     * @param refmesh Reference mesh (available formats: VTK, ASCII, GIFTI). Needs to be a sphere. If not included algorithm assumes reference mesh is equivalent input
-     * @param indata Scalar or multivariate data for input - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
-     * @param refdata Scalar or multivariate data for reference - can be ASCII (.asc,.dpv,.txt) or GIFTI (.func.gii or .shape.gii)
-     * @param trans Transformed source mesh (output of a previous registration). Use this to initialise the current registration.
-     * @param in_register Input mesh at data resolution. Used to resample data onto input mesh if data is supplied at a different resolution. Note this mesh HAS to be in alignment with either the input_mesh of (if supplied) the transformed source mesh. Use with supreme caution.
-     * @param inweight Cost function weighting for input - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
-     * @param refweight Cost function weighting for reference - weights data in these vertices when calculating similarity (ASCII or GIFTI). Can be multivariate provided dimension equals that of data
-     * @param format Format of output files, can be: GIFTI, VTK, ASCII or ASCII_MAT (for full details of output file formats see MSM wiki)
-     * @param conf Configuration file
-     * @param levels Number of resolution levels (default = number of resolution levels specified by --opt in config file)
-     * @param smoothout Smooth transformed output with this sigma (default=0)
-     * @param help Display help message
-     * @param verbose Switch on diagnostic messages
-     * @param printoptions Print configuration file options
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MsmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MSM_METADATA);
     const params = msm_params(inmesh, out, refmesh, indata, refdata, trans, in_register, inweight, refweight, format, conf, levels, smoothout, help, verbose, printoptions)
@@ -365,5 +365,8 @@ export {
       MsmOutputs,
       MsmParameters,
       msm,
+      msm_cargs,
+      msm_execute,
+      msm_outputs,
       msm_params,
 };

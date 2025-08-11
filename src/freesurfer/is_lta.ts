@@ -12,41 +12,41 @@ const IS_LTA_METADATA: Metadata = {
 
 
 interface IsLtaParameters {
-    "__STYXTYPE__": "IsLTA";
+    "@type": "freesurfer.IsLTA";
     "candidate_file": InputPathType;
     "outfile": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "IsLTA": is_lta_cargs,
+        "freesurfer.IsLTA": is_lta_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "IsLTA": is_lta_outputs,
+        "freesurfer.IsLTA": is_lta_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface IsLtaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param candidate_file Candidate file to check if it is an LTA
+ * @param outfile Output file to write the result
+ *
+ * @returns Parameter dictionary
+ */
 function is_lta_params(
     candidate_file: InputPathType,
     outfile: string,
 ): IsLtaParameters {
-    /**
-     * Build parameters.
-    
-     * @param candidate_file Candidate file to check if it is an LTA
-     * @param outfile Output file to write the result
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "IsLTA" as const,
+        "@type": "freesurfer.IsLTA" as const,
         "candidate_file": candidate_file,
         "outfile": outfile,
     };
@@ -90,18 +90,18 @@ function is_lta_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function is_lta_cargs(
     params: IsLtaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("IsLTA");
     cargs.push(
@@ -116,18 +116,18 @@ function is_lta_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function is_lta_outputs(
     params: IsLtaParameters,
     execution: Execution,
 ): IsLtaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsLtaOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -136,22 +136,22 @@ function is_lta_outputs(
 }
 
 
+/**
+ * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
+ */
 function is_lta_execute(
     params: IsLtaParameters,
     execution: Execution,
 ): IsLtaOutputs {
-    /**
-     * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
-     */
     params = execution.params(params)
     const cargs = is_lta_cargs(params, execution)
     const ret = is_lta_outputs(params, execution)
@@ -160,24 +160,24 @@ function is_lta_execute(
 }
 
 
+/**
+ * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param candidate_file Candidate file to check if it is an LTA
+ * @param outfile Output file to write the result
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
+ */
 function is_lta(
     candidate_file: InputPathType,
     outfile: string,
     runner: Runner | null = null,
 ): IsLtaOutputs {
-    /**
-     * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param candidate_file Candidate file to check if it is an LTA
-     * @param outfile Output file to write the result
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IS_LTA_METADATA);
     const params = is_lta_params(candidate_file, outfile)
@@ -190,5 +190,8 @@ export {
       IsLtaOutputs,
       IsLtaParameters,
       is_lta,
+      is_lta_cargs,
+      is_lta_execute,
+      is_lta_outputs,
       is_lta_params,
 };

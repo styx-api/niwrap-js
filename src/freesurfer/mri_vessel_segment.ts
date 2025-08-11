@@ -12,7 +12,7 @@ const MRI_VESSEL_SEGMENT_METADATA: Metadata = {
 
 
 interface MriVesselSegmentParameters {
-    "__STYXTYPE__": "mri_vessel_segment";
+    "@type": "freesurfer.mri_vessel_segment";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
     "aseg_file": InputPathType;
@@ -21,35 +21,35 @@ interface MriVesselSegmentParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_vessel_segment": mri_vessel_segment_cargs,
+        "freesurfer.mri_vessel_segment": mri_vessel_segment_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_vessel_segment": mri_vessel_segment_outputs,
+        "freesurfer.mri_vessel_segment": mri_vessel_segment_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriVesselSegmentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_image T1-weighted input image
+ * @param t2_image T2-weighted input image
+ * @param aseg_file Anatomical segmentation file
+ * @param output_file Output file
+ * @param shape_flag Use shape constraints during segmentation
+ *
+ * @returns Parameter dictionary
+ */
 function mri_vessel_segment_params(
     t1_image: InputPathType,
     t2_image: InputPathType,
@@ -79,19 +90,8 @@ function mri_vessel_segment_params(
     output_file: string,
     shape_flag: boolean = false,
 ): MriVesselSegmentParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_image T1-weighted input image
-     * @param t2_image T2-weighted input image
-     * @param aseg_file Anatomical segmentation file
-     * @param output_file Output file
-     * @param shape_flag Use shape constraints during segmentation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_vessel_segment" as const,
+        "@type": "freesurfer.mri_vessel_segment" as const,
         "t1_image": t1_image,
         "t2_image": t2_image,
         "aseg_file": aseg_file,
@@ -102,18 +102,18 @@ function mri_vessel_segment_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_vessel_segment_cargs(
     params: MriVesselSegmentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_vessel_segment");
     cargs.push(
@@ -139,18 +139,18 @@ function mri_vessel_segment_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_vessel_segment_outputs(
     params: MriVesselSegmentParameters,
     execution: Execution,
 ): MriVesselSegmentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVesselSegmentOutputs = {
         root: execution.outputFile("."),
         segmented_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -159,22 +159,22 @@ function mri_vessel_segment_outputs(
 }
 
 
+/**
+ * MRI vessel segmentation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
+ */
 function mri_vessel_segment_execute(
     params: MriVesselSegmentParameters,
     execution: Execution,
 ): MriVesselSegmentOutputs {
-    /**
-     * MRI vessel segmentation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_vessel_segment_cargs(params, execution)
     const ret = mri_vessel_segment_outputs(params, execution)
@@ -183,6 +183,22 @@ function mri_vessel_segment_execute(
 }
 
 
+/**
+ * MRI vessel segmentation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_image T1-weighted input image
+ * @param t2_image T2-weighted input image
+ * @param aseg_file Anatomical segmentation file
+ * @param output_file Output file
+ * @param shape_flag Use shape constraints during segmentation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
+ */
 function mri_vessel_segment(
     t1_image: InputPathType,
     t2_image: InputPathType,
@@ -191,22 +207,6 @@ function mri_vessel_segment(
     shape_flag: boolean = false,
     runner: Runner | null = null,
 ): MriVesselSegmentOutputs {
-    /**
-     * MRI vessel segmentation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_image T1-weighted input image
-     * @param t2_image T2-weighted input image
-     * @param aseg_file Anatomical segmentation file
-     * @param output_file Output file
-     * @param shape_flag Use shape constraints during segmentation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VESSEL_SEGMENT_METADATA);
     const params = mri_vessel_segment_params(t1_image, t2_image, aseg_file, output_file, shape_flag)
@@ -219,5 +219,8 @@ export {
       MriVesselSegmentOutputs,
       MriVesselSegmentParameters,
       mri_vessel_segment,
+      mri_vessel_segment_cargs,
+      mri_vessel_segment_execute,
+      mri_vessel_segment_outputs,
       mri_vessel_segment_params,
 };

@@ -12,14 +12,14 @@ const FIXELCROP_METADATA: Metadata = {
 
 
 interface FixelcropConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelcrop.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelcropParameters {
-    "__STYXTYPE__": "fixelcrop";
+    "@type": "mrtrix.fixelcrop";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface FixelcropParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelcrop": fixelcrop_cargs,
-        "config": fixelcrop_config_cargs,
+        "mrtrix.fixelcrop": fixelcrop_cargs,
+        "mrtrix.fixelcrop.config": fixelcrop_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixelcrop": fixelcrop_outputs,
+        "mrtrix.fixelcrop": fixelcrop_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcrop_config_params(
     key: string,
     value: string,
 ): FixelcropConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelcrop.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function fixelcrop_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcrop_config_cargs(
     params: FixelcropConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface FixelcropOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_fixel_directory input fixel directory, all data files and directions file will be cropped and saved in the output fixel directory
+ * @param input_fixel_mask the input fixel data file defining which fixels to crop. Fixels with zero values will be removed
+ * @param output_fixel_directory the output directory to store the cropped directions and data files
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelcrop_params(
     input_fixel_directory: InputPathType,
     input_fixel_mask: InputPathType,
@@ -140,25 +157,8 @@ function fixelcrop_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelcropParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_fixel_directory input fixel directory, all data files and directions file will be cropped and saved in the output fixel directory
-     * @param input_fixel_mask the input fixel data file defining which fixels to crop. Fixels with zero values will be removed
-     * @param output_fixel_directory the output directory to store the cropped directions and data files
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelcrop" as const,
+        "@type": "mrtrix.fixelcrop" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function fixelcrop_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelcrop_cargs(
     params: FixelcropParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelcrop");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function fixelcrop_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function fixelcrop_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelcrop_outputs(
     params: FixelcropParameters,
     execution: Execution,
 ): FixelcropOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelcropOutputs = {
         root: execution.outputFile("."),
         output_fixel_directory: execution.outputFile([(params["output_fixel_directory"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function fixelcrop_outputs(
 }
 
 
+/**
+ * Crop/remove fixels from sparse fixel image using a binary fixel mask.
+ *
+ * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
+ */
 function fixelcrop_execute(
     params: FixelcropParameters,
     execution: Execution,
 ): FixelcropOutputs {
-    /**
-     * Crop/remove fixels from sparse fixel image using a binary fixel mask.
-     * 
-     * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelcrop_cargs(params, execution)
     const ret = fixelcrop_outputs(params, execution)
@@ -277,6 +277,34 @@ function fixelcrop_execute(
 }
 
 
+/**
+ * Crop/remove fixels from sparse fixel image using a binary fixel mask.
+ *
+ * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input_fixel_directory input fixel directory, all data files and directions file will be cropped and saved in the output fixel directory
+ * @param input_fixel_mask the input fixel data file defining which fixels to crop. Fixels with zero values will be removed
+ * @param output_fixel_directory the output directory to store the cropped directions and data files
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
+ */
 function fixelcrop(
     input_fixel_directory: InputPathType,
     input_fixel_mask: InputPathType,
@@ -291,34 +319,6 @@ function fixelcrop(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcropOutputs {
-    /**
-     * Crop/remove fixels from sparse fixel image using a binary fixel mask.
-     * 
-     * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input_fixel_directory input fixel directory, all data files and directions file will be cropped and saved in the output fixel directory
-     * @param input_fixel_mask the input fixel data file defining which fixels to crop. Fixels with zero values will be removed
-     * @param output_fixel_directory the output directory to store the cropped directions and data files
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELCROP_METADATA);
     const params = fixelcrop_params(input_fixel_directory, input_fixel_mask, output_fixel_directory, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       FixelcropOutputs,
       FixelcropParameters,
       fixelcrop,
+      fixelcrop_cargs,
+      fixelcrop_config_cargs,
       fixelcrop_config_params,
+      fixelcrop_execute,
+      fixelcrop_outputs,
       fixelcrop_params,
 };

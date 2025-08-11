@@ -12,7 +12,7 @@ const MRIS_MAKE_FACE_PARCELLATION_METADATA: Metadata = {
 
 
 interface MrisMakeFaceParcellationParameters {
-    "__STYXTYPE__": "mris_make_face_parcellation";
+    "@type": "freesurfer.mris_make_face_parcellation";
     "input_surface": InputPathType;
     "ico_file": InputPathType;
     "output_annot": string;
@@ -20,35 +20,35 @@ interface MrisMakeFaceParcellationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_make_face_parcellation": mris_make_face_parcellation_cargs,
+        "freesurfer.mris_make_face_parcellation": mris_make_face_parcellation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_make_face_parcellation": mris_make_face_parcellation_outputs,
+        "freesurfer.mris_make_face_parcellation": mris_make_face_parcellation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisMakeFaceParcellationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file (e.g. lh.sphere or lh.sphere.reg)
+ * @param ico_file Icosahedron file (e.g. ic3.tri)
+ * @param output_annot Output annotation file (e.g. lh.ic3.annot)
+ * @param colortable Color table file (e.g. colortable.txt)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_make_face_parcellation_params(
     input_surface: InputPathType,
     ico_file: InputPathType,
     output_annot: string,
     colortable: InputPathType | null = null,
 ): MrisMakeFaceParcellationParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file (e.g. lh.sphere or lh.sphere.reg)
-     * @param ico_file Icosahedron file (e.g. ic3.tri)
-     * @param output_annot Output annotation file (e.g. lh.ic3.annot)
-     * @param colortable Color table file (e.g. colortable.txt)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_make_face_parcellation" as const,
+        "@type": "freesurfer.mris_make_face_parcellation" as const,
         "input_surface": input_surface,
         "ico_file": ico_file,
         "output_annot": output_annot,
@@ -100,18 +100,18 @@ function mris_make_face_parcellation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_make_face_parcellation_cargs(
     params: MrisMakeFaceParcellationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_make_face_parcellation");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -127,18 +127,18 @@ function mris_make_face_parcellation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_make_face_parcellation_outputs(
     params: MrisMakeFaceParcellationParameters,
     execution: Execution,
 ): MrisMakeFaceParcellationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMakeFaceParcellationOutputs = {
         root: execution.outputFile("."),
         annot_file: execution.outputFile([(params["output_annot"] ?? null)].join('')),
@@ -147,22 +147,22 @@ function mris_make_face_parcellation_outputs(
 }
 
 
+/**
+ * Generates a parcellation based on which icosahedral face each vertex maps to.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
+ */
 function mris_make_face_parcellation_execute(
     params: MrisMakeFaceParcellationParameters,
     execution: Execution,
 ): MrisMakeFaceParcellationOutputs {
-    /**
-     * Generates a parcellation based on which icosahedral face each vertex maps to.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_make_face_parcellation_cargs(params, execution)
     const ret = mris_make_face_parcellation_outputs(params, execution)
@@ -171,6 +171,21 @@ function mris_make_face_parcellation_execute(
 }
 
 
+/**
+ * Generates a parcellation based on which icosahedral face each vertex maps to.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file (e.g. lh.sphere or lh.sphere.reg)
+ * @param ico_file Icosahedron file (e.g. ic3.tri)
+ * @param output_annot Output annotation file (e.g. lh.ic3.annot)
+ * @param colortable Color table file (e.g. colortable.txt)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
+ */
 function mris_make_face_parcellation(
     input_surface: InputPathType,
     ico_file: InputPathType,
@@ -178,21 +193,6 @@ function mris_make_face_parcellation(
     colortable: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisMakeFaceParcellationOutputs {
-    /**
-     * Generates a parcellation based on which icosahedral face each vertex maps to.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file (e.g. lh.sphere or lh.sphere.reg)
-     * @param ico_file Icosahedron file (e.g. ic3.tri)
-     * @param output_annot Output annotation file (e.g. lh.ic3.annot)
-     * @param colortable Color table file (e.g. colortable.txt)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MAKE_FACE_PARCELLATION_METADATA);
     const params = mris_make_face_parcellation_params(input_surface, ico_file, output_annot, colortable)
@@ -205,5 +205,8 @@ export {
       MrisMakeFaceParcellationOutputs,
       MrisMakeFaceParcellationParameters,
       mris_make_face_parcellation,
+      mris_make_face_parcellation_cargs,
+      mris_make_face_parcellation_execute,
+      mris_make_face_parcellation_outputs,
       mris_make_face_parcellation_params,
 };

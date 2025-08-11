@@ -12,276 +12,276 @@ const MRCALC_METADATA: Metadata = {
 
 
 interface MrcalcAbsParameters {
-    "__STYXTYPE__": "abs";
+    "@type": "mrtrix.mrcalc.abs";
 }
 
 
 interface MrcalcNegParameters {
-    "__STYXTYPE__": "neg";
+    "@type": "mrtrix.mrcalc.neg";
 }
 
 
 interface MrcalcAddParameters {
-    "__STYXTYPE__": "add";
+    "@type": "mrtrix.mrcalc.add";
 }
 
 
 interface MrcalcSubtractParameters {
-    "__STYXTYPE__": "subtract";
+    "@type": "mrtrix.mrcalc.subtract";
 }
 
 
 interface MrcalcMultiplyParameters {
-    "__STYXTYPE__": "multiply";
+    "@type": "mrtrix.mrcalc.multiply";
 }
 
 
 interface MrcalcDivideParameters {
-    "__STYXTYPE__": "divide";
+    "@type": "mrtrix.mrcalc.divide";
 }
 
 
 interface MrcalcMinParameters {
-    "__STYXTYPE__": "min";
+    "@type": "mrtrix.mrcalc.min";
 }
 
 
 interface MrcalcMaxParameters {
-    "__STYXTYPE__": "max";
+    "@type": "mrtrix.mrcalc.max";
 }
 
 
 interface MrcalcLtParameters {
-    "__STYXTYPE__": "lt";
+    "@type": "mrtrix.mrcalc.lt";
 }
 
 
 interface MrcalcGtParameters {
-    "__STYXTYPE__": "gt";
+    "@type": "mrtrix.mrcalc.gt";
 }
 
 
 interface MrcalcLeParameters {
-    "__STYXTYPE__": "le";
+    "@type": "mrtrix.mrcalc.le";
 }
 
 
 interface MrcalcGeParameters {
-    "__STYXTYPE__": "ge";
+    "@type": "mrtrix.mrcalc.ge";
 }
 
 
 interface MrcalcEqParameters {
-    "__STYXTYPE__": "eq";
+    "@type": "mrtrix.mrcalc.eq";
 }
 
 
 interface MrcalcNeqParameters {
-    "__STYXTYPE__": "neq";
+    "@type": "mrtrix.mrcalc.neq";
 }
 
 
 interface MrcalcIfParameters {
-    "__STYXTYPE__": "if";
+    "@type": "mrtrix.mrcalc.if";
 }
 
 
 interface MrcalcReplaceParameters {
-    "__STYXTYPE__": "replace";
+    "@type": "mrtrix.mrcalc.replace";
 }
 
 
 interface MrcalcSqrtParameters {
-    "__STYXTYPE__": "sqrt";
+    "@type": "mrtrix.mrcalc.sqrt";
 }
 
 
 interface MrcalcPowParameters {
-    "__STYXTYPE__": "pow";
+    "@type": "mrtrix.mrcalc.pow";
 }
 
 
 interface MrcalcRoundParameters {
-    "__STYXTYPE__": "round";
+    "@type": "mrtrix.mrcalc.round";
 }
 
 
 interface MrcalcCeilParameters {
-    "__STYXTYPE__": "ceil";
+    "@type": "mrtrix.mrcalc.ceil";
 }
 
 
 interface MrcalcFloorParameters {
-    "__STYXTYPE__": "floor";
+    "@type": "mrtrix.mrcalc.floor";
 }
 
 
 interface MrcalcNotParameters {
-    "__STYXTYPE__": "not";
+    "@type": "mrtrix.mrcalc.not";
 }
 
 
 interface MrcalcAndParameters {
-    "__STYXTYPE__": "and";
+    "@type": "mrtrix.mrcalc.and";
 }
 
 
 interface MrcalcOrParameters {
-    "__STYXTYPE__": "or";
+    "@type": "mrtrix.mrcalc.or";
 }
 
 
 interface MrcalcXorParameters {
-    "__STYXTYPE__": "xor";
+    "@type": "mrtrix.mrcalc.xor";
 }
 
 
 interface MrcalcIsnanParameters {
-    "__STYXTYPE__": "isnan";
+    "@type": "mrtrix.mrcalc.isnan";
 }
 
 
 interface MrcalcIsinfParameters {
-    "__STYXTYPE__": "isinf";
+    "@type": "mrtrix.mrcalc.isinf";
 }
 
 
 interface MrcalcFiniteParameters {
-    "__STYXTYPE__": "finite";
+    "@type": "mrtrix.mrcalc.finite";
 }
 
 
 interface MrcalcComplexParameters {
-    "__STYXTYPE__": "complex";
+    "@type": "mrtrix.mrcalc.complex";
 }
 
 
 interface MrcalcPolarParameters {
-    "__STYXTYPE__": "polar";
+    "@type": "mrtrix.mrcalc.polar";
 }
 
 
 interface MrcalcRealParameters {
-    "__STYXTYPE__": "real";
+    "@type": "mrtrix.mrcalc.real";
 }
 
 
 interface MrcalcImagParameters {
-    "__STYXTYPE__": "imag";
+    "@type": "mrtrix.mrcalc.imag";
 }
 
 
 interface MrcalcPhaseParameters {
-    "__STYXTYPE__": "phase";
+    "@type": "mrtrix.mrcalc.phase";
 }
 
 
 interface MrcalcConjParameters {
-    "__STYXTYPE__": "conj";
+    "@type": "mrtrix.mrcalc.conj";
 }
 
 
 interface MrcalcProjParameters {
-    "__STYXTYPE__": "proj";
+    "@type": "mrtrix.mrcalc.proj";
 }
 
 
 interface MrcalcExpParameters {
-    "__STYXTYPE__": "exp";
+    "@type": "mrtrix.mrcalc.exp";
 }
 
 
 interface MrcalcLogParameters {
-    "__STYXTYPE__": "log";
+    "@type": "mrtrix.mrcalc.log";
 }
 
 
 interface MrcalcLog10Parameters {
-    "__STYXTYPE__": "log10";
+    "@type": "mrtrix.mrcalc.log10";
 }
 
 
 interface MrcalcCosParameters {
-    "__STYXTYPE__": "cos";
+    "@type": "mrtrix.mrcalc.cos";
 }
 
 
 interface MrcalcSinParameters {
-    "__STYXTYPE__": "sin";
+    "@type": "mrtrix.mrcalc.sin";
 }
 
 
 interface MrcalcTanParameters {
-    "__STYXTYPE__": "tan";
+    "@type": "mrtrix.mrcalc.tan";
 }
 
 
 interface MrcalcAcosParameters {
-    "__STYXTYPE__": "acos";
+    "@type": "mrtrix.mrcalc.acos";
 }
 
 
 interface MrcalcAsinParameters {
-    "__STYXTYPE__": "asin";
+    "@type": "mrtrix.mrcalc.asin";
 }
 
 
 interface MrcalcAtanParameters {
-    "__STYXTYPE__": "atan";
+    "@type": "mrtrix.mrcalc.atan";
 }
 
 
 interface MrcalcCoshParameters {
-    "__STYXTYPE__": "cosh";
+    "@type": "mrtrix.mrcalc.cosh";
 }
 
 
 interface MrcalcSinhParameters {
-    "__STYXTYPE__": "sinh";
+    "@type": "mrtrix.mrcalc.sinh";
 }
 
 
 interface MrcalcTanhParameters {
-    "__STYXTYPE__": "tanh";
+    "@type": "mrtrix.mrcalc.tanh";
 }
 
 
 interface MrcalcAcoshParameters {
-    "__STYXTYPE__": "acosh";
+    "@type": "mrtrix.mrcalc.acosh";
 }
 
 
 interface MrcalcAsinhParameters {
-    "__STYXTYPE__": "asinh";
+    "@type": "mrtrix.mrcalc.asinh";
 }
 
 
 interface MrcalcAtanhParameters {
-    "__STYXTYPE__": "atanh";
+    "@type": "mrtrix.mrcalc.atanh";
 }
 
 
 interface MrcalcConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrcalc.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrcalcVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.mrcalc.VariousString";
     "obj": string;
 }
 
 
 interface MrcalcVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.mrcalc.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrcalcParameters {
-    "__STYXTYPE__": "mrcalc";
+    "@type": "mrtrix.mrcalc";
     "abs"?: Array<MrcalcAbsParameters> | null | undefined;
     "neg"?: Array<MrcalcNegParameters> | null | undefined;
     "add"?: Array<MrcalcAddParameters> | null | undefined;
@@ -345,1706 +345,1706 @@ interface MrcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrcalc": mrcalc_cargs,
-        "abs": mrcalc_abs_cargs,
-        "neg": mrcalc_neg_cargs,
-        "add": mrcalc_add_cargs,
-        "subtract": mrcalc_subtract_cargs,
-        "multiply": mrcalc_multiply_cargs,
-        "divide": mrcalc_divide_cargs,
-        "min": mrcalc_min_cargs,
-        "max": mrcalc_max_cargs,
-        "lt": mrcalc_lt_cargs,
-        "gt": mrcalc_gt_cargs,
-        "le": mrcalc_le_cargs,
-        "ge": mrcalc_ge_cargs,
-        "eq": mrcalc_eq_cargs,
-        "neq": mrcalc_neq_cargs,
-        "if": mrcalc_if_cargs,
-        "replace": mrcalc_replace_cargs,
-        "sqrt": mrcalc_sqrt_cargs,
-        "pow": mrcalc_pow_cargs,
-        "round": mrcalc_round_cargs,
-        "ceil": mrcalc_ceil_cargs,
-        "floor": mrcalc_floor_cargs,
-        "not": mrcalc_not_cargs,
-        "and": mrcalc_and_cargs,
-        "or": mrcalc_or_cargs,
-        "xor": mrcalc_xor_cargs,
-        "isnan": mrcalc_isnan_cargs,
-        "isinf": mrcalc_isinf_cargs,
-        "finite": mrcalc_finite_cargs,
-        "complex": mrcalc_complex_cargs,
-        "polar": mrcalc_polar_cargs,
-        "real": mrcalc_real_cargs,
-        "imag": mrcalc_imag_cargs,
-        "phase": mrcalc_phase_cargs,
-        "conj": mrcalc_conj_cargs,
-        "proj": mrcalc_proj_cargs,
-        "exp": mrcalc_exp_cargs,
-        "log": mrcalc_log_cargs,
-        "log10": mrcalc_log10_cargs,
-        "cos": mrcalc_cos_cargs,
-        "sin": mrcalc_sin_cargs,
-        "tan": mrcalc_tan_cargs,
-        "acos": mrcalc_acos_cargs,
-        "asin": mrcalc_asin_cargs,
-        "atan": mrcalc_atan_cargs,
-        "cosh": mrcalc_cosh_cargs,
-        "sinh": mrcalc_sinh_cargs,
-        "tanh": mrcalc_tanh_cargs,
-        "acosh": mrcalc_acosh_cargs,
-        "asinh": mrcalc_asinh_cargs,
-        "atanh": mrcalc_atanh_cargs,
-        "config": mrcalc_config_cargs,
-        "VariousString": mrcalc_various_string_cargs,
-        "VariousFile": mrcalc_various_file_cargs,
+        "mrtrix.mrcalc": mrcalc_cargs,
+        "mrtrix.mrcalc.abs": mrcalc_abs_cargs,
+        "mrtrix.mrcalc.neg": mrcalc_neg_cargs,
+        "mrtrix.mrcalc.add": mrcalc_add_cargs,
+        "mrtrix.mrcalc.subtract": mrcalc_subtract_cargs,
+        "mrtrix.mrcalc.multiply": mrcalc_multiply_cargs,
+        "mrtrix.mrcalc.divide": mrcalc_divide_cargs,
+        "mrtrix.mrcalc.min": mrcalc_min_cargs,
+        "mrtrix.mrcalc.max": mrcalc_max_cargs,
+        "mrtrix.mrcalc.lt": mrcalc_lt_cargs,
+        "mrtrix.mrcalc.gt": mrcalc_gt_cargs,
+        "mrtrix.mrcalc.le": mrcalc_le_cargs,
+        "mrtrix.mrcalc.ge": mrcalc_ge_cargs,
+        "mrtrix.mrcalc.eq": mrcalc_eq_cargs,
+        "mrtrix.mrcalc.neq": mrcalc_neq_cargs,
+        "mrtrix.mrcalc.if": mrcalc_if_cargs,
+        "mrtrix.mrcalc.replace": mrcalc_replace_cargs,
+        "mrtrix.mrcalc.sqrt": mrcalc_sqrt_cargs,
+        "mrtrix.mrcalc.pow": mrcalc_pow_cargs,
+        "mrtrix.mrcalc.round": mrcalc_round_cargs,
+        "mrtrix.mrcalc.ceil": mrcalc_ceil_cargs,
+        "mrtrix.mrcalc.floor": mrcalc_floor_cargs,
+        "mrtrix.mrcalc.not": mrcalc_not_cargs,
+        "mrtrix.mrcalc.and": mrcalc_and_cargs,
+        "mrtrix.mrcalc.or": mrcalc_or_cargs,
+        "mrtrix.mrcalc.xor": mrcalc_xor_cargs,
+        "mrtrix.mrcalc.isnan": mrcalc_isnan_cargs,
+        "mrtrix.mrcalc.isinf": mrcalc_isinf_cargs,
+        "mrtrix.mrcalc.finite": mrcalc_finite_cargs,
+        "mrtrix.mrcalc.complex": mrcalc_complex_cargs,
+        "mrtrix.mrcalc.polar": mrcalc_polar_cargs,
+        "mrtrix.mrcalc.real": mrcalc_real_cargs,
+        "mrtrix.mrcalc.imag": mrcalc_imag_cargs,
+        "mrtrix.mrcalc.phase": mrcalc_phase_cargs,
+        "mrtrix.mrcalc.conj": mrcalc_conj_cargs,
+        "mrtrix.mrcalc.proj": mrcalc_proj_cargs,
+        "mrtrix.mrcalc.exp": mrcalc_exp_cargs,
+        "mrtrix.mrcalc.log": mrcalc_log_cargs,
+        "mrtrix.mrcalc.log10": mrcalc_log10_cargs,
+        "mrtrix.mrcalc.cos": mrcalc_cos_cargs,
+        "mrtrix.mrcalc.sin": mrcalc_sin_cargs,
+        "mrtrix.mrcalc.tan": mrcalc_tan_cargs,
+        "mrtrix.mrcalc.acos": mrcalc_acos_cargs,
+        "mrtrix.mrcalc.asin": mrcalc_asin_cargs,
+        "mrtrix.mrcalc.atan": mrcalc_atan_cargs,
+        "mrtrix.mrcalc.cosh": mrcalc_cosh_cargs,
+        "mrtrix.mrcalc.sinh": mrcalc_sinh_cargs,
+        "mrtrix.mrcalc.tanh": mrcalc_tanh_cargs,
+        "mrtrix.mrcalc.acosh": mrcalc_acosh_cargs,
+        "mrtrix.mrcalc.asinh": mrcalc_asinh_cargs,
+        "mrtrix.mrcalc.atanh": mrcalc_atanh_cargs,
+        "mrtrix.mrcalc.config": mrcalc_config_cargs,
+        "mrtrix.mrcalc.VariousString": mrcalc_various_string_cargs,
+        "mrtrix.mrcalc.VariousFile": mrcalc_various_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_abs_params(
 ): MrcalcAbsParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "abs" as const,
+        "@type": "mrtrix.mrcalc.abs" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_abs_cargs(
     params: MrcalcAbsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-abs");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_neg_params(
 ): MrcalcNegParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neg" as const,
+        "@type": "mrtrix.mrcalc.neg" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_neg_cargs(
     params: MrcalcNegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neg");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_add_params(
 ): MrcalcAddParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "add" as const,
+        "@type": "mrtrix.mrcalc.add" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_add_cargs(
     params: MrcalcAddParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-add");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_subtract_params(
 ): MrcalcSubtractParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "subtract" as const,
+        "@type": "mrtrix.mrcalc.subtract" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_subtract_cargs(
     params: MrcalcSubtractParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-subtract");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_multiply_params(
 ): MrcalcMultiplyParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "multiply" as const,
+        "@type": "mrtrix.mrcalc.multiply" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_multiply_cargs(
     params: MrcalcMultiplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-multiply");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_divide_params(
 ): MrcalcDivideParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "divide" as const,
+        "@type": "mrtrix.mrcalc.divide" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_divide_cargs(
     params: MrcalcDivideParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-divide");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_min_params(
 ): MrcalcMinParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "min" as const,
+        "@type": "mrtrix.mrcalc.min" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_min_cargs(
     params: MrcalcMinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-min");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_max_params(
 ): MrcalcMaxParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "max" as const,
+        "@type": "mrtrix.mrcalc.max" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_max_cargs(
     params: MrcalcMaxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-max");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_lt_params(
 ): MrcalcLtParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "lt" as const,
+        "@type": "mrtrix.mrcalc.lt" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_lt_cargs(
     params: MrcalcLtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-lt");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_gt_params(
 ): MrcalcGtParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gt" as const,
+        "@type": "mrtrix.mrcalc.gt" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_gt_cargs(
     params: MrcalcGtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-gt");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_le_params(
 ): MrcalcLeParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "le" as const,
+        "@type": "mrtrix.mrcalc.le" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_le_cargs(
     params: MrcalcLeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-le");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_ge_params(
 ): MrcalcGeParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ge" as const,
+        "@type": "mrtrix.mrcalc.ge" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_ge_cargs(
     params: MrcalcGeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-ge");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_eq_params(
 ): MrcalcEqParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "eq" as const,
+        "@type": "mrtrix.mrcalc.eq" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_eq_cargs(
     params: MrcalcEqParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-eq");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_neq_params(
 ): MrcalcNeqParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neq" as const,
+        "@type": "mrtrix.mrcalc.neq" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_neq_cargs(
     params: MrcalcNeqParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neq");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_if_params(
 ): MrcalcIfParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "if" as const,
+        "@type": "mrtrix.mrcalc.if" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_if_cargs(
     params: MrcalcIfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-if");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_replace_params(
 ): MrcalcReplaceParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "replace" as const,
+        "@type": "mrtrix.mrcalc.replace" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_replace_cargs(
     params: MrcalcReplaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-replace");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_sqrt_params(
 ): MrcalcSqrtParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sqrt" as const,
+        "@type": "mrtrix.mrcalc.sqrt" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_sqrt_cargs(
     params: MrcalcSqrtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sqrt");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_pow_params(
 ): MrcalcPowParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pow" as const,
+        "@type": "mrtrix.mrcalc.pow" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_pow_cargs(
     params: MrcalcPowParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-pow");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_round_params(
 ): MrcalcRoundParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "round" as const,
+        "@type": "mrtrix.mrcalc.round" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_round_cargs(
     params: MrcalcRoundParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-round");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_ceil_params(
 ): MrcalcCeilParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ceil" as const,
+        "@type": "mrtrix.mrcalc.ceil" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_ceil_cargs(
     params: MrcalcCeilParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-ceil");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_floor_params(
 ): MrcalcFloorParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "floor" as const,
+        "@type": "mrtrix.mrcalc.floor" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_floor_cargs(
     params: MrcalcFloorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-floor");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_not_params(
 ): MrcalcNotParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "not" as const,
+        "@type": "mrtrix.mrcalc.not" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_not_cargs(
     params: MrcalcNotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-not");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_and_params(
 ): MrcalcAndParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "and" as const,
+        "@type": "mrtrix.mrcalc.and" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_and_cargs(
     params: MrcalcAndParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-and");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_or_params(
 ): MrcalcOrParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "or" as const,
+        "@type": "mrtrix.mrcalc.or" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_or_cargs(
     params: MrcalcOrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-or");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_xor_params(
 ): MrcalcXorParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xor" as const,
+        "@type": "mrtrix.mrcalc.xor" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_xor_cargs(
     params: MrcalcXorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-xor");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_isnan_params(
 ): MrcalcIsnanParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isnan" as const,
+        "@type": "mrtrix.mrcalc.isnan" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_isnan_cargs(
     params: MrcalcIsnanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-isnan");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_isinf_params(
 ): MrcalcIsinfParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isinf" as const,
+        "@type": "mrtrix.mrcalc.isinf" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_isinf_cargs(
     params: MrcalcIsinfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-isinf");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_finite_params(
 ): MrcalcFiniteParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "finite" as const,
+        "@type": "mrtrix.mrcalc.finite" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_finite_cargs(
     params: MrcalcFiniteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-finite");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_complex_params(
 ): MrcalcComplexParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "complex" as const,
+        "@type": "mrtrix.mrcalc.complex" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_complex_cargs(
     params: MrcalcComplexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-complex");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_polar_params(
 ): MrcalcPolarParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "polar" as const,
+        "@type": "mrtrix.mrcalc.polar" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_polar_cargs(
     params: MrcalcPolarParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-polar");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_real_params(
 ): MrcalcRealParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "real" as const,
+        "@type": "mrtrix.mrcalc.real" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_real_cargs(
     params: MrcalcRealParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-real");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_imag_params(
 ): MrcalcImagParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imag" as const,
+        "@type": "mrtrix.mrcalc.imag" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_imag_cargs(
     params: MrcalcImagParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-imag");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_phase_params(
 ): MrcalcPhaseParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "phase" as const,
+        "@type": "mrtrix.mrcalc.phase" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_phase_cargs(
     params: MrcalcPhaseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-phase");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_conj_params(
 ): MrcalcConjParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "conj" as const,
+        "@type": "mrtrix.mrcalc.conj" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_conj_cargs(
     params: MrcalcConjParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-conj");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_proj_params(
 ): MrcalcProjParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "proj" as const,
+        "@type": "mrtrix.mrcalc.proj" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_proj_cargs(
     params: MrcalcProjParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-proj");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_exp_params(
 ): MrcalcExpParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exp" as const,
+        "@type": "mrtrix.mrcalc.exp" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_exp_cargs(
     params: MrcalcExpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exp");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_log_params(
 ): MrcalcLogParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "log" as const,
+        "@type": "mrtrix.mrcalc.log" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_log_cargs(
     params: MrcalcLogParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-log");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_log10_params(
 ): MrcalcLog10Parameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "log10" as const,
+        "@type": "mrtrix.mrcalc.log10" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_log10_cargs(
     params: MrcalcLog10Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-log10");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_cos_params(
 ): MrcalcCosParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cos" as const,
+        "@type": "mrtrix.mrcalc.cos" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_cos_cargs(
     params: MrcalcCosParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cos");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_sin_params(
 ): MrcalcSinParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sin" as const,
+        "@type": "mrtrix.mrcalc.sin" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_sin_cargs(
     params: MrcalcSinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sin");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_tan_params(
 ): MrcalcTanParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tan" as const,
+        "@type": "mrtrix.mrcalc.tan" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_tan_cargs(
     params: MrcalcTanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-tan");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_acos_params(
 ): MrcalcAcosParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "acos" as const,
+        "@type": "mrtrix.mrcalc.acos" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_acos_cargs(
     params: MrcalcAcosParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-acos");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_asin_params(
 ): MrcalcAsinParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asin" as const,
+        "@type": "mrtrix.mrcalc.asin" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_asin_cargs(
     params: MrcalcAsinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-asin");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_atan_params(
 ): MrcalcAtanParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "atan" as const,
+        "@type": "mrtrix.mrcalc.atan" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_atan_cargs(
     params: MrcalcAtanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-atan");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_cosh_params(
 ): MrcalcCoshParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cosh" as const,
+        "@type": "mrtrix.mrcalc.cosh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_cosh_cargs(
     params: MrcalcCoshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cosh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_sinh_params(
 ): MrcalcSinhParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sinh" as const,
+        "@type": "mrtrix.mrcalc.sinh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_sinh_cargs(
     params: MrcalcSinhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sinh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_tanh_params(
 ): MrcalcTanhParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tanh" as const,
+        "@type": "mrtrix.mrcalc.tanh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_tanh_cargs(
     params: MrcalcTanhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-tanh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_acosh_params(
 ): MrcalcAcoshParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "acosh" as const,
+        "@type": "mrtrix.mrcalc.acosh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_acosh_cargs(
     params: MrcalcAcoshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-acosh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_asinh_params(
 ): MrcalcAsinhParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asinh" as const,
+        "@type": "mrtrix.mrcalc.asinh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_asinh_cargs(
     params: MrcalcAsinhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-asinh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_atanh_params(
 ): MrcalcAtanhParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "atanh" as const,
+        "@type": "mrtrix.mrcalc.atanh" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_atanh_cargs(
     params: MrcalcAtanhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-atanh");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_config_params(
     key: string,
     value: string,
 ): MrcalcConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrcalc.config" as const,
         "key": key,
         "value": value,
     };
@@ -2052,18 +2052,18 @@ function mrcalc_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_config_cargs(
     params: MrcalcConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -2072,72 +2072,72 @@ function mrcalc_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_various_string_params(
     obj: string,
 ): MrcalcVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.mrcalc.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_various_string_cargs(
     params: MrcalcVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_various_file_params(
     obj: InputPathType,
 ): MrcalcVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.mrcalc.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_various_file_cargs(
     params: MrcalcVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -2157,6 +2157,72 @@ interface MrcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param operand an input image, intensity value, or the special keywords 'rand' (random number between 0 and 1) or 'randn' (random number from unit std.dev. normal distribution) or the mathematical constants 'e' and 'pi'.
+ * @param abs |%1| : return absolute value (magnitude) of real or complex number
+ * @param neg -%1 : negative value
+ * @param add (%1 + %2) : add values
+ * @param subtract (%1 - %2) : subtract nth operand from (n-1)th
+ * @param multiply (%1 * %2) : multiply values
+ * @param divide (%1 / %2) : divide (n-1)th operand by nth
+ * @param min min (%1, %2) : smallest of last two operands
+ * @param max max (%1, %2) : greatest of last two operands
+ * @param lt (%1 < %2) : less-than operator (true=1, false=0)
+ * @param gt (%1 > %2) : greater-than operator (true=1, false=0)
+ * @param le (%1 <= %2) : less-than-or-equal-to operator (true=1, false=0)
+ * @param ge (%1 >= %2) : greater-than-or-equal-to operator (true=1, false=0)
+ * @param eq (%1 == %2) : equal-to operator (true=1, false=0)
+ * @param neq (%1 != %2) : not-equal-to operator (true=1, false=0)
+ * @param if_ (%1 ? %2 : %3) : if first operand is true (non-zero), return second operand, otherwise return third operand
+ * @param replace (%1, %2 -> %3) : Wherever first operand is equal to the second operand, replace with third operand
+ * @param sqrt sqrt (%1) : square root
+ * @param pow %1^%2 : raise (n-1)th operand to nth power
+ * @param round round (%1) : round to nearest integer
+ * @param ceil ceil (%1) : round up to nearest integer
+ * @param floor floor (%1) : round down to nearest integer
+ * @param not !%1 : NOT operator: true (1) if operand is false (i.e. zero)
+ * @param and (%1 && %2) : AND operator: true (1) if both operands are true (i.e. non-zero)
+ * @param or (%1 || %2) : OR operator: true (1) if either operand is true (i.e. non-zero)
+ * @param xor (%1 ^^ %2) : XOR operator: true (1) if only one of the operands is true (i.e. non-zero)
+ * @param isnan isnan (%1) : true (1) if operand is not-a-number (NaN)
+ * @param isinf isinf (%1) : true (1) if operand is infinite (Inf)
+ * @param finite finite (%1) : true (1) if operand is finite (i.e. not NaN or Inf)
+ * @param complex (%1 + %2 i) : create complex number using the last two operands as real,imaginary components
+ * @param polar (%1 /_ %2) : create complex number using the last two operands as magnitude,phase components (phase in radians)
+ * @param real real (%1) : real part of complex number
+ * @param imag imag (%1) : imaginary part of complex number
+ * @param phase phase (%1) : phase of complex number (use -abs for magnitude)
+ * @param conj conj (%1) : complex conjugate
+ * @param proj proj (%1) : projection onto the Riemann sphere
+ * @param exp exp (%1) : exponential function
+ * @param log log (%1) : natural logarithm
+ * @param log10 log10 (%1) : common logarithm
+ * @param cos cos (%1) : cosine
+ * @param sin sin (%1) : sine
+ * @param tan tan (%1) : tangent
+ * @param acos acos (%1) : inverse cosine
+ * @param asin asin (%1) : inverse sine
+ * @param atan atan (%1) : inverse tangent
+ * @param cosh cosh (%1) : hyperbolic cosine
+ * @param sinh sinh (%1) : hyperbolic sine
+ * @param tanh tanh (%1) : hyperbolic tangent
+ * @param acosh acosh (%1) : inverse hyperbolic cosine
+ * @param asinh asinh (%1) : inverse hyperbolic sine
+ * @param atanh atanh (%1) : inverse hyperbolic tangent
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcalc_params(
     operand: Array<MrcalcVariousStringParameters | MrcalcVariousFileParameters>,
     abs: Array<MrcalcAbsParameters> | null = null,
@@ -2219,74 +2285,8 @@ function mrcalc_params(
     help: boolean = false,
     version: boolean = false,
 ): MrcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param operand an input image, intensity value, or the special keywords 'rand' (random number between 0 and 1) or 'randn' (random number from unit std.dev. normal distribution) or the mathematical constants 'e' and 'pi'.
-     * @param abs |%1| : return absolute value (magnitude) of real or complex number
-     * @param neg -%1 : negative value
-     * @param add (%1 + %2) : add values
-     * @param subtract (%1 - %2) : subtract nth operand from (n-1)th
-     * @param multiply (%1 * %2) : multiply values
-     * @param divide (%1 / %2) : divide (n-1)th operand by nth
-     * @param min min (%1, %2) : smallest of last two operands
-     * @param max max (%1, %2) : greatest of last two operands
-     * @param lt (%1 < %2) : less-than operator (true=1, false=0)
-     * @param gt (%1 > %2) : greater-than operator (true=1, false=0)
-     * @param le (%1 <= %2) : less-than-or-equal-to operator (true=1, false=0)
-     * @param ge (%1 >= %2) : greater-than-or-equal-to operator (true=1, false=0)
-     * @param eq (%1 == %2) : equal-to operator (true=1, false=0)
-     * @param neq (%1 != %2) : not-equal-to operator (true=1, false=0)
-     * @param if_ (%1 ? %2 : %3) : if first operand is true (non-zero), return second operand, otherwise return third operand
-     * @param replace (%1, %2 -> %3) : Wherever first operand is equal to the second operand, replace with third operand
-     * @param sqrt sqrt (%1) : square root
-     * @param pow %1^%2 : raise (n-1)th operand to nth power
-     * @param round round (%1) : round to nearest integer
-     * @param ceil ceil (%1) : round up to nearest integer
-     * @param floor floor (%1) : round down to nearest integer
-     * @param not !%1 : NOT operator: true (1) if operand is false (i.e. zero)
-     * @param and (%1 && %2) : AND operator: true (1) if both operands are true (i.e. non-zero)
-     * @param or (%1 || %2) : OR operator: true (1) if either operand is true (i.e. non-zero)
-     * @param xor (%1 ^^ %2) : XOR operator: true (1) if only one of the operands is true (i.e. non-zero)
-     * @param isnan isnan (%1) : true (1) if operand is not-a-number (NaN)
-     * @param isinf isinf (%1) : true (1) if operand is infinite (Inf)
-     * @param finite finite (%1) : true (1) if operand is finite (i.e. not NaN or Inf)
-     * @param complex (%1 + %2 i) : create complex number using the last two operands as real,imaginary components
-     * @param polar (%1 /_ %2) : create complex number using the last two operands as magnitude,phase components (phase in radians)
-     * @param real real (%1) : real part of complex number
-     * @param imag imag (%1) : imaginary part of complex number
-     * @param phase phase (%1) : phase of complex number (use -abs for magnitude)
-     * @param conj conj (%1) : complex conjugate
-     * @param proj proj (%1) : projection onto the Riemann sphere
-     * @param exp exp (%1) : exponential function
-     * @param log log (%1) : natural logarithm
-     * @param log10 log10 (%1) : common logarithm
-     * @param cos cos (%1) : cosine
-     * @param sin sin (%1) : sine
-     * @param tan tan (%1) : tangent
-     * @param acos acos (%1) : inverse cosine
-     * @param asin asin (%1) : inverse sine
-     * @param atan atan (%1) : inverse tangent
-     * @param cosh cosh (%1) : hyperbolic cosine
-     * @param sinh sinh (%1) : hyperbolic sine
-     * @param tanh tanh (%1) : hyperbolic tangent
-     * @param acosh acosh (%1) : inverse hyperbolic cosine
-     * @param asinh asinh (%1) : inverse hyperbolic sine
-     * @param atanh atanh (%1) : inverse hyperbolic tangent
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrcalc" as const,
+        "@type": "mrtrix.mrcalc" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -2458,169 +2458,169 @@ function mrcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcalc_cargs(
     params: MrcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrcalc");
     if ((params["abs"] ?? null) !== null) {
-        cargs.push(...(params["abs"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["abs"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["neg"] ?? null) !== null) {
-        cargs.push(...(params["neg"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["neg"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["add"] ?? null) !== null) {
-        cargs.push(...(params["add"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["add"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["subtract"] ?? null) !== null) {
-        cargs.push(...(params["subtract"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["subtract"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["multiply"] ?? null) !== null) {
-        cargs.push(...(params["multiply"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["multiply"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["divide"] ?? null) !== null) {
-        cargs.push(...(params["divide"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["divide"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["min"] ?? null) !== null) {
-        cargs.push(...(params["min"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["min"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["max"] ?? null) !== null) {
-        cargs.push(...(params["max"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["max"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["lt"] ?? null) !== null) {
-        cargs.push(...(params["lt"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["lt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["gt"] ?? null) !== null) {
-        cargs.push(...(params["gt"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["gt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["le"] ?? null) !== null) {
-        cargs.push(...(params["le"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["le"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["ge"] ?? null) !== null) {
-        cargs.push(...(params["ge"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["ge"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["eq"] ?? null) !== null) {
-        cargs.push(...(params["eq"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["eq"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["neq"] ?? null) !== null) {
-        cargs.push(...(params["neq"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["neq"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["if"] ?? null) !== null) {
-        cargs.push(...(params["if"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["if"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["replace"] ?? null) !== null) {
-        cargs.push(...(params["replace"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["replace"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["sqrt"] ?? null) !== null) {
-        cargs.push(...(params["sqrt"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["sqrt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["pow"] ?? null) !== null) {
-        cargs.push(...(params["pow"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["pow"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["round"] ?? null) !== null) {
-        cargs.push(...(params["round"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["round"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["ceil"] ?? null) !== null) {
-        cargs.push(...(params["ceil"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["ceil"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["floor"] ?? null) !== null) {
-        cargs.push(...(params["floor"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["floor"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["not"] ?? null) !== null) {
-        cargs.push(...(params["not"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["not"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["and"] ?? null) !== null) {
-        cargs.push(...(params["and"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["and"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["or"] ?? null) !== null) {
-        cargs.push(...(params["or"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["or"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["xor"] ?? null) !== null) {
-        cargs.push(...(params["xor"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["xor"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["isnan"] ?? null) !== null) {
-        cargs.push(...(params["isnan"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["isnan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["isinf"] ?? null) !== null) {
-        cargs.push(...(params["isinf"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["isinf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["finite"] ?? null) !== null) {
-        cargs.push(...(params["finite"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["finite"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["complex"] ?? null) !== null) {
-        cargs.push(...(params["complex"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["complex"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["polar"] ?? null) !== null) {
-        cargs.push(...(params["polar"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["polar"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["real"] ?? null) !== null) {
-        cargs.push(...(params["real"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["real"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["imag"] ?? null) !== null) {
-        cargs.push(...(params["imag"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["imag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["phase"] ?? null) !== null) {
-        cargs.push(...(params["phase"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["phase"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["conj"] ?? null) !== null) {
-        cargs.push(...(params["conj"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["conj"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["proj"] ?? null) !== null) {
-        cargs.push(...(params["proj"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["proj"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["exp"] ?? null) !== null) {
-        cargs.push(...(params["exp"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["exp"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["log"] ?? null) !== null) {
-        cargs.push(...(params["log"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["log"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["log10"] ?? null) !== null) {
-        cargs.push(...(params["log10"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["log10"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["cos"] ?? null) !== null) {
-        cargs.push(...(params["cos"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cos"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["sin"] ?? null) !== null) {
-        cargs.push(...(params["sin"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["sin"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["tan"] ?? null) !== null) {
-        cargs.push(...(params["tan"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["tan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["acos"] ?? null) !== null) {
-        cargs.push(...(params["acos"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["acos"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["asin"] ?? null) !== null) {
-        cargs.push(...(params["asin"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["asin"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["atan"] ?? null) !== null) {
-        cargs.push(...(params["atan"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["atan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["cosh"] ?? null) !== null) {
-        cargs.push(...(params["cosh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cosh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["sinh"] ?? null) !== null) {
-        cargs.push(...(params["sinh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["sinh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["tanh"] ?? null) !== null) {
-        cargs.push(...(params["tanh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["tanh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["acosh"] ?? null) !== null) {
-        cargs.push(...(params["acosh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["acosh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["asinh"] ?? null) !== null) {
-        cargs.push(...(params["asinh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["asinh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["atanh"] ?? null) !== null) {
-        cargs.push(...(params["atanh"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["atanh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["datatype"] ?? null) !== null) {
         cargs.push(
@@ -2647,7 +2647,7 @@ function mrcalc_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -2655,23 +2655,23 @@ function mrcalc_cargs(
     if ((params["version"] ?? null)) {
         cargs.push("-version");
     }
-    cargs.push(...(params["operand"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["operand"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrcalc_outputs(
     params: MrcalcParameters,
     execution: Execution,
 ): MrcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrcalcOutputs = {
         root: execution.outputFile("."),
     };
@@ -2679,32 +2679,32 @@ function mrcalc_outputs(
 }
 
 
+/**
+ * Apply generic voxel-wise mathematical operations to images.
+ *
+ * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.
+ *
+ * This command uses a stack-based syntax, with operators (specified using options) operating on the top-most entries (i.e. images or values) in the stack. Operands (values or images) are pushed onto the stack in the order they appear (as arguments) on the command-line, and operators (specified as options) operate on and consume the top-most entries in the stack, and push their output as a new entry on the stack.
+ *
+ * As an additional feature, this command will allow images with different dimensions to be processed, provided they satisfy the following conditions: for each axis, the dimensions match if they are the same size, or one of them has size one. In the latter case, the entire image will be replicated along that axis. This allows for example a 4D image of size [ X Y Z N ] to be added to a 3D image of size [ X Y Z ], as if it consisted of N copies of the 3D image along the 4th axis (the missing dimension is assumed to have size 1). Another example would a single-voxel 4D image of size [ 1 1 1 N ], multiplied by a 3D image of size [ X Y Z ], which would allow the creation of a 4D image where each volume consists of the 3D image scaled by the corresponding value for that volume in the single-voxel image.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
+ */
 function mrcalc_execute(
     params: MrcalcParameters,
     execution: Execution,
 ): MrcalcOutputs {
-    /**
-     * Apply generic voxel-wise mathematical operations to images.
-     * 
-     * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.
-     * 
-     * This command uses a stack-based syntax, with operators (specified using options) operating on the top-most entries (i.e. images or values) in the stack. Operands (values or images) are pushed onto the stack in the order they appear (as arguments) on the command-line, and operators (specified as options) operate on and consume the top-most entries in the stack, and push their output as a new entry on the stack.
-     * 
-     * As an additional feature, this command will allow images with different dimensions to be processed, provided they satisfy the following conditions: for each axis, the dimensions match if they are the same size, or one of them has size one. In the latter case, the entire image will be replicated along that axis. This allows for example a 4D image of size [ X Y Z N ] to be added to a 3D image of size [ X Y Z ], as if it consisted of N copies of the 3D image along the 4th axis (the missing dimension is assumed to have size 1). Another example would a single-voxel 4D image of size [ 1 1 1 N ], multiplied by a 3D image of size [ X Y Z ], which would allow the creation of a 4D image where each volume consists of the 3D image scaled by the corresponding value for that volume in the single-voxel image.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrcalc_cargs(params, execution)
     const ret = mrcalc_outputs(params, execution)
@@ -2713,6 +2713,87 @@ function mrcalc_execute(
 }
 
 
+/**
+ * Apply generic voxel-wise mathematical operations to images.
+ *
+ * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.
+ *
+ * This command uses a stack-based syntax, with operators (specified using options) operating on the top-most entries (i.e. images or values) in the stack. Operands (values or images) are pushed onto the stack in the order they appear (as arguments) on the command-line, and operators (specified as options) operate on and consume the top-most entries in the stack, and push their output as a new entry on the stack.
+ *
+ * As an additional feature, this command will allow images with different dimensions to be processed, provided they satisfy the following conditions: for each axis, the dimensions match if they are the same size, or one of them has size one. In the latter case, the entire image will be replicated along that axis. This allows for example a 4D image of size [ X Y Z N ] to be added to a 3D image of size [ X Y Z ], as if it consisted of N copies of the 3D image along the 4th axis (the missing dimension is assumed to have size 1). Another example would a single-voxel 4D image of size [ 1 1 1 N ], multiplied by a 3D image of size [ X Y Z ], which would allow the creation of a 4D image where each volume consists of the 3D image scaled by the corresponding value for that volume in the single-voxel image.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param operand an input image, intensity value, or the special keywords 'rand' (random number between 0 and 1) or 'randn' (random number from unit std.dev. normal distribution) or the mathematical constants 'e' and 'pi'.
+ * @param abs |%1| : return absolute value (magnitude) of real or complex number
+ * @param neg -%1 : negative value
+ * @param add (%1 + %2) : add values
+ * @param subtract (%1 - %2) : subtract nth operand from (n-1)th
+ * @param multiply (%1 * %2) : multiply values
+ * @param divide (%1 / %2) : divide (n-1)th operand by nth
+ * @param min min (%1, %2) : smallest of last two operands
+ * @param max max (%1, %2) : greatest of last two operands
+ * @param lt (%1 < %2) : less-than operator (true=1, false=0)
+ * @param gt (%1 > %2) : greater-than operator (true=1, false=0)
+ * @param le (%1 <= %2) : less-than-or-equal-to operator (true=1, false=0)
+ * @param ge (%1 >= %2) : greater-than-or-equal-to operator (true=1, false=0)
+ * @param eq (%1 == %2) : equal-to operator (true=1, false=0)
+ * @param neq (%1 != %2) : not-equal-to operator (true=1, false=0)
+ * @param if_ (%1 ? %2 : %3) : if first operand is true (non-zero), return second operand, otherwise return third operand
+ * @param replace (%1, %2 -> %3) : Wherever first operand is equal to the second operand, replace with third operand
+ * @param sqrt sqrt (%1) : square root
+ * @param pow %1^%2 : raise (n-1)th operand to nth power
+ * @param round round (%1) : round to nearest integer
+ * @param ceil ceil (%1) : round up to nearest integer
+ * @param floor floor (%1) : round down to nearest integer
+ * @param not !%1 : NOT operator: true (1) if operand is false (i.e. zero)
+ * @param and (%1 && %2) : AND operator: true (1) if both operands are true (i.e. non-zero)
+ * @param or (%1 || %2) : OR operator: true (1) if either operand is true (i.e. non-zero)
+ * @param xor (%1 ^^ %2) : XOR operator: true (1) if only one of the operands is true (i.e. non-zero)
+ * @param isnan isnan (%1) : true (1) if operand is not-a-number (NaN)
+ * @param isinf isinf (%1) : true (1) if operand is infinite (Inf)
+ * @param finite finite (%1) : true (1) if operand is finite (i.e. not NaN or Inf)
+ * @param complex (%1 + %2 i) : create complex number using the last two operands as real,imaginary components
+ * @param polar (%1 /_ %2) : create complex number using the last two operands as magnitude,phase components (phase in radians)
+ * @param real real (%1) : real part of complex number
+ * @param imag imag (%1) : imaginary part of complex number
+ * @param phase phase (%1) : phase of complex number (use -abs for magnitude)
+ * @param conj conj (%1) : complex conjugate
+ * @param proj proj (%1) : projection onto the Riemann sphere
+ * @param exp exp (%1) : exponential function
+ * @param log log (%1) : natural logarithm
+ * @param log10 log10 (%1) : common logarithm
+ * @param cos cos (%1) : cosine
+ * @param sin sin (%1) : sine
+ * @param tan tan (%1) : tangent
+ * @param acos acos (%1) : inverse cosine
+ * @param asin asin (%1) : inverse sine
+ * @param atan atan (%1) : inverse tangent
+ * @param cosh cosh (%1) : hyperbolic cosine
+ * @param sinh sinh (%1) : hyperbolic sine
+ * @param tanh tanh (%1) : hyperbolic tangent
+ * @param acosh acosh (%1) : inverse hyperbolic cosine
+ * @param asinh asinh (%1) : inverse hyperbolic sine
+ * @param atanh atanh (%1) : inverse hyperbolic tangent
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
+ */
 function mrcalc(
     operand: Array<MrcalcVariousStringParameters | MrcalcVariousFileParameters>,
     abs: Array<MrcalcAbsParameters> | null = null,
@@ -2776,87 +2857,6 @@ function mrcalc(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcalcOutputs {
-    /**
-     * Apply generic voxel-wise mathematical operations to images.
-     * 
-     * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.
-     * 
-     * This command uses a stack-based syntax, with operators (specified using options) operating on the top-most entries (i.e. images or values) in the stack. Operands (values or images) are pushed onto the stack in the order they appear (as arguments) on the command-line, and operators (specified as options) operate on and consume the top-most entries in the stack, and push their output as a new entry on the stack.
-     * 
-     * As an additional feature, this command will allow images with different dimensions to be processed, provided they satisfy the following conditions: for each axis, the dimensions match if they are the same size, or one of them has size one. In the latter case, the entire image will be replicated along that axis. This allows for example a 4D image of size [ X Y Z N ] to be added to a 3D image of size [ X Y Z ], as if it consisted of N copies of the 3D image along the 4th axis (the missing dimension is assumed to have size 1). Another example would a single-voxel 4D image of size [ 1 1 1 N ], multiplied by a 3D image of size [ X Y Z ], which would allow the creation of a 4D image where each volume consists of the 3D image scaled by the corresponding value for that volume in the single-voxel image.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param operand an input image, intensity value, or the special keywords 'rand' (random number between 0 and 1) or 'randn' (random number from unit std.dev. normal distribution) or the mathematical constants 'e' and 'pi'.
-     * @param abs |%1| : return absolute value (magnitude) of real or complex number
-     * @param neg -%1 : negative value
-     * @param add (%1 + %2) : add values
-     * @param subtract (%1 - %2) : subtract nth operand from (n-1)th
-     * @param multiply (%1 * %2) : multiply values
-     * @param divide (%1 / %2) : divide (n-1)th operand by nth
-     * @param min min (%1, %2) : smallest of last two operands
-     * @param max max (%1, %2) : greatest of last two operands
-     * @param lt (%1 < %2) : less-than operator (true=1, false=0)
-     * @param gt (%1 > %2) : greater-than operator (true=1, false=0)
-     * @param le (%1 <= %2) : less-than-or-equal-to operator (true=1, false=0)
-     * @param ge (%1 >= %2) : greater-than-or-equal-to operator (true=1, false=0)
-     * @param eq (%1 == %2) : equal-to operator (true=1, false=0)
-     * @param neq (%1 != %2) : not-equal-to operator (true=1, false=0)
-     * @param if_ (%1 ? %2 : %3) : if first operand is true (non-zero), return second operand, otherwise return third operand
-     * @param replace (%1, %2 -> %3) : Wherever first operand is equal to the second operand, replace with third operand
-     * @param sqrt sqrt (%1) : square root
-     * @param pow %1^%2 : raise (n-1)th operand to nth power
-     * @param round round (%1) : round to nearest integer
-     * @param ceil ceil (%1) : round up to nearest integer
-     * @param floor floor (%1) : round down to nearest integer
-     * @param not !%1 : NOT operator: true (1) if operand is false (i.e. zero)
-     * @param and (%1 && %2) : AND operator: true (1) if both operands are true (i.e. non-zero)
-     * @param or (%1 || %2) : OR operator: true (1) if either operand is true (i.e. non-zero)
-     * @param xor (%1 ^^ %2) : XOR operator: true (1) if only one of the operands is true (i.e. non-zero)
-     * @param isnan isnan (%1) : true (1) if operand is not-a-number (NaN)
-     * @param isinf isinf (%1) : true (1) if operand is infinite (Inf)
-     * @param finite finite (%1) : true (1) if operand is finite (i.e. not NaN or Inf)
-     * @param complex (%1 + %2 i) : create complex number using the last two operands as real,imaginary components
-     * @param polar (%1 /_ %2) : create complex number using the last two operands as magnitude,phase components (phase in radians)
-     * @param real real (%1) : real part of complex number
-     * @param imag imag (%1) : imaginary part of complex number
-     * @param phase phase (%1) : phase of complex number (use -abs for magnitude)
-     * @param conj conj (%1) : complex conjugate
-     * @param proj proj (%1) : projection onto the Riemann sphere
-     * @param exp exp (%1) : exponential function
-     * @param log log (%1) : natural logarithm
-     * @param log10 log10 (%1) : common logarithm
-     * @param cos cos (%1) : cosine
-     * @param sin sin (%1) : sine
-     * @param tan tan (%1) : tangent
-     * @param acos acos (%1) : inverse cosine
-     * @param asin asin (%1) : inverse sine
-     * @param atan atan (%1) : inverse tangent
-     * @param cosh cosh (%1) : hyperbolic cosine
-     * @param sinh sinh (%1) : hyperbolic sine
-     * @param tanh tanh (%1) : hyperbolic tangent
-     * @param acosh acosh (%1) : inverse hyperbolic cosine
-     * @param asinh asinh (%1) : inverse hyperbolic sine
-     * @param atanh atanh (%1) : inverse hyperbolic tangent
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRCALC_METADATA);
     const params = mrcalc_params(operand, abs, neg, add, subtract, multiply, divide, min, max, lt, gt, le, ge, eq, neq, if_, replace, sqrt, pow, round, ceil, floor, not, and, or, xor, isnan, isinf, finite, complex, polar, real, imag, phase, conj, proj, exp, log, log10, cos, sin, tan, acos, asin, atan, cosh, sinh, tanh, acosh, asinh, atanh, datatype, info, quiet, debug, force, nthreads, config, help, version)
@@ -2922,58 +2922,114 @@ export {
       MrcalcVariousStringParameters,
       MrcalcXorParameters,
       mrcalc,
+      mrcalc_abs_cargs,
       mrcalc_abs_params,
+      mrcalc_acos_cargs,
       mrcalc_acos_params,
+      mrcalc_acosh_cargs,
       mrcalc_acosh_params,
+      mrcalc_add_cargs,
       mrcalc_add_params,
+      mrcalc_and_cargs,
       mrcalc_and_params,
+      mrcalc_asin_cargs,
       mrcalc_asin_params,
+      mrcalc_asinh_cargs,
       mrcalc_asinh_params,
+      mrcalc_atan_cargs,
       mrcalc_atan_params,
+      mrcalc_atanh_cargs,
       mrcalc_atanh_params,
+      mrcalc_cargs,
+      mrcalc_ceil_cargs,
       mrcalc_ceil_params,
+      mrcalc_complex_cargs,
       mrcalc_complex_params,
+      mrcalc_config_cargs,
       mrcalc_config_params,
+      mrcalc_conj_cargs,
       mrcalc_conj_params,
+      mrcalc_cos_cargs,
       mrcalc_cos_params,
+      mrcalc_cosh_cargs,
       mrcalc_cosh_params,
+      mrcalc_divide_cargs,
       mrcalc_divide_params,
+      mrcalc_eq_cargs,
       mrcalc_eq_params,
+      mrcalc_execute,
+      mrcalc_exp_cargs,
       mrcalc_exp_params,
+      mrcalc_finite_cargs,
       mrcalc_finite_params,
+      mrcalc_floor_cargs,
       mrcalc_floor_params,
+      mrcalc_ge_cargs,
       mrcalc_ge_params,
+      mrcalc_gt_cargs,
       mrcalc_gt_params,
+      mrcalc_if_cargs,
       mrcalc_if_params,
+      mrcalc_imag_cargs,
       mrcalc_imag_params,
+      mrcalc_isinf_cargs,
       mrcalc_isinf_params,
+      mrcalc_isnan_cargs,
       mrcalc_isnan_params,
+      mrcalc_le_cargs,
       mrcalc_le_params,
+      mrcalc_log10_cargs,
       mrcalc_log10_params,
+      mrcalc_log_cargs,
       mrcalc_log_params,
+      mrcalc_lt_cargs,
       mrcalc_lt_params,
+      mrcalc_max_cargs,
       mrcalc_max_params,
+      mrcalc_min_cargs,
       mrcalc_min_params,
+      mrcalc_multiply_cargs,
       mrcalc_multiply_params,
+      mrcalc_neg_cargs,
       mrcalc_neg_params,
+      mrcalc_neq_cargs,
       mrcalc_neq_params,
+      mrcalc_not_cargs,
       mrcalc_not_params,
+      mrcalc_or_cargs,
       mrcalc_or_params,
+      mrcalc_outputs,
       mrcalc_params,
+      mrcalc_phase_cargs,
       mrcalc_phase_params,
+      mrcalc_polar_cargs,
       mrcalc_polar_params,
+      mrcalc_pow_cargs,
       mrcalc_pow_params,
+      mrcalc_proj_cargs,
       mrcalc_proj_params,
+      mrcalc_real_cargs,
       mrcalc_real_params,
+      mrcalc_replace_cargs,
       mrcalc_replace_params,
+      mrcalc_round_cargs,
       mrcalc_round_params,
+      mrcalc_sin_cargs,
       mrcalc_sin_params,
+      mrcalc_sinh_cargs,
       mrcalc_sinh_params,
+      mrcalc_sqrt_cargs,
       mrcalc_sqrt_params,
+      mrcalc_subtract_cargs,
       mrcalc_subtract_params,
+      mrcalc_tan_cargs,
       mrcalc_tan_params,
+      mrcalc_tanh_cargs,
       mrcalc_tanh_params,
+      mrcalc_various_file_cargs,
       mrcalc_various_file_params,
+      mrcalc_various_string_cargs,
       mrcalc_various_string_params,
+      mrcalc_xor_cargs,
       mrcalc_xor_params,
 };

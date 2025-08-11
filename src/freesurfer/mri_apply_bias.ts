@@ -12,42 +12,42 @@ const MRI_APPLY_BIAS_METADATA: Metadata = {
 
 
 interface MriApplyBiasParameters {
-    "__STYXTYPE__": "mri_apply_bias";
+    "@type": "freesurfer.mri_apply_bias";
     "input_volume": InputPathType;
     "bias_volume": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_apply_bias": mri_apply_bias_cargs,
+        "freesurfer.mri_apply_bias": mri_apply_bias_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_apply_bias": mri_apply_bias_outputs,
+        "freesurfer.mri_apply_bias": mri_apply_bias_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriApplyBiasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume The input volume file
+ * @param bias_volume The bias volume file
+ * @param output_volume The output volume file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_apply_bias_params(
     input_volume: InputPathType,
     bias_volume: InputPathType,
     output_volume: string,
 ): MriApplyBiasParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume The input volume file
-     * @param bias_volume The bias volume file
-     * @param output_volume The output volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_apply_bias" as const,
+        "@type": "freesurfer.mri_apply_bias" as const,
         "input_volume": input_volume,
         "bias_volume": bias_volume,
         "output_volume": output_volume,
@@ -94,18 +94,18 @@ function mri_apply_bias_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_apply_bias_cargs(
     params: MriApplyBiasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_apply_bias");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -115,18 +115,18 @@ function mri_apply_bias_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_apply_bias_outputs(
     params: MriApplyBiasParameters,
     execution: Execution,
 ): MriApplyBiasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriApplyBiasOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_apply_bias_outputs(
 }
 
 
+/**
+ * A tool for applying a bias volume to an input volume to produce an output volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriApplyBiasOutputs`).
+ */
 function mri_apply_bias_execute(
     params: MriApplyBiasParameters,
     execution: Execution,
 ): MriApplyBiasOutputs {
-    /**
-     * A tool for applying a bias volume to an input volume to produce an output volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriApplyBiasOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_apply_bias_cargs(params, execution)
     const ret = mri_apply_bias_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_apply_bias_execute(
 }
 
 
+/**
+ * A tool for applying a bias volume to an input volume to produce an output volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume The input volume file
+ * @param bias_volume The bias volume file
+ * @param output_volume The output volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriApplyBiasOutputs`).
+ */
 function mri_apply_bias(
     input_volume: InputPathType,
     bias_volume: InputPathType,
     output_volume: string,
     runner: Runner | null = null,
 ): MriApplyBiasOutputs {
-    /**
-     * A tool for applying a bias volume to an input volume to produce an output volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume The input volume file
-     * @param bias_volume The bias volume file
-     * @param output_volume The output volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriApplyBiasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_APPLY_BIAS_METADATA);
     const params = mri_apply_bias_params(input_volume, bias_volume, output_volume)
@@ -191,5 +191,8 @@ export {
       MriApplyBiasOutputs,
       MriApplyBiasParameters,
       mri_apply_bias,
+      mri_apply_bias_cargs,
+      mri_apply_bias_execute,
+      mri_apply_bias_outputs,
       mri_apply_bias_params,
 };

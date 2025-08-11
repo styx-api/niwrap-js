@@ -12,38 +12,38 @@ const MPR2MNI305_METADATA: Metadata = {
 
 
 interface Mpr2mni305Parameters {
-    "__STYXTYPE__": "mpr2mni305";
+    "@type": "freesurfer.mpr2mni305";
     "mpr_anat": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mpr2mni305": mpr2mni305_cargs,
+        "freesurfer.mpr2mni305": mpr2mni305_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Mpr2mni305Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mpr_anat MPRAGE anatomical input file (e.g., 131)
+ *
+ * @returns Parameter dictionary
+ */
 function mpr2mni305_params(
     mpr_anat: string,
 ): Mpr2mni305Parameters {
-    /**
-     * Build parameters.
-    
-     * @param mpr_anat MPRAGE anatomical input file (e.g., 131)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mpr2mni305" as const,
+        "@type": "freesurfer.mpr2mni305" as const,
         "mpr_anat": mpr_anat,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mpr2mni305_cargs(
     params: Mpr2mni305Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mpr2mni305");
     cargs.push((params["mpr_anat"] ?? null));
@@ -100,18 +100,18 @@ function mpr2mni305_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mpr2mni305_outputs(
     params: Mpr2mni305Parameters,
     execution: Execution,
 ): Mpr2mni305Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Mpr2mni305Outputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function mpr2mni305_outputs(
 }
 
 
+/**
+ * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
+ */
 function mpr2mni305_execute(
     params: Mpr2mni305Parameters,
     execution: Execution,
 ): Mpr2mni305Outputs {
-    /**
-     * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
-     */
     params = execution.params(params)
     const cargs = mpr2mni305_cargs(params, execution)
     const ret = mpr2mni305_outputs(params, execution)
@@ -143,22 +143,22 @@ function mpr2mni305_execute(
 }
 
 
+/**
+ * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mpr_anat MPRAGE anatomical input file (e.g., 131)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
+ */
 function mpr2mni305(
     mpr_anat: string,
     runner: Runner | null = null,
 ): Mpr2mni305Outputs {
-    /**
-     * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mpr_anat MPRAGE anatomical input file (e.g., 131)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MPR2MNI305_METADATA);
     const params = mpr2mni305_params(mpr_anat)
@@ -171,5 +171,8 @@ export {
       Mpr2mni305Outputs,
       Mpr2mni305Parameters,
       mpr2mni305,
+      mpr2mni305_cargs,
+      mpr2mni305_execute,
+      mpr2mni305_outputs,
       mpr2mni305_params,
 };

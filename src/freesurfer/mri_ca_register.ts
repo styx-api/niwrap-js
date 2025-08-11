@@ -12,7 +12,7 @@ const MRI_CA_REGISTER_METADATA: Metadata = {
 
 
 interface MriCaRegisterParameters {
-    "__STYXTYPE__": "mri_ca_register";
+    "@type": "freesurfer.mri_ca_register";
     "input_volume": InputPathType;
     "template": InputPathType;
     "output_volume": string;
@@ -55,35 +55,35 @@ interface MriCaRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ca_register": mri_ca_register_cargs,
+        "freesurfer.mri_ca_register": mri_ca_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ca_register": mri_ca_register_outputs,
+        "freesurfer.mri_ca_register": mri_ca_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,51 @@ interface MriCaRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume
+ * @param template Template in GCA format
+ * @param output_volume Output volume in M3D format
+ * @param tolerance Defines convergence of registration
+ * @param mask Specifies volume to use as a mask
+ * @param transform_lta Transform in LTA format
+ * @param level Defines how many surrounding voxels will be used in interpolations, default is 6
+ * @param read_intensity Allows reading of multiple intensity normalization
+ * @param align Enable alignment
+ * @param invert_save_file Invert and save as GCAM file
+ * @param distance Distance for registration
+ * @param regularize Regularization parameter
+ * @param regularize_mean Mean regularization
+ * @param scale_smoothness Smoothness scaling factor
+ * @param nobright Disable brightness adjustment
+ * @param renormalize_map Renormalize using map
+ * @param renormalize Renormalize with intensity file
+ * @param read_lta Use LTA file for registration
+ * @param smoothness Smoothness parameter
+ * @param samples Sample points for registration
+ * @param nsmall Number of small features
+ * @param fixed Fixed mode for registration
+ * @param optimal Optimal registration settings
+ * @param noneg Disallow negative values
+ * @param wm White matter flag
+ * @param min_avgs Minimum number of averages
+ * @param transform_limit Transform limit
+ * @param relabel Relabel options
+ * @param relabel_avgs Relabel averages
+ * @param reset_avgs Reset averages
+ * @param vf_file VF file name
+ * @param diag_file Diagnostic file name
+ * @param tr TR parameter
+ * @param te TE parameter
+ * @param example Example file
+ * @param bigventricles Handle big ventricles
+ * @param uncompress Uncompress files
+ * @param second_pass_renorm Second pass renormalization
+ * @param threads Number of threads
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ca_register_params(
     input_volume: InputPathType,
     template: InputPathType,
@@ -147,53 +192,8 @@ function mri_ca_register_params(
     second_pass_renorm: boolean = false,
     threads: number | null = null,
 ): MriCaRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume
-     * @param template Template in GCA format
-     * @param output_volume Output volume in M3D format
-     * @param tolerance Defines convergence of registration
-     * @param mask Specifies volume to use as a mask
-     * @param transform_lta Transform in LTA format
-     * @param level Defines how many surrounding voxels will be used in interpolations, default is 6
-     * @param read_intensity Allows reading of multiple intensity normalization
-     * @param align Enable alignment
-     * @param invert_save_file Invert and save as GCAM file
-     * @param distance Distance for registration
-     * @param regularize Regularization parameter
-     * @param regularize_mean Mean regularization
-     * @param scale_smoothness Smoothness scaling factor
-     * @param nobright Disable brightness adjustment
-     * @param renormalize_map Renormalize using map
-     * @param renormalize Renormalize with intensity file
-     * @param read_lta Use LTA file for registration
-     * @param smoothness Smoothness parameter
-     * @param samples Sample points for registration
-     * @param nsmall Number of small features
-     * @param fixed Fixed mode for registration
-     * @param optimal Optimal registration settings
-     * @param noneg Disallow negative values
-     * @param wm White matter flag
-     * @param min_avgs Minimum number of averages
-     * @param transform_limit Transform limit
-     * @param relabel Relabel options
-     * @param relabel_avgs Relabel averages
-     * @param reset_avgs Reset averages
-     * @param vf_file VF file name
-     * @param diag_file Diagnostic file name
-     * @param tr TR parameter
-     * @param te TE parameter
-     * @param example Example file
-     * @param bigventricles Handle big ventricles
-     * @param uncompress Uncompress files
-     * @param second_pass_renorm Second pass renormalization
-     * @param threads Number of threads
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ca_register" as const,
+        "@type": "freesurfer.mri_ca_register" as const,
         "input_volume": input_volume,
         "template": template,
         "output_volume": output_volume,
@@ -286,18 +286,18 @@ function mri_ca_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ca_register_cargs(
     params: MriCaRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ca_register");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -487,18 +487,18 @@ function mri_ca_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ca_register_outputs(
     params: MriCaRegisterParameters,
     execution: Execution,
 ): MriCaRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCaRegisterOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null), ".m3d"].join('')),
@@ -507,22 +507,22 @@ function mri_ca_register_outputs(
 }
 
 
+/**
+ * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
+ */
 function mri_ca_register_execute(
     params: MriCaRegisterParameters,
     execution: Execution,
 ): MriCaRegisterOutputs {
-    /**
-     * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ca_register_cargs(params, execution)
     const ret = mri_ca_register_outputs(params, execution)
@@ -531,6 +531,56 @@ function mri_ca_register_execute(
 }
 
 
+/**
+ * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume
+ * @param template Template in GCA format
+ * @param output_volume Output volume in M3D format
+ * @param tolerance Defines convergence of registration
+ * @param mask Specifies volume to use as a mask
+ * @param transform_lta Transform in LTA format
+ * @param level Defines how many surrounding voxels will be used in interpolations, default is 6
+ * @param read_intensity Allows reading of multiple intensity normalization
+ * @param align Enable alignment
+ * @param invert_save_file Invert and save as GCAM file
+ * @param distance Distance for registration
+ * @param regularize Regularization parameter
+ * @param regularize_mean Mean regularization
+ * @param scale_smoothness Smoothness scaling factor
+ * @param nobright Disable brightness adjustment
+ * @param renormalize_map Renormalize using map
+ * @param renormalize Renormalize with intensity file
+ * @param read_lta Use LTA file for registration
+ * @param smoothness Smoothness parameter
+ * @param samples Sample points for registration
+ * @param nsmall Number of small features
+ * @param fixed Fixed mode for registration
+ * @param optimal Optimal registration settings
+ * @param noneg Disallow negative values
+ * @param wm White matter flag
+ * @param min_avgs Minimum number of averages
+ * @param transform_limit Transform limit
+ * @param relabel Relabel options
+ * @param relabel_avgs Relabel averages
+ * @param reset_avgs Reset averages
+ * @param vf_file VF file name
+ * @param diag_file Diagnostic file name
+ * @param tr TR parameter
+ * @param te TE parameter
+ * @param example Example file
+ * @param bigventricles Handle big ventricles
+ * @param uncompress Uncompress files
+ * @param second_pass_renorm Second pass renormalization
+ * @param threads Number of threads
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
+ */
 function mri_ca_register(
     input_volume: InputPathType,
     template: InputPathType,
@@ -573,56 +623,6 @@ function mri_ca_register(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriCaRegisterOutputs {
-    /**
-     * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume
-     * @param template Template in GCA format
-     * @param output_volume Output volume in M3D format
-     * @param tolerance Defines convergence of registration
-     * @param mask Specifies volume to use as a mask
-     * @param transform_lta Transform in LTA format
-     * @param level Defines how many surrounding voxels will be used in interpolations, default is 6
-     * @param read_intensity Allows reading of multiple intensity normalization
-     * @param align Enable alignment
-     * @param invert_save_file Invert and save as GCAM file
-     * @param distance Distance for registration
-     * @param regularize Regularization parameter
-     * @param regularize_mean Mean regularization
-     * @param scale_smoothness Smoothness scaling factor
-     * @param nobright Disable brightness adjustment
-     * @param renormalize_map Renormalize using map
-     * @param renormalize Renormalize with intensity file
-     * @param read_lta Use LTA file for registration
-     * @param smoothness Smoothness parameter
-     * @param samples Sample points for registration
-     * @param nsmall Number of small features
-     * @param fixed Fixed mode for registration
-     * @param optimal Optimal registration settings
-     * @param noneg Disallow negative values
-     * @param wm White matter flag
-     * @param min_avgs Minimum number of averages
-     * @param transform_limit Transform limit
-     * @param relabel Relabel options
-     * @param relabel_avgs Relabel averages
-     * @param reset_avgs Reset averages
-     * @param vf_file VF file name
-     * @param diag_file Diagnostic file name
-     * @param tr TR parameter
-     * @param te TE parameter
-     * @param example Example file
-     * @param bigventricles Handle big ventricles
-     * @param uncompress Uncompress files
-     * @param second_pass_renorm Second pass renormalization
-     * @param threads Number of threads
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CA_REGISTER_METADATA);
     const params = mri_ca_register_params(input_volume, template, output_volume, tolerance, mask, transform_lta, level, read_intensity, align, invert_save_file, distance, regularize, regularize_mean, scale_smoothness, nobright, renormalize_map, renormalize, read_lta, smoothness, samples, nsmall, fixed, optimal, noneg, wm, min_avgs, transform_limit, relabel, relabel_avgs, reset_avgs, vf_file, diag_file, tr, te, example, bigventricles, uncompress, second_pass_renorm, threads)
@@ -635,5 +635,8 @@ export {
       MriCaRegisterOutputs,
       MriCaRegisterParameters,
       mri_ca_register,
+      mri_ca_register_cargs,
+      mri_ca_register_execute,
+      mri_ca_register_outputs,
       mri_ca_register_params,
 };

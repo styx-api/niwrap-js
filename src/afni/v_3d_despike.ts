@@ -12,41 +12,41 @@ const V_3D_DESPIKE_METADATA: Metadata = {
 
 
 interface V3dDespikeParameters {
-    "__STYXTYPE__": "3dDespike";
+    "@type": "afni.3dDespike";
     "prefix"?: string | null | undefined;
     "in_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDespike": v_3d_despike_cargs,
+        "afni.3dDespike": v_3d_despike_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDespike": v_3d_despike_outputs,
+        "afni.3dDespike": v_3d_despike_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface V3dDespikeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3ddespike.
+ * @param prefix Prefix for output file.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_despike_params(
     in_file: InputPathType,
     prefix: string | null = null,
 ): V3dDespikeParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3ddespike.
-     * @param prefix Prefix for output file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDespike" as const,
+        "@type": "afni.3dDespike" as const,
         "in_file": in_file,
     };
     if (prefix !== null) {
@@ -92,18 +92,18 @@ function v_3d_despike_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_despike_cargs(
     params: V3dDespikeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDespike");
     if ((params["prefix"] ?? null) !== null) {
@@ -117,18 +117,18 @@ function v_3d_despike_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_despike_outputs(
     params: V3dDespikeParameters,
     execution: Execution,
 ): V3dDespikeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDespikeOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -137,22 +137,22 @@ function v_3d_despike_outputs(
 }
 
 
+/**
+ * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
+ */
 function v_3d_despike_execute(
     params: V3dDespikeParameters,
     execution: Execution,
 ): V3dDespikeOutputs {
-    /**
-     * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_despike_cargs(params, execution)
     const ret = v_3d_despike_outputs(params, execution)
@@ -161,24 +161,24 @@ function v_3d_despike_execute(
 }
 
 
+/**
+ * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3ddespike.
+ * @param prefix Prefix for output file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
+ */
 function v_3d_despike(
     in_file: InputPathType,
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dDespikeOutputs {
-    /**
-     * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3ddespike.
-     * @param prefix Prefix for output file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DESPIKE_METADATA);
     const params = v_3d_despike_params(in_file, prefix)
@@ -191,5 +191,8 @@ export {
       V3dDespikeParameters,
       V_3D_DESPIKE_METADATA,
       v_3d_despike,
+      v_3d_despike_cargs,
+      v_3d_despike_execute,
+      v_3d_despike_outputs,
       v_3d_despike_params,
 };

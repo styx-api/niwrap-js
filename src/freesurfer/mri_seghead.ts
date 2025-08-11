@@ -12,7 +12,7 @@ const MRI_SEGHEAD_METADATA: Metadata = {
 
 
 interface MriSegheadParameters {
-    "__STYXTYPE__": "mri_seghead";
+    "@type": "freesurfer.mri_seghead";
     "input_volume": string;
     "output_volume": string;
     "fill_value"?: number | null | undefined;
@@ -31,33 +31,33 @@ interface MriSegheadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_seghead": mri_seghead_cargs,
+        "freesurfer.mri_seghead": mri_seghead_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface MriSegheadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume identifier, e.g., T1.
+ * @param output_volume Output volume identifier.
+ * @param fill_value Fill value for binarizing the head (default 255).
+ * @param fhi_value FHI value used in type change operation (default 0.999).
+ * @param thresh1_value Threshold value for detecting the skin (e.g., 20).
+ * @param thresh2_value Threshold value for the final binarization (e.g., 20).
+ * @param threshold Single threshold value applied to both thresh1 and thresh2.
+ * @param nhitsmin_value Minimum number of consecutive hits needed to identify skin (default 2).
+ * @param hvoldat_file File to write the volume of the head in mm3 to an ASCII file.
+ * @param signal_behind_head Consider signals behind the head in the binarization process.
+ * @param rescale Rescale the input when converting to uchar.
+ * @param fill_holes_islands Fill holes and remove islands in the binary volume.
+ * @param seed_point Seed point specified by column, row, slice for filling operation.
+ * @param or_mask_file Mask file to include voxels in the binarization process.
+ * @param gdiag_option Optional diagnostic option for internal use.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_seghead_params(
     input_volume: string,
     output_volume: string,
@@ -94,29 +115,8 @@ function mri_seghead_params(
     or_mask_file: InputPathType | null = null,
     gdiag_option: string | null = null,
 ): MriSegheadParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume identifier, e.g., T1.
-     * @param output_volume Output volume identifier.
-     * @param fill_value Fill value for binarizing the head (default 255).
-     * @param fhi_value FHI value used in type change operation (default 0.999).
-     * @param thresh1_value Threshold value for detecting the skin (e.g., 20).
-     * @param thresh2_value Threshold value for the final binarization (e.g., 20).
-     * @param threshold Single threshold value applied to both thresh1 and thresh2.
-     * @param nhitsmin_value Minimum number of consecutive hits needed to identify skin (default 2).
-     * @param hvoldat_file File to write the volume of the head in mm3 to an ASCII file.
-     * @param signal_behind_head Consider signals behind the head in the binarization process.
-     * @param rescale Rescale the input when converting to uchar.
-     * @param fill_holes_islands Fill holes and remove islands in the binary volume.
-     * @param seed_point Seed point specified by column, row, slice for filling operation.
-     * @param or_mask_file Mask file to include voxels in the binarization process.
-     * @param gdiag_option Optional diagnostic option for internal use.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_seghead" as const,
+        "@type": "freesurfer.mri_seghead" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "signal_behind_head": signal_behind_head,
@@ -157,18 +157,18 @@ function mri_seghead_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_seghead_cargs(
     params: MriSegheadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_seghead");
     cargs.push(
@@ -252,18 +252,18 @@ function mri_seghead_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_seghead_outputs(
     params: MriSegheadParameters,
     execution: Execution,
 ): MriSegheadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegheadOutputs = {
         root: execution.outputFile("."),
     };
@@ -271,22 +271,22 @@ function mri_seghead_outputs(
 }
 
 
+/**
+ * Binarizes an input volume to identify the head's voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
+ */
 function mri_seghead_execute(
     params: MriSegheadParameters,
     execution: Execution,
 ): MriSegheadOutputs {
-    /**
-     * Binarizes an input volume to identify the head's voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_seghead_cargs(params, execution)
     const ret = mri_seghead_outputs(params, execution)
@@ -295,6 +295,32 @@ function mri_seghead_execute(
 }
 
 
+/**
+ * Binarizes an input volume to identify the head's voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume identifier, e.g., T1.
+ * @param output_volume Output volume identifier.
+ * @param fill_value Fill value for binarizing the head (default 255).
+ * @param fhi_value FHI value used in type change operation (default 0.999).
+ * @param thresh1_value Threshold value for detecting the skin (e.g., 20).
+ * @param thresh2_value Threshold value for the final binarization (e.g., 20).
+ * @param threshold Single threshold value applied to both thresh1 and thresh2.
+ * @param nhitsmin_value Minimum number of consecutive hits needed to identify skin (default 2).
+ * @param hvoldat_file File to write the volume of the head in mm3 to an ASCII file.
+ * @param signal_behind_head Consider signals behind the head in the binarization process.
+ * @param rescale Rescale the input when converting to uchar.
+ * @param fill_holes_islands Fill holes and remove islands in the binary volume.
+ * @param seed_point Seed point specified by column, row, slice for filling operation.
+ * @param or_mask_file Mask file to include voxels in the binarization process.
+ * @param gdiag_option Optional diagnostic option for internal use.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
+ */
 function mri_seghead(
     input_volume: string,
     output_volume: string,
@@ -313,32 +339,6 @@ function mri_seghead(
     gdiag_option: string | null = null,
     runner: Runner | null = null,
 ): MriSegheadOutputs {
-    /**
-     * Binarizes an input volume to identify the head's voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume identifier, e.g., T1.
-     * @param output_volume Output volume identifier.
-     * @param fill_value Fill value for binarizing the head (default 255).
-     * @param fhi_value FHI value used in type change operation (default 0.999).
-     * @param thresh1_value Threshold value for detecting the skin (e.g., 20).
-     * @param thresh2_value Threshold value for the final binarization (e.g., 20).
-     * @param threshold Single threshold value applied to both thresh1 and thresh2.
-     * @param nhitsmin_value Minimum number of consecutive hits needed to identify skin (default 2).
-     * @param hvoldat_file File to write the volume of the head in mm3 to an ASCII file.
-     * @param signal_behind_head Consider signals behind the head in the binarization process.
-     * @param rescale Rescale the input when converting to uchar.
-     * @param fill_holes_islands Fill holes and remove islands in the binary volume.
-     * @param seed_point Seed point specified by column, row, slice for filling operation.
-     * @param or_mask_file Mask file to include voxels in the binarization process.
-     * @param gdiag_option Optional diagnostic option for internal use.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGHEAD_METADATA);
     const params = mri_seghead_params(input_volume, output_volume, fill_value, fhi_value, thresh1_value, thresh2_value, threshold, nhitsmin_value, hvoldat_file, signal_behind_head, rescale, fill_holes_islands, seed_point, or_mask_file, gdiag_option)
@@ -351,5 +351,8 @@ export {
       MriSegheadOutputs,
       MriSegheadParameters,
       mri_seghead,
+      mri_seghead_cargs,
+      mri_seghead_execute,
+      mri_seghead_outputs,
       mri_seghead_params,
 };

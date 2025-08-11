@@ -12,40 +12,40 @@ const BORDER_EXPORT_COLOR_TABLE_METADATA: Metadata = {
 
 
 interface BorderExportColorTableParameters {
-    "__STYXTYPE__": "border-export-color-table";
+    "@type": "workbench.border-export-color-table";
     "border_file": InputPathType;
     "table_out": string;
     "opt_class_colors": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "border-export-color-table": border_export_color_table_cargs,
+        "workbench.border-export-color-table": border_export_color_table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface BorderExportColorTableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param border_file the input border file
+ * @param table_out output - the output text file
+ * @param opt_class_colors use class colors instead of the name colors
+ *
+ * @returns Parameter dictionary
+ */
 function border_export_color_table_params(
     border_file: InputPathType,
     table_out: string,
     opt_class_colors: boolean = false,
 ): BorderExportColorTableParameters {
-    /**
-     * Build parameters.
-    
-     * @param border_file the input border file
-     * @param table_out output - the output text file
-     * @param opt_class_colors use class colors instead of the name colors
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "border-export-color-table" as const,
+        "@type": "workbench.border-export-color-table" as const,
         "border_file": border_file,
         "table_out": table_out,
         "opt_class_colors": opt_class_colors,
@@ -89,18 +89,18 @@ function border_export_color_table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function border_export_color_table_cargs(
     params: BorderExportColorTableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-border-export-color-table");
@@ -113,18 +113,18 @@ function border_export_color_table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function border_export_color_table_outputs(
     params: BorderExportColorTableParameters,
     execution: Execution,
 ): BorderExportColorTableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BorderExportColorTableOutputs = {
         root: execution.outputFile("."),
     };
@@ -132,24 +132,24 @@ function border_export_color_table_outputs(
 }
 
 
+/**
+ * Write border names and colors as text.
+ *
+ * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
+ */
 function border_export_color_table_execute(
     params: BorderExportColorTableParameters,
     execution: Execution,
 ): BorderExportColorTableOutputs {
-    /**
-     * Write border names and colors as text.
-     * 
-     * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
-     */
     params = execution.params(params)
     const cargs = border_export_color_table_cargs(params, execution)
     const ret = border_export_color_table_outputs(params, execution)
@@ -158,28 +158,28 @@ function border_export_color_table_execute(
 }
 
 
+/**
+ * Write border names and colors as text.
+ *
+ * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param border_file the input border file
+ * @param table_out output - the output text file
+ * @param opt_class_colors use class colors instead of the name colors
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
+ */
 function border_export_color_table(
     border_file: InputPathType,
     table_out: string,
     opt_class_colors: boolean = false,
     runner: Runner | null = null,
 ): BorderExportColorTableOutputs {
-    /**
-     * Write border names and colors as text.
-     * 
-     * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param border_file the input border file
-     * @param table_out output - the output text file
-     * @param opt_class_colors use class colors instead of the name colors
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BORDER_EXPORT_COLOR_TABLE_METADATA);
     const params = border_export_color_table_params(border_file, table_out, opt_class_colors)
@@ -192,5 +192,8 @@ export {
       BorderExportColorTableOutputs,
       BorderExportColorTableParameters,
       border_export_color_table,
+      border_export_color_table_cargs,
+      border_export_color_table_execute,
+      border_export_color_table_outputs,
       border_export_color_table_params,
 };

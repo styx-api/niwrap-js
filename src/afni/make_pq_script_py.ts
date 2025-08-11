@@ -12,7 +12,7 @@ const MAKE_PQ_SCRIPT_PY_METADATA: Metadata = {
 
 
 interface MakePqScriptPyParameters {
-    "__STYXTYPE__": "make_pq_script.py";
+    "@type": "afni.make_pq_script.py";
     "dataset": InputPathType;
     "brick_index": number;
     "mask": InputPathType;
@@ -20,35 +20,35 @@ interface MakePqScriptPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_pq_script.py": make_pq_script_py_cargs,
+        "afni.make_pq_script.py": make_pq_script_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_pq_script.py": make_pq_script_py_outputs,
+        "afni.make_pq_script.py": make_pq_script_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MakePqScriptPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset (no sub-brick selectors)
+ * @param brick_index Volume sub-brick for specific t-stat
+ * @param mask Mask volume dataset
+ * @param out_script Name for output script to write
+ *
+ * @returns Parameter dictionary
+ */
 function make_pq_script_py_params(
     dataset: InputPathType,
     brick_index: number,
     mask: InputPathType,
     out_script: string,
 ): MakePqScriptPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset (no sub-brick selectors)
-     * @param brick_index Volume sub-brick for specific t-stat
-     * @param mask Mask volume dataset
-     * @param out_script Name for output script to write
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_pq_script.py" as const,
+        "@type": "afni.make_pq_script.py" as const,
         "dataset": dataset,
         "brick_index": brick_index,
         "mask": mask,
@@ -98,18 +98,18 @@ function make_pq_script_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_pq_script_py_cargs(
     params: MakePqScriptPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_pq_script.py");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -120,18 +120,18 @@ function make_pq_script_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_pq_script_py_outputs(
     params: MakePqScriptPyParameters,
     execution: Execution,
 ): MakePqScriptPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakePqScriptPyOutputs = {
         root: execution.outputFile("."),
         script: execution.outputFile([(params["out_script"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function make_pq_script_py_outputs(
 }
 
 
+/**
+ * Creates a script to compute p-value and q-value curves.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
+ */
 function make_pq_script_py_execute(
     params: MakePqScriptPyParameters,
     execution: Execution,
 ): MakePqScriptPyOutputs {
-    /**
-     * Creates a script to compute p-value and q-value curves.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_pq_script_py_cargs(params, execution)
     const ret = make_pq_script_py_outputs(params, execution)
@@ -164,6 +164,21 @@ function make_pq_script_py_execute(
 }
 
 
+/**
+ * Creates a script to compute p-value and q-value curves.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset (no sub-brick selectors)
+ * @param brick_index Volume sub-brick for specific t-stat
+ * @param mask Mask volume dataset
+ * @param out_script Name for output script to write
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
+ */
 function make_pq_script_py(
     dataset: InputPathType,
     brick_index: number,
@@ -171,21 +186,6 @@ function make_pq_script_py(
     out_script: string,
     runner: Runner | null = null,
 ): MakePqScriptPyOutputs {
-    /**
-     * Creates a script to compute p-value and q-value curves.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset (no sub-brick selectors)
-     * @param brick_index Volume sub-brick for specific t-stat
-     * @param mask Mask volume dataset
-     * @param out_script Name for output script to write
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_PQ_SCRIPT_PY_METADATA);
     const params = make_pq_script_py_params(dataset, brick_index, mask, out_script)
@@ -198,5 +198,8 @@ export {
       MakePqScriptPyOutputs,
       MakePqScriptPyParameters,
       make_pq_script_py,
+      make_pq_script_py_cargs,
+      make_pq_script_py_execute,
+      make_pq_script_py_outputs,
       make_pq_script_py_params,
 };

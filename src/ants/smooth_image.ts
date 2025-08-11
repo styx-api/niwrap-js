@@ -12,7 +12,7 @@ const SMOOTH_IMAGE_METADATA: Metadata = {
 
 
 interface SmoothImageParameters {
-    "__STYXTYPE__": "SmoothImage";
+    "@type": "ants.SmoothImage";
     "image_dimension": number;
     "image_ext": InputPathType;
     "smoothing_sigma": string;
@@ -22,35 +22,35 @@ interface SmoothImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SmoothImage": smooth_image_cargs,
+        "ants.SmoothImage": smooth_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SmoothImage": smooth_image_outputs,
+        "ants.SmoothImage": smooth_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface SmoothImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Specifies the dimensionality of the image.
+ * @param image_ext The input image file to be smoothed.
+ * @param smoothing_sigma The sigma value for smoothing. A separate sigma may be specified for each dimension, e.g., '1.5x1x2'.
+ * @param out_image_ext The output smoothed image file.
+ * @param sigma_units Determines if sigma is in spacing units (1) or not (0). Default is 0.
+ * @param median_filter Whether to use median filter. Default is 0. If using median filter, sigma represents the radius in voxels.
+ *
+ * @returns Parameter dictionary
+ */
 function smooth_image_params(
     image_dimension: number,
     image_ext: InputPathType,
@@ -81,20 +93,8 @@ function smooth_image_params(
     sigma_units: 0 | 1 | null = null,
     median_filter: 0 | 1 | null = null,
 ): SmoothImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Specifies the dimensionality of the image.
-     * @param image_ext The input image file to be smoothed.
-     * @param smoothing_sigma The sigma value for smoothing. A separate sigma may be specified for each dimension, e.g., '1.5x1x2'.
-     * @param out_image_ext The output smoothed image file.
-     * @param sigma_units Determines if sigma is in spacing units (1) or not (0). Default is 0.
-     * @param median_filter Whether to use median filter. Default is 0. If using median filter, sigma represents the radius in voxels.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SmoothImage" as const,
+        "@type": "ants.SmoothImage" as const,
         "image_dimension": image_dimension,
         "image_ext": image_ext,
         "smoothing_sigma": smoothing_sigma,
@@ -110,18 +110,18 @@ function smooth_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function smooth_image_cargs(
     params: SmoothImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SmoothImage");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -138,18 +138,18 @@ function smooth_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function smooth_image_outputs(
     params: SmoothImageParameters,
     execution: Execution,
 ): SmoothImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SmoothImageOutputs = {
         root: execution.outputFile("."),
         smoothed_image: execution.outputFile([(params["out_image_ext"] ?? null)].join('')),
@@ -158,22 +158,22 @@ function smooth_image_outputs(
 }
 
 
+/**
+ * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
+ */
 function smooth_image_execute(
     params: SmoothImageParameters,
     execution: Execution,
 ): SmoothImageOutputs {
-    /**
-     * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = smooth_image_cargs(params, execution)
     const ret = smooth_image_outputs(params, execution)
@@ -182,6 +182,23 @@ function smooth_image_execute(
 }
 
 
+/**
+ * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Specifies the dimensionality of the image.
+ * @param image_ext The input image file to be smoothed.
+ * @param smoothing_sigma The sigma value for smoothing. A separate sigma may be specified for each dimension, e.g., '1.5x1x2'.
+ * @param out_image_ext The output smoothed image file.
+ * @param sigma_units Determines if sigma is in spacing units (1) or not (0). Default is 0.
+ * @param median_filter Whether to use median filter. Default is 0. If using median filter, sigma represents the radius in voxels.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
+ */
 function smooth_image(
     image_dimension: number,
     image_ext: InputPathType,
@@ -191,23 +208,6 @@ function smooth_image(
     median_filter: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): SmoothImageOutputs {
-    /**
-     * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Specifies the dimensionality of the image.
-     * @param image_ext The input image file to be smoothed.
-     * @param smoothing_sigma The sigma value for smoothing. A separate sigma may be specified for each dimension, e.g., '1.5x1x2'.
-     * @param out_image_ext The output smoothed image file.
-     * @param sigma_units Determines if sigma is in spacing units (1) or not (0). Default is 0.
-     * @param median_filter Whether to use median filter. Default is 0. If using median filter, sigma represents the radius in voxels.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SMOOTH_IMAGE_METADATA);
     const params = smooth_image_params(image_dimension, image_ext, smoothing_sigma, out_image_ext, sigma_units, median_filter)
@@ -220,5 +220,8 @@ export {
       SmoothImageOutputs,
       SmoothImageParameters,
       smooth_image,
+      smooth_image_cargs,
+      smooth_image_execute,
+      smooth_image_outputs,
       smooth_image_params,
 };

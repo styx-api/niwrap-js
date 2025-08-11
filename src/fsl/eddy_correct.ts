@@ -12,7 +12,7 @@ const EDDY_CORRECT_METADATA: Metadata = {
 
 
 interface EddyCorrectParameters {
-    "__STYXTYPE__": "eddy_correct";
+    "@type": "fsl.eddy_correct";
     "4d_input": InputPathType;
     "4d_output": string;
     "reference_no": number;
@@ -20,35 +20,35 @@ interface EddyCorrectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "eddy_correct": eddy_correct_cargs,
+        "fsl.eddy_correct": eddy_correct_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "eddy_correct": eddy_correct_outputs,
+        "fsl.eddy_correct": eddy_correct_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface EddyCorrectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param v_4d_input Input 4D image file (e.g., dti.nii.gz)
+ * @param v_4d_output Output 4D image file (e.g., dti_corrected.nii.gz)
+ * @param reference_no Reference number
+ * @param interp_method Interpolation method to use: 'trilinear' or 'spline'
+ *
+ * @returns Parameter dictionary
+ */
 function eddy_correct_params(
     v_4d_input: InputPathType,
     v_4d_output: string,
     reference_no: number,
     interp_method: "trilinear" | "spline" | null = "trilinear",
 ): EddyCorrectParameters {
-    /**
-     * Build parameters.
-    
-     * @param v_4d_input Input 4D image file (e.g., dti.nii.gz)
-     * @param v_4d_output Output 4D image file (e.g., dti_corrected.nii.gz)
-     * @param reference_no Reference number
-     * @param interp_method Interpolation method to use: 'trilinear' or 'spline'
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "eddy_correct" as const,
+        "@type": "fsl.eddy_correct" as const,
         "4d_input": v_4d_input,
         "4d_output": v_4d_output,
         "reference_no": reference_no,
@@ -100,18 +100,18 @@ function eddy_correct_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function eddy_correct_cargs(
     params: EddyCorrectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("eddy_correct");
     cargs.push(execution.inputFile((params["4d_input"] ?? null)));
@@ -123,18 +123,18 @@ function eddy_correct_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function eddy_correct_outputs(
     params: EddyCorrectParameters,
     execution: Execution,
 ): EddyCorrectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EddyCorrectOutputs = {
         root: execution.outputFile("."),
         corrected_4d_output: execution.outputFile([(params["4d_output"] ?? null), ".nii.gz"].join('')),
@@ -143,22 +143,22 @@ function eddy_correct_outputs(
 }
 
 
+/**
+ * Eddy current correction tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
+ */
 function eddy_correct_execute(
     params: EddyCorrectParameters,
     execution: Execution,
 ): EddyCorrectOutputs {
-    /**
-     * Eddy current correction tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
-     */
     params = execution.params(params)
     const cargs = eddy_correct_cargs(params, execution)
     const ret = eddy_correct_outputs(params, execution)
@@ -167,6 +167,21 @@ function eddy_correct_execute(
 }
 
 
+/**
+ * Eddy current correction tool for FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param v_4d_input Input 4D image file (e.g., dti.nii.gz)
+ * @param v_4d_output Output 4D image file (e.g., dti_corrected.nii.gz)
+ * @param reference_no Reference number
+ * @param interp_method Interpolation method to use: 'trilinear' or 'spline'
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
+ */
 function eddy_correct(
     v_4d_input: InputPathType,
     v_4d_output: string,
@@ -174,21 +189,6 @@ function eddy_correct(
     interp_method: "trilinear" | "spline" | null = "trilinear",
     runner: Runner | null = null,
 ): EddyCorrectOutputs {
-    /**
-     * Eddy current correction tool for FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param v_4d_input Input 4D image file (e.g., dti.nii.gz)
-     * @param v_4d_output Output 4D image file (e.g., dti_corrected.nii.gz)
-     * @param reference_no Reference number
-     * @param interp_method Interpolation method to use: 'trilinear' or 'spline'
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EDDY_CORRECT_METADATA);
     const params = eddy_correct_params(v_4d_input, v_4d_output, reference_no, interp_method)
@@ -201,5 +201,8 @@ export {
       EddyCorrectOutputs,
       EddyCorrectParameters,
       eddy_correct,
+      eddy_correct_cargs,
+      eddy_correct_execute,
+      eddy_correct_outputs,
       eddy_correct_params,
 };

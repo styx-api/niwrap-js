@@ -12,7 +12,7 @@ const FSDCMDECOMPRESS_METADATA: Metadata = {
 
 
 interface FsdcmdecompressParameters {
-    "__STYXTYPE__": "fsdcmdecompress";
+    "@type": "freesurfer.fsdcmdecompress";
     "indcmfile": InputPathType;
     "outdcmfile": string;
     "dcmtk": boolean;
@@ -22,35 +22,35 @@ interface FsdcmdecompressParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsdcmdecompress": fsdcmdecompress_cargs,
+        "freesurfer.fsdcmdecompress": fsdcmdecompress_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsdcmdecompress": fsdcmdecompress_outputs,
+        "freesurfer.fsdcmdecompress": fsdcmdecompress_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface FsdcmdecompressOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param indcmfile Input DICOM file to decompress
+ * @param outdcmfile Output decompressed DICOM file
+ * @param dcmtk Use DCMTK for decompression (either dcmdrle.fs or dcmdjpeg.fs)
+ * @param jpeg DICOM is JPEG compressed (ignored without --dcmtk)
+ * @param rle DICOM is RLE compressed (ignored without --dcmtk)
+ * @param gdcm Use GDCM for decompression (default)
+ *
+ * @returns Parameter dictionary
+ */
 function fsdcmdecompress_params(
     indcmfile: InputPathType,
     outdcmfile: string,
@@ -81,20 +93,8 @@ function fsdcmdecompress_params(
     rle: boolean = false,
     gdcm: boolean = false,
 ): FsdcmdecompressParameters {
-    /**
-     * Build parameters.
-    
-     * @param indcmfile Input DICOM file to decompress
-     * @param outdcmfile Output decompressed DICOM file
-     * @param dcmtk Use DCMTK for decompression (either dcmdrle.fs or dcmdjpeg.fs)
-     * @param jpeg DICOM is JPEG compressed (ignored without --dcmtk)
-     * @param rle DICOM is RLE compressed (ignored without --dcmtk)
-     * @param gdcm Use GDCM for decompression (default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsdcmdecompress" as const,
+        "@type": "freesurfer.fsdcmdecompress" as const,
         "indcmfile": indcmfile,
         "outdcmfile": outdcmfile,
         "dcmtk": dcmtk,
@@ -106,18 +106,18 @@ function fsdcmdecompress_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsdcmdecompress_cargs(
     params: FsdcmdecompressParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsdcmdecompress");
     cargs.push(
@@ -144,18 +144,18 @@ function fsdcmdecompress_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsdcmdecompress_outputs(
     params: FsdcmdecompressParameters,
     execution: Execution,
 ): FsdcmdecompressOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsdcmdecompressOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([(params["outdcmfile"] ?? null)].join('')),
@@ -164,22 +164,22 @@ function fsdcmdecompress_outputs(
 }
 
 
+/**
+ * A tool for decompressing DICOM files using GDCM or DCMTK.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
+ */
 function fsdcmdecompress_execute(
     params: FsdcmdecompressParameters,
     execution: Execution,
 ): FsdcmdecompressOutputs {
-    /**
-     * A tool for decompressing DICOM files using GDCM or DCMTK.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsdcmdecompress_cargs(params, execution)
     const ret = fsdcmdecompress_outputs(params, execution)
@@ -188,6 +188,23 @@ function fsdcmdecompress_execute(
 }
 
 
+/**
+ * A tool for decompressing DICOM files using GDCM or DCMTK.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param indcmfile Input DICOM file to decompress
+ * @param outdcmfile Output decompressed DICOM file
+ * @param dcmtk Use DCMTK for decompression (either dcmdrle.fs or dcmdjpeg.fs)
+ * @param jpeg DICOM is JPEG compressed (ignored without --dcmtk)
+ * @param rle DICOM is RLE compressed (ignored without --dcmtk)
+ * @param gdcm Use GDCM for decompression (default)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
+ */
 function fsdcmdecompress(
     indcmfile: InputPathType,
     outdcmfile: string,
@@ -197,23 +214,6 @@ function fsdcmdecompress(
     gdcm: boolean = false,
     runner: Runner | null = null,
 ): FsdcmdecompressOutputs {
-    /**
-     * A tool for decompressing DICOM files using GDCM or DCMTK.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param indcmfile Input DICOM file to decompress
-     * @param outdcmfile Output decompressed DICOM file
-     * @param dcmtk Use DCMTK for decompression (either dcmdrle.fs or dcmdjpeg.fs)
-     * @param jpeg DICOM is JPEG compressed (ignored without --dcmtk)
-     * @param rle DICOM is RLE compressed (ignored without --dcmtk)
-     * @param gdcm Use GDCM for decompression (default)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSDCMDECOMPRESS_METADATA);
     const params = fsdcmdecompress_params(indcmfile, outdcmfile, dcmtk, jpeg, rle, gdcm)
@@ -226,5 +226,8 @@ export {
       FsdcmdecompressOutputs,
       FsdcmdecompressParameters,
       fsdcmdecompress,
+      fsdcmdecompress_cargs,
+      fsdcmdecompress_execute,
+      fsdcmdecompress_outputs,
       fsdcmdecompress_params,
 };

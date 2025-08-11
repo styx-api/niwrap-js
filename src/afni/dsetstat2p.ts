@@ -12,7 +12,7 @@ const DSETSTAT2P_METADATA: Metadata = {
 
 
 interface Dsetstat2pParameters {
-    "__STYXTYPE__": "dsetstat2p";
+    "@type": "afni.dsetstat2p";
     "dataset": string;
     "statval": number;
     "bisided": boolean;
@@ -22,35 +22,35 @@ interface Dsetstat2pParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dsetstat2p": dsetstat2p_cargs,
+        "afni.dsetstat2p": dsetstat2p_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dsetstat2p": dsetstat2p_outputs,
+        "afni.dsetstat2p": dsetstat2p_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface Dsetstat2pOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
+ * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
+ * @param bisided Choose one-sided or bi-sided/two-sided testing
+ * @param two_sided Choose one-sided or bi-sided/two-sided testing
+ * @param one_sided Choose one-sided or bi-sided/two-sided testing
+ * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
+ *
+ * @returns Parameter dictionary
+ */
 function dsetstat2p_params(
     dataset: string,
     statval: number,
@@ -81,20 +93,8 @@ function dsetstat2p_params(
     one_sided: boolean = false,
     quiet: boolean = false,
 ): Dsetstat2pParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
-     * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
-     * @param bisided Choose one-sided or bi-sided/two-sided testing
-     * @param two_sided Choose one-sided or bi-sided/two-sided testing
-     * @param one_sided Choose one-sided or bi-sided/two-sided testing
-     * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dsetstat2p" as const,
+        "@type": "afni.dsetstat2p" as const,
         "dataset": dataset,
         "statval": statval,
         "bisided": bisided,
@@ -106,18 +106,18 @@ function dsetstat2p_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dsetstat2p_cargs(
     params: Dsetstat2pParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dsetstat2p");
     cargs.push((params["dataset"] ?? null));
@@ -138,18 +138,18 @@ function dsetstat2p_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dsetstat2p_outputs(
     params: Dsetstat2pParameters,
     execution: Execution,
 ): Dsetstat2pOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Dsetstat2pOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["output.txt"].join('')),
@@ -158,22 +158,22 @@ function dsetstat2p_outputs(
 }
 
 
+/**
+ * Converts a statistic to a p-value with reference to a particular dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
+ */
 function dsetstat2p_execute(
     params: Dsetstat2pParameters,
     execution: Execution,
 ): Dsetstat2pOutputs {
-    /**
-     * Converts a statistic to a p-value with reference to a particular dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
-     */
     params = execution.params(params)
     const cargs = dsetstat2p_cargs(params, execution)
     const ret = dsetstat2p_outputs(params, execution)
@@ -182,6 +182,23 @@ function dsetstat2p_execute(
 }
 
 
+/**
+ * Converts a statistic to a p-value with reference to a particular dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
+ * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
+ * @param bisided Choose one-sided or bi-sided/two-sided testing
+ * @param two_sided Choose one-sided or bi-sided/two-sided testing
+ * @param one_sided Choose one-sided or bi-sided/two-sided testing
+ * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
+ */
 function dsetstat2p(
     dataset: string,
     statval: number,
@@ -191,23 +208,6 @@ function dsetstat2p(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): Dsetstat2pOutputs {
-    /**
-     * Converts a statistic to a p-value with reference to a particular dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Specify a dataset DDD and, if it has multiple sub-bricks, the [i]th subbrick with the statistic of interest MUST be selected explicitly; note the use of quotation marks around the brick selector (because of the square-brackets). Note that 'i' can be either a number of a string label selector.
-     * @param statval Input stat-value S, which MUST be in the interval [0, infinity).
-     * @param bisided Choose one-sided or bi-sided/two-sided testing
-     * @param two_sided Choose one-sided or bi-sided/two-sided testing
-     * @param one_sided Choose one-sided or bi-sided/two-sided testing
-     * @param quiet An optional flag so that output ONLY the final statistic value output to standard output; this can be then be viewed, redirected to a text file or saved as a shell variable. (Default: display supplementary text.)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DSETSTAT2P_METADATA);
     const params = dsetstat2p_params(dataset, statval, bisided, two_sided, one_sided, quiet)
@@ -220,5 +220,8 @@ export {
       Dsetstat2pOutputs,
       Dsetstat2pParameters,
       dsetstat2p,
+      dsetstat2p_cargs,
+      dsetstat2p_execute,
+      dsetstat2p_outputs,
       dsetstat2p_params,
 };

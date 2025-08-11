@@ -12,7 +12,7 @@ const MRI_APARC2ASEG_METADATA: Metadata = {
 
 
 interface MriAparc2asegParameters {
-    "__STYXTYPE__": "mri_aparc2aseg";
+    "@type": "freesurfer.mri_aparc2aseg";
     "subject"?: string | null | undefined;
     "output_volfile"?: string | null | undefined;
     "old_ribbon": boolean;
@@ -37,35 +37,35 @@ interface MriAparc2asegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_aparc2aseg": mri_aparc2aseg_cargs,
+        "freesurfer.mri_aparc2aseg": mri_aparc2aseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_aparc2aseg": mri_aparc2aseg_outputs,
+        "freesurfer.mri_aparc2aseg": mri_aparc2aseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface MriAparc2asegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Name of the subject as found in the SUBJECTS_DIR.
+ * @param output_volfile Full path of file to save the output segmentation in. Default is mri/aparc+aseg.mgz
+ * @param old_ribbon Use mri/hemi.ribbon.mgz as a mask for the cortex
+ * @param new_ribbon Mask cortical voxels with mri/ribbon.mgz. Same as --volmask
+ * @param a2005s Use ?h.aparc.a2005s.annot. Output will be aparc.a2005s+aseg.mgz.
+ * @param a2009s Use ?h.aparc.a2009s.annot. Output will be aparc.a2009s+aseg.mgz.
+ * @param annot_name Use annotname surface annotation. By default, uses ?h.aparc.annot.
+ * @param annot_table Annotation table file. Default is $FREESURFER_HOME/Simple_surface_labels2009.txt
+ * @param base_offset Add offset to all segmentation ids.
+ * @param label_wm Re-assign white matter voxel labels to the closest cortical point if within distance.
+ * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM (default 5mm)
+ * @param rip_unknown Do not label WM based on 'unknown' cortical label
+ * @param hypo_as_wm Label hypointensities as WM
+ * @param no_fix_parahip Do not remove unconnected regions from WM parahip
+ * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
+ * @param crs_test Test mapping of column, row, slice
+ * @param left_hemisphere Only process the left hemisphere
+ * @param right_hemisphere Only process the right hemisphere
+ * @param threads Run in parallel with the specified number of threads
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_aparc2aseg_params(
     subject: string | null = null,
     output_volfile: string | null = null,
@@ -111,35 +138,8 @@ function mri_aparc2aseg_params(
     help: boolean = false,
     version: boolean = false,
 ): MriAparc2asegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Name of the subject as found in the SUBJECTS_DIR.
-     * @param output_volfile Full path of file to save the output segmentation in. Default is mri/aparc+aseg.mgz
-     * @param old_ribbon Use mri/hemi.ribbon.mgz as a mask for the cortex
-     * @param new_ribbon Mask cortical voxels with mri/ribbon.mgz. Same as --volmask
-     * @param a2005s Use ?h.aparc.a2005s.annot. Output will be aparc.a2005s+aseg.mgz.
-     * @param a2009s Use ?h.aparc.a2009s.annot. Output will be aparc.a2009s+aseg.mgz.
-     * @param annot_name Use annotname surface annotation. By default, uses ?h.aparc.annot.
-     * @param annot_table Annotation table file. Default is $FREESURFER_HOME/Simple_surface_labels2009.txt
-     * @param base_offset Add offset to all segmentation ids.
-     * @param label_wm Re-assign white matter voxel labels to the closest cortical point if within distance.
-     * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM (default 5mm)
-     * @param rip_unknown Do not label WM based on 'unknown' cortical label
-     * @param hypo_as_wm Label hypointensities as WM
-     * @param no_fix_parahip Do not remove unconnected regions from WM parahip
-     * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
-     * @param crs_test Test mapping of column, row, slice
-     * @param left_hemisphere Only process the left hemisphere
-     * @param right_hemisphere Only process the right hemisphere
-     * @param threads Run in parallel with the specified number of threads
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_aparc2aseg" as const,
+        "@type": "freesurfer.mri_aparc2aseg" as const,
         "old_ribbon": old_ribbon,
         "new_ribbon": new_ribbon,
         "a2005s": a2005s,
@@ -184,18 +184,18 @@ function mri_aparc2aseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_aparc2aseg_cargs(
     params: MriAparc2asegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_aparc2aseg");
     if ((params["subject"] ?? null) !== null) {
@@ -292,18 +292,18 @@ function mri_aparc2aseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_aparc2aseg_outputs(
     params: MriAparc2asegParameters,
     execution: Execution,
 ): MriAparc2asegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAparc2asegOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile(["mri/aparc+aseg.mgz"].join('')),
@@ -312,22 +312,22 @@ function mri_aparc2aseg_outputs(
 }
 
 
+/**
+ * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
+ */
 function mri_aparc2aseg_execute(
     params: MriAparc2asegParameters,
     execution: Execution,
 ): MriAparc2asegOutputs {
-    /**
-     * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_aparc2aseg_cargs(params, execution)
     const ret = mri_aparc2aseg_outputs(params, execution)
@@ -336,6 +336,38 @@ function mri_aparc2aseg_execute(
 }
 
 
+/**
+ * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Name of the subject as found in the SUBJECTS_DIR.
+ * @param output_volfile Full path of file to save the output segmentation in. Default is mri/aparc+aseg.mgz
+ * @param old_ribbon Use mri/hemi.ribbon.mgz as a mask for the cortex
+ * @param new_ribbon Mask cortical voxels with mri/ribbon.mgz. Same as --volmask
+ * @param a2005s Use ?h.aparc.a2005s.annot. Output will be aparc.a2005s+aseg.mgz.
+ * @param a2009s Use ?h.aparc.a2009s.annot. Output will be aparc.a2009s+aseg.mgz.
+ * @param annot_name Use annotname surface annotation. By default, uses ?h.aparc.annot.
+ * @param annot_table Annotation table file. Default is $FREESURFER_HOME/Simple_surface_labels2009.txt
+ * @param base_offset Add offset to all segmentation ids.
+ * @param label_wm Re-assign white matter voxel labels to the closest cortical point if within distance.
+ * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM (default 5mm)
+ * @param rip_unknown Do not label WM based on 'unknown' cortical label
+ * @param hypo_as_wm Label hypointensities as WM
+ * @param no_fix_parahip Do not remove unconnected regions from WM parahip
+ * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
+ * @param crs_test Test mapping of column, row, slice
+ * @param left_hemisphere Only process the left hemisphere
+ * @param right_hemisphere Only process the right hemisphere
+ * @param threads Run in parallel with the specified number of threads
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
+ */
 function mri_aparc2aseg(
     subject: string | null = null,
     output_volfile: string | null = null,
@@ -360,38 +392,6 @@ function mri_aparc2aseg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAparc2asegOutputs {
-    /**
-     * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Name of the subject as found in the SUBJECTS_DIR.
-     * @param output_volfile Full path of file to save the output segmentation in. Default is mri/aparc+aseg.mgz
-     * @param old_ribbon Use mri/hemi.ribbon.mgz as a mask for the cortex
-     * @param new_ribbon Mask cortical voxels with mri/ribbon.mgz. Same as --volmask
-     * @param a2005s Use ?h.aparc.a2005s.annot. Output will be aparc.a2005s+aseg.mgz.
-     * @param a2009s Use ?h.aparc.a2009s.annot. Output will be aparc.a2009s+aseg.mgz.
-     * @param annot_name Use annotname surface annotation. By default, uses ?h.aparc.annot.
-     * @param annot_table Annotation table file. Default is $FREESURFER_HOME/Simple_surface_labels2009.txt
-     * @param base_offset Add offset to all segmentation ids.
-     * @param label_wm Re-assign white matter voxel labels to the closest cortical point if within distance.
-     * @param wmparc_dmax Max distance (mm) from cortex to be labeled as gyral WM (default 5mm)
-     * @param rip_unknown Do not label WM based on 'unknown' cortical label
-     * @param hypo_as_wm Label hypointensities as WM
-     * @param no_fix_parahip Do not remove unconnected regions from WM parahip
-     * @param smooth_normals Change number of surface normal smoothing steps (default is 10).
-     * @param crs_test Test mapping of column, row, slice
-     * @param left_hemisphere Only process the left hemisphere
-     * @param right_hemisphere Only process the right hemisphere
-     * @param threads Run in parallel with the specified number of threads
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_APARC2ASEG_METADATA);
     const params = mri_aparc2aseg_params(subject, output_volfile, old_ribbon, new_ribbon, a2005s, a2009s, annot_name, annot_table, base_offset, label_wm, wmparc_dmax, rip_unknown, hypo_as_wm, no_fix_parahip, smooth_normals, crs_test, left_hemisphere, right_hemisphere, threads, help, version)
@@ -404,5 +404,8 @@ export {
       MriAparc2asegOutputs,
       MriAparc2asegParameters,
       mri_aparc2aseg,
+      mri_aparc2aseg_cargs,
+      mri_aparc2aseg_execute,
+      mri_aparc2aseg_outputs,
       mri_aparc2aseg_params,
 };

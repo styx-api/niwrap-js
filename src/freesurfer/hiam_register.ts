@@ -12,42 +12,42 @@ const HIAM_REGISTER_METADATA: Metadata = {
 
 
 interface HiamRegisterParameters {
-    "__STYXTYPE__": "hiam_register";
+    "@type": "freesurfer.hiam_register";
     "input_surface": InputPathType;
     "average_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "hiam_register": hiam_register_cargs,
+        "freesurfer.hiam_register": hiam_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "hiam_register": hiam_register_outputs,
+        "freesurfer.hiam_register": hiam_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface HiamRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface The input surface to be registered.
+ * @param average_surface The average surface to register against.
+ * @param output_surface The path where the output registered surface will be saved.
+ *
+ * @returns Parameter dictionary
+ */
 function hiam_register_params(
     input_surface: InputPathType,
     average_surface: InputPathType,
     output_surface: string,
 ): HiamRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface The input surface to be registered.
-     * @param average_surface The average surface to register against.
-     * @param output_surface The path where the output registered surface will be saved.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "hiam_register" as const,
+        "@type": "freesurfer.hiam_register" as const,
         "input_surface": input_surface,
         "average_surface": average_surface,
         "output_surface": output_surface,
@@ -94,18 +94,18 @@ function hiam_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function hiam_register_cargs(
     params: HiamRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("hiam_register");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -115,18 +115,18 @@ function hiam_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function hiam_register_outputs(
     params: HiamRegisterParameters,
     execution: Execution,
 ): HiamRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: HiamRegisterOutputs = {
         root: execution.outputFile("."),
         registered_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function hiam_register_outputs(
 }
 
 
+/**
+ * This program registers a surface with an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
+ */
 function hiam_register_execute(
     params: HiamRegisterParameters,
     execution: Execution,
 ): HiamRegisterOutputs {
-    /**
-     * This program registers a surface with an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = hiam_register_cargs(params, execution)
     const ret = hiam_register_outputs(params, execution)
@@ -159,26 +159,26 @@ function hiam_register_execute(
 }
 
 
+/**
+ * This program registers a surface with an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface The input surface to be registered.
+ * @param average_surface The average surface to register against.
+ * @param output_surface The path where the output registered surface will be saved.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
+ */
 function hiam_register(
     input_surface: InputPathType,
     average_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): HiamRegisterOutputs {
-    /**
-     * This program registers a surface with an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface The input surface to be registered.
-     * @param average_surface The average surface to register against.
-     * @param output_surface The path where the output registered surface will be saved.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(HIAM_REGISTER_METADATA);
     const params = hiam_register_params(input_surface, average_surface, output_surface)
@@ -191,5 +191,8 @@ export {
       HiamRegisterOutputs,
       HiamRegisterParameters,
       hiam_register,
+      hiam_register_cargs,
+      hiam_register_execute,
+      hiam_register_outputs,
       hiam_register_params,
 };

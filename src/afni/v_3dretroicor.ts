@@ -12,7 +12,7 @@ const V_3DRETROICOR_METADATA: Metadata = {
 
 
 interface V3dretroicorParameters {
-    "__STYXTYPE__": "3dretroicor";
+    "@type": "afni.3dretroicor";
     "ignore"?: number | null | undefined;
     "prefix"?: string | null | undefined;
     "card"?: InputPathType | null | undefined;
@@ -25,35 +25,35 @@ interface V3dretroicorParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dretroicor": v_3dretroicor_cargs,
+        "afni.3dretroicor": v_3dretroicor_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dretroicor": v_3dretroicor_outputs,
+        "afni.3dretroicor": v_3dretroicor_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,21 @@ interface V3dretroicorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset 3D+time dataset to process.
+ * @param ignore The number of initial timepoints to ignore in the input. These points will be passed through uncorrected.
+ * @param prefix Prefix for new, corrected dataset.
+ * @param card 1D cardiac data file for cardiac correction.
+ * @param cardphase Filename for 1D cardiac phase output.
+ * @param threshold Threshold for detection of R-wave peaks in input. Make sure it's above the background noise level; try 3/4 or 4/5 times range plus minimum.
+ * @param resp 1D respiratory waveform data for correction.
+ * @param respphase Filename for 1D respiratory phase output.
+ * @param order The order of the correction. Higher-order terms yield little improvement according to Glover et al.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dretroicor_params(
     dataset: InputPathType,
     ignore: number | null = null,
@@ -95,23 +110,8 @@ function v_3dretroicor_params(
     respphase: string | null = null,
     order: number | null = null,
 ): V3dretroicorParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset 3D+time dataset to process.
-     * @param ignore The number of initial timepoints to ignore in the input. These points will be passed through uncorrected.
-     * @param prefix Prefix for new, corrected dataset.
-     * @param card 1D cardiac data file for cardiac correction.
-     * @param cardphase Filename for 1D cardiac phase output.
-     * @param threshold Threshold for detection of R-wave peaks in input. Make sure it's above the background noise level; try 3/4 or 4/5 times range plus minimum.
-     * @param resp 1D respiratory waveform data for correction.
-     * @param respphase Filename for 1D respiratory phase output.
-     * @param order The order of the correction. Higher-order terms yield little improvement according to Glover et al.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dretroicor" as const,
+        "@type": "afni.3dretroicor" as const,
         "dataset": dataset,
     };
     if (ignore !== null) {
@@ -142,18 +142,18 @@ function v_3dretroicor_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dretroicor_cargs(
     params: V3dretroicorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dretroicor");
     if ((params["ignore"] ?? null) !== null) {
@@ -209,18 +209,18 @@ function v_3dretroicor_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dretroicor_outputs(
     params: V3dretroicorParameters,
     execution: Execution,
 ): V3dretroicorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dretroicorOutputs = {
         root: execution.outputFile("."),
         corrected_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -231,22 +231,22 @@ function v_3dretroicor_outputs(
 }
 
 
+/**
+ * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
+ */
 function v_3dretroicor_execute(
     params: V3dretroicorParameters,
     execution: Execution,
 ): V3dretroicorOutputs {
-    /**
-     * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dretroicor_cargs(params, execution)
     const ret = v_3dretroicor_outputs(params, execution)
@@ -255,6 +255,26 @@ function v_3dretroicor_execute(
 }
 
 
+/**
+ * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset 3D+time dataset to process.
+ * @param ignore The number of initial timepoints to ignore in the input. These points will be passed through uncorrected.
+ * @param prefix Prefix for new, corrected dataset.
+ * @param card 1D cardiac data file for cardiac correction.
+ * @param cardphase Filename for 1D cardiac phase output.
+ * @param threshold Threshold for detection of R-wave peaks in input. Make sure it's above the background noise level; try 3/4 or 4/5 times range plus minimum.
+ * @param resp 1D respiratory waveform data for correction.
+ * @param respphase Filename for 1D respiratory phase output.
+ * @param order The order of the correction. Higher-order terms yield little improvement according to Glover et al.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
+ */
 function v_3dretroicor(
     dataset: InputPathType,
     ignore: number | null = null,
@@ -267,26 +287,6 @@ function v_3dretroicor(
     order: number | null = null,
     runner: Runner | null = null,
 ): V3dretroicorOutputs {
-    /**
-     * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset 3D+time dataset to process.
-     * @param ignore The number of initial timepoints to ignore in the input. These points will be passed through uncorrected.
-     * @param prefix Prefix for new, corrected dataset.
-     * @param card 1D cardiac data file for cardiac correction.
-     * @param cardphase Filename for 1D cardiac phase output.
-     * @param threshold Threshold for detection of R-wave peaks in input. Make sure it's above the background noise level; try 3/4 or 4/5 times range plus minimum.
-     * @param resp 1D respiratory waveform data for correction.
-     * @param respphase Filename for 1D respiratory phase output.
-     * @param order The order of the correction. Higher-order terms yield little improvement according to Glover et al.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DRETROICOR_METADATA);
     const params = v_3dretroicor_params(dataset, ignore, prefix, card, cardphase, threshold, resp, respphase, order)
@@ -299,5 +299,8 @@ export {
       V3dretroicorParameters,
       V_3DRETROICOR_METADATA,
       v_3dretroicor,
+      v_3dretroicor_cargs,
+      v_3dretroicor_execute,
+      v_3dretroicor_outputs,
       v_3dretroicor_params,
 };

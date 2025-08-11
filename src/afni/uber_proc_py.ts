@@ -12,38 +12,38 @@ const UBER_PROC_PY_METADATA: Metadata = {
 
 
 interface UberProcPyParameters {
-    "__STYXTYPE__": "uber_proc.py";
+    "@type": "afni.uber_proc.py";
     "results_dir"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "uber_proc.py": uber_proc_py_cargs,
+        "afni.uber_proc.py": uber_proc_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface UberProcPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param results_dir Directory where results will be placed. Default is a new 'uber_results' directory in the current working directory.
+ *
+ * @returns Parameter dictionary
+ */
 function uber_proc_py_params(
     results_dir: string | null = null,
 ): UberProcPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param results_dir Directory where results will be placed. Default is a new 'uber_results' directory in the current working directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "uber_proc.py" as const,
+        "@type": "afni.uber_proc.py" as const,
     };
     if (results_dir !== null) {
         params["results_dir"] = results_dir;
@@ -83,18 +83,18 @@ function uber_proc_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function uber_proc_py_cargs(
     params: UberProcPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("uber_proc.py");
     if ((params["results_dir"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function uber_proc_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function uber_proc_py_outputs(
     params: UberProcPyParameters,
     execution: Execution,
 ): UberProcPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UberProcPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function uber_proc_py_outputs(
 }
 
 
+/**
+ * Uber processing tool - work in progress.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
+ */
 function uber_proc_py_execute(
     params: UberProcPyParameters,
     execution: Execution,
 ): UberProcPyOutputs {
-    /**
-     * Uber processing tool - work in progress.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = uber_proc_py_cargs(params, execution)
     const ret = uber_proc_py_outputs(params, execution)
@@ -147,22 +147,22 @@ function uber_proc_py_execute(
 }
 
 
+/**
+ * Uber processing tool - work in progress.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param results_dir Directory where results will be placed. Default is a new 'uber_results' directory in the current working directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
+ */
 function uber_proc_py(
     results_dir: string | null = null,
     runner: Runner | null = null,
 ): UberProcPyOutputs {
-    /**
-     * Uber processing tool - work in progress.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param results_dir Directory where results will be placed. Default is a new 'uber_results' directory in the current working directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UBER_PROC_PY_METADATA);
     const params = uber_proc_py_params(results_dir)
@@ -175,5 +175,8 @@ export {
       UberProcPyOutputs,
       UberProcPyParameters,
       uber_proc_py,
+      uber_proc_py_cargs,
+      uber_proc_py_execute,
+      uber_proc_py_outputs,
       uber_proc_py_params,
 };

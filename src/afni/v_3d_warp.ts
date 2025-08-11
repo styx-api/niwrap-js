@@ -12,7 +12,7 @@ const V_3D_WARP_METADATA: Metadata = {
 
 
 interface V3dWarpParameters {
-    "__STYXTYPE__": "3dWarp";
+    "@type": "afni.3dWarp";
     "matvec_in2out"?: InputPathType | null | undefined;
     "matvec_out2in"?: InputPathType | null | undefined;
     "tta2mni": boolean;
@@ -38,33 +38,33 @@ interface V3dWarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dWarp": v_3d_warp_cargs,
+        "afni.3dWarp": v_3d_warp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -84,6 +84,34 @@ interface V3dWarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset to be warped
+ * @param matvec_in2out Read a 3x4 affine transform matrix+vector from file
+ * @param matvec_out2in Read a 3x4 affine transform matrix+vector from file
+ * @param tta2mni Transform a dataset in Talairach-Tournoux Atlas coordinates to MNI-152 coordinates
+ * @param mni2tta Transform a dataset in MNI-152 coordinates to Talairach-Tournoux Atlas coordinates
+ * @param matparent Read in the matrix from WARPDRIVE_MATVEC_* attributes in the header of dataset
+ * @param card2oblique Make cardinal dataset oblique to match oblique dataset
+ * @param oblique_parent Make cardinal dataset oblique to match oblique dataset
+ * @param deoblique Transform an oblique dataset to a cardinal dataset
+ * @param oblique2card Transform an oblique dataset to a cardinal dataset
+ * @param disp_obl_xform_only Display the obliquity transform matrix
+ * @param linear Use linear interpolation
+ * @param cubic Use cubic interpolation
+ * @param nn Use nearest neighbor interpolation
+ * @param quintic Use quintic interpolation
+ * @param wsinc5 Use wsinc5 interpolation
+ * @param fsl_matvec Indicates that the matrix file uses FSL ordered coordinates ('LPI')
+ * @param newgrid Compute new dataset on a new 3D grid, with specified spacing
+ * @param gridset Compute new dataset on the same grid as another dataset
+ * @param zpad Pad input dataset with specified planes of zeros on all sides before transformation
+ * @param verb Print out some information along the way
+ * @param prefix Set the prefix of the output dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_warp_params(
     dataset: string,
     matvec_in2out: InputPathType | null = null,
@@ -108,36 +136,8 @@ function v_3d_warp_params(
     verb: boolean = false,
     prefix: string | null = null,
 ): V3dWarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset to be warped
-     * @param matvec_in2out Read a 3x4 affine transform matrix+vector from file
-     * @param matvec_out2in Read a 3x4 affine transform matrix+vector from file
-     * @param tta2mni Transform a dataset in Talairach-Tournoux Atlas coordinates to MNI-152 coordinates
-     * @param mni2tta Transform a dataset in MNI-152 coordinates to Talairach-Tournoux Atlas coordinates
-     * @param matparent Read in the matrix from WARPDRIVE_MATVEC_* attributes in the header of dataset
-     * @param card2oblique Make cardinal dataset oblique to match oblique dataset
-     * @param oblique_parent Make cardinal dataset oblique to match oblique dataset
-     * @param deoblique Transform an oblique dataset to a cardinal dataset
-     * @param oblique2card Transform an oblique dataset to a cardinal dataset
-     * @param disp_obl_xform_only Display the obliquity transform matrix
-     * @param linear Use linear interpolation
-     * @param cubic Use cubic interpolation
-     * @param nn Use nearest neighbor interpolation
-     * @param quintic Use quintic interpolation
-     * @param wsinc5 Use wsinc5 interpolation
-     * @param fsl_matvec Indicates that the matrix file uses FSL ordered coordinates ('LPI')
-     * @param newgrid Compute new dataset on a new 3D grid, with specified spacing
-     * @param gridset Compute new dataset on the same grid as another dataset
-     * @param zpad Pad input dataset with specified planes of zeros on all sides before transformation
-     * @param verb Print out some information along the way
-     * @param prefix Set the prefix of the output dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dWarp" as const,
+        "@type": "afni.3dWarp" as const,
         "tta2mni": tta2mni,
         "mni2tta": mni2tta,
         "deoblique": deoblique,
@@ -183,18 +183,18 @@ function v_3d_warp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_warp_cargs(
     params: V3dWarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dWarp");
     if ((params["matvec_in2out"] ?? null) !== null) {
@@ -292,18 +292,18 @@ function v_3d_warp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_warp_outputs(
     params: V3dWarpParameters,
     execution: Execution,
 ): V3dWarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dWarpOutputs = {
         root: execution.outputFile("."),
     };
@@ -311,22 +311,22 @@ function v_3d_warp_outputs(
 }
 
 
+/**
+ * Warp (spatially transform) one 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
+ */
 function v_3d_warp_execute(
     params: V3dWarpParameters,
     execution: Execution,
 ): V3dWarpOutputs {
-    /**
-     * Warp (spatially transform) one 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_warp_cargs(params, execution)
     const ret = v_3d_warp_outputs(params, execution)
@@ -335,6 +335,39 @@ function v_3d_warp_execute(
 }
 
 
+/**
+ * Warp (spatially transform) one 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset to be warped
+ * @param matvec_in2out Read a 3x4 affine transform matrix+vector from file
+ * @param matvec_out2in Read a 3x4 affine transform matrix+vector from file
+ * @param tta2mni Transform a dataset in Talairach-Tournoux Atlas coordinates to MNI-152 coordinates
+ * @param mni2tta Transform a dataset in MNI-152 coordinates to Talairach-Tournoux Atlas coordinates
+ * @param matparent Read in the matrix from WARPDRIVE_MATVEC_* attributes in the header of dataset
+ * @param card2oblique Make cardinal dataset oblique to match oblique dataset
+ * @param oblique_parent Make cardinal dataset oblique to match oblique dataset
+ * @param deoblique Transform an oblique dataset to a cardinal dataset
+ * @param oblique2card Transform an oblique dataset to a cardinal dataset
+ * @param disp_obl_xform_only Display the obliquity transform matrix
+ * @param linear Use linear interpolation
+ * @param cubic Use cubic interpolation
+ * @param nn Use nearest neighbor interpolation
+ * @param quintic Use quintic interpolation
+ * @param wsinc5 Use wsinc5 interpolation
+ * @param fsl_matvec Indicates that the matrix file uses FSL ordered coordinates ('LPI')
+ * @param newgrid Compute new dataset on a new 3D grid, with specified spacing
+ * @param gridset Compute new dataset on the same grid as another dataset
+ * @param zpad Pad input dataset with specified planes of zeros on all sides before transformation
+ * @param verb Print out some information along the way
+ * @param prefix Set the prefix of the output dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
+ */
 function v_3d_warp(
     dataset: string,
     matvec_in2out: InputPathType | null = null,
@@ -360,39 +393,6 @@ function v_3d_warp(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dWarpOutputs {
-    /**
-     * Warp (spatially transform) one 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset to be warped
-     * @param matvec_in2out Read a 3x4 affine transform matrix+vector from file
-     * @param matvec_out2in Read a 3x4 affine transform matrix+vector from file
-     * @param tta2mni Transform a dataset in Talairach-Tournoux Atlas coordinates to MNI-152 coordinates
-     * @param mni2tta Transform a dataset in MNI-152 coordinates to Talairach-Tournoux Atlas coordinates
-     * @param matparent Read in the matrix from WARPDRIVE_MATVEC_* attributes in the header of dataset
-     * @param card2oblique Make cardinal dataset oblique to match oblique dataset
-     * @param oblique_parent Make cardinal dataset oblique to match oblique dataset
-     * @param deoblique Transform an oblique dataset to a cardinal dataset
-     * @param oblique2card Transform an oblique dataset to a cardinal dataset
-     * @param disp_obl_xform_only Display the obliquity transform matrix
-     * @param linear Use linear interpolation
-     * @param cubic Use cubic interpolation
-     * @param nn Use nearest neighbor interpolation
-     * @param quintic Use quintic interpolation
-     * @param wsinc5 Use wsinc5 interpolation
-     * @param fsl_matvec Indicates that the matrix file uses FSL ordered coordinates ('LPI')
-     * @param newgrid Compute new dataset on a new 3D grid, with specified spacing
-     * @param gridset Compute new dataset on the same grid as another dataset
-     * @param zpad Pad input dataset with specified planes of zeros on all sides before transformation
-     * @param verb Print out some information along the way
-     * @param prefix Set the prefix of the output dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_WARP_METADATA);
     const params = v_3d_warp_params(dataset, matvec_in2out, matvec_out2in, tta2mni, mni2tta, matparent, card2oblique, oblique_parent, deoblique, oblique2card, disp_obl_xform_only, linear, cubic, nn, quintic, wsinc5, fsl_matvec, newgrid, gridset, zpad, verb, prefix)
@@ -405,5 +405,8 @@ export {
       V3dWarpParameters,
       V_3D_WARP_METADATA,
       v_3d_warp,
+      v_3d_warp_cargs,
+      v_3d_warp_execute,
+      v_3d_warp_outputs,
       v_3d_warp_params,
 };

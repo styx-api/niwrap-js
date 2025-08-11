@@ -12,7 +12,7 @@ const FAT_MAT_TABLEIZE_METADATA: Metadata = {
 
 
 interface FatMatTableizeParameters {
-    "__STYXTYPE__": "fat_mat_tableize";
+    "@type": "afni.fat_mat_tableize";
     "input_matrices": Array<string>;
     "input_csv"?: InputPathType | null | undefined;
     "input_list"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface FatMatTableizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mat_tableize": fat_mat_tableize_cargs,
+        "afni.fat_mat_tableize": fat_mat_tableize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mat_tableize": fat_mat_tableize_outputs,
+        "afni.fat_mat_tableize": fat_mat_tableize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface FatMatTableizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_matrices Names of *.netcc or *.grid files with matrices to be used to make table; can be provided using wildcard chars.
+ * @param output_prefix Output basename for the table and log files. Suffix and file extensions will be added for the outputs.
+ * @param input_csv Name of a CSV file to include in the table. The first column must have subject ID labels that match with the input matrix files.
+ * @param input_list File containing paths to subject matrices and optionally CSV IDs for matching.
+ * @param parameters List of matrices to be included in the table, identified by their parameter name.
+ * @param version Display current version.
+ * @param date Display release/editing date of current version.
+ * @param help Display help in terminal.
+ * @param help_short Display help in terminal (short flag).
+ * @param help_view Display help in a separate text editor.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mat_tableize_params(
     input_matrices: Array<string>,
     output_prefix: string,
@@ -93,24 +109,8 @@ function fat_mat_tableize_params(
     help_short: boolean = false,
     help_view: boolean = false,
 ): FatMatTableizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_matrices Names of *.netcc or *.grid files with matrices to be used to make table; can be provided using wildcard chars.
-     * @param output_prefix Output basename for the table and log files. Suffix and file extensions will be added for the outputs.
-     * @param input_csv Name of a CSV file to include in the table. The first column must have subject ID labels that match with the input matrix files.
-     * @param input_list File containing paths to subject matrices and optionally CSV IDs for matching.
-     * @param parameters List of matrices to be included in the table, identified by their parameter name.
-     * @param version Display current version.
-     * @param date Display release/editing date of current version.
-     * @param help Display help in terminal.
-     * @param help_short Display help in terminal (short flag).
-     * @param help_view Display help in a separate text editor.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mat_tableize" as const,
+        "@type": "afni.fat_mat_tableize" as const,
         "input_matrices": input_matrices,
         "output_prefix": output_prefix,
         "version": version,
@@ -132,18 +132,18 @@ function fat_mat_tableize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mat_tableize_cargs(
     params: FatMatTableizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mat_tableize.py");
     cargs.push(
@@ -191,18 +191,18 @@ function fat_mat_tableize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mat_tableize_outputs(
     params: FatMatTableizeParameters,
     execution: Execution,
 ): FatMatTableizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMatTableizeOutputs = {
         root: execution.outputFile("."),
         output_table: execution.outputFile([(params["output_prefix"] ?? null), "_tbl.txt"].join('')),
@@ -212,22 +212,22 @@ function fat_mat_tableize_outputs(
 }
 
 
+/**
+ * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMatTableizeOutputs`).
+ */
 function fat_mat_tableize_execute(
     params: FatMatTableizeParameters,
     execution: Execution,
 ): FatMatTableizeOutputs {
-    /**
-     * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMatTableizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mat_tableize_cargs(params, execution)
     const ret = fat_mat_tableize_outputs(params, execution)
@@ -236,6 +236,27 @@ function fat_mat_tableize_execute(
 }
 
 
+/**
+ * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_matrices Names of *.netcc or *.grid files with matrices to be used to make table; can be provided using wildcard chars.
+ * @param output_prefix Output basename for the table and log files. Suffix and file extensions will be added for the outputs.
+ * @param input_csv Name of a CSV file to include in the table. The first column must have subject ID labels that match with the input matrix files.
+ * @param input_list File containing paths to subject matrices and optionally CSV IDs for matching.
+ * @param parameters List of matrices to be included in the table, identified by their parameter name.
+ * @param version Display current version.
+ * @param date Display release/editing date of current version.
+ * @param help Display help in terminal.
+ * @param help_short Display help in terminal (short flag).
+ * @param help_view Display help in a separate text editor.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMatTableizeOutputs`).
+ */
 function fat_mat_tableize(
     input_matrices: Array<string>,
     output_prefix: string,
@@ -249,27 +270,6 @@ function fat_mat_tableize(
     help_view: boolean = false,
     runner: Runner | null = null,
 ): FatMatTableizeOutputs {
-    /**
-     * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_matrices Names of *.netcc or *.grid files with matrices to be used to make table; can be provided using wildcard chars.
-     * @param output_prefix Output basename for the table and log files. Suffix and file extensions will be added for the outputs.
-     * @param input_csv Name of a CSV file to include in the table. The first column must have subject ID labels that match with the input matrix files.
-     * @param input_list File containing paths to subject matrices and optionally CSV IDs for matching.
-     * @param parameters List of matrices to be included in the table, identified by their parameter name.
-     * @param version Display current version.
-     * @param date Display release/editing date of current version.
-     * @param help Display help in terminal.
-     * @param help_short Display help in terminal (short flag).
-     * @param help_view Display help in a separate text editor.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMatTableizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MAT_TABLEIZE_METADATA);
     const params = fat_mat_tableize_params(input_matrices, output_prefix, input_csv, input_list, parameters, version, date, help, help_short, help_view)
@@ -282,5 +282,8 @@ export {
       FatMatTableizeOutputs,
       FatMatTableizeParameters,
       fat_mat_tableize,
+      fat_mat_tableize_cargs,
+      fat_mat_tableize_execute,
+      fat_mat_tableize_outputs,
       fat_mat_tableize_params,
 };

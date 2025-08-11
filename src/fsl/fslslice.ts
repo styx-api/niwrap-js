@@ -12,41 +12,41 @@ const FSLSLICE_METADATA: Metadata = {
 
 
 interface FslsliceParameters {
-    "__STYXTYPE__": "fslslice";
+    "@type": "fsl.fslslice";
     "volume": InputPathType;
     "output_basename"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslslice": fslslice_cargs,
+        "fsl.fslslice": fslslice_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslslice": fslslice_outputs,
+        "fsl.fslslice": fslslice_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FslsliceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume Input 3D volume (e.g. volume.nii.gz)
+ * @param output_basename Output basename for extracted slices
+ *
+ * @returns Parameter dictionary
+ */
 function fslslice_params(
     volume: InputPathType,
     output_basename: string | null = null,
 ): FslsliceParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume Input 3D volume (e.g. volume.nii.gz)
-     * @param output_basename Output basename for extracted slices
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslslice" as const,
+        "@type": "fsl.fslslice" as const,
         "volume": volume,
     };
     if (output_basename !== null) {
@@ -92,18 +92,18 @@ function fslslice_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslslice_cargs(
     params: FslsliceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslslice");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -114,18 +114,18 @@ function fslslice_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslslice_outputs(
     params: FslsliceParameters,
     execution: Execution,
 ): FslsliceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslsliceOutputs = {
         root: execution.outputFile("."),
         output_slices: ((params["output_basename"] ?? null) !== null) ? execution.outputFile([(params["output_basename"] ?? null), "_slice*.nii.gz"].join('')) : null,
@@ -134,22 +134,22 @@ function fslslice_outputs(
 }
 
 
+/**
+ * Tool to extract all slices from a 3D volume and store as 2D images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
+ */
 function fslslice_execute(
     params: FslsliceParameters,
     execution: Execution,
 ): FslsliceOutputs {
-    /**
-     * Tool to extract all slices from a 3D volume and store as 2D images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslslice_cargs(params, execution)
     const ret = fslslice_outputs(params, execution)
@@ -158,24 +158,24 @@ function fslslice_execute(
 }
 
 
+/**
+ * Tool to extract all slices from a 3D volume and store as 2D images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param volume Input 3D volume (e.g. volume.nii.gz)
+ * @param output_basename Output basename for extracted slices
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
+ */
 function fslslice(
     volume: InputPathType,
     output_basename: string | null = null,
     runner: Runner | null = null,
 ): FslsliceOutputs {
-    /**
-     * Tool to extract all slices from a 3D volume and store as 2D images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param volume Input 3D volume (e.g. volume.nii.gz)
-     * @param output_basename Output basename for extracted slices
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSLICE_METADATA);
     const params = fslslice_params(volume, output_basename)
@@ -188,5 +188,8 @@ export {
       FslsliceOutputs,
       FslsliceParameters,
       fslslice,
+      fslslice_cargs,
+      fslslice_execute,
+      fslslice_outputs,
       fslslice_params,
 };

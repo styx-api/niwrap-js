@@ -12,40 +12,40 @@ const V__SUMA_RENUMBER_FS_METADATA: Metadata = {
 
 
 interface VSumaRenumberFsParameters {
-    "__STYXTYPE__": "@SUMA_renumber_FS";
+    "@type": "afni.@SUMA_renumber_FS";
     "sumadir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SUMA_renumber_FS": v__suma_renumber_fs_cargs,
+        "afni.@SUMA_renumber_FS": v__suma_renumber_fs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SUMA_renumber_FS": v__suma_renumber_fs_outputs,
+        "afni.@SUMA_renumber_FS": v__suma_renumber_fs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -108,36 +108,36 @@ interface VSumaRenumberFsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sumadir Path to the 'SUMA/' directory created by @SUMA_Make_Spec_FS.
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_renumber_fs_params(
     sumadir: string,
 ): VSumaRenumberFsParameters {
-    /**
-     * Build parameters.
-    
-     * @param sumadir Path to the 'SUMA/' directory created by @SUMA_Make_Spec_FS.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SUMA_renumber_FS" as const,
+        "@type": "afni.@SUMA_renumber_FS" as const,
         "sumadir": sumadir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_renumber_fs_cargs(
     params: VSumaRenumberFsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SUMA_renumber_FS");
     cargs.push((params["sumadir"] ?? null));
@@ -145,18 +145,18 @@ function v__suma_renumber_fs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_renumber_fs_outputs(
     params: VSumaRenumberFsParameters,
     execution: Execution,
 ): VSumaRenumberFsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaRenumberFsOutputs = {
         root: execution.outputFile("."),
         ren_all: execution.outputFile(["*_REN_all.nii.gz"].join('')),
@@ -175,22 +175,22 @@ function v__suma_renumber_fs_outputs(
 }
 
 
+/**
+ * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
+ */
 function v__suma_renumber_fs_execute(
     params: VSumaRenumberFsParameters,
     execution: Execution,
 ): VSumaRenumberFsOutputs {
-    /**
-     * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_renumber_fs_cargs(params, execution)
     const ret = v__suma_renumber_fs_outputs(params, execution)
@@ -199,22 +199,22 @@ function v__suma_renumber_fs_execute(
 }
 
 
+/**
+ * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param sumadir Path to the 'SUMA/' directory created by @SUMA_Make_Spec_FS.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
+ */
 function v__suma_renumber_fs(
     sumadir: string,
     runner: Runner | null = null,
 ): VSumaRenumberFsOutputs {
-    /**
-     * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param sumadir Path to the 'SUMA/' directory created by @SUMA_Make_Spec_FS.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_RENUMBER_FS_METADATA);
     const params = v__suma_renumber_fs_params(sumadir)
@@ -227,5 +227,8 @@ export {
       VSumaRenumberFsParameters,
       V__SUMA_RENUMBER_FS_METADATA,
       v__suma_renumber_fs,
+      v__suma_renumber_fs_cargs,
+      v__suma_renumber_fs_execute,
+      v__suma_renumber_fs_outputs,
       v__suma_renumber_fs_params,
 };

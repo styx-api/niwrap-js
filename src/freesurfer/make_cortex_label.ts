@@ -12,7 +12,7 @@ const MAKE_CORTEX_LABEL_METADATA: Metadata = {
 
 
 interface MakeCortexLabelParameters {
-    "__STYXTYPE__": "make_cortex_label";
+    "@type": "freesurfer.make_cortex_label";
     "subject": string;
     "hemi"?: string | null | undefined;
     "use_a2009s": boolean;
@@ -20,35 +20,35 @@ interface MakeCortexLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_cortex_label": make_cortex_label_cargs,
+        "freesurfer.make_cortex_label": make_cortex_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_cortex_label": make_cortex_label_outputs,
+        "freesurfer.make_cortex_label": make_cortex_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MakeCortexLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject The subject for which the cortex label is to be created.
+ * @param hemi The hemisphere(s) on which to operate. Default is both hemispheres.
+ * @param use_a2009s Use aparc.a2009 instead of aparc.
+ * @param output_name Output name. The output will be ?h.outname.label. Default is 'cortex'.
+ *
+ * @returns Parameter dictionary
+ */
 function make_cortex_label_params(
     subject: string,
     hemi: string | null = null,
     use_a2009s: boolean = false,
     output_name: string | null = "cortex",
 ): MakeCortexLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject The subject for which the cortex label is to be created.
-     * @param hemi The hemisphere(s) on which to operate. Default is both hemispheres.
-     * @param use_a2009s Use aparc.a2009 instead of aparc.
-     * @param output_name Output name. The output will be ?h.outname.label. Default is 'cortex'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_cortex_label" as const,
+        "@type": "freesurfer.make_cortex_label" as const,
         "subject": subject,
         "use_a2009s": use_a2009s,
     };
@@ -102,18 +102,18 @@ function make_cortex_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_cortex_label_cargs(
     params: MakeCortexLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_cortex_label");
     cargs.push(
@@ -139,18 +139,18 @@ function make_cortex_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_cortex_label_outputs(
     params: MakeCortexLabelParameters,
     execution: Execution,
 ): MakeCortexLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeCortexLabelOutputs = {
         root: execution.outputFile("."),
         output_label_file: ((params["output_name"] ?? null) !== null) ? execution.outputFile(["?h.", (params["output_name"] ?? null), ".label"].join('')) : null,
@@ -159,22 +159,22 @@ function make_cortex_label_outputs(
 }
 
 
+/**
+ * A tool to create cortical labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
+ */
 function make_cortex_label_execute(
     params: MakeCortexLabelParameters,
     execution: Execution,
 ): MakeCortexLabelOutputs {
-    /**
-     * A tool to create cortical labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_cortex_label_cargs(params, execution)
     const ret = make_cortex_label_outputs(params, execution)
@@ -183,6 +183,21 @@ function make_cortex_label_execute(
 }
 
 
+/**
+ * A tool to create cortical labels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject The subject for which the cortex label is to be created.
+ * @param hemi The hemisphere(s) on which to operate. Default is both hemispheres.
+ * @param use_a2009s Use aparc.a2009 instead of aparc.
+ * @param output_name Output name. The output will be ?h.outname.label. Default is 'cortex'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
+ */
 function make_cortex_label(
     subject: string,
     hemi: string | null = null,
@@ -190,21 +205,6 @@ function make_cortex_label(
     output_name: string | null = "cortex",
     runner: Runner | null = null,
 ): MakeCortexLabelOutputs {
-    /**
-     * A tool to create cortical labels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject The subject for which the cortex label is to be created.
-     * @param hemi The hemisphere(s) on which to operate. Default is both hemispheres.
-     * @param use_a2009s Use aparc.a2009 instead of aparc.
-     * @param output_name Output name. The output will be ?h.outname.label. Default is 'cortex'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_CORTEX_LABEL_METADATA);
     const params = make_cortex_label_params(subject, hemi, use_a2009s, output_name)
@@ -217,5 +217,8 @@ export {
       MakeCortexLabelOutputs,
       MakeCortexLabelParameters,
       make_cortex_label,
+      make_cortex_label_cargs,
+      make_cortex_label_execute,
+      make_cortex_label_outputs,
       make_cortex_label_params,
 };

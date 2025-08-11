@@ -12,7 +12,7 @@ const BETA2SXA_METADATA: Metadata = {
 
 
 interface Beta2sxaParameters {
-    "__STYXTYPE__": "beta2sxa";
+    "@type": "freesurfer.beta2sxa";
     "beta_files": Array<InputPathType>;
     "number_of_conditions": number;
     "number_of_per_subjects": number;
@@ -20,35 +20,35 @@ interface Beta2sxaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "beta2sxa": beta2sxa_cargs,
+        "freesurfer.beta2sxa": beta2sxa_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "beta2sxa": beta2sxa_outputs,
+        "freesurfer.beta2sxa": beta2sxa_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface Beta2sxaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param beta_files Input beta files, e.g., data.nii
+ * @param number_of_conditions Number of groups or conditions
+ * @param number_of_per_subjects Number of subjects per group
+ * @param sxa_output Output sxa file. Default is h.beta
+ *
+ * @returns Parameter dictionary
+ */
 function beta2sxa_params(
     beta_files: Array<InputPathType>,
     number_of_conditions: number,
     number_of_per_subjects: number,
     sxa_output: string | null = "h.beta",
 ): Beta2sxaParameters {
-    /**
-     * Build parameters.
-    
-     * @param beta_files Input beta files, e.g., data.nii
-     * @param number_of_conditions Number of groups or conditions
-     * @param number_of_per_subjects Number of subjects per group
-     * @param sxa_output Output sxa file. Default is h.beta
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "beta2sxa" as const,
+        "@type": "freesurfer.beta2sxa" as const,
         "beta_files": beta_files,
         "number_of_conditions": number_of_conditions,
         "number_of_per_subjects": number_of_per_subjects,
@@ -100,18 +100,18 @@ function beta2sxa_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function beta2sxa_cargs(
     params: Beta2sxaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("beta2sxa");
     cargs.push(
@@ -136,18 +136,18 @@ function beta2sxa_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function beta2sxa_outputs(
     params: Beta2sxaParameters,
     execution: Execution,
 ): Beta2sxaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Beta2sxaOutputs = {
         root: execution.outputFile("."),
         sxa_output_file: execution.outputFile(["h.[MASK].nii"].join('')),
@@ -156,22 +156,22 @@ function beta2sxa_outputs(
 }
 
 
+/**
+ * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
+ */
 function beta2sxa_execute(
     params: Beta2sxaParameters,
     execution: Execution,
 ): Beta2sxaOutputs {
-    /**
-     * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
-     */
     params = execution.params(params)
     const cargs = beta2sxa_cargs(params, execution)
     const ret = beta2sxa_outputs(params, execution)
@@ -180,6 +180,21 @@ function beta2sxa_execute(
 }
 
 
+/**
+ * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param beta_files Input beta files, e.g., data.nii
+ * @param number_of_conditions Number of groups or conditions
+ * @param number_of_per_subjects Number of subjects per group
+ * @param sxa_output Output sxa file. Default is h.beta
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
+ */
 function beta2sxa(
     beta_files: Array<InputPathType>,
     number_of_conditions: number,
@@ -187,21 +202,6 @@ function beta2sxa(
     sxa_output: string | null = "h.beta",
     runner: Runner | null = null,
 ): Beta2sxaOutputs {
-    /**
-     * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param beta_files Input beta files, e.g., data.nii
-     * @param number_of_conditions Number of groups or conditions
-     * @param number_of_per_subjects Number of subjects per group
-     * @param sxa_output Output sxa file. Default is h.beta
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BETA2SXA_METADATA);
     const params = beta2sxa_params(beta_files, number_of_conditions, number_of_per_subjects, sxa_output)
@@ -214,5 +214,8 @@ export {
       Beta2sxaOutputs,
       Beta2sxaParameters,
       beta2sxa,
+      beta2sxa_cargs,
+      beta2sxa_execute,
+      beta2sxa_outputs,
       beta2sxa_params,
 };

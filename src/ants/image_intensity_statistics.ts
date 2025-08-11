@@ -12,42 +12,42 @@ const IMAGE_INTENSITY_STATISTICS_METADATA: Metadata = {
 
 
 interface ImageIntensityStatisticsParameters {
-    "__STYXTYPE__": "ImageIntensityStatistics";
+    "@type": "ants.ImageIntensityStatistics";
     "image_dimension": number;
     "input_image": InputPathType;
     "label_image"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ImageIntensityStatistics": image_intensity_statistics_cargs,
+        "ants.ImageIntensityStatistics": image_intensity_statistics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ImageIntensityStatistics": image_intensity_statistics_outputs,
+        "ants.ImageIntensityStatistics": image_intensity_statistics_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ImageIntensityStatisticsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the image (e.g., 2D, 3D).
+ * @param input_image The input image for which intensity statistics will be computed.
+ * @param label_image An optional label image which defines regions of interest.
+ *
+ * @returns Parameter dictionary
+ */
 function image_intensity_statistics_params(
     image_dimension: number,
     input_image: InputPathType,
     label_image: InputPathType | null = null,
 ): ImageIntensityStatisticsParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the image (e.g., 2D, 3D).
-     * @param input_image The input image for which intensity statistics will be computed.
-     * @param label_image An optional label image which defines regions of interest.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ImageIntensityStatistics" as const,
+        "@type": "ants.ImageIntensityStatistics" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -96,18 +96,18 @@ function image_intensity_statistics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function image_intensity_statistics_cargs(
     params: ImageIntensityStatisticsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ImageIntensityStatistics");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -119,18 +119,18 @@ function image_intensity_statistics_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function image_intensity_statistics_outputs(
     params: ImageIntensityStatisticsParameters,
     execution: Execution,
 ): ImageIntensityStatisticsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImageIntensityStatisticsOutputs = {
         root: execution.outputFile("."),
         intensity_statistics: execution.outputFile(["intensity_statistics.txt"].join('')),
@@ -139,22 +139,22 @@ function image_intensity_statistics_outputs(
 }
 
 
+/**
+ * This tool computes intensity statistics of an input image, optionally given a label image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
+ */
 function image_intensity_statistics_execute(
     params: ImageIntensityStatisticsParameters,
     execution: Execution,
 ): ImageIntensityStatisticsOutputs {
-    /**
-     * This tool computes intensity statistics of an input image, optionally given a label image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
-     */
     params = execution.params(params)
     const cargs = image_intensity_statistics_cargs(params, execution)
     const ret = image_intensity_statistics_outputs(params, execution)
@@ -163,26 +163,26 @@ function image_intensity_statistics_execute(
 }
 
 
+/**
+ * This tool computes intensity statistics of an input image, optionally given a label image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the image (e.g., 2D, 3D).
+ * @param input_image The input image for which intensity statistics will be computed.
+ * @param label_image An optional label image which defines regions of interest.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
+ */
 function image_intensity_statistics(
     image_dimension: number,
     input_image: InputPathType,
     label_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): ImageIntensityStatisticsOutputs {
-    /**
-     * This tool computes intensity statistics of an input image, optionally given a label image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the image (e.g., 2D, 3D).
-     * @param input_image The input image for which intensity statistics will be computed.
-     * @param label_image An optional label image which defines regions of interest.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMAGE_INTENSITY_STATISTICS_METADATA);
     const params = image_intensity_statistics_params(image_dimension, input_image, label_image)
@@ -195,5 +195,8 @@ export {
       ImageIntensityStatisticsOutputs,
       ImageIntensityStatisticsParameters,
       image_intensity_statistics,
+      image_intensity_statistics_cargs,
+      image_intensity_statistics_execute,
+      image_intensity_statistics_outputs,
       image_intensity_statistics_params,
 };

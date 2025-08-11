@@ -12,7 +12,7 @@ const MRI_PROBE_IMA_METADATA: Metadata = {
 
 
 interface MriProbeImaParameters {
-    "__STYXTYPE__": "mri_probe_ima";
+    "@type": "freesurfer.mri_probe_ima";
     "ima_file": InputPathType;
     "key_string"?: string | null | undefined;
     "offset_type_len"?: string | null | undefined;
@@ -25,33 +25,33 @@ interface MriProbeImaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_probe_ima": mri_probe_ima_cargs,
+        "freesurfer.mri_probe_ima": mri_probe_ima_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface MriProbeImaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ima_file Path to the IMA file to be probed.
+ * @param key_string String from dictionary to query the IMA file.
+ * @param offset_type_len Offset, type, and string length for querying. Type can be short, int, long, float, double, or string.
+ * @param attribute_name Name of the file information attribute to query.
+ * @param fileinfo Dump the interpreted file information.
+ * @param dictionary Dump the dictionary without the need of an IMA file.
+ * @param ob_stem Dump binary pixel data into bshort with stem prefix.
+ * @param help Show help message and exit.
+ * @param version Print version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_probe_ima_params(
     ima_file: InputPathType,
     key_string: string | null = null,
@@ -82,23 +97,8 @@ function mri_probe_ima_params(
     help: boolean = false,
     version: boolean = false,
 ): MriProbeImaParameters {
-    /**
-     * Build parameters.
-    
-     * @param ima_file Path to the IMA file to be probed.
-     * @param key_string String from dictionary to query the IMA file.
-     * @param offset_type_len Offset, type, and string length for querying. Type can be short, int, long, float, double, or string.
-     * @param attribute_name Name of the file information attribute to query.
-     * @param fileinfo Dump the interpreted file information.
-     * @param dictionary Dump the dictionary without the need of an IMA file.
-     * @param ob_stem Dump binary pixel data into bshort with stem prefix.
-     * @param help Show help message and exit.
-     * @param version Print version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_probe_ima" as const,
+        "@type": "freesurfer.mri_probe_ima" as const,
         "ima_file": ima_file,
         "fileinfo": fileinfo,
         "dictionary": dictionary,
@@ -121,18 +121,18 @@ function mri_probe_ima_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_probe_ima_cargs(
     params: MriProbeImaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_probe_ima");
     cargs.push(
@@ -179,18 +179,18 @@ function mri_probe_ima_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_probe_ima_outputs(
     params: MriProbeImaParameters,
     execution: Execution,
 ): MriProbeImaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriProbeImaOutputs = {
         root: execution.outputFile("."),
     };
@@ -198,22 +198,22 @@ function mri_probe_ima_outputs(
 }
 
 
+/**
+ * Query Siemens IMA files to extract header information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
+ */
 function mri_probe_ima_execute(
     params: MriProbeImaParameters,
     execution: Execution,
 ): MriProbeImaOutputs {
-    /**
-     * Query Siemens IMA files to extract header information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_probe_ima_cargs(params, execution)
     const ret = mri_probe_ima_outputs(params, execution)
@@ -222,6 +222,26 @@ function mri_probe_ima_execute(
 }
 
 
+/**
+ * Query Siemens IMA files to extract header information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param ima_file Path to the IMA file to be probed.
+ * @param key_string String from dictionary to query the IMA file.
+ * @param offset_type_len Offset, type, and string length for querying. Type can be short, int, long, float, double, or string.
+ * @param attribute_name Name of the file information attribute to query.
+ * @param fileinfo Dump the interpreted file information.
+ * @param dictionary Dump the dictionary without the need of an IMA file.
+ * @param ob_stem Dump binary pixel data into bshort with stem prefix.
+ * @param help Show help message and exit.
+ * @param version Print version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
+ */
 function mri_probe_ima(
     ima_file: InputPathType,
     key_string: string | null = null,
@@ -234,26 +254,6 @@ function mri_probe_ima(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriProbeImaOutputs {
-    /**
-     * Query Siemens IMA files to extract header information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param ima_file Path to the IMA file to be probed.
-     * @param key_string String from dictionary to query the IMA file.
-     * @param offset_type_len Offset, type, and string length for querying. Type can be short, int, long, float, double, or string.
-     * @param attribute_name Name of the file information attribute to query.
-     * @param fileinfo Dump the interpreted file information.
-     * @param dictionary Dump the dictionary without the need of an IMA file.
-     * @param ob_stem Dump binary pixel data into bshort with stem prefix.
-     * @param help Show help message and exit.
-     * @param version Print version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PROBE_IMA_METADATA);
     const params = mri_probe_ima_params(ima_file, key_string, offset_type_len, attribute_name, fileinfo, dictionary, ob_stem, help, version)
@@ -266,5 +266,8 @@ export {
       MriProbeImaOutputs,
       MriProbeImaParameters,
       mri_probe_ima,
+      mri_probe_ima_cargs,
+      mri_probe_ima_execute,
+      mri_probe_ima_outputs,
       mri_probe_ima_params,
 };

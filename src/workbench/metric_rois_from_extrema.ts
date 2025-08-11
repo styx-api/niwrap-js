@@ -12,7 +12,7 @@ const METRIC_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 
 interface MetricRoisFromExtremaParameters {
-    "__STYXTYPE__": "metric-rois-from-extrema";
+    "@type": "workbench.metric-rois-from-extrema";
     "surface": InputPathType;
     "metric": InputPathType;
     "limit": number;
@@ -24,35 +24,35 @@ interface MetricRoisFromExtremaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-rois-from-extrema": metric_rois_from_extrema_cargs,
+        "workbench.metric-rois-from-extrema": metric_rois_from_extrema_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-rois-from-extrema": metric_rois_from_extrema_outputs,
+        "workbench.metric-rois-from-extrema": metric_rois_from_extrema_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MetricRoisFromExtremaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use for geodesic distance
+ * @param metric the input metric file
+ * @param limit geodesic distance limit from vertex, in mm
+ * @param metric_out the output metric file
+ * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
+ * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
+ * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
+ * @param opt_column_column select a single input column to use: the column number or name
+ *
+ * @returns Parameter dictionary
+ */
 function metric_rois_from_extrema_params(
     surface: InputPathType,
     metric: InputPathType,
@@ -85,22 +99,8 @@ function metric_rois_from_extrema_params(
     opt_overlap_logic_method: string | null = null,
     opt_column_column: string | null = null,
 ): MetricRoisFromExtremaParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use for geodesic distance
-     * @param metric the input metric file
-     * @param limit geodesic distance limit from vertex, in mm
-     * @param metric_out the output metric file
-     * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
-     * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
-     * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
-     * @param opt_column_column select a single input column to use: the column number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-rois-from-extrema" as const,
+        "@type": "workbench.metric-rois-from-extrema" as const,
         "surface": surface,
         "metric": metric,
         "limit": limit,
@@ -122,18 +122,18 @@ function metric_rois_from_extrema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_rois_from_extrema_cargs(
     params: MetricRoisFromExtremaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-rois-from-extrema");
@@ -169,18 +169,18 @@ function metric_rois_from_extrema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_rois_from_extrema_outputs(
     params: MetricRoisFromExtremaParameters,
     execution: Execution,
 ): MetricRoisFromExtremaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricRoisFromExtremaOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -189,24 +189,24 @@ function metric_rois_from_extrema_outputs(
 }
 
 
+/**
+ * Create metric roi maps from extrema maps.
+ *
+ * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
+ */
 function metric_rois_from_extrema_execute(
     params: MetricRoisFromExtremaParameters,
     execution: Execution,
 ): MetricRoisFromExtremaOutputs {
-    /**
-     * Create metric roi maps from extrema maps.
-     * 
-     * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_rois_from_extrema_cargs(params, execution)
     const ret = metric_rois_from_extrema_outputs(params, execution)
@@ -215,6 +215,27 @@ function metric_rois_from_extrema_execute(
 }
 
 
+/**
+ * Create metric roi maps from extrema maps.
+ *
+ * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use for geodesic distance
+ * @param metric the input metric file
+ * @param limit geodesic distance limit from vertex, in mm
+ * @param metric_out the output metric file
+ * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
+ * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
+ * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
+ * @param opt_column_column select a single input column to use: the column number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
+ */
 function metric_rois_from_extrema(
     surface: InputPathType,
     metric: InputPathType,
@@ -226,27 +247,6 @@ function metric_rois_from_extrema(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
-    /**
-     * Create metric roi maps from extrema maps.
-     * 
-     * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use for geodesic distance
-     * @param metric the input metric file
-     * @param limit geodesic distance limit from vertex, in mm
-     * @param metric_out the output metric file
-     * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
-     * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
-     * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
-     * @param opt_column_column select a single input column to use: the column number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_ROIS_FROM_EXTREMA_METADATA);
     const params = metric_rois_from_extrema_params(surface, metric, limit, metric_out, opt_gaussian_sigma, opt_roi_roi_metric, opt_overlap_logic_method, opt_column_column)
@@ -259,5 +259,8 @@ export {
       MetricRoisFromExtremaOutputs,
       MetricRoisFromExtremaParameters,
       metric_rois_from_extrema,
+      metric_rois_from_extrema_cargs,
+      metric_rois_from_extrema_execute,
+      metric_rois_from_extrema_outputs,
       metric_rois_from_extrema_params,
 };

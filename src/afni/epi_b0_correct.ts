@@ -12,7 +12,7 @@ const EPI_B0_CORRECT_METADATA: Metadata = {
 
 
 interface EpiB0CorrectParameters {
-    "__STYXTYPE__": "epi_b0_correct";
+    "@type": "afni.epi_b0_correct";
     "prefix": string;
     "input_freq": InputPathType;
     "input_epi": InputPathType;
@@ -40,35 +40,35 @@ interface EpiB0CorrectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "epi_b0_correct": epi_b0_correct_cargs,
+        "afni.epi_b0_correct": epi_b0_correct_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "epi_b0_correct": epi_b0_correct_outputs,
+        "afni.epi_b0_correct": epi_b0_correct_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,6 +107,36 @@ interface EpiB0CorrectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix of output files; can include path.
+ * @param input_freq Phase dataset (frequency volume); should be at similar resolution and FOV as the EPI dataset; must be scaled appropriately.
+ * @param input_epi EPI dataset to which B0 distortion correction will be applied.
+ * @param epi_pe_dir Direction (axis) of phase encoding, e.g., AP, PA, RL, ...
+ * @param input_mask Mask of brain volume.
+ * @param input_magn Magnitude dataset from which to estimate brain mask; can be used for QC imaging.
+ * @param input_anat Anatomical dataset to be used as underlay for QC images (optional).
+ * @param input_json JSON file containing parameters about the EPI dataset.
+ * @param epi_pe_bwpp Bandwidth per pixel (in Hz) in the EPI dataset along the phase encode direction.
+ * @param epi_pe_echo_sp Effective TE spacing of the phase encoded volume, in seconds.
+ * @param epi_pe_vox_dim Voxel size along the EPI dataset's phase encode axis, in mm.
+ * @param scale_freq Scale to apply to frequency volume to match units (def: SF=1.0).
+ * @param out_cmds Name for output script recording commands (def: PREFIX_cmds.tcsh).
+ * @param out_pars Name for output text file recording relevant parameters (def: PREFIX_pars.txt).
+ * @param wdir_name Working directory name (def: automatic name).
+ * @param blur_sigma Amount of blurring to apply to masked phase encode dataset (def: BS=9).
+ * @param do_recenter_freq Method to recenter the phase volume within the brain mask (def: MC=mode).
+ * @param mask_dilate Erosion and dilation parameters for automask (when using magnitude image).
+ * @param no_clean Don't remove the temporary directory of intermediate files.
+ * @param qc_box_focus_ulay Focus the QC images on an automask region of the underlay dataset.
+ * @param no_qc_image Don't generate QC images.
+ * @param help Display program help in terminal.
+ * @param ver Display program version number in terminal.
+ * @param date Display date of program's last update in terminal.
+ *
+ * @returns Parameter dictionary
+ */
 function epi_b0_correct_params(
     prefix: string,
     input_freq: InputPathType,
@@ -133,38 +163,8 @@ function epi_b0_correct_params(
     ver: boolean = false,
     date: boolean = false,
 ): EpiB0CorrectParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix of output files; can include path.
-     * @param input_freq Phase dataset (frequency volume); should be at similar resolution and FOV as the EPI dataset; must be scaled appropriately.
-     * @param input_epi EPI dataset to which B0 distortion correction will be applied.
-     * @param epi_pe_dir Direction (axis) of phase encoding, e.g., AP, PA, RL, ...
-     * @param input_mask Mask of brain volume.
-     * @param input_magn Magnitude dataset from which to estimate brain mask; can be used for QC imaging.
-     * @param input_anat Anatomical dataset to be used as underlay for QC images (optional).
-     * @param input_json JSON file containing parameters about the EPI dataset.
-     * @param epi_pe_bwpp Bandwidth per pixel (in Hz) in the EPI dataset along the phase encode direction.
-     * @param epi_pe_echo_sp Effective TE spacing of the phase encoded volume, in seconds.
-     * @param epi_pe_vox_dim Voxel size along the EPI dataset's phase encode axis, in mm.
-     * @param scale_freq Scale to apply to frequency volume to match units (def: SF=1.0).
-     * @param out_cmds Name for output script recording commands (def: PREFIX_cmds.tcsh).
-     * @param out_pars Name for output text file recording relevant parameters (def: PREFIX_pars.txt).
-     * @param wdir_name Working directory name (def: automatic name).
-     * @param blur_sigma Amount of blurring to apply to masked phase encode dataset (def: BS=9).
-     * @param do_recenter_freq Method to recenter the phase volume within the brain mask (def: MC=mode).
-     * @param mask_dilate Erosion and dilation parameters for automask (when using magnitude image).
-     * @param no_clean Don't remove the temporary directory of intermediate files.
-     * @param qc_box_focus_ulay Focus the QC images on an automask region of the underlay dataset.
-     * @param no_qc_image Don't generate QC images.
-     * @param help Display program help in terminal.
-     * @param ver Display program version number in terminal.
-     * @param date Display date of program's last update in terminal.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "epi_b0_correct" as const,
+        "@type": "afni.epi_b0_correct" as const,
         "prefix": prefix,
         "input_freq": input_freq,
         "input_epi": input_epi,
@@ -222,18 +222,18 @@ function epi_b0_correct_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function epi_b0_correct_cargs(
     params: EpiB0CorrectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("epi_b0_correct.py");
     cargs.push((params["prefix"] ?? null));
@@ -355,18 +355,18 @@ function epi_b0_correct_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function epi_b0_correct_outputs(
     params: EpiB0CorrectParameters,
     execution: Execution,
 ): EpiB0CorrectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EpiB0CorrectOutputs = {
         root: execution.outputFile("."),
         warp_dset: execution.outputFile([(params["prefix"] ?? null), "_WARP.nii.gz"].join('')),
@@ -379,22 +379,22 @@ function epi_b0_correct_outputs(
 }
 
 
+/**
+ * B0 distortion correction tool using an acquired frequency (phase) image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
+ */
 function epi_b0_correct_execute(
     params: EpiB0CorrectParameters,
     execution: Execution,
 ): EpiB0CorrectOutputs {
-    /**
-     * B0 distortion correction tool using an acquired frequency (phase) image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
-     */
     params = execution.params(params)
     const cargs = epi_b0_correct_cargs(params, execution)
     const ret = epi_b0_correct_outputs(params, execution)
@@ -403,6 +403,41 @@ function epi_b0_correct_execute(
 }
 
 
+/**
+ * B0 distortion correction tool using an acquired frequency (phase) image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix of output files; can include path.
+ * @param input_freq Phase dataset (frequency volume); should be at similar resolution and FOV as the EPI dataset; must be scaled appropriately.
+ * @param input_epi EPI dataset to which B0 distortion correction will be applied.
+ * @param epi_pe_dir Direction (axis) of phase encoding, e.g., AP, PA, RL, ...
+ * @param input_mask Mask of brain volume.
+ * @param input_magn Magnitude dataset from which to estimate brain mask; can be used for QC imaging.
+ * @param input_anat Anatomical dataset to be used as underlay for QC images (optional).
+ * @param input_json JSON file containing parameters about the EPI dataset.
+ * @param epi_pe_bwpp Bandwidth per pixel (in Hz) in the EPI dataset along the phase encode direction.
+ * @param epi_pe_echo_sp Effective TE spacing of the phase encoded volume, in seconds.
+ * @param epi_pe_vox_dim Voxel size along the EPI dataset's phase encode axis, in mm.
+ * @param scale_freq Scale to apply to frequency volume to match units (def: SF=1.0).
+ * @param out_cmds Name for output script recording commands (def: PREFIX_cmds.tcsh).
+ * @param out_pars Name for output text file recording relevant parameters (def: PREFIX_pars.txt).
+ * @param wdir_name Working directory name (def: automatic name).
+ * @param blur_sigma Amount of blurring to apply to masked phase encode dataset (def: BS=9).
+ * @param do_recenter_freq Method to recenter the phase volume within the brain mask (def: MC=mode).
+ * @param mask_dilate Erosion and dilation parameters for automask (when using magnitude image).
+ * @param no_clean Don't remove the temporary directory of intermediate files.
+ * @param qc_box_focus_ulay Focus the QC images on an automask region of the underlay dataset.
+ * @param no_qc_image Don't generate QC images.
+ * @param help Display program help in terminal.
+ * @param ver Display program version number in terminal.
+ * @param date Display date of program's last update in terminal.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
+ */
 function epi_b0_correct(
     prefix: string,
     input_freq: InputPathType,
@@ -430,41 +465,6 @@ function epi_b0_correct(
     date: boolean = false,
     runner: Runner | null = null,
 ): EpiB0CorrectOutputs {
-    /**
-     * B0 distortion correction tool using an acquired frequency (phase) image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix of output files; can include path.
-     * @param input_freq Phase dataset (frequency volume); should be at similar resolution and FOV as the EPI dataset; must be scaled appropriately.
-     * @param input_epi EPI dataset to which B0 distortion correction will be applied.
-     * @param epi_pe_dir Direction (axis) of phase encoding, e.g., AP, PA, RL, ...
-     * @param input_mask Mask of brain volume.
-     * @param input_magn Magnitude dataset from which to estimate brain mask; can be used for QC imaging.
-     * @param input_anat Anatomical dataset to be used as underlay for QC images (optional).
-     * @param input_json JSON file containing parameters about the EPI dataset.
-     * @param epi_pe_bwpp Bandwidth per pixel (in Hz) in the EPI dataset along the phase encode direction.
-     * @param epi_pe_echo_sp Effective TE spacing of the phase encoded volume, in seconds.
-     * @param epi_pe_vox_dim Voxel size along the EPI dataset's phase encode axis, in mm.
-     * @param scale_freq Scale to apply to frequency volume to match units (def: SF=1.0).
-     * @param out_cmds Name for output script recording commands (def: PREFIX_cmds.tcsh).
-     * @param out_pars Name for output text file recording relevant parameters (def: PREFIX_pars.txt).
-     * @param wdir_name Working directory name (def: automatic name).
-     * @param blur_sigma Amount of blurring to apply to masked phase encode dataset (def: BS=9).
-     * @param do_recenter_freq Method to recenter the phase volume within the brain mask (def: MC=mode).
-     * @param mask_dilate Erosion and dilation parameters for automask (when using magnitude image).
-     * @param no_clean Don't remove the temporary directory of intermediate files.
-     * @param qc_box_focus_ulay Focus the QC images on an automask region of the underlay dataset.
-     * @param no_qc_image Don't generate QC images.
-     * @param help Display program help in terminal.
-     * @param ver Display program version number in terminal.
-     * @param date Display date of program's last update in terminal.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EPI_B0_CORRECT_METADATA);
     const params = epi_b0_correct_params(prefix, input_freq, input_epi, epi_pe_dir, input_mask, input_magn, input_anat, input_json, epi_pe_bwpp, epi_pe_echo_sp, epi_pe_vox_dim, scale_freq, out_cmds, out_pars, wdir_name, blur_sigma, do_recenter_freq, mask_dilate, no_clean, qc_box_focus_ulay, no_qc_image, help, ver, date)
@@ -477,5 +477,8 @@ export {
       EpiB0CorrectOutputs,
       EpiB0CorrectParameters,
       epi_b0_correct,
+      epi_b0_correct_cargs,
+      epi_b0_correct_execute,
+      epi_b0_correct_outputs,
       epi_b0_correct_params,
 };

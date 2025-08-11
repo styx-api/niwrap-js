@@ -12,39 +12,39 @@ const PROJ_THRESH_METADATA: Metadata = {
 
 
 interface ProjThreshParameters {
-    "__STYXTYPE__": "proj_thresh";
+    "@type": "fsl.proj_thresh";
     "input_paths": Array<InputPathType>;
     "threshold": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "proj_thresh": proj_thresh_cargs,
+        "fsl.proj_thresh": proj_thresh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface ProjThreshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_paths Paths to volume or surface files. Please use either volumes or surfaces but not both.
+ * @param threshold Threshold value to be applied.
+ *
+ * @returns Parameter dictionary
+ */
 function proj_thresh_params(
     input_paths: Array<InputPathType>,
     threshold: number,
 ): ProjThreshParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_paths Paths to volume or surface files. Please use either volumes or surfaces but not both.
-     * @param threshold Threshold value to be applied.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "proj_thresh" as const,
+        "@type": "fsl.proj_thresh" as const,
         "input_paths": input_paths,
         "threshold": threshold,
     };
@@ -85,18 +85,18 @@ function proj_thresh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function proj_thresh_cargs(
     params: ProjThreshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("proj_thresh");
     cargs.push(...(params["input_paths"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function proj_thresh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function proj_thresh_outputs(
     params: ProjThreshParameters,
     execution: Execution,
 ): ProjThreshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ProjThreshOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function proj_thresh_outputs(
 }
 
 
+/**
+ * A tool to apply a threshold to either volumes or surfaces.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
+ */
 function proj_thresh_execute(
     params: ProjThreshParameters,
     execution: Execution,
 ): ProjThreshOutputs {
-    /**
-     * A tool to apply a threshold to either volumes or surfaces.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
-     */
     params = execution.params(params)
     const cargs = proj_thresh_cargs(params, execution)
     const ret = proj_thresh_outputs(params, execution)
@@ -148,24 +148,24 @@ function proj_thresh_execute(
 }
 
 
+/**
+ * A tool to apply a threshold to either volumes or surfaces.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_paths Paths to volume or surface files. Please use either volumes or surfaces but not both.
+ * @param threshold Threshold value to be applied.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
+ */
 function proj_thresh(
     input_paths: Array<InputPathType>,
     threshold: number,
     runner: Runner | null = null,
 ): ProjThreshOutputs {
-    /**
-     * A tool to apply a threshold to either volumes or surfaces.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_paths Paths to volume or surface files. Please use either volumes or surfaces but not both.
-     * @param threshold Threshold value to be applied.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PROJ_THRESH_METADATA);
     const params = proj_thresh_params(input_paths, threshold)
@@ -178,5 +178,8 @@ export {
       ProjThreshOutputs,
       ProjThreshParameters,
       proj_thresh,
+      proj_thresh_cargs,
+      proj_thresh_execute,
+      proj_thresh_outputs,
       proj_thresh_params,
 };

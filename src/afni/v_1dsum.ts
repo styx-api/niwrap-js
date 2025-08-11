@@ -12,7 +12,7 @@ const V_1DSUM_METADATA: Metadata = {
 
 
 interface V1dsumParameters {
-    "__STYXTYPE__": "1dsum";
+    "@type": "afni.1dsum";
     "input_files": Array<InputPathType>;
     "ignore_rows"?: number | null | undefined;
     "use_rows"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface V1dsumParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dsum": v_1dsum_cargs,
+        "afni.1dsum": v_1dsum_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dsum": v_1dsum_outputs,
+        "afni.1dsum": v_1dsum_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V1dsumOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input ASCII files with numbers arranged in rows and columns.
+ * @param ignore_rows Skip the first nn rows of each file
+ * @param use_rows Use only mm rows from each file
+ * @param mean_flag Compute the average instead of the sum
+ * @param nocomment_flag Do not reproduce comments from the header of the first input file to the output.
+ * @param okempty_flag If encountering an empty 1D file, print 0 and exit quietly instead of exiting with an error message.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dsum_params(
     input_files: Array<InputPathType>,
     ignore_rows: number | null = null,
@@ -81,20 +93,8 @@ function v_1dsum_params(
     nocomment_flag: boolean = false,
     okempty_flag: boolean = false,
 ): V1dsumParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input ASCII files with numbers arranged in rows and columns.
-     * @param ignore_rows Skip the first nn rows of each file
-     * @param use_rows Use only mm rows from each file
-     * @param mean_flag Compute the average instead of the sum
-     * @param nocomment_flag Do not reproduce comments from the header of the first input file to the output.
-     * @param okempty_flag If encountering an empty 1D file, print 0 and exit quietly instead of exiting with an error message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dsum" as const,
+        "@type": "afni.1dsum" as const,
         "input_files": input_files,
         "mean_flag": mean_flag,
         "nocomment_flag": nocomment_flag,
@@ -110,18 +110,18 @@ function v_1dsum_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dsum_cargs(
     params: V1dsumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dsum");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -150,18 +150,18 @@ function v_1dsum_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dsum_outputs(
     params: V1dsumParameters,
     execution: Execution,
 ): V1dsumOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dsumOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["output.txt"].join('')),
@@ -170,22 +170,22 @@ function v_1dsum_outputs(
 }
 
 
+/**
+ * Sum or average columns of ASCII files with numbers arranged in rows and columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
+ */
 function v_1dsum_execute(
     params: V1dsumParameters,
     execution: Execution,
 ): V1dsumOutputs {
-    /**
-     * Sum or average columns of ASCII files with numbers arranged in rows and columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dsum_cargs(params, execution)
     const ret = v_1dsum_outputs(params, execution)
@@ -194,6 +194,23 @@ function v_1dsum_execute(
 }
 
 
+/**
+ * Sum or average columns of ASCII files with numbers arranged in rows and columns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input ASCII files with numbers arranged in rows and columns.
+ * @param ignore_rows Skip the first nn rows of each file
+ * @param use_rows Use only mm rows from each file
+ * @param mean_flag Compute the average instead of the sum
+ * @param nocomment_flag Do not reproduce comments from the header of the first input file to the output.
+ * @param okempty_flag If encountering an empty 1D file, print 0 and exit quietly instead of exiting with an error message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
+ */
 function v_1dsum(
     input_files: Array<InputPathType>,
     ignore_rows: number | null = null,
@@ -203,23 +220,6 @@ function v_1dsum(
     okempty_flag: boolean = false,
     runner: Runner | null = null,
 ): V1dsumOutputs {
-    /**
-     * Sum or average columns of ASCII files with numbers arranged in rows and columns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input ASCII files with numbers arranged in rows and columns.
-     * @param ignore_rows Skip the first nn rows of each file
-     * @param use_rows Use only mm rows from each file
-     * @param mean_flag Compute the average instead of the sum
-     * @param nocomment_flag Do not reproduce comments from the header of the first input file to the output.
-     * @param okempty_flag If encountering an empty 1D file, print 0 and exit quietly instead of exiting with an error message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DSUM_METADATA);
     const params = v_1dsum_params(input_files, ignore_rows, use_rows, mean_flag, nocomment_flag, okempty_flag)
@@ -232,5 +232,8 @@ export {
       V1dsumParameters,
       V_1DSUM_METADATA,
       v_1dsum,
+      v_1dsum_cargs,
+      v_1dsum_execute,
+      v_1dsum_outputs,
       v_1dsum_params,
 };

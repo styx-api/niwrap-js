@@ -12,7 +12,7 @@ const NEW_INVWARP_METADATA: Metadata = {
 
 
 interface NewInvwarpParameters {
-    "__STYXTYPE__": "new_invwarp";
+    "@type": "fsl.new_invwarp";
     "warpvol": InputPathType;
     "outvol": string;
     "refvol": InputPathType;
@@ -26,35 +26,35 @@ interface NewInvwarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "new_invwarp": new_invwarp_cargs,
+        "fsl.new_invwarp": new_invwarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "new_invwarp": new_invwarp_outputs,
+        "fsl.new_invwarp": new_invwarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface NewInvwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warpvol Filename for warp/shiftmap transform (volume)
+ * @param outvol Filename for output (inverse warped) image
+ * @param refvol Filename for new reference image, i.e., what was originally the input image (determines inverse warpvol's FOV and pixdims)
+ * @param relflag Use relative warp convention: x' = x + w(x)
+ * @param absflag Use absolute warp convention (default): x' = w(x)
+ * @param noconstraintflag Do not apply the Jacobian constraint
+ * @param jmin Minimum acceptable Jacobian value for constraint (default 0.01)
+ * @param jmax Maximum acceptable Jacobian value for constraint (default 100.0)
+ * @param debugflag Turn on debugging output
+ * @param verboseflag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function new_invwarp_params(
     warpvol: InputPathType,
     outvol: string,
@@ -89,24 +105,8 @@ function new_invwarp_params(
     debugflag: boolean = false,
     verboseflag: boolean = false,
 ): NewInvwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param warpvol Filename for warp/shiftmap transform (volume)
-     * @param outvol Filename for output (inverse warped) image
-     * @param refvol Filename for new reference image, i.e., what was originally the input image (determines inverse warpvol's FOV and pixdims)
-     * @param relflag Use relative warp convention: x' = x + w(x)
-     * @param absflag Use absolute warp convention (default): x' = w(x)
-     * @param noconstraintflag Do not apply the Jacobian constraint
-     * @param jmin Minimum acceptable Jacobian value for constraint (default 0.01)
-     * @param jmax Maximum acceptable Jacobian value for constraint (default 100.0)
-     * @param debugflag Turn on debugging output
-     * @param verboseflag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "new_invwarp" as const,
+        "@type": "fsl.new_invwarp" as const,
         "warpvol": warpvol,
         "outvol": outvol,
         "refvol": refvol,
@@ -126,18 +126,18 @@ function new_invwarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function new_invwarp_cargs(
     params: NewInvwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("new_invwarp");
     cargs.push(
@@ -183,18 +183,18 @@ function new_invwarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function new_invwarp_outputs(
     params: NewInvwarpParameters,
     execution: Execution,
 ): NewInvwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NewInvwarpOutputs = {
         root: execution.outputFile("."),
         out_volume: execution.outputFile([(params["outvol"] ?? null)].join('')),
@@ -203,22 +203,22 @@ function new_invwarp_outputs(
 }
 
 
+/**
+ * Inverse warp tool from FSL suite.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
+ */
 function new_invwarp_execute(
     params: NewInvwarpParameters,
     execution: Execution,
 ): NewInvwarpOutputs {
-    /**
-     * Inverse warp tool from FSL suite.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = new_invwarp_cargs(params, execution)
     const ret = new_invwarp_outputs(params, execution)
@@ -227,6 +227,27 @@ function new_invwarp_execute(
 }
 
 
+/**
+ * Inverse warp tool from FSL suite.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param warpvol Filename for warp/shiftmap transform (volume)
+ * @param outvol Filename for output (inverse warped) image
+ * @param refvol Filename for new reference image, i.e., what was originally the input image (determines inverse warpvol's FOV and pixdims)
+ * @param relflag Use relative warp convention: x' = x + w(x)
+ * @param absflag Use absolute warp convention (default): x' = w(x)
+ * @param noconstraintflag Do not apply the Jacobian constraint
+ * @param jmin Minimum acceptable Jacobian value for constraint (default 0.01)
+ * @param jmax Maximum acceptable Jacobian value for constraint (default 100.0)
+ * @param debugflag Turn on debugging output
+ * @param verboseflag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
+ */
 function new_invwarp(
     warpvol: InputPathType,
     outvol: string,
@@ -240,27 +261,6 @@ function new_invwarp(
     verboseflag: boolean = false,
     runner: Runner | null = null,
 ): NewInvwarpOutputs {
-    /**
-     * Inverse warp tool from FSL suite.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param warpvol Filename for warp/shiftmap transform (volume)
-     * @param outvol Filename for output (inverse warped) image
-     * @param refvol Filename for new reference image, i.e., what was originally the input image (determines inverse warpvol's FOV and pixdims)
-     * @param relflag Use relative warp convention: x' = x + w(x)
-     * @param absflag Use absolute warp convention (default): x' = w(x)
-     * @param noconstraintflag Do not apply the Jacobian constraint
-     * @param jmin Minimum acceptable Jacobian value for constraint (default 0.01)
-     * @param jmax Maximum acceptable Jacobian value for constraint (default 100.0)
-     * @param debugflag Turn on debugging output
-     * @param verboseflag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NEW_INVWARP_METADATA);
     const params = new_invwarp_params(warpvol, outvol, refvol, relflag, absflag, noconstraintflag, jmin, jmax, debugflag, verboseflag)
@@ -273,5 +273,8 @@ export {
       NewInvwarpOutputs,
       NewInvwarpParameters,
       new_invwarp,
+      new_invwarp_cargs,
+      new_invwarp_execute,
+      new_invwarp_outputs,
       new_invwarp_params,
 };

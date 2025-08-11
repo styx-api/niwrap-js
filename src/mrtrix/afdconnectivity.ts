@@ -12,14 +12,14 @@ const AFDCONNECTIVITY_METADATA: Metadata = {
 
 
 interface AfdconnectivityConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.afdconnectivity.config";
     "key": string;
     "value": string;
 }
 
 
 interface AfdconnectivityParameters {
-    "__STYXTYPE__": "afdconnectivity";
+    "@type": "mrtrix.afdconnectivity";
     "wbft"?: InputPathType | null | undefined;
     "afd_map"?: string | null | undefined;
     "all_fixels": boolean;
@@ -36,55 +36,55 @@ interface AfdconnectivityParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afdconnectivity": afdconnectivity_cargs,
-        "config": afdconnectivity_config_cargs,
+        "mrtrix.afdconnectivity": afdconnectivity_cargs,
+        "mrtrix.afdconnectivity.config": afdconnectivity_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "afdconnectivity": afdconnectivity_outputs,
+        "mrtrix.afdconnectivity": afdconnectivity_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function afdconnectivity_config_params(
     key: string,
     value: string,
 ): AfdconnectivityConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.afdconnectivity.config" as const,
         "key": key,
         "value": value,
     };
@@ -92,18 +92,18 @@ function afdconnectivity_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afdconnectivity_config_cargs(
     params: AfdconnectivityConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -129,6 +129,25 @@ interface AfdconnectivityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image the input FOD image.
+ * @param tracks the input track file defining the bundle of interest.
+ * @param wbft provide a whole-brain fibre-tracking data set (of which the input track file should be a subset), to improve the estimate of fibre bundle volume in the presence of partial volume
+ * @param afd_map output a 3D image containing the AFD estimated for each voxel.
+ * @param all_fixels if whole-brain fibre-tracking is NOT provided, then if multiple fixels within a voxel are traversed by the pathway of interest, by default the fixel with the greatest streamlines density is selected to contribute to the AFD in that voxel. If this option is provided, then ALL fixels with non-zero streamlines density will contribute to the result, even if multiple fixels per voxel are selected.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function afdconnectivity_params(
     image: InputPathType,
     tracks: InputPathType,
@@ -144,27 +163,8 @@ function afdconnectivity_params(
     help: boolean = false,
     version: boolean = false,
 ): AfdconnectivityParameters {
-    /**
-     * Build parameters.
-    
-     * @param image the input FOD image.
-     * @param tracks the input track file defining the bundle of interest.
-     * @param wbft provide a whole-brain fibre-tracking data set (of which the input track file should be a subset), to improve the estimate of fibre bundle volume in the presence of partial volume
-     * @param afd_map output a 3D image containing the AFD estimated for each voxel.
-     * @param all_fixels if whole-brain fibre-tracking is NOT provided, then if multiple fixels within a voxel are traversed by the pathway of interest, by default the fixel with the greatest streamlines density is selected to contribute to the AFD in that voxel. If this option is provided, then ALL fixels with non-zero streamlines density will contribute to the result, even if multiple fixels per voxel are selected.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afdconnectivity" as const,
+        "@type": "mrtrix.afdconnectivity" as const,
         "all_fixels": all_fixels,
         "info": info,
         "quiet": quiet,
@@ -191,18 +191,18 @@ function afdconnectivity_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afdconnectivity_cargs(
     params: AfdconnectivityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afdconnectivity");
     if ((params["wbft"] ?? null) !== null) {
@@ -239,7 +239,7 @@ function afdconnectivity_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -253,18 +253,18 @@ function afdconnectivity_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afdconnectivity_outputs(
     params: AfdconnectivityParameters,
     execution: Execution,
 ): AfdconnectivityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfdconnectivityOutputs = {
         root: execution.outputFile("."),
         afd_map: ((params["afd_map"] ?? null) !== null) ? execution.outputFile([(params["afd_map"] ?? null)].join('')) : null,
@@ -273,38 +273,38 @@ function afdconnectivity_outputs(
 }
 
 
+/**
+ * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
+ *
+ * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.
+ *
+ * If only the streamlines belonging to the pathway of interest are provided, then ALL of the fibre volume within each fixel selected will contribute to the result. If the -wbft option is used to provide whole-brain fibre-tracking (of which the pathway of interest should contain a subset), only the fraction of the fibre volume in each fixel estimated to belong to the pathway of interest will contribute to the result.
+ *
+ * Use -quiet to suppress progress messages and output fibre connectivity value only.
+ *
+ * For valid comparisons of AFD connectivity across scans, images MUST be intensity normalised and bias field corrected, and a common response function for all subjects must be used.
+ *
+ * Note that the sum of the AFD is normalised by streamline length to account for subject differences in fibre bundle length. This normalisation results in a measure that is more related to the cross-sectional volume of the tract (and therefore 'connectivity'). Note that SIFT-ed tract count is a superior measure because it is unaffected by tangential yet unrelated fibres. However, AFD connectivity may be used as a substitute when Anatomically Constrained Tractography is not possible due to uncorrectable EPI distortions, and SIFT may therefore not be as effective.
+ *
+ * Longer discussion regarding this command can additionally be found at: https://mrtrix.readthedocs.io/en/3.0.4/concepts/afd_connectivity.html (as well as in the relevant reference).
+ *
+ * References:
+ *
+ * Smith, R. E.; Raffelt, D.; Tournier, J.-D.; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
+ */
 function afdconnectivity_execute(
     params: AfdconnectivityParameters,
     execution: Execution,
 ): AfdconnectivityOutputs {
-    /**
-     * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
-     * 
-     * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.
-     * 
-     * If only the streamlines belonging to the pathway of interest are provided, then ALL of the fibre volume within each fixel selected will contribute to the result. If the -wbft option is used to provide whole-brain fibre-tracking (of which the pathway of interest should contain a subset), only the fraction of the fibre volume in each fixel estimated to belong to the pathway of interest will contribute to the result.
-     * 
-     * Use -quiet to suppress progress messages and output fibre connectivity value only.
-     * 
-     * For valid comparisons of AFD connectivity across scans, images MUST be intensity normalised and bias field corrected, and a common response function for all subjects must be used.
-     * 
-     * Note that the sum of the AFD is normalised by streamline length to account for subject differences in fibre bundle length. This normalisation results in a measure that is more related to the cross-sectional volume of the tract (and therefore 'connectivity'). Note that SIFT-ed tract count is a superior measure because it is unaffected by tangential yet unrelated fibres. However, AFD connectivity may be used as a substitute when Anatomically Constrained Tractography is not possible due to uncorrectable EPI distortions, and SIFT may therefore not be as effective.
-     * 
-     * Longer discussion regarding this command can additionally be found at: https://mrtrix.readthedocs.io/en/3.0.4/concepts/afd_connectivity.html (as well as in the relevant reference).
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Raffelt, D.; Tournier, J.-D.; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
-     */
     params = execution.params(params)
     const cargs = afdconnectivity_cargs(params, execution)
     const ret = afdconnectivity_outputs(params, execution)
@@ -313,6 +313,46 @@ function afdconnectivity_execute(
 }
 
 
+/**
+ * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
+ *
+ * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.
+ *
+ * If only the streamlines belonging to the pathway of interest are provided, then ALL of the fibre volume within each fixel selected will contribute to the result. If the -wbft option is used to provide whole-brain fibre-tracking (of which the pathway of interest should contain a subset), only the fraction of the fibre volume in each fixel estimated to belong to the pathway of interest will contribute to the result.
+ *
+ * Use -quiet to suppress progress messages and output fibre connectivity value only.
+ *
+ * For valid comparisons of AFD connectivity across scans, images MUST be intensity normalised and bias field corrected, and a common response function for all subjects must be used.
+ *
+ * Note that the sum of the AFD is normalised by streamline length to account for subject differences in fibre bundle length. This normalisation results in a measure that is more related to the cross-sectional volume of the tract (and therefore 'connectivity'). Note that SIFT-ed tract count is a superior measure because it is unaffected by tangential yet unrelated fibres. However, AFD connectivity may be used as a substitute when Anatomically Constrained Tractography is not possible due to uncorrectable EPI distortions, and SIFT may therefore not be as effective.
+ *
+ * Longer discussion regarding this command can additionally be found at: https://mrtrix.readthedocs.io/en/3.0.4/concepts/afd_connectivity.html (as well as in the relevant reference).
+ *
+ * References:
+ *
+ * Smith, R. E.; Raffelt, D.; Tournier, J.-D.; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image the input FOD image.
+ * @param tracks the input track file defining the bundle of interest.
+ * @param wbft provide a whole-brain fibre-tracking data set (of which the input track file should be a subset), to improve the estimate of fibre bundle volume in the presence of partial volume
+ * @param afd_map output a 3D image containing the AFD estimated for each voxel.
+ * @param all_fixels if whole-brain fibre-tracking is NOT provided, then if multiple fixels within a voxel are traversed by the pathway of interest, by default the fixel with the greatest streamlines density is selected to contribute to the AFD in that voxel. If this option is provided, then ALL fixels with non-zero streamlines density will contribute to the result, even if multiple fixels per voxel are selected.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
+ */
 function afdconnectivity(
     image: InputPathType,
     tracks: InputPathType,
@@ -329,46 +369,6 @@ function afdconnectivity(
     version: boolean = false,
     runner: Runner | null = null,
 ): AfdconnectivityOutputs {
-    /**
-     * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
-     * 
-     * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.
-     * 
-     * If only the streamlines belonging to the pathway of interest are provided, then ALL of the fibre volume within each fixel selected will contribute to the result. If the -wbft option is used to provide whole-brain fibre-tracking (of which the pathway of interest should contain a subset), only the fraction of the fibre volume in each fixel estimated to belong to the pathway of interest will contribute to the result.
-     * 
-     * Use -quiet to suppress progress messages and output fibre connectivity value only.
-     * 
-     * For valid comparisons of AFD connectivity across scans, images MUST be intensity normalised and bias field corrected, and a common response function for all subjects must be used.
-     * 
-     * Note that the sum of the AFD is normalised by streamline length to account for subject differences in fibre bundle length. This normalisation results in a measure that is more related to the cross-sectional volume of the tract (and therefore 'connectivity'). Note that SIFT-ed tract count is a superior measure because it is unaffected by tangential yet unrelated fibres. However, AFD connectivity may be used as a substitute when Anatomically Constrained Tractography is not possible due to uncorrectable EPI distortions, and SIFT may therefore not be as effective.
-     * 
-     * Longer discussion regarding this command can additionally be found at: https://mrtrix.readthedocs.io/en/3.0.4/concepts/afd_connectivity.html (as well as in the relevant reference).
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Raffelt, D.; Tournier, J.-D.; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image the input FOD image.
-     * @param tracks the input track file defining the bundle of interest.
-     * @param wbft provide a whole-brain fibre-tracking data set (of which the input track file should be a subset), to improve the estimate of fibre bundle volume in the presence of partial volume
-     * @param afd_map output a 3D image containing the AFD estimated for each voxel.
-     * @param all_fixels if whole-brain fibre-tracking is NOT provided, then if multiple fixels within a voxel are traversed by the pathway of interest, by default the fixel with the greatest streamlines density is selected to contribute to the AFD in that voxel. If this option is provided, then ALL fixels with non-zero streamlines density will contribute to the result, even if multiple fixels per voxel are selected.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFDCONNECTIVITY_METADATA);
     const params = afdconnectivity_params(image, tracks, wbft, afd_map, all_fixels, info, quiet, debug, force, nthreads, config, help, version)
@@ -382,6 +382,10 @@ export {
       AfdconnectivityOutputs,
       AfdconnectivityParameters,
       afdconnectivity,
+      afdconnectivity_cargs,
+      afdconnectivity_config_cargs,
       afdconnectivity_config_params,
+      afdconnectivity_execute,
+      afdconnectivity_outputs,
       afdconnectivity_params,
 };

@@ -12,7 +12,7 @@ const TRAC_PREPROC_METADATA: Metadata = {
 
 
 interface TracPreprocParameters {
-    "__STYXTYPE__": "trac-preproc";
+    "@type": "freesurfer.trac-preproc";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
     "nolog": boolean;
@@ -28,33 +28,33 @@ interface TracPreprocParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "trac-preproc": trac_preproc_cargs,
+        "freesurfer.trac-preproc": trac_preproc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface TracPreprocOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dmrirc_file dmrirc file (see dmrirc.example)
+ * @param log_file Log file; default is trac-all.log in the same dir as dmrirc
+ * @param nolog Do not save a log file
+ * @param cmd_file Cmd file; default is trac-all.cmd in the same dir as dmrirc
+ * @param nocmd Do not save a cmd file
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param umask Set unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug Generate much more output
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ *
+ * @returns Parameter dictionary
+ */
 function trac_preproc_params(
     dmrirc_file: InputPathType,
     log_file: string | null = null,
@@ -88,26 +106,8 @@ function trac_preproc_params(
     dontrun: boolean = false,
     version: boolean = false,
 ): TracPreprocParameters {
-    /**
-     * Build parameters.
-    
-     * @param dmrirc_file dmrirc file (see dmrirc.example)
-     * @param log_file Log file; default is trac-all.log in the same dir as dmrirc
-     * @param nolog Do not save a log file
-     * @param cmd_file Cmd file; default is trac-all.cmd in the same dir as dmrirc
-     * @param nocmd Do not save a cmd file
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param umask Set unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug Generate much more output
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trac-preproc" as const,
+        "@type": "freesurfer.trac-preproc" as const,
         "dmrirc_file": dmrirc_file,
         "nolog": nolog,
         "nocmd": nocmd,
@@ -133,18 +133,18 @@ function trac_preproc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function trac_preproc_cargs(
     params: TracPreprocParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("trac-preproc");
     cargs.push(
@@ -200,18 +200,18 @@ function trac_preproc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function trac_preproc_outputs(
     params: TracPreprocParameters,
     execution: Execution,
 ): TracPreprocOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TracPreprocOutputs = {
         root: execution.outputFile("."),
     };
@@ -219,22 +219,22 @@ function trac_preproc_outputs(
 }
 
 
+/**
+ * Tractography pre-processing for a single subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
+ */
 function trac_preproc_execute(
     params: TracPreprocParameters,
     execution: Execution,
 ): TracPreprocOutputs {
-    /**
-     * Tractography pre-processing for a single subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
-     */
     params = execution.params(params)
     const cargs = trac_preproc_cargs(params, execution)
     const ret = trac_preproc_outputs(params, execution)
@@ -243,6 +243,29 @@ function trac_preproc_execute(
 }
 
 
+/**
+ * Tractography pre-processing for a single subject.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dmrirc_file dmrirc file (see dmrirc.example)
+ * @param log_file Log file; default is trac-all.log in the same dir as dmrirc
+ * @param nolog Do not save a log file
+ * @param cmd_file Cmd file; default is trac-all.cmd in the same dir as dmrirc
+ * @param nocmd Do not save a cmd file
+ * @param no_isrunning Do not check whether this subject is currently being processed
+ * @param umask Set unix file permission mask (default 002)
+ * @param group_id Check that current group is alpha groupid
+ * @param allow_core_dump Set coredump limit to unlimited
+ * @param debug Generate much more output
+ * @param dontrun Do everything but execute each command
+ * @param version Print version of this script and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
+ */
 function trac_preproc(
     dmrirc_file: InputPathType,
     log_file: string | null = null,
@@ -258,29 +281,6 @@ function trac_preproc(
     version: boolean = false,
     runner: Runner | null = null,
 ): TracPreprocOutputs {
-    /**
-     * Tractography pre-processing for a single subject.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dmrirc_file dmrirc file (see dmrirc.example)
-     * @param log_file Log file; default is trac-all.log in the same dir as dmrirc
-     * @param nolog Do not save a log file
-     * @param cmd_file Cmd file; default is trac-all.cmd in the same dir as dmrirc
-     * @param nocmd Do not save a cmd file
-     * @param no_isrunning Do not check whether this subject is currently being processed
-     * @param umask Set unix file permission mask (default 002)
-     * @param group_id Check that current group is alpha groupid
-     * @param allow_core_dump Set coredump limit to unlimited
-     * @param debug Generate much more output
-     * @param dontrun Do everything but execute each command
-     * @param version Print version of this script and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAC_PREPROC_METADATA);
     const params = trac_preproc_params(dmrirc_file, log_file, nolog, cmd_file, nocmd, no_isrunning, umask, group_id, allow_core_dump, debug, dontrun, version)
@@ -293,5 +293,8 @@ export {
       TracPreprocOutputs,
       TracPreprocParameters,
       trac_preproc,
+      trac_preproc_cargs,
+      trac_preproc_execute,
+      trac_preproc_outputs,
       trac_preproc_params,
 };

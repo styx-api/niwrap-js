@@ -12,7 +12,7 @@ const METRIC_REMOVE_ISLANDS_METADATA: Metadata = {
 
 
 interface MetricRemoveIslandsParameters {
-    "__STYXTYPE__": "metric-remove-islands";
+    "@type": "workbench.metric-remove-islands";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface MetricRemoveIslandsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-remove-islands": metric_remove_islands_cargs,
+        "workbench.metric-remove-islands": metric_remove_islands_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-remove-islands": metric_remove_islands_outputs,
+        "workbench.metric-remove-islands": metric_remove_islands_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MetricRemoveIslandsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function metric_remove_islands_params(
     surface: InputPathType,
     metric_in: InputPathType,
     metric_out: string,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): MetricRemoveIslandsParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use for neighbor information
-     * @param metric_in the input ROI metric
-     * @param metric_out the output ROI metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-remove-islands" as const,
+        "@type": "workbench.metric-remove-islands" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function metric_remove_islands_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_remove_islands_cargs(
     params: MetricRemoveIslandsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-remove-islands");
@@ -128,18 +128,18 @@ function metric_remove_islands_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_remove_islands_outputs(
     params: MetricRemoveIslandsParameters,
     execution: Execution,
 ): MetricRemoveIslandsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricRemoveIslandsOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function metric_remove_islands_outputs(
 }
 
 
+/**
+ * Remove islands from an roi metric.
+ *
+ * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
+ */
 function metric_remove_islands_execute(
     params: MetricRemoveIslandsParameters,
     execution: Execution,
 ): MetricRemoveIslandsOutputs {
-    /**
-     * Remove islands from an roi metric.
-     * 
-     * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_remove_islands_cargs(params, execution)
     const ret = metric_remove_islands_outputs(params, execution)
@@ -174,6 +174,23 @@ function metric_remove_islands_execute(
 }
 
 
+/**
+ * Remove islands from an roi metric.
+ *
+ * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
+ */
 function metric_remove_islands(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -181,23 +198,6 @@ function metric_remove_islands(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
-    /**
-     * Remove islands from an roi metric.
-     * 
-     * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use for neighbor information
-     * @param metric_in the input ROI metric
-     * @param metric_out the output ROI metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_REMOVE_ISLANDS_METADATA);
     const params = metric_remove_islands_params(surface, metric_in, metric_out, opt_corrected_areas_area_metric)
@@ -210,5 +210,8 @@ export {
       MetricRemoveIslandsOutputs,
       MetricRemoveIslandsParameters,
       metric_remove_islands,
+      metric_remove_islands_cargs,
+      metric_remove_islands_execute,
+      metric_remove_islands_outputs,
       metric_remove_islands_params,
 };

@@ -12,7 +12,7 @@ const FSLMATHS_METADATA: Metadata = {
 
 
 interface FslmathsOperationParameters {
-    "__STYXTYPE__": "operation";
+    "@type": "fsl.fslmaths.operations";
     "add"?: number | null | undefined;
     "sub"?: number | null | undefined;
     "mul"?: number | null | undefined;
@@ -115,7 +115,7 @@ interface FslmathsOperationParameters {
 
 
 interface FslmathsParameters {
-    "__STYXTYPE__": "fslmaths";
+    "@type": "fsl.fslmaths";
     "datatype_internal"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
     "input_files": Array<InputPathType>;
     "operations": Array<FslmathsOperationParameters>;
@@ -124,41 +124,145 @@ interface FslmathsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslmaths": fslmaths_cargs,
-        "operation": fslmaths_operation_cargs,
+        "fsl.fslmaths": fslmaths_cargs,
+        "fsl.fslmaths.operations": fslmaths_operation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslmaths": fslmaths_outputs,
+        "fsl.fslmaths": fslmaths_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param add Add following input to current image
+ * @param sub Subtract following input from current image
+ * @param mul Multiply current image by following input
+ * @param div Divide current image by following input
+ * @param rem Modulus remainder - divide current image by following input and take remainder
+ * @param mas Use (following image>0) to mask current image
+ * @param thr Use following number to threshold current image (zero anything below the number)
+ * @param thrp Use following percentage (0-100) of ROBUST RANGE to threshold current image (zero anything below the number)
+ * @param thr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold below
+ * @param uthr Use following number to upper-threshold current image (zero anything above the number)
+ * @param uthrp Use following percentage (0-100) of ROBUST RANGE to upper-threshold current image (zero anything above the number)
+ * @param uthr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold above
+ * @param max Take maximum of following input and current image
+ * @param min Take minimum of following input and current image
+ * @param seed Seed random number generator with following number
+ * @param restart Replace the current image with input for future processing operations
+ * @param save Save the current working image to the input filename
+ * @param exp Exponential
+ * @param log Natural logarithm
+ * @param sin Sine function
+ * @param cos Cosine function
+ * @param tan Tangent function
+ * @param asin Arc sine function
+ * @param acos Arc cosine function
+ * @param atan Arc tangent function
+ * @param sqr Square
+ * @param sqrt Square root
+ * @param recip Reciprocal (1/current image)
+ * @param abs Absolute value
+ * @param bin Use (current image>0) to binarise
+ * @param binv Binarise and invert (binarisation and logical inversion)
+ * @param fillh Fill holes in a binary mask (holes are internal - i.e. do not touch the edge of the FOV)
+ * @param fillh26 Fill holes using 26 connectivity
+ * @param index Replace each nonzero voxel with a unique (subject to wrapping) index number
+ * @param grid Add a 3D grid of intensity <value> with grid spacing <spacing>
+ * @param edge Edge strength
+ * @param tfce Enhance with TFCE, e.g. -tfce 2 0.5 6 (maybe change 6 to 26 for skeletons)
+ * @param tfce_s Show support area for voxel (X,Y,Z)
+ * @param nan Replace NaNs (improper numbers) with 0
+ * @param nanm Make NaN (improper number) mask with 1 for NaN voxels, 0 otherwise
+ * @param rand Add uniform noise (range 0:1)
+ * @param randn Add Gaussian noise (mean=0 sigma=1)
+ * @param inm Intensity normalisation (per 3D volume mean)
+ * @param ing Intensity normalisation, global 4D mean
+ * @param range Set the output calmin/max to full data range
+ * @param tensor_decomp Convert a 4D (6-timepoint) tensor image into L1,2,3,FA,MD,MO,V1,2,3 (remaining image in pipeline is FA)
+ * @param kernel_3_d 3x3x3 box centered on target voxel (set as default kernel)
+ * @param kernel_2_d 3x3x1 box centered on target voxel
+ * @param kernel_box All voxels in a cube of width <size> mm centered on target voxel
+ * @param kernel_boxv All voxels in a cube of width <size> voxels centered on target voxel
+ * @param kernel_boxv3 All voxels in a cuboid of dimensions X x Y x Z centered on target voxel
+ * @param kernel_gauss Gaussian kernel (sigma in mm, not voxels)
+ * @param kernel_sphere All voxels in a sphere of radius <size> mm centered on target voxel
+ * @param kernel_file Use external file as kernel
+ * @param dil_m Mean Dilation of non-zero voxels
+ * @param dil_d Modal Dilation of non-zero voxels
+ * @param dil_f Maximum filtering of all voxels
+ * @param dilall Apply -dilM repeatedly until the entire FOV is covered
+ * @param ero Erode by zeroing non-zero voxels when zero voxels found in kernel
+ * @param ero_f Minimum filtering of all voxels
+ * @param fmedian Median Filtering
+ * @param fmean Mean filtering, kernel weighted (conventionally used with gauss kernel)
+ * @param fmeanu Mean filtering, kernel weighted, un-normalised (gives edge effects)
+ * @param s Create a gauss kernel of sigma mm and perform mean filtering
+ * @param subsamp2 Downsamples image by a factor of 2 (keeping new voxels centred on old)
+ * @param subsamp2offc Downsamples image by a factor of 2 (non-centred)
+ * @param tmean Mean across time
+ * @param xmean Mean across X axis
+ * @param ymean Mean across Y axis
+ * @param zmean Mean across Z axis
+ * @param tstd Standard deviation across time
+ * @param xstd Standard deviation across X axis
+ * @param ystd Standard deviation across Y axis
+ * @param zstd Standard deviation across Z axis
+ * @param tmax Max across time
+ * @param xmax Max across X axis
+ * @param ymax Max across Y axis
+ * @param zmax Max across Z axis
+ * @param tmaxn Time index of max across time
+ * @param xmaxn X index of max across X axis
+ * @param ymaxn Y index of max across Y axis
+ * @param zmaxn Z index of max across Z axis
+ * @param tmin Min across time
+ * @param xmin Min across X axis
+ * @param ymin Min across Y axis
+ * @param zmin Min across Z axis
+ * @param tmedian Median across time
+ * @param xmedian Median across X axis
+ * @param ymedian Median across Y axis
+ * @param zmedian Median across Z axis
+ * @param tperc Nth percentile (0-100) of FULL RANGE across time
+ * @param xperc Nth percentile (0-100) of FULL RANGE across X axis
+ * @param yperc Nth percentile (0-100) of FULL RANGE across Y axis
+ * @param zperc Nth percentile (0-100) of FULL RANGE across Z axis
+ * @param tar1 Temporal AR(1) coefficient (use -odt float and probably demean first)
+ * @param roi <xmin> <xsize> <ymin> <ysize> <zmin> <zsize> <tmin> <tsize>. Zero outside roi (using voxel coordinates). Inputting -1 for a size will set it to the full image extent for that dimension.
+ * @param bptf <lowpass> <highpass>. Bandpass temporal filtering (use -odt float and probably demean first)
+ * @param roc <threshold> <output>. ROC analysis
+ *
+ * @returns Parameter dictionary
+ */
 function fslmaths_operation_params(
     add: number | null = null,
     sub: number | null = null,
@@ -259,112 +363,8 @@ function fslmaths_operation_params(
     bptf: Array<number> | null = null,
     roc: Array<number> | null = null,
 ): FslmathsOperationParameters {
-    /**
-     * Build parameters.
-    
-     * @param add Add following input to current image
-     * @param sub Subtract following input from current image
-     * @param mul Multiply current image by following input
-     * @param div Divide current image by following input
-     * @param rem Modulus remainder - divide current image by following input and take remainder
-     * @param mas Use (following image>0) to mask current image
-     * @param thr Use following number to threshold current image (zero anything below the number)
-     * @param thrp Use following percentage (0-100) of ROBUST RANGE to threshold current image (zero anything below the number)
-     * @param thr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold below
-     * @param uthr Use following number to upper-threshold current image (zero anything above the number)
-     * @param uthrp Use following percentage (0-100) of ROBUST RANGE to upper-threshold current image (zero anything above the number)
-     * @param uthr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold above
-     * @param max Take maximum of following input and current image
-     * @param min Take minimum of following input and current image
-     * @param seed Seed random number generator with following number
-     * @param restart Replace the current image with input for future processing operations
-     * @param save Save the current working image to the input filename
-     * @param exp Exponential
-     * @param log Natural logarithm
-     * @param sin Sine function
-     * @param cos Cosine function
-     * @param tan Tangent function
-     * @param asin Arc sine function
-     * @param acos Arc cosine function
-     * @param atan Arc tangent function
-     * @param sqr Square
-     * @param sqrt Square root
-     * @param recip Reciprocal (1/current image)
-     * @param abs Absolute value
-     * @param bin Use (current image>0) to binarise
-     * @param binv Binarise and invert (binarisation and logical inversion)
-     * @param fillh Fill holes in a binary mask (holes are internal - i.e. do not touch the edge of the FOV)
-     * @param fillh26 Fill holes using 26 connectivity
-     * @param index Replace each nonzero voxel with a unique (subject to wrapping) index number
-     * @param grid Add a 3D grid of intensity <value> with grid spacing <spacing>
-     * @param edge Edge strength
-     * @param tfce Enhance with TFCE, e.g. -tfce 2 0.5 6 (maybe change 6 to 26 for skeletons)
-     * @param tfce_s Show support area for voxel (X,Y,Z)
-     * @param nan Replace NaNs (improper numbers) with 0
-     * @param nanm Make NaN (improper number) mask with 1 for NaN voxels, 0 otherwise
-     * @param rand Add uniform noise (range 0:1)
-     * @param randn Add Gaussian noise (mean=0 sigma=1)
-     * @param inm Intensity normalisation (per 3D volume mean)
-     * @param ing Intensity normalisation, global 4D mean
-     * @param range Set the output calmin/max to full data range
-     * @param tensor_decomp Convert a 4D (6-timepoint) tensor image into L1,2,3,FA,MD,MO,V1,2,3 (remaining image in pipeline is FA)
-     * @param kernel_3_d 3x3x3 box centered on target voxel (set as default kernel)
-     * @param kernel_2_d 3x3x1 box centered on target voxel
-     * @param kernel_box All voxels in a cube of width <size> mm centered on target voxel
-     * @param kernel_boxv All voxels in a cube of width <size> voxels centered on target voxel
-     * @param kernel_boxv3 All voxels in a cuboid of dimensions X x Y x Z centered on target voxel
-     * @param kernel_gauss Gaussian kernel (sigma in mm, not voxels)
-     * @param kernel_sphere All voxels in a sphere of radius <size> mm centered on target voxel
-     * @param kernel_file Use external file as kernel
-     * @param dil_m Mean Dilation of non-zero voxels
-     * @param dil_d Modal Dilation of non-zero voxels
-     * @param dil_f Maximum filtering of all voxels
-     * @param dilall Apply -dilM repeatedly until the entire FOV is covered
-     * @param ero Erode by zeroing non-zero voxels when zero voxels found in kernel
-     * @param ero_f Minimum filtering of all voxels
-     * @param fmedian Median Filtering
-     * @param fmean Mean filtering, kernel weighted (conventionally used with gauss kernel)
-     * @param fmeanu Mean filtering, kernel weighted, un-normalised (gives edge effects)
-     * @param s Create a gauss kernel of sigma mm and perform mean filtering
-     * @param subsamp2 Downsamples image by a factor of 2 (keeping new voxels centred on old)
-     * @param subsamp2offc Downsamples image by a factor of 2 (non-centred)
-     * @param tmean Mean across time
-     * @param xmean Mean across X axis
-     * @param ymean Mean across Y axis
-     * @param zmean Mean across Z axis
-     * @param tstd Standard deviation across time
-     * @param xstd Standard deviation across X axis
-     * @param ystd Standard deviation across Y axis
-     * @param zstd Standard deviation across Z axis
-     * @param tmax Max across time
-     * @param xmax Max across X axis
-     * @param ymax Max across Y axis
-     * @param zmax Max across Z axis
-     * @param tmaxn Time index of max across time
-     * @param xmaxn X index of max across X axis
-     * @param ymaxn Y index of max across Y axis
-     * @param zmaxn Z index of max across Z axis
-     * @param tmin Min across time
-     * @param xmin Min across X axis
-     * @param ymin Min across Y axis
-     * @param zmin Min across Z axis
-     * @param tmedian Median across time
-     * @param xmedian Median across X axis
-     * @param ymedian Median across Y axis
-     * @param zmedian Median across Z axis
-     * @param tperc Nth percentile (0-100) of FULL RANGE across time
-     * @param xperc Nth percentile (0-100) of FULL RANGE across X axis
-     * @param yperc Nth percentile (0-100) of FULL RANGE across Y axis
-     * @param zperc Nth percentile (0-100) of FULL RANGE across Z axis
-     * @param tar1 Temporal AR(1) coefficient (use -odt float and probably demean first)
-     * @param roi <xmin> <xsize> <ymin> <ysize> <zmin> <zsize> <tmin> <tsize>. Zero outside roi (using voxel coordinates). Inputting -1 for a size will set it to the full image extent for that dimension.
-     * @param bptf <lowpass> <highpass>. Bandpass temporal filtering (use -odt float and probably demean first)
-     * @param roc <threshold> <output>. ROC analysis
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "operation" as const,
+        "@type": "fsl.fslmaths.operations" as const,
         "save": save,
         "exp": exp,
         "log": log,
@@ -538,18 +538,18 @@ function fslmaths_operation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslmaths_operation_cargs(
     params: FslmathsOperationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["add"] ?? null) !== null) {
         cargs.push(
@@ -971,6 +971,17 @@ interface FslmathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input images for processing
+ * @param operations Operations to perform on input images
+ * @param output Output image file
+ * @param datatype_internal Datatype used internally for calculations
+ * @param output_datatype Datatype used for the output image
+ *
+ * @returns Parameter dictionary
+ */
 function fslmaths_params(
     input_files: Array<InputPathType>,
     operations: Array<FslmathsOperationParameters>,
@@ -978,19 +989,8 @@ function fslmaths_params(
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
 ): FslmathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input images for processing
-     * @param operations Operations to perform on input images
-     * @param output Output image file
-     * @param datatype_internal Datatype used internally for calculations
-     * @param output_datatype Datatype used for the output image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslmaths" as const,
+        "@type": "fsl.fslmaths" as const,
         "input_files": input_files,
         "operations": operations,
         "output": output,
@@ -1005,18 +1005,18 @@ function fslmaths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslmaths_cargs(
     params: FslmathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslmaths");
     if ((params["datatype_internal"] ?? null) !== null) {
@@ -1026,7 +1026,7 @@ function fslmaths_cargs(
         );
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     cargs.push((params["output"] ?? null));
     if ((params["output_datatype"] ?? null) !== null) {
         cargs.push(
@@ -1038,18 +1038,18 @@ function fslmaths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslmaths_outputs(
     params: FslmathsParameters,
     execution: Execution,
 ): FslmathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslmathsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -1058,22 +1058,22 @@ function fslmaths_outputs(
 }
 
 
+/**
+ * FSL utility for image arithmetic, statistics, and mathematical operations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
+ */
 function fslmaths_execute(
     params: FslmathsParameters,
     execution: Execution,
 ): FslmathsOutputs {
-    /**
-     * FSL utility for image arithmetic, statistics, and mathematical operations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslmaths_cargs(params, execution)
     const ret = fslmaths_outputs(params, execution)
@@ -1082,6 +1082,22 @@ function fslmaths_execute(
 }
 
 
+/**
+ * FSL utility for image arithmetic, statistics, and mathematical operations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_files Input images for processing
+ * @param operations Operations to perform on input images
+ * @param output Output image file
+ * @param datatype_internal Datatype used internally for calculations
+ * @param output_datatype Datatype used for the output image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
+ */
 function fslmaths(
     input_files: Array<InputPathType>,
     operations: Array<FslmathsOperationParameters>,
@@ -1090,22 +1106,6 @@ function fslmaths(
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     runner: Runner | null = null,
 ): FslmathsOutputs {
-    /**
-     * FSL utility for image arithmetic, statistics, and mathematical operations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_files Input images for processing
-     * @param operations Operations to perform on input images
-     * @param output Output image file
-     * @param datatype_internal Datatype used internally for calculations
-     * @param output_datatype Datatype used for the output image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLMATHS_METADATA);
     const params = fslmaths_params(input_files, operations, output, datatype_internal, output_datatype)
@@ -1119,6 +1119,10 @@ export {
       FslmathsOutputs,
       FslmathsParameters,
       fslmaths,
+      fslmaths_cargs,
+      fslmaths_execute,
+      fslmaths_operation_cargs,
       fslmaths_operation_params,
+      fslmaths_outputs,
       fslmaths_params,
 };

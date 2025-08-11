@@ -12,7 +12,7 @@ const DMRI_ANATOMI_CUTS_METADATA: Metadata = {
 
 
 interface DmriAnatomiCutsParameters {
-    "__STYXTYPE__": "dmri_AnatomiCuts";
+    "@type": "freesurfer.dmri_AnatomiCuts";
     "segmentation_file": InputPathType;
     "fiber_file": InputPathType;
     "clusters": number;
@@ -23,35 +23,35 @@ interface DmriAnatomiCutsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_AnatomiCuts": dmri_anatomi_cuts_cargs,
+        "freesurfer.dmri_AnatomiCuts": dmri_anatomi_cuts_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_AnatomiCuts": dmri_anatomi_cuts_outputs,
+        "freesurfer.dmri_AnatomiCuts": dmri_anatomi_cuts_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface DmriAnatomiCutsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param segmentation_file Segmentation file
+ * @param fiber_file VTK fiber file
+ * @param clusters Number of clusters
+ * @param points Number of points
+ * @param fibers_eigen Number of fibers for eigen decomposition
+ * @param output_folder Output folder
+ * @param direction_flag Direction flag: 's' for straight, 'd' for diagonal, 'a' for all, 'o' for none
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_anatomi_cuts_params(
     segmentation_file: InputPathType,
     fiber_file: InputPathType,
@@ -83,21 +96,8 @@ function dmri_anatomi_cuts_params(
     output_folder: string,
     direction_flag: "s" | "d" | "a" | "o",
 ): DmriAnatomiCutsParameters {
-    /**
-     * Build parameters.
-    
-     * @param segmentation_file Segmentation file
-     * @param fiber_file VTK fiber file
-     * @param clusters Number of clusters
-     * @param points Number of points
-     * @param fibers_eigen Number of fibers for eigen decomposition
-     * @param output_folder Output folder
-     * @param direction_flag Direction flag: 's' for straight, 'd' for diagonal, 'a' for all, 'o' for none
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_AnatomiCuts" as const,
+        "@type": "freesurfer.dmri_AnatomiCuts" as const,
         "segmentation_file": segmentation_file,
         "fiber_file": fiber_file,
         "clusters": clusters,
@@ -110,18 +110,18 @@ function dmri_anatomi_cuts_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_anatomi_cuts_cargs(
     params: DmriAnatomiCutsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_AnatomiCuts");
     cargs.push(
@@ -156,18 +156,18 @@ function dmri_anatomi_cuts_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_anatomi_cuts_outputs(
     params: DmriAnatomiCutsParameters,
     execution: Execution,
 ): DmriAnatomiCutsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriAnatomiCutsOutputs = {
         root: execution.outputFile("."),
         output_vtk: execution.outputFile([(params["output_folder"] ?? null), "/output.vtk"].join('')),
@@ -176,22 +176,22 @@ function dmri_anatomi_cuts_outputs(
 }
 
 
+/**
+ * AnatomiCuts tool for DTI fibers segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
+ */
 function dmri_anatomi_cuts_execute(
     params: DmriAnatomiCutsParameters,
     execution: Execution,
 ): DmriAnatomiCutsOutputs {
-    /**
-     * AnatomiCuts tool for DTI fibers segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_anatomi_cuts_cargs(params, execution)
     const ret = dmri_anatomi_cuts_outputs(params, execution)
@@ -200,6 +200,24 @@ function dmri_anatomi_cuts_execute(
 }
 
 
+/**
+ * AnatomiCuts tool for DTI fibers segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param segmentation_file Segmentation file
+ * @param fiber_file VTK fiber file
+ * @param clusters Number of clusters
+ * @param points Number of points
+ * @param fibers_eigen Number of fibers for eigen decomposition
+ * @param output_folder Output folder
+ * @param direction_flag Direction flag: 's' for straight, 'd' for diagonal, 'a' for all, 'o' for none
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
+ */
 function dmri_anatomi_cuts(
     segmentation_file: InputPathType,
     fiber_file: InputPathType,
@@ -210,24 +228,6 @@ function dmri_anatomi_cuts(
     direction_flag: "s" | "d" | "a" | "o",
     runner: Runner | null = null,
 ): DmriAnatomiCutsOutputs {
-    /**
-     * AnatomiCuts tool for DTI fibers segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param segmentation_file Segmentation file
-     * @param fiber_file VTK fiber file
-     * @param clusters Number of clusters
-     * @param points Number of points
-     * @param fibers_eigen Number of fibers for eigen decomposition
-     * @param output_folder Output folder
-     * @param direction_flag Direction flag: 's' for straight, 'd' for diagonal, 'a' for all, 'o' for none
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_ANATOMI_CUTS_METADATA);
     const params = dmri_anatomi_cuts_params(segmentation_file, fiber_file, clusters, points, fibers_eigen, output_folder, direction_flag)
@@ -240,5 +240,8 @@ export {
       DmriAnatomiCutsOutputs,
       DmriAnatomiCutsParameters,
       dmri_anatomi_cuts,
+      dmri_anatomi_cuts_cargs,
+      dmri_anatomi_cuts_execute,
+      dmri_anatomi_cuts_outputs,
       dmri_anatomi_cuts_params,
 };

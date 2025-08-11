@@ -12,7 +12,7 @@ const SLOW_SURF_CLUSTSIM_PY_METADATA: Metadata = {
 
 
 interface SlowSurfClustsimPyParameters {
-    "__STYXTYPE__": "slow_surf_clustsim.py";
+    "@type": "afni.slow_surf_clustsim.py";
     "on_surface"?: string | null | undefined;
     "save_script"?: string | null | undefined;
     "print_script": boolean;
@@ -27,33 +27,33 @@ interface SlowSurfClustsimPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slow_surf_clustsim.py": slow_surf_clustsim_py_cargs,
+        "afni.slow_surf_clustsim.py": slow_surf_clustsim_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface SlowSurfClustsimPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param on_surface Start from noise on the surface (so no volume data is involved)
+ * @param save_script Save script to given file
+ * @param print_script Print script to terminal
+ * @param uvar Set the user variable (use -show_default_uvars to see user vars). Example usage: -uvar spec_file sb23_lh_141_std.spec -uvar surf_vol sb23_SurfVol_aligned+orig
+ * @param verbosity Set the verbosity level
+ * @param help Show this help
+ * @param hist Show module history
+ * @param show_default_cvars List default control variables
+ * @param show_default_uvars List default user variables
+ * @param show_valid_opts List valid options
+ * @param version Show current version
+ *
+ * @returns Parameter dictionary
+ */
 function slow_surf_clustsim_py_params(
     on_surface: string | null = null,
     save_script: string | null = null,
@@ -86,25 +103,8 @@ function slow_surf_clustsim_py_params(
     show_valid_opts: boolean = false,
     version: boolean = false,
 ): SlowSurfClustsimPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param on_surface Start from noise on the surface (so no volume data is involved)
-     * @param save_script Save script to given file
-     * @param print_script Print script to terminal
-     * @param uvar Set the user variable (use -show_default_uvars to see user vars). Example usage: -uvar spec_file sb23_lh_141_std.spec -uvar surf_vol sb23_SurfVol_aligned+orig
-     * @param verbosity Set the verbosity level
-     * @param help Show this help
-     * @param hist Show module history
-     * @param show_default_cvars List default control variables
-     * @param show_default_uvars List default user variables
-     * @param show_valid_opts List valid options
-     * @param version Show current version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slow_surf_clustsim.py" as const,
+        "@type": "afni.slow_surf_clustsim.py" as const,
         "print_script": print_script,
         "help": help,
         "hist": hist,
@@ -129,18 +129,18 @@ function slow_surf_clustsim_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slow_surf_clustsim_py_cargs(
     params: SlowSurfClustsimPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slow_surf_clustsim.py");
     if ((params["on_surface"] ?? null) !== null) {
@@ -192,18 +192,18 @@ function slow_surf_clustsim_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slow_surf_clustsim_py_outputs(
     params: SlowSurfClustsimPyParameters,
     execution: Execution,
 ): SlowSurfClustsimPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlowSurfClustsimPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -211,22 +211,22 @@ function slow_surf_clustsim_py_outputs(
 }
 
 
+/**
+ * Generate a tcsh script to run clustsim on surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
+ */
 function slow_surf_clustsim_py_execute(
     params: SlowSurfClustsimPyParameters,
     execution: Execution,
 ): SlowSurfClustsimPyOutputs {
-    /**
-     * Generate a tcsh script to run clustsim on surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = slow_surf_clustsim_py_cargs(params, execution)
     const ret = slow_surf_clustsim_py_outputs(params, execution)
@@ -235,6 +235,28 @@ function slow_surf_clustsim_py_execute(
 }
 
 
+/**
+ * Generate a tcsh script to run clustsim on surface.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param on_surface Start from noise on the surface (so no volume data is involved)
+ * @param save_script Save script to given file
+ * @param print_script Print script to terminal
+ * @param uvar Set the user variable (use -show_default_uvars to see user vars). Example usage: -uvar spec_file sb23_lh_141_std.spec -uvar surf_vol sb23_SurfVol_aligned+orig
+ * @param verbosity Set the verbosity level
+ * @param help Show this help
+ * @param hist Show module history
+ * @param show_default_cvars List default control variables
+ * @param show_default_uvars List default user variables
+ * @param show_valid_opts List valid options
+ * @param version Show current version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
+ */
 function slow_surf_clustsim_py(
     on_surface: string | null = null,
     save_script: string | null = null,
@@ -249,28 +271,6 @@ function slow_surf_clustsim_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): SlowSurfClustsimPyOutputs {
-    /**
-     * Generate a tcsh script to run clustsim on surface.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param on_surface Start from noise on the surface (so no volume data is involved)
-     * @param save_script Save script to given file
-     * @param print_script Print script to terminal
-     * @param uvar Set the user variable (use -show_default_uvars to see user vars). Example usage: -uvar spec_file sb23_lh_141_std.spec -uvar surf_vol sb23_SurfVol_aligned+orig
-     * @param verbosity Set the verbosity level
-     * @param help Show this help
-     * @param hist Show module history
-     * @param show_default_cvars List default control variables
-     * @param show_default_uvars List default user variables
-     * @param show_valid_opts List valid options
-     * @param version Show current version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLOW_SURF_CLUSTSIM_PY_METADATA);
     const params = slow_surf_clustsim_py_params(on_surface, save_script, print_script, uvar, verbosity, help, hist, show_default_cvars, show_default_uvars, show_valid_opts, version)
@@ -283,5 +283,8 @@ export {
       SlowSurfClustsimPyOutputs,
       SlowSurfClustsimPyParameters,
       slow_surf_clustsim_py,
+      slow_surf_clustsim_py_cargs,
+      slow_surf_clustsim_py_execute,
+      slow_surf_clustsim_py_outputs,
       slow_surf_clustsim_py_params,
 };

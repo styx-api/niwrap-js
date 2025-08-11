@@ -12,7 +12,7 @@ const MRI_SEGMENT_METADATA: Metadata = {
 
 
 interface MriSegmentParameters {
-    "__STYXTYPE__": "mri_segment";
+    "@type": "freesurfer.mri_segment";
     "in_vol": InputPathType;
     "out_vol": string;
     "no1d_remove"?: number | null | undefined;
@@ -50,35 +50,35 @@ interface MriSegmentParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segment": mri_segment_cargs,
+        "freesurfer.mri_segment": mri_segment_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segment": mri_segment_outputs,
+        "freesurfer.mri_segment": mri_segment_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,46 @@ interface MriSegmentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_vol Input volume to be segmented
+ * @param out_vol Output volume after segmentation
+ * @param no1d_remove Don't run code that removes 1D strands from segmentation
+ * @param slope Set the curvature slope (both n and p)
+ * @param pslope Set the curvature pslope (default=1.0)
+ * @param nslope Set the curvature nslope (default=1.0)
+ * @param debug_voxel Set voxel for debugging
+ * @param auto Automatically detect class statistics (default)
+ * @param noauto Don't automatically detect class statistics
+ * @param log Log to ./segment.dat
+ * @param keep Keep wm edits, maintains all values of 1 and 255
+ * @param gray_hi Set the gray matter high limit (default=100.000)
+ * @param wm_low Set the white matter low limit (default=80.000)
+ * @param wm_low_factor wm_low = f*gray_mean + (1-f)*white_mean;
+ * @param wm_hi Set the white matter high limit (default=125.000)
+ * @param nseg Thicken the n largest thin strands (default=20)
+ * @param thicken Toggle thickening step (default=ON)
+ * @param fillbg Toggle filling of the basal ganglia (default=OFF)
+ * @param fillv Toggle filling of the ventricles (default=OFF)
+ * @param blur_sigma Set blur sigma (default=0.25)
+ * @param iterations Set # iterations of border classification (default=1)
+ * @param thin_strand_limit Set limit to thin strands in mm (default=4)
+ * @param verbose Verbose
+ * @param threshold Set % threshold (default=0.80)
+ * @param extract_options Extract options from filename
+ * @param wsize Set wsize (default=11 voxels)
+ * @param wsizemm Set wsize based on mm instead of voxels
+ * @param polvw_size Set wsize for plane of least variance (default=5)
+ * @param polv_len Set length for plane of least variance (default=3)
+ * @param datfile Set datfile (default is segment.dat)
+ * @param segmentation Use segmentation to set thresholds
+ * @param diagno Set diagnostic number
+ * @param diag_write Set diagnostic write
+ * @param diag_verbose Set diagnostic verbose
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segment_params(
     in_vol: InputPathType,
     out_vol: string,
@@ -141,48 +181,8 @@ function mri_segment_params(
     diag_write: boolean = false,
     diag_verbose: boolean = false,
 ): MriSegmentParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_vol Input volume to be segmented
-     * @param out_vol Output volume after segmentation
-     * @param no1d_remove Don't run code that removes 1D strands from segmentation
-     * @param slope Set the curvature slope (both n and p)
-     * @param pslope Set the curvature pslope (default=1.0)
-     * @param nslope Set the curvature nslope (default=1.0)
-     * @param debug_voxel Set voxel for debugging
-     * @param auto Automatically detect class statistics (default)
-     * @param noauto Don't automatically detect class statistics
-     * @param log Log to ./segment.dat
-     * @param keep Keep wm edits, maintains all values of 1 and 255
-     * @param gray_hi Set the gray matter high limit (default=100.000)
-     * @param wm_low Set the white matter low limit (default=80.000)
-     * @param wm_low_factor wm_low = f*gray_mean + (1-f)*white_mean;
-     * @param wm_hi Set the white matter high limit (default=125.000)
-     * @param nseg Thicken the n largest thin strands (default=20)
-     * @param thicken Toggle thickening step (default=ON)
-     * @param fillbg Toggle filling of the basal ganglia (default=OFF)
-     * @param fillv Toggle filling of the ventricles (default=OFF)
-     * @param blur_sigma Set blur sigma (default=0.25)
-     * @param iterations Set # iterations of border classification (default=1)
-     * @param thin_strand_limit Set limit to thin strands in mm (default=4)
-     * @param verbose Verbose
-     * @param threshold Set % threshold (default=0.80)
-     * @param extract_options Extract options from filename
-     * @param wsize Set wsize (default=11 voxels)
-     * @param wsizemm Set wsize based on mm instead of voxels
-     * @param polvw_size Set wsize for plane of least variance (default=5)
-     * @param polv_len Set length for plane of least variance (default=3)
-     * @param datfile Set datfile (default is segment.dat)
-     * @param segmentation Use segmentation to set thresholds
-     * @param diagno Set diagnostic number
-     * @param diag_write Set diagnostic write
-     * @param diag_verbose Set diagnostic verbose
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segment" as const,
+        "@type": "freesurfer.mri_segment" as const,
         "in_vol": in_vol,
         "out_vol": out_vol,
         "auto": auto,
@@ -266,18 +266,18 @@ function mri_segment_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segment_cargs(
     params: MriSegmentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segment");
     cargs.push(execution.inputFile((params["in_vol"] ?? null)));
@@ -448,18 +448,18 @@ function mri_segment_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segment_outputs(
     params: MriSegmentParameters,
     execution: Execution,
 ): MriSegmentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegmentOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["out_vol"] ?? null)].join('')),
@@ -469,22 +469,22 @@ function mri_segment_outputs(
 }
 
 
+/**
+ * Segments white matter from the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
+ */
 function mri_segment_execute(
     params: MriSegmentParameters,
     execution: Execution,
 ): MriSegmentOutputs {
-    /**
-     * Segments white matter from the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segment_cargs(params, execution)
     const ret = mri_segment_outputs(params, execution)
@@ -493,6 +493,51 @@ function mri_segment_execute(
 }
 
 
+/**
+ * Segments white matter from the input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param in_vol Input volume to be segmented
+ * @param out_vol Output volume after segmentation
+ * @param no1d_remove Don't run code that removes 1D strands from segmentation
+ * @param slope Set the curvature slope (both n and p)
+ * @param pslope Set the curvature pslope (default=1.0)
+ * @param nslope Set the curvature nslope (default=1.0)
+ * @param debug_voxel Set voxel for debugging
+ * @param auto Automatically detect class statistics (default)
+ * @param noauto Don't automatically detect class statistics
+ * @param log Log to ./segment.dat
+ * @param keep Keep wm edits, maintains all values of 1 and 255
+ * @param gray_hi Set the gray matter high limit (default=100.000)
+ * @param wm_low Set the white matter low limit (default=80.000)
+ * @param wm_low_factor wm_low = f*gray_mean + (1-f)*white_mean;
+ * @param wm_hi Set the white matter high limit (default=125.000)
+ * @param nseg Thicken the n largest thin strands (default=20)
+ * @param thicken Toggle thickening step (default=ON)
+ * @param fillbg Toggle filling of the basal ganglia (default=OFF)
+ * @param fillv Toggle filling of the ventricles (default=OFF)
+ * @param blur_sigma Set blur sigma (default=0.25)
+ * @param iterations Set # iterations of border classification (default=1)
+ * @param thin_strand_limit Set limit to thin strands in mm (default=4)
+ * @param verbose Verbose
+ * @param threshold Set % threshold (default=0.80)
+ * @param extract_options Extract options from filename
+ * @param wsize Set wsize (default=11 voxels)
+ * @param wsizemm Set wsize based on mm instead of voxels
+ * @param polvw_size Set wsize for plane of least variance (default=5)
+ * @param polv_len Set length for plane of least variance (default=3)
+ * @param datfile Set datfile (default is segment.dat)
+ * @param segmentation Use segmentation to set thresholds
+ * @param diagno Set diagnostic number
+ * @param diag_write Set diagnostic write
+ * @param diag_verbose Set diagnostic verbose
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
+ */
 function mri_segment(
     in_vol: InputPathType,
     out_vol: string,
@@ -530,51 +575,6 @@ function mri_segment(
     diag_verbose: boolean = false,
     runner: Runner | null = null,
 ): MriSegmentOutputs {
-    /**
-     * Segments white matter from the input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param in_vol Input volume to be segmented
-     * @param out_vol Output volume after segmentation
-     * @param no1d_remove Don't run code that removes 1D strands from segmentation
-     * @param slope Set the curvature slope (both n and p)
-     * @param pslope Set the curvature pslope (default=1.0)
-     * @param nslope Set the curvature nslope (default=1.0)
-     * @param debug_voxel Set voxel for debugging
-     * @param auto Automatically detect class statistics (default)
-     * @param noauto Don't automatically detect class statistics
-     * @param log Log to ./segment.dat
-     * @param keep Keep wm edits, maintains all values of 1 and 255
-     * @param gray_hi Set the gray matter high limit (default=100.000)
-     * @param wm_low Set the white matter low limit (default=80.000)
-     * @param wm_low_factor wm_low = f*gray_mean + (1-f)*white_mean;
-     * @param wm_hi Set the white matter high limit (default=125.000)
-     * @param nseg Thicken the n largest thin strands (default=20)
-     * @param thicken Toggle thickening step (default=ON)
-     * @param fillbg Toggle filling of the basal ganglia (default=OFF)
-     * @param fillv Toggle filling of the ventricles (default=OFF)
-     * @param blur_sigma Set blur sigma (default=0.25)
-     * @param iterations Set # iterations of border classification (default=1)
-     * @param thin_strand_limit Set limit to thin strands in mm (default=4)
-     * @param verbose Verbose
-     * @param threshold Set % threshold (default=0.80)
-     * @param extract_options Extract options from filename
-     * @param wsize Set wsize (default=11 voxels)
-     * @param wsizemm Set wsize based on mm instead of voxels
-     * @param polvw_size Set wsize for plane of least variance (default=5)
-     * @param polv_len Set length for plane of least variance (default=3)
-     * @param datfile Set datfile (default is segment.dat)
-     * @param segmentation Use segmentation to set thresholds
-     * @param diagno Set diagnostic number
-     * @param diag_write Set diagnostic write
-     * @param diag_verbose Set diagnostic verbose
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGMENT_METADATA);
     const params = mri_segment_params(in_vol, out_vol, no1d_remove, slope, pslope, nslope, debug_voxel, auto, noauto, log, keep, gray_hi, wm_low, wm_low_factor, wm_hi, nseg, thicken, fillbg, fillv, blur_sigma, iterations, thin_strand_limit, verbose, threshold, extract_options, wsize, wsizemm, polvw_size, polv_len, datfile, segmentation, diagno, diag_write, diag_verbose)
@@ -587,5 +587,8 @@ export {
       MriSegmentOutputs,
       MriSegmentParameters,
       mri_segment,
+      mri_segment_cargs,
+      mri_segment_execute,
+      mri_segment_outputs,
       mri_segment_params,
 };

@@ -12,7 +12,7 @@ const DCMSPLIT_METADATA: Metadata = {
 
 
 interface DcmsplitParameters {
-    "__STYXTYPE__": "dcmsplit";
+    "@type": "freesurfer.dcmsplit";
     "dcm_dir": string;
     "out_dir": string;
     "copy": boolean;
@@ -26,33 +26,33 @@ interface DcmsplitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmsplit": dcmsplit_cargs,
+        "freesurfer.dcmsplit": dcmsplit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface DcmsplitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dcm_dir Directory containing the DICOM files
+ * @param out_dir Output directory for split DICOM files
+ * @param copy Copy files instead of creating symbolic links
+ * @param link Link files instead of copying (default behavior)
+ * @param split_name Split files by patient name instead of UID
+ * @param split_uid Split files by Study UID instead of name (default behavior)
+ * @param series_no Split files by series number
+ * @param series_plus Split files by series number and either name or UID
+ * @param dicom_tag Split files by given DICOM tag (group element)
+ * @param study_description Split files by Study Description
+ *
+ * @returns Parameter dictionary
+ */
 function dcmsplit_params(
     dcm_dir: string,
     out_dir: string,
@@ -84,24 +100,8 @@ function dcmsplit_params(
     dicom_tag: string | null = null,
     study_description: boolean = false,
 ): DcmsplitParameters {
-    /**
-     * Build parameters.
-    
-     * @param dcm_dir Directory containing the DICOM files
-     * @param out_dir Output directory for split DICOM files
-     * @param copy Copy files instead of creating symbolic links
-     * @param link Link files instead of copying (default behavior)
-     * @param split_name Split files by patient name instead of UID
-     * @param split_uid Split files by Study UID instead of name (default behavior)
-     * @param series_no Split files by series number
-     * @param series_plus Split files by series number and either name or UID
-     * @param dicom_tag Split files by given DICOM tag (group element)
-     * @param study_description Split files by Study Description
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmsplit" as const,
+        "@type": "freesurfer.dcmsplit" as const,
         "dcm_dir": dcm_dir,
         "out_dir": out_dir,
         "copy": copy,
@@ -119,18 +119,18 @@ function dcmsplit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmsplit_cargs(
     params: DcmsplitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmsplit");
     cargs.push(
@@ -172,18 +172,18 @@ function dcmsplit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmsplit_outputs(
     params: DcmsplitParameters,
     execution: Execution,
 ): DcmsplitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmsplitOutputs = {
         root: execution.outputFile("."),
     };
@@ -191,22 +191,22 @@ function dcmsplit_outputs(
 }
 
 
+/**
+ * Splits DICOM files into separate folders based on a unique identifier (UID).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
+ */
 function dcmsplit_execute(
     params: DcmsplitParameters,
     execution: Execution,
 ): DcmsplitOutputs {
-    /**
-     * Splits DICOM files into separate folders based on a unique identifier (UID).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmsplit_cargs(params, execution)
     const ret = dcmsplit_outputs(params, execution)
@@ -215,6 +215,27 @@ function dcmsplit_execute(
 }
 
 
+/**
+ * Splits DICOM files into separate folders based on a unique identifier (UID).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dcm_dir Directory containing the DICOM files
+ * @param out_dir Output directory for split DICOM files
+ * @param copy Copy files instead of creating symbolic links
+ * @param link Link files instead of copying (default behavior)
+ * @param split_name Split files by patient name instead of UID
+ * @param split_uid Split files by Study UID instead of name (default behavior)
+ * @param series_no Split files by series number
+ * @param series_plus Split files by series number and either name or UID
+ * @param dicom_tag Split files by given DICOM tag (group element)
+ * @param study_description Split files by Study Description
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
+ */
 function dcmsplit(
     dcm_dir: string,
     out_dir: string,
@@ -228,27 +249,6 @@ function dcmsplit(
     study_description: boolean = false,
     runner: Runner | null = null,
 ): DcmsplitOutputs {
-    /**
-     * Splits DICOM files into separate folders based on a unique identifier (UID).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dcm_dir Directory containing the DICOM files
-     * @param out_dir Output directory for split DICOM files
-     * @param copy Copy files instead of creating symbolic links
-     * @param link Link files instead of copying (default behavior)
-     * @param split_name Split files by patient name instead of UID
-     * @param split_uid Split files by Study UID instead of name (default behavior)
-     * @param series_no Split files by series number
-     * @param series_plus Split files by series number and either name or UID
-     * @param dicom_tag Split files by given DICOM tag (group element)
-     * @param study_description Split files by Study Description
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMSPLIT_METADATA);
     const params = dcmsplit_params(dcm_dir, out_dir, copy, link, split_name, split_uid, series_no, series_plus, dicom_tag, study_description)
@@ -261,5 +261,8 @@ export {
       DcmsplitOutputs,
       DcmsplitParameters,
       dcmsplit,
+      dcmsplit_cargs,
+      dcmsplit_execute,
+      dcmsplit_outputs,
       dcmsplit_params,
 };

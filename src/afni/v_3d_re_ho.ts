@@ -12,7 +12,7 @@ const V_3D_RE_HO_METADATA: Metadata = {
 
 
 interface V3dReHoParameters {
-    "__STYXTYPE__": "3dReHo";
+    "@type": "afni.3dReHo";
     "prefix": string;
     "inset": InputPathType;
     "nneigh"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface V3dReHoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dReHo": v_3d_re_ho_cargs,
+        "afni.3dReHo": v_3d_re_ho_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dReHo": v_3d_re_ho_outputs,
+        "afni.3dReHo": v_3d_re_ho_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,26 @@ interface V3dReHoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file name part.
+ * @param inset Time series input file.
+ * @param nneigh Number of voxels in neighborhood, inclusive; can be 7 (for facewise neighbors), 19 (for face- and edge-wise neighbors), 27 (for face-, edge-, and node-wise neighbors). Default is 27.
+ * @param chi_sq Switch to output Friedman chi-square value per voxel as a subbrick.
+ * @param mask Include a whole brain mask within which to calculate ReHo. Otherwise, data should be masked already.
+ * @param neigh_rad Radius R of a desired neighborhood for voxelwise control, must be a floating point number >1. Examples: R=2.0 -> V=33, R=2.3 -> V=57, etc.
+ * @param neigh_x Semi-radius length A for ellipsoidal neighborhood.
+ * @param neigh_y Semi-radius length B for ellipsoidal neighborhood.
+ * @param neigh_z Semi-radius length C for ellipsoidal neighborhood.
+ * @param box_rad Cubic box radius BR centered on a given voxel for neighborhood control. Examples: BR=1 -> V=27, BR=2 -> V=125, etc.
+ * @param box_x Box volume neighborhood dimension X. Values put in get added in the +/- directions of each axis.
+ * @param box_y Box volume neighborhood dimension Y. Values put in get added in the +/- directions of each axis.
+ * @param box_z Box volume neighborhood dimension Z. Values put in get added in the +/- directions of each axis.
+ * @param in_rois Input a set of ROIs, each labeled with distinct integers. ReHo will be calculated per ROI.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_re_ho_params(
     prefix: string,
     inset: InputPathType,
@@ -109,28 +129,8 @@ function v_3d_re_ho_params(
     box_z: number | null = null,
     in_rois: InputPathType | null = null,
 ): V3dReHoParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file name part.
-     * @param inset Time series input file.
-     * @param nneigh Number of voxels in neighborhood, inclusive; can be 7 (for facewise neighbors), 19 (for face- and edge-wise neighbors), 27 (for face-, edge-, and node-wise neighbors). Default is 27.
-     * @param chi_sq Switch to output Friedman chi-square value per voxel as a subbrick.
-     * @param mask Include a whole brain mask within which to calculate ReHo. Otherwise, data should be masked already.
-     * @param neigh_rad Radius R of a desired neighborhood for voxelwise control, must be a floating point number >1. Examples: R=2.0 -> V=33, R=2.3 -> V=57, etc.
-     * @param neigh_x Semi-radius length A for ellipsoidal neighborhood.
-     * @param neigh_y Semi-radius length B for ellipsoidal neighborhood.
-     * @param neigh_z Semi-radius length C for ellipsoidal neighborhood.
-     * @param box_rad Cubic box radius BR centered on a given voxel for neighborhood control. Examples: BR=1 -> V=27, BR=2 -> V=125, etc.
-     * @param box_x Box volume neighborhood dimension X. Values put in get added in the +/- directions of each axis.
-     * @param box_y Box volume neighborhood dimension Y. Values put in get added in the +/- directions of each axis.
-     * @param box_z Box volume neighborhood dimension Z. Values put in get added in the +/- directions of each axis.
-     * @param in_rois Input a set of ROIs, each labeled with distinct integers. ReHo will be calculated per ROI.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dReHo" as const,
+        "@type": "afni.3dReHo" as const,
         "prefix": prefix,
         "inset": inset,
         "chi_sq": chi_sq,
@@ -172,18 +172,18 @@ function v_3d_re_ho_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_re_ho_cargs(
     params: V3dReHoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dReHo");
     cargs.push(
@@ -267,18 +267,18 @@ function v_3d_re_ho_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_re_ho_outputs(
     params: V3dReHoParameters,
     execution: Execution,
 ): V3dReHoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dReHoOutputs = {
         root: execution.outputFile("."),
         reho_output: execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')),
@@ -290,22 +290,22 @@ function v_3d_re_ho_outputs(
 }
 
 
+/**
+ * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
+ */
 function v_3d_re_ho_execute(
     params: V3dReHoParameters,
     execution: Execution,
 ): V3dReHoOutputs {
-    /**
-     * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_re_ho_cargs(params, execution)
     const ret = v_3d_re_ho_outputs(params, execution)
@@ -314,6 +314,31 @@ function v_3d_re_ho_execute(
 }
 
 
+/**
+ * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file name part.
+ * @param inset Time series input file.
+ * @param nneigh Number of voxels in neighborhood, inclusive; can be 7 (for facewise neighbors), 19 (for face- and edge-wise neighbors), 27 (for face-, edge-, and node-wise neighbors). Default is 27.
+ * @param chi_sq Switch to output Friedman chi-square value per voxel as a subbrick.
+ * @param mask Include a whole brain mask within which to calculate ReHo. Otherwise, data should be masked already.
+ * @param neigh_rad Radius R of a desired neighborhood for voxelwise control, must be a floating point number >1. Examples: R=2.0 -> V=33, R=2.3 -> V=57, etc.
+ * @param neigh_x Semi-radius length A for ellipsoidal neighborhood.
+ * @param neigh_y Semi-radius length B for ellipsoidal neighborhood.
+ * @param neigh_z Semi-radius length C for ellipsoidal neighborhood.
+ * @param box_rad Cubic box radius BR centered on a given voxel for neighborhood control. Examples: BR=1 -> V=27, BR=2 -> V=125, etc.
+ * @param box_x Box volume neighborhood dimension X. Values put in get added in the +/- directions of each axis.
+ * @param box_y Box volume neighborhood dimension Y. Values put in get added in the +/- directions of each axis.
+ * @param box_z Box volume neighborhood dimension Z. Values put in get added in the +/- directions of each axis.
+ * @param in_rois Input a set of ROIs, each labeled with distinct integers. ReHo will be calculated per ROI.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
+ */
 function v_3d_re_ho(
     prefix: string,
     inset: InputPathType,
@@ -331,31 +356,6 @@ function v_3d_re_ho(
     in_rois: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dReHoOutputs {
-    /**
-     * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file name part.
-     * @param inset Time series input file.
-     * @param nneigh Number of voxels in neighborhood, inclusive; can be 7 (for facewise neighbors), 19 (for face- and edge-wise neighbors), 27 (for face-, edge-, and node-wise neighbors). Default is 27.
-     * @param chi_sq Switch to output Friedman chi-square value per voxel as a subbrick.
-     * @param mask Include a whole brain mask within which to calculate ReHo. Otherwise, data should be masked already.
-     * @param neigh_rad Radius R of a desired neighborhood for voxelwise control, must be a floating point number >1. Examples: R=2.0 -> V=33, R=2.3 -> V=57, etc.
-     * @param neigh_x Semi-radius length A for ellipsoidal neighborhood.
-     * @param neigh_y Semi-radius length B for ellipsoidal neighborhood.
-     * @param neigh_z Semi-radius length C for ellipsoidal neighborhood.
-     * @param box_rad Cubic box radius BR centered on a given voxel for neighborhood control. Examples: BR=1 -> V=27, BR=2 -> V=125, etc.
-     * @param box_x Box volume neighborhood dimension X. Values put in get added in the +/- directions of each axis.
-     * @param box_y Box volume neighborhood dimension Y. Values put in get added in the +/- directions of each axis.
-     * @param box_z Box volume neighborhood dimension Z. Values put in get added in the +/- directions of each axis.
-     * @param in_rois Input a set of ROIs, each labeled with distinct integers. ReHo will be calculated per ROI.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RE_HO_METADATA);
     const params = v_3d_re_ho_params(prefix, inset, nneigh, chi_sq, mask, neigh_rad, neigh_x, neigh_y, neigh_z, box_rad, box_x, box_y, box_z, in_rois)
@@ -368,5 +368,8 @@ export {
       V3dReHoParameters,
       V_3D_RE_HO_METADATA,
       v_3d_re_ho,
+      v_3d_re_ho_cargs,
+      v_3d_re_ho_execute,
+      v_3d_re_ho_outputs,
       v_3d_re_ho_params,
 };

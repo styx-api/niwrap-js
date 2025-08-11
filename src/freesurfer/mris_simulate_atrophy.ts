@@ -12,7 +12,7 @@ const MRIS_SIMULATE_ATROPHY_METADATA: Metadata = {
 
 
 interface MrisSimulateAtrophyParameters {
-    "__STYXTYPE__": "mris_simulate_atrophy";
+    "@type": "freesurfer.mris_simulate_atrophy";
     "subject": string;
     "hemi": string;
     "label": string;
@@ -23,35 +23,35 @@ interface MrisSimulateAtrophyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_simulate_atrophy": mris_simulate_atrophy_cargs,
+        "freesurfer.mris_simulate_atrophy": mris_simulate_atrophy_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_simulate_atrophy": mris_simulate_atrophy_outputs,
+        "freesurfer.mris_simulate_atrophy": mris_simulate_atrophy_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisSimulateAtrophyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param hemi Hemisphere (e.g. lh or rh)
+ * @param label Label of the brain region
+ * @param atrophy_fraction Target atrophy fraction
+ * @param output_volume Output volume file
+ * @param atrophy_percent Percentage atrophy to simulate of structure
+ * @param noise_level Gaussian noise level to add
+ *
+ * @returns Parameter dictionary
+ */
 function mris_simulate_atrophy_params(
     subject: string,
     hemi: string,
@@ -83,21 +96,8 @@ function mris_simulate_atrophy_params(
     atrophy_percent: number | null = null,
     noise_level: number | null = null,
 ): MrisSimulateAtrophyParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param hemi Hemisphere (e.g. lh or rh)
-     * @param label Label of the brain region
-     * @param atrophy_fraction Target atrophy fraction
-     * @param output_volume Output volume file
-     * @param atrophy_percent Percentage atrophy to simulate of structure
-     * @param noise_level Gaussian noise level to add
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_simulate_atrophy" as const,
+        "@type": "freesurfer.mris_simulate_atrophy" as const,
         "subject": subject,
         "hemi": hemi,
         "label": label,
@@ -114,18 +114,18 @@ function mris_simulate_atrophy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_simulate_atrophy_cargs(
     params: MrisSimulateAtrophyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_simulate_atrophy");
     cargs.push((params["subject"] ?? null));
@@ -149,18 +149,18 @@ function mris_simulate_atrophy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_simulate_atrophy_outputs(
     params: MrisSimulateAtrophyParameters,
     execution: Execution,
 ): MrisSimulateAtrophyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSimulateAtrophyOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -169,22 +169,22 @@ function mris_simulate_atrophy_outputs(
 }
 
 
+/**
+ * Simulate atrophy on brain structures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSimulateAtrophyOutputs`).
+ */
 function mris_simulate_atrophy_execute(
     params: MrisSimulateAtrophyParameters,
     execution: Execution,
 ): MrisSimulateAtrophyOutputs {
-    /**
-     * Simulate atrophy on brain structures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSimulateAtrophyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_simulate_atrophy_cargs(params, execution)
     const ret = mris_simulate_atrophy_outputs(params, execution)
@@ -193,6 +193,24 @@ function mris_simulate_atrophy_execute(
 }
 
 
+/**
+ * Simulate atrophy on brain structures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param hemi Hemisphere (e.g. lh or rh)
+ * @param label Label of the brain region
+ * @param atrophy_fraction Target atrophy fraction
+ * @param output_volume Output volume file
+ * @param atrophy_percent Percentage atrophy to simulate of structure
+ * @param noise_level Gaussian noise level to add
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSimulateAtrophyOutputs`).
+ */
 function mris_simulate_atrophy(
     subject: string,
     hemi: string,
@@ -203,24 +221,6 @@ function mris_simulate_atrophy(
     noise_level: number | null = null,
     runner: Runner | null = null,
 ): MrisSimulateAtrophyOutputs {
-    /**
-     * Simulate atrophy on brain structures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param hemi Hemisphere (e.g. lh or rh)
-     * @param label Label of the brain region
-     * @param atrophy_fraction Target atrophy fraction
-     * @param output_volume Output volume file
-     * @param atrophy_percent Percentage atrophy to simulate of structure
-     * @param noise_level Gaussian noise level to add
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSimulateAtrophyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SIMULATE_ATROPHY_METADATA);
     const params = mris_simulate_atrophy_params(subject, hemi, label, atrophy_fraction, output_volume, atrophy_percent, noise_level)
@@ -233,5 +233,8 @@ export {
       MrisSimulateAtrophyOutputs,
       MrisSimulateAtrophyParameters,
       mris_simulate_atrophy,
+      mris_simulate_atrophy_cargs,
+      mris_simulate_atrophy_execute,
+      mris_simulate_atrophy_outputs,
       mris_simulate_atrophy_params,
 };

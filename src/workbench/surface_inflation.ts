@@ -12,7 +12,7 @@ const SURFACE_INFLATION_METADATA: Metadata = {
 
 
 interface SurfaceInflationParameters {
-    "__STYXTYPE__": "surface-inflation";
+    "@type": "workbench.surface-inflation";
     "anatomical_surface_in": InputPathType;
     "surface_in": InputPathType;
     "number_of_smoothing_cycles": number;
@@ -23,35 +23,35 @@ interface SurfaceInflationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-inflation": surface_inflation_cargs,
+        "workbench.surface-inflation": surface_inflation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-inflation": surface_inflation_outputs,
+        "workbench.surface-inflation": surface_inflation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface SurfaceInflationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param anatomical_surface_in the anatomical surface
+ * @param surface_in the surface file to inflate
+ * @param number_of_smoothing_cycles number of smoothing cycles
+ * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
+ * @param smoothing_iterations smoothing iterations
+ * @param inflation_factor inflation factor
+ * @param surface_out output surface file
+ *
+ * @returns Parameter dictionary
+ */
 function surface_inflation_params(
     anatomical_surface_in: InputPathType,
     surface_in: InputPathType,
@@ -83,21 +96,8 @@ function surface_inflation_params(
     inflation_factor: number,
     surface_out: string,
 ): SurfaceInflationParameters {
-    /**
-     * Build parameters.
-    
-     * @param anatomical_surface_in the anatomical surface
-     * @param surface_in the surface file to inflate
-     * @param number_of_smoothing_cycles number of smoothing cycles
-     * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
-     * @param smoothing_iterations smoothing iterations
-     * @param inflation_factor inflation factor
-     * @param surface_out output surface file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-inflation" as const,
+        "@type": "workbench.surface-inflation" as const,
         "anatomical_surface_in": anatomical_surface_in,
         "surface_in": surface_in,
         "number_of_smoothing_cycles": number_of_smoothing_cycles,
@@ -110,18 +110,18 @@ function surface_inflation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_inflation_cargs(
     params: SurfaceInflationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-inflation");
@@ -136,18 +136,18 @@ function surface_inflation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_inflation_outputs(
     params: SurfaceInflationParameters,
     execution: Execution,
 ): SurfaceInflationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceInflationOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -156,24 +156,24 @@ function surface_inflation_outputs(
 }
 
 
+/**
+ * Surface inflation.
+ *
+ * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
+ */
 function surface_inflation_execute(
     params: SurfaceInflationParameters,
     execution: Execution,
 ): SurfaceInflationOutputs {
-    /**
-     * Surface inflation.
-     * 
-     * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_inflation_cargs(params, execution)
     const ret = surface_inflation_outputs(params, execution)
@@ -182,6 +182,26 @@ function surface_inflation_execute(
 }
 
 
+/**
+ * Surface inflation.
+ *
+ * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param anatomical_surface_in the anatomical surface
+ * @param surface_in the surface file to inflate
+ * @param number_of_smoothing_cycles number of smoothing cycles
+ * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
+ * @param smoothing_iterations smoothing iterations
+ * @param inflation_factor inflation factor
+ * @param surface_out output surface file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
+ */
 function surface_inflation(
     anatomical_surface_in: InputPathType,
     surface_in: InputPathType,
@@ -192,26 +212,6 @@ function surface_inflation(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceInflationOutputs {
-    /**
-     * Surface inflation.
-     * 
-     * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param anatomical_surface_in the anatomical surface
-     * @param surface_in the surface file to inflate
-     * @param number_of_smoothing_cycles number of smoothing cycles
-     * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
-     * @param smoothing_iterations smoothing iterations
-     * @param inflation_factor inflation factor
-     * @param surface_out output surface file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_INFLATION_METADATA);
     const params = surface_inflation_params(anatomical_surface_in, surface_in, number_of_smoothing_cycles, smoothing_strength, smoothing_iterations, inflation_factor, surface_out)
@@ -224,5 +224,8 @@ export {
       SurfaceInflationOutputs,
       SurfaceInflationParameters,
       surface_inflation,
+      surface_inflation_cargs,
+      surface_inflation_execute,
+      surface_inflation_outputs,
       surface_inflation_params,
 };

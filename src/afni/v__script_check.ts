@@ -12,42 +12,42 @@ const V__SCRIPT_CHECK_METADATA: Metadata = {
 
 
 interface VScriptCheckParameters {
-    "__STYXTYPE__": "@ScriptCheck";
+    "@type": "afni.@ScriptCheck";
     "clean": boolean;
     "suffix"?: string | null | undefined;
     "scripts": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ScriptCheck": v__script_check_cargs,
+        "afni.@ScriptCheck": v__script_check_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ScriptCheck": v__script_check_outputs,
+        "afni.@ScriptCheck": v__script_check_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface VScriptCheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scripts Scripts to be checked for improperly terminated lines
+ * @param clean Clean bad line breaks
+ * @param suffix Rename uncleaned file with specified suffix. Default is .uncln
+ *
+ * @returns Parameter dictionary
+ */
 function v__script_check_params(
     scripts: Array<InputPathType>,
     clean: boolean = false,
     suffix: string | null = null,
 ): VScriptCheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param scripts Scripts to be checked for improperly terminated lines
-     * @param clean Clean bad line breaks
-     * @param suffix Rename uncleaned file with specified suffix. Default is .uncln
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ScriptCheck" as const,
+        "@type": "afni.@ScriptCheck" as const,
         "clean": clean,
         "scripts": scripts,
     };
@@ -100,18 +100,18 @@ function v__script_check_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__script_check_cargs(
     params: VScriptCheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ScriptCheck");
     if ((params["clean"] ?? null)) {
@@ -128,18 +128,18 @@ function v__script_check_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__script_check_outputs(
     params: VScriptCheckParameters,
     execution: Execution,
 ): VScriptCheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VScriptCheckOutputs = {
         root: execution.outputFile("."),
         uncleaned_file: execution.outputFile(["{SCRIPT}.uncln"].join('')),
@@ -149,22 +149,22 @@ function v__script_check_outputs(
 }
 
 
+/**
+ * Checks scripts for improperly terminated lines and optionally cleans them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
+ */
 function v__script_check_execute(
     params: VScriptCheckParameters,
     execution: Execution,
 ): VScriptCheckOutputs {
-    /**
-     * Checks scripts for improperly terminated lines and optionally cleans them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__script_check_cargs(params, execution)
     const ret = v__script_check_outputs(params, execution)
@@ -173,26 +173,26 @@ function v__script_check_execute(
 }
 
 
+/**
+ * Checks scripts for improperly terminated lines and optionally cleans them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param scripts Scripts to be checked for improperly terminated lines
+ * @param clean Clean bad line breaks
+ * @param suffix Rename uncleaned file with specified suffix. Default is .uncln
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
+ */
 function v__script_check(
     scripts: Array<InputPathType>,
     clean: boolean = false,
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VScriptCheckOutputs {
-    /**
-     * Checks scripts for improperly terminated lines and optionally cleans them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param scripts Scripts to be checked for improperly terminated lines
-     * @param clean Clean bad line breaks
-     * @param suffix Rename uncleaned file with specified suffix. Default is .uncln
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SCRIPT_CHECK_METADATA);
     const params = v__script_check_params(scripts, clean, suffix)
@@ -205,5 +205,8 @@ export {
       VScriptCheckParameters,
       V__SCRIPT_CHECK_METADATA,
       v__script_check,
+      v__script_check_cargs,
+      v__script_check_execute,
+      v__script_check_outputs,
       v__script_check_params,
 };

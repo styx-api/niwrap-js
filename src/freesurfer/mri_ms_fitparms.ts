@@ -12,7 +12,7 @@ const MRI_MS_FITPARMS_METADATA: Metadata = {
 
 
 interface MriMsFitparmsParameters {
-    "__STYXTYPE__": "mri_ms_fitparms";
+    "@type": "freesurfer.mri_ms_fitparms";
     "volumes": Array<InputPathType>;
     "output_dir": string;
     "afi_flag": boolean;
@@ -52,35 +52,35 @@ interface MriMsFitparmsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_ms_fitparms": mri_ms_fitparms_cargs,
+        "freesurfer.mri_ms_fitparms": mri_ms_fitparms_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_ms_fitparms": mri_ms_fitparms_outputs,
+        "freesurfer.mri_ms_fitparms": mri_ms_fitparms_outputs,
     };
     return outputsFuncs[t];
 }
@@ -123,6 +123,48 @@ interface MriMsFitparmsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volumes List of 3D FLASH images with different flip angles.
+ * @param output_dir Output directory
+ * @param afi_flag Designate flip angle map to use with nominal value 60 degrees
+ * @param ait_flag Apply inverse of transform
+ * @param at Set acquisition time
+ * @param conform_flag Interpolate volume to be isotropic 1mm^3
+ * @param correct_flag Correct proton density map (PD) by T2* estimates
+ * @param cubic_flag Use cubic interpolation (NOT WORKING!)
+ * @param debug_slice_flag Debug slice processing ???
+ * @param debug_voxel_flag Debug voxel processing ???
+ * @param dt Set time step dt ???
+ * @param fa Set flip angle
+ * @param fa_scale Set value to scale all flip angles by
+ * @param faf Designate flip angle map to use with specified control points
+ * @param fsmooth Smooth flip angle map for X iterations of soap bubble smoothing
+ * @param invert_flag Invert volumes
+ * @param momentum Set momentum
+ * @param max_t2 Set max T2*
+ * @param n_iter Perform estimation/motion correction X times
+ * @param nearest_flag Use nearest-neighbor interpolation
+ * @param nocompress_flag Do not compress output volumes (save as .mgh)
+ * @param nosynth_flag Disable volume synthesis
+ * @param residuals Write out residuals to designated location
+ * @param smooth_sigma Smooth faf field with sigma=X
+ * @param scale_factor Scale volumes by X after reading
+ * @param sinc_flag Use sinc interpolation (default window width is 6)
+ * @param transform_flag Apply transform to output volumes
+ * @param echo_time Set echo time (TE) in ms
+ * @param repetition_time Set repetition time (TR) in ms
+ * @param trilinear_flag Use trilinear interpolation
+ * @param tukey_flag Use Tukey bi-weight of residuals
+ * @param help_flag Display help text
+ * @param use_brain_mask_flag Compute a brain mask from the PD map and use it for registration
+ * @param write_intermediate Write out intermediate results every X iterations
+ * @param extract_subimage Extract a subimage for each input image, specified by x0 y0 z0 dx dy dz
+ * @param window_flag Not implemented
+ *
+ * @returns Parameter dictionary
+ */
 function mri_ms_fitparms_params(
     volumes: Array<InputPathType>,
     output_dir: string,
@@ -161,50 +203,8 @@ function mri_ms_fitparms_params(
     extract_subimage: Array<number> | null = null,
     window_flag: boolean = false,
 ): MriMsFitparmsParameters {
-    /**
-     * Build parameters.
-    
-     * @param volumes List of 3D FLASH images with different flip angles.
-     * @param output_dir Output directory
-     * @param afi_flag Designate flip angle map to use with nominal value 60 degrees
-     * @param ait_flag Apply inverse of transform
-     * @param at Set acquisition time
-     * @param conform_flag Interpolate volume to be isotropic 1mm^3
-     * @param correct_flag Correct proton density map (PD) by T2* estimates
-     * @param cubic_flag Use cubic interpolation (NOT WORKING!)
-     * @param debug_slice_flag Debug slice processing ???
-     * @param debug_voxel_flag Debug voxel processing ???
-     * @param dt Set time step dt ???
-     * @param fa Set flip angle
-     * @param fa_scale Set value to scale all flip angles by
-     * @param faf Designate flip angle map to use with specified control points
-     * @param fsmooth Smooth flip angle map for X iterations of soap bubble smoothing
-     * @param invert_flag Invert volumes
-     * @param momentum Set momentum
-     * @param max_t2 Set max T2*
-     * @param n_iter Perform estimation/motion correction X times
-     * @param nearest_flag Use nearest-neighbor interpolation
-     * @param nocompress_flag Do not compress output volumes (save as .mgh)
-     * @param nosynth_flag Disable volume synthesis
-     * @param residuals Write out residuals to designated location
-     * @param smooth_sigma Smooth faf field with sigma=X
-     * @param scale_factor Scale volumes by X after reading
-     * @param sinc_flag Use sinc interpolation (default window width is 6)
-     * @param transform_flag Apply transform to output volumes
-     * @param echo_time Set echo time (TE) in ms
-     * @param repetition_time Set repetition time (TR) in ms
-     * @param trilinear_flag Use trilinear interpolation
-     * @param tukey_flag Use Tukey bi-weight of residuals
-     * @param help_flag Display help text
-     * @param use_brain_mask_flag Compute a brain mask from the PD map and use it for registration
-     * @param write_intermediate Write out intermediate results every X iterations
-     * @param extract_subimage Extract a subimage for each input image, specified by x0 y0 z0 dx dy dz
-     * @param window_flag Not implemented
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_ms_fitparms" as const,
+        "@type": "freesurfer.mri_ms_fitparms" as const,
         "volumes": volumes,
         "output_dir": output_dir,
         "afi_flag": afi_flag,
@@ -278,18 +278,18 @@ function mri_ms_fitparms_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_ms_fitparms_cargs(
     params: MriMsFitparmsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_ms_fitparms");
     cargs.push(...(params["volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -448,18 +448,18 @@ function mri_ms_fitparms_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_ms_fitparms_outputs(
     params: MriMsFitparmsParameters,
     execution: Execution,
 ): MriMsFitparmsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMsFitparmsOutputs = {
         root: execution.outputFile("."),
         t1_map: execution.outputFile(["T1.mgz"].join('')),
@@ -473,22 +473,22 @@ function mri_ms_fitparms_outputs(
 }
 
 
+/**
+ * Tool for estimating T1 and PD values from FLASH images and applying transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
+ */
 function mri_ms_fitparms_execute(
     params: MriMsFitparmsParameters,
     execution: Execution,
 ): MriMsFitparmsOutputs {
-    /**
-     * Tool for estimating T1 and PD values from FLASH images and applying transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_ms_fitparms_cargs(params, execution)
     const ret = mri_ms_fitparms_outputs(params, execution)
@@ -497,6 +497,53 @@ function mri_ms_fitparms_execute(
 }
 
 
+/**
+ * Tool for estimating T1 and PD values from FLASH images and applying transformations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param volumes List of 3D FLASH images with different flip angles.
+ * @param output_dir Output directory
+ * @param afi_flag Designate flip angle map to use with nominal value 60 degrees
+ * @param ait_flag Apply inverse of transform
+ * @param at Set acquisition time
+ * @param conform_flag Interpolate volume to be isotropic 1mm^3
+ * @param correct_flag Correct proton density map (PD) by T2* estimates
+ * @param cubic_flag Use cubic interpolation (NOT WORKING!)
+ * @param debug_slice_flag Debug slice processing ???
+ * @param debug_voxel_flag Debug voxel processing ???
+ * @param dt Set time step dt ???
+ * @param fa Set flip angle
+ * @param fa_scale Set value to scale all flip angles by
+ * @param faf Designate flip angle map to use with specified control points
+ * @param fsmooth Smooth flip angle map for X iterations of soap bubble smoothing
+ * @param invert_flag Invert volumes
+ * @param momentum Set momentum
+ * @param max_t2 Set max T2*
+ * @param n_iter Perform estimation/motion correction X times
+ * @param nearest_flag Use nearest-neighbor interpolation
+ * @param nocompress_flag Do not compress output volumes (save as .mgh)
+ * @param nosynth_flag Disable volume synthesis
+ * @param residuals Write out residuals to designated location
+ * @param smooth_sigma Smooth faf field with sigma=X
+ * @param scale_factor Scale volumes by X after reading
+ * @param sinc_flag Use sinc interpolation (default window width is 6)
+ * @param transform_flag Apply transform to output volumes
+ * @param echo_time Set echo time (TE) in ms
+ * @param repetition_time Set repetition time (TR) in ms
+ * @param trilinear_flag Use trilinear interpolation
+ * @param tukey_flag Use Tukey bi-weight of residuals
+ * @param help_flag Display help text
+ * @param use_brain_mask_flag Compute a brain mask from the PD map and use it for registration
+ * @param write_intermediate Write out intermediate results every X iterations
+ * @param extract_subimage Extract a subimage for each input image, specified by x0 y0 z0 dx dy dz
+ * @param window_flag Not implemented
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
+ */
 function mri_ms_fitparms(
     volumes: Array<InputPathType>,
     output_dir: string,
@@ -536,53 +583,6 @@ function mri_ms_fitparms(
     window_flag: boolean = false,
     runner: Runner | null = null,
 ): MriMsFitparmsOutputs {
-    /**
-     * Tool for estimating T1 and PD values from FLASH images and applying transformations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param volumes List of 3D FLASH images with different flip angles.
-     * @param output_dir Output directory
-     * @param afi_flag Designate flip angle map to use with nominal value 60 degrees
-     * @param ait_flag Apply inverse of transform
-     * @param at Set acquisition time
-     * @param conform_flag Interpolate volume to be isotropic 1mm^3
-     * @param correct_flag Correct proton density map (PD) by T2* estimates
-     * @param cubic_flag Use cubic interpolation (NOT WORKING!)
-     * @param debug_slice_flag Debug slice processing ???
-     * @param debug_voxel_flag Debug voxel processing ???
-     * @param dt Set time step dt ???
-     * @param fa Set flip angle
-     * @param fa_scale Set value to scale all flip angles by
-     * @param faf Designate flip angle map to use with specified control points
-     * @param fsmooth Smooth flip angle map for X iterations of soap bubble smoothing
-     * @param invert_flag Invert volumes
-     * @param momentum Set momentum
-     * @param max_t2 Set max T2*
-     * @param n_iter Perform estimation/motion correction X times
-     * @param nearest_flag Use nearest-neighbor interpolation
-     * @param nocompress_flag Do not compress output volumes (save as .mgh)
-     * @param nosynth_flag Disable volume synthesis
-     * @param residuals Write out residuals to designated location
-     * @param smooth_sigma Smooth faf field with sigma=X
-     * @param scale_factor Scale volumes by X after reading
-     * @param sinc_flag Use sinc interpolation (default window width is 6)
-     * @param transform_flag Apply transform to output volumes
-     * @param echo_time Set echo time (TE) in ms
-     * @param repetition_time Set repetition time (TR) in ms
-     * @param trilinear_flag Use trilinear interpolation
-     * @param tukey_flag Use Tukey bi-weight of residuals
-     * @param help_flag Display help text
-     * @param use_brain_mask_flag Compute a brain mask from the PD map and use it for registration
-     * @param write_intermediate Write out intermediate results every X iterations
-     * @param extract_subimage Extract a subimage for each input image, specified by x0 y0 z0 dx dy dz
-     * @param window_flag Not implemented
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MS_FITPARMS_METADATA);
     const params = mri_ms_fitparms_params(volumes, output_dir, afi_flag, ait_flag, at, conform_flag, correct_flag, cubic_flag, debug_slice_flag, debug_voxel_flag, dt, fa, fa_scale, faf, fsmooth, invert_flag, momentum, max_t2, n_iter, nearest_flag, nocompress_flag, nosynth_flag, residuals, smooth_sigma, scale_factor, sinc_flag, transform_flag, echo_time, repetition_time, trilinear_flag, tukey_flag, help_flag, use_brain_mask_flag, write_intermediate, extract_subimage, window_flag)
@@ -595,5 +595,8 @@ export {
       MriMsFitparmsOutputs,
       MriMsFitparmsParameters,
       mri_ms_fitparms,
+      mri_ms_fitparms_cargs,
+      mri_ms_fitparms_execute,
+      mri_ms_fitparms_outputs,
       mri_ms_fitparms_params,
 };

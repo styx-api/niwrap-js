@@ -12,7 +12,7 @@ const REG_TOOLS_METADATA: Metadata = {
 
 
 interface RegToolsParameters {
-    "__STYXTYPE__": "reg_tools";
+    "@type": "niftyreg.reg_tools";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "add_value_or_image"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface RegToolsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_tools": reg_tools_cargs,
+        "niftyreg.reg_tools": reg_tools_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_tools": reg_tools_outputs,
+        "niftyreg.reg_tools": reg_tools_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface RegToolsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Filename of the input image
+ * @param output_image Filename of the output image
+ * @param add_value_or_image This image (or value) is added to the input
+ * @param sub_value_or_image This image (or value) is subtracted from the input
+ * @param mul_value_or_image This image (or value) is multiplied with the input
+ * @param div_value_or_image This image (or value) is divided by the input
+ * @param smooth_value The input image is smoothed using a B-spline curve
+ * @param smooth_gaussian The input image is smoothed using a Gaussian kernel
+ * @param rms_image Compute the mean RMS between the input image and this image
+ * @param binarize Binarize the input image (val!=0?val=1:val=0)
+ * @param threshold_value Threshold the input image (val<thr?val=0:val=1)
+ * @param nan_mask_image This image is used to mask the input image. Voxels outside of the mask are set to NaN
+ *
+ * @returns Parameter dictionary
+ */
 function reg_tools_params(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -93,26 +111,8 @@ function reg_tools_params(
     threshold_value: number | null = null,
     nan_mask_image: InputPathType | null = null,
 ): RegToolsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Filename of the input image
-     * @param output_image Filename of the output image
-     * @param add_value_or_image This image (or value) is added to the input
-     * @param sub_value_or_image This image (or value) is subtracted from the input
-     * @param mul_value_or_image This image (or value) is multiplied with the input
-     * @param div_value_or_image This image (or value) is divided by the input
-     * @param smooth_value The input image is smoothed using a B-spline curve
-     * @param smooth_gaussian The input image is smoothed using a Gaussian kernel
-     * @param rms_image Compute the mean RMS between the input image and this image
-     * @param binarize Binarize the input image (val!=0?val=1:val=0)
-     * @param threshold_value Threshold the input image (val<thr?val=0:val=1)
-     * @param nan_mask_image This image is used to mask the input image. Voxels outside of the mask are set to NaN
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_tools" as const,
+        "@type": "niftyreg.reg_tools" as const,
         "input_image": input_image,
         "binarize": binarize,
     };
@@ -150,18 +150,18 @@ function reg_tools_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_tools_cargs(
     params: RegToolsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_tools");
     cargs.push(
@@ -235,18 +235,18 @@ function reg_tools_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_tools_outputs(
     params: RegToolsParameters,
     execution: Execution,
 ): RegToolsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegToolsOutputs = {
         root: execution.outputFile("."),
         output_image_file: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
@@ -255,22 +255,22 @@ function reg_tools_outputs(
 }
 
 
+/**
+ * A versatile tool for manipulating and processing medical images.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
+ */
 function reg_tools_execute(
     params: RegToolsParameters,
     execution: Execution,
 ): RegToolsOutputs {
-    /**
-     * A versatile tool for manipulating and processing medical images.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_tools_cargs(params, execution)
     const ret = reg_tools_outputs(params, execution)
@@ -279,6 +279,29 @@ function reg_tools_execute(
 }
 
 
+/**
+ * A versatile tool for manipulating and processing medical images.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param input_image Filename of the input image
+ * @param output_image Filename of the output image
+ * @param add_value_or_image This image (or value) is added to the input
+ * @param sub_value_or_image This image (or value) is subtracted from the input
+ * @param mul_value_or_image This image (or value) is multiplied with the input
+ * @param div_value_or_image This image (or value) is divided by the input
+ * @param smooth_value The input image is smoothed using a B-spline curve
+ * @param smooth_gaussian The input image is smoothed using a Gaussian kernel
+ * @param rms_image Compute the mean RMS between the input image and this image
+ * @param binarize Binarize the input image (val!=0?val=1:val=0)
+ * @param threshold_value Threshold the input image (val<thr?val=0:val=1)
+ * @param nan_mask_image This image is used to mask the input image. Voxels outside of the mask are set to NaN
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
+ */
 function reg_tools(
     input_image: InputPathType,
     output_image: string | null = null,
@@ -294,29 +317,6 @@ function reg_tools(
     nan_mask_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegToolsOutputs {
-    /**
-     * A versatile tool for manipulating and processing medical images.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param input_image Filename of the input image
-     * @param output_image Filename of the output image
-     * @param add_value_or_image This image (or value) is added to the input
-     * @param sub_value_or_image This image (or value) is subtracted from the input
-     * @param mul_value_or_image This image (or value) is multiplied with the input
-     * @param div_value_or_image This image (or value) is divided by the input
-     * @param smooth_value The input image is smoothed using a B-spline curve
-     * @param smooth_gaussian The input image is smoothed using a Gaussian kernel
-     * @param rms_image Compute the mean RMS between the input image and this image
-     * @param binarize Binarize the input image (val!=0?val=1:val=0)
-     * @param threshold_value Threshold the input image (val<thr?val=0:val=1)
-     * @param nan_mask_image This image is used to mask the input image. Voxels outside of the mask are set to NaN
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_TOOLS_METADATA);
     const params = reg_tools_params(input_image, output_image, add_value_or_image, sub_value_or_image, mul_value_or_image, div_value_or_image, smooth_value, smooth_gaussian, rms_image, binarize, threshold_value, nan_mask_image)
@@ -329,5 +329,8 @@ export {
       RegToolsOutputs,
       RegToolsParameters,
       reg_tools,
+      reg_tools_cargs,
+      reg_tools_execute,
+      reg_tools_outputs,
       reg_tools_params,
 };

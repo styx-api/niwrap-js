@@ -12,7 +12,7 @@ const BUILD_AFNI_PY_METADATA: Metadata = {
 
 
 interface BuildAfniPyParameters {
-    "__STYXTYPE__": "build_afni.py";
+    "@type": "afni.build_afni.py";
     "build_root": string;
     "clean_root"?: string | null | undefined;
     "git_branch"?: string | null | undefined;
@@ -32,35 +32,35 @@ interface BuildAfniPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "build_afni.py": build_afni_py_cargs,
+        "afni.build_afni.py": build_afni_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "build_afni.py": build_afni_py_outputs,
+        "afni.build_afni.py": build_afni_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,28 @@ interface BuildAfniPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param build_root Root directory to use for git and building
+ * @param clean_root Specify whether to clean up the build_root. Default is yes.
+ * @param git_branch Specify a branch to checkout in git. Default is master.
+ * @param git_tag Specify a tag to checkout in git. Default is LAST_TAG.
+ * @param git_update Specify whether to update git repo. Default is yes.
+ * @param make_target Specify target for make command. Default is itall.
+ * @param makefile Specify an alternate Makefile to build from.
+ * @param package_ Specify the desired package to build.
+ * @param prep_only Prepare to but do not run (c)make.
+ * @param run_cmake Choose whether to run a cmake build. Default is no.
+ * @param run_make Choose whether to run a make build. Default is yes.
+ * @param verbose_level Set the verbosity level. Default is 1.
+ * @param help Show help message
+ * @param history Show module history
+ * @param show_valid_opts List valid options
+ * @param version Show the current version
+ *
+ * @returns Parameter dictionary
+ */
 function build_afni_py_params(
     build_root: string,
     clean_root: string | null = null,
@@ -105,30 +127,8 @@ function build_afni_py_params(
     show_valid_opts: boolean = false,
     version: boolean = false,
 ): BuildAfniPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param build_root Root directory to use for git and building
-     * @param clean_root Specify whether to clean up the build_root. Default is yes.
-     * @param git_branch Specify a branch to checkout in git. Default is master.
-     * @param git_tag Specify a tag to checkout in git. Default is LAST_TAG.
-     * @param git_update Specify whether to update git repo. Default is yes.
-     * @param make_target Specify target for make command. Default is itall.
-     * @param makefile Specify an alternate Makefile to build from.
-     * @param package_ Specify the desired package to build.
-     * @param prep_only Prepare to but do not run (c)make.
-     * @param run_cmake Choose whether to run a cmake build. Default is no.
-     * @param run_make Choose whether to run a make build. Default is yes.
-     * @param verbose_level Set the verbosity level. Default is 1.
-     * @param help Show help message
-     * @param history Show module history
-     * @param show_valid_opts List valid options
-     * @param version Show the current version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "build_afni.py" as const,
+        "@type": "afni.build_afni.py" as const,
         "build_root": build_root,
         "prep_only": prep_only,
         "help": help,
@@ -170,18 +170,18 @@ function build_afni_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function build_afni_py_cargs(
     params: BuildAfniPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("build_afni.py");
     cargs.push(
@@ -267,18 +267,18 @@ function build_afni_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function build_afni_py_outputs(
     params: BuildAfniPyParameters,
     execution: Execution,
 ): BuildAfniPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BuildAfniPyOutputs = {
         root: execution.outputFile("."),
         command_history_file: execution.outputFile([(params["build_root"] ?? null), "/hist_commands.txt"].join('')),
@@ -288,22 +288,22 @@ function build_afni_py_outputs(
 }
 
 
+/**
+ * Compile an AFNI package from the git repository.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
+ */
 function build_afni_py_execute(
     params: BuildAfniPyParameters,
     execution: Execution,
 ): BuildAfniPyOutputs {
-    /**
-     * Compile an AFNI package from the git repository.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = build_afni_py_cargs(params, execution)
     const ret = build_afni_py_outputs(params, execution)
@@ -312,6 +312,33 @@ function build_afni_py_execute(
 }
 
 
+/**
+ * Compile an AFNI package from the git repository.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param build_root Root directory to use for git and building
+ * @param clean_root Specify whether to clean up the build_root. Default is yes.
+ * @param git_branch Specify a branch to checkout in git. Default is master.
+ * @param git_tag Specify a tag to checkout in git. Default is LAST_TAG.
+ * @param git_update Specify whether to update git repo. Default is yes.
+ * @param make_target Specify target for make command. Default is itall.
+ * @param makefile Specify an alternate Makefile to build from.
+ * @param package_ Specify the desired package to build.
+ * @param prep_only Prepare to but do not run (c)make.
+ * @param run_cmake Choose whether to run a cmake build. Default is no.
+ * @param run_make Choose whether to run a make build. Default is yes.
+ * @param verbose_level Set the verbosity level. Default is 1.
+ * @param help Show help message
+ * @param history Show module history
+ * @param show_valid_opts List valid options
+ * @param version Show the current version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
+ */
 function build_afni_py(
     build_root: string,
     clean_root: string | null = null,
@@ -331,33 +358,6 @@ function build_afni_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): BuildAfniPyOutputs {
-    /**
-     * Compile an AFNI package from the git repository.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param build_root Root directory to use for git and building
-     * @param clean_root Specify whether to clean up the build_root. Default is yes.
-     * @param git_branch Specify a branch to checkout in git. Default is master.
-     * @param git_tag Specify a tag to checkout in git. Default is LAST_TAG.
-     * @param git_update Specify whether to update git repo. Default is yes.
-     * @param make_target Specify target for make command. Default is itall.
-     * @param makefile Specify an alternate Makefile to build from.
-     * @param package_ Specify the desired package to build.
-     * @param prep_only Prepare to but do not run (c)make.
-     * @param run_cmake Choose whether to run a cmake build. Default is no.
-     * @param run_make Choose whether to run a make build. Default is yes.
-     * @param verbose_level Set the verbosity level. Default is 1.
-     * @param help Show help message
-     * @param history Show module history
-     * @param show_valid_opts List valid options
-     * @param version Show the current version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BUILD_AFNI_PY_METADATA);
     const params = build_afni_py_params(build_root, clean_root, git_branch, git_tag, git_update, make_target, makefile, package_, prep_only, run_cmake, run_make, verbose_level, help, history, show_valid_opts, version)
@@ -370,5 +370,8 @@ export {
       BuildAfniPyOutputs,
       BuildAfniPyParameters,
       build_afni_py,
+      build_afni_py_cargs,
+      build_afni_py_execute,
+      build_afni_py_outputs,
       build_afni_py_params,
 };

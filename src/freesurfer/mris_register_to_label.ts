@@ -12,7 +12,7 @@ const MRIS_REGISTER_TO_LABEL_METADATA: Metadata = {
 
 
 interface MrisRegisterToLabelParameters {
-    "__STYXTYPE__": "mris_register_to_label";
+    "@type": "freesurfer.mris_register_to_label";
     "surface": InputPathType;
     "regfile": InputPathType;
     "mri_reg": InputPathType;
@@ -28,33 +28,33 @@ interface MrisRegisterToLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_register_to_label": mris_register_to_label_cargs,
+        "freesurfer.mris_register_to_label": mris_register_to_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface MrisRegisterToLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface file for registration
+ * @param regfile Registration file
+ * @param mri_reg Volume for MRI registration
+ * @param mov_volume Volume on which label points are specified
+ * @param resolution Resolution for calculations
+ * @param max_rot Maximum angle (degrees) to search over for rotation
+ * @param max_trans Maximum translation (mm) to search over
+ * @param subject Specify name of subject for register.dat file
+ * @param label Load label and limit calculations to it
+ * @param out_reg Output registration at lowest cost
+ * @param downsample Downsample input volume by a factor
+ * @param cost_file Cost file for registration
+ *
+ * @returns Parameter dictionary
+ */
 function mris_register_to_label_params(
     surface: InputPathType,
     regfile: InputPathType,
@@ -88,26 +106,8 @@ function mris_register_to_label_params(
     downsample: number | null = null,
     cost_file: InputPathType | null = null,
 ): MrisRegisterToLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface file for registration
-     * @param regfile Registration file
-     * @param mri_reg Volume for MRI registration
-     * @param mov_volume Volume on which label points are specified
-     * @param resolution Resolution for calculations
-     * @param max_rot Maximum angle (degrees) to search over for rotation
-     * @param max_trans Maximum translation (mm) to search over
-     * @param subject Specify name of subject for register.dat file
-     * @param label Load label and limit calculations to it
-     * @param out_reg Output registration at lowest cost
-     * @param downsample Downsample input volume by a factor
-     * @param cost_file Cost file for registration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_register_to_label" as const,
+        "@type": "freesurfer.mris_register_to_label" as const,
         "surface": surface,
         "regfile": regfile,
         "mri_reg": mri_reg,
@@ -139,18 +139,18 @@ function mris_register_to_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_register_to_label_cargs(
     params: MrisRegisterToLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_register_to_label");
     cargs.push(
@@ -219,18 +219,18 @@ function mris_register_to_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_register_to_label_outputs(
     params: MrisRegisterToLabelParameters,
     execution: Execution,
 ): MrisRegisterToLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRegisterToLabelOutputs = {
         root: execution.outputFile("."),
     };
@@ -238,22 +238,22 @@ function mris_register_to_label_outputs(
 }
 
 
+/**
+ * Register a surface to a volume using a label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
+ */
 function mris_register_to_label_execute(
     params: MrisRegisterToLabelParameters,
     execution: Execution,
 ): MrisRegisterToLabelOutputs {
-    /**
-     * Register a surface to a volume using a label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_register_to_label_cargs(params, execution)
     const ret = mris_register_to_label_outputs(params, execution)
@@ -262,6 +262,29 @@ function mris_register_to_label_execute(
 }
 
 
+/**
+ * Register a surface to a volume using a label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Surface file for registration
+ * @param regfile Registration file
+ * @param mri_reg Volume for MRI registration
+ * @param mov_volume Volume on which label points are specified
+ * @param resolution Resolution for calculations
+ * @param max_rot Maximum angle (degrees) to search over for rotation
+ * @param max_trans Maximum translation (mm) to search over
+ * @param subject Specify name of subject for register.dat file
+ * @param label Load label and limit calculations to it
+ * @param out_reg Output registration at lowest cost
+ * @param downsample Downsample input volume by a factor
+ * @param cost_file Cost file for registration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
+ */
 function mris_register_to_label(
     surface: InputPathType,
     regfile: InputPathType,
@@ -277,29 +300,6 @@ function mris_register_to_label(
     cost_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisRegisterToLabelOutputs {
-    /**
-     * Register a surface to a volume using a label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Surface file for registration
-     * @param regfile Registration file
-     * @param mri_reg Volume for MRI registration
-     * @param mov_volume Volume on which label points are specified
-     * @param resolution Resolution for calculations
-     * @param max_rot Maximum angle (degrees) to search over for rotation
-     * @param max_trans Maximum translation (mm) to search over
-     * @param subject Specify name of subject for register.dat file
-     * @param label Load label and limit calculations to it
-     * @param out_reg Output registration at lowest cost
-     * @param downsample Downsample input volume by a factor
-     * @param cost_file Cost file for registration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REGISTER_TO_LABEL_METADATA);
     const params = mris_register_to_label_params(surface, regfile, mri_reg, mov_volume, resolution, max_rot, max_trans, subject, label, out_reg, downsample, cost_file)
@@ -312,5 +312,8 @@ export {
       MrisRegisterToLabelOutputs,
       MrisRegisterToLabelParameters,
       mris_register_to_label,
+      mris_register_to_label_cargs,
+      mris_register_to_label_execute,
+      mris_register_to_label_outputs,
       mris_register_to_label_params,
 };

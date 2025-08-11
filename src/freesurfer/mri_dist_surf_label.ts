@@ -12,42 +12,42 @@ const MRI_DIST_SURF_LABEL_METADATA: Metadata = {
 
 
 interface MriDistSurfLabelParameters {
-    "__STYXTYPE__": "mri_dist_surf_label";
+    "@type": "freesurfer.mri_dist_surf_label";
     "surface": InputPathType;
     "label_file": InputPathType;
     "output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_dist_surf_label": mri_dist_surf_label_cargs,
+        "freesurfer.mri_dist_surf_label": mri_dist_surf_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_dist_surf_label": mri_dist_surf_label_outputs,
+        "freesurfer.mri_dist_surf_label": mri_dist_surf_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriDistSurfLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Input surface file.
+ * @param label_file Input label file.
+ * @param output Output file for distances.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_dist_surf_label_params(
     surface: InputPathType,
     label_file: InputPathType,
     output: string,
 ): MriDistSurfLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Input surface file.
-     * @param label_file Input label file.
-     * @param output Output file for distances.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_dist_surf_label" as const,
+        "@type": "freesurfer.mri_dist_surf_label" as const,
         "surface": surface,
         "label_file": label_file,
         "output": output,
@@ -94,18 +94,18 @@ function mri_dist_surf_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_dist_surf_label_cargs(
     params: MriDistSurfLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_dist_surf_label");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -115,18 +115,18 @@ function mri_dist_surf_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_dist_surf_label_outputs(
     params: MriDistSurfLabelParameters,
     execution: Execution,
 ): MriDistSurfLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDistSurfLabelOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_dist_surf_label_outputs(
 }
 
 
+/**
+ * Computes distances from input surface to label points or waypoints.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
+ */
 function mri_dist_surf_label_execute(
     params: MriDistSurfLabelParameters,
     execution: Execution,
 ): MriDistSurfLabelOutputs {
-    /**
-     * Computes distances from input surface to label points or waypoints.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_dist_surf_label_cargs(params, execution)
     const ret = mri_dist_surf_label_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_dist_surf_label_execute(
 }
 
 
+/**
+ * Computes distances from input surface to label points or waypoints.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Input surface file.
+ * @param label_file Input label file.
+ * @param output Output file for distances.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
+ */
 function mri_dist_surf_label(
     surface: InputPathType,
     label_file: InputPathType,
     output: string,
     runner: Runner | null = null,
 ): MriDistSurfLabelOutputs {
-    /**
-     * Computes distances from input surface to label points or waypoints.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Input surface file.
-     * @param label_file Input label file.
-     * @param output Output file for distances.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DIST_SURF_LABEL_METADATA);
     const params = mri_dist_surf_label_params(surface, label_file, output)
@@ -191,5 +191,8 @@ export {
       MriDistSurfLabelOutputs,
       MriDistSurfLabelParameters,
       mri_dist_surf_label,
+      mri_dist_surf_label_cargs,
+      mri_dist_surf_label_execute,
+      mri_dist_surf_label_outputs,
       mri_dist_surf_label_params,
 };

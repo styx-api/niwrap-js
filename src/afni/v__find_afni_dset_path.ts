@@ -12,7 +12,7 @@ const V__FIND_AFNI_DSET_PATH_METADATA: Metadata = {
 
 
 interface VFindAfniDsetPathParameters {
-    "__STYXTYPE__": "@FindAfniDsetPath";
+    "@type": "afni.@FindAfniDsetPath";
     "dsetname": string;
     "append_file": boolean;
     "full_path": boolean;
@@ -20,33 +20,33 @@ interface VFindAfniDsetPathParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@FindAfniDsetPath": v__find_afni_dset_path_cargs,
+        "afni.@FindAfniDsetPath": v__find_afni_dset_path_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface VFindAfniDsetPathOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dsetname Name of the dataset to search for
+ * @param append_file Show the file appended to (even with atlas name)
+ * @param full_path Print full path instead of '.'
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function v__find_afni_dset_path_params(
     dsetname: string,
     append_file: boolean = false,
     full_path: boolean = false,
     help: boolean = false,
 ): VFindAfniDsetPathParameters {
-    /**
-     * Build parameters.
-    
-     * @param dsetname Name of the dataset to search for
-     * @param append_file Show the file appended to (even with atlas name)
-     * @param full_path Print full path instead of '.'
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@FindAfniDsetPath" as const,
+        "@type": "afni.@FindAfniDsetPath" as const,
         "dsetname": dsetname,
         "append_file": append_file,
         "full_path": full_path,
@@ -93,18 +93,18 @@ function v__find_afni_dset_path_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__find_afni_dset_path_cargs(
     params: VFindAfniDsetPathParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@FindAfniDsetPath");
     cargs.push((params["dsetname"] ?? null));
@@ -121,18 +121,18 @@ function v__find_afni_dset_path_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__find_afni_dset_path_outputs(
     params: VFindAfniDsetPathParameters,
     execution: Execution,
 ): VFindAfniDsetPathOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFindAfniDsetPathOutputs = {
         root: execution.outputFile("."),
     };
@@ -140,22 +140,22 @@ function v__find_afni_dset_path_outputs(
 }
 
 
+/**
+ * Searches various AFNI directories for a specified dataset and returns its path.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
+ */
 function v__find_afni_dset_path_execute(
     params: VFindAfniDsetPathParameters,
     execution: Execution,
 ): VFindAfniDsetPathOutputs {
-    /**
-     * Searches various AFNI directories for a specified dataset and returns its path.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__find_afni_dset_path_cargs(params, execution)
     const ret = v__find_afni_dset_path_outputs(params, execution)
@@ -164,6 +164,21 @@ function v__find_afni_dset_path_execute(
 }
 
 
+/**
+ * Searches various AFNI directories for a specified dataset and returns its path.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dsetname Name of the dataset to search for
+ * @param append_file Show the file appended to (even with atlas name)
+ * @param full_path Print full path instead of '.'
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
+ */
 function v__find_afni_dset_path(
     dsetname: string,
     append_file: boolean = false,
@@ -171,21 +186,6 @@ function v__find_afni_dset_path(
     help: boolean = false,
     runner: Runner | null = null,
 ): VFindAfniDsetPathOutputs {
-    /**
-     * Searches various AFNI directories for a specified dataset and returns its path.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dsetname Name of the dataset to search for
-     * @param append_file Show the file appended to (even with atlas name)
-     * @param full_path Print full path instead of '.'
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FIND_AFNI_DSET_PATH_METADATA);
     const params = v__find_afni_dset_path_params(dsetname, append_file, full_path, help)
@@ -198,5 +198,8 @@ export {
       VFindAfniDsetPathParameters,
       V__FIND_AFNI_DSET_PATH_METADATA,
       v__find_afni_dset_path,
+      v__find_afni_dset_path_cargs,
+      v__find_afni_dset_path_execute,
+      v__find_afni_dset_path_outputs,
       v__find_afni_dset_path_params,
 };

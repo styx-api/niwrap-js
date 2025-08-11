@@ -12,39 +12,39 @@ const V__CLUST_EXP_RUN_SHINY_METADATA: Metadata = {
 
 
 interface VClustExpRunShinyParameters {
-    "__STYXTYPE__": "@ClustExp_run_shiny";
+    "@type": "afni.@ClustExp_run_shiny";
     "directory": string;
     "help": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ClustExp_run_shiny": v__clust_exp_run_shiny_cargs,
+        "afni.@ClustExp_run_shiny": v__clust_exp_run_shiny_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VClustExpRunShinyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directory Folder created by ClustExp_StatParse.py
+ * @param help Show help message
+ *
+ * @returns Parameter dictionary
+ */
 function v__clust_exp_run_shiny_params(
     directory: string,
     help: boolean = false,
 ): VClustExpRunShinyParameters {
-    /**
-     * Build parameters.
-    
-     * @param directory Folder created by ClustExp_StatParse.py
-     * @param help Show help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ClustExp_run_shiny" as const,
+        "@type": "afni.@ClustExp_run_shiny" as const,
         "directory": directory,
         "help": help,
     };
@@ -85,18 +85,18 @@ function v__clust_exp_run_shiny_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__clust_exp_run_shiny_cargs(
     params: VClustExpRunShinyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ClustExp_run_shiny");
     cargs.push((params["directory"] ?? null));
@@ -107,18 +107,18 @@ function v__clust_exp_run_shiny_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__clust_exp_run_shiny_outputs(
     params: VClustExpRunShinyParameters,
     execution: Execution,
 ): VClustExpRunShinyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VClustExpRunShinyOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function v__clust_exp_run_shiny_outputs(
 }
 
 
+/**
+ * Launch a shiny app that was created by ClustExp_StatParse.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
+ */
 function v__clust_exp_run_shiny_execute(
     params: VClustExpRunShinyParameters,
     execution: Execution,
 ): VClustExpRunShinyOutputs {
-    /**
-     * Launch a shiny app that was created by ClustExp_StatParse.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__clust_exp_run_shiny_cargs(params, execution)
     const ret = v__clust_exp_run_shiny_outputs(params, execution)
@@ -150,24 +150,24 @@ function v__clust_exp_run_shiny_execute(
 }
 
 
+/**
+ * Launch a shiny app that was created by ClustExp_StatParse.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param directory Folder created by ClustExp_StatParse.py
+ * @param help Show help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
+ */
 function v__clust_exp_run_shiny(
     directory: string,
     help: boolean = false,
     runner: Runner | null = null,
 ): VClustExpRunShinyOutputs {
-    /**
-     * Launch a shiny app that was created by ClustExp_StatParse.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param directory Folder created by ClustExp_StatParse.py
-     * @param help Show help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__CLUST_EXP_RUN_SHINY_METADATA);
     const params = v__clust_exp_run_shiny_params(directory, help)
@@ -180,5 +180,8 @@ export {
       VClustExpRunShinyParameters,
       V__CLUST_EXP_RUN_SHINY_METADATA,
       v__clust_exp_run_shiny,
+      v__clust_exp_run_shiny_cargs,
+      v__clust_exp_run_shiny_execute,
+      v__clust_exp_run_shiny_outputs,
       v__clust_exp_run_shiny_params,
 };

@@ -12,7 +12,7 @@ const V_3D_POLYFIT_METADATA: Metadata = {
 
 
 interface V3dPolyfitParameters {
-    "__STYXTYPE__": "3dPolyfit";
+    "@type": "afni.3dPolyfit";
     "input_dataset": InputPathType;
     "poly_order"?: number | null | undefined;
     "blur"?: number | null | undefined;
@@ -30,35 +30,35 @@ interface V3dPolyfitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPolyfit": v_3d_polyfit_cargs,
+        "afni.3dPolyfit": v_3d_polyfit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPolyfit": v_3d_polyfit_outputs,
+        "afni.3dPolyfit": v_3d_polyfit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface V3dPolyfitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g., data.nii.gz)
+ * @param poly_order Maximum polynomial order (0..9); [default=3]; [n=0 is the constant 1]; [n=-1 means only use volumes from '-base']
+ * @param blur Gaussian blur input dataset (inside mask) with FWHM='f' (mm)
+ * @param median_radius Radius (voxels) of preliminary median filter of input; default is no blurring
+ * @param output_prefix Use 'pp' for prefix of output dataset (the fit); default prefix is 'Polyfit'; use NULL to skip this output
+ * @param resid_prefix Use 'rr' for the prefix of the residual dataset; default is not to output residuals
+ * @param coeff_output Save coefficients of fit into text file cc.1D; default is not to save these coefficients
+ * @param automask Create a mask (a la 3dAutomask)
+ * @param mask_dataset Create a mask from nonzero voxels in 'mset'; default is not to use a mask
+ * @param mean_scale Scale the mean value of the fit (inside the mask) to 1; probably this option is not useful for anything
+ * @param clip_box Clip fit values outside the rectilinear box containing the mask to the edge of that box, to avoid weird artifacts
+ * @param fit_method Set 'mm' to 2 for least squares fit; set it to 1 for L1 fit [default method=2]; [Note that L1 fitting is slower than L2 fitting]
+ * @param base_dataset In addition to the polynomial fit, also use the volumes in dataset 'bb' as extra basis functions
+ * @param verbose Print fun and useful progress reports
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_polyfit_params(
     input_dataset: InputPathType,
     poly_order: number | null = null,
@@ -105,28 +125,8 @@ function v_3d_polyfit_params(
     base_dataset: InputPathType | null = null,
     verbose: boolean = false,
 ): V3dPolyfitParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g., data.nii.gz)
-     * @param poly_order Maximum polynomial order (0..9); [default=3]; [n=0 is the constant 1]; [n=-1 means only use volumes from '-base']
-     * @param blur Gaussian blur input dataset (inside mask) with FWHM='f' (mm)
-     * @param median_radius Radius (voxels) of preliminary median filter of input; default is no blurring
-     * @param output_prefix Use 'pp' for prefix of output dataset (the fit); default prefix is 'Polyfit'; use NULL to skip this output
-     * @param resid_prefix Use 'rr' for the prefix of the residual dataset; default is not to output residuals
-     * @param coeff_output Save coefficients of fit into text file cc.1D; default is not to save these coefficients
-     * @param automask Create a mask (a la 3dAutomask)
-     * @param mask_dataset Create a mask from nonzero voxels in 'mset'; default is not to use a mask
-     * @param mean_scale Scale the mean value of the fit (inside the mask) to 1; probably this option is not useful for anything
-     * @param clip_box Clip fit values outside the rectilinear box containing the mask to the edge of that box, to avoid weird artifacts
-     * @param fit_method Set 'mm' to 2 for least squares fit; set it to 1 for L1 fit [default method=2]; [Note that L1 fitting is slower than L2 fitting]
-     * @param base_dataset In addition to the polynomial fit, also use the volumes in dataset 'bb' as extra basis functions
-     * @param verbose Print fun and useful progress reports
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPolyfit" as const,
+        "@type": "afni.3dPolyfit" as const,
         "input_dataset": input_dataset,
         "automask": automask,
         "mean_scale": mean_scale,
@@ -164,18 +164,18 @@ function v_3d_polyfit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_polyfit_cargs(
     params: V3dPolyfitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPolyfit");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -249,18 +249,18 @@ function v_3d_polyfit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_polyfit_outputs(
     params: V3dPolyfitParameters,
     execution: Execution,
 ): V3dPolyfitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPolyfitOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -271,22 +271,22 @@ function v_3d_polyfit_outputs(
 }
 
 
+/**
+ * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
+ */
 function v_3d_polyfit_execute(
     params: V3dPolyfitParameters,
     execution: Execution,
 ): V3dPolyfitOutputs {
-    /**
-     * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_polyfit_cargs(params, execution)
     const ret = v_3d_polyfit_outputs(params, execution)
@@ -295,6 +295,31 @@ function v_3d_polyfit_execute(
 }
 
 
+/**
+ * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g., data.nii.gz)
+ * @param poly_order Maximum polynomial order (0..9); [default=3]; [n=0 is the constant 1]; [n=-1 means only use volumes from '-base']
+ * @param blur Gaussian blur input dataset (inside mask) with FWHM='f' (mm)
+ * @param median_radius Radius (voxels) of preliminary median filter of input; default is no blurring
+ * @param output_prefix Use 'pp' for prefix of output dataset (the fit); default prefix is 'Polyfit'; use NULL to skip this output
+ * @param resid_prefix Use 'rr' for the prefix of the residual dataset; default is not to output residuals
+ * @param coeff_output Save coefficients of fit into text file cc.1D; default is not to save these coefficients
+ * @param automask Create a mask (a la 3dAutomask)
+ * @param mask_dataset Create a mask from nonzero voxels in 'mset'; default is not to use a mask
+ * @param mean_scale Scale the mean value of the fit (inside the mask) to 1; probably this option is not useful for anything
+ * @param clip_box Clip fit values outside the rectilinear box containing the mask to the edge of that box, to avoid weird artifacts
+ * @param fit_method Set 'mm' to 2 for least squares fit; set it to 1 for L1 fit [default method=2]; [Note that L1 fitting is slower than L2 fitting]
+ * @param base_dataset In addition to the polynomial fit, also use the volumes in dataset 'bb' as extra basis functions
+ * @param verbose Print fun and useful progress reports
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
+ */
 function v_3d_polyfit(
     input_dataset: InputPathType,
     poly_order: number | null = null,
@@ -312,31 +337,6 @@ function v_3d_polyfit(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dPolyfitOutputs {
-    /**
-     * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g., data.nii.gz)
-     * @param poly_order Maximum polynomial order (0..9); [default=3]; [n=0 is the constant 1]; [n=-1 means only use volumes from '-base']
-     * @param blur Gaussian blur input dataset (inside mask) with FWHM='f' (mm)
-     * @param median_radius Radius (voxels) of preliminary median filter of input; default is no blurring
-     * @param output_prefix Use 'pp' for prefix of output dataset (the fit); default prefix is 'Polyfit'; use NULL to skip this output
-     * @param resid_prefix Use 'rr' for the prefix of the residual dataset; default is not to output residuals
-     * @param coeff_output Save coefficients of fit into text file cc.1D; default is not to save these coefficients
-     * @param automask Create a mask (a la 3dAutomask)
-     * @param mask_dataset Create a mask from nonzero voxels in 'mset'; default is not to use a mask
-     * @param mean_scale Scale the mean value of the fit (inside the mask) to 1; probably this option is not useful for anything
-     * @param clip_box Clip fit values outside the rectilinear box containing the mask to the edge of that box, to avoid weird artifacts
-     * @param fit_method Set 'mm' to 2 for least squares fit; set it to 1 for L1 fit [default method=2]; [Note that L1 fitting is slower than L2 fitting]
-     * @param base_dataset In addition to the polynomial fit, also use the volumes in dataset 'bb' as extra basis functions
-     * @param verbose Print fun and useful progress reports
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_POLYFIT_METADATA);
     const params = v_3d_polyfit_params(input_dataset, poly_order, blur, median_radius, output_prefix, resid_prefix, coeff_output, automask, mask_dataset, mean_scale, clip_box, fit_method, base_dataset, verbose)
@@ -349,5 +349,8 @@ export {
       V3dPolyfitParameters,
       V_3D_POLYFIT_METADATA,
       v_3d_polyfit,
+      v_3d_polyfit_cargs,
+      v_3d_polyfit_execute,
+      v_3d_polyfit_outputs,
       v_3d_polyfit_params,
 };

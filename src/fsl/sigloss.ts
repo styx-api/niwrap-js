@@ -12,7 +12,7 @@ const SIGLOSS_METADATA: Metadata = {
 
 
 interface SiglossParameters {
-    "__STYXTYPE__": "sigloss";
+    "@type": "fsl.sigloss";
     "input_b0map": InputPathType;
     "output_sigloss": string;
     "input_mask"?: InputPathType | null | undefined;
@@ -23,33 +23,33 @@ interface SiglossParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sigloss": sigloss_cargs,
+        "fsl.sigloss": sigloss_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface SiglossOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_b0map Input b0 map image filename (in rad/s)
+ * @param output_sigloss Output signal loss image filename
+ * @param input_mask Input mask filename
+ * @param echo_time Echo time (in seconds)
+ * @param slice_direction Slice direction (either x, y or z)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ *
+ * @returns Parameter dictionary
+ */
 function sigloss_params(
     input_b0map: InputPathType,
     output_sigloss: string,
@@ -78,21 +91,8 @@ function sigloss_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): SiglossParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_b0map Input b0 map image filename (in rad/s)
-     * @param output_sigloss Output signal loss image filename
-     * @param input_mask Input mask filename
-     * @param echo_time Echo time (in seconds)
-     * @param slice_direction Slice direction (either x, y or z)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sigloss" as const,
+        "@type": "fsl.sigloss" as const,
         "input_b0map": input_b0map,
         "output_sigloss": output_sigloss,
         "verbose_flag": verbose_flag,
@@ -111,18 +111,18 @@ function sigloss_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sigloss_cargs(
     params: SiglossParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sigloss");
     cargs.push(
@@ -161,18 +161,18 @@ function sigloss_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sigloss_outputs(
     params: SiglossParameters,
     execution: Execution,
 ): SiglossOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SiglossOutputs = {
         root: execution.outputFile("."),
     };
@@ -180,22 +180,22 @@ function sigloss_outputs(
 }
 
 
+/**
+ * Estimates signal loss from a field map (in rad/s).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SiglossOutputs`).
+ */
 function sigloss_execute(
     params: SiglossParameters,
     execution: Execution,
 ): SiglossOutputs {
-    /**
-     * Estimates signal loss from a field map (in rad/s).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SiglossOutputs`).
-     */
     params = execution.params(params)
     const cargs = sigloss_cargs(params, execution)
     const ret = sigloss_outputs(params, execution)
@@ -204,6 +204,24 @@ function sigloss_execute(
 }
 
 
+/**
+ * Estimates signal loss from a field map (in rad/s).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_b0map Input b0 map image filename (in rad/s)
+ * @param output_sigloss Output signal loss image filename
+ * @param input_mask Input mask filename
+ * @param echo_time Echo time (in seconds)
+ * @param slice_direction Slice direction (either x, y or z)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SiglossOutputs`).
+ */
 function sigloss(
     input_b0map: InputPathType,
     output_sigloss: string,
@@ -214,24 +232,6 @@ function sigloss(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): SiglossOutputs {
-    /**
-     * Estimates signal loss from a field map (in rad/s).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_b0map Input b0 map image filename (in rad/s)
-     * @param output_sigloss Output signal loss image filename
-     * @param input_mask Input mask filename
-     * @param echo_time Echo time (in seconds)
-     * @param slice_direction Slice direction (either x, y or z)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SiglossOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIGLOSS_METADATA);
     const params = sigloss_params(input_b0map, output_sigloss, input_mask, echo_time, slice_direction, verbose_flag, help_flag)
@@ -244,5 +244,8 @@ export {
       SiglossOutputs,
       SiglossParameters,
       sigloss,
+      sigloss_cargs,
+      sigloss_execute,
+      sigloss_outputs,
       sigloss_params,
 };

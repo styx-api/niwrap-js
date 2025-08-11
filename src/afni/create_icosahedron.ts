@@ -12,7 +12,7 @@ const CREATE_ICOSAHEDRON_METADATA: Metadata = {
 
 
 interface CreateIcosahedronParameters {
-    "__STYXTYPE__": "CreateIcosahedron";
+    "@type": "afni.CreateIcosahedron";
     "rad"?: number | null | undefined;
     "rec_depth"?: number | null | undefined;
     "lin_depth"?: number | null | undefined;
@@ -26,33 +26,33 @@ interface CreateIcosahedronParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "CreateIcosahedron": create_icosahedron_cargs,
+        "afni.CreateIcosahedron": create_icosahedron_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface CreateIcosahedronOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rad Size of icosahedron.
+ * @param rec_depth Recursive tessellation depth for icosahedron.
+ * @param lin_depth Number of edge divides for linear icosahedron tessellation.
+ * @param min_nodes Automatically select the -ld value which produces an icosahedron of at least MIN_NODES nodes.
+ * @param nums Output the number of nodes (vertices), triangles, edges, total volume, and total area then quit.
+ * @param nums_quiet Output numbers in a less verbose manner.
+ * @param center_coordinates Coordinates of the center of the icosahedron.
+ * @param to_sphere Project nodes to sphere.
+ * @param output_prefix Prefix for output files.
+ * @param help Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function create_icosahedron_params(
     rad: number | null = null,
     rec_depth: number | null = null,
@@ -84,24 +100,8 @@ function create_icosahedron_params(
     output_prefix: string | null = null,
     help: boolean = false,
 ): CreateIcosahedronParameters {
-    /**
-     * Build parameters.
-    
-     * @param rad Size of icosahedron.
-     * @param rec_depth Recursive tessellation depth for icosahedron.
-     * @param lin_depth Number of edge divides for linear icosahedron tessellation.
-     * @param min_nodes Automatically select the -ld value which produces an icosahedron of at least MIN_NODES nodes.
-     * @param nums Output the number of nodes (vertices), triangles, edges, total volume, and total area then quit.
-     * @param nums_quiet Output numbers in a less verbose manner.
-     * @param center_coordinates Coordinates of the center of the icosahedron.
-     * @param to_sphere Project nodes to sphere.
-     * @param output_prefix Prefix for output files.
-     * @param help Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "CreateIcosahedron" as const,
+        "@type": "afni.CreateIcosahedron" as const,
         "nums": nums,
         "nums_quiet": nums_quiet,
         "to_sphere": to_sphere,
@@ -129,18 +129,18 @@ function create_icosahedron_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_icosahedron_cargs(
     params: CreateIcosahedronParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CreateIcosahedron");
     if ((params["rad"] ?? null) !== null) {
@@ -195,18 +195,18 @@ function create_icosahedron_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_icosahedron_outputs(
     params: CreateIcosahedronParameters,
     execution: Execution,
 ): CreateIcosahedronOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateIcosahedronOutputs = {
         root: execution.outputFile("."),
     };
@@ -214,22 +214,22 @@ function create_icosahedron_outputs(
 }
 
 
+/**
+ * Tool to create an icosahedron with optional tessellation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
+ */
 function create_icosahedron_execute(
     params: CreateIcosahedronParameters,
     execution: Execution,
 ): CreateIcosahedronOutputs {
-    /**
-     * Tool to create an icosahedron with optional tessellation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_icosahedron_cargs(params, execution)
     const ret = create_icosahedron_outputs(params, execution)
@@ -238,6 +238,27 @@ function create_icosahedron_execute(
 }
 
 
+/**
+ * Tool to create an icosahedron with optional tessellation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param rad Size of icosahedron.
+ * @param rec_depth Recursive tessellation depth for icosahedron.
+ * @param lin_depth Number of edge divides for linear icosahedron tessellation.
+ * @param min_nodes Automatically select the -ld value which produces an icosahedron of at least MIN_NODES nodes.
+ * @param nums Output the number of nodes (vertices), triangles, edges, total volume, and total area then quit.
+ * @param nums_quiet Output numbers in a less verbose manner.
+ * @param center_coordinates Coordinates of the center of the icosahedron.
+ * @param to_sphere Project nodes to sphere.
+ * @param output_prefix Prefix for output files.
+ * @param help Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
+ */
 function create_icosahedron(
     rad: number | null = null,
     rec_depth: number | null = null,
@@ -251,27 +272,6 @@ function create_icosahedron(
     help: boolean = false,
     runner: Runner | null = null,
 ): CreateIcosahedronOutputs {
-    /**
-     * Tool to create an icosahedron with optional tessellation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param rad Size of icosahedron.
-     * @param rec_depth Recursive tessellation depth for icosahedron.
-     * @param lin_depth Number of edge divides for linear icosahedron tessellation.
-     * @param min_nodes Automatically select the -ld value which produces an icosahedron of at least MIN_NODES nodes.
-     * @param nums Output the number of nodes (vertices), triangles, edges, total volume, and total area then quit.
-     * @param nums_quiet Output numbers in a less verbose manner.
-     * @param center_coordinates Coordinates of the center of the icosahedron.
-     * @param to_sphere Project nodes to sphere.
-     * @param output_prefix Prefix for output files.
-     * @param help Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_ICOSAHEDRON_METADATA);
     const params = create_icosahedron_params(rad, rec_depth, lin_depth, min_nodes, nums, nums_quiet, center_coordinates, to_sphere, output_prefix, help)
@@ -284,5 +284,8 @@ export {
       CreateIcosahedronOutputs,
       CreateIcosahedronParameters,
       create_icosahedron,
+      create_icosahedron_cargs,
+      create_icosahedron_execute,
+      create_icosahedron_outputs,
       create_icosahedron_params,
 };

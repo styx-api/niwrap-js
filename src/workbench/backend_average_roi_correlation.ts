@@ -12,39 +12,39 @@ const BACKEND_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
 
 
 interface BackendAverageRoiCorrelationParameters {
-    "__STYXTYPE__": "backend-average-roi-correlation";
+    "@type": "workbench.backend-average-roi-correlation";
     "index_list": string;
     "out_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "backend-average-roi-correlation": backend_average_roi_correlation_cargs,
+        "workbench.backend-average-roi-correlation": backend_average_roi_correlation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface BackendAverageRoiCorrelationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param index_list comma separated list of cifti indexes to average and then correlate
+ * @param out_file file to write the average row to
+ *
+ * @returns Parameter dictionary
+ */
 function backend_average_roi_correlation_params(
     index_list: string,
     out_file: string,
 ): BackendAverageRoiCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param index_list comma separated list of cifti indexes to average and then correlate
-     * @param out_file file to write the average row to
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "backend-average-roi-correlation" as const,
+        "@type": "workbench.backend-average-roi-correlation" as const,
         "index_list": index_list,
         "out_file": out_file,
     };
@@ -85,18 +85,18 @@ function backend_average_roi_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function backend_average_roi_correlation_cargs(
     params: BackendAverageRoiCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-backend-average-roi-correlation");
@@ -106,18 +106,18 @@ function backend_average_roi_correlation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function backend_average_roi_correlation_outputs(
     params: BackendAverageRoiCorrelationParameters,
     execution: Execution,
 ): BackendAverageRoiCorrelationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BackendAverageRoiCorrelationOutputs = {
         root: execution.outputFile("."),
     };
@@ -125,24 +125,24 @@ function backend_average_roi_correlation_outputs(
 }
 
 
+/**
+ * Connectome db backend command for cifti average roi correlation.
+ *
+ * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
+ */
 function backend_average_roi_correlation_execute(
     params: BackendAverageRoiCorrelationParameters,
     execution: Execution,
 ): BackendAverageRoiCorrelationOutputs {
-    /**
-     * Connectome db backend command for cifti average roi correlation.
-     * 
-     * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
-     */
     params = execution.params(params)
     const cargs = backend_average_roi_correlation_cargs(params, execution)
     const ret = backend_average_roi_correlation_outputs(params, execution)
@@ -151,26 +151,26 @@ function backend_average_roi_correlation_execute(
 }
 
 
+/**
+ * Connectome db backend command for cifti average roi correlation.
+ *
+ * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param index_list comma separated list of cifti indexes to average and then correlate
+ * @param out_file file to write the average row to
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
+ */
 function backend_average_roi_correlation(
     index_list: string,
     out_file: string,
     runner: Runner | null = null,
 ): BackendAverageRoiCorrelationOutputs {
-    /**
-     * Connectome db backend command for cifti average roi correlation.
-     * 
-     * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param index_list comma separated list of cifti indexes to average and then correlate
-     * @param out_file file to write the average row to
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BACKEND_AVERAGE_ROI_CORRELATION_METADATA);
     const params = backend_average_roi_correlation_params(index_list, out_file)
@@ -183,5 +183,8 @@ export {
       BackendAverageRoiCorrelationOutputs,
       BackendAverageRoiCorrelationParameters,
       backend_average_roi_correlation,
+      backend_average_roi_correlation_cargs,
+      backend_average_roi_correlation_execute,
+      backend_average_roi_correlation_outputs,
       backend_average_roi_correlation_params,
 };

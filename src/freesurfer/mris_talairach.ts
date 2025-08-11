@@ -12,38 +12,38 @@ const MRIS_TALAIRACH_METADATA: Metadata = {
 
 
 interface MrisTalairachParameters {
-    "__STYXTYPE__": "mris_talairach";
+    "@type": "freesurfer.mris_talairach";
     "input_image": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_talairach": mris_talairach_cargs,
+        "freesurfer.mris_talairach": mris_talairach_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MrisTalairachOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image file to be transformed into Talairach space
+ *
+ * @returns Parameter dictionary
+ */
 function mris_talairach_params(
     input_image: InputPathType,
 ): MrisTalairachParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image file to be transformed into Talairach space
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_talairach" as const,
+        "@type": "freesurfer.mris_talairach" as const,
         "input_image": input_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_talairach_cargs(
     params: MrisTalairachParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_talairach");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -100,18 +100,18 @@ function mris_talairach_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_talairach_outputs(
     params: MrisTalairachParameters,
     execution: Execution,
 ): MrisTalairachOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisTalairachOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function mris_talairach_outputs(
 }
 
 
+/**
+ * Transforms an MRI surface into Talairach space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
+ */
 function mris_talairach_execute(
     params: MrisTalairachParameters,
     execution: Execution,
 ): MrisTalairachOutputs {
-    /**
-     * Transforms an MRI surface into Talairach space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_talairach_cargs(params, execution)
     const ret = mris_talairach_outputs(params, execution)
@@ -143,22 +143,22 @@ function mris_talairach_execute(
 }
 
 
+/**
+ * Transforms an MRI surface into Talairach space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input image file to be transformed into Talairach space
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
+ */
 function mris_talairach(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): MrisTalairachOutputs {
-    /**
-     * Transforms an MRI surface into Talairach space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input image file to be transformed into Talairach space
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_TALAIRACH_METADATA);
     const params = mris_talairach_params(input_image)
@@ -171,5 +171,8 @@ export {
       MrisTalairachOutputs,
       MrisTalairachParameters,
       mris_talairach,
+      mris_talairach_cargs,
+      mris_talairach_execute,
+      mris_talairach_outputs,
       mris_talairach_params,
 };

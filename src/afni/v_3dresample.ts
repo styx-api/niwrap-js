@@ -12,7 +12,7 @@ const V_3DRESAMPLE_METADATA: Metadata = {
 
 
 interface V3dresampleParameters {
-    "__STYXTYPE__": "3dresample";
+    "@type": "afni.3dresample";
     "in_file": InputPathType;
     "master"?: InputPathType | null | undefined;
     "orientation"?: "AIL" | "AIR" | "ASL" | "ASR" | "PIL" | "PIR" | "PSL" | "PSR" | "ALI" | "ALS" | "ARI" | "ARS" | "PLI" | "PLS" | "PRI" | "PRS" | "IAL" | "IAR" | "IPL" | "IPR" | "SAL" | "SAR" | "SPL" | "SPR" | "ILA" | "ILP" | "IRA" | "IRP" | "SLA" | "SLP" | "SRA" | "SRP" | "LAI" | "LAS" | "LPI" | "LPS" | "RAI" | "RAS" | "RPI" | "RPS" | "LIA" | "LIP" | "LSA" | "LSP" | "RIA" | "RIP" | "RSA" | "RSP" | null | undefined;
@@ -23,35 +23,35 @@ interface V3dresampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dresample": v_3dresample_cargs,
+        "afni.3dresample": v_3dresample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dresample": v_3dresample_outputs,
+        "afni.3dresample": v_3dresample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface V3dresampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3dresample.
+ * @param prefix required prefix for output dataset
+ * @param master Align dataset grid to a reference file.
+ * @param orientation New orientation code.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param resample_mode 'nn' or 'li' or 'cu' or 'bk'. Resampling method from set {"nn", "li", "cu", "bk"}. these are for "nearest neighbor", "linear", "cubic" and "blocky"interpolation, respectively. default is nn.
+ * @param voxel_size (a float, a float, a float). Resample to new dx, dy and dz.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dresample_params(
     in_file: InputPathType,
     prefix: string,
@@ -83,21 +96,8 @@ function v_3dresample_params(
     resample_mode: "NN" | "Li" | "Cu" | "Bk" | null = null,
     voxel_size: Array<number> | null = null,
 ): V3dresampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3dresample.
-     * @param prefix required prefix for output dataset
-     * @param master Align dataset grid to a reference file.
-     * @param orientation New orientation code.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param resample_mode 'nn' or 'li' or 'cu' or 'bk'. Resampling method from set {"nn", "li", "cu", "bk"}. these are for "nearest neighbor", "linear", "cubic" and "blocky"interpolation, respectively. default is nn.
-     * @param voxel_size (a float, a float, a float). Resample to new dx, dy and dz.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dresample" as const,
+        "@type": "afni.3dresample" as const,
         "in_file": in_file,
         "prefix": prefix,
     };
@@ -120,18 +120,18 @@ function v_3dresample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dresample_cargs(
     params: V3dresampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dresample");
     cargs.push(
@@ -173,18 +173,18 @@ function v_3dresample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dresample_outputs(
     params: V3dresampleParameters,
     execution: Execution,
 ): V3dresampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dresampleOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -193,22 +193,22 @@ function v_3dresample_outputs(
 }
 
 
+/**
+ * Resample or reorient an image using AFNI 3dresample command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
+ */
 function v_3dresample_execute(
     params: V3dresampleParameters,
     execution: Execution,
 ): V3dresampleOutputs {
-    /**
-     * Resample or reorient an image using AFNI 3dresample command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dresample_cargs(params, execution)
     const ret = v_3dresample_outputs(params, execution)
@@ -217,6 +217,24 @@ function v_3dresample_execute(
 }
 
 
+/**
+ * Resample or reorient an image using AFNI 3dresample command.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3dresample.
+ * @param prefix required prefix for output dataset
+ * @param master Align dataset grid to a reference file.
+ * @param orientation New orientation code.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param resample_mode 'nn' or 'li' or 'cu' or 'bk'. Resampling method from set {"nn", "li", "cu", "bk"}. these are for "nearest neighbor", "linear", "cubic" and "blocky"interpolation, respectively. default is nn.
+ * @param voxel_size (a float, a float, a float). Resample to new dx, dy and dz.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
+ */
 function v_3dresample(
     in_file: InputPathType,
     prefix: string,
@@ -227,24 +245,6 @@ function v_3dresample(
     voxel_size: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dresampleOutputs {
-    /**
-     * Resample or reorient an image using AFNI 3dresample command.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3dresample.
-     * @param prefix required prefix for output dataset
-     * @param master Align dataset grid to a reference file.
-     * @param orientation New orientation code.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param resample_mode 'nn' or 'li' or 'cu' or 'bk'. Resampling method from set {"nn", "li", "cu", "bk"}. these are for "nearest neighbor", "linear", "cubic" and "blocky"interpolation, respectively. default is nn.
-     * @param voxel_size (a float, a float, a float). Resample to new dx, dy and dz.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DRESAMPLE_METADATA);
     const params = v_3dresample_params(in_file, prefix, master, orientation, outputtype, resample_mode, voxel_size)
@@ -257,5 +257,8 @@ export {
       V3dresampleParameters,
       V_3DRESAMPLE_METADATA,
       v_3dresample,
+      v_3dresample_cargs,
+      v_3dresample_execute,
+      v_3dresample_outputs,
       v_3dresample_params,
 };

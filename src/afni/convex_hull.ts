@@ -12,7 +12,7 @@ const CONVEX_HULL_METADATA: Metadata = {
 
 
 interface ConvexHullParameters {
-    "__STYXTYPE__": "ConvexHull";
+    "@type": "afni.ConvexHull";
     "vol"?: InputPathType | null | undefined;
     "isoval"?: number | null | undefined;
     "isorange"?: Array<number> | null | undefined;
@@ -32,35 +32,35 @@ interface ConvexHullParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvexHull": convex_hull_cargs,
+        "afni.ConvexHull": convex_hull_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ConvexHull": convex_hull_outputs,
+        "afni.ConvexHull": convex_hull_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface ConvexHullOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol Input AFNI (or AFNI readable) volume.
+ * @param isoval Create isosurface where volume = V
+ * @param isorange Create isosurface where V0 <= volume < V1
+ * @param isocmask Create isosurface where MASK_COM != 0. Example: -isocmask '-a VOL+orig -expr (1-bool(a-V))' is equivalent to using -isoval V. NOTE: Allowed only with -xform mask
+ * @param xform Transform to apply to volume values before searching for sign change boundary. Options: mask, shift, none
+ * @param surface_input Input surface type
+ * @param surf_vol Specify a surface volume which contains a transform to apply to the surface node coordinates
+ * @param input_1d Construct the triangulation of the points contained in 1D file XYZ. Use AFNI's [] selectors to specify the XYZ columns.
+ * @param q_opt Meshing option OPT. Options: convex_hull, triangulate_xy
+ * @param proj_xy Project points onto plane whose normal is the third principal component. Then rotate projection so that plane is parallel to Z = constant.
+ * @param orig_coord Use original coordinates when writing surface, not transformed ones.
+ * @param these_coords Use coordinates in COORDS.1D when writing surface.
+ * @param output_prefix Prefix of output surface. Specifies the format and prefix of the surface.
+ * @param debug Debugging level.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param setenv Set environment variable ENVname to be ENVvalue.
+ *
+ * @returns Parameter dictionary
+ */
 function convex_hull_params(
     vol: InputPathType | null = null,
     isoval: number | null = null,
@@ -101,30 +123,8 @@ function convex_hull_params(
     novolreg: boolean = false,
     setenv: string | null = null,
 ): ConvexHullParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol Input AFNI (or AFNI readable) volume.
-     * @param isoval Create isosurface where volume = V
-     * @param isorange Create isosurface where V0 <= volume < V1
-     * @param isocmask Create isosurface where MASK_COM != 0. Example: -isocmask '-a VOL+orig -expr (1-bool(a-V))' is equivalent to using -isoval V. NOTE: Allowed only with -xform mask
-     * @param xform Transform to apply to volume values before searching for sign change boundary. Options: mask, shift, none
-     * @param surface_input Input surface type
-     * @param surf_vol Specify a surface volume which contains a transform to apply to the surface node coordinates
-     * @param input_1d Construct the triangulation of the points contained in 1D file XYZ. Use AFNI's [] selectors to specify the XYZ columns.
-     * @param q_opt Meshing option OPT. Options: convex_hull, triangulate_xy
-     * @param proj_xy Project points onto plane whose normal is the third principal component. Then rotate projection so that plane is parallel to Z = constant.
-     * @param orig_coord Use original coordinates when writing surface, not transformed ones.
-     * @param these_coords Use coordinates in COORDS.1D when writing surface.
-     * @param output_prefix Prefix of output surface. Specifies the format and prefix of the surface.
-     * @param debug Debugging level.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param setenv Set environment variable ENVname to be ENVvalue.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvexHull" as const,
+        "@type": "afni.ConvexHull" as const,
         "proj_xy": proj_xy,
         "orig_coord": orig_coord,
         "novolreg": novolreg,
@@ -172,18 +172,18 @@ function convex_hull_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convex_hull_cargs(
     params: ConvexHullParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvexHull");
     if ((params["vol"] ?? null) !== null) {
@@ -277,18 +277,18 @@ function convex_hull_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convex_hull_outputs(
     params: ConvexHullParameters,
     execution: Execution,
 ): ConvexHullOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvexHullOutputs = {
         root: execution.outputFile("."),
         out_surf: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null)].join('')) : null,
@@ -297,22 +297,22 @@ function convex_hull_outputs(
 }
 
 
+/**
+ * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
+ */
 function convex_hull_execute(
     params: ConvexHullParameters,
     execution: Execution,
 ): ConvexHullOutputs {
-    /**
-     * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
-     */
     params = execution.params(params)
     const cargs = convex_hull_cargs(params, execution)
     const ret = convex_hull_outputs(params, execution)
@@ -321,6 +321,33 @@ function convex_hull_execute(
 }
 
 
+/**
+ * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param vol Input AFNI (or AFNI readable) volume.
+ * @param isoval Create isosurface where volume = V
+ * @param isorange Create isosurface where V0 <= volume < V1
+ * @param isocmask Create isosurface where MASK_COM != 0. Example: -isocmask '-a VOL+orig -expr (1-bool(a-V))' is equivalent to using -isoval V. NOTE: Allowed only with -xform mask
+ * @param xform Transform to apply to volume values before searching for sign change boundary. Options: mask, shift, none
+ * @param surface_input Input surface type
+ * @param surf_vol Specify a surface volume which contains a transform to apply to the surface node coordinates
+ * @param input_1d Construct the triangulation of the points contained in 1D file XYZ. Use AFNI's [] selectors to specify the XYZ columns.
+ * @param q_opt Meshing option OPT. Options: convex_hull, triangulate_xy
+ * @param proj_xy Project points onto plane whose normal is the third principal component. Then rotate projection so that plane is parallel to Z = constant.
+ * @param orig_coord Use original coordinates when writing surface, not transformed ones.
+ * @param these_coords Use coordinates in COORDS.1D when writing surface.
+ * @param output_prefix Prefix of output surface. Specifies the format and prefix of the surface.
+ * @param debug Debugging level.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param setenv Set environment variable ENVname to be ENVvalue.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
+ */
 function convex_hull(
     vol: InputPathType | null = null,
     isoval: number | null = null,
@@ -340,33 +367,6 @@ function convex_hull(
     setenv: string | null = null,
     runner: Runner | null = null,
 ): ConvexHullOutputs {
-    /**
-     * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param vol Input AFNI (or AFNI readable) volume.
-     * @param isoval Create isosurface where volume = V
-     * @param isorange Create isosurface where V0 <= volume < V1
-     * @param isocmask Create isosurface where MASK_COM != 0. Example: -isocmask '-a VOL+orig -expr (1-bool(a-V))' is equivalent to using -isoval V. NOTE: Allowed only with -xform mask
-     * @param xform Transform to apply to volume values before searching for sign change boundary. Options: mask, shift, none
-     * @param surface_input Input surface type
-     * @param surf_vol Specify a surface volume which contains a transform to apply to the surface node coordinates
-     * @param input_1d Construct the triangulation of the points contained in 1D file XYZ. Use AFNI's [] selectors to specify the XYZ columns.
-     * @param q_opt Meshing option OPT. Options: convex_hull, triangulate_xy
-     * @param proj_xy Project points onto plane whose normal is the third principal component. Then rotate projection so that plane is parallel to Z = constant.
-     * @param orig_coord Use original coordinates when writing surface, not transformed ones.
-     * @param these_coords Use coordinates in COORDS.1D when writing surface.
-     * @param output_prefix Prefix of output surface. Specifies the format and prefix of the surface.
-     * @param debug Debugging level.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param setenv Set environment variable ENVname to be ENVvalue.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVEX_HULL_METADATA);
     const params = convex_hull_params(vol, isoval, isorange, isocmask, xform, surface_input, surf_vol, input_1d, q_opt, proj_xy, orig_coord, these_coords, output_prefix, debug, novolreg, setenv)
@@ -379,5 +379,8 @@ export {
       ConvexHullOutputs,
       ConvexHullParameters,
       convex_hull,
+      convex_hull_cargs,
+      convex_hull_execute,
+      convex_hull_outputs,
       convex_hull_params,
 };

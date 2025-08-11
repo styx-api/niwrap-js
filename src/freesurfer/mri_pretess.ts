@@ -12,7 +12,7 @@ const MRI_PRETESS_METADATA: Metadata = {
 
 
 interface MriPretessParameters {
-    "__STYXTYPE__": "mri_pretess";
+    "@type": "freesurfer.mri_pretess";
     "filledvol": InputPathType;
     "labelstring": string;
     "normvol": InputPathType;
@@ -25,35 +25,35 @@ interface MriPretessParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_pretess": mri_pretess_cargs,
+        "freesurfer.mri_pretess": mri_pretess_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_pretess": mri_pretess_outputs,
+        "freesurfer.mri_pretess": mri_pretess_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MriPretessOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filledvol Input filled volume, usually wm.mgz
+ * @param labelstring Label string, usually wm
+ * @param normvol Normalization volume, usually norm.mgz
+ * @param newfilledvol New filled volume output, usually wm.mgz
+ * @param debug_voxel Specify the voxel to debug with coordinates C R S
+ * @param nocorners No removal of corner configurations in addition to edge ones
+ * @param write Turn on diagnostic writing
+ * @param keep Keep WM edits
+ * @param test Adds a voxel to test removal by mri_pretess, retained with -keep. Output not saved.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_pretess_params(
     filledvol: InputPathType,
     labelstring: string,
@@ -87,23 +102,8 @@ function mri_pretess_params(
     keep: boolean = false,
     test: boolean = false,
 ): MriPretessParameters {
-    /**
-     * Build parameters.
-    
-     * @param filledvol Input filled volume, usually wm.mgz
-     * @param labelstring Label string, usually wm
-     * @param normvol Normalization volume, usually norm.mgz
-     * @param newfilledvol New filled volume output, usually wm.mgz
-     * @param debug_voxel Specify the voxel to debug with coordinates C R S
-     * @param nocorners No removal of corner configurations in addition to edge ones
-     * @param write Turn on diagnostic writing
-     * @param keep Keep WM edits
-     * @param test Adds a voxel to test removal by mri_pretess, retained with -keep. Output not saved.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_pretess" as const,
+        "@type": "freesurfer.mri_pretess" as const,
         "filledvol": filledvol,
         "labelstring": labelstring,
         "normvol": normvol,
@@ -120,18 +120,18 @@ function mri_pretess_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_pretess_cargs(
     params: MriPretessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_pretess");
     cargs.push(execution.inputFile((params["filledvol"] ?? null)));
@@ -160,18 +160,18 @@ function mri_pretess_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_pretess_outputs(
     params: MriPretessParameters,
     execution: Execution,
 ): MriPretessOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriPretessOutputs = {
         root: execution.outputFile("."),
         out_newfilledvol: execution.outputFile([(params["newfilledvol"] ?? null)].join('')),
@@ -180,22 +180,22 @@ function mri_pretess_outputs(
 }
 
 
+/**
+ * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
+ */
 function mri_pretess_execute(
     params: MriPretessParameters,
     execution: Execution,
 ): MriPretessOutputs {
-    /**
-     * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_pretess_cargs(params, execution)
     const ret = mri_pretess_outputs(params, execution)
@@ -204,6 +204,26 @@ function mri_pretess_execute(
 }
 
 
+/**
+ * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param filledvol Input filled volume, usually wm.mgz
+ * @param labelstring Label string, usually wm
+ * @param normvol Normalization volume, usually norm.mgz
+ * @param newfilledvol New filled volume output, usually wm.mgz
+ * @param debug_voxel Specify the voxel to debug with coordinates C R S
+ * @param nocorners No removal of corner configurations in addition to edge ones
+ * @param write Turn on diagnostic writing
+ * @param keep Keep WM edits
+ * @param test Adds a voxel to test removal by mri_pretess, retained with -keep. Output not saved.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
+ */
 function mri_pretess(
     filledvol: InputPathType,
     labelstring: string,
@@ -216,26 +236,6 @@ function mri_pretess(
     test: boolean = false,
     runner: Runner | null = null,
 ): MriPretessOutputs {
-    /**
-     * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param filledvol Input filled volume, usually wm.mgz
-     * @param labelstring Label string, usually wm
-     * @param normvol Normalization volume, usually norm.mgz
-     * @param newfilledvol New filled volume output, usually wm.mgz
-     * @param debug_voxel Specify the voxel to debug with coordinates C R S
-     * @param nocorners No removal of corner configurations in addition to edge ones
-     * @param write Turn on diagnostic writing
-     * @param keep Keep WM edits
-     * @param test Adds a voxel to test removal by mri_pretess, retained with -keep. Output not saved.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PRETESS_METADATA);
     const params = mri_pretess_params(filledvol, labelstring, normvol, newfilledvol, debug_voxel, nocorners, write, keep, test)
@@ -248,5 +248,8 @@ export {
       MriPretessOutputs,
       MriPretessParameters,
       mri_pretess,
+      mri_pretess_cargs,
+      mri_pretess_execute,
+      mri_pretess_outputs,
       mri_pretess_params,
 };

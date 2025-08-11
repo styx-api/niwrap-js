@@ -12,7 +12,7 @@ const V__DJUNCT_ANONYMIZE_METADATA: Metadata = {
 
 
 interface VDjunctAnonymizeParameters {
-    "__STYXTYPE__": "@djunct_anonymize";
+    "@type": "afni.@djunct_anonymize";
     "input": InputPathType;
     "add_note"?: string | null | undefined;
     "copy_to"?: InputPathType | null | undefined;
@@ -20,33 +20,33 @@ interface VDjunctAnonymizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_anonymize": v__djunct_anonymize_cargs,
+        "afni.@djunct_anonymize": v__djunct_anonymize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface VDjunctAnonymizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input dataset
+ * @param add_note Add a note to the history after anonymizing
+ * @param copy_to Copy the input to a new file, which is then anonymized
+ * @param overwrite Overwrite the existing file if using -copy_to
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_anonymize_params(
     input: InputPathType,
     add_note: string | null = null,
     copy_to: InputPathType | null = null,
     overwrite: boolean = false,
 ): VDjunctAnonymizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input dataset
-     * @param add_note Add a note to the history after anonymizing
-     * @param copy_to Copy the input to a new file, which is then anonymized
-     * @param overwrite Overwrite the existing file if using -copy_to
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_anonymize" as const,
+        "@type": "afni.@djunct_anonymize" as const,
         "input": input,
         "overwrite": overwrite,
     };
@@ -97,18 +97,18 @@ function v__djunct_anonymize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_anonymize_cargs(
     params: VDjunctAnonymizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_anonymize");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -131,18 +131,18 @@ function v__djunct_anonymize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_anonymize_outputs(
     params: VDjunctAnonymizeParameters,
     execution: Execution,
 ): VDjunctAnonymizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctAnonymizeOutputs = {
         root: execution.outputFile("."),
     };
@@ -150,22 +150,22 @@ function v__djunct_anonymize_outputs(
 }
 
 
+/**
+ * Helper program to anonymize files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctAnonymizeOutputs`).
+ */
 function v__djunct_anonymize_execute(
     params: VDjunctAnonymizeParameters,
     execution: Execution,
 ): VDjunctAnonymizeOutputs {
-    /**
-     * Helper program to anonymize files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctAnonymizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_anonymize_cargs(params, execution)
     const ret = v__djunct_anonymize_outputs(params, execution)
@@ -174,6 +174,21 @@ function v__djunct_anonymize_execute(
 }
 
 
+/**
+ * Helper program to anonymize files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input dataset
+ * @param add_note Add a note to the history after anonymizing
+ * @param copy_to Copy the input to a new file, which is then anonymized
+ * @param overwrite Overwrite the existing file if using -copy_to
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctAnonymizeOutputs`).
+ */
 function v__djunct_anonymize(
     input: InputPathType,
     add_note: string | null = null,
@@ -181,21 +196,6 @@ function v__djunct_anonymize(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): VDjunctAnonymizeOutputs {
-    /**
-     * Helper program to anonymize files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input dataset
-     * @param add_note Add a note to the history after anonymizing
-     * @param copy_to Copy the input to a new file, which is then anonymized
-     * @param overwrite Overwrite the existing file if using -copy_to
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctAnonymizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_ANONYMIZE_METADATA);
     const params = v__djunct_anonymize_params(input, add_note, copy_to, overwrite)
@@ -208,5 +208,8 @@ export {
       VDjunctAnonymizeParameters,
       V__DJUNCT_ANONYMIZE_METADATA,
       v__djunct_anonymize,
+      v__djunct_anonymize_cargs,
+      v__djunct_anonymize_execute,
+      v__djunct_anonymize_outputs,
       v__djunct_anonymize_params,
 };

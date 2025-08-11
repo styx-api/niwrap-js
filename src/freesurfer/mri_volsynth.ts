@@ -12,7 +12,7 @@ const MRI_VOLSYNTH_METADATA: Metadata = {
 
 
 interface MriVolsynthParameters {
-    "__STYXTYPE__": "mri_volsynth";
+    "@type": "freesurfer.mri_volsynth";
     "output_volid": string;
     "template"?: string | null | undefined;
     "nframes"?: number | null | undefined;
@@ -59,33 +59,33 @@ interface MriVolsynthParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_volsynth": mri_volsynth_cargs,
+        "freesurfer.mri_volsynth": mri_volsynth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -105,6 +105,55 @@ interface MriVolsynthOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_volid Output volume path id and format
+ * @param template Template volume id
+ * @param nframes Override template number of frames
+ * @param offset_flag Use template as intensity offset
+ * @param offset_mid_flag Use middle frame of template as intensity offset
+ * @param curv Save output as curvature, uses lh.thickness as template. Requires subject and hemisphere.
+ * @param dim Specify dimensionality nc nr ns nf
+ * @param res Voxel resolution dc dr ds df (df is TR, in msec)
+ * @param vox_size Change template voxel resolution and dimension dc dr ds
+ * @param tr Time between frames in msec
+ * @param cdircos Column cosine direction x, y, z
+ * @param rdircos Row cosine direction x, y, z
+ * @param sdircos Slice cosine direction x, y, z
+ * @param c_ras RAS coordinates of 'center' voxel c_r c_a c_s
+ * @param p0 First voxel coordinates p0r p0a p0s
+ * @param precision Precision of the output (e.g., float)
+ * @param seed Seed for the random number generator
+ * @param seedfile Write seed value to this file
+ * @param pdf Probability distribution function (e.g., gaussian, uniform, const)
+ * @param bb Bounding box c r s dc dr ds (In=ValA, Out=ValB)
+ * @param gmean Mean for the gaussian distribution
+ * @param gstd Standard deviation for the gaussian distribution
+ * @param delta_crsf Delta's col, row, slice, and frame coordinates
+ * @param delta_val Delta value
+ * @param delta_val_off Delta background value
+ * @param grid Grid dimensions dcol, drow, dslice
+ * @param dof Degrees of freedom for t and chi2 distributions
+ * @param dof_num Numerator degrees of freedom for F distribution
+ * @param dof_den Denominator degrees of freedom for F distribution
+ * @param rescale_flag Rescale z, t, F, or chi2 after smoothing
+ * @param val_a Set ValA
+ * @param val_b Set ValB
+ * @param vox_radius Radius in voxels for sphere
+ * @param mm_radius Radius in mm for sphere
+ * @param sphere_center Sphere center coordinates column, row, slice
+ * @param hsc Multiply each frame by a random number between min and max
+ * @param abs_flag Compute absolute value
+ * @param cp Set control point voxels to 1
+ * @param spike Set all values at a given time point to 1e9
+ * @param fwhm Smooth by Full Width at Half Maximum (FWHM) in mm
+ * @param sum2 Save sum of volume squared into specified file
+ * @param dim_surf_flag Set dimension to nvertices x 1 x 1
+ * @param ctab Embed color table
+ *
+ * @returns Parameter dictionary
+ */
 function mri_volsynth_params(
     output_volid: string,
     template: string | null = null,
@@ -150,57 +199,8 @@ function mri_volsynth_params(
     dim_surf_flag: boolean = false,
     ctab: InputPathType | null = null,
 ): MriVolsynthParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_volid Output volume path id and format
-     * @param template Template volume id
-     * @param nframes Override template number of frames
-     * @param offset_flag Use template as intensity offset
-     * @param offset_mid_flag Use middle frame of template as intensity offset
-     * @param curv Save output as curvature, uses lh.thickness as template. Requires subject and hemisphere.
-     * @param dim Specify dimensionality nc nr ns nf
-     * @param res Voxel resolution dc dr ds df (df is TR, in msec)
-     * @param vox_size Change template voxel resolution and dimension dc dr ds
-     * @param tr Time between frames in msec
-     * @param cdircos Column cosine direction x, y, z
-     * @param rdircos Row cosine direction x, y, z
-     * @param sdircos Slice cosine direction x, y, z
-     * @param c_ras RAS coordinates of 'center' voxel c_r c_a c_s
-     * @param p0 First voxel coordinates p0r p0a p0s
-     * @param precision Precision of the output (e.g., float)
-     * @param seed Seed for the random number generator
-     * @param seedfile Write seed value to this file
-     * @param pdf Probability distribution function (e.g., gaussian, uniform, const)
-     * @param bb Bounding box c r s dc dr ds (In=ValA, Out=ValB)
-     * @param gmean Mean for the gaussian distribution
-     * @param gstd Standard deviation for the gaussian distribution
-     * @param delta_crsf Delta's col, row, slice, and frame coordinates
-     * @param delta_val Delta value
-     * @param delta_val_off Delta background value
-     * @param grid Grid dimensions dcol, drow, dslice
-     * @param dof Degrees of freedom for t and chi2 distributions
-     * @param dof_num Numerator degrees of freedom for F distribution
-     * @param dof_den Denominator degrees of freedom for F distribution
-     * @param rescale_flag Rescale z, t, F, or chi2 after smoothing
-     * @param val_a Set ValA
-     * @param val_b Set ValB
-     * @param vox_radius Radius in voxels for sphere
-     * @param mm_radius Radius in mm for sphere
-     * @param sphere_center Sphere center coordinates column, row, slice
-     * @param hsc Multiply each frame by a random number between min and max
-     * @param abs_flag Compute absolute value
-     * @param cp Set control point voxels to 1
-     * @param spike Set all values at a given time point to 1e9
-     * @param fwhm Smooth by Full Width at Half Maximum (FWHM) in mm
-     * @param sum2 Save sum of volume squared into specified file
-     * @param dim_surf_flag Set dimension to nvertices x 1 x 1
-     * @param ctab Embed color table
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_volsynth" as const,
+        "@type": "freesurfer.mri_volsynth" as const,
         "output_volid": output_volid,
         "offset_flag": offset_flag,
         "offset_mid_flag": offset_mid_flag,
@@ -323,18 +323,18 @@ function mri_volsynth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_volsynth_cargs(
     params: MriVolsynthParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_volsynth");
     cargs.push(
@@ -582,18 +582,18 @@ function mri_volsynth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_volsynth_outputs(
     params: MriVolsynthParameters,
     execution: Execution,
 ): MriVolsynthOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVolsynthOutputs = {
         root: execution.outputFile("."),
     };
@@ -601,22 +601,22 @@ function mri_volsynth_outputs(
 }
 
 
+/**
+ * Synthesizes a volume with specified geometry and probability distribution function.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
+ */
 function mri_volsynth_execute(
     params: MriVolsynthParameters,
     execution: Execution,
 ): MriVolsynthOutputs {
-    /**
-     * Synthesizes a volume with specified geometry and probability distribution function.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_volsynth_cargs(params, execution)
     const ret = mri_volsynth_outputs(params, execution)
@@ -625,6 +625,60 @@ function mri_volsynth_execute(
 }
 
 
+/**
+ * Synthesizes a volume with specified geometry and probability distribution function.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_volid Output volume path id and format
+ * @param template Template volume id
+ * @param nframes Override template number of frames
+ * @param offset_flag Use template as intensity offset
+ * @param offset_mid_flag Use middle frame of template as intensity offset
+ * @param curv Save output as curvature, uses lh.thickness as template. Requires subject and hemisphere.
+ * @param dim Specify dimensionality nc nr ns nf
+ * @param res Voxel resolution dc dr ds df (df is TR, in msec)
+ * @param vox_size Change template voxel resolution and dimension dc dr ds
+ * @param tr Time between frames in msec
+ * @param cdircos Column cosine direction x, y, z
+ * @param rdircos Row cosine direction x, y, z
+ * @param sdircos Slice cosine direction x, y, z
+ * @param c_ras RAS coordinates of 'center' voxel c_r c_a c_s
+ * @param p0 First voxel coordinates p0r p0a p0s
+ * @param precision Precision of the output (e.g., float)
+ * @param seed Seed for the random number generator
+ * @param seedfile Write seed value to this file
+ * @param pdf Probability distribution function (e.g., gaussian, uniform, const)
+ * @param bb Bounding box c r s dc dr ds (In=ValA, Out=ValB)
+ * @param gmean Mean for the gaussian distribution
+ * @param gstd Standard deviation for the gaussian distribution
+ * @param delta_crsf Delta's col, row, slice, and frame coordinates
+ * @param delta_val Delta value
+ * @param delta_val_off Delta background value
+ * @param grid Grid dimensions dcol, drow, dslice
+ * @param dof Degrees of freedom for t and chi2 distributions
+ * @param dof_num Numerator degrees of freedom for F distribution
+ * @param dof_den Denominator degrees of freedom for F distribution
+ * @param rescale_flag Rescale z, t, F, or chi2 after smoothing
+ * @param val_a Set ValA
+ * @param val_b Set ValB
+ * @param vox_radius Radius in voxels for sphere
+ * @param mm_radius Radius in mm for sphere
+ * @param sphere_center Sphere center coordinates column, row, slice
+ * @param hsc Multiply each frame by a random number between min and max
+ * @param abs_flag Compute absolute value
+ * @param cp Set control point voxels to 1
+ * @param spike Set all values at a given time point to 1e9
+ * @param fwhm Smooth by Full Width at Half Maximum (FWHM) in mm
+ * @param sum2 Save sum of volume squared into specified file
+ * @param dim_surf_flag Set dimension to nvertices x 1 x 1
+ * @param ctab Embed color table
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
+ */
 function mri_volsynth(
     output_volid: string,
     template: string | null = null,
@@ -671,60 +725,6 @@ function mri_volsynth(
     ctab: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriVolsynthOutputs {
-    /**
-     * Synthesizes a volume with specified geometry and probability distribution function.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_volid Output volume path id and format
-     * @param template Template volume id
-     * @param nframes Override template number of frames
-     * @param offset_flag Use template as intensity offset
-     * @param offset_mid_flag Use middle frame of template as intensity offset
-     * @param curv Save output as curvature, uses lh.thickness as template. Requires subject and hemisphere.
-     * @param dim Specify dimensionality nc nr ns nf
-     * @param res Voxel resolution dc dr ds df (df is TR, in msec)
-     * @param vox_size Change template voxel resolution and dimension dc dr ds
-     * @param tr Time between frames in msec
-     * @param cdircos Column cosine direction x, y, z
-     * @param rdircos Row cosine direction x, y, z
-     * @param sdircos Slice cosine direction x, y, z
-     * @param c_ras RAS coordinates of 'center' voxel c_r c_a c_s
-     * @param p0 First voxel coordinates p0r p0a p0s
-     * @param precision Precision of the output (e.g., float)
-     * @param seed Seed for the random number generator
-     * @param seedfile Write seed value to this file
-     * @param pdf Probability distribution function (e.g., gaussian, uniform, const)
-     * @param bb Bounding box c r s dc dr ds (In=ValA, Out=ValB)
-     * @param gmean Mean for the gaussian distribution
-     * @param gstd Standard deviation for the gaussian distribution
-     * @param delta_crsf Delta's col, row, slice, and frame coordinates
-     * @param delta_val Delta value
-     * @param delta_val_off Delta background value
-     * @param grid Grid dimensions dcol, drow, dslice
-     * @param dof Degrees of freedom for t and chi2 distributions
-     * @param dof_num Numerator degrees of freedom for F distribution
-     * @param dof_den Denominator degrees of freedom for F distribution
-     * @param rescale_flag Rescale z, t, F, or chi2 after smoothing
-     * @param val_a Set ValA
-     * @param val_b Set ValB
-     * @param vox_radius Radius in voxels for sphere
-     * @param mm_radius Radius in mm for sphere
-     * @param sphere_center Sphere center coordinates column, row, slice
-     * @param hsc Multiply each frame by a random number between min and max
-     * @param abs_flag Compute absolute value
-     * @param cp Set control point voxels to 1
-     * @param spike Set all values at a given time point to 1e9
-     * @param fwhm Smooth by Full Width at Half Maximum (FWHM) in mm
-     * @param sum2 Save sum of volume squared into specified file
-     * @param dim_surf_flag Set dimension to nvertices x 1 x 1
-     * @param ctab Embed color table
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOLSYNTH_METADATA);
     const params = mri_volsynth_params(output_volid, template, nframes, offset_flag, offset_mid_flag, curv, dim, res, vox_size, tr, cdircos, rdircos, sdircos, c_ras, p0, precision, seed, seedfile, pdf, bb, gmean, gstd, delta_crsf, delta_val, delta_val_off, grid, dof, dof_num, dof_den, rescale_flag, val_a, val_b, vox_radius, mm_radius, sphere_center, hsc, abs_flag, cp, spike, fwhm, sum2, dim_surf_flag, ctab)
@@ -737,5 +737,8 @@ export {
       MriVolsynthOutputs,
       MriVolsynthParameters,
       mri_volsynth,
+      mri_volsynth_cargs,
+      mri_volsynth_execute,
+      mri_volsynth_outputs,
       mri_volsynth_params,
 };

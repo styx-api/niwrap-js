@@ -12,7 +12,7 @@ const IMMASK_METADATA: Metadata = {
 
 
 interface ImmaskParameters {
-    "__STYXTYPE__": "immask";
+    "@type": "afni.immask";
     "threshold"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "positive_only": boolean;
@@ -21,35 +21,35 @@ interface ImmaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "immask": immask_cargs,
+        "afni.immask": immask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "immask": immask_outputs,
+        "afni.immask": immask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface ImmaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image to be masked
+ * @param output_image Output image after masking
+ * @param threshold Threshold value; all pixels with absolute value below this will be set to zero in the output image
+ * @param mask_image Mask image; only locations that are nonzero in the mask image will be nonzero in the output image
+ * @param positive_only Use only positive pixels from input image
+ *
+ * @returns Parameter dictionary
+ */
 function immask_params(
     input_image: InputPathType,
     output_image: string,
@@ -79,19 +90,8 @@ function immask_params(
     mask_image: InputPathType | null = null,
     positive_only: boolean = false,
 ): ImmaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image to be masked
-     * @param output_image Output image after masking
-     * @param threshold Threshold value; all pixels with absolute value below this will be set to zero in the output image
-     * @param mask_image Mask image; only locations that are nonzero in the mask image will be nonzero in the output image
-     * @param positive_only Use only positive pixels from input image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "immask" as const,
+        "@type": "afni.immask" as const,
         "positive_only": positive_only,
         "input_image": input_image,
         "output_image": output_image,
@@ -106,18 +106,18 @@ function immask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function immask_cargs(
     params: ImmaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("immask");
     if ((params["threshold"] ?? null) !== null) {
@@ -141,18 +141,18 @@ function immask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function immask_outputs(
     params: ImmaskParameters,
     execution: Execution,
 ): ImmaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImmaskOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -161,22 +161,22 @@ function immask_outputs(
 }
 
 
+/**
+ * Masks the input image based on specified criteria and produces the output image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
+ */
 function immask_execute(
     params: ImmaskParameters,
     execution: Execution,
 ): ImmaskOutputs {
-    /**
-     * Masks the input image based on specified criteria and produces the output image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = immask_cargs(params, execution)
     const ret = immask_outputs(params, execution)
@@ -185,6 +185,22 @@ function immask_execute(
 }
 
 
+/**
+ * Masks the input image based on specified criteria and produces the output image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_image Input image to be masked
+ * @param output_image Output image after masking
+ * @param threshold Threshold value; all pixels with absolute value below this will be set to zero in the output image
+ * @param mask_image Mask image; only locations that are nonzero in the mask image will be nonzero in the output image
+ * @param positive_only Use only positive pixels from input image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
+ */
 function immask(
     input_image: InputPathType,
     output_image: string,
@@ -193,22 +209,6 @@ function immask(
     positive_only: boolean = false,
     runner: Runner | null = null,
 ): ImmaskOutputs {
-    /**
-     * Masks the input image based on specified criteria and produces the output image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_image Input image to be masked
-     * @param output_image Output image after masking
-     * @param threshold Threshold value; all pixels with absolute value below this will be set to zero in the output image
-     * @param mask_image Mask image; only locations that are nonzero in the mask image will be nonzero in the output image
-     * @param positive_only Use only positive pixels from input image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMMASK_METADATA);
     const params = immask_params(input_image, output_image, threshold, mask_image, positive_only)
@@ -221,5 +221,8 @@ export {
       ImmaskOutputs,
       ImmaskParameters,
       immask,
+      immask_cargs,
+      immask_execute,
+      immask_outputs,
       immask_params,
 };

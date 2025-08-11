@@ -12,7 +12,7 @@ const METRIC_FILL_HOLES_METADATA: Metadata = {
 
 
 interface MetricFillHolesParameters {
-    "__STYXTYPE__": "metric-fill-holes";
+    "@type": "workbench.metric-fill-holes";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface MetricFillHolesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-fill-holes": metric_fill_holes_cargs,
+        "workbench.metric-fill-holes": metric_fill_holes_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-fill-holes": metric_fill_holes_outputs,
+        "workbench.metric-fill-holes": metric_fill_holes_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MetricFillHolesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function metric_fill_holes_params(
     surface: InputPathType,
     metric_in: InputPathType,
     metric_out: string,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): MetricFillHolesParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use for neighbor information
-     * @param metric_in the input ROI metric
-     * @param metric_out the output ROI metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-fill-holes" as const,
+        "@type": "workbench.metric-fill-holes" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function metric_fill_holes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_fill_holes_cargs(
     params: MetricFillHolesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-fill-holes");
@@ -128,18 +128,18 @@ function metric_fill_holes_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_fill_holes_outputs(
     params: MetricFillHolesParameters,
     execution: Execution,
 ): MetricFillHolesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricFillHolesOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function metric_fill_holes_outputs(
 }
 
 
+/**
+ * Fill holes in an roi metric.
+ *
+ * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
+ */
 function metric_fill_holes_execute(
     params: MetricFillHolesParameters,
     execution: Execution,
 ): MetricFillHolesOutputs {
-    /**
-     * Fill holes in an roi metric.
-     * 
-     * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_fill_holes_cargs(params, execution)
     const ret = metric_fill_holes_outputs(params, execution)
@@ -174,6 +174,23 @@ function metric_fill_holes_execute(
 }
 
 
+/**
+ * Fill holes in an roi metric.
+ *
+ * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
+ */
 function metric_fill_holes(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -181,23 +198,6 @@ function metric_fill_holes(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricFillHolesOutputs {
-    /**
-     * Fill holes in an roi metric.
-     * 
-     * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use for neighbor information
-     * @param metric_in the input ROI metric
-     * @param metric_out the output ROI metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_FILL_HOLES_METADATA);
     const params = metric_fill_holes_params(surface, metric_in, metric_out, opt_corrected_areas_area_metric)
@@ -210,5 +210,8 @@ export {
       MetricFillHolesOutputs,
       MetricFillHolesParameters,
       metric_fill_holes,
+      metric_fill_holes_cargs,
+      metric_fill_holes_execute,
+      metric_fill_holes_outputs,
       metric_fill_holes_params,
 };

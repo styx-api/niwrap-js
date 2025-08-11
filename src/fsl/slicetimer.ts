@@ -12,7 +12,7 @@ const SLICETIMER_METADATA: Metadata = {
 
 
 interface SlicetimerParameters {
-    "__STYXTYPE__": "slicetimer";
+    "@type": "fsl.slicetimer";
     "infile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
     "verbose_flag": boolean;
@@ -26,35 +26,35 @@ interface SlicetimerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slicetimer": slicetimer_cargs,
+        "fsl.slicetimer": slicetimer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "slicetimer": slicetimer_outputs,
+        "fsl.slicetimer": slicetimer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface SlicetimerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Filename of input timeseries
+ * @param outfile Filename of output timeseries
+ * @param verbose_flag Switch on diagnostic messages
+ * @param down_flag Reverse slice indexing (default is: slices were acquired bottom-up)
+ * @param tr_value Specify TR of data - default is 3s
+ * @param direction Direction of slice acquisition (x=1,y=2,z=3) - default is z
+ * @param odd_flag Use interleaved acquisition
+ * @param tcustom_file Filename of single-column slice timings, in fractions of TR, +ve values shift slices forward in time
+ * @param tglobal_value Global shift in fraction of TR, (default is 0)
+ * @param ocustom_file Filename of single-column custom interleave order file (first slice is referred to as 1 not 0)
+ *
+ * @returns Parameter dictionary
+ */
 function slicetimer_params(
     infile: InputPathType,
     outfile: InputPathType | null = null,
@@ -89,24 +105,8 @@ function slicetimer_params(
     tglobal_value: number | null = null,
     ocustom_file: InputPathType | null = null,
 ): SlicetimerParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Filename of input timeseries
-     * @param outfile Filename of output timeseries
-     * @param verbose_flag Switch on diagnostic messages
-     * @param down_flag Reverse slice indexing (default is: slices were acquired bottom-up)
-     * @param tr_value Specify TR of data - default is 3s
-     * @param direction Direction of slice acquisition (x=1,y=2,z=3) - default is z
-     * @param odd_flag Use interleaved acquisition
-     * @param tcustom_file Filename of single-column slice timings, in fractions of TR, +ve values shift slices forward in time
-     * @param tglobal_value Global shift in fraction of TR, (default is 0)
-     * @param ocustom_file Filename of single-column custom interleave order file (first slice is referred to as 1 not 0)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slicetimer" as const,
+        "@type": "fsl.slicetimer" as const,
         "infile": infile,
         "verbose_flag": verbose_flag,
         "down_flag": down_flag,
@@ -134,18 +134,18 @@ function slicetimer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slicetimer_cargs(
     params: SlicetimerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slicetimer");
     cargs.push(
@@ -201,18 +201,18 @@ function slicetimer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slicetimer_outputs(
     params: SlicetimerParameters,
     execution: Execution,
 ): SlicetimerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicetimerOutputs = {
         root: execution.outputFile("."),
         output_timeseries: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
@@ -221,22 +221,22 @@ function slicetimer_outputs(
 }
 
 
+/**
+ * FMRIB's Interpolation for Slice Timing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
+ */
 function slicetimer_execute(
     params: SlicetimerParameters,
     execution: Execution,
 ): SlicetimerOutputs {
-    /**
-     * FMRIB's Interpolation for Slice Timing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
-     */
     params = execution.params(params)
     const cargs = slicetimer_cargs(params, execution)
     const ret = slicetimer_outputs(params, execution)
@@ -245,6 +245,27 @@ function slicetimer_execute(
 }
 
 
+/**
+ * FMRIB's Interpolation for Slice Timing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Filename of input timeseries
+ * @param outfile Filename of output timeseries
+ * @param verbose_flag Switch on diagnostic messages
+ * @param down_flag Reverse slice indexing (default is: slices were acquired bottom-up)
+ * @param tr_value Specify TR of data - default is 3s
+ * @param direction Direction of slice acquisition (x=1,y=2,z=3) - default is z
+ * @param odd_flag Use interleaved acquisition
+ * @param tcustom_file Filename of single-column slice timings, in fractions of TR, +ve values shift slices forward in time
+ * @param tglobal_value Global shift in fraction of TR, (default is 0)
+ * @param ocustom_file Filename of single-column custom interleave order file (first slice is referred to as 1 not 0)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
+ */
 function slicetimer(
     infile: InputPathType,
     outfile: InputPathType | null = null,
@@ -258,27 +279,6 @@ function slicetimer(
     ocustom_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SlicetimerOutputs {
-    /**
-     * FMRIB's Interpolation for Slice Timing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Filename of input timeseries
-     * @param outfile Filename of output timeseries
-     * @param verbose_flag Switch on diagnostic messages
-     * @param down_flag Reverse slice indexing (default is: slices were acquired bottom-up)
-     * @param tr_value Specify TR of data - default is 3s
-     * @param direction Direction of slice acquisition (x=1,y=2,z=3) - default is z
-     * @param odd_flag Use interleaved acquisition
-     * @param tcustom_file Filename of single-column slice timings, in fractions of TR, +ve values shift slices forward in time
-     * @param tglobal_value Global shift in fraction of TR, (default is 0)
-     * @param ocustom_file Filename of single-column custom interleave order file (first slice is referred to as 1 not 0)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICETIMER_METADATA);
     const params = slicetimer_params(infile, outfile, verbose_flag, down_flag, tr_value, direction, odd_flag, tcustom_file, tglobal_value, ocustom_file)
@@ -291,5 +291,8 @@ export {
       SlicetimerOutputs,
       SlicetimerParameters,
       slicetimer,
+      slicetimer_cargs,
+      slicetimer_execute,
+      slicetimer_outputs,
       slicetimer_params,
 };

@@ -12,42 +12,42 @@ const TBSS_DEPROJECT_METADATA: Metadata = {
 
 
 interface TbssDeprojectParameters {
-    "__STYXTYPE__": "tbss_deproject";
+    "@type": "fsl.tbss_deproject";
     "skeleton_space_input_image": InputPathType;
     "final_space_option": number;
     "index_image_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_deproject": tbss_deproject_cargs,
+        "fsl.tbss_deproject": tbss_deproject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tbss_deproject": tbss_deproject_outputs,
+        "fsl.tbss_deproject": tbss_deproject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface TbssDeprojectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param skeleton_space_input_image Skeleton space input image.
+ * @param final_space_option Final space option.
+ * @param index_image_flag Assume that the skeleton space input image contains one or more integer index numbers and ensure that those exact values are deprojected without being changed by interpolations.
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_deproject_params(
     skeleton_space_input_image: InputPathType,
     final_space_option: number,
     index_image_flag: boolean = false,
 ): TbssDeprojectParameters {
-    /**
-     * Build parameters.
-    
-     * @param skeleton_space_input_image Skeleton space input image.
-     * @param final_space_option Final space option.
-     * @param index_image_flag Assume that the skeleton space input image contains one or more integer index numbers and ensure that those exact values are deprojected without being changed by interpolations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_deproject" as const,
+        "@type": "fsl.tbss_deproject" as const,
         "skeleton_space_input_image": skeleton_space_input_image,
         "final_space_option": final_space_option,
         "index_image_flag": index_image_flag,
@@ -98,18 +98,18 @@ function tbss_deproject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_deproject_cargs(
     params: TbssDeprojectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_deproject");
     cargs.push(execution.inputFile((params["skeleton_space_input_image"] ?? null)));
@@ -121,18 +121,18 @@ function tbss_deproject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_deproject_outputs(
     params: TbssDeprojectParameters,
     execution: Execution,
 ): TbssDeprojectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TbssDeprojectOutputs = {
         root: execution.outputFile("."),
         stats_output: execution.outputFile(["stats/", path.basename((params["skeleton_space_input_image"] ?? null))].join('')),
@@ -142,22 +142,22 @@ function tbss_deproject_outputs(
 }
 
 
+/**
+ * Tool to deproject images from skeleton space to final space.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
+ */
 function tbss_deproject_execute(
     params: TbssDeprojectParameters,
     execution: Execution,
 ): TbssDeprojectOutputs {
-    /**
-     * Tool to deproject images from skeleton space to final space.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_deproject_cargs(params, execution)
     const ret = tbss_deproject_outputs(params, execution)
@@ -166,26 +166,26 @@ function tbss_deproject_execute(
 }
 
 
+/**
+ * Tool to deproject images from skeleton space to final space.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param skeleton_space_input_image Skeleton space input image.
+ * @param final_space_option Final space option.
+ * @param index_image_flag Assume that the skeleton space input image contains one or more integer index numbers and ensure that those exact values are deprojected without being changed by interpolations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
+ */
 function tbss_deproject(
     skeleton_space_input_image: InputPathType,
     final_space_option: number,
     index_image_flag: boolean = false,
     runner: Runner | null = null,
 ): TbssDeprojectOutputs {
-    /**
-     * Tool to deproject images from skeleton space to final space.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param skeleton_space_input_image Skeleton space input image.
-     * @param final_space_option Final space option.
-     * @param index_image_flag Assume that the skeleton space input image contains one or more integer index numbers and ensure that those exact values are deprojected without being changed by interpolations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_DEPROJECT_METADATA);
     const params = tbss_deproject_params(skeleton_space_input_image, final_space_option, index_image_flag)
@@ -198,5 +198,8 @@ export {
       TbssDeprojectOutputs,
       TbssDeprojectParameters,
       tbss_deproject,
+      tbss_deproject_cargs,
+      tbss_deproject_execute,
+      tbss_deproject_outputs,
       tbss_deproject_params,
 };

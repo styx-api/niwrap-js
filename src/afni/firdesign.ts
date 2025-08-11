@@ -12,7 +12,7 @@ const FIRDESIGN_METADATA: Metadata = {
 
 
 interface FirdesignParameters {
-    "__STYXTYPE__": "FIRdesign";
+    "@type": "afni.FIRdesign";
     "fbot": number;
     "ftop": number;
     "ntap": number;
@@ -22,33 +22,33 @@ interface FirdesignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "FIRdesign": firdesign_cargs,
+        "afni.FIRdesign": firdesign_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface FirdesignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fbot Lowest frequency in the pass band.
+ * @param ftop Highest frequency in the pass band, must be higher than fbot and <= 0.5/TR.
+ * @param ntap Number of filter weights (AKA 'taps') to use, must be in the range 8..2000 (inclusive).
+ * @param tr Set time grid spacing to 'dd' [default is 1.0]
+ * @param alternative_band Alternative way to specify the passband
+ * @param alternative_ntap Alternative way to specify the number of taps
+ *
+ * @returns Parameter dictionary
+ */
 function firdesign_params(
     fbot: number,
     ftop: number,
@@ -76,20 +88,8 @@ function firdesign_params(
     alternative_band: Array<number> | null = null,
     alternative_ntap: number | null = null,
 ): FirdesignParameters {
-    /**
-     * Build parameters.
-    
-     * @param fbot Lowest frequency in the pass band.
-     * @param ftop Highest frequency in the pass band, must be higher than fbot and <= 0.5/TR.
-     * @param ntap Number of filter weights (AKA 'taps') to use, must be in the range 8..2000 (inclusive).
-     * @param tr Set time grid spacing to 'dd' [default is 1.0]
-     * @param alternative_band Alternative way to specify the passband
-     * @param alternative_ntap Alternative way to specify the number of taps
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "FIRdesign" as const,
+        "@type": "afni.FIRdesign" as const,
         "fbot": fbot,
         "ftop": ftop,
         "ntap": ntap,
@@ -107,18 +107,18 @@ function firdesign_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function firdesign_cargs(
     params: FirdesignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("FIRdesign");
     cargs.push(String((params["fbot"] ?? null)));
@@ -146,18 +146,18 @@ function firdesign_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function firdesign_outputs(
     params: FirdesignParameters,
     execution: Execution,
 ): FirdesignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirdesignOutputs = {
         root: execution.outputFile("."),
     };
@@ -165,22 +165,22 @@ function firdesign_outputs(
 }
 
 
+/**
+ * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
+ */
 function firdesign_execute(
     params: FirdesignParameters,
     execution: Execution,
 ): FirdesignOutputs {
-    /**
-     * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
-     */
     params = execution.params(params)
     const cargs = firdesign_cargs(params, execution)
     const ret = firdesign_outputs(params, execution)
@@ -189,6 +189,23 @@ function firdesign_execute(
 }
 
 
+/**
+ * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fbot Lowest frequency in the pass band.
+ * @param ftop Highest frequency in the pass band, must be higher than fbot and <= 0.5/TR.
+ * @param ntap Number of filter weights (AKA 'taps') to use, must be in the range 8..2000 (inclusive).
+ * @param tr Set time grid spacing to 'dd' [default is 1.0]
+ * @param alternative_band Alternative way to specify the passband
+ * @param alternative_ntap Alternative way to specify the number of taps
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
+ */
 function firdesign(
     fbot: number,
     ftop: number,
@@ -198,23 +215,6 @@ function firdesign(
     alternative_ntap: number | null = null,
     runner: Runner | null = null,
 ): FirdesignOutputs {
-    /**
-     * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fbot Lowest frequency in the pass band.
-     * @param ftop Highest frequency in the pass band, must be higher than fbot and <= 0.5/TR.
-     * @param ntap Number of filter weights (AKA 'taps') to use, must be in the range 8..2000 (inclusive).
-     * @param tr Set time grid spacing to 'dd' [default is 1.0]
-     * @param alternative_band Alternative way to specify the passband
-     * @param alternative_ntap Alternative way to specify the number of taps
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRDESIGN_METADATA);
     const params = firdesign_params(fbot, ftop, ntap, tr, alternative_band, alternative_ntap)
@@ -227,5 +227,8 @@ export {
       FirdesignOutputs,
       FirdesignParameters,
       firdesign,
+      firdesign_cargs,
+      firdesign_execute,
+      firdesign_outputs,
       firdesign_params,
 };

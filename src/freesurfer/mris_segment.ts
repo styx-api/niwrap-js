@@ -12,42 +12,42 @@ const MRIS_SEGMENT_METADATA: Metadata = {
 
 
 interface MrisSegmentParameters {
-    "__STYXTYPE__": "mris_segment";
+    "@type": "freesurfer.mris_segment";
     "subjects": Array<string>;
     "output_subject": string;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_segment": mris_segment_cargs,
+        "freesurfer.mris_segment": mris_segment_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_segment": mris_segment_outputs,
+        "freesurfer.mris_segment": mris_segment_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisSegmentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects A list of input subjects
+ * @param output_subject Output subject name
+ * @param output_file Output file path
+ *
+ * @returns Parameter dictionary
+ */
 function mris_segment_params(
     subjects: Array<string>,
     output_subject: string,
     output_file: string,
 ): MrisSegmentParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects A list of input subjects
-     * @param output_subject Output subject name
-     * @param output_file Output file path
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_segment" as const,
+        "@type": "freesurfer.mris_segment" as const,
         "subjects": subjects,
         "output_subject": output_subject,
         "output_file": output_file,
@@ -94,18 +94,18 @@ function mris_segment_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_segment_cargs(
     params: MrisSegmentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_segment");
     cargs.push(...(params["subjects"] ?? null));
@@ -115,18 +115,18 @@ function mris_segment_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_segment_outputs(
     params: MrisSegmentParameters,
     execution: Execution,
 ): MrisSegmentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSegmentOutputs = {
         root: execution.outputFile("."),
         segmented_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mris_segment_outputs(
 }
 
 
+/**
+ * A command-line tool for segmenting surfaces in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSegmentOutputs`).
+ */
 function mris_segment_execute(
     params: MrisSegmentParameters,
     execution: Execution,
 ): MrisSegmentOutputs {
-    /**
-     * A command-line tool for segmenting surfaces in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSegmentOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_segment_cargs(params, execution)
     const ret = mris_segment_outputs(params, execution)
@@ -159,26 +159,26 @@ function mris_segment_execute(
 }
 
 
+/**
+ * A command-line tool for segmenting surfaces in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects A list of input subjects
+ * @param output_subject Output subject name
+ * @param output_file Output file path
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSegmentOutputs`).
+ */
 function mris_segment(
     subjects: Array<string>,
     output_subject: string,
     output_file: string,
     runner: Runner | null = null,
 ): MrisSegmentOutputs {
-    /**
-     * A command-line tool for segmenting surfaces in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects A list of input subjects
-     * @param output_subject Output subject name
-     * @param output_file Output file path
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSegmentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SEGMENT_METADATA);
     const params = mris_segment_params(subjects, output_subject, output_file)
@@ -191,5 +191,8 @@ export {
       MrisSegmentOutputs,
       MrisSegmentParameters,
       mris_segment,
+      mris_segment_cargs,
+      mris_segment_execute,
+      mris_segment_outputs,
       mris_segment_params,
 };

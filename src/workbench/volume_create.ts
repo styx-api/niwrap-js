@@ -12,7 +12,7 @@ const VOLUME_CREATE_METADATA: Metadata = {
 
 
 interface VolumeCreatePlumbParameters {
-    "__STYXTYPE__": "plumb";
+    "@type": "workbench.volume-create.plumb";
     "axis_order": string;
     "x_spacing": number;
     "y_spacing": number;
@@ -24,7 +24,7 @@ interface VolumeCreatePlumbParameters {
 
 
 interface VolumeCreateSformParameters {
-    "__STYXTYPE__": "sform";
+    "@type": "workbench.volume-create.sform";
     "xi_spacing": number;
     "xj_spacing": number;
     "xk_spacing": number;
@@ -41,7 +41,7 @@ interface VolumeCreateSformParameters {
 
 
 interface VolumeCreateParameters {
-    "__STYXTYPE__": "volume-create";
+    "@type": "workbench.volume-create";
     "i_dim": number;
     "j_dim": number;
     "k_dim": number;
@@ -51,42 +51,55 @@ interface VolumeCreateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-create": volume_create_cargs,
-        "plumb": volume_create_plumb_cargs,
-        "sform": volume_create_sform_cargs,
+        "workbench.volume-create": volume_create_cargs,
+        "workbench.volume-create.plumb": volume_create_plumb_cargs,
+        "workbench.volume-create.sform": volume_create_sform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-create": volume_create_outputs,
+        "workbench.volume-create": volume_create_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param axis_order a string like 'XYZ' that specifies which index is along which spatial dimension
+ * @param x_spacing change in x-coordinate from incrementing the relevant index
+ * @param y_spacing change in y-coordinate from incrementing the relevant index
+ * @param z_spacing change in z-coordinate from incrementing the relevant index
+ * @param x_offset the x-coordinate of the center of the first voxel
+ * @param y_offset the y-coordinate of the center of the first voxel
+ * @param z_offset the z-coordinate of the center of the first voxel
+ *
+ * @returns Parameter dictionary
+ */
 function volume_create_plumb_params(
     axis_order: string,
     x_spacing: number,
@@ -96,21 +109,8 @@ function volume_create_plumb_params(
     y_offset: number,
     z_offset: number,
 ): VolumeCreatePlumbParameters {
-    /**
-     * Build parameters.
-    
-     * @param axis_order a string like 'XYZ' that specifies which index is along which spatial dimension
-     * @param x_spacing change in x-coordinate from incrementing the relevant index
-     * @param y_spacing change in y-coordinate from incrementing the relevant index
-     * @param z_spacing change in z-coordinate from incrementing the relevant index
-     * @param x_offset the x-coordinate of the center of the first voxel
-     * @param y_offset the y-coordinate of the center of the first voxel
-     * @param z_offset the z-coordinate of the center of the first voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "plumb" as const,
+        "@type": "workbench.volume-create.plumb" as const,
         "axis_order": axis_order,
         "x_spacing": x_spacing,
         "y_spacing": y_spacing,
@@ -123,18 +123,18 @@ function volume_create_plumb_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_create_plumb_cargs(
     params: VolumeCreatePlumbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-plumb");
     cargs.push((params["axis_order"] ?? null));
@@ -148,6 +148,24 @@ function volume_create_plumb_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xi_spacing increase in x coordinate from incrementing the i index
+ * @param xj_spacing increase in x coordinate from incrementing the j index
+ * @param xk_spacing increase in x coordinate from incrementing the k index
+ * @param x_offset x coordinate of first voxel
+ * @param yi_spacing increase in y coordinate from incrementing the i index
+ * @param yj_spacing increase in y coordinate from incrementing the j index
+ * @param yk_spacing increase in y coordinate from incrementing the k index
+ * @param y_offset y coordinate of first voxel
+ * @param zi_spacing increase in z coordinate from incrementing the i index
+ * @param zj_spacing increase in z coordinate from incrementing the j index
+ * @param zk_spacing increase in z coordinate from incrementing the k index
+ * @param z_offset z coordinate of first voxel
+ *
+ * @returns Parameter dictionary
+ */
 function volume_create_sform_params(
     xi_spacing: number,
     xj_spacing: number,
@@ -162,26 +180,8 @@ function volume_create_sform_params(
     zk_spacing: number,
     z_offset: number,
 ): VolumeCreateSformParameters {
-    /**
-     * Build parameters.
-    
-     * @param xi_spacing increase in x coordinate from incrementing the i index
-     * @param xj_spacing increase in x coordinate from incrementing the j index
-     * @param xk_spacing increase in x coordinate from incrementing the k index
-     * @param x_offset x coordinate of first voxel
-     * @param yi_spacing increase in y coordinate from incrementing the i index
-     * @param yj_spacing increase in y coordinate from incrementing the j index
-     * @param yk_spacing increase in y coordinate from incrementing the k index
-     * @param y_offset y coordinate of first voxel
-     * @param zi_spacing increase in z coordinate from incrementing the i index
-     * @param zj_spacing increase in z coordinate from incrementing the j index
-     * @param zk_spacing increase in z coordinate from incrementing the k index
-     * @param z_offset z coordinate of first voxel
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sform" as const,
+        "@type": "workbench.volume-create.sform" as const,
         "xi_spacing": xi_spacing,
         "xj_spacing": xj_spacing,
         "xk_spacing": xk_spacing,
@@ -199,18 +199,18 @@ function volume_create_sform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_create_sform_cargs(
     params: VolumeCreateSformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-sform");
     cargs.push(String((params["xi_spacing"] ?? null)));
@@ -246,6 +246,18 @@ interface VolumeCreateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param i_dim length of first dimension
+ * @param j_dim length of second dimension
+ * @param k_dim length of third dimension
+ * @param volume_out the output volume
+ * @param plumb set via axis order and spacing/offset
+ * @param sform set via a nifti sform
+ *
+ * @returns Parameter dictionary
+ */
 function volume_create_params(
     i_dim: number,
     j_dim: number,
@@ -254,20 +266,8 @@ function volume_create_params(
     plumb: VolumeCreatePlumbParameters | null = null,
     sform: VolumeCreateSformParameters | null = null,
 ): VolumeCreateParameters {
-    /**
-     * Build parameters.
-    
-     * @param i_dim length of first dimension
-     * @param j_dim length of second dimension
-     * @param k_dim length of third dimension
-     * @param volume_out the output volume
-     * @param plumb set via axis order and spacing/offset
-     * @param sform set via a nifti sform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-create" as const,
+        "@type": "workbench.volume-create" as const,
         "i_dim": i_dim,
         "j_dim": j_dim,
         "k_dim": k_dim,
@@ -283,18 +283,18 @@ function volume_create_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_create_cargs(
     params: VolumeCreateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-create");
@@ -303,27 +303,27 @@ function volume_create_cargs(
     cargs.push(String((params["k_dim"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["plumb"] ?? null).__STYXTYPE__)((params["plumb"] ?? null), execution));
+        cargs.push(...dynCargs((params["plumb"] ?? null)["@type"])((params["plumb"] ?? null), execution));
     }
     if ((params["sform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["sform"] ?? null).__STYXTYPE__)((params["sform"] ?? null), execution));
+        cargs.push(...dynCargs((params["sform"] ?? null)["@type"])((params["sform"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_create_outputs(
     params: VolumeCreateParameters,
     execution: Execution,
 ): VolumeCreateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeCreateOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -332,24 +332,24 @@ function volume_create_outputs(
 }
 
 
+/**
+ * Create a blank volume file.
+ *
+ * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
+ */
 function volume_create_execute(
     params: VolumeCreateParameters,
     execution: Execution,
 ): VolumeCreateOutputs {
-    /**
-     * Create a blank volume file.
-     * 
-     * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_create_cargs(params, execution)
     const ret = volume_create_outputs(params, execution)
@@ -358,6 +358,25 @@ function volume_create_execute(
 }
 
 
+/**
+ * Create a blank volume file.
+ *
+ * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param i_dim length of first dimension
+ * @param j_dim length of second dimension
+ * @param k_dim length of third dimension
+ * @param volume_out the output volume
+ * @param plumb set via axis order and spacing/offset
+ * @param sform set via a nifti sform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
+ */
 function volume_create(
     i_dim: number,
     j_dim: number,
@@ -367,25 +386,6 @@ function volume_create(
     sform: VolumeCreateSformParameters | null = null,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
-    /**
-     * Create a blank volume file.
-     * 
-     * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param i_dim length of first dimension
-     * @param j_dim length of second dimension
-     * @param k_dim length of third dimension
-     * @param volume_out the output volume
-     * @param plumb set via axis order and spacing/offset
-     * @param sform set via a nifti sform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_CREATE_METADATA);
     const params = volume_create_params(i_dim, j_dim, k_dim, volume_out, plumb, sform)
@@ -400,7 +400,12 @@ export {
       VolumeCreatePlumbParameters,
       VolumeCreateSformParameters,
       volume_create,
+      volume_create_cargs,
+      volume_create_execute,
+      volume_create_outputs,
       volume_create_params,
+      volume_create_plumb_cargs,
       volume_create_plumb_params,
+      volume_create_sform_cargs,
       volume_create_sform_params,
 };

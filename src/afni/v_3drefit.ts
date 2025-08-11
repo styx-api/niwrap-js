@@ -12,7 +12,7 @@ const V_3DREFIT_METADATA: Metadata = {
 
 
 interface V3drefitParameters {
-    "__STYXTYPE__": "3drefit";
+    "@type": "afni.3drefit";
     "atrcopy"?: Array<string> | null | undefined;
     "atrfloat"?: Array<string> | null | undefined;
     "atrint"?: Array<string> | null | undefined;
@@ -33,35 +33,35 @@ interface V3drefitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3drefit": v_3drefit_cargs,
+        "afni.3drefit": v_3drefit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3drefit": v_3drefit_outputs,
+        "afni.3drefit": v_3drefit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,29 @@ interface V3drefitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input file to 3drefit.
+ * @param atrcopy (file, string). Copy afni header attribute from the given file into the header of the dataset(s) being modified. for more information on afni header attributes, see documentation file readme.attributes. more than one '-atrcopy' option can be used. for afni advanced users only. do not use -atrcopy or -atrstring with other modification options. see also -copyaux.
+ * @param atrfloat (a string, a string). Create or modify floating point attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0.2 0 0 -0.2 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0.2,2@0,-0.2,1,2@0,2@0,1,0'.
+ * @param atrint (a string, a string). Create or modify integer attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0 0 0 0 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0,2@0,-0,1,2@0,2@0,1,0'.
+ * @param atrstring (a string, a string). Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.to be safe, the last string should be in quotes.
+ * @param deoblique Replace current transformation matrix with cardinal matrix.
+ * @param duporigin_file Copies the xorigin, yorigin, and zorigin values from the header of the given dataset.
+ * @param nosaveatr Opposite of -saveatr.
+ * @param saveatr (default) copy the attributes that are known to afni into the dset->dblk structure thereby forcing changes to known attributes to be present in the output. this option only makes sense with -atrcopy.
+ * @param space 'tlrc' or 'mni' or 'orig'. Associates the dataset with a specific template type, e.g. tlrc, mni, orig.
+ * @param xdel New x voxel dimension in mm.
+ * @param xorigin X distance for edge voxel offset.
+ * @param xyzscale Scale the size of the dataset voxels by the given factor.
+ * @param ydel New y voxel dimension in mm.
+ * @param yorigin Y distance for edge voxel offset.
+ * @param zdel New z voxel dimension in mm.
+ * @param zorigin Z distance for edge voxel offset.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3drefit_params(
     in_file: InputPathType,
     atrcopy: Array<string> | null = null,
@@ -103,31 +126,8 @@ function v_3drefit_params(
     zdel: number | null = null,
     zorigin: string | null = null,
 ): V3drefitParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input file to 3drefit.
-     * @param atrcopy (file, string). Copy afni header attribute from the given file into the header of the dataset(s) being modified. for more information on afni header attributes, see documentation file readme.attributes. more than one '-atrcopy' option can be used. for afni advanced users only. do not use -atrcopy or -atrstring with other modification options. see also -copyaux.
-     * @param atrfloat (a string, a string). Create or modify floating point attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0.2 0 0 -0.2 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0.2,2@0,-0.2,1,2@0,2@0,1,0'.
-     * @param atrint (a string, a string). Create or modify integer attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0 0 0 0 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0,2@0,-0,1,2@0,2@0,1,0'.
-     * @param atrstring (a string, a string). Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.to be safe, the last string should be in quotes.
-     * @param deoblique Replace current transformation matrix with cardinal matrix.
-     * @param duporigin_file Copies the xorigin, yorigin, and zorigin values from the header of the given dataset.
-     * @param nosaveatr Opposite of -saveatr.
-     * @param saveatr (default) copy the attributes that are known to afni into the dset->dblk structure thereby forcing changes to known attributes to be present in the output. this option only makes sense with -atrcopy.
-     * @param space 'tlrc' or 'mni' or 'orig'. Associates the dataset with a specific template type, e.g. tlrc, mni, orig.
-     * @param xdel New x voxel dimension in mm.
-     * @param xorigin X distance for edge voxel offset.
-     * @param xyzscale Scale the size of the dataset voxels by the given factor.
-     * @param ydel New y voxel dimension in mm.
-     * @param yorigin Y distance for edge voxel offset.
-     * @param zdel New z voxel dimension in mm.
-     * @param zorigin Z distance for edge voxel offset.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3drefit" as const,
+        "@type": "afni.3drefit" as const,
         "deoblique": deoblique,
         "in_file": in_file,
         "nosaveatr": nosaveatr,
@@ -176,18 +176,18 @@ function v_3drefit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3drefit_cargs(
     params: V3drefitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3drefit");
     if ((params["atrcopy"] ?? null) !== null) {
@@ -282,18 +282,18 @@ function v_3drefit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3drefit_outputs(
     params: V3drefitParameters,
     execution: Execution,
 ): V3drefitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3drefitOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile(["out_file"].join('')),
@@ -302,22 +302,22 @@ function v_3drefit_outputs(
 }
 
 
+/**
+ * Changes some of the information inside a 3D dataset's header.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
+ */
 function v_3drefit_execute(
     params: V3drefitParameters,
     execution: Execution,
 ): V3drefitOutputs {
-    /**
-     * Changes some of the information inside a 3D dataset's header.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3drefit_cargs(params, execution)
     const ret = v_3drefit_outputs(params, execution)
@@ -326,6 +326,34 @@ function v_3drefit_execute(
 }
 
 
+/**
+ * Changes some of the information inside a 3D dataset's header.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file Input file to 3drefit.
+ * @param atrcopy (file, string). Copy afni header attribute from the given file into the header of the dataset(s) being modified. for more information on afni header attributes, see documentation file readme.attributes. more than one '-atrcopy' option can be used. for afni advanced users only. do not use -atrcopy or -atrstring with other modification options. see also -copyaux.
+ * @param atrfloat (a string, a string). Create or modify floating point attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0.2 0 0 -0.2 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0.2,2@0,-0.2,1,2@0,2@0,1,0'.
+ * @param atrint (a string, a string). Create or modify integer attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0 0 0 0 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0,2@0,-0,1,2@0,2@0,1,0'.
+ * @param atrstring (a string, a string). Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.to be safe, the last string should be in quotes.
+ * @param deoblique Replace current transformation matrix with cardinal matrix.
+ * @param duporigin_file Copies the xorigin, yorigin, and zorigin values from the header of the given dataset.
+ * @param nosaveatr Opposite of -saveatr.
+ * @param saveatr (default) copy the attributes that are known to afni into the dset->dblk structure thereby forcing changes to known attributes to be present in the output. this option only makes sense with -atrcopy.
+ * @param space 'tlrc' or 'mni' or 'orig'. Associates the dataset with a specific template type, e.g. tlrc, mni, orig.
+ * @param xdel New x voxel dimension in mm.
+ * @param xorigin X distance for edge voxel offset.
+ * @param xyzscale Scale the size of the dataset voxels by the given factor.
+ * @param ydel New y voxel dimension in mm.
+ * @param yorigin Y distance for edge voxel offset.
+ * @param zdel New z voxel dimension in mm.
+ * @param zorigin Z distance for edge voxel offset.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
+ */
 function v_3drefit(
     in_file: InputPathType,
     atrcopy: Array<string> | null = null,
@@ -346,34 +374,6 @@ function v_3drefit(
     zorigin: string | null = null,
     runner: Runner | null = null,
 ): V3drefitOutputs {
-    /**
-     * Changes some of the information inside a 3D dataset's header.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file Input file to 3drefit.
-     * @param atrcopy (file, string). Copy afni header attribute from the given file into the header of the dataset(s) being modified. for more information on afni header attributes, see documentation file readme.attributes. more than one '-atrcopy' option can be used. for afni advanced users only. do not use -atrcopy or -atrstring with other modification options. see also -copyaux.
-     * @param atrfloat (a string, a string). Create or modify floating point attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0.2 0 0 -0.2 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0.2,2@0,-0.2,1,2@0,2@0,1,0'.
-     * @param atrint (a string, a string). Create or modify integer attributes. the input values may be specified as a single string in quotes or as a 1d filename or string, example '1 0 0 0 0 1 0 0 0 0 1 0' or flipz.1d or '1d:1,0,2@0,-0,1,2@0,2@0,1,0'.
-     * @param atrstring (a string, a string). Copy the last given string into the dataset(s) being modified, giving it the attribute name given by the last string.to be safe, the last string should be in quotes.
-     * @param deoblique Replace current transformation matrix with cardinal matrix.
-     * @param duporigin_file Copies the xorigin, yorigin, and zorigin values from the header of the given dataset.
-     * @param nosaveatr Opposite of -saveatr.
-     * @param saveatr (default) copy the attributes that are known to afni into the dset->dblk structure thereby forcing changes to known attributes to be present in the output. this option only makes sense with -atrcopy.
-     * @param space 'tlrc' or 'mni' or 'orig'. Associates the dataset with a specific template type, e.g. tlrc, mni, orig.
-     * @param xdel New x voxel dimension in mm.
-     * @param xorigin X distance for edge voxel offset.
-     * @param xyzscale Scale the size of the dataset voxels by the given factor.
-     * @param ydel New y voxel dimension in mm.
-     * @param yorigin Y distance for edge voxel offset.
-     * @param zdel New z voxel dimension in mm.
-     * @param zorigin Z distance for edge voxel offset.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DREFIT_METADATA);
     const params = v_3drefit_params(in_file, atrcopy, atrfloat, atrint, atrstring, deoblique, duporigin_file, nosaveatr, saveatr, space, xdel, xorigin, xyzscale, ydel, yorigin, zdel, zorigin)
@@ -386,5 +386,8 @@ export {
       V3drefitParameters,
       V_3DREFIT_METADATA,
       v_3drefit,
+      v_3drefit_cargs,
+      v_3drefit_execute,
+      v_3drefit_outputs,
       v_3drefit_params,
 };

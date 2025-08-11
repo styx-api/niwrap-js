@@ -12,38 +12,38 @@ const SEGMENT_BS_SH_METADATA: Metadata = {
 
 
 interface SegmentBsShParameters {
-    "__STYXTYPE__": "segmentBS.sh";
+    "@type": "freesurfer.segmentBS.sh";
     "matlab_runtime"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentBS.sh": segment_bs_sh_cargs,
+        "freesurfer.segmentBS.sh": segment_bs_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface SegmentBsShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matlab_runtime Path to the Matlab 2019b runtime environment; necessary for running the segmentation tool.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_bs_sh_params(
     matlab_runtime: string | null = "/usr/local/freesurfer/MCRv97",
 ): SegmentBsShParameters {
-    /**
-     * Build parameters.
-    
-     * @param matlab_runtime Path to the Matlab 2019b runtime environment; necessary for running the segmentation tool.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentBS.sh" as const,
+        "@type": "freesurfer.segmentBS.sh" as const,
     };
     if (matlab_runtime !== null) {
         params["matlab_runtime"] = matlab_runtime;
@@ -83,18 +83,18 @@ function segment_bs_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_bs_sh_cargs(
     params: SegmentBsShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentBS.sh");
     if ((params["matlab_runtime"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function segment_bs_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_bs_sh_outputs(
     params: SegmentBsShParameters,
     execution: Execution,
 ): SegmentBsShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentBsShOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function segment_bs_sh_outputs(
 }
 
 
+/**
+ * Segmentation tool for hippocampal/amygdala and brainstem modules.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
+ */
 function segment_bs_sh_execute(
     params: SegmentBsShParameters,
     execution: Execution,
 ): SegmentBsShOutputs {
-    /**
-     * Segmentation tool for hippocampal/amygdala and brainstem modules.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_bs_sh_cargs(params, execution)
     const ret = segment_bs_sh_outputs(params, execution)
@@ -147,22 +147,22 @@ function segment_bs_sh_execute(
 }
 
 
+/**
+ * Segmentation tool for hippocampal/amygdala and brainstem modules.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param matlab_runtime Path to the Matlab 2019b runtime environment; necessary for running the segmentation tool.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
+ */
 function segment_bs_sh(
     matlab_runtime: string | null = "/usr/local/freesurfer/MCRv97",
     runner: Runner | null = null,
 ): SegmentBsShOutputs {
-    /**
-     * Segmentation tool for hippocampal/amygdala and brainstem modules.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param matlab_runtime Path to the Matlab 2019b runtime environment; necessary for running the segmentation tool.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_BS_SH_METADATA);
     const params = segment_bs_sh_params(matlab_runtime)
@@ -175,5 +175,8 @@ export {
       SegmentBsShOutputs,
       SegmentBsShParameters,
       segment_bs_sh,
+      segment_bs_sh_cargs,
+      segment_bs_sh_execute,
+      segment_bs_sh_outputs,
       segment_bs_sh_params,
 };

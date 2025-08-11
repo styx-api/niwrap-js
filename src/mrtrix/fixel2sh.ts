@@ -12,14 +12,14 @@ const FIXEL2SH_METADATA: Metadata = {
 
 
 interface Fixel2shConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixel2sh.config";
     "key": string;
     "value": string;
 }
 
 
 interface Fixel2shParameters {
-    "__STYXTYPE__": "fixel2sh";
+    "@type": "mrtrix.fixel2sh";
     "lmax"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface Fixel2shParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixel2sh": fixel2sh_cargs,
-        "config": fixel2sh_config_cargs,
+        "mrtrix.fixel2sh": fixel2sh_cargs,
+        "mrtrix.fixel2sh.config": fixel2sh_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixel2sh": fixel2sh_outputs,
+        "mrtrix.fixel2sh": fixel2sh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2sh_config_params(
     key: string,
     value: string,
 ): Fixel2shConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixel2sh.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function fixel2sh_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2sh_config_cargs(
     params: Fixel2shConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface Fixel2shOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixel_in the input fixel data file.
+ * @param sh_out the output sh image.
+ * @param lmax set the maximum harmonic order for the output series (Default: 8)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2sh_params(
     fixel_in: InputPathType,
     sh_out: string,
@@ -140,25 +157,8 @@ function fixel2sh_params(
     help: boolean = false,
     version: boolean = false,
 ): Fixel2shParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixel_in the input fixel data file.
-     * @param sh_out the output sh image.
-     * @param lmax set the maximum harmonic order for the output series (Default: 8)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixel2sh" as const,
+        "@type": "mrtrix.fixel2sh" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -181,18 +181,18 @@ function fixel2sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2sh_cargs(
     params: Fixel2shParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixel2sh");
     if ((params["lmax"] ?? null) !== null) {
@@ -220,7 +220,7 @@ function fixel2sh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -234,18 +234,18 @@ function fixel2sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixel2sh_outputs(
     params: Fixel2shParameters,
     execution: Execution,
 ): Fixel2shOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fixel2shOutputs = {
         root: execution.outputFile("."),
         sh_out: execution.outputFile([(params["sh_out"] ?? null)].join('')),
@@ -254,31 +254,31 @@ function fixel2sh_outputs(
 }
 
 
+/**
+ * Convert a fixel-based sparse-data image into an spherical harmonic image.
+ *
+ * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
+ */
 function fixel2sh_execute(
     params: Fixel2shParameters,
     execution: Execution,
 ): Fixel2shOutputs {
-    /**
-     * Convert a fixel-based sparse-data image into an spherical harmonic image.
-     * 
-     * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixel2sh_cargs(params, execution)
     const ret = fixel2sh_outputs(params, execution)
@@ -287,6 +287,37 @@ function fixel2sh_execute(
 }
 
 
+/**
+ * Convert a fixel-based sparse-data image into an spherical harmonic image.
+ *
+ * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fixel_in the input fixel data file.
+ * @param sh_out the output sh image.
+ * @param lmax set the maximum harmonic order for the output series (Default: 8)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
+ */
 function fixel2sh(
     fixel_in: InputPathType,
     sh_out: string,
@@ -301,37 +332,6 @@ function fixel2sh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2shOutputs {
-    /**
-     * Convert a fixel-based sparse-data image into an spherical harmonic image.
-     * 
-     * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fixel_in the input fixel data file.
-     * @param sh_out the output sh image.
-     * @param lmax set the maximum harmonic order for the output series (Default: 8)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXEL2SH_METADATA);
     const params = fixel2sh_params(fixel_in, sh_out, lmax, info, quiet, debug, force, nthreads, config, help, version)
@@ -345,6 +345,10 @@ export {
       Fixel2shOutputs,
       Fixel2shParameters,
       fixel2sh,
+      fixel2sh_cargs,
+      fixel2sh_config_cargs,
       fixel2sh_config_params,
+      fixel2sh_execute,
+      fixel2sh_outputs,
       fixel2sh_params,
 };

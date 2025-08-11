@@ -12,38 +12,38 @@ const ISNIFTI_METADATA: Metadata = {
 
 
 interface IsniftiParameters {
-    "__STYXTYPE__": "isnifti";
+    "@type": "freesurfer.isnifti";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "isnifti": isnifti_cargs,
+        "freesurfer.isnifti": isnifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface IsniftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file to be checked if it is a NIfTI image
+ *
+ * @returns Parameter dictionary
+ */
 function isnifti_params(
     infile: InputPathType,
 ): IsniftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file to be checked if it is a NIfTI image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isnifti" as const,
+        "@type": "freesurfer.isnifti" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function isnifti_cargs(
     params: IsniftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("isnifti");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -100,18 +100,18 @@ function isnifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function isnifti_outputs(
     params: IsniftiParameters,
     execution: Execution,
 ): IsniftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsniftiOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function isnifti_outputs(
 }
 
 
+/**
+ * A simple tool to check if a file is a NIfTI image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
+ */
 function isnifti_execute(
     params: IsniftiParameters,
     execution: Execution,
 ): IsniftiOutputs {
-    /**
-     * A simple tool to check if a file is a NIfTI image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
-     */
     params = execution.params(params)
     const cargs = isnifti_cargs(params, execution)
     const ret = isnifti_outputs(params, execution)
@@ -143,22 +143,22 @@ function isnifti_execute(
 }
 
 
+/**
+ * A simple tool to check if a file is a NIfTI image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input file to be checked if it is a NIfTI image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
+ */
 function isnifti(
     infile: InputPathType,
     runner: Runner | null = null,
 ): IsniftiOutputs {
-    /**
-     * A simple tool to check if a file is a NIfTI image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input file to be checked if it is a NIfTI image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISNIFTI_METADATA);
     const params = isnifti_params(infile)
@@ -171,5 +171,8 @@ export {
       IsniftiOutputs,
       IsniftiParameters,
       isnifti,
+      isnifti_cargs,
+      isnifti_execute,
+      isnifti_outputs,
       isnifti_params,
 };

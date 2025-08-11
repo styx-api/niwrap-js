@@ -12,7 +12,7 @@ const V_3D_TSPLIT4_D_METADATA: Metadata = {
 
 
 interface V3dTsplit4DParameters {
-    "__STYXTYPE__": "3dTsplit4D";
+    "@type": "afni.3dTsplit4D";
     "prefix": string;
     "infile": InputPathType;
     "keep_datum": boolean;
@@ -20,35 +20,35 @@ interface V3dTsplit4DParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTsplit4D": v_3d_tsplit4_d_cargs,
+        "afni.3dTsplit4D": v_3d_tsplit4_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTsplit4D": v_3d_tsplit4_d_outputs,
+        "afni.3dTsplit4D": v_3d_tsplit4_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface V3dTsplit4DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix of the output datasets (e.g., out/epi)
+ * @param infile Input 3D+time dataset (e.g., epi_r1+orig)
+ * @param keep_datum Output uses original datum (no conversion to float)
+ * @param digits Number of digits to use for output filenames
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tsplit4_d_params(
     prefix: string,
     infile: InputPathType,
     keep_datum: boolean = false,
     digits: number | null = null,
 ): V3dTsplit4DParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix of the output datasets (e.g., out/epi)
-     * @param infile Input 3D+time dataset (e.g., epi_r1+orig)
-     * @param keep_datum Output uses original datum (no conversion to float)
-     * @param digits Number of digits to use for output filenames
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTsplit4D" as const,
+        "@type": "afni.3dTsplit4D" as const,
         "prefix": prefix,
         "infile": infile,
         "keep_datum": keep_datum,
@@ -100,18 +100,18 @@ function v_3d_tsplit4_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tsplit4_d_cargs(
     params: V3dTsplit4DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTsplit4D");
     cargs.push(
@@ -132,18 +132,18 @@ function v_3d_tsplit4_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tsplit4_d_outputs(
     params: V3dTsplit4DParameters,
     execution: Execution,
 ): V3dTsplit4DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTsplit4DOutputs = {
         root: execution.outputFile("."),
         outfiles: execution.outputFile([(params["prefix"] ?? null), "*"].join('')),
@@ -152,22 +152,22 @@ function v_3d_tsplit4_d_outputs(
 }
 
 
+/**
+ * Convert a 3D+time dataset into multiple 3D single-brick files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsplit4DOutputs`).
+ */
 function v_3d_tsplit4_d_execute(
     params: V3dTsplit4DParameters,
     execution: Execution,
 ): V3dTsplit4DOutputs {
-    /**
-     * Convert a 3D+time dataset into multiple 3D single-brick files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTsplit4DOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tsplit4_d_cargs(params, execution)
     const ret = v_3d_tsplit4_d_outputs(params, execution)
@@ -176,6 +176,21 @@ function v_3d_tsplit4_d_execute(
 }
 
 
+/**
+ * Convert a 3D+time dataset into multiple 3D single-brick files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix of the output datasets (e.g., out/epi)
+ * @param infile Input 3D+time dataset (e.g., epi_r1+orig)
+ * @param keep_datum Output uses original datum (no conversion to float)
+ * @param digits Number of digits to use for output filenames
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsplit4DOutputs`).
+ */
 function v_3d_tsplit4_d(
     prefix: string,
     infile: InputPathType,
@@ -183,21 +198,6 @@ function v_3d_tsplit4_d(
     digits: number | null = null,
     runner: Runner | null = null,
 ): V3dTsplit4DOutputs {
-    /**
-     * Convert a 3D+time dataset into multiple 3D single-brick files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix of the output datasets (e.g., out/epi)
-     * @param infile Input 3D+time dataset (e.g., epi_r1+orig)
-     * @param keep_datum Output uses original datum (no conversion to float)
-     * @param digits Number of digits to use for output filenames
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTsplit4DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSPLIT4_D_METADATA);
     const params = v_3d_tsplit4_d_params(prefix, infile, keep_datum, digits)
@@ -210,5 +210,8 @@ export {
       V3dTsplit4DParameters,
       V_3D_TSPLIT4_D_METADATA,
       v_3d_tsplit4_d,
+      v_3d_tsplit4_d_cargs,
+      v_3d_tsplit4_d_execute,
+      v_3d_tsplit4_d_outputs,
       v_3d_tsplit4_d_params,
 };

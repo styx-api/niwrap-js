@@ -12,40 +12,40 @@ const SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA: Metadata = {
 
 
 interface SurfaceSphereTriangularPatchesParameters {
-    "__STYXTYPE__": "surface-sphere-triangular-patches";
+    "@type": "workbench.surface-sphere-triangular-patches";
     "sphere": InputPathType;
     "divisions": number;
     "text_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-sphere-triangular-patches": surface_sphere_triangular_patches_cargs,
+        "workbench.surface-sphere-triangular-patches": surface_sphere_triangular_patches_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface SurfaceSphereTriangularPatchesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sphere an undistorted, regularly divided icosahedral sphere
+ * @param divisions how many pieces to divide each icosahedral edge into, must divide perfectly into the given sphere
+ * @param text_out output - text file for the vertex numbers of the patches
+ *
+ * @returns Parameter dictionary
+ */
 function surface_sphere_triangular_patches_params(
     sphere: InputPathType,
     divisions: number,
     text_out: string,
 ): SurfaceSphereTriangularPatchesParameters {
-    /**
-     * Build parameters.
-    
-     * @param sphere an undistorted, regularly divided icosahedral sphere
-     * @param divisions how many pieces to divide each icosahedral edge into, must divide perfectly into the given sphere
-     * @param text_out output - text file for the vertex numbers of the patches
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-sphere-triangular-patches" as const,
+        "@type": "workbench.surface-sphere-triangular-patches" as const,
         "sphere": sphere,
         "divisions": divisions,
         "text_out": text_out,
@@ -89,18 +89,18 @@ function surface_sphere_triangular_patches_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_sphere_triangular_patches_cargs(
     params: SurfaceSphereTriangularPatchesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-sphere-triangular-patches");
@@ -111,18 +111,18 @@ function surface_sphere_triangular_patches_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_sphere_triangular_patches_outputs(
     params: SurfaceSphereTriangularPatchesParameters,
     execution: Execution,
 ): SurfaceSphereTriangularPatchesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceSphereTriangularPatchesOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function surface_sphere_triangular_patches_outputs(
 }
 
 
+/**
+ * Divide standard sphere into patches.
+ *
+ * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
+ */
 function surface_sphere_triangular_patches_execute(
     params: SurfaceSphereTriangularPatchesParameters,
     execution: Execution,
 ): SurfaceSphereTriangularPatchesOutputs {
-    /**
-     * Divide standard sphere into patches.
-     * 
-     * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_sphere_triangular_patches_cargs(params, execution)
     const ret = surface_sphere_triangular_patches_outputs(params, execution)
@@ -156,28 +156,28 @@ function surface_sphere_triangular_patches_execute(
 }
 
 
+/**
+ * Divide standard sphere into patches.
+ *
+ * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param sphere an undistorted, regularly divided icosahedral sphere
+ * @param divisions how many pieces to divide each icosahedral edge into, must divide perfectly into the given sphere
+ * @param text_out output - text file for the vertex numbers of the patches
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
+ */
 function surface_sphere_triangular_patches(
     sphere: InputPathType,
     divisions: number,
     text_out: string,
     runner: Runner | null = null,
 ): SurfaceSphereTriangularPatchesOutputs {
-    /**
-     * Divide standard sphere into patches.
-     * 
-     * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param sphere an undistorted, regularly divided icosahedral sphere
-     * @param divisions how many pieces to divide each icosahedral edge into, must divide perfectly into the given sphere
-     * @param text_out output - text file for the vertex numbers of the patches
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA);
     const params = surface_sphere_triangular_patches_params(sphere, divisions, text_out)
@@ -190,5 +190,8 @@ export {
       SurfaceSphereTriangularPatchesOutputs,
       SurfaceSphereTriangularPatchesParameters,
       surface_sphere_triangular_patches,
+      surface_sphere_triangular_patches_cargs,
+      surface_sphere_triangular_patches_execute,
+      surface_sphere_triangular_patches_outputs,
       surface_sphere_triangular_patches_params,
 };

@@ -12,14 +12,14 @@ const CIFTI_CONVERT_METADATA: Metadata = {
 
 
 interface CiftiConvertToGiftiExtParameters {
-    "__STYXTYPE__": "to_gifti_ext";
+    "@type": "workbench.cifti-convert.to_gifti_ext";
     "cifti_in": InputPathType;
     "gifti_out": string;
 }
 
 
 interface CiftiConvertResetTimepointsParameters {
-    "__STYXTYPE__": "reset_timepoints";
+    "@type": "workbench.cifti-convert.from_gifti_ext.reset_timepoints";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
@@ -27,7 +27,7 @@ interface CiftiConvertResetTimepointsParameters {
 
 
 interface CiftiConvertReplaceBinaryParameters {
-    "__STYXTYPE__": "replace_binary";
+    "@type": "workbench.cifti-convert.from_gifti_ext.replace_binary";
     "binary_in": string;
     "opt_flip_endian": boolean;
     "opt_transpose": boolean;
@@ -35,7 +35,7 @@ interface CiftiConvertReplaceBinaryParameters {
 
 
 interface CiftiConvertFromGiftiExtParameters {
-    "__STYXTYPE__": "from_gifti_ext";
+    "@type": "workbench.cifti-convert.from_gifti_ext";
     "gifti_in": string;
     "cifti_out": string;
     "reset_timepoints"?: CiftiConvertResetTimepointsParameters | null | undefined;
@@ -46,7 +46,7 @@ interface CiftiConvertFromGiftiExtParameters {
 
 
 interface CiftiConvertToNiftiParameters {
-    "__STYXTYPE__": "to_nifti";
+    "@type": "workbench.cifti-convert.to_nifti";
     "cifti_in": InputPathType;
     "nifti_out": string;
     "opt_smaller_file": boolean;
@@ -55,7 +55,7 @@ interface CiftiConvertToNiftiParameters {
 
 
 interface CiftiConvertResetTimepoints1Parameters {
-    "__STYXTYPE__": "reset_timepoints_1";
+    "@type": "workbench.cifti-convert.from_nifti.reset_timepoints";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
@@ -63,7 +63,7 @@ interface CiftiConvertResetTimepoints1Parameters {
 
 
 interface CiftiConvertFromNiftiParameters {
-    "__STYXTYPE__": "from_nifti";
+    "@type": "workbench.cifti-convert.from_nifti";
     "nifti_in": InputPathType;
     "cifti_template": InputPathType;
     "cifti_out": string;
@@ -73,7 +73,7 @@ interface CiftiConvertFromNiftiParameters {
 
 
 interface CiftiConvertToTextParameters {
-    "__STYXTYPE__": "to_text";
+    "@type": "workbench.cifti-convert.to_text";
     "cifti_in": InputPathType;
     "text_out": string;
     "opt_col_delim_delim_string"?: string | null | undefined;
@@ -81,7 +81,7 @@ interface CiftiConvertToTextParameters {
 
 
 interface CiftiConvertResetTimepoints2Parameters {
-    "__STYXTYPE__": "reset_timepoints_2";
+    "@type": "workbench.cifti-convert.from_text.reset_timepoints";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
@@ -89,7 +89,7 @@ interface CiftiConvertResetTimepoints2Parameters {
 
 
 interface CiftiConvertFromTextParameters {
-    "__STYXTYPE__": "from_text";
+    "@type": "workbench.cifti-convert.from_text";
     "text_in": string;
     "cifti_template": InputPathType;
     "cifti_out": string;
@@ -100,7 +100,7 @@ interface CiftiConvertFromTextParameters {
 
 
 interface CiftiConvertParameters {
-    "__STYXTYPE__": "cifti-convert";
+    "@type": "workbench.cifti-convert";
     "to_gifti_ext"?: CiftiConvertToGiftiExtParameters | null | undefined;
     "from_gifti_ext"?: CiftiConvertFromGiftiExtParameters | null | undefined;
     "to_nifti"?: CiftiConvertToNiftiParameters | null | undefined;
@@ -110,68 +110,68 @@ interface CiftiConvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-convert": cifti_convert_cargs,
-        "to_gifti_ext": cifti_convert_to_gifti_ext_cargs,
-        "from_gifti_ext": cifti_convert_from_gifti_ext_cargs,
-        "reset_timepoints": cifti_convert_reset_timepoints_cargs,
-        "replace_binary": cifti_convert_replace_binary_cargs,
-        "to_nifti": cifti_convert_to_nifti_cargs,
-        "from_nifti": cifti_convert_from_nifti_cargs,
-        "reset_timepoints_1": cifti_convert_reset_timepoints_1_cargs,
-        "to_text": cifti_convert_to_text_cargs,
-        "from_text": cifti_convert_from_text_cargs,
-        "reset_timepoints_2": cifti_convert_reset_timepoints_2_cargs,
+        "workbench.cifti-convert": cifti_convert_cargs,
+        "workbench.cifti-convert.to_gifti_ext": cifti_convert_to_gifti_ext_cargs,
+        "workbench.cifti-convert.from_gifti_ext": cifti_convert_from_gifti_ext_cargs,
+        "workbench.cifti-convert.from_gifti_ext.reset_timepoints": cifti_convert_reset_timepoints_cargs,
+        "workbench.cifti-convert.from_gifti_ext.replace_binary": cifti_convert_replace_binary_cargs,
+        "workbench.cifti-convert.to_nifti": cifti_convert_to_nifti_cargs,
+        "workbench.cifti-convert.from_nifti": cifti_convert_from_nifti_cargs,
+        "workbench.cifti-convert.from_nifti.reset_timepoints": cifti_convert_reset_timepoints_1_cargs,
+        "workbench.cifti-convert.to_text": cifti_convert_to_text_cargs,
+        "workbench.cifti-convert.from_text": cifti_convert_from_text_cargs,
+        "workbench.cifti-convert.from_text.reset_timepoints": cifti_convert_reset_timepoints_2_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-convert": cifti_convert_outputs,
-        "from_gifti_ext": cifti_convert_from_gifti_ext_outputs,
-        "to_nifti": cifti_convert_to_nifti_outputs,
-        "from_nifti": cifti_convert_from_nifti_outputs,
-        "from_text": cifti_convert_from_text_outputs,
+        "workbench.cifti-convert": cifti_convert_outputs,
+        "workbench.cifti-convert.from_gifti_ext": cifti_convert_from_gifti_ext_outputs,
+        "workbench.cifti-convert.to_nifti": cifti_convert_to_nifti_outputs,
+        "workbench.cifti-convert.from_nifti": cifti_convert_from_nifti_outputs,
+        "workbench.cifti-convert.from_text": cifti_convert_from_text_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param gifti_out output - the output gifti file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_to_gifti_ext_params(
     cifti_in: InputPathType,
     gifti_out: string,
 ): CiftiConvertToGiftiExtParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param gifti_out output - the output gifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to_gifti_ext" as const,
+        "@type": "workbench.cifti-convert.to_gifti_ext" as const,
         "cifti_in": cifti_in,
         "gifti_out": gifti_out,
     };
@@ -179,18 +179,18 @@ function cifti_convert_to_gifti_ext_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_to_gifti_ext_cargs(
     params: CiftiConvertToGiftiExtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-to-gifti-ext");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -199,22 +199,22 @@ function cifti_convert_to_gifti_ext_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timestep the desired time between frames
+ * @param timestart the desired time offset of the initial frame
+ * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_reset_timepoints_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
 ): CiftiConvertResetTimepointsParameters {
-    /**
-     * Build parameters.
-    
-     * @param timestep the desired time between frames
-     * @param timestart the desired time offset of the initial frame
-     * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reset_timepoints" as const,
+        "@type": "workbench.cifti-convert.from_gifti_ext.reset_timepoints" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -225,18 +225,18 @@ function cifti_convert_reset_timepoints_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_reset_timepoints_cargs(
     params: CiftiConvertResetTimepointsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-reset-timepoints");
     cargs.push(String((params["timestep"] ?? null)));
@@ -251,22 +251,22 @@ function cifti_convert_reset_timepoints_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param binary_in the binary file that contains replacement data
+ * @param opt_flip_endian byteswap the binary file
+ * @param opt_transpose transpose the binary file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_replace_binary_params(
     binary_in: string,
     opt_flip_endian: boolean = false,
     opt_transpose: boolean = false,
 ): CiftiConvertReplaceBinaryParameters {
-    /**
-     * Build parameters.
-    
-     * @param binary_in the binary file that contains replacement data
-     * @param opt_flip_endian byteswap the binary file
-     * @param opt_transpose transpose the binary file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "replace_binary" as const,
+        "@type": "workbench.cifti-convert.from_gifti_ext.replace_binary" as const,
         "binary_in": binary_in,
         "opt_flip_endian": opt_flip_endian,
         "opt_transpose": opt_transpose,
@@ -275,18 +275,18 @@ function cifti_convert_replace_binary_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_replace_binary_cargs(
     params: CiftiConvertReplaceBinaryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-replace-binary");
     cargs.push((params["binary_in"] ?? null));
@@ -317,6 +317,18 @@ interface CiftiConvertFromGiftiExtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gifti_in the input gifti file
+ * @param cifti_out the output cifti file
+ * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the gifti file
+ * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the gifti file
+ * @param opt_column_reset_scalars reset mapping along columns to scalar (useful for changing number of series in a sdseries file)
+ * @param replace_binary replace data with a binary file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_from_gifti_ext_params(
     gifti_in: string,
     cifti_out: string,
@@ -325,20 +337,8 @@ function cifti_convert_from_gifti_ext_params(
     opt_column_reset_scalars: boolean = false,
     replace_binary: CiftiConvertReplaceBinaryParameters | null = null,
 ): CiftiConvertFromGiftiExtParameters {
-    /**
-     * Build parameters.
-    
-     * @param gifti_in the input gifti file
-     * @param cifti_out the output cifti file
-     * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the gifti file
-     * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the gifti file
-     * @param opt_column_reset_scalars reset mapping along columns to scalar (useful for changing number of series in a sdseries file)
-     * @param replace_binary replace data with a binary file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_gifti_ext" as const,
+        "@type": "workbench.cifti-convert.from_gifti_ext" as const,
         "gifti_in": gifti_in,
         "cifti_out": cifti_out,
         "opt_reset_scalars": opt_reset_scalars,
@@ -354,24 +354,24 @@ function cifti_convert_from_gifti_ext_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_from_gifti_ext_cargs(
     params: CiftiConvertFromGiftiExtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-gifti-ext");
     cargs.push((params["gifti_in"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null).__STYXTYPE__)((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
     }
     if ((params["opt_reset_scalars"] ?? null)) {
         cargs.push("-reset-scalars");
@@ -380,24 +380,24 @@ function cifti_convert_from_gifti_ext_cargs(
         cargs.push("-column-reset-scalars");
     }
     if ((params["replace_binary"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["replace_binary"] ?? null).__STYXTYPE__)((params["replace_binary"] ?? null), execution));
+        cargs.push(...dynCargs((params["replace_binary"] ?? null)["@type"])((params["replace_binary"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_convert_from_gifti_ext_outputs(
     params: CiftiConvertFromGiftiExtParameters,
     execution: Execution,
 ): CiftiConvertFromGiftiExtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiConvertFromGiftiExtOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -423,24 +423,24 @@ interface CiftiConvertToNiftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param nifti_out the output nifti file
+ * @param opt_smaller_file use better-fitting dimension lengths
+ * @param opt_smaller_dims minimize the largest dimension, for tools that don't like large indices
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_to_nifti_params(
     cifti_in: InputPathType,
     nifti_out: string,
     opt_smaller_file: boolean = false,
     opt_smaller_dims: boolean = false,
 ): CiftiConvertToNiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param nifti_out the output nifti file
-     * @param opt_smaller_file use better-fitting dimension lengths
-     * @param opt_smaller_dims minimize the largest dimension, for tools that don't like large indices
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to_nifti" as const,
+        "@type": "workbench.cifti-convert.to_nifti" as const,
         "cifti_in": cifti_in,
         "nifti_out": nifti_out,
         "opt_smaller_file": opt_smaller_file,
@@ -450,18 +450,18 @@ function cifti_convert_to_nifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_to_nifti_cargs(
     params: CiftiConvertToNiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-to-nifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -476,18 +476,18 @@ function cifti_convert_to_nifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_convert_to_nifti_outputs(
     params: CiftiConvertToNiftiParameters,
     execution: Execution,
 ): CiftiConvertToNiftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiConvertToNiftiOutputs = {
         root: execution.outputFile("."),
         nifti_out: execution.outputFile([(params["nifti_out"] ?? null)].join('')),
@@ -496,22 +496,22 @@ function cifti_convert_to_nifti_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timestep the desired time between frames
+ * @param timestart the desired time offset of the initial frame
+ * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_reset_timepoints_1_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
 ): CiftiConvertResetTimepoints1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param timestep the desired time between frames
-     * @param timestart the desired time offset of the initial frame
-     * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reset_timepoints_1" as const,
+        "@type": "workbench.cifti-convert.from_nifti.reset_timepoints" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -522,18 +522,18 @@ function cifti_convert_reset_timepoints_1_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_reset_timepoints_1_cargs(
     params: CiftiConvertResetTimepoints1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-reset-timepoints");
     cargs.push(String((params["timestep"] ?? null)));
@@ -565,6 +565,17 @@ interface CiftiConvertFromNiftiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nifti_in the input nifti file
+ * @param cifti_template a cifti file with the dimension(s) and mapping(s) that should be used
+ * @param cifti_out the output cifti file
+ * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the nifti file
+ * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the nifti file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_from_nifti_params(
     nifti_in: InputPathType,
     cifti_template: InputPathType,
@@ -572,19 +583,8 @@ function cifti_convert_from_nifti_params(
     reset_timepoints: CiftiConvertResetTimepoints1Parameters | null = null,
     opt_reset_scalars: boolean = false,
 ): CiftiConvertFromNiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param nifti_in the input nifti file
-     * @param cifti_template a cifti file with the dimension(s) and mapping(s) that should be used
-     * @param cifti_out the output cifti file
-     * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the nifti file
-     * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the nifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_nifti" as const,
+        "@type": "workbench.cifti-convert.from_nifti" as const,
         "nifti_in": nifti_in,
         "cifti_template": cifti_template,
         "cifti_out": cifti_out,
@@ -597,25 +597,25 @@ function cifti_convert_from_nifti_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_from_nifti_cargs(
     params: CiftiConvertFromNiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-nifti");
     cargs.push(execution.inputFile((params["nifti_in"] ?? null)));
     cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null).__STYXTYPE__)((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
     }
     if ((params["opt_reset_scalars"] ?? null)) {
         cargs.push("-reset-scalars");
@@ -624,18 +624,18 @@ function cifti_convert_from_nifti_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_convert_from_nifti_outputs(
     params: CiftiConvertFromNiftiParameters,
     execution: Execution,
 ): CiftiConvertFromNiftiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiConvertFromNiftiOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -644,22 +644,22 @@ function cifti_convert_from_nifti_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti file
+ * @param text_out output - the output text file
+ * @param opt_col_delim_delim_string choose string to put between elements in a row: the string to use (default is a tab character)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_to_text_params(
     cifti_in: InputPathType,
     text_out: string,
     opt_col_delim_delim_string: string | null = null,
 ): CiftiConvertToTextParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti file
-     * @param text_out output - the output text file
-     * @param opt_col_delim_delim_string choose string to put between elements in a row: the string to use (default is a tab character)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "to_text" as const,
+        "@type": "workbench.cifti-convert.to_text" as const,
         "cifti_in": cifti_in,
         "text_out": text_out,
     };
@@ -670,18 +670,18 @@ function cifti_convert_to_text_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_to_text_cargs(
     params: CiftiConvertToTextParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-to-text");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -696,22 +696,22 @@ function cifti_convert_to_text_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param timestep the desired time between frames
+ * @param timestart the desired time offset of the initial frame
+ * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_reset_timepoints_2_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
 ): CiftiConvertResetTimepoints2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param timestep the desired time between frames
-     * @param timestart the desired time offset of the initial frame
-     * @param opt_unit_unit use a unit other than time: unit identifier (default SECOND)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reset_timepoints_2" as const,
+        "@type": "workbench.cifti-convert.from_text.reset_timepoints" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -722,18 +722,18 @@ function cifti_convert_reset_timepoints_2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_reset_timepoints_2_cargs(
     params: CiftiConvertResetTimepoints2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-reset-timepoints");
     cargs.push(String((params["timestep"] ?? null)));
@@ -765,6 +765,18 @@ interface CiftiConvertFromTextOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param text_in the input text file
+ * @param cifti_template a cifti file with the dimension(s) and mapping(s) that should be used
+ * @param cifti_out the output cifti file
+ * @param opt_col_delim_delim_string specify string that is between elements in a row: the string to use (default is any whitespace)
+ * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the text file
+ * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the text file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_from_text_params(
     text_in: string,
     cifti_template: InputPathType,
@@ -773,20 +785,8 @@ function cifti_convert_from_text_params(
     reset_timepoints: CiftiConvertResetTimepoints2Parameters | null = null,
     opt_reset_scalars: boolean = false,
 ): CiftiConvertFromTextParameters {
-    /**
-     * Build parameters.
-    
-     * @param text_in the input text file
-     * @param cifti_template a cifti file with the dimension(s) and mapping(s) that should be used
-     * @param cifti_out the output cifti file
-     * @param opt_col_delim_delim_string specify string that is between elements in a row: the string to use (default is any whitespace)
-     * @param reset_timepoints reset the mapping along rows to timepoints, taking length from the text file
-     * @param opt_reset_scalars reset mapping along rows to scalars, taking length from the text file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "from_text" as const,
+        "@type": "workbench.cifti-convert.from_text" as const,
         "text_in": text_in,
         "cifti_template": cifti_template,
         "cifti_out": cifti_out,
@@ -802,18 +802,18 @@ function cifti_convert_from_text_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_from_text_cargs(
     params: CiftiConvertFromTextParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-from-text");
     cargs.push((params["text_in"] ?? null));
@@ -826,7 +826,7 @@ function cifti_convert_from_text_cargs(
         );
     }
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null).__STYXTYPE__)((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
     }
     if ((params["opt_reset_scalars"] ?? null)) {
         cargs.push("-reset-scalars");
@@ -835,18 +835,18 @@ function cifti_convert_from_text_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_convert_from_text_outputs(
     params: CiftiConvertFromTextParameters,
     execution: Execution,
 ): CiftiConvertFromTextOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiConvertFromTextOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -884,6 +884,18 @@ interface CiftiConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param to_gifti_ext convert to GIFTI external binary
+ * @param from_gifti_ext convert a GIFTI made with this command back into a CIFTI
+ * @param to_nifti convert to NIFTI1
+ * @param from_nifti convert a NIFTI (1 or 2) file made with this command back into CIFTI
+ * @param to_text convert to a plain text file
+ * @param from_text convert from plain text to cifti
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_convert_params(
     to_gifti_ext: CiftiConvertToGiftiExtParameters | null = null,
     from_gifti_ext: CiftiConvertFromGiftiExtParameters | null = null,
@@ -892,20 +904,8 @@ function cifti_convert_params(
     to_text: CiftiConvertToTextParameters | null = null,
     from_text: CiftiConvertFromTextParameters | null = null,
 ): CiftiConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param to_gifti_ext convert to GIFTI external binary
-     * @param from_gifti_ext convert a GIFTI made with this command back into a CIFTI
-     * @param to_nifti convert to NIFTI1
-     * @param from_nifti convert a NIFTI (1 or 2) file made with this command back into CIFTI
-     * @param to_text convert to a plain text file
-     * @param from_text convert from plain text to cifti
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-convert" as const,
+        "@type": "workbench.cifti-convert" as const,
     };
     if (to_gifti_ext !== null) {
         params["to_gifti_ext"] = to_gifti_ext;
@@ -929,99 +929,99 @@ function cifti_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_convert_cargs(
     params: CiftiConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-convert");
     if ((params["to_gifti_ext"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_gifti_ext"] ?? null).__STYXTYPE__)((params["to_gifti_ext"] ?? null), execution));
+        cargs.push(...dynCargs((params["to_gifti_ext"] ?? null)["@type"])((params["to_gifti_ext"] ?? null), execution));
     }
     if ((params["from_gifti_ext"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_gifti_ext"] ?? null).__STYXTYPE__)((params["from_gifti_ext"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_gifti_ext"] ?? null)["@type"])((params["from_gifti_ext"] ?? null), execution));
     }
     if ((params["to_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_nifti"] ?? null).__STYXTYPE__)((params["to_nifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["to_nifti"] ?? null)["@type"])((params["to_nifti"] ?? null), execution));
     }
     if ((params["from_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_nifti"] ?? null).__STYXTYPE__)((params["from_nifti"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_nifti"] ?? null)["@type"])((params["from_nifti"] ?? null), execution));
     }
     if ((params["to_text"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_text"] ?? null).__STYXTYPE__)((params["to_text"] ?? null), execution));
+        cargs.push(...dynCargs((params["to_text"] ?? null)["@type"])((params["to_text"] ?? null), execution));
     }
     if ((params["from_text"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_text"] ?? null).__STYXTYPE__)((params["from_text"] ?? null), execution));
+        cargs.push(...dynCargs((params["from_text"] ?? null)["@type"])((params["from_text"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_convert_outputs(
     params: CiftiConvertParameters,
     execution: Execution,
 ): CiftiConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiConvertOutputs = {
         root: execution.outputFile("."),
-        from_gifti_ext: (dynOutputs((params["from_gifti_ext"] ?? null).__STYXTYPE__)?.((params["from_gifti_ext"] ?? null), execution) ?? null),
-        to_nifti: (dynOutputs((params["to_nifti"] ?? null).__STYXTYPE__)?.((params["to_nifti"] ?? null), execution) ?? null),
-        from_nifti: (dynOutputs((params["from_nifti"] ?? null).__STYXTYPE__)?.((params["from_nifti"] ?? null), execution) ?? null),
-        from_text: (dynOutputs((params["from_text"] ?? null).__STYXTYPE__)?.((params["from_text"] ?? null), execution) ?? null),
+        from_gifti_ext: (dynOutputs((params["from_gifti_ext"] ?? null)["@type"])?.((params["from_gifti_ext"] ?? null), execution) ?? null),
+        to_nifti: (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null),
+        from_nifti: (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null),
+        from_text: (dynOutputs((params["from_text"] ?? null)["@type"])?.((params["from_text"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Dump cifti matrix into other formats.
+ *
+ * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.
+ *
+ * If you want to write an existing CIFTI file with a different CIFTI version, see -file-convert, and its -cifti-version-convert option.
+ *
+ * If you want part of the CIFTI file as a metric, label, or volume file, see -cifti-separate.  If you want to create a CIFTI file from metric and/or volume files, see the -cifti-create-* commands.
+ *
+ * If you want to import a matrix that is restricted to an ROI, first create a template CIFTI file matching that ROI using a -cifti-create-* command.  After importing to CIFTI, you can then expand the file into a standard brainordinates space with -cifti-create-dense-from-template.  If you want to export only part of a CIFTI file, first create an roi-restricted CIFTI file with -cifti-restrict-dense-mapping.
+ *
+ * The -transpose option to -from-gifti-ext is needed if the replacement binary file is in column-major order.
+ *
+ * The -unit options accept these values:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
+ */
 function cifti_convert_execute(
     params: CiftiConvertParameters,
     execution: Execution,
 ): CiftiConvertOutputs {
-    /**
-     * Dump cifti matrix into other formats.
-     * 
-     * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.
-     * 
-     * If you want to write an existing CIFTI file with a different CIFTI version, see -file-convert, and its -cifti-version-convert option.
-     * 
-     * If you want part of the CIFTI file as a metric, label, or volume file, see -cifti-separate.  If you want to create a CIFTI file from metric and/or volume files, see the -cifti-create-* commands.
-     * 
-     * If you want to import a matrix that is restricted to an ROI, first create a template CIFTI file matching that ROI using a -cifti-create-* command.  After importing to CIFTI, you can then expand the file into a standard brainordinates space with -cifti-create-dense-from-template.  If you want to export only part of a CIFTI file, first create an roi-restricted CIFTI file with -cifti-restrict-dense-mapping.
-     * 
-     * The -transpose option to -from-gifti-ext is needed if the replacement binary file is in column-major order.
-     * 
-     * The -unit options accept these values:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_convert_cargs(params, execution)
     const ret = cifti_convert_outputs(params, execution)
@@ -1030,6 +1030,40 @@ function cifti_convert_execute(
 }
 
 
+/**
+ * Dump cifti matrix into other formats.
+ *
+ * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.
+ *
+ * If you want to write an existing CIFTI file with a different CIFTI version, see -file-convert, and its -cifti-version-convert option.
+ *
+ * If you want part of the CIFTI file as a metric, label, or volume file, see -cifti-separate.  If you want to create a CIFTI file from metric and/or volume files, see the -cifti-create-* commands.
+ *
+ * If you want to import a matrix that is restricted to an ROI, first create a template CIFTI file matching that ROI using a -cifti-create-* command.  After importing to CIFTI, you can then expand the file into a standard brainordinates space with -cifti-create-dense-from-template.  If you want to export only part of a CIFTI file, first create an roi-restricted CIFTI file with -cifti-restrict-dense-mapping.
+ *
+ * The -transpose option to -from-gifti-ext is needed if the replacement binary file is in column-major order.
+ *
+ * The -unit options accept these values:
+ *
+ * SECOND
+ * HERTZ
+ * METER
+ * RADIAN.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param to_gifti_ext convert to GIFTI external binary
+ * @param from_gifti_ext convert a GIFTI made with this command back into a CIFTI
+ * @param to_nifti convert to NIFTI1
+ * @param from_nifti convert a NIFTI (1 or 2) file made with this command back into CIFTI
+ * @param to_text convert to a plain text file
+ * @param from_text convert from plain text to cifti
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
+ */
 function cifti_convert(
     to_gifti_ext: CiftiConvertToGiftiExtParameters | null = null,
     from_gifti_ext: CiftiConvertFromGiftiExtParameters | null = null,
@@ -1039,40 +1073,6 @@ function cifti_convert(
     from_text: CiftiConvertFromTextParameters | null = null,
     runner: Runner | null = null,
 ): CiftiConvertOutputs {
-    /**
-     * Dump cifti matrix into other formats.
-     * 
-     * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.
-     * 
-     * If you want to write an existing CIFTI file with a different CIFTI version, see -file-convert, and its -cifti-version-convert option.
-     * 
-     * If you want part of the CIFTI file as a metric, label, or volume file, see -cifti-separate.  If you want to create a CIFTI file from metric and/or volume files, see the -cifti-create-* commands.
-     * 
-     * If you want to import a matrix that is restricted to an ROI, first create a template CIFTI file matching that ROI using a -cifti-create-* command.  After importing to CIFTI, you can then expand the file into a standard brainordinates space with -cifti-create-dense-from-template.  If you want to export only part of a CIFTI file, first create an roi-restricted CIFTI file with -cifti-restrict-dense-mapping.
-     * 
-     * The -transpose option to -from-gifti-ext is needed if the replacement binary file is in column-major order.
-     * 
-     * The -unit options accept these values:
-     * 
-     * SECOND
-     * HERTZ
-     * METER
-     * RADIAN.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param to_gifti_ext convert to GIFTI external binary
-     * @param from_gifti_ext convert a GIFTI made with this command back into a CIFTI
-     * @param to_nifti convert to NIFTI1
-     * @param from_nifti convert a NIFTI (1 or 2) file made with this command back into CIFTI
-     * @param to_text convert to a plain text file
-     * @param from_text convert from plain text to cifti
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CONVERT_METADATA);
     const params = cifti_convert_params(to_gifti_ext, from_gifti_ext, to_nifti, from_nifti, to_text, from_text)
@@ -1099,15 +1099,32 @@ export {
       CiftiConvertToNiftiParameters,
       CiftiConvertToTextParameters,
       cifti_convert,
+      cifti_convert_cargs,
+      cifti_convert_execute,
+      cifti_convert_from_gifti_ext_cargs,
+      cifti_convert_from_gifti_ext_outputs,
       cifti_convert_from_gifti_ext_params,
+      cifti_convert_from_nifti_cargs,
+      cifti_convert_from_nifti_outputs,
       cifti_convert_from_nifti_params,
+      cifti_convert_from_text_cargs,
+      cifti_convert_from_text_outputs,
       cifti_convert_from_text_params,
+      cifti_convert_outputs,
       cifti_convert_params,
+      cifti_convert_replace_binary_cargs,
       cifti_convert_replace_binary_params,
+      cifti_convert_reset_timepoints_1_cargs,
       cifti_convert_reset_timepoints_1_params,
+      cifti_convert_reset_timepoints_2_cargs,
       cifti_convert_reset_timepoints_2_params,
+      cifti_convert_reset_timepoints_cargs,
       cifti_convert_reset_timepoints_params,
+      cifti_convert_to_gifti_ext_cargs,
       cifti_convert_to_gifti_ext_params,
+      cifti_convert_to_nifti_cargs,
+      cifti_convert_to_nifti_outputs,
       cifti_convert_to_nifti_params,
+      cifti_convert_to_text_cargs,
       cifti_convert_to_text_params,
 };

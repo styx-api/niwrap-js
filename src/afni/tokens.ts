@@ -12,39 +12,39 @@ const TOKENS_METADATA: Metadata = {
 
 
 interface TokensParameters {
-    "__STYXTYPE__": "tokens";
+    "@type": "afni.tokens";
     "infile"?: InputPathType | null | undefined;
     "extra_char"?: Array<string> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tokens": tokens_cargs,
+        "afni.tokens": tokens_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface TokensOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Specify input file (stdin if none)
+ * @param extra_char Specify extra character to count as valid. Can be used more than once.
+ *
+ * @returns Parameter dictionary
+ */
 function tokens_params(
     infile: InputPathType | null = null,
     extra_char: Array<string> | null = null,
 ): TokensParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Specify input file (stdin if none)
-     * @param extra_char Specify extra character to count as valid. Can be used more than once.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tokens" as const,
+        "@type": "afni.tokens" as const,
     };
     if (infile !== null) {
         params["infile"] = infile;
@@ -89,18 +89,18 @@ function tokens_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tokens_cargs(
     params: TokensParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tokens");
     if ((params["infile"] ?? null) !== null) {
@@ -119,18 +119,18 @@ function tokens_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tokens_outputs(
     params: TokensParameters,
     execution: Execution,
 ): TokensOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TokensOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function tokens_outputs(
 }
 
 
+/**
+ * Token counting tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TokensOutputs`).
+ */
 function tokens_execute(
     params: TokensParameters,
     execution: Execution,
 ): TokensOutputs {
-    /**
-     * Token counting tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TokensOutputs`).
-     */
     params = execution.params(params)
     const cargs = tokens_cargs(params, execution)
     const ret = tokens_outputs(params, execution)
@@ -162,24 +162,24 @@ function tokens_execute(
 }
 
 
+/**
+ * Token counting tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Specify input file (stdin if none)
+ * @param extra_char Specify extra character to count as valid. Can be used more than once.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TokensOutputs`).
+ */
 function tokens(
     infile: InputPathType | null = null,
     extra_char: Array<string> | null = null,
     runner: Runner | null = null,
 ): TokensOutputs {
-    /**
-     * Token counting tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Specify input file (stdin if none)
-     * @param extra_char Specify extra character to count as valid. Can be used more than once.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TokensOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TOKENS_METADATA);
     const params = tokens_params(infile, extra_char)
@@ -192,5 +192,8 @@ export {
       TokensOutputs,
       TokensParameters,
       tokens,
+      tokens_cargs,
+      tokens_execute,
+      tokens_outputs,
       tokens_params,
 };

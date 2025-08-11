@@ -12,7 +12,7 @@ const MRI_SYNTHSTRIP_METADATA: Metadata = {
 
 
 interface MriSynthstripParameters {
-    "__STYXTYPE__": "mri_synthstrip";
+    "@type": "freesurfer.mri_synthstrip";
     "image": InputPathType;
     "output_image"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -23,35 +23,35 @@ interface MriSynthstripParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthstrip": mri_synthstrip_cargs,
+        "freesurfer.mri_synthstrip": mri_synthstrip_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_synthstrip": mri_synthstrip_outputs,
+        "freesurfer.mri_synthstrip": mri_synthstrip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface MriSynthstripOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image Input image to skullstrip.
+ * @param output_image Save stripped image to path.
+ * @param mask Save binary brain mask to path.
+ * @param gpu Use the GPU.
+ * @param border Mask border threshold in mm. Default is 1.
+ * @param exclude_csf Exclude CSF from brain border.
+ * @param model_weights Alternative model weights.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthstrip_params(
     image: InputPathType,
     output_image: string | null = null,
@@ -87,21 +100,8 @@ function mri_synthstrip_params(
     exclude_csf: boolean = false,
     model_weights: InputPathType | null = null,
 ): MriSynthstripParameters {
-    /**
-     * Build parameters.
-    
-     * @param image Input image to skullstrip.
-     * @param output_image Save stripped image to path.
-     * @param mask Save binary brain mask to path.
-     * @param gpu Use the GPU.
-     * @param border Mask border threshold in mm. Default is 1.
-     * @param exclude_csf Exclude CSF from brain border.
-     * @param model_weights Alternative model weights.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthstrip" as const,
+        "@type": "freesurfer.mri_synthstrip" as const,
         "image": image,
         "gpu": gpu,
         "exclude_csf": exclude_csf,
@@ -122,18 +122,18 @@ function mri_synthstrip_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthstrip_cargs(
     params: MriSynthstripParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthstrip");
     cargs.push(
@@ -174,18 +174,18 @@ function mri_synthstrip_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthstrip_outputs(
     params: MriSynthstripParameters,
     execution: Execution,
 ): MriSynthstripOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthstripOutputs = {
         root: execution.outputFile("."),
         output_image_file: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
@@ -195,22 +195,22 @@ function mri_synthstrip_outputs(
 }
 
 
+/**
+ * Robust, universal skull-stripping for brain images of any type.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
+ */
 function mri_synthstrip_execute(
     params: MriSynthstripParameters,
     execution: Execution,
 ): MriSynthstripOutputs {
-    /**
-     * Robust, universal skull-stripping for brain images of any type.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthstrip_cargs(params, execution)
     const ret = mri_synthstrip_outputs(params, execution)
@@ -219,6 +219,24 @@ function mri_synthstrip_execute(
 }
 
 
+/**
+ * Robust, universal skull-stripping for brain images of any type.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param image Input image to skullstrip.
+ * @param output_image Save stripped image to path.
+ * @param mask Save binary brain mask to path.
+ * @param gpu Use the GPU.
+ * @param border Mask border threshold in mm. Default is 1.
+ * @param exclude_csf Exclude CSF from brain border.
+ * @param model_weights Alternative model weights.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
+ */
 function mri_synthstrip(
     image: InputPathType,
     output_image: string | null = null,
@@ -229,24 +247,6 @@ function mri_synthstrip(
     model_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSynthstripOutputs {
-    /**
-     * Robust, universal skull-stripping for brain images of any type.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param image Input image to skullstrip.
-     * @param output_image Save stripped image to path.
-     * @param mask Save binary brain mask to path.
-     * @param gpu Use the GPU.
-     * @param border Mask border threshold in mm. Default is 1.
-     * @param exclude_csf Exclude CSF from brain border.
-     * @param model_weights Alternative model weights.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHSTRIP_METADATA);
     const params = mri_synthstrip_params(image, output_image, mask, gpu, border, exclude_csf, model_weights)
@@ -259,5 +259,8 @@ export {
       MriSynthstripOutputs,
       MriSynthstripParameters,
       mri_synthstrip,
+      mri_synthstrip_cargs,
+      mri_synthstrip_execute,
+      mri_synthstrip_outputs,
       mri_synthstrip_params,
 };

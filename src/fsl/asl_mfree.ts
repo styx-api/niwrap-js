@@ -12,7 +12,7 @@ const ASL_MFREE_METADATA: Metadata = {
 
 
 interface AslMfreeParameters {
-    "__STYXTYPE__": "asl_mfree";
+    "@type": "fsl.asl_mfree";
     "datafile": InputPathType;
     "mask": InputPathType;
     "out": string;
@@ -35,35 +35,35 @@ interface AslMfreeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "asl_mfree": asl_mfree_cargs,
+        "fsl.asl_mfree": asl_mfree_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "asl_mfree": asl_mfree_outputs,
+        "fsl.asl_mfree": asl_mfree_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,31 @@ interface AslMfreeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile ASL data file
+ * @param mask Mask file
+ * @param out Output directory name
+ * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+ * @param dt Temporal spacing in data (s)
+ * @param metric Metric image file (optional)
+ * @param mthresh Metric threshold (optional)
+ * @param tcorrect Apply correction for timing difference between AIF and tissue curve (optional)
+ * @param bata Arterial BAT image (optional)
+ * @param batt Tissue BAT image (optional)
+ * @param bat Estimate tissue BAT from data and save this image (optional)
+ * @param bat_grad_thr Edge detection gradient threshold (default: 0.2, optional)
+ * @param t1 T1 (of blood) value (optional)
+ * @param fa Flip angle (if using LL readout, optional)
+ * @param std Calculate standard deviations on perfusion values using wild bootstrapping (optional)
+ * @param nwb Number of permutations for wild bootstrapping (optional)
+ * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
+ * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
+ * @param verbose Enable verbose mode
+ *
+ * @returns Parameter dictionary
+ */
 function asl_mfree_params(
     datafile: InputPathType,
     mask: InputPathType,
@@ -111,33 +136,8 @@ function asl_mfree_params(
     shift_factor: number | null = 1,
     verbose: boolean = false,
 ): AslMfreeParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile ASL data file
-     * @param mask Mask file
-     * @param out Output directory name
-     * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
-     * @param dt Temporal spacing in data (s)
-     * @param metric Metric image file (optional)
-     * @param mthresh Metric threshold (optional)
-     * @param tcorrect Apply correction for timing difference between AIF and tissue curve (optional)
-     * @param bata Arterial BAT image (optional)
-     * @param batt Tissue BAT image (optional)
-     * @param bat Estimate tissue BAT from data and save this image (optional)
-     * @param bat_grad_thr Edge detection gradient threshold (default: 0.2, optional)
-     * @param t1 T1 (of blood) value (optional)
-     * @param fa Flip angle (if using LL readout, optional)
-     * @param std Calculate standard deviations on perfusion values using wild bootstrapping (optional)
-     * @param nwb Number of permutations for wild bootstrapping (optional)
-     * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
-     * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
-     * @param verbose Enable verbose mode
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "asl_mfree" as const,
+        "@type": "fsl.asl_mfree" as const,
         "datafile": datafile,
         "mask": mask,
         "out": out,
@@ -180,18 +180,18 @@ function asl_mfree_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function asl_mfree_cargs(
     params: AslMfreeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("asl_mfree");
     cargs.push(
@@ -287,18 +287,18 @@ function asl_mfree_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function asl_mfree_outputs(
     params: AslMfreeParameters,
     execution: Execution,
 ): AslMfreeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AslMfreeOutputs = {
         root: execution.outputFile("."),
         result_file: execution.outputFile([(params["out"] ?? null), "/results.nii.gz"].join('')),
@@ -308,22 +308,22 @@ function asl_mfree_outputs(
 }
 
 
+/**
+ * ASL model-free analysis tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
+ */
 function asl_mfree_execute(
     params: AslMfreeParameters,
     execution: Execution,
 ): AslMfreeOutputs {
-    /**
-     * ASL model-free analysis tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
-     */
     params = execution.params(params)
     const cargs = asl_mfree_cargs(params, execution)
     const ret = asl_mfree_outputs(params, execution)
@@ -332,6 +332,36 @@ function asl_mfree_execute(
 }
 
 
+/**
+ * ASL model-free analysis tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile ASL data file
+ * @param mask Mask file
+ * @param out Output directory name
+ * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
+ * @param dt Temporal spacing in data (s)
+ * @param metric Metric image file (optional)
+ * @param mthresh Metric threshold (optional)
+ * @param tcorrect Apply correction for timing difference between AIF and tissue curve (optional)
+ * @param bata Arterial BAT image (optional)
+ * @param batt Tissue BAT image (optional)
+ * @param bat Estimate tissue BAT from data and save this image (optional)
+ * @param bat_grad_thr Edge detection gradient threshold (default: 0.2, optional)
+ * @param t1 T1 (of blood) value (optional)
+ * @param fa Flip angle (if using LL readout, optional)
+ * @param std Calculate standard deviations on perfusion values using wild bootstrapping (optional)
+ * @param nwb Number of permutations for wild bootstrapping (optional)
+ * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
+ * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
+ * @param verbose Enable verbose mode
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
+ */
 function asl_mfree(
     datafile: InputPathType,
     mask: InputPathType,
@@ -354,36 +384,6 @@ function asl_mfree(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): AslMfreeOutputs {
-    /**
-     * ASL model-free analysis tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile ASL data file
-     * @param mask Mask file
-     * @param out Output directory name
-     * @param aif Arterial input functions for deconvolution (4D volume, one aif for each voxel within mask)
-     * @param dt Temporal spacing in data (s)
-     * @param metric Metric image file (optional)
-     * @param mthresh Metric threshold (optional)
-     * @param tcorrect Apply correction for timing difference between AIF and tissue curve (optional)
-     * @param bata Arterial BAT image (optional)
-     * @param batt Tissue BAT image (optional)
-     * @param bat Estimate tissue BAT from data and save this image (optional)
-     * @param bat_grad_thr Edge detection gradient threshold (default: 0.2, optional)
-     * @param t1 T1 (of blood) value (optional)
-     * @param fa Flip angle (if using LL readout, optional)
-     * @param std Calculate standard deviations on perfusion values using wild bootstrapping (optional)
-     * @param nwb Number of permutations for wild bootstrapping (optional)
-     * @param turbo_quasar Specify this is a Turbo QUASAR Sequence (optional)
-     * @param shift_factor Slice shifting factor in Turbo QUASAR (default value: 1, optional)
-     * @param verbose Enable verbose mode
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ASL_MFREE_METADATA);
     const params = asl_mfree_params(datafile, mask, out, aif, dt, metric, mthresh, tcorrect, bata, batt, bat, bat_grad_thr, t1, fa, std, nwb, turbo_quasar, shift_factor, verbose)
@@ -396,5 +396,8 @@ export {
       AslMfreeOutputs,
       AslMfreeParameters,
       asl_mfree,
+      asl_mfree_cargs,
+      asl_mfree_execute,
+      asl_mfree_outputs,
       asl_mfree_params,
 };

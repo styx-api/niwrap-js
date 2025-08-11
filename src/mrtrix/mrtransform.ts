@@ -12,40 +12,40 @@ const MRTRANSFORM_METADATA: Metadata = {
 
 
 interface MrtransformFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.mrtransform.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface MrtransformExportGradFslParameters {
-    "__STYXTYPE__": "export_grad_fsl";
+    "@type": "mrtrix.mrtransform.export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
 
 
 interface MrtransformVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.mrtransform.VariousString";
     "obj": string;
 }
 
 
 interface MrtransformVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.mrtransform.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrtransformConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrtransform.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrtransformParameters {
-    "__STYXTYPE__": "mrtransform";
+    "@type": "mrtrix.mrtransform";
     "linear"?: InputPathType | null | undefined;
     "flip"?: Array<number> | null | undefined;
     "inverse": boolean;
@@ -83,60 +83,60 @@ interface MrtransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrtransform": mrtransform_cargs,
-        "fslgrad": mrtransform_fslgrad_cargs,
-        "export_grad_fsl": mrtransform_export_grad_fsl_cargs,
-        "VariousString": mrtransform_various_string_cargs,
-        "VariousFile": mrtransform_various_file_cargs,
-        "config": mrtransform_config_cargs,
+        "mrtrix.mrtransform": mrtransform_cargs,
+        "mrtrix.mrtransform.fslgrad": mrtransform_fslgrad_cargs,
+        "mrtrix.mrtransform.export_grad_fsl": mrtransform_export_grad_fsl_cargs,
+        "mrtrix.mrtransform.VariousString": mrtransform_various_string_cargs,
+        "mrtrix.mrtransform.VariousFile": mrtransform_various_file_cargs,
+        "mrtrix.mrtransform.config": mrtransform_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrtransform": mrtransform_outputs,
-        "export_grad_fsl": mrtransform_export_grad_fsl_outputs,
+        "mrtrix.mrtransform": mrtransform_outputs,
+        "mrtrix.mrtransform.export_grad_fsl": mrtransform_export_grad_fsl_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): MrtransformFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.mrtransform.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -144,18 +144,18 @@ function mrtransform_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_fslgrad_cargs(
     params: MrtransformFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -185,20 +185,20 @@ interface MrtransformExportGradFslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
 ): MrtransformExportGradFslParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_grad_fsl" as const,
+        "@type": "mrtrix.mrtransform.export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -206,18 +206,18 @@ function mrtransform_export_grad_fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_export_grad_fsl_cargs(
     params: MrtransformExportGradFslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_grad_fsl");
     cargs.push((params["bvecs_path"] ?? null));
@@ -226,18 +226,18 @@ function mrtransform_export_grad_fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrtransform_export_grad_fsl_outputs(
     params: MrtransformExportGradFslParameters,
     execution: Execution,
 ): MrtransformExportGradFslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrtransformExportGradFslOutputs = {
         root: execution.outputFile("."),
         bvecs_path: execution.outputFile([(params["bvecs_path"] ?? null)].join('')),
@@ -247,92 +247,92 @@ function mrtransform_export_grad_fsl_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_various_string_params(
     obj: string,
 ): MrtransformVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.mrtransform.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_various_string_cargs(
     params: MrtransformVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_various_file_params(
     obj: InputPathType,
 ): MrtransformVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.mrtransform.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_various_file_cargs(
     params: MrtransformVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_config_params(
     key: string,
     value: string,
 ): MrtransformConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrtransform.config" as const,
         "key": key,
         "value": value,
     };
@@ -340,18 +340,18 @@ function mrtransform_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_config_cargs(
     params: MrtransformConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -385,6 +385,48 @@ interface MrtransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input input image to be transformed.
+ * @param output the output image.
+ * @param linear specify a linear transform to apply, in the form of a 3x4 or 4x4 ascii file. Note the standard 'reverse' convention is used, where the transform maps points in the template image to the moving image. Note that the reverse convention is still assumed even if no -template image is supplied
+ * @param flip flip the specified axes, provided as a comma-separated list of indices (0:x, 1:y, 2:z).
+ * @param inverse apply the inverse transformation
+ * @param half apply the matrix square root of the transformation. This can be combined with the inverse option.
+ * @param replace replace the linear transform of the original image by that specified, rather than applying it to the original image. The specified transform can be either a template image, or a 3x4 or 4x4 ascii file.
+ * @param identity set the header transform of the image to the identity matrix
+ * @param template reslice the input image to match the specified template image grid.
+ * @param midway_space reslice the input image to the midway space. Requires either the -template or -warp option. If used with -template and -linear option the input image will be resliced onto the grid halfway between the input and template. If used with the -warp option the input will be warped to the midway space defined by the grid of the input warp (i.e. half way between image1 and image2)
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
+ * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
+ * @param warp apply a non-linear 4D deformation field to warp the input image. Each voxel in the deformation field must define the scanner space position that will be used to interpolate the input image during warping (i.e. pull-back/reverse warp convention). If the -template image is also supplied the deformation field will be resliced first to the template image grid. If no -template option is supplied then the output image will have the same image grid as the deformation field. This option can be used in combination with the -affine option, in which case the affine will be applied first)
+ * @param warp_full warp the input image using a 5D warp file output from mrregister. Any linear transforms in the warp image header will also be applied. The -warp_full option must be used in combination with either the -template option or the -midway_space option. If a -template image is supplied then the full warp will be used. By default the image1->image2 transform will be applied, however the -from 2 option can be used to apply the image2->image1 transform. Use the -midway_space option to warp the input image to the midway space. The -from option can also be used to define which warp to use when transforming to midway space
+ * @param from_ used to define which space the input image is when using the -warp_mid option. Use -from 1 to warp from image1 or -from 2 to warp from image2
+ * @param modulate Valid choices are: fod and jac. 
+fod: modulate FODs during reorientation to preserve the apparent fibre density across fibre bundle widths before and after the transformation. 
+jac: modulate the image intensity with the determinant of the Jacobian of the warp of linear transformation to preserve the total intensity before and after the transformation.
+ * @param directions directions defining the number and orientation of the apodised point spread functions used in FOD reorientation (Default: 300 directions)
+ * @param reorient_fod specify whether to perform FOD reorientation. This is required if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series with lmax >= 2 (i.e. 6, 15, 28, 45, 66 volumes).
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param nan Use NaN as the out of bounds value (Default: 0.0)
+ * @param no_reorientation deprecated, use -reorient_fod instead
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrtransform_params(
     input: InputPathType,
     output: string,
@@ -421,50 +463,8 @@ function mrtransform_params(
     help: boolean = false,
     version: boolean = false,
 ): MrtransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param input input image to be transformed.
-     * @param output the output image.
-     * @param linear specify a linear transform to apply, in the form of a 3x4 or 4x4 ascii file. Note the standard 'reverse' convention is used, where the transform maps points in the template image to the moving image. Note that the reverse convention is still assumed even if no -template image is supplied
-     * @param flip flip the specified axes, provided as a comma-separated list of indices (0:x, 1:y, 2:z).
-     * @param inverse apply the inverse transformation
-     * @param half apply the matrix square root of the transformation. This can be combined with the inverse option.
-     * @param replace replace the linear transform of the original image by that specified, rather than applying it to the original image. The specified transform can be either a template image, or a 3x4 or 4x4 ascii file.
-     * @param identity set the header transform of the image to the identity matrix
-     * @param template reslice the input image to match the specified template image grid.
-     * @param midway_space reslice the input image to the midway space. Requires either the -template or -warp option. If used with -template and -linear option the input image will be resliced onto the grid halfway between the input and template. If used with the -warp option the input will be warped to the midway space defined by the grid of the input warp (i.e. half way between image1 and image2)
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
-     * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
-     * @param warp apply a non-linear 4D deformation field to warp the input image. Each voxel in the deformation field must define the scanner space position that will be used to interpolate the input image during warping (i.e. pull-back/reverse warp convention). If the -template image is also supplied the deformation field will be resliced first to the template image grid. If no -template option is supplied then the output image will have the same image grid as the deformation field. This option can be used in combination with the -affine option, in which case the affine will be applied first)
-     * @param warp_full warp the input image using a 5D warp file output from mrregister. Any linear transforms in the warp image header will also be applied. The -warp_full option must be used in combination with either the -template option or the -midway_space option. If a -template image is supplied then the full warp will be used. By default the image1->image2 transform will be applied, however the -from 2 option can be used to apply the image2->image1 transform. Use the -midway_space option to warp the input image to the midway space. The -from option can also be used to define which warp to use when transforming to midway space
-     * @param from_ used to define which space the input image is when using the -warp_mid option. Use -from 1 to warp from image1 or -from 2 to warp from image2
-     * @param modulate Valid choices are: fod and jac. 
-fod: modulate FODs during reorientation to preserve the apparent fibre density across fibre bundle widths before and after the transformation. 
-jac: modulate the image intensity with the determinant of the Jacobian of the warp of linear transformation to preserve the total intensity before and after the transformation.
-     * @param directions directions defining the number and orientation of the apodised point spread functions used in FOD reorientation (Default: 300 directions)
-     * @param reorient_fod specify whether to perform FOD reorientation. This is required if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series with lmax >= 2 (i.e. 6, 15, 28, 45, 66 volumes).
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param nan Use NaN as the out of bounds value (Default: 0.0)
-     * @param no_reorientation deprecated, use -reorient_fod instead
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrtransform" as const,
+        "@type": "mrtrix.mrtransform" as const,
         "inverse": inverse,
         "half": half,
         "identity": identity,
@@ -544,18 +544,18 @@ jac: modulate the image intensity with the determinant of the Jacobian of the wa
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrtransform_cargs(
     params: MrtransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrtransform");
     if ((params["linear"] ?? null) !== null) {
@@ -649,7 +649,7 @@ function mrtransform_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["export_grad_mrtrix"] ?? null) !== null) {
         cargs.push(
@@ -658,7 +658,7 @@ function mrtransform_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null).__STYXTYPE__)((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["datatype"] ?? null) !== null) {
         cargs.push(
@@ -669,7 +669,7 @@ function mrtransform_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["nan"] ?? null)) {
@@ -697,7 +697,7 @@ function mrtransform_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -711,62 +711,62 @@ function mrtransform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrtransform_outputs(
     params: MrtransformParameters,
     execution: Execution,
 ): MrtransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrtransformOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null).__STYXTYPE__)?.((params["export_grad_fsl"] ?? null), execution) ?? null),
+        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Apply spatial transformations to an image.
+ *
+ * If a linear transform is applied without a template image the command will modify the image header transform matrix
+ *
+ * FOD reorientation (with apodised point spread functions) can be performed if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). For such data, the -reorient_fod yes/no option must be used to specify if reorientation is required.
+ *
+ * The output image intensity can be modulated using the (local or global) volume change if a linear or nonlinear transformation is applied. 'FOD' modulation preserves the apparent fibre density across the fibre bundle width and can only be applied if FOD reorientation is used. Alternatively, non-directional scaling by the Jacobian determinant can be applied to any image type. 
+ *
+ * If a DW scheme is contained in the header (or specified separately), and the number of directions matches the number of volumes in the images, any transformation applied using the -linear option will also be applied to the directions.
+ *
+ * When the -template option is used to specify the target image grid, the image provided via this option will not influence the axis data strides of the output image; these are determined based on the input image, or the input to the -strides option.
+ *
+ * References:
+ *
+ * * If FOD reorientation is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855
+ *
+ * * If FOD modulation is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A.; Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images. NeuroImage, 2012, 15;59(4), 3976-94.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
+ */
 function mrtransform_execute(
     params: MrtransformParameters,
     execution: Execution,
 ): MrtransformOutputs {
-    /**
-     * Apply spatial transformations to an image.
-     * 
-     * If a linear transform is applied without a template image the command will modify the image header transform matrix
-     * 
-     * FOD reorientation (with apodised point spread functions) can be performed if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). For such data, the -reorient_fod yes/no option must be used to specify if reorientation is required.
-     * 
-     * The output image intensity can be modulated using the (local or global) volume change if a linear or nonlinear transformation is applied. 'FOD' modulation preserves the apparent fibre density across the fibre bundle width and can only be applied if FOD reorientation is used. Alternatively, non-directional scaling by the Jacobian determinant can be applied to any image type. 
-     * 
-     * If a DW scheme is contained in the header (or specified separately), and the number of directions matches the number of volumes in the images, any transformation applied using the -linear option will also be applied to the directions.
-     * 
-     * When the -template option is used to specify the target image grid, the image provided via this option will not influence the axis data strides of the output image; these are determined based on the input image, or the input to the -strides option.
-     * 
-     * References:
-     * 
-     * * If FOD reorientation is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855
-     * 
-     * * If FOD modulation is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A.; Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images. NeuroImage, 2012, 15;59(4), 3976-94.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrtransform_cargs(params, execution)
     const ret = mrtransform_outputs(params, execution)
@@ -775,6 +775,71 @@ function mrtransform_execute(
 }
 
 
+/**
+ * Apply spatial transformations to an image.
+ *
+ * If a linear transform is applied without a template image the command will modify the image header transform matrix
+ *
+ * FOD reorientation (with apodised point spread functions) can be performed if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). For such data, the -reorient_fod yes/no option must be used to specify if reorientation is required.
+ *
+ * The output image intensity can be modulated using the (local or global) volume change if a linear or nonlinear transformation is applied. 'FOD' modulation preserves the apparent fibre density across the fibre bundle width and can only be applied if FOD reorientation is used. Alternatively, non-directional scaling by the Jacobian determinant can be applied to any image type. 
+ *
+ * If a DW scheme is contained in the header (or specified separately), and the number of directions matches the number of volumes in the images, any transformation applied using the -linear option will also be applied to the directions.
+ *
+ * When the -template option is used to specify the target image grid, the image provided via this option will not influence the axis data strides of the output image; these are determined based on the input image, or the input to the -strides option.
+ *
+ * References:
+ *
+ * * If FOD reorientation is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855
+ *
+ * * If FOD modulation is being performed:
+ * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A.; Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images. NeuroImage, 2012, 15;59(4), 3976-94.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input input image to be transformed.
+ * @param output the output image.
+ * @param linear specify a linear transform to apply, in the form of a 3x4 or 4x4 ascii file. Note the standard 'reverse' convention is used, where the transform maps points in the template image to the moving image. Note that the reverse convention is still assumed even if no -template image is supplied
+ * @param flip flip the specified axes, provided as a comma-separated list of indices (0:x, 1:y, 2:z).
+ * @param inverse apply the inverse transformation
+ * @param half apply the matrix square root of the transformation. This can be combined with the inverse option.
+ * @param replace replace the linear transform of the original image by that specified, rather than applying it to the original image. The specified transform can be either a template image, or a 3x4 or 4x4 ascii file.
+ * @param identity set the header transform of the image to the identity matrix
+ * @param template reslice the input image to match the specified template image grid.
+ * @param midway_space reslice the input image to the midway space. Requires either the -template or -warp option. If used with -template and -linear option the input image will be resliced onto the grid halfway between the input and template. If used with the -warp option the input will be warped to the midway space defined by the grid of the input warp (i.e. half way between image1 and image2)
+ * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
+ * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
+ * @param warp apply a non-linear 4D deformation field to warp the input image. Each voxel in the deformation field must define the scanner space position that will be used to interpolate the input image during warping (i.e. pull-back/reverse warp convention). If the -template image is also supplied the deformation field will be resliced first to the template image grid. If no -template option is supplied then the output image will have the same image grid as the deformation field. This option can be used in combination with the -affine option, in which case the affine will be applied first)
+ * @param warp_full warp the input image using a 5D warp file output from mrregister. Any linear transforms in the warp image header will also be applied. The -warp_full option must be used in combination with either the -template option or the -midway_space option. If a -template image is supplied then the full warp will be used. By default the image1->image2 transform will be applied, however the -from 2 option can be used to apply the image2->image1 transform. Use the -midway_space option to warp the input image to the midway space. The -from option can also be used to define which warp to use when transforming to midway space
+ * @param from_ used to define which space the input image is when using the -warp_mid option. Use -from 1 to warp from image1 or -from 2 to warp from image2
+ * @param modulate Valid choices are: fod and jac. 
+fod: modulate FODs during reorientation to preserve the apparent fibre density across fibre bundle widths before and after the transformation. 
+jac: modulate the image intensity with the determinant of the Jacobian of the warp of linear transformation to preserve the total intensity before and after the transformation.
+ * @param directions directions defining the number and orientation of the apodised point spread functions used in FOD reorientation (Default: 300 directions)
+ * @param reorient_fod specify whether to perform FOD reorientation. This is required if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series with lmax >= 2 (i.e. 6, 15, 28, 45, 66 volumes).
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param nan Use NaN as the out of bounds value (Default: 0.0)
+ * @param no_reorientation deprecated, use -reorient_fod instead
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
+ */
 function mrtransform(
     input: InputPathType,
     output: string,
@@ -812,71 +877,6 @@ function mrtransform(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrtransformOutputs {
-    /**
-     * Apply spatial transformations to an image.
-     * 
-     * If a linear transform is applied without a template image the command will modify the image header transform matrix
-     * 
-     * FOD reorientation (with apodised point spread functions) can be performed if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc). For such data, the -reorient_fod yes/no option must be used to specify if reorientation is required.
-     * 
-     * The output image intensity can be modulated using the (local or global) volume change if a linear or nonlinear transformation is applied. 'FOD' modulation preserves the apparent fibre density across the fibre bundle width and can only be applied if FOD reorientation is used. Alternatively, non-directional scaling by the Jacobian determinant can be applied to any image type. 
-     * 
-     * If a DW scheme is contained in the header (or specified separately), and the number of directions matches the number of volumes in the images, any transformation applied using the -linear option will also be applied to the directions.
-     * 
-     * When the -template option is used to specify the target image grid, the image provided via this option will not influence the axis data strides of the output image; these are determined based on the input image, or the input to the -strides option.
-     * 
-     * References:
-     * 
-     * * If FOD reorientation is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Crozier, S.; Connelly, A. & Salvado, O. Reorientation of fiber orientation distributions using apodized point spread functions. Magnetic Resonance in Medicine, 2012, 67, 844-855
-     * 
-     * * If FOD modulation is being performed:
-     * Raffelt, D.; Tournier, J.-D.; Rose, S.; Ridgway, G.R.; Henderson, R.; Crozier, S.; Salvado, O.; Connelly, A.; Apparent Fibre Density: a novel measure for the analysis of diffusion-weighted magnetic resonance images. NeuroImage, 2012, 15;59(4), 3976-94.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input input image to be transformed.
-     * @param output the output image.
-     * @param linear specify a linear transform to apply, in the form of a 3x4 or 4x4 ascii file. Note the standard 'reverse' convention is used, where the transform maps points in the template image to the moving image. Note that the reverse convention is still assumed even if no -template image is supplied
-     * @param flip flip the specified axes, provided as a comma-separated list of indices (0:x, 1:y, 2:z).
-     * @param inverse apply the inverse transformation
-     * @param half apply the matrix square root of the transformation. This can be combined with the inverse option.
-     * @param replace replace the linear transform of the original image by that specified, rather than applying it to the original image. The specified transform can be either a template image, or a 3x4 or 4x4 ascii file.
-     * @param identity set the header transform of the image to the identity matrix
-     * @param template reslice the input image to match the specified template image grid.
-     * @param midway_space reslice the input image to the midway space. Requires either the -template or -warp option. If used with -template and -linear option the input image will be resliced onto the grid halfway between the input and template. If used with the -warp option the input will be warped to the midway space defined by the grid of the input warp (i.e. half way between image1 and image2)
-     * @param interp set the interpolation method to use when reslicing (choices: nearest, linear, cubic, sinc. Default: cubic).
-     * @param oversample set the amount of over-sampling (in the target space) to perform when regridding. This is particularly relevant when downsamping a high-resolution image to a low-resolution image, to avoid aliasing artefacts. This can consist of a single integer, or a comma-separated list of 3 integers if different oversampling factors are desired along the different axes. Default is determined from ratio of voxel dimensions (disabled for nearest-neighbour interpolation).
-     * @param warp apply a non-linear 4D deformation field to warp the input image. Each voxel in the deformation field must define the scanner space position that will be used to interpolate the input image during warping (i.e. pull-back/reverse warp convention). If the -template image is also supplied the deformation field will be resliced first to the template image grid. If no -template option is supplied then the output image will have the same image grid as the deformation field. This option can be used in combination with the -affine option, in which case the affine will be applied first)
-     * @param warp_full warp the input image using a 5D warp file output from mrregister. Any linear transforms in the warp image header will also be applied. The -warp_full option must be used in combination with either the -template option or the -midway_space option. If a -template image is supplied then the full warp will be used. By default the image1->image2 transform will be applied, however the -from 2 option can be used to apply the image2->image1 transform. Use the -midway_space option to warp the input image to the midway space. The -from option can also be used to define which warp to use when transforming to midway space
-     * @param from_ used to define which space the input image is when using the -warp_mid option. Use -from 1 to warp from image1 or -from 2 to warp from image2
-     * @param modulate Valid choices are: fod and jac. 
-fod: modulate FODs during reorientation to preserve the apparent fibre density across fibre bundle widths before and after the transformation. 
-jac: modulate the image intensity with the determinant of the Jacobian of the warp of linear transformation to preserve the total intensity before and after the transformation.
-     * @param directions directions defining the number and orientation of the apodised point spread functions used in FOD reorientation (Default: 300 directions)
-     * @param reorient_fod specify whether to perform FOD reorientation. This is required if the number of volumes in the 4th dimension corresponds to the number of coefficients in an antipodally symmetric spherical harmonic series with lmax >= 2 (i.e. 6, 15, 28, 45, 66 volumes).
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param nan Use NaN as the out of bounds value (Default: 0.0)
-     * @param no_reorientation deprecated, use -reorient_fod instead
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRTRANSFORM_METADATA);
     const params = mrtransform_params(input, output, linear, flip, inverse, half, replace, identity, template, midway_space, interp, oversample, warp, warp_full, from_, modulate, directions, reorient_fod, grad, fslgrad, export_grad_mrtrix, export_grad_fsl, datatype, strides, nan, no_reorientation, info, quiet, debug, force, nthreads, config, help, version)
@@ -895,10 +895,19 @@ export {
       MrtransformVariousFileParameters,
       MrtransformVariousStringParameters,
       mrtransform,
+      mrtransform_cargs,
+      mrtransform_config_cargs,
       mrtransform_config_params,
+      mrtransform_execute,
+      mrtransform_export_grad_fsl_cargs,
+      mrtransform_export_grad_fsl_outputs,
       mrtransform_export_grad_fsl_params,
+      mrtransform_fslgrad_cargs,
       mrtransform_fslgrad_params,
+      mrtransform_outputs,
       mrtransform_params,
+      mrtransform_various_file_cargs,
       mrtransform_various_file_params,
+      mrtransform_various_string_cargs,
       mrtransform_various_string_params,
 };

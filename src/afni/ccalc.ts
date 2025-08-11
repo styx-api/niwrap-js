@@ -12,39 +12,39 @@ const CCALC_METADATA: Metadata = {
 
 
 interface CcalcParameters {
-    "__STYXTYPE__": "ccalc";
+    "@type": "afni.ccalc";
     "format"?: string | null | undefined;
     "expr": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ccalc": ccalc_cargs,
+        "afni.ccalc": ccalc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface CcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param expr Evaluate an expression specified on command line, return answer and quit
+ * @param format Format output in a nice form. Choose from 'double', 'nice', 'int', 'rint', 'cint', 'fint', or custom format string (e.g., %n.mf)
+ *
+ * @returns Parameter dictionary
+ */
 function ccalc_params(
     expr: string,
     format: string | null = null,
 ): CcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param expr Evaluate an expression specified on command line, return answer and quit
-     * @param format Format output in a nice form. Choose from 'double', 'nice', 'int', 'rint', 'cint', 'fint', or custom format string (e.g., %n.mf)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ccalc" as const,
+        "@type": "afni.ccalc" as const,
         "expr": expr,
     };
     if (format !== null) {
@@ -87,18 +87,18 @@ function ccalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ccalc_cargs(
     params: CcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ccalc");
     if ((params["format"] ?? null) !== null) {
@@ -115,18 +115,18 @@ function ccalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ccalc_outputs(
     params: CcalcParameters,
     execution: Execution,
 ): CcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CcalcOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function ccalc_outputs(
 }
 
 
+/**
+ * Command line calculator with formatted output options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CcalcOutputs`).
+ */
 function ccalc_execute(
     params: CcalcParameters,
     execution: Execution,
 ): CcalcOutputs {
-    /**
-     * Command line calculator with formatted output options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = ccalc_cargs(params, execution)
     const ret = ccalc_outputs(params, execution)
@@ -158,24 +158,24 @@ function ccalc_execute(
 }
 
 
+/**
+ * Command line calculator with formatted output options.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param expr Evaluate an expression specified on command line, return answer and quit
+ * @param format Format output in a nice form. Choose from 'double', 'nice', 'int', 'rint', 'cint', 'fint', or custom format string (e.g., %n.mf)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CcalcOutputs`).
+ */
 function ccalc(
     expr: string,
     format: string | null = null,
     runner: Runner | null = null,
 ): CcalcOutputs {
-    /**
-     * Command line calculator with formatted output options.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param expr Evaluate an expression specified on command line, return answer and quit
-     * @param format Format output in a nice form. Choose from 'double', 'nice', 'int', 'rint', 'cint', 'fint', or custom format string (e.g., %n.mf)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CCALC_METADATA);
     const params = ccalc_params(expr, format)
@@ -188,5 +188,8 @@ export {
       CcalcOutputs,
       CcalcParameters,
       ccalc,
+      ccalc_cargs,
+      ccalc_execute,
+      ccalc_outputs,
       ccalc_params,
 };

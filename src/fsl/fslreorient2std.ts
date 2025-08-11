@@ -12,42 +12,42 @@ const FSLREORIENT2STD_METADATA: Metadata = {
 
 
 interface Fslreorient2stdParameters {
-    "__STYXTYPE__": "fslreorient2std";
+    "@type": "fsl.fslreorient2std";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "matrix_file"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslreorient2std": fslreorient2std_cargs,
+        "fsl.fslreorient2std": fslreorient2std_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslreorient2std": fslreorient2std_outputs,
+        "fsl.fslreorient2std": fslreorient2std_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface Fslreorient2stdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image to be reoriented (NIfTI format, e.g. img.nii.gz)
+ * @param output_image Output image with the reoriented result (NIfTI format, e.g. reoriented_img.nii.gz). If not provided, transformation matrix is output to standard output.
+ * @param matrix_file File to save the transformation matrix
+ *
+ * @returns Parameter dictionary
+ */
 function fslreorient2std_params(
     input_image: InputPathType,
     output_image: string | null = "output",
     matrix_file: string | null = null,
 ): Fslreorient2stdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image to be reoriented (NIfTI format, e.g. img.nii.gz)
-     * @param output_image Output image with the reoriented result (NIfTI format, e.g. reoriented_img.nii.gz). If not provided, transformation matrix is output to standard output.
-     * @param matrix_file File to save the transformation matrix
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslreorient2std" as const,
+        "@type": "fsl.fslreorient2std" as const,
         "input_image": input_image,
     };
     if (output_image !== null) {
@@ -102,18 +102,18 @@ function fslreorient2std_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslreorient2std_cargs(
     params: Fslreorient2stdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslreorient2std");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -130,18 +130,18 @@ function fslreorient2std_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslreorient2std_outputs(
     params: Fslreorient2stdParameters,
     execution: Execution,
 ): Fslreorient2stdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fslreorient2stdOutputs = {
         root: execution.outputFile("."),
         output_image: ((params["output_image"] ?? null) !== null) ? execution.outputFile([((params["output_image"] ?? null).endsWith(".nii.gz") ? (params["output_image"] ?? null).slice(0, -7) : (params["output_image"] ?? null)), ".nii.gz"].join('')) : null,
@@ -151,22 +151,22 @@ function fslreorient2std_outputs(
 }
 
 
+/**
+ * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
+ */
 function fslreorient2std_execute(
     params: Fslreorient2stdParameters,
     execution: Execution,
 ): Fslreorient2stdOutputs {
-    /**
-     * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslreorient2std_cargs(params, execution)
     const ret = fslreorient2std_outputs(params, execution)
@@ -175,26 +175,26 @@ function fslreorient2std_execute(
 }
 
 
+/**
+ * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image to be reoriented (NIfTI format, e.g. img.nii.gz)
+ * @param output_image Output image with the reoriented result (NIfTI format, e.g. reoriented_img.nii.gz). If not provided, transformation matrix is output to standard output.
+ * @param matrix_file File to save the transformation matrix
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
+ */
 function fslreorient2std(
     input_image: InputPathType,
     output_image: string | null = "output",
     matrix_file: string | null = null,
     runner: Runner | null = null,
 ): Fslreorient2stdOutputs {
-    /**
-     * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image to be reoriented (NIfTI format, e.g. img.nii.gz)
-     * @param output_image Output image with the reoriented result (NIfTI format, e.g. reoriented_img.nii.gz). If not provided, transformation matrix is output to standard output.
-     * @param matrix_file File to save the transformation matrix
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLREORIENT2STD_METADATA);
     const params = fslreorient2std_params(input_image, output_image, matrix_file)
@@ -207,5 +207,8 @@ export {
       Fslreorient2stdOutputs,
       Fslreorient2stdParameters,
       fslreorient2std,
+      fslreorient2std_cargs,
+      fslreorient2std_execute,
+      fslreorient2std_outputs,
       fslreorient2std_params,
 };

@@ -12,14 +12,14 @@ const TCKSIFT2_METADATA: Metadata = {
 
 
 interface Tcksift2ConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tcksift2.config";
     "key": string;
     "value": string;
 }
 
 
 interface Tcksift2Parameters {
-    "__STYXTYPE__": "tcksift2";
+    "@type": "mrtrix.tcksift2";
     "proc_mask"?: InputPathType | null | undefined;
     "act"?: InputPathType | null | undefined;
     "fd_scale_gm": boolean;
@@ -57,55 +57,55 @@ interface Tcksift2Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tcksift2": tcksift2_cargs,
-        "config": tcksift2_config_cargs,
+        "mrtrix.tcksift2": tcksift2_cargs,
+        "mrtrix.tcksift2.config": tcksift2_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tcksift2": tcksift2_outputs,
+        "mrtrix.tcksift2": tcksift2_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksift2_config_params(
     key: string,
     value: string,
 ): Tcksift2ConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tcksift2.config" as const,
         "key": key,
         "value": value,
     };
@@ -113,18 +113,18 @@ function tcksift2_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksift2_config_cargs(
     params: Tcksift2ConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -162,6 +162,46 @@ interface Tcksift2Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_tracks the input track file
+ * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
+ * @param out_weights output text file containing the weighting factor for each streamline
+ * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
+ * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
+ * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
+ * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
+ * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
+ * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
+ * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
+ * @param csv output statistics of execution per iteration to a .csv file
+ * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
+ * @param output_debug provide various output images for assessing & debugging performance etc.
+ * @param out_coeffs output text file containing the weighting coefficient for each streamline
+ * @param reg_tikhonov provide coefficient for regularising streamline weighting coefficients (Tikhonov regularisation) (default: 0)
+ * @param reg_tv provide coefficient for regularising variance of streamline weighting coefficient to fixels along its length (Total Variation regularisation) (default: 0.1)
+ * @param min_td_frac minimum fraction of the FOD integral reconstructed by streamlines; if the reconstructed streamline density is below this fraction, the fixel is excluded from optimisation (default: 0.1)
+ * @param min_iters minimum number of iterations to run before testing for convergence; this can prevent premature termination at early iterations if the cost function increases slightly (default: 10)
+ * @param max_iters maximum number of iterations to run before terminating program
+ * @param min_factor minimum weighting factor for an individual streamline; if the factor falls below this number the streamline will be rejected entirely (factor set to zero) (default: 0)
+ * @param min_coeff minimum weighting coefficient for an individual streamline; similar to the '-min_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -min_factor and -min_coeff options are mutually exclusive - you can only provide one. (default: -inf)
+ * @param max_factor maximum weighting factor that can be assigned to any one streamline (default: inf)
+ * @param max_coeff maximum weighting coefficient for an individual streamline; similar to the '-max_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -max_factor and -max_coeff options are mutually exclusive - you can only provide one. (default: inf)
+ * @param max_coeff_step maximum change to a streamline's weighting coefficient in a single iteration (default: 1)
+ * @param min_cf_decrease minimum decrease in the cost function (as a fraction of the initial value) that must occur each iteration for the algorithm to continue (default: 2.5e-05)
+ * @param linear perform a linear estimation of streamline weights, rather than the standard non-linear optimisation (typically does not provide as accurate a model fit; but only requires a single pass)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tcksift2_params(
     in_tracks: InputPathType,
     in_fod: InputPathType,
@@ -198,48 +238,8 @@ function tcksift2_params(
     help: boolean = false,
     version: boolean = false,
 ): Tcksift2Parameters {
-    /**
-     * Build parameters.
-    
-     * @param in_tracks the input track file
-     * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
-     * @param out_weights output text file containing the weighting factor for each streamline
-     * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
-     * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
-     * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
-     * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
-     * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
-     * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
-     * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
-     * @param csv output statistics of execution per iteration to a .csv file
-     * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
-     * @param output_debug provide various output images for assessing & debugging performance etc.
-     * @param out_coeffs output text file containing the weighting coefficient for each streamline
-     * @param reg_tikhonov provide coefficient for regularising streamline weighting coefficients (Tikhonov regularisation) (default: 0)
-     * @param reg_tv provide coefficient for regularising variance of streamline weighting coefficient to fixels along its length (Total Variation regularisation) (default: 0.1)
-     * @param min_td_frac minimum fraction of the FOD integral reconstructed by streamlines; if the reconstructed streamline density is below this fraction, the fixel is excluded from optimisation (default: 0.1)
-     * @param min_iters minimum number of iterations to run before testing for convergence; this can prevent premature termination at early iterations if the cost function increases slightly (default: 10)
-     * @param max_iters maximum number of iterations to run before terminating program
-     * @param min_factor minimum weighting factor for an individual streamline; if the factor falls below this number the streamline will be rejected entirely (factor set to zero) (default: 0)
-     * @param min_coeff minimum weighting coefficient for an individual streamline; similar to the '-min_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -min_factor and -min_coeff options are mutually exclusive - you can only provide one. (default: -inf)
-     * @param max_factor maximum weighting factor that can be assigned to any one streamline (default: inf)
-     * @param max_coeff maximum weighting coefficient for an individual streamline; similar to the '-max_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -max_factor and -max_coeff options are mutually exclusive - you can only provide one. (default: inf)
-     * @param max_coeff_step maximum change to a streamline's weighting coefficient in a single iteration (default: 1)
-     * @param min_cf_decrease minimum decrease in the cost function (as a fraction of the initial value) that must occur each iteration for the algorithm to continue (default: 2.5e-05)
-     * @param linear perform a linear estimation of streamline weights, rather than the standard non-linear optimisation (typically does not provide as accurate a model fit; but only requires a single pass)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tcksift2" as const,
+        "@type": "mrtrix.tcksift2" as const,
         "fd_scale_gm": fd_scale_gm,
         "no_dilate_lut": no_dilate_lut,
         "make_null_lobes": make_null_lobes,
@@ -317,18 +317,18 @@ function tcksift2_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tcksift2_cargs(
     params: Tcksift2Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tcksift2");
     if ((params["proc_mask"] ?? null) !== null) {
@@ -470,7 +470,7 @@ function tcksift2_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -485,18 +485,18 @@ function tcksift2_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tcksift2_outputs(
     params: Tcksift2Parameters,
     execution: Execution,
 ): Tcksift2Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tcksift2Outputs = {
         root: execution.outputFile("."),
         out_weights: execution.outputFile([(params["out_weights"] ?? null)].join('')),
@@ -508,31 +508,31 @@ function tcksift2_outputs(
 }
 
 
+/**
+ * Optimise per-streamline cross-section multipliers to match a whole-brain tractogram to fixel-wise fibre densities.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT2: Enabling dense quantitative assessment of brain white matter connectivity using streamlines tractography. NeuroImage, 2015, 119, 338-351
+ *
+ * * If using the -linear option: 
+ * Smith, RE; Raffelt, D; Tournier, J-D; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
+ */
 function tcksift2_execute(
     params: Tcksift2Parameters,
     execution: Execution,
 ): Tcksift2Outputs {
-    /**
-     * Optimise per-streamline cross-section multipliers to match a whole-brain tractogram to fixel-wise fibre densities.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT2: Enabling dense quantitative assessment of brain white matter connectivity using streamlines tractography. NeuroImage, 2015, 119, 338-351
-     * 
-     * * If using the -linear option: 
-     * Smith, RE; Raffelt, D; Tournier, J-D; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
-     */
     params = execution.params(params)
     const cargs = tcksift2_cargs(params, execution)
     const ret = tcksift2_outputs(params, execution)
@@ -541,6 +541,60 @@ function tcksift2_execute(
 }
 
 
+/**
+ * Optimise per-streamline cross-section multipliers to match a whole-brain tractogram to fixel-wise fibre densities.
+ *
+ *
+ *
+ * References:
+ *
+ * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT2: Enabling dense quantitative assessment of brain white matter connectivity using streamlines tractography. NeuroImage, 2015, 119, 338-351
+ *
+ * * If using the -linear option: 
+ * Smith, RE; Raffelt, D; Tournier, J-D; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param in_tracks the input track file
+ * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
+ * @param out_weights output text file containing the weighting factor for each streamline
+ * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
+ * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
+ * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
+ * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
+ * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
+ * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
+ * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
+ * @param csv output statistics of execution per iteration to a .csv file
+ * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
+ * @param output_debug provide various output images for assessing & debugging performance etc.
+ * @param out_coeffs output text file containing the weighting coefficient for each streamline
+ * @param reg_tikhonov provide coefficient for regularising streamline weighting coefficients (Tikhonov regularisation) (default: 0)
+ * @param reg_tv provide coefficient for regularising variance of streamline weighting coefficient to fixels along its length (Total Variation regularisation) (default: 0.1)
+ * @param min_td_frac minimum fraction of the FOD integral reconstructed by streamlines; if the reconstructed streamline density is below this fraction, the fixel is excluded from optimisation (default: 0.1)
+ * @param min_iters minimum number of iterations to run before testing for convergence; this can prevent premature termination at early iterations if the cost function increases slightly (default: 10)
+ * @param max_iters maximum number of iterations to run before terminating program
+ * @param min_factor minimum weighting factor for an individual streamline; if the factor falls below this number the streamline will be rejected entirely (factor set to zero) (default: 0)
+ * @param min_coeff minimum weighting coefficient for an individual streamline; similar to the '-min_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -min_factor and -min_coeff options are mutually exclusive - you can only provide one. (default: -inf)
+ * @param max_factor maximum weighting factor that can be assigned to any one streamline (default: inf)
+ * @param max_coeff maximum weighting coefficient for an individual streamline; similar to the '-max_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -max_factor and -max_coeff options are mutually exclusive - you can only provide one. (default: inf)
+ * @param max_coeff_step maximum change to a streamline's weighting coefficient in a single iteration (default: 1)
+ * @param min_cf_decrease minimum decrease in the cost function (as a fraction of the initial value) that must occur each iteration for the algorithm to continue (default: 2.5e-05)
+ * @param linear perform a linear estimation of streamline weights, rather than the standard non-linear optimisation (typically does not provide as accurate a model fit; but only requires a single pass)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
+ */
 function tcksift2(
     in_tracks: InputPathType,
     in_fod: InputPathType,
@@ -578,60 +632,6 @@ function tcksift2(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tcksift2Outputs {
-    /**
-     * Optimise per-streamline cross-section multipliers to match a whole-brain tractogram to fixel-wise fibre densities.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. SIFT2: Enabling dense quantitative assessment of brain white matter connectivity using streamlines tractography. NeuroImage, 2015, 119, 338-351
-     * 
-     * * If using the -linear option: 
-     * Smith, RE; Raffelt, D; Tournier, J-D; Connelly, A. Quantitative Streamlines Tractography: Methods and Inter-Subject Normalisation. Open Science Framework, https://doi.org/10.31219/osf.io/c67kn.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param in_tracks the input track file
-     * @param in_fod input image containing the spherical harmonics of the fibre orientation distributions
-     * @param out_weights output text file containing the weighting factor for each streamline
-     * @param proc_mask provide an image containing the processing mask weights for the model; image spatial dimensions must match the fixel image
-     * @param act use an ACT five-tissue-type segmented anatomical image to derive the processing mask
-     * @param fd_scale_gm provide this option (in conjunction with -act) to heuristically downsize the fibre density estimates based on the presence of GM in the voxel. This can assist in reducing tissue interface effects when using a single-tissue deconvolution algorithm
-     * @param no_dilate_lut do NOT dilate FOD lobe lookup tables; only map streamlines to FOD lobes if the precise tangent lies within the angular spread of that lobe
-     * @param make_null_lobes add an additional FOD lobe to each voxel, with zero integral, that covers all directions with zero / negative FOD amplitudes
-     * @param remove_untracked remove FOD lobes that do not have any streamline density attributed to them; this improves filtering slightly, at the expense of longer computation time (and you can no longer do quantitative comparisons between reconstructions if this is enabled)
-     * @param fd_thresh fibre density threshold; exclude an FOD lobe from filtering processing if its integral is less than this amount (streamlines will still be mapped to it, but it will not contribute to the cost function or the filtering)
-     * @param csv output statistics of execution per iteration to a .csv file
-     * @param out_mu output the final value of SIFT proportionality coefficient mu to a text file
-     * @param output_debug provide various output images for assessing & debugging performance etc.
-     * @param out_coeffs output text file containing the weighting coefficient for each streamline
-     * @param reg_tikhonov provide coefficient for regularising streamline weighting coefficients (Tikhonov regularisation) (default: 0)
-     * @param reg_tv provide coefficient for regularising variance of streamline weighting coefficient to fixels along its length (Total Variation regularisation) (default: 0.1)
-     * @param min_td_frac minimum fraction of the FOD integral reconstructed by streamlines; if the reconstructed streamline density is below this fraction, the fixel is excluded from optimisation (default: 0.1)
-     * @param min_iters minimum number of iterations to run before testing for convergence; this can prevent premature termination at early iterations if the cost function increases slightly (default: 10)
-     * @param max_iters maximum number of iterations to run before terminating program
-     * @param min_factor minimum weighting factor for an individual streamline; if the factor falls below this number the streamline will be rejected entirely (factor set to zero) (default: 0)
-     * @param min_coeff minimum weighting coefficient for an individual streamline; similar to the '-min_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -min_factor and -min_coeff options are mutually exclusive - you can only provide one. (default: -inf)
-     * @param max_factor maximum weighting factor that can be assigned to any one streamline (default: inf)
-     * @param max_coeff maximum weighting coefficient for an individual streamline; similar to the '-max_factor' option, but using the exponential coefficient basis of the SIFT2 model; these parameters are related as: factor = e^(coeff). Note that the -max_factor and -max_coeff options are mutually exclusive - you can only provide one. (default: inf)
-     * @param max_coeff_step maximum change to a streamline's weighting coefficient in a single iteration (default: 1)
-     * @param min_cf_decrease minimum decrease in the cost function (as a fraction of the initial value) that must occur each iteration for the algorithm to continue (default: 2.5e-05)
-     * @param linear perform a linear estimation of streamline weights, rather than the standard non-linear optimisation (typically does not provide as accurate a model fit; but only requires a single pass)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCKSIFT2_METADATA);
     const params = tcksift2_params(in_tracks, in_fod, out_weights, proc_mask, act, fd_scale_gm, no_dilate_lut, make_null_lobes, remove_untracked, fd_thresh, csv, out_mu, output_debug, out_coeffs, reg_tikhonov, reg_tv, min_td_frac, min_iters, max_iters, min_factor, min_coeff, max_factor, max_coeff, max_coeff_step, min_cf_decrease, linear, info, quiet, debug, force, nthreads, config, help, version)
@@ -645,6 +645,10 @@ export {
       Tcksift2Outputs,
       Tcksift2Parameters,
       tcksift2,
+      tcksift2_cargs,
+      tcksift2_config_cargs,
       tcksift2_config_params,
+      tcksift2_execute,
+      tcksift2_outputs,
       tcksift2_params,
 };

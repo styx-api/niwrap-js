@@ -12,7 +12,7 @@ const CONVERT_CDIFLIST_TO_GRADS_METADATA: Metadata = {
 
 
 interface ConvertCdiflistToGradsParameters {
-    "__STYXTYPE__": "convert_cdiflist_to_grads";
+    "@type": "afni.convert_cdiflist_to_grads";
     "cdiflist": InputPathType;
     "bval_max": number;
     "prefix": string;
@@ -23,35 +23,35 @@ interface ConvertCdiflistToGradsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "convert_cdiflist_to_grads": convert_cdiflist_to_grads_cargs,
+        "afni.convert_cdiflist_to_grads": convert_cdiflist_to_grads_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "convert_cdiflist_to_grads": convert_cdiflist_to_grads_outputs,
+        "afni.convert_cdiflist_to_grads": convert_cdiflist_to_grads_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,19 @@ interface ConvertCdiflistToGradsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cdiflist Name(s) of cdiflist text file output by GE scanners when acquiring DWIs.
+ * @param bval_max Max bvalue used, which provides a reference value for scaling everything else.
+ * @param prefix Output basename for the subsequent grad and bvalue files (suffix and extensions will be added).
+ * @param ver Display current version.
+ * @param date Display release/editing date of current version.
+ * @param help Display help in terminal.
+ * @param hview Display help in terminal.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_cdiflist_to_grads_params(
     cdiflist: InputPathType,
     bval_max: number,
@@ -91,21 +104,8 @@ function convert_cdiflist_to_grads_params(
     help: boolean = false,
     hview: boolean = false,
 ): ConvertCdiflistToGradsParameters {
-    /**
-     * Build parameters.
-    
-     * @param cdiflist Name(s) of cdiflist text file output by GE scanners when acquiring DWIs.
-     * @param bval_max Max bvalue used, which provides a reference value for scaling everything else.
-     * @param prefix Output basename for the subsequent grad and bvalue files (suffix and extensions will be added).
-     * @param ver Display current version.
-     * @param date Display release/editing date of current version.
-     * @param help Display help in terminal.
-     * @param hview Display help in terminal.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convert_cdiflist_to_grads" as const,
+        "@type": "afni.convert_cdiflist_to_grads" as const,
         "cdiflist": cdiflist,
         "bval_max": bval_max,
         "prefix": prefix,
@@ -118,18 +118,18 @@ function convert_cdiflist_to_grads_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_cdiflist_to_grads_cargs(
     params: ConvertCdiflistToGradsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("convert_cdiflist_to_grads.py");
     cargs.push(
@@ -160,18 +160,18 @@ function convert_cdiflist_to_grads_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_cdiflist_to_grads_outputs(
     params: ConvertCdiflistToGradsParameters,
     execution: Execution,
 ): ConvertCdiflistToGradsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertCdiflistToGradsOutputs = {
         root: execution.outputFile("."),
         output_rvec: execution.outputFile([(params["prefix"] ?? null), "_rvec.dat"].join('')),
@@ -182,22 +182,22 @@ function convert_cdiflist_to_grads_outputs(
 }
 
 
+/**
+ * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsOutputs`).
+ */
 function convert_cdiflist_to_grads_execute(
     params: ConvertCdiflistToGradsParameters,
     execution: Execution,
 ): ConvertCdiflistToGradsOutputs {
-    /**
-     * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_cdiflist_to_grads_cargs(params, execution)
     const ret = convert_cdiflist_to_grads_outputs(params, execution)
@@ -206,6 +206,24 @@ function convert_cdiflist_to_grads_execute(
 }
 
 
+/**
+ * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param cdiflist Name(s) of cdiflist text file output by GE scanners when acquiring DWIs.
+ * @param bval_max Max bvalue used, which provides a reference value for scaling everything else.
+ * @param prefix Output basename for the subsequent grad and bvalue files (suffix and extensions will be added).
+ * @param ver Display current version.
+ * @param date Display release/editing date of current version.
+ * @param help Display help in terminal.
+ * @param hview Display help in terminal.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsOutputs`).
+ */
 function convert_cdiflist_to_grads(
     cdiflist: InputPathType,
     bval_max: number,
@@ -216,24 +234,6 @@ function convert_cdiflist_to_grads(
     hview: boolean = false,
     runner: Runner | null = null,
 ): ConvertCdiflistToGradsOutputs {
-    /**
-     * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param cdiflist Name(s) of cdiflist text file output by GE scanners when acquiring DWIs.
-     * @param bval_max Max bvalue used, which provides a reference value for scaling everything else.
-     * @param prefix Output basename for the subsequent grad and bvalue files (suffix and extensions will be added).
-     * @param ver Display current version.
-     * @param date Display release/editing date of current version.
-     * @param help Display help in terminal.
-     * @param hview Display help in terminal.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_CDIFLIST_TO_GRADS_METADATA);
     const params = convert_cdiflist_to_grads_params(cdiflist, bval_max, prefix, ver, date, help, hview)
@@ -246,5 +246,8 @@ export {
       ConvertCdiflistToGradsOutputs,
       ConvertCdiflistToGradsParameters,
       convert_cdiflist_to_grads,
+      convert_cdiflist_to_grads_cargs,
+      convert_cdiflist_to_grads_execute,
+      convert_cdiflist_to_grads_outputs,
       convert_cdiflist_to_grads_params,
 };

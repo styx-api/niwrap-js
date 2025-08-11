@@ -12,7 +12,7 @@ const MRIS_ANNOT_DIFF_METADATA: Metadata = {
 
 
 interface MrisAnnotDiffParameters {
-    "__STYXTYPE__": "mris_annot_diff";
+    "@type": "freesurfer.mris_annot_diff";
     "annot1": InputPathType;
     "annot2": InputPathType;
     "diff_ctab": boolean;
@@ -20,33 +20,33 @@ interface MrisAnnotDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_annot_diff": mris_annot_diff_cargs,
+        "freesurfer.mris_annot_diff": mris_annot_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MrisAnnotDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param annot1 Input .annot file 1
+ * @param annot2 Input .annot file 2
+ * @param diff_ctab Diff colortable included in .annot
+ * @param verbose Print details of annotation/colortable differences
+ *
+ * @returns Parameter dictionary
+ */
 function mris_annot_diff_params(
     annot1: InputPathType,
     annot2: InputPathType,
     diff_ctab: boolean = false,
     verbose: boolean = false,
 ): MrisAnnotDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param annot1 Input .annot file 1
-     * @param annot2 Input .annot file 2
-     * @param diff_ctab Diff colortable included in .annot
-     * @param verbose Print details of annotation/colortable differences
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_annot_diff" as const,
+        "@type": "freesurfer.mris_annot_diff" as const,
         "annot1": annot1,
         "annot2": annot2,
         "diff_ctab": diff_ctab,
@@ -93,18 +93,18 @@ function mris_annot_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_annot_diff_cargs(
     params: MrisAnnotDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_annot_diff");
     cargs.push(execution.inputFile((params["annot1"] ?? null)));
@@ -119,18 +119,18 @@ function mris_annot_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_annot_diff_outputs(
     params: MrisAnnotDiffParameters,
     execution: Execution,
 ): MrisAnnotDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisAnnotDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function mris_annot_diff_outputs(
 }
 
 
+/**
+ * Compare two surface annotation files. The program works with .annot only.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
+ */
 function mris_annot_diff_execute(
     params: MrisAnnotDiffParameters,
     execution: Execution,
 ): MrisAnnotDiffOutputs {
-    /**
-     * Compare two surface annotation files. The program works with .annot only.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_annot_diff_cargs(params, execution)
     const ret = mris_annot_diff_outputs(params, execution)
@@ -162,6 +162,21 @@ function mris_annot_diff_execute(
 }
 
 
+/**
+ * Compare two surface annotation files. The program works with .annot only.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param annot1 Input .annot file 1
+ * @param annot2 Input .annot file 2
+ * @param diff_ctab Diff colortable included in .annot
+ * @param verbose Print details of annotation/colortable differences
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
+ */
 function mris_annot_diff(
     annot1: InputPathType,
     annot2: InputPathType,
@@ -169,21 +184,6 @@ function mris_annot_diff(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): MrisAnnotDiffOutputs {
-    /**
-     * Compare two surface annotation files. The program works with .annot only.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param annot1 Input .annot file 1
-     * @param annot2 Input .annot file 2
-     * @param diff_ctab Diff colortable included in .annot
-     * @param verbose Print details of annotation/colortable differences
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ANNOT_DIFF_METADATA);
     const params = mris_annot_diff_params(annot1, annot2, diff_ctab, verbose)
@@ -196,5 +196,8 @@ export {
       MrisAnnotDiffOutputs,
       MrisAnnotDiffParameters,
       mris_annot_diff,
+      mris_annot_diff_cargs,
+      mris_annot_diff_execute,
+      mris_annot_diff_outputs,
       mris_annot_diff_params,
 };

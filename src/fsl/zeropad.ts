@@ -12,41 +12,41 @@ const ZEROPAD_METADATA: Metadata = {
 
 
 interface ZeropadParameters {
-    "__STYXTYPE__": "zeropad";
+    "@type": "fsl.zeropad";
     "input_number": string;
     "length": number;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "zeropad": zeropad_cargs,
+        "fsl.zeropad": zeropad_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "zeropad": zeropad_outputs,
+        "fsl.zeropad": zeropad_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface ZeropadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_number Input number to be zero-padded
+ * @param length Desired length of the output string
+ *
+ * @returns Parameter dictionary
+ */
 function zeropad_params(
     input_number: string,
     length: number,
 ): ZeropadParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_number Input number to be zero-padded
-     * @param length Desired length of the output string
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "zeropad" as const,
+        "@type": "fsl.zeropad" as const,
         "input_number": input_number,
         "length": length,
     };
@@ -90,18 +90,18 @@ function zeropad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function zeropad_cargs(
     params: ZeropadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("zeropad");
     cargs.push((params["input_number"] ?? null));
@@ -110,18 +110,18 @@ function zeropad_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function zeropad_outputs(
     params: ZeropadParameters,
     execution: Execution,
 ): ZeropadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ZeropadOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["padded_output.txt"].join('')),
@@ -130,22 +130,22 @@ function zeropad_outputs(
 }
 
 
+/**
+ * Tool for zero-padding numbers to a specified length.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
+ */
 function zeropad_execute(
     params: ZeropadParameters,
     execution: Execution,
 ): ZeropadOutputs {
-    /**
-     * Tool for zero-padding numbers to a specified length.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
-     */
     params = execution.params(params)
     const cargs = zeropad_cargs(params, execution)
     const ret = zeropad_outputs(params, execution)
@@ -154,24 +154,24 @@ function zeropad_execute(
 }
 
 
+/**
+ * Tool for zero-padding numbers to a specified length.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_number Input number to be zero-padded
+ * @param length Desired length of the output string
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
+ */
 function zeropad(
     input_number: string,
     length: number,
     runner: Runner | null = null,
 ): ZeropadOutputs {
-    /**
-     * Tool for zero-padding numbers to a specified length.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_number Input number to be zero-padded
-     * @param length Desired length of the output string
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ZEROPAD_METADATA);
     const params = zeropad_params(input_number, length)
@@ -184,5 +184,8 @@ export {
       ZeropadOutputs,
       ZeropadParameters,
       zeropad,
+      zeropad_cargs,
+      zeropad_execute,
+      zeropad_outputs,
       zeropad_params,
 };

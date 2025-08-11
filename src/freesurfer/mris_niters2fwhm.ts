@@ -12,7 +12,7 @@ const MRIS_NITERS2FWHM_METADATA: Metadata = {
 
 
 interface MrisNiters2fwhmParameters {
-    "__STYXTYPE__": "mris_niters2fwhm";
+    "@type": "freesurfer.mris_niters2fwhm";
     "subject": string;
     "hemi": string;
     "surf": string;
@@ -25,33 +25,33 @@ interface MrisNiters2fwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_niters2fwhm": mris_niters2fwhm_cargs,
+        "freesurfer.mris_niters2fwhm": mris_niters2fwhm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface MrisNiters2fwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param hemi Hemisphere (e.g., lh or rh)
+ * @param surf Surface type (e.g., white, pial)
+ * @param dof Degrees of Freedom
+ * @param niters Maximum number of iterations
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mris_niters2fwhm_params(
     subject: string,
     hemi: string,
@@ -82,23 +97,8 @@ function mris_niters2fwhm_params(
     help: boolean = false,
     version: boolean = false,
 ): MrisNiters2fwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param hemi Hemisphere (e.g., lh or rh)
-     * @param surf Surface type (e.g., white, pial)
-     * @param dof Degrees of Freedom
-     * @param niters Maximum number of iterations
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_niters2fwhm" as const,
+        "@type": "freesurfer.mris_niters2fwhm" as const,
         "subject": subject,
         "hemi": hemi,
         "surf": surf,
@@ -113,18 +113,18 @@ function mris_niters2fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_niters2fwhm_cargs(
     params: MrisNiters2fwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_niters2fwhm");
     cargs.push(
@@ -163,18 +163,18 @@ function mris_niters2fwhm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_niters2fwhm_outputs(
     params: MrisNiters2fwhmParameters,
     execution: Execution,
 ): MrisNiters2fwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisNiters2fwhmOutputs = {
         root: execution.outputFile("."),
     };
@@ -182,22 +182,22 @@ function mris_niters2fwhm_outputs(
 }
 
 
+/**
+ * Convert number of iterations to full width at half maximum (FWHM) for surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
+ */
 function mris_niters2fwhm_execute(
     params: MrisNiters2fwhmParameters,
     execution: Execution,
 ): MrisNiters2fwhmOutputs {
-    /**
-     * Convert number of iterations to full width at half maximum (FWHM) for surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_niters2fwhm_cargs(params, execution)
     const ret = mris_niters2fwhm_outputs(params, execution)
@@ -206,6 +206,26 @@ function mris_niters2fwhm_execute(
 }
 
 
+/**
+ * Convert number of iterations to full width at half maximum (FWHM) for surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param hemi Hemisphere (e.g., lh or rh)
+ * @param surf Surface type (e.g., white, pial)
+ * @param dof Degrees of Freedom
+ * @param niters Maximum number of iterations
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
+ */
 function mris_niters2fwhm(
     subject: string,
     hemi: string,
@@ -218,26 +238,6 @@ function mris_niters2fwhm(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisNiters2fwhmOutputs {
-    /**
-     * Convert number of iterations to full width at half maximum (FWHM) for surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param hemi Hemisphere (e.g., lh or rh)
-     * @param surf Surface type (e.g., white, pial)
-     * @param dof Degrees of Freedom
-     * @param niters Maximum number of iterations
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_NITERS2FWHM_METADATA);
     const params = mris_niters2fwhm_params(subject, hemi, surf, dof, niters, debug, checkopts, help, version)
@@ -250,5 +250,8 @@ export {
       MrisNiters2fwhmOutputs,
       MrisNiters2fwhmParameters,
       mris_niters2fwhm,
+      mris_niters2fwhm_cargs,
+      mris_niters2fwhm_execute,
+      mris_niters2fwhm_outputs,
       mris_niters2fwhm_params,
 };

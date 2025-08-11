@@ -12,7 +12,7 @@ const SET_STRUCTURE_METADATA: Metadata = {
 
 
 interface SetStructureParameters {
-    "__STYXTYPE__": "set-structure";
+    "@type": "workbench.set-structure";
     "data_file": string;
     "structure": string;
     "opt_surface_type_type"?: string | null | undefined;
@@ -20,33 +20,33 @@ interface SetStructureParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "set-structure": set_structure_cargs,
+        "workbench.set-structure": set_structure_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface SetStructureOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file the file to set the structure of
+ * @param structure the structure to set the file to
+ * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
+ * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
+ *
+ * @returns Parameter dictionary
+ */
 function set_structure_params(
     data_file: string,
     structure: string,
     opt_surface_type_type: string | null = null,
     opt_surface_secondary_type_secondary_type: string | null = null,
 ): SetStructureParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file the file to set the structure of
-     * @param structure the structure to set the file to
-     * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
-     * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "set-structure" as const,
+        "@type": "workbench.set-structure" as const,
         "data_file": data_file,
         "structure": structure,
     };
@@ -97,18 +97,18 @@ function set_structure_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function set_structure_cargs(
     params: SetStructureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-set-structure");
@@ -130,18 +130,18 @@ function set_structure_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function set_structure_outputs(
     params: SetStructureParameters,
     execution: Execution,
 ): SetStructureOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SetStructureOutputs = {
         root: execution.outputFile("."),
     };
@@ -149,79 +149,79 @@ function set_structure_outputs(
 }
 
 
+/**
+ * Set structure of a data file.
+ *
+ * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ *
+ * Valid names for the surface type are:
+ *
+ * UNKNOWN
+ * RECONSTRUCTION
+ * ANATOMICAL
+ * INFLATED
+ * VERY_INFLATED
+ * SPHERICAL
+ * SEMI_SPHERICAL
+ * ELLIPSOID
+ * FLAT
+ * HULL
+ *
+ * Valid names for the surface secondary type are:
+ *
+ * INVALID
+ * GRAY_WHITE
+ * MIDTHICKNESS
+ * PIAL
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
+ */
 function set_structure_execute(
     params: SetStructureParameters,
     execution: Execution,
 ): SetStructureOutputs {
-    /**
-     * Set structure of a data file.
-     * 
-     * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * 
-     * Valid names for the surface type are:
-     * 
-     * UNKNOWN
-     * RECONSTRUCTION
-     * ANATOMICAL
-     * INFLATED
-     * VERY_INFLATED
-     * SPHERICAL
-     * SEMI_SPHERICAL
-     * ELLIPSOID
-     * FLAT
-     * HULL
-     * 
-     * Valid names for the surface secondary type are:
-     * 
-     * INVALID
-     * GRAY_WHITE
-     * MIDTHICKNESS
-     * PIAL
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
-     */
     params = execution.params(params)
     const cargs = set_structure_cargs(params, execution)
     const ret = set_structure_outputs(params, execution)
@@ -230,6 +230,78 @@ function set_structure_execute(
 }
 
 
+/**
+ * Set structure of a data file.
+ *
+ * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT
+ *
+ * Valid names for the surface type are:
+ *
+ * UNKNOWN
+ * RECONSTRUCTION
+ * ANATOMICAL
+ * INFLATED
+ * VERY_INFLATED
+ * SPHERICAL
+ * SEMI_SPHERICAL
+ * ELLIPSOID
+ * FLAT
+ * HULL
+ *
+ * Valid names for the surface secondary type are:
+ *
+ * INVALID
+ * GRAY_WHITE
+ * MIDTHICKNESS
+ * PIAL
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param data_file the file to set the structure of
+ * @param structure the structure to set the file to
+ * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
+ * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
+ */
 function set_structure(
     data_file: string,
     structure: string,
@@ -237,78 +309,6 @@ function set_structure(
     opt_surface_secondary_type_secondary_type: string | null = null,
     runner: Runner | null = null,
 ): SetStructureOutputs {
-    /**
-     * Set structure of a data file.
-     * 
-     * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT
-     * 
-     * Valid names for the surface type are:
-     * 
-     * UNKNOWN
-     * RECONSTRUCTION
-     * ANATOMICAL
-     * INFLATED
-     * VERY_INFLATED
-     * SPHERICAL
-     * SEMI_SPHERICAL
-     * ELLIPSOID
-     * FLAT
-     * HULL
-     * 
-     * Valid names for the surface secondary type are:
-     * 
-     * INVALID
-     * GRAY_WHITE
-     * MIDTHICKNESS
-     * PIAL
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param data_file the file to set the structure of
-     * @param structure the structure to set the file to
-     * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
-     * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SET_STRUCTURE_METADATA);
     const params = set_structure_params(data_file, structure, opt_surface_type_type, opt_surface_secondary_type_secondary_type)
@@ -321,5 +321,8 @@ export {
       SetStructureOutputs,
       SetStructureParameters,
       set_structure,
+      set_structure_cargs,
+      set_structure_execute,
+      set_structure_outputs,
       set_structure_params,
 };

@@ -12,7 +12,7 @@ const GROUPSTATSDIFF_METADATA: Metadata = {
 
 
 interface GroupstatsdiffParameters {
-    "__STYXTYPE__": "groupstatsdiff";
+    "@type": "freesurfer.groupstatsdiff";
     "group1_dir": string;
     "group2_dir": string;
     "output_dir": string;
@@ -36,33 +36,33 @@ interface GroupstatsdiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "groupstatsdiff": groupstatsdiff_cargs,
+        "freesurfer.groupstatsdiff": groupstatsdiff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -82,6 +82,32 @@ interface GroupstatsdiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param group1_dir Output folder from groupstats for group 1
+ * @param group2_dir Output folder from groupstats for group 2
+ * @param output_dir Output folder for the difference analysis
+ * @param no_maps Only analyze ROI data, no maps
+ * @param osgm Use OSGM instead of native FSGD
+ * @param no_common Do not select common segments when running stattablediff
+ * @param allow_subj_diff Allow list of subjects to be different between the two analyses
+ * @param no_area Do not compute area differences
+ * @param no_volume Do not compute volume differences
+ * @param no_ba Do not compute differences for BA labels
+ * @param no_aparcstats Do not do aparcstats
+ * @param no_asegstats Do not do asegstats
+ * @param no_wparcstats Do not do wmparcstats
+ * @param no_stats Do not do any ROI stats
+ * @param no_prune Do not prune when running mri_glmfit
+ * @param fwhm_value Override the FWHM from group analysis
+ * @param subjects_dir1 Subjects directory 1 for computing dice (default is parent dir of groupdir)
+ * @param subjects_dir2 Subjects directory 2 for computing dice (default is parent dir of groupdir)
+ * @param no_dice Do not compute dice
+ * @param dice_ctab CTAB to use for dice computation (default is /usr/local/freesurfer/ASegStatsLUT.txt)
+ *
+ * @returns Parameter dictionary
+ */
 function groupstatsdiff_params(
     group1_dir: string,
     group2_dir: string,
@@ -104,34 +130,8 @@ function groupstatsdiff_params(
     no_dice: boolean = false,
     dice_ctab: string | null = null,
 ): GroupstatsdiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param group1_dir Output folder from groupstats for group 1
-     * @param group2_dir Output folder from groupstats for group 2
-     * @param output_dir Output folder for the difference analysis
-     * @param no_maps Only analyze ROI data, no maps
-     * @param osgm Use OSGM instead of native FSGD
-     * @param no_common Do not select common segments when running stattablediff
-     * @param allow_subj_diff Allow list of subjects to be different between the two analyses
-     * @param no_area Do not compute area differences
-     * @param no_volume Do not compute volume differences
-     * @param no_ba Do not compute differences for BA labels
-     * @param no_aparcstats Do not do aparcstats
-     * @param no_asegstats Do not do asegstats
-     * @param no_wparcstats Do not do wmparcstats
-     * @param no_stats Do not do any ROI stats
-     * @param no_prune Do not prune when running mri_glmfit
-     * @param fwhm_value Override the FWHM from group analysis
-     * @param subjects_dir1 Subjects directory 1 for computing dice (default is parent dir of groupdir)
-     * @param subjects_dir2 Subjects directory 2 for computing dice (default is parent dir of groupdir)
-     * @param no_dice Do not compute dice
-     * @param dice_ctab CTAB to use for dice computation (default is /usr/local/freesurfer/ASegStatsLUT.txt)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "groupstatsdiff" as const,
+        "@type": "freesurfer.groupstatsdiff" as const,
         "group1_dir": group1_dir,
         "group2_dir": group2_dir,
         "output_dir": output_dir,
@@ -165,18 +165,18 @@ function groupstatsdiff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function groupstatsdiff_cargs(
     params: GroupstatsdiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("groupstatsdiff");
     cargs.push(
@@ -258,18 +258,18 @@ function groupstatsdiff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function groupstatsdiff_outputs(
     params: GroupstatsdiffParameters,
     execution: Execution,
 ): GroupstatsdiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GroupstatsdiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -277,22 +277,22 @@ function groupstatsdiff_outputs(
 }
 
 
+/**
+ * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
+ */
 function groupstatsdiff_execute(
     params: GroupstatsdiffParameters,
     execution: Execution,
 ): GroupstatsdiffOutputs {
-    /**
-     * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = groupstatsdiff_cargs(params, execution)
     const ret = groupstatsdiff_outputs(params, execution)
@@ -301,6 +301,37 @@ function groupstatsdiff_execute(
 }
 
 
+/**
+ * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param group1_dir Output folder from groupstats for group 1
+ * @param group2_dir Output folder from groupstats for group 2
+ * @param output_dir Output folder for the difference analysis
+ * @param no_maps Only analyze ROI data, no maps
+ * @param osgm Use OSGM instead of native FSGD
+ * @param no_common Do not select common segments when running stattablediff
+ * @param allow_subj_diff Allow list of subjects to be different between the two analyses
+ * @param no_area Do not compute area differences
+ * @param no_volume Do not compute volume differences
+ * @param no_ba Do not compute differences for BA labels
+ * @param no_aparcstats Do not do aparcstats
+ * @param no_asegstats Do not do asegstats
+ * @param no_wparcstats Do not do wmparcstats
+ * @param no_stats Do not do any ROI stats
+ * @param no_prune Do not prune when running mri_glmfit
+ * @param fwhm_value Override the FWHM from group analysis
+ * @param subjects_dir1 Subjects directory 1 for computing dice (default is parent dir of groupdir)
+ * @param subjects_dir2 Subjects directory 2 for computing dice (default is parent dir of groupdir)
+ * @param no_dice Do not compute dice
+ * @param dice_ctab CTAB to use for dice computation (default is /usr/local/freesurfer/ASegStatsLUT.txt)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
+ */
 function groupstatsdiff(
     group1_dir: string,
     group2_dir: string,
@@ -324,37 +355,6 @@ function groupstatsdiff(
     dice_ctab: string | null = null,
     runner: Runner | null = null,
 ): GroupstatsdiffOutputs {
-    /**
-     * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param group1_dir Output folder from groupstats for group 1
-     * @param group2_dir Output folder from groupstats for group 2
-     * @param output_dir Output folder for the difference analysis
-     * @param no_maps Only analyze ROI data, no maps
-     * @param osgm Use OSGM instead of native FSGD
-     * @param no_common Do not select common segments when running stattablediff
-     * @param allow_subj_diff Allow list of subjects to be different between the two analyses
-     * @param no_area Do not compute area differences
-     * @param no_volume Do not compute volume differences
-     * @param no_ba Do not compute differences for BA labels
-     * @param no_aparcstats Do not do aparcstats
-     * @param no_asegstats Do not do asegstats
-     * @param no_wparcstats Do not do wmparcstats
-     * @param no_stats Do not do any ROI stats
-     * @param no_prune Do not prune when running mri_glmfit
-     * @param fwhm_value Override the FWHM from group analysis
-     * @param subjects_dir1 Subjects directory 1 for computing dice (default is parent dir of groupdir)
-     * @param subjects_dir2 Subjects directory 2 for computing dice (default is parent dir of groupdir)
-     * @param no_dice Do not compute dice
-     * @param dice_ctab CTAB to use for dice computation (default is /usr/local/freesurfer/ASegStatsLUT.txt)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GROUPSTATSDIFF_METADATA);
     const params = groupstatsdiff_params(group1_dir, group2_dir, output_dir, no_maps, osgm, no_common, allow_subj_diff, no_area, no_volume, no_ba, no_aparcstats, no_asegstats, no_wparcstats, no_stats, no_prune, fwhm_value, subjects_dir1, subjects_dir2, no_dice, dice_ctab)
@@ -367,5 +367,8 @@ export {
       GroupstatsdiffOutputs,
       GroupstatsdiffParameters,
       groupstatsdiff,
+      groupstatsdiff_cargs,
+      groupstatsdiff_execute,
+      groupstatsdiff_outputs,
       groupstatsdiff_params,
 };

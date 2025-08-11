@@ -12,14 +12,14 @@ const MRAVERAGEHEADER_METADATA: Metadata = {
 
 
 interface MraverageheaderConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mraverageheader.config";
     "key": string;
     "value": string;
 }
 
 
 interface MraverageheaderParameters {
-    "__STYXTYPE__": "mraverageheader";
+    "@type": "mrtrix.mraverageheader";
     "padding"?: number | null | undefined;
     "resolution"?: string | null | undefined;
     "fill": boolean;
@@ -37,55 +37,55 @@ interface MraverageheaderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mraverageheader": mraverageheader_cargs,
-        "config": mraverageheader_config_cargs,
+        "mrtrix.mraverageheader": mraverageheader_cargs,
+        "mrtrix.mraverageheader.config": mraverageheader_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mraverageheader": mraverageheader_outputs,
+        "mrtrix.mraverageheader": mraverageheader_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mraverageheader_config_params(
     key: string,
     value: string,
 ): MraverageheaderConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mraverageheader.config" as const,
         "key": key,
         "value": value,
     };
@@ -93,18 +93,18 @@ function mraverageheader_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mraverageheader_config_cargs(
     params: MraverageheaderConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -130,6 +130,26 @@ interface MraverageheaderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image(s).
+ * @param output the output image
+ * @param padding  boundary box padding in voxels. Default: 0
+ * @param resolution  subsampling of template compared to smallest voxel size in any input image. Valid options are 'mean': unbiased but loss of resolution for individual images possible, and 'max': smallest voxel size of any input image defines the resolution. Default: mean
+ * @param fill  set the intensity in the first volume of the average space to 1
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mraverageheader_params(
     input: Array<InputPathType>,
     output: string,
@@ -146,28 +166,8 @@ function mraverageheader_params(
     help: boolean = false,
     version: boolean = false,
 ): MraverageheaderParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image(s).
-     * @param output the output image
-     * @param padding  boundary box padding in voxels. Default: 0
-     * @param resolution  subsampling of template compared to smallest voxel size in any input image. Valid options are 'mean': unbiased but loss of resolution for individual images possible, and 'max': smallest voxel size of any input image defines the resolution. Default: mean
-     * @param fill  set the intensity in the first volume of the average space to 1
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mraverageheader" as const,
+        "@type": "mrtrix.mraverageheader" as const,
         "fill": fill,
         "info": info,
         "quiet": quiet,
@@ -197,18 +197,18 @@ function mraverageheader_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mraverageheader_cargs(
     params: MraverageheaderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mraverageheader");
     if ((params["padding"] ?? null) !== null) {
@@ -251,7 +251,7 @@ function mraverageheader_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -265,18 +265,18 @@ function mraverageheader_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mraverageheader_outputs(
     params: MraverageheaderParameters,
     execution: Execution,
 ): MraverageheaderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MraverageheaderOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -285,28 +285,28 @@ function mraverageheader_outputs(
 }
 
 
+/**
+ * Calculate the average (unbiased) coordinate space of all input images.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
+ */
 function mraverageheader_execute(
     params: MraverageheaderParameters,
     execution: Execution,
 ): MraverageheaderOutputs {
-    /**
-     * Calculate the average (unbiased) coordinate space of all input images.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
-     */
     params = execution.params(params)
     const cargs = mraverageheader_cargs(params, execution)
     const ret = mraverageheader_outputs(params, execution)
@@ -315,6 +315,37 @@ function mraverageheader_execute(
 }
 
 
+/**
+ * Calculate the average (unbiased) coordinate space of all input images.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image(s).
+ * @param output the output image
+ * @param padding  boundary box padding in voxels. Default: 0
+ * @param resolution  subsampling of template compared to smallest voxel size in any input image. Valid options are 'mean': unbiased but loss of resolution for individual images possible, and 'max': smallest voxel size of any input image defines the resolution. Default: mean
+ * @param fill  set the intensity in the first volume of the average space to 1
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
+ */
 function mraverageheader(
     input: Array<InputPathType>,
     output: string,
@@ -332,37 +363,6 @@ function mraverageheader(
     version: boolean = false,
     runner: Runner | null = null,
 ): MraverageheaderOutputs {
-    /**
-     * Calculate the average (unbiased) coordinate space of all input images.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image(s).
-     * @param output the output image
-     * @param padding  boundary box padding in voxels. Default: 0
-     * @param resolution  subsampling of template compared to smallest voxel size in any input image. Valid options are 'mean': unbiased but loss of resolution for individual images possible, and 'max': smallest voxel size of any input image defines the resolution. Default: mean
-     * @param fill  set the intensity in the first volume of the average space to 1
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRAVERAGEHEADER_METADATA);
     const params = mraverageheader_params(input, output, padding, resolution, fill, datatype, info, quiet, debug, force, nthreads, config, help, version)
@@ -376,6 +376,10 @@ export {
       MraverageheaderOutputs,
       MraverageheaderParameters,
       mraverageheader,
+      mraverageheader_cargs,
+      mraverageheader_config_cargs,
       mraverageheader_config_params,
+      mraverageheader_execute,
+      mraverageheader_outputs,
       mraverageheader_params,
 };

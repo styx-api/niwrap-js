@@ -12,41 +12,41 @@ const FAT_MVM_GRIDCONV_PY_METADATA: Metadata = {
 
 
 interface FatMvmGridconvPyParameters {
-    "__STYXTYPE__": "fat_mvm_gridconv.py";
+    "@type": "afni.fat_mvm_gridconv.py";
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mvm_gridconv.py": fat_mvm_gridconv_py_cargs,
+        "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mvm_gridconv.py": fat_mvm_gridconv_py_outputs,
+        "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface FatMvmGridconvPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix_files Provide the set of matrix (*.grid) files as a searchable path. This can be a globbable entry in quotes containing wildcard characters.
+ * @param list_file Provide the matrix (*.grid) files by explicit path in a text file. The LIST text file must contain at least one column (path to subject matrix file) with an optional second column (output file names). If no second column is given, the default '_MOD.grid' postfix is applied.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mvm_gridconv_py_params(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
 ): FatMvmGridconvPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix_files Provide the set of matrix (*.grid) files as a searchable path. This can be a globbable entry in quotes containing wildcard characters.
-     * @param list_file Provide the matrix (*.grid) files by explicit path in a text file. The LIST text file must contain at least one column (path to subject matrix file) with an optional second column (output file names). If no second column is given, the default '_MOD.grid' postfix is applied.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mvm_gridconv.py" as const,
+        "@type": "afni.fat_mvm_gridconv.py" as const,
     };
     if (matrix_files !== null) {
         params["matrix_files"] = matrix_files;
@@ -94,18 +94,18 @@ function fat_mvm_gridconv_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mvm_gridconv_py_cargs(
     params: FatMvmGridconvPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mvm_gridconv.py");
     if ((params["matrix_files"] ?? null) !== null) {
@@ -124,18 +124,18 @@ function fat_mvm_gridconv_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mvm_gridconv_py_outputs(
     params: FatMvmGridconvPyParameters,
     execution: Execution,
 ): FatMvmGridconvPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMvmGridconvPyOutputs = {
         root: execution.outputFile("."),
         converted_grid_files: execution.outputFile(["*_MOD.grid"].join('')),
@@ -144,22 +144,22 @@ function fat_mvm_gridconv_py_outputs(
 }
 
 
+/**
+ * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
+ */
 function fat_mvm_gridconv_py_execute(
     params: FatMvmGridconvPyParameters,
     execution: Execution,
 ): FatMvmGridconvPyOutputs {
-    /**
-     * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mvm_gridconv_py_cargs(params, execution)
     const ret = fat_mvm_gridconv_py_outputs(params, execution)
@@ -168,24 +168,24 @@ function fat_mvm_gridconv_py_execute(
 }
 
 
+/**
+ * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param matrix_files Provide the set of matrix (*.grid) files as a searchable path. This can be a globbable entry in quotes containing wildcard characters.
+ * @param list_file Provide the matrix (*.grid) files by explicit path in a text file. The LIST text file must contain at least one column (path to subject matrix file) with an optional second column (output file names). If no second column is given, the default '_MOD.grid' postfix is applied.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
+ */
 function fat_mvm_gridconv_py(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FatMvmGridconvPyOutputs {
-    /**
-     * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param matrix_files Provide the set of matrix (*.grid) files as a searchable path. This can be a globbable entry in quotes containing wildcard characters.
-     * @param list_file Provide the matrix (*.grid) files by explicit path in a text file. The LIST text file must contain at least one column (path to subject matrix file) with an optional second column (output file names). If no second column is given, the default '_MOD.grid' postfix is applied.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MVM_GRIDCONV_PY_METADATA);
     const params = fat_mvm_gridconv_py_params(matrix_files, list_file)
@@ -198,5 +198,8 @@ export {
       FatMvmGridconvPyOutputs,
       FatMvmGridconvPyParameters,
       fat_mvm_gridconv_py,
+      fat_mvm_gridconv_py_cargs,
+      fat_mvm_gridconv_py_execute,
+      fat_mvm_gridconv_py_outputs,
       fat_mvm_gridconv_py_params,
 };

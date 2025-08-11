@@ -12,7 +12,7 @@ const FUGUE_METADATA: Metadata = {
 
 
 interface FugueParameters {
-    "__STYXTYPE__": "fugue";
+    "@type": "fsl.fugue";
     "asym_se_time"?: number | null | undefined;
     "despike_2dfilter": boolean;
     "despike_threshold"?: number | null | undefined;
@@ -49,35 +49,35 @@ interface FugueParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fugue": fugue_cargs,
+        "fsl.fugue": fugue_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fugue": fugue_outputs,
+        "fsl.fugue": fugue_outputs,
     };
     return outputsFuncs[t];
 }
@@ -112,6 +112,45 @@ interface FugueOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param asym_se_time Set the fieldmap asymmetric spin echo time (sec).
+ * @param despike_2dfilter Apply a 2d de-spiking filter.
+ * @param despike_threshold Specify the threshold for de-spiking (default=3.0).
+ * @param dwell_time Set the epi dwell time per phase-encode line - same as echo spacing - (sec).
+ * @param dwell_to_asym_ratio Set the dwell to asym time ratio.
+ * @param fmap_in_file Filename for loading fieldmap (rad/s).
+ * @param fmap_out_file Filename for saving fieldmap (rad/s).
+ * @param forward_warping Apply forward warping instead of unwarping.
+ * @param fourier_order Apply fourier (sinusoidal) fitting of order n.
+ * @param icorr Apply intensity correction to unwarping (pixel shift method only).
+ * @param icorr_only Apply intensity correction only.
+ * @param in_file Filename of input volume.
+ * @param mask_file Filename for loading valid mask.
+ * @param median_2dfilter Apply 2d median filtering.
+ * @param no_extend Do not apply rigid-body extrapolation to the fieldmap.
+ * @param no_gap_fill Do not apply gap-filling measure to the fieldmap.
+ * @param nokspace Do not use k-space forward warping.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param pava Apply monotonic enforcement via pava.
+ * @param phase_conjugate Apply phase conjugate method of unwarping.
+ * @param phasemap_in_file Filename for input phase image.
+ * @param poly_order Apply polynomial fitting of order n.
+ * @param save_fmap Write field map volume.
+ * @param save_shift Write pixel shift volume.
+ * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
+ * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
+ * @param shift_in_file Filename for reading pixel shift volume.
+ * @param shift_out_file Filename for saving pixel shift volume.
+ * @param smooth2d Apply 2d gaussian smoothing of sigma n (in mm).
+ * @param smooth3d Apply 3d gaussian smoothing of sigma n (in mm).
+ * @param unwarp_direction 'x' or 'y' or 'z' or 'x-' or 'y-' or 'z-'. Specifies direction of warping (default y).
+ * @param unwarped_file Apply unwarping and save as filename.
+ * @param warped_file Apply forward warping and save as filename.
+ *
+ * @returns Parameter dictionary
+ */
 function fugue_params(
     asym_se_time: number | null = null,
     despike_2dfilter: boolean = false,
@@ -147,47 +186,8 @@ function fugue_params(
     unwarped_file: string | null = null,
     warped_file: string | null = null,
 ): FugueParameters {
-    /**
-     * Build parameters.
-    
-     * @param asym_se_time Set the fieldmap asymmetric spin echo time (sec).
-     * @param despike_2dfilter Apply a 2d de-spiking filter.
-     * @param despike_threshold Specify the threshold for de-spiking (default=3.0).
-     * @param dwell_time Set the epi dwell time per phase-encode line - same as echo spacing - (sec).
-     * @param dwell_to_asym_ratio Set the dwell to asym time ratio.
-     * @param fmap_in_file Filename for loading fieldmap (rad/s).
-     * @param fmap_out_file Filename for saving fieldmap (rad/s).
-     * @param forward_warping Apply forward warping instead of unwarping.
-     * @param fourier_order Apply fourier (sinusoidal) fitting of order n.
-     * @param icorr Apply intensity correction to unwarping (pixel shift method only).
-     * @param icorr_only Apply intensity correction only.
-     * @param in_file Filename of input volume.
-     * @param mask_file Filename for loading valid mask.
-     * @param median_2dfilter Apply 2d median filtering.
-     * @param no_extend Do not apply rigid-body extrapolation to the fieldmap.
-     * @param no_gap_fill Do not apply gap-filling measure to the fieldmap.
-     * @param nokspace Do not use k-space forward warping.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param pava Apply monotonic enforcement via pava.
-     * @param phase_conjugate Apply phase conjugate method of unwarping.
-     * @param phasemap_in_file Filename for input phase image.
-     * @param poly_order Apply polynomial fitting of order n.
-     * @param save_fmap Write field map volume.
-     * @param save_shift Write pixel shift volume.
-     * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
-     * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
-     * @param shift_in_file Filename for reading pixel shift volume.
-     * @param shift_out_file Filename for saving pixel shift volume.
-     * @param smooth2d Apply 2d gaussian smoothing of sigma n (in mm).
-     * @param smooth3d Apply 3d gaussian smoothing of sigma n (in mm).
-     * @param unwarp_direction 'x' or 'y' or 'z' or 'x-' or 'y-' or 'z-'. Specifies direction of warping (default y).
-     * @param unwarped_file Apply unwarping and save as filename.
-     * @param warped_file Apply forward warping and save as filename.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fugue" as const,
+        "@type": "fsl.fugue" as const,
         "despike_2dfilter": despike_2dfilter,
         "forward_warping": forward_warping,
         "icorr": icorr,
@@ -264,18 +264,18 @@ function fugue_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fugue_cargs(
     params: FugueParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fugue");
     if ((params["asym_se_time"] ?? null) !== null) {
@@ -381,18 +381,18 @@ function fugue_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fugue_outputs(
     params: FugueParameters,
     execution: Execution,
 ): FugueOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FugueOutputs = {
         root: execution.outputFile("."),
         fmap_out_file_outfile: ((params["fmap_out_file"] ?? null) !== null) ? execution.outputFile([(params["fmap_out_file"] ?? null)].join('')) : null,
@@ -404,22 +404,22 @@ function fugue_outputs(
 }
 
 
+/**
+ * FMRIB's Utility for Geometric Unwarping of EPIs.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FugueOutputs`).
+ */
 function fugue_execute(
     params: FugueParameters,
     execution: Execution,
 ): FugueOutputs {
-    /**
-     * FMRIB's Utility for Geometric Unwarping of EPIs.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FugueOutputs`).
-     */
     params = execution.params(params)
     const cargs = fugue_cargs(params, execution)
     const ret = fugue_outputs(params, execution)
@@ -428,6 +428,50 @@ function fugue_execute(
 }
 
 
+/**
+ * FMRIB's Utility for Geometric Unwarping of EPIs.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param asym_se_time Set the fieldmap asymmetric spin echo time (sec).
+ * @param despike_2dfilter Apply a 2d de-spiking filter.
+ * @param despike_threshold Specify the threshold for de-spiking (default=3.0).
+ * @param dwell_time Set the epi dwell time per phase-encode line - same as echo spacing - (sec).
+ * @param dwell_to_asym_ratio Set the dwell to asym time ratio.
+ * @param fmap_in_file Filename for loading fieldmap (rad/s).
+ * @param fmap_out_file Filename for saving fieldmap (rad/s).
+ * @param forward_warping Apply forward warping instead of unwarping.
+ * @param fourier_order Apply fourier (sinusoidal) fitting of order n.
+ * @param icorr Apply intensity correction to unwarping (pixel shift method only).
+ * @param icorr_only Apply intensity correction only.
+ * @param in_file Filename of input volume.
+ * @param mask_file Filename for loading valid mask.
+ * @param median_2dfilter Apply 2d median filtering.
+ * @param no_extend Do not apply rigid-body extrapolation to the fieldmap.
+ * @param no_gap_fill Do not apply gap-filling measure to the fieldmap.
+ * @param nokspace Do not use k-space forward warping.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param pava Apply monotonic enforcement via pava.
+ * @param phase_conjugate Apply phase conjugate method of unwarping.
+ * @param phasemap_in_file Filename for input phase image.
+ * @param poly_order Apply polynomial fitting of order n.
+ * @param save_fmap Write field map volume.
+ * @param save_shift Write pixel shift volume.
+ * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
+ * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
+ * @param shift_in_file Filename for reading pixel shift volume.
+ * @param shift_out_file Filename for saving pixel shift volume.
+ * @param smooth2d Apply 2d gaussian smoothing of sigma n (in mm).
+ * @param smooth3d Apply 3d gaussian smoothing of sigma n (in mm).
+ * @param unwarp_direction 'x' or 'y' or 'z' or 'x-' or 'y-' or 'z-'. Specifies direction of warping (default y).
+ * @param unwarped_file Apply unwarping and save as filename.
+ * @param warped_file Apply forward warping and save as filename.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FugueOutputs`).
+ */
 function fugue(
     asym_se_time: number | null = null,
     despike_2dfilter: boolean = false,
@@ -464,50 +508,6 @@ function fugue(
     warped_file: string | null = null,
     runner: Runner | null = null,
 ): FugueOutputs {
-    /**
-     * FMRIB's Utility for Geometric Unwarping of EPIs.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param asym_se_time Set the fieldmap asymmetric spin echo time (sec).
-     * @param despike_2dfilter Apply a 2d de-spiking filter.
-     * @param despike_threshold Specify the threshold for de-spiking (default=3.0).
-     * @param dwell_time Set the epi dwell time per phase-encode line - same as echo spacing - (sec).
-     * @param dwell_to_asym_ratio Set the dwell to asym time ratio.
-     * @param fmap_in_file Filename for loading fieldmap (rad/s).
-     * @param fmap_out_file Filename for saving fieldmap (rad/s).
-     * @param forward_warping Apply forward warping instead of unwarping.
-     * @param fourier_order Apply fourier (sinusoidal) fitting of order n.
-     * @param icorr Apply intensity correction to unwarping (pixel shift method only).
-     * @param icorr_only Apply intensity correction only.
-     * @param in_file Filename of input volume.
-     * @param mask_file Filename for loading valid mask.
-     * @param median_2dfilter Apply 2d median filtering.
-     * @param no_extend Do not apply rigid-body extrapolation to the fieldmap.
-     * @param no_gap_fill Do not apply gap-filling measure to the fieldmap.
-     * @param nokspace Do not use k-space forward warping.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param pava Apply monotonic enforcement via pava.
-     * @param phase_conjugate Apply phase conjugate method of unwarping.
-     * @param phasemap_in_file Filename for input phase image.
-     * @param poly_order Apply polynomial fitting of order n.
-     * @param save_fmap Write field map volume.
-     * @param save_shift Write pixel shift volume.
-     * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
-     * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
-     * @param shift_in_file Filename for reading pixel shift volume.
-     * @param shift_out_file Filename for saving pixel shift volume.
-     * @param smooth2d Apply 2d gaussian smoothing of sigma n (in mm).
-     * @param smooth3d Apply 3d gaussian smoothing of sigma n (in mm).
-     * @param unwarp_direction 'x' or 'y' or 'z' or 'x-' or 'y-' or 'z-'. Specifies direction of warping (default y).
-     * @param unwarped_file Apply unwarping and save as filename.
-     * @param warped_file Apply forward warping and save as filename.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FugueOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FUGUE_METADATA);
     const params = fugue_params(asym_se_time, despike_2dfilter, despike_threshold, dwell_time, dwell_to_asym_ratio, fmap_in_file, fmap_out_file, forward_warping, fourier_order, icorr, icorr_only, in_file, mask_file, median_2dfilter, no_extend, no_gap_fill, nokspace, output_type, pava, phase_conjugate, phasemap_in_file, poly_order, save_fmap, save_shift, save_unmasked_fmap, save_unmasked_shift, shift_in_file, shift_out_file, smooth2d, smooth3d, unwarp_direction, unwarped_file, warped_file)
@@ -520,5 +520,8 @@ export {
       FugueOutputs,
       FugueParameters,
       fugue,
+      fugue_cargs,
+      fugue_execute,
+      fugue_outputs,
       fugue_params,
 };

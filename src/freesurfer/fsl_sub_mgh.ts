@@ -12,7 +12,7 @@ const FSL_SUB_MGH_METADATA: Metadata = {
 
 
 interface FslSubMghParameters {
-    "__STYXTYPE__": "fsl_sub_mgh";
+    "@type": "freesurfer.fsl_sub_mgh";
     "estimated_time"?: number | null | undefined;
     "queue_name"?: string | null | undefined;
     "architecture"?: string | null | undefined;
@@ -29,33 +29,33 @@ interface FslSubMghParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_sub_mgh": fsl_sub_mgh_cargs,
+        "freesurfer.fsl_sub_mgh": fsl_sub_mgh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface FslSubMghOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param estimated_time Estimated job length in minutes, used to auto-set queue name
+ * @param queue_name Queue name. Possible values are 'verylong.q', 'long.q' and 'short.q'. Default is 'long.q'.
+ * @param architecture Architecture [e.g., darwin or lx24-amd64]
+ * @param job_priority Job priority [0:-1024]. Default is 0.
+ * @param email_address Email address to send notifications. Default is root@fmrib.ox.ac.uk.
+ * @param hold_job Job ID to place a hold on this task until completion.
+ * @param task_file Task file of commands to execute in parallel.
+ * @param job_name Specify job name as it will appear on the queue.
+ * @param log_dir Output directory for log files.
+ * @param mail_options Change the SGE mail options.
+ * @param flags_in_scripts Use flags embedded in scripts to set SGE queuing options.
+ * @param verbose Verbose mode.
+ * @param shell_path Change the PBS shell option.
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_sub_mgh_params(
     estimated_time: number | null = null,
     queue_name: string | null = "long.q",
@@ -90,27 +109,8 @@ function fsl_sub_mgh_params(
     verbose: boolean = false,
     shell_path: string | null = null,
 ): FslSubMghParameters {
-    /**
-     * Build parameters.
-    
-     * @param estimated_time Estimated job length in minutes, used to auto-set queue name
-     * @param queue_name Queue name. Possible values are 'verylong.q', 'long.q' and 'short.q'. Default is 'long.q'.
-     * @param architecture Architecture [e.g., darwin or lx24-amd64]
-     * @param job_priority Job priority [0:-1024]. Default is 0.
-     * @param email_address Email address to send notifications. Default is root@fmrib.ox.ac.uk.
-     * @param hold_job Job ID to place a hold on this task until completion.
-     * @param task_file Task file of commands to execute in parallel.
-     * @param job_name Specify job name as it will appear on the queue.
-     * @param log_dir Output directory for log files.
-     * @param mail_options Change the SGE mail options.
-     * @param flags_in_scripts Use flags embedded in scripts to set SGE queuing options.
-     * @param verbose Verbose mode.
-     * @param shell_path Change the PBS shell option.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_sub_mgh" as const,
+        "@type": "freesurfer.fsl_sub_mgh" as const,
         "flags_in_scripts": flags_in_scripts,
         "verbose": verbose,
     };
@@ -151,18 +151,18 @@ function fsl_sub_mgh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_sub_mgh_cargs(
     params: FslSubMghParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_sub_mgh");
     if ((params["estimated_time"] ?? null) !== null) {
@@ -241,18 +241,18 @@ function fsl_sub_mgh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_sub_mgh_outputs(
     params: FslSubMghParameters,
     execution: Execution,
 ): FslSubMghOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslSubMghOutputs = {
         root: execution.outputFile("."),
     };
@@ -260,22 +260,22 @@ function fsl_sub_mgh_outputs(
 }
 
 
+/**
+ * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
+ */
 function fsl_sub_mgh_execute(
     params: FslSubMghParameters,
     execution: Execution,
 ): FslSubMghOutputs {
-    /**
-     * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_sub_mgh_cargs(params, execution)
     const ret = fsl_sub_mgh_outputs(params, execution)
@@ -284,6 +284,30 @@ function fsl_sub_mgh_execute(
 }
 
 
+/**
+ * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param estimated_time Estimated job length in minutes, used to auto-set queue name
+ * @param queue_name Queue name. Possible values are 'verylong.q', 'long.q' and 'short.q'. Default is 'long.q'.
+ * @param architecture Architecture [e.g., darwin or lx24-amd64]
+ * @param job_priority Job priority [0:-1024]. Default is 0.
+ * @param email_address Email address to send notifications. Default is root@fmrib.ox.ac.uk.
+ * @param hold_job Job ID to place a hold on this task until completion.
+ * @param task_file Task file of commands to execute in parallel.
+ * @param job_name Specify job name as it will appear on the queue.
+ * @param log_dir Output directory for log files.
+ * @param mail_options Change the SGE mail options.
+ * @param flags_in_scripts Use flags embedded in scripts to set SGE queuing options.
+ * @param verbose Verbose mode.
+ * @param shell_path Change the PBS shell option.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
+ */
 function fsl_sub_mgh(
     estimated_time: number | null = null,
     queue_name: string | null = "long.q",
@@ -300,30 +324,6 @@ function fsl_sub_mgh(
     shell_path: string | null = null,
     runner: Runner | null = null,
 ): FslSubMghOutputs {
-    /**
-     * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param estimated_time Estimated job length in minutes, used to auto-set queue name
-     * @param queue_name Queue name. Possible values are 'verylong.q', 'long.q' and 'short.q'. Default is 'long.q'.
-     * @param architecture Architecture [e.g., darwin or lx24-amd64]
-     * @param job_priority Job priority [0:-1024]. Default is 0.
-     * @param email_address Email address to send notifications. Default is root@fmrib.ox.ac.uk.
-     * @param hold_job Job ID to place a hold on this task until completion.
-     * @param task_file Task file of commands to execute in parallel.
-     * @param job_name Specify job name as it will appear on the queue.
-     * @param log_dir Output directory for log files.
-     * @param mail_options Change the SGE mail options.
-     * @param flags_in_scripts Use flags embedded in scripts to set SGE queuing options.
-     * @param verbose Verbose mode.
-     * @param shell_path Change the PBS shell option.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_SUB_MGH_METADATA);
     const params = fsl_sub_mgh_params(estimated_time, queue_name, architecture, job_priority, email_address, hold_job, task_file, job_name, log_dir, mail_options, flags_in_scripts, verbose, shell_path)
@@ -336,5 +336,8 @@ export {
       FslSubMghOutputs,
       FslSubMghParameters,
       fsl_sub_mgh,
+      fsl_sub_mgh_cargs,
+      fsl_sub_mgh_execute,
+      fsl_sub_mgh_outputs,
       fsl_sub_mgh_params,
 };

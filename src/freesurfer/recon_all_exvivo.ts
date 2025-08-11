@@ -12,40 +12,40 @@ const RECON_ALL_EXVIVO_METADATA: Metadata = {
 
 
 interface ReconAllExvivoParameters {
-    "__STYXTYPE__": "recon-all-exvivo";
+    "@type": "freesurfer.recon-all-exvivo";
     "subject_id": string;
     "hemisphere"?: string | null | undefined;
     "nocerebellum": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "recon-all-exvivo": recon_all_exvivo_cargs,
+        "freesurfer.recon-all-exvivo": recon_all_exvivo_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface ReconAllExvivoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject identifier
+ * @param hemisphere Specify hemisphere: -lh for left, -rh for right hemisphere
+ * @param nocerebellum Do not process cerebellum
+ *
+ * @returns Parameter dictionary
+ */
 function recon_all_exvivo_params(
     subject_id: string,
     hemisphere: string | null = null,
     nocerebellum: boolean = false,
 ): ReconAllExvivoParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject identifier
-     * @param hemisphere Specify hemisphere: -lh for left, -rh for right hemisphere
-     * @param nocerebellum Do not process cerebellum
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "recon-all-exvivo" as const,
+        "@type": "freesurfer.recon-all-exvivo" as const,
         "subject_id": subject_id,
         "nocerebellum": nocerebellum,
     };
@@ -91,18 +91,18 @@ function recon_all_exvivo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function recon_all_exvivo_cargs(
     params: ReconAllExvivoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("recon-all-exvivo");
     cargs.push(
@@ -122,18 +122,18 @@ function recon_all_exvivo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function recon_all_exvivo_outputs(
     params: ReconAllExvivoParameters,
     execution: Execution,
 ): ReconAllExvivoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReconAllExvivoOutputs = {
         root: execution.outputFile("."),
     };
@@ -141,22 +141,22 @@ function recon_all_exvivo_outputs(
 }
 
 
+/**
+ * A script to perform an ex vivo reconstruction with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
+ */
 function recon_all_exvivo_execute(
     params: ReconAllExvivoParameters,
     execution: Execution,
 ): ReconAllExvivoOutputs {
-    /**
-     * A script to perform an ex vivo reconstruction with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
-     */
     params = execution.params(params)
     const cargs = recon_all_exvivo_cargs(params, execution)
     const ret = recon_all_exvivo_outputs(params, execution)
@@ -165,26 +165,26 @@ function recon_all_exvivo_execute(
 }
 
 
+/**
+ * A script to perform an ex vivo reconstruction with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject identifier
+ * @param hemisphere Specify hemisphere: -lh for left, -rh for right hemisphere
+ * @param nocerebellum Do not process cerebellum
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
+ */
 function recon_all_exvivo(
     subject_id: string,
     hemisphere: string | null = null,
     nocerebellum: boolean = false,
     runner: Runner | null = null,
 ): ReconAllExvivoOutputs {
-    /**
-     * A script to perform an ex vivo reconstruction with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject identifier
-     * @param hemisphere Specify hemisphere: -lh for left, -rh for right hemisphere
-     * @param nocerebellum Do not process cerebellum
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RECON_ALL_EXVIVO_METADATA);
     const params = recon_all_exvivo_params(subject_id, hemisphere, nocerebellum)
@@ -197,5 +197,8 @@ export {
       ReconAllExvivoOutputs,
       ReconAllExvivoParameters,
       recon_all_exvivo,
+      recon_all_exvivo_cargs,
+      recon_all_exvivo_execute,
+      recon_all_exvivo_outputs,
       recon_all_exvivo_params,
 };

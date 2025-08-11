@@ -12,7 +12,7 @@ const V_3DKMEANS_METADATA: Metadata = {
 
 
 interface V3dkmeansParameters {
-    "__STYXTYPE__": "3dkmeans";
+    "@type": "afni.3dkmeans";
     "version": boolean;
     "input": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
@@ -35,35 +35,35 @@ interface V3dkmeansParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dkmeans": v_3dkmeans_cargs,
+        "afni.3dkmeans": v_3dkmeans_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dkmeans": v_3dkmeans_outputs,
+        "afni.3dkmeans": v_3dkmeans_outputs,
     };
     return outputsFuncs[t];
 }
@@ -110,6 +110,30 @@ interface V3dkmeansOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input data to be clustered. You can specify multiple filenames in sequence and they will be concatenated internally.
+ * @param mask Dataset to be used as a mask; only voxels with nonzero values in 'mset' will be used.
+ * @param mask_range Restrict the voxels from 'mset' to only those mask values between 'a' and 'b' (inclusive).
+ * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program to produce a mask from the resulting 3D brick.
+ * @param jobname Specify a different name for the output files. Default is derived from the input file name.
+ * @param prefix Specify a prefix for the output volumes. Default is the same as jobname.
+ * @param distance_measure Specifies distance measure for clustering. Supported values: 0 (No clustering), 1 (Uncentered correlation distance), 2 (Pearson distance), 3 (Uncentered correlation distance, absolute value), 4 (Pearson distance, absolute value), 5 (Spearman's rank distance), 6 (Kendall's distance), 7 (Euclidean distance), 8 (City-block distance).
+ * @param num_clusters Specify number of clusters.
+ * @param remap_method Reassign clusters numbers based on METHOD: NONE (default), COUNT, iCOUNT, MAG, iMAG.
+ * @param labeltable Attach labeltable to clustering output.
+ * @param clabels Provide a label for each cluster. Labels cannot start with '-'.
+ * @param clust_init Specify a dataset to initialize clustering. If provided, sets -r 0.
+ * @param num_repeats Number of times the k-means clustering algorithm is run.
+ * @param rsigs Calculate distances from each voxel's signature to the signatures in this multi-column file. No clustering done.
+ * @param verbose Enable verbose mode.
+ * @param write_dists Output text files containing various distance measures.
+ * @param voxdbg Output debugging info for specified voxel (I J K).
+ * @param seed Seed for the random number generator. Default is 1234567.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dkmeans_params(
     input: Array<InputPathType>,
     version: boolean = false,
@@ -131,32 +155,8 @@ function v_3dkmeans_params(
     voxdbg: Array<number> | null = null,
     seed: number | null = null,
 ): V3dkmeansParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input data to be clustered. You can specify multiple filenames in sequence and they will be concatenated internally.
-     * @param mask Dataset to be used as a mask; only voxels with nonzero values in 'mset' will be used.
-     * @param mask_range Restrict the voxels from 'mset' to only those mask values between 'a' and 'b' (inclusive).
-     * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program to produce a mask from the resulting 3D brick.
-     * @param jobname Specify a different name for the output files. Default is derived from the input file name.
-     * @param prefix Specify a prefix for the output volumes. Default is the same as jobname.
-     * @param distance_measure Specifies distance measure for clustering. Supported values: 0 (No clustering), 1 (Uncentered correlation distance), 2 (Pearson distance), 3 (Uncentered correlation distance, absolute value), 4 (Pearson distance, absolute value), 5 (Spearman's rank distance), 6 (Kendall's distance), 7 (Euclidean distance), 8 (City-block distance).
-     * @param num_clusters Specify number of clusters.
-     * @param remap_method Reassign clusters numbers based on METHOD: NONE (default), COUNT, iCOUNT, MAG, iMAG.
-     * @param labeltable Attach labeltable to clustering output.
-     * @param clabels Provide a label for each cluster. Labels cannot start with '-'.
-     * @param clust_init Specify a dataset to initialize clustering. If provided, sets -r 0.
-     * @param num_repeats Number of times the k-means clustering algorithm is run.
-     * @param rsigs Calculate distances from each voxel's signature to the signatures in this multi-column file. No clustering done.
-     * @param verbose Enable verbose mode.
-     * @param write_dists Output text files containing various distance measures.
-     * @param voxdbg Output debugging info for specified voxel (I J K).
-     * @param seed Seed for the random number generator. Default is 1234567.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dkmeans" as const,
+        "@type": "afni.3dkmeans" as const,
         "version": version,
         "input": input,
         "verbose": verbose,
@@ -211,18 +211,18 @@ function v_3dkmeans_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dkmeans_cargs(
     params: V3dkmeansParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dkmeans");
     if ((params["version"] ?? null)) {
@@ -332,18 +332,18 @@ function v_3dkmeans_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dkmeans_outputs(
     params: V3dkmeansParameters,
     execution: Execution,
 ): V3dkmeansOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dkmeansOutputs = {
         root: execution.outputFile("."),
         cluster_membership: ((params["jobname"] ?? null) !== null) ? execution.outputFile([(params["jobname"] ?? null), "_membership.nii.gz"].join('')) : null,
@@ -358,22 +358,22 @@ function v_3dkmeans_outputs(
 }
 
 
+/**
+ * 3d+t Clustering segmentation based on The C clustering library.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
+ */
 function v_3dkmeans_execute(
     params: V3dkmeansParameters,
     execution: Execution,
 ): V3dkmeansOutputs {
-    /**
-     * 3d+t Clustering segmentation based on The C clustering library.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dkmeans_cargs(params, execution)
     const ret = v_3dkmeans_outputs(params, execution)
@@ -382,6 +382,35 @@ function v_3dkmeans_execute(
 }
 
 
+/**
+ * 3d+t Clustering segmentation based on The C clustering library.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input data to be clustered. You can specify multiple filenames in sequence and they will be concatenated internally.
+ * @param mask Dataset to be used as a mask; only voxels with nonzero values in 'mset' will be used.
+ * @param mask_range Restrict the voxels from 'mset' to only those mask values between 'a' and 'b' (inclusive).
+ * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program to produce a mask from the resulting 3D brick.
+ * @param jobname Specify a different name for the output files. Default is derived from the input file name.
+ * @param prefix Specify a prefix for the output volumes. Default is the same as jobname.
+ * @param distance_measure Specifies distance measure for clustering. Supported values: 0 (No clustering), 1 (Uncentered correlation distance), 2 (Pearson distance), 3 (Uncentered correlation distance, absolute value), 4 (Pearson distance, absolute value), 5 (Spearman's rank distance), 6 (Kendall's distance), 7 (Euclidean distance), 8 (City-block distance).
+ * @param num_clusters Specify number of clusters.
+ * @param remap_method Reassign clusters numbers based on METHOD: NONE (default), COUNT, iCOUNT, MAG, iMAG.
+ * @param labeltable Attach labeltable to clustering output.
+ * @param clabels Provide a label for each cluster. Labels cannot start with '-'.
+ * @param clust_init Specify a dataset to initialize clustering. If provided, sets -r 0.
+ * @param num_repeats Number of times the k-means clustering algorithm is run.
+ * @param rsigs Calculate distances from each voxel's signature to the signatures in this multi-column file. No clustering done.
+ * @param verbose Enable verbose mode.
+ * @param write_dists Output text files containing various distance measures.
+ * @param voxdbg Output debugging info for specified voxel (I J K).
+ * @param seed Seed for the random number generator. Default is 1234567.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
+ */
 function v_3dkmeans(
     input: Array<InputPathType>,
     version: boolean = false,
@@ -404,35 +433,6 @@ function v_3dkmeans(
     seed: number | null = null,
     runner: Runner | null = null,
 ): V3dkmeansOutputs {
-    /**
-     * 3d+t Clustering segmentation based on The C clustering library.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input data to be clustered. You can specify multiple filenames in sequence and they will be concatenated internally.
-     * @param mask Dataset to be used as a mask; only voxels with nonzero values in 'mset' will be used.
-     * @param mask_range Restrict the voxels from 'mset' to only those mask values between 'a' and 'b' (inclusive).
-     * @param cmask Execute the options enclosed in single quotes as a 3dcalc-like program to produce a mask from the resulting 3D brick.
-     * @param jobname Specify a different name for the output files. Default is derived from the input file name.
-     * @param prefix Specify a prefix for the output volumes. Default is the same as jobname.
-     * @param distance_measure Specifies distance measure for clustering. Supported values: 0 (No clustering), 1 (Uncentered correlation distance), 2 (Pearson distance), 3 (Uncentered correlation distance, absolute value), 4 (Pearson distance, absolute value), 5 (Spearman's rank distance), 6 (Kendall's distance), 7 (Euclidean distance), 8 (City-block distance).
-     * @param num_clusters Specify number of clusters.
-     * @param remap_method Reassign clusters numbers based on METHOD: NONE (default), COUNT, iCOUNT, MAG, iMAG.
-     * @param labeltable Attach labeltable to clustering output.
-     * @param clabels Provide a label for each cluster. Labels cannot start with '-'.
-     * @param clust_init Specify a dataset to initialize clustering. If provided, sets -r 0.
-     * @param num_repeats Number of times the k-means clustering algorithm is run.
-     * @param rsigs Calculate distances from each voxel's signature to the signatures in this multi-column file. No clustering done.
-     * @param verbose Enable verbose mode.
-     * @param write_dists Output text files containing various distance measures.
-     * @param voxdbg Output debugging info for specified voxel (I J K).
-     * @param seed Seed for the random number generator. Default is 1234567.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DKMEANS_METADATA);
     const params = v_3dkmeans_params(input, version, mask, mask_range, cmask, jobname, prefix, distance_measure, num_clusters, remap_method, labeltable, clabels, clust_init, num_repeats, rsigs, verbose, write_dists, voxdbg, seed)
@@ -445,5 +445,8 @@ export {
       V3dkmeansParameters,
       V_3DKMEANS_METADATA,
       v_3dkmeans,
+      v_3dkmeans_cargs,
+      v_3dkmeans_execute,
+      v_3dkmeans_outputs,
       v_3dkmeans_params,
 };

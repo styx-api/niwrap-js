@@ -12,7 +12,7 @@ const MRI_SYNTHSEG_METADATA: Metadata = {
 
 
 interface MriSynthsegParameters {
-    "__STYXTYPE__": "mri_synthseg";
+    "@type": "freesurfer.mri_synthseg";
     "input_image": InputPathType;
     "output_segmentation": string;
     "cortex_parcellation": boolean;
@@ -31,35 +31,35 @@ interface MriSynthsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_synthseg": mri_synthseg_cargs,
+        "freesurfer.mri_synthseg": mri_synthseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_synthseg": mri_synthseg_outputs,
+        "freesurfer.mri_synthseg": mri_synthseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,27 @@ interface MriSynthsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Image(s) to segment. Can be a path to an image or to a folder.
+ * @param output_segmentation Segmentation output(s). Must be a folder if --i designates a folder.
+ * @param cortex_parcellation Perform cortex parcellation.
+ * @param robust_prediction Use robust predictions (slower).
+ * @param fast_prediction Bypass some processing for faster prediction.
+ * @param clip_ct Clip CT scans in Hounsfield scale to [0, 80].
+ * @param output_volume Output CSV file with volumes for all structures and subjects.
+ * @param output_qc Output CSV file with QC scores for all subjects.
+ * @param output_posteriors Posteriors output(s). Must be a folder if --i designates a folder.
+ * @param resampled_images Resampled image(s). Must be a folder if --i is a folder.
+ * @param image_patch_size Only analyse an image patch of the given size.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param cpu Enforce running with CPU rather than GPU.
+ * @param version_1 Use SynthSeg 1.0 (updated 25/06/22).
+ * @param photo_synthseg Photo-SynthSeg: segment 3D reconstructed stack of coronal dissection photos of the cerebrum; must be left, right, or both.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_synthseg_params(
     input_image: InputPathType,
     output_segmentation: string,
@@ -115,29 +136,8 @@ function mri_synthseg_params(
     version_1: boolean = false,
     photo_synthseg: string | null = null,
 ): MriSynthsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Image(s) to segment. Can be a path to an image or to a folder.
-     * @param output_segmentation Segmentation output(s). Must be a folder if --i designates a folder.
-     * @param cortex_parcellation Perform cortex parcellation.
-     * @param robust_prediction Use robust predictions (slower).
-     * @param fast_prediction Bypass some processing for faster prediction.
-     * @param clip_ct Clip CT scans in Hounsfield scale to [0, 80].
-     * @param output_volume Output CSV file with volumes for all structures and subjects.
-     * @param output_qc Output CSV file with QC scores for all subjects.
-     * @param output_posteriors Posteriors output(s). Must be a folder if --i designates a folder.
-     * @param resampled_images Resampled image(s). Must be a folder if --i is a folder.
-     * @param image_patch_size Only analyse an image patch of the given size.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param cpu Enforce running with CPU rather than GPU.
-     * @param version_1 Use SynthSeg 1.0 (updated 25/06/22).
-     * @param photo_synthseg Photo-SynthSeg: segment 3D reconstructed stack of coronal dissection photos of the cerebrum; must be left, right, or both.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_synthseg" as const,
+        "@type": "freesurfer.mri_synthseg" as const,
         "input_image": input_image,
         "output_segmentation": output_segmentation,
         "cortex_parcellation": cortex_parcellation,
@@ -172,18 +172,18 @@ function mri_synthseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_synthseg_cargs(
     params: MriSynthsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_synthseg");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -231,18 +231,18 @@ function mri_synthseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_synthseg_outputs(
     params: MriSynthsegParameters,
     execution: Execution,
 ): MriSynthsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSynthsegOutputs = {
         root: execution.outputFile("."),
         output_segmentation_file: execution.outputFile([(params["output_segmentation"] ?? null)].join('')),
@@ -255,22 +255,22 @@ function mri_synthseg_outputs(
 }
 
 
+/**
+ * SynthSeg is a tool for brain image segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
+ */
 function mri_synthseg_execute(
     params: MriSynthsegParameters,
     execution: Execution,
 ): MriSynthsegOutputs {
-    /**
-     * SynthSeg is a tool for brain image segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_synthseg_cargs(params, execution)
     const ret = mri_synthseg_outputs(params, execution)
@@ -279,6 +279,32 @@ function mri_synthseg_execute(
 }
 
 
+/**
+ * SynthSeg is a tool for brain image segmentation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Image(s) to segment. Can be a path to an image or to a folder.
+ * @param output_segmentation Segmentation output(s). Must be a folder if --i designates a folder.
+ * @param cortex_parcellation Perform cortex parcellation.
+ * @param robust_prediction Use robust predictions (slower).
+ * @param fast_prediction Bypass some processing for faster prediction.
+ * @param clip_ct Clip CT scans in Hounsfield scale to [0, 80].
+ * @param output_volume Output CSV file with volumes for all structures and subjects.
+ * @param output_qc Output CSV file with QC scores for all subjects.
+ * @param output_posteriors Posteriors output(s). Must be a folder if --i designates a folder.
+ * @param resampled_images Resampled image(s). Must be a folder if --i is a folder.
+ * @param image_patch_size Only analyse an image patch of the given size.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param cpu Enforce running with CPU rather than GPU.
+ * @param version_1 Use SynthSeg 1.0 (updated 25/06/22).
+ * @param photo_synthseg Photo-SynthSeg: segment 3D reconstructed stack of coronal dissection photos of the cerebrum; must be left, right, or both.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
+ */
 function mri_synthseg(
     input_image: InputPathType,
     output_segmentation: string,
@@ -297,32 +323,6 @@ function mri_synthseg(
     photo_synthseg: string | null = null,
     runner: Runner | null = null,
 ): MriSynthsegOutputs {
-    /**
-     * SynthSeg is a tool for brain image segmentation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Image(s) to segment. Can be a path to an image or to a folder.
-     * @param output_segmentation Segmentation output(s). Must be a folder if --i designates a folder.
-     * @param cortex_parcellation Perform cortex parcellation.
-     * @param robust_prediction Use robust predictions (slower).
-     * @param fast_prediction Bypass some processing for faster prediction.
-     * @param clip_ct Clip CT scans in Hounsfield scale to [0, 80].
-     * @param output_volume Output CSV file with volumes for all structures and subjects.
-     * @param output_qc Output CSV file with QC scores for all subjects.
-     * @param output_posteriors Posteriors output(s). Must be a folder if --i designates a folder.
-     * @param resampled_images Resampled image(s). Must be a folder if --i is a folder.
-     * @param image_patch_size Only analyse an image patch of the given size.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param cpu Enforce running with CPU rather than GPU.
-     * @param version_1 Use SynthSeg 1.0 (updated 25/06/22).
-     * @param photo_synthseg Photo-SynthSeg: segment 3D reconstructed stack of coronal dissection photos of the cerebrum; must be left, right, or both.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SYNTHSEG_METADATA);
     const params = mri_synthseg_params(input_image, output_segmentation, cortex_parcellation, robust_prediction, fast_prediction, clip_ct, output_volume, output_qc, output_posteriors, resampled_images, image_patch_size, threads, cpu, version_1, photo_synthseg)
@@ -335,5 +335,8 @@ export {
       MriSynthsegOutputs,
       MriSynthsegParameters,
       mri_synthseg,
+      mri_synthseg_cargs,
+      mri_synthseg_execute,
+      mri_synthseg_outputs,
       mri_synthseg_params,
 };

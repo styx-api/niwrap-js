@@ -12,7 +12,7 @@ const FIRST_UTILS_METADATA: Metadata = {
 
 
 interface FirstUtilsParameters {
-    "__STYXTYPE__": "first_utils";
+    "@type": "fsl.first_utils";
     "input_file": InputPathType;
     "output_name": string;
     "norm_factors"?: InputPathType | null | undefined;
@@ -48,33 +48,33 @@ interface FirstUtilsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "first_utils": first_utils_cargs,
+        "fsl.first_utils": first_utils_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -94,6 +94,44 @@ interface FirstUtilsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of input image/mesh/bvars
+ * @param output_name Output name
+ * @param norm_factors Filename of normalization factors
+ * @param reference_image Filename of reference image
+ * @param extra_path Specifies extra path to image in .bvars file
+ * @param flirt_matrices Text file containing filenames of flirt matrices
+ * @param use_scale Do stats
+ * @param dice_overlap Calculates Dice overlap
+ * @param input_mesh Filename of input mesh
+ * @param use_norm Normalize volumes measurements
+ * @param surface_out Output vertex analysis on the surface
+ * @param threshold Threshold for clean up
+ * @param mesh_label Specifies the label used to fill the mesh
+ * @param use_bvars Operate using the mode parameters output from FIRST
+ * @param use_recon_mni Reconstruct meshes in MNI space
+ * @param vertex_analysis Perform vertex-wise stats from bvars
+ * @param use_recon_native Reconstruct meshes in native space
+ * @param use_rigid_align Register meshes using 6 degree of freedom (7 if useScale is used)
+ * @param design_matrix Filename of fsl design matrix
+ * @param recon_mesh_from_bvars Convert bvars to mesh
+ * @param read_bvars Read bvars from binary format
+ * @param mesh_to_vol Convert mesh to an image
+ * @param centre_origin Places origin of mesh at the centre of the image
+ * @param save_vertices Filename for saving matrix of vertex coords: (all x, then all y, then all z) by Nsubjects
+ * @param verbose Output F-stats to standard out
+ * @param use_pca_filter Smooths the surface by truncating the mode parameters
+ * @param num_modes Number of modes to retain per structure
+ * @param single_boundary_corr Correct boundary voxels of a single structure
+ * @param do_mvglm Perform multivariate general linear model analysis
+ * @param concat_bvars Concat bvars from binary format
+ * @param debug_mode Turn on debugging mode
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function first_utils_params(
     input_file: InputPathType,
     output_name: string,
@@ -128,46 +166,8 @@ function first_utils_params(
     debug_mode: boolean = false,
     help: boolean = false,
 ): FirstUtilsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of input image/mesh/bvars
-     * @param output_name Output name
-     * @param norm_factors Filename of normalization factors
-     * @param reference_image Filename of reference image
-     * @param extra_path Specifies extra path to image in .bvars file
-     * @param flirt_matrices Text file containing filenames of flirt matrices
-     * @param use_scale Do stats
-     * @param dice_overlap Calculates Dice overlap
-     * @param input_mesh Filename of input mesh
-     * @param use_norm Normalize volumes measurements
-     * @param surface_out Output vertex analysis on the surface
-     * @param threshold Threshold for clean up
-     * @param mesh_label Specifies the label used to fill the mesh
-     * @param use_bvars Operate using the mode parameters output from FIRST
-     * @param use_recon_mni Reconstruct meshes in MNI space
-     * @param vertex_analysis Perform vertex-wise stats from bvars
-     * @param use_recon_native Reconstruct meshes in native space
-     * @param use_rigid_align Register meshes using 6 degree of freedom (7 if useScale is used)
-     * @param design_matrix Filename of fsl design matrix
-     * @param recon_mesh_from_bvars Convert bvars to mesh
-     * @param read_bvars Read bvars from binary format
-     * @param mesh_to_vol Convert mesh to an image
-     * @param centre_origin Places origin of mesh at the centre of the image
-     * @param save_vertices Filename for saving matrix of vertex coords: (all x, then all y, then all z) by Nsubjects
-     * @param verbose Output F-stats to standard out
-     * @param use_pca_filter Smooths the surface by truncating the mode parameters
-     * @param num_modes Number of modes to retain per structure
-     * @param single_boundary_corr Correct boundary voxels of a single structure
-     * @param do_mvglm Perform multivariate general linear model analysis
-     * @param concat_bvars Concat bvars from binary format
-     * @param debug_mode Turn on debugging mode
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "first_utils" as const,
+        "@type": "fsl.first_utils" as const,
         "input_file": input_file,
         "output_name": output_name,
         "use_scale": use_scale,
@@ -225,18 +225,18 @@ function first_utils_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function first_utils_cargs(
     params: FirstUtilsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("first_utils");
     cargs.push(
@@ -371,18 +371,18 @@ function first_utils_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function first_utils_outputs(
     params: FirstUtilsParameters,
     execution: Execution,
 ): FirstUtilsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirstUtilsOutputs = {
         root: execution.outputFile("."),
     };
@@ -390,22 +390,22 @@ function first_utils_outputs(
 }
 
 
+/**
+ * Utilities for handling FIRST's input and output files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
+ */
 function first_utils_execute(
     params: FirstUtilsParameters,
     execution: Execution,
 ): FirstUtilsOutputs {
-    /**
-     * Utilities for handling FIRST's input and output files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
-     */
     params = execution.params(params)
     const cargs = first_utils_cargs(params, execution)
     const ret = first_utils_outputs(params, execution)
@@ -414,6 +414,49 @@ function first_utils_execute(
 }
 
 
+/**
+ * Utilities for handling FIRST's input and output files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Filename of input image/mesh/bvars
+ * @param output_name Output name
+ * @param norm_factors Filename of normalization factors
+ * @param reference_image Filename of reference image
+ * @param extra_path Specifies extra path to image in .bvars file
+ * @param flirt_matrices Text file containing filenames of flirt matrices
+ * @param use_scale Do stats
+ * @param dice_overlap Calculates Dice overlap
+ * @param input_mesh Filename of input mesh
+ * @param use_norm Normalize volumes measurements
+ * @param surface_out Output vertex analysis on the surface
+ * @param threshold Threshold for clean up
+ * @param mesh_label Specifies the label used to fill the mesh
+ * @param use_bvars Operate using the mode parameters output from FIRST
+ * @param use_recon_mni Reconstruct meshes in MNI space
+ * @param vertex_analysis Perform vertex-wise stats from bvars
+ * @param use_recon_native Reconstruct meshes in native space
+ * @param use_rigid_align Register meshes using 6 degree of freedom (7 if useScale is used)
+ * @param design_matrix Filename of fsl design matrix
+ * @param recon_mesh_from_bvars Convert bvars to mesh
+ * @param read_bvars Read bvars from binary format
+ * @param mesh_to_vol Convert mesh to an image
+ * @param centre_origin Places origin of mesh at the centre of the image
+ * @param save_vertices Filename for saving matrix of vertex coords: (all x, then all y, then all z) by Nsubjects
+ * @param verbose Output F-stats to standard out
+ * @param use_pca_filter Smooths the surface by truncating the mode parameters
+ * @param num_modes Number of modes to retain per structure
+ * @param single_boundary_corr Correct boundary voxels of a single structure
+ * @param do_mvglm Perform multivariate general linear model analysis
+ * @param concat_bvars Concat bvars from binary format
+ * @param debug_mode Turn on debugging mode
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
+ */
 function first_utils(
     input_file: InputPathType,
     output_name: string,
@@ -449,49 +492,6 @@ function first_utils(
     help: boolean = false,
     runner: Runner | null = null,
 ): FirstUtilsOutputs {
-    /**
-     * Utilities for handling FIRST's input and output files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Filename of input image/mesh/bvars
-     * @param output_name Output name
-     * @param norm_factors Filename of normalization factors
-     * @param reference_image Filename of reference image
-     * @param extra_path Specifies extra path to image in .bvars file
-     * @param flirt_matrices Text file containing filenames of flirt matrices
-     * @param use_scale Do stats
-     * @param dice_overlap Calculates Dice overlap
-     * @param input_mesh Filename of input mesh
-     * @param use_norm Normalize volumes measurements
-     * @param surface_out Output vertex analysis on the surface
-     * @param threshold Threshold for clean up
-     * @param mesh_label Specifies the label used to fill the mesh
-     * @param use_bvars Operate using the mode parameters output from FIRST
-     * @param use_recon_mni Reconstruct meshes in MNI space
-     * @param vertex_analysis Perform vertex-wise stats from bvars
-     * @param use_recon_native Reconstruct meshes in native space
-     * @param use_rigid_align Register meshes using 6 degree of freedom (7 if useScale is used)
-     * @param design_matrix Filename of fsl design matrix
-     * @param recon_mesh_from_bvars Convert bvars to mesh
-     * @param read_bvars Read bvars from binary format
-     * @param mesh_to_vol Convert mesh to an image
-     * @param centre_origin Places origin of mesh at the centre of the image
-     * @param save_vertices Filename for saving matrix of vertex coords: (all x, then all y, then all z) by Nsubjects
-     * @param verbose Output F-stats to standard out
-     * @param use_pca_filter Smooths the surface by truncating the mode parameters
-     * @param num_modes Number of modes to retain per structure
-     * @param single_boundary_corr Correct boundary voxels of a single structure
-     * @param do_mvglm Perform multivariate general linear model analysis
-     * @param concat_bvars Concat bvars from binary format
-     * @param debug_mode Turn on debugging mode
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_UTILS_METADATA);
     const params = first_utils_params(input_file, output_name, norm_factors, reference_image, extra_path, flirt_matrices, use_scale, dice_overlap, input_mesh, use_norm, surface_out, threshold, mesh_label, use_bvars, use_recon_mni, vertex_analysis, use_recon_native, use_rigid_align, design_matrix, recon_mesh_from_bvars, read_bvars, mesh_to_vol, centre_origin, save_vertices, verbose, use_pca_filter, num_modes, single_boundary_corr, do_mvglm, concat_bvars, debug_mode, help)
@@ -504,5 +504,8 @@ export {
       FirstUtilsOutputs,
       FirstUtilsParameters,
       first_utils,
+      first_utils_cargs,
+      first_utils_execute,
+      first_utils_outputs,
       first_utils_params,
 };

@@ -12,7 +12,7 @@ const WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
 
 
 interface WarpTensorImageMultiTransformParameters {
-    "__STYXTYPE__": "WarpTensorImageMultiTransform";
+    "@type": "ants.WarpTensorImageMultiTransform";
     "image_dimension": number;
     "moving_image": InputPathType;
     "output_image": string;
@@ -26,35 +26,35 @@ interface WarpTensorImageMultiTransformParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_cargs,
+        "ants.WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_outputs,
+        "ants.WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface WarpTensorImageMultiTransformOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimensionality of the image (e.g., 2D or 3D).
+ * @param moving_image The moving image that will be transformed.
+ * @param output_image Path for saving the transformed output image.
+ * @param transforms List of transformations to apply, which can include deformation fields or affine transforms.
+ * @param reference_image Reference image for reslicing or defining the transformation domain.
+ * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
+ * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
+ * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
+ * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
+ * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
+ *
+ * @returns Parameter dictionary
+ */
 function warp_tensor_image_multi_transform_params(
     image_dimension: number,
     moving_image: InputPathType,
@@ -89,24 +105,8 @@ function warp_tensor_image_multi_transform_params(
     ants_prefix: string | null = null,
     ants_prefix_invert: string | null = null,
 ): WarpTensorImageMultiTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimensionality of the image (e.g., 2D or 3D).
-     * @param moving_image The moving image that will be transformed.
-     * @param output_image Path for saving the transformed output image.
-     * @param transforms List of transformations to apply, which can include deformation fields or affine transforms.
-     * @param reference_image Reference image for reslicing or defining the transformation domain.
-     * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
-     * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
-     * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
-     * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
-     * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "WarpTensorImageMultiTransform" as const,
+        "@type": "ants.WarpTensorImageMultiTransform" as const,
         "image_dimension": image_dimension,
         "moving_image": moving_image,
         "output_image": output_image,
@@ -128,18 +128,18 @@ function warp_tensor_image_multi_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warp_tensor_image_multi_transform_cargs(
     params: WarpTensorImageMultiTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("WarpTensorImageMultiTransform");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -177,18 +177,18 @@ function warp_tensor_image_multi_transform_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function warp_tensor_image_multi_transform_outputs(
     params: WarpTensorImageMultiTransformParameters,
     execution: Execution,
 ): WarpTensorImageMultiTransformOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WarpTensorImageMultiTransformOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -197,22 +197,22 @@ function warp_tensor_image_multi_transform_outputs(
 }
 
 
+/**
+ * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
+ */
 function warp_tensor_image_multi_transform_execute(
     params: WarpTensorImageMultiTransformParameters,
     execution: Execution,
 ): WarpTensorImageMultiTransformOutputs {
-    /**
-     * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
-     */
     params = execution.params(params)
     const cargs = warp_tensor_image_multi_transform_cargs(params, execution)
     const ret = warp_tensor_image_multi_transform_outputs(params, execution)
@@ -221,6 +221,27 @@ function warp_tensor_image_multi_transform_execute(
 }
 
 
+/**
+ * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimensionality of the image (e.g., 2D or 3D).
+ * @param moving_image The moving image that will be transformed.
+ * @param output_image Path for saving the transformed output image.
+ * @param transforms List of transformations to apply, which can include deformation fields or affine transforms.
+ * @param reference_image Reference image for reslicing or defining the transformation domain.
+ * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
+ * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
+ * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
+ * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
+ * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
+ */
 function warp_tensor_image_multi_transform(
     image_dimension: number,
     moving_image: InputPathType,
@@ -234,27 +255,6 @@ function warp_tensor_image_multi_transform(
     ants_prefix_invert: string | null = null,
     runner: Runner | null = null,
 ): WarpTensorImageMultiTransformOutputs {
-    /**
-     * WarpTensorImageMultiTransform is used to apply transformations including affine and deformation fields to an image, supporting various interpolation techniques, image header reslicing, and compatibility with ANTS-generated transformations.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimensionality of the image (e.g., 2D or 3D).
-     * @param moving_image The moving image that will be transformed.
-     * @param output_image Path for saving the transformed output image.
-     * @param transforms List of transformations to apply, which can include deformation fields or affine transforms.
-     * @param reference_image Reference image for reslicing or defining the transformation domain.
-     * @param tightest_bounding_box Compute the tightest bounding box using all affine transformations.
-     * @param reslice_by_header Use the orientation matrix and origin encoded in the image file header for reslicing.
-     * @param use_nearest_neighbor Use Nearest Neighbor Interpolator for the transformation.
-     * @param ants_prefix Prefix for ANTS-generated deformation and affine transformation files.
-     * @param ants_prefix_invert Prefix for inverting ANTS-generated affine and deformation transformations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA);
     const params = warp_tensor_image_multi_transform_params(image_dimension, moving_image, output_image, transforms, reference_image, tightest_bounding_box, reslice_by_header, use_nearest_neighbor, ants_prefix, ants_prefix_invert)
@@ -267,5 +267,8 @@ export {
       WarpTensorImageMultiTransformOutputs,
       WarpTensorImageMultiTransformParameters,
       warp_tensor_image_multi_transform,
+      warp_tensor_image_multi_transform_cargs,
+      warp_tensor_image_multi_transform_execute,
+      warp_tensor_image_multi_transform_outputs,
       warp_tensor_image_multi_transform_params,
 };

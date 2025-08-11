@@ -12,7 +12,7 @@ const ZTOP_METADATA: Metadata = {
 
 
 interface ZtopParameters {
-    "__STYXTYPE__": "ztop";
+    "@type": "fsl.ztop";
     "z_score": number;
     "tail_flag": boolean;
     "grf_flag": boolean;
@@ -20,33 +20,33 @@ interface ZtopParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ztop": ztop_cargs,
+        "fsl.ztop": ztop_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface ZtopOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param z_score Input z-score
+ * @param tail_flag Use 2-tailed conversion (default is 1-tailed)
+ * @param grf_flag Use GRF maximum-height theory instead of Gaussian PDF
+ * @param number_of_resels Number of resels (resolution elements) for GRF correction
+ *
+ * @returns Parameter dictionary
+ */
 function ztop_params(
     z_score: number,
     tail_flag: boolean = false,
     grf_flag: boolean = false,
     number_of_resels: number | null = null,
 ): ZtopParameters {
-    /**
-     * Build parameters.
-    
-     * @param z_score Input z-score
-     * @param tail_flag Use 2-tailed conversion (default is 1-tailed)
-     * @param grf_flag Use GRF maximum-height theory instead of Gaussian PDF
-     * @param number_of_resels Number of resels (resolution elements) for GRF correction
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ztop" as const,
+        "@type": "fsl.ztop" as const,
         "z_score": z_score,
         "tail_flag": tail_flag,
         "grf_flag": grf_flag,
@@ -95,18 +95,18 @@ function ztop_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ztop_cargs(
     params: ZtopParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ztop");
     cargs.push(String((params["z_score"] ?? null)));
@@ -123,18 +123,18 @@ function ztop_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ztop_outputs(
     params: ZtopParameters,
     execution: Execution,
 ): ZtopOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ZtopOutputs = {
         root: execution.outputFile("."),
     };
@@ -142,22 +142,22 @@ function ztop_outputs(
 }
 
 
+/**
+ * Converts a z-score to a p-value.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ZtopOutputs`).
+ */
 function ztop_execute(
     params: ZtopParameters,
     execution: Execution,
 ): ZtopOutputs {
-    /**
-     * Converts a z-score to a p-value.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ZtopOutputs`).
-     */
     params = execution.params(params)
     const cargs = ztop_cargs(params, execution)
     const ret = ztop_outputs(params, execution)
@@ -166,6 +166,21 @@ function ztop_execute(
 }
 
 
+/**
+ * Converts a z-score to a p-value.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param z_score Input z-score
+ * @param tail_flag Use 2-tailed conversion (default is 1-tailed)
+ * @param grf_flag Use GRF maximum-height theory instead of Gaussian PDF
+ * @param number_of_resels Number of resels (resolution elements) for GRF correction
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ZtopOutputs`).
+ */
 function ztop(
     z_score: number,
     tail_flag: boolean = false,
@@ -173,21 +188,6 @@ function ztop(
     number_of_resels: number | null = null,
     runner: Runner | null = null,
 ): ZtopOutputs {
-    /**
-     * Converts a z-score to a p-value.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param z_score Input z-score
-     * @param tail_flag Use 2-tailed conversion (default is 1-tailed)
-     * @param grf_flag Use GRF maximum-height theory instead of Gaussian PDF
-     * @param number_of_resels Number of resels (resolution elements) for GRF correction
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ZtopOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ZTOP_METADATA);
     const params = ztop_params(z_score, tail_flag, grf_flag, number_of_resels)
@@ -200,5 +200,8 @@ export {
       ZtopOutputs,
       ZtopParameters,
       ztop,
+      ztop_cargs,
+      ztop_execute,
+      ztop_outputs,
       ztop_params,
 };

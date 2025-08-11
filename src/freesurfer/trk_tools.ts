@@ -12,7 +12,7 @@ const TRK_TOOLS_METADATA: Metadata = {
 
 
 interface TrkToolsParameters {
-    "__STYXTYPE__": "trk_tools";
+    "@type": "freesurfer.trk_tools";
     "reference_image": InputPathType;
     "input_trk": InputPathType;
     "output_trk"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface TrkToolsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "trk_tools": trk_tools_cargs,
+        "freesurfer.trk_tools": trk_tools_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "trk_tools": trk_tools_outputs,
+        "freesurfer.trk_tools": trk_tools_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,18 @@ interface TrkToolsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Reference image for TRK processing
+ * @param input_trk Input TRK file to be processed
+ * @param output_trk Output TRK file
+ * @param output_image Export TRK into an image
+ * @param update_header Update TRK header with reference image
+ * @param output_vtk Output streamlines in VTK format
+ *
+ * @returns Parameter dictionary
+ */
 function trk_tools_params(
     reference_image: InputPathType,
     input_trk: InputPathType,
@@ -89,20 +101,8 @@ function trk_tools_params(
     update_header: boolean = false,
     output_vtk: string | null = null,
 ): TrkToolsParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Reference image for TRK processing
-     * @param input_trk Input TRK file to be processed
-     * @param output_trk Output TRK file
-     * @param output_image Export TRK into an image
-     * @param update_header Update TRK header with reference image
-     * @param output_vtk Output streamlines in VTK format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "trk_tools" as const,
+        "@type": "freesurfer.trk_tools" as const,
         "reference_image": reference_image,
         "input_trk": input_trk,
         "update_header": update_header,
@@ -120,18 +120,18 @@ function trk_tools_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function trk_tools_cargs(
     params: TrkToolsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("trk_tools");
     cargs.push(
@@ -167,18 +167,18 @@ function trk_tools_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function trk_tools_outputs(
     params: TrkToolsParameters,
     execution: Execution,
 ): TrkToolsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TrkToolsOutputs = {
         root: execution.outputFile("."),
         trk_output_file: ((params["output_trk"] ?? null) !== null) ? execution.outputFile([(params["output_trk"] ?? null)].join('')) : null,
@@ -189,22 +189,22 @@ function trk_tools_outputs(
 }
 
 
+/**
+ * Tool for processing TRK files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
+ */
 function trk_tools_execute(
     params: TrkToolsParameters,
     execution: Execution,
 ): TrkToolsOutputs {
-    /**
-     * Tool for processing TRK files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
-     */
     params = execution.params(params)
     const cargs = trk_tools_cargs(params, execution)
     const ret = trk_tools_outputs(params, execution)
@@ -213,6 +213,23 @@ function trk_tools_execute(
 }
 
 
+/**
+ * Tool for processing TRK files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param reference_image Reference image for TRK processing
+ * @param input_trk Input TRK file to be processed
+ * @param output_trk Output TRK file
+ * @param output_image Export TRK into an image
+ * @param update_header Update TRK header with reference image
+ * @param output_vtk Output streamlines in VTK format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
+ */
 function trk_tools(
     reference_image: InputPathType,
     input_trk: InputPathType,
@@ -222,23 +239,6 @@ function trk_tools(
     output_vtk: string | null = null,
     runner: Runner | null = null,
 ): TrkToolsOutputs {
-    /**
-     * Tool for processing TRK files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param reference_image Reference image for TRK processing
-     * @param input_trk Input TRK file to be processed
-     * @param output_trk Output TRK file
-     * @param output_image Export TRK into an image
-     * @param update_header Update TRK header with reference image
-     * @param output_vtk Output streamlines in VTK format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRK_TOOLS_METADATA);
     const params = trk_tools_params(reference_image, input_trk, output_trk, output_image, update_header, output_vtk)
@@ -251,5 +251,8 @@ export {
       TrkToolsOutputs,
       TrkToolsParameters,
       trk_tools,
+      trk_tools_cargs,
+      trk_tools_execute,
+      trk_tools_outputs,
       trk_tools_params,
 };

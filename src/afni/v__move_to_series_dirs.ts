@@ -12,7 +12,7 @@ const V__MOVE_TO_SERIES_DIRS_METADATA: Metadata = {
 
 
 interface VMoveToSeriesDirsParameters {
-    "__STYXTYPE__": "@move.to.series.dirs";
+    "@type": "afni.@move.to.series.dirs";
     "action"?: "copy" | "move" | null | undefined;
     "dprefix"?: string | null | undefined;
     "tag"?: string | null | undefined;
@@ -24,33 +24,33 @@ interface VMoveToSeriesDirsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@move.to.series.dirs": v__move_to_series_dirs_cargs,
+        "afni.@move.to.series.dirs": v__move_to_series_dirs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface VMoveToSeriesDirsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dicom_files Specify input DICOM files (e.g., IMG*)
+ * @param action Specify action to perform: copy or move. Default is copy.
+ * @param dprefix Specify directory root for output series directories. Default is current directory.
+ * @param tag Specify the DICOM tag to use for partitioning. Default is 0020,0011 (REL Series Number).
+ * @param test Run in test mode, only show what would be done without actually moving any files.
+ * @param help Show help information.
+ * @param hist Show modification history.
+ * @param ver Show version number.
+ *
+ * @returns Parameter dictionary
+ */
 function v__move_to_series_dirs_params(
     dicom_files: Array<InputPathType>,
     action: "copy" | "move" | null = null,
@@ -80,22 +94,8 @@ function v__move_to_series_dirs_params(
     hist: boolean = false,
     ver: boolean = false,
 ): VMoveToSeriesDirsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_files Specify input DICOM files (e.g., IMG*)
-     * @param action Specify action to perform: copy or move. Default is copy.
-     * @param dprefix Specify directory root for output series directories. Default is current directory.
-     * @param tag Specify the DICOM tag to use for partitioning. Default is 0020,0011 (REL Series Number).
-     * @param test Run in test mode, only show what would be done without actually moving any files.
-     * @param help Show help information.
-     * @param hist Show modification history.
-     * @param ver Show version number.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@move.to.series.dirs" as const,
+        "@type": "afni.@move.to.series.dirs" as const,
         "test": test,
         "help": help,
         "hist": hist,
@@ -115,18 +115,18 @@ function v__move_to_series_dirs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__move_to_series_dirs_cargs(
     params: VMoveToSeriesDirsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@move.to.series.dirs");
     if ((params["action"] ?? null) !== null) {
@@ -164,18 +164,18 @@ function v__move_to_series_dirs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__move_to_series_dirs_outputs(
     params: VMoveToSeriesDirsParameters,
     execution: Execution,
 ): VMoveToSeriesDirsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMoveToSeriesDirsOutputs = {
         root: execution.outputFile("."),
     };
@@ -183,22 +183,22 @@ function v__move_to_series_dirs_outputs(
 }
 
 
+/**
+ * Partition DICOM files into series directories by copying or moving them to new series directories.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
+ */
 function v__move_to_series_dirs_execute(
     params: VMoveToSeriesDirsParameters,
     execution: Execution,
 ): VMoveToSeriesDirsOutputs {
-    /**
-     * Partition DICOM files into series directories by copying or moving them to new series directories.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__move_to_series_dirs_cargs(params, execution)
     const ret = v__move_to_series_dirs_outputs(params, execution)
@@ -207,6 +207,25 @@ function v__move_to_series_dirs_execute(
 }
 
 
+/**
+ * Partition DICOM files into series directories by copying or moving them to new series directories.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dicom_files Specify input DICOM files (e.g., IMG*)
+ * @param action Specify action to perform: copy or move. Default is copy.
+ * @param dprefix Specify directory root for output series directories. Default is current directory.
+ * @param tag Specify the DICOM tag to use for partitioning. Default is 0020,0011 (REL Series Number).
+ * @param test Run in test mode, only show what would be done without actually moving any files.
+ * @param help Show help information.
+ * @param hist Show modification history.
+ * @param ver Show version number.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
+ */
 function v__move_to_series_dirs(
     dicom_files: Array<InputPathType>,
     action: "copy" | "move" | null = null,
@@ -218,25 +237,6 @@ function v__move_to_series_dirs(
     ver: boolean = false,
     runner: Runner | null = null,
 ): VMoveToSeriesDirsOutputs {
-    /**
-     * Partition DICOM files into series directories by copying or moving them to new series directories.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dicom_files Specify input DICOM files (e.g., IMG*)
-     * @param action Specify action to perform: copy or move. Default is copy.
-     * @param dprefix Specify directory root for output series directories. Default is current directory.
-     * @param tag Specify the DICOM tag to use for partitioning. Default is 0020,0011 (REL Series Number).
-     * @param test Run in test mode, only show what would be done without actually moving any files.
-     * @param help Show help information.
-     * @param hist Show modification history.
-     * @param ver Show version number.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MOVE_TO_SERIES_DIRS_METADATA);
     const params = v__move_to_series_dirs_params(dicom_files, action, dprefix, tag, test, help, hist, ver)
@@ -249,5 +249,8 @@ export {
       VMoveToSeriesDirsParameters,
       V__MOVE_TO_SERIES_DIRS_METADATA,
       v__move_to_series_dirs,
+      v__move_to_series_dirs_cargs,
+      v__move_to_series_dirs_execute,
+      v__move_to_series_dirs_outputs,
       v__move_to_series_dirs_params,
 };

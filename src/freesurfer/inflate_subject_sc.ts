@@ -12,42 +12,42 @@ const INFLATE_SUBJECT_SC_METADATA: Metadata = {
 
 
 interface InflateSubjectScParameters {
-    "__STYXTYPE__": "inflate_subject_sc";
+    "@type": "freesurfer.inflate_subject_sc";
     "subject_dir": string;
     "verbose": boolean;
     "debug": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "inflate_subject_sc": inflate_subject_sc_cargs,
+        "freesurfer.inflate_subject_sc": inflate_subject_sc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "inflate_subject_sc": inflate_subject_sc_outputs,
+        "freesurfer.inflate_subject_sc": inflate_subject_sc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface InflateSubjectScOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Path to the subject directory.
+ * @param verbose Enable verbose output.
+ * @param debug Enable debug mode.
+ *
+ * @returns Parameter dictionary
+ */
 function inflate_subject_sc_params(
     subject_dir: string,
     verbose: boolean = false,
     debug: boolean = false,
 ): InflateSubjectScParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Path to the subject directory.
-     * @param verbose Enable verbose output.
-     * @param debug Enable debug mode.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inflate_subject_sc" as const,
+        "@type": "freesurfer.inflate_subject_sc" as const,
         "subject_dir": subject_dir,
         "verbose": verbose,
         "debug": debug,
@@ -94,18 +94,18 @@ function inflate_subject_sc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function inflate_subject_sc_cargs(
     params: InflateSubjectScParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("inflate_subject_sc");
     cargs.push((params["subject_dir"] ?? null));
@@ -119,18 +119,18 @@ function inflate_subject_sc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function inflate_subject_sc_outputs(
     params: InflateSubjectScParameters,
     execution: Execution,
 ): InflateSubjectScOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InflateSubjectScOutputs = {
         root: execution.outputFile("."),
         inflated_output: execution.outputFile([(params["subject_dir"] ?? null), "/inflated_output"].join('')),
@@ -139,22 +139,22 @@ function inflate_subject_sc_outputs(
 }
 
 
+/**
+ * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
+ */
 function inflate_subject_sc_execute(
     params: InflateSubjectScParameters,
     execution: Execution,
 ): InflateSubjectScOutputs {
-    /**
-     * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
-     */
     params = execution.params(params)
     const cargs = inflate_subject_sc_cargs(params, execution)
     const ret = inflate_subject_sc_outputs(params, execution)
@@ -163,26 +163,26 @@ function inflate_subject_sc_execute(
 }
 
 
+/**
+ * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Path to the subject directory.
+ * @param verbose Enable verbose output.
+ * @param debug Enable debug mode.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
+ */
 function inflate_subject_sc(
     subject_dir: string,
     verbose: boolean = false,
     debug: boolean = false,
     runner: Runner | null = null,
 ): InflateSubjectScOutputs {
-    /**
-     * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Path to the subject directory.
-     * @param verbose Enable verbose output.
-     * @param debug Enable debug mode.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INFLATE_SUBJECT_SC_METADATA);
     const params = inflate_subject_sc_params(subject_dir, verbose, debug)
@@ -195,5 +195,8 @@ export {
       InflateSubjectScOutputs,
       InflateSubjectScParameters,
       inflate_subject_sc,
+      inflate_subject_sc_cargs,
+      inflate_subject_sc_execute,
+      inflate_subject_sc_outputs,
       inflate_subject_sc_params,
 };

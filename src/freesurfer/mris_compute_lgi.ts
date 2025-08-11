@@ -12,7 +12,7 @@ const MRIS_COMPUTE_LGI_METADATA: Metadata = {
 
 
 interface MrisComputeLgiParameters {
-    "__STYXTYPE__": "mris_compute_lgi";
+    "@type": "freesurfer.mris_compute_lgi";
     "input_surface": InputPathType;
     "close_sphere_size"?: number | null | undefined;
     "smooth_iters"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface MrisComputeLgiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_compute_lgi": mris_compute_lgi_cargs,
+        "freesurfer.mris_compute_lgi": mris_compute_lgi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_compute_lgi": mris_compute_lgi_outputs,
+        "freesurfer.mris_compute_lgi": mris_compute_lgi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisComputeLgiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file, typically lh.pial or rh.pial
+ * @param close_sphere_size Use sphere of specified size in mm for morph closing operation (default: 15mm)
+ * @param smooth_iters Smooth outer-surface specified number of iterations (default: 30)
+ * @param step_size Skip every specified number of vertices when computing lGI (default: 100)
+ * @param echo Enable command echo, for debug
+ * @param dontrun Just show commands (don't run them)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_compute_lgi_params(
     input_surface: InputPathType,
     close_sphere_size: number | null = null,
@@ -81,20 +93,8 @@ function mris_compute_lgi_params(
     echo: boolean = false,
     dontrun: boolean = false,
 ): MrisComputeLgiParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file, typically lh.pial or rh.pial
-     * @param close_sphere_size Use sphere of specified size in mm for morph closing operation (default: 15mm)
-     * @param smooth_iters Smooth outer-surface specified number of iterations (default: 30)
-     * @param step_size Skip every specified number of vertices when computing lGI (default: 100)
-     * @param echo Enable command echo, for debug
-     * @param dontrun Just show commands (don't run them)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_compute_lgi" as const,
+        "@type": "freesurfer.mris_compute_lgi" as const,
         "input_surface": input_surface,
         "echo": echo,
         "dontrun": dontrun,
@@ -112,18 +112,18 @@ function mris_compute_lgi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_compute_lgi_cargs(
     params: MrisComputeLgiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_compute_lgi");
     cargs.push(
@@ -158,18 +158,18 @@ function mris_compute_lgi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_compute_lgi_outputs(
     params: MrisComputeLgiParameters,
     execution: Execution,
 ): MrisComputeLgiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisComputeLgiOutputs = {
         root: execution.outputFile("."),
         output_surface_map: execution.outputFile([path.basename((params["input_surface"] ?? null)), "_lgi"].join('')),
@@ -178,22 +178,22 @@ function mris_compute_lgi_outputs(
 }
 
 
+/**
+ * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
+ */
 function mris_compute_lgi_execute(
     params: MrisComputeLgiParameters,
     execution: Execution,
 ): MrisComputeLgiOutputs {
-    /**
-     * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_compute_lgi_cargs(params, execution)
     const ret = mris_compute_lgi_outputs(params, execution)
@@ -202,6 +202,23 @@ function mris_compute_lgi_execute(
 }
 
 
+/**
+ * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file, typically lh.pial or rh.pial
+ * @param close_sphere_size Use sphere of specified size in mm for morph closing operation (default: 15mm)
+ * @param smooth_iters Smooth outer-surface specified number of iterations (default: 30)
+ * @param step_size Skip every specified number of vertices when computing lGI (default: 100)
+ * @param echo Enable command echo, for debug
+ * @param dontrun Just show commands (don't run them)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
+ */
 function mris_compute_lgi(
     input_surface: InputPathType,
     close_sphere_size: number | null = null,
@@ -211,23 +228,6 @@ function mris_compute_lgi(
     dontrun: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeLgiOutputs {
-    /**
-     * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file, typically lh.pial or rh.pial
-     * @param close_sphere_size Use sphere of specified size in mm for morph closing operation (default: 15mm)
-     * @param smooth_iters Smooth outer-surface specified number of iterations (default: 30)
-     * @param step_size Skip every specified number of vertices when computing lGI (default: 100)
-     * @param echo Enable command echo, for debug
-     * @param dontrun Just show commands (don't run them)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_COMPUTE_LGI_METADATA);
     const params = mris_compute_lgi_params(input_surface, close_sphere_size, smooth_iters, step_size, echo, dontrun)
@@ -240,5 +240,8 @@ export {
       MrisComputeLgiOutputs,
       MrisComputeLgiParameters,
       mris_compute_lgi,
+      mris_compute_lgi_cargs,
+      mris_compute_lgi_execute,
+      mris_compute_lgi_outputs,
       mris_compute_lgi_params,
 };

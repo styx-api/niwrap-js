@@ -12,7 +12,7 @@ const MRI_INFO_METADATA: Metadata = {
 
 
 interface MriInfoParameters {
-    "__STYXTYPE__": "mri_info";
+    "@type": "freesurfer.mri_info";
     "input1": InputPathType;
     "input2"?: InputPathType | null | undefined;
     "conformed": boolean;
@@ -68,33 +68,33 @@ interface MriInfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_info": mri_info_cargs,
+        "freesurfer.mri_info": mri_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -114,6 +114,64 @@ interface MriInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 Primary input file
+ * @param input2 Secondary input file (optional)
+ * @param conformed Print whether a volume is conformed
+ * @param conformed_to_min Print whether a volume is conformed-to-min
+ * @param is_1mm_iso Print whether the voxel size is 1mm isotropic
+ * @param type_ Print the voxel type/precision
+ * @param tr Print TR
+ * @param te Print TE
+ * @param ti Print TI
+ * @param fa Print flip angle
+ * @param pedir Print phase encode direction
+ * @param res Print column, row, slice, and frame resolution
+ * @param cres Print column voxel size
+ * @param rres Print row voxel size
+ * @param sres Print slice voxel size
+ * @param voxvol Print voxel volume
+ * @param voxvolsum Compute sum of all voxels times the voxel volume
+ * @param ncols Print number of columns
+ * @param nrows Print number of rows
+ * @param nslices Print number of slices
+ * @param dim Print number of columns, rows, slices, and frames
+ * @param cdc Print column direction cosine (x_{r,a,s})
+ * @param rdc Print row direction cosine (y_{r,a,s})
+ * @param sdc Print slice direction cosine (z_{r,a,s})
+ * @param vox2ras Print the native/qform vox2ras matrix
+ * @param ras2vox Print the native/qform ras2vox matrix
+ * @param vox2ras_tkr Print the tkregister vox2ras matrix
+ * @param ras2vox_tkr Print the tkregister ras2vox matrix
+ * @param vox2ras_fsl Print the FSL/FLIRT vox2ras matrix
+ * @param tkr2scanner Print tkrRAS-to-scannerRAS matrix
+ * @param scanner2tkr Print scannerRAS-to-tkrRAS matrix
+ * @param ras_good Print the ras_good_flag
+ * @param cras Print the RAS near the center of the volume
+ * @param center Print the RAS at the actual center of the volume
+ * @param zero_cras Zero the center ras
+ * @param p0 Print the RAS at voxel (0,0,0)
+ * @param det Print the determinant of the vox2ras matrix
+ * @param dof Print the degrees of freedom stored in the header
+ * @param nframes Print the number of frames
+ * @param mid_frame Print the middle frame
+ * @param format Print file format
+ * @param orientation Print orientation string (e.g., LPS, RAS, RPI)
+ * @param slicedirection Print primary slice direction (e.g., axial)
+ * @param autoalign Print auto align matrix (if it exists)
+ * @param ctab Print embedded color lookup table
+ * @param cmds Print command-line provenance info
+ * @param dump Print FA, TR, TE, TI, etc
+ * @param voxel_crs Dump voxel value from column, row, slice (0-based, all frames)
+ * @param entropy Compute and print entropy
+ * @param output_file Print flagged results to file
+ * @param orig_ras2vox Print orig Ras2Vox matrix if present
+ * @param in_type Explicitly specify file type
+ *
+ * @returns Parameter dictionary
+ */
 function mri_info_params(
     input1: InputPathType,
     input2: InputPathType | null = null,
@@ -168,66 +226,8 @@ function mri_info_params(
     orig_ras2vox: boolean = false,
     in_type: string | null = null,
 ): MriInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 Primary input file
-     * @param input2 Secondary input file (optional)
-     * @param conformed Print whether a volume is conformed
-     * @param conformed_to_min Print whether a volume is conformed-to-min
-     * @param is_1mm_iso Print whether the voxel size is 1mm isotropic
-     * @param type_ Print the voxel type/precision
-     * @param tr Print TR
-     * @param te Print TE
-     * @param ti Print TI
-     * @param fa Print flip angle
-     * @param pedir Print phase encode direction
-     * @param res Print column, row, slice, and frame resolution
-     * @param cres Print column voxel size
-     * @param rres Print row voxel size
-     * @param sres Print slice voxel size
-     * @param voxvol Print voxel volume
-     * @param voxvolsum Compute sum of all voxels times the voxel volume
-     * @param ncols Print number of columns
-     * @param nrows Print number of rows
-     * @param nslices Print number of slices
-     * @param dim Print number of columns, rows, slices, and frames
-     * @param cdc Print column direction cosine (x_{r,a,s})
-     * @param rdc Print row direction cosine (y_{r,a,s})
-     * @param sdc Print slice direction cosine (z_{r,a,s})
-     * @param vox2ras Print the native/qform vox2ras matrix
-     * @param ras2vox Print the native/qform ras2vox matrix
-     * @param vox2ras_tkr Print the tkregister vox2ras matrix
-     * @param ras2vox_tkr Print the tkregister ras2vox matrix
-     * @param vox2ras_fsl Print the FSL/FLIRT vox2ras matrix
-     * @param tkr2scanner Print tkrRAS-to-scannerRAS matrix
-     * @param scanner2tkr Print scannerRAS-to-tkrRAS matrix
-     * @param ras_good Print the ras_good_flag
-     * @param cras Print the RAS near the center of the volume
-     * @param center Print the RAS at the actual center of the volume
-     * @param zero_cras Zero the center ras
-     * @param p0 Print the RAS at voxel (0,0,0)
-     * @param det Print the determinant of the vox2ras matrix
-     * @param dof Print the degrees of freedom stored in the header
-     * @param nframes Print the number of frames
-     * @param mid_frame Print the middle frame
-     * @param format Print file format
-     * @param orientation Print orientation string (e.g., LPS, RAS, RPI)
-     * @param slicedirection Print primary slice direction (e.g., axial)
-     * @param autoalign Print auto align matrix (if it exists)
-     * @param ctab Print embedded color lookup table
-     * @param cmds Print command-line provenance info
-     * @param dump Print FA, TR, TE, TI, etc
-     * @param voxel_crs Dump voxel value from column, row, slice (0-based, all frames)
-     * @param entropy Compute and print entropy
-     * @param output_file Print flagged results to file
-     * @param orig_ras2vox Print orig Ras2Vox matrix if present
-     * @param in_type Explicitly specify file type
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_info" as const,
+        "@type": "freesurfer.mri_info" as const,
         "input1": input1,
         "conformed": conformed,
         "conformed_to_min": conformed_to_min,
@@ -293,18 +293,18 @@ function mri_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_info_cargs(
     params: MriInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_info");
     cargs.push(execution.inputFile((params["input1"] ?? null)));
@@ -474,18 +474,18 @@ function mri_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_info_outputs(
     params: MriInfoParameters,
     execution: Execution,
 ): MriInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriInfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -493,22 +493,22 @@ function mri_info_outputs(
 }
 
 
+/**
+ * Tool to extract metadata from MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
+ */
 function mri_info_execute(
     params: MriInfoParameters,
     execution: Execution,
 ): MriInfoOutputs {
-    /**
-     * Tool to extract metadata from MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_info_cargs(params, execution)
     const ret = mri_info_outputs(params, execution)
@@ -517,6 +517,69 @@ function mri_info_execute(
 }
 
 
+/**
+ * Tool to extract metadata from MRI volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input1 Primary input file
+ * @param input2 Secondary input file (optional)
+ * @param conformed Print whether a volume is conformed
+ * @param conformed_to_min Print whether a volume is conformed-to-min
+ * @param is_1mm_iso Print whether the voxel size is 1mm isotropic
+ * @param type_ Print the voxel type/precision
+ * @param tr Print TR
+ * @param te Print TE
+ * @param ti Print TI
+ * @param fa Print flip angle
+ * @param pedir Print phase encode direction
+ * @param res Print column, row, slice, and frame resolution
+ * @param cres Print column voxel size
+ * @param rres Print row voxel size
+ * @param sres Print slice voxel size
+ * @param voxvol Print voxel volume
+ * @param voxvolsum Compute sum of all voxels times the voxel volume
+ * @param ncols Print number of columns
+ * @param nrows Print number of rows
+ * @param nslices Print number of slices
+ * @param dim Print number of columns, rows, slices, and frames
+ * @param cdc Print column direction cosine (x_{r,a,s})
+ * @param rdc Print row direction cosine (y_{r,a,s})
+ * @param sdc Print slice direction cosine (z_{r,a,s})
+ * @param vox2ras Print the native/qform vox2ras matrix
+ * @param ras2vox Print the native/qform ras2vox matrix
+ * @param vox2ras_tkr Print the tkregister vox2ras matrix
+ * @param ras2vox_tkr Print the tkregister ras2vox matrix
+ * @param vox2ras_fsl Print the FSL/FLIRT vox2ras matrix
+ * @param tkr2scanner Print tkrRAS-to-scannerRAS matrix
+ * @param scanner2tkr Print scannerRAS-to-tkrRAS matrix
+ * @param ras_good Print the ras_good_flag
+ * @param cras Print the RAS near the center of the volume
+ * @param center Print the RAS at the actual center of the volume
+ * @param zero_cras Zero the center ras
+ * @param p0 Print the RAS at voxel (0,0,0)
+ * @param det Print the determinant of the vox2ras matrix
+ * @param dof Print the degrees of freedom stored in the header
+ * @param nframes Print the number of frames
+ * @param mid_frame Print the middle frame
+ * @param format Print file format
+ * @param orientation Print orientation string (e.g., LPS, RAS, RPI)
+ * @param slicedirection Print primary slice direction (e.g., axial)
+ * @param autoalign Print auto align matrix (if it exists)
+ * @param ctab Print embedded color lookup table
+ * @param cmds Print command-line provenance info
+ * @param dump Print FA, TR, TE, TI, etc
+ * @param voxel_crs Dump voxel value from column, row, slice (0-based, all frames)
+ * @param entropy Compute and print entropy
+ * @param output_file Print flagged results to file
+ * @param orig_ras2vox Print orig Ras2Vox matrix if present
+ * @param in_type Explicitly specify file type
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
+ */
 function mri_info(
     input1: InputPathType,
     input2: InputPathType | null = null,
@@ -572,69 +635,6 @@ function mri_info(
     in_type: string | null = null,
     runner: Runner | null = null,
 ): MriInfoOutputs {
-    /**
-     * Tool to extract metadata from MRI volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input1 Primary input file
-     * @param input2 Secondary input file (optional)
-     * @param conformed Print whether a volume is conformed
-     * @param conformed_to_min Print whether a volume is conformed-to-min
-     * @param is_1mm_iso Print whether the voxel size is 1mm isotropic
-     * @param type_ Print the voxel type/precision
-     * @param tr Print TR
-     * @param te Print TE
-     * @param ti Print TI
-     * @param fa Print flip angle
-     * @param pedir Print phase encode direction
-     * @param res Print column, row, slice, and frame resolution
-     * @param cres Print column voxel size
-     * @param rres Print row voxel size
-     * @param sres Print slice voxel size
-     * @param voxvol Print voxel volume
-     * @param voxvolsum Compute sum of all voxels times the voxel volume
-     * @param ncols Print number of columns
-     * @param nrows Print number of rows
-     * @param nslices Print number of slices
-     * @param dim Print number of columns, rows, slices, and frames
-     * @param cdc Print column direction cosine (x_{r,a,s})
-     * @param rdc Print row direction cosine (y_{r,a,s})
-     * @param sdc Print slice direction cosine (z_{r,a,s})
-     * @param vox2ras Print the native/qform vox2ras matrix
-     * @param ras2vox Print the native/qform ras2vox matrix
-     * @param vox2ras_tkr Print the tkregister vox2ras matrix
-     * @param ras2vox_tkr Print the tkregister ras2vox matrix
-     * @param vox2ras_fsl Print the FSL/FLIRT vox2ras matrix
-     * @param tkr2scanner Print tkrRAS-to-scannerRAS matrix
-     * @param scanner2tkr Print scannerRAS-to-tkrRAS matrix
-     * @param ras_good Print the ras_good_flag
-     * @param cras Print the RAS near the center of the volume
-     * @param center Print the RAS at the actual center of the volume
-     * @param zero_cras Zero the center ras
-     * @param p0 Print the RAS at voxel (0,0,0)
-     * @param det Print the determinant of the vox2ras matrix
-     * @param dof Print the degrees of freedom stored in the header
-     * @param nframes Print the number of frames
-     * @param mid_frame Print the middle frame
-     * @param format Print file format
-     * @param orientation Print orientation string (e.g., LPS, RAS, RPI)
-     * @param slicedirection Print primary slice direction (e.g., axial)
-     * @param autoalign Print auto align matrix (if it exists)
-     * @param ctab Print embedded color lookup table
-     * @param cmds Print command-line provenance info
-     * @param dump Print FA, TR, TE, TI, etc
-     * @param voxel_crs Dump voxel value from column, row, slice (0-based, all frames)
-     * @param entropy Compute and print entropy
-     * @param output_file Print flagged results to file
-     * @param orig_ras2vox Print orig Ras2Vox matrix if present
-     * @param in_type Explicitly specify file type
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_INFO_METADATA);
     const params = mri_info_params(input1, input2, conformed, conformed_to_min, is_1mm_iso, type_, tr, te, ti, fa, pedir, res, cres, rres, sres, voxvol, voxvolsum, ncols, nrows, nslices, dim, cdc, rdc, sdc, vox2ras, ras2vox, vox2ras_tkr, ras2vox_tkr, vox2ras_fsl, tkr2scanner, scanner2tkr, ras_good, cras, center, zero_cras, p0, det, dof, nframes, mid_frame, format, orientation, slicedirection, autoalign, ctab, cmds, dump, voxel_crs, entropy, output_file, orig_ras2vox, in_type)
@@ -647,5 +647,8 @@ export {
       MriInfoOutputs,
       MriInfoParameters,
       mri_info,
+      mri_info_cargs,
+      mri_info_execute,
+      mri_info_outputs,
       mri_info_params,
 };

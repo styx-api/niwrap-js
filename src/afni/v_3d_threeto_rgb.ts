@@ -12,7 +12,7 @@ const V_3D_THREETO_RGB_METADATA: Metadata = {
 
 
 interface V3dThreetoRgbParameters {
-    "__STYXTYPE__": "3dThreetoRGB";
+    "@type": "afni.3dThreetoRGB";
     "output_prefix"?: string | null | undefined;
     "scale_factor"?: number | null | undefined;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -24,35 +24,35 @@ interface V3dThreetoRgbParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dThreetoRGB": v_3d_threeto_rgb_cargs,
+        "afni.3dThreetoRGB": v_3d_threeto_rgb_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dThreetoRGB": v_3d_threeto_rgb_outputs,
+        "afni.3dThreetoRGB": v_3d_threeto_rgb_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dThreetoRgbOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset or first dataset if three datasets are provided
+ * @param output_prefix Write output into dataset with specified prefix
+ * @param scale_factor Multiply input values by this factor before using as RGB
+ * @param mask_dataset Only output nonzero values where the mask dataset is nonzero
+ * @param fim Write result as a 'fim' type dataset (default behavior)
+ * @param anat Write result as a anatomical type dataset
+ * @param input_dataset2 Second dataset, required only if three datasets are provided
+ * @param input_dataset3 Third dataset, required only if three datasets are provided
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_threeto_rgb_params(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -89,22 +103,8 @@ function v_3d_threeto_rgb_params(
     input_dataset2: InputPathType | null = null,
     input_dataset3: InputPathType | null = null,
 ): V3dThreetoRgbParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset or first dataset if three datasets are provided
-     * @param output_prefix Write output into dataset with specified prefix
-     * @param scale_factor Multiply input values by this factor before using as RGB
-     * @param mask_dataset Only output nonzero values where the mask dataset is nonzero
-     * @param fim Write result as a 'fim' type dataset (default behavior)
-     * @param anat Write result as a anatomical type dataset
-     * @param input_dataset2 Second dataset, required only if three datasets are provided
-     * @param input_dataset3 Third dataset, required only if three datasets are provided
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dThreetoRGB" as const,
+        "@type": "afni.3dThreetoRGB" as const,
         "fim": fim,
         "anat": anat,
         "input_dataset": input_dataset,
@@ -128,18 +128,18 @@ function v_3d_threeto_rgb_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_threeto_rgb_cargs(
     params: V3dThreetoRgbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dThreetoRGB");
     if ((params["output_prefix"] ?? null) !== null) {
@@ -177,18 +177,18 @@ function v_3d_threeto_rgb_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_threeto_rgb_outputs(
     params: V3dThreetoRgbParameters,
     execution: Execution,
 ): V3dThreetoRgbOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dThreetoRgbOutputs = {
         root: execution.outputFile("."),
         output_dataset_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "+rgb.HEAD"].join('')) : null,
@@ -198,22 +198,22 @@ function v_3d_threeto_rgb_outputs(
 }
 
 
+/**
+ * Converts 3 sub-bricks of input to an RGB-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
+ */
 function v_3d_threeto_rgb_execute(
     params: V3dThreetoRgbParameters,
     execution: Execution,
 ): V3dThreetoRgbOutputs {
-    /**
-     * Converts 3 sub-bricks of input to an RGB-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_threeto_rgb_cargs(params, execution)
     const ret = v_3d_threeto_rgb_outputs(params, execution)
@@ -222,6 +222,25 @@ function v_3d_threeto_rgb_execute(
 }
 
 
+/**
+ * Converts 3 sub-bricks of input to an RGB-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset or first dataset if three datasets are provided
+ * @param output_prefix Write output into dataset with specified prefix
+ * @param scale_factor Multiply input values by this factor before using as RGB
+ * @param mask_dataset Only output nonzero values where the mask dataset is nonzero
+ * @param fim Write result as a 'fim' type dataset (default behavior)
+ * @param anat Write result as a anatomical type dataset
+ * @param input_dataset2 Second dataset, required only if three datasets are provided
+ * @param input_dataset3 Third dataset, required only if three datasets are provided
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
+ */
 function v_3d_threeto_rgb(
     input_dataset: InputPathType,
     output_prefix: string | null = null,
@@ -233,25 +252,6 @@ function v_3d_threeto_rgb(
     input_dataset3: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dThreetoRgbOutputs {
-    /**
-     * Converts 3 sub-bricks of input to an RGB-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset or first dataset if three datasets are provided
-     * @param output_prefix Write output into dataset with specified prefix
-     * @param scale_factor Multiply input values by this factor before using as RGB
-     * @param mask_dataset Only output nonzero values where the mask dataset is nonzero
-     * @param fim Write result as a 'fim' type dataset (default behavior)
-     * @param anat Write result as a anatomical type dataset
-     * @param input_dataset2 Second dataset, required only if three datasets are provided
-     * @param input_dataset3 Third dataset, required only if three datasets are provided
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_THREETO_RGB_METADATA);
     const params = v_3d_threeto_rgb_params(input_dataset, output_prefix, scale_factor, mask_dataset, fim, anat, input_dataset2, input_dataset3)
@@ -264,5 +264,8 @@ export {
       V3dThreetoRgbParameters,
       V_3D_THREETO_RGB_METADATA,
       v_3d_threeto_rgb,
+      v_3d_threeto_rgb_cargs,
+      v_3d_threeto_rgb_execute,
+      v_3d_threeto_rgb_outputs,
       v_3d_threeto_rgb_params,
 };

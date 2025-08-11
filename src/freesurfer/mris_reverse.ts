@@ -12,41 +12,41 @@ const MRIS_REVERSE_METADATA: Metadata = {
 
 
 interface MrisReverseParameters {
-    "__STYXTYPE__": "mris_reverse";
+    "@type": "freesurfer.mris_reverse";
     "input_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_reverse": mris_reverse_cargs,
+        "freesurfer.mris_reverse": mris_reverse_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_reverse": mris_reverse_outputs,
+        "freesurfer.mris_reverse": mris_reverse_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MrisReverseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input cortical surface file.
+ * @param output_surface Output cortical surface file.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_reverse_params(
     input_surface: InputPathType,
     output_surface: string,
 ): MrisReverseParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input cortical surface file.
-     * @param output_surface Output cortical surface file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_reverse" as const,
+        "@type": "freesurfer.mris_reverse" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -90,18 +90,18 @@ function mris_reverse_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_reverse_cargs(
     params: MrisReverseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_reverse");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -110,18 +110,18 @@ function mris_reverse_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_reverse_outputs(
     params: MrisReverseParameters,
     execution: Execution,
 ): MrisReverseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisReverseOutputs = {
         root: execution.outputFile("."),
         reversed_surface: execution.outputFile([(params["output_surface"] ?? null), ".surf"].join('')),
@@ -130,22 +130,22 @@ function mris_reverse_outputs(
 }
 
 
+/**
+ * This tool reverses a cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
+ */
 function mris_reverse_execute(
     params: MrisReverseParameters,
     execution: Execution,
 ): MrisReverseOutputs {
-    /**
-     * This tool reverses a cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_reverse_cargs(params, execution)
     const ret = mris_reverse_outputs(params, execution)
@@ -154,24 +154,24 @@ function mris_reverse_execute(
 }
 
 
+/**
+ * This tool reverses a cortical surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input cortical surface file.
+ * @param output_surface Output cortical surface file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
+ */
 function mris_reverse(
     input_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): MrisReverseOutputs {
-    /**
-     * This tool reverses a cortical surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input cortical surface file.
-     * @param output_surface Output cortical surface file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REVERSE_METADATA);
     const params = mris_reverse_params(input_surface, output_surface)
@@ -184,5 +184,8 @@ export {
       MrisReverseOutputs,
       MrisReverseParameters,
       mris_reverse,
+      mris_reverse_cargs,
+      mris_reverse_execute,
+      mris_reverse_outputs,
       mris_reverse_params,
 };

@@ -12,14 +12,14 @@ const PEAKS2AMP_METADATA: Metadata = {
 
 
 interface Peaks2ampConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.peaks2amp.config";
     "key": string;
     "value": string;
 }
 
 
 interface Peaks2ampParameters {
-    "__STYXTYPE__": "peaks2amp";
+    "@type": "mrtrix.peaks2amp";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -33,55 +33,55 @@ interface Peaks2ampParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "peaks2amp": peaks2amp_cargs,
-        "config": peaks2amp_config_cargs,
+        "mrtrix.peaks2amp": peaks2amp_cargs,
+        "mrtrix.peaks2amp.config": peaks2amp_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "peaks2amp": peaks2amp_outputs,
+        "mrtrix.peaks2amp": peaks2amp_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function peaks2amp_config_params(
     key: string,
     value: string,
 ): Peaks2ampConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.peaks2amp.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function peaks2amp_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function peaks2amp_config_cargs(
     params: Peaks2ampConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -126,6 +126,22 @@ interface Peaks2ampOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directions the input directions image. Each volume corresponds to the x, y & z component of each direction vector in turn.
+ * @param amplitudes the output amplitudes image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function peaks2amp_params(
     directions: InputPathType,
     amplitudes: string,
@@ -138,24 +154,8 @@ function peaks2amp_params(
     help: boolean = false,
     version: boolean = false,
 ): Peaks2ampParameters {
-    /**
-     * Build parameters.
-    
-     * @param directions the input directions image. Each volume corresponds to the x, y & z component of each direction vector in turn.
-     * @param amplitudes the output amplitudes image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "peaks2amp" as const,
+        "@type": "mrtrix.peaks2amp" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -175,18 +175,18 @@ function peaks2amp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function peaks2amp_cargs(
     params: Peaks2ampParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("peaks2amp");
     if ((params["info"] ?? null)) {
@@ -208,7 +208,7 @@ function peaks2amp_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -222,18 +222,18 @@ function peaks2amp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function peaks2amp_outputs(
     params: Peaks2ampParameters,
     execution: Execution,
 ): Peaks2ampOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Peaks2ampOutputs = {
         root: execution.outputFile("."),
         amplitudes: execution.outputFile([(params["amplitudes"] ?? null)].join('')),
@@ -242,28 +242,28 @@ function peaks2amp_outputs(
 }
 
 
+/**
+ * Extract amplitudes from a peak directions image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
+ */
 function peaks2amp_execute(
     params: Peaks2ampParameters,
     execution: Execution,
 ): Peaks2ampOutputs {
-    /**
-     * Extract amplitudes from a peak directions image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
-     */
     params = execution.params(params)
     const cargs = peaks2amp_cargs(params, execution)
     const ret = peaks2amp_outputs(params, execution)
@@ -272,6 +272,33 @@ function peaks2amp_execute(
 }
 
 
+/**
+ * Extract amplitudes from a peak directions image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param directions the input directions image. Each volume corresponds to the x, y & z component of each direction vector in turn.
+ * @param amplitudes the output amplitudes image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
+ */
 function peaks2amp(
     directions: InputPathType,
     amplitudes: string,
@@ -285,33 +312,6 @@ function peaks2amp(
     version: boolean = false,
     runner: Runner | null = null,
 ): Peaks2ampOutputs {
-    /**
-     * Extract amplitudes from a peak directions image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param directions the input directions image. Each volume corresponds to the x, y & z component of each direction vector in turn.
-     * @param amplitudes the output amplitudes image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PEAKS2AMP_METADATA);
     const params = peaks2amp_params(directions, amplitudes, info, quiet, debug, force, nthreads, config, help, version)
@@ -325,6 +325,10 @@ export {
       Peaks2ampOutputs,
       Peaks2ampParameters,
       peaks2amp,
+      peaks2amp_cargs,
+      peaks2amp_config_cargs,
       peaks2amp_config_params,
+      peaks2amp_execute,
+      peaks2amp_outputs,
       peaks2amp_params,
 };

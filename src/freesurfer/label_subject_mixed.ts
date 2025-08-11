@@ -12,7 +12,7 @@ const LABEL_SUBJECT_MIXED_METADATA: Metadata = {
 
 
 interface LabelSubjectMixedParameters {
-    "__STYXTYPE__": "label_subject_mixed";
+    "@type": "freesurfer.label_subject_mixed";
     "brain_mask": InputPathType;
     "norm_volume": InputPathType;
     "transform": InputPathType;
@@ -21,35 +21,35 @@ interface LabelSubjectMixedParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label_subject_mixed": label_subject_mixed_cargs,
+        "freesurfer.label_subject_mixed": label_subject_mixed_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label_subject_mixed": label_subject_mixed_outputs,
+        "freesurfer.label_subject_mixed": label_subject_mixed_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface LabelSubjectMixedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param brain_mask Brain mask to be used for final labeling
+ * @param norm_volume Normalized volume
+ * @param transform Transform file in LTA format
+ * @param gca_file Gaussian classifier array (GCA) file
+ * @param aseg_output Output aseg file
+ *
+ * @returns Parameter dictionary
+ */
 function label_subject_mixed_params(
     brain_mask: InputPathType,
     norm_volume: InputPathType,
@@ -79,19 +90,8 @@ function label_subject_mixed_params(
     gca_file: InputPathType,
     aseg_output: string,
 ): LabelSubjectMixedParameters {
-    /**
-     * Build parameters.
-    
-     * @param brain_mask Brain mask to be used for final labeling
-     * @param norm_volume Normalized volume
-     * @param transform Transform file in LTA format
-     * @param gca_file Gaussian classifier array (GCA) file
-     * @param aseg_output Output aseg file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label_subject_mixed" as const,
+        "@type": "freesurfer.label_subject_mixed" as const,
         "brain_mask": brain_mask,
         "norm_volume": norm_volume,
         "transform": transform,
@@ -102,18 +102,18 @@ function label_subject_mixed_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_subject_mixed_cargs(
     params: LabelSubjectMixedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label_subject_mixed");
     cargs.push(
@@ -128,18 +128,18 @@ function label_subject_mixed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_subject_mixed_outputs(
     params: LabelSubjectMixedParameters,
     execution: Execution,
 ): LabelSubjectMixedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelSubjectMixedOutputs = {
         root: execution.outputFile("."),
         output_aseg: execution.outputFile([(params["aseg_output"] ?? null)].join('')),
@@ -148,22 +148,22 @@ function label_subject_mixed_outputs(
 }
 
 
+/**
+ * Automatic labeling of brain regions using a Gaussian classifier array.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
+ */
 function label_subject_mixed_execute(
     params: LabelSubjectMixedParameters,
     execution: Execution,
 ): LabelSubjectMixedOutputs {
-    /**
-     * Automatic labeling of brain regions using a Gaussian classifier array.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_subject_mixed_cargs(params, execution)
     const ret = label_subject_mixed_outputs(params, execution)
@@ -172,6 +172,22 @@ function label_subject_mixed_execute(
 }
 
 
+/**
+ * Automatic labeling of brain regions using a Gaussian classifier array.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param brain_mask Brain mask to be used for final labeling
+ * @param norm_volume Normalized volume
+ * @param transform Transform file in LTA format
+ * @param gca_file Gaussian classifier array (GCA) file
+ * @param aseg_output Output aseg file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
+ */
 function label_subject_mixed(
     brain_mask: InputPathType,
     norm_volume: InputPathType,
@@ -180,22 +196,6 @@ function label_subject_mixed(
     aseg_output: string,
     runner: Runner | null = null,
 ): LabelSubjectMixedOutputs {
-    /**
-     * Automatic labeling of brain regions using a Gaussian classifier array.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param brain_mask Brain mask to be used for final labeling
-     * @param norm_volume Normalized volume
-     * @param transform Transform file in LTA format
-     * @param gca_file Gaussian classifier array (GCA) file
-     * @param aseg_output Output aseg file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_SUBJECT_MIXED_METADATA);
     const params = label_subject_mixed_params(brain_mask, norm_volume, transform, gca_file, aseg_output)
@@ -208,5 +208,8 @@ export {
       LabelSubjectMixedOutputs,
       LabelSubjectMixedParameters,
       label_subject_mixed,
+      label_subject_mixed_cargs,
+      label_subject_mixed_execute,
+      label_subject_mixed_outputs,
       label_subject_mixed_params,
 };

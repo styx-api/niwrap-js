@@ -12,38 +12,38 @@ const FS_INSTALL_MCR_METADATA: Metadata = {
 
 
 interface FsInstallMcrParameters {
-    "__STYXTYPE__": "fs_install_mcr";
+    "@type": "freesurfer.fs_install_mcr";
     "mcr_version": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fs_install_mcr": fs_install_mcr_cargs,
+        "freesurfer.fs_install_mcr": fs_install_mcr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface FsInstallMcrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mcr_version Specify the MATLAB Compiler Runtime (MCR) version to install
+ *
+ * @returns Parameter dictionary
+ */
 function fs_install_mcr_params(
     mcr_version: string,
 ): FsInstallMcrParameters {
-    /**
-     * Build parameters.
-    
-     * @param mcr_version Specify the MATLAB Compiler Runtime (MCR) version to install
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fs_install_mcr" as const,
+        "@type": "freesurfer.fs_install_mcr" as const,
         "mcr_version": mcr_version,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fs_install_mcr_cargs(
     params: FsInstallMcrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fs_install_mcr");
     cargs.push((params["mcr_version"] ?? null));
@@ -100,18 +100,18 @@ function fs_install_mcr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fs_install_mcr_outputs(
     params: FsInstallMcrParameters,
     execution: Execution,
 ): FsInstallMcrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsInstallMcrOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function fs_install_mcr_outputs(
 }
 
 
+/**
+ * MCR installation tool for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
+ */
 function fs_install_mcr_execute(
     params: FsInstallMcrParameters,
     execution: Execution,
 ): FsInstallMcrOutputs {
-    /**
-     * MCR installation tool for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
-     */
     params = execution.params(params)
     const cargs = fs_install_mcr_cargs(params, execution)
     const ret = fs_install_mcr_outputs(params, execution)
@@ -143,22 +143,22 @@ function fs_install_mcr_execute(
 }
 
 
+/**
+ * MCR installation tool for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mcr_version Specify the MATLAB Compiler Runtime (MCR) version to install
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
+ */
 function fs_install_mcr(
     mcr_version: string,
     runner: Runner | null = null,
 ): FsInstallMcrOutputs {
-    /**
-     * MCR installation tool for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mcr_version Specify the MATLAB Compiler Runtime (MCR) version to install
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FS_INSTALL_MCR_METADATA);
     const params = fs_install_mcr_params(mcr_version)
@@ -171,5 +171,8 @@ export {
       FsInstallMcrOutputs,
       FsInstallMcrParameters,
       fs_install_mcr,
+      fs_install_mcr_cargs,
+      fs_install_mcr_execute,
+      fs_install_mcr_outputs,
       fs_install_mcr_params,
 };

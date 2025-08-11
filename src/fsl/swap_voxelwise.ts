@@ -12,7 +12,7 @@ const SWAP_VOXELWISE_METADATA: Metadata = {
 
 
 interface SwapVoxelwiseParameters {
-    "__STYXTYPE__": "swap_voxelwise";
+    "@type": "fsl.swap_voxelwise";
     "vectors_file_list": InputPathType;
     "scalars_file_list"?: InputPathType | null | undefined;
     "mask": InputPathType;
@@ -24,35 +24,35 @@ interface SwapVoxelwiseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "swap_voxelwise": swap_voxelwise_cargs,
+        "fsl.swap_voxelwise": swap_voxelwise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "swap_voxelwise": swap_voxelwise_outputs,
+        "fsl.swap_voxelwise": swap_voxelwise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface SwapVoxelwiseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vectors_file_list Text file containing list of vectors
+ * @param mask Filename of brain mask or skeleton
+ * @param scalars_file_list Text file containing list of scalars
+ * @param output_base_name Output base name
+ * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
+ * @param init_mask Filename of initialization mask
+ * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function swap_voxelwise_params(
     vectors_file_list: InputPathType,
     mask: InputPathType,
@@ -85,22 +99,8 @@ function swap_voxelwise_params(
     crossing_thresh: number | null = 0.1,
     verbose_flag: boolean = false,
 ): SwapVoxelwiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param vectors_file_list Text file containing list of vectors
-     * @param mask Filename of brain mask or skeleton
-     * @param scalars_file_list Text file containing list of scalars
-     * @param output_base_name Output base name
-     * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
-     * @param init_mask Filename of initialization mask
-     * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "swap_voxelwise" as const,
+        "@type": "fsl.swap_voxelwise" as const,
         "vectors_file_list": vectors_file_list,
         "mask": mask,
         "verbose_flag": verbose_flag,
@@ -124,18 +124,18 @@ function swap_voxelwise_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function swap_voxelwise_cargs(
     params: SwapVoxelwiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("swap_voxelwise");
     cargs.push(
@@ -183,18 +183,18 @@ function swap_voxelwise_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function swap_voxelwise_outputs(
     params: SwapVoxelwiseParameters,
     execution: Execution,
 ): SwapVoxelwiseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SwapVoxelwiseOutputs = {
         root: execution.outputFile("."),
         reordered_output: ((params["output_base_name"] ?? null) !== null) ? execution.outputFile([(params["output_base_name"] ?? null), ".nii.gz"].join('')) : null,
@@ -203,22 +203,22 @@ function swap_voxelwise_outputs(
 }
 
 
+/**
+ * Reordering of vectors with direction preservation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
+ */
 function swap_voxelwise_execute(
     params: SwapVoxelwiseParameters,
     execution: Execution,
 ): SwapVoxelwiseOutputs {
-    /**
-     * Reordering of vectors with direction preservation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
-     */
     params = execution.params(params)
     const cargs = swap_voxelwise_cargs(params, execution)
     const ret = swap_voxelwise_outputs(params, execution)
@@ -227,6 +227,25 @@ function swap_voxelwise_execute(
 }
 
 
+/**
+ * Reordering of vectors with direction preservation.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param vectors_file_list Text file containing list of vectors
+ * @param mask Filename of brain mask or skeleton
+ * @param scalars_file_list Text file containing list of scalars
+ * @param output_base_name Output base name
+ * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
+ * @param init_mask Filename of initialization mask
+ * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
+ */
 function swap_voxelwise(
     vectors_file_list: InputPathType,
     mask: InputPathType,
@@ -238,25 +257,6 @@ function swap_voxelwise(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SwapVoxelwiseOutputs {
-    /**
-     * Reordering of vectors with direction preservation.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param vectors_file_list Text file containing list of vectors
-     * @param mask Filename of brain mask or skeleton
-     * @param scalars_file_list Text file containing list of scalars
-     * @param output_base_name Output base name
-     * @param reorder_mode Reordering mode - choose between 'voxels' (default) or 'volumes'
-     * @param init_mask Filename of initialization mask
-     * @param crossing_thresh Threshold for considering a crossing fibre region - default=0.1
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SWAP_VOXELWISE_METADATA);
     const params = swap_voxelwise_params(vectors_file_list, mask, scalars_file_list, output_base_name, reorder_mode, init_mask, crossing_thresh, verbose_flag)
@@ -269,5 +269,8 @@ export {
       SwapVoxelwiseOutputs,
       SwapVoxelwiseParameters,
       swap_voxelwise,
+      swap_voxelwise_cargs,
+      swap_voxelwise_execute,
+      swap_voxelwise_outputs,
       swap_voxelwise_params,
 };

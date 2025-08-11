@@ -12,7 +12,7 @@ const CIFTI_SEPARATE_METADATA: Metadata = {
 
 
 interface CiftiSeparateVolumeAllParameters {
-    "__STYXTYPE__": "volume_all";
+    "@type": "workbench.cifti-separate.volume_all";
     "volume_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
     "opt_label_label_out"?: string | null | undefined;
@@ -21,7 +21,7 @@ interface CiftiSeparateVolumeAllParameters {
 
 
 interface CiftiSeparateLabelParameters {
-    "__STYXTYPE__": "label";
+    "@type": "workbench.cifti-separate.label";
     "structure": string;
     "label_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
@@ -29,7 +29,7 @@ interface CiftiSeparateLabelParameters {
 
 
 interface CiftiSeparateMetricParameters {
-    "__STYXTYPE__": "metric";
+    "@type": "workbench.cifti-separate.metric";
     "structure": string;
     "metric_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
@@ -37,7 +37,7 @@ interface CiftiSeparateMetricParameters {
 
 
 interface CiftiSeparateVolumeParameters {
-    "__STYXTYPE__": "volume";
+    "@type": "workbench.cifti-separate.volume";
     "structure": string;
     "volume_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
@@ -46,7 +46,7 @@ interface CiftiSeparateVolumeParameters {
 
 
 interface CiftiSeparateParameters {
-    "__STYXTYPE__": "cifti-separate";
+    "@type": "workbench.cifti-separate";
     "cifti_in": InputPathType;
     "direction": string;
     "volume_all"?: CiftiSeparateVolumeAllParameters | null | undefined;
@@ -56,43 +56,43 @@ interface CiftiSeparateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-separate": cifti_separate_cargs,
-        "volume_all": cifti_separate_volume_all_cargs,
-        "label": cifti_separate_label_cargs,
-        "metric": cifti_separate_metric_cargs,
-        "volume": cifti_separate_volume_cargs,
+        "workbench.cifti-separate": cifti_separate_cargs,
+        "workbench.cifti-separate.volume_all": cifti_separate_volume_all_cargs,
+        "workbench.cifti-separate.label": cifti_separate_label_cargs,
+        "workbench.cifti-separate.metric": cifti_separate_metric_cargs,
+        "workbench.cifti-separate.volume": cifti_separate_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-separate": cifti_separate_outputs,
-        "volume_all": cifti_separate_volume_all_outputs,
-        "label": cifti_separate_label_outputs,
-        "metric": cifti_separate_metric_outputs,
-        "volume": cifti_separate_volume_outputs,
+        "workbench.cifti-separate": cifti_separate_outputs,
+        "workbench.cifti-separate.volume_all": cifti_separate_volume_all_outputs,
+        "workbench.cifti-separate.label": cifti_separate_label_outputs,
+        "workbench.cifti-separate.metric": cifti_separate_metric_outputs,
+        "workbench.cifti-separate.volume": cifti_separate_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -123,24 +123,24 @@ interface CiftiSeparateVolumeAllOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_out the output volume
+ * @param opt_roi_roi_out also output the roi of which voxels have data: the roi output volume
+ * @param opt_label_label_out output a volume label file indicating the location of structures: the label output volume
+ * @param opt_crop crop volume to the size of the data rather than using the original volume size
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_separate_volume_all_params(
     volume_out: string,
     opt_roi_roi_out: string | null = null,
     opt_label_label_out: string | null = null,
     opt_crop: boolean = false,
 ): CiftiSeparateVolumeAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_out the output volume
-     * @param opt_roi_roi_out also output the roi of which voxels have data: the roi output volume
-     * @param opt_label_label_out output a volume label file indicating the location of structures: the label output volume
-     * @param opt_crop crop volume to the size of the data rather than using the original volume size
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume_all" as const,
+        "@type": "workbench.cifti-separate.volume_all" as const,
         "volume_out": volume_out,
         "opt_crop": opt_crop,
     };
@@ -154,18 +154,18 @@ function cifti_separate_volume_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_separate_volume_all_cargs(
     params: CiftiSeparateVolumeAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume-all");
     cargs.push((params["volume_out"] ?? null));
@@ -188,18 +188,18 @@ function cifti_separate_volume_all_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_separate_volume_all_outputs(
     params: CiftiSeparateVolumeAllParameters,
     execution: Execution,
 ): CiftiSeparateVolumeAllOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiSeparateVolumeAllOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -231,22 +231,22 @@ interface CiftiSeparateLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure the structure to output
+ * @param label_out the output label file
+ * @param opt_roi_roi_out also output the roi of which vertices have data: the roi output metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_separate_label_params(
     structure: string,
     label_out: string,
     opt_roi_roi_out: string | null = null,
 ): CiftiSeparateLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure the structure to output
-     * @param label_out the output label file
-     * @param opt_roi_roi_out also output the roi of which vertices have data: the roi output metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label" as const,
+        "@type": "workbench.cifti-separate.label" as const,
         "structure": structure,
         "label_out": label_out,
     };
@@ -257,18 +257,18 @@ function cifti_separate_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_separate_label_cargs(
     params: CiftiSeparateLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-label");
     cargs.push((params["structure"] ?? null));
@@ -283,18 +283,18 @@ function cifti_separate_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_separate_label_outputs(
     params: CiftiSeparateLabelParameters,
     execution: Execution,
 ): CiftiSeparateLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiSeparateLabelOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -325,22 +325,22 @@ interface CiftiSeparateMetricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure the structure to output
+ * @param metric_out the output metric
+ * @param opt_roi_roi_out also output the roi of which vertices have data: the roi output metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_separate_metric_params(
     structure: string,
     metric_out: string,
     opt_roi_roi_out: string | null = null,
 ): CiftiSeparateMetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure the structure to output
-     * @param metric_out the output metric
-     * @param opt_roi_roi_out also output the roi of which vertices have data: the roi output metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric" as const,
+        "@type": "workbench.cifti-separate.metric" as const,
         "structure": structure,
         "metric_out": metric_out,
     };
@@ -351,18 +351,18 @@ function cifti_separate_metric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_separate_metric_cargs(
     params: CiftiSeparateMetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-metric");
     cargs.push((params["structure"] ?? null));
@@ -377,18 +377,18 @@ function cifti_separate_metric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_separate_metric_outputs(
     params: CiftiSeparateMetricParameters,
     execution: Execution,
 ): CiftiSeparateMetricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiSeparateMetricOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -419,24 +419,24 @@ interface CiftiSeparateVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param structure the structure to output
+ * @param volume_out the output volume
+ * @param opt_roi_roi_out also output the roi of which voxels have data: the roi output volume
+ * @param opt_crop crop volume to the size of the component rather than using the original volume size
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_separate_volume_params(
     structure: string,
     volume_out: string,
     opt_roi_roi_out: string | null = null,
     opt_crop: boolean = false,
 ): CiftiSeparateVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param structure the structure to output
-     * @param volume_out the output volume
-     * @param opt_roi_roi_out also output the roi of which voxels have data: the roi output volume
-     * @param opt_crop crop volume to the size of the component rather than using the original volume size
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume" as const,
+        "@type": "workbench.cifti-separate.volume" as const,
         "structure": structure,
         "volume_out": volume_out,
         "opt_crop": opt_crop,
@@ -448,18 +448,18 @@ function cifti_separate_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_separate_volume_cargs(
     params: CiftiSeparateVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume");
     cargs.push((params["structure"] ?? null));
@@ -477,18 +477,18 @@ function cifti_separate_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_separate_volume_outputs(
     params: CiftiSeparateVolumeParameters,
     execution: Execution,
 ): CiftiSeparateVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiSeparateVolumeOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -527,6 +527,18 @@ interface CiftiSeparateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the cifti to separate a component of
+ * @param direction which direction to separate into components, ROW or COLUMN
+ * @param volume_all separate all volume structures into a volume file
+ * @param label separate a surface model into a surface label file
+ * @param metric separate a surface model into a metric file
+ * @param volume separate a volume structure into a volume file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_separate_params(
     cifti_in: InputPathType,
     direction: string,
@@ -535,20 +547,8 @@ function cifti_separate_params(
     metric: Array<CiftiSeparateMetricParameters> | null = null,
     volume: Array<CiftiSeparateVolumeParameters> | null = null,
 ): CiftiSeparateParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the cifti to separate a component of
-     * @param direction which direction to separate into components, ROW or COLUMN
-     * @param volume_all separate all volume structures into a volume file
-     * @param label separate a surface model into a surface label file
-     * @param metric separate a surface model into a metric file
-     * @param volume separate a volume structure into a volume file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-separate" as const,
+        "@type": "workbench.cifti-separate" as const,
         "cifti_in": cifti_in,
         "direction": direction,
     };
@@ -568,118 +568,118 @@ function cifti_separate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_separate_cargs(
     params: CiftiSeparateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-separate");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null).__STYXTYPE__)((params["volume_all"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
     }
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_separate_outputs(
     params: CiftiSeparateParameters,
     execution: Execution,
 ): CiftiSeparateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiSeparateOutputs = {
         root: execution.outputFile("."),
-        volume_all: (dynOutputs((params["volume_all"] ?? null).__STYXTYPE__)?.((params["volume_all"] ?? null), execution) ?? null),
-        label: ((params["label"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null) ?? null),
-        metric: ((params["metric"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null) ?? null),
-        volume: ((params["volume"] ?? null).map(i => dynOutputs(i.__STYXTYPE__)?.(i, execution) ?? null) ?? null),
+        volume_all: (dynOutputs((params["volume_all"] ?? null)["@type"])?.((params["volume_all"] ?? null), execution) ?? null),
+        label: ((params["label"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        metric: ((params["metric"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        volume: ((params["volume"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Write a cifti structure as metric, label or volume.
+ *
+ * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.
+ *
+ * You must specify at least one of -metric, -volume-all, -volume, or -label for this command to do anything.  Output volumes will spatially line up with their original positions, whether or not they are cropped.  Volume files produced by separating a dlabel file, or from the -label suboption of -volume-all, will be label volumes, see -volume-help.
+ *
+ * For each <structure> argument, use one of the following strings:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
+ */
 function cifti_separate_execute(
     params: CiftiSeparateParameters,
     execution: Execution,
 ): CiftiSeparateOutputs {
-    /**
-     * Write a cifti structure as metric, label or volume.
-     * 
-     * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.
-     * 
-     * You must specify at least one of -metric, -volume-all, -volume, or -label for this command to do anything.  Output volumes will spatially line up with their original positions, whether or not they are cropped.  Volume files produced by separating a dlabel file, or from the -label suboption of -volume-all, will be label volumes, see -volume-help.
-     * 
-     * For each <structure> argument, use one of the following strings:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_separate_cargs(params, execution)
     const ret = cifti_separate_outputs(params, execution)
@@ -688,6 +688,63 @@ function cifti_separate_execute(
 }
 
 
+/**
+ * Write a cifti structure as metric, label or volume.
+ *
+ * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.
+ *
+ * You must specify at least one of -metric, -volume-all, -volume, or -label for this command to do anything.  Output volumes will spatially line up with their original positions, whether or not they are cropped.  Volume files produced by separating a dlabel file, or from the -label suboption of -volume-all, will be label volumes, see -volume-help.
+ *
+ * For each <structure> argument, use one of the following strings:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the cifti to separate a component of
+ * @param direction which direction to separate into components, ROW or COLUMN
+ * @param volume_all separate all volume structures into a volume file
+ * @param label separate a surface model into a surface label file
+ * @param metric separate a surface model into a metric file
+ * @param volume separate a volume structure into a volume file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
+ */
 function cifti_separate(
     cifti_in: InputPathType,
     direction: string,
@@ -697,63 +754,6 @@ function cifti_separate(
     volume: Array<CiftiSeparateVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiSeparateOutputs {
-    /**
-     * Write a cifti structure as metric, label or volume.
-     * 
-     * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.
-     * 
-     * You must specify at least one of -metric, -volume-all, -volume, or -label for this command to do anything.  Output volumes will spatially line up with their original positions, whether or not they are cropped.  Volume files produced by separating a dlabel file, or from the -label suboption of -volume-all, will be label volumes, see -volume-help.
-     * 
-     * For each <structure> argument, use one of the following strings:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the cifti to separate a component of
-     * @param direction which direction to separate into components, ROW or COLUMN
-     * @param volume_all separate all volume structures into a volume file
-     * @param label separate a surface model into a surface label file
-     * @param metric separate a surface model into a metric file
-     * @param volume separate a volume structure into a volume file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_SEPARATE_METADATA);
     const params = cifti_separate_params(cifti_in, direction, volume_all, label, metric, volume)
@@ -774,9 +774,20 @@ export {
       CiftiSeparateVolumeOutputs,
       CiftiSeparateVolumeParameters,
       cifti_separate,
+      cifti_separate_cargs,
+      cifti_separate_execute,
+      cifti_separate_label_cargs,
+      cifti_separate_label_outputs,
       cifti_separate_label_params,
+      cifti_separate_metric_cargs,
+      cifti_separate_metric_outputs,
       cifti_separate_metric_params,
+      cifti_separate_outputs,
       cifti_separate_params,
+      cifti_separate_volume_all_cargs,
+      cifti_separate_volume_all_outputs,
       cifti_separate_volume_all_params,
+      cifti_separate_volume_cargs,
+      cifti_separate_volume_outputs,
       cifti_separate_volume_params,
 };

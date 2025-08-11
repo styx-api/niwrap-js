@@ -12,7 +12,7 @@ const ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA: Metadata = {
 
 
 interface AntsLandmarkBasedTransformInitializerParameters {
-    "__STYXTYPE__": "antsLandmarkBasedTransformInitializer";
+    "@type": "ants.antsLandmarkBasedTransformInitializer";
     "dimension": number;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
@@ -26,35 +26,35 @@ interface AntsLandmarkBasedTransformInitializerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_cargs,
+        "ants.antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_outputs,
+        "ants.antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface AntsLandmarkBasedTransformInitializerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimension The dimensionality of the registration problem (e.g., 2 for 2D, 3 for 3D).
+ * @param fixed_image The fixed image in the registration process.
+ * @param moving_image The moving image in the registration process.
+ * @param transform_type The type of transform to initialize. Options are 'rigid', 'affine', or 'bspline'.
+ * @param output_transform The output transform file that will be created.
+ * @param mesh_size The mesh size for the B-spline transform, specified as 'meshSize[0]xmeshSize[1]x...'. Default is '1x1x1'.
+ * @param number_of_levels Number of levels for multi-resolution fitting. Default is 4.
+ * @param order The polynomial order of the B-spline transform. Default is 3.
+ * @param enforce_stationary_boundaries Enforces stationary boundaries for the B-spline transform. Default is 1 (true).
+ * @param landmark_weights File containing landmark weights. Each row is either 'label,labelWeight' or 'labelWeight'.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_landmark_based_transform_initializer_params(
     dimension: number,
     fixed_image: InputPathType,
@@ -89,24 +105,8 @@ function ants_landmark_based_transform_initializer_params(
     enforce_stationary_boundaries: 0 | 1 | null = null,
     landmark_weights: InputPathType | null = null,
 ): AntsLandmarkBasedTransformInitializerParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimension The dimensionality of the registration problem (e.g., 2 for 2D, 3 for 3D).
-     * @param fixed_image The fixed image in the registration process.
-     * @param moving_image The moving image in the registration process.
-     * @param transform_type The type of transform to initialize. Options are 'rigid', 'affine', or 'bspline'.
-     * @param output_transform The output transform file that will be created.
-     * @param mesh_size The mesh size for the B-spline transform, specified as 'meshSize[0]xmeshSize[1]x...'. Default is '1x1x1'.
-     * @param number_of_levels Number of levels for multi-resolution fitting. Default is 4.
-     * @param order The polynomial order of the B-spline transform. Default is 3.
-     * @param enforce_stationary_boundaries Enforces stationary boundaries for the B-spline transform. Default is 1 (true).
-     * @param landmark_weights File containing landmark weights. Each row is either 'label,labelWeight' or 'labelWeight'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsLandmarkBasedTransformInitializer" as const,
+        "@type": "ants.antsLandmarkBasedTransformInitializer" as const,
         "dimension": dimension,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -132,18 +132,18 @@ function ants_landmark_based_transform_initializer_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_landmark_based_transform_initializer_cargs(
     params: AntsLandmarkBasedTransformInitializerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsLandmarkBasedTransformInitializer");
     cargs.push(String((params["dimension"] ?? null)));
@@ -170,18 +170,18 @@ function ants_landmark_based_transform_initializer_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_landmark_based_transform_initializer_outputs(
     params: AntsLandmarkBasedTransformInitializerParameters,
     execution: Execution,
 ): AntsLandmarkBasedTransformInitializerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsLandmarkBasedTransformInitializerOutputs = {
         root: execution.outputFile("."),
         output_transform: execution.outputFile([(params["output_transform"] ?? null)].join('')),
@@ -190,22 +190,22 @@ function ants_landmark_based_transform_initializer_outputs(
 }
 
 
+/**
+ * This tool initializes a transform between two images based on corresponding landmarks.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
+ */
 function ants_landmark_based_transform_initializer_execute(
     params: AntsLandmarkBasedTransformInitializerParameters,
     execution: Execution,
 ): AntsLandmarkBasedTransformInitializerOutputs {
-    /**
-     * This tool initializes a transform between two images based on corresponding landmarks.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_landmark_based_transform_initializer_cargs(params, execution)
     const ret = ants_landmark_based_transform_initializer_outputs(params, execution)
@@ -214,6 +214,27 @@ function ants_landmark_based_transform_initializer_execute(
 }
 
 
+/**
+ * This tool initializes a transform between two images based on corresponding landmarks.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimension The dimensionality of the registration problem (e.g., 2 for 2D, 3 for 3D).
+ * @param fixed_image The fixed image in the registration process.
+ * @param moving_image The moving image in the registration process.
+ * @param transform_type The type of transform to initialize. Options are 'rigid', 'affine', or 'bspline'.
+ * @param output_transform The output transform file that will be created.
+ * @param mesh_size The mesh size for the B-spline transform, specified as 'meshSize[0]xmeshSize[1]x...'. Default is '1x1x1'.
+ * @param number_of_levels Number of levels for multi-resolution fitting. Default is 4.
+ * @param order The polynomial order of the B-spline transform. Default is 3.
+ * @param enforce_stationary_boundaries Enforces stationary boundaries for the B-spline transform. Default is 1 (true).
+ * @param landmark_weights File containing landmark weights. Each row is either 'label,labelWeight' or 'labelWeight'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
+ */
 function ants_landmark_based_transform_initializer(
     dimension: number,
     fixed_image: InputPathType,
@@ -227,27 +248,6 @@ function ants_landmark_based_transform_initializer(
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsLandmarkBasedTransformInitializerOutputs {
-    /**
-     * This tool initializes a transform between two images based on corresponding landmarks.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimension The dimensionality of the registration problem (e.g., 2 for 2D, 3 for 3D).
-     * @param fixed_image The fixed image in the registration process.
-     * @param moving_image The moving image in the registration process.
-     * @param transform_type The type of transform to initialize. Options are 'rigid', 'affine', or 'bspline'.
-     * @param output_transform The output transform file that will be created.
-     * @param mesh_size The mesh size for the B-spline transform, specified as 'meshSize[0]xmeshSize[1]x...'. Default is '1x1x1'.
-     * @param number_of_levels Number of levels for multi-resolution fitting. Default is 4.
-     * @param order The polynomial order of the B-spline transform. Default is 3.
-     * @param enforce_stationary_boundaries Enforces stationary boundaries for the B-spline transform. Default is 1 (true).
-     * @param landmark_weights File containing landmark weights. Each row is either 'label,labelWeight' or 'labelWeight'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA);
     const params = ants_landmark_based_transform_initializer_params(dimension, fixed_image, moving_image, transform_type, output_transform, mesh_size, number_of_levels, order, enforce_stationary_boundaries, landmark_weights)
@@ -260,5 +260,8 @@ export {
       AntsLandmarkBasedTransformInitializerOutputs,
       AntsLandmarkBasedTransformInitializerParameters,
       ants_landmark_based_transform_initializer,
+      ants_landmark_based_transform_initializer_cargs,
+      ants_landmark_based_transform_initializer_execute,
+      ants_landmark_based_transform_initializer_outputs,
       ants_landmark_based_transform_initializer_params,
 };

@@ -12,7 +12,7 @@ const TTOZ_METADATA: Metadata = {
 
 
 interface TtozParameters {
-    "__STYXTYPE__": "ttoz";
+    "@type": "fsl.ttoz";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
     "dof": number;
@@ -21,35 +21,35 @@ interface TtozParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ttoz": ttoz_cargs,
+        "fsl.ttoz": ttoz_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ttoz": ttoz_outputs,
+        "fsl.ttoz": ttoz_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface TtozOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param varsfile Input variables file
+ * @param cbsfile Input CBS file
+ * @param dof Degrees of freedom
+ * @param outputvol Output volume name (default is zstats)
+ * @param help_flag Display help information
+ *
+ * @returns Parameter dictionary
+ */
 function ttoz_params(
     varsfile: InputPathType,
     cbsfile: InputPathType,
@@ -79,19 +90,8 @@ function ttoz_params(
     outputvol: string | null = null,
     help_flag: boolean = false,
 ): TtozParameters {
-    /**
-     * Build parameters.
-    
-     * @param varsfile Input variables file
-     * @param cbsfile Input CBS file
-     * @param dof Degrees of freedom
-     * @param outputvol Output volume name (default is zstats)
-     * @param help_flag Display help information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ttoz" as const,
+        "@type": "fsl.ttoz" as const,
         "varsfile": varsfile,
         "cbsfile": cbsfile,
         "dof": dof,
@@ -104,18 +104,18 @@ function ttoz_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ttoz_cargs(
     params: TtozParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ttoz");
     cargs.push(execution.inputFile((params["varsfile"] ?? null)));
@@ -134,18 +134,18 @@ function ttoz_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ttoz_outputs(
     params: TtozParameters,
     execution: Execution,
 ): TtozOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TtozOutputs = {
         root: execution.outputFile("."),
         output_zvol: ((params["outputvol"] ?? null) !== null) ? execution.outputFile([(params["outputvol"] ?? null), ".nii.gz"].join('')) : null,
@@ -154,22 +154,22 @@ function ttoz_outputs(
 }
 
 
+/**
+ * Tool to convert a T-statistic image to a Z-statistic image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TtozOutputs`).
+ */
 function ttoz_execute(
     params: TtozParameters,
     execution: Execution,
 ): TtozOutputs {
-    /**
-     * Tool to convert a T-statistic image to a Z-statistic image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TtozOutputs`).
-     */
     params = execution.params(params)
     const cargs = ttoz_cargs(params, execution)
     const ret = ttoz_outputs(params, execution)
@@ -178,6 +178,22 @@ function ttoz_execute(
 }
 
 
+/**
+ * Tool to convert a T-statistic image to a Z-statistic image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param varsfile Input variables file
+ * @param cbsfile Input CBS file
+ * @param dof Degrees of freedom
+ * @param outputvol Output volume name (default is zstats)
+ * @param help_flag Display help information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TtozOutputs`).
+ */
 function ttoz(
     varsfile: InputPathType,
     cbsfile: InputPathType,
@@ -186,22 +202,6 @@ function ttoz(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): TtozOutputs {
-    /**
-     * Tool to convert a T-statistic image to a Z-statistic image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param varsfile Input variables file
-     * @param cbsfile Input CBS file
-     * @param dof Degrees of freedom
-     * @param outputvol Output volume name (default is zstats)
-     * @param help_flag Display help information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TtozOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TTOZ_METADATA);
     const params = ttoz_params(varsfile, cbsfile, dof, outputvol, help_flag)
@@ -214,5 +214,8 @@ export {
       TtozOutputs,
       TtozParameters,
       ttoz,
+      ttoz_cargs,
+      ttoz_execute,
+      ttoz_outputs,
       ttoz_params,
 };

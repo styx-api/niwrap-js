@@ -12,42 +12,42 @@ const MRI_PROBEDICOM_METADATA: Metadata = {
 
 
 interface MriProbedicomParameters {
-    "__STYXTYPE__": "mri_probedicom";
+    "@type": "freesurfer.mri_probedicom";
     "dicom_file": InputPathType;
     "option1"?: string | null | undefined;
     "option2"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_probedicom": mri_probedicom_cargs,
+        "freesurfer.mri_probedicom": mri_probedicom_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_probedicom": mri_probedicom_outputs,
+        "freesurfer.mri_probedicom": mri_probedicom_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriProbedicomOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dicom_file DICOM file to be probed.
+ * @param option1 Description for option1
+ * @param option2 Description for option2
+ *
+ * @returns Parameter dictionary
+ */
 function mri_probedicom_params(
     dicom_file: InputPathType,
     option1: string | null = null,
     option2: string | null = null,
 ): MriProbedicomParameters {
-    /**
-     * Build parameters.
-    
-     * @param dicom_file DICOM file to be probed.
-     * @param option1 Description for option1
-     * @param option2 Description for option2
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_probedicom" as const,
+        "@type": "freesurfer.mri_probedicom" as const,
         "dicom_file": dicom_file,
     };
     if (option1 !== null) {
@@ -98,18 +98,18 @@ function mri_probedicom_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_probedicom_cargs(
     params: MriProbedicomParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_probedicom");
     cargs.push(execution.inputFile((params["dicom_file"] ?? null)));
@@ -129,18 +129,18 @@ function mri_probedicom_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_probedicom_outputs(
     params: MriProbedicomParameters,
     execution: Execution,
 ): MriProbedicomOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriProbedicomOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["[OUTPUT].txt"].join('')),
@@ -149,22 +149,22 @@ function mri_probedicom_outputs(
 }
 
 
+/**
+ * Utility to probe DICOM files for information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
+ */
 function mri_probedicom_execute(
     params: MriProbedicomParameters,
     execution: Execution,
 ): MriProbedicomOutputs {
-    /**
-     * Utility to probe DICOM files for information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_probedicom_cargs(params, execution)
     const ret = mri_probedicom_outputs(params, execution)
@@ -173,26 +173,26 @@ function mri_probedicom_execute(
 }
 
 
+/**
+ * Utility to probe DICOM files for information.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param dicom_file DICOM file to be probed.
+ * @param option1 Description for option1
+ * @param option2 Description for option2
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
+ */
 function mri_probedicom(
     dicom_file: InputPathType,
     option1: string | null = null,
     option2: string | null = null,
     runner: Runner | null = null,
 ): MriProbedicomOutputs {
-    /**
-     * Utility to probe DICOM files for information.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param dicom_file DICOM file to be probed.
-     * @param option1 Description for option1
-     * @param option2 Description for option2
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_PROBEDICOM_METADATA);
     const params = mri_probedicom_params(dicom_file, option1, option2)
@@ -205,5 +205,8 @@ export {
       MriProbedicomOutputs,
       MriProbedicomParameters,
       mri_probedicom,
+      mri_probedicom_cargs,
+      mri_probedicom_execute,
+      mri_probedicom_outputs,
       mri_probedicom_params,
 };

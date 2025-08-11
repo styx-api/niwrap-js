@@ -12,42 +12,42 @@ const ADJUNCT_COMBINE_STR_PY_METADATA: Metadata = {
 
 
 interface AdjunctCombineStrPyParameters {
-    "__STYXTYPE__": "adjunct_combine_str.py";
+    "@type": "afni.adjunct_combine_str.py";
     "output_file": string;
     "upper_index": number;
     "string_selectors": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_combine_str.py": adjunct_combine_str_py_cargs,
+        "afni.adjunct_combine_str.py": adjunct_combine_str_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adjunct_combine_str.py": adjunct_combine_str_py_outputs,
+        "afni.adjunct_combine_str.py": adjunct_combine_str_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface AdjunctCombineStrPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file An output file name
+ * @param upper_index An int that is the upper index for the selector (-1 means to use the max number in the input strings)
+ * @param string_selectors One or more string selector strings of *goods* to keep
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_combine_str_py_params(
     output_file: string,
     upper_index: number,
     string_selectors: Array<string>,
 ): AdjunctCombineStrPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file An output file name
-     * @param upper_index An int that is the upper index for the selector (-1 means to use the max number in the input strings)
-     * @param string_selectors One or more string selector strings of *goods* to keep
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_combine_str.py" as const,
+        "@type": "afni.adjunct_combine_str.py" as const,
         "output_file": output_file,
         "upper_index": upper_index,
         "string_selectors": string_selectors,
@@ -94,18 +94,18 @@ function adjunct_combine_str_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_combine_str_py_cargs(
     params: AdjunctCombineStrPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_combine_str.py");
     cargs.push((params["output_file"] ?? null));
@@ -115,18 +115,18 @@ function adjunct_combine_str_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_combine_str_py_outputs(
     params: AdjunctCombineStrPyParameters,
     execution: Execution,
 ): AdjunctCombineStrPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctCombineStrPyOutputs = {
         root: execution.outputFile("."),
         output_selector_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function adjunct_combine_str_py_outputs(
 }
 
 
+/**
+ * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
+ */
 function adjunct_combine_str_py_execute(
     params: AdjunctCombineStrPyParameters,
     execution: Execution,
 ): AdjunctCombineStrPyOutputs {
-    /**
-     * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_combine_str_py_cargs(params, execution)
     const ret = adjunct_combine_str_py_outputs(params, execution)
@@ -159,26 +159,26 @@ function adjunct_combine_str_py_execute(
 }
 
 
+/**
+ * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param output_file An output file name
+ * @param upper_index An int that is the upper index for the selector (-1 means to use the max number in the input strings)
+ * @param string_selectors One or more string selector strings of *goods* to keep
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
+ */
 function adjunct_combine_str_py(
     output_file: string,
     upper_index: number,
     string_selectors: Array<string>,
     runner: Runner | null = null,
 ): AdjunctCombineStrPyOutputs {
-    /**
-     * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param output_file An output file name
-     * @param upper_index An int that is the upper index for the selector (-1 means to use the max number in the input strings)
-     * @param string_selectors One or more string selector strings of *goods* to keep
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_COMBINE_STR_PY_METADATA);
     const params = adjunct_combine_str_py_params(output_file, upper_index, string_selectors)
@@ -191,5 +191,8 @@ export {
       AdjunctCombineStrPyOutputs,
       AdjunctCombineStrPyParameters,
       adjunct_combine_str_py,
+      adjunct_combine_str_py_cargs,
+      adjunct_combine_str_py_execute,
+      adjunct_combine_str_py_outputs,
       adjunct_combine_str_py_params,
 };

@@ -12,14 +12,14 @@ const TCK2CONNECTOME_METADATA: Metadata = {
 
 
 interface Tck2connectomeConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.tck2connectome.config";
     "key": string;
     "value": string;
 }
 
 
 interface Tck2connectomeParameters {
-    "__STYXTYPE__": "tck2connectome";
+    "@type": "mrtrix.tck2connectome";
     "assignment_end_voxels": boolean;
     "assignment_radial_search"?: number | null | undefined;
     "assignment_reverse_search"?: number | null | undefined;
@@ -50,55 +50,55 @@ interface Tck2connectomeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tck2connectome": tck2connectome_cargs,
-        "config": tck2connectome_config_cargs,
+        "mrtrix.tck2connectome": tck2connectome_cargs,
+        "mrtrix.tck2connectome.config": tck2connectome_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tck2connectome": tck2connectome_outputs,
+        "mrtrix.tck2connectome": tck2connectome_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function tck2connectome_config_params(
     key: string,
     value: string,
 ): Tck2connectomeConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.tck2connectome.config" as const,
         "key": key,
         "value": value,
     };
@@ -106,18 +106,18 @@ function tck2connectome_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tck2connectome_config_cargs(
     params: Tck2connectomeConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -147,6 +147,39 @@ interface Tck2connectomeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracks_in the input track file
+ * @param nodes_in the input node parcellation image
+ * @param connectome_out the output .csv file containing edge weights
+ * @param assignment_end_voxels use a simple voxel lookup value at each streamline endpoint
+ * @param assignment_radial_search perform a radial search from each streamline endpoint to locate the nearest node. Argument is the maximum radius in mm; if no node is found within this radius, the streamline endpoint is not assigned to any node. Default search distance is 4mm.
+ * @param assignment_reverse_search traverse from each streamline endpoint inwards along the streamline, in search of the last node traversed by the streamline. Argument is the maximum traversal length in mm (set to 0 to allow search to continue to the streamline midpoint).
+ * @param assignment_forward_search project the streamline forwards from the endpoint in search of a parcellation node voxel. Argument is the maximum traversal length in mm.
+ * @param assignment_all_voxels assign the streamline to all nodes it intersects along its length (note that this means a streamline may be assigned to more than two nodes, or indeed none at all)
+ * @param scale_length scale each contribution to the connectome edge by the length of the streamline
+ * @param scale_invlength scale each contribution to the connectome edge by the inverse of the streamline length
+ * @param scale_invnodevol scale each contribution to the connectome edge by the inverse of the two node volumes
+ * @param scale_file scale each contribution to the connectome edge according to the values in a vector file
+ * @param symmetric Make matrices symmetric on output
+ * @param zero_diagonal Set matrix diagonal to zero on output
+ * @param stat_edge statistic for combining the values from all streamlines in an edge into a single scale value for that edge (options are: sum,mean,min,max; default=sum)
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param keep_unassigned By default, the program discards the information regarding those streamlines that are not successfully assigned to a node pair. Set this option to keep these values (will be the first row/column in the output matrix)
+ * @param out_assignments output the node assignments of each streamline to a file; this can be used subsequently e.g. by the command connectome2tck
+ * @param vector output a vector representing connectivities from a given seed point to target nodes, rather than a matrix of node-node connectivities
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tck2connectome_params(
     tracks_in: InputPathType,
     nodes_in: InputPathType,
@@ -176,41 +209,8 @@ function tck2connectome_params(
     help: boolean = false,
     version: boolean = false,
 ): Tck2connectomeParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracks_in the input track file
-     * @param nodes_in the input node parcellation image
-     * @param connectome_out the output .csv file containing edge weights
-     * @param assignment_end_voxels use a simple voxel lookup value at each streamline endpoint
-     * @param assignment_radial_search perform a radial search from each streamline endpoint to locate the nearest node. Argument is the maximum radius in mm; if no node is found within this radius, the streamline endpoint is not assigned to any node. Default search distance is 4mm.
-     * @param assignment_reverse_search traverse from each streamline endpoint inwards along the streamline, in search of the last node traversed by the streamline. Argument is the maximum traversal length in mm (set to 0 to allow search to continue to the streamline midpoint).
-     * @param assignment_forward_search project the streamline forwards from the endpoint in search of a parcellation node voxel. Argument is the maximum traversal length in mm.
-     * @param assignment_all_voxels assign the streamline to all nodes it intersects along its length (note that this means a streamline may be assigned to more than two nodes, or indeed none at all)
-     * @param scale_length scale each contribution to the connectome edge by the length of the streamline
-     * @param scale_invlength scale each contribution to the connectome edge by the inverse of the streamline length
-     * @param scale_invnodevol scale each contribution to the connectome edge by the inverse of the two node volumes
-     * @param scale_file scale each contribution to the connectome edge according to the values in a vector file
-     * @param symmetric Make matrices symmetric on output
-     * @param zero_diagonal Set matrix diagonal to zero on output
-     * @param stat_edge statistic for combining the values from all streamlines in an edge into a single scale value for that edge (options are: sum,mean,min,max; default=sum)
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param keep_unassigned By default, the program discards the information regarding those streamlines that are not successfully assigned to a node pair. Set this option to keep these values (will be the first row/column in the output matrix)
-     * @param out_assignments output the node assignments of each streamline to a file; this can be used subsequently e.g. by the command connectome2tck
-     * @param vector output a vector representing connectivities from a given seed point to target nodes, rather than a matrix of node-node connectivities
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tck2connectome" as const,
+        "@type": "mrtrix.tck2connectome" as const,
         "assignment_end_voxels": assignment_end_voxels,
         "assignment_all_voxels": assignment_all_voxels,
         "scale_length": scale_length,
@@ -261,18 +261,18 @@ function tck2connectome_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tck2connectome_cargs(
     params: Tck2connectomeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tck2connectome");
     if ((params["assignment_end_voxels"] ?? null)) {
@@ -363,7 +363,7 @@ function tck2connectome_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -378,18 +378,18 @@ function tck2connectome_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tck2connectome_outputs(
     params: Tck2connectomeParameters,
     execution: Execution,
 ): Tck2connectomeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tck2connectomeOutputs = {
         root: execution.outputFile("."),
         connectome_out: execution.outputFile([(params["connectome_out"] ?? null)].join('')),
@@ -399,30 +399,30 @@ function tck2connectome_outputs(
 }
 
 
+/**
+ * Generate a connectome matrix from a streamlines file and a node parcellation image.
+ *
+ *
+ *
+ * References:
+ *
+ * If using the default streamline-parcel assignment mechanism (or -assignment_radial_search option): Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. The effects of SIFT on the reproducibility and biological accuracy of the structural connectome. NeuroImage, 2015, 104, 253-265
+ *
+ * If using -scale_invlength or -scale_invnodevol options: Hagmann, P.; Cammoun, L.; Gigandet, X.; Meuli, R.; Honey, C.; Wedeen, V. & Sporns, O. Mapping the Structural Core of Human Cerebral Cortex. PLoS Biology 6(7), e159.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
+ */
 function tck2connectome_execute(
     params: Tck2connectomeParameters,
     execution: Execution,
 ): Tck2connectomeOutputs {
-    /**
-     * Generate a connectome matrix from a streamlines file and a node parcellation image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * If using the default streamline-parcel assignment mechanism (or -assignment_radial_search option): Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. The effects of SIFT on the reproducibility and biological accuracy of the structural connectome. NeuroImage, 2015, 104, 253-265
-     * 
-     * If using -scale_invlength or -scale_invnodevol options: Hagmann, P.; Cammoun, L.; Gigandet, X.; Meuli, R.; Honey, C.; Wedeen, V. & Sporns, O. Mapping the Structural Core of Human Cerebral Cortex. PLoS Biology 6(7), e159.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
-     */
     params = execution.params(params)
     const cargs = tck2connectome_cargs(params, execution)
     const ret = tck2connectome_outputs(params, execution)
@@ -431,6 +431,52 @@ function tck2connectome_execute(
 }
 
 
+/**
+ * Generate a connectome matrix from a streamlines file and a node parcellation image.
+ *
+ *
+ *
+ * References:
+ *
+ * If using the default streamline-parcel assignment mechanism (or -assignment_radial_search option): Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. The effects of SIFT on the reproducibility and biological accuracy of the structural connectome. NeuroImage, 2015, 104, 253-265
+ *
+ * If using -scale_invlength or -scale_invnodevol options: Hagmann, P.; Cammoun, L.; Gigandet, X.; Meuli, R.; Honey, C.; Wedeen, V. & Sporns, O. Mapping the Structural Core of Human Cerebral Cortex. PLoS Biology 6(7), e159.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param tracks_in the input track file
+ * @param nodes_in the input node parcellation image
+ * @param connectome_out the output .csv file containing edge weights
+ * @param assignment_end_voxels use a simple voxel lookup value at each streamline endpoint
+ * @param assignment_radial_search perform a radial search from each streamline endpoint to locate the nearest node. Argument is the maximum radius in mm; if no node is found within this radius, the streamline endpoint is not assigned to any node. Default search distance is 4mm.
+ * @param assignment_reverse_search traverse from each streamline endpoint inwards along the streamline, in search of the last node traversed by the streamline. Argument is the maximum traversal length in mm (set to 0 to allow search to continue to the streamline midpoint).
+ * @param assignment_forward_search project the streamline forwards from the endpoint in search of a parcellation node voxel. Argument is the maximum traversal length in mm.
+ * @param assignment_all_voxels assign the streamline to all nodes it intersects along its length (note that this means a streamline may be assigned to more than two nodes, or indeed none at all)
+ * @param scale_length scale each contribution to the connectome edge by the length of the streamline
+ * @param scale_invlength scale each contribution to the connectome edge by the inverse of the streamline length
+ * @param scale_invnodevol scale each contribution to the connectome edge by the inverse of the two node volumes
+ * @param scale_file scale each contribution to the connectome edge according to the values in a vector file
+ * @param symmetric Make matrices symmetric on output
+ * @param zero_diagonal Set matrix diagonal to zero on output
+ * @param stat_edge statistic for combining the values from all streamlines in an edge into a single scale value for that edge (options are: sum,mean,min,max; default=sum)
+ * @param tck_weights_in specify a text scalar file containing the streamline weights
+ * @param keep_unassigned By default, the program discards the information regarding those streamlines that are not successfully assigned to a node pair. Set this option to keep these values (will be the first row/column in the output matrix)
+ * @param out_assignments output the node assignments of each streamline to a file; this can be used subsequently e.g. by the command connectome2tck
+ * @param vector output a vector representing connectivities from a given seed point to target nodes, rather than a matrix of node-node connectivities
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
+ */
 function tck2connectome(
     tracks_in: InputPathType,
     nodes_in: InputPathType,
@@ -461,52 +507,6 @@ function tck2connectome(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tck2connectomeOutputs {
-    /**
-     * Generate a connectome matrix from a streamlines file and a node parcellation image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * If using the default streamline-parcel assignment mechanism (or -assignment_radial_search option): Smith, R. E.; Tournier, J.-D.; Calamante, F. & Connelly, A. The effects of SIFT on the reproducibility and biological accuracy of the structural connectome. NeuroImage, 2015, 104, 253-265
-     * 
-     * If using -scale_invlength or -scale_invnodevol options: Hagmann, P.; Cammoun, L.; Gigandet, X.; Meuli, R.; Honey, C.; Wedeen, V. & Sporns, O. Mapping the Structural Core of Human Cerebral Cortex. PLoS Biology 6(7), e159.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param tracks_in the input track file
-     * @param nodes_in the input node parcellation image
-     * @param connectome_out the output .csv file containing edge weights
-     * @param assignment_end_voxels use a simple voxel lookup value at each streamline endpoint
-     * @param assignment_radial_search perform a radial search from each streamline endpoint to locate the nearest node. Argument is the maximum radius in mm; if no node is found within this radius, the streamline endpoint is not assigned to any node. Default search distance is 4mm.
-     * @param assignment_reverse_search traverse from each streamline endpoint inwards along the streamline, in search of the last node traversed by the streamline. Argument is the maximum traversal length in mm (set to 0 to allow search to continue to the streamline midpoint).
-     * @param assignment_forward_search project the streamline forwards from the endpoint in search of a parcellation node voxel. Argument is the maximum traversal length in mm.
-     * @param assignment_all_voxels assign the streamline to all nodes it intersects along its length (note that this means a streamline may be assigned to more than two nodes, or indeed none at all)
-     * @param scale_length scale each contribution to the connectome edge by the length of the streamline
-     * @param scale_invlength scale each contribution to the connectome edge by the inverse of the streamline length
-     * @param scale_invnodevol scale each contribution to the connectome edge by the inverse of the two node volumes
-     * @param scale_file scale each contribution to the connectome edge according to the values in a vector file
-     * @param symmetric Make matrices symmetric on output
-     * @param zero_diagonal Set matrix diagonal to zero on output
-     * @param stat_edge statistic for combining the values from all streamlines in an edge into a single scale value for that edge (options are: sum,mean,min,max; default=sum)
-     * @param tck_weights_in specify a text scalar file containing the streamline weights
-     * @param keep_unassigned By default, the program discards the information regarding those streamlines that are not successfully assigned to a node pair. Set this option to keep these values (will be the first row/column in the output matrix)
-     * @param out_assignments output the node assignments of each streamline to a file; this can be used subsequently e.g. by the command connectome2tck
-     * @param vector output a vector representing connectivities from a given seed point to target nodes, rather than a matrix of node-node connectivities
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TCK2CONNECTOME_METADATA);
     const params = tck2connectome_params(tracks_in, nodes_in, connectome_out, assignment_end_voxels, assignment_radial_search, assignment_reverse_search, assignment_forward_search, assignment_all_voxels, scale_length, scale_invlength, scale_invnodevol, scale_file, symmetric, zero_diagonal, stat_edge, tck_weights_in, keep_unassigned, out_assignments, vector, info, quiet, debug, force, nthreads, config, help, version)
@@ -520,6 +520,10 @@ export {
       Tck2connectomeOutputs,
       Tck2connectomeParameters,
       tck2connectome,
+      tck2connectome_cargs,
+      tck2connectome_config_cargs,
       tck2connectome_config_params,
+      tck2connectome_execute,
+      tck2connectome_outputs,
       tck2connectome_params,
 };

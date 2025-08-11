@@ -12,7 +12,7 @@ const POSSUM_MATRIX_METADATA: Metadata = {
 
 
 interface PossumMatrixParameters {
-    "__STYXTYPE__": "possum_matrix";
+    "@type": "fsl.possum_matrix";
     "pulse_sequence": string;
     "motion_matrix": string;
     "output_matrix": string;
@@ -23,35 +23,35 @@ interface PossumMatrixParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "possum_matrix": possum_matrix_cargs,
+        "fsl.possum_matrix": possum_matrix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "possum_matrix": possum_matrix_outputs,
+        "fsl.possum_matrix": possum_matrix_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface PossumMatrixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pulse_sequence Pulse sequence - all additional files with extensions .posx, .posy, etc., expected to be in the same directory
+ * @param motion_matrix Motion matrix [time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad)]
+ * @param output_matrix Main event matrix [t(s), rf_ang(rad), rf_freq_band(Hz), (4)=rf_cent_freq(Hz), read(1/0), Gx, Gy, Gz(T/m), Tx, Ty, Tz(m), angle_of_rot B(rad), rot_axis Bx, By, Bz(m), angle_of_rot A(rad), rot_axis Ax, Ay, Az(m)]
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ * @param old_version_flag Allows for the old version of the sorter to run
+ * @param segment_size Setting the size of the segment of the matrix that is read in one at a time
+ *
+ * @returns Parameter dictionary
+ */
 function possum_matrix_params(
     pulse_sequence: string,
     motion_matrix: string,
@@ -83,21 +96,8 @@ function possum_matrix_params(
     old_version_flag: boolean = false,
     segment_size: number | null = null,
 ): PossumMatrixParameters {
-    /**
-     * Build parameters.
-    
-     * @param pulse_sequence Pulse sequence - all additional files with extensions .posx, .posy, etc., expected to be in the same directory
-     * @param motion_matrix Motion matrix [time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad)]
-     * @param output_matrix Main event matrix [t(s), rf_ang(rad), rf_freq_band(Hz), (4)=rf_cent_freq(Hz), read(1/0), Gx, Gy, Gz(T/m), Tx, Ty, Tz(m), angle_of_rot B(rad), rot_axis Bx, By, Bz(m), angle_of_rot A(rad), rot_axis Ax, Ay, Az(m)]
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-     * @param old_version_flag Allows for the old version of the sorter to run
-     * @param segment_size Setting the size of the segment of the matrix that is read in one at a time
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "possum_matrix" as const,
+        "@type": "fsl.possum_matrix" as const,
         "pulse_sequence": pulse_sequence,
         "motion_matrix": motion_matrix,
         "output_matrix": output_matrix,
@@ -112,18 +112,18 @@ function possum_matrix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function possum_matrix_cargs(
     params: PossumMatrixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("possum_matrix");
     cargs.push(
@@ -157,18 +157,18 @@ function possum_matrix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function possum_matrix_outputs(
     params: PossumMatrixParameters,
     execution: Execution,
 ): PossumMatrixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PossumMatrixOutputs = {
         root: execution.outputFile("."),
         output_main_matrix: execution.outputFile([(params["output_matrix"] ?? null)].join('')),
@@ -177,22 +177,22 @@ function possum_matrix_outputs(
 }
 
 
+/**
+ * Event matrix generator for POSSUM simulation in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
+ */
 function possum_matrix_execute(
     params: PossumMatrixParameters,
     execution: Execution,
 ): PossumMatrixOutputs {
-    /**
-     * Event matrix generator for POSSUM simulation in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
-     */
     params = execution.params(params)
     const cargs = possum_matrix_cargs(params, execution)
     const ret = possum_matrix_outputs(params, execution)
@@ -201,6 +201,24 @@ function possum_matrix_execute(
 }
 
 
+/**
+ * Event matrix generator for POSSUM simulation in FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param pulse_sequence Pulse sequence - all additional files with extensions .posx, .posy, etc., expected to be in the same directory
+ * @param motion_matrix Motion matrix [time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad)]
+ * @param output_matrix Main event matrix [t(s), rf_ang(rad), rf_freq_band(Hz), (4)=rf_cent_freq(Hz), read(1/0), Gx, Gy, Gz(T/m), Tx, Ty, Tz(m), angle_of_rot B(rad), rot_axis Bx, By, Bz(m), angle_of_rot A(rad), rot_axis Ax, Ay, Az(m)]
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display this help message
+ * @param old_version_flag Allows for the old version of the sorter to run
+ * @param segment_size Setting the size of the segment of the matrix that is read in one at a time
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
+ */
 function possum_matrix(
     pulse_sequence: string,
     motion_matrix: string,
@@ -211,24 +229,6 @@ function possum_matrix(
     segment_size: number | null = null,
     runner: Runner | null = null,
 ): PossumMatrixOutputs {
-    /**
-     * Event matrix generator for POSSUM simulation in FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param pulse_sequence Pulse sequence - all additional files with extensions .posx, .posy, etc., expected to be in the same directory
-     * @param motion_matrix Motion matrix [time(s) Tx(m) Ty(m) Tz(m) Rx(rad) Ry(rad) Rz(rad)]
-     * @param output_matrix Main event matrix [t(s), rf_ang(rad), rf_freq_band(Hz), (4)=rf_cent_freq(Hz), read(1/0), Gx, Gy, Gz(T/m), Tx, Ty, Tz(m), angle_of_rot B(rad), rot_axis Bx, By, Bz(m), angle_of_rot A(rad), rot_axis Ax, Ay, Az(m)]
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display this help message
-     * @param old_version_flag Allows for the old version of the sorter to run
-     * @param segment_size Setting the size of the segment of the matrix that is read in one at a time
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POSSUM_MATRIX_METADATA);
     const params = possum_matrix_params(pulse_sequence, motion_matrix, output_matrix, verbose_flag, help_flag, old_version_flag, segment_size)
@@ -241,5 +241,8 @@ export {
       PossumMatrixOutputs,
       PossumMatrixParameters,
       possum_matrix,
+      possum_matrix_cargs,
+      possum_matrix_execute,
+      possum_matrix_outputs,
       possum_matrix_params,
 };

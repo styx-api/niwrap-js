@@ -12,7 +12,7 @@ const RUN_SAMSEG_METADATA: Metadata = {
 
 
 interface RunSamsegParameters {
-    "__STYXTYPE__": "run_samseg";
+    "@type": "freesurfer.run_samseg";
     "output_dir": string;
     "input_files": Array<InputPathType>;
     "input_mode"?: Array<string> | null | undefined;
@@ -48,33 +48,33 @@ interface RunSamsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_samseg": run_samseg_cargs,
+        "freesurfer.run_samseg": run_samseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -94,6 +94,44 @@ interface RunSamsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_dir Target directory for output.
+ * @param input_files Input image(s) for segmentation.
+ * @param input_mode Output basenames for the input image mode.
+ * @param threads Number of threads to use.
+ * @param reg_only Only perform initial affine registration.
+ * @param reg_file Skip initial affine registration and read transform from file.
+ * @param init_reg_file Initial affine registration.
+ * @param atlas_dir Point to an alternative atlas directory.
+ * @param gmm_file Point to an alternative GMM file.
+ * @param ignore_unknown Ignore final priors corresponding to unknown class.
+ * @param options_file Override advanced options via a JSON file.
+ * @param pallidum_separate Move pallidum outside of global white matter class.
+ * @param mesh_stiffness Override mesh stiffness.
+ * @param smooth_wm_cortex_priors Sigma value to smooth the WM and cortex atlas priors.
+ * @param bias_field_smoothing_kernel Distance in mm of sinc function center to first zero crossing.
+ * @param lesion Enable lesion segmentation (requires tensorflow).
+ * @param threshold Lesion threshold for final segmentation.
+ * @param samples Number of samples for lesion segmentation.
+ * @param burnin Number of burn-in samples for lesion segmentation.
+ * @param lesion_pseudo_samples Lesion pseudo samples mean and variance.
+ * @param lesion_rho Lesion ratio.
+ * @param lesion_mask_structure Intensity mask brain structure.
+ * @param lesion_mask_pattern Lesion mask pattern for each input volume.
+ * @param random_seed Random seed.
+ * @param dissection_photo Specify hemispheres: left, right, or both.
+ * @param history Save history of segmentation.
+ * @param save_posteriors Save posterior volumes.
+ * @param save_probabilities Save modal class probabilities.
+ * @param showfigs Show figures during run.
+ * @param save_mesh Save final mesh in template space.
+ * @param save_warp Save image->template warp field.
+ * @param movie Show history as controlled time sequence.
+ *
+ * @returns Parameter dictionary
+ */
 function run_samseg_params(
     output_dir: string,
     input_files: Array<InputPathType>,
@@ -128,46 +166,8 @@ function run_samseg_params(
     save_warp: boolean = false,
     movie: boolean = false,
 ): RunSamsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_dir Target directory for output.
-     * @param input_files Input image(s) for segmentation.
-     * @param input_mode Output basenames for the input image mode.
-     * @param threads Number of threads to use.
-     * @param reg_only Only perform initial affine registration.
-     * @param reg_file Skip initial affine registration and read transform from file.
-     * @param init_reg_file Initial affine registration.
-     * @param atlas_dir Point to an alternative atlas directory.
-     * @param gmm_file Point to an alternative GMM file.
-     * @param ignore_unknown Ignore final priors corresponding to unknown class.
-     * @param options_file Override advanced options via a JSON file.
-     * @param pallidum_separate Move pallidum outside of global white matter class.
-     * @param mesh_stiffness Override mesh stiffness.
-     * @param smooth_wm_cortex_priors Sigma value to smooth the WM and cortex atlas priors.
-     * @param bias_field_smoothing_kernel Distance in mm of sinc function center to first zero crossing.
-     * @param lesion Enable lesion segmentation (requires tensorflow).
-     * @param threshold Lesion threshold for final segmentation.
-     * @param samples Number of samples for lesion segmentation.
-     * @param burnin Number of burn-in samples for lesion segmentation.
-     * @param lesion_pseudo_samples Lesion pseudo samples mean and variance.
-     * @param lesion_rho Lesion ratio.
-     * @param lesion_mask_structure Intensity mask brain structure.
-     * @param lesion_mask_pattern Lesion mask pattern for each input volume.
-     * @param random_seed Random seed.
-     * @param dissection_photo Specify hemispheres: left, right, or both.
-     * @param history Save history of segmentation.
-     * @param save_posteriors Save posterior volumes.
-     * @param save_probabilities Save modal class probabilities.
-     * @param showfigs Show figures during run.
-     * @param save_mesh Save final mesh in template space.
-     * @param save_warp Save image->template warp field.
-     * @param movie Show history as controlled time sequence.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_samseg" as const,
+        "@type": "freesurfer.run_samseg" as const,
         "output_dir": output_dir,
         "input_files": input_files,
         "reg_only": reg_only,
@@ -245,18 +245,18 @@ function run_samseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_samseg_cargs(
     params: RunSamsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_samseg");
     cargs.push(
@@ -421,18 +421,18 @@ function run_samseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_samseg_outputs(
     params: RunSamsegParameters,
     execution: Execution,
 ): RunSamsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunSamsegOutputs = {
         root: execution.outputFile("."),
     };
@@ -440,22 +440,22 @@ function run_samseg_outputs(
 }
 
 
+/**
+ * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
+ */
 function run_samseg_execute(
     params: RunSamsegParameters,
     execution: Execution,
 ): RunSamsegOutputs {
-    /**
-     * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_samseg_cargs(params, execution)
     const ret = run_samseg_outputs(params, execution)
@@ -464,6 +464,49 @@ function run_samseg_execute(
 }
 
 
+/**
+ * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_dir Target directory for output.
+ * @param input_files Input image(s) for segmentation.
+ * @param input_mode Output basenames for the input image mode.
+ * @param threads Number of threads to use.
+ * @param reg_only Only perform initial affine registration.
+ * @param reg_file Skip initial affine registration and read transform from file.
+ * @param init_reg_file Initial affine registration.
+ * @param atlas_dir Point to an alternative atlas directory.
+ * @param gmm_file Point to an alternative GMM file.
+ * @param ignore_unknown Ignore final priors corresponding to unknown class.
+ * @param options_file Override advanced options via a JSON file.
+ * @param pallidum_separate Move pallidum outside of global white matter class.
+ * @param mesh_stiffness Override mesh stiffness.
+ * @param smooth_wm_cortex_priors Sigma value to smooth the WM and cortex atlas priors.
+ * @param bias_field_smoothing_kernel Distance in mm of sinc function center to first zero crossing.
+ * @param lesion Enable lesion segmentation (requires tensorflow).
+ * @param threshold Lesion threshold for final segmentation.
+ * @param samples Number of samples for lesion segmentation.
+ * @param burnin Number of burn-in samples for lesion segmentation.
+ * @param lesion_pseudo_samples Lesion pseudo samples mean and variance.
+ * @param lesion_rho Lesion ratio.
+ * @param lesion_mask_structure Intensity mask brain structure.
+ * @param lesion_mask_pattern Lesion mask pattern for each input volume.
+ * @param random_seed Random seed.
+ * @param dissection_photo Specify hemispheres: left, right, or both.
+ * @param history Save history of segmentation.
+ * @param save_posteriors Save posterior volumes.
+ * @param save_probabilities Save modal class probabilities.
+ * @param showfigs Show figures during run.
+ * @param save_mesh Save final mesh in template space.
+ * @param save_warp Save image->template warp field.
+ * @param movie Show history as controlled time sequence.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
+ */
 function run_samseg(
     output_dir: string,
     input_files: Array<InputPathType>,
@@ -499,49 +542,6 @@ function run_samseg(
     movie: boolean = false,
     runner: Runner | null = null,
 ): RunSamsegOutputs {
-    /**
-     * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_dir Target directory for output.
-     * @param input_files Input image(s) for segmentation.
-     * @param input_mode Output basenames for the input image mode.
-     * @param threads Number of threads to use.
-     * @param reg_only Only perform initial affine registration.
-     * @param reg_file Skip initial affine registration and read transform from file.
-     * @param init_reg_file Initial affine registration.
-     * @param atlas_dir Point to an alternative atlas directory.
-     * @param gmm_file Point to an alternative GMM file.
-     * @param ignore_unknown Ignore final priors corresponding to unknown class.
-     * @param options_file Override advanced options via a JSON file.
-     * @param pallidum_separate Move pallidum outside of global white matter class.
-     * @param mesh_stiffness Override mesh stiffness.
-     * @param smooth_wm_cortex_priors Sigma value to smooth the WM and cortex atlas priors.
-     * @param bias_field_smoothing_kernel Distance in mm of sinc function center to first zero crossing.
-     * @param lesion Enable lesion segmentation (requires tensorflow).
-     * @param threshold Lesion threshold for final segmentation.
-     * @param samples Number of samples for lesion segmentation.
-     * @param burnin Number of burn-in samples for lesion segmentation.
-     * @param lesion_pseudo_samples Lesion pseudo samples mean and variance.
-     * @param lesion_rho Lesion ratio.
-     * @param lesion_mask_structure Intensity mask brain structure.
-     * @param lesion_mask_pattern Lesion mask pattern for each input volume.
-     * @param random_seed Random seed.
-     * @param dissection_photo Specify hemispheres: left, right, or both.
-     * @param history Save history of segmentation.
-     * @param save_posteriors Save posterior volumes.
-     * @param save_probabilities Save modal class probabilities.
-     * @param showfigs Show figures during run.
-     * @param save_mesh Save final mesh in template space.
-     * @param save_warp Save image->template warp field.
-     * @param movie Show history as controlled time sequence.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_SAMSEG_METADATA);
     const params = run_samseg_params(output_dir, input_files, input_mode, threads, reg_only, reg_file, init_reg_file, atlas_dir, gmm_file, ignore_unknown, options_file, pallidum_separate, mesh_stiffness, smooth_wm_cortex_priors, bias_field_smoothing_kernel, lesion, threshold, samples, burnin, lesion_pseudo_samples, lesion_rho, lesion_mask_structure, lesion_mask_pattern, random_seed, dissection_photo, history, save_posteriors, save_probabilities, showfigs, save_mesh, save_warp, movie)
@@ -554,5 +554,8 @@ export {
       RunSamsegOutputs,
       RunSamsegParameters,
       run_samseg,
+      run_samseg_cargs,
+      run_samseg_execute,
+      run_samseg_outputs,
       run_samseg_params,
 };

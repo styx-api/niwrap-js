@@ -12,7 +12,7 @@ const MRIS_FLATTEN_METADATA: Metadata = {
 
 
 interface MrisFlattenParameters {
-    "__STYXTYPE__": "mris_flatten";
+    "@type": "freesurfer.mris_flatten";
     "input_patch": InputPathType;
     "output_patch": string;
     "iterations"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface MrisFlattenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_flatten": mris_flatten_cargs,
+        "freesurfer.mris_flatten": mris_flatten_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_flatten": mris_flatten_outputs,
+        "freesurfer.mris_flatten": mris_flatten_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MrisFlattenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_patch Input surface patch
+ * @param output_patch Output flattened surface patch
+ * @param iterations Write out the surface every # of iterations.
+ * @param distances Specify size of neighborhood and number of vertices at each distance to be used in the optimization.
+ * @param dilations Specify the number of times to dilate the ripped edges to ensure a clean cut
+ * @param random_seed Set the random seed to a specific value so that flattening is repeatable
+ * @param copy_coords Copy xyz coords from surface before flattening.
+ * @param norand Set the random seed to 0 so that flattening is repeatable
+ *
+ * @returns Parameter dictionary
+ */
 function mris_flatten_params(
     input_patch: InputPathType,
     output_patch: string,
@@ -85,22 +99,8 @@ function mris_flatten_params(
     copy_coords: string | null = null,
     norand: boolean = false,
 ): MrisFlattenParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_patch Input surface patch
-     * @param output_patch Output flattened surface patch
-     * @param iterations Write out the surface every # of iterations.
-     * @param distances Specify size of neighborhood and number of vertices at each distance to be used in the optimization.
-     * @param dilations Specify the number of times to dilate the ripped edges to ensure a clean cut
-     * @param random_seed Set the random seed to a specific value so that flattening is repeatable
-     * @param copy_coords Copy xyz coords from surface before flattening.
-     * @param norand Set the random seed to 0 so that flattening is repeatable
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_flatten" as const,
+        "@type": "freesurfer.mris_flatten" as const,
         "input_patch": input_patch,
         "output_patch": output_patch,
         "norand": norand,
@@ -124,18 +124,18 @@ function mris_flatten_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_flatten_cargs(
     params: MrisFlattenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_flatten");
     cargs.push(execution.inputFile((params["input_patch"] ?? null)));
@@ -177,18 +177,18 @@ function mris_flatten_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_flatten_outputs(
     params: MrisFlattenParameters,
     execution: Execution,
 ): MrisFlattenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisFlattenOutputs = {
         root: execution.outputFile("."),
         output_patch_file: execution.outputFile([(params["output_patch"] ?? null)].join('')),
@@ -197,22 +197,22 @@ function mris_flatten_outputs(
 }
 
 
+/**
+ * This program will flatten a surface patch.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
+ */
 function mris_flatten_execute(
     params: MrisFlattenParameters,
     execution: Execution,
 ): MrisFlattenOutputs {
-    /**
-     * This program will flatten a surface patch.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_flatten_cargs(params, execution)
     const ret = mris_flatten_outputs(params, execution)
@@ -221,6 +221,25 @@ function mris_flatten_execute(
 }
 
 
+/**
+ * This program will flatten a surface patch.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_patch Input surface patch
+ * @param output_patch Output flattened surface patch
+ * @param iterations Write out the surface every # of iterations.
+ * @param distances Specify size of neighborhood and number of vertices at each distance to be used in the optimization.
+ * @param dilations Specify the number of times to dilate the ripped edges to ensure a clean cut
+ * @param random_seed Set the random seed to a specific value so that flattening is repeatable
+ * @param copy_coords Copy xyz coords from surface before flattening.
+ * @param norand Set the random seed to 0 so that flattening is repeatable
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
+ */
 function mris_flatten(
     input_patch: InputPathType,
     output_patch: string,
@@ -232,25 +251,6 @@ function mris_flatten(
     norand: boolean = false,
     runner: Runner | null = null,
 ): MrisFlattenOutputs {
-    /**
-     * This program will flatten a surface patch.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_patch Input surface patch
-     * @param output_patch Output flattened surface patch
-     * @param iterations Write out the surface every # of iterations.
-     * @param distances Specify size of neighborhood and number of vertices at each distance to be used in the optimization.
-     * @param dilations Specify the number of times to dilate the ripped edges to ensure a clean cut
-     * @param random_seed Set the random seed to a specific value so that flattening is repeatable
-     * @param copy_coords Copy xyz coords from surface before flattening.
-     * @param norand Set the random seed to 0 so that flattening is repeatable
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_FLATTEN_METADATA);
     const params = mris_flatten_params(input_patch, output_patch, iterations, distances, dilations, random_seed, copy_coords, norand)
@@ -263,5 +263,8 @@ export {
       MrisFlattenOutputs,
       MrisFlattenParameters,
       mris_flatten,
+      mris_flatten_cargs,
+      mris_flatten_execute,
+      mris_flatten_outputs,
       mris_flatten_params,
 };

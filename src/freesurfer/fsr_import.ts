@@ -12,7 +12,7 @@ const FSR_IMPORT_METADATA: Metadata = {
 
 
 interface FsrImportParameters {
-    "__STYXTYPE__": "fsr-import";
+    "@type": "freesurfer.fsr-import";
     "outdir": string;
     "t1w_input"?: Array<InputPathType> | null | undefined;
     "t2w_input"?: Array<InputPathType> | null | undefined;
@@ -24,35 +24,35 @@ interface FsrImportParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsr-import": fsr_import_cargs,
+        "freesurfer.fsr-import": fsr_import_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsr-import": fsr_import_outputs,
+        "freesurfer.fsr-import": fsr_import_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,20 @@ interface FsrImportOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outdir Root directory for output data
+ * @param t1w_input Input T1-weighted image files
+ * @param t2w_input Input T2-weighted image files
+ * @param flair_input Input FLAIR image files
+ * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
+ * @param force_update Update files regardless of timestamp
+ * @param no_conform Do not conform inputs to 1mm, 256 dimensions
+ * @param hires Same as --no-conform
+ *
+ * @returns Parameter dictionary
+ */
 function fsr_import_params(
     outdir: string,
     t1w_input: Array<InputPathType> | null = null,
@@ -97,22 +111,8 @@ function fsr_import_params(
     no_conform: boolean = false,
     hires: boolean = false,
 ): FsrImportParameters {
-    /**
-     * Build parameters.
-    
-     * @param outdir Root directory for output data
-     * @param t1w_input Input T1-weighted image files
-     * @param t2w_input Input T2-weighted image files
-     * @param flair_input Input FLAIR image files
-     * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
-     * @param force_update Update files regardless of timestamp
-     * @param no_conform Do not conform inputs to 1mm, 256 dimensions
-     * @param hires Same as --no-conform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsr-import" as const,
+        "@type": "freesurfer.fsr-import" as const,
         "outdir": outdir,
         "force_update": force_update,
         "no_conform": no_conform,
@@ -134,18 +134,18 @@ function fsr_import_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsr_import_cargs(
     params: FsrImportParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsr-import");
     cargs.push(
@@ -189,18 +189,18 @@ function fsr_import_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsr_import_outputs(
     params: FsrImportParameters,
     execution: Execution,
 ): FsrImportOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsrImportOutputs = {
         root: execution.outputFile("."),
         out_t1w: execution.outputFile([(params["outdir"] ?? null), "/t1w/*.mgz"].join('')),
@@ -212,22 +212,22 @@ function fsr_import_outputs(
 }
 
 
+/**
+ * Copies/converts data into a directory structure for samseg-expected format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
+ */
 function fsr_import_execute(
     params: FsrImportParameters,
     execution: Execution,
 ): FsrImportOutputs {
-    /**
-     * Copies/converts data into a directory structure for samseg-expected format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsr_import_cargs(params, execution)
     const ret = fsr_import_outputs(params, execution)
@@ -236,6 +236,25 @@ function fsr_import_execute(
 }
 
 
+/**
+ * Copies/converts data into a directory structure for samseg-expected format.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outdir Root directory for output data
+ * @param t1w_input Input T1-weighted image files
+ * @param t2w_input Input T2-weighted image files
+ * @param flair_input Input FLAIR image files
+ * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
+ * @param force_update Update files regardless of timestamp
+ * @param no_conform Do not conform inputs to 1mm, 256 dimensions
+ * @param hires Same as --no-conform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
+ */
 function fsr_import(
     outdir: string,
     t1w_input: Array<InputPathType> | null = null,
@@ -247,25 +266,6 @@ function fsr_import(
     hires: boolean = false,
     runner: Runner | null = null,
 ): FsrImportOutputs {
-    /**
-     * Copies/converts data into a directory structure for samseg-expected format.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outdir Root directory for output data
-     * @param t1w_input Input T1-weighted image files
-     * @param t2w_input Input T2-weighted image files
-     * @param flair_input Input FLAIR image files
-     * @param custom_mode_input Custom modality image file with specified mode name (not t1w, t2w, or flair)
-     * @param force_update Update files regardless of timestamp
-     * @param no_conform Do not conform inputs to 1mm, 256 dimensions
-     * @param hires Same as --no-conform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSR_IMPORT_METADATA);
     const params = fsr_import_params(outdir, t1w_input, t2w_input, flair_input, custom_mode_input, force_update, no_conform, hires)
@@ -278,5 +278,8 @@ export {
       FsrImportOutputs,
       FsrImportParameters,
       fsr_import,
+      fsr_import_cargs,
+      fsr_import_execute,
+      fsr_import_outputs,
       fsr_import_params,
 };

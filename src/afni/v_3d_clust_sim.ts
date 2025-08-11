@@ -12,7 +12,7 @@ const V_3D_CLUST_SIM_METADATA: Metadata = {
 
 
 interface V3dClustSimParameters {
-    "__STYXTYPE__": "3dClustSim";
+    "@type": "afni.3dClustSim";
     "nxyz"?: string | null | undefined;
     "dxyz"?: string | null | undefined;
     "ball": boolean;
@@ -38,35 +38,35 @@ interface V3dClustSimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dClustSim": v_3d_clust_sim_cargs,
+        "afni.3dClustSim": v_3d_clust_sim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dClustSim": v_3d_clust_sim_outputs,
+        "afni.3dClustSim": v_3d_clust_sim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -125,6 +125,34 @@ interface V3dClustSimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nxyz Size of 3D grid to use for simulation
+ * @param dxyz Voxel sizes along each dimension
+ * @param ball Mask off points outside a ball at the center of the grid
+ * @param mask Use the 0 sub-brick of this dataset as a mask
+ * @param oksmallmask Allow small masks with less than 128 nonzero voxels
+ * @param inset Use these dataset(s) as the simulations to threshold and clusterize
+ * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
+ * @param acf Parameters a, b, c for the autocorrelation function
+ * @param nopad Turn off padding slices added for edge effects
+ * @param pthr List of uncorrected per voxel p-values
+ * @param athr List of corrected whole volume alpha-values
+ * @param lots Use a longer list of values for pthr and athr
+ * @param mega Add even more values to the pthr and athr grids
+ * @param iter Number of Monte Carlo simulations
+ * @param nodec Print the cluster size threshold as an integer
+ * @param seed Random number seed
+ * @param niml Output the table in XML/NIML format
+ * @param both Output the table in both XML/NIML format and in .1D format
+ * @param prefix Specify prefix for the output files
+ * @param cmd Write command for putting results into a file's header
+ * @param quiet Don't print out progress reports
+ * @param ssave Save un-thresholded generated random volumes
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_clust_sim_params(
     nxyz: string | null = null,
     dxyz: string | null = null,
@@ -149,36 +177,8 @@ function v_3d_clust_sim_params(
     quiet: boolean = false,
     ssave: string | null = null,
 ): V3dClustSimParameters {
-    /**
-     * Build parameters.
-    
-     * @param nxyz Size of 3D grid to use for simulation
-     * @param dxyz Voxel sizes along each dimension
-     * @param ball Mask off points outside a ball at the center of the grid
-     * @param mask Use the 0 sub-brick of this dataset as a mask
-     * @param oksmallmask Allow small masks with less than 128 nonzero voxels
-     * @param inset Use these dataset(s) as the simulations to threshold and clusterize
-     * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
-     * @param acf Parameters a, b, c for the autocorrelation function
-     * @param nopad Turn off padding slices added for edge effects
-     * @param pthr List of uncorrected per voxel p-values
-     * @param athr List of corrected whole volume alpha-values
-     * @param lots Use a longer list of values for pthr and athr
-     * @param mega Add even more values to the pthr and athr grids
-     * @param iter Number of Monte Carlo simulations
-     * @param nodec Print the cluster size threshold as an integer
-     * @param seed Random number seed
-     * @param niml Output the table in XML/NIML format
-     * @param both Output the table in both XML/NIML format and in .1D format
-     * @param prefix Specify prefix for the output files
-     * @param cmd Write command for putting results into a file's header
-     * @param quiet Don't print out progress reports
-     * @param ssave Save un-thresholded generated random volumes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dClustSim" as const,
+        "@type": "afni.3dClustSim" as const,
         "ball": ball,
         "oksmallmask": oksmallmask,
         "nopad": nopad,
@@ -232,18 +232,18 @@ function v_3d_clust_sim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_clust_sim_cargs(
     params: V3dClustSimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dClustSim");
     if ((params["nxyz"] ?? null) !== null) {
@@ -355,18 +355,18 @@ function v_3d_clust_sim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_clust_sim_outputs(
     params: V3dClustSimParameters,
     execution: Execution,
 ): V3dClustSimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dClustSimOutputs = {
         root: execution.outputFile("."),
         output_nn1_1sided: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".NN1_1sided.1D"].join('')) : null,
@@ -384,22 +384,22 @@ function v_3d_clust_sim_outputs(
 }
 
 
+/**
+ * Program to estimate the probability of false positive (noise-only) clusters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
+ */
 function v_3d_clust_sim_execute(
     params: V3dClustSimParameters,
     execution: Execution,
 ): V3dClustSimOutputs {
-    /**
-     * Program to estimate the probability of false positive (noise-only) clusters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_clust_sim_cargs(params, execution)
     const ret = v_3d_clust_sim_outputs(params, execution)
@@ -408,6 +408,39 @@ function v_3d_clust_sim_execute(
 }
 
 
+/**
+ * Program to estimate the probability of false positive (noise-only) clusters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param nxyz Size of 3D grid to use for simulation
+ * @param dxyz Voxel sizes along each dimension
+ * @param ball Mask off points outside a ball at the center of the grid
+ * @param mask Use the 0 sub-brick of this dataset as a mask
+ * @param oksmallmask Allow small masks with less than 128 nonzero voxels
+ * @param inset Use these dataset(s) as the simulations to threshold and clusterize
+ * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
+ * @param acf Parameters a, b, c for the autocorrelation function
+ * @param nopad Turn off padding slices added for edge effects
+ * @param pthr List of uncorrected per voxel p-values
+ * @param athr List of corrected whole volume alpha-values
+ * @param lots Use a longer list of values for pthr and athr
+ * @param mega Add even more values to the pthr and athr grids
+ * @param iter Number of Monte Carlo simulations
+ * @param nodec Print the cluster size threshold as an integer
+ * @param seed Random number seed
+ * @param niml Output the table in XML/NIML format
+ * @param both Output the table in both XML/NIML format and in .1D format
+ * @param prefix Specify prefix for the output files
+ * @param cmd Write command for putting results into a file's header
+ * @param quiet Don't print out progress reports
+ * @param ssave Save un-thresholded generated random volumes
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
+ */
 function v_3d_clust_sim(
     nxyz: string | null = null,
     dxyz: string | null = null,
@@ -433,39 +466,6 @@ function v_3d_clust_sim(
     ssave: string | null = null,
     runner: Runner | null = null,
 ): V3dClustSimOutputs {
-    /**
-     * Program to estimate the probability of false positive (noise-only) clusters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param nxyz Size of 3D grid to use for simulation
-     * @param dxyz Voxel sizes along each dimension
-     * @param ball Mask off points outside a ball at the center of the grid
-     * @param mask Use the 0 sub-brick of this dataset as a mask
-     * @param oksmallmask Allow small masks with less than 128 nonzero voxels
-     * @param inset Use these dataset(s) as the simulations to threshold and clusterize
-     * @param fwhm Gaussian filter width in mm (use -fwhmxyz for different values per axis)
-     * @param acf Parameters a, b, c for the autocorrelation function
-     * @param nopad Turn off padding slices added for edge effects
-     * @param pthr List of uncorrected per voxel p-values
-     * @param athr List of corrected whole volume alpha-values
-     * @param lots Use a longer list of values for pthr and athr
-     * @param mega Add even more values to the pthr and athr grids
-     * @param iter Number of Monte Carlo simulations
-     * @param nodec Print the cluster size threshold as an integer
-     * @param seed Random number seed
-     * @param niml Output the table in XML/NIML format
-     * @param both Output the table in both XML/NIML format and in .1D format
-     * @param prefix Specify prefix for the output files
-     * @param cmd Write command for putting results into a file's header
-     * @param quiet Don't print out progress reports
-     * @param ssave Save un-thresholded generated random volumes
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_CLUST_SIM_METADATA);
     const params = v_3d_clust_sim_params(nxyz, dxyz, ball, mask, oksmallmask, inset, fwhm, acf, nopad, pthr, athr, lots, mega, iter, nodec, seed, niml, both, prefix, cmd, quiet, ssave)
@@ -478,5 +478,8 @@ export {
       V3dClustSimParameters,
       V_3D_CLUST_SIM_METADATA,
       v_3d_clust_sim,
+      v_3d_clust_sim_cargs,
+      v_3d_clust_sim_execute,
+      v_3d_clust_sim_outputs,
       v_3d_clust_sim_params,
 };

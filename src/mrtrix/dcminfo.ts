@@ -12,21 +12,21 @@ const DCMINFO_METADATA: Metadata = {
 
 
 interface DcminfoTagParameters {
-    "__STYXTYPE__": "tag";
+    "@type": "mrtrix.dcminfo.tag";
     "group": string;
     "element": string;
 }
 
 
 interface DcminfoConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dcminfo.config";
     "key": string;
     "value": string;
 }
 
 
 interface DcminfoParameters {
-    "__STYXTYPE__": "dcminfo";
+    "@type": "mrtrix.dcminfo";
     "all": boolean;
     "csa": boolean;
     "phoenix": boolean;
@@ -43,55 +43,55 @@ interface DcminfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcminfo": dcminfo_cargs,
-        "tag": dcminfo_tag_cargs,
-        "config": dcminfo_config_cargs,
+        "mrtrix.dcminfo": dcminfo_cargs,
+        "mrtrix.dcminfo.tag": dcminfo_tag_cargs,
+        "mrtrix.dcminfo.config": dcminfo_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param group print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
+ * @param element print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
+ *
+ * @returns Parameter dictionary
+ */
 function dcminfo_tag_params(
     group: string,
     element: string,
 ): DcminfoTagParameters {
-    /**
-     * Build parameters.
-    
-     * @param group print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
-     * @param element print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tag" as const,
+        "@type": "mrtrix.dcminfo.tag" as const,
         "group": group,
         "element": element,
     };
@@ -99,18 +99,18 @@ function dcminfo_tag_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcminfo_tag_cargs(
     params: DcminfoTagParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-tag");
     cargs.push((params["group"] ?? null));
@@ -119,20 +119,20 @@ function dcminfo_tag_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dcminfo_config_params(
     key: string,
     value: string,
 ): DcminfoConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dcminfo.config" as const,
         "key": key,
         "value": value,
     };
@@ -140,18 +140,18 @@ function dcminfo_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcminfo_config_cargs(
     params: DcminfoConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -173,6 +173,25 @@ interface DcminfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param file the DICOM file to be scanned.
+ * @param all print all DICOM fields.
+ * @param csa print all Siemens CSA fields (excluding Phoenix unless requested)
+ * @param phoenix print Siemens Phoenix protocol information
+ * @param tag print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dcminfo_params(
     file: InputPathType,
     all: boolean = false,
@@ -188,27 +207,8 @@ function dcminfo_params(
     help: boolean = false,
     version: boolean = false,
 ): DcminfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param file the DICOM file to be scanned.
-     * @param all print all DICOM fields.
-     * @param csa print all Siemens CSA fields (excluding Phoenix unless requested)
-     * @param phoenix print Siemens Phoenix protocol information
-     * @param tag print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcminfo" as const,
+        "@type": "mrtrix.dcminfo" as const,
         "all": all,
         "csa": csa,
         "phoenix": phoenix,
@@ -233,18 +233,18 @@ function dcminfo_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcminfo_cargs(
     params: DcminfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcminfo");
     if ((params["all"] ?? null)) {
@@ -257,7 +257,7 @@ function dcminfo_cargs(
         cargs.push("-phoenix");
     }
     if ((params["tag"] ?? null) !== null) {
-        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -278,7 +278,7 @@ function dcminfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -291,18 +291,18 @@ function dcminfo_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcminfo_outputs(
     params: DcminfoParameters,
     execution: Execution,
 ): DcminfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcminfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -310,28 +310,28 @@ function dcminfo_outputs(
 }
 
 
+/**
+ * Output DICOM fields in human-readable format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
+ */
 function dcminfo_execute(
     params: DcminfoParameters,
     execution: Execution,
 ): DcminfoOutputs {
-    /**
-     * Output DICOM fields in human-readable format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcminfo_cargs(params, execution)
     const ret = dcminfo_outputs(params, execution)
@@ -340,6 +340,36 @@ function dcminfo_execute(
 }
 
 
+/**
+ * Output DICOM fields in human-readable format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param file the DICOM file to be scanned.
+ * @param all print all DICOM fields.
+ * @param csa print all Siemens CSA fields (excluding Phoenix unless requested)
+ * @param phoenix print Siemens Phoenix protocol information
+ * @param tag print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
+ */
 function dcminfo(
     file: InputPathType,
     all: boolean = false,
@@ -356,36 +386,6 @@ function dcminfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): DcminfoOutputs {
-    /**
-     * Output DICOM fields in human-readable format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param file the DICOM file to be scanned.
-     * @param all print all DICOM fields.
-     * @param csa print all Siemens CSA fields (excluding Phoenix unless requested)
-     * @param phoenix print Siemens Phoenix protocol information
-     * @param tag print field specified by the group & element tags supplied. Tags should be supplied as Hexadecimal (i.e. as they appear in the -all listing).
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMINFO_METADATA);
     const params = dcminfo_params(file, all, csa, phoenix, tag, info, quiet, debug, force, nthreads, config, help, version)
@@ -400,7 +400,12 @@ export {
       DcminfoParameters,
       DcminfoTagParameters,
       dcminfo,
+      dcminfo_cargs,
+      dcminfo_config_cargs,
       dcminfo_config_params,
+      dcminfo_execute,
+      dcminfo_outputs,
       dcminfo_params,
+      dcminfo_tag_cargs,
       dcminfo_tag_params,
 };

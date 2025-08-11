@@ -12,7 +12,7 @@ const WPNG_METADATA: Metadata = {
 
 
 interface WpngParameters {
-    "__STYXTYPE__": "wpng";
+    "@type": "fsl.wpng";
     "input_file"?: InputPathType | null | undefined;
     "gamma"?: number | null | undefined;
     "bgcolor"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface WpngParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "wpng": wpng_cargs,
+        "fsl.wpng": wpng_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "wpng": wpng_outputs,
+        "fsl.wpng": wpng_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface WpngOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input PNM file (binary PGM 'P5', PPM 'P6' or PAM 'P8')
+ * @param gamma Transfer-function exponent (``gamma'') of the image in floating-point format (e.g., ``0.45455''). If image looks correct on given display system, image gamma is equal to inverse of display-system exponent, i.e., 1 / (LUT * CRT) (where LUT = lookup-table exponent and CRT = CRT exponent; first varies, second is usually 2.2, all are positive)
+ * @param bgcolor Desired background color for alpha-channel images, in 7-character hex RGB format (e.g., ``#ff7700'' for orange: same as HTML colors)
+ * @param text_flag Prompt interactively for text info (tEXt chunks)
+ * @param time_flag Include a tIME chunk (last modification time)
+ * @param interlace_flag Write interlaced PNG image
+ *
+ * @returns Parameter dictionary
+ */
 function wpng_params(
     input_file: InputPathType | null = null,
     gamma: number | null = null,
@@ -81,20 +93,8 @@ function wpng_params(
     time_flag: boolean = false,
     interlace_flag: boolean = false,
 ): WpngParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input PNM file (binary PGM 'P5', PPM 'P6' or PAM 'P8')
-     * @param gamma Transfer-function exponent (``gamma'') of the image in floating-point format (e.g., ``0.45455''). If image looks correct on given display system, image gamma is equal to inverse of display-system exponent, i.e., 1 / (LUT * CRT) (where LUT = lookup-table exponent and CRT = CRT exponent; first varies, second is usually 2.2, all are positive)
-     * @param bgcolor Desired background color for alpha-channel images, in 7-character hex RGB format (e.g., ``#ff7700'' for orange: same as HTML colors)
-     * @param text_flag Prompt interactively for text info (tEXt chunks)
-     * @param time_flag Include a tIME chunk (last modification time)
-     * @param interlace_flag Write interlaced PNG image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wpng" as const,
+        "@type": "fsl.wpng" as const,
         "text_flag": text_flag,
         "time_flag": time_flag,
         "interlace_flag": interlace_flag,
@@ -112,18 +112,18 @@ function wpng_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wpng_cargs(
     params: WpngParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wpng");
     if ((params["input_file"] ?? null) !== null) {
@@ -154,18 +154,18 @@ function wpng_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function wpng_outputs(
     params: WpngParameters,
     execution: Execution,
 ): WpngOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WpngOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["[INPUT_FILE_BASE_NAME].png"].join('')),
@@ -174,22 +174,22 @@ function wpng_outputs(
 }
 
 
+/**
+ * Simple PGM/PPM/PAM to PNG Converter.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WpngOutputs`).
+ */
 function wpng_execute(
     params: WpngParameters,
     execution: Execution,
 ): WpngOutputs {
-    /**
-     * Simple PGM/PPM/PAM to PNG Converter.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WpngOutputs`).
-     */
     params = execution.params(params)
     const cargs = wpng_cargs(params, execution)
     const ret = wpng_outputs(params, execution)
@@ -198,6 +198,23 @@ function wpng_execute(
 }
 
 
+/**
+ * Simple PGM/PPM/PAM to PNG Converter.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input PNM file (binary PGM 'P5', PPM 'P6' or PAM 'P8')
+ * @param gamma Transfer-function exponent (``gamma'') of the image in floating-point format (e.g., ``0.45455''). If image looks correct on given display system, image gamma is equal to inverse of display-system exponent, i.e., 1 / (LUT * CRT) (where LUT = lookup-table exponent and CRT = CRT exponent; first varies, second is usually 2.2, all are positive)
+ * @param bgcolor Desired background color for alpha-channel images, in 7-character hex RGB format (e.g., ``#ff7700'' for orange: same as HTML colors)
+ * @param text_flag Prompt interactively for text info (tEXt chunks)
+ * @param time_flag Include a tIME chunk (last modification time)
+ * @param interlace_flag Write interlaced PNG image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WpngOutputs`).
+ */
 function wpng(
     input_file: InputPathType | null = null,
     gamma: number | null = null,
@@ -207,23 +224,6 @@ function wpng(
     interlace_flag: boolean = false,
     runner: Runner | null = null,
 ): WpngOutputs {
-    /**
-     * Simple PGM/PPM/PAM to PNG Converter.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input PNM file (binary PGM 'P5', PPM 'P6' or PAM 'P8')
-     * @param gamma Transfer-function exponent (``gamma'') of the image in floating-point format (e.g., ``0.45455''). If image looks correct on given display system, image gamma is equal to inverse of display-system exponent, i.e., 1 / (LUT * CRT) (where LUT = lookup-table exponent and CRT = CRT exponent; first varies, second is usually 2.2, all are positive)
-     * @param bgcolor Desired background color for alpha-channel images, in 7-character hex RGB format (e.g., ``#ff7700'' for orange: same as HTML colors)
-     * @param text_flag Prompt interactively for text info (tEXt chunks)
-     * @param time_flag Include a tIME chunk (last modification time)
-     * @param interlace_flag Write interlaced PNG image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WpngOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WPNG_METADATA);
     const params = wpng_params(input_file, gamma, bgcolor, text_flag, time_flag, interlace_flag)
@@ -236,5 +236,8 @@ export {
       WpngOutputs,
       WpngParameters,
       wpng,
+      wpng_cargs,
+      wpng_execute,
+      wpng_outputs,
       wpng_params,
 };

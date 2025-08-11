@@ -12,7 +12,7 @@ const VOLUME_PARCEL_SMOOTHING_METADATA: Metadata = {
 
 
 interface VolumeParcelSmoothingParameters {
-    "__STYXTYPE__": "volume-parcel-smoothing";
+    "@type": "workbench.volume-parcel-smoothing";
     "data_volume": InputPathType;
     "label_volume": InputPathType;
     "kernel": number;
@@ -23,35 +23,35 @@ interface VolumeParcelSmoothingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-parcel-smoothing": volume_parcel_smoothing_cargs,
+        "workbench.volume-parcel-smoothing": volume_parcel_smoothing_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-parcel-smoothing": volume_parcel_smoothing_outputs,
+        "workbench.volume-parcel-smoothing": volume_parcel_smoothing_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VolumeParcelSmoothingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_volume the volume to smooth
+ * @param label_volume a label volume containing the parcels to smooth
+ * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param volume_out the output volume
+ * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ * @param opt_fix_zeros treat zero values as not being data
+ * @param opt_subvolume_subvol select a single subvolume to smooth: the subvolume number or name
+ *
+ * @returns Parameter dictionary
+ */
 function volume_parcel_smoothing_params(
     data_volume: InputPathType,
     label_volume: InputPathType,
@@ -83,21 +96,8 @@ function volume_parcel_smoothing_params(
     opt_fix_zeros: boolean = false,
     opt_subvolume_subvol: string | null = null,
 ): VolumeParcelSmoothingParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_volume the volume to smooth
-     * @param label_volume a label volume containing the parcels to smooth
-     * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
-     * @param volume_out the output volume
-     * @param opt_fwhm smoothing kernel size is FWHM, not sigma
-     * @param opt_fix_zeros treat zero values as not being data
-     * @param opt_subvolume_subvol select a single subvolume to smooth: the subvolume number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-parcel-smoothing" as const,
+        "@type": "workbench.volume-parcel-smoothing" as const,
         "data_volume": data_volume,
         "label_volume": label_volume,
         "kernel": kernel,
@@ -112,18 +112,18 @@ function volume_parcel_smoothing_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_parcel_smoothing_cargs(
     params: VolumeParcelSmoothingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-parcel-smoothing");
@@ -147,18 +147,18 @@ function volume_parcel_smoothing_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_parcel_smoothing_outputs(
     params: VolumeParcelSmoothingParameters,
     execution: Execution,
 ): VolumeParcelSmoothingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeParcelSmoothingOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -167,24 +167,24 @@ function volume_parcel_smoothing_outputs(
 }
 
 
+/**
+ * Smooth parcels in a volume separately.
+ *
+ * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
+ */
 function volume_parcel_smoothing_execute(
     params: VolumeParcelSmoothingParameters,
     execution: Execution,
 ): VolumeParcelSmoothingOutputs {
-    /**
-     * Smooth parcels in a volume separately.
-     * 
-     * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_parcel_smoothing_cargs(params, execution)
     const ret = volume_parcel_smoothing_outputs(params, execution)
@@ -193,6 +193,26 @@ function volume_parcel_smoothing_execute(
 }
 
 
+/**
+ * Smooth parcels in a volume separately.
+ *
+ * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param data_volume the volume to smooth
+ * @param label_volume a label volume containing the parcels to smooth
+ * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param volume_out the output volume
+ * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ * @param opt_fix_zeros treat zero values as not being data
+ * @param opt_subvolume_subvol select a single subvolume to smooth: the subvolume number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
+ */
 function volume_parcel_smoothing(
     data_volume: InputPathType,
     label_volume: InputPathType,
@@ -203,26 +223,6 @@ function volume_parcel_smoothing(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
-    /**
-     * Smooth parcels in a volume separately.
-     * 
-     * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param data_volume the volume to smooth
-     * @param label_volume a label volume containing the parcels to smooth
-     * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
-     * @param volume_out the output volume
-     * @param opt_fwhm smoothing kernel size is FWHM, not sigma
-     * @param opt_fix_zeros treat zero values as not being data
-     * @param opt_subvolume_subvol select a single subvolume to smooth: the subvolume number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_PARCEL_SMOOTHING_METADATA);
     const params = volume_parcel_smoothing_params(data_volume, label_volume, kernel, volume_out, opt_fwhm, opt_fix_zeros, opt_subvolume_subvol)
@@ -235,5 +235,8 @@ export {
       VolumeParcelSmoothingOutputs,
       VolumeParcelSmoothingParameters,
       volume_parcel_smoothing,
+      volume_parcel_smoothing_cargs,
+      volume_parcel_smoothing_execute,
+      volume_parcel_smoothing_outputs,
       volume_parcel_smoothing_params,
 };

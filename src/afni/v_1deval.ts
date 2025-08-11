@@ -12,7 +12,7 @@ const V_1DEVAL_METADATA: Metadata = {
 
 
 interface V1devalParameters {
-    "__STYXTYPE__": "1deval";
+    "@type": "afni.1deval";
     "del"?: number | null | undefined;
     "start"?: number | null | undefined;
     "num"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface V1devalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1deval": v_1deval_cargs,
+        "afni.1deval": v_1deval_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1deval": v_1deval_outputs,
+        "afni.1deval": v_1deval_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V1devalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param expression Expression to evaluate.
+ * @param del Use 'd' as the step for a single undetermined variable in the expression.
+ * @param start Start at value 's' for a single undetermined variable in the expression.
+ * @param num Evaluate the expression 'n' times.
+ * @param index Read index column from file i.1D and write it out as 1st column of output.
+ * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
+ * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+ * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1deval_params(
     expression: string,
     del: number | null = null,
@@ -85,22 +99,8 @@ function v_1deval_params(
     symbols: Array<InputPathType> | null = null,
     symbol_values: Array<string> | null = null,
 ): V1devalParameters {
-    /**
-     * Build parameters.
-    
-     * @param expression Expression to evaluate.
-     * @param del Use 'd' as the step for a single undetermined variable in the expression.
-     * @param start Start at value 's' for a single undetermined variable in the expression.
-     * @param num Evaluate the expression 'n' times.
-     * @param index Read index column from file i.1D and write it out as 1st column of output.
-     * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
-     * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
-     * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1deval" as const,
+        "@type": "afni.1deval" as const,
         "1D": v_1_d,
         "expression": expression,
     };
@@ -126,18 +126,18 @@ function v_1deval_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1deval_cargs(
     params: V1devalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1deval");
     if ((params["del"] ?? null) !== null) {
@@ -187,18 +187,18 @@ function v_1deval_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1deval_outputs(
     params: V1devalParameters,
     execution: Execution,
 ): V1devalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1devalOutputs = {
         root: execution.outputFile("."),
         output_1_d: execution.outputFile(["output.1D"].join('')),
@@ -207,22 +207,22 @@ function v_1deval_outputs(
 }
 
 
+/**
+ * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1devalOutputs`).
+ */
 function v_1deval_execute(
     params: V1devalParameters,
     execution: Execution,
 ): V1devalOutputs {
-    /**
-     * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1devalOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1deval_cargs(params, execution)
     const ret = v_1deval_outputs(params, execution)
@@ -231,6 +231,25 @@ function v_1deval_execute(
 }
 
 
+/**
+ * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param expression Expression to evaluate.
+ * @param del Use 'd' as the step for a single undetermined variable in the expression.
+ * @param start Start at value 's' for a single undetermined variable in the expression.
+ * @param num Evaluate the expression 'n' times.
+ * @param index Read index column from file i.1D and write it out as 1st column of output.
+ * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
+ * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+ * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1devalOutputs`).
+ */
 function v_1deval(
     expression: string,
     del: number | null = null,
@@ -242,25 +261,6 @@ function v_1deval(
     symbol_values: Array<string> | null = null,
     runner: Runner | null = null,
 ): V1devalOutputs {
-    /**
-     * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param expression Expression to evaluate.
-     * @param del Use 'd' as the step for a single undetermined variable in the expression.
-     * @param start Start at value 's' for a single undetermined variable in the expression.
-     * @param num Evaluate the expression 'n' times.
-     * @param index Read index column from file i.1D and write it out as 1st column of output.
-     * @param v_1_d Write output in the form of a single '1D:' string suitable for input on the command line of another program.
-     * @param symbols Read time series file and assign it to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
-     * @param symbol_values Assign a fixed numerical value to the symbol 'a'. Letters 'a' to 'z' may be used as symbols.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1devalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DEVAL_METADATA);
     const params = v_1deval_params(expression, del, start, num, index, v_1_d, symbols, symbol_values)
@@ -273,5 +273,8 @@ export {
       V1devalParameters,
       V_1DEVAL_METADATA,
       v_1deval,
+      v_1deval_cargs,
+      v_1deval_execute,
+      v_1deval_outputs,
       v_1deval_params,
 };

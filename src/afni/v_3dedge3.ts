@@ -12,7 +12,7 @@ const V_3DEDGE3_METADATA: Metadata = {
 
 
 interface V3dedge3Parameters {
-    "__STYXTYPE__": "3dedge3";
+    "@type": "afni.3dedge3";
     "input_file": InputPathType;
     "verbose": boolean;
     "prefix"?: string | null | undefined;
@@ -25,35 +25,35 @@ interface V3dedge3Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dedge3": v_3dedge3_cargs,
+        "afni.3dedge3": v_3dedge3_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dedge3": v_3dedge3_outputs,
+        "afni.3dedge3": v_3dedge3_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dedge3Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input dataset
+ * @param verbose Print out some information along the way
+ * @param prefix Sets the prefix of the output dataset
+ * @param datum Sets the datum of the output dataset
+ * @param fscale Force scaling of the output to the maximum integer range
+ * @param gscale Same as '-fscale', but also forces each output sub-brick to get the same scaling factor
+ * @param nscale Don't do any scaling on output to byte or short datasets
+ * @param scale_floats Multiply input by VAL, but only if the input datum is float.
+ * @param automask For automatic internal calculation of a mask in the usual AFNI way
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dedge3_params(
     input_file: InputPathType,
     verbose: boolean = false,
@@ -87,23 +102,8 @@ function v_3dedge3_params(
     scale_floats: number | null = null,
     automask: boolean = false,
 ): V3dedge3Parameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input dataset
-     * @param verbose Print out some information along the way
-     * @param prefix Sets the prefix of the output dataset
-     * @param datum Sets the datum of the output dataset
-     * @param fscale Force scaling of the output to the maximum integer range
-     * @param gscale Same as '-fscale', but also forces each output sub-brick to get the same scaling factor
-     * @param nscale Don't do any scaling on output to byte or short datasets
-     * @param scale_floats Multiply input by VAL, but only if the input datum is float.
-     * @param automask For automatic internal calculation of a mask in the usual AFNI way
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dedge3" as const,
+        "@type": "afni.3dedge3" as const,
         "input_file": input_file,
         "verbose": verbose,
         "fscale": fscale,
@@ -124,18 +124,18 @@ function v_3dedge3_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dedge3_cargs(
     params: V3dedge3Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dedge3");
     cargs.push(
@@ -179,18 +179,18 @@ function v_3dedge3_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dedge3_outputs(
     params: V3dedge3Parameters,
     execution: Execution,
 ): V3dedge3Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dedge3Outputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -199,22 +199,22 @@ function v_3dedge3_outputs(
 }
 
 
+/**
+ * Does 3D Edge detection using the library 3DEdge.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
+ */
 function v_3dedge3_execute(
     params: V3dedge3Parameters,
     execution: Execution,
 ): V3dedge3Outputs {
-    /**
-     * Does 3D Edge detection using the library 3DEdge.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dedge3_cargs(params, execution)
     const ret = v_3dedge3_outputs(params, execution)
@@ -223,6 +223,26 @@ function v_3dedge3_execute(
 }
 
 
+/**
+ * Does 3D Edge detection using the library 3DEdge.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input dataset
+ * @param verbose Print out some information along the way
+ * @param prefix Sets the prefix of the output dataset
+ * @param datum Sets the datum of the output dataset
+ * @param fscale Force scaling of the output to the maximum integer range
+ * @param gscale Same as '-fscale', but also forces each output sub-brick to get the same scaling factor
+ * @param nscale Don't do any scaling on output to byte or short datasets
+ * @param scale_floats Multiply input by VAL, but only if the input datum is float.
+ * @param automask For automatic internal calculation of a mask in the usual AFNI way
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
+ */
 function v_3dedge3(
     input_file: InputPathType,
     verbose: boolean = false,
@@ -235,26 +255,6 @@ function v_3dedge3(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dedge3Outputs {
-    /**
-     * Does 3D Edge detection using the library 3DEdge.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input dataset
-     * @param verbose Print out some information along the way
-     * @param prefix Sets the prefix of the output dataset
-     * @param datum Sets the datum of the output dataset
-     * @param fscale Force scaling of the output to the maximum integer range
-     * @param gscale Same as '-fscale', but also forces each output sub-brick to get the same scaling factor
-     * @param nscale Don't do any scaling on output to byte or short datasets
-     * @param scale_floats Multiply input by VAL, but only if the input datum is float.
-     * @param automask For automatic internal calculation of a mask in the usual AFNI way
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DEDGE3_METADATA);
     const params = v_3dedge3_params(input_file, verbose, prefix, datum, fscale, gscale, nscale, scale_floats, automask)
@@ -267,5 +267,8 @@ export {
       V3dedge3Parameters,
       V_3DEDGE3_METADATA,
       v_3dedge3,
+      v_3dedge3_cargs,
+      v_3dedge3_execute,
+      v_3dedge3_outputs,
       v_3dedge3_params,
 };

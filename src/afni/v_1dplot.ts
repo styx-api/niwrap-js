@@ -12,28 +12,28 @@ const V_1DPLOT_METADATA: Metadata = {
 
 
 interface V1dplotNolineParameters {
-    "__STYXTYPE__": "noline";
+    "@type": "afni.1dplot.noline";
     "noline": boolean;
     "NOLINE": boolean;
 }
 
 
 interface V1dplotThickParameters {
-    "__STYXTYPE__": "thick";
+    "@type": "afni.1dplot.thick";
     "thick": boolean;
     "THICK": boolean;
 }
 
 
 interface V1dplotRboxParameters {
-    "__STYXTYPE__": "rbox";
+    "@type": "afni.1dplot.rbox";
     "rbox"?: string | null | undefined;
     "Rbox"?: string | null | undefined;
 }
 
 
 interface V1dplotParameters {
-    "__STYXTYPE__": "1dplot";
+    "@type": "afni.1dplot";
     "tsfiles": Array<InputPathType>;
     "install": boolean;
     "sep": boolean;
@@ -88,56 +88,56 @@ interface V1dplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dplot": v_1dplot_cargs,
-        "noline": v_1dplot_noline_cargs,
-        "thick": v_1dplot_thick_cargs,
-        "rbox": v_1dplot_rbox_cargs,
+        "afni.1dplot": v_1dplot_cargs,
+        "afni.1dplot.noline": v_1dplot_noline_cargs,
+        "afni.1dplot.thick": v_1dplot_thick_cargs,
+        "afni.1dplot.rbox": v_1dplot_rbox_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param noline Don't plot the connecting lines.
+ * @param noline_ Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dplot_noline_params(
     noline: boolean = false,
     noline_: boolean = false,
 ): V1dplotNolineParameters {
-    /**
-     * Build parameters.
-    
-     * @param noline Don't plot the connecting lines.
-     * @param noline_ Same as -noline, but will not try to plot values outside the rectangular box that contains the graph axes.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "noline" as const,
+        "@type": "afni.1dplot.noline" as const,
         "noline": noline,
         "NOLINE": noline_,
     };
@@ -145,18 +145,18 @@ function v_1dplot_noline_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dplot_noline_cargs(
     params: V1dplotNolineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["noline"] ?? null)) {
         cargs.push("-noline");
@@ -168,20 +168,20 @@ function v_1dplot_noline_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param thick Increase the line thickness used for plotting.
+ * @param thick_ Twice the power of '-thick' at no extra cost!
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dplot_thick_params(
     thick: boolean = false,
     thick_: boolean = false,
 ): V1dplotThickParameters {
-    /**
-     * Build parameters.
-    
-     * @param thick Increase the line thickness used for plotting.
-     * @param thick_ Twice the power of '-thick' at no extra cost!
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "thick" as const,
+        "@type": "afni.1dplot.thick" as const,
         "thick": thick,
         "THICK": thick_,
     };
@@ -189,18 +189,18 @@ function v_1dplot_thick_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dplot_thick_cargs(
     params: V1dplotThickParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["thick"] ?? null)) {
         cargs.push("-thick");
@@ -212,20 +212,20 @@ function v_1dplot_thick_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rbox Draw a rectangular box with specified corners and colors.
+ * @param rbox_ Draw a rectangular box with one extra horizontal line.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dplot_rbox_params(
     rbox: string | null = null,
     rbox_: string | null = null,
 ): V1dplotRboxParameters {
-    /**
-     * Build parameters.
-    
-     * @param rbox Draw a rectangular box with specified corners and colors.
-     * @param rbox_ Draw a rectangular box with one extra horizontal line.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rbox" as const,
+        "@type": "afni.1dplot.rbox" as const,
     };
     if (rbox !== null) {
         params["rbox"] = rbox;
@@ -237,18 +237,18 @@ function v_1dplot_rbox_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dplot_rbox_cargs(
     params: V1dplotRboxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["rbox"] ?? null) !== null) {
         cargs.push(
@@ -279,6 +279,63 @@ interface V1dplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tsfiles Input time series files (*.1D) to be plotted.
+ * @param install Install a new X11 colormap.
+ * @param sep Plot each column in a separate sub-graph.
+ * @param one Plot all columns together in one big graph.
+ * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
+ * @param noline Don't plot the connecting lines.
+ * @param box Plot a small 'box' at each data point.
+ * @param hist Plot graphs in histogram style (i.e., vertical boxes).
+ * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
+ * @param normx Independently scale each time series plotted to have max absolute value = 1 (L_infinity norm).
+ * @param norm1 Independently scale each time series plotted to have max sum of absolute values = 1 (L_1 norm).
+ * @param demean Remove the mean from each time series before normalizing.
+ * @param x Use for X axis the data in a specified .1D file.
+ * @param xl10 Use log10 of the specified .1D file as the X axis.
+ * @param dx Spacing between points on the x-axis.
+ * @param xzero Initial x coordinate.
+ * @param nopush Don't 'push' axes ranges outwards.
+ * @param ignore Skip first 'nn' rows in the input file.
+ * @param use Plot 'mm' points.
+ * @param xlabel Put string 'aa' below the x-axis.
+ * @param ylabel Put string 'aa' to the left of the y-axis.
+ * @param plabel Put string 'pp' atop the plot.
+ * @param title Same as -plabel, but only works with -ps/-png/-jpg/-pnm options.
+ * @param wintitle Set string 'pp' as the title of the frame containing the plot.
+ * @param naked Do NOT plot axes or labels, just the graph(s).
+ * @param aspect Set the width-to-height ratio of the plot region to 'A'.
+ * @param stdin Don't read from tsfile; instead, read from stdin and plot it.
+ * @param ps Don't draw plot in a window; instead, write it to stdout in PostScript format.
+ * @param jpg Render plot to JPEG image and save to a file named 'fname'.
+ * @param jpeg Render plot to JPEG image and save to a file named 'fname'.
+ * @param png Render plot to PNG image and save to a file named 'fname'.
+ * @param pnm Render plot to PNM image and save to a file named 'fname'.
+ * @param pngs Render plot to PNG image of specified size and save to a file named 'fname'.
+ * @param jpgs Render plot to JPEG image of specified size and save to a file named 'fname'.
+ * @param jpegs Render plot to JPEG image of specified size and save to a file named 'fname'.
+ * @param pnms Render plot to PNM image of specified size and save to a file named 'fname'.
+ * @param ytran Transform the data along the y-axis by applying the expression to each input value.
+ * @param xtran Transform the data along the x-axis by applying the expression to each input value.
+ * @param xaxis Set the x-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
+ * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
+ * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
+ * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
+ * @param thick Increase the line thickness used for plotting.
+ * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
+ * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
+ * @param censor_rgb Set the color used for marking to a specified color.
+ * @param censor Specify the filename of the censor .1D time series.
+ * @param censortr Specify time indexes to be marked in the graph(s).
+ * @param concat Specify the filename for the list of concatenated runs.
+ * @param rbox Draw a rectangular box.
+ * @param line Draw one line segment.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dplot_params(
     tsfiles: Array<InputPathType>,
     install: boolean = false,
@@ -332,65 +389,8 @@ function v_1dplot_params(
     rbox: V1dplotRboxParameters | null = null,
     line: string | null = null,
 ): V1dplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param tsfiles Input time series files (*.1D) to be plotted.
-     * @param install Install a new X11 colormap.
-     * @param sep Plot each column in a separate sub-graph.
-     * @param one Plot all columns together in one big graph.
-     * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
-     * @param noline Don't plot the connecting lines.
-     * @param box Plot a small 'box' at each data point.
-     * @param hist Plot graphs in histogram style (i.e., vertical boxes).
-     * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
-     * @param normx Independently scale each time series plotted to have max absolute value = 1 (L_infinity norm).
-     * @param norm1 Independently scale each time series plotted to have max sum of absolute values = 1 (L_1 norm).
-     * @param demean Remove the mean from each time series before normalizing.
-     * @param x Use for X axis the data in a specified .1D file.
-     * @param xl10 Use log10 of the specified .1D file as the X axis.
-     * @param dx Spacing between points on the x-axis.
-     * @param xzero Initial x coordinate.
-     * @param nopush Don't 'push' axes ranges outwards.
-     * @param ignore Skip first 'nn' rows in the input file.
-     * @param use Plot 'mm' points.
-     * @param xlabel Put string 'aa' below the x-axis.
-     * @param ylabel Put string 'aa' to the left of the y-axis.
-     * @param plabel Put string 'pp' atop the plot.
-     * @param title Same as -plabel, but only works with -ps/-png/-jpg/-pnm options.
-     * @param wintitle Set string 'pp' as the title of the frame containing the plot.
-     * @param naked Do NOT plot axes or labels, just the graph(s).
-     * @param aspect Set the width-to-height ratio of the plot region to 'A'.
-     * @param stdin Don't read from tsfile; instead, read from stdin and plot it.
-     * @param ps Don't draw plot in a window; instead, write it to stdout in PostScript format.
-     * @param jpg Render plot to JPEG image and save to a file named 'fname'.
-     * @param jpeg Render plot to JPEG image and save to a file named 'fname'.
-     * @param png Render plot to PNG image and save to a file named 'fname'.
-     * @param pnm Render plot to PNM image and save to a file named 'fname'.
-     * @param pngs Render plot to PNG image of specified size and save to a file named 'fname'.
-     * @param jpgs Render plot to JPEG image of specified size and save to a file named 'fname'.
-     * @param jpegs Render plot to JPEG image of specified size and save to a file named 'fname'.
-     * @param pnms Render plot to PNM image of specified size and save to a file named 'fname'.
-     * @param ytran Transform the data along the y-axis by applying the expression to each input value.
-     * @param xtran Transform the data along the x-axis by applying the expression to each input value.
-     * @param xaxis Set the x-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
-     * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
-     * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
-     * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
-     * @param thick Increase the line thickness used for plotting.
-     * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
-     * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
-     * @param censor_rgb Set the color used for marking to a specified color.
-     * @param censor Specify the filename of the censor .1D time series.
-     * @param censortr Specify time indexes to be marked in the graph(s).
-     * @param concat Specify the filename for the list of concatenated runs.
-     * @param rbox Draw a rectangular box.
-     * @param line Draw one line segment.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dplot" as const,
+        "@type": "afni.1dplot" as const,
         "tsfiles": tsfiles,
         "install": install,
         "sep": sep,
@@ -517,18 +517,18 @@ function v_1dplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dplot_cargs(
     params: V1dplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dplot");
     cargs.push(...(params["tsfiles"] ?? null).map(f => execution.inputFile(f)));
@@ -545,7 +545,7 @@ function v_1dplot_cargs(
         cargs.push("-sepscl");
     }
     if ((params["noline"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["noline"] ?? null).__STYXTYPE__)((params["noline"] ?? null), execution));
+        cargs.push(...dynCargs((params["noline"] ?? null)["@type"])((params["noline"] ?? null), execution));
     }
     if ((params["box"] ?? null)) {
         cargs.push("-box");
@@ -731,7 +731,7 @@ function v_1dplot_cargs(
         cargs.push("-volreg");
     }
     if ((params["thick"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thick"] ?? null).__STYXTYPE__)((params["thick"] ?? null), execution));
+        cargs.push(...dynCargs((params["thick"] ?? null)["@type"])((params["thick"] ?? null), execution));
     }
     if ((params["dashed"] ?? null) !== null) {
         cargs.push(
@@ -770,7 +770,7 @@ function v_1dplot_cargs(
         );
     }
     if ((params["rbox"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["rbox"] ?? null).__STYXTYPE__)((params["rbox"] ?? null), execution));
+        cargs.push(...dynCargs((params["rbox"] ?? null)["@type"])((params["rbox"] ?? null), execution));
     }
     if ((params["line"] ?? null) !== null) {
         cargs.push(
@@ -782,18 +782,18 @@ function v_1dplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dplot_outputs(
     params: V1dplotParameters,
     execution: Execution,
 ): V1dplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dplotOutputs = {
         root: execution.outputFile("."),
     };
@@ -801,22 +801,22 @@ function v_1dplot_outputs(
 }
 
 
+/**
+ * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
+ */
 function v_1dplot_execute(
     params: V1dplotParameters,
     execution: Execution,
 ): V1dplotOutputs {
-    /**
-     * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dplot_cargs(params, execution)
     const ret = v_1dplot_outputs(params, execution)
@@ -825,6 +825,68 @@ function v_1dplot_execute(
 }
 
 
+/**
+ * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tsfiles Input time series files (*.1D) to be plotted.
+ * @param install Install a new X11 colormap.
+ * @param sep Plot each column in a separate sub-graph.
+ * @param one Plot all columns together in one big graph.
+ * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
+ * @param noline Don't plot the connecting lines.
+ * @param box Plot a small 'box' at each data point.
+ * @param hist Plot graphs in histogram style (i.e., vertical boxes).
+ * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
+ * @param normx Independently scale each time series plotted to have max absolute value = 1 (L_infinity norm).
+ * @param norm1 Independently scale each time series plotted to have max sum of absolute values = 1 (L_1 norm).
+ * @param demean Remove the mean from each time series before normalizing.
+ * @param x Use for X axis the data in a specified .1D file.
+ * @param xl10 Use log10 of the specified .1D file as the X axis.
+ * @param dx Spacing between points on the x-axis.
+ * @param xzero Initial x coordinate.
+ * @param nopush Don't 'push' axes ranges outwards.
+ * @param ignore Skip first 'nn' rows in the input file.
+ * @param use Plot 'mm' points.
+ * @param xlabel Put string 'aa' below the x-axis.
+ * @param ylabel Put string 'aa' to the left of the y-axis.
+ * @param plabel Put string 'pp' atop the plot.
+ * @param title Same as -plabel, but only works with -ps/-png/-jpg/-pnm options.
+ * @param wintitle Set string 'pp' as the title of the frame containing the plot.
+ * @param naked Do NOT plot axes or labels, just the graph(s).
+ * @param aspect Set the width-to-height ratio of the plot region to 'A'.
+ * @param stdin Don't read from tsfile; instead, read from stdin and plot it.
+ * @param ps Don't draw plot in a window; instead, write it to stdout in PostScript format.
+ * @param jpg Render plot to JPEG image and save to a file named 'fname'.
+ * @param jpeg Render plot to JPEG image and save to a file named 'fname'.
+ * @param png Render plot to PNG image and save to a file named 'fname'.
+ * @param pnm Render plot to PNM image and save to a file named 'fname'.
+ * @param pngs Render plot to PNG image of specified size and save to a file named 'fname'.
+ * @param jpgs Render plot to JPEG image of specified size and save to a file named 'fname'.
+ * @param jpegs Render plot to JPEG image of specified size and save to a file named 'fname'.
+ * @param pnms Render plot to PNM image of specified size and save to a file named 'fname'.
+ * @param ytran Transform the data along the y-axis by applying the expression to each input value.
+ * @param xtran Transform the data along the x-axis by applying the expression to each input value.
+ * @param xaxis Set the x-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
+ * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
+ * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
+ * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
+ * @param thick Increase the line thickness used for plotting.
+ * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
+ * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
+ * @param censor_rgb Set the color used for marking to a specified color.
+ * @param censor Specify the filename of the censor .1D time series.
+ * @param censortr Specify time indexes to be marked in the graph(s).
+ * @param concat Specify the filename for the list of concatenated runs.
+ * @param rbox Draw a rectangular box.
+ * @param line Draw one line segment.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
+ */
 function v_1dplot(
     tsfiles: Array<InputPathType>,
     install: boolean = false,
@@ -879,68 +941,6 @@ function v_1dplot(
     line: string | null = null,
     runner: Runner | null = null,
 ): V1dplotOutputs {
-    /**
-     * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tsfiles Input time series files (*.1D) to be plotted.
-     * @param install Install a new X11 colormap.
-     * @param sep Plot each column in a separate sub-graph.
-     * @param one Plot all columns together in one big graph.
-     * @param sepscl Plot each column in a separate sub-graph and allow each sub-graph to have a different y-scale. This option is meaningless with -one!
-     * @param noline Don't plot the connecting lines.
-     * @param box Plot a small 'box' at each data point.
-     * @param hist Plot graphs in histogram style (i.e., vertical boxes).
-     * @param norm2 Independently scale each time series plotted to have L_2 norm = 1 (sum of squares).
-     * @param normx Independently scale each time series plotted to have max absolute value = 1 (L_infinity norm).
-     * @param norm1 Independently scale each time series plotted to have max sum of absolute values = 1 (L_1 norm).
-     * @param demean Remove the mean from each time series before normalizing.
-     * @param x Use for X axis the data in a specified .1D file.
-     * @param xl10 Use log10 of the specified .1D file as the X axis.
-     * @param dx Spacing between points on the x-axis.
-     * @param xzero Initial x coordinate.
-     * @param nopush Don't 'push' axes ranges outwards.
-     * @param ignore Skip first 'nn' rows in the input file.
-     * @param use Plot 'mm' points.
-     * @param xlabel Put string 'aa' below the x-axis.
-     * @param ylabel Put string 'aa' to the left of the y-axis.
-     * @param plabel Put string 'pp' atop the plot.
-     * @param title Same as -plabel, but only works with -ps/-png/-jpg/-pnm options.
-     * @param wintitle Set string 'pp' as the title of the frame containing the plot.
-     * @param naked Do NOT plot axes or labels, just the graph(s).
-     * @param aspect Set the width-to-height ratio of the plot region to 'A'.
-     * @param stdin Don't read from tsfile; instead, read from stdin and plot it.
-     * @param ps Don't draw plot in a window; instead, write it to stdout in PostScript format.
-     * @param jpg Render plot to JPEG image and save to a file named 'fname'.
-     * @param jpeg Render plot to JPEG image and save to a file named 'fname'.
-     * @param png Render plot to PNG image and save to a file named 'fname'.
-     * @param pnm Render plot to PNM image and save to a file named 'fname'.
-     * @param pngs Render plot to PNG image of specified size and save to a file named 'fname'.
-     * @param jpgs Render plot to JPEG image of specified size and save to a file named 'fname'.
-     * @param jpegs Render plot to JPEG image of specified size and save to a file named 'fname'.
-     * @param pnms Render plot to PNM image of specified size and save to a file named 'fname'.
-     * @param ytran Transform the data along the y-axis by applying the expression to each input value.
-     * @param xtran Transform the data along the x-axis by applying the expression to each input value.
-     * @param xaxis Set the x-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
-     * @param yaxis Set the y-axis to run from value 'b' to value 't', with 'n' major divisions and 'm' minor tic marks per major division.
-     * @param ynames Use the strings as labels to the right of the graphs, corresponding to each input column.
-     * @param volreg Makes the 'ynames' be the same as the 6 labels used in plug_volreg for Roll, Pitch, Yaw, I-S, R-L, and A-P movements.
-     * @param thick Increase the line thickness used for plotting.
-     * @param dashed Plot dashed lines between data points using specified colon-separated list of dash values (1: solid, 2: longer dashes, 3: shorter dashes).
-     * @param setenv Set environment variable 'name' to 'val' for this run of the program only.
-     * @param censor_rgb Set the color used for marking to a specified color.
-     * @param censor Specify the filename of the censor .1D time series.
-     * @param censortr Specify time indexes to be marked in the graph(s).
-     * @param concat Specify the filename for the list of concatenated runs.
-     * @param rbox Draw a rectangular box.
-     * @param line Draw one line segment.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DPLOT_METADATA);
     const params = v_1dplot_params(tsfiles, install, sep, one, sepscl, noline, box, hist, norm2, normx, norm1, demean, x, xl10, dx, xzero, nopush, ignore, use, xlabel, ylabel, plabel, title, wintitle, naked, aspect, stdin, ps, jpg, jpeg, png, pnm, pngs, jpgs, jpegs, pnms, ytran, xtran, xaxis, yaxis, ynames, volreg, thick, dashed, setenv, censor_rgb, censor, censortr, concat, rbox, line)
@@ -956,8 +956,14 @@ export {
       V1dplotThickParameters,
       V_1DPLOT_METADATA,
       v_1dplot,
+      v_1dplot_cargs,
+      v_1dplot_execute,
+      v_1dplot_noline_cargs,
       v_1dplot_noline_params,
+      v_1dplot_outputs,
       v_1dplot_params,
+      v_1dplot_rbox_cargs,
       v_1dplot_rbox_params,
+      v_1dplot_thick_cargs,
       v_1dplot_thick_params,
 };

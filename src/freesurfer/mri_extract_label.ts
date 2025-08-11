@@ -12,7 +12,7 @@ const MRI_EXTRACT_LABEL_METADATA: Metadata = {
 
 
 interface MriExtractLabelParameters {
-    "__STYXTYPE__": "mri_extract_label";
+    "@type": "freesurfer.mri_extract_label";
     "input_volume": InputPathType;
     "labels": Array<string>;
     "output_name": string;
@@ -24,35 +24,35 @@ interface MriExtractLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_extract_label": mri_extract_label_cargs,
+        "freesurfer.mri_extract_label": mri_extract_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_extract_label": mri_extract_label_outputs,
+        "freesurfer.mri_extract_label": mri_extract_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MriExtractLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume from which to extract labels.
+ * @param labels Labels to extract. Can include one or more labels.
+ * @param output_name Name of the output file.
+ * @param gaussian_smoothing Apply a Gaussian smoothing kernel with sigma.
+ * @param transform_file Apply the transform in xform file to the extracted volume.
+ * @param exit_none_found Exit with error if none of the specified labels are found.
+ * @param dilate Dilate the output volume n times.
+ * @param erode Erode the output volume n times.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_extract_label_params(
     input_volume: InputPathType,
     labels: Array<string>,
@@ -85,22 +99,8 @@ function mri_extract_label_params(
     dilate: number | null = null,
     erode: number | null = null,
 ): MriExtractLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume from which to extract labels.
-     * @param labels Labels to extract. Can include one or more labels.
-     * @param output_name Name of the output file.
-     * @param gaussian_smoothing Apply a Gaussian smoothing kernel with sigma.
-     * @param transform_file Apply the transform in xform file to the extracted volume.
-     * @param exit_none_found Exit with error if none of the specified labels are found.
-     * @param dilate Dilate the output volume n times.
-     * @param erode Erode the output volume n times.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_extract_label" as const,
+        "@type": "freesurfer.mri_extract_label" as const,
         "input_volume": input_volume,
         "labels": labels,
         "output_name": output_name,
@@ -122,18 +122,18 @@ function mri_extract_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_extract_label_cargs(
     params: MriExtractLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_extract_label");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -170,18 +170,18 @@ function mri_extract_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_extract_label_outputs(
     params: MriExtractLabelParameters,
     execution: Execution,
 ): MriExtractLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriExtractLabelOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["output_name"] ?? null)].join('')),
@@ -190,22 +190,22 @@ function mri_extract_label_outputs(
 }
 
 
+/**
+ * Extracts a set of labeled voxels from an image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
+ */
 function mri_extract_label_execute(
     params: MriExtractLabelParameters,
     execution: Execution,
 ): MriExtractLabelOutputs {
-    /**
-     * Extracts a set of labeled voxels from an image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_extract_label_cargs(params, execution)
     const ret = mri_extract_label_outputs(params, execution)
@@ -214,6 +214,25 @@ function mri_extract_label_execute(
 }
 
 
+/**
+ * Extracts a set of labeled voxels from an image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume from which to extract labels.
+ * @param labels Labels to extract. Can include one or more labels.
+ * @param output_name Name of the output file.
+ * @param gaussian_smoothing Apply a Gaussian smoothing kernel with sigma.
+ * @param transform_file Apply the transform in xform file to the extracted volume.
+ * @param exit_none_found Exit with error if none of the specified labels are found.
+ * @param dilate Dilate the output volume n times.
+ * @param erode Erode the output volume n times.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
+ */
 function mri_extract_label(
     input_volume: InputPathType,
     labels: Array<string>,
@@ -225,25 +244,6 @@ function mri_extract_label(
     erode: number | null = null,
     runner: Runner | null = null,
 ): MriExtractLabelOutputs {
-    /**
-     * Extracts a set of labeled voxels from an image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume from which to extract labels.
-     * @param labels Labels to extract. Can include one or more labels.
-     * @param output_name Name of the output file.
-     * @param gaussian_smoothing Apply a Gaussian smoothing kernel with sigma.
-     * @param transform_file Apply the transform in xform file to the extracted volume.
-     * @param exit_none_found Exit with error if none of the specified labels are found.
-     * @param dilate Dilate the output volume n times.
-     * @param erode Erode the output volume n times.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_EXTRACT_LABEL_METADATA);
     const params = mri_extract_label_params(input_volume, labels, output_name, gaussian_smoothing, transform_file, exit_none_found, dilate, erode)
@@ -256,5 +256,8 @@ export {
       MriExtractLabelOutputs,
       MriExtractLabelParameters,
       mri_extract_label,
+      mri_extract_label_cargs,
+      mri_extract_label_execute,
+      mri_extract_label_outputs,
       mri_extract_label_params,
 };

@@ -12,7 +12,7 @@ const DMRI_MERGEPATHS_METADATA: Metadata = {
 
 
 interface DmriMergepathsParameters {
-    "__STYXTYPE__": "dmri_mergepaths";
+    "@type": "freesurfer.dmri_mergepaths";
     "input_volumes": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
     "output_volume": string;
@@ -23,33 +23,33 @@ interface DmriMergepathsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_mergepaths": dmri_mergepaths_cargs,
+        "freesurfer.dmri_mergepaths": dmri_mergepaths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface DmriMergepathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Input volume(s)
+ * @param output_volume Output volume
+ * @param color_table Color table file
+ * @param threshold Lower threshold for display (0<=num<=1, as fraction of max)
+ * @param input_directory Input directory (optional). If specified, names of input files are relative to this
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_mergepaths_params(
     input_volumes: Array<InputPathType>,
     output_volume: string,
@@ -78,21 +91,8 @@ function dmri_mergepaths_params(
     debug: boolean = false,
     check_opts: boolean = false,
 ): DmriMergepathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Input volume(s)
-     * @param output_volume Output volume
-     * @param color_table Color table file
-     * @param threshold Lower threshold for display (0<=num<=1, as fraction of max)
-     * @param input_directory Input directory (optional). If specified, names of input files are relative to this
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_mergepaths" as const,
+        "@type": "freesurfer.dmri_mergepaths" as const,
         "input_volumes": input_volumes,
         "output_volume": output_volume,
         "color_table": color_table,
@@ -107,18 +107,18 @@ function dmri_mergepaths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_mergepaths_cargs(
     params: DmriMergepathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_mergepaths");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -150,18 +150,18 @@ function dmri_mergepaths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_mergepaths_outputs(
     params: DmriMergepathsParameters,
     execution: Execution,
 ): DmriMergepathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriMergepathsOutputs = {
         root: execution.outputFile("."),
     };
@@ -169,22 +169,22 @@ function dmri_mergepaths_outputs(
 }
 
 
+/**
+ * A tool for merging diffusion MRI path data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
+ */
 function dmri_mergepaths_execute(
     params: DmriMergepathsParameters,
     execution: Execution,
 ): DmriMergepathsOutputs {
-    /**
-     * A tool for merging diffusion MRI path data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_mergepaths_cargs(params, execution)
     const ret = dmri_mergepaths_outputs(params, execution)
@@ -193,6 +193,24 @@ function dmri_mergepaths_execute(
 }
 
 
+/**
+ * A tool for merging diffusion MRI path data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Input volume(s)
+ * @param output_volume Output volume
+ * @param color_table Color table file
+ * @param threshold Lower threshold for display (0<=num<=1, as fraction of max)
+ * @param input_directory Input directory (optional). If specified, names of input files are relative to this
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
+ */
 function dmri_mergepaths(
     input_volumes: Array<InputPathType>,
     output_volume: string,
@@ -203,24 +221,6 @@ function dmri_mergepaths(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): DmriMergepathsOutputs {
-    /**
-     * A tool for merging diffusion MRI path data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Input volume(s)
-     * @param output_volume Output volume
-     * @param color_table Color table file
-     * @param threshold Lower threshold for display (0<=num<=1, as fraction of max)
-     * @param input_directory Input directory (optional). If specified, names of input files are relative to this
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_MERGEPATHS_METADATA);
     const params = dmri_mergepaths_params(input_volumes, output_volume, color_table, threshold, input_directory, debug, check_opts)
@@ -233,5 +233,8 @@ export {
       DmriMergepathsOutputs,
       DmriMergepathsParameters,
       dmri_mergepaths,
+      dmri_mergepaths_cargs,
+      dmri_mergepaths_execute,
+      dmri_mergepaths_outputs,
       dmri_mergepaths_params,
 };

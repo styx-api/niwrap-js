@@ -12,7 +12,7 @@ const POST_RECON_ALL_METADATA: Metadata = {
 
 
 interface PostReconAllParameters {
-    "__STYXTYPE__": "post-recon-all";
+    "@type": "freesurfer.post-recon-all";
     "subject": string;
     "subfields": boolean;
     "no_subfields": boolean;
@@ -36,33 +36,33 @@ interface PostReconAllParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "post-recon-all": post_recon_all_cargs,
+        "freesurfer.post-recon-all": post_recon_all_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -82,6 +82,32 @@ interface PostReconAllOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier to be processed
+ * @param subfields Run subfields extraction (default behavior)
+ * @param no_subfields Do not run subfields extraction
+ * @param subregions Run subregions extraction (default behavior)
+ * @param no_subregions Do not run subregions extraction
+ * @param cvs Run CVS processing
+ * @param no_cvs Do not run CVS processing (default behavior)
+ * @param qcache Run qcache processing (default behavior)
+ * @param no_qcache Do not run qcache processing
+ * @param no_sclimbic Do not run sclimbic processing
+ * @param no_hthsu Do not run hypothalamic subunits processing
+ * @param no_synthstrip Do not run synthstrip processing
+ * @param no_synthseg Do not run synthseg processing
+ * @param no_qastats Do not run qastats processing
+ * @param no_samseg Do not run samseg processing
+ * @param no_xhemi Do not run xhemi processing
+ * @param no_cos7 Do not run commands from CentOS7 container
+ * @param threads Number of threads to be used
+ * @param force Force rerunning even if output is newer than input
+ * @param exit_on_error Exit immediately if an error occurs
+ *
+ * @returns Parameter dictionary
+ */
 function post_recon_all_params(
     subject: string,
     subfields: boolean = false,
@@ -104,34 +130,8 @@ function post_recon_all_params(
     force: boolean = false,
     exit_on_error: boolean = false,
 ): PostReconAllParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier to be processed
-     * @param subfields Run subfields extraction (default behavior)
-     * @param no_subfields Do not run subfields extraction
-     * @param subregions Run subregions extraction (default behavior)
-     * @param no_subregions Do not run subregions extraction
-     * @param cvs Run CVS processing
-     * @param no_cvs Do not run CVS processing (default behavior)
-     * @param qcache Run qcache processing (default behavior)
-     * @param no_qcache Do not run qcache processing
-     * @param no_sclimbic Do not run sclimbic processing
-     * @param no_hthsu Do not run hypothalamic subunits processing
-     * @param no_synthstrip Do not run synthstrip processing
-     * @param no_synthseg Do not run synthseg processing
-     * @param no_qastats Do not run qastats processing
-     * @param no_samseg Do not run samseg processing
-     * @param no_xhemi Do not run xhemi processing
-     * @param no_cos7 Do not run commands from CentOS7 container
-     * @param threads Number of threads to be used
-     * @param force Force rerunning even if output is newer than input
-     * @param exit_on_error Exit immediately if an error occurs
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "post-recon-all" as const,
+        "@type": "freesurfer.post-recon-all" as const,
         "subject": subject,
         "subfields": subfields,
         "no_subfields": no_subfields,
@@ -159,18 +159,18 @@ function post_recon_all_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function post_recon_all_cargs(
     params: PostReconAllParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("post-recon-all");
     cargs.push(
@@ -241,18 +241,18 @@ function post_recon_all_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function post_recon_all_outputs(
     params: PostReconAllParameters,
     execution: Execution,
 ): PostReconAllOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PostReconAllOutputs = {
         root: execution.outputFile("."),
     };
@@ -260,22 +260,22 @@ function post_recon_all_outputs(
 }
 
 
+/**
+ * Post-processing script typically run after recon-all in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
+ */
 function post_recon_all_execute(
     params: PostReconAllParameters,
     execution: Execution,
 ): PostReconAllOutputs {
-    /**
-     * Post-processing script typically run after recon-all in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
-     */
     params = execution.params(params)
     const cargs = post_recon_all_cargs(params, execution)
     const ret = post_recon_all_outputs(params, execution)
@@ -284,6 +284,37 @@ function post_recon_all_execute(
 }
 
 
+/**
+ * Post-processing script typically run after recon-all in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier to be processed
+ * @param subfields Run subfields extraction (default behavior)
+ * @param no_subfields Do not run subfields extraction
+ * @param subregions Run subregions extraction (default behavior)
+ * @param no_subregions Do not run subregions extraction
+ * @param cvs Run CVS processing
+ * @param no_cvs Do not run CVS processing (default behavior)
+ * @param qcache Run qcache processing (default behavior)
+ * @param no_qcache Do not run qcache processing
+ * @param no_sclimbic Do not run sclimbic processing
+ * @param no_hthsu Do not run hypothalamic subunits processing
+ * @param no_synthstrip Do not run synthstrip processing
+ * @param no_synthseg Do not run synthseg processing
+ * @param no_qastats Do not run qastats processing
+ * @param no_samseg Do not run samseg processing
+ * @param no_xhemi Do not run xhemi processing
+ * @param no_cos7 Do not run commands from CentOS7 container
+ * @param threads Number of threads to be used
+ * @param force Force rerunning even if output is newer than input
+ * @param exit_on_error Exit immediately if an error occurs
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
+ */
 function post_recon_all(
     subject: string,
     subfields: boolean = false,
@@ -307,37 +338,6 @@ function post_recon_all(
     exit_on_error: boolean = false,
     runner: Runner | null = null,
 ): PostReconAllOutputs {
-    /**
-     * Post-processing script typically run after recon-all in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier to be processed
-     * @param subfields Run subfields extraction (default behavior)
-     * @param no_subfields Do not run subfields extraction
-     * @param subregions Run subregions extraction (default behavior)
-     * @param no_subregions Do not run subregions extraction
-     * @param cvs Run CVS processing
-     * @param no_cvs Do not run CVS processing (default behavior)
-     * @param qcache Run qcache processing (default behavior)
-     * @param no_qcache Do not run qcache processing
-     * @param no_sclimbic Do not run sclimbic processing
-     * @param no_hthsu Do not run hypothalamic subunits processing
-     * @param no_synthstrip Do not run synthstrip processing
-     * @param no_synthseg Do not run synthseg processing
-     * @param no_qastats Do not run qastats processing
-     * @param no_samseg Do not run samseg processing
-     * @param no_xhemi Do not run xhemi processing
-     * @param no_cos7 Do not run commands from CentOS7 container
-     * @param threads Number of threads to be used
-     * @param force Force rerunning even if output is newer than input
-     * @param exit_on_error Exit immediately if an error occurs
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POST_RECON_ALL_METADATA);
     const params = post_recon_all_params(subject, subfields, no_subfields, subregions, no_subregions, cvs, no_cvs, qcache, no_qcache, no_sclimbic, no_hthsu, no_synthstrip, no_synthseg, no_qastats, no_samseg, no_xhemi, no_cos7, threads, force, exit_on_error)
@@ -350,5 +350,8 @@ export {
       PostReconAllOutputs,
       PostReconAllParameters,
       post_recon_all,
+      post_recon_all_cargs,
+      post_recon_all_execute,
+      post_recon_all_outputs,
       post_recon_all_params,
 };

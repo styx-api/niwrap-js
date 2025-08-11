@@ -12,7 +12,7 @@ const V__ELECTRO_GRID_METADATA: Metadata = {
 
 
 interface VElectroGridParameters {
-    "__STYXTYPE__": "@ElectroGrid";
+    "@type": "afni.@ElectroGrid";
     "strip"?: number | null | undefined;
     "grid"?: Array<number> | null | undefined;
     "prefix"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface VElectroGridParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ElectroGrid": v__electro_grid_cargs,
+        "afni.@ElectroGrid": v__electro_grid_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@ElectroGrid": v__electro_grid_outputs,
+        "afni.@ElectroGrid": v__electro_grid_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VElectroGridOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param strip Make an Nx strip (array) of electrodes.
+ * @param grid Make an Nx by Ny grid of electrodes. A node at (i,j) has a node ID = i+Nx*j with 0<=i<Nx and 0<=j<=Ny
+ * @param prefix Use PREFIX for the output surface.
+ * @param coords Specify the coordinates of the nodes on the grid, or the array. XYZ.1D should have three columns, with each row specifying the coordinates of one node.
+ * @param with_markers Add markers to the surface at each electrode.
+ * @param echo Set echo.
+ *
+ * @returns Parameter dictionary
+ */
 function v__electro_grid_params(
     strip: number | null = null,
     grid: Array<number> | null = null,
@@ -81,20 +93,8 @@ function v__electro_grid_params(
     with_markers: boolean = false,
     echo: boolean = false,
 ): VElectroGridParameters {
-    /**
-     * Build parameters.
-    
-     * @param strip Make an Nx strip (array) of electrodes.
-     * @param grid Make an Nx by Ny grid of electrodes. A node at (i,j) has a node ID = i+Nx*j with 0<=i<Nx and 0<=j<=Ny
-     * @param prefix Use PREFIX for the output surface.
-     * @param coords Specify the coordinates of the nodes on the grid, or the array. XYZ.1D should have three columns, with each row specifying the coordinates of one node.
-     * @param with_markers Add markers to the surface at each electrode.
-     * @param echo Set echo.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ElectroGrid" as const,
+        "@type": "afni.@ElectroGrid" as const,
         "with_markers": with_markers,
         "echo": echo,
     };
@@ -114,18 +114,18 @@ function v__electro_grid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__electro_grid_cargs(
     params: VElectroGridParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ElectroGrid");
     if ((params["strip"] ?? null) !== null) {
@@ -162,18 +162,18 @@ function v__electro_grid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__electro_grid_outputs(
     params: VElectroGridParameters,
     execution: Execution,
 ): VElectroGridOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VElectroGridOutputs = {
         root: execution.outputFile("."),
         output_surface: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".gii"].join('')) : null,
@@ -182,22 +182,22 @@ function v__electro_grid_outputs(
 }
 
 
+/**
+ * Creates a mesh representation of an electrode grid for use with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
+ */
 function v__electro_grid_execute(
     params: VElectroGridParameters,
     execution: Execution,
 ): VElectroGridOutputs {
-    /**
-     * Creates a mesh representation of an electrode grid for use with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__electro_grid_cargs(params, execution)
     const ret = v__electro_grid_outputs(params, execution)
@@ -206,6 +206,23 @@ function v__electro_grid_execute(
 }
 
 
+/**
+ * Creates a mesh representation of an electrode grid for use with SUMA.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param strip Make an Nx strip (array) of electrodes.
+ * @param grid Make an Nx by Ny grid of electrodes. A node at (i,j) has a node ID = i+Nx*j with 0<=i<Nx and 0<=j<=Ny
+ * @param prefix Use PREFIX for the output surface.
+ * @param coords Specify the coordinates of the nodes on the grid, or the array. XYZ.1D should have three columns, with each row specifying the coordinates of one node.
+ * @param with_markers Add markers to the surface at each electrode.
+ * @param echo Set echo.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
+ */
 function v__electro_grid(
     strip: number | null = null,
     grid: Array<number> | null = null,
@@ -215,23 +232,6 @@ function v__electro_grid(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VElectroGridOutputs {
-    /**
-     * Creates a mesh representation of an electrode grid for use with SUMA.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param strip Make an Nx strip (array) of electrodes.
-     * @param grid Make an Nx by Ny grid of electrodes. A node at (i,j) has a node ID = i+Nx*j with 0<=i<Nx and 0<=j<=Ny
-     * @param prefix Use PREFIX for the output surface.
-     * @param coords Specify the coordinates of the nodes on the grid, or the array. XYZ.1D should have three columns, with each row specifying the coordinates of one node.
-     * @param with_markers Add markers to the surface at each electrode.
-     * @param echo Set echo.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ELECTRO_GRID_METADATA);
     const params = v__electro_grid_params(strip, grid, prefix, coords, with_markers, echo)
@@ -244,5 +244,8 @@ export {
       VElectroGridParameters,
       V__ELECTRO_GRID_METADATA,
       v__electro_grid,
+      v__electro_grid_cargs,
+      v__electro_grid_execute,
+      v__electro_grid_outputs,
       v__electro_grid_params,
 };

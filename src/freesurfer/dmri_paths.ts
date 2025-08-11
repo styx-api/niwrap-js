@@ -12,7 +12,7 @@ const DMRI_PATHS_METADATA: Metadata = {
 
 
 interface DmriPathsParameters {
-    "__STYXTYPE__": "dmri_paths";
+    "@type": "freesurfer.dmri_paths";
     "indir"?: string | null | undefined;
     "outdir"?: string | null | undefined;
     "dwi"?: InputPathType | null | undefined;
@@ -52,33 +52,33 @@ interface DmriPathsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_paths": dmri_paths_cargs,
+        "freesurfer.dmri_paths": dmri_paths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -98,6 +98,48 @@ interface DmriPathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param indir Input subject directory (optional), specify multiple for longitudinal data.
+ * @param outdir Output directory (one per path).
+ * @param dwi DWI volume series.
+ * @param grad Text file of diffusion gradients.
+ * @param bval Text file of diffusion b-values.
+ * @param mask Mask volume.
+ * @param bpdir BEDPOST directory.
+ * @param ntr Max number of tracts per voxel (default 1).
+ * @param fmin Tract volume fraction threshold (default 0).
+ * @param basereg Base-to-DWI registration, needed for longitudinal data only (.mat, as many as input directories).
+ * @param basemask Base template mask volume.
+ * @param roi1 End ROI 1 (volume or label, one per path).
+ * @param roi2 End ROI 2 (volume or label, one per path).
+ * @param roimesh1 Mesh for end ROI 1 (for label ROIs).
+ * @param roimesh2 Mesh for end ROI 2 (for label ROIs).
+ * @param roiref1 Reference volume for end ROI 1 (for label ROIs).
+ * @param roiref2 Reference volume for end ROI 2 (for label ROIs).
+ * @param prior Spatial path priors (negative log-likelihoods off and on the path, one pair per path).
+ * @param nprior Near-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
+ * @param nset Subset of near-neighbor label priors (default all).
+ * @param lprior Local-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
+ * @param lset Subset of local-neighbor label priors (default all).
+ * @param seg Segmentation map of test subject, specify multiple for longitudinal data.
+ * @param tprior Path tangent vector priors (negative log-likelihood, one per path).
+ * @param cprior Path curvature priors (negative log-likelihood, one per path).
+ * @param reg DWI-to-atlas affine registration (.mat).
+ * @param regnl DWI-to-atlas nonlinear registration (.m3z).
+ * @param init Text file of initial control points (one per path).
+ * @param nb Number of burn-in samples (default 5000).
+ * @param ns Number of post-burn-in samples (default 5000).
+ * @param nk Keep every nk-th sample (default 10).
+ * @param nu Update proposal every nu-th sample (default 40).
+ * @param sdp Text file with initial proposal standard deviations for control point perturbations.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param version Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_paths_params(
     indir: string | null = null,
     outdir: string | null = null,
@@ -136,50 +178,8 @@ function dmri_paths_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): DmriPathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param indir Input subject directory (optional), specify multiple for longitudinal data.
-     * @param outdir Output directory (one per path).
-     * @param dwi DWI volume series.
-     * @param grad Text file of diffusion gradients.
-     * @param bval Text file of diffusion b-values.
-     * @param mask Mask volume.
-     * @param bpdir BEDPOST directory.
-     * @param ntr Max number of tracts per voxel (default 1).
-     * @param fmin Tract volume fraction threshold (default 0).
-     * @param basereg Base-to-DWI registration, needed for longitudinal data only (.mat, as many as input directories).
-     * @param basemask Base template mask volume.
-     * @param roi1 End ROI 1 (volume or label, one per path).
-     * @param roi2 End ROI 2 (volume or label, one per path).
-     * @param roimesh1 Mesh for end ROI 1 (for label ROIs).
-     * @param roimesh2 Mesh for end ROI 2 (for label ROIs).
-     * @param roiref1 Reference volume for end ROI 1 (for label ROIs).
-     * @param roiref2 Reference volume for end ROI 2 (for label ROIs).
-     * @param prior Spatial path priors (negative log-likelihoods off and on the path, one pair per path).
-     * @param nprior Near-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
-     * @param nset Subset of near-neighbor label priors (default all).
-     * @param lprior Local-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
-     * @param lset Subset of local-neighbor label priors (default all).
-     * @param seg Segmentation map of test subject, specify multiple for longitudinal data.
-     * @param tprior Path tangent vector priors (negative log-likelihood, one per path).
-     * @param cprior Path curvature priors (negative log-likelihood, one per path).
-     * @param reg DWI-to-atlas affine registration (.mat).
-     * @param regnl DWI-to-atlas nonlinear registration (.m3z).
-     * @param init Text file of initial control points (one per path).
-     * @param nb Number of burn-in samples (default 5000).
-     * @param ns Number of post-burn-in samples (default 5000).
-     * @param nk Keep every nk-th sample (default 10).
-     * @param nu Update proposal every nu-th sample (default 40).
-     * @param sdp Text file with initial proposal standard deviations for control point perturbations.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param version Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_paths" as const,
+        "@type": "freesurfer.dmri_paths" as const,
         "debug": debug,
         "checkopts": checkopts,
         "version": version,
@@ -287,18 +287,18 @@ function dmri_paths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_paths_cargs(
     params: DmriPathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_paths");
     if ((params["indir"] ?? null) !== null) {
@@ -512,18 +512,18 @@ function dmri_paths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_paths_outputs(
     params: DmriPathsParameters,
     execution: Execution,
 ): DmriPathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriPathsOutputs = {
         root: execution.outputFile("."),
     };
@@ -531,22 +531,22 @@ function dmri_paths_outputs(
 }
 
 
+/**
+ * Tool for diffusion MRI path analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriPathsOutputs`).
+ */
 function dmri_paths_execute(
     params: DmriPathsParameters,
     execution: Execution,
 ): DmriPathsOutputs {
-    /**
-     * Tool for diffusion MRI path analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriPathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_paths_cargs(params, execution)
     const ret = dmri_paths_outputs(params, execution)
@@ -555,6 +555,53 @@ function dmri_paths_execute(
 }
 
 
+/**
+ * Tool for diffusion MRI path analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param indir Input subject directory (optional), specify multiple for longitudinal data.
+ * @param outdir Output directory (one per path).
+ * @param dwi DWI volume series.
+ * @param grad Text file of diffusion gradients.
+ * @param bval Text file of diffusion b-values.
+ * @param mask Mask volume.
+ * @param bpdir BEDPOST directory.
+ * @param ntr Max number of tracts per voxel (default 1).
+ * @param fmin Tract volume fraction threshold (default 0).
+ * @param basereg Base-to-DWI registration, needed for longitudinal data only (.mat, as many as input directories).
+ * @param basemask Base template mask volume.
+ * @param roi1 End ROI 1 (volume or label, one per path).
+ * @param roi2 End ROI 2 (volume or label, one per path).
+ * @param roimesh1 Mesh for end ROI 1 (for label ROIs).
+ * @param roimesh2 Mesh for end ROI 2 (for label ROIs).
+ * @param roiref1 Reference volume for end ROI 1 (for label ROIs).
+ * @param roiref2 Reference volume for end ROI 2 (for label ROIs).
+ * @param prior Spatial path priors (negative log-likelihoods off and on the path, one pair per path).
+ * @param nprior Near-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
+ * @param nset Subset of near-neighbor label priors (default all).
+ * @param lprior Local-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
+ * @param lset Subset of local-neighbor label priors (default all).
+ * @param seg Segmentation map of test subject, specify multiple for longitudinal data.
+ * @param tprior Path tangent vector priors (negative log-likelihood, one per path).
+ * @param cprior Path curvature priors (negative log-likelihood, one per path).
+ * @param reg DWI-to-atlas affine registration (.mat).
+ * @param regnl DWI-to-atlas nonlinear registration (.m3z).
+ * @param init Text file of initial control points (one per path).
+ * @param nb Number of burn-in samples (default 5000).
+ * @param ns Number of post-burn-in samples (default 5000).
+ * @param nk Keep every nk-th sample (default 10).
+ * @param nu Update proposal every nu-th sample (default 40).
+ * @param sdp Text file with initial proposal standard deviations for control point perturbations.
+ * @param debug Turn on debugging.
+ * @param checkopts Don't run anything, just check options and exit.
+ * @param version Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriPathsOutputs`).
+ */
 function dmri_paths(
     indir: string | null = null,
     outdir: string | null = null,
@@ -594,53 +641,6 @@ function dmri_paths(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriPathsOutputs {
-    /**
-     * Tool for diffusion MRI path analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param indir Input subject directory (optional), specify multiple for longitudinal data.
-     * @param outdir Output directory (one per path).
-     * @param dwi DWI volume series.
-     * @param grad Text file of diffusion gradients.
-     * @param bval Text file of diffusion b-values.
-     * @param mask Mask volume.
-     * @param bpdir BEDPOST directory.
-     * @param ntr Max number of tracts per voxel (default 1).
-     * @param fmin Tract volume fraction threshold (default 0).
-     * @param basereg Base-to-DWI registration, needed for longitudinal data only (.mat, as many as input directories).
-     * @param basemask Base template mask volume.
-     * @param roi1 End ROI 1 (volume or label, one per path).
-     * @param roi2 End ROI 2 (volume or label, one per path).
-     * @param roimesh1 Mesh for end ROI 1 (for label ROIs).
-     * @param roimesh2 Mesh for end ROI 2 (for label ROIs).
-     * @param roiref1 Reference volume for end ROI 1 (for label ROIs).
-     * @param roiref2 Reference volume for end ROI 2 (for label ROIs).
-     * @param prior Spatial path priors (negative log-likelihoods off and on the path, one pair per path).
-     * @param nprior Near-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
-     * @param nset Subset of near-neighbor label priors (default all).
-     * @param lprior Local-neighbor label priors (negative log-likelihood and list of labels, one pair per path).
-     * @param lset Subset of local-neighbor label priors (default all).
-     * @param seg Segmentation map of test subject, specify multiple for longitudinal data.
-     * @param tprior Path tangent vector priors (negative log-likelihood, one per path).
-     * @param cprior Path curvature priors (negative log-likelihood, one per path).
-     * @param reg DWI-to-atlas affine registration (.mat).
-     * @param regnl DWI-to-atlas nonlinear registration (.m3z).
-     * @param init Text file of initial control points (one per path).
-     * @param nb Number of burn-in samples (default 5000).
-     * @param ns Number of post-burn-in samples (default 5000).
-     * @param nk Keep every nk-th sample (default 10).
-     * @param nu Update proposal every nu-th sample (default 40).
-     * @param sdp Text file with initial proposal standard deviations for control point perturbations.
-     * @param debug Turn on debugging.
-     * @param checkopts Don't run anything, just check options and exit.
-     * @param version Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriPathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_PATHS_METADATA);
     const params = dmri_paths_params(indir, outdir, dwi, grad, bval, mask, bpdir, ntr, fmin, basereg, basemask, roi1, roi2, roimesh1, roimesh2, roiref1, roiref2, prior, nprior, nset, lprior, lset, seg, tprior, cprior, reg, regnl, init, nb, ns, nk, nu, sdp, debug, checkopts, version)
@@ -653,5 +653,8 @@ export {
       DmriPathsOutputs,
       DmriPathsParameters,
       dmri_paths,
+      dmri_paths_cargs,
+      dmri_paths_execute,
+      dmri_paths_outputs,
       dmri_paths_params,
 };

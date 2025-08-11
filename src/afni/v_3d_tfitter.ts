@@ -12,7 +12,7 @@ const V_3D_TFITTER_METADATA: Metadata = {
 
 
 interface V3dTfitterParameters {
-    "__STYXTYPE__": "3dTfitter";
+    "@type": "afni.3dTfitter";
     "RHS": string;
     "LHS"?: Array<string> | null | undefined;
     "polort"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface V3dTfitterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTfitter": v_3d_tfitter_cargs,
+        "afni.3dTfitter": v_3d_tfitter_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTfitter": v_3d_tfitter_outputs,
+        "afni.3dTfitter": v_3d_tfitter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,30 @@ interface V3dTfitterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param rhs Specifies the right-hand-side 3D+time dataset. ('rset' can also be a 1D file with 1 column)
+ * @param lhs Specifies a column (or columns) of the left-hand-side matrix. More than one 'lset' can follow the '-LHS' option.
+ * @param polort Add 'p+1' Legendre polynomial columns to the LHS matrix.
+ * @param vthr The value 'v' (between 0.0 and 0.09, inclusive) defines the threshold below which LHS vectors will be omitted from the regression analysis.
+ * @param faltung Specifies a convolution (German: Faltung) model to be added to the LHS matrix. Followed by four arguments: 'fset', 'fpre', 'pen', 'fac'.
+ * @param lsqfit Solve equations via least squares [the default method].
+ * @param l1fit Solve equations via least sum of absolute residuals.
+ * @param l2lasso Solve equations via least squares with a LASSO (L1) penalty on the coefficients. Followed by 'lam' and optional 'i j k ...'
+ * @param lasso_centro_block Defines a block of coefficients that will be penalized together.
+ * @param l2sqrtlasso Similar to '-l2lasso', but aims to minimize sqrt(Q2)+lam*L1.
+ * @param consign Indicates that the sign of some output LHS parameters should be constrained in the solution.
+ * @param cons_fal Constrain the deconvolution time series from '-FALTUNG' to be positive if 'c' is '+' or to be negative if 'c' is '-'.
+ * @param prefix Prefix for the output dataset (LHS parameters) filename.
+ * @param label Specifies sub-brick labels in the output LHS parameter dataset.
+ * @param fitts Prefix filename for the output fitted time series dataset.
+ * @param errsum Prefix filename for the error sums dataset.
+ * @param mask Read in dataset 'ms' to use as a mask; only voxels with nonzero values in the mask will be processed.
+ * @param quiet Don't print progress report messages.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tfitter_params(
     rhs: string,
     lhs: Array<string> | null = null,
@@ -113,32 +137,8 @@ function v_3d_tfitter_params(
     mask: string | null = null,
     quiet: boolean = false,
 ): V3dTfitterParameters {
-    /**
-     * Build parameters.
-    
-     * @param rhs Specifies the right-hand-side 3D+time dataset. ('rset' can also be a 1D file with 1 column)
-     * @param lhs Specifies a column (or columns) of the left-hand-side matrix. More than one 'lset' can follow the '-LHS' option.
-     * @param polort Add 'p+1' Legendre polynomial columns to the LHS matrix.
-     * @param vthr The value 'v' (between 0.0 and 0.09, inclusive) defines the threshold below which LHS vectors will be omitted from the regression analysis.
-     * @param faltung Specifies a convolution (German: Faltung) model to be added to the LHS matrix. Followed by four arguments: 'fset', 'fpre', 'pen', 'fac'.
-     * @param lsqfit Solve equations via least squares [the default method].
-     * @param l1fit Solve equations via least sum of absolute residuals.
-     * @param l2lasso Solve equations via least squares with a LASSO (L1) penalty on the coefficients. Followed by 'lam' and optional 'i j k ...'
-     * @param lasso_centro_block Defines a block of coefficients that will be penalized together.
-     * @param l2sqrtlasso Similar to '-l2lasso', but aims to minimize sqrt(Q2)+lam*L1.
-     * @param consign Indicates that the sign of some output LHS parameters should be constrained in the solution.
-     * @param cons_fal Constrain the deconvolution time series from '-FALTUNG' to be positive if 'c' is '+' or to be negative if 'c' is '-'.
-     * @param prefix Prefix for the output dataset (LHS parameters) filename.
-     * @param label Specifies sub-brick labels in the output LHS parameter dataset.
-     * @param fitts Prefix filename for the output fitted time series dataset.
-     * @param errsum Prefix filename for the error sums dataset.
-     * @param mask Read in dataset 'ms' to use as a mask; only voxels with nonzero values in the mask will be processed.
-     * @param quiet Don't print progress report messages.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTfitter" as const,
+        "@type": "afni.3dTfitter" as const,
         "RHS": rhs,
         "lsqfit": lsqfit,
         "l1fit": l1fit,
@@ -190,18 +190,18 @@ function v_3d_tfitter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tfitter_cargs(
     params: V3dTfitterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTfitter");
     cargs.push(
@@ -305,18 +305,18 @@ function v_3d_tfitter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tfitter_outputs(
     params: V3dTfitterParameters,
     execution: Execution,
 ): V3dTfitterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTfitterOutputs = {
         root: execution.outputFile("."),
         output_prefix: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -327,28 +327,28 @@ function v_3d_tfitter_outputs(
 }
 
 
+/**
+ * * At each voxel, assembles and solves a set of linear equations.
+ *  ++ The matrix at each voxel may be the same or may be different.
+ *  ++ This flexibility (for voxel-wise regressors) is one feature
+ *     that makes 3dTfitter different from 3dDeconvolve.
+ *  ++ Another distinguishing feature is that 3dTfitter allows for
+ *     L2, L1, and L2+L1 (LASSO) regression solvers, and allows you
+ *     to impose sign constraints on the solution parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
+ */
 function v_3d_tfitter_execute(
     params: V3dTfitterParameters,
     execution: Execution,
 ): V3dTfitterOutputs {
-    /**
-     * * At each voxel, assembles and solves a set of linear equations.
-     *  ++ The matrix at each voxel may be the same or may be different.
-     *  ++ This flexibility (for voxel-wise regressors) is one feature
-     *     that makes 3dTfitter different from 3dDeconvolve.
-     *  ++ Another distinguishing feature is that 3dTfitter allows for
-     *     L2, L1, and L2+L1 (LASSO) regression solvers, and allows you
-     *     to impose sign constraints on the solution parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tfitter_cargs(params, execution)
     const ret = v_3d_tfitter_outputs(params, execution)
@@ -357,6 +357,41 @@ function v_3d_tfitter_execute(
 }
 
 
+/**
+ * * At each voxel, assembles and solves a set of linear equations.
+ *  ++ The matrix at each voxel may be the same or may be different.
+ *  ++ This flexibility (for voxel-wise regressors) is one feature
+ *     that makes 3dTfitter different from 3dDeconvolve.
+ *  ++ Another distinguishing feature is that 3dTfitter allows for
+ *     L2, L1, and L2+L1 (LASSO) regression solvers, and allows you
+ *     to impose sign constraints on the solution parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param rhs Specifies the right-hand-side 3D+time dataset. ('rset' can also be a 1D file with 1 column)
+ * @param lhs Specifies a column (or columns) of the left-hand-side matrix. More than one 'lset' can follow the '-LHS' option.
+ * @param polort Add 'p+1' Legendre polynomial columns to the LHS matrix.
+ * @param vthr The value 'v' (between 0.0 and 0.09, inclusive) defines the threshold below which LHS vectors will be omitted from the regression analysis.
+ * @param faltung Specifies a convolution (German: Faltung) model to be added to the LHS matrix. Followed by four arguments: 'fset', 'fpre', 'pen', 'fac'.
+ * @param lsqfit Solve equations via least squares [the default method].
+ * @param l1fit Solve equations via least sum of absolute residuals.
+ * @param l2lasso Solve equations via least squares with a LASSO (L1) penalty on the coefficients. Followed by 'lam' and optional 'i j k ...'
+ * @param lasso_centro_block Defines a block of coefficients that will be penalized together.
+ * @param l2sqrtlasso Similar to '-l2lasso', but aims to minimize sqrt(Q2)+lam*L1.
+ * @param consign Indicates that the sign of some output LHS parameters should be constrained in the solution.
+ * @param cons_fal Constrain the deconvolution time series from '-FALTUNG' to be positive if 'c' is '+' or to be negative if 'c' is '-'.
+ * @param prefix Prefix for the output dataset (LHS parameters) filename.
+ * @param label Specifies sub-brick labels in the output LHS parameter dataset.
+ * @param fitts Prefix filename for the output fitted time series dataset.
+ * @param errsum Prefix filename for the error sums dataset.
+ * @param mask Read in dataset 'ms' to use as a mask; only voxels with nonzero values in the mask will be processed.
+ * @param quiet Don't print progress report messages.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
+ */
 function v_3d_tfitter(
     rhs: string,
     lhs: Array<string> | null = null,
@@ -378,41 +413,6 @@ function v_3d_tfitter(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dTfitterOutputs {
-    /**
-     * * At each voxel, assembles and solves a set of linear equations.
-     *  ++ The matrix at each voxel may be the same or may be different.
-     *  ++ This flexibility (for voxel-wise regressors) is one feature
-     *     that makes 3dTfitter different from 3dDeconvolve.
-     *  ++ Another distinguishing feature is that 3dTfitter allows for
-     *     L2, L1, and L2+L1 (LASSO) regression solvers, and allows you
-     *     to impose sign constraints on the solution parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param rhs Specifies the right-hand-side 3D+time dataset. ('rset' can also be a 1D file with 1 column)
-     * @param lhs Specifies a column (or columns) of the left-hand-side matrix. More than one 'lset' can follow the '-LHS' option.
-     * @param polort Add 'p+1' Legendre polynomial columns to the LHS matrix.
-     * @param vthr The value 'v' (between 0.0 and 0.09, inclusive) defines the threshold below which LHS vectors will be omitted from the regression analysis.
-     * @param faltung Specifies a convolution (German: Faltung) model to be added to the LHS matrix. Followed by four arguments: 'fset', 'fpre', 'pen', 'fac'.
-     * @param lsqfit Solve equations via least squares [the default method].
-     * @param l1fit Solve equations via least sum of absolute residuals.
-     * @param l2lasso Solve equations via least squares with a LASSO (L1) penalty on the coefficients. Followed by 'lam' and optional 'i j k ...'
-     * @param lasso_centro_block Defines a block of coefficients that will be penalized together.
-     * @param l2sqrtlasso Similar to '-l2lasso', but aims to minimize sqrt(Q2)+lam*L1.
-     * @param consign Indicates that the sign of some output LHS parameters should be constrained in the solution.
-     * @param cons_fal Constrain the deconvolution time series from '-FALTUNG' to be positive if 'c' is '+' or to be negative if 'c' is '-'.
-     * @param prefix Prefix for the output dataset (LHS parameters) filename.
-     * @param label Specifies sub-brick labels in the output LHS parameter dataset.
-     * @param fitts Prefix filename for the output fitted time series dataset.
-     * @param errsum Prefix filename for the error sums dataset.
-     * @param mask Read in dataset 'ms' to use as a mask; only voxels with nonzero values in the mask will be processed.
-     * @param quiet Don't print progress report messages.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TFITTER_METADATA);
     const params = v_3d_tfitter_params(rhs, lhs, polort, vthr, faltung, lsqfit, l1fit, l2lasso, lasso_centro_block, l2sqrtlasso, consign, cons_fal, prefix, label, fitts, errsum, mask, quiet)
@@ -425,5 +425,8 @@ export {
       V3dTfitterParameters,
       V_3D_TFITTER_METADATA,
       v_3d_tfitter,
+      v_3d_tfitter_cargs,
+      v_3d_tfitter_execute,
+      v_3d_tfitter_outputs,
       v_3d_tfitter_params,
 };

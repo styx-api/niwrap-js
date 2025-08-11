@@ -12,7 +12,7 @@ const MRI_VOL2SURF_METADATA: Metadata = {
 
 
 interface MriVol2surfParameters {
-    "__STYXTYPE__": "mri_vol2surf";
+    "@type": "freesurfer.mri_vol2surf";
     "input_volume": InputPathType;
     "registration_file": InputPathType;
     "output_path": string;
@@ -25,35 +25,35 @@ interface MriVol2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_vol2surf": mri_vol2surf_cargs,
+        "freesurfer.mri_vol2surf": mri_vol2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_vol2surf": mri_vol2surf_outputs,
+        "freesurfer.mri_vol2surf": mri_vol2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface MriVol2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Path to input volume file
+ * @param registration_file Registration file as computed by tkregister, spmregister, bbregister, etc.
+ * @param output_path Output path for the resampled volume
+ * @param reference_volume Reference volume name, default is orig.mgz
+ * @param regheader_subject Compute registration from header information, aligning the current volume with the subject/mri/orig.mgz
+ * @param mni152reg_flag Use MNI152 registration: $FREESURFER_HOME/average/mni152.register.dat
+ * @param target_subject Target subject for resampling, can be a subject name or 'ico' for icosahedron
+ * @param hemisphere Hemisphere to process: lh = left hemisphere or rh = right hemisphere
+ * @param surface Target surface on which to resample, default is 'white'
+ *
+ * @returns Parameter dictionary
+ */
 function mri_vol2surf_params(
     input_volume: InputPathType,
     registration_file: InputPathType,
@@ -87,23 +102,8 @@ function mri_vol2surf_params(
     hemisphere: "lh" | "rh" | null = null,
     surface: string | null = null,
 ): MriVol2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Path to input volume file
-     * @param registration_file Registration file as computed by tkregister, spmregister, bbregister, etc.
-     * @param output_path Output path for the resampled volume
-     * @param reference_volume Reference volume name, default is orig.mgz
-     * @param regheader_subject Compute registration from header information, aligning the current volume with the subject/mri/orig.mgz
-     * @param mni152reg_flag Use MNI152 registration: $FREESURFER_HOME/average/mni152.register.dat
-     * @param target_subject Target subject for resampling, can be a subject name or 'ico' for icosahedron
-     * @param hemisphere Hemisphere to process: lh = left hemisphere or rh = right hemisphere
-     * @param surface Target surface on which to resample, default is 'white'
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_vol2surf" as const,
+        "@type": "freesurfer.mri_vol2surf" as const,
         "input_volume": input_volume,
         "registration_file": registration_file,
         "output_path": output_path,
@@ -128,18 +128,18 @@ function mri_vol2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_vol2surf_cargs(
     params: MriVol2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_vol2surf");
     cargs.push(
@@ -191,18 +191,18 @@ function mri_vol2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_vol2surf_outputs(
     params: MriVol2surfParameters,
     execution: Execution,
 ): MriVol2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriVol2surfOutputs = {
         root: execution.outputFile("."),
         resampled_volume_output: execution.outputFile([(params["output_path"] ?? null)].join('')),
@@ -211,22 +211,22 @@ function mri_vol2surf_outputs(
 }
 
 
+/**
+ * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
+ */
 function mri_vol2surf_execute(
     params: MriVol2surfParameters,
     execution: Execution,
 ): MriVol2surfOutputs {
-    /**
-     * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_vol2surf_cargs(params, execution)
     const ret = mri_vol2surf_outputs(params, execution)
@@ -235,6 +235,26 @@ function mri_vol2surf_execute(
 }
 
 
+/**
+ * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Path to input volume file
+ * @param registration_file Registration file as computed by tkregister, spmregister, bbregister, etc.
+ * @param output_path Output path for the resampled volume
+ * @param reference_volume Reference volume name, default is orig.mgz
+ * @param regheader_subject Compute registration from header information, aligning the current volume with the subject/mri/orig.mgz
+ * @param mni152reg_flag Use MNI152 registration: $FREESURFER_HOME/average/mni152.register.dat
+ * @param target_subject Target subject for resampling, can be a subject name or 'ico' for icosahedron
+ * @param hemisphere Hemisphere to process: lh = left hemisphere or rh = right hemisphere
+ * @param surface Target surface on which to resample, default is 'white'
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
+ */
 function mri_vol2surf(
     input_volume: InputPathType,
     registration_file: InputPathType,
@@ -247,26 +267,6 @@ function mri_vol2surf(
     surface: string | null = null,
     runner: Runner | null = null,
 ): MriVol2surfOutputs {
-    /**
-     * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Path to input volume file
-     * @param registration_file Registration file as computed by tkregister, spmregister, bbregister, etc.
-     * @param output_path Output path for the resampled volume
-     * @param reference_volume Reference volume name, default is orig.mgz
-     * @param regheader_subject Compute registration from header information, aligning the current volume with the subject/mri/orig.mgz
-     * @param mni152reg_flag Use MNI152 registration: $FREESURFER_HOME/average/mni152.register.dat
-     * @param target_subject Target subject for resampling, can be a subject name or 'ico' for icosahedron
-     * @param hemisphere Hemisphere to process: lh = left hemisphere or rh = right hemisphere
-     * @param surface Target surface on which to resample, default is 'white'
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_VOL2SURF_METADATA);
     const params = mri_vol2surf_params(input_volume, registration_file, output_path, reference_volume, regheader_subject, mni152reg_flag, target_subject, hemisphere, surface)
@@ -279,5 +279,8 @@ export {
       MriVol2surfOutputs,
       MriVol2surfParameters,
       mri_vol2surf,
+      mri_vol2surf_cargs,
+      mri_vol2surf_execute,
+      mri_vol2surf_outputs,
       mri_vol2surf_params,
 };

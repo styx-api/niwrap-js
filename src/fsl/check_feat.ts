@@ -12,41 +12,41 @@ const CHECK_FEAT_METADATA: Metadata = {
 
 
 interface CheckFeatParameters {
-    "__STYXTYPE__": "checkFEAT";
+    "@type": "fsl.checkFEAT";
     "report_file": InputPathType;
     "report_log_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "checkFEAT": check_feat_cargs,
+        "fsl.checkFEAT": check_feat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "checkFEAT": check_feat_outputs,
+        "fsl.checkFEAT": check_feat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface CheckFeatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param report_file Path to the HTML report
+ * @param report_log_file Path to the HTML report log
+ *
+ * @returns Parameter dictionary
+ */
 function check_feat_params(
     report_file: InputPathType,
     report_log_file: InputPathType,
 ): CheckFeatParameters {
-    /**
-     * Build parameters.
-    
-     * @param report_file Path to the HTML report
-     * @param report_log_file Path to the HTML report log
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "checkFEAT" as const,
+        "@type": "fsl.checkFEAT" as const,
         "report_file": report_file,
         "report_log_file": report_log_file,
     };
@@ -94,18 +94,18 @@ function check_feat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function check_feat_cargs(
     params: CheckFeatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("checkFEAT");
     cargs.push(execution.inputFile((params["report_file"] ?? null)));
@@ -114,18 +114,18 @@ function check_feat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function check_feat_outputs(
     params: CheckFeatParameters,
     execution: Execution,
 ): CheckFeatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CheckFeatOutputs = {
         root: execution.outputFile("."),
         output_report: execution.outputFile(["output_report.html"].join('')),
@@ -135,22 +135,22 @@ function check_feat_outputs(
 }
 
 
+/**
+ * Perform checks on FEAT analysis results.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
+ */
 function check_feat_execute(
     params: CheckFeatParameters,
     execution: Execution,
 ): CheckFeatOutputs {
-    /**
-     * Perform checks on FEAT analysis results.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
-     */
     params = execution.params(params)
     const cargs = check_feat_cargs(params, execution)
     const ret = check_feat_outputs(params, execution)
@@ -159,24 +159,24 @@ function check_feat_execute(
 }
 
 
+/**
+ * Perform checks on FEAT analysis results.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param report_file Path to the HTML report
+ * @param report_log_file Path to the HTML report log
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
+ */
 function check_feat(
     report_file: InputPathType,
     report_log_file: InputPathType,
     runner: Runner | null = null,
 ): CheckFeatOutputs {
-    /**
-     * Perform checks on FEAT analysis results.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param report_file Path to the HTML report
-     * @param report_log_file Path to the HTML report log
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CHECK_FEAT_METADATA);
     const params = check_feat_params(report_file, report_log_file)
@@ -189,5 +189,8 @@ export {
       CheckFeatOutputs,
       CheckFeatParameters,
       check_feat,
+      check_feat_cargs,
+      check_feat_execute,
+      check_feat_outputs,
       check_feat_params,
 };

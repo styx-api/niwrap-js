@@ -12,7 +12,7 @@ const PREDICT_V1_SH_METADATA: Metadata = {
 
 
 interface PredictV1ShParameters {
-    "__STYXTYPE__": "predict_v1.sh";
+    "@type": "freesurfer.predict_v1.sh";
     "template"?: string | null | undefined;
     "inflated_surface_flag": boolean;
     "hemisphere"?: string | null | undefined;
@@ -22,33 +22,33 @@ interface PredictV1ShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "predict_v1.sh": predict_v1_sh_cargs,
+        "freesurfer.predict_v1.sh": predict_v1_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface PredictV1ShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects Subjects for prediction
+ * @param template Target image for registration (exvivo or invivo [default])
+ * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
+ * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
+ * @param print_mode_flag Print mode (do not run commands, just print them)
+ * @param usage_flag Print usage
+ *
+ * @returns Parameter dictionary
+ */
 function predict_v1_sh_params(
     subjects: Array<string>,
     template: string | null = null,
@@ -76,20 +88,8 @@ function predict_v1_sh_params(
     print_mode_flag: boolean = false,
     usage_flag: boolean = false,
 ): PredictV1ShParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects Subjects for prediction
-     * @param template Target image for registration (exvivo or invivo [default])
-     * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
-     * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
-     * @param print_mode_flag Print mode (do not run commands, just print them)
-     * @param usage_flag Print usage
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "predict_v1.sh" as const,
+        "@type": "freesurfer.predict_v1.sh" as const,
         "inflated_surface_flag": inflated_surface_flag,
         "print_mode_flag": print_mode_flag,
         "subjects": subjects,
@@ -105,18 +105,18 @@ function predict_v1_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function predict_v1_sh_cargs(
     params: PredictV1ShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("predict_v1.sh");
     if ((params["template"] ?? null) !== null) {
@@ -145,18 +145,18 @@ function predict_v1_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function predict_v1_sh_outputs(
     params: PredictV1ShParameters,
     execution: Execution,
 ): PredictV1ShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PredictV1ShOutputs = {
         root: execution.outputFile("."),
     };
@@ -164,22 +164,22 @@ function predict_v1_sh_outputs(
 }
 
 
+/**
+ * A script for predicting brain images using registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
+ */
 function predict_v1_sh_execute(
     params: PredictV1ShParameters,
     execution: Execution,
 ): PredictV1ShOutputs {
-    /**
-     * A script for predicting brain images using registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
-     */
     params = execution.params(params)
     const cargs = predict_v1_sh_cargs(params, execution)
     const ret = predict_v1_sh_outputs(params, execution)
@@ -188,6 +188,23 @@ function predict_v1_sh_execute(
 }
 
 
+/**
+ * A script for predicting brain images using registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects Subjects for prediction
+ * @param template Target image for registration (exvivo or invivo [default])
+ * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
+ * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
+ * @param print_mode_flag Print mode (do not run commands, just print them)
+ * @param usage_flag Print usage
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
+ */
 function predict_v1_sh(
     subjects: Array<string>,
     template: string | null = null,
@@ -197,23 +214,6 @@ function predict_v1_sh(
     usage_flag: boolean = false,
     runner: Runner | null = null,
 ): PredictV1ShOutputs {
-    /**
-     * A script for predicting brain images using registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects Subjects for prediction
-     * @param template Target image for registration (exvivo or invivo [default])
-     * @param inflated_surface_flag Don't use inflated surface as initial registration (backward compatibility)
-     * @param hemisphere Hemisphere (rh or lh) default is both hemispheres
-     * @param print_mode_flag Print mode (do not run commands, just print them)
-     * @param usage_flag Print usage
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PREDICT_V1_SH_METADATA);
     const params = predict_v1_sh_params(subjects, template, inflated_surface_flag, hemisphere, print_mode_flag, usage_flag)
@@ -226,5 +226,8 @@ export {
       PredictV1ShOutputs,
       PredictV1ShParameters,
       predict_v1_sh,
+      predict_v1_sh_cargs,
+      predict_v1_sh_execute,
+      predict_v1_sh_outputs,
       predict_v1_sh_params,
 };

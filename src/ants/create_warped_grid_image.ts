@@ -12,7 +12,7 @@ const CREATE_WARPED_GRID_IMAGE_METADATA: Metadata = {
 
 
 interface CreateWarpedGridImageParameters {
-    "__STYXTYPE__": "CreateWarpedGridImage";
+    "@type": "ants.CreateWarpedGridImage";
     "image_dimension": number;
     "deformation_field": InputPathType;
     "output_image": string;
@@ -22,35 +22,35 @@ interface CreateWarpedGridImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "CreateWarpedGridImage": create_warped_grid_image_cargs,
+        "ants.CreateWarpedGridImage": create_warped_grid_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "CreateWarpedGridImage": create_warped_grid_image_outputs,
+        "ants.CreateWarpedGridImage": create_warped_grid_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface CreateWarpedGridImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the input image.
+ * @param deformation_field File containing the deformation field to be applied.
+ * @param output_image The filename of the output warped grid image.
+ * @param directions Directions for the grid warping, e.g., '1x0x0'.
+ * @param grid_spacing Spacing of the grid, e.g., '10x10x10'.
+ * @param grid_sigma Sigma value for the grid smoothing, e.g., '1x1x1'.
+ *
+ * @returns Parameter dictionary
+ */
 function create_warped_grid_image_params(
     image_dimension: number,
     deformation_field: InputPathType,
@@ -81,20 +93,8 @@ function create_warped_grid_image_params(
     grid_spacing: string | null = null,
     grid_sigma: string | null = null,
 ): CreateWarpedGridImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the input image.
-     * @param deformation_field File containing the deformation field to be applied.
-     * @param output_image The filename of the output warped grid image.
-     * @param directions Directions for the grid warping, e.g., '1x0x0'.
-     * @param grid_spacing Spacing of the grid, e.g., '10x10x10'.
-     * @param grid_sigma Sigma value for the grid smoothing, e.g., '1x1x1'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "CreateWarpedGridImage" as const,
+        "@type": "ants.CreateWarpedGridImage" as const,
         "image_dimension": image_dimension,
         "deformation_field": deformation_field,
         "output_image": output_image,
@@ -112,18 +112,18 @@ function create_warped_grid_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_warped_grid_image_cargs(
     params: CreateWarpedGridImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CreateWarpedGridImage");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -142,18 +142,18 @@ function create_warped_grid_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_warped_grid_image_outputs(
     params: CreateWarpedGridImageParameters,
     execution: Execution,
 ): CreateWarpedGridImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateWarpedGridImageOutputs = {
         root: execution.outputFile("."),
         warped_grid_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -162,22 +162,22 @@ function create_warped_grid_image_outputs(
 }
 
 
+/**
+ * Create a warped grid image based on the specified deformation field.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
+ */
 function create_warped_grid_image_execute(
     params: CreateWarpedGridImageParameters,
     execution: Execution,
 ): CreateWarpedGridImageOutputs {
-    /**
-     * Create a warped grid image based on the specified deformation field.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_warped_grid_image_cargs(params, execution)
     const ret = create_warped_grid_image_outputs(params, execution)
@@ -186,6 +186,23 @@ function create_warped_grid_image_execute(
 }
 
 
+/**
+ * Create a warped grid image based on the specified deformation field.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the input image.
+ * @param deformation_field File containing the deformation field to be applied.
+ * @param output_image The filename of the output warped grid image.
+ * @param directions Directions for the grid warping, e.g., '1x0x0'.
+ * @param grid_spacing Spacing of the grid, e.g., '10x10x10'.
+ * @param grid_sigma Sigma value for the grid smoothing, e.g., '1x1x1'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
+ */
 function create_warped_grid_image(
     image_dimension: number,
     deformation_field: InputPathType,
@@ -195,23 +212,6 @@ function create_warped_grid_image(
     grid_sigma: string | null = null,
     runner: Runner | null = null,
 ): CreateWarpedGridImageOutputs {
-    /**
-     * Create a warped grid image based on the specified deformation field.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the input image.
-     * @param deformation_field File containing the deformation field to be applied.
-     * @param output_image The filename of the output warped grid image.
-     * @param directions Directions for the grid warping, e.g., '1x0x0'.
-     * @param grid_spacing Spacing of the grid, e.g., '10x10x10'.
-     * @param grid_sigma Sigma value for the grid smoothing, e.g., '1x1x1'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_WARPED_GRID_IMAGE_METADATA);
     const params = create_warped_grid_image_params(image_dimension, deformation_field, output_image, directions, grid_spacing, grid_sigma)
@@ -224,5 +224,8 @@ export {
       CreateWarpedGridImageOutputs,
       CreateWarpedGridImageParameters,
       create_warped_grid_image,
+      create_warped_grid_image_cargs,
+      create_warped_grid_image_execute,
+      create_warped_grid_image_outputs,
       create_warped_grid_image_params,
 };

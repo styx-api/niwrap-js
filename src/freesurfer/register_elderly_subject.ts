@@ -12,7 +12,7 @@ const REGISTER_ELDERLY_SUBJECT_METADATA: Metadata = {
 
 
 interface RegisterElderlySubjectParameters {
-    "__STYXTYPE__": "register_elderly_subject";
+    "@type": "freesurfer.register_elderly_subject";
     "sampling_percentage"?: number | null | undefined;
     "output_fsamples": string;
     "output_norm": string;
@@ -22,35 +22,35 @@ interface RegisterElderlySubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "register_elderly_subject": register_elderly_subject_cargs,
+        "freesurfer.register_elderly_subject": register_elderly_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "register_elderly_subject": register_elderly_subject_outputs,
+        "freesurfer.register_elderly_subject": register_elderly_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface RegisterElderlySubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_fsamples Output path for transformed control points
+ * @param output_norm Output path for intensity normalized volume
+ * @param input_volume Input MRI volume to register
+ * @param gca_file GCA file for registration
+ * @param transform_file Output transform file
+ * @param sampling_percentage Percentage of white matter points to use as control points
+ *
+ * @returns Parameter dictionary
+ */
 function register_elderly_subject_params(
     output_fsamples: string,
     output_norm: string,
@@ -85,20 +97,8 @@ function register_elderly_subject_params(
     transform_file: InputPathType,
     sampling_percentage: number | null = 0.5,
 ): RegisterElderlySubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_fsamples Output path for transformed control points
-     * @param output_norm Output path for intensity normalized volume
-     * @param input_volume Input MRI volume to register
-     * @param gca_file GCA file for registration
-     * @param transform_file Output transform file
-     * @param sampling_percentage Percentage of white matter points to use as control points
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "register_elderly_subject" as const,
+        "@type": "freesurfer.register_elderly_subject" as const,
         "output_fsamples": output_fsamples,
         "output_norm": output_norm,
         "input_volume": input_volume,
@@ -112,18 +112,18 @@ function register_elderly_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function register_elderly_subject_cargs(
     params: RegisterElderlySubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("register_elderly_subject");
     if ((params["sampling_percentage"] ?? null) !== null) {
@@ -147,18 +147,18 @@ function register_elderly_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function register_elderly_subject_outputs(
     params: RegisterElderlySubjectParameters,
     execution: Execution,
 ): RegisterElderlySubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegisterElderlySubjectOutputs = {
         root: execution.outputFile("."),
         transformed_fsamples_output: execution.outputFile([(params["output_fsamples"] ?? null)].join('')),
@@ -168,22 +168,22 @@ function register_elderly_subject_outputs(
 }
 
 
+/**
+ * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
+ */
 function register_elderly_subject_execute(
     params: RegisterElderlySubjectParameters,
     execution: Execution,
 ): RegisterElderlySubjectOutputs {
-    /**
-     * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = register_elderly_subject_cargs(params, execution)
     const ret = register_elderly_subject_outputs(params, execution)
@@ -192,6 +192,23 @@ function register_elderly_subject_execute(
 }
 
 
+/**
+ * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_fsamples Output path for transformed control points
+ * @param output_norm Output path for intensity normalized volume
+ * @param input_volume Input MRI volume to register
+ * @param gca_file GCA file for registration
+ * @param transform_file Output transform file
+ * @param sampling_percentage Percentage of white matter points to use as control points
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
+ */
 function register_elderly_subject(
     output_fsamples: string,
     output_norm: string,
@@ -201,23 +218,6 @@ function register_elderly_subject(
     sampling_percentage: number | null = 0.5,
     runner: Runner | null = null,
 ): RegisterElderlySubjectOutputs {
-    /**
-     * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_fsamples Output path for transformed control points
-     * @param output_norm Output path for intensity normalized volume
-     * @param input_volume Input MRI volume to register
-     * @param gca_file GCA file for registration
-     * @param transform_file Output transform file
-     * @param sampling_percentage Percentage of white matter points to use as control points
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REGISTER_ELDERLY_SUBJECT_METADATA);
     const params = register_elderly_subject_params(output_fsamples, output_norm, input_volume, gca_file, transform_file, sampling_percentage)
@@ -230,5 +230,8 @@ export {
       RegisterElderlySubjectOutputs,
       RegisterElderlySubjectParameters,
       register_elderly_subject,
+      register_elderly_subject_cargs,
+      register_elderly_subject_execute,
+      register_elderly_subject_outputs,
       register_elderly_subject_params,
 };

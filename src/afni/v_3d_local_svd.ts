@@ -12,7 +12,7 @@ const V_3D_LOCAL_SVD_METADATA: Metadata = {
 
 
 interface V3dLocalSvdParameters {
-    "__STYXTYPE__": "3dLocalSVD";
+    "@type": "afni.3dLocalSVD";
     "auto_mask": boolean;
     "input_file": InputPathType;
     "mask_file"?: InputPathType | null | undefined;
@@ -24,33 +24,33 @@ interface V3dLocalSvdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLocalSVD": v_3d_local_svd_cargs,
+        "afni.3dLocalSVD": v_3d_local_svd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface V3dLocalSvdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input time series dataset file
+ * @param output_file Prefix for the output SVD vector result dataset file
+ * @param auto_mask Create a mask from time series dataset
+ * @param mask_file Restrict operations to this mask dataset
+ * @param nbhd Neighborhood for SVD calculation, e.g., 'SPHERE(5)'
+ * @param polort Detrending option, ['+' means to add trend back]
+ * @param vnorm Normalize data vectors [strongly recommended]
+ * @param vproj Project central data time series onto local SVD subspace of dimension 'ndim'
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_local_svd_params(
     input_file: InputPathType,
     output_file: string,
@@ -80,22 +94,8 @@ function v_3d_local_svd_params(
     vnorm: boolean = false,
     vproj: number | null = null,
 ): V3dLocalSvdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input time series dataset file
-     * @param output_file Prefix for the output SVD vector result dataset file
-     * @param auto_mask Create a mask from time series dataset
-     * @param mask_file Restrict operations to this mask dataset
-     * @param nbhd Neighborhood for SVD calculation, e.g., 'SPHERE(5)'
-     * @param polort Detrending option, ['+' means to add trend back]
-     * @param vnorm Normalize data vectors [strongly recommended]
-     * @param vproj Project central data time series onto local SVD subspace of dimension 'ndim'
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLocalSVD" as const,
+        "@type": "afni.3dLocalSVD" as const,
         "auto_mask": auto_mask,
         "input_file": input_file,
         "output_file": output_file,
@@ -117,18 +117,18 @@ function v_3d_local_svd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_local_svd_cargs(
     params: V3dLocalSvdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLocalSVD");
     if ((params["auto_mask"] ?? null)) {
@@ -173,18 +173,18 @@ function v_3d_local_svd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_local_svd_outputs(
     params: V3dLocalSvdParameters,
     execution: Execution,
 ): V3dLocalSvdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLocalSvdOutputs = {
         root: execution.outputFile("."),
     };
@@ -192,22 +192,22 @@ function v_3d_local_svd_outputs(
 }
 
 
+/**
+ * Computes the SVD of time series from a neighborhood of each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
+ */
 function v_3d_local_svd_execute(
     params: V3dLocalSvdParameters,
     execution: Execution,
 ): V3dLocalSvdOutputs {
-    /**
-     * Computes the SVD of time series from a neighborhood of each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_local_svd_cargs(params, execution)
     const ret = v_3d_local_svd_outputs(params, execution)
@@ -216,6 +216,25 @@ function v_3d_local_svd_execute(
 }
 
 
+/**
+ * Computes the SVD of time series from a neighborhood of each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input time series dataset file
+ * @param output_file Prefix for the output SVD vector result dataset file
+ * @param auto_mask Create a mask from time series dataset
+ * @param mask_file Restrict operations to this mask dataset
+ * @param nbhd Neighborhood for SVD calculation, e.g., 'SPHERE(5)'
+ * @param polort Detrending option, ['+' means to add trend back]
+ * @param vnorm Normalize data vectors [strongly recommended]
+ * @param vproj Project central data time series onto local SVD subspace of dimension 'ndim'
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
+ */
 function v_3d_local_svd(
     input_file: InputPathType,
     output_file: string,
@@ -227,25 +246,6 @@ function v_3d_local_svd(
     vproj: number | null = null,
     runner: Runner | null = null,
 ): V3dLocalSvdOutputs {
-    /**
-     * Computes the SVD of time series from a neighborhood of each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input time series dataset file
-     * @param output_file Prefix for the output SVD vector result dataset file
-     * @param auto_mask Create a mask from time series dataset
-     * @param mask_file Restrict operations to this mask dataset
-     * @param nbhd Neighborhood for SVD calculation, e.g., 'SPHERE(5)'
-     * @param polort Detrending option, ['+' means to add trend back]
-     * @param vnorm Normalize data vectors [strongly recommended]
-     * @param vproj Project central data time series onto local SVD subspace of dimension 'ndim'
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_SVD_METADATA);
     const params = v_3d_local_svd_params(input_file, output_file, auto_mask, mask_file, nbhd, polort, vnorm, vproj)
@@ -258,5 +258,8 @@ export {
       V3dLocalSvdParameters,
       V_3D_LOCAL_SVD_METADATA,
       v_3d_local_svd,
+      v_3d_local_svd_cargs,
+      v_3d_local_svd_execute,
+      v_3d_local_svd_outputs,
       v_3d_local_svd_params,
 };

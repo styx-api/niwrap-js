@@ -12,7 +12,7 @@ const PNM_EVS_METADATA: Metadata = {
 
 
 interface PnmEvsParameters {
-    "__STYXTYPE__": "pnm_evs";
+    "@type": "fsl.pnm_evs";
     "input_file": InputPathType;
     "output_file": string;
     "tr_value": number;
@@ -36,35 +36,35 @@ interface PnmEvsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pnm_evs": pnm_evs_cargs,
+        "fsl.pnm_evs": pnm_evs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pnm_evs": pnm_evs_outputs,
+        "fsl.pnm_evs": pnm_evs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface PnmEvsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image filename (4D functional/EPI data)
+ * @param output_file Output filename (for confound/EV matrix)
+ * @param tr_value TR of fMRI volumes (in seconds)
+ * @param cardiac_file Input filename for cardiac values (1 or 2 columns: time [phase])
+ * @param respiratory_file Input filename for respiratory phase values (1 or 2 columns: time [phase])
+ * @param order_cardiac Order of basic cardiac regressors (number of Fourier pairs)
+ * @param order_respiratory Order of basic respiratory regressors (number of Fourier pairs)
+ * @param order_mult_cardiac Order of multiplicative cardiac terms (also need to set --multr)
+ * @param order_mult_respiratory Order of multiplicative respiratory terms (also need to set --multc)
+ * @param csf_mask Filename of CSF mask image (and generate CSF regressor)
+ * @param rvt_file Input filename of RVT data (2 columns: time value)
+ * @param heartrate_file Input filename for heart rate data (2 columns: time value)
+ * @param rvt_smooth Optional smoothing of RVT regressor (in seconds)
+ * @param heartrate_smooth Optional smoothing of heart rate regressor (in seconds)
+ * @param slice_direction Specify slice direction (x/y/z)
+ * @param slice_order Specify slice ordering (up/down/interleaved_up/interleaved_down)
+ * @param slice_timing_file Specify slice timing via an external file
+ * @param debug_flag Turn on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function pnm_evs_params(
     input_file: InputPathType,
     output_file: string,
@@ -109,34 +135,8 @@ function pnm_evs_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): PnmEvsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image filename (4D functional/EPI data)
-     * @param output_file Output filename (for confound/EV matrix)
-     * @param tr_value TR of fMRI volumes (in seconds)
-     * @param cardiac_file Input filename for cardiac values (1 or 2 columns: time [phase])
-     * @param respiratory_file Input filename for respiratory phase values (1 or 2 columns: time [phase])
-     * @param order_cardiac Order of basic cardiac regressors (number of Fourier pairs)
-     * @param order_respiratory Order of basic respiratory regressors (number of Fourier pairs)
-     * @param order_mult_cardiac Order of multiplicative cardiac terms (also need to set --multr)
-     * @param order_mult_respiratory Order of multiplicative respiratory terms (also need to set --multc)
-     * @param csf_mask Filename of CSF mask image (and generate CSF regressor)
-     * @param rvt_file Input filename of RVT data (2 columns: time value)
-     * @param heartrate_file Input filename for heart rate data (2 columns: time value)
-     * @param rvt_smooth Optional smoothing of RVT regressor (in seconds)
-     * @param heartrate_smooth Optional smoothing of heart rate regressor (in seconds)
-     * @param slice_direction Specify slice direction (x/y/z)
-     * @param slice_order Specify slice ordering (up/down/interleaved_up/interleaved_down)
-     * @param slice_timing_file Specify slice timing via an external file
-     * @param debug_flag Turn on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pnm_evs" as const,
+        "@type": "fsl.pnm_evs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "tr_value": tr_value,
@@ -190,18 +190,18 @@ function pnm_evs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pnm_evs_cargs(
     params: PnmEvsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pnm_evs");
     cargs.push(
@@ -313,18 +313,18 @@ function pnm_evs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pnm_evs_outputs(
     params: PnmEvsParameters,
     execution: Execution,
 ): PnmEvsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PnmEvsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -333,22 +333,22 @@ function pnm_evs_outputs(
 }
 
 
+/**
+ * PNM EVs: Generates physiological noise regressors for fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
+ */
 function pnm_evs_execute(
     params: PnmEvsParameters,
     execution: Execution,
 ): PnmEvsOutputs {
-    /**
-     * PNM EVs: Generates physiological noise regressors for fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
-     */
     params = execution.params(params)
     const cargs = pnm_evs_cargs(params, execution)
     const ret = pnm_evs_outputs(params, execution)
@@ -357,6 +357,37 @@ function pnm_evs_execute(
 }
 
 
+/**
+ * PNM EVs: Generates physiological noise regressors for fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image filename (4D functional/EPI data)
+ * @param output_file Output filename (for confound/EV matrix)
+ * @param tr_value TR of fMRI volumes (in seconds)
+ * @param cardiac_file Input filename for cardiac values (1 or 2 columns: time [phase])
+ * @param respiratory_file Input filename for respiratory phase values (1 or 2 columns: time [phase])
+ * @param order_cardiac Order of basic cardiac regressors (number of Fourier pairs)
+ * @param order_respiratory Order of basic respiratory regressors (number of Fourier pairs)
+ * @param order_mult_cardiac Order of multiplicative cardiac terms (also need to set --multr)
+ * @param order_mult_respiratory Order of multiplicative respiratory terms (also need to set --multc)
+ * @param csf_mask Filename of CSF mask image (and generate CSF regressor)
+ * @param rvt_file Input filename of RVT data (2 columns: time value)
+ * @param heartrate_file Input filename for heart rate data (2 columns: time value)
+ * @param rvt_smooth Optional smoothing of RVT regressor (in seconds)
+ * @param heartrate_smooth Optional smoothing of heart rate regressor (in seconds)
+ * @param slice_direction Specify slice direction (x/y/z)
+ * @param slice_order Specify slice ordering (up/down/interleaved_up/interleaved_down)
+ * @param slice_timing_file Specify slice timing via an external file
+ * @param debug_flag Turn on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
+ */
 function pnm_evs(
     input_file: InputPathType,
     output_file: string,
@@ -380,37 +411,6 @@ function pnm_evs(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): PnmEvsOutputs {
-    /**
-     * PNM EVs: Generates physiological noise regressors for fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image filename (4D functional/EPI data)
-     * @param output_file Output filename (for confound/EV matrix)
-     * @param tr_value TR of fMRI volumes (in seconds)
-     * @param cardiac_file Input filename for cardiac values (1 or 2 columns: time [phase])
-     * @param respiratory_file Input filename for respiratory phase values (1 or 2 columns: time [phase])
-     * @param order_cardiac Order of basic cardiac regressors (number of Fourier pairs)
-     * @param order_respiratory Order of basic respiratory regressors (number of Fourier pairs)
-     * @param order_mult_cardiac Order of multiplicative cardiac terms (also need to set --multr)
-     * @param order_mult_respiratory Order of multiplicative respiratory terms (also need to set --multc)
-     * @param csf_mask Filename of CSF mask image (and generate CSF regressor)
-     * @param rvt_file Input filename of RVT data (2 columns: time value)
-     * @param heartrate_file Input filename for heart rate data (2 columns: time value)
-     * @param rvt_smooth Optional smoothing of RVT regressor (in seconds)
-     * @param heartrate_smooth Optional smoothing of heart rate regressor (in seconds)
-     * @param slice_direction Specify slice direction (x/y/z)
-     * @param slice_order Specify slice ordering (up/down/interleaved_up/interleaved_down)
-     * @param slice_timing_file Specify slice timing via an external file
-     * @param debug_flag Turn on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PNM_EVS_METADATA);
     const params = pnm_evs_params(input_file, output_file, tr_value, cardiac_file, respiratory_file, order_cardiac, order_respiratory, order_mult_cardiac, order_mult_respiratory, csf_mask, rvt_file, heartrate_file, rvt_smooth, heartrate_smooth, slice_direction, slice_order, slice_timing_file, debug_flag, verbose_flag, help_flag)
@@ -423,5 +423,8 @@ export {
       PnmEvsOutputs,
       PnmEvsParameters,
       pnm_evs,
+      pnm_evs_cargs,
+      pnm_evs_execute,
+      pnm_evs_outputs,
       pnm_evs_params,
 };

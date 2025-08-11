@@ -12,38 +12,38 @@ const GETFULLPATH_METADATA: Metadata = {
 
 
 interface GetfullpathParameters {
-    "__STYXTYPE__": "getfullpath";
+    "@type": "freesurfer.getfullpath";
     "filename": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "getfullpath": getfullpath_cargs,
+        "freesurfer.getfullpath": getfullpath_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface GetfullpathOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename Filename for which to get the full path.
+ *
+ * @returns Parameter dictionary
+ */
 function getfullpath_params(
     filename: string,
 ): GetfullpathParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename Filename for which to get the full path.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "getfullpath" as const,
+        "@type": "freesurfer.getfullpath" as const,
         "filename": filename,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function getfullpath_cargs(
     params: GetfullpathParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("getfullpath");
     cargs.push((params["filename"] ?? null));
@@ -100,18 +100,18 @@ function getfullpath_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function getfullpath_outputs(
     params: GetfullpathParameters,
     execution: Execution,
 ): GetfullpathOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GetfullpathOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function getfullpath_outputs(
 }
 
 
+/**
+ * A utility to retrieve the full path of a specified file or directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
+ */
 function getfullpath_execute(
     params: GetfullpathParameters,
     execution: Execution,
 ): GetfullpathOutputs {
-    /**
-     * A utility to retrieve the full path of a specified file or directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
-     */
     params = execution.params(params)
     const cargs = getfullpath_cargs(params, execution)
     const ret = getfullpath_outputs(params, execution)
@@ -143,22 +143,22 @@ function getfullpath_execute(
 }
 
 
+/**
+ * A utility to retrieve the full path of a specified file or directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param filename Filename for which to get the full path.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
+ */
 function getfullpath(
     filename: string,
     runner: Runner | null = null,
 ): GetfullpathOutputs {
-    /**
-     * A utility to retrieve the full path of a specified file or directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param filename Filename for which to get the full path.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GETFULLPATH_METADATA);
     const params = getfullpath_params(filename)
@@ -171,5 +171,8 @@ export {
       GetfullpathOutputs,
       GetfullpathParameters,
       getfullpath,
+      getfullpath_cargs,
+      getfullpath_execute,
+      getfullpath_outputs,
       getfullpath_params,
 };

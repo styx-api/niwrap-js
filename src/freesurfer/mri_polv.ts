@@ -12,40 +12,40 @@ const MRI_POLV_METADATA: Metadata = {
 
 
 interface MriPolvParameters {
-    "__STYXTYPE__": "mri_polv";
+    "@type": "freesurfer.mri_polv";
     "window_size"?: number | null | undefined;
     "input_image": InputPathType;
     "output_image": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_polv": mri_polv_cargs,
+        "freesurfer.mri_polv": mri_polv_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MriPolvOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image The input image file for processing.
+ * @param output_image The output image file specifying the plane of least variance.
+ * @param window_size Specify the window size to be used in the calculation of the central plane of least variance (default=5).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_polv_params(
     input_image: InputPathType,
     output_image: InputPathType,
     window_size: number | null = null,
 ): MriPolvParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image The input image file for processing.
-     * @param output_image The output image file specifying the plane of least variance.
-     * @param window_size Specify the window size to be used in the calculation of the central plane of least variance (default=5).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_polv" as const,
+        "@type": "freesurfer.mri_polv" as const,
         "input_image": input_image,
         "output_image": output_image,
     };
@@ -91,18 +91,18 @@ function mri_polv_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_polv_cargs(
     params: MriPolvParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_polv");
     if ((params["window_size"] ?? null) !== null) {
@@ -117,18 +117,18 @@ function mri_polv_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_polv_outputs(
     params: MriPolvParameters,
     execution: Execution,
 ): MriPolvOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriPolvOutputs = {
         root: execution.outputFile("."),
     };
@@ -136,22 +136,22 @@ function mri_polv_outputs(
 }
 
 
+/**
+ * Calculate an image specifying the plane of least variance at each point in the input image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
+ */
 function mri_polv_execute(
     params: MriPolvParameters,
     execution: Execution,
 ): MriPolvOutputs {
-    /**
-     * Calculate an image specifying the plane of least variance at each point in the input image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_polv_cargs(params, execution)
     const ret = mri_polv_outputs(params, execution)
@@ -160,26 +160,26 @@ function mri_polv_execute(
 }
 
 
+/**
+ * Calculate an image specifying the plane of least variance at each point in the input image.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image The input image file for processing.
+ * @param output_image The output image file specifying the plane of least variance.
+ * @param window_size Specify the window size to be used in the calculation of the central plane of least variance (default=5).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
+ */
 function mri_polv(
     input_image: InputPathType,
     output_image: InputPathType,
     window_size: number | null = null,
     runner: Runner | null = null,
 ): MriPolvOutputs {
-    /**
-     * Calculate an image specifying the plane of least variance at each point in the input image.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image The input image file for processing.
-     * @param output_image The output image file specifying the plane of least variance.
-     * @param window_size Specify the window size to be used in the calculation of the central plane of least variance (default=5).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_POLV_METADATA);
     const params = mri_polv_params(input_image, output_image, window_size)
@@ -192,5 +192,8 @@ export {
       MriPolvOutputs,
       MriPolvParameters,
       mri_polv,
+      mri_polv_cargs,
+      mri_polv_execute,
+      mri_polv_outputs,
       mri_polv_params,
 };

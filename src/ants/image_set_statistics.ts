@@ -12,7 +12,7 @@ const IMAGE_SET_STATISTICS_METADATA: Metadata = {
 
 
 interface ImageSetStatisticsParameters {
-    "__STYXTYPE__": "ImageSetStatistics";
+    "@type": "ants.ImageSetStatistics";
     "image_dimension": number;
     "controls_list": InputPathType;
     "output_image": string;
@@ -22,35 +22,35 @@ interface ImageSetStatisticsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ImageSetStatistics": image_set_statistics_cargs,
+        "ants.ImageSetStatistics": image_set_statistics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ImageSetStatistics": image_set_statistics_outputs,
+        "ants.ImageSetStatistics": image_set_statistics_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface ImageSetStatisticsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the images to be processed by ImageSetStatistics.
+ * @param controls_list Text file containing the list of control images.
+ * @param output_image The output image file where the computed statistics are stored.
+ * @param which_stat Choice of statistic to compute: 0 for median, 1 for max probability appearance, 2 for weighted mean appearance, 3 for trimmed mean, 4 for max value, 5 for similarity-weighted (requires imagelist2), 6 for best local match label, 7 for max value from ROI.
+ * @param roi Region of interest image file, optional depending on the whichstat option.
+ * @param imagelist2 List of similarity images used for similarity-weighted statistics. Required if whichstat equals 5 or 6.
+ *
+ * @returns Parameter dictionary
+ */
 function image_set_statistics_params(
     image_dimension: number,
     controls_list: InputPathType,
@@ -81,20 +93,8 @@ function image_set_statistics_params(
     roi: InputPathType | null = null,
     imagelist2: InputPathType | null = null,
 ): ImageSetStatisticsParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the images to be processed by ImageSetStatistics.
-     * @param controls_list Text file containing the list of control images.
-     * @param output_image The output image file where the computed statistics are stored.
-     * @param which_stat Choice of statistic to compute: 0 for median, 1 for max probability appearance, 2 for weighted mean appearance, 3 for trimmed mean, 4 for max value, 5 for similarity-weighted (requires imagelist2), 6 for best local match label, 7 for max value from ROI.
-     * @param roi Region of interest image file, optional depending on the whichstat option.
-     * @param imagelist2 List of similarity images used for similarity-weighted statistics. Required if whichstat equals 5 or 6.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ImageSetStatistics" as const,
+        "@type": "ants.ImageSetStatistics" as const,
         "image_dimension": image_dimension,
         "controls_list": controls_list,
         "output_image": output_image,
@@ -110,18 +110,18 @@ function image_set_statistics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function image_set_statistics_cargs(
     params: ImageSetStatisticsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ImageSetStatistics");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -153,18 +153,18 @@ function image_set_statistics_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function image_set_statistics_outputs(
     params: ImageSetStatisticsParameters,
     execution: Execution,
 ): ImageSetStatisticsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImageSetStatisticsOutputs = {
         root: execution.outputFile("."),
         computed_statistics_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -173,22 +173,22 @@ function image_set_statistics_outputs(
 }
 
 
+/**
+ * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
+ */
 function image_set_statistics_execute(
     params: ImageSetStatisticsParameters,
     execution: Execution,
 ): ImageSetStatisticsOutputs {
-    /**
-     * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
-     */
     params = execution.params(params)
     const cargs = image_set_statistics_cargs(params, execution)
     const ret = image_set_statistics_outputs(params, execution)
@@ -197,6 +197,23 @@ function image_set_statistics_execute(
 }
 
 
+/**
+ * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the images to be processed by ImageSetStatistics.
+ * @param controls_list Text file containing the list of control images.
+ * @param output_image The output image file where the computed statistics are stored.
+ * @param which_stat Choice of statistic to compute: 0 for median, 1 for max probability appearance, 2 for weighted mean appearance, 3 for trimmed mean, 4 for max value, 5 for similarity-weighted (requires imagelist2), 6 for best local match label, 7 for max value from ROI.
+ * @param roi Region of interest image file, optional depending on the whichstat option.
+ * @param imagelist2 List of similarity images used for similarity-weighted statistics. Required if whichstat equals 5 or 6.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
+ */
 function image_set_statistics(
     image_dimension: number,
     controls_list: InputPathType,
@@ -206,23 +223,6 @@ function image_set_statistics(
     imagelist2: InputPathType | null = null,
     runner: Runner | null = null,
 ): ImageSetStatisticsOutputs {
-    /**
-     * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the images to be processed by ImageSetStatistics.
-     * @param controls_list Text file containing the list of control images.
-     * @param output_image The output image file where the computed statistics are stored.
-     * @param which_stat Choice of statistic to compute: 0 for median, 1 for max probability appearance, 2 for weighted mean appearance, 3 for trimmed mean, 4 for max value, 5 for similarity-weighted (requires imagelist2), 6 for best local match label, 7 for max value from ROI.
-     * @param roi Region of interest image file, optional depending on the whichstat option.
-     * @param imagelist2 List of similarity images used for similarity-weighted statistics. Required if whichstat equals 5 or 6.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMAGE_SET_STATISTICS_METADATA);
     const params = image_set_statistics_params(image_dimension, controls_list, output_image, which_stat, roi, imagelist2)
@@ -235,5 +235,8 @@ export {
       ImageSetStatisticsOutputs,
       ImageSetStatisticsParameters,
       image_set_statistics,
+      image_set_statistics_cargs,
+      image_set_statistics_execute,
+      image_set_statistics_outputs,
       image_set_statistics_params,
 };

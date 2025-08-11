@@ -12,7 +12,7 @@ const V_3D_TSORT_METADATA: Metadata = {
 
 
 interface V3dTsortParameters {
-    "__STYXTYPE__": "3dTsort";
+    "@type": "afni.3dTsort";
     "input_file": InputPathType;
     "prefix"?: string | null | undefined;
     "inc": boolean;
@@ -27,35 +27,35 @@ interface V3dTsortParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTsort": v_3d_tsort_cargs,
+        "afni.3dTsort": v_3d_tsort_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTsort": v_3d_tsort_outputs,
+        "afni.3dTsort": v_3d_tsort_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface V3dTsortOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input dataset to be sorted
+ * @param prefix Prefix for the output dataset
+ * @param inc Sort into increasing order (default)
+ * @param dec Sort into decreasing order
+ * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
+ * @param ind Output sorting index (0 to Nvals -1)
+ * @param val Output sorted values (default)
+ * @param random Randomly shuffle (permute) the time points in each voxel
+ * @param ranfft Randomize each time series by scrambling the FFT phase
+ * @param randft Randomize each time series by scrambling the DFT phase
+ * @param datum Coerce the output data to be stored as the given type (byte, short, or float)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tsort_params(
     input_file: InputPathType,
     prefix: string | null = null,
@@ -91,25 +108,8 @@ function v_3d_tsort_params(
     randft: boolean = false,
     datum: string | null = null,
 ): V3dTsortParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input dataset to be sorted
-     * @param prefix Prefix for the output dataset
-     * @param inc Sort into increasing order (default)
-     * @param dec Sort into decreasing order
-     * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
-     * @param ind Output sorting index (0 to Nvals -1)
-     * @param val Output sorted values (default)
-     * @param random Randomly shuffle (permute) the time points in each voxel
-     * @param ranfft Randomize each time series by scrambling the FFT phase
-     * @param randft Randomize each time series by scrambling the DFT phase
-     * @param datum Coerce the output data to be stored as the given type (byte, short, or float)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTsort" as const,
+        "@type": "afni.3dTsort" as const,
         "input_file": input_file,
         "inc": inc,
         "dec": dec,
@@ -130,18 +130,18 @@ function v_3d_tsort_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tsort_cargs(
     params: V3dTsortParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTsort");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -185,18 +185,18 @@ function v_3d_tsort_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tsort_outputs(
     params: V3dTsortParameters,
     execution: Execution,
 ): V3dTsortOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTsortOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -205,22 +205,22 @@ function v_3d_tsort_outputs(
 }
 
 
+/**
+ * Sorts each voxel in a dataset and produces a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
+ */
 function v_3d_tsort_execute(
     params: V3dTsortParameters,
     execution: Execution,
 ): V3dTsortOutputs {
-    /**
-     * Sorts each voxel in a dataset and produces a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tsort_cargs(params, execution)
     const ret = v_3d_tsort_outputs(params, execution)
@@ -229,6 +229,28 @@ function v_3d_tsort_execute(
 }
 
 
+/**
+ * Sorts each voxel in a dataset and produces a new dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input dataset to be sorted
+ * @param prefix Prefix for the output dataset
+ * @param inc Sort into increasing order (default)
+ * @param dec Sort into decreasing order
+ * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
+ * @param ind Output sorting index (0 to Nvals -1)
+ * @param val Output sorted values (default)
+ * @param random Randomly shuffle (permute) the time points in each voxel
+ * @param ranfft Randomize each time series by scrambling the FFT phase
+ * @param randft Randomize each time series by scrambling the DFT phase
+ * @param datum Coerce the output data to be stored as the given type (byte, short, or float)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
+ */
 function v_3d_tsort(
     input_file: InputPathType,
     prefix: string | null = null,
@@ -243,28 +265,6 @@ function v_3d_tsort(
     datum: string | null = null,
     runner: Runner | null = null,
 ): V3dTsortOutputs {
-    /**
-     * Sorts each voxel in a dataset and produces a new dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input dataset to be sorted
-     * @param prefix Prefix for the output dataset
-     * @param inc Sort into increasing order (default)
-     * @param dec Sort into decreasing order
-     * @param rank Output rank instead of sorted values; ranks range from 1 to Nvals
-     * @param ind Output sorting index (0 to Nvals -1)
-     * @param val Output sorted values (default)
-     * @param random Randomly shuffle (permute) the time points in each voxel
-     * @param ranfft Randomize each time series by scrambling the FFT phase
-     * @param randft Randomize each time series by scrambling the DFT phase
-     * @param datum Coerce the output data to be stored as the given type (byte, short, or float)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSORT_METADATA);
     const params = v_3d_tsort_params(input_file, prefix, inc, dec, rank, ind, val, random, ranfft, randft, datum)
@@ -277,5 +277,8 @@ export {
       V3dTsortParameters,
       V_3D_TSORT_METADATA,
       v_3d_tsort,
+      v_3d_tsort_cargs,
+      v_3d_tsort_execute,
+      v_3d_tsort_outputs,
       v_3d_tsort_params,
 };

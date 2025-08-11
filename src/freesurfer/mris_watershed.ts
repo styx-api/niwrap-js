@@ -12,7 +12,7 @@ const MRIS_WATERSHED_METADATA: Metadata = {
 
 
 interface MrisWatershedParameters {
-    "__STYXTYPE__": "mris_watershed";
+    "@type": "freesurfer.mris_watershed";
     "input_surface": InputPathType;
     "input_gradient_field": InputPathType;
     "output_annotation": string;
@@ -21,35 +21,35 @@ interface MrisWatershedParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_watershed": mris_watershed_cargs,
+        "freesurfer.mris_watershed": mris_watershed_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_watershed": mris_watershed_outputs,
+        "freesurfer.mris_watershed": mris_watershed_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MrisWatershedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file
+ * @param input_gradient_field Input gradient field file
+ * @param output_annotation Output annotation file
+ * @param max_clusters Set the number of maximum clusters
+ * @param mask_label Read in and mask the input volume that is not in the specified label
+ *
+ * @returns Parameter dictionary
+ */
 function mris_watershed_params(
     input_surface: InputPathType,
     input_gradient_field: InputPathType,
@@ -79,19 +90,8 @@ function mris_watershed_params(
     max_clusters: number | null = null,
     mask_label: string | null = null,
 ): MrisWatershedParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file
-     * @param input_gradient_field Input gradient field file
-     * @param output_annotation Output annotation file
-     * @param max_clusters Set the number of maximum clusters
-     * @param mask_label Read in and mask the input volume that is not in the specified label
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_watershed" as const,
+        "@type": "freesurfer.mris_watershed" as const,
         "input_surface": input_surface,
         "input_gradient_field": input_gradient_field,
         "output_annotation": output_annotation,
@@ -106,18 +106,18 @@ function mris_watershed_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_watershed_cargs(
     params: MrisWatershedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_watershed");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -139,18 +139,18 @@ function mris_watershed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_watershed_outputs(
     params: MrisWatershedParameters,
     execution: Execution,
 ): MrisWatershedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisWatershedOutputs = {
         root: execution.outputFile("."),
         output_annotation_file: execution.outputFile([(params["output_annotation"] ?? null)].join('')),
@@ -159,22 +159,22 @@ function mris_watershed_outputs(
 }
 
 
+/**
+ * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
+ */
 function mris_watershed_execute(
     params: MrisWatershedParameters,
     execution: Execution,
 ): MrisWatershedOutputs {
-    /**
-     * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_watershed_cargs(params, execution)
     const ret = mris_watershed_outputs(params, execution)
@@ -183,6 +183,22 @@ function mris_watershed_execute(
 }
 
 
+/**
+ * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file
+ * @param input_gradient_field Input gradient field file
+ * @param output_annotation Output annotation file
+ * @param max_clusters Set the number of maximum clusters
+ * @param mask_label Read in and mask the input volume that is not in the specified label
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
+ */
 function mris_watershed(
     input_surface: InputPathType,
     input_gradient_field: InputPathType,
@@ -191,22 +207,6 @@ function mris_watershed(
     mask_label: string | null = null,
     runner: Runner | null = null,
 ): MrisWatershedOutputs {
-    /**
-     * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file
-     * @param input_gradient_field Input gradient field file
-     * @param output_annotation Output annotation file
-     * @param max_clusters Set the number of maximum clusters
-     * @param mask_label Read in and mask the input volume that is not in the specified label
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_WATERSHED_METADATA);
     const params = mris_watershed_params(input_surface, input_gradient_field, output_annotation, max_clusters, mask_label)
@@ -219,5 +219,8 @@ export {
       MrisWatershedOutputs,
       MrisWatershedParameters,
       mris_watershed,
+      mris_watershed_cargs,
+      mris_watershed_execute,
+      mris_watershed_outputs,
       mris_watershed_params,
 };

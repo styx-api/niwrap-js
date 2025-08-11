@@ -12,7 +12,7 @@ const V_1D_NLFIT_METADATA: Metadata = {
 
 
 interface V1dNlfitParameters {
-    "__STYXTYPE__": "1dNLfit";
+    "@type": "afni.1dNLfit";
     "expression": string;
     "independent_variable": string;
     "parameters": Array<string>;
@@ -21,35 +21,35 @@ interface V1dNlfitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dNLfit": v_1d_nlfit_cargs,
+        "afni.1dNLfit": v_1d_nlfit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dNLfit": v_1d_nlfit_outputs,
+        "afni.1dNLfit": v_1d_nlfit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V1dNlfitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param expression The expression for the fit. It must contain one symbol from 'a' to 'z' which is marked as the independent variable by option '-indvar', and at least one more symbol which is a parameter to be estimated.
+ * @param independent_variable Indicates which variable in '-expr' is the independent variable. All other symbols are parameters, which are either fixed (constants) or variables to be estimated. Read the values of the independent variable from 1D file.
+ * @param parameters Set fixed value or estimating range for a particular symbol. For a fixed value, it takes the form 'a=3.14'. For an estimated parameter, it takes the form 'q=-sqrt(2):sqrt(2)'. All symbols in '-expr' must have a corresponding '-param' option, EXCEPT for the '-indvar' symbol.
+ * @param dependent_data Read the values of the dependent variable (to be fitted to '-expr') from 1D file. The file must have the same number of rows as the '-indvar' file.
+ * @param method Set the method for fitting: '1' for L1, '2' for L2 (default is L2).
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_nlfit_params(
     expression: string,
     independent_variable: string,
@@ -79,19 +90,8 @@ function v_1d_nlfit_params(
     dependent_data: InputPathType,
     method: number | null = null,
 ): V1dNlfitParameters {
-    /**
-     * Build parameters.
-    
-     * @param expression The expression for the fit. It must contain one symbol from 'a' to 'z' which is marked as the independent variable by option '-indvar', and at least one more symbol which is a parameter to be estimated.
-     * @param independent_variable Indicates which variable in '-expr' is the independent variable. All other symbols are parameters, which are either fixed (constants) or variables to be estimated. Read the values of the independent variable from 1D file.
-     * @param parameters Set fixed value or estimating range for a particular symbol. For a fixed value, it takes the form 'a=3.14'. For an estimated parameter, it takes the form 'q=-sqrt(2):sqrt(2)'. All symbols in '-expr' must have a corresponding '-param' option, EXCEPT for the '-indvar' symbol.
-     * @param dependent_data Read the values of the dependent variable (to be fitted to '-expr') from 1D file. The file must have the same number of rows as the '-indvar' file.
-     * @param method Set the method for fitting: '1' for L1, '2' for L2 (default is L2).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dNLfit" as const,
+        "@type": "afni.1dNLfit" as const,
         "expression": expression,
         "independent_variable": independent_variable,
         "parameters": parameters,
@@ -104,18 +104,18 @@ function v_1d_nlfit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_nlfit_cargs(
     params: V1dNlfitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dNLfit");
     cargs.push(
@@ -144,18 +144,18 @@ function v_1d_nlfit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_nlfit_outputs(
     params: V1dNlfitParameters,
     execution: Execution,
 ): V1dNlfitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dNlfitOutputs = {
         root: execution.outputFile("."),
         fit_results: execution.outputFile(["stdout"].join('')),
@@ -164,22 +164,22 @@ function v_1d_nlfit_outputs(
 }
 
 
+/**
+ * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
+ */
 function v_1d_nlfit_execute(
     params: V1dNlfitParameters,
     execution: Execution,
 ): V1dNlfitOutputs {
-    /**
-     * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_nlfit_cargs(params, execution)
     const ret = v_1d_nlfit_outputs(params, execution)
@@ -188,6 +188,22 @@ function v_1d_nlfit_execute(
 }
 
 
+/**
+ * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param expression The expression for the fit. It must contain one symbol from 'a' to 'z' which is marked as the independent variable by option '-indvar', and at least one more symbol which is a parameter to be estimated.
+ * @param independent_variable Indicates which variable in '-expr' is the independent variable. All other symbols are parameters, which are either fixed (constants) or variables to be estimated. Read the values of the independent variable from 1D file.
+ * @param parameters Set fixed value or estimating range for a particular symbol. For a fixed value, it takes the form 'a=3.14'. For an estimated parameter, it takes the form 'q=-sqrt(2):sqrt(2)'. All symbols in '-expr' must have a corresponding '-param' option, EXCEPT for the '-indvar' symbol.
+ * @param dependent_data Read the values of the dependent variable (to be fitted to '-expr') from 1D file. The file must have the same number of rows as the '-indvar' file.
+ * @param method Set the method for fitting: '1' for L1, '2' for L2 (default is L2).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
+ */
 function v_1d_nlfit(
     expression: string,
     independent_variable: string,
@@ -196,22 +212,6 @@ function v_1d_nlfit(
     method: number | null = null,
     runner: Runner | null = null,
 ): V1dNlfitOutputs {
-    /**
-     * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param expression The expression for the fit. It must contain one symbol from 'a' to 'z' which is marked as the independent variable by option '-indvar', and at least one more symbol which is a parameter to be estimated.
-     * @param independent_variable Indicates which variable in '-expr' is the independent variable. All other symbols are parameters, which are either fixed (constants) or variables to be estimated. Read the values of the independent variable from 1D file.
-     * @param parameters Set fixed value or estimating range for a particular symbol. For a fixed value, it takes the form 'a=3.14'. For an estimated parameter, it takes the form 'q=-sqrt(2):sqrt(2)'. All symbols in '-expr' must have a corresponding '-param' option, EXCEPT for the '-indvar' symbol.
-     * @param dependent_data Read the values of the dependent variable (to be fitted to '-expr') from 1D file. The file must have the same number of rows as the '-indvar' file.
-     * @param method Set the method for fitting: '1' for L1, '2' for L2 (default is L2).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_NLFIT_METADATA);
     const params = v_1d_nlfit_params(expression, independent_variable, parameters, dependent_data, method)
@@ -224,5 +224,8 @@ export {
       V1dNlfitParameters,
       V_1D_NLFIT_METADATA,
       v_1d_nlfit,
+      v_1d_nlfit_cargs,
+      v_1d_nlfit_execute,
+      v_1d_nlfit_outputs,
       v_1d_nlfit_params,
 };

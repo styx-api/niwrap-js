@@ -12,7 +12,7 @@ const MRIS_HAUSDORFF_DIST_METADATA: Metadata = {
 
 
 interface MrisHausdorffDistParameters {
-    "__STYXTYPE__": "mris_hausdorff_dist";
+    "@type": "freesurfer.mris_hausdorff_dist";
     "surface": InputPathType;
     "label1": InputPathType;
     "label2": InputPathType;
@@ -20,35 +20,35 @@ interface MrisHausdorffDistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_hausdorff_dist": mris_hausdorff_dist_cargs,
+        "freesurfer.mris_hausdorff_dist": mris_hausdorff_dist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_hausdorff_dist": mris_hausdorff_dist_outputs,
+        "freesurfer.mris_hausdorff_dist": mris_hausdorff_dist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisHausdorffDistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface file on which the labels exist
+ * @param label1 First label file
+ * @param label2 Second label file
+ * @param annot_name Compute pairwise Hausdorff Distance (HD) between all annotations with the given name
+ *
+ * @returns Parameter dictionary
+ */
 function mris_hausdorff_dist_params(
     surface: InputPathType,
     label1: InputPathType,
     label2: InputPathType,
     annot_name: string | null = null,
 ): MrisHausdorffDistParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface file on which the labels exist
-     * @param label1 First label file
-     * @param label2 Second label file
-     * @param annot_name Compute pairwise Hausdorff Distance (HD) between all annotations with the given name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_hausdorff_dist" as const,
+        "@type": "freesurfer.mris_hausdorff_dist" as const,
         "surface": surface,
         "label1": label1,
         "label2": label2,
@@ -100,18 +100,18 @@ function mris_hausdorff_dist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_hausdorff_dist_cargs(
     params: MrisHausdorffDistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_hausdorff_dist");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -127,18 +127,18 @@ function mris_hausdorff_dist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_hausdorff_dist_outputs(
     params: MrisHausdorffDistParameters,
     execution: Execution,
 ): MrisHausdorffDistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisHausdorffDistOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["hausdorff_output.txt"].join('')),
@@ -147,22 +147,22 @@ function mris_hausdorff_dist_outputs(
 }
 
 
+/**
+ * This program computes the Hausdorff distance between two labels on a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
+ */
 function mris_hausdorff_dist_execute(
     params: MrisHausdorffDistParameters,
     execution: Execution,
 ): MrisHausdorffDistOutputs {
-    /**
-     * This program computes the Hausdorff distance between two labels on a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_hausdorff_dist_cargs(params, execution)
     const ret = mris_hausdorff_dist_outputs(params, execution)
@@ -171,6 +171,21 @@ function mris_hausdorff_dist_execute(
 }
 
 
+/**
+ * This program computes the Hausdorff distance between two labels on a surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface Surface file on which the labels exist
+ * @param label1 First label file
+ * @param label2 Second label file
+ * @param annot_name Compute pairwise Hausdorff Distance (HD) between all annotations with the given name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
+ */
 function mris_hausdorff_dist(
     surface: InputPathType,
     label1: InputPathType,
@@ -178,21 +193,6 @@ function mris_hausdorff_dist(
     annot_name: string | null = null,
     runner: Runner | null = null,
 ): MrisHausdorffDistOutputs {
-    /**
-     * This program computes the Hausdorff distance between two labels on a surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface Surface file on which the labels exist
-     * @param label1 First label file
-     * @param label2 Second label file
-     * @param annot_name Compute pairwise Hausdorff Distance (HD) between all annotations with the given name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_HAUSDORFF_DIST_METADATA);
     const params = mris_hausdorff_dist_params(surface, label1, label2, annot_name)
@@ -205,5 +205,8 @@ export {
       MrisHausdorffDistOutputs,
       MrisHausdorffDistParameters,
       mris_hausdorff_dist,
+      mris_hausdorff_dist_cargs,
+      mris_hausdorff_dist_execute,
+      mris_hausdorff_dist_outputs,
       mris_hausdorff_dist_params,
 };

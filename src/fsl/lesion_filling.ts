@@ -12,7 +12,7 @@ const LESION_FILLING_METADATA: Metadata = {
 
 
 interface LesionFillingParameters {
-    "__STYXTYPE__": "lesion_filling";
+    "@type": "fsl.lesion_filling";
     "infile": InputPathType;
     "outfile": string;
     "lesionmask": InputPathType;
@@ -23,35 +23,35 @@ interface LesionFillingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "lesion_filling": lesion_filling_cargs,
+        "fsl.lesion_filling": lesion_filling_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "lesion_filling": lesion_filling_outputs,
+        "fsl.lesion_filling": lesion_filling_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface LesionFillingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image filename (e.g., T1w image)
+ * @param outfile Output filename (lesion filled image)
+ * @param lesionmask Filename of lesion mask image
+ * @param wmmask Filename of white matter mask image
+ * @param verbose_flag Switch on diagnostic messages
+ * @param components_flag Save all lesion components as volumes
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function lesion_filling_params(
     infile: InputPathType,
     outfile: string,
@@ -83,21 +96,8 @@ function lesion_filling_params(
     components_flag: boolean = false,
     help_flag: boolean = false,
 ): LesionFillingParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image filename (e.g., T1w image)
-     * @param outfile Output filename (lesion filled image)
-     * @param lesionmask Filename of lesion mask image
-     * @param wmmask Filename of white matter mask image
-     * @param verbose_flag Switch on diagnostic messages
-     * @param components_flag Save all lesion components as volumes
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "lesion_filling" as const,
+        "@type": "fsl.lesion_filling" as const,
         "infile": infile,
         "outfile": outfile,
         "lesionmask": lesionmask,
@@ -112,18 +112,18 @@ function lesion_filling_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function lesion_filling_cargs(
     params: LesionFillingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("lesion_filling");
     cargs.push(
@@ -157,18 +157,18 @@ function lesion_filling_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function lesion_filling_outputs(
     params: LesionFillingParameters,
     execution: Execution,
 ): LesionFillingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LesionFillingOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -177,22 +177,22 @@ function lesion_filling_outputs(
 }
 
 
+/**
+ * Lesion filling tool as part of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
+ */
 function lesion_filling_execute(
     params: LesionFillingParameters,
     execution: Execution,
 ): LesionFillingOutputs {
-    /**
-     * Lesion filling tool as part of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
-     */
     params = execution.params(params)
     const cargs = lesion_filling_cargs(params, execution)
     const ret = lesion_filling_outputs(params, execution)
@@ -201,6 +201,24 @@ function lesion_filling_execute(
 }
 
 
+/**
+ * Lesion filling tool as part of FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image filename (e.g., T1w image)
+ * @param outfile Output filename (lesion filled image)
+ * @param lesionmask Filename of lesion mask image
+ * @param wmmask Filename of white matter mask image
+ * @param verbose_flag Switch on diagnostic messages
+ * @param components_flag Save all lesion components as volumes
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
+ */
 function lesion_filling(
     infile: InputPathType,
     outfile: string,
@@ -211,24 +229,6 @@ function lesion_filling(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): LesionFillingOutputs {
-    /**
-     * Lesion filling tool as part of FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image filename (e.g., T1w image)
-     * @param outfile Output filename (lesion filled image)
-     * @param lesionmask Filename of lesion mask image
-     * @param wmmask Filename of white matter mask image
-     * @param verbose_flag Switch on diagnostic messages
-     * @param components_flag Save all lesion components as volumes
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LESION_FILLING_METADATA);
     const params = lesion_filling_params(infile, outfile, lesionmask, wmmask, verbose_flag, components_flag, help_flag)
@@ -241,5 +241,8 @@ export {
       LesionFillingOutputs,
       LesionFillingParameters,
       lesion_filling,
+      lesion_filling_cargs,
+      lesion_filling_execute,
+      lesion_filling_outputs,
       lesion_filling_params,
 };

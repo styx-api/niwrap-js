@@ -12,40 +12,40 @@ const IMDUMP_METADATA: Metadata = {
 
 
 interface ImdumpParameters {
-    "__STYXTYPE__": "imdump";
+    "@type": "afni.imdump";
     "input_image": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imdump": imdump_cargs,
+        "afni.imdump": imdump_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imdump": imdump_outputs,
+        "afni.imdump": imdump_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface ImdumpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image file to be processed.
+ *
+ * @returns Parameter dictionary
+ */
 function imdump_params(
     input_image: InputPathType,
 ): ImdumpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image file to be processed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imdump" as const,
+        "@type": "afni.imdump" as const,
         "input_image": input_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imdump_cargs(
     params: ImdumpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imdump");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -105,18 +105,18 @@ function imdump_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imdump_outputs(
     params: ImdumpParameters,
     execution: Execution,
 ): ImdumpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImdumpOutputs = {
         root: execution.outputFile("."),
         stdout: execution.outputFile(["stdout.txt"].join('')),
@@ -125,22 +125,22 @@ function imdump_outputs(
 }
 
 
+/**
+ * Prints out nonzero pixels in an image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
+ */
 function imdump_execute(
     params: ImdumpParameters,
     execution: Execution,
 ): ImdumpOutputs {
-    /**
-     * Prints out nonzero pixels in an image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
-     */
     params = execution.params(params)
     const cargs = imdump_cargs(params, execution)
     const ret = imdump_outputs(params, execution)
@@ -149,22 +149,22 @@ function imdump_execute(
 }
 
 
+/**
+ * Prints out nonzero pixels in an image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_image Input image file to be processed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
+ */
 function imdump(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): ImdumpOutputs {
-    /**
-     * Prints out nonzero pixels in an image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_image Input image file to be processed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMDUMP_METADATA);
     const params = imdump_params(input_image)
@@ -177,5 +177,8 @@ export {
       ImdumpOutputs,
       ImdumpParameters,
       imdump,
+      imdump_cargs,
+      imdump_execute,
+      imdump_outputs,
       imdump_params,
 };

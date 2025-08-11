@@ -12,28 +12,28 @@ const CIFTI_CORRELATION_GRADIENT_METADATA: Metadata = {
 
 
 interface CiftiCorrelationGradientLeftSurfaceParameters {
-    "__STYXTYPE__": "left_surface";
+    "@type": "workbench.cifti-correlation-gradient.left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCorrelationGradientRightSurfaceParameters {
-    "__STYXTYPE__": "right_surface";
+    "@type": "workbench.cifti-correlation-gradient.right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCorrelationGradientCerebellumSurfaceParameters {
-    "__STYXTYPE__": "cerebellum_surface";
+    "@type": "workbench.cifti-correlation-gradient.cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiCorrelationGradientDoubleCorrelationParameters {
-    "__STYXTYPE__": "double_correlation";
+    "@type": "workbench.cifti-correlation-gradient.double_correlation";
     "opt_fisher_z_first": boolean;
     "opt_no_demean_first": boolean;
     "opt_covariance_first": boolean;
@@ -41,7 +41,7 @@ interface CiftiCorrelationGradientDoubleCorrelationParameters {
 
 
 interface CiftiCorrelationGradientParameters {
-    "__STYXTYPE__": "cifti-correlation-gradient";
+    "@type": "workbench.cifti-correlation-gradient";
     "cifti": InputPathType;
     "cifti_out": string;
     "left_surface"?: CiftiCorrelationGradientLeftSurfaceParameters | null | undefined;
@@ -60,58 +60,58 @@ interface CiftiCorrelationGradientParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-correlation-gradient": cifti_correlation_gradient_cargs,
-        "left_surface": cifti_correlation_gradient_left_surface_cargs,
-        "right_surface": cifti_correlation_gradient_right_surface_cargs,
-        "cerebellum_surface": cifti_correlation_gradient_cerebellum_surface_cargs,
-        "double_correlation": cifti_correlation_gradient_double_correlation_cargs,
+        "workbench.cifti-correlation-gradient": cifti_correlation_gradient_cargs,
+        "workbench.cifti-correlation-gradient.left_surface": cifti_correlation_gradient_left_surface_cargs,
+        "workbench.cifti-correlation-gradient.right_surface": cifti_correlation_gradient_right_surface_cargs,
+        "workbench.cifti-correlation-gradient.cerebellum_surface": cifti_correlation_gradient_cerebellum_surface_cargs,
+        "workbench.cifti-correlation-gradient.double_correlation": cifti_correlation_gradient_double_correlation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-correlation-gradient": cifti_correlation_gradient_outputs,
+        "workbench.cifti-correlation-gradient": cifti_correlation_gradient_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the left surface file
+ * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_gradient_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiCorrelationGradientLeftSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the left surface file
-     * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_surface" as const,
+        "@type": "workbench.cifti-correlation-gradient.left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -121,18 +121,18 @@ function cifti_correlation_gradient_left_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_gradient_left_surface_cargs(
     params: CiftiCorrelationGradientLeftSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -146,20 +146,20 @@ function cifti_correlation_gradient_left_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the right surface file
+ * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_gradient_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiCorrelationGradientRightSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the right surface file
-     * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_surface" as const,
+        "@type": "workbench.cifti-correlation-gradient.right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -169,18 +169,18 @@ function cifti_correlation_gradient_right_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_gradient_right_surface_cargs(
     params: CiftiCorrelationGradientRightSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -194,20 +194,20 @@ function cifti_correlation_gradient_right_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the cerebellum surface file
+ * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_gradient_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiCorrelationGradientCerebellumSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the cerebellum surface file
-     * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_surface" as const,
+        "@type": "workbench.cifti-correlation-gradient.cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -217,18 +217,18 @@ function cifti_correlation_gradient_cerebellum_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_gradient_cerebellum_surface_cargs(
     params: CiftiCorrelationGradientCerebellumSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -242,22 +242,22 @@ function cifti_correlation_gradient_cerebellum_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_fisher_z_first after the FIRST correlation, apply fisher small z transform (ie, artanh)
+ * @param opt_no_demean_first instead of correlation for the FIRST operation, do dot product of rows, then normalize by diagonal
+ * @param opt_covariance_first instead of correlation for the FIRST operation, compute covariance
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_gradient_double_correlation_params(
     opt_fisher_z_first: boolean = false,
     opt_no_demean_first: boolean = false,
     opt_covariance_first: boolean = false,
 ): CiftiCorrelationGradientDoubleCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_fisher_z_first after the FIRST correlation, apply fisher small z transform (ie, artanh)
-     * @param opt_no_demean_first instead of correlation for the FIRST operation, do dot product of rows, then normalize by diagonal
-     * @param opt_covariance_first instead of correlation for the FIRST operation, compute covariance
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "double_correlation" as const,
+        "@type": "workbench.cifti-correlation-gradient.double_correlation" as const,
         "opt_fisher_z_first": opt_fisher_z_first,
         "opt_no_demean_first": opt_no_demean_first,
         "opt_covariance_first": opt_covariance_first,
@@ -266,18 +266,18 @@ function cifti_correlation_gradient_double_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_gradient_double_correlation_cargs(
     params: CiftiCorrelationGradientDoubleCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-double-correlation");
     if ((params["opt_fisher_z_first"] ?? null)) {
@@ -310,6 +310,27 @@ interface CiftiCorrelationGradientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti
+ * @param cifti_out the output cifti
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth the volume before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param opt_undo_fisher_z apply the inverse fisher small z transform to the input
+ * @param opt_fisher_z apply the fisher small z transform to the correlations before taking the gradient
+ * @param opt_surface_exclude_distance exclude vertices near each seed vertex from computation: geodesic distance from seed vertex for the exclusion zone, in mm
+ * @param opt_volume_exclude_distance exclude voxels near each seed voxel from computation: distance from seed voxel for the exclusion zone, in mm
+ * @param opt_covariance compute covariance instead of correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param double_correlation do two correlations before taking the gradient
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_gradient_params(
     cifti: InputPathType,
     cifti_out: string,
@@ -327,29 +348,8 @@ function cifti_correlation_gradient_params(
     opt_mem_limit_limit_gb: number | null = null,
     double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
 ): CiftiCorrelationGradientParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti
-     * @param cifti_out the output cifti
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth the volume before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
-     * @param opt_undo_fisher_z apply the inverse fisher small z transform to the input
-     * @param opt_fisher_z apply the fisher small z transform to the correlations before taking the gradient
-     * @param opt_surface_exclude_distance exclude vertices near each seed vertex from computation: geodesic distance from seed vertex for the exclusion zone, in mm
-     * @param opt_volume_exclude_distance exclude voxels near each seed voxel from computation: distance from seed voxel for the exclusion zone, in mm
-     * @param opt_covariance compute covariance instead of correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-     * @param double_correlation do two correlations before taking the gradient
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-correlation-gradient" as const,
+        "@type": "workbench.cifti-correlation-gradient" as const,
         "cifti": cifti,
         "cifti_out": cifti_out,
         "opt_presmooth_fwhm": opt_presmooth_fwhm,
@@ -388,31 +388,31 @@ function cifti_correlation_gradient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_gradient_cargs(
     params: CiftiCorrelationGradientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-correlation-gradient");
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null).__STYXTYPE__)((params["left_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null).__STYXTYPE__)((params["right_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null).__STYXTYPE__)((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_surface_presmooth_surface_kernel"] ?? null) !== null) {
         cargs.push(
@@ -457,24 +457,24 @@ function cifti_correlation_gradient_cargs(
         );
     }
     if ((params["double_correlation"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["double_correlation"] ?? null).__STYXTYPE__)((params["double_correlation"] ?? null), execution));
+        cargs.push(...dynCargs((params["double_correlation"] ?? null)["@type"])((params["double_correlation"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_correlation_gradient_outputs(
     params: CiftiCorrelationGradientParameters,
     execution: Execution,
 ): CiftiCorrelationGradientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCorrelationGradientOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -483,24 +483,24 @@ function cifti_correlation_gradient_outputs(
 }
 
 
+/**
+ * Correlate cifti rows and take gradient.
+ *
+ * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
+ */
 function cifti_correlation_gradient_execute(
     params: CiftiCorrelationGradientParameters,
     execution: Execution,
 ): CiftiCorrelationGradientOutputs {
-    /**
-     * Correlate cifti rows and take gradient.
-     * 
-     * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_correlation_gradient_cargs(params, execution)
     const ret = cifti_correlation_gradient_outputs(params, execution)
@@ -509,6 +509,34 @@ function cifti_correlation_gradient_execute(
 }
 
 
+/**
+ * Correlate cifti rows and take gradient.
+ *
+ * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti
+ * @param cifti_out the output cifti
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param opt_volume_presmooth_volume_kernel smooth the volume before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param opt_undo_fisher_z apply the inverse fisher small z transform to the input
+ * @param opt_fisher_z apply the fisher small z transform to the correlations before taking the gradient
+ * @param opt_surface_exclude_distance exclude vertices near each seed vertex from computation: geodesic distance from seed vertex for the exclusion zone, in mm
+ * @param opt_volume_exclude_distance exclude voxels near each seed voxel from computation: distance from seed voxel for the exclusion zone, in mm
+ * @param opt_covariance compute covariance instead of correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param double_correlation do two correlations before taking the gradient
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
+ */
 function cifti_correlation_gradient(
     cifti: InputPathType,
     cifti_out: string,
@@ -527,34 +555,6 @@ function cifti_correlation_gradient(
     double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
-    /**
-     * Correlate cifti rows and take gradient.
-     * 
-     * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti
-     * @param cifti_out the output cifti
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_surface_presmooth_surface_kernel smooth on the surface before computing the gradient: the size of the gaussian surface smoothing kernel in mm, as sigma by default
-     * @param opt_volume_presmooth_volume_kernel smooth the volume before computing the gradient: the size of the gaussian volume smoothing kernel in mm, as sigma by default
-     * @param opt_presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
-     * @param opt_undo_fisher_z apply the inverse fisher small z transform to the input
-     * @param opt_fisher_z apply the fisher small z transform to the correlations before taking the gradient
-     * @param opt_surface_exclude_distance exclude vertices near each seed vertex from computation: geodesic distance from seed vertex for the exclusion zone, in mm
-     * @param opt_volume_exclude_distance exclude voxels near each seed voxel from computation: distance from seed voxel for the exclusion zone, in mm
-     * @param opt_covariance compute covariance instead of correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-     * @param double_correlation do two correlations before taking the gradient
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CORRELATION_GRADIENT_METADATA);
     const params = cifti_correlation_gradient_params(cifti, cifti_out, left_surface, right_surface, cerebellum_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, opt_undo_fisher_z, opt_fisher_z, opt_surface_exclude_distance, opt_volume_exclude_distance, opt_covariance, opt_mem_limit_limit_gb, double_correlation)
@@ -571,9 +571,16 @@ export {
       CiftiCorrelationGradientParameters,
       CiftiCorrelationGradientRightSurfaceParameters,
       cifti_correlation_gradient,
+      cifti_correlation_gradient_cargs,
+      cifti_correlation_gradient_cerebellum_surface_cargs,
       cifti_correlation_gradient_cerebellum_surface_params,
+      cifti_correlation_gradient_double_correlation_cargs,
       cifti_correlation_gradient_double_correlation_params,
+      cifti_correlation_gradient_execute,
+      cifti_correlation_gradient_left_surface_cargs,
       cifti_correlation_gradient_left_surface_params,
+      cifti_correlation_gradient_outputs,
       cifti_correlation_gradient_params,
+      cifti_correlation_gradient_right_surface_cargs,
       cifti_correlation_gradient_right_surface_params,
 };

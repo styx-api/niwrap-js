@@ -12,7 +12,7 @@ const V_3D_DWUNCERT_METADATA: Metadata = {
 
 
 interface V3dDwuncertParameters {
-    "__STYXTYPE__": "3dDWUncert";
+    "@type": "afni.3dDWUncert";
     "input_file": InputPathType;
     "input_prefix": string;
     "output_prefix": string;
@@ -25,35 +25,35 @@ interface V3dDwuncertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDWUncert": v_3d_dwuncert_cargs,
+        "afni.3dDWUncert": v_3d_dwuncert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDWUncert": v_3d_dwuncert_outputs,
+        "afni.3dDWUncert": v_3d_dwuncert_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dDwuncertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file with b0 and DWI subbricks.
+ * @param input_prefix Basename of DTI volumes.
+ * @param output_prefix Output file name prefix.
+ * @param grad_file File with 3 columns for x-, y-, and z-comps of DW-gradients.
+ * @param bmatrix_file File with gradient info in b-matrix format.
+ * @param num_iters Number of jackknife resample iterations.
+ * @param mask_file Mask file within which to calculate uncertainty.
+ * @param calc_thr_fa Threshold for the minimum FA value above which to calculate uncertainty.
+ * @param csf_fa Number marking FA value of 'bad' voxels.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_dwuncert_params(
     input_file: InputPathType,
     input_prefix: string,
@@ -87,23 +102,8 @@ function v_3d_dwuncert_params(
     calc_thr_fa: number | null = null,
     csf_fa: number | null = null,
 ): V3dDwuncertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file with b0 and DWI subbricks.
-     * @param input_prefix Basename of DTI volumes.
-     * @param output_prefix Output file name prefix.
-     * @param grad_file File with 3 columns for x-, y-, and z-comps of DW-gradients.
-     * @param bmatrix_file File with gradient info in b-matrix format.
-     * @param num_iters Number of jackknife resample iterations.
-     * @param mask_file Mask file within which to calculate uncertainty.
-     * @param calc_thr_fa Threshold for the minimum FA value above which to calculate uncertainty.
-     * @param csf_fa Number marking FA value of 'bad' voxels.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDWUncert" as const,
+        "@type": "afni.3dDWUncert" as const,
         "input_file": input_file,
         "input_prefix": input_prefix,
         "output_prefix": output_prefix,
@@ -130,18 +130,18 @@ function v_3d_dwuncert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_dwuncert_cargs(
     params: V3dDwuncertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDWUncert");
     cargs.push(
@@ -196,18 +196,18 @@ function v_3d_dwuncert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_dwuncert_outputs(
     params: V3dDwuncertParameters,
     execution: Execution,
 ): V3dDwuncertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDwuncertOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_prefix"] ?? null), "+*.HEAD/", (params["output_prefix"] ?? null), "+*.BRIK"].join('')),
@@ -216,22 +216,22 @@ function v_3d_dwuncert_outputs(
 }
 
 
+/**
+ * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
+ */
 function v_3d_dwuncert_execute(
     params: V3dDwuncertParameters,
     execution: Execution,
 ): V3dDwuncertOutputs {
-    /**
-     * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_dwuncert_cargs(params, execution)
     const ret = v_3d_dwuncert_outputs(params, execution)
@@ -240,6 +240,26 @@ function v_3d_dwuncert_execute(
 }
 
 
+/**
+ * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input file with b0 and DWI subbricks.
+ * @param input_prefix Basename of DTI volumes.
+ * @param output_prefix Output file name prefix.
+ * @param grad_file File with 3 columns for x-, y-, and z-comps of DW-gradients.
+ * @param bmatrix_file File with gradient info in b-matrix format.
+ * @param num_iters Number of jackknife resample iterations.
+ * @param mask_file Mask file within which to calculate uncertainty.
+ * @param calc_thr_fa Threshold for the minimum FA value above which to calculate uncertainty.
+ * @param csf_fa Number marking FA value of 'bad' voxels.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
+ */
 function v_3d_dwuncert(
     input_file: InputPathType,
     input_prefix: string,
@@ -252,26 +272,6 @@ function v_3d_dwuncert(
     csf_fa: number | null = null,
     runner: Runner | null = null,
 ): V3dDwuncertOutputs {
-    /**
-     * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input file with b0 and DWI subbricks.
-     * @param input_prefix Basename of DTI volumes.
-     * @param output_prefix Output file name prefix.
-     * @param grad_file File with 3 columns for x-, y-, and z-comps of DW-gradients.
-     * @param bmatrix_file File with gradient info in b-matrix format.
-     * @param num_iters Number of jackknife resample iterations.
-     * @param mask_file Mask file within which to calculate uncertainty.
-     * @param calc_thr_fa Threshold for the minimum FA value above which to calculate uncertainty.
-     * @param csf_fa Number marking FA value of 'bad' voxels.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DWUNCERT_METADATA);
     const params = v_3d_dwuncert_params(input_file, input_prefix, output_prefix, grad_file, bmatrix_file, num_iters, mask_file, calc_thr_fa, csf_fa)
@@ -284,5 +284,8 @@ export {
       V3dDwuncertParameters,
       V_3D_DWUNCERT_METADATA,
       v_3d_dwuncert,
+      v_3d_dwuncert_cargs,
+      v_3d_dwuncert_execute,
+      v_3d_dwuncert_outputs,
       v_3d_dwuncert_params,
 };

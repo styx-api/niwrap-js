@@ -12,7 +12,7 @@ const V_3D_TORTOISETO_HERE_METADATA: Metadata = {
 
 
 interface V3dTortoisetoHereParameters {
-    "__STYXTYPE__": "3dTORTOISEtoHere";
+    "@type": "afni.3dTORTOISEtoHere";
     "dt_tort": InputPathType;
     "prefix": string;
     "scale_factor"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface V3dTortoisetoHereParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTORTOISEtoHere": v_3d_tortoiseto_here_cargs,
+        "afni.3dTORTOISEtoHere": v_3d_tortoiseto_here_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTORTOISEtoHere": v_3d_tortoiseto_here_outputs,
+        "afni.3dTORTOISEtoHere": v_3d_tortoiseto_here_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dTortoisetoHereOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dt_tort Diffusion tensor file with six bricks of DT components ordered in the TORTOISE manner (Dxx, Dyy, Dzz, Dxy, Dxz, Dyz).
+ * @param prefix Output file name prefix. Will have N+1 bricks when GRADFILE has N rows of gradients.
+ * @param scale_factor Optional switch to rescale the DT elements, dividing by a number X>0.
+ * @param flip_x Change sign of the first element of (inner) eigenvectors.
+ * @param flip_y Change sign of the second element of (inner) eigenvectors.
+ * @param flip_z Change sign of the third element of (inner) eigenvectors.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tortoiseto_here_params(
     dt_tort: InputPathType,
     prefix: string,
@@ -81,20 +93,8 @@ function v_3d_tortoiseto_here_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
 ): V3dTortoisetoHereParameters {
-    /**
-     * Build parameters.
-    
-     * @param dt_tort Diffusion tensor file with six bricks of DT components ordered in the TORTOISE manner (Dxx, Dyy, Dzz, Dxy, Dxz, Dyz).
-     * @param prefix Output file name prefix. Will have N+1 bricks when GRADFILE has N rows of gradients.
-     * @param scale_factor Optional switch to rescale the DT elements, dividing by a number X>0.
-     * @param flip_x Change sign of the first element of (inner) eigenvectors.
-     * @param flip_y Change sign of the second element of (inner) eigenvectors.
-     * @param flip_z Change sign of the third element of (inner) eigenvectors.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTORTOISEtoHere" as const,
+        "@type": "afni.3dTORTOISEtoHere" as const,
         "dt_tort": dt_tort,
         "prefix": prefix,
         "flip_x": flip_x,
@@ -108,18 +108,18 @@ function v_3d_tortoiseto_here_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tortoiseto_here_cargs(
     params: V3dTortoisetoHereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTORTOISEtoHere");
     cargs.push(
@@ -149,18 +149,18 @@ function v_3d_tortoiseto_here_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tortoiseto_here_outputs(
     params: V3dTortoisetoHereParameters,
     execution: Execution,
 ): V3dTortoisetoHereOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTortoisetoHereOutputs = {
         root: execution.outputFile("."),
         output_dt_file: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -169,22 +169,22 @@ function v_3d_tortoiseto_here_outputs(
 }
 
 
+/**
+ * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
+ */
 function v_3d_tortoiseto_here_execute(
     params: V3dTortoisetoHereParameters,
     execution: Execution,
 ): V3dTortoisetoHereOutputs {
-    /**
-     * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tortoiseto_here_cargs(params, execution)
     const ret = v_3d_tortoiseto_here_outputs(params, execution)
@@ -193,6 +193,23 @@ function v_3d_tortoiseto_here_execute(
 }
 
 
+/**
+ * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dt_tort Diffusion tensor file with six bricks of DT components ordered in the TORTOISE manner (Dxx, Dyy, Dzz, Dxy, Dxz, Dyz).
+ * @param prefix Output file name prefix. Will have N+1 bricks when GRADFILE has N rows of gradients.
+ * @param scale_factor Optional switch to rescale the DT elements, dividing by a number X>0.
+ * @param flip_x Change sign of the first element of (inner) eigenvectors.
+ * @param flip_y Change sign of the second element of (inner) eigenvectors.
+ * @param flip_z Change sign of the third element of (inner) eigenvectors.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
+ */
 function v_3d_tortoiseto_here(
     dt_tort: InputPathType,
     prefix: string,
@@ -202,23 +219,6 @@ function v_3d_tortoiseto_here(
     flip_z: boolean = false,
     runner: Runner | null = null,
 ): V3dTortoisetoHereOutputs {
-    /**
-     * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dt_tort Diffusion tensor file with six bricks of DT components ordered in the TORTOISE manner (Dxx, Dyy, Dzz, Dxy, Dxz, Dyz).
-     * @param prefix Output file name prefix. Will have N+1 bricks when GRADFILE has N rows of gradients.
-     * @param scale_factor Optional switch to rescale the DT elements, dividing by a number X>0.
-     * @param flip_x Change sign of the first element of (inner) eigenvectors.
-     * @param flip_y Change sign of the second element of (inner) eigenvectors.
-     * @param flip_z Change sign of the third element of (inner) eigenvectors.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TORTOISETO_HERE_METADATA);
     const params = v_3d_tortoiseto_here_params(dt_tort, prefix, scale_factor, flip_x, flip_y, flip_z)
@@ -231,5 +231,8 @@ export {
       V3dTortoisetoHereParameters,
       V_3D_TORTOISETO_HERE_METADATA,
       v_3d_tortoiseto_here,
+      v_3d_tortoiseto_here_cargs,
+      v_3d_tortoiseto_here_execute,
+      v_3d_tortoiseto_here_outputs,
       v_3d_tortoiseto_here_params,
 };

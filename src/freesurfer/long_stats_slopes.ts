@@ -12,7 +12,7 @@ const LONG_STATS_SLOPES_METADATA: Metadata = {
 
 
 interface LongStatsSlopesParameters {
-    "__STYXTYPE__": "long_stats_slopes";
+    "@type": "freesurfer.long_stats_slopes";
     "qdec_table": InputPathType;
     "stats_file": InputPathType;
     "measure": string;
@@ -43,33 +43,33 @@ interface LongStatsSlopesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_stats_slopes": long_stats_slopes_cargs,
+        "freesurfer.long_stats_slopes": long_stats_slopes_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -89,6 +89,39 @@ interface LongStatsSlopesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec_table QDEC table file specifying the subjects and time points.
+ * @param stats_file The stats file, e.g. aseg.stats or lh.aparc.stats.
+ * @param measure The stats measure (e.g. volume, thickness, mean, std).
+ * @param subjects_dir Full path to FreeSurfer subjects directory.
+ * @param do_avg Compute and output the temporal average.
+ * @param do_rate Compute and output the rate.
+ * @param do_pc1fit Compute and output the percent change with respect to tp1 from linear fit.
+ * @param do_pc1 Compute and output the percent change with respect to tp1.
+ * @param do_spc Compute and output the symmetric percent change with respect to temporal average.
+ * @param do_stack Compute and output tables showing the time series (row per time point).
+ * @param resid Residual timepoint to export (pass 1 for tp1, etc., pass 0 for average).
+ * @param time_var Variable name for time column variable (e.g., age) in QDEC table.
+ * @param generic_time Time points are ordered in QDEC file; assume time=1,2,3...
+ * @param cross_sectional Use cross-sectional results (for testing only).
+ * @param out_avg Filename to store temporal average in <template>/stats/<OUT_AVG>.
+ * @param out_rate Filename to store rate in <template>/stats/<OUT_RATE>.
+ * @param out_pc1fit Filename to store percent change to tp1fit in <template>/stats/<OUT_PC1FIT>.
+ * @param out_pc1 Filename to store percent change to tp1 in <template>/stats/<OUT_PC1>.
+ * @param out_spc Filename to store symmetric percent change in <template>/stats/<OUT_SPC>.
+ * @param out_resid Filename to store residual in <template>/stats/<OUT_RESID>.
+ * @param out_stack Filename to store stacked measure file in <template>/stats/<OUT_STACK>.
+ * @param stack_avg Full filename to stack temporal average tables.
+ * @param stack_rate Full filename to stack rate tables.
+ * @param stack_pc1fit Full filename to stack percent change to tp1fit tables.
+ * @param stack_pc1 Full filename to stack percent change to tp1 tables.
+ * @param stack_spc Full filename to stack symmetric percent change tables.
+ * @param stack_resid Full filename to stack residual tables.
+ *
+ * @returns Parameter dictionary
+ */
 function long_stats_slopes_params(
     qdec_table: InputPathType,
     stats_file: InputPathType,
@@ -118,41 +151,8 @@ function long_stats_slopes_params(
     stack_spc: string | null = null,
     stack_resid: string | null = null,
 ): LongStatsSlopesParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec_table QDEC table file specifying the subjects and time points.
-     * @param stats_file The stats file, e.g. aseg.stats or lh.aparc.stats.
-     * @param measure The stats measure (e.g. volume, thickness, mean, std).
-     * @param subjects_dir Full path to FreeSurfer subjects directory.
-     * @param do_avg Compute and output the temporal average.
-     * @param do_rate Compute and output the rate.
-     * @param do_pc1fit Compute and output the percent change with respect to tp1 from linear fit.
-     * @param do_pc1 Compute and output the percent change with respect to tp1.
-     * @param do_spc Compute and output the symmetric percent change with respect to temporal average.
-     * @param do_stack Compute and output tables showing the time series (row per time point).
-     * @param resid Residual timepoint to export (pass 1 for tp1, etc., pass 0 for average).
-     * @param time_var Variable name for time column variable (e.g., age) in QDEC table.
-     * @param generic_time Time points are ordered in QDEC file; assume time=1,2,3...
-     * @param cross_sectional Use cross-sectional results (for testing only).
-     * @param out_avg Filename to store temporal average in <template>/stats/<OUT_AVG>.
-     * @param out_rate Filename to store rate in <template>/stats/<OUT_RATE>.
-     * @param out_pc1fit Filename to store percent change to tp1fit in <template>/stats/<OUT_PC1FIT>.
-     * @param out_pc1 Filename to store percent change to tp1 in <template>/stats/<OUT_PC1>.
-     * @param out_spc Filename to store symmetric percent change in <template>/stats/<OUT_SPC>.
-     * @param out_resid Filename to store residual in <template>/stats/<OUT_RESID>.
-     * @param out_stack Filename to store stacked measure file in <template>/stats/<OUT_STACK>.
-     * @param stack_avg Full filename to stack temporal average tables.
-     * @param stack_rate Full filename to stack rate tables.
-     * @param stack_pc1fit Full filename to stack percent change to tp1fit tables.
-     * @param stack_pc1 Full filename to stack percent change to tp1 tables.
-     * @param stack_spc Full filename to stack symmetric percent change tables.
-     * @param stack_resid Full filename to stack residual tables.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_stats_slopes" as const,
+        "@type": "freesurfer.long_stats_slopes" as const,
         "qdec_table": qdec_table,
         "stats_file": stats_file,
         "measure": measure,
@@ -215,18 +215,18 @@ function long_stats_slopes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_stats_slopes_cargs(
     params: LongStatsSlopesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_stats_slopes");
     cargs.push(
@@ -363,18 +363,18 @@ function long_stats_slopes_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_stats_slopes_outputs(
     params: LongStatsSlopesParameters,
     execution: Execution,
 ): LongStatsSlopesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongStatsSlopesOutputs = {
         root: execution.outputFile("."),
     };
@@ -382,22 +382,22 @@ function long_stats_slopes_outputs(
 }
 
 
+/**
+ * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
+ */
 function long_stats_slopes_execute(
     params: LongStatsSlopesParameters,
     execution: Execution,
 ): LongStatsSlopesOutputs {
-    /**
-     * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_stats_slopes_cargs(params, execution)
     const ret = long_stats_slopes_outputs(params, execution)
@@ -406,6 +406,44 @@ function long_stats_slopes_execute(
 }
 
 
+/**
+ * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec_table QDEC table file specifying the subjects and time points.
+ * @param stats_file The stats file, e.g. aseg.stats or lh.aparc.stats.
+ * @param measure The stats measure (e.g. volume, thickness, mean, std).
+ * @param subjects_dir Full path to FreeSurfer subjects directory.
+ * @param do_avg Compute and output the temporal average.
+ * @param do_rate Compute and output the rate.
+ * @param do_pc1fit Compute and output the percent change with respect to tp1 from linear fit.
+ * @param do_pc1 Compute and output the percent change with respect to tp1.
+ * @param do_spc Compute and output the symmetric percent change with respect to temporal average.
+ * @param do_stack Compute and output tables showing the time series (row per time point).
+ * @param resid Residual timepoint to export (pass 1 for tp1, etc., pass 0 for average).
+ * @param time_var Variable name for time column variable (e.g., age) in QDEC table.
+ * @param generic_time Time points are ordered in QDEC file; assume time=1,2,3...
+ * @param cross_sectional Use cross-sectional results (for testing only).
+ * @param out_avg Filename to store temporal average in <template>/stats/<OUT_AVG>.
+ * @param out_rate Filename to store rate in <template>/stats/<OUT_RATE>.
+ * @param out_pc1fit Filename to store percent change to tp1fit in <template>/stats/<OUT_PC1FIT>.
+ * @param out_pc1 Filename to store percent change to tp1 in <template>/stats/<OUT_PC1>.
+ * @param out_spc Filename to store symmetric percent change in <template>/stats/<OUT_SPC>.
+ * @param out_resid Filename to store residual in <template>/stats/<OUT_RESID>.
+ * @param out_stack Filename to store stacked measure file in <template>/stats/<OUT_STACK>.
+ * @param stack_avg Full filename to stack temporal average tables.
+ * @param stack_rate Full filename to stack rate tables.
+ * @param stack_pc1fit Full filename to stack percent change to tp1fit tables.
+ * @param stack_pc1 Full filename to stack percent change to tp1 tables.
+ * @param stack_spc Full filename to stack symmetric percent change tables.
+ * @param stack_resid Full filename to stack residual tables.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
+ */
 function long_stats_slopes(
     qdec_table: InputPathType,
     stats_file: InputPathType,
@@ -436,44 +474,6 @@ function long_stats_slopes(
     stack_resid: string | null = null,
     runner: Runner | null = null,
 ): LongStatsSlopesOutputs {
-    /**
-     * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec_table QDEC table file specifying the subjects and time points.
-     * @param stats_file The stats file, e.g. aseg.stats or lh.aparc.stats.
-     * @param measure The stats measure (e.g. volume, thickness, mean, std).
-     * @param subjects_dir Full path to FreeSurfer subjects directory.
-     * @param do_avg Compute and output the temporal average.
-     * @param do_rate Compute and output the rate.
-     * @param do_pc1fit Compute and output the percent change with respect to tp1 from linear fit.
-     * @param do_pc1 Compute and output the percent change with respect to tp1.
-     * @param do_spc Compute and output the symmetric percent change with respect to temporal average.
-     * @param do_stack Compute and output tables showing the time series (row per time point).
-     * @param resid Residual timepoint to export (pass 1 for tp1, etc., pass 0 for average).
-     * @param time_var Variable name for time column variable (e.g., age) in QDEC table.
-     * @param generic_time Time points are ordered in QDEC file; assume time=1,2,3...
-     * @param cross_sectional Use cross-sectional results (for testing only).
-     * @param out_avg Filename to store temporal average in <template>/stats/<OUT_AVG>.
-     * @param out_rate Filename to store rate in <template>/stats/<OUT_RATE>.
-     * @param out_pc1fit Filename to store percent change to tp1fit in <template>/stats/<OUT_PC1FIT>.
-     * @param out_pc1 Filename to store percent change to tp1 in <template>/stats/<OUT_PC1>.
-     * @param out_spc Filename to store symmetric percent change in <template>/stats/<OUT_SPC>.
-     * @param out_resid Filename to store residual in <template>/stats/<OUT_RESID>.
-     * @param out_stack Filename to store stacked measure file in <template>/stats/<OUT_STACK>.
-     * @param stack_avg Full filename to stack temporal average tables.
-     * @param stack_rate Full filename to stack rate tables.
-     * @param stack_pc1fit Full filename to stack percent change to tp1fit tables.
-     * @param stack_pc1 Full filename to stack percent change to tp1 tables.
-     * @param stack_spc Full filename to stack symmetric percent change tables.
-     * @param stack_resid Full filename to stack residual tables.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_STATS_SLOPES_METADATA);
     const params = long_stats_slopes_params(qdec_table, stats_file, measure, subjects_dir, do_avg, do_rate, do_pc1fit, do_pc1, do_spc, do_stack, resid, time_var, generic_time, cross_sectional, out_avg, out_rate, out_pc1fit, out_pc1, out_spc, out_resid, out_stack, stack_avg, stack_rate, stack_pc1fit, stack_pc1, stack_spc, stack_resid)
@@ -486,5 +486,8 @@ export {
       LongStatsSlopesOutputs,
       LongStatsSlopesParameters,
       long_stats_slopes,
+      long_stats_slopes_cargs,
+      long_stats_slopes_execute,
+      long_stats_slopes_outputs,
       long_stats_slopes_params,
 };

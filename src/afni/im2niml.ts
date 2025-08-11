@@ -12,40 +12,40 @@ const IM2NIML_METADATA: Metadata = {
 
 
 interface Im2nimlParameters {
-    "__STYXTYPE__": "im2niml";
+    "@type": "afni.im2niml";
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "im2niml": im2niml_cargs,
+        "afni.im2niml": im2niml_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "im2niml": im2niml_outputs,
+        "afni.im2niml": im2niml_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface Im2nimlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image file(s) (e.g. image.jpg)
+ *
+ * @returns Parameter dictionary
+ */
 function im2niml_params(
     input_files: Array<InputPathType>,
 ): Im2nimlParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image file(s) (e.g. image.jpg)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "im2niml" as const,
+        "@type": "afni.im2niml" as const,
         "input_files": input_files,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function im2niml_cargs(
     params: Im2nimlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("im2niml");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -105,18 +105,18 @@ function im2niml_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function im2niml_outputs(
     params: Im2nimlParameters,
     execution: Execution,
 ): Im2nimlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Im2nimlOutputs = {
         root: execution.outputFile("."),
         niml_output: execution.outputFile(["stdout"].join('')),
@@ -125,22 +125,22 @@ function im2niml_outputs(
 }
 
 
+/**
+ * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
+ */
 function im2niml_execute(
     params: Im2nimlParameters,
     execution: Execution,
 ): Im2nimlOutputs {
-    /**
-     * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
-     */
     params = execution.params(params)
     const cargs = im2niml_cargs(params, execution)
     const ret = im2niml_outputs(params, execution)
@@ -149,22 +149,22 @@ function im2niml_execute(
 }
 
 
+/**
+ * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input image file(s) (e.g. image.jpg)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
+ */
 function im2niml(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): Im2nimlOutputs {
-    /**
-     * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input image file(s) (e.g. image.jpg)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IM2NIML_METADATA);
     const params = im2niml_params(input_files)
@@ -177,5 +177,8 @@ export {
       Im2nimlOutputs,
       Im2nimlParameters,
       im2niml,
+      im2niml_cargs,
+      im2niml_execute,
+      im2niml_outputs,
       im2niml_params,
 };

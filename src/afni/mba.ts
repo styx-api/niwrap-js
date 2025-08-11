@@ -12,7 +12,7 @@ const MBA_METADATA: Metadata = {
 
 
 interface MbaParameters {
-    "__STYXTYPE__": "MBA";
+    "@type": "afni.MBA";
     "prefix": string;
     "chains"?: number | null | undefined;
     "iterations"?: number | null | undefined;
@@ -31,35 +31,35 @@ interface MbaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "MBA": mba_cargs,
+        "afni.MBA": mba_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "MBA": mba_outputs,
+        "afni.MBA": mba_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,27 @@ interface MbaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output file names
+ * @param data_table Specify the data structure in a table of long format
+ * @param chains Specify the number of Markov chains
+ * @param iterations Specify the number of iterations per Markov chain
+ * @param model Specify the effects associated with explanatory variables
+ * @param eoi Identify effects of interest in the output
+ * @param cvars Identify categorical (qualitative) variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param qcvar Identify comparisons of interest between quantitative variables
+ * @param stdz Identify quantitative variables (or covariates) to be standardized
+ * @param wcp Invoke within-chain parallelization to speed up runtime
+ * @param disty Specify the distribution for the response variable
+ * @param se Specify the column name that designates the standard error for the response variable
+ * @param dbg_args Enable R to save the parameters in a file called .MBA.dbg.AFNI.args for debugging purposes
+ * @param help Show help message
+ *
+ * @returns Parameter dictionary
+ */
 function mba_params(
     prefix: string,
     data_table: InputPathType,
@@ -107,29 +128,8 @@ function mba_params(
     dbg_args: boolean = false,
     help: boolean = false,
 ): MbaParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output file names
-     * @param data_table Specify the data structure in a table of long format
-     * @param chains Specify the number of Markov chains
-     * @param iterations Specify the number of iterations per Markov chain
-     * @param model Specify the effects associated with explanatory variables
-     * @param eoi Identify effects of interest in the output
-     * @param cvars Identify categorical (qualitative) variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param qcvar Identify comparisons of interest between quantitative variables
-     * @param stdz Identify quantitative variables (or covariates) to be standardized
-     * @param wcp Invoke within-chain parallelization to speed up runtime
-     * @param disty Specify the distribution for the response variable
-     * @param se Specify the column name that designates the standard error for the response variable
-     * @param dbg_args Enable R to save the parameters in a file called .MBA.dbg.AFNI.args for debugging purposes
-     * @param help Show help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "MBA" as const,
+        "@type": "afni.MBA" as const,
         "prefix": prefix,
         "data_table": data_table,
         "dbgArgs": dbg_args,
@@ -172,18 +172,18 @@ function mba_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mba_cargs(
     params: MbaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("MBA");
     cargs.push((params["prefix"] ?? null));
@@ -267,18 +267,18 @@ function mba_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mba_outputs(
     params: MbaParameters,
     execution: Execution,
 ): MbaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MbaOutputs = {
         root: execution.outputFile("."),
         output_txt: execution.outputFile([(params["prefix"] ?? null), ".txt"].join('')),
@@ -289,22 +289,22 @@ function mba_outputs(
 }
 
 
+/**
+ * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MbaOutputs`).
+ */
 function mba_execute(
     params: MbaParameters,
     execution: Execution,
 ): MbaOutputs {
-    /**
-     * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MbaOutputs`).
-     */
     params = execution.params(params)
     const cargs = mba_cargs(params, execution)
     const ret = mba_outputs(params, execution)
@@ -313,6 +313,32 @@ function mba_execute(
 }
 
 
+/**
+ * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output file names
+ * @param data_table Specify the data structure in a table of long format
+ * @param chains Specify the number of Markov chains
+ * @param iterations Specify the number of iterations per Markov chain
+ * @param model Specify the effects associated with explanatory variables
+ * @param eoi Identify effects of interest in the output
+ * @param cvars Identify categorical (qualitative) variables
+ * @param qvars Identify quantitative variables (or covariates)
+ * @param qcvar Identify comparisons of interest between quantitative variables
+ * @param stdz Identify quantitative variables (or covariates) to be standardized
+ * @param wcp Invoke within-chain parallelization to speed up runtime
+ * @param disty Specify the distribution for the response variable
+ * @param se Specify the column name that designates the standard error for the response variable
+ * @param dbg_args Enable R to save the parameters in a file called .MBA.dbg.AFNI.args for debugging purposes
+ * @param help Show help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MbaOutputs`).
+ */
 function mba(
     prefix: string,
     data_table: InputPathType,
@@ -331,32 +357,6 @@ function mba(
     help: boolean = false,
     runner: Runner | null = null,
 ): MbaOutputs {
-    /**
-     * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output file names
-     * @param data_table Specify the data structure in a table of long format
-     * @param chains Specify the number of Markov chains
-     * @param iterations Specify the number of iterations per Markov chain
-     * @param model Specify the effects associated with explanatory variables
-     * @param eoi Identify effects of interest in the output
-     * @param cvars Identify categorical (qualitative) variables
-     * @param qvars Identify quantitative variables (or covariates)
-     * @param qcvar Identify comparisons of interest between quantitative variables
-     * @param stdz Identify quantitative variables (or covariates) to be standardized
-     * @param wcp Invoke within-chain parallelization to speed up runtime
-     * @param disty Specify the distribution for the response variable
-     * @param se Specify the column name that designates the standard error for the response variable
-     * @param dbg_args Enable R to save the parameters in a file called .MBA.dbg.AFNI.args for debugging purposes
-     * @param help Show help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MbaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MBA_METADATA);
     const params = mba_params(prefix, data_table, chains, iterations, model, eoi, cvars, qvars, qcvar, stdz, wcp, disty, se, dbg_args, help)
@@ -369,5 +369,8 @@ export {
       MbaOutputs,
       MbaParameters,
       mba,
+      mba_cargs,
+      mba_execute,
+      mba_outputs,
       mba_params,
 };

@@ -12,40 +12,40 @@ const INFLATE_SUBJECT_NEW_LH_METADATA: Metadata = {
 
 
 interface InflateSubjectNewLhParameters {
-    "__STYXTYPE__": "inflate_subject_new-lh";
+    "@type": "freesurfer.inflate_subject_new-lh";
     "subject_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "inflate_subject_new-lh": inflate_subject_new_lh_cargs,
+        "freesurfer.inflate_subject_new-lh": inflate_subject_new_lh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "inflate_subject_new-lh": inflate_subject_new_lh_outputs,
+        "freesurfer.inflate_subject_new-lh": inflate_subject_new_lh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface InflateSubjectNewLhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_dir Directory of the subject's data in FreeSurfer
+ *
+ * @returns Parameter dictionary
+ */
 function inflate_subject_new_lh_params(
     subject_dir: string,
 ): InflateSubjectNewLhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_dir Directory of the subject's data in FreeSurfer
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inflate_subject_new-lh" as const,
+        "@type": "freesurfer.inflate_subject_new-lh" as const,
         "subject_dir": subject_dir,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function inflate_subject_new_lh_cargs(
     params: InflateSubjectNewLhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("inflate_subject_new");
     cargs.push(
@@ -108,18 +108,18 @@ function inflate_subject_new_lh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function inflate_subject_new_lh_outputs(
     params: InflateSubjectNewLhParameters,
     execution: Execution,
 ): InflateSubjectNewLhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InflateSubjectNewLhOutputs = {
         root: execution.outputFile("."),
         inflated_surface: execution.outputFile([(params["subject_dir"] ?? null), "/surf/lh.inflated"].join('')),
@@ -128,22 +128,22 @@ function inflate_subject_new_lh_outputs(
 }
 
 
+/**
+ * Tool for inflating the left hemisphere of a subject in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewLhOutputs`).
+ */
 function inflate_subject_new_lh_execute(
     params: InflateSubjectNewLhParameters,
     execution: Execution,
 ): InflateSubjectNewLhOutputs {
-    /**
-     * Tool for inflating the left hemisphere of a subject in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewLhOutputs`).
-     */
     params = execution.params(params)
     const cargs = inflate_subject_new_lh_cargs(params, execution)
     const ret = inflate_subject_new_lh_outputs(params, execution)
@@ -152,22 +152,22 @@ function inflate_subject_new_lh_execute(
 }
 
 
+/**
+ * Tool for inflating the left hemisphere of a subject in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_dir Directory of the subject's data in FreeSurfer
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InflateSubjectNewLhOutputs`).
+ */
 function inflate_subject_new_lh(
     subject_dir: string,
     runner: Runner | null = null,
 ): InflateSubjectNewLhOutputs {
-    /**
-     * Tool for inflating the left hemisphere of a subject in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_dir Directory of the subject's data in FreeSurfer
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InflateSubjectNewLhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INFLATE_SUBJECT_NEW_LH_METADATA);
     const params = inflate_subject_new_lh_params(subject_dir)
@@ -180,5 +180,8 @@ export {
       InflateSubjectNewLhOutputs,
       InflateSubjectNewLhParameters,
       inflate_subject_new_lh,
+      inflate_subject_new_lh_cargs,
+      inflate_subject_new_lh_execute,
+      inflate_subject_new_lh_outputs,
       inflate_subject_new_lh_params,
 };

@@ -12,42 +12,42 @@ const MRI_SURFACEMASK_METADATA: Metadata = {
 
 
 interface MriSurfacemaskParameters {
-    "__STYXTYPE__": "mri_surfacemask";
+    "@type": "freesurfer.mri_surfacemask";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_surfacemask": mri_surfacemask_cargs,
+        "freesurfer.mri_surfacemask": mri_surfacemask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_surfacemask": mri_surfacemask_outputs,
+        "freesurfer.mri_surfacemask": mri_surfacemask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriSurfacemaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume which will be masked
+ * @param input_surface Surface file used for masking the volume
+ * @param output_volume Output volume file where pixels outside the surface are set to zero
+ *
+ * @returns Parameter dictionary
+ */
 function mri_surfacemask_params(
     input_volume: InputPathType,
     input_surface: InputPathType,
     output_volume: string,
 ): MriSurfacemaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume which will be masked
-     * @param input_surface Surface file used for masking the volume
-     * @param output_volume Output volume file where pixels outside the surface are set to zero
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_surfacemask" as const,
+        "@type": "freesurfer.mri_surfacemask" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "output_volume": output_volume,
@@ -94,18 +94,18 @@ function mri_surfacemask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_surfacemask_cargs(
     params: MriSurfacemaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_surfacemask");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -115,18 +115,18 @@ function mri_surfacemask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_surfacemask_outputs(
     params: MriSurfacemaskParameters,
     execution: Execution,
 ): MriSurfacemaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSurfacemaskOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_surfacemask_outputs(
 }
 
 
+/**
+ * Tool to produce a new volume where all pixels outside the surface are set to zero.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
+ */
 function mri_surfacemask_execute(
     params: MriSurfacemaskParameters,
     execution: Execution,
 ): MriSurfacemaskOutputs {
-    /**
-     * Tool to produce a new volume where all pixels outside the surface are set to zero.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_surfacemask_cargs(params, execution)
     const ret = mri_surfacemask_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_surfacemask_execute(
 }
 
 
+/**
+ * Tool to produce a new volume where all pixels outside the surface are set to zero.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume which will be masked
+ * @param input_surface Surface file used for masking the volume
+ * @param output_volume Output volume file where pixels outside the surface are set to zero
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
+ */
 function mri_surfacemask(
     input_volume: InputPathType,
     input_surface: InputPathType,
     output_volume: string,
     runner: Runner | null = null,
 ): MriSurfacemaskOutputs {
-    /**
-     * Tool to produce a new volume where all pixels outside the surface are set to zero.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume which will be masked
-     * @param input_surface Surface file used for masking the volume
-     * @param output_volume Output volume file where pixels outside the surface are set to zero
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SURFACEMASK_METADATA);
     const params = mri_surfacemask_params(input_volume, input_surface, output_volume)
@@ -191,5 +191,8 @@ export {
       MriSurfacemaskOutputs,
       MriSurfacemaskParameters,
       mri_surfacemask,
+      mri_surfacemask_cargs,
+      mri_surfacemask_execute,
+      mri_surfacemask_outputs,
       mri_surfacemask_params,
 };

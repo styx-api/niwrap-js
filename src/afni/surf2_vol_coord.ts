@@ -12,7 +12,7 @@ const SURF2_VOL_COORD_METADATA: Metadata = {
 
 
 interface Surf2VolCoordParameters {
-    "__STYXTYPE__": "Surf2VolCoord";
+    "@type": "afni.Surf2VolCoord";
     "surface": string;
     "grid_vol": InputPathType;
     "grid_subbrick"?: number | null | undefined;
@@ -27,35 +27,35 @@ interface Surf2VolCoordParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "Surf2VolCoord": surf2_vol_coord_cargs,
+        "afni.Surf2VolCoord": surf2_vol_coord_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "Surf2VolCoord": surf2_vol_coord_outputs,
+        "afni.Surf2VolCoord": surf2_vol_coord_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface Surf2VolCoordOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Specify input surface.
+ * @param grid_vol Specifies the grid for the output volume.
+ * @param closest_nodes A coordinate file specifying coordinates for which the closest nodes will be found.
+ * @param prefix Output results to file PREFIX (will overwrite). Default is stdout.
+ * @param grid_subbrick Sub-brick from which data are taken.
+ * @param sv Surface Volume file aligning with the surface.
+ * @param one_node Specify a single node's coordinates.
+ * @param qual A string of characters that qualify the surface in which the closest node was found.
+ * @param lpi Coordinate axis direction for values in XYZ.1D are in LPI.
+ * @param rai Coordinate axis direction for values in XYZ.1D are in RAI (default).
+ * @param verb_level Verbosity level, default is 0.
+ *
+ * @returns Parameter dictionary
+ */
 function surf2_vol_coord_params(
     surface: string,
     grid_vol: InputPathType,
@@ -91,25 +108,8 @@ function surf2_vol_coord_params(
     rai: boolean = false,
     verb_level: number | null = null,
 ): Surf2VolCoordParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Specify input surface.
-     * @param grid_vol Specifies the grid for the output volume.
-     * @param closest_nodes A coordinate file specifying coordinates for which the closest nodes will be found.
-     * @param prefix Output results to file PREFIX (will overwrite). Default is stdout.
-     * @param grid_subbrick Sub-brick from which data are taken.
-     * @param sv Surface Volume file aligning with the surface.
-     * @param one_node Specify a single node's coordinates.
-     * @param qual A string of characters that qualify the surface in which the closest node was found.
-     * @param lpi Coordinate axis direction for values in XYZ.1D are in LPI.
-     * @param rai Coordinate axis direction for values in XYZ.1D are in RAI (default).
-     * @param verb_level Verbosity level, default is 0.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "Surf2VolCoord" as const,
+        "@type": "afni.Surf2VolCoord" as const,
         "surface": surface,
         "grid_vol": grid_vol,
         "closest_nodes": closest_nodes,
@@ -136,18 +136,18 @@ function surf2_vol_coord_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf2_vol_coord_cargs(
     params: Surf2VolCoordParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Surf2VolCoord");
     cargs.push(
@@ -206,18 +206,18 @@ function surf2_vol_coord_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf2_vol_coord_outputs(
     params: Surf2VolCoordParameters,
     execution: Execution,
 ): Surf2VolCoordOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Surf2VolCoordOutputs = {
         root: execution.outputFile("."),
         results_file: execution.outputFile([(params["prefix"] ?? null)].join('')),
@@ -226,22 +226,22 @@ function surf2_vol_coord_outputs(
 }
 
 
+/**
+ * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
+ */
 function surf2_vol_coord_execute(
     params: Surf2VolCoordParameters,
     execution: Execution,
 ): Surf2VolCoordOutputs {
-    /**
-     * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf2_vol_coord_cargs(params, execution)
     const ret = surf2_vol_coord_outputs(params, execution)
@@ -250,6 +250,28 @@ function surf2_vol_coord_execute(
 }
 
 
+/**
+ * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Specify input surface.
+ * @param grid_vol Specifies the grid for the output volume.
+ * @param closest_nodes A coordinate file specifying coordinates for which the closest nodes will be found.
+ * @param prefix Output results to file PREFIX (will overwrite). Default is stdout.
+ * @param grid_subbrick Sub-brick from which data are taken.
+ * @param sv Surface Volume file aligning with the surface.
+ * @param one_node Specify a single node's coordinates.
+ * @param qual A string of characters that qualify the surface in which the closest node was found.
+ * @param lpi Coordinate axis direction for values in XYZ.1D are in LPI.
+ * @param rai Coordinate axis direction for values in XYZ.1D are in RAI (default).
+ * @param verb_level Verbosity level, default is 0.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
+ */
 function surf2_vol_coord(
     surface: string,
     grid_vol: InputPathType,
@@ -264,28 +286,6 @@ function surf2_vol_coord(
     verb_level: number | null = null,
     runner: Runner | null = null,
 ): Surf2VolCoordOutputs {
-    /**
-     * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Specify input surface.
-     * @param grid_vol Specifies the grid for the output volume.
-     * @param closest_nodes A coordinate file specifying coordinates for which the closest nodes will be found.
-     * @param prefix Output results to file PREFIX (will overwrite). Default is stdout.
-     * @param grid_subbrick Sub-brick from which data are taken.
-     * @param sv Surface Volume file aligning with the surface.
-     * @param one_node Specify a single node's coordinates.
-     * @param qual A string of characters that qualify the surface in which the closest node was found.
-     * @param lpi Coordinate axis direction for values in XYZ.1D are in LPI.
-     * @param rai Coordinate axis direction for values in XYZ.1D are in RAI (default).
-     * @param verb_level Verbosity level, default is 0.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF2_VOL_COORD_METADATA);
     const params = surf2_vol_coord_params(surface, grid_vol, closest_nodes, prefix, grid_subbrick, sv, one_node, qual, lpi, rai, verb_level)
@@ -298,5 +298,8 @@ export {
       Surf2VolCoordOutputs,
       Surf2VolCoordParameters,
       surf2_vol_coord,
+      surf2_vol_coord_cargs,
+      surf2_vol_coord_execute,
+      surf2_vol_coord_outputs,
       surf2_vol_coord_params,
 };

@@ -12,7 +12,7 @@ const AVI2TALXFM_METADATA: Metadata = {
 
 
 interface Avi2talxfmParameters {
-    "__STYXTYPE__": "avi2talxfm";
+    "@type": "freesurfer.avi2talxfm";
     "input_volume": InputPathType;
     "target_volume": InputPathType;
     "vox2vox_transform": InputPathType;
@@ -20,35 +20,35 @@ interface Avi2talxfmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "avi2talxfm": avi2talxfm_cargs,
+        "freesurfer.avi2talxfm": avi2talxfm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "avi2talxfm": avi2talxfm_outputs,
+        "freesurfer.avi2talxfm": avi2talxfm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface Avi2talxfmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file
+ * @param target_volume Target volume file
+ * @param vox2vox_transform Voxel-to-voxel transform file
+ * @param output_xfm Output MNI transform file
+ *
+ * @returns Parameter dictionary
+ */
 function avi2talxfm_params(
     input_volume: InputPathType,
     target_volume: InputPathType,
     vox2vox_transform: InputPathType,
     output_xfm: string,
 ): Avi2talxfmParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file
-     * @param target_volume Target volume file
-     * @param vox2vox_transform Voxel-to-voxel transform file
-     * @param output_xfm Output MNI transform file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "avi2talxfm" as const,
+        "@type": "freesurfer.avi2talxfm" as const,
         "input_volume": input_volume,
         "target_volume": target_volume,
         "vox2vox_transform": vox2vox_transform,
@@ -98,18 +98,18 @@ function avi2talxfm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function avi2talxfm_cargs(
     params: Avi2talxfmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("avi2talxfm");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -120,18 +120,18 @@ function avi2talxfm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function avi2talxfm_outputs(
     params: Avi2talxfmParameters,
     execution: Execution,
 ): Avi2talxfmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Avi2talxfmOutputs = {
         root: execution.outputFile("."),
         output_xfm_file: execution.outputFile([(params["output_xfm"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function avi2talxfm_outputs(
 }
 
 
+/**
+ * Convert voxel-to-voxel transform to MNI transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
+ */
 function avi2talxfm_execute(
     params: Avi2talxfmParameters,
     execution: Execution,
 ): Avi2talxfmOutputs {
-    /**
-     * Convert voxel-to-voxel transform to MNI transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
-     */
     params = execution.params(params)
     const cargs = avi2talxfm_cargs(params, execution)
     const ret = avi2talxfm_outputs(params, execution)
@@ -164,6 +164,21 @@ function avi2talxfm_execute(
 }
 
 
+/**
+ * Convert voxel-to-voxel transform to MNI transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file
+ * @param target_volume Target volume file
+ * @param vox2vox_transform Voxel-to-voxel transform file
+ * @param output_xfm Output MNI transform file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
+ */
 function avi2talxfm(
     input_volume: InputPathType,
     target_volume: InputPathType,
@@ -171,21 +186,6 @@ function avi2talxfm(
     output_xfm: string,
     runner: Runner | null = null,
 ): Avi2talxfmOutputs {
-    /**
-     * Convert voxel-to-voxel transform to MNI transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file
-     * @param target_volume Target volume file
-     * @param vox2vox_transform Voxel-to-voxel transform file
-     * @param output_xfm Output MNI transform file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AVI2TALXFM_METADATA);
     const params = avi2talxfm_params(input_volume, target_volume, vox2vox_transform, output_xfm)
@@ -198,5 +198,8 @@ export {
       Avi2talxfmOutputs,
       Avi2talxfmParameters,
       avi2talxfm,
+      avi2talxfm_cargs,
+      avi2talxfm_execute,
+      avi2talxfm_outputs,
       avi2talxfm_params,
 };

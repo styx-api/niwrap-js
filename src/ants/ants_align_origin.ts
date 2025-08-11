@@ -12,7 +12,7 @@ const ANTS_ALIGN_ORIGIN_METADATA: Metadata = {
 
 
 interface AntsAlignOriginParameters {
-    "__STYXTYPE__": "antsAlignOrigin";
+    "@type": "ants.antsAlignOrigin";
     "dimensionality"?: 2 | 3 | null | undefined;
     "input": InputPathType;
     "reference_image": InputPathType;
@@ -20,35 +20,35 @@ interface AntsAlignOriginParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsAlignOrigin": ants_align_origin_cargs,
+        "ants.antsAlignOrigin": ants_align_origin_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsAlignOrigin": ants_align_origin_outputs,
+        "ants.antsAlignOrigin": ants_align_origin_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface AntsAlignOriginOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
+ * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
+ * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_align_origin_params(
     input: InputPathType,
     reference_image: InputPathType,
     output: string,
     dimensionality: 2 | 3 | null = null,
 ): AntsAlignOriginParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
-     * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
-     * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsAlignOrigin" as const,
+        "@type": "ants.antsAlignOrigin" as const,
         "input": input,
         "reference_image": reference_image,
         "output": output,
@@ -100,18 +100,18 @@ function ants_align_origin_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_align_origin_cargs(
     params: AntsAlignOriginParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsAlignOrigin");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -136,18 +136,18 @@ function ants_align_origin_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_align_origin_outputs(
     params: AntsAlignOriginParameters,
     execution: Execution,
 ): AntsAlignOriginOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsAlignOriginOutputs = {
         root: execution.outputFile("."),
         aligned_image: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -156,22 +156,22 @@ function ants_align_origin_outputs(
 }
 
 
+/**
+ * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
+ */
 function ants_align_origin_execute(
     params: AntsAlignOriginParameters,
     execution: Execution,
 ): AntsAlignOriginOutputs {
-    /**
-     * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_align_origin_cargs(params, execution)
     const ret = ants_align_origin_outputs(params, execution)
@@ -180,6 +180,21 @@ function ants_align_origin_execute(
 }
 
 
+/**
+ * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
+ * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
+ * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
+ */
 function ants_align_origin(
     input: InputPathType,
     reference_image: InputPathType,
@@ -187,21 +202,6 @@ function ants_align_origin(
     dimensionality: 2 | 3 | null = null,
     runner: Runner | null = null,
 ): AntsAlignOriginOutputs {
-    /**
-     * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
-     * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
-     * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, antsWarp tries to infer the dimensionality from the input image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_ALIGN_ORIGIN_METADATA);
     const params = ants_align_origin_params(input, reference_image, output, dimensionality)
@@ -214,5 +214,8 @@ export {
       AntsAlignOriginOutputs,
       AntsAlignOriginParameters,
       ants_align_origin,
+      ants_align_origin_cargs,
+      ants_align_origin_execute,
+      ants_align_origin_outputs,
       ants_align_origin_params,
 };

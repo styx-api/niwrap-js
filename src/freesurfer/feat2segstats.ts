@@ -12,7 +12,7 @@ const FEAT2SEGSTATS_METADATA: Metadata = {
 
 
 interface Feat2segstatsParameters {
-    "__STYXTYPE__": "feat2segstats";
+    "@type": "freesurfer.feat2segstats";
     "feat_dir": string;
     "featdirfile"?: InputPathType | null | undefined;
     "seg_vol"?: string | null | undefined;
@@ -36,35 +36,35 @@ interface Feat2segstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "feat2segstats": feat2segstats_cargs,
+        "freesurfer.feat2segstats": feat2segstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "feat2segstats": feat2segstats_outputs,
+        "freesurfer.feat2segstats": feat2segstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,32 @@ interface Feat2segstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_dir Feat output directory
+ * @param stat Statistical output
+ * @param featdirfile File with a list of feat directories
+ * @param seg_vol Segmentation volume
+ * @param aseg_flag Use aseg segmentation
+ * @param aparc_aseg_flag Use aparc+aseg segmentation
+ * @param ctab Color lookup table, default is FREESURFER_HOME/FreeSurferColorLUT.txt
+ * @param all_segs_flag Report on all segments, even empty ones
+ * @param copes_flag Do all copes
+ * @param varcopes_flag Do all varcopes
+ * @param zstats_flag Do all zstats
+ * @param pes_flag Do all pes
+ * @param rvar Sigma squared values
+ * @param example_func Example function
+ * @param mask Probably not too useful
+ * @param mean_func Mean function
+ * @param version_flag Print version and exit
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param nolog_flag Do not create a log file
+ *
+ * @returns Parameter dictionary
+ */
 function feat2segstats_params(
     feat_dir: string,
     stat: string,
@@ -109,34 +135,8 @@ function feat2segstats_params(
     debug_flag: boolean = false,
     nolog_flag: boolean = false,
 ): Feat2segstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_dir Feat output directory
-     * @param stat Statistical output
-     * @param featdirfile File with a list of feat directories
-     * @param seg_vol Segmentation volume
-     * @param aseg_flag Use aseg segmentation
-     * @param aparc_aseg_flag Use aparc+aseg segmentation
-     * @param ctab Color lookup table, default is FREESURFER_HOME/FreeSurferColorLUT.txt
-     * @param all_segs_flag Report on all segments, even empty ones
-     * @param copes_flag Do all copes
-     * @param varcopes_flag Do all varcopes
-     * @param zstats_flag Do all zstats
-     * @param pes_flag Do all pes
-     * @param rvar Sigma squared values
-     * @param example_func Example function
-     * @param mask Probably not too useful
-     * @param mean_func Mean function
-     * @param version_flag Print version and exit
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param nolog_flag Do not create a log file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "feat2segstats" as const,
+        "@type": "freesurfer.feat2segstats" as const,
         "feat_dir": feat_dir,
         "aseg_flag": aseg_flag,
         "aparc_aseg_flag": aparc_aseg_flag,
@@ -176,18 +176,18 @@ function feat2segstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function feat2segstats_cargs(
     params: Feat2segstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("feat2segstats");
     cargs.push(
@@ -277,18 +277,18 @@ function feat2segstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function feat2segstats_outputs(
     params: Feat2segstatsParameters,
     execution: Execution,
 ): Feat2segstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Feat2segstatsOutputs = {
         root: execution.outputFile("."),
         segstats_output: ((params["seg_vol"] ?? null) !== null) ? execution.outputFile([(params["feat_dir"] ?? null), "/freesurfer/segstats/", (params["seg_vol"] ?? null), "/", (params["stat"] ?? null), ".dat"].join('')) : null,
@@ -297,22 +297,22 @@ function feat2segstats_outputs(
 }
 
 
+/**
+ * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
+ */
 function feat2segstats_execute(
     params: Feat2segstatsParameters,
     execution: Execution,
 ): Feat2segstatsOutputs {
-    /**
-     * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = feat2segstats_cargs(params, execution)
     const ret = feat2segstats_outputs(params, execution)
@@ -321,6 +321,37 @@ function feat2segstats_execute(
 }
 
 
+/**
+ * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param feat_dir Feat output directory
+ * @param stat Statistical output
+ * @param featdirfile File with a list of feat directories
+ * @param seg_vol Segmentation volume
+ * @param aseg_flag Use aseg segmentation
+ * @param aparc_aseg_flag Use aparc+aseg segmentation
+ * @param ctab Color lookup table, default is FREESURFER_HOME/FreeSurferColorLUT.txt
+ * @param all_segs_flag Report on all segments, even empty ones
+ * @param copes_flag Do all copes
+ * @param varcopes_flag Do all varcopes
+ * @param zstats_flag Do all zstats
+ * @param pes_flag Do all pes
+ * @param rvar Sigma squared values
+ * @param example_func Example function
+ * @param mask Probably not too useful
+ * @param mean_func Mean function
+ * @param version_flag Print version and exit
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param nolog_flag Do not create a log file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
+ */
 function feat2segstats(
     feat_dir: string,
     stat: string,
@@ -344,37 +375,6 @@ function feat2segstats(
     nolog_flag: boolean = false,
     runner: Runner | null = null,
 ): Feat2segstatsOutputs {
-    /**
-     * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param feat_dir Feat output directory
-     * @param stat Statistical output
-     * @param featdirfile File with a list of feat directories
-     * @param seg_vol Segmentation volume
-     * @param aseg_flag Use aseg segmentation
-     * @param aparc_aseg_flag Use aparc+aseg segmentation
-     * @param ctab Color lookup table, default is FREESURFER_HOME/FreeSurferColorLUT.txt
-     * @param all_segs_flag Report on all segments, even empty ones
-     * @param copes_flag Do all copes
-     * @param varcopes_flag Do all varcopes
-     * @param zstats_flag Do all zstats
-     * @param pes_flag Do all pes
-     * @param rvar Sigma squared values
-     * @param example_func Example function
-     * @param mask Probably not too useful
-     * @param mean_func Mean function
-     * @param version_flag Print version and exit
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param nolog_flag Do not create a log file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEAT2SEGSTATS_METADATA);
     const params = feat2segstats_params(feat_dir, stat, featdirfile, seg_vol, aseg_flag, aparc_aseg_flag, ctab, all_segs_flag, copes_flag, varcopes_flag, zstats_flag, pes_flag, rvar, example_func, mask, mean_func, version_flag, help_flag, debug_flag, nolog_flag)
@@ -387,5 +387,8 @@ export {
       Feat2segstatsOutputs,
       Feat2segstatsParameters,
       feat2segstats,
+      feat2segstats_cargs,
+      feat2segstats_execute,
+      feat2segstats_outputs,
       feat2segstats_params,
 };

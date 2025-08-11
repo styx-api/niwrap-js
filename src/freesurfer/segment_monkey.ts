@@ -12,38 +12,38 @@ const SEGMENT_MONKEY_METADATA: Metadata = {
 
 
 interface SegmentMonkeyParameters {
-    "__STYXTYPE__": "segment_monkey";
+    "@type": "freesurfer.segment_monkey";
     "control_points": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_monkey": segment_monkey_cargs,
+        "freesurfer.segment_monkey": segment_monkey_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SegmentMonkeyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param control_points List of control points required for segmentation
+ *
+ * @returns Parameter dictionary
+ */
 function segment_monkey_params(
     control_points: Array<string>,
 ): SegmentMonkeyParameters {
-    /**
-     * Build parameters.
-    
-     * @param control_points List of control points required for segmentation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_monkey" as const,
+        "@type": "freesurfer.segment_monkey" as const,
         "control_points": control_points,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_monkey_cargs(
     params: SegmentMonkeyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_monkey");
     cargs.push(...(params["control_points"] ?? null));
@@ -100,18 +100,18 @@ function segment_monkey_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_monkey_outputs(
     params: SegmentMonkeyParameters,
     execution: Execution,
 ): SegmentMonkeyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentMonkeyOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function segment_monkey_outputs(
 }
 
 
+/**
+ * A tool for segmenting images using specified control points.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
+ */
 function segment_monkey_execute(
     params: SegmentMonkeyParameters,
     execution: Execution,
 ): SegmentMonkeyOutputs {
-    /**
-     * A tool for segmenting images using specified control points.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_monkey_cargs(params, execution)
     const ret = segment_monkey_outputs(params, execution)
@@ -143,22 +143,22 @@ function segment_monkey_execute(
 }
 
 
+/**
+ * A tool for segmenting images using specified control points.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param control_points List of control points required for segmentation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
+ */
 function segment_monkey(
     control_points: Array<string>,
     runner: Runner | null = null,
 ): SegmentMonkeyOutputs {
-    /**
-     * A tool for segmenting images using specified control points.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param control_points List of control points required for segmentation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_MONKEY_METADATA);
     const params = segment_monkey_params(control_points)
@@ -171,5 +171,8 @@ export {
       SegmentMonkeyOutputs,
       SegmentMonkeyParameters,
       segment_monkey,
+      segment_monkey_cargs,
+      segment_monkey_execute,
+      segment_monkey_outputs,
       segment_monkey_params,
 };

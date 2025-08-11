@@ -12,7 +12,7 @@ const MRI_NL_ALIGN_METADATA: Metadata = {
 
 
 interface MriNlAlignParameters {
-    "__STYXTYPE__": "mri_nl_align";
+    "@type": "freesurfer.mri_nl_align";
     "source": InputPathType;
     "target": InputPathType;
     "warp": string;
@@ -64,35 +64,35 @@ interface MriNlAlignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_nl_align": mri_nl_align_cargs,
+        "freesurfer.mri_nl_align": mri_nl_align_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_nl_align": mri_nl_align_outputs,
+        "freesurfer.mri_nl_align": mri_nl_align_outputs,
     };
     return outputsFuncs[t];
 }
@@ -115,6 +115,60 @@ interface MriNlAlignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Input source image file
+ * @param target Input target image file
+ * @param warp Output warp file
+ * @param debug_voxel Debug voxel coordinates (Gx, Gy, Gz)
+ * @param debug_node Debug node coordinates (Gx, Gy, Gz)
+ * @param no_neg Control allowing temporary folds during numerical minimization
+ * @param renormalize Control for renormalizing intensities
+ * @param aseg_flag Treat inputs as segmentations
+ * @param diag_volume Write d2 diagnostics for input volume
+ * @param optimal_flag Use line search optimization
+ * @param momentum_flag Use fixed time-step integration
+ * @param fixed_flag Use fixed time-step integration
+ * @param distance Expand border by specified mm every outer cycle
+ * @param dtrans Set distance transform coefficient
+ * @param match_peak_flag Match peak of intensity ratio histogram
+ * @param erode Erode source and target image specified times before morphing
+ * @param match_mean Control for matching peak of intensity ratio histogram
+ * @param intensity Set l_log_likelihood to specified value
+ * @param ll Set l_log_likelihood to specified value
+ * @param noregrid_flag Disable regridding
+ * @param regrid_flag Enable regridding
+ * @param view View voxel coordinates (Gx, Gy, Gz)
+ * @param levels Set levels to specified value
+ * @param area_smoothness Set l_area_smoothness to specified value
+ * @param asmooth Set l_area_smoothness to specified value
+ * @param area Set l_area to specified value
+ * @param tolerance Set tolerance to specified value
+ * @param sigma Set sigma to specified value
+ * @param min_sigma Set minimum sigma value
+ * @param ribbon Read ribbon from specified file and insert into aseg
+ * @param rthresh Set compression ratio threshold to specified value
+ * @param scale Scale input values by specified factor
+ * @param dt Set dt to specified value
+ * @param passes Integrate in specified number of passes
+ * @param skip Skip specified number of voxels in source data
+ * @param apply Control for applying transform after registration
+ * @param distance_log Set l_distance to specified value
+ * @param momentum Set momentum to specified value
+ * @param iterations Set number of iterations to specified value
+ * @param smoothness Set l_smoothness to specified value
+ * @param transform Read the forward transform from specified file
+ * @param inverse_transform Read the inverse transform from specified file
+ * @param binary Set l_binary to specified value
+ * @param jacobian Set l_jacobian to specified value
+ * @param disable_zero_locations Control for disabling zero image locations
+ * @param smooth_averages Smooth gradient with specified number of averages
+ * @param exp_k Set exp_k to specified value
+ * @param diagnostics Write diagnostics at each specified iteration
+ *
+ * @returns Parameter dictionary
+ */
 function mri_nl_align_params(
     source: InputPathType,
     target: InputPathType,
@@ -165,62 +219,8 @@ function mri_nl_align_params(
     exp_k: number | null = null,
     diagnostics: number | null = null,
 ): MriNlAlignParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Input source image file
-     * @param target Input target image file
-     * @param warp Output warp file
-     * @param debug_voxel Debug voxel coordinates (Gx, Gy, Gz)
-     * @param debug_node Debug node coordinates (Gx, Gy, Gz)
-     * @param no_neg Control allowing temporary folds during numerical minimization
-     * @param renormalize Control for renormalizing intensities
-     * @param aseg_flag Treat inputs as segmentations
-     * @param diag_volume Write d2 diagnostics for input volume
-     * @param optimal_flag Use line search optimization
-     * @param momentum_flag Use fixed time-step integration
-     * @param fixed_flag Use fixed time-step integration
-     * @param distance Expand border by specified mm every outer cycle
-     * @param dtrans Set distance transform coefficient
-     * @param match_peak_flag Match peak of intensity ratio histogram
-     * @param erode Erode source and target image specified times before morphing
-     * @param match_mean Control for matching peak of intensity ratio histogram
-     * @param intensity Set l_log_likelihood to specified value
-     * @param ll Set l_log_likelihood to specified value
-     * @param noregrid_flag Disable regridding
-     * @param regrid_flag Enable regridding
-     * @param view View voxel coordinates (Gx, Gy, Gz)
-     * @param levels Set levels to specified value
-     * @param area_smoothness Set l_area_smoothness to specified value
-     * @param asmooth Set l_area_smoothness to specified value
-     * @param area Set l_area to specified value
-     * @param tolerance Set tolerance to specified value
-     * @param sigma Set sigma to specified value
-     * @param min_sigma Set minimum sigma value
-     * @param ribbon Read ribbon from specified file and insert into aseg
-     * @param rthresh Set compression ratio threshold to specified value
-     * @param scale Scale input values by specified factor
-     * @param dt Set dt to specified value
-     * @param passes Integrate in specified number of passes
-     * @param skip Skip specified number of voxels in source data
-     * @param apply Control for applying transform after registration
-     * @param distance_log Set l_distance to specified value
-     * @param momentum Set momentum to specified value
-     * @param iterations Set number of iterations to specified value
-     * @param smoothness Set l_smoothness to specified value
-     * @param transform Read the forward transform from specified file
-     * @param inverse_transform Read the inverse transform from specified file
-     * @param binary Set l_binary to specified value
-     * @param jacobian Set l_jacobian to specified value
-     * @param disable_zero_locations Control for disabling zero image locations
-     * @param smooth_averages Smooth gradient with specified number of averages
-     * @param exp_k Set exp_k to specified value
-     * @param diagnostics Write diagnostics at each specified iteration
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_nl_align" as const,
+        "@type": "freesurfer.mri_nl_align" as const,
         "source": source,
         "target": target,
         "warp": warp,
@@ -350,18 +350,18 @@ function mri_nl_align_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_nl_align_cargs(
     params: MriNlAlignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_nl_align");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -620,18 +620,18 @@ function mri_nl_align_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_nl_align_outputs(
     params: MriNlAlignParameters,
     execution: Execution,
 ): MriNlAlignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriNlAlignOutputs = {
         root: execution.outputFile("."),
         warp_output: execution.outputFile([(params["warp"] ?? null)].join('')),
@@ -640,22 +640,22 @@ function mri_nl_align_outputs(
 }
 
 
+/**
+ * mri_nl_align aligns two images using nonlinear registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
+ */
 function mri_nl_align_execute(
     params: MriNlAlignParameters,
     execution: Execution,
 ): MriNlAlignOutputs {
-    /**
-     * mri_nl_align aligns two images using nonlinear registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_nl_align_cargs(params, execution)
     const ret = mri_nl_align_outputs(params, execution)
@@ -664,6 +664,65 @@ function mri_nl_align_execute(
 }
 
 
+/**
+ * mri_nl_align aligns two images using nonlinear registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Input source image file
+ * @param target Input target image file
+ * @param warp Output warp file
+ * @param debug_voxel Debug voxel coordinates (Gx, Gy, Gz)
+ * @param debug_node Debug node coordinates (Gx, Gy, Gz)
+ * @param no_neg Control allowing temporary folds during numerical minimization
+ * @param renormalize Control for renormalizing intensities
+ * @param aseg_flag Treat inputs as segmentations
+ * @param diag_volume Write d2 diagnostics for input volume
+ * @param optimal_flag Use line search optimization
+ * @param momentum_flag Use fixed time-step integration
+ * @param fixed_flag Use fixed time-step integration
+ * @param distance Expand border by specified mm every outer cycle
+ * @param dtrans Set distance transform coefficient
+ * @param match_peak_flag Match peak of intensity ratio histogram
+ * @param erode Erode source and target image specified times before morphing
+ * @param match_mean Control for matching peak of intensity ratio histogram
+ * @param intensity Set l_log_likelihood to specified value
+ * @param ll Set l_log_likelihood to specified value
+ * @param noregrid_flag Disable regridding
+ * @param regrid_flag Enable regridding
+ * @param view View voxel coordinates (Gx, Gy, Gz)
+ * @param levels Set levels to specified value
+ * @param area_smoothness Set l_area_smoothness to specified value
+ * @param asmooth Set l_area_smoothness to specified value
+ * @param area Set l_area to specified value
+ * @param tolerance Set tolerance to specified value
+ * @param sigma Set sigma to specified value
+ * @param min_sigma Set minimum sigma value
+ * @param ribbon Read ribbon from specified file and insert into aseg
+ * @param rthresh Set compression ratio threshold to specified value
+ * @param scale Scale input values by specified factor
+ * @param dt Set dt to specified value
+ * @param passes Integrate in specified number of passes
+ * @param skip Skip specified number of voxels in source data
+ * @param apply Control for applying transform after registration
+ * @param distance_log Set l_distance to specified value
+ * @param momentum Set momentum to specified value
+ * @param iterations Set number of iterations to specified value
+ * @param smoothness Set l_smoothness to specified value
+ * @param transform Read the forward transform from specified file
+ * @param inverse_transform Read the inverse transform from specified file
+ * @param binary Set l_binary to specified value
+ * @param jacobian Set l_jacobian to specified value
+ * @param disable_zero_locations Control for disabling zero image locations
+ * @param smooth_averages Smooth gradient with specified number of averages
+ * @param exp_k Set exp_k to specified value
+ * @param diagnostics Write diagnostics at each specified iteration
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
+ */
 function mri_nl_align(
     source: InputPathType,
     target: InputPathType,
@@ -715,65 +774,6 @@ function mri_nl_align(
     diagnostics: number | null = null,
     runner: Runner | null = null,
 ): MriNlAlignOutputs {
-    /**
-     * mri_nl_align aligns two images using nonlinear registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Input source image file
-     * @param target Input target image file
-     * @param warp Output warp file
-     * @param debug_voxel Debug voxel coordinates (Gx, Gy, Gz)
-     * @param debug_node Debug node coordinates (Gx, Gy, Gz)
-     * @param no_neg Control allowing temporary folds during numerical minimization
-     * @param renormalize Control for renormalizing intensities
-     * @param aseg_flag Treat inputs as segmentations
-     * @param diag_volume Write d2 diagnostics for input volume
-     * @param optimal_flag Use line search optimization
-     * @param momentum_flag Use fixed time-step integration
-     * @param fixed_flag Use fixed time-step integration
-     * @param distance Expand border by specified mm every outer cycle
-     * @param dtrans Set distance transform coefficient
-     * @param match_peak_flag Match peak of intensity ratio histogram
-     * @param erode Erode source and target image specified times before morphing
-     * @param match_mean Control for matching peak of intensity ratio histogram
-     * @param intensity Set l_log_likelihood to specified value
-     * @param ll Set l_log_likelihood to specified value
-     * @param noregrid_flag Disable regridding
-     * @param regrid_flag Enable regridding
-     * @param view View voxel coordinates (Gx, Gy, Gz)
-     * @param levels Set levels to specified value
-     * @param area_smoothness Set l_area_smoothness to specified value
-     * @param asmooth Set l_area_smoothness to specified value
-     * @param area Set l_area to specified value
-     * @param tolerance Set tolerance to specified value
-     * @param sigma Set sigma to specified value
-     * @param min_sigma Set minimum sigma value
-     * @param ribbon Read ribbon from specified file and insert into aseg
-     * @param rthresh Set compression ratio threshold to specified value
-     * @param scale Scale input values by specified factor
-     * @param dt Set dt to specified value
-     * @param passes Integrate in specified number of passes
-     * @param skip Skip specified number of voxels in source data
-     * @param apply Control for applying transform after registration
-     * @param distance_log Set l_distance to specified value
-     * @param momentum Set momentum to specified value
-     * @param iterations Set number of iterations to specified value
-     * @param smoothness Set l_smoothness to specified value
-     * @param transform Read the forward transform from specified file
-     * @param inverse_transform Read the inverse transform from specified file
-     * @param binary Set l_binary to specified value
-     * @param jacobian Set l_jacobian to specified value
-     * @param disable_zero_locations Control for disabling zero image locations
-     * @param smooth_averages Smooth gradient with specified number of averages
-     * @param exp_k Set exp_k to specified value
-     * @param diagnostics Write diagnostics at each specified iteration
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_NL_ALIGN_METADATA);
     const params = mri_nl_align_params(source, target, warp, debug_voxel, debug_node, no_neg, renormalize, aseg_flag, diag_volume, optimal_flag, momentum_flag, fixed_flag, distance, dtrans, match_peak_flag, erode, match_mean, intensity, ll, noregrid_flag, regrid_flag, view, levels, area_smoothness, asmooth, area, tolerance, sigma, min_sigma, ribbon, rthresh, scale, dt, passes, skip, apply, distance_log, momentum, iterations, smoothness, transform, inverse_transform, binary, jacobian, disable_zero_locations, smooth_averages, exp_k, diagnostics)
@@ -786,5 +786,8 @@ export {
       MriNlAlignOutputs,
       MriNlAlignParameters,
       mri_nl_align,
+      mri_nl_align_cargs,
+      mri_nl_align_execute,
+      mri_nl_align_outputs,
       mri_nl_align_params,
 };

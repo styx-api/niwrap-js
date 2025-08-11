@@ -12,7 +12,7 @@ const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
 
 
 interface MetricFindClustersParameters {
-    "__STYXTYPE__": "metric-find-clusters";
+    "@type": "workbench.metric-find-clusters";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "value_threshold": number;
@@ -28,35 +28,35 @@ interface MetricFindClustersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-find-clusters": metric_find_clusters_cargs,
+        "workbench.metric-find-clusters": metric_find_clusters_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-find-clusters": metric_find_clusters_outputs,
+        "workbench.metric-find-clusters": metric_find_clusters_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface MetricFindClustersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to compute on
+ * @param metric_in the input metric
+ * @param value_threshold threshold for data values
+ * @param minimum_area threshold for cluster area, in mm^2
+ * @param metric_out the output metric
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param opt_roi_roi_metric select a region of interest: the roi, as a metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_column_column select a single column: the column number or name
+ * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's area
+ * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ *
+ * @returns Parameter dictionary
+ */
 function metric_find_clusters_params(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -93,26 +111,8 @@ function metric_find_clusters_params(
     opt_distance_distance: number | null = null,
     opt_start_startval: number | null = null,
 ): MetricFindClustersParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to compute on
-     * @param metric_in the input metric
-     * @param value_threshold threshold for data values
-     * @param minimum_area threshold for cluster area, in mm^2
-     * @param metric_out the output metric
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param opt_roi_roi_metric select a region of interest: the roi, as a metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_column_column select a single column: the column number or name
-     * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's area
-     * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-find-clusters" as const,
+        "@type": "workbench.metric-find-clusters" as const,
         "surface": surface,
         "metric_in": metric_in,
         "value_threshold": value_threshold,
@@ -142,18 +142,18 @@ function metric_find_clusters_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_find_clusters_cargs(
     params: MetricFindClustersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-find-clusters");
@@ -205,18 +205,18 @@ function metric_find_clusters_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_find_clusters_outputs(
     params: MetricFindClustersParameters,
     execution: Execution,
 ): MetricFindClustersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricFindClustersOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -225,24 +225,24 @@ function metric_find_clusters_outputs(
 }
 
 
+/**
+ * Filter clusters by surface area.
+ *
+ * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
+ */
 function metric_find_clusters_execute(
     params: MetricFindClustersParameters,
     execution: Execution,
 ): MetricFindClustersOutputs {
-    /**
-     * Filter clusters by surface area.
-     * 
-     * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_find_clusters_cargs(params, execution)
     const ret = metric_find_clusters_outputs(params, execution)
@@ -251,6 +251,31 @@ function metric_find_clusters_execute(
 }
 
 
+/**
+ * Filter clusters by surface area.
+ *
+ * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to compute on
+ * @param metric_in the input metric
+ * @param value_threshold threshold for data values
+ * @param minimum_area threshold for cluster area, in mm^2
+ * @param metric_out the output metric
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param opt_roi_roi_metric select a region of interest: the roi, as a metric
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ * @param opt_column_column select a single column: the column number or name
+ * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's area
+ * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
+ */
 function metric_find_clusters(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -266,31 +291,6 @@ function metric_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
-    /**
-     * Filter clusters by surface area.
-     * 
-     * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to compute on
-     * @param metric_in the input metric
-     * @param value_threshold threshold for data values
-     * @param minimum_area threshold for cluster area, in mm^2
-     * @param metric_out the output metric
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param opt_roi_roi_metric select a region of interest: the roi, as a metric
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-     * @param opt_column_column select a single column: the column number or name
-     * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's area
-     * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_FIND_CLUSTERS_METADATA);
     const params = metric_find_clusters_params(surface, metric_in, value_threshold, minimum_area, metric_out, opt_less_than, opt_roi_roi_metric, opt_corrected_areas_area_metric, opt_column_column, opt_size_ratio_ratio, opt_distance_distance, opt_start_startval)
@@ -303,5 +303,8 @@ export {
       MetricFindClustersOutputs,
       MetricFindClustersParameters,
       metric_find_clusters,
+      metric_find_clusters_cargs,
+      metric_find_clusters_execute,
+      metric_find_clusters_outputs,
       metric_find_clusters_params,
 };

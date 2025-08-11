@@ -12,7 +12,7 @@ const RANDOMISE_METADATA: Metadata = {
 
 
 interface RandomiseParameters {
-    "__STYXTYPE__": "randomise";
+    "@type": "fsl.randomise";
     "in_file": InputPathType;
     "base_name"?: string | null | undefined;
     "design_mat"?: InputPathType | null | undefined;
@@ -44,35 +44,35 @@ interface RandomiseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "randomise": randomise_cargs,
+        "fsl.randomise": randomise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "randomise": randomise_outputs,
+        "fsl.randomise": randomise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -115,6 +115,40 @@ interface RandomiseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file 4d input file.
+ * @param base_name The rootname that all generated files will have.
+ * @param design_mat Design matrix file.
+ * @param tcon T contrasts file.
+ * @param c_thresh Carry out cluster-based thresholding.
+ * @param cm_thresh Carry out cluster-mass-based thresholding.
+ * @param demean Demean data temporally before model fitting.
+ * @param f_c_thresh Carry out f cluster thresholding.
+ * @param f_cm_thresh Carry out f cluster-mass thresholding.
+ * @param f_only Calculate f-statistics only.
+ * @param fcon F contrasts file.
+ * @param mask Mask image.
+ * @param num_perm Number of permutations (default 5000, set to 0 for exhaustive).
+ * @param one_sample_group_mean Perform 1-sample group-mean test instead of generic permutation test.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param p_vec_n_dist_files Output permutation vector and null distribution text files.
+ * @param raw_stats_imgs Output raw ( unpermuted ) statistic images.
+ * @param seed Specific integer seed for random number generator.
+ * @param show_info_parallel_mode Print out information required for parallel mode and exit.
+ * @param show_total_perms Print out how many unique permutations would be generated and exit.
+ * @param tfce Carry out threshold-free cluster enhancement.
+ * @param tfce2_d Carry out threshold-free cluster enhancement with 2d optimisation.
+ * @param tfce_c Tfce connectivity (6 or 26; default=6).
+ * @param tfce_e Tfce extent parameter (default=0.5).
+ * @param tfce_h Tfce height parameter (default=2).
+ * @param var_smooth Use variance smoothing (std is in mm).
+ * @param vox_p_values Output voxelwise (corrected and uncorrected) p-value images.
+ * @param x_block_labels Exchangeability block labels file.
+ *
+ * @returns Parameter dictionary
+ */
 function randomise_params(
     in_file: InputPathType,
     base_name: string | null = "randomise",
@@ -145,42 +179,8 @@ function randomise_params(
     vox_p_values: boolean = false,
     x_block_labels: InputPathType | null = null,
 ): RandomiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file 4d input file.
-     * @param base_name The rootname that all generated files will have.
-     * @param design_mat Design matrix file.
-     * @param tcon T contrasts file.
-     * @param c_thresh Carry out cluster-based thresholding.
-     * @param cm_thresh Carry out cluster-mass-based thresholding.
-     * @param demean Demean data temporally before model fitting.
-     * @param f_c_thresh Carry out f cluster thresholding.
-     * @param f_cm_thresh Carry out f cluster-mass thresholding.
-     * @param f_only Calculate f-statistics only.
-     * @param fcon F contrasts file.
-     * @param mask Mask image.
-     * @param num_perm Number of permutations (default 5000, set to 0 for exhaustive).
-     * @param one_sample_group_mean Perform 1-sample group-mean test instead of generic permutation test.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param p_vec_n_dist_files Output permutation vector and null distribution text files.
-     * @param raw_stats_imgs Output raw ( unpermuted ) statistic images.
-     * @param seed Specific integer seed for random number generator.
-     * @param show_info_parallel_mode Print out information required for parallel mode and exit.
-     * @param show_total_perms Print out how many unique permutations would be generated and exit.
-     * @param tfce Carry out threshold-free cluster enhancement.
-     * @param tfce2_d Carry out threshold-free cluster enhancement with 2d optimisation.
-     * @param tfce_c Tfce connectivity (6 or 26; default=6).
-     * @param tfce_e Tfce extent parameter (default=0.5).
-     * @param tfce_h Tfce height parameter (default=2).
-     * @param var_smooth Use variance smoothing (std is in mm).
-     * @param vox_p_values Output voxelwise (corrected and uncorrected) p-value images.
-     * @param x_block_labels Exchangeability block labels file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "randomise" as const,
+        "@type": "fsl.randomise" as const,
         "in_file": in_file,
         "demean": demean,
         "f_only": f_only,
@@ -248,18 +248,18 @@ function randomise_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function randomise_cargs(
     params: RandomiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("randomise");
     cargs.push(
@@ -387,18 +387,18 @@ function randomise_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function randomise_outputs(
     params: RandomiseParameters,
     execution: Execution,
 ): RandomiseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RandomiseOutputs = {
         root: execution.outputFile("."),
         f_corrected_p_files: execution.outputFile(["f_corrected_p_files"].join('')),
@@ -412,22 +412,22 @@ function randomise_outputs(
 }
 
 
+/**
+ * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
+ */
 function randomise_execute(
     params: RandomiseParameters,
     execution: Execution,
 ): RandomiseOutputs {
-    /**
-     * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
-     */
     params = execution.params(params)
     const cargs = randomise_cargs(params, execution)
     const ret = randomise_outputs(params, execution)
@@ -436,6 +436,45 @@ function randomise_execute(
 }
 
 
+/**
+ * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file 4d input file.
+ * @param base_name The rootname that all generated files will have.
+ * @param design_mat Design matrix file.
+ * @param tcon T contrasts file.
+ * @param c_thresh Carry out cluster-based thresholding.
+ * @param cm_thresh Carry out cluster-mass-based thresholding.
+ * @param demean Demean data temporally before model fitting.
+ * @param f_c_thresh Carry out f cluster thresholding.
+ * @param f_cm_thresh Carry out f cluster-mass thresholding.
+ * @param f_only Calculate f-statistics only.
+ * @param fcon F contrasts file.
+ * @param mask Mask image.
+ * @param num_perm Number of permutations (default 5000, set to 0 for exhaustive).
+ * @param one_sample_group_mean Perform 1-sample group-mean test instead of generic permutation test.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param p_vec_n_dist_files Output permutation vector and null distribution text files.
+ * @param raw_stats_imgs Output raw ( unpermuted ) statistic images.
+ * @param seed Specific integer seed for random number generator.
+ * @param show_info_parallel_mode Print out information required for parallel mode and exit.
+ * @param show_total_perms Print out how many unique permutations would be generated and exit.
+ * @param tfce Carry out threshold-free cluster enhancement.
+ * @param tfce2_d Carry out threshold-free cluster enhancement with 2d optimisation.
+ * @param tfce_c Tfce connectivity (6 or 26; default=6).
+ * @param tfce_e Tfce extent parameter (default=0.5).
+ * @param tfce_h Tfce height parameter (default=2).
+ * @param var_smooth Use variance smoothing (std is in mm).
+ * @param vox_p_values Output voxelwise (corrected and uncorrected) p-value images.
+ * @param x_block_labels Exchangeability block labels file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
+ */
 function randomise(
     in_file: InputPathType,
     base_name: string | null = "randomise",
@@ -467,45 +506,6 @@ function randomise(
     x_block_labels: InputPathType | null = null,
     runner: Runner | null = null,
 ): RandomiseOutputs {
-    /**
-     * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file 4d input file.
-     * @param base_name The rootname that all generated files will have.
-     * @param design_mat Design matrix file.
-     * @param tcon T contrasts file.
-     * @param c_thresh Carry out cluster-based thresholding.
-     * @param cm_thresh Carry out cluster-mass-based thresholding.
-     * @param demean Demean data temporally before model fitting.
-     * @param f_c_thresh Carry out f cluster thresholding.
-     * @param f_cm_thresh Carry out f cluster-mass thresholding.
-     * @param f_only Calculate f-statistics only.
-     * @param fcon F contrasts file.
-     * @param mask Mask image.
-     * @param num_perm Number of permutations (default 5000, set to 0 for exhaustive).
-     * @param one_sample_group_mean Perform 1-sample group-mean test instead of generic permutation test.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param p_vec_n_dist_files Output permutation vector and null distribution text files.
-     * @param raw_stats_imgs Output raw ( unpermuted ) statistic images.
-     * @param seed Specific integer seed for random number generator.
-     * @param show_info_parallel_mode Print out information required for parallel mode and exit.
-     * @param show_total_perms Print out how many unique permutations would be generated and exit.
-     * @param tfce Carry out threshold-free cluster enhancement.
-     * @param tfce2_d Carry out threshold-free cluster enhancement with 2d optimisation.
-     * @param tfce_c Tfce connectivity (6 or 26; default=6).
-     * @param tfce_e Tfce extent parameter (default=0.5).
-     * @param tfce_h Tfce height parameter (default=2).
-     * @param var_smooth Use variance smoothing (std is in mm).
-     * @param vox_p_values Output voxelwise (corrected and uncorrected) p-value images.
-     * @param x_block_labels Exchangeability block labels file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RANDOMISE_METADATA);
     const params = randomise_params(in_file, base_name, design_mat, tcon, c_thresh, cm_thresh, demean, f_c_thresh, f_cm_thresh, f_only, fcon, mask, num_perm, one_sample_group_mean, output_type, p_vec_n_dist_files, raw_stats_imgs, seed, show_info_parallel_mode, show_total_perms, tfce, tfce2_d, tfce_c, tfce_e, tfce_h, var_smooth, vox_p_values, x_block_labels)
@@ -518,5 +518,8 @@ export {
       RandomiseOutputs,
       RandomiseParameters,
       randomise,
+      randomise_cargs,
+      randomise_execute,
+      randomise_outputs,
       randomise_params,
 };

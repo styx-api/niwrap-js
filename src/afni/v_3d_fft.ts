@@ -12,7 +12,7 @@ const V_3D_FFT_METADATA: Metadata = {
 
 
 interface V3dFftParameters {
-    "__STYXTYPE__": "3dFFT";
+    "@type": "afni.3dFFT";
     "dataset": InputPathType;
     "abs": boolean;
     "phase": boolean;
@@ -28,35 +28,35 @@ interface V3dFftParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dFFT": v_3d_fft_cargs,
+        "afni.3dFFT": v_3d_fft_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dFFT": v_3d_fft_outputs,
+        "afni.3dFFT": v_3d_fft_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface V3dFftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset (e.g., dataset.nii)
+ * @param abs Outputs the magnitude of the FFT (default)
+ * @param phase Outputs the phase of the FFT (-PI..PI)
+ * @param complex Outputs the complex-valued FFT
+ * @param inverse Does the inverse FFT instead of the forward FFT
+ * @param lx Use FFT of length 'xx' in the x-direction
+ * @param ly Use FFT of length 'yy' in the y-direction
+ * @param lz Use FFT of length 'zz' in the z-direction
+ * @param alt_in Alternate signs of input data before FFT to bring zero frequency from edge of FFT-space to center of grid for cosmetic purposes.
+ * @param alt_out Alternate signs of output data after FFT. Use '-altOUT' with '-altIN' on the forward transform to get the signs of the recovered image correct.
+ * @param input Read the input dataset from specified file instead of from the last argument on the command line.
+ * @param prefix Use specified prefix for the output dataset.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_fft_params(
     dataset: InputPathType,
     abs: boolean = false,
@@ -93,26 +111,8 @@ function v_3d_fft_params(
     input: InputPathType | null = null,
     prefix: string | null = null,
 ): V3dFftParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset (e.g., dataset.nii)
-     * @param abs Outputs the magnitude of the FFT (default)
-     * @param phase Outputs the phase of the FFT (-PI..PI)
-     * @param complex Outputs the complex-valued FFT
-     * @param inverse Does the inverse FFT instead of the forward FFT
-     * @param lx Use FFT of length 'xx' in the x-direction
-     * @param ly Use FFT of length 'yy' in the y-direction
-     * @param lz Use FFT of length 'zz' in the z-direction
-     * @param alt_in Alternate signs of input data before FFT to bring zero frequency from edge of FFT-space to center of grid for cosmetic purposes.
-     * @param alt_out Alternate signs of output data after FFT. Use '-altOUT' with '-altIN' on the forward transform to get the signs of the recovered image correct.
-     * @param input Read the input dataset from specified file instead of from the last argument on the command line.
-     * @param prefix Use specified prefix for the output dataset.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dFFT" as const,
+        "@type": "afni.3dFFT" as const,
         "dataset": dataset,
         "abs": abs,
         "phase": phase,
@@ -140,18 +140,18 @@ function v_3d_fft_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_fft_cargs(
     params: V3dFftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dFFT");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -207,18 +207,18 @@ function v_3d_fft_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_fft_outputs(
     params: V3dFftParameters,
     execution: Execution,
 ): V3dFftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dFftOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -227,22 +227,22 @@ function v_3d_fft_outputs(
 }
 
 
+/**
+ * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
+ */
 function v_3d_fft_execute(
     params: V3dFftParameters,
     execution: Execution,
 ): V3dFftOutputs {
-    /**
-     * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_fft_cargs(params, execution)
     const ret = v_3d_fft_outputs(params, execution)
@@ -251,6 +251,29 @@ function v_3d_fft_execute(
 }
 
 
+/**
+ * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset (e.g., dataset.nii)
+ * @param abs Outputs the magnitude of the FFT (default)
+ * @param phase Outputs the phase of the FFT (-PI..PI)
+ * @param complex Outputs the complex-valued FFT
+ * @param inverse Does the inverse FFT instead of the forward FFT
+ * @param lx Use FFT of length 'xx' in the x-direction
+ * @param ly Use FFT of length 'yy' in the y-direction
+ * @param lz Use FFT of length 'zz' in the z-direction
+ * @param alt_in Alternate signs of input data before FFT to bring zero frequency from edge of FFT-space to center of grid for cosmetic purposes.
+ * @param alt_out Alternate signs of output data after FFT. Use '-altOUT' with '-altIN' on the forward transform to get the signs of the recovered image correct.
+ * @param input Read the input dataset from specified file instead of from the last argument on the command line.
+ * @param prefix Use specified prefix for the output dataset.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
+ */
 function v_3d_fft(
     dataset: InputPathType,
     abs: boolean = false,
@@ -266,29 +289,6 @@ function v_3d_fft(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dFftOutputs {
-    /**
-     * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset (e.g., dataset.nii)
-     * @param abs Outputs the magnitude of the FFT (default)
-     * @param phase Outputs the phase of the FFT (-PI..PI)
-     * @param complex Outputs the complex-valued FFT
-     * @param inverse Does the inverse FFT instead of the forward FFT
-     * @param lx Use FFT of length 'xx' in the x-direction
-     * @param ly Use FFT of length 'yy' in the y-direction
-     * @param lz Use FFT of length 'zz' in the z-direction
-     * @param alt_in Alternate signs of input data before FFT to bring zero frequency from edge of FFT-space to center of grid for cosmetic purposes.
-     * @param alt_out Alternate signs of output data after FFT. Use '-altOUT' with '-altIN' on the forward transform to get the signs of the recovered image correct.
-     * @param input Read the input dataset from specified file instead of from the last argument on the command line.
-     * @param prefix Use specified prefix for the output dataset.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_FFT_METADATA);
     const params = v_3d_fft_params(dataset, abs, phase, complex, inverse, lx, ly, lz, alt_in, alt_out, input, prefix)
@@ -301,5 +301,8 @@ export {
       V3dFftParameters,
       V_3D_FFT_METADATA,
       v_3d_fft,
+      v_3d_fft_cargs,
+      v_3d_fft_execute,
+      v_3d_fft_outputs,
       v_3d_fft_params,
 };

@@ -12,14 +12,14 @@ const TRANSFORMCALC_METADATA: Metadata = {
 
 
 interface TransformcalcConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.transformcalc.config";
     "key": string;
     "value": string;
 }
 
 
 interface TransformcalcParameters {
-    "__STYXTYPE__": "transformcalc";
+    "@type": "mrtrix.transformcalc";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface TransformcalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "transformcalc": transformcalc_cargs,
-        "config": transformcalc_config_cargs,
+        "mrtrix.transformcalc": transformcalc_cargs,
+        "mrtrix.transformcalc.config": transformcalc_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "transformcalc": transformcalc_outputs,
+        "mrtrix.transformcalc": transformcalc_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcalc_config_params(
     key: string,
     value: string,
 ): TransformcalcConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.transformcalc.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function transformcalc_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcalc_config_cargs(
     params: TransformcalcConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface TransformcalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputs the input(s) for the specified operation
+ * @param operation the operation to perform, one of: invert, half, rigid, header, average, interpolate, decompose, align_vertices_rigid, align_vertices_rigid_scale (see description section for details).
+ * @param output the output transformation matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function transformcalc_params(
     inputs: Array<string>,
     operation: string,
@@ -140,25 +157,8 @@ function transformcalc_params(
     help: boolean = false,
     version: boolean = false,
 ): TransformcalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputs the input(s) for the specified operation
-     * @param operation the operation to perform, one of: invert, half, rigid, header, average, interpolate, decompose, align_vertices_rigid, align_vertices_rigid_scale (see description section for details).
-     * @param output the output transformation matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformcalc" as const,
+        "@type": "mrtrix.transformcalc" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -179,18 +179,18 @@ function transformcalc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformcalc_cargs(
     params: TransformcalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("transformcalc");
     if ((params["info"] ?? null)) {
@@ -212,7 +212,7 @@ function transformcalc_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -227,18 +227,18 @@ function transformcalc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function transformcalc_outputs(
     params: TransformcalcParameters,
     execution: Execution,
 ): TransformcalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TransformcalcOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -247,28 +247,28 @@ function transformcalc_outputs(
 }
 
 
+/**
+ * Perform calculations on linear transformation matrices.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
+ */
 function transformcalc_execute(
     params: TransformcalcParameters,
     execution: Execution,
 ): TransformcalcOutputs {
-    /**
-     * Perform calculations on linear transformation matrices.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = transformcalc_cargs(params, execution)
     const ret = transformcalc_outputs(params, execution)
@@ -277,6 +277,34 @@ function transformcalc_execute(
 }
 
 
+/**
+ * Perform calculations on linear transformation matrices.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param inputs the input(s) for the specified operation
+ * @param operation the operation to perform, one of: invert, half, rigid, header, average, interpolate, decompose, align_vertices_rigid, align_vertices_rigid_scale (see description section for details).
+ * @param output the output transformation matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
+ */
 function transformcalc(
     inputs: Array<string>,
     operation: string,
@@ -291,34 +319,6 @@ function transformcalc(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformcalcOutputs {
-    /**
-     * Perform calculations on linear transformation matrices.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param inputs the input(s) for the specified operation
-     * @param operation the operation to perform, one of: invert, half, rigid, header, average, interpolate, decompose, align_vertices_rigid, align_vertices_rigid_scale (see description section for details).
-     * @param output the output transformation matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRANSFORMCALC_METADATA);
     const params = transformcalc_params(inputs, operation, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -332,6 +332,10 @@ export {
       TransformcalcOutputs,
       TransformcalcParameters,
       transformcalc,
+      transformcalc_cargs,
+      transformcalc_config_cargs,
       transformcalc_config_params,
+      transformcalc_execute,
+      transformcalc_outputs,
       transformcalc_params,
 };

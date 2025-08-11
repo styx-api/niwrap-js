@@ -12,7 +12,7 @@ const IMGREG_4DFP_METADATA: Metadata = {
 
 
 interface Imgreg4dfpParameters {
-    "__STYXTYPE__": "imgreg_4dfp";
+    "@type": "freesurfer.imgreg_4dfp";
     "target_image": InputPathType;
     "target_mask": string;
     "source_image": InputPathType;
@@ -22,33 +22,33 @@ interface Imgreg4dfpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imgreg_4dfp": imgreg_4dfp_cargs,
+        "freesurfer.imgreg_4dfp": imgreg_4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface Imgreg4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param target_image Target image
+ * @param source_image Source image
+ * @param t4file Transformation file
+ * @param mode Mode of operation
+ * @param target_mask Target mask
+ * @param source_mask Source mask
+ *
+ * @returns Parameter dictionary
+ */
 function imgreg_4dfp_params(
     target_image: InputPathType,
     source_image: InputPathType,
@@ -76,20 +88,8 @@ function imgreg_4dfp_params(
     target_mask: string = "none",
     source_mask: string = "none",
 ): Imgreg4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param target_image Target image
-     * @param source_image Source image
-     * @param t4file Transformation file
-     * @param mode Mode of operation
-     * @param target_mask Target mask
-     * @param source_mask Source mask
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imgreg_4dfp" as const,
+        "@type": "freesurfer.imgreg_4dfp" as const,
         "target_image": target_image,
         "target_mask": target_mask,
         "source_image": source_image,
@@ -101,18 +101,18 @@ function imgreg_4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imgreg_4dfp_cargs(
     params: Imgreg4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imgreg_4dfp");
     cargs.push(execution.inputFile((params["target_image"] ?? null)));
@@ -125,18 +125,18 @@ function imgreg_4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imgreg_4dfp_outputs(
     params: Imgreg4dfpParameters,
     execution: Execution,
 ): Imgreg4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Imgreg4dfpOutputs = {
         root: execution.outputFile("."),
     };
@@ -144,22 +144,22 @@ function imgreg_4dfp_outputs(
 }
 
 
+/**
+ * Image registration utility using 4dfp.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
+ */
 function imgreg_4dfp_execute(
     params: Imgreg4dfpParameters,
     execution: Execution,
 ): Imgreg4dfpOutputs {
-    /**
-     * Image registration utility using 4dfp.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = imgreg_4dfp_cargs(params, execution)
     const ret = imgreg_4dfp_outputs(params, execution)
@@ -168,6 +168,23 @@ function imgreg_4dfp_execute(
 }
 
 
+/**
+ * Image registration utility using 4dfp.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param target_image Target image
+ * @param source_image Source image
+ * @param t4file Transformation file
+ * @param mode Mode of operation
+ * @param target_mask Target mask
+ * @param source_mask Source mask
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
+ */
 function imgreg_4dfp(
     target_image: InputPathType,
     source_image: InputPathType,
@@ -177,23 +194,6 @@ function imgreg_4dfp(
     source_mask: string = "none",
     runner: Runner | null = null,
 ): Imgreg4dfpOutputs {
-    /**
-     * Image registration utility using 4dfp.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param target_image Target image
-     * @param source_image Source image
-     * @param t4file Transformation file
-     * @param mode Mode of operation
-     * @param target_mask Target mask
-     * @param source_mask Source mask
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMGREG_4DFP_METADATA);
     const params = imgreg_4dfp_params(target_image, source_image, t4file, mode, target_mask, source_mask)
@@ -206,5 +206,8 @@ export {
       Imgreg4dfpOutputs,
       Imgreg4dfpParameters,
       imgreg_4dfp,
+      imgreg_4dfp_cargs,
+      imgreg_4dfp_execute,
+      imgreg_4dfp_outputs,
       imgreg_4dfp_params,
 };

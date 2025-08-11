@@ -12,7 +12,7 @@ const DMRI_BSET_METADATA: Metadata = {
 
 
 interface DmriBsetParameters {
-    "__STYXTYPE__": "dmri_bset";
+    "@type": "freesurfer.dmri_bset";
     "input_dwi": InputPathType;
     "output_dwi": string;
     "b_values"?: Array<number> | null | undefined;
@@ -26,35 +26,35 @@ interface DmriBsetParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_bset": dmri_bset_cargs,
+        "freesurfer.dmri_bset": dmri_bset_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_bset": dmri_bset_outputs,
+        "freesurfer.dmri_bset": dmri_bset_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface DmriBsetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dwi Input DWI series
+ * @param output_dwi Output DWI series
+ * @param b_values Extract one or more b-values
+ * @param btol Tolerance around each single b-value (default: 0.05)
+ * @param bsort Reorder output data by b-shell (default: maintain original order)
+ * @param bmax Extract all b-values less than or equal to a maximum
+ * @param input_b_table Input b-value table (default: input DWI base, .bvals extension)
+ * @param input_g_table Input gradient table (default: input DWI base, .bvecs extension)
+ * @param output_b_table Output b-value table (default: output DWI base, .bvals extension)
+ * @param output_g_table Output gradient table (default: output DWI base, .bvecs extension)
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_bset_params(
     input_dwi: InputPathType,
     output_dwi: string,
@@ -97,24 +113,8 @@ function dmri_bset_params(
     output_b_table: string | null = null,
     output_g_table: string | null = null,
 ): DmriBsetParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dwi Input DWI series
-     * @param output_dwi Output DWI series
-     * @param b_values Extract one or more b-values
-     * @param btol Tolerance around each single b-value (default: 0.05)
-     * @param bsort Reorder output data by b-shell (default: maintain original order)
-     * @param bmax Extract all b-values less than or equal to a maximum
-     * @param input_b_table Input b-value table (default: input DWI base, .bvals extension)
-     * @param input_g_table Input gradient table (default: input DWI base, .bvecs extension)
-     * @param output_b_table Output b-value table (default: output DWI base, .bvals extension)
-     * @param output_g_table Output gradient table (default: output DWI base, .bvecs extension)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_bset" as const,
+        "@type": "freesurfer.dmri_bset" as const,
         "input_dwi": input_dwi,
         "output_dwi": output_dwi,
         "bsort": bsort,
@@ -144,18 +144,18 @@ function dmri_bset_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_bset_cargs(
     params: DmriBsetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_bset");
     cargs.push(execution.inputFile((params["input_dwi"] ?? null)));
@@ -209,18 +209,18 @@ function dmri_bset_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_bset_outputs(
     params: DmriBsetParameters,
     execution: Execution,
 ): DmriBsetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriBsetOutputs = {
         root: execution.outputFile("."),
         output_dwi_file: execution.outputFile([(params["output_dwi"] ?? null)].join('')),
@@ -231,22 +231,22 @@ function dmri_bset_outputs(
 }
 
 
+/**
+ * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
+ */
 function dmri_bset_execute(
     params: DmriBsetParameters,
     execution: Execution,
 ): DmriBsetOutputs {
-    /**
-     * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_bset_cargs(params, execution)
     const ret = dmri_bset_outputs(params, execution)
@@ -255,6 +255,27 @@ function dmri_bset_execute(
 }
 
 
+/**
+ * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_dwi Input DWI series
+ * @param output_dwi Output DWI series
+ * @param b_values Extract one or more b-values
+ * @param btol Tolerance around each single b-value (default: 0.05)
+ * @param bsort Reorder output data by b-shell (default: maintain original order)
+ * @param bmax Extract all b-values less than or equal to a maximum
+ * @param input_b_table Input b-value table (default: input DWI base, .bvals extension)
+ * @param input_g_table Input gradient table (default: input DWI base, .bvecs extension)
+ * @param output_b_table Output b-value table (default: output DWI base, .bvals extension)
+ * @param output_g_table Output gradient table (default: output DWI base, .bvecs extension)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
+ */
 function dmri_bset(
     input_dwi: InputPathType,
     output_dwi: string,
@@ -268,27 +289,6 @@ function dmri_bset(
     output_g_table: string | null = null,
     runner: Runner | null = null,
 ): DmriBsetOutputs {
-    /**
-     * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_dwi Input DWI series
-     * @param output_dwi Output DWI series
-     * @param b_values Extract one or more b-values
-     * @param btol Tolerance around each single b-value (default: 0.05)
-     * @param bsort Reorder output data by b-shell (default: maintain original order)
-     * @param bmax Extract all b-values less than or equal to a maximum
-     * @param input_b_table Input b-value table (default: input DWI base, .bvals extension)
-     * @param input_g_table Input gradient table (default: input DWI base, .bvecs extension)
-     * @param output_b_table Output b-value table (default: output DWI base, .bvals extension)
-     * @param output_g_table Output gradient table (default: output DWI base, .bvecs extension)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_BSET_METADATA);
     const params = dmri_bset_params(input_dwi, output_dwi, b_values, btol, bsort, bmax, input_b_table, input_g_table, output_b_table, output_g_table)
@@ -301,5 +301,8 @@ export {
       DmriBsetOutputs,
       DmriBsetParameters,
       dmri_bset,
+      dmri_bset_cargs,
+      dmri_bset_execute,
+      dmri_bset_outputs,
       dmri_bset_params,
 };

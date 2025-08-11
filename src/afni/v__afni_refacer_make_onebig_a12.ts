@@ -12,40 +12,40 @@ const V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA: Metadata = {
 
 
 interface VAfniRefacerMakeOnebigA12Parameters {
-    "__STYXTYPE__": "@afni_refacer_make_onebigA12";
+    "@type": "afni.@afni_refacer_make_onebigA12";
     "t1w_dataset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_cargs,
+        "afni.@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_outputs,
+        "afni.@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VAfniRefacerMakeOnebigA12Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1w_dataset Input T1w dataset name
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_refacer_make_onebig_a12_params(
     t1w_dataset: InputPathType,
 ): VAfniRefacerMakeOnebigA12Parameters {
-    /**
-     * Build parameters.
-    
-     * @param t1w_dataset Input T1w dataset name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@afni_refacer_make_onebigA12" as const,
+        "@type": "afni.@afni_refacer_make_onebigA12" as const,
         "t1w_dataset": t1w_dataset,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_refacer_make_onebig_a12_cargs(
     params: VAfniRefacerMakeOnebigA12Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@afni_refacer_make_onebigA12");
     cargs.push(execution.inputFile((params["t1w_dataset"] ?? null)));
@@ -105,18 +105,18 @@ function v__afni_refacer_make_onebig_a12_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_refacer_make_onebig_a12_outputs(
     params: VAfniRefacerMakeOnebigA12Parameters,
     execution: Execution,
 ): VAfniRefacerMakeOnebigA12Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniRefacerMakeOnebigA12Outputs = {
         root: execution.outputFile("."),
         aligned_output: execution.outputFile([path.basename((params["t1w_dataset"] ?? null)), "_aligned_to_MNI.nii.gz"].join('')),
@@ -125,22 +125,22 @@ function v__afni_refacer_make_onebig_a12_outputs(
 }
 
 
+/**
+ * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
+ */
 function v__afni_refacer_make_onebig_a12_execute(
     params: VAfniRefacerMakeOnebigA12Parameters,
     execution: Execution,
 ): VAfniRefacerMakeOnebigA12Outputs {
-    /**
-     * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_refacer_make_onebig_a12_cargs(params, execution)
     const ret = v__afni_refacer_make_onebig_a12_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__afni_refacer_make_onebig_a12_execute(
 }
 
 
+/**
+ * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param t1w_dataset Input T1w dataset name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
+ */
 function v__afni_refacer_make_onebig_a12(
     t1w_dataset: InputPathType,
     runner: Runner | null = null,
 ): VAfniRefacerMakeOnebigA12Outputs {
-    /**
-     * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param t1w_dataset Input T1w dataset name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA);
     const params = v__afni_refacer_make_onebig_a12_params(t1w_dataset)
@@ -177,5 +177,8 @@ export {
       VAfniRefacerMakeOnebigA12Parameters,
       V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA,
       v__afni_refacer_make_onebig_a12,
+      v__afni_refacer_make_onebig_a12_cargs,
+      v__afni_refacer_make_onebig_a12_execute,
+      v__afni_refacer_make_onebig_a12_outputs,
       v__afni_refacer_make_onebig_a12_params,
 };

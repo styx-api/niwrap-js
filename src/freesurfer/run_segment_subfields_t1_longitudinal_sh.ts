@@ -12,39 +12,39 @@ const RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubfieldsT1LongitudinalShParameters {
-    "__STYXTYPE__": "run_SegmentSubfieldsT1Longitudinal.sh";
+    "@type": "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh";
     "deployed_mcr_root": string;
     "additional_args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_SegmentSubfieldsT1Longitudinal.sh": run_segment_subfields_t1_longitudinal_sh_cargs,
+        "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh": run_segment_subfields_t1_longitudinal_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface RunSegmentSubfieldsT1LongitudinalShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param deployed_mcr_root Root directory for the deployed MATLAB Runtime environment.
+ * @param additional_args Additional arguments for the script.
+ *
+ * @returns Parameter dictionary
+ */
 function run_segment_subfields_t1_longitudinal_sh_params(
     deployed_mcr_root: string,
     additional_args: string | null = null,
 ): RunSegmentSubfieldsT1LongitudinalShParameters {
-    /**
-     * Build parameters.
-    
-     * @param deployed_mcr_root Root directory for the deployed MATLAB Runtime environment.
-     * @param additional_args Additional arguments for the script.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_SegmentSubfieldsT1Longitudinal.sh" as const,
+        "@type": "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
     };
     if (additional_args !== null) {
@@ -87,18 +87,18 @@ function run_segment_subfields_t1_longitudinal_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_segment_subfields_t1_longitudinal_sh_cargs(
     params: RunSegmentSubfieldsT1LongitudinalShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_SegmentSubfieldsT1Longitudinal.sh");
     cargs.push((params["deployed_mcr_root"] ?? null));
@@ -109,18 +109,18 @@ function run_segment_subfields_t1_longitudinal_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_segment_subfields_t1_longitudinal_sh_outputs(
     params: RunSegmentSubfieldsT1LongitudinalShParameters,
     execution: Execution,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunSegmentSubfieldsT1LongitudinalShOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function run_segment_subfields_t1_longitudinal_sh_outputs(
 }
 
 
+/**
+ * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
+ */
 function run_segment_subfields_t1_longitudinal_sh_execute(
     params: RunSegmentSubfieldsT1LongitudinalShParameters,
     execution: Execution,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
-    /**
-     * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_segment_subfields_t1_longitudinal_sh_cargs(params, execution)
     const ret = run_segment_subfields_t1_longitudinal_sh_outputs(params, execution)
@@ -152,24 +152,24 @@ function run_segment_subfields_t1_longitudinal_sh_execute(
 }
 
 
+/**
+ * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param deployed_mcr_root Root directory for the deployed MATLAB Runtime environment.
+ * @param additional_args Additional arguments for the script.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
+ */
 function run_segment_subfields_t1_longitudinal_sh(
     deployed_mcr_root: string,
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
-    /**
-     * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param deployed_mcr_root Root directory for the deployed MATLAB Runtime environment.
-     * @param additional_args Additional arguments for the script.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA);
     const params = run_segment_subfields_t1_longitudinal_sh_params(deployed_mcr_root, additional_args)
@@ -182,5 +182,8 @@ export {
       RunSegmentSubfieldsT1LongitudinalShOutputs,
       RunSegmentSubfieldsT1LongitudinalShParameters,
       run_segment_subfields_t1_longitudinal_sh,
+      run_segment_subfields_t1_longitudinal_sh_cargs,
+      run_segment_subfields_t1_longitudinal_sh_execute,
+      run_segment_subfields_t1_longitudinal_sh_outputs,
       run_segment_subfields_t1_longitudinal_sh_params,
 };

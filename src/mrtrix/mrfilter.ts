@@ -12,26 +12,26 @@ const MRFILTER_METADATA: Metadata = {
 
 
 interface MrfilterVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.mrfilter.VariousString";
     "obj": string;
 }
 
 
 interface MrfilterVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.mrfilter.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrfilterConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrfilter.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrfilterParameters {
-    "__STYXTYPE__": "mrfilter";
+    "@type": "mrtrix.mrfilter";
     "axes"?: Array<number> | null | undefined;
     "inverse": boolean;
     "magnitude": boolean;
@@ -64,129 +64,129 @@ interface MrfilterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrfilter": mrfilter_cargs,
-        "VariousString": mrfilter_various_string_cargs,
-        "VariousFile": mrfilter_various_file_cargs,
-        "config": mrfilter_config_cargs,
+        "mrtrix.mrfilter": mrfilter_cargs,
+        "mrtrix.mrfilter.VariousString": mrfilter_various_string_cargs,
+        "mrtrix.mrfilter.VariousFile": mrfilter_various_file_cargs,
+        "mrtrix.mrfilter.config": mrfilter_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrfilter": mrfilter_outputs,
+        "mrtrix.mrfilter": mrfilter_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrfilter_various_string_params(
     obj: string,
 ): MrfilterVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.mrfilter.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrfilter_various_string_cargs(
     params: MrfilterVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrfilter_various_file_params(
     obj: InputPathType,
 ): MrfilterVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.mrfilter.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrfilter_various_file_cargs(
     params: MrfilterVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrfilter_config_params(
     key: string,
     value: string,
 ): MrfilterConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrfilter.config" as const,
         "key": key,
         "value": value,
     };
@@ -194,18 +194,18 @@ function mrfilter_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrfilter_config_cargs(
     params: MrfilterConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -235,6 +235,41 @@ interface MrfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image.
+ * @param filter the type of filter to be applied
+ * @param output the output image.
+ * @param axes the axes along which to apply the Fourier Transform. By default, the transform is applied along the three spatial axes. Provide as a comma-separate list of axis indices.
+ * @param inverse apply the inverse FFT
+ * @param magnitude output a magnitude image rather than a complex-valued image
+ * @param centre_zero re-arrange the FFT results so that the zero-frequency component appears in the centre of the image, rather than at the edges
+ * @param stdev the standard deviation of the Gaussian kernel used to smooth the input image (in mm). The image is smoothed to reduced large spurious gradients caused by noise. Use this option to override the default stdev of 1 voxel. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis.
+ * @param magnitude_1 output the gradient magnitude, rather than the default x,y,z components
+ * @param scanner define the gradient with respect to the scanner coordinate frame of reference.
+ * @param extent specify extent of median filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
+ * @param extent_1 specify extent of normalisation filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
+ * @param stdev_1 apply Gaussian smoothing with the specified standard deviation. The standard deviation is defined in mm (Default 1 voxel). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the stdev for each axis.
+ * @param fwhm apply Gaussian smoothing with the specified full-width half maximum. The FWHM is defined in mm (Default 1 voxel * 2.3548). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the FWHM for each axis.
+ * @param extent_2 specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default extent is 2 * ceil(2.5 * stdev / voxel_size) - 1.
+ * @param zupper define high intensity outliers: default: 2.5
+ * @param zlower define low intensity outliers: default: 2.5
+ * @param bridge number of voxels to gap to fill holes in mask: default: 4
+ * @param maskin initial mask that defines the maximum spatial extent and the region from which to smaple the intensity range.
+ * @param maskout Output a refined mask based on a spatially coherent region with normal intensity range.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrfilter_params(
     input: InputPathType,
     filter: string,
@@ -266,43 +301,8 @@ function mrfilter_params(
     help: boolean = false,
     version: boolean = false,
 ): MrfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image.
-     * @param filter the type of filter to be applied
-     * @param output the output image.
-     * @param axes the axes along which to apply the Fourier Transform. By default, the transform is applied along the three spatial axes. Provide as a comma-separate list of axis indices.
-     * @param inverse apply the inverse FFT
-     * @param magnitude output a magnitude image rather than a complex-valued image
-     * @param centre_zero re-arrange the FFT results so that the zero-frequency component appears in the centre of the image, rather than at the edges
-     * @param stdev the standard deviation of the Gaussian kernel used to smooth the input image (in mm). The image is smoothed to reduced large spurious gradients caused by noise. Use this option to override the default stdev of 1 voxel. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis.
-     * @param magnitude_1 output the gradient magnitude, rather than the default x,y,z components
-     * @param scanner define the gradient with respect to the scanner coordinate frame of reference.
-     * @param extent specify extent of median filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
-     * @param extent_1 specify extent of normalisation filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
-     * @param stdev_1 apply Gaussian smoothing with the specified standard deviation. The standard deviation is defined in mm (Default 1 voxel). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the stdev for each axis.
-     * @param fwhm apply Gaussian smoothing with the specified full-width half maximum. The FWHM is defined in mm (Default 1 voxel * 2.3548). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the FWHM for each axis.
-     * @param extent_2 specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default extent is 2 * ceil(2.5 * stdev / voxel_size) - 1.
-     * @param zupper define high intensity outliers: default: 2.5
-     * @param zlower define low intensity outliers: default: 2.5
-     * @param bridge number of voxels to gap to fill holes in mask: default: 4
-     * @param maskin initial mask that defines the maximum spatial extent and the region from which to smaple the intensity range.
-     * @param maskout Output a refined mask based on a spatially coherent region with normal intensity range.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrfilter" as const,
+        "@type": "mrtrix.mrfilter" as const,
         "inverse": inverse,
         "magnitude": magnitude,
         "centre_zero": centre_zero,
@@ -367,18 +367,18 @@ function mrfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrfilter_cargs(
     params: MrfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrfilter");
     if ((params["axes"] ?? null) !== null) {
@@ -471,7 +471,7 @@ function mrfilter_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["info"] ?? null)) {
@@ -493,7 +493,7 @@ function mrfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -508,18 +508,18 @@ function mrfilter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrfilter_outputs(
     params: MrfilterParameters,
     execution: Execution,
 ): MrfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrfilterOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -529,32 +529,32 @@ function mrfilter_outputs(
 }
 
 
+/**
+ * Perform filtering operations on 3D / 4D MR images.
+ *
+ * The available filters are: fft, gradient, median, smooth, normalise, zclean.
+ *
+ * Each filter has its own unique set of optional parameters.
+ *
+ * For 4D images, each 3D volume is processed independently.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
+ */
 function mrfilter_execute(
     params: MrfilterParameters,
     execution: Execution,
 ): MrfilterOutputs {
-    /**
-     * Perform filtering operations on 3D / 4D MR images.
-     * 
-     * The available filters are: fft, gradient, median, smooth, normalise, zclean.
-     * 
-     * Each filter has its own unique set of optional parameters.
-     * 
-     * For 4D images, each 3D volume is processed independently.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrfilter_cargs(params, execution)
     const ret = mrfilter_outputs(params, execution)
@@ -563,6 +563,56 @@ function mrfilter_execute(
 }
 
 
+/**
+ * Perform filtering operations on 3D / 4D MR images.
+ *
+ * The available filters are: fft, gradient, median, smooth, normalise, zclean.
+ *
+ * Each filter has its own unique set of optional parameters.
+ *
+ * For 4D images, each 3D volume is processed independently.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image.
+ * @param filter the type of filter to be applied
+ * @param output the output image.
+ * @param axes the axes along which to apply the Fourier Transform. By default, the transform is applied along the three spatial axes. Provide as a comma-separate list of axis indices.
+ * @param inverse apply the inverse FFT
+ * @param magnitude output a magnitude image rather than a complex-valued image
+ * @param centre_zero re-arrange the FFT results so that the zero-frequency component appears in the centre of the image, rather than at the edges
+ * @param stdev the standard deviation of the Gaussian kernel used to smooth the input image (in mm). The image is smoothed to reduced large spurious gradients caused by noise. Use this option to override the default stdev of 1 voxel. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis.
+ * @param magnitude_1 output the gradient magnitude, rather than the default x,y,z components
+ * @param scanner define the gradient with respect to the scanner coordinate frame of reference.
+ * @param extent specify extent of median filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
+ * @param extent_1 specify extent of normalisation filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
+ * @param stdev_1 apply Gaussian smoothing with the specified standard deviation. The standard deviation is defined in mm (Default 1 voxel). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the stdev for each axis.
+ * @param fwhm apply Gaussian smoothing with the specified full-width half maximum. The FWHM is defined in mm (Default 1 voxel * 2.3548). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the FWHM for each axis.
+ * @param extent_2 specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default extent is 2 * ceil(2.5 * stdev / voxel_size) - 1.
+ * @param zupper define high intensity outliers: default: 2.5
+ * @param zlower define low intensity outliers: default: 2.5
+ * @param bridge number of voxels to gap to fill holes in mask: default: 4
+ * @param maskin initial mask that defines the maximum spatial extent and the region from which to smaple the intensity range.
+ * @param maskout Output a refined mask based on a spatially coherent region with normal intensity range.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
+ */
 function mrfilter(
     input: InputPathType,
     filter: string,
@@ -595,56 +645,6 @@ function mrfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrfilterOutputs {
-    /**
-     * Perform filtering operations on 3D / 4D MR images.
-     * 
-     * The available filters are: fft, gradient, median, smooth, normalise, zclean.
-     * 
-     * Each filter has its own unique set of optional parameters.
-     * 
-     * For 4D images, each 3D volume is processed independently.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image.
-     * @param filter the type of filter to be applied
-     * @param output the output image.
-     * @param axes the axes along which to apply the Fourier Transform. By default, the transform is applied along the three spatial axes. Provide as a comma-separate list of axis indices.
-     * @param inverse apply the inverse FFT
-     * @param magnitude output a magnitude image rather than a complex-valued image
-     * @param centre_zero re-arrange the FFT results so that the zero-frequency component appears in the centre of the image, rather than at the edges
-     * @param stdev the standard deviation of the Gaussian kernel used to smooth the input image (in mm). The image is smoothed to reduced large spurious gradients caused by noise. Use this option to override the default stdev of 1 voxel. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis.
-     * @param magnitude_1 output the gradient magnitude, rather than the default x,y,z components
-     * @param scanner define the gradient with respect to the scanner coordinate frame of reference.
-     * @param extent specify extent of median filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
-     * @param extent_1 specify extent of normalisation filtering neighbourhood in voxels. This can be specified either as a single value to be used for all 3 axes, or as a comma-separated list of 3 values, one for each axis (default: 3x3x3).
-     * @param stdev_1 apply Gaussian smoothing with the specified standard deviation. The standard deviation is defined in mm (Default 1 voxel). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the stdev for each axis.
-     * @param fwhm apply Gaussian smoothing with the specified full-width half maximum. The FWHM is defined in mm (Default 1 voxel * 2.3548). This can be specified either as a single value to be used for all axes, or as a comma-separated list of the FWHM for each axis.
-     * @param extent_2 specify the extent (width) of kernel size in voxels. This can be specified either as a single value to be used for all axes, or as a comma-separated list of the extent for each axis. The default extent is 2 * ceil(2.5 * stdev / voxel_size) - 1.
-     * @param zupper define high intensity outliers: default: 2.5
-     * @param zlower define low intensity outliers: default: 2.5
-     * @param bridge number of voxels to gap to fill holes in mask: default: 4
-     * @param maskin initial mask that defines the maximum spatial extent and the region from which to smaple the intensity range.
-     * @param maskout Output a refined mask based on a spatially coherent region with normal intensity range.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRFILTER_METADATA);
     const params = mrfilter_params(input, filter, output, axes, inverse, magnitude, centre_zero, stdev, magnitude_1, scanner, extent, extent_1, stdev_1, fwhm, extent_2, zupper, zlower, bridge, maskin, maskout, strides, info, quiet, debug, force, nthreads, config, help, version)
@@ -660,8 +660,14 @@ export {
       MrfilterVariousFileParameters,
       MrfilterVariousStringParameters,
       mrfilter,
+      mrfilter_cargs,
+      mrfilter_config_cargs,
       mrfilter_config_params,
+      mrfilter_execute,
+      mrfilter_outputs,
       mrfilter_params,
+      mrfilter_various_file_cargs,
       mrfilter_various_file_params,
+      mrfilter_various_string_cargs,
       mrfilter_various_string_params,
 };

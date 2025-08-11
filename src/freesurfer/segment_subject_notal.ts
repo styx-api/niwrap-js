@@ -12,38 +12,38 @@ const SEGMENT_SUBJECT_NOTAL_METADATA: Metadata = {
 
 
 interface SegmentSubjectNotalParameters {
-    "__STYXTYPE__": "segment_subject_notal";
+    "@type": "freesurfer.segment_subject_notal";
     "subject_path": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_subject_notal": segment_subject_notal_cargs,
+        "freesurfer.segment_subject_notal": segment_subject_notal_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface SegmentSubjectNotalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_path Path to the subject's directory
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_notal_params(
     subject_path: string,
 ): SegmentSubjectNotalParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_path Path to the subject's directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_subject_notal" as const,
+        "@type": "freesurfer.segment_subject_notal" as const,
         "subject_path": subject_path,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_notal_cargs(
     params: SegmentSubjectNotalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_subject_notal");
     cargs.push((params["subject_path"] ?? null));
@@ -100,18 +100,18 @@ function segment_subject_notal_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_notal_outputs(
     params: SegmentSubjectNotalParameters,
     execution: Execution,
 ): SegmentSubjectNotalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectNotalOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function segment_subject_notal_outputs(
 }
 
 
+/**
+ * A script to segment subjects (notal).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
+ */
 function segment_subject_notal_execute(
     params: SegmentSubjectNotalParameters,
     execution: Execution,
 ): SegmentSubjectNotalOutputs {
-    /**
-     * A script to segment subjects (notal).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_notal_cargs(params, execution)
     const ret = segment_subject_notal_outputs(params, execution)
@@ -143,22 +143,22 @@ function segment_subject_notal_execute(
 }
 
 
+/**
+ * A script to segment subjects (notal).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_path Path to the subject's directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
+ */
 function segment_subject_notal(
     subject_path: string,
     runner: Runner | null = null,
 ): SegmentSubjectNotalOutputs {
-    /**
-     * A script to segment subjects (notal).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_path Path to the subject's directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL_METADATA);
     const params = segment_subject_notal_params(subject_path)
@@ -171,5 +171,8 @@ export {
       SegmentSubjectNotalOutputs,
       SegmentSubjectNotalParameters,
       segment_subject_notal,
+      segment_subject_notal_cargs,
+      segment_subject_notal_execute,
+      segment_subject_notal_outputs,
       segment_subject_notal_params,
 };

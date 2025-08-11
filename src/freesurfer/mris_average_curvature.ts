@@ -12,7 +12,7 @@ const MRIS_AVERAGE_CURVATURE_METADATA: Metadata = {
 
 
 interface MrisAverageCurvatureParameters {
-    "__STYXTYPE__": "mris_average_curvature";
+    "@type": "freesurfer.mris_average_curvature";
     "input_curvature_file": InputPathType;
     "hemi": string;
     "surface": string;
@@ -23,33 +23,33 @@ interface MrisAverageCurvatureParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_average_curvature": mris_average_curvature_cargs,
+        "freesurfer.mris_average_curvature": mris_average_curvature_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface MrisAverageCurvatureOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_curvature_file The input curvature file.
+ * @param hemi Specifies the hemisphere (e.g., lh or rh).
+ * @param surface Specifies the surface.
+ * @param subjects The list of subjects. The output curvature file will be painted onto the last subject specified.
+ * @param output_curvature_file The output curvature file.
+ * @param summary_stats_flag Generate summary statistics and write them into specified directory.
+ * @param output_surface_flag Override the last subject as the output surface.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_average_curvature_params(
     input_curvature_file: InputPathType,
     hemi: string,
@@ -78,21 +91,8 @@ function mris_average_curvature_params(
     summary_stats_flag: boolean = false,
     output_surface_flag: boolean = false,
 ): MrisAverageCurvatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_curvature_file The input curvature file.
-     * @param hemi Specifies the hemisphere (e.g., lh or rh).
-     * @param surface Specifies the surface.
-     * @param subjects The list of subjects. The output curvature file will be painted onto the last subject specified.
-     * @param output_curvature_file The output curvature file.
-     * @param summary_stats_flag Generate summary statistics and write them into specified directory.
-     * @param output_surface_flag Override the last subject as the output surface.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_average_curvature" as const,
+        "@type": "freesurfer.mris_average_curvature" as const,
         "input_curvature_file": input_curvature_file,
         "hemi": hemi,
         "surface": surface,
@@ -105,18 +105,18 @@ function mris_average_curvature_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_average_curvature_cargs(
     params: MrisAverageCurvatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_average_curvature");
     cargs.push(execution.inputFile((params["input_curvature_file"] ?? null)));
@@ -134,18 +134,18 @@ function mris_average_curvature_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_average_curvature_outputs(
     params: MrisAverageCurvatureParameters,
     execution: Execution,
 ): MrisAverageCurvatureOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisAverageCurvatureOutputs = {
         root: execution.outputFile("."),
     };
@@ -153,22 +153,22 @@ function mris_average_curvature_outputs(
 }
 
 
+/**
+ * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
+ */
 function mris_average_curvature_execute(
     params: MrisAverageCurvatureParameters,
     execution: Execution,
 ): MrisAverageCurvatureOutputs {
-    /**
-     * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_average_curvature_cargs(params, execution)
     const ret = mris_average_curvature_outputs(params, execution)
@@ -177,6 +177,24 @@ function mris_average_curvature_execute(
 }
 
 
+/**
+ * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_curvature_file The input curvature file.
+ * @param hemi Specifies the hemisphere (e.g., lh or rh).
+ * @param surface Specifies the surface.
+ * @param subjects The list of subjects. The output curvature file will be painted onto the last subject specified.
+ * @param output_curvature_file The output curvature file.
+ * @param summary_stats_flag Generate summary statistics and write them into specified directory.
+ * @param output_surface_flag Override the last subject as the output surface.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
+ */
 function mris_average_curvature(
     input_curvature_file: InputPathType,
     hemi: string,
@@ -187,24 +205,6 @@ function mris_average_curvature(
     output_surface_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisAverageCurvatureOutputs {
-    /**
-     * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_curvature_file The input curvature file.
-     * @param hemi Specifies the hemisphere (e.g., lh or rh).
-     * @param surface Specifies the surface.
-     * @param subjects The list of subjects. The output curvature file will be painted onto the last subject specified.
-     * @param output_curvature_file The output curvature file.
-     * @param summary_stats_flag Generate summary statistics and write them into specified directory.
-     * @param output_surface_flag Override the last subject as the output surface.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_AVERAGE_CURVATURE_METADATA);
     const params = mris_average_curvature_params(input_curvature_file, hemi, surface, subjects, output_curvature_file, summary_stats_flag, output_surface_flag)
@@ -217,5 +217,8 @@ export {
       MrisAverageCurvatureOutputs,
       MrisAverageCurvatureParameters,
       mris_average_curvature,
+      mris_average_curvature_cargs,
+      mris_average_curvature_execute,
+      mris_average_curvature_outputs,
       mris_average_curvature_params,
 };

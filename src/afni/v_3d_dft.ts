@@ -12,7 +12,7 @@ const V_3D_DFT_METADATA: Metadata = {
 
 
 interface V3dDftParameters {
-    "__STYXTYPE__": "3dDFT";
+    "@type": "afni.3dDFT";
     "infile": InputPathType;
     "prefix": string;
     "abs_output": boolean;
@@ -23,35 +23,35 @@ interface V3dDftParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDFT": v_3d_dft_cargs,
+        "afni.3dDFT": v_3d_dft_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDFT": v_3d_dft_outputs,
+        "afni.3dDFT": v_3d_dft_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface V3dDftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input dataset (complex- or float-valued)
+ * @param prefix Prefix for the output file
+ * @param abs_output Output float dataset = abs(DFT)
+ * @param nfft DFT length (must be >= number of time points)
+ * @param detrend Least-squares remove linear drift before DFT
+ * @param taper Fraction (0 <= f <= 1) of data to taper at ends (Hamming taper)
+ * @param inverse Perform the inverse DFT
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_dft_params(
     infile: InputPathType,
     prefix: string,
@@ -87,21 +100,8 @@ function v_3d_dft_params(
     taper: number | null = null,
     inverse: boolean = false,
 ): V3dDftParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input dataset (complex- or float-valued)
-     * @param prefix Prefix for the output file
-     * @param abs_output Output float dataset = abs(DFT)
-     * @param nfft DFT length (must be >= number of time points)
-     * @param detrend Least-squares remove linear drift before DFT
-     * @param taper Fraction (0 <= f <= 1) of data to taper at ends (Hamming taper)
-     * @param inverse Perform the inverse DFT
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDFT" as const,
+        "@type": "afni.3dDFT" as const,
         "infile": infile,
         "prefix": prefix,
         "abs_output": abs_output,
@@ -118,18 +118,18 @@ function v_3d_dft_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_dft_cargs(
     params: V3dDftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDFT");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -162,18 +162,18 @@ function v_3d_dft_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_dft_outputs(
     params: V3dDftParameters,
     execution: Execution,
 ): V3dDftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDftOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')),
@@ -183,22 +183,22 @@ function v_3d_dft_outputs(
 }
 
 
+/**
+ * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
+ */
 function v_3d_dft_execute(
     params: V3dDftParameters,
     execution: Execution,
 ): V3dDftOutputs {
-    /**
-     * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_dft_cargs(params, execution)
     const ret = v_3d_dft_outputs(params, execution)
@@ -207,6 +207,24 @@ function v_3d_dft_execute(
 }
 
 
+/**
+ * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input dataset (complex- or float-valued)
+ * @param prefix Prefix for the output file
+ * @param abs_output Output float dataset = abs(DFT)
+ * @param nfft DFT length (must be >= number of time points)
+ * @param detrend Least-squares remove linear drift before DFT
+ * @param taper Fraction (0 <= f <= 1) of data to taper at ends (Hamming taper)
+ * @param inverse Perform the inverse DFT
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
+ */
 function v_3d_dft(
     infile: InputPathType,
     prefix: string,
@@ -217,24 +235,6 @@ function v_3d_dft(
     inverse: boolean = false,
     runner: Runner | null = null,
 ): V3dDftOutputs {
-    /**
-     * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input dataset (complex- or float-valued)
-     * @param prefix Prefix for the output file
-     * @param abs_output Output float dataset = abs(DFT)
-     * @param nfft DFT length (must be >= number of time points)
-     * @param detrend Least-squares remove linear drift before DFT
-     * @param taper Fraction (0 <= f <= 1) of data to taper at ends (Hamming taper)
-     * @param inverse Perform the inverse DFT
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DFT_METADATA);
     const params = v_3d_dft_params(infile, prefix, abs_output, nfft, detrend, taper, inverse)
@@ -247,5 +247,8 @@ export {
       V3dDftParameters,
       V_3D_DFT_METADATA,
       v_3d_dft,
+      v_3d_dft_cargs,
+      v_3d_dft_execute,
+      v_3d_dft_outputs,
       v_3d_dft_params,
 };

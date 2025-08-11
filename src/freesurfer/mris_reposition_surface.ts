@@ -12,7 +12,7 @@ const MRIS_REPOSITION_SURFACE_METADATA: Metadata = {
 
 
 interface MrisRepositionSurfaceParameters {
-    "__STYXTYPE__": "mris_reposition_surface";
+    "@type": "freesurfer.mris_reposition_surface";
     "surf": InputPathType;
     "volume": InputPathType;
     "points": InputPathType;
@@ -23,35 +23,35 @@ interface MrisRepositionSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_reposition_surface": mris_reposition_surface_cargs,
+        "freesurfer.mris_reposition_surface": mris_reposition_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_reposition_surface": mris_reposition_surface_outputs,
+        "freesurfer.mris_reposition_surface": mris_reposition_surface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisRepositionSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf Input surface
+ * @param volume Input volume
+ * @param points Input points
+ * @param output Output surface filename
+ * @param size Size parameter for repositioning. Default is 1.
+ * @param sigma Sigma. Default is 2.0.
+ * @param iterations Number of iterations. Default is 1.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_reposition_surface_params(
     surf: InputPathType,
     volume: InputPathType,
@@ -83,21 +96,8 @@ function mris_reposition_surface_params(
     sigma: number | null = 2.0,
     iterations: number | null = 1,
 ): MrisRepositionSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf Input surface
-     * @param volume Input volume
-     * @param points Input points
-     * @param output Output surface filename
-     * @param size Size parameter for repositioning. Default is 1.
-     * @param sigma Sigma. Default is 2.0.
-     * @param iterations Number of iterations. Default is 1.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_reposition_surface" as const,
+        "@type": "freesurfer.mris_reposition_surface" as const,
         "surf": surf,
         "volume": volume,
         "points": points,
@@ -116,18 +116,18 @@ function mris_reposition_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_reposition_surface_cargs(
     params: MrisRepositionSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_reposition_surface");
     cargs.push(
@@ -168,18 +168,18 @@ function mris_reposition_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_reposition_surface_outputs(
     params: MrisRepositionSurfaceParameters,
     execution: Execution,
 ): MrisRepositionSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRepositionSurfaceOutputs = {
         root: execution.outputFile("."),
         output_surface: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -188,22 +188,22 @@ function mris_reposition_surface_outputs(
 }
 
 
+/**
+ * Reposition a surface based on the given control points (in JSON format).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
+ */
 function mris_reposition_surface_execute(
     params: MrisRepositionSurfaceParameters,
     execution: Execution,
 ): MrisRepositionSurfaceOutputs {
-    /**
-     * Reposition a surface based on the given control points (in JSON format).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_reposition_surface_cargs(params, execution)
     const ret = mris_reposition_surface_outputs(params, execution)
@@ -212,6 +212,24 @@ function mris_reposition_surface_execute(
 }
 
 
+/**
+ * Reposition a surface based on the given control points (in JSON format).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surf Input surface
+ * @param volume Input volume
+ * @param points Input points
+ * @param output Output surface filename
+ * @param size Size parameter for repositioning. Default is 1.
+ * @param sigma Sigma. Default is 2.0.
+ * @param iterations Number of iterations. Default is 1.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
+ */
 function mris_reposition_surface(
     surf: InputPathType,
     volume: InputPathType,
@@ -222,24 +240,6 @@ function mris_reposition_surface(
     iterations: number | null = 1,
     runner: Runner | null = null,
 ): MrisRepositionSurfaceOutputs {
-    /**
-     * Reposition a surface based on the given control points (in JSON format).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surf Input surface
-     * @param volume Input volume
-     * @param points Input points
-     * @param output Output surface filename
-     * @param size Size parameter for repositioning. Default is 1.
-     * @param sigma Sigma. Default is 2.0.
-     * @param iterations Number of iterations. Default is 1.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REPOSITION_SURFACE_METADATA);
     const params = mris_reposition_surface_params(surf, volume, points, output, size, sigma, iterations)
@@ -252,5 +252,8 @@ export {
       MrisRepositionSurfaceOutputs,
       MrisRepositionSurfaceParameters,
       mris_reposition_surface,
+      mris_reposition_surface_cargs,
+      mris_reposition_surface_execute,
+      mris_reposition_surface_outputs,
       mris_reposition_surface_params,
 };

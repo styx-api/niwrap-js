@@ -12,7 +12,7 @@ const CLUST_EXP_HIST_TABLE_PY_METADATA: Metadata = {
 
 
 interface ClustExpHistTablePyParameters {
-    "__STYXTYPE__": "ClustExp_HistTable.py";
+    "@type": "afni.ClustExp_HistTable.py";
     "stat_dset": InputPathType;
     "prefix"?: string | null | undefined;
     "session"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface ClustExpHistTablePyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ClustExp_HistTable.py": clust_exp_hist_table_py_cargs,
+        "afni.ClustExp_HistTable.py": clust_exp_hist_table_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ClustExp_HistTable.py": clust_exp_hist_table_py_outputs,
+        "afni.ClustExp_HistTable.py": clust_exp_hist_table_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface ClustExpHistTablePyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stat_dset Statistics dataset.
+ * @param prefix Name for output (no path). Default is GroupOut.
+ * @param session Output parent folder if you don't want the current working directory. Default is ./
+ * @param overwrite Remove previous folder with same PREFIX
+ *
+ * @returns Parameter dictionary
+ */
 function clust_exp_hist_table_py_params(
     stat_dset: InputPathType,
     prefix: string | null = null,
     session: string | null = null,
     overwrite: boolean = false,
 ): ClustExpHistTablePyParameters {
-    /**
-     * Build parameters.
-    
-     * @param stat_dset Statistics dataset.
-     * @param prefix Name for output (no path). Default is GroupOut.
-     * @param session Output parent folder if you don't want the current working directory. Default is ./
-     * @param overwrite Remove previous folder with same PREFIX
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ClustExp_HistTable.py" as const,
+        "@type": "afni.ClustExp_HistTable.py" as const,
         "stat_dset": stat_dset,
         "overwrite": overwrite,
     };
@@ -102,18 +102,18 @@ function clust_exp_hist_table_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function clust_exp_hist_table_py_cargs(
     params: ClustExpHistTablePyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ClustExp_HistTable.py");
     cargs.push(
@@ -139,18 +139,18 @@ function clust_exp_hist_table_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function clust_exp_hist_table_py_outputs(
     params: ClustExpHistTablePyParameters,
     execution: Execution,
 ): ClustExpHistTablePyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ClustExpHistTablePyOutputs = {
         root: execution.outputFile("."),
         group_table: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_GroupTable.csv"].join('')) : null,
@@ -159,22 +159,22 @@ function clust_exp_hist_table_py_outputs(
 }
 
 
+/**
+ * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
+ */
 function clust_exp_hist_table_py_execute(
     params: ClustExpHistTablePyParameters,
     execution: Execution,
 ): ClustExpHistTablePyOutputs {
-    /**
-     * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
-     */
     params = execution.params(params)
     const cargs = clust_exp_hist_table_py_cargs(params, execution)
     const ret = clust_exp_hist_table_py_outputs(params, execution)
@@ -183,6 +183,21 @@ function clust_exp_hist_table_py_execute(
 }
 
 
+/**
+ * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param stat_dset Statistics dataset.
+ * @param prefix Name for output (no path). Default is GroupOut.
+ * @param session Output parent folder if you don't want the current working directory. Default is ./
+ * @param overwrite Remove previous folder with same PREFIX
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
+ */
 function clust_exp_hist_table_py(
     stat_dset: InputPathType,
     prefix: string | null = null,
@@ -190,21 +205,6 @@ function clust_exp_hist_table_py(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): ClustExpHistTablePyOutputs {
-    /**
-     * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param stat_dset Statistics dataset.
-     * @param prefix Name for output (no path). Default is GroupOut.
-     * @param session Output parent folder if you don't want the current working directory. Default is ./
-     * @param overwrite Remove previous folder with same PREFIX
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CLUST_EXP_HIST_TABLE_PY_METADATA);
     const params = clust_exp_hist_table_py_params(stat_dset, prefix, session, overwrite)
@@ -217,5 +217,8 @@ export {
       ClustExpHistTablePyOutputs,
       ClustExpHistTablePyParameters,
       clust_exp_hist_table_py,
+      clust_exp_hist_table_py_cargs,
+      clust_exp_hist_table_py_execute,
+      clust_exp_hist_table_py_outputs,
       clust_exp_hist_table_py_params,
 };

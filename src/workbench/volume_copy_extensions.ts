@@ -12,7 +12,7 @@ const VOLUME_COPY_EXTENSIONS_METADATA: Metadata = {
 
 
 interface VolumeCopyExtensionsParameters {
-    "__STYXTYPE__": "volume-copy-extensions";
+    "@type": "workbench.volume-copy-extensions";
     "data_volume": InputPathType;
     "extension_volume": InputPathType;
     "volume_out": string;
@@ -20,35 +20,35 @@ interface VolumeCopyExtensionsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-copy-extensions": volume_copy_extensions_cargs,
+        "workbench.volume-copy-extensions": volume_copy_extensions_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-copy-extensions": volume_copy_extensions_outputs,
+        "workbench.volume-copy-extensions": volume_copy_extensions_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface VolumeCopyExtensionsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_volume the volume file containing the voxel data to use
+ * @param extension_volume the volume file containing the extensions to use
+ * @param volume_out the output volume
+ * @param opt_drop_unknown don't copy extensions that workbench doesn't understand
+ *
+ * @returns Parameter dictionary
+ */
 function volume_copy_extensions_params(
     data_volume: InputPathType,
     extension_volume: InputPathType,
     volume_out: string,
     opt_drop_unknown: boolean = false,
 ): VolumeCopyExtensionsParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_volume the volume file containing the voxel data to use
-     * @param extension_volume the volume file containing the extensions to use
-     * @param volume_out the output volume
-     * @param opt_drop_unknown don't copy extensions that workbench doesn't understand
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-copy-extensions" as const,
+        "@type": "workbench.volume-copy-extensions" as const,
         "data_volume": data_volume,
         "extension_volume": extension_volume,
         "volume_out": volume_out,
@@ -98,18 +98,18 @@ function volume_copy_extensions_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_copy_extensions_cargs(
     params: VolumeCopyExtensionsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-copy-extensions");
@@ -123,18 +123,18 @@ function volume_copy_extensions_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_copy_extensions_outputs(
     params: VolumeCopyExtensionsParameters,
     execution: Execution,
 ): VolumeCopyExtensionsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeCopyExtensionsOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -143,24 +143,24 @@ function volume_copy_extensions_outputs(
 }
 
 
+/**
+ * Copy extended data to another volume file.
+ *
+ * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
+ */
 function volume_copy_extensions_execute(
     params: VolumeCopyExtensionsParameters,
     execution: Execution,
 ): VolumeCopyExtensionsOutputs {
-    /**
-     * Copy extended data to another volume file.
-     * 
-     * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_copy_extensions_cargs(params, execution)
     const ret = volume_copy_extensions_outputs(params, execution)
@@ -169,6 +169,23 @@ function volume_copy_extensions_execute(
 }
 
 
+/**
+ * Copy extended data to another volume file.
+ *
+ * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param data_volume the volume file containing the voxel data to use
+ * @param extension_volume the volume file containing the extensions to use
+ * @param volume_out the output volume
+ * @param opt_drop_unknown don't copy extensions that workbench doesn't understand
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
+ */
 function volume_copy_extensions(
     data_volume: InputPathType,
     extension_volume: InputPathType,
@@ -176,23 +193,6 @@ function volume_copy_extensions(
     opt_drop_unknown: boolean = false,
     runner: Runner | null = null,
 ): VolumeCopyExtensionsOutputs {
-    /**
-     * Copy extended data to another volume file.
-     * 
-     * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param data_volume the volume file containing the voxel data to use
-     * @param extension_volume the volume file containing the extensions to use
-     * @param volume_out the output volume
-     * @param opt_drop_unknown don't copy extensions that workbench doesn't understand
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_COPY_EXTENSIONS_METADATA);
     const params = volume_copy_extensions_params(data_volume, extension_volume, volume_out, opt_drop_unknown)
@@ -205,5 +205,8 @@ export {
       VolumeCopyExtensionsOutputs,
       VolumeCopyExtensionsParameters,
       volume_copy_extensions,
+      volume_copy_extensions_cargs,
+      volume_copy_extensions_execute,
+      volume_copy_extensions_outputs,
       volume_copy_extensions_params,
 };

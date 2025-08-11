@@ -12,7 +12,7 @@ const V__XYZ_TO_IJK_METADATA: Metadata = {
 
 
 interface VXyzToIjkParameters {
-    "__STYXTYPE__": "@xyz_to_ijk";
+    "@type": "afni.@xyz_to_ijk";
     "inset": InputPathType;
     "x_coord": number;
     "y_coord": number;
@@ -21,35 +21,35 @@ interface VXyzToIjkParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@xyz_to_ijk": v__xyz_to_ijk_cargs,
+        "afni.@xyz_to_ijk": v__xyz_to_ijk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@xyz_to_ijk": v__xyz_to_ijk_outputs,
+        "afni.@xyz_to_ijk": v__xyz_to_ijk_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface VXyzToIjkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset Volumetric file name (e.g. FILE.nii.gz)
+ * @param x_coord Three coordinates (in units of the dataset, like mm)
+ * @param y_coord Three coordinates (in units of the dataset, like mm)
+ * @param z_coord Three coordinates (in units of the dataset, like mm)
+ * @param prefix File name (including path) to output the three indices
+ *
+ * @returns Parameter dictionary
+ */
 function v__xyz_to_ijk_params(
     inset: InputPathType,
     x_coord: number,
@@ -79,19 +90,8 @@ function v__xyz_to_ijk_params(
     z_coord: number,
     prefix: string | null = null,
 ): VXyzToIjkParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset Volumetric file name (e.g. FILE.nii.gz)
-     * @param x_coord Three coordinates (in units of the dataset, like mm)
-     * @param y_coord Three coordinates (in units of the dataset, like mm)
-     * @param z_coord Three coordinates (in units of the dataset, like mm)
-     * @param prefix File name (including path) to output the three indices
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@xyz_to_ijk" as const,
+        "@type": "afni.@xyz_to_ijk" as const,
         "inset": inset,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -104,18 +104,18 @@ function v__xyz_to_ijk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__xyz_to_ijk_cargs(
     params: VXyzToIjkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@xyz_to_ijk");
     cargs.push(
@@ -138,18 +138,18 @@ function v__xyz_to_ijk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__xyz_to_ijk_outputs(
     params: VXyzToIjkParameters,
     execution: Execution,
 ): VXyzToIjkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VXyzToIjkOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -158,22 +158,22 @@ function v__xyz_to_ijk_outputs(
 }
 
 
+/**
+ * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
+ */
 function v__xyz_to_ijk_execute(
     params: VXyzToIjkParameters,
     execution: Execution,
 ): VXyzToIjkOutputs {
-    /**
-     * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__xyz_to_ijk_cargs(params, execution)
     const ret = v__xyz_to_ijk_outputs(params, execution)
@@ -182,6 +182,22 @@ function v__xyz_to_ijk_execute(
 }
 
 
+/**
+ * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset Volumetric file name (e.g. FILE.nii.gz)
+ * @param x_coord Three coordinates (in units of the dataset, like mm)
+ * @param y_coord Three coordinates (in units of the dataset, like mm)
+ * @param z_coord Three coordinates (in units of the dataset, like mm)
+ * @param prefix File name (including path) to output the three indices
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
+ */
 function v__xyz_to_ijk(
     inset: InputPathType,
     x_coord: number,
@@ -190,22 +206,6 @@ function v__xyz_to_ijk(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): VXyzToIjkOutputs {
-    /**
-     * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset Volumetric file name (e.g. FILE.nii.gz)
-     * @param x_coord Three coordinates (in units of the dataset, like mm)
-     * @param y_coord Three coordinates (in units of the dataset, like mm)
-     * @param z_coord Three coordinates (in units of the dataset, like mm)
-     * @param prefix File name (including path) to output the three indices
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__XYZ_TO_IJK_METADATA);
     const params = v__xyz_to_ijk_params(inset, x_coord, y_coord, z_coord, prefix)
@@ -218,5 +218,8 @@ export {
       VXyzToIjkParameters,
       V__XYZ_TO_IJK_METADATA,
       v__xyz_to_ijk,
+      v__xyz_to_ijk_cargs,
+      v__xyz_to_ijk_execute,
+      v__xyz_to_ijk_outputs,
       v__xyz_to_ijk_params,
 };

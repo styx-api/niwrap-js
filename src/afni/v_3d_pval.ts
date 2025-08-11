@@ -12,7 +12,7 @@ const V_3D_PVAL_METADATA: Metadata = {
 
 
 interface V3dPvalParameters {
-    "__STYXTYPE__": "3dPval";
+    "@type": "afni.3dPval";
     "input_dataset": InputPathType;
     "zscore": boolean;
     "log2": boolean;
@@ -22,35 +22,35 @@ interface V3dPvalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPval": v_3d_pval_cargs,
+        "afni.3dPval": v_3d_pval_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPval": v_3d_pval_outputs,
+        "afni.3dPval": v_3d_pval_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface V3dPvalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g., InputDataset.nii)
+ * @param zscore Convert statistic to a z-score instead, an N(0,1) deviate that represents the same p-value.
+ * @param log2 Convert statistic to -log2(p).
+ * @param log10 Convert statistic to -log10(p).
+ * @param qval Convert statistic to a q-value (FDR) instead. This option only works with datasets that have FDR curves inserted in their headers.
+ * @param prefix Prefix name for output file (default name is 'Pval').
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_pval_params(
     input_dataset: InputPathType,
     zscore: boolean = false,
@@ -81,20 +93,8 @@ function v_3d_pval_params(
     qval: boolean = false,
     prefix: string | null = null,
 ): V3dPvalParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g., InputDataset.nii)
-     * @param zscore Convert statistic to a z-score instead, an N(0,1) deviate that represents the same p-value.
-     * @param log2 Convert statistic to -log2(p).
-     * @param log10 Convert statistic to -log10(p).
-     * @param qval Convert statistic to a q-value (FDR) instead. This option only works with datasets that have FDR curves inserted in their headers.
-     * @param prefix Prefix name for output file (default name is 'Pval').
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPval" as const,
+        "@type": "afni.3dPval" as const,
         "input_dataset": input_dataset,
         "zscore": zscore,
         "log2": log2,
@@ -108,18 +108,18 @@ function v_3d_pval_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_pval_cargs(
     params: V3dPvalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPval");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -145,18 +145,18 @@ function v_3d_pval_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_pval_outputs(
     params: V3dPvalParameters,
     execution: Execution,
 ): V3dPvalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPvalOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -165,22 +165,22 @@ function v_3d_pval_outputs(
 }
 
 
+/**
+ * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
+ */
 function v_3d_pval_execute(
     params: V3dPvalParameters,
     execution: Execution,
 ): V3dPvalOutputs {
-    /**
-     * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_pval_cargs(params, execution)
     const ret = v_3d_pval_outputs(params, execution)
@@ -189,6 +189,23 @@ function v_3d_pval_execute(
 }
 
 
+/**
+ * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g., InputDataset.nii)
+ * @param zscore Convert statistic to a z-score instead, an N(0,1) deviate that represents the same p-value.
+ * @param log2 Convert statistic to -log2(p).
+ * @param log10 Convert statistic to -log10(p).
+ * @param qval Convert statistic to a q-value (FDR) instead. This option only works with datasets that have FDR curves inserted in their headers.
+ * @param prefix Prefix name for output file (default name is 'Pval').
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
+ */
 function v_3d_pval(
     input_dataset: InputPathType,
     zscore: boolean = false,
@@ -198,23 +215,6 @@ function v_3d_pval(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dPvalOutputs {
-    /**
-     * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g., InputDataset.nii)
-     * @param zscore Convert statistic to a z-score instead, an N(0,1) deviate that represents the same p-value.
-     * @param log2 Convert statistic to -log2(p).
-     * @param log10 Convert statistic to -log10(p).
-     * @param qval Convert statistic to a q-value (FDR) instead. This option only works with datasets that have FDR curves inserted in their headers.
-     * @param prefix Prefix name for output file (default name is 'Pval').
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PVAL_METADATA);
     const params = v_3d_pval_params(input_dataset, zscore, log2, log10, qval, prefix)
@@ -227,5 +227,8 @@ export {
       V3dPvalParameters,
       V_3D_PVAL_METADATA,
       v_3d_pval,
+      v_3d_pval_cargs,
+      v_3d_pval_execute,
+      v_3d_pval_outputs,
       v_3d_pval_params,
 };

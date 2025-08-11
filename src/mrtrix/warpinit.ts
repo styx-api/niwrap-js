@@ -12,14 +12,14 @@ const WARPINIT_METADATA: Metadata = {
 
 
 interface WarpinitConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.warpinit.config";
     "key": string;
     "value": string;
 }
 
 
 interface WarpinitParameters {
-    "__STYXTYPE__": "warpinit";
+    "@type": "mrtrix.warpinit";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -33,55 +33,55 @@ interface WarpinitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "warpinit": warpinit_cargs,
-        "config": warpinit_config_cargs,
+        "mrtrix.warpinit": warpinit_cargs,
+        "mrtrix.warpinit.config": warpinit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "warpinit": warpinit_outputs,
+        "mrtrix.warpinit": warpinit_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function warpinit_config_params(
     key: string,
     value: string,
 ): WarpinitConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.warpinit.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function warpinit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpinit_config_cargs(
     params: WarpinitConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -126,6 +126,22 @@ interface WarpinitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template the input template image.
+ * @param warp the output warp image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function warpinit_params(
     template: InputPathType,
     warp: string,
@@ -138,24 +154,8 @@ function warpinit_params(
     help: boolean = false,
     version: boolean = false,
 ): WarpinitParameters {
-    /**
-     * Build parameters.
-    
-     * @param template the input template image.
-     * @param warp the output warp image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warpinit" as const,
+        "@type": "mrtrix.warpinit" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -175,18 +175,18 @@ function warpinit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function warpinit_cargs(
     params: WarpinitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("warpinit");
     if ((params["info"] ?? null)) {
@@ -208,7 +208,7 @@ function warpinit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -222,18 +222,18 @@ function warpinit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function warpinit_outputs(
     params: WarpinitParameters,
     execution: Execution,
 ): WarpinitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WarpinitOutputs = {
         root: execution.outputFile("."),
         warp: execution.outputFile([(params["warp"] ?? null)].join('')),
@@ -242,34 +242,34 @@ function warpinit_outputs(
 }
 
 
+/**
+ * Create an initial warp image, representing an identity transformation.
+ *
+ * This is useful to obtain the warp fields from other normalisation applications, by applying the transformation of interest to the warp field generated by this program.
+ *
+ * The image generated is a 4D image with the same spatial characteristics as the input template image. It contains 3 volumes, with each voxel containing its own x,y,z coordinates.
+ *
+ * Note that this command can be used to create 3 separate X,Y,Z images directly (which may be useful to create images suitable for use in the registration program) using the following syntax:
+ *
+ *   $ warpinit template.mif warp-'[]'.nii
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
+ */
 function warpinit_execute(
     params: WarpinitParameters,
     execution: Execution,
 ): WarpinitOutputs {
-    /**
-     * Create an initial warp image, representing an identity transformation.
-     * 
-     * This is useful to obtain the warp fields from other normalisation applications, by applying the transformation of interest to the warp field generated by this program.
-     * 
-     * The image generated is a 4D image with the same spatial characteristics as the input template image. It contains 3 volumes, with each voxel containing its own x,y,z coordinates.
-     * 
-     * Note that this command can be used to create 3 separate X,Y,Z images directly (which may be useful to create images suitable for use in the registration program) using the following syntax:
-     * 
-     *   $ warpinit template.mif warp-'[]'.nii
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
-     */
     params = execution.params(params)
     const cargs = warpinit_cargs(params, execution)
     const ret = warpinit_outputs(params, execution)
@@ -278,6 +278,39 @@ function warpinit_execute(
 }
 
 
+/**
+ * Create an initial warp image, representing an identity transformation.
+ *
+ * This is useful to obtain the warp fields from other normalisation applications, by applying the transformation of interest to the warp field generated by this program.
+ *
+ * The image generated is a 4D image with the same spatial characteristics as the input template image. It contains 3 volumes, with each voxel containing its own x,y,z coordinates.
+ *
+ * Note that this command can be used to create 3 separate X,Y,Z images directly (which may be useful to create images suitable for use in the registration program) using the following syntax:
+ *
+ *   $ warpinit template.mif warp-'[]'.nii
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param template the input template image.
+ * @param warp the output warp image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
+ */
 function warpinit(
     template: InputPathType,
     warp: string,
@@ -291,39 +324,6 @@ function warpinit(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpinitOutputs {
-    /**
-     * Create an initial warp image, representing an identity transformation.
-     * 
-     * This is useful to obtain the warp fields from other normalisation applications, by applying the transformation of interest to the warp field generated by this program.
-     * 
-     * The image generated is a 4D image with the same spatial characteristics as the input template image. It contains 3 volumes, with each voxel containing its own x,y,z coordinates.
-     * 
-     * Note that this command can be used to create 3 separate X,Y,Z images directly (which may be useful to create images suitable for use in the registration program) using the following syntax:
-     * 
-     *   $ warpinit template.mif warp-'[]'.nii
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param template the input template image.
-     * @param warp the output warp image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WARPINIT_METADATA);
     const params = warpinit_params(template, warp, info, quiet, debug, force, nthreads, config, help, version)
@@ -337,6 +337,10 @@ export {
       WarpinitOutputs,
       WarpinitParameters,
       warpinit,
+      warpinit_cargs,
+      warpinit_config_cargs,
       warpinit_config_params,
+      warpinit_execute,
+      warpinit_outputs,
       warpinit_params,
 };

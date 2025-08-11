@@ -12,39 +12,39 @@ const MRIS_MAP_CUTS_METADATA: Metadata = {
 
 
 interface MrisMapCutsParameters {
-    "__STYXTYPE__": "mris_map_cuts";
+    "@type": "freesurfer.mris_map_cuts";
     "input_patch": InputPathType;
     "output_patch": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_map_cuts": mris_map_cuts_cargs,
+        "freesurfer.mris_map_cuts": mris_map_cuts_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface MrisMapCutsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_patch Input patch file
+ * @param output_patch Output patch file
+ *
+ * @returns Parameter dictionary
+ */
 function mris_map_cuts_params(
     input_patch: InputPathType,
     output_patch: string,
 ): MrisMapCutsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_patch Input patch file
-     * @param output_patch Output patch file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_map_cuts" as const,
+        "@type": "freesurfer.mris_map_cuts" as const,
         "input_patch": input_patch,
         "output_patch": output_patch,
     };
@@ -85,18 +85,18 @@ function mris_map_cuts_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_map_cuts_cargs(
     params: MrisMapCutsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_map_cuts");
     cargs.push(execution.inputFile((params["input_patch"] ?? null)));
@@ -105,18 +105,18 @@ function mris_map_cuts_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_map_cuts_outputs(
     params: MrisMapCutsParameters,
     execution: Execution,
 ): MrisMapCutsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMapCutsOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function mris_map_cuts_outputs(
 }
 
 
+/**
+ * Tool for mapping cortical surface data onto cuts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
+ */
 function mris_map_cuts_execute(
     params: MrisMapCutsParameters,
     execution: Execution,
 ): MrisMapCutsOutputs {
-    /**
-     * Tool for mapping cortical surface data onto cuts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_map_cuts_cargs(params, execution)
     const ret = mris_map_cuts_outputs(params, execution)
@@ -148,24 +148,24 @@ function mris_map_cuts_execute(
 }
 
 
+/**
+ * Tool for mapping cortical surface data onto cuts.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_patch Input patch file
+ * @param output_patch Output patch file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
+ */
 function mris_map_cuts(
     input_patch: InputPathType,
     output_patch: string,
     runner: Runner | null = null,
 ): MrisMapCutsOutputs {
-    /**
-     * Tool for mapping cortical surface data onto cuts.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_patch Input patch file
-     * @param output_patch Output patch file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MAP_CUTS_METADATA);
     const params = mris_map_cuts_params(input_patch, output_patch)
@@ -178,5 +178,8 @@ export {
       MrisMapCutsOutputs,
       MrisMapCutsParameters,
       mris_map_cuts,
+      mris_map_cuts_cargs,
+      mris_map_cuts_execute,
+      mris_map_cuts_outputs,
       mris_map_cuts_params,
 };

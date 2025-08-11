@@ -12,7 +12,7 @@ const V_3DSVM_METADATA: Metadata = {
 
 
 interface V3dsvmParameters {
-    "__STYXTYPE__": "3dsvm";
+    "@type": "afni.3dsvm";
     "train_vol"?: InputPathType | null | undefined;
     "train_labels"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -43,35 +43,35 @@ interface V3dsvmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dsvm": v_3dsvm_cargs,
+        "afni.3dsvm": v_3dsvm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dsvm": v_3dsvm_outputs,
+        "afni.3dsvm": v_3dsvm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,39 @@ interface V3dsvmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param model The basename for the model brik containing the SVM model during training or testing.
+ * @param train_vol A 3D+t AFNI brik dataset to be used for training.
+ * @param train_labels Filename of class category .1D labels corresponding to the stimulus paradigm for the training data set.
+ * @param mask Specify a mask dataset to only perform the analysis on non-zero mask voxels.
+ * @param no_model_mask Flag to enable the omission of a mask file. Required if '-mask' is not used.
+ * @param alpha Write the alphas to a specified .1D file.
+ * @param bucket Outputs the sum of weighted linear support vectors written out to a functional (fim) brik file.
+ * @param type_ Specify type: classification (default) or regression.
+ * @param c_value Control SVM model complexity (C value).
+ * @param epsilon Specify epsilon for regression.
+ * @param kernel Specify type of kernel function.
+ * @param d_value D parameter in polynomial kernel.
+ * @param gamma Gamma parameter in rbf kernel.
+ * @param s_value S parameter in sigmoid/poly kernel.
+ * @param r_value R parameter in sigmoid/poly kernel.
+ * @param max_iterations Specify the maximum number of iterations for the optimization. Default is 1 million.
+ * @param wout Flag to output sum of weighted linear support vectors to the bucket file.
+ * @param test_vol A 3D or 3D+t AFNI brik dataset to be used for testing.
+ * @param predictions Basename for .1D prediction files.
+ * @param classout Flag to specify that prediction files should be integer-valued, corresponding to class category decisions.
+ * @param nopred_censored Do not write predicted values for censored time-points to predictions file.
+ * @param nodetrend Flag to specify that prediction files should NOT be linearly detrended.
+ * @param nopred_scale Do not scale predictions. Values below 0.0 correspond to (class A) and values above 0.0 to (class B).
+ * @param test_labels Filename of 'true' class category .1D labels for the test dataset.
+ * @param multiclass Specify the multiclass algorithm for classification.
+ * @param help Print help message
+ * @param version Print version history
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dsvm_params(
     model: string,
     train_vol: InputPathType | null = null,
@@ -135,41 +168,8 @@ function v_3dsvm_params(
     help: boolean = false,
     version: boolean = false,
 ): V3dsvmParameters {
-    /**
-     * Build parameters.
-    
-     * @param model The basename for the model brik containing the SVM model during training or testing.
-     * @param train_vol A 3D+t AFNI brik dataset to be used for training.
-     * @param train_labels Filename of class category .1D labels corresponding to the stimulus paradigm for the training data set.
-     * @param mask Specify a mask dataset to only perform the analysis on non-zero mask voxels.
-     * @param no_model_mask Flag to enable the omission of a mask file. Required if '-mask' is not used.
-     * @param alpha Write the alphas to a specified .1D file.
-     * @param bucket Outputs the sum of weighted linear support vectors written out to a functional (fim) brik file.
-     * @param type_ Specify type: classification (default) or regression.
-     * @param c_value Control SVM model complexity (C value).
-     * @param epsilon Specify epsilon for regression.
-     * @param kernel Specify type of kernel function.
-     * @param d_value D parameter in polynomial kernel.
-     * @param gamma Gamma parameter in rbf kernel.
-     * @param s_value S parameter in sigmoid/poly kernel.
-     * @param r_value R parameter in sigmoid/poly kernel.
-     * @param max_iterations Specify the maximum number of iterations for the optimization. Default is 1 million.
-     * @param wout Flag to output sum of weighted linear support vectors to the bucket file.
-     * @param test_vol A 3D or 3D+t AFNI brik dataset to be used for testing.
-     * @param predictions Basename for .1D prediction files.
-     * @param classout Flag to specify that prediction files should be integer-valued, corresponding to class category decisions.
-     * @param nopred_censored Do not write predicted values for censored time-points to predictions file.
-     * @param nodetrend Flag to specify that prediction files should NOT be linearly detrended.
-     * @param nopred_scale Do not scale predictions. Values below 0.0 correspond to (class A) and values above 0.0 to (class B).
-     * @param test_labels Filename of 'true' class category .1D labels for the test dataset.
-     * @param multiclass Specify the multiclass algorithm for classification.
-     * @param help Print help message
-     * @param version Print version history
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dsvm" as const,
+        "@type": "afni.3dsvm" as const,
         "no_model_mask": no_model_mask,
         "model": model,
         "wout": wout,
@@ -238,18 +238,18 @@ function v_3dsvm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dsvm_cargs(
     params: V3dsvmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dsvm");
     if ((params["train_vol"] ?? null) !== null) {
@@ -392,18 +392,18 @@ function v_3dsvm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dsvm_outputs(
     params: V3dsvmParameters,
     execution: Execution,
 ): V3dsvmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dsvmOutputs = {
         root: execution.outputFile("."),
         out_model: execution.outputFile(["model_{output}.1D"].join('')),
@@ -415,22 +415,22 @@ function v_3dsvm_outputs(
 }
 
 
+/**
+ * Support vector machine analysis of brain data using the SVM-light package.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
+ */
 function v_3dsvm_execute(
     params: V3dsvmParameters,
     execution: Execution,
 ): V3dsvmOutputs {
-    /**
-     * Support vector machine analysis of brain data using the SVM-light package.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dsvm_cargs(params, execution)
     const ret = v_3dsvm_outputs(params, execution)
@@ -439,6 +439,44 @@ function v_3dsvm_execute(
 }
 
 
+/**
+ * Support vector machine analysis of brain data using the SVM-light package.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param model The basename for the model brik containing the SVM model during training or testing.
+ * @param train_vol A 3D+t AFNI brik dataset to be used for training.
+ * @param train_labels Filename of class category .1D labels corresponding to the stimulus paradigm for the training data set.
+ * @param mask Specify a mask dataset to only perform the analysis on non-zero mask voxels.
+ * @param no_model_mask Flag to enable the omission of a mask file. Required if '-mask' is not used.
+ * @param alpha Write the alphas to a specified .1D file.
+ * @param bucket Outputs the sum of weighted linear support vectors written out to a functional (fim) brik file.
+ * @param type_ Specify type: classification (default) or regression.
+ * @param c_value Control SVM model complexity (C value).
+ * @param epsilon Specify epsilon for regression.
+ * @param kernel Specify type of kernel function.
+ * @param d_value D parameter in polynomial kernel.
+ * @param gamma Gamma parameter in rbf kernel.
+ * @param s_value S parameter in sigmoid/poly kernel.
+ * @param r_value R parameter in sigmoid/poly kernel.
+ * @param max_iterations Specify the maximum number of iterations for the optimization. Default is 1 million.
+ * @param wout Flag to output sum of weighted linear support vectors to the bucket file.
+ * @param test_vol A 3D or 3D+t AFNI brik dataset to be used for testing.
+ * @param predictions Basename for .1D prediction files.
+ * @param classout Flag to specify that prediction files should be integer-valued, corresponding to class category decisions.
+ * @param nopred_censored Do not write predicted values for censored time-points to predictions file.
+ * @param nodetrend Flag to specify that prediction files should NOT be linearly detrended.
+ * @param nopred_scale Do not scale predictions. Values below 0.0 correspond to (class A) and values above 0.0 to (class B).
+ * @param test_labels Filename of 'true' class category .1D labels for the test dataset.
+ * @param multiclass Specify the multiclass algorithm for classification.
+ * @param help Print help message
+ * @param version Print version history
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
+ */
 function v_3dsvm(
     model: string,
     train_vol: InputPathType | null = null,
@@ -469,44 +507,6 @@ function v_3dsvm(
     version: boolean = false,
     runner: Runner | null = null,
 ): V3dsvmOutputs {
-    /**
-     * Support vector machine analysis of brain data using the SVM-light package.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param model The basename for the model brik containing the SVM model during training or testing.
-     * @param train_vol A 3D+t AFNI brik dataset to be used for training.
-     * @param train_labels Filename of class category .1D labels corresponding to the stimulus paradigm for the training data set.
-     * @param mask Specify a mask dataset to only perform the analysis on non-zero mask voxels.
-     * @param no_model_mask Flag to enable the omission of a mask file. Required if '-mask' is not used.
-     * @param alpha Write the alphas to a specified .1D file.
-     * @param bucket Outputs the sum of weighted linear support vectors written out to a functional (fim) brik file.
-     * @param type_ Specify type: classification (default) or regression.
-     * @param c_value Control SVM model complexity (C value).
-     * @param epsilon Specify epsilon for regression.
-     * @param kernel Specify type of kernel function.
-     * @param d_value D parameter in polynomial kernel.
-     * @param gamma Gamma parameter in rbf kernel.
-     * @param s_value S parameter in sigmoid/poly kernel.
-     * @param r_value R parameter in sigmoid/poly kernel.
-     * @param max_iterations Specify the maximum number of iterations for the optimization. Default is 1 million.
-     * @param wout Flag to output sum of weighted linear support vectors to the bucket file.
-     * @param test_vol A 3D or 3D+t AFNI brik dataset to be used for testing.
-     * @param predictions Basename for .1D prediction files.
-     * @param classout Flag to specify that prediction files should be integer-valued, corresponding to class category decisions.
-     * @param nopred_censored Do not write predicted values for censored time-points to predictions file.
-     * @param nodetrend Flag to specify that prediction files should NOT be linearly detrended.
-     * @param nopred_scale Do not scale predictions. Values below 0.0 correspond to (class A) and values above 0.0 to (class B).
-     * @param test_labels Filename of 'true' class category .1D labels for the test dataset.
-     * @param multiclass Specify the multiclass algorithm for classification.
-     * @param help Print help message
-     * @param version Print version history
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DSVM_METADATA);
     const params = v_3dsvm_params(model, train_vol, train_labels, mask, no_model_mask, alpha, bucket, type_, c_value, epsilon, kernel, d_value, gamma, s_value, r_value, max_iterations, wout, test_vol, predictions, classout, nopred_censored, nodetrend, nopred_scale, test_labels, multiclass, help, version)
@@ -519,5 +519,8 @@ export {
       V3dsvmParameters,
       V_3DSVM_METADATA,
       v_3dsvm,
+      v_3dsvm_cargs,
+      v_3dsvm_execute,
+      v_3dsvm_outputs,
       v_3dsvm_params,
 };

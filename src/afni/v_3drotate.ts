@@ -12,7 +12,7 @@ const V_3DROTATE_METADATA: Metadata = {
 
 
 interface V3drotateParameters {
-    "__STYXTYPE__": "3drotate";
+    "@type": "afni.3drotate";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
@@ -41,35 +41,35 @@ interface V3drotateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3drotate": v_3drotate_cargs,
+        "afni.3drotate": v_3drotate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3drotate": v_3drotate_outputs,
+        "afni.3drotate": v_3drotate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -96,6 +96,37 @@ interface V3drotateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input AFNI dataset, may contain a sub-brick selector list
+ * @param prefix Sets the output dataset prefix name
+ * @param verbose Prints out progress reports (to stderr)
+ * @param ashift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, AFTER rotation
+ * @param bshift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, BEFORE rotation
+ * @param rotate Specifies the 3D rotation angles (th1, th2, th3) about certain axes
+ * @param rotparent Rotation and translation should be taken from the first 3dvolreg transformation found in the header of dataset 'rset'.
+ * @param gridparent Output dataset should be shifted to match the grid of dataset 'gset'. Can only be used with -rotparent.
+ * @param matvec_dicom Rotation and translation should be read from DICOM file 'mfile'.
+ * @param matvec_order Rotation and translation should be read from file 'mfile' with dataset coordinate order.
+ * @param matvec_dset Rotation and translation should be read from the .HEAD file of dataset 'mset' created by 3dTagalign.
+ * @param dfile Reads movement parameters for each sub-brick from an ASCII file 'dname'.
+ * @param v_1_dfile Reads movement parameters for each sub-brick from a 1D ASCII file 'dname'.
+ * @param points Specifies that (x,y,z) points are to be rotated instead of a dataset.
+ * @param origin Specifies the rotation origin point (xo, yo, zo)
+ * @param fourier Use Fourier interpolation method during transformation.
+ * @param nn Use nearest neighbor interpolation method during transformation.
+ * @param linear Use linear interpolation (1st order polynomial) during transformation.
+ * @param cubic Use cubic interpolation (3rd order polynomial) during transformation.
+ * @param quintic Use quintic interpolation (5th order Lagrange polynomial) during transformation.
+ * @param heptic Use heptic interpolation (7th order Lagrange polynomial) during transformation.
+ * @param fourier_nopad Use the Fourier method WITHOUT padding.
+ * @param clipit Clip results to input brick range [default option].
+ * @param noclip Do not clip results to input brick range.
+ * @param zpad Zero pad around the edges by 'n' voxels during rotations.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3drotate_params(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -123,39 +154,8 @@ function v_3drotate_params(
     noclip: boolean = false,
     zpad: number | null = null,
 ): V3drotateParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input AFNI dataset, may contain a sub-brick selector list
-     * @param prefix Sets the output dataset prefix name
-     * @param verbose Prints out progress reports (to stderr)
-     * @param ashift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, AFTER rotation
-     * @param bshift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, BEFORE rotation
-     * @param rotate Specifies the 3D rotation angles (th1, th2, th3) about certain axes
-     * @param rotparent Rotation and translation should be taken from the first 3dvolreg transformation found in the header of dataset 'rset'.
-     * @param gridparent Output dataset should be shifted to match the grid of dataset 'gset'. Can only be used with -rotparent.
-     * @param matvec_dicom Rotation and translation should be read from DICOM file 'mfile'.
-     * @param matvec_order Rotation and translation should be read from file 'mfile' with dataset coordinate order.
-     * @param matvec_dset Rotation and translation should be read from the .HEAD file of dataset 'mset' created by 3dTagalign.
-     * @param dfile Reads movement parameters for each sub-brick from an ASCII file 'dname'.
-     * @param v_1_dfile Reads movement parameters for each sub-brick from a 1D ASCII file 'dname'.
-     * @param points Specifies that (x,y,z) points are to be rotated instead of a dataset.
-     * @param origin Specifies the rotation origin point (xo, yo, zo)
-     * @param fourier Use Fourier interpolation method during transformation.
-     * @param nn Use nearest neighbor interpolation method during transformation.
-     * @param linear Use linear interpolation (1st order polynomial) during transformation.
-     * @param cubic Use cubic interpolation (3rd order polynomial) during transformation.
-     * @param quintic Use quintic interpolation (5th order Lagrange polynomial) during transformation.
-     * @param heptic Use heptic interpolation (7th order Lagrange polynomial) during transformation.
-     * @param fourier_nopad Use the Fourier method WITHOUT padding.
-     * @param clipit Clip results to input brick range [default option].
-     * @param noclip Do not clip results to input brick range.
-     * @param zpad Zero pad around the edges by 'n' voxels during rotations.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3drotate" as const,
+        "@type": "afni.3drotate" as const,
         "dataset": dataset,
         "verbose": verbose,
         "points": points,
@@ -212,18 +212,18 @@ function v_3drotate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3drotate_cargs(
     params: V3drotateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3drotate");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -342,18 +342,18 @@ function v_3drotate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3drotate_outputs(
     params: V3drotateParameters,
     execution: Execution,
 ): V3drotateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3drotateOutputs = {
         root: execution.outputFile("."),
         out_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -363,22 +363,22 @@ function v_3drotate_outputs(
 }
 
 
+/**
+ * Rotates and/or translates all bricks from an AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
+ */
 function v_3drotate_execute(
     params: V3drotateParameters,
     execution: Execution,
 ): V3drotateOutputs {
-    /**
-     * Rotates and/or translates all bricks from an AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3drotate_cargs(params, execution)
     const ret = v_3drotate_outputs(params, execution)
@@ -387,6 +387,42 @@ function v_3drotate_execute(
 }
 
 
+/**
+ * Rotates and/or translates all bricks from an AFNI dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input AFNI dataset, may contain a sub-brick selector list
+ * @param prefix Sets the output dataset prefix name
+ * @param verbose Prints out progress reports (to stderr)
+ * @param ashift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, AFTER rotation
+ * @param bshift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, BEFORE rotation
+ * @param rotate Specifies the 3D rotation angles (th1, th2, th3) about certain axes
+ * @param rotparent Rotation and translation should be taken from the first 3dvolreg transformation found in the header of dataset 'rset'.
+ * @param gridparent Output dataset should be shifted to match the grid of dataset 'gset'. Can only be used with -rotparent.
+ * @param matvec_dicom Rotation and translation should be read from DICOM file 'mfile'.
+ * @param matvec_order Rotation and translation should be read from file 'mfile' with dataset coordinate order.
+ * @param matvec_dset Rotation and translation should be read from the .HEAD file of dataset 'mset' created by 3dTagalign.
+ * @param dfile Reads movement parameters for each sub-brick from an ASCII file 'dname'.
+ * @param v_1_dfile Reads movement parameters for each sub-brick from a 1D ASCII file 'dname'.
+ * @param points Specifies that (x,y,z) points are to be rotated instead of a dataset.
+ * @param origin Specifies the rotation origin point (xo, yo, zo)
+ * @param fourier Use Fourier interpolation method during transformation.
+ * @param nn Use nearest neighbor interpolation method during transformation.
+ * @param linear Use linear interpolation (1st order polynomial) during transformation.
+ * @param cubic Use cubic interpolation (3rd order polynomial) during transformation.
+ * @param quintic Use quintic interpolation (5th order Lagrange polynomial) during transformation.
+ * @param heptic Use heptic interpolation (7th order Lagrange polynomial) during transformation.
+ * @param fourier_nopad Use the Fourier method WITHOUT padding.
+ * @param clipit Clip results to input brick range [default option].
+ * @param noclip Do not clip results to input brick range.
+ * @param zpad Zero pad around the edges by 'n' voxels during rotations.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
+ */
 function v_3drotate(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -415,42 +451,6 @@ function v_3drotate(
     zpad: number | null = null,
     runner: Runner | null = null,
 ): V3drotateOutputs {
-    /**
-     * Rotates and/or translates all bricks from an AFNI dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input AFNI dataset, may contain a sub-brick selector list
-     * @param prefix Sets the output dataset prefix name
-     * @param verbose Prints out progress reports (to stderr)
-     * @param ashift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, AFTER rotation
-     * @param bshift Shifts the dataset by specified distances (dx, dy, dz) in mm in x, y, z directions respectively, BEFORE rotation
-     * @param rotate Specifies the 3D rotation angles (th1, th2, th3) about certain axes
-     * @param rotparent Rotation and translation should be taken from the first 3dvolreg transformation found in the header of dataset 'rset'.
-     * @param gridparent Output dataset should be shifted to match the grid of dataset 'gset'. Can only be used with -rotparent.
-     * @param matvec_dicom Rotation and translation should be read from DICOM file 'mfile'.
-     * @param matvec_order Rotation and translation should be read from file 'mfile' with dataset coordinate order.
-     * @param matvec_dset Rotation and translation should be read from the .HEAD file of dataset 'mset' created by 3dTagalign.
-     * @param dfile Reads movement parameters for each sub-brick from an ASCII file 'dname'.
-     * @param v_1_dfile Reads movement parameters for each sub-brick from a 1D ASCII file 'dname'.
-     * @param points Specifies that (x,y,z) points are to be rotated instead of a dataset.
-     * @param origin Specifies the rotation origin point (xo, yo, zo)
-     * @param fourier Use Fourier interpolation method during transformation.
-     * @param nn Use nearest neighbor interpolation method during transformation.
-     * @param linear Use linear interpolation (1st order polynomial) during transformation.
-     * @param cubic Use cubic interpolation (3rd order polynomial) during transformation.
-     * @param quintic Use quintic interpolation (5th order Lagrange polynomial) during transformation.
-     * @param heptic Use heptic interpolation (7th order Lagrange polynomial) during transformation.
-     * @param fourier_nopad Use the Fourier method WITHOUT padding.
-     * @param clipit Clip results to input brick range [default option].
-     * @param noclip Do not clip results to input brick range.
-     * @param zpad Zero pad around the edges by 'n' voxels during rotations.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DROTATE_METADATA);
     const params = v_3drotate_params(dataset, prefix, verbose, ashift, bshift, rotate, rotparent, gridparent, matvec_dicom, matvec_order, matvec_dset, dfile, v_1_dfile, points, origin, fourier, nn, linear, cubic, quintic, heptic, fourier_nopad, clipit, noclip, zpad)
@@ -463,5 +463,8 @@ export {
       V3drotateParameters,
       V_3DROTATE_METADATA,
       v_3drotate,
+      v_3drotate_cargs,
+      v_3drotate_execute,
+      v_3drotate_outputs,
       v_3drotate_params,
 };

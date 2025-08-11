@@ -12,7 +12,7 @@ const IMCAT_METADATA: Metadata = {
 
 
 interface ImcatParameters {
-    "__STYXTYPE__": "imcat";
+    "@type": "afni.imcat";
     "input_files": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
     "scale_pixels"?: InputPathType | null | undefined;
@@ -41,35 +41,35 @@ interface ImcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imcat": imcat_cargs,
+        "afni.imcat": imcat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imcat": imcat_outputs,
+        "afni.imcat": imcat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface ImcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image files
+ * @param scale_image Multiply each image IM(i,j) in output image matrix IM by the color or intensity of the pixel (i,j) in SCALE_IMG.
+ * @param scale_pixels Multiply each pixel (i,j) in output image by the color or intensity of the pixel (i,j) in SCALE_IMG. SCALE_IMG is automatically resized to the resolution of the output image.
+ * @param scale_intensity Instead of multiplying by the color of pixel (i,j), use its intensity (average color).
+ * @param gscale Apply FAC in addition to scaling of -scale_* options.
+ * @param rgb_out Force output to be in RGB, even if input is bytes. This option is turned on automatically in certain cases.
+ * @param res_in Set resolution of all input images to RX by RY pixels. Default is to make all input have the same resolution as the first image.
+ * @param respad_in Like -res_in, but resample to the max while respecting the aspect ratio, and then pad to achieve desired pixel count.
+ * @param pad_val Set the padding value, should it be needed by -respad_in to VAL. VAL is typecast to byte, default is 0, max is 255.
+ * @param crop Crop images by L (Left), R (Right), T (Top), B (Bottom) pixels. Cutting is performed after any resolution change, if any, is to be done.
+ * @param autocrop_ctol A line is eliminated if none of its R G B values differ by more than CTOL% from those of the corner pixel.
+ * @param autocrop_atol A line is eliminated if none of its R G B values differ by more than ATOL% from those of line average.
+ * @param autocrop This option is the same as using both of -autocrop_atol 20 and -autocrop_ctol 20
+ * @param zero_wrap If number of images is not enough to fill matrix solid black images are used.
+ * @param white_wrap If number of images is not enough to fill matrix solid white images are used.
+ * @param gray_wrap If number of images is not enough to fill matrix, solid gray images are used. GRAY must be between 0 and 1.0.
+ * @param image_wrap If number of images is not enough to fill matrix, images on command line are reused (default).
+ * @param rand_wrap When reusing images to fill matrix, randomize the order in refill section only.
+ * @param prefix Prefix the output files with string 'ppp'.
+ * @param matrix Specify number of images in each row and column of IM at the same time.
+ * @param nx Number of images in each row.
+ * @param ny Number of images in each column.
+ * @param matrix_from_scale Set NX and NY to be the same as the SCALE_IMG's dimensions. (needs -scale_image)
+ * @param gap Put a line G pixels wide between images.
+ * @param gap_col Set color of line to R G B values. Values range between 0 and 255.
+ *
+ * @returns Parameter dictionary
+ */
 function imcat_params(
     input_files: Array<InputPathType>,
     scale_image: InputPathType | null = null,
@@ -119,39 +150,8 @@ function imcat_params(
     gap: number | null = null,
     gap_col: Array<number> | null = null,
 ): ImcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image files
-     * @param scale_image Multiply each image IM(i,j) in output image matrix IM by the color or intensity of the pixel (i,j) in SCALE_IMG.
-     * @param scale_pixels Multiply each pixel (i,j) in output image by the color or intensity of the pixel (i,j) in SCALE_IMG. SCALE_IMG is automatically resized to the resolution of the output image.
-     * @param scale_intensity Instead of multiplying by the color of pixel (i,j), use its intensity (average color).
-     * @param gscale Apply FAC in addition to scaling of -scale_* options.
-     * @param rgb_out Force output to be in RGB, even if input is bytes. This option is turned on automatically in certain cases.
-     * @param res_in Set resolution of all input images to RX by RY pixels. Default is to make all input have the same resolution as the first image.
-     * @param respad_in Like -res_in, but resample to the max while respecting the aspect ratio, and then pad to achieve desired pixel count.
-     * @param pad_val Set the padding value, should it be needed by -respad_in to VAL. VAL is typecast to byte, default is 0, max is 255.
-     * @param crop Crop images by L (Left), R (Right), T (Top), B (Bottom) pixels. Cutting is performed after any resolution change, if any, is to be done.
-     * @param autocrop_ctol A line is eliminated if none of its R G B values differ by more than CTOL% from those of the corner pixel.
-     * @param autocrop_atol A line is eliminated if none of its R G B values differ by more than ATOL% from those of line average.
-     * @param autocrop This option is the same as using both of -autocrop_atol 20 and -autocrop_ctol 20
-     * @param zero_wrap If number of images is not enough to fill matrix solid black images are used.
-     * @param white_wrap If number of images is not enough to fill matrix solid white images are used.
-     * @param gray_wrap If number of images is not enough to fill matrix, solid gray images are used. GRAY must be between 0 and 1.0.
-     * @param image_wrap If number of images is not enough to fill matrix, images on command line are reused (default).
-     * @param rand_wrap When reusing images to fill matrix, randomize the order in refill section only.
-     * @param prefix Prefix the output files with string 'ppp'.
-     * @param matrix Specify number of images in each row and column of IM at the same time.
-     * @param nx Number of images in each row.
-     * @param ny Number of images in each column.
-     * @param matrix_from_scale Set NX and NY to be the same as the SCALE_IMG's dimensions. (needs -scale_image)
-     * @param gap Put a line G pixels wide between images.
-     * @param gap_col Set color of line to R G B values. Values range between 0 and 255.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imcat" as const,
+        "@type": "afni.imcat" as const,
         "input_files": input_files,
         "scale_intensity": scale_intensity,
         "rgb_out": rgb_out,
@@ -214,18 +214,18 @@ function imcat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imcat_cargs(
     params: ImcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imcat");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -353,18 +353,18 @@ function imcat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imcat_outputs(
     params: ImcatParameters,
     execution: Execution,
 ): ImcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImcatOutputs = {
         root: execution.outputFile("."),
         output_image_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "output_image.[EXT]"].join('')) : null,
@@ -373,22 +373,22 @@ function imcat_outputs(
 }
 
 
+/**
+ * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImcatOutputs`).
+ */
 function imcat_execute(
     params: ImcatParameters,
     execution: Execution,
 ): ImcatOutputs {
-    /**
-     * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = imcat_cargs(params, execution)
     const ret = imcat_outputs(params, execution)
@@ -397,6 +397,42 @@ function imcat_execute(
 }
 
 
+/**
+ * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input image files
+ * @param scale_image Multiply each image IM(i,j) in output image matrix IM by the color or intensity of the pixel (i,j) in SCALE_IMG.
+ * @param scale_pixels Multiply each pixel (i,j) in output image by the color or intensity of the pixel (i,j) in SCALE_IMG. SCALE_IMG is automatically resized to the resolution of the output image.
+ * @param scale_intensity Instead of multiplying by the color of pixel (i,j), use its intensity (average color).
+ * @param gscale Apply FAC in addition to scaling of -scale_* options.
+ * @param rgb_out Force output to be in RGB, even if input is bytes. This option is turned on automatically in certain cases.
+ * @param res_in Set resolution of all input images to RX by RY pixels. Default is to make all input have the same resolution as the first image.
+ * @param respad_in Like -res_in, but resample to the max while respecting the aspect ratio, and then pad to achieve desired pixel count.
+ * @param pad_val Set the padding value, should it be needed by -respad_in to VAL. VAL is typecast to byte, default is 0, max is 255.
+ * @param crop Crop images by L (Left), R (Right), T (Top), B (Bottom) pixels. Cutting is performed after any resolution change, if any, is to be done.
+ * @param autocrop_ctol A line is eliminated if none of its R G B values differ by more than CTOL% from those of the corner pixel.
+ * @param autocrop_atol A line is eliminated if none of its R G B values differ by more than ATOL% from those of line average.
+ * @param autocrop This option is the same as using both of -autocrop_atol 20 and -autocrop_ctol 20
+ * @param zero_wrap If number of images is not enough to fill matrix solid black images are used.
+ * @param white_wrap If number of images is not enough to fill matrix solid white images are used.
+ * @param gray_wrap If number of images is not enough to fill matrix, solid gray images are used. GRAY must be between 0 and 1.0.
+ * @param image_wrap If number of images is not enough to fill matrix, images on command line are reused (default).
+ * @param rand_wrap When reusing images to fill matrix, randomize the order in refill section only.
+ * @param prefix Prefix the output files with string 'ppp'.
+ * @param matrix Specify number of images in each row and column of IM at the same time.
+ * @param nx Number of images in each row.
+ * @param ny Number of images in each column.
+ * @param matrix_from_scale Set NX and NY to be the same as the SCALE_IMG's dimensions. (needs -scale_image)
+ * @param gap Put a line G pixels wide between images.
+ * @param gap_col Set color of line to R G B values. Values range between 0 and 255.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImcatOutputs`).
+ */
 function imcat(
     input_files: Array<InputPathType>,
     scale_image: InputPathType | null = null,
@@ -425,42 +461,6 @@ function imcat(
     gap_col: Array<number> | null = null,
     runner: Runner | null = null,
 ): ImcatOutputs {
-    /**
-     * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input image files
-     * @param scale_image Multiply each image IM(i,j) in output image matrix IM by the color or intensity of the pixel (i,j) in SCALE_IMG.
-     * @param scale_pixels Multiply each pixel (i,j) in output image by the color or intensity of the pixel (i,j) in SCALE_IMG. SCALE_IMG is automatically resized to the resolution of the output image.
-     * @param scale_intensity Instead of multiplying by the color of pixel (i,j), use its intensity (average color).
-     * @param gscale Apply FAC in addition to scaling of -scale_* options.
-     * @param rgb_out Force output to be in RGB, even if input is bytes. This option is turned on automatically in certain cases.
-     * @param res_in Set resolution of all input images to RX by RY pixels. Default is to make all input have the same resolution as the first image.
-     * @param respad_in Like -res_in, but resample to the max while respecting the aspect ratio, and then pad to achieve desired pixel count.
-     * @param pad_val Set the padding value, should it be needed by -respad_in to VAL. VAL is typecast to byte, default is 0, max is 255.
-     * @param crop Crop images by L (Left), R (Right), T (Top), B (Bottom) pixels. Cutting is performed after any resolution change, if any, is to be done.
-     * @param autocrop_ctol A line is eliminated if none of its R G B values differ by more than CTOL% from those of the corner pixel.
-     * @param autocrop_atol A line is eliminated if none of its R G B values differ by more than ATOL% from those of line average.
-     * @param autocrop This option is the same as using both of -autocrop_atol 20 and -autocrop_ctol 20
-     * @param zero_wrap If number of images is not enough to fill matrix solid black images are used.
-     * @param white_wrap If number of images is not enough to fill matrix solid white images are used.
-     * @param gray_wrap If number of images is not enough to fill matrix, solid gray images are used. GRAY must be between 0 and 1.0.
-     * @param image_wrap If number of images is not enough to fill matrix, images on command line are reused (default).
-     * @param rand_wrap When reusing images to fill matrix, randomize the order in refill section only.
-     * @param prefix Prefix the output files with string 'ppp'.
-     * @param matrix Specify number of images in each row and column of IM at the same time.
-     * @param nx Number of images in each row.
-     * @param ny Number of images in each column.
-     * @param matrix_from_scale Set NX and NY to be the same as the SCALE_IMG's dimensions. (needs -scale_image)
-     * @param gap Put a line G pixels wide between images.
-     * @param gap_col Set color of line to R G B values. Values range between 0 and 255.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMCAT_METADATA);
     const params = imcat_params(input_files, scale_image, scale_pixels, scale_intensity, gscale, rgb_out, res_in, respad_in, pad_val, crop, autocrop_ctol, autocrop_atol, autocrop, zero_wrap, white_wrap, gray_wrap, image_wrap, rand_wrap, prefix, matrix, nx, ny, matrix_from_scale, gap, gap_col)
@@ -473,5 +473,8 @@ export {
       ImcatOutputs,
       ImcatParameters,
       imcat,
+      imcat_cargs,
+      imcat_execute,
+      imcat_outputs,
       imcat_params,
 };

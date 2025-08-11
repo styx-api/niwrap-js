@@ -12,38 +12,38 @@ const MORPH_TABLES_RH_METADATA: Metadata = {
 
 
 interface MorphTablesRhParameters {
-    "__STYXTYPE__": "morph_tables-rh";
+    "@type": "freesurfer.morph_tables-rh";
     "options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_tables-rh": morph_tables_rh_cargs,
+        "freesurfer.morph_tables-rh": morph_tables_rh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface MorphTablesRhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param options Options used by morph_tables-rh
+ *
+ * @returns Parameter dictionary
+ */
 function morph_tables_rh_params(
     options: string | null = null,
 ): MorphTablesRhParameters {
-    /**
-     * Build parameters.
-    
-     * @param options Options used by morph_tables-rh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_tables-rh" as const,
+        "@type": "freesurfer.morph_tables-rh" as const,
     };
     if (options !== null) {
         params["options"] = options;
@@ -83,18 +83,18 @@ function morph_tables_rh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_tables_rh_cargs(
     params: MorphTablesRhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_tables-rh");
     if ((params["options"] ?? null) !== null) {
@@ -107,18 +107,18 @@ function morph_tables_rh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_tables_rh_outputs(
     params: MorphTablesRhParameters,
     execution: Execution,
 ): MorphTablesRhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphTablesRhOutputs = {
         root: execution.outputFile("."),
     };
@@ -126,22 +126,22 @@ function morph_tables_rh_outputs(
 }
 
 
+/**
+ * A tool from Freesurfer associated with morphological tables for the right hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphTablesRhOutputs`).
+ */
 function morph_tables_rh_execute(
     params: MorphTablesRhParameters,
     execution: Execution,
 ): MorphTablesRhOutputs {
-    /**
-     * A tool from Freesurfer associated with morphological tables for the right hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphTablesRhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_tables_rh_cargs(params, execution)
     const ret = morph_tables_rh_outputs(params, execution)
@@ -150,22 +150,22 @@ function morph_tables_rh_execute(
 }
 
 
+/**
+ * A tool from Freesurfer associated with morphological tables for the right hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param options Options used by morph_tables-rh
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphTablesRhOutputs`).
+ */
 function morph_tables_rh(
     options: string | null = null,
     runner: Runner | null = null,
 ): MorphTablesRhOutputs {
-    /**
-     * A tool from Freesurfer associated with morphological tables for the right hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param options Options used by morph_tables-rh
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphTablesRhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_TABLES_RH_METADATA);
     const params = morph_tables_rh_params(options)
@@ -178,5 +178,8 @@ export {
       MorphTablesRhOutputs,
       MorphTablesRhParameters,
       morph_tables_rh,
+      morph_tables_rh_cargs,
+      morph_tables_rh_execute,
+      morph_tables_rh_outputs,
       morph_tables_rh_params,
 };

@@ -12,7 +12,7 @@ const V_3DBUCKET_METADATA: Metadata = {
 
 
 interface V3dbucketParameters {
-    "__STYXTYPE__": "3dbucket";
+    "@type": "afni.3dbucket";
     "prefix"?: string | null | undefined;
     "output"?: string | null | undefined;
     "session"?: string | null | undefined;
@@ -26,33 +26,33 @@ interface V3dbucketParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dbucket": v_3dbucket_cargs,
+        "afni.3dbucket": v_3dbucket_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface V3dbucketOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input datasets with optional sub-brick selection.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param output Use 'pname' for the output dataset prefix name.
+ * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
+ * @param glueto Append bricks to the end of the 'fname' dataset.
+ * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
+ * @param dry Execute a 'dry run'; only print out what would be done.
+ * @param verbose Print out some verbose output as the program proceeds.
+ * @param fbuc Create a functional bucket.
+ * @param abuc Create an anatomical bucket. If neither of these options is given, the output type is determined from the first input type.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dbucket_params(
     input_files: Array<string>,
     prefix: string | null = null,
@@ -84,24 +100,8 @@ function v_3dbucket_params(
     fbuc: boolean = false,
     abuc: boolean = false,
 ): V3dbucketParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input datasets with optional sub-brick selection.
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param output Use 'pname' for the output dataset prefix name.
-     * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
-     * @param glueto Append bricks to the end of the 'fname' dataset.
-     * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
-     * @param dry Execute a 'dry run'; only print out what would be done.
-     * @param verbose Print out some verbose output as the program proceeds.
-     * @param fbuc Create a functional bucket.
-     * @param abuc Create an anatomical bucket. If neither of these options is given, the output type is determined from the first input type.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dbucket" as const,
+        "@type": "afni.3dbucket" as const,
         "dry": dry,
         "verbose": verbose,
         "fbuc": fbuc,
@@ -127,18 +127,18 @@ function v_3dbucket_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dbucket_cargs(
     params: V3dbucketParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dbucket");
     if ((params["prefix"] ?? null) !== null) {
@@ -188,18 +188,18 @@ function v_3dbucket_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dbucket_outputs(
     params: V3dbucketParameters,
     execution: Execution,
 ): V3dbucketOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dbucketOutputs = {
         root: execution.outputFile("."),
     };
@@ -207,22 +207,22 @@ function v_3dbucket_outputs(
 }
 
 
+/**
+ * Concatenate sub-bricks from input datasets into one big bucket dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
+ */
 function v_3dbucket_execute(
     params: V3dbucketParameters,
     execution: Execution,
 ): V3dbucketOutputs {
-    /**
-     * Concatenate sub-bricks from input datasets into one big bucket dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dbucket_cargs(params, execution)
     const ret = v_3dbucket_outputs(params, execution)
@@ -231,6 +231,27 @@ function v_3dbucket_execute(
 }
 
 
+/**
+ * Concatenate sub-bricks from input datasets into one big bucket dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input datasets with optional sub-brick selection.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param output Use 'pname' for the output dataset prefix name.
+ * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
+ * @param glueto Append bricks to the end of the 'fname' dataset.
+ * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
+ * @param dry Execute a 'dry run'; only print out what would be done.
+ * @param verbose Print out some verbose output as the program proceeds.
+ * @param fbuc Create a functional bucket.
+ * @param abuc Create an anatomical bucket. If neither of these options is given, the output type is determined from the first input type.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
+ */
 function v_3dbucket(
     input_files: Array<string>,
     prefix: string | null = null,
@@ -244,27 +265,6 @@ function v_3dbucket(
     abuc: boolean = false,
     runner: Runner | null = null,
 ): V3dbucketOutputs {
-    /**
-     * Concatenate sub-bricks from input datasets into one big bucket dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input datasets with optional sub-brick selection.
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param output Use 'pname' for the output dataset prefix name.
-     * @param session Use 'dir' for the output dataset session directory. [default='./'=current working directory]
-     * @param glueto Append bricks to the end of the 'fname' dataset.
-     * @param aglueto If fname dataset does not exist, create it (like -prefix). Otherwise append to fname (like -glueto).
-     * @param dry Execute a 'dry run'; only print out what would be done.
-     * @param verbose Print out some verbose output as the program proceeds.
-     * @param fbuc Create a functional bucket.
-     * @param abuc Create an anatomical bucket. If neither of these options is given, the output type is determined from the first input type.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DBUCKET_METADATA);
     const params = v_3dbucket_params(input_files, prefix, output, session, glueto, aglueto, dry, verbose, fbuc, abuc)
@@ -277,5 +277,8 @@ export {
       V3dbucketParameters,
       V_3DBUCKET_METADATA,
       v_3dbucket,
+      v_3dbucket_cargs,
+      v_3dbucket_execute,
+      v_3dbucket_outputs,
       v_3dbucket_params,
 };

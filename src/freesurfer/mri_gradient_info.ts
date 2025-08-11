@@ -12,40 +12,40 @@ const MRI_GRADIENT_INFO_METADATA: Metadata = {
 
 
 interface MriGradientInfoParameters {
-    "__STYXTYPE__": "mri_gradient_info";
+    "@type": "freesurfer.mri_gradient_info";
     "input_image": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gradient_info": mri_gradient_info_cargs,
+        "freesurfer.mri_gradient_info": mri_gradient_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_gradient_info": mri_gradient_info_outputs,
+        "freesurfer.mri_gradient_info": mri_gradient_info_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface MriGradientInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input MRI image file, typically in .mgz format
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gradient_info_params(
     input_image: InputPathType,
 ): MriGradientInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input MRI image file, typically in .mgz format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gradient_info" as const,
+        "@type": "freesurfer.mri_gradient_info" as const,
         "input_image": input_image,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gradient_info_cargs(
     params: MriGradientInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gradient_info");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -105,18 +105,18 @@ function mri_gradient_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gradient_info_outputs(
     params: MriGradientInfoParameters,
     execution: Execution,
 ): MriGradientInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGradientInfoOutputs = {
         root: execution.outputFile("."),
         gradient_info_output: execution.outputFile(["gradient_info_output.txt"].join('')),
@@ -125,22 +125,22 @@ function mri_gradient_info_outputs(
 }
 
 
+/**
+ * A utility to obtain gradient information from MRI images using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
+ */
 function mri_gradient_info_execute(
     params: MriGradientInfoParameters,
     execution: Execution,
 ): MriGradientInfoOutputs {
-    /**
-     * A utility to obtain gradient information from MRI images using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gradient_info_cargs(params, execution)
     const ret = mri_gradient_info_outputs(params, execution)
@@ -149,22 +149,22 @@ function mri_gradient_info_execute(
 }
 
 
+/**
+ * A utility to obtain gradient information from MRI images using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input MRI image file, typically in .mgz format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
+ */
 function mri_gradient_info(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): MriGradientInfoOutputs {
-    /**
-     * A utility to obtain gradient information from MRI images using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input MRI image file, typically in .mgz format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GRADIENT_INFO_METADATA);
     const params = mri_gradient_info_params(input_image)
@@ -177,5 +177,8 @@ export {
       MriGradientInfoOutputs,
       MriGradientInfoParameters,
       mri_gradient_info,
+      mri_gradient_info_cargs,
+      mri_gradient_info_execute,
+      mri_gradient_info_outputs,
       mri_gradient_info_params,
 };

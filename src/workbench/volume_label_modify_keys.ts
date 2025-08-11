@@ -12,7 +12,7 @@ const VOLUME_LABEL_MODIFY_KEYS_METADATA: Metadata = {
 
 
 interface VolumeLabelModifyKeysParameters {
-    "__STYXTYPE__": "volume-label-modify-keys";
+    "@type": "workbench.volume-label-modify-keys";
     "volume_in": InputPathType;
     "remap_file": string;
     "volume_out": string;
@@ -20,35 +20,35 @@ interface VolumeLabelModifyKeysParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-label-modify-keys": volume_label_modify_keys_cargs,
+        "workbench.volume-label-modify-keys": volume_label_modify_keys_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-label-modify-keys": volume_label_modify_keys_outputs,
+        "workbench.volume-label-modify-keys": volume_label_modify_keys_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface VolumeLabelModifyKeysOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input volume label file
+ * @param remap_file text file with old and new key values
+ * @param volume_out the output volume label file
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ *
+ * @returns Parameter dictionary
+ */
 function volume_label_modify_keys_params(
     volume_in: InputPathType,
     remap_file: string,
     volume_out: string,
     opt_subvolume_subvolume: string | null = null,
 ): VolumeLabelModifyKeysParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input volume label file
-     * @param remap_file text file with old and new key values
-     * @param volume_out the output volume label file
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-label-modify-keys" as const,
+        "@type": "workbench.volume-label-modify-keys" as const,
         "volume_in": volume_in,
         "remap_file": remap_file,
         "volume_out": volume_out,
@@ -100,18 +100,18 @@ function volume_label_modify_keys_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_label_modify_keys_cargs(
     params: VolumeLabelModifyKeysParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-label-modify-keys");
@@ -128,18 +128,18 @@ function volume_label_modify_keys_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_label_modify_keys_outputs(
     params: VolumeLabelModifyKeysParameters,
     execution: Execution,
 ): VolumeLabelModifyKeysOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeLabelModifyKeysOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -148,30 +148,30 @@ function volume_label_modify_keys_outputs(
 }
 
 
+/**
+ * Change key values in a volume label file.
+ *
+ * <remap-file> should have lines of the form 'oldkey newkey', like so:
+ *
+ * 3 5
+ * 5 8
+ * 8 2
+ *
+ * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
+ */
 function volume_label_modify_keys_execute(
     params: VolumeLabelModifyKeysParameters,
     execution: Execution,
 ): VolumeLabelModifyKeysOutputs {
-    /**
-     * Change key values in a volume label file.
-     * 
-     * <remap-file> should have lines of the form 'oldkey newkey', like so:
-     * 
-     * 3 5
-     * 5 8
-     * 8 2
-     * 
-     * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_label_modify_keys_cargs(params, execution)
     const ret = volume_label_modify_keys_outputs(params, execution)
@@ -180,6 +180,29 @@ function volume_label_modify_keys_execute(
 }
 
 
+/**
+ * Change key values in a volume label file.
+ *
+ * <remap-file> should have lines of the form 'oldkey newkey', like so:
+ *
+ * 3 5
+ * 5 8
+ * 8 2
+ *
+ * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input volume label file
+ * @param remap_file text file with old and new key values
+ * @param volume_out the output volume label file
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
+ */
 function volume_label_modify_keys(
     volume_in: InputPathType,
     remap_file: string,
@@ -187,29 +210,6 @@ function volume_label_modify_keys(
     opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
-    /**
-     * Change key values in a volume label file.
-     * 
-     * <remap-file> should have lines of the form 'oldkey newkey', like so:
-     * 
-     * 3 5
-     * 5 8
-     * 8 2
-     * 
-     * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input volume label file
-     * @param remap_file text file with old and new key values
-     * @param volume_out the output volume label file
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_LABEL_MODIFY_KEYS_METADATA);
     const params = volume_label_modify_keys_params(volume_in, remap_file, volume_out, opt_subvolume_subvolume)
@@ -222,5 +222,8 @@ export {
       VolumeLabelModifyKeysOutputs,
       VolumeLabelModifyKeysParameters,
       volume_label_modify_keys,
+      volume_label_modify_keys_cargs,
+      volume_label_modify_keys_execute,
+      volume_label_modify_keys_outputs,
       volume_label_modify_keys_params,
 };

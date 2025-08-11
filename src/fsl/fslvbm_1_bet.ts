@@ -12,40 +12,40 @@ const FSLVBM_1_BET_METADATA: Metadata = {
 
 
 interface Fslvbm1BetParameters {
-    "__STYXTYPE__": "fslvbm_1_bet";
+    "@type": "fsl.fslvbm_1_bet";
     "default_bet": boolean;
     "increased_robustness": boolean;
     "bet_parameters"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslvbm_1_bet": fslvbm_1_bet_cargs,
+        "fsl.fslvbm_1_bet": fslvbm_1_bet_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface Fslvbm1BetOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param default_bet Default BET brain extraction with -f 0.4
+ * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
+ * @param bet_parameters Additional options to be passed on to BET
+ *
+ * @returns Parameter dictionary
+ */
 function fslvbm_1_bet_params(
     default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
 ): Fslvbm1BetParameters {
-    /**
-     * Build parameters.
-    
-     * @param default_bet Default BET brain extraction with -f 0.4
-     * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
-     * @param bet_parameters Additional options to be passed on to BET
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslvbm_1_bet" as const,
+        "@type": "fsl.fslvbm_1_bet" as const,
         "default_bet": default_bet,
         "increased_robustness": increased_robustness,
     };
@@ -91,18 +91,18 @@ function fslvbm_1_bet_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslvbm_1_bet_cargs(
     params: Fslvbm1BetParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslvbm_1_bet");
     if ((params["default_bet"] ?? null)) {
@@ -118,18 +118,18 @@ function fslvbm_1_bet_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslvbm_1_bet_outputs(
     params: Fslvbm1BetParameters,
     execution: Execution,
 ): Fslvbm1BetOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fslvbm1BetOutputs = {
         root: execution.outputFile("."),
     };
@@ -137,22 +137,22 @@ function fslvbm_1_bet_outputs(
 }
 
 
+/**
+ * Brain extraction for VBM using FSL BET.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
+ */
 function fslvbm_1_bet_execute(
     params: Fslvbm1BetParameters,
     execution: Execution,
 ): Fslvbm1BetOutputs {
-    /**
-     * Brain extraction for VBM using FSL BET.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslvbm_1_bet_cargs(params, execution)
     const ret = fslvbm_1_bet_outputs(params, execution)
@@ -161,26 +161,26 @@ function fslvbm_1_bet_execute(
 }
 
 
+/**
+ * Brain extraction for VBM using FSL BET.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param default_bet Default BET brain extraction with -f 0.4
+ * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
+ * @param bet_parameters Additional options to be passed on to BET
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
+ */
 function fslvbm_1_bet(
     default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
     runner: Runner | null = null,
 ): Fslvbm1BetOutputs {
-    /**
-     * Brain extraction for VBM using FSL BET.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param default_bet Default BET brain extraction with -f 0.4
-     * @param increased_robustness Increased robustness in the brain extraction when a lot of neck is present
-     * @param bet_parameters Additional options to be passed on to BET
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLVBM_1_BET_METADATA);
     const params = fslvbm_1_bet_params(default_bet, increased_robustness, bet_parameters)
@@ -193,5 +193,8 @@ export {
       Fslvbm1BetOutputs,
       Fslvbm1BetParameters,
       fslvbm_1_bet,
+      fslvbm_1_bet_cargs,
+      fslvbm_1_bet_execute,
+      fslvbm_1_bet_outputs,
       fslvbm_1_bet_params,
 };

@@ -12,7 +12,7 @@ const READ_MATLAB_FILES_PY_METADATA: Metadata = {
 
 
 interface ReadMatlabFilesPyParameters {
-    "__STYXTYPE__": "read_matlab_files.py";
+    "@type": "afni.read_matlab_files.py";
     "infiles": Array<string>;
     "prefix"?: string | null | undefined;
     "overwrite": boolean;
@@ -22,35 +22,35 @@ interface ReadMatlabFilesPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "read_matlab_files.py": read_matlab_files_py_cargs,
+        "afni.read_matlab_files.py": read_matlab_files_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "read_matlab_files.py": read_matlab_files_py_outputs,
+        "afni.read_matlab_files.py": read_matlab_files_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface ReadMatlabFilesPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infiles Input MATLAB files to be processed
+ * @param prefix Prefix for output file names
+ * @param overwrite Overwrite any existing output files
+ * @param help Show help message
+ * @param history Show revision history
+ * @param version Show version number
+ *
+ * @returns Parameter dictionary
+ */
 function read_matlab_files_py_params(
     infiles: Array<string>,
     prefix: string | null = null,
@@ -81,20 +93,8 @@ function read_matlab_files_py_params(
     history: boolean = false,
     version: boolean = false,
 ): ReadMatlabFilesPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param infiles Input MATLAB files to be processed
-     * @param prefix Prefix for output file names
-     * @param overwrite Overwrite any existing output files
-     * @param help Show help message
-     * @param history Show revision history
-     * @param version Show version number
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "read_matlab_files.py" as const,
+        "@type": "afni.read_matlab_files.py" as const,
         "infiles": infiles,
         "overwrite": overwrite,
         "help": help,
@@ -108,18 +108,18 @@ function read_matlab_files_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function read_matlab_files_py_cargs(
     params: ReadMatlabFilesPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("read_matlab_files.py");
     cargs.push(...(params["infiles"] ?? null));
@@ -145,18 +145,18 @@ function read_matlab_files_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function read_matlab_files_py_outputs(
     params: ReadMatlabFilesPyParameters,
     execution: Execution,
 ): ReadMatlabFilesPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReadMatlabFilesPyOutputs = {
         root: execution.outputFile("."),
         converted_1d_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".[INDEX].[KEY].1D"].join('')) : null,
@@ -165,22 +165,22 @@ function read_matlab_files_py_outputs(
 }
 
 
+/**
+ * Describe or convert MATLAB files (.mat) to 1D format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
+ */
 function read_matlab_files_py_execute(
     params: ReadMatlabFilesPyParameters,
     execution: Execution,
 ): ReadMatlabFilesPyOutputs {
-    /**
-     * Describe or convert MATLAB files (.mat) to 1D format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = read_matlab_files_py_cargs(params, execution)
     const ret = read_matlab_files_py_outputs(params, execution)
@@ -189,6 +189,23 @@ function read_matlab_files_py_execute(
 }
 
 
+/**
+ * Describe or convert MATLAB files (.mat) to 1D format.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infiles Input MATLAB files to be processed
+ * @param prefix Prefix for output file names
+ * @param overwrite Overwrite any existing output files
+ * @param help Show help message
+ * @param history Show revision history
+ * @param version Show version number
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
+ */
 function read_matlab_files_py(
     infiles: Array<string>,
     prefix: string | null = null,
@@ -198,23 +215,6 @@ function read_matlab_files_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): ReadMatlabFilesPyOutputs {
-    /**
-     * Describe or convert MATLAB files (.mat) to 1D format.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infiles Input MATLAB files to be processed
-     * @param prefix Prefix for output file names
-     * @param overwrite Overwrite any existing output files
-     * @param help Show help message
-     * @param history Show revision history
-     * @param version Show version number
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(READ_MATLAB_FILES_PY_METADATA);
     const params = read_matlab_files_py_params(infiles, prefix, overwrite, help, history, version)
@@ -227,5 +227,8 @@ export {
       ReadMatlabFilesPyOutputs,
       ReadMatlabFilesPyParameters,
       read_matlab_files_py,
+      read_matlab_files_py_cargs,
+      read_matlab_files_py_execute,
+      read_matlab_files_py_outputs,
       read_matlab_files_py_params,
 };

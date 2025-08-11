@@ -12,7 +12,7 @@ const CONF2HIRES_METADATA: Metadata = {
 
 
 interface Conf2hiresParameters {
-    "__STYXTYPE__": "conf2hires";
+    "@type": "freesurfer.conf2hires";
     "subject": string;
     "t2": boolean;
     "no_t2": boolean;
@@ -37,33 +37,33 @@ interface Conf2hiresParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "conf2hires": conf2hires_cargs,
+        "freesurfer.conf2hires": conf2hires_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -83,6 +83,33 @@ interface Conf2hiresOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param t2 Enable T2 processing
+ * @param no_t2 Disable T2 processing (default)
+ * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
+ * @param flair Enable FLAIR processing
+ * @param no_flair Disable FLAIR processing (default)
+ * @param threads Number of threads to use
+ * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
+ * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
+ * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
+ * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
+ * @param dev Use mris_make_surfaces.dev
+ * @param no_dev Do not use mris_make_surfaces.dev (default)
+ * @param bbr_con Set BBR contrast type (default t2)
+ * @param bbr_t1 Set BBR contrast type to t1
+ * @param bbr_t2 Set BBR contrast type to t2
+ * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
+ * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
+ * @param stopmask Specify stop mask
+ * @param expert Use expert options
+ * @param force_update Force update of final surfaces
+ *
+ * @returns Parameter dictionary
+ */
 function conf2hires_params(
     subject: string,
     t2: boolean = false,
@@ -106,35 +133,8 @@ function conf2hires_params(
     expert: string | null = null,
     force_update: boolean = false,
 ): Conf2hiresParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param t2 Enable T2 processing
-     * @param no_t2 Disable T2 processing (default)
-     * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
-     * @param flair Enable FLAIR processing
-     * @param no_flair Disable FLAIR processing (default)
-     * @param threads Number of threads to use
-     * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
-     * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
-     * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
-     * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
-     * @param dev Use mris_make_surfaces.dev
-     * @param no_dev Do not use mris_make_surfaces.dev (default)
-     * @param bbr_con Set BBR contrast type (default t2)
-     * @param bbr_t1 Set BBR contrast type to t1
-     * @param bbr_t2 Set BBR contrast type to t2
-     * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
-     * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
-     * @param stopmask Specify stop mask
-     * @param expert Use expert options
-     * @param force_update Force update of final surfaces
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "conf2hires" as const,
+        "@type": "freesurfer.conf2hires" as const,
         "subject": subject,
         "t2": t2,
         "no_t2": no_t2,
@@ -171,18 +171,18 @@ function conf2hires_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function conf2hires_cargs(
     params: Conf2hiresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("conf2hires");
     cargs.push(
@@ -268,18 +268,18 @@ function conf2hires_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function conf2hires_outputs(
     params: Conf2hiresParameters,
     execution: Execution,
 ): Conf2hiresOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Conf2hiresOutputs = {
         root: execution.outputFile("."),
     };
@@ -287,22 +287,22 @@ function conf2hires_outputs(
 }
 
 
+/**
+ * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
+ */
 function conf2hires_execute(
     params: Conf2hiresParameters,
     execution: Execution,
 ): Conf2hiresOutputs {
-    /**
-     * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
-     */
     params = execution.params(params)
     const cargs = conf2hires_cargs(params, execution)
     const ret = conf2hires_outputs(params, execution)
@@ -311,6 +311,38 @@ function conf2hires_execute(
 }
 
 
+/**
+ * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param t2 Enable T2 processing
+ * @param no_t2 Disable T2 processing (default)
+ * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
+ * @param flair Enable FLAIR processing
+ * @param no_flair Disable FLAIR processing (default)
+ * @param threads Number of threads to use
+ * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
+ * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
+ * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
+ * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
+ * @param dev Use mris_make_surfaces.dev
+ * @param no_dev Do not use mris_make_surfaces.dev (default)
+ * @param bbr_con Set BBR contrast type (default t2)
+ * @param bbr_t1 Set BBR contrast type to t1
+ * @param bbr_t2 Set BBR contrast type to t2
+ * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
+ * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
+ * @param stopmask Specify stop mask
+ * @param expert Use expert options
+ * @param force_update Force update of final surfaces
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
+ */
 function conf2hires(
     subject: string,
     t2: boolean = false,
@@ -335,38 +367,6 @@ function conf2hires(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): Conf2hiresOutputs {
-    /**
-     * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param t2 Enable T2 processing
-     * @param no_t2 Disable T2 processing (default)
-     * @param mm_norm_sigma Smoothing level for T2 mri_normalize (default is 8)
-     * @param flair Enable FLAIR processing
-     * @param no_flair Disable FLAIR processing (default)
-     * @param threads Number of threads to use
-     * @param copy_bias_from_conf Copy bias field from conformed instead of computing directly
-     * @param norm_opts_rca Compute bias directly using recon-all opts to mri_normalize
-     * @param cubic Use cubic normalization (applies with --copy-bias-from-conf)
-     * @param trilin Use trilinear normalization (default, applies with --copy-bias-from-conf)
-     * @param dev Use mris_make_surfaces.dev
-     * @param no_dev Do not use mris_make_surfaces.dev (default)
-     * @param bbr_con Set BBR contrast type (default t2)
-     * @param bbr_t1 Set BBR contrast type to t1
-     * @param bbr_t2 Set BBR contrast type to t2
-     * @param first_peak_d1 Refine surface targets in MRIScomputeBorderValues() using first peak method D1
-     * @param first_peak_d2 Refine surface targets in MRIScomputeBorderValues() using first peak method D2
-     * @param stopmask Specify stop mask
-     * @param expert Use expert options
-     * @param force_update Force update of final surfaces
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONF2HIRES_METADATA);
     const params = conf2hires_params(subject, t2, no_t2, mm_norm_sigma, flair, no_flair, threads, copy_bias_from_conf, norm_opts_rca, cubic, trilin, dev, no_dev, bbr_con, bbr_t1, bbr_t2, first_peak_d1, first_peak_d2, stopmask, expert, force_update)
@@ -379,5 +379,8 @@ export {
       Conf2hiresOutputs,
       Conf2hiresParameters,
       conf2hires,
+      conf2hires_cargs,
+      conf2hires_execute,
+      conf2hires_outputs,
       conf2hires_params,
 };

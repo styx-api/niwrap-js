@@ -12,7 +12,7 @@ const THRESHOLD_IMAGE_METADATA: Metadata = {
 
 
 interface ThresholdImageParameters {
-    "__STYXTYPE__": "ThresholdImage";
+    "@type": "ants.ThresholdImage";
     "image_dimension": number;
     "image_in": InputPathType;
     "out_image": string;
@@ -26,35 +26,35 @@ interface ThresholdImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ThresholdImage": threshold_image_cargs,
+        "ants.ThresholdImage": threshold_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ThresholdImage": threshold_image_outputs,
+        "ants.ThresholdImage": threshold_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface ThresholdImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimension of the input image.
+ * @param image_in The input image file to be thresholded.
+ * @param out_image The output image file after thresholding.
+ * @param threshlo The lower threshold value for fixed thresholding.
+ * @param threshhi The upper threshold value for fixed thresholding.
+ * @param inside_value The pixel value to be used inside the threshold range.
+ * @param outside_value The pixel value to be used outside the threshold range.
+ * @param otsu_number_of_thresholds Number of thresholds to use when applying the Otsu method.
+ * @param kmeans_number_of_thresholds Number of thresholds to use when applying the K-means method.
+ * @param mask_image Optional mask image for the thresholding operation.
+ *
+ * @returns Parameter dictionary
+ */
 function threshold_image_params(
     image_dimension: number,
     image_in: InputPathType,
@@ -89,24 +105,8 @@ function threshold_image_params(
     kmeans_number_of_thresholds: number | null = null,
     mask_image: InputPathType | null = null,
 ): ThresholdImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimension of the input image.
-     * @param image_in The input image file to be thresholded.
-     * @param out_image The output image file after thresholding.
-     * @param threshlo The lower threshold value for fixed thresholding.
-     * @param threshhi The upper threshold value for fixed thresholding.
-     * @param inside_value The pixel value to be used inside the threshold range.
-     * @param outside_value The pixel value to be used outside the threshold range.
-     * @param otsu_number_of_thresholds Number of thresholds to use when applying the Otsu method.
-     * @param kmeans_number_of_thresholds Number of thresholds to use when applying the K-means method.
-     * @param mask_image Optional mask image for the thresholding operation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ThresholdImage" as const,
+        "@type": "ants.ThresholdImage" as const,
         "image_dimension": image_dimension,
         "image_in": image_in,
         "out_image": out_image,
@@ -136,18 +136,18 @@ function threshold_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function threshold_image_cargs(
     params: ThresholdImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ThresholdImage");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -178,18 +178,18 @@ function threshold_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function threshold_image_outputs(
     params: ThresholdImageParameters,
     execution: Execution,
 ): ThresholdImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ThresholdImageOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["out_image"] ?? null)].join('')),
@@ -198,22 +198,22 @@ function threshold_image_outputs(
 }
 
 
+/**
+ * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
+ */
 function threshold_image_execute(
     params: ThresholdImageParameters,
     execution: Execution,
 ): ThresholdImageOutputs {
-    /**
-     * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = threshold_image_cargs(params, execution)
     const ret = threshold_image_outputs(params, execution)
@@ -222,6 +222,27 @@ function threshold_image_execute(
 }
 
 
+/**
+ * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimension of the input image.
+ * @param image_in The input image file to be thresholded.
+ * @param out_image The output image file after thresholding.
+ * @param threshlo The lower threshold value for fixed thresholding.
+ * @param threshhi The upper threshold value for fixed thresholding.
+ * @param inside_value The pixel value to be used inside the threshold range.
+ * @param outside_value The pixel value to be used outside the threshold range.
+ * @param otsu_number_of_thresholds Number of thresholds to use when applying the Otsu method.
+ * @param kmeans_number_of_thresholds Number of thresholds to use when applying the K-means method.
+ * @param mask_image Optional mask image for the thresholding operation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
+ */
 function threshold_image(
     image_dimension: number,
     image_in: InputPathType,
@@ -235,27 +256,6 @@ function threshold_image(
     mask_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): ThresholdImageOutputs {
-    /**
-     * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimension of the input image.
-     * @param image_in The input image file to be thresholded.
-     * @param out_image The output image file after thresholding.
-     * @param threshlo The lower threshold value for fixed thresholding.
-     * @param threshhi The upper threshold value for fixed thresholding.
-     * @param inside_value The pixel value to be used inside the threshold range.
-     * @param outside_value The pixel value to be used outside the threshold range.
-     * @param otsu_number_of_thresholds Number of thresholds to use when applying the Otsu method.
-     * @param kmeans_number_of_thresholds Number of thresholds to use when applying the K-means method.
-     * @param mask_image Optional mask image for the thresholding operation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(THRESHOLD_IMAGE_METADATA);
     const params = threshold_image_params(image_dimension, image_in, out_image, threshlo, threshhi, inside_value, outside_value, otsu_number_of_thresholds, kmeans_number_of_thresholds, mask_image)
@@ -268,5 +268,8 @@ export {
       ThresholdImageOutputs,
       ThresholdImageParameters,
       threshold_image,
+      threshold_image_cargs,
+      threshold_image_execute,
+      threshold_image_outputs,
       threshold_image_params,
 };

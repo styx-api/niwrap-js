@@ -12,7 +12,7 @@ const V_3D_ISC_METADATA: Metadata = {
 
 
 interface V3dIscParameters {
-    "__STYXTYPE__": "3dISC";
+    "@type": "afni.3dISC";
     "outfile_prefix": string;
     "num_jobs"?: number | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -25,35 +25,35 @@ interface V3dIscParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dISC": v_3d_isc_cargs,
+        "afni.3dISC": v_3d_isc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dISC": v_3d_isc_outputs,
+        "afni.3dISC": v_3d_isc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dIscOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile_prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed.
+ * @param model_structure Specify the model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes.
+ * @param data_table List the data structure with a header as the first line. Has to occur last in the script.
+ * @param num_jobs Specify the number of jobs to run concurrently. Choose 1 for a single-processor computer.
+ * @param mask_file Process voxels inside this mask only. Default is no masking.
+ * @param qvar_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas without spaces and should be within quotes.
+ * @param quantitative_vars Identify quantitative variables (or covariates). The list should be comma-separated and within quotes.
+ * @param fisher_transform Perform Fisher transformation on the response variable (input files) if it is a correlation value.
+ * @param io_functions Use AFNI's C io functions (default) or R's io functions.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_isc_params(
     outfile_prefix: string,
     model_structure: string,
@@ -91,23 +106,8 @@ function v_3d_isc_params(
     fisher_transform: boolean = false,
     io_functions: "AFNI" | "R" | null = null,
 ): V3dIscParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile_prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed.
-     * @param model_structure Specify the model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes.
-     * @param data_table List the data structure with a header as the first line. Has to occur last in the script.
-     * @param num_jobs Specify the number of jobs to run concurrently. Choose 1 for a single-processor computer.
-     * @param mask_file Process voxels inside this mask only. Default is no masking.
-     * @param qvar_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas without spaces and should be within quotes.
-     * @param quantitative_vars Identify quantitative variables (or covariates). The list should be comma-separated and within quotes.
-     * @param fisher_transform Perform Fisher transformation on the response variable (input files) if it is a correlation value.
-     * @param io_functions Use AFNI's C io functions (default) or R's io functions.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dISC" as const,
+        "@type": "afni.3dISC" as const,
         "outfile_prefix": outfile_prefix,
         "model_structure": model_structure,
         "fisher_transform": fisher_transform,
@@ -132,18 +132,18 @@ function v_3d_isc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_isc_cargs(
     params: V3dIscParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dISC");
     cargs.push(
@@ -195,18 +195,18 @@ function v_3d_isc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_isc_outputs(
     params: V3dIscParameters,
     execution: Execution,
 ): V3dIscOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dIscOutputs = {
         root: execution.outputFile("."),
         isc_output: execution.outputFile([(params["outfile_prefix"] ?? null), "_ISC.nii"].join('')),
@@ -216,22 +216,22 @@ function v_3d_isc_outputs(
 }
 
 
+/**
+ * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dIscOutputs`).
+ */
 function v_3d_isc_execute(
     params: V3dIscParameters,
     execution: Execution,
 ): V3dIscOutputs {
-    /**
-     * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dIscOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_isc_cargs(params, execution)
     const ret = v_3d_isc_outputs(params, execution)
@@ -240,6 +240,26 @@ function v_3d_isc_execute(
 }
 
 
+/**
+ * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param outfile_prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed.
+ * @param model_structure Specify the model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes.
+ * @param data_table List the data structure with a header as the first line. Has to occur last in the script.
+ * @param num_jobs Specify the number of jobs to run concurrently. Choose 1 for a single-processor computer.
+ * @param mask_file Process voxels inside this mask only. Default is no masking.
+ * @param qvar_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas without spaces and should be within quotes.
+ * @param quantitative_vars Identify quantitative variables (or covariates). The list should be comma-separated and within quotes.
+ * @param fisher_transform Perform Fisher transformation on the response variable (input files) if it is a correlation value.
+ * @param io_functions Use AFNI's C io functions (default) or R's io functions.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dIscOutputs`).
+ */
 function v_3d_isc(
     outfile_prefix: string,
     model_structure: string,
@@ -252,26 +272,6 @@ function v_3d_isc(
     io_functions: "AFNI" | "R" | null = null,
     runner: Runner | null = null,
 ): V3dIscOutputs {
-    /**
-     * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param outfile_prefix Output file name. For AFNI format, provide prefix only, with no view+suffix needed.
-     * @param model_structure Specify the model structure for all the variables. The expression FORMULA with more than one variable has to be surrounded within quotes.
-     * @param data_table List the data structure with a header as the first line. Has to occur last in the script.
-     * @param num_jobs Specify the number of jobs to run concurrently. Choose 1 for a single-processor computer.
-     * @param mask_file Process voxels inside this mask only. Default is no masking.
-     * @param qvar_centers Specify centering values for quantitative variables identified under -qVars. Multiple centers are separated by commas without spaces and should be within quotes.
-     * @param quantitative_vars Identify quantitative variables (or covariates). The list should be comma-separated and within quotes.
-     * @param fisher_transform Perform Fisher transformation on the response variable (input files) if it is a correlation value.
-     * @param io_functions Use AFNI's C io functions (default) or R's io functions.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dIscOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ISC_METADATA);
     const params = v_3d_isc_params(outfile_prefix, model_structure, data_table, num_jobs, mask_file, qvar_centers, quantitative_vars, fisher_transform, io_functions)
@@ -284,5 +284,8 @@ export {
       V3dIscParameters,
       V_3D_ISC_METADATA,
       v_3d_isc,
+      v_3d_isc_cargs,
+      v_3d_isc_execute,
+      v_3d_isc_outputs,
       v_3d_isc_params,
 };

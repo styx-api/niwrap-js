@@ -12,7 +12,7 @@ const MRI_STOPMASK_METADATA: Metadata = {
 
 
 interface MriStopmaskParameters {
-    "__STYXTYPE__": "mri_stopmask";
+    "@type": "freesurfer.mri_stopmask";
     "output_mask": string;
     "filled": Array<InputPathType>;
     "aseg_presurf": InputPathType;
@@ -28,35 +28,35 @@ interface MriStopmaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_stopmask": mri_stopmask_cargs,
+        "freesurfer.mri_stopmask": mri_stopmask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_stopmask": mri_stopmask_outputs,
+        "freesurfer.mri_stopmask": mri_stopmask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface MriStopmaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_mask Output stop mask in volume format
+ * @param filled Include voxels edited fill voxels that are set in the filled.mgz
+ * @param aseg_presurf Used with --lv and/or --wmsa; Note: must be aseg.presurf.mgz, not aseg.mgz
+ * @param lateral_ventricles Add lateral ventricles and choroid plexus to the mask (needs --aseg)
+ * @param wmsa Add WM hypointensities to the mask (needs --aseg); erode by given distance away from any adjacent cortex
+ * @param wm_voxels Include voxels that =255 from wm.mgz
+ * @param brain_final_surfs Include voxels that =255 from brain.finalsurfs.mgz
+ * @param no_filled Turns off --filled option
+ * @param no_lv Turns off --lv option
+ * @param no_wmsa Turns off --wmsa option
+ * @param no_wm Turns off --wm option
+ * @param no_bfs Turns off --bfs option
+ *
+ * @returns Parameter dictionary
+ */
 function mri_stopmask_params(
     output_mask: string,
     filled: Array<InputPathType>,
@@ -93,26 +111,8 @@ function mri_stopmask_params(
     no_wm: boolean = false,
     no_bfs: boolean = false,
 ): MriStopmaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_mask Output stop mask in volume format
-     * @param filled Include voxels edited fill voxels that are set in the filled.mgz
-     * @param aseg_presurf Used with --lv and/or --wmsa; Note: must be aseg.presurf.mgz, not aseg.mgz
-     * @param lateral_ventricles Add lateral ventricles and choroid plexus to the mask (needs --aseg)
-     * @param wmsa Add WM hypointensities to the mask (needs --aseg); erode by given distance away from any adjacent cortex
-     * @param wm_voxels Include voxels that =255 from wm.mgz
-     * @param brain_final_surfs Include voxels that =255 from brain.finalsurfs.mgz
-     * @param no_filled Turns off --filled option
-     * @param no_lv Turns off --lv option
-     * @param no_wmsa Turns off --wmsa option
-     * @param no_wm Turns off --wm option
-     * @param no_bfs Turns off --bfs option
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_stopmask" as const,
+        "@type": "freesurfer.mri_stopmask" as const,
         "output_mask": output_mask,
         "filled": filled,
         "aseg_presurf": aseg_presurf,
@@ -136,18 +136,18 @@ function mri_stopmask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_stopmask_cargs(
     params: MriStopmaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_stopmask");
     cargs.push(
@@ -202,18 +202,18 @@ function mri_stopmask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_stopmask_outputs(
     params: MriStopmaskParameters,
     execution: Execution,
 ): MriStopmaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriStopmaskOutputs = {
         root: execution.outputFile("."),
         generated_mask: execution.outputFile([(params["output_mask"] ?? null)].join('')),
@@ -222,22 +222,22 @@ function mri_stopmask_outputs(
 }
 
 
+/**
+ * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
+ */
 function mri_stopmask_execute(
     params: MriStopmaskParameters,
     execution: Execution,
 ): MriStopmaskOutputs {
-    /**
-     * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_stopmask_cargs(params, execution)
     const ret = mri_stopmask_outputs(params, execution)
@@ -246,6 +246,29 @@ function mri_stopmask_execute(
 }
 
 
+/**
+ * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_mask Output stop mask in volume format
+ * @param filled Include voxels edited fill voxels that are set in the filled.mgz
+ * @param aseg_presurf Used with --lv and/or --wmsa; Note: must be aseg.presurf.mgz, not aseg.mgz
+ * @param lateral_ventricles Add lateral ventricles and choroid plexus to the mask (needs --aseg)
+ * @param wmsa Add WM hypointensities to the mask (needs --aseg); erode by given distance away from any adjacent cortex
+ * @param wm_voxels Include voxels that =255 from wm.mgz
+ * @param brain_final_surfs Include voxels that =255 from brain.finalsurfs.mgz
+ * @param no_filled Turns off --filled option
+ * @param no_lv Turns off --lv option
+ * @param no_wmsa Turns off --wmsa option
+ * @param no_wm Turns off --wm option
+ * @param no_bfs Turns off --bfs option
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
+ */
 function mri_stopmask(
     output_mask: string,
     filled: Array<InputPathType>,
@@ -261,29 +284,6 @@ function mri_stopmask(
     no_bfs: boolean = false,
     runner: Runner | null = null,
 ): MriStopmaskOutputs {
-    /**
-     * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_mask Output stop mask in volume format
-     * @param filled Include voxels edited fill voxels that are set in the filled.mgz
-     * @param aseg_presurf Used with --lv and/or --wmsa; Note: must be aseg.presurf.mgz, not aseg.mgz
-     * @param lateral_ventricles Add lateral ventricles and choroid plexus to the mask (needs --aseg)
-     * @param wmsa Add WM hypointensities to the mask (needs --aseg); erode by given distance away from any adjacent cortex
-     * @param wm_voxels Include voxels that =255 from wm.mgz
-     * @param brain_final_surfs Include voxels that =255 from brain.finalsurfs.mgz
-     * @param no_filled Turns off --filled option
-     * @param no_lv Turns off --lv option
-     * @param no_wmsa Turns off --wmsa option
-     * @param no_wm Turns off --wm option
-     * @param no_bfs Turns off --bfs option
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_STOPMASK_METADATA);
     const params = mri_stopmask_params(output_mask, filled, aseg_presurf, lateral_ventricles, wmsa, wm_voxels, brain_final_surfs, no_filled, no_lv, no_wmsa, no_wm, no_bfs)
@@ -296,5 +296,8 @@ export {
       MriStopmaskOutputs,
       MriStopmaskParameters,
       mri_stopmask,
+      mri_stopmask_cargs,
+      mri_stopmask_execute,
+      mri_stopmask_outputs,
       mri_stopmask_params,
 };

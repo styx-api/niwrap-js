@@ -12,7 +12,7 @@ const MRI_GTMSEG_METADATA: Metadata = {
 
 
 interface MriGtmsegParameters {
-    "__STYXTYPE__": "mri_gtmseg";
+    "@type": "freesurfer.mri_gtmseg";
     "output_volume": string;
     "source_subject": string;
     "internal_usf"?: number | null | undefined;
@@ -35,33 +35,33 @@ interface MriGtmsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gtmseg": mri_gtmseg_cargs,
+        "freesurfer.mri_gtmseg": mri_gtmseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -81,6 +81,31 @@ interface MriGtmsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_volume Output volume (output will be subject/mri/outvol)
+ * @param source_subject Source subject
+ * @param internal_usf Upsampling factor (default 2)
+ * @param apas_file Defines extra-cerebral and subcortical segmentations (apas+head.mgz)
+ * @param context_annotation Use annotation to segment cortex (aparc.annot,1000,2000)
+ * @param subseg_wm Turn on segmenting of WM into smaller parts (off by default)
+ * @param wm_annotation Use annotation to subsegment white matter
+ * @param dmax Distance from cortex for white matter segmentation to be considered 'unsegmented' (default 5.000000)
+ * @param keep_hypo Do not convert white matter hypointensities to a white matter label
+ * @param keep_cc Do not convert corpus callosum to a white matter label
+ * @param ctab Copy items in ctab.lut into master ctab merging or overwriting what is there
+ * @param lhminmax For defining left hemisphere ribbon in APAS (default: 1000 1900)
+ * @param rhminmax For defining right hemisphere ribbon in APAS (default: 2000 2900)
+ * @param output_usf Set actual output resolution. Default is to be the same as the --internal-usf
+ * @param threads Use N threads (with Open MP)
+ * @param threads_max Use the maximum allowable number of threads for this computer
+ * @param threads_max_1 Use one less than the maximum allowable number of threads for this computer
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gtmseg_params(
     output_volume: string,
     source_subject: string,
@@ -102,33 +127,8 @@ function mri_gtmseg_params(
     debug: boolean = false,
     check_opts: boolean = false,
 ): MriGtmsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_volume Output volume (output will be subject/mri/outvol)
-     * @param source_subject Source subject
-     * @param internal_usf Upsampling factor (default 2)
-     * @param apas_file Defines extra-cerebral and subcortical segmentations (apas+head.mgz)
-     * @param context_annotation Use annotation to segment cortex (aparc.annot,1000,2000)
-     * @param subseg_wm Turn on segmenting of WM into smaller parts (off by default)
-     * @param wm_annotation Use annotation to subsegment white matter
-     * @param dmax Distance from cortex for white matter segmentation to be considered 'unsegmented' (default 5.000000)
-     * @param keep_hypo Do not convert white matter hypointensities to a white matter label
-     * @param keep_cc Do not convert corpus callosum to a white matter label
-     * @param ctab Copy items in ctab.lut into master ctab merging or overwriting what is there
-     * @param lhminmax For defining left hemisphere ribbon in APAS (default: 1000 1900)
-     * @param rhminmax For defining right hemisphere ribbon in APAS (default: 2000 2900)
-     * @param output_usf Set actual output resolution. Default is to be the same as the --internal-usf
-     * @param threads Use N threads (with Open MP)
-     * @param threads_max Use the maximum allowable number of threads for this computer
-     * @param threads_max_1 Use one less than the maximum allowable number of threads for this computer
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gtmseg" as const,
+        "@type": "freesurfer.mri_gtmseg" as const,
         "output_volume": output_volume,
         "source_subject": source_subject,
         "subseg_wm": subseg_wm,
@@ -173,18 +173,18 @@ function mri_gtmseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gtmseg_cargs(
     params: MriGtmsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gtmseg");
     cargs.push(
@@ -280,18 +280,18 @@ function mri_gtmseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gtmseg_outputs(
     params: MriGtmsegParameters,
     execution: Execution,
 ): MriGtmsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGtmsegOutputs = {
         root: execution.outputFile("."),
     };
@@ -299,22 +299,22 @@ function mri_gtmseg_outputs(
 }
 
 
+/**
+ * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
+ */
 function mri_gtmseg_execute(
     params: MriGtmsegParameters,
     execution: Execution,
 ): MriGtmsegOutputs {
-    /**
-     * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gtmseg_cargs(params, execution)
     const ret = mri_gtmseg_outputs(params, execution)
@@ -323,6 +323,36 @@ function mri_gtmseg_execute(
 }
 
 
+/**
+ * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_volume Output volume (output will be subject/mri/outvol)
+ * @param source_subject Source subject
+ * @param internal_usf Upsampling factor (default 2)
+ * @param apas_file Defines extra-cerebral and subcortical segmentations (apas+head.mgz)
+ * @param context_annotation Use annotation to segment cortex (aparc.annot,1000,2000)
+ * @param subseg_wm Turn on segmenting of WM into smaller parts (off by default)
+ * @param wm_annotation Use annotation to subsegment white matter
+ * @param dmax Distance from cortex for white matter segmentation to be considered 'unsegmented' (default 5.000000)
+ * @param keep_hypo Do not convert white matter hypointensities to a white matter label
+ * @param keep_cc Do not convert corpus callosum to a white matter label
+ * @param ctab Copy items in ctab.lut into master ctab merging or overwriting what is there
+ * @param lhminmax For defining left hemisphere ribbon in APAS (default: 1000 1900)
+ * @param rhminmax For defining right hemisphere ribbon in APAS (default: 2000 2900)
+ * @param output_usf Set actual output resolution. Default is to be the same as the --internal-usf
+ * @param threads Use N threads (with Open MP)
+ * @param threads_max Use the maximum allowable number of threads for this computer
+ * @param threads_max_1 Use one less than the maximum allowable number of threads for this computer
+ * @param debug Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
+ */
 function mri_gtmseg(
     output_volume: string,
     source_subject: string,
@@ -345,36 +375,6 @@ function mri_gtmseg(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriGtmsegOutputs {
-    /**
-     * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_volume Output volume (output will be subject/mri/outvol)
-     * @param source_subject Source subject
-     * @param internal_usf Upsampling factor (default 2)
-     * @param apas_file Defines extra-cerebral and subcortical segmentations (apas+head.mgz)
-     * @param context_annotation Use annotation to segment cortex (aparc.annot,1000,2000)
-     * @param subseg_wm Turn on segmenting of WM into smaller parts (off by default)
-     * @param wm_annotation Use annotation to subsegment white matter
-     * @param dmax Distance from cortex for white matter segmentation to be considered 'unsegmented' (default 5.000000)
-     * @param keep_hypo Do not convert white matter hypointensities to a white matter label
-     * @param keep_cc Do not convert corpus callosum to a white matter label
-     * @param ctab Copy items in ctab.lut into master ctab merging or overwriting what is there
-     * @param lhminmax For defining left hemisphere ribbon in APAS (default: 1000 1900)
-     * @param rhminmax For defining right hemisphere ribbon in APAS (default: 2000 2900)
-     * @param output_usf Set actual output resolution. Default is to be the same as the --internal-usf
-     * @param threads Use N threads (with Open MP)
-     * @param threads_max Use the maximum allowable number of threads for this computer
-     * @param threads_max_1 Use one less than the maximum allowable number of threads for this computer
-     * @param debug Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GTMSEG_METADATA);
     const params = mri_gtmseg_params(output_volume, source_subject, internal_usf, apas_file, context_annotation, subseg_wm, wm_annotation, dmax, keep_hypo, keep_cc, ctab, lhminmax, rhminmax, output_usf, threads, threads_max, threads_max_1, debug, check_opts)
@@ -387,5 +387,8 @@ export {
       MriGtmsegOutputs,
       MriGtmsegParameters,
       mri_gtmseg,
+      mri_gtmseg_cargs,
+      mri_gtmseg_execute,
+      mri_gtmseg_outputs,
       mri_gtmseg_params,
 };

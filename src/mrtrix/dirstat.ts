@@ -12,21 +12,21 @@ const DIRSTAT_METADATA: Metadata = {
 
 
 interface DirstatFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.dirstat.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface DirstatConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dirstat.config";
     "key": string;
     "value": string;
 }
 
 
 interface DirstatParameters {
-    "__STYXTYPE__": "dirstat";
+    "@type": "mrtrix.dirstat";
     "output"?: string | null | undefined;
     "shells"?: Array<number> | null | undefined;
     "grad"?: InputPathType | null | undefined;
@@ -43,55 +43,55 @@ interface DirstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dirstat": dirstat_cargs,
-        "fslgrad": dirstat_fslgrad_cargs,
-        "config": dirstat_config_cargs,
+        "mrtrix.dirstat": dirstat_cargs,
+        "mrtrix.dirstat.fslgrad": dirstat_fslgrad_cargs,
+        "mrtrix.dirstat.config": dirstat_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function dirstat_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): DirstatFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.dirstat.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -99,18 +99,18 @@ function dirstat_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirstat_fslgrad_cargs(
     params: DirstatFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -119,20 +119,20 @@ function dirstat_fslgrad_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dirstat_config_params(
     key: string,
     value: string,
 ): DirstatConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dirstat.config" as const,
         "key": key,
         "value": value,
     };
@@ -140,18 +140,18 @@ function dirstat_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirstat_config_cargs(
     params: DirstatConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -173,6 +173,26 @@ interface DirstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dirs the text file or image containing the directions.
+ * @param output output selected metrics as a space-delimited list, suitable for use in scripts. This will produce one line of values per selected shell. Valid metrics are as specified in the description above.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dirstat_params(
     dirs: InputPathType,
     output: string | null = null,
@@ -188,28 +208,8 @@ function dirstat_params(
     help: boolean = false,
     version: boolean = false,
 ): DirstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param dirs the text file or image containing the directions.
-     * @param output output selected metrics as a space-delimited list, suitable for use in scripts. This will produce one line of values per selected shell. Valid metrics are as specified in the description above.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dirstat" as const,
+        "@type": "mrtrix.dirstat" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -240,18 +240,18 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirstat_cargs(
     params: DirstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dirstat");
     if ((params["output"] ?? null) !== null) {
@@ -273,7 +273,7 @@ function dirstat_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -294,7 +294,7 @@ function dirstat_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -307,18 +307,18 @@ function dirstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dirstat_outputs(
     params: DirstatParameters,
     execution: Execution,
 ): DirstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DirstatOutputs = {
         root: execution.outputFile("."),
     };
@@ -326,48 +326,48 @@ function dirstat_outputs(
 }
 
 
+/**
+ * Report statistics on a direction set.
+ *
+ * This command will accept as inputs:
+ *
+ * - directions file in spherical coordinates (ASCII text, [ az el ] space-separated values, one per line);
+ *
+ * - directions file in Cartesian coordinates (ASCII text, [ x y z ] space-separated values, one per line);
+ *
+ * - DW gradient files (MRtrix format: ASCII text, [ x y z b ] space-separated values, one per line);
+ *
+ * - image files, using the DW gradient scheme found in the header (or provided using the appropriate command line options below).
+ *
+ * By default, this produces all relevant metrics for the direction set provided. If the direction set contains multiple shells, metrics are provided for each shell separately.
+ *
+ * Metrics are produced assuming a unipolar or bipolar electrostatic repulsion model, producing the potential energy (total, mean, min & max), and the nearest-neighbour angles (mean, min & max). The condition number is also produced for the spherical harmonic fits up to the highest harmonic order supported by the number of volumes. Finally, the norm of the mean direction vector is provided as a measure of the overall symmetry of the direction set (important with respect to eddy-current resilience).
+ *
+ * Specific metrics can also be queried independently via the "-output" option, using these shorthands: 
+ * U/B for unipolar/bipolar model, 
+ * E/N for energy and nearest-neighbour respectively, 
+ * t/-/+ for total/min/max respectively (mean implied otherwise); 
+ * SHn for condition number of SH fit at order n (with n an even integer); 
+ * ASYM for asymmetry index (norm of mean direction vector); 
+ * N for the number of directions.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DirstatOutputs`).
+ */
 function dirstat_execute(
     params: DirstatParameters,
     execution: Execution,
 ): DirstatOutputs {
-    /**
-     * Report statistics on a direction set.
-     * 
-     * This command will accept as inputs:
-     * 
-     * - directions file in spherical coordinates (ASCII text, [ az el ] space-separated values, one per line);
-     * 
-     * - directions file in Cartesian coordinates (ASCII text, [ x y z ] space-separated values, one per line);
-     * 
-     * - DW gradient files (MRtrix format: ASCII text, [ x y z b ] space-separated values, one per line);
-     * 
-     * - image files, using the DW gradient scheme found in the header (or provided using the appropriate command line options below).
-     * 
-     * By default, this produces all relevant metrics for the direction set provided. If the direction set contains multiple shells, metrics are provided for each shell separately.
-     * 
-     * Metrics are produced assuming a unipolar or bipolar electrostatic repulsion model, producing the potential energy (total, mean, min & max), and the nearest-neighbour angles (mean, min & max). The condition number is also produced for the spherical harmonic fits up to the highest harmonic order supported by the number of volumes. Finally, the norm of the mean direction vector is provided as a measure of the overall symmetry of the direction set (important with respect to eddy-current resilience).
-     * 
-     * Specific metrics can also be queried independently via the "-output" option, using these shorthands: 
-     * U/B for unipolar/bipolar model, 
-     * E/N for energy and nearest-neighbour respectively, 
-     * t/-/+ for total/min/max respectively (mean implied otherwise); 
-     * SHn for condition number of SH fit at order n (with n an even integer); 
-     * ASYM for asymmetry index (norm of mean direction vector); 
-     * N for the number of directions.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DirstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = dirstat_cargs(params, execution)
     const ret = dirstat_outputs(params, execution)
@@ -376,6 +376,57 @@ function dirstat_execute(
 }
 
 
+/**
+ * Report statistics on a direction set.
+ *
+ * This command will accept as inputs:
+ *
+ * - directions file in spherical coordinates (ASCII text, [ az el ] space-separated values, one per line);
+ *
+ * - directions file in Cartesian coordinates (ASCII text, [ x y z ] space-separated values, one per line);
+ *
+ * - DW gradient files (MRtrix format: ASCII text, [ x y z b ] space-separated values, one per line);
+ *
+ * - image files, using the DW gradient scheme found in the header (or provided using the appropriate command line options below).
+ *
+ * By default, this produces all relevant metrics for the direction set provided. If the direction set contains multiple shells, metrics are provided for each shell separately.
+ *
+ * Metrics are produced assuming a unipolar or bipolar electrostatic repulsion model, producing the potential energy (total, mean, min & max), and the nearest-neighbour angles (mean, min & max). The condition number is also produced for the spherical harmonic fits up to the highest harmonic order supported by the number of volumes. Finally, the norm of the mean direction vector is provided as a measure of the overall symmetry of the direction set (important with respect to eddy-current resilience).
+ *
+ * Specific metrics can also be queried independently via the "-output" option, using these shorthands: 
+ * U/B for unipolar/bipolar model, 
+ * E/N for energy and nearest-neighbour respectively, 
+ * t/-/+ for total/min/max respectively (mean implied otherwise); 
+ * SHn for condition number of SH fit at order n (with n an even integer); 
+ * ASYM for asymmetry index (norm of mean direction vector); 
+ * N for the number of directions.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param dirs the text file or image containing the directions.
+ * @param output output selected metrics as a space-delimited list, suitable for use in scripts. This will produce one line of values per selected shell. Valid metrics are as specified in the description above.
+ * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
+WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DirstatOutputs`).
+ */
 function dirstat(
     dirs: InputPathType,
     output: string | null = null,
@@ -392,57 +443,6 @@ function dirstat(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirstatOutputs {
-    /**
-     * Report statistics on a direction set.
-     * 
-     * This command will accept as inputs:
-     * 
-     * - directions file in spherical coordinates (ASCII text, [ az el ] space-separated values, one per line);
-     * 
-     * - directions file in Cartesian coordinates (ASCII text, [ x y z ] space-separated values, one per line);
-     * 
-     * - DW gradient files (MRtrix format: ASCII text, [ x y z b ] space-separated values, one per line);
-     * 
-     * - image files, using the DW gradient scheme found in the header (or provided using the appropriate command line options below).
-     * 
-     * By default, this produces all relevant metrics for the direction set provided. If the direction set contains multiple shells, metrics are provided for each shell separately.
-     * 
-     * Metrics are produced assuming a unipolar or bipolar electrostatic repulsion model, producing the potential energy (total, mean, min & max), and the nearest-neighbour angles (mean, min & max). The condition number is also produced for the spherical harmonic fits up to the highest harmonic order supported by the number of volumes. Finally, the norm of the mean direction vector is provided as a measure of the overall symmetry of the direction set (important with respect to eddy-current resilience).
-     * 
-     * Specific metrics can also be queried independently via the "-output" option, using these shorthands: 
-     * U/B for unipolar/bipolar model, 
-     * E/N for energy and nearest-neighbour respectively, 
-     * t/-/+ for total/min/max respectively (mean implied otherwise); 
-     * SHn for condition number of SH fit at order n (with n an even integer); 
-     * ASYM for asymmetry index (norm of mean direction vector); 
-     * N for the number of directions.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param dirs the text file or image containing the directions.
-     * @param output output selected metrics as a space-delimited list, suitable for use in scripts. This will produce one line of values per selected shell. Valid metrics are as specified in the description above.
-     * @param shells specify one or more b-values to use during processing, as a comma-separated list of the desired approximate b-values (b-values are clustered to allow for small deviations). Note that some commands are incompatible with multiple b-values, and will report an error if more than one b-value is provided. 
-WARNING: note that, even though the b=0 volumes are never referred to as shells in the literature, they still have to be explicitly included in the list of b-values as provided to the -shell option! Several algorithms which include the b=0 volumes in their computations may otherwise return an undesired result.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DirstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIRSTAT_METADATA);
     const params = dirstat_params(dirs, output, shells, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
@@ -457,7 +457,12 @@ export {
       DirstatOutputs,
       DirstatParameters,
       dirstat,
+      dirstat_cargs,
+      dirstat_config_cargs,
       dirstat_config_params,
+      dirstat_execute,
+      dirstat_fslgrad_cargs,
       dirstat_fslgrad_params,
+      dirstat_outputs,
       dirstat_params,
 };

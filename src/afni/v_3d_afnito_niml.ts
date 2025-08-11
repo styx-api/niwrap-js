@@ -12,7 +12,7 @@ const V_3D_AFNITO_NIML_METADATA: Metadata = {
 
 
 interface V3dAfnitoNimlParameters {
-    "__STYXTYPE__": "3dAFNItoNIML";
+    "@type": "afni.3dAFNItoNIML";
     "dset": InputPathType;
     "data": boolean;
     "ascii": boolean;
@@ -20,33 +20,33 @@ interface V3dAfnitoNimlParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAFNItoNIML": v_3d_afnito_niml_cargs,
+        "afni.3dAFNItoNIML": v_3d_afnito_niml_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface V3dAfnitoNimlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset AFNI dataset
+ * @param data Also put the data into the output (will be huge).
+ * @param ascii Format in ASCII, not binary (even huger).
+ * @param tcp Instead of stdout, send the dataset to a socket. Implies '-data' as well.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_afnito_niml_params(
     dset: InputPathType,
     data: boolean = false,
     ascii: boolean = false,
     tcp: string | null = null,
 ): V3dAfnitoNimlParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset AFNI dataset
-     * @param data Also put the data into the output (will be huge).
-     * @param ascii Format in ASCII, not binary (even huger).
-     * @param tcp Instead of stdout, send the dataset to a socket. Implies '-data' as well.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAFNItoNIML" as const,
+        "@type": "afni.3dAFNItoNIML" as const,
         "dset": dset,
         "data": data,
         "ascii": ascii,
@@ -95,18 +95,18 @@ function v_3d_afnito_niml_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_afnito_niml_cargs(
     params: V3dAfnitoNimlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAFNItoNIML");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
@@ -126,18 +126,18 @@ function v_3d_afnito_niml_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_afnito_niml_outputs(
     params: V3dAfnitoNimlParameters,
     execution: Execution,
 ): V3dAfnitoNimlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAfnitoNimlOutputs = {
         root: execution.outputFile("."),
     };
@@ -145,22 +145,22 @@ function v_3d_afnito_niml_outputs(
 }
 
 
+/**
+ * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
+ */
 function v_3d_afnito_niml_execute(
     params: V3dAfnitoNimlParameters,
     execution: Execution,
 ): V3dAfnitoNimlOutputs {
-    /**
-     * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_afnito_niml_cargs(params, execution)
     const ret = v_3d_afnito_niml_outputs(params, execution)
@@ -169,6 +169,21 @@ function v_3d_afnito_niml_execute(
 }
 
 
+/**
+ * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset AFNI dataset
+ * @param data Also put the data into the output (will be huge).
+ * @param ascii Format in ASCII, not binary (even huger).
+ * @param tcp Instead of stdout, send the dataset to a socket. Implies '-data' as well.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
+ */
 function v_3d_afnito_niml(
     dset: InputPathType,
     data: boolean = false,
@@ -176,21 +191,6 @@ function v_3d_afnito_niml(
     tcp: string | null = null,
     runner: Runner | null = null,
 ): V3dAfnitoNimlOutputs {
-    /**
-     * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset AFNI dataset
-     * @param data Also put the data into the output (will be huge).
-     * @param ascii Format in ASCII, not binary (even huger).
-     * @param tcp Instead of stdout, send the dataset to a socket. Implies '-data' as well.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AFNITO_NIML_METADATA);
     const params = v_3d_afnito_niml_params(dset, data, ascii, tcp)
@@ -203,5 +203,8 @@ export {
       V3dAfnitoNimlParameters,
       V_3D_AFNITO_NIML_METADATA,
       v_3d_afnito_niml,
+      v_3d_afnito_niml_cargs,
+      v_3d_afnito_niml_execute,
+      v_3d_afnito_niml_outputs,
       v_3d_afnito_niml_params,
 };

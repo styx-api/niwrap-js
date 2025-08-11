@@ -12,41 +12,41 @@ const QUICK_ALPHA_VALS_PY_METADATA: Metadata = {
 
 
 interface QuickAlphaValsPyParameters {
-    "__STYXTYPE__": "quick.alpha.vals.py";
+    "@type": "afni.quick.alpha.vals.py";
     "niter"?: number | null | undefined;
     "max_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quick.alpha.vals.py": quick_alpha_vals_py_cargs,
+        "afni.quick.alpha.vals.py": quick_alpha_vals_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quick.alpha.vals.py": quick_alpha_vals_py_outputs,
+        "afni.quick.alpha.vals.py": quick_alpha_vals_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface QuickAlphaValsPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param max_file File containing maximum z values
+ * @param niter Number of iterations that should be in the z file
+ *
+ * @returns Parameter dictionary
+ */
 function quick_alpha_vals_py_params(
     max_file: InputPathType,
     niter: number | null = null,
 ): QuickAlphaValsPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param max_file File containing maximum z values
-     * @param niter Number of iterations that should be in the z file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quick.alpha.vals.py" as const,
+        "@type": "afni.quick.alpha.vals.py" as const,
         "max_file": max_file,
     };
     if (niter !== null) {
@@ -92,18 +92,18 @@ function quick_alpha_vals_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quick_alpha_vals_py_cargs(
     params: QuickAlphaValsPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quick.alpha.vals.py");
     if ((params["niter"] ?? null) !== null) {
@@ -117,18 +117,18 @@ function quick_alpha_vals_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quick_alpha_vals_py_outputs(
     params: QuickAlphaValsPyParameters,
     execution: Execution,
 ): QuickAlphaValsPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuickAlphaValsPyOutputs = {
         root: execution.outputFile("."),
         alpha_table: execution.outputFile(["alpha_table.txt"].join('')),
@@ -137,22 +137,22 @@ function quick_alpha_vals_py_outputs(
 }
 
 
+/**
+ * Generate an alpha table from slow_surf_clustsim.py results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
+ */
 function quick_alpha_vals_py_execute(
     params: QuickAlphaValsPyParameters,
     execution: Execution,
 ): QuickAlphaValsPyOutputs {
-    /**
-     * Generate an alpha table from slow_surf_clustsim.py results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = quick_alpha_vals_py_cargs(params, execution)
     const ret = quick_alpha_vals_py_outputs(params, execution)
@@ -161,24 +161,24 @@ function quick_alpha_vals_py_execute(
 }
 
 
+/**
+ * Generate an alpha table from slow_surf_clustsim.py results.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param max_file File containing maximum z values
+ * @param niter Number of iterations that should be in the z file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
+ */
 function quick_alpha_vals_py(
     max_file: InputPathType,
     niter: number | null = null,
     runner: Runner | null = null,
 ): QuickAlphaValsPyOutputs {
-    /**
-     * Generate an alpha table from slow_surf_clustsim.py results.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param max_file File containing maximum z values
-     * @param niter Number of iterations that should be in the z file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUICK_ALPHA_VALS_PY_METADATA);
     const params = quick_alpha_vals_py_params(max_file, niter)
@@ -191,5 +191,8 @@ export {
       QuickAlphaValsPyOutputs,
       QuickAlphaValsPyParameters,
       quick_alpha_vals_py,
+      quick_alpha_vals_py_cargs,
+      quick_alpha_vals_py_execute,
+      quick_alpha_vals_py_outputs,
       quick_alpha_vals_py_params,
 };

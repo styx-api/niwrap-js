@@ -12,7 +12,7 @@ const FAT_PROC_CONVERT_DCM_ANAT_METADATA: Metadata = {
 
 
 interface FatProcConvertDcmAnatParameters {
-    "__STYXTYPE__": "fat_proc_convert_dcm_anat";
+    "@type": "afni.fat_proc_convert_dcm_anat";
     "dicom_directory"?: string | null | undefined;
     "nifti_input"?: InputPathType | null | undefined;
     "prefix": string;
@@ -26,35 +26,35 @@ interface FatProcConvertDcmAnatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_cargs,
+        "afni.fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_outputs,
+        "afni.fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface FatProcConvertDcmAnatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Set prefix (and path) for output data.
+ * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
+ * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
+ * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
+ * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
+ * @param no_clean Prevents removal of working directory.
+ * @param reorig_reorient_off Turns off the nicety of putting (0, 0, 0) at brain's center of mass (-> 'reorigin' calc) and reorienting data (-> 'reorient' calc).
+ * @param qc_prefix Set the prefix of the QC image files separately (default is '').
+ * @param no_cmd_out Don't save the command line call and the location where it was run.
+ * @param no_qc_view Turn off generating QC image files.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_convert_dcm_anat_params(
     prefix: string,
     dicom_directory: string | null = null,
@@ -89,24 +105,8 @@ function fat_proc_convert_dcm_anat_params(
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
 ): FatProcConvertDcmAnatParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Set prefix (and path) for output data.
-     * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
-     * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
-     * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
-     * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
-     * @param no_clean Prevents removal of working directory.
-     * @param reorig_reorient_off Turns off the nicety of putting (0, 0, 0) at brain's center of mass (-> 'reorigin' calc) and reorienting data (-> 'reorient' calc).
-     * @param qc_prefix Set the prefix of the QC image files separately (default is '').
-     * @param no_cmd_out Don't save the command line call and the location where it was run.
-     * @param no_qc_view Turn off generating QC image files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_convert_dcm_anat" as const,
+        "@type": "afni.fat_proc_convert_dcm_anat" as const,
         "prefix": prefix,
         "no_clean": no_clean,
         "reorig_reorient_off": reorig_reorient_off,
@@ -132,18 +132,18 @@ function fat_proc_convert_dcm_anat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_convert_dcm_anat_cargs(
     params: FatProcConvertDcmAnatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_convert_dcm_anat");
     if ((params["dicom_directory"] ?? null) !== null) {
@@ -196,18 +196,18 @@ function fat_proc_convert_dcm_anat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_convert_dcm_anat_outputs(
     params: FatProcConvertDcmAnatParameters,
     execution: Execution,
 ): FatProcConvertDcmAnatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcConvertDcmAnatOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -216,22 +216,22 @@ function fat_proc_convert_dcm_anat_outputs(
 }
 
 
+/**
+ * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
+ */
 function fat_proc_convert_dcm_anat_execute(
     params: FatProcConvertDcmAnatParameters,
     execution: Execution,
 ): FatProcConvertDcmAnatOutputs {
-    /**
-     * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_convert_dcm_anat_cargs(params, execution)
     const ret = fat_proc_convert_dcm_anat_outputs(params, execution)
@@ -240,6 +240,27 @@ function fat_proc_convert_dcm_anat_execute(
 }
 
 
+/**
+ * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Set prefix (and path) for output data.
+ * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
+ * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
+ * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
+ * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
+ * @param no_clean Prevents removal of working directory.
+ * @param reorig_reorient_off Turns off the nicety of putting (0, 0, 0) at brain's center of mass (-> 'reorigin' calc) and reorienting data (-> 'reorient' calc).
+ * @param qc_prefix Set the prefix of the QC image files separately (default is '').
+ * @param no_cmd_out Don't save the command line call and the location where it was run.
+ * @param no_qc_view Turn off generating QC image files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
+ */
 function fat_proc_convert_dcm_anat(
     prefix: string,
     dicom_directory: string | null = null,
@@ -253,27 +274,6 @@ function fat_proc_convert_dcm_anat(
     no_qc_view: boolean = false,
     runner: Runner | null = null,
 ): FatProcConvertDcmAnatOutputs {
-    /**
-     * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Set prefix (and path) for output data.
-     * @param dicom_directory Input as DICOM directory; DIR_IN should contain only DICOM files; all will be selected.
-     * @param nifti_input Input as NIFTI file (zipped or unzipped fine). Alternative to '-indir ..'.
-     * @param workdir Specify a working directory, which can be removed (default name = '__WORKING_convert_dcm_anat').
-     * @param orient Optional chance to reset orientation of the volume files (default is currently 'RAI').
-     * @param no_clean Prevents removal of working directory.
-     * @param reorig_reorient_off Turns off the nicety of putting (0, 0, 0) at brain's center of mass (-> 'reorigin' calc) and reorienting data (-> 'reorient' calc).
-     * @param qc_prefix Set the prefix of the QC image files separately (default is '').
-     * @param no_cmd_out Don't save the command line call and the location where it was run.
-     * @param no_qc_view Turn off generating QC image files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_ANAT_METADATA);
     const params = fat_proc_convert_dcm_anat_params(prefix, dicom_directory, nifti_input, workdir, orient, no_clean, reorig_reorient_off, qc_prefix, no_cmd_out, no_qc_view)
@@ -286,5 +286,8 @@ export {
       FatProcConvertDcmAnatOutputs,
       FatProcConvertDcmAnatParameters,
       fat_proc_convert_dcm_anat,
+      fat_proc_convert_dcm_anat_cargs,
+      fat_proc_convert_dcm_anat_execute,
+      fat_proc_convert_dcm_anat_outputs,
       fat_proc_convert_dcm_anat_params,
 };

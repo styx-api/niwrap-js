@@ -12,7 +12,7 @@ const MRIS_ENTROPY_METADATA: Metadata = {
 
 
 interface MrisEntropyParameters {
-    "__STYXTYPE__": "mris_entropy";
+    "@type": "freesurfer.mris_entropy";
     "subject": string;
     "hemi": string;
     "wfile": InputPathType;
@@ -22,35 +22,35 @@ interface MrisEntropyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_entropy": mris_entropy_cargs,
+        "freesurfer.mris_entropy": mris_entropy_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_entropy": mris_entropy_outputs,
+        "freesurfer.mris_entropy": mris_entropy_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisEntropyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject ID
+ * @param hemi Hemisphere (e.g., lh or rh)
+ * @param wfile Weight file for surface
+ * @param curvfile Curvature file for input
+ * @param average_iterations Specify number of curvature averaging iterations (default=0)
+ * @param normalize Normalize curvature before writing
+ *
+ * @returns Parameter dictionary
+ */
 function mris_entropy_params(
     subject: string,
     hemi: string,
@@ -81,20 +93,8 @@ function mris_entropy_params(
     average_iterations: number | null = 0,
     normalize: boolean = false,
 ): MrisEntropyParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject ID
-     * @param hemi Hemisphere (e.g., lh or rh)
-     * @param wfile Weight file for surface
-     * @param curvfile Curvature file for input
-     * @param average_iterations Specify number of curvature averaging iterations (default=0)
-     * @param normalize Normalize curvature before writing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_entropy" as const,
+        "@type": "freesurfer.mris_entropy" as const,
         "subject": subject,
         "hemi": hemi,
         "wfile": wfile,
@@ -108,18 +108,18 @@ function mris_entropy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_entropy_cargs(
     params: MrisEntropyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_entropy");
     cargs.push((params["subject"] ?? null));
@@ -139,18 +139,18 @@ function mris_entropy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_entropy_outputs(
     params: MrisEntropyParameters,
     execution: Execution,
 ): MrisEntropyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisEntropyOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["subject"] ?? null), "_", (params["hemi"] ?? null), "_output.txt"].join('')),
@@ -159,22 +159,22 @@ function mris_entropy_outputs(
 }
 
 
+/**
+ * Computes the entropy of a surface activation pattern for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
+ */
 function mris_entropy_execute(
     params: MrisEntropyParameters,
     execution: Execution,
 ): MrisEntropyOutputs {
-    /**
-     * Computes the entropy of a surface activation pattern for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_entropy_cargs(params, execution)
     const ret = mris_entropy_outputs(params, execution)
@@ -183,6 +183,23 @@ function mris_entropy_execute(
 }
 
 
+/**
+ * Computes the entropy of a surface activation pattern for FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject ID
+ * @param hemi Hemisphere (e.g., lh or rh)
+ * @param wfile Weight file for surface
+ * @param curvfile Curvature file for input
+ * @param average_iterations Specify number of curvature averaging iterations (default=0)
+ * @param normalize Normalize curvature before writing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
+ */
 function mris_entropy(
     subject: string,
     hemi: string,
@@ -192,23 +209,6 @@ function mris_entropy(
     normalize: boolean = false,
     runner: Runner | null = null,
 ): MrisEntropyOutputs {
-    /**
-     * Computes the entropy of a surface activation pattern for FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject ID
-     * @param hemi Hemisphere (e.g., lh or rh)
-     * @param wfile Weight file for surface
-     * @param curvfile Curvature file for input
-     * @param average_iterations Specify number of curvature averaging iterations (default=0)
-     * @param normalize Normalize curvature before writing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ENTROPY_METADATA);
     const params = mris_entropy_params(subject, hemi, wfile, curvfile, average_iterations, normalize)
@@ -221,5 +221,8 @@ export {
       MrisEntropyOutputs,
       MrisEntropyParameters,
       mris_entropy,
+      mris_entropy_cargs,
+      mris_entropy_execute,
+      mris_entropy_outputs,
       mris_entropy_params,
 };

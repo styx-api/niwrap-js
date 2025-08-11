@@ -12,14 +12,14 @@ const TRANSFORMCONVERT_METADATA: Metadata = {
 
 
 interface TransformconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.transformconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface TransformconvertParameters {
-    "__STYXTYPE__": "transformconvert";
+    "@type": "mrtrix.transformconvert";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,55 +34,55 @@ interface TransformconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "transformconvert": transformconvert_cargs,
-        "config": transformconvert_config_cargs,
+        "mrtrix.transformconvert": transformconvert_cargs,
+        "mrtrix.transformconvert.config": transformconvert_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "transformconvert": transformconvert_outputs,
+        "mrtrix.transformconvert": transformconvert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function transformconvert_config_params(
     key: string,
     value: string,
 ): TransformconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.transformconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function transformconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformconvert_config_cargs(
     params: TransformconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,24 @@ interface TransformconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input(s) for the specified operation
+ * @param operation the operation to perform, one of:
+flirt_import, itk_import
+ * @param output the output transformation matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function transformconvert_params(
     input: Array<string>,
     operation: string,
@@ -140,26 +158,8 @@ function transformconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): TransformconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input(s) for the specified operation
-     * @param operation the operation to perform, one of:
-flirt_import, itk_import
-     * @param output the output transformation matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformconvert" as const,
+        "@type": "mrtrix.transformconvert" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -180,18 +180,18 @@ flirt_import, itk_import
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function transformconvert_cargs(
     params: TransformconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("transformconvert");
     if ((params["info"] ?? null)) {
@@ -213,7 +213,7 @@ function transformconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -228,18 +228,18 @@ function transformconvert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function transformconvert_outputs(
     params: TransformconvertParameters,
     execution: Execution,
 ): TransformconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TransformconvertOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -248,28 +248,28 @@ function transformconvert_outputs(
 }
 
 
+/**
+ * Convert linear transformation matrices.
+ *
+ * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
+ */
 function transformconvert_execute(
     params: TransformconvertParameters,
     execution: Execution,
 ): TransformconvertOutputs {
-    /**
-     * Convert linear transformation matrices.
-     * 
-     * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = transformconvert_cargs(params, execution)
     const ret = transformconvert_outputs(params, execution)
@@ -278,6 +278,35 @@ function transformconvert_execute(
 }
 
 
+/**
+ * Convert linear transformation matrices.
+ *
+ * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input(s) for the specified operation
+ * @param operation the operation to perform, one of:
+flirt_import, itk_import
+ * @param output the output transformation matrix.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
+ */
 function transformconvert(
     input: Array<string>,
     operation: string,
@@ -292,35 +321,6 @@ function transformconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformconvertOutputs {
-    /**
-     * Convert linear transformation matrices.
-     * 
-     * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input(s) for the specified operation
-     * @param operation the operation to perform, one of:
-flirt_import, itk_import
-     * @param output the output transformation matrix.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRANSFORMCONVERT_METADATA);
     const params = transformconvert_params(input, operation, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -334,6 +334,10 @@ export {
       TransformconvertOutputs,
       TransformconvertParameters,
       transformconvert,
+      transformconvert_cargs,
+      transformconvert_config_cargs,
       transformconvert_config_params,
+      transformconvert_execute,
+      transformconvert_outputs,
       transformconvert_params,
 };

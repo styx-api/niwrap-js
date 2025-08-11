@@ -12,7 +12,7 @@ const MRI_THRESHOLD_METADATA: Metadata = {
 
 
 interface MriThresholdParameters {
-    "__STYXTYPE__": "mri_threshold";
+    "@type": "freesurfer.mri_threshold";
     "input_vol": InputPathType;
     "threshold": number;
     "output_vol": string;
@@ -22,35 +22,35 @@ interface MriThresholdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_threshold": mri_threshold_cargs,
+        "freesurfer.mri_threshold": mri_threshold_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_threshold": mri_threshold_outputs,
+        "freesurfer.mri_threshold": mri_threshold_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MriThresholdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_vol Input volume file
+ * @param threshold Threshold value for the volume
+ * @param output_vol Output volume file
+ * @param binarize Binarize the output volume with specified bval
+ * @param upper_threshold Upper threshold the volume instead of lower thresholding
+ * @param frame_number Apply thresholding to a specific frame indexed by fnum
+ *
+ * @returns Parameter dictionary
+ */
 function mri_threshold_params(
     input_vol: InputPathType,
     threshold: number,
@@ -81,20 +93,8 @@ function mri_threshold_params(
     upper_threshold: boolean = false,
     frame_number: number | null = null,
 ): MriThresholdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_vol Input volume file
-     * @param threshold Threshold value for the volume
-     * @param output_vol Output volume file
-     * @param binarize Binarize the output volume with specified bval
-     * @param upper_threshold Upper threshold the volume instead of lower thresholding
-     * @param frame_number Apply thresholding to a specific frame indexed by fnum
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_threshold" as const,
+        "@type": "freesurfer.mri_threshold" as const,
         "input_vol": input_vol,
         "threshold": threshold,
         "output_vol": output_vol,
@@ -110,18 +110,18 @@ function mri_threshold_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_threshold_cargs(
     params: MriThresholdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_threshold");
     cargs.push(execution.inputFile((params["input_vol"] ?? null)));
@@ -146,18 +146,18 @@ function mri_threshold_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_threshold_outputs(
     params: MriThresholdParameters,
     execution: Execution,
 ): MriThresholdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriThresholdOutputs = {
         root: execution.outputFile("."),
         output_vol_file: execution.outputFile([(params["output_vol"] ?? null)].join('')),
@@ -166,22 +166,22 @@ function mri_threshold_outputs(
 }
 
 
+/**
+ * This program will lower threshold an input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
+ */
 function mri_threshold_execute(
     params: MriThresholdParameters,
     execution: Execution,
 ): MriThresholdOutputs {
-    /**
-     * This program will lower threshold an input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_threshold_cargs(params, execution)
     const ret = mri_threshold_outputs(params, execution)
@@ -190,6 +190,23 @@ function mri_threshold_execute(
 }
 
 
+/**
+ * This program will lower threshold an input volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_vol Input volume file
+ * @param threshold Threshold value for the volume
+ * @param output_vol Output volume file
+ * @param binarize Binarize the output volume with specified bval
+ * @param upper_threshold Upper threshold the volume instead of lower thresholding
+ * @param frame_number Apply thresholding to a specific frame indexed by fnum
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
+ */
 function mri_threshold(
     input_vol: InputPathType,
     threshold: number,
@@ -199,23 +216,6 @@ function mri_threshold(
     frame_number: number | null = null,
     runner: Runner | null = null,
 ): MriThresholdOutputs {
-    /**
-     * This program will lower threshold an input volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_vol Input volume file
-     * @param threshold Threshold value for the volume
-     * @param output_vol Output volume file
-     * @param binarize Binarize the output volume with specified bval
-     * @param upper_threshold Upper threshold the volume instead of lower thresholding
-     * @param frame_number Apply thresholding to a specific frame indexed by fnum
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_THRESHOLD_METADATA);
     const params = mri_threshold_params(input_vol, threshold, output_vol, binarize, upper_threshold, frame_number)
@@ -228,5 +228,8 @@ export {
       MriThresholdOutputs,
       MriThresholdParameters,
       mri_threshold,
+      mri_threshold_cargs,
+      mri_threshold_execute,
+      mri_threshold_outputs,
       mri_threshold_params,
 };

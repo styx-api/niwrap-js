@@ -12,28 +12,28 @@ const TIME_SCCAN_METADATA: Metadata = {
 
 
 interface TimeSccanTimeseriesimageToMatrixParameters {
-    "__STYXTYPE__": "timeseriesimage_to_matrix";
+    "@type": "ants.TimeSCCAN.timeseriesimage_to_matrix";
     "timeseries_image": InputPathType;
     "mask_image": InputPathType;
 }
 
 
 interface TimeSccanNetworkSccaParameters {
-    "__STYXTYPE__": "network_scca";
+    "@type": "ants.TimeSCCAN.network_scca";
     "time_matrix": InputPathType;
     "label_matrix": InputPathType;
 }
 
 
 interface TimeSccanNetworkRegionAveragingParameters {
-    "__STYXTYPE__": "network_region_averaging";
+    "@type": "ants.TimeSCCAN.network_region_averaging";
     "time_matrix": InputPathType;
     "label_matrix": InputPathType;
 }
 
 
 interface TimeSccanParameters {
-    "__STYXTYPE__": "TimeSCCAN";
+    "@type": "ants.TimeSCCAN";
     "output": string;
     "number_consecutive_labels"?: number | null | undefined;
     "minimum_region_size"?: number | null | undefined;
@@ -51,55 +51,55 @@ interface TimeSccanParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "TimeSCCAN": time_sccan_cargs,
-        "timeseriesimage_to_matrix": time_sccan_timeseriesimage_to_matrix_cargs,
-        "network_scca": time_sccan_network_scca_cargs,
-        "network_region_averaging": time_sccan_network_region_averaging_cargs,
+        "ants.TimeSCCAN": time_sccan_cargs,
+        "ants.TimeSCCAN.timeseriesimage_to_matrix": time_sccan_timeseriesimage_to_matrix_cargs,
+        "ants.TimeSCCAN.network_scca": time_sccan_network_scca_cargs,
+        "ants.TimeSCCAN.network_region_averaging": time_sccan_network_region_averaging_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "TimeSCCAN": time_sccan_outputs,
+        "ants.TimeSCCAN": time_sccan_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function time_sccan_timeseriesimage_to_matrix_params(
     timeseries_image: InputPathType,
     mask_image: InputPathType,
 ): TimeSccanTimeseriesimageToMatrixParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "timeseriesimage_to_matrix" as const,
+        "@type": "ants.TimeSCCAN.timeseriesimage_to_matrix" as const,
         "timeseries_image": timeseries_image,
         "mask_image": mask_image,
     };
@@ -107,36 +107,36 @@ function time_sccan_timeseriesimage_to_matrix_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function time_sccan_timeseriesimage_to_matrix_cargs(
     params: TimeSccanTimeseriesimageToMatrixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push([execution.inputFile((params["timeseries_image"] ?? null)), execution.inputFile((params["mask_image"] ?? null))].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function time_sccan_network_scca_params(
     time_matrix: InputPathType,
     label_matrix: InputPathType,
 ): TimeSccanNetworkSccaParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "network_scca" as const,
+        "@type": "ants.TimeSCCAN.network_scca" as const,
         "time_matrix": time_matrix,
         "label_matrix": label_matrix,
     };
@@ -144,36 +144,36 @@ function time_sccan_network_scca_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function time_sccan_network_scca_cargs(
     params: TimeSccanNetworkSccaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["scca[", execution.inputFile((params["time_matrix"] ?? null)), ",", execution.inputFile((params["label_matrix"] ?? null)), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function time_sccan_network_region_averaging_params(
     time_matrix: InputPathType,
     label_matrix: InputPathType,
 ): TimeSccanNetworkRegionAveragingParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "network_region_averaging" as const,
+        "@type": "ants.TimeSCCAN.network_region_averaging" as const,
         "time_matrix": time_matrix,
         "label_matrix": label_matrix,
     };
@@ -181,18 +181,18 @@ function time_sccan_network_region_averaging_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function time_sccan_network_region_averaging_cargs(
     params: TimeSccanNetworkRegionAveragingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["region-averaging[", execution.inputFile((params["time_matrix"] ?? null)), ",", execution.inputFile((params["label_matrix"] ?? null)), "]"].join(''));
     return cargs;
@@ -216,6 +216,26 @@ interface TimeSccanOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output Output is a 2D correlation matrix.
+ * @param number_consecutive_labels Number of consecutive labels in data.
+ * @param minimum_region_size Minimum size of a region: regions below this size are given a 0.0 connectivity value.
+ * @param iterations Number of iterations.
+ * @param sparsity Sparsity - a float from (0,1] indicating what fraction of the data to use.
+ * @param n_eigenvectors Number of permutations to use in scca.
+ * @param robustify Rank-based scca.
+ * @param l1 Use l1 ( > 0 ) or l0 ( < 0 ) penalty, also sets gradient step size e.g. -l 0.5 ( L1 ) , -l -0.5 (L0) will set 0.5 grad descent step for either penalty.
+ * @param cluster_thresh Cluster threshold on view P.
+ * @param ridge_cca Number of permutations to use in scca.
+ * @param partial_scca_option Choices for partial SCCA: PQ, PminusRQ, PQminusR, PminusRQminusR.
+ * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format as output. If the mask has multiple labels (more than one), then the average time series in each label will be computed and put in the csv.
+ * @param labelsimage_to_matrix Takes a labeled (3D) image and converts it to a 2D matrix csv format as output.
+ * @param network Build the network connectivity matrix.
+ *
+ * @returns Parameter dictionary
+ */
 function time_sccan_params(
     output: string,
     number_consecutive_labels: number | null = 0,
@@ -232,28 +252,8 @@ function time_sccan_params(
     labelsimage_to_matrix: InputPathType | null = null,
     network: TimeSccanNetworkSccaParameters | TimeSccanNetworkRegionAveragingParameters | null = null,
 ): TimeSccanParameters {
-    /**
-     * Build parameters.
-    
-     * @param output Output is a 2D correlation matrix.
-     * @param number_consecutive_labels Number of consecutive labels in data.
-     * @param minimum_region_size Minimum size of a region: regions below this size are given a 0.0 connectivity value.
-     * @param iterations Number of iterations.
-     * @param sparsity Sparsity - a float from (0,1] indicating what fraction of the data to use.
-     * @param n_eigenvectors Number of permutations to use in scca.
-     * @param robustify Rank-based scca.
-     * @param l1 Use l1 ( > 0 ) or l0 ( < 0 ) penalty, also sets gradient step size e.g. -l 0.5 ( L1 ) , -l -0.5 (L0) will set 0.5 grad descent step for either penalty.
-     * @param cluster_thresh Cluster threshold on view P.
-     * @param ridge_cca Number of permutations to use in scca.
-     * @param partial_scca_option Choices for partial SCCA: PQ, PminusRQ, PQminusR, PminusRQminusR.
-     * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format as output. If the mask has multiple labels (more than one), then the average time series in each label will be computed and put in the csv.
-     * @param labelsimage_to_matrix Takes a labeled (3D) image and converts it to a 2D matrix csv format as output.
-     * @param network Build the network connectivity matrix.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "TimeSCCAN" as const,
+        "@type": "ants.TimeSCCAN" as const,
         "output": output,
     };
     if (number_consecutive_labels !== null) {
@@ -299,18 +299,18 @@ function time_sccan_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function time_sccan_cargs(
     params: TimeSccanParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("TimeSCCAN");
     cargs.push(
@@ -380,7 +380,7 @@ function time_sccan_cargs(
     if ((params["timeseriesimage_to_matrix"] ?? null) !== null) {
         cargs.push(
             "--timeseriesimage-to-matrix",
-            ...dynCargs((params["timeseriesimage_to_matrix"] ?? null).__STYXTYPE__)((params["timeseriesimage_to_matrix"] ?? null), execution)
+            ...dynCargs((params["timeseriesimage_to_matrix"] ?? null)["@type"])((params["timeseriesimage_to_matrix"] ?? null), execution)
         );
     }
     if ((params["labelsimage_to_matrix"] ?? null) !== null) {
@@ -392,25 +392,25 @@ function time_sccan_cargs(
     if ((params["network"] ?? null) !== null) {
         cargs.push(
             "--network",
-            ...dynCargs((params["network"] ?? null).__STYXTYPE__)((params["network"] ?? null), execution)
+            ...dynCargs((params["network"] ?? null)["@type"])((params["network"] ?? null), execution)
         );
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function time_sccan_outputs(
     params: TimeSccanParameters,
     execution: Execution,
 ): TimeSccanOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TimeSccanOutputs = {
         root: execution.outputFile("."),
         correlation_matrix: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -419,22 +419,22 @@ function time_sccan_outputs(
 }
 
 
+/**
+ * A tool for sparse statistical analysis on connectivity within a subject.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
+ */
 function time_sccan_execute(
     params: TimeSccanParameters,
     execution: Execution,
 ): TimeSccanOutputs {
-    /**
-     * A tool for sparse statistical analysis on connectivity within a subject.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
-     */
     params = execution.params(params)
     const cargs = time_sccan_cargs(params, execution)
     const ret = time_sccan_outputs(params, execution)
@@ -443,6 +443,31 @@ function time_sccan_execute(
 }
 
 
+/**
+ * A tool for sparse statistical analysis on connectivity within a subject.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param output Output is a 2D correlation matrix.
+ * @param number_consecutive_labels Number of consecutive labels in data.
+ * @param minimum_region_size Minimum size of a region: regions below this size are given a 0.0 connectivity value.
+ * @param iterations Number of iterations.
+ * @param sparsity Sparsity - a float from (0,1] indicating what fraction of the data to use.
+ * @param n_eigenvectors Number of permutations to use in scca.
+ * @param robustify Rank-based scca.
+ * @param l1 Use l1 ( > 0 ) or l0 ( < 0 ) penalty, also sets gradient step size e.g. -l 0.5 ( L1 ) , -l -0.5 (L0) will set 0.5 grad descent step for either penalty.
+ * @param cluster_thresh Cluster threshold on view P.
+ * @param ridge_cca Number of permutations to use in scca.
+ * @param partial_scca_option Choices for partial SCCA: PQ, PminusRQ, PQminusR, PminusRQminusR.
+ * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format as output. If the mask has multiple labels (more than one), then the average time series in each label will be computed and put in the csv.
+ * @param labelsimage_to_matrix Takes a labeled (3D) image and converts it to a 2D matrix csv format as output.
+ * @param network Build the network connectivity matrix.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
+ */
 function time_sccan(
     output: string,
     number_consecutive_labels: number | null = 0,
@@ -460,31 +485,6 @@ function time_sccan(
     network: TimeSccanNetworkSccaParameters | TimeSccanNetworkRegionAveragingParameters | null = null,
     runner: Runner | null = null,
 ): TimeSccanOutputs {
-    /**
-     * A tool for sparse statistical analysis on connectivity within a subject.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param output Output is a 2D correlation matrix.
-     * @param number_consecutive_labels Number of consecutive labels in data.
-     * @param minimum_region_size Minimum size of a region: regions below this size are given a 0.0 connectivity value.
-     * @param iterations Number of iterations.
-     * @param sparsity Sparsity - a float from (0,1] indicating what fraction of the data to use.
-     * @param n_eigenvectors Number of permutations to use in scca.
-     * @param robustify Rank-based scca.
-     * @param l1 Use l1 ( > 0 ) or l0 ( < 0 ) penalty, also sets gradient step size e.g. -l 0.5 ( L1 ) , -l -0.5 (L0) will set 0.5 grad descent step for either penalty.
-     * @param cluster_thresh Cluster threshold on view P.
-     * @param ridge_cca Number of permutations to use in scca.
-     * @param partial_scca_option Choices for partial SCCA: PQ, PminusRQ, PQminusR, PminusRQminusR.
-     * @param timeseriesimage_to_matrix Takes a timeseries (4D) image and converts it to a 2D matrix csv format as output. If the mask has multiple labels (more than one), then the average time series in each label will be computed and put in the csv.
-     * @param labelsimage_to_matrix Takes a labeled (3D) image and converts it to a 2D matrix csv format as output.
-     * @param network Build the network connectivity matrix.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TIME_SCCAN_METADATA);
     const params = time_sccan_params(output, number_consecutive_labels, minimum_region_size, iterations, sparsity, n_eigenvectors, robustify, l1, cluster_thresh, ridge_cca, partial_scca_option, timeseriesimage_to_matrix, labelsimage_to_matrix, network)
@@ -500,8 +500,14 @@ export {
       TimeSccanParameters,
       TimeSccanTimeseriesimageToMatrixParameters,
       time_sccan,
+      time_sccan_cargs,
+      time_sccan_execute,
+      time_sccan_network_region_averaging_cargs,
       time_sccan_network_region_averaging_params,
+      time_sccan_network_scca_cargs,
       time_sccan_network_scca_params,
+      time_sccan_outputs,
       time_sccan_params,
+      time_sccan_timeseriesimage_to_matrix_cargs,
       time_sccan_timeseriesimage_to_matrix_params,
 };

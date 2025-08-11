@@ -12,7 +12,7 @@ const MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 
 
 interface MakeAverageSurfaceParameters {
-    "__STYXTYPE__": "make_average_surface";
+    "@type": "freesurfer.make_average_surface";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
     "average_subject_name"?: string | null | undefined;
@@ -38,33 +38,33 @@ interface MakeAverageSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_average_surface": make_average_surface_cargs,
+        "freesurfer.make_average_surface": make_average_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -84,6 +84,34 @@ interface MakeAverageSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subject names
+ * @param fsgd_file File from which to get the subject list
+ * @param average_subject_name Average subject name
+ * @param subjects_dir Directory for SUBJECTS_DIR (if different from the environment variable)
+ * @param sd_out_dir Directory to put output data
+ * @param transform_file Filename of the transform file
+ * @param icosahedron_number Specify icosahedron number
+ * @param surf_reg Alternative registration surface name
+ * @param left_hemi Only process the left hemisphere
+ * @param right_hemi Only process the right hemisphere
+ * @param force Overwrite existing average subject data
+ * @param annot_template Use annotation when making tif
+ * @param template_only Useful when creating iterative atlases
+ * @param no_template_only Turns off --template-only
+ * @param no_annot Do not create average annotations
+ * @param no_cortex_label Do not create ?h.cortex.label
+ * @param annot_list List of annotations to use
+ * @param meas_list List of measurements to use
+ * @param no_surf2surf Use old parametric surface method
+ * @param no_symlink Do not use symbolic links, just copy files
+ * @param version Script version information
+ * @param echo Enable command echo for debugging
+ *
+ * @returns Parameter dictionary
+ */
 function make_average_surface_params(
     subjects: Array<string>,
     fsgd_file: InputPathType | null = null,
@@ -108,36 +136,8 @@ function make_average_surface_params(
     version: boolean = false,
     echo: boolean = false,
 ): MakeAverageSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subject names
-     * @param fsgd_file File from which to get the subject list
-     * @param average_subject_name Average subject name
-     * @param subjects_dir Directory for SUBJECTS_DIR (if different from the environment variable)
-     * @param sd_out_dir Directory to put output data
-     * @param transform_file Filename of the transform file
-     * @param icosahedron_number Specify icosahedron number
-     * @param surf_reg Alternative registration surface name
-     * @param left_hemi Only process the left hemisphere
-     * @param right_hemi Only process the right hemisphere
-     * @param force Overwrite existing average subject data
-     * @param annot_template Use annotation when making tif
-     * @param template_only Useful when creating iterative atlases
-     * @param no_template_only Turns off --template-only
-     * @param no_annot Do not create average annotations
-     * @param no_cortex_label Do not create ?h.cortex.label
-     * @param annot_list List of annotations to use
-     * @param meas_list List of measurements to use
-     * @param no_surf2surf Use old parametric surface method
-     * @param no_symlink Do not use symbolic links, just copy files
-     * @param version Script version information
-     * @param echo Enable command echo for debugging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_average_surface" as const,
+        "@type": "freesurfer.make_average_surface" as const,
         "subjects": subjects,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
@@ -183,18 +183,18 @@ function make_average_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_average_surface_cargs(
     params: MakeAverageSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_average_surface");
     cargs.push(...(params["subjects"] ?? null));
@@ -292,18 +292,18 @@ function make_average_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_average_surface_outputs(
     params: MakeAverageSurfaceParameters,
     execution: Execution,
 ): MakeAverageSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeAverageSurfaceOutputs = {
         root: execution.outputFile("."),
     };
@@ -311,22 +311,22 @@ function make_average_surface_outputs(
 }
 
 
+/**
+ * Creates average surfaces and curvatures from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
+ */
 function make_average_surface_execute(
     params: MakeAverageSurfaceParameters,
     execution: Execution,
 ): MakeAverageSurfaceOutputs {
-    /**
-     * Creates average surfaces and curvatures from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_average_surface_cargs(params, execution)
     const ret = make_average_surface_outputs(params, execution)
@@ -335,6 +335,39 @@ function make_average_surface_execute(
 }
 
 
+/**
+ * Creates average surfaces and curvatures from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subject names
+ * @param fsgd_file File from which to get the subject list
+ * @param average_subject_name Average subject name
+ * @param subjects_dir Directory for SUBJECTS_DIR (if different from the environment variable)
+ * @param sd_out_dir Directory to put output data
+ * @param transform_file Filename of the transform file
+ * @param icosahedron_number Specify icosahedron number
+ * @param surf_reg Alternative registration surface name
+ * @param left_hemi Only process the left hemisphere
+ * @param right_hemi Only process the right hemisphere
+ * @param force Overwrite existing average subject data
+ * @param annot_template Use annotation when making tif
+ * @param template_only Useful when creating iterative atlases
+ * @param no_template_only Turns off --template-only
+ * @param no_annot Do not create average annotations
+ * @param no_cortex_label Do not create ?h.cortex.label
+ * @param annot_list List of annotations to use
+ * @param meas_list List of measurements to use
+ * @param no_surf2surf Use old parametric surface method
+ * @param no_symlink Do not use symbolic links, just copy files
+ * @param version Script version information
+ * @param echo Enable command echo for debugging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
+ */
 function make_average_surface(
     subjects: Array<string>,
     fsgd_file: InputPathType | null = null,
@@ -360,39 +393,6 @@ function make_average_surface(
     echo: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageSurfaceOutputs {
-    /**
-     * Creates average surfaces and curvatures from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subject names
-     * @param fsgd_file File from which to get the subject list
-     * @param average_subject_name Average subject name
-     * @param subjects_dir Directory for SUBJECTS_DIR (if different from the environment variable)
-     * @param sd_out_dir Directory to put output data
-     * @param transform_file Filename of the transform file
-     * @param icosahedron_number Specify icosahedron number
-     * @param surf_reg Alternative registration surface name
-     * @param left_hemi Only process the left hemisphere
-     * @param right_hemi Only process the right hemisphere
-     * @param force Overwrite existing average subject data
-     * @param annot_template Use annotation when making tif
-     * @param template_only Useful when creating iterative atlases
-     * @param no_template_only Turns off --template-only
-     * @param no_annot Do not create average annotations
-     * @param no_cortex_label Do not create ?h.cortex.label
-     * @param annot_list List of annotations to use
-     * @param meas_list List of measurements to use
-     * @param no_surf2surf Use old parametric surface method
-     * @param no_symlink Do not use symbolic links, just copy files
-     * @param version Script version information
-     * @param echo Enable command echo for debugging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_AVERAGE_SURFACE_METADATA);
     const params = make_average_surface_params(subjects, fsgd_file, average_subject_name, subjects_dir, sd_out_dir, transform_file, icosahedron_number, surf_reg, left_hemi, right_hemi, force, annot_template, template_only, no_template_only, no_annot, no_cortex_label, annot_list, meas_list, no_surf2surf, no_symlink, version, echo)
@@ -405,5 +405,8 @@ export {
       MakeAverageSurfaceOutputs,
       MakeAverageSurfaceParameters,
       make_average_surface,
+      make_average_surface_cargs,
+      make_average_surface_execute,
+      make_average_surface_outputs,
       make_average_surface_params,
 };

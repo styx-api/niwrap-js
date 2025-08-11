@@ -12,7 +12,7 @@ const MRI_FUNCVITS_METADATA: Metadata = {
 
 
 interface MriFuncvitsParameters {
-    "__STYXTYPE__": "mri-funcvits";
+    "@type": "freesurfer.mri-funcvits";
     "stem": string;
     "outdir": string;
     "reg"?: string | null | undefined;
@@ -28,33 +28,33 @@ interface MriFuncvitsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri-funcvits": mri_funcvits_cargs,
+        "freesurfer.mri-funcvits": mri_funcvits_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface MriFuncvitsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param stem Template stem
+ * @param outdir Output directory
+ * @param reg Registration file
+ * @param paintsurf Surface upon which to paint
+ * @param sphere Spherical surface
+ * @param icosize Icosahedron size
+ * @param hemi Hemifield(s)
+ * @param svitdir SVIT directory
+ * @param icodir ICO directory
+ * @param umask New umask
+ * @param mail User email for notifications
+ * @param noforce Do not create if output already exists
+ *
+ * @returns Parameter dictionary
+ */
 function mri_funcvits_params(
     stem: string,
     outdir: string,
@@ -88,26 +106,8 @@ function mri_funcvits_params(
     mail: string | null = null,
     noforce: boolean = false,
 ): MriFuncvitsParameters {
-    /**
-     * Build parameters.
-    
-     * @param stem Template stem
-     * @param outdir Output directory
-     * @param reg Registration file
-     * @param paintsurf Surface upon which to paint
-     * @param sphere Spherical surface
-     * @param icosize Icosahedron size
-     * @param hemi Hemifield(s)
-     * @param svitdir SVIT directory
-     * @param icodir ICO directory
-     * @param umask New umask
-     * @param mail User email for notifications
-     * @param noforce Do not create if output already exists
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri-funcvits" as const,
+        "@type": "freesurfer.mri-funcvits" as const,
         "stem": stem,
         "outdir": outdir,
         "noforce": noforce,
@@ -143,18 +143,18 @@ function mri_funcvits_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_funcvits_cargs(
     params: MriFuncvitsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri-funcvits");
     cargs.push(
@@ -226,18 +226,18 @@ function mri_funcvits_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_funcvits_outputs(
     params: MriFuncvitsParameters,
     execution: Execution,
 ): MriFuncvitsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriFuncvitsOutputs = {
         root: execution.outputFile("."),
     };
@@ -245,22 +245,22 @@ function mri_funcvits_outputs(
 }
 
 
+/**
+ * Tool for functional volume to surface conversion in neuroimaging analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
+ */
 function mri_funcvits_execute(
     params: MriFuncvitsParameters,
     execution: Execution,
 ): MriFuncvitsOutputs {
-    /**
-     * Tool for functional volume to surface conversion in neuroimaging analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_funcvits_cargs(params, execution)
     const ret = mri_funcvits_outputs(params, execution)
@@ -269,6 +269,29 @@ function mri_funcvits_execute(
 }
 
 
+/**
+ * Tool for functional volume to surface conversion in neuroimaging analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param stem Template stem
+ * @param outdir Output directory
+ * @param reg Registration file
+ * @param paintsurf Surface upon which to paint
+ * @param sphere Spherical surface
+ * @param icosize Icosahedron size
+ * @param hemi Hemifield(s)
+ * @param svitdir SVIT directory
+ * @param icodir ICO directory
+ * @param umask New umask
+ * @param mail User email for notifications
+ * @param noforce Do not create if output already exists
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
+ */
 function mri_funcvits(
     stem: string,
     outdir: string,
@@ -284,29 +307,6 @@ function mri_funcvits(
     noforce: boolean = false,
     runner: Runner | null = null,
 ): MriFuncvitsOutputs {
-    /**
-     * Tool for functional volume to surface conversion in neuroimaging analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param stem Template stem
-     * @param outdir Output directory
-     * @param reg Registration file
-     * @param paintsurf Surface upon which to paint
-     * @param sphere Spherical surface
-     * @param icosize Icosahedron size
-     * @param hemi Hemifield(s)
-     * @param svitdir SVIT directory
-     * @param icodir ICO directory
-     * @param umask New umask
-     * @param mail User email for notifications
-     * @param noforce Do not create if output already exists
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_FUNCVITS_METADATA);
     const params = mri_funcvits_params(stem, outdir, reg, paintsurf, sphere, icosize, hemi, svitdir, icodir, umask, mail, noforce)
@@ -319,5 +319,8 @@ export {
       MriFuncvitsOutputs,
       MriFuncvitsParameters,
       mri_funcvits,
+      mri_funcvits_cargs,
+      mri_funcvits_execute,
+      mri_funcvits_outputs,
       mri_funcvits_params,
 };

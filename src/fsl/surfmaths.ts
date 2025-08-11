@@ -12,42 +12,42 @@ const SURFMATHS_METADATA: Metadata = {
 
 
 interface SurfmathsParameters {
-    "__STYXTYPE__": "surfmaths";
+    "@type": "fsl.surfmaths";
     "first_input": InputPathType;
     "operations_inputs"?: Array<string> | null | undefined;
     "output": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surfmaths": surfmaths_cargs,
+        "fsl.surfmaths": surfmaths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surfmaths": surfmaths_outputs,
+        "fsl.surfmaths": surfmaths_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SurfmathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param first_input First input surface file.
+ * @param output Output surface file.
+ * @param operations_inputs Mathematical operations and additional inputs.
+ *
+ * @returns Parameter dictionary
+ */
 function surfmaths_params(
     first_input: InputPathType,
     output: string,
     operations_inputs: Array<string> | null = null,
 ): SurfmathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param first_input First input surface file.
-     * @param output Output surface file.
-     * @param operations_inputs Mathematical operations and additional inputs.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surfmaths" as const,
+        "@type": "fsl.surfmaths" as const,
         "first_input": first_input,
         "output": output,
     };
@@ -96,18 +96,18 @@ function surfmaths_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surfmaths_cargs(
     params: SurfmathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surfmaths");
     cargs.push(execution.inputFile((params["first_input"] ?? null)));
@@ -119,18 +119,18 @@ function surfmaths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surfmaths_outputs(
     params: SurfmathsParameters,
     execution: Execution,
 ): SurfmathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfmathsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -139,22 +139,22 @@ function surfmaths_outputs(
 }
 
 
+/**
+ * A command-line tool for performing various mathematical operations on surface files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
+ */
 function surfmaths_execute(
     params: SurfmathsParameters,
     execution: Execution,
 ): SurfmathsOutputs {
-    /**
-     * A command-line tool for performing various mathematical operations on surface files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = surfmaths_cargs(params, execution)
     const ret = surfmaths_outputs(params, execution)
@@ -163,26 +163,26 @@ function surfmaths_execute(
 }
 
 
+/**
+ * A command-line tool for performing various mathematical operations on surface files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param first_input First input surface file.
+ * @param output Output surface file.
+ * @param operations_inputs Mathematical operations and additional inputs.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
+ */
 function surfmaths(
     first_input: InputPathType,
     output: string,
     operations_inputs: Array<string> | null = null,
     runner: Runner | null = null,
 ): SurfmathsOutputs {
-    /**
-     * A command-line tool for performing various mathematical operations on surface files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param first_input First input surface file.
-     * @param output Output surface file.
-     * @param operations_inputs Mathematical operations and additional inputs.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFMATHS_METADATA);
     const params = surfmaths_params(first_input, output, operations_inputs)
@@ -195,5 +195,8 @@ export {
       SurfmathsOutputs,
       SurfmathsParameters,
       surfmaths,
+      surfmaths_cargs,
+      surfmaths_execute,
+      surfmaths_outputs,
       surfmaths_params,
 };

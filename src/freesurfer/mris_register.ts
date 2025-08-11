@@ -12,7 +12,7 @@ const MRIS_REGISTER_METADATA: Metadata = {
 
 
 interface MrisRegisterParameters {
-    "__STYXTYPE__": "mris_register";
+    "@type": "freesurfer.mris_register";
     "surf_fname": InputPathType;
     "target": InputPathType;
     "out_fname": string;
@@ -79,35 +79,35 @@ interface MrisRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_register": mris_register_cargs,
+        "freesurfer.mris_register": mris_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_register": mris_register_outputs,
+        "freesurfer.mris_register": mris_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -134,6 +134,75 @@ interface MrisRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surf_fname Surface to register, often {hemi}.sphere
+ * @param target The data to register to. A template file for average surface or a single-subject's surface.
+ * @param out_fname Output surface file to capture registration. Example: {hemi}.sphere.reg
+ * @param one_flag Treats target argument as a single subject's surface not a template file.
+ * @param addframe Add field with location in the atlas.
+ * @param annot_name Zeroes medial wall using annotation.
+ * @param curvature_fname Curvature file name.
+ * @param canonical_name Use surface for canonical properties.
+ * @param inflated Use inflated surface for initial alignment.
+ * @param inflated_name Uses this name for inflated surface for initial alignment.
+ * @param label_file Specify a manual label to align with atlas label.
+ * @param orig_name Use this for original properties.
+ * @param overlay_values Adds a variable to the atlas from overlay file, smoothing it specified number of times.
+ * @param overlay_dir Changes overlay path.
+ * @param starting_reg_fname Start registration with coordinates from file.
+ * @param jacobian_fname Write out jacobian of mapping to the specified file.
+ * @param n_averages Set the number of averages.
+ * @param adaptive Use adaptive time step integration.
+ * @param l_area Sets l_area parameter.
+ * @param l_corr Sets the l_corr parameter.
+ * @param curvature_flag Use smoothwm curvature for final alignment.
+ * @param l_dist Specify distance term.
+ * @param dt_value Sets momentum with specified dt.
+ * @param dt_decrease Set decrease for dt.
+ * @param dt_increase Set increase for dt.
+ * @param l_external Sets l_external parameter.
+ * @param error_ratio Sets error ratio.
+ * @param initial_flag Use initial registration.
+ * @param l_laplacian Sets l_laplacian.
+ * @param line_min Integrate using line minimization.
+ * @param momentum Chooses integration_type = INTEGRATE_MOMENTUM and sets momentum value.
+ * @param max_degrees Set max angle for search.
+ * @param median Uses median normalization (instead of mean).
+ * @param min_degrees Set min angle for search.
+ * @param multi_scale Use multi_scale scales for morphing.
+ * @param n_iterations Sets number of iterations.
+ * @param n_angles Set number of angles/search per scale.
+ * @param neighborhood_size Use neighborhood size specified.
+ * @param l_nlarea Sets l_nlarea parameter.
+ * @param no_curv Do not use smoothwm curvature for final alignment.
+ * @param no_normalization Disables normalization.
+ * @param no_rotation Disables initial rigid alignment.
+ * @param no_sulc Disables initial sulc alignment.
+ * @param num_surfaces Use specified number of surfaces/curvatures for alignment.
+ * @param overlay_corr Sets overlay correlation coefficient.
+ * @param max_passes Limit unfolding to specified passes.
+ * @param l_parea Sets l_parea parameter.
+ * @param remove_negative Remove negative triangles with iterative smoothing if non-zero.
+ * @param reverse Mirror image reverse brain before morphing.
+ * @param rotate_values Rotates brain by specified angles.
+ * @param registration_file Extract rotational components from registration file.
+ * @param scale Scales distances by the specified value.
+ * @param search_flag Integrate with binary search line minimization.
+ * @param spring_value Sets the spring parameter.
+ * @param tolerance Specifies tolerance.
+ * @param topology_flag Preserves the topology of positive area triangles.
+ * @param vnum Set neighborhood parameters.
+ * @param vsmooth Use space/time varying smoothness weighting.
+ * @param write_iterations Set number of write iterations.
+ * @param gdiag_no Supplies a vertex number for diagnostics.
+ * @param vector_flag Prints help for Multiframe mode, listing field names and numbers.
+ * @param threads Set number of OMP threads.
+ * @param version_flag Print the version number.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_register_params(
     surf_fname: InputPathType,
     target: InputPathType,
@@ -199,77 +268,8 @@ function mris_register_params(
     threads: number | null = null,
     version_flag: boolean = false,
 ): MrisRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param surf_fname Surface to register, often {hemi}.sphere
-     * @param target The data to register to. A template file for average surface or a single-subject's surface.
-     * @param out_fname Output surface file to capture registration. Example: {hemi}.sphere.reg
-     * @param one_flag Treats target argument as a single subject's surface not a template file.
-     * @param addframe Add field with location in the atlas.
-     * @param annot_name Zeroes medial wall using annotation.
-     * @param curvature_fname Curvature file name.
-     * @param canonical_name Use surface for canonical properties.
-     * @param inflated Use inflated surface for initial alignment.
-     * @param inflated_name Uses this name for inflated surface for initial alignment.
-     * @param label_file Specify a manual label to align with atlas label.
-     * @param orig_name Use this for original properties.
-     * @param overlay_values Adds a variable to the atlas from overlay file, smoothing it specified number of times.
-     * @param overlay_dir Changes overlay path.
-     * @param starting_reg_fname Start registration with coordinates from file.
-     * @param jacobian_fname Write out jacobian of mapping to the specified file.
-     * @param n_averages Set the number of averages.
-     * @param adaptive Use adaptive time step integration.
-     * @param l_area Sets l_area parameter.
-     * @param l_corr Sets the l_corr parameter.
-     * @param curvature_flag Use smoothwm curvature for final alignment.
-     * @param l_dist Specify distance term.
-     * @param dt_value Sets momentum with specified dt.
-     * @param dt_decrease Set decrease for dt.
-     * @param dt_increase Set increase for dt.
-     * @param l_external Sets l_external parameter.
-     * @param error_ratio Sets error ratio.
-     * @param initial_flag Use initial registration.
-     * @param l_laplacian Sets l_laplacian.
-     * @param line_min Integrate using line minimization.
-     * @param momentum Chooses integration_type = INTEGRATE_MOMENTUM and sets momentum value.
-     * @param max_degrees Set max angle for search.
-     * @param median Uses median normalization (instead of mean).
-     * @param min_degrees Set min angle for search.
-     * @param multi_scale Use multi_scale scales for morphing.
-     * @param n_iterations Sets number of iterations.
-     * @param n_angles Set number of angles/search per scale.
-     * @param neighborhood_size Use neighborhood size specified.
-     * @param l_nlarea Sets l_nlarea parameter.
-     * @param no_curv Do not use smoothwm curvature for final alignment.
-     * @param no_normalization Disables normalization.
-     * @param no_rotation Disables initial rigid alignment.
-     * @param no_sulc Disables initial sulc alignment.
-     * @param num_surfaces Use specified number of surfaces/curvatures for alignment.
-     * @param overlay_corr Sets overlay correlation coefficient.
-     * @param max_passes Limit unfolding to specified passes.
-     * @param l_parea Sets l_parea parameter.
-     * @param remove_negative Remove negative triangles with iterative smoothing if non-zero.
-     * @param reverse Mirror image reverse brain before morphing.
-     * @param rotate_values Rotates brain by specified angles.
-     * @param registration_file Extract rotational components from registration file.
-     * @param scale Scales distances by the specified value.
-     * @param search_flag Integrate with binary search line minimization.
-     * @param spring_value Sets the spring parameter.
-     * @param tolerance Specifies tolerance.
-     * @param topology_flag Preserves the topology of positive area triangles.
-     * @param vnum Set neighborhood parameters.
-     * @param vsmooth Use space/time varying smoothness weighting.
-     * @param write_iterations Set number of write iterations.
-     * @param gdiag_no Supplies a vertex number for diagnostics.
-     * @param vector_flag Prints help for Multiframe mode, listing field names and numbers.
-     * @param threads Set number of OMP threads.
-     * @param version_flag Print the version number.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_register" as const,
+        "@type": "freesurfer.mris_register" as const,
         "surf_fname": surf_fname,
         "target": target,
         "out_fname": out_fname,
@@ -424,18 +424,18 @@ function mris_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_register_cargs(
     params: MrisRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_register");
     cargs.push(execution.inputFile((params["surf_fname"] ?? null)));
@@ -754,18 +754,18 @@ function mris_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_register_outputs(
     params: MrisRegisterParameters,
     execution: Execution,
 ): MrisRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRegisterOutputs = {
         root: execution.outputFile("."),
         output_surface_file: execution.outputFile([(params["out_fname"] ?? null)].join('')),
@@ -775,22 +775,22 @@ function mris_register_outputs(
 }
 
 
+/**
+ * This program registers a surface to an average surface template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
+ */
 function mris_register_execute(
     params: MrisRegisterParameters,
     execution: Execution,
 ): MrisRegisterOutputs {
-    /**
-     * This program registers a surface to an average surface template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_register_cargs(params, execution)
     const ret = mris_register_outputs(params, execution)
@@ -799,6 +799,80 @@ function mris_register_execute(
 }
 
 
+/**
+ * This program registers a surface to an average surface template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surf_fname Surface to register, often {hemi}.sphere
+ * @param target The data to register to. A template file for average surface or a single-subject's surface.
+ * @param out_fname Output surface file to capture registration. Example: {hemi}.sphere.reg
+ * @param one_flag Treats target argument as a single subject's surface not a template file.
+ * @param addframe Add field with location in the atlas.
+ * @param annot_name Zeroes medial wall using annotation.
+ * @param curvature_fname Curvature file name.
+ * @param canonical_name Use surface for canonical properties.
+ * @param inflated Use inflated surface for initial alignment.
+ * @param inflated_name Uses this name for inflated surface for initial alignment.
+ * @param label_file Specify a manual label to align with atlas label.
+ * @param orig_name Use this for original properties.
+ * @param overlay_values Adds a variable to the atlas from overlay file, smoothing it specified number of times.
+ * @param overlay_dir Changes overlay path.
+ * @param starting_reg_fname Start registration with coordinates from file.
+ * @param jacobian_fname Write out jacobian of mapping to the specified file.
+ * @param n_averages Set the number of averages.
+ * @param adaptive Use adaptive time step integration.
+ * @param l_area Sets l_area parameter.
+ * @param l_corr Sets the l_corr parameter.
+ * @param curvature_flag Use smoothwm curvature for final alignment.
+ * @param l_dist Specify distance term.
+ * @param dt_value Sets momentum with specified dt.
+ * @param dt_decrease Set decrease for dt.
+ * @param dt_increase Set increase for dt.
+ * @param l_external Sets l_external parameter.
+ * @param error_ratio Sets error ratio.
+ * @param initial_flag Use initial registration.
+ * @param l_laplacian Sets l_laplacian.
+ * @param line_min Integrate using line minimization.
+ * @param momentum Chooses integration_type = INTEGRATE_MOMENTUM and sets momentum value.
+ * @param max_degrees Set max angle for search.
+ * @param median Uses median normalization (instead of mean).
+ * @param min_degrees Set min angle for search.
+ * @param multi_scale Use multi_scale scales for morphing.
+ * @param n_iterations Sets number of iterations.
+ * @param n_angles Set number of angles/search per scale.
+ * @param neighborhood_size Use neighborhood size specified.
+ * @param l_nlarea Sets l_nlarea parameter.
+ * @param no_curv Do not use smoothwm curvature for final alignment.
+ * @param no_normalization Disables normalization.
+ * @param no_rotation Disables initial rigid alignment.
+ * @param no_sulc Disables initial sulc alignment.
+ * @param num_surfaces Use specified number of surfaces/curvatures for alignment.
+ * @param overlay_corr Sets overlay correlation coefficient.
+ * @param max_passes Limit unfolding to specified passes.
+ * @param l_parea Sets l_parea parameter.
+ * @param remove_negative Remove negative triangles with iterative smoothing if non-zero.
+ * @param reverse Mirror image reverse brain before morphing.
+ * @param rotate_values Rotates brain by specified angles.
+ * @param registration_file Extract rotational components from registration file.
+ * @param scale Scales distances by the specified value.
+ * @param search_flag Integrate with binary search line minimization.
+ * @param spring_value Sets the spring parameter.
+ * @param tolerance Specifies tolerance.
+ * @param topology_flag Preserves the topology of positive area triangles.
+ * @param vnum Set neighborhood parameters.
+ * @param vsmooth Use space/time varying smoothness weighting.
+ * @param write_iterations Set number of write iterations.
+ * @param gdiag_no Supplies a vertex number for diagnostics.
+ * @param vector_flag Prints help for Multiframe mode, listing field names and numbers.
+ * @param threads Set number of OMP threads.
+ * @param version_flag Print the version number.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
+ */
 function mris_register(
     surf_fname: InputPathType,
     target: InputPathType,
@@ -865,80 +939,6 @@ function mris_register(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisRegisterOutputs {
-    /**
-     * This program registers a surface to an average surface template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surf_fname Surface to register, often {hemi}.sphere
-     * @param target The data to register to. A template file for average surface or a single-subject's surface.
-     * @param out_fname Output surface file to capture registration. Example: {hemi}.sphere.reg
-     * @param one_flag Treats target argument as a single subject's surface not a template file.
-     * @param addframe Add field with location in the atlas.
-     * @param annot_name Zeroes medial wall using annotation.
-     * @param curvature_fname Curvature file name.
-     * @param canonical_name Use surface for canonical properties.
-     * @param inflated Use inflated surface for initial alignment.
-     * @param inflated_name Uses this name for inflated surface for initial alignment.
-     * @param label_file Specify a manual label to align with atlas label.
-     * @param orig_name Use this for original properties.
-     * @param overlay_values Adds a variable to the atlas from overlay file, smoothing it specified number of times.
-     * @param overlay_dir Changes overlay path.
-     * @param starting_reg_fname Start registration with coordinates from file.
-     * @param jacobian_fname Write out jacobian of mapping to the specified file.
-     * @param n_averages Set the number of averages.
-     * @param adaptive Use adaptive time step integration.
-     * @param l_area Sets l_area parameter.
-     * @param l_corr Sets the l_corr parameter.
-     * @param curvature_flag Use smoothwm curvature for final alignment.
-     * @param l_dist Specify distance term.
-     * @param dt_value Sets momentum with specified dt.
-     * @param dt_decrease Set decrease for dt.
-     * @param dt_increase Set increase for dt.
-     * @param l_external Sets l_external parameter.
-     * @param error_ratio Sets error ratio.
-     * @param initial_flag Use initial registration.
-     * @param l_laplacian Sets l_laplacian.
-     * @param line_min Integrate using line minimization.
-     * @param momentum Chooses integration_type = INTEGRATE_MOMENTUM and sets momentum value.
-     * @param max_degrees Set max angle for search.
-     * @param median Uses median normalization (instead of mean).
-     * @param min_degrees Set min angle for search.
-     * @param multi_scale Use multi_scale scales for morphing.
-     * @param n_iterations Sets number of iterations.
-     * @param n_angles Set number of angles/search per scale.
-     * @param neighborhood_size Use neighborhood size specified.
-     * @param l_nlarea Sets l_nlarea parameter.
-     * @param no_curv Do not use smoothwm curvature for final alignment.
-     * @param no_normalization Disables normalization.
-     * @param no_rotation Disables initial rigid alignment.
-     * @param no_sulc Disables initial sulc alignment.
-     * @param num_surfaces Use specified number of surfaces/curvatures for alignment.
-     * @param overlay_corr Sets overlay correlation coefficient.
-     * @param max_passes Limit unfolding to specified passes.
-     * @param l_parea Sets l_parea parameter.
-     * @param remove_negative Remove negative triangles with iterative smoothing if non-zero.
-     * @param reverse Mirror image reverse brain before morphing.
-     * @param rotate_values Rotates brain by specified angles.
-     * @param registration_file Extract rotational components from registration file.
-     * @param scale Scales distances by the specified value.
-     * @param search_flag Integrate with binary search line minimization.
-     * @param spring_value Sets the spring parameter.
-     * @param tolerance Specifies tolerance.
-     * @param topology_flag Preserves the topology of positive area triangles.
-     * @param vnum Set neighborhood parameters.
-     * @param vsmooth Use space/time varying smoothness weighting.
-     * @param write_iterations Set number of write iterations.
-     * @param gdiag_no Supplies a vertex number for diagnostics.
-     * @param vector_flag Prints help for Multiframe mode, listing field names and numbers.
-     * @param threads Set number of OMP threads.
-     * @param version_flag Print the version number.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REGISTER_METADATA);
     const params = mris_register_params(surf_fname, target, out_fname, one_flag, addframe, annot_name, curvature_fname, canonical_name, inflated, inflated_name, label_file, orig_name, overlay_values, overlay_dir, starting_reg_fname, jacobian_fname, n_averages, adaptive, l_area, l_corr, curvature_flag, l_dist, dt_value, dt_decrease, dt_increase, l_external, error_ratio, initial_flag, l_laplacian, line_min, momentum, max_degrees, median, min_degrees, multi_scale, n_iterations, n_angles, neighborhood_size, l_nlarea, no_curv, no_normalization, no_rotation, no_sulc, num_surfaces, overlay_corr, max_passes, l_parea, remove_negative, reverse, rotate_values, registration_file, scale, search_flag, spring_value, tolerance, topology_flag, vnum, vsmooth, write_iterations, gdiag_no, vector_flag, threads, version_flag)
@@ -951,5 +951,8 @@ export {
       MrisRegisterOutputs,
       MrisRegisterParameters,
       mris_register,
+      mris_register_cargs,
+      mris_register_execute,
+      mris_register_outputs,
       mris_register_params,
 };

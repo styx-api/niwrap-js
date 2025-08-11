@@ -12,7 +12,7 @@ const WFILEMASK_METADATA: Metadata = {
 
 
 interface WfilemaskParameters {
-    "__STYXTYPE__": "wfilemask";
+    "@type": "freesurfer.wfilemask";
     "w_file": InputPathType;
     "label_file": InputPathType;
     "output_file": string;
@@ -22,35 +22,35 @@ interface WfilemaskParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "wfilemask": wfilemask_cargs,
+        "freesurfer.wfilemask": wfilemask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "wfilemask": wfilemask_outputs,
+        "freesurfer.wfilemask": wfilemask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface WfilemaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param w_file Input w file
+ * @param label_file Label file to use as a mask
+ * @param output_file Output w file
+ * @param permission_mask Set Unix file permission mask
+ * @param help_flag Display help message and exit
+ * @param version_flag Print version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function wfilemask_params(
     w_file: InputPathType,
     label_file: InputPathType,
@@ -81,20 +93,8 @@ function wfilemask_params(
     help_flag: boolean = false,
     version_flag: boolean = false,
 ): WfilemaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param w_file Input w file
-     * @param label_file Label file to use as a mask
-     * @param output_file Output w file
-     * @param permission_mask Set Unix file permission mask
-     * @param help_flag Display help message and exit
-     * @param version_flag Print version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wfilemask" as const,
+        "@type": "freesurfer.wfilemask" as const,
         "w_file": w_file,
         "label_file": label_file,
         "output_file": output_file,
@@ -108,18 +108,18 @@ function wfilemask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wfilemask_cargs(
     params: WfilemaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wfilemask");
     cargs.push(
@@ -150,18 +150,18 @@ function wfilemask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function wfilemask_outputs(
     params: WfilemaskParameters,
     execution: Execution,
 ): WfilemaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WfilemaskOutputs = {
         root: execution.outputFile("."),
         output_w_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -170,22 +170,22 @@ function wfilemask_outputs(
 }
 
 
+/**
+ * Zero-out regions of a surface value file (.w file) using a label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
+ */
 function wfilemask_execute(
     params: WfilemaskParameters,
     execution: Execution,
 ): WfilemaskOutputs {
-    /**
-     * Zero-out regions of a surface value file (.w file) using a label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = wfilemask_cargs(params, execution)
     const ret = wfilemask_outputs(params, execution)
@@ -194,6 +194,23 @@ function wfilemask_execute(
 }
 
 
+/**
+ * Zero-out regions of a surface value file (.w file) using a label.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param w_file Input w file
+ * @param label_file Label file to use as a mask
+ * @param output_file Output w file
+ * @param permission_mask Set Unix file permission mask
+ * @param help_flag Display help message and exit
+ * @param version_flag Print version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
+ */
 function wfilemask(
     w_file: InputPathType,
     label_file: InputPathType,
@@ -203,23 +220,6 @@ function wfilemask(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): WfilemaskOutputs {
-    /**
-     * Zero-out regions of a surface value file (.w file) using a label.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param w_file Input w file
-     * @param label_file Label file to use as a mask
-     * @param output_file Output w file
-     * @param permission_mask Set Unix file permission mask
-     * @param help_flag Display help message and exit
-     * @param version_flag Print version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WFILEMASK_METADATA);
     const params = wfilemask_params(w_file, label_file, output_file, permission_mask, help_flag, version_flag)
@@ -232,5 +232,8 @@ export {
       WfilemaskOutputs,
       WfilemaskParameters,
       wfilemask,
+      wfilemask_cargs,
+      wfilemask_execute,
+      wfilemask_outputs,
       wfilemask_params,
 };

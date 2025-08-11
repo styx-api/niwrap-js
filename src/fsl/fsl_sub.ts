@@ -12,7 +12,7 @@ const FSL_SUB_METADATA: Metadata = {
 
 
 interface FslSubParameters {
-    "__STYXTYPE__": "fsl_sub";
+    "@type": "fsl.fsl_sub";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: number | null | undefined;
@@ -50,33 +50,33 @@ interface FslSubParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_sub": fsl_sub_cargs,
+        "fsl.fsl_sub": fsl_sub_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -96,6 +96,46 @@ interface FslSubOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param arch Architectures not available.
+ * @param coprocessor No co-processor configured - ignored.
+ * @param coprocessor_multi No co-processor configured - ignored
+ * @param coprocessor_class No co-processor classes configured - ignored.
+ * @param coprocessor_class_strict No co-processor classes configured - ignored.
+ * @param coprocessor_toolkit No co-processor toolkits configured - ignored.
+ * @param usescript Use flags embedded in scripts to set queuing options - not supported
+ * @param jobhold Place a hold on this task until specified job id has completed.
+ * @param not_requeueable Job cannot be requeued in the event of a node failure.
+ * @param array_hold Not supported - will be converted to simple job hold
+ * @param logdir Where to output logfiles.
+ * @param mailoptions Email notification options (ignored).
+ * @param mailto Email notification recipients (ignored).
+ * @param novalidation Don't check for presence of script/binary in your searchpath
+ * @param name Specify job name as it will appear on queue.
+ * @param priority Specify job priority (not supported).
+ * @param queue Specify the queue for the job (irrelevant if not running in a cluster environment).
+ * @param resource Pass a resource request or constraint string through to the job scheduler.
+ * @param delete_job Deletes a queued/running job.
+ * @param jobram Max total RAM required for job (integer in GB).
+ * @param parallelenv_threads No parallel environments configured.
+ * @param array_task Specify a task file of commands to execute in parallel.
+ * @param array_native Binary/Script will handle array task internally (mutually exclusive with --array_task).
+ * @param array_limit Specify the maximum number of parallel job sub-tasks to run concurrently.
+ * @param keep_jobscript Whether to create and save a job submission script.
+ * @param project Specify the project (not relevant when not running in a cluster environment).
+ * @param noramsplit Disable RAM splitting (not relevant when not running in a cluster environment).
+ * @param jobtime Estimated job length in minutes, used to automatically choose the queue name.
+ * @param has_coprocessor fsl_sub returns with exit code of 0 if specified coprocessor is configured.
+ * @param has_queues fsl_sub returns with exit code of 0 if there's a compute cluster with queues configured.
+ * @param show_config Display the configuration currently in force.
+ * @param verbose Verbose mode.
+ * @param version Show program's version number and exit.
+ * @param fileisimage If <file> already exists and is an MRI image file, do nothing and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_sub_params(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -132,48 +172,8 @@ function fsl_sub_params(
     version: boolean = false,
     fileisimage: InputPathType | null = null,
 ): FslSubParameters {
-    /**
-     * Build parameters.
-    
-     * @param arch Architectures not available.
-     * @param coprocessor No co-processor configured - ignored.
-     * @param coprocessor_multi No co-processor configured - ignored
-     * @param coprocessor_class No co-processor classes configured - ignored.
-     * @param coprocessor_class_strict No co-processor classes configured - ignored.
-     * @param coprocessor_toolkit No co-processor toolkits configured - ignored.
-     * @param usescript Use flags embedded in scripts to set queuing options - not supported
-     * @param jobhold Place a hold on this task until specified job id has completed.
-     * @param not_requeueable Job cannot be requeued in the event of a node failure.
-     * @param array_hold Not supported - will be converted to simple job hold
-     * @param logdir Where to output logfiles.
-     * @param mailoptions Email notification options (ignored).
-     * @param mailto Email notification recipients (ignored).
-     * @param novalidation Don't check for presence of script/binary in your searchpath
-     * @param name Specify job name as it will appear on queue.
-     * @param priority Specify job priority (not supported).
-     * @param queue Specify the queue for the job (irrelevant if not running in a cluster environment).
-     * @param resource Pass a resource request or constraint string through to the job scheduler.
-     * @param delete_job Deletes a queued/running job.
-     * @param jobram Max total RAM required for job (integer in GB).
-     * @param parallelenv_threads No parallel environments configured.
-     * @param array_task Specify a task file of commands to execute in parallel.
-     * @param array_native Binary/Script will handle array task internally (mutually exclusive with --array_task).
-     * @param array_limit Specify the maximum number of parallel job sub-tasks to run concurrently.
-     * @param keep_jobscript Whether to create and save a job submission script.
-     * @param project Specify the project (not relevant when not running in a cluster environment).
-     * @param noramsplit Disable RAM splitting (not relevant when not running in a cluster environment).
-     * @param jobtime Estimated job length in minutes, used to automatically choose the queue name.
-     * @param has_coprocessor fsl_sub returns with exit code of 0 if specified coprocessor is configured.
-     * @param has_queues fsl_sub returns with exit code of 0 if there's a compute cluster with queues configured.
-     * @param show_config Display the configuration currently in force.
-     * @param verbose Verbose mode.
-     * @param version Show program's version number and exit.
-     * @param fileisimage If <file> already exists and is an MRI image file, do nothing and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_sub" as const,
+        "@type": "fsl.fsl_sub" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
         "usescript": usescript,
         "not_requeueable": not_requeueable,
@@ -261,18 +261,18 @@ function fsl_sub_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_sub_cargs(
     params: FslSubParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_sub");
     if ((params["arch"] ?? null) !== null) {
@@ -453,18 +453,18 @@ function fsl_sub_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_sub_outputs(
     params: FslSubParameters,
     execution: Execution,
 ): FslSubOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslSubOutputs = {
         root: execution.outputFile("."),
     };
@@ -472,22 +472,22 @@ function fsl_sub_outputs(
 }
 
 
+/**
+ * FSL cluster submission tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslSubOutputs`).
+ */
 function fsl_sub_execute(
     params: FslSubParameters,
     execution: Execution,
 ): FslSubOutputs {
-    /**
-     * FSL cluster submission tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslSubOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_sub_cargs(params, execution)
     const ret = fsl_sub_outputs(params, execution)
@@ -496,6 +496,51 @@ function fsl_sub_execute(
 }
 
 
+/**
+ * FSL cluster submission tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param arch Architectures not available.
+ * @param coprocessor No co-processor configured - ignored.
+ * @param coprocessor_multi No co-processor configured - ignored
+ * @param coprocessor_class No co-processor classes configured - ignored.
+ * @param coprocessor_class_strict No co-processor classes configured - ignored.
+ * @param coprocessor_toolkit No co-processor toolkits configured - ignored.
+ * @param usescript Use flags embedded in scripts to set queuing options - not supported
+ * @param jobhold Place a hold on this task until specified job id has completed.
+ * @param not_requeueable Job cannot be requeued in the event of a node failure.
+ * @param array_hold Not supported - will be converted to simple job hold
+ * @param logdir Where to output logfiles.
+ * @param mailoptions Email notification options (ignored).
+ * @param mailto Email notification recipients (ignored).
+ * @param novalidation Don't check for presence of script/binary in your searchpath
+ * @param name Specify job name as it will appear on queue.
+ * @param priority Specify job priority (not supported).
+ * @param queue Specify the queue for the job (irrelevant if not running in a cluster environment).
+ * @param resource Pass a resource request or constraint string through to the job scheduler.
+ * @param delete_job Deletes a queued/running job.
+ * @param jobram Max total RAM required for job (integer in GB).
+ * @param parallelenv_threads No parallel environments configured.
+ * @param array_task Specify a task file of commands to execute in parallel.
+ * @param array_native Binary/Script will handle array task internally (mutually exclusive with --array_task).
+ * @param array_limit Specify the maximum number of parallel job sub-tasks to run concurrently.
+ * @param keep_jobscript Whether to create and save a job submission script.
+ * @param project Specify the project (not relevant when not running in a cluster environment).
+ * @param noramsplit Disable RAM splitting (not relevant when not running in a cluster environment).
+ * @param jobtime Estimated job length in minutes, used to automatically choose the queue name.
+ * @param has_coprocessor fsl_sub returns with exit code of 0 if specified coprocessor is configured.
+ * @param has_queues fsl_sub returns with exit code of 0 if there's a compute cluster with queues configured.
+ * @param show_config Display the configuration currently in force.
+ * @param verbose Verbose mode.
+ * @param version Show program's version number and exit.
+ * @param fileisimage If <file> already exists and is an MRI image file, do nothing and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslSubOutputs`).
+ */
 function fsl_sub(
     arch: string | null = null,
     coprocessor: string | null = null,
@@ -533,51 +578,6 @@ function fsl_sub(
     fileisimage: InputPathType | null = null,
     runner: Runner | null = null,
 ): FslSubOutputs {
-    /**
-     * FSL cluster submission tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param arch Architectures not available.
-     * @param coprocessor No co-processor configured - ignored.
-     * @param coprocessor_multi No co-processor configured - ignored
-     * @param coprocessor_class No co-processor classes configured - ignored.
-     * @param coprocessor_class_strict No co-processor classes configured - ignored.
-     * @param coprocessor_toolkit No co-processor toolkits configured - ignored.
-     * @param usescript Use flags embedded in scripts to set queuing options - not supported
-     * @param jobhold Place a hold on this task until specified job id has completed.
-     * @param not_requeueable Job cannot be requeued in the event of a node failure.
-     * @param array_hold Not supported - will be converted to simple job hold
-     * @param logdir Where to output logfiles.
-     * @param mailoptions Email notification options (ignored).
-     * @param mailto Email notification recipients (ignored).
-     * @param novalidation Don't check for presence of script/binary in your searchpath
-     * @param name Specify job name as it will appear on queue.
-     * @param priority Specify job priority (not supported).
-     * @param queue Specify the queue for the job (irrelevant if not running in a cluster environment).
-     * @param resource Pass a resource request or constraint string through to the job scheduler.
-     * @param delete_job Deletes a queued/running job.
-     * @param jobram Max total RAM required for job (integer in GB).
-     * @param parallelenv_threads No parallel environments configured.
-     * @param array_task Specify a task file of commands to execute in parallel.
-     * @param array_native Binary/Script will handle array task internally (mutually exclusive with --array_task).
-     * @param array_limit Specify the maximum number of parallel job sub-tasks to run concurrently.
-     * @param keep_jobscript Whether to create and save a job submission script.
-     * @param project Specify the project (not relevant when not running in a cluster environment).
-     * @param noramsplit Disable RAM splitting (not relevant when not running in a cluster environment).
-     * @param jobtime Estimated job length in minutes, used to automatically choose the queue name.
-     * @param has_coprocessor fsl_sub returns with exit code of 0 if specified coprocessor is configured.
-     * @param has_queues fsl_sub returns with exit code of 0 if there's a compute cluster with queues configured.
-     * @param show_config Display the configuration currently in force.
-     * @param verbose Verbose mode.
-     * @param version Show program's version number and exit.
-     * @param fileisimage If <file> already exists and is an MRI image file, do nothing and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslSubOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_SUB_METADATA);
     const params = fsl_sub_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_class_strict, coprocessor_toolkit, usescript, jobhold, not_requeueable, array_hold, logdir, mailoptions, mailto, novalidation, name, priority, queue, resource, delete_job, jobram, parallelenv_threads, array_task, array_native, array_limit, keep_jobscript, project, noramsplit, jobtime, has_coprocessor, has_queues, show_config, verbose, version, fileisimage)
@@ -590,5 +590,8 @@ export {
       FslSubOutputs,
       FslSubParameters,
       fsl_sub,
+      fsl_sub_cargs,
+      fsl_sub_execute,
+      fsl_sub_outputs,
       fsl_sub_params,
 };

@@ -12,7 +12,7 @@ const V_3D_NLFIM_METADATA: Metadata = {
 
 
 interface V3dNlfimParameters {
-    "__STYXTYPE__": "3dNLfim";
+    "@type": "afni.3dNLfim";
     "input_file": InputPathType;
     "signal_model": string;
     "noise_model": string;
@@ -53,35 +53,35 @@ interface V3dNlfimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNLfim": v_3d_nlfim_cargs,
+        "afni.3dNLfim": v_3d_nlfim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNLfim": v_3d_nlfim_outputs,
+        "afni.3dNLfim": v_3d_nlfim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -156,6 +156,49 @@ interface V3dNlfimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of 3d+time data file for input
+ * @param signal_model Name of the nonlinear signal model
+ * @param noise_model Name of the linear noise model
+ * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
+ * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
+ * @param intr Set the TR of the input 3d+time dataset
+ * @param tr Directly set the TR of the time series model
+ * @param time_file ASCII file containing each time point in the time series.
+ * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
+ * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
+ * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
+ * @param nrand Number of random test points; default=19999
+ * @param nbest Use b best test points to start; default=9
+ * @param rmsmin Minimum RMS error to reject reduced model
+ * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
+ * @param progress Display results every ival number of voxels
+ * @param voxel_count Display the current voxel index
+ * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
+ * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
+ * @param both Use both Powell's and Nelder-Mead method
+ * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
+ * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
+ * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
+ * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
+ * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
+ * @param brick Specify sub-brick contents for 'bucket' dataset
+ * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
+ * @param sfit Prefix for output 3d+time signal model fit
+ * @param snfit Prefix for output 3d+time signal+noise fit
+ * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nlfim_params(
     input_file: InputPathType,
     signal_model: string,
@@ -195,51 +238,8 @@ function v_3d_nlfim_params(
     snfit: string | null = null,
     jobs: number | null = null,
 ): V3dNlfimParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of 3d+time data file for input
-     * @param signal_model Name of the nonlinear signal model
-     * @param noise_model Name of the linear noise model
-     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
-     * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
-     * @param intr Set the TR of the input 3d+time dataset
-     * @param tr Directly set the TR of the time series model
-     * @param time_file ASCII file containing each time point in the time series.
-     * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
-     * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
-     * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
-     * @param nrand Number of random test points; default=19999
-     * @param nbest Use b best test points to start; default=9
-     * @param rmsmin Minimum RMS error to reject reduced model
-     * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
-     * @param progress Display results every ival number of voxels
-     * @param voxel_count Display the current voxel index
-     * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
-     * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
-     * @param both Use both Powell's and Nelder-Mead method
-     * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
-     * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
-     * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
-     * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
-     * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
-     * @param brick Specify sub-brick contents for 'bucket' dataset
-     * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
-     * @param sfit Prefix for output 3d+time signal model fit
-     * @param snfit Prefix for output 3d+time signal+noise fit
-     * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNLfim" as const,
+        "@type": "afni.3dNLfim" as const,
         "input_file": input_file,
         "signal_model": signal_model,
         "noise_model": noise_model,
@@ -338,18 +338,18 @@ function v_3d_nlfim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nlfim_cargs(
     params: V3dNlfimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNLfim");
     cargs.push(
@@ -554,18 +554,18 @@ function v_3d_nlfim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nlfim_outputs(
     params: V3dNlfimParameters,
     execution: Execution,
 ): V3dNlfimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNlfimOutputs = {
         root: execution.outputFile("."),
         freg_outfile: ((params["freg"] ?? null) !== null) ? execution.outputFile([(params["freg"] ?? null), ".fift"].join('')) : null,
@@ -587,22 +587,22 @@ function v_3d_nlfim_outputs(
 }
 
 
+/**
+ * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
+ */
 function v_3d_nlfim_execute(
     params: V3dNlfimParameters,
     execution: Execution,
 ): V3dNlfimOutputs {
-    /**
-     * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nlfim_cargs(params, execution)
     const ret = v_3d_nlfim_outputs(params, execution)
@@ -611,6 +611,54 @@ function v_3d_nlfim_execute(
 }
 
 
+/**
+ * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Filename of 3d+time data file for input
+ * @param signal_model Name of the nonlinear signal model
+ * @param noise_model Name of the linear noise model
+ * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
+ * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
+ * @param intr Set the TR of the input 3d+time dataset
+ * @param tr Directly set the TR of the time series model
+ * @param time_file ASCII file containing each time point in the time series.
+ * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
+ * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
+ * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
+ * @param nrand Number of random test points; default=19999
+ * @param nbest Use b best test points to start; default=9
+ * @param rmsmin Minimum RMS error to reject reduced model
+ * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
+ * @param progress Display results every ival number of voxels
+ * @param voxel_count Display the current voxel index
+ * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
+ * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
+ * @param both Use both Powell's and Nelder-Mead method
+ * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
+ * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
+ * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
+ * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
+ * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
+ * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
+ * @param brick Specify sub-brick contents for 'bucket' dataset
+ * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
+ * @param sfit Prefix for output 3d+time signal model fit
+ * @param snfit Prefix for output 3d+time signal+noise fit
+ * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
+ */
 function v_3d_nlfim(
     input_file: InputPathType,
     signal_model: string,
@@ -651,54 +699,6 @@ function v_3d_nlfim(
     jobs: number | null = null,
     runner: Runner | null = null,
 ): V3dNlfimOutputs {
-    /**
-     * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Filename of 3d+time data file for input
-     * @param signal_model Name of the nonlinear signal model
-     * @param noise_model Name of the linear noise model
-     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask to indicate which voxels to analyze
-     * @param ignore Skip this number of initial images in the time series for regression analysis; default = 0
-     * @param intr Set the TR of the input 3d+time dataset
-     * @param tr Directly set the TR of the time series model
-     * @param time_file ASCII file containing each time point in the time series.
-     * @param sconstr Constraints for signal parameters; c <= gs[k] <= d
-     * @param nconstr Constraints for noise parameters; c+b[k] <= gn[k] <= d+b[k]
-     * @param nabs Use absolute constraints for noise parameters; c <= gn[k] <= d
-     * @param nrand Number of random test points; default=19999
-     * @param nbest Use b best test points to start; default=9
-     * @param rmsmin Minimum RMS error to reject reduced model
-     * @param fdisp Display results for those voxels whose F-statistic is greater than fval; default=999.0
-     * @param progress Display results every ival number of voxels
-     * @param voxel_count Display the current voxel index
-     * @param simplex Use Nelder-Mead simplex method for least-square minimization (default)
-     * @param powell Use Powell's NEWUOA method instead of Nelder-Mead simplex method
-     * @param both Use both Powell's and Nelder-Mead method
-     * @param freg Perform F-test for significance of the regression; output 'fift' is written to prefix filename fname
-     * @param frsqr Calculate R^2 (coef. of multiple determination); store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fsmax Estimate signed maximum of signal; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param ftmax Estimate time of signed maximum; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fpsmax Calculate (signed) maximum percentage change of signal from baseline; output 'fift' is written to prefix filename fname
-     * @param farea Calculate area between signal and baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fparea Percentage area of signal relative to baseline; store with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fscoef Estimate kth signal parameter gs[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param fncoef Estimate kth noise parameter gn[k]; store along with F-test for regression; output 'fift' is written to prefix filename fname
-     * @param tscoef Perform t-test for significance of kth signal parameter gs[k]; output 'fitt' is written to prefix filename fname
-     * @param tncoef Perform t-test for significance of kth noise parameter gn[k]; output 'fitt' is written to prefix filename fname
-     * @param bucket Create one AFNI 'bucket' dataset containing n sub-bricks; n=0 creates default output; output 'bucket' is written to prefixname
-     * @param brick Specify sub-brick contents for 'bucket' dataset
-     * @param nofdr Don't write the FDR (q vs. threshold) curves into the output dataset.
-     * @param sfit Prefix for output 3d+time signal model fit
-     * @param snfit Prefix for output 3d+time signal+noise fit
-     * @param jobs Run the program with 'J' jobs (sub-processes). 1 to 32.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NLFIM_METADATA);
     const params = v_3d_nlfim_params(input_file, signal_model, noise_model, mask, ignore, intr, tr, time_file, sconstr, nconstr, nabs, nrand, nbest, rmsmin, fdisp, progress, voxel_count, simplex, powell, both, freg, frsqr, fsmax, ftmax, fpsmax, farea, fparea, fscoef, fncoef, tscoef, tncoef, bucket, brick, nofdr, sfit, snfit, jobs)
@@ -711,5 +711,8 @@ export {
       V3dNlfimParameters,
       V_3D_NLFIM_METADATA,
       v_3d_nlfim,
+      v_3d_nlfim_cargs,
+      v_3d_nlfim_execute,
+      v_3d_nlfim_outputs,
       v_3d_nlfim_params,
 };

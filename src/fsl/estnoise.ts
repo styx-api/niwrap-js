@@ -12,7 +12,7 @@ const ESTNOISE_METADATA: Metadata = {
 
 
 interface EstnoiseParameters {
-    "__STYXTYPE__": "estnoise";
+    "@type": "fsl.estnoise";
     "input_4d_data": InputPathType;
     "spatial_sigma"?: number | null | undefined;
     "temp_hp_sigma"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface EstnoiseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "estnoise": estnoise_cargs,
+        "fsl.estnoise": estnoise_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "estnoise": estnoise_outputs,
+        "fsl.estnoise": estnoise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface EstnoiseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_4d_data Input 4D fMRI data (e.g., fmri_data.nii.gz)
+ * @param spatial_sigma Spatial smoothing sigma
+ * @param temp_hp_sigma Temporal high-pass filter sigma
+ * @param temp_lp_sigma Temporal low-pass filter sigma
+ *
+ * @returns Parameter dictionary
+ */
 function estnoise_params(
     input_4d_data: InputPathType,
     spatial_sigma: number | null = null,
     temp_hp_sigma: number | null = null,
     temp_lp_sigma: number | null = null,
 ): EstnoiseParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_4d_data Input 4D fMRI data (e.g., fmri_data.nii.gz)
-     * @param spatial_sigma Spatial smoothing sigma
-     * @param temp_hp_sigma Temporal high-pass filter sigma
-     * @param temp_lp_sigma Temporal low-pass filter sigma
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "estnoise" as const,
+        "@type": "fsl.estnoise" as const,
         "input_4d_data": input_4d_data,
     };
     if (spatial_sigma !== null) {
@@ -104,18 +104,18 @@ function estnoise_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function estnoise_cargs(
     params: EstnoiseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("estnoise");
     cargs.push(execution.inputFile((params["input_4d_data"] ?? null)));
@@ -132,18 +132,18 @@ function estnoise_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function estnoise_outputs(
     params: EstnoiseParameters,
     execution: Execution,
 ): EstnoiseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EstnoiseOutputs = {
         root: execution.outputFile("."),
         output_noise_file: execution.outputFile(["noise_estimate.txt"].join('')),
@@ -152,22 +152,22 @@ function estnoise_outputs(
 }
 
 
+/**
+ * Estimate noise in 4D fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
+ */
 function estnoise_execute(
     params: EstnoiseParameters,
     execution: Execution,
 ): EstnoiseOutputs {
-    /**
-     * Estimate noise in 4D fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
-     */
     params = execution.params(params)
     const cargs = estnoise_cargs(params, execution)
     const ret = estnoise_outputs(params, execution)
@@ -176,6 +176,21 @@ function estnoise_execute(
 }
 
 
+/**
+ * Estimate noise in 4D fMRI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_4d_data Input 4D fMRI data (e.g., fmri_data.nii.gz)
+ * @param spatial_sigma Spatial smoothing sigma
+ * @param temp_hp_sigma Temporal high-pass filter sigma
+ * @param temp_lp_sigma Temporal low-pass filter sigma
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
+ */
 function estnoise(
     input_4d_data: InputPathType,
     spatial_sigma: number | null = null,
@@ -183,21 +198,6 @@ function estnoise(
     temp_lp_sigma: number | null = null,
     runner: Runner | null = null,
 ): EstnoiseOutputs {
-    /**
-     * Estimate noise in 4D fMRI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_4d_data Input 4D fMRI data (e.g., fmri_data.nii.gz)
-     * @param spatial_sigma Spatial smoothing sigma
-     * @param temp_hp_sigma Temporal high-pass filter sigma
-     * @param temp_lp_sigma Temporal low-pass filter sigma
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ESTNOISE_METADATA);
     const params = estnoise_params(input_4d_data, spatial_sigma, temp_hp_sigma, temp_lp_sigma)
@@ -210,5 +210,8 @@ export {
       EstnoiseOutputs,
       EstnoiseParameters,
       estnoise,
+      estnoise_cargs,
+      estnoise_execute,
+      estnoise_outputs,
       estnoise_params,
 };

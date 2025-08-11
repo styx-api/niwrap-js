@@ -12,42 +12,42 @@ const DEFECT_SEG_METADATA: Metadata = {
 
 
 interface DefectSegParameters {
-    "__STYXTYPE__": "defect-seg";
+    "@type": "freesurfer.defect-seg";
     "subject": string;
     "lh_only": boolean;
     "rh_only": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "defect-seg": defect_seg_cargs,
+        "freesurfer.defect-seg": defect_seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "defect-seg": defect_seg_outputs,
+        "freesurfer.defect-seg": defect_seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,22 +94,22 @@ interface DefectSegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier.
+ * @param lh_only Only process the left hemisphere.
+ * @param rh_only Only process the right hemisphere.
+ *
+ * @returns Parameter dictionary
+ */
 function defect_seg_params(
     subject: string,
     lh_only: boolean = false,
     rh_only: boolean = false,
 ): DefectSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier.
-     * @param lh_only Only process the left hemisphere.
-     * @param rh_only Only process the right hemisphere.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "defect-seg" as const,
+        "@type": "freesurfer.defect-seg" as const,
         "subject": subject,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -118,18 +118,18 @@ function defect_seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function defect_seg_cargs(
     params: DefectSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("defect-seg");
     cargs.push(
@@ -146,18 +146,18 @@ function defect_seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function defect_seg_outputs(
     params: DefectSegParameters,
     execution: Execution,
 ): DefectSegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DefectSegOutputs = {
         root: execution.outputFile("."),
         surface_defects: execution.outputFile(["mri/surface.defects.mgz"].join('')),
@@ -172,22 +172,22 @@ function defect_seg_outputs(
 }
 
 
+/**
+ * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
+ */
 function defect_seg_execute(
     params: DefectSegParameters,
     execution: Execution,
 ): DefectSegOutputs {
-    /**
-     * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
-     */
     params = execution.params(params)
     const cargs = defect_seg_cargs(params, execution)
     const ret = defect_seg_outputs(params, execution)
@@ -196,26 +196,26 @@ function defect_seg_execute(
 }
 
 
+/**
+ * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier.
+ * @param lh_only Only process the left hemisphere.
+ * @param rh_only Only process the right hemisphere.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
+ */
 function defect_seg(
     subject: string,
     lh_only: boolean = false,
     rh_only: boolean = false,
     runner: Runner | null = null,
 ): DefectSegOutputs {
-    /**
-     * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier.
-     * @param lh_only Only process the left hemisphere.
-     * @param rh_only Only process the right hemisphere.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DEFECT_SEG_METADATA);
     const params = defect_seg_params(subject, lh_only, rh_only)
@@ -228,5 +228,8 @@ export {
       DefectSegOutputs,
       DefectSegParameters,
       defect_seg,
+      defect_seg_cargs,
+      defect_seg_execute,
+      defect_seg_outputs,
       defect_seg_params,
 };

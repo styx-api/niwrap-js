@@ -12,7 +12,7 @@ const BBLABEL_METADATA: Metadata = {
 
 
 interface BblabelParameters {
-    "__STYXTYPE__": "bblabel";
+    "@type": "freesurfer.bblabel";
     "labelfile": InputPathType;
     "xmin"?: number | null | undefined;
     "xmax"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface BblabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bblabel": bblabel_cargs,
+        "freesurfer.bblabel": bblabel_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bblabel": bblabel_outputs,
+        "freesurfer.bblabel": bblabel_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface BblabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param labelfile Input label file.
+ * @param outlabelfile Output label file.
+ * @param xmin Minimum x-coordinate for bounding box.
+ * @param xmax Maximum x-coordinate for bounding box.
+ * @param ymin Minimum y-coordinate for bounding box.
+ * @param ymax Maximum y-coordinate for bounding box.
+ * @param zmin Minimum z-coordinate for bounding box.
+ * @param zmax Maximum z-coordinate for bounding box.
+ * @param debug Enable debug mode.
+ * @param umask Set Unix file permission mask.
+ *
+ * @returns Parameter dictionary
+ */
 function bblabel_params(
     labelfile: InputPathType,
     outlabelfile: string,
@@ -89,24 +105,8 @@ function bblabel_params(
     debug: boolean = false,
     umask: string | null = null,
 ): BblabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param labelfile Input label file.
-     * @param outlabelfile Output label file.
-     * @param xmin Minimum x-coordinate for bounding box.
-     * @param xmax Maximum x-coordinate for bounding box.
-     * @param ymin Minimum y-coordinate for bounding box.
-     * @param ymax Maximum y-coordinate for bounding box.
-     * @param zmin Minimum z-coordinate for bounding box.
-     * @param zmax Maximum z-coordinate for bounding box.
-     * @param debug Enable debug mode.
-     * @param umask Set Unix file permission mask.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bblabel" as const,
+        "@type": "freesurfer.bblabel" as const,
         "labelfile": labelfile,
         "outlabelfile": outlabelfile,
         "debug": debug,
@@ -136,18 +136,18 @@ function bblabel_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bblabel_cargs(
     params: BblabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bblabel");
     cargs.push(
@@ -207,18 +207,18 @@ function bblabel_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bblabel_outputs(
     params: BblabelParameters,
     execution: Execution,
 ): BblabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BblabelOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outlabelfile"] ?? null)].join('')),
@@ -227,22 +227,22 @@ function bblabel_outputs(
 }
 
 
+/**
+ * Applies a bounding box to a label, copying only the label points within the specified box to the output.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BblabelOutputs`).
+ */
 function bblabel_execute(
     params: BblabelParameters,
     execution: Execution,
 ): BblabelOutputs {
-    /**
-     * Applies a bounding box to a label, copying only the label points within the specified box to the output.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BblabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = bblabel_cargs(params, execution)
     const ret = bblabel_outputs(params, execution)
@@ -251,6 +251,27 @@ function bblabel_execute(
 }
 
 
+/**
+ * Applies a bounding box to a label, copying only the label points within the specified box to the output.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param labelfile Input label file.
+ * @param outlabelfile Output label file.
+ * @param xmin Minimum x-coordinate for bounding box.
+ * @param xmax Maximum x-coordinate for bounding box.
+ * @param ymin Minimum y-coordinate for bounding box.
+ * @param ymax Maximum y-coordinate for bounding box.
+ * @param zmin Minimum z-coordinate for bounding box.
+ * @param zmax Maximum z-coordinate for bounding box.
+ * @param debug Enable debug mode.
+ * @param umask Set Unix file permission mask.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BblabelOutputs`).
+ */
 function bblabel(
     labelfile: InputPathType,
     outlabelfile: string,
@@ -264,27 +285,6 @@ function bblabel(
     umask: string | null = null,
     runner: Runner | null = null,
 ): BblabelOutputs {
-    /**
-     * Applies a bounding box to a label, copying only the label points within the specified box to the output.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param labelfile Input label file.
-     * @param outlabelfile Output label file.
-     * @param xmin Minimum x-coordinate for bounding box.
-     * @param xmax Maximum x-coordinate for bounding box.
-     * @param ymin Minimum y-coordinate for bounding box.
-     * @param ymax Maximum y-coordinate for bounding box.
-     * @param zmin Minimum z-coordinate for bounding box.
-     * @param zmax Maximum z-coordinate for bounding box.
-     * @param debug Enable debug mode.
-     * @param umask Set Unix file permission mask.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BblabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BBLABEL_METADATA);
     const params = bblabel_params(labelfile, outlabelfile, xmin, xmax, ymin, ymax, zmin, zmax, debug, umask)
@@ -297,5 +297,8 @@ export {
       BblabelOutputs,
       BblabelParameters,
       bblabel,
+      bblabel_cargs,
+      bblabel_execute,
+      bblabel_outputs,
       bblabel_params,
 };

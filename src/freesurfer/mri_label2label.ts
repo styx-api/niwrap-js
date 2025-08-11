@@ -12,7 +12,7 @@ const MRI_LABEL2LABEL_METADATA: Metadata = {
 
 
 interface MriLabel2labelParameters {
-    "__STYXTYPE__": "mri_label2label";
+    "@type": "freesurfer.mri_label2label";
     "src_label": InputPathType;
     "trg_label": string;
     "erode"?: number | null | undefined;
@@ -62,33 +62,33 @@ interface MriLabel2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_label2label": mri_label2label_cargs,
+        "freesurfer.mri_label2label": mri_label2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -108,6 +108,58 @@ interface MriLabel2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_label Input label file
+ * @param trg_label Output label file
+ * @param erode Erode the label N times before writing
+ * @param open Open the label N times before writing
+ * @param close Close the label N times before writing
+ * @param dilate Dilate the label N times before writing
+ * @param ring Dilate the label N times then remove the original before writing
+ * @param src_subject Source subject
+ * @param trg_subject Target subject
+ * @param subject Use for both target and source
+ * @param outmask Save output label as a binary mask (surf only)
+ * @param outstat Save output label stat as a mask (surf only)
+ * @param sample Sample label onto surface
+ * @param regmethod Registration method (surface, volume)
+ * @param usepathfiles Read from and write to a path file
+ * @param hemi Hemisphere (lh or rh) (with surface)
+ * @param src_hemi Source Hemisphere (lh or rh)
+ * @param trg_hemi Target Hemisphere (lh or rh)
+ * @param src_ico_order When srcsubject=ico
+ * @param trg_ico_order When trgsubject=ico
+ * @param direct Use the [xyz] coords for src and trg surfaces to do direct lookup
+ * @param trgsurf Get xyz from this surface (white)
+ * @param surfreg Surface registration (sphere.reg)
+ * @param srcsurfreg Source surface registration (sphere.reg)
+ * @param trgsurfreg Target surface registration (sphere.reg)
+ * @param srcsurfreg_file Specify full path to source reg
+ * @param trgsurfreg_file Specify full path to target reg
+ * @param paint Map to closest vertex on source surfname if d < dmax
+ * @param dmindmin Bin mask with vertex of closest label point when painting
+ * @param baryfill Fill with barycentric interpolation
+ * @param label_cortex Create a label like ?h.cortex.label
+ * @param surf_label2mask Convert a label to a binary mask
+ * @param srcmask Source mask surfvalfile thresh <format>
+ * @param srcmasksign Source mask sign (<abs>, pos, neg)
+ * @param srcmaskframe Source mask frame number (0-based)
+ * @param xfm Use xfm file instead of computing tal xfm
+ * @param reg Use register.dat file instead of computing tal xfm
+ * @param xfm_invert Invert xfm, or reg
+ * @param projabs Project dist mm along surf normal
+ * @param projfrac Project frac of thickness along surf normal
+ * @param sd Use specified subjects directory
+ * @param nohash Don't use hash table when regmethod is surface
+ * @param norevmap Don't use reverse mapping when regmethod is surface
+ * @param to_scanner Convert coords to scanner RAS prior to other operations
+ * @param to_tkr Convert coords to tkregister RAS prior to other operations
+ * @param scanner Set output coordinate type to scanner
+ *
+ * @returns Parameter dictionary
+ */
 function mri_label2label_params(
     src_label: InputPathType,
     trg_label: string,
@@ -156,60 +208,8 @@ function mri_label2label_params(
     to_tkr: string | null = null,
     scanner: boolean = false,
 ): MriLabel2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_label Input label file
-     * @param trg_label Output label file
-     * @param erode Erode the label N times before writing
-     * @param open Open the label N times before writing
-     * @param close Close the label N times before writing
-     * @param dilate Dilate the label N times before writing
-     * @param ring Dilate the label N times then remove the original before writing
-     * @param src_subject Source subject
-     * @param trg_subject Target subject
-     * @param subject Use for both target and source
-     * @param outmask Save output label as a binary mask (surf only)
-     * @param outstat Save output label stat as a mask (surf only)
-     * @param sample Sample label onto surface
-     * @param regmethod Registration method (surface, volume)
-     * @param usepathfiles Read from and write to a path file
-     * @param hemi Hemisphere (lh or rh) (with surface)
-     * @param src_hemi Source Hemisphere (lh or rh)
-     * @param trg_hemi Target Hemisphere (lh or rh)
-     * @param src_ico_order When srcsubject=ico
-     * @param trg_ico_order When trgsubject=ico
-     * @param direct Use the [xyz] coords for src and trg surfaces to do direct lookup
-     * @param trgsurf Get xyz from this surface (white)
-     * @param surfreg Surface registration (sphere.reg)
-     * @param srcsurfreg Source surface registration (sphere.reg)
-     * @param trgsurfreg Target surface registration (sphere.reg)
-     * @param srcsurfreg_file Specify full path to source reg
-     * @param trgsurfreg_file Specify full path to target reg
-     * @param paint Map to closest vertex on source surfname if d < dmax
-     * @param dmindmin Bin mask with vertex of closest label point when painting
-     * @param baryfill Fill with barycentric interpolation
-     * @param label_cortex Create a label like ?h.cortex.label
-     * @param surf_label2mask Convert a label to a binary mask
-     * @param srcmask Source mask surfvalfile thresh <format>
-     * @param srcmasksign Source mask sign (<abs>, pos, neg)
-     * @param srcmaskframe Source mask frame number (0-based)
-     * @param xfm Use xfm file instead of computing tal xfm
-     * @param reg Use register.dat file instead of computing tal xfm
-     * @param xfm_invert Invert xfm, or reg
-     * @param projabs Project dist mm along surf normal
-     * @param projfrac Project frac of thickness along surf normal
-     * @param sd Use specified subjects directory
-     * @param nohash Don't use hash table when regmethod is surface
-     * @param norevmap Don't use reverse mapping when regmethod is surface
-     * @param to_scanner Convert coords to scanner RAS prior to other operations
-     * @param to_tkr Convert coords to tkregister RAS prior to other operations
-     * @param scanner Set output coordinate type to scanner
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_label2label" as const,
+        "@type": "freesurfer.mri_label2label" as const,
         "src_label": src_label,
         "trg_label": trg_label,
         "usepathfiles": usepathfiles,
@@ -339,18 +339,18 @@ function mri_label2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_label2label_cargs(
     params: MriLabel2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_label2label");
     cargs.push(
@@ -614,18 +614,18 @@ function mri_label2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_label2label_outputs(
     params: MriLabel2labelParameters,
     execution: Execution,
 ): MriLabel2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLabel2labelOutputs = {
         root: execution.outputFile("."),
     };
@@ -633,22 +633,22 @@ function mri_label2label_outputs(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
+ */
 function mri_label2label_execute(
     params: MriLabel2labelParameters,
     execution: Execution,
 ): MriLabel2labelOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_label2label_cargs(params, execution)
     const ret = mri_label2label_outputs(params, execution)
@@ -657,6 +657,63 @@ function mri_label2label_execute(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_label Input label file
+ * @param trg_label Output label file
+ * @param erode Erode the label N times before writing
+ * @param open Open the label N times before writing
+ * @param close Close the label N times before writing
+ * @param dilate Dilate the label N times before writing
+ * @param ring Dilate the label N times then remove the original before writing
+ * @param src_subject Source subject
+ * @param trg_subject Target subject
+ * @param subject Use for both target and source
+ * @param outmask Save output label as a binary mask (surf only)
+ * @param outstat Save output label stat as a mask (surf only)
+ * @param sample Sample label onto surface
+ * @param regmethod Registration method (surface, volume)
+ * @param usepathfiles Read from and write to a path file
+ * @param hemi Hemisphere (lh or rh) (with surface)
+ * @param src_hemi Source Hemisphere (lh or rh)
+ * @param trg_hemi Target Hemisphere (lh or rh)
+ * @param src_ico_order When srcsubject=ico
+ * @param trg_ico_order When trgsubject=ico
+ * @param direct Use the [xyz] coords for src and trg surfaces to do direct lookup
+ * @param trgsurf Get xyz from this surface (white)
+ * @param surfreg Surface registration (sphere.reg)
+ * @param srcsurfreg Source surface registration (sphere.reg)
+ * @param trgsurfreg Target surface registration (sphere.reg)
+ * @param srcsurfreg_file Specify full path to source reg
+ * @param trgsurfreg_file Specify full path to target reg
+ * @param paint Map to closest vertex on source surfname if d < dmax
+ * @param dmindmin Bin mask with vertex of closest label point when painting
+ * @param baryfill Fill with barycentric interpolation
+ * @param label_cortex Create a label like ?h.cortex.label
+ * @param surf_label2mask Convert a label to a binary mask
+ * @param srcmask Source mask surfvalfile thresh <format>
+ * @param srcmasksign Source mask sign (<abs>, pos, neg)
+ * @param srcmaskframe Source mask frame number (0-based)
+ * @param xfm Use xfm file instead of computing tal xfm
+ * @param reg Use register.dat file instead of computing tal xfm
+ * @param xfm_invert Invert xfm, or reg
+ * @param projabs Project dist mm along surf normal
+ * @param projfrac Project frac of thickness along surf normal
+ * @param sd Use specified subjects directory
+ * @param nohash Don't use hash table when regmethod is surface
+ * @param norevmap Don't use reverse mapping when regmethod is surface
+ * @param to_scanner Convert coords to scanner RAS prior to other operations
+ * @param to_tkr Convert coords to tkregister RAS prior to other operations
+ * @param scanner Set output coordinate type to scanner
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
+ */
 function mri_label2label(
     src_label: InputPathType,
     trg_label: string,
@@ -706,63 +763,6 @@ function mri_label2label(
     scanner: boolean = false,
     runner: Runner | null = null,
 ): MriLabel2labelOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_label Input label file
-     * @param trg_label Output label file
-     * @param erode Erode the label N times before writing
-     * @param open Open the label N times before writing
-     * @param close Close the label N times before writing
-     * @param dilate Dilate the label N times before writing
-     * @param ring Dilate the label N times then remove the original before writing
-     * @param src_subject Source subject
-     * @param trg_subject Target subject
-     * @param subject Use for both target and source
-     * @param outmask Save output label as a binary mask (surf only)
-     * @param outstat Save output label stat as a mask (surf only)
-     * @param sample Sample label onto surface
-     * @param regmethod Registration method (surface, volume)
-     * @param usepathfiles Read from and write to a path file
-     * @param hemi Hemisphere (lh or rh) (with surface)
-     * @param src_hemi Source Hemisphere (lh or rh)
-     * @param trg_hemi Target Hemisphere (lh or rh)
-     * @param src_ico_order When srcsubject=ico
-     * @param trg_ico_order When trgsubject=ico
-     * @param direct Use the [xyz] coords for src and trg surfaces to do direct lookup
-     * @param trgsurf Get xyz from this surface (white)
-     * @param surfreg Surface registration (sphere.reg)
-     * @param srcsurfreg Source surface registration (sphere.reg)
-     * @param trgsurfreg Target surface registration (sphere.reg)
-     * @param srcsurfreg_file Specify full path to source reg
-     * @param trgsurfreg_file Specify full path to target reg
-     * @param paint Map to closest vertex on source surfname if d < dmax
-     * @param dmindmin Bin mask with vertex of closest label point when painting
-     * @param baryfill Fill with barycentric interpolation
-     * @param label_cortex Create a label like ?h.cortex.label
-     * @param surf_label2mask Convert a label to a binary mask
-     * @param srcmask Source mask surfvalfile thresh <format>
-     * @param srcmasksign Source mask sign (<abs>, pos, neg)
-     * @param srcmaskframe Source mask frame number (0-based)
-     * @param xfm Use xfm file instead of computing tal xfm
-     * @param reg Use register.dat file instead of computing tal xfm
-     * @param xfm_invert Invert xfm, or reg
-     * @param projabs Project dist mm along surf normal
-     * @param projfrac Project frac of thickness along surf normal
-     * @param sd Use specified subjects directory
-     * @param nohash Don't use hash table when regmethod is surface
-     * @param norevmap Don't use reverse mapping when regmethod is surface
-     * @param to_scanner Convert coords to scanner RAS prior to other operations
-     * @param to_tkr Convert coords to tkregister RAS prior to other operations
-     * @param scanner Set output coordinate type to scanner
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LABEL2LABEL_METADATA);
     const params = mri_label2label_params(src_label, trg_label, erode, open, close, dilate, ring, src_subject, trg_subject, subject, outmask, outstat, sample, regmethod, usepathfiles, hemi, src_hemi, trg_hemi, src_ico_order, trg_ico_order, direct, trgsurf, surfreg, srcsurfreg, trgsurfreg, srcsurfreg_file, trgsurfreg_file, paint, dmindmin, baryfill, label_cortex, surf_label2mask, srcmask, srcmasksign, srcmaskframe, xfm, reg, xfm_invert, projabs, projfrac, sd, nohash, norevmap, to_scanner, to_tkr, scanner)
@@ -775,5 +775,8 @@ export {
       MriLabel2labelOutputs,
       MriLabel2labelParameters,
       mri_label2label,
+      mri_label2label_cargs,
+      mri_label2label_execute,
+      mri_label2label_outputs,
       mri_label2label_params,
 };

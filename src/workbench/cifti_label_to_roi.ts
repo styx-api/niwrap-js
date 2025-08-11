@@ -12,7 +12,7 @@ const CIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 
 
 interface CiftiLabelToRoiParameters {
-    "__STYXTYPE__": "cifti-label-to-roi";
+    "@type": "workbench.cifti-label-to-roi";
     "label_in": InputPathType;
     "scalar_out": string;
     "opt_name_label_name"?: string | null | undefined;
@@ -21,35 +21,35 @@ interface CiftiLabelToRoiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-label-to-roi": cifti_label_to_roi_cargs,
+        "workbench.cifti-label-to-roi": cifti_label_to_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-label-to-roi": cifti_label_to_roi_outputs,
+        "workbench.cifti-label-to-roi": cifti_label_to_roi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface CiftiLabelToRoiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the input cifti label file
+ * @param scalar_out the output cifti scalar file
+ * @param opt_name_label_name select label by name: the label name that you want an roi of
+ * @param opt_key_label_key select label by key: the label key that you want an roi of
+ * @param opt_map_map select a single label map to use: the map number or name
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_label_to_roi_params(
     label_in: InputPathType,
     scalar_out: string,
@@ -79,19 +90,8 @@ function cifti_label_to_roi_params(
     opt_key_label_key: number | null = null,
     opt_map_map: string | null = null,
 ): CiftiLabelToRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the input cifti label file
-     * @param scalar_out the output cifti scalar file
-     * @param opt_name_label_name select label by name: the label name that you want an roi of
-     * @param opt_key_label_key select label by key: the label key that you want an roi of
-     * @param opt_map_map select a single label map to use: the map number or name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-label-to-roi" as const,
+        "@type": "workbench.cifti-label-to-roi" as const,
         "label_in": label_in,
         "scalar_out": scalar_out,
     };
@@ -108,18 +108,18 @@ function cifti_label_to_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_label_to_roi_cargs(
     params: CiftiLabelToRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-label-to-roi");
@@ -147,18 +147,18 @@ function cifti_label_to_roi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_label_to_roi_outputs(
     params: CiftiLabelToRoiParameters,
     execution: Execution,
 ): CiftiLabelToRoiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiLabelToRoiOutputs = {
         root: execution.outputFile("."),
         scalar_out: execution.outputFile([(params["scalar_out"] ?? null)].join('')),
@@ -167,24 +167,24 @@ function cifti_label_to_roi_outputs(
 }
 
 
+/**
+ * Make a cifti label into an roi.
+ *
+ * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
+ */
 function cifti_label_to_roi_execute(
     params: CiftiLabelToRoiParameters,
     execution: Execution,
 ): CiftiLabelToRoiOutputs {
-    /**
-     * Make a cifti label into an roi.
-     * 
-     * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_label_to_roi_cargs(params, execution)
     const ret = cifti_label_to_roi_outputs(params, execution)
@@ -193,6 +193,24 @@ function cifti_label_to_roi_execute(
 }
 
 
+/**
+ * Make a cifti label into an roi.
+ *
+ * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the input cifti label file
+ * @param scalar_out the output cifti scalar file
+ * @param opt_name_label_name select label by name: the label name that you want an roi of
+ * @param opt_key_label_key select label by key: the label key that you want an roi of
+ * @param opt_map_map select a single label map to use: the map number or name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
+ */
 function cifti_label_to_roi(
     label_in: InputPathType,
     scalar_out: string,
@@ -201,24 +219,6 @@ function cifti_label_to_roi(
     opt_map_map: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToRoiOutputs {
-    /**
-     * Make a cifti label into an roi.
-     * 
-     * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the input cifti label file
-     * @param scalar_out the output cifti scalar file
-     * @param opt_name_label_name select label by name: the label name that you want an roi of
-     * @param opt_key_label_key select label by key: the label key that you want an roi of
-     * @param opt_map_map select a single label map to use: the map number or name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_LABEL_TO_ROI_METADATA);
     const params = cifti_label_to_roi_params(label_in, scalar_out, opt_name_label_name, opt_key_label_key, opt_map_map)
@@ -231,5 +231,8 @@ export {
       CiftiLabelToRoiOutputs,
       CiftiLabelToRoiParameters,
       cifti_label_to_roi,
+      cifti_label_to_roi_cargs,
+      cifti_label_to_roi_execute,
+      cifti_label_to_roi_outputs,
       cifti_label_to_roi_params,
 };

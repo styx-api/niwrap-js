@@ -12,41 +12,41 @@ const V__GET_AFNI_ORIENT_METADATA: Metadata = {
 
 
 interface VGetAfniOrientParameters {
-    "__STYXTYPE__": "@GetAfniOrient";
+    "@type": "afni.@GetAfniOrient";
     "exploratory": boolean;
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniOrient": v__get_afni_orient_cargs,
+        "afni.@GetAfniOrient": v__get_afni_orient_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@GetAfniOrient": v__get_afni_orient_outputs,
+        "afni.@GetAfniOrient": v__get_afni_orient_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VGetAfniOrientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input AFNI dataset (e.g. Hello+orig.HEAD)
+ * @param exploratory Exploratory flag for additional functionalities
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_orient_params(
     infile: InputPathType,
     exploratory: boolean = false,
 ): VGetAfniOrientParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input AFNI dataset (e.g. Hello+orig.HEAD)
-     * @param exploratory Exploratory flag for additional functionalities
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniOrient" as const,
+        "@type": "afni.@GetAfniOrient" as const,
         "exploratory": exploratory,
         "infile": infile,
     };
@@ -90,18 +90,18 @@ function v__get_afni_orient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_orient_cargs(
     params: VGetAfniOrientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniOrient");
     if ((params["exploratory"] ?? null)) {
@@ -112,18 +112,18 @@ function v__get_afni_orient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_orient_outputs(
     params: VGetAfniOrientParameters,
     execution: Execution,
 ): VGetAfniOrientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniOrientOutputs = {
         root: execution.outputFile("."),
         output_orient_code: execution.outputFile([path.basename((params["infile"] ?? null)), "_orient_code.txt"].join('')),
@@ -132,22 +132,22 @@ function v__get_afni_orient_outputs(
 }
 
 
+/**
+ * Returns the orient code of AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
+ */
 function v__get_afni_orient_execute(
     params: VGetAfniOrientParameters,
     execution: Execution,
 ): VGetAfniOrientOutputs {
-    /**
-     * Returns the orient code of AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_orient_cargs(params, execution)
     const ret = v__get_afni_orient_outputs(params, execution)
@@ -156,24 +156,24 @@ function v__get_afni_orient_execute(
 }
 
 
+/**
+ * Returns the orient code of AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input AFNI dataset (e.g. Hello+orig.HEAD)
+ * @param exploratory Exploratory flag for additional functionalities
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
+ */
 function v__get_afni_orient(
     infile: InputPathType,
     exploratory: boolean = false,
     runner: Runner | null = null,
 ): VGetAfniOrientOutputs {
-    /**
-     * Returns the orient code of AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input AFNI dataset (e.g. Hello+orig.HEAD)
-     * @param exploratory Exploratory flag for additional functionalities
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_ORIENT_METADATA);
     const params = v__get_afni_orient_params(infile, exploratory)
@@ -186,5 +186,8 @@ export {
       VGetAfniOrientParameters,
       V__GET_AFNI_ORIENT_METADATA,
       v__get_afni_orient,
+      v__get_afni_orient_cargs,
+      v__get_afni_orient_execute,
+      v__get_afni_orient_outputs,
       v__get_afni_orient_params,
 };

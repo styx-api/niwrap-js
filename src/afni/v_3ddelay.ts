@@ -12,7 +12,7 @@ const V_3DDELAY_METADATA: Metadata = {
 
 
 interface V3ddelayParameters {
-    "__STYXTYPE__": "3ddelay";
+    "@type": "afni.3ddelay";
     "input_file": InputPathType;
     "reference_file": InputPathType;
     "sampling_freq": number;
@@ -40,35 +40,35 @@ interface V3ddelayParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3ddelay": v_3ddelay_cargs,
+        "afni.3ddelay": v_3ddelay_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3ddelay": v_3ddelay_outputs,
+        "afni.3ddelay": v_3ddelay_outputs,
     };
     return outputsFuncs[t];
 }
@@ -103,6 +103,36 @@ interface V3ddelayOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of the input 3D+time dataset
+ * @param reference_file Input ideal time series file name
+ * @param sampling_freq Sampling frequency in Hz. of data time series (1/TR)
+ * @param stim_period Stimulus period in seconds. Set to 0 if stimulus is not periodic
+ * @param prefix The prefix for the results Brick
+ * @param polort Detrend input time series with polynomial of specified order. Default is -1 for auto selection
+ * @param nodtrnd Remove only the mean (equivalent to polort 0)
+ * @param units_seconds Units for delay estimates in seconds
+ * @param units_degrees Units for delay estimates in degrees. Requires Tstim > 0
+ * @param units_radians Units for delay estimates in radians. Requires Tstim > 0
+ * @param phzwrp Wrap delay (or phase) values
+ * @param nophzwrp Do not wrap phase (default)
+ * @param phzreverse Reverse phase such that phase -> (T-phase)
+ * @param phzscale Scale phase: phase -> phase*SC (default no scaling)
+ * @param bias Do not correct for the bias in the estimates
+ * @param nobias Correct for the bias in the estimates (default)
+ * @param dsamp Correct for slice timing differences (default)
+ * @param nodsamp Do not correct for slice timing differences
+ * @param mask Filename of mask dataset. Only voxels with non-zero values in the mask will be considered
+ * @param nfirst Number of first dataset image to use in the delay estimate
+ * @param nlast Number of last dataset image to use in the delay estimate
+ * @param co Cross Correlation Coefficient threshold value to limit ascii output
+ * @param asc Write the results to an ascii file for voxels with cross correlation coefficients larger than CCT
+ * @param ascts Write the results and time series to an ascii file for voxels with cross correlation coefficients larger than CCT
+ *
+ * @returns Parameter dictionary
+ */
 function v_3ddelay_params(
     input_file: InputPathType,
     reference_file: InputPathType,
@@ -129,38 +159,8 @@ function v_3ddelay_params(
     asc: string | null = null,
     ascts: string | null = null,
 ): V3ddelayParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of the input 3D+time dataset
-     * @param reference_file Input ideal time series file name
-     * @param sampling_freq Sampling frequency in Hz. of data time series (1/TR)
-     * @param stim_period Stimulus period in seconds. Set to 0 if stimulus is not periodic
-     * @param prefix The prefix for the results Brick
-     * @param polort Detrend input time series with polynomial of specified order. Default is -1 for auto selection
-     * @param nodtrnd Remove only the mean (equivalent to polort 0)
-     * @param units_seconds Units for delay estimates in seconds
-     * @param units_degrees Units for delay estimates in degrees. Requires Tstim > 0
-     * @param units_radians Units for delay estimates in radians. Requires Tstim > 0
-     * @param phzwrp Wrap delay (or phase) values
-     * @param nophzwrp Do not wrap phase (default)
-     * @param phzreverse Reverse phase such that phase -> (T-phase)
-     * @param phzscale Scale phase: phase -> phase*SC (default no scaling)
-     * @param bias Do not correct for the bias in the estimates
-     * @param nobias Correct for the bias in the estimates (default)
-     * @param dsamp Correct for slice timing differences (default)
-     * @param nodsamp Do not correct for slice timing differences
-     * @param mask Filename of mask dataset. Only voxels with non-zero values in the mask will be considered
-     * @param nfirst Number of first dataset image to use in the delay estimate
-     * @param nlast Number of last dataset image to use in the delay estimate
-     * @param co Cross Correlation Coefficient threshold value to limit ascii output
-     * @param asc Write the results to an ascii file for voxels with cross correlation coefficients larger than CCT
-     * @param ascts Write the results and time series to an ascii file for voxels with cross correlation coefficients larger than CCT
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3ddelay" as const,
+        "@type": "afni.3ddelay" as const,
         "input_file": input_file,
         "reference_file": reference_file,
         "sampling_freq": sampling_freq,
@@ -208,18 +208,18 @@ function v_3ddelay_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3ddelay_cargs(
     params: V3ddelayParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3ddelay");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -323,18 +323,18 @@ function v_3ddelay_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3ddelay_outputs(
     params: V3ddelayParameters,
     execution: Execution,
 ): V3ddelayOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3ddelayOutputs = {
         root: execution.outputFile("."),
         output_brick: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".DEL+orig.BRIK"].join('')) : null,
@@ -346,22 +346,22 @@ function v_3ddelay_outputs(
 }
 
 
+/**
+ * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
+ */
 function v_3ddelay_execute(
     params: V3ddelayParameters,
     execution: Execution,
 ): V3ddelayOutputs {
-    /**
-     * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3ddelay_cargs(params, execution)
     const ret = v_3ddelay_outputs(params, execution)
@@ -370,6 +370,41 @@ function v_3ddelay_execute(
 }
 
 
+/**
+ * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Filename of the input 3D+time dataset
+ * @param reference_file Input ideal time series file name
+ * @param sampling_freq Sampling frequency in Hz. of data time series (1/TR)
+ * @param stim_period Stimulus period in seconds. Set to 0 if stimulus is not periodic
+ * @param prefix The prefix for the results Brick
+ * @param polort Detrend input time series with polynomial of specified order. Default is -1 for auto selection
+ * @param nodtrnd Remove only the mean (equivalent to polort 0)
+ * @param units_seconds Units for delay estimates in seconds
+ * @param units_degrees Units for delay estimates in degrees. Requires Tstim > 0
+ * @param units_radians Units for delay estimates in radians. Requires Tstim > 0
+ * @param phzwrp Wrap delay (or phase) values
+ * @param nophzwrp Do not wrap phase (default)
+ * @param phzreverse Reverse phase such that phase -> (T-phase)
+ * @param phzscale Scale phase: phase -> phase*SC (default no scaling)
+ * @param bias Do not correct for the bias in the estimates
+ * @param nobias Correct for the bias in the estimates (default)
+ * @param dsamp Correct for slice timing differences (default)
+ * @param nodsamp Do not correct for slice timing differences
+ * @param mask Filename of mask dataset. Only voxels with non-zero values in the mask will be considered
+ * @param nfirst Number of first dataset image to use in the delay estimate
+ * @param nlast Number of last dataset image to use in the delay estimate
+ * @param co Cross Correlation Coefficient threshold value to limit ascii output
+ * @param asc Write the results to an ascii file for voxels with cross correlation coefficients larger than CCT
+ * @param ascts Write the results and time series to an ascii file for voxels with cross correlation coefficients larger than CCT
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
+ */
 function v_3ddelay(
     input_file: InputPathType,
     reference_file: InputPathType,
@@ -397,41 +432,6 @@ function v_3ddelay(
     ascts: string | null = null,
     runner: Runner | null = null,
 ): V3ddelayOutputs {
-    /**
-     * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Filename of the input 3D+time dataset
-     * @param reference_file Input ideal time series file name
-     * @param sampling_freq Sampling frequency in Hz. of data time series (1/TR)
-     * @param stim_period Stimulus period in seconds. Set to 0 if stimulus is not periodic
-     * @param prefix The prefix for the results Brick
-     * @param polort Detrend input time series with polynomial of specified order. Default is -1 for auto selection
-     * @param nodtrnd Remove only the mean (equivalent to polort 0)
-     * @param units_seconds Units for delay estimates in seconds
-     * @param units_degrees Units for delay estimates in degrees. Requires Tstim > 0
-     * @param units_radians Units for delay estimates in radians. Requires Tstim > 0
-     * @param phzwrp Wrap delay (or phase) values
-     * @param nophzwrp Do not wrap phase (default)
-     * @param phzreverse Reverse phase such that phase -> (T-phase)
-     * @param phzscale Scale phase: phase -> phase*SC (default no scaling)
-     * @param bias Do not correct for the bias in the estimates
-     * @param nobias Correct for the bias in the estimates (default)
-     * @param dsamp Correct for slice timing differences (default)
-     * @param nodsamp Do not correct for slice timing differences
-     * @param mask Filename of mask dataset. Only voxels with non-zero values in the mask will be considered
-     * @param nfirst Number of first dataset image to use in the delay estimate
-     * @param nlast Number of last dataset image to use in the delay estimate
-     * @param co Cross Correlation Coefficient threshold value to limit ascii output
-     * @param asc Write the results to an ascii file for voxels with cross correlation coefficients larger than CCT
-     * @param ascts Write the results and time series to an ascii file for voxels with cross correlation coefficients larger than CCT
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DDELAY_METADATA);
     const params = v_3ddelay_params(input_file, reference_file, sampling_freq, stim_period, prefix, polort, nodtrnd, units_seconds, units_degrees, units_radians, phzwrp, nophzwrp, phzreverse, phzscale, bias, nobias, dsamp, nodsamp, mask, nfirst, nlast, co, asc, ascts)
@@ -444,5 +444,8 @@ export {
       V3ddelayParameters,
       V_3DDELAY_METADATA,
       v_3ddelay,
+      v_3ddelay_cargs,
+      v_3ddelay_execute,
+      v_3ddelay_outputs,
       v_3ddelay_params,
 };

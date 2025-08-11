@@ -12,7 +12,7 @@ const CREATE_SIGNED_DISTANCE_VOLUME_METADATA: Metadata = {
 
 
 interface CreateSignedDistanceVolumeParameters {
-    "__STYXTYPE__": "create-signed-distance-volume";
+    "@type": "workbench.create-signed-distance-volume";
     "surface": InputPathType;
     "refspace": string;
     "outvol": string;
@@ -25,35 +25,35 @@ interface CreateSignedDistanceVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "create-signed-distance-volume": create_signed_distance_volume_cargs,
+        "workbench.create-signed-distance-volume": create_signed_distance_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "create-signed-distance-volume": create_signed_distance_volume_outputs,
+        "workbench.create-signed-distance-volume": create_signed_distance_volume_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface CreateSignedDistanceVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the input surface
+ * @param refspace a volume in the desired output space (dims, spacing, origin)
+ * @param outvol the output volume
+ * @param opt_roi_out_roi_vol output an roi volume of where the output has a computed value: the output roi volume
+ * @param opt_fill_value_value specify a value to put in all voxels that don't get assigned a distance: value to fill with (default 0)
+ * @param opt_exact_limit_dist specify distance for exact output: distance in mm (default 5)
+ * @param opt_approx_limit_dist specify distance for approximate output: distance in mm (default 20)
+ * @param opt_approx_neighborhood_num voxel neighborhood for approximate calculation: size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
+ * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
+ *
+ * @returns Parameter dictionary
+ */
 function create_signed_distance_volume_params(
     surface: InputPathType,
     refspace: string,
@@ -91,23 +106,8 @@ function create_signed_distance_volume_params(
     opt_approx_neighborhood_num: number | null = null,
     opt_winding_method: string | null = null,
 ): CreateSignedDistanceVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the input surface
-     * @param refspace a volume in the desired output space (dims, spacing, origin)
-     * @param outvol the output volume
-     * @param opt_roi_out_roi_vol output an roi volume of where the output has a computed value: the output roi volume
-     * @param opt_fill_value_value specify a value to put in all voxels that don't get assigned a distance: value to fill with (default 0)
-     * @param opt_exact_limit_dist specify distance for exact output: distance in mm (default 5)
-     * @param opt_approx_limit_dist specify distance for approximate output: distance in mm (default 20)
-     * @param opt_approx_neighborhood_num voxel neighborhood for approximate calculation: size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
-     * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "create-signed-distance-volume" as const,
+        "@type": "workbench.create-signed-distance-volume" as const,
         "surface": surface,
         "refspace": refspace,
         "outvol": outvol,
@@ -134,18 +134,18 @@ function create_signed_distance_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_signed_distance_volume_cargs(
     params: CreateSignedDistanceVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-create-signed-distance-volume");
@@ -192,18 +192,18 @@ function create_signed_distance_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_signed_distance_volume_outputs(
     params: CreateSignedDistanceVolumeParameters,
     execution: Execution,
 ): CreateSignedDistanceVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateSignedDistanceVolumeOutputs = {
         root: execution.outputFile("."),
         outvol: execution.outputFile([(params["outvol"] ?? null)].join('')),
@@ -213,31 +213,31 @@ function create_signed_distance_volume_outputs(
 }
 
 
+/**
+ * Create signed distance volume from surface.
+ *
+ * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:
+ *
+ * EVEN_ODD (default)
+ * NEGATIVE
+ * NONZERO
+ * NORMALS
+ *
+ * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
+ */
 function create_signed_distance_volume_execute(
     params: CreateSignedDistanceVolumeParameters,
     execution: Execution,
 ): CreateSignedDistanceVolumeOutputs {
-    /**
-     * Create signed distance volume from surface.
-     * 
-     * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:
-     * 
-     * EVEN_ODD (default)
-     * NEGATIVE
-     * NONZERO
-     * NORMALS
-     * 
-     * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_signed_distance_volume_cargs(params, execution)
     const ret = create_signed_distance_volume_outputs(params, execution)
@@ -246,6 +246,35 @@ function create_signed_distance_volume_execute(
 }
 
 
+/**
+ * Create signed distance volume from surface.
+ *
+ * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:
+ *
+ * EVEN_ODD (default)
+ * NEGATIVE
+ * NONZERO
+ * NORMALS
+ *
+ * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the input surface
+ * @param refspace a volume in the desired output space (dims, spacing, origin)
+ * @param outvol the output volume
+ * @param opt_roi_out_roi_vol output an roi volume of where the output has a computed value: the output roi volume
+ * @param opt_fill_value_value specify a value to put in all voxels that don't get assigned a distance: value to fill with (default 0)
+ * @param opt_exact_limit_dist specify distance for exact output: distance in mm (default 5)
+ * @param opt_approx_limit_dist specify distance for approximate output: distance in mm (default 20)
+ * @param opt_approx_neighborhood_num voxel neighborhood for approximate calculation: size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
+ * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
+ */
 function create_signed_distance_volume(
     surface: InputPathType,
     refspace: string,
@@ -258,35 +287,6 @@ function create_signed_distance_volume(
     opt_winding_method: string | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    /**
-     * Create signed distance volume from surface.
-     * 
-     * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:
-     * 
-     * EVEN_ODD (default)
-     * NEGATIVE
-     * NONZERO
-     * NORMALS
-     * 
-     * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the input surface
-     * @param refspace a volume in the desired output space (dims, spacing, origin)
-     * @param outvol the output volume
-     * @param opt_roi_out_roi_vol output an roi volume of where the output has a computed value: the output roi volume
-     * @param opt_fill_value_value specify a value to put in all voxels that don't get assigned a distance: value to fill with (default 0)
-     * @param opt_exact_limit_dist specify distance for exact output: distance in mm (default 5)
-     * @param opt_approx_limit_dist specify distance for approximate output: distance in mm (default 20)
-     * @param opt_approx_neighborhood_num voxel neighborhood for approximate calculation: size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
-     * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_SIGNED_DISTANCE_VOLUME_METADATA);
     const params = create_signed_distance_volume_params(surface, refspace, outvol, opt_roi_out_roi_vol, opt_fill_value_value, opt_exact_limit_dist, opt_approx_limit_dist, opt_approx_neighborhood_num, opt_winding_method)
@@ -299,5 +299,8 @@ export {
       CreateSignedDistanceVolumeOutputs,
       CreateSignedDistanceVolumeParameters,
       create_signed_distance_volume,
+      create_signed_distance_volume_cargs,
+      create_signed_distance_volume_execute,
+      create_signed_distance_volume_outputs,
       create_signed_distance_volume_params,
 };

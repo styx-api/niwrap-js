@@ -12,14 +12,14 @@ const V_5TT2VIS_METADATA: Metadata = {
 
 
 interface V5tt2visConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.5tt2vis.config";
     "key": string;
     "value": string;
 }
 
 
 interface V5tt2visParameters {
-    "__STYXTYPE__": "5tt2vis";
+    "@type": "mrtrix.5tt2vis";
     "bg"?: number | null | undefined;
     "cgm"?: number | null | undefined;
     "sgm"?: number | null | undefined;
@@ -39,55 +39,55 @@ interface V5tt2visParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "5tt2vis": v_5tt2vis_cargs,
-        "config": v_5tt2vis_config_cargs,
+        "mrtrix.5tt2vis": v_5tt2vis_cargs,
+        "mrtrix.5tt2vis.config": v_5tt2vis_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "5tt2vis": v_5tt2vis_outputs,
+        "mrtrix.5tt2vis": v_5tt2vis_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5tt2vis_config_params(
     key: string,
     value: string,
 ): V5tt2visConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.5tt2vis.config" as const,
         "key": key,
         "value": value,
     };
@@ -95,18 +95,18 @@ function v_5tt2vis_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5tt2vis_config_cargs(
     params: V5tt2visConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -132,6 +132,28 @@ interface V5tt2visOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input 4D tissue-segmented image
+ * @param output the output 3D image for visualisation
+ * @param bg image intensity of background (default: 0)
+ * @param cgm image intensity of cortical grey matter (default: 0.5)
+ * @param sgm image intensity of sub-cortical grey matter (default: 0.75)
+ * @param wm image intensity of white matter (default: 1)
+ * @param csf image intensity of CSF (default: 0.15)
+ * @param path image intensity of pathological tissue (default: 2)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function v_5tt2vis_params(
     input: InputPathType,
     output: string,
@@ -150,30 +172,8 @@ function v_5tt2vis_params(
     help: boolean = false,
     version: boolean = false,
 ): V5tt2visParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input 4D tissue-segmented image
-     * @param output the output 3D image for visualisation
-     * @param bg image intensity of background (default: 0)
-     * @param cgm image intensity of cortical grey matter (default: 0.5)
-     * @param sgm image intensity of sub-cortical grey matter (default: 0.75)
-     * @param wm image intensity of white matter (default: 1)
-     * @param csf image intensity of CSF (default: 0.15)
-     * @param path image intensity of pathological tissue (default: 2)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "5tt2vis" as const,
+        "@type": "mrtrix.5tt2vis" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -211,18 +211,18 @@ function v_5tt2vis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_5tt2vis_cargs(
     params: V5tt2visParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("5tt2vis");
     if ((params["bg"] ?? null) !== null) {
@@ -280,7 +280,7 @@ function v_5tt2vis_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -294,18 +294,18 @@ function v_5tt2vis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_5tt2vis_outputs(
     params: V5tt2visParameters,
     execution: Execution,
 ): V5tt2visOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V5tt2visOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -314,28 +314,28 @@ function v_5tt2vis_outputs(
 }
 
 
+/**
+ * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
+ */
 function v_5tt2vis_execute(
     params: V5tt2visParameters,
     execution: Execution,
 ): V5tt2visOutputs {
-    /**
-     * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_5tt2vis_cargs(params, execution)
     const ret = v_5tt2vis_outputs(params, execution)
@@ -344,6 +344,39 @@ function v_5tt2vis_execute(
 }
 
 
+/**
+ * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input 4D tissue-segmented image
+ * @param output the output 3D image for visualisation
+ * @param bg image intensity of background (default: 0)
+ * @param cgm image intensity of cortical grey matter (default: 0.5)
+ * @param sgm image intensity of sub-cortical grey matter (default: 0.75)
+ * @param wm image intensity of white matter (default: 1)
+ * @param csf image intensity of CSF (default: 0.15)
+ * @param path image intensity of pathological tissue (default: 2)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
+ */
 function v_5tt2vis(
     input: InputPathType,
     output: string,
@@ -363,39 +396,6 @@ function v_5tt2vis(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tt2visOutputs {
-    /**
-     * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input 4D tissue-segmented image
-     * @param output the output 3D image for visualisation
-     * @param bg image intensity of background (default: 0)
-     * @param cgm image intensity of cortical grey matter (default: 0.5)
-     * @param sgm image intensity of sub-cortical grey matter (default: 0.75)
-     * @param wm image intensity of white matter (default: 1)
-     * @param csf image intensity of CSF (default: 0.15)
-     * @param path image intensity of pathological tissue (default: 2)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_5TT2VIS_METADATA);
     const params = v_5tt2vis_params(input, output, bg, cgm, sgm, wm, csf, path, info, quiet, debug, force, nthreads, config, help, version)
@@ -409,6 +409,10 @@ export {
       V5tt2visParameters,
       V_5TT2VIS_METADATA,
       v_5tt2vis,
+      v_5tt2vis_cargs,
+      v_5tt2vis_config_cargs,
       v_5tt2vis_config_params,
+      v_5tt2vis_execute,
+      v_5tt2vis_outputs,
       v_5tt2vis_params,
 };

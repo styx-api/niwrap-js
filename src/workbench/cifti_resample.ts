@@ -12,14 +12,14 @@ const CIFTI_RESAMPLE_METADATA: Metadata = {
 
 
 interface CiftiResampleWeightedParameters {
-    "__STYXTYPE__": "weighted";
+    "@type": "workbench.cifti-resample.volume_predilate.weighted";
     "opt_exponent_exponent"?: number | null | undefined;
     "opt_legacy_cutoff": boolean;
 }
 
 
 interface CiftiResampleVolumePredilateParameters {
-    "__STYXTYPE__": "volume_predilate";
+    "@type": "workbench.cifti-resample.volume_predilate";
     "dilate_mm": number;
     "opt_nearest": boolean;
     "weighted"?: CiftiResampleWeightedParameters | null | undefined;
@@ -27,14 +27,14 @@ interface CiftiResampleVolumePredilateParameters {
 
 
 interface CiftiResampleWeighted1Parameters {
-    "__STYXTYPE__": "weighted_1";
+    "@type": "workbench.cifti-resample.surface_postdilate.weighted";
     "opt_exponent_exponent"?: number | null | undefined;
     "opt_legacy_cutoff": boolean;
 }
 
 
 interface CiftiResampleSurfacePostdilateParameters {
-    "__STYXTYPE__": "surface_postdilate";
+    "@type": "workbench.cifti-resample.surface_postdilate";
     "dilate_mm": number;
     "opt_nearest": boolean;
     "opt_linear": boolean;
@@ -43,42 +43,42 @@ interface CiftiResampleSurfacePostdilateParameters {
 
 
 interface CiftiResampleFlirtParameters {
-    "__STYXTYPE__": "flirt";
+    "@type": "workbench.cifti-resample.affine.flirt";
     "source_volume": string;
     "target_volume": string;
 }
 
 
 interface CiftiResampleAffineParameters {
-    "__STYXTYPE__": "affine";
+    "@type": "workbench.cifti-resample.affine";
     "affine_file": string;
     "flirt"?: CiftiResampleFlirtParameters | null | undefined;
 }
 
 
 interface CiftiResampleWarpfieldParameters {
-    "__STYXTYPE__": "warpfield";
+    "@type": "workbench.cifti-resample.warpfield";
     "warpfield": string;
     "opt_fnirt_source_volume"?: string | null | undefined;
 }
 
 
 interface CiftiResampleLeftAreaSurfsParameters {
-    "__STYXTYPE__": "left_area_surfs";
+    "@type": "workbench.cifti-resample.left_spheres.left_area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleLeftAreaMetricsParameters {
-    "__STYXTYPE__": "left_area_metrics";
+    "@type": "workbench.cifti-resample.left_spheres.left_area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleLeftSpheresParameters {
-    "__STYXTYPE__": "left_spheres";
+    "@type": "workbench.cifti-resample.left_spheres";
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
     "left_area_surfs"?: CiftiResampleLeftAreaSurfsParameters | null | undefined;
@@ -87,21 +87,21 @@ interface CiftiResampleLeftSpheresParameters {
 
 
 interface CiftiResampleRightAreaSurfsParameters {
-    "__STYXTYPE__": "right_area_surfs";
+    "@type": "workbench.cifti-resample.right_spheres.right_area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleRightAreaMetricsParameters {
-    "__STYXTYPE__": "right_area_metrics";
+    "@type": "workbench.cifti-resample.right_spheres.right_area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleRightSpheresParameters {
-    "__STYXTYPE__": "right_spheres";
+    "@type": "workbench.cifti-resample.right_spheres";
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
     "right_area_surfs"?: CiftiResampleRightAreaSurfsParameters | null | undefined;
@@ -110,21 +110,21 @@ interface CiftiResampleRightSpheresParameters {
 
 
 interface CiftiResampleCerebellumAreaSurfsParameters {
-    "__STYXTYPE__": "cerebellum_area_surfs";
+    "@type": "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleCerebellumAreaMetricsParameters {
-    "__STYXTYPE__": "cerebellum_area_metrics";
+    "@type": "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface CiftiResampleCerebellumSpheresParameters {
-    "__STYXTYPE__": "cerebellum_spheres";
+    "@type": "workbench.cifti-resample.cerebellum_spheres";
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
     "cerebellum_area_surfs"?: CiftiResampleCerebellumAreaSurfsParameters | null | undefined;
@@ -133,7 +133,7 @@ interface CiftiResampleCerebellumSpheresParameters {
 
 
 interface CiftiResampleParameters {
-    "__STYXTYPE__": "cifti-resample";
+    "@type": "workbench.cifti-resample";
     "cifti_in": InputPathType;
     "direction": string;
     "cifti_template": InputPathType;
@@ -152,70 +152,70 @@ interface CiftiResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-resample": cifti_resample_cargs,
-        "volume_predilate": cifti_resample_volume_predilate_cargs,
-        "weighted": cifti_resample_weighted_cargs,
-        "surface_postdilate": cifti_resample_surface_postdilate_cargs,
-        "weighted_1": cifti_resample_weighted_1_cargs,
-        "affine": cifti_resample_affine_cargs,
-        "flirt": cifti_resample_flirt_cargs,
-        "warpfield": cifti_resample_warpfield_cargs,
-        "left_spheres": cifti_resample_left_spheres_cargs,
-        "left_area_surfs": cifti_resample_left_area_surfs_cargs,
-        "left_area_metrics": cifti_resample_left_area_metrics_cargs,
-        "right_spheres": cifti_resample_right_spheres_cargs,
-        "right_area_surfs": cifti_resample_right_area_surfs_cargs,
-        "right_area_metrics": cifti_resample_right_area_metrics_cargs,
-        "cerebellum_spheres": cifti_resample_cerebellum_spheres_cargs,
-        "cerebellum_area_surfs": cifti_resample_cerebellum_area_surfs_cargs,
-        "cerebellum_area_metrics": cifti_resample_cerebellum_area_metrics_cargs,
+        "workbench.cifti-resample": cifti_resample_cargs,
+        "workbench.cifti-resample.volume_predilate": cifti_resample_volume_predilate_cargs,
+        "workbench.cifti-resample.volume_predilate.weighted": cifti_resample_weighted_cargs,
+        "workbench.cifti-resample.surface_postdilate": cifti_resample_surface_postdilate_cargs,
+        "workbench.cifti-resample.surface_postdilate.weighted": cifti_resample_weighted_1_cargs,
+        "workbench.cifti-resample.affine": cifti_resample_affine_cargs,
+        "workbench.cifti-resample.affine.flirt": cifti_resample_flirt_cargs,
+        "workbench.cifti-resample.warpfield": cifti_resample_warpfield_cargs,
+        "workbench.cifti-resample.left_spheres": cifti_resample_left_spheres_cargs,
+        "workbench.cifti-resample.left_spheres.left_area_surfs": cifti_resample_left_area_surfs_cargs,
+        "workbench.cifti-resample.left_spheres.left_area_metrics": cifti_resample_left_area_metrics_cargs,
+        "workbench.cifti-resample.right_spheres": cifti_resample_right_spheres_cargs,
+        "workbench.cifti-resample.right_spheres.right_area_surfs": cifti_resample_right_area_surfs_cargs,
+        "workbench.cifti-resample.right_spheres.right_area_metrics": cifti_resample_right_area_metrics_cargs,
+        "workbench.cifti-resample.cerebellum_spheres": cifti_resample_cerebellum_spheres_cargs,
+        "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_surfs": cifti_resample_cerebellum_area_surfs_cargs,
+        "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_metrics": cifti_resample_cerebellum_area_metrics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-resample": cifti_resample_outputs,
+        "workbench.cifti-resample": cifti_resample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
+ * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_weighted_params(
     opt_exponent_exponent: number | null = null,
     opt_legacy_cutoff: boolean = false,
 ): CiftiResampleWeightedParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
-     * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "weighted" as const,
+        "@type": "workbench.cifti-resample.volume_predilate.weighted" as const,
         "opt_legacy_cutoff": opt_legacy_cutoff,
     };
     if (opt_exponent_exponent !== null) {
@@ -225,18 +225,18 @@ function cifti_resample_weighted_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_weighted_cargs(
     params: CiftiResampleWeightedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-weighted");
     if ((params["opt_exponent_exponent"] ?? null) !== null) {
@@ -252,22 +252,22 @@ function cifti_resample_weighted_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dilate_mm distance, in mm, to dilate
+ * @param opt_nearest use nearest value dilation
+ * @param weighted use weighted dilation (default)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_volume_predilate_params(
     dilate_mm: number,
     opt_nearest: boolean = false,
     weighted: CiftiResampleWeightedParameters | null = null,
 ): CiftiResampleVolumePredilateParameters {
-    /**
-     * Build parameters.
-    
-     * @param dilate_mm distance, in mm, to dilate
-     * @param opt_nearest use nearest value dilation
-     * @param weighted use weighted dilation (default)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume_predilate" as const,
+        "@type": "workbench.cifti-resample.volume_predilate" as const,
         "dilate_mm": dilate_mm,
         "opt_nearest": opt_nearest,
     };
@@ -278,18 +278,18 @@ function cifti_resample_volume_predilate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_volume_predilate_cargs(
     params: CiftiResampleVolumePredilateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume-predilate");
     cargs.push(String((params["dilate_mm"] ?? null)));
@@ -297,26 +297,26 @@ function cifti_resample_volume_predilate_cargs(
         cargs.push("-nearest");
     }
     if ((params["weighted"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["weighted"] ?? null).__STYXTYPE__)((params["weighted"] ?? null), execution));
+        cargs.push(...dynCargs((params["weighted"] ?? null)["@type"])((params["weighted"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_weighted_1_params(
     opt_exponent_exponent: number | null = null,
     opt_legacy_cutoff: boolean = false,
 ): CiftiResampleWeighted1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
-     * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "weighted_1" as const,
+        "@type": "workbench.cifti-resample.surface_postdilate.weighted" as const,
         "opt_legacy_cutoff": opt_legacy_cutoff,
     };
     if (opt_exponent_exponent !== null) {
@@ -326,18 +326,18 @@ function cifti_resample_weighted_1_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_weighted_1_cargs(
     params: CiftiResampleWeighted1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-weighted");
     if ((params["opt_exponent_exponent"] ?? null) !== null) {
@@ -353,24 +353,24 @@ function cifti_resample_weighted_1_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dilate_mm distance, in mm, to dilate
+ * @param opt_nearest use nearest value dilation
+ * @param opt_linear use linear dilation
+ * @param weighted use weighted dilation (default for non-label data)
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_surface_postdilate_params(
     dilate_mm: number,
     opt_nearest: boolean = false,
     opt_linear: boolean = false,
     weighted: CiftiResampleWeighted1Parameters | null = null,
 ): CiftiResampleSurfacePostdilateParameters {
-    /**
-     * Build parameters.
-    
-     * @param dilate_mm distance, in mm, to dilate
-     * @param opt_nearest use nearest value dilation
-     * @param opt_linear use linear dilation
-     * @param weighted use weighted dilation (default for non-label data)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface_postdilate" as const,
+        "@type": "workbench.cifti-resample.surface_postdilate" as const,
         "dilate_mm": dilate_mm,
         "opt_nearest": opt_nearest,
         "opt_linear": opt_linear,
@@ -382,18 +382,18 @@ function cifti_resample_surface_postdilate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_surface_postdilate_cargs(
     params: CiftiResampleSurfacePostdilateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-surface-postdilate");
     cargs.push(String((params["dilate_mm"] ?? null)));
@@ -404,26 +404,26 @@ function cifti_resample_surface_postdilate_cargs(
         cargs.push("-linear");
     }
     if ((params["weighted"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["weighted"] ?? null).__STYXTYPE__)((params["weighted"] ?? null), execution));
+        cargs.push(...dynCargs((params["weighted"] ?? null)["@type"])((params["weighted"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_volume the source volume used when generating the affine
+ * @param target_volume the target volume used when generating the affine
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_flirt_params(
     source_volume: string,
     target_volume: string,
 ): CiftiResampleFlirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_volume the source volume used when generating the affine
-     * @param target_volume the target volume used when generating the affine
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "flirt" as const,
+        "@type": "workbench.cifti-resample.affine.flirt" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -431,18 +431,18 @@ function cifti_resample_flirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_flirt_cargs(
     params: CiftiResampleFlirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-flirt");
     cargs.push((params["source_volume"] ?? null));
@@ -451,20 +451,20 @@ function cifti_resample_flirt_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param affine_file the affine file to use
+ * @param flirt MUST be used if affine is a flirt affine
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_affine_params(
     affine_file: string,
     flirt: CiftiResampleFlirtParameters | null = null,
 ): CiftiResampleAffineParameters {
-    /**
-     * Build parameters.
-    
-     * @param affine_file the affine file to use
-     * @param flirt MUST be used if affine is a flirt affine
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "affine" as const,
+        "@type": "workbench.cifti-resample.affine" as const,
         "affine_file": affine_file,
     };
     if (flirt !== null) {
@@ -474,42 +474,42 @@ function cifti_resample_affine_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_affine_cargs(
     params: CiftiResampleAffineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-affine");
     cargs.push((params["affine_file"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt"] ?? null).__STYXTYPE__)((params["flirt"] ?? null), execution));
+        cargs.push(...dynCargs((params["flirt"] ?? null)["@type"])((params["flirt"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warpfield the warpfield to use
+ * @param opt_fnirt_source_volume MUST be used if using a fnirt warpfield: the source volume used when generating the warpfield
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_warpfield_params(
     warpfield: string,
     opt_fnirt_source_volume: string | null = null,
 ): CiftiResampleWarpfieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param warpfield the warpfield to use
-     * @param opt_fnirt_source_volume MUST be used if using a fnirt warpfield: the source volume used when generating the warpfield
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warpfield" as const,
+        "@type": "workbench.cifti-resample.warpfield" as const,
         "warpfield": warpfield,
     };
     if (opt_fnirt_source_volume !== null) {
@@ -519,18 +519,18 @@ function cifti_resample_warpfield_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_warpfield_cargs(
     params: CiftiResampleWarpfieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-warpfield");
     cargs.push((params["warpfield"] ?? null));
@@ -544,20 +544,20 @@ function cifti_resample_warpfield_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant left anatomical surface with current mesh
+ * @param new_area a relevant left anatomical surface with new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_left_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleLeftAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant left anatomical surface with current mesh
-     * @param new_area a relevant left anatomical surface with new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_area_surfs" as const,
+        "@type": "workbench.cifti-resample.left_spheres.left_area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -565,18 +565,18 @@ function cifti_resample_left_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_left_area_surfs_cargs(
     params: CiftiResampleLeftAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -585,20 +585,20 @@ function cifti_resample_left_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for the current mesh
+ * @param new_area a metric file with vertex areas for the new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_left_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleLeftAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for the current mesh
-     * @param new_area a metric file with vertex areas for the new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_area_metrics" as const,
+        "@type": "workbench.cifti-resample.left_spheres.left_area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -606,18 +606,18 @@ function cifti_resample_left_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_left_area_metrics_cargs(
     params: CiftiResampleLeftAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -626,24 +626,24 @@ function cifti_resample_left_area_metrics_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_sphere a sphere with the same mesh as the current left surface
+ * @param new_sphere a sphere with the new left mesh that is in register with the current sphere
+ * @param left_area_surfs specify left surfaces to do vertex area correction based on
+ * @param left_area_metrics specify left vertex area metrics to do area correction based on
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_left_spheres_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     left_area_surfs: CiftiResampleLeftAreaSurfsParameters | null = null,
     left_area_metrics: CiftiResampleLeftAreaMetricsParameters | null = null,
 ): CiftiResampleLeftSpheresParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_sphere a sphere with the same mesh as the current left surface
-     * @param new_sphere a sphere with the new left mesh that is in register with the current sphere
-     * @param left_area_surfs specify left surfaces to do vertex area correction based on
-     * @param left_area_metrics specify left vertex area metrics to do area correction based on
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_spheres" as const,
+        "@type": "workbench.cifti-resample.left_spheres" as const,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
     };
@@ -657,46 +657,46 @@ function cifti_resample_left_spheres_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_left_spheres_cargs(
     params: CiftiResampleLeftSpheresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-spheres");
     cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
     if ((params["left_area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_area_surfs"] ?? null).__STYXTYPE__)((params["left_area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_area_surfs"] ?? null)["@type"])((params["left_area_surfs"] ?? null), execution));
     }
     if ((params["left_area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_area_metrics"] ?? null).__STYXTYPE__)((params["left_area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_area_metrics"] ?? null)["@type"])((params["left_area_metrics"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant right anatomical surface with current mesh
+ * @param new_area a relevant right anatomical surface with new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_right_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleRightAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant right anatomical surface with current mesh
-     * @param new_area a relevant right anatomical surface with new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_area_surfs" as const,
+        "@type": "workbench.cifti-resample.right_spheres.right_area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -704,18 +704,18 @@ function cifti_resample_right_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_right_area_surfs_cargs(
     params: CiftiResampleRightAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -724,20 +724,20 @@ function cifti_resample_right_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for the current mesh
+ * @param new_area a metric file with vertex areas for the new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_right_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleRightAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for the current mesh
-     * @param new_area a metric file with vertex areas for the new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_area_metrics" as const,
+        "@type": "workbench.cifti-resample.right_spheres.right_area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -745,18 +745,18 @@ function cifti_resample_right_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_right_area_metrics_cargs(
     params: CiftiResampleRightAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -765,24 +765,24 @@ function cifti_resample_right_area_metrics_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_sphere a sphere with the same mesh as the current right surface
+ * @param new_sphere a sphere with the new right mesh that is in register with the current sphere
+ * @param right_area_surfs specify right surfaces to do vertex area correction based on
+ * @param right_area_metrics specify right vertex area metrics to do area correction based on
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_right_spheres_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     right_area_surfs: CiftiResampleRightAreaSurfsParameters | null = null,
     right_area_metrics: CiftiResampleRightAreaMetricsParameters | null = null,
 ): CiftiResampleRightSpheresParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_sphere a sphere with the same mesh as the current right surface
-     * @param new_sphere a sphere with the new right mesh that is in register with the current sphere
-     * @param right_area_surfs specify right surfaces to do vertex area correction based on
-     * @param right_area_metrics specify right vertex area metrics to do area correction based on
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_spheres" as const,
+        "@type": "workbench.cifti-resample.right_spheres" as const,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
     };
@@ -796,46 +796,46 @@ function cifti_resample_right_spheres_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_right_spheres_cargs(
     params: CiftiResampleRightSpheresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-spheres");
     cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
     if ((params["right_area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_area_surfs"] ?? null).__STYXTYPE__)((params["right_area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_area_surfs"] ?? null)["@type"])((params["right_area_surfs"] ?? null), execution));
     }
     if ((params["right_area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_area_metrics"] ?? null).__STYXTYPE__)((params["right_area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_area_metrics"] ?? null)["@type"])((params["right_area_metrics"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant cerebellum anatomical surface with current mesh
+ * @param new_area a relevant cerebellum anatomical surface with new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_cerebellum_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleCerebellumAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant cerebellum anatomical surface with current mesh
-     * @param new_area a relevant cerebellum anatomical surface with new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_area_surfs" as const,
+        "@type": "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -843,18 +843,18 @@ function cifti_resample_cerebellum_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_cerebellum_area_surfs_cargs(
     params: CiftiResampleCerebellumAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -863,20 +863,20 @@ function cifti_resample_cerebellum_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for the current mesh
+ * @param new_area a metric file with vertex areas for the new mesh
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_cerebellum_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): CiftiResampleCerebellumAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for the current mesh
-     * @param new_area a metric file with vertex areas for the new mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_area_metrics" as const,
+        "@type": "workbench.cifti-resample.cerebellum_spheres.cerebellum_area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -884,18 +884,18 @@ function cifti_resample_cerebellum_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_cerebellum_area_metrics_cargs(
     params: CiftiResampleCerebellumAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -904,24 +904,24 @@ function cifti_resample_cerebellum_area_metrics_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_sphere a sphere with the same mesh as the current cerebellum surface
+ * @param new_sphere a sphere with the new cerebellum mesh that is in register with the current sphere
+ * @param cerebellum_area_surfs specify cerebellum surfaces to do vertex area correction based on
+ * @param cerebellum_area_metrics specify cerebellum vertex area metrics to do area correction based on
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_cerebellum_spheres_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     cerebellum_area_surfs: CiftiResampleCerebellumAreaSurfsParameters | null = null,
     cerebellum_area_metrics: CiftiResampleCerebellumAreaMetricsParameters | null = null,
 ): CiftiResampleCerebellumSpheresParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_sphere a sphere with the same mesh as the current cerebellum surface
-     * @param new_sphere a sphere with the new cerebellum mesh that is in register with the current sphere
-     * @param cerebellum_area_surfs specify cerebellum surfaces to do vertex area correction based on
-     * @param cerebellum_area_metrics specify cerebellum vertex area metrics to do area correction based on
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_spheres" as const,
+        "@type": "workbench.cifti-resample.cerebellum_spheres" as const,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
     };
@@ -935,27 +935,27 @@ function cifti_resample_cerebellum_spheres_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_cerebellum_spheres_cargs(
     params: CiftiResampleCerebellumSpheresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-spheres");
     cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
     if ((params["cerebellum_area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_area_surfs"] ?? null).__STYXTYPE__)((params["cerebellum_area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_area_surfs"] ?? null)["@type"])((params["cerebellum_area_surfs"] ?? null), execution));
     }
     if ((params["cerebellum_area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_area_metrics"] ?? null).__STYXTYPE__)((params["cerebellum_area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_area_metrics"] ?? null)["@type"])((params["cerebellum_area_metrics"] ?? null), execution));
     }
     return cargs;
 }
@@ -978,6 +978,27 @@ interface CiftiResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the cifti file to resample
+ * @param direction the direction of the input that should be resampled, ROW or COLUMN
+ * @param cifti_template a cifti file containing the cifti space to resample to
+ * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
+ * @param surface_method specify a surface resampling method
+ * @param volume_method specify a volume interpolation method
+ * @param cifti_out the output cifti file
+ * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
+ * @param volume_predilate dilate the volume components before resampling
+ * @param surface_postdilate dilate the surface components after resampling
+ * @param affine use an affine transformation on the volume components
+ * @param warpfield use a warpfield on the volume components
+ * @param left_spheres specify spheres for left surface resampling
+ * @param right_spheres specify spheres for right surface resampling
+ * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_resample_params(
     cifti_in: InputPathType,
     direction: string,
@@ -995,29 +1016,8 @@ function cifti_resample_params(
     right_spheres: CiftiResampleRightSpheresParameters | null = null,
     cerebellum_spheres: CiftiResampleCerebellumSpheresParameters | null = null,
 ): CiftiResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the cifti file to resample
-     * @param direction the direction of the input that should be resampled, ROW or COLUMN
-     * @param cifti_template a cifti file containing the cifti space to resample to
-     * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
-     * @param surface_method specify a surface resampling method
-     * @param volume_method specify a volume interpolation method
-     * @param cifti_out the output cifti file
-     * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
-     * @param volume_predilate dilate the volume components before resampling
-     * @param surface_postdilate dilate the surface components after resampling
-     * @param affine use an affine transformation on the volume components
-     * @param warpfield use a warpfield on the volume components
-     * @param left_spheres specify spheres for left surface resampling
-     * @param right_spheres specify spheres for right surface resampling
-     * @param cerebellum_spheres specify spheres for cerebellum surface resampling
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-resample" as const,
+        "@type": "workbench.cifti-resample" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "cifti_template": cifti_template,
@@ -1052,18 +1052,18 @@ function cifti_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_resample_cargs(
     params: CiftiResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-resample");
@@ -1078,42 +1078,42 @@ function cifti_resample_cargs(
         cargs.push("-surface-largest");
     }
     if ((params["volume_predilate"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_predilate"] ?? null).__STYXTYPE__)((params["volume_predilate"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume_predilate"] ?? null)["@type"])((params["volume_predilate"] ?? null), execution));
     }
     if ((params["surface_postdilate"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["surface_postdilate"] ?? null).__STYXTYPE__)((params["surface_postdilate"] ?? null), execution));
+        cargs.push(...dynCargs((params["surface_postdilate"] ?? null)["@type"])((params["surface_postdilate"] ?? null), execution));
     }
     if ((params["affine"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["affine"] ?? null).__STYXTYPE__)((params["affine"] ?? null), execution));
+        cargs.push(...dynCargs((params["affine"] ?? null)["@type"])((params["affine"] ?? null), execution));
     }
     if ((params["warpfield"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["warpfield"] ?? null).__STYXTYPE__)((params["warpfield"] ?? null), execution));
+        cargs.push(...dynCargs((params["warpfield"] ?? null)["@type"])((params["warpfield"] ?? null), execution));
     }
     if ((params["left_spheres"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_spheres"] ?? null).__STYXTYPE__)((params["left_spheres"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_spheres"] ?? null)["@type"])((params["left_spheres"] ?? null), execution));
     }
     if ((params["right_spheres"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_spheres"] ?? null).__STYXTYPE__)((params["right_spheres"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_spheres"] ?? null)["@type"])((params["right_spheres"] ?? null), execution));
     }
     if ((params["cerebellum_spheres"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_spheres"] ?? null).__STYXTYPE__)((params["cerebellum_spheres"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_spheres"] ?? null)["@type"])((params["cerebellum_spheres"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_resample_outputs(
     params: CiftiResampleParameters,
     execution: Execution,
 ): CiftiResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiResampleOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -1122,38 +1122,38 @@ function cifti_resample_outputs(
 }
 
 
+/**
+ * Resample a cifti file to a new cifti space.
+ *
+ * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
+ *
+ * The recommended resampling methods are ADAP_BARY_AREA and CUBIC (cubic spline), except for label data which should use ADAP_BARY_AREA and ENCLOSING_VOXEL.  Using ADAP_BARY_AREA requires specifying an area option to each used -*-spheres option.
+ *
+ * The <volume-method> argument must be one of the following:
+ *
+ * CUBIC
+ * ENCLOSING_VOXEL
+ * TRILINEAR
+ *
+ * The <surface-method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
+ */
 function cifti_resample_execute(
     params: CiftiResampleParameters,
     execution: Execution,
 ): CiftiResampleOutputs {
-    /**
-     * Resample a cifti file to a new cifti space.
-     * 
-     * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
-     * 
-     * The recommended resampling methods are ADAP_BARY_AREA and CUBIC (cubic spline), except for label data which should use ADAP_BARY_AREA and ENCLOSING_VOXEL.  Using ADAP_BARY_AREA requires specifying an area option to each used -*-spheres option.
-     * 
-     * The <volume-method> argument must be one of the following:
-     * 
-     * CUBIC
-     * ENCLOSING_VOXEL
-     * TRILINEAR
-     * 
-     * The <surface-method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_resample_cargs(params, execution)
     const ret = cifti_resample_outputs(params, execution)
@@ -1162,6 +1162,48 @@ function cifti_resample_execute(
 }
 
 
+/**
+ * Resample a cifti file to a new cifti space.
+ *
+ * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
+ *
+ * The recommended resampling methods are ADAP_BARY_AREA and CUBIC (cubic spline), except for label data which should use ADAP_BARY_AREA and ENCLOSING_VOXEL.  Using ADAP_BARY_AREA requires specifying an area option to each used -*-spheres option.
+ *
+ * The <volume-method> argument must be one of the following:
+ *
+ * CUBIC
+ * ENCLOSING_VOXEL
+ * TRILINEAR
+ *
+ * The <surface-method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the cifti file to resample
+ * @param direction the direction of the input that should be resampled, ROW or COLUMN
+ * @param cifti_template a cifti file containing the cifti space to resample to
+ * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
+ * @param surface_method specify a surface resampling method
+ * @param volume_method specify a volume interpolation method
+ * @param cifti_out the output cifti file
+ * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
+ * @param volume_predilate dilate the volume components before resampling
+ * @param surface_postdilate dilate the surface components after resampling
+ * @param affine use an affine transformation on the volume components
+ * @param warpfield use a warpfield on the volume components
+ * @param left_spheres specify spheres for left surface resampling
+ * @param right_spheres specify spheres for right surface resampling
+ * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
+ */
 function cifti_resample(
     cifti_in: InputPathType,
     direction: string,
@@ -1180,48 +1222,6 @@ function cifti_resample(
     cerebellum_spheres: CiftiResampleCerebellumSpheresParameters | null = null,
     runner: Runner | null = null,
 ): CiftiResampleOutputs {
-    /**
-     * Resample a cifti file to a new cifti space.
-     * 
-     * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
-     * 
-     * The recommended resampling methods are ADAP_BARY_AREA and CUBIC (cubic spline), except for label data which should use ADAP_BARY_AREA and ENCLOSING_VOXEL.  Using ADAP_BARY_AREA requires specifying an area option to each used -*-spheres option.
-     * 
-     * The <volume-method> argument must be one of the following:
-     * 
-     * CUBIC
-     * ENCLOSING_VOXEL
-     * TRILINEAR
-     * 
-     * The <surface-method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the cifti file to resample
-     * @param direction the direction of the input that should be resampled, ROW or COLUMN
-     * @param cifti_template a cifti file containing the cifti space to resample to
-     * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
-     * @param surface_method specify a surface resampling method
-     * @param volume_method specify a volume interpolation method
-     * @param cifti_out the output cifti file
-     * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
-     * @param volume_predilate dilate the volume components before resampling
-     * @param surface_postdilate dilate the surface components after resampling
-     * @param affine use an affine transformation on the volume components
-     * @param warpfield use a warpfield on the volume components
-     * @param left_spheres specify spheres for left surface resampling
-     * @param right_spheres specify spheres for right surface resampling
-     * @param cerebellum_spheres specify spheres for cerebellum surface resampling
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_RESAMPLE_METADATA);
     const params = cifti_resample_params(cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, cifti_out, opt_surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
@@ -1250,21 +1250,40 @@ export {
       CiftiResampleWeighted1Parameters,
       CiftiResampleWeightedParameters,
       cifti_resample,
+      cifti_resample_affine_cargs,
       cifti_resample_affine_params,
+      cifti_resample_cargs,
+      cifti_resample_cerebellum_area_metrics_cargs,
       cifti_resample_cerebellum_area_metrics_params,
+      cifti_resample_cerebellum_area_surfs_cargs,
       cifti_resample_cerebellum_area_surfs_params,
+      cifti_resample_cerebellum_spheres_cargs,
       cifti_resample_cerebellum_spheres_params,
+      cifti_resample_execute,
+      cifti_resample_flirt_cargs,
       cifti_resample_flirt_params,
+      cifti_resample_left_area_metrics_cargs,
       cifti_resample_left_area_metrics_params,
+      cifti_resample_left_area_surfs_cargs,
       cifti_resample_left_area_surfs_params,
+      cifti_resample_left_spheres_cargs,
       cifti_resample_left_spheres_params,
+      cifti_resample_outputs,
       cifti_resample_params,
+      cifti_resample_right_area_metrics_cargs,
       cifti_resample_right_area_metrics_params,
+      cifti_resample_right_area_surfs_cargs,
       cifti_resample_right_area_surfs_params,
+      cifti_resample_right_spheres_cargs,
       cifti_resample_right_spheres_params,
+      cifti_resample_surface_postdilate_cargs,
       cifti_resample_surface_postdilate_params,
+      cifti_resample_volume_predilate_cargs,
       cifti_resample_volume_predilate_params,
+      cifti_resample_warpfield_cargs,
       cifti_resample_warpfield_params,
+      cifti_resample_weighted_1_cargs,
       cifti_resample_weighted_1_params,
+      cifti_resample_weighted_cargs,
       cifti_resample_weighted_params,
 };

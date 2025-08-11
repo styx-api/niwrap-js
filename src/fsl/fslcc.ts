@@ -12,7 +12,7 @@ const FSLCC_METADATA: Metadata = {
 
 
 interface FslccParameters {
-    "__STYXTYPE__": "fslcc";
+    "@type": "fsl.fslcc";
     "first_input": InputPathType;
     "second_input": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -23,33 +23,33 @@ interface FslccParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslcc": fslcc_cargs,
+        "fsl.fslcc": fslcc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface FslccOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param first_input First input time-series
+ * @param second_input Second input time-series
+ * @param mask Mask file name
+ * @param noabs_flag Don't return absolute values (keep sign)
+ * @param nodemean_flag Don't demean the input files
+ * @param threshold Threshold (default 0.1)
+ * @param decimal_places Number of decimal places to display in output (default 2)
+ *
+ * @returns Parameter dictionary
+ */
 function fslcc_params(
     first_input: InputPathType,
     second_input: InputPathType,
@@ -78,21 +91,8 @@ function fslcc_params(
     threshold: number | null = 0.1,
     decimal_places: number | null = 2,
 ): FslccParameters {
-    /**
-     * Build parameters.
-    
-     * @param first_input First input time-series
-     * @param second_input Second input time-series
-     * @param mask Mask file name
-     * @param noabs_flag Don't return absolute values (keep sign)
-     * @param nodemean_flag Don't demean the input files
-     * @param threshold Threshold (default 0.1)
-     * @param decimal_places Number of decimal places to display in output (default 2)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslcc" as const,
+        "@type": "fsl.fslcc" as const,
         "first_input": first_input,
         "second_input": second_input,
         "noabs_flag": noabs_flag,
@@ -111,18 +111,18 @@ function fslcc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslcc_cargs(
     params: FslccParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslcc");
     cargs.push(execution.inputFile((params["first_input"] ?? null)));
@@ -155,18 +155,18 @@ function fslcc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslcc_outputs(
     params: FslccParameters,
     execution: Execution,
 ): FslccOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslccOutputs = {
         root: execution.outputFile("."),
     };
@@ -174,22 +174,22 @@ function fslcc_outputs(
 }
 
 
+/**
+ * Cross-correlate two time-series, timepoint by timepoint.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslccOutputs`).
+ */
 function fslcc_execute(
     params: FslccParameters,
     execution: Execution,
 ): FslccOutputs {
-    /**
-     * Cross-correlate two time-series, timepoint by timepoint.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslccOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslcc_cargs(params, execution)
     const ret = fslcc_outputs(params, execution)
@@ -198,6 +198,24 @@ function fslcc_execute(
 }
 
 
+/**
+ * Cross-correlate two time-series, timepoint by timepoint.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param first_input First input time-series
+ * @param second_input Second input time-series
+ * @param mask Mask file name
+ * @param noabs_flag Don't return absolute values (keep sign)
+ * @param nodemean_flag Don't demean the input files
+ * @param threshold Threshold (default 0.1)
+ * @param decimal_places Number of decimal places to display in output (default 2)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslccOutputs`).
+ */
 function fslcc(
     first_input: InputPathType,
     second_input: InputPathType,
@@ -208,24 +226,6 @@ function fslcc(
     decimal_places: number | null = 2,
     runner: Runner | null = null,
 ): FslccOutputs {
-    /**
-     * Cross-correlate two time-series, timepoint by timepoint.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param first_input First input time-series
-     * @param second_input Second input time-series
-     * @param mask Mask file name
-     * @param noabs_flag Don't return absolute values (keep sign)
-     * @param nodemean_flag Don't demean the input files
-     * @param threshold Threshold (default 0.1)
-     * @param decimal_places Number of decimal places to display in output (default 2)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslccOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLCC_METADATA);
     const params = fslcc_params(first_input, second_input, mask, noabs_flag, nodemean_flag, threshold, decimal_places)
@@ -238,5 +238,8 @@ export {
       FslccOutputs,
       FslccParameters,
       fslcc,
+      fslcc_cargs,
+      fslcc_execute,
+      fslcc_outputs,
       fslcc_params,
 };

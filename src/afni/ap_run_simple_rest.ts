@@ -12,7 +12,7 @@ const AP_RUN_SIMPLE_REST_METADATA: Metadata = {
 
 
 interface ApRunSimpleRestParameters {
-    "__STYXTYPE__": "ap_run_simple_rest";
+    "@type": "afni.ap_run_simple_rest";
     "anat"?: InputPathType | null | undefined;
     "epi": Array<InputPathType>;
     "nt_rm"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface ApRunSimpleRestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ap_run_simple_rest": ap_run_simple_rest_cargs,
+        "afni.ap_run_simple_rest": ap_run_simple_rest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ap_run_simple_rest": ap_run_simple_rest_outputs,
+        "afni.ap_run_simple_rest": ap_run_simple_rest_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,22 @@ interface ApRunSimpleRestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param epi EPI datasets
+ * @param anat Single anatomical dataset
+ * @param nt_rm Number of time points to remove from starts of runs
+ * @param run_ap Run the afni_proc.py command
+ * @param run_proc Run the proc script from afni_proc.py command
+ * @param subjid Specify subject ID for file names
+ * @param template Specify template for standard space
+ * @param compressor Control automatic compression of *.BRIK files
+ * @param verb Specify verbosity level
+ * @param echo Same as verbosity level 3
+ *
+ * @returns Parameter dictionary
+ */
 function ap_run_simple_rest_params(
     epi: Array<InputPathType>,
     anat: InputPathType | null = null,
@@ -101,24 +117,8 @@ function ap_run_simple_rest_params(
     verb: number | null = null,
     echo: boolean = false,
 ): ApRunSimpleRestParameters {
-    /**
-     * Build parameters.
-    
-     * @param epi EPI datasets
-     * @param anat Single anatomical dataset
-     * @param nt_rm Number of time points to remove from starts of runs
-     * @param run_ap Run the afni_proc.py command
-     * @param run_proc Run the proc script from afni_proc.py command
-     * @param subjid Specify subject ID for file names
-     * @param template Specify template for standard space
-     * @param compressor Control automatic compression of *.BRIK files
-     * @param verb Specify verbosity level
-     * @param echo Same as verbosity level 3
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ap_run_simple_rest" as const,
+        "@type": "afni.ap_run_simple_rest" as const,
         "epi": epi,
         "run_ap": run_ap,
         "run_proc": run_proc,
@@ -146,18 +146,18 @@ function ap_run_simple_rest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ap_run_simple_rest_cargs(
     params: ApRunSimpleRestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ap_run_simple_rest.tcsh");
     if ((params["anat"] ?? null) !== null) {
@@ -213,18 +213,18 @@ function ap_run_simple_rest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ap_run_simple_rest_outputs(
     params: ApRunSimpleRestParameters,
     execution: Execution,
 ): ApRunSimpleRestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApRunSimpleRestOutputs = {
         root: execution.outputFile("."),
         run_ap_script: ((params["subjid"] ?? null) !== null) ? execution.outputFile(["run_ap_", (params["subjid"] ?? null)].join('')) : null,
@@ -236,22 +236,22 @@ function ap_run_simple_rest_outputs(
 }
 
 
+/**
+ * Run a quick afni_proc.py analysis for QC.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
+ */
 function ap_run_simple_rest_execute(
     params: ApRunSimpleRestParameters,
     execution: Execution,
 ): ApRunSimpleRestOutputs {
-    /**
-     * Run a quick afni_proc.py analysis for QC.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
-     */
     params = execution.params(params)
     const cargs = ap_run_simple_rest_cargs(params, execution)
     const ret = ap_run_simple_rest_outputs(params, execution)
@@ -260,6 +260,27 @@ function ap_run_simple_rest_execute(
 }
 
 
+/**
+ * Run a quick afni_proc.py analysis for QC.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param epi EPI datasets
+ * @param anat Single anatomical dataset
+ * @param nt_rm Number of time points to remove from starts of runs
+ * @param run_ap Run the afni_proc.py command
+ * @param run_proc Run the proc script from afni_proc.py command
+ * @param subjid Specify subject ID for file names
+ * @param template Specify template for standard space
+ * @param compressor Control automatic compression of *.BRIK files
+ * @param verb Specify verbosity level
+ * @param echo Same as verbosity level 3
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
+ */
 function ap_run_simple_rest(
     epi: Array<InputPathType>,
     anat: InputPathType | null = null,
@@ -273,27 +294,6 @@ function ap_run_simple_rest(
     echo: boolean = false,
     runner: Runner | null = null,
 ): ApRunSimpleRestOutputs {
-    /**
-     * Run a quick afni_proc.py analysis for QC.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param epi EPI datasets
-     * @param anat Single anatomical dataset
-     * @param nt_rm Number of time points to remove from starts of runs
-     * @param run_ap Run the afni_proc.py command
-     * @param run_proc Run the proc script from afni_proc.py command
-     * @param subjid Specify subject ID for file names
-     * @param template Specify template for standard space
-     * @param compressor Control automatic compression of *.BRIK files
-     * @param verb Specify verbosity level
-     * @param echo Same as verbosity level 3
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AP_RUN_SIMPLE_REST_METADATA);
     const params = ap_run_simple_rest_params(epi, anat, nt_rm, run_ap, run_proc, subjid, template, compressor, verb, echo)
@@ -306,5 +306,8 @@ export {
       ApRunSimpleRestOutputs,
       ApRunSimpleRestParameters,
       ap_run_simple_rest,
+      ap_run_simple_rest_cargs,
+      ap_run_simple_rest_execute,
+      ap_run_simple_rest_outputs,
       ap_run_simple_rest_params,
 };

@@ -12,21 +12,21 @@ const MESHCONVERT_METADATA: Metadata = {
 
 
 interface MeshconvertTransformParameters {
-    "__STYXTYPE__": "transform";
+    "@type": "mrtrix.meshconvert.transform";
     "mode": string;
     "image": InputPathType;
 }
 
 
 interface MeshconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.meshconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface MeshconvertParameters {
-    "__STYXTYPE__": "meshconvert";
+    "@type": "mrtrix.meshconvert";
     "binary": boolean;
     "transform"?: MeshconvertTransformParameters | null | undefined;
     "info": boolean;
@@ -42,56 +42,56 @@ interface MeshconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "meshconvert": meshconvert_cargs,
-        "transform": meshconvert_transform_cargs,
-        "config": meshconvert_config_cargs,
+        "mrtrix.meshconvert": meshconvert_cargs,
+        "mrtrix.meshconvert.transform": meshconvert_transform_cargs,
+        "mrtrix.meshconvert.config": meshconvert_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "meshconvert": meshconvert_outputs,
+        "mrtrix.meshconvert": meshconvert_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mode transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
+ * @param image transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
+ *
+ * @returns Parameter dictionary
+ */
 function meshconvert_transform_params(
     mode: string,
     image: InputPathType,
 ): MeshconvertTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @param mode transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
-     * @param image transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transform" as const,
+        "@type": "mrtrix.meshconvert.transform" as const,
         "mode": mode,
         "image": image,
     };
@@ -99,18 +99,18 @@ function meshconvert_transform_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function meshconvert_transform_cargs(
     params: MeshconvertTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-transform");
     cargs.push((params["mode"] ?? null));
@@ -119,20 +119,20 @@ function meshconvert_transform_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function meshconvert_config_params(
     key: string,
     value: string,
 ): MeshconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.meshconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -140,18 +140,18 @@ function meshconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function meshconvert_config_cargs(
     params: MeshconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -177,6 +177,24 @@ interface MeshconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input mesh file
+ * @param output the output mesh file
+ * @param binary write the output mesh file in binary format (if supported)
+ * @param transform transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function meshconvert_params(
     input: InputPathType,
     output: string,
@@ -191,26 +209,8 @@ function meshconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): MeshconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input mesh file
-     * @param output the output mesh file
-     * @param binary write the output mesh file in binary format (if supported)
-     * @param transform transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "meshconvert" as const,
+        "@type": "mrtrix.meshconvert" as const,
         "binary": binary,
         "info": info,
         "quiet": quiet,
@@ -234,25 +234,25 @@ function meshconvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function meshconvert_cargs(
     params: MeshconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("meshconvert");
     if ((params["binary"] ?? null)) {
         cargs.push("-binary");
     }
     if ((params["transform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["transform"] ?? null).__STYXTYPE__)((params["transform"] ?? null), execution));
+        cargs.push(...dynCargs((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution));
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -273,7 +273,7 @@ function meshconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -287,18 +287,18 @@ function meshconvert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function meshconvert_outputs(
     params: MeshconvertParameters,
     execution: Execution,
 ): MeshconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MeshconvertOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -307,28 +307,28 @@ function meshconvert_outputs(
 }
 
 
+/**
+ * Convert meshes between different formats, and apply transformations.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
+ */
 function meshconvert_execute(
     params: MeshconvertParameters,
     execution: Execution,
 ): MeshconvertOutputs {
-    /**
-     * Convert meshes between different formats, and apply transformations.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = meshconvert_cargs(params, execution)
     const ret = meshconvert_outputs(params, execution)
@@ -337,6 +337,35 @@ function meshconvert_execute(
 }
 
 
+/**
+ * Convert meshes between different formats, and apply transformations.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input mesh file
+ * @param output the output mesh file
+ * @param binary write the output mesh file in binary format (if supported)
+ * @param transform transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
+ */
 function meshconvert(
     input: InputPathType,
     output: string,
@@ -352,35 +381,6 @@ function meshconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): MeshconvertOutputs {
-    /**
-     * Convert meshes between different formats, and apply transformations.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input mesh file
-     * @param output the output mesh file
-     * @param binary write the output mesh file in binary format (if supported)
-     * @param transform transform vertices from one coordinate space to another, based on a template image; options are: first2real, real2first, voxel2real, real2voxel, fs2real
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MESHCONVERT_METADATA);
     const params = meshconvert_params(input, output, binary, transform, info, quiet, debug, force, nthreads, config, help, version)
@@ -395,7 +395,12 @@ export {
       MeshconvertParameters,
       MeshconvertTransformParameters,
       meshconvert,
+      meshconvert_cargs,
+      meshconvert_config_cargs,
       meshconvert_config_params,
+      meshconvert_execute,
+      meshconvert_outputs,
       meshconvert_params,
+      meshconvert_transform_cargs,
       meshconvert_transform_params,
 };

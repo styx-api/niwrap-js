@@ -12,41 +12,41 @@ const IMLN_METADATA: Metadata = {
 
 
 interface ImlnParameters {
-    "__STYXTYPE__": "imln";
+    "@type": "fsl.imln";
     "input_file": InputPathType;
     "link_name": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imln": imln_cargs,
+        "fsl.imln": imln_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "imln": imln_outputs,
+        "fsl.imln": imln_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface ImlnOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file The source file (file1) to create a link to
+ * @param link_name The name for the link (file2)
+ *
+ * @returns Parameter dictionary
+ */
 function imln_params(
     input_file: InputPathType,
     link_name: string,
 ): ImlnParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file The source file (file1) to create a link to
-     * @param link_name The name for the link (file2)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imln" as const,
+        "@type": "fsl.imln" as const,
         "input_file": input_file,
         "link_name": link_name,
     };
@@ -90,18 +90,18 @@ function imln_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imln_cargs(
     params: ImlnParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imln");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function imln_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imln_outputs(
     params: ImlnParameters,
     execution: Execution,
 ): ImlnOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImlnOutputs = {
         root: execution.outputFile("."),
         output_link: execution.outputFile([(params["link_name"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function imln_outputs(
 }
 
 
+/**
+ * Creates a link (called file2) to file1.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImlnOutputs`).
+ */
 function imln_execute(
     params: ImlnParameters,
     execution: Execution,
 ): ImlnOutputs {
-    /**
-     * Creates a link (called file2) to file1.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImlnOutputs`).
-     */
     params = execution.params(params)
     const cargs = imln_cargs(params, execution)
     const ret = imln_outputs(params, execution)
@@ -154,24 +154,24 @@ function imln_execute(
 }
 
 
+/**
+ * Creates a link (called file2) to file1.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file The source file (file1) to create a link to
+ * @param link_name The name for the link (file2)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImlnOutputs`).
+ */
 function imln(
     input_file: InputPathType,
     link_name: string,
     runner: Runner | null = null,
 ): ImlnOutputs {
-    /**
-     * Creates a link (called file2) to file1.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file The source file (file1) to create a link to
-     * @param link_name The name for the link (file2)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImlnOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMLN_METADATA);
     const params = imln_params(input_file, link_name)
@@ -184,5 +184,8 @@ export {
       ImlnOutputs,
       ImlnParameters,
       imln,
+      imln_cargs,
+      imln_execute,
+      imln_outputs,
       imln_params,
 };

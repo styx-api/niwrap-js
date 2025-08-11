@@ -12,7 +12,7 @@ const FDR_METADATA: Metadata = {
 
 
 interface FdrParameters {
-    "__STYXTYPE__": "fdr";
+    "@type": "fsl.fdr";
     "infile": InputPathType;
     "maskfile"?: InputPathType | null | undefined;
     "qvalue"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface FdrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fdr": fdr_cargs,
+        "fsl.fdr": fdr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fdr": fdr_outputs,
+        "fsl.fdr": fdr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface FdrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input p-value image file
+ * @param maskfile Mask image file
+ * @param qvalue Q-value (FDR) threshold
+ * @param adjustedimage Output image with FDR-adjusted p-values
+ * @param othresh_flag Output a thresholded p-value image
+ * @param order_flag Output image of order values
+ * @param oneminusp_flag Treat input as 1-p (also save output like this)
+ * @param positive_corr_flag Use FDR correction factor that assumes positive correlation
+ * @param independent_flag Use FDR correction factor that assumes independence
+ * @param conservative_flag Use conservative FDR correction factor (allows for any correlation)
+ * @param debug_flag Switch on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function fdr_params(
     infile: InputPathType,
     maskfile: InputPathType | null = null,
@@ -101,26 +119,8 @@ function fdr_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
 ): FdrParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input p-value image file
-     * @param maskfile Mask image file
-     * @param qvalue Q-value (FDR) threshold
-     * @param adjustedimage Output image with FDR-adjusted p-values
-     * @param othresh_flag Output a thresholded p-value image
-     * @param order_flag Output image of order values
-     * @param oneminusp_flag Treat input as 1-p (also save output like this)
-     * @param positive_corr_flag Use FDR correction factor that assumes positive correlation
-     * @param independent_flag Use FDR correction factor that assumes independence
-     * @param conservative_flag Use conservative FDR correction factor (allows for any correlation)
-     * @param debug_flag Switch on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fdr" as const,
+        "@type": "fsl.fdr" as const,
         "infile": infile,
         "othresh_flag": othresh_flag,
         "order_flag": order_flag,
@@ -144,18 +144,18 @@ function fdr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fdr_cargs(
     params: FdrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fdr");
     cargs.push(
@@ -208,18 +208,18 @@ function fdr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fdr_outputs(
     params: FdrParameters,
     execution: Execution,
 ): FdrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FdrOutputs = {
         root: execution.outputFile("."),
         output_adjusted: ((params["adjustedimage"] ?? null) !== null) ? execution.outputFile([(params["adjustedimage"] ?? null), ".nii.gz"].join('')) : null,
@@ -230,22 +230,22 @@ function fdr_outputs(
 }
 
 
+/**
+ * False Discovery Rate (FDR) correction tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FdrOutputs`).
+ */
 function fdr_execute(
     params: FdrParameters,
     execution: Execution,
 ): FdrOutputs {
-    /**
-     * False Discovery Rate (FDR) correction tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FdrOutputs`).
-     */
     params = execution.params(params)
     const cargs = fdr_cargs(params, execution)
     const ret = fdr_outputs(params, execution)
@@ -254,6 +254,29 @@ function fdr_execute(
 }
 
 
+/**
+ * False Discovery Rate (FDR) correction tool from FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input p-value image file
+ * @param maskfile Mask image file
+ * @param qvalue Q-value (FDR) threshold
+ * @param adjustedimage Output image with FDR-adjusted p-values
+ * @param othresh_flag Output a thresholded p-value image
+ * @param order_flag Output image of order values
+ * @param oneminusp_flag Treat input as 1-p (also save output like this)
+ * @param positive_corr_flag Use FDR correction factor that assumes positive correlation
+ * @param independent_flag Use FDR correction factor that assumes independence
+ * @param conservative_flag Use conservative FDR correction factor (allows for any correlation)
+ * @param debug_flag Switch on debugging output
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FdrOutputs`).
+ */
 function fdr(
     infile: InputPathType,
     maskfile: InputPathType | null = null,
@@ -269,29 +292,6 @@ function fdr(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FdrOutputs {
-    /**
-     * False Discovery Rate (FDR) correction tool from FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input p-value image file
-     * @param maskfile Mask image file
-     * @param qvalue Q-value (FDR) threshold
-     * @param adjustedimage Output image with FDR-adjusted p-values
-     * @param othresh_flag Output a thresholded p-value image
-     * @param order_flag Output image of order values
-     * @param oneminusp_flag Treat input as 1-p (also save output like this)
-     * @param positive_corr_flag Use FDR correction factor that assumes positive correlation
-     * @param independent_flag Use FDR correction factor that assumes independence
-     * @param conservative_flag Use conservative FDR correction factor (allows for any correlation)
-     * @param debug_flag Switch on debugging output
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FdrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FDR_METADATA);
     const params = fdr_params(infile, maskfile, qvalue, adjustedimage, othresh_flag, order_flag, oneminusp_flag, positive_corr_flag, independent_flag, conservative_flag, debug_flag, verbose_flag)
@@ -304,5 +304,8 @@ export {
       FdrOutputs,
       FdrParameters,
       fdr,
+      fdr_cargs,
+      fdr_execute,
+      fdr_outputs,
       fdr_params,
 };

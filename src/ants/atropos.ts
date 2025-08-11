@@ -12,7 +12,7 @@ const ATROPOS_METADATA: Metadata = {
 
 
 interface AtroposParameters {
-    "__STYXTYPE__": "Atropos";
+    "@type": "ants.Atropos";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "intensity_image": string;
     "bspline"?: string | null | undefined;
@@ -35,35 +35,35 @@ interface AtroposParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "Atropos": atropos_cargs,
+        "ants.Atropos": atropos_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "Atropos": atropos_outputs,
+        "ants.Atropos": atropos_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,31 @@ interface AtroposOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param intensity_image One or more scalar images is specified for segmentation. For scenarios with no prior information, the first scalar image is used to order labelings by intensity. The optional adaptive smoothing weight is applicable with prior images, specified between [0,1].
+ * @param initialization Initialize the FMM parameters. options include Random, Otsu, KMeans, PriorProbabilityImages, and PriorLabelImage.
+ * @param mask_image The required image mask defines the region to be labeled by Atropos.
+ * @param convergence Determine convergence based on mean maximum posterior probability over region of interest.
+ * @param likelihood_model Specify parametric or non-parametric likelihood model. Options include Gaussian, HistogramParzenWindows, ManifoldParzenWindows, among others.
+ * @param output Output labeled image and optionally posterior probability images.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, Atropos tries to infer the dimensionality from the first input image.
+ * @param bspline Parameters for B-Spline. Adaptive smoothing is applied to intensity images if smoothing weights > 0.
+ * @param partial_volume_label_set Model mixtures of classes within single voxels. Specify labels for each partial volume class.
+ * @param use_partial_volume_likelihoods Whether to use partial volume likelihoods. A value of 1 considers the partial volume class separate from tissue classes.
+ * @param posterior_formulation Specify posterior probability formulation. Options are Socrates, Plato, Aristotle, or Sigmoid.
+ * @param mrf Markov Random Field parameters to enforce spatial constraints on segmentation.
+ * @param icm ICM (Iterated Conditional Modes) parameters for asynchronous updating.
+ * @param use_random_seed Initialize with a random seed or a constant seed number.
+ * @param minimize_memory_usage Minimize memory usage by calculating images on the fly and storing only non-negligible pixel values.
+ * @param winsorize_outliers Options to remove effects of outliers in calculations using methods like BoxPlot or GrubbsRosner.
+ * @param use_euclidean_distance Propagate labels throughout the mask using a distance transform.
+ * @param label_propagation Control propagation of each prior label by specified lambda and boundary probability.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function atropos_params(
     intensity_image: string,
     initialization: string,
@@ -111,33 +136,8 @@ function atropos_params(
     label_propagation: string | null = null,
     verbose: 0 | 1 | null = null,
 ): AtroposParameters {
-    /**
-     * Build parameters.
-    
-     * @param intensity_image One or more scalar images is specified for segmentation. For scenarios with no prior information, the first scalar image is used to order labelings by intensity. The optional adaptive smoothing weight is applicable with prior images, specified between [0,1].
-     * @param initialization Initialize the FMM parameters. options include Random, Otsu, KMeans, PriorProbabilityImages, and PriorLabelImage.
-     * @param mask_image The required image mask defines the region to be labeled by Atropos.
-     * @param convergence Determine convergence based on mean maximum posterior probability over region of interest.
-     * @param likelihood_model Specify parametric or non-parametric likelihood model. Options include Gaussian, HistogramParzenWindows, ManifoldParzenWindows, among others.
-     * @param output Output labeled image and optionally posterior probability images.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, Atropos tries to infer the dimensionality from the first input image.
-     * @param bspline Parameters for B-Spline. Adaptive smoothing is applied to intensity images if smoothing weights > 0.
-     * @param partial_volume_label_set Model mixtures of classes within single voxels. Specify labels for each partial volume class.
-     * @param use_partial_volume_likelihoods Whether to use partial volume likelihoods. A value of 1 considers the partial volume class separate from tissue classes.
-     * @param posterior_formulation Specify posterior probability formulation. Options are Socrates, Plato, Aristotle, or Sigmoid.
-     * @param mrf Markov Random Field parameters to enforce spatial constraints on segmentation.
-     * @param icm ICM (Iterated Conditional Modes) parameters for asynchronous updating.
-     * @param use_random_seed Initialize with a random seed or a constant seed number.
-     * @param minimize_memory_usage Minimize memory usage by calculating images on the fly and storing only non-negligible pixel values.
-     * @param winsorize_outliers Options to remove effects of outliers in calculations using methods like BoxPlot or GrubbsRosner.
-     * @param use_euclidean_distance Propagate labels throughout the mask using a distance transform.
-     * @param label_propagation Control propagation of each prior label by specified lambda and boundary probability.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "Atropos" as const,
+        "@type": "ants.Atropos" as const,
         "intensity_image": intensity_image,
         "initialization": initialization,
         "mask_image": mask_image,
@@ -188,18 +188,18 @@ function atropos_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function atropos_cargs(
     params: AtroposParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Atropos");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -308,18 +308,18 @@ function atropos_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function atropos_outputs(
     params: AtroposParameters,
     execution: Execution,
 ): AtroposOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AtroposOutputs = {
         root: execution.outputFile("."),
         classified_image: execution.outputFile([(params["output"] ?? null), "_classified.nii.gz"].join('')),
@@ -329,22 +329,22 @@ function atropos_outputs(
 }
 
 
+/**
+ * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AtroposOutputs`).
+ */
 function atropos_execute(
     params: AtroposParameters,
     execution: Execution,
 ): AtroposOutputs {
-    /**
-     * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AtroposOutputs`).
-     */
     params = execution.params(params)
     const cargs = atropos_cargs(params, execution)
     const ret = atropos_outputs(params, execution)
@@ -353,6 +353,36 @@ function atropos_execute(
 }
 
 
+/**
+ * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param intensity_image One or more scalar images is specified for segmentation. For scenarios with no prior information, the first scalar image is used to order labelings by intensity. The optional adaptive smoothing weight is applicable with prior images, specified between [0,1].
+ * @param initialization Initialize the FMM parameters. options include Random, Otsu, KMeans, PriorProbabilityImages, and PriorLabelImage.
+ * @param mask_image The required image mask defines the region to be labeled by Atropos.
+ * @param convergence Determine convergence based on mean maximum posterior probability over region of interest.
+ * @param likelihood_model Specify parametric or non-parametric likelihood model. Options include Gaussian, HistogramParzenWindows, ManifoldParzenWindows, among others.
+ * @param output Output labeled image and optionally posterior probability images.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, Atropos tries to infer the dimensionality from the first input image.
+ * @param bspline Parameters for B-Spline. Adaptive smoothing is applied to intensity images if smoothing weights > 0.
+ * @param partial_volume_label_set Model mixtures of classes within single voxels. Specify labels for each partial volume class.
+ * @param use_partial_volume_likelihoods Whether to use partial volume likelihoods. A value of 1 considers the partial volume class separate from tissue classes.
+ * @param posterior_formulation Specify posterior probability formulation. Options are Socrates, Plato, Aristotle, or Sigmoid.
+ * @param mrf Markov Random Field parameters to enforce spatial constraints on segmentation.
+ * @param icm ICM (Iterated Conditional Modes) parameters for asynchronous updating.
+ * @param use_random_seed Initialize with a random seed or a constant seed number.
+ * @param minimize_memory_usage Minimize memory usage by calculating images on the fly and storing only non-negligible pixel values.
+ * @param winsorize_outliers Options to remove effects of outliers in calculations using methods like BoxPlot or GrubbsRosner.
+ * @param use_euclidean_distance Propagate labels throughout the mask using a distance transform.
+ * @param label_propagation Control propagation of each prior label by specified lambda and boundary probability.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AtroposOutputs`).
+ */
 function atropos(
     intensity_image: string,
     initialization: string,
@@ -375,36 +405,6 @@ function atropos(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AtroposOutputs {
-    /**
-     * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param intensity_image One or more scalar images is specified for segmentation. For scenarios with no prior information, the first scalar image is used to order labelings by intensity. The optional adaptive smoothing weight is applicable with prior images, specified between [0,1].
-     * @param initialization Initialize the FMM parameters. options include Random, Otsu, KMeans, PriorProbabilityImages, and PriorLabelImage.
-     * @param mask_image The required image mask defines the region to be labeled by Atropos.
-     * @param convergence Determine convergence based on mean maximum posterior probability over region of interest.
-     * @param likelihood_model Specify parametric or non-parametric likelihood model. Options include Gaussian, HistogramParzenWindows, ManifoldParzenWindows, among others.
-     * @param output Output labeled image and optionally posterior probability images.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, Atropos tries to infer the dimensionality from the first input image.
-     * @param bspline Parameters for B-Spline. Adaptive smoothing is applied to intensity images if smoothing weights > 0.
-     * @param partial_volume_label_set Model mixtures of classes within single voxels. Specify labels for each partial volume class.
-     * @param use_partial_volume_likelihoods Whether to use partial volume likelihoods. A value of 1 considers the partial volume class separate from tissue classes.
-     * @param posterior_formulation Specify posterior probability formulation. Options are Socrates, Plato, Aristotle, or Sigmoid.
-     * @param mrf Markov Random Field parameters to enforce spatial constraints on segmentation.
-     * @param icm ICM (Iterated Conditional Modes) parameters for asynchronous updating.
-     * @param use_random_seed Initialize with a random seed or a constant seed number.
-     * @param minimize_memory_usage Minimize memory usage by calculating images on the fly and storing only non-negligible pixel values.
-     * @param winsorize_outliers Options to remove effects of outliers in calculations using methods like BoxPlot or GrubbsRosner.
-     * @param use_euclidean_distance Propagate labels throughout the mask using a distance transform.
-     * @param label_propagation Control propagation of each prior label by specified lambda and boundary probability.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AtroposOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ATROPOS_METADATA);
     const params = atropos_params(intensity_image, initialization, mask_image, convergence, likelihood_model, output, image_dimensionality, bspline, partial_volume_label_set, use_partial_volume_likelihoods, posterior_formulation, mrf, icm, use_random_seed, minimize_memory_usage, winsorize_outliers, use_euclidean_distance, label_propagation, verbose)
@@ -417,5 +417,8 @@ export {
       AtroposOutputs,
       AtroposParameters,
       atropos,
+      atropos_cargs,
+      atropos_execute,
+      atropos_outputs,
       atropos_params,
 };

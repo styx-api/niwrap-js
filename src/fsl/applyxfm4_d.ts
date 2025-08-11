@@ -12,7 +12,7 @@ const APPLYXFM4_D_METADATA: Metadata = {
 
 
 interface Applyxfm4DParameters {
-    "__STYXTYPE__": "applyxfm4D";
+    "@type": "fsl.applyxfm4D";
     "input_volume": InputPathType;
     "ref_volume": InputPathType;
     "output_volume": string;
@@ -24,35 +24,35 @@ interface Applyxfm4DParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "applyxfm4D": applyxfm4_d_cargs,
+        "fsl.applyxfm4D": applyxfm4_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "applyxfm4D": applyxfm4_d_outputs,
+        "fsl.applyxfm4D": applyxfm4_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface Applyxfm4DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input 4D volume (e.g. img.nii.gz)
+ * @param ref_volume Reference volume (e.g. ref.nii.gz)
+ * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
+ * @param transformation_matrix Transformation matrix file or directory
+ * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
+ * @param single_matrix_flag Flag to specify a single transformation matrix
+ * @param four_digit_flag Flag to use four digits in naming files
+ * @param user_prefix User-defined prefix for output files
+ *
+ * @returns Parameter dictionary
+ */
 function applyxfm4_d_params(
     input_volume: InputPathType,
     ref_volume: InputPathType,
@@ -85,22 +99,8 @@ function applyxfm4_d_params(
     four_digit_flag: boolean = false,
     user_prefix: string | null = null,
 ): Applyxfm4DParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input 4D volume (e.g. img.nii.gz)
-     * @param ref_volume Reference volume (e.g. ref.nii.gz)
-     * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
-     * @param transformation_matrix Transformation matrix file or directory
-     * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
-     * @param single_matrix_flag Flag to specify a single transformation matrix
-     * @param four_digit_flag Flag to use four digits in naming files
-     * @param user_prefix User-defined prefix for output files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "applyxfm4D" as const,
+        "@type": "fsl.applyxfm4D" as const,
         "input_volume": input_volume,
         "ref_volume": ref_volume,
         "output_volume": output_volume,
@@ -118,18 +118,18 @@ function applyxfm4_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function applyxfm4_d_cargs(
     params: Applyxfm4DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("applyxfm4D");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -158,18 +158,18 @@ function applyxfm4_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function applyxfm4_d_outputs(
     params: Applyxfm4DParameters,
     execution: Execution,
 ): Applyxfm4DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Applyxfm4DOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_volume"] ?? null), ".nii.gz"].join('')),
@@ -178,22 +178,22 @@ function applyxfm4_d_outputs(
 }
 
 
+/**
+ * Applies 4D transformation matrices to 4D volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
+ */
 function applyxfm4_d_execute(
     params: Applyxfm4DParameters,
     execution: Execution,
 ): Applyxfm4DOutputs {
-    /**
-     * Applies 4D transformation matrices to 4D volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
-     */
     params = execution.params(params)
     const cargs = applyxfm4_d_cargs(params, execution)
     const ret = applyxfm4_d_outputs(params, execution)
@@ -202,6 +202,25 @@ function applyxfm4_d_execute(
 }
 
 
+/**
+ * Applies 4D transformation matrices to 4D volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_volume Input 4D volume (e.g. img.nii.gz)
+ * @param ref_volume Reference volume (e.g. ref.nii.gz)
+ * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
+ * @param transformation_matrix Transformation matrix file or directory
+ * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
+ * @param single_matrix_flag Flag to specify a single transformation matrix
+ * @param four_digit_flag Flag to use four digits in naming files
+ * @param user_prefix User-defined prefix for output files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
+ */
 function applyxfm4_d(
     input_volume: InputPathType,
     ref_volume: InputPathType,
@@ -213,25 +232,6 @@ function applyxfm4_d(
     user_prefix: string | null = null,
     runner: Runner | null = null,
 ): Applyxfm4DOutputs {
-    /**
-     * Applies 4D transformation matrices to 4D volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_volume Input 4D volume (e.g. img.nii.gz)
-     * @param ref_volume Reference volume (e.g. ref.nii.gz)
-     * @param output_volume Output volume after applying transformation (e.g. output.nii.gz)
-     * @param transformation_matrix Transformation matrix file or directory
-     * @param interpolation_method Interpolation method; options are nearestneighbour (or nn), trilinear, spline, sinc; default is sinc
-     * @param single_matrix_flag Flag to specify a single transformation matrix
-     * @param four_digit_flag Flag to use four digits in naming files
-     * @param user_prefix User-defined prefix for output files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYXFM4_D_METADATA);
     const params = applyxfm4_d_params(input_volume, ref_volume, output_volume, transformation_matrix, interpolation_method, single_matrix_flag, four_digit_flag, user_prefix)
@@ -244,5 +244,8 @@ export {
       Applyxfm4DOutputs,
       Applyxfm4DParameters,
       applyxfm4_d,
+      applyxfm4_d_cargs,
+      applyxfm4_d_execute,
+      applyxfm4_d_outputs,
       applyxfm4_d_params,
 };

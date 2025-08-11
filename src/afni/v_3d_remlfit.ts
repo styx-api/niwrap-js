@@ -12,7 +12,7 @@ const V_3D_REMLFIT_METADATA: Metadata = {
 
 
 interface V3dRemlfitParameters {
-    "__STYXTYPE__": "3dREMLfit";
+    "@type": "afni.3dREMLfit";
     "input_file": InputPathType;
     "regression_matrix": InputPathType;
     "baseline_files"?: Array<string> | null | undefined;
@@ -31,35 +31,35 @@ interface V3dRemlfitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dREMLfit": v_3d_remlfit_cargs,
+        "afni.3dREMLfit": v_3d_remlfit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dREMLfit": v_3d_remlfit_outputs,
+        "afni.3dREMLfit": v_3d_remlfit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,6 +102,27 @@ interface V3dRemlfitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Read time series dataset
+ * @param regression_matrix Read the regression matrix, which should have been output from 3dDeconvolve via the '-x1D' option
+ * @param baseline_files Add baseline model columns to the matrix. Each column in the specified .1D file will be appended to the matrix.
+ * @param sort_nods If '-dsort' is used, the output datasets reflect the impact of the voxel-wise regressor(s). If you want to compare those results to the case where you did NOT give the '-dsort' option, then also use '-dsort_nods'.
+ * @param temp_storage Write intermediate output to disk, to economize on RAM.
+ * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
+ * @param output_prefix Dataset prefix for saving REML variance parameters.
+ * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
+ * @param go_for_it Force the program to continue past a failed collinearity check.
+ * @param max_a_param Set max allowed AR a parameter.
+ * @param max_b_param Set max allowed MA b parameter.
+ * @param grid_param Set the number of grid divisions in the (a,b) grid.
+ * @param negative_corr Allows negative correlations to be used.
+ * @param quiet Turn off most progress messages
+ * @param verbose Turn on more progress messages
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_remlfit_params(
     input_file: InputPathType,
     regression_matrix: InputPathType,
@@ -119,29 +140,8 @@ function v_3d_remlfit_params(
     quiet: boolean = false,
     verbose: boolean = false,
 ): V3dRemlfitParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Read time series dataset
-     * @param regression_matrix Read the regression matrix, which should have been output from 3dDeconvolve via the '-x1D' option
-     * @param baseline_files Add baseline model columns to the matrix. Each column in the specified .1D file will be appended to the matrix.
-     * @param sort_nods If '-dsort' is used, the output datasets reflect the impact of the voxel-wise regressor(s). If you want to compare those results to the case where you did NOT give the '-dsort' option, then also use '-dsort_nods'.
-     * @param temp_storage Write intermediate output to disk, to economize on RAM.
-     * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
-     * @param output_prefix Dataset prefix for saving REML variance parameters.
-     * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
-     * @param go_for_it Force the program to continue past a failed collinearity check.
-     * @param max_a_param Set max allowed AR a parameter.
-     * @param max_b_param Set max allowed MA b parameter.
-     * @param grid_param Set the number of grid divisions in the (a,b) grid.
-     * @param negative_corr Allows negative correlations to be used.
-     * @param quiet Turn off most progress messages
-     * @param verbose Turn on more progress messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dREMLfit" as const,
+        "@type": "afni.3dREMLfit" as const,
         "input_file": input_file,
         "regression_matrix": regression_matrix,
         "sort_nods": sort_nods,
@@ -174,18 +174,18 @@ function v_3d_remlfit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_remlfit_cargs(
     params: V3dRemlfitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dREMLfit");
     cargs.push(
@@ -257,18 +257,18 @@ function v_3d_remlfit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_remlfit_outputs(
     params: V3dRemlfitParameters,
     execution: Execution,
 ): V3dRemlfitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRemlfitOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -282,22 +282,22 @@ function v_3d_remlfit_outputs(
 }
 
 
+/**
+ * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
+ */
 function v_3d_remlfit_execute(
     params: V3dRemlfitParameters,
     execution: Execution,
 ): V3dRemlfitOutputs {
-    /**
-     * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_remlfit_cargs(params, execution)
     const ret = v_3d_remlfit_outputs(params, execution)
@@ -306,6 +306,32 @@ function v_3d_remlfit_execute(
 }
 
 
+/**
+ * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Read time series dataset
+ * @param regression_matrix Read the regression matrix, which should have been output from 3dDeconvolve via the '-x1D' option
+ * @param baseline_files Add baseline model columns to the matrix. Each column in the specified .1D file will be appended to the matrix.
+ * @param sort_nods If '-dsort' is used, the output datasets reflect the impact of the voxel-wise regressor(s). If you want to compare those results to the case where you did NOT give the '-dsort' option, then also use '-dsort_nods'.
+ * @param temp_storage Write intermediate output to disk, to economize on RAM.
+ * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
+ * @param output_prefix Dataset prefix for saving REML variance parameters.
+ * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
+ * @param go_for_it Force the program to continue past a failed collinearity check.
+ * @param max_a_param Set max allowed AR a parameter.
+ * @param max_b_param Set max allowed MA b parameter.
+ * @param grid_param Set the number of grid divisions in the (a,b) grid.
+ * @param negative_corr Allows negative correlations to be used.
+ * @param quiet Turn off most progress messages
+ * @param verbose Turn on more progress messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
+ */
 function v_3d_remlfit(
     input_file: InputPathType,
     regression_matrix: InputPathType,
@@ -324,32 +350,6 @@ function v_3d_remlfit(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dRemlfitOutputs {
-    /**
-     * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Read time series dataset
-     * @param regression_matrix Read the regression matrix, which should have been output from 3dDeconvolve via the '-x1D' option
-     * @param baseline_files Add baseline model columns to the matrix. Each column in the specified .1D file will be appended to the matrix.
-     * @param sort_nods If '-dsort' is used, the output datasets reflect the impact of the voxel-wise regressor(s). If you want to compare those results to the case where you did NOT give the '-dsort' option, then also use '-dsort_nods'.
-     * @param temp_storage Write intermediate output to disk, to economize on RAM.
-     * @param mask Read dataset as a mask for the input; voxels outside the mask will not be fit by the regression model.
-     * @param output_prefix Dataset prefix for saving REML variance parameters.
-     * @param no_fdr_curve Do not add FDR curve data to bucket datasets.
-     * @param go_for_it Force the program to continue past a failed collinearity check.
-     * @param max_a_param Set max allowed AR a parameter.
-     * @param max_b_param Set max allowed MA b parameter.
-     * @param grid_param Set the number of grid divisions in the (a,b) grid.
-     * @param negative_corr Allows negative correlations to be used.
-     * @param quiet Turn off most progress messages
-     * @param verbose Turn on more progress messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_REMLFIT_METADATA);
     const params = v_3d_remlfit_params(input_file, regression_matrix, baseline_files, sort_nods, temp_storage, mask, output_prefix, no_fdr_curve, go_for_it, max_a_param, max_b_param, grid_param, negative_corr, quiet, verbose)
@@ -362,5 +362,8 @@ export {
       V3dRemlfitParameters,
       V_3D_REMLFIT_METADATA,
       v_3d_remlfit,
+      v_3d_remlfit_cargs,
+      v_3d_remlfit_execute,
+      v_3d_remlfit_outputs,
       v_3d_remlfit_params,
 };

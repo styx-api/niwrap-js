@@ -12,7 +12,7 @@ const FOCI_GET_PROJECTION_VERTEX_METADATA: Metadata = {
 
 
 interface FociGetProjectionVertexParameters {
-    "__STYXTYPE__": "foci-get-projection-vertex";
+    "@type": "workbench.foci-get-projection-vertex";
     "foci": InputPathType;
     "surface": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface FociGetProjectionVertexParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "foci-get-projection-vertex": foci_get_projection_vertex_cargs,
+        "workbench.foci-get-projection-vertex": foci_get_projection_vertex_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "foci-get-projection-vertex": foci_get_projection_vertex_outputs,
+        "workbench.foci-get-projection-vertex": foci_get_projection_vertex_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface FociGetProjectionVertexOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param foci the foci file
+ * @param surface the surface related to the foci file
+ * @param metric_out the output metric file
+ * @param opt_name_name select a focus by name: the name of the focus
+ *
+ * @returns Parameter dictionary
+ */
 function foci_get_projection_vertex_params(
     foci: InputPathType,
     surface: InputPathType,
     metric_out: string,
     opt_name_name: string | null = null,
 ): FociGetProjectionVertexParameters {
-    /**
-     * Build parameters.
-    
-     * @param foci the foci file
-     * @param surface the surface related to the foci file
-     * @param metric_out the output metric file
-     * @param opt_name_name select a focus by name: the name of the focus
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "foci-get-projection-vertex" as const,
+        "@type": "workbench.foci-get-projection-vertex" as const,
         "foci": foci,
         "surface": surface,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function foci_get_projection_vertex_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function foci_get_projection_vertex_cargs(
     params: FociGetProjectionVertexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-foci-get-projection-vertex");
@@ -128,18 +128,18 @@ function foci_get_projection_vertex_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function foci_get_projection_vertex_outputs(
     params: FociGetProjectionVertexParameters,
     execution: Execution,
 ): FociGetProjectionVertexOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FociGetProjectionVertexOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function foci_get_projection_vertex_outputs(
 }
 
 
+/**
+ * Get projection vertex for foci.
+ *
+ * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
+ */
 function foci_get_projection_vertex_execute(
     params: FociGetProjectionVertexParameters,
     execution: Execution,
 ): FociGetProjectionVertexOutputs {
-    /**
-     * Get projection vertex for foci.
-     * 
-     * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
-     */
     params = execution.params(params)
     const cargs = foci_get_projection_vertex_cargs(params, execution)
     const ret = foci_get_projection_vertex_outputs(params, execution)
@@ -174,6 +174,23 @@ function foci_get_projection_vertex_execute(
 }
 
 
+/**
+ * Get projection vertex for foci.
+ *
+ * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param foci the foci file
+ * @param surface the surface related to the foci file
+ * @param metric_out the output metric file
+ * @param opt_name_name select a focus by name: the name of the focus
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
+ */
 function foci_get_projection_vertex(
     foci: InputPathType,
     surface: InputPathType,
@@ -181,23 +198,6 @@ function foci_get_projection_vertex(
     opt_name_name: string | null = null,
     runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
-    /**
-     * Get projection vertex for foci.
-     * 
-     * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param foci the foci file
-     * @param surface the surface related to the foci file
-     * @param metric_out the output metric file
-     * @param opt_name_name select a focus by name: the name of the focus
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FOCI_GET_PROJECTION_VERTEX_METADATA);
     const params = foci_get_projection_vertex_params(foci, surface, metric_out, opt_name_name)
@@ -210,5 +210,8 @@ export {
       FociGetProjectionVertexOutputs,
       FociGetProjectionVertexParameters,
       foci_get_projection_vertex,
+      foci_get_projection_vertex_cargs,
+      foci_get_projection_vertex_execute,
+      foci_get_projection_vertex_outputs,
       foci_get_projection_vertex_params,
 };

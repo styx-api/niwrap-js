@@ -12,7 +12,7 @@ const GET_AFNI_MODEL_PRF_6_BAD_METADATA: Metadata = {
 
 
 interface GetAfniModelPrf6BadParameters {
-    "__STYXTYPE__": "get_afni_model_PRF_6_BAD";
+    "@type": "afni.get_afni_model_PRF_6_BAD";
     "amplitude": number;
     "x_coord": number;
     "y_coord": number;
@@ -22,33 +22,33 @@ interface GetAfniModelPrf6BadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "get_afni_model_PRF_6_BAD": get_afni_model_prf_6_bad_cargs,
+        "afni.get_afni_model_PRF_6_BAD": get_afni_model_prf_6_bad_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface GetAfniModelPrf6BadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param amplitude Amplitude parameter A
+ * @param x_coord X coordinate parameter x
+ * @param y_coord Y coordinate parameter y
+ * @param sigma Sigma parameter sigma
+ * @param sigrat Sigma ratio parameter sigrat
+ * @param theta Theta parameter theta (in radians)
+ *
+ * @returns Parameter dictionary
+ */
 function get_afni_model_prf_6_bad_params(
     amplitude: number,
     x_coord: number,
@@ -76,20 +88,8 @@ function get_afni_model_prf_6_bad_params(
     sigrat: number,
     theta: number,
 ): GetAfniModelPrf6BadParameters {
-    /**
-     * Build parameters.
-    
-     * @param amplitude Amplitude parameter A
-     * @param x_coord X coordinate parameter x
-     * @param y_coord Y coordinate parameter y
-     * @param sigma Sigma parameter sigma
-     * @param sigrat Sigma ratio parameter sigrat
-     * @param theta Theta parameter theta (in radians)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "get_afni_model_PRF_6_BAD" as const,
+        "@type": "afni.get_afni_model_PRF_6_BAD" as const,
         "amplitude": amplitude,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -101,18 +101,18 @@ function get_afni_model_prf_6_bad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function get_afni_model_prf_6_bad_cargs(
     params: GetAfniModelPrf6BadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("get_afni_model_PRF_6_BAD");
     cargs.push(String((params["amplitude"] ?? null)));
@@ -125,18 +125,18 @@ function get_afni_model_prf_6_bad_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function get_afni_model_prf_6_bad_outputs(
     params: GetAfniModelPrf6BadParameters,
     execution: Execution,
 ): GetAfniModelPrf6BadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GetAfniModelPrf6BadOutputs = {
         root: execution.outputFile("."),
     };
@@ -144,22 +144,22 @@ function get_afni_model_prf_6_bad_outputs(
 }
 
 
+/**
+ * Command line tool for obtaining AFNI pRF model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
+ */
 function get_afni_model_prf_6_bad_execute(
     params: GetAfniModelPrf6BadParameters,
     execution: Execution,
 ): GetAfniModelPrf6BadOutputs {
-    /**
-     * Command line tool for obtaining AFNI pRF model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
-     */
     params = execution.params(params)
     const cargs = get_afni_model_prf_6_bad_cargs(params, execution)
     const ret = get_afni_model_prf_6_bad_outputs(params, execution)
@@ -168,6 +168,23 @@ function get_afni_model_prf_6_bad_execute(
 }
 
 
+/**
+ * Command line tool for obtaining AFNI pRF model.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param amplitude Amplitude parameter A
+ * @param x_coord X coordinate parameter x
+ * @param y_coord Y coordinate parameter y
+ * @param sigma Sigma parameter sigma
+ * @param sigrat Sigma ratio parameter sigrat
+ * @param theta Theta parameter theta (in radians)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
+ */
 function get_afni_model_prf_6_bad(
     amplitude: number,
     x_coord: number,
@@ -177,23 +194,6 @@ function get_afni_model_prf_6_bad(
     theta: number,
     runner: Runner | null = null,
 ): GetAfniModelPrf6BadOutputs {
-    /**
-     * Command line tool for obtaining AFNI pRF model.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param amplitude Amplitude parameter A
-     * @param x_coord X coordinate parameter x
-     * @param y_coord Y coordinate parameter y
-     * @param sigma Sigma parameter sigma
-     * @param sigrat Sigma ratio parameter sigrat
-     * @param theta Theta parameter theta (in radians)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_BAD_METADATA);
     const params = get_afni_model_prf_6_bad_params(amplitude, x_coord, y_coord, sigma, sigrat, theta)
@@ -206,5 +206,8 @@ export {
       GetAfniModelPrf6BadOutputs,
       GetAfniModelPrf6BadParameters,
       get_afni_model_prf_6_bad,
+      get_afni_model_prf_6_bad_cargs,
+      get_afni_model_prf_6_bad_execute,
+      get_afni_model_prf_6_bad_outputs,
       get_afni_model_prf_6_bad_params,
 };

@@ -12,42 +12,42 @@ const APSEARCH_METADATA: Metadata = {
 
 
 interface ApsearchParameters {
-    "__STYXTYPE__": "apsearch";
+    "@type": "afni.apsearch";
     "search_term": string;
     "file_output"?: string | null | undefined;
     "verbose": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "apsearch": apsearch_cargs,
+        "afni.apsearch": apsearch_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "apsearch": apsearch_outputs,
+        "afni.apsearch": apsearch_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface ApsearchOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param search_term Term to search
+ * @param file_output File to save the search results
+ * @param verbose Print detailed information during search
+ *
+ * @returns Parameter dictionary
+ */
 function apsearch_params(
     search_term: string,
     file_output: string | null = null,
     verbose: boolean = false,
 ): ApsearchParameters {
-    /**
-     * Build parameters.
-    
-     * @param search_term Term to search
-     * @param file_output File to save the search results
-     * @param verbose Print detailed information during search
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "apsearch" as const,
+        "@type": "afni.apsearch" as const,
         "search_term": search_term,
         "verbose": verbose,
     };
@@ -96,18 +96,18 @@ function apsearch_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function apsearch_cargs(
     params: ApsearchParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("apsearch");
     cargs.push((params["search_term"] ?? null));
@@ -121,18 +121,18 @@ function apsearch_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function apsearch_outputs(
     params: ApsearchParameters,
     execution: Execution,
 ): ApsearchOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApsearchOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["file_output"] ?? null) !== null) ? execution.outputFile([(params["file_output"] ?? null)].join('')) : null,
@@ -141,22 +141,22 @@ function apsearch_outputs(
 }
 
 
+/**
+ * A tool for searching applications.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
+ */
 function apsearch_execute(
     params: ApsearchParameters,
     execution: Execution,
 ): ApsearchOutputs {
-    /**
-     * A tool for searching applications.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
-     */
     params = execution.params(params)
     const cargs = apsearch_cargs(params, execution)
     const ret = apsearch_outputs(params, execution)
@@ -165,26 +165,26 @@ function apsearch_execute(
 }
 
 
+/**
+ * A tool for searching applications.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param search_term Term to search
+ * @param file_output File to save the search results
+ * @param verbose Print detailed information during search
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
+ */
 function apsearch(
     search_term: string,
     file_output: string | null = null,
     verbose: boolean = false,
     runner: Runner | null = null,
 ): ApsearchOutputs {
-    /**
-     * A tool for searching applications.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param search_term Term to search
-     * @param file_output File to save the search results
-     * @param verbose Print detailed information during search
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APSEARCH_METADATA);
     const params = apsearch_params(search_term, file_output, verbose)
@@ -197,5 +197,8 @@ export {
       ApsearchOutputs,
       ApsearchParameters,
       apsearch,
+      apsearch_cargs,
+      apsearch_execute,
+      apsearch_outputs,
       apsearch_params,
 };

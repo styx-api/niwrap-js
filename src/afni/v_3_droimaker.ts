@@ -12,7 +12,7 @@ const V_3_DROIMAKER_METADATA: Metadata = {
 
 
 interface V3DroimakerParameters {
-    "__STYXTYPE__": "3DROIMaker";
+    "@type": "afni.3DROIMaker";
     "inset": InputPathType;
     "thresh": number;
     "prefix": string;
@@ -36,35 +36,35 @@ interface V3DroimakerParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3DROIMaker": v_3_droimaker_cargs,
+        "afni.3DROIMaker": v_3_droimaker_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3DROIMaker": v_3_droimaker_outputs,
+        "afni.3DROIMaker": v_3_droimaker_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,32 @@ interface V3DroimakerOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset 3D volume(s) of values, especially functionally-derived quantities like correlation values or ICA Z-scores.
+ * @param thresh Threshold for values in INSET, used to create ROI islands from the 3D volume's sea of values.
+ * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
+ * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
+ * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
+ * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
+ * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
+ * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
+ * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
+ * @param wm_skel 3D volume containing info of WM, as might be defined from an FA map or anatomical segmentation.
+ * @param skel_thr Threshold value for WM skeleton if it is not a mask.
+ * @param skel_stop Stop inflation at locations which are already on WM skeleton.
+ * @param skel_stop_strict Do not allow any inflation into the skel-region.
+ * @param csf_skel 3D volume containing info of CSF. Info must be a binary mask already.
+ * @param mask Mask within which to apply threshold. Useful if the MINTHR is a negative value.
+ * @param neigh_upto_vert Define neighbors loosely so that voxels can be grouped into the same ROI if they share at least one vertex.
+ * @param nifti Switch to output *.nii.gz GM and GMI files
+ * @param preinfl_inset Start with a WM ROI, inflate it to find the nearest GM, then expand that GM and subtract away the WM+CSF parts.
+ * @param preinfl_inflate Number of voxels for initial inflation of PSET.
+ * @param dump_no_labtab Switch for turning off labeltable attachment to the output GM and GMI files.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3_droimaker_params(
     inset: InputPathType,
     thresh: number,
@@ -113,34 +139,8 @@ function v_3_droimaker_params(
     preinfl_inflate: number | null = null,
     dump_no_labtab: boolean = false,
 ): V3DroimakerParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset 3D volume(s) of values, especially functionally-derived quantities like correlation values or ICA Z-scores.
-     * @param thresh Threshold for values in INSET, used to create ROI islands from the 3D volume's sea of values.
-     * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
-     * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
-     * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
-     * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
-     * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
-     * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
-     * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
-     * @param wm_skel 3D volume containing info of WM, as might be defined from an FA map or anatomical segmentation.
-     * @param skel_thr Threshold value for WM skeleton if it is not a mask.
-     * @param skel_stop Stop inflation at locations which are already on WM skeleton.
-     * @param skel_stop_strict Do not allow any inflation into the skel-region.
-     * @param csf_skel 3D volume containing info of CSF. Info must be a binary mask already.
-     * @param mask Mask within which to apply threshold. Useful if the MINTHR is a negative value.
-     * @param neigh_upto_vert Define neighbors loosely so that voxels can be grouped into the same ROI if they share at least one vertex.
-     * @param nifti Switch to output *.nii.gz GM and GMI files
-     * @param preinfl_inset Start with a WM ROI, inflate it to find the nearest GM, then expand that GM and subtract away the WM+CSF parts.
-     * @param preinfl_inflate Number of voxels for initial inflation of PSET.
-     * @param dump_no_labtab Switch for turning off labeltable attachment to the output GM and GMI files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3DROIMaker" as const,
+        "@type": "afni.3DROIMaker" as const,
         "inset": inset,
         "thresh": thresh,
         "prefix": prefix,
@@ -188,18 +188,18 @@ function v_3_droimaker_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3_droimaker_cargs(
     params: V3DroimakerParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dROIMaker");
     cargs.push(execution.inputFile((params["inset"] ?? null)));
@@ -299,18 +299,18 @@ function v_3_droimaker_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3_droimaker_outputs(
     params: V3DroimakerParameters,
     execution: Execution,
 ): V3DroimakerOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3DroimakerOutputs = {
         root: execution.outputFile("."),
         gm_map: execution.outputFile([(params["prefix"] ?? null), "_GM+orig.*.HEAD"].join('')),
@@ -320,22 +320,22 @@ function v_3_droimaker_outputs(
 }
 
 
+/**
+ * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
+ */
 function v_3_droimaker_execute(
     params: V3DroimakerParameters,
     execution: Execution,
 ): V3DroimakerOutputs {
-    /**
-     * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3_droimaker_cargs(params, execution)
     const ret = v_3_droimaker_outputs(params, execution)
@@ -344,6 +344,37 @@ function v_3_droimaker_execute(
 }
 
 
+/**
+ * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset 3D volume(s) of values, especially functionally-derived quantities like correlation values or ICA Z-scores.
+ * @param thresh Threshold for values in INSET, used to create ROI islands from the 3D volume's sea of values.
+ * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
+ * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
+ * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
+ * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
+ * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
+ * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
+ * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
+ * @param wm_skel 3D volume containing info of WM, as might be defined from an FA map or anatomical segmentation.
+ * @param skel_thr Threshold value for WM skeleton if it is not a mask.
+ * @param skel_stop Stop inflation at locations which are already on WM skeleton.
+ * @param skel_stop_strict Do not allow any inflation into the skel-region.
+ * @param csf_skel 3D volume containing info of CSF. Info must be a binary mask already.
+ * @param mask Mask within which to apply threshold. Useful if the MINTHR is a negative value.
+ * @param neigh_upto_vert Define neighbors loosely so that voxels can be grouped into the same ROI if they share at least one vertex.
+ * @param nifti Switch to output *.nii.gz GM and GMI files
+ * @param preinfl_inset Start with a WM ROI, inflate it to find the nearest GM, then expand that GM and subtract away the WM+CSF parts.
+ * @param preinfl_inflate Number of voxels for initial inflation of PSET.
+ * @param dump_no_labtab Switch for turning off labeltable attachment to the output GM and GMI files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
+ */
 function v_3_droimaker(
     inset: InputPathType,
     thresh: number,
@@ -367,37 +398,6 @@ function v_3_droimaker(
     dump_no_labtab: boolean = false,
     runner: Runner | null = null,
 ): V3DroimakerOutputs {
-    /**
-     * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset 3D volume(s) of values, especially functionally-derived quantities like correlation values or ICA Z-scores.
-     * @param thresh Threshold for values in INSET, used to create ROI islands from the 3D volume's sea of values.
-     * @param prefix Prefix of output name, with output files being: PREFIX_GM* and PREFIX_GMI*
-     * @param refset 3D (or multi-subbrick) volume containing integer values with which to label specific GM ROIs after thresholding.
-     * @param volthr Minimum size a cluster of voxels must have in order to remain a GM ROI after thresholding. Can reduce 'noisy' clusters.
-     * @param only_some_top Restrict each found region to keep only N voxels with the highest inset values.
-     * @param only_conn_top Select N max contiguous voxels in a region starting from peak voxel and expanding.
-     * @param inflate Number of voxels to pad each found ROI in order to turn GM ROIs into inflated (GMI) ROIs.
-     * @param trim_off_wm Trim the INSET to exclude voxels in WM by excluding those which overlap an input WM skeleton.
-     * @param wm_skel 3D volume containing info of WM, as might be defined from an FA map or anatomical segmentation.
-     * @param skel_thr Threshold value for WM skeleton if it is not a mask.
-     * @param skel_stop Stop inflation at locations which are already on WM skeleton.
-     * @param skel_stop_strict Do not allow any inflation into the skel-region.
-     * @param csf_skel 3D volume containing info of CSF. Info must be a binary mask already.
-     * @param mask Mask within which to apply threshold. Useful if the MINTHR is a negative value.
-     * @param neigh_upto_vert Define neighbors loosely so that voxels can be grouped into the same ROI if they share at least one vertex.
-     * @param nifti Switch to output *.nii.gz GM and GMI files
-     * @param preinfl_inset Start with a WM ROI, inflate it to find the nearest GM, then expand that GM and subtract away the WM+CSF parts.
-     * @param preinfl_inflate Number of voxels for initial inflation of PSET.
-     * @param dump_no_labtab Switch for turning off labeltable attachment to the output GM and GMI files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3_DROIMAKER_METADATA);
     const params = v_3_droimaker_params(inset, thresh, prefix, refset, volthr, only_some_top, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
@@ -410,5 +410,8 @@ export {
       V3DroimakerParameters,
       V_3_DROIMAKER_METADATA,
       v_3_droimaker,
+      v_3_droimaker_cargs,
+      v_3_droimaker_execute,
+      v_3_droimaker_outputs,
       v_3_droimaker_params,
 };

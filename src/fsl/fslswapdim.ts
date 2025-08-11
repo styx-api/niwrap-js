@@ -12,7 +12,7 @@ const FSLSWAPDIM_METADATA: Metadata = {
 
 
 interface FslswapdimParameters {
-    "__STYXTYPE__": "fslswapdim";
+    "@type": "fsl.fslswapdim";
     "input_file": InputPathType;
     "axis_a": string;
     "axis_b": string;
@@ -21,35 +21,35 @@ interface FslswapdimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslswapdim": fslswapdim_cargs,
+        "fsl.fslswapdim": fslswapdim_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslswapdim": fslswapdim_outputs,
+        "fsl.fslswapdim": fslswapdim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface FslswapdimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image (e.g. img.nii.gz)
+ * @param axis_a New x-axis dimension (e.g., -x, x, RL, etc.)
+ * @param axis_b New y-axis dimension (e.g., -y, y, PA, etc.)
+ * @param axis_c New z-axis dimension (e.g., -z, z, IS, etc.)
+ * @param output_file Output image (e.g., output.nii.gz). If not specified, the equivalent transformation matrix is written to the standard output.
+ *
+ * @returns Parameter dictionary
+ */
 function fslswapdim_params(
     input_file: InputPathType,
     axis_a: string,
@@ -79,19 +90,8 @@ function fslswapdim_params(
     axis_c: string,
     output_file: string | null = null,
 ): FslswapdimParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image (e.g. img.nii.gz)
-     * @param axis_a New x-axis dimension (e.g., -x, x, RL, etc.)
-     * @param axis_b New y-axis dimension (e.g., -y, y, PA, etc.)
-     * @param axis_c New z-axis dimension (e.g., -z, z, IS, etc.)
-     * @param output_file Output image (e.g., output.nii.gz). If not specified, the equivalent transformation matrix is written to the standard output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslswapdim" as const,
+        "@type": "fsl.fslswapdim" as const,
         "input_file": input_file,
         "axis_a": axis_a,
         "axis_b": axis_b,
@@ -104,18 +104,18 @@ function fslswapdim_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslswapdim_cargs(
     params: FslswapdimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslswapdim");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -129,18 +129,18 @@ function fslswapdim_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslswapdim_outputs(
     params: FslswapdimParameters,
     execution: Execution,
 ): FslswapdimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslswapdimOutputs = {
         root: execution.outputFile("."),
         output_image: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -149,22 +149,22 @@ function fslswapdim_outputs(
 }
 
 
+/**
+ * Swap dimensions of an image volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
+ */
 function fslswapdim_execute(
     params: FslswapdimParameters,
     execution: Execution,
 ): FslswapdimOutputs {
-    /**
-     * Swap dimensions of an image volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslswapdim_cargs(params, execution)
     const ret = fslswapdim_outputs(params, execution)
@@ -173,6 +173,22 @@ function fslswapdim_execute(
 }
 
 
+/**
+ * Swap dimensions of an image volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image (e.g. img.nii.gz)
+ * @param axis_a New x-axis dimension (e.g., -x, x, RL, etc.)
+ * @param axis_b New y-axis dimension (e.g., -y, y, PA, etc.)
+ * @param axis_c New z-axis dimension (e.g., -z, z, IS, etc.)
+ * @param output_file Output image (e.g., output.nii.gz). If not specified, the equivalent transformation matrix is written to the standard output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
+ */
 function fslswapdim(
     input_file: InputPathType,
     axis_a: string,
@@ -181,22 +197,6 @@ function fslswapdim(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): FslswapdimOutputs {
-    /**
-     * Swap dimensions of an image volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image (e.g. img.nii.gz)
-     * @param axis_a New x-axis dimension (e.g., -x, x, RL, etc.)
-     * @param axis_b New y-axis dimension (e.g., -y, y, PA, etc.)
-     * @param axis_c New z-axis dimension (e.g., -z, z, IS, etc.)
-     * @param output_file Output image (e.g., output.nii.gz). If not specified, the equivalent transformation matrix is written to the standard output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSWAPDIM_METADATA);
     const params = fslswapdim_params(input_file, axis_a, axis_b, axis_c, output_file)
@@ -209,5 +209,8 @@ export {
       FslswapdimOutputs,
       FslswapdimParameters,
       fslswapdim,
+      fslswapdim_cargs,
+      fslswapdim_execute,
+      fslswapdim_outputs,
       fslswapdim_params,
 };

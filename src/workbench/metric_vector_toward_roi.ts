@@ -12,7 +12,7 @@ const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
 
 
 interface MetricVectorTowardRoiParameters {
-    "__STYXTYPE__": "metric-vector-toward-roi";
+    "@type": "workbench.metric-vector-toward-roi";
     "surface": InputPathType;
     "target_roi": InputPathType;
     "metric_out": string;
@@ -20,35 +20,35 @@ interface MetricVectorTowardRoiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-vector-toward-roi": metric_vector_toward_roi_cargs,
+        "workbench.metric-vector-toward-roi": metric_vector_toward_roi_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "metric-vector-toward-roi": metric_vector_toward_roi_outputs,
+        "workbench.metric-vector-toward-roi": metric_vector_toward_roi_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MetricVectorTowardRoiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to compute on
+ * @param target_roi the roi to find the shortest path to
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function metric_vector_toward_roi_params(
     surface: InputPathType,
     target_roi: InputPathType,
     metric_out: string,
     opt_roi_roi_metric: InputPathType | null = null,
 ): MetricVectorTowardRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to compute on
-     * @param target_roi the roi to find the shortest path to
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-vector-toward-roi" as const,
+        "@type": "workbench.metric-vector-toward-roi" as const,
         "surface": surface,
         "target_roi": target_roi,
         "metric_out": metric_out,
@@ -100,18 +100,18 @@ function metric_vector_toward_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_vector_toward_roi_cargs(
     params: MetricVectorTowardRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-vector-toward-roi");
@@ -128,18 +128,18 @@ function metric_vector_toward_roi_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_vector_toward_roi_outputs(
     params: MetricVectorTowardRoiParameters,
     execution: Execution,
 ): MetricVectorTowardRoiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricVectorTowardRoiOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
@@ -148,24 +148,24 @@ function metric_vector_toward_roi_outputs(
 }
 
 
+/**
+ * Find if vectors point toward an roi.
+ *
+ * At each vertex, compute the vector along the start of the shortest path to the ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
+ */
 function metric_vector_toward_roi_execute(
     params: MetricVectorTowardRoiParameters,
     execution: Execution,
 ): MetricVectorTowardRoiOutputs {
-    /**
-     * Find if vectors point toward an roi.
-     * 
-     * At each vertex, compute the vector along the start of the shortest path to the ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_vector_toward_roi_cargs(params, execution)
     const ret = metric_vector_toward_roi_outputs(params, execution)
@@ -174,6 +174,23 @@ function metric_vector_toward_roi_execute(
 }
 
 
+/**
+ * Find if vectors point toward an roi.
+ *
+ * At each vertex, compute the vector along the start of the shortest path to the ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to compute on
+ * @param target_roi the roi to find the shortest path to
+ * @param metric_out the output metric
+ * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
+ */
 function metric_vector_toward_roi(
     surface: InputPathType,
     target_roi: InputPathType,
@@ -181,23 +198,6 @@ function metric_vector_toward_roi(
     opt_roi_roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
-    /**
-     * Find if vectors point toward an roi.
-     * 
-     * At each vertex, compute the vector along the start of the shortest path to the ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to compute on
-     * @param target_roi the roi to find the shortest path to
-     * @param metric_out the output metric
-     * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_VECTOR_TOWARD_ROI_METADATA);
     const params = metric_vector_toward_roi_params(surface, target_roi, metric_out, opt_roi_roi_metric)
@@ -210,5 +210,8 @@ export {
       MetricVectorTowardRoiOutputs,
       MetricVectorTowardRoiParameters,
       metric_vector_toward_roi,
+      metric_vector_toward_roi_cargs,
+      metric_vector_toward_roi_execute,
+      metric_vector_toward_roi_outputs,
       metric_vector_toward_roi_params,
 };

@@ -12,7 +12,7 @@ const ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA: Metadata = {
 
 
 interface AdjunctSumaFsMaskAndQcParameters {
-    "__STYXTYPE__": "adjunct_suma_fs_mask_and_qc";
+    "@type": "afni.adjunct_suma_fs_mask_and_qc";
     "subj_id": string;
     "suma_dir": string;
     "no_clean": boolean;
@@ -22,35 +22,35 @@ interface AdjunctSumaFsMaskAndQcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_cargs,
+        "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_outputs,
+        "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,18 @@ interface AdjunctSumaFsMaskAndQcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subj_id Subject ID
+ * @param suma_dir SUMA/ directory output by AFNI's @SUMA_Make_Spec_FS
+ * @param no_clean Do not remove temporary working subdirectory (default: remove it)
+ * @param help Show help
+ * @param hview Show help in text editor
+ * @param version Show version
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_suma_fs_mask_and_qc_params(
     subj_id: string,
     suma_dir: string,
@@ -105,20 +117,8 @@ function adjunct_suma_fs_mask_and_qc_params(
     hview: boolean = false,
     version: boolean = false,
 ): AdjunctSumaFsMaskAndQcParameters {
-    /**
-     * Build parameters.
-    
-     * @param subj_id Subject ID
-     * @param suma_dir SUMA/ directory output by AFNI's @SUMA_Make_Spec_FS
-     * @param no_clean Do not remove temporary working subdirectory (default: remove it)
-     * @param help Show help
-     * @param hview Show help in text editor
-     * @param version Show version
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_suma_fs_mask_and_qc" as const,
+        "@type": "afni.adjunct_suma_fs_mask_and_qc" as const,
         "subj_id": subj_id,
         "suma_dir": suma_dir,
         "no_clean": no_clean,
@@ -130,18 +130,18 @@ function adjunct_suma_fs_mask_and_qc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_suma_fs_mask_and_qc_cargs(
     params: AdjunctSumaFsMaskAndQcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_suma_fs_mask_and_qc");
     cargs.push(
@@ -168,18 +168,18 @@ function adjunct_suma_fs_mask_and_qc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_suma_fs_mask_and_qc_outputs(
     params: AdjunctSumaFsMaskAndQcParameters,
     execution: Execution,
 ): AdjunctSumaFsMaskAndQcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctSumaFsMaskAndQcOutputs = {
         root: execution.outputFile("."),
         fs_parc_wb_mask: execution.outputFile(["SUMA/fs_parc_wb_mask.nii.gz"].join('')),
@@ -194,22 +194,22 @@ function adjunct_suma_fs_mask_and_qc_outputs(
 }
 
 
+/**
+ * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
+ */
 function adjunct_suma_fs_mask_and_qc_execute(
     params: AdjunctSumaFsMaskAndQcParameters,
     execution: Execution,
 ): AdjunctSumaFsMaskAndQcOutputs {
-    /**
-     * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_suma_fs_mask_and_qc_cargs(params, execution)
     const ret = adjunct_suma_fs_mask_and_qc_outputs(params, execution)
@@ -218,6 +218,23 @@ function adjunct_suma_fs_mask_and_qc_execute(
 }
 
 
+/**
+ * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param subj_id Subject ID
+ * @param suma_dir SUMA/ directory output by AFNI's @SUMA_Make_Spec_FS
+ * @param no_clean Do not remove temporary working subdirectory (default: remove it)
+ * @param help Show help
+ * @param hview Show help in text editor
+ * @param version Show version
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
+ */
 function adjunct_suma_fs_mask_and_qc(
     subj_id: string,
     suma_dir: string,
@@ -227,23 +244,6 @@ function adjunct_suma_fs_mask_and_qc(
     version: boolean = false,
     runner: Runner | null = null,
 ): AdjunctSumaFsMaskAndQcOutputs {
-    /**
-     * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param subj_id Subject ID
-     * @param suma_dir SUMA/ directory output by AFNI's @SUMA_Make_Spec_FS
-     * @param no_clean Do not remove temporary working subdirectory (default: remove it)
-     * @param help Show help
-     * @param hview Show help in text editor
-     * @param version Show version
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA);
     const params = adjunct_suma_fs_mask_and_qc_params(subj_id, suma_dir, no_clean, help, hview, version)
@@ -256,5 +256,8 @@ export {
       AdjunctSumaFsMaskAndQcOutputs,
       AdjunctSumaFsMaskAndQcParameters,
       adjunct_suma_fs_mask_and_qc,
+      adjunct_suma_fs_mask_and_qc_cargs,
+      adjunct_suma_fs_mask_and_qc_execute,
+      adjunct_suma_fs_mask_and_qc_outputs,
       adjunct_suma_fs_mask_and_qc_params,
 };

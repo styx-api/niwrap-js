@@ -12,38 +12,38 @@ const LIST_OTL_LABELS_METADATA: Metadata = {
 
 
 interface ListOtlLabelsParameters {
-    "__STYXTYPE__": "list_otl_labels";
+    "@type": "freesurfer.list_otl_labels";
     "input_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "list_otl_labels": list_otl_labels_cargs,
+        "freesurfer.list_otl_labels": list_otl_labels_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface ListOtlLabelsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume filename
+ *
+ * @returns Parameter dictionary
+ */
 function list_otl_labels_params(
     input_file: InputPathType,
 ): ListOtlLabelsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume filename
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "list_otl_labels" as const,
+        "@type": "freesurfer.list_otl_labels" as const,
         "input_file": input_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function list_otl_labels_cargs(
     params: ListOtlLabelsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("list_otl_labels");
     cargs.push(
@@ -103,18 +103,18 @@ function list_otl_labels_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function list_otl_labels_outputs(
     params: ListOtlLabelsParameters,
     execution: Execution,
 ): ListOtlLabelsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ListOtlLabelsOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function list_otl_labels_outputs(
 }
 
 
+/**
+ * Tool for listing labels in an imaging file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
+ */
 function list_otl_labels_execute(
     params: ListOtlLabelsParameters,
     execution: Execution,
 ): ListOtlLabelsOutputs {
-    /**
-     * Tool for listing labels in an imaging file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
-     */
     params = execution.params(params)
     const cargs = list_otl_labels_cargs(params, execution)
     const ret = list_otl_labels_outputs(params, execution)
@@ -146,22 +146,22 @@ function list_otl_labels_execute(
 }
 
 
+/**
+ * Tool for listing labels in an imaging file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume filename
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
+ */
 function list_otl_labels(
     input_file: InputPathType,
     runner: Runner | null = null,
 ): ListOtlLabelsOutputs {
-    /**
-     * Tool for listing labels in an imaging file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume filename
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LIST_OTL_LABELS_METADATA);
     const params = list_otl_labels_params(input_file)
@@ -174,5 +174,8 @@ export {
       ListOtlLabelsOutputs,
       ListOtlLabelsParameters,
       list_otl_labels,
+      list_otl_labels_cargs,
+      list_otl_labels_execute,
+      list_otl_labels_outputs,
       list_otl_labels_params,
 };

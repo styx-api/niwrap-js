@@ -12,7 +12,7 @@ const CIFTI_CROSS_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiCrossCorrelationParameters {
-    "__STYXTYPE__": "cifti-cross-correlation";
+    "@type": "workbench.cifti-cross-correlation";
     "cifti_a": InputPathType;
     "cifti_b": InputPathType;
     "cifti_out": string;
@@ -22,35 +22,35 @@ interface CiftiCrossCorrelationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-cross-correlation": cifti_cross_correlation_cargs,
+        "workbench.cifti-cross-correlation": cifti_cross_correlation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-cross-correlation": cifti_cross_correlation_outputs,
+        "workbench.cifti-cross-correlation": cifti_cross_correlation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface CiftiCrossCorrelationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
+ * @param cifti_out output cifti file
+ * @param opt_weights_weight_file specify column weights: text file containing one weight per column
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_cross_correlation_params(
     cifti_a: InputPathType,
     cifti_b: InputPathType,
@@ -81,20 +93,8 @@ function cifti_cross_correlation_params(
     opt_fisher_z: boolean = false,
     opt_mem_limit_limit_gb: number | null = null,
 ): CiftiCrossCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_a first input cifti file
-     * @param cifti_b second input cifti file
-     * @param cifti_out output cifti file
-     * @param opt_weights_weight_file specify column weights: text file containing one weight per column
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-cross-correlation" as const,
+        "@type": "workbench.cifti-cross-correlation" as const,
         "cifti_a": cifti_a,
         "cifti_b": cifti_b,
         "cifti_out": cifti_out,
@@ -110,18 +110,18 @@ function cifti_cross_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_cross_correlation_cargs(
     params: CiftiCrossCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-cross-correlation");
@@ -147,18 +147,18 @@ function cifti_cross_correlation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_cross_correlation_outputs(
     params: CiftiCrossCorrelationParameters,
     execution: Execution,
 ): CiftiCrossCorrelationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCrossCorrelationOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -167,28 +167,28 @@ function cifti_cross_correlation_outputs(
 }
 
 
+/**
+ * Correlate a cifti file with another cifti file.
+ *
+ * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.
+ *
+ * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
+ *
+ * Restricting the memory usage will make it calculate the output in chunks, by reading through <cifti-b> multiple times.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
+ */
 function cifti_cross_correlation_execute(
     params: CiftiCrossCorrelationParameters,
     execution: Execution,
 ): CiftiCrossCorrelationOutputs {
-    /**
-     * Correlate a cifti file with another cifti file.
-     * 
-     * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.
-     * 
-     * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
-     * 
-     * Restricting the memory usage will make it calculate the output in chunks, by reading through <cifti-b> multiple times.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_cross_correlation_cargs(params, execution)
     const ret = cifti_cross_correlation_outputs(params, execution)
@@ -197,6 +197,29 @@ function cifti_cross_correlation_execute(
 }
 
 
+/**
+ * Correlate a cifti file with another cifti file.
+ *
+ * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.
+ *
+ * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
+ *
+ * Restricting the memory usage will make it calculate the output in chunks, by reading through <cifti-b> multiple times.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
+ * @param cifti_out output cifti file
+ * @param opt_weights_weight_file specify column weights: text file containing one weight per column
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
+ */
 function cifti_cross_correlation(
     cifti_a: InputPathType,
     cifti_b: InputPathType,
@@ -206,29 +229,6 @@ function cifti_cross_correlation(
     opt_mem_limit_limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
-    /**
-     * Correlate a cifti file with another cifti file.
-     * 
-     * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.
-     * 
-     * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
-     * 
-     * Restricting the memory usage will make it calculate the output in chunks, by reading through <cifti-b> multiple times.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_a first input cifti file
-     * @param cifti_b second input cifti file
-     * @param cifti_out output cifti file
-     * @param opt_weights_weight_file specify column weights: text file containing one weight per column
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CROSS_CORRELATION_METADATA);
     const params = cifti_cross_correlation_params(cifti_a, cifti_b, cifti_out, opt_weights_weight_file, opt_fisher_z, opt_mem_limit_limit_gb)
@@ -241,5 +241,8 @@ export {
       CiftiCrossCorrelationOutputs,
       CiftiCrossCorrelationParameters,
       cifti_cross_correlation,
+      cifti_cross_correlation_cargs,
+      cifti_cross_correlation_execute,
+      cifti_cross_correlation_outputs,
       cifti_cross_correlation_params,
 };

@@ -12,7 +12,7 @@ const TOPUP_METADATA: Metadata = {
 
 
 interface TopupParameters {
-    "__STYXTYPE__": "topup";
+    "@type": "fsl.topup";
     "imain": InputPathType;
     "datain": InputPathType;
     "out"?: string | null | undefined;
@@ -39,35 +39,35 @@ interface TopupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "topup": topup_cargs,
+        "fsl.topup": topup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "topup": topup_outputs,
+        "fsl.topup": topup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -106,6 +106,35 @@ interface TopupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param imain Name of 4D file with images
+ * @param datain Name of text file with PE directions/times
+ * @param out Base-name of output files (spline coefficients (Hz) and movement parameters)
+ * @param fout Name of image file with field (Hz)
+ * @param iout Name of 4D image file with unwarped images
+ * @param logout Name of log-file
+ * @param warpres (Approximate) resolution (in mm) of warp basis for the different sub-sampling levels, default 10
+ * @param subsamp Sub-sampling scheme, default 1
+ * @param fwhm FWHM (in mm) of gaussian smoothing kernel, default 8
+ * @param config Name of config file specifying command line arguments
+ * @param miter Max # of non-linear iterations, default 5
+ * @param lambda Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.
+ * @param ssqlambda If set (=1), lambda is weighted by current ssq, default 1
+ * @param regmod Model for regularisation of warp-field [membrane_energy bending_energy], default bending_energy
+ * @param estmov Estimate movements if set, default 1 (true)
+ * @param minmet Minimisation method 0=Levenberg-Marquardt, 1=Scaled Conjugate Gradient, default 0 (LM)
+ * @param splineorder Order of spline, 2=Quadratic spline, 3=Cubic spline. Default=3
+ * @param numprec Precision for representing Hessian, double or float. Default double
+ * @param interp Image interpolation model, linear or spline. Default spline
+ * @param scale If set (=1), the images are individually scaled to a common mean, default 0 (false)
+ * @param regrid If set (=1), the calculations are done in a different grid, default 1 (true)
+ * @param nthr Number of threads to use (cannot be greater than numbers of hardware cores), default 1
+ * @param verbose Print diagnostic information while running
+ *
+ * @returns Parameter dictionary
+ */
 function topup_params(
     imain: InputPathType,
     datain: InputPathType,
@@ -131,37 +160,8 @@ function topup_params(
     nthr: number | null = null,
     verbose: boolean = false,
 ): TopupParameters {
-    /**
-     * Build parameters.
-    
-     * @param imain Name of 4D file with images
-     * @param datain Name of text file with PE directions/times
-     * @param out Base-name of output files (spline coefficients (Hz) and movement parameters)
-     * @param fout Name of image file with field (Hz)
-     * @param iout Name of 4D image file with unwarped images
-     * @param logout Name of log-file
-     * @param warpres (Approximate) resolution (in mm) of warp basis for the different sub-sampling levels, default 10
-     * @param subsamp Sub-sampling scheme, default 1
-     * @param fwhm FWHM (in mm) of gaussian smoothing kernel, default 8
-     * @param config Name of config file specifying command line arguments
-     * @param miter Max # of non-linear iterations, default 5
-     * @param lambda Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.
-     * @param ssqlambda If set (=1), lambda is weighted by current ssq, default 1
-     * @param regmod Model for regularisation of warp-field [membrane_energy bending_energy], default bending_energy
-     * @param estmov Estimate movements if set, default 1 (true)
-     * @param minmet Minimisation method 0=Levenberg-Marquardt, 1=Scaled Conjugate Gradient, default 0 (LM)
-     * @param splineorder Order of spline, 2=Quadratic spline, 3=Cubic spline. Default=3
-     * @param numprec Precision for representing Hessian, double or float. Default double
-     * @param interp Image interpolation model, linear or spline. Default spline
-     * @param scale If set (=1), the images are individually scaled to a common mean, default 0 (false)
-     * @param regrid If set (=1), the calculations are done in a different grid, default 1 (true)
-     * @param nthr Number of threads to use (cannot be greater than numbers of hardware cores), default 1
-     * @param verbose Print diagnostic information while running
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "topup" as const,
+        "@type": "fsl.topup" as const,
         "imain": imain,
         "datain": datain,
         "ssqlambda": ssqlambda,
@@ -222,18 +222,18 @@ function topup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function topup_cargs(
     params: TopupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("topup");
     cargs.push(["--imain=", execution.inputFile((params["imain"] ?? null))].join(''));
@@ -305,18 +305,18 @@ function topup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function topup_outputs(
     params: TopupParameters,
     execution: Execution,
 ): TopupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TopupOutputs = {
         root: execution.outputFile("."),
         fieldcoef: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null), "_fieldcoef.nii.gz"].join('')) : null,
@@ -329,22 +329,22 @@ function topup_outputs(
 }
 
 
+/**
+ * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TopupOutputs`).
+ */
 function topup_execute(
     params: TopupParameters,
     execution: Execution,
 ): TopupOutputs {
-    /**
-     * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TopupOutputs`).
-     */
     params = execution.params(params)
     const cargs = topup_cargs(params, execution)
     const ret = topup_outputs(params, execution)
@@ -353,6 +353,40 @@ function topup_execute(
 }
 
 
+/**
+ * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param imain Name of 4D file with images
+ * @param datain Name of text file with PE directions/times
+ * @param out Base-name of output files (spline coefficients (Hz) and movement parameters)
+ * @param fout Name of image file with field (Hz)
+ * @param iout Name of 4D image file with unwarped images
+ * @param logout Name of log-file
+ * @param warpres (Approximate) resolution (in mm) of warp basis for the different sub-sampling levels, default 10
+ * @param subsamp Sub-sampling scheme, default 1
+ * @param fwhm FWHM (in mm) of gaussian smoothing kernel, default 8
+ * @param config Name of config file specifying command line arguments
+ * @param miter Max # of non-linear iterations, default 5
+ * @param lambda Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.
+ * @param ssqlambda If set (=1), lambda is weighted by current ssq, default 1
+ * @param regmod Model for regularisation of warp-field [membrane_energy bending_energy], default bending_energy
+ * @param estmov Estimate movements if set, default 1 (true)
+ * @param minmet Minimisation method 0=Levenberg-Marquardt, 1=Scaled Conjugate Gradient, default 0 (LM)
+ * @param splineorder Order of spline, 2=Quadratic spline, 3=Cubic spline. Default=3
+ * @param numprec Precision for representing Hessian, double or float. Default double
+ * @param interp Image interpolation model, linear or spline. Default spline
+ * @param scale If set (=1), the images are individually scaled to a common mean, default 0 (false)
+ * @param regrid If set (=1), the calculations are done in a different grid, default 1 (true)
+ * @param nthr Number of threads to use (cannot be greater than numbers of hardware cores), default 1
+ * @param verbose Print diagnostic information while running
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TopupOutputs`).
+ */
 function topup(
     imain: InputPathType,
     datain: InputPathType,
@@ -379,40 +413,6 @@ function topup(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): TopupOutputs {
-    /**
-     * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param imain Name of 4D file with images
-     * @param datain Name of text file with PE directions/times
-     * @param out Base-name of output files (spline coefficients (Hz) and movement parameters)
-     * @param fout Name of image file with field (Hz)
-     * @param iout Name of 4D image file with unwarped images
-     * @param logout Name of log-file
-     * @param warpres (Approximate) resolution (in mm) of warp basis for the different sub-sampling levels, default 10
-     * @param subsamp Sub-sampling scheme, default 1
-     * @param fwhm FWHM (in mm) of gaussian smoothing kernel, default 8
-     * @param config Name of config file specifying command line arguments
-     * @param miter Max # of non-linear iterations, default 5
-     * @param lambda Weight of regularisation, default depending on --ssqlambda and --regmod switches. See user documentation.
-     * @param ssqlambda If set (=1), lambda is weighted by current ssq, default 1
-     * @param regmod Model for regularisation of warp-field [membrane_energy bending_energy], default bending_energy
-     * @param estmov Estimate movements if set, default 1 (true)
-     * @param minmet Minimisation method 0=Levenberg-Marquardt, 1=Scaled Conjugate Gradient, default 0 (LM)
-     * @param splineorder Order of spline, 2=Quadratic spline, 3=Cubic spline. Default=3
-     * @param numprec Precision for representing Hessian, double or float. Default double
-     * @param interp Image interpolation model, linear or spline. Default spline
-     * @param scale If set (=1), the images are individually scaled to a common mean, default 0 (false)
-     * @param regrid If set (=1), the calculations are done in a different grid, default 1 (true)
-     * @param nthr Number of threads to use (cannot be greater than numbers of hardware cores), default 1
-     * @param verbose Print diagnostic information while running
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TopupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TOPUP_METADATA);
     const params = topup_params(imain, datain, out, fout, iout, logout, warpres, subsamp, fwhm, config, miter, lambda, ssqlambda, regmod, estmov, minmet, splineorder, numprec, interp, scale, regrid, nthr, verbose)
@@ -425,5 +425,8 @@ export {
       TopupOutputs,
       TopupParameters,
       topup,
+      topup_cargs,
+      topup_execute,
+      topup_outputs,
       topup_params,
 };

@@ -12,7 +12,7 @@ const CREATE_MORPH_METADATA: Metadata = {
 
 
 interface CreateMorphParameters {
-    "__STYXTYPE__": "createMorph";
+    "@type": "freesurfer.createMorph";
     "input_transforms": Array<string>;
     "output_transform": string;
     "template"?: InputPathType | null | undefined;
@@ -21,35 +21,35 @@ interface CreateMorphParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "createMorph": create_morph_cargs,
+        "freesurfer.createMorph": create_morph_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "createMorph": create_morph_outputs,
+        "freesurfer.createMorph": create_morph_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface CreateMorphOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_transforms Input transforms, must specify type (affine, volume, morph, mesh, gcam) with filename.
+ * @param output_transform Output transform file in tm3d format.
+ * @param template Template volume for geometry. Required if a gcam is present.
+ * @param subject Subject volume for geometry.
+ * @param debug_coordinates Coordinates for debugging purposes. Requires three integer values.
+ *
+ * @returns Parameter dictionary
+ */
 function create_morph_params(
     input_transforms: Array<string>,
     output_transform: string,
@@ -79,19 +90,8 @@ function create_morph_params(
     subject: InputPathType | null = null,
     debug_coordinates: Array<number> | null = null,
 ): CreateMorphParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_transforms Input transforms, must specify type (affine, volume, morph, mesh, gcam) with filename.
-     * @param output_transform Output transform file in tm3d format.
-     * @param template Template volume for geometry. Required if a gcam is present.
-     * @param subject Subject volume for geometry.
-     * @param debug_coordinates Coordinates for debugging purposes. Requires three integer values.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "createMorph" as const,
+        "@type": "freesurfer.createMorph" as const,
         "input_transforms": input_transforms,
         "output_transform": output_transform,
     };
@@ -108,18 +108,18 @@ function create_morph_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_morph_cargs(
     params: CreateMorphParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("createMorph");
     cargs.push(
@@ -152,18 +152,18 @@ function create_morph_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_morph_outputs(
     params: CreateMorphParameters,
     execution: Execution,
 ): CreateMorphOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateMorphOutputs = {
         root: execution.outputFile("."),
         output_transform_file: execution.outputFile([(params["output_transform"] ?? null)].join('')),
@@ -172,22 +172,22 @@ function create_morph_outputs(
 }
 
 
+/**
+ * Tool to create morphological transformations using specified input transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
+ */
 function create_morph_execute(
     params: CreateMorphParameters,
     execution: Execution,
 ): CreateMorphOutputs {
-    /**
-     * Tool to create morphological transformations using specified input transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_morph_cargs(params, execution)
     const ret = create_morph_outputs(params, execution)
@@ -196,6 +196,22 @@ function create_morph_execute(
 }
 
 
+/**
+ * Tool to create morphological transformations using specified input transforms.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_transforms Input transforms, must specify type (affine, volume, morph, mesh, gcam) with filename.
+ * @param output_transform Output transform file in tm3d format.
+ * @param template Template volume for geometry. Required if a gcam is present.
+ * @param subject Subject volume for geometry.
+ * @param debug_coordinates Coordinates for debugging purposes. Requires three integer values.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
+ */
 function create_morph(
     input_transforms: Array<string>,
     output_transform: string,
@@ -204,22 +220,6 @@ function create_morph(
     debug_coordinates: Array<number> | null = null,
     runner: Runner | null = null,
 ): CreateMorphOutputs {
-    /**
-     * Tool to create morphological transformations using specified input transforms.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_transforms Input transforms, must specify type (affine, volume, morph, mesh, gcam) with filename.
-     * @param output_transform Output transform file in tm3d format.
-     * @param template Template volume for geometry. Required if a gcam is present.
-     * @param subject Subject volume for geometry.
-     * @param debug_coordinates Coordinates for debugging purposes. Requires three integer values.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_MORPH_METADATA);
     const params = create_morph_params(input_transforms, output_transform, template, subject, debug_coordinates)
@@ -232,5 +232,8 @@ export {
       CreateMorphOutputs,
       CreateMorphParameters,
       create_morph,
+      create_morph_cargs,
+      create_morph_execute,
+      create_morph_outputs,
       create_morph_params,
 };

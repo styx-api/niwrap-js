@@ -12,41 +12,41 @@ const UNPACKSDCMDIR_METADATA: Metadata = {
 
 
 interface UnpacksdcmdirParameters {
-    "__STYXTYPE__": "unpacksdcmdir";
+    "@type": "freesurfer.unpacksdcmdir";
     "input_directory": string;
     "output_directory": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unpacksdcmdir": unpacksdcmdir_cargs,
+        "freesurfer.unpacksdcmdir": unpacksdcmdir_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "unpacksdcmdir": unpacksdcmdir_outputs,
+        "freesurfer.unpacksdcmdir": unpacksdcmdir_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface UnpacksdcmdirOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory The directory containing SD card data to be unpacked.
+ * @param output_directory The output directory where unpacked data will be stored.
+ *
+ * @returns Parameter dictionary
+ */
 function unpacksdcmdir_params(
     input_directory: string,
     output_directory: string,
 ): UnpacksdcmdirParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory The directory containing SD card data to be unpacked.
-     * @param output_directory The output directory where unpacked data will be stored.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unpacksdcmdir" as const,
+        "@type": "freesurfer.unpacksdcmdir" as const,
         "input_directory": input_directory,
         "output_directory": output_directory,
     };
@@ -90,18 +90,18 @@ function unpacksdcmdir_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function unpacksdcmdir_cargs(
     params: UnpacksdcmdirParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unpacksdcmdir");
     cargs.push((params["input_directory"] ?? null));
@@ -110,18 +110,18 @@ function unpacksdcmdir_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function unpacksdcmdir_outputs(
     params: UnpacksdcmdirParameters,
     execution: Execution,
 ): UnpacksdcmdirOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnpacksdcmdirOutputs = {
         root: execution.outputFile("."),
         unpacked_data: execution.outputFile([(params["output_directory"] ?? null), "/unpacked_data"].join('')),
@@ -130,22 +130,22 @@ function unpacksdcmdir_outputs(
 }
 
 
+/**
+ * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
+ */
 function unpacksdcmdir_execute(
     params: UnpacksdcmdirParameters,
     execution: Execution,
 ): UnpacksdcmdirOutputs {
-    /**
-     * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
-     */
     params = execution.params(params)
     const cargs = unpacksdcmdir_cargs(params, execution)
     const ret = unpacksdcmdir_outputs(params, execution)
@@ -154,24 +154,24 @@ function unpacksdcmdir_execute(
 }
 
 
+/**
+ * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_directory The directory containing SD card data to be unpacked.
+ * @param output_directory The output directory where unpacked data will be stored.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
+ */
 function unpacksdcmdir(
     input_directory: string,
     output_directory: string,
     runner: Runner | null = null,
 ): UnpacksdcmdirOutputs {
-    /**
-     * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_directory The directory containing SD card data to be unpacked.
-     * @param output_directory The output directory where unpacked data will be stored.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UNPACKSDCMDIR_METADATA);
     const params = unpacksdcmdir_params(input_directory, output_directory)
@@ -184,5 +184,8 @@ export {
       UnpacksdcmdirOutputs,
       UnpacksdcmdirParameters,
       unpacksdcmdir,
+      unpacksdcmdir_cargs,
+      unpacksdcmdir_execute,
+      unpacksdcmdir_outputs,
       unpacksdcmdir_params,
 };

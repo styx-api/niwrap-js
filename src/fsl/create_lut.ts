@@ -12,40 +12,40 @@ const CREATE_LUT_METADATA: Metadata = {
 
 
 interface CreateLutParameters {
-    "__STYXTYPE__": "create_lut";
+    "@type": "fsl.create_lut";
     "output_file_root": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "create_lut": create_lut_cargs,
+        "fsl.create_lut": create_lut_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "create_lut": create_lut_outputs,
+        "fsl.create_lut": create_lut_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface CreateLutOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file_root The root name of the output file to be generated
+ *
+ * @returns Parameter dictionary
+ */
 function create_lut_params(
     output_file_root: string,
 ): CreateLutParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file_root The root name of the output file to be generated
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "create_lut" as const,
+        "@type": "fsl.create_lut" as const,
         "output_file_root": output_file_root,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_lut_cargs(
     params: CreateLutParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("create_lut");
     cargs.push((params["output_file_root"] ?? null));
@@ -105,18 +105,18 @@ function create_lut_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_lut_outputs(
     params: CreateLutParameters,
     execution: Execution,
 ): CreateLutOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateLutOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([(params["output_file_root"] ?? null), ".*"].join('')),
@@ -125,22 +125,22 @@ function create_lut_outputs(
 }
 
 
+/**
+ * A tool to create lookup tables.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
+ */
 function create_lut_execute(
     params: CreateLutParameters,
     execution: Execution,
 ): CreateLutOutputs {
-    /**
-     * A tool to create lookup tables.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_lut_cargs(params, execution)
     const ret = create_lut_outputs(params, execution)
@@ -149,22 +149,22 @@ function create_lut_execute(
 }
 
 
+/**
+ * A tool to create lookup tables.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_file_root The root name of the output file to be generated
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
+ */
 function create_lut(
     output_file_root: string,
     runner: Runner | null = null,
 ): CreateLutOutputs {
-    /**
-     * A tool to create lookup tables.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_file_root The root name of the output file to be generated
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_LUT_METADATA);
     const params = create_lut_params(output_file_root)
@@ -177,5 +177,8 @@ export {
       CreateLutOutputs,
       CreateLutParameters,
       create_lut,
+      create_lut_cargs,
+      create_lut_execute,
+      create_lut_outputs,
       create_lut_params,
 };

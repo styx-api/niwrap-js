@@ -12,117 +12,117 @@ const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
 
 
 interface AntsApplyTransformsWarpedOutputParameters {
-    "__STYXTYPE__": "warpedOutput";
+    "@type": "ants.antsApplyTransforms.warpedOutput";
     "warpedOutputFileName": string;
 }
 
 
 interface AntsApplyTransformsCompositeDisplacementFieldOutputParameters {
-    "__STYXTYPE__": "compositeDisplacementFieldOutput";
+    "@type": "ants.antsApplyTransforms.compositeDisplacementFieldOutput";
     "compositeDisplacementField": string;
     "printOutCompositeWarpFile"?: 0 | 1 | null | undefined;
 }
 
 
 interface AntsApplyTransformsGenericAffineTransformOutputParameters {
-    "__STYXTYPE__": "genericAffineTransformOutput";
+    "@type": "ants.antsApplyTransforms.genericAffineTransformOutput";
     "genericAffineTransformFile": string;
     "calculateInverse"?: 0 | 1 | null | undefined;
 }
 
 
 interface AntsApplyTransformsLinearParameters {
-    "__STYXTYPE__": "linear";
+    "@type": "ants.antsApplyTransforms.linear";
 }
 
 
 interface AntsApplyTransformsNearestNeighborParameters {
-    "__STYXTYPE__": "nearestNeighbor";
+    "@type": "ants.antsApplyTransforms.nearestNeighbor";
 }
 
 
 interface AntsApplyTransformsMultiLabelnoparamsParameters {
-    "__STYXTYPE__": "multiLabelnoparams";
+    "@type": "ants.antsApplyTransforms.multiLabelnoparams";
 }
 
 
 interface AntsApplyTransformsSigmaParameters {
-    "__STYXTYPE__": "sigma";
+    "@type": "ants.antsApplyTransforms.multiLabel.params.sigma";
     "sigma": number;
 }
 
 
 interface AntsApplyTransformsAlphaParameters {
-    "__STYXTYPE__": "alpha";
+    "@type": "ants.antsApplyTransforms.multiLabel.params.alpha";
     "alpha": number;
 }
 
 
 interface AntsApplyTransformsParamParameters {
-    "__STYXTYPE__": "param";
+    "@type": "ants.antsApplyTransforms.multiLabel.params";
     "params": Array<AntsApplyTransformsSigmaParameters | AntsApplyTransformsAlphaParameters>;
 }
 
 
 interface AntsApplyTransformsMultiLabelParameters {
-    "__STYXTYPE__": "multiLabel";
+    "@type": "ants.antsApplyTransforms.multiLabel";
     "params": AntsApplyTransformsParamParameters;
 }
 
 
 interface AntsApplyTransformsGaussianParameters {
-    "__STYXTYPE__": "gaussian";
+    "@type": "ants.antsApplyTransforms.gaussian";
     "sigma"?: number | null | undefined;
     "alpha"?: number | null | undefined;
 }
 
 
 interface AntsApplyTransformsBsplineParameters {
-    "__STYXTYPE__": "bspline";
+    "@type": "ants.antsApplyTransforms.bspline";
     "order"?: number | null | undefined;
 }
 
 
 interface AntsApplyTransformsCosineWindowedSincParameters {
-    "__STYXTYPE__": "cosineWindowedSinc";
+    "@type": "ants.antsApplyTransforms.cosineWindowedSinc";
 }
 
 
 interface AntsApplyTransformsWelchWindowedSincParameters {
-    "__STYXTYPE__": "welchWindowedSinc";
+    "@type": "ants.antsApplyTransforms.welchWindowedSinc";
 }
 
 
 interface AntsApplyTransformsHammingWindowedSincParameters {
-    "__STYXTYPE__": "hammingWindowedSinc";
+    "@type": "ants.antsApplyTransforms.hammingWindowedSinc";
 }
 
 
 interface AntsApplyTransformsLanczosWindowedSincParameters {
-    "__STYXTYPE__": "lanczosWindowedSinc";
+    "@type": "ants.antsApplyTransforms.lanczosWindowedSinc";
 }
 
 
 interface AntsApplyTransformsGenericLabelParameters {
-    "__STYXTYPE__": "genericLabel";
+    "@type": "ants.antsApplyTransforms.genericLabel";
     "interpolator"?: string | null | undefined;
 }
 
 
 interface AntsApplyTransformsTransformFileNameParameters {
-    "__STYXTYPE__": "transformFileName";
+    "@type": "ants.antsApplyTransforms.transformFileName";
     "transformFileName": InputPathType;
 }
 
 
 interface AntsApplyTransformsUseInverseParameters {
-    "__STYXTYPE__": "useInverse";
+    "@type": "ants.antsApplyTransforms.useInverse";
     "transformFileName": InputPathType;
 }
 
 
 interface AntsApplyTransformsParameters {
-    "__STYXTYPE__": "antsApplyTransforms";
+    "@type": "ants.antsApplyTransforms";
     "dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image_type"?: 0 | 1 | 2 | 3 | 4 | 5 | null | undefined;
     "input_image"?: InputPathType | null | undefined;
@@ -138,57 +138,57 @@ interface AntsApplyTransformsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsApplyTransforms": ants_apply_transforms_cargs,
-        "warpedOutput": ants_apply_transforms_warped_output_cargs,
-        "compositeDisplacementFieldOutput": ants_apply_transforms_composite_displacement_field_output_cargs,
-        "genericAffineTransformOutput": ants_apply_transforms_generic_affine_transform_output_cargs,
-        "linear": ants_apply_transforms_linear_cargs,
-        "nearestNeighbor": ants_apply_transforms_nearest_neighbor_cargs,
-        "multiLabelnoparams": ants_apply_transforms_multi_labelnoparams_cargs,
-        "multiLabel": ants_apply_transforms_multi_label_cargs,
-        "param": ants_apply_transforms_param_cargs,
-        "sigma": ants_apply_transforms_sigma_cargs,
-        "alpha": ants_apply_transforms_alpha_cargs,
-        "gaussian": ants_apply_transforms_gaussian_cargs,
-        "bspline": ants_apply_transforms_bspline_cargs,
-        "cosineWindowedSinc": ants_apply_transforms_cosine_windowed_sinc_cargs,
-        "welchWindowedSinc": ants_apply_transforms_welch_windowed_sinc_cargs,
-        "hammingWindowedSinc": ants_apply_transforms_hamming_windowed_sinc_cargs,
-        "lanczosWindowedSinc": ants_apply_transforms_lanczos_windowed_sinc_cargs,
-        "genericLabel": ants_apply_transforms_generic_label_cargs,
-        "transformFileName": ants_apply_transforms_transform_file_name_cargs,
-        "useInverse": ants_apply_transforms_use_inverse_cargs,
+        "ants.antsApplyTransforms": ants_apply_transforms_cargs,
+        "ants.antsApplyTransforms.warpedOutput": ants_apply_transforms_warped_output_cargs,
+        "ants.antsApplyTransforms.compositeDisplacementFieldOutput": ants_apply_transforms_composite_displacement_field_output_cargs,
+        "ants.antsApplyTransforms.genericAffineTransformOutput": ants_apply_transforms_generic_affine_transform_output_cargs,
+        "ants.antsApplyTransforms.linear": ants_apply_transforms_linear_cargs,
+        "ants.antsApplyTransforms.nearestNeighbor": ants_apply_transforms_nearest_neighbor_cargs,
+        "ants.antsApplyTransforms.multiLabelnoparams": ants_apply_transforms_multi_labelnoparams_cargs,
+        "ants.antsApplyTransforms.multiLabel": ants_apply_transforms_multi_label_cargs,
+        "ants.antsApplyTransforms.multiLabel.params": ants_apply_transforms_param_cargs,
+        "ants.antsApplyTransforms.multiLabel.params.sigma": ants_apply_transforms_sigma_cargs,
+        "ants.antsApplyTransforms.multiLabel.params.alpha": ants_apply_transforms_alpha_cargs,
+        "ants.antsApplyTransforms.gaussian": ants_apply_transforms_gaussian_cargs,
+        "ants.antsApplyTransforms.bspline": ants_apply_transforms_bspline_cargs,
+        "ants.antsApplyTransforms.cosineWindowedSinc": ants_apply_transforms_cosine_windowed_sinc_cargs,
+        "ants.antsApplyTransforms.welchWindowedSinc": ants_apply_transforms_welch_windowed_sinc_cargs,
+        "ants.antsApplyTransforms.hammingWindowedSinc": ants_apply_transforms_hamming_windowed_sinc_cargs,
+        "ants.antsApplyTransforms.lanczosWindowedSinc": ants_apply_transforms_lanczos_windowed_sinc_cargs,
+        "ants.antsApplyTransforms.genericLabel": ants_apply_transforms_generic_label_cargs,
+        "ants.antsApplyTransforms.transformFileName": ants_apply_transforms_transform_file_name_cargs,
+        "ants.antsApplyTransforms.useInverse": ants_apply_transforms_use_inverse_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsApplyTransforms": ants_apply_transforms_outputs,
-        "warpedOutput": ants_apply_transforms_warped_output_outputs,
-        "compositeDisplacementFieldOutput": ants_apply_transforms_composite_displacement_field_output_outputs,
-        "genericAffineTransformOutput": ants_apply_transforms_generic_affine_transform_output_outputs,
+        "ants.antsApplyTransforms": ants_apply_transforms_outputs,
+        "ants.antsApplyTransforms.warpedOutput": ants_apply_transforms_warped_output_outputs,
+        "ants.antsApplyTransforms.compositeDisplacementFieldOutput": ants_apply_transforms_composite_displacement_field_output_outputs,
+        "ants.antsApplyTransforms.genericAffineTransformOutput": ants_apply_transforms_generic_affine_transform_output_outputs,
     };
     return outputsFuncs[t];
 }
@@ -211,54 +211,54 @@ interface AntsApplyTransformsWarpedOutputOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param warped_output_file_name Output file name.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_warped_output_params(
     warped_output_file_name: string,
 ): AntsApplyTransformsWarpedOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param warped_output_file_name Output file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "warpedOutput" as const,
+        "@type": "ants.antsApplyTransforms.warpedOutput" as const,
         "warpedOutputFileName": warped_output_file_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_warped_output_cargs(
     params: AntsApplyTransformsWarpedOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["warpedOutputFileName"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_apply_transforms_warped_output_outputs(
     params: AntsApplyTransformsWarpedOutputParameters,
     execution: Execution,
 ): AntsApplyTransformsWarpedOutputOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsApplyTransformsWarpedOutputOutputs = {
         root: execution.outputFile("."),
         output_image_outfile: execution.outputFile([(params["warpedOutputFileName"] ?? null)].join('')),
@@ -284,20 +284,20 @@ interface AntsApplyTransformsCompositeDisplacementFieldOutputOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param composite_displacement_field Output file name.
+ * @param print_out_composite_warp_file Output a composite warp file instead of a transformed image.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_composite_displacement_field_output_params(
     composite_displacement_field: string,
     print_out_composite_warp_file: 0 | 1 | null = null,
 ): AntsApplyTransformsCompositeDisplacementFieldOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param composite_displacement_field Output file name.
-     * @param print_out_composite_warp_file Output a composite warp file instead of a transformed image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "compositeDisplacementFieldOutput" as const,
+        "@type": "ants.antsApplyTransforms.compositeDisplacementFieldOutput" as const,
         "compositeDisplacementField": composite_displacement_field,
     };
     if (print_out_composite_warp_file !== null) {
@@ -307,18 +307,18 @@ function ants_apply_transforms_composite_displacement_field_output_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_composite_displacement_field_output_cargs(
     params: AntsApplyTransformsCompositeDisplacementFieldOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["printOutCompositeWarpFile"] ?? null) !== null) {
         cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", String((params["printOutCompositeWarpFile"] ?? null)), "]"].join(''));
@@ -327,18 +327,18 @@ function ants_apply_transforms_composite_displacement_field_output_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_apply_transforms_composite_displacement_field_output_outputs(
     params: AntsApplyTransformsCompositeDisplacementFieldOutputParameters,
     execution: Execution,
 ): AntsApplyTransformsCompositeDisplacementFieldOutputOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsApplyTransformsCompositeDisplacementFieldOutputOutputs = {
         root: execution.outputFile("."),
         output_image_outfile: execution.outputFile([(params["compositeDisplacementField"] ?? null)].join('')),
@@ -364,20 +364,20 @@ interface AntsApplyTransformsGenericAffineTransformOutputOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param generic_affine_transform_file Output file name.
+ * @param calculate_inverse Calculate the inverse of the affine transform.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_generic_affine_transform_output_params(
     generic_affine_transform_file: string,
     calculate_inverse: 0 | 1 | null = null,
 ): AntsApplyTransformsGenericAffineTransformOutputParameters {
-    /**
-     * Build parameters.
-    
-     * @param generic_affine_transform_file Output file name.
-     * @param calculate_inverse Calculate the inverse of the affine transform.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "genericAffineTransformOutput" as const,
+        "@type": "ants.antsApplyTransforms.genericAffineTransformOutput" as const,
         "genericAffineTransformFile": generic_affine_transform_file,
     };
     if (calculate_inverse !== null) {
@@ -387,18 +387,18 @@ function ants_apply_transforms_generic_affine_transform_output_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_generic_affine_transform_output_cargs(
     params: AntsApplyTransformsGenericAffineTransformOutputParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["calculateInverse"] ?? null) !== null) {
         cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", String((params["calculateInverse"] ?? null)), "]"].join(''));
@@ -407,18 +407,18 @@ function ants_apply_transforms_generic_affine_transform_output_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_apply_transforms_generic_affine_transform_output_outputs(
     params: AntsApplyTransformsGenericAffineTransformOutputParameters,
     execution: Execution,
 ): AntsApplyTransformsGenericAffineTransformOutputOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsApplyTransformsGenericAffineTransformOutputOutputs = {
         root: execution.outputFile("."),
         output_image_outfile: execution.outputFile([(params["genericAffineTransformFile"] ?? null)].join('')),
@@ -427,258 +427,258 @@ function ants_apply_transforms_generic_affine_transform_output_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_linear_params(
 ): AntsApplyTransformsLinearParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "linear" as const,
+        "@type": "ants.antsApplyTransforms.linear" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_linear_cargs(
     params: AntsApplyTransformsLinearParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("Linear");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_nearest_neighbor_params(
 ): AntsApplyTransformsNearestNeighborParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "nearestNeighbor" as const,
+        "@type": "ants.antsApplyTransforms.nearestNeighbor" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_nearest_neighbor_cargs(
     params: AntsApplyTransformsNearestNeighborParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("NearestNeighbor");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_multi_labelnoparams_params(
 ): AntsApplyTransformsMultiLabelnoparamsParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "multiLabelnoparams" as const,
+        "@type": "ants.antsApplyTransforms.multiLabelnoparams" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_multi_labelnoparams_cargs(
     params: AntsApplyTransformsMultiLabelnoparamsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("MultiLabel");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma Sigma value.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_sigma_params(
     sigma: number,
 ): AntsApplyTransformsSigmaParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma Sigma value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sigma" as const,
+        "@type": "ants.antsApplyTransforms.multiLabel.params.sigma" as const,
         "sigma": sigma,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_sigma_cargs(
     params: AntsApplyTransformsSigmaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["sigma=", String((params["sigma"] ?? null))].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param alpha Alpha value.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_alpha_params(
     alpha: number,
 ): AntsApplyTransformsAlphaParameters {
-    /**
-     * Build parameters.
-    
-     * @param alpha Alpha value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "alpha" as const,
+        "@type": "ants.antsApplyTransforms.multiLabel.params.alpha" as const,
         "alpha": alpha,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_alpha_cargs(
     params: AntsApplyTransformsAlphaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["alpha=", String((params["alpha"] ?? null))].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_param_params(
     params_: Array<AntsApplyTransformsSigmaParameters | AntsApplyTransformsAlphaParameters>,
 ): AntsApplyTransformsParamParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "param" as const,
+        "@type": "ants.antsApplyTransforms.multiLabel.params" as const,
         "params": params_,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_param_cargs(
     params: AntsApplyTransformsParamParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
-    cargs.push(["[", (params["params"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat().join(","), "]"].join(''));
+    cargs.push(["[", (params["params"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_multi_label_params(
     params_: AntsApplyTransformsParamParameters,
 ): AntsApplyTransformsMultiLabelParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "multiLabel" as const,
+        "@type": "ants.antsApplyTransforms.multiLabel" as const,
         "params": params_,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_multi_label_cargs(
     params: AntsApplyTransformsMultiLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
-    cargs.push(["MultiLabel", dynCargs((params["params"] ?? null).__STYXTYPE__)((params["params"] ?? null), execution).join("")].join(''));
+    cargs.push(["MultiLabel", dynCargs((params["params"] ?? null)["@type"])((params["params"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma Sigma value.
+ * @param alpha Alpha value.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_gaussian_params(
     sigma: number | null = null,
     alpha: number | null = null,
 ): AntsApplyTransformsGaussianParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma Sigma value.
-     * @param alpha Alpha value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gaussian" as const,
+        "@type": "ants.antsApplyTransforms.gaussian" as const,
     };
     if (sigma !== null) {
         params["sigma"] = sigma;
@@ -690,18 +690,18 @@ function ants_apply_transforms_gaussian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_gaussian_cargs(
     params: AntsApplyTransformsGaussianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["sigma"] ?? null) !== null || (params["alpha"] ?? null) !== null) {
         cargs.push(["Gaussian[sigma=", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""), ",alpha=", (((params["alpha"] ?? null) !== null) ? String((params["alpha"] ?? null)) : ""), "]"].join(''));
@@ -710,18 +710,18 @@ function ants_apply_transforms_gaussian_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param order Order value.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_bspline_params(
     order: number | null = null,
 ): AntsApplyTransformsBsplineParameters {
-    /**
-     * Build parameters.
-    
-     * @param order Order value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bspline" as const,
+        "@type": "ants.antsApplyTransforms.bspline" as const,
     };
     if (order !== null) {
         params["order"] = order;
@@ -730,18 +730,18 @@ function ants_apply_transforms_bspline_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_bspline_cargs(
     params: AntsApplyTransformsBsplineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["order"] ?? null) !== null) {
         cargs.push(["BSpline[order=", String((params["order"] ?? null)), "]"].join(''));
@@ -750,146 +750,146 @@ function ants_apply_transforms_bspline_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_cosine_windowed_sinc_params(
 ): AntsApplyTransformsCosineWindowedSincParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cosineWindowedSinc" as const,
+        "@type": "ants.antsApplyTransforms.cosineWindowedSinc" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_cosine_windowed_sinc_cargs(
     params: AntsApplyTransformsCosineWindowedSincParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CosineWindowedSinc");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_welch_windowed_sinc_params(
 ): AntsApplyTransformsWelchWindowedSincParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "welchWindowedSinc" as const,
+        "@type": "ants.antsApplyTransforms.welchWindowedSinc" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_welch_windowed_sinc_cargs(
     params: AntsApplyTransformsWelchWindowedSincParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("WelchWindowedSinc");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_hamming_windowed_sinc_params(
 ): AntsApplyTransformsHammingWindowedSincParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "hammingWindowedSinc" as const,
+        "@type": "ants.antsApplyTransforms.hammingWindowedSinc" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_hamming_windowed_sinc_cargs(
     params: AntsApplyTransformsHammingWindowedSincParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("HammingWindowedSinc");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_lanczos_windowed_sinc_params(
 ): AntsApplyTransformsLanczosWindowedSincParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "lanczosWindowedSinc" as const,
+        "@type": "ants.antsApplyTransforms.lanczosWindowedSinc" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_lanczos_windowed_sinc_cargs(
     params: AntsApplyTransformsLanczosWindowedSincParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("LanczosWindowedSinc");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param interpolator Interpolator value.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_generic_label_params(
     interpolator: string | null = null,
 ): AntsApplyTransformsGenericLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param interpolator Interpolator value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "genericLabel" as const,
+        "@type": "ants.antsApplyTransforms.genericLabel" as const,
     };
     if (interpolator !== null) {
         params["interpolator"] = interpolator;
@@ -898,18 +898,18 @@ function ants_apply_transforms_generic_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_generic_label_cargs(
     params: AntsApplyTransformsGenericLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     if ((params["interpolator"] ?? null) !== null) {
         cargs.push(["GenericLabel[interpolator=", (params["interpolator"] ?? null), "]"].join(''));
@@ -918,72 +918,72 @@ function ants_apply_transforms_generic_label_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform_file_name Transform file name.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_transform_file_name_params(
     transform_file_name: InputPathType,
 ): AntsApplyTransformsTransformFileNameParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform_file_name Transform file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "transformFileName" as const,
+        "@type": "ants.antsApplyTransforms.transformFileName" as const,
         "transformFileName": transform_file_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_transform_file_name_cargs(
     params: AntsApplyTransformsTransformFileNameParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["transformFileName"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param transform_file_name Transform file name.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_use_inverse_params(
     transform_file_name: InputPathType,
 ): AntsApplyTransformsUseInverseParameters {
-    /**
-     * Build parameters.
-    
-     * @param transform_file_name Transform file name.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "useInverse" as const,
+        "@type": "ants.antsApplyTransforms.useInverse" as const,
         "transformFileName": transform_file_name,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_use_inverse_cargs(
     params: AntsApplyTransformsUseInverseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(["[", execution.inputFile((params["transformFileName"] ?? null)), ",useInverse]"].join(''));
     return cargs;
@@ -1007,6 +1007,24 @@ interface AntsApplyTransformsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
+ * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
+ * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
+ * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
+ * @param interpolation Several interpolation options are available in ITK. These have all been made available.
+ * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
+ * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
+ * @param default_value Default voxel value to be used with input images only. Specifies the voxel value when the input point maps outside the output domain. With tensor input images, specifies the default voxel eigenvalues.
+ * @param static_cast_for_r Forces static cast in ReadTransform (for R).
+ * @param float Use float instead of double for computations.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_params(
     reference_image: InputPathType,
     output: AntsApplyTransformsWarpedOutputParameters | AntsApplyTransformsCompositeDisplacementFieldOutputParameters | AntsApplyTransformsGenericAffineTransformOutputParameters,
@@ -1021,26 +1039,8 @@ function ants_apply_transforms_params(
     float: 0 | 1 | null = null,
     verbose: 0 | 1 | null = null,
 ): AntsApplyTransformsParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
-     * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
-     * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
-     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
-     * @param interpolation Several interpolation options are available in ITK. These have all been made available.
-     * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
-     * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
-     * @param default_value Default voxel value to be used with input images only. Specifies the voxel value when the input point maps outside the output domain. With tensor input images, specifies the default voxel eigenvalues.
-     * @param static_cast_for_r Forces static cast in ReadTransform (for R).
-     * @param float Use float instead of double for computations.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsApplyTransforms" as const,
+        "@type": "ants.antsApplyTransforms" as const,
         "reference_image": reference_image,
         "output": output,
     };
@@ -1078,18 +1078,18 @@ function ants_apply_transforms_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_cargs(
     params: AntsApplyTransformsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsApplyTransforms");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -1116,12 +1116,12 @@ function ants_apply_transforms_cargs(
     );
     cargs.push(
         "--output",
-        ...dynCargs((params["output"] ?? null).__STYXTYPE__)((params["output"] ?? null), execution)
+        ...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
     );
     if ((params["interpolation"] ?? null) !== null) {
         cargs.push(
             "--interpolation",
-            ...dynCargs((params["interpolation"] ?? null).__STYXTYPE__)((params["interpolation"] ?? null), execution)
+            ...dynCargs((params["interpolation"] ?? null)["@type"])((params["interpolation"] ?? null), execution)
         );
     }
     if ((params["output_data_type"] ?? null) !== null) {
@@ -1133,7 +1133,7 @@ function ants_apply_transforms_cargs(
     if ((params["transform"] ?? null) !== null) {
         cargs.push(
             "--transform",
-            ...(params["transform"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat()
+            ...(params["transform"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat()
         );
     }
     if ((params["default_value"] ?? null) !== null) {
@@ -1164,42 +1164,42 @@ function ants_apply_transforms_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_apply_transforms_outputs(
     params: AntsApplyTransformsParameters,
     execution: Execution,
 ): AntsApplyTransformsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsApplyTransformsOutputs = {
         root: execution.outputFile("."),
-        output: dynOutputs((params["output"] ?? null).__STYXTYPE__)?.((params["output"] ?? null), execution),
+        output: dynOutputs((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
     };
     return ret;
 }
 
 
+/**
+ * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsApplyTransformsOutputs`).
+ */
 function ants_apply_transforms_execute(
     params: AntsApplyTransformsParameters,
     execution: Execution,
 ): AntsApplyTransformsOutputs {
-    /**
-     * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsApplyTransformsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_apply_transforms_cargs(params, execution)
     const ret = ants_apply_transforms_outputs(params, execution)
@@ -1208,6 +1208,29 @@ function ants_apply_transforms_execute(
 }
 
 
+/**
+ * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
+ * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
+ * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
+ * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
+ * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
+ * @param interpolation Several interpolation options are available in ITK. These have all been made available.
+ * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
+ * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
+ * @param default_value Default voxel value to be used with input images only. Specifies the voxel value when the input point maps outside the output domain. With tensor input images, specifies the default voxel eigenvalues.
+ * @param static_cast_for_r Forces static cast in ReadTransform (for R).
+ * @param float Use float instead of double for computations.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsApplyTransformsOutputs`).
+ */
 function ants_apply_transforms(
     reference_image: InputPathType,
     output: AntsApplyTransformsWarpedOutputParameters | AntsApplyTransformsCompositeDisplacementFieldOutputParameters | AntsApplyTransformsGenericAffineTransformOutputParameters,
@@ -1223,29 +1246,6 @@ function ants_apply_transforms(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsOutputs {
-    /**
-     * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param reference_image For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image.
-     * @param output One can either output the warped image or, if the boolean is set, one can print out the displacement field based on the composite transform and the reference image. A third option is to compose all affine transforms and (if boolean is set) calculate its inverse which is then written to an ITK file.
-     * @param dimensionality This option forces the image to be treated as a specified-dimensional image. if not specified, antswarp tries to infer the dimensionality from the input image.
-     * @param input_image_type Option specifying the input image type of scalar (default), vector, tensor, time series, or multi-channel. A time series image is a scalar image defined by an additional dimension for the time component whereas a multi-channel image is a vector image with only spatial dimensions. Five-dimensional images are e.g., AFNI stats image.
-     * @param input_image Currently, the only input objects supported are image objects. However, the current framework allows for warping of other objects such as meshes and point sets.
-     * @param interpolation Several interpolation options are available in ITK. These have all been made available.
-     * @param output_data_type Output image data type. This is a direct typecast; output values are not rescaled. Default is to use the internal data type (float or double). uchar is unsigned char; others are signed. WARNING: Outputs will be incorrect (overflowed/reinterpreted) if values exceed the range allowed by your choice. Note that some pixel types are not supported by some image formats. e.g. int is not supported by jpg.
-     * @param transform Several transform options are supported including all those defined in the ITK library in addition to a deformation field transform. The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform. Also, it should be noted that the inverse transform can be accommodated with the usual caveat that such an inverse must be defined by the specified transform class.
-     * @param default_value Default voxel value to be used with input images only. Specifies the voxel value when the input point maps outside the output domain. With tensor input images, specifies the default voxel eigenvalues.
-     * @param static_cast_for_r Forces static cast in ReadTransform (for R).
-     * @param float Use float instead of double for computations.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsApplyTransformsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_METADATA);
     const params = ants_apply_transforms_params(reference_image, output, dimensionality, input_image_type, input_image, interpolation, output_data_type, transform, default_value, static_cast_for_r, float, verbose)
@@ -1280,24 +1280,49 @@ export {
       AntsApplyTransformsWarpedOutputParameters,
       AntsApplyTransformsWelchWindowedSincParameters,
       ants_apply_transforms,
+      ants_apply_transforms_alpha_cargs,
       ants_apply_transforms_alpha_params,
+      ants_apply_transforms_bspline_cargs,
       ants_apply_transforms_bspline_params,
+      ants_apply_transforms_cargs,
+      ants_apply_transforms_composite_displacement_field_output_cargs,
+      ants_apply_transforms_composite_displacement_field_output_outputs,
       ants_apply_transforms_composite_displacement_field_output_params,
+      ants_apply_transforms_cosine_windowed_sinc_cargs,
       ants_apply_transforms_cosine_windowed_sinc_params,
+      ants_apply_transforms_execute,
+      ants_apply_transforms_gaussian_cargs,
       ants_apply_transforms_gaussian_params,
+      ants_apply_transforms_generic_affine_transform_output_cargs,
+      ants_apply_transforms_generic_affine_transform_output_outputs,
       ants_apply_transforms_generic_affine_transform_output_params,
+      ants_apply_transforms_generic_label_cargs,
       ants_apply_transforms_generic_label_params,
+      ants_apply_transforms_hamming_windowed_sinc_cargs,
       ants_apply_transforms_hamming_windowed_sinc_params,
+      ants_apply_transforms_lanczos_windowed_sinc_cargs,
       ants_apply_transforms_lanczos_windowed_sinc_params,
+      ants_apply_transforms_linear_cargs,
       ants_apply_transforms_linear_params,
+      ants_apply_transforms_multi_label_cargs,
       ants_apply_transforms_multi_label_params,
+      ants_apply_transforms_multi_labelnoparams_cargs,
       ants_apply_transforms_multi_labelnoparams_params,
+      ants_apply_transforms_nearest_neighbor_cargs,
       ants_apply_transforms_nearest_neighbor_params,
+      ants_apply_transforms_outputs,
+      ants_apply_transforms_param_cargs,
       ants_apply_transforms_param_params,
       ants_apply_transforms_params,
+      ants_apply_transforms_sigma_cargs,
       ants_apply_transforms_sigma_params,
+      ants_apply_transforms_transform_file_name_cargs,
       ants_apply_transforms_transform_file_name_params,
+      ants_apply_transforms_use_inverse_cargs,
       ants_apply_transforms_use_inverse_params,
+      ants_apply_transforms_warped_output_cargs,
+      ants_apply_transforms_warped_output_outputs,
       ants_apply_transforms_warped_output_params,
+      ants_apply_transforms_welch_windowed_sinc_cargs,
       ants_apply_transforms_welch_windowed_sinc_params,
 };

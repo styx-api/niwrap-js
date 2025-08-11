@@ -12,7 +12,7 @@ const DT_RECON_METADATA: Metadata = {
 
 
 interface DtReconParameters {
-    "__STYXTYPE__": "dt_recon";
+    "@type": "freesurfer.dt_recon";
     "input_volume": InputPathType;
     "bvals_bvecs"?: string | null | undefined;
     "subject_id": string;
@@ -34,35 +34,35 @@ interface DtReconParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dt_recon": dt_recon_cargs,
+        "freesurfer.dt_recon": dt_recon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dt_recon": dt_recon_outputs,
+        "freesurfer.dt_recon": dt_recon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,6 +109,30 @@ interface DtReconOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume (DWI data).
+ * @param subject_id Subject ID.
+ * @param output_dir Output directory.
+ * @param bvals_bvecs B-values and B-vectors files.
+ * @param info_dump Use info dump created by unpacksdcmdir or dcmunpack.
+ * @param ec_reference Use specified time points as 0-based reference for eddy current correction.
+ * @param no_ec_flag Turn off eddy/motion correction.
+ * @param no_reg_flag Do not register to subject or resample to talairach.
+ * @param register_file Supply a register.lta file instead of registering.
+ * @param no_tal_flag Do not resample FA to talairach space.
+ * @param subjects_dir Specify subjects directory (default env SUBJECTS_DIR).
+ * @param save_ec_residuals_flag Save residual error (dwires and eres).
+ * @param pca_analysis_flag Run PCA/SVD analysis on eres (saves in pca-eres dir).
+ * @param mask_prune_threshold Set threshold for masking (default is FLT_MIN).
+ * @param init_spm_flag Initialize BBR with SPM instead of coreg (requires MATLAB).
+ * @param init_fsl_flag Initialize BBR with FSL instead of coreg.
+ * @param debug_flag Print out lots of info.
+ * @param version_flag Print version of this script and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dt_recon_params(
     input_volume: InputPathType,
     subject_id: string,
@@ -129,32 +153,8 @@ function dt_recon_params(
     debug_flag: boolean = false,
     version_flag: boolean = false,
 ): DtReconParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume (DWI data).
-     * @param subject_id Subject ID.
-     * @param output_dir Output directory.
-     * @param bvals_bvecs B-values and B-vectors files.
-     * @param info_dump Use info dump created by unpacksdcmdir or dcmunpack.
-     * @param ec_reference Use specified time points as 0-based reference for eddy current correction.
-     * @param no_ec_flag Turn off eddy/motion correction.
-     * @param no_reg_flag Do not register to subject or resample to talairach.
-     * @param register_file Supply a register.lta file instead of registering.
-     * @param no_tal_flag Do not resample FA to talairach space.
-     * @param subjects_dir Specify subjects directory (default env SUBJECTS_DIR).
-     * @param save_ec_residuals_flag Save residual error (dwires and eres).
-     * @param pca_analysis_flag Run PCA/SVD analysis on eres (saves in pca-eres dir).
-     * @param mask_prune_threshold Set threshold for masking (default is FLT_MIN).
-     * @param init_spm_flag Initialize BBR with SPM instead of coreg (requires MATLAB).
-     * @param init_fsl_flag Initialize BBR with FSL instead of coreg.
-     * @param debug_flag Print out lots of info.
-     * @param version_flag Print version of this script and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dt_recon" as const,
+        "@type": "freesurfer.dt_recon" as const,
         "input_volume": input_volume,
         "subject_id": subject_id,
         "output_dir": output_dir,
@@ -190,18 +190,18 @@ function dt_recon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dt_recon_cargs(
     params: DtReconParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dt_recon");
     cargs.push(
@@ -283,18 +283,18 @@ function dt_recon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dt_recon_outputs(
     params: DtReconParameters,
     execution: Execution,
 ): DtReconOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DtReconOutputs = {
         root: execution.outputFile("."),
         dwi_nifti: execution.outputFile([(params["output_dir"] ?? null), "/dwi.nii.gz"].join('')),
@@ -309,22 +309,22 @@ function dt_recon_outputs(
 }
 
 
+/**
+ * Performs DTI reconstruction from the raw DWI input files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DtReconOutputs`).
+ */
 function dt_recon_execute(
     params: DtReconParameters,
     execution: Execution,
 ): DtReconOutputs {
-    /**
-     * Performs DTI reconstruction from the raw DWI input files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DtReconOutputs`).
-     */
     params = execution.params(params)
     const cargs = dt_recon_cargs(params, execution)
     const ret = dt_recon_outputs(params, execution)
@@ -333,6 +333,35 @@ function dt_recon_execute(
 }
 
 
+/**
+ * Performs DTI reconstruction from the raw DWI input files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume (DWI data).
+ * @param subject_id Subject ID.
+ * @param output_dir Output directory.
+ * @param bvals_bvecs B-values and B-vectors files.
+ * @param info_dump Use info dump created by unpacksdcmdir or dcmunpack.
+ * @param ec_reference Use specified time points as 0-based reference for eddy current correction.
+ * @param no_ec_flag Turn off eddy/motion correction.
+ * @param no_reg_flag Do not register to subject or resample to talairach.
+ * @param register_file Supply a register.lta file instead of registering.
+ * @param no_tal_flag Do not resample FA to talairach space.
+ * @param subjects_dir Specify subjects directory (default env SUBJECTS_DIR).
+ * @param save_ec_residuals_flag Save residual error (dwires and eres).
+ * @param pca_analysis_flag Run PCA/SVD analysis on eres (saves in pca-eres dir).
+ * @param mask_prune_threshold Set threshold for masking (default is FLT_MIN).
+ * @param init_spm_flag Initialize BBR with SPM instead of coreg (requires MATLAB).
+ * @param init_fsl_flag Initialize BBR with FSL instead of coreg.
+ * @param debug_flag Print out lots of info.
+ * @param version_flag Print version of this script and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DtReconOutputs`).
+ */
 function dt_recon(
     input_volume: InputPathType,
     subject_id: string,
@@ -354,35 +383,6 @@ function dt_recon(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): DtReconOutputs {
-    /**
-     * Performs DTI reconstruction from the raw DWI input files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume (DWI data).
-     * @param subject_id Subject ID.
-     * @param output_dir Output directory.
-     * @param bvals_bvecs B-values and B-vectors files.
-     * @param info_dump Use info dump created by unpacksdcmdir or dcmunpack.
-     * @param ec_reference Use specified time points as 0-based reference for eddy current correction.
-     * @param no_ec_flag Turn off eddy/motion correction.
-     * @param no_reg_flag Do not register to subject or resample to talairach.
-     * @param register_file Supply a register.lta file instead of registering.
-     * @param no_tal_flag Do not resample FA to talairach space.
-     * @param subjects_dir Specify subjects directory (default env SUBJECTS_DIR).
-     * @param save_ec_residuals_flag Save residual error (dwires and eres).
-     * @param pca_analysis_flag Run PCA/SVD analysis on eres (saves in pca-eres dir).
-     * @param mask_prune_threshold Set threshold for masking (default is FLT_MIN).
-     * @param init_spm_flag Initialize BBR with SPM instead of coreg (requires MATLAB).
-     * @param init_fsl_flag Initialize BBR with FSL instead of coreg.
-     * @param debug_flag Print out lots of info.
-     * @param version_flag Print version of this script and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DtReconOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DT_RECON_METADATA);
     const params = dt_recon_params(input_volume, subject_id, output_dir, bvals_bvecs, info_dump, ec_reference, no_ec_flag, no_reg_flag, register_file, no_tal_flag, subjects_dir, save_ec_residuals_flag, pca_analysis_flag, mask_prune_threshold, init_spm_flag, init_fsl_flag, debug_flag, version_flag)
@@ -395,5 +395,8 @@ export {
       DtReconOutputs,
       DtReconParameters,
       dt_recon,
+      dt_recon_cargs,
+      dt_recon_execute,
+      dt_recon_outputs,
       dt_recon_params,
 };

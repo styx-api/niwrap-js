@@ -12,7 +12,7 @@ const MRI_ROBUST_TEMPLATE_METADATA: Metadata = {
 
 
 interface MriRobustTemplateParameters {
-    "__STYXTYPE__": "mri_robust_template";
+    "@type": "freesurfer.mri_robust_template";
     "mov_files": Array<InputPathType>;
     "template_file": string;
     "sat_value"?: number | null | undefined;
@@ -53,35 +53,35 @@ interface MriRobustTemplateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_robust_template": mri_robust_template_cargs,
+        "freesurfer.mri_robust_template": mri_robust_template_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_robust_template": mri_robust_template_outputs,
+        "freesurfer.mri_robust_template": mri_robust_template_outputs,
     };
     return outputsFuncs[t];
 }
@@ -116,6 +116,49 @@ interface MriRobustTemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mov_files Input movable volumes to be aligned to common mean/median template.
+ * @param template_file Output template volume (final mean/median image).
+ * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
+ * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
+ * @param lta_files Output transforms to template (for each input).
+ * @param mapmov_files Output images: map and resample each input to template.
+ * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
+ * @param weights_files Output weights (outliers) in target space.
+ * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
+ * @param average_type Construct template from: 0 Mean, 1 Median (default).
+ * @param inittp Use TP# for spatial init (default random), 0: no init.
+ * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
+ * @param iscale_flag Allow also intensity scaling (default off).
+ * @param iscaleonly_flag Only perform iscale (no transformation, default off).
+ * @param iscalein_files Use initial intensity scales.
+ * @param iscaleout_files Output final intensity scales (will activate --iscale).
+ * @param transonly_flag Find 3 parameter translation only.
+ * @param affine_flag Find 12 parameter affine transform.
+ * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
+ * @param masks_files Input masks applied to movables.
+ * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
+ * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
+ * @param noit_flag Do not iterate, just create first template.
+ * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
+ * @param highit Iterate max # times on highest resolution (default 5).
+ * @param epsit Stop iterations when all transform updates fall below the specified value.
+ * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
+ * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
+ * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
+ * @param nomulti_flag Do not use multi-resolution (only highest resolution).
+ * @param floattype_flag Convert images to float internally (default: keep input type).
+ * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
+ * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
+ * @param cras_flag Center template at average CRAS, instead of average barycenter.
+ * @param res_thresh Volume resolution threshold (default is 0.01 mm).
+ * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
+ * @param debug_flag Show debug output (default no debug output).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_robust_template_params(
     mov_files: Array<InputPathType>,
     template_file: string,
@@ -155,51 +198,8 @@ function mri_robust_template_params(
     frobnorm_thresh: number | null = null,
     debug_flag: boolean = false,
 ): MriRobustTemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param mov_files Input movable volumes to be aligned to common mean/median template.
-     * @param template_file Output template volume (final mean/median image).
-     * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
-     * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
-     * @param lta_files Output transforms to template (for each input).
-     * @param mapmov_files Output images: map and resample each input to template.
-     * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
-     * @param weights_files Output weights (outliers) in target space.
-     * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
-     * @param average_type Construct template from: 0 Mean, 1 Median (default).
-     * @param inittp Use TP# for spatial init (default random), 0: no init.
-     * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
-     * @param iscale_flag Allow also intensity scaling (default off).
-     * @param iscaleonly_flag Only perform iscale (no transformation, default off).
-     * @param iscalein_files Use initial intensity scales.
-     * @param iscaleout_files Output final intensity scales (will activate --iscale).
-     * @param transonly_flag Find 3 parameter translation only.
-     * @param affine_flag Find 12 parameter affine transform.
-     * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
-     * @param masks_files Input masks applied to movables.
-     * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
-     * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
-     * @param noit_flag Do not iterate, just create first template.
-     * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
-     * @param highit Iterate max # times on highest resolution (default 5).
-     * @param epsit Stop iterations when all transform updates fall below the specified value.
-     * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
-     * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
-     * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
-     * @param nomulti_flag Do not use multi-resolution (only highest resolution).
-     * @param floattype_flag Convert images to float internally (default: keep input type).
-     * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
-     * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
-     * @param cras_flag Center template at average CRAS, instead of average barycenter.
-     * @param res_thresh Volume resolution threshold (default is 0.01 mm).
-     * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
-     * @param debug_flag Show debug output (default no debug output).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_robust_template" as const,
+        "@type": "freesurfer.mri_robust_template" as const,
         "mov_files": mov_files,
         "template_file": template_file,
         "satit_flag": satit_flag,
@@ -280,18 +280,18 @@ function mri_robust_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_robust_template_cargs(
     params: MriRobustTemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_robust_template");
     cargs.push(
@@ -468,18 +468,18 @@ function mri_robust_template_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_robust_template_outputs(
     params: MriRobustTemplateParameters,
     execution: Execution,
 ): MriRobustTemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRobustTemplateOutputs = {
         root: execution.outputFile("."),
         output_template: execution.outputFile([(params["template_file"] ?? null)].join('')),
@@ -491,22 +491,22 @@ function mri_robust_template_outputs(
 }
 
 
+/**
+ * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
+ */
 function mri_robust_template_execute(
     params: MriRobustTemplateParameters,
     execution: Execution,
 ): MriRobustTemplateOutputs {
-    /**
-     * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_robust_template_cargs(params, execution)
     const ret = mri_robust_template_outputs(params, execution)
@@ -515,6 +515,54 @@ function mri_robust_template_execute(
 }
 
 
+/**
+ * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param mov_files Input movable volumes to be aligned to common mean/median template.
+ * @param template_file Output template volume (final mean/median image).
+ * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
+ * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
+ * @param lta_files Output transforms to template (for each input).
+ * @param mapmov_files Output images: map and resample each input to template.
+ * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
+ * @param weights_files Output weights (outliers) in target space.
+ * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
+ * @param average_type Construct template from: 0 Mean, 1 Median (default).
+ * @param inittp Use TP# for spatial init (default random), 0: no init.
+ * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
+ * @param iscale_flag Allow also intensity scaling (default off).
+ * @param iscaleonly_flag Only perform iscale (no transformation, default off).
+ * @param iscalein_files Use initial intensity scales.
+ * @param iscaleout_files Output final intensity scales (will activate --iscale).
+ * @param transonly_flag Find 3 parameter translation only.
+ * @param affine_flag Find 12 parameter affine transform.
+ * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
+ * @param masks_files Input masks applied to movables.
+ * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
+ * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
+ * @param noit_flag Do not iterate, just create first template.
+ * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
+ * @param highit Iterate max # times on highest resolution (default 5).
+ * @param epsit Stop iterations when all transform updates fall below the specified value.
+ * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
+ * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
+ * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
+ * @param nomulti_flag Do not use multi-resolution (only highest resolution).
+ * @param floattype_flag Convert images to float internally (default: keep input type).
+ * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
+ * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
+ * @param cras_flag Center template at average CRAS, instead of average barycenter.
+ * @param res_thresh Volume resolution threshold (default is 0.01 mm).
+ * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
+ * @param debug_flag Show debug output (default no debug output).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
+ */
 function mri_robust_template(
     mov_files: Array<InputPathType>,
     template_file: string,
@@ -555,54 +603,6 @@ function mri_robust_template(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriRobustTemplateOutputs {
-    /**
-     * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param mov_files Input movable volumes to be aligned to common mean/median template.
-     * @param template_file Output template volume (final mean/median image).
-     * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
-     * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
-     * @param lta_files Output transforms to template (for each input).
-     * @param mapmov_files Output images: map and resample each input to template.
-     * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
-     * @param weights_files Output weights (outliers) in target space.
-     * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
-     * @param average_type Construct template from: 0 Mean, 1 Median (default).
-     * @param inittp Use TP# for spatial init (default random), 0: no init.
-     * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
-     * @param iscale_flag Allow also intensity scaling (default off).
-     * @param iscaleonly_flag Only perform iscale (no transformation, default off).
-     * @param iscalein_files Use initial intensity scales.
-     * @param iscaleout_files Output final intensity scales (will activate --iscale).
-     * @param transonly_flag Find 3 parameter translation only.
-     * @param affine_flag Find 12 parameter affine transform.
-     * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
-     * @param masks_files Input masks applied to movables.
-     * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
-     * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
-     * @param noit_flag Do not iterate, just create first template.
-     * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
-     * @param highit Iterate max # times on highest resolution (default 5).
-     * @param epsit Stop iterations when all transform updates fall below the specified value.
-     * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
-     * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
-     * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
-     * @param nomulti_flag Do not use multi-resolution (only highest resolution).
-     * @param floattype_flag Convert images to float internally (default: keep input type).
-     * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
-     * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
-     * @param cras_flag Center template at average CRAS, instead of average barycenter.
-     * @param res_thresh Volume resolution threshold (default is 0.01 mm).
-     * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
-     * @param debug_flag Show debug output (default no debug output).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ROBUST_TEMPLATE_METADATA);
     const params = mri_robust_template_params(mov_files, template_file, sat_value, satit_flag, lta_files, mapmov_files, mapmovhdr_files, weights_files, oneminusw_flag, average_type, inittp, fixtp_flag, iscale_flag, iscaleonly_flag, iscalein_files, iscaleout_files, transonly_flag, affine_flag, ixforms_files, masks_files, vox2vox_flag, leastsquares_flag, noit_flag, maxit, highit, epsit, pairmaxit, pairepsit, subsample, nomulti_flag, floattype_flag, finalnearest_flag, doubleprec_flag, cras_flag, res_thresh, frobnorm_thresh, debug_flag)
@@ -615,5 +615,8 @@ export {
       MriRobustTemplateOutputs,
       MriRobustTemplateParameters,
       mri_robust_template,
+      mri_robust_template_cargs,
+      mri_robust_template_execute,
+      mri_robust_template_outputs,
       mri_robust_template_params,
 };

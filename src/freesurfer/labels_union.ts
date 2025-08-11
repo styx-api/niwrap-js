@@ -12,42 +12,42 @@ const LABELS_UNION_METADATA: Metadata = {
 
 
 interface LabelsUnionParameters {
-    "__STYXTYPE__": "labels_union";
+    "@type": "freesurfer.labels_union";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "labels_union": labels_union_cargs,
+        "freesurfer.labels_union": labels_union_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "labels_union": labels_union_outputs,
+        "freesurfer.labels_union": labels_union_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface LabelsUnionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label1 First label file (e.g., rh.BA3a.label)
+ * @param label2 Second label file (e.g., rh.BA3b.label)
+ * @param outputname Output name for the union label file (e.g., rh.BA3ab.union.label)
+ *
+ * @returns Parameter dictionary
+ */
 function labels_union_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
 ): LabelsUnionParameters {
-    /**
-     * Build parameters.
-    
-     * @param label1 First label file (e.g., rh.BA3a.label)
-     * @param label2 Second label file (e.g., rh.BA3b.label)
-     * @param outputname Output name for the union label file (e.g., rh.BA3ab.union.label)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "labels_union" as const,
+        "@type": "freesurfer.labels_union" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -94,18 +94,18 @@ function labels_union_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function labels_union_cargs(
     params: LabelsUnionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("labels_union");
     cargs.push(execution.inputFile((params["label1"] ?? null)));
@@ -115,18 +115,18 @@ function labels_union_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function labels_union_outputs(
     params: LabelsUnionParameters,
     execution: Execution,
 ): LabelsUnionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelsUnionOutputs = {
         root: execution.outputFile("."),
         union_label: execution.outputFile([(params["outputname"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function labels_union_outputs(
 }
 
 
+/**
+ * Utility to create the union of two label files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
+ */
 function labels_union_execute(
     params: LabelsUnionParameters,
     execution: Execution,
 ): LabelsUnionOutputs {
-    /**
-     * Utility to create the union of two label files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
-     */
     params = execution.params(params)
     const cargs = labels_union_cargs(params, execution)
     const ret = labels_union_outputs(params, execution)
@@ -159,26 +159,26 @@ function labels_union_execute(
 }
 
 
+/**
+ * Utility to create the union of two label files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param label1 First label file (e.g., rh.BA3a.label)
+ * @param label2 Second label file (e.g., rh.BA3b.label)
+ * @param outputname Output name for the union label file (e.g., rh.BA3ab.union.label)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
+ */
 function labels_union(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
     runner: Runner | null = null,
 ): LabelsUnionOutputs {
-    /**
-     * Utility to create the union of two label files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param label1 First label file (e.g., rh.BA3a.label)
-     * @param label2 Second label file (e.g., rh.BA3b.label)
-     * @param outputname Output name for the union label file (e.g., rh.BA3ab.union.label)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABELS_UNION_METADATA);
     const params = labels_union_params(label1, label2, outputname)
@@ -191,5 +191,8 @@ export {
       LabelsUnionOutputs,
       LabelsUnionParameters,
       labels_union,
+      labels_union_cargs,
+      labels_union_execute,
+      labels_union_outputs,
       labels_union_params,
 };

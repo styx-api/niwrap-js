@@ -12,7 +12,7 @@ const MRIS_MAKE_TEMPLATE_METADATA: Metadata = {
 
 
 interface MrisMakeTemplateParameters {
-    "__STYXTYPE__": "mris_make_template";
+    "@type": "freesurfer.mris_make_template";
     "hemi": string;
     "surface_name": string;
     "subjects": Array<string>;
@@ -31,33 +31,33 @@ interface MrisMakeTemplateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_make_template": mris_make_template_cargs,
+        "freesurfer.mris_make_template": mris_make_template_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface MrisMakeTemplateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere (e.g., 'lh' or 'rh')
+ * @param surface_name Surface name (e.g., 'white', 'pial')
+ * @param subjects List of subjects to be averaged
+ * @param output_name Output name for the template
+ * @param addframe_parameters Add a frame with specific field and location in atlas
+ * @param vector Print additional information for addframe
+ * @param norot Not aligning hemispheres before averaging (default)
+ * @param rot Rough rigid alignment of hemispheres before averaging
+ * @param annot Zero medial wall
+ * @param overlay_parameters Read overlay from file, specify number of averages
+ * @param overlay_dir Use directory for overlay hemi
+ * @param scale Scale value for transformation
+ * @param surf_dir Use custom subdirectory instead of 'surf'
+ * @param smooth_iterations Number of iterations to smooth curvature
+ * @param subjects_dir Specify SUBJECTS_DIR
+ *
+ * @returns Parameter dictionary
+ */
 function mris_make_template_params(
     hemi: string,
     surface_name: string,
@@ -94,29 +115,8 @@ function mris_make_template_params(
     smooth_iterations: number | null = null,
     subjects_dir: string | null = null,
 ): MrisMakeTemplateParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere (e.g., 'lh' or 'rh')
-     * @param surface_name Surface name (e.g., 'white', 'pial')
-     * @param subjects List of subjects to be averaged
-     * @param output_name Output name for the template
-     * @param addframe_parameters Add a frame with specific field and location in atlas
-     * @param vector Print additional information for addframe
-     * @param norot Not aligning hemispheres before averaging (default)
-     * @param rot Rough rigid alignment of hemispheres before averaging
-     * @param annot Zero medial wall
-     * @param overlay_parameters Read overlay from file, specify number of averages
-     * @param overlay_dir Use directory for overlay hemi
-     * @param scale Scale value for transformation
-     * @param surf_dir Use custom subdirectory instead of 'surf'
-     * @param smooth_iterations Number of iterations to smooth curvature
-     * @param subjects_dir Specify SUBJECTS_DIR
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_make_template" as const,
+        "@type": "freesurfer.mris_make_template" as const,
         "hemi": hemi,
         "surface_name": surface_name,
         "subjects": subjects,
@@ -151,18 +151,18 @@ function mris_make_template_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_make_template_cargs(
     params: MrisMakeTemplateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_make_template");
     cargs.push((params["hemi"] ?? null));
@@ -227,18 +227,18 @@ function mris_make_template_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_make_template_outputs(
     params: MrisMakeTemplateParameters,
     execution: Execution,
 ): MrisMakeTemplateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMakeTemplateOutputs = {
         root: execution.outputFile("."),
     };
@@ -246,22 +246,22 @@ function mris_make_template_outputs(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
+ */
 function mris_make_template_execute(
     params: MrisMakeTemplateParameters,
     execution: Execution,
 ): MrisMakeTemplateOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_make_template_cargs(params, execution)
     const ret = mris_make_template_outputs(params, execution)
@@ -270,6 +270,32 @@ function mris_make_template_execute(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere (e.g., 'lh' or 'rh')
+ * @param surface_name Surface name (e.g., 'white', 'pial')
+ * @param subjects List of subjects to be averaged
+ * @param output_name Output name for the template
+ * @param addframe_parameters Add a frame with specific field and location in atlas
+ * @param vector Print additional information for addframe
+ * @param norot Not aligning hemispheres before averaging (default)
+ * @param rot Rough rigid alignment of hemispheres before averaging
+ * @param annot Zero medial wall
+ * @param overlay_parameters Read overlay from file, specify number of averages
+ * @param overlay_dir Use directory for overlay hemi
+ * @param scale Scale value for transformation
+ * @param surf_dir Use custom subdirectory instead of 'surf'
+ * @param smooth_iterations Number of iterations to smooth curvature
+ * @param subjects_dir Specify SUBJECTS_DIR
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
+ */
 function mris_make_template(
     hemi: string,
     surface_name: string,
@@ -288,32 +314,6 @@ function mris_make_template(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MrisMakeTemplateOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere (e.g., 'lh' or 'rh')
-     * @param surface_name Surface name (e.g., 'white', 'pial')
-     * @param subjects List of subjects to be averaged
-     * @param output_name Output name for the template
-     * @param addframe_parameters Add a frame with specific field and location in atlas
-     * @param vector Print additional information for addframe
-     * @param norot Not aligning hemispheres before averaging (default)
-     * @param rot Rough rigid alignment of hemispheres before averaging
-     * @param annot Zero medial wall
-     * @param overlay_parameters Read overlay from file, specify number of averages
-     * @param overlay_dir Use directory for overlay hemi
-     * @param scale Scale value for transformation
-     * @param surf_dir Use custom subdirectory instead of 'surf'
-     * @param smooth_iterations Number of iterations to smooth curvature
-     * @param subjects_dir Specify SUBJECTS_DIR
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MAKE_TEMPLATE_METADATA);
     const params = mris_make_template_params(hemi, surface_name, subjects, output_name, addframe_parameters, vector, norot, rot, annot, overlay_parameters, overlay_dir, scale, surf_dir, smooth_iterations, subjects_dir)
@@ -326,5 +326,8 @@ export {
       MrisMakeTemplateOutputs,
       MrisMakeTemplateParameters,
       mris_make_template,
+      mris_make_template_cargs,
+      mris_make_template_execute,
+      mris_make_template_outputs,
       mris_make_template_params,
 };

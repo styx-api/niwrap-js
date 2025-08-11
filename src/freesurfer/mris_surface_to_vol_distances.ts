@@ -12,7 +12,7 @@ const MRIS_SURFACE_TO_VOL_DISTANCES_METADATA: Metadata = {
 
 
 interface MrisSurfaceToVolDistancesParameters {
-    "__STYXTYPE__": "mris_surface_to_vol_distances";
+    "@type": "freesurfer.mris_surface_to_vol_distances";
     "average_subject": string;
     "hemisphere": string;
     "subjects": Array<string>;
@@ -20,35 +20,35 @@ interface MrisSurfaceToVolDistancesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_surface_to_vol_distances": mris_surface_to_vol_distances_cargs,
+        "freesurfer.mris_surface_to_vol_distances": mris_surface_to_vol_distances_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_surface_to_vol_distances": mris_surface_to_vol_distances_outputs,
+        "freesurfer.mris_surface_to_vol_distances": mris_surface_to_vol_distances_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisSurfaceToVolDistancesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param average_subject The average subject.
+ * @param hemisphere Hemisphere identifier (e.g., lh or rh).
+ * @param subjects List of subjects for distance calculation.
+ * @param output_prefix Prefix for output files.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_surface_to_vol_distances_params(
     average_subject: string,
     hemisphere: string,
     subjects: Array<string>,
     output_prefix: string,
 ): MrisSurfaceToVolDistancesParameters {
-    /**
-     * Build parameters.
-    
-     * @param average_subject The average subject.
-     * @param hemisphere Hemisphere identifier (e.g., lh or rh).
-     * @param subjects List of subjects for distance calculation.
-     * @param output_prefix Prefix for output files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_surface_to_vol_distances" as const,
+        "@type": "freesurfer.mris_surface_to_vol_distances" as const,
         "average_subject": average_subject,
         "hemisphere": hemisphere,
         "subjects": subjects,
@@ -98,18 +98,18 @@ function mris_surface_to_vol_distances_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_surface_to_vol_distances_cargs(
     params: MrisSurfaceToVolDistancesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_surface_to_vol_distances");
     cargs.push((params["average_subject"] ?? null));
@@ -120,18 +120,18 @@ function mris_surface_to_vol_distances_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_surface_to_vol_distances_outputs(
     params: MrisSurfaceToVolDistancesParameters,
     execution: Execution,
 ): MrisSurfaceToVolDistancesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSurfaceToVolDistancesOutputs = {
         root: execution.outputFile("."),
         output_distances: execution.outputFile([(params["output_prefix"] ?? null), "_distances.txt"].join('')),
@@ -140,22 +140,22 @@ function mris_surface_to_vol_distances_outputs(
 }
 
 
+/**
+ * Tool from FreeSurfer to calculate surface-to-volume distances.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
+ */
 function mris_surface_to_vol_distances_execute(
     params: MrisSurfaceToVolDistancesParameters,
     execution: Execution,
 ): MrisSurfaceToVolDistancesOutputs {
-    /**
-     * Tool from FreeSurfer to calculate surface-to-volume distances.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_surface_to_vol_distances_cargs(params, execution)
     const ret = mris_surface_to_vol_distances_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_surface_to_vol_distances_execute(
 }
 
 
+/**
+ * Tool from FreeSurfer to calculate surface-to-volume distances.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param average_subject The average subject.
+ * @param hemisphere Hemisphere identifier (e.g., lh or rh).
+ * @param subjects List of subjects for distance calculation.
+ * @param output_prefix Prefix for output files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
+ */
 function mris_surface_to_vol_distances(
     average_subject: string,
     hemisphere: string,
@@ -171,21 +186,6 @@ function mris_surface_to_vol_distances(
     output_prefix: string,
     runner: Runner | null = null,
 ): MrisSurfaceToVolDistancesOutputs {
-    /**
-     * Tool from FreeSurfer to calculate surface-to-volume distances.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param average_subject The average subject.
-     * @param hemisphere Hemisphere identifier (e.g., lh or rh).
-     * @param subjects List of subjects for distance calculation.
-     * @param output_prefix Prefix for output files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SURFACE_TO_VOL_DISTANCES_METADATA);
     const params = mris_surface_to_vol_distances_params(average_subject, hemisphere, subjects, output_prefix)
@@ -198,5 +198,8 @@ export {
       MrisSurfaceToVolDistancesOutputs,
       MrisSurfaceToVolDistancesParameters,
       mris_surface_to_vol_distances,
+      mris_surface_to_vol_distances_cargs,
+      mris_surface_to_vol_distances_execute,
+      mris_surface_to_vol_distances_outputs,
       mris_surface_to_vol_distances_params,
 };

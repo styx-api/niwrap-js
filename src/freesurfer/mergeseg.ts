@@ -12,7 +12,7 @@ const MERGESEG_METADATA: Metadata = {
 
 
 interface MergesegParameters {
-    "__STYXTYPE__": "mergeseg";
+    "@type": "freesurfer.mergeseg";
     "src_seg": InputPathType;
     "merge_seg": InputPathType;
     "out_seg": string;
@@ -23,35 +23,35 @@ interface MergesegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mergeseg": mergeseg_cargs,
+        "freesurfer.mergeseg": mergeseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mergeseg": mergeseg_outputs,
+        "freesurfer.mergeseg": mergeseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MergesegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_seg Source segmentation image file
+ * @param merge_seg Merge segmentation volume file
+ * @param out_seg Output merged segmentation
+ * @param segid Segmentation index (optional). If specified, all the voxels in the merge seg will be set to segindex.
+ * @param segid_only Only take segindex from merge and use it for merging.
+ * @param segid_erode Erode seg-only segindex before merge. Specify the number of erosion iterations.
+ * @param ctab Color table to embed in the output segmentation.
+ *
+ * @returns Parameter dictionary
+ */
 function mergeseg_params(
     src_seg: InputPathType,
     merge_seg: InputPathType,
@@ -83,21 +96,8 @@ function mergeseg_params(
     segid_erode: number | null = null,
     ctab: InputPathType | null = null,
 ): MergesegParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_seg Source segmentation image file
-     * @param merge_seg Merge segmentation volume file
-     * @param out_seg Output merged segmentation
-     * @param segid Segmentation index (optional). If specified, all the voxels in the merge seg will be set to segindex.
-     * @param segid_only Only take segindex from merge and use it for merging.
-     * @param segid_erode Erode seg-only segindex before merge. Specify the number of erosion iterations.
-     * @param ctab Color table to embed in the output segmentation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mergeseg" as const,
+        "@type": "freesurfer.mergeseg" as const,
         "src_seg": src_seg,
         "merge_seg": merge_seg,
         "out_seg": out_seg,
@@ -118,18 +118,18 @@ function mergeseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mergeseg_cargs(
     params: MergesegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mergeseg");
     cargs.push(execution.inputFile((params["src_seg"] ?? null)));
@@ -166,18 +166,18 @@ function mergeseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mergeseg_outputs(
     params: MergesegParameters,
     execution: Execution,
 ): MergesegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MergesegOutputs = {
         root: execution.outputFile("."),
         output_seg: execution.outputFile([(params["out_seg"] ?? null)].join('')),
@@ -186,22 +186,22 @@ function mergeseg_outputs(
 }
 
 
+/**
+ * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MergesegOutputs`).
+ */
 function mergeseg_execute(
     params: MergesegParameters,
     execution: Execution,
 ): MergesegOutputs {
-    /**
-     * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MergesegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mergeseg_cargs(params, execution)
     const ret = mergeseg_outputs(params, execution)
@@ -210,6 +210,24 @@ function mergeseg_execute(
 }
 
 
+/**
+ * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_seg Source segmentation image file
+ * @param merge_seg Merge segmentation volume file
+ * @param out_seg Output merged segmentation
+ * @param segid Segmentation index (optional). If specified, all the voxels in the merge seg will be set to segindex.
+ * @param segid_only Only take segindex from merge and use it for merging.
+ * @param segid_erode Erode seg-only segindex before merge. Specify the number of erosion iterations.
+ * @param ctab Color table to embed in the output segmentation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MergesegOutputs`).
+ */
 function mergeseg(
     src_seg: InputPathType,
     merge_seg: InputPathType,
@@ -220,24 +238,6 @@ function mergeseg(
     ctab: InputPathType | null = null,
     runner: Runner | null = null,
 ): MergesegOutputs {
-    /**
-     * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_seg Source segmentation image file
-     * @param merge_seg Merge segmentation volume file
-     * @param out_seg Output merged segmentation
-     * @param segid Segmentation index (optional). If specified, all the voxels in the merge seg will be set to segindex.
-     * @param segid_only Only take segindex from merge and use it for merging.
-     * @param segid_erode Erode seg-only segindex before merge. Specify the number of erosion iterations.
-     * @param ctab Color table to embed in the output segmentation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MergesegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MERGESEG_METADATA);
     const params = mergeseg_params(src_seg, merge_seg, out_seg, segid, segid_only, segid_erode, ctab)
@@ -250,5 +250,8 @@ export {
       MergesegOutputs,
       MergesegParameters,
       mergeseg,
+      mergeseg_cargs,
+      mergeseg_execute,
+      mergeseg_outputs,
       mergeseg_params,
 };

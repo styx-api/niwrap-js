@@ -12,7 +12,7 @@ const DMRI_TRK2TRK_METADATA: Metadata = {
 
 
 interface DmriTrk2trkParameters {
-    "__STYXTYPE__": "dmri_trk2trk";
+    "@type": "freesurfer.dmri_trk2trk";
     "in_trk": Array<InputPathType>;
     "in_asc"?: Array<InputPathType> | null | undefined;
     "in_dir"?: string | null | undefined;
@@ -43,35 +43,35 @@ interface DmriTrk2trkParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_trk2trk": dmri_trk2trk_cargs,
+        "freesurfer.dmri_trk2trk": dmri_trk2trk_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_trk2trk": dmri_trk2trk_outputs,
+        "freesurfer.dmri_trk2trk": dmri_trk2trk_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,6 +102,39 @@ interface DmriTrk2trkOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_trk Input .trk file(s)
+ * @param in_asc Input ASCII plain text file(s), as an alternative to .trk
+ * @param in_dir Input directory (optional)
+ * @param out_trk Output .trk file(s), as many as inputs (or 1 to merge inputs)
+ * @param out_asc Output ASCII plain text file(s), as many as inputs (or 1 to merge inputs)
+ * @param out_vol Output volume(s), as many as inputs (or 1 to merge inputs)
+ * @param out_dir Output directory (optional)
+ * @param in_ref Input reference volume (needed for --reg/--regnl)
+ * @param out_ref Output reference volume (needed for --reg/--regnl/--outvol)
+ * @param reg_file Affine registration file (.lta or .mat), applied first
+ * @param regnl_file Nonlinear registration file (.m3z), applied second
+ * @param inv_flag Apply inverse of registration (default: no)
+ * @param fill_flag Fill gaps b/w mapped points by linear interpolation
+ * @param overlay Scalar overlay 1D volume(s), applied to all input .trk files
+ * @param inclusion_mask Inclusion mask(s), applied to all input .trk files
+ * @param exclusion_mask Exclusion mask(s), applied to all input .trk files
+ * @param terminal_inclusion_mask Terminal inclusion mask(s), applied to all input .trk files
+ * @param terminal_exclusion_mask Terminal exclusion mask(s), applied to all input .trk files
+ * @param length_min Only save streamlines with length greater than this number
+ * @param length_max Only save streamlines with length smaller than this number
+ * @param mean_flag Only save the mean of the streamlines (Default: save all)
+ * @param nearmean_flag Only save the streamline nearest to the mean (Default: save all)
+ * @param nth_streamline Only save the n-th (0-based) streamline (Default: save all)
+ * @param every_nth_streamline Only save every n-th streamline (Default: save all)
+ * @param smooth_flag Smooth streamlines (default: no)
+ * @param debug_flag Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_trk2trk_params(
     in_trk: Array<InputPathType>,
     in_asc: Array<InputPathType> | null = null,
@@ -131,41 +164,8 @@ function dmri_trk2trk_params(
     debug_flag: boolean = false,
     check_opts: boolean = false,
 ): DmriTrk2trkParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_trk Input .trk file(s)
-     * @param in_asc Input ASCII plain text file(s), as an alternative to .trk
-     * @param in_dir Input directory (optional)
-     * @param out_trk Output .trk file(s), as many as inputs (or 1 to merge inputs)
-     * @param out_asc Output ASCII plain text file(s), as many as inputs (or 1 to merge inputs)
-     * @param out_vol Output volume(s), as many as inputs (or 1 to merge inputs)
-     * @param out_dir Output directory (optional)
-     * @param in_ref Input reference volume (needed for --reg/--regnl)
-     * @param out_ref Output reference volume (needed for --reg/--regnl/--outvol)
-     * @param reg_file Affine registration file (.lta or .mat), applied first
-     * @param regnl_file Nonlinear registration file (.m3z), applied second
-     * @param inv_flag Apply inverse of registration (default: no)
-     * @param fill_flag Fill gaps b/w mapped points by linear interpolation
-     * @param overlay Scalar overlay 1D volume(s), applied to all input .trk files
-     * @param inclusion_mask Inclusion mask(s), applied to all input .trk files
-     * @param exclusion_mask Exclusion mask(s), applied to all input .trk files
-     * @param terminal_inclusion_mask Terminal inclusion mask(s), applied to all input .trk files
-     * @param terminal_exclusion_mask Terminal exclusion mask(s), applied to all input .trk files
-     * @param length_min Only save streamlines with length greater than this number
-     * @param length_max Only save streamlines with length smaller than this number
-     * @param mean_flag Only save the mean of the streamlines (Default: save all)
-     * @param nearmean_flag Only save the streamline nearest to the mean (Default: save all)
-     * @param nth_streamline Only save the n-th (0-based) streamline (Default: save all)
-     * @param every_nth_streamline Only save every n-th streamline (Default: save all)
-     * @param smooth_flag Smooth streamlines (default: no)
-     * @param debug_flag Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_trk2trk" as const,
+        "@type": "freesurfer.dmri_trk2trk" as const,
         "in_trk": in_trk,
         "inv_flag": inv_flag,
         "fill_flag": fill_flag,
@@ -236,18 +236,18 @@ function dmri_trk2trk_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_trk2trk_cargs(
     params: DmriTrk2trkParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_trk2trk");
     cargs.push(
@@ -393,18 +393,18 @@ function dmri_trk2trk_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_trk2trk_outputs(
     params: DmriTrk2trkParameters,
     execution: Execution,
 ): DmriTrk2trkOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriTrk2trkOutputs = {
         root: execution.outputFile("."),
         out_trk_file: ((params["out_trk"] ?? null) !== null) ? execution.outputFile([(params["out_trk"] ?? null)].join('')) : null,
@@ -415,22 +415,22 @@ function dmri_trk2trk_outputs(
 }
 
 
+/**
+ * A tool for transforming and analyzing tractography data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
+ */
 function dmri_trk2trk_execute(
     params: DmriTrk2trkParameters,
     execution: Execution,
 ): DmriTrk2trkOutputs {
-    /**
-     * A tool for transforming and analyzing tractography data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_trk2trk_cargs(params, execution)
     const ret = dmri_trk2trk_outputs(params, execution)
@@ -439,6 +439,44 @@ function dmri_trk2trk_execute(
 }
 
 
+/**
+ * A tool for transforming and analyzing tractography data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param in_trk Input .trk file(s)
+ * @param in_asc Input ASCII plain text file(s), as an alternative to .trk
+ * @param in_dir Input directory (optional)
+ * @param out_trk Output .trk file(s), as many as inputs (or 1 to merge inputs)
+ * @param out_asc Output ASCII plain text file(s), as many as inputs (or 1 to merge inputs)
+ * @param out_vol Output volume(s), as many as inputs (or 1 to merge inputs)
+ * @param out_dir Output directory (optional)
+ * @param in_ref Input reference volume (needed for --reg/--regnl)
+ * @param out_ref Output reference volume (needed for --reg/--regnl/--outvol)
+ * @param reg_file Affine registration file (.lta or .mat), applied first
+ * @param regnl_file Nonlinear registration file (.m3z), applied second
+ * @param inv_flag Apply inverse of registration (default: no)
+ * @param fill_flag Fill gaps b/w mapped points by linear interpolation
+ * @param overlay Scalar overlay 1D volume(s), applied to all input .trk files
+ * @param inclusion_mask Inclusion mask(s), applied to all input .trk files
+ * @param exclusion_mask Exclusion mask(s), applied to all input .trk files
+ * @param terminal_inclusion_mask Terminal inclusion mask(s), applied to all input .trk files
+ * @param terminal_exclusion_mask Terminal exclusion mask(s), applied to all input .trk files
+ * @param length_min Only save streamlines with length greater than this number
+ * @param length_max Only save streamlines with length smaller than this number
+ * @param mean_flag Only save the mean of the streamlines (Default: save all)
+ * @param nearmean_flag Only save the streamline nearest to the mean (Default: save all)
+ * @param nth_streamline Only save the n-th (0-based) streamline (Default: save all)
+ * @param every_nth_streamline Only save every n-th streamline (Default: save all)
+ * @param smooth_flag Smooth streamlines (default: no)
+ * @param debug_flag Turn on debugging
+ * @param check_opts Don't run anything, just check options and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
+ */
 function dmri_trk2trk(
     in_trk: Array<InputPathType>,
     in_asc: Array<InputPathType> | null = null,
@@ -469,44 +507,6 @@ function dmri_trk2trk(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): DmriTrk2trkOutputs {
-    /**
-     * A tool for transforming and analyzing tractography data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param in_trk Input .trk file(s)
-     * @param in_asc Input ASCII plain text file(s), as an alternative to .trk
-     * @param in_dir Input directory (optional)
-     * @param out_trk Output .trk file(s), as many as inputs (or 1 to merge inputs)
-     * @param out_asc Output ASCII plain text file(s), as many as inputs (or 1 to merge inputs)
-     * @param out_vol Output volume(s), as many as inputs (or 1 to merge inputs)
-     * @param out_dir Output directory (optional)
-     * @param in_ref Input reference volume (needed for --reg/--regnl)
-     * @param out_ref Output reference volume (needed for --reg/--regnl/--outvol)
-     * @param reg_file Affine registration file (.lta or .mat), applied first
-     * @param regnl_file Nonlinear registration file (.m3z), applied second
-     * @param inv_flag Apply inverse of registration (default: no)
-     * @param fill_flag Fill gaps b/w mapped points by linear interpolation
-     * @param overlay Scalar overlay 1D volume(s), applied to all input .trk files
-     * @param inclusion_mask Inclusion mask(s), applied to all input .trk files
-     * @param exclusion_mask Exclusion mask(s), applied to all input .trk files
-     * @param terminal_inclusion_mask Terminal inclusion mask(s), applied to all input .trk files
-     * @param terminal_exclusion_mask Terminal exclusion mask(s), applied to all input .trk files
-     * @param length_min Only save streamlines with length greater than this number
-     * @param length_max Only save streamlines with length smaller than this number
-     * @param mean_flag Only save the mean of the streamlines (Default: save all)
-     * @param nearmean_flag Only save the streamline nearest to the mean (Default: save all)
-     * @param nth_streamline Only save the n-th (0-based) streamline (Default: save all)
-     * @param every_nth_streamline Only save every n-th streamline (Default: save all)
-     * @param smooth_flag Smooth streamlines (default: no)
-     * @param debug_flag Turn on debugging
-     * @param check_opts Don't run anything, just check options and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_TRK2TRK_METADATA);
     const params = dmri_trk2trk_params(in_trk, in_asc, in_dir, out_trk, out_asc, out_vol, out_dir, in_ref, out_ref, reg_file, regnl_file, inv_flag, fill_flag, overlay, inclusion_mask, exclusion_mask, terminal_inclusion_mask, terminal_exclusion_mask, length_min, length_max, mean_flag, nearmean_flag, nth_streamline, every_nth_streamline, smooth_flag, debug_flag, check_opts)
@@ -519,5 +519,8 @@ export {
       DmriTrk2trkOutputs,
       DmriTrk2trkParameters,
       dmri_trk2trk,
+      dmri_trk2trk_cargs,
+      dmri_trk2trk_execute,
+      dmri_trk2trk_outputs,
       dmri_trk2trk_params,
 };

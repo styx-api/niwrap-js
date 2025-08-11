@@ -12,42 +12,42 @@ const CIFTI_FIND_CLUSTERS_METADATA: Metadata = {
 
 
 interface CiftiFindClustersLeftSurfaceParameters {
-    "__STYXTYPE__": "left_surface";
+    "@type": "workbench.cifti-find-clusters.left_surface";
     "surface": InputPathType;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiFindClustersRightSurfaceParameters {
-    "__STYXTYPE__": "right_surface";
+    "@type": "workbench.cifti-find-clusters.right_surface";
     "surface": InputPathType;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiFindClustersCerebellumSurfaceParameters {
-    "__STYXTYPE__": "cerebellum_surface";
+    "@type": "workbench.cifti-find-clusters.cerebellum_surface";
     "surface": InputPathType;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
 
 
 interface CiftiFindClustersSizeRatioParameters {
-    "__STYXTYPE__": "size_ratio";
+    "@type": "workbench.cifti-find-clusters.size_ratio";
     "surface_ratio": number;
     "volume_ratio": number;
 }
 
 
 interface CiftiFindClustersDistanceParameters {
-    "__STYXTYPE__": "distance";
+    "@type": "workbench.cifti-find-clusters.distance";
     "surface_distance": number;
     "volume_distance": number;
 }
 
 
 interface CiftiFindClustersParameters {
-    "__STYXTYPE__": "cifti-find-clusters";
+    "@type": "workbench.cifti-find-clusters";
     "cifti": InputPathType;
     "surface_value_threshold": number;
     "surface_minimum_area": number;
@@ -67,59 +67,59 @@ interface CiftiFindClustersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-find-clusters": cifti_find_clusters_cargs,
-        "left_surface": cifti_find_clusters_left_surface_cargs,
-        "right_surface": cifti_find_clusters_right_surface_cargs,
-        "cerebellum_surface": cifti_find_clusters_cerebellum_surface_cargs,
-        "size_ratio": cifti_find_clusters_size_ratio_cargs,
-        "distance": cifti_find_clusters_distance_cargs,
+        "workbench.cifti-find-clusters": cifti_find_clusters_cargs,
+        "workbench.cifti-find-clusters.left_surface": cifti_find_clusters_left_surface_cargs,
+        "workbench.cifti-find-clusters.right_surface": cifti_find_clusters_right_surface_cargs,
+        "workbench.cifti-find-clusters.cerebellum_surface": cifti_find_clusters_cerebellum_surface_cargs,
+        "workbench.cifti-find-clusters.size_ratio": cifti_find_clusters_size_ratio_cargs,
+        "workbench.cifti-find-clusters.distance": cifti_find_clusters_distance_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-find-clusters": cifti_find_clusters_outputs,
+        "workbench.cifti-find-clusters": cifti_find_clusters_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the left surface file
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_left_surface_params(
     surface: InputPathType,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiFindClustersLeftSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the left surface file
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "left_surface" as const,
+        "@type": "workbench.cifti-find-clusters.left_surface" as const,
         "surface": surface,
     };
     if (opt_corrected_areas_area_metric !== null) {
@@ -129,18 +129,18 @@ function cifti_find_clusters_left_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_left_surface_cargs(
     params: CiftiFindClustersLeftSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-left-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -154,20 +154,20 @@ function cifti_find_clusters_left_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the right surface file
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_right_surface_params(
     surface: InputPathType,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiFindClustersRightSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the right surface file
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "right_surface" as const,
+        "@type": "workbench.cifti-find-clusters.right_surface" as const,
         "surface": surface,
     };
     if (opt_corrected_areas_area_metric !== null) {
@@ -177,18 +177,18 @@ function cifti_find_clusters_right_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_right_surface_cargs(
     params: CiftiFindClustersRightSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-right-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -202,20 +202,20 @@ function cifti_find_clusters_right_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the cerebellum surface file
+ * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_cerebellum_surface_params(
     surface: InputPathType,
     opt_corrected_areas_area_metric: InputPathType | null = null,
 ): CiftiFindClustersCerebellumSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the cerebellum surface file
-     * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cerebellum_surface" as const,
+        "@type": "workbench.cifti-find-clusters.cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_corrected_areas_area_metric !== null) {
@@ -225,18 +225,18 @@ function cifti_find_clusters_cerebellum_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_cerebellum_surface_cargs(
     params: CiftiFindClustersCerebellumSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cerebellum-surface");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -250,20 +250,20 @@ function cifti_find_clusters_cerebellum_surface_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_ratio fraction of the structure's largest cluster area
+ * @param volume_ratio fraction of the structure's largest cluster volume
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_size_ratio_params(
     surface_ratio: number,
     volume_ratio: number,
 ): CiftiFindClustersSizeRatioParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_ratio fraction of the structure's largest cluster area
-     * @param volume_ratio fraction of the structure's largest cluster volume
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "size_ratio" as const,
+        "@type": "workbench.cifti-find-clusters.size_ratio" as const,
         "surface_ratio": surface_ratio,
         "volume_ratio": volume_ratio,
     };
@@ -271,18 +271,18 @@ function cifti_find_clusters_size_ratio_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_size_ratio_cargs(
     params: CiftiFindClustersSizeRatioParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-size-ratio");
     cargs.push(String((params["surface_ratio"] ?? null)));
@@ -291,20 +291,20 @@ function cifti_find_clusters_size_ratio_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_distance how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param volume_distance how far from the largest cluster a cluster can be, edge to edge, in mm
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_distance_params(
     surface_distance: number,
     volume_distance: number,
 ): CiftiFindClustersDistanceParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_distance how far from the largest cluster a cluster can be, edge to edge, in mm
-     * @param volume_distance how far from the largest cluster a cluster can be, edge to edge, in mm
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "distance" as const,
+        "@type": "workbench.cifti-find-clusters.distance" as const,
         "surface_distance": surface_distance,
         "volume_distance": volume_distance,
     };
@@ -312,18 +312,18 @@ function cifti_find_clusters_distance_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_distance_cargs(
     params: CiftiFindClustersDistanceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-distance");
     cargs.push(String((params["surface_distance"] ?? null)));
@@ -349,6 +349,28 @@ interface CiftiFindClustersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti the input cifti
+ * @param surface_value_threshold threshold for surface data values
+ * @param surface_minimum_area threshold for surface cluster area, in mm^2
+ * @param volume_value_threshold threshold for volume data values
+ * @param volume_minimum_size threshold for volume cluster size, in mm^3
+ * @param direction which dimension to use for spatial information, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_cifti_roi_roi_cifti search only within regions of interest: the regions to search within, as a cifti file
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
+ * @param distance ignore clusters further than a given distance from the largest cluster in the structure
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_find_clusters_params(
     cifti: InputPathType,
     surface_value_threshold: number,
@@ -367,30 +389,8 @@ function cifti_find_clusters_params(
     distance: CiftiFindClustersDistanceParameters | null = null,
     opt_start_startval: number | null = null,
 ): CiftiFindClustersParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti the input cifti
-     * @param surface_value_threshold threshold for surface data values
-     * @param surface_minimum_area threshold for surface cluster area, in mm^2
-     * @param volume_value_threshold threshold for volume data values
-     * @param volume_minimum_size threshold for volume cluster size, in mm^3
-     * @param direction which dimension to use for spatial information, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_cifti_roi_roi_cifti search only within regions of interest: the regions to search within, as a cifti file
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
-     * @param distance ignore clusters further than a given distance from the largest cluster in the structure
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-find-clusters" as const,
+        "@type": "workbench.cifti-find-clusters" as const,
         "cifti": cifti,
         "surface_value_threshold": surface_value_threshold,
         "surface_minimum_area": surface_minimum_area,
@@ -426,18 +426,18 @@ function cifti_find_clusters_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_find_clusters_cargs(
     params: CiftiFindClustersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-find-clusters");
@@ -452,13 +452,13 @@ function cifti_find_clusters_cargs(
         cargs.push("-less-than");
     }
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null).__STYXTYPE__)((params["left_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null).__STYXTYPE__)((params["right_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null).__STYXTYPE__)((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_cifti_roi_roi_cifti"] ?? null) !== null) {
         cargs.push(
@@ -470,10 +470,10 @@ function cifti_find_clusters_cargs(
         cargs.push("-merged-volume");
     }
     if ((params["size_ratio"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["size_ratio"] ?? null).__STYXTYPE__)((params["size_ratio"] ?? null), execution));
+        cargs.push(...dynCargs((params["size_ratio"] ?? null)["@type"])((params["size_ratio"] ?? null), execution));
     }
     if ((params["distance"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["distance"] ?? null).__STYXTYPE__)((params["distance"] ?? null), execution));
+        cargs.push(...dynCargs((params["distance"] ?? null)["@type"])((params["distance"] ?? null), execution));
     }
     if ((params["opt_start_startval"] ?? null) !== null) {
         cargs.push(
@@ -485,18 +485,18 @@ function cifti_find_clusters_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_find_clusters_outputs(
     params: CiftiFindClustersParameters,
     execution: Execution,
 ): CiftiFindClustersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiFindClustersOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -505,24 +505,24 @@ function cifti_find_clusters_outputs(
 }
 
 
+/**
+ * Filter clusters by area/volume.
+ *
+ * Outputs a cifti file with nonzero integers for all brainordinates within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
+ */
 function cifti_find_clusters_execute(
     params: CiftiFindClustersParameters,
     execution: Execution,
 ): CiftiFindClustersOutputs {
-    /**
-     * Filter clusters by area/volume.
-     * 
-     * Outputs a cifti file with nonzero integers for all brainordinates within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_find_clusters_cargs(params, execution)
     const ret = cifti_find_clusters_outputs(params, execution)
@@ -531,6 +531,35 @@ function cifti_find_clusters_execute(
 }
 
 
+/**
+ * Filter clusters by area/volume.
+ *
+ * Outputs a cifti file with nonzero integers for all brainordinates within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti the input cifti
+ * @param surface_value_threshold threshold for surface data values
+ * @param surface_minimum_area threshold for surface cluster area, in mm^2
+ * @param volume_value_threshold threshold for volume data values
+ * @param volume_minimum_size threshold for volume cluster size, in mm^3
+ * @param direction which dimension to use for spatial information, ROW or COLUMN
+ * @param cifti_out the output cifti
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
+ * @param opt_cifti_roi_roi_cifti search only within regions of interest: the regions to search within, as a cifti file
+ * @param opt_merged_volume treat volume components as if they were a single component
+ * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
+ * @param distance ignore clusters further than a given distance from the largest cluster in the structure
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
+ */
 function cifti_find_clusters(
     cifti: InputPathType,
     surface_value_threshold: number,
@@ -550,35 +579,6 @@ function cifti_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
-    /**
-     * Filter clusters by area/volume.
-     * 
-     * Outputs a cifti file with nonzero integers for all brainordinates within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti the input cifti
-     * @param surface_value_threshold threshold for surface data values
-     * @param surface_minimum_area threshold for surface cluster area, in mm^2
-     * @param volume_value_threshold threshold for volume data values
-     * @param volume_minimum_size threshold for volume cluster size, in mm^3
-     * @param direction which dimension to use for spatial information, ROW or COLUMN
-     * @param cifti_out the output cifti
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param left_surface specify the left surface to use
-     * @param right_surface specify the right surface to use
-     * @param cerebellum_surface specify the cerebellum surface to use
-     * @param opt_cifti_roi_roi_cifti search only within regions of interest: the regions to search within, as a cifti file
-     * @param opt_merged_volume treat volume components as if they were a single component
-     * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
-     * @param distance ignore clusters further than a given distance from the largest cluster in the structure
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_FIND_CLUSTERS_METADATA);
     const params = cifti_find_clusters_params(cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, cifti_out, opt_less_than, left_surface, right_surface, cerebellum_surface, opt_cifti_roi_roi_cifti, opt_merged_volume, size_ratio, distance, opt_start_startval)
@@ -596,10 +596,18 @@ export {
       CiftiFindClustersRightSurfaceParameters,
       CiftiFindClustersSizeRatioParameters,
       cifti_find_clusters,
+      cifti_find_clusters_cargs,
+      cifti_find_clusters_cerebellum_surface_cargs,
       cifti_find_clusters_cerebellum_surface_params,
+      cifti_find_clusters_distance_cargs,
       cifti_find_clusters_distance_params,
+      cifti_find_clusters_execute,
+      cifti_find_clusters_left_surface_cargs,
       cifti_find_clusters_left_surface_params,
+      cifti_find_clusters_outputs,
       cifti_find_clusters_params,
+      cifti_find_clusters_right_surface_cargs,
       cifti_find_clusters_right_surface_params,
+      cifti_find_clusters_size_ratio_cargs,
       cifti_find_clusters_size_ratio_params,
 };

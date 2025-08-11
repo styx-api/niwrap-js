@@ -12,7 +12,7 @@ const APPLYTOPUP_METADATA: Metadata = {
 
 
 interface ApplytopupParameters {
-    "__STYXTYPE__": "applytopup";
+    "@type": "fsl.applytopup";
     "imain": Array<InputPathType>;
     "datain": InputPathType;
     "inindex": Array<string>;
@@ -25,35 +25,35 @@ interface ApplytopupParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "applytopup": applytopup_cargs,
+        "fsl.applytopup": applytopup_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "applytopup": applytopup_outputs,
+        "fsl.applytopup": applytopup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface ApplytopupOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param imain Comma separated list of names of input image (to be corrected)
+ * @param datain Name of text file with PE directions/times
+ * @param inindex Comma separated list of indices into --datain of the input image (to be corrected)
+ * @param topup Name of field/movements (from topup)
+ * @param out Basename for output (warped) image
+ * @param method Use jacobian modulation (jac) or least-squares resampling (lsr), default=lsr.
+ * @param interp Interpolation method {trilinear, spline}, default=spline
+ * @param datatype Force output data type [char short int float double]
+ * @param verbose Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function applytopup_params(
     imain: Array<InputPathType>,
     datain: InputPathType,
@@ -87,23 +102,8 @@ function applytopup_params(
     datatype: "char" | "short" | "int" | "float" | "double" | null = null,
     verbose: boolean = false,
 ): ApplytopupParameters {
-    /**
-     * Build parameters.
-    
-     * @param imain Comma separated list of names of input image (to be corrected)
-     * @param datain Name of text file with PE directions/times
-     * @param inindex Comma separated list of indices into --datain of the input image (to be corrected)
-     * @param topup Name of field/movements (from topup)
-     * @param out Basename for output (warped) image
-     * @param method Use jacobian modulation (jac) or least-squares resampling (lsr), default=lsr.
-     * @param interp Interpolation method {trilinear, spline}, default=spline
-     * @param datatype Force output data type [char short int float double]
-     * @param verbose Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "applytopup" as const,
+        "@type": "fsl.applytopup" as const,
         "imain": imain,
         "datain": datain,
         "inindex": inindex,
@@ -124,18 +124,18 @@ function applytopup_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function applytopup_cargs(
     params: ApplytopupParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("applytopup");
     cargs.push(["--imain=", (params["imain"] ?? null).map(f => execution.inputFile(f)).join(",")].join(''));
@@ -159,18 +159,18 @@ function applytopup_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function applytopup_outputs(
     params: ApplytopupParameters,
     execution: Execution,
 ): ApplytopupOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApplytopupOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["out"] ?? null)].join('')),
@@ -179,22 +179,22 @@ function applytopup_outputs(
 }
 
 
+/**
+ * applytopup applies corrections to images using the field estimates produced by topup.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
+ */
 function applytopup_execute(
     params: ApplytopupParameters,
     execution: Execution,
 ): ApplytopupOutputs {
-    /**
-     * applytopup applies corrections to images using the field estimates produced by topup.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
-     */
     params = execution.params(params)
     const cargs = applytopup_cargs(params, execution)
     const ret = applytopup_outputs(params, execution)
@@ -203,6 +203,26 @@ function applytopup_execute(
 }
 
 
+/**
+ * applytopup applies corrections to images using the field estimates produced by topup.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param imain Comma separated list of names of input image (to be corrected)
+ * @param datain Name of text file with PE directions/times
+ * @param inindex Comma separated list of indices into --datain of the input image (to be corrected)
+ * @param topup Name of field/movements (from topup)
+ * @param out Basename for output (warped) image
+ * @param method Use jacobian modulation (jac) or least-squares resampling (lsr), default=lsr.
+ * @param interp Interpolation method {trilinear, spline}, default=spline
+ * @param datatype Force output data type [char short int float double]
+ * @param verbose Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
+ */
 function applytopup(
     imain: Array<InputPathType>,
     datain: InputPathType,
@@ -215,26 +235,6 @@ function applytopup(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): ApplytopupOutputs {
-    /**
-     * applytopup applies corrections to images using the field estimates produced by topup.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param imain Comma separated list of names of input image (to be corrected)
-     * @param datain Name of text file with PE directions/times
-     * @param inindex Comma separated list of indices into --datain of the input image (to be corrected)
-     * @param topup Name of field/movements (from topup)
-     * @param out Basename for output (warped) image
-     * @param method Use jacobian modulation (jac) or least-squares resampling (lsr), default=lsr.
-     * @param interp Interpolation method {trilinear, spline}, default=spline
-     * @param datatype Force output data type [char short int float double]
-     * @param verbose Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYTOPUP_METADATA);
     const params = applytopup_params(imain, datain, inindex, topup, out, method, interp, datatype, verbose)
@@ -247,5 +247,8 @@ export {
       ApplytopupOutputs,
       ApplytopupParameters,
       applytopup,
+      applytopup_cargs,
+      applytopup_execute,
+      applytopup_outputs,
       applytopup_params,
 };

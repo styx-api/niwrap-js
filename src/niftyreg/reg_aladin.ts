@@ -12,7 +12,7 @@ const REG_ALADIN_METADATA: Metadata = {
 
 
 interface RegAladinParameters {
-    "__STYXTYPE__": "reg_aladin";
+    "@type": "niftyreg.reg_aladin";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "symmetric": boolean;
@@ -29,35 +29,35 @@ interface RegAladinParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg_aladin": reg_aladin_cargs,
+        "niftyreg.reg_aladin": reg_aladin_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reg_aladin": reg_aladin_outputs,
+        "niftyreg.reg_aladin": reg_aladin_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface RegAladinOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_image Filename of the reference (target) image
+ * @param floating_image Filename of the floating (source) image
+ * @param symmetric Uses symmetric version of the algorithm
+ * @param output_affine Filename which contains the output affine transformation
+ * @param rigid_only To perform a rigid registration only
+ * @param direct_affine Directly optimize 12 DoF affine
+ * @param smooth_ref Smooth the reference image using the specified sigma (mm)
+ * @param smooth_float Smooth the floating image using the specified sigma (mm)
+ * @param num_levels Number of levels to perform
+ * @param first_levels Only perform the first levels
+ * @param use_nifti_origin Use the NIFTI header origins to initialize the translation
+ * @param percent_block Percentage of block to use
+ * @param percent_inlier Percentage of inlier for the LTS
+ *
+ * @returns Parameter dictionary
+ */
 function reg_aladin_params(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -95,27 +114,8 @@ function reg_aladin_params(
     percent_block: number | null = null,
     percent_inlier: number | null = null,
 ): RegAladinParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_image Filename of the reference (target) image
-     * @param floating_image Filename of the floating (source) image
-     * @param symmetric Uses symmetric version of the algorithm
-     * @param output_affine Filename which contains the output affine transformation
-     * @param rigid_only To perform a rigid registration only
-     * @param direct_affine Directly optimize 12 DoF affine
-     * @param smooth_ref Smooth the reference image using the specified sigma (mm)
-     * @param smooth_float Smooth the floating image using the specified sigma (mm)
-     * @param num_levels Number of levels to perform
-     * @param first_levels Only perform the first levels
-     * @param use_nifti_origin Use the NIFTI header origins to initialize the translation
-     * @param percent_block Percentage of block to use
-     * @param percent_inlier Percentage of inlier for the LTS
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg_aladin" as const,
+        "@type": "niftyreg.reg_aladin" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "symmetric": symmetric,
@@ -148,18 +148,18 @@ function reg_aladin_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg_aladin_cargs(
     params: RegAladinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg_aladin");
     cargs.push(
@@ -228,18 +228,18 @@ function reg_aladin_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg_aladin_outputs(
     params: RegAladinParameters,
     execution: Execution,
 ): RegAladinOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RegAladinOutputs = {
         root: execution.outputFile("."),
         output_affine_file: execution.outputFile(["outputAffine.txt"].join('')),
@@ -248,22 +248,22 @@ function reg_aladin_outputs(
 }
 
 
+/**
+ * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
+ */
 function reg_aladin_execute(
     params: RegAladinParameters,
     execution: Execution,
 ): RegAladinOutputs {
-    /**
-     * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg_aladin_cargs(params, execution)
     const ret = reg_aladin_outputs(params, execution)
@@ -272,6 +272,30 @@ function reg_aladin_execute(
 }
 
 
+/**
+ * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
+ *
+ * Author: NiftyReg Developers
+ *
+ * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
+ *
+ * @param reference_image Filename of the reference (target) image
+ * @param floating_image Filename of the floating (source) image
+ * @param symmetric Uses symmetric version of the algorithm
+ * @param output_affine Filename which contains the output affine transformation
+ * @param rigid_only To perform a rigid registration only
+ * @param direct_affine Directly optimize 12 DoF affine
+ * @param smooth_ref Smooth the reference image using the specified sigma (mm)
+ * @param smooth_float Smooth the floating image using the specified sigma (mm)
+ * @param num_levels Number of levels to perform
+ * @param first_levels Only perform the first levels
+ * @param use_nifti_origin Use the NIFTI header origins to initialize the translation
+ * @param percent_block Percentage of block to use
+ * @param percent_inlier Percentage of inlier for the LTS
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
+ */
 function reg_aladin(
     reference_image: InputPathType,
     floating_image: InputPathType,
@@ -288,30 +312,6 @@ function reg_aladin(
     percent_inlier: number | null = null,
     runner: Runner | null = null,
 ): RegAladinOutputs {
-    /**
-     * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
-     * 
-     * Author: NiftyReg Developers
-     * 
-     * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
-    
-     * @param reference_image Filename of the reference (target) image
-     * @param floating_image Filename of the floating (source) image
-     * @param symmetric Uses symmetric version of the algorithm
-     * @param output_affine Filename which contains the output affine transformation
-     * @param rigid_only To perform a rigid registration only
-     * @param direct_affine Directly optimize 12 DoF affine
-     * @param smooth_ref Smooth the reference image using the specified sigma (mm)
-     * @param smooth_float Smooth the floating image using the specified sigma (mm)
-     * @param num_levels Number of levels to perform
-     * @param first_levels Only perform the first levels
-     * @param use_nifti_origin Use the NIFTI header origins to initialize the translation
-     * @param percent_block Percentage of block to use
-     * @param percent_inlier Percentage of inlier for the LTS
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG_ALADIN_METADATA);
     const params = reg_aladin_params(reference_image, floating_image, symmetric, output_affine, rigid_only, direct_affine, smooth_ref, smooth_float, num_levels, first_levels, use_nifti_origin, percent_block, percent_inlier)
@@ -324,5 +324,8 @@ export {
       RegAladinOutputs,
       RegAladinParameters,
       reg_aladin,
+      reg_aladin_cargs,
+      reg_aladin_execute,
+      reg_aladin_outputs,
       reg_aladin_params,
 };

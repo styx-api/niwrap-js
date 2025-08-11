@@ -12,7 +12,7 @@ const V_3DMASK_SVD_METADATA: Metadata = {
 
 
 interface V3dmaskSvdParameters {
-    "__STYXTYPE__": "3dmaskSVD";
+    "@type": "afni.3dmaskSVD";
     "input_dataset": InputPathType;
     "vnorm": boolean;
     "sval"?: number | null | undefined;
@@ -25,35 +25,35 @@ interface V3dmaskSvdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dmaskSVD": v_3dmask_svd_cargs,
+        "afni.3dmaskSVD": v_3dmask_svd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dmaskSVD": v_3dmask_svd_outputs,
+        "afni.3dmaskSVD": v_3dmask_svd_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V3dmaskSvdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset
+ * @param vnorm L2 normalize all time series before SVD
+ * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
+ * @param mask_file Define the mask (default is entire dataset)
+ * @param automask Automatic mask definition
+ * @param polort Remove polynomial trend (default 0 if not specified)
+ * @param bandpass Bandpass filter (mutually exclusive with -polort)
+ * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
+ * @param alt_input Alternative way to give the input dataset name
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dmask_svd_params(
     input_dataset: InputPathType,
     vnorm: boolean = false,
@@ -87,23 +102,8 @@ function v_3dmask_svd_params(
     ort: Array<InputPathType> | null = null,
     alt_input: InputPathType | null = null,
 ): V3dmaskSvdParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset
-     * @param vnorm L2 normalize all time series before SVD
-     * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
-     * @param mask_file Define the mask (default is entire dataset)
-     * @param automask Automatic mask definition
-     * @param polort Remove polynomial trend (default 0 if not specified)
-     * @param bandpass Bandpass filter (mutually exclusive with -polort)
-     * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
-     * @param alt_input Alternative way to give the input dataset name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dmaskSVD" as const,
+        "@type": "afni.3dmaskSVD" as const,
         "input_dataset": input_dataset,
         "vnorm": vnorm,
         "automask": automask,
@@ -130,18 +130,18 @@ function v_3dmask_svd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dmask_svd_cargs(
     params: V3dmaskSvdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dmaskSVD");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -191,18 +191,18 @@ function v_3dmask_svd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dmask_svd_outputs(
     params: V3dmaskSvdParameters,
     execution: Execution,
 ): V3dmaskSvdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dmaskSvdOutputs = {
         root: execution.outputFile("."),
         svd_output: execution.outputFile(["../stdout"].join('')),
@@ -211,22 +211,22 @@ function v_3dmask_svd_outputs(
 }
 
 
+/**
+ * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
+ */
 function v_3dmask_svd_execute(
     params: V3dmaskSvdParameters,
     execution: Execution,
 ): V3dmaskSvdOutputs {
-    /**
-     * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dmask_svd_cargs(params, execution)
     const ret = v_3dmask_svd_outputs(params, execution)
@@ -235,6 +235,26 @@ function v_3dmask_svd_execute(
 }
 
 
+/**
+ * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset
+ * @param vnorm L2 normalize all time series before SVD
+ * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
+ * @param mask_file Define the mask (default is entire dataset)
+ * @param automask Automatic mask definition
+ * @param polort Remove polynomial trend (default 0 if not specified)
+ * @param bandpass Bandpass filter (mutually exclusive with -polort)
+ * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
+ * @param alt_input Alternative way to give the input dataset name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
+ */
 function v_3dmask_svd(
     input_dataset: InputPathType,
     vnorm: boolean = false,
@@ -247,26 +267,6 @@ function v_3dmask_svd(
     alt_input: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dmaskSvdOutputs {
-    /**
-     * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset
-     * @param vnorm L2 normalize all time series before SVD
-     * @param sval Output singular vectors 0 .. a (default a=0 = first one only)
-     * @param mask_file Define the mask (default is entire dataset)
-     * @param automask Automatic mask definition
-     * @param polort Remove polynomial trend (default 0 if not specified)
-     * @param bandpass Bandpass filter (mutually exclusive with -polort)
-     * @param ort Time series to remove from the data before SVD-ization. You can give more than 1 '-ort' option. 'xx.1D' can contain more than 1 column.
-     * @param alt_input Alternative way to give the input dataset name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DMASK_SVD_METADATA);
     const params = v_3dmask_svd_params(input_dataset, vnorm, sval, mask_file, automask, polort, bandpass, ort, alt_input)
@@ -279,5 +279,8 @@ export {
       V3dmaskSvdParameters,
       V_3DMASK_SVD_METADATA,
       v_3dmask_svd,
+      v_3dmask_svd_cargs,
+      v_3dmask_svd_execute,
+      v_3dmask_svd_outputs,
       v_3dmask_svd_params,
 };

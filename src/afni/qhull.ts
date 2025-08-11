@@ -12,7 +12,7 @@ const QHULL_METADATA: Metadata = {
 
 
 interface QhullParameters {
-    "__STYXTYPE__": "qhull";
+    "@type": "afni.qhull";
     "input_coords": string;
     "delaunay": boolean;
     "furthest_delaunay": boolean;
@@ -37,35 +37,35 @@ interface QhullParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "qhull": qhull_cargs,
+        "afni.qhull": qhull_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "qhull": qhull_outputs,
+        "afni.qhull": qhull_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface QhullOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_coords Dimension, number of points, and point coordinates provided via stdin.
+ * @param delaunay Compute Delaunay triangulation by lifting points to a paraboloid.
+ * @param furthest_delaunay Compute furthest-site Delaunay triangulation (upper convex hull).
+ * @param voronoi Compute Voronoi diagram as the dual of the Delaunay triangulation.
+ * @param furthest_voronoi Compute furthest-site Voronoi diagram.
+ * @param halfspace_intersection Compute halfspace intersection about [1,1,0,...] via polar duality.
+ * @param triangulated_output Triangulated output.
+ * @param joggled_input Joggled input instead of merged facets.
+ * @param verify Verify result: structure, convexity, and point inclusion.
+ * @param summary Summary of results.
+ * @param vertices_incident Vertices incident to each facet.
+ * @param normals Normals with offsets.
+ * @param vertex_coordinates Vertex coordinates (if 'Qc', includes coplanar points). If 'v', Voronoi vertices.
+ * @param halfspace_intersections Halfspace intersections.
+ * @param extreme_points Extreme points (convex hull vertices).
+ * @param total_area_volume Compute total area and volume.
+ * @param off_format OFF format (if 'v', outputs Voronoi regions).
+ * @param geomview_output Geomview output (2-d, 3-d and 4-d).
+ * @param mathematica_output Mathematica output (2-d and 3-d).
+ * @param print_facets Print facets that include point n, -n if not.
+ * @param output_file Output results to file.
+ *
+ * @returns Parameter dictionary
+ */
 function qhull_params(
     input_coords: string,
     delaunay: boolean = false,
@@ -111,35 +138,8 @@ function qhull_params(
     print_facets: string | null = null,
     output_file: string | null = null,
 ): QhullParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_coords Dimension, number of points, and point coordinates provided via stdin.
-     * @param delaunay Compute Delaunay triangulation by lifting points to a paraboloid.
-     * @param furthest_delaunay Compute furthest-site Delaunay triangulation (upper convex hull).
-     * @param voronoi Compute Voronoi diagram as the dual of the Delaunay triangulation.
-     * @param furthest_voronoi Compute furthest-site Voronoi diagram.
-     * @param halfspace_intersection Compute halfspace intersection about [1,1,0,...] via polar duality.
-     * @param triangulated_output Triangulated output.
-     * @param joggled_input Joggled input instead of merged facets.
-     * @param verify Verify result: structure, convexity, and point inclusion.
-     * @param summary Summary of results.
-     * @param vertices_incident Vertices incident to each facet.
-     * @param normals Normals with offsets.
-     * @param vertex_coordinates Vertex coordinates (if 'Qc', includes coplanar points). If 'v', Voronoi vertices.
-     * @param halfspace_intersections Halfspace intersections.
-     * @param extreme_points Extreme points (convex hull vertices).
-     * @param total_area_volume Compute total area and volume.
-     * @param off_format OFF format (if 'v', outputs Voronoi regions).
-     * @param geomview_output Geomview output (2-d, 3-d and 4-d).
-     * @param mathematica_output Mathematica output (2-d and 3-d).
-     * @param print_facets Print facets that include point n, -n if not.
-     * @param output_file Output results to file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "qhull" as const,
+        "@type": "afni.qhull" as const,
         "input_coords": input_coords,
         "delaunay": delaunay,
         "furthest_delaunay": furthest_delaunay,
@@ -170,18 +170,18 @@ function qhull_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function qhull_cargs(
     params: QhullParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("qhull");
     cargs.push((params["input_coords"] ?? null));
@@ -255,18 +255,18 @@ function qhull_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function qhull_outputs(
     params: QhullParameters,
     execution: Execution,
 ): QhullOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QhullOutputs = {
         root: execution.outputFile("."),
         output_results: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null), ".txt"].join('')) : null,
@@ -275,22 +275,22 @@ function qhull_outputs(
 }
 
 
+/**
+ * Tool to compute convex hulls and related structures.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QhullOutputs`).
+ */
 function qhull_execute(
     params: QhullParameters,
     execution: Execution,
 ): QhullOutputs {
-    /**
-     * Tool to compute convex hulls and related structures.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QhullOutputs`).
-     */
     params = execution.params(params)
     const cargs = qhull_cargs(params, execution)
     const ret = qhull_outputs(params, execution)
@@ -299,6 +299,38 @@ function qhull_execute(
 }
 
 
+/**
+ * Tool to compute convex hulls and related structures.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_coords Dimension, number of points, and point coordinates provided via stdin.
+ * @param delaunay Compute Delaunay triangulation by lifting points to a paraboloid.
+ * @param furthest_delaunay Compute furthest-site Delaunay triangulation (upper convex hull).
+ * @param voronoi Compute Voronoi diagram as the dual of the Delaunay triangulation.
+ * @param furthest_voronoi Compute furthest-site Voronoi diagram.
+ * @param halfspace_intersection Compute halfspace intersection about [1,1,0,...] via polar duality.
+ * @param triangulated_output Triangulated output.
+ * @param joggled_input Joggled input instead of merged facets.
+ * @param verify Verify result: structure, convexity, and point inclusion.
+ * @param summary Summary of results.
+ * @param vertices_incident Vertices incident to each facet.
+ * @param normals Normals with offsets.
+ * @param vertex_coordinates Vertex coordinates (if 'Qc', includes coplanar points). If 'v', Voronoi vertices.
+ * @param halfspace_intersections Halfspace intersections.
+ * @param extreme_points Extreme points (convex hull vertices).
+ * @param total_area_volume Compute total area and volume.
+ * @param off_format OFF format (if 'v', outputs Voronoi regions).
+ * @param geomview_output Geomview output (2-d, 3-d and 4-d).
+ * @param mathematica_output Mathematica output (2-d and 3-d).
+ * @param print_facets Print facets that include point n, -n if not.
+ * @param output_file Output results to file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QhullOutputs`).
+ */
 function qhull(
     input_coords: string,
     delaunay: boolean = false,
@@ -323,38 +355,6 @@ function qhull(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): QhullOutputs {
-    /**
-     * Tool to compute convex hulls and related structures.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_coords Dimension, number of points, and point coordinates provided via stdin.
-     * @param delaunay Compute Delaunay triangulation by lifting points to a paraboloid.
-     * @param furthest_delaunay Compute furthest-site Delaunay triangulation (upper convex hull).
-     * @param voronoi Compute Voronoi diagram as the dual of the Delaunay triangulation.
-     * @param furthest_voronoi Compute furthest-site Voronoi diagram.
-     * @param halfspace_intersection Compute halfspace intersection about [1,1,0,...] via polar duality.
-     * @param triangulated_output Triangulated output.
-     * @param joggled_input Joggled input instead of merged facets.
-     * @param verify Verify result: structure, convexity, and point inclusion.
-     * @param summary Summary of results.
-     * @param vertices_incident Vertices incident to each facet.
-     * @param normals Normals with offsets.
-     * @param vertex_coordinates Vertex coordinates (if 'Qc', includes coplanar points). If 'v', Voronoi vertices.
-     * @param halfspace_intersections Halfspace intersections.
-     * @param extreme_points Extreme points (convex hull vertices).
-     * @param total_area_volume Compute total area and volume.
-     * @param off_format OFF format (if 'v', outputs Voronoi regions).
-     * @param geomview_output Geomview output (2-d, 3-d and 4-d).
-     * @param mathematica_output Mathematica output (2-d and 3-d).
-     * @param print_facets Print facets that include point n, -n if not.
-     * @param output_file Output results to file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QhullOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QHULL_METADATA);
     const params = qhull_params(input_coords, delaunay, furthest_delaunay, voronoi, furthest_voronoi, halfspace_intersection, triangulated_output, joggled_input, verify, summary, vertices_incident, normals, vertex_coordinates, halfspace_intersections, extreme_points, total_area_volume, off_format, geomview_output, mathematica_output, print_facets, output_file)
@@ -367,5 +367,8 @@ export {
       QhullOutputs,
       QhullParameters,
       qhull,
+      qhull_cargs,
+      qhull_execute,
+      qhull_outputs,
       qhull_params,
 };

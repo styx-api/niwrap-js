@@ -12,42 +12,42 @@ const CIFTI_LABEL_PROBABILITY_METADATA: Metadata = {
 
 
 interface CiftiLabelProbabilityParameters {
-    "__STYXTYPE__": "cifti-label-probability";
+    "@type": "workbench.cifti-label-probability";
     "label_maps": InputPathType;
     "probability_dscalar_out": string;
     "opt_exclude_unlabeled": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-label-probability": cifti_label_probability_cargs,
+        "workbench.cifti-label-probability": cifti_label_probability_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-label-probability": cifti_label_probability_outputs,
+        "workbench.cifti-label-probability": cifti_label_probability_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface CiftiLabelProbabilityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_maps cifti dlabel file containing individual label maps from many subjects
+ * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
+ * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_label_probability_params(
     label_maps: InputPathType,
     probability_dscalar_out: string,
     opt_exclude_unlabeled: boolean = false,
 ): CiftiLabelProbabilityParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_maps cifti dlabel file containing individual label maps from many subjects
-     * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
-     * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-label-probability" as const,
+        "@type": "workbench.cifti-label-probability" as const,
         "label_maps": label_maps,
         "probability_dscalar_out": probability_dscalar_out,
         "opt_exclude_unlabeled": opt_exclude_unlabeled,
@@ -94,18 +94,18 @@ function cifti_label_probability_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_label_probability_cargs(
     params: CiftiLabelProbabilityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-label-probability");
@@ -118,18 +118,18 @@ function cifti_label_probability_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_label_probability_outputs(
     params: CiftiLabelProbabilityParameters,
     execution: Execution,
 ): CiftiLabelProbabilityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiLabelProbabilityOutputs = {
         root: execution.outputFile("."),
         probability_dscalar_out: execution.outputFile([(params["probability_dscalar_out"] ?? null)].join('')),
@@ -138,24 +138,24 @@ function cifti_label_probability_outputs(
 }
 
 
+/**
+ * Find frequency of cifti labels.
+ *
+ * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
+ */
 function cifti_label_probability_execute(
     params: CiftiLabelProbabilityParameters,
     execution: Execution,
 ): CiftiLabelProbabilityOutputs {
-    /**
-     * Find frequency of cifti labels.
-     * 
-     * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_label_probability_cargs(params, execution)
     const ret = cifti_label_probability_outputs(params, execution)
@@ -164,28 +164,28 @@ function cifti_label_probability_execute(
 }
 
 
+/**
+ * Find frequency of cifti labels.
+ *
+ * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_maps cifti dlabel file containing individual label maps from many subjects
+ * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
+ * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
+ */
 function cifti_label_probability(
     label_maps: InputPathType,
     probability_dscalar_out: string,
     opt_exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelProbabilityOutputs {
-    /**
-     * Find frequency of cifti labels.
-     * 
-     * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_maps cifti dlabel file containing individual label maps from many subjects
-     * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
-     * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_LABEL_PROBABILITY_METADATA);
     const params = cifti_label_probability_params(label_maps, probability_dscalar_out, opt_exclude_unlabeled)
@@ -198,5 +198,8 @@ export {
       CiftiLabelProbabilityOutputs,
       CiftiLabelProbabilityParameters,
       cifti_label_probability,
+      cifti_label_probability_cargs,
+      cifti_label_probability_execute,
+      cifti_label_probability_outputs,
       cifti_label_probability_params,
 };

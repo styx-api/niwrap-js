@@ -12,7 +12,7 @@ const MRIS_REMESH_METADATA: Metadata = {
 
 
 interface MrisRemeshParameters {
-    "__STYXTYPE__": "mris_remesh";
+    "@type": "freesurfer.mris_remesh";
     "input": InputPathType;
     "output": string;
     "edge_length"?: number | null | undefined;
@@ -23,35 +23,35 @@ interface MrisRemeshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_remesh": mris_remesh_cargs,
+        "freesurfer.mris_remesh": mris_remesh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_remesh": mris_remesh_outputs,
+        "freesurfer.mris_remesh": mris_remesh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisRemeshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input surface file
+ * @param output Output surface file
+ * @param edge_length Target average edge length in mm for remeshed surface
+ * @param num_vertices Target number of vertices for remeshed surface
+ * @param face_area Desired average face area in mm²
+ * @param remesh Improve the quality while only reducing vertices by a small amount
+ * @param iterations Number of remeshing iterations (default is 5)
+ *
+ * @returns Parameter dictionary
+ */
 function mris_remesh_params(
     input: InputPathType,
     output: string,
@@ -83,21 +96,8 @@ function mris_remesh_params(
     remesh: boolean = false,
     iterations: number | null = null,
 ): MrisRemeshParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input surface file
-     * @param output Output surface file
-     * @param edge_length Target average edge length in mm for remeshed surface
-     * @param num_vertices Target number of vertices for remeshed surface
-     * @param face_area Desired average face area in mm²
-     * @param remesh Improve the quality while only reducing vertices by a small amount
-     * @param iterations Number of remeshing iterations (default is 5)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_remesh" as const,
+        "@type": "freesurfer.mris_remesh" as const,
         "input": input,
         "output": output,
         "remesh": remesh,
@@ -118,18 +118,18 @@ function mris_remesh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_remesh_cargs(
     params: MrisRemeshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_remesh");
     cargs.push(
@@ -171,18 +171,18 @@ function mris_remesh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_remesh_outputs(
     params: MrisRemeshParameters,
     execution: Execution,
 ): MrisRemeshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRemeshOutputs = {
         root: execution.outputFile("."),
         remeshed_output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -191,22 +191,22 @@ function mris_remesh_outputs(
 }
 
 
+/**
+ * Remeshes a surface to a desired edge length, number of vertices, or average face area.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
+ */
 function mris_remesh_execute(
     params: MrisRemeshParameters,
     execution: Execution,
 ): MrisRemeshOutputs {
-    /**
-     * Remeshes a surface to a desired edge length, number of vertices, or average face area.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_remesh_cargs(params, execution)
     const ret = mris_remesh_outputs(params, execution)
@@ -215,6 +215,24 @@ function mris_remesh_execute(
 }
 
 
+/**
+ * Remeshes a surface to a desired edge length, number of vertices, or average face area.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input Input surface file
+ * @param output Output surface file
+ * @param edge_length Target average edge length in mm for remeshed surface
+ * @param num_vertices Target number of vertices for remeshed surface
+ * @param face_area Desired average face area in mm²
+ * @param remesh Improve the quality while only reducing vertices by a small amount
+ * @param iterations Number of remeshing iterations (default is 5)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
+ */
 function mris_remesh(
     input: InputPathType,
     output: string,
@@ -225,24 +243,6 @@ function mris_remesh(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisRemeshOutputs {
-    /**
-     * Remeshes a surface to a desired edge length, number of vertices, or average face area.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input Input surface file
-     * @param output Output surface file
-     * @param edge_length Target average edge length in mm for remeshed surface
-     * @param num_vertices Target number of vertices for remeshed surface
-     * @param face_area Desired average face area in mm²
-     * @param remesh Improve the quality while only reducing vertices by a small amount
-     * @param iterations Number of remeshing iterations (default is 5)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REMESH_METADATA);
     const params = mris_remesh_params(input, output, edge_length, num_vertices, face_area, remesh, iterations)
@@ -255,5 +255,8 @@ export {
       MrisRemeshOutputs,
       MrisRemeshParameters,
       mris_remesh,
+      mris_remesh_cargs,
+      mris_remesh_execute,
+      mris_remesh_outputs,
       mris_remesh_params,
 };

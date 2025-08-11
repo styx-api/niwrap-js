@@ -12,7 +12,7 @@ const CIFTI_REORDER_METADATA: Metadata = {
 
 
 interface CiftiReorderParameters {
-    "__STYXTYPE__": "cifti-reorder";
+    "@type": "workbench.cifti-reorder";
     "cifti_in": InputPathType;
     "direction": string;
     "reorder_list": string;
@@ -20,35 +20,35 @@ interface CiftiReorderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-reorder": cifti_reorder_cargs,
+        "workbench.cifti-reorder": cifti_reorder_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-reorder": cifti_reorder_outputs,
+        "workbench.cifti-reorder": cifti_reorder_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface CiftiReorderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in input cifti file
+ * @param direction which dimension to reorder along, ROW or COLUMN
+ * @param reorder_list a text file containing the desired order transformation
+ * @param cifti_out the reordered cifti file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_reorder_params(
     cifti_in: InputPathType,
     direction: string,
     reorder_list: string,
     cifti_out: string,
 ): CiftiReorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in input cifti file
-     * @param direction which dimension to reorder along, ROW or COLUMN
-     * @param reorder_list a text file containing the desired order transformation
-     * @param cifti_out the reordered cifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-reorder" as const,
+        "@type": "workbench.cifti-reorder" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "reorder_list": reorder_list,
@@ -98,18 +98,18 @@ function cifti_reorder_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_reorder_cargs(
     params: CiftiReorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-reorder");
@@ -121,18 +121,18 @@ function cifti_reorder_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_reorder_outputs(
     params: CiftiReorderParameters,
     execution: Execution,
 ): CiftiReorderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiReorderOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -141,24 +141,24 @@ function cifti_reorder_outputs(
 }
 
 
+/**
+ * Reorder the parcels or scalar/label maps in a cifti file.
+ *
+ * The mapping along the specified direction must be parcels, scalars, or labels.  For pscalar or ptseries, use COLUMN to reorder the parcels.  For dlabel, use ROW.  The <reorder-list> file must contain 1-based indices separated by whitespace (spaces, newlines, tabs, etc), with as many indices as <cifti-in> has along the specified dimension.  These indices specify which current index should end up in that position, for instance, if the current order is 'A B C D', and the desired order is 'D A B C', the text file should contain '4 1 2 3'.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
+ */
 function cifti_reorder_execute(
     params: CiftiReorderParameters,
     execution: Execution,
 ): CiftiReorderOutputs {
-    /**
-     * Reorder the parcels or scalar/label maps in a cifti file.
-     * 
-     * The mapping along the specified direction must be parcels, scalars, or labels.  For pscalar or ptseries, use COLUMN to reorder the parcels.  For dlabel, use ROW.  The <reorder-list> file must contain 1-based indices separated by whitespace (spaces, newlines, tabs, etc), with as many indices as <cifti-in> has along the specified dimension.  These indices specify which current index should end up in that position, for instance, if the current order is 'A B C D', and the desired order is 'D A B C', the text file should contain '4 1 2 3'.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_reorder_cargs(params, execution)
     const ret = cifti_reorder_outputs(params, execution)
@@ -167,6 +167,23 @@ function cifti_reorder_execute(
 }
 
 
+/**
+ * Reorder the parcels or scalar/label maps in a cifti file.
+ *
+ * The mapping along the specified direction must be parcels, scalars, or labels.  For pscalar or ptseries, use COLUMN to reorder the parcels.  For dlabel, use ROW.  The <reorder-list> file must contain 1-based indices separated by whitespace (spaces, newlines, tabs, etc), with as many indices as <cifti-in> has along the specified dimension.  These indices specify which current index should end up in that position, for instance, if the current order is 'A B C D', and the desired order is 'D A B C', the text file should contain '4 1 2 3'.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in input cifti file
+ * @param direction which dimension to reorder along, ROW or COLUMN
+ * @param reorder_list a text file containing the desired order transformation
+ * @param cifti_out the reordered cifti file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
+ */
 function cifti_reorder(
     cifti_in: InputPathType,
     direction: string,
@@ -174,23 +191,6 @@ function cifti_reorder(
     cifti_out: string,
     runner: Runner | null = null,
 ): CiftiReorderOutputs {
-    /**
-     * Reorder the parcels or scalar/label maps in a cifti file.
-     * 
-     * The mapping along the specified direction must be parcels, scalars, or labels.  For pscalar or ptseries, use COLUMN to reorder the parcels.  For dlabel, use ROW.  The <reorder-list> file must contain 1-based indices separated by whitespace (spaces, newlines, tabs, etc), with as many indices as <cifti-in> has along the specified dimension.  These indices specify which current index should end up in that position, for instance, if the current order is 'A B C D', and the desired order is 'D A B C', the text file should contain '4 1 2 3'.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in input cifti file
-     * @param direction which dimension to reorder along, ROW or COLUMN
-     * @param reorder_list a text file containing the desired order transformation
-     * @param cifti_out the reordered cifti file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_REORDER_METADATA);
     const params = cifti_reorder_params(cifti_in, direction, reorder_list, cifti_out)
@@ -203,5 +203,8 @@ export {
       CiftiReorderOutputs,
       CiftiReorderParameters,
       cifti_reorder,
+      cifti_reorder_cargs,
+      cifti_reorder_execute,
+      cifti_reorder_outputs,
       cifti_reorder_params,
 };

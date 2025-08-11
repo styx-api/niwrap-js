@@ -12,7 +12,7 @@ const SAMSEG_METADATA: Metadata = {
 
 
 interface SamsegParameters {
-    "__STYXTYPE__": "samseg";
+    "@type": "freesurfer.samseg";
     "input_files": Array<InputPathType>;
     "t1w_files"?: Array<InputPathType> | null | undefined;
     "t2w_files"?: Array<InputPathType> | null | undefined;
@@ -60,35 +60,35 @@ interface SamsegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "samseg": samseg_cargs,
+        "freesurfer.samseg": samseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "samseg": samseg_outputs,
+        "freesurfer.samseg": samseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -123,6 +123,56 @@ interface SamsegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image files, must be in registration with each other.
+ * @param output_directory Output directory where results will be saved.
+ * @param t1w_files T1-weighted input file, causes input to be conformed unless --hires is used.
+ * @param t2w_files T2-weighted input file.
+ * @param flair_files FLAIR-weighted input file.
+ * @param other_modality_files Specific mode input files, each associated with a custom modality name.
+ * @param options_file JSON file for specifying advanced options.
+ * @param dissection_photo_mode Mode for processing 3D reconstructed dissection photos, specifying left/right/both.
+ * @param save_history Turns on saving of processing history.
+ * @param subject Subject identifier, sets output directory to subject/mri/samseg. The first input must be the conformed T1 weighted input.
+ * @param save_posteriors Save posterior probabilities.
+ * @param save_probabilities Save posterior, prior, and likelihood as 3-frame volume for each tissue type.
+ * @param no_save_warp Do not save m3z-style warp.
+ * @param mrf Perform Markov Random Field processing.
+ * @param no_mrf Do not perform Markov Random Field processing.
+ * @param threads Set the number of CPUs to use.
+ * @param atlas_directory Path to the SAMSEG atlas directory.
+ * @param gmm_file Gaussian Mixture Model file.
+ * @param no_block_coordinate_descent Do not use block coordinate descent.
+ * @param logdomain_costandgradient_calculator Use log-domain cost and gradient calculator.
+ * @param no_logdomain_costandgradient_calculator Do not use log-domain cost and gradient calculator.
+ * @param recon Run recon-all.
+ * @param fill Use samseg to create filled.mgz instead of recon-all.
+ * @param normalization2 Use samseg to create brain.mgz instead of recon-all (with --recon).
+ * @param use_t2w Use the T2-weighted input when running recon-all.
+ * @param use_flair Use the FLAIR-weighted input when running recon-all.
+ * @param hires Use -hires when running recon-all.
+ * @param subjects_directory Path to the SUBJECTS_DIR.
+ * @param pallidum_separate Move pallidum outside of global white matter class, used for analyzing T2 or FLAIR.
+ * @param stiffness Set mesh stiffness.
+ * @param lesion Turn on lesion segmentation.
+ * @param lesion_mask_pattern Pattern needed when using T2 for lesion mask, e.g., 0 1.
+ * @param bias_field_smoothing_kernel Width of bias field smoothness.
+ * @param registration_file Registration file (LTA or MAT) as output by samseg.
+ * @param regmat_file Same as --reg.
+ * @param init_lta Initial registration LTA file.
+ * @param reg_only Only perform registration.
+ * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
+ * @param save_mesh Save the mesh, useful for longitudinal analysis.
+ * @param max_iters Maximum number of iterations.
+ * @param dice_file DICE coefficient file for segmentation.
+ * @param ignore_unknown Ignore unknown flags.
+ * @param smooth_wm_cortex Smooth white matter and cortex priors using specified sigma value.
+ * @param profile_file Run using the cProfile Python profiler, with the specified profile file.
+ *
+ * @returns Parameter dictionary
+ */
 function samseg_params(
     input_files: Array<InputPathType>,
     output_directory: string,
@@ -169,58 +219,8 @@ function samseg_params(
     smooth_wm_cortex: number | null = null,
     profile_file: InputPathType | null = null,
 ): SamsegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image files, must be in registration with each other.
-     * @param output_directory Output directory where results will be saved.
-     * @param t1w_files T1-weighted input file, causes input to be conformed unless --hires is used.
-     * @param t2w_files T2-weighted input file.
-     * @param flair_files FLAIR-weighted input file.
-     * @param other_modality_files Specific mode input files, each associated with a custom modality name.
-     * @param options_file JSON file for specifying advanced options.
-     * @param dissection_photo_mode Mode for processing 3D reconstructed dissection photos, specifying left/right/both.
-     * @param save_history Turns on saving of processing history.
-     * @param subject Subject identifier, sets output directory to subject/mri/samseg. The first input must be the conformed T1 weighted input.
-     * @param save_posteriors Save posterior probabilities.
-     * @param save_probabilities Save posterior, prior, and likelihood as 3-frame volume for each tissue type.
-     * @param no_save_warp Do not save m3z-style warp.
-     * @param mrf Perform Markov Random Field processing.
-     * @param no_mrf Do not perform Markov Random Field processing.
-     * @param threads Set the number of CPUs to use.
-     * @param atlas_directory Path to the SAMSEG atlas directory.
-     * @param gmm_file Gaussian Mixture Model file.
-     * @param no_block_coordinate_descent Do not use block coordinate descent.
-     * @param logdomain_costandgradient_calculator Use log-domain cost and gradient calculator.
-     * @param no_logdomain_costandgradient_calculator Do not use log-domain cost and gradient calculator.
-     * @param recon Run recon-all.
-     * @param fill Use samseg to create filled.mgz instead of recon-all.
-     * @param normalization2 Use samseg to create brain.mgz instead of recon-all (with --recon).
-     * @param use_t2w Use the T2-weighted input when running recon-all.
-     * @param use_flair Use the FLAIR-weighted input when running recon-all.
-     * @param hires Use -hires when running recon-all.
-     * @param subjects_directory Path to the SUBJECTS_DIR.
-     * @param pallidum_separate Move pallidum outside of global white matter class, used for analyzing T2 or FLAIR.
-     * @param stiffness Set mesh stiffness.
-     * @param lesion Turn on lesion segmentation.
-     * @param lesion_mask_pattern Pattern needed when using T2 for lesion mask, e.g., 0 1.
-     * @param bias_field_smoothing_kernel Width of bias field smoothness.
-     * @param registration_file Registration file (LTA or MAT) as output by samseg.
-     * @param regmat_file Same as --reg.
-     * @param init_lta Initial registration LTA file.
-     * @param reg_only Only perform registration.
-     * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
-     * @param save_mesh Save the mesh, useful for longitudinal analysis.
-     * @param max_iters Maximum number of iterations.
-     * @param dice_file DICE coefficient file for segmentation.
-     * @param ignore_unknown Ignore unknown flags.
-     * @param smooth_wm_cortex Smooth white matter and cortex priors using specified sigma value.
-     * @param profile_file Run using the cProfile Python profiler, with the specified profile file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "samseg" as const,
+        "@type": "freesurfer.samseg" as const,
         "input_files": input_files,
         "output_directory": output_directory,
         "save_history": save_history,
@@ -314,18 +314,18 @@ function samseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function samseg_cargs(
     params: SamsegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("samseg");
     cargs.push(
@@ -532,18 +532,18 @@ function samseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function samseg_outputs(
     params: SamsegParameters,
     execution: Execution,
 ): SamsegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SamsegOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["output_directory"] ?? null), "/seg.mgz"].join('')),
@@ -555,22 +555,22 @@ function samseg_outputs(
 }
 
 
+/**
+ * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SamsegOutputs`).
+ */
 function samseg_execute(
     params: SamsegParameters,
     execution: Execution,
 ): SamsegOutputs {
-    /**
-     * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SamsegOutputs`).
-     */
     params = execution.params(params)
     const cargs = samseg_cargs(params, execution)
     const ret = samseg_outputs(params, execution)
@@ -579,6 +579,61 @@ function samseg_execute(
 }
 
 
+/**
+ * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_files Input image files, must be in registration with each other.
+ * @param output_directory Output directory where results will be saved.
+ * @param t1w_files T1-weighted input file, causes input to be conformed unless --hires is used.
+ * @param t2w_files T2-weighted input file.
+ * @param flair_files FLAIR-weighted input file.
+ * @param other_modality_files Specific mode input files, each associated with a custom modality name.
+ * @param options_file JSON file for specifying advanced options.
+ * @param dissection_photo_mode Mode for processing 3D reconstructed dissection photos, specifying left/right/both.
+ * @param save_history Turns on saving of processing history.
+ * @param subject Subject identifier, sets output directory to subject/mri/samseg. The first input must be the conformed T1 weighted input.
+ * @param save_posteriors Save posterior probabilities.
+ * @param save_probabilities Save posterior, prior, and likelihood as 3-frame volume for each tissue type.
+ * @param no_save_warp Do not save m3z-style warp.
+ * @param mrf Perform Markov Random Field processing.
+ * @param no_mrf Do not perform Markov Random Field processing.
+ * @param threads Set the number of CPUs to use.
+ * @param atlas_directory Path to the SAMSEG atlas directory.
+ * @param gmm_file Gaussian Mixture Model file.
+ * @param no_block_coordinate_descent Do not use block coordinate descent.
+ * @param logdomain_costandgradient_calculator Use log-domain cost and gradient calculator.
+ * @param no_logdomain_costandgradient_calculator Do not use log-domain cost and gradient calculator.
+ * @param recon Run recon-all.
+ * @param fill Use samseg to create filled.mgz instead of recon-all.
+ * @param normalization2 Use samseg to create brain.mgz instead of recon-all (with --recon).
+ * @param use_t2w Use the T2-weighted input when running recon-all.
+ * @param use_flair Use the FLAIR-weighted input when running recon-all.
+ * @param hires Use -hires when running recon-all.
+ * @param subjects_directory Path to the SUBJECTS_DIR.
+ * @param pallidum_separate Move pallidum outside of global white matter class, used for analyzing T2 or FLAIR.
+ * @param stiffness Set mesh stiffness.
+ * @param lesion Turn on lesion segmentation.
+ * @param lesion_mask_pattern Pattern needed when using T2 for lesion mask, e.g., 0 1.
+ * @param bias_field_smoothing_kernel Width of bias field smoothness.
+ * @param registration_file Registration file (LTA or MAT) as output by samseg.
+ * @param regmat_file Same as --reg.
+ * @param init_lta Initial registration LTA file.
+ * @param reg_only Only perform registration.
+ * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
+ * @param save_mesh Save the mesh, useful for longitudinal analysis.
+ * @param max_iters Maximum number of iterations.
+ * @param dice_file DICE coefficient file for segmentation.
+ * @param ignore_unknown Ignore unknown flags.
+ * @param smooth_wm_cortex Smooth white matter and cortex priors using specified sigma value.
+ * @param profile_file Run using the cProfile Python profiler, with the specified profile file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SamsegOutputs`).
+ */
 function samseg(
     input_files: Array<InputPathType>,
     output_directory: string,
@@ -626,61 +681,6 @@ function samseg(
     profile_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SamsegOutputs {
-    /**
-     * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_files Input image files, must be in registration with each other.
-     * @param output_directory Output directory where results will be saved.
-     * @param t1w_files T1-weighted input file, causes input to be conformed unless --hires is used.
-     * @param t2w_files T2-weighted input file.
-     * @param flair_files FLAIR-weighted input file.
-     * @param other_modality_files Specific mode input files, each associated with a custom modality name.
-     * @param options_file JSON file for specifying advanced options.
-     * @param dissection_photo_mode Mode for processing 3D reconstructed dissection photos, specifying left/right/both.
-     * @param save_history Turns on saving of processing history.
-     * @param subject Subject identifier, sets output directory to subject/mri/samseg. The first input must be the conformed T1 weighted input.
-     * @param save_posteriors Save posterior probabilities.
-     * @param save_probabilities Save posterior, prior, and likelihood as 3-frame volume for each tissue type.
-     * @param no_save_warp Do not save m3z-style warp.
-     * @param mrf Perform Markov Random Field processing.
-     * @param no_mrf Do not perform Markov Random Field processing.
-     * @param threads Set the number of CPUs to use.
-     * @param atlas_directory Path to the SAMSEG atlas directory.
-     * @param gmm_file Gaussian Mixture Model file.
-     * @param no_block_coordinate_descent Do not use block coordinate descent.
-     * @param logdomain_costandgradient_calculator Use log-domain cost and gradient calculator.
-     * @param no_logdomain_costandgradient_calculator Do not use log-domain cost and gradient calculator.
-     * @param recon Run recon-all.
-     * @param fill Use samseg to create filled.mgz instead of recon-all.
-     * @param normalization2 Use samseg to create brain.mgz instead of recon-all (with --recon).
-     * @param use_t2w Use the T2-weighted input when running recon-all.
-     * @param use_flair Use the FLAIR-weighted input when running recon-all.
-     * @param hires Use -hires when running recon-all.
-     * @param subjects_directory Path to the SUBJECTS_DIR.
-     * @param pallidum_separate Move pallidum outside of global white matter class, used for analyzing T2 or FLAIR.
-     * @param stiffness Set mesh stiffness.
-     * @param lesion Turn on lesion segmentation.
-     * @param lesion_mask_pattern Pattern needed when using T2 for lesion mask, e.g., 0 1.
-     * @param bias_field_smoothing_kernel Width of bias field smoothness.
-     * @param registration_file Registration file (LTA or MAT) as output by samseg.
-     * @param regmat_file Same as --reg.
-     * @param init_lta Initial registration LTA file.
-     * @param reg_only Only perform registration.
-     * @param ssdd_directory Path to SAMSEG_Data_DIR where the atlas is located.
-     * @param save_mesh Save the mesh, useful for longitudinal analysis.
-     * @param max_iters Maximum number of iterations.
-     * @param dice_file DICE coefficient file for segmentation.
-     * @param ignore_unknown Ignore unknown flags.
-     * @param smooth_wm_cortex Smooth white matter and cortex priors using specified sigma value.
-     * @param profile_file Run using the cProfile Python profiler, with the specified profile file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SamsegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEG_METADATA);
     const params = samseg_params(input_files, output_directory, t1w_files, t2w_files, flair_files, other_modality_files, options_file, dissection_photo_mode, save_history, subject, save_posteriors, save_probabilities, no_save_warp, mrf, no_mrf, threads, atlas_directory, gmm_file, no_block_coordinate_descent, logdomain_costandgradient_calculator, no_logdomain_costandgradient_calculator, recon, fill, normalization2, use_t2w, use_flair, hires, subjects_directory, pallidum_separate, stiffness, lesion, lesion_mask_pattern, bias_field_smoothing_kernel, registration_file, regmat_file, init_lta, reg_only, ssdd_directory, save_mesh, max_iters, dice_file, ignore_unknown, smooth_wm_cortex, profile_file)
@@ -693,5 +693,8 @@ export {
       SamsegOutputs,
       SamsegParameters,
       samseg,
+      samseg_cargs,
+      samseg_execute,
+      samseg_outputs,
       samseg_params,
 };

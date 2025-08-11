@@ -12,7 +12,7 @@ const SLICES_SUMMARY_METADATA: Metadata = {
 
 
 interface SlicesSummaryParameters {
-    "__STYXTYPE__": "slices_summary";
+    "@type": "fsl.slices_summary";
     "4d_input_file": InputPathType;
     "threshold": number;
     "background_image": InputPathType;
@@ -26,35 +26,35 @@ interface SlicesSummaryParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "slices_summary": slices_summary_cargs,
+        "fsl.slices_summary": slices_summary_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "slices_summary": slices_summary_outputs,
+        "fsl.slices_summary": slices_summary_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface SlicesSummaryOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param v_4d_input_file 4D input image (e.g., melodic_IC)
+ * @param threshold Threshold value for the slices
+ * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
+ * @param pictures_sum Output directory for summary images
+ * @param pictures_sum_second Path to summary images directory
+ * @param output_png Output PNG file
+ * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
+ * @param single_slice_flag Generate single-slice summary images instead of 3-slice
+ * @param darker_background_flag Make background darker and colour brighter, for greater colour visibility
+ * @param dumb_rule_flag Use dumber rule for choosing optimal slice
+ *
+ * @returns Parameter dictionary
+ */
 function slices_summary_params(
     v_4d_input_file: InputPathType,
     threshold: number,
@@ -93,24 +109,8 @@ function slices_summary_params(
     darker_background_flag: boolean = false,
     dumb_rule_flag: boolean = false,
 ): SlicesSummaryParameters {
-    /**
-     * Build parameters.
-    
-     * @param v_4d_input_file 4D input image (e.g., melodic_IC)
-     * @param threshold Threshold value for the slices
-     * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
-     * @param pictures_sum Output directory for summary images
-     * @param pictures_sum_second Path to summary images directory
-     * @param output_png Output PNG file
-     * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
-     * @param single_slice_flag Generate single-slice summary images instead of 3-slice
-     * @param darker_background_flag Make background darker and colour brighter, for greater colour visibility
-     * @param dumb_rule_flag Use dumber rule for choosing optimal slice
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "slices_summary" as const,
+        "@type": "fsl.slices_summary" as const,
         "4d_input_file": v_4d_input_file,
         "threshold": threshold,
         "background_image": background_image,
@@ -126,18 +126,18 @@ function slices_summary_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function slices_summary_cargs(
     params: SlicesSummaryParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("slices_summary");
     cargs.push(execution.inputFile((params["4d_input_file"] ?? null)));
@@ -160,18 +160,18 @@ function slices_summary_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function slices_summary_outputs(
     params: SlicesSummaryParameters,
     execution: Execution,
 ): SlicesSummaryOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SlicesSummaryOutputs = {
         root: execution.outputFile("."),
         summary_images_directory: execution.outputFile([(params["pictures_sum_second"] ?? null)].join('')),
@@ -181,22 +181,22 @@ function slices_summary_outputs(
 }
 
 
+/**
+ * Generate summary PNG images for 4D neuroimaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
+ */
 function slices_summary_execute(
     params: SlicesSummaryParameters,
     execution: Execution,
 ): SlicesSummaryOutputs {
-    /**
-     * Generate summary PNG images for 4D neuroimaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
-     */
     params = execution.params(params)
     const cargs = slices_summary_cargs(params, execution)
     const ret = slices_summary_outputs(params, execution)
@@ -205,6 +205,27 @@ function slices_summary_execute(
 }
 
 
+/**
+ * Generate summary PNG images for 4D neuroimaging data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param v_4d_input_file 4D input image (e.g., melodic_IC)
+ * @param threshold Threshold value for the slices
+ * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
+ * @param pictures_sum Output directory for summary images
+ * @param pictures_sum_second Path to summary images directory
+ * @param output_png Output PNG file
+ * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
+ * @param single_slice_flag Generate single-slice summary images instead of 3-slice
+ * @param darker_background_flag Make background darker and colour brighter, for greater colour visibility
+ * @param dumb_rule_flag Use dumber rule for choosing optimal slice
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
+ */
 function slices_summary(
     v_4d_input_file: InputPathType,
     threshold: number,
@@ -218,27 +239,6 @@ function slices_summary(
     dumb_rule_flag: boolean = false,
     runner: Runner | null = null,
 ): SlicesSummaryOutputs {
-    /**
-     * Generate summary PNG images for 4D neuroimaging data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param v_4d_input_file 4D input image (e.g., melodic_IC)
-     * @param threshold Threshold value for the slices
-     * @param background_image Background image file (e.g., standard/MNI152_T1_2mm)
-     * @param pictures_sum Output directory for summary images
-     * @param pictures_sum_second Path to summary images directory
-     * @param output_png Output PNG file
-     * @param timepoints Space-separated list of timepoints to use; first timepoint is 0
-     * @param single_slice_flag Generate single-slice summary images instead of 3-slice
-     * @param darker_background_flag Make background darker and colour brighter, for greater colour visibility
-     * @param dumb_rule_flag Use dumber rule for choosing optimal slice
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SLICES_SUMMARY_METADATA);
     const params = slices_summary_params(v_4d_input_file, threshold, background_image, pictures_sum, pictures_sum_second, output_png, timepoints, single_slice_flag, darker_background_flag, dumb_rule_flag)
@@ -251,5 +251,8 @@ export {
       SlicesSummaryOutputs,
       SlicesSummaryParameters,
       slices_summary,
+      slices_summary_cargs,
+      slices_summary_execute,
+      slices_summary_outputs,
       slices_summary_params,
 };

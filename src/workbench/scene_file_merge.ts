@@ -12,83 +12,83 @@ const SCENE_FILE_MERGE_METADATA: Metadata = {
 
 
 interface SceneFileMergeUpToParameters {
-    "__STYXTYPE__": "up_to";
+    "@type": "workbench.scene-file-merge.scene_file.scene.up_to";
     "last_column": string;
     "opt_reverse": boolean;
 }
 
 
 interface SceneFileMergeSceneParameters {
-    "__STYXTYPE__": "scene";
+    "@type": "workbench.scene-file-merge.scene_file.scene";
     "scene": string;
     "up_to"?: SceneFileMergeUpToParameters | null | undefined;
 }
 
 
 interface SceneFileMergeSceneFileParameters {
-    "__STYXTYPE__": "scene_file";
+    "@type": "workbench.scene-file-merge.scene_file";
     "scene_file": string;
     "scene"?: Array<SceneFileMergeSceneParameters> | null | undefined;
 }
 
 
 interface SceneFileMergeParameters {
-    "__STYXTYPE__": "scene-file-merge";
+    "@type": "workbench.scene-file-merge";
     "scene_file_out": string;
     "scene_file"?: Array<SceneFileMergeSceneFileParameters> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "scene-file-merge": scene_file_merge_cargs,
-        "scene_file": scene_file_merge_scene_file_cargs,
-        "scene": scene_file_merge_scene_cargs,
-        "up_to": scene_file_merge_up_to_cargs,
+        "workbench.scene-file-merge": scene_file_merge_cargs,
+        "workbench.scene-file-merge.scene_file": scene_file_merge_scene_file_cargs,
+        "workbench.scene-file-merge.scene_file.scene": scene_file_merge_scene_cargs,
+        "workbench.scene-file-merge.scene_file.scene.up_to": scene_file_merge_up_to_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param last_column the number or name of the last scene to include
+ * @param opt_reverse use the range in reverse order
+ *
+ * @returns Parameter dictionary
+ */
 function scene_file_merge_up_to_params(
     last_column: string,
     opt_reverse: boolean = false,
 ): SceneFileMergeUpToParameters {
-    /**
-     * Build parameters.
-    
-     * @param last_column the number or name of the last scene to include
-     * @param opt_reverse use the range in reverse order
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "up_to" as const,
+        "@type": "workbench.scene-file-merge.scene_file.scene.up_to" as const,
         "last_column": last_column,
         "opt_reverse": opt_reverse,
     };
@@ -96,18 +96,18 @@ function scene_file_merge_up_to_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scene_file_merge_up_to_cargs(
     params: SceneFileMergeUpToParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_column"] ?? null));
@@ -118,20 +118,20 @@ function scene_file_merge_up_to_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scene the scene number or name
+ * @param up_to use an inclusive range of scenes
+ *
+ * @returns Parameter dictionary
+ */
 function scene_file_merge_scene_params(
     scene: string,
     up_to: SceneFileMergeUpToParameters | null = null,
 ): SceneFileMergeSceneParameters {
-    /**
-     * Build parameters.
-    
-     * @param scene the scene number or name
-     * @param up_to use an inclusive range of scenes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "scene" as const,
+        "@type": "workbench.scene-file-merge.scene_file.scene" as const,
         "scene": scene,
     };
     if (up_to !== null) {
@@ -141,42 +141,42 @@ function scene_file_merge_scene_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scene_file_merge_scene_cargs(
     params: SceneFileMergeSceneParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-scene");
     cargs.push((params["scene"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null).__STYXTYPE__)((params["up_to"] ?? null), execution));
+        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scene_file the input scene file
+ * @param scene specify a scene to use
+ *
+ * @returns Parameter dictionary
+ */
 function scene_file_merge_scene_file_params(
     scene_file: string,
     scene: Array<SceneFileMergeSceneParameters> | null = null,
 ): SceneFileMergeSceneFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param scene_file the input scene file
-     * @param scene specify a scene to use
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "scene_file" as const,
+        "@type": "workbench.scene-file-merge.scene_file" as const,
         "scene_file": scene_file,
     };
     if (scene !== null) {
@@ -186,23 +186,23 @@ function scene_file_merge_scene_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scene_file_merge_scene_file_cargs(
     params: SceneFileMergeSceneFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-scene-file");
     cargs.push((params["scene_file"] ?? null));
     if ((params["scene"] ?? null) !== null) {
-        cargs.push(...(params["scene"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["scene"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
@@ -221,20 +221,20 @@ interface SceneFileMergeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scene_file_out output - the output scene file
+ * @param scene_file specify a scene file to use scenes from
+ *
+ * @returns Parameter dictionary
+ */
 function scene_file_merge_params(
     scene_file_out: string,
     scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
 ): SceneFileMergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param scene_file_out output - the output scene file
-     * @param scene_file specify a scene file to use scenes from
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "scene-file-merge" as const,
+        "@type": "workbench.scene-file-merge" as const,
         "scene_file_out": scene_file_out,
     };
     if (scene_file !== null) {
@@ -244,41 +244,41 @@ function scene_file_merge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function scene_file_merge_cargs(
     params: SceneFileMergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-scene-file-merge");
     cargs.push((params["scene_file_out"] ?? null));
     if ((params["scene_file"] ?? null) !== null) {
-        cargs.push(...(params["scene_file"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["scene_file"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function scene_file_merge_outputs(
     params: SceneFileMergeParameters,
     execution: Execution,
 ): SceneFileMergeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SceneFileMergeOutputs = {
         root: execution.outputFile("."),
     };
@@ -286,28 +286,28 @@ function scene_file_merge_outputs(
 }
 
 
+/**
+ * Rearrange scenes into a new file.
+ *
+ * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
+ *
+ * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
+ *
+ * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
+ */
 function scene_file_merge_execute(
     params: SceneFileMergeParameters,
     execution: Execution,
 ): SceneFileMergeOutputs {
-    /**
-     * Rearrange scenes into a new file.
-     * 
-     * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
-     * 
-     * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
-     * 
-     * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
-     */
     params = execution.params(params)
     const cargs = scene_file_merge_cargs(params, execution)
     const ret = scene_file_merge_outputs(params, execution)
@@ -316,30 +316,30 @@ function scene_file_merge_execute(
 }
 
 
+/**
+ * Rearrange scenes into a new file.
+ *
+ * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
+ *
+ * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
+ *
+ * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param scene_file_out output - the output scene file
+ * @param scene_file specify a scene file to use scenes from
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
+ */
 function scene_file_merge(
     scene_file_out: string,
     scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
     runner: Runner | null = null,
 ): SceneFileMergeOutputs {
-    /**
-     * Rearrange scenes into a new file.
-     * 
-     * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
-     * 
-     * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
-     * 
-     * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param scene_file_out output - the output scene file
-     * @param scene_file specify a scene file to use scenes from
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SCENE_FILE_MERGE_METADATA);
     const params = scene_file_merge_params(scene_file_out, scene_file)
@@ -355,8 +355,14 @@ export {
       SceneFileMergeSceneParameters,
       SceneFileMergeUpToParameters,
       scene_file_merge,
+      scene_file_merge_cargs,
+      scene_file_merge_execute,
+      scene_file_merge_outputs,
       scene_file_merge_params,
+      scene_file_merge_scene_cargs,
+      scene_file_merge_scene_file_cargs,
       scene_file_merge_scene_file_params,
       scene_file_merge_scene_params,
+      scene_file_merge_up_to_cargs,
       scene_file_merge_up_to_params,
 };

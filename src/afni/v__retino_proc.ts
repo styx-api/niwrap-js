@@ -12,7 +12,7 @@ const V__RETINO_PROC_METADATA: Metadata = {
 
 
 interface VRetinoProcParameters {
-    "__STYXTYPE__": "@RetinoProc";
+    "@type": "afni.@RetinoProc";
     "ccw"?: Array<InputPathType> | null | undefined;
     "clw"?: Array<InputPathType> | null | undefined;
     "exp"?: Array<InputPathType> | null | undefined;
@@ -56,33 +56,33 @@ interface VRetinoProcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@RetinoProc": v__retino_proc_cargs,
+        "afni.@RetinoProc": v__retino_proc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -102,6 +102,52 @@ interface VRetinoProcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tr TR, in seconds, of retinotopic scans
+ * @param period_ecc Period, in seconds, of eccentricity stimuli
+ * @param period_pol Period, in seconds, of polar angle stimuli
+ * @param ccw Input time series dataset for counterclockwise stimulus
+ * @param clw Input time series dataset for clockwise stimulus
+ * @param exp Input time series dataset for expanding stimulus
+ * @param con Input time series dataset for contracting stimulus
+ * @param epi_ref Specify a volume from the EPI time series to which all EPI volumes are aligned
+ * @param epi_anat_ref Specify a volume from the EPI time series that is better suited for aligning the T1 to it than EpiRef might be
+ * @param anat_vol T1 volume acquired during the same session as the retinotopic scans
+ * @param anat_vol_epi Anatomical volume aligned to EPI reference
+ * @param surf_vol Surface Volume for the cortical surfaces
+ * @param surf_vol_epi Surface volume aligned to experiment's EPI data
+ * @param phase Use phase of fundamental frequency to estimate latency
+ * @param delay Use delay relative to reference time series to estimate latency
+ * @param pre_ecc Duration, in seconds, before eccentricity stimulus
+ * @param pre_pol Duration, in seconds, before polar angle stimulus
+ * @param on_ecc Number of stimulation blocks and duration of stimulation for eccentricity stimulus
+ * @param on_pol Number of stimulation blocks and duration of stimulation for polar angle stimulus
+ * @param var_on_ecc Multiple on durations for eccentricity stimulus
+ * @param var_on_pol Multiple on durations for polar angle stimulus
+ * @param nwedges Number of wedges in polar stimulus
+ * @param nrings Number of rings in eccentricity stimulus
+ * @param fwhm_pol Target smoothness for polar stimulus
+ * @param fwhm_ecc Target smoothness for eccentricity stimulus
+ * @param ignore Ignore volumes from the beginning of each time series
+ * @param no_tshift Do not correct for slice timing
+ * @param spec_left Spec file for left hemisphere
+ * @param spec_right Spec file for right hemisphere
+ * @param dorts Detrend time series using columns in ORT1D file
+ * @param ccw_orts Detrend time series for counterclockwise stimulus
+ * @param clw_orts Detrend time series for clockwise stimulus
+ * @param exp_orts Detrend time series for expanding stimulus
+ * @param con_orts Detrend time series for contracting stimulus
+ * @param sid SID is a flag identifying the subject
+ * @param out_dir Directory where processing results are to be stored
+ * @param echo Turn on the command echoing to help with debugging script failure
+ * @param echo_edu Turn on command echoing for certain programs only
+ * @param a2e_opts Pass options to @SUMA_AlignToExperiment script
+ * @param aea_opts Pass options to align_epi_anat.py
+ *
+ * @returns Parameter dictionary
+ */
 function v__retino_proc_params(
     tr: number,
     period_ecc: number,
@@ -144,54 +190,8 @@ function v__retino_proc_params(
     a2e_opts: string | null = null,
     aea_opts: string | null = null,
 ): VRetinoProcParameters {
-    /**
-     * Build parameters.
-    
-     * @param tr TR, in seconds, of retinotopic scans
-     * @param period_ecc Period, in seconds, of eccentricity stimuli
-     * @param period_pol Period, in seconds, of polar angle stimuli
-     * @param ccw Input time series dataset for counterclockwise stimulus
-     * @param clw Input time series dataset for clockwise stimulus
-     * @param exp Input time series dataset for expanding stimulus
-     * @param con Input time series dataset for contracting stimulus
-     * @param epi_ref Specify a volume from the EPI time series to which all EPI volumes are aligned
-     * @param epi_anat_ref Specify a volume from the EPI time series that is better suited for aligning the T1 to it than EpiRef might be
-     * @param anat_vol T1 volume acquired during the same session as the retinotopic scans
-     * @param anat_vol_epi Anatomical volume aligned to EPI reference
-     * @param surf_vol Surface Volume for the cortical surfaces
-     * @param surf_vol_epi Surface volume aligned to experiment's EPI data
-     * @param phase Use phase of fundamental frequency to estimate latency
-     * @param delay Use delay relative to reference time series to estimate latency
-     * @param pre_ecc Duration, in seconds, before eccentricity stimulus
-     * @param pre_pol Duration, in seconds, before polar angle stimulus
-     * @param on_ecc Number of stimulation blocks and duration of stimulation for eccentricity stimulus
-     * @param on_pol Number of stimulation blocks and duration of stimulation for polar angle stimulus
-     * @param var_on_ecc Multiple on durations for eccentricity stimulus
-     * @param var_on_pol Multiple on durations for polar angle stimulus
-     * @param nwedges Number of wedges in polar stimulus
-     * @param nrings Number of rings in eccentricity stimulus
-     * @param fwhm_pol Target smoothness for polar stimulus
-     * @param fwhm_ecc Target smoothness for eccentricity stimulus
-     * @param ignore Ignore volumes from the beginning of each time series
-     * @param no_tshift Do not correct for slice timing
-     * @param spec_left Spec file for left hemisphere
-     * @param spec_right Spec file for right hemisphere
-     * @param dorts Detrend time series using columns in ORT1D file
-     * @param ccw_orts Detrend time series for counterclockwise stimulus
-     * @param clw_orts Detrend time series for clockwise stimulus
-     * @param exp_orts Detrend time series for expanding stimulus
-     * @param con_orts Detrend time series for contracting stimulus
-     * @param sid SID is a flag identifying the subject
-     * @param out_dir Directory where processing results are to be stored
-     * @param echo Turn on the command echoing to help with debugging script failure
-     * @param echo_edu Turn on command echoing for certain programs only
-     * @param a2e_opts Pass options to @SUMA_AlignToExperiment script
-     * @param aea_opts Pass options to align_epi_anat.py
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@RetinoProc" as const,
+        "@type": "afni.@RetinoProc" as const,
         "phase": phase,
         "delay": delay,
         "tr": tr,
@@ -301,18 +301,18 @@ function v__retino_proc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__retino_proc_cargs(
     params: VRetinoProcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@RetinoProc");
     if ((params["ccw"] ?? null) !== null) {
@@ -538,18 +538,18 @@ function v__retino_proc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__retino_proc_outputs(
     params: VRetinoProcParameters,
     execution: Execution,
 ): VRetinoProcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VRetinoProcOutputs = {
         root: execution.outputFile("."),
     };
@@ -557,22 +557,22 @@ function v__retino_proc_outputs(
 }
 
 
+/**
+ * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
+ */
 function v__retino_proc_execute(
     params: VRetinoProcParameters,
     execution: Execution,
 ): VRetinoProcOutputs {
-    /**
-     * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__retino_proc_cargs(params, execution)
     const ret = v__retino_proc_outputs(params, execution)
@@ -581,6 +581,57 @@ function v__retino_proc_execute(
 }
 
 
+/**
+ * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tr TR, in seconds, of retinotopic scans
+ * @param period_ecc Period, in seconds, of eccentricity stimuli
+ * @param period_pol Period, in seconds, of polar angle stimuli
+ * @param ccw Input time series dataset for counterclockwise stimulus
+ * @param clw Input time series dataset for clockwise stimulus
+ * @param exp Input time series dataset for expanding stimulus
+ * @param con Input time series dataset for contracting stimulus
+ * @param epi_ref Specify a volume from the EPI time series to which all EPI volumes are aligned
+ * @param epi_anat_ref Specify a volume from the EPI time series that is better suited for aligning the T1 to it than EpiRef might be
+ * @param anat_vol T1 volume acquired during the same session as the retinotopic scans
+ * @param anat_vol_epi Anatomical volume aligned to EPI reference
+ * @param surf_vol Surface Volume for the cortical surfaces
+ * @param surf_vol_epi Surface volume aligned to experiment's EPI data
+ * @param phase Use phase of fundamental frequency to estimate latency
+ * @param delay Use delay relative to reference time series to estimate latency
+ * @param pre_ecc Duration, in seconds, before eccentricity stimulus
+ * @param pre_pol Duration, in seconds, before polar angle stimulus
+ * @param on_ecc Number of stimulation blocks and duration of stimulation for eccentricity stimulus
+ * @param on_pol Number of stimulation blocks and duration of stimulation for polar angle stimulus
+ * @param var_on_ecc Multiple on durations for eccentricity stimulus
+ * @param var_on_pol Multiple on durations for polar angle stimulus
+ * @param nwedges Number of wedges in polar stimulus
+ * @param nrings Number of rings in eccentricity stimulus
+ * @param fwhm_pol Target smoothness for polar stimulus
+ * @param fwhm_ecc Target smoothness for eccentricity stimulus
+ * @param ignore Ignore volumes from the beginning of each time series
+ * @param no_tshift Do not correct for slice timing
+ * @param spec_left Spec file for left hemisphere
+ * @param spec_right Spec file for right hemisphere
+ * @param dorts Detrend time series using columns in ORT1D file
+ * @param ccw_orts Detrend time series for counterclockwise stimulus
+ * @param clw_orts Detrend time series for clockwise stimulus
+ * @param exp_orts Detrend time series for expanding stimulus
+ * @param con_orts Detrend time series for contracting stimulus
+ * @param sid SID is a flag identifying the subject
+ * @param out_dir Directory where processing results are to be stored
+ * @param echo Turn on the command echoing to help with debugging script failure
+ * @param echo_edu Turn on command echoing for certain programs only
+ * @param a2e_opts Pass options to @SUMA_AlignToExperiment script
+ * @param aea_opts Pass options to align_epi_anat.py
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
+ */
 function v__retino_proc(
     tr: number,
     period_ecc: number,
@@ -624,57 +675,6 @@ function v__retino_proc(
     aea_opts: string | null = null,
     runner: Runner | null = null,
 ): VRetinoProcOutputs {
-    /**
-     * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tr TR, in seconds, of retinotopic scans
-     * @param period_ecc Period, in seconds, of eccentricity stimuli
-     * @param period_pol Period, in seconds, of polar angle stimuli
-     * @param ccw Input time series dataset for counterclockwise stimulus
-     * @param clw Input time series dataset for clockwise stimulus
-     * @param exp Input time series dataset for expanding stimulus
-     * @param con Input time series dataset for contracting stimulus
-     * @param epi_ref Specify a volume from the EPI time series to which all EPI volumes are aligned
-     * @param epi_anat_ref Specify a volume from the EPI time series that is better suited for aligning the T1 to it than EpiRef might be
-     * @param anat_vol T1 volume acquired during the same session as the retinotopic scans
-     * @param anat_vol_epi Anatomical volume aligned to EPI reference
-     * @param surf_vol Surface Volume for the cortical surfaces
-     * @param surf_vol_epi Surface volume aligned to experiment's EPI data
-     * @param phase Use phase of fundamental frequency to estimate latency
-     * @param delay Use delay relative to reference time series to estimate latency
-     * @param pre_ecc Duration, in seconds, before eccentricity stimulus
-     * @param pre_pol Duration, in seconds, before polar angle stimulus
-     * @param on_ecc Number of stimulation blocks and duration of stimulation for eccentricity stimulus
-     * @param on_pol Number of stimulation blocks and duration of stimulation for polar angle stimulus
-     * @param var_on_ecc Multiple on durations for eccentricity stimulus
-     * @param var_on_pol Multiple on durations for polar angle stimulus
-     * @param nwedges Number of wedges in polar stimulus
-     * @param nrings Number of rings in eccentricity stimulus
-     * @param fwhm_pol Target smoothness for polar stimulus
-     * @param fwhm_ecc Target smoothness for eccentricity stimulus
-     * @param ignore Ignore volumes from the beginning of each time series
-     * @param no_tshift Do not correct for slice timing
-     * @param spec_left Spec file for left hemisphere
-     * @param spec_right Spec file for right hemisphere
-     * @param dorts Detrend time series using columns in ORT1D file
-     * @param ccw_orts Detrend time series for counterclockwise stimulus
-     * @param clw_orts Detrend time series for clockwise stimulus
-     * @param exp_orts Detrend time series for expanding stimulus
-     * @param con_orts Detrend time series for contracting stimulus
-     * @param sid SID is a flag identifying the subject
-     * @param out_dir Directory where processing results are to be stored
-     * @param echo Turn on the command echoing to help with debugging script failure
-     * @param echo_edu Turn on command echoing for certain programs only
-     * @param a2e_opts Pass options to @SUMA_AlignToExperiment script
-     * @param aea_opts Pass options to align_epi_anat.py
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__RETINO_PROC_METADATA);
     const params = v__retino_proc_params(tr, period_ecc, period_pol, ccw, clw, exp, con, epi_ref, epi_anat_ref, anat_vol, anat_vol_epi, surf_vol, surf_vol_epi, phase, delay, pre_ecc, pre_pol, on_ecc, on_pol, var_on_ecc, var_on_pol, nwedges, nrings, fwhm_pol, fwhm_ecc, ignore, no_tshift, spec_left, spec_right, dorts, ccw_orts, clw_orts, exp_orts, con_orts, sid, out_dir, echo, echo_edu, a2e_opts, aea_opts)
@@ -687,5 +687,8 @@ export {
       VRetinoProcParameters,
       V__RETINO_PROC_METADATA,
       v__retino_proc,
+      v__retino_proc_cargs,
+      v__retino_proc_execute,
+      v__retino_proc_outputs,
       v__retino_proc_params,
 };

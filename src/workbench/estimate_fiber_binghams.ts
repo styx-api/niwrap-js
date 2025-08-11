@@ -12,7 +12,7 @@ const ESTIMATE_FIBER_BINGHAMS_METADATA: Metadata = {
 
 
 interface EstimateFiberBinghamsParameters {
-    "__STYXTYPE__": "estimate-fiber-binghams";
+    "@type": "workbench.estimate-fiber-binghams";
     "merged_f1samples": InputPathType;
     "merged_th1samples": InputPathType;
     "merged_ph1samples": InputPathType;
@@ -27,35 +27,35 @@ interface EstimateFiberBinghamsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "estimate-fiber-binghams": estimate_fiber_binghams_cargs,
+        "workbench.estimate-fiber-binghams": estimate_fiber_binghams_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "estimate-fiber-binghams": estimate_fiber_binghams_outputs,
+        "workbench.estimate-fiber-binghams": estimate_fiber_binghams_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface EstimateFiberBinghamsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param merged_f1samples fiber 1 strength samples
+ * @param merged_th1samples fiber 1 theta samples
+ * @param merged_ph1samples fiber 1 phi samples
+ * @param merged_f2samples fiber 2 strength samples
+ * @param merged_th2samples fiber 2 theta samples
+ * @param merged_ph2samples fiber 2 phi samples
+ * @param merged_f3samples fiber 3 strength samples
+ * @param merged_th3samples fiber 3 theta samples
+ * @param merged_ph3samples fiber 3 phi samples
+ * @param label_volume volume of cifti structure labels
+ * @param cifti_out output cifti fiber distributons file
+ *
+ * @returns Parameter dictionary
+ */
 function estimate_fiber_binghams_params(
     merged_f1samples: InputPathType,
     merged_th1samples: InputPathType,
@@ -91,25 +108,8 @@ function estimate_fiber_binghams_params(
     label_volume: InputPathType,
     cifti_out: string,
 ): EstimateFiberBinghamsParameters {
-    /**
-     * Build parameters.
-    
-     * @param merged_f1samples fiber 1 strength samples
-     * @param merged_th1samples fiber 1 theta samples
-     * @param merged_ph1samples fiber 1 phi samples
-     * @param merged_f2samples fiber 2 strength samples
-     * @param merged_th2samples fiber 2 theta samples
-     * @param merged_ph2samples fiber 2 phi samples
-     * @param merged_f3samples fiber 3 strength samples
-     * @param merged_th3samples fiber 3 theta samples
-     * @param merged_ph3samples fiber 3 phi samples
-     * @param label_volume volume of cifti structure labels
-     * @param cifti_out output cifti fiber distributons file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "estimate-fiber-binghams" as const,
+        "@type": "workbench.estimate-fiber-binghams" as const,
         "merged_f1samples": merged_f1samples,
         "merged_th1samples": merged_th1samples,
         "merged_ph1samples": merged_ph1samples,
@@ -126,18 +126,18 @@ function estimate_fiber_binghams_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function estimate_fiber_binghams_cargs(
     params: EstimateFiberBinghamsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-estimate-fiber-binghams");
@@ -156,18 +156,18 @@ function estimate_fiber_binghams_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function estimate_fiber_binghams_outputs(
     params: EstimateFiberBinghamsParameters,
     execution: Execution,
 ): EstimateFiberBinghamsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EstimateFiberBinghamsOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -176,58 +176,58 @@ function estimate_fiber_binghams_outputs(
 }
 
 
+/**
+ * Estimate fiber orientation distributions from bedpostx samples.
+ *
+ * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
+ */
 function estimate_fiber_binghams_execute(
     params: EstimateFiberBinghamsParameters,
     execution: Execution,
 ): EstimateFiberBinghamsOutputs {
-    /**
-     * Estimate fiber orientation distributions from bedpostx samples.
-     * 
-     * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
-     */
     params = execution.params(params)
     const cargs = estimate_fiber_binghams_cargs(params, execution)
     const ret = estimate_fiber_binghams_outputs(params, execution)
@@ -236,6 +236,64 @@ function estimate_fiber_binghams_execute(
 }
 
 
+/**
+ * Estimate fiber orientation distributions from bedpostx samples.
+ *
+ * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
+ *
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param merged_f1samples fiber 1 strength samples
+ * @param merged_th1samples fiber 1 theta samples
+ * @param merged_ph1samples fiber 1 phi samples
+ * @param merged_f2samples fiber 2 strength samples
+ * @param merged_th2samples fiber 2 theta samples
+ * @param merged_ph2samples fiber 2 phi samples
+ * @param merged_f3samples fiber 3 strength samples
+ * @param merged_th3samples fiber 3 theta samples
+ * @param merged_ph3samples fiber 3 phi samples
+ * @param label_volume volume of cifti structure labels
+ * @param cifti_out output cifti fiber distributons file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
+ */
 function estimate_fiber_binghams(
     merged_f1samples: InputPathType,
     merged_th1samples: InputPathType,
@@ -250,64 +308,6 @@ function estimate_fiber_binghams(
     cifti_out: string,
     runner: Runner | null = null,
 ): EstimateFiberBinghamsOutputs {
-    /**
-     * Estimate fiber orientation distributions from bedpostx samples.
-     * 
-     * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
-     * 
-     * CORTEX_LEFT
-     * CORTEX_RIGHT
-     * CEREBELLUM
-     * ACCUMBENS_LEFT
-     * ACCUMBENS_RIGHT
-     * ALL_GREY_MATTER
-     * ALL_WHITE_MATTER
-     * AMYGDALA_LEFT
-     * AMYGDALA_RIGHT
-     * BRAIN_STEM
-     * CAUDATE_LEFT
-     * CAUDATE_RIGHT
-     * CEREBELLAR_WHITE_MATTER_LEFT
-     * CEREBELLAR_WHITE_MATTER_RIGHT
-     * CEREBELLUM_LEFT
-     * CEREBELLUM_RIGHT
-     * CEREBRAL_WHITE_MATTER_LEFT
-     * CEREBRAL_WHITE_MATTER_RIGHT
-     * CORTEX
-     * DIENCEPHALON_VENTRAL_LEFT
-     * DIENCEPHALON_VENTRAL_RIGHT
-     * HIPPOCAMPUS_LEFT
-     * HIPPOCAMPUS_RIGHT
-     * INVALID
-     * OTHER
-     * OTHER_GREY_MATTER
-     * OTHER_WHITE_MATTER
-     * PALLIDUM_LEFT
-     * PALLIDUM_RIGHT
-     * PUTAMEN_LEFT
-     * PUTAMEN_RIGHT
-     * THALAMUS_LEFT
-     * THALAMUS_RIGHT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param merged_f1samples fiber 1 strength samples
-     * @param merged_th1samples fiber 1 theta samples
-     * @param merged_ph1samples fiber 1 phi samples
-     * @param merged_f2samples fiber 2 strength samples
-     * @param merged_th2samples fiber 2 theta samples
-     * @param merged_ph2samples fiber 2 phi samples
-     * @param merged_f3samples fiber 3 strength samples
-     * @param merged_th3samples fiber 3 theta samples
-     * @param merged_ph3samples fiber 3 phi samples
-     * @param label_volume volume of cifti structure labels
-     * @param cifti_out output cifti fiber distributons file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ESTIMATE_FIBER_BINGHAMS_METADATA);
     const params = estimate_fiber_binghams_params(merged_f1samples, merged_th1samples, merged_ph1samples, merged_f2samples, merged_th2samples, merged_ph2samples, merged_f3samples, merged_th3samples, merged_ph3samples, label_volume, cifti_out)
@@ -320,5 +320,8 @@ export {
       EstimateFiberBinghamsOutputs,
       EstimateFiberBinghamsParameters,
       estimate_fiber_binghams,
+      estimate_fiber_binghams_cargs,
+      estimate_fiber_binghams_execute,
+      estimate_fiber_binghams_outputs,
       estimate_fiber_binghams_params,
 };

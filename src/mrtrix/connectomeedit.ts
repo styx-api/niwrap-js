@@ -12,14 +12,14 @@ const CONNECTOMEEDIT_METADATA: Metadata = {
 
 
 interface ConnectomeeditConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.connectomeedit.config";
     "key": string;
     "value": string;
 }
 
 
 interface ConnectomeeditParameters {
-    "__STYXTYPE__": "connectomeedit";
+    "@type": "mrtrix.connectomeedit";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -34,54 +34,54 @@ interface ConnectomeeditParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "connectomeedit": connectomeedit_cargs,
-        "config": connectomeedit_config_cargs,
+        "mrtrix.connectomeedit": connectomeedit_cargs,
+        "mrtrix.connectomeedit.config": connectomeedit_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function connectomeedit_config_params(
     key: string,
     value: string,
 ): ConnectomeeditConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.connectomeedit.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function connectomeedit_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connectomeedit_config_cargs(
     params: ConnectomeeditConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -122,6 +122,23 @@ interface ConnectomeeditOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input connectome.
+ * @param operation the operation to apply, one of: to_symmetric, upper_triangular, lower_triangular, transpose, zero_diagonal.
+ * @param output the output connectome.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function connectomeedit_params(
     input: string,
     operation: string,
@@ -135,25 +152,8 @@ function connectomeedit_params(
     help: boolean = false,
     version: boolean = false,
 ): ConnectomeeditParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input connectome.
-     * @param operation the operation to apply, one of: to_symmetric, upper_triangular, lower_triangular, transpose, zero_diagonal.
-     * @param output the output connectome.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "connectomeedit" as const,
+        "@type": "mrtrix.connectomeedit" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -174,18 +174,18 @@ function connectomeedit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function connectomeedit_cargs(
     params: ConnectomeeditParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("connectomeedit");
     if ((params["info"] ?? null)) {
@@ -207,7 +207,7 @@ function connectomeedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -222,18 +222,18 @@ function connectomeedit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function connectomeedit_outputs(
     params: ConnectomeeditParameters,
     execution: Execution,
 ): ConnectomeeditOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConnectomeeditOutputs = {
         root: execution.outputFile("."),
     };
@@ -241,28 +241,28 @@ function connectomeedit_outputs(
 }
 
 
+/**
+ * Perform basic operations on a connectome.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
+ */
 function connectomeedit_execute(
     params: ConnectomeeditParameters,
     execution: Execution,
 ): ConnectomeeditOutputs {
-    /**
-     * Perform basic operations on a connectome.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
-     */
     params = execution.params(params)
     const cargs = connectomeedit_cargs(params, execution)
     const ret = connectomeedit_outputs(params, execution)
@@ -271,6 +271,34 @@ function connectomeedit_execute(
 }
 
 
+/**
+ * Perform basic operations on a connectome.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input connectome.
+ * @param operation the operation to apply, one of: to_symmetric, upper_triangular, lower_triangular, transpose, zero_diagonal.
+ * @param output the output connectome.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
+ */
 function connectomeedit(
     input: string,
     operation: string,
@@ -285,34 +313,6 @@ function connectomeedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): ConnectomeeditOutputs {
-    /**
-     * Perform basic operations on a connectome.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input connectome.
-     * @param operation the operation to apply, one of: to_symmetric, upper_triangular, lower_triangular, transpose, zero_diagonal.
-     * @param output the output connectome.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONNECTOMEEDIT_METADATA);
     const params = connectomeedit_params(input, operation, output, info, quiet, debug, force, nthreads, config, help, version)
@@ -326,6 +326,10 @@ export {
       ConnectomeeditOutputs,
       ConnectomeeditParameters,
       connectomeedit,
+      connectomeedit_cargs,
+      connectomeedit_config_cargs,
       connectomeedit_config_params,
+      connectomeedit_execute,
+      connectomeedit_outputs,
       connectomeedit_params,
 };

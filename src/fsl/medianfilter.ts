@@ -12,41 +12,41 @@ const MEDIANFILTER_METADATA: Metadata = {
 
 
 interface MedianfilterParameters {
-    "__STYXTYPE__": "medianfilter";
+    "@type": "fsl.medianfilter";
     "infile": InputPathType;
     "outfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "medianfilter": medianfilter_cargs,
+        "fsl.medianfilter": medianfilter_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "medianfilter": medianfilter_outputs,
+        "fsl.medianfilter": medianfilter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MedianfilterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image file to be filtered (e.g., img.nii.gz)
+ * @param outfile Output file to store the filtered image (e.g., img_filtered.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function medianfilter_params(
     infile: InputPathType,
     outfile: InputPathType,
 ): MedianfilterParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image file to be filtered (e.g., img.nii.gz)
-     * @param outfile Output file to store the filtered image (e.g., img_filtered.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "medianfilter" as const,
+        "@type": "fsl.medianfilter" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -90,18 +90,18 @@ function medianfilter_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function medianfilter_cargs(
     params: MedianfilterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("medianfilter");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -110,18 +110,18 @@ function medianfilter_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function medianfilter_outputs(
     params: MedianfilterParameters,
     execution: Execution,
 ): MedianfilterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MedianfilterOutputs = {
         root: execution.outputFile("."),
         filtered_file: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
@@ -130,22 +130,22 @@ function medianfilter_outputs(
 }
 
 
+/**
+ * A tool to perform 26 neighbourhood median filtering on an input image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
+ */
 function medianfilter_execute(
     params: MedianfilterParameters,
     execution: Execution,
 ): MedianfilterOutputs {
-    /**
-     * A tool to perform 26 neighbourhood median filtering on an input image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
-     */
     params = execution.params(params)
     const cargs = medianfilter_cargs(params, execution)
     const ret = medianfilter_outputs(params, execution)
@@ -154,24 +154,24 @@ function medianfilter_execute(
 }
 
 
+/**
+ * A tool to perform 26 neighbourhood median filtering on an input image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image file to be filtered (e.g., img.nii.gz)
+ * @param outfile Output file to store the filtered image (e.g., img_filtered.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
+ */
 function medianfilter(
     infile: InputPathType,
     outfile: InputPathType,
     runner: Runner | null = null,
 ): MedianfilterOutputs {
-    /**
-     * A tool to perform 26 neighbourhood median filtering on an input image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image file to be filtered (e.g., img.nii.gz)
-     * @param outfile Output file to store the filtered image (e.g., img_filtered.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MEDIANFILTER_METADATA);
     const params = medianfilter_params(infile, outfile)
@@ -184,5 +184,8 @@ export {
       MedianfilterOutputs,
       MedianfilterParameters,
       medianfilter,
+      medianfilter_cargs,
+      medianfilter_execute,
+      medianfilter_outputs,
       medianfilter_params,
 };

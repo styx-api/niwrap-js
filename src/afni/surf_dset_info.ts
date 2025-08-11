@@ -12,7 +12,7 @@ const SURF_DSET_INFO_METADATA: Metadata = {
 
 
 interface SurfDsetInfoParameters {
-    "__STYXTYPE__": "SurfDsetInfo";
+    "@type": "afni.SurfDsetInfo";
     "input_dsets": Array<InputPathType>;
     "debug_level"?: number | null | undefined;
     "novolreg": boolean;
@@ -35,33 +35,33 @@ interface SurfDsetInfoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfDsetInfo": surf_dset_info_cargs,
+        "afni.SurfDsetInfo": surf_dset_info_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -81,6 +81,31 @@ interface SurfDsetInfoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dsets Input dataset
+ * @param debug_level Debug level. If DBG = 2, show full dataset information in NIML form.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable
+ * @param trace Turns on In/Out debug and Memory tracing
+ * @param extreme_trace Turns on extreme tracing
+ * @param nomall Turn off memory tracing
+ * @param yesmall Turn on memory tracing (default)
+ * @param mini_help Mini help
+ * @param help Show entire help output
+ * @param extreme_help Show extreme help
+ * @param help_view Open help in text editor
+ * @param help_web Open help in web browser
+ * @param help_find Look for lines in help output that match the specified word
+ * @param help_raw Show unedited help string
+ * @param help_spx Show help string in sphinx format, but do not autoformat
+ * @param help_aspx Show help string in sphinx with autoformatting
+ * @param all_opts Attempt to identify all options for the program from the help output
+ *
+ * @returns Parameter dictionary
+ */
 function surf_dset_info_params(
     input_dsets: Array<InputPathType>,
     debug_level: number | null = null,
@@ -102,33 +127,8 @@ function surf_dset_info_params(
     help_aspx: boolean = false,
     all_opts: boolean = false,
 ): SurfDsetInfoParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dsets Input dataset
-     * @param debug_level Debug level. If DBG = 2, show full dataset information in NIML form.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable
-     * @param trace Turns on In/Out debug and Memory tracing
-     * @param extreme_trace Turns on extreme tracing
-     * @param nomall Turn off memory tracing
-     * @param yesmall Turn on memory tracing (default)
-     * @param mini_help Mini help
-     * @param help Show entire help output
-     * @param extreme_help Show extreme help
-     * @param help_view Open help in text editor
-     * @param help_web Open help in web browser
-     * @param help_find Look for lines in help output that match the specified word
-     * @param help_raw Show unedited help string
-     * @param help_spx Show help string in sphinx format, but do not autoformat
-     * @param help_aspx Show help string in sphinx with autoformatting
-     * @param all_opts Attempt to identify all options for the program from the help output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfDsetInfo" as const,
+        "@type": "afni.SurfDsetInfo" as const,
         "input_dsets": input_dsets,
         "novolreg": novolreg,
         "noxform": noxform,
@@ -159,18 +159,18 @@ function surf_dset_info_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_dset_info_cargs(
     params: SurfDsetInfoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfDsetInfo");
     cargs.push(
@@ -244,18 +244,18 @@ function surf_dset_info_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_dset_info_outputs(
     params: SurfDsetInfoParameters,
     execution: Execution,
 ): SurfDsetInfoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfDsetInfoOutputs = {
         root: execution.outputFile("."),
     };
@@ -263,22 +263,22 @@ function surf_dset_info_outputs(
 }
 
 
+/**
+ * Provides information about surface datasets (DSET).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
+ */
 function surf_dset_info_execute(
     params: SurfDsetInfoParameters,
     execution: Execution,
 ): SurfDsetInfoOutputs {
-    /**
-     * Provides information about surface datasets (DSET).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_dset_info_cargs(params, execution)
     const ret = surf_dset_info_outputs(params, execution)
@@ -287,6 +287,36 @@ function surf_dset_info_execute(
 }
 
 
+/**
+ * Provides information about surface datasets (DSET).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dsets Input dataset
+ * @param debug_level Debug level. If DBG = 2, show full dataset information in NIML form.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable
+ * @param trace Turns on In/Out debug and Memory tracing
+ * @param extreme_trace Turns on extreme tracing
+ * @param nomall Turn off memory tracing
+ * @param yesmall Turn on memory tracing (default)
+ * @param mini_help Mini help
+ * @param help Show entire help output
+ * @param extreme_help Show extreme help
+ * @param help_view Open help in text editor
+ * @param help_web Open help in web browser
+ * @param help_find Look for lines in help output that match the specified word
+ * @param help_raw Show unedited help string
+ * @param help_spx Show help string in sphinx format, but do not autoformat
+ * @param help_aspx Show help string in sphinx with autoformatting
+ * @param all_opts Attempt to identify all options for the program from the help output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
+ */
 function surf_dset_info(
     input_dsets: Array<InputPathType>,
     debug_level: number | null = null,
@@ -309,36 +339,6 @@ function surf_dset_info(
     all_opts: boolean = false,
     runner: Runner | null = null,
 ): SurfDsetInfoOutputs {
-    /**
-     * Provides information about surface datasets (DSET).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dsets Input dataset
-     * @param debug_level Debug level. If DBG = 2, show full dataset information in NIML form.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable
-     * @param trace Turns on In/Out debug and Memory tracing
-     * @param extreme_trace Turns on extreme tracing
-     * @param nomall Turn off memory tracing
-     * @param yesmall Turn on memory tracing (default)
-     * @param mini_help Mini help
-     * @param help Show entire help output
-     * @param extreme_help Show extreme help
-     * @param help_view Open help in text editor
-     * @param help_web Open help in web browser
-     * @param help_find Look for lines in help output that match the specified word
-     * @param help_raw Show unedited help string
-     * @param help_spx Show help string in sphinx format, but do not autoformat
-     * @param help_aspx Show help string in sphinx with autoformatting
-     * @param all_opts Attempt to identify all options for the program from the help output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_DSET_INFO_METADATA);
     const params = surf_dset_info_params(input_dsets, debug_level, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall, mini_help, help, extreme_help, help_view, help_web, help_find, help_raw, help_spx, help_aspx, all_opts)
@@ -351,5 +351,8 @@ export {
       SurfDsetInfoOutputs,
       SurfDsetInfoParameters,
       surf_dset_info,
+      surf_dset_info_cargs,
+      surf_dset_info_execute,
+      surf_dset_info_outputs,
       surf_dset_info_params,
 };

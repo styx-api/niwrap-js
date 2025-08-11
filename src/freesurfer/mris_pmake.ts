@@ -12,7 +12,7 @@ const MRIS_PMAKE_METADATA: Metadata = {
 
 
 interface MrisPmakeParameters {
-    "__STYXTYPE__": "mris_pmake";
+    "@type": "freesurfer.mris_pmake";
     "options_file"?: string | null | undefined;
     "working_dir"?: string | null | undefined;
     "listen_mode": boolean;
@@ -29,33 +29,33 @@ interface MrisPmakeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_pmake": mris_pmake_cargs,
+        "freesurfer.mris_pmake": mris_pmake_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface MrisPmakeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Set the subject to <subj>.
+ * @param hemisphere The hemisphere to process.
+ * @param options_file The main configuration file specifying the startup run-time behaviour.
+ * @param working_dir The working directory.
+ * @param listen_mode Start in LISTEN mode without calculating a path.
+ * @param listen_on_port Create the server port on specified port and do nothing else.
+ * @param surface0 The main mesh surface to read.
+ * @param surface1 The aux mesh surface to read.
+ * @param curve0 The main curvature function maps.
+ * @param curve1 The aux curvature function maps.
+ * @param use_abs_curvs Use absolute values on each curvature map.
+ * @param mpm_prog The mpmProg to run.
+ * @param mpm_args Arguments for the specified mpmProg.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_pmake_params(
     subject: string,
     hemisphere: string,
@@ -90,27 +109,8 @@ function mris_pmake_params(
     mpm_prog: string | null = null,
     mpm_args: string | null = null,
 ): MrisPmakeParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Set the subject to <subj>.
-     * @param hemisphere The hemisphere to process.
-     * @param options_file The main configuration file specifying the startup run-time behaviour.
-     * @param working_dir The working directory.
-     * @param listen_mode Start in LISTEN mode without calculating a path.
-     * @param listen_on_port Create the server port on specified port and do nothing else.
-     * @param surface0 The main mesh surface to read.
-     * @param surface1 The aux mesh surface to read.
-     * @param curve0 The main curvature function maps.
-     * @param curve1 The aux curvature function maps.
-     * @param use_abs_curvs Use absolute values on each curvature map.
-     * @param mpm_prog The mpmProg to run.
-     * @param mpm_args Arguments for the specified mpmProg.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_pmake" as const,
+        "@type": "freesurfer.mris_pmake" as const,
         "listen_mode": listen_mode,
         "subject": subject,
         "hemisphere": hemisphere,
@@ -147,18 +147,18 @@ function mris_pmake_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_pmake_cargs(
     params: MrisPmakeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_pmake");
     if ((params["options_file"] ?? null) !== null) {
@@ -233,18 +233,18 @@ function mris_pmake_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_pmake_outputs(
     params: MrisPmakeParameters,
     execution: Execution,
 ): MrisPmakeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisPmakeOutputs = {
         root: execution.outputFile("."),
     };
@@ -252,22 +252,22 @@ function mris_pmake_outputs(
 }
 
 
+/**
+ * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
+ */
 function mris_pmake_execute(
     params: MrisPmakeParameters,
     execution: Execution,
 ): MrisPmakeOutputs {
-    /**
-     * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_pmake_cargs(params, execution)
     const ret = mris_pmake_outputs(params, execution)
@@ -276,6 +276,30 @@ function mris_pmake_execute(
 }
 
 
+/**
+ * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Set the subject to <subj>.
+ * @param hemisphere The hemisphere to process.
+ * @param options_file The main configuration file specifying the startup run-time behaviour.
+ * @param working_dir The working directory.
+ * @param listen_mode Start in LISTEN mode without calculating a path.
+ * @param listen_on_port Create the server port on specified port and do nothing else.
+ * @param surface0 The main mesh surface to read.
+ * @param surface1 The aux mesh surface to read.
+ * @param curve0 The main curvature function maps.
+ * @param curve1 The aux curvature function maps.
+ * @param use_abs_curvs Use absolute values on each curvature map.
+ * @param mpm_prog The mpmProg to run.
+ * @param mpm_args Arguments for the specified mpmProg.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
+ */
 function mris_pmake(
     subject: string,
     hemisphere: string,
@@ -292,30 +316,6 @@ function mris_pmake(
     mpm_args: string | null = null,
     runner: Runner | null = null,
 ): MrisPmakeOutputs {
-    /**
-     * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Set the subject to <subj>.
-     * @param hemisphere The hemisphere to process.
-     * @param options_file The main configuration file specifying the startup run-time behaviour.
-     * @param working_dir The working directory.
-     * @param listen_mode Start in LISTEN mode without calculating a path.
-     * @param listen_on_port Create the server port on specified port and do nothing else.
-     * @param surface0 The main mesh surface to read.
-     * @param surface1 The aux mesh surface to read.
-     * @param curve0 The main curvature function maps.
-     * @param curve1 The aux curvature function maps.
-     * @param use_abs_curvs Use absolute values on each curvature map.
-     * @param mpm_prog The mpmProg to run.
-     * @param mpm_args Arguments for the specified mpmProg.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PMAKE_METADATA);
     const params = mris_pmake_params(subject, hemisphere, options_file, working_dir, listen_mode, listen_on_port, surface0, surface1, curve0, curve1, use_abs_curvs, mpm_prog, mpm_args)
@@ -328,5 +328,8 @@ export {
       MrisPmakeOutputs,
       MrisPmakeParameters,
       mris_pmake,
+      mris_pmake_cargs,
+      mris_pmake_execute,
+      mris_pmake_outputs,
       mris_pmake_params,
 };

@@ -12,7 +12,7 @@ const MRI_CONCATENATE_GCAM_METADATA: Metadata = {
 
 
 interface MriConcatenateGcamParameters {
-    "__STYXTYPE__": "mri_concatenate_gcam";
+    "@type": "freesurfer.mri_concatenate_gcam";
     "inputs": Array<InputPathType>;
     "output": string;
     "source_image"?: InputPathType | null | undefined;
@@ -23,35 +23,35 @@ interface MriConcatenateGcamParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_concatenate_gcam": mri_concatenate_gcam_cargs,
+        "freesurfer.mri_concatenate_gcam": mri_concatenate_gcam_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_concatenate_gcam": mri_concatenate_gcam_outputs,
+        "freesurfer.mri_concatenate_gcam": mri_concatenate_gcam_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MriConcatenateGcamOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputs Combination of input LTAs and M3Zs.
+ * @param output Concatenated output transform, saved as an LTA or M3Z depending on the input transforms.
+ * @param source_image Change source image geometry of output M3Z, useful for GCAM inversion if the path of the original source volume changed.
+ * @param target_image Change destination image geometry of output M3Z.
+ * @param reduce Reduce output LTA to single LT.
+ * @param invert Invert the output transform.
+ * @param downsample Downsample output M3Z to spacing of 2; by default, the output spacing is that of the rightmost input M3Z.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_concatenate_gcam_params(
     inputs: Array<InputPathType>,
     output: string,
@@ -83,21 +96,8 @@ function mri_concatenate_gcam_params(
     invert: boolean = false,
     downsample: boolean = false,
 ): MriConcatenateGcamParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputs Combination of input LTAs and M3Zs.
-     * @param output Concatenated output transform, saved as an LTA or M3Z depending on the input transforms.
-     * @param source_image Change source image geometry of output M3Z, useful for GCAM inversion if the path of the original source volume changed.
-     * @param target_image Change destination image geometry of output M3Z.
-     * @param reduce Reduce output LTA to single LT.
-     * @param invert Invert the output transform.
-     * @param downsample Downsample output M3Z to spacing of 2; by default, the output spacing is that of the rightmost input M3Z.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_concatenate_gcam" as const,
+        "@type": "freesurfer.mri_concatenate_gcam" as const,
         "inputs": inputs,
         "output": output,
         "reduce": reduce,
@@ -114,18 +114,18 @@ function mri_concatenate_gcam_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_concatenate_gcam_cargs(
     params: MriConcatenateGcamParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_concatenate_gcam");
     cargs.push(...(params["inputs"] ?? null).map(f => execution.inputFile(f)));
@@ -155,18 +155,18 @@ function mri_concatenate_gcam_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_concatenate_gcam_outputs(
     params: MriConcatenateGcamParameters,
     execution: Execution,
 ): MriConcatenateGcamOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriConcatenateGcamOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -175,22 +175,22 @@ function mri_concatenate_gcam_outputs(
 }
 
 
+/**
+ * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
+ */
 function mri_concatenate_gcam_execute(
     params: MriConcatenateGcamParameters,
     execution: Execution,
 ): MriConcatenateGcamOutputs {
-    /**
-     * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_concatenate_gcam_cargs(params, execution)
     const ret = mri_concatenate_gcam_outputs(params, execution)
@@ -199,6 +199,24 @@ function mri_concatenate_gcam_execute(
 }
 
 
+/**
+ * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inputs Combination of input LTAs and M3Zs.
+ * @param output Concatenated output transform, saved as an LTA or M3Z depending on the input transforms.
+ * @param source_image Change source image geometry of output M3Z, useful for GCAM inversion if the path of the original source volume changed.
+ * @param target_image Change destination image geometry of output M3Z.
+ * @param reduce Reduce output LTA to single LT.
+ * @param invert Invert the output transform.
+ * @param downsample Downsample output M3Z to spacing of 2; by default, the output spacing is that of the rightmost input M3Z.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
+ */
 function mri_concatenate_gcam(
     inputs: Array<InputPathType>,
     output: string,
@@ -209,24 +227,6 @@ function mri_concatenate_gcam(
     downsample: boolean = false,
     runner: Runner | null = null,
 ): MriConcatenateGcamOutputs {
-    /**
-     * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inputs Combination of input LTAs and M3Zs.
-     * @param output Concatenated output transform, saved as an LTA or M3Z depending on the input transforms.
-     * @param source_image Change source image geometry of output M3Z, useful for GCAM inversion if the path of the original source volume changed.
-     * @param target_image Change destination image geometry of output M3Z.
-     * @param reduce Reduce output LTA to single LT.
-     * @param invert Invert the output transform.
-     * @param downsample Downsample output M3Z to spacing of 2; by default, the output spacing is that of the rightmost input M3Z.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CONCATENATE_GCAM_METADATA);
     const params = mri_concatenate_gcam_params(inputs, output, source_image, target_image, reduce, invert, downsample)
@@ -239,5 +239,8 @@ export {
       MriConcatenateGcamOutputs,
       MriConcatenateGcamParameters,
       mri_concatenate_gcam,
+      mri_concatenate_gcam_cargs,
+      mri_concatenate_gcam_execute,
+      mri_concatenate_gcam_outputs,
       mri_concatenate_gcam_params,
 };

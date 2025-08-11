@@ -12,7 +12,7 @@ const CIFTI_PAIRWISE_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiPairwiseCorrelationParameters {
-    "__STYXTYPE__": "cifti-pairwise-correlation";
+    "@type": "workbench.cifti-pairwise-correlation";
     "cifti_a": InputPathType;
     "cifti_b": InputPathType;
     "cifti_out": string;
@@ -21,35 +21,35 @@ interface CiftiPairwiseCorrelationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-pairwise-correlation": cifti_pairwise_correlation_cargs,
+        "workbench.cifti-pairwise-correlation": cifti_pairwise_correlation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-pairwise-correlation": cifti_pairwise_correlation_outputs,
+        "workbench.cifti-pairwise-correlation": cifti_pairwise_correlation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface CiftiPairwiseCorrelationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
+ * @param cifti_out output cifti file
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_pairwise_correlation_params(
     cifti_a: InputPathType,
     cifti_b: InputPathType,
@@ -79,19 +90,8 @@ function cifti_pairwise_correlation_params(
     opt_fisher_z: boolean = false,
     opt_override_mapping_check: boolean = false,
 ): CiftiPairwiseCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_a first input cifti file
-     * @param cifti_b second input cifti file
-     * @param cifti_out output cifti file
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-pairwise-correlation" as const,
+        "@type": "workbench.cifti-pairwise-correlation" as const,
         "cifti_a": cifti_a,
         "cifti_b": cifti_b,
         "cifti_out": cifti_out,
@@ -102,18 +102,18 @@ function cifti_pairwise_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_pairwise_correlation_cargs(
     params: CiftiPairwiseCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-pairwise-correlation");
@@ -130,18 +130,18 @@ function cifti_pairwise_correlation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_pairwise_correlation_outputs(
     params: CiftiPairwiseCorrelationParameters,
     execution: Execution,
 ): CiftiPairwiseCorrelationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiPairwiseCorrelationOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -150,24 +150,24 @@ function cifti_pairwise_correlation_outputs(
 }
 
 
+/**
+ * Correlate paired rows between two cifti files.
+ *
+ * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
+ */
 function cifti_pairwise_correlation_execute(
     params: CiftiPairwiseCorrelationParameters,
     execution: Execution,
 ): CiftiPairwiseCorrelationOutputs {
-    /**
-     * Correlate paired rows between two cifti files.
-     * 
-     * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_pairwise_correlation_cargs(params, execution)
     const ret = cifti_pairwise_correlation_outputs(params, execution)
@@ -176,6 +176,24 @@ function cifti_pairwise_correlation_execute(
 }
 
 
+/**
+ * Correlate paired rows between two cifti files.
+ *
+ * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
+ * @param cifti_out output cifti file
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
+ */
 function cifti_pairwise_correlation(
     cifti_a: InputPathType,
     cifti_b: InputPathType,
@@ -184,24 +202,6 @@ function cifti_pairwise_correlation(
     opt_override_mapping_check: boolean = false,
     runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
-    /**
-     * Correlate paired rows between two cifti files.
-     * 
-     * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_a first input cifti file
-     * @param cifti_b second input cifti file
-     * @param cifti_out output cifti file
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_PAIRWISE_CORRELATION_METADATA);
     const params = cifti_pairwise_correlation_params(cifti_a, cifti_b, cifti_out, opt_fisher_z, opt_override_mapping_check)
@@ -214,5 +214,8 @@ export {
       CiftiPairwiseCorrelationOutputs,
       CiftiPairwiseCorrelationParameters,
       cifti_pairwise_correlation,
+      cifti_pairwise_correlation_cargs,
+      cifti_pairwise_correlation_execute,
+      cifti_pairwise_correlation_outputs,
       cifti_pairwise_correlation_params,
 };

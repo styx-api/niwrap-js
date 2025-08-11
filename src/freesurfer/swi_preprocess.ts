@@ -12,7 +12,7 @@ const SWI_PREPROCESS_METADATA: Metadata = {
 
 
 interface SwiPreprocessParameters {
-    "__STYXTYPE__": "swi_preprocess";
+    "@type": "freesurfer.swi_preprocess";
     "scanner": "ge" | "siemens" | "philips";
     "ge_file"?: InputPathType | null | undefined;
     "philips_file"?: InputPathType | null | undefined;
@@ -23,35 +23,35 @@ interface SwiPreprocessParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "swi_preprocess": swi_preprocess_cargs,
+        "freesurfer.swi_preprocess": swi_preprocess_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "swi_preprocess": swi_preprocess_outputs,
+        "freesurfer.swi_preprocess": swi_preprocess_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface SwiPreprocessOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param scanner Name of the scanner (one of ge, siemens or philips)
+ * @param out_magnitude Name of the output magnitude file after preprocessing. Ensure it has a .nii suffix
+ * @param out_phase Name of the output phase file after preprocessing. Ensure it has a .nii suffix
+ * @param ge_file Name of the input GE file (only compatible with --scanner ge option)
+ * @param philips_file Name of the input Philips file (only compatible with --scanner philips option)
+ * @param siemens_magnitude Name of the input Siemens magnitude file (only compatible with --scanner siemens option)
+ * @param siemens_phase Name of the input Siemens phase file (only compatible with --scanner siemens option)
+ *
+ * @returns Parameter dictionary
+ */
 function swi_preprocess_params(
     scanner: "ge" | "siemens" | "philips",
     out_magnitude: string,
@@ -87,21 +100,8 @@ function swi_preprocess_params(
     siemens_magnitude: InputPathType | null = null,
     siemens_phase: InputPathType | null = null,
 ): SwiPreprocessParameters {
-    /**
-     * Build parameters.
-    
-     * @param scanner Name of the scanner (one of ge, siemens or philips)
-     * @param out_magnitude Name of the output magnitude file after preprocessing. Ensure it has a .nii suffix
-     * @param out_phase Name of the output phase file after preprocessing. Ensure it has a .nii suffix
-     * @param ge_file Name of the input GE file (only compatible with --scanner ge option)
-     * @param philips_file Name of the input Philips file (only compatible with --scanner philips option)
-     * @param siemens_magnitude Name of the input Siemens magnitude file (only compatible with --scanner siemens option)
-     * @param siemens_phase Name of the input Siemens phase file (only compatible with --scanner siemens option)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "swi_preprocess" as const,
+        "@type": "freesurfer.swi_preprocess" as const,
         "scanner": scanner,
         "out_magnitude": out_magnitude,
         "out_phase": out_phase,
@@ -122,18 +122,18 @@ function swi_preprocess_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function swi_preprocess_cargs(
     params: SwiPreprocessParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("swi_preprocess");
     cargs.push(
@@ -176,18 +176,18 @@ function swi_preprocess_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function swi_preprocess_outputs(
     params: SwiPreprocessParameters,
     execution: Execution,
 ): SwiPreprocessOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SwiPreprocessOutputs = {
         root: execution.outputFile("."),
         output_magnitude_file: execution.outputFile([(params["out_magnitude"] ?? null)].join('')),
@@ -197,22 +197,22 @@ function swi_preprocess_outputs(
 }
 
 
+/**
+ * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
+ */
 function swi_preprocess_execute(
     params: SwiPreprocessParameters,
     execution: Execution,
 ): SwiPreprocessOutputs {
-    /**
-     * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
-     */
     params = execution.params(params)
     const cargs = swi_preprocess_cargs(params, execution)
     const ret = swi_preprocess_outputs(params, execution)
@@ -221,6 +221,24 @@ function swi_preprocess_execute(
 }
 
 
+/**
+ * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param scanner Name of the scanner (one of ge, siemens or philips)
+ * @param out_magnitude Name of the output magnitude file after preprocessing. Ensure it has a .nii suffix
+ * @param out_phase Name of the output phase file after preprocessing. Ensure it has a .nii suffix
+ * @param ge_file Name of the input GE file (only compatible with --scanner ge option)
+ * @param philips_file Name of the input Philips file (only compatible with --scanner philips option)
+ * @param siemens_magnitude Name of the input Siemens magnitude file (only compatible with --scanner siemens option)
+ * @param siemens_phase Name of the input Siemens phase file (only compatible with --scanner siemens option)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
+ */
 function swi_preprocess(
     scanner: "ge" | "siemens" | "philips",
     out_magnitude: string,
@@ -231,24 +249,6 @@ function swi_preprocess(
     siemens_phase: InputPathType | null = null,
     runner: Runner | null = null,
 ): SwiPreprocessOutputs {
-    /**
-     * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param scanner Name of the scanner (one of ge, siemens or philips)
-     * @param out_magnitude Name of the output magnitude file after preprocessing. Ensure it has a .nii suffix
-     * @param out_phase Name of the output phase file after preprocessing. Ensure it has a .nii suffix
-     * @param ge_file Name of the input GE file (only compatible with --scanner ge option)
-     * @param philips_file Name of the input Philips file (only compatible with --scanner philips option)
-     * @param siemens_magnitude Name of the input Siemens magnitude file (only compatible with --scanner siemens option)
-     * @param siemens_phase Name of the input Siemens phase file (only compatible with --scanner siemens option)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SWI_PREPROCESS_METADATA);
     const params = swi_preprocess_params(scanner, out_magnitude, out_phase, ge_file, philips_file, siemens_magnitude, siemens_phase)
@@ -261,5 +261,8 @@ export {
       SwiPreprocessOutputs,
       SwiPreprocessParameters,
       swi_preprocess,
+      swi_preprocess_cargs,
+      swi_preprocess_execute,
+      swi_preprocess_outputs,
       swi_preprocess_params,
 };

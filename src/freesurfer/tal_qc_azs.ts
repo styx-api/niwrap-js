@@ -12,38 +12,38 @@ const TAL_QC_AZS_METADATA: Metadata = {
 
 
 interface TalQcAzsParameters {
-    "__STYXTYPE__": "tal_QC_AZS";
+    "@type": "freesurfer.tal_QC_AZS";
     "logfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tal_QC_AZS": tal_qc_azs_cargs,
+        "freesurfer.tal_QC_AZS": tal_qc_azs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface TalQcAzsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param logfile Input logfile for processing.
+ *
+ * @returns Parameter dictionary
+ */
 function tal_qc_azs_params(
     logfile: InputPathType,
 ): TalQcAzsParameters {
-    /**
-     * Build parameters.
-    
-     * @param logfile Input logfile for processing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tal_QC_AZS" as const,
+        "@type": "freesurfer.tal_QC_AZS" as const,
         "logfile": logfile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tal_qc_azs_cargs(
     params: TalQcAzsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tal_QC_AZS");
     cargs.push(execution.inputFile((params["logfile"] ?? null)));
@@ -100,18 +100,18 @@ function tal_qc_azs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tal_qc_azs_outputs(
     params: TalQcAzsParameters,
     execution: Execution,
 ): TalQcAzsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalQcAzsOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function tal_qc_azs_outputs(
 }
 
 
+/**
+ * A tool that processes a logfile.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
+ */
 function tal_qc_azs_execute(
     params: TalQcAzsParameters,
     execution: Execution,
 ): TalQcAzsOutputs {
-    /**
-     * A tool that processes a logfile.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
-     */
     params = execution.params(params)
     const cargs = tal_qc_azs_cargs(params, execution)
     const ret = tal_qc_azs_outputs(params, execution)
@@ -143,22 +143,22 @@ function tal_qc_azs_execute(
 }
 
 
+/**
+ * A tool that processes a logfile.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param logfile Input logfile for processing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
+ */
 function tal_qc_azs(
     logfile: InputPathType,
     runner: Runner | null = null,
 ): TalQcAzsOutputs {
-    /**
-     * A tool that processes a logfile.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param logfile Input logfile for processing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TAL_QC_AZS_METADATA);
     const params = tal_qc_azs_params(logfile)
@@ -171,5 +171,8 @@ export {
       TalQcAzsOutputs,
       TalQcAzsParameters,
       tal_qc_azs,
+      tal_qc_azs_cargs,
+      tal_qc_azs_execute,
+      tal_qc_azs_outputs,
       tal_qc_azs_params,
 };

@@ -12,7 +12,7 @@ const TABLE2MAP_METADATA: Metadata = {
 
 
 interface Table2mapParameters {
-    "__STYXTYPE__": "table2map";
+    "@type": "freesurfer.table2map";
     "input_table": InputPathType;
     "output_map": string;
     "segmentation"?: InputPathType | null | undefined;
@@ -22,33 +22,33 @@ interface Table2mapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "table2map": table2map_cargs,
+        "freesurfer.table2map": table2map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface Table2mapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_table Input table.
+ * @param output_map Output map.
+ * @param segmentation Segmentation to map to.
+ * @param parcellation Parcellation to map to.
+ * @param columns Table columns to map. All are included by default.
+ * @param lookup_table Alternative lookup table.
+ *
+ * @returns Parameter dictionary
+ */
 function table2map_params(
     input_table: InputPathType,
     output_map: string,
@@ -76,20 +88,8 @@ function table2map_params(
     columns: Array<string> | null = null,
     lookup_table: InputPathType | null = null,
 ): Table2mapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_table Input table.
-     * @param output_map Output map.
-     * @param segmentation Segmentation to map to.
-     * @param parcellation Parcellation to map to.
-     * @param columns Table columns to map. All are included by default.
-     * @param lookup_table Alternative lookup table.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "table2map" as const,
+        "@type": "freesurfer.table2map" as const,
         "input_table": input_table,
         "output_map": output_map,
     };
@@ -109,18 +109,18 @@ function table2map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function table2map_cargs(
     params: Table2mapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("table2map");
     cargs.push(
@@ -159,18 +159,18 @@ function table2map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function table2map_outputs(
     params: Table2mapParameters,
     execution: Execution,
 ): Table2mapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Table2mapOutputs = {
         root: execution.outputFile("."),
     };
@@ -178,22 +178,22 @@ function table2map_outputs(
 }
 
 
+/**
+ * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
+ */
 function table2map_execute(
     params: Table2mapParameters,
     execution: Execution,
 ): Table2mapOutputs {
-    /**
-     * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
-     */
     params = execution.params(params)
     const cargs = table2map_cargs(params, execution)
     const ret = table2map_outputs(params, execution)
@@ -202,6 +202,23 @@ function table2map_execute(
 }
 
 
+/**
+ * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_table Input table.
+ * @param output_map Output map.
+ * @param segmentation Segmentation to map to.
+ * @param parcellation Parcellation to map to.
+ * @param columns Table columns to map. All are included by default.
+ * @param lookup_table Alternative lookup table.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
+ */
 function table2map(
     input_table: InputPathType,
     output_map: string,
@@ -211,23 +228,6 @@ function table2map(
     lookup_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): Table2mapOutputs {
-    /**
-     * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_table Input table.
-     * @param output_map Output map.
-     * @param segmentation Segmentation to map to.
-     * @param parcellation Parcellation to map to.
-     * @param columns Table columns to map. All are included by default.
-     * @param lookup_table Alternative lookup table.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TABLE2MAP_METADATA);
     const params = table2map_params(input_table, output_map, segmentation, parcellation, columns, lookup_table)
@@ -240,5 +240,8 @@ export {
       Table2mapOutputs,
       Table2mapParameters,
       table2map,
+      table2map_cargs,
+      table2map_execute,
+      table2map_outputs,
       table2map_params,
 };

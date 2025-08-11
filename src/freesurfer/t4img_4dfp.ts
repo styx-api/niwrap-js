@@ -12,42 +12,42 @@ const T4IMG_4DFP_METADATA: Metadata = {
 
 
 interface T4img4dfpParameters {
-    "__STYXTYPE__": "t4img_4dfp";
+    "@type": "freesurfer.t4img_4dfp";
     "t4file": InputPathType;
     "imgfile": InputPathType;
     "outfile"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "t4img_4dfp": t4img_4dfp_cargs,
+        "freesurfer.t4img_4dfp": t4img_4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "t4img_4dfp": t4img_4dfp_outputs,
+        "freesurfer.t4img_4dfp": t4img_4dfp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface T4img4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t4file Transformation matrix file (t4 file format).
+ * @param imgfile Input image file (4dfp format).
+ * @param outfile Output image file (optional, defaults to <imgfile>t if not provided).
+ *
+ * @returns Parameter dictionary
+ */
 function t4img_4dfp_params(
     t4file: InputPathType,
     imgfile: InputPathType,
     outfile: string | null = null,
 ): T4img4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param t4file Transformation matrix file (t4 file format).
-     * @param imgfile Input image file (4dfp format).
-     * @param outfile Output image file (optional, defaults to <imgfile>t if not provided).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "t4img_4dfp" as const,
+        "@type": "freesurfer.t4img_4dfp" as const,
         "t4file": t4file,
         "imgfile": imgfile,
     };
@@ -96,18 +96,18 @@ function t4img_4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function t4img_4dfp_cargs(
     params: T4img4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("t4img_4dfp");
     cargs.push(execution.inputFile((params["t4file"] ?? null)));
@@ -119,18 +119,18 @@ function t4img_4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function t4img_4dfp_outputs(
     params: T4img4dfpParameters,
     execution: Execution,
 ): T4img4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: T4img4dfpOutputs = {
         root: execution.outputFile("."),
         transformed_image: ((params["outfile"] ?? null) !== null) ? execution.outputFile([(params["outfile"] ?? null), ".4dfp.img"].join('')) : null,
@@ -139,22 +139,22 @@ function t4img_4dfp_outputs(
 }
 
 
+/**
+ * Transforms a 4dfp image using a specified t4 file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
+ */
 function t4img_4dfp_execute(
     params: T4img4dfpParameters,
     execution: Execution,
 ): T4img4dfpOutputs {
-    /**
-     * Transforms a 4dfp image using a specified t4 file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = t4img_4dfp_cargs(params, execution)
     const ret = t4img_4dfp_outputs(params, execution)
@@ -163,26 +163,26 @@ function t4img_4dfp_execute(
 }
 
 
+/**
+ * Transforms a 4dfp image using a specified t4 file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t4file Transformation matrix file (t4 file format).
+ * @param imgfile Input image file (4dfp format).
+ * @param outfile Output image file (optional, defaults to <imgfile>t if not provided).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
+ */
 function t4img_4dfp(
     t4file: InputPathType,
     imgfile: InputPathType,
     outfile: string | null = null,
     runner: Runner | null = null,
 ): T4img4dfpOutputs {
-    /**
-     * Transforms a 4dfp image using a specified t4 file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t4file Transformation matrix file (t4 file format).
-     * @param imgfile Input image file (4dfp format).
-     * @param outfile Output image file (optional, defaults to <imgfile>t if not provided).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(T4IMG_4DFP_METADATA);
     const params = t4img_4dfp_params(t4file, imgfile, outfile)
@@ -195,5 +195,8 @@ export {
       T4img4dfpOutputs,
       T4img4dfpParameters,
       t4img_4dfp,
+      t4img_4dfp_cargs,
+      t4img_4dfp_execute,
+      t4img_4dfp_outputs,
       t4img_4dfp_params,
 };

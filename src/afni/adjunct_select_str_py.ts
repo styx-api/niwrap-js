@@ -12,40 +12,40 @@ const ADJUNCT_SELECT_STR_PY_METADATA: Metadata = {
 
 
 interface AdjunctSelectStrPyParameters {
-    "__STYXTYPE__": "adjunct_select_str.py";
+    "@type": "afni.adjunct_select_str.py";
     "input_file": InputPathType;
     "num_bricks": number;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "adjunct_select_str.py": adjunct_select_str_py_cargs,
+        "afni.adjunct_select_str.py": adjunct_select_str_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface AdjunctSelectStrPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file File containing a list of integers
+ * @param num_bricks The number N of bricks in the dataset (so max index is N-1)
+ * @param output_file Output file name
+ *
+ * @returns Parameter dictionary
+ */
 function adjunct_select_str_py_params(
     input_file: InputPathType,
     num_bricks: number,
     output_file: string,
 ): AdjunctSelectStrPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file File containing a list of integers
-     * @param num_bricks The number N of bricks in the dataset (so max index is N-1)
-     * @param output_file Output file name
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "adjunct_select_str.py" as const,
+        "@type": "afni.adjunct_select_str.py" as const,
         "input_file": input_file,
         "num_bricks": num_bricks,
         "output_file": output_file,
@@ -89,18 +89,18 @@ function adjunct_select_str_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function adjunct_select_str_py_cargs(
     params: AdjunctSelectStrPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("adjunct_select_str.py");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function adjunct_select_str_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function adjunct_select_str_py_outputs(
     params: AdjunctSelectStrPyParameters,
     execution: Execution,
 ): AdjunctSelectStrPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AdjunctSelectStrPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function adjunct_select_str_py_outputs(
 }
 
 
+/**
+ * A simple helper function for the fat_proc* scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
+ */
 function adjunct_select_str_py_execute(
     params: AdjunctSelectStrPyParameters,
     execution: Execution,
 ): AdjunctSelectStrPyOutputs {
-    /**
-     * A simple helper function for the fat_proc* scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = adjunct_select_str_py_cargs(params, execution)
     const ret = adjunct_select_str_py_outputs(params, execution)
@@ -153,26 +153,26 @@ function adjunct_select_str_py_execute(
 }
 
 
+/**
+ * A simple helper function for the fat_proc* scripts.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file File containing a list of integers
+ * @param num_bricks The number N of bricks in the dataset (so max index is N-1)
+ * @param output_file Output file name
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
+ */
 function adjunct_select_str_py(
     input_file: InputPathType,
     num_bricks: number,
     output_file: string,
     runner: Runner | null = null,
 ): AdjunctSelectStrPyOutputs {
-    /**
-     * A simple helper function for the fat_proc* scripts.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file File containing a list of integers
-     * @param num_bricks The number N of bricks in the dataset (so max index is N-1)
-     * @param output_file Output file name
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ADJUNCT_SELECT_STR_PY_METADATA);
     const params = adjunct_select_str_py_params(input_file, num_bricks, output_file)
@@ -185,5 +185,8 @@ export {
       AdjunctSelectStrPyOutputs,
       AdjunctSelectStrPyParameters,
       adjunct_select_str_py,
+      adjunct_select_str_py_cargs,
+      adjunct_select_str_py_execute,
+      adjunct_select_str_py_outputs,
       adjunct_select_str_py_params,
 };

@@ -12,7 +12,7 @@ const MRI_SEG_DIFF_METADATA: Metadata = {
 
 
 interface MriSegDiffParameters {
-    "__STYXTYPE__": "mri_seg_diff";
+    "@type": "freesurfer.mri_seg_diff";
     "seg1"?: InputPathType | null | undefined;
     "seg2"?: InputPathType | null | undefined;
     "seg"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface MriSegDiffParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_seg_diff": mri_seg_diff_cargs,
+        "freesurfer.mri_seg_diff": mri_seg_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_seg_diff": mri_seg_diff_outputs,
+        "freesurfer.mri_seg_diff": mri_seg_diff_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface MriSegDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param diff Output diff segmentation volume.
+ * @param seg1 First segmentation file (e.g., unedited).
+ * @param seg2 Second segmentation file (e.g., edited).
+ * @param seg Source segmentation file (e.g., unedited).
+ * @param diff_in Input diff segmentation volume.
+ * @param merged Merged output, combining unedited with diff.
+ * @param diff_force Force creation of a diff even if no diff is detected.
+ * @param debug Turn on debugging.
+ * @param checkopts Check options and exit without running.
+ * @param version Print out version and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_seg_diff_params(
     diff: string,
     seg1: InputPathType | null = null,
@@ -93,24 +109,8 @@ function mri_seg_diff_params(
     checkopts: boolean = false,
     version: boolean = false,
 ): MriSegDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param diff Output diff segmentation volume.
-     * @param seg1 First segmentation file (e.g., unedited).
-     * @param seg2 Second segmentation file (e.g., edited).
-     * @param seg Source segmentation file (e.g., unedited).
-     * @param diff_in Input diff segmentation volume.
-     * @param merged Merged output, combining unedited with diff.
-     * @param diff_force Force creation of a diff even if no diff is detected.
-     * @param debug Turn on debugging.
-     * @param checkopts Check options and exit without running.
-     * @param version Print out version and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_seg_diff" as const,
+        "@type": "freesurfer.mri_seg_diff" as const,
         "diff": diff,
         "diff_force": diff_force,
         "debug": debug,
@@ -136,18 +136,18 @@ function mri_seg_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_seg_diff_cargs(
     params: MriSegDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_seg_diff");
     if ((params["seg1"] ?? null) !== null) {
@@ -200,18 +200,18 @@ function mri_seg_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_seg_diff_outputs(
     params: MriSegDiffParameters,
     execution: Execution,
 ): MriSegDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegDiffOutputs = {
         root: execution.outputFile("."),
         diff_output: execution.outputFile([(params["diff"] ?? null)].join('')),
@@ -221,22 +221,22 @@ function mri_seg_diff_outputs(
 }
 
 
+/**
+ * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
+ */
 function mri_seg_diff_execute(
     params: MriSegDiffParameters,
     execution: Execution,
 ): MriSegDiffOutputs {
-    /**
-     * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_seg_diff_cargs(params, execution)
     const ret = mri_seg_diff_outputs(params, execution)
@@ -245,6 +245,27 @@ function mri_seg_diff_execute(
 }
 
 
+/**
+ * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param diff Output diff segmentation volume.
+ * @param seg1 First segmentation file (e.g., unedited).
+ * @param seg2 Second segmentation file (e.g., edited).
+ * @param seg Source segmentation file (e.g., unedited).
+ * @param diff_in Input diff segmentation volume.
+ * @param merged Merged output, combining unedited with diff.
+ * @param diff_force Force creation of a diff even if no diff is detected.
+ * @param debug Turn on debugging.
+ * @param checkopts Check options and exit without running.
+ * @param version Print out version and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
+ */
 function mri_seg_diff(
     diff: string,
     seg1: InputPathType | null = null,
@@ -258,27 +279,6 @@ function mri_seg_diff(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriSegDiffOutputs {
-    /**
-     * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param diff Output diff segmentation volume.
-     * @param seg1 First segmentation file (e.g., unedited).
-     * @param seg2 Second segmentation file (e.g., edited).
-     * @param seg Source segmentation file (e.g., unedited).
-     * @param diff_in Input diff segmentation volume.
-     * @param merged Merged output, combining unedited with diff.
-     * @param diff_force Force creation of a diff even if no diff is detected.
-     * @param debug Turn on debugging.
-     * @param checkopts Check options and exit without running.
-     * @param version Print out version and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEG_DIFF_METADATA);
     const params = mri_seg_diff_params(diff, seg1, seg2, seg, diff_in, merged, diff_force, debug, checkopts, version)
@@ -291,5 +291,8 @@ export {
       MriSegDiffOutputs,
       MriSegDiffParameters,
       mri_seg_diff,
+      mri_seg_diff_cargs,
+      mri_seg_diff_execute,
+      mri_seg_diff_outputs,
       mri_seg_diff_params,
 };

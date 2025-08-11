@@ -12,7 +12,7 @@ const VOL2SUBFIELD_METADATA: Metadata = {
 
 
 interface Vol2subfieldParameters {
-    "__STYXTYPE__": "vol2subfield";
+    "@type": "freesurfer.vol2subfield";
     "input_volume": InputPathType;
     "subfield_volume": InputPathType;
     "registration_file": InputPathType;
@@ -35,35 +35,35 @@ interface Vol2subfieldParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vol2subfield": vol2subfield_cargs,
+        "freesurfer.vol2subfield": vol2subfield_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vol2subfield": vol2subfield_outputs,
+        "freesurfer.vol2subfield": vol2subfield_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,6 +102,31 @@ interface Vol2subfieldOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume
+ * @param subfield_volume Subfield volume (full path or relative to subject/mri)
+ * @param registration_file Registration that maps input volume to conformed space
+ * @param output_volume Output volume
+ * @param output_registration Registration between input volume and subfield
+ * @param stats_output Run mri_segstats with --sum output to this file
+ * @param avgwf_output Run mri_segstats with --avgwf output to this file
+ * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
+ * @param color_table Color table to use with mri_segstats
+ * @param interpolation_nearest Use nearest neighbor interpolation
+ * @param interpolation_trilin Use triliear interpolation
+ * @param interpolation_cubic Use cubic interpolation
+ * @param tmp_directory Temporary directory for debugging
+ * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
+ * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
+ * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
+ * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
+ * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
+ * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
+ *
+ * @returns Parameter dictionary
+ */
 function vol2subfield_params(
     input_volume: InputPathType,
     subfield_volume: InputPathType,
@@ -123,33 +148,8 @@ function vol2subfield_params(
     preset_subfield_thalamus: boolean = false,
     preset_subfield_brainstem: boolean = false,
 ): Vol2subfieldParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume
-     * @param subfield_volume Subfield volume (full path or relative to subject/mri)
-     * @param registration_file Registration that maps input volume to conformed space
-     * @param output_volume Output volume
-     * @param output_registration Registration between input volume and subfield
-     * @param stats_output Run mri_segstats with --sum output to this file
-     * @param avgwf_output Run mri_segstats with --avgwf output to this file
-     * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
-     * @param color_table Color table to use with mri_segstats
-     * @param interpolation_nearest Use nearest neighbor interpolation
-     * @param interpolation_trilin Use triliear interpolation
-     * @param interpolation_cubic Use cubic interpolation
-     * @param tmp_directory Temporary directory for debugging
-     * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
-     * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
-     * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
-     * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
-     * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
-     * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vol2subfield" as const,
+        "@type": "freesurfer.vol2subfield" as const,
         "input_volume": input_volume,
         "subfield_volume": subfield_volume,
         "registration_file": registration_file,
@@ -188,18 +188,18 @@ function vol2subfield_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vol2subfield_cargs(
     params: Vol2subfieldParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vol2subfield");
     cargs.push(
@@ -287,18 +287,18 @@ function vol2subfield_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vol2subfield_outputs(
     params: Vol2subfieldParameters,
     execution: Execution,
 ): Vol2subfieldOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Vol2subfieldOutputs = {
         root: execution.outputFile("."),
         mapped_output_volume: ((params["output_volume"] ?? null) !== null) ? execution.outputFile([(params["output_volume"] ?? null)].join('')) : null,
@@ -311,22 +311,22 @@ function vol2subfield_outputs(
 }
 
 
+/**
+ * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
+ */
 function vol2subfield_execute(
     params: Vol2subfieldParameters,
     execution: Execution,
 ): Vol2subfieldOutputs {
-    /**
-     * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
-     */
     params = execution.params(params)
     const cargs = vol2subfield_cargs(params, execution)
     const ret = vol2subfield_outputs(params, execution)
@@ -335,6 +335,36 @@ function vol2subfield_execute(
 }
 
 
+/**
+ * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume
+ * @param subfield_volume Subfield volume (full path or relative to subject/mri)
+ * @param registration_file Registration that maps input volume to conformed space
+ * @param output_volume Output volume
+ * @param output_registration Registration between input volume and subfield
+ * @param stats_output Run mri_segstats with --sum output to this file
+ * @param avgwf_output Run mri_segstats with --avgwf output to this file
+ * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
+ * @param color_table Color table to use with mri_segstats
+ * @param interpolation_nearest Use nearest neighbor interpolation
+ * @param interpolation_trilin Use triliear interpolation
+ * @param interpolation_cubic Use cubic interpolation
+ * @param tmp_directory Temporary directory for debugging
+ * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
+ * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
+ * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
+ * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
+ * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
+ * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
+ */
 function vol2subfield(
     input_volume: InputPathType,
     subfield_volume: InputPathType,
@@ -357,36 +387,6 @@ function vol2subfield(
     preset_subfield_brainstem: boolean = false,
     runner: Runner | null = null,
 ): Vol2subfieldOutputs {
-    /**
-     * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume
-     * @param subfield_volume Subfield volume (full path or relative to subject/mri)
-     * @param registration_file Registration that maps input volume to conformed space
-     * @param output_volume Output volume
-     * @param output_registration Registration between input volume and subfield
-     * @param stats_output Run mri_segstats with --sum output to this file
-     * @param avgwf_output Run mri_segstats with --avgwf output to this file
-     * @param avgwfvol_output Run mri_segstats with --avgwfvol output to this file
-     * @param color_table Color table to use with mri_segstats
-     * @param interpolation_nearest Use nearest neighbor interpolation
-     * @param interpolation_trilin Use triliear interpolation
-     * @param interpolation_cubic Use cubic interpolation
-     * @param tmp_directory Temporary directory for debugging
-     * @param preset_subfield_lh_hippoamyg Set subfield to lh.hippoAmygLabels-T1.v21.mgz
-     * @param preset_subfield_rh_hippoamyg Set subfield to rh.hippoAmygLabels-T1.v21.mgz
-     * @param preset_subfield_lh_hbt Set subfield to lh.hippoAmygLabels-T1.v21.HBT.mgz
-     * @param preset_subfield_rh_hbt Set subfield to rh.hippoAmygLabels-T1.v21.HBT.mgz
-     * @param preset_subfield_thalamus Set subfield to ThalamicNuclei.v10.T1.mgz
-     * @param preset_subfield_brainstem Set subfield to brainstemSsLabels.v12.mgz
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOL2SUBFIELD_METADATA);
     const params = vol2subfield_params(input_volume, subfield_volume, registration_file, output_volume, output_registration, stats_output, avgwf_output, avgwfvol_output, color_table, interpolation_nearest, interpolation_trilin, interpolation_cubic, tmp_directory, preset_subfield_lh_hippoamyg, preset_subfield_rh_hippoamyg, preset_subfield_lh_hbt, preset_subfield_rh_hbt, preset_subfield_thalamus, preset_subfield_brainstem)
@@ -399,5 +399,8 @@ export {
       Vol2subfieldOutputs,
       Vol2subfieldParameters,
       vol2subfield,
+      vol2subfield_cargs,
+      vol2subfield_execute,
+      vol2subfield_outputs,
       vol2subfield_params,
 };

@@ -12,7 +12,7 @@ const TEDANA_WRAPPER_PY_METADATA: Metadata = {
 
 
 interface TedanaWrapperPyParameters {
-    "__STYXTYPE__": "tedana_wrapper.py";
+    "@type": "afni.tedana_wrapper.py";
     "input_files": Array<InputPathType>;
     "echo_times": Array<number>;
     "mask": InputPathType;
@@ -29,35 +29,35 @@ interface TedanaWrapperPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tedana_wrapper.py": tedana_wrapper_py_cargs,
+        "afni.tedana_wrapper.py": tedana_wrapper_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tedana_wrapper.py": tedana_wrapper_py_outputs,
+        "afni.tedana_wrapper.py": tedana_wrapper_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,25 @@ interface TedanaWrapperPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files 4D dataset for each echo.
+ * @param echo_times Echo time (ms) for each echo.
+ * @param mask Mask in same space/grid as the input datasets.
+ * @param results_dir Folder to be created for all outputs. Default [./Bunnymen].
+ * @param prefix Prefix for dataset names. Default [Bunnymen].
+ * @param save_all Save intermediate datasets. Default is to save only the 3dZcat stacked dataset (and tedana stuff).
+ * @param prep_only Do not run tedana.py, stop at 3dZcat.
+ * @param tedana_prog Path and name of the version of tedana.py that will be run. Default is meica.libs/tedana.py in the afni binaries directory.
+ * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
+ * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
+ * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
+ * @param help Show help message and exit.
+ * @param detailed_help Show detailed help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function tedana_wrapper_py_params(
     input_files: Array<InputPathType>,
     echo_times: Array<number>,
@@ -99,27 +118,8 @@ function tedana_wrapper_py_params(
     help: boolean = false,
     detailed_help: boolean = false,
 ): TedanaWrapperPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files 4D dataset for each echo.
-     * @param echo_times Echo time (ms) for each echo.
-     * @param mask Mask in same space/grid as the input datasets.
-     * @param results_dir Folder to be created for all outputs. Default [./Bunnymen].
-     * @param prefix Prefix for dataset names. Default [Bunnymen].
-     * @param save_all Save intermediate datasets. Default is to save only the 3dZcat stacked dataset (and tedana stuff).
-     * @param prep_only Do not run tedana.py, stop at 3dZcat.
-     * @param tedana_prog Path and name of the version of tedana.py that will be run. Default is meica.libs/tedana.py in the afni binaries directory.
-     * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
-     * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
-     * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
-     * @param help Show help message and exit.
-     * @param detailed_help Show detailed help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tedana_wrapper.py" as const,
+        "@type": "afni.tedana_wrapper.py" as const,
         "input_files": input_files,
         "echo_times": echo_times,
         "mask": mask,
@@ -148,18 +148,18 @@ function tedana_wrapper_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tedana_wrapper_py_cargs(
     params: TedanaWrapperPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tedana_wrapper.py");
     cargs.push(
@@ -223,18 +223,18 @@ function tedana_wrapper_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tedana_wrapper_py_outputs(
     params: TedanaWrapperPyParameters,
     execution: Execution,
 ): TedanaWrapperPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TedanaWrapperPyOutputs = {
         root: execution.outputFile("."),
         tedana_output: ((params["results_dir"] ?? null) !== null && (params["prefix"] ?? null) !== null) ? execution.outputFile([(params["results_dir"] ?? null), "/", (params["prefix"] ?? null), "_ted_output"].join('')) : null,
@@ -244,22 +244,22 @@ function tedana_wrapper_py_outputs(
 }
 
 
+/**
+ * Internal wrapper to run tedana.py, typically used within afni_proc.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
+ */
 function tedana_wrapper_py_execute(
     params: TedanaWrapperPyParameters,
     execution: Execution,
 ): TedanaWrapperPyOutputs {
-    /**
-     * Internal wrapper to run tedana.py, typically used within afni_proc.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = tedana_wrapper_py_cargs(params, execution)
     const ret = tedana_wrapper_py_outputs(params, execution)
@@ -268,6 +268,30 @@ function tedana_wrapper_py_execute(
 }
 
 
+/**
+ * Internal wrapper to run tedana.py, typically used within afni_proc.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files 4D dataset for each echo.
+ * @param echo_times Echo time (ms) for each echo.
+ * @param mask Mask in same space/grid as the input datasets.
+ * @param results_dir Folder to be created for all outputs. Default [./Bunnymen].
+ * @param prefix Prefix for dataset names. Default [Bunnymen].
+ * @param save_all Save intermediate datasets. Default is to save only the 3dZcat stacked dataset (and tedana stuff).
+ * @param prep_only Do not run tedana.py, stop at 3dZcat.
+ * @param tedana_prog Path and name of the version of tedana.py that will be run. Default is meica.libs/tedana.py in the afni binaries directory.
+ * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
+ * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
+ * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
+ * @param help Show help message and exit.
+ * @param detailed_help Show detailed help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
+ */
 function tedana_wrapper_py(
     input_files: Array<InputPathType>,
     echo_times: Array<number>,
@@ -284,30 +308,6 @@ function tedana_wrapper_py(
     detailed_help: boolean = false,
     runner: Runner | null = null,
 ): TedanaWrapperPyOutputs {
-    /**
-     * Internal wrapper to run tedana.py, typically used within afni_proc.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files 4D dataset for each echo.
-     * @param echo_times Echo time (ms) for each echo.
-     * @param mask Mask in same space/grid as the input datasets.
-     * @param results_dir Folder to be created for all outputs. Default [./Bunnymen].
-     * @param prefix Prefix for dataset names. Default [Bunnymen].
-     * @param save_all Save intermediate datasets. Default is to save only the 3dZcat stacked dataset (and tedana stuff).
-     * @param prep_only Do not run tedana.py, stop at 3dZcat.
-     * @param tedana_prog Path and name of the version of tedana.py that will be run. Default is meica.libs/tedana.py in the afni binaries directory.
-     * @param tedana_is_exec Run 'tedana.py' rather than 'python tedana.py'.
-     * @param ted_label Suffix for output folder. Adds suffix like TED.LABEL (NOT A PATH).
-     * @param tedana_opts Additional options to pass to tedana.py. (In quotes) Example: '--initcost=tanh --conv=2.5e-5'
-     * @param help Show help message and exit.
-     * @param detailed_help Show detailed help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEDANA_WRAPPER_PY_METADATA);
     const params = tedana_wrapper_py_params(input_files, echo_times, mask, results_dir, prefix, save_all, prep_only, tedana_prog, tedana_is_exec, ted_label, tedana_opts, help, detailed_help)
@@ -320,5 +320,8 @@ export {
       TedanaWrapperPyOutputs,
       TedanaWrapperPyParameters,
       tedana_wrapper_py,
+      tedana_wrapper_py_cargs,
+      tedana_wrapper_py_execute,
+      tedana_wrapper_py_outputs,
       tedana_wrapper_py_params,
 };

@@ -12,7 +12,7 @@ const MRI_DEFACE_METADATA: Metadata = {
 
 
 interface MriDefaceParameters {
-    "__STYXTYPE__": "mri_deface";
+    "@type": "freesurfer.mri_deface";
     "input_volume": InputPathType;
     "brain_template": InputPathType;
     "face_template": InputPathType;
@@ -20,35 +20,35 @@ interface MriDefaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_deface": mri_deface_cargs,
+        "freesurfer.mri_deface": mri_deface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_deface": mri_deface_outputs,
+        "freesurfer.mri_deface": mri_deface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriDefaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume The input volume to be defaced (e.g. anatomical MRI image).
+ * @param brain_template Template volume of the brain to be used for defacing.
+ * @param face_template Template volume of the face to be used for defacing.
+ * @param output_volume The output volume path for the defaced image.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_deface_params(
     input_volume: InputPathType,
     brain_template: InputPathType,
     face_template: InputPathType,
     output_volume: string,
 ): MriDefaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume The input volume to be defaced (e.g. anatomical MRI image).
-     * @param brain_template Template volume of the brain to be used for defacing.
-     * @param face_template Template volume of the face to be used for defacing.
-     * @param output_volume The output volume path for the defaced image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_deface" as const,
+        "@type": "freesurfer.mri_deface" as const,
         "input_volume": input_volume,
         "brain_template": brain_template,
         "face_template": face_template,
@@ -98,18 +98,18 @@ function mri_deface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_deface_cargs(
     params: MriDefaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_deface");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -120,18 +120,18 @@ function mri_deface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_deface_outputs(
     params: MriDefaceParameters,
     execution: Execution,
 ): MriDefaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriDefaceOutputs = {
         root: execution.outputFile("."),
         defaced_output_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mri_deface_outputs(
 }
 
 
+/**
+ * MRI Deface utility for removing facial features from MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
+ */
 function mri_deface_execute(
     params: MriDefaceParameters,
     execution: Execution,
 ): MriDefaceOutputs {
-    /**
-     * MRI Deface utility for removing facial features from MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_deface_cargs(params, execution)
     const ret = mri_deface_outputs(params, execution)
@@ -164,6 +164,21 @@ function mri_deface_execute(
 }
 
 
+/**
+ * MRI Deface utility for removing facial features from MRI images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume The input volume to be defaced (e.g. anatomical MRI image).
+ * @param brain_template Template volume of the brain to be used for defacing.
+ * @param face_template Template volume of the face to be used for defacing.
+ * @param output_volume The output volume path for the defaced image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
+ */
 function mri_deface(
     input_volume: InputPathType,
     brain_template: InputPathType,
@@ -171,21 +186,6 @@ function mri_deface(
     output_volume: string,
     runner: Runner | null = null,
 ): MriDefaceOutputs {
-    /**
-     * MRI Deface utility for removing facial features from MRI images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume The input volume to be defaced (e.g. anatomical MRI image).
-     * @param brain_template Template volume of the brain to be used for defacing.
-     * @param face_template Template volume of the face to be used for defacing.
-     * @param output_volume The output volume path for the defaced image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_DEFACE_METADATA);
     const params = mri_deface_params(input_volume, brain_template, face_template, output_volume)
@@ -198,5 +198,8 @@ export {
       MriDefaceOutputs,
       MriDefaceParameters,
       mri_deface,
+      mri_deface_cargs,
+      mri_deface_execute,
+      mri_deface_outputs,
       mri_deface_params,
 };

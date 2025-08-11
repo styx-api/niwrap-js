@@ -12,42 +12,42 @@ const SURFACE_SET_COORDINATES_METADATA: Metadata = {
 
 
 interface SurfaceSetCoordinatesParameters {
-    "__STYXTYPE__": "surface-set-coordinates";
+    "@type": "workbench.surface-set-coordinates";
     "surface_in": InputPathType;
     "coord_metric": InputPathType;
     "surface_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-set-coordinates": surface_set_coordinates_cargs,
+        "workbench.surface-set-coordinates": surface_set_coordinates_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-set-coordinates": surface_set_coordinates_outputs,
+        "workbench.surface-set-coordinates": surface_set_coordinates_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SurfaceSetCoordinatesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface_in the surface to use for the topology
+ * @param coord_metric the new coordinates, as a 3-column metric file
+ * @param surface_out the new surface
+ *
+ * @returns Parameter dictionary
+ */
 function surface_set_coordinates_params(
     surface_in: InputPathType,
     coord_metric: InputPathType,
     surface_out: string,
 ): SurfaceSetCoordinatesParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface_in the surface to use for the topology
-     * @param coord_metric the new coordinates, as a 3-column metric file
-     * @param surface_out the new surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-set-coordinates" as const,
+        "@type": "workbench.surface-set-coordinates" as const,
         "surface_in": surface_in,
         "coord_metric": coord_metric,
         "surface_out": surface_out,
@@ -94,18 +94,18 @@ function surface_set_coordinates_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_set_coordinates_cargs(
     params: SurfaceSetCoordinatesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-set-coordinates");
@@ -116,18 +116,18 @@ function surface_set_coordinates_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_set_coordinates_outputs(
     params: SurfaceSetCoordinatesParameters,
     execution: Execution,
 ): SurfaceSetCoordinatesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceSetCoordinatesOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
@@ -136,26 +136,26 @@ function surface_set_coordinates_outputs(
 }
 
 
+/**
+ * Modify coordinates of a surface.
+ *
+ * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.
+ *
+ * See -surface-coordinates-to-metric for how to get surface coordinates as a metric file, such that you can then modify them via metric commands, etc.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
+ */
 function surface_set_coordinates_execute(
     params: SurfaceSetCoordinatesParameters,
     execution: Execution,
 ): SurfaceSetCoordinatesOutputs {
-    /**
-     * Modify coordinates of a surface.
-     * 
-     * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.
-     * 
-     * See -surface-coordinates-to-metric for how to get surface coordinates as a metric file, such that you can then modify them via metric commands, etc.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_set_coordinates_cargs(params, execution)
     const ret = surface_set_coordinates_outputs(params, execution)
@@ -164,30 +164,30 @@ function surface_set_coordinates_execute(
 }
 
 
+/**
+ * Modify coordinates of a surface.
+ *
+ * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.
+ *
+ * See -surface-coordinates-to-metric for how to get surface coordinates as a metric file, such that you can then modify them via metric commands, etc.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface_in the surface to use for the topology
+ * @param coord_metric the new coordinates, as a 3-column metric file
+ * @param surface_out the new surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
+ */
 function surface_set_coordinates(
     surface_in: InputPathType,
     coord_metric: InputPathType,
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceSetCoordinatesOutputs {
-    /**
-     * Modify coordinates of a surface.
-     * 
-     * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.
-     * 
-     * See -surface-coordinates-to-metric for how to get surface coordinates as a metric file, such that you can then modify them via metric commands, etc.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface_in the surface to use for the topology
-     * @param coord_metric the new coordinates, as a 3-column metric file
-     * @param surface_out the new surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_SET_COORDINATES_METADATA);
     const params = surface_set_coordinates_params(surface_in, coord_metric, surface_out)
@@ -200,5 +200,8 @@ export {
       SurfaceSetCoordinatesOutputs,
       SurfaceSetCoordinatesParameters,
       surface_set_coordinates,
+      surface_set_coordinates_cargs,
+      surface_set_coordinates_execute,
+      surface_set_coordinates_outputs,
       surface_set_coordinates_params,
 };

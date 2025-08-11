@@ -12,42 +12,42 @@ const MRI_RELABEL_HYPOINTENSITIES_METADATA: Metadata = {
 
 
 interface MriRelabelHypointensitiesParameters {
-    "__STYXTYPE__": "mri_relabel_hypointensities";
+    "@type": "freesurfer.mri_relabel_hypointensities";
     "input_aseg": InputPathType;
     "surface_directory": string;
     "output_aseg": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_relabel_hypointensities": mri_relabel_hypointensities_cargs,
+        "freesurfer.mri_relabel_hypointensities": mri_relabel_hypointensities_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_relabel_hypointensities": mri_relabel_hypointensities_outputs,
+        "freesurfer.mri_relabel_hypointensities": mri_relabel_hypointensities_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriRelabelHypointensitiesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_aseg Input aseg file
+ * @param surface_directory Directory containing surfaces
+ * @param output_aseg Output aseg file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_relabel_hypointensities_params(
     input_aseg: InputPathType,
     surface_directory: string,
     output_aseg: string,
 ): MriRelabelHypointensitiesParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_aseg Input aseg file
-     * @param surface_directory Directory containing surfaces
-     * @param output_aseg Output aseg file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_relabel_hypointensities" as const,
+        "@type": "freesurfer.mri_relabel_hypointensities" as const,
         "input_aseg": input_aseg,
         "surface_directory": surface_directory,
         "output_aseg": output_aseg,
@@ -94,18 +94,18 @@ function mri_relabel_hypointensities_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_relabel_hypointensities_cargs(
     params: MriRelabelHypointensitiesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_relabel_hypointensities");
     cargs.push(execution.inputFile((params["input_aseg"] ?? null)));
@@ -115,18 +115,18 @@ function mri_relabel_hypointensities_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_relabel_hypointensities_outputs(
     params: MriRelabelHypointensitiesParameters,
     execution: Execution,
 ): MriRelabelHypointensitiesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRelabelHypointensitiesOutputs = {
         root: execution.outputFile("."),
         output_aseg_file: execution.outputFile([(params["output_aseg"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_relabel_hypointensities_outputs(
 }
 
 
+/**
+ * Tool for relabeling hypointensities in FreeSurfer's aseg files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
+ */
 function mri_relabel_hypointensities_execute(
     params: MriRelabelHypointensitiesParameters,
     execution: Execution,
 ): MriRelabelHypointensitiesOutputs {
-    /**
-     * Tool for relabeling hypointensities in FreeSurfer's aseg files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_relabel_hypointensities_cargs(params, execution)
     const ret = mri_relabel_hypointensities_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_relabel_hypointensities_execute(
 }
 
 
+/**
+ * Tool for relabeling hypointensities in FreeSurfer's aseg files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_aseg Input aseg file
+ * @param surface_directory Directory containing surfaces
+ * @param output_aseg Output aseg file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
+ */
 function mri_relabel_hypointensities(
     input_aseg: InputPathType,
     surface_directory: string,
     output_aseg: string,
     runner: Runner | null = null,
 ): MriRelabelHypointensitiesOutputs {
-    /**
-     * Tool for relabeling hypointensities in FreeSurfer's aseg files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_aseg Input aseg file
-     * @param surface_directory Directory containing surfaces
-     * @param output_aseg Output aseg file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RELABEL_HYPOINTENSITIES_METADATA);
     const params = mri_relabel_hypointensities_params(input_aseg, surface_directory, output_aseg)
@@ -191,5 +191,8 @@ export {
       MriRelabelHypointensitiesOutputs,
       MriRelabelHypointensitiesParameters,
       mri_relabel_hypointensities,
+      mri_relabel_hypointensities_cargs,
+      mri_relabel_hypointensities_execute,
+      mri_relabel_hypointensities_outputs,
       mri_relabel_hypointensities_params,
 };

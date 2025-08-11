@@ -12,7 +12,7 @@ const BBREGISTER_METADATA: Metadata = {
 
 
 interface BbregisterParameters {
-    "__STYXTYPE__": "bbregister";
+    "@type": "freesurfer.bbregister";
     "subject": string;
     "moveable_volume": InputPathType;
     "reg_file": string;
@@ -32,35 +32,35 @@ interface BbregisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "bbregister": bbregister_cargs,
+        "freesurfer.bbregister": bbregister_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "bbregister": bbregister_outputs,
+        "freesurfer.bbregister": bbregister_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,28 @@ interface BbregisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
+ * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
+ * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
+ * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
+ * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
+ * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
+ * @param init_coreg Initialize with FreeSurfer mri_coreg program.
+ * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
+ * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
+ * @param init_reg Supply an initial registration matrix; can be LTA format.
+ * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
+ * @param mid_frame Register to middle frame (not with --frame option).
+ * @param frame_no Register to specified frame (default is 0=1st).
+ * @param template_out Save template (beneficial with --frame).
+ * @param o_outvol Resample moveable volume and save as specified output volume.
+ * @param s_from_reg Get subject name from registration file.
+ *
+ * @returns Parameter dictionary
+ */
 function bbregister_params(
     subject: string,
     moveable_volume: InputPathType,
@@ -105,30 +127,8 @@ function bbregister_params(
     o_outvol: string | null = null,
     s_from_reg: boolean = false,
 ): BbregisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
-     * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
-     * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
-     * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
-     * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
-     * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
-     * @param init_coreg Initialize with FreeSurfer mri_coreg program.
-     * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
-     * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
-     * @param init_reg Supply an initial registration matrix; can be LTA format.
-     * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
-     * @param mid_frame Register to middle frame (not with --frame option).
-     * @param frame_no Register to specified frame (default is 0=1st).
-     * @param template_out Save template (beneficial with --frame).
-     * @param o_outvol Resample moveable volume and save as specified output volume.
-     * @param s_from_reg Get subject name from registration file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "bbregister" as const,
+        "@type": "freesurfer.bbregister" as const,
         "subject": subject,
         "moveable_volume": moveable_volume,
         "reg_file": reg_file,
@@ -162,18 +162,18 @@ function bbregister_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function bbregister_cargs(
     params: BbregisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("bbregister");
     cargs.push(
@@ -249,18 +249,18 @@ function bbregister_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function bbregister_outputs(
     params: BbregisterParameters,
     execution: Execution,
 ): BbregisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BbregisterOutputs = {
         root: execution.outputFile("."),
         reg_output: execution.outputFile([(params["reg_file"] ?? null)].join('')),
@@ -270,22 +270,22 @@ function bbregister_outputs(
 }
 
 
+/**
+ * Performs within-subject, cross-modal registration using a boundary-based cost function.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
+ */
 function bbregister_execute(
     params: BbregisterParameters,
     execution: Execution,
 ): BbregisterOutputs {
-    /**
-     * Performs within-subject, cross-modal registration using a boundary-based cost function.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = bbregister_cargs(params, execution)
     const ret = bbregister_outputs(params, execution)
@@ -294,6 +294,33 @@ function bbregister_execute(
 }
 
 
+/**
+ * Performs within-subject, cross-modal registration using a boundary-based cost function.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
+ * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
+ * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
+ * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
+ * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
+ * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
+ * @param init_coreg Initialize with FreeSurfer mri_coreg program.
+ * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
+ * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
+ * @param init_reg Supply an initial registration matrix; can be LTA format.
+ * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
+ * @param mid_frame Register to middle frame (not with --frame option).
+ * @param frame_no Register to specified frame (default is 0=1st).
+ * @param template_out Save template (beneficial with --frame).
+ * @param o_outvol Resample moveable volume and save as specified output volume.
+ * @param s_from_reg Get subject name from registration file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
+ */
 function bbregister(
     subject: string,
     moveable_volume: InputPathType,
@@ -313,33 +340,6 @@ function bbregister(
     s_from_reg: boolean = false,
     runner: Runner | null = null,
 ): BbregisterOutputs {
-    /**
-     * Performs within-subject, cross-modal registration using a boundary-based cost function.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject FreeSurfer subject name as found in $SUBJECTS_DIR.
-     * @param moveable_volume "Moveable" volume template for cross-modal volume. E.g., fMRI volume used for motion correction.
-     * @param reg_file Output FreeSurfer registration file (tkregister-style or LTA format).
-     * @param contrast_type_t1 Assume T1 contrast, White Matter brighter than Grey Matter.
-     * @param contrast_type_t2 Assume T2 contrast, Grey Matter brighter than White Matter. Same as --bold and --dti.
-     * @param vsm Include B0 distortion correction. A voxel shift map can be created with the epidewarp.fsl script.
-     * @param init_coreg Initialize with FreeSurfer mri_coreg program.
-     * @param no_coreg_ref_mask Do not use aparc+aseg.mgz as a reference mask.
-     * @param init_header Use geometry info for close voxel-to-voxel registration. Typically valid if acquired in same session.
-     * @param init_reg Supply an initial registration matrix; can be LTA format.
-     * @param intvol Volume used as an intermediate during registration. Useful for partial field-of-view volumes.
-     * @param mid_frame Register to middle frame (not with --frame option).
-     * @param frame_no Register to specified frame (default is 0=1st).
-     * @param template_out Save template (beneficial with --frame).
-     * @param o_outvol Resample moveable volume and save as specified output volume.
-     * @param s_from_reg Get subject name from registration file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BBREGISTER_METADATA);
     const params = bbregister_params(subject, moveable_volume, reg_file, contrast_type_t1, contrast_type_t2, vsm, init_coreg, no_coreg_ref_mask, init_header, init_reg, intvol, mid_frame, frame_no, template_out, o_outvol, s_from_reg)
@@ -352,5 +352,8 @@ export {
       BbregisterOutputs,
       BbregisterParameters,
       bbregister,
+      bbregister_cargs,
+      bbregister_execute,
+      bbregister_outputs,
       bbregister_params,
 };

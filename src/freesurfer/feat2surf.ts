@@ -12,7 +12,7 @@ const FEAT2SURF_METADATA: Metadata = {
 
 
 interface Feat2surfParameters {
-    "__STYXTYPE__": "feat2surf";
+    "@type": "freesurfer.feat2surf";
     "feat_dirs": Array<string>;
     "feat_dirfile"?: InputPathType | null | undefined;
     "proj_frac"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface Feat2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "feat2surf": feat2surf_cargs,
+        "freesurfer.feat2surf": feat2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "feat2surf": feat2surf_outputs,
+        "freesurfer.feat2surf": feat2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,22 @@ interface Feat2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_dirs Directory where Feat results are stored. Can specify multiple directories.
+ * @param feat_dirfile File with a list of Feat directories.
+ * @param proj_frac Sample functional a fraction of the cortical thickness normal to the surface. Default is 0.
+ * @param hemi Run on specified hemisphere (lh or rh) only. Default is both hemispheres.
+ * @param target Subject used to define common surface space. Default is fsaverage.
+ * @param surf Surface to resample to. Default is white.
+ * @param cope_only Only map the copes and varcopes to the common surface space
+ * @param debug_flag Turn on debugging
+ * @param nolog_flag Do not create a log file
+ * @param out_dir Output directory to use instead of default feat/reg_surf-?h/stats.
+ *
+ * @returns Parameter dictionary
+ */
 function feat2surf_params(
     feat_dirs: Array<string>,
     feat_dirfile: InputPathType | null = null,
@@ -101,24 +117,8 @@ function feat2surf_params(
     nolog_flag: boolean = false,
     out_dir: string | null = null,
 ): Feat2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_dirs Directory where Feat results are stored. Can specify multiple directories.
-     * @param feat_dirfile File with a list of Feat directories.
-     * @param proj_frac Sample functional a fraction of the cortical thickness normal to the surface. Default is 0.
-     * @param hemi Run on specified hemisphere (lh or rh) only. Default is both hemispheres.
-     * @param target Subject used to define common surface space. Default is fsaverage.
-     * @param surf Surface to resample to. Default is white.
-     * @param cope_only Only map the copes and varcopes to the common surface space
-     * @param debug_flag Turn on debugging
-     * @param nolog_flag Do not create a log file
-     * @param out_dir Output directory to use instead of default feat/reg_surf-?h/stats.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "feat2surf" as const,
+        "@type": "freesurfer.feat2surf" as const,
         "feat_dirs": feat_dirs,
         "cope_only": cope_only,
         "debug_flag": debug_flag,
@@ -146,18 +146,18 @@ function feat2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function feat2surf_cargs(
     params: Feat2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("feat2surf");
     cargs.push(
@@ -213,18 +213,18 @@ function feat2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function feat2surf_outputs(
     params: Feat2surfParameters,
     execution: Execution,
 ): Feat2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Feat2surfOutputs = {
         root: execution.outputFile("."),
         lh_output: ((params["out_dir"] ?? null) !== null) ? execution.outputFile([(params["out_dir"] ?? null), "/reg_surf-lh-Subject/stats"].join('')) : null,
@@ -236,22 +236,22 @@ function feat2surf_outputs(
 }
 
 
+/**
+ * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
+ */
 function feat2surf_execute(
     params: Feat2surfParameters,
     execution: Execution,
 ): Feat2surfOutputs {
-    /**
-     * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = feat2surf_cargs(params, execution)
     const ret = feat2surf_outputs(params, execution)
@@ -260,6 +260,27 @@ function feat2surf_execute(
 }
 
 
+/**
+ * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param feat_dirs Directory where Feat results are stored. Can specify multiple directories.
+ * @param feat_dirfile File with a list of Feat directories.
+ * @param proj_frac Sample functional a fraction of the cortical thickness normal to the surface. Default is 0.
+ * @param hemi Run on specified hemisphere (lh or rh) only. Default is both hemispheres.
+ * @param target Subject used to define common surface space. Default is fsaverage.
+ * @param surf Surface to resample to. Default is white.
+ * @param cope_only Only map the copes and varcopes to the common surface space
+ * @param debug_flag Turn on debugging
+ * @param nolog_flag Do not create a log file
+ * @param out_dir Output directory to use instead of default feat/reg_surf-?h/stats.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
+ */
 function feat2surf(
     feat_dirs: Array<string>,
     feat_dirfile: InputPathType | null = null,
@@ -273,27 +294,6 @@ function feat2surf(
     out_dir: string | null = null,
     runner: Runner | null = null,
 ): Feat2surfOutputs {
-    /**
-     * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param feat_dirs Directory where Feat results are stored. Can specify multiple directories.
-     * @param feat_dirfile File with a list of Feat directories.
-     * @param proj_frac Sample functional a fraction of the cortical thickness normal to the surface. Default is 0.
-     * @param hemi Run on specified hemisphere (lh or rh) only. Default is both hemispheres.
-     * @param target Subject used to define common surface space. Default is fsaverage.
-     * @param surf Surface to resample to. Default is white.
-     * @param cope_only Only map the copes and varcopes to the common surface space
-     * @param debug_flag Turn on debugging
-     * @param nolog_flag Do not create a log file
-     * @param out_dir Output directory to use instead of default feat/reg_surf-?h/stats.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEAT2SURF_METADATA);
     const params = feat2surf_params(feat_dirs, feat_dirfile, proj_frac, hemi, target, surf, cope_only, debug_flag, nolog_flag, out_dir)
@@ -306,5 +306,8 @@ export {
       Feat2surfOutputs,
       Feat2surfParameters,
       feat2surf,
+      feat2surf_cargs,
+      feat2surf_execute,
+      feat2surf_outputs,
       feat2surf_params,
 };

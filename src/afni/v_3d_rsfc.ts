@@ -12,7 +12,7 @@ const V_3D_RSFC_METADATA: Metadata = {
 
 
 interface V3dRsfcParameters {
-    "__STYXTYPE__": "3dRSFC";
+    "@type": "afni.3dRSFC";
     "fbot": number;
     "ftop": number;
     "input_dataset": InputPathType;
@@ -40,35 +40,35 @@ interface V3dRsfcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRSFC": v_3d_rsfc_cargs,
+        "afni.3dRSFC": v_3d_rsfc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRSFC": v_3d_rsfc_outputs,
+        "afni.3dRSFC": v_3d_rsfc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,36 @@ interface V3dRsfcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fbot Lowest frequency in the passband, in Hz
+ * @param ftop Highest frequency in the passband (must be > fbot)
+ * @param input_dataset Input dataset (3D+time sequence of volumes)
+ * @param despike Despike each time series before other processing.
+ * @param ort_file Also orthogonalize input to columns in specified file.
+ * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
+ * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
+ * @param time_step Set time step to specified value in seconds.
+ * @param nfft Set the FFT length to specified value.
+ * @param norm Make all output time series have L2 norm = 1.
+ * @param mask Specify mask dataset.
+ * @param automask Create a mask from the input dataset.
+ * @param blur Blur inside the mask only with specified FWHM in mm.
+ * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
+ * @param input_alt Alternative way to specify input dataset.
+ * @param band Alternative way to specify passband frequencies.
+ * @param prefix Set prefix name of the output dataset.
+ * @param quiet Turn off the fun and informative messages.
+ * @param no_rs_out Don't output processed time series, just output parameters.
+ * @param un_bandpass_out Output the un-bandpassed series as well.
+ * @param no_rsfa Exclude RSFA output (default is to include).
+ * @param bp_at_end Bandpassing as the last step in the processing sequence.
+ * @param notrans Don't check for initial positive transients in the data.
+ * @param nosat Equivalent to -notrans, skips checking for initial transients.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_rsfc_params(
     fbot: number,
     ftop: number,
@@ -121,38 +151,8 @@ function v_3d_rsfc_params(
     notrans: boolean = false,
     nosat: boolean = false,
 ): V3dRsfcParameters {
-    /**
-     * Build parameters.
-    
-     * @param fbot Lowest frequency in the passband, in Hz
-     * @param ftop Highest frequency in the passband (must be > fbot)
-     * @param input_dataset Input dataset (3D+time sequence of volumes)
-     * @param despike Despike each time series before other processing.
-     * @param ort_file Also orthogonalize input to columns in specified file.
-     * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
-     * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
-     * @param time_step Set time step to specified value in seconds.
-     * @param nfft Set the FFT length to specified value.
-     * @param norm Make all output time series have L2 norm = 1.
-     * @param mask Specify mask dataset.
-     * @param automask Create a mask from the input dataset.
-     * @param blur Blur inside the mask only with specified FWHM in mm.
-     * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
-     * @param input_alt Alternative way to specify input dataset.
-     * @param band Alternative way to specify passband frequencies.
-     * @param prefix Set prefix name of the output dataset.
-     * @param quiet Turn off the fun and informative messages.
-     * @param no_rs_out Don't output processed time series, just output parameters.
-     * @param un_bandpass_out Output the un-bandpassed series as well.
-     * @param no_rsfa Exclude RSFA output (default is to include).
-     * @param bp_at_end Bandpassing as the last step in the processing sequence.
-     * @param notrans Don't check for initial positive transients in the data.
-     * @param nosat Equivalent to -notrans, skips checking for initial transients.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRSFC" as const,
+        "@type": "afni.3dRSFC" as const,
         "fbot": fbot,
         "ftop": ftop,
         "input_dataset": input_dataset,
@@ -202,18 +202,18 @@ function v_3d_rsfc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_rsfc_cargs(
     params: V3dRsfcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRSFC");
     cargs.push(String((params["fbot"] ?? null)));
@@ -316,18 +316,18 @@ function v_3d_rsfc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_rsfc_outputs(
     params: V3dRsfcParameters,
     execution: Execution,
 ): V3dRsfcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRsfcOutputs = {
         root: execution.outputFile("."),
         filtered_time_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_LFF+orig.*"].join('')) : null,
@@ -337,22 +337,22 @@ function v_3d_rsfc_outputs(
 }
 
 
+/**
+ * Program to calculate common resting state functional connectivity (RSFC) parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
+ */
 function v_3d_rsfc_execute(
     params: V3dRsfcParameters,
     execution: Execution,
 ): V3dRsfcOutputs {
-    /**
-     * Program to calculate common resting state functional connectivity (RSFC) parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_rsfc_cargs(params, execution)
     const ret = v_3d_rsfc_outputs(params, execution)
@@ -361,6 +361,41 @@ function v_3d_rsfc_execute(
 }
 
 
+/**
+ * Program to calculate common resting state functional connectivity (RSFC) parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param fbot Lowest frequency in the passband, in Hz
+ * @param ftop Highest frequency in the passband (must be > fbot)
+ * @param input_dataset Input dataset (3D+time sequence of volumes)
+ * @param despike Despike each time series before other processing.
+ * @param ort_file Also orthogonalize input to columns in specified file.
+ * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
+ * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
+ * @param time_step Set time step to specified value in seconds.
+ * @param nfft Set the FFT length to specified value.
+ * @param norm Make all output time series have L2 norm = 1.
+ * @param mask Specify mask dataset.
+ * @param automask Create a mask from the input dataset.
+ * @param blur Blur inside the mask only with specified FWHM in mm.
+ * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
+ * @param input_alt Alternative way to specify input dataset.
+ * @param band Alternative way to specify passband frequencies.
+ * @param prefix Set prefix name of the output dataset.
+ * @param quiet Turn off the fun and informative messages.
+ * @param no_rs_out Don't output processed time series, just output parameters.
+ * @param un_bandpass_out Output the un-bandpassed series as well.
+ * @param no_rsfa Exclude RSFA output (default is to include).
+ * @param bp_at_end Bandpassing as the last step in the processing sequence.
+ * @param notrans Don't check for initial positive transients in the data.
+ * @param nosat Equivalent to -notrans, skips checking for initial transients.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
+ */
 function v_3d_rsfc(
     fbot: number,
     ftop: number,
@@ -388,41 +423,6 @@ function v_3d_rsfc(
     nosat: boolean = false,
     runner: Runner | null = null,
 ): V3dRsfcOutputs {
-    /**
-     * Program to calculate common resting state functional connectivity (RSFC) parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param fbot Lowest frequency in the passband, in Hz
-     * @param ftop Highest frequency in the passband (must be > fbot)
-     * @param input_dataset Input dataset (3D+time sequence of volumes)
-     * @param despike Despike each time series before other processing.
-     * @param ort_file Also orthogonalize input to columns in specified file.
-     * @param dsort_file Orthogonalize each voxel to the corresponding voxel time series in specified dataset.
-     * @param nodetrend Skip the quadratic detrending of input before FFT-based bandpassing.
-     * @param time_step Set time step to specified value in seconds.
-     * @param nfft Set the FFT length to specified value.
-     * @param norm Make all output time series have L2 norm = 1.
-     * @param mask Specify mask dataset.
-     * @param automask Create a mask from the input dataset.
-     * @param blur Blur inside the mask only with specified FWHM in mm.
-     * @param localpv Replace each vector by the local Principal Vector from a neighborhood radius.
-     * @param input_alt Alternative way to specify input dataset.
-     * @param band Alternative way to specify passband frequencies.
-     * @param prefix Set prefix name of the output dataset.
-     * @param quiet Turn off the fun and informative messages.
-     * @param no_rs_out Don't output processed time series, just output parameters.
-     * @param un_bandpass_out Output the un-bandpassed series as well.
-     * @param no_rsfa Exclude RSFA output (default is to include).
-     * @param bp_at_end Bandpassing as the last step in the processing sequence.
-     * @param notrans Don't check for initial positive transients in the data.
-     * @param nosat Equivalent to -notrans, skips checking for initial transients.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RSFC_METADATA);
     const params = v_3d_rsfc_params(fbot, ftop, input_dataset, despike, ort_file, dsort_file, nodetrend, time_step, nfft, norm, mask, automask, blur, localpv, input_alt, band, prefix, quiet, no_rs_out, un_bandpass_out, no_rsfa, bp_at_end, notrans, nosat)
@@ -435,5 +435,8 @@ export {
       V3dRsfcParameters,
       V_3D_RSFC_METADATA,
       v_3d_rsfc,
+      v_3d_rsfc_cargs,
+      v_3d_rsfc_execute,
+      v_3d_rsfc_outputs,
       v_3d_rsfc_params,
 };

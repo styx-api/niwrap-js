@@ -12,7 +12,7 @@ const ANALYZE_TRACE_METADATA: Metadata = {
 
 
 interface AnalyzeTraceParameters {
-    "__STYXTYPE__": "AnalyzeTrace";
+    "@type": "afni.AnalyzeTrace";
     "tracefile": InputPathType;
     "max_func_lines"?: number | null | undefined;
     "suma_c"?: InputPathType | null | undefined;
@@ -27,33 +27,33 @@ interface AnalyzeTraceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "AnalyzeTrace": analyze_trace_cargs,
+        "afni.AnalyzeTrace": analyze_trace_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -73,6 +73,23 @@ interface AnalyzeTraceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tracefile Trace output file obtained by redirecting the program’s trace output.
+ * @param max_func_lines Set the maximum number of code lines before a function returns. Default is no limit.
+ * @param suma_c FILE is a SUMA_*.c file. It is analyzed for functions that use SUMA_RETURN without ENTRY.
+ * @param max_err Stop after encountering MAX_ERR errors reported in log. Default is 5. Error key terms are: 'Error', 'error', 'corruption'.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ *
+ * @returns Parameter dictionary
+ */
 function analyze_trace_params(
     tracefile: InputPathType,
     max_func_lines: number | null = null,
@@ -86,25 +103,8 @@ function analyze_trace_params(
     nomall: boolean = false,
     yesmall: boolean = false,
 ): AnalyzeTraceParameters {
-    /**
-     * Build parameters.
-    
-     * @param tracefile Trace output file obtained by redirecting the program’s trace output.
-     * @param max_func_lines Set the maximum number of code lines before a function returns. Default is no limit.
-     * @param suma_c FILE is a SUMA_*.c file. It is analyzed for functions that use SUMA_RETURN without ENTRY.
-     * @param max_err Stop after encountering MAX_ERR errors reported in log. Default is 5. Error key terms are: 'Error', 'error', 'corruption'.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "AnalyzeTrace" as const,
+        "@type": "afni.AnalyzeTrace" as const,
         "tracefile": tracefile,
         "novolreg": novolreg,
         "noxform": noxform,
@@ -129,18 +129,18 @@ function analyze_trace_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function analyze_trace_cargs(
     params: AnalyzeTraceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("AnalyzeTrace");
     cargs.push(execution.inputFile((params["tracefile"] ?? null)));
@@ -190,18 +190,18 @@ function analyze_trace_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function analyze_trace_outputs(
     params: AnalyzeTraceParameters,
     execution: Execution,
 ): AnalyzeTraceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AnalyzeTraceOutputs = {
         root: execution.outputFile("."),
     };
@@ -209,22 +209,22 @@ function analyze_trace_outputs(
 }
 
 
+/**
+ * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
+ */
 function analyze_trace_execute(
     params: AnalyzeTraceParameters,
     execution: Execution,
 ): AnalyzeTraceOutputs {
-    /**
-     * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
-     */
     params = execution.params(params)
     const cargs = analyze_trace_cargs(params, execution)
     const ret = analyze_trace_outputs(params, execution)
@@ -233,6 +233,28 @@ function analyze_trace_execute(
 }
 
 
+/**
+ * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tracefile Trace output file obtained by redirecting the program’s trace output.
+ * @param max_func_lines Set the maximum number of code lines before a function returns. Default is no limit.
+ * @param suma_c FILE is a SUMA_*.c file. It is analyzed for functions that use SUMA_RETURN without ENTRY.
+ * @param max_err Stop after encountering MAX_ERR errors reported in log. Default is 5. Error key terms are: 'Error', 'error', 'corruption'.
+ * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
+ * @param noxform Same as -novolreg
+ * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
+ * @param trace Turns on In/Out debug and Memory tracing.
+ * @param extreme_trace Turns on extreme tracing.
+ * @param nomall Turn off memory tracing.
+ * @param yesmall Turn on memory tracing (default).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
+ */
 function analyze_trace(
     tracefile: InputPathType,
     max_func_lines: number | null = null,
@@ -247,28 +269,6 @@ function analyze_trace(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): AnalyzeTraceOutputs {
-    /**
-     * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tracefile Trace output file obtained by redirecting the program’s trace output.
-     * @param max_func_lines Set the maximum number of code lines before a function returns. Default is no limit.
-     * @param suma_c FILE is a SUMA_*.c file. It is analyzed for functions that use SUMA_RETURN without ENTRY.
-     * @param max_err Stop after encountering MAX_ERR errors reported in log. Default is 5. Error key terms are: 'Error', 'error', 'corruption'.
-     * @param novolreg Ignore any Rotate, Volreg, Tagalign, or WarpDrive transformations present in the Surface Volume.
-     * @param noxform Same as -novolreg
-     * @param setenv Set environment variable ENVname to be ENVvalue. Quotes are necessary.
-     * @param trace Turns on In/Out debug and Memory tracing.
-     * @param extreme_trace Turns on extreme tracing.
-     * @param nomall Turn off memory tracing.
-     * @param yesmall Turn on memory tracing (default).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANALYZE_TRACE_METADATA);
     const params = analyze_trace_params(tracefile, max_func_lines, suma_c, max_err, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall)
@@ -281,5 +281,8 @@ export {
       AnalyzeTraceOutputs,
       AnalyzeTraceParameters,
       analyze_trace,
+      analyze_trace_cargs,
+      analyze_trace_execute,
+      analyze_trace_outputs,
       analyze_trace_params,
 };

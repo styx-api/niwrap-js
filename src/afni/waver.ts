@@ -12,7 +12,7 @@ const WAVER_METADATA: Metadata = {
 
 
 interface WaverParameters {
-    "__STYXTYPE__": "waver";
+    "@type": "afni.waver";
     "wav": boolean;
     "gam": boolean;
     "expr"?: string | null | undefined;
@@ -38,35 +38,35 @@ interface WaverParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "waver": waver_cargs,
+        "afni.waver": waver_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "waver": waver_outputs,
+        "afni.waver": waver_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,34 @@ interface WaverOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param wav Sets waveform to Cox special [default]
+ * @param gam Sets waveform to form t^b * exp(-t/c) (cf. Mark Cohen)
+ * @param expr Sets waveform to the expression given, which should depend on the variable 't'.
+ * @param file_opt Sets waveform to the values read from the file wname, which should be a single column .1D file. The dt value is the time step (in seconds) between lines in wname.
+ * @param delay_time Sets delay time to # seconds [2]
+ * @param rise_time Sets rise time to # seconds [4]
+ * @param fall_time Sets fall time to # seconds [6]
+ * @param undershoot Sets undershoot to # times the peak [0.2]
+ * @param restore_time Sets time to restore from undershoot [2]
+ * @param gamb Sets the parameter 'b' to # [8.6]
+ * @param gamc Sets the parameter 'c' to # [0.547]
+ * @param gamd Sets the delay time to # seconds [0.0]
+ * @param peak Sets peak value to # [100]
+ * @param dt Sets time step of output AND input [0.1]
+ * @param tr '-TR' is equivalent to '-dt'
+ * @param xyout Output data in 2 columns: 1=time 2=waveform (useful for graphing) [default is 1 column=waveform]
+ * @param input_file Read timeseries from *.1D formatted 'infile'; convolve with waveform to produce output
+ * @param inline_data Read timeseries from command line DATA; convolve with waveform to produce output
+ * @param tstim_data Read discrete stimulation times from the command line and convolve the waveform with delta-functions at those times.
+ * @param when_data Read time blocks when stimulus is 'on' (=1) from the command line and convolve the waveform with with a zero-one input.
+ * @param numout Output a timeseries with NN points; if this option is not given, then enough points are output to let the result tail back down to zero.
+ * @param ver_flag Output version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function waver_params(
     wav: boolean = false,
     gam: boolean = false,
@@ -113,36 +141,8 @@ function waver_params(
     numout: number | null = null,
     ver_flag: boolean = false,
 ): WaverParameters {
-    /**
-     * Build parameters.
-    
-     * @param wav Sets waveform to Cox special [default]
-     * @param gam Sets waveform to form t^b * exp(-t/c) (cf. Mark Cohen)
-     * @param expr Sets waveform to the expression given, which should depend on the variable 't'.
-     * @param file_opt Sets waveform to the values read from the file wname, which should be a single column .1D file. The dt value is the time step (in seconds) between lines in wname.
-     * @param delay_time Sets delay time to # seconds [2]
-     * @param rise_time Sets rise time to # seconds [4]
-     * @param fall_time Sets fall time to # seconds [6]
-     * @param undershoot Sets undershoot to # times the peak [0.2]
-     * @param restore_time Sets time to restore from undershoot [2]
-     * @param gamb Sets the parameter 'b' to # [8.6]
-     * @param gamc Sets the parameter 'c' to # [0.547]
-     * @param gamd Sets the delay time to # seconds [0.0]
-     * @param peak Sets peak value to # [100]
-     * @param dt Sets time step of output AND input [0.1]
-     * @param tr '-TR' is equivalent to '-dt'
-     * @param xyout Output data in 2 columns: 1=time 2=waveform (useful for graphing) [default is 1 column=waveform]
-     * @param input_file Read timeseries from *.1D formatted 'infile'; convolve with waveform to produce output
-     * @param inline_data Read timeseries from command line DATA; convolve with waveform to produce output
-     * @param tstim_data Read discrete stimulation times from the command line and convolve the waveform with delta-functions at those times.
-     * @param when_data Read time blocks when stimulus is 'on' (=1) from the command line and convolve the waveform with with a zero-one input.
-     * @param numout Output a timeseries with NN points; if this option is not given, then enough points are output to let the result tail back down to zero.
-     * @param ver_flag Output version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "waver" as const,
+        "@type": "afni.waver" as const,
         "wav": wav,
         "gam": gam,
         "xyout": xyout,
@@ -206,18 +206,18 @@ function waver_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function waver_cargs(
     params: WaverParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("waver");
     if ((params["wav"] ?? null)) {
@@ -344,18 +344,18 @@ function waver_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function waver_outputs(
     params: WaverParameters,
     execution: Execution,
 ): WaverOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WaverOutputs = {
         root: execution.outputFile("."),
         output_filename: execution.outputFile(["output_filename"].join('')),
@@ -364,22 +364,22 @@ function waver_outputs(
 }
 
 
+/**
+ * Creates an ideal waveform timeseries file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WaverOutputs`).
+ */
 function waver_execute(
     params: WaverParameters,
     execution: Execution,
 ): WaverOutputs {
-    /**
-     * Creates an ideal waveform timeseries file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WaverOutputs`).
-     */
     params = execution.params(params)
     const cargs = waver_cargs(params, execution)
     const ret = waver_outputs(params, execution)
@@ -388,6 +388,39 @@ function waver_execute(
 }
 
 
+/**
+ * Creates an ideal waveform timeseries file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param wav Sets waveform to Cox special [default]
+ * @param gam Sets waveform to form t^b * exp(-t/c) (cf. Mark Cohen)
+ * @param expr Sets waveform to the expression given, which should depend on the variable 't'.
+ * @param file_opt Sets waveform to the values read from the file wname, which should be a single column .1D file. The dt value is the time step (in seconds) between lines in wname.
+ * @param delay_time Sets delay time to # seconds [2]
+ * @param rise_time Sets rise time to # seconds [4]
+ * @param fall_time Sets fall time to # seconds [6]
+ * @param undershoot Sets undershoot to # times the peak [0.2]
+ * @param restore_time Sets time to restore from undershoot [2]
+ * @param gamb Sets the parameter 'b' to # [8.6]
+ * @param gamc Sets the parameter 'c' to # [0.547]
+ * @param gamd Sets the delay time to # seconds [0.0]
+ * @param peak Sets peak value to # [100]
+ * @param dt Sets time step of output AND input [0.1]
+ * @param tr '-TR' is equivalent to '-dt'
+ * @param xyout Output data in 2 columns: 1=time 2=waveform (useful for graphing) [default is 1 column=waveform]
+ * @param input_file Read timeseries from *.1D formatted 'infile'; convolve with waveform to produce output
+ * @param inline_data Read timeseries from command line DATA; convolve with waveform to produce output
+ * @param tstim_data Read discrete stimulation times from the command line and convolve the waveform with delta-functions at those times.
+ * @param when_data Read time blocks when stimulus is 'on' (=1) from the command line and convolve the waveform with with a zero-one input.
+ * @param numout Output a timeseries with NN points; if this option is not given, then enough points are output to let the result tail back down to zero.
+ * @param ver_flag Output version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WaverOutputs`).
+ */
 function waver(
     wav: boolean = false,
     gam: boolean = false,
@@ -413,39 +446,6 @@ function waver(
     ver_flag: boolean = false,
     runner: Runner | null = null,
 ): WaverOutputs {
-    /**
-     * Creates an ideal waveform timeseries file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param wav Sets waveform to Cox special [default]
-     * @param gam Sets waveform to form t^b * exp(-t/c) (cf. Mark Cohen)
-     * @param expr Sets waveform to the expression given, which should depend on the variable 't'.
-     * @param file_opt Sets waveform to the values read from the file wname, which should be a single column .1D file. The dt value is the time step (in seconds) between lines in wname.
-     * @param delay_time Sets delay time to # seconds [2]
-     * @param rise_time Sets rise time to # seconds [4]
-     * @param fall_time Sets fall time to # seconds [6]
-     * @param undershoot Sets undershoot to # times the peak [0.2]
-     * @param restore_time Sets time to restore from undershoot [2]
-     * @param gamb Sets the parameter 'b' to # [8.6]
-     * @param gamc Sets the parameter 'c' to # [0.547]
-     * @param gamd Sets the delay time to # seconds [0.0]
-     * @param peak Sets peak value to # [100]
-     * @param dt Sets time step of output AND input [0.1]
-     * @param tr '-TR' is equivalent to '-dt'
-     * @param xyout Output data in 2 columns: 1=time 2=waveform (useful for graphing) [default is 1 column=waveform]
-     * @param input_file Read timeseries from *.1D formatted 'infile'; convolve with waveform to produce output
-     * @param inline_data Read timeseries from command line DATA; convolve with waveform to produce output
-     * @param tstim_data Read discrete stimulation times from the command line and convolve the waveform with delta-functions at those times.
-     * @param when_data Read time blocks when stimulus is 'on' (=1) from the command line and convolve the waveform with with a zero-one input.
-     * @param numout Output a timeseries with NN points; if this option is not given, then enough points are output to let the result tail back down to zero.
-     * @param ver_flag Output version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WaverOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WAVER_METADATA);
     const params = waver_params(wav, gam, expr, file_opt, delay_time, rise_time, fall_time, undershoot, restore_time, gamb, gamc, gamd, peak, dt, tr, xyout, input_file, inline_data, tstim_data, when_data, numout, ver_flag)
@@ -458,5 +458,8 @@ export {
       WaverOutputs,
       WaverParameters,
       waver,
+      waver_cargs,
+      waver_execute,
+      waver_outputs,
       waver_params,
 };

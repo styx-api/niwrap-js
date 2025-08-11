@@ -12,7 +12,7 @@ const SIENA_FLOW2STD_METADATA: Metadata = {
 
 
 interface SienaFlow2stdParameters {
-    "__STYXTYPE__": "siena_flow2std";
+    "@type": "fsl.siena_flow2std";
     "fileroot1": string;
     "fileroot2": string;
     "sigma"?: number | null | undefined;
@@ -20,33 +20,33 @@ interface SienaFlow2stdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "siena_flow2std": siena_flow2std_cargs,
+        "fsl.siena_flow2std": siena_flow2std_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface SienaFlow2stdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fileroot1 Input file root 1
+ * @param fileroot2 Input file root 2
+ * @param sigma Spatial smoothing of standard-space edge-flow image, sigma (HWHM) in mm (default=5)
+ * @param debug_flag Debug (don't delete intermediate files)
+ *
+ * @returns Parameter dictionary
+ */
 function siena_flow2std_params(
     fileroot1: string,
     fileroot2: string,
     sigma: number | null = 5,
     debug_flag: boolean = false,
 ): SienaFlow2stdParameters {
-    /**
-     * Build parameters.
-    
-     * @param fileroot1 Input file root 1
-     * @param fileroot2 Input file root 2
-     * @param sigma Spatial smoothing of standard-space edge-flow image, sigma (HWHM) in mm (default=5)
-     * @param debug_flag Debug (don't delete intermediate files)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "siena_flow2std" as const,
+        "@type": "fsl.siena_flow2std" as const,
         "fileroot1": fileroot1,
         "fileroot2": fileroot2,
         "debug_flag": debug_flag,
@@ -95,18 +95,18 @@ function siena_flow2std_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function siena_flow2std_cargs(
     params: SienaFlow2stdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("siena_flow2std");
     cargs.push((params["fileroot1"] ?? null));
@@ -124,18 +124,18 @@ function siena_flow2std_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function siena_flow2std_outputs(
     params: SienaFlow2stdParameters,
     execution: Execution,
 ): SienaFlow2stdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SienaFlow2stdOutputs = {
         root: execution.outputFile("."),
     };
@@ -143,22 +143,22 @@ function siena_flow2std_outputs(
 }
 
 
+/**
+ * Convert edge flow to standard space.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
+ */
 function siena_flow2std_execute(
     params: SienaFlow2stdParameters,
     execution: Execution,
 ): SienaFlow2stdOutputs {
-    /**
-     * Convert edge flow to standard space.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
-     */
     params = execution.params(params)
     const cargs = siena_flow2std_cargs(params, execution)
     const ret = siena_flow2std_outputs(params, execution)
@@ -167,6 +167,21 @@ function siena_flow2std_execute(
 }
 
 
+/**
+ * Convert edge flow to standard space.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param fileroot1 Input file root 1
+ * @param fileroot2 Input file root 2
+ * @param sigma Spatial smoothing of standard-space edge-flow image, sigma (HWHM) in mm (default=5)
+ * @param debug_flag Debug (don't delete intermediate files)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
+ */
 function siena_flow2std(
     fileroot1: string,
     fileroot2: string,
@@ -174,21 +189,6 @@ function siena_flow2std(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): SienaFlow2stdOutputs {
-    /**
-     * Convert edge flow to standard space.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param fileroot1 Input file root 1
-     * @param fileroot2 Input file root 2
-     * @param sigma Spatial smoothing of standard-space edge-flow image, sigma (HWHM) in mm (default=5)
-     * @param debug_flag Debug (don't delete intermediate files)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIENA_FLOW2STD_METADATA);
     const params = siena_flow2std_params(fileroot1, fileroot2, sigma, debug_flag)
@@ -201,5 +201,8 @@ export {
       SienaFlow2stdOutputs,
       SienaFlow2stdParameters,
       siena_flow2std,
+      siena_flow2std_cargs,
+      siena_flow2std_execute,
+      siena_flow2std_outputs,
       siena_flow2std_params,
 };

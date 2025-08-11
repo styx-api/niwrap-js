@@ -12,7 +12,7 @@ const SFA2FIELDSIGN_METADATA: Metadata = {
 
 
 interface Sfa2fieldsignParameters {
-    "__STYXTYPE__": "sfa2fieldsign";
+    "@type": "freesurfer.sfa2fieldsign";
     "sfadir": string;
     "register_dat": string;
     "threshold"?: number | null | undefined;
@@ -26,35 +26,35 @@ interface Sfa2fieldsignParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sfa2fieldsign": sfa2fieldsign_cargs,
+        "freesurfer.sfa2fieldsign": sfa2fieldsign_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sfa2fieldsign": sfa2fieldsign_outputs,
+        "freesurfer.sfa2fieldsign": sfa2fieldsign_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,22 @@ interface Sfa2fieldsignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sfadir Output directory of sfa-sess
+ * @param register_dat Registration file
+ * @param threshold Sigthresh threshold (Default: 2)
+ * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
+ * @param proj_frac Projection fraction (Default: 0.5)
+ * @param occip Use ?h.occip.patch.flat
+ * @param patch Use specific patch (?)h.patch
+ * @param osd Directory under SFA to put output (Default: fieldsign)
+ * @param lh Process left hemisphere only
+ * @param rh Process right hemisphere only
+ *
+ * @returns Parameter dictionary
+ */
 function sfa2fieldsign_params(
     sfadir: string,
     register_dat: string,
@@ -109,24 +125,8 @@ function sfa2fieldsign_params(
     lh: boolean = false,
     rh: boolean = false,
 ): Sfa2fieldsignParameters {
-    /**
-     * Build parameters.
-    
-     * @param sfadir Output directory of sfa-sess
-     * @param register_dat Registration file
-     * @param threshold Sigthresh threshold (Default: 2)
-     * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
-     * @param proj_frac Projection fraction (Default: 0.5)
-     * @param occip Use ?h.occip.patch.flat
-     * @param patch Use specific patch (?)h.patch
-     * @param osd Directory under SFA to put output (Default: fieldsign)
-     * @param lh Process left hemisphere only
-     * @param rh Process right hemisphere only
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sfa2fieldsign" as const,
+        "@type": "freesurfer.sfa2fieldsign" as const,
         "sfadir": sfadir,
         "register_dat": register_dat,
         "occip": occip,
@@ -152,18 +152,18 @@ function sfa2fieldsign_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sfa2fieldsign_cargs(
     params: Sfa2fieldsignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sfa2fieldsign");
     cargs.push(
@@ -217,18 +217,18 @@ function sfa2fieldsign_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sfa2fieldsign_outputs(
     params: Sfa2fieldsignParameters,
     execution: Execution,
 ): Sfa2fieldsignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Sfa2fieldsignOutputs = {
         root: execution.outputFile("."),
         fsig_bin: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/fsig.bin.nii"].join('')),
@@ -242,22 +242,22 @@ function sfa2fieldsign_outputs(
 }
 
 
+/**
+ * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
+ */
 function sfa2fieldsign_execute(
     params: Sfa2fieldsignParameters,
     execution: Execution,
 ): Sfa2fieldsignOutputs {
-    /**
-     * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
-     */
     params = execution.params(params)
     const cargs = sfa2fieldsign_cargs(params, execution)
     const ret = sfa2fieldsign_outputs(params, execution)
@@ -266,6 +266,27 @@ function sfa2fieldsign_execute(
 }
 
 
+/**
+ * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param sfadir Output directory of sfa-sess
+ * @param register_dat Registration file
+ * @param threshold Sigthresh threshold (Default: 2)
+ * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
+ * @param proj_frac Projection fraction (Default: 0.5)
+ * @param occip Use ?h.occip.patch.flat
+ * @param patch Use specific patch (?)h.patch
+ * @param osd Directory under SFA to put output (Default: fieldsign)
+ * @param lh Process left hemisphere only
+ * @param rh Process right hemisphere only
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
+ */
 function sfa2fieldsign(
     sfadir: string,
     register_dat: string,
@@ -279,27 +300,6 @@ function sfa2fieldsign(
     rh: boolean = false,
     runner: Runner | null = null,
 ): Sfa2fieldsignOutputs {
-    /**
-     * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param sfadir Output directory of sfa-sess
-     * @param register_dat Registration file
-     * @param threshold Sigthresh threshold (Default: 2)
-     * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
-     * @param proj_frac Projection fraction (Default: 0.5)
-     * @param occip Use ?h.occip.patch.flat
-     * @param patch Use specific patch (?)h.patch
-     * @param osd Directory under SFA to put output (Default: fieldsign)
-     * @param lh Process left hemisphere only
-     * @param rh Process right hemisphere only
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SFA2FIELDSIGN_METADATA);
     const params = sfa2fieldsign_params(sfadir, register_dat, threshold, fwhm, proj_frac, occip, patch, osd, lh, rh)
@@ -312,5 +312,8 @@ export {
       Sfa2fieldsignOutputs,
       Sfa2fieldsignParameters,
       sfa2fieldsign,
+      sfa2fieldsign_cargs,
+      sfa2fieldsign_execute,
+      sfa2fieldsign_outputs,
       sfa2fieldsign_params,
 };

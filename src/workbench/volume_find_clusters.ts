@@ -12,7 +12,7 @@ const VOLUME_FIND_CLUSTERS_METADATA: Metadata = {
 
 
 interface VolumeFindClustersParameters {
-    "__STYXTYPE__": "volume-find-clusters";
+    "@type": "workbench.volume-find-clusters";
     "volume_in": InputPathType;
     "value_threshold": number;
     "minimum_volume": number;
@@ -26,35 +26,35 @@ interface VolumeFindClustersParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-find-clusters": volume_find_clusters_cargs,
+        "workbench.volume-find-clusters": volume_find_clusters_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-find-clusters": volume_find_clusters_outputs,
+        "workbench.volume-find-clusters": volume_find_clusters_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface VolumeFindClustersOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume_in the input volume
+ * @param value_threshold threshold for data values
+ * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param volume_out the output volume
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param opt_roi_roi_volume select a region of interest: the roi, as a volume file
+ * @param opt_subvolume_subvol select a single subvolume: the subvolume number or name
+ * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's volume
+ * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ *
+ * @returns Parameter dictionary
+ */
 function volume_find_clusters_params(
     volume_in: InputPathType,
     value_threshold: number,
@@ -89,24 +105,8 @@ function volume_find_clusters_params(
     opt_distance_distance: number | null = null,
     opt_start_startval: number | null = null,
 ): VolumeFindClustersParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume_in the input volume
-     * @param value_threshold threshold for data values
-     * @param minimum_volume threshold for cluster volume, in mm^3
-     * @param volume_out the output volume
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param opt_roi_roi_volume select a region of interest: the roi, as a volume file
-     * @param opt_subvolume_subvol select a single subvolume: the subvolume number or name
-     * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's volume
-     * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-find-clusters" as const,
+        "@type": "workbench.volume-find-clusters" as const,
         "volume_in": volume_in,
         "value_threshold": value_threshold,
         "minimum_volume": minimum_volume,
@@ -132,18 +132,18 @@ function volume_find_clusters_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_find_clusters_cargs(
     params: VolumeFindClustersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-find-clusters");
@@ -188,18 +188,18 @@ function volume_find_clusters_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_find_clusters_outputs(
     params: VolumeFindClustersParameters,
     execution: Execution,
 ): VolumeFindClustersOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeFindClustersOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -208,24 +208,24 @@ function volume_find_clusters_outputs(
 }
 
 
+/**
+ * Filter clusters by volume.
+ *
+ * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
+ */
 function volume_find_clusters_execute(
     params: VolumeFindClustersParameters,
     execution: Execution,
 ): VolumeFindClustersOutputs {
-    /**
-     * Filter clusters by volume.
-     * 
-     * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_find_clusters_cargs(params, execution)
     const ret = volume_find_clusters_outputs(params, execution)
@@ -234,6 +234,29 @@ function volume_find_clusters_execute(
 }
 
 
+/**
+ * Filter clusters by volume.
+ *
+ * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume_in the input volume
+ * @param value_threshold threshold for data values
+ * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param volume_out the output volume
+ * @param opt_less_than find values less than <value-threshold>, rather than greater
+ * @param opt_roi_roi_volume select a region of interest: the roi, as a volume file
+ * @param opt_subvolume_subvol select a single subvolume: the subvolume number or name
+ * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's volume
+ * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
+ */
 function volume_find_clusters(
     volume_in: InputPathType,
     value_threshold: number,
@@ -247,29 +270,6 @@ function volume_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
-    /**
-     * Filter clusters by volume.
-     * 
-     * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume_in the input volume
-     * @param value_threshold threshold for data values
-     * @param minimum_volume threshold for cluster volume, in mm^3
-     * @param volume_out the output volume
-     * @param opt_less_than find values less than <value-threshold>, rather than greater
-     * @param opt_roi_roi_volume select a region of interest: the roi, as a volume file
-     * @param opt_subvolume_subvol select a single subvolume: the subvolume number or name
-     * @param opt_size_ratio_ratio ignore clusters smaller than a given fraction of the largest cluster in map: fraction of the largest cluster's volume
-     * @param opt_distance_distance ignore clusters further than a given distance from the largest cluster: how far from the largest cluster a cluster can be, edge to edge, in mm
-     * @param opt_start_startval start labeling clusters from a value other than 1: the value to give the first cluster found
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_FIND_CLUSTERS_METADATA);
     const params = volume_find_clusters_params(volume_in, value_threshold, minimum_volume, volume_out, opt_less_than, opt_roi_roi_volume, opt_subvolume_subvol, opt_size_ratio_ratio, opt_distance_distance, opt_start_startval)
@@ -282,5 +282,8 @@ export {
       VolumeFindClustersOutputs,
       VolumeFindClustersParameters,
       volume_find_clusters,
+      volume_find_clusters_cargs,
+      volume_find_clusters_execute,
+      volume_find_clusters_outputs,
       volume_find_clusters_params,
 };

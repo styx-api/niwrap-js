@@ -12,7 +12,7 @@ const V_1D_TSORT_METADATA: Metadata = {
 
 
 interface V1dTsortParameters {
-    "__STYXTYPE__": "1dTsort";
+    "@type": "afni.1dTsort";
     "inc_order": boolean;
     "dec_order": boolean;
     "transpose": boolean;
@@ -22,33 +22,33 @@ interface V1dTsortParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dTsort": v_1d_tsort_cargs,
+        "afni.1dTsort": v_1d_tsort_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface V1dTsortOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input 1D file to be sorted.
+ * @param inc_order Sort into increasing order [default]
+ * @param dec_order Sort into decreasing order
+ * @param transpose Transpose the file before output.
+ * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
+ * @param imode Typecast all values to integers, return the mode in the input then exit. No sorting results are returned.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1d_tsort_params(
     infile: InputPathType,
     inc_order: boolean = false,
@@ -76,20 +88,8 @@ function v_1d_tsort_params(
     column: number | null = null,
     imode: boolean = false,
 ): V1dTsortParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input 1D file to be sorted.
-     * @param inc_order Sort into increasing order [default]
-     * @param dec_order Sort into decreasing order
-     * @param transpose Transpose the file before output.
-     * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
-     * @param imode Typecast all values to integers, return the mode in the input then exit. No sorting results are returned.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dTsort" as const,
+        "@type": "afni.1dTsort" as const,
         "inc_order": inc_order,
         "dec_order": dec_order,
         "transpose": transpose,
@@ -103,18 +103,18 @@ function v_1d_tsort_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1d_tsort_cargs(
     params: V1dTsortParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dTsort");
     if ((params["inc_order"] ?? null)) {
@@ -140,18 +140,18 @@ function v_1d_tsort_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1d_tsort_outputs(
     params: V1dTsortParameters,
     execution: Execution,
 ): V1dTsortOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dTsortOutputs = {
         root: execution.outputFile("."),
     };
@@ -159,22 +159,22 @@ function v_1d_tsort_outputs(
 }
 
 
+/**
+ * Sorts each column of the input 1D file and writes result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
+ */
 function v_1d_tsort_execute(
     params: V1dTsortParameters,
     execution: Execution,
 ): V1dTsortOutputs {
-    /**
-     * Sorts each column of the input 1D file and writes result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1d_tsort_cargs(params, execution)
     const ret = v_1d_tsort_outputs(params, execution)
@@ -183,6 +183,23 @@ function v_1d_tsort_execute(
 }
 
 
+/**
+ * Sorts each column of the input 1D file and writes result to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input 1D file to be sorted.
+ * @param inc_order Sort into increasing order [default]
+ * @param dec_order Sort into decreasing order
+ * @param transpose Transpose the file before output.
+ * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
+ * @param imode Typecast all values to integers, return the mode in the input then exit. No sorting results are returned.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
+ */
 function v_1d_tsort(
     infile: InputPathType,
     inc_order: boolean = false,
@@ -192,23 +209,6 @@ function v_1d_tsort(
     imode: boolean = false,
     runner: Runner | null = null,
 ): V1dTsortOutputs {
-    /**
-     * Sorts each column of the input 1D file and writes result to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input 1D file to be sorted.
-     * @param inc_order Sort into increasing order [default]
-     * @param dec_order Sort into decreasing order
-     * @param transpose Transpose the file before output.
-     * @param column Sort only on column #j (counting starts at 0), and carry the rest of the columns with it.
-     * @param imode Typecast all values to integers, return the mode in the input then exit. No sorting results are returned.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1D_TSORT_METADATA);
     const params = v_1d_tsort_params(infile, inc_order, dec_order, transpose, column, imode)
@@ -221,5 +221,8 @@ export {
       V1dTsortParameters,
       V_1D_TSORT_METADATA,
       v_1d_tsort,
+      v_1d_tsort_cargs,
+      v_1d_tsort_execute,
+      v_1d_tsort_outputs,
       v_1d_tsort_params,
 };

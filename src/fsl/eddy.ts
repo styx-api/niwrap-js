@@ -12,7 +12,7 @@ const EDDY_METADATA: Metadata = {
 
 
 interface EddyParameters {
-    "__STYXTYPE__": "eddy";
+    "@type": "fsl.eddy";
     "imain": InputPathType;
     "mask": InputPathType;
     "index": InputPathType;
@@ -60,35 +60,35 @@ interface EddyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "eddy": eddy_cargs,
+        "fsl.eddy": eddy_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "eddy": eddy_outputs,
+        "fsl.eddy": eddy_outputs,
     };
     return outputsFuncs[t];
 }
@@ -183,6 +183,56 @@ interface EddyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param imain File containing all the images to estimate distortions for
+ * @param mask Mask to indicate brain
+ * @param index File containing indices for all volumes in --imain into --acqp and --topup
+ * @param acqp File containing acquisition parameters
+ * @param bvecs File containing the b-vectors for all volumes in --imain
+ * @param bvals File containing the b-values for all volumes in --imain
+ * @param out Basename for output
+ * @param mb Multi-band factor
+ * @param mb_offs Multi-band offset (-1 if bottom slice removed, 1 if top slice removed)
+ * @param slspec Name of text file completely specifying slice/group acuistion. N.B. --slspec and --json are mutually exclusive.
+ * @param json Name of .json text file with information about slice timing. N.B. --json and --slspec are mutually exclusive.
+ * @param mporder Order of slice-to-vol movement model (default 0, i.e. vol-to-vol
+ * @param s2v_lambda Regularisation weight for slice-to-vol movement. (default 1, reasonable range 1--10)
+ * @param topup Base name for output files from topup
+ * @param field Name of file with susceptibility field (in Hz)
+ * @param field_mat Name of rigid body transform for susceptibility field
+ * @param flm First level EC model (movement/linear/quadratic/cubic, default quadratic)
+ * @param slm Second level EC model (none/linear/quadratic, default none)
+ * @param fwhm FWHM for conditioning filter when estimating the parameters (default 0)
+ * @param niter Number of iterations (default 5)
+ * @param s2v_niter Number of iterations for slice-to-vol (default 5)
+ * @param cnr_maps Write shell-wise cnr-maps (default false)
+ * @param residuals Write residuals (between GP and observations), (default false)
+ * @param fep Fill empty planes in x- or y-directions (default false)
+ * @param interp Interpolation model for estimation step (spline/trilinear, default spline)
+ * @param s2v_interp Slice-to-vol interpolation model for estimation step (spline/trilinear, default trilinear)
+ * @param resamp Final resampling method (jac/lsr, default jac)
+ * @param nvoxhp # of voxels used to estimate the hyperparameters (default 1000)
+ * @param initrand Seeds rand for when selecting voxels (default 0=no seeding)
+ * @param ff Fudge factor for hyperparameter error variance (default 10.0)
+ * @param repol Detect and replace outlier slices (default false))
+ * @param ol_nstd Number of std off to qualify as outlier (default 4)
+ * @param ol_nvox Min # of voxels in a slice for inclusion in outlier detection (default 250)
+ * @param ol_type Type of outliers, slicewise (sw), groupwise (gw) or both (both). (default sw)
+ * @param ol_pos Consider both positive and negative outliers if set (default false)
+ * @param ol_sqr Consider outliers among sums-of-squared differences if set (default false)
+ * @param estimate_move_by_susceptibility Estimate how susceptibility field changes with subject movement (default false)
+ * @param mbs_niter Number of iterations for MBS estimation (default 10)
+ * @param mbs_lambda Weighting of regularisation for MBS estimation (default 10)
+ * @param mbs_ksp Knot-spacing for MBS field estimation (default 10mm)
+ * @param dont_sep_offs_move Do NOT attempt to separate field offset from subject movement (default false)
+ * @param dont_peas Do NOT perform a post-eddy alignment of shells (default false)
+ * @param data_is_shelled Assume, don't check, that data is shelled (default false)
+ * @param verbose switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function eddy_params(
     imain: InputPathType,
     mask: InputPathType,
@@ -229,58 +279,8 @@ function eddy_params(
     data_is_shelled: boolean = false,
     verbose: boolean = false,
 ): EddyParameters {
-    /**
-     * Build parameters.
-    
-     * @param imain File containing all the images to estimate distortions for
-     * @param mask Mask to indicate brain
-     * @param index File containing indices for all volumes in --imain into --acqp and --topup
-     * @param acqp File containing acquisition parameters
-     * @param bvecs File containing the b-vectors for all volumes in --imain
-     * @param bvals File containing the b-values for all volumes in --imain
-     * @param out Basename for output
-     * @param mb Multi-band factor
-     * @param mb_offs Multi-band offset (-1 if bottom slice removed, 1 if top slice removed)
-     * @param slspec Name of text file completely specifying slice/group acuistion. N.B. --slspec and --json are mutually exclusive.
-     * @param json Name of .json text file with information about slice timing. N.B. --json and --slspec are mutually exclusive.
-     * @param mporder Order of slice-to-vol movement model (default 0, i.e. vol-to-vol
-     * @param s2v_lambda Regularisation weight for slice-to-vol movement. (default 1, reasonable range 1--10)
-     * @param topup Base name for output files from topup
-     * @param field Name of file with susceptibility field (in Hz)
-     * @param field_mat Name of rigid body transform for susceptibility field
-     * @param flm First level EC model (movement/linear/quadratic/cubic, default quadratic)
-     * @param slm Second level EC model (none/linear/quadratic, default none)
-     * @param fwhm FWHM for conditioning filter when estimating the parameters (default 0)
-     * @param niter Number of iterations (default 5)
-     * @param s2v_niter Number of iterations for slice-to-vol (default 5)
-     * @param cnr_maps Write shell-wise cnr-maps (default false)
-     * @param residuals Write residuals (between GP and observations), (default false)
-     * @param fep Fill empty planes in x- or y-directions (default false)
-     * @param interp Interpolation model for estimation step (spline/trilinear, default spline)
-     * @param s2v_interp Slice-to-vol interpolation model for estimation step (spline/trilinear, default trilinear)
-     * @param resamp Final resampling method (jac/lsr, default jac)
-     * @param nvoxhp # of voxels used to estimate the hyperparameters (default 1000)
-     * @param initrand Seeds rand for when selecting voxels (default 0=no seeding)
-     * @param ff Fudge factor for hyperparameter error variance (default 10.0)
-     * @param repol Detect and replace outlier slices (default false))
-     * @param ol_nstd Number of std off to qualify as outlier (default 4)
-     * @param ol_nvox Min # of voxels in a slice for inclusion in outlier detection (default 250)
-     * @param ol_type Type of outliers, slicewise (sw), groupwise (gw) or both (both). (default sw)
-     * @param ol_pos Consider both positive and negative outliers if set (default false)
-     * @param ol_sqr Consider outliers among sums-of-squared differences if set (default false)
-     * @param estimate_move_by_susceptibility Estimate how susceptibility field changes with subject movement (default false)
-     * @param mbs_niter Number of iterations for MBS estimation (default 10)
-     * @param mbs_lambda Weighting of regularisation for MBS estimation (default 10)
-     * @param mbs_ksp Knot-spacing for MBS field estimation (default 10mm)
-     * @param dont_sep_offs_move Do NOT attempt to separate field offset from subject movement (default false)
-     * @param dont_peas Do NOT perform a post-eddy alignment of shells (default false)
-     * @param data_is_shelled Assume, don't check, that data is shelled (default false)
-     * @param verbose switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "eddy" as const,
+        "@type": "fsl.eddy" as const,
         "imain": imain,
         "mask": mask,
         "index": index,
@@ -382,18 +382,18 @@ function eddy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function eddy_cargs(
     params: EddyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("eddy");
     cargs.push(["--imain=", execution.inputFile((params["imain"] ?? null))].join(''));
@@ -518,18 +518,18 @@ function eddy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function eddy_outputs(
     params: EddyParameters,
     execution: Execution,
 ): EddyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EddyOutputs = {
         root: execution.outputFile("."),
         out: execution.outputFile([(params["out"] ?? null), ".nii.gz"].join('')),
@@ -556,22 +556,22 @@ function eddy_outputs(
 }
 
 
+/**
+ * A tool for correcting eddy currents and movements in diffusion data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EddyOutputs`).
+ */
 function eddy_execute(
     params: EddyParameters,
     execution: Execution,
 ): EddyOutputs {
-    /**
-     * A tool for correcting eddy currents and movements in diffusion data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EddyOutputs`).
-     */
     params = execution.params(params)
     const cargs = eddy_cargs(params, execution)
     const ret = eddy_outputs(params, execution)
@@ -580,6 +580,61 @@ function eddy_execute(
 }
 
 
+/**
+ * A tool for correcting eddy currents and movements in diffusion data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param imain File containing all the images to estimate distortions for
+ * @param mask Mask to indicate brain
+ * @param index File containing indices for all volumes in --imain into --acqp and --topup
+ * @param acqp File containing acquisition parameters
+ * @param bvecs File containing the b-vectors for all volumes in --imain
+ * @param bvals File containing the b-values for all volumes in --imain
+ * @param out Basename for output
+ * @param mb Multi-band factor
+ * @param mb_offs Multi-band offset (-1 if bottom slice removed, 1 if top slice removed)
+ * @param slspec Name of text file completely specifying slice/group acuistion. N.B. --slspec and --json are mutually exclusive.
+ * @param json Name of .json text file with information about slice timing. N.B. --json and --slspec are mutually exclusive.
+ * @param mporder Order of slice-to-vol movement model (default 0, i.e. vol-to-vol
+ * @param s2v_lambda Regularisation weight for slice-to-vol movement. (default 1, reasonable range 1--10)
+ * @param topup Base name for output files from topup
+ * @param field Name of file with susceptibility field (in Hz)
+ * @param field_mat Name of rigid body transform for susceptibility field
+ * @param flm First level EC model (movement/linear/quadratic/cubic, default quadratic)
+ * @param slm Second level EC model (none/linear/quadratic, default none)
+ * @param fwhm FWHM for conditioning filter when estimating the parameters (default 0)
+ * @param niter Number of iterations (default 5)
+ * @param s2v_niter Number of iterations for slice-to-vol (default 5)
+ * @param cnr_maps Write shell-wise cnr-maps (default false)
+ * @param residuals Write residuals (between GP and observations), (default false)
+ * @param fep Fill empty planes in x- or y-directions (default false)
+ * @param interp Interpolation model for estimation step (spline/trilinear, default spline)
+ * @param s2v_interp Slice-to-vol interpolation model for estimation step (spline/trilinear, default trilinear)
+ * @param resamp Final resampling method (jac/lsr, default jac)
+ * @param nvoxhp # of voxels used to estimate the hyperparameters (default 1000)
+ * @param initrand Seeds rand for when selecting voxels (default 0=no seeding)
+ * @param ff Fudge factor for hyperparameter error variance (default 10.0)
+ * @param repol Detect and replace outlier slices (default false))
+ * @param ol_nstd Number of std off to qualify as outlier (default 4)
+ * @param ol_nvox Min # of voxels in a slice for inclusion in outlier detection (default 250)
+ * @param ol_type Type of outliers, slicewise (sw), groupwise (gw) or both (both). (default sw)
+ * @param ol_pos Consider both positive and negative outliers if set (default false)
+ * @param ol_sqr Consider outliers among sums-of-squared differences if set (default false)
+ * @param estimate_move_by_susceptibility Estimate how susceptibility field changes with subject movement (default false)
+ * @param mbs_niter Number of iterations for MBS estimation (default 10)
+ * @param mbs_lambda Weighting of regularisation for MBS estimation (default 10)
+ * @param mbs_ksp Knot-spacing for MBS field estimation (default 10mm)
+ * @param dont_sep_offs_move Do NOT attempt to separate field offset from subject movement (default false)
+ * @param dont_peas Do NOT perform a post-eddy alignment of shells (default false)
+ * @param data_is_shelled Assume, don't check, that data is shelled (default false)
+ * @param verbose switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EddyOutputs`).
+ */
 function eddy(
     imain: InputPathType,
     mask: InputPathType,
@@ -627,61 +682,6 @@ function eddy(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyOutputs {
-    /**
-     * A tool for correcting eddy currents and movements in diffusion data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param imain File containing all the images to estimate distortions for
-     * @param mask Mask to indicate brain
-     * @param index File containing indices for all volumes in --imain into --acqp and --topup
-     * @param acqp File containing acquisition parameters
-     * @param bvecs File containing the b-vectors for all volumes in --imain
-     * @param bvals File containing the b-values for all volumes in --imain
-     * @param out Basename for output
-     * @param mb Multi-band factor
-     * @param mb_offs Multi-band offset (-1 if bottom slice removed, 1 if top slice removed)
-     * @param slspec Name of text file completely specifying slice/group acuistion. N.B. --slspec and --json are mutually exclusive.
-     * @param json Name of .json text file with information about slice timing. N.B. --json and --slspec are mutually exclusive.
-     * @param mporder Order of slice-to-vol movement model (default 0, i.e. vol-to-vol
-     * @param s2v_lambda Regularisation weight for slice-to-vol movement. (default 1, reasonable range 1--10)
-     * @param topup Base name for output files from topup
-     * @param field Name of file with susceptibility field (in Hz)
-     * @param field_mat Name of rigid body transform for susceptibility field
-     * @param flm First level EC model (movement/linear/quadratic/cubic, default quadratic)
-     * @param slm Second level EC model (none/linear/quadratic, default none)
-     * @param fwhm FWHM for conditioning filter when estimating the parameters (default 0)
-     * @param niter Number of iterations (default 5)
-     * @param s2v_niter Number of iterations for slice-to-vol (default 5)
-     * @param cnr_maps Write shell-wise cnr-maps (default false)
-     * @param residuals Write residuals (between GP and observations), (default false)
-     * @param fep Fill empty planes in x- or y-directions (default false)
-     * @param interp Interpolation model for estimation step (spline/trilinear, default spline)
-     * @param s2v_interp Slice-to-vol interpolation model for estimation step (spline/trilinear, default trilinear)
-     * @param resamp Final resampling method (jac/lsr, default jac)
-     * @param nvoxhp # of voxels used to estimate the hyperparameters (default 1000)
-     * @param initrand Seeds rand for when selecting voxels (default 0=no seeding)
-     * @param ff Fudge factor for hyperparameter error variance (default 10.0)
-     * @param repol Detect and replace outlier slices (default false))
-     * @param ol_nstd Number of std off to qualify as outlier (default 4)
-     * @param ol_nvox Min # of voxels in a slice for inclusion in outlier detection (default 250)
-     * @param ol_type Type of outliers, slicewise (sw), groupwise (gw) or both (both). (default sw)
-     * @param ol_pos Consider both positive and negative outliers if set (default false)
-     * @param ol_sqr Consider outliers among sums-of-squared differences if set (default false)
-     * @param estimate_move_by_susceptibility Estimate how susceptibility field changes with subject movement (default false)
-     * @param mbs_niter Number of iterations for MBS estimation (default 10)
-     * @param mbs_lambda Weighting of regularisation for MBS estimation (default 10)
-     * @param mbs_ksp Knot-spacing for MBS field estimation (default 10mm)
-     * @param dont_sep_offs_move Do NOT attempt to separate field offset from subject movement (default false)
-     * @param dont_peas Do NOT perform a post-eddy alignment of shells (default false)
-     * @param data_is_shelled Assume, don't check, that data is shelled (default false)
-     * @param verbose switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EddyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EDDY_METADATA);
     const params = eddy_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
@@ -694,5 +694,8 @@ export {
       EddyOutputs,
       EddyParameters,
       eddy,
+      eddy_cargs,
+      eddy_execute,
+      eddy_outputs,
       eddy_params,
 };

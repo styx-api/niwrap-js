@@ -12,14 +12,14 @@ const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
 
 
 interface ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
-    "__STYXTYPE__": "volume_seeds";
+    "@type": "workbench.convert-matrix4-to-workbench-sparse.volume_seeds";
     "cifti_template": InputPathType;
     "direction": string;
 }
 
 
 interface ConvertMatrix4ToWorkbenchSparseParameters {
-    "__STYXTYPE__": "convert-matrix4-to-workbench-sparse";
+    "@type": "workbench.convert-matrix4-to-workbench-sparse";
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
@@ -31,54 +31,54 @@ interface ConvertMatrix4ToWorkbenchSparseParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "convert-matrix4-to-workbench-sparse": convert_matrix4_to_workbench_sparse_cargs,
-        "volume_seeds": convert_matrix4_to_workbench_sparse_volume_seeds_cargs,
+        "workbench.convert-matrix4-to-workbench-sparse": convert_matrix4_to_workbench_sparse_cargs,
+        "workbench.convert-matrix4-to-workbench-sparse.volume_seeds": convert_matrix4_to_workbench_sparse_volume_seeds_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_template cifti file to use the volume mappings from
+ * @param direction dimension along the cifti file to take the mapping from, ROW or COLUMN
+ *
+ * @returns Parameter dictionary
+ */
 function convert_matrix4_to_workbench_sparse_volume_seeds_params(
     cifti_template: InputPathType,
     direction: string,
 ): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_template cifti file to use the volume mappings from
-     * @param direction dimension along the cifti file to take the mapping from, ROW or COLUMN
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume_seeds" as const,
+        "@type": "workbench.convert-matrix4-to-workbench-sparse.volume_seeds" as const,
         "cifti_template": cifti_template,
         "direction": direction,
     };
@@ -86,18 +86,18 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_matrix4_to_workbench_sparse_volume_seeds_cargs(
     params: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-volume-seeds");
     cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
@@ -119,6 +119,20 @@ interface ConvertMatrix4ToWorkbenchSparseOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrix4_1 the first matrix4 file
+ * @param matrix4_2 the second matrix4 file
+ * @param matrix4_3 the third matrix4 file
+ * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
+ * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
+ * @param wb_sparse_out output - the output workbench sparse file
+ * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
+ * @param volume_seeds specify the volume seed space
+ *
+ * @returns Parameter dictionary
+ */
 function convert_matrix4_to_workbench_sparse_params(
     matrix4_1: string,
     matrix4_2: string,
@@ -129,22 +143,8 @@ function convert_matrix4_to_workbench_sparse_params(
     opt_surface_seeds_seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
 ): ConvertMatrix4ToWorkbenchSparseParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrix4_1 the first matrix4 file
-     * @param matrix4_2 the second matrix4 file
-     * @param matrix4_3 the third matrix4 file
-     * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
-     * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
-     * @param wb_sparse_out output - the output workbench sparse file
-     * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
-     * @param volume_seeds specify the volume seed space
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "convert-matrix4-to-workbench-sparse" as const,
+        "@type": "workbench.convert-matrix4-to-workbench-sparse" as const,
         "matrix4_1": matrix4_1,
         "matrix4_2": matrix4_2,
         "matrix4_3": matrix4_3,
@@ -162,18 +162,18 @@ function convert_matrix4_to_workbench_sparse_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_matrix4_to_workbench_sparse_cargs(
     params: ConvertMatrix4ToWorkbenchSparseParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-convert-matrix4-to-workbench-sparse");
@@ -190,24 +190,24 @@ function convert_matrix4_to_workbench_sparse_cargs(
         );
     }
     if ((params["volume_seeds"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_seeds"] ?? null).__STYXTYPE__)((params["volume_seeds"] ?? null), execution));
+        cargs.push(...dynCargs((params["volume_seeds"] ?? null)["@type"])((params["volume_seeds"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_matrix4_to_workbench_sparse_outputs(
     params: ConvertMatrix4ToWorkbenchSparseParameters,
     execution: Execution,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertMatrix4ToWorkbenchSparseOutputs = {
         root: execution.outputFile("."),
     };
@@ -215,24 +215,24 @@ function convert_matrix4_to_workbench_sparse_outputs(
 }
 
 
+/**
+ * Convert a 3-file matrix4 to a workbench sparse file.
+ *
+ * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
+ */
 function convert_matrix4_to_workbench_sparse_execute(
     params: ConvertMatrix4ToWorkbenchSparseParameters,
     execution: Execution,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    /**
-     * Convert a 3-file matrix4 to a workbench sparse file.
-     * 
-     * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_matrix4_to_workbench_sparse_cargs(params, execution)
     const ret = convert_matrix4_to_workbench_sparse_outputs(params, execution)
@@ -241,6 +241,27 @@ function convert_matrix4_to_workbench_sparse_execute(
 }
 
 
+/**
+ * Convert a 3-file matrix4 to a workbench sparse file.
+ *
+ * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param matrix4_1 the first matrix4 file
+ * @param matrix4_2 the second matrix4 file
+ * @param matrix4_3 the third matrix4 file
+ * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
+ * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
+ * @param wb_sparse_out output - the output workbench sparse file
+ * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
+ * @param volume_seeds specify the volume seed space
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
+ */
 function convert_matrix4_to_workbench_sparse(
     matrix4_1: string,
     matrix4_2: string,
@@ -252,27 +273,6 @@ function convert_matrix4_to_workbench_sparse(
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    /**
-     * Convert a 3-file matrix4 to a workbench sparse file.
-     * 
-     * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param matrix4_1 the first matrix4 file
-     * @param matrix4_2 the second matrix4 file
-     * @param matrix4_3 the third matrix4 file
-     * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
-     * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
-     * @param wb_sparse_out output - the output workbench sparse file
-     * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
-     * @param volume_seeds specify the volume seed space
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA);
     const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, opt_surface_seeds_seed_roi, volume_seeds)
@@ -286,6 +286,10 @@ export {
       ConvertMatrix4ToWorkbenchSparseParameters,
       ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters,
       convert_matrix4_to_workbench_sparse,
+      convert_matrix4_to_workbench_sparse_cargs,
+      convert_matrix4_to_workbench_sparse_execute,
+      convert_matrix4_to_workbench_sparse_outputs,
       convert_matrix4_to_workbench_sparse_params,
+      convert_matrix4_to_workbench_sparse_volume_seeds_cargs,
       convert_matrix4_to_workbench_sparse_volume_seeds_params,
 };

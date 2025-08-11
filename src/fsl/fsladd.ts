@@ -12,7 +12,7 @@ const FSLADD_METADATA: Metadata = {
 
 
 interface FsladdParameters {
-    "__STYXTYPE__": "fsladd";
+    "@type": "fsl.fsladd";
     "output_file": string;
     "mean_flag": boolean;
     "scale_flag": boolean;
@@ -20,35 +20,35 @@ interface FsladdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsladd": fsladd_cargs,
+        "fsl.fsladd": fsladd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsladd": fsladd_outputs,
+        "fsl.fsladd": fsladd_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface FsladdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_file Output volume file
+ * @param volume_list List of input volumes
+ * @param mean_flag Calculate mean instead of sum
+ * @param scale_flag Scale each input image mean to 1000 before processing
+ *
+ * @returns Parameter dictionary
+ */
 function fsladd_params(
     output_file: string,
     volume_list: Array<InputPathType>,
     mean_flag: boolean = false,
     scale_flag: boolean = false,
 ): FsladdParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_file Output volume file
-     * @param volume_list List of input volumes
-     * @param mean_flag Calculate mean instead of sum
-     * @param scale_flag Scale each input image mean to 1000 before processing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsladd" as const,
+        "@type": "fsl.fsladd" as const,
         "output_file": output_file,
         "mean_flag": mean_flag,
         "scale_flag": scale_flag,
@@ -98,18 +98,18 @@ function fsladd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsladd_cargs(
     params: FsladdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsladd");
     cargs.push((params["output_file"] ?? null));
@@ -124,18 +124,18 @@ function fsladd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsladd_outputs(
     params: FsladdParameters,
     execution: Execution,
 ): FsladdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsladdOutputs = {
         root: execution.outputFile("."),
         resulting_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -144,22 +144,22 @@ function fsladd_outputs(
 }
 
 
+/**
+ * Tool for adding or averaging multiple input volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsladdOutputs`).
+ */
 function fsladd_execute(
     params: FsladdParameters,
     execution: Execution,
 ): FsladdOutputs {
-    /**
-     * Tool for adding or averaging multiple input volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsladdOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsladd_cargs(params, execution)
     const ret = fsladd_outputs(params, execution)
@@ -168,6 +168,21 @@ function fsladd_execute(
 }
 
 
+/**
+ * Tool for adding or averaging multiple input volumes.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_file Output volume file
+ * @param volume_list List of input volumes
+ * @param mean_flag Calculate mean instead of sum
+ * @param scale_flag Scale each input image mean to 1000 before processing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsladdOutputs`).
+ */
 function fsladd(
     output_file: string,
     volume_list: Array<InputPathType>,
@@ -175,21 +190,6 @@ function fsladd(
     scale_flag: boolean = false,
     runner: Runner | null = null,
 ): FsladdOutputs {
-    /**
-     * Tool for adding or averaging multiple input volumes.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_file Output volume file
-     * @param volume_list List of input volumes
-     * @param mean_flag Calculate mean instead of sum
-     * @param scale_flag Scale each input image mean to 1000 before processing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsladdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLADD_METADATA);
     const params = fsladd_params(output_file, volume_list, mean_flag, scale_flag)
@@ -202,5 +202,8 @@ export {
       FsladdOutputs,
       FsladdParameters,
       fsladd,
+      fsladd_cargs,
+      fsladd_execute,
+      fsladd_outputs,
       fsladd_params,
 };

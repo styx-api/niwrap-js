@@ -12,40 +12,40 @@ const SPEC_FILE_MERGE_METADATA: Metadata = {
 
 
 interface SpecFileMergeParameters {
-    "__STYXTYPE__": "spec-file-merge";
+    "@type": "workbench.spec-file-merge";
     "spec_1": string;
     "spec_2": string;
     "out_spec": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "spec-file-merge": spec_file_merge_cargs,
+        "workbench.spec-file-merge": spec_file_merge_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface SpecFileMergeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_1 first spec file to merge
+ * @param spec_2 second spec file to merge
+ * @param out_spec output - output spec file
+ *
+ * @returns Parameter dictionary
+ */
 function spec_file_merge_params(
     spec_1: string,
     spec_2: string,
     out_spec: string,
 ): SpecFileMergeParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_1 first spec file to merge
-     * @param spec_2 second spec file to merge
-     * @param out_spec output - output spec file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spec-file-merge" as const,
+        "@type": "workbench.spec-file-merge" as const,
         "spec_1": spec_1,
         "spec_2": spec_2,
         "out_spec": out_spec,
@@ -89,18 +89,18 @@ function spec_file_merge_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spec_file_merge_cargs(
     params: SpecFileMergeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-spec-file-merge");
@@ -111,18 +111,18 @@ function spec_file_merge_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spec_file_merge_outputs(
     params: SpecFileMergeParameters,
     execution: Execution,
 ): SpecFileMergeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpecFileMergeOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,24 +130,24 @@ function spec_file_merge_outputs(
 }
 
 
+/**
+ * Merge two spec files into one.
+ *
+ * The output spec file contains every file that is in either of the input spec files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
+ */
 function spec_file_merge_execute(
     params: SpecFileMergeParameters,
     execution: Execution,
 ): SpecFileMergeOutputs {
-    /**
-     * Merge two spec files into one.
-     * 
-     * The output spec file contains every file that is in either of the input spec files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
-     */
     params = execution.params(params)
     const cargs = spec_file_merge_cargs(params, execution)
     const ret = spec_file_merge_outputs(params, execution)
@@ -156,28 +156,28 @@ function spec_file_merge_execute(
 }
 
 
+/**
+ * Merge two spec files into one.
+ *
+ * The output spec file contains every file that is in either of the input spec files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param spec_1 first spec file to merge
+ * @param spec_2 second spec file to merge
+ * @param out_spec output - output spec file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
+ */
 function spec_file_merge(
     spec_1: string,
     spec_2: string,
     out_spec: string,
     runner: Runner | null = null,
 ): SpecFileMergeOutputs {
-    /**
-     * Merge two spec files into one.
-     * 
-     * The output spec file contains every file that is in either of the input spec files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param spec_1 first spec file to merge
-     * @param spec_2 second spec file to merge
-     * @param out_spec output - output spec file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPEC_FILE_MERGE_METADATA);
     const params = spec_file_merge_params(spec_1, spec_2, out_spec)
@@ -190,5 +190,8 @@ export {
       SpecFileMergeOutputs,
       SpecFileMergeParameters,
       spec_file_merge,
+      spec_file_merge_cargs,
+      spec_file_merge_execute,
+      spec_file_merge_outputs,
       spec_file_merge_params,
 };

@@ -12,7 +12,7 @@ const V_3D_NWARP_APPLY_METADATA: Metadata = {
 
 
 interface V3dNwarpApplyParameters {
-    "__STYXTYPE__": "3dNwarpApply";
+    "@type": "afni.3dNwarpApply";
     "nwarp": string;
     "iwarp": boolean;
     "source": string;
@@ -30,35 +30,35 @@ interface V3dNwarpApplyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNwarpApply": v_3d_nwarp_apply_cargs,
+        "afni.3dNwarpApply": v_3d_nwarp_apply_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNwarpApply": v_3d_nwarp_apply_outputs,
+        "afni.3dNwarpApply": v_3d_nwarp_apply_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface V3dNwarpApplyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nwarp The name of the 3D warp dataset. Multiple warps can be catenated.
+ * @param source The name of the source dataset to be warped. Multiple datasets can be supplied.
+ * @param iwarp Invert the warp specified in '-nwarp'.
+ * @param master The name of the master dataset which defines the output grid.
+ * @param newgrid The new grid spacing (cubical voxels, in mm).
+ * @param dxyz Specify a different grid spacing (cubical voxels, in mm).
+ * @param interp The interpolation mode ('NN', 'linear', 'cubic', 'quintic', 'wsinc5').
+ * @param ainterp Specify a different interpolation mode for the data than the warp.
+ * @param prefix The name of the new output dataset. Multiple names can be supplied if more than one source dataset is input.
+ * @param suffix Change the default suffix '_Nwarp' to a user-defined suffix.
+ * @param short Write output dataset using 16-bit short integers rather than the usual 32-bit floats.
+ * @param wprefix Save every warp generated in the process to a separate dataset.
+ * @param quiet Don't be verbose.
+ * @param verb Be extra verbose.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nwarp_apply_params(
     nwarp: string,
     source: string,
@@ -101,28 +121,8 @@ function v_3d_nwarp_apply_params(
     quiet: boolean = false,
     verb: boolean = false,
 ): V3dNwarpApplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param nwarp The name of the 3D warp dataset. Multiple warps can be catenated.
-     * @param source The name of the source dataset to be warped. Multiple datasets can be supplied.
-     * @param iwarp Invert the warp specified in '-nwarp'.
-     * @param master The name of the master dataset which defines the output grid.
-     * @param newgrid The new grid spacing (cubical voxels, in mm).
-     * @param dxyz Specify a different grid spacing (cubical voxels, in mm).
-     * @param interp The interpolation mode ('NN', 'linear', 'cubic', 'quintic', 'wsinc5').
-     * @param ainterp Specify a different interpolation mode for the data than the warp.
-     * @param prefix The name of the new output dataset. Multiple names can be supplied if more than one source dataset is input.
-     * @param suffix Change the default suffix '_Nwarp' to a user-defined suffix.
-     * @param short Write output dataset using 16-bit short integers rather than the usual 32-bit floats.
-     * @param wprefix Save every warp generated in the process to a separate dataset.
-     * @param quiet Don't be verbose.
-     * @param verb Be extra verbose.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNwarpApply" as const,
+        "@type": "afni.3dNwarpApply" as const,
         "nwarp": nwarp,
         "iwarp": iwarp,
         "source": source,
@@ -158,18 +158,18 @@ function v_3d_nwarp_apply_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nwarp_apply_cargs(
     params: V3dNwarpApplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNwarpApply");
     cargs.push(
@@ -244,18 +244,18 @@ function v_3d_nwarp_apply_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nwarp_apply_outputs(
     params: V3dNwarpApplyParameters,
     execution: Execution,
 ): V3dNwarpApplyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNwarpApplyOutputs = {
         root: execution.outputFile("."),
         warped_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_", (params["source"] ?? null), "_warped.nii.gz"].join('')) : null,
@@ -265,22 +265,22 @@ function v_3d_nwarp_apply_outputs(
 }
 
 
+/**
+ * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpApplyOutputs`).
+ */
 function v_3d_nwarp_apply_execute(
     params: V3dNwarpApplyParameters,
     execution: Execution,
 ): V3dNwarpApplyOutputs {
-    /**
-     * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpApplyOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nwarp_apply_cargs(params, execution)
     const ret = v_3d_nwarp_apply_outputs(params, execution)
@@ -289,6 +289,31 @@ function v_3d_nwarp_apply_execute(
 }
 
 
+/**
+ * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param nwarp The name of the 3D warp dataset. Multiple warps can be catenated.
+ * @param source The name of the source dataset to be warped. Multiple datasets can be supplied.
+ * @param iwarp Invert the warp specified in '-nwarp'.
+ * @param master The name of the master dataset which defines the output grid.
+ * @param newgrid The new grid spacing (cubical voxels, in mm).
+ * @param dxyz Specify a different grid spacing (cubical voxels, in mm).
+ * @param interp The interpolation mode ('NN', 'linear', 'cubic', 'quintic', 'wsinc5').
+ * @param ainterp Specify a different interpolation mode for the data than the warp.
+ * @param prefix The name of the new output dataset. Multiple names can be supplied if more than one source dataset is input.
+ * @param suffix Change the default suffix '_Nwarp' to a user-defined suffix.
+ * @param short Write output dataset using 16-bit short integers rather than the usual 32-bit floats.
+ * @param wprefix Save every warp generated in the process to a separate dataset.
+ * @param quiet Don't be verbose.
+ * @param verb Be extra verbose.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpApplyOutputs`).
+ */
 function v_3d_nwarp_apply(
     nwarp: string,
     source: string,
@@ -306,31 +331,6 @@ function v_3d_nwarp_apply(
     verb: boolean = false,
     runner: Runner | null = null,
 ): V3dNwarpApplyOutputs {
-    /**
-     * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param nwarp The name of the 3D warp dataset. Multiple warps can be catenated.
-     * @param source The name of the source dataset to be warped. Multiple datasets can be supplied.
-     * @param iwarp Invert the warp specified in '-nwarp'.
-     * @param master The name of the master dataset which defines the output grid.
-     * @param newgrid The new grid spacing (cubical voxels, in mm).
-     * @param dxyz Specify a different grid spacing (cubical voxels, in mm).
-     * @param interp The interpolation mode ('NN', 'linear', 'cubic', 'quintic', 'wsinc5').
-     * @param ainterp Specify a different interpolation mode for the data than the warp.
-     * @param prefix The name of the new output dataset. Multiple names can be supplied if more than one source dataset is input.
-     * @param suffix Change the default suffix '_Nwarp' to a user-defined suffix.
-     * @param short Write output dataset using 16-bit short integers rather than the usual 32-bit floats.
-     * @param wprefix Save every warp generated in the process to a separate dataset.
-     * @param quiet Don't be verbose.
-     * @param verb Be extra verbose.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpApplyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NWARP_APPLY_METADATA);
     const params = v_3d_nwarp_apply_params(nwarp, source, iwarp, master, newgrid, dxyz, interp, ainterp, prefix, suffix, short, wprefix, quiet, verb)
@@ -343,5 +343,8 @@ export {
       V3dNwarpApplyParameters,
       V_3D_NWARP_APPLY_METADATA,
       v_3d_nwarp_apply,
+      v_3d_nwarp_apply_cargs,
+      v_3d_nwarp_apply_execute,
+      v_3d_nwarp_apply_outputs,
       v_3d_nwarp_apply_params,
 };

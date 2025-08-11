@@ -12,7 +12,7 @@ const RCA_CONFIG_METADATA: Metadata = {
 
 
 interface RcaConfigParameters {
-    "__STYXTYPE__": "rca-config";
+    "@type": "freesurfer.rca-config";
     "source_config": InputPathType;
     "updated_config": InputPathType;
     "unknown_args_file": InputPathType;
@@ -20,33 +20,33 @@ interface RcaConfigParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rca-config": rca_config_cargs,
+        "freesurfer.rca-config": rca_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface RcaConfigOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source_config Path to the source configuration file
+ * @param updated_config Path to the updated configuration file
+ * @param unknown_args_file Path to the file where unknown arguments are recorded
+ * @param args Additional arguments to be processed
+ *
+ * @returns Parameter dictionary
+ */
 function rca_config_params(
     source_config: InputPathType,
     updated_config: InputPathType,
     unknown_args_file: InputPathType,
     args: Array<string> | null = null,
 ): RcaConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param source_config Path to the source configuration file
-     * @param updated_config Path to the updated configuration file
-     * @param unknown_args_file Path to the file where unknown arguments are recorded
-     * @param args Additional arguments to be processed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rca-config" as const,
+        "@type": "freesurfer.rca-config" as const,
         "source_config": source_config,
         "updated_config": updated_config,
         "unknown_args_file": unknown_args_file,
@@ -95,18 +95,18 @@ function rca_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rca_config_cargs(
     params: RcaConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rca-config");
     cargs.push(
@@ -122,18 +122,18 @@ function rca_config_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rca_config_outputs(
     params: RcaConfigParameters,
     execution: Execution,
 ): RcaConfigOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcaConfigOutputs = {
         root: execution.outputFile("."),
     };
@@ -141,22 +141,22 @@ function rca_config_outputs(
 }
 
 
+/**
+ * A command-line tool that processes configuration files and arguments.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
+ */
 function rca_config_execute(
     params: RcaConfigParameters,
     execution: Execution,
 ): RcaConfigOutputs {
-    /**
-     * A command-line tool that processes configuration files and arguments.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
-     */
     params = execution.params(params)
     const cargs = rca_config_cargs(params, execution)
     const ret = rca_config_outputs(params, execution)
@@ -165,6 +165,21 @@ function rca_config_execute(
 }
 
 
+/**
+ * A command-line tool that processes configuration files and arguments.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source_config Path to the source configuration file
+ * @param updated_config Path to the updated configuration file
+ * @param unknown_args_file Path to the file where unknown arguments are recorded
+ * @param args Additional arguments to be processed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
+ */
 function rca_config(
     source_config: InputPathType,
     updated_config: InputPathType,
@@ -172,21 +187,6 @@ function rca_config(
     args: Array<string> | null = null,
     runner: Runner | null = null,
 ): RcaConfigOutputs {
-    /**
-     * A command-line tool that processes configuration files and arguments.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source_config Path to the source configuration file
-     * @param updated_config Path to the updated configuration file
-     * @param unknown_args_file Path to the file where unknown arguments are recorded
-     * @param args Additional arguments to be processed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCA_CONFIG_METADATA);
     const params = rca_config_params(source_config, updated_config, unknown_args_file, args)
@@ -199,5 +199,8 @@ export {
       RcaConfigOutputs,
       RcaConfigParameters,
       rca_config,
+      rca_config_cargs,
+      rca_config_execute,
+      rca_config_outputs,
       rca_config_params,
 };

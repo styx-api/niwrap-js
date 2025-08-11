@@ -12,7 +12,7 @@ const V_3D_PERIODOGRAM_METADATA: Metadata = {
 
 
 interface V3dPeriodogramParameters {
-    "__STYXTYPE__": "3dPeriodogram";
+    "@type": "afni.3dPeriodogram";
     "prefix"?: string | null | undefined;
     "taper"?: number | null | undefined;
     "nfft"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface V3dPeriodogramParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPeriodogram": v_3d_periodogram_cargs,
+        "afni.3dPeriodogram": v_3d_periodogram_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPeriodogram": v_3d_periodogram_outputs,
+        "afni.3dPeriodogram": v_3d_periodogram_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface V3dPeriodogramOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param prefix Prefix for the output dataset
+ * @param taper Fraction of data to taper
+ * @param nfft Set FFT length to a specific number of points
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_periodogram_params(
     dataset: InputPathType,
     prefix: string | null = null,
     taper: number | null = null,
     nfft: number | null = null,
 ): V3dPeriodogramParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param prefix Prefix for the output dataset
-     * @param taper Fraction of data to taper
-     * @param nfft Set FFT length to a specific number of points
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPeriodogram" as const,
+        "@type": "afni.3dPeriodogram" as const,
         "dataset": dataset,
     };
     if (prefix !== null) {
@@ -108,18 +108,18 @@ function v_3d_periodogram_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_periodogram_cargs(
     params: V3dPeriodogramParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPeriodogram");
     if ((params["prefix"] ?? null) !== null) {
@@ -145,18 +145,18 @@ function v_3d_periodogram_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_periodogram_outputs(
     params: V3dPeriodogramParameters,
     execution: Execution,
 ): V3dPeriodogramOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPeriodogramOutputs = {
         root: execution.outputFile("."),
         output_header: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
@@ -166,22 +166,22 @@ function v_3d_periodogram_outputs(
 }
 
 
+/**
+ * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
+ */
 function v_3d_periodogram_execute(
     params: V3dPeriodogramParameters,
     execution: Execution,
 ): V3dPeriodogramOutputs {
-    /**
-     * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_periodogram_cargs(params, execution)
     const ret = v_3d_periodogram_outputs(params, execution)
@@ -190,6 +190,21 @@ function v_3d_periodogram_execute(
 }
 
 
+/**
+ * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param prefix Prefix for the output dataset
+ * @param taper Fraction of data to taper
+ * @param nfft Set FFT length to a specific number of points
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
+ */
 function v_3d_periodogram(
     dataset: InputPathType,
     prefix: string | null = null,
@@ -197,21 +212,6 @@ function v_3d_periodogram(
     nfft: number | null = null,
     runner: Runner | null = null,
 ): V3dPeriodogramOutputs {
-    /**
-     * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param prefix Prefix for the output dataset
-     * @param taper Fraction of data to taper
-     * @param nfft Set FFT length to a specific number of points
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PERIODOGRAM_METADATA);
     const params = v_3d_periodogram_params(dataset, prefix, taper, nfft)
@@ -224,5 +224,8 @@ export {
       V3dPeriodogramParameters,
       V_3D_PERIODOGRAM_METADATA,
       v_3d_periodogram,
+      v_3d_periodogram_cargs,
+      v_3d_periodogram_execute,
+      v_3d_periodogram_outputs,
       v_3d_periodogram_params,
 };

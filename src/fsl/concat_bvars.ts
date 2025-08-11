@@ -12,41 +12,41 @@ const CONCAT_BVARS_METADATA: Metadata = {
 
 
 interface ConcatBvarsParameters {
-    "__STYXTYPE__": "concat_bvars";
+    "@type": "fsl.concat_bvars";
     "output_bvars": string;
     "input_bvars": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "concat_bvars": concat_bvars_cargs,
+        "fsl.concat_bvars": concat_bvars_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "concat_bvars": concat_bvars_outputs,
+        "fsl.concat_bvars": concat_bvars_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface ConcatBvarsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_bvars Output .bvars file
+ * @param input_bvars List of input .bvars files
+ *
+ * @returns Parameter dictionary
+ */
 function concat_bvars_params(
     output_bvars: string,
     input_bvars: Array<InputPathType>,
 ): ConcatBvarsParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_bvars Output .bvars file
-     * @param input_bvars List of input .bvars files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "concat_bvars" as const,
+        "@type": "fsl.concat_bvars" as const,
         "output_bvars": output_bvars,
         "input_bvars": input_bvars,
     };
@@ -90,18 +90,18 @@ function concat_bvars_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function concat_bvars_cargs(
     params: ConcatBvarsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("concat_bvars");
     cargs.push((params["output_bvars"] ?? null));
@@ -110,18 +110,18 @@ function concat_bvars_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function concat_bvars_outputs(
     params: ConcatBvarsParameters,
     execution: Execution,
 ): ConcatBvarsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConcatBvarsOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_bvars"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function concat_bvars_outputs(
 }
 
 
+/**
+ * Concatenate multiple .bvars files into a single .bvars file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
+ */
 function concat_bvars_execute(
     params: ConcatBvarsParameters,
     execution: Execution,
 ): ConcatBvarsOutputs {
-    /**
-     * Concatenate multiple .bvars files into a single .bvars file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
-     */
     params = execution.params(params)
     const cargs = concat_bvars_cargs(params, execution)
     const ret = concat_bvars_outputs(params, execution)
@@ -154,24 +154,24 @@ function concat_bvars_execute(
 }
 
 
+/**
+ * Concatenate multiple .bvars files into a single .bvars file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param output_bvars Output .bvars file
+ * @param input_bvars List of input .bvars files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
+ */
 function concat_bvars(
     output_bvars: string,
     input_bvars: Array<InputPathType>,
     runner: Runner | null = null,
 ): ConcatBvarsOutputs {
-    /**
-     * Concatenate multiple .bvars files into a single .bvars file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param output_bvars Output .bvars file
-     * @param input_bvars List of input .bvars files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONCAT_BVARS_METADATA);
     const params = concat_bvars_params(output_bvars, input_bvars)
@@ -184,5 +184,8 @@ export {
       ConcatBvarsOutputs,
       ConcatBvarsParameters,
       concat_bvars,
+      concat_bvars_cargs,
+      concat_bvars_execute,
+      concat_bvars_outputs,
       concat_bvars_params,
 };

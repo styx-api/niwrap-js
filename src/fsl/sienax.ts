@@ -12,7 +12,7 @@ const SIENAX_METADATA: Metadata = {
 
 
 interface SienaxParameters {
-    "__STYXTYPE__": "sienax";
+    "@type": "fsl.sienax";
     "infile": InputPathType;
     "output_dir"?: string | null | undefined;
     "debug_flag": boolean;
@@ -27,35 +27,35 @@ interface SienaxParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "sienax": sienax_cargs,
+        "fsl.sienax": sienax_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "sienax": sienax_outputs,
+        "fsl.sienax": sienax_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,23 @@ interface SienaxOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image (e.g. img.nii.gz)
+ * @param output_dir Output directory (default output is <input>_sienax)
+ * @param debug_flag Debug (don't delete intermediate files)
+ * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
+ * @param twoclass_segment_flag Two-class segmentation (don't segment grey and white matter separately)
+ * @param t2_flag Input image is T2-weighted (default is T1-weighted)
+ * @param top_threshold Ignore from t (mm) upwards in MNI152/Talairach space
+ * @param bottom_threshold Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
+ * @param regional_flag Regional - use standard-space masks to give peripheral cortex GM volume (3-class segmentation only) and ventricular CSF volume
+ * @param lesion_mask Use lesion (or lesion+CSF) mask to remove incorrectly labelled 'grey matter' voxels
+ * @param fast_options Options to pass to FAST segmentation (inside double-quotes), e.g. -S "I 20"
+ *
+ * @returns Parameter dictionary
+ */
 function sienax_params(
     infile: InputPathType,
     output_dir: string | null = null,
@@ -95,25 +112,8 @@ function sienax_params(
     lesion_mask: InputPathType | null = null,
     fast_options: string | null = null,
 ): SienaxParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image (e.g. img.nii.gz)
-     * @param output_dir Output directory (default output is <input>_sienax)
-     * @param debug_flag Debug (don't delete intermediate files)
-     * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
-     * @param twoclass_segment_flag Two-class segmentation (don't segment grey and white matter separately)
-     * @param t2_flag Input image is T2-weighted (default is T1-weighted)
-     * @param top_threshold Ignore from t (mm) upwards in MNI152/Talairach space
-     * @param bottom_threshold Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
-     * @param regional_flag Regional - use standard-space masks to give peripheral cortex GM volume (3-class segmentation only) and ventricular CSF volume
-     * @param lesion_mask Use lesion (or lesion+CSF) mask to remove incorrectly labelled 'grey matter' voxels
-     * @param fast_options Options to pass to FAST segmentation (inside double-quotes), e.g. -S "I 20"
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "sienax" as const,
+        "@type": "fsl.sienax" as const,
         "infile": infile,
         "debug_flag": debug_flag,
         "twoclass_segment_flag": twoclass_segment_flag,
@@ -142,18 +142,18 @@ function sienax_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function sienax_cargs(
     params: SienaxParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("sienax");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -209,18 +209,18 @@ function sienax_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function sienax_outputs(
     params: SienaxParameters,
     execution: Execution,
 ): SienaxOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SienaxOutputs = {
         root: execution.outputFile("."),
         segmentation_output: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/segmentation.nii.gz"].join('')) : null,
@@ -230,22 +230,22 @@ function sienax_outputs(
 }
 
 
+/**
+ * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SienaxOutputs`).
+ */
 function sienax_execute(
     params: SienaxParameters,
     execution: Execution,
 ): SienaxOutputs {
-    /**
-     * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SienaxOutputs`).
-     */
     params = execution.params(params)
     const cargs = sienax_cargs(params, execution)
     const ret = sienax_outputs(params, execution)
@@ -254,6 +254,28 @@ function sienax_execute(
 }
 
 
+/**
+ * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image (e.g. img.nii.gz)
+ * @param output_dir Output directory (default output is <input>_sienax)
+ * @param debug_flag Debug (don't delete intermediate files)
+ * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
+ * @param twoclass_segment_flag Two-class segmentation (don't segment grey and white matter separately)
+ * @param t2_flag Input image is T2-weighted (default is T1-weighted)
+ * @param top_threshold Ignore from t (mm) upwards in MNI152/Talairach space
+ * @param bottom_threshold Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
+ * @param regional_flag Regional - use standard-space masks to give peripheral cortex GM volume (3-class segmentation only) and ventricular CSF volume
+ * @param lesion_mask Use lesion (or lesion+CSF) mask to remove incorrectly labelled 'grey matter' voxels
+ * @param fast_options Options to pass to FAST segmentation (inside double-quotes), e.g. -S "I 20"
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SienaxOutputs`).
+ */
 function sienax(
     infile: InputPathType,
     output_dir: string | null = null,
@@ -268,28 +290,6 @@ function sienax(
     fast_options: string | null = null,
     runner: Runner | null = null,
 ): SienaxOutputs {
-    /**
-     * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image (e.g. img.nii.gz)
-     * @param output_dir Output directory (default output is <input>_sienax)
-     * @param debug_flag Debug (don't delete intermediate files)
-     * @param bet_options Options to pass to BET brain extraction (inside double-quotes), e.g. -B "-f 0.3"
-     * @param twoclass_segment_flag Two-class segmentation (don't segment grey and white matter separately)
-     * @param t2_flag Input image is T2-weighted (default is T1-weighted)
-     * @param top_threshold Ignore from t (mm) upwards in MNI152/Talairach space
-     * @param bottom_threshold Ignore from b (mm) downwards in MNI152/Talairach space (b should probably be negative)
-     * @param regional_flag Regional - use standard-space masks to give peripheral cortex GM volume (3-class segmentation only) and ventricular CSF volume
-     * @param lesion_mask Use lesion (or lesion+CSF) mask to remove incorrectly labelled 'grey matter' voxels
-     * @param fast_options Options to pass to FAST segmentation (inside double-quotes), e.g. -S "I 20"
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SienaxOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SIENAX_METADATA);
     const params = sienax_params(infile, output_dir, debug_flag, bet_options, twoclass_segment_flag, t2_flag, top_threshold, bottom_threshold, regional_flag, lesion_mask, fast_options)
@@ -302,5 +302,8 @@ export {
       SienaxOutputs,
       SienaxParameters,
       sienax,
+      sienax_cargs,
+      sienax_execute,
+      sienax_outputs,
       sienax_params,
 };

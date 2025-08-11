@@ -12,7 +12,7 @@ const V_3D_BLUR_TO_FWHM_METADATA: Metadata = {
 
 
 interface V3dBlurToFwhmParameters {
-    "__STYXTYPE__": "3dBlurToFWHM";
+    "@type": "afni.3dBlurToFWHM";
     "automask": boolean;
     "blurmaster"?: InputPathType | null | undefined;
     "fwhm"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface V3dBlurToFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBlurToFWHM": v_3d_blur_to_fwhm_cargs,
+        "afni.3dBlurToFWHM": v_3d_blur_to_fwhm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBlurToFWHM": v_3d_blur_to_fwhm_outputs,
+        "afni.3dBlurToFWHM": v_3d_blur_to_fwhm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface V3dBlurToFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file The dataset that will be smoothed.
+ * @param automask Create an automask from the input dataset.
+ * @param blurmaster The dataset whose smoothness controls the process.
+ * @param fwhm Blur until the 3d fwhm reaches this value (in mm).
+ * @param fwhmxy Blur until the 2d (x,y)-plane fwhm reaches this value (in mm).
+ * @param mask Mask dataset, if desired. voxels not in mask will be set to zero in output.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param prefix Prefix for output dataset.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_blur_to_fwhm_params(
     in_file: InputPathType,
     automask: boolean = false,
@@ -85,22 +99,8 @@ function v_3d_blur_to_fwhm_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     prefix: string | null = null,
 ): V3dBlurToFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file The dataset that will be smoothed.
-     * @param automask Create an automask from the input dataset.
-     * @param blurmaster The dataset whose smoothness controls the process.
-     * @param fwhm Blur until the 3d fwhm reaches this value (in mm).
-     * @param fwhmxy Blur until the 2d (x,y)-plane fwhm reaches this value (in mm).
-     * @param mask Mask dataset, if desired. voxels not in mask will be set to zero in output.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param prefix Prefix for output dataset.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBlurToFWHM" as const,
+        "@type": "afni.3dBlurToFWHM" as const,
         "automask": automask,
         "in_file": in_file,
     };
@@ -126,18 +126,18 @@ function v_3d_blur_to_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_blur_to_fwhm_cargs(
     params: V3dBlurToFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBlurToFWHM");
     if ((params["automask"] ?? null)) {
@@ -184,18 +184,18 @@ function v_3d_blur_to_fwhm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_blur_to_fwhm_outputs(
     params: V3dBlurToFwhmParameters,
     execution: Execution,
 ): V3dBlurToFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBlurToFwhmOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -204,22 +204,22 @@ function v_3d_blur_to_fwhm_outputs(
 }
 
 
+/**
+ * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
+ */
 function v_3d_blur_to_fwhm_execute(
     params: V3dBlurToFwhmParameters,
     execution: Execution,
 ): V3dBlurToFwhmOutputs {
-    /**
-     * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_blur_to_fwhm_cargs(params, execution)
     const ret = v_3d_blur_to_fwhm_outputs(params, execution)
@@ -228,6 +228,25 @@ function v_3d_blur_to_fwhm_execute(
 }
 
 
+/**
+ * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param in_file The dataset that will be smoothed.
+ * @param automask Create an automask from the input dataset.
+ * @param blurmaster The dataset whose smoothness controls the process.
+ * @param fwhm Blur until the 3d fwhm reaches this value (in mm).
+ * @param fwhmxy Blur until the 2d (x,y)-plane fwhm reaches this value (in mm).
+ * @param mask Mask dataset, if desired. voxels not in mask will be set to zero in output.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param prefix Prefix for output dataset.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
+ */
 function v_3d_blur_to_fwhm(
     in_file: InputPathType,
     automask: boolean = false,
@@ -239,25 +258,6 @@ function v_3d_blur_to_fwhm(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dBlurToFwhmOutputs {
-    /**
-     * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param in_file The dataset that will be smoothed.
-     * @param automask Create an automask from the input dataset.
-     * @param blurmaster The dataset whose smoothness controls the process.
-     * @param fwhm Blur until the 3d fwhm reaches this value (in mm).
-     * @param fwhmxy Blur until the 2d (x,y)-plane fwhm reaches this value (in mm).
-     * @param mask Mask dataset, if desired. voxels not in mask will be set to zero in output.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param prefix Prefix for output dataset.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BLUR_TO_FWHM_METADATA);
     const params = v_3d_blur_to_fwhm_params(in_file, automask, blurmaster, fwhm, fwhmxy, mask, outputtype, prefix)
@@ -270,5 +270,8 @@ export {
       V3dBlurToFwhmParameters,
       V_3D_BLUR_TO_FWHM_METADATA,
       v_3d_blur_to_fwhm,
+      v_3d_blur_to_fwhm_cargs,
+      v_3d_blur_to_fwhm_execute,
+      v_3d_blur_to_fwhm_outputs,
       v_3d_blur_to_fwhm_params,
 };

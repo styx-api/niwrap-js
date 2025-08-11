@@ -12,41 +12,41 @@ const MRI_SEGREG_METADATA: Metadata = {
 
 
 interface MriSegregParameters {
-    "__STYXTYPE__": "mri_segreg";
+    "@type": "freesurfer.mri_segreg";
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segreg": mri_segreg_cargs,
+        "freesurfer.mri_segreg": mri_segreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segreg": mri_segreg_outputs,
+        "freesurfer.mri_segreg": mri_segreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MriSegregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file. All formats accepted by mri_convert can be used.
+ * @param output_file Output file for the processed image
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segreg_params(
     input_file: InputPathType,
     output_file: string = "output.mgz",
 ): MriSegregParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file. All formats accepted by mri_convert can be used.
-     * @param output_file Output file for the processed image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segreg" as const,
+        "@type": "freesurfer.mri_segreg" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -90,18 +90,18 @@ function mri_segreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segreg_cargs(
     params: MriSegregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segreg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -110,18 +110,18 @@ function mri_segreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segreg_outputs(
     params: MriSegregParameters,
     execution: Execution,
 ): MriSegregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegregOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mri_segreg_outputs(
 }
 
 
+/**
+ * MRI Segregation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
+ */
 function mri_segreg_execute(
     params: MriSegregParameters,
     execution: Execution,
 ): MriSegregOutputs {
-    /**
-     * MRI Segregation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segreg_cargs(params, execution)
     const ret = mri_segreg_outputs(params, execution)
@@ -154,24 +154,24 @@ function mri_segreg_execute(
 }
 
 
+/**
+ * MRI Segregation tool.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input image file. All formats accepted by mri_convert can be used.
+ * @param output_file Output file for the processed image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
+ */
 function mri_segreg(
     input_file: InputPathType,
     output_file: string = "output.mgz",
     runner: Runner | null = null,
 ): MriSegregOutputs {
-    /**
-     * MRI Segregation tool.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input image file. All formats accepted by mri_convert can be used.
-     * @param output_file Output file for the processed image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGREG_METADATA);
     const params = mri_segreg_params(input_file, output_file)
@@ -184,5 +184,8 @@ export {
       MriSegregOutputs,
       MriSegregParameters,
       mri_segreg,
+      mri_segreg_cargs,
+      mri_segreg_execute,
+      mri_segreg_outputs,
       mri_segreg_params,
 };

@@ -12,7 +12,7 @@ const V_3DTTEST___METADATA: Metadata = {
 
 
 interface V3dttestParameters {
-    "__STYXTYPE__": "3dttest++";
+    "@type": "afni.3dttest++";
     "setA": Array<string>;
     "setB"?: Array<string> | null | undefined;
     "setA_long"?: Array<string> | null | undefined;
@@ -37,35 +37,35 @@ interface V3dttestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dttest++": v_3dttest___cargs,
+        "afni.3dttest++": v_3dttest___cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dttest++": v_3dttest___outputs,
+        "afni.3dttest++": v_3dttest___outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,33 @@ interface V3dttestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param set_a Set A in short form, e.g., 'a+tlrc[3]' b+tlrc[3] ...'
+ * @param set_b Set B in short form, e.g., 'x+tlrc[3]' y+tlrc[3] ...'
+ * @param set_a_long Specify an overall name for the set of datasets (Long form). Example: -setA Green sub001 a+tlrc[3] sub002 b+tlrc[3] ...
+ * @param set_b_long Specify an overall name for the set of datasets (Long form). Example: -setB Blue sub001 x+tlrc[3] sub002 y+tlrc[3] ...
+ * @param covariates File containing covariates.
+ * @param label_a Label for the set (for Set A). Limited to 12 characters.
+ * @param label_b Label for the set (for Set B). Limited to 12 characters.
+ * @param setweight_a File with voxel-wise weights for -setA datasets.
+ * @param setweight_b File with voxel-wise weights for -setB datasets.
+ * @param prefix Output the prefix name of the dataset result. For surface-based datasets, use -prefix p.niml.dset or -prefix p.gii.dset
+ * @param resid Residuals will be output into a dataset with the given prefix.
+ * @param paired Specify to use a paired-sample t-test to compare setA and setB. Both sets must have the same cardinality.
+ * @param unpooled Specify separate variance estimates for setA and setB (not pooled together).
+ * @param mask Set mask for dataset analysis.
+ * @param exblur Add extra Gaussian blurring kernel FWHM (mm). Example: -exblur 6
+ * @param randomsign Randomize signs of datasets. Used with output from -resid to generate null hypothesis statistics.
+ * @param permute With -randomsign, adds inter-set permutation to randomization when both sets are used.
+ * @param etac Apply the Equitable Thresholding And Clustering (ETAC) method for thresholding results.
+ * @param etac_blur List of multiple levels of spatial blurring for ETAC. Example: -ETAC_blur 4 6
+ * @param etac_opt Specify options for ETAC. Example: -ETAC_opt NN=2:sid=2:hpow=0,2:pthr=0.01,0.005,0.002,0.01:name=Fred
+ * @param seed Random number seed for -randomsign and -permute/ETAC.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dttest___params(
     set_a: Array<string>,
     set_b: Array<string> | null = null,
@@ -115,35 +142,8 @@ function v_3dttest___params(
     etac_opt: Array<string> | null = null,
     seed: number | null = null,
 ): V3dttestParameters {
-    /**
-     * Build parameters.
-    
-     * @param set_a Set A in short form, e.g., 'a+tlrc[3]' b+tlrc[3] ...'
-     * @param set_b Set B in short form, e.g., 'x+tlrc[3]' y+tlrc[3] ...'
-     * @param set_a_long Specify an overall name for the set of datasets (Long form). Example: -setA Green sub001 a+tlrc[3] sub002 b+tlrc[3] ...
-     * @param set_b_long Specify an overall name for the set of datasets (Long form). Example: -setB Blue sub001 x+tlrc[3] sub002 y+tlrc[3] ...
-     * @param covariates File containing covariates.
-     * @param label_a Label for the set (for Set A). Limited to 12 characters.
-     * @param label_b Label for the set (for Set B). Limited to 12 characters.
-     * @param setweight_a File with voxel-wise weights for -setA datasets.
-     * @param setweight_b File with voxel-wise weights for -setB datasets.
-     * @param prefix Output the prefix name of the dataset result. For surface-based datasets, use -prefix p.niml.dset or -prefix p.gii.dset
-     * @param resid Residuals will be output into a dataset with the given prefix.
-     * @param paired Specify to use a paired-sample t-test to compare setA and setB. Both sets must have the same cardinality.
-     * @param unpooled Specify separate variance estimates for setA and setB (not pooled together).
-     * @param mask Set mask for dataset analysis.
-     * @param exblur Add extra Gaussian blurring kernel FWHM (mm). Example: -exblur 6
-     * @param randomsign Randomize signs of datasets. Used with output from -resid to generate null hypothesis statistics.
-     * @param permute With -randomsign, adds inter-set permutation to randomization when both sets are used.
-     * @param etac Apply the Equitable Thresholding And Clustering (ETAC) method for thresholding results.
-     * @param etac_blur List of multiple levels of spatial blurring for ETAC. Example: -ETAC_blur 4 6
-     * @param etac_opt Specify options for ETAC. Example: -ETAC_opt NN=2:sid=2:hpow=0,2:pthr=0.01,0.005,0.002,0.01:name=Fred
-     * @param seed Random number seed for -randomsign and -permute/ETAC.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dttest++" as const,
+        "@type": "afni.3dttest++" as const,
         "setA": set_a,
         "paired": paired,
         "unpooled": unpooled,
@@ -200,18 +200,18 @@ function v_3dttest___params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dttest___cargs(
     params: V3dttestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dttest++");
     cargs.push(
@@ -327,18 +327,18 @@ function v_3dttest___cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dttest___outputs(
     params: V3dttestParameters,
     execution: Execution,
 ): V3dttestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dttestOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -348,22 +348,22 @@ function v_3dttest___outputs(
 }
 
 
+/**
+ * Gosset (Student) t-test of sets of 3D datasets in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
+ */
 function v_3dttest___execute(
     params: V3dttestParameters,
     execution: Execution,
 ): V3dttestOutputs {
-    /**
-     * Gosset (Student) t-test of sets of 3D datasets in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dttest___cargs(params, execution)
     const ret = v_3dttest___outputs(params, execution)
@@ -372,6 +372,38 @@ function v_3dttest___execute(
 }
 
 
+/**
+ * Gosset (Student) t-test of sets of 3D datasets in AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param set_a Set A in short form, e.g., 'a+tlrc[3]' b+tlrc[3] ...'
+ * @param set_b Set B in short form, e.g., 'x+tlrc[3]' y+tlrc[3] ...'
+ * @param set_a_long Specify an overall name for the set of datasets (Long form). Example: -setA Green sub001 a+tlrc[3] sub002 b+tlrc[3] ...
+ * @param set_b_long Specify an overall name for the set of datasets (Long form). Example: -setB Blue sub001 x+tlrc[3] sub002 y+tlrc[3] ...
+ * @param covariates File containing covariates.
+ * @param label_a Label for the set (for Set A). Limited to 12 characters.
+ * @param label_b Label for the set (for Set B). Limited to 12 characters.
+ * @param setweight_a File with voxel-wise weights for -setA datasets.
+ * @param setweight_b File with voxel-wise weights for -setB datasets.
+ * @param prefix Output the prefix name of the dataset result. For surface-based datasets, use -prefix p.niml.dset or -prefix p.gii.dset
+ * @param resid Residuals will be output into a dataset with the given prefix.
+ * @param paired Specify to use a paired-sample t-test to compare setA and setB. Both sets must have the same cardinality.
+ * @param unpooled Specify separate variance estimates for setA and setB (not pooled together).
+ * @param mask Set mask for dataset analysis.
+ * @param exblur Add extra Gaussian blurring kernel FWHM (mm). Example: -exblur 6
+ * @param randomsign Randomize signs of datasets. Used with output from -resid to generate null hypothesis statistics.
+ * @param permute With -randomsign, adds inter-set permutation to randomization when both sets are used.
+ * @param etac Apply the Equitable Thresholding And Clustering (ETAC) method for thresholding results.
+ * @param etac_blur List of multiple levels of spatial blurring for ETAC. Example: -ETAC_blur 4 6
+ * @param etac_opt Specify options for ETAC. Example: -ETAC_opt NN=2:sid=2:hpow=0,2:pthr=0.01,0.005,0.002,0.01:name=Fred
+ * @param seed Random number seed for -randomsign and -permute/ETAC.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
+ */
 function v_3dttest__(
     set_a: Array<string>,
     set_b: Array<string> | null = null,
@@ -396,38 +428,6 @@ function v_3dttest__(
     seed: number | null = null,
     runner: Runner | null = null,
 ): V3dttestOutputs {
-    /**
-     * Gosset (Student) t-test of sets of 3D datasets in AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param set_a Set A in short form, e.g., 'a+tlrc[3]' b+tlrc[3] ...'
-     * @param set_b Set B in short form, e.g., 'x+tlrc[3]' y+tlrc[3] ...'
-     * @param set_a_long Specify an overall name for the set of datasets (Long form). Example: -setA Green sub001 a+tlrc[3] sub002 b+tlrc[3] ...
-     * @param set_b_long Specify an overall name for the set of datasets (Long form). Example: -setB Blue sub001 x+tlrc[3] sub002 y+tlrc[3] ...
-     * @param covariates File containing covariates.
-     * @param label_a Label for the set (for Set A). Limited to 12 characters.
-     * @param label_b Label for the set (for Set B). Limited to 12 characters.
-     * @param setweight_a File with voxel-wise weights for -setA datasets.
-     * @param setweight_b File with voxel-wise weights for -setB datasets.
-     * @param prefix Output the prefix name of the dataset result. For surface-based datasets, use -prefix p.niml.dset or -prefix p.gii.dset
-     * @param resid Residuals will be output into a dataset with the given prefix.
-     * @param paired Specify to use a paired-sample t-test to compare setA and setB. Both sets must have the same cardinality.
-     * @param unpooled Specify separate variance estimates for setA and setB (not pooled together).
-     * @param mask Set mask for dataset analysis.
-     * @param exblur Add extra Gaussian blurring kernel FWHM (mm). Example: -exblur 6
-     * @param randomsign Randomize signs of datasets. Used with output from -resid to generate null hypothesis statistics.
-     * @param permute With -randomsign, adds inter-set permutation to randomization when both sets are used.
-     * @param etac Apply the Equitable Thresholding And Clustering (ETAC) method for thresholding results.
-     * @param etac_blur List of multiple levels of spatial blurring for ETAC. Example: -ETAC_blur 4 6
-     * @param etac_opt Specify options for ETAC. Example: -ETAC_opt NN=2:sid=2:hpow=0,2:pthr=0.01,0.005,0.002,0.01:name=Fred
-     * @param seed Random number seed for -randomsign and -permute/ETAC.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DTTEST___METADATA);
     const params = v_3dttest___params(set_a, set_b, set_a_long, set_b_long, covariates, label_a, label_b, setweight_a, setweight_b, prefix, resid, paired, unpooled, mask, exblur, randomsign, permute, etac, etac_blur, etac_opt, seed)
@@ -440,5 +440,8 @@ export {
       V3dttestParameters,
       V_3DTTEST___METADATA,
       v_3dttest__,
+      v_3dttest___cargs,
+      v_3dttest___execute,
+      v_3dttest___outputs,
       v_3dttest___params,
 };

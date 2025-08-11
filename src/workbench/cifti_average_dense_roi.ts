@@ -12,20 +12,20 @@ const CIFTI_AVERAGE_DENSE_ROI_METADATA: Metadata = {
 
 
 interface CiftiAverageDenseRoiCiftiRoiParameters {
-    "__STYXTYPE__": "cifti_roi";
+    "@type": "workbench.cifti-average-dense-roi.cifti_roi";
     "roi_cifti": InputPathType;
     "opt_in_memory": boolean;
 }
 
 
 interface CiftiAverageDenseRoiCiftiParameters {
-    "__STYXTYPE__": "cifti";
+    "@type": "workbench.cifti-average-dense-roi.cifti";
     "cifti_in": InputPathType;
 }
 
 
 interface CiftiAverageDenseRoiParameters {
-    "__STYXTYPE__": "cifti-average-dense-roi";
+    "@type": "workbench.cifti-average-dense-roi";
     "cifti_out": string;
     "cifti_roi"?: CiftiAverageDenseRoiCiftiRoiParameters | null | undefined;
     "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
@@ -39,56 +39,56 @@ interface CiftiAverageDenseRoiParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-average-dense-roi": cifti_average_dense_roi_cargs,
-        "cifti_roi": cifti_average_dense_roi_cifti_roi_cargs,
-        "cifti": cifti_average_dense_roi_cifti_cargs,
+        "workbench.cifti-average-dense-roi": cifti_average_dense_roi_cargs,
+        "workbench.cifti-average-dense-roi.cifti_roi": cifti_average_dense_roi_cifti_roi_cargs,
+        "workbench.cifti-average-dense-roi.cifti": cifti_average_dense_roi_cifti_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-average-dense-roi": cifti_average_dense_roi_outputs,
+        "workbench.cifti-average-dense-roi": cifti_average_dense_roi_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_cifti the roi cifti file
+ * @param opt_in_memory cache the roi in memory so that it isn't re-read for each input cifti
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_dense_roi_cifti_roi_params(
     roi_cifti: InputPathType,
     opt_in_memory: boolean = false,
 ): CiftiAverageDenseRoiCiftiRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_cifti the roi cifti file
-     * @param opt_in_memory cache the roi in memory so that it isn't re-read for each input cifti
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti_roi" as const,
+        "@type": "workbench.cifti-average-dense-roi.cifti_roi" as const,
         "roi_cifti": roi_cifti,
         "opt_in_memory": opt_in_memory,
     };
@@ -96,18 +96,18 @@ function cifti_average_dense_roi_cifti_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_dense_roi_cifti_roi_cargs(
     params: CiftiAverageDenseRoiCiftiRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti-roi");
     cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
@@ -118,36 +118,36 @@ function cifti_average_dense_roi_cifti_roi_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in a cifti file to average across
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_dense_roi_cifti_params(
     cifti_in: InputPathType,
 ): CiftiAverageDenseRoiCiftiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in a cifti file to average across
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti" as const,
+        "@type": "workbench.cifti-average-dense-roi.cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_dense_roi_cifti_cargs(
     params: CiftiAverageDenseRoiCiftiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-cifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
@@ -172,6 +172,22 @@ interface CiftiAverageDenseRoiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_out output cifti dscalar file
+ * @param cifti_roi cifti file containing combined weights
+ * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
+ * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
+ * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
+ * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
+ * @param cifti specify an input cifti file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_average_dense_roi_params(
     cifti_out: string,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParameters | null = null,
@@ -184,24 +200,8 @@ function cifti_average_dense_roi_params(
     opt_cerebellum_area_surf_cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
 ): CiftiAverageDenseRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_out output cifti dscalar file
-     * @param cifti_roi cifti file containing combined weights
-     * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
-     * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
-     * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
-     * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
-     * @param cifti specify an input cifti file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-average-dense-roi" as const,
+        "@type": "workbench.cifti-average-dense-roi" as const,
         "cifti_out": cifti_out,
     };
     if (cifti_roi !== null) {
@@ -235,24 +235,24 @@ function cifti_average_dense_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_average_dense_roi_cargs(
     params: CiftiAverageDenseRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-average-dense-roi");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["cifti_roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cifti_roi"] ?? null).__STYXTYPE__)((params["cifti_roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["cifti_roi"] ?? null)["@type"])((params["cifti_roi"] ?? null), execution));
     }
     if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -297,24 +297,24 @@ function cifti_average_dense_roi_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_average_dense_roi_outputs(
     params: CiftiAverageDenseRoiParameters,
     execution: Execution,
 ): CiftiAverageDenseRoiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiAverageDenseRoiOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -323,24 +323,24 @@ function cifti_average_dense_roi_outputs(
 }
 
 
+/**
+ * Average cifti rows across subjects by roi.
+ *
+ * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
+ */
 function cifti_average_dense_roi_execute(
     params: CiftiAverageDenseRoiParameters,
     execution: Execution,
 ): CiftiAverageDenseRoiOutputs {
-    /**
-     * Average cifti rows across subjects by roi.
-     * 
-     * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_average_dense_roi_cargs(params, execution)
     const ret = cifti_average_dense_roi_outputs(params, execution)
@@ -349,6 +349,29 @@ function cifti_average_dense_roi_execute(
 }
 
 
+/**
+ * Average cifti rows across subjects by roi.
+ *
+ * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_out output cifti dscalar file
+ * @param cifti_roi cifti file containing combined weights
+ * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
+ * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
+ * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
+ * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
+ * @param cifti specify an input cifti file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
+ */
 function cifti_average_dense_roi(
     cifti_out: string,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParameters | null = null,
@@ -362,29 +385,6 @@ function cifti_average_dense_roi(
     cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
-    /**
-     * Average cifti rows across subjects by roi.
-     * 
-     * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_out output cifti dscalar file
-     * @param cifti_roi cifti file containing combined weights
-     * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
-     * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
-     * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
-     * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
-     * @param cifti specify an input cifti file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_AVERAGE_DENSE_ROI_METADATA);
     const params = cifti_average_dense_roi_params(cifti_out, cifti_roi, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol, opt_left_area_surf_left_surf, opt_right_area_surf_right_surf, opt_cerebellum_area_surf_cerebellum_surf, cifti)
@@ -399,7 +399,12 @@ export {
       CiftiAverageDenseRoiOutputs,
       CiftiAverageDenseRoiParameters,
       cifti_average_dense_roi,
+      cifti_average_dense_roi_cargs,
+      cifti_average_dense_roi_cifti_cargs,
       cifti_average_dense_roi_cifti_params,
+      cifti_average_dense_roi_cifti_roi_cargs,
       cifti_average_dense_roi_cifti_roi_params,
+      cifti_average_dense_roi_execute,
+      cifti_average_dense_roi_outputs,
       cifti_average_dense_roi_params,
 };

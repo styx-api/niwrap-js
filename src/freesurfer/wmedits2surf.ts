@@ -12,7 +12,7 @@ const WMEDITS2SURF_METADATA: Metadata = {
 
 
 interface Wmedits2surfParameters {
-    "__STYXTYPE__": "wmedits2surf";
+    "@type": "freesurfer.wmedits2surf";
     "subject": string;
     "self": boolean;
     "overwrite": boolean;
@@ -26,35 +26,35 @@ interface Wmedits2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "wmedits2surf": wmedits2surf_cargs,
+        "freesurfer.wmedits2surf": wmedits2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "wmedits2surf": wmedits2surf_outputs,
+        "freesurfer.wmedits2surf": wmedits2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,21 @@ interface Wmedits2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier.
+ * @param overwrite Force overwriting of existing results.
+ * @param tmp_dir Temporary directory.
+ * @param cleanup Cleanup temporary files after execution.
+ * @param no_cleanup Do not cleanup temporary files after execution.
+ * @param debug Debug mode.
+ * @param lh Only do left hemisphere.
+ * @param rh Only do right hemisphere.
+ * @param no_surfs Do not compute surfaces, only count stats.
+ *
+ * @returns Parameter dictionary
+ */
 function wmedits2surf_params(
     subject: string,
     self: boolean = false,
@@ -109,23 +124,8 @@ function wmedits2surf_params(
     rh: boolean = false,
     no_surfs: boolean = false,
 ): Wmedits2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier.
-     * @param overwrite Force overwriting of existing results.
-     * @param tmp_dir Temporary directory.
-     * @param cleanup Cleanup temporary files after execution.
-     * @param no_cleanup Do not cleanup temporary files after execution.
-     * @param debug Debug mode.
-     * @param lh Only do left hemisphere.
-     * @param rh Only do right hemisphere.
-     * @param no_surfs Do not compute surfaces, only count stats.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "wmedits2surf" as const,
+        "@type": "freesurfer.wmedits2surf" as const,
         "subject": subject,
         "self": self,
         "overwrite": overwrite,
@@ -143,18 +143,18 @@ function wmedits2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function wmedits2surf_cargs(
     params: Wmedits2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wmedits2surf");
     cargs.push(
@@ -195,18 +195,18 @@ function wmedits2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function wmedits2surf_outputs(
     params: Wmedits2surfParameters,
     execution: Execution,
 ): Wmedits2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Wmedits2surfOutputs = {
         root: execution.outputFile("."),
         lh_wmerase: execution.outputFile(["subject/surf/lh.wmerase.fsa.mgh"].join('')),
@@ -220,22 +220,22 @@ function wmedits2surf_outputs(
 }
 
 
+/**
+ * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
+ */
 function wmedits2surf_execute(
     params: Wmedits2surfParameters,
     execution: Execution,
 ): Wmedits2surfOutputs {
-    /**
-     * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = wmedits2surf_cargs(params, execution)
     const ret = wmedits2surf_outputs(params, execution)
@@ -244,6 +244,26 @@ function wmedits2surf_execute(
 }
 
 
+/**
+ * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier.
+ * @param overwrite Force overwriting of existing results.
+ * @param tmp_dir Temporary directory.
+ * @param cleanup Cleanup temporary files after execution.
+ * @param no_cleanup Do not cleanup temporary files after execution.
+ * @param debug Debug mode.
+ * @param lh Only do left hemisphere.
+ * @param rh Only do right hemisphere.
+ * @param no_surfs Do not compute surfaces, only count stats.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
+ */
 function wmedits2surf(
     subject: string,
     self: boolean = false,
@@ -257,26 +277,6 @@ function wmedits2surf(
     no_surfs: boolean = false,
     runner: Runner | null = null,
 ): Wmedits2surfOutputs {
-    /**
-     * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier.
-     * @param overwrite Force overwriting of existing results.
-     * @param tmp_dir Temporary directory.
-     * @param cleanup Cleanup temporary files after execution.
-     * @param no_cleanup Do not cleanup temporary files after execution.
-     * @param debug Debug mode.
-     * @param lh Only do left hemisphere.
-     * @param rh Only do right hemisphere.
-     * @param no_surfs Do not compute surfaces, only count stats.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WMEDITS2SURF_METADATA);
     const params = wmedits2surf_params(subject, self, overwrite, tmp_dir, cleanup, no_cleanup, debug, lh, rh, no_surfs)
@@ -289,5 +289,8 @@ export {
       Wmedits2surfOutputs,
       Wmedits2surfParameters,
       wmedits2surf,
+      wmedits2surf_cargs,
+      wmedits2surf_execute,
+      wmedits2surf_outputs,
       wmedits2surf_params,
 };

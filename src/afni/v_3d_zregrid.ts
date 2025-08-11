@@ -12,7 +12,7 @@ const V_3D_ZREGRID_METADATA: Metadata = {
 
 
 interface V3dZregridParameters {
-    "__STYXTYPE__": "3dZregrid";
+    "@type": "afni.3dZregrid";
     "z_thickness"?: number | null | undefined;
     "slice_count"?: number | null | undefined;
     "z_size"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface V3dZregridParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dZregrid": v_3d_zregrid_cargs,
+        "afni.3dZregrid": v_3d_zregrid_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dZregrid": v_3d_zregrid_outputs,
+        "afni.3dZregrid": v_3d_zregrid_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface V3dZregridOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input dataset
+ * @param z_thickness Set slice thickness to D mm
+ * @param slice_count Set slice count to N
+ * @param z_size Set thickness of dataset (center-to-center of first and last slices) to Z mm
+ * @param prefix Write result to dataset with prefix P
+ * @param verbose Write progress reports to stderr
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_zregrid_params(
     infile: InputPathType,
     z_thickness: number | null = null,
@@ -85,20 +97,8 @@ function v_3d_zregrid_params(
     prefix: string | null = null,
     verbose: boolean = false,
 ): V3dZregridParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input dataset
-     * @param z_thickness Set slice thickness to D mm
-     * @param slice_count Set slice count to N
-     * @param z_size Set thickness of dataset (center-to-center of first and last slices) to Z mm
-     * @param prefix Write result to dataset with prefix P
-     * @param verbose Write progress reports to stderr
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dZregrid" as const,
+        "@type": "afni.3dZregrid" as const,
         "infile": infile,
         "verbose": verbose,
     };
@@ -118,18 +118,18 @@ function v_3d_zregrid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_zregrid_cargs(
     params: V3dZregridParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dZregrid");
     if ((params["z_thickness"] ?? null) !== null) {
@@ -164,18 +164,18 @@ function v_3d_zregrid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_zregrid_outputs(
     params: V3dZregridParameters,
     execution: Execution,
 ): V3dZregridOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dZregridOutputs = {
         root: execution.outputFile("."),
         outfile_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -185,22 +185,22 @@ function v_3d_zregrid_outputs(
 }
 
 
+/**
+ * Alters the input dataset's slice thickness and/or number.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
+ */
 function v_3d_zregrid_execute(
     params: V3dZregridParameters,
     execution: Execution,
 ): V3dZregridOutputs {
-    /**
-     * Alters the input dataset's slice thickness and/or number.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_zregrid_cargs(params, execution)
     const ret = v_3d_zregrid_outputs(params, execution)
@@ -209,6 +209,23 @@ function v_3d_zregrid_execute(
 }
 
 
+/**
+ * Alters the input dataset's slice thickness and/or number.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input dataset
+ * @param z_thickness Set slice thickness to D mm
+ * @param slice_count Set slice count to N
+ * @param z_size Set thickness of dataset (center-to-center of first and last slices) to Z mm
+ * @param prefix Write result to dataset with prefix P
+ * @param verbose Write progress reports to stderr
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
+ */
 function v_3d_zregrid(
     infile: InputPathType,
     z_thickness: number | null = null,
@@ -218,23 +235,6 @@ function v_3d_zregrid(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dZregridOutputs {
-    /**
-     * Alters the input dataset's slice thickness and/or number.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input dataset
-     * @param z_thickness Set slice thickness to D mm
-     * @param slice_count Set slice count to N
-     * @param z_size Set thickness of dataset (center-to-center of first and last slices) to Z mm
-     * @param prefix Write result to dataset with prefix P
-     * @param verbose Write progress reports to stderr
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ZREGRID_METADATA);
     const params = v_3d_zregrid_params(infile, z_thickness, slice_count, z_size, prefix, verbose)
@@ -247,5 +247,8 @@ export {
       V3dZregridParameters,
       V_3D_ZREGRID_METADATA,
       v_3d_zregrid,
+      v_3d_zregrid_cargs,
+      v_3d_zregrid_execute,
+      v_3d_zregrid_outputs,
       v_3d_zregrid_params,
 };

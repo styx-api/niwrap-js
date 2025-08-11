@@ -12,7 +12,7 @@ const TRACTSTATS2TABLE_METADATA: Metadata = {
 
 
 interface Tractstats2tableParameters {
-    "__STYXTYPE__": "tractstats2table";
+    "@type": "freesurfer.tractstats2table";
     "inputs"?: Array<string> | null | undefined;
     "load_pathstats_from_file"?: InputPathType | null | undefined;
     "overall": boolean;
@@ -25,35 +25,35 @@ interface Tractstats2tableParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tractstats2table": tractstats2table_cargs,
+        "freesurfer.tractstats2table": tractstats2table_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tractstats2table": tractstats2table_outputs,
+        "freesurfer.tractstats2table": tractstats2table_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface Tractstats2tableOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tablefile The output table file.
+ * @param inputs Specify input stat files.
+ * @param load_pathstats_from_file Name of the file which has the list of subjects (one subject per line).
+ * @param overall Operate on the overall path statistics.
+ * @param byvoxel Operate on the byvoxel path statistics.
+ * @param byvoxel_measure Specify byvoxel measure. One of [AD, RD, MD, FA]. Required with --byvoxel option.
+ * @param delimiter Delimiter between measures in the table. Default is tab (alt comma, space, semicolon).
+ * @param transpose Transpose the table (default is subject in rows and measures/count in cols).
+ * @param debug Increase verbosity.
+ *
+ * @returns Parameter dictionary
+ */
 function tractstats2table_params(
     tablefile: InputPathType,
     inputs: Array<string> | null = null,
@@ -87,23 +102,8 @@ function tractstats2table_params(
     transpose: boolean = false,
     debug: boolean = false,
 ): Tractstats2tableParameters {
-    /**
-     * Build parameters.
-    
-     * @param tablefile The output table file.
-     * @param inputs Specify input stat files.
-     * @param load_pathstats_from_file Name of the file which has the list of subjects (one subject per line).
-     * @param overall Operate on the overall path statistics.
-     * @param byvoxel Operate on the byvoxel path statistics.
-     * @param byvoxel_measure Specify byvoxel measure. One of [AD, RD, MD, FA]. Required with --byvoxel option.
-     * @param delimiter Delimiter between measures in the table. Default is tab (alt comma, space, semicolon).
-     * @param transpose Transpose the table (default is subject in rows and measures/count in cols).
-     * @param debug Increase verbosity.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tractstats2table" as const,
+        "@type": "freesurfer.tractstats2table" as const,
         "overall": overall,
         "byvoxel": byvoxel,
         "tablefile": tablefile,
@@ -126,18 +126,18 @@ function tractstats2table_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tractstats2table_cargs(
     params: Tractstats2tableParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tractstats2table");
     if ((params["inputs"] ?? null) !== null) {
@@ -184,18 +184,18 @@ function tractstats2table_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tractstats2table_outputs(
     params: Tractstats2tableParameters,
     execution: Execution,
 ): Tractstats2tableOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tractstats2tableOutputs = {
         root: execution.outputFile("."),
         output_tablefile: execution.outputFile([path.basename((params["tablefile"] ?? null))].join('')),
@@ -204,22 +204,22 @@ function tractstats2table_outputs(
 }
 
 
+/**
+ * Converts a track overall stats file created by tracula into a table used for group statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
+ */
 function tractstats2table_execute(
     params: Tractstats2tableParameters,
     execution: Execution,
 ): Tractstats2tableOutputs {
-    /**
-     * Converts a track overall stats file created by tracula into a table used for group statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
-     */
     params = execution.params(params)
     const cargs = tractstats2table_cargs(params, execution)
     const ret = tractstats2table_outputs(params, execution)
@@ -228,6 +228,26 @@ function tractstats2table_execute(
 }
 
 
+/**
+ * Converts a track overall stats file created by tracula into a table used for group statistics.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param tablefile The output table file.
+ * @param inputs Specify input stat files.
+ * @param load_pathstats_from_file Name of the file which has the list of subjects (one subject per line).
+ * @param overall Operate on the overall path statistics.
+ * @param byvoxel Operate on the byvoxel path statistics.
+ * @param byvoxel_measure Specify byvoxel measure. One of [AD, RD, MD, FA]. Required with --byvoxel option.
+ * @param delimiter Delimiter between measures in the table. Default is tab (alt comma, space, semicolon).
+ * @param transpose Transpose the table (default is subject in rows and measures/count in cols).
+ * @param debug Increase verbosity.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
+ */
 function tractstats2table(
     tablefile: InputPathType,
     inputs: Array<string> | null = null,
@@ -240,26 +260,6 @@ function tractstats2table(
     debug: boolean = false,
     runner: Runner | null = null,
 ): Tractstats2tableOutputs {
-    /**
-     * Converts a track overall stats file created by tracula into a table used for group statistics.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param tablefile The output table file.
-     * @param inputs Specify input stat files.
-     * @param load_pathstats_from_file Name of the file which has the list of subjects (one subject per line).
-     * @param overall Operate on the overall path statistics.
-     * @param byvoxel Operate on the byvoxel path statistics.
-     * @param byvoxel_measure Specify byvoxel measure. One of [AD, RD, MD, FA]. Required with --byvoxel option.
-     * @param delimiter Delimiter between measures in the table. Default is tab (alt comma, space, semicolon).
-     * @param transpose Transpose the table (default is subject in rows and measures/count in cols).
-     * @param debug Increase verbosity.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRACTSTATS2TABLE_METADATA);
     const params = tractstats2table_params(tablefile, inputs, load_pathstats_from_file, overall, byvoxel, byvoxel_measure, delimiter, transpose, debug)
@@ -272,5 +272,8 @@ export {
       Tractstats2tableOutputs,
       Tractstats2tableParameters,
       tractstats2table,
+      tractstats2table_cargs,
+      tractstats2table_execute,
+      tractstats2table_outputs,
       tractstats2table_params,
 };

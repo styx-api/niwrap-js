@@ -12,7 +12,7 @@ const AFNI_SYSTEM_CHECK_PY_METADATA: Metadata = {
 
 
 interface AfniSystemCheckPyParameters {
-    "__STYXTYPE__": "afni_system_check.py";
+    "@type": "afni.afni_system_check.py";
     "check_all": boolean;
     "find_prog"?: string | null | undefined;
     "exact"?: string | null | undefined;
@@ -26,33 +26,33 @@ interface AfniSystemCheckPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "afni_system_check.py": afni_system_check_py_cargs,
+        "afni.afni_system_check.py": afni_system_check_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -72,6 +72,22 @@ interface AfniSystemCheckPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param check_all Perform all system checks.
+ * @param find_prog Search PATH for PROG.
+ * @param exact Search for PROG without wildcards in -find_prog.
+ * @param disp_num_cpu Display number of CPUs available.
+ * @param disp_ver_matplotlib Display matplotlib version (else 'None').
+ * @param dot_file_list List all found dot files (startup files).
+ * @param dot_file_show Display contents of all found dot files.
+ * @param dot_file_pack Create a NAME.tgz package containing dot files.
+ * @param casematch Match case in -find_prog.
+ * @param data_root Search for class data under DDIR.
+ *
+ * @returns Parameter dictionary
+ */
 function afni_system_check_py_params(
     check_all: boolean = false,
     find_prog: string | null = null,
@@ -84,24 +100,8 @@ function afni_system_check_py_params(
     casematch: string | null = null,
     data_root: string | null = null,
 ): AfniSystemCheckPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param check_all Perform all system checks.
-     * @param find_prog Search PATH for PROG.
-     * @param exact Search for PROG without wildcards in -find_prog.
-     * @param disp_num_cpu Display number of CPUs available.
-     * @param disp_ver_matplotlib Display matplotlib version (else 'None').
-     * @param dot_file_list List all found dot files (startup files).
-     * @param dot_file_show Display contents of all found dot files.
-     * @param dot_file_pack Create a NAME.tgz package containing dot files.
-     * @param casematch Match case in -find_prog.
-     * @param data_root Search for class data under DDIR.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "afni_system_check.py" as const,
+        "@type": "afni.afni_system_check.py" as const,
         "check_all": check_all,
         "disp_num_cpu": disp_num_cpu,
         "disp_ver_matplotlib": disp_ver_matplotlib,
@@ -127,18 +127,18 @@ function afni_system_check_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function afni_system_check_py_cargs(
     params: AfniSystemCheckPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("afni_system_check.py");
     if ((params["check_all"] ?? null)) {
@@ -190,18 +190,18 @@ function afni_system_check_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function afni_system_check_py_outputs(
     params: AfniSystemCheckPyParameters,
     execution: Execution,
 ): AfniSystemCheckPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AfniSystemCheckPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -209,22 +209,22 @@ function afni_system_check_py_outputs(
 }
 
 
+/**
+ * Perform various system checks for figuring out AFNI installation issues.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
+ */
 function afni_system_check_py_execute(
     params: AfniSystemCheckPyParameters,
     execution: Execution,
 ): AfniSystemCheckPyOutputs {
-    /**
-     * Perform various system checks for figuring out AFNI installation issues.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = afni_system_check_py_cargs(params, execution)
     const ret = afni_system_check_py_outputs(params, execution)
@@ -233,6 +233,27 @@ function afni_system_check_py_execute(
 }
 
 
+/**
+ * Perform various system checks for figuring out AFNI installation issues.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param check_all Perform all system checks.
+ * @param find_prog Search PATH for PROG.
+ * @param exact Search for PROG without wildcards in -find_prog.
+ * @param disp_num_cpu Display number of CPUs available.
+ * @param disp_ver_matplotlib Display matplotlib version (else 'None').
+ * @param dot_file_list List all found dot files (startup files).
+ * @param dot_file_show Display contents of all found dot files.
+ * @param dot_file_pack Create a NAME.tgz package containing dot files.
+ * @param casematch Match case in -find_prog.
+ * @param data_root Search for class data under DDIR.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
+ */
 function afni_system_check_py(
     check_all: boolean = false,
     find_prog: string | null = null,
@@ -246,27 +267,6 @@ function afni_system_check_py(
     data_root: string | null = null,
     runner: Runner | null = null,
 ): AfniSystemCheckPyOutputs {
-    /**
-     * Perform various system checks for figuring out AFNI installation issues.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param check_all Perform all system checks.
-     * @param find_prog Search PATH for PROG.
-     * @param exact Search for PROG without wildcards in -find_prog.
-     * @param disp_num_cpu Display number of CPUs available.
-     * @param disp_ver_matplotlib Display matplotlib version (else 'None').
-     * @param dot_file_list List all found dot files (startup files).
-     * @param dot_file_show Display contents of all found dot files.
-     * @param dot_file_pack Create a NAME.tgz package containing dot files.
-     * @param casematch Match case in -find_prog.
-     * @param data_root Search for class data under DDIR.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(AFNI_SYSTEM_CHECK_PY_METADATA);
     const params = afni_system_check_py_params(check_all, find_prog, exact, disp_num_cpu, disp_ver_matplotlib, dot_file_list, dot_file_show, dot_file_pack, casematch, data_root)
@@ -279,5 +279,8 @@ export {
       AfniSystemCheckPyOutputs,
       AfniSystemCheckPyParameters,
       afni_system_check_py,
+      afni_system_check_py_cargs,
+      afni_system_check_py_execute,
+      afni_system_check_py_outputs,
       afni_system_check_py_params,
 };

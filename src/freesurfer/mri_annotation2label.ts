@@ -12,7 +12,7 @@ const MRI_ANNOTATION2LABEL_METADATA: Metadata = {
 
 
 interface MriAnnotation2labelParameters {
-    "__STYXTYPE__": "mri_annotation2label";
+    "@type": "freesurfer.mri_annotation2label";
     "subject": string;
     "hemi": string;
     "lobes"?: InputPathType | null | undefined;
@@ -35,33 +35,33 @@ interface MriAnnotation2labelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_annotation2label": mri_annotation2label_cargs,
+        "freesurfer.mri_annotation2label": mri_annotation2label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -81,6 +81,31 @@ interface MriAnnotation2labelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Source subject
+ * @param hemi Hemisphere (lh or rh) with surface
+ * @param lobes Create an annotation based on cortical lobes, saved to <LobesFile>.
+ * @param lobes_strict Use a stricter lobe definition with precentral added to 'frontal' and postcentral with 'parietal', saved to <LobesFile>.
+ * @param lobes_strict_phcg Use a stricter lobe definition with an additional lobe 'parahippocampalgyrus', saved to <LobesFile>.
+ * @param label Extract only single label.
+ * @param labelbase Output will be base-XXX.label.
+ * @param outdir Output will be in dir/hemi.name.label.
+ * @param seg Output will be a segmentation volume.
+ * @param segbase Add base to the annotation number to get segmentation value.
+ * @param ctab Color table, like FreeSurferColorLUT.txt.
+ * @param border Output will be a binary overlay of the parc borders.
+ * @param border_annot Default goes in subject/label.
+ * @param annotation As found in SUBJDIR/labels <aparc>.
+ * @param subjects_dir Specify SUBJECTS_DIR on the command line.
+ * @param surface Name of surface <white>. Only affect xyz in label.
+ * @param stat Surface overlay file (curv or volume format).
+ * @param help Display help.
+ * @param version Display version.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_annotation2label_params(
     subject: string,
     hemi: string,
@@ -102,33 +127,8 @@ function mri_annotation2label_params(
     help: boolean = false,
     version: boolean = false,
 ): MriAnnotation2labelParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Source subject
-     * @param hemi Hemisphere (lh or rh) with surface
-     * @param lobes Create an annotation based on cortical lobes, saved to <LobesFile>.
-     * @param lobes_strict Use a stricter lobe definition with precentral added to 'frontal' and postcentral with 'parietal', saved to <LobesFile>.
-     * @param lobes_strict_phcg Use a stricter lobe definition with an additional lobe 'parahippocampalgyrus', saved to <LobesFile>.
-     * @param label Extract only single label.
-     * @param labelbase Output will be base-XXX.label.
-     * @param outdir Output will be in dir/hemi.name.label.
-     * @param seg Output will be a segmentation volume.
-     * @param segbase Add base to the annotation number to get segmentation value.
-     * @param ctab Color table, like FreeSurferColorLUT.txt.
-     * @param border Output will be a binary overlay of the parc borders.
-     * @param border_annot Default goes in subject/label.
-     * @param annotation As found in SUBJDIR/labels <aparc>.
-     * @param subjects_dir Specify SUBJECTS_DIR on the command line.
-     * @param surface Name of surface <white>. Only affect xyz in label.
-     * @param stat Surface overlay file (curv or volume format).
-     * @param help Display help.
-     * @param version Display version.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_annotation2label" as const,
+        "@type": "freesurfer.mri_annotation2label" as const,
         "subject": subject,
         "hemi": hemi,
         "help": help,
@@ -183,18 +183,18 @@ function mri_annotation2label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_annotation2label_cargs(
     params: MriAnnotation2labelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_annotation2label");
     cargs.push(
@@ -305,18 +305,18 @@ function mri_annotation2label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_annotation2label_outputs(
     params: MriAnnotation2labelParameters,
     execution: Execution,
 ): MriAnnotation2labelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAnnotation2labelOutputs = {
         root: execution.outputFile("."),
     };
@@ -324,22 +324,22 @@ function mri_annotation2label_outputs(
 }
 
 
+/**
+ * Convert an annotation into multiple label files or into a segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
+ */
 function mri_annotation2label_execute(
     params: MriAnnotation2labelParameters,
     execution: Execution,
 ): MriAnnotation2labelOutputs {
-    /**
-     * Convert an annotation into multiple label files or into a segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_annotation2label_cargs(params, execution)
     const ret = mri_annotation2label_outputs(params, execution)
@@ -348,6 +348,36 @@ function mri_annotation2label_execute(
 }
 
 
+/**
+ * Convert an annotation into multiple label files or into a segmentation volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Source subject
+ * @param hemi Hemisphere (lh or rh) with surface
+ * @param lobes Create an annotation based on cortical lobes, saved to <LobesFile>.
+ * @param lobes_strict Use a stricter lobe definition with precentral added to 'frontal' and postcentral with 'parietal', saved to <LobesFile>.
+ * @param lobes_strict_phcg Use a stricter lobe definition with an additional lobe 'parahippocampalgyrus', saved to <LobesFile>.
+ * @param label Extract only single label.
+ * @param labelbase Output will be base-XXX.label.
+ * @param outdir Output will be in dir/hemi.name.label.
+ * @param seg Output will be a segmentation volume.
+ * @param segbase Add base to the annotation number to get segmentation value.
+ * @param ctab Color table, like FreeSurferColorLUT.txt.
+ * @param border Output will be a binary overlay of the parc borders.
+ * @param border_annot Default goes in subject/label.
+ * @param annotation As found in SUBJDIR/labels <aparc>.
+ * @param subjects_dir Specify SUBJECTS_DIR on the command line.
+ * @param surface Name of surface <white>. Only affect xyz in label.
+ * @param stat Surface overlay file (curv or volume format).
+ * @param help Display help.
+ * @param version Display version.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
+ */
 function mri_annotation2label(
     subject: string,
     hemi: string,
@@ -370,36 +400,6 @@ function mri_annotation2label(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAnnotation2labelOutputs {
-    /**
-     * Convert an annotation into multiple label files or into a segmentation volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Source subject
-     * @param hemi Hemisphere (lh or rh) with surface
-     * @param lobes Create an annotation based on cortical lobes, saved to <LobesFile>.
-     * @param lobes_strict Use a stricter lobe definition with precentral added to 'frontal' and postcentral with 'parietal', saved to <LobesFile>.
-     * @param lobes_strict_phcg Use a stricter lobe definition with an additional lobe 'parahippocampalgyrus', saved to <LobesFile>.
-     * @param label Extract only single label.
-     * @param labelbase Output will be base-XXX.label.
-     * @param outdir Output will be in dir/hemi.name.label.
-     * @param seg Output will be a segmentation volume.
-     * @param segbase Add base to the annotation number to get segmentation value.
-     * @param ctab Color table, like FreeSurferColorLUT.txt.
-     * @param border Output will be a binary overlay of the parc borders.
-     * @param border_annot Default goes in subject/label.
-     * @param annotation As found in SUBJDIR/labels <aparc>.
-     * @param subjects_dir Specify SUBJECTS_DIR on the command line.
-     * @param surface Name of surface <white>. Only affect xyz in label.
-     * @param stat Surface overlay file (curv or volume format).
-     * @param help Display help.
-     * @param version Display version.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ANNOTATION2LABEL_METADATA);
     const params = mri_annotation2label_params(subject, hemi, lobes, lobes_strict, lobes_strict_phcg, label, labelbase, outdir, seg, segbase, ctab, border, border_annot, annotation, subjects_dir, surface, stat, help, version)
@@ -412,5 +412,8 @@ export {
       MriAnnotation2labelOutputs,
       MriAnnotation2labelParameters,
       mri_annotation2label,
+      mri_annotation2label_cargs,
+      mri_annotation2label_execute,
+      mri_annotation2label_outputs,
       mri_annotation2label_params,
 };

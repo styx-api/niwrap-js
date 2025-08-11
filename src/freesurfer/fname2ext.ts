@@ -12,40 +12,40 @@ const FNAME2EXT_METADATA: Metadata = {
 
 
 interface Fname2extParameters {
-    "__STYXTYPE__": "fname2ext";
+    "@type": "freesurfer.fname2ext";
     "filename": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fname2ext": fname2ext_cargs,
+        "freesurfer.fname2ext": fname2ext_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fname2ext": fname2ext_outputs,
+        "freesurfer.fname2ext": fname2ext_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface Fname2extOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filename The name of the file for which to extract the extension. The file does not need to exist.
+ *
+ * @returns Parameter dictionary
+ */
 function fname2ext_params(
     filename: string,
 ): Fname2extParameters {
-    /**
-     * Build parameters.
-    
-     * @param filename The name of the file for which to extract the extension. The file does not need to exist.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fname2ext" as const,
+        "@type": "freesurfer.fname2ext" as const,
         "filename": filename,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fname2ext_cargs(
     params: Fname2extParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fname2ext");
     cargs.push((params["filename"] ?? null));
@@ -105,18 +105,18 @@ function fname2ext_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fname2ext_outputs(
     params: Fname2extParameters,
     execution: Execution,
 ): Fname2extOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fname2extOutputs = {
         root: execution.outputFile("."),
         file_extension: execution.outputFile(["extension.txt"].join('')),
@@ -125,22 +125,22 @@ function fname2ext_outputs(
 }
 
 
+/**
+ * Converts the name of a file to its extension.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
+ */
 function fname2ext_execute(
     params: Fname2extParameters,
     execution: Execution,
 ): Fname2extOutputs {
-    /**
-     * Converts the name of a file to its extension.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
-     */
     params = execution.params(params)
     const cargs = fname2ext_cargs(params, execution)
     const ret = fname2ext_outputs(params, execution)
@@ -149,22 +149,22 @@ function fname2ext_execute(
 }
 
 
+/**
+ * Converts the name of a file to its extension.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param filename The name of the file for which to extract the extension. The file does not need to exist.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
+ */
 function fname2ext(
     filename: string,
     runner: Runner | null = null,
 ): Fname2extOutputs {
-    /**
-     * Converts the name of a file to its extension.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param filename The name of the file for which to extract the extension. The file does not need to exist.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FNAME2EXT_METADATA);
     const params = fname2ext_params(filename)
@@ -177,5 +177,8 @@ export {
       Fname2extOutputs,
       Fname2extParameters,
       fname2ext,
+      fname2ext_cargs,
+      fname2ext_execute,
+      fname2ext_outputs,
       fname2ext_params,
 };

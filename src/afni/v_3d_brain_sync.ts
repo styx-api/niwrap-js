@@ -12,7 +12,7 @@ const V_3D_BRAIN_SYNC_METADATA: Metadata = {
 
 
 interface V3dBrainSyncParameters {
-    "__STYXTYPE__": "3dBrainSync";
+    "@type": "afni.3dBrainSync";
     "inset1": InputPathType;
     "inset2": InputPathType;
     "qprefix"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface V3dBrainSyncParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dBrainSync": v_3d_brain_sync_cargs,
+        "afni.3dBrainSync": v_3d_brain_sync_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dBrainSync": v_3d_brain_sync_outputs,
+        "afni.3dBrainSync": v_3d_brain_sync_outputs,
     };
     return outputsFuncs[t];
 }
@@ -90,6 +90,19 @@ interface V3dBrainSyncOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset1 Reference dataset
+ * @param inset2 Dataset to be matched to the reference dataset
+ * @param qprefix Specifies the output dataset to be used for the orthogonal matrix transformation
+ * @param pprefix Specifies the output dataset to be used for the permutation transformation
+ * @param normalize Normalize the output dataset(s) so that each time series has sum-of-squares = 1
+ * @param mask Only operate on nonzero voxels in the mask dataset
+ * @param verb Print some progress reports and auxiliary information
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_brain_sync_params(
     inset1: InputPathType,
     inset2: InputPathType,
@@ -99,21 +112,8 @@ function v_3d_brain_sync_params(
     mask: InputPathType | null = null,
     verb: boolean = false,
 ): V3dBrainSyncParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset1 Reference dataset
-     * @param inset2 Dataset to be matched to the reference dataset
-     * @param qprefix Specifies the output dataset to be used for the orthogonal matrix transformation
-     * @param pprefix Specifies the output dataset to be used for the permutation transformation
-     * @param normalize Normalize the output dataset(s) so that each time series has sum-of-squares = 1
-     * @param mask Only operate on nonzero voxels in the mask dataset
-     * @param verb Print some progress reports and auxiliary information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dBrainSync" as const,
+        "@type": "afni.3dBrainSync" as const,
         "inset1": inset1,
         "inset2": inset2,
         "normalize": normalize,
@@ -132,18 +132,18 @@ function v_3d_brain_sync_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_brain_sync_cargs(
     params: V3dBrainSyncParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dBrainSync");
     cargs.push(
@@ -182,18 +182,18 @@ function v_3d_brain_sync_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_brain_sync_outputs(
     params: V3dBrainSyncParameters,
     execution: Execution,
 ): V3dBrainSyncOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dBrainSyncOutputs = {
         root: execution.outputFile("."),
         qprefix_output: ((params["qprefix"] ?? null) !== null) ? execution.outputFile([(params["qprefix"] ?? null), ".nii"].join('')) : null,
@@ -206,22 +206,22 @@ function v_3d_brain_sync_outputs(
 }
 
 
+/**
+ * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
+ */
 function v_3d_brain_sync_execute(
     params: V3dBrainSyncParameters,
     execution: Execution,
 ): V3dBrainSyncOutputs {
-    /**
-     * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_brain_sync_cargs(params, execution)
     const ret = v_3d_brain_sync_outputs(params, execution)
@@ -230,6 +230,24 @@ function v_3d_brain_sync_execute(
 }
 
 
+/**
+ * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset1 Reference dataset
+ * @param inset2 Dataset to be matched to the reference dataset
+ * @param qprefix Specifies the output dataset to be used for the orthogonal matrix transformation
+ * @param pprefix Specifies the output dataset to be used for the permutation transformation
+ * @param normalize Normalize the output dataset(s) so that each time series has sum-of-squares = 1
+ * @param mask Only operate on nonzero voxels in the mask dataset
+ * @param verb Print some progress reports and auxiliary information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
+ */
 function v_3d_brain_sync(
     inset1: InputPathType,
     inset2: InputPathType,
@@ -240,24 +258,6 @@ function v_3d_brain_sync(
     verb: boolean = false,
     runner: Runner | null = null,
 ): V3dBrainSyncOutputs {
-    /**
-     * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset1 Reference dataset
-     * @param inset2 Dataset to be matched to the reference dataset
-     * @param qprefix Specifies the output dataset to be used for the orthogonal matrix transformation
-     * @param pprefix Specifies the output dataset to be used for the permutation transformation
-     * @param normalize Normalize the output dataset(s) so that each time series has sum-of-squares = 1
-     * @param mask Only operate on nonzero voxels in the mask dataset
-     * @param verb Print some progress reports and auxiliary information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_BRAIN_SYNC_METADATA);
     const params = v_3d_brain_sync_params(inset1, inset2, qprefix, pprefix, normalize, mask, verb)
@@ -270,5 +270,8 @@ export {
       V3dBrainSyncParameters,
       V_3D_BRAIN_SYNC_METADATA,
       v_3d_brain_sync,
+      v_3d_brain_sync_cargs,
+      v_3d_brain_sync_execute,
+      v_3d_brain_sync_outputs,
       v_3d_brain_sync_params,
 };

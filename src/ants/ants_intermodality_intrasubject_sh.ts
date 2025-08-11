@@ -12,7 +12,7 @@ const ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA: Metadata = {
 
 
 interface AntsIntermodalityIntrasubjectShParameters {
-    "__STYXTYPE__": "antsIntermodalityIntrasubject.sh";
+    "@type": "ants.antsIntermodalityIntrasubject.sh";
     "dimension": number;
     "anatomical_t1_image": InputPathType;
     "anatomical_reference_image"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface AntsIntermodalityIntrasubjectShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_cargs,
+        "ants.antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_outputs,
+        "ants.antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface AntsIntermodalityIntrasubjectShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimension Dimensionality of the image, typically 3 for 3D images.
+ * @param anatomical_t1_image Anatomical T1 image (brain or whole-head) to align to.
+ * @param scalar_image_to_match Scalar image to be matched, such as average BOLD, average DWI, etc.
+ * @param anatomical_t1brainmask Brain mask for the anatomical T1 image, should mask out regions not appearing in the scalar image.
+ * @param transform_type Type of transform: 0=rigid, 1=affine, 2=rigid+small_def, 3=affine+small_def
+ * @param t1_to_template_prefix Prefix for T1 to template transform files.
+ * @param output_prefix Prefix for output files.
+ * @param anatomical_reference_image Anatomical reference image to warp to, often higher resolution than the anatomical T1 image.
+ * @param template_space Template space.
+ * @param labels_in_template_space Labels in the template space.
+ * @param auxiliary_scalar_images Auxiliary scalar images to warp to the template.
+ * @param auxiliary_dt_image Auxiliary DT image to warp to the template.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_intermodality_intrasubject_sh_params(
     dimension: number,
     anatomical_t1_image: InputPathType,
@@ -101,26 +119,8 @@ function ants_intermodality_intrasubject_sh_params(
     auxiliary_scalar_images: InputPathType | null = null,
     auxiliary_dt_image: InputPathType | null = null,
 ): AntsIntermodalityIntrasubjectShParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimension Dimensionality of the image, typically 3 for 3D images.
-     * @param anatomical_t1_image Anatomical T1 image (brain or whole-head) to align to.
-     * @param scalar_image_to_match Scalar image to be matched, such as average BOLD, average DWI, etc.
-     * @param anatomical_t1brainmask Brain mask for the anatomical T1 image, should mask out regions not appearing in the scalar image.
-     * @param transform_type Type of transform: 0=rigid, 1=affine, 2=rigid+small_def, 3=affine+small_def
-     * @param t1_to_template_prefix Prefix for T1 to template transform files.
-     * @param output_prefix Prefix for output files.
-     * @param anatomical_reference_image Anatomical reference image to warp to, often higher resolution than the anatomical T1 image.
-     * @param template_space Template space.
-     * @param labels_in_template_space Labels in the template space.
-     * @param auxiliary_scalar_images Auxiliary scalar images to warp to the template.
-     * @param auxiliary_dt_image Auxiliary DT image to warp to the template.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsIntermodalityIntrasubject.sh" as const,
+        "@type": "ants.antsIntermodalityIntrasubject.sh" as const,
         "dimension": dimension,
         "anatomical_t1_image": anatomical_t1_image,
         "scalar_image_to_match": scalar_image_to_match,
@@ -148,18 +148,18 @@ function ants_intermodality_intrasubject_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_intermodality_intrasubject_sh_cargs(
     params: AntsIntermodalityIntrasubjectShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsIntermodalityIntrasubject.sh");
     cargs.push(
@@ -224,18 +224,18 @@ function ants_intermodality_intrasubject_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_intermodality_intrasubject_sh_outputs(
     params: AntsIntermodalityIntrasubjectShParameters,
     execution: Execution,
 ): AntsIntermodalityIntrasubjectShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsIntermodalityIntrasubjectShOutputs = {
         root: execution.outputFile("."),
         output_transformed_image: execution.outputFile([(params["output_prefix"] ?? null), "Transformed.nii.gz"].join('')),
@@ -246,22 +246,22 @@ function ants_intermodality_intrasubject_sh_outputs(
 }
 
 
+/**
+ * Performs registration between a scalar image and a T1 image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
+ */
 function ants_intermodality_intrasubject_sh_execute(
     params: AntsIntermodalityIntrasubjectShParameters,
     execution: Execution,
 ): AntsIntermodalityIntrasubjectShOutputs {
-    /**
-     * Performs registration between a scalar image and a T1 image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_intermodality_intrasubject_sh_cargs(params, execution)
     const ret = ants_intermodality_intrasubject_sh_outputs(params, execution)
@@ -270,6 +270,29 @@ function ants_intermodality_intrasubject_sh_execute(
 }
 
 
+/**
+ * Performs registration between a scalar image and a T1 image.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimension Dimensionality of the image, typically 3 for 3D images.
+ * @param anatomical_t1_image Anatomical T1 image (brain or whole-head) to align to.
+ * @param scalar_image_to_match Scalar image to be matched, such as average BOLD, average DWI, etc.
+ * @param anatomical_t1brainmask Brain mask for the anatomical T1 image, should mask out regions not appearing in the scalar image.
+ * @param transform_type Type of transform: 0=rigid, 1=affine, 2=rigid+small_def, 3=affine+small_def
+ * @param t1_to_template_prefix Prefix for T1 to template transform files.
+ * @param output_prefix Prefix for output files.
+ * @param anatomical_reference_image Anatomical reference image to warp to, often higher resolution than the anatomical T1 image.
+ * @param template_space Template space.
+ * @param labels_in_template_space Labels in the template space.
+ * @param auxiliary_scalar_images Auxiliary scalar images to warp to the template.
+ * @param auxiliary_dt_image Auxiliary DT image to warp to the template.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
+ */
 function ants_intermodality_intrasubject_sh(
     dimension: number,
     anatomical_t1_image: InputPathType,
@@ -285,29 +308,6 @@ function ants_intermodality_intrasubject_sh(
     auxiliary_dt_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsIntermodalityIntrasubjectShOutputs {
-    /**
-     * Performs registration between a scalar image and a T1 image.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimension Dimensionality of the image, typically 3 for 3D images.
-     * @param anatomical_t1_image Anatomical T1 image (brain or whole-head) to align to.
-     * @param scalar_image_to_match Scalar image to be matched, such as average BOLD, average DWI, etc.
-     * @param anatomical_t1brainmask Brain mask for the anatomical T1 image, should mask out regions not appearing in the scalar image.
-     * @param transform_type Type of transform: 0=rigid, 1=affine, 2=rigid+small_def, 3=affine+small_def
-     * @param t1_to_template_prefix Prefix for T1 to template transform files.
-     * @param output_prefix Prefix for output files.
-     * @param anatomical_reference_image Anatomical reference image to warp to, often higher resolution than the anatomical T1 image.
-     * @param template_space Template space.
-     * @param labels_in_template_space Labels in the template space.
-     * @param auxiliary_scalar_images Auxiliary scalar images to warp to the template.
-     * @param auxiliary_dt_image Auxiliary DT image to warp to the template.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA);
     const params = ants_intermodality_intrasubject_sh_params(dimension, anatomical_t1_image, scalar_image_to_match, anatomical_t1brainmask, transform_type, t1_to_template_prefix, output_prefix, anatomical_reference_image, template_space, labels_in_template_space, auxiliary_scalar_images, auxiliary_dt_image)
@@ -320,5 +320,8 @@ export {
       AntsIntermodalityIntrasubjectShOutputs,
       AntsIntermodalityIntrasubjectShParameters,
       ants_intermodality_intrasubject_sh,
+      ants_intermodality_intrasubject_sh_cargs,
+      ants_intermodality_intrasubject_sh_execute,
+      ants_intermodality_intrasubject_sh_outputs,
       ants_intermodality_intrasubject_sh_params,
 };

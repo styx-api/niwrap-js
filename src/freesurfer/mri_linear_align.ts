@@ -12,40 +12,40 @@ const MRI_LINEAR_ALIGN_METADATA: Metadata = {
 
 
 interface MriLinearAlignParameters {
-    "__STYXTYPE__": "mri_linear_align";
+    "@type": "freesurfer.mri_linear_align";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_linear_align": mri_linear_align_cargs,
+        "freesurfer.mri_linear_align": mri_linear_align_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface MriLinearAlignOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Source image file for alignment
+ * @param target Target image file for alignment
+ * @param output_xform Output transformation file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_linear_align_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
 ): MriLinearAlignParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Source image file for alignment
-     * @param target Target image file for alignment
-     * @param output_xform Output transformation file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_linear_align" as const,
+        "@type": "freesurfer.mri_linear_align" as const,
         "source": source,
         "target": target,
         "output_xform": output_xform,
@@ -89,18 +89,18 @@ function mri_linear_align_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_linear_align_cargs(
     params: MriLinearAlignParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_linear_align");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -110,18 +110,18 @@ function mri_linear_align_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_linear_align_outputs(
     params: MriLinearAlignParameters,
     execution: Execution,
 ): MriLinearAlignOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriLinearAlignOutputs = {
         root: execution.outputFile("."),
     };
@@ -129,22 +129,22 @@ function mri_linear_align_outputs(
 }
 
 
+/**
+ * MRI Linear Alignment Tool for Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
+ */
 function mri_linear_align_execute(
     params: MriLinearAlignParameters,
     execution: Execution,
 ): MriLinearAlignOutputs {
-    /**
-     * MRI Linear Alignment Tool for Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_linear_align_cargs(params, execution)
     const ret = mri_linear_align_outputs(params, execution)
@@ -153,26 +153,26 @@ function mri_linear_align_execute(
 }
 
 
+/**
+ * MRI Linear Alignment Tool for Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param source Source image file for alignment
+ * @param target Target image file for alignment
+ * @param output_xform Output transformation file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
+ */
 function mri_linear_align(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
     runner: Runner | null = null,
 ): MriLinearAlignOutputs {
-    /**
-     * MRI Linear Alignment Tool for Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param source Source image file for alignment
-     * @param target Target image file for alignment
-     * @param output_xform Output transformation file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_LINEAR_ALIGN_METADATA);
     const params = mri_linear_align_params(source, target, output_xform)
@@ -185,5 +185,8 @@ export {
       MriLinearAlignOutputs,
       MriLinearAlignParameters,
       mri_linear_align,
+      mri_linear_align_cargs,
+      mri_linear_align_execute,
+      mri_linear_align_outputs,
       mri_linear_align_params,
 };

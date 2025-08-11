@@ -12,7 +12,7 @@ const V_3D_RANK_METADATA: Metadata = {
 
 
 interface V3dRankParameters {
-    "__STYXTYPE__": "3dRank";
+    "@type": "afni.3dRank";
     "input_datasets": Array<InputPathType>;
     "output_prefix"?: string | null | undefined;
     "version_info": boolean;
@@ -20,35 +20,35 @@ interface V3dRankParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRank": v_3d_rank_cargs,
+        "afni.3dRank": v_3d_rank_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRank": v_3d_rank_outputs,
+        "afni.3dRank": v_3d_rank_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,24 +79,24 @@ interface V3dRankOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_datasets Input datasets. Acceptable data types are: byte, short, and floats.
+ * @param output_prefix Output prefix. If you have multiple datasets on input, the prefix is preceded by r00., r01., etc. If no prefix is given, the default is rank.DATASET1, rank.DATASET2, etc.
+ * @param version_info Print author and version info
+ * @param help_info Print this help screen
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_rank_params(
     input_datasets: Array<InputPathType>,
     output_prefix: string | null = null,
     version_info: boolean = false,
     help_info: boolean = false,
 ): V3dRankParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_datasets Input datasets. Acceptable data types are: byte, short, and floats.
-     * @param output_prefix Output prefix. If you have multiple datasets on input, the prefix is preceded by r00., r01., etc. If no prefix is given, the default is rank.DATASET1, rank.DATASET2, etc.
-     * @param version_info Print author and version info
-     * @param help_info Print this help screen
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRank" as const,
+        "@type": "afni.3dRank" as const,
         "input_datasets": input_datasets,
         "version_info": version_info,
         "help_info": help_info,
@@ -108,18 +108,18 @@ function v_3d_rank_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_rank_cargs(
     params: V3dRankParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRank");
     cargs.push(...(params["input_datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -139,18 +139,18 @@ function v_3d_rank_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_rank_outputs(
     params: V3dRankParameters,
     execution: Execution,
 ): V3dRankOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRankOutputs = {
         root: execution.outputFile("."),
         output_dataset_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.HEAD"].join('')) : null,
@@ -161,22 +161,22 @@ function v_3d_rank_outputs(
 }
 
 
+/**
+ * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRankOutputs`).
+ */
 function v_3d_rank_execute(
     params: V3dRankParameters,
     execution: Execution,
 ): V3dRankOutputs {
-    /**
-     * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRankOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_rank_cargs(params, execution)
     const ret = v_3d_rank_outputs(params, execution)
@@ -185,6 +185,21 @@ function v_3d_rank_execute(
 }
 
 
+/**
+ * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_datasets Input datasets. Acceptable data types are: byte, short, and floats.
+ * @param output_prefix Output prefix. If you have multiple datasets on input, the prefix is preceded by r00., r01., etc. If no prefix is given, the default is rank.DATASET1, rank.DATASET2, etc.
+ * @param version_info Print author and version info
+ * @param help_info Print this help screen
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRankOutputs`).
+ */
 function v_3d_rank(
     input_datasets: Array<InputPathType>,
     output_prefix: string | null = null,
@@ -192,21 +207,6 @@ function v_3d_rank(
     help_info: boolean = false,
     runner: Runner | null = null,
 ): V3dRankOutputs {
-    /**
-     * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_datasets Input datasets. Acceptable data types are: byte, short, and floats.
-     * @param output_prefix Output prefix. If you have multiple datasets on input, the prefix is preceded by r00., r01., etc. If no prefix is given, the default is rank.DATASET1, rank.DATASET2, etc.
-     * @param version_info Print author and version info
-     * @param help_info Print this help screen
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRankOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_RANK_METADATA);
     const params = v_3d_rank_params(input_datasets, output_prefix, version_info, help_info)
@@ -219,5 +219,8 @@ export {
       V3dRankParameters,
       V_3D_RANK_METADATA,
       v_3d_rank,
+      v_3d_rank_cargs,
+      v_3d_rank_execute,
+      v_3d_rank_outputs,
       v_3d_rank_params,
 };

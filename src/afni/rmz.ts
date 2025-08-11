@@ -12,7 +12,7 @@ const RMZ_METADATA: Metadata = {
 
 
 interface RmzParameters {
-    "__STYXTYPE__": "rmz";
+    "@type": "afni.rmz";
     "quiet": boolean;
     "hash_flag"?: number | null | undefined;
     "keep_flag": boolean;
@@ -20,33 +20,33 @@ interface RmzParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rmz": rmz_cargs,
+        "afni.rmz": rmz_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface RmzOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filenames Files to zero out and remove
+ * @param quiet Quiet mode
+ * @param hash_flag Number of times to zero out the files
+ * @param keep_flag Keep the files instead of removing them
+ *
+ * @returns Parameter dictionary
+ */
 function rmz_params(
     filenames: Array<InputPathType>,
     quiet: boolean = false,
     hash_flag: number | null = null,
     keep_flag: boolean = false,
 ): RmzParameters {
-    /**
-     * Build parameters.
-    
-     * @param filenames Files to zero out and remove
-     * @param quiet Quiet mode
-     * @param hash_flag Number of times to zero out the files
-     * @param keep_flag Keep the files instead of removing them
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rmz" as const,
+        "@type": "afni.rmz" as const,
         "quiet": quiet,
         "keep_flag": keep_flag,
         "filenames": filenames,
@@ -95,18 +95,18 @@ function rmz_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rmz_cargs(
     params: RmzParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rmz");
     if ((params["quiet"] ?? null)) {
@@ -126,18 +126,18 @@ function rmz_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rmz_outputs(
     params: RmzParameters,
     execution: Execution,
 ): RmzOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RmzOutputs = {
         root: execution.outputFile("."),
     };
@@ -145,22 +145,22 @@ function rmz_outputs(
 }
 
 
+/**
+ * Zeros out files before removing them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RmzOutputs`).
+ */
 function rmz_execute(
     params: RmzParameters,
     execution: Execution,
 ): RmzOutputs {
-    /**
-     * Zeros out files before removing them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RmzOutputs`).
-     */
     params = execution.params(params)
     const cargs = rmz_cargs(params, execution)
     const ret = rmz_outputs(params, execution)
@@ -169,6 +169,21 @@ function rmz_execute(
 }
 
 
+/**
+ * Zeros out files before removing them.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param filenames Files to zero out and remove
+ * @param quiet Quiet mode
+ * @param hash_flag Number of times to zero out the files
+ * @param keep_flag Keep the files instead of removing them
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RmzOutputs`).
+ */
 function rmz(
     filenames: Array<InputPathType>,
     quiet: boolean = false,
@@ -176,21 +191,6 @@ function rmz(
     keep_flag: boolean = false,
     runner: Runner | null = null,
 ): RmzOutputs {
-    /**
-     * Zeros out files before removing them.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param filenames Files to zero out and remove
-     * @param quiet Quiet mode
-     * @param hash_flag Number of times to zero out the files
-     * @param keep_flag Keep the files instead of removing them
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RmzOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RMZ_METADATA);
     const params = rmz_params(filenames, quiet, hash_flag, keep_flag)
@@ -203,5 +203,8 @@ export {
       RmzOutputs,
       RmzParameters,
       rmz,
+      rmz_cargs,
+      rmz_execute,
+      rmz_outputs,
       rmz_params,
 };

@@ -12,7 +12,7 @@ const V_3D_UNDUMP_METADATA: Metadata = {
 
 
 interface V3dUndumpParameters {
-    "__STYXTYPE__": "3dUndump";
+    "@type": "afni.3dUndump";
     "input_files": Array<InputPathType>;
     "prefix"?: string | null | undefined;
     "master"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface V3dUndumpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dUndump": v_3d_undump_cargs,
+        "afni.3dUndump": v_3d_undump_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dUndump": v_3d_undump_outputs,
+        "afni.3dUndump": v_3d_undump_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface V3dUndumpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input ASCII file(s), with one voxel specification per line.
+ * @param prefix 'ppp' is the prefix for the output dataset [default = undump].
+ * @param master 'mmm' is the master dataset, whose geometry will determine the geometry of the output.
+ * @param dimensions Sets the dimensions of the output dataset to be I by J by K voxels.
+ * @param mask Specifies a mask dataset 'MMM', which will control which voxels are allowed to get values set.
+ * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
+ * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
+ * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
+ * @param ijk Coordinates in the input file are (i,j,k) index triples.
+ * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
+ * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
+ * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
+ * @param orient Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs {R,L} {A,P} {I,S}.
+ * @param head_only Creates only the .HEAD file.
+ * @param roimask Specifies which voxels get what numbers by using a dataset 'rrr', instead of coordinates.
+ * @param allow_nan Allow NaN (not-a-number) values to be entered.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_undump_params(
     input_files: Array<InputPathType>,
     prefix: string | null = null,
@@ -101,30 +123,8 @@ function v_3d_undump_params(
     roimask: InputPathType | null = null,
     allow_nan: boolean = false,
 ): V3dUndumpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input ASCII file(s), with one voxel specification per line.
-     * @param prefix 'ppp' is the prefix for the output dataset [default = undump].
-     * @param master 'mmm' is the master dataset, whose geometry will determine the geometry of the output.
-     * @param dimensions Sets the dimensions of the output dataset to be I by J by K voxels.
-     * @param mask Specifies a mask dataset 'MMM', which will control which voxels are allowed to get values set.
-     * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
-     * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
-     * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
-     * @param ijk Coordinates in the input file are (i,j,k) index triples.
-     * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
-     * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
-     * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
-     * @param orient Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs {R,L} {A,P} {I,S}.
-     * @param head_only Creates only the .HEAD file.
-     * @param roimask Specifies which voxels get what numbers by using a dataset 'rrr', instead of coordinates.
-     * @param allow_nan Allow NaN (not-a-number) values to be entered.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dUndump" as const,
+        "@type": "afni.3dUndump" as const,
         "input_files": input_files,
         "ijk": ijk,
         "xyz": xyz,
@@ -166,18 +166,18 @@ function v_3d_undump_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_undump_cargs(
     params: V3dUndumpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dUndump");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -260,18 +260,18 @@ function v_3d_undump_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_undump_outputs(
     params: V3dUndumpParameters,
     execution: Execution,
 ): V3dUndumpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dUndumpOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -280,22 +280,22 @@ function v_3d_undump_outputs(
 }
 
 
+/**
+ * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
+ */
 function v_3d_undump_execute(
     params: V3dUndumpParameters,
     execution: Execution,
 ): V3dUndumpOutputs {
-    /**
-     * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_undump_cargs(params, execution)
     const ret = v_3d_undump_outputs(params, execution)
@@ -304,6 +304,33 @@ function v_3d_undump_execute(
 }
 
 
+/**
+ * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input ASCII file(s), with one voxel specification per line.
+ * @param prefix 'ppp' is the prefix for the output dataset [default = undump].
+ * @param master 'mmm' is the master dataset, whose geometry will determine the geometry of the output.
+ * @param dimensions Sets the dimensions of the output dataset to be I by J by K voxels.
+ * @param mask Specifies a mask dataset 'MMM', which will control which voxels are allowed to get values set.
+ * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
+ * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
+ * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
+ * @param ijk Coordinates in the input file are (i,j,k) index triples.
+ * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
+ * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
+ * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
+ * @param orient Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs {R,L} {A,P} {I,S}.
+ * @param head_only Creates only the .HEAD file.
+ * @param roimask Specifies which voxels get what numbers by using a dataset 'rrr', instead of coordinates.
+ * @param allow_nan Allow NaN (not-a-number) values to be entered.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
+ */
 function v_3d_undump(
     input_files: Array<InputPathType>,
     prefix: string | null = null,
@@ -323,33 +350,6 @@ function v_3d_undump(
     allow_nan: boolean = false,
     runner: Runner | null = null,
 ): V3dUndumpOutputs {
-    /**
-     * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input ASCII file(s), with one voxel specification per line.
-     * @param prefix 'ppp' is the prefix for the output dataset [default = undump].
-     * @param master 'mmm' is the master dataset, whose geometry will determine the geometry of the output.
-     * @param dimensions Sets the dimensions of the output dataset to be I by J by K voxels.
-     * @param mask Specifies a mask dataset 'MMM', which will control which voxels are allowed to get values set.
-     * @param datatype 'type' determines the voxel data type of the output, which may be byte, short, or float [default = short].
-     * @param dval 'vvv' is the default value stored in each input voxel that does not have a value supplied in the input file [default = 1].
-     * @param fval 'fff' is the fill value, used for each voxel in the output dataset that is NOT listed in the input file [default = 0].
-     * @param ijk Coordinates in the input file are (i,j,k) index triples.
-     * @param xyz Coordinates in the input file are (x,y,z) spatial coordinates, in mm.
-     * @param sphere_radius Specifies that a sphere of radius 'rrr' will be filled about each input (x,y,z) or (i,j,k) voxel.
-     * @param cube_mode Put cubes down instead of spheres. The 'radius' then is half the length of a side.
-     * @param orient Specifies the coordinate order used by -xyz. The code must be 3 letters, one each from the pairs {R,L} {A,P} {I,S}.
-     * @param head_only Creates only the .HEAD file.
-     * @param roimask Specifies which voxels get what numbers by using a dataset 'rrr', instead of coordinates.
-     * @param allow_nan Allow NaN (not-a-number) values to be entered.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_UNDUMP_METADATA);
     const params = v_3d_undump_params(input_files, prefix, master, dimensions, mask, datatype, dval, fval, ijk, xyz, sphere_radius, cube_mode, orient, head_only, roimask, allow_nan)
@@ -362,5 +362,8 @@ export {
       V3dUndumpParameters,
       V_3D_UNDUMP_METADATA,
       v_3d_undump,
+      v_3d_undump_cargs,
+      v_3d_undump_execute,
+      v_3d_undump_outputs,
       v_3d_undump_params,
 };

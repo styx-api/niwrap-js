@@ -12,42 +12,42 @@ const V_3D_NWARP_ADJUST_METADATA: Metadata = {
 
 
 interface V3dNwarpAdjustParameters {
-    "__STYXTYPE__": "3dNwarpAdjust";
+    "@type": "afni.3dNwarpAdjust";
     "input_warps": Array<InputPathType>;
     "source_datasets"?: Array<InputPathType> | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNwarpAdjust": v_3d_nwarp_adjust_cargs,
+        "afni.3dNwarpAdjust": v_3d_nwarp_adjust_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dNwarpAdjust": v_3d_nwarp_adjust_outputs,
+        "afni.3dNwarpAdjust": v_3d_nwarp_adjust_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface V3dNwarpAdjustOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_warps List of input 3D warp datasets (at least 5).
+ * @param source_datasets List of input 3D datasets to be warped by the adjusted warp datasets. There must be exactly as many of these datasets as there are input warps.
+ * @param output_prefix Prefix for the output mean dataset (only needed if the '-source' option is also given).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_nwarp_adjust_params(
     input_warps: Array<InputPathType>,
     source_datasets: Array<InputPathType> | null = null,
     output_prefix: string | null = null,
 ): V3dNwarpAdjustParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_warps List of input 3D warp datasets (at least 5).
-     * @param source_datasets List of input 3D datasets to be warped by the adjusted warp datasets. There must be exactly as many of these datasets as there are input warps.
-     * @param output_prefix Prefix for the output mean dataset (only needed if the '-source' option is also given).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNwarpAdjust" as const,
+        "@type": "afni.3dNwarpAdjust" as const,
         "input_warps": input_warps,
     };
     if (source_datasets !== null) {
@@ -102,18 +102,18 @@ function v_3d_nwarp_adjust_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_nwarp_adjust_cargs(
     params: V3dNwarpAdjustParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNwarpAdjust");
     cargs.push(
@@ -136,18 +136,18 @@ function v_3d_nwarp_adjust_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_nwarp_adjust_outputs(
     params: V3dNwarpAdjustParameters,
     execution: Execution,
 ): V3dNwarpAdjustOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNwarpAdjustOutputs = {
         root: execution.outputFile("."),
         output_brik: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "+tlrc.BRIK"].join('')) : null,
@@ -157,22 +157,22 @@ function v_3d_nwarp_adjust_outputs(
 }
 
 
+/**
+ * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
+ */
 function v_3d_nwarp_adjust_execute(
     params: V3dNwarpAdjustParameters,
     execution: Execution,
 ): V3dNwarpAdjustOutputs {
-    /**
-     * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_nwarp_adjust_cargs(params, execution)
     const ret = v_3d_nwarp_adjust_outputs(params, execution)
@@ -181,26 +181,26 @@ function v_3d_nwarp_adjust_execute(
 }
 
 
+/**
+ * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_warps List of input 3D warp datasets (at least 5).
+ * @param source_datasets List of input 3D datasets to be warped by the adjusted warp datasets. There must be exactly as many of these datasets as there are input warps.
+ * @param output_prefix Prefix for the output mean dataset (only needed if the '-source' option is also given).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
+ */
 function v_3d_nwarp_adjust(
     input_warps: Array<InputPathType>,
     source_datasets: Array<InputPathType> | null = null,
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dNwarpAdjustOutputs {
-    /**
-     * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_warps List of input 3D warp datasets (at least 5).
-     * @param source_datasets List of input 3D datasets to be warped by the adjusted warp datasets. There must be exactly as many of these datasets as there are input warps.
-     * @param output_prefix Prefix for the output mean dataset (only needed if the '-source' option is also given).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NWARP_ADJUST_METADATA);
     const params = v_3d_nwarp_adjust_params(input_warps, source_datasets, output_prefix)
@@ -213,5 +213,8 @@ export {
       V3dNwarpAdjustParameters,
       V_3D_NWARP_ADJUST_METADATA,
       v_3d_nwarp_adjust,
+      v_3d_nwarp_adjust_cargs,
+      v_3d_nwarp_adjust_execute,
+      v_3d_nwarp_adjust_outputs,
       v_3d_nwarp_adjust_params,
 };

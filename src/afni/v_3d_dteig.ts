@@ -12,7 +12,7 @@ const V_3D_DTEIG_METADATA: Metadata = {
 
 
 interface V3dDteigParameters {
-    "__STYXTYPE__": "3dDTeig";
+    "@type": "afni.3dDTeig";
     "input_dataset": string;
     "prefix"?: string | null | undefined;
     "datum"?: "byte" | "short" | "float" | null | undefined;
@@ -21,35 +21,35 @@ interface V3dDteigParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dDTeig": v_3d_dteig_cargs,
+        "afni.3dDTeig": v_3d_dteig_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dDTeig": v_3d_dteig_outputs,
+        "afni.3dDTeig": v_3d_dteig_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,17 @@ interface V3dDteigOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset of Dxx, Dxy, Dyy, Dxz, Dyz, Dzz sub-bricks
+ * @param prefix Use the given prefix for the output dataset
+ * @param datum Coerce the output data to be stored as the given type (byte, short, or float).
+ * @param sep_dsets Save eigenvalues, vectors, FA, and MD in separate datasets
+ * @param uddata Tensor data is stored as upper diagonal instead of lower diagonal
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_dteig_params(
     input_dataset: string,
     prefix: string | null = null,
@@ -95,19 +106,8 @@ function v_3d_dteig_params(
     sep_dsets: boolean = false,
     uddata: boolean = false,
 ): V3dDteigParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset of Dxx, Dxy, Dyy, Dxz, Dyz, Dzz sub-bricks
-     * @param prefix Use the given prefix for the output dataset
-     * @param datum Coerce the output data to be stored as the given type (byte, short, or float).
-     * @param sep_dsets Save eigenvalues, vectors, FA, and MD in separate datasets
-     * @param uddata Tensor data is stored as upper diagonal instead of lower diagonal
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dDTeig" as const,
+        "@type": "afni.3dDTeig" as const,
         "input_dataset": input_dataset,
         "sep_dsets": sep_dsets,
         "uddata": uddata,
@@ -122,18 +122,18 @@ function v_3d_dteig_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_dteig_cargs(
     params: V3dDteigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dDTeig");
     cargs.push((params["input_dataset"] ?? null));
@@ -159,18 +159,18 @@ function v_3d_dteig_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_dteig_outputs(
     params: V3dDteigParameters,
     execution: Execution,
 ): V3dDteigOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dDteigOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')) : null,
@@ -183,22 +183,22 @@ function v_3d_dteig_outputs(
 }
 
 
+/**
+ * Computes eigenvalues and eigenvectors for an input dataset of tensors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
+ */
 function v_3d_dteig_execute(
     params: V3dDteigParameters,
     execution: Execution,
 ): V3dDteigOutputs {
-    /**
-     * Computes eigenvalues and eigenvectors for an input dataset of tensors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_dteig_cargs(params, execution)
     const ret = v_3d_dteig_outputs(params, execution)
@@ -207,6 +207,22 @@ function v_3d_dteig_execute(
 }
 
 
+/**
+ * Computes eigenvalues and eigenvectors for an input dataset of tensors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset of Dxx, Dxy, Dyy, Dxz, Dyz, Dzz sub-bricks
+ * @param prefix Use the given prefix for the output dataset
+ * @param datum Coerce the output data to be stored as the given type (byte, short, or float).
+ * @param sep_dsets Save eigenvalues, vectors, FA, and MD in separate datasets
+ * @param uddata Tensor data is stored as upper diagonal instead of lower diagonal
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
+ */
 function v_3d_dteig(
     input_dataset: string,
     prefix: string | null = null,
@@ -215,22 +231,6 @@ function v_3d_dteig(
     uddata: boolean = false,
     runner: Runner | null = null,
 ): V3dDteigOutputs {
-    /**
-     * Computes eigenvalues and eigenvectors for an input dataset of tensors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset of Dxx, Dxy, Dyy, Dxz, Dyz, Dzz sub-bricks
-     * @param prefix Use the given prefix for the output dataset
-     * @param datum Coerce the output data to be stored as the given type (byte, short, or float).
-     * @param sep_dsets Save eigenvalues, vectors, FA, and MD in separate datasets
-     * @param uddata Tensor data is stored as upper diagonal instead of lower diagonal
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_DTEIG_METADATA);
     const params = v_3d_dteig_params(input_dataset, prefix, datum, sep_dsets, uddata)
@@ -243,5 +243,8 @@ export {
       V3dDteigParameters,
       V_3D_DTEIG_METADATA,
       v_3d_dteig,
+      v_3d_dteig_cargs,
+      v_3d_dteig_execute,
+      v_3d_dteig_outputs,
       v_3d_dteig_params,
 };

@@ -12,7 +12,7 @@ const V_3D_SLICE_NDICE_METADATA: Metadata = {
 
 
 interface V3dSliceNdiceParameters {
-    "__STYXTYPE__": "3dSliceNDice";
+    "@type": "afni.3dSliceNDice";
     "infile_a": InputPathType;
     "infile_b": InputPathType;
     "output_prefix": string;
@@ -21,35 +21,35 @@ interface V3dSliceNdiceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSliceNDice": v_3d_slice_ndice_cargs,
+        "afni.3dSliceNDice": v_3d_slice_ndice_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSliceNDice": v_3d_slice_ndice_outputs,
+        "afni.3dSliceNDice": v_3d_slice_ndice_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,17 @@ interface V3dSliceNdiceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile_a Input dataset A (e.g. mask_1.nii.gz)
+ * @param infile_b Input dataset B (e.g. mask_2.nii.gz)
+ * @param output_prefix Prefix for output files (e.g. result_prefix)
+ * @param out_domain Specify which slices to include in the Dice coefficient report. Options are: all (default), AorB, AandB, Amask, Bmask.
+ * @param no_cmd_echo Turn OFF recording the command line call in the output *.1D files. Default is to do the recording.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_slice_ndice_params(
     infile_a: InputPathType,
     infile_b: InputPathType,
@@ -87,19 +98,8 @@ function v_3d_slice_ndice_params(
     out_domain: "all" | "AorB" | "AandB" | "Amask" | "Bmask" | null = null,
     no_cmd_echo: boolean = false,
 ): V3dSliceNdiceParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile_a Input dataset A (e.g. mask_1.nii.gz)
-     * @param infile_b Input dataset B (e.g. mask_2.nii.gz)
-     * @param output_prefix Prefix for output files (e.g. result_prefix)
-     * @param out_domain Specify which slices to include in the Dice coefficient report. Options are: all (default), AorB, AandB, Amask, Bmask.
-     * @param no_cmd_echo Turn OFF recording the command line call in the output *.1D files. Default is to do the recording.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSliceNDice" as const,
+        "@type": "afni.3dSliceNDice" as const,
         "infile_a": infile_a,
         "infile_b": infile_b,
         "output_prefix": output_prefix,
@@ -112,18 +112,18 @@ function v_3d_slice_ndice_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_slice_ndice_cargs(
     params: V3dSliceNdiceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSliceNDice");
     cargs.push(
@@ -151,18 +151,18 @@ function v_3d_slice_ndice_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_slice_ndice_outputs(
     params: V3dSliceNdiceParameters,
     execution: Execution,
 ): V3dSliceNdiceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSliceNdiceOutputs = {
         root: execution.outputFile("."),
         output_rl: execution.outputFile([(params["output_prefix"] ?? null), "_0_RL.1D"].join('')),
@@ -173,22 +173,22 @@ function v_3d_slice_ndice_outputs(
 }
 
 
+/**
+ * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
+ */
 function v_3d_slice_ndice_execute(
     params: V3dSliceNdiceParameters,
     execution: Execution,
 ): V3dSliceNdiceOutputs {
-    /**
-     * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_slice_ndice_cargs(params, execution)
     const ret = v_3d_slice_ndice_outputs(params, execution)
@@ -197,6 +197,22 @@ function v_3d_slice_ndice_execute(
 }
 
 
+/**
+ * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile_a Input dataset A (e.g. mask_1.nii.gz)
+ * @param infile_b Input dataset B (e.g. mask_2.nii.gz)
+ * @param output_prefix Prefix for output files (e.g. result_prefix)
+ * @param out_domain Specify which slices to include in the Dice coefficient report. Options are: all (default), AorB, AandB, Amask, Bmask.
+ * @param no_cmd_echo Turn OFF recording the command line call in the output *.1D files. Default is to do the recording.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
+ */
 function v_3d_slice_ndice(
     infile_a: InputPathType,
     infile_b: InputPathType,
@@ -205,22 +221,6 @@ function v_3d_slice_ndice(
     no_cmd_echo: boolean = false,
     runner: Runner | null = null,
 ): V3dSliceNdiceOutputs {
-    /**
-     * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile_a Input dataset A (e.g. mask_1.nii.gz)
-     * @param infile_b Input dataset B (e.g. mask_2.nii.gz)
-     * @param output_prefix Prefix for output files (e.g. result_prefix)
-     * @param out_domain Specify which slices to include in the Dice coefficient report. Options are: all (default), AorB, AandB, Amask, Bmask.
-     * @param no_cmd_echo Turn OFF recording the command line call in the output *.1D files. Default is to do the recording.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SLICE_NDICE_METADATA);
     const params = v_3d_slice_ndice_params(infile_a, infile_b, output_prefix, out_domain, no_cmd_echo)
@@ -233,5 +233,8 @@ export {
       V3dSliceNdiceParameters,
       V_3D_SLICE_NDICE_METADATA,
       v_3d_slice_ndice,
+      v_3d_slice_ndice_cargs,
+      v_3d_slice_ndice_execute,
+      v_3d_slice_ndice_outputs,
       v_3d_slice_ndice_params,
 };

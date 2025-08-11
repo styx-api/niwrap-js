@@ -12,7 +12,7 @@ const DEFECT2SEG_METADATA: Metadata = {
 
 
 interface Defect2segParameters {
-    "__STYXTYPE__": "defect2seg";
+    "@type": "freesurfer.defect2seg";
     "output_seg": string;
     "template": InputPathType;
     "left_hemisphere"?: Array<string> | null | undefined;
@@ -25,35 +25,35 @@ interface Defect2segParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "defect2seg": defect2seg_cargs,
+        "freesurfer.defect2seg": defect2seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "defect2seg": defect2seg_outputs,
+        "freesurfer.defect2seg": defect2seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface Defect2segOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_seg Output segmentation volume
+ * @param template Template for segmentation
+ * @param left_hemisphere Left hemisphere inputs: surface, defect labels, pointset, and offset
+ * @param right_hemisphere Right hemisphere inputs: surface, defect labels, pointset, and offset
+ * @param subject Subject identifier, sets default values for other parameters
+ * @param lh_only Consider only left hemisphere defects
+ * @param rh_only Consider only right hemisphere defects
+ * @param cortex Constrain defects to within cortex
+ * @param no_cortex Allow defects outside of cortex
+ *
+ * @returns Parameter dictionary
+ */
 function defect2seg_params(
     output_seg: string,
     template: InputPathType,
@@ -87,23 +102,8 @@ function defect2seg_params(
     cortex: boolean = false,
     no_cortex: boolean = false,
 ): Defect2segParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_seg Output segmentation volume
-     * @param template Template for segmentation
-     * @param left_hemisphere Left hemisphere inputs: surface, defect labels, pointset, and offset
-     * @param right_hemisphere Right hemisphere inputs: surface, defect labels, pointset, and offset
-     * @param subject Subject identifier, sets default values for other parameters
-     * @param lh_only Consider only left hemisphere defects
-     * @param rh_only Consider only right hemisphere defects
-     * @param cortex Constrain defects to within cortex
-     * @param no_cortex Allow defects outside of cortex
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "defect2seg" as const,
+        "@type": "freesurfer.defect2seg" as const,
         "output_seg": output_seg,
         "template": template,
         "lh_only": lh_only,
@@ -124,18 +124,18 @@ function defect2seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function defect2seg_cargs(
     params: Defect2segParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("defect2seg");
     cargs.push(
@@ -180,18 +180,18 @@ function defect2seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function defect2seg_outputs(
     params: Defect2segParameters,
     execution: Execution,
 ): Defect2segOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Defect2segOutputs = {
         root: execution.outputFile("."),
         output_segmentation: execution.outputFile([(params["output_seg"] ?? null)].join('')),
@@ -200,22 +200,22 @@ function defect2seg_outputs(
 }
 
 
+/**
+ * Converts surface defect labels into a segmentation volume and pointsets.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
+ */
 function defect2seg_execute(
     params: Defect2segParameters,
     execution: Execution,
 ): Defect2segOutputs {
-    /**
-     * Converts surface defect labels into a segmentation volume and pointsets.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
-     */
     params = execution.params(params)
     const cargs = defect2seg_cargs(params, execution)
     const ret = defect2seg_outputs(params, execution)
@@ -224,6 +224,26 @@ function defect2seg_execute(
 }
 
 
+/**
+ * Converts surface defect labels into a segmentation volume and pointsets.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_seg Output segmentation volume
+ * @param template Template for segmentation
+ * @param left_hemisphere Left hemisphere inputs: surface, defect labels, pointset, and offset
+ * @param right_hemisphere Right hemisphere inputs: surface, defect labels, pointset, and offset
+ * @param subject Subject identifier, sets default values for other parameters
+ * @param lh_only Consider only left hemisphere defects
+ * @param rh_only Consider only right hemisphere defects
+ * @param cortex Constrain defects to within cortex
+ * @param no_cortex Allow defects outside of cortex
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
+ */
 function defect2seg(
     output_seg: string,
     template: InputPathType,
@@ -236,26 +256,6 @@ function defect2seg(
     no_cortex: boolean = false,
     runner: Runner | null = null,
 ): Defect2segOutputs {
-    /**
-     * Converts surface defect labels into a segmentation volume and pointsets.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_seg Output segmentation volume
-     * @param template Template for segmentation
-     * @param left_hemisphere Left hemisphere inputs: surface, defect labels, pointset, and offset
-     * @param right_hemisphere Right hemisphere inputs: surface, defect labels, pointset, and offset
-     * @param subject Subject identifier, sets default values for other parameters
-     * @param lh_only Consider only left hemisphere defects
-     * @param rh_only Consider only right hemisphere defects
-     * @param cortex Constrain defects to within cortex
-     * @param no_cortex Allow defects outside of cortex
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DEFECT2SEG_METADATA);
     const params = defect2seg_params(output_seg, template, left_hemisphere, right_hemisphere, subject, lh_only, rh_only, cortex, no_cortex)
@@ -268,5 +268,8 @@ export {
       Defect2segOutputs,
       Defect2segParameters,
       defect2seg,
+      defect2seg_cargs,
+      defect2seg_execute,
+      defect2seg_outputs,
       defect2seg_params,
 };

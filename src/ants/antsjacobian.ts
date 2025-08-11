@@ -12,7 +12,7 @@ const ANTSJACOBIAN_METADATA: Metadata = {
 
 
 interface AntsjacobianParameters {
-    "__STYXTYPE__": "ANTSJacobian";
+    "@type": "ants.ANTSJacobian";
     "imagedim": number;
     "gwarp": InputPathType;
     "outfile": string;
@@ -23,35 +23,35 @@ interface AntsjacobianParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ANTSJacobian": antsjacobian_cargs,
+        "ants.ANTSJacobian": antsjacobian_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ANTSJacobian": antsjacobian_outputs,
+        "ants.ANTSJacobian": antsjacobian_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface AntsjacobianOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param imagedim The dimensionality of the input image.
+ * @param gwarp The input warp image.
+ * @param outfile The prefix for the output files.
+ * @param uselog Whether to use logarithm in computation.
+ * @param maskfn Mask file used in the computation.
+ * @param normbytotalbool Normalize the Jacobian by the total in the mask. Use this to adjust for head size.
+ * @param projectionvector Projects the warp along the specified direction. Do not add this option if no projection is desired.
+ *
+ * @returns Parameter dictionary
+ */
 function antsjacobian_params(
     imagedim: number,
     gwarp: InputPathType,
@@ -83,21 +96,8 @@ function antsjacobian_params(
     normbytotalbool: number,
     projectionvector: string | null = null,
 ): AntsjacobianParameters {
-    /**
-     * Build parameters.
-    
-     * @param imagedim The dimensionality of the input image.
-     * @param gwarp The input warp image.
-     * @param outfile The prefix for the output files.
-     * @param uselog Whether to use logarithm in computation.
-     * @param maskfn Mask file used in the computation.
-     * @param normbytotalbool Normalize the Jacobian by the total in the mask. Use this to adjust for head size.
-     * @param projectionvector Projects the warp along the specified direction. Do not add this option if no projection is desired.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ANTSJacobian" as const,
+        "@type": "ants.ANTSJacobian" as const,
         "imagedim": imagedim,
         "gwarp": gwarp,
         "outfile": outfile,
@@ -112,18 +112,18 @@ function antsjacobian_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function antsjacobian_cargs(
     params: AntsjacobianParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ANTSJacobian");
     cargs.push(String((params["imagedim"] ?? null)));
@@ -139,18 +139,18 @@ function antsjacobian_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function antsjacobian_outputs(
     params: AntsjacobianParameters,
     execution: Execution,
 ): AntsjacobianOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsjacobianOutputs = {
         root: execution.outputFile("."),
         jacobian_output: execution.outputFile([(params["outfile"] ?? null), "Jacobian.nii.gz"].join('')),
@@ -159,22 +159,22 @@ function antsjacobian_outputs(
 }
 
 
+/**
+ * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
+ */
 function antsjacobian_execute(
     params: AntsjacobianParameters,
     execution: Execution,
 ): AntsjacobianOutputs {
-    /**
-     * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
-     */
     params = execution.params(params)
     const cargs = antsjacobian_cargs(params, execution)
     const ret = antsjacobian_outputs(params, execution)
@@ -183,6 +183,24 @@ function antsjacobian_execute(
 }
 
 
+/**
+ * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param imagedim The dimensionality of the input image.
+ * @param gwarp The input warp image.
+ * @param outfile The prefix for the output files.
+ * @param uselog Whether to use logarithm in computation.
+ * @param maskfn Mask file used in the computation.
+ * @param normbytotalbool Normalize the Jacobian by the total in the mask. Use this to adjust for head size.
+ * @param projectionvector Projects the warp along the specified direction. Do not add this option if no projection is desired.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
+ */
 function antsjacobian(
     imagedim: number,
     gwarp: InputPathType,
@@ -193,24 +211,6 @@ function antsjacobian(
     projectionvector: string | null = null,
     runner: Runner | null = null,
 ): AntsjacobianOutputs {
-    /**
-     * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param imagedim The dimensionality of the input image.
-     * @param gwarp The input warp image.
-     * @param outfile The prefix for the output files.
-     * @param uselog Whether to use logarithm in computation.
-     * @param maskfn Mask file used in the computation.
-     * @param normbytotalbool Normalize the Jacobian by the total in the mask. Use this to adjust for head size.
-     * @param projectionvector Projects the warp along the specified direction. Do not add this option if no projection is desired.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTSJACOBIAN_METADATA);
     const params = antsjacobian_params(imagedim, gwarp, outfile, uselog, maskfn, normbytotalbool, projectionvector)
@@ -223,5 +223,8 @@ export {
       AntsjacobianOutputs,
       AntsjacobianParameters,
       antsjacobian,
+      antsjacobian_cargs,
+      antsjacobian_execute,
+      antsjacobian_outputs,
       antsjacobian_params,
 };

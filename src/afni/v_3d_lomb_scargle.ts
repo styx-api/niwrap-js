@@ -12,7 +12,7 @@ const V_3D_LOMB_SCARGLE_METADATA: Metadata = {
 
 
 interface V3dLombScargleParameters {
-    "__STYXTYPE__": "3dLombScargle";
+    "@type": "afni.3dLombScargle";
     "prefix": string;
     "inset": InputPathType;
     "censor_1d"?: InputPathType | null | undefined;
@@ -24,35 +24,35 @@ interface V3dLombScargleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLombScargle": v_3d_lomb_scargle_cargs,
+        "afni.3dLombScargle": v_3d_lomb_scargle_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLombScargle": v_3d_lomb_scargle_outputs,
+        "afni.3dLombScargle": v_3d_lomb_scargle_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,20 @@ interface V3dLombScargleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output prefix name for data volume, time point 1D file, and frequency 1D file
+ * @param inset Time series of volumes, a 4D volumetric data set
+ * @param censor_1d Single row or column of 1s (keep) and 0s (censored) describing which volumes of FILE are kept in the sampling and which are censored out, respectively. The length of the list of numbers must be of the same length as the number of volumes in FILE. If not entered, then the program will look for subbricks of all-zeros and assume those are censored out.
+ * @param censor_string AFNI-style selector string of volumes to *keep* in the analysis. Such as: '[0..4,7,10..$]'.
+ * @param mask_file Optional, mask of volume to analyze; additionally, any voxel with uniformly zero values across time will produce a zero-spectrum
+ * @param out_pow_spec Switch to output the amplitude spectrum of the freqs instead of the periodogram. In the formulation used here, for a time series of length N, the power spectral value S is related to the amplitude value X as: S = (X)**2. (Without this opt, default output is amplitude spectrum.)
+ * @param nyquist_multiplier L-S periodograms can include frequencies above what would typically be considered Nyquist. By default, the maximum frequency will be what f_N *would* have been if no censoring of points had occurred. Acceptable values are >0. (This sets the 'hifac' parameter).
+ * @param nifti Switch to output *.nii.gz volume file (default format is BRIK/HEAD).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_lomb_scargle_params(
     prefix: string,
     inset: InputPathType,
@@ -97,22 +111,8 @@ function v_3d_lomb_scargle_params(
     nyquist_multiplier: number | null = null,
     nifti: boolean = false,
 ): V3dLombScargleParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output prefix name for data volume, time point 1D file, and frequency 1D file
-     * @param inset Time series of volumes, a 4D volumetric data set
-     * @param censor_1d Single row or column of 1s (keep) and 0s (censored) describing which volumes of FILE are kept in the sampling and which are censored out, respectively. The length of the list of numbers must be of the same length as the number of volumes in FILE. If not entered, then the program will look for subbricks of all-zeros and assume those are censored out.
-     * @param censor_string AFNI-style selector string of volumes to *keep* in the analysis. Such as: '[0..4,7,10..$]'.
-     * @param mask_file Optional, mask of volume to analyze; additionally, any voxel with uniformly zero values across time will produce a zero-spectrum
-     * @param out_pow_spec Switch to output the amplitude spectrum of the freqs instead of the periodogram. In the formulation used here, for a time series of length N, the power spectral value S is related to the amplitude value X as: S = (X)**2. (Without this opt, default output is amplitude spectrum.)
-     * @param nyquist_multiplier L-S periodograms can include frequencies above what would typically be considered Nyquist. By default, the maximum frequency will be what f_N *would* have been if no censoring of points had occurred. Acceptable values are >0. (This sets the 'hifac' parameter).
-     * @param nifti Switch to output *.nii.gz volume file (default format is BRIK/HEAD).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLombScargle" as const,
+        "@type": "afni.3dLombScargle" as const,
         "prefix": prefix,
         "inset": inset,
         "out_pow_spec": out_pow_spec,
@@ -134,18 +134,18 @@ function v_3d_lomb_scargle_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_lomb_scargle_cargs(
     params: V3dLombScargleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLombScargle");
     cargs.push(
@@ -190,18 +190,18 @@ function v_3d_lomb_scargle_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_lomb_scargle_outputs(
     params: V3dLombScargleParameters,
     execution: Execution,
 ): V3dLombScargleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLombScargleOutputs = {
         root: execution.outputFile("."),
         time_points: execution.outputFile([(params["prefix"] ?? null), "_time.1D"].join('')),
@@ -213,22 +213,22 @@ function v_3d_lomb_scargle_outputs(
 }
 
 
+/**
+ * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
+ */
 function v_3d_lomb_scargle_execute(
     params: V3dLombScargleParameters,
     execution: Execution,
 ): V3dLombScargleOutputs {
-    /**
-     * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_lomb_scargle_cargs(params, execution)
     const ret = v_3d_lomb_scargle_outputs(params, execution)
@@ -237,6 +237,25 @@ function v_3d_lomb_scargle_execute(
 }
 
 
+/**
+ * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output prefix name for data volume, time point 1D file, and frequency 1D file
+ * @param inset Time series of volumes, a 4D volumetric data set
+ * @param censor_1d Single row or column of 1s (keep) and 0s (censored) describing which volumes of FILE are kept in the sampling and which are censored out, respectively. The length of the list of numbers must be of the same length as the number of volumes in FILE. If not entered, then the program will look for subbricks of all-zeros and assume those are censored out.
+ * @param censor_string AFNI-style selector string of volumes to *keep* in the analysis. Such as: '[0..4,7,10..$]'.
+ * @param mask_file Optional, mask of volume to analyze; additionally, any voxel with uniformly zero values across time will produce a zero-spectrum
+ * @param out_pow_spec Switch to output the amplitude spectrum of the freqs instead of the periodogram. In the formulation used here, for a time series of length N, the power spectral value S is related to the amplitude value X as: S = (X)**2. (Without this opt, default output is amplitude spectrum.)
+ * @param nyquist_multiplier L-S periodograms can include frequencies above what would typically be considered Nyquist. By default, the maximum frequency will be what f_N *would* have been if no censoring of points had occurred. Acceptable values are >0. (This sets the 'hifac' parameter).
+ * @param nifti Switch to output *.nii.gz volume file (default format is BRIK/HEAD).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
+ */
 function v_3d_lomb_scargle(
     prefix: string,
     inset: InputPathType,
@@ -248,25 +267,6 @@ function v_3d_lomb_scargle(
     nifti: boolean = false,
     runner: Runner | null = null,
 ): V3dLombScargleOutputs {
-    /**
-     * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output prefix name for data volume, time point 1D file, and frequency 1D file
-     * @param inset Time series of volumes, a 4D volumetric data set
-     * @param censor_1d Single row or column of 1s (keep) and 0s (censored) describing which volumes of FILE are kept in the sampling and which are censored out, respectively. The length of the list of numbers must be of the same length as the number of volumes in FILE. If not entered, then the program will look for subbricks of all-zeros and assume those are censored out.
-     * @param censor_string AFNI-style selector string of volumes to *keep* in the analysis. Such as: '[0..4,7,10..$]'.
-     * @param mask_file Optional, mask of volume to analyze; additionally, any voxel with uniformly zero values across time will produce a zero-spectrum
-     * @param out_pow_spec Switch to output the amplitude spectrum of the freqs instead of the periodogram. In the formulation used here, for a time series of length N, the power spectral value S is related to the amplitude value X as: S = (X)**2. (Without this opt, default output is amplitude spectrum.)
-     * @param nyquist_multiplier L-S periodograms can include frequencies above what would typically be considered Nyquist. By default, the maximum frequency will be what f_N *would* have been if no censoring of points had occurred. Acceptable values are >0. (This sets the 'hifac' parameter).
-     * @param nifti Switch to output *.nii.gz volume file (default format is BRIK/HEAD).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOMB_SCARGLE_METADATA);
     const params = v_3d_lomb_scargle_params(prefix, inset, censor_1d, censor_string, mask_file, out_pow_spec, nyquist_multiplier, nifti)
@@ -279,5 +279,8 @@ export {
       V3dLombScargleParameters,
       V_3D_LOMB_SCARGLE_METADATA,
       v_3d_lomb_scargle,
+      v_3d_lomb_scargle_cargs,
+      v_3d_lomb_scargle_execute,
+      v_3d_lomb_scargle_outputs,
       v_3d_lomb_scargle_params,
 };

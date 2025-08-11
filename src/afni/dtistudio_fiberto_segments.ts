@@ -12,42 +12,42 @@ const DTISTUDIO_FIBERTO_SEGMENTS_METADATA: Metadata = {
 
 
 interface DtistudioFibertoSegmentsParameters {
-    "__STYXTYPE__": "DTIStudioFibertoSegments";
+    "@type": "afni.DTIStudioFibertoSegments";
     "dataset": InputPathType;
     "output_file"?: string | null | undefined;
     "swap_flag": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "DTIStudioFibertoSegments": dtistudio_fiberto_segments_cargs,
+        "afni.DTIStudioFibertoSegments": dtistudio_fiberto_segments_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "DTIStudioFibertoSegments": dtistudio_fiberto_segments_outputs,
+        "afni.DTIStudioFibertoSegments": dtistudio_fiberto_segments_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface DtistudioFibertoSegmentsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset file
+ * @param output_file Name of the output file (default is rawxyzseg.dat)
+ * @param swap_flag Swap bytes in data
+ *
+ * @returns Parameter dictionary
+ */
 function dtistudio_fiberto_segments_params(
     dataset: InputPathType,
     output_file: string | null = null,
     swap_flag: boolean = false,
 ): DtistudioFibertoSegmentsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset file
-     * @param output_file Name of the output file (default is rawxyzseg.dat)
-     * @param swap_flag Swap bytes in data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "DTIStudioFibertoSegments" as const,
+        "@type": "afni.DTIStudioFibertoSegments" as const,
         "dataset": dataset,
         "swap_flag": swap_flag,
     };
@@ -96,18 +96,18 @@ function dtistudio_fiberto_segments_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dtistudio_fiberto_segments_cargs(
     params: DtistudioFibertoSegmentsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("DTIStudioFibertoSegments");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -124,18 +124,18 @@ function dtistudio_fiberto_segments_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dtistudio_fiberto_segments_outputs(
     params: DtistudioFibertoSegmentsParameters,
     execution: Execution,
 ): DtistudioFibertoSegmentsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DtistudioFibertoSegmentsOutputs = {
         root: execution.outputFile("."),
         output_segment_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -144,22 +144,22 @@ function dtistudio_fiberto_segments_outputs(
 }
 
 
+/**
+ * Convert a DTIStudio Fiber file to a SUMA segment file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
+ */
 function dtistudio_fiberto_segments_execute(
     params: DtistudioFibertoSegmentsParameters,
     execution: Execution,
 ): DtistudioFibertoSegmentsOutputs {
-    /**
-     * Convert a DTIStudio Fiber file to a SUMA segment file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dtistudio_fiberto_segments_cargs(params, execution)
     const ret = dtistudio_fiberto_segments_outputs(params, execution)
@@ -168,26 +168,26 @@ function dtistudio_fiberto_segments_execute(
 }
 
 
+/**
+ * Convert a DTIStudio Fiber file to a SUMA segment file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset file
+ * @param output_file Name of the output file (default is rawxyzseg.dat)
+ * @param swap_flag Swap bytes in data
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
+ */
 function dtistudio_fiberto_segments(
     dataset: InputPathType,
     output_file: string | null = null,
     swap_flag: boolean = false,
     runner: Runner | null = null,
 ): DtistudioFibertoSegmentsOutputs {
-    /**
-     * Convert a DTIStudio Fiber file to a SUMA segment file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset file
-     * @param output_file Name of the output file (default is rawxyzseg.dat)
-     * @param swap_flag Swap bytes in data
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DTISTUDIO_FIBERTO_SEGMENTS_METADATA);
     const params = dtistudio_fiberto_segments_params(dataset, output_file, swap_flag)
@@ -200,5 +200,8 @@ export {
       DtistudioFibertoSegmentsOutputs,
       DtistudioFibertoSegmentsParameters,
       dtistudio_fiberto_segments,
+      dtistudio_fiberto_segments_cargs,
+      dtistudio_fiberto_segments_execute,
+      dtistudio_fiberto_segments_outputs,
       dtistudio_fiberto_segments_params,
 };

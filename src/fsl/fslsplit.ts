@@ -12,7 +12,7 @@ const FSLSPLIT_METADATA: Metadata = {
 
 
 interface FslsplitParameters {
-    "__STYXTYPE__": "fslsplit";
+    "@type": "fsl.fslsplit";
     "infile": InputPathType;
     "output_basename"?: string | null | undefined;
     "separation_x": boolean;
@@ -22,35 +22,35 @@ interface FslsplitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslsplit": fslsplit_cargs,
+        "fsl.fslsplit": fslsplit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslsplit": fslsplit_outputs,
+        "fsl.fslsplit": fslsplit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface FslsplitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input image (e.g. img.nii.gz)
+ * @param output_basename Output basename (default: vol)
+ * @param separation_x Separate images in the x direction
+ * @param separation_y Separate images in the y direction
+ * @param separation_z Separate images in the z direction
+ * @param separation_time Separate images in time (default behaviour)
+ *
+ * @returns Parameter dictionary
+ */
 function fslsplit_params(
     infile: InputPathType,
     output_basename: string | null = "vol",
@@ -81,20 +93,8 @@ function fslsplit_params(
     separation_z: boolean = false,
     separation_time: boolean = false,
 ): FslsplitParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input image (e.g. img.nii.gz)
-     * @param output_basename Output basename (default: vol)
-     * @param separation_x Separate images in the x direction
-     * @param separation_y Separate images in the y direction
-     * @param separation_z Separate images in the z direction
-     * @param separation_time Separate images in time (default behaviour)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslsplit" as const,
+        "@type": "fsl.fslsplit" as const,
         "infile": infile,
         "separation_x": separation_x,
         "separation_y": separation_y,
@@ -108,18 +108,18 @@ function fslsplit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslsplit_cargs(
     params: FslsplitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslsplit");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -142,18 +142,18 @@ function fslsplit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslsplit_outputs(
     params: FslsplitParameters,
     execution: Execution,
 ): FslsplitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslsplitOutputs = {
         root: execution.outputFile("."),
         out_files: ((params["output_basename"] ?? null) !== null) ? execution.outputFile([(params["output_basename"] ?? null)].join('')) : null,
@@ -162,22 +162,22 @@ function fslsplit_outputs(
 }
 
 
+/**
+ * Split a 4D image into separate volumes or a 3D image into separate slices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
+ */
 function fslsplit_execute(
     params: FslsplitParameters,
     execution: Execution,
 ): FslsplitOutputs {
-    /**
-     * Split a 4D image into separate volumes or a 3D image into separate slices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslsplit_cargs(params, execution)
     const ret = fslsplit_outputs(params, execution)
@@ -186,6 +186,23 @@ function fslsplit_execute(
 }
 
 
+/**
+ * Split a 4D image into separate volumes or a 3D image into separate slices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input image (e.g. img.nii.gz)
+ * @param output_basename Output basename (default: vol)
+ * @param separation_x Separate images in the x direction
+ * @param separation_y Separate images in the y direction
+ * @param separation_z Separate images in the z direction
+ * @param separation_time Separate images in time (default behaviour)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
+ */
 function fslsplit(
     infile: InputPathType,
     output_basename: string | null = "vol",
@@ -195,23 +212,6 @@ function fslsplit(
     separation_time: boolean = false,
     runner: Runner | null = null,
 ): FslsplitOutputs {
-    /**
-     * Split a 4D image into separate volumes or a 3D image into separate slices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input image (e.g. img.nii.gz)
-     * @param output_basename Output basename (default: vol)
-     * @param separation_x Separate images in the x direction
-     * @param separation_y Separate images in the y direction
-     * @param separation_z Separate images in the z direction
-     * @param separation_time Separate images in time (default behaviour)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSPLIT_METADATA);
     const params = fslsplit_params(infile, output_basename, separation_x, separation_y, separation_z, separation_time)
@@ -224,5 +224,8 @@ export {
       FslsplitOutputs,
       FslsplitParameters,
       fslsplit,
+      fslsplit_cargs,
+      fslsplit_execute,
+      fslsplit_outputs,
       fslsplit_params,
 };

@@ -12,7 +12,7 @@ const V_1DGEN_ARMA11_METADATA: Metadata = {
 
 
 interface V1dgenArma11Parameters {
-    "__STYXTYPE__": "1dgenARMA11";
+    "@type": "afni.1dgenARMA11";
     "length"?: number | null | undefined;
     "length_alt"?: number | null | undefined;
     "num_series"?: number | null | undefined;
@@ -28,35 +28,35 @@ interface V1dgenArma11Parameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dgenARMA11": v_1dgen_arma11_cargs,
+        "afni.1dgenARMA11": v_1dgen_arma11_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dgenARMA11": v_1dgen_arma11_outputs,
+        "afni.1dgenARMA11": v_1dgen_arma11_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface V1dgenArma11Outputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param length Specify the length of the time series vector to generate (equivalent to -len option).
+ * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
+ * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
+ * @param param_a Specify ARMA(1,1) parameters 'a'.
+ * @param param_b Specify ARMA(1,1) parameter 'b' directly.
+ * @param param_lam Specify ARMA(1,1) parameter 'b' indirectly.
+ * @param std_dev Set standard deviation of results [default=1].
+ * @param normalize Normalize time series so sum of squares is 1.
+ * @param seed Set random number seed.
+ * @param corcut Specify a cutoff for the correlation coefficient r(k) of noise samples at k units apart. Default is 0.00010.
+ * @param arma31 Specify parameters for a restricted ARMA(3,1) model: -arma31 a r theta vrat
+ * @param arma51 Specify parameters for a restricted ARMA(5,1) model: -arma51 a r1 theta1 r2 theta2 vrat
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dgen_arma11_params(
     length: number | null = null,
     length_alt: number | null = null,
@@ -93,26 +111,8 @@ function v_1dgen_arma11_params(
     arma31: string | null = null,
     arma51: string | null = null,
 ): V1dgenArma11Parameters {
-    /**
-     * Build parameters.
-    
-     * @param length Specify the length of the time series vector to generate (equivalent to -len option).
-     * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
-     * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
-     * @param param_a Specify ARMA(1,1) parameters 'a'.
-     * @param param_b Specify ARMA(1,1) parameter 'b' directly.
-     * @param param_lam Specify ARMA(1,1) parameter 'b' indirectly.
-     * @param std_dev Set standard deviation of results [default=1].
-     * @param normalize Normalize time series so sum of squares is 1.
-     * @param seed Set random number seed.
-     * @param corcut Specify a cutoff for the correlation coefficient r(k) of noise samples at k units apart. Default is 0.00010.
-     * @param arma31 Specify parameters for a restricted ARMA(3,1) model: -arma31 a r theta vrat
-     * @param arma51 Specify parameters for a restricted ARMA(5,1) model: -arma51 a r1 theta1 r2 theta2 vrat
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dgenARMA11" as const,
+        "@type": "afni.1dgenARMA11" as const,
         "normalize": normalize,
     };
     if (length !== null) {
@@ -152,18 +152,18 @@ function v_1dgen_arma11_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dgen_arma11_cargs(
     params: V1dgenArma11Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dgenARMA11");
     if ((params["length"] ?? null) !== null) {
@@ -239,18 +239,18 @@ function v_1dgen_arma11_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dgen_arma11_outputs(
     params: V1dgenArma11Parameters,
     execution: Execution,
 ): V1dgenArma11Outputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dgenArma11Outputs = {
         root: execution.outputFile("."),
         output: execution.outputFile(["stdout"].join('')),
@@ -259,22 +259,22 @@ function v_1dgen_arma11_outputs(
 }
 
 
+/**
+ * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
+ */
 function v_1dgen_arma11_execute(
     params: V1dgenArma11Parameters,
     execution: Execution,
 ): V1dgenArma11Outputs {
-    /**
-     * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dgen_arma11_cargs(params, execution)
     const ret = v_1dgen_arma11_outputs(params, execution)
@@ -283,6 +283,29 @@ function v_1dgen_arma11_execute(
 }
 
 
+/**
+ * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param length Specify the length of the time series vector to generate (equivalent to -len option).
+ * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
+ * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
+ * @param param_a Specify ARMA(1,1) parameters 'a'.
+ * @param param_b Specify ARMA(1,1) parameter 'b' directly.
+ * @param param_lam Specify ARMA(1,1) parameter 'b' indirectly.
+ * @param std_dev Set standard deviation of results [default=1].
+ * @param normalize Normalize time series so sum of squares is 1.
+ * @param seed Set random number seed.
+ * @param corcut Specify a cutoff for the correlation coefficient r(k) of noise samples at k units apart. Default is 0.00010.
+ * @param arma31 Specify parameters for a restricted ARMA(3,1) model: -arma31 a r theta vrat
+ * @param arma51 Specify parameters for a restricted ARMA(5,1) model: -arma51 a r1 theta1 r2 theta2 vrat
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
+ */
 function v_1dgen_arma11(
     length: number | null = null,
     length_alt: number | null = null,
@@ -298,29 +321,6 @@ function v_1dgen_arma11(
     arma51: string | null = null,
     runner: Runner | null = null,
 ): V1dgenArma11Outputs {
-    /**
-     * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param length Specify the length of the time series vector to generate (equivalent to -len option).
-     * @param length_alt Specify the length of the time series vector to generate (equivalent to -num option).
-     * @param num_series The number of time series vectors to generate; defaults to 1 if not given.
-     * @param param_a Specify ARMA(1,1) parameters 'a'.
-     * @param param_b Specify ARMA(1,1) parameter 'b' directly.
-     * @param param_lam Specify ARMA(1,1) parameter 'b' indirectly.
-     * @param std_dev Set standard deviation of results [default=1].
-     * @param normalize Normalize time series so sum of squares is 1.
-     * @param seed Set random number seed.
-     * @param corcut Specify a cutoff for the correlation coefficient r(k) of noise samples at k units apart. Default is 0.00010.
-     * @param arma31 Specify parameters for a restricted ARMA(3,1) model: -arma31 a r theta vrat
-     * @param arma51 Specify parameters for a restricted ARMA(5,1) model: -arma51 a r1 theta1 r2 theta2 vrat
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DGEN_ARMA11_METADATA);
     const params = v_1dgen_arma11_params(length, length_alt, num_series, param_a, param_b, param_lam, std_dev, normalize, seed, corcut, arma31, arma51)
@@ -333,5 +333,8 @@ export {
       V1dgenArma11Parameters,
       V_1DGEN_ARMA11_METADATA,
       v_1dgen_arma11,
+      v_1dgen_arma11_cargs,
+      v_1dgen_arma11_execute,
+      v_1dgen_arma11_outputs,
       v_1dgen_arma11_params,
 };

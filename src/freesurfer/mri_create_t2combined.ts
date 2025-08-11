@@ -12,7 +12,7 @@ const MRI_CREATE_T2COMBINED_METADATA: Metadata = {
 
 
 interface MriCreateT2combinedParameters {
-    "__STYXTYPE__": "mri_create_t2combined";
+    "@type": "freesurfer.mri_create_t2combined";
     "subjid": string;
     "t1wb": InputPathType;
     "t2upper": InputPathType;
@@ -23,35 +23,35 @@ interface MriCreateT2combinedParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_create_t2combined": mri_create_t2combined_cargs,
+        "freesurfer.mri_create_t2combined": mri_create_t2combined_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_create_t2combined": mri_create_t2combined_outputs,
+        "freesurfer.mri_create_t2combined": mri_create_t2combined_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,19 @@ interface MriCreateT2combinedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Subject ID of the FreeSurfer anatomical
+ * @param t1wb T1 7T whole-brain image
+ * @param t2upper T2* 7T partial-brain upper half image
+ * @param t2lower T2* 7T partial-brain lower half image
+ * @param t2combined Output file for T2* 7T combined partial-brain halves
+ * @param t2middle T2* 7T partial-brain middle half image, or enter 'none'
+ * @param show If the last argument is 'show', then the commands that will run are shown but not executed.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_create_t2combined_params(
     subjid: string,
     t1wb: InputPathType,
@@ -87,21 +100,8 @@ function mri_create_t2combined_params(
     t2middle: InputPathType | null = null,
     show: boolean = false,
 ): MriCreateT2combinedParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Subject ID of the FreeSurfer anatomical
-     * @param t1wb T1 7T whole-brain image
-     * @param t2upper T2* 7T partial-brain upper half image
-     * @param t2lower T2* 7T partial-brain lower half image
-     * @param t2combined Output file for T2* 7T combined partial-brain halves
-     * @param t2middle T2* 7T partial-brain middle half image, or enter 'none'
-     * @param show If the last argument is 'show', then the commands that will run are shown but not executed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_create_t2combined" as const,
+        "@type": "freesurfer.mri_create_t2combined" as const,
         "subjid": subjid,
         "t1wb": t1wb,
         "t2upper": t2upper,
@@ -116,18 +116,18 @@ function mri_create_t2combined_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_create_t2combined_cargs(
     params: MriCreateT2combinedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_create_t2combined");
     cargs.push((params["subjid"] ?? null));
@@ -145,18 +145,18 @@ function mri_create_t2combined_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_create_t2combined_outputs(
     params: MriCreateT2combinedParameters,
     execution: Execution,
 ): MriCreateT2combinedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCreateT2combinedOutputs = {
         root: execution.outputFile("."),
         logfile: execution.outputFile(["/root/mri_create_t2combined.log"].join('')),
@@ -166,22 +166,22 @@ function mri_create_t2combined_outputs(
 }
 
 
+/**
+ * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
+ */
 function mri_create_t2combined_execute(
     params: MriCreateT2combinedParameters,
     execution: Execution,
 ): MriCreateT2combinedOutputs {
-    /**
-     * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_create_t2combined_cargs(params, execution)
     const ret = mri_create_t2combined_outputs(params, execution)
@@ -190,6 +190,24 @@ function mri_create_t2combined_execute(
 }
 
 
+/**
+ * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Subject ID of the FreeSurfer anatomical
+ * @param t1wb T1 7T whole-brain image
+ * @param t2upper T2* 7T partial-brain upper half image
+ * @param t2lower T2* 7T partial-brain lower half image
+ * @param t2combined Output file for T2* 7T combined partial-brain halves
+ * @param t2middle T2* 7T partial-brain middle half image, or enter 'none'
+ * @param show If the last argument is 'show', then the commands that will run are shown but not executed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
+ */
 function mri_create_t2combined(
     subjid: string,
     t1wb: InputPathType,
@@ -200,24 +218,6 @@ function mri_create_t2combined(
     show: boolean = false,
     runner: Runner | null = null,
 ): MriCreateT2combinedOutputs {
-    /**
-     * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Subject ID of the FreeSurfer anatomical
-     * @param t1wb T1 7T whole-brain image
-     * @param t2upper T2* 7T partial-brain upper half image
-     * @param t2lower T2* 7T partial-brain lower half image
-     * @param t2combined Output file for T2* 7T combined partial-brain halves
-     * @param t2middle T2* 7T partial-brain middle half image, or enter 'none'
-     * @param show If the last argument is 'show', then the commands that will run are shown but not executed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_CREATE_T2COMBINED_METADATA);
     const params = mri_create_t2combined_params(subjid, t1wb, t2upper, t2lower, t2combined, t2middle, show)
@@ -230,5 +230,8 @@ export {
       MriCreateT2combinedOutputs,
       MriCreateT2combinedParameters,
       mri_create_t2combined,
+      mri_create_t2combined_cargs,
+      mri_create_t2combined_execute,
+      mri_create_t2combined_outputs,
       mri_create_t2combined_params,
 };

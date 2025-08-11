@@ -12,7 +12,7 @@ const DUAL_REGRESSION_METADATA: Metadata = {
 
 
 interface DualRegressionParameters {
-    "__STYXTYPE__": "dual_regression";
+    "@type": "fsl.dual_regression";
     "group_ic_maps": InputPathType;
     "des_norm": number;
     "design_mat": InputPathType;
@@ -24,35 +24,35 @@ interface DualRegressionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dual_regression": dual_regression_cargs,
+        "fsl.dual_regression": dual_regression_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dual_regression": dual_regression_outputs,
+        "fsl.dual_regression": dual_regression_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,20 @@ interface DualRegressionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param group_ic_maps 4D image containing spatial IC maps (melodic_IC) from the whole-group ICA analysis
+ * @param des_norm 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+ * @param design_mat Design matrix for final cross-subject modelling with randomise
+ * @param design_con Design contrasts for final cross-subject modelling with randomise
+ * @param n_perm Number of permutations for randomise; set to 1 for just raw tstat output, set to 0 to not run randomise at all.
+ * @param output_directory This directory will be created to hold all output and logfiles
+ * @param input_files List of all subjects' preprocessed, standard-space 4D datasets
+ * @param thr_flag Perform thresholded dual regression to obtain unbiased timeseries for connectomics analyses (e.g., with FSLnets)
+ *
+ * @returns Parameter dictionary
+ */
 function dual_regression_params(
     group_ic_maps: InputPathType,
     des_norm: number,
@@ -97,22 +111,8 @@ function dual_regression_params(
     input_files: Array<InputPathType>,
     thr_flag: boolean = false,
 ): DualRegressionParameters {
-    /**
-     * Build parameters.
-    
-     * @param group_ic_maps 4D image containing spatial IC maps (melodic_IC) from the whole-group ICA analysis
-     * @param des_norm 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-     * @param design_mat Design matrix for final cross-subject modelling with randomise
-     * @param design_con Design contrasts for final cross-subject modelling with randomise
-     * @param n_perm Number of permutations for randomise; set to 1 for just raw tstat output, set to 0 to not run randomise at all.
-     * @param output_directory This directory will be created to hold all output and logfiles
-     * @param input_files List of all subjects' preprocessed, standard-space 4D datasets
-     * @param thr_flag Perform thresholded dual regression to obtain unbiased timeseries for connectomics analyses (e.g., with FSLnets)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dual_regression" as const,
+        "@type": "fsl.dual_regression" as const,
         "group_ic_maps": group_ic_maps,
         "des_norm": des_norm,
         "design_mat": design_mat,
@@ -126,18 +126,18 @@ function dual_regression_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dual_regression_cargs(
     params: DualRegressionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dual_regression");
     cargs.push(execution.inputFile((params["group_ic_maps"] ?? null)));
@@ -154,18 +154,18 @@ function dual_regression_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dual_regression_outputs(
     params: DualRegressionParameters,
     execution: Execution,
 ): DualRegressionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DualRegressionOutputs = {
         root: execution.outputFile("."),
         stage1_output: execution.outputFile([(params["output_directory"] ?? null), "/dr_stage1_subject[SUBJECT_INDEX].nii.gz"].join('')),
@@ -177,22 +177,22 @@ function dual_regression_outputs(
 }
 
 
+/**
+ * Dual regression algorithm to investigate group-ICA results.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
+ */
 function dual_regression_execute(
     params: DualRegressionParameters,
     execution: Execution,
 ): DualRegressionOutputs {
-    /**
-     * Dual regression algorithm to investigate group-ICA results.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
-     */
     params = execution.params(params)
     const cargs = dual_regression_cargs(params, execution)
     const ret = dual_regression_outputs(params, execution)
@@ -201,6 +201,25 @@ function dual_regression_execute(
 }
 
 
+/**
+ * Dual regression algorithm to investigate group-ICA results.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param group_ic_maps 4D image containing spatial IC maps (melodic_IC) from the whole-group ICA analysis
+ * @param des_norm 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
+ * @param design_mat Design matrix for final cross-subject modelling with randomise
+ * @param design_con Design contrasts for final cross-subject modelling with randomise
+ * @param n_perm Number of permutations for randomise; set to 1 for just raw tstat output, set to 0 to not run randomise at all.
+ * @param output_directory This directory will be created to hold all output and logfiles
+ * @param input_files List of all subjects' preprocessed, standard-space 4D datasets
+ * @param thr_flag Perform thresholded dual regression to obtain unbiased timeseries for connectomics analyses (e.g., with FSLnets)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
+ */
 function dual_regression(
     group_ic_maps: InputPathType,
     des_norm: number,
@@ -212,25 +231,6 @@ function dual_regression(
     thr_flag: boolean = false,
     runner: Runner | null = null,
 ): DualRegressionOutputs {
-    /**
-     * Dual regression algorithm to investigate group-ICA results.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param group_ic_maps 4D image containing spatial IC maps (melodic_IC) from the whole-group ICA analysis
-     * @param des_norm 0 or 1 (1 is recommended). Whether to variance-normalise the timecourses used as the stage-2 regressors
-     * @param design_mat Design matrix for final cross-subject modelling with randomise
-     * @param design_con Design contrasts for final cross-subject modelling with randomise
-     * @param n_perm Number of permutations for randomise; set to 1 for just raw tstat output, set to 0 to not run randomise at all.
-     * @param output_directory This directory will be created to hold all output and logfiles
-     * @param input_files List of all subjects' preprocessed, standard-space 4D datasets
-     * @param thr_flag Perform thresholded dual regression to obtain unbiased timeseries for connectomics analyses (e.g., with FSLnets)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DUAL_REGRESSION_METADATA);
     const params = dual_regression_params(group_ic_maps, des_norm, design_mat, design_con, n_perm, output_directory, input_files, thr_flag)
@@ -243,5 +243,8 @@ export {
       DualRegressionOutputs,
       DualRegressionParameters,
       dual_regression,
+      dual_regression_cargs,
+      dual_regression_execute,
+      dual_regression_outputs,
       dual_regression_params,
 };

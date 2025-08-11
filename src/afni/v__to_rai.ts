@@ -12,39 +12,39 @@ const V__TO_RAI_METADATA: Metadata = {
 
 
 interface VToRaiParameters {
-    "__STYXTYPE__": "@ToRAI";
+    "@type": "afni.@ToRAI";
     "coordinates": Array<number>;
     "orientation": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@ToRAI": v__to_rai_cargs,
+        "afni.@ToRAI": v__to_rai_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VToRaiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param coordinates Specify the X, Y, and Z coordinates
+ * @param orientation Specify the orientation
+ *
+ * @returns Parameter dictionary
+ */
 function v__to_rai_params(
     coordinates: Array<number>,
     orientation: string,
 ): VToRaiParameters {
-    /**
-     * Build parameters.
-    
-     * @param coordinates Specify the X, Y, and Z coordinates
-     * @param orientation Specify the orientation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@ToRAI" as const,
+        "@type": "afni.@ToRAI" as const,
         "coordinates": coordinates,
         "orientation": orientation,
     };
@@ -85,18 +85,18 @@ function v__to_rai_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__to_rai_cargs(
     params: VToRaiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@ToRAI");
     cargs.push(
@@ -111,18 +111,18 @@ function v__to_rai_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__to_rai_outputs(
     params: VToRaiParameters,
     execution: Execution,
 ): VToRaiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VToRaiOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,22 +130,22 @@ function v__to_rai_outputs(
 }
 
 
+/**
+ * Tool to change the ORIENT coordinates to RAI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
+ */
 function v__to_rai_execute(
     params: VToRaiParameters,
     execution: Execution,
 ): VToRaiOutputs {
-    /**
-     * Tool to change the ORIENT coordinates to RAI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__to_rai_cargs(params, execution)
     const ret = v__to_rai_outputs(params, execution)
@@ -154,24 +154,24 @@ function v__to_rai_execute(
 }
 
 
+/**
+ * Tool to change the ORIENT coordinates to RAI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param coordinates Specify the X, Y, and Z coordinates
+ * @param orientation Specify the orientation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
+ */
 function v__to_rai(
     coordinates: Array<number>,
     orientation: string,
     runner: Runner | null = null,
 ): VToRaiOutputs {
-    /**
-     * Tool to change the ORIENT coordinates to RAI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param coordinates Specify the X, Y, and Z coordinates
-     * @param orientation Specify the orientation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__TO_RAI_METADATA);
     const params = v__to_rai_params(coordinates, orientation)
@@ -184,5 +184,8 @@ export {
       VToRaiParameters,
       V__TO_RAI_METADATA,
       v__to_rai,
+      v__to_rai_cargs,
+      v__to_rai_execute,
+      v__to_rai_outputs,
       v__to_rai_params,
 };

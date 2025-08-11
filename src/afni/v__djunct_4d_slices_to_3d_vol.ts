@@ -12,40 +12,40 @@ const V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA: Metadata = {
 
 
 interface VDjunct4dSlicesTo3dVolParameters {
-    "__STYXTYPE__": "@djunct_4d_slices_to_3d_vol";
+    "@type": "afni.@djunct_4d_slices_to_3d_vol";
     "do_something": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_cargs,
+        "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_outputs,
+        "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VDjunct4dSlicesTo3dVolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param do_something Do something really useful
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_4d_slices_to_3d_vol_params(
     do_something: boolean = false,
 ): VDjunct4dSlicesTo3dVolParameters {
-    /**
-     * Build parameters.
-    
-     * @param do_something Do something really useful
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_4d_slices_to_3d_vol" as const,
+        "@type": "afni.@djunct_4d_slices_to_3d_vol" as const,
         "do_something": do_something,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_4d_slices_to_3d_vol_cargs(
     params: VDjunct4dSlicesTo3dVolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_4d_slices_to_3d_vol");
     if ((params["do_something"] ?? null)) {
@@ -107,18 +107,18 @@ function v__djunct_4d_slices_to_3d_vol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_4d_slices_to_3d_vol_outputs(
     params: VDjunct4dSlicesTo3dVolParameters,
     execution: Execution,
 ): VDjunct4dSlicesTo3dVolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunct4dSlicesTo3dVolOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["output_file"].join('')),
@@ -127,22 +127,22 @@ function v__djunct_4d_slices_to_3d_vol_outputs(
 }
 
 
+/**
+ * Tool description goes here.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
+ */
 function v__djunct_4d_slices_to_3d_vol_execute(
     params: VDjunct4dSlicesTo3dVolParameters,
     execution: Execution,
 ): VDjunct4dSlicesTo3dVolOutputs {
-    /**
-     * Tool description goes here.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_4d_slices_to_3d_vol_cargs(params, execution)
     const ret = v__djunct_4d_slices_to_3d_vol_outputs(params, execution)
@@ -151,22 +151,22 @@ function v__djunct_4d_slices_to_3d_vol_execute(
 }
 
 
+/**
+ * Tool description goes here.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param do_something Do something really useful
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
+ */
 function v__djunct_4d_slices_to_3d_vol(
     do_something: boolean = false,
     runner: Runner | null = null,
 ): VDjunct4dSlicesTo3dVolOutputs {
-    /**
-     * Tool description goes here.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param do_something Do something really useful
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA);
     const params = v__djunct_4d_slices_to_3d_vol_params(do_something)
@@ -179,5 +179,8 @@ export {
       VDjunct4dSlicesTo3dVolParameters,
       V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA,
       v__djunct_4d_slices_to_3d_vol,
+      v__djunct_4d_slices_to_3d_vol_cargs,
+      v__djunct_4d_slices_to_3d_vol_execute,
+      v__djunct_4d_slices_to_3d_vol_outputs,
       v__djunct_4d_slices_to_3d_vol_params,
 };

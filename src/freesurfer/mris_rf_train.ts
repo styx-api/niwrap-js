@@ -12,7 +12,7 @@ const MRIS_RF_TRAIN_METADATA: Metadata = {
 
 
 interface MrisRfTrainParameters {
-    "__STYXTYPE__": "mris_rf_train";
+    "@type": "freesurfer.mris_rf_train";
     "subjects": Array<string>;
     "output_name": string;
     "hemi"?: string | null | undefined;
@@ -20,33 +20,33 @@ interface MrisRfTrainParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_rf_train": mris_rf_train_cargs,
+        "freesurfer.mris_rf_train": mris_rf_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MrisRfTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subjects to process
+ * @param output_name Output name for the trained model
+ * @param hemi Process specified hemisphere instead of the default 'lh'.
+ * @param surf Change the default surface name from 'white' to the specified surface.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_rf_train_params(
     subjects: Array<string>,
     output_name: string,
     hemi: string | null = null,
     surf: string | null = null,
 ): MrisRfTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subjects to process
-     * @param output_name Output name for the trained model
-     * @param hemi Process specified hemisphere instead of the default 'lh'.
-     * @param surf Change the default surface name from 'white' to the specified surface.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_rf_train" as const,
+        "@type": "freesurfer.mris_rf_train" as const,
         "subjects": subjects,
         "output_name": output_name,
     };
@@ -97,18 +97,18 @@ function mris_rf_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_rf_train_cargs(
     params: MrisRfTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_rf_train");
     cargs.push(...(params["subjects"] ?? null));
@@ -129,18 +129,18 @@ function mris_rf_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_rf_train_outputs(
     params: MrisRfTrainParameters,
     execution: Execution,
 ): MrisRfTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRfTrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -148,22 +148,22 @@ function mris_rf_train_outputs(
 }
 
 
+/**
+ * Tool for training a random forest classifier using MRIS surface data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
+ */
 function mris_rf_train_execute(
     params: MrisRfTrainParameters,
     execution: Execution,
 ): MrisRfTrainOutputs {
-    /**
-     * Tool for training a random forest classifier using MRIS surface data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_rf_train_cargs(params, execution)
     const ret = mris_rf_train_outputs(params, execution)
@@ -172,6 +172,21 @@ function mris_rf_train_execute(
 }
 
 
+/**
+ * Tool for training a random forest classifier using MRIS surface data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subjects to process
+ * @param output_name Output name for the trained model
+ * @param hemi Process specified hemisphere instead of the default 'lh'.
+ * @param surf Change the default surface name from 'white' to the specified surface.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
+ */
 function mris_rf_train(
     subjects: Array<string>,
     output_name: string,
@@ -179,21 +194,6 @@ function mris_rf_train(
     surf: string | null = null,
     runner: Runner | null = null,
 ): MrisRfTrainOutputs {
-    /**
-     * Tool for training a random forest classifier using MRIS surface data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subjects to process
-     * @param output_name Output name for the trained model
-     * @param hemi Process specified hemisphere instead of the default 'lh'.
-     * @param surf Change the default surface name from 'white' to the specified surface.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_RF_TRAIN_METADATA);
     const params = mris_rf_train_params(subjects, output_name, hemi, surf)
@@ -206,5 +206,8 @@ export {
       MrisRfTrainOutputs,
       MrisRfTrainParameters,
       mris_rf_train,
+      mris_rf_train_cargs,
+      mris_rf_train_execute,
+      mris_rf_train_outputs,
       mris_rf_train_params,
 };

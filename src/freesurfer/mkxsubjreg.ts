@@ -12,7 +12,7 @@ const MKXSUBJREG_METADATA: Metadata = {
 
 
 interface MkxsubjregParameters {
-    "__STYXTYPE__": "mkxsubjreg";
+    "@type": "freesurfer.mkxsubjreg";
     "srcreg": InputPathType;
     "targreg": InputPathType;
     "targsubj"?: string | null | undefined;
@@ -24,33 +24,33 @@ interface MkxsubjregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mkxsubjreg": mkxsubjreg_cargs,
+        "freesurfer.mkxsubjreg": mkxsubjreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MkxsubjregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param srcreg Path to the source registration file (srcreg.dat)
+ * @param targreg Path to the target registration file (targreg.dat)
+ * @param targsubj Target subject ID; default is talairach
+ * @param xfm XFM file name relative to transforms
+ * @param sd Directory containing subject data; default is env SUBJECTS_DIR
+ * @param fvol Path to example functional volume
+ * @param help Display help information
+ * @param version Display version information
+ *
+ * @returns Parameter dictionary
+ */
 function mkxsubjreg_params(
     srcreg: InputPathType,
     targreg: InputPathType,
@@ -80,22 +94,8 @@ function mkxsubjreg_params(
     help: boolean = false,
     version: boolean = false,
 ): MkxsubjregParameters {
-    /**
-     * Build parameters.
-    
-     * @param srcreg Path to the source registration file (srcreg.dat)
-     * @param targreg Path to the target registration file (targreg.dat)
-     * @param targsubj Target subject ID; default is talairach
-     * @param xfm XFM file name relative to transforms
-     * @param sd Directory containing subject data; default is env SUBJECTS_DIR
-     * @param fvol Path to example functional volume
-     * @param help Display help information
-     * @param version Display version information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mkxsubjreg" as const,
+        "@type": "freesurfer.mkxsubjreg" as const,
         "srcreg": srcreg,
         "targreg": targreg,
         "help": help,
@@ -117,18 +117,18 @@ function mkxsubjreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mkxsubjreg_cargs(
     params: MkxsubjregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mkxsubjreg");
     cargs.push(
@@ -173,18 +173,18 @@ function mkxsubjreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mkxsubjreg_outputs(
     params: MkxsubjregParameters,
     execution: Execution,
 ): MkxsubjregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MkxsubjregOutputs = {
         root: execution.outputFile("."),
     };
@@ -192,22 +192,22 @@ function mkxsubjreg_outputs(
 }
 
 
+/**
+ * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
+ */
 function mkxsubjreg_execute(
     params: MkxsubjregParameters,
     execution: Execution,
 ): MkxsubjregOutputs {
-    /**
-     * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
-     */
     params = execution.params(params)
     const cargs = mkxsubjreg_cargs(params, execution)
     const ret = mkxsubjreg_outputs(params, execution)
@@ -216,6 +216,25 @@ function mkxsubjreg_execute(
 }
 
 
+/**
+ * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param srcreg Path to the source registration file (srcreg.dat)
+ * @param targreg Path to the target registration file (targreg.dat)
+ * @param targsubj Target subject ID; default is talairach
+ * @param xfm XFM file name relative to transforms
+ * @param sd Directory containing subject data; default is env SUBJECTS_DIR
+ * @param fvol Path to example functional volume
+ * @param help Display help information
+ * @param version Display version information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
+ */
 function mkxsubjreg(
     srcreg: InputPathType,
     targreg: InputPathType,
@@ -227,25 +246,6 @@ function mkxsubjreg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MkxsubjregOutputs {
-    /**
-     * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param srcreg Path to the source registration file (srcreg.dat)
-     * @param targreg Path to the target registration file (targreg.dat)
-     * @param targsubj Target subject ID; default is talairach
-     * @param xfm XFM file name relative to transforms
-     * @param sd Directory containing subject data; default is env SUBJECTS_DIR
-     * @param fvol Path to example functional volume
-     * @param help Display help information
-     * @param version Display version information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKXSUBJREG_METADATA);
     const params = mkxsubjreg_params(srcreg, targreg, targsubj, xfm, sd, fvol, help, version)
@@ -258,5 +258,8 @@ export {
       MkxsubjregOutputs,
       MkxsubjregParameters,
       mkxsubjreg,
+      mkxsubjreg_cargs,
+      mkxsubjreg_execute,
+      mkxsubjreg_outputs,
       mkxsubjreg_params,
 };

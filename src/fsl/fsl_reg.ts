@@ -12,7 +12,7 @@ const FSL_REG_METADATA: Metadata = {
 
 
 interface FslRegParameters {
-    "__STYXTYPE__": "fsl_reg";
+    "@type": "fsl.fsl_reg";
     "input_file": InputPathType;
     "reference_file": InputPathType;
     "output_file": string;
@@ -24,35 +24,35 @@ interface FslRegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_reg": fsl_reg_cargs,
+        "fsl.fsl_reg": fsl_reg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_reg": fsl_reg_outputs,
+        "fsl.fsl_reg": fsl_reg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface FslRegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file
+ * @param reference_file Reference image file
+ * @param output_file Output transformation file
+ * @param estimate_only_flag Estimate transformation but don't apply it
+ * @param affine_only_flag Affine-only registration
+ * @param fnirt_fa_config_flag Use FNIRT config file optimised for FA data
+ * @param flirt_options Options to be passed onto flirt (inside double-quotes)
+ * @param fnirt_options Options to be passed onto fnirt (inside double-quotes)
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_reg_params(
     input_file: InputPathType,
     reference_file: InputPathType,
@@ -85,22 +99,8 @@ function fsl_reg_params(
     flirt_options: string | null = null,
     fnirt_options: string | null = null,
 ): FslRegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file
-     * @param reference_file Reference image file
-     * @param output_file Output transformation file
-     * @param estimate_only_flag Estimate transformation but don't apply it
-     * @param affine_only_flag Affine-only registration
-     * @param fnirt_fa_config_flag Use FNIRT config file optimised for FA data
-     * @param flirt_options Options to be passed onto flirt (inside double-quotes)
-     * @param fnirt_options Options to be passed onto fnirt (inside double-quotes)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_reg" as const,
+        "@type": "fsl.fsl_reg" as const,
         "input_file": input_file,
         "reference_file": reference_file,
         "output_file": output_file,
@@ -118,18 +118,18 @@ function fsl_reg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_reg_cargs(
     params: FslRegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_reg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -160,18 +160,18 @@ function fsl_reg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_reg_outputs(
     params: FslRegParameters,
     execution: Execution,
 ): FslRegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslRegOutputs = {
         root: execution.outputFile("."),
         output_transform_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -180,22 +180,22 @@ function fsl_reg_outputs(
 }
 
 
+/**
+ * Image registration using FSL tools.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslRegOutputs`).
+ */
 function fsl_reg_execute(
     params: FslRegParameters,
     execution: Execution,
 ): FslRegOutputs {
-    /**
-     * Image registration using FSL tools.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslRegOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_reg_cargs(params, execution)
     const ret = fsl_reg_outputs(params, execution)
@@ -204,6 +204,25 @@ function fsl_reg_execute(
 }
 
 
+/**
+ * Image registration using FSL tools.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file
+ * @param reference_file Reference image file
+ * @param output_file Output transformation file
+ * @param estimate_only_flag Estimate transformation but don't apply it
+ * @param affine_only_flag Affine-only registration
+ * @param fnirt_fa_config_flag Use FNIRT config file optimised for FA data
+ * @param flirt_options Options to be passed onto flirt (inside double-quotes)
+ * @param fnirt_options Options to be passed onto fnirt (inside double-quotes)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslRegOutputs`).
+ */
 function fsl_reg(
     input_file: InputPathType,
     reference_file: InputPathType,
@@ -215,25 +234,6 @@ function fsl_reg(
     fnirt_options: string | null = null,
     runner: Runner | null = null,
 ): FslRegOutputs {
-    /**
-     * Image registration using FSL tools.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file
-     * @param reference_file Reference image file
-     * @param output_file Output transformation file
-     * @param estimate_only_flag Estimate transformation but don't apply it
-     * @param affine_only_flag Affine-only registration
-     * @param fnirt_fa_config_flag Use FNIRT config file optimised for FA data
-     * @param flirt_options Options to be passed onto flirt (inside double-quotes)
-     * @param fnirt_options Options to be passed onto fnirt (inside double-quotes)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslRegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_REG_METADATA);
     const params = fsl_reg_params(input_file, reference_file, output_file, estimate_only_flag, affine_only_flag, fnirt_fa_config_flag, flirt_options, fnirt_options)
@@ -246,5 +246,8 @@ export {
       FslRegOutputs,
       FslRegParameters,
       fsl_reg,
+      fsl_reg_cargs,
+      fsl_reg_execute,
+      fsl_reg_outputs,
       fsl_reg_params,
 };

@@ -12,42 +12,42 @@ const MRIS_SAMPLE_LABEL_METADATA: Metadata = {
 
 
 interface MrisSampleLabelParameters {
-    "__STYXTYPE__": "mris_sample_label";
+    "@type": "freesurfer.mris_sample_label";
     "input_label_file": InputPathType;
     "input_surface_file": InputPathType;
     "output_label_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_sample_label": mris_sample_label_cargs,
+        "freesurfer.mris_sample_label": mris_sample_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_sample_label": mris_sample_label_outputs,
+        "freesurfer.mris_sample_label": mris_sample_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisSampleLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_label_file Input label file
+ * @param input_surface_file Input surface file
+ * @param output_label_file Output label file
+ *
+ * @returns Parameter dictionary
+ */
 function mris_sample_label_params(
     input_label_file: InputPathType,
     input_surface_file: InputPathType,
     output_label_file: string,
 ): MrisSampleLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_label_file Input label file
-     * @param input_surface_file Input surface file
-     * @param output_label_file Output label file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_sample_label" as const,
+        "@type": "freesurfer.mris_sample_label" as const,
         "input_label_file": input_label_file,
         "input_surface_file": input_surface_file,
         "output_label_file": output_label_file,
@@ -94,18 +94,18 @@ function mris_sample_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_sample_label_cargs(
     params: MrisSampleLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_sample_label");
     cargs.push(execution.inputFile((params["input_label_file"] ?? null)));
@@ -115,18 +115,18 @@ function mris_sample_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_sample_label_outputs(
     params: MrisSampleLabelParameters,
     execution: Execution,
 ): MrisSampleLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisSampleLabelOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([(params["output_label_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mris_sample_label_outputs(
 }
 
 
+/**
+ * This tool samples a label onto a surface model.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
+ */
 function mris_sample_label_execute(
     params: MrisSampleLabelParameters,
     execution: Execution,
 ): MrisSampleLabelOutputs {
-    /**
-     * This tool samples a label onto a surface model.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_sample_label_cargs(params, execution)
     const ret = mris_sample_label_outputs(params, execution)
@@ -159,26 +159,26 @@ function mris_sample_label_execute(
 }
 
 
+/**
+ * This tool samples a label onto a surface model.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_label_file Input label file
+ * @param input_surface_file Input surface file
+ * @param output_label_file Output label file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
+ */
 function mris_sample_label(
     input_label_file: InputPathType,
     input_surface_file: InputPathType,
     output_label_file: string,
     runner: Runner | null = null,
 ): MrisSampleLabelOutputs {
-    /**
-     * This tool samples a label onto a surface model.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_label_file Input label file
-     * @param input_surface_file Input surface file
-     * @param output_label_file Output label file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_SAMPLE_LABEL_METADATA);
     const params = mris_sample_label_params(input_label_file, input_surface_file, output_label_file)
@@ -191,5 +191,8 @@ export {
       MrisSampleLabelOutputs,
       MrisSampleLabelParameters,
       mris_sample_label,
+      mris_sample_label_cargs,
+      mris_sample_label_execute,
+      mris_sample_label_outputs,
       mris_sample_label_params,
 };

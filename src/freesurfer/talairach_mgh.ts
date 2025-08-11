@@ -12,41 +12,41 @@ const TALAIRACH_MGH_METADATA: Metadata = {
 
 
 interface TalairachMghParameters {
-    "__STYXTYPE__": "talairach_mgh";
+    "@type": "freesurfer.talairach_mgh";
     "input_volume": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "talairach_mgh": talairach_mgh_cargs,
+        "freesurfer.talairach_mgh": talairach_mgh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "talairach_mgh": talairach_mgh_outputs,
+        "freesurfer.talairach_mgh": talairach_mgh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface TalairachMghOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file for the talairach transformation
+ * @param output_volume Output volume file for the talairach transformation
+ *
+ * @returns Parameter dictionary
+ */
 function talairach_mgh_params(
     input_volume: InputPathType,
     output_volume: string,
 ): TalairachMghParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file for the talairach transformation
-     * @param output_volume Output volume file for the talairach transformation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "talairach_mgh" as const,
+        "@type": "freesurfer.talairach_mgh" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
     };
@@ -90,18 +90,18 @@ function talairach_mgh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function talairach_mgh_cargs(
     params: TalairachMghParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("talairach_mgh");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -110,18 +110,18 @@ function talairach_mgh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function talairach_mgh_outputs(
     params: TalairachMghParameters,
     execution: Execution,
 ): TalairachMghOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TalairachMghOutputs = {
         root: execution.outputFile("."),
         transformed_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function talairach_mgh_outputs(
 }
 
 
+/**
+ * A tool for aligning brain volume with Talairach reference brain.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
+ */
 function talairach_mgh_execute(
     params: TalairachMghParameters,
     execution: Execution,
 ): TalairachMghOutputs {
-    /**
-     * A tool for aligning brain volume with Talairach reference brain.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
-     */
     params = execution.params(params)
     const cargs = talairach_mgh_cargs(params, execution)
     const ret = talairach_mgh_outputs(params, execution)
@@ -154,24 +154,24 @@ function talairach_mgh_execute(
 }
 
 
+/**
+ * A tool for aligning brain volume with Talairach reference brain.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file for the talairach transformation
+ * @param output_volume Output volume file for the talairach transformation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
+ */
 function talairach_mgh(
     input_volume: InputPathType,
     output_volume: string,
     runner: Runner | null = null,
 ): TalairachMghOutputs {
-    /**
-     * A tool for aligning brain volume with Talairach reference brain.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file for the talairach transformation
-     * @param output_volume Output volume file for the talairach transformation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TALAIRACH_MGH_METADATA);
     const params = talairach_mgh_params(input_volume, output_volume)
@@ -184,5 +184,8 @@ export {
       TalairachMghOutputs,
       TalairachMghParameters,
       talairach_mgh,
+      talairach_mgh_cargs,
+      talairach_mgh_execute,
+      talairach_mgh_outputs,
       talairach_mgh_params,
 };

@@ -12,7 +12,7 @@ const SURF_PROJ_METADATA: Metadata = {
 
 
 interface SurfProjParameters {
-    "__STYXTYPE__": "surf_proj";
+    "@type": "fsl.surf_proj";
     "data": InputPathType;
     "surface": InputPathType;
     "output_file": string;
@@ -26,35 +26,35 @@ interface SurfProjParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surf_proj": surf_proj_cargs,
+        "fsl.surf_proj": surf_proj_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surf_proj": surf_proj_outputs,
+        "fsl.surf_proj": surf_proj_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,22 @@ interface SurfProjOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data Data to project onto surface
+ * @param surface Surface file
+ * @param output_file Output file
+ * @param surface_reference Surface volume reference (default=same as data)
+ * @param transform Data to surface transform (default=Identity)
+ * @param meshspace Mesh space (default='caret')
+ * @param step_size Average over step (mm - default=1)
+ * @param direction If >0 goes towards brain (default=0 i.e. both directions)
+ * @param operation What to do with values: 'mean' (default), 'max', 'median', 'last'
+ * @param surface_output Output surface file, not ASCII matrix (valid only for scalars)
+ *
+ * @returns Parameter dictionary
+ */
 function surf_proj_params(
     data: InputPathType,
     surface: InputPathType,
@@ -93,24 +109,8 @@ function surf_proj_params(
     operation: string | null = null,
     surface_output: string | null = null,
 ): SurfProjParameters {
-    /**
-     * Build parameters.
-    
-     * @param data Data to project onto surface
-     * @param surface Surface file
-     * @param output_file Output file
-     * @param surface_reference Surface volume reference (default=same as data)
-     * @param transform Data to surface transform (default=Identity)
-     * @param meshspace Mesh space (default='caret')
-     * @param step_size Average over step (mm - default=1)
-     * @param direction If >0 goes towards brain (default=0 i.e. both directions)
-     * @param operation What to do with values: 'mean' (default), 'max', 'median', 'last'
-     * @param surface_output Output surface file, not ASCII matrix (valid only for scalars)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surf_proj" as const,
+        "@type": "fsl.surf_proj" as const,
         "data": data,
         "surface": surface,
         "output_file": output_file,
@@ -140,18 +140,18 @@ function surf_proj_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_proj_cargs(
     params: SurfProjParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("surf_proj");
     cargs.push(
@@ -212,18 +212,18 @@ function surf_proj_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_proj_outputs(
     params: SurfProjParameters,
     execution: Execution,
 ): SurfProjOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfProjOutputs = {
         root: execution.outputFile("."),
         projected_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -233,22 +233,22 @@ function surf_proj_outputs(
 }
 
 
+/**
+ * Projects data onto a surface mesh using specified parameters.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
+ */
 function surf_proj_execute(
     params: SurfProjParameters,
     execution: Execution,
 ): SurfProjOutputs {
-    /**
-     * Projects data onto a surface mesh using specified parameters.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_proj_cargs(params, execution)
     const ret = surf_proj_outputs(params, execution)
@@ -257,6 +257,27 @@ function surf_proj_execute(
 }
 
 
+/**
+ * Projects data onto a surface mesh using specified parameters.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param data Data to project onto surface
+ * @param surface Surface file
+ * @param output_file Output file
+ * @param surface_reference Surface volume reference (default=same as data)
+ * @param transform Data to surface transform (default=Identity)
+ * @param meshspace Mesh space (default='caret')
+ * @param step_size Average over step (mm - default=1)
+ * @param direction If >0 goes towards brain (default=0 i.e. both directions)
+ * @param operation What to do with values: 'mean' (default), 'max', 'median', 'last'
+ * @param surface_output Output surface file, not ASCII matrix (valid only for scalars)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
+ */
 function surf_proj(
     data: InputPathType,
     surface: InputPathType,
@@ -270,27 +291,6 @@ function surf_proj(
     surface_output: string | null = null,
     runner: Runner | null = null,
 ): SurfProjOutputs {
-    /**
-     * Projects data onto a surface mesh using specified parameters.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param data Data to project onto surface
-     * @param surface Surface file
-     * @param output_file Output file
-     * @param surface_reference Surface volume reference (default=same as data)
-     * @param transform Data to surface transform (default=Identity)
-     * @param meshspace Mesh space (default='caret')
-     * @param step_size Average over step (mm - default=1)
-     * @param direction If >0 goes towards brain (default=0 i.e. both directions)
-     * @param operation What to do with values: 'mean' (default), 'max', 'median', 'last'
-     * @param surface_output Output surface file, not ASCII matrix (valid only for scalars)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_PROJ_METADATA);
     const params = surf_proj_params(data, surface, output_file, surface_reference, transform, meshspace, step_size, direction, operation, surface_output)
@@ -303,5 +303,8 @@ export {
       SurfProjOutputs,
       SurfProjParameters,
       surf_proj,
+      surf_proj_cargs,
+      surf_proj_execute,
+      surf_proj_outputs,
       surf_proj_params,
 };

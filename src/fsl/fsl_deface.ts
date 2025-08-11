@@ -12,7 +12,7 @@ const FSL_DEFACE_METADATA: Metadata = {
 
 
 interface FslDefaceParameters {
-    "__STYXTYPE__": "fsl_deface";
+    "@type": "fsl.fsl_deface";
     "infile": InputPathType;
     "outfile": string;
     "cropped_defacing_flag": boolean;
@@ -29,35 +29,35 @@ interface FslDefaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_deface": fsl_deface_cargs,
+        "fsl.fsl_deface": fsl_deface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_deface": fsl_deface_outputs,
+        "fsl.fsl_deface": fsl_deface_outputs,
     };
     return outputsFuncs[t];
 }
@@ -108,6 +108,25 @@ interface FslDefaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input T1w image
+ * @param outfile Output defaced T1w image
+ * @param cropped_defacing_flag Apply the defacing to the cropped image instead of the original image
+ * @param defacing_mask Filename to save the defacing mask
+ * @param cropped_struc Filename to save the new cropped struct
+ * @param orig_to_std_mat Filename to save affine matrix from original struct to std
+ * @param orig_to_cropped_mat Filename to save affine matrix from original struct to cropped struct
+ * @param cropped_to_std_mat Filename to save affine matrix from cropped struct to std
+ * @param shift_nud Shift, in mm, x-, y- and z-directions, to shift face mask by (These matrices will only work if the input has been previously reoriented to std)
+ * @param fractional_intensity Fractional intensity for bet (0->1); default=0.5
+ * @param bias_correct_flag Bias-correct the input image (with fast)
+ * @param center_of_gravity Center-of-gravity for bet (voxels, not mm)
+ * @param qc_images Generate 2 pngs to show how the defacing worked for QC purposes
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_deface_params(
     infile: InputPathType,
     outfile: string,
@@ -123,27 +142,8 @@ function fsl_deface_params(
     center_of_gravity: Array<number> | null = null,
     qc_images: string | null = null,
 ): FslDefaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input T1w image
-     * @param outfile Output defaced T1w image
-     * @param cropped_defacing_flag Apply the defacing to the cropped image instead of the original image
-     * @param defacing_mask Filename to save the defacing mask
-     * @param cropped_struc Filename to save the new cropped struct
-     * @param orig_to_std_mat Filename to save affine matrix from original struct to std
-     * @param orig_to_cropped_mat Filename to save affine matrix from original struct to cropped struct
-     * @param cropped_to_std_mat Filename to save affine matrix from cropped struct to std
-     * @param shift_nud Shift, in mm, x-, y- and z-directions, to shift face mask by (These matrices will only work if the input has been previously reoriented to std)
-     * @param fractional_intensity Fractional intensity for bet (0->1); default=0.5
-     * @param bias_correct_flag Bias-correct the input image (with fast)
-     * @param center_of_gravity Center-of-gravity for bet (voxels, not mm)
-     * @param qc_images Generate 2 pngs to show how the defacing worked for QC purposes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_deface" as const,
+        "@type": "fsl.fsl_deface" as const,
         "infile": infile,
         "outfile": outfile,
         "cropped_defacing_flag": cropped_defacing_flag,
@@ -180,18 +180,18 @@ function fsl_deface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_deface_cargs(
     params: FslDefaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_deface");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -260,18 +260,18 @@ function fsl_deface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_deface_outputs(
     params: FslDefaceParameters,
     execution: Execution,
 ): FslDefaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslDefaceOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null), ".nii.gz"].join('')),
@@ -287,22 +287,22 @@ function fsl_deface_outputs(
 }
 
 
+/**
+ * Tool to deface a structural T1w image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
+ */
 function fsl_deface_execute(
     params: FslDefaceParameters,
     execution: Execution,
 ): FslDefaceOutputs {
-    /**
-     * Tool to deface a structural T1w image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_deface_cargs(params, execution)
     const ret = fsl_deface_outputs(params, execution)
@@ -311,6 +311,30 @@ function fsl_deface_execute(
 }
 
 
+/**
+ * Tool to deface a structural T1w image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input T1w image
+ * @param outfile Output defaced T1w image
+ * @param cropped_defacing_flag Apply the defacing to the cropped image instead of the original image
+ * @param defacing_mask Filename to save the defacing mask
+ * @param cropped_struc Filename to save the new cropped struct
+ * @param orig_to_std_mat Filename to save affine matrix from original struct to std
+ * @param orig_to_cropped_mat Filename to save affine matrix from original struct to cropped struct
+ * @param cropped_to_std_mat Filename to save affine matrix from cropped struct to std
+ * @param shift_nud Shift, in mm, x-, y- and z-directions, to shift face mask by (These matrices will only work if the input has been previously reoriented to std)
+ * @param fractional_intensity Fractional intensity for bet (0->1); default=0.5
+ * @param bias_correct_flag Bias-correct the input image (with fast)
+ * @param center_of_gravity Center-of-gravity for bet (voxels, not mm)
+ * @param qc_images Generate 2 pngs to show how the defacing worked for QC purposes
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
+ */
 function fsl_deface(
     infile: InputPathType,
     outfile: string,
@@ -327,30 +351,6 @@ function fsl_deface(
     qc_images: string | null = null,
     runner: Runner | null = null,
 ): FslDefaceOutputs {
-    /**
-     * Tool to deface a structural T1w image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input T1w image
-     * @param outfile Output defaced T1w image
-     * @param cropped_defacing_flag Apply the defacing to the cropped image instead of the original image
-     * @param defacing_mask Filename to save the defacing mask
-     * @param cropped_struc Filename to save the new cropped struct
-     * @param orig_to_std_mat Filename to save affine matrix from original struct to std
-     * @param orig_to_cropped_mat Filename to save affine matrix from original struct to cropped struct
-     * @param cropped_to_std_mat Filename to save affine matrix from cropped struct to std
-     * @param shift_nud Shift, in mm, x-, y- and z-directions, to shift face mask by (These matrices will only work if the input has been previously reoriented to std)
-     * @param fractional_intensity Fractional intensity for bet (0->1); default=0.5
-     * @param bias_correct_flag Bias-correct the input image (with fast)
-     * @param center_of_gravity Center-of-gravity for bet (voxels, not mm)
-     * @param qc_images Generate 2 pngs to show how the defacing worked for QC purposes
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_DEFACE_METADATA);
     const params = fsl_deface_params(infile, outfile, cropped_defacing_flag, defacing_mask, cropped_struc, orig_to_std_mat, orig_to_cropped_mat, cropped_to_std_mat, shift_nud, fractional_intensity, bias_correct_flag, center_of_gravity, qc_images)
@@ -363,5 +363,8 @@ export {
       FslDefaceOutputs,
       FslDefaceParameters,
       fsl_deface,
+      fsl_deface_cargs,
+      fsl_deface_execute,
+      fsl_deface_outputs,
       fsl_deface_params,
 };

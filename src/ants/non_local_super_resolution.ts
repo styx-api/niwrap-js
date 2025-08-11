@@ -12,7 +12,7 @@ const NON_LOCAL_SUPER_RESOLUTION_METADATA: Metadata = {
 
 
 interface NonLocalSuperResolutionParameters {
-    "__STYXTYPE__": "NonLocalSuperResolution";
+    "@type": "ants.NonLocalSuperResolution";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "interpolated_image"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface NonLocalSuperResolutionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "NonLocalSuperResolution": non_local_super_resolution_cargs,
+        "ants.NonLocalSuperResolution": non_local_super_resolution_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "NonLocalSuperResolution": non_local_super_resolution_outputs,
+        "ants.NonLocalSuperResolution": non_local_super_resolution_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface NonLocalSuperResolutionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image A low-resolution input image to be superresoluted.
+ * @param output The output consists of the noise corrected version of the input image. Optionally, one can also output the estimated noise image.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param interpolated_image An interpolated version of the low-resolution image (such as B-spline). Specify either this option or a high-resolution multi-modal counterpart (cf the -k option).
+ * @param reference_image A high-resolution reference multi-modal image. Assumed to be in the same space as the low-resolution input image. Specify either this option or an interpolated version (cf the -j option).
+ * @param patch_radius Patch radius. Default = 1x1x1.
+ * @param search_radius Search radius. Default = 3x3x3.
+ * @param intensity_difference_sigma Intensity difference sigma. Default = 1.0.
+ * @param patch_similarity_sigma Patch similarity sigma. Default = 1.0.
+ * @param scale_levels Scale levels. Default = 32x16x8x2x1.
+ * @param interpolation Several interpolation options are available in ITK.
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function non_local_super_resolution_params(
     input_image: InputPathType,
     output: string,
@@ -93,26 +111,8 @@ function non_local_super_resolution_params(
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
 ): NonLocalSuperResolutionParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image A low-resolution input image to be superresoluted.
-     * @param output The output consists of the noise corrected version of the input image. Optionally, one can also output the estimated noise image.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param interpolated_image An interpolated version of the low-resolution image (such as B-spline). Specify either this option or a high-resolution multi-modal counterpart (cf the -k option).
-     * @param reference_image A high-resolution reference multi-modal image. Assumed to be in the same space as the low-resolution input image. Specify either this option or an interpolated version (cf the -j option).
-     * @param patch_radius Patch radius. Default = 1x1x1.
-     * @param search_radius Search radius. Default = 3x3x3.
-     * @param intensity_difference_sigma Intensity difference sigma. Default = 1.0.
-     * @param patch_similarity_sigma Patch similarity sigma. Default = 1.0.
-     * @param scale_levels Scale levels. Default = 32x16x8x2x1.
-     * @param interpolation Several interpolation options are available in ITK.
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "NonLocalSuperResolution" as const,
+        "@type": "ants.NonLocalSuperResolution" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -150,18 +150,18 @@ function non_local_super_resolution_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function non_local_super_resolution_cargs(
     params: NonLocalSuperResolutionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("NonLocalSuperResolution");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -236,18 +236,18 @@ function non_local_super_resolution_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function non_local_super_resolution_outputs(
     params: NonLocalSuperResolutionParameters,
     execution: Execution,
 ): NonLocalSuperResolutionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: NonLocalSuperResolutionOutputs = {
         root: execution.outputFile("."),
         superresoluted_output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -256,22 +256,22 @@ function non_local_super_resolution_outputs(
 }
 
 
+/**
+ * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
+ */
 function non_local_super_resolution_execute(
     params: NonLocalSuperResolutionParameters,
     execution: Execution,
 ): NonLocalSuperResolutionOutputs {
-    /**
-     * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
-     */
     params = execution.params(params)
     const cargs = non_local_super_resolution_cargs(params, execution)
     const ret = non_local_super_resolution_outputs(params, execution)
@@ -280,6 +280,29 @@ function non_local_super_resolution_execute(
 }
 
 
+/**
+ * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_image A low-resolution input image to be superresoluted.
+ * @param output The output consists of the noise corrected version of the input image. Optionally, one can also output the estimated noise image.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param interpolated_image An interpolated version of the low-resolution image (such as B-spline). Specify either this option or a high-resolution multi-modal counterpart (cf the -k option).
+ * @param reference_image A high-resolution reference multi-modal image. Assumed to be in the same space as the low-resolution input image. Specify either this option or an interpolated version (cf the -j option).
+ * @param patch_radius Patch radius. Default = 1x1x1.
+ * @param search_radius Search radius. Default = 3x3x3.
+ * @param intensity_difference_sigma Intensity difference sigma. Default = 1.0.
+ * @param patch_similarity_sigma Patch similarity sigma. Default = 1.0.
+ * @param scale_levels Scale levels. Default = 32x16x8x2x1.
+ * @param interpolation Several interpolation options are available in ITK.
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
+ */
 function non_local_super_resolution(
     input_image: InputPathType,
     output: string,
@@ -295,29 +318,6 @@ function non_local_super_resolution(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): NonLocalSuperResolutionOutputs {
-    /**
-     * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_image A low-resolution input image to be superresoluted.
-     * @param output The output consists of the noise corrected version of the input image. Optionally, one can also output the estimated noise image.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param interpolated_image An interpolated version of the low-resolution image (such as B-spline). Specify either this option or a high-resolution multi-modal counterpart (cf the -k option).
-     * @param reference_image A high-resolution reference multi-modal image. Assumed to be in the same space as the low-resolution input image. Specify either this option or an interpolated version (cf the -j option).
-     * @param patch_radius Patch radius. Default = 1x1x1.
-     * @param search_radius Search radius. Default = 3x3x3.
-     * @param intensity_difference_sigma Intensity difference sigma. Default = 1.0.
-     * @param patch_similarity_sigma Patch similarity sigma. Default = 1.0.
-     * @param scale_levels Scale levels. Default = 32x16x8x2x1.
-     * @param interpolation Several interpolation options are available in ITK.
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(NON_LOCAL_SUPER_RESOLUTION_METADATA);
     const params = non_local_super_resolution_params(input_image, output, image_dimensionality, interpolated_image, reference_image, patch_radius, search_radius, intensity_difference_sigma, patch_similarity_sigma, scale_levels, interpolation, verbose)
@@ -330,5 +330,8 @@ export {
       NonLocalSuperResolutionOutputs,
       NonLocalSuperResolutionParameters,
       non_local_super_resolution,
+      non_local_super_resolution_cargs,
+      non_local_super_resolution_execute,
+      non_local_super_resolution_outputs,
       non_local_super_resolution_params,
 };

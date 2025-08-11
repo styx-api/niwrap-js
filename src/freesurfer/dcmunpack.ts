@@ -12,7 +12,7 @@ const DCMUNPACK_METADATA: Metadata = {
 
 
 interface DcmunpackParameters {
-    "__STYXTYPE__": "dcmunpack";
+    "@type": "freesurfer.dcmunpack";
     "src": string;
     "targ"?: string | null | undefined;
     "run"?: string | null | undefined;
@@ -54,33 +54,33 @@ interface DcmunpackParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dcmunpack": dcmunpack_cargs,
+        "freesurfer.dcmunpack": dcmunpack_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -100,6 +100,50 @@ interface DcmunpackOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src Dicom source directory. You can specify more than one.
+ * @param targ Output directory. Do not need to include when just getting information about what is in the directory.
+ * @param run Specify unpacking rules for a given run (series). Eg, "-run 3 bold nii f.nii".
+ * @param auto_runseq Save all scans in the targetdir as runo.seqname.format.
+ * @param keep_scouts Unpack series with 'scout' or 'setter' in the name.
+ * @param scanonly Only scan the directory and put result in file.
+ * @param one_per_dir Assume that there is only one dicom series in each subdir.
+ * @param ext Input extension (eg, dcm).
+ * @param pre Input prefix (i.e., input file name init string).
+ * @param pat Input pattern (i.e., string that occurs in the middle of file name).
+ * @param no_infodump Do not create the fname-infodump.dat file.
+ * @param generic Do not use FSFAST hierarchy.
+ * @param copy_only Only copy dicom files to output directory (implies -no-convert).
+ * @param no_convert Do not convert to output format.
+ * @param force_update Convert even if output is newer than the input dicom.
+ * @param max Print out max in given dicom file.
+ * @param base Report filename without path.
+ * @param key_string Put keystring before each run line (good for searching).
+ * @param index_out Save index of files to index.out.dat (for re-use).
+ * @param index_in Read index of files (can make things much faster on 2nd run).
+ * @param it_dicom Add -it dicom to mri_convert cmd line.
+ * @param no_exit_on_error Continue to unpack data even if there is an error in conversion.
+ * @param run_skip Skip a given run (good when using -auto-runseq).
+ * @param no_rescale_dicom Turn off DICOM rescaling based on tags (0028,1052) (0028,1053).
+ * @param rescale_dicom Turn DICOM rescaling on.
+ * @param no_dwi Turn off trying to read DWI parameters.
+ * @param iid Set -iid to mri_convert.
+ * @param ijd Set -ijd to mri_convert.
+ * @param ikd Set -ikd to mri_convert.
+ * @param extra_info Add session info to each line of the info file (pat, date, man, scan, field, serno).
+ * @param first_dicom Copy first dicom file into output folder.
+ * @param no_dcm2niix Turn off dcm2niix conversion.
+ * @param phase Add the string _phase to volumes that are phase images based on ImageType.
+ * @param fips Fips parameters: project, site, birnid, visit.
+ * @param fips_run Fips-run parameters: run paradigm.
+ * @param xml_only For fips, only create xml file, do not convert to output.
+ * @param log Log output to a file.
+ * @param debug Enable debug mode.
+ *
+ * @returns Parameter dictionary
+ */
 function dcmunpack_params(
     src: string,
     targ: string | null = null,
@@ -140,52 +184,8 @@ function dcmunpack_params(
     log: string | null = null,
     debug: boolean = false,
 ): DcmunpackParameters {
-    /**
-     * Build parameters.
-    
-     * @param src Dicom source directory. You can specify more than one.
-     * @param targ Output directory. Do not need to include when just getting information about what is in the directory.
-     * @param run Specify unpacking rules for a given run (series). Eg, "-run 3 bold nii f.nii".
-     * @param auto_runseq Save all scans in the targetdir as runo.seqname.format.
-     * @param keep_scouts Unpack series with 'scout' or 'setter' in the name.
-     * @param scanonly Only scan the directory and put result in file.
-     * @param one_per_dir Assume that there is only one dicom series in each subdir.
-     * @param ext Input extension (eg, dcm).
-     * @param pre Input prefix (i.e., input file name init string).
-     * @param pat Input pattern (i.e., string that occurs in the middle of file name).
-     * @param no_infodump Do not create the fname-infodump.dat file.
-     * @param generic Do not use FSFAST hierarchy.
-     * @param copy_only Only copy dicom files to output directory (implies -no-convert).
-     * @param no_convert Do not convert to output format.
-     * @param force_update Convert even if output is newer than the input dicom.
-     * @param max Print out max in given dicom file.
-     * @param base Report filename without path.
-     * @param key_string Put keystring before each run line (good for searching).
-     * @param index_out Save index of files to index.out.dat (for re-use).
-     * @param index_in Read index of files (can make things much faster on 2nd run).
-     * @param it_dicom Add -it dicom to mri_convert cmd line.
-     * @param no_exit_on_error Continue to unpack data even if there is an error in conversion.
-     * @param run_skip Skip a given run (good when using -auto-runseq).
-     * @param no_rescale_dicom Turn off DICOM rescaling based on tags (0028,1052) (0028,1053).
-     * @param rescale_dicom Turn DICOM rescaling on.
-     * @param no_dwi Turn off trying to read DWI parameters.
-     * @param iid Set -iid to mri_convert.
-     * @param ijd Set -ijd to mri_convert.
-     * @param ikd Set -ikd to mri_convert.
-     * @param extra_info Add session info to each line of the info file (pat, date, man, scan, field, serno).
-     * @param first_dicom Copy first dicom file into output folder.
-     * @param no_dcm2niix Turn off dcm2niix conversion.
-     * @param phase Add the string _phase to volumes that are phase images based on ImageType.
-     * @param fips Fips parameters: project, site, birnid, visit.
-     * @param fips_run Fips-run parameters: run paradigm.
-     * @param xml_only For fips, only create xml file, do not convert to output.
-     * @param log Log output to a file.
-     * @param debug Enable debug mode.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dcmunpack" as const,
+        "@type": "freesurfer.dcmunpack" as const,
         "src": src,
         "keep_scouts": keep_scouts,
         "one_per_dir": one_per_dir,
@@ -263,18 +263,18 @@ function dcmunpack_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dcmunpack_cargs(
     params: DcmunpackParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dcmunpack");
     cargs.push(
@@ -447,18 +447,18 @@ function dcmunpack_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dcmunpack_outputs(
     params: DcmunpackParameters,
     execution: Execution,
 ): DcmunpackOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DcmunpackOutputs = {
         root: execution.outputFile("."),
     };
@@ -466,22 +466,22 @@ function dcmunpack_outputs(
 }
 
 
+/**
+ * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
+ */
 function dcmunpack_execute(
     params: DcmunpackParameters,
     execution: Execution,
 ): DcmunpackOutputs {
-    /**
-     * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
-     */
     params = execution.params(params)
     const cargs = dcmunpack_cargs(params, execution)
     const ret = dcmunpack_outputs(params, execution)
@@ -490,6 +490,55 @@ function dcmunpack_execute(
 }
 
 
+/**
+ * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src Dicom source directory. You can specify more than one.
+ * @param targ Output directory. Do not need to include when just getting information about what is in the directory.
+ * @param run Specify unpacking rules for a given run (series). Eg, "-run 3 bold nii f.nii".
+ * @param auto_runseq Save all scans in the targetdir as runo.seqname.format.
+ * @param keep_scouts Unpack series with 'scout' or 'setter' in the name.
+ * @param scanonly Only scan the directory and put result in file.
+ * @param one_per_dir Assume that there is only one dicom series in each subdir.
+ * @param ext Input extension (eg, dcm).
+ * @param pre Input prefix (i.e., input file name init string).
+ * @param pat Input pattern (i.e., string that occurs in the middle of file name).
+ * @param no_infodump Do not create the fname-infodump.dat file.
+ * @param generic Do not use FSFAST hierarchy.
+ * @param copy_only Only copy dicom files to output directory (implies -no-convert).
+ * @param no_convert Do not convert to output format.
+ * @param force_update Convert even if output is newer than the input dicom.
+ * @param max Print out max in given dicom file.
+ * @param base Report filename without path.
+ * @param key_string Put keystring before each run line (good for searching).
+ * @param index_out Save index of files to index.out.dat (for re-use).
+ * @param index_in Read index of files (can make things much faster on 2nd run).
+ * @param it_dicom Add -it dicom to mri_convert cmd line.
+ * @param no_exit_on_error Continue to unpack data even if there is an error in conversion.
+ * @param run_skip Skip a given run (good when using -auto-runseq).
+ * @param no_rescale_dicom Turn off DICOM rescaling based on tags (0028,1052) (0028,1053).
+ * @param rescale_dicom Turn DICOM rescaling on.
+ * @param no_dwi Turn off trying to read DWI parameters.
+ * @param iid Set -iid to mri_convert.
+ * @param ijd Set -ijd to mri_convert.
+ * @param ikd Set -ikd to mri_convert.
+ * @param extra_info Add session info to each line of the info file (pat, date, man, scan, field, serno).
+ * @param first_dicom Copy first dicom file into output folder.
+ * @param no_dcm2niix Turn off dcm2niix conversion.
+ * @param phase Add the string _phase to volumes that are phase images based on ImageType.
+ * @param fips Fips parameters: project, site, birnid, visit.
+ * @param fips_run Fips-run parameters: run paradigm.
+ * @param xml_only For fips, only create xml file, do not convert to output.
+ * @param log Log output to a file.
+ * @param debug Enable debug mode.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
+ */
 function dcmunpack(
     src: string,
     targ: string | null = null,
@@ -531,55 +580,6 @@ function dcmunpack(
     debug: boolean = false,
     runner: Runner | null = null,
 ): DcmunpackOutputs {
-    /**
-     * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src Dicom source directory. You can specify more than one.
-     * @param targ Output directory. Do not need to include when just getting information about what is in the directory.
-     * @param run Specify unpacking rules for a given run (series). Eg, "-run 3 bold nii f.nii".
-     * @param auto_runseq Save all scans in the targetdir as runo.seqname.format.
-     * @param keep_scouts Unpack series with 'scout' or 'setter' in the name.
-     * @param scanonly Only scan the directory and put result in file.
-     * @param one_per_dir Assume that there is only one dicom series in each subdir.
-     * @param ext Input extension (eg, dcm).
-     * @param pre Input prefix (i.e., input file name init string).
-     * @param pat Input pattern (i.e., string that occurs in the middle of file name).
-     * @param no_infodump Do not create the fname-infodump.dat file.
-     * @param generic Do not use FSFAST hierarchy.
-     * @param copy_only Only copy dicom files to output directory (implies -no-convert).
-     * @param no_convert Do not convert to output format.
-     * @param force_update Convert even if output is newer than the input dicom.
-     * @param max Print out max in given dicom file.
-     * @param base Report filename without path.
-     * @param key_string Put keystring before each run line (good for searching).
-     * @param index_out Save index of files to index.out.dat (for re-use).
-     * @param index_in Read index of files (can make things much faster on 2nd run).
-     * @param it_dicom Add -it dicom to mri_convert cmd line.
-     * @param no_exit_on_error Continue to unpack data even if there is an error in conversion.
-     * @param run_skip Skip a given run (good when using -auto-runseq).
-     * @param no_rescale_dicom Turn off DICOM rescaling based on tags (0028,1052) (0028,1053).
-     * @param rescale_dicom Turn DICOM rescaling on.
-     * @param no_dwi Turn off trying to read DWI parameters.
-     * @param iid Set -iid to mri_convert.
-     * @param ijd Set -ijd to mri_convert.
-     * @param ikd Set -ikd to mri_convert.
-     * @param extra_info Add session info to each line of the info file (pat, date, man, scan, field, serno).
-     * @param first_dicom Copy first dicom file into output folder.
-     * @param no_dcm2niix Turn off dcm2niix conversion.
-     * @param phase Add the string _phase to volumes that are phase images based on ImageType.
-     * @param fips Fips parameters: project, site, birnid, visit.
-     * @param fips_run Fips-run parameters: run paradigm.
-     * @param xml_only For fips, only create xml file, do not convert to output.
-     * @param log Log output to a file.
-     * @param debug Enable debug mode.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DCMUNPACK_METADATA);
     const params = dcmunpack_params(src, targ, run, auto_runseq, keep_scouts, scanonly, one_per_dir, ext, pre, pat, no_infodump, generic, copy_only, no_convert, force_update, max, base, key_string, index_out, index_in, it_dicom, no_exit_on_error, run_skip, no_rescale_dicom, rescale_dicom, no_dwi, iid, ijd, ikd, extra_info, first_dicom, no_dcm2niix, phase, fips, fips_run, xml_only, log, debug)
@@ -592,5 +592,8 @@ export {
       DcmunpackOutputs,
       DcmunpackParameters,
       dcmunpack,
+      dcmunpack_cargs,
+      dcmunpack_execute,
+      dcmunpack_outputs,
       dcmunpack_params,
 };

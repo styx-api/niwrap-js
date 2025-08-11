@@ -12,7 +12,7 @@ const QUANTIFY_HASUBREGIONS_SH_METADATA: Metadata = {
 
 
 interface QuantifyHasubregionsShParameters {
-    "__STYXTYPE__": "quantifyHAsubregions.sh";
+    "@type": "freesurfer.quantifyHAsubregions.sh";
     "prefix": string;
     "suffix": string;
     "output_file": string;
@@ -20,35 +20,35 @@ interface QuantifyHasubregionsShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quantifyHAsubregions.sh": quantify_hasubregions_sh_cargs,
+        "freesurfer.quantifyHAsubregions.sh": quantify_hasubregions_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quantifyHAsubregions.sh": quantify_hasubregions_sh_outputs,
+        "freesurfer.quantifyHAsubregions.sh": quantify_hasubregions_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface QuantifyHasubregionsShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for the files to be processed.
+ * @param suffix Suffix for the files to be processed.
+ * @param output_file Output file name to store the results.
+ * @param subjects_directory Directory containing the subject data. If not provided, the current directory is used.
+ *
+ * @returns Parameter dictionary
+ */
 function quantify_hasubregions_sh_params(
     prefix: string,
     suffix: string,
     output_file: string,
     subjects_directory: string | null = null,
 ): QuantifyHasubregionsShParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for the files to be processed.
-     * @param suffix Suffix for the files to be processed.
-     * @param output_file Output file name to store the results.
-     * @param subjects_directory Directory containing the subject data. If not provided, the current directory is used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quantifyHAsubregions.sh" as const,
+        "@type": "freesurfer.quantifyHAsubregions.sh" as const,
         "prefix": prefix,
         "suffix": suffix,
         "output_file": output_file,
@@ -100,18 +100,18 @@ function quantify_hasubregions_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quantify_hasubregions_sh_cargs(
     params: QuantifyHasubregionsShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quantifyHAsubregions.sh");
     cargs.push((params["prefix"] ?? null));
@@ -124,18 +124,18 @@ function quantify_hasubregions_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quantify_hasubregions_sh_outputs(
     params: QuantifyHasubregionsShParameters,
     execution: Execution,
 ): QuantifyHasubregionsShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuantifyHasubregionsShOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -144,22 +144,22 @@ function quantify_hasubregions_sh_outputs(
 }
 
 
+/**
+ * Tool to quantify hippocampal subregions using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
+ */
 function quantify_hasubregions_sh_execute(
     params: QuantifyHasubregionsShParameters,
     execution: Execution,
 ): QuantifyHasubregionsShOutputs {
-    /**
-     * Tool to quantify hippocampal subregions using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
-     */
     params = execution.params(params)
     const cargs = quantify_hasubregions_sh_cargs(params, execution)
     const ret = quantify_hasubregions_sh_outputs(params, execution)
@@ -168,6 +168,21 @@ function quantify_hasubregions_sh_execute(
 }
 
 
+/**
+ * Tool to quantify hippocampal subregions using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param prefix Prefix for the files to be processed.
+ * @param suffix Suffix for the files to be processed.
+ * @param output_file Output file name to store the results.
+ * @param subjects_directory Directory containing the subject data. If not provided, the current directory is used.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
+ */
 function quantify_hasubregions_sh(
     prefix: string,
     suffix: string,
@@ -175,21 +190,6 @@ function quantify_hasubregions_sh(
     subjects_directory: string | null = null,
     runner: Runner | null = null,
 ): QuantifyHasubregionsShOutputs {
-    /**
-     * Tool to quantify hippocampal subregions using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param prefix Prefix for the files to be processed.
-     * @param suffix Suffix for the files to be processed.
-     * @param output_file Output file name to store the results.
-     * @param subjects_directory Directory containing the subject data. If not provided, the current directory is used.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUANTIFY_HASUBREGIONS_SH_METADATA);
     const params = quantify_hasubregions_sh_params(prefix, suffix, output_file, subjects_directory)
@@ -202,5 +202,8 @@ export {
       QuantifyHasubregionsShOutputs,
       QuantifyHasubregionsShParameters,
       quantify_hasubregions_sh,
+      quantify_hasubregions_sh_cargs,
+      quantify_hasubregions_sh_execute,
+      quantify_hasubregions_sh_outputs,
       quantify_hasubregions_sh_params,
 };

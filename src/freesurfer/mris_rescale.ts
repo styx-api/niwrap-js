@@ -12,41 +12,41 @@ const MRIS_RESCALE_METADATA: Metadata = {
 
 
 interface MrisRescaleParameters {
-    "__STYXTYPE__": "mris_rescale";
+    "@type": "freesurfer.mris_rescale";
     "input_surface": InputPathType;
     "output_surface": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_rescale": mris_rescale_cargs,
+        "freesurfer.mris_rescale": mris_rescale_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_rescale": mris_rescale_outputs,
+        "freesurfer.mris_rescale": mris_rescale_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface MrisRescaleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface The input surface file to be rescaled.
+ * @param output_surface The output surface file after rescaling.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_rescale_params(
     input_surface: InputPathType,
     output_surface: string,
 ): MrisRescaleParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface The input surface file to be rescaled.
-     * @param output_surface The output surface file after rescaling.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_rescale" as const,
+        "@type": "freesurfer.mris_rescale" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -90,18 +90,18 @@ function mris_rescale_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_rescale_cargs(
     params: MrisRescaleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_rescale");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -110,18 +110,18 @@ function mris_rescale_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_rescale_outputs(
     params: MrisRescaleParameters,
     execution: Execution,
 ): MrisRescaleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRescaleOutputs = {
         root: execution.outputFile("."),
         rescaled_output_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function mris_rescale_outputs(
 }
 
 
+/**
+ * This program will rescale a surface representation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
+ */
 function mris_rescale_execute(
     params: MrisRescaleParameters,
     execution: Execution,
 ): MrisRescaleOutputs {
-    /**
-     * This program will rescale a surface representation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_rescale_cargs(params, execution)
     const ret = mris_rescale_outputs(params, execution)
@@ -154,24 +154,24 @@ function mris_rescale_execute(
 }
 
 
+/**
+ * This program will rescale a surface representation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface The input surface file to be rescaled.
+ * @param output_surface The output surface file after rescaling.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
+ */
 function mris_rescale(
     input_surface: InputPathType,
     output_surface: string,
     runner: Runner | null = null,
 ): MrisRescaleOutputs {
-    /**
-     * This program will rescale a surface representation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface The input surface file to be rescaled.
-     * @param output_surface The output surface file after rescaling.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_RESCALE_METADATA);
     const params = mris_rescale_params(input_surface, output_surface)
@@ -184,5 +184,8 @@ export {
       MrisRescaleOutputs,
       MrisRescaleParameters,
       mris_rescale,
+      mris_rescale_cargs,
+      mris_rescale_execute,
+      mris_rescale_outputs,
       mris_rescale_params,
 };

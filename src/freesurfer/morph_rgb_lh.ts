@@ -12,38 +12,38 @@ const MORPH_RGB_LH_METADATA: Metadata = {
 
 
 interface MorphRgbLhParameters {
-    "__STYXTYPE__": "morph_rgb-lh";
+    "@type": "freesurfer.morph_rgb-lh";
     "subject_id": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_rgb-lh": morph_rgb_lh_cargs,
+        "freesurfer.morph_rgb-lh": morph_rgb_lh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MorphRgbLhOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id The subject ID to process. This refers to the sub-directory within $SUBJECTS_DIR containing the FreeSurfer processed data for the subject.
+ *
+ * @returns Parameter dictionary
+ */
 function morph_rgb_lh_params(
     subject_id: string,
 ): MorphRgbLhParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id The subject ID to process. This refers to the sub-directory within $SUBJECTS_DIR containing the FreeSurfer processed data for the subject.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_rgb-lh" as const,
+        "@type": "freesurfer.morph_rgb-lh" as const,
         "subject_id": subject_id,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_rgb_lh_cargs(
     params: MorphRgbLhParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_rgb-lh");
     cargs.push(
@@ -103,18 +103,18 @@ function morph_rgb_lh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_rgb_lh_outputs(
     params: MorphRgbLhParameters,
     execution: Execution,
 ): MorphRgbLhOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphRgbLhOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function morph_rgb_lh_outputs(
 }
 
 
+/**
+ * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphRgbLhOutputs`).
+ */
 function morph_rgb_lh_execute(
     params: MorphRgbLhParameters,
     execution: Execution,
 ): MorphRgbLhOutputs {
-    /**
-     * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphRgbLhOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_rgb_lh_cargs(params, execution)
     const ret = morph_rgb_lh_outputs(params, execution)
@@ -146,22 +146,22 @@ function morph_rgb_lh_execute(
 }
 
 
+/**
+ * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id The subject ID to process. This refers to the sub-directory within $SUBJECTS_DIR containing the FreeSurfer processed data for the subject.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphRgbLhOutputs`).
+ */
 function morph_rgb_lh(
     subject_id: string,
     runner: Runner | null = null,
 ): MorphRgbLhOutputs {
-    /**
-     * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id The subject ID to process. This refers to the sub-directory within $SUBJECTS_DIR containing the FreeSurfer processed data for the subject.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphRgbLhOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_RGB_LH_METADATA);
     const params = morph_rgb_lh_params(subject_id)
@@ -174,5 +174,8 @@ export {
       MorphRgbLhOutputs,
       MorphRgbLhParameters,
       morph_rgb_lh,
+      morph_rgb_lh_cargs,
+      morph_rgb_lh_execute,
+      morph_rgb_lh_outputs,
       morph_rgb_lh_params,
 };

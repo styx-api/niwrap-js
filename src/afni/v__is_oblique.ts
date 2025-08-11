@@ -12,40 +12,40 @@ const V__IS_OBLIQUE_METADATA: Metadata = {
 
 
 interface VIsObliqueParameters {
-    "__STYXTYPE__": "@isOblique";
+    "@type": "afni.@isOblique";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@isOblique": v__is_oblique_cargs,
+        "afni.@isOblique": v__is_oblique_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@isOblique": v__is_oblique_outputs,
+        "afni.@isOblique": v__is_oblique_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface VIsObliqueOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input file (e.g., Hello+orig.HEAD)
+ *
+ * @returns Parameter dictionary
+ */
 function v__is_oblique_params(
     infile: InputPathType,
 ): VIsObliqueParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input file (e.g., Hello+orig.HEAD)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@isOblique" as const,
+        "@type": "afni.@isOblique" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__is_oblique_cargs(
     params: VIsObliqueParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@isOblique");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -105,18 +105,18 @@ function v__is_oblique_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__is_oblique_outputs(
     params: VIsObliqueParameters,
     execution: Execution,
 ): VIsObliqueOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VIsObliqueOutputs = {
         root: execution.outputFile("."),
         result: execution.outputFile(["oblique_check_result.txt"].join('')),
@@ -125,22 +125,22 @@ function v__is_oblique_outputs(
 }
 
 
+/**
+ * Determine if a file is oblique or plumb.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
+ */
 function v__is_oblique_execute(
     params: VIsObliqueParameters,
     execution: Execution,
 ): VIsObliqueOutputs {
-    /**
-     * Determine if a file is oblique or plumb.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__is_oblique_cargs(params, execution)
     const ret = v__is_oblique_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__is_oblique_execute(
 }
 
 
+/**
+ * Determine if a file is oblique or plumb.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input file (e.g., Hello+orig.HEAD)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
+ */
 function v__is_oblique(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VIsObliqueOutputs {
-    /**
-     * Determine if a file is oblique or plumb.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input file (e.g., Hello+orig.HEAD)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__IS_OBLIQUE_METADATA);
     const params = v__is_oblique_params(infile)
@@ -177,5 +177,8 @@ export {
       VIsObliqueParameters,
       V__IS_OBLIQUE_METADATA,
       v__is_oblique,
+      v__is_oblique_cargs,
+      v__is_oblique_execute,
+      v__is_oblique_outputs,
       v__is_oblique_params,
 };

@@ -12,41 +12,41 @@ const PREWHITEN_METADATA: Metadata = {
 
 
 interface PrewhitenParameters {
-    "__STYXTYPE__": "prewhiten";
+    "@type": "fsl.prewhiten";
     "feat_directory": string;
     "output_directory"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "prewhiten": prewhiten_cargs,
+        "fsl.prewhiten": prewhiten_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "prewhiten": prewhiten_outputs,
+        "fsl.prewhiten": prewhiten_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface PrewhitenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_directory Input FEAT directory
+ * @param output_directory Change output directory from default of input FEAT directory
+ *
+ * @returns Parameter dictionary
+ */
 function prewhiten_params(
     feat_directory: string,
     output_directory: string | null = null,
 ): PrewhitenParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_directory Input FEAT directory
-     * @param output_directory Change output directory from default of input FEAT directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "prewhiten" as const,
+        "@type": "fsl.prewhiten" as const,
         "feat_directory": feat_directory,
     };
     if (output_directory !== null) {
@@ -92,18 +92,18 @@ function prewhiten_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function prewhiten_cargs(
     params: PrewhitenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("prewhiten");
     cargs.push((params["feat_directory"] ?? null));
@@ -117,18 +117,18 @@ function prewhiten_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function prewhiten_outputs(
     params: PrewhitenParameters,
     execution: Execution,
 ): PrewhitenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PrewhitenOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/*"].join('')) : null,
@@ -137,22 +137,22 @@ function prewhiten_outputs(
 }
 
 
+/**
+ * Prewhitening tool for FEAT directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
+ */
 function prewhiten_execute(
     params: PrewhitenParameters,
     execution: Execution,
 ): PrewhitenOutputs {
-    /**
-     * Prewhitening tool for FEAT directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
-     */
     params = execution.params(params)
     const cargs = prewhiten_cargs(params, execution)
     const ret = prewhiten_outputs(params, execution)
@@ -161,24 +161,24 @@ function prewhiten_execute(
 }
 
 
+/**
+ * Prewhitening tool for FEAT directories.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param feat_directory Input FEAT directory
+ * @param output_directory Change output directory from default of input FEAT directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
+ */
 function prewhiten(
     feat_directory: string,
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): PrewhitenOutputs {
-    /**
-     * Prewhitening tool for FEAT directories.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param feat_directory Input FEAT directory
-     * @param output_directory Change output directory from default of input FEAT directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PREWHITEN_METADATA);
     const params = prewhiten_params(feat_directory, output_directory)
@@ -191,5 +191,8 @@ export {
       PrewhitenOutputs,
       PrewhitenParameters,
       prewhiten,
+      prewhiten_cargs,
+      prewhiten_execute,
+      prewhiten_outputs,
       prewhiten_params,
 };

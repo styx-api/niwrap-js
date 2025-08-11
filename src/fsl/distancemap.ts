@@ -12,7 +12,7 @@ const DISTANCEMAP_METADATA: Metadata = {
 
 
 interface DistancemapParameters {
-    "__STYXTYPE__": "distancemap";
+    "@type": "fsl.distancemap";
     "input_image": InputPathType;
     "output_image": string;
     "mask_image"?: InputPathType | null | undefined;
@@ -26,35 +26,35 @@ interface DistancemapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "distancemap": distancemap_cargs,
+        "fsl.distancemap": distancemap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "distancemap": distancemap_outputs,
+        "fsl.distancemap": distancemap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface DistancemapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image filename (calc distance to non-zero voxels)
+ * @param output_image Output image filename
+ * @param mask_image Mask image filename (only calc values at these voxels)
+ * @param second_image Second image filename (calc closest distance of this and primary input image, using non-zero voxels, negative distances mean this secondary image is the closer one)
+ * @param local_maxima_image Local maxima output image filename
+ * @param segmented_image Segmented output image filename (unique value per segment is local maxima label)
+ * @param invert_flag Invert input image
+ * @param interpolate_values Filename for values to interpolate (sparse sampling interpolation)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function distancemap_params(
     input_image: InputPathType,
     output_image: string,
@@ -97,24 +113,8 @@ function distancemap_params(
     verbose_flag: boolean = false,
     help_flag: boolean = false,
 ): DistancemapParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image filename (calc distance to non-zero voxels)
-     * @param output_image Output image filename
-     * @param mask_image Mask image filename (only calc values at these voxels)
-     * @param second_image Second image filename (calc closest distance of this and primary input image, using non-zero voxels, negative distances mean this secondary image is the closer one)
-     * @param local_maxima_image Local maxima output image filename
-     * @param segmented_image Segmented output image filename (unique value per segment is local maxima label)
-     * @param invert_flag Invert input image
-     * @param interpolate_values Filename for values to interpolate (sparse sampling interpolation)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "distancemap" as const,
+        "@type": "fsl.distancemap" as const,
         "input_image": input_image,
         "output_image": output_image,
         "invert_flag": invert_flag,
@@ -140,18 +140,18 @@ function distancemap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function distancemap_cargs(
     params: DistancemapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("distancemap");
     cargs.push(
@@ -205,18 +205,18 @@ function distancemap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function distancemap_outputs(
     params: DistancemapParameters,
     execution: Execution,
 ): DistancemapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DistancemapOutputs = {
         root: execution.outputFile("."),
         output_distancemap: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -227,22 +227,22 @@ function distancemap_outputs(
 }
 
 
+/**
+ * A tool to calculate distance maps using FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
+ */
 function distancemap_execute(
     params: DistancemapParameters,
     execution: Execution,
 ): DistancemapOutputs {
-    /**
-     * A tool to calculate distance maps using FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
-     */
     params = execution.params(params)
     const cargs = distancemap_cargs(params, execution)
     const ret = distancemap_outputs(params, execution)
@@ -251,6 +251,27 @@ function distancemap_execute(
 }
 
 
+/**
+ * A tool to calculate distance maps using FSL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image filename (calc distance to non-zero voxels)
+ * @param output_image Output image filename
+ * @param mask_image Mask image filename (only calc values at these voxels)
+ * @param second_image Second image filename (calc closest distance of this and primary input image, using non-zero voxels, negative distances mean this secondary image is the closer one)
+ * @param local_maxima_image Local maxima output image filename
+ * @param segmented_image Segmented output image filename (unique value per segment is local maxima label)
+ * @param invert_flag Invert input image
+ * @param interpolate_values Filename for values to interpolate (sparse sampling interpolation)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param help_flag Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
+ */
 function distancemap(
     input_image: InputPathType,
     output_image: string,
@@ -264,27 +285,6 @@ function distancemap(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): DistancemapOutputs {
-    /**
-     * A tool to calculate distance maps using FSL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image filename (calc distance to non-zero voxels)
-     * @param output_image Output image filename
-     * @param mask_image Mask image filename (only calc values at these voxels)
-     * @param second_image Second image filename (calc closest distance of this and primary input image, using non-zero voxels, negative distances mean this secondary image is the closer one)
-     * @param local_maxima_image Local maxima output image filename
-     * @param segmented_image Segmented output image filename (unique value per segment is local maxima label)
-     * @param invert_flag Invert input image
-     * @param interpolate_values Filename for values to interpolate (sparse sampling interpolation)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param help_flag Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DISTANCEMAP_METADATA);
     const params = distancemap_params(input_image, output_image, mask_image, second_image, local_maxima_image, segmented_image, invert_flag, interpolate_values, verbose_flag, help_flag)
@@ -297,5 +297,8 @@ export {
       DistancemapOutputs,
       DistancemapParameters,
       distancemap,
+      distancemap_cargs,
+      distancemap_execute,
+      distancemap_outputs,
       distancemap_params,
 };

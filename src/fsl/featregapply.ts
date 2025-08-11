@@ -12,7 +12,7 @@ const FEATREGAPPLY_METADATA: Metadata = {
 
 
 interface FeatregapplyParameters {
-    "__STYXTYPE__": "featregapply";
+    "@type": "fsl.featregapply";
     "feat_directory": string;
     "force_flag": boolean;
     "cleanup_flag": boolean;
@@ -23,35 +23,35 @@ interface FeatregapplyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "featregapply": featregapply_cargs,
+        "fsl.featregapply": featregapply_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "featregapply": featregapply_outputs,
+        "fsl.featregapply": featregapply_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface FeatregapplyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param feat_directory FEAT directory from which registration will be taken
+ * @param force_flag Force featregapply to run even if it has already been run on this FEAT directory
+ * @param cleanup_flag Cleanup, i.e. remove all featregapply output
+ * @param upsample_trilinear Upsample functional-space image to standard space using trilinear interpolation
+ * @param upsample_spline Upsample functional-space image to standard space using spline (like sinc) interpolation
+ * @param standard_space_res Specify the standard space resolution for melodic (e.g. 3 for 3mm)
+ * @param exclude_filtered_func_flag Exclude filtered func when processing melodic directories (for FEAT directories filtered func is never processed)
+ *
+ * @returns Parameter dictionary
+ */
 function featregapply_params(
     feat_directory: string,
     force_flag: boolean = false,
@@ -83,21 +96,8 @@ function featregapply_params(
     standard_space_res: number | null = null,
     exclude_filtered_func_flag: boolean = false,
 ): FeatregapplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param feat_directory FEAT directory from which registration will be taken
-     * @param force_flag Force featregapply to run even if it has already been run on this FEAT directory
-     * @param cleanup_flag Cleanup, i.e. remove all featregapply output
-     * @param upsample_trilinear Upsample functional-space image to standard space using trilinear interpolation
-     * @param upsample_spline Upsample functional-space image to standard space using spline (like sinc) interpolation
-     * @param standard_space_res Specify the standard space resolution for melodic (e.g. 3 for 3mm)
-     * @param exclude_filtered_func_flag Exclude filtered func when processing melodic directories (for FEAT directories filtered func is never processed)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "featregapply" as const,
+        "@type": "fsl.featregapply" as const,
         "feat_directory": feat_directory,
         "force_flag": force_flag,
         "cleanup_flag": cleanup_flag,
@@ -116,18 +116,18 @@ function featregapply_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function featregapply_cargs(
     params: FeatregapplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("featregapply");
     cargs.push((params["feat_directory"] ?? null));
@@ -162,18 +162,18 @@ function featregapply_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function featregapply_outputs(
     params: FeatregapplyParameters,
     execution: Execution,
 ): FeatregapplyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FeatregapplyOutputs = {
         root: execution.outputFile("."),
         output_directory: execution.outputFile([(params["feat_directory"] ?? null), "/reg_standard"].join('')),
@@ -182,22 +182,22 @@ function featregapply_outputs(
 }
 
 
+/**
+ * Apply registration from FEAT analysis to other images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
+ */
 function featregapply_execute(
     params: FeatregapplyParameters,
     execution: Execution,
 ): FeatregapplyOutputs {
-    /**
-     * Apply registration from FEAT analysis to other images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
-     */
     params = execution.params(params)
     const cargs = featregapply_cargs(params, execution)
     const ret = featregapply_outputs(params, execution)
@@ -206,6 +206,24 @@ function featregapply_execute(
 }
 
 
+/**
+ * Apply registration from FEAT analysis to other images.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param feat_directory FEAT directory from which registration will be taken
+ * @param force_flag Force featregapply to run even if it has already been run on this FEAT directory
+ * @param cleanup_flag Cleanup, i.e. remove all featregapply output
+ * @param upsample_trilinear Upsample functional-space image to standard space using trilinear interpolation
+ * @param upsample_spline Upsample functional-space image to standard space using spline (like sinc) interpolation
+ * @param standard_space_res Specify the standard space resolution for melodic (e.g. 3 for 3mm)
+ * @param exclude_filtered_func_flag Exclude filtered func when processing melodic directories (for FEAT directories filtered func is never processed)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
+ */
 function featregapply(
     feat_directory: string,
     force_flag: boolean = false,
@@ -216,24 +234,6 @@ function featregapply(
     exclude_filtered_func_flag: boolean = false,
     runner: Runner | null = null,
 ): FeatregapplyOutputs {
-    /**
-     * Apply registration from FEAT analysis to other images.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param feat_directory FEAT directory from which registration will be taken
-     * @param force_flag Force featregapply to run even if it has already been run on this FEAT directory
-     * @param cleanup_flag Cleanup, i.e. remove all featregapply output
-     * @param upsample_trilinear Upsample functional-space image to standard space using trilinear interpolation
-     * @param upsample_spline Upsample functional-space image to standard space using spline (like sinc) interpolation
-     * @param standard_space_res Specify the standard space resolution for melodic (e.g. 3 for 3mm)
-     * @param exclude_filtered_func_flag Exclude filtered func when processing melodic directories (for FEAT directories filtered func is never processed)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FEATREGAPPLY_METADATA);
     const params = featregapply_params(feat_directory, force_flag, cleanup_flag, upsample_trilinear, upsample_spline, standard_space_res, exclude_filtered_func_flag)
@@ -246,5 +246,8 @@ export {
       FeatregapplyOutputs,
       FeatregapplyParameters,
       featregapply,
+      featregapply_cargs,
+      featregapply_execute,
+      featregapply_outputs,
       featregapply_params,
 };

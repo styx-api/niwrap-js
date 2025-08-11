@@ -12,39 +12,39 @@ const BASIL_VAR_METADATA: Metadata = {
 
 
 interface BasilVarParameters {
-    "__STYXTYPE__": "basil_var";
+    "@type": "fsl.basil_var";
     "results_dir": string;
     "mask_image": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "basil_var": basil_var_cargs,
+        "fsl.basil_var": basil_var_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface BasilVarOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param results_dir BASIL results directory
+ * @param mask_image Mask image
+ *
+ * @returns Parameter dictionary
+ */
 function basil_var_params(
     results_dir: string,
     mask_image: InputPathType,
 ): BasilVarParameters {
-    /**
-     * Build parameters.
-    
-     * @param results_dir BASIL results directory
-     * @param mask_image Mask image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "basil_var" as const,
+        "@type": "fsl.basil_var" as const,
         "results_dir": results_dir,
         "mask_image": mask_image,
     };
@@ -85,18 +85,18 @@ function basil_var_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function basil_var_cargs(
     params: BasilVarParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("basil_var");
     cargs.push(
@@ -111,18 +111,18 @@ function basil_var_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function basil_var_outputs(
     params: BasilVarParameters,
     execution: Execution,
 ): BasilVarOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BasilVarOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,22 +130,22 @@ function basil_var_outputs(
 }
 
 
+/**
+ * Variance calculator for BASIL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
+ */
 function basil_var_execute(
     params: BasilVarParameters,
     execution: Execution,
 ): BasilVarOutputs {
-    /**
-     * Variance calculator for BASIL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
-     */
     params = execution.params(params)
     const cargs = basil_var_cargs(params, execution)
     const ret = basil_var_outputs(params, execution)
@@ -154,24 +154,24 @@ function basil_var_execute(
 }
 
 
+/**
+ * Variance calculator for BASIL.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param results_dir BASIL results directory
+ * @param mask_image Mask image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
+ */
 function basil_var(
     results_dir: string,
     mask_image: InputPathType,
     runner: Runner | null = null,
 ): BasilVarOutputs {
-    /**
-     * Variance calculator for BASIL.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param results_dir BASIL results directory
-     * @param mask_image Mask image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BASIL_VAR_METADATA);
     const params = basil_var_params(results_dir, mask_image)
@@ -184,5 +184,8 @@ export {
       BasilVarOutputs,
       BasilVarParameters,
       basil_var,
+      basil_var_cargs,
+      basil_var_execute,
+      basil_var_outputs,
       basil_var_params,
 };

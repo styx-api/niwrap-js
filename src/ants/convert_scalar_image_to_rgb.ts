@@ -12,7 +12,7 @@ const CONVERT_SCALAR_IMAGE_TO_RGB_METADATA: Metadata = {
 
 
 interface ConvertScalarImageToRgbParameters {
-    "__STYXTYPE__": "ConvertScalarImageToRGB";
+    "@type": "ants.ConvertScalarImageToRGB";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
@@ -27,35 +27,35 @@ interface ConvertScalarImageToRgbParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvertScalarImageToRGB": convert_scalar_image_to_rgb_cargs,
+        "ants.ConvertScalarImageToRGB": convert_scalar_image_to_rgb_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ConvertScalarImageToRGB": convert_scalar_image_to_rgb_outputs,
+        "ants.ConvertScalarImageToRGB": convert_scalar_image_to_rgb_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,6 +78,23 @@ interface ConvertScalarImageToRgbOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the image (e.g., 2D or 3D).
+ * @param input_image The input scalar image to be converted to RGB.
+ * @param output_image The output RGB image file.
+ * @param mask The mask image to apply during conversion.
+ * @param colormap The colormap to use for RGB conversion.
+ * @param custom_colormap_file The file specifying the custom colormap (only used if colormap is 'custom').
+ * @param minimum_input The minimum input value for scaling.
+ * @param maximum_input The maximum input value for scaling.
+ * @param minimum_rgb_output The minimum output value for the RGB image. Defaults to 0.
+ * @param maximum_rgb_output The maximum output value for the RGB image. Defaults to 255.
+ * @param vtk_lookup_table The VTK lookup table to apply for additional customization.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_scalar_image_to_rgb_params(
     image_dimension: number,
     input_image: InputPathType,
@@ -91,25 +108,8 @@ function convert_scalar_image_to_rgb_params(
     maximum_rgb_output: number | null = 255,
     vtk_lookup_table: string | null = null,
 ): ConvertScalarImageToRgbParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the image (e.g., 2D or 3D).
-     * @param input_image The input scalar image to be converted to RGB.
-     * @param output_image The output RGB image file.
-     * @param mask The mask image to apply during conversion.
-     * @param colormap The colormap to use for RGB conversion.
-     * @param custom_colormap_file The file specifying the custom colormap (only used if colormap is 'custom').
-     * @param minimum_input The minimum input value for scaling.
-     * @param maximum_input The maximum input value for scaling.
-     * @param minimum_rgb_output The minimum output value for the RGB image. Defaults to 0.
-     * @param maximum_rgb_output The maximum output value for the RGB image. Defaults to 255.
-     * @param vtk_lookup_table The VTK lookup table to apply for additional customization.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvertScalarImageToRGB" as const,
+        "@type": "ants.ConvertScalarImageToRGB" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -138,18 +138,18 @@ function convert_scalar_image_to_rgb_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_scalar_image_to_rgb_cargs(
     params: ConvertScalarImageToRgbParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvertScalarImageToRGB");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -179,18 +179,18 @@ function convert_scalar_image_to_rgb_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_scalar_image_to_rgb_outputs(
     params: ConvertScalarImageToRgbParameters,
     execution: Execution,
 ): ConvertScalarImageToRgbOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertScalarImageToRgbOutputs = {
         root: execution.outputFile("."),
         output_rgb_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -199,22 +199,22 @@ function convert_scalar_image_to_rgb_outputs(
 }
 
 
+/**
+ * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
+ */
 function convert_scalar_image_to_rgb_execute(
     params: ConvertScalarImageToRgbParameters,
     execution: Execution,
 ): ConvertScalarImageToRgbOutputs {
-    /**
-     * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_scalar_image_to_rgb_cargs(params, execution)
     const ret = convert_scalar_image_to_rgb_outputs(params, execution)
@@ -223,6 +223,28 @@ function convert_scalar_image_to_rgb_execute(
 }
 
 
+/**
+ * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the image (e.g., 2D or 3D).
+ * @param input_image The input scalar image to be converted to RGB.
+ * @param output_image The output RGB image file.
+ * @param mask The mask image to apply during conversion.
+ * @param colormap The colormap to use for RGB conversion.
+ * @param custom_colormap_file The file specifying the custom colormap (only used if colormap is 'custom').
+ * @param minimum_input The minimum input value for scaling.
+ * @param maximum_input The maximum input value for scaling.
+ * @param minimum_rgb_output The minimum output value for the RGB image. Defaults to 0.
+ * @param maximum_rgb_output The maximum output value for the RGB image. Defaults to 255.
+ * @param vtk_lookup_table The VTK lookup table to apply for additional customization.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
+ */
 function convert_scalar_image_to_rgb(
     image_dimension: number,
     input_image: InputPathType,
@@ -237,28 +259,6 @@ function convert_scalar_image_to_rgb(
     vtk_lookup_table: string | null = null,
     runner: Runner | null = null,
 ): ConvertScalarImageToRgbOutputs {
-    /**
-     * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the image (e.g., 2D or 3D).
-     * @param input_image The input scalar image to be converted to RGB.
-     * @param output_image The output RGB image file.
-     * @param mask The mask image to apply during conversion.
-     * @param colormap The colormap to use for RGB conversion.
-     * @param custom_colormap_file The file specifying the custom colormap (only used if colormap is 'custom').
-     * @param minimum_input The minimum input value for scaling.
-     * @param maximum_input The maximum input value for scaling.
-     * @param minimum_rgb_output The minimum output value for the RGB image. Defaults to 0.
-     * @param maximum_rgb_output The maximum output value for the RGB image. Defaults to 255.
-     * @param vtk_lookup_table The VTK lookup table to apply for additional customization.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_SCALAR_IMAGE_TO_RGB_METADATA);
     const params = convert_scalar_image_to_rgb_params(image_dimension, input_image, output_image, mask, colormap, custom_colormap_file, minimum_input, maximum_input, minimum_rgb_output, maximum_rgb_output, vtk_lookup_table)
@@ -271,5 +271,8 @@ export {
       ConvertScalarImageToRgbOutputs,
       ConvertScalarImageToRgbParameters,
       convert_scalar_image_to_rgb,
+      convert_scalar_image_to_rgb_cargs,
+      convert_scalar_image_to_rgb_execute,
+      convert_scalar_image_to_rgb_outputs,
       convert_scalar_image_to_rgb_params,
 };

@@ -12,7 +12,7 @@ const GCA_APPLY_METADATA: Metadata = {
 
 
 interface GcaApplyParameters {
-    "__STYXTYPE__": "gca-apply";
+    "@type": "freesurfer.gca-apply";
     "gcafile": InputPathType;
     "subject": string;
     "nthreads"?: number | null | undefined;
@@ -34,35 +34,35 @@ interface GcaApplyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gca-apply": gca_apply_cargs,
+        "freesurfer.gca-apply": gca_apply_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gca-apply": gca_apply_outputs,
+        "freesurfer.gca-apply": gca_apply_outputs,
     };
     return outputsFuncs[t];
 }
@@ -101,6 +101,30 @@ interface GcaApplyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param gcafile GCA file
+ * @param subject Subject
+ * @param nthreads Number of OMP threads
+ * @param base Use gcabase for naming output files (default is basename gcafile)
+ * @param no_segstats Do not compute segstats
+ * @param subjects_dir Subjects directory
+ * @param dice_seg Specify dice coefficient computation parameters
+ * @param dice_file Specify dice coefficient computation file
+ * @param lta Use SrcLTA instead of running mri_em_register
+ * @param norm Use SrcNorm instead of running mri_ca_normalize
+ * @param input_mgz Input file, default is nu.mgz
+ * @param brainmask Brainmask file, default is brainmask.mgz
+ * @param output_dir Output directory (default: SUBJECTS_DIR/subject)
+ * @param no_v6labopts Do not include v6 command line options
+ * @param m3z_file M3Z file
+ * @param gca_rb_2016 Use RB_all_2016-05-10.vc700.gca
+ * @param force_update Force recreation of a file even if it is younger than its parents
+ * @param gcareg_iters Set to 1, only for testing
+ *
+ * @returns Parameter dictionary
+ */
 function gca_apply_params(
     gcafile: InputPathType,
     subject: string,
@@ -121,32 +145,8 @@ function gca_apply_params(
     force_update: boolean = false,
     gcareg_iters: number | null = null,
 ): GcaApplyParameters {
-    /**
-     * Build parameters.
-    
-     * @param gcafile GCA file
-     * @param subject Subject
-     * @param nthreads Number of OMP threads
-     * @param base Use gcabase for naming output files (default is basename gcafile)
-     * @param no_segstats Do not compute segstats
-     * @param subjects_dir Subjects directory
-     * @param dice_seg Specify dice coefficient computation parameters
-     * @param dice_file Specify dice coefficient computation file
-     * @param lta Use SrcLTA instead of running mri_em_register
-     * @param norm Use SrcNorm instead of running mri_ca_normalize
-     * @param input_mgz Input file, default is nu.mgz
-     * @param brainmask Brainmask file, default is brainmask.mgz
-     * @param output_dir Output directory (default: SUBJECTS_DIR/subject)
-     * @param no_v6labopts Do not include v6 command line options
-     * @param m3z_file M3Z file
-     * @param gca_rb_2016 Use RB_all_2016-05-10.vc700.gca
-     * @param force_update Force recreation of a file even if it is younger than its parents
-     * @param gcareg_iters Set to 1, only for testing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gca-apply" as const,
+        "@type": "freesurfer.gca-apply" as const,
         "gcafile": gcafile,
         "subject": subject,
         "no_segstats": no_segstats,
@@ -194,18 +194,18 @@ function gca_apply_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gca_apply_cargs(
     params: GcaApplyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gca-apply");
     cargs.push(
@@ -298,18 +298,18 @@ function gca_apply_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gca_apply_outputs(
     params: GcaApplyParameters,
     execution: Execution,
 ): GcaApplyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GcaApplyOutputs = {
         root: execution.outputFile("."),
         output_lta: ((params["base"] ?? null) !== null) ? execution.outputFile([(params["base"] ?? null), ".lta"].join('')) : null,
@@ -322,22 +322,22 @@ function gca_apply_outputs(
 }
 
 
+/**
+ * Applies a GCA, performing the steps of mri_em_register, mri_ca_normalize, mri_ca_register, and mri_ca_label. This script replicates the stages in recon-all without overwriting files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
+ */
 function gca_apply_execute(
     params: GcaApplyParameters,
     execution: Execution,
 ): GcaApplyOutputs {
-    /**
-     * Applies a GCA, performing the steps of mri_em_register, mri_ca_normalize, mri_ca_register, and mri_ca_label. This script replicates the stages in recon-all without overwriting files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
-     */
     params = execution.params(params)
     const cargs = gca_apply_cargs(params, execution)
     const ret = gca_apply_outputs(params, execution)
@@ -346,6 +346,35 @@ function gca_apply_execute(
 }
 
 
+/**
+ * Applies a GCA, performing the steps of mri_em_register, mri_ca_normalize, mri_ca_register, and mri_ca_label. This script replicates the stages in recon-all without overwriting files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param gcafile GCA file
+ * @param subject Subject
+ * @param nthreads Number of OMP threads
+ * @param base Use gcabase for naming output files (default is basename gcafile)
+ * @param no_segstats Do not compute segstats
+ * @param subjects_dir Subjects directory
+ * @param dice_seg Specify dice coefficient computation parameters
+ * @param dice_file Specify dice coefficient computation file
+ * @param lta Use SrcLTA instead of running mri_em_register
+ * @param norm Use SrcNorm instead of running mri_ca_normalize
+ * @param input_mgz Input file, default is nu.mgz
+ * @param brainmask Brainmask file, default is brainmask.mgz
+ * @param output_dir Output directory (default: SUBJECTS_DIR/subject)
+ * @param no_v6labopts Do not include v6 command line options
+ * @param m3z_file M3Z file
+ * @param gca_rb_2016 Use RB_all_2016-05-10.vc700.gca
+ * @param force_update Force recreation of a file even if it is younger than its parents
+ * @param gcareg_iters Set to 1, only for testing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
+ */
 function gca_apply(
     gcafile: InputPathType,
     subject: string,
@@ -367,35 +396,6 @@ function gca_apply(
     gcareg_iters: number | null = null,
     runner: Runner | null = null,
 ): GcaApplyOutputs {
-    /**
-     * Applies a GCA, performing the steps of mri_em_register, mri_ca_normalize, mri_ca_register, and mri_ca_label. This script replicates the stages in recon-all without overwriting files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param gcafile GCA file
-     * @param subject Subject
-     * @param nthreads Number of OMP threads
-     * @param base Use gcabase for naming output files (default is basename gcafile)
-     * @param no_segstats Do not compute segstats
-     * @param subjects_dir Subjects directory
-     * @param dice_seg Specify dice coefficient computation parameters
-     * @param dice_file Specify dice coefficient computation file
-     * @param lta Use SrcLTA instead of running mri_em_register
-     * @param norm Use SrcNorm instead of running mri_ca_normalize
-     * @param input_mgz Input file, default is nu.mgz
-     * @param brainmask Brainmask file, default is brainmask.mgz
-     * @param output_dir Output directory (default: SUBJECTS_DIR/subject)
-     * @param no_v6labopts Do not include v6 command line options
-     * @param m3z_file M3Z file
-     * @param gca_rb_2016 Use RB_all_2016-05-10.vc700.gca
-     * @param force_update Force recreation of a file even if it is younger than its parents
-     * @param gcareg_iters Set to 1, only for testing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GCA_APPLY_METADATA);
     const params = gca_apply_params(gcafile, subject, nthreads, base, no_segstats, subjects_dir, dice_seg, dice_file, lta, norm, input_mgz, brainmask, output_dir, no_v6labopts, m3z_file, gca_rb_2016, force_update, gcareg_iters)
@@ -408,5 +408,8 @@ export {
       GcaApplyOutputs,
       GcaApplyParameters,
       gca_apply,
+      gca_apply_cargs,
+      gca_apply_execute,
+      gca_apply_outputs,
       gca_apply_params,
 };

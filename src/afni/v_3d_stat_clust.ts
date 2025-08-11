@@ -12,7 +12,7 @@ const V_3D_STAT_CLUST_METADATA: Metadata = {
 
 
 interface V3dStatClustParameters {
-    "__STYXTYPE__": "3dStatClust";
+    "@type": "afni.3dStatClust";
     "prefix"?: string | null | undefined;
     "session_dir"?: string | null | undefined;
     "verbose": boolean;
@@ -25,35 +25,35 @@ interface V3dStatClustParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dStatClust": v_3d_stat_clust_cargs,
+        "afni.3dStatClust": v_3d_stat_clust_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dStatClust": v_3d_stat_clust_outputs,
+        "afni.3dStatClust": v_3d_stat_clust_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,21 @@ interface V3dStatClustOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param thresh Threshold statistic from file tname. Only voxels whose threshold statistic is greater than t in absolute value will be considered. If file tname contains more than 1 sub-brick, the threshold stat. sub-brick must be specified.
+ * @param nclust Maximum number of clusters for output (= number of sub-bricks in output dataset).
+ * @param datasets Parameter datasets.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param session_dir Use 'dir' for the output dataset session directory.
+ * @param verbose Print out verbose output as the program proceeds.
+ * @param dist_euc Calculate Euclidean distance between parameters
+ * @param dist_ind Statistical distance for independent parameters
+ * @param dist_cor Statistical distance for correlated parameters
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_stat_clust_params(
     thresh: string,
     nclust: number,
@@ -91,23 +106,8 @@ function v_3d_stat_clust_params(
     dist_ind: boolean = false,
     dist_cor: boolean = false,
 ): V3dStatClustParameters {
-    /**
-     * Build parameters.
-    
-     * @param thresh Threshold statistic from file tname. Only voxels whose threshold statistic is greater than t in absolute value will be considered. If file tname contains more than 1 sub-brick, the threshold stat. sub-brick must be specified.
-     * @param nclust Maximum number of clusters for output (= number of sub-bricks in output dataset).
-     * @param datasets Parameter datasets.
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param session_dir Use 'dir' for the output dataset session directory.
-     * @param verbose Print out verbose output as the program proceeds.
-     * @param dist_euc Calculate Euclidean distance between parameters
-     * @param dist_ind Statistical distance for independent parameters
-     * @param dist_cor Statistical distance for correlated parameters
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dStatClust" as const,
+        "@type": "afni.3dStatClust" as const,
         "verbose": verbose,
         "dist_euc": dist_euc,
         "dist_ind": dist_ind,
@@ -126,18 +126,18 @@ function v_3d_stat_clust_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_stat_clust_cargs(
     params: V3dStatClustParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dStatClust");
     if ((params["prefix"] ?? null) !== null) {
@@ -177,18 +177,18 @@ function v_3d_stat_clust_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_stat_clust_outputs(
     params: V3dStatClustParameters,
     execution: Execution,
 ): V3dStatClustOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dStatClustOutputs = {
         root: execution.outputFile("."),
         output_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
@@ -198,22 +198,22 @@ function v_3d_stat_clust_outputs(
 }
 
 
+/**
+ * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
+ */
 function v_3d_stat_clust_execute(
     params: V3dStatClustParameters,
     execution: Execution,
 ): V3dStatClustOutputs {
-    /**
-     * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_stat_clust_cargs(params, execution)
     const ret = v_3d_stat_clust_outputs(params, execution)
@@ -222,6 +222,26 @@ function v_3d_stat_clust_execute(
 }
 
 
+/**
+ * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param thresh Threshold statistic from file tname. Only voxels whose threshold statistic is greater than t in absolute value will be considered. If file tname contains more than 1 sub-brick, the threshold stat. sub-brick must be specified.
+ * @param nclust Maximum number of clusters for output (= number of sub-bricks in output dataset).
+ * @param datasets Parameter datasets.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param session_dir Use 'dir' for the output dataset session directory.
+ * @param verbose Print out verbose output as the program proceeds.
+ * @param dist_euc Calculate Euclidean distance between parameters
+ * @param dist_ind Statistical distance for independent parameters
+ * @param dist_cor Statistical distance for correlated parameters
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
+ */
 function v_3d_stat_clust(
     thresh: string,
     nclust: number,
@@ -234,26 +254,6 @@ function v_3d_stat_clust(
     dist_cor: boolean = false,
     runner: Runner | null = null,
 ): V3dStatClustOutputs {
-    /**
-     * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param thresh Threshold statistic from file tname. Only voxels whose threshold statistic is greater than t in absolute value will be considered. If file tname contains more than 1 sub-brick, the threshold stat. sub-brick must be specified.
-     * @param nclust Maximum number of clusters for output (= number of sub-bricks in output dataset).
-     * @param datasets Parameter datasets.
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param session_dir Use 'dir' for the output dataset session directory.
-     * @param verbose Print out verbose output as the program proceeds.
-     * @param dist_euc Calculate Euclidean distance between parameters
-     * @param dist_ind Statistical distance for independent parameters
-     * @param dist_cor Statistical distance for correlated parameters
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_STAT_CLUST_METADATA);
     const params = v_3d_stat_clust_params(thresh, nclust, datasets, prefix, session_dir, verbose, dist_euc, dist_ind, dist_cor)
@@ -266,5 +266,8 @@ export {
       V3dStatClustParameters,
       V_3D_STAT_CLUST_METADATA,
       v_3d_stat_clust,
+      v_3d_stat_clust_cargs,
+      v_3d_stat_clust_execute,
+      v_3d_stat_clust_outputs,
       v_3d_stat_clust_params,
 };

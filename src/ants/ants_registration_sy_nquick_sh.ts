@@ -12,7 +12,7 @@ const ANTS_REGISTRATION_SY_NQUICK_SH_METADATA: Metadata = {
 
 
 interface AntsRegistrationSyNquickShParameters {
-    "__STYXTYPE__": "antsRegistrationSyNQuick.sh";
+    "@type": "ants.antsRegistrationSyNQuick.sh";
     "dimensionality": 2 | 3;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
@@ -21,35 +21,35 @@ interface AntsRegistrationSyNquickShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_cargs,
+        "ants.antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_outputs,
+        "ants.antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,6 +84,17 @@ interface AntsRegistrationSyNquickShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimensionality Dimensionality of the images (2 or 3).
+ * @param fixed_image Fixed image to which the moving image is registered.
+ * @param moving_image Moving image that is registered to the fixed image.
+ * @param output_prefix Prefix for the output files.
+ * @param transform_type Type of transform: 's' for SyN, 'b' for B-spline SyN. Default is 's'.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_sy_nquick_sh_params(
     dimensionality: 2 | 3,
     fixed_image: InputPathType,
@@ -91,19 +102,8 @@ function ants_registration_sy_nquick_sh_params(
     output_prefix: string,
     transform_type: "s" | "b" | null = null,
 ): AntsRegistrationSyNquickShParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimensionality Dimensionality of the images (2 or 3).
-     * @param fixed_image Fixed image to which the moving image is registered.
-     * @param moving_image Moving image that is registered to the fixed image.
-     * @param output_prefix Prefix for the output files.
-     * @param transform_type Type of transform: 's' for SyN, 'b' for B-spline SyN. Default is 's'.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsRegistrationSyNQuick.sh" as const,
+        "@type": "ants.antsRegistrationSyNQuick.sh" as const,
         "dimensionality": dimensionality,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -116,18 +116,18 @@ function ants_registration_sy_nquick_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_sy_nquick_sh_cargs(
     params: AntsRegistrationSyNquickShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsRegistrationSyNQuick.sh");
     cargs.push(
@@ -153,18 +153,18 @@ function ants_registration_sy_nquick_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_registration_sy_nquick_sh_outputs(
     params: AntsRegistrationSyNquickShParameters,
     execution: Execution,
 ): AntsRegistrationSyNquickShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsRegistrationSyNquickShOutputs = {
         root: execution.outputFile("."),
         output_transform: execution.outputFile([(params["output_prefix"] ?? null), "0GenericAffine.mat"].join('')),
@@ -176,22 +176,22 @@ function ants_registration_sy_nquick_sh_outputs(
 }
 
 
+/**
+ * A script to quickly compute a SyN-based registration between two images using ANTS.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
+ */
 function ants_registration_sy_nquick_sh_execute(
     params: AntsRegistrationSyNquickShParameters,
     execution: Execution,
 ): AntsRegistrationSyNquickShOutputs {
-    /**
-     * A script to quickly compute a SyN-based registration between two images using ANTS.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_registration_sy_nquick_sh_cargs(params, execution)
     const ret = ants_registration_sy_nquick_sh_outputs(params, execution)
@@ -200,6 +200,22 @@ function ants_registration_sy_nquick_sh_execute(
 }
 
 
+/**
+ * A script to quickly compute a SyN-based registration between two images using ANTS.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimensionality Dimensionality of the images (2 or 3).
+ * @param fixed_image Fixed image to which the moving image is registered.
+ * @param moving_image Moving image that is registered to the fixed image.
+ * @param output_prefix Prefix for the output files.
+ * @param transform_type Type of transform: 's' for SyN, 'b' for B-spline SyN. Default is 's'.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
+ */
 function ants_registration_sy_nquick_sh(
     dimensionality: 2 | 3,
     fixed_image: InputPathType,
@@ -208,22 +224,6 @@ function ants_registration_sy_nquick_sh(
     transform_type: "s" | "b" | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationSyNquickShOutputs {
-    /**
-     * A script to quickly compute a SyN-based registration between two images using ANTS.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimensionality Dimensionality of the images (2 or 3).
-     * @param fixed_image Fixed image to which the moving image is registered.
-     * @param moving_image Moving image that is registered to the fixed image.
-     * @param output_prefix Prefix for the output files.
-     * @param transform_type Type of transform: 's' for SyN, 'b' for B-spline SyN. Default is 's'.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_REGISTRATION_SY_NQUICK_SH_METADATA);
     const params = ants_registration_sy_nquick_sh_params(dimensionality, fixed_image, moving_image, output_prefix, transform_type)
@@ -236,5 +236,8 @@ export {
       AntsRegistrationSyNquickShOutputs,
       AntsRegistrationSyNquickShParameters,
       ants_registration_sy_nquick_sh,
+      ants_registration_sy_nquick_sh_cargs,
+      ants_registration_sy_nquick_sh_execute,
+      ants_registration_sy_nquick_sh_outputs,
       ants_registration_sy_nquick_sh_params,
 };

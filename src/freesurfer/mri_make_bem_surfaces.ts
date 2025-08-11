@@ -12,41 +12,41 @@ const MRI_MAKE_BEM_SURFACES_METADATA: Metadata = {
 
 
 interface MriMakeBemSurfacesParameters {
-    "__STYXTYPE__": "mri_make_bem_surfaces";
+    "@type": "freesurfer.mri_make_bem_surfaces";
     "name": string;
     "mfile"?: InputPathType | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_make_bem_surfaces": mri_make_bem_surfaces_cargs,
+        "freesurfer.mri_make_bem_surfaces": mri_make_bem_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_make_bem_surfaces": mri_make_bem_surfaces_outputs,
+        "freesurfer.mri_make_bem_surfaces": mri_make_bem_surfaces_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface MriMakeBemSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param name The name of the subject or session to process.
+ * @param mfile Optional mfile parameter to provide additional settings.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_make_bem_surfaces_params(
     name: string,
     mfile: InputPathType | null = null,
 ): MriMakeBemSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param name The name of the subject or session to process.
-     * @param mfile Optional mfile parameter to provide additional settings.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_make_bem_surfaces" as const,
+        "@type": "freesurfer.mri_make_bem_surfaces" as const,
         "name": name,
     };
     if (mfile !== null) {
@@ -96,18 +96,18 @@ function mri_make_bem_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_make_bem_surfaces_cargs(
     params: MriMakeBemSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_make_bem_surfaces");
     cargs.push((params["name"] ?? null));
@@ -118,18 +118,18 @@ function mri_make_bem_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_make_bem_surfaces_outputs(
     params: MriMakeBemSurfacesParameters,
     execution: Execution,
 ): MriMakeBemSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriMakeBemSurfacesOutputs = {
         root: execution.outputFile("."),
         inner_skull_tri: execution.outputFile(["inner_skull.tri"].join('')),
@@ -139,22 +139,22 @@ function mri_make_bem_surfaces_outputs(
 }
 
 
+/**
+ * Tool to create Boundary Element Method (BEM) surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
+ */
 function mri_make_bem_surfaces_execute(
     params: MriMakeBemSurfacesParameters,
     execution: Execution,
 ): MriMakeBemSurfacesOutputs {
-    /**
-     * Tool to create Boundary Element Method (BEM) surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_make_bem_surfaces_cargs(params, execution)
     const ret = mri_make_bem_surfaces_outputs(params, execution)
@@ -163,24 +163,24 @@ function mri_make_bem_surfaces_execute(
 }
 
 
+/**
+ * Tool to create Boundary Element Method (BEM) surfaces.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param name The name of the subject or session to process.
+ * @param mfile Optional mfile parameter to provide additional settings.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
+ */
 function mri_make_bem_surfaces(
     name: string,
     mfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriMakeBemSurfacesOutputs {
-    /**
-     * Tool to create Boundary Element Method (BEM) surfaces.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param name The name of the subject or session to process.
-     * @param mfile Optional mfile parameter to provide additional settings.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_MAKE_BEM_SURFACES_METADATA);
     const params = mri_make_bem_surfaces_params(name, mfile)
@@ -193,5 +193,8 @@ export {
       MriMakeBemSurfacesOutputs,
       MriMakeBemSurfacesParameters,
       mri_make_bem_surfaces,
+      mri_make_bem_surfaces_cargs,
+      mri_make_bem_surfaces_execute,
+      mri_make_bem_surfaces_outputs,
       mri_make_bem_surfaces_params,
 };

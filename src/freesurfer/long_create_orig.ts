@@ -12,41 +12,41 @@ const LONG_CREATE_ORIG_METADATA: Metadata = {
 
 
 interface LongCreateOrigParameters {
-    "__STYXTYPE__": "long_create_orig";
+    "@type": "freesurfer.long_create_orig";
     "base_id": string;
     "tp_id"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "long_create_orig": long_create_orig_cargs,
+        "freesurfer.long_create_orig": long_create_orig_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "long_create_orig": long_create_orig_outputs,
+        "freesurfer.long_create_orig": long_create_orig_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface LongCreateOrigOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param base_id Base ID to be utilized in the process.
+ * @param tp_id Time point ID. If omitted, operates on all time points in base.
+ *
+ * @returns Parameter dictionary
+ */
 function long_create_orig_params(
     base_id: string,
     tp_id: string | null = null,
 ): LongCreateOrigParameters {
-    /**
-     * Build parameters.
-    
-     * @param base_id Base ID to be utilized in the process.
-     * @param tp_id Time point ID. If omitted, operates on all time points in base.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "long_create_orig" as const,
+        "@type": "freesurfer.long_create_orig" as const,
         "base_id": base_id,
     };
     if (tp_id !== null) {
@@ -92,18 +92,18 @@ function long_create_orig_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function long_create_orig_cargs(
     params: LongCreateOrigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("long_create_orig");
     cargs.push((params["base_id"] ?? null));
@@ -114,18 +114,18 @@ function long_create_orig_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function long_create_orig_outputs(
     params: LongCreateOrigParameters,
     execution: Execution,
 ): LongCreateOrigOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LongCreateOrigOutputs = {
         root: execution.outputFile("."),
         output_directory: execution.outputFile(["<SUBJECTS_DIR>/<base-id>/longtp/<tp-id>"].join('')),
@@ -134,22 +134,22 @@ function long_create_orig_outputs(
 }
 
 
+/**
+ * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
+ */
 function long_create_orig_execute(
     params: LongCreateOrigParameters,
     execution: Execution,
 ): LongCreateOrigOutputs {
-    /**
-     * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
-     */
     params = execution.params(params)
     const cargs = long_create_orig_cargs(params, execution)
     const ret = long_create_orig_outputs(params, execution)
@@ -158,24 +158,24 @@ function long_create_orig_execute(
 }
 
 
+/**
+ * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param base_id Base ID to be utilized in the process.
+ * @param tp_id Time point ID. If omitted, operates on all time points in base.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
+ */
 function long_create_orig(
     base_id: string,
     tp_id: string | null = null,
     runner: Runner | null = null,
 ): LongCreateOrigOutputs {
-    /**
-     * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param base_id Base ID to be utilized in the process.
-     * @param tp_id Time point ID. If omitted, operates on all time points in base.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LONG_CREATE_ORIG_METADATA);
     const params = long_create_orig_params(base_id, tp_id)
@@ -188,5 +188,8 @@ export {
       LongCreateOrigOutputs,
       LongCreateOrigParameters,
       long_create_orig,
+      long_create_orig_cargs,
+      long_create_orig_execute,
+      long_create_orig_outputs,
       long_create_orig_params,
 };

@@ -12,42 +12,42 @@ const MAKE_HEMI_MASK_METADATA: Metadata = {
 
 
 interface MakeHemiMaskParameters {
-    "__STYXTYPE__": "make_hemi_mask";
+    "@type": "freesurfer.make_hemi_mask";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_hemi_mask": make_hemi_mask_cargs,
+        "freesurfer.make_hemi_mask": make_hemi_mask_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_hemi_mask": make_hemi_mask_outputs,
+        "freesurfer.make_hemi_mask": make_hemi_mask_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MakeHemiMaskOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi Hemisphere to keep ('lh' for left hemisphere, 'rh' for right hemisphere)
+ * @param input_file Input MRI volume file (e.g. input.mgz)
+ * @param output_file Output masked MRI volume file (e.g. output.mgz)
+ *
+ * @returns Parameter dictionary
+ */
 function make_hemi_mask_params(
     hemi: string,
     input_file: InputPathType,
     output_file: string,
 ): MakeHemiMaskParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi Hemisphere to keep ('lh' for left hemisphere, 'rh' for right hemisphere)
-     * @param input_file Input MRI volume file (e.g. input.mgz)
-     * @param output_file Output masked MRI volume file (e.g. output.mgz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_hemi_mask" as const,
+        "@type": "freesurfer.make_hemi_mask" as const,
         "hemi": hemi,
         "input_file": input_file,
         "output_file": output_file,
@@ -94,18 +94,18 @@ function make_hemi_mask_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_hemi_mask_cargs(
     params: MakeHemiMaskParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_hemi_mask");
     cargs.push((params["hemi"] ?? null));
@@ -115,18 +115,18 @@ function make_hemi_mask_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_hemi_mask_outputs(
     params: MakeHemiMaskParameters,
     execution: Execution,
 ): MakeHemiMaskOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeHemiMaskOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function make_hemi_mask_outputs(
 }
 
 
+/**
+ * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
+ */
 function make_hemi_mask_execute(
     params: MakeHemiMaskParameters,
     execution: Execution,
 ): MakeHemiMaskOutputs {
-    /**
-     * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_hemi_mask_cargs(params, execution)
     const ret = make_hemi_mask_outputs(params, execution)
@@ -159,26 +159,26 @@ function make_hemi_mask_execute(
 }
 
 
+/**
+ * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi Hemisphere to keep ('lh' for left hemisphere, 'rh' for right hemisphere)
+ * @param input_file Input MRI volume file (e.g. input.mgz)
+ * @param output_file Output masked MRI volume file (e.g. output.mgz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
+ */
 function make_hemi_mask(
     hemi: string,
     input_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
 ): MakeHemiMaskOutputs {
-    /**
-     * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi Hemisphere to keep ('lh' for left hemisphere, 'rh' for right hemisphere)
-     * @param input_file Input MRI volume file (e.g. input.mgz)
-     * @param output_file Output masked MRI volume file (e.g. output.mgz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_HEMI_MASK_METADATA);
     const params = make_hemi_mask_params(hemi, input_file, output_file)
@@ -191,5 +191,8 @@ export {
       MakeHemiMaskOutputs,
       MakeHemiMaskParameters,
       make_hemi_mask,
+      make_hemi_mask_cargs,
+      make_hemi_mask_execute,
+      make_hemi_mask_outputs,
       make_hemi_mask_params,
 };

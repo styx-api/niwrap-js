@@ -12,7 +12,7 @@ const DMRI_PATHSTATS_METADATA: Metadata = {
 
 
 interface DmriPathstatsParameters {
-    "__STYXTYPE__": "dmri_pathstats";
+    "@type": "freesurfer.dmri_pathstats";
     "intrk": InputPathType;
     "rois"?: Array<InputPathType> | null | undefined;
     "intrc": InputPathType;
@@ -35,35 +35,35 @@ interface DmriPathstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_pathstats": dmri_pathstats_cargs,
+        "freesurfer.dmri_pathstats": dmri_pathstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_pathstats": dmri_pathstats_outputs,
+        "freesurfer.dmri_pathstats": dmri_pathstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,31 @@ interface DmriPathstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param intrk Input .trk file
+ * @param intrc Input tracula directory
+ * @param rois Input labeling ROIs for .trk file (optional)
+ * @param meas Input microstructural measure volume(s) (optional)
+ * @param measname Name(s) of microstructural measure(s) (as many as volumes)
+ * @param dtbase Base name of input dtifit volumes (optional)
+ * @param path Name of pathway (optional, written to output files)
+ * @param subj Name of subject (optional, written to output files)
+ * @param out Output text file for overall path measures
+ * @param outvox Output text file for voxel-by-voxel measures along path (optional)
+ * @param median Output .trk file of median streamline (optional)
+ * @param ends Base name of output volumes of streamline ends (optional)
+ * @param ref Reference volume (needed only if using --ends without --dtbase)
+ * @param pthr Lower threshold on path posterior distribution, as a portion of the maximum (range: 0-1, default: 0.2)
+ * @param fthr Lower threshold on FA (range: 0-1, default: no threshold)
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_pathstats_params(
     intrk: InputPathType,
     intrc: InputPathType,
@@ -115,33 +140,8 @@ function dmri_pathstats_params(
     help: boolean = false,
     version: boolean = false,
 ): DmriPathstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param intrk Input .trk file
-     * @param intrc Input tracula directory
-     * @param rois Input labeling ROIs for .trk file (optional)
-     * @param meas Input microstructural measure volume(s) (optional)
-     * @param measname Name(s) of microstructural measure(s) (as many as volumes)
-     * @param dtbase Base name of input dtifit volumes (optional)
-     * @param path Name of pathway (optional, written to output files)
-     * @param subj Name of subject (optional, written to output files)
-     * @param out Output text file for overall path measures
-     * @param outvox Output text file for voxel-by-voxel measures along path (optional)
-     * @param median Output .trk file of median streamline (optional)
-     * @param ends Base name of output volumes of streamline ends (optional)
-     * @param ref Reference volume (needed only if using --ends without --dtbase)
-     * @param pthr Lower threshold on path posterior distribution, as a portion of the maximum (range: 0-1, default: 0.2)
-     * @param fthr Lower threshold on FA (range: 0-1, default: no threshold)
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_pathstats" as const,
+        "@type": "freesurfer.dmri_pathstats" as const,
         "intrk": intrk,
         "intrc": intrc,
         "debug": debug,
@@ -192,18 +192,18 @@ function dmri_pathstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_pathstats_cargs(
     params: DmriPathstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_pathstats");
     cargs.push(
@@ -308,18 +308,18 @@ function dmri_pathstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_pathstats_outputs(
     params: DmriPathstatsParameters,
     execution: Execution,
 ): DmriPathstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriPathstatsOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null)].join('')) : null,
@@ -330,22 +330,22 @@ function dmri_pathstats_outputs(
 }
 
 
+/**
+ * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
+ */
 function dmri_pathstats_execute(
     params: DmriPathstatsParameters,
     execution: Execution,
 ): DmriPathstatsOutputs {
-    /**
-     * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_pathstats_cargs(params, execution)
     const ret = dmri_pathstats_outputs(params, execution)
@@ -354,6 +354,36 @@ function dmri_pathstats_execute(
 }
 
 
+/**
+ * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param intrk Input .trk file
+ * @param intrc Input tracula directory
+ * @param rois Input labeling ROIs for .trk file (optional)
+ * @param meas Input microstructural measure volume(s) (optional)
+ * @param measname Name(s) of microstructural measure(s) (as many as volumes)
+ * @param dtbase Base name of input dtifit volumes (optional)
+ * @param path Name of pathway (optional, written to output files)
+ * @param subj Name of subject (optional, written to output files)
+ * @param out Output text file for overall path measures
+ * @param outvox Output text file for voxel-by-voxel measures along path (optional)
+ * @param median Output .trk file of median streamline (optional)
+ * @param ends Base name of output volumes of streamline ends (optional)
+ * @param ref Reference volume (needed only if using --ends without --dtbase)
+ * @param pthr Lower threshold on path posterior distribution, as a portion of the maximum (range: 0-1, default: 0.2)
+ * @param fthr Lower threshold on FA (range: 0-1, default: no threshold)
+ * @param debug Turn on debugging
+ * @param checkopts Don't run anything, just check options and exit
+ * @param help Print out information on how to use this program
+ * @param version Print out version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
+ */
 function dmri_pathstats(
     intrk: InputPathType,
     intrc: InputPathType,
@@ -376,36 +406,6 @@ function dmri_pathstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriPathstatsOutputs {
-    /**
-     * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param intrk Input .trk file
-     * @param intrc Input tracula directory
-     * @param rois Input labeling ROIs for .trk file (optional)
-     * @param meas Input microstructural measure volume(s) (optional)
-     * @param measname Name(s) of microstructural measure(s) (as many as volumes)
-     * @param dtbase Base name of input dtifit volumes (optional)
-     * @param path Name of pathway (optional, written to output files)
-     * @param subj Name of subject (optional, written to output files)
-     * @param out Output text file for overall path measures
-     * @param outvox Output text file for voxel-by-voxel measures along path (optional)
-     * @param median Output .trk file of median streamline (optional)
-     * @param ends Base name of output volumes of streamline ends (optional)
-     * @param ref Reference volume (needed only if using --ends without --dtbase)
-     * @param pthr Lower threshold on path posterior distribution, as a portion of the maximum (range: 0-1, default: 0.2)
-     * @param fthr Lower threshold on FA (range: 0-1, default: no threshold)
-     * @param debug Turn on debugging
-     * @param checkopts Don't run anything, just check options and exit
-     * @param help Print out information on how to use this program
-     * @param version Print out version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_PATHSTATS_METADATA);
     const params = dmri_pathstats_params(intrk, intrc, rois, meas, measname, dtbase, path, subj, out, outvox, median, ends, ref, pthr, fthr, debug, checkopts, help, version)
@@ -418,5 +418,8 @@ export {
       DmriPathstatsOutputs,
       DmriPathstatsParameters,
       dmri_pathstats,
+      dmri_pathstats_cargs,
+      dmri_pathstats_execute,
+      dmri_pathstats_outputs,
       dmri_pathstats_params,
 };

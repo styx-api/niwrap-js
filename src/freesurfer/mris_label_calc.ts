@@ -12,7 +12,7 @@ const MRIS_LABEL_CALC_METADATA: Metadata = {
 
 
 interface MrisLabelCalcParameters {
-    "__STYXTYPE__": "mris_label_calc";
+    "@type": "freesurfer.mris_label_calc";
     "command": "union" | "intersect" | "invert" | "erode" | "dilate";
     "input1": InputPathType;
     "input2": InputPathType;
@@ -21,35 +21,35 @@ interface MrisLabelCalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_label_calc": mris_label_calc_cargs,
+        "freesurfer.mris_label_calc": mris_label_calc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_label_calc": mris_label_calc_outputs,
+        "freesurfer.mris_label_calc": mris_label_calc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MrisLabelCalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param command Command to perform on input labels
+ * @param input1 First input label file
+ * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
+ * @param output Output label file
+ * @param iterations Number of times to erode or dilate label
+ *
+ * @returns Parameter dictionary
+ */
 function mris_label_calc_params(
     command: "union" | "intersect" | "invert" | "erode" | "dilate",
     input1: InputPathType,
@@ -79,19 +90,8 @@ function mris_label_calc_params(
     output: string,
     iterations: number | null = null,
 ): MrisLabelCalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param command Command to perform on input labels
-     * @param input1 First input label file
-     * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
-     * @param output Output label file
-     * @param iterations Number of times to erode or dilate label
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_label_calc" as const,
+        "@type": "freesurfer.mris_label_calc" as const,
         "command": command,
         "input1": input1,
         "input2": input2,
@@ -104,18 +104,18 @@ function mris_label_calc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_label_calc_cargs(
     params: MrisLabelCalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_label_calc");
     cargs.push((params["command"] ?? null));
@@ -132,18 +132,18 @@ function mris_label_calc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_label_calc_outputs(
     params: MrisLabelCalcParameters,
     execution: Execution,
 ): MrisLabelCalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisLabelCalcOutputs = {
         root: execution.outputFile("."),
         output_label: execution.outputFile([(params["output"] ?? null), ".label"].join('')),
@@ -152,22 +152,22 @@ function mris_label_calc_outputs(
 }
 
 
+/**
+ * Tool for surface label calculations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
+ */
 function mris_label_calc_execute(
     params: MrisLabelCalcParameters,
     execution: Execution,
 ): MrisLabelCalcOutputs {
-    /**
-     * Tool for surface label calculations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_label_calc_cargs(params, execution)
     const ret = mris_label_calc_outputs(params, execution)
@@ -176,6 +176,22 @@ function mris_label_calc_execute(
 }
 
 
+/**
+ * Tool for surface label calculations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param command Command to perform on input labels
+ * @param input1 First input label file
+ * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
+ * @param output Output label file
+ * @param iterations Number of times to erode or dilate label
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
+ */
 function mris_label_calc(
     command: "union" | "intersect" | "invert" | "erode" | "dilate",
     input1: InputPathType,
@@ -184,22 +200,6 @@ function mris_label_calc(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisLabelCalcOutputs {
-    /**
-     * Tool for surface label calculations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param command Command to perform on input labels
-     * @param input1 First input label file
-     * @param input2 Second input label file (used for 'invert', 'erode', 'dilate' operations)
-     * @param output Output label file
-     * @param iterations Number of times to erode or dilate label
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LABEL_CALC_METADATA);
     const params = mris_label_calc_params(command, input1, input2, output, iterations)
@@ -212,5 +212,8 @@ export {
       MrisLabelCalcOutputs,
       MrisLabelCalcParameters,
       mris_label_calc,
+      mris_label_calc_cargs,
+      mris_label_calc_execute,
+      mris_label_calc_outputs,
       mris_label_calc_params,
 };

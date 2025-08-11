@@ -12,7 +12,7 @@ const PARC_ATLAS_JACKKNIFE_TEST_METADATA: Metadata = {
 
 
 interface ParcAtlasJackknifeTestParameters {
-    "__STYXTYPE__": "parc_atlas_jackknife_test";
+    "@type": "freesurfer.parc_atlas_jackknife_test";
     "register": boolean;
     "reg_dist"?: string | null | undefined;
     "reg_append"?: string | null | undefined;
@@ -28,35 +28,35 @@ interface ParcAtlasJackknifeTestParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "parc_atlas_jackknife_test": parc_atlas_jackknife_test_cargs,
+        "freesurfer.parc_atlas_jackknife_test": parc_atlas_jackknife_test_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "parc_atlas_jackknife_test": parc_atlas_jackknife_test_outputs,
+        "freesurfer.parc_atlas_jackknife_test": parc_atlas_jackknife_test_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface ParcAtlasJackknifeTestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param register Run mris_register: creates .sphere.reg files
+ * @param reg_dist Run mris_register with '-dist <arg>' flag
+ * @param reg_append Append <string> to end of ?h.sphere.reg
+ * @param reg_copy Copy ?h.sphere.reg<string> ?h.sphere.reg
+ * @param train Run mris_ca_train: creates .gcs files
+ * @param classify Run mris_ca_label: creates .annot files
+ * @param test Run mris_compute_parc_overlap
+ * @param all Run train, classify, and test
+ * @param subjects_dir Override default subjects directory
+ * @param freesurfer_home Source a new FREESURFER_HOME
+ * @param binaries_path Specify override path to binaries
+ * @param dontrun Don't execute the commands
+ *
+ * @returns Parameter dictionary
+ */
 function parc_atlas_jackknife_test_params(
     register: boolean = false,
     reg_dist: string | null = null,
@@ -93,26 +111,8 @@ function parc_atlas_jackknife_test_params(
     binaries_path: string | null = null,
     dontrun: boolean = false,
 ): ParcAtlasJackknifeTestParameters {
-    /**
-     * Build parameters.
-    
-     * @param register Run mris_register: creates .sphere.reg files
-     * @param reg_dist Run mris_register with '-dist <arg>' flag
-     * @param reg_append Append <string> to end of ?h.sphere.reg
-     * @param reg_copy Copy ?h.sphere.reg<string> ?h.sphere.reg
-     * @param train Run mris_ca_train: creates .gcs files
-     * @param classify Run mris_ca_label: creates .annot files
-     * @param test Run mris_compute_parc_overlap
-     * @param all Run train, classify, and test
-     * @param subjects_dir Override default subjects directory
-     * @param freesurfer_home Source a new FREESURFER_HOME
-     * @param binaries_path Specify override path to binaries
-     * @param dontrun Don't execute the commands
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "parc_atlas_jackknife_test" as const,
+        "@type": "freesurfer.parc_atlas_jackknife_test" as const,
         "register": register,
         "train": train,
         "classify": classify,
@@ -142,18 +142,18 @@ function parc_atlas_jackknife_test_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function parc_atlas_jackknife_test_cargs(
     params: ParcAtlasJackknifeTestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("parc_atlas_jackknife_test");
     if ((params["register"] ?? null)) {
@@ -214,18 +214,18 @@ function parc_atlas_jackknife_test_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function parc_atlas_jackknife_test_outputs(
     params: ParcAtlasJackknifeTestParameters,
     execution: Execution,
 ): ParcAtlasJackknifeTestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ParcAtlasJackknifeTestOutputs = {
         root: execution.outputFile("."),
         jackknife_output: execution.outputFile(["jackknife/*"].join('')),
@@ -234,22 +234,22 @@ function parc_atlas_jackknife_test_outputs(
 }
 
 
+/**
+ * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
+ */
 function parc_atlas_jackknife_test_execute(
     params: ParcAtlasJackknifeTestParameters,
     execution: Execution,
 ): ParcAtlasJackknifeTestOutputs {
-    /**
-     * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
-     */
     params = execution.params(params)
     const cargs = parc_atlas_jackknife_test_cargs(params, execution)
     const ret = parc_atlas_jackknife_test_outputs(params, execution)
@@ -258,6 +258,29 @@ function parc_atlas_jackknife_test_execute(
 }
 
 
+/**
+ * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param register Run mris_register: creates .sphere.reg files
+ * @param reg_dist Run mris_register with '-dist <arg>' flag
+ * @param reg_append Append <string> to end of ?h.sphere.reg
+ * @param reg_copy Copy ?h.sphere.reg<string> ?h.sphere.reg
+ * @param train Run mris_ca_train: creates .gcs files
+ * @param classify Run mris_ca_label: creates .annot files
+ * @param test Run mris_compute_parc_overlap
+ * @param all Run train, classify, and test
+ * @param subjects_dir Override default subjects directory
+ * @param freesurfer_home Source a new FREESURFER_HOME
+ * @param binaries_path Specify override path to binaries
+ * @param dontrun Don't execute the commands
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
+ */
 function parc_atlas_jackknife_test(
     register: boolean = false,
     reg_dist: string | null = null,
@@ -273,29 +296,6 @@ function parc_atlas_jackknife_test(
     dontrun: boolean = false,
     runner: Runner | null = null,
 ): ParcAtlasJackknifeTestOutputs {
-    /**
-     * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param register Run mris_register: creates .sphere.reg files
-     * @param reg_dist Run mris_register with '-dist <arg>' flag
-     * @param reg_append Append <string> to end of ?h.sphere.reg
-     * @param reg_copy Copy ?h.sphere.reg<string> ?h.sphere.reg
-     * @param train Run mris_ca_train: creates .gcs files
-     * @param classify Run mris_ca_label: creates .annot files
-     * @param test Run mris_compute_parc_overlap
-     * @param all Run train, classify, and test
-     * @param subjects_dir Override default subjects directory
-     * @param freesurfer_home Source a new FREESURFER_HOME
-     * @param binaries_path Specify override path to binaries
-     * @param dontrun Don't execute the commands
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PARC_ATLAS_JACKKNIFE_TEST_METADATA);
     const params = parc_atlas_jackknife_test_params(register, reg_dist, reg_append, reg_copy, train, classify, test, all, subjects_dir, freesurfer_home, binaries_path, dontrun)
@@ -308,5 +308,8 @@ export {
       ParcAtlasJackknifeTestOutputs,
       ParcAtlasJackknifeTestParameters,
       parc_atlas_jackknife_test,
+      parc_atlas_jackknife_test_cargs,
+      parc_atlas_jackknife_test_execute,
+      parc_atlas_jackknife_test_outputs,
       parc_atlas_jackknife_test_params,
 };

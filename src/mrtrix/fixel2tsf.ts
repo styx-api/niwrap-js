@@ -12,14 +12,14 @@ const FIXEL2TSF_METADATA: Metadata = {
 
 
 interface Fixel2tsfConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixel2tsf.config";
     "key": string;
     "value": string;
 }
 
 
 interface Fixel2tsfParameters {
-    "__STYXTYPE__": "fixel2tsf";
+    "@type": "mrtrix.fixel2tsf";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -35,55 +35,55 @@ interface Fixel2tsfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixel2tsf": fixel2tsf_cargs,
-        "config": fixel2tsf_config_cargs,
+        "mrtrix.fixel2tsf": fixel2tsf_cargs,
+        "mrtrix.fixel2tsf.config": fixel2tsf_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixel2tsf": fixel2tsf_outputs,
+        "mrtrix.fixel2tsf": fixel2tsf_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2tsf_config_params(
     key: string,
     value: string,
 ): Fixel2tsfConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixel2tsf.config" as const,
         "key": key,
         "value": value,
     };
@@ -91,18 +91,18 @@ function fixel2tsf_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2tsf_config_cargs(
     params: Fixel2tsfConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -128,6 +128,24 @@ interface Fixel2tsfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixel_in the input fixel data file (within the fixel directory)
+ * @param tracks the input track file 
+ * @param tsf the output track scalar file
+ * @param angle the max anglular threshold for computing correspondence between a fixel direction and track tangent (default = 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixel2tsf_params(
     fixel_in: InputPathType,
     tracks: InputPathType,
@@ -142,26 +160,8 @@ function fixel2tsf_params(
     help: boolean = false,
     version: boolean = false,
 ): Fixel2tsfParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixel_in the input fixel data file (within the fixel directory)
-     * @param tracks the input track file 
-     * @param tsf the output track scalar file
-     * @param angle the max anglular threshold for computing correspondence between a fixel direction and track tangent (default = 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixel2tsf" as const,
+        "@type": "mrtrix.fixel2tsf" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -185,18 +185,18 @@ function fixel2tsf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixel2tsf_cargs(
     params: Fixel2tsfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixel2tsf");
     if ((params["angle"] ?? null) !== null) {
@@ -224,7 +224,7 @@ function fixel2tsf_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -239,18 +239,18 @@ function fixel2tsf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixel2tsf_outputs(
     params: Fixel2tsfParameters,
     execution: Execution,
 ): Fixel2tsfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Fixel2tsfOutputs = {
         root: execution.outputFile("."),
         tsf: execution.outputFile([(params["tsf"] ?? null)].join('')),
@@ -259,28 +259,28 @@ function fixel2tsf_outputs(
 }
 
 
+/**
+ * Map fixel values to a track scalar file based on an input tractogram.
+ *
+ * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
+ */
 function fixel2tsf_execute(
     params: Fixel2tsfParameters,
     execution: Execution,
 ): Fixel2tsfOutputs {
-    /**
-     * Map fixel values to a track scalar file based on an input tractogram.
-     * 
-     * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixel2tsf_cargs(params, execution)
     const ret = fixel2tsf_outputs(params, execution)
@@ -289,6 +289,35 @@ function fixel2tsf_execute(
 }
 
 
+/**
+ * Map fixel values to a track scalar file based on an input tractogram.
+ *
+ * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fixel_in the input fixel data file (within the fixel directory)
+ * @param tracks the input track file 
+ * @param tsf the output track scalar file
+ * @param angle the max anglular threshold for computing correspondence between a fixel direction and track tangent (default = 45 degrees)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
+ */
 function fixel2tsf(
     fixel_in: InputPathType,
     tracks: InputPathType,
@@ -304,35 +333,6 @@ function fixel2tsf(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2tsfOutputs {
-    /**
-     * Map fixel values to a track scalar file based on an input tractogram.
-     * 
-     * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fixel_in the input fixel data file (within the fixel directory)
-     * @param tracks the input track file 
-     * @param tsf the output track scalar file
-     * @param angle the max anglular threshold for computing correspondence between a fixel direction and track tangent (default = 45 degrees)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXEL2TSF_METADATA);
     const params = fixel2tsf_params(fixel_in, tracks, tsf, angle, info, quiet, debug, force, nthreads, config, help, version)
@@ -346,6 +346,10 @@ export {
       Fixel2tsfOutputs,
       Fixel2tsfParameters,
       fixel2tsf,
+      fixel2tsf_cargs,
+      fixel2tsf_config_cargs,
       fixel2tsf_config_params,
+      fixel2tsf_execute,
+      fixel2tsf_outputs,
       fixel2tsf_params,
 };

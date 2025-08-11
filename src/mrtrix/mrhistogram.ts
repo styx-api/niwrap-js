@@ -12,14 +12,14 @@ const MRHISTOGRAM_METADATA: Metadata = {
 
 
 interface MrhistogramConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrhistogram.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrhistogramParameters {
-    "__STYXTYPE__": "mrhistogram";
+    "@type": "mrtrix.mrhistogram";
     "bins"?: number | null | undefined;
     "template"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -38,55 +38,55 @@ interface MrhistogramParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrhistogram": mrhistogram_cargs,
-        "config": mrhistogram_config_cargs,
+        "mrtrix.mrhistogram": mrhistogram_cargs,
+        "mrtrix.mrhistogram.config": mrhistogram_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrhistogram": mrhistogram_outputs,
+        "mrtrix.mrhistogram": mrhistogram_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrhistogram_config_params(
     key: string,
     value: string,
 ): MrhistogramConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrhistogram.config" as const,
         "key": key,
         "value": value,
     };
@@ -94,18 +94,18 @@ function mrhistogram_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrhistogram_config_cargs(
     params: MrhistogramConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -131,6 +131,27 @@ interface MrhistogramOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image the input image from which the histogram will be computed
+ * @param hist the output histogram file
+ * @param bins Manually set the number of bins to use to generate the histogram.
+ * @param template Use an existing histogram file as the template for histogram formation
+ * @param mask Calculate the histogram only within a mask image.
+ * @param ignorezero ignore zero-valued data during histogram construction.
+ * @param allvolumes generate one histogram across all image volumes, rather than one per image volume
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrhistogram_params(
     image: InputPathType,
     hist: string,
@@ -148,29 +169,8 @@ function mrhistogram_params(
     help: boolean = false,
     version: boolean = false,
 ): MrhistogramParameters {
-    /**
-     * Build parameters.
-    
-     * @param image the input image from which the histogram will be computed
-     * @param hist the output histogram file
-     * @param bins Manually set the number of bins to use to generate the histogram.
-     * @param template Use an existing histogram file as the template for histogram formation
-     * @param mask Calculate the histogram only within a mask image.
-     * @param ignorezero ignore zero-valued data during histogram construction.
-     * @param allvolumes generate one histogram across all image volumes, rather than one per image volume
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrhistogram" as const,
+        "@type": "mrtrix.mrhistogram" as const,
         "ignorezero": ignorezero,
         "allvolumes": allvolumes,
         "info": info,
@@ -201,18 +201,18 @@ function mrhistogram_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrhistogram_cargs(
     params: MrhistogramParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrhistogram");
     if ((params["bins"] ?? null) !== null) {
@@ -258,7 +258,7 @@ function mrhistogram_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -272,18 +272,18 @@ function mrhistogram_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrhistogram_outputs(
     params: MrhistogramParameters,
     execution: Execution,
 ): MrhistogramOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrhistogramOutputs = {
         root: execution.outputFile("."),
         hist: execution.outputFile([(params["hist"] ?? null)].join('')),
@@ -292,28 +292,28 @@ function mrhistogram_outputs(
 }
 
 
+/**
+ * Generate a histogram of image intensities.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
+ */
 function mrhistogram_execute(
     params: MrhistogramParameters,
     execution: Execution,
 ): MrhistogramOutputs {
-    /**
-     * Generate a histogram of image intensities.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrhistogram_cargs(params, execution)
     const ret = mrhistogram_outputs(params, execution)
@@ -322,6 +322,38 @@ function mrhistogram_execute(
 }
 
 
+/**
+ * Generate a histogram of image intensities.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param image the input image from which the histogram will be computed
+ * @param hist the output histogram file
+ * @param bins Manually set the number of bins to use to generate the histogram.
+ * @param template Use an existing histogram file as the template for histogram formation
+ * @param mask Calculate the histogram only within a mask image.
+ * @param ignorezero ignore zero-valued data during histogram construction.
+ * @param allvolumes generate one histogram across all image volumes, rather than one per image volume
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
+ */
 function mrhistogram(
     image: InputPathType,
     hist: string,
@@ -340,38 +372,6 @@ function mrhistogram(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrhistogramOutputs {
-    /**
-     * Generate a histogram of image intensities.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param image the input image from which the histogram will be computed
-     * @param hist the output histogram file
-     * @param bins Manually set the number of bins to use to generate the histogram.
-     * @param template Use an existing histogram file as the template for histogram formation
-     * @param mask Calculate the histogram only within a mask image.
-     * @param ignorezero ignore zero-valued data during histogram construction.
-     * @param allvolumes generate one histogram across all image volumes, rather than one per image volume
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRHISTOGRAM_METADATA);
     const params = mrhistogram_params(image, hist, bins, template, mask, ignorezero, allvolumes, info, quiet, debug, force, nthreads, config, help, version)
@@ -385,6 +385,10 @@ export {
       MrhistogramOutputs,
       MrhistogramParameters,
       mrhistogram,
+      mrhistogram_cargs,
+      mrhistogram_config_cargs,
       mrhistogram_config_params,
+      mrhistogram_execute,
+      mrhistogram_outputs,
       mrhistogram_params,
 };

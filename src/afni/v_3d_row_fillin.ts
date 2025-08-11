@@ -12,7 +12,7 @@ const V_3D_ROW_FILLIN_METADATA: Metadata = {
 
 
 interface V3dRowFillinParameters {
-    "__STYXTYPE__": "3dRowFillin";
+    "@type": "afni.3dRowFillin";
     "maxgap"?: number | null | undefined;
     "dir"?: string | null | undefined;
     "binary": boolean;
@@ -21,35 +21,35 @@ interface V3dRowFillinParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dRowFillin": v_3d_row_fillin_cargs,
+        "afni.3dRowFillin": v_3d_row_fillin_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dRowFillin": v_3d_row_fillin_outputs,
+        "afni.3dRowFillin": v_3d_row_fillin_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface V3dRowFillinOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input 3D dataset (e.g., dataset+orig)
+ * @param maxgap Set the maximum length of a blank region that will be filled in
+ * @param dir Set the direction of fill, e.g., A-P, P-A, I-S, S-I, L-R, R-L, x, y, z, XYZ.OR, XYZ.AND
+ * @param binary Turn input dataset to binary (0 and 1) before filling in. Output will also be binary.
+ * @param prefix Set the prefix for the output dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_row_fillin_params(
     input_dataset: InputPathType,
     maxgap: number | null = null,
@@ -83,19 +94,8 @@ function v_3d_row_fillin_params(
     binary: boolean = false,
     prefix: string | null = null,
 ): V3dRowFillinParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input 3D dataset (e.g., dataset+orig)
-     * @param maxgap Set the maximum length of a blank region that will be filled in
-     * @param dir Set the direction of fill, e.g., A-P, P-A, I-S, S-I, L-R, R-L, x, y, z, XYZ.OR, XYZ.AND
-     * @param binary Turn input dataset to binary (0 and 1) before filling in. Output will also be binary.
-     * @param prefix Set the prefix for the output dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dRowFillin" as const,
+        "@type": "afni.3dRowFillin" as const,
         "binary": binary,
         "input_dataset": input_dataset,
     };
@@ -112,18 +112,18 @@ function v_3d_row_fillin_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_row_fillin_cargs(
     params: V3dRowFillinParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dRowFillin");
     if ((params["maxgap"] ?? null) !== null) {
@@ -152,18 +152,18 @@ function v_3d_row_fillin_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_row_fillin_outputs(
     params: V3dRowFillinParameters,
     execution: Execution,
 ): V3dRowFillinOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dRowFillinOutputs = {
         root: execution.outputFile("."),
         output_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -173,22 +173,22 @@ function v_3d_row_fillin_outputs(
 }
 
 
+/**
+ * Fills in blank regions in 1D rows extracted from a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
+ */
 function v_3d_row_fillin_execute(
     params: V3dRowFillinParameters,
     execution: Execution,
 ): V3dRowFillinOutputs {
-    /**
-     * Fills in blank regions in 1D rows extracted from a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_row_fillin_cargs(params, execution)
     const ret = v_3d_row_fillin_outputs(params, execution)
@@ -197,6 +197,22 @@ function v_3d_row_fillin_execute(
 }
 
 
+/**
+ * Fills in blank regions in 1D rows extracted from a 3D dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input 3D dataset (e.g., dataset+orig)
+ * @param maxgap Set the maximum length of a blank region that will be filled in
+ * @param dir Set the direction of fill, e.g., A-P, P-A, I-S, S-I, L-R, R-L, x, y, z, XYZ.OR, XYZ.AND
+ * @param binary Turn input dataset to binary (0 and 1) before filling in. Output will also be binary.
+ * @param prefix Set the prefix for the output dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
+ */
 function v_3d_row_fillin(
     input_dataset: InputPathType,
     maxgap: number | null = null,
@@ -205,22 +221,6 @@ function v_3d_row_fillin(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dRowFillinOutputs {
-    /**
-     * Fills in blank regions in 1D rows extracted from a 3D dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input 3D dataset (e.g., dataset+orig)
-     * @param maxgap Set the maximum length of a blank region that will be filled in
-     * @param dir Set the direction of fill, e.g., A-P, P-A, I-S, S-I, L-R, R-L, x, y, z, XYZ.OR, XYZ.AND
-     * @param binary Turn input dataset to binary (0 and 1) before filling in. Output will also be binary.
-     * @param prefix Set the prefix for the output dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ROW_FILLIN_METADATA);
     const params = v_3d_row_fillin_params(input_dataset, maxgap, dir, binary, prefix)
@@ -233,5 +233,8 @@ export {
       V3dRowFillinParameters,
       V_3D_ROW_FILLIN_METADATA,
       v_3d_row_fillin,
+      v_3d_row_fillin_cargs,
+      v_3d_row_fillin_execute,
+      v_3d_row_fillin_outputs,
       v_3d_row_fillin_params,
 };

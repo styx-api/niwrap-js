@@ -12,7 +12,7 @@ const TRAIN_GCS_ATLAS_METADATA: Metadata = {
 
 
 interface TrainGcsAtlasParameters {
-    "__STYXTYPE__": "train-gcs-atlas";
+    "@type": "freesurfer.train-gcs-atlas";
     "manual_parcellation"?: string | null | undefined;
     "subjlist_file"?: InputPathType | null | undefined;
     "left_hemi": boolean;
@@ -28,35 +28,35 @@ interface TrainGcsAtlasParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "train-gcs-atlas": train_gcs_atlas_cargs,
+        "freesurfer.train-gcs-atlas": train_gcs_atlas_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "train-gcs-atlas": train_gcs_atlas_outputs,
+        "freesurfer.train-gcs-atlas": train_gcs_atlas_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,24 @@ interface TrainGcsAtlasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_gcs Output GCS file
+ * @param manual_parcellation Manual parcellation; default is aparc_edited
+ * @param subjlist_file File containing the list of subjects
+ * @param left_hemi Left hemisphere processing
+ * @param right_hemi Right hemisphere processing
+ * @param hemi_spec Specify hemisphere for processing
+ * @param surf_reg Surface registration file; default is sphere.reg
+ * @param color_table Color table file
+ * @param exclude_subject Exclude a subject from the atlas
+ * @param jackknife_flag Submit a job for each subject excluding it
+ * @param aseg_filename Aseg filename; default is aseg.auto.mgz
+ * @param threads Number of threads to use
+ *
+ * @returns Parameter dictionary
+ */
 function train_gcs_atlas_params(
     output_gcs: string,
     manual_parcellation: string | null = null,
@@ -93,26 +111,8 @@ function train_gcs_atlas_params(
     aseg_filename: string | null = null,
     threads: number | null = null,
 ): TrainGcsAtlasParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_gcs Output GCS file
-     * @param manual_parcellation Manual parcellation; default is aparc_edited
-     * @param subjlist_file File containing the list of subjects
-     * @param left_hemi Left hemisphere processing
-     * @param right_hemi Right hemisphere processing
-     * @param hemi_spec Specify hemisphere for processing
-     * @param surf_reg Surface registration file; default is sphere.reg
-     * @param color_table Color table file
-     * @param exclude_subject Exclude a subject from the atlas
-     * @param jackknife_flag Submit a job for each subject excluding it
-     * @param aseg_filename Aseg filename; default is aseg.auto.mgz
-     * @param threads Number of threads to use
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "train-gcs-atlas" as const,
+        "@type": "freesurfer.train-gcs-atlas" as const,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "output_gcs": output_gcs,
@@ -146,18 +146,18 @@ function train_gcs_atlas_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function train_gcs_atlas_cargs(
     params: TrainGcsAtlasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("train-gcs-atlas");
     if ((params["manual_parcellation"] ?? null) !== null) {
@@ -225,18 +225,18 @@ function train_gcs_atlas_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function train_gcs_atlas_outputs(
     params: TrainGcsAtlasParameters,
     execution: Execution,
 ): TrainGcsAtlasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TrainGcsAtlasOutputs = {
         root: execution.outputFile("."),
         output_gcs_file: execution.outputFile([(params["output_gcs"] ?? null)].join('')),
@@ -245,22 +245,22 @@ function train_gcs_atlas_outputs(
 }
 
 
+/**
+ * Script to train a surface-based gaussian classifier for cortical surface parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
+ */
 function train_gcs_atlas_execute(
     params: TrainGcsAtlasParameters,
     execution: Execution,
 ): TrainGcsAtlasOutputs {
-    /**
-     * Script to train a surface-based gaussian classifier for cortical surface parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
-     */
     params = execution.params(params)
     const cargs = train_gcs_atlas_cargs(params, execution)
     const ret = train_gcs_atlas_outputs(params, execution)
@@ -269,6 +269,29 @@ function train_gcs_atlas_execute(
 }
 
 
+/**
+ * Script to train a surface-based gaussian classifier for cortical surface parcellation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_gcs Output GCS file
+ * @param manual_parcellation Manual parcellation; default is aparc_edited
+ * @param subjlist_file File containing the list of subjects
+ * @param left_hemi Left hemisphere processing
+ * @param right_hemi Right hemisphere processing
+ * @param hemi_spec Specify hemisphere for processing
+ * @param surf_reg Surface registration file; default is sphere.reg
+ * @param color_table Color table file
+ * @param exclude_subject Exclude a subject from the atlas
+ * @param jackknife_flag Submit a job for each subject excluding it
+ * @param aseg_filename Aseg filename; default is aseg.auto.mgz
+ * @param threads Number of threads to use
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
+ */
 function train_gcs_atlas(
     output_gcs: string,
     manual_parcellation: string | null = null,
@@ -284,29 +307,6 @@ function train_gcs_atlas(
     threads: number | null = null,
     runner: Runner | null = null,
 ): TrainGcsAtlasOutputs {
-    /**
-     * Script to train a surface-based gaussian classifier for cortical surface parcellation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_gcs Output GCS file
-     * @param manual_parcellation Manual parcellation; default is aparc_edited
-     * @param subjlist_file File containing the list of subjects
-     * @param left_hemi Left hemisphere processing
-     * @param right_hemi Right hemisphere processing
-     * @param hemi_spec Specify hemisphere for processing
-     * @param surf_reg Surface registration file; default is sphere.reg
-     * @param color_table Color table file
-     * @param exclude_subject Exclude a subject from the atlas
-     * @param jackknife_flag Submit a job for each subject excluding it
-     * @param aseg_filename Aseg filename; default is aseg.auto.mgz
-     * @param threads Number of threads to use
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRAIN_GCS_ATLAS_METADATA);
     const params = train_gcs_atlas_params(output_gcs, manual_parcellation, subjlist_file, left_hemi, right_hemi, hemi_spec, surf_reg, color_table, exclude_subject, jackknife_flag, aseg_filename, threads)
@@ -319,5 +319,8 @@ export {
       TrainGcsAtlasOutputs,
       TrainGcsAtlasParameters,
       train_gcs_atlas,
+      train_gcs_atlas_cargs,
+      train_gcs_atlas_execute,
+      train_gcs_atlas_outputs,
       train_gcs_atlas_params,
 };

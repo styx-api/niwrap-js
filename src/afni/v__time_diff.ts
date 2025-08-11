@@ -12,39 +12,39 @@ const V__TIME_DIFF_METADATA: Metadata = {
 
 
 interface VTimeDiffParameters {
-    "__STYXTYPE__": "@TimeDiff";
+    "@type": "afni.@TimeDiff";
     "file1": InputPathType;
     "file2": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@TimeDiff": v__time_diff_cargs,
+        "afni.@TimeDiff": v__time_diff_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VTimeDiffOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param file1 First file to compare (e.g., file1.txt)
+ * @param file2 Second file to compare (e.g., file2.txt)
+ *
+ * @returns Parameter dictionary
+ */
 function v__time_diff_params(
     file1: InputPathType,
     file2: InputPathType,
 ): VTimeDiffParameters {
-    /**
-     * Build parameters.
-    
-     * @param file1 First file to compare (e.g., file1.txt)
-     * @param file2 Second file to compare (e.g., file2.txt)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@TimeDiff" as const,
+        "@type": "afni.@TimeDiff" as const,
         "file1": file1,
         "file2": file2,
     };
@@ -85,18 +85,18 @@ function v__time_diff_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__time_diff_cargs(
     params: VTimeDiffParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@TimeDiff");
     cargs.push(execution.inputFile((params["file1"] ?? null)));
@@ -105,18 +105,18 @@ function v__time_diff_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__time_diff_outputs(
     params: VTimeDiffParameters,
     execution: Execution,
 ): VTimeDiffOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VTimeDiffOutputs = {
         root: execution.outputFile("."),
     };
@@ -124,22 +124,22 @@ function v__time_diff_outputs(
 }
 
 
+/**
+ * A tool to compare the modification times of two files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
+ */
 function v__time_diff_execute(
     params: VTimeDiffParameters,
     execution: Execution,
 ): VTimeDiffOutputs {
-    /**
-     * A tool to compare the modification times of two files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__time_diff_cargs(params, execution)
     const ret = v__time_diff_outputs(params, execution)
@@ -148,24 +148,24 @@ function v__time_diff_execute(
 }
 
 
+/**
+ * A tool to compare the modification times of two files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param file1 First file to compare (e.g., file1.txt)
+ * @param file2 Second file to compare (e.g., file2.txt)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
+ */
 function v__time_diff(
     file1: InputPathType,
     file2: InputPathType,
     runner: Runner | null = null,
 ): VTimeDiffOutputs {
-    /**
-     * A tool to compare the modification times of two files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param file1 First file to compare (e.g., file1.txt)
-     * @param file2 Second file to compare (e.g., file2.txt)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__TIME_DIFF_METADATA);
     const params = v__time_diff_params(file1, file2)
@@ -178,5 +178,8 @@ export {
       VTimeDiffParameters,
       V__TIME_DIFF_METADATA,
       v__time_diff,
+      v__time_diff_cargs,
+      v__time_diff_execute,
+      v__time_diff_outputs,
       v__time_diff_params,
 };

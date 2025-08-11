@@ -12,42 +12,42 @@ const VIENA_QUANT_METADATA: Metadata = {
 
 
 interface VienaQuantParameters {
-    "__STYXTYPE__": "viena_quant";
+    "@type": "fsl.viena_quant";
     "input1": InputPathType;
     "input2": InputPathType;
     "ventricle_mask": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "viena_quant": viena_quant_cargs,
+        "fsl.viena_quant": viena_quant_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "viena_quant": viena_quant_outputs,
+        "fsl.viena_quant": viena_quant_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface VienaQuantOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input1 Input image 1 (e.g. img1.nii.gz)
+ * @param input2 Input image 2 (e.g. img2.nii.gz)
+ * @param ventricle_mask Ventricle mask (e.g. mask.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function viena_quant_params(
     input1: InputPathType,
     input2: InputPathType,
     ventricle_mask: InputPathType,
 ): VienaQuantParameters {
-    /**
-     * Build parameters.
-    
-     * @param input1 Input image 1 (e.g. img1.nii.gz)
-     * @param input2 Input image 2 (e.g. img2.nii.gz)
-     * @param ventricle_mask Ventricle mask (e.g. mask.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "viena_quant" as const,
+        "@type": "fsl.viena_quant" as const,
         "input1": input1,
         "input2": input2,
         "ventricle_mask": ventricle_mask,
@@ -94,18 +94,18 @@ function viena_quant_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function viena_quant_cargs(
     params: VienaQuantParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("viena_quant");
     cargs.push(execution.inputFile((params["input1"] ?? null)));
@@ -115,18 +115,18 @@ function viena_quant_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function viena_quant_outputs(
     params: VienaQuantParameters,
     execution: Execution,
 ): VienaQuantOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VienaQuantOutputs = {
         root: execution.outputFile("."),
         output_quantification: execution.outputFile(["output_quantification.nii.gz"].join('')),
@@ -135,22 +135,22 @@ function viena_quant_outputs(
 }
 
 
+/**
+ * Automated brain ventricle quantification tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
+ */
 function viena_quant_execute(
     params: VienaQuantParameters,
     execution: Execution,
 ): VienaQuantOutputs {
-    /**
-     * Automated brain ventricle quantification tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
-     */
     params = execution.params(params)
     const cargs = viena_quant_cargs(params, execution)
     const ret = viena_quant_outputs(params, execution)
@@ -159,26 +159,26 @@ function viena_quant_execute(
 }
 
 
+/**
+ * Automated brain ventricle quantification tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input1 Input image 1 (e.g. img1.nii.gz)
+ * @param input2 Input image 2 (e.g. img2.nii.gz)
+ * @param ventricle_mask Ventricle mask (e.g. mask.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
+ */
 function viena_quant(
     input1: InputPathType,
     input2: InputPathType,
     ventricle_mask: InputPathType,
     runner: Runner | null = null,
 ): VienaQuantOutputs {
-    /**
-     * Automated brain ventricle quantification tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input1 Input image 1 (e.g. img1.nii.gz)
-     * @param input2 Input image 2 (e.g. img2.nii.gz)
-     * @param ventricle_mask Ventricle mask (e.g. mask.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VIENA_QUANT_METADATA);
     const params = viena_quant_params(input1, input2, ventricle_mask)
@@ -191,5 +191,8 @@ export {
       VienaQuantOutputs,
       VienaQuantParameters,
       viena_quant,
+      viena_quant_cargs,
+      viena_quant_execute,
+      viena_quant_outputs,
       viena_quant_params,
 };

@@ -12,7 +12,7 @@ const MKSUBJDIRS_METADATA: Metadata = {
 
 
 interface MksubjdirsParameters {
-    "__STYXTYPE__": "mksubjdirs";
+    "@type": "freesurfer.mksubjdirs";
     "subj_name": string;
     "mode"?: string | null | undefined;
     "parents": boolean;
@@ -23,33 +23,33 @@ interface MksubjdirsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mksubjdirs": mksubjdirs_cargs,
+        "freesurfer.mksubjdirs": mksubjdirs_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface MksubjdirsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subj_name Name of the subject directory to create.
+ * @param mode Set file mode (as in chmod), not a=rwx - umask
+ * @param parents No error if existing, make parent directories as needed
+ * @param verbose Print a message for each created directory
+ * @param selinux_context Set SELinux security context of each created directory to the default type
+ * @param help Display help and exit
+ * @param version Output version information and exit
+ *
+ * @returns Parameter dictionary
+ */
 function mksubjdirs_params(
     subj_name: string,
     mode: string | null = null,
@@ -78,21 +91,8 @@ function mksubjdirs_params(
     help: boolean = false,
     version: boolean = false,
 ): MksubjdirsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subj_name Name of the subject directory to create.
-     * @param mode Set file mode (as in chmod), not a=rwx - umask
-     * @param parents No error if existing, make parent directories as needed
-     * @param verbose Print a message for each created directory
-     * @param selinux_context Set SELinux security context of each created directory to the default type
-     * @param help Display help and exit
-     * @param version Output version information and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mksubjdirs" as const,
+        "@type": "freesurfer.mksubjdirs" as const,
         "subj_name": subj_name,
         "parents": parents,
         "verbose": verbose,
@@ -107,18 +107,18 @@ function mksubjdirs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mksubjdirs_cargs(
     params: MksubjdirsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mksubjdirs");
     cargs.push((params["subj_name"] ?? null));
@@ -147,18 +147,18 @@ function mksubjdirs_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mksubjdirs_outputs(
     params: MksubjdirsParameters,
     execution: Execution,
 ): MksubjdirsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MksubjdirsOutputs = {
         root: execution.outputFile("."),
     };
@@ -166,22 +166,22 @@ function mksubjdirs_outputs(
 }
 
 
+/**
+ * A command-line tool to create subject directories.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
+ */
 function mksubjdirs_execute(
     params: MksubjdirsParameters,
     execution: Execution,
 ): MksubjdirsOutputs {
-    /**
-     * A command-line tool to create subject directories.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mksubjdirs_cargs(params, execution)
     const ret = mksubjdirs_outputs(params, execution)
@@ -190,6 +190,24 @@ function mksubjdirs_execute(
 }
 
 
+/**
+ * A command-line tool to create subject directories.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subj_name Name of the subject directory to create.
+ * @param mode Set file mode (as in chmod), not a=rwx - umask
+ * @param parents No error if existing, make parent directories as needed
+ * @param verbose Print a message for each created directory
+ * @param selinux_context Set SELinux security context of each created directory to the default type
+ * @param help Display help and exit
+ * @param version Output version information and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
+ */
 function mksubjdirs(
     subj_name: string,
     mode: string | null = null,
@@ -200,24 +218,6 @@ function mksubjdirs(
     version: boolean = false,
     runner: Runner | null = null,
 ): MksubjdirsOutputs {
-    /**
-     * A command-line tool to create subject directories.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subj_name Name of the subject directory to create.
-     * @param mode Set file mode (as in chmod), not a=rwx - umask
-     * @param parents No error if existing, make parent directories as needed
-     * @param verbose Print a message for each created directory
-     * @param selinux_context Set SELinux security context of each created directory to the default type
-     * @param help Display help and exit
-     * @param version Output version information and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MKSUBJDIRS_METADATA);
     const params = mksubjdirs_params(subj_name, mode, parents, verbose, selinux_context, help, version)
@@ -230,5 +230,8 @@ export {
       MksubjdirsOutputs,
       MksubjdirsParameters,
       mksubjdirs,
+      mksubjdirs_cargs,
+      mksubjdirs_execute,
+      mksubjdirs_outputs,
       mksubjdirs_params,
 };

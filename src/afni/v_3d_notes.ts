@@ -12,7 +12,7 @@ const V_3D_NOTES_METADATA: Metadata = {
 
 
 interface V3dNotesParameters {
-    "__STYXTYPE__": "3dNotes";
+    "@type": "afni.3dNotes";
     "add_note"?: string | null | undefined;
     "append_history"?: string | null | undefined;
     "replace_history"?: string | null | undefined;
@@ -23,33 +23,33 @@ interface V3dNotesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dNotes": v_3d_notes_cargs,
+        "afni.3dNotes": v_3d_notes_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface V3dNotesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset AFNI compatible dataset [required].
+ * @param add_note Add the string 'str' to the list of notes.
+ * @param append_history Append the string 'str' to the dataset's history. This can only appear once on the command line.
+ * @param replace_history Replace any existing history note with 'str'. This option cannot be used with '-h'.
+ * @param delete_note Deletes note number num.
+ * @param print_notes Print to stdout the expanded notes.
+ * @param help Displays this help screen.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_notes_params(
     dataset: InputPathType,
     add_note: string | null = null,
@@ -78,21 +91,8 @@ function v_3d_notes_params(
     print_notes: boolean = false,
     help: boolean = false,
 ): V3dNotesParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset AFNI compatible dataset [required].
-     * @param add_note Add the string 'str' to the list of notes.
-     * @param append_history Append the string 'str' to the dataset's history. This can only appear once on the command line.
-     * @param replace_history Replace any existing history note with 'str'. This option cannot be used with '-h'.
-     * @param delete_note Deletes note number num.
-     * @param print_notes Print to stdout the expanded notes.
-     * @param help Displays this help screen.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dNotes" as const,
+        "@type": "afni.3dNotes" as const,
         "print_notes": print_notes,
         "help": help,
         "dataset": dataset,
@@ -113,18 +113,18 @@ function v_3d_notes_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_notes_cargs(
     params: V3dNotesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dNotes");
     if ((params["add_note"] ?? null) !== null) {
@@ -162,18 +162,18 @@ function v_3d_notes_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_notes_outputs(
     params: V3dNotesParameters,
     execution: Execution,
 ): V3dNotesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dNotesOutputs = {
         root: execution.outputFile("."),
     };
@@ -181,22 +181,22 @@ function v_3d_notes_outputs(
 }
 
 
+/**
+ * A program to add, delete and show notes for AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
+ */
 function v_3d_notes_execute(
     params: V3dNotesParameters,
     execution: Execution,
 ): V3dNotesOutputs {
-    /**
-     * A program to add, delete and show notes for AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_notes_cargs(params, execution)
     const ret = v_3d_notes_outputs(params, execution)
@@ -205,6 +205,24 @@ function v_3d_notes_execute(
 }
 
 
+/**
+ * A program to add, delete and show notes for AFNI datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset AFNI compatible dataset [required].
+ * @param add_note Add the string 'str' to the list of notes.
+ * @param append_history Append the string 'str' to the dataset's history. This can only appear once on the command line.
+ * @param replace_history Replace any existing history note with 'str'. This option cannot be used with '-h'.
+ * @param delete_note Deletes note number num.
+ * @param print_notes Print to stdout the expanded notes.
+ * @param help Displays this help screen.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
+ */
 function v_3d_notes(
     dataset: InputPathType,
     add_note: string | null = null,
@@ -215,24 +233,6 @@ function v_3d_notes(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dNotesOutputs {
-    /**
-     * A program to add, delete and show notes for AFNI datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset AFNI compatible dataset [required].
-     * @param add_note Add the string 'str' to the list of notes.
-     * @param append_history Append the string 'str' to the dataset's history. This can only appear once on the command line.
-     * @param replace_history Replace any existing history note with 'str'. This option cannot be used with '-h'.
-     * @param delete_note Deletes note number num.
-     * @param print_notes Print to stdout the expanded notes.
-     * @param help Displays this help screen.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_NOTES_METADATA);
     const params = v_3d_notes_params(dataset, add_note, append_history, replace_history, delete_note, print_notes, help)
@@ -245,5 +245,8 @@ export {
       V3dNotesParameters,
       V_3D_NOTES_METADATA,
       v_3d_notes,
+      v_3d_notes_cargs,
+      v_3d_notes_execute,
+      v_3d_notes_outputs,
       v_3d_notes_params,
 };

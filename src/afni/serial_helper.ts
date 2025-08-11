@@ -12,7 +12,7 @@ const SERIAL_HELPER_METADATA: Metadata = {
 
 
 interface SerialHelperParameters {
-    "__STYXTYPE__": "serial_helper";
+    "@type": "afni.serial_helper";
     "serial_port": string;
     "sock_num"?: number | null | undefined;
     "mp_max"?: number | null | undefined;
@@ -28,33 +28,33 @@ interface SerialHelperParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "serial_helper": serial_helper_cargs,
+        "afni.serial_helper": serial_helper_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -74,6 +74,24 @@ interface SerialHelperOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param serial_port Output serial port filename
+ * @param sock_num Specify socket number to serve
+ * @param mp_max Limit the maximum value of the MP data
+ * @param mp_min Limit the minimum value of the MP data
+ * @param num_extra Receive additional floats per TR
+ * @param disp_all Receive NVOX*8 extra floats per TR
+ * @param debug Set the debugging level (0-3)
+ * @param show_times Show communication times
+ * @param help Display this help information
+ * @param hist Show the module history
+ * @param no_serial Turn off serial port output
+ * @param version Show the current version number
+ *
+ * @returns Parameter dictionary
+ */
 function serial_helper_params(
     serial_port: string,
     sock_num: number | null = null,
@@ -88,26 +106,8 @@ function serial_helper_params(
     no_serial: boolean = false,
     version: boolean = false,
 ): SerialHelperParameters {
-    /**
-     * Build parameters.
-    
-     * @param serial_port Output serial port filename
-     * @param sock_num Specify socket number to serve
-     * @param mp_max Limit the maximum value of the MP data
-     * @param mp_min Limit the minimum value of the MP data
-     * @param num_extra Receive additional floats per TR
-     * @param disp_all Receive NVOX*8 extra floats per TR
-     * @param debug Set the debugging level (0-3)
-     * @param show_times Show communication times
-     * @param help Display this help information
-     * @param hist Show the module history
-     * @param no_serial Turn off serial port output
-     * @param version Show the current version number
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "serial_helper" as const,
+        "@type": "afni.serial_helper" as const,
         "serial_port": serial_port,
         "show_times": show_times,
         "help": help,
@@ -137,18 +137,18 @@ function serial_helper_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function serial_helper_cargs(
     params: SerialHelperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("serial_helper");
     cargs.push(
@@ -210,18 +210,18 @@ function serial_helper_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function serial_helper_outputs(
     params: SerialHelperParameters,
     execution: Execution,
 ): SerialHelperOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SerialHelperOutputs = {
         root: execution.outputFile("."),
     };
@@ -229,22 +229,22 @@ function serial_helper_outputs(
 }
 
 
+/**
+ * Passes motion parameters from socket to serial port.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
+ */
 function serial_helper_execute(
     params: SerialHelperParameters,
     execution: Execution,
 ): SerialHelperOutputs {
-    /**
-     * Passes motion parameters from socket to serial port.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
-     */
     params = execution.params(params)
     const cargs = serial_helper_cargs(params, execution)
     const ret = serial_helper_outputs(params, execution)
@@ -253,6 +253,29 @@ function serial_helper_execute(
 }
 
 
+/**
+ * Passes motion parameters from socket to serial port.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param serial_port Output serial port filename
+ * @param sock_num Specify socket number to serve
+ * @param mp_max Limit the maximum value of the MP data
+ * @param mp_min Limit the minimum value of the MP data
+ * @param num_extra Receive additional floats per TR
+ * @param disp_all Receive NVOX*8 extra floats per TR
+ * @param debug Set the debugging level (0-3)
+ * @param show_times Show communication times
+ * @param help Display this help information
+ * @param hist Show the module history
+ * @param no_serial Turn off serial port output
+ * @param version Show the current version number
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
+ */
 function serial_helper(
     serial_port: string,
     sock_num: number | null = null,
@@ -268,29 +291,6 @@ function serial_helper(
     version: boolean = false,
     runner: Runner | null = null,
 ): SerialHelperOutputs {
-    /**
-     * Passes motion parameters from socket to serial port.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param serial_port Output serial port filename
-     * @param sock_num Specify socket number to serve
-     * @param mp_max Limit the maximum value of the MP data
-     * @param mp_min Limit the minimum value of the MP data
-     * @param num_extra Receive additional floats per TR
-     * @param disp_all Receive NVOX*8 extra floats per TR
-     * @param debug Set the debugging level (0-3)
-     * @param show_times Show communication times
-     * @param help Display this help information
-     * @param hist Show the module history
-     * @param no_serial Turn off serial port output
-     * @param version Show the current version number
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SERIAL_HELPER_METADATA);
     const params = serial_helper_params(serial_port, sock_num, mp_max, mp_min, num_extra, disp_all, debug, show_times, help, hist, no_serial, version)
@@ -303,5 +303,8 @@ export {
       SerialHelperOutputs,
       SerialHelperParameters,
       serial_helper,
+      serial_helper_cargs,
+      serial_helper_execute,
+      serial_helper_outputs,
       serial_helper_params,
 };

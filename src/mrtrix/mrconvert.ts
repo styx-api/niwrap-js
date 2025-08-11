@@ -12,93 +12,93 @@ const MRCONVERT_METADATA: Metadata = {
 
 
 interface MrconvertCoordParameters {
-    "__STYXTYPE__": "coord";
+    "@type": "mrtrix.mrconvert.coord";
     "axis": number;
     "selection": Array<number>;
 }
 
 
 interface MrconvertClearPropertyParameters {
-    "__STYXTYPE__": "clear_property";
+    "@type": "mrtrix.mrconvert.clear_property";
     "key": string;
 }
 
 
 interface MrconvertSetPropertyParameters {
-    "__STYXTYPE__": "set_property";
+    "@type": "mrtrix.mrconvert.set_property";
     "key": string;
     "value": string;
 }
 
 
 interface MrconvertAppendPropertyParameters {
-    "__STYXTYPE__": "append_property";
+    "@type": "mrtrix.mrconvert.append_property";
     "key": string;
     "value": string;
 }
 
 
 interface MrconvertVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.mrconvert.VariousString";
     "obj": string;
 }
 
 
 interface MrconvertVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.mrconvert.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrconvertVariousString1Parameters {
-    "__STYXTYPE__": "VariousString_1";
+    "@type": "mrtrix.mrconvert.VariousString";
     "obj": string;
 }
 
 
 interface MrconvertVariousFile1Parameters {
-    "__STYXTYPE__": "VariousFile_1";
+    "@type": "mrtrix.mrconvert.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface MrconvertFslgradParameters {
-    "__STYXTYPE__": "fslgrad";
+    "@type": "mrtrix.mrconvert.fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
 
 
 interface MrconvertExportGradFslParameters {
-    "__STYXTYPE__": "export_grad_fsl";
+    "@type": "mrtrix.mrconvert.export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
 
 
 interface MrconvertImportPeEddyParameters {
-    "__STYXTYPE__": "import_pe_eddy";
+    "@type": "mrtrix.mrconvert.import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
 
 
 interface MrconvertExportPeEddyParameters {
-    "__STYXTYPE__": "export_pe_eddy";
+    "@type": "mrtrix.mrconvert.export_pe_eddy";
     "config": string;
     "indices": string;
 }
 
 
 interface MrconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrconvertParameters {
-    "__STYXTYPE__": "mrconvert";
+    "@type": "mrtrix.mrconvert";
     "coord"?: Array<MrconvertCoordParameters> | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "axes"?: Array<number> | null | undefined;
@@ -133,69 +133,69 @@ interface MrconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrconvert": mrconvert_cargs,
-        "coord": mrconvert_coord_cargs,
-        "clear_property": mrconvert_clear_property_cargs,
-        "set_property": mrconvert_set_property_cargs,
-        "append_property": mrconvert_append_property_cargs,
-        "VariousString": mrconvert_various_string_cargs,
-        "VariousFile": mrconvert_various_file_cargs,
-        "VariousString_1": mrconvert_various_string_1_cargs,
-        "VariousFile_1": mrconvert_various_file_1_cargs,
-        "fslgrad": mrconvert_fslgrad_cargs,
-        "export_grad_fsl": mrconvert_export_grad_fsl_cargs,
-        "import_pe_eddy": mrconvert_import_pe_eddy_cargs,
-        "export_pe_eddy": mrconvert_export_pe_eddy_cargs,
-        "config": mrconvert_config_cargs,
+        "mrtrix.mrconvert": mrconvert_cargs,
+        "mrtrix.mrconvert.coord": mrconvert_coord_cargs,
+        "mrtrix.mrconvert.clear_property": mrconvert_clear_property_cargs,
+        "mrtrix.mrconvert.set_property": mrconvert_set_property_cargs,
+        "mrtrix.mrconvert.append_property": mrconvert_append_property_cargs,
+        "mrtrix.mrconvert.VariousString": mrconvert_various_string_cargs,
+        "mrtrix.mrconvert.VariousFile": mrconvert_various_file_cargs,
+        "mrtrix.mrconvert.VariousString": mrconvert_various_string_1_cargs,
+        "mrtrix.mrconvert.VariousFile": mrconvert_various_file_1_cargs,
+        "mrtrix.mrconvert.fslgrad": mrconvert_fslgrad_cargs,
+        "mrtrix.mrconvert.export_grad_fsl": mrconvert_export_grad_fsl_cargs,
+        "mrtrix.mrconvert.import_pe_eddy": mrconvert_import_pe_eddy_cargs,
+        "mrtrix.mrconvert.export_pe_eddy": mrconvert_export_pe_eddy_cargs,
+        "mrtrix.mrconvert.config": mrconvert_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrconvert": mrconvert_outputs,
-        "export_grad_fsl": mrconvert_export_grad_fsl_outputs,
-        "export_pe_eddy": mrconvert_export_pe_eddy_outputs,
+        "mrtrix.mrconvert": mrconvert_outputs,
+        "mrtrix.mrconvert.export_grad_fsl": mrconvert_export_grad_fsl_outputs,
+        "mrtrix.mrconvert.export_pe_eddy": mrconvert_export_pe_eddy_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param axis retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
+ * @param selection retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_coord_params(
     axis: number,
     selection: Array<number>,
 ): MrconvertCoordParameters {
-    /**
-     * Build parameters.
-    
-     * @param axis retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
-     * @param selection retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "coord" as const,
+        "@type": "mrtrix.mrconvert.coord" as const,
         "axis": axis,
         "selection": selection,
     };
@@ -203,18 +203,18 @@ function mrconvert_coord_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_coord_cargs(
     params: MrconvertCoordParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-coord");
     cargs.push(String((params["axis"] ?? null)));
@@ -223,36 +223,36 @@ function mrconvert_coord_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key remove the specified key from the image header altogether.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_clear_property_params(
     key: string,
 ): MrconvertClearPropertyParameters {
-    /**
-     * Build parameters.
-    
-     * @param key remove the specified key from the image header altogether.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "clear_property" as const,
+        "@type": "mrtrix.mrconvert.clear_property" as const,
         "key": key,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_clear_property_cargs(
     params: MrconvertClearPropertyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-clear_property");
     cargs.push((params["key"] ?? null));
@@ -260,20 +260,20 @@ function mrconvert_clear_property_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key set the value of the specified key in the image header.
+ * @param value set the value of the specified key in the image header.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_set_property_params(
     key: string,
     value: string,
 ): MrconvertSetPropertyParameters {
-    /**
-     * Build parameters.
-    
-     * @param key set the value of the specified key in the image header.
-     * @param value set the value of the specified key in the image header.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "set_property" as const,
+        "@type": "mrtrix.mrconvert.set_property" as const,
         "key": key,
         "value": value,
     };
@@ -281,18 +281,18 @@ function mrconvert_set_property_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_set_property_cargs(
     params: MrconvertSetPropertyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-set_property");
     cargs.push((params["key"] ?? null));
@@ -301,20 +301,20 @@ function mrconvert_set_property_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
+ * @param value append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_append_property_params(
     key: string,
     value: string,
 ): MrconvertAppendPropertyParameters {
-    /**
-     * Build parameters.
-    
-     * @param key append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
-     * @param value append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "append_property" as const,
+        "@type": "mrtrix.mrconvert.append_property" as const,
         "key": key,
         "value": value,
     };
@@ -322,18 +322,18 @@ function mrconvert_append_property_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_append_property_cargs(
     params: MrconvertAppendPropertyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-append_property");
     cargs.push((params["key"] ?? null));
@@ -342,164 +342,164 @@ function mrconvert_append_property_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_various_string_params(
     obj: string,
 ): MrconvertVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.mrconvert.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_various_string_cargs(
     params: MrconvertVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_various_file_params(
     obj: InputPathType,
 ): MrconvertVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.mrconvert.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_various_file_cargs(
     params: MrconvertVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_various_string_1_params(
     obj: string,
 ): MrconvertVariousString1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString_1" as const,
+        "@type": "mrtrix.mrconvert.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_various_string_1_cargs(
     params: MrconvertVariousString1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_various_file_1_params(
     obj: InputPathType,
 ): MrconvertVariousFile1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile_1" as const,
+        "@type": "mrtrix.mrconvert.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_various_file_1_cargs(
     params: MrconvertVariousFile1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
 ): MrconvertFslgradParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvals Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslgrad" as const,
+        "@type": "mrtrix.mrconvert.fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -507,18 +507,18 @@ function mrconvert_fslgrad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_fslgrad_cargs(
     params: MrconvertFslgradParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-fslgrad");
     cargs.push(execution.inputFile((params["bvecs"] ?? null)));
@@ -548,20 +548,20 @@ interface MrconvertExportGradFslOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
 ): MrconvertExportGradFslParameters {
-    /**
-     * Build parameters.
-    
-     * @param bvecs_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param bvals_path export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_grad_fsl" as const,
+        "@type": "mrtrix.mrconvert.export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -569,18 +569,18 @@ function mrconvert_export_grad_fsl_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_export_grad_fsl_cargs(
     params: MrconvertExportGradFslParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_grad_fsl");
     cargs.push((params["bvecs_path"] ?? null));
@@ -589,18 +589,18 @@ function mrconvert_export_grad_fsl_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrconvert_export_grad_fsl_outputs(
     params: MrconvertExportGradFslParameters,
     execution: Execution,
 ): MrconvertExportGradFslOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrconvertExportGradFslOutputs = {
         root: execution.outputFile("."),
         bvecs_path: execution.outputFile([(params["bvecs_path"] ?? null)].join('')),
@@ -610,20 +610,20 @@ function mrconvert_export_grad_fsl_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param config import phase-encoding information from an EDDY-style config / index file pair
+ * @param indices import phase-encoding information from an EDDY-style config / index file pair
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_import_pe_eddy_params(
     config: InputPathType,
     indices: InputPathType,
 ): MrconvertImportPeEddyParameters {
-    /**
-     * Build parameters.
-    
-     * @param config import phase-encoding information from an EDDY-style config / index file pair
-     * @param indices import phase-encoding information from an EDDY-style config / index file pair
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "import_pe_eddy" as const,
+        "@type": "mrtrix.mrconvert.import_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -631,18 +631,18 @@ function mrconvert_import_pe_eddy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_import_pe_eddy_cargs(
     params: MrconvertImportPeEddyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-import_pe_eddy");
     cargs.push(execution.inputFile((params["config"] ?? null)));
@@ -672,20 +672,20 @@ interface MrconvertExportPeEddyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param config export phase-encoding information to an EDDY-style config / index file pair
+ * @param indices export phase-encoding information to an EDDY-style config / index file pair
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_export_pe_eddy_params(
     config: string,
     indices: string,
 ): MrconvertExportPeEddyParameters {
-    /**
-     * Build parameters.
-    
-     * @param config export phase-encoding information to an EDDY-style config / index file pair
-     * @param indices export phase-encoding information to an EDDY-style config / index file pair
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "export_pe_eddy" as const,
+        "@type": "mrtrix.mrconvert.export_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -693,18 +693,18 @@ function mrconvert_export_pe_eddy_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_export_pe_eddy_cargs(
     params: MrconvertExportPeEddyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-export_pe_eddy");
     cargs.push((params["config"] ?? null));
@@ -713,18 +713,18 @@ function mrconvert_export_pe_eddy_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrconvert_export_pe_eddy_outputs(
     params: MrconvertExportPeEddyParameters,
     execution: Execution,
 ): MrconvertExportPeEddyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrconvertExportPeEddyOutputs = {
         root: execution.outputFile("."),
         config: execution.outputFile([(params["config"] ?? null)].join('')),
@@ -734,20 +734,20 @@ function mrconvert_export_pe_eddy_outputs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_config_params(
     key: string,
     value: string,
 ): MrconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -755,18 +755,18 @@ function mrconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_config_cargs(
     params: MrconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -812,6 +812,43 @@ interface MrconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image.
+ * @param output the output image.
+ * @param coord retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
+ * @param vox change the voxel dimensions reported in the output image header
+ * @param axes specify the axes from the input image that will be used to form the output image
+ * @param scaling specify the data scaling parameters used to rescale the intensity values
+ * @param json_import import data from a JSON file into header key-value pairs
+ * @param json_export export data from an image header key-value pairs into a JSON file
+ * @param clear_property remove the specified key from the image header altogether.
+ * @param set_property set the value of the specified key in the image header.
+ * @param append_property append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
+ * @param copy_properties clear all generic properties and replace with the properties from the image / file specified.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param import_pe_table import a phase-encoding table from file
+ * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
+ * @param export_pe_table export phase-encoding table to file
+ * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrconvert_params(
     input: InputPathType,
     output: string,
@@ -845,45 +882,8 @@ function mrconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): MrconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image.
-     * @param output the output image.
-     * @param coord retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
-     * @param vox change the voxel dimensions reported in the output image header
-     * @param axes specify the axes from the input image that will be used to form the output image
-     * @param scaling specify the data scaling parameters used to rescale the intensity values
-     * @param json_import import data from a JSON file into header key-value pairs
-     * @param json_export export data from an image header key-value pairs into a JSON file
-     * @param clear_property remove the specified key from the image header altogether.
-     * @param set_property set the value of the specified key in the image header.
-     * @param append_property append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
-     * @param copy_properties clear all generic properties and replace with the properties from the image / file specified.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param import_pe_table import a phase-encoding table from file
-     * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
-     * @param export_pe_table export phase-encoding table to file
-     * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrconvert" as const,
+        "@type": "mrtrix.mrconvert" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -966,22 +966,22 @@ function mrconvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrconvert_cargs(
     params: MrconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrconvert");
     if ((params["coord"] ?? null) !== null) {
-        cargs.push(...(params["coord"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["coord"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["vox"] ?? null) !== null) {
         cargs.push(
@@ -1014,24 +1014,24 @@ function mrconvert_cargs(
         );
     }
     if ((params["clear_property"] ?? null) !== null) {
-        cargs.push(...(params["clear_property"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["clear_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["set_property"] ?? null) !== null) {
-        cargs.push(...(params["set_property"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["set_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["append_property"] ?? null) !== null) {
-        cargs.push(...(params["append_property"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["append_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["copy_properties"] ?? null) !== null) {
         cargs.push(
             "-copy_properties",
-            ...dynCargs((params["copy_properties"] ?? null).__STYXTYPE__)((params["copy_properties"] ?? null), execution)
+            ...dynCargs((params["copy_properties"] ?? null)["@type"])((params["copy_properties"] ?? null), execution)
         );
     }
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null).__STYXTYPE__)((params["strides"] ?? null), execution)
+            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -1047,7 +1047,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null).__STYXTYPE__)((params["fslgrad"] ?? null), execution));
+        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
     }
     if ((params["bvalue_scaling"] ?? null) !== null) {
         cargs.push(
@@ -1062,7 +1062,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null).__STYXTYPE__)((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["import_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -1071,7 +1071,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["import_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null).__STYXTYPE__)((params["import_pe_eddy"] ?? null), execution));
+        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null)["@type"])((params["import_pe_eddy"] ?? null), execution));
     }
     if ((params["export_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -1080,7 +1080,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["export_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null).__STYXTYPE__)((params["export_pe_eddy"] ?? null), execution));
+        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null)["@type"])((params["export_pe_eddy"] ?? null), execution));
     }
     if ((params["info"] ?? null)) {
         cargs.push("-info");
@@ -1101,7 +1101,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -1115,65 +1115,65 @@ function mrconvert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrconvert_outputs(
     params: MrconvertParameters,
     execution: Execution,
 ): MrconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrconvertOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
         json_export: ((params["json_export"] ?? null) !== null) ? execution.outputFile([(params["json_export"] ?? null)].join('')) : null,
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_pe_table: ((params["export_pe_table"] ?? null) !== null) ? execution.outputFile([(params["export_pe_table"] ?? null)].join('')) : null,
-        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null).__STYXTYPE__)?.((params["export_grad_fsl"] ?? null), execution) ?? null),
-        export_pe_eddy: (dynOutputs((params["export_pe_eddy"] ?? null).__STYXTYPE__)?.((params["export_pe_eddy"] ?? null), execution) ?? null),
+        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
+        export_pe_eddy: (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null),
     };
     return ret;
 }
 
 
+/**
+ * Perform conversion between different file types and optionally extract a subset of the input image.
+ *
+ * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.
+ *
+ * Note that for both the -coord and -axes options, indexing starts from 0 rather than 1. E.g. -coord 3 <#> selects volumes (the fourth dimension) from the series; -axes 0,1,2 includes only the three spatial axes in the output image.
+ *
+ * Additionally, for the second input to the -coord option and the -axes option, you can use any valid number sequence in the selection, as well as the 'end' keyword (see the main documentation for details); this can be particularly useful to select multiple coordinates.
+ *
+ * The -vox option is used to change the size of the voxels in the output image as reported in the image header; note however that this does not re-sample the image based on a new voxel size (that is done using the mrgrid command).
+ *
+ * By default, the intensity scaling parameters in the input image header are passed through to the output image header when writing to an integer image, and reset to 0,1 (i.e. no scaling) for floating-point and binary images. Note that the -scaling option will therefore have no effect for floating-point or binary output images.
+ *
+ * The -axes option specifies which axes from the input image will be used to form the output image. This allows the permutation, omission, or addition of axes into the output image. The axes should be supplied as a comma-separated list of axis indices. If an axis from the input image is to be omitted from the output image, it must either already have a size of 1, or a single coordinate along that axis must be selected by the user by using the -coord option. Examples are provided further below.
+ *
+ * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
+ */
 function mrconvert_execute(
     params: MrconvertParameters,
     execution: Execution,
 ): MrconvertOutputs {
-    /**
-     * Perform conversion between different file types and optionally extract a subset of the input image.
-     * 
-     * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.
-     * 
-     * Note that for both the -coord and -axes options, indexing starts from 0 rather than 1. E.g. -coord 3 <#> selects volumes (the fourth dimension) from the series; -axes 0,1,2 includes only the three spatial axes in the output image.
-     * 
-     * Additionally, for the second input to the -coord option and the -axes option, you can use any valid number sequence in the selection, as well as the 'end' keyword (see the main documentation for details); this can be particularly useful to select multiple coordinates.
-     * 
-     * The -vox option is used to change the size of the voxels in the output image as reported in the image header; note however that this does not re-sample the image based on a new voxel size (that is done using the mrgrid command).
-     * 
-     * By default, the intensity scaling parameters in the input image header are passed through to the output image header when writing to an integer image, and reset to 0,1 (i.e. no scaling) for floating-point and binary images. Note that the -scaling option will therefore have no effect for floating-point or binary output images.
-     * 
-     * The -axes option specifies which axes from the input image will be used to form the output image. This allows the permutation, omission, or addition of axes into the output image. The axes should be supplied as a comma-separated list of axis indices. If an axis from the input image is to be omitted from the output image, it must either already have a size of 1, or a single coordinate along that axis must be selected by the user by using the -coord option. Examples are provided further below.
-     * 
-     * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrconvert_cargs(params, execution)
     const ret = mrconvert_outputs(params, execution)
@@ -1182,6 +1182,66 @@ function mrconvert_execute(
 }
 
 
+/**
+ * Perform conversion between different file types and optionally extract a subset of the input image.
+ *
+ * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.
+ *
+ * Note that for both the -coord and -axes options, indexing starts from 0 rather than 1. E.g. -coord 3 <#> selects volumes (the fourth dimension) from the series; -axes 0,1,2 includes only the three spatial axes in the output image.
+ *
+ * Additionally, for the second input to the -coord option and the -axes option, you can use any valid number sequence in the selection, as well as the 'end' keyword (see the main documentation for details); this can be particularly useful to select multiple coordinates.
+ *
+ * The -vox option is used to change the size of the voxels in the output image as reported in the image header; note however that this does not re-sample the image based on a new voxel size (that is done using the mrgrid command).
+ *
+ * By default, the intensity scaling parameters in the input image header are passed through to the output image header when writing to an integer image, and reset to 0,1 (i.e. no scaling) for floating-point and binary images. Note that the -scaling option will therefore have no effect for floating-point or binary output images.
+ *
+ * The -axes option specifies which axes from the input image will be used to form the output image. This allows the permutation, omission, or addition of axes into the output image. The axes should be supplied as a comma-separated list of axis indices. If an axis from the input image is to be omitted from the output image, it must either already have a size of 1, or a single coordinate along that axis must be selected by the user by using the -coord option. Examples are provided further below.
+ *
+ * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image.
+ * @param output the output image.
+ * @param coord retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
+ * @param vox change the voxel dimensions reported in the output image header
+ * @param axes specify the axes from the input image that will be used to form the output image
+ * @param scaling specify the data scaling parameters used to rescale the intensity values
+ * @param json_import import data from a JSON file into header key-value pairs
+ * @param json_export export data from an image header key-value pairs into a JSON file
+ * @param clear_property remove the specified key from the image header altogether.
+ * @param set_property set the value of the specified key in the image header.
+ * @param append_property append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
+ * @param copy_properties clear all generic properties and replace with the properties from the image / file specified.
+ * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
+ * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
+ * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
+ * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
+ * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
+ * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
+ * @param import_pe_table import a phase-encoding table from file
+ * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
+ * @param export_pe_table export phase-encoding table to file
+ * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
+ */
 function mrconvert(
     input: InputPathType,
     output: string,
@@ -1216,66 +1276,6 @@ function mrconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrconvertOutputs {
-    /**
-     * Perform conversion between different file types and optionally extract a subset of the input image.
-     * 
-     * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.
-     * 
-     * Note that for both the -coord and -axes options, indexing starts from 0 rather than 1. E.g. -coord 3 <#> selects volumes (the fourth dimension) from the series; -axes 0,1,2 includes only the three spatial axes in the output image.
-     * 
-     * Additionally, for the second input to the -coord option and the -axes option, you can use any valid number sequence in the selection, as well as the 'end' keyword (see the main documentation for details); this can be particularly useful to select multiple coordinates.
-     * 
-     * The -vox option is used to change the size of the voxels in the output image as reported in the image header; note however that this does not re-sample the image based on a new voxel size (that is done using the mrgrid command).
-     * 
-     * By default, the intensity scaling parameters in the input image header are passed through to the output image header when writing to an integer image, and reset to 0,1 (i.e. no scaling) for floating-point and binary images. Note that the -scaling option will therefore have no effect for floating-point or binary output images.
-     * 
-     * The -axes option specifies which axes from the input image will be used to form the output image. This allows the permutation, omission, or addition of axes into the output image. The axes should be supplied as a comma-separated list of axis indices. If an axis from the input image is to be omitted from the output image, it must either already have a size of 1, or a single coordinate along that axis must be selected by the user by using the -coord option. Examples are provided further below.
-     * 
-     * The -bvalue_scaling option controls an aspect of the import of diffusion gradient tables. When the input diffusion-weighting direction vectors have norms that differ substantially from unity, the b-values will be scaled by the square of their corresponding vector norm (this is how multi-shell acquisitions are frequently achieved on scanner platforms). However in some rare instances, the b-values may be correct, despite the vectors not being of unit norm (or conversely, the b-values may need to be rescaled even though the vectors are close to unit norm). This option allows the user to control this operation and override MRrtix3's automatic detection.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image.
-     * @param output the output image.
-     * @param coord retain data from the input image only at the coordinates specified in the selection along the specified axis. The selection argument expects a number sequence, which can also include the 'end' keyword.
-     * @param vox change the voxel dimensions reported in the output image header
-     * @param axes specify the axes from the input image that will be used to form the output image
-     * @param scaling specify the data scaling parameters used to rescale the intensity values
-     * @param json_import import data from a JSON file into header key-value pairs
-     * @param json_export export data from an image header key-value pairs into a JSON file
-     * @param clear_property remove the specified key from the image header altogether.
-     * @param set_property set the value of the specified key in the image header.
-     * @param append_property append the given value to the specified key in the image header (this adds the value specified as a new line in the header value).
-     * @param copy_properties clear all generic properties and replace with the properties from the image / file specified.
-     * @param strides specify the strides of the output data in memory; either as a comma-separated list of (signed) integers, or as a template image from which the strides shall be extracted and used. The actual strides produced will depend on whether the output image format can support it.
-     * @param datatype specify output image data type. Valid choices are: float32, float32le, float32be, float64, float64le, float64be, int64, uint64, int64le, uint64le, int64be, uint64be, int32, uint32, int32le, uint32le, int32be, uint32be, int16, uint16, int16le, uint16le, int16be, uint16be, cfloat32, cfloat32le, cfloat32be, cfloat64, cfloat64le, cfloat64be, int8, uint8, bit.
-     * @param grad Provide the diffusion-weighted gradient scheme used in the acquisition in a text file. This should be supplied as a 4xN text file with each line is in the format [ X Y Z b ], where [ X Y Z ] describe the direction of the applied gradient, and b gives the b-value in units of s/mm^2. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param fslgrad Provide the diffusion-weighted gradient scheme used in the acquisition in FSL bvecs/bvals format files. If a diffusion gradient scheme is present in the input image header, the data provided with this option will be instead used.
-     * @param bvalue_scaling enable or disable scaling of diffusion b-values by the square of the corresponding DW gradient norm (see Desciption). Valid choices are yes/no, true/false, 0/1 (default: automatic).
-     * @param export_grad_mrtrix export the diffusion-weighted gradient table to file in MRtrix format
-     * @param export_grad_fsl export the diffusion-weighted gradient table to files in FSL (bvecs / bvals) format
-     * @param import_pe_table import a phase-encoding table from file
-     * @param import_pe_eddy import phase-encoding information from an EDDY-style config / index file pair
-     * @param export_pe_table export phase-encoding table to file
-     * @param export_pe_eddy export phase-encoding information to an EDDY-style config / index file pair
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRCONVERT_METADATA);
     const params = mrconvert_params(input, output, coord, vox, axes, scaling, json_import, json_export, clear_property, set_property, append_property, copy_properties, strides, datatype, grad, fslgrad, bvalue_scaling, export_grad_mrtrix, export_grad_fsl, import_pe_table, import_pe_eddy, export_pe_table, export_pe_eddy, info, quiet, debug, force, nthreads, config, help, version)
@@ -1303,18 +1303,36 @@ export {
       MrconvertVariousString1Parameters,
       MrconvertVariousStringParameters,
       mrconvert,
+      mrconvert_append_property_cargs,
       mrconvert_append_property_params,
+      mrconvert_cargs,
+      mrconvert_clear_property_cargs,
       mrconvert_clear_property_params,
+      mrconvert_config_cargs,
       mrconvert_config_params,
+      mrconvert_coord_cargs,
       mrconvert_coord_params,
+      mrconvert_execute,
+      mrconvert_export_grad_fsl_cargs,
+      mrconvert_export_grad_fsl_outputs,
       mrconvert_export_grad_fsl_params,
+      mrconvert_export_pe_eddy_cargs,
+      mrconvert_export_pe_eddy_outputs,
       mrconvert_export_pe_eddy_params,
+      mrconvert_fslgrad_cargs,
       mrconvert_fslgrad_params,
+      mrconvert_import_pe_eddy_cargs,
       mrconvert_import_pe_eddy_params,
+      mrconvert_outputs,
       mrconvert_params,
+      mrconvert_set_property_cargs,
       mrconvert_set_property_params,
+      mrconvert_various_file_1_cargs,
       mrconvert_various_file_1_params,
+      mrconvert_various_file_cargs,
       mrconvert_various_file_params,
+      mrconvert_various_string_1_cargs,
       mrconvert_various_string_1_params,
+      mrconvert_various_string_cargs,
       mrconvert_various_string_params,
 };

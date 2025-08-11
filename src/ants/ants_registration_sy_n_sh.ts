@@ -12,7 +12,7 @@ const ANTS_REGISTRATION_SY_N_SH_METADATA: Metadata = {
 
 
 interface AntsRegistrationSyNShParameters {
-    "__STYXTYPE__": "antsRegistrationSyN.sh";
+    "@type": "ants.antsRegistrationSyN.sh";
     "image_dimension": 2 | 3;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
@@ -32,35 +32,35 @@ interface AntsRegistrationSyNShParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsRegistrationSyN.sh": ants_registration_sy_n_sh_cargs,
+        "ants.antsRegistrationSyN.sh": ants_registration_sy_n_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsRegistrationSyN.sh": ants_registration_sy_n_sh_outputs,
+        "ants.antsRegistrationSyN.sh": ants_registration_sy_n_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,45 @@ interface AntsRegistrationSyNShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Image dimension: 2 or 3 (for 2 or 3-dimensional registration of a single volume)
+ * @param fixed_image Fixed image(s) or source image(s) or reference image(s)
+ * @param moving_image Moving image(s) or target image(s)
+ * @param output_prefix A prefix that is prepended to all output files
+ * @param threads Number of threads (default = ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS if defined, otherwise 1)
+ * @param initial_transform Initial transform(s) --- order specified on the command line matters
+ * @param transform_type Transform type (default = 's'). Options:
+ - t: translation (1 stage)
+ - r: rigid (1 stage)
+ - a: rigid + affine (2 stages)
+ - s: rigid + affine + deformable syn (3 stages)
+ - sr: rigid + deformable syn (2 stages)
+ - so: deformable syn only (1 stage)
+ - b: rigid + affine + deformable b-spline syn (3 stages)
+ - br: rigid + deformable b-spline syn (2 stages)
+ - bo: deformable b-spline syn only (1 stage)
+ * @param radius Radius for cross correlation metric used during SyN stage (default = 4)
+ * @param spline_distance Spline distance for deformable B-spline SyN transform (default = 26)
+ * @param gradient_step Gradient step size for SyN and B-spline SyN (default = 0.1)
+ * @param masks Mask(s) for the fixed image space, or for the fixed and moving image space in the format 'fixedMask,MovingMask'. Use -x once to specify mask(s) to be used for all stages or use -x for each 'stage' (cf -t option). If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of file names.
+ * @param precision_type Precision type (default = 'd'). Options:
+ - f: float
+ - d: double
+ * @param use_histogram_matching Use histogram matching (default = 0). Options:
+ - 0: false
+ - 1: true
+ * @param use_repro_mode Use 'repro' mode for exact reproducibility of output. Uses GC metric for linear stages and a fixed random seed (default = 0). Options:
+ - 0: false
+ - 1: true
+ * @param collapse_output_transforms Collapse output transforms (default = 1). Options:
+ - 0: false
+ - 1: true
+ * @param random_seed Fix random seed to an int value
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_sy_n_sh_params(
     image_dimension: 2 | 3,
     fixed_image: InputPathType,
@@ -109,47 +148,8 @@ function ants_registration_sy_n_sh_params(
     collapse_output_transforms: 0 | 1 | null = null,
     random_seed: number | null = null,
 ): AntsRegistrationSyNShParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Image dimension: 2 or 3 (for 2 or 3-dimensional registration of a single volume)
-     * @param fixed_image Fixed image(s) or source image(s) or reference image(s)
-     * @param moving_image Moving image(s) or target image(s)
-     * @param output_prefix A prefix that is prepended to all output files
-     * @param threads Number of threads (default = ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS if defined, otherwise 1)
-     * @param initial_transform Initial transform(s) --- order specified on the command line matters
-     * @param transform_type Transform type (default = 's'). Options:
- - t: translation (1 stage)
- - r: rigid (1 stage)
- - a: rigid + affine (2 stages)
- - s: rigid + affine + deformable syn (3 stages)
- - sr: rigid + deformable syn (2 stages)
- - so: deformable syn only (1 stage)
- - b: rigid + affine + deformable b-spline syn (3 stages)
- - br: rigid + deformable b-spline syn (2 stages)
- - bo: deformable b-spline syn only (1 stage)
-     * @param radius Radius for cross correlation metric used during SyN stage (default = 4)
-     * @param spline_distance Spline distance for deformable B-spline SyN transform (default = 26)
-     * @param gradient_step Gradient step size for SyN and B-spline SyN (default = 0.1)
-     * @param masks Mask(s) for the fixed image space, or for the fixed and moving image space in the format 'fixedMask,MovingMask'. Use -x once to specify mask(s) to be used for all stages or use -x for each 'stage' (cf -t option). If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of file names.
-     * @param precision_type Precision type (default = 'd'). Options:
- - f: float
- - d: double
-     * @param use_histogram_matching Use histogram matching (default = 0). Options:
- - 0: false
- - 1: true
-     * @param use_repro_mode Use 'repro' mode for exact reproducibility of output. Uses GC metric for linear stages and a fixed random seed (default = 0). Options:
- - 0: false
- - 1: true
-     * @param collapse_output_transforms Collapse output transforms (default = 1). Options:
- - 0: false
- - 1: true
-     * @param random_seed Fix random seed to an int value
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsRegistrationSyN.sh" as const,
+        "@type": "ants.antsRegistrationSyN.sh" as const,
         "image_dimension": image_dimension,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -195,18 +195,18 @@ function ants_registration_sy_n_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_registration_sy_n_sh_cargs(
     params: AntsRegistrationSyNShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsRegistrationSyN.sh");
     cargs.push(
@@ -301,18 +301,18 @@ function ants_registration_sy_n_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_registration_sy_n_sh_outputs(
     params: AntsRegistrationSyNShParameters,
     execution: Execution,
 ): AntsRegistrationSyNShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsRegistrationSyNShOutputs = {
         root: execution.outputFile("."),
         affine_transform: execution.outputFile([(params["output_prefix"] ?? null), "0GenericAffine.mat"].join('')),
@@ -323,22 +323,22 @@ function ants_registration_sy_n_sh_outputs(
 }
 
 
+/**
+ * Script for simplified symmetric image registration using ANTs.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
+ */
 function ants_registration_sy_n_sh_execute(
     params: AntsRegistrationSyNShParameters,
     execution: Execution,
 ): AntsRegistrationSyNShOutputs {
-    /**
-     * Script for simplified symmetric image registration using ANTs.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_registration_sy_n_sh_cargs(params, execution)
     const ret = ants_registration_sy_n_sh_outputs(params, execution)
@@ -347,6 +347,50 @@ function ants_registration_sy_n_sh_execute(
 }
 
 
+/**
+ * Script for simplified symmetric image registration using ANTs.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Image dimension: 2 or 3 (for 2 or 3-dimensional registration of a single volume)
+ * @param fixed_image Fixed image(s) or source image(s) or reference image(s)
+ * @param moving_image Moving image(s) or target image(s)
+ * @param output_prefix A prefix that is prepended to all output files
+ * @param threads Number of threads (default = ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS if defined, otherwise 1)
+ * @param initial_transform Initial transform(s) --- order specified on the command line matters
+ * @param transform_type Transform type (default = 's'). Options:
+ - t: translation (1 stage)
+ - r: rigid (1 stage)
+ - a: rigid + affine (2 stages)
+ - s: rigid + affine + deformable syn (3 stages)
+ - sr: rigid + deformable syn (2 stages)
+ - so: deformable syn only (1 stage)
+ - b: rigid + affine + deformable b-spline syn (3 stages)
+ - br: rigid + deformable b-spline syn (2 stages)
+ - bo: deformable b-spline syn only (1 stage)
+ * @param radius Radius for cross correlation metric used during SyN stage (default = 4)
+ * @param spline_distance Spline distance for deformable B-spline SyN transform (default = 26)
+ * @param gradient_step Gradient step size for SyN and B-spline SyN (default = 0.1)
+ * @param masks Mask(s) for the fixed image space, or for the fixed and moving image space in the format 'fixedMask,MovingMask'. Use -x once to specify mask(s) to be used for all stages or use -x for each 'stage' (cf -t option). If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of file names.
+ * @param precision_type Precision type (default = 'd'). Options:
+ - f: float
+ - d: double
+ * @param use_histogram_matching Use histogram matching (default = 0). Options:
+ - 0: false
+ - 1: true
+ * @param use_repro_mode Use 'repro' mode for exact reproducibility of output. Uses GC metric for linear stages and a fixed random seed (default = 0). Options:
+ - 0: false
+ - 1: true
+ * @param collapse_output_transforms Collapse output transforms (default = 1). Options:
+ - 0: false
+ - 1: true
+ * @param random_seed Fix random seed to an int value
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
+ */
 function ants_registration_sy_n_sh(
     image_dimension: 2 | 3,
     fixed_image: InputPathType,
@@ -366,50 +410,6 @@ function ants_registration_sy_n_sh(
     random_seed: number | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationSyNShOutputs {
-    /**
-     * Script for simplified symmetric image registration using ANTs.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Image dimension: 2 or 3 (for 2 or 3-dimensional registration of a single volume)
-     * @param fixed_image Fixed image(s) or source image(s) or reference image(s)
-     * @param moving_image Moving image(s) or target image(s)
-     * @param output_prefix A prefix that is prepended to all output files
-     * @param threads Number of threads (default = ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS if defined, otherwise 1)
-     * @param initial_transform Initial transform(s) --- order specified on the command line matters
-     * @param transform_type Transform type (default = 's'). Options:
- - t: translation (1 stage)
- - r: rigid (1 stage)
- - a: rigid + affine (2 stages)
- - s: rigid + affine + deformable syn (3 stages)
- - sr: rigid + deformable syn (2 stages)
- - so: deformable syn only (1 stage)
- - b: rigid + affine + deformable b-spline syn (3 stages)
- - br: rigid + deformable b-spline syn (2 stages)
- - bo: deformable b-spline syn only (1 stage)
-     * @param radius Radius for cross correlation metric used during SyN stage (default = 4)
-     * @param spline_distance Spline distance for deformable B-spline SyN transform (default = 26)
-     * @param gradient_step Gradient step size for SyN and B-spline SyN (default = 0.1)
-     * @param masks Mask(s) for the fixed image space, or for the fixed and moving image space in the format 'fixedMask,MovingMask'. Use -x once to specify mask(s) to be used for all stages or use -x for each 'stage' (cf -t option). If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of file names.
-     * @param precision_type Precision type (default = 'd'). Options:
- - f: float
- - d: double
-     * @param use_histogram_matching Use histogram matching (default = 0). Options:
- - 0: false
- - 1: true
-     * @param use_repro_mode Use 'repro' mode for exact reproducibility of output. Uses GC metric for linear stages and a fixed random seed (default = 0). Options:
- - 0: false
- - 1: true
-     * @param collapse_output_transforms Collapse output transforms (default = 1). Options:
- - 0: false
- - 1: true
-     * @param random_seed Fix random seed to an int value
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_REGISTRATION_SY_N_SH_METADATA);
     const params = ants_registration_sy_n_sh_params(image_dimension, fixed_image, moving_image, output_prefix, threads, initial_transform, transform_type, radius, spline_distance, gradient_step, masks, precision_type, use_histogram_matching, use_repro_mode, collapse_output_transforms, random_seed)
@@ -422,5 +422,8 @@ export {
       AntsRegistrationSyNShOutputs,
       AntsRegistrationSyNShParameters,
       ants_registration_sy_n_sh,
+      ants_registration_sy_n_sh_cargs,
+      ants_registration_sy_n_sh_execute,
+      ants_registration_sy_n_sh_outputs,
       ants_registration_sy_n_sh_params,
 };

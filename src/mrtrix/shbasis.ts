@@ -12,14 +12,14 @@ const SHBASIS_METADATA: Metadata = {
 
 
 interface ShbasisConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.shbasis.config";
     "key": string;
     "value": string;
 }
 
 
 interface ShbasisParameters {
-    "__STYXTYPE__": "shbasis";
+    "@type": "mrtrix.shbasis";
     "convert"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -33,54 +33,54 @@ interface ShbasisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "shbasis": shbasis_cargs,
-        "config": shbasis_config_cargs,
+        "mrtrix.shbasis": shbasis_cargs,
+        "mrtrix.shbasis.config": shbasis_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function shbasis_config_params(
     key: string,
     value: string,
 ): ShbasisConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.shbasis.config" as const,
         "key": key,
         "value": value,
     };
@@ -88,18 +88,18 @@ function shbasis_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shbasis_config_cargs(
     params: ShbasisConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -121,6 +121,22 @@ interface ShbasisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sh the input image(s) of SH coefficients.
+ * @param convert convert the image data in-place to the desired basis; options are: old,new,force_oldtonew,force_newtoold.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function shbasis_params(
     sh: Array<InputPathType>,
     convert: string | null = null,
@@ -133,24 +149,8 @@ function shbasis_params(
     help: boolean = false,
     version: boolean = false,
 ): ShbasisParameters {
-    /**
-     * Build parameters.
-    
-     * @param sh the input image(s) of SH coefficients.
-     * @param convert convert the image data in-place to the desired basis; options are: old,new,force_oldtonew,force_newtoold.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "shbasis" as const,
+        "@type": "mrtrix.shbasis" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -172,18 +172,18 @@ function shbasis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function shbasis_cargs(
     params: ShbasisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("shbasis");
     if ((params["convert"] ?? null) !== null) {
@@ -211,7 +211,7 @@ function shbasis_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -224,18 +224,18 @@ function shbasis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function shbasis_outputs(
     params: ShbasisParameters,
     execution: Execution,
 ): ShbasisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ShbasisOutputs = {
         root: execution.outputFile("."),
     };
@@ -243,35 +243,35 @@ function shbasis_outputs(
 }
 
 
+/**
+ * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
+ *
+ * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).
+ *
+ * This command provides a mechanism for testing the basis used in storage of image data representing a spherical harmonic series per voxel, and allows the user to forcibly modify the raw image data to conform to the desired basis.
+ *
+ * Note that the "force_*" conversion choices should only be used in cases where this command has previously been unable to automatically determine the SH basis from the image data, but the user themselves are confident of the SH basis of the data.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
+ */
 function shbasis_execute(
     params: ShbasisParameters,
     execution: Execution,
 ): ShbasisOutputs {
-    /**
-     * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
-     * 
-     * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).
-     * 
-     * This command provides a mechanism for testing the basis used in storage of image data representing a spherical harmonic series per voxel, and allows the user to forcibly modify the raw image data to conform to the desired basis.
-     * 
-     * Note that the "force_*" conversion choices should only be used in cases where this command has previously been unable to automatically determine the SH basis from the image data, but the user themselves are confident of the SH basis of the data.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
-     */
     params = execution.params(params)
     const cargs = shbasis_cargs(params, execution)
     const ret = shbasis_outputs(params, execution)
@@ -280,6 +280,40 @@ function shbasis_execute(
 }
 
 
+/**
+ * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
+ *
+ * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).
+ *
+ * This command provides a mechanism for testing the basis used in storage of image data representing a spherical harmonic series per voxel, and allows the user to forcibly modify the raw image data to conform to the desired basis.
+ *
+ * Note that the "force_*" conversion choices should only be used in cases where this command has previously been unable to automatically determine the SH basis from the image data, but the user themselves are confident of the SH basis of the data.
+ *
+ * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
+ * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param sh the input image(s) of SH coefficients.
+ * @param convert convert the image data in-place to the desired basis; options are: old,new,force_oldtonew,force_newtoold.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
+ */
 function shbasis(
     sh: Array<InputPathType>,
     convert: string | null = null,
@@ -293,40 +327,6 @@ function shbasis(
     version: boolean = false,
     runner: Runner | null = null,
 ): ShbasisOutputs {
-    /**
-     * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
-     * 
-     * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).
-     * 
-     * This command provides a mechanism for testing the basis used in storage of image data representing a spherical harmonic series per voxel, and allows the user to forcibly modify the raw image data to conform to the desired basis.
-     * 
-     * Note that the "force_*" conversion choices should only be used in cases where this command has previously been unable to automatically determine the SH basis from the image data, but the user themselves are confident of the SH basis of the data.
-     * 
-     * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
-     * https://mrtrix.readthedocs.io/en/3.0.4/concepts/spherical_harmonics.html
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param sh the input image(s) of SH coefficients.
-     * @param convert convert the image data in-place to the desired basis; options are: old,new,force_oldtonew,force_newtoold.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SHBASIS_METADATA);
     const params = shbasis_params(sh, convert, info, quiet, debug, force, nthreads, config, help, version)
@@ -340,6 +340,10 @@ export {
       ShbasisOutputs,
       ShbasisParameters,
       shbasis,
+      shbasis_cargs,
+      shbasis_config_cargs,
       shbasis_config_params,
+      shbasis_execute,
+      shbasis_outputs,
       shbasis_params,
 };

@@ -12,7 +12,7 @@ const MAP_TRACK_ID_METADATA: Metadata = {
 
 
 interface MapTrackIdParameters {
-    "__STYXTYPE__": "map_TrackID";
+    "@type": "afni.map_TrackID";
     "prefix": string;
     "in_trk": InputPathType;
     "in_map": InputPathType;
@@ -24,35 +24,35 @@ interface MapTrackIdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "map_TrackID": map_track_id_cargs,
+        "afni.map_TrackID": map_track_id_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "map_TrackID": map_track_id_outputs,
+        "afni.map_TrackID": map_track_id_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface MapTrackIdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for the output track file.
+ * @param in_trk The name of the *.trk file to be mapped.
+ * @param in_map Single line of matrix values for the transformation.
+ * @param reference 3D data set in the space to which the TRK file is being mapped.
+ * @param verbose Verbose output.
+ * @param orig_zero Put (0,0,0) as the origin in the output *.trk file.
+ * @param line_only_num If your 1D_MATR file is just 12 numbers in a row.
+ * @param already_inv If you have inverted the mapping or use another program than 3dAllineate.
+ *
+ * @returns Parameter dictionary
+ */
 function map_track_id_params(
     prefix: string,
     in_trk: InputPathType,
@@ -85,22 +99,8 @@ function map_track_id_params(
     line_only_num: boolean = false,
     already_inv: boolean = false,
 ): MapTrackIdParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for the output track file.
-     * @param in_trk The name of the *.trk file to be mapped.
-     * @param in_map Single line of matrix values for the transformation.
-     * @param reference 3D data set in the space to which the TRK file is being mapped.
-     * @param verbose Verbose output.
-     * @param orig_zero Put (0,0,0) as the origin in the output *.trk file.
-     * @param line_only_num If your 1D_MATR file is just 12 numbers in a row.
-     * @param already_inv If you have inverted the mapping or use another program than 3dAllineate.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "map_TrackID" as const,
+        "@type": "afni.map_TrackID" as const,
         "prefix": prefix,
         "in_trk": in_trk,
         "in_map": in_map,
@@ -114,18 +114,18 @@ function map_track_id_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function map_track_id_cargs(
     params: MapTrackIdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("map_TrackID");
     cargs.push(
@@ -160,18 +160,18 @@ function map_track_id_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function map_track_id_outputs(
     params: MapTrackIdParameters,
     execution: Execution,
 ): MapTrackIdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MapTrackIdOutputs = {
         root: execution.outputFile("."),
         output_trk_file: execution.outputFile([(params["prefix"] ?? null), ".trk"].join('')),
@@ -180,22 +180,22 @@ function map_track_id_outputs(
 }
 
 
+/**
+ * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
+ */
 function map_track_id_execute(
     params: MapTrackIdParameters,
     execution: Execution,
 ): MapTrackIdOutputs {
-    /**
-     * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
-     */
     params = execution.params(params)
     const cargs = map_track_id_cargs(params, execution)
     const ret = map_track_id_outputs(params, execution)
@@ -204,6 +204,25 @@ function map_track_id_execute(
 }
 
 
+/**
+ * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for the output track file.
+ * @param in_trk The name of the *.trk file to be mapped.
+ * @param in_map Single line of matrix values for the transformation.
+ * @param reference 3D data set in the space to which the TRK file is being mapped.
+ * @param verbose Verbose output.
+ * @param orig_zero Put (0,0,0) as the origin in the output *.trk file.
+ * @param line_only_num If your 1D_MATR file is just 12 numbers in a row.
+ * @param already_inv If you have inverted the mapping or use another program than 3dAllineate.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
+ */
 function map_track_id(
     prefix: string,
     in_trk: InputPathType,
@@ -215,25 +234,6 @@ function map_track_id(
     already_inv: boolean = false,
     runner: Runner | null = null,
 ): MapTrackIdOutputs {
-    /**
-     * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for the output track file.
-     * @param in_trk The name of the *.trk file to be mapped.
-     * @param in_map Single line of matrix values for the transformation.
-     * @param reference 3D data set in the space to which the TRK file is being mapped.
-     * @param verbose Verbose output.
-     * @param orig_zero Put (0,0,0) as the origin in the output *.trk file.
-     * @param line_only_num If your 1D_MATR file is just 12 numbers in a row.
-     * @param already_inv If you have inverted the mapping or use another program than 3dAllineate.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAP_TRACK_ID_METADATA);
     const params = map_track_id_params(prefix, in_trk, in_map, reference, verbose, orig_zero, line_only_num, already_inv)
@@ -246,5 +246,8 @@ export {
       MapTrackIdOutputs,
       MapTrackIdParameters,
       map_track_id,
+      map_track_id_cargs,
+      map_track_id_execute,
+      map_track_id_outputs,
       map_track_id_params,
 };

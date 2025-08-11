@@ -12,7 +12,7 @@ const MRIS_PLACE_SURFACE_METADATA: Metadata = {
 
 
 interface MrisPlaceSurfaceParameters {
-    "__STYXTYPE__": "mris_place_surface";
+    "@type": "freesurfer.mris_place_surface";
     "output_surface": string;
     "input_surface": string;
     "autodetect_gray_white_stats": string;
@@ -60,33 +60,33 @@ interface MrisPlaceSurfaceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_place_surface": mris_place_surface_cargs,
+        "freesurfer.mris_place_surface": mris_place_surface_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -106,6 +106,56 @@ interface MrisPlaceSurfaceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param output_surface Output surface
+ * @param input_surface Input surface
+ * @param autodetect_gray_white_stats Intensity stats created by mris_autodet_gwstats
+ * @param input_volume T1-weighed intensity volume used to find white/gray/csf gradients (usually brain.finalsurf.mgz)
+ * @param surface_type_group Place the white surface or the pial surface. Must choose one.
+ * @param hemi_group Left or right hemisphere. Must choose one.
+ * @param wm_segment White matter segmentation
+ * @param out_volume Save input volume after preprocessing
+ * @param out_volume_only Save input volume after preprocessing and then exit
+ * @param restore_255 Set voxels in the input volume that start off as 255 to 110 (white surf only).
+ * @param segmentation Whole-brain segmentation (usually aseg.presurf.mgz)
+ * @param cortical_parcellation Set cortical parcellation used to rip vertices (usually ?h.aparc.annot)
+ * @param nsmooth Smooth input surface by number of iterations
+ * @param smooth_after_rip Smooth after ripping
+ * @param max_cbv_dist Limit distance MRIScomputeBorderValues() can search from the input
+ * @param rip_label Do not move vertices that are NOT in the cortex label
+ * @param rip_midline Do not move vertices that are in the midline as indicated by the seg
+ * @param rip_bg Do not move vertices near basal ganglia (as defined by seg)
+ * @param rip_bg_no_annot Do not require surface have an annotation when ripping BG
+ * @param no_rip_freeze Do NOT move vertices in/near freeze voxels (247 as defined in seg)
+ * @param rip_wmsa Do not move vertices in/near white-matter signal abnormalities (77,78,79 as defined in seg)
+ * @param rip_lesion Do not move vertices in/near lesions (25 and 57 as defined in seg)
+ * @param no_rip Turn off all ripping
+ * @param rip_overlay Rip vertices > 0.5 in the surface overlay file
+ * @param rip_surface Use this surface with ripping midline, BG, Freezes, Lesions, and WMSA.
+ * @param rip_projection Control projection depth along normal to ripsurface when sampling seg
+ * @param repulse_surface Force input surface away from this surface (usually the white surface when placing the pial).
+ * @param white_surface Set the white{xyz} coordinates of the input surface using this surface.
+ * @param blend_surface Recompute the xyz coordinates of the input surface by computing a weighted average with the blend surface.
+ * @param multimodal_input Specify a T2 or FLAIR input volume used for placing the pial surface. Must be in registration with the input volume.
+ * @param mm_refine Use Siless' MultimodalRefinement. Sets tspring=nspring=0.3
+ * @param pin_medial_wall Set coordinates in vertices NOT in cortexlabel to be that of the white{xyz} coordinates.
+ * @param no_intensity_proc Do not process the input intensity volume (eg, to remove parts of eye socket).
+ * @param debug_vertex Debug vertex number
+ * @param ripflag_out Save ripflag as overlay
+ * @param local_max Save LocalMaxFoundFlag as overlay
+ * @param target_surf Save CBV target surface
+ * @param stop_mask Stop mask to stop search along normal for max gradient
+ * @param mm_intensity_limits Intensity limits for placing pial on multimodal input.
+ * @param cover_seg Force surface to cover the segmentation
+ * @param first_peak_d1 Use find-first-peak option with 1st derivative in ComputeBorderValues
+ * @param first_peak_d2 Use find-first-peak option with 2nd derivative in ComputeBorderValues
+ * @param white_border_low_factor white_border_low = f*adgws.gray_mean + (1-f)*adgws.white_mean;
+ * @param fill_lateral_ventricles Fill lateral ventricles with 110.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_place_surface_params(
     output_surface: string,
     input_surface: string,
@@ -152,58 +202,8 @@ function mris_place_surface_params(
     white_border_low_factor: number | null = null,
     fill_lateral_ventricles: Array<number> | null = null,
 ): MrisPlaceSurfaceParameters {
-    /**
-     * Build parameters.
-    
-     * @param output_surface Output surface
-     * @param input_surface Input surface
-     * @param autodetect_gray_white_stats Intensity stats created by mris_autodet_gwstats
-     * @param input_volume T1-weighed intensity volume used to find white/gray/csf gradients (usually brain.finalsurf.mgz)
-     * @param surface_type_group Place the white surface or the pial surface. Must choose one.
-     * @param hemi_group Left or right hemisphere. Must choose one.
-     * @param wm_segment White matter segmentation
-     * @param out_volume Save input volume after preprocessing
-     * @param out_volume_only Save input volume after preprocessing and then exit
-     * @param restore_255 Set voxels in the input volume that start off as 255 to 110 (white surf only).
-     * @param segmentation Whole-brain segmentation (usually aseg.presurf.mgz)
-     * @param cortical_parcellation Set cortical parcellation used to rip vertices (usually ?h.aparc.annot)
-     * @param nsmooth Smooth input surface by number of iterations
-     * @param smooth_after_rip Smooth after ripping
-     * @param max_cbv_dist Limit distance MRIScomputeBorderValues() can search from the input
-     * @param rip_label Do not move vertices that are NOT in the cortex label
-     * @param rip_midline Do not move vertices that are in the midline as indicated by the seg
-     * @param rip_bg Do not move vertices near basal ganglia (as defined by seg)
-     * @param rip_bg_no_annot Do not require surface have an annotation when ripping BG
-     * @param no_rip_freeze Do NOT move vertices in/near freeze voxels (247 as defined in seg)
-     * @param rip_wmsa Do not move vertices in/near white-matter signal abnormalities (77,78,79 as defined in seg)
-     * @param rip_lesion Do not move vertices in/near lesions (25 and 57 as defined in seg)
-     * @param no_rip Turn off all ripping
-     * @param rip_overlay Rip vertices > 0.5 in the surface overlay file
-     * @param rip_surface Use this surface with ripping midline, BG, Freezes, Lesions, and WMSA.
-     * @param rip_projection Control projection depth along normal to ripsurface when sampling seg
-     * @param repulse_surface Force input surface away from this surface (usually the white surface when placing the pial).
-     * @param white_surface Set the white{xyz} coordinates of the input surface using this surface.
-     * @param blend_surface Recompute the xyz coordinates of the input surface by computing a weighted average with the blend surface.
-     * @param multimodal_input Specify a T2 or FLAIR input volume used for placing the pial surface. Must be in registration with the input volume.
-     * @param mm_refine Use Siless' MultimodalRefinement. Sets tspring=nspring=0.3
-     * @param pin_medial_wall Set coordinates in vertices NOT in cortexlabel to be that of the white{xyz} coordinates.
-     * @param no_intensity_proc Do not process the input intensity volume (eg, to remove parts of eye socket).
-     * @param debug_vertex Debug vertex number
-     * @param ripflag_out Save ripflag as overlay
-     * @param local_max Save LocalMaxFoundFlag as overlay
-     * @param target_surf Save CBV target surface
-     * @param stop_mask Stop mask to stop search along normal for max gradient
-     * @param mm_intensity_limits Intensity limits for placing pial on multimodal input.
-     * @param cover_seg Force surface to cover the segmentation
-     * @param first_peak_d1 Use find-first-peak option with 1st derivative in ComputeBorderValues
-     * @param first_peak_d2 Use find-first-peak option with 2nd derivative in ComputeBorderValues
-     * @param white_border_low_factor white_border_low = f*adgws.gray_mean + (1-f)*adgws.white_mean;
-     * @param fill_lateral_ventricles Fill lateral ventricles with 110.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_place_surface" as const,
+        "@type": "freesurfer.mris_place_surface" as const,
         "output_surface": output_surface,
         "input_surface": input_surface,
         "autodetect_gray_white_stats": autodetect_gray_white_stats,
@@ -301,18 +301,18 @@ function mris_place_surface_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_place_surface_cargs(
     params: MrisPlaceSurfaceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_place_surface");
     cargs.push(
@@ -523,18 +523,18 @@ function mris_place_surface_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_place_surface_outputs(
     params: MrisPlaceSurfaceParameters,
     execution: Execution,
 ): MrisPlaceSurfaceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisPlaceSurfaceOutputs = {
         root: execution.outputFile("."),
     };
@@ -542,22 +542,22 @@ function mris_place_surface_outputs(
 }
 
 
+/**
+ * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
+ */
 function mris_place_surface_execute(
     params: MrisPlaceSurfaceParameters,
     execution: Execution,
 ): MrisPlaceSurfaceOutputs {
-    /**
-     * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_place_surface_cargs(params, execution)
     const ret = mris_place_surface_outputs(params, execution)
@@ -566,6 +566,61 @@ function mris_place_surface_execute(
 }
 
 
+/**
+ * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param output_surface Output surface
+ * @param input_surface Input surface
+ * @param autodetect_gray_white_stats Intensity stats created by mris_autodet_gwstats
+ * @param input_volume T1-weighed intensity volume used to find white/gray/csf gradients (usually brain.finalsurf.mgz)
+ * @param surface_type_group Place the white surface or the pial surface. Must choose one.
+ * @param hemi_group Left or right hemisphere. Must choose one.
+ * @param wm_segment White matter segmentation
+ * @param out_volume Save input volume after preprocessing
+ * @param out_volume_only Save input volume after preprocessing and then exit
+ * @param restore_255 Set voxels in the input volume that start off as 255 to 110 (white surf only).
+ * @param segmentation Whole-brain segmentation (usually aseg.presurf.mgz)
+ * @param cortical_parcellation Set cortical parcellation used to rip vertices (usually ?h.aparc.annot)
+ * @param nsmooth Smooth input surface by number of iterations
+ * @param smooth_after_rip Smooth after ripping
+ * @param max_cbv_dist Limit distance MRIScomputeBorderValues() can search from the input
+ * @param rip_label Do not move vertices that are NOT in the cortex label
+ * @param rip_midline Do not move vertices that are in the midline as indicated by the seg
+ * @param rip_bg Do not move vertices near basal ganglia (as defined by seg)
+ * @param rip_bg_no_annot Do not require surface have an annotation when ripping BG
+ * @param no_rip_freeze Do NOT move vertices in/near freeze voxels (247 as defined in seg)
+ * @param rip_wmsa Do not move vertices in/near white-matter signal abnormalities (77,78,79 as defined in seg)
+ * @param rip_lesion Do not move vertices in/near lesions (25 and 57 as defined in seg)
+ * @param no_rip Turn off all ripping
+ * @param rip_overlay Rip vertices > 0.5 in the surface overlay file
+ * @param rip_surface Use this surface with ripping midline, BG, Freezes, Lesions, and WMSA.
+ * @param rip_projection Control projection depth along normal to ripsurface when sampling seg
+ * @param repulse_surface Force input surface away from this surface (usually the white surface when placing the pial).
+ * @param white_surface Set the white{xyz} coordinates of the input surface using this surface.
+ * @param blend_surface Recompute the xyz coordinates of the input surface by computing a weighted average with the blend surface.
+ * @param multimodal_input Specify a T2 or FLAIR input volume used for placing the pial surface. Must be in registration with the input volume.
+ * @param mm_refine Use Siless' MultimodalRefinement. Sets tspring=nspring=0.3
+ * @param pin_medial_wall Set coordinates in vertices NOT in cortexlabel to be that of the white{xyz} coordinates.
+ * @param no_intensity_proc Do not process the input intensity volume (eg, to remove parts of eye socket).
+ * @param debug_vertex Debug vertex number
+ * @param ripflag_out Save ripflag as overlay
+ * @param local_max Save LocalMaxFoundFlag as overlay
+ * @param target_surf Save CBV target surface
+ * @param stop_mask Stop mask to stop search along normal for max gradient
+ * @param mm_intensity_limits Intensity limits for placing pial on multimodal input.
+ * @param cover_seg Force surface to cover the segmentation
+ * @param first_peak_d1 Use find-first-peak option with 1st derivative in ComputeBorderValues
+ * @param first_peak_d2 Use find-first-peak option with 2nd derivative in ComputeBorderValues
+ * @param white_border_low_factor white_border_low = f*adgws.gray_mean + (1-f)*adgws.white_mean;
+ * @param fill_lateral_ventricles Fill lateral ventricles with 110.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
+ */
 function mris_place_surface(
     output_surface: string,
     input_surface: string,
@@ -613,61 +668,6 @@ function mris_place_surface(
     fill_lateral_ventricles: Array<number> | null = null,
     runner: Runner | null = null,
 ): MrisPlaceSurfaceOutputs {
-    /**
-     * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param output_surface Output surface
-     * @param input_surface Input surface
-     * @param autodetect_gray_white_stats Intensity stats created by mris_autodet_gwstats
-     * @param input_volume T1-weighed intensity volume used to find white/gray/csf gradients (usually brain.finalsurf.mgz)
-     * @param surface_type_group Place the white surface or the pial surface. Must choose one.
-     * @param hemi_group Left or right hemisphere. Must choose one.
-     * @param wm_segment White matter segmentation
-     * @param out_volume Save input volume after preprocessing
-     * @param out_volume_only Save input volume after preprocessing and then exit
-     * @param restore_255 Set voxels in the input volume that start off as 255 to 110 (white surf only).
-     * @param segmentation Whole-brain segmentation (usually aseg.presurf.mgz)
-     * @param cortical_parcellation Set cortical parcellation used to rip vertices (usually ?h.aparc.annot)
-     * @param nsmooth Smooth input surface by number of iterations
-     * @param smooth_after_rip Smooth after ripping
-     * @param max_cbv_dist Limit distance MRIScomputeBorderValues() can search from the input
-     * @param rip_label Do not move vertices that are NOT in the cortex label
-     * @param rip_midline Do not move vertices that are in the midline as indicated by the seg
-     * @param rip_bg Do not move vertices near basal ganglia (as defined by seg)
-     * @param rip_bg_no_annot Do not require surface have an annotation when ripping BG
-     * @param no_rip_freeze Do NOT move vertices in/near freeze voxels (247 as defined in seg)
-     * @param rip_wmsa Do not move vertices in/near white-matter signal abnormalities (77,78,79 as defined in seg)
-     * @param rip_lesion Do not move vertices in/near lesions (25 and 57 as defined in seg)
-     * @param no_rip Turn off all ripping
-     * @param rip_overlay Rip vertices > 0.5 in the surface overlay file
-     * @param rip_surface Use this surface with ripping midline, BG, Freezes, Lesions, and WMSA.
-     * @param rip_projection Control projection depth along normal to ripsurface when sampling seg
-     * @param repulse_surface Force input surface away from this surface (usually the white surface when placing the pial).
-     * @param white_surface Set the white{xyz} coordinates of the input surface using this surface.
-     * @param blend_surface Recompute the xyz coordinates of the input surface by computing a weighted average with the blend surface.
-     * @param multimodal_input Specify a T2 or FLAIR input volume used for placing the pial surface. Must be in registration with the input volume.
-     * @param mm_refine Use Siless' MultimodalRefinement. Sets tspring=nspring=0.3
-     * @param pin_medial_wall Set coordinates in vertices NOT in cortexlabel to be that of the white{xyz} coordinates.
-     * @param no_intensity_proc Do not process the input intensity volume (eg, to remove parts of eye socket).
-     * @param debug_vertex Debug vertex number
-     * @param ripflag_out Save ripflag as overlay
-     * @param local_max Save LocalMaxFoundFlag as overlay
-     * @param target_surf Save CBV target surface
-     * @param stop_mask Stop mask to stop search along normal for max gradient
-     * @param mm_intensity_limits Intensity limits for placing pial on multimodal input.
-     * @param cover_seg Force surface to cover the segmentation
-     * @param first_peak_d1 Use find-first-peak option with 1st derivative in ComputeBorderValues
-     * @param first_peak_d2 Use find-first-peak option with 2nd derivative in ComputeBorderValues
-     * @param white_border_low_factor white_border_low = f*adgws.gray_mean + (1-f)*adgws.white_mean;
-     * @param fill_lateral_ventricles Fill lateral ventricles with 110.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_PLACE_SURFACE_METADATA);
     const params = mris_place_surface_params(output_surface, input_surface, autodetect_gray_white_stats, input_volume, surface_type_group, hemi_group, wm_segment, out_volume, out_volume_only, restore_255, segmentation, cortical_parcellation, nsmooth, smooth_after_rip, max_cbv_dist, rip_label, rip_midline, rip_bg, rip_bg_no_annot, no_rip_freeze, rip_wmsa, rip_lesion, no_rip, rip_overlay, rip_surface, rip_projection, repulse_surface, white_surface, blend_surface, multimodal_input, mm_refine, pin_medial_wall, no_intensity_proc, debug_vertex, ripflag_out, local_max, target_surf, stop_mask, mm_intensity_limits, cover_seg, first_peak_d1, first_peak_d2, white_border_low_factor, fill_lateral_ventricles)
@@ -680,5 +680,8 @@ export {
       MrisPlaceSurfaceOutputs,
       MrisPlaceSurfaceParameters,
       mris_place_surface,
+      mris_place_surface_cargs,
+      mris_place_surface_execute,
+      mris_place_surface_outputs,
       mris_place_surface_params,
 };

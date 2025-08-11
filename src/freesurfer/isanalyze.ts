@@ -12,38 +12,38 @@ const ISANALYZE_METADATA: Metadata = {
 
 
 interface IsanalyzeParameters {
-    "__STYXTYPE__": "isanalyze";
+    "@type": "freesurfer.isanalyze";
     "input_file": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "isanalyze": isanalyze_cargs,
+        "freesurfer.isanalyze": isanalyze_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface IsanalyzeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file for IS analysis.
+ *
+ * @returns Parameter dictionary
+ */
 function isanalyze_params(
     input_file: InputPathType,
 ): IsanalyzeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file for IS analysis.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "isanalyze" as const,
+        "@type": "freesurfer.isanalyze" as const,
         "input_file": input_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function isanalyze_cargs(
     params: IsanalyzeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("isanalyze");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -100,18 +100,18 @@ function isanalyze_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function isanalyze_outputs(
     params: IsanalyzeParameters,
     execution: Execution,
 ): IsanalyzeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IsanalyzeOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function isanalyze_outputs(
 }
 
 
+/**
+ * A tool to analyze and process IS files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
+ */
 function isanalyze_execute(
     params: IsanalyzeParameters,
     execution: Execution,
 ): IsanalyzeOutputs {
-    /**
-     * A tool to analyze and process IS files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
-     */
     params = execution.params(params)
     const cargs = isanalyze_cargs(params, execution)
     const ret = isanalyze_outputs(params, execution)
@@ -143,22 +143,22 @@ function isanalyze_execute(
 }
 
 
+/**
+ * A tool to analyze and process IS files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input file for IS analysis.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
+ */
 function isanalyze(
     input_file: InputPathType,
     runner: Runner | null = null,
 ): IsanalyzeOutputs {
-    /**
-     * A tool to analyze and process IS files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input file for IS analysis.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ISANALYZE_METADATA);
     const params = isanalyze_params(input_file)
@@ -171,5 +171,8 @@ export {
       IsanalyzeOutputs,
       IsanalyzeParameters,
       isanalyze,
+      isanalyze_cargs,
+      isanalyze_execute,
+      isanalyze_outputs,
       isanalyze_params,
 };

@@ -12,7 +12,7 @@ const QUICKSPEC_METADATA: Metadata = {
 
 
 interface QuickspecParameters {
-    "__STYXTYPE__": "quickspec";
+    "@type": "afni.quickspec";
     "tn": Array<string>;
     "tsn": Array<string>;
     "tsnad"?: Array<string> | null | undefined;
@@ -23,35 +23,35 @@ interface QuickspecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "quickspec": quickspec_cargs,
+        "afni.quickspec": quickspec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "quickspec": quickspec_outputs,
+        "afni.quickspec": quickspec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface QuickspecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tn Specify surface type and name.
+ * @param tsn Specify surface type, state, and name.
+ * @param tsnad Specify surface type, state, name, anatomical correctness, and Local Domain Parent.
+ * @param tsnadm Specify surface type, state, name, anatomical correctness, Local Domain Parent, and node marker file.
+ * @param tsnadl Specify surface type, state, name, anatomical correctness, Local Domain Parent, and label dataset file.
+ * @param spec Name of spec file output. Default is quick.spec.
+ * @param help Display help message.
+ *
+ * @returns Parameter dictionary
+ */
 function quickspec_params(
     tn: Array<string>,
     tsn: Array<string>,
@@ -83,21 +96,8 @@ function quickspec_params(
     spec: string | null = null,
     help: boolean = false,
 ): QuickspecParameters {
-    /**
-     * Build parameters.
-    
-     * @param tn Specify surface type and name.
-     * @param tsn Specify surface type, state, and name.
-     * @param tsnad Specify surface type, state, name, anatomical correctness, and Local Domain Parent.
-     * @param tsnadm Specify surface type, state, name, anatomical correctness, Local Domain Parent, and node marker file.
-     * @param tsnadl Specify surface type, state, name, anatomical correctness, Local Domain Parent, and label dataset file.
-     * @param spec Name of spec file output. Default is quick.spec.
-     * @param help Display help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "quickspec" as const,
+        "@type": "afni.quickspec" as const,
         "tn": tn,
         "tsn": tsn,
         "help": help,
@@ -118,18 +118,18 @@ function quickspec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function quickspec_cargs(
     params: QuickspecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("quickspec");
     cargs.push(
@@ -171,18 +171,18 @@ function quickspec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function quickspec_outputs(
     params: QuickspecParameters,
     execution: Execution,
 ): QuickspecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: QuickspecOutputs = {
         root: execution.outputFile("."),
         out_specfile: ((params["spec"] ?? null) !== null) ? execution.outputFile([(params["spec"] ?? null)].join('')) : null,
@@ -191,22 +191,22 @@ function quickspec_outputs(
 }
 
 
+/**
+ * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
+ */
 function quickspec_execute(
     params: QuickspecParameters,
     execution: Execution,
 ): QuickspecOutputs {
-    /**
-     * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
-     */
     params = execution.params(params)
     const cargs = quickspec_cargs(params, execution)
     const ret = quickspec_outputs(params, execution)
@@ -215,6 +215,24 @@ function quickspec_execute(
 }
 
 
+/**
+ * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param tn Specify surface type and name.
+ * @param tsn Specify surface type, state, and name.
+ * @param tsnad Specify surface type, state, name, anatomical correctness, and Local Domain Parent.
+ * @param tsnadm Specify surface type, state, name, anatomical correctness, Local Domain Parent, and node marker file.
+ * @param tsnadl Specify surface type, state, name, anatomical correctness, Local Domain Parent, and label dataset file.
+ * @param spec Name of spec file output. Default is quick.spec.
+ * @param help Display help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
+ */
 function quickspec(
     tn: Array<string>,
     tsn: Array<string>,
@@ -225,24 +243,6 @@ function quickspec(
     help: boolean = false,
     runner: Runner | null = null,
 ): QuickspecOutputs {
-    /**
-     * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param tn Specify surface type and name.
-     * @param tsn Specify surface type, state, and name.
-     * @param tsnad Specify surface type, state, name, anatomical correctness, and Local Domain Parent.
-     * @param tsnadm Specify surface type, state, name, anatomical correctness, Local Domain Parent, and node marker file.
-     * @param tsnadl Specify surface type, state, name, anatomical correctness, Local Domain Parent, and label dataset file.
-     * @param spec Name of spec file output. Default is quick.spec.
-     * @param help Display help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(QUICKSPEC_METADATA);
     const params = quickspec_params(tn, tsn, tsnad, tsnadm, tsnadl, spec, help)
@@ -255,5 +255,8 @@ export {
       QuickspecOutputs,
       QuickspecParameters,
       quickspec,
+      quickspec_cargs,
+      quickspec_execute,
+      quickspec_outputs,
       quickspec_params,
 };

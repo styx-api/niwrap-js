@@ -12,7 +12,7 @@ const FSLCREATEHD_METADATA: Metadata = {
 
 
 interface FslcreatehdParameters {
-    "__STYXTYPE__": "fslcreatehd";
+    "@type": "fsl.fslcreatehd";
     "xsize": number;
     "ysize": number;
     "zsize": number;
@@ -30,35 +30,35 @@ interface FslcreatehdParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslcreatehd": fslcreatehd_cargs,
+        "fsl.fslcreatehd": fslcreatehd_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslcreatehd": fslcreatehd_outputs,
+        "fsl.fslcreatehd": fslcreatehd_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface FslcreatehdOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xsize Size of the image in the x dimension
+ * @param ysize Size of the image in the y dimension
+ * @param zsize Size of the image in the z dimension
+ * @param tsize Size of the image in the t dimension (time)
+ * @param xvoxsize Voxel size in the x dimension
+ * @param yvoxsize Voxel size in the y dimension
+ * @param zvoxsize Voxel size in the z dimension
+ * @param tr Repetition time (TR) of the image
+ * @param xorigin Origin of the image in the x dimension
+ * @param yorigin Origin of the image in the y dimension
+ * @param zorigin Origin of the image in the z dimension
+ * @param datatype Datatype of the image (2=char, 4=short, 8=int, 16=float, 64=double)
+ * @param headername Name of the header file to be created
+ * @param nifti_xml_file NIfTI XML file describing the header configuration (Mutually exclusive with other inputs)
+ *
+ * @returns Parameter dictionary
+ */
 function fslcreatehd_params(
     xsize: number,
     ysize: number,
@@ -97,28 +117,8 @@ function fslcreatehd_params(
     headername: string,
     nifti_xml_file: InputPathType | null = null,
 ): FslcreatehdParameters {
-    /**
-     * Build parameters.
-    
-     * @param xsize Size of the image in the x dimension
-     * @param ysize Size of the image in the y dimension
-     * @param zsize Size of the image in the z dimension
-     * @param tsize Size of the image in the t dimension (time)
-     * @param xvoxsize Voxel size in the x dimension
-     * @param yvoxsize Voxel size in the y dimension
-     * @param zvoxsize Voxel size in the z dimension
-     * @param tr Repetition time (TR) of the image
-     * @param xorigin Origin of the image in the x dimension
-     * @param yorigin Origin of the image in the y dimension
-     * @param zorigin Origin of the image in the z dimension
-     * @param datatype Datatype of the image (2=char, 4=short, 8=int, 16=float, 64=double)
-     * @param headername Name of the header file to be created
-     * @param nifti_xml_file NIfTI XML file describing the header configuration (Mutually exclusive with other inputs)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslcreatehd" as const,
+        "@type": "fsl.fslcreatehd" as const,
         "xsize": xsize,
         "ysize": ysize,
         "zsize": zsize,
@@ -140,18 +140,18 @@ function fslcreatehd_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslcreatehd_cargs(
     params: FslcreatehdParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslcreatehd");
     cargs.push(String((params["xsize"] ?? null)));
@@ -174,18 +174,18 @@ function fslcreatehd_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslcreatehd_outputs(
     params: FslcreatehdParameters,
     execution: Execution,
 ): FslcreatehdOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslcreatehdOutputs = {
         root: execution.outputFile("."),
         out_headerfile: execution.outputFile([(params["headername"] ?? null), ".nii.gz"].join('')),
@@ -194,22 +194,22 @@ function fslcreatehd_outputs(
 }
 
 
+/**
+ * Tool to create a new NIfTI header.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
+ */
 function fslcreatehd_execute(
     params: FslcreatehdParameters,
     execution: Execution,
 ): FslcreatehdOutputs {
-    /**
-     * Tool to create a new NIfTI header.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslcreatehd_cargs(params, execution)
     const ret = fslcreatehd_outputs(params, execution)
@@ -218,6 +218,31 @@ function fslcreatehd_execute(
 }
 
 
+/**
+ * Tool to create a new NIfTI header.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param xsize Size of the image in the x dimension
+ * @param ysize Size of the image in the y dimension
+ * @param zsize Size of the image in the z dimension
+ * @param tsize Size of the image in the t dimension (time)
+ * @param xvoxsize Voxel size in the x dimension
+ * @param yvoxsize Voxel size in the y dimension
+ * @param zvoxsize Voxel size in the z dimension
+ * @param tr Repetition time (TR) of the image
+ * @param xorigin Origin of the image in the x dimension
+ * @param yorigin Origin of the image in the y dimension
+ * @param zorigin Origin of the image in the z dimension
+ * @param datatype Datatype of the image (2=char, 4=short, 8=int, 16=float, 64=double)
+ * @param headername Name of the header file to be created
+ * @param nifti_xml_file NIfTI XML file describing the header configuration (Mutually exclusive with other inputs)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
+ */
 function fslcreatehd(
     xsize: number,
     ysize: number,
@@ -235,31 +260,6 @@ function fslcreatehd(
     nifti_xml_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FslcreatehdOutputs {
-    /**
-     * Tool to create a new NIfTI header.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param xsize Size of the image in the x dimension
-     * @param ysize Size of the image in the y dimension
-     * @param zsize Size of the image in the z dimension
-     * @param tsize Size of the image in the t dimension (time)
-     * @param xvoxsize Voxel size in the x dimension
-     * @param yvoxsize Voxel size in the y dimension
-     * @param zvoxsize Voxel size in the z dimension
-     * @param tr Repetition time (TR) of the image
-     * @param xorigin Origin of the image in the x dimension
-     * @param yorigin Origin of the image in the y dimension
-     * @param zorigin Origin of the image in the z dimension
-     * @param datatype Datatype of the image (2=char, 4=short, 8=int, 16=float, 64=double)
-     * @param headername Name of the header file to be created
-     * @param nifti_xml_file NIfTI XML file describing the header configuration (Mutually exclusive with other inputs)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLCREATEHD_METADATA);
     const params = fslcreatehd_params(xsize, ysize, zsize, tsize, xvoxsize, yvoxsize, zvoxsize, tr, xorigin, yorigin, zorigin, datatype, headername, nifti_xml_file)
@@ -272,5 +272,8 @@ export {
       FslcreatehdOutputs,
       FslcreatehdParameters,
       fslcreatehd,
+      fslcreatehd_cargs,
+      fslcreatehd_execute,
+      fslcreatehd_outputs,
       fslcreatehd_params,
 };

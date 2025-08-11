@@ -12,7 +12,7 @@ const V__BUILD_AFNI_XLIB_METADATA: Metadata = {
 
 
 interface VBuildAfniXlibParameters {
-    "__STYXTYPE__": "@build_afni_Xlib";
+    "@type": "afni.@build_afni_Xlib";
     "afniX": boolean;
     "localinstall": boolean;
     "debug_symbols": boolean;
@@ -22,33 +22,33 @@ interface VBuildAfniXlibParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@build_afni_Xlib": v__build_afni_xlib_cargs,
+        "afni.@build_afni_Xlib": v__build_afni_xlib_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface VBuildAfniXlibOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
+ * @param afni_x Install under /usr/local/afniX
+ * @param localinstall Install under each package directory
+ * @param debug_symbols Compile with -g to add symbols
+ * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
+ * @param lib64 Install libs under lib64 (default is lib)
+ *
+ * @returns Parameter dictionary
+ */
 function v__build_afni_xlib_params(
     packages: Array<string>,
     afni_x: boolean = false,
@@ -76,20 +88,8 @@ function v__build_afni_xlib_params(
     lib32: boolean = false,
     lib64: boolean = false,
 ): VBuildAfniXlibParameters {
-    /**
-     * Build parameters.
-    
-     * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
-     * @param afni_x Install under /usr/local/afniX
-     * @param localinstall Install under each package directory
-     * @param debug_symbols Compile with -g to add symbols
-     * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
-     * @param lib64 Install libs under lib64 (default is lib)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@build_afni_Xlib" as const,
+        "@type": "afni.@build_afni_Xlib" as const,
         "afniX": afni_x,
         "localinstall": localinstall,
         "debug_symbols": debug_symbols,
@@ -101,18 +101,18 @@ function v__build_afni_xlib_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__build_afni_xlib_cargs(
     params: VBuildAfniXlibParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@build_afni_Xlib");
     if ((params["afniX"] ?? null)) {
@@ -135,18 +135,18 @@ function v__build_afni_xlib_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__build_afni_xlib_outputs(
     params: VBuildAfniXlibParameters,
     execution: Execution,
 ): VBuildAfniXlibOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VBuildAfniXlibOutputs = {
         root: execution.outputFile("."),
     };
@@ -154,22 +154,22 @@ function v__build_afni_xlib_outputs(
 }
 
 
+/**
+ * Compile and install lesstif, openmotif, and/or libXt.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
+ */
 function v__build_afni_xlib_execute(
     params: VBuildAfniXlibParameters,
     execution: Execution,
 ): VBuildAfniXlibOutputs {
-    /**
-     * Compile and install lesstif, openmotif, and/or libXt.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__build_afni_xlib_cargs(params, execution)
     const ret = v__build_afni_xlib_outputs(params, execution)
@@ -178,6 +178,23 @@ function v__build_afni_xlib_execute(
 }
 
 
+/**
+ * Compile and install lesstif, openmotif, and/or libXt.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
+ * @param afni_x Install under /usr/local/afniX
+ * @param localinstall Install under each package directory
+ * @param debug_symbols Compile with -g to add symbols
+ * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
+ * @param lib64 Install libs under lib64 (default is lib)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
+ */
 function v__build_afni_xlib(
     packages: Array<string>,
     afni_x: boolean = false,
@@ -187,23 +204,6 @@ function v__build_afni_xlib(
     lib64: boolean = false,
     runner: Runner | null = null,
 ): VBuildAfniXlibOutputs {
-    /**
-     * Compile and install lesstif, openmotif, and/or libXt.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param packages Packages to compile and install (e.g., lesstif, openmotif, libXt)
-     * @param afni_x Install under /usr/local/afniX
-     * @param localinstall Install under each package directory
-     * @param debug_symbols Compile with -g to add symbols
-     * @param lib32 Install libs under lib, and force 32-bit compile (on Linux: add --target=i386)
-     * @param lib64 Install libs under lib64 (default is lib)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__BUILD_AFNI_XLIB_METADATA);
     const params = v__build_afni_xlib_params(packages, afni_x, localinstall, debug_symbols, lib32, lib64)
@@ -216,5 +216,8 @@ export {
       VBuildAfniXlibParameters,
       V__BUILD_AFNI_XLIB_METADATA,
       v__build_afni_xlib,
+      v__build_afni_xlib_cargs,
+      v__build_afni_xlib_execute,
+      v__build_afni_xlib_outputs,
       v__build_afni_xlib_params,
 };

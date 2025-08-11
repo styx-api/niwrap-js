@@ -12,7 +12,7 @@ const CIFTI_PARCELLATE_METADATA: Metadata = {
 
 
 interface CiftiParcellateSpatialWeightsParameters {
-    "__STYXTYPE__": "spatial_weights";
+    "@type": "workbench.cifti-parcellate.spatial_weights";
     "opt_left_area_surf_left_surf"?: InputPathType | null | undefined;
     "opt_right_area_surf_right_surf"?: InputPathType | null | undefined;
     "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
@@ -23,14 +23,14 @@ interface CiftiParcellateSpatialWeightsParameters {
 
 
 interface CiftiParcellateExcludeOutliersParameters {
-    "__STYXTYPE__": "exclude_outliers";
+    "@type": "workbench.cifti-parcellate.exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
 
 
 interface CiftiParcellateParameters {
-    "__STYXTYPE__": "cifti-parcellate";
+    "@type": "workbench.cifti-parcellate";
     "cifti_in": InputPathType;
     "cifti_label": InputPathType;
     "direction": string;
@@ -47,42 +47,54 @@ interface CiftiParcellateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-parcellate": cifti_parcellate_cargs,
-        "spatial_weights": cifti_parcellate_spatial_weights_cargs,
-        "exclude_outliers": cifti_parcellate_exclude_outliers_cargs,
+        "workbench.cifti-parcellate": cifti_parcellate_cargs,
+        "workbench.cifti-parcellate.spatial_weights": cifti_parcellate_spatial_weights_cargs,
+        "workbench.cifti-parcellate.exclude_outliers": cifti_parcellate_exclude_outliers_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-parcellate": cifti_parcellate_outputs,
+        "workbench.cifti-parcellate": cifti_parcellate_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_left_area_surf_left_surf use a surface for left vertex areas: the left surface to use, areas are in mm^2
+ * @param opt_right_area_surf_right_surf use a surface for right vertex areas: the right surface to use, areas are in mm^2
+ * @param opt_cerebellum_area_surf_cerebellum_surf use a surface for cerebellum vertex areas: the cerebellum surface to use, areas are in mm^2
+ * @param opt_left_area_metric_left_metric use a metric file for left vertex weights: metric file containing left vertex weights
+ * @param opt_right_area_metric_right_metric use a metric file for right vertex weights: metric file containing right vertex weights
+ * @param opt_cerebellum_area_metric_cerebellum_metric use a metric file for cerebellum vertex weights: metric file containing cerebellum vertex weights
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_parcellate_spatial_weights_params(
     opt_left_area_surf_left_surf: InputPathType | null = null,
     opt_right_area_surf_right_surf: InputPathType | null = null,
@@ -91,20 +103,8 @@ function cifti_parcellate_spatial_weights_params(
     opt_right_area_metric_right_metric: InputPathType | null = null,
     opt_cerebellum_area_metric_cerebellum_metric: InputPathType | null = null,
 ): CiftiParcellateSpatialWeightsParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_left_area_surf_left_surf use a surface for left vertex areas: the left surface to use, areas are in mm^2
-     * @param opt_right_area_surf_right_surf use a surface for right vertex areas: the right surface to use, areas are in mm^2
-     * @param opt_cerebellum_area_surf_cerebellum_surf use a surface for cerebellum vertex areas: the cerebellum surface to use, areas are in mm^2
-     * @param opt_left_area_metric_left_metric use a metric file for left vertex weights: metric file containing left vertex weights
-     * @param opt_right_area_metric_right_metric use a metric file for right vertex weights: metric file containing right vertex weights
-     * @param opt_cerebellum_area_metric_cerebellum_metric use a metric file for cerebellum vertex weights: metric file containing cerebellum vertex weights
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spatial_weights" as const,
+        "@type": "workbench.cifti-parcellate.spatial_weights" as const,
     };
     if (opt_left_area_surf_left_surf !== null) {
         params["opt_left_area_surf_left_surf"] = opt_left_area_surf_left_surf;
@@ -128,18 +128,18 @@ function cifti_parcellate_spatial_weights_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_parcellate_spatial_weights_cargs(
     params: CiftiParcellateSpatialWeightsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-spatial-weights");
     if ((params["opt_left_area_surf_left_surf"] ?? null) !== null) {
@@ -182,20 +182,20 @@ function cifti_parcellate_spatial_weights_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sigma_below number of standard deviations below the mean to include
+ * @param sigma_above number of standard deviations above the mean to include
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_parcellate_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
 ): CiftiParcellateExcludeOutliersParameters {
-    /**
-     * Build parameters.
-    
-     * @param sigma_below number of standard deviations below the mean to include
-     * @param sigma_above number of standard deviations above the mean to include
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "exclude_outliers" as const,
+        "@type": "workbench.cifti-parcellate.exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -203,18 +203,18 @@ function cifti_parcellate_exclude_outliers_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_parcellate_exclude_outliers_cargs(
     params: CiftiParcellateExcludeOutliersParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-exclude-outliers");
     cargs.push(String((params["sigma_below"] ?? null)));
@@ -244,6 +244,25 @@ interface CiftiParcellateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the cifti file to parcellate
+ * @param cifti_label a cifti label file to use for the parcellation
+ * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param cifti_out output cifti file
+ * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
+ * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
+ * @param opt_method_method specify method of parcellation (default MEAN, or MODE if label data): the method to use to assign parcel values from the values of member brainordinates
+ * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ * @param opt_fill_value_value specify value to use in empty parcels (default 0): the value to fill empty parcels with
+ * @param opt_nonempty_mask_out_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere: the output mask file
+ * @param opt_legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param opt_include_empty deprecated: now the default behavior
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_parcellate_params(
     cifti_in: InputPathType,
     cifti_label: InputPathType,
@@ -259,27 +278,8 @@ function cifti_parcellate_params(
     opt_legacy_mode: boolean = false,
     opt_include_empty: boolean = false,
 ): CiftiParcellateParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the cifti file to parcellate
-     * @param cifti_label a cifti label file to use for the parcellation
-     * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
-     * @param cifti_out output cifti file
-     * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
-     * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
-     * @param opt_method_method specify method of parcellation (default MEAN, or MODE if label data): the method to use to assign parcel values from the values of member brainordinates
-     * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-     * @param opt_fill_value_value specify value to use in empty parcels (default 0): the value to fill empty parcels with
-     * @param opt_nonempty_mask_out_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere: the output mask file
-     * @param opt_legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
-     * @param opt_include_empty deprecated: now the default behavior
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-parcellate" as const,
+        "@type": "workbench.cifti-parcellate" as const,
         "cifti_in": cifti_in,
         "cifti_label": cifti_label,
         "direction": direction,
@@ -310,18 +310,18 @@ function cifti_parcellate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_parcellate_cargs(
     params: CiftiParcellateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-parcellate");
@@ -330,7 +330,7 @@ function cifti_parcellate_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["spatial_weights"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["spatial_weights"] ?? null).__STYXTYPE__)((params["spatial_weights"] ?? null), execution));
+        cargs.push(...dynCargs((params["spatial_weights"] ?? null)["@type"])((params["spatial_weights"] ?? null), execution));
     }
     if ((params["opt_cifti_weights_weight_cifti"] ?? null) !== null) {
         cargs.push(
@@ -345,7 +345,7 @@ function cifti_parcellate_cargs(
         );
     }
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null).__STYXTYPE__)((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
     }
     if ((params["opt_only_numeric"] ?? null)) {
         cargs.push("-only-numeric");
@@ -372,18 +372,18 @@ function cifti_parcellate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_parcellate_outputs(
     params: CiftiParcellateParameters,
     execution: Execution,
 ): CiftiParcellateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiParcellateOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -393,47 +393,47 @@ function cifti_parcellate_outputs(
 }
 
 
+/**
+ * Parcellate a cifti file.
+ *
+ * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.
+ *
+ * NOTE: the parcels in the output file are sorted by the numeric label keys, in ascending order.
+ *
+ * The parameter to the -method option must be one of the following:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ *
+ * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
+ */
 function cifti_parcellate_execute(
     params: CiftiParcellateParameters,
     execution: Execution,
 ): CiftiParcellateOutputs {
-    /**
-     * Parcellate a cifti file.
-     * 
-     * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.
-     * 
-     * NOTE: the parcels in the output file are sorted by the numeric label keys, in ascending order.
-     * 
-     * The parameter to the -method option must be one of the following:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * 
-     * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_parcellate_cargs(params, execution)
     const ret = cifti_parcellate_outputs(params, execution)
@@ -442,6 +442,55 @@ function cifti_parcellate_execute(
 }
 
 
+/**
+ * Parcellate a cifti file.
+ *
+ * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.
+ *
+ * NOTE: the parcels in the output file are sorted by the numeric label keys, in ascending order.
+ *
+ * The parameter to the -method option must be one of the following:
+ *
+ * MAX: the maximum value
+ * MIN: the minimum value
+ * INDEXMAX: the 1-based index of the maximum value
+ * INDEXMIN: the 1-based index of the minimum value
+ * SUM: add all values
+ * PRODUCT: multiply all values
+ * MEAN: the mean of the data
+ * STDEV: the standard deviation (N denominator)
+ * SAMPSTDEV: the sample standard deviation (N-1 denominator)
+ * VARIANCE: the variance of the data
+ * TSNR: mean divided by sample standard deviation (N-1 denominator)
+ * COV: sample standard deviation (N-1 denominator) divided by mean
+ * L2NORM: square root of sum of squares
+ * MEDIAN: the median of the data
+ * MODE: the mode of the data
+ * COUNT_NONZERO: the number of nonzero elements in the data
+ *
+ * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the cifti file to parcellate
+ * @param cifti_label a cifti label file to use for the parcellation
+ * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param cifti_out output cifti file
+ * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
+ * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
+ * @param opt_method_method specify method of parcellation (default MEAN, or MODE if label data): the method to use to assign parcel values from the values of member brainordinates
+ * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
+ * @param opt_only_numeric exclude non-numeric values
+ * @param opt_fill_value_value specify value to use in empty parcels (default 0): the value to fill empty parcels with
+ * @param opt_nonempty_mask_out_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere: the output mask file
+ * @param opt_legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param opt_include_empty deprecated: now the default behavior
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
+ */
 function cifti_parcellate(
     cifti_in: InputPathType,
     cifti_label: InputPathType,
@@ -458,55 +507,6 @@ function cifti_parcellate(
     opt_include_empty: boolean = false,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
-    /**
-     * Parcellate a cifti file.
-     * 
-     * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.
-     * 
-     * NOTE: the parcels in the output file are sorted by the numeric label keys, in ascending order.
-     * 
-     * The parameter to the -method option must be one of the following:
-     * 
-     * MAX: the maximum value
-     * MIN: the minimum value
-     * INDEXMAX: the 1-based index of the maximum value
-     * INDEXMIN: the 1-based index of the minimum value
-     * SUM: add all values
-     * PRODUCT: multiply all values
-     * MEAN: the mean of the data
-     * STDEV: the standard deviation (N denominator)
-     * SAMPSTDEV: the sample standard deviation (N-1 denominator)
-     * VARIANCE: the variance of the data
-     * TSNR: mean divided by sample standard deviation (N-1 denominator)
-     * COV: sample standard deviation (N-1 denominator) divided by mean
-     * L2NORM: square root of sum of squares
-     * MEDIAN: the median of the data
-     * MODE: the mode of the data
-     * COUNT_NONZERO: the number of nonzero elements in the data
-     * 
-     * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the cifti file to parcellate
-     * @param cifti_label a cifti label file to use for the parcellation
-     * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
-     * @param cifti_out output cifti file
-     * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
-     * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
-     * @param opt_method_method specify method of parcellation (default MEAN, or MODE if label data): the method to use to assign parcel values from the values of member brainordinates
-     * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
-     * @param opt_only_numeric exclude non-numeric values
-     * @param opt_fill_value_value specify value to use in empty parcels (default 0): the value to fill empty parcels with
-     * @param opt_nonempty_mask_out_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere: the output mask file
-     * @param opt_legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
-     * @param opt_include_empty deprecated: now the default behavior
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_PARCELLATE_METADATA);
     const params = cifti_parcellate_params(cifti_in, cifti_label, direction, cifti_out, spatial_weights, opt_cifti_weights_weight_cifti, opt_method_method, exclude_outliers, opt_only_numeric, opt_fill_value_value, opt_nonempty_mask_out_mask_out, opt_legacy_mode, opt_include_empty)
@@ -521,7 +521,12 @@ export {
       CiftiParcellateParameters,
       CiftiParcellateSpatialWeightsParameters,
       cifti_parcellate,
+      cifti_parcellate_cargs,
+      cifti_parcellate_exclude_outliers_cargs,
       cifti_parcellate_exclude_outliers_params,
+      cifti_parcellate_execute,
+      cifti_parcellate_outputs,
       cifti_parcellate_params,
+      cifti_parcellate_spatial_weights_cargs,
       cifti_parcellate_spatial_weights_params,
 };

@@ -12,42 +12,42 @@ const APAS2ASEG_METADATA: Metadata = {
 
 
 interface Apas2asegParameters {
-    "__STYXTYPE__": "apas2aseg";
+    "@type": "freesurfer.apas2aseg";
     "subject"?: string | null | undefined;
     "input_aparc_aseg"?: InputPathType | null | undefined;
     "output_seg"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "apas2aseg": apas2aseg_cargs,
+        "freesurfer.apas2aseg": apas2aseg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "apas2aseg": apas2aseg_outputs,
+        "freesurfer.apas2aseg": apas2aseg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface Apas2asegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier specifying the directory where the subject's data is stored.
+ * @param input_aparc_aseg Input aparc+aseg.mgz file to be converted.
+ * @param output_seg Output file for the new segmentation (e.g., apas-aseg.mgz).
+ *
+ * @returns Parameter dictionary
+ */
 function apas2aseg_params(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
     output_seg: string | null = "apas-aseg.mgz",
 ): Apas2asegParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier specifying the directory where the subject's data is stored.
-     * @param input_aparc_aseg Input aparc+aseg.mgz file to be converted.
-     * @param output_seg Output file for the new segmentation (e.g., apas-aseg.mgz).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "apas2aseg" as const,
+        "@type": "freesurfer.apas2aseg" as const,
     };
     if (subject !== null) {
         params["subject"] = subject;
@@ -100,18 +100,18 @@ function apas2aseg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function apas2aseg_cargs(
     params: Apas2asegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("apas2aseg");
     if ((params["subject"] ?? null) !== null) {
@@ -136,18 +136,18 @@ function apas2aseg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function apas2aseg_outputs(
     params: Apas2asegParameters,
     execution: Execution,
 ): Apas2asegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Apas2asegOutputs = {
         root: execution.outputFile("."),
         output_seg_file: ((params["output_seg"] ?? null) !== null) ? execution.outputFile([(params["output_seg"] ?? null)].join('')) : null,
@@ -156,22 +156,22 @@ function apas2aseg_outputs(
 }
 
 
+/**
+ * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
+ */
 function apas2aseg_execute(
     params: Apas2asegParameters,
     execution: Execution,
 ): Apas2asegOutputs {
-    /**
-     * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
-     */
     params = execution.params(params)
     const cargs = apas2aseg_cargs(params, execution)
     const ret = apas2aseg_outputs(params, execution)
@@ -180,26 +180,26 @@ function apas2aseg_execute(
 }
 
 
+/**
+ * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier specifying the directory where the subject's data is stored.
+ * @param input_aparc_aseg Input aparc+aseg.mgz file to be converted.
+ * @param output_seg Output file for the new segmentation (e.g., apas-aseg.mgz).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
+ */
 function apas2aseg(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
     output_seg: string | null = "apas-aseg.mgz",
     runner: Runner | null = null,
 ): Apas2asegOutputs {
-    /**
-     * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier specifying the directory where the subject's data is stored.
-     * @param input_aparc_aseg Input aparc+aseg.mgz file to be converted.
-     * @param output_seg Output file for the new segmentation (e.g., apas-aseg.mgz).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APAS2ASEG_METADATA);
     const params = apas2aseg_params(subject, input_aparc_aseg, output_seg)
@@ -212,5 +212,8 @@ export {
       Apas2asegOutputs,
       Apas2asegParameters,
       apas2aseg,
+      apas2aseg_cargs,
+      apas2aseg_execute,
+      apas2aseg_outputs,
       apas2aseg_params,
 };

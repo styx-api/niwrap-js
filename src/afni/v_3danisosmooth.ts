@@ -12,7 +12,7 @@ const V_3DANISOSMOOTH_METADATA: Metadata = {
 
 
 interface V3danisosmoothParameters {
-    "__STYXTYPE__": "3danisosmooth";
+    "@type": "afni.3danisosmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "iterations"?: number | null | undefined;
@@ -38,35 +38,35 @@ interface V3danisosmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3danisosmooth": v_3danisosmooth_cargs,
+        "afni.3danisosmooth": v_3danisosmooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3danisosmooth": v_3danisosmooth_outputs,
+        "afni.3danisosmooth": v_3danisosmooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -121,6 +121,34 @@ interface V3danisosmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset to be smoothed
+ * @param prefix Output dataset prefix name
+ * @param iterations Number of iterations (default=10)
+ * @param v_2d_flag Smooth a slice at a time (default)
+ * @param v_3d_flag Smooth through slices
+ * @param mask_dataset Use specified dataset as mask to include/exclude voxels
+ * @param automask_flag Automatically compute mask for dataset
+ * @param viewer_flag Show central axial slice image every iteration
+ * @param nosmooth_flag Do not do intermediate smoothing of gradients
+ * @param sigma1 Gaussian smoothing sigma before gradient computation (default=0.5)
+ * @param sigma2 Gaussian smoothing sigma after gradient computation (default=1.0)
+ * @param deltat Pseudo-time step (default=0.25)
+ * @param savetempdata_flag Save temporary datasets each iteration
+ * @param save_temp_with_diff_measures_flag Save temporary datasets with different measures in a dataset
+ * @param phiding_flag Use Ding method for computing phi (default)
+ * @param phiexp_flag Use exponential method for computing phi
+ * @param noneg_flag Set negative voxels to 0
+ * @param setneg_value Set negative voxels to specified value
+ * @param edgefraction Adjust the fraction of the anisotropic component added (0 to 1, default=0.5)
+ * @param datum_type Specify type for output data (byte, short, float) [default=float]
+ * @param matchorig_flag Match datum type and clip min/max to input data
+ * @param help_flag Print help message
+ *
+ * @returns Parameter dictionary
+ */
 function v_3danisosmooth_params(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -145,36 +173,8 @@ function v_3danisosmooth_params(
     matchorig_flag: boolean = false,
     help_flag: boolean = false,
 ): V3danisosmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset to be smoothed
-     * @param prefix Output dataset prefix name
-     * @param iterations Number of iterations (default=10)
-     * @param v_2d_flag Smooth a slice at a time (default)
-     * @param v_3d_flag Smooth through slices
-     * @param mask_dataset Use specified dataset as mask to include/exclude voxels
-     * @param automask_flag Automatically compute mask for dataset
-     * @param viewer_flag Show central axial slice image every iteration
-     * @param nosmooth_flag Do not do intermediate smoothing of gradients
-     * @param sigma1 Gaussian smoothing sigma before gradient computation (default=0.5)
-     * @param sigma2 Gaussian smoothing sigma after gradient computation (default=1.0)
-     * @param deltat Pseudo-time step (default=0.25)
-     * @param savetempdata_flag Save temporary datasets each iteration
-     * @param save_temp_with_diff_measures_flag Save temporary datasets with different measures in a dataset
-     * @param phiding_flag Use Ding method for computing phi (default)
-     * @param phiexp_flag Use exponential method for computing phi
-     * @param noneg_flag Set negative voxels to 0
-     * @param setneg_value Set negative voxels to specified value
-     * @param edgefraction Adjust the fraction of the anisotropic component added (0 to 1, default=0.5)
-     * @param datum_type Specify type for output data (byte, short, float) [default=float]
-     * @param matchorig_flag Match datum type and clip min/max to input data
-     * @param help_flag Print help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3danisosmooth" as const,
+        "@type": "afni.3danisosmooth" as const,
         "input_dataset": input_dataset,
         "2d_flag": v_2d_flag,
         "3d_flag": v_3d_flag,
@@ -220,18 +220,18 @@ function v_3danisosmooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3danisosmooth_cargs(
     params: V3danisosmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3danisosmooth");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -329,18 +329,18 @@ function v_3danisosmooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3danisosmooth_outputs(
     params: V3danisosmoothParameters,
     execution: Execution,
 ): V3danisosmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3danisosmoothOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+smooth"].join('')) : null,
@@ -357,22 +357,22 @@ function v_3danisosmooth_outputs(
 }
 
 
+/**
+ * Smooths a dataset using an anisotropic smoothing technique.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
+ */
 function v_3danisosmooth_execute(
     params: V3danisosmoothParameters,
     execution: Execution,
 ): V3danisosmoothOutputs {
-    /**
-     * Smooths a dataset using an anisotropic smoothing technique.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3danisosmooth_cargs(params, execution)
     const ret = v_3danisosmooth_outputs(params, execution)
@@ -381,6 +381,39 @@ function v_3danisosmooth_execute(
 }
 
 
+/**
+ * Smooths a dataset using an anisotropic smoothing technique.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset to be smoothed
+ * @param prefix Output dataset prefix name
+ * @param iterations Number of iterations (default=10)
+ * @param v_2d_flag Smooth a slice at a time (default)
+ * @param v_3d_flag Smooth through slices
+ * @param mask_dataset Use specified dataset as mask to include/exclude voxels
+ * @param automask_flag Automatically compute mask for dataset
+ * @param viewer_flag Show central axial slice image every iteration
+ * @param nosmooth_flag Do not do intermediate smoothing of gradients
+ * @param sigma1 Gaussian smoothing sigma before gradient computation (default=0.5)
+ * @param sigma2 Gaussian smoothing sigma after gradient computation (default=1.0)
+ * @param deltat Pseudo-time step (default=0.25)
+ * @param savetempdata_flag Save temporary datasets each iteration
+ * @param save_temp_with_diff_measures_flag Save temporary datasets with different measures in a dataset
+ * @param phiding_flag Use Ding method for computing phi (default)
+ * @param phiexp_flag Use exponential method for computing phi
+ * @param noneg_flag Set negative voxels to 0
+ * @param setneg_value Set negative voxels to specified value
+ * @param edgefraction Adjust the fraction of the anisotropic component added (0 to 1, default=0.5)
+ * @param datum_type Specify type for output data (byte, short, float) [default=float]
+ * @param matchorig_flag Match datum type and clip min/max to input data
+ * @param help_flag Print help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
+ */
 function v_3danisosmooth(
     input_dataset: InputPathType,
     prefix: string | null = null,
@@ -406,39 +439,6 @@ function v_3danisosmooth(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): V3danisosmoothOutputs {
-    /**
-     * Smooths a dataset using an anisotropic smoothing technique.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset to be smoothed
-     * @param prefix Output dataset prefix name
-     * @param iterations Number of iterations (default=10)
-     * @param v_2d_flag Smooth a slice at a time (default)
-     * @param v_3d_flag Smooth through slices
-     * @param mask_dataset Use specified dataset as mask to include/exclude voxels
-     * @param automask_flag Automatically compute mask for dataset
-     * @param viewer_flag Show central axial slice image every iteration
-     * @param nosmooth_flag Do not do intermediate smoothing of gradients
-     * @param sigma1 Gaussian smoothing sigma before gradient computation (default=0.5)
-     * @param sigma2 Gaussian smoothing sigma after gradient computation (default=1.0)
-     * @param deltat Pseudo-time step (default=0.25)
-     * @param savetempdata_flag Save temporary datasets each iteration
-     * @param save_temp_with_diff_measures_flag Save temporary datasets with different measures in a dataset
-     * @param phiding_flag Use Ding method for computing phi (default)
-     * @param phiexp_flag Use exponential method for computing phi
-     * @param noneg_flag Set negative voxels to 0
-     * @param setneg_value Set negative voxels to specified value
-     * @param edgefraction Adjust the fraction of the anisotropic component added (0 to 1, default=0.5)
-     * @param datum_type Specify type for output data (byte, short, float) [default=float]
-     * @param matchorig_flag Match datum type and clip min/max to input data
-     * @param help_flag Print help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DANISOSMOOTH_METADATA);
     const params = v_3danisosmooth_params(input_dataset, prefix, iterations, v_2d_flag, v_3d_flag, mask_dataset, automask_flag, viewer_flag, nosmooth_flag, sigma1, sigma2, deltat, savetempdata_flag, save_temp_with_diff_measures_flag, phiding_flag, phiexp_flag, noneg_flag, setneg_value, edgefraction, datum_type, matchorig_flag, help_flag)
@@ -451,5 +451,8 @@ export {
       V3danisosmoothParameters,
       V_3DANISOSMOOTH_METADATA,
       v_3danisosmooth,
+      v_3danisosmooth_cargs,
+      v_3danisosmooth_execute,
+      v_3danisosmooth_outputs,
       v_3danisosmooth_params,
 };

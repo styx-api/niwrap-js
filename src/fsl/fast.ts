@@ -12,7 +12,7 @@ const FAST_METADATA: Metadata = {
 
 
 interface FastParameters {
-    "__STYXTYPE__": "fast";
+    "@type": "fsl.fast";
     "number_classes"?: number | null | undefined;
     "bias_iters"?: number | null | undefined;
     "bias_lowpass"?: number | null | undefined;
@@ -38,35 +38,35 @@ interface FastParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fast": fast_cargs,
+        "fsl.fast": fast_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fast": fast_outputs,
+        "fsl.fast": fast_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,34 @@ interface FastOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_files Image, or multi-channel set of images, to be segmented.
+ * @param number_classes number of tissue-type classes; default=3
+ * @param bias_iters number of main-loop iterations during bias-field removal; default=4
+ * @param bias_lowpass bias field smoothing extent (FWHM) in mm; default=20
+ * @param img_type type of image 1=T1, 2=T2, 3=PD; default=T1
+ * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
+ * @param segments outputs a separate binary image for each tissue type
+ * @param init_transform initialise using priors; you must supply a FLIRT transform
+ * @param other_priors Alternative prior images.
+ * @param output_biasfield Output estimated bias field.
+ * @param output_biascorrected Output restored image (bias-corrected image).
+ * @param no_bias Do not remove bias field.
+ * @param channels number of input images (channels); default 1
+ * @param out_basename Base name of output files.
+ * @param use_priors Use priors throughout.
+ * @param no_pve Turn off pve (partial volume estimation).
+ * @param segment_iters number of segmentation-initialisation iterations; default=15
+ * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
+ * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
+ * @param verbose Switch on diagnostic messages.
+ * @param manual_seg Filename containing intensities.
+ * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
+ *
+ * @returns Parameter dictionary
+ */
 function fast_params(
     in_files: Array<InputPathType>,
     number_classes: number | null = null,
@@ -129,36 +157,8 @@ function fast_params(
     manual_seg: InputPathType | null = null,
     iters_afterbias: number | null = null,
 ): FastParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_files Image, or multi-channel set of images, to be segmented.
-     * @param number_classes number of tissue-type classes; default=3
-     * @param bias_iters number of main-loop iterations during bias-field removal; default=4
-     * @param bias_lowpass bias field smoothing extent (FWHM) in mm; default=20
-     * @param img_type type of image 1=T1, 2=T2, 3=PD; default=T1
-     * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
-     * @param segments outputs a separate binary image for each tissue type
-     * @param init_transform initialise using priors; you must supply a FLIRT transform
-     * @param other_priors Alternative prior images.
-     * @param output_biasfield Output estimated bias field.
-     * @param output_biascorrected Output restored image (bias-corrected image).
-     * @param no_bias Do not remove bias field.
-     * @param channels number of input images (channels); default 1
-     * @param out_basename Base name of output files.
-     * @param use_priors Use priors throughout.
-     * @param no_pve Turn off pve (partial volume estimation).
-     * @param segment_iters number of segmentation-initialisation iterations; default=15
-     * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
-     * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
-     * @param verbose Switch on diagnostic messages.
-     * @param manual_seg Filename containing intensities.
-     * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fast" as const,
+        "@type": "fsl.fast" as const,
         "segments": segments,
         "output_biasfield": output_biasfield,
         "output_biascorrected": output_biascorrected,
@@ -214,18 +214,18 @@ function fast_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fast_cargs(
     params: FastParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fast");
     if ((params["number_classes"] ?? null) !== null) {
@@ -338,18 +338,18 @@ function fast_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fast_outputs(
     params: FastParameters,
     execution: Execution,
 ): FastOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FastOutputs = {
         root: execution.outputFile("."),
         mixeltype: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_mixeltype.nii.gz"].join('')) : null,
@@ -362,22 +362,22 @@ function fast_outputs(
 }
 
 
+/**
+ * FAST (FMRIB's Automated Segmentation Tool) segments a 3D image of the brain into different tissue types (Grey Matter, White Matter, CSF, etc.), whilst also correcting for spatial intensity variations (also known as bias field or RF inhomogeneities). The underlying method is based on a hidden Markov random field model and an associated Expectation-Maximization algorithm. The whole process is fully automated and can also produce a bias field-corrected input image and a probabilistic and/or partial volume tissue segmentation. It is robust and reliable, compared to most finite mixture model-based methods, which are sensitive to noise.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FastOutputs`).
+ */
 function fast_execute(
     params: FastParameters,
     execution: Execution,
 ): FastOutputs {
-    /**
-     * FAST (FMRIB's Automated Segmentation Tool) segments a 3D image of the brain into different tissue types (Grey Matter, White Matter, CSF, etc.), whilst also correcting for spatial intensity variations (also known as bias field or RF inhomogeneities). The underlying method is based on a hidden Markov random field model and an associated Expectation-Maximization algorithm. The whole process is fully automated and can also produce a bias field-corrected input image and a probabilistic and/or partial volume tissue segmentation. It is robust and reliable, compared to most finite mixture model-based methods, which are sensitive to noise.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FastOutputs`).
-     */
     params = execution.params(params)
     const cargs = fast_cargs(params, execution)
     const ret = fast_outputs(params, execution)
@@ -386,6 +386,39 @@ function fast_execute(
 }
 
 
+/**
+ * FAST (FMRIB's Automated Segmentation Tool) segments a 3D image of the brain into different tissue types (Grey Matter, White Matter, CSF, etc.), whilst also correcting for spatial intensity variations (also known as bias field or RF inhomogeneities). The underlying method is based on a hidden Markov random field model and an associated Expectation-Maximization algorithm. The whole process is fully automated and can also produce a bias field-corrected input image and a probabilistic and/or partial volume tissue segmentation. It is robust and reliable, compared to most finite mixture model-based methods, which are sensitive to noise.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_files Image, or multi-channel set of images, to be segmented.
+ * @param number_classes number of tissue-type classes; default=3
+ * @param bias_iters number of main-loop iterations during bias-field removal; default=4
+ * @param bias_lowpass bias field smoothing extent (FWHM) in mm; default=20
+ * @param img_type type of image 1=T1, 2=T2, 3=PD; default=T1
+ * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
+ * @param segments outputs a separate binary image for each tissue type
+ * @param init_transform initialise using priors; you must supply a FLIRT transform
+ * @param other_priors Alternative prior images.
+ * @param output_biasfield Output estimated bias field.
+ * @param output_biascorrected Output restored image (bias-corrected image).
+ * @param no_bias Do not remove bias field.
+ * @param channels number of input images (channels); default 1
+ * @param out_basename Base name of output files.
+ * @param use_priors Use priors throughout.
+ * @param no_pve Turn off pve (partial volume estimation).
+ * @param segment_iters number of segmentation-initialisation iterations; default=15
+ * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
+ * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
+ * @param verbose Switch on diagnostic messages.
+ * @param manual_seg Filename containing intensities.
+ * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FastOutputs`).
+ */
 function fast(
     in_files: Array<InputPathType>,
     number_classes: number | null = null,
@@ -411,39 +444,6 @@ function fast(
     iters_afterbias: number | null = null,
     runner: Runner | null = null,
 ): FastOutputs {
-    /**
-     * FAST (FMRIB's Automated Segmentation Tool) segments a 3D image of the brain into different tissue types (Grey Matter, White Matter, CSF, etc.), whilst also correcting for spatial intensity variations (also known as bias field or RF inhomogeneities). The underlying method is based on a hidden Markov random field model and an associated Expectation-Maximization algorithm. The whole process is fully automated and can also produce a bias field-corrected input image and a probabilistic and/or partial volume tissue segmentation. It is robust and reliable, compared to most finite mixture model-based methods, which are sensitive to noise.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_files Image, or multi-channel set of images, to be segmented.
-     * @param number_classes number of tissue-type classes; default=3
-     * @param bias_iters number of main-loop iterations during bias-field removal; default=4
-     * @param bias_lowpass bias field smoothing extent (FWHM) in mm; default=20
-     * @param img_type type of image 1=T1, 2=T2, 3=PD; default=T1
-     * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
-     * @param segments outputs a separate binary image for each tissue type
-     * @param init_transform initialise using priors; you must supply a FLIRT transform
-     * @param other_priors Alternative prior images.
-     * @param output_biasfield Output estimated bias field.
-     * @param output_biascorrected Output restored image (bias-corrected image).
-     * @param no_bias Do not remove bias field.
-     * @param channels number of input images (channels); default 1
-     * @param out_basename Base name of output files.
-     * @param use_priors Use priors throughout.
-     * @param no_pve Turn off pve (partial volume estimation).
-     * @param segment_iters number of segmentation-initialisation iterations; default=15
-     * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
-     * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
-     * @param verbose Switch on diagnostic messages.
-     * @param manual_seg Filename containing intensities.
-     * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FastOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAST_METADATA);
     const params = fast_params(in_files, number_classes, bias_iters, bias_lowpass, img_type, init_seg_smooth, segments, init_transform, other_priors, output_biasfield, output_biascorrected, no_bias, channels, out_basename, use_priors, no_pve, segment_iters, mixel_smooth, hyper, verbose, manual_seg, iters_afterbias)
@@ -456,5 +456,8 @@ export {
       FastOutputs,
       FastParameters,
       fast,
+      fast_cargs,
+      fast_execute,
+      fast_outputs,
       fast_params,
 };

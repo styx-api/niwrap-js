@@ -12,42 +12,42 @@ const MRI_JOINT_DENSITY_METADATA: Metadata = {
 
 
 interface MriJointDensityParameters {
-    "__STYXTYPE__": "mri_joint_density";
+    "@type": "freesurfer.mri_joint_density";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "output_density_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_joint_density": mri_joint_density_cargs,
+        "freesurfer.mri_joint_density": mri_joint_density_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_joint_density": mri_joint_density_outputs,
+        "freesurfer.mri_joint_density": mri_joint_density_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriJointDensityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vol1 First input volume
+ * @param vol2 Second input volume
+ * @param output_density_file Output joint density file
+ *
+ * @returns Parameter dictionary
+ */
 function mri_joint_density_params(
     vol1: InputPathType,
     vol2: InputPathType,
     output_density_file: string,
 ): MriJointDensityParameters {
-    /**
-     * Build parameters.
-    
-     * @param vol1 First input volume
-     * @param vol2 Second input volume
-     * @param output_density_file Output joint density file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_joint_density" as const,
+        "@type": "freesurfer.mri_joint_density" as const,
         "vol1": vol1,
         "vol2": vol2,
         "output_density_file": output_density_file,
@@ -94,18 +94,18 @@ function mri_joint_density_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_joint_density_cargs(
     params: MriJointDensityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_joint_density");
     cargs.push(execution.inputFile((params["vol1"] ?? null)));
@@ -115,18 +115,18 @@ function mri_joint_density_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_joint_density_outputs(
     params: MriJointDensityParameters,
     execution: Execution,
 ): MriJointDensityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriJointDensityOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_density_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mri_joint_density_outputs(
 }
 
 
+/**
+ * Tool for computing joint density from two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
+ */
 function mri_joint_density_execute(
     params: MriJointDensityParameters,
     execution: Execution,
 ): MriJointDensityOutputs {
-    /**
-     * Tool for computing joint density from two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_joint_density_cargs(params, execution)
     const ret = mri_joint_density_outputs(params, execution)
@@ -159,26 +159,26 @@ function mri_joint_density_execute(
 }
 
 
+/**
+ * Tool for computing joint density from two volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param vol1 First input volume
+ * @param vol2 Second input volume
+ * @param output_density_file Output joint density file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
+ */
 function mri_joint_density(
     vol1: InputPathType,
     vol2: InputPathType,
     output_density_file: string,
     runner: Runner | null = null,
 ): MriJointDensityOutputs {
-    /**
-     * Tool for computing joint density from two volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param vol1 First input volume
-     * @param vol2 Second input volume
-     * @param output_density_file Output joint density file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_JOINT_DENSITY_METADATA);
     const params = mri_joint_density_params(vol1, vol2, output_density_file)
@@ -191,5 +191,8 @@ export {
       MriJointDensityOutputs,
       MriJointDensityParameters,
       mri_joint_density,
+      mri_joint_density_cargs,
+      mri_joint_density_execute,
+      mri_joint_density_outputs,
       mri_joint_density_params,
 };

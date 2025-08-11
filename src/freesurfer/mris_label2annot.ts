@@ -12,7 +12,7 @@ const MRIS_LABEL2ANNOT_METADATA: Metadata = {
 
 
 interface MrisLabel2annotParameters {
-    "__STYXTYPE__": "mris_label2annot";
+    "@type": "freesurfer.mris_label2annot";
     "subject": string;
     "hemi": string;
     "ctabfile": InputPathType;
@@ -30,35 +30,35 @@ interface MrisLabel2annotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_label2annot": mris_label2annot_cargs,
+        "freesurfer.mris_label2annot": mris_label2annot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_label2annot": mris_label2annot_outputs,
+        "freesurfer.mris_label2annot": mris_label2annot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface MrisLabel2annotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject FreeSurfer subject
+ * @param hemi Hemisphere (lh or rh)
+ * @param ctabfile Colortable file (like FreeSurferColorLUT.txt)
+ * @param annotname Output annotation name
+ * @param index_offset Add to label number to get CTAB index
+ * @param label_files Label file(s)
+ * @param annot_path Full name/path of annotation file
+ * @param labeldir Directory with label files when not using --l
+ * @param ldir_default Use subject/labels as label directory
+ * @param no_unknown Do not map unhit labels to index 0
+ * @param thresh Threshold label by stats field
+ * @param maxstatwinner Keep label with highest 'stat' value
+ * @param surf Surface name, default is orig
+ * @param subjects_dir Subjects Directory
+ *
+ * @returns Parameter dictionary
+ */
 function mris_label2annot_params(
     subject: string,
     hemi: string,
@@ -97,28 +117,8 @@ function mris_label2annot_params(
     surf: string | null = null,
     subjects_dir: string | null = null,
 ): MrisLabel2annotParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject FreeSurfer subject
-     * @param hemi Hemisphere (lh or rh)
-     * @param ctabfile Colortable file (like FreeSurferColorLUT.txt)
-     * @param annotname Output annotation name
-     * @param index_offset Add to label number to get CTAB index
-     * @param label_files Label file(s)
-     * @param annot_path Full name/path of annotation file
-     * @param labeldir Directory with label files when not using --l
-     * @param ldir_default Use subject/labels as label directory
-     * @param no_unknown Do not map unhit labels to index 0
-     * @param thresh Threshold label by stats field
-     * @param maxstatwinner Keep label with highest 'stat' value
-     * @param surf Surface name, default is orig
-     * @param subjects_dir Subjects Directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_label2annot" as const,
+        "@type": "freesurfer.mris_label2annot" as const,
         "subject": subject,
         "hemi": hemi,
         "ctabfile": ctabfile,
@@ -152,18 +152,18 @@ function mris_label2annot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_label2annot_cargs(
     params: MrisLabel2annotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_label2annot");
     cargs.push(
@@ -237,18 +237,18 @@ function mris_label2annot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_label2annot_outputs(
     params: MrisLabel2annotParameters,
     execution: Execution,
 ): MrisLabel2annotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisLabel2annotOutputs = {
         root: execution.outputFile("."),
         annot_file: execution.outputFile([(params["hemi"] ?? null), ".", (params["annotname"] ?? null), ".annot"].join('')),
@@ -257,22 +257,22 @@ function mris_label2annot_outputs(
 }
 
 
+/**
+ * Converts a set of surface labels to an annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
+ */
 function mris_label2annot_execute(
     params: MrisLabel2annotParameters,
     execution: Execution,
 ): MrisLabel2annotOutputs {
-    /**
-     * Converts a set of surface labels to an annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_label2annot_cargs(params, execution)
     const ret = mris_label2annot_outputs(params, execution)
@@ -281,6 +281,31 @@ function mris_label2annot_execute(
 }
 
 
+/**
+ * Converts a set of surface labels to an annotation file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject FreeSurfer subject
+ * @param hemi Hemisphere (lh or rh)
+ * @param ctabfile Colortable file (like FreeSurferColorLUT.txt)
+ * @param annotname Output annotation name
+ * @param index_offset Add to label number to get CTAB index
+ * @param label_files Label file(s)
+ * @param annot_path Full name/path of annotation file
+ * @param labeldir Directory with label files when not using --l
+ * @param ldir_default Use subject/labels as label directory
+ * @param no_unknown Do not map unhit labels to index 0
+ * @param thresh Threshold label by stats field
+ * @param maxstatwinner Keep label with highest 'stat' value
+ * @param surf Surface name, default is orig
+ * @param subjects_dir Subjects Directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
+ */
 function mris_label2annot(
     subject: string,
     hemi: string,
@@ -298,31 +323,6 @@ function mris_label2annot(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MrisLabel2annotOutputs {
-    /**
-     * Converts a set of surface labels to an annotation file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject FreeSurfer subject
-     * @param hemi Hemisphere (lh or rh)
-     * @param ctabfile Colortable file (like FreeSurferColorLUT.txt)
-     * @param annotname Output annotation name
-     * @param index_offset Add to label number to get CTAB index
-     * @param label_files Label file(s)
-     * @param annot_path Full name/path of annotation file
-     * @param labeldir Directory with label files when not using --l
-     * @param ldir_default Use subject/labels as label directory
-     * @param no_unknown Do not map unhit labels to index 0
-     * @param thresh Threshold label by stats field
-     * @param maxstatwinner Keep label with highest 'stat' value
-     * @param surf Surface name, default is orig
-     * @param subjects_dir Subjects Directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LABEL2ANNOT_METADATA);
     const params = mris_label2annot_params(subject, hemi, ctabfile, annotname, index_offset, label_files, annot_path, labeldir, ldir_default, no_unknown, thresh, maxstatwinner, surf, subjects_dir)
@@ -335,5 +335,8 @@ export {
       MrisLabel2annotOutputs,
       MrisLabel2annotParameters,
       mris_label2annot,
+      mris_label2annot_cargs,
+      mris_label2annot_execute,
+      mris_label2annot_outputs,
       mris_label2annot_params,
 };

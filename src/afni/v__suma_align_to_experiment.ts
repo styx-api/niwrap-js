@@ -12,7 +12,7 @@ const V__SUMA_ALIGN_TO_EXPERIMENT_METADATA: Metadata = {
 
 
 interface VSumaAlignToExperimentParameters {
-    "__STYXTYPE__": "@SUMA_AlignToExperiment";
+    "@type": "afni.@SUMA_AlignToExperiment";
     "exp_anat": InputPathType;
     "surf_anat": InputPathType;
     "dxyz"?: number | null | undefined;
@@ -36,35 +36,35 @@ interface VSumaAlignToExperimentParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@SUMA_AlignToExperiment": v__suma_align_to_experiment_cargs,
+        "afni.@SUMA_AlignToExperiment": v__suma_align_to_experiment_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@SUMA_AlignToExperiment": v__suma_align_to_experiment_outputs,
+        "afni.@SUMA_AlignToExperiment": v__suma_align_to_experiment_outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,32 @@ interface VSumaAlignToExperimentOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param exp_anat Name of high resolution anatomical data set in register with experimental data.
+ * @param surf_anat Path and name of high resolution antomical data set used to create the surface.
+ * @param dxyz Optional parameter to downsample anatomical volumes to dxyz mm voxel resolution before registration.
+ * @param out_dxyz Output the final aligned volume at a cubic voxelsize of DXYZmm.
+ * @param wd Use 3dWarpDrive's general affine transform (12 param) instead of 3dvolreg's 6 parameters.
+ * @param al Use 3dAllineate to do the 12 parameter alignment. Cost function is 'lpa'.
+ * @param al_opt Specify set of options to pass to 3dAllineate.
+ * @param ok_change_view Be quiet when view of registered volume is changed to match that of the Experiment_Anatomy.
+ * @param strip_skull Use 3dSkullStrip to remove non-brain tissue.
+ * @param skull_strip_opt Pass the options to 3dSkullStrip.
+ * @param align_centers Add an additional transformation to align the volume centers.
+ * @param init_xform Apply affine transform file to Surface_Anatomy before beginning registration.
+ * @param ea_clip_below Set slices below CLPmm in 'Experiment Anatomy' to zero.
+ * @param prefix Prefix for the output volume.
+ * @param surf_anat_followers Apply the same alignment transform to additional datasets.
+ * @param followers_interp Set the interpolation mode for the follower datasets.
+ * @param atlas_followers Automatically set the followers to be atlases in the directory of -surf_anat.
+ * @param echo Echo all commands to terminal for debugging.
+ * @param keep_tmp Keep temporary files for debugging.
+ * @param overwrite_resp Answer 'overwrite' questions automatically.
+ *
+ * @returns Parameter dictionary
+ */
 function v__suma_align_to_experiment_params(
     exp_anat: InputPathType,
     surf_anat: InputPathType,
@@ -113,34 +139,8 @@ function v__suma_align_to_experiment_params(
     keep_tmp: boolean = false,
     overwrite_resp: string | null = null,
 ): VSumaAlignToExperimentParameters {
-    /**
-     * Build parameters.
-    
-     * @param exp_anat Name of high resolution anatomical data set in register with experimental data.
-     * @param surf_anat Path and name of high resolution antomical data set used to create the surface.
-     * @param dxyz Optional parameter to downsample anatomical volumes to dxyz mm voxel resolution before registration.
-     * @param out_dxyz Output the final aligned volume at a cubic voxelsize of DXYZmm.
-     * @param wd Use 3dWarpDrive's general affine transform (12 param) instead of 3dvolreg's 6 parameters.
-     * @param al Use 3dAllineate to do the 12 parameter alignment. Cost function is 'lpa'.
-     * @param al_opt Specify set of options to pass to 3dAllineate.
-     * @param ok_change_view Be quiet when view of registered volume is changed to match that of the Experiment_Anatomy.
-     * @param strip_skull Use 3dSkullStrip to remove non-brain tissue.
-     * @param skull_strip_opt Pass the options to 3dSkullStrip.
-     * @param align_centers Add an additional transformation to align the volume centers.
-     * @param init_xform Apply affine transform file to Surface_Anatomy before beginning registration.
-     * @param ea_clip_below Set slices below CLPmm in 'Experiment Anatomy' to zero.
-     * @param prefix Prefix for the output volume.
-     * @param surf_anat_followers Apply the same alignment transform to additional datasets.
-     * @param followers_interp Set the interpolation mode for the follower datasets.
-     * @param atlas_followers Automatically set the followers to be atlases in the directory of -surf_anat.
-     * @param echo Echo all commands to terminal for debugging.
-     * @param keep_tmp Keep temporary files for debugging.
-     * @param overwrite_resp Answer 'overwrite' questions automatically.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@SUMA_AlignToExperiment" as const,
+        "@type": "afni.@SUMA_AlignToExperiment" as const,
         "exp_anat": exp_anat,
         "surf_anat": surf_anat,
         "wd": wd,
@@ -188,18 +188,18 @@ function v__suma_align_to_experiment_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__suma_align_to_experiment_cargs(
     params: VSumaAlignToExperimentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@SUMA_AlignToExperiment");
     cargs.push(
@@ -301,18 +301,18 @@ function v__suma_align_to_experiment_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__suma_align_to_experiment_outputs(
     params: VSumaAlignToExperimentParameters,
     execution: Execution,
 ): VSumaAlignToExperimentOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VSumaAlignToExperimentOutputs = {
         root: execution.outputFile("."),
         aligned_volume: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_Alnd_Exp.nii.gz"].join('')) : null,
@@ -322,22 +322,22 @@ function v__suma_align_to_experiment_outputs(
 }
 
 
+/**
+ * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
+ */
 function v__suma_align_to_experiment_execute(
     params: VSumaAlignToExperimentParameters,
     execution: Execution,
 ): VSumaAlignToExperimentOutputs {
-    /**
-     * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__suma_align_to_experiment_cargs(params, execution)
     const ret = v__suma_align_to_experiment_outputs(params, execution)
@@ -346,6 +346,37 @@ function v__suma_align_to_experiment_execute(
 }
 
 
+/**
+ * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param exp_anat Name of high resolution anatomical data set in register with experimental data.
+ * @param surf_anat Path and name of high resolution antomical data set used to create the surface.
+ * @param dxyz Optional parameter to downsample anatomical volumes to dxyz mm voxel resolution before registration.
+ * @param out_dxyz Output the final aligned volume at a cubic voxelsize of DXYZmm.
+ * @param wd Use 3dWarpDrive's general affine transform (12 param) instead of 3dvolreg's 6 parameters.
+ * @param al Use 3dAllineate to do the 12 parameter alignment. Cost function is 'lpa'.
+ * @param al_opt Specify set of options to pass to 3dAllineate.
+ * @param ok_change_view Be quiet when view of registered volume is changed to match that of the Experiment_Anatomy.
+ * @param strip_skull Use 3dSkullStrip to remove non-brain tissue.
+ * @param skull_strip_opt Pass the options to 3dSkullStrip.
+ * @param align_centers Add an additional transformation to align the volume centers.
+ * @param init_xform Apply affine transform file to Surface_Anatomy before beginning registration.
+ * @param ea_clip_below Set slices below CLPmm in 'Experiment Anatomy' to zero.
+ * @param prefix Prefix for the output volume.
+ * @param surf_anat_followers Apply the same alignment transform to additional datasets.
+ * @param followers_interp Set the interpolation mode for the follower datasets.
+ * @param atlas_followers Automatically set the followers to be atlases in the directory of -surf_anat.
+ * @param echo Echo all commands to terminal for debugging.
+ * @param keep_tmp Keep temporary files for debugging.
+ * @param overwrite_resp Answer 'overwrite' questions automatically.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
+ */
 function v__suma_align_to_experiment(
     exp_anat: InputPathType,
     surf_anat: InputPathType,
@@ -369,37 +400,6 @@ function v__suma_align_to_experiment(
     overwrite_resp: string | null = null,
     runner: Runner | null = null,
 ): VSumaAlignToExperimentOutputs {
-    /**
-     * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param exp_anat Name of high resolution anatomical data set in register with experimental data.
-     * @param surf_anat Path and name of high resolution antomical data set used to create the surface.
-     * @param dxyz Optional parameter to downsample anatomical volumes to dxyz mm voxel resolution before registration.
-     * @param out_dxyz Output the final aligned volume at a cubic voxelsize of DXYZmm.
-     * @param wd Use 3dWarpDrive's general affine transform (12 param) instead of 3dvolreg's 6 parameters.
-     * @param al Use 3dAllineate to do the 12 parameter alignment. Cost function is 'lpa'.
-     * @param al_opt Specify set of options to pass to 3dAllineate.
-     * @param ok_change_view Be quiet when view of registered volume is changed to match that of the Experiment_Anatomy.
-     * @param strip_skull Use 3dSkullStrip to remove non-brain tissue.
-     * @param skull_strip_opt Pass the options to 3dSkullStrip.
-     * @param align_centers Add an additional transformation to align the volume centers.
-     * @param init_xform Apply affine transform file to Surface_Anatomy before beginning registration.
-     * @param ea_clip_below Set slices below CLPmm in 'Experiment Anatomy' to zero.
-     * @param prefix Prefix for the output volume.
-     * @param surf_anat_followers Apply the same alignment transform to additional datasets.
-     * @param followers_interp Set the interpolation mode for the follower datasets.
-     * @param atlas_followers Automatically set the followers to be atlases in the directory of -surf_anat.
-     * @param echo Echo all commands to terminal for debugging.
-     * @param keep_tmp Keep temporary files for debugging.
-     * @param overwrite_resp Answer 'overwrite' questions automatically.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__SUMA_ALIGN_TO_EXPERIMENT_METADATA);
     const params = v__suma_align_to_experiment_params(exp_anat, surf_anat, dxyz, out_dxyz, wd, al, al_opt, ok_change_view, strip_skull, skull_strip_opt, align_centers, init_xform, ea_clip_below, prefix, surf_anat_followers, followers_interp, atlas_followers, echo, keep_tmp, overwrite_resp)
@@ -412,5 +412,8 @@ export {
       VSumaAlignToExperimentParameters,
       V__SUMA_ALIGN_TO_EXPERIMENT_METADATA,
       v__suma_align_to_experiment,
+      v__suma_align_to_experiment_cargs,
+      v__suma_align_to_experiment_execute,
+      v__suma_align_to_experiment_outputs,
       v__suma_align_to_experiment_params,
 };

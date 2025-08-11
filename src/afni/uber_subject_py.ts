@@ -12,7 +12,7 @@ const UBER_SUBJECT_PY_METADATA: Metadata = {
 
 
 interface UberSubjectPyParameters {
-    "__STYXTYPE__": "uber_subject.py";
+    "@type": "afni.uber_subject.py";
     "qt_opts"?: string | null | undefined;
     "svar"?: string | null | undefined;
     "cvar"?: string | null | undefined;
@@ -59,33 +59,33 @@ interface UberSubjectPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "uber_subject.py": uber_subject_py_cargs,
+        "afni.uber_subject.py": uber_subject_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -105,6 +105,55 @@ interface UberSubjectPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qt_opts Pass options to PyQt4
+ * @param svar Set subject variable to value
+ * @param cvar Set control variable to value
+ * @param no_gui Do not open graphical interface
+ * @param print_ap_command Show afni_proc.py script
+ * @param save_ap_command Save afni_proc.py script
+ * @param exec_ap_command Run afni_proc.py command
+ * @param exec_proc_script Run proc script
+ * @param align_cost Specify cost function for anat/EPI alignment
+ * @param align_giant_move Use -giant_move in AEA.py
+ * @param align_opts_aea Specify extra options for align_epi_anat.py
+ * @param anal_domain Set data domain (volume/rest)
+ * @param anal_type Set analysis type (task/rest)
+ * @param anat Set anatomical dataset name
+ * @param anat_has_skull Whether anat has skull (yes/no)
+ * @param blocks Set list of processing blocks to apply
+ * @param blur_size Set blur size in mm
+ * @param epi Set list of EPI datasets
+ * @param epi_wildcard Use wildcard for EPI datasets (yes/no)
+ * @param gid Set group ID
+ * @param gltsym Specify list of symbolic GLTs
+ * @param gltsym_label Set corresponding GLT labels
+ * @param motion_limit Set per-TR motion limit in mm
+ * @param outlier_limit Specify outlier limit for censoring
+ * @param regress_goforit Set GOFORIT level in 3dDeconvolve
+ * @param regress_bandpass Specify bandpass limits to remain after regress
+ * @param regress_jobs Number of jobs to use in 3dDeconvolve
+ * @param regress_mot_deriv Regress motion derivatives (yes/no)
+ * @param regress_opts_3d_d Specify extra options for 3dDeconvolve
+ * @param reml_exec Run 3dREMLfit (yes/no)
+ * @param run_clustsim Run 3dClustSim (yes/no)
+ * @param sid Set subject ID
+ * @param stim Set list of stim timing files
+ * @param stim_basis Set basis functions for stim classes
+ * @param stim_label Set stim file labels
+ * @param stim_type Set stim types for stim classes
+ * @param stim_wildcard Use wildcard for stim files (yes/no)
+ * @param tcat_nfirst Set number of TRs to remove per run
+ * @param tlrc_base Specify anat for standard space alignment
+ * @param tlrc_ok_maxite Pass -OK_maxite to @auto_tlrc (yes/no)
+ * @param tlrc_opts_at Specify extra options for @auto_tlrc
+ * @param volreg_base Set volreg base string (first/third/last)
+ * @param verb Set verbose level
+ *
+ * @returns Parameter dictionary
+ */
 function uber_subject_py_params(
     qt_opts: string | null = null,
     svar: string | null = null,
@@ -150,57 +199,8 @@ function uber_subject_py_params(
     volreg_base: string | null = null,
     verb: string | null = null,
 ): UberSubjectPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param qt_opts Pass options to PyQt4
-     * @param svar Set subject variable to value
-     * @param cvar Set control variable to value
-     * @param no_gui Do not open graphical interface
-     * @param print_ap_command Show afni_proc.py script
-     * @param save_ap_command Save afni_proc.py script
-     * @param exec_ap_command Run afni_proc.py command
-     * @param exec_proc_script Run proc script
-     * @param align_cost Specify cost function for anat/EPI alignment
-     * @param align_giant_move Use -giant_move in AEA.py
-     * @param align_opts_aea Specify extra options for align_epi_anat.py
-     * @param anal_domain Set data domain (volume/rest)
-     * @param anal_type Set analysis type (task/rest)
-     * @param anat Set anatomical dataset name
-     * @param anat_has_skull Whether anat has skull (yes/no)
-     * @param blocks Set list of processing blocks to apply
-     * @param blur_size Set blur size in mm
-     * @param epi Set list of EPI datasets
-     * @param epi_wildcard Use wildcard for EPI datasets (yes/no)
-     * @param gid Set group ID
-     * @param gltsym Specify list of symbolic GLTs
-     * @param gltsym_label Set corresponding GLT labels
-     * @param motion_limit Set per-TR motion limit in mm
-     * @param outlier_limit Specify outlier limit for censoring
-     * @param regress_goforit Set GOFORIT level in 3dDeconvolve
-     * @param regress_bandpass Specify bandpass limits to remain after regress
-     * @param regress_jobs Number of jobs to use in 3dDeconvolve
-     * @param regress_mot_deriv Regress motion derivatives (yes/no)
-     * @param regress_opts_3d_d Specify extra options for 3dDeconvolve
-     * @param reml_exec Run 3dREMLfit (yes/no)
-     * @param run_clustsim Run 3dClustSim (yes/no)
-     * @param sid Set subject ID
-     * @param stim Set list of stim timing files
-     * @param stim_basis Set basis functions for stim classes
-     * @param stim_label Set stim file labels
-     * @param stim_type Set stim types for stim classes
-     * @param stim_wildcard Use wildcard for stim files (yes/no)
-     * @param tcat_nfirst Set number of TRs to remove per run
-     * @param tlrc_base Specify anat for standard space alignment
-     * @param tlrc_ok_maxite Pass -OK_maxite to @auto_tlrc (yes/no)
-     * @param tlrc_opts_at Specify extra options for @auto_tlrc
-     * @param volreg_base Set volreg base string (first/third/last)
-     * @param verb Set verbose level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "uber_subject.py" as const,
+        "@type": "afni.uber_subject.py" as const,
         "no_gui": no_gui,
         "print_ap_command": print_ap_command,
         "exec_ap_command": exec_ap_command,
@@ -327,18 +327,18 @@ function uber_subject_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function uber_subject_py_cargs(
     params: UberSubjectPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("uber_subject.py");
     if ((params["qt_opts"] ?? null) !== null) {
@@ -591,18 +591,18 @@ function uber_subject_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function uber_subject_py_outputs(
     params: UberSubjectPyParameters,
     execution: Execution,
 ): UberSubjectPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UberSubjectPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -610,22 +610,22 @@ function uber_subject_py_outputs(
 }
 
 
+/**
+ * Graphical interface to afni_proc.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
+ */
 function uber_subject_py_execute(
     params: UberSubjectPyParameters,
     execution: Execution,
 ): UberSubjectPyOutputs {
-    /**
-     * Graphical interface to afni_proc.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = uber_subject_py_cargs(params, execution)
     const ret = uber_subject_py_outputs(params, execution)
@@ -634,6 +634,60 @@ function uber_subject_py_execute(
 }
 
 
+/**
+ * Graphical interface to afni_proc.py.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param qt_opts Pass options to PyQt4
+ * @param svar Set subject variable to value
+ * @param cvar Set control variable to value
+ * @param no_gui Do not open graphical interface
+ * @param print_ap_command Show afni_proc.py script
+ * @param save_ap_command Save afni_proc.py script
+ * @param exec_ap_command Run afni_proc.py command
+ * @param exec_proc_script Run proc script
+ * @param align_cost Specify cost function for anat/EPI alignment
+ * @param align_giant_move Use -giant_move in AEA.py
+ * @param align_opts_aea Specify extra options for align_epi_anat.py
+ * @param anal_domain Set data domain (volume/rest)
+ * @param anal_type Set analysis type (task/rest)
+ * @param anat Set anatomical dataset name
+ * @param anat_has_skull Whether anat has skull (yes/no)
+ * @param blocks Set list of processing blocks to apply
+ * @param blur_size Set blur size in mm
+ * @param epi Set list of EPI datasets
+ * @param epi_wildcard Use wildcard for EPI datasets (yes/no)
+ * @param gid Set group ID
+ * @param gltsym Specify list of symbolic GLTs
+ * @param gltsym_label Set corresponding GLT labels
+ * @param motion_limit Set per-TR motion limit in mm
+ * @param outlier_limit Specify outlier limit for censoring
+ * @param regress_goforit Set GOFORIT level in 3dDeconvolve
+ * @param regress_bandpass Specify bandpass limits to remain after regress
+ * @param regress_jobs Number of jobs to use in 3dDeconvolve
+ * @param regress_mot_deriv Regress motion derivatives (yes/no)
+ * @param regress_opts_3d_d Specify extra options for 3dDeconvolve
+ * @param reml_exec Run 3dREMLfit (yes/no)
+ * @param run_clustsim Run 3dClustSim (yes/no)
+ * @param sid Set subject ID
+ * @param stim Set list of stim timing files
+ * @param stim_basis Set basis functions for stim classes
+ * @param stim_label Set stim file labels
+ * @param stim_type Set stim types for stim classes
+ * @param stim_wildcard Use wildcard for stim files (yes/no)
+ * @param tcat_nfirst Set number of TRs to remove per run
+ * @param tlrc_base Specify anat for standard space alignment
+ * @param tlrc_ok_maxite Pass -OK_maxite to @auto_tlrc (yes/no)
+ * @param tlrc_opts_at Specify extra options for @auto_tlrc
+ * @param volreg_base Set volreg base string (first/third/last)
+ * @param verb Set verbose level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
+ */
 function uber_subject_py(
     qt_opts: string | null = null,
     svar: string | null = null,
@@ -680,60 +734,6 @@ function uber_subject_py(
     verb: string | null = null,
     runner: Runner | null = null,
 ): UberSubjectPyOutputs {
-    /**
-     * Graphical interface to afni_proc.py.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param qt_opts Pass options to PyQt4
-     * @param svar Set subject variable to value
-     * @param cvar Set control variable to value
-     * @param no_gui Do not open graphical interface
-     * @param print_ap_command Show afni_proc.py script
-     * @param save_ap_command Save afni_proc.py script
-     * @param exec_ap_command Run afni_proc.py command
-     * @param exec_proc_script Run proc script
-     * @param align_cost Specify cost function for anat/EPI alignment
-     * @param align_giant_move Use -giant_move in AEA.py
-     * @param align_opts_aea Specify extra options for align_epi_anat.py
-     * @param anal_domain Set data domain (volume/rest)
-     * @param anal_type Set analysis type (task/rest)
-     * @param anat Set anatomical dataset name
-     * @param anat_has_skull Whether anat has skull (yes/no)
-     * @param blocks Set list of processing blocks to apply
-     * @param blur_size Set blur size in mm
-     * @param epi Set list of EPI datasets
-     * @param epi_wildcard Use wildcard for EPI datasets (yes/no)
-     * @param gid Set group ID
-     * @param gltsym Specify list of symbolic GLTs
-     * @param gltsym_label Set corresponding GLT labels
-     * @param motion_limit Set per-TR motion limit in mm
-     * @param outlier_limit Specify outlier limit for censoring
-     * @param regress_goforit Set GOFORIT level in 3dDeconvolve
-     * @param regress_bandpass Specify bandpass limits to remain after regress
-     * @param regress_jobs Number of jobs to use in 3dDeconvolve
-     * @param regress_mot_deriv Regress motion derivatives (yes/no)
-     * @param regress_opts_3d_d Specify extra options for 3dDeconvolve
-     * @param reml_exec Run 3dREMLfit (yes/no)
-     * @param run_clustsim Run 3dClustSim (yes/no)
-     * @param sid Set subject ID
-     * @param stim Set list of stim timing files
-     * @param stim_basis Set basis functions for stim classes
-     * @param stim_label Set stim file labels
-     * @param stim_type Set stim types for stim classes
-     * @param stim_wildcard Use wildcard for stim files (yes/no)
-     * @param tcat_nfirst Set number of TRs to remove per run
-     * @param tlrc_base Specify anat for standard space alignment
-     * @param tlrc_ok_maxite Pass -OK_maxite to @auto_tlrc (yes/no)
-     * @param tlrc_opts_at Specify extra options for @auto_tlrc
-     * @param volreg_base Set volreg base string (first/third/last)
-     * @param verb Set verbose level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UBER_SUBJECT_PY_METADATA);
     const params = uber_subject_py_params(qt_opts, svar, cvar, no_gui, print_ap_command, save_ap_command, exec_ap_command, exec_proc_script, align_cost, align_giant_move, align_opts_aea, anal_domain, anal_type, anat, anat_has_skull, blocks, blur_size, epi, epi_wildcard, gid, gltsym, gltsym_label, motion_limit, outlier_limit, regress_goforit, regress_bandpass, regress_jobs, regress_mot_deriv, regress_opts_3d_d, reml_exec, run_clustsim, sid, stim, stim_basis, stim_label, stim_type, stim_wildcard, tcat_nfirst, tlrc_base, tlrc_ok_maxite, tlrc_opts_at, volreg_base, verb)
@@ -746,5 +746,8 @@ export {
       UberSubjectPyOutputs,
       UberSubjectPyParameters,
       uber_subject_py,
+      uber_subject_py_cargs,
+      uber_subject_py_execute,
+      uber_subject_py_outputs,
       uber_subject_py_params,
 };

@@ -12,7 +12,7 @@ const CREATE_DTICOHORT_METADATA: Metadata = {
 
 
 interface CreateDticohortParameters {
-    "__STYXTYPE__": "CreateDTICohort";
+    "@type": "ants.CreateDTICohort";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "dti_atlas": InputPathType;
     "label_mask_image"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface CreateDticohortParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "CreateDTICohort": create_dticohort_cargs,
+        "ants.CreateDTICohort": create_dticohort_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "CreateDTICohort": create_dticohort_outputs,
+        "ants.CreateDTICohort": create_dticohort_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface CreateDticohortOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dti_atlas A diffusion tensor atlas image is required input for creating the cohort.
+ * @param dwi_parameters This option specifies the parameters of the output diffusion-weighted images, including the directions and b-values. Directions can be specified using a direction file or scheme file.
+ * @param output The output consists of a set of diffusion-weighted images for each subject. Control and experimental subject numbers can be specified.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param label_mask_image A mask image can be specified which determines the region(s) to which the simulated pathology operations are applied. If no mask is specified one is created by thresholding the atlas FA map at 0.2 unless a lower threshold is specified.
+ * @param noise_sigma This parameter characterizes the Rician noise in the original DWI images. Default value is 18.
+ * @param pathology The user can specify the simulated pathology in a given area using a label mask. Pathology is simulated by changing the eigenvalues. One can specify the number of voxels affected in each region or the proportion of voxels affected. Change is specified as a proportion of the current eigenvalues.
+ * @param registered_population To introduce inter-subject variability, a registered DTI population to the DTI atlas is required. This is modeled by PCA decomposition.
+ *
+ * @returns Parameter dictionary
+ */
 function create_dticohort_params(
     dti_atlas: InputPathType,
     dwi_parameters: string,
@@ -89,22 +103,8 @@ function create_dticohort_params(
     pathology: string | null = null,
     registered_population: InputPathType | null = null,
 ): CreateDticohortParameters {
-    /**
-     * Build parameters.
-    
-     * @param dti_atlas A diffusion tensor atlas image is required input for creating the cohort.
-     * @param dwi_parameters This option specifies the parameters of the output diffusion-weighted images, including the directions and b-values. Directions can be specified using a direction file or scheme file.
-     * @param output The output consists of a set of diffusion-weighted images for each subject. Control and experimental subject numbers can be specified.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param label_mask_image A mask image can be specified which determines the region(s) to which the simulated pathology operations are applied. If no mask is specified one is created by thresholding the atlas FA map at 0.2 unless a lower threshold is specified.
-     * @param noise_sigma This parameter characterizes the Rician noise in the original DWI images. Default value is 18.
-     * @param pathology The user can specify the simulated pathology in a given area using a label mask. Pathology is simulated by changing the eigenvalues. One can specify the number of voxels affected in each region or the proportion of voxels affected. Change is specified as a proportion of the current eigenvalues.
-     * @param registered_population To introduce inter-subject variability, a registered DTI population to the DTI atlas is required. This is modeled by PCA decomposition.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "CreateDTICohort" as const,
+        "@type": "ants.CreateDTICohort" as const,
         "dti_atlas": dti_atlas,
         "dwi_parameters": dwi_parameters,
         "output": output,
@@ -128,18 +128,18 @@ function create_dticohort_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function create_dticohort_cargs(
     params: CreateDticohortParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("CreateDTICohort");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -188,18 +188,18 @@ function create_dticohort_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function create_dticohort_outputs(
     params: CreateDticohortParameters,
     execution: Execution,
 ): CreateDticohortOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CreateDticohortOutputs = {
         root: execution.outputFile("."),
         output_directory: execution.outputFile(["[OUTPUT_DIRECTORY]"].join('')),
@@ -209,22 +209,22 @@ function create_dticohort_outputs(
 }
 
 
+/**
+ * CreateDTICohort implements the work of Van Hecke et al. to create simulated DTI data sets. The only difference is that all registrations (both for the input population and for the output population) are assumed to take place outside of this program.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
+ */
 function create_dticohort_execute(
     params: CreateDticohortParameters,
     execution: Execution,
 ): CreateDticohortOutputs {
-    /**
-     * CreateDTICohort implements the work of Van Hecke et al. to create simulated DTI data sets. The only difference is that all registrations (both for the input population and for the output population) are assumed to take place outside of this program.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
-     */
     params = execution.params(params)
     const cargs = create_dticohort_cargs(params, execution)
     const ret = create_dticohort_outputs(params, execution)
@@ -233,6 +233,25 @@ function create_dticohort_execute(
 }
 
 
+/**
+ * CreateDTICohort implements the work of Van Hecke et al. to create simulated DTI data sets. The only difference is that all registrations (both for the input population and for the output population) are assumed to take place outside of this program.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dti_atlas A diffusion tensor atlas image is required input for creating the cohort.
+ * @param dwi_parameters This option specifies the parameters of the output diffusion-weighted images, including the directions and b-values. Directions can be specified using a direction file or scheme file.
+ * @param output The output consists of a set of diffusion-weighted images for each subject. Control and experimental subject numbers can be specified.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
+ * @param label_mask_image A mask image can be specified which determines the region(s) to which the simulated pathology operations are applied. If no mask is specified one is created by thresholding the atlas FA map at 0.2 unless a lower threshold is specified.
+ * @param noise_sigma This parameter characterizes the Rician noise in the original DWI images. Default value is 18.
+ * @param pathology The user can specify the simulated pathology in a given area using a label mask. Pathology is simulated by changing the eigenvalues. One can specify the number of voxels affected in each region or the proportion of voxels affected. Change is specified as a proportion of the current eigenvalues.
+ * @param registered_population To introduce inter-subject variability, a registered DTI population to the DTI atlas is required. This is modeled by PCA decomposition.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
+ */
 function create_dticohort(
     dti_atlas: InputPathType,
     dwi_parameters: string,
@@ -244,25 +263,6 @@ function create_dticohort(
     registered_population: InputPathType | null = null,
     runner: Runner | null = null,
 ): CreateDticohortOutputs {
-    /**
-     * CreateDTICohort implements the work of Van Hecke et al. to create simulated DTI data sets. The only difference is that all registrations (both for the input population and for the output population) are assumed to take place outside of this program.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dti_atlas A diffusion tensor atlas image is required input for creating the cohort.
-     * @param dwi_parameters This option specifies the parameters of the output diffusion-weighted images, including the directions and b-values. Directions can be specified using a direction file or scheme file.
-     * @param output The output consists of a set of diffusion-weighted images for each subject. Control and experimental subject numbers can be specified.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, the program tries to infer the dimensionality from the input image.
-     * @param label_mask_image A mask image can be specified which determines the region(s) to which the simulated pathology operations are applied. If no mask is specified one is created by thresholding the atlas FA map at 0.2 unless a lower threshold is specified.
-     * @param noise_sigma This parameter characterizes the Rician noise in the original DWI images. Default value is 18.
-     * @param pathology The user can specify the simulated pathology in a given area using a label mask. Pathology is simulated by changing the eigenvalues. One can specify the number of voxels affected in each region or the proportion of voxels affected. Change is specified as a proportion of the current eigenvalues.
-     * @param registered_population To introduce inter-subject variability, a registered DTI population to the DTI atlas is required. This is modeled by PCA decomposition.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CREATE_DTICOHORT_METADATA);
     const params = create_dticohort_params(dti_atlas, dwi_parameters, output, image_dimensionality, label_mask_image, noise_sigma, pathology, registered_population)
@@ -275,5 +275,8 @@ export {
       CreateDticohortOutputs,
       CreateDticohortParameters,
       create_dticohort,
+      create_dticohort_cargs,
+      create_dticohort_execute,
+      create_dticohort_outputs,
       create_dticohort_params,
 };

@@ -12,40 +12,40 @@ const ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA: Metadata = {
 
 
 interface AntsMultivariateTemplateConstruction2ShParameters {
-    "__STYXTYPE__": "antsMultivariateTemplateConstruction2.sh";
+    "@type": "ants.antsMultivariateTemplateConstruction2.sh";
     "input": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_cargs,
+        "ants.antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_outputs,
+        "ants.antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface AntsMultivariateTemplateConstruction2ShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Options for setting up and running the multivariate template construction process.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_multivariate_template_construction2_sh_params(
     input: string,
 ): AntsMultivariateTemplateConstruction2ShParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Options for setting up and running the multivariate template construction process.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsMultivariateTemplateConstruction2.sh" as const,
+        "@type": "ants.antsMultivariateTemplateConstruction2.sh" as const,
         "input": input,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_multivariate_template_construction2_sh_cargs(
     params: AntsMultivariateTemplateConstruction2ShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsMultivariateTemplateConstruction2.sh");
     cargs.push((params["input"] ?? null));
@@ -105,18 +105,18 @@ function ants_multivariate_template_construction2_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_multivariate_template_construction2_sh_outputs(
     params: AntsMultivariateTemplateConstruction2ShParameters,
     execution: Execution,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsMultivariateTemplateConstruction2ShOutputs = {
         root: execution.outputFile("."),
         template: execution.outputFile(["<output-prefix>Template.nii.gz"].join('')),
@@ -125,22 +125,22 @@ function ants_multivariate_template_construction2_sh_outputs(
 }
 
 
+/**
+ * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
+ */
 function ants_multivariate_template_construction2_sh_execute(
     params: AntsMultivariateTemplateConstruction2ShParameters,
     execution: Execution,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
-    /**
-     * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_multivariate_template_construction2_sh_cargs(params, execution)
     const ret = ants_multivariate_template_construction2_sh_outputs(params, execution)
@@ -149,22 +149,22 @@ function ants_multivariate_template_construction2_sh_execute(
 }
 
 
+/**
+ * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input Options for setting up and running the multivariate template construction process.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
+ */
 function ants_multivariate_template_construction2_sh(
     input: string,
     runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
-    /**
-     * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input Options for setting up and running the multivariate template construction process.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA);
     const params = ants_multivariate_template_construction2_sh_params(input)
@@ -177,5 +177,8 @@ export {
       AntsMultivariateTemplateConstruction2ShOutputs,
       AntsMultivariateTemplateConstruction2ShParameters,
       ants_multivariate_template_construction2_sh,
+      ants_multivariate_template_construction2_sh_cargs,
+      ants_multivariate_template_construction2_sh_execute,
+      ants_multivariate_template_construction2_sh_outputs,
       ants_multivariate_template_construction2_sh_params,
 };

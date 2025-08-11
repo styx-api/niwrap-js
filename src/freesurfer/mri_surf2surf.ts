@@ -12,7 +12,7 @@ const MRI_SURF2SURF_METADATA: Metadata = {
 
 
 interface MriSurf2surfParameters {
-    "__STYXTYPE__": "mri_surf2surf";
+    "@type": "freesurfer.mri_surf2surf";
     "src_subject": string;
     "sval_path"?: InputPathType | null | undefined;
     "sval_xyz"?: string | null | undefined;
@@ -72,35 +72,35 @@ interface MriSurf2surfParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_surf2surf": mri_surf2surf_cargs,
+        "freesurfer.mri_surf2surf": mri_surf2surf_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_surf2surf": mri_surf2surf_outputs,
+        "freesurfer.mri_surf2surf": mri_surf2surf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -127,6 +127,68 @@ interface MriSurf2surfOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_subject Name of source subject as found in $SUBJECTS_DIR or ico for icosahedron.
+ * @param trg_subject Name of target subject as found in $SUBJECTS_DIR or ico for icosahedron.
+ * @param sval_path Path of the file with input values.
+ * @param sval_xyz Use xyz of a surface as input.
+ * @param projfrac Use projected xyz of a surface as input.
+ * @param projabs Use projected xyz absolute of a surface as input.
+ * @param sval_tal_xyz Use tal xyz of a surface as input.
+ * @param sval_area Use vertex area of a surface as input.
+ * @param sval_annot Map annotation file.
+ * @param sval_nxyz Use surface normals of a surface as input.
+ * @param patch Specify source patch file, target surface and number of dilations.
+ * @param sfmt Source format type string.
+ * @param reg Apply registration file to sval-xyz.
+ * @param reg_inv Apply inverse registration file to sval-xyz.
+ * @param srcicoorder Icosahedron order for the source.
+ * @param trgicoorder Icosahedron order for the target.
+ * @param tval_path Path of the file in which to store output values.
+ * @param tval_xyz Save target value as a surface file with source xyz.
+ * @param tfmt Target format type string.
+ * @param trg_dist Save distance from source to target vertices.
+ * @param s Use the same subject for both source and target.
+ * @param hemi Hemisphere for both source and target (lh or rh).
+ * @param src_hemi Hemisphere for source (lh or rh).
+ * @param trg_hemi Hemisphere for target (lh or rh).
+ * @param dual_hemi Assume source ?h.?h.surfreg file name.
+ * @param jac Turn on jacobian correction, needed when applying to area or volume.
+ * @param surfreg Surface registration for source and target (sphere.reg).
+ * @param src_surfreg Source surface registration (sphere.reg).
+ * @param trg_surfreg Target surface registration (sphere.reg).
+ * @param mapmethod Method used to map from the vertices in one subject to another (nnfr or nnf).
+ * @param frame Save only nth frame (when using paint output format).
+ * @param fwhm_src Smooth the source to given FWHM.
+ * @param fwhm_trg Smooth the target to given FWHM.
+ * @param nsmooth_in Number of smoothing iterations for input.
+ * @param nsmooth_out Number of smoothing iterations for output.
+ * @param cortex Use ?h.cortex.label as a smoothing mask.
+ * @param no_cortex Do NOT use ?h.cortex.label as a smoothing mask (default).
+ * @param label_src Source smoothing mask.
+ * @param label_trg Target smoothing mask.
+ * @param mul Multiply the input by the given value.
+ * @param div Divide the input by the given value.
+ * @param reshape Reshape output to multiple 'slices'.
+ * @param reshape_factor Reshape to Nfactor 'slices'.
+ * @param reshape3d Reshape fsaverage (ico7) into 42 x 47 x 83.
+ * @param split Output each frame separately.
+ * @param synth Replace input with white Gaussian noise.
+ * @param ones Replace input with 1s.
+ * @param normvar Rescale so that stddev=1 (good with --synth).
+ * @param seed Seed for synth (default is auto).
+ * @param prune Remove any voxel that is zero in any time point (for smoothing).
+ * @param no_prune Do not prune (default).
+ * @param proj_surf Project vertices by mag*scale at each vertex.
+ * @param proj_norm Project vertices by distmm at each vertex.
+ * @param reg_diff Subtract reg2 from --reg (primarily for testing).
+ * @param rms Save RMS of reg1-reg2 (primarily for testing).
+ * @param rms_mask Compute RMS in mask (primarily for testing).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_surf2surf_params(
     src_subject: string,
     trg_subject: string,
@@ -185,70 +247,8 @@ function mri_surf2surf_params(
     rms: InputPathType | null = null,
     rms_mask: InputPathType | null = null,
 ): MriSurf2surfParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_subject Name of source subject as found in $SUBJECTS_DIR or ico for icosahedron.
-     * @param trg_subject Name of target subject as found in $SUBJECTS_DIR or ico for icosahedron.
-     * @param sval_path Path of the file with input values.
-     * @param sval_xyz Use xyz of a surface as input.
-     * @param projfrac Use projected xyz of a surface as input.
-     * @param projabs Use projected xyz absolute of a surface as input.
-     * @param sval_tal_xyz Use tal xyz of a surface as input.
-     * @param sval_area Use vertex area of a surface as input.
-     * @param sval_annot Map annotation file.
-     * @param sval_nxyz Use surface normals of a surface as input.
-     * @param patch Specify source patch file, target surface and number of dilations.
-     * @param sfmt Source format type string.
-     * @param reg Apply registration file to sval-xyz.
-     * @param reg_inv Apply inverse registration file to sval-xyz.
-     * @param srcicoorder Icosahedron order for the source.
-     * @param trgicoorder Icosahedron order for the target.
-     * @param tval_path Path of the file in which to store output values.
-     * @param tval_xyz Save target value as a surface file with source xyz.
-     * @param tfmt Target format type string.
-     * @param trg_dist Save distance from source to target vertices.
-     * @param s Use the same subject for both source and target.
-     * @param hemi Hemisphere for both source and target (lh or rh).
-     * @param src_hemi Hemisphere for source (lh or rh).
-     * @param trg_hemi Hemisphere for target (lh or rh).
-     * @param dual_hemi Assume source ?h.?h.surfreg file name.
-     * @param jac Turn on jacobian correction, needed when applying to area or volume.
-     * @param surfreg Surface registration for source and target (sphere.reg).
-     * @param src_surfreg Source surface registration (sphere.reg).
-     * @param trg_surfreg Target surface registration (sphere.reg).
-     * @param mapmethod Method used to map from the vertices in one subject to another (nnfr or nnf).
-     * @param frame Save only nth frame (when using paint output format).
-     * @param fwhm_src Smooth the source to given FWHM.
-     * @param fwhm_trg Smooth the target to given FWHM.
-     * @param nsmooth_in Number of smoothing iterations for input.
-     * @param nsmooth_out Number of smoothing iterations for output.
-     * @param cortex Use ?h.cortex.label as a smoothing mask.
-     * @param no_cortex Do NOT use ?h.cortex.label as a smoothing mask (default).
-     * @param label_src Source smoothing mask.
-     * @param label_trg Target smoothing mask.
-     * @param mul Multiply the input by the given value.
-     * @param div Divide the input by the given value.
-     * @param reshape Reshape output to multiple 'slices'.
-     * @param reshape_factor Reshape to Nfactor 'slices'.
-     * @param reshape3d Reshape fsaverage (ico7) into 42 x 47 x 83.
-     * @param split Output each frame separately.
-     * @param synth Replace input with white Gaussian noise.
-     * @param ones Replace input with 1s.
-     * @param normvar Rescale so that stddev=1 (good with --synth).
-     * @param seed Seed for synth (default is auto).
-     * @param prune Remove any voxel that is zero in any time point (for smoothing).
-     * @param no_prune Do not prune (default).
-     * @param proj_surf Project vertices by mag*scale at each vertex.
-     * @param proj_norm Project vertices by distmm at each vertex.
-     * @param reg_diff Subtract reg2 from --reg (primarily for testing).
-     * @param rms Save RMS of reg1-reg2 (primarily for testing).
-     * @param rms_mask Compute RMS in mask (primarily for testing).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_surf2surf" as const,
+        "@type": "freesurfer.mri_surf2surf" as const,
         "src_subject": src_subject,
         "trg_subject": trg_subject,
         "dual_hemi": dual_hemi,
@@ -394,18 +394,18 @@ function mri_surf2surf_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_surf2surf_cargs(
     params: MriSurf2surfParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_surf2surf");
     cargs.push(
@@ -708,18 +708,18 @@ function mri_surf2surf_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_surf2surf_outputs(
     params: MriSurf2surfParameters,
     execution: Execution,
 ): MriSurf2surfOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSurf2surfOutputs = {
         root: execution.outputFile("."),
         output_values: ((params["tval_path"] ?? null) !== null) ? execution.outputFile([(params["tval_path"] ?? null)].join('')) : null,
@@ -729,22 +729,22 @@ function mri_surf2surf_outputs(
 }
 
 
+/**
+ * Resample one surface onto another using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
+ */
 function mri_surf2surf_execute(
     params: MriSurf2surfParameters,
     execution: Execution,
 ): MriSurf2surfOutputs {
-    /**
-     * Resample one surface onto another using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_surf2surf_cargs(params, execution)
     const ret = mri_surf2surf_outputs(params, execution)
@@ -753,6 +753,73 @@ function mri_surf2surf_execute(
 }
 
 
+/**
+ * Resample one surface onto another using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_subject Name of source subject as found in $SUBJECTS_DIR or ico for icosahedron.
+ * @param trg_subject Name of target subject as found in $SUBJECTS_DIR or ico for icosahedron.
+ * @param sval_path Path of the file with input values.
+ * @param sval_xyz Use xyz of a surface as input.
+ * @param projfrac Use projected xyz of a surface as input.
+ * @param projabs Use projected xyz absolute of a surface as input.
+ * @param sval_tal_xyz Use tal xyz of a surface as input.
+ * @param sval_area Use vertex area of a surface as input.
+ * @param sval_annot Map annotation file.
+ * @param sval_nxyz Use surface normals of a surface as input.
+ * @param patch Specify source patch file, target surface and number of dilations.
+ * @param sfmt Source format type string.
+ * @param reg Apply registration file to sval-xyz.
+ * @param reg_inv Apply inverse registration file to sval-xyz.
+ * @param srcicoorder Icosahedron order for the source.
+ * @param trgicoorder Icosahedron order for the target.
+ * @param tval_path Path of the file in which to store output values.
+ * @param tval_xyz Save target value as a surface file with source xyz.
+ * @param tfmt Target format type string.
+ * @param trg_dist Save distance from source to target vertices.
+ * @param s Use the same subject for both source and target.
+ * @param hemi Hemisphere for both source and target (lh or rh).
+ * @param src_hemi Hemisphere for source (lh or rh).
+ * @param trg_hemi Hemisphere for target (lh or rh).
+ * @param dual_hemi Assume source ?h.?h.surfreg file name.
+ * @param jac Turn on jacobian correction, needed when applying to area or volume.
+ * @param surfreg Surface registration for source and target (sphere.reg).
+ * @param src_surfreg Source surface registration (sphere.reg).
+ * @param trg_surfreg Target surface registration (sphere.reg).
+ * @param mapmethod Method used to map from the vertices in one subject to another (nnfr or nnf).
+ * @param frame Save only nth frame (when using paint output format).
+ * @param fwhm_src Smooth the source to given FWHM.
+ * @param fwhm_trg Smooth the target to given FWHM.
+ * @param nsmooth_in Number of smoothing iterations for input.
+ * @param nsmooth_out Number of smoothing iterations for output.
+ * @param cortex Use ?h.cortex.label as a smoothing mask.
+ * @param no_cortex Do NOT use ?h.cortex.label as a smoothing mask (default).
+ * @param label_src Source smoothing mask.
+ * @param label_trg Target smoothing mask.
+ * @param mul Multiply the input by the given value.
+ * @param div Divide the input by the given value.
+ * @param reshape Reshape output to multiple 'slices'.
+ * @param reshape_factor Reshape to Nfactor 'slices'.
+ * @param reshape3d Reshape fsaverage (ico7) into 42 x 47 x 83.
+ * @param split Output each frame separately.
+ * @param synth Replace input with white Gaussian noise.
+ * @param ones Replace input with 1s.
+ * @param normvar Rescale so that stddev=1 (good with --synth).
+ * @param seed Seed for synth (default is auto).
+ * @param prune Remove any voxel that is zero in any time point (for smoothing).
+ * @param no_prune Do not prune (default).
+ * @param proj_surf Project vertices by mag*scale at each vertex.
+ * @param proj_norm Project vertices by distmm at each vertex.
+ * @param reg_diff Subtract reg2 from --reg (primarily for testing).
+ * @param rms Save RMS of reg1-reg2 (primarily for testing).
+ * @param rms_mask Compute RMS in mask (primarily for testing).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
+ */
 function mri_surf2surf(
     src_subject: string,
     trg_subject: string,
@@ -812,73 +879,6 @@ function mri_surf2surf(
     rms_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSurf2surfOutputs {
-    /**
-     * Resample one surface onto another using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_subject Name of source subject as found in $SUBJECTS_DIR or ico for icosahedron.
-     * @param trg_subject Name of target subject as found in $SUBJECTS_DIR or ico for icosahedron.
-     * @param sval_path Path of the file with input values.
-     * @param sval_xyz Use xyz of a surface as input.
-     * @param projfrac Use projected xyz of a surface as input.
-     * @param projabs Use projected xyz absolute of a surface as input.
-     * @param sval_tal_xyz Use tal xyz of a surface as input.
-     * @param sval_area Use vertex area of a surface as input.
-     * @param sval_annot Map annotation file.
-     * @param sval_nxyz Use surface normals of a surface as input.
-     * @param patch Specify source patch file, target surface and number of dilations.
-     * @param sfmt Source format type string.
-     * @param reg Apply registration file to sval-xyz.
-     * @param reg_inv Apply inverse registration file to sval-xyz.
-     * @param srcicoorder Icosahedron order for the source.
-     * @param trgicoorder Icosahedron order for the target.
-     * @param tval_path Path of the file in which to store output values.
-     * @param tval_xyz Save target value as a surface file with source xyz.
-     * @param tfmt Target format type string.
-     * @param trg_dist Save distance from source to target vertices.
-     * @param s Use the same subject for both source and target.
-     * @param hemi Hemisphere for both source and target (lh or rh).
-     * @param src_hemi Hemisphere for source (lh or rh).
-     * @param trg_hemi Hemisphere for target (lh or rh).
-     * @param dual_hemi Assume source ?h.?h.surfreg file name.
-     * @param jac Turn on jacobian correction, needed when applying to area or volume.
-     * @param surfreg Surface registration for source and target (sphere.reg).
-     * @param src_surfreg Source surface registration (sphere.reg).
-     * @param trg_surfreg Target surface registration (sphere.reg).
-     * @param mapmethod Method used to map from the vertices in one subject to another (nnfr or nnf).
-     * @param frame Save only nth frame (when using paint output format).
-     * @param fwhm_src Smooth the source to given FWHM.
-     * @param fwhm_trg Smooth the target to given FWHM.
-     * @param nsmooth_in Number of smoothing iterations for input.
-     * @param nsmooth_out Number of smoothing iterations for output.
-     * @param cortex Use ?h.cortex.label as a smoothing mask.
-     * @param no_cortex Do NOT use ?h.cortex.label as a smoothing mask (default).
-     * @param label_src Source smoothing mask.
-     * @param label_trg Target smoothing mask.
-     * @param mul Multiply the input by the given value.
-     * @param div Divide the input by the given value.
-     * @param reshape Reshape output to multiple 'slices'.
-     * @param reshape_factor Reshape to Nfactor 'slices'.
-     * @param reshape3d Reshape fsaverage (ico7) into 42 x 47 x 83.
-     * @param split Output each frame separately.
-     * @param synth Replace input with white Gaussian noise.
-     * @param ones Replace input with 1s.
-     * @param normvar Rescale so that stddev=1 (good with --synth).
-     * @param seed Seed for synth (default is auto).
-     * @param prune Remove any voxel that is zero in any time point (for smoothing).
-     * @param no_prune Do not prune (default).
-     * @param proj_surf Project vertices by mag*scale at each vertex.
-     * @param proj_norm Project vertices by distmm at each vertex.
-     * @param reg_diff Subtract reg2 from --reg (primarily for testing).
-     * @param rms Save RMS of reg1-reg2 (primarily for testing).
-     * @param rms_mask Compute RMS in mask (primarily for testing).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SURF2SURF_METADATA);
     const params = mri_surf2surf_params(src_subject, trg_subject, sval_path, sval_xyz, projfrac, projabs, sval_tal_xyz, sval_area, sval_annot, sval_nxyz, patch, sfmt, reg, reg_inv, srcicoorder, trgicoorder, tval_path, tval_xyz, tfmt, trg_dist, s, hemi, src_hemi, trg_hemi, dual_hemi, jac, surfreg, src_surfreg, trg_surfreg, mapmethod, frame, fwhm_src, fwhm_trg, nsmooth_in, nsmooth_out, cortex, no_cortex, label_src, label_trg, mul, div, reshape, reshape_factor, reshape3d, split, synth, ones, normvar, seed, prune, no_prune, proj_surf, proj_norm, reg_diff, rms, rms_mask)
@@ -891,5 +891,8 @@ export {
       MriSurf2surfOutputs,
       MriSurf2surfParameters,
       mri_surf2surf,
+      mri_surf2surf_cargs,
+      mri_surf2surf_execute,
+      mri_surf2surf_outputs,
       mri_surf2surf_params,
 };

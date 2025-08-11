@@ -12,38 +12,38 @@ const V__FLOAT_FIX_METADATA: Metadata = {
 
 
 interface VFloatFixParameters {
-    "__STYXTYPE__": "@float_fix";
+    "@type": "afni.@float_fix";
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@float_fix": v__float_fix_cargs,
+        "afni.@float_fix": v__float_fix_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface VFloatFixOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input files to be checked for illegal IEEE floating point values. Wildcards can be used, but filenames must end with .HEAD.
+ *
+ * @returns Parameter dictionary
+ */
 function v__float_fix_params(
     input_files: Array<InputPathType>,
 ): VFloatFixParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input files to be checked for illegal IEEE floating point values. Wildcards can be used, but filenames must end with .HEAD.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@float_fix" as const,
+        "@type": "afni.@float_fix" as const,
         "input_files": input_files,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__float_fix_cargs(
     params: VFloatFixParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@float_fix");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -100,18 +100,18 @@ function v__float_fix_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__float_fix_outputs(
     params: VFloatFixParameters,
     execution: Execution,
 ): VFloatFixOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFloatFixOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function v__float_fix_outputs(
 }
 
 
+/**
+ * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
+ */
 function v__float_fix_execute(
     params: VFloatFixParameters,
     execution: Execution,
 ): VFloatFixOutputs {
-    /**
-     * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__float_fix_cargs(params, execution)
     const ret = v__float_fix_outputs(params, execution)
@@ -143,22 +143,22 @@ function v__float_fix_execute(
 }
 
 
+/**
+ * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input files to be checked for illegal IEEE floating point values. Wildcards can be used, but filenames must end with .HEAD.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
+ */
 function v__float_fix(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): VFloatFixOutputs {
-    /**
-     * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input files to be checked for illegal IEEE floating point values. Wildcards can be used, but filenames must end with .HEAD.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FLOAT_FIX_METADATA);
     const params = v__float_fix_params(input_files)
@@ -171,5 +171,8 @@ export {
       VFloatFixParameters,
       V__FLOAT_FIX_METADATA,
       v__float_fix,
+      v__float_fix_cargs,
+      v__float_fix_execute,
+      v__float_fix_outputs,
       v__float_fix_params,
 };

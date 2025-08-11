@@ -12,7 +12,7 @@ const FAT_PROC_ALIGN_ANAT_PAIR_METADATA: Metadata = {
 
 
 interface FatProcAlignAnatPairParameters {
-    "__STYXTYPE__": "fat_proc_align_anat_pair";
+    "@type": "afni.fat_proc_align_anat_pair";
     "input_t1w": InputPathType;
     "input_t2w": InputPathType;
     "output_prefix": string;
@@ -28,35 +28,35 @@ interface FatProcAlignAnatPairParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_align_anat_pair": fat_proc_align_anat_pair_cargs,
+        "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_align_anat_pair": fat_proc_align_anat_pair_outputs,
+        "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface FatProcAlignAnatPairOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_t1w T1-weighted volume
+ * @param input_t2w T2-weighted volume
+ * @param output_prefix Output prefix for files and snapshots
+ * @param output_grid Specify output T1w volume's final resolution (isotropic)
+ * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
+ * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
+ * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
+ * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
+ * @param matrix Apply a pre-made matrix from 3dAllineate
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Do not save the command line call and the location where it was run
+ * @param no_clean Do not delete the temporary working directory
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_align_anat_pair_params(
     input_t1w: InputPathType,
     input_t2w: InputPathType,
@@ -101,26 +119,8 @@ function fat_proc_align_anat_pair_params(
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
 ): FatProcAlignAnatPairParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_t1w T1-weighted volume
-     * @param input_t2w T2-weighted volume
-     * @param output_prefix Output prefix for files and snapshots
-     * @param output_grid Specify output T1w volume's final resolution (isotropic)
-     * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
-     * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
-     * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
-     * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
-     * @param matrix Apply a pre-made matrix from 3dAllineate
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Do not save the command line call and the location where it was run
-     * @param no_clean Do not delete the temporary working directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_align_anat_pair" as const,
+        "@type": "afni.fat_proc_align_anat_pair" as const,
         "input_t1w": input_t1w,
         "input_t2w": input_t2w,
         "output_prefix": output_prefix,
@@ -148,18 +148,18 @@ function fat_proc_align_anat_pair_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_align_anat_pair_cargs(
     params: FatProcAlignAnatPairParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_align_anat_pair");
     cargs.push(
@@ -220,18 +220,18 @@ function fat_proc_align_anat_pair_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_align_anat_pair_outputs(
     params: FatProcAlignAnatPairParameters,
     execution: Execution,
 ): FatProcAlignAnatPairOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcAlignAnatPairOutputs = {
         root: execution.outputFile("."),
         aligned_t1w: execution.outputFile([(params["output_prefix"] ?? null), "_t1w_aligned.nii.gz"].join('')),
@@ -242,22 +242,22 @@ function fat_proc_align_anat_pair_outputs(
 }
 
 
+/**
+ * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
+ */
 function fat_proc_align_anat_pair_execute(
     params: FatProcAlignAnatPairParameters,
     execution: Execution,
 ): FatProcAlignAnatPairOutputs {
-    /**
-     * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_align_anat_pair_cargs(params, execution)
     const ret = fat_proc_align_anat_pair_outputs(params, execution)
@@ -266,6 +266,29 @@ function fat_proc_align_anat_pair_execute(
 }
 
 
+/**
+ * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_t1w T1-weighted volume
+ * @param input_t2w T2-weighted volume
+ * @param output_prefix Output prefix for files and snapshots
+ * @param output_grid Specify output T1w volume's final resolution (isotropic)
+ * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
+ * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
+ * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
+ * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
+ * @param matrix Apply a pre-made matrix from 3dAllineate
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Do not save the command line call and the location where it was run
+ * @param no_clean Do not delete the temporary working directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
+ */
 function fat_proc_align_anat_pair(
     input_t1w: InputPathType,
     input_t2w: InputPathType,
@@ -281,29 +304,6 @@ function fat_proc_align_anat_pair(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcAlignAnatPairOutputs {
-    /**
-     * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_t1w T1-weighted volume
-     * @param input_t2w T2-weighted volume
-     * @param output_prefix Output prefix for files and snapshots
-     * @param output_grid Specify output T1w volume's final resolution (isotropic)
-     * @param out_t2w_grid Final T1w volume is on the T2W volume's grid
-     * @param input_t2w_mask Input a mask to apply to the T2w volume for alignment
-     * @param do_ss_tmp_t1w Apply skullstripping to the T1w volume during an intermediate step
-     * @param warp Specify the degrees of freedom for warping using options from 3dAllineate
-     * @param matrix Apply a pre-made matrix from 3dAllineate
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Do not save the command line call and the location where it was run
-     * @param no_clean Do not delete the temporary working directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_ALIGN_ANAT_PAIR_METADATA);
     const params = fat_proc_align_anat_pair_params(input_t1w, input_t2w, output_prefix, output_grid, out_t2w_grid, input_t2w_mask, do_ss_tmp_t1w, warp, matrix, workdir, no_cmd_out, no_clean)
@@ -316,5 +316,8 @@ export {
       FatProcAlignAnatPairOutputs,
       FatProcAlignAnatPairParameters,
       fat_proc_align_anat_pair,
+      fat_proc_align_anat_pair_cargs,
+      fat_proc_align_anat_pair_execute,
+      fat_proc_align_anat_pair_outputs,
       fat_proc_align_anat_pair_params,
 };

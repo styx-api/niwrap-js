@@ -12,35 +12,35 @@ const VOLUME_PALETTE_METADATA: Metadata = {
 
 
 interface VolumePalettePosPercentParameters {
-    "__STYXTYPE__": "pos_percent";
+    "@type": "workbench.volume-palette.pos_percent";
     "pos_min__": number;
     "pos_max__": number;
 }
 
 
 interface VolumePaletteNegPercentParameters {
-    "__STYXTYPE__": "neg_percent";
+    "@type": "workbench.volume-palette.neg_percent";
     "neg_min__": number;
     "neg_max__": number;
 }
 
 
 interface VolumePalettePosUserParameters {
-    "__STYXTYPE__": "pos_user";
+    "@type": "workbench.volume-palette.pos_user";
     "pos_min_user": number;
     "pos_max_user": number;
 }
 
 
 interface VolumePaletteNegUserParameters {
-    "__STYXTYPE__": "neg_user";
+    "@type": "workbench.volume-palette.neg_user";
     "neg_min_user": number;
     "neg_max_user": number;
 }
 
 
 interface VolumePaletteThresholdingParameters {
-    "__STYXTYPE__": "thresholding";
+    "@type": "workbench.volume-palette.thresholding";
     "type": string;
     "test": string;
     "min": number;
@@ -49,7 +49,7 @@ interface VolumePaletteThresholdingParameters {
 
 
 interface VolumePaletteParameters {
-    "__STYXTYPE__": "volume-palette";
+    "@type": "workbench.volume-palette";
     "volume": string;
     "mode": string;
     "opt_subvolume_subvolume"?: string | null | undefined;
@@ -67,58 +67,58 @@ interface VolumePaletteParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-palette": volume_palette_cargs,
-        "pos_percent": volume_palette_pos_percent_cargs,
-        "neg_percent": volume_palette_neg_percent_cargs,
-        "pos_user": volume_palette_pos_user_cargs,
-        "neg_user": volume_palette_neg_user_cargs,
-        "thresholding": volume_palette_thresholding_cargs,
+        "workbench.volume-palette": volume_palette_cargs,
+        "workbench.volume-palette.pos_percent": volume_palette_pos_percent_cargs,
+        "workbench.volume-palette.neg_percent": volume_palette_neg_percent_cargs,
+        "workbench.volume-palette.pos_user": volume_palette_pos_user_cargs,
+        "workbench.volume-palette.neg_user": volume_palette_neg_user_cargs,
+        "workbench.volume-palette.thresholding": volume_palette_thresholding_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pos_min__ the percentile for the least positive data
+ * @param pos_max__ the percentile for the most positive data
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_pos_percent_params(
     pos_min__: number,
     pos_max__: number,
 ): VolumePalettePosPercentParameters {
-    /**
-     * Build parameters.
-    
-     * @param pos_min__ the percentile for the least positive data
-     * @param pos_max__ the percentile for the most positive data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pos_percent" as const,
+        "@type": "workbench.volume-palette.pos_percent" as const,
         "pos_min__": pos_min__,
         "pos_max__": pos_max__,
     };
@@ -126,18 +126,18 @@ function volume_palette_pos_percent_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_pos_percent_cargs(
     params: VolumePalettePosPercentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-pos-percent");
     cargs.push(String((params["pos_min__"] ?? null)));
@@ -146,20 +146,20 @@ function volume_palette_pos_percent_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param neg_min__ the percentile for the least negative data
+ * @param neg_max__ the percentile for the most negative data
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_neg_percent_params(
     neg_min__: number,
     neg_max__: number,
 ): VolumePaletteNegPercentParameters {
-    /**
-     * Build parameters.
-    
-     * @param neg_min__ the percentile for the least negative data
-     * @param neg_max__ the percentile for the most negative data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neg_percent" as const,
+        "@type": "workbench.volume-palette.neg_percent" as const,
         "neg_min__": neg_min__,
         "neg_max__": neg_max__,
     };
@@ -167,18 +167,18 @@ function volume_palette_neg_percent_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_neg_percent_cargs(
     params: VolumePaletteNegPercentParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neg-percent");
     cargs.push(String((params["neg_min__"] ?? null)));
@@ -187,20 +187,20 @@ function volume_palette_neg_percent_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param pos_min_user the value for the least positive data
+ * @param pos_max_user the value for the most positive data
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_pos_user_params(
     pos_min_user: number,
     pos_max_user: number,
 ): VolumePalettePosUserParameters {
-    /**
-     * Build parameters.
-    
-     * @param pos_min_user the value for the least positive data
-     * @param pos_max_user the value for the most positive data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pos_user" as const,
+        "@type": "workbench.volume-palette.pos_user" as const,
         "pos_min_user": pos_min_user,
         "pos_max_user": pos_max_user,
     };
@@ -208,18 +208,18 @@ function volume_palette_pos_user_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_pos_user_cargs(
     params: VolumePalettePosUserParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-pos-user");
     cargs.push(String((params["pos_min_user"] ?? null)));
@@ -228,20 +228,20 @@ function volume_palette_pos_user_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param neg_min_user the value for the least negative data
+ * @param neg_max_user the value for the most negative data
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_neg_user_params(
     neg_min_user: number,
     neg_max_user: number,
 ): VolumePaletteNegUserParameters {
-    /**
-     * Build parameters.
-    
-     * @param neg_min_user the value for the least negative data
-     * @param neg_max_user the value for the most negative data
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "neg_user" as const,
+        "@type": "workbench.volume-palette.neg_user" as const,
         "neg_min_user": neg_min_user,
         "neg_max_user": neg_max_user,
     };
@@ -249,18 +249,18 @@ function volume_palette_neg_user_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_neg_user_cargs(
     params: VolumePaletteNegUserParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-neg-user");
     cargs.push(String((params["neg_min_user"] ?? null)));
@@ -269,24 +269,24 @@ function volume_palette_neg_user_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param type_ thresholding setting
+ * @param test show values inside or outside thresholds
+ * @param min lower threshold
+ * @param max upper threshold
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_thresholding_params(
     type_: string,
     test: string,
     min: number,
     max: number,
 ): VolumePaletteThresholdingParameters {
-    /**
-     * Build parameters.
-    
-     * @param type_ thresholding setting
-     * @param test show values inside or outside thresholds
-     * @param min lower threshold
-     * @param max upper threshold
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "thresholding" as const,
+        "@type": "workbench.volume-palette.thresholding" as const,
         "type": type_,
         "test": test,
         "min": min,
@@ -296,18 +296,18 @@ function volume_palette_thresholding_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_thresholding_cargs(
     params: VolumePaletteThresholdingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-thresholding");
     cargs.push((params["type"] ?? null));
@@ -331,6 +331,26 @@ interface VolumePaletteOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume the volume file to modify
+ * @param mode the mapping mode
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
+ * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
+ * @param opt_disp_pos_display display positive data: boolean, whether to display
+ * @param opt_disp_neg_display display positive data: boolean, whether to display
+ * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
+ * @param opt_palette_name_name set the palette used: the name of the palette
+ * @param thresholding set the thresholding
+ * @param opt_inversion_type specify palette inversion: the type of inversion
+ *
+ * @returns Parameter dictionary
+ */
 function volume_palette_params(
     volume: string,
     mode: string,
@@ -347,28 +367,8 @@ function volume_palette_params(
     thresholding: VolumePaletteThresholdingParameters | null = null,
     opt_inversion_type: string | null = null,
 ): VolumePaletteParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume the volume file to modify
-     * @param mode the mapping mode
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-     * @param pos_percent percentage min/max for positive data coloring
-     * @param neg_percent percentage min/max for negative data coloring
-     * @param pos_user user min/max values for positive data coloring
-     * @param neg_user user min/max values for negative data coloring
-     * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
-     * @param opt_disp_pos_display display positive data: boolean, whether to display
-     * @param opt_disp_neg_display display positive data: boolean, whether to display
-     * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
-     * @param opt_palette_name_name set the palette used: the name of the palette
-     * @param thresholding set the thresholding
-     * @param opt_inversion_type specify palette inversion: the type of inversion
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-palette" as const,
+        "@type": "workbench.volume-palette" as const,
         "volume": volume,
         "mode": mode,
     };
@@ -412,18 +412,18 @@ function volume_palette_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_palette_cargs(
     params: VolumePaletteParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-palette");
@@ -436,16 +436,16 @@ function volume_palette_cargs(
         );
     }
     if ((params["pos_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_percent"] ?? null).__STYXTYPE__)((params["pos_percent"] ?? null), execution));
+        cargs.push(...dynCargs((params["pos_percent"] ?? null)["@type"])((params["pos_percent"] ?? null), execution));
     }
     if ((params["neg_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_percent"] ?? null).__STYXTYPE__)((params["neg_percent"] ?? null), execution));
+        cargs.push(...dynCargs((params["neg_percent"] ?? null)["@type"])((params["neg_percent"] ?? null), execution));
     }
     if ((params["pos_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_user"] ?? null).__STYXTYPE__)((params["pos_user"] ?? null), execution));
+        cargs.push(...dynCargs((params["pos_user"] ?? null)["@type"])((params["pos_user"] ?? null), execution));
     }
     if ((params["neg_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_user"] ?? null).__STYXTYPE__)((params["neg_user"] ?? null), execution));
+        cargs.push(...dynCargs((params["neg_user"] ?? null)["@type"])((params["neg_user"] ?? null), execution));
     }
     if ((params["opt_interpolate_interpolate"] ?? null) !== null) {
         cargs.push(
@@ -478,7 +478,7 @@ function volume_palette_cargs(
         );
     }
     if ((params["thresholding"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thresholding"] ?? null).__STYXTYPE__)((params["thresholding"] ?? null), execution));
+        cargs.push(...dynCargs((params["thresholding"] ?? null)["@type"])((params["thresholding"] ?? null), execution));
     }
     if ((params["opt_inversion_type"] ?? null) !== null) {
         cargs.push(
@@ -490,18 +490,18 @@ function volume_palette_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_palette_outputs(
     params: VolumePaletteParameters,
     execution: Execution,
 ): VolumePaletteOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumePaletteOutputs = {
         root: execution.outputFile("."),
     };
@@ -509,94 +509,94 @@ function volume_palette_outputs(
 }
 
 
+/**
+ * Set the palette of a volume file.
+ *
+ * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
+ *
+ * MODE_AUTO_SCALE
+ * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
+ * MODE_AUTO_SCALE_PERCENTAGE
+ * MODE_USER_SCALE
+ *
+ * The <name> argument to -palette-name must be one of the following:
+ *
+ * ROY-BIG-BL
+ * videen_style
+ * Gray_Interp_Positive
+ * Gray_Interp
+ * PSYCH-FIXED
+ * RBGYR20
+ * RBGYR20P
+ * RYGBR4_positive
+ * RGRBR_mirror90_pos
+ * Orange-Yellow
+ * POS_NEG_ZERO
+ * red-yellow
+ * blue-lightblue
+ * FSL
+ * power_surf
+ * black-red
+ * black-green
+ * black-blue
+ * black-red-positive
+ * black-green-positive
+ * black-blue-positive
+ * blue-black-green
+ * blue-black-red
+ * red-black-green
+ * fsl_red
+ * fsl_green
+ * fsl_blue
+ * fsl_yellow
+ * RedWhiteBlue
+ * cool-warm
+ * spectral
+ * RY-BC-BL
+ * magma
+ * JET256
+ * PSYCH
+ * PSYCH-NO-NONE
+ * ROY-BIG
+ * clear_brain
+ * fidl
+ * raich4_clrmid
+ * raich6_clrmid
+ * HSB8_clrmid
+ * POS_NEG
+ * Special-RGB-Volume
+ *
+ * The <type> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TYPE_OFF
+ * THRESHOLD_TYPE_NORMAL
+ * THRESHOLD_TYPE_FILE
+ *
+ * The <test> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TEST_SHOW_OUTSIDE
+ * THRESHOLD_TEST_SHOW_INSIDE
+ *
+ * The <type> argument to -inversion must be one of the following:
+ *
+ * OFF
+ * POSITIVE_WITH_NEGATIVE
+ * POSITIVE_NEGATIVE_SEPARATE
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
+ */
 function volume_palette_execute(
     params: VolumePaletteParameters,
     execution: Execution,
 ): VolumePaletteOutputs {
-    /**
-     * Set the palette of a volume file.
-     * 
-     * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
-     * 
-     * MODE_AUTO_SCALE
-     * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
-     * MODE_AUTO_SCALE_PERCENTAGE
-     * MODE_USER_SCALE
-     * 
-     * The <name> argument to -palette-name must be one of the following:
-     * 
-     * ROY-BIG-BL
-     * videen_style
-     * Gray_Interp_Positive
-     * Gray_Interp
-     * PSYCH-FIXED
-     * RBGYR20
-     * RBGYR20P
-     * RYGBR4_positive
-     * RGRBR_mirror90_pos
-     * Orange-Yellow
-     * POS_NEG_ZERO
-     * red-yellow
-     * blue-lightblue
-     * FSL
-     * power_surf
-     * black-red
-     * black-green
-     * black-blue
-     * black-red-positive
-     * black-green-positive
-     * black-blue-positive
-     * blue-black-green
-     * blue-black-red
-     * red-black-green
-     * fsl_red
-     * fsl_green
-     * fsl_blue
-     * fsl_yellow
-     * RedWhiteBlue
-     * cool-warm
-     * spectral
-     * RY-BC-BL
-     * magma
-     * JET256
-     * PSYCH
-     * PSYCH-NO-NONE
-     * ROY-BIG
-     * clear_brain
-     * fidl
-     * raich4_clrmid
-     * raich6_clrmid
-     * HSB8_clrmid
-     * POS_NEG
-     * Special-RGB-Volume
-     * 
-     * The <type> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TYPE_OFF
-     * THRESHOLD_TYPE_NORMAL
-     * THRESHOLD_TYPE_FILE
-     * 
-     * The <test> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TEST_SHOW_OUTSIDE
-     * THRESHOLD_TEST_SHOW_INSIDE
-     * 
-     * The <type> argument to -inversion must be one of the following:
-     * 
-     * OFF
-     * POSITIVE_WITH_NEGATIVE
-     * POSITIVE_NEGATIVE_SEPARATE
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_palette_cargs(params, execution)
     const ret = volume_palette_outputs(params, execution)
@@ -605,6 +605,103 @@ function volume_palette_execute(
 }
 
 
+/**
+ * Set the palette of a volume file.
+ *
+ * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
+ *
+ * MODE_AUTO_SCALE
+ * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
+ * MODE_AUTO_SCALE_PERCENTAGE
+ * MODE_USER_SCALE
+ *
+ * The <name> argument to -palette-name must be one of the following:
+ *
+ * ROY-BIG-BL
+ * videen_style
+ * Gray_Interp_Positive
+ * Gray_Interp
+ * PSYCH-FIXED
+ * RBGYR20
+ * RBGYR20P
+ * RYGBR4_positive
+ * RGRBR_mirror90_pos
+ * Orange-Yellow
+ * POS_NEG_ZERO
+ * red-yellow
+ * blue-lightblue
+ * FSL
+ * power_surf
+ * black-red
+ * black-green
+ * black-blue
+ * black-red-positive
+ * black-green-positive
+ * black-blue-positive
+ * blue-black-green
+ * blue-black-red
+ * red-black-green
+ * fsl_red
+ * fsl_green
+ * fsl_blue
+ * fsl_yellow
+ * RedWhiteBlue
+ * cool-warm
+ * spectral
+ * RY-BC-BL
+ * magma
+ * JET256
+ * PSYCH
+ * PSYCH-NO-NONE
+ * ROY-BIG
+ * clear_brain
+ * fidl
+ * raich4_clrmid
+ * raich6_clrmid
+ * HSB8_clrmid
+ * POS_NEG
+ * Special-RGB-Volume
+ *
+ * The <type> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TYPE_OFF
+ * THRESHOLD_TYPE_NORMAL
+ * THRESHOLD_TYPE_FILE
+ *
+ * The <test> argument to -thresholding must be one of the following:
+ *
+ * THRESHOLD_TEST_SHOW_OUTSIDE
+ * THRESHOLD_TEST_SHOW_INSIDE
+ *
+ * The <type> argument to -inversion must be one of the following:
+ *
+ * OFF
+ * POSITIVE_WITH_NEGATIVE
+ * POSITIVE_NEGATIVE_SEPARATE
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume the volume file to modify
+ * @param mode the mapping mode
+ * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
+ * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
+ * @param opt_disp_pos_display display positive data: boolean, whether to display
+ * @param opt_disp_neg_display display positive data: boolean, whether to display
+ * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
+ * @param opt_palette_name_name set the palette used: the name of the palette
+ * @param thresholding set the thresholding
+ * @param opt_inversion_type specify palette inversion: the type of inversion
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
+ */
 function volume_palette(
     volume: string,
     mode: string,
@@ -622,103 +719,6 @@ function volume_palette(
     opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
-    /**
-     * Set the palette of a volume file.
-     * 
-     * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
-     * 
-     * MODE_AUTO_SCALE
-     * MODE_AUTO_SCALE_ABSOLUTE_PERCENTAGE
-     * MODE_AUTO_SCALE_PERCENTAGE
-     * MODE_USER_SCALE
-     * 
-     * The <name> argument to -palette-name must be one of the following:
-     * 
-     * ROY-BIG-BL
-     * videen_style
-     * Gray_Interp_Positive
-     * Gray_Interp
-     * PSYCH-FIXED
-     * RBGYR20
-     * RBGYR20P
-     * RYGBR4_positive
-     * RGRBR_mirror90_pos
-     * Orange-Yellow
-     * POS_NEG_ZERO
-     * red-yellow
-     * blue-lightblue
-     * FSL
-     * power_surf
-     * black-red
-     * black-green
-     * black-blue
-     * black-red-positive
-     * black-green-positive
-     * black-blue-positive
-     * blue-black-green
-     * blue-black-red
-     * red-black-green
-     * fsl_red
-     * fsl_green
-     * fsl_blue
-     * fsl_yellow
-     * RedWhiteBlue
-     * cool-warm
-     * spectral
-     * RY-BC-BL
-     * magma
-     * JET256
-     * PSYCH
-     * PSYCH-NO-NONE
-     * ROY-BIG
-     * clear_brain
-     * fidl
-     * raich4_clrmid
-     * raich6_clrmid
-     * HSB8_clrmid
-     * POS_NEG
-     * Special-RGB-Volume
-     * 
-     * The <type> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TYPE_OFF
-     * THRESHOLD_TYPE_NORMAL
-     * THRESHOLD_TYPE_FILE
-     * 
-     * The <test> argument to -thresholding must be one of the following:
-     * 
-     * THRESHOLD_TEST_SHOW_OUTSIDE
-     * THRESHOLD_TEST_SHOW_INSIDE
-     * 
-     * The <type> argument to -inversion must be one of the following:
-     * 
-     * OFF
-     * POSITIVE_WITH_NEGATIVE
-     * POSITIVE_NEGATIVE_SEPARATE
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume the volume file to modify
-     * @param mode the mapping mode
-     * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
-     * @param pos_percent percentage min/max for positive data coloring
-     * @param neg_percent percentage min/max for negative data coloring
-     * @param pos_user user min/max values for positive data coloring
-     * @param neg_user user min/max values for negative data coloring
-     * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
-     * @param opt_disp_pos_display display positive data: boolean, whether to display
-     * @param opt_disp_neg_display display positive data: boolean, whether to display
-     * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
-     * @param opt_palette_name_name set the palette used: the name of the palette
-     * @param thresholding set the thresholding
-     * @param opt_inversion_type specify palette inversion: the type of inversion
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_PALETTE_METADATA);
     const params = volume_palette_params(volume, mode, opt_subvolume_subvolume, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
@@ -736,10 +736,18 @@ export {
       VolumePalettePosUserParameters,
       VolumePaletteThresholdingParameters,
       volume_palette,
+      volume_palette_cargs,
+      volume_palette_execute,
+      volume_palette_neg_percent_cargs,
       volume_palette_neg_percent_params,
+      volume_palette_neg_user_cargs,
       volume_palette_neg_user_params,
+      volume_palette_outputs,
       volume_palette_params,
+      volume_palette_pos_percent_cargs,
       volume_palette_pos_percent_params,
+      volume_palette_pos_user_cargs,
       volume_palette_pos_user_params,
+      volume_palette_thresholding_cargs,
       volume_palette_thresholding_params,
 };

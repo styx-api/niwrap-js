@@ -12,7 +12,7 @@ const CJPEG_METADATA: Metadata = {
 
 
 interface CjpegParameters {
-    "__STYXTYPE__": "cjpeg";
+    "@type": "afni.cjpeg";
     "quality"?: number | null | undefined;
     "grayscale": boolean;
     "optimize": boolean;
@@ -23,35 +23,35 @@ interface CjpegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cjpeg": cjpeg_cargs,
+        "afni.cjpeg": cjpeg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cjpeg": cjpeg_outputs,
+        "afni.cjpeg": cjpeg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface CjpegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outfile Output JPEG file
+ * @param infile Input image file
+ * @param quality Quality of JPEG image (0-100)
+ * @param grayscale Create a grayscale JPEG file
+ * @param optimize Optimize Huffman table
+ * @param baseline Create a baseline JPEG file
+ * @param progressive Create a progressive JPEG file
+ *
+ * @returns Parameter dictionary
+ */
 function cjpeg_params(
     outfile: string,
     infile: InputPathType,
@@ -83,21 +96,8 @@ function cjpeg_params(
     baseline: boolean = false,
     progressive: boolean = false,
 ): CjpegParameters {
-    /**
-     * Build parameters.
-    
-     * @param outfile Output JPEG file
-     * @param infile Input image file
-     * @param quality Quality of JPEG image (0-100)
-     * @param grayscale Create a grayscale JPEG file
-     * @param optimize Optimize Huffman table
-     * @param baseline Create a baseline JPEG file
-     * @param progressive Create a progressive JPEG file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cjpeg" as const,
+        "@type": "afni.cjpeg" as const,
         "grayscale": grayscale,
         "optimize": optimize,
         "baseline": baseline,
@@ -112,18 +112,18 @@ function cjpeg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cjpeg_cargs(
     params: CjpegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cjpeg");
     if ((params["quality"] ?? null) !== null) {
@@ -150,18 +150,18 @@ function cjpeg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cjpeg_outputs(
     params: CjpegParameters,
     execution: Execution,
 ): CjpegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CjpegOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -170,22 +170,22 @@ function cjpeg_outputs(
 }
 
 
+/**
+ * Compresses an image file to a JPEG file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CjpegOutputs`).
+ */
 function cjpeg_execute(
     params: CjpegParameters,
     execution: Execution,
 ): CjpegOutputs {
-    /**
-     * Compresses an image file to a JPEG file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CjpegOutputs`).
-     */
     params = execution.params(params)
     const cargs = cjpeg_cargs(params, execution)
     const ret = cjpeg_outputs(params, execution)
@@ -194,6 +194,24 @@ function cjpeg_execute(
 }
 
 
+/**
+ * Compresses an image file to a JPEG file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param outfile Output JPEG file
+ * @param infile Input image file
+ * @param quality Quality of JPEG image (0-100)
+ * @param grayscale Create a grayscale JPEG file
+ * @param optimize Optimize Huffman table
+ * @param baseline Create a baseline JPEG file
+ * @param progressive Create a progressive JPEG file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CjpegOutputs`).
+ */
 function cjpeg(
     outfile: string,
     infile: InputPathType,
@@ -204,24 +222,6 @@ function cjpeg(
     progressive: boolean = false,
     runner: Runner | null = null,
 ): CjpegOutputs {
-    /**
-     * Compresses an image file to a JPEG file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param outfile Output JPEG file
-     * @param infile Input image file
-     * @param quality Quality of JPEG image (0-100)
-     * @param grayscale Create a grayscale JPEG file
-     * @param optimize Optimize Huffman table
-     * @param baseline Create a baseline JPEG file
-     * @param progressive Create a progressive JPEG file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CjpegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CJPEG_METADATA);
     const params = cjpeg_params(outfile, infile, quality, grayscale, optimize, baseline, progressive)
@@ -234,5 +234,8 @@ export {
       CjpegOutputs,
       CjpegParameters,
       cjpeg,
+      cjpeg_cargs,
+      cjpeg_execute,
+      cjpeg_outputs,
       cjpeg_params,
 };

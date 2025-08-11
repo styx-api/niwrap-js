@@ -12,7 +12,7 @@ const MRI_HEAD_METADATA: Metadata = {
 
 
 interface MriHeadParameters {
-    "__STYXTYPE__": "mri_head";
+    "@type": "freesurfer.mri_head";
     "identify": boolean;
     "read": boolean;
     "filename"?: string | null | undefined;
@@ -22,33 +22,33 @@ interface MriHeadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_head": mri_head_cargs,
+        "freesurfer.mri_head": mri_head_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface MriHeadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param identify Identify the MRI file
+ * @param read Read the MRI file
+ * @param filename Filename for identification or reading
+ * @param help Display help information
+ * @param usage Display usage information
+ * @param question_mark_help Display help or usage information
+ *
+ * @returns Parameter dictionary
+ */
 function mri_head_params(
     identify: boolean = false,
     read: boolean = false,
@@ -76,20 +88,8 @@ function mri_head_params(
     usage: boolean = false,
     question_mark_help: boolean = false,
 ): MriHeadParameters {
-    /**
-     * Build parameters.
-    
-     * @param identify Identify the MRI file
-     * @param read Read the MRI file
-     * @param filename Filename for identification or reading
-     * @param help Display help information
-     * @param usage Display usage information
-     * @param question_mark_help Display help or usage information
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_head" as const,
+        "@type": "freesurfer.mri_head" as const,
         "identify": identify,
         "read": read,
         "help": help,
@@ -103,18 +103,18 @@ function mri_head_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_head_cargs(
     params: MriHeadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_head");
     if ((params["identify"] ?? null)) {
@@ -139,18 +139,18 @@ function mri_head_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_head_outputs(
     params: MriHeadParameters,
     execution: Execution,
 ): MriHeadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriHeadOutputs = {
         root: execution.outputFile("."),
     };
@@ -158,22 +158,22 @@ function mri_head_outputs(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
+ */
 function mri_head_execute(
     params: MriHeadParameters,
     execution: Execution,
 ): MriHeadOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_head_cargs(params, execution)
     const ret = mri_head_outputs(params, execution)
@@ -182,6 +182,23 @@ function mri_head_execute(
 }
 
 
+/**
+ * No description.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param identify Identify the MRI file
+ * @param read Read the MRI file
+ * @param filename Filename for identification or reading
+ * @param help Display help information
+ * @param usage Display usage information
+ * @param question_mark_help Display help or usage information
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
+ */
 function mri_head(
     identify: boolean = false,
     read: boolean = false,
@@ -191,23 +208,6 @@ function mri_head(
     question_mark_help: boolean = false,
     runner: Runner | null = null,
 ): MriHeadOutputs {
-    /**
-     * No description.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param identify Identify the MRI file
-     * @param read Read the MRI file
-     * @param filename Filename for identification or reading
-     * @param help Display help information
-     * @param usage Display usage information
-     * @param question_mark_help Display help or usage information
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_HEAD_METADATA);
     const params = mri_head_params(identify, read, filename, help, usage, question_mark_help)
@@ -220,5 +220,8 @@ export {
       MriHeadOutputs,
       MriHeadParameters,
       mri_head,
+      mri_head_cargs,
+      mri_head_execute,
+      mri_head_outputs,
       mri_head_params,
 };

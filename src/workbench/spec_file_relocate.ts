@@ -12,39 +12,39 @@ const SPEC_FILE_RELOCATE_METADATA: Metadata = {
 
 
 interface SpecFileRelocateParameters {
-    "__STYXTYPE__": "spec-file-relocate";
+    "@type": "workbench.spec-file-relocate";
     "input_spec": string;
     "output_spec": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "spec-file-relocate": spec_file_relocate_cargs,
+        "workbench.spec-file-relocate": spec_file_relocate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface SpecFileRelocateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_spec the spec file to use
+ * @param output_spec output - the new spec file to create
+ *
+ * @returns Parameter dictionary
+ */
 function spec_file_relocate_params(
     input_spec: string,
     output_spec: string,
 ): SpecFileRelocateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_spec the spec file to use
-     * @param output_spec output - the new spec file to create
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spec-file-relocate" as const,
+        "@type": "workbench.spec-file-relocate" as const,
         "input_spec": input_spec,
         "output_spec": output_spec,
     };
@@ -85,18 +85,18 @@ function spec_file_relocate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spec_file_relocate_cargs(
     params: SpecFileRelocateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-spec-file-relocate");
@@ -106,18 +106,18 @@ function spec_file_relocate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spec_file_relocate_outputs(
     params: SpecFileRelocateParameters,
     execution: Execution,
 ): SpecFileRelocateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpecFileRelocateOutputs = {
         root: execution.outputFile("."),
     };
@@ -125,24 +125,24 @@ function spec_file_relocate_outputs(
 }
 
 
+/**
+ * Recreate spec file in new location.
+ *
+ * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
+ */
 function spec_file_relocate_execute(
     params: SpecFileRelocateParameters,
     execution: Execution,
 ): SpecFileRelocateOutputs {
-    /**
-     * Recreate spec file in new location.
-     * 
-     * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
-     */
     params = execution.params(params)
     const cargs = spec_file_relocate_cargs(params, execution)
     const ret = spec_file_relocate_outputs(params, execution)
@@ -151,26 +151,26 @@ function spec_file_relocate_execute(
 }
 
 
+/**
+ * Recreate spec file in new location.
+ *
+ * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param input_spec the spec file to use
+ * @param output_spec output - the new spec file to create
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
+ */
 function spec_file_relocate(
     input_spec: string,
     output_spec: string,
     runner: Runner | null = null,
 ): SpecFileRelocateOutputs {
-    /**
-     * Recreate spec file in new location.
-     * 
-     * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param input_spec the spec file to use
-     * @param output_spec output - the new spec file to create
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPEC_FILE_RELOCATE_METADATA);
     const params = spec_file_relocate_params(input_spec, output_spec)
@@ -183,5 +183,8 @@ export {
       SpecFileRelocateOutputs,
       SpecFileRelocateParameters,
       spec_file_relocate,
+      spec_file_relocate_cargs,
+      spec_file_relocate_execute,
+      spec_file_relocate_outputs,
       spec_file_relocate_params,
 };

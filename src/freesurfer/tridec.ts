@@ -12,7 +12,7 @@ const TRIDEC_METADATA: Metadata = {
 
 
 interface TridecParameters {
-    "__STYXTYPE__": "tridec";
+    "@type": "freesurfer.tridec";
     "subject_name": string;
     "fine_file": InputPathType;
     "ico_file": InputPathType;
@@ -20,35 +20,35 @@ interface TridecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tridec": tridec_cargs,
+        "freesurfer.tridec": tridec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "tridec": tridec_outputs,
+        "freesurfer.tridec": tridec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface TridecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject being processed.
+ * @param fine_file Fine file input for tridec.
+ * @param ico_file ICO file input for tridec.
+ * @param out_file Output file for tridec processing result.
+ *
+ * @returns Parameter dictionary
+ */
 function tridec_params(
     subject_name: string,
     fine_file: InputPathType,
     ico_file: InputPathType,
     out_file: string,
 ): TridecParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject being processed.
-     * @param fine_file Fine file input for tridec.
-     * @param ico_file ICO file input for tridec.
-     * @param out_file Output file for tridec processing result.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tridec" as const,
+        "@type": "freesurfer.tridec" as const,
         "subject_name": subject_name,
         "fine_file": fine_file,
         "ico_file": ico_file,
@@ -98,18 +98,18 @@ function tridec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tridec_cargs(
     params: TridecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tridec");
     cargs.push((params["subject_name"] ?? null));
@@ -120,18 +120,18 @@ function tridec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tridec_outputs(
     params: TridecParameters,
     execution: Execution,
 ): TridecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TridecOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["out_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function tridec_outputs(
 }
 
 
+/**
+ * Tridec tool for processing brain images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TridecOutputs`).
+ */
 function tridec_execute(
     params: TridecParameters,
     execution: Execution,
 ): TridecOutputs {
-    /**
-     * Tridec tool for processing brain images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TridecOutputs`).
-     */
     params = execution.params(params)
     const cargs = tridec_cargs(params, execution)
     const ret = tridec_outputs(params, execution)
@@ -164,6 +164,21 @@ function tridec_execute(
 }
 
 
+/**
+ * Tridec tool for processing brain images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject being processed.
+ * @param fine_file Fine file input for tridec.
+ * @param ico_file ICO file input for tridec.
+ * @param out_file Output file for tridec processing result.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TridecOutputs`).
+ */
 function tridec(
     subject_name: string,
     fine_file: InputPathType,
@@ -171,21 +186,6 @@ function tridec(
     out_file: string,
     runner: Runner | null = null,
 ): TridecOutputs {
-    /**
-     * Tridec tool for processing brain images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject being processed.
-     * @param fine_file Fine file input for tridec.
-     * @param ico_file ICO file input for tridec.
-     * @param out_file Output file for tridec processing result.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TridecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TRIDEC_METADATA);
     const params = tridec_params(subject_name, fine_file, ico_file, out_file)
@@ -198,5 +198,8 @@ export {
       TridecOutputs,
       TridecParameters,
       tridec,
+      tridec_cargs,
+      tridec_execute,
+      tridec_outputs,
       tridec_params,
 };

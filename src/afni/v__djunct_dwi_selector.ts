@@ -12,42 +12,42 @@ const V__DJUNCT_DWI_SELECTOR_METADATA: Metadata = {
 
 
 interface VDjunctDwiSelectorParameters {
-    "__STYXTYPE__": "@djunct_dwi_selector";
+    "@type": "afni.@djunct_dwi_selector";
     "dwi": InputPathType;
     "png": InputPathType;
     "outfile": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_dwi_selector": v__djunct_dwi_selector_cargs,
+        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@djunct_dwi_selector": v__djunct_dwi_selector_outputs,
+        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface VDjunctDwiSelectorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dwi Input DWI file
+ * @param png Output PNG image
+ * @param outfile Path to the output file
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_dwi_selector_params(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
 ): VDjunctDwiSelectorParameters {
-    /**
-     * Build parameters.
-    
-     * @param dwi Input DWI file
-     * @param png Output PNG image
-     * @param outfile Path to the output file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_dwi_selector" as const,
+        "@type": "afni.@djunct_dwi_selector" as const,
         "dwi": dwi,
         "png": png,
         "outfile": outfile,
@@ -94,18 +94,18 @@ function v__djunct_dwi_selector_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_dwi_selector_cargs(
     params: VDjunctDwiSelectorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_dwi_selector.tcsh");
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
@@ -115,18 +115,18 @@ function v__djunct_dwi_selector_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_dwi_selector_outputs(
     params: VDjunctDwiSelectorParameters,
     execution: Execution,
 ): VDjunctDwiSelectorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctDwiSelectorOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function v__djunct_dwi_selector_outputs(
 }
 
 
+/**
+ * Selects DWI data and creates a representative image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
+ */
 function v__djunct_dwi_selector_execute(
     params: VDjunctDwiSelectorParameters,
     execution: Execution,
 ): VDjunctDwiSelectorOutputs {
-    /**
-     * Selects DWI data and creates a representative image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_dwi_selector_cargs(params, execution)
     const ret = v__djunct_dwi_selector_outputs(params, execution)
@@ -159,26 +159,26 @@ function v__djunct_dwi_selector_execute(
 }
 
 
+/**
+ * Selects DWI data and creates a representative image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dwi Input DWI file
+ * @param png Output PNG image
+ * @param outfile Path to the output file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
+ */
 function v__djunct_dwi_selector(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
     runner: Runner | null = null,
 ): VDjunctDwiSelectorOutputs {
-    /**
-     * Selects DWI data and creates a representative image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dwi Input DWI file
-     * @param png Output PNG image
-     * @param outfile Path to the output file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_DWI_SELECTOR_METADATA);
     const params = v__djunct_dwi_selector_params(dwi, png, outfile)
@@ -191,5 +191,8 @@ export {
       VDjunctDwiSelectorParameters,
       V__DJUNCT_DWI_SELECTOR_METADATA,
       v__djunct_dwi_selector,
+      v__djunct_dwi_selector_cargs,
+      v__djunct_dwi_selector_execute,
+      v__djunct_dwi_selector_outputs,
       v__djunct_dwi_selector_params,
 };

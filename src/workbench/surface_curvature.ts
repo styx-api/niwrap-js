@@ -12,42 +12,42 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 
 
 interface SurfaceCurvatureParameters {
-    "__STYXTYPE__": "surface-curvature";
+    "@type": "workbench.surface-curvature";
     "surface": InputPathType;
     "opt_mean_mean_out"?: string | null | undefined;
     "opt_gauss_gauss_out"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-curvature": surface_curvature_cargs,
+        "workbench.surface-curvature": surface_curvature_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-curvature": surface_curvature_outputs,
+        "workbench.surface-curvature": surface_curvature_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,22 +74,22 @@ interface SurfaceCurvatureOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to compute the curvature of
+ * @param opt_mean_mean_out output mean curvature: mean curvature metric
+ * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
+ *
+ * @returns Parameter dictionary
+ */
 function surface_curvature_params(
     surface: InputPathType,
     opt_mean_mean_out: string | null = null,
     opt_gauss_gauss_out: string | null = null,
 ): SurfaceCurvatureParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to compute the curvature of
-     * @param opt_mean_mean_out output mean curvature: mean curvature metric
-     * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-curvature" as const,
+        "@type": "workbench.surface-curvature" as const,
         "surface": surface,
     };
     if (opt_mean_mean_out !== null) {
@@ -102,18 +102,18 @@ function surface_curvature_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_curvature_cargs(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-curvature");
@@ -134,18 +134,18 @@ function surface_curvature_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_curvature_outputs(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): SurfaceCurvatureOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceCurvatureOutputs = {
         root: execution.outputFile("."),
         opt_mean_mean_out: ((params["opt_mean_mean_out"] ?? null) !== null) ? execution.outputFile([(params["opt_mean_mean_out"] ?? null)].join('')) : null,
@@ -155,26 +155,26 @@ function surface_curvature_outputs(
 }
 
 
+/**
+ * Calculate curvature of surface.
+ *
+ * Compute the curvature of the surface, using the method from:
+ * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
+ * ACM-0-98791-601-8/93/008.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
+ */
 function surface_curvature_execute(
     params: SurfaceCurvatureParameters,
     execution: Execution,
 ): SurfaceCurvatureOutputs {
-    /**
-     * Calculate curvature of surface.
-     * 
-     * Compute the curvature of the surface, using the method from:
-     * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
-     * ACM-0-98791-601-8/93/008.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_curvature_cargs(params, execution)
     const ret = surface_curvature_outputs(params, execution)
@@ -183,30 +183,30 @@ function surface_curvature_execute(
 }
 
 
+/**
+ * Calculate curvature of surface.
+ *
+ * Compute the curvature of the surface, using the method from:
+ * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
+ * ACM-0-98791-601-8/93/008.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to compute the curvature of
+ * @param opt_mean_mean_out output mean curvature: mean curvature metric
+ * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
+ */
 function surface_curvature(
     surface: InputPathType,
     opt_mean_mean_out: string | null = null,
     opt_gauss_gauss_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    /**
-     * Calculate curvature of surface.
-     * 
-     * Compute the curvature of the surface, using the method from:
-     * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
-     * ACM-0-98791-601-8/93/008.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to compute the curvature of
-     * @param opt_mean_mean_out output mean curvature: mean curvature metric
-     * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_CURVATURE_METADATA);
     const params = surface_curvature_params(surface, opt_mean_mean_out, opt_gauss_gauss_out)
@@ -219,5 +219,8 @@ export {
       SurfaceCurvatureOutputs,
       SurfaceCurvatureParameters,
       surface_curvature,
+      surface_curvature_cargs,
+      surface_curvature_execute,
+      surface_curvature_outputs,
       surface_curvature_params,
 };

@@ -12,14 +12,14 @@ const DIRORDER_METADATA: Metadata = {
 
 
 interface DirorderConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dirorder.config";
     "key": string;
     "value": string;
 }
 
 
 interface DirorderParameters {
-    "__STYXTYPE__": "dirorder";
+    "@type": "mrtrix.dirorder";
     "cartesian": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface DirorderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dirorder": dirorder_cargs,
-        "config": dirorder_config_cargs,
+        "mrtrix.dirorder": dirorder_cargs,
+        "mrtrix.dirorder.config": dirorder_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dirorder": dirorder_outputs,
+        "mrtrix.dirorder": dirorder_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dirorder_config_params(
     key: string,
     value: string,
 ): DirorderConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dirorder.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function dirorder_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirorder_config_cargs(
     params: DirorderConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface DirorderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input directions file
+ * @param output the output directions file
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dirorder_params(
     input: InputPathType,
     output: string,
@@ -140,25 +157,8 @@ function dirorder_params(
     help: boolean = false,
     version: boolean = false,
 ): DirorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input directions file
-     * @param output the output directions file
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dirorder" as const,
+        "@type": "mrtrix.dirorder" as const,
         "cartesian": cartesian,
         "info": info,
         "quiet": quiet,
@@ -179,18 +179,18 @@ function dirorder_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirorder_cargs(
     params: DirorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dirorder");
     if ((params["cartesian"] ?? null)) {
@@ -215,7 +215,7 @@ function dirorder_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -229,18 +229,18 @@ function dirorder_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dirorder_outputs(
     params: DirorderParameters,
     execution: Execution,
 ): DirorderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DirorderOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -249,28 +249,28 @@ function dirorder_outputs(
 }
 
 
+/**
+ * Reorder a set of directions to ensure near-uniformity upon truncation.
+ *
+ * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DirorderOutputs`).
+ */
 function dirorder_execute(
     params: DirorderParameters,
     execution: Execution,
 ): DirorderOutputs {
-    /**
-     * Reorder a set of directions to ensure near-uniformity upon truncation.
-     * 
-     * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DirorderOutputs`).
-     */
     params = execution.params(params)
     const cargs = dirorder_cargs(params, execution)
     const ret = dirorder_outputs(params, execution)
@@ -279,6 +279,34 @@ function dirorder_execute(
 }
 
 
+/**
+ * Reorder a set of directions to ensure near-uniformity upon truncation.
+ *
+ * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input directions file
+ * @param output the output directions file
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DirorderOutputs`).
+ */
 function dirorder(
     input: InputPathType,
     output: string,
@@ -293,34 +321,6 @@ function dirorder(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirorderOutputs {
-    /**
-     * Reorder a set of directions to ensure near-uniformity upon truncation.
-     * 
-     * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input directions file
-     * @param output the output directions file
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DirorderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIRORDER_METADATA);
     const params = dirorder_params(input, output, cartesian, info, quiet, debug, force, nthreads, config, help, version)
@@ -334,6 +334,10 @@ export {
       DirorderOutputs,
       DirorderParameters,
       dirorder,
+      dirorder_cargs,
+      dirorder_config_cargs,
       dirorder_config_params,
+      dirorder_execute,
+      dirorder_outputs,
       dirorder_params,
 };

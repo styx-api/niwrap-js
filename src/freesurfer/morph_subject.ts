@@ -12,38 +12,38 @@ const MORPH_SUBJECT_METADATA: Metadata = {
 
 
 interface MorphSubjectParameters {
-    "__STYXTYPE__": "morph_subject";
+    "@type": "freesurfer.morph_subject";
     "subjid": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "morph_subject": morph_subject_cargs,
+        "freesurfer.morph_subject": morph_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface MorphSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjid Subject ID for processing
+ *
+ * @returns Parameter dictionary
+ */
 function morph_subject_params(
     subjid: string,
 ): MorphSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjid Subject ID for processing
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "morph_subject" as const,
+        "@type": "freesurfer.morph_subject" as const,
         "subjid": subjid,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function morph_subject_cargs(
     params: MorphSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("morph_subject");
     cargs.push((params["subjid"] ?? null));
@@ -100,18 +100,18 @@ function morph_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function morph_subject_outputs(
     params: MorphSubjectParameters,
     execution: Execution,
 ): MorphSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MorphSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function morph_subject_outputs(
 }
 
 
+/**
+ * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
+ */
 function morph_subject_execute(
     params: MorphSubjectParameters,
     execution: Execution,
 ): MorphSubjectOutputs {
-    /**
-     * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = morph_subject_cargs(params, execution)
     const ret = morph_subject_outputs(params, execution)
@@ -143,22 +143,22 @@ function morph_subject_execute(
 }
 
 
+/**
+ * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjid Subject ID for processing
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
+ */
 function morph_subject(
     subjid: string,
     runner: Runner | null = null,
 ): MorphSubjectOutputs {
-    /**
-     * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjid Subject ID for processing
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MORPH_SUBJECT_METADATA);
     const params = morph_subject_params(subjid)
@@ -171,5 +171,8 @@ export {
       MorphSubjectOutputs,
       MorphSubjectParameters,
       morph_subject,
+      morph_subject_cargs,
+      morph_subject_execute,
+      morph_subject_outputs,
       morph_subject_params,
 };

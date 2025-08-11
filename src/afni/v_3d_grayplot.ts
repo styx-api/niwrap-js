@@ -12,7 +12,7 @@ const V_3D_GRAYPLOT_METADATA: Metadata = {
 
 
 interface V3dGrayplotParameters {
-    "__STYXTYPE__": "3dGrayplot";
+    "@type": "afni.3dGrayplot";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface V3dGrayplotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dGrayplot": v_3d_grayplot_cargs,
+        "afni.3dGrayplot": v_3d_grayplot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dGrayplot": v_3d_grayplot_outputs,
+        "afni.3dGrayplot": v_3d_grayplot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface V3dGrayplotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input dataset
+ * @param mask Name of mask dataset. Voxels that are 0 in the mask will not be processed.
+ * @param prefix Name for the output file. Default is Grayplot.png
+ * @param dimensions Output size of image in pixels: [width height]. Defaults are width=1024 and height=512.
+ * @param resample_old Original resampling method for processed dataset.
+ * @param polort Order of polynomials for detrending. Default is 2. Use '-1' if data is already detrended and de-meaned.
+ * @param fwhm FWHM of blurring radius to use in the dataset before making the image. Default is 0 mm.
+ * @param pvorder Order the voxels by how well they match the two leading principal components of their partition.
+ * @param ljorder Order the voxels by their Ljung-Box statistics, a measure of temporal correlation.
+ * @param peelorder Order the voxels by how many 'peel' steps are needed to get from the partition boundary to the voxel.
+ * @param ijkorder Default intra-partition ordering by dataset 3D index ('ijk').
+ * @param range Set the range of the data to be plotted. Value of 0 is middle-gray, +X is white, -X is black.
+ * @param percent Scale values to percent differences from the mean of each voxel timeseries. Suitable for raw time series datasets.
+ * @param raw_with_bounds Map values <= A to black, values >= B to white, and intermediate values to grays.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_grayplot_params(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -97,28 +117,8 @@ function v_3d_grayplot_params(
     percent: boolean = false,
     raw_with_bounds: Array<number> | null = null,
 ): V3dGrayplotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input dataset
-     * @param mask Name of mask dataset. Voxels that are 0 in the mask will not be processed.
-     * @param prefix Name for the output file. Default is Grayplot.png
-     * @param dimensions Output size of image in pixels: [width height]. Defaults are width=1024 and height=512.
-     * @param resample_old Original resampling method for processed dataset.
-     * @param polort Order of polynomials for detrending. Default is 2. Use '-1' if data is already detrended and de-meaned.
-     * @param fwhm FWHM of blurring radius to use in the dataset before making the image. Default is 0 mm.
-     * @param pvorder Order the voxels by how well they match the two leading principal components of their partition.
-     * @param ljorder Order the voxels by their Ljung-Box statistics, a measure of temporal correlation.
-     * @param peelorder Order the voxels by how many 'peel' steps are needed to get from the partition boundary to the voxel.
-     * @param ijkorder Default intra-partition ordering by dataset 3D index ('ijk').
-     * @param range Set the range of the data to be plotted. Value of 0 is middle-gray, +X is white, -X is black.
-     * @param percent Scale values to percent differences from the mean of each voxel timeseries. Suitable for raw time series datasets.
-     * @param raw_with_bounds Map values <= A to black, values >= B to white, and intermediate values to grays.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dGrayplot" as const,
+        "@type": "afni.3dGrayplot" as const,
         "input": input,
         "resample_old": resample_old,
         "pvorder": pvorder,
@@ -152,18 +152,18 @@ function v_3d_grayplot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_grayplot_cargs(
     params: V3dGrayplotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dGrayplot");
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -231,18 +231,18 @@ function v_3d_grayplot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_grayplot_outputs(
     params: V3dGrayplotParameters,
     execution: Execution,
 ): V3dGrayplotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dGrayplotOutputs = {
         root: execution.outputFile("."),
         grayplot_img: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
@@ -251,22 +251,22 @@ function v_3d_grayplot_outputs(
 }
 
 
+/**
+ * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
+ */
 function v_3d_grayplot_execute(
     params: V3dGrayplotParameters,
     execution: Execution,
 ): V3dGrayplotOutputs {
-    /**
-     * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_grayplot_cargs(params, execution)
     const ret = v_3d_grayplot_outputs(params, execution)
@@ -275,6 +275,31 @@ function v_3d_grayplot_execute(
 }
 
 
+/**
+ * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input Input dataset
+ * @param mask Name of mask dataset. Voxels that are 0 in the mask will not be processed.
+ * @param prefix Name for the output file. Default is Grayplot.png
+ * @param dimensions Output size of image in pixels: [width height]. Defaults are width=1024 and height=512.
+ * @param resample_old Original resampling method for processed dataset.
+ * @param polort Order of polynomials for detrending. Default is 2. Use '-1' if data is already detrended and de-meaned.
+ * @param fwhm FWHM of blurring radius to use in the dataset before making the image. Default is 0 mm.
+ * @param pvorder Order the voxels by how well they match the two leading principal components of their partition.
+ * @param ljorder Order the voxels by their Ljung-Box statistics, a measure of temporal correlation.
+ * @param peelorder Order the voxels by how many 'peel' steps are needed to get from the partition boundary to the voxel.
+ * @param ijkorder Default intra-partition ordering by dataset 3D index ('ijk').
+ * @param range Set the range of the data to be plotted. Value of 0 is middle-gray, +X is white, -X is black.
+ * @param percent Scale values to percent differences from the mean of each voxel timeseries. Suitable for raw time series datasets.
+ * @param raw_with_bounds Map values <= A to black, values >= B to white, and intermediate values to grays.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
+ */
 function v_3d_grayplot(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -292,31 +317,6 @@ function v_3d_grayplot(
     raw_with_bounds: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dGrayplotOutputs {
-    /**
-     * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input Input dataset
-     * @param mask Name of mask dataset. Voxels that are 0 in the mask will not be processed.
-     * @param prefix Name for the output file. Default is Grayplot.png
-     * @param dimensions Output size of image in pixels: [width height]. Defaults are width=1024 and height=512.
-     * @param resample_old Original resampling method for processed dataset.
-     * @param polort Order of polynomials for detrending. Default is 2. Use '-1' if data is already detrended and de-meaned.
-     * @param fwhm FWHM of blurring radius to use in the dataset before making the image. Default is 0 mm.
-     * @param pvorder Order the voxels by how well they match the two leading principal components of their partition.
-     * @param ljorder Order the voxels by their Ljung-Box statistics, a measure of temporal correlation.
-     * @param peelorder Order the voxels by how many 'peel' steps are needed to get from the partition boundary to the voxel.
-     * @param ijkorder Default intra-partition ordering by dataset 3D index ('ijk').
-     * @param range Set the range of the data to be plotted. Value of 0 is middle-gray, +X is white, -X is black.
-     * @param percent Scale values to percent differences from the mean of each voxel timeseries. Suitable for raw time series datasets.
-     * @param raw_with_bounds Map values <= A to black, values >= B to white, and intermediate values to grays.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_GRAYPLOT_METADATA);
     const params = v_3d_grayplot_params(input, mask, prefix, dimensions, resample_old, polort, fwhm, pvorder, ljorder, peelorder, ijkorder, range, percent, raw_with_bounds)
@@ -329,5 +329,8 @@ export {
       V3dGrayplotParameters,
       V_3D_GRAYPLOT_METADATA,
       v_3d_grayplot,
+      v_3d_grayplot_cargs,
+      v_3d_grayplot_execute,
+      v_3d_grayplot_outputs,
       v_3d_grayplot_params,
 };

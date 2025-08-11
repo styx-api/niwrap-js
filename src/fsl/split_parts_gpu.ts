@@ -12,7 +12,7 @@ const SPLIT_PARTS_GPU_METADATA: Metadata = {
 
 
 interface SplitPartsGpuParameters {
-    "__STYXTYPE__": "split_parts_gpu";
+    "@type": "fsl.split_parts_gpu";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "bvals_file": InputPathType;
@@ -24,35 +24,35 @@ interface SplitPartsGpuParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "split_parts_gpu": split_parts_gpu_cargs,
+        "fsl.split_parts_gpu": split_parts_gpu_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "split_parts_gpu": split_parts_gpu_outputs,
+        "fsl.split_parts_gpu": split_parts_gpu_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface SplitPartsGpuOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datafile Input data file
+ * @param maskfile Input mask file
+ * @param bvals_file bvals file
+ * @param bvecs_file bvecs file
+ * @param use_grad_file Use gradient file (0 or 1)
+ * @param total_num_parts Total number of parts
+ * @param output_directory Output directory
+ * @param grad_file Gradient file (can be null)
+ *
+ * @returns Parameter dictionary
+ */
 function split_parts_gpu_params(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -85,22 +99,8 @@ function split_parts_gpu_params(
     output_directory: string,
     grad_file: string | null = null,
 ): SplitPartsGpuParameters {
-    /**
-     * Build parameters.
-    
-     * @param datafile Input data file
-     * @param maskfile Input mask file
-     * @param bvals_file bvals file
-     * @param bvecs_file bvecs file
-     * @param use_grad_file Use gradient file (0 or 1)
-     * @param total_num_parts Total number of parts
-     * @param output_directory Output directory
-     * @param grad_file Gradient file (can be null)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "split_parts_gpu" as const,
+        "@type": "fsl.split_parts_gpu" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "bvals_file": bvals_file,
@@ -116,18 +116,18 @@ function split_parts_gpu_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function split_parts_gpu_cargs(
     params: SplitPartsGpuParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("split_parts_gpu");
     cargs.push(execution.inputFile((params["datafile"] ?? null)));
@@ -144,18 +144,18 @@ function split_parts_gpu_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function split_parts_gpu_outputs(
     params: SplitPartsGpuParameters,
     execution: Execution,
 ): SplitPartsGpuOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SplitPartsGpuOutputs = {
         root: execution.outputFile("."),
         output_parts: execution.outputFile([(params["output_directory"] ?? null), "/part_*"].join('')),
@@ -164,22 +164,22 @@ function split_parts_gpu_outputs(
 }
 
 
+/**
+ * Splits parts of data for GPU processing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
+ */
 function split_parts_gpu_execute(
     params: SplitPartsGpuParameters,
     execution: Execution,
 ): SplitPartsGpuOutputs {
-    /**
-     * Splits parts of data for GPU processing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
-     */
     params = execution.params(params)
     const cargs = split_parts_gpu_cargs(params, execution)
     const ret = split_parts_gpu_outputs(params, execution)
@@ -188,6 +188,25 @@ function split_parts_gpu_execute(
 }
 
 
+/**
+ * Splits parts of data for GPU processing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param datafile Input data file
+ * @param maskfile Input mask file
+ * @param bvals_file bvals file
+ * @param bvecs_file bvecs file
+ * @param use_grad_file Use gradient file (0 or 1)
+ * @param total_num_parts Total number of parts
+ * @param output_directory Output directory
+ * @param grad_file Gradient file (can be null)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
+ */
 function split_parts_gpu(
     datafile: InputPathType,
     maskfile: InputPathType,
@@ -199,25 +218,6 @@ function split_parts_gpu(
     grad_file: string | null = null,
     runner: Runner | null = null,
 ): SplitPartsGpuOutputs {
-    /**
-     * Splits parts of data for GPU processing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param datafile Input data file
-     * @param maskfile Input mask file
-     * @param bvals_file bvals file
-     * @param bvecs_file bvecs file
-     * @param use_grad_file Use gradient file (0 or 1)
-     * @param total_num_parts Total number of parts
-     * @param output_directory Output directory
-     * @param grad_file Gradient file (can be null)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPLIT_PARTS_GPU_METADATA);
     const params = split_parts_gpu_params(datafile, maskfile, bvals_file, bvecs_file, use_grad_file, total_num_parts, output_directory, grad_file)
@@ -230,5 +230,8 @@ export {
       SplitPartsGpuOutputs,
       SplitPartsGpuParameters,
       split_parts_gpu,
+      split_parts_gpu_cargs,
+      split_parts_gpu_execute,
+      split_parts_gpu_outputs,
       split_parts_gpu_params,
 };

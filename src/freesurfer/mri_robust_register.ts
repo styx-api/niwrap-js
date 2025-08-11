@@ -12,7 +12,7 @@ const MRI_ROBUST_REGISTER_METADATA: Metadata = {
 
 
 interface MriRobustRegisterParameters {
-    "__STYXTYPE__": "mri_robust_register";
+    "@type": "freesurfer.mri_robust_register";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
     "output_registration": string;
@@ -65,35 +65,35 @@ interface MriRobustRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_robust_register": mri_robust_register_cargs,
+        "freesurfer.mri_robust_register": mri_robust_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_robust_register": mri_robust_register_outputs,
+        "freesurfer.mri_robust_register": mri_robust_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -160,6 +160,61 @@ interface MriRobustRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param movable_volume Input movable volume to be aligned to target.
+ * @param target_volume Input target volume.
+ * @param output_registration Output registration (transform from mov to dst).
+ * @param outlier_sensitivity Set outlier sensitivity manually for robust cost functions. Higher values mean less sensitivity.
+ * @param satit Auto-detect good sensitivity for robust cost functions.
+ * @param mapped_movable Output image: movable mapped and resampled at destination.
+ * @param mapped_movable_hdr Output image: movable aligned to destination (no resampling, only adjusting header vox2ras).
+ * @param weights Output weights (outlier probabilities) in destination space (0=regular,1=outlier).
+ * @param oneminus_w Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
+ * @param iscale Estimate intensity scale factor.
+ * @param iscale_only Only perform intensity scaling (no transformation).
+ * @param iscale_out Output text file for iscale value.
+ * @param iscale_in Initial input text file for iscale value.
+ * @param trans_only Find 3 parameter translation only.
+ * @param affine Find 12 parameter affine transform.
+ * @param ixform Use initial transform LTA on source.
+ * @param init_orient Use moments for orientation initialization.
+ * @param no_init Skip automatic transform initialization.
+ * @param vox2vox Output VOX2VOX LTA file.
+ * @param cost Set cost function for registration.
+ * @param ent_radius With ROBENT: specify box radius for entropy computation.
+ * @param ent_correction With ROBENT: use better entropy computation that works on smaller boxes.
+ * @param ent_ball With ROBENT: use ball around voxel instead of box.
+ * @param ent_mov With ROBENT: write movable entropy image.
+ * @param powell_tolerance With MI, NMI etc: set Powell tolerance.
+ * @param sobel Register Sobel magnitude images.
+ * @param no_sym Do not map to half way space.
+ * @param maximum_iterations Maximum number of iterations on each resolution.
+ * @param ent_dst With ROBENT: write target entropy image.
+ * @param high_iter Maximum number of iterations on highest resolution.
+ * @param eps_iteration Stop iterations when transform update falls below specified RMS distance.
+ * @param no_multiscale Process highest resolution only (no multiscale).
+ * @param max_size Specify largest voxel dimension for gaussian pyramid.
+ * @param min_size Specify smallest voxel dimension for gaussian pyramid.
+ * @param w_limit (Expert) sets maximal outlier limit for --satit.
+ * @param sub_sample Subsample if dimension is greater than the specified value on all axes.
+ * @param float_type Convert images to float internally.
+ * @param white_bg_mov Assume white background in MOV for padding.
+ * @param white_bg_dst Assume white background in DST for padding.
+ * @param uchar Convert inputs to UCHAR with rescale and histogram cropping.
+ * @param mask_mov Mask movable image with mask file.
+ * @param mask_dst Mask destination image with mask file.
+ * @param half_mov Outputs half-way movable (resampled in halfway space).
+ * @param half_dst Outputs half-way destination (resampled in halfway space).
+ * @param half_weights Outputs half-way weights (resampled in halfway space).
+ * @param half_mov_lta Outputs transform from movable to half-way space.
+ * @param half_dst_lta Outputs transform from destination to half-way space.
+ * @param debug Show debug output.
+ * @param verbose Verbosity level: 0 (quiet), 1 (normal), 2 (detail).
+ *
+ * @returns Parameter dictionary
+ */
 function mri_robust_register_params(
     movable_volume: InputPathType,
     target_volume: InputPathType,
@@ -211,63 +266,8 @@ function mri_robust_register_params(
     debug: boolean = false,
     verbose: number | null = null,
 ): MriRobustRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param movable_volume Input movable volume to be aligned to target.
-     * @param target_volume Input target volume.
-     * @param output_registration Output registration (transform from mov to dst).
-     * @param outlier_sensitivity Set outlier sensitivity manually for robust cost functions. Higher values mean less sensitivity.
-     * @param satit Auto-detect good sensitivity for robust cost functions.
-     * @param mapped_movable Output image: movable mapped and resampled at destination.
-     * @param mapped_movable_hdr Output image: movable aligned to destination (no resampling, only adjusting header vox2ras).
-     * @param weights Output weights (outlier probabilities) in destination space (0=regular,1=outlier).
-     * @param oneminus_w Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
-     * @param iscale Estimate intensity scale factor.
-     * @param iscale_only Only perform intensity scaling (no transformation).
-     * @param iscale_out Output text file for iscale value.
-     * @param iscale_in Initial input text file for iscale value.
-     * @param trans_only Find 3 parameter translation only.
-     * @param affine Find 12 parameter affine transform.
-     * @param ixform Use initial transform LTA on source.
-     * @param init_orient Use moments for orientation initialization.
-     * @param no_init Skip automatic transform initialization.
-     * @param vox2vox Output VOX2VOX LTA file.
-     * @param cost Set cost function for registration.
-     * @param ent_radius With ROBENT: specify box radius for entropy computation.
-     * @param ent_correction With ROBENT: use better entropy computation that works on smaller boxes.
-     * @param ent_ball With ROBENT: use ball around voxel instead of box.
-     * @param ent_mov With ROBENT: write movable entropy image.
-     * @param powell_tolerance With MI, NMI etc: set Powell tolerance.
-     * @param sobel Register Sobel magnitude images.
-     * @param no_sym Do not map to half way space.
-     * @param maximum_iterations Maximum number of iterations on each resolution.
-     * @param ent_dst With ROBENT: write target entropy image.
-     * @param high_iter Maximum number of iterations on highest resolution.
-     * @param eps_iteration Stop iterations when transform update falls below specified RMS distance.
-     * @param no_multiscale Process highest resolution only (no multiscale).
-     * @param max_size Specify largest voxel dimension for gaussian pyramid.
-     * @param min_size Specify smallest voxel dimension for gaussian pyramid.
-     * @param w_limit (Expert) sets maximal outlier limit for --satit.
-     * @param sub_sample Subsample if dimension is greater than the specified value on all axes.
-     * @param float_type Convert images to float internally.
-     * @param white_bg_mov Assume white background in MOV for padding.
-     * @param white_bg_dst Assume white background in DST for padding.
-     * @param uchar Convert inputs to UCHAR with rescale and histogram cropping.
-     * @param mask_mov Mask movable image with mask file.
-     * @param mask_dst Mask destination image with mask file.
-     * @param half_mov Outputs half-way movable (resampled in halfway space).
-     * @param half_dst Outputs half-way destination (resampled in halfway space).
-     * @param half_weights Outputs half-way weights (resampled in halfway space).
-     * @param half_mov_lta Outputs transform from movable to half-way space.
-     * @param half_dst_lta Outputs transform from destination to half-way space.
-     * @param debug Show debug output.
-     * @param verbose Verbosity level: 0 (quiet), 1 (normal), 2 (detail).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_robust_register" as const,
+        "@type": "freesurfer.mri_robust_register" as const,
         "movable_volume": movable_volume,
         "target_volume": target_volume,
         "output_registration": output_registration,
@@ -376,18 +376,18 @@ function mri_robust_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_robust_register_cargs(
     params: MriRobustRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_robust_register");
     cargs.push(
@@ -625,18 +625,18 @@ function mri_robust_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_robust_register_outputs(
     params: MriRobustRegisterParameters,
     execution: Execution,
 ): MriRobustRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRobustRegisterOutputs = {
         root: execution.outputFile("."),
         reg_output: execution.outputFile([(params["output_registration"] ?? null)].join('')),
@@ -656,22 +656,22 @@ function mri_robust_register_outputs(
 }
 
 
+/**
+ * Inverse consistent registration of two volumes using robust and standard cost functions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
+ */
 function mri_robust_register_execute(
     params: MriRobustRegisterParameters,
     execution: Execution,
 ): MriRobustRegisterOutputs {
-    /**
-     * Inverse consistent registration of two volumes using robust and standard cost functions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_robust_register_cargs(params, execution)
     const ret = mri_robust_register_outputs(params, execution)
@@ -680,6 +680,66 @@ function mri_robust_register_execute(
 }
 
 
+/**
+ * Inverse consistent registration of two volumes using robust and standard cost functions.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param movable_volume Input movable volume to be aligned to target.
+ * @param target_volume Input target volume.
+ * @param output_registration Output registration (transform from mov to dst).
+ * @param outlier_sensitivity Set outlier sensitivity manually for robust cost functions. Higher values mean less sensitivity.
+ * @param satit Auto-detect good sensitivity for robust cost functions.
+ * @param mapped_movable Output image: movable mapped and resampled at destination.
+ * @param mapped_movable_hdr Output image: movable aligned to destination (no resampling, only adjusting header vox2ras).
+ * @param weights Output weights (outlier probabilities) in destination space (0=regular,1=outlier).
+ * @param oneminus_w Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
+ * @param iscale Estimate intensity scale factor.
+ * @param iscale_only Only perform intensity scaling (no transformation).
+ * @param iscale_out Output text file for iscale value.
+ * @param iscale_in Initial input text file for iscale value.
+ * @param trans_only Find 3 parameter translation only.
+ * @param affine Find 12 parameter affine transform.
+ * @param ixform Use initial transform LTA on source.
+ * @param init_orient Use moments for orientation initialization.
+ * @param no_init Skip automatic transform initialization.
+ * @param vox2vox Output VOX2VOX LTA file.
+ * @param cost Set cost function for registration.
+ * @param ent_radius With ROBENT: specify box radius for entropy computation.
+ * @param ent_correction With ROBENT: use better entropy computation that works on smaller boxes.
+ * @param ent_ball With ROBENT: use ball around voxel instead of box.
+ * @param ent_mov With ROBENT: write movable entropy image.
+ * @param powell_tolerance With MI, NMI etc: set Powell tolerance.
+ * @param sobel Register Sobel magnitude images.
+ * @param no_sym Do not map to half way space.
+ * @param maximum_iterations Maximum number of iterations on each resolution.
+ * @param ent_dst With ROBENT: write target entropy image.
+ * @param high_iter Maximum number of iterations on highest resolution.
+ * @param eps_iteration Stop iterations when transform update falls below specified RMS distance.
+ * @param no_multiscale Process highest resolution only (no multiscale).
+ * @param max_size Specify largest voxel dimension for gaussian pyramid.
+ * @param min_size Specify smallest voxel dimension for gaussian pyramid.
+ * @param w_limit (Expert) sets maximal outlier limit for --satit.
+ * @param sub_sample Subsample if dimension is greater than the specified value on all axes.
+ * @param float_type Convert images to float internally.
+ * @param white_bg_mov Assume white background in MOV for padding.
+ * @param white_bg_dst Assume white background in DST for padding.
+ * @param uchar Convert inputs to UCHAR with rescale and histogram cropping.
+ * @param mask_mov Mask movable image with mask file.
+ * @param mask_dst Mask destination image with mask file.
+ * @param half_mov Outputs half-way movable (resampled in halfway space).
+ * @param half_dst Outputs half-way destination (resampled in halfway space).
+ * @param half_weights Outputs half-way weights (resampled in halfway space).
+ * @param half_mov_lta Outputs transform from movable to half-way space.
+ * @param half_dst_lta Outputs transform from destination to half-way space.
+ * @param debug Show debug output.
+ * @param verbose Verbosity level: 0 (quiet), 1 (normal), 2 (detail).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
+ */
 function mri_robust_register(
     movable_volume: InputPathType,
     target_volume: InputPathType,
@@ -732,66 +792,6 @@ function mri_robust_register(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): MriRobustRegisterOutputs {
-    /**
-     * Inverse consistent registration of two volumes using robust and standard cost functions.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param movable_volume Input movable volume to be aligned to target.
-     * @param target_volume Input target volume.
-     * @param output_registration Output registration (transform from mov to dst).
-     * @param outlier_sensitivity Set outlier sensitivity manually for robust cost functions. Higher values mean less sensitivity.
-     * @param satit Auto-detect good sensitivity for robust cost functions.
-     * @param mapped_movable Output image: movable mapped and resampled at destination.
-     * @param mapped_movable_hdr Output image: movable aligned to destination (no resampling, only adjusting header vox2ras).
-     * @param weights Output weights (outlier probabilities) in destination space (0=regular,1=outlier).
-     * @param oneminus_w Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
-     * @param iscale Estimate intensity scale factor.
-     * @param iscale_only Only perform intensity scaling (no transformation).
-     * @param iscale_out Output text file for iscale value.
-     * @param iscale_in Initial input text file for iscale value.
-     * @param trans_only Find 3 parameter translation only.
-     * @param affine Find 12 parameter affine transform.
-     * @param ixform Use initial transform LTA on source.
-     * @param init_orient Use moments for orientation initialization.
-     * @param no_init Skip automatic transform initialization.
-     * @param vox2vox Output VOX2VOX LTA file.
-     * @param cost Set cost function for registration.
-     * @param ent_radius With ROBENT: specify box radius for entropy computation.
-     * @param ent_correction With ROBENT: use better entropy computation that works on smaller boxes.
-     * @param ent_ball With ROBENT: use ball around voxel instead of box.
-     * @param ent_mov With ROBENT: write movable entropy image.
-     * @param powell_tolerance With MI, NMI etc: set Powell tolerance.
-     * @param sobel Register Sobel magnitude images.
-     * @param no_sym Do not map to half way space.
-     * @param maximum_iterations Maximum number of iterations on each resolution.
-     * @param ent_dst With ROBENT: write target entropy image.
-     * @param high_iter Maximum number of iterations on highest resolution.
-     * @param eps_iteration Stop iterations when transform update falls below specified RMS distance.
-     * @param no_multiscale Process highest resolution only (no multiscale).
-     * @param max_size Specify largest voxel dimension for gaussian pyramid.
-     * @param min_size Specify smallest voxel dimension for gaussian pyramid.
-     * @param w_limit (Expert) sets maximal outlier limit for --satit.
-     * @param sub_sample Subsample if dimension is greater than the specified value on all axes.
-     * @param float_type Convert images to float internally.
-     * @param white_bg_mov Assume white background in MOV for padding.
-     * @param white_bg_dst Assume white background in DST for padding.
-     * @param uchar Convert inputs to UCHAR with rescale and histogram cropping.
-     * @param mask_mov Mask movable image with mask file.
-     * @param mask_dst Mask destination image with mask file.
-     * @param half_mov Outputs half-way movable (resampled in halfway space).
-     * @param half_dst Outputs half-way destination (resampled in halfway space).
-     * @param half_weights Outputs half-way weights (resampled in halfway space).
-     * @param half_mov_lta Outputs transform from movable to half-way space.
-     * @param half_dst_lta Outputs transform from destination to half-way space.
-     * @param debug Show debug output.
-     * @param verbose Verbosity level: 0 (quiet), 1 (normal), 2 (detail).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ROBUST_REGISTER_METADATA);
     const params = mri_robust_register_params(movable_volume, target_volume, output_registration, outlier_sensitivity, satit, mapped_movable, mapped_movable_hdr, weights, oneminus_w, iscale, iscale_only, iscale_out, iscale_in, trans_only, affine, ixform, init_orient, no_init, vox2vox, cost, ent_radius, ent_correction, ent_ball, ent_mov, powell_tolerance, sobel, no_sym, maximum_iterations, ent_dst, high_iter, eps_iteration, no_multiscale, max_size, min_size, w_limit, sub_sample, float_type, white_bg_mov, white_bg_dst, uchar, mask_mov, mask_dst, half_mov, half_dst, half_weights, half_mov_lta, half_dst_lta, debug, verbose)
@@ -804,5 +804,8 @@ export {
       MriRobustRegisterOutputs,
       MriRobustRegisterParameters,
       mri_robust_register,
+      mri_robust_register_cargs,
+      mri_robust_register_execute,
+      mri_robust_register_outputs,
       mri_robust_register_params,
 };

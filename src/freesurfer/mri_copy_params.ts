@@ -12,7 +12,7 @@ const MRI_COPY_PARAMS_METADATA: Metadata = {
 
 
 interface MriCopyParamsParameters {
-    "__STYXTYPE__": "mri_copy_params";
+    "@type": "freesurfer.mri_copy_params";
     "in_vol": InputPathType;
     "template_vol": InputPathType;
     "out_vol": string;
@@ -20,35 +20,35 @@ interface MriCopyParamsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_copy_params": mri_copy_params_cargs,
+        "freesurfer.mri_copy_params": mri_copy_params_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_copy_params": mri_copy_params_outputs,
+        "freesurfer.mri_copy_params": mri_copy_params_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MriCopyParamsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_vol Input volume file whose parameters will be replaced.
+ * @param template_vol Template volume file whose parameters will be copied.
+ * @param out_vol Output volume file with replaced parameters.
+ * @param size_flag Force copying of voxel sizes when resolutions vary.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_copy_params_params(
     in_vol: InputPathType,
     template_vol: InputPathType,
     out_vol: string,
     size_flag: boolean = false,
 ): MriCopyParamsParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_vol Input volume file whose parameters will be replaced.
-     * @param template_vol Template volume file whose parameters will be copied.
-     * @param out_vol Output volume file with replaced parameters.
-     * @param size_flag Force copying of voxel sizes when resolutions vary.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_copy_params" as const,
+        "@type": "freesurfer.mri_copy_params" as const,
         "in_vol": in_vol,
         "template_vol": template_vol,
         "out_vol": out_vol,
@@ -98,18 +98,18 @@ function mri_copy_params_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_copy_params_cargs(
     params: MriCopyParamsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_copy_params");
     cargs.push(execution.inputFile((params["in_vol"] ?? null)));
@@ -122,18 +122,18 @@ function mri_copy_params_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_copy_params_outputs(
     params: MriCopyParamsParameters,
     execution: Execution,
 ): MriCopyParamsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriCopyParamsOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["out_vol"] ?? null)].join('')),
@@ -142,22 +142,22 @@ function mri_copy_params_outputs(
 }
 
 
+/**
+ * A tool to replace the volume parameters of an input volume with those of a template volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriCopyParamsOutputs`).
+ */
 function mri_copy_params_execute(
     params: MriCopyParamsParameters,
     execution: Execution,
 ): MriCopyParamsOutputs {
-    /**
-     * A tool to replace the volume parameters of an input volume with those of a template volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriCopyParamsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_copy_params_cargs(params, execution)
     const ret = mri_copy_params_outputs(params, execution)
@@ -166,6 +166,21 @@ function mri_copy_params_execute(
 }
 
 
+/**
+ * A tool to replace the volume parameters of an input volume with those of a template volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param in_vol Input volume file whose parameters will be replaced.
+ * @param template_vol Template volume file whose parameters will be copied.
+ * @param out_vol Output volume file with replaced parameters.
+ * @param size_flag Force copying of voxel sizes when resolutions vary.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriCopyParamsOutputs`).
+ */
 function mri_copy_params(
     in_vol: InputPathType,
     template_vol: InputPathType,
@@ -173,21 +188,6 @@ function mri_copy_params(
     size_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCopyParamsOutputs {
-    /**
-     * A tool to replace the volume parameters of an input volume with those of a template volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param in_vol Input volume file whose parameters will be replaced.
-     * @param template_vol Template volume file whose parameters will be copied.
-     * @param out_vol Output volume file with replaced parameters.
-     * @param size_flag Force copying of voxel sizes when resolutions vary.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriCopyParamsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_COPY_PARAMS_METADATA);
     const params = mri_copy_params_params(in_vol, template_vol, out_vol, size_flag)
@@ -200,5 +200,8 @@ export {
       MriCopyParamsOutputs,
       MriCopyParamsParameters,
       mri_copy_params,
+      mri_copy_params_cargs,
+      mri_copy_params_execute,
+      mri_copy_params_outputs,
       mri_copy_params_params,
 };

@@ -12,7 +12,7 @@ const V_3D_TCORR1_D_METADATA: Metadata = {
 
 
 interface V3dTcorr1DParameters {
-    "__STYXTYPE__": "3dTcorr1D";
+    "@type": "afni.3dTcorr1D";
     "ktaub": boolean;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
@@ -24,35 +24,35 @@ interface V3dTcorr1DParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTcorr1D": v_3d_tcorr1_d_cargs,
+        "afni.3dTcorr1D": v_3d_tcorr1_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dTcorr1D": v_3d_tcorr1_d_outputs,
+        "afni.3dTcorr1D": v_3d_tcorr1_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface V3dTcorr1DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xset 3d+time dataset input.
+ * @param y_1d 1d time series file input.
+ * @param ktaub Correlation is the kendall's tau_b correlation coefficient.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param pearson Correlation is the normal pearson correlation coefficient.
+ * @param quadrant Correlation is the quadrant correlation coefficient.
+ * @param spearman Correlation is the spearman (rank) correlation coefficient.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tcorr1_d_params(
     xset: InputPathType,
     y_1d: InputPathType,
@@ -89,22 +103,8 @@ function v_3d_tcorr1_d_params(
     quadrant: boolean = false,
     spearman: boolean = false,
 ): V3dTcorr1DParameters {
-    /**
-     * Build parameters.
-    
-     * @param xset 3d+time dataset input.
-     * @param y_1d 1d time series file input.
-     * @param ktaub Correlation is the kendall's tau_b correlation coefficient.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param pearson Correlation is the normal pearson correlation coefficient.
-     * @param quadrant Correlation is the quadrant correlation coefficient.
-     * @param spearman Correlation is the spearman (rank) correlation coefficient.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTcorr1D" as const,
+        "@type": "afni.3dTcorr1D" as const,
         "ktaub": ktaub,
         "pearson": pearson,
         "quadrant": quadrant,
@@ -122,18 +122,18 @@ function v_3d_tcorr1_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tcorr1_d_cargs(
     params: V3dTcorr1DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTcorr1D");
     if ((params["ktaub"] ?? null)) {
@@ -158,18 +158,18 @@ function v_3d_tcorr1_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tcorr1_d_outputs(
     params: V3dTcorr1DParameters,
     execution: Execution,
 ): V3dTcorr1DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTcorr1DOutputs = {
         root: execution.outputFile("."),
         out_file: execution.outputFile([path.basename((params["xset"] ?? null)), "_correlation.nii.gz"].join('')),
@@ -179,22 +179,22 @@ function v_3d_tcorr1_d_outputs(
 }
 
 
+/**
+ * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
+ */
 function v_3d_tcorr1_d_execute(
     params: V3dTcorr1DParameters,
     execution: Execution,
 ): V3dTcorr1DOutputs {
-    /**
-     * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tcorr1_d_cargs(params, execution)
     const ret = v_3d_tcorr1_d_outputs(params, execution)
@@ -203,6 +203,25 @@ function v_3d_tcorr1_d_execute(
 }
 
 
+/**
+ * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param xset 3d+time dataset input.
+ * @param y_1d 1d time series file input.
+ * @param ktaub Correlation is the kendall's tau_b correlation coefficient.
+ * @param num_threads Set number of threads.
+ * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
+ * @param pearson Correlation is the normal pearson correlation coefficient.
+ * @param quadrant Correlation is the quadrant correlation coefficient.
+ * @param spearman Correlation is the spearman (rank) correlation coefficient.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
+ */
 function v_3d_tcorr1_d(
     xset: InputPathType,
     y_1d: InputPathType,
@@ -214,25 +233,6 @@ function v_3d_tcorr1_d(
     spearman: boolean = false,
     runner: Runner | null = null,
 ): V3dTcorr1DOutputs {
-    /**
-     * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param xset 3d+time dataset input.
-     * @param y_1d 1d time series file input.
-     * @param ktaub Correlation is the kendall's tau_b correlation coefficient.
-     * @param num_threads Set number of threads.
-     * @param outputtype 'nifti' or 'afni' or 'nifti_gz'. Afni output filetype.
-     * @param pearson Correlation is the normal pearson correlation coefficient.
-     * @param quadrant Correlation is the quadrant correlation coefficient.
-     * @param spearman Correlation is the spearman (rank) correlation coefficient.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TCORR1_D_METADATA);
     const params = v_3d_tcorr1_d_params(xset, y_1d, ktaub, num_threads, outputtype, pearson, quadrant, spearman)
@@ -245,5 +245,8 @@ export {
       V3dTcorr1DParameters,
       V_3D_TCORR1_D_METADATA,
       v_3d_tcorr1_d,
+      v_3d_tcorr1_d_cargs,
+      v_3d_tcorr1_d_execute,
+      v_3d_tcorr1_d_outputs,
       v_3d_tcorr1_d_params,
 };

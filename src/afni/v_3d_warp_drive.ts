@@ -12,7 +12,7 @@ const V_3D_WARP_DRIVE_METADATA: Metadata = {
 
 
 interface V3dWarpDriveParameters {
-    "__STYXTYPE__": "3dWarpDrive";
+    "@type": "afni.3dWarpDrive";
     "dataset": InputPathType;
     "base_dataset": InputPathType;
     "prefix": string;
@@ -52,35 +52,35 @@ interface V3dWarpDriveParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dWarpDrive": v_3d_warp_drive_cargs,
+        "afni.3dWarpDrive": v_3d_warp_drive_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dWarpDrive": v_3d_warp_drive_outputs,
+        "afni.3dWarpDrive": v_3d_warp_drive_outputs,
     };
     return outputsFuncs[t];
 }
@@ -115,6 +115,48 @@ interface V3dWarpDriveOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dataset Input dataset
+ * @param base_dataset Load dataset as the base to which the input dataset will be matched. This is a mandatory option.
+ * @param prefix Sets the prefix of the output dataset. If 'NULL', no output dataset is written.
+ * @param shift_only 3 parameters (shifts)
+ * @param shift_rotate 6 parameters (shifts + angles)
+ * @param shift_rotate_scale 9 parameters (shifts + angles + scale factors)
+ * @param affine_general 12 parameters (3 shifts + 3x3 matrix)
+ * @param bilinear_general 39 parameters (3 + 3x3 + 3x3x3). Not implemented and will never be.
+ * @param linear Linear interpolation method
+ * @param cubic Cubic interpolation method
+ * @param nn Nearest neighbor interpolation method [default]
+ * @param quintic Quintic interpolation method
+ * @param input_dataset Specify the input dataset anywhere in the command line option list.
+ * @param verbosity_flag Print out lots of information along the way.
+ * @param summary_file Save summary of calculations into text file. If value is '-', summary goes to stdout.
+ * @param max_iterations Allow up to 'm' iterations for convergence.
+ * @param delta Distance, in voxel size, used to compute image derivatives using finite differences. [Default=1.0]
+ * @param weight Set the weighting applied to each voxel proportional to the brick specified here. [Default=computed by program from base]
+ * @param convergence_thresh Set the convergence parameter to be RMS 't' voxels movement between iterations. [Default=0.03]
+ * @param twopass Do the parameter estimation in two passes, coarse-but-fast first, then fine-but-slow second.
+ * @param final_mode Set the final warp to be interpolated using 'mode'.
+ * @param parfix Fix the n'th parameter of the warp model to the value 'v'. More than one -parfix option can be used.
+ * @param oned_file Write out the warping parameters to this file.
+ * @param float_format Write output dataset in float format, even if input dataset is short or byte.
+ * @param coarserot_init Initialize shift+rotation parameters by a brute force coarse search.
+ * @param oned_matrix_save Save base-to-input transformation matrices in specified file. If the file does not end in '.1D', the program will append '.aff12.1D'.
+ * @param sdu_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, D=diagonal scaling matrix, U=rotation matrix).
+ * @param sud_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, U=rotation matrix, D=diagonal scaling matrix).
+ * @param dsu_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, S=triangular shear, U=rotation matrix).
+ * @param dus_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, U=rotation matrix, S=triangular shear).
+ * @param usd_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, S=triangular shear, D=diagonal scaling matrix).
+ * @param uds_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, D=diagonal scaling matrix, S=triangular shear).
+ * @param supper_s_matrix Set the S matrix to be upper triangular.
+ * @param slower_s_matrix Set the S matrix to be lower triangular.
+ * @param ashift Apply the shift parameters after the matrix transformation.
+ * @param bshift Apply the shift parameters before the matrix transformation.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_warp_drive_params(
     dataset: InputPathType,
     base_dataset: InputPathType,
@@ -153,50 +195,8 @@ function v_3d_warp_drive_params(
     ashift: boolean = false,
     bshift: boolean = false,
 ): V3dWarpDriveParameters {
-    /**
-     * Build parameters.
-    
-     * @param dataset Input dataset
-     * @param base_dataset Load dataset as the base to which the input dataset will be matched. This is a mandatory option.
-     * @param prefix Sets the prefix of the output dataset. If 'NULL', no output dataset is written.
-     * @param shift_only 3 parameters (shifts)
-     * @param shift_rotate 6 parameters (shifts + angles)
-     * @param shift_rotate_scale 9 parameters (shifts + angles + scale factors)
-     * @param affine_general 12 parameters (3 shifts + 3x3 matrix)
-     * @param bilinear_general 39 parameters (3 + 3x3 + 3x3x3). Not implemented and will never be.
-     * @param linear Linear interpolation method
-     * @param cubic Cubic interpolation method
-     * @param nn Nearest neighbor interpolation method [default]
-     * @param quintic Quintic interpolation method
-     * @param input_dataset Specify the input dataset anywhere in the command line option list.
-     * @param verbosity_flag Print out lots of information along the way.
-     * @param summary_file Save summary of calculations into text file. If value is '-', summary goes to stdout.
-     * @param max_iterations Allow up to 'm' iterations for convergence.
-     * @param delta Distance, in voxel size, used to compute image derivatives using finite differences. [Default=1.0]
-     * @param weight Set the weighting applied to each voxel proportional to the brick specified here. [Default=computed by program from base]
-     * @param convergence_thresh Set the convergence parameter to be RMS 't' voxels movement between iterations. [Default=0.03]
-     * @param twopass Do the parameter estimation in two passes, coarse-but-fast first, then fine-but-slow second.
-     * @param final_mode Set the final warp to be interpolated using 'mode'.
-     * @param parfix Fix the n'th parameter of the warp model to the value 'v'. More than one -parfix option can be used.
-     * @param oned_file Write out the warping parameters to this file.
-     * @param float_format Write output dataset in float format, even if input dataset is short or byte.
-     * @param coarserot_init Initialize shift+rotation parameters by a brute force coarse search.
-     * @param oned_matrix_save Save base-to-input transformation matrices in specified file. If the file does not end in '.1D', the program will append '.aff12.1D'.
-     * @param sdu_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, D=diagonal scaling matrix, U=rotation matrix).
-     * @param sud_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, U=rotation matrix, D=diagonal scaling matrix).
-     * @param dsu_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, S=triangular shear, U=rotation matrix).
-     * @param dus_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, U=rotation matrix, S=triangular shear).
-     * @param usd_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, S=triangular shear, D=diagonal scaling matrix).
-     * @param uds_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, D=diagonal scaling matrix, S=triangular shear).
-     * @param supper_s_matrix Set the S matrix to be upper triangular.
-     * @param slower_s_matrix Set the S matrix to be lower triangular.
-     * @param ashift Apply the shift parameters after the matrix transformation.
-     * @param bshift Apply the shift parameters before the matrix transformation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dWarpDrive" as const,
+        "@type": "afni.3dWarpDrive" as const,
         "dataset": dataset,
         "base_dataset": base_dataset,
         "prefix": prefix,
@@ -258,18 +258,18 @@ function v_3d_warp_drive_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_warp_drive_cargs(
     params: V3dWarpDriveParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dWarpDrive");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -414,18 +414,18 @@ function v_3d_warp_drive_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_warp_drive_outputs(
     params: V3dWarpDriveParameters,
     execution: Execution,
 ): V3dWarpDriveOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dWarpDriveOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["prefix"] ?? null), "+orig"].join('')),
@@ -437,22 +437,22 @@ function v_3d_warp_drive_outputs(
 }
 
 
+/**
+ * Warp a dataset to match another one (the base) using an affine transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
+ */
 function v_3d_warp_drive_execute(
     params: V3dWarpDriveParameters,
     execution: Execution,
 ): V3dWarpDriveOutputs {
-    /**
-     * Warp a dataset to match another one (the base) using an affine transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_warp_drive_cargs(params, execution)
     const ret = v_3d_warp_drive_outputs(params, execution)
@@ -461,6 +461,53 @@ function v_3d_warp_drive_execute(
 }
 
 
+/**
+ * Warp a dataset to match another one (the base) using an affine transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dataset Input dataset
+ * @param base_dataset Load dataset as the base to which the input dataset will be matched. This is a mandatory option.
+ * @param prefix Sets the prefix of the output dataset. If 'NULL', no output dataset is written.
+ * @param shift_only 3 parameters (shifts)
+ * @param shift_rotate 6 parameters (shifts + angles)
+ * @param shift_rotate_scale 9 parameters (shifts + angles + scale factors)
+ * @param affine_general 12 parameters (3 shifts + 3x3 matrix)
+ * @param bilinear_general 39 parameters (3 + 3x3 + 3x3x3). Not implemented and will never be.
+ * @param linear Linear interpolation method
+ * @param cubic Cubic interpolation method
+ * @param nn Nearest neighbor interpolation method [default]
+ * @param quintic Quintic interpolation method
+ * @param input_dataset Specify the input dataset anywhere in the command line option list.
+ * @param verbosity_flag Print out lots of information along the way.
+ * @param summary_file Save summary of calculations into text file. If value is '-', summary goes to stdout.
+ * @param max_iterations Allow up to 'm' iterations for convergence.
+ * @param delta Distance, in voxel size, used to compute image derivatives using finite differences. [Default=1.0]
+ * @param weight Set the weighting applied to each voxel proportional to the brick specified here. [Default=computed by program from base]
+ * @param convergence_thresh Set the convergence parameter to be RMS 't' voxels movement between iterations. [Default=0.03]
+ * @param twopass Do the parameter estimation in two passes, coarse-but-fast first, then fine-but-slow second.
+ * @param final_mode Set the final warp to be interpolated using 'mode'.
+ * @param parfix Fix the n'th parameter of the warp model to the value 'v'. More than one -parfix option can be used.
+ * @param oned_file Write out the warping parameters to this file.
+ * @param float_format Write output dataset in float format, even if input dataset is short or byte.
+ * @param coarserot_init Initialize shift+rotation parameters by a brute force coarse search.
+ * @param oned_matrix_save Save base-to-input transformation matrices in specified file. If the file does not end in '.1D', the program will append '.aff12.1D'.
+ * @param sdu_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, D=diagonal scaling matrix, U=rotation matrix).
+ * @param sud_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, U=rotation matrix, D=diagonal scaling matrix).
+ * @param dsu_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, S=triangular shear, U=rotation matrix).
+ * @param dus_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, U=rotation matrix, S=triangular shear).
+ * @param usd_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, S=triangular shear, D=diagonal scaling matrix).
+ * @param uds_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, D=diagonal scaling matrix, S=triangular shear).
+ * @param supper_s_matrix Set the S matrix to be upper triangular.
+ * @param slower_s_matrix Set the S matrix to be lower triangular.
+ * @param ashift Apply the shift parameters after the matrix transformation.
+ * @param bshift Apply the shift parameters before the matrix transformation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
+ */
 function v_3d_warp_drive(
     dataset: InputPathType,
     base_dataset: InputPathType,
@@ -500,53 +547,6 @@ function v_3d_warp_drive(
     bshift: boolean = false,
     runner: Runner | null = null,
 ): V3dWarpDriveOutputs {
-    /**
-     * Warp a dataset to match another one (the base) using an affine transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dataset Input dataset
-     * @param base_dataset Load dataset as the base to which the input dataset will be matched. This is a mandatory option.
-     * @param prefix Sets the prefix of the output dataset. If 'NULL', no output dataset is written.
-     * @param shift_only 3 parameters (shifts)
-     * @param shift_rotate 6 parameters (shifts + angles)
-     * @param shift_rotate_scale 9 parameters (shifts + angles + scale factors)
-     * @param affine_general 12 parameters (3 shifts + 3x3 matrix)
-     * @param bilinear_general 39 parameters (3 + 3x3 + 3x3x3). Not implemented and will never be.
-     * @param linear Linear interpolation method
-     * @param cubic Cubic interpolation method
-     * @param nn Nearest neighbor interpolation method [default]
-     * @param quintic Quintic interpolation method
-     * @param input_dataset Specify the input dataset anywhere in the command line option list.
-     * @param verbosity_flag Print out lots of information along the way.
-     * @param summary_file Save summary of calculations into text file. If value is '-', summary goes to stdout.
-     * @param max_iterations Allow up to 'm' iterations for convergence.
-     * @param delta Distance, in voxel size, used to compute image derivatives using finite differences. [Default=1.0]
-     * @param weight Set the weighting applied to each voxel proportional to the brick specified here. [Default=computed by program from base]
-     * @param convergence_thresh Set the convergence parameter to be RMS 't' voxels movement between iterations. [Default=0.03]
-     * @param twopass Do the parameter estimation in two passes, coarse-but-fast first, then fine-but-slow second.
-     * @param final_mode Set the final warp to be interpolated using 'mode'.
-     * @param parfix Fix the n'th parameter of the warp model to the value 'v'. More than one -parfix option can be used.
-     * @param oned_file Write out the warping parameters to this file.
-     * @param float_format Write output dataset in float format, even if input dataset is short or byte.
-     * @param coarserot_init Initialize shift+rotation parameters by a brute force coarse search.
-     * @param oned_matrix_save Save base-to-input transformation matrices in specified file. If the file does not end in '.1D', the program will append '.aff12.1D'.
-     * @param sdu_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, D=diagonal scaling matrix, U=rotation matrix).
-     * @param sud_order Set the order of the matrix multiplication for the affine transformations (S=triangular shear, U=rotation matrix, D=diagonal scaling matrix).
-     * @param dsu_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, S=triangular shear, U=rotation matrix).
-     * @param dus_order Set the order of the matrix multiplication for the affine transformations (D=diagonal scaling matrix, U=rotation matrix, S=triangular shear).
-     * @param usd_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, S=triangular shear, D=diagonal scaling matrix).
-     * @param uds_order Set the order of the matrix multiplication for the affine transformations (U=rotation matrix, D=diagonal scaling matrix, S=triangular shear).
-     * @param supper_s_matrix Set the S matrix to be upper triangular.
-     * @param slower_s_matrix Set the S matrix to be lower triangular.
-     * @param ashift Apply the shift parameters after the matrix transformation.
-     * @param bshift Apply the shift parameters before the matrix transformation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_WARP_DRIVE_METADATA);
     const params = v_3d_warp_drive_params(dataset, base_dataset, prefix, shift_only, shift_rotate, shift_rotate_scale, affine_general, bilinear_general, linear, cubic, nn, quintic, input_dataset, verbosity_flag, summary_file, max_iterations, delta, weight, convergence_thresh, twopass, final_mode, parfix, oned_file, float_format, coarserot_init, oned_matrix_save, sdu_order, sud_order, dsu_order, dus_order, usd_order, uds_order, supper_s_matrix, slower_s_matrix, ashift, bshift)
@@ -559,5 +559,8 @@ export {
       V3dWarpDriveParameters,
       V_3D_WARP_DRIVE_METADATA,
       v_3d_warp_drive,
+      v_3d_warp_drive_cargs,
+      v_3d_warp_drive_execute,
+      v_3d_warp_drive_outputs,
       v_3d_warp_drive_params,
 };

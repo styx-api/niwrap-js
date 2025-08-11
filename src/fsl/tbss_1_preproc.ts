@@ -12,38 +12,38 @@ const TBSS_1_PREPROC_METADATA: Metadata = {
 
 
 interface Tbss1PreprocParameters {
-    "__STYXTYPE__": "tbss_1_preproc";
+    "@type": "fsl.tbss_1_preproc";
     "images": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "tbss_1_preproc": tbss_1_preproc_cargs,
+        "fsl.tbss_1_preproc": tbss_1_preproc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Tbss1PreprocOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param images List of input images (e.g. subj1_FA.nii.gz subj2_FA.nii.gz ...)
+ *
+ * @returns Parameter dictionary
+ */
 function tbss_1_preproc_params(
     images: Array<InputPathType>,
 ): Tbss1PreprocParameters {
-    /**
-     * Build parameters.
-    
-     * @param images List of input images (e.g. subj1_FA.nii.gz subj2_FA.nii.gz ...)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "tbss_1_preproc" as const,
+        "@type": "fsl.tbss_1_preproc" as const,
         "images": images,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tbss_1_preproc_cargs(
     params: Tbss1PreprocParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("tbss_1_preproc");
     cargs.push(...(params["images"] ?? null).map(f => execution.inputFile(f)));
@@ -100,18 +100,18 @@ function tbss_1_preproc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tbss_1_preproc_outputs(
     params: Tbss1PreprocParameters,
     execution: Execution,
 ): Tbss1PreprocOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Tbss1PreprocOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function tbss_1_preproc_outputs(
 }
 
 
+/**
+ * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
+ */
 function tbss_1_preproc_execute(
     params: Tbss1PreprocParameters,
     execution: Execution,
 ): Tbss1PreprocOutputs {
-    /**
-     * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
-     */
     params = execution.params(params)
     const cargs = tbss_1_preproc_cargs(params, execution)
     const ret = tbss_1_preproc_outputs(params, execution)
@@ -143,22 +143,22 @@ function tbss_1_preproc_execute(
 }
 
 
+/**
+ * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param images List of input images (e.g. subj1_FA.nii.gz subj2_FA.nii.gz ...)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
+ */
 function tbss_1_preproc(
     images: Array<InputPathType>,
     runner: Runner | null = null,
 ): Tbss1PreprocOutputs {
-    /**
-     * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param images List of input images (e.g. subj1_FA.nii.gz subj2_FA.nii.gz ...)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TBSS_1_PREPROC_METADATA);
     const params = tbss_1_preproc_params(images)
@@ -171,5 +171,8 @@ export {
       Tbss1PreprocOutputs,
       Tbss1PreprocParameters,
       tbss_1_preproc,
+      tbss_1_preproc_cargs,
+      tbss_1_preproc_execute,
+      tbss_1_preproc_outputs,
       tbss_1_preproc_params,
 };

@@ -12,7 +12,7 @@ const V_3D_LOCAL_HISTOG_METADATA: Metadata = {
 
 
 interface V3dLocalHistogParameters {
-    "__STYXTYPE__": "3dLocalHistog";
+    "@type": "afni.3dLocalHistog";
     "nbhd_option"?: string | null | undefined;
     "prefix": string;
     "hsave"?: string | null | undefined;
@@ -26,35 +26,35 @@ interface V3dLocalHistogParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dLocalHistog": v_3d_local_histog_cargs,
+        "afni.3dLocalHistog": v_3d_local_histog_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dLocalHistog": v_3d_local_histog_outputs,
+        "afni.3dLocalHistog": v_3d_local_histog_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface V3dLocalHistogOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Use string 'ppp' as the prefix for the output dataset.
+ * @param input_datasets Input dataset(s) for the 3dLocalHistog tool
+ * @param nbhd_option Defines the region around each voxel to be used for the statistics calculation. Available formats: 'SPHERE(r)', 'RECT(a,b,c)', 'RHDD(a)', 'TOHD(a)'.
+ * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
+ * @param lab_file Use file 'LL' as a label file.
+ * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
+ * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
+ * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
+ * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
+ * @param quiet Stop the highly informative progress reports.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_local_histog_params(
     prefix: string,
     input_datasets: Array<InputPathType>,
@@ -97,24 +113,8 @@ function v_3d_local_histog_params(
     probability: boolean = false,
     quiet: boolean = false,
 ): V3dLocalHistogParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Use string 'ppp' as the prefix for the output dataset.
-     * @param input_datasets Input dataset(s) for the 3dLocalHistog tool
-     * @param nbhd_option Defines the region around each voxel to be used for the statistics calculation. Available formats: 'SPHERE(r)', 'RECT(a,b,c)', 'RHDD(a)', 'TOHD(a)'.
-     * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
-     * @param lab_file Use file 'LL' as a label file.
-     * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
-     * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
-     * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
-     * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
-     * @param quiet Stop the highly informative progress reports.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dLocalHistog" as const,
+        "@type": "afni.3dLocalHistog" as const,
         "prefix": prefix,
         "exc_nonlab": exc_nonlab,
         "probability": probability,
@@ -140,18 +140,18 @@ function v_3d_local_histog_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_local_histog_cargs(
     params: V3dLocalHistogParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dLocalHistog");
     if ((params["nbhd_option"] ?? null) !== null) {
@@ -202,18 +202,18 @@ function v_3d_local_histog_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_local_histog_outputs(
     params: V3dLocalHistogParameters,
     execution: Execution,
 ): V3dLocalHistogOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dLocalHistogOutputs = {
         root: execution.outputFile("."),
         output_dataset_head: execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')),
@@ -224,22 +224,22 @@ function v_3d_local_histog_outputs(
 }
 
 
+/**
+ * This program computes a local histogram at each voxel in the input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
+ */
 function v_3d_local_histog_execute(
     params: V3dLocalHistogParameters,
     execution: Execution,
 ): V3dLocalHistogOutputs {
-    /**
-     * This program computes a local histogram at each voxel in the input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_local_histog_cargs(params, execution)
     const ret = v_3d_local_histog_outputs(params, execution)
@@ -248,6 +248,27 @@ function v_3d_local_histog_execute(
 }
 
 
+/**
+ * This program computes a local histogram at each voxel in the input datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Use string 'ppp' as the prefix for the output dataset.
+ * @param input_datasets Input dataset(s) for the 3dLocalHistog tool
+ * @param nbhd_option Defines the region around each voxel to be used for the statistics calculation. Available formats: 'SPHERE(r)', 'RECT(a,b,c)', 'RHDD(a)', 'TOHD(a)'.
+ * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
+ * @param lab_file Use file 'LL' as a label file.
+ * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
+ * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
+ * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
+ * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
+ * @param quiet Stop the highly informative progress reports.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
+ */
 function v_3d_local_histog(
     prefix: string,
     input_datasets: Array<InputPathType>,
@@ -261,27 +282,6 @@ function v_3d_local_histog(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dLocalHistogOutputs {
-    /**
-     * This program computes a local histogram at each voxel in the input datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Use string 'ppp' as the prefix for the output dataset.
-     * @param input_datasets Input dataset(s) for the 3dLocalHistog tool
-     * @param nbhd_option Defines the region around each voxel to be used for the statistics calculation. Available formats: 'SPHERE(r)', 'RECT(a,b,c)', 'RHDD(a)', 'TOHD(a)'.
-     * @param hsave Save the overall histogram into file 'sss'. This file will have 2 columns: value and count.
-     * @param lab_file Use file 'LL' as a label file.
-     * @param exclude Exclude values from 'a' to 'b' from the counting. This option can be used more than once.
-     * @param exc_nonlab If '-lab_file' is used, then exclude all values that are NOT in the label file (except for 0).
-     * @param mincount Exclude values which appear in the overall histogram fewer than 'mm' times.
-     * @param probability Convert each count to a probability by dividing by the total number of counts at each voxel.
-     * @param quiet Stop the highly informative progress reports.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_LOCAL_HISTOG_METADATA);
     const params = v_3d_local_histog_params(prefix, input_datasets, nbhd_option, hsave, lab_file, exclude, exc_nonlab, mincount, probability, quiet)
@@ -294,5 +294,8 @@ export {
       V3dLocalHistogParameters,
       V_3D_LOCAL_HISTOG_METADATA,
       v_3d_local_histog,
+      v_3d_local_histog_cargs,
+      v_3d_local_histog_execute,
+      v_3d_local_histog_outputs,
       v_3d_local_histog_params,
 };

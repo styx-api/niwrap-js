@@ -12,40 +12,40 @@ const DMRI_VIOLIN_PLOTS_METADATA: Metadata = {
 
 
 interface DmriViolinPlotsParameters {
-    "__STYXTYPE__": "dmri_violinPlots";
+    "@type": "freesurfer.dmri_violinPlots";
     "input_directory": string;
     "labels": InputPathType;
     "structure": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_violinPlots": dmri_violin_plots_cargs,
+        "freesurfer.dmri_violinPlots": dmri_violin_plots_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface DmriViolinPlotsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_directory Directory with all subjects
+ * @param labels CSV file with group labels
+ * @param structure Name of the structure
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_violin_plots_params(
     input_directory: string,
     labels: InputPathType,
     structure: string,
 ): DmriViolinPlotsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_directory Directory with all subjects
-     * @param labels CSV file with group labels
-     * @param structure Name of the structure
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_violinPlots" as const,
+        "@type": "freesurfer.dmri_violinPlots" as const,
         "input_directory": input_directory,
         "labels": labels,
         "structure": structure,
@@ -89,18 +89,18 @@ function dmri_violin_plots_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_violin_plots_cargs(
     params: DmriViolinPlotsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_violinPlots");
     cargs.push(
@@ -119,18 +119,18 @@ function dmri_violin_plots_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_violin_plots_outputs(
     params: DmriViolinPlotsParameters,
     execution: Execution,
 ): DmriViolinPlotsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriViolinPlotsOutputs = {
         root: execution.outputFile("."),
     };
@@ -138,22 +138,22 @@ function dmri_violin_plots_outputs(
 }
 
 
+/**
+ * Generate violin plots for dMRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
+ */
 function dmri_violin_plots_execute(
     params: DmriViolinPlotsParameters,
     execution: Execution,
 ): DmriViolinPlotsOutputs {
-    /**
-     * Generate violin plots for dMRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_violin_plots_cargs(params, execution)
     const ret = dmri_violin_plots_outputs(params, execution)
@@ -162,26 +162,26 @@ function dmri_violin_plots_execute(
 }
 
 
+/**
+ * Generate violin plots for dMRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_directory Directory with all subjects
+ * @param labels CSV file with group labels
+ * @param structure Name of the structure
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
+ */
 function dmri_violin_plots(
     input_directory: string,
     labels: InputPathType,
     structure: string,
     runner: Runner | null = null,
 ): DmriViolinPlotsOutputs {
-    /**
-     * Generate violin plots for dMRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_directory Directory with all subjects
-     * @param labels CSV file with group labels
-     * @param structure Name of the structure
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_VIOLIN_PLOTS_METADATA);
     const params = dmri_violin_plots_params(input_directory, labels, structure)
@@ -194,5 +194,8 @@ export {
       DmriViolinPlotsOutputs,
       DmriViolinPlotsParameters,
       dmri_violin_plots,
+      dmri_violin_plots_cargs,
+      dmri_violin_plots_execute,
+      dmri_violin_plots_outputs,
       dmri_violin_plots_params,
 };

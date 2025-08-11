@@ -12,7 +12,7 @@ const DTIGEN_METADATA: Metadata = {
 
 
 interface DtigenParameters {
-    "__STYXTYPE__": "dtigen";
+    "@type": "fsl.dtigen";
     "tensor": InputPathType;
     "s0": InputPathType;
     "output_data": string;
@@ -24,35 +24,35 @@ interface DtigenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dtigen": dtigen_cargs,
+        "fsl.dtigen": dtigen_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dtigen": dtigen_outputs,
+        "fsl.dtigen": dtigen_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface DtigenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tensor Input tensor file
+ * @param s0 Input S0 file
+ * @param output_data Output data file
+ * @param bvecs bvecs ASCII text file
+ * @param bvals bvals ASCII text file
+ * @param brainmask Brain mask file
+ * @param kurtosis Mean kurtosis map
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function dtigen_params(
     tensor: InputPathType,
     s0: InputPathType,
@@ -89,22 +103,8 @@ function dtigen_params(
     kurtosis: InputPathType | null = null,
     help: boolean = false,
 ): DtigenParameters {
-    /**
-     * Build parameters.
-    
-     * @param tensor Input tensor file
-     * @param s0 Input S0 file
-     * @param output_data Output data file
-     * @param bvecs bvecs ASCII text file
-     * @param bvals bvals ASCII text file
-     * @param brainmask Brain mask file
-     * @param kurtosis Mean kurtosis map
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dtigen" as const,
+        "@type": "fsl.dtigen" as const,
         "tensor": tensor,
         "s0": s0,
         "output_data": output_data,
@@ -120,18 +120,18 @@ function dtigen_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dtigen_cargs(
     params: DtigenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dtigen");
     cargs.push(
@@ -171,18 +171,18 @@ function dtigen_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dtigen_outputs(
     params: DtigenParameters,
     execution: Execution,
 ): DtigenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DtigenOutputs = {
         root: execution.outputFile("."),
         output_diffusion_data: execution.outputFile([(params["output_data"] ?? null), ".nii.gz"].join('')),
@@ -192,22 +192,22 @@ function dtigen_outputs(
 }
 
 
+/**
+ * Generate diffusion data using tensor model.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DtigenOutputs`).
+ */
 function dtigen_execute(
     params: DtigenParameters,
     execution: Execution,
 ): DtigenOutputs {
-    /**
-     * Generate diffusion data using tensor model.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DtigenOutputs`).
-     */
     params = execution.params(params)
     const cargs = dtigen_cargs(params, execution)
     const ret = dtigen_outputs(params, execution)
@@ -216,6 +216,25 @@ function dtigen_execute(
 }
 
 
+/**
+ * Generate diffusion data using tensor model.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param tensor Input tensor file
+ * @param s0 Input S0 file
+ * @param output_data Output data file
+ * @param bvecs bvecs ASCII text file
+ * @param bvals bvals ASCII text file
+ * @param brainmask Brain mask file
+ * @param kurtosis Mean kurtosis map
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DtigenOutputs`).
+ */
 function dtigen(
     tensor: InputPathType,
     s0: InputPathType,
@@ -227,25 +246,6 @@ function dtigen(
     help: boolean = false,
     runner: Runner | null = null,
 ): DtigenOutputs {
-    /**
-     * Generate diffusion data using tensor model.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param tensor Input tensor file
-     * @param s0 Input S0 file
-     * @param output_data Output data file
-     * @param bvecs bvecs ASCII text file
-     * @param bvals bvals ASCII text file
-     * @param brainmask Brain mask file
-     * @param kurtosis Mean kurtosis map
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DtigenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DTIGEN_METADATA);
     const params = dtigen_params(tensor, s0, output_data, bvecs, bvals, brainmask, kurtosis, help)
@@ -258,5 +258,8 @@ export {
       DtigenOutputs,
       DtigenParameters,
       dtigen,
+      dtigen_cargs,
+      dtigen_execute,
+      dtigen_outputs,
       dtigen_params,
 };

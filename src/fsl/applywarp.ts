@@ -12,7 +12,7 @@ const APPLYWARP_METADATA: Metadata = {
 
 
 interface ApplywarpParameters {
-    "__STYXTYPE__": "applywarp";
+    "@type": "fsl.applywarp";
     "interp"?: "nn" | "trilinear" | "sinc" | "spline" | null | undefined;
     "in_file": InputPathType;
     "ref_file": InputPathType;
@@ -31,35 +31,35 @@ interface ApplywarpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "applywarp": applywarp_cargs,
+        "fsl.applywarp": applywarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "applywarp": applywarp_outputs,
+        "fsl.applywarp": applywarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface ApplywarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Image to be warped.
+ * @param ref_file Reference image.
+ * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
+ * @param out_file Output filename.
+ * @param relwarp Treat warp field as relative: x' = x + w(x).
+ * @param abswarp Treat warp field as absolute: x' = w(x).
+ * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type [char short int float double].
+ * @param field_file File containing warp field.
+ * @param mask_file Filename for mask image (in reference space).
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param postmat Filename for post-transform (affine matrix).
+ * @param premat Filename for pre-transform (affine matrix).
+ * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
+ * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
+ * @param supersample Intermediary supersampling of output, default is off.
+ *
+ * @returns Parameter dictionary
+ */
 function applywarp_params(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -99,29 +120,8 @@ function applywarp_params(
     superlevel_2: number | null = null,
     supersample: boolean = false,
 ): ApplywarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Image to be warped.
-     * @param ref_file Reference image.
-     * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
-     * @param out_file Output filename.
-     * @param relwarp Treat warp field as relative: x' = x + w(x).
-     * @param abswarp Treat warp field as absolute: x' = w(x).
-     * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type [char short int float double].
-     * @param field_file File containing warp field.
-     * @param mask_file Filename for mask image (in reference space).
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param postmat Filename for post-transform (affine matrix).
-     * @param premat Filename for pre-transform (affine matrix).
-     * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
-     * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
-     * @param supersample Intermediary supersampling of output, default is off.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "applywarp" as const,
+        "@type": "fsl.applywarp" as const,
         "in_file": in_file,
         "ref_file": ref_file,
         "relwarp": relwarp,
@@ -162,18 +162,18 @@ function applywarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function applywarp_cargs(
     params: ApplywarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("applywarp");
     if ((params["interp"] ?? null) !== null) {
@@ -221,18 +221,18 @@ function applywarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function applywarp_outputs(
     params: ApplywarpParameters,
     execution: Execution,
 ): ApplywarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ApplywarpOutputs = {
         root: execution.outputFile("."),
         out_file_outfile: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null)].join('')) : null,
@@ -241,22 +241,22 @@ function applywarp_outputs(
 }
 
 
+/**
+ * Apply warps estimated by FNIRT (or some other software) to some image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
+ */
 function applywarp_execute(
     params: ApplywarpParameters,
     execution: Execution,
 ): ApplywarpOutputs {
-    /**
-     * Apply warps estimated by FNIRT (or some other software) to some image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = applywarp_cargs(params, execution)
     const ret = applywarp_outputs(params, execution)
@@ -265,6 +265,32 @@ function applywarp_execute(
 }
 
 
+/**
+ * Apply warps estimated by FNIRT (or some other software) to some image.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Image to be warped.
+ * @param ref_file Reference image.
+ * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
+ * @param out_file Output filename.
+ * @param relwarp Treat warp field as relative: x' = x + w(x).
+ * @param abswarp Treat warp field as absolute: x' = w(x).
+ * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type [char short int float double].
+ * @param field_file File containing warp field.
+ * @param mask_file Filename for mask image (in reference space).
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param postmat Filename for post-transform (affine matrix).
+ * @param premat Filename for pre-transform (affine matrix).
+ * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
+ * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
+ * @param supersample Intermediary supersampling of output, default is off.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
+ */
 function applywarp(
     in_file: InputPathType,
     ref_file: InputPathType,
@@ -283,32 +309,6 @@ function applywarp(
     supersample: boolean = false,
     runner: Runner | null = null,
 ): ApplywarpOutputs {
-    /**
-     * Apply warps estimated by FNIRT (or some other software) to some image.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Image to be warped.
-     * @param ref_file Reference image.
-     * @param interp 'nn' or 'trilinear' or 'sinc' or 'spline'. Interpolation method.
-     * @param out_file Output filename.
-     * @param relwarp Treat warp field as relative: x' = x + w(x).
-     * @param abswarp Treat warp field as absolute: x' = w(x).
-     * @param datatype 'char' or 'short' or 'int' or 'float' or 'double'. Force output data type [char short int float double].
-     * @param field_file File containing warp field.
-     * @param mask_file Filename for mask image (in reference space).
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param postmat Filename for post-transform (affine matrix).
-     * @param premat Filename for pre-transform (affine matrix).
-     * @param superlevel 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
-     * @param superlevel_2 'a' or an integer. Level of intermediary supersampling, a for 'automatic' or integer level. default = 2.
-     * @param supersample Intermediary supersampling of output, default is off.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(APPLYWARP_METADATA);
     const params = applywarp_params(in_file, ref_file, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel, superlevel_2, supersample)
@@ -321,5 +321,8 @@ export {
       ApplywarpOutputs,
       ApplywarpParameters,
       applywarp,
+      applywarp_cargs,
+      applywarp_execute,
+      applywarp_outputs,
       applywarp_params,
 };

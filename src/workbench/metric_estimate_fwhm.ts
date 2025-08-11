@@ -12,13 +12,13 @@ const METRIC_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface MetricEstimateFwhmWholeFileParameters {
-    "__STYXTYPE__": "whole_file";
+    "@type": "workbench.metric-estimate-fwhm.whole_file";
     "opt_demean": boolean;
 }
 
 
 interface MetricEstimateFwhmParameters {
-    "__STYXTYPE__": "metric-estimate-fwhm";
+    "@type": "workbench.metric-estimate-fwhm";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
@@ -27,70 +27,70 @@ interface MetricEstimateFwhmParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-estimate-fwhm": metric_estimate_fwhm_cargs,
-        "whole_file": metric_estimate_fwhm_whole_file_cargs,
+        "workbench.metric-estimate-fwhm": metric_estimate_fwhm_cargs,
+        "workbench.metric-estimate-fwhm.whole_file": metric_estimate_fwhm_whole_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_demean subtract the mean image before estimating smoothness
+ *
+ * @returns Parameter dictionary
+ */
 function metric_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
 ): MetricEstimateFwhmWholeFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_demean subtract the mean image before estimating smoothness
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "whole_file" as const,
+        "@type": "workbench.metric-estimate-fwhm.whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_estimate_fwhm_whole_file_cargs(
     params: MetricEstimateFwhmWholeFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-whole-file");
     if ((params["opt_demean"] ?? null)) {
@@ -113,6 +113,17 @@ interface MetricEstimateFwhmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use for distance and neighbor information
+ * @param metric_in the input metric
+ * @param opt_roi_roi_metric use only data within an ROI: the metric file to use as an ROI
+ * @param opt_column_column select a single column to estimate smoothness of: the column number or name
+ * @param whole_file estimate for the whole file at once, not each column separately
+ *
+ * @returns Parameter dictionary
+ */
 function metric_estimate_fwhm_params(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -120,19 +131,8 @@ function metric_estimate_fwhm_params(
     opt_column_column: string | null = null,
     whole_file: MetricEstimateFwhmWholeFileParameters | null = null,
 ): MetricEstimateFwhmParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use for distance and neighbor information
-     * @param metric_in the input metric
-     * @param opt_roi_roi_metric use only data within an ROI: the metric file to use as an ROI
-     * @param opt_column_column select a single column to estimate smoothness of: the column number or name
-     * @param whole_file estimate for the whole file at once, not each column separately
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-estimate-fwhm" as const,
+        "@type": "workbench.metric-estimate-fwhm" as const,
         "surface": surface,
         "metric_in": metric_in,
     };
@@ -149,18 +149,18 @@ function metric_estimate_fwhm_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_estimate_fwhm_cargs(
     params: MetricEstimateFwhmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-estimate-fwhm");
@@ -179,24 +179,24 @@ function metric_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null).__STYXTYPE__)((params["whole_file"] ?? null), execution));
+        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_estimate_fwhm_outputs(
     params: MetricEstimateFwhmParameters,
     execution: Execution,
 ): MetricEstimateFwhmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricEstimateFwhmOutputs = {
         root: execution.outputFile("."),
     };
@@ -204,24 +204,24 @@ function metric_estimate_fwhm_outputs(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a metric file.
+ *
+ * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
+ */
 function metric_estimate_fwhm_execute(
     params: MetricEstimateFwhmParameters,
     execution: Execution,
 ): MetricEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a metric file.
-     * 
-     * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_estimate_fwhm_cargs(params, execution)
     const ret = metric_estimate_fwhm_outputs(params, execution)
@@ -230,6 +230,24 @@ function metric_estimate_fwhm_execute(
 }
 
 
+/**
+ * Estimate fwhm smoothness of a metric file.
+ *
+ * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use for distance and neighbor information
+ * @param metric_in the input metric
+ * @param opt_roi_roi_metric use only data within an ROI: the metric file to use as an ROI
+ * @param opt_column_column select a single column to estimate smoothness of: the column number or name
+ * @param whole_file estimate for the whole file at once, not each column separately
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
+ */
 function metric_estimate_fwhm(
     surface: InputPathType,
     metric_in: InputPathType,
@@ -238,24 +256,6 @@ function metric_estimate_fwhm(
     whole_file: MetricEstimateFwhmWholeFileParameters | null = null,
     runner: Runner | null = null,
 ): MetricEstimateFwhmOutputs {
-    /**
-     * Estimate fwhm smoothness of a metric file.
-     * 
-     * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use for distance and neighbor information
-     * @param metric_in the input metric
-     * @param opt_roi_roi_metric use only data within an ROI: the metric file to use as an ROI
-     * @param opt_column_column select a single column to estimate smoothness of: the column number or name
-     * @param whole_file estimate for the whole file at once, not each column separately
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_ESTIMATE_FWHM_METADATA);
     const params = metric_estimate_fwhm_params(surface, metric_in, opt_roi_roi_metric, opt_column_column, whole_file)
@@ -269,6 +269,10 @@ export {
       MetricEstimateFwhmParameters,
       MetricEstimateFwhmWholeFileParameters,
       metric_estimate_fwhm,
+      metric_estimate_fwhm_cargs,
+      metric_estimate_fwhm_execute,
+      metric_estimate_fwhm_outputs,
       metric_estimate_fwhm_params,
+      metric_estimate_fwhm_whole_file_cargs,
       metric_estimate_fwhm_whole_file_params,
 };

@@ -12,7 +12,7 @@ const XMAT_TOOL_PY_METADATA: Metadata = {
 
 
 interface XmatToolPyParameters {
-    "__STYXTYPE__": "xmat_tool.py";
+    "@type": "afni.xmat_tool.py";
     "no_gui": boolean;
     "load_xmat"?: InputPathType | null | undefined;
     "load_1d"?: InputPathType | null | undefined;
@@ -37,35 +37,35 @@ interface XmatToolPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xmat_tool.py": xmat_tool_py_cargs,
+        "afni.xmat_tool.py": xmat_tool_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "xmat_tool.py": xmat_tool_py_outputs,
+        "afni.xmat_tool.py": xmat_tool_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -88,6 +88,33 @@ interface XmatToolPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param no_gui Do not start the GUI
+ * @param load_xmat Load the AFNI X-matrix
+ * @param load_1d Load the 1D time series
+ * @param choose_cols Select columns to fit against
+ * @param choose_nonzero_cols Select only non-zero columns
+ * @param chrono Apply options chronologically
+ * @param cormat_cutoff Set min cutoff for correlation matrix warnings
+ * @param cosmat_cutoff Set min cutoff for cosine matrix warnings
+ * @param cosmat_motion Include motion in cosine matrix warnings
+ * @param verb Set the verbose level. Valid levels are currently 0..5.
+ * @param show_col_types Display columns by regressor types
+ * @param show_conds Display a list of condition numbers
+ * @param show_cormat Display the correlation matrix
+ * @param show_cormat_warnings Show correlation matrix warnings
+ * @param show_cosmat Display the cosine matrix
+ * @param show_cosmat_warnings Show cosine matrix warnings
+ * @param show_fit_betas Show fit betas
+ * @param show_fit_ts Show fit time series
+ * @param show_xmat Display general X-matrix information
+ * @param show_1d Display general 1D information
+ * @param gui_plot_xmat_as_one Plot Xmat columns on single axis
+ *
+ * @returns Parameter dictionary
+ */
 function xmat_tool_py_params(
     no_gui: boolean = false,
     load_xmat: InputPathType | null = null,
@@ -111,35 +138,8 @@ function xmat_tool_py_params(
     show_1d: boolean = false,
     gui_plot_xmat_as_one: boolean = false,
 ): XmatToolPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param no_gui Do not start the GUI
-     * @param load_xmat Load the AFNI X-matrix
-     * @param load_1d Load the 1D time series
-     * @param choose_cols Select columns to fit against
-     * @param choose_nonzero_cols Select only non-zero columns
-     * @param chrono Apply options chronologically
-     * @param cormat_cutoff Set min cutoff for correlation matrix warnings
-     * @param cosmat_cutoff Set min cutoff for cosine matrix warnings
-     * @param cosmat_motion Include motion in cosine matrix warnings
-     * @param verb Set the verbose level. Valid levels are currently 0..5.
-     * @param show_col_types Display columns by regressor types
-     * @param show_conds Display a list of condition numbers
-     * @param show_cormat Display the correlation matrix
-     * @param show_cormat_warnings Show correlation matrix warnings
-     * @param show_cosmat Display the cosine matrix
-     * @param show_cosmat_warnings Show cosine matrix warnings
-     * @param show_fit_betas Show fit betas
-     * @param show_fit_ts Show fit time series
-     * @param show_xmat Display general X-matrix information
-     * @param show_1d Display general 1D information
-     * @param gui_plot_xmat_as_one Plot Xmat columns on single axis
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xmat_tool.py" as const,
+        "@type": "afni.xmat_tool.py" as const,
         "no_gui": no_gui,
         "choose_nonzero_cols": choose_nonzero_cols,
         "chrono": chrono,
@@ -178,18 +178,18 @@ function xmat_tool_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xmat_tool_py_cargs(
     params: XmatToolPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xmat_tool.py");
     if ((params["no_gui"] ?? null)) {
@@ -277,18 +277,18 @@ function xmat_tool_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xmat_tool_py_outputs(
     params: XmatToolPyParameters,
     execution: Execution,
 ): XmatToolPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XmatToolPyOutputs = {
         root: execution.outputFile("."),
         output_fitts: execution.outputFile(["fitts.1D"].join('')),
@@ -297,22 +297,22 @@ function xmat_tool_py_outputs(
 }
 
 
+/**
+ * A tool for evaluating an AFNI X-matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
+ */
 function xmat_tool_py_execute(
     params: XmatToolPyParameters,
     execution: Execution,
 ): XmatToolPyOutputs {
-    /**
-     * A tool for evaluating an AFNI X-matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = xmat_tool_py_cargs(params, execution)
     const ret = xmat_tool_py_outputs(params, execution)
@@ -321,6 +321,38 @@ function xmat_tool_py_execute(
 }
 
 
+/**
+ * A tool for evaluating an AFNI X-matrix.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param no_gui Do not start the GUI
+ * @param load_xmat Load the AFNI X-matrix
+ * @param load_1d Load the 1D time series
+ * @param choose_cols Select columns to fit against
+ * @param choose_nonzero_cols Select only non-zero columns
+ * @param chrono Apply options chronologically
+ * @param cormat_cutoff Set min cutoff for correlation matrix warnings
+ * @param cosmat_cutoff Set min cutoff for cosine matrix warnings
+ * @param cosmat_motion Include motion in cosine matrix warnings
+ * @param verb Set the verbose level. Valid levels are currently 0..5.
+ * @param show_col_types Display columns by regressor types
+ * @param show_conds Display a list of condition numbers
+ * @param show_cormat Display the correlation matrix
+ * @param show_cormat_warnings Show correlation matrix warnings
+ * @param show_cosmat Display the cosine matrix
+ * @param show_cosmat_warnings Show cosine matrix warnings
+ * @param show_fit_betas Show fit betas
+ * @param show_fit_ts Show fit time series
+ * @param show_xmat Display general X-matrix information
+ * @param show_1d Display general 1D information
+ * @param gui_plot_xmat_as_one Plot Xmat columns on single axis
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
+ */
 function xmat_tool_py(
     no_gui: boolean = false,
     load_xmat: InputPathType | null = null,
@@ -345,38 +377,6 @@ function xmat_tool_py(
     gui_plot_xmat_as_one: boolean = false,
     runner: Runner | null = null,
 ): XmatToolPyOutputs {
-    /**
-     * A tool for evaluating an AFNI X-matrix.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param no_gui Do not start the GUI
-     * @param load_xmat Load the AFNI X-matrix
-     * @param load_1d Load the 1D time series
-     * @param choose_cols Select columns to fit against
-     * @param choose_nonzero_cols Select only non-zero columns
-     * @param chrono Apply options chronologically
-     * @param cormat_cutoff Set min cutoff for correlation matrix warnings
-     * @param cosmat_cutoff Set min cutoff for cosine matrix warnings
-     * @param cosmat_motion Include motion in cosine matrix warnings
-     * @param verb Set the verbose level. Valid levels are currently 0..5.
-     * @param show_col_types Display columns by regressor types
-     * @param show_conds Display a list of condition numbers
-     * @param show_cormat Display the correlation matrix
-     * @param show_cormat_warnings Show correlation matrix warnings
-     * @param show_cosmat Display the cosine matrix
-     * @param show_cosmat_warnings Show cosine matrix warnings
-     * @param show_fit_betas Show fit betas
-     * @param show_fit_ts Show fit time series
-     * @param show_xmat Display general X-matrix information
-     * @param show_1d Display general 1D information
-     * @param gui_plot_xmat_as_one Plot Xmat columns on single axis
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XMAT_TOOL_PY_METADATA);
     const params = xmat_tool_py_params(no_gui, load_xmat, load_1d, choose_cols, choose_nonzero_cols, chrono, cormat_cutoff, cosmat_cutoff, cosmat_motion, verb, show_col_types, show_conds, show_cormat, show_cormat_warnings, show_cosmat, show_cosmat_warnings, show_fit_betas, show_fit_ts, show_xmat, show_1d, gui_plot_xmat_as_one)
@@ -389,5 +389,8 @@ export {
       XmatToolPyOutputs,
       XmatToolPyParameters,
       xmat_tool_py,
+      xmat_tool_py_cargs,
+      xmat_tool_py_execute,
+      xmat_tool_py_outputs,
       xmat_tool_py_params,
 };

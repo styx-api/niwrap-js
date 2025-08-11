@@ -12,41 +12,41 @@ const SEGMENT_THALAMIC_NUCLEI_METADATA: Metadata = {
 
 
 interface SegmentThalamicNucleiParameters {
-    "__STYXTYPE__": "SegmentThalamicNuclei";
+    "@type": "freesurfer.SegmentThalamicNuclei";
     "t1_image": InputPathType;
     "output_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SegmentThalamicNuclei": segment_thalamic_nuclei_cargs,
+        "freesurfer.SegmentThalamicNuclei": segment_thalamic_nuclei_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SegmentThalamicNuclei": segment_thalamic_nuclei_outputs,
+        "freesurfer.SegmentThalamicNuclei": segment_thalamic_nuclei_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SegmentThalamicNucleiOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_image The T1-weighted image to process.
+ * @param output_dir Directory to store segmentation results.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_thalamic_nuclei_params(
     t1_image: InputPathType,
     output_dir: string,
 ): SegmentThalamicNucleiParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_image The T1-weighted image to process.
-     * @param output_dir Directory to store segmentation results.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SegmentThalamicNuclei" as const,
+        "@type": "freesurfer.SegmentThalamicNuclei" as const,
         "t1_image": t1_image,
         "output_dir": output_dir,
     };
@@ -90,18 +90,18 @@ function segment_thalamic_nuclei_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_thalamic_nuclei_cargs(
     params: SegmentThalamicNucleiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SegmentThalamicNuclei");
     cargs.push(execution.inputFile((params["t1_image"] ?? null)));
@@ -110,18 +110,18 @@ function segment_thalamic_nuclei_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_thalamic_nuclei_outputs(
     params: SegmentThalamicNucleiParameters,
     execution: Execution,
 ): SegmentThalamicNucleiOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentThalamicNucleiOutputs = {
         root: execution.outputFile("."),
         seg_output: execution.outputFile([(params["output_dir"] ?? null), "/thalamic_nuclei_seg.nii.gz"].join('')),
@@ -130,22 +130,22 @@ function segment_thalamic_nuclei_outputs(
 }
 
 
+/**
+ * A tool for segmenting thalamic nuclei using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
+ */
 function segment_thalamic_nuclei_execute(
     params: SegmentThalamicNucleiParameters,
     execution: Execution,
 ): SegmentThalamicNucleiOutputs {
-    /**
-     * A tool for segmenting thalamic nuclei using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_thalamic_nuclei_cargs(params, execution)
     const ret = segment_thalamic_nuclei_outputs(params, execution)
@@ -154,24 +154,24 @@ function segment_thalamic_nuclei_execute(
 }
 
 
+/**
+ * A tool for segmenting thalamic nuclei using FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_image The T1-weighted image to process.
+ * @param output_dir Directory to store segmentation results.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
+ */
 function segment_thalamic_nuclei(
     t1_image: InputPathType,
     output_dir: string,
     runner: Runner | null = null,
 ): SegmentThalamicNucleiOutputs {
-    /**
-     * A tool for segmenting thalamic nuclei using FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_image The T1-weighted image to process.
-     * @param output_dir Directory to store segmentation results.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_THALAMIC_NUCLEI_METADATA);
     const params = segment_thalamic_nuclei_params(t1_image, output_dir)
@@ -184,5 +184,8 @@ export {
       SegmentThalamicNucleiOutputs,
       SegmentThalamicNucleiParameters,
       segment_thalamic_nuclei,
+      segment_thalamic_nuclei_cargs,
+      segment_thalamic_nuclei_execute,
+      segment_thalamic_nuclei_outputs,
       segment_thalamic_nuclei_params,
 };

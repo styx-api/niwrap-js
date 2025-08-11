@@ -12,7 +12,7 @@ const SURF_DIST_METADATA: Metadata = {
 
 
 interface SurfDistParameters {
-    "__STYXTYPE__": "SurfDist";
+    "@type": "afni.SurfDist";
     "surface": InputPathType;
     "nodepairs": InputPathType;
     "node_path_do"?: string | null | undefined;
@@ -24,35 +24,35 @@ interface SurfDistParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfDist": surf_dist_cargs,
+        "afni.SurfDist": surf_dist_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfDist": surf_dist_outputs,
+        "afni.SurfDist": surf_dist_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface SurfDistOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface on which distances are computed.
+ * @param nodepairs Specify node pairs for distance computation.
+ * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
+ * @param euclidean Calculate Euclidean distance, rather than graph distance.
+ * @param euclidian Synonym for '-Euclidean'.
+ * @param graph Calculate distance along the mesh (default).
+ * @param from_node Specify one starting node for pair calculation.
+ * @param to_nodes Specify nodes used for pair calculation when using -from_node.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_dist_params(
     surface: InputPathType,
     nodepairs: InputPathType,
@@ -85,22 +99,8 @@ function surf_dist_params(
     from_node: string | null = null,
     to_nodes: InputPathType | null = null,
 ): SurfDistParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface on which distances are computed.
-     * @param nodepairs Specify node pairs for distance computation.
-     * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
-     * @param euclidean Calculate Euclidean distance, rather than graph distance.
-     * @param euclidian Synonym for '-Euclidean'.
-     * @param graph Calculate distance along the mesh (default).
-     * @param from_node Specify one starting node for pair calculation.
-     * @param to_nodes Specify nodes used for pair calculation when using -from_node.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfDist" as const,
+        "@type": "afni.SurfDist" as const,
         "surface": surface,
         "nodepairs": nodepairs,
         "euclidean": euclidean,
@@ -120,18 +120,18 @@ function surf_dist_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_dist_cargs(
     params: SurfDistParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfDist");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -167,18 +167,18 @@ function surf_dist_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_dist_outputs(
     params: SurfDistParameters,
     execution: Execution,
 ): SurfDistOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfDistOutputs = {
         root: execution.outputFile("."),
         distances: execution.outputFile(["example.1D"].join('')),
@@ -187,22 +187,22 @@ function surf_dist_outputs(
 }
 
 
+/**
+ * Calculate shortest distance between node pairs on a surface mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
+ */
 function surf_dist_execute(
     params: SurfDistParameters,
     execution: Execution,
 ): SurfDistOutputs {
-    /**
-     * Calculate shortest distance between node pairs on a surface mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_dist_cargs(params, execution)
     const ret = surf_dist_outputs(params, execution)
@@ -211,6 +211,25 @@ function surf_dist_execute(
 }
 
 
+/**
+ * Calculate shortest distance between node pairs on a surface mesh.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Surface on which distances are computed.
+ * @param nodepairs Specify node pairs for distance computation.
+ * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
+ * @param euclidean Calculate Euclidean distance, rather than graph distance.
+ * @param euclidian Synonym for '-Euclidean'.
+ * @param graph Calculate distance along the mesh (default).
+ * @param from_node Specify one starting node for pair calculation.
+ * @param to_nodes Specify nodes used for pair calculation when using -from_node.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
+ */
 function surf_dist(
     surface: InputPathType,
     nodepairs: InputPathType,
@@ -222,25 +241,6 @@ function surf_dist(
     to_nodes: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfDistOutputs {
-    /**
-     * Calculate shortest distance between node pairs on a surface mesh.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Surface on which distances are computed.
-     * @param nodepairs Specify node pairs for distance computation.
-     * @param node_path_do Output the shortest path between each node pair as a SUMA Displayable object.
-     * @param euclidean Calculate Euclidean distance, rather than graph distance.
-     * @param euclidian Synonym for '-Euclidean'.
-     * @param graph Calculate distance along the mesh (default).
-     * @param from_node Specify one starting node for pair calculation.
-     * @param to_nodes Specify nodes used for pair calculation when using -from_node.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_DIST_METADATA);
     const params = surf_dist_params(surface, nodepairs, node_path_do, euclidean, euclidian, graph, from_node, to_nodes)
@@ -253,5 +253,8 @@ export {
       SurfDistOutputs,
       SurfDistParameters,
       surf_dist,
+      surf_dist_cargs,
+      surf_dist_execute,
+      surf_dist_outputs,
       surf_dist_params,
 };

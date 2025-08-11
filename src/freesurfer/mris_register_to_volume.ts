@@ -12,7 +12,7 @@ const MRIS_REGISTER_TO_VOLUME_METADATA: Metadata = {
 
 
 interface MrisRegisterToVolumeParameters {
-    "__STYXTYPE__": "mris_register_to_volume";
+    "@type": "freesurfer.mris_register_to_volume";
     "surface": string;
     "pial": string;
     "pial_only"?: string | null | undefined;
@@ -44,33 +44,33 @@ interface MrisRegisterToVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_register_to_volume": mris_register_to_volume_cargs,
+        "freesurfer.mris_register_to_volume": mris_register_to_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -90,6 +90,40 @@ interface MrisRegisterToVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface The main surface file.
+ * @param pial Pial surface name.
+ * @param reg Registration file.
+ * @param mri_reg MRI volume registration file.
+ * @param pial_only Pial surface name (only).
+ * @param noglobal Do not use global optimization.
+ * @param median Use median filtering.
+ * @param tx_mmd Translation in x (min, max, delta).
+ * @param ty_mmd Translation in y (min, max, delta).
+ * @param tz_mmd Translation in z (min, max, delta).
+ * @param ax_mmd Rotation about x (min, max, delta).
+ * @param ay_mmd Rotation about y (min, max, delta).
+ * @param az_mmd Rotation about z (min, max, delta).
+ * @param cost Cost file.
+ * @param interp Interpolation type: trilinear or nearest.
+ * @param noise Add noise with stddev for testing sensitivity.
+ * @param seed Random seed for use with noise.
+ * @param skip Number of vertices to skip.
+ * @param sigma Size of blurring kernels to use.
+ * @param cnr Use CNR-based similarity function.
+ * @param max_rot Max angle (degrees) to search over.
+ * @param max_trans Max translation (mm) to search over.
+ * @param border Size of the border region to ignore.
+ * @param subject Specify name of subject (for register.dat file).
+ * @param dilate Dilate ripflags ndil times.
+ * @param patch Load patch and limit calculations.
+ * @param label Load label and limit calculations.
+ * @param out_reg Output registration at lowest cost.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_register_to_volume_params(
     surface: string,
     pial: string,
@@ -120,42 +154,8 @@ function mris_register_to_volume_params(
     label: string | null = null,
     out_reg: string | null = null,
 ): MrisRegisterToVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface The main surface file.
-     * @param pial Pial surface name.
-     * @param reg Registration file.
-     * @param mri_reg MRI volume registration file.
-     * @param pial_only Pial surface name (only).
-     * @param noglobal Do not use global optimization.
-     * @param median Use median filtering.
-     * @param tx_mmd Translation in x (min, max, delta).
-     * @param ty_mmd Translation in y (min, max, delta).
-     * @param tz_mmd Translation in z (min, max, delta).
-     * @param ax_mmd Rotation about x (min, max, delta).
-     * @param ay_mmd Rotation about y (min, max, delta).
-     * @param az_mmd Rotation about z (min, max, delta).
-     * @param cost Cost file.
-     * @param interp Interpolation type: trilinear or nearest.
-     * @param noise Add noise with stddev for testing sensitivity.
-     * @param seed Random seed for use with noise.
-     * @param skip Number of vertices to skip.
-     * @param sigma Size of blurring kernels to use.
-     * @param cnr Use CNR-based similarity function.
-     * @param max_rot Max angle (degrees) to search over.
-     * @param max_trans Max translation (mm) to search over.
-     * @param border Size of the border region to ignore.
-     * @param subject Specify name of subject (for register.dat file).
-     * @param dilate Dilate ripflags ndil times.
-     * @param patch Load patch and limit calculations.
-     * @param label Load label and limit calculations.
-     * @param out_reg Output registration at lowest cost.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_register_to_volume" as const,
+        "@type": "freesurfer.mris_register_to_volume" as const,
         "surface": surface,
         "pial": pial,
         "reg": reg,
@@ -231,18 +231,18 @@ function mris_register_to_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_register_to_volume_cargs(
     params: MrisRegisterToVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_register_to_volume");
     cargs.push(
@@ -400,18 +400,18 @@ function mris_register_to_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_register_to_volume_outputs(
     params: MrisRegisterToVolumeParameters,
     execution: Execution,
 ): MrisRegisterToVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRegisterToVolumeOutputs = {
         root: execution.outputFile("."),
     };
@@ -419,22 +419,22 @@ function mris_register_to_volume_outputs(
 }
 
 
+/**
+ * Aligns cortical surfaces to a volumetric template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
+ */
 function mris_register_to_volume_execute(
     params: MrisRegisterToVolumeParameters,
     execution: Execution,
 ): MrisRegisterToVolumeOutputs {
-    /**
-     * Aligns cortical surfaces to a volumetric template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_register_to_volume_cargs(params, execution)
     const ret = mris_register_to_volume_outputs(params, execution)
@@ -443,6 +443,45 @@ function mris_register_to_volume_execute(
 }
 
 
+/**
+ * Aligns cortical surfaces to a volumetric template.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param surface The main surface file.
+ * @param pial Pial surface name.
+ * @param reg Registration file.
+ * @param mri_reg MRI volume registration file.
+ * @param pial_only Pial surface name (only).
+ * @param noglobal Do not use global optimization.
+ * @param median Use median filtering.
+ * @param tx_mmd Translation in x (min, max, delta).
+ * @param ty_mmd Translation in y (min, max, delta).
+ * @param tz_mmd Translation in z (min, max, delta).
+ * @param ax_mmd Rotation about x (min, max, delta).
+ * @param ay_mmd Rotation about y (min, max, delta).
+ * @param az_mmd Rotation about z (min, max, delta).
+ * @param cost Cost file.
+ * @param interp Interpolation type: trilinear or nearest.
+ * @param noise Add noise with stddev for testing sensitivity.
+ * @param seed Random seed for use with noise.
+ * @param skip Number of vertices to skip.
+ * @param sigma Size of blurring kernels to use.
+ * @param cnr Use CNR-based similarity function.
+ * @param max_rot Max angle (degrees) to search over.
+ * @param max_trans Max translation (mm) to search over.
+ * @param border Size of the border region to ignore.
+ * @param subject Specify name of subject (for register.dat file).
+ * @param dilate Dilate ripflags ndil times.
+ * @param patch Load patch and limit calculations.
+ * @param label Load label and limit calculations.
+ * @param out_reg Output registration at lowest cost.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
+ */
 function mris_register_to_volume(
     surface: string,
     pial: string,
@@ -474,45 +513,6 @@ function mris_register_to_volume(
     out_reg: string | null = null,
     runner: Runner | null = null,
 ): MrisRegisterToVolumeOutputs {
-    /**
-     * Aligns cortical surfaces to a volumetric template.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param surface The main surface file.
-     * @param pial Pial surface name.
-     * @param reg Registration file.
-     * @param mri_reg MRI volume registration file.
-     * @param pial_only Pial surface name (only).
-     * @param noglobal Do not use global optimization.
-     * @param median Use median filtering.
-     * @param tx_mmd Translation in x (min, max, delta).
-     * @param ty_mmd Translation in y (min, max, delta).
-     * @param tz_mmd Translation in z (min, max, delta).
-     * @param ax_mmd Rotation about x (min, max, delta).
-     * @param ay_mmd Rotation about y (min, max, delta).
-     * @param az_mmd Rotation about z (min, max, delta).
-     * @param cost Cost file.
-     * @param interp Interpolation type: trilinear or nearest.
-     * @param noise Add noise with stddev for testing sensitivity.
-     * @param seed Random seed for use with noise.
-     * @param skip Number of vertices to skip.
-     * @param sigma Size of blurring kernels to use.
-     * @param cnr Use CNR-based similarity function.
-     * @param max_rot Max angle (degrees) to search over.
-     * @param max_trans Max translation (mm) to search over.
-     * @param border Size of the border region to ignore.
-     * @param subject Specify name of subject (for register.dat file).
-     * @param dilate Dilate ripflags ndil times.
-     * @param patch Load patch and limit calculations.
-     * @param label Load label and limit calculations.
-     * @param out_reg Output registration at lowest cost.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REGISTER_TO_VOLUME_METADATA);
     const params = mris_register_to_volume_params(surface, pial, reg, mri_reg, pial_only, noglobal, median, tx_mmd, ty_mmd, tz_mmd, ax_mmd, ay_mmd, az_mmd, cost, interp, noise, seed, skip, sigma, cnr, max_rot, max_trans, border, subject, dilate, patch, label, out_reg)
@@ -525,5 +525,8 @@ export {
       MrisRegisterToVolumeOutputs,
       MrisRegisterToVolumeParameters,
       mris_register_to_volume,
+      mris_register_to_volume_cargs,
+      mris_register_to_volume_execute,
+      mris_register_to_volume_outputs,
       mris_register_to_volume_params,
 };

@@ -12,7 +12,7 @@ const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
 
 
 interface SurfaceModifySphereParameters {
-    "__STYXTYPE__": "surface-modify-sphere";
+    "@type": "workbench.surface-modify-sphere";
     "sphere_in": InputPathType;
     "radius": number;
     "sphere_out": string;
@@ -20,35 +20,35 @@ interface SurfaceModifySphereParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-modify-sphere": surface_modify_sphere_cargs,
+        "workbench.surface-modify-sphere": surface_modify_sphere_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "surface-modify-sphere": surface_modify_sphere_outputs,
+        "workbench.surface-modify-sphere": surface_modify_sphere_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SurfaceModifySphereOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param sphere_in the sphere to modify
+ * @param radius the radius the output sphere should have
+ * @param sphere_out the output sphere
+ * @param opt_recenter recenter the sphere by means of the bounding box
+ *
+ * @returns Parameter dictionary
+ */
 function surface_modify_sphere_params(
     sphere_in: InputPathType,
     radius: number,
     sphere_out: string,
     opt_recenter: boolean = false,
 ): SurfaceModifySphereParameters {
-    /**
-     * Build parameters.
-    
-     * @param sphere_in the sphere to modify
-     * @param radius the radius the output sphere should have
-     * @param sphere_out the output sphere
-     * @param opt_recenter recenter the sphere by means of the bounding box
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-modify-sphere" as const,
+        "@type": "workbench.surface-modify-sphere" as const,
         "sphere_in": sphere_in,
         "radius": radius,
         "sphere_out": sphere_out,
@@ -98,18 +98,18 @@ function surface_modify_sphere_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_modify_sphere_cargs(
     params: SurfaceModifySphereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-modify-sphere");
@@ -123,18 +123,18 @@ function surface_modify_sphere_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_modify_sphere_outputs(
     params: SurfaceModifySphereParameters,
     execution: Execution,
 ): SurfaceModifySphereOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceModifySphereOutputs = {
         root: execution.outputFile("."),
         sphere_out: execution.outputFile([(params["sphere_out"] ?? null)].join('')),
@@ -143,26 +143,26 @@ function surface_modify_sphere_outputs(
 }
 
 
+/**
+ * Change radius and optionally recenter a sphere.
+ *
+ * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
+ *
+ * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
+ */
 function surface_modify_sphere_execute(
     params: SurfaceModifySphereParameters,
     execution: Execution,
 ): SurfaceModifySphereOutputs {
-    /**
-     * Change radius and optionally recenter a sphere.
-     * 
-     * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
-     * 
-     * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_modify_sphere_cargs(params, execution)
     const ret = surface_modify_sphere_outputs(params, execution)
@@ -171,6 +171,25 @@ function surface_modify_sphere_execute(
 }
 
 
+/**
+ * Change radius and optionally recenter a sphere.
+ *
+ * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
+ *
+ * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param sphere_in the sphere to modify
+ * @param radius the radius the output sphere should have
+ * @param sphere_out the output sphere
+ * @param opt_recenter recenter the sphere by means of the bounding box
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
+ */
 function surface_modify_sphere(
     sphere_in: InputPathType,
     radius: number,
@@ -178,25 +197,6 @@ function surface_modify_sphere(
     opt_recenter: boolean = false,
     runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
-    /**
-     * Change radius and optionally recenter a sphere.
-     * 
-     * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
-     * 
-     * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param sphere_in the sphere to modify
-     * @param radius the radius the output sphere should have
-     * @param sphere_out the output sphere
-     * @param opt_recenter recenter the sphere by means of the bounding box
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_MODIFY_SPHERE_METADATA);
     const params = surface_modify_sphere_params(sphere_in, radius, sphere_out, opt_recenter)
@@ -209,5 +209,8 @@ export {
       SurfaceModifySphereOutputs,
       SurfaceModifySphereParameters,
       surface_modify_sphere,
+      surface_modify_sphere_cargs,
+      surface_modify_sphere_execute,
+      surface_modify_sphere_outputs,
       surface_modify_sphere_params,
 };

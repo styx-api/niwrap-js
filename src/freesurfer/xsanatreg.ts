@@ -12,7 +12,7 @@ const XSANATREG_METADATA: Metadata = {
 
 
 interface XsanatregParameters {
-    "__STYXTYPE__": "xsanatreg";
+    "@type": "freesurfer.xsanatreg";
     "src_cordir": string;
     "targ_cordir": string;
     "transform_file": string;
@@ -25,33 +25,33 @@ interface XsanatregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "xsanatreg": xsanatreg_cargs,
+        "freesurfer.xsanatreg": xsanatreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -71,6 +71,21 @@ interface XsanatregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param src_cordir Directory of source COR volume
+ * @param targ_cordir Directory of target COR volume
+ * @param transform_file File in which to store the transformation
+ * @param temp_directory Directory for temporary storage, defaults to /tmp
+ * @param source_minc File name for source minc, set automatically if not specified
+ * @param target_minc File name for target minc, set automatically if not specified
+ * @param no_cleanup Do not delete temporary minc files
+ * @param version Print version and exit
+ * @param umask Set file mode creation mask
+ *
+ * @returns Parameter dictionary
+ */
 function xsanatreg_params(
     src_cordir: string,
     targ_cordir: string,
@@ -82,23 +97,8 @@ function xsanatreg_params(
     version: boolean = false,
     umask: string | null = null,
 ): XsanatregParameters {
-    /**
-     * Build parameters.
-    
-     * @param src_cordir Directory of source COR volume
-     * @param targ_cordir Directory of target COR volume
-     * @param transform_file File in which to store the transformation
-     * @param temp_directory Directory for temporary storage, defaults to /tmp
-     * @param source_minc File name for source minc, set automatically if not specified
-     * @param target_minc File name for target minc, set automatically if not specified
-     * @param no_cleanup Do not delete temporary minc files
-     * @param version Print version and exit
-     * @param umask Set file mode creation mask
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "xsanatreg" as const,
+        "@type": "freesurfer.xsanatreg" as const,
         "src_cordir": src_cordir,
         "targ_cordir": targ_cordir,
         "transform_file": transform_file,
@@ -121,18 +121,18 @@ function xsanatreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function xsanatreg_cargs(
     params: XsanatregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("xsanatreg");
     cargs.push(
@@ -181,18 +181,18 @@ function xsanatreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function xsanatreg_outputs(
     params: XsanatregParameters,
     execution: Execution,
 ): XsanatregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: XsanatregOutputs = {
         root: execution.outputFile("."),
     };
@@ -200,22 +200,22 @@ function xsanatreg_outputs(
 }
 
 
+/**
+ * A tool for registering source and target COR volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
+ */
 function xsanatreg_execute(
     params: XsanatregParameters,
     execution: Execution,
 ): XsanatregOutputs {
-    /**
-     * A tool for registering source and target COR volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
-     */
     params = execution.params(params)
     const cargs = xsanatreg_cargs(params, execution)
     const ret = xsanatreg_outputs(params, execution)
@@ -224,6 +224,26 @@ function xsanatreg_execute(
 }
 
 
+/**
+ * A tool for registering source and target COR volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param src_cordir Directory of source COR volume
+ * @param targ_cordir Directory of target COR volume
+ * @param transform_file File in which to store the transformation
+ * @param temp_directory Directory for temporary storage, defaults to /tmp
+ * @param source_minc File name for source minc, set automatically if not specified
+ * @param target_minc File name for target minc, set automatically if not specified
+ * @param no_cleanup Do not delete temporary minc files
+ * @param version Print version and exit
+ * @param umask Set file mode creation mask
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
+ */
 function xsanatreg(
     src_cordir: string,
     targ_cordir: string,
@@ -236,26 +256,6 @@ function xsanatreg(
     umask: string | null = null,
     runner: Runner | null = null,
 ): XsanatregOutputs {
-    /**
-     * A tool for registering source and target COR volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param src_cordir Directory of source COR volume
-     * @param targ_cordir Directory of target COR volume
-     * @param transform_file File in which to store the transformation
-     * @param temp_directory Directory for temporary storage, defaults to /tmp
-     * @param source_minc File name for source minc, set automatically if not specified
-     * @param target_minc File name for target minc, set automatically if not specified
-     * @param no_cleanup Do not delete temporary minc files
-     * @param version Print version and exit
-     * @param umask Set file mode creation mask
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(XSANATREG_METADATA);
     const params = xsanatreg_params(src_cordir, targ_cordir, transform_file, temp_directory, source_minc, target_minc, no_cleanup, version, umask)
@@ -268,5 +268,8 @@ export {
       XsanatregOutputs,
       XsanatregParameters,
       xsanatreg,
+      xsanatreg_cargs,
+      xsanatreg_execute,
+      xsanatreg_outputs,
       xsanatreg_params,
 };

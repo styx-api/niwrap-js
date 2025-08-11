@@ -12,7 +12,7 @@ const DJPEG_METADATA: Metadata = {
 
 
 interface DjpegParameters {
-    "__STYXTYPE__": "djpeg";
+    "@type": "afni.djpeg";
     "input_file": InputPathType;
     "output_file": string;
     "gray": boolean;
@@ -23,35 +23,35 @@ interface DjpegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "djpeg": djpeg_cargs,
+        "afni.djpeg": djpeg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "djpeg": djpeg_outputs,
+        "afni.djpeg": djpeg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface DjpegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input JPEG file (e.g. image.jpg)
+ * @param output_file Output image file (e.g. image.ppm)
+ * @param gray Force grayscale output
+ * @param fast_dct Prevent dithering of output
+ * @param one_pixel_height Force one-pixel modulation flag
+ * @param pseudo_pixel_ratio Force pseudo-pixel ratio flag
+ * @param crop_region Crop region (syntax: WxH+X+Y, e.g., 100x100+10+10)
+ *
+ * @returns Parameter dictionary
+ */
 function djpeg_params(
     input_file: InputPathType,
     output_file: string,
@@ -83,21 +96,8 @@ function djpeg_params(
     pseudo_pixel_ratio: boolean = false,
     crop_region: string | null = null,
 ): DjpegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input JPEG file (e.g. image.jpg)
-     * @param output_file Output image file (e.g. image.ppm)
-     * @param gray Force grayscale output
-     * @param fast_dct Prevent dithering of output
-     * @param one_pixel_height Force one-pixel modulation flag
-     * @param pseudo_pixel_ratio Force pseudo-pixel ratio flag
-     * @param crop_region Crop region (syntax: WxH+X+Y, e.g., 100x100+10+10)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "djpeg" as const,
+        "@type": "afni.djpeg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "gray": gray,
@@ -112,18 +112,18 @@ function djpeg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function djpeg_cargs(
     params: DjpegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("djpeg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -150,18 +150,18 @@ function djpeg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function djpeg_outputs(
     params: DjpegParameters,
     execution: Execution,
 ): DjpegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DjpegOutputs = {
         root: execution.outputFile("."),
         output_image: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -170,22 +170,22 @@ function djpeg_outputs(
 }
 
 
+/**
+ * Decompress a JPEG file to an image file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DjpegOutputs`).
+ */
 function djpeg_execute(
     params: DjpegParameters,
     execution: Execution,
 ): DjpegOutputs {
-    /**
-     * Decompress a JPEG file to an image file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DjpegOutputs`).
-     */
     params = execution.params(params)
     const cargs = djpeg_cargs(params, execution)
     const ret = djpeg_outputs(params, execution)
@@ -194,6 +194,24 @@ function djpeg_execute(
 }
 
 
+/**
+ * Decompress a JPEG file to an image file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Input JPEG file (e.g. image.jpg)
+ * @param output_file Output image file (e.g. image.ppm)
+ * @param gray Force grayscale output
+ * @param fast_dct Prevent dithering of output
+ * @param one_pixel_height Force one-pixel modulation flag
+ * @param pseudo_pixel_ratio Force pseudo-pixel ratio flag
+ * @param crop_region Crop region (syntax: WxH+X+Y, e.g., 100x100+10+10)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DjpegOutputs`).
+ */
 function djpeg(
     input_file: InputPathType,
     output_file: string,
@@ -204,24 +222,6 @@ function djpeg(
     crop_region: string | null = null,
     runner: Runner | null = null,
 ): DjpegOutputs {
-    /**
-     * Decompress a JPEG file to an image file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Input JPEG file (e.g. image.jpg)
-     * @param output_file Output image file (e.g. image.ppm)
-     * @param gray Force grayscale output
-     * @param fast_dct Prevent dithering of output
-     * @param one_pixel_height Force one-pixel modulation flag
-     * @param pseudo_pixel_ratio Force pseudo-pixel ratio flag
-     * @param crop_region Crop region (syntax: WxH+X+Y, e.g., 100x100+10+10)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DjpegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DJPEG_METADATA);
     const params = djpeg_params(input_file, output_file, gray, fast_dct, one_pixel_height, pseudo_pixel_ratio, crop_region)
@@ -234,5 +234,8 @@ export {
       DjpegOutputs,
       DjpegParameters,
       djpeg,
+      djpeg_cargs,
+      djpeg_execute,
+      djpeg_outputs,
       djpeg_params,
 };

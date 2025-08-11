@@ -12,7 +12,7 @@ const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
 
 
 interface V3dAmpToRsfcParameters {
-    "__STYXTYPE__": "3dAmpToRSFC";
+    "@type": "afni.3dAmpToRSFC";
     "in_amp"?: InputPathType | null | undefined;
     "in_pow"?: InputPathType | null | undefined;
     "prefix": string;
@@ -22,35 +22,35 @@ interface V3dAmpToRsfcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAmpToRSFC": v_3d_amp_to_rsfc_cargs,
+        "afni.3dAmpToRSFC": v_3d_amp_to_rsfc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAmpToRSFC": v_3d_amp_to_rsfc_outputs,
+        "afni.3dAmpToRSFC": v_3d_amp_to_rsfc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,18 @@ interface V3dAmpToRsfcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Output file prefix; file names will be: PREFIX_ALFF, PREFIX_FALFF, etc.
+ * @param band Lower and upper boundaries of the low frequency fluctuations (LFFs), within the interval [FBOT, FTOP].
+ * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
+ * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
+ * @param mask Volume mask of voxels to include for calculations.
+ * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_amp_to_rsfc_params(
     prefix: string,
     band: Array<number>,
@@ -101,20 +113,8 @@ function v_3d_amp_to_rsfc_params(
     mask: InputPathType | null = null,
     nifti: boolean = false,
 ): V3dAmpToRsfcParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Output file prefix; file names will be: PREFIX_ALFF, PREFIX_FALFF, etc.
-     * @param band Lower and upper boundaries of the low frequency fluctuations (LFFs), within the interval [FBOT, FTOP].
-     * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
-     * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
-     * @param mask Volume mask of voxels to include for calculations.
-     * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAmpToRSFC" as const,
+        "@type": "afni.3dAmpToRSFC" as const,
         "prefix": prefix,
         "band": band,
         "nifti": nifti,
@@ -132,18 +132,18 @@ function v_3d_amp_to_rsfc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_amp_to_rsfc_cargs(
     params: V3dAmpToRsfcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAmpToRSFC");
     if ((params["in_amp"] ?? null) !== null) {
@@ -179,18 +179,18 @@ function v_3d_amp_to_rsfc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_amp_to_rsfc_outputs(
     params: V3dAmpToRsfcParameters,
     execution: Execution,
 ): V3dAmpToRsfcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAmpToRsfcOutputs = {
         root: execution.outputFile("."),
         output_alff: execution.outputFile([(params["prefix"] ?? null), "_ALFF*"].join('')),
@@ -204,22 +204,22 @@ function v_3d_amp_to_rsfc_outputs(
 }
 
 
+/**
+ * Convert spectral amplitudes into standard RSFC parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
+ */
 function v_3d_amp_to_rsfc_execute(
     params: V3dAmpToRsfcParameters,
     execution: Execution,
 ): V3dAmpToRsfcOutputs {
-    /**
-     * Convert spectral amplitudes into standard RSFC parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_amp_to_rsfc_cargs(params, execution)
     const ret = v_3d_amp_to_rsfc_outputs(params, execution)
@@ -228,6 +228,23 @@ function v_3d_amp_to_rsfc_execute(
 }
 
 
+/**
+ * Convert spectral amplitudes into standard RSFC parameters.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Output file prefix; file names will be: PREFIX_ALFF, PREFIX_FALFF, etc.
+ * @param band Lower and upper boundaries of the low frequency fluctuations (LFFs), within the interval [FBOT, FTOP].
+ * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
+ * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
+ * @param mask Volume mask of voxels to include for calculations.
+ * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
+ */
 function v_3d_amp_to_rsfc(
     prefix: string,
     band: Array<number>,
@@ -237,23 +254,6 @@ function v_3d_amp_to_rsfc(
     nifti: boolean = false,
     runner: Runner | null = null,
 ): V3dAmpToRsfcOutputs {
-    /**
-     * Convert spectral amplitudes into standard RSFC parameters.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Output file prefix; file names will be: PREFIX_ALFF, PREFIX_FALFF, etc.
-     * @param band Lower and upper boundaries of the low frequency fluctuations (LFFs), within the interval [FBOT, FTOP].
-     * @param in_amp Input file of one-sided spectral amplitudes, such as output by 3dLombScargle.
-     * @param in_pow Input file of a one-sided power spectrum, such as output by 3dLombScargle.
-     * @param mask Volume mask of voxels to include for calculations.
-     * @param nifti Output files as *.nii.gz (default is BRIK/HEAD).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_AMP_TO_RSFC_METADATA);
     const params = v_3d_amp_to_rsfc_params(prefix, band, in_amp, in_pow, mask, nifti)
@@ -266,5 +266,8 @@ export {
       V3dAmpToRsfcParameters,
       V_3D_AMP_TO_RSFC_METADATA,
       v_3d_amp_to_rsfc,
+      v_3d_amp_to_rsfc_cargs,
+      v_3d_amp_to_rsfc_execute,
+      v_3d_amp_to_rsfc_outputs,
       v_3d_amp_to_rsfc_params,
 };

@@ -12,38 +12,38 @@ const DMRI_AC_SH_METADATA: Metadata = {
 
 
 interface DmriAcShParameters {
-    "__STYXTYPE__": "dmri_ac.sh";
+    "@type": "freesurfer.dmri_ac.sh";
     "additional_args"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_ac.sh": dmri_ac_sh_cargs,
+        "freesurfer.dmri_ac.sh": dmri_ac_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface DmriAcShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param additional_args Additional arguments for dmri_ac.sh script.
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_ac_sh_params(
     additional_args: string | null = null,
 ): DmriAcShParameters {
-    /**
-     * Build parameters.
-    
-     * @param additional_args Additional arguments for dmri_ac.sh script.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_ac.sh" as const,
+        "@type": "freesurfer.dmri_ac.sh" as const,
     };
     if (additional_args !== null) {
         params["additional_args"] = additional_args;
@@ -83,18 +83,18 @@ function dmri_ac_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_ac_sh_cargs(
     params: DmriAcShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_ac.sh");
     if ((params["additional_args"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function dmri_ac_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_ac_sh_outputs(
     params: DmriAcShParameters,
     execution: Execution,
 ): DmriAcShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriAcShOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function dmri_ac_sh_outputs(
 }
 
 
+/**
+ * A script related to diffusion MRI processing in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
+ */
 function dmri_ac_sh_execute(
     params: DmriAcShParameters,
     execution: Execution,
 ): DmriAcShOutputs {
-    /**
-     * A script related to diffusion MRI processing in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_ac_sh_cargs(params, execution)
     const ret = dmri_ac_sh_outputs(params, execution)
@@ -147,22 +147,22 @@ function dmri_ac_sh_execute(
 }
 
 
+/**
+ * A script related to diffusion MRI processing in FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param additional_args Additional arguments for dmri_ac.sh script.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
+ */
 function dmri_ac_sh(
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): DmriAcShOutputs {
-    /**
-     * A script related to diffusion MRI processing in FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param additional_args Additional arguments for dmri_ac.sh script.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_AC_SH_METADATA);
     const params = dmri_ac_sh_params(additional_args)
@@ -175,5 +175,8 @@ export {
       DmriAcShOutputs,
       DmriAcShParameters,
       dmri_ac_sh,
+      dmri_ac_sh_cargs,
+      dmri_ac_sh_execute,
+      dmri_ac_sh_outputs,
       dmri_ac_sh_params,
 };

@@ -12,7 +12,7 @@ const MRISP_PAINT_METADATA: Metadata = {
 
 
 interface MrispPaintParameters {
-    "__STYXTYPE__": "mrisp_paint";
+    "@type": "freesurfer.mrisp_paint";
     "template_file": InputPathType;
     "input_surface": InputPathType;
     "output_name": string;
@@ -32,35 +32,35 @@ interface MrispPaintParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrisp_paint": mrisp_paint_cargs,
+        "freesurfer.mrisp_paint": mrisp_paint_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mrisp_paint": mrisp_paint_outputs,
+        "freesurfer.mrisp_paint": mrisp_paint_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface MrispPaintOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param template_file Full path to the template file. Template may contain multiple parameters. Example: 'somepath/mytemplate.tif#1'.
+ * @param input_surface Full path to the input surface file, which provides the grid onto which the template data is sampled.
+ * @param output_name Output file name. Saves the surface-worth of per-vertex values.
+ * @param subjects_dir Set the SUBJECTS_DIR. Default: use environment variable.
+ * @param vertex_coords Treat overlay as a surface and write it into a 3 frame parameterization.
+ * @param average_flag Average curvature patterns a given number of times.
+ * @param normalize_flag Normalize curvature by variance.
+ * @param frame_number Paint the specified frame number to the output file. Default: 0.
+ * @param square_root_flag Take the square-root of the output variable.
+ * @param variance_params Generate variance map. Requires subject name, hemisphere, and field number.
+ * @param usage_flag Print usage.
+ * @param birn_info_flag Print BIRN-standard program information.
+ * @param help_flag Print help message.
+ * @param diag_vertex Invoke diagnostics for a specific vertex number.
+ * @param version_flag Print version information.
+ * @param diag_write_flag Write some diagnostics (DIAG_WRITE).
+ *
+ * @returns Parameter dictionary
+ */
 function mrisp_paint_params(
     template_file: InputPathType,
     input_surface: InputPathType,
@@ -101,30 +123,8 @@ function mrisp_paint_params(
     version_flag: boolean = false,
     diag_write_flag: boolean = false,
 ): MrispPaintParameters {
-    /**
-     * Build parameters.
-    
-     * @param template_file Full path to the template file. Template may contain multiple parameters. Example: 'somepath/mytemplate.tif#1'.
-     * @param input_surface Full path to the input surface file, which provides the grid onto which the template data is sampled.
-     * @param output_name Output file name. Saves the surface-worth of per-vertex values.
-     * @param subjects_dir Set the SUBJECTS_DIR. Default: use environment variable.
-     * @param vertex_coords Treat overlay as a surface and write it into a 3 frame parameterization.
-     * @param average_flag Average curvature patterns a given number of times.
-     * @param normalize_flag Normalize curvature by variance.
-     * @param frame_number Paint the specified frame number to the output file. Default: 0.
-     * @param square_root_flag Take the square-root of the output variable.
-     * @param variance_params Generate variance map. Requires subject name, hemisphere, and field number.
-     * @param usage_flag Print usage.
-     * @param birn_info_flag Print BIRN-standard program information.
-     * @param help_flag Print help message.
-     * @param diag_vertex Invoke diagnostics for a specific vertex number.
-     * @param version_flag Print version information.
-     * @param diag_write_flag Write some diagnostics (DIAG_WRITE).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrisp_paint" as const,
+        "@type": "freesurfer.mrisp_paint" as const,
         "template_file": template_file,
         "input_surface": input_surface,
         "output_name": output_name,
@@ -158,18 +158,18 @@ function mrisp_paint_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrisp_paint_cargs(
     params: MrispPaintParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrisp_paint");
     cargs.push(execution.inputFile((params["template_file"] ?? null)));
@@ -236,18 +236,18 @@ function mrisp_paint_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrisp_paint_outputs(
     params: MrispPaintParameters,
     execution: Execution,
 ): MrispPaintOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrispPaintOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_name"] ?? null)].join('')),
@@ -256,22 +256,22 @@ function mrisp_paint_outputs(
 }
 
 
+/**
+ * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
+ */
 function mrisp_paint_execute(
     params: MrispPaintParameters,
     execution: Execution,
 ): MrispPaintOutputs {
-    /**
-     * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrisp_paint_cargs(params, execution)
     const ret = mrisp_paint_outputs(params, execution)
@@ -280,6 +280,33 @@ function mrisp_paint_execute(
 }
 
 
+/**
+ * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param template_file Full path to the template file. Template may contain multiple parameters. Example: 'somepath/mytemplate.tif#1'.
+ * @param input_surface Full path to the input surface file, which provides the grid onto which the template data is sampled.
+ * @param output_name Output file name. Saves the surface-worth of per-vertex values.
+ * @param subjects_dir Set the SUBJECTS_DIR. Default: use environment variable.
+ * @param vertex_coords Treat overlay as a surface and write it into a 3 frame parameterization.
+ * @param average_flag Average curvature patterns a given number of times.
+ * @param normalize_flag Normalize curvature by variance.
+ * @param frame_number Paint the specified frame number to the output file. Default: 0.
+ * @param square_root_flag Take the square-root of the output variable.
+ * @param variance_params Generate variance map. Requires subject name, hemisphere, and field number.
+ * @param usage_flag Print usage.
+ * @param birn_info_flag Print BIRN-standard program information.
+ * @param help_flag Print help message.
+ * @param diag_vertex Invoke diagnostics for a specific vertex number.
+ * @param version_flag Print version information.
+ * @param diag_write_flag Write some diagnostics (DIAG_WRITE).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
+ */
 function mrisp_paint(
     template_file: InputPathType,
     input_surface: InputPathType,
@@ -299,33 +326,6 @@ function mrisp_paint(
     diag_write_flag: boolean = false,
     runner: Runner | null = null,
 ): MrispPaintOutputs {
-    /**
-     * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param template_file Full path to the template file. Template may contain multiple parameters. Example: 'somepath/mytemplate.tif#1'.
-     * @param input_surface Full path to the input surface file, which provides the grid onto which the template data is sampled.
-     * @param output_name Output file name. Saves the surface-worth of per-vertex values.
-     * @param subjects_dir Set the SUBJECTS_DIR. Default: use environment variable.
-     * @param vertex_coords Treat overlay as a surface and write it into a 3 frame parameterization.
-     * @param average_flag Average curvature patterns a given number of times.
-     * @param normalize_flag Normalize curvature by variance.
-     * @param frame_number Paint the specified frame number to the output file. Default: 0.
-     * @param square_root_flag Take the square-root of the output variable.
-     * @param variance_params Generate variance map. Requires subject name, hemisphere, and field number.
-     * @param usage_flag Print usage.
-     * @param birn_info_flag Print BIRN-standard program information.
-     * @param help_flag Print help message.
-     * @param diag_vertex Invoke diagnostics for a specific vertex number.
-     * @param version_flag Print version information.
-     * @param diag_write_flag Write some diagnostics (DIAG_WRITE).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRISP_PAINT_METADATA);
     const params = mrisp_paint_params(template_file, input_surface, output_name, subjects_dir, vertex_coords, average_flag, normalize_flag, frame_number, square_root_flag, variance_params, usage_flag, birn_info_flag, help_flag, diag_vertex, version_flag, diag_write_flag)
@@ -338,5 +338,8 @@ export {
       MrispPaintOutputs,
       MrispPaintParameters,
       mrisp_paint,
+      mrisp_paint_cargs,
+      mrisp_paint_execute,
+      mrisp_paint_outputs,
       mrisp_paint_params,
 };

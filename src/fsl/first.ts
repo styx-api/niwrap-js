@@ -12,7 +12,7 @@ const FIRST_METADATA: Metadata = {
 
 
 interface FirstParameters {
-    "__STYXTYPE__": "first";
+    "@type": "fsl.first";
     "input_file": InputPathType;
     "output_name": string;
     "input_model": InputPathType;
@@ -31,35 +31,35 @@ interface FirstParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "first": first_cargs,
+        "fsl.first": first_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "first": first_outputs,
+        "fsl.first": first_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface FirstOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of input image to be segmented.
+ * @param output_name Output name
+ * @param input_model Filename of input model (the structure to be segmented).
+ * @param flirt_matrix Filename of flirt matrix that transform input image to MNI space (output of first_flirt).
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param input_model2 Filename of second input model (the structure to be segmented).
+ * @param nmodes Specifies number of modes used.
+ * @param intref Use structure specified by modelname2 as intensity reference
+ * @param multi_image_input Use structure specified by modelname2 as intensity reference
+ * @param binary_surface_output Use structure specified by modelname2 as intensity reference
+ * @param bmap_name Filename of conditional mapping matrix
+ * @param bvars Initialize using bvars from a previous segmentation. When using with --shcond specifies the shape of the structure we are conditioning on.
+ * @param shcond Use conditional shape probability
+ * @param loadbvars Load initial parameter estimates from a previous segmentation.
+ *
+ * @returns Parameter dictionary
+ */
 function first_params(
     input_file: InputPathType,
     output_name: string,
@@ -99,29 +120,8 @@ function first_params(
     shcond: boolean = false,
     loadbvars: boolean = false,
 ): FirstParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of input image to be segmented.
-     * @param output_name Output name
-     * @param input_model Filename of input model (the structure to be segmented).
-     * @param flirt_matrix Filename of flirt matrix that transform input image to MNI space (output of first_flirt).
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param input_model2 Filename of second input model (the structure to be segmented).
-     * @param nmodes Specifies number of modes used.
-     * @param intref Use structure specified by modelname2 as intensity reference
-     * @param multi_image_input Use structure specified by modelname2 as intensity reference
-     * @param binary_surface_output Use structure specified by modelname2 as intensity reference
-     * @param bmap_name Filename of conditional mapping matrix
-     * @param bvars Initialize using bvars from a previous segmentation. When using with --shcond specifies the shape of the structure we are conditioning on.
-     * @param shcond Use conditional shape probability
-     * @param loadbvars Load initial parameter estimates from a previous segmentation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "first" as const,
+        "@type": "fsl.first" as const,
         "input_file": input_file,
         "output_name": output_name,
         "input_model": input_model,
@@ -150,18 +150,18 @@ function first_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function first_cargs(
     params: FirstParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("first");
     cargs.push(
@@ -229,18 +229,18 @@ function first_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function first_outputs(
     params: FirstParameters,
     execution: Execution,
 ): FirstOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirstOutputs = {
         root: execution.outputFile("."),
         segmented_output_image: execution.outputFile([(params["output_name"] ?? null), "_seg.nii.gz"].join('')),
@@ -249,22 +249,22 @@ function first_outputs(
 }
 
 
+/**
+ * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirstOutputs`).
+ */
 function first_execute(
     params: FirstParameters,
     execution: Execution,
 ): FirstOutputs {
-    /**
-     * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirstOutputs`).
-     */
     params = execution.params(params)
     const cargs = first_cargs(params, execution)
     const ret = first_outputs(params, execution)
@@ -273,6 +273,32 @@ function first_execute(
 }
 
 
+/**
+ * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Filename of input image to be segmented.
+ * @param output_name Output name
+ * @param input_model Filename of input model (the structure to be segmented).
+ * @param flirt_matrix Filename of flirt matrix that transform input image to MNI space (output of first_flirt).
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param input_model2 Filename of second input model (the structure to be segmented).
+ * @param nmodes Specifies number of modes used.
+ * @param intref Use structure specified by modelname2 as intensity reference
+ * @param multi_image_input Use structure specified by modelname2 as intensity reference
+ * @param binary_surface_output Use structure specified by modelname2 as intensity reference
+ * @param bmap_name Filename of conditional mapping matrix
+ * @param bvars Initialize using bvars from a previous segmentation. When using with --shcond specifies the shape of the structure we are conditioning on.
+ * @param shcond Use conditional shape probability
+ * @param loadbvars Load initial parameter estimates from a previous segmentation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirstOutputs`).
+ */
 function first(
     input_file: InputPathType,
     output_name: string,
@@ -291,32 +317,6 @@ function first(
     loadbvars: boolean = false,
     runner: Runner | null = null,
 ): FirstOutputs {
-    /**
-     * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Filename of input image to be segmented.
-     * @param output_name Output name
-     * @param input_model Filename of input model (the structure to be segmented).
-     * @param flirt_matrix Filename of flirt matrix that transform input image to MNI space (output of first_flirt).
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param input_model2 Filename of second input model (the structure to be segmented).
-     * @param nmodes Specifies number of modes used.
-     * @param intref Use structure specified by modelname2 as intensity reference
-     * @param multi_image_input Use structure specified by modelname2 as intensity reference
-     * @param binary_surface_output Use structure specified by modelname2 as intensity reference
-     * @param bmap_name Filename of conditional mapping matrix
-     * @param bvars Initialize using bvars from a previous segmentation. When using with --shcond specifies the shape of the structure we are conditioning on.
-     * @param shcond Use conditional shape probability
-     * @param loadbvars Load initial parameter estimates from a previous segmentation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirstOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_METADATA);
     const params = first_params(input_file, output_name, input_model, flirt_matrix, verbose, help, input_model2, nmodes, intref, multi_image_input, binary_surface_output, bmap_name, bvars, shcond, loadbvars)
@@ -329,5 +329,8 @@ export {
       FirstOutputs,
       FirstParameters,
       first,
+      first_cargs,
+      first_execute,
+      first_outputs,
       first_params,
 };

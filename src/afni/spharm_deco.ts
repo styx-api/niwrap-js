@@ -12,7 +12,7 @@ const SPHARM_DECO_METADATA: Metadata = {
 
 
 interface SpharmDecoParameters {
-    "__STYXTYPE__": "SpharmDeco";
+    "@type": "afni.SpharmDeco";
     "i_type_s": InputPathType;
     "unit_sph_label": string;
     "order_l": number;
@@ -26,35 +26,35 @@ interface SpharmDecoParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SpharmDeco": spharm_deco_cargs,
+        "afni.SpharmDeco": spharm_deco_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SpharmDeco": spharm_deco_outputs,
+        "afni.SpharmDeco": spharm_deco_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface SpharmDecoOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param i_type_s Unit sphere, isotopic to the surface domain over which the data to be decomposed is defined.
+ * @param unit_sph_label Label of the unit sphere.
+ * @param order_l Decomposition order.
+ * @param i_type_sd A surface whose node coordinates provide data vectors (X, Y, Z) to be decomposed or a dataset whose columns are to be individually decomposed. You can specify multiple surfaces to be processed.
+ * @param data_d Data vectors to be decomposed.
+ * @param bases_prefix Save the basis functions under the prefix BASES_PREFIX.
+ * @param prefix Write out the reconstructed data into dataset PREFIX and write the beta coefficients for each processed data column.
+ * @param o_type_sdr Write out a new surface with reconstructed coordinates.
+ * @param debug Debug levels (1-3)
+ * @param sigma Smoothing parameter (0 .. 0.001) which weighs down the contribution of higher order harmonics.
+ *
+ * @returns Parameter dictionary
+ */
 function spharm_deco_params(
     i_type_s: InputPathType,
     unit_sph_label: string,
@@ -97,24 +113,8 @@ function spharm_deco_params(
     debug: number | null = null,
     sigma: number | null = null,
 ): SpharmDecoParameters {
-    /**
-     * Build parameters.
-    
-     * @param i_type_s Unit sphere, isotopic to the surface domain over which the data to be decomposed is defined.
-     * @param unit_sph_label Label of the unit sphere.
-     * @param order_l Decomposition order.
-     * @param i_type_sd A surface whose node coordinates provide data vectors (X, Y, Z) to be decomposed or a dataset whose columns are to be individually decomposed. You can specify multiple surfaces to be processed.
-     * @param data_d Data vectors to be decomposed.
-     * @param bases_prefix Save the basis functions under the prefix BASES_PREFIX.
-     * @param prefix Write out the reconstructed data into dataset PREFIX and write the beta coefficients for each processed data column.
-     * @param o_type_sdr Write out a new surface with reconstructed coordinates.
-     * @param debug Debug levels (1-3)
-     * @param sigma Smoothing parameter (0 .. 0.001) which weighs down the contribution of higher order harmonics.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SpharmDeco" as const,
+        "@type": "afni.SpharmDeco" as const,
         "i_type_s": i_type_s,
         "unit_sph_label": unit_sph_label,
         "order_l": order_l,
@@ -144,18 +144,18 @@ function spharm_deco_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function spharm_deco_cargs(
     params: SpharmDecoParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SpharmDeco");
     cargs.push(execution.inputFile((params["i_type_s"] ?? null)));
@@ -192,18 +192,18 @@ function spharm_deco_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function spharm_deco_outputs(
     params: SpharmDecoParameters,
     execution: Execution,
 ): SpharmDecoOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SpharmDecoOutputs = {
         root: execution.outputFile("."),
         harmonics_file: execution.outputFile(["BASES_PREFIX.sph*.1D"].join('')),
@@ -214,22 +214,22 @@ function spharm_deco_outputs(
 }
 
 
+/**
+ * Spherical Harmonics Decomposition of a surface's coordinates or data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
+ */
 function spharm_deco_execute(
     params: SpharmDecoParameters,
     execution: Execution,
 ): SpharmDecoOutputs {
-    /**
-     * Spherical Harmonics Decomposition of a surface's coordinates or data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
-     */
     params = execution.params(params)
     const cargs = spharm_deco_cargs(params, execution)
     const ret = spharm_deco_outputs(params, execution)
@@ -238,6 +238,27 @@ function spharm_deco_execute(
 }
 
 
+/**
+ * Spherical Harmonics Decomposition of a surface's coordinates or data.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param i_type_s Unit sphere, isotopic to the surface domain over which the data to be decomposed is defined.
+ * @param unit_sph_label Label of the unit sphere.
+ * @param order_l Decomposition order.
+ * @param i_type_sd A surface whose node coordinates provide data vectors (X, Y, Z) to be decomposed or a dataset whose columns are to be individually decomposed. You can specify multiple surfaces to be processed.
+ * @param data_d Data vectors to be decomposed.
+ * @param bases_prefix Save the basis functions under the prefix BASES_PREFIX.
+ * @param prefix Write out the reconstructed data into dataset PREFIX and write the beta coefficients for each processed data column.
+ * @param o_type_sdr Write out a new surface with reconstructed coordinates.
+ * @param debug Debug levels (1-3)
+ * @param sigma Smoothing parameter (0 .. 0.001) which weighs down the contribution of higher order harmonics.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
+ */
 function spharm_deco(
     i_type_s: InputPathType,
     unit_sph_label: string,
@@ -251,27 +272,6 @@ function spharm_deco(
     sigma: number | null = null,
     runner: Runner | null = null,
 ): SpharmDecoOutputs {
-    /**
-     * Spherical Harmonics Decomposition of a surface's coordinates or data.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param i_type_s Unit sphere, isotopic to the surface domain over which the data to be decomposed is defined.
-     * @param unit_sph_label Label of the unit sphere.
-     * @param order_l Decomposition order.
-     * @param i_type_sd A surface whose node coordinates provide data vectors (X, Y, Z) to be decomposed or a dataset whose columns are to be individually decomposed. You can specify multiple surfaces to be processed.
-     * @param data_d Data vectors to be decomposed.
-     * @param bases_prefix Save the basis functions under the prefix BASES_PREFIX.
-     * @param prefix Write out the reconstructed data into dataset PREFIX and write the beta coefficients for each processed data column.
-     * @param o_type_sdr Write out a new surface with reconstructed coordinates.
-     * @param debug Debug levels (1-3)
-     * @param sigma Smoothing parameter (0 .. 0.001) which weighs down the contribution of higher order harmonics.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SPHARM_DECO_METADATA);
     const params = spharm_deco_params(i_type_s, unit_sph_label, order_l, i_type_sd, data_d, bases_prefix, prefix, o_type_sdr, debug, sigma)
@@ -284,5 +284,8 @@ export {
       SpharmDecoOutputs,
       SpharmDecoParameters,
       spharm_deco,
+      spharm_deco_cargs,
+      spharm_deco_execute,
+      spharm_deco_outputs,
       spharm_deco_params,
 };

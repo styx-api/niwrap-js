@@ -12,7 +12,7 @@ const V_3DPC_METADATA: Metadata = {
 
 
 interface V3dpcParameters {
-    "__STYXTYPE__": "3dpc";
+    "@type": "afni.3dpc";
     "datasets": Array<InputPathType>;
     "dmean": boolean;
     "vmean": boolean;
@@ -31,35 +31,35 @@ interface V3dpcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dpc": v_3dpc_cargs,
+        "afni.3dpc": v_3dpc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dpc": v_3dpc_outputs,
+        "afni.3dpc": v_3dpc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -98,6 +98,27 @@ interface V3dpcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input dataset(s) with sub-brick selector list support
+ * @param dmean Remove the mean from each input brick (across space)
+ * @param vmean Remove the mean from each input voxel (across bricks)
+ * @param vnorm L2 normalize each input voxel time series
+ * @param normalize L2 normalize each input brick (after mean subtraction)
+ * @param nscale Scale the covariance matrix by the number of samples
+ * @param pcsave 'sss' is the number of components to save in the output
+ * @param reduce Compute a dimensionally reduced dataset with top 'r' eigenvalues and write to disk in dataset 'pp'
+ * @param prefix Name for the output dataset
+ * @param dummy_lines Add 'ddd' dummy lines to the top of each *.1D file
+ * @param verbose Print progress reports during the computations
+ * @param quiet Don't print progress reports
+ * @param eigonly Only compute eigenvalues, write them to 'pname'_eig.1D, then stop
+ * @param float Save eigen-bricks as floats (default = shorts)
+ * @param mask Use the 0 sub-brick of dataset 'mset' as a mask indicating which voxels to analyze
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dpc_params(
     datasets: Array<InputPathType>,
     dmean: boolean = false,
@@ -115,29 +136,8 @@ function v_3dpc_params(
     float: boolean = false,
     mask: InputPathType | null = null,
 ): V3dpcParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input dataset(s) with sub-brick selector list support
-     * @param dmean Remove the mean from each input brick (across space)
-     * @param vmean Remove the mean from each input voxel (across bricks)
-     * @param vnorm L2 normalize each input voxel time series
-     * @param normalize L2 normalize each input brick (after mean subtraction)
-     * @param nscale Scale the covariance matrix by the number of samples
-     * @param pcsave 'sss' is the number of components to save in the output
-     * @param reduce Compute a dimensionally reduced dataset with top 'r' eigenvalues and write to disk in dataset 'pp'
-     * @param prefix Name for the output dataset
-     * @param dummy_lines Add 'ddd' dummy lines to the top of each *.1D file
-     * @param verbose Print progress reports during the computations
-     * @param quiet Don't print progress reports
-     * @param eigonly Only compute eigenvalues, write them to 'pname'_eig.1D, then stop
-     * @param float Save eigen-bricks as floats (default = shorts)
-     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask indicating which voxels to analyze
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dpc" as const,
+        "@type": "afni.3dpc" as const,
         "datasets": datasets,
         "dmean": dmean,
         "vmean": vmean,
@@ -168,18 +168,18 @@ function v_3dpc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dpc_cargs(
     params: V3dpcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dpc");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -244,18 +244,18 @@ function v_3dpc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dpc_outputs(
     params: V3dpcParameters,
     execution: Execution,
 ): V3dpcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dpcOutputs = {
         root: execution.outputFile("."),
         output_dataset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -268,22 +268,22 @@ function v_3dpc_outputs(
 }
 
 
+/**
+ * Principal Component Analysis of 3D Datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
+ */
 function v_3dpc_execute(
     params: V3dpcParameters,
     execution: Execution,
 ): V3dpcOutputs {
-    /**
-     * Principal Component Analysis of 3D Datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dpc_cargs(params, execution)
     const ret = v_3dpc_outputs(params, execution)
@@ -292,6 +292,32 @@ function v_3dpc_execute(
 }
 
 
+/**
+ * Principal Component Analysis of 3D Datasets.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input dataset(s) with sub-brick selector list support
+ * @param dmean Remove the mean from each input brick (across space)
+ * @param vmean Remove the mean from each input voxel (across bricks)
+ * @param vnorm L2 normalize each input voxel time series
+ * @param normalize L2 normalize each input brick (after mean subtraction)
+ * @param nscale Scale the covariance matrix by the number of samples
+ * @param pcsave 'sss' is the number of components to save in the output
+ * @param reduce Compute a dimensionally reduced dataset with top 'r' eigenvalues and write to disk in dataset 'pp'
+ * @param prefix Name for the output dataset
+ * @param dummy_lines Add 'ddd' dummy lines to the top of each *.1D file
+ * @param verbose Print progress reports during the computations
+ * @param quiet Don't print progress reports
+ * @param eigonly Only compute eigenvalues, write them to 'pname'_eig.1D, then stop
+ * @param float Save eigen-bricks as floats (default = shorts)
+ * @param mask Use the 0 sub-brick of dataset 'mset' as a mask indicating which voxels to analyze
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
+ */
 function v_3dpc(
     datasets: Array<InputPathType>,
     dmean: boolean = false,
@@ -310,32 +336,6 @@ function v_3dpc(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dpcOutputs {
-    /**
-     * Principal Component Analysis of 3D Datasets.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input dataset(s) with sub-brick selector list support
-     * @param dmean Remove the mean from each input brick (across space)
-     * @param vmean Remove the mean from each input voxel (across bricks)
-     * @param vnorm L2 normalize each input voxel time series
-     * @param normalize L2 normalize each input brick (after mean subtraction)
-     * @param nscale Scale the covariance matrix by the number of samples
-     * @param pcsave 'sss' is the number of components to save in the output
-     * @param reduce Compute a dimensionally reduced dataset with top 'r' eigenvalues and write to disk in dataset 'pp'
-     * @param prefix Name for the output dataset
-     * @param dummy_lines Add 'ddd' dummy lines to the top of each *.1D file
-     * @param verbose Print progress reports during the computations
-     * @param quiet Don't print progress reports
-     * @param eigonly Only compute eigenvalues, write them to 'pname'_eig.1D, then stop
-     * @param float Save eigen-bricks as floats (default = shorts)
-     * @param mask Use the 0 sub-brick of dataset 'mset' as a mask indicating which voxels to analyze
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DPC_METADATA);
     const params = v_3dpc_params(datasets, dmean, vmean, vnorm, normalize, nscale, pcsave, reduce, prefix, dummy_lines, verbose, quiet, eigonly, float, mask)
@@ -348,5 +348,8 @@ export {
       V3dpcParameters,
       V_3DPC_METADATA,
       v_3dpc,
+      v_3dpc_cargs,
+      v_3dpc_execute,
+      v_3dpc_outputs,
       v_3dpc_params,
 };

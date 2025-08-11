@@ -12,39 +12,39 @@ const V__ISO_MASKS_METADATA: Metadata = {
 
 
 interface VIsoMasksParameters {
-    "__STYXTYPE__": "@IsoMasks";
+    "@type": "afni.@IsoMasks";
     "input_dataset": InputPathType;
     "isovals"?: Array<number> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@IsoMasks": v__iso_masks_cargs,
+        "afni.@IsoMasks": v__iso_masks_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VIsoMasksOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset for creating isosurfaces
+ * @param isovals Isovalue thresholds for creating isosurfaces
+ *
+ * @returns Parameter dictionary
+ */
 function v__iso_masks_params(
     input_dataset: InputPathType,
     isovals: Array<number> | null = null,
 ): VIsoMasksParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset for creating isosurfaces
-     * @param isovals Isovalue thresholds for creating isosurfaces
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@IsoMasks" as const,
+        "@type": "afni.@IsoMasks" as const,
         "input_dataset": input_dataset,
     };
     if (isovals !== null) {
@@ -87,18 +87,18 @@ function v__iso_masks_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__iso_masks_cargs(
     params: VIsoMasksParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@IsoMasks");
     cargs.push(
@@ -112,18 +112,18 @@ function v__iso_masks_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__iso_masks_outputs(
     params: VIsoMasksParameters,
     execution: Execution,
 ): VIsoMasksOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VIsoMasksOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function v__iso_masks_outputs(
 }
 
 
+/**
+ * Creates isosurfaces from isovolume envelopes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
+ */
 function v__iso_masks_execute(
     params: VIsoMasksParameters,
     execution: Execution,
 ): VIsoMasksOutputs {
-    /**
-     * Creates isosurfaces from isovolume envelopes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__iso_masks_cargs(params, execution)
     const ret = v__iso_masks_outputs(params, execution)
@@ -155,24 +155,24 @@ function v__iso_masks_execute(
 }
 
 
+/**
+ * Creates isosurfaces from isovolume envelopes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset for creating isosurfaces
+ * @param isovals Isovalue thresholds for creating isosurfaces
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
+ */
 function v__iso_masks(
     input_dataset: InputPathType,
     isovals: Array<number> | null = null,
     runner: Runner | null = null,
 ): VIsoMasksOutputs {
-    /**
-     * Creates isosurfaces from isovolume envelopes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset for creating isosurfaces
-     * @param isovals Isovalue thresholds for creating isosurfaces
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__ISO_MASKS_METADATA);
     const params = v__iso_masks_params(input_dataset, isovals)
@@ -185,5 +185,8 @@ export {
       VIsoMasksParameters,
       V__ISO_MASKS_METADATA,
       v__iso_masks,
+      v__iso_masks_cargs,
+      v__iso_masks_execute,
+      v__iso_masks_outputs,
       v__iso_masks_params,
 };

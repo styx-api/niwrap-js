@@ -12,7 +12,7 @@ const V_3D_SPACE_TIME_CORR_METADATA: Metadata = {
 
 
 interface V3dSpaceTimeCorrParameters {
-    "__STYXTYPE__": "3dSpaceTimeCorr";
+    "@type": "afni.3dSpaceTimeCorr";
     "insetA": InputPathType;
     "insetB": InputPathType;
     "prefix": string;
@@ -23,35 +23,35 @@ interface V3dSpaceTimeCorrParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSpaceTimeCorr": v_3d_space_time_corr_cargs,
+        "afni.3dSpaceTimeCorr": v_3d_space_time_corr_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSpaceTimeCorr": v_3d_space_time_corr_outputs,
+        "afni.3dSpaceTimeCorr": v_3d_space_time_corr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface V3dSpaceTimeCorrOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inset_a First 4D data set.
+ * @param inset_b Second 4D data set. Must have the same spatial dimensions and number of time points as insetA.
+ * @param prefix Output filename/base.
+ * @param mask Optional mask for calculations. Recommended for speed and interpretability.
+ * @param out_zcorr Switch to output Fisher Z transform of spatial map correlation instead of Pearson r values.
+ * @param freeze_inset_a_ijk Freeze the seed voxel location in the insetA data set using ijk indices while the seed location in insetB moves throughout the volume or mask. Provide three ijk values.
+ * @param freeze_inset_a_xyz Freeze the seed voxel location in the insetA data set using xyz coordinates while the seed location in insetB moves throughout the volume or mask. Provide three xyz values.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_space_time_corr_params(
     inset_a: InputPathType,
     inset_b: InputPathType,
@@ -83,21 +96,8 @@ function v_3d_space_time_corr_params(
     freeze_inset_a_ijk: Array<number> | null = null,
     freeze_inset_a_xyz: Array<number> | null = null,
 ): V3dSpaceTimeCorrParameters {
-    /**
-     * Build parameters.
-    
-     * @param inset_a First 4D data set.
-     * @param inset_b Second 4D data set. Must have the same spatial dimensions and number of time points as insetA.
-     * @param prefix Output filename/base.
-     * @param mask Optional mask for calculations. Recommended for speed and interpretability.
-     * @param out_zcorr Switch to output Fisher Z transform of spatial map correlation instead of Pearson r values.
-     * @param freeze_inset_a_ijk Freeze the seed voxel location in the insetA data set using ijk indices while the seed location in insetB moves throughout the volume or mask. Provide three ijk values.
-     * @param freeze_inset_a_xyz Freeze the seed voxel location in the insetA data set using xyz coordinates while the seed location in insetB moves throughout the volume or mask. Provide three xyz values.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSpaceTimeCorr" as const,
+        "@type": "afni.3dSpaceTimeCorr" as const,
         "insetA": inset_a,
         "insetB": inset_b,
         "prefix": prefix,
@@ -116,18 +116,18 @@ function v_3d_space_time_corr_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_space_time_corr_cargs(
     params: V3dSpaceTimeCorrParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSpaceTimeCorr");
     cargs.push(
@@ -167,18 +167,18 @@ function v_3d_space_time_corr_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_space_time_corr_outputs(
     params: V3dSpaceTimeCorrParameters,
     execution: Execution,
 ): V3dSpaceTimeCorrOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSpaceTimeCorrOutputs = {
         root: execution.outputFile("."),
         output: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
@@ -187,22 +187,22 @@ function v_3d_space_time_corr_outputs(
 }
 
 
+/**
+ * Calculates correlation coefficients between two 4D datasets using space+time patterns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
+ */
 function v_3d_space_time_corr_execute(
     params: V3dSpaceTimeCorrParameters,
     execution: Execution,
 ): V3dSpaceTimeCorrOutputs {
-    /**
-     * Calculates correlation coefficients between two 4D datasets using space+time patterns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_space_time_corr_cargs(params, execution)
     const ret = v_3d_space_time_corr_outputs(params, execution)
@@ -211,6 +211,24 @@ function v_3d_space_time_corr_execute(
 }
 
 
+/**
+ * Calculates correlation coefficients between two 4D datasets using space+time patterns.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inset_a First 4D data set.
+ * @param inset_b Second 4D data set. Must have the same spatial dimensions and number of time points as insetA.
+ * @param prefix Output filename/base.
+ * @param mask Optional mask for calculations. Recommended for speed and interpretability.
+ * @param out_zcorr Switch to output Fisher Z transform of spatial map correlation instead of Pearson r values.
+ * @param freeze_inset_a_ijk Freeze the seed voxel location in the insetA data set using ijk indices while the seed location in insetB moves throughout the volume or mask. Provide three ijk values.
+ * @param freeze_inset_a_xyz Freeze the seed voxel location in the insetA data set using xyz coordinates while the seed location in insetB moves throughout the volume or mask. Provide three xyz values.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
+ */
 function v_3d_space_time_corr(
     inset_a: InputPathType,
     inset_b: InputPathType,
@@ -221,24 +239,6 @@ function v_3d_space_time_corr(
     freeze_inset_a_xyz: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dSpaceTimeCorrOutputs {
-    /**
-     * Calculates correlation coefficients between two 4D datasets using space+time patterns.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inset_a First 4D data set.
-     * @param inset_b Second 4D data set. Must have the same spatial dimensions and number of time points as insetA.
-     * @param prefix Output filename/base.
-     * @param mask Optional mask for calculations. Recommended for speed and interpretability.
-     * @param out_zcorr Switch to output Fisher Z transform of spatial map correlation instead of Pearson r values.
-     * @param freeze_inset_a_ijk Freeze the seed voxel location in the insetA data set using ijk indices while the seed location in insetB moves throughout the volume or mask. Provide three ijk values.
-     * @param freeze_inset_a_xyz Freeze the seed voxel location in the insetA data set using xyz coordinates while the seed location in insetB moves throughout the volume or mask. Provide three xyz values.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SPACE_TIME_CORR_METADATA);
     const params = v_3d_space_time_corr_params(inset_a, inset_b, prefix, mask, out_zcorr, freeze_inset_a_ijk, freeze_inset_a_xyz)
@@ -251,5 +251,8 @@ export {
       V3dSpaceTimeCorrParameters,
       V_3D_SPACE_TIME_CORR_METADATA,
       v_3d_space_time_corr,
+      v_3d_space_time_corr_cargs,
+      v_3d_space_time_corr_execute,
+      v_3d_space_time_corr_outputs,
       v_3d_space_time_corr_params,
 };

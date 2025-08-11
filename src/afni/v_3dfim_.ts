@@ -12,7 +12,7 @@ const V_3DFIM__METADATA: Metadata = {
 
 
 interface V3dfimParameters {
-    "__STYXTYPE__": "3dfim+";
+    "@type": "afni.3dfim+";
     "infile": InputPathType;
     "input1dfile"?: InputPathType | null | undefined;
     "maskfile"?: InputPathType | null | undefined;
@@ -28,35 +28,35 @@ interface V3dfimParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dfim+": v_3dfim__cargs,
+        "afni.3dfim+": v_3dfim__cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dfim+": v_3dfim__outputs,
+        "afni.3dfim+": v_3dfim__outputs,
     };
     return outputsFuncs[t];
 }
@@ -91,6 +91,24 @@ interface V3dfimOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Filename of input 3d+time dataset
+ * @param ideal_file Input ideal time series file name. Can be used multiple times.
+ * @param input1dfile Filename of single (fMRI) .1D time series
+ * @param maskfile Filename of 3d mask dataset
+ * @param first_image Number of first dataset image to use in the cross-correlation procedure (default = 0)
+ * @param last_image Number of last dataset image to use in the cross-correlation procedure (default = last)
+ * @param baseline_polynomial Degree of polynomial corresponding to the baseline model (default: 1). Use -1 for no baseline model.
+ * @param threshold FIM internal mask threshold value (0 <= p <= 1) to get rid of low intensity voxels (default: 0.0999)
+ * @param cdisp_value Write (to screen) results for voxels whose correlation stat. > cval (0 <= cval <= 1; default: disabled)
+ * @param ort_file Input ort time series file name. Can be used multiple times.
+ * @param output_params Output the specified parameter. Can be used multiple times. Possible values are: 'Fit Coef', 'Best Index', '% Change', 'Baseline', 'Correlation', '% From Ave', 'Average', '% From Top', 'Topline', 'Sigma Resid', 'All', 'Spearman CC', 'Quadrant CC'.
+ * @param output_bucket Create one AFNI 'bucket' dataset containing the parameters of interest, as specified by the '-out' commands. The output 'bucket' dataset is written to a file with the prefix name bprefix.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dfim__params(
     infile: InputPathType,
     ideal_file: InputPathType,
@@ -105,26 +123,8 @@ function v_3dfim__params(
     output_params: Array<string> | null = null,
     output_bucket: string | null = null,
 ): V3dfimParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Filename of input 3d+time dataset
-     * @param ideal_file Input ideal time series file name. Can be used multiple times.
-     * @param input1dfile Filename of single (fMRI) .1D time series
-     * @param maskfile Filename of 3d mask dataset
-     * @param first_image Number of first dataset image to use in the cross-correlation procedure (default = 0)
-     * @param last_image Number of last dataset image to use in the cross-correlation procedure (default = last)
-     * @param baseline_polynomial Degree of polynomial corresponding to the baseline model (default: 1). Use -1 for no baseline model.
-     * @param threshold FIM internal mask threshold value (0 <= p <= 1) to get rid of low intensity voxels (default: 0.0999)
-     * @param cdisp_value Write (to screen) results for voxels whose correlation stat. > cval (0 <= cval <= 1; default: disabled)
-     * @param ort_file Input ort time series file name. Can be used multiple times.
-     * @param output_params Output the specified parameter. Can be used multiple times. Possible values are: 'Fit Coef', 'Best Index', '% Change', 'Baseline', 'Correlation', '% From Ave', 'Average', '% From Top', 'Topline', 'Sigma Resid', 'All', 'Spearman CC', 'Quadrant CC'.
-     * @param output_bucket Create one AFNI 'bucket' dataset containing the parameters of interest, as specified by the '-out' commands. The output 'bucket' dataset is written to a file with the prefix name bprefix.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dfim+" as const,
+        "@type": "afni.3dfim+" as const,
         "infile": infile,
         "ideal_file": ideal_file,
     };
@@ -162,18 +162,18 @@ function v_3dfim__params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dfim__cargs(
     params: V3dfimParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dfim+");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -245,18 +245,18 @@ function v_3dfim__cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dfim__outputs(
     params: V3dfimParameters,
     execution: Execution,
 ): V3dfimOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dfimOutputs = {
         root: execution.outputFile("."),
         outfile_tlrc_head: ((params["output_bucket"] ?? null) !== null) ? execution.outputFile([(params["output_bucket"] ?? null), "+tlrc.HEAD"].join('')) : null,
@@ -268,22 +268,22 @@ function v_3dfim__outputs(
 }
 
 
+/**
+ * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dfimOutputs`).
+ */
 function v_3dfim__execute(
     params: V3dfimParameters,
     execution: Execution,
 ): V3dfimOutputs {
-    /**
-     * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dfimOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dfim__cargs(params, execution)
     const ret = v_3dfim__outputs(params, execution)
@@ -292,6 +292,29 @@ function v_3dfim__execute(
 }
 
 
+/**
+ * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Filename of input 3d+time dataset
+ * @param ideal_file Input ideal time series file name. Can be used multiple times.
+ * @param input1dfile Filename of single (fMRI) .1D time series
+ * @param maskfile Filename of 3d mask dataset
+ * @param first_image Number of first dataset image to use in the cross-correlation procedure (default = 0)
+ * @param last_image Number of last dataset image to use in the cross-correlation procedure (default = last)
+ * @param baseline_polynomial Degree of polynomial corresponding to the baseline model (default: 1). Use -1 for no baseline model.
+ * @param threshold FIM internal mask threshold value (0 <= p <= 1) to get rid of low intensity voxels (default: 0.0999)
+ * @param cdisp_value Write (to screen) results for voxels whose correlation stat. > cval (0 <= cval <= 1; default: disabled)
+ * @param ort_file Input ort time series file name. Can be used multiple times.
+ * @param output_params Output the specified parameter. Can be used multiple times. Possible values are: 'Fit Coef', 'Best Index', '% Change', 'Baseline', 'Correlation', '% From Ave', 'Average', '% From Top', 'Topline', 'Sigma Resid', 'All', 'Spearman CC', 'Quadrant CC'.
+ * @param output_bucket Create one AFNI 'bucket' dataset containing the parameters of interest, as specified by the '-out' commands. The output 'bucket' dataset is written to a file with the prefix name bprefix.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dfimOutputs`).
+ */
 function v_3dfim_(
     infile: InputPathType,
     ideal_file: InputPathType,
@@ -307,29 +330,6 @@ function v_3dfim_(
     output_bucket: string | null = null,
     runner: Runner | null = null,
 ): V3dfimOutputs {
-    /**
-     * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Filename of input 3d+time dataset
-     * @param ideal_file Input ideal time series file name. Can be used multiple times.
-     * @param input1dfile Filename of single (fMRI) .1D time series
-     * @param maskfile Filename of 3d mask dataset
-     * @param first_image Number of first dataset image to use in the cross-correlation procedure (default = 0)
-     * @param last_image Number of last dataset image to use in the cross-correlation procedure (default = last)
-     * @param baseline_polynomial Degree of polynomial corresponding to the baseline model (default: 1). Use -1 for no baseline model.
-     * @param threshold FIM internal mask threshold value (0 <= p <= 1) to get rid of low intensity voxels (default: 0.0999)
-     * @param cdisp_value Write (to screen) results for voxels whose correlation stat. > cval (0 <= cval <= 1; default: disabled)
-     * @param ort_file Input ort time series file name. Can be used multiple times.
-     * @param output_params Output the specified parameter. Can be used multiple times. Possible values are: 'Fit Coef', 'Best Index', '% Change', 'Baseline', 'Correlation', '% From Ave', 'Average', '% From Top', 'Topline', 'Sigma Resid', 'All', 'Spearman CC', 'Quadrant CC'.
-     * @param output_bucket Create one AFNI 'bucket' dataset containing the parameters of interest, as specified by the '-out' commands. The output 'bucket' dataset is written to a file with the prefix name bprefix.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dfimOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DFIM__METADATA);
     const params = v_3dfim__params(infile, ideal_file, input1dfile, maskfile, first_image, last_image, baseline_polynomial, threshold, cdisp_value, ort_file, output_params, output_bucket)
@@ -342,5 +342,8 @@ export {
       V3dfimParameters,
       V_3DFIM__METADATA,
       v_3dfim_,
+      v_3dfim__cargs,
+      v_3dfim__execute,
+      v_3dfim__outputs,
       v_3dfim__params,
 };

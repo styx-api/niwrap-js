@@ -12,7 +12,7 @@ const ABIDS_JSON_INFO_PY_METADATA: Metadata = {
 
 
 interface AbidsJsonInfoPyParameters {
-    "__STYXTYPE__": "abids_json_info.py";
+    "@type": "afni.abids_json_info.py";
     "json_files": Array<InputPathType>;
     "tr_flag": boolean;
     "te_flag": boolean;
@@ -24,33 +24,33 @@ interface AbidsJsonInfoPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "abids_json_info.py": abids_json_info_py_cargs,
+        "afni.abids_json_info.py": abids_json_info_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface AbidsJsonInfoPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param json_files Specify .json file(s).
+ * @param tr_flag Print the TR from the json file in seconds, from the 'RepetitionTime' field.
+ * @param te_flag Print out the 'EchoTime' field in milliseconds (the json file stores it in seconds).
+ * @param te_sec_flag Print the 'EchoTime' field in seconds.
+ * @param match_nii_flag Check if there is a .nii or .nii.gz file that matches the .json file (1 if the dataset is loadable).
+ * @param field_list Print any field or list of fields from the json file.
+ * @param list_fields_flag Print a list of the available fields from the .json file. This must be the only argument specified.
+ * @param help_flag Show this help message and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function abids_json_info_py_params(
     json_files: Array<InputPathType>,
     tr_flag: boolean = false,
@@ -80,22 +94,8 @@ function abids_json_info_py_params(
     list_fields_flag: boolean = false,
     help_flag: boolean = false,
 ): AbidsJsonInfoPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param json_files Specify .json file(s).
-     * @param tr_flag Print the TR from the json file in seconds, from the 'RepetitionTime' field.
-     * @param te_flag Print out the 'EchoTime' field in milliseconds (the json file stores it in seconds).
-     * @param te_sec_flag Print the 'EchoTime' field in seconds.
-     * @param match_nii_flag Check if there is a .nii or .nii.gz file that matches the .json file (1 if the dataset is loadable).
-     * @param field_list Print any field or list of fields from the json file.
-     * @param list_fields_flag Print a list of the available fields from the .json file. This must be the only argument specified.
-     * @param help_flag Show this help message and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "abids_json_info.py" as const,
+        "@type": "afni.abids_json_info.py" as const,
         "json_files": json_files,
         "tr_flag": tr_flag,
         "te_flag": te_flag,
@@ -111,18 +111,18 @@ function abids_json_info_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function abids_json_info_py_cargs(
     params: AbidsJsonInfoPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("abids_json_info.py");
     cargs.push(...(params["json_files"] ?? null).map(f => execution.inputFile(f)));
@@ -154,18 +154,18 @@ function abids_json_info_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function abids_json_info_py_outputs(
     params: AbidsJsonInfoPyParameters,
     execution: Execution,
 ): AbidsJsonInfoPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AbidsJsonInfoPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -173,22 +173,22 @@ function abids_json_info_py_outputs(
 }
 
 
+/**
+ * A tool to extract information from BIDS formatted json files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
+ */
 function abids_json_info_py_execute(
     params: AbidsJsonInfoPyParameters,
     execution: Execution,
 ): AbidsJsonInfoPyOutputs {
-    /**
-     * A tool to extract information from BIDS formatted json files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = abids_json_info_py_cargs(params, execution)
     const ret = abids_json_info_py_outputs(params, execution)
@@ -197,6 +197,25 @@ function abids_json_info_py_execute(
 }
 
 
+/**
+ * A tool to extract information from BIDS formatted json files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param json_files Specify .json file(s).
+ * @param tr_flag Print the TR from the json file in seconds, from the 'RepetitionTime' field.
+ * @param te_flag Print out the 'EchoTime' field in milliseconds (the json file stores it in seconds).
+ * @param te_sec_flag Print the 'EchoTime' field in seconds.
+ * @param match_nii_flag Check if there is a .nii or .nii.gz file that matches the .json file (1 if the dataset is loadable).
+ * @param field_list Print any field or list of fields from the json file.
+ * @param list_fields_flag Print a list of the available fields from the .json file. This must be the only argument specified.
+ * @param help_flag Show this help message and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
+ */
 function abids_json_info_py(
     json_files: Array<InputPathType>,
     tr_flag: boolean = false,
@@ -208,25 +227,6 @@ function abids_json_info_py(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AbidsJsonInfoPyOutputs {
-    /**
-     * A tool to extract information from BIDS formatted json files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param json_files Specify .json file(s).
-     * @param tr_flag Print the TR from the json file in seconds, from the 'RepetitionTime' field.
-     * @param te_flag Print out the 'EchoTime' field in milliseconds (the json file stores it in seconds).
-     * @param te_sec_flag Print the 'EchoTime' field in seconds.
-     * @param match_nii_flag Check if there is a .nii or .nii.gz file that matches the .json file (1 if the dataset is loadable).
-     * @param field_list Print any field or list of fields from the json file.
-     * @param list_fields_flag Print a list of the available fields from the .json file. This must be the only argument specified.
-     * @param help_flag Show this help message and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ABIDS_JSON_INFO_PY_METADATA);
     const params = abids_json_info_py_params(json_files, tr_flag, te_flag, te_sec_flag, match_nii_flag, field_list, list_fields_flag, help_flag)
@@ -239,5 +239,8 @@ export {
       AbidsJsonInfoPyOutputs,
       AbidsJsonInfoPyParameters,
       abids_json_info_py,
+      abids_json_info_py_cargs,
+      abids_json_info_py_execute,
+      abids_json_info_py_outputs,
       abids_json_info_py_params,
 };

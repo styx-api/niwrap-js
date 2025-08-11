@@ -12,7 +12,7 @@ const SURF_EXTREMA_METADATA: Metadata = {
 
 
 interface SurfExtremaParameters {
-    "__STYXTYPE__": "SurfExtrema";
+    "@type": "afni.SurfExtrema";
     "input"?: InputPathType | null | undefined;
     "hood"?: number | null | undefined;
     "thresh"?: number | null | undefined;
@@ -24,35 +24,35 @@ interface SurfExtremaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfExtrema": surf_extrema_cargs,
+        "afni.SurfExtrema": surf_extrema_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfExtrema": surf_extrema_outputs,
+        "afni.SurfExtrema": surf_extrema_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,6 +79,20 @@ interface SurfExtremaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for the output datasets.
+ * @param input Input dataset in which Extrema are to be identified.
+ * @param hood Neighborhood radius (R) in mm. Default is 8 mm.
+ * @param thresh Do not consider nodes with value less than this threshold. Default is 0.
+ * @param gthresh Do not consider nodes with gradient less than this threshold. Default is 0.01.
+ * @param gscale Scaling to apply to gradient computation.
+ * @param extype Find maxima, minima, or extrema. Options are MAX (default), MIN, ABS.
+ * @param table Name of file in which to store a record of the extrema found.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_extrema_params(
     prefix: string,
     input: InputPathType | null = null,
@@ -89,22 +103,8 @@ function surf_extrema_params(
     extype: "MAX" | "MIN" | "ABS" | null = null,
     table: string | null = null,
 ): SurfExtremaParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for the output datasets.
-     * @param input Input dataset in which Extrema are to be identified.
-     * @param hood Neighborhood radius (R) in mm. Default is 8 mm.
-     * @param thresh Do not consider nodes with value less than this threshold. Default is 0.
-     * @param gthresh Do not consider nodes with gradient less than this threshold. Default is 0.01.
-     * @param gscale Scaling to apply to gradient computation.
-     * @param extype Find maxima, minima, or extrema. Options are MAX (default), MIN, ABS.
-     * @param table Name of file in which to store a record of the extrema found.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfExtrema" as const,
+        "@type": "afni.SurfExtrema" as const,
         "prefix": prefix,
     };
     if (input !== null) {
@@ -132,18 +132,18 @@ function surf_extrema_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_extrema_cargs(
     params: SurfExtremaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfExtrema");
     if ((params["input"] ?? null) !== null) {
@@ -196,18 +196,18 @@ function surf_extrema_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_extrema_outputs(
     params: SurfExtremaParameters,
     execution: Execution,
 ): SurfExtremaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfExtremaOutputs = {
         root: execution.outputFile("."),
         output_grd: execution.outputFile([(params["prefix"] ?? null), ".grd"].join('')),
@@ -217,22 +217,22 @@ function surf_extrema_outputs(
 }
 
 
+/**
+ * A program finding the local extrema in a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
+ */
 function surf_extrema_execute(
     params: SurfExtremaParameters,
     execution: Execution,
 ): SurfExtremaOutputs {
-    /**
-     * A program finding the local extrema in a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_extrema_cargs(params, execution)
     const ret = surf_extrema_outputs(params, execution)
@@ -241,6 +241,25 @@ function surf_extrema_execute(
 }
 
 
+/**
+ * A program finding the local extrema in a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for the output datasets.
+ * @param input Input dataset in which Extrema are to be identified.
+ * @param hood Neighborhood radius (R) in mm. Default is 8 mm.
+ * @param thresh Do not consider nodes with value less than this threshold. Default is 0.
+ * @param gthresh Do not consider nodes with gradient less than this threshold. Default is 0.01.
+ * @param gscale Scaling to apply to gradient computation.
+ * @param extype Find maxima, minima, or extrema. Options are MAX (default), MIN, ABS.
+ * @param table Name of file in which to store a record of the extrema found.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
+ */
 function surf_extrema(
     prefix: string,
     input: InputPathType | null = null,
@@ -252,25 +271,6 @@ function surf_extrema(
     table: string | null = null,
     runner: Runner | null = null,
 ): SurfExtremaOutputs {
-    /**
-     * A program finding the local extrema in a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for the output datasets.
-     * @param input Input dataset in which Extrema are to be identified.
-     * @param hood Neighborhood radius (R) in mm. Default is 8 mm.
-     * @param thresh Do not consider nodes with value less than this threshold. Default is 0.
-     * @param gthresh Do not consider nodes with gradient less than this threshold. Default is 0.01.
-     * @param gscale Scaling to apply to gradient computation.
-     * @param extype Find maxima, minima, or extrema. Options are MAX (default), MIN, ABS.
-     * @param table Name of file in which to store a record of the extrema found.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_EXTREMA_METADATA);
     const params = surf_extrema_params(prefix, input, hood, thresh, gthresh, gscale, extype, table)
@@ -283,5 +283,8 @@ export {
       SurfExtremaOutputs,
       SurfExtremaParameters,
       surf_extrema,
+      surf_extrema_cargs,
+      surf_extrema_execute,
+      surf_extrema_outputs,
       surf_extrema_params,
 };

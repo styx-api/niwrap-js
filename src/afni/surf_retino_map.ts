@@ -12,7 +12,7 @@ const SURF_RETINO_MAP_METADATA: Metadata = {
 
 
 interface SurfRetinoMapParameters {
-    "__STYXTYPE__": "SurfRetinoMap";
+    "@type": "afni.SurfRetinoMap";
     "surface": string;
     "polar": string;
     "eccentricity": string;
@@ -21,35 +21,35 @@ interface SurfRetinoMapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfRetinoMap": surf_retino_map_cargs,
+        "afni.SurfRetinoMap": surf_retino_map_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfRetinoMap": surf_retino_map_outputs,
+        "afni.SurfRetinoMap": surf_retino_map_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,17 @@ interface SurfRetinoMapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Surface on which distances are computed. See 'Specifying input surfaces' section for syntax.
+ * @param polar Retinotopic dataset: polar angle dataset.
+ * @param eccentricity Retinotopic dataset: eccentricity angle dataset.
+ * @param prefix Prefix for output datasets.
+ * @param node_debug Index of node number for which debugging information is output.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_retino_map_params(
     surface: string,
     polar: string,
@@ -83,19 +94,8 @@ function surf_retino_map_params(
     prefix: string | null = null,
     node_debug: number | null = null,
 ): SurfRetinoMapParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Surface on which distances are computed. See 'Specifying input surfaces' section for syntax.
-     * @param polar Retinotopic dataset: polar angle dataset.
-     * @param eccentricity Retinotopic dataset: eccentricity angle dataset.
-     * @param prefix Prefix for output datasets.
-     * @param node_debug Index of node number for which debugging information is output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfRetinoMap" as const,
+        "@type": "afni.SurfRetinoMap" as const,
         "surface": surface,
         "polar": polar,
         "eccentricity": eccentricity,
@@ -110,18 +110,18 @@ function surf_retino_map_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_retino_map_cargs(
     params: SurfRetinoMapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfRetinoMap");
     cargs.push((params["surface"] ?? null));
@@ -143,18 +143,18 @@ function surf_retino_map_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_retino_map_outputs(
     params: SurfRetinoMapParameters,
     execution: Execution,
 ): SurfRetinoMapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfRetinoMapOutputs = {
         root: execution.outputFile("."),
         vfr_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_VFR.nii.gz"].join('')) : null,
@@ -164,22 +164,22 @@ function surf_retino_map_outputs(
 }
 
 
+/**
+ * Tool for retinotopic mapping on cortical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
+ */
 function surf_retino_map_execute(
     params: SurfRetinoMapParameters,
     execution: Execution,
 ): SurfRetinoMapOutputs {
-    /**
-     * Tool for retinotopic mapping on cortical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_retino_map_cargs(params, execution)
     const ret = surf_retino_map_outputs(params, execution)
@@ -188,6 +188,22 @@ function surf_retino_map_execute(
 }
 
 
+/**
+ * Tool for retinotopic mapping on cortical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Surface on which distances are computed. See 'Specifying input surfaces' section for syntax.
+ * @param polar Retinotopic dataset: polar angle dataset.
+ * @param eccentricity Retinotopic dataset: eccentricity angle dataset.
+ * @param prefix Prefix for output datasets.
+ * @param node_debug Index of node number for which debugging information is output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
+ */
 function surf_retino_map(
     surface: string,
     polar: string,
@@ -196,22 +212,6 @@ function surf_retino_map(
     node_debug: number | null = null,
     runner: Runner | null = null,
 ): SurfRetinoMapOutputs {
-    /**
-     * Tool for retinotopic mapping on cortical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Surface on which distances are computed. See 'Specifying input surfaces' section for syntax.
-     * @param polar Retinotopic dataset: polar angle dataset.
-     * @param eccentricity Retinotopic dataset: eccentricity angle dataset.
-     * @param prefix Prefix for output datasets.
-     * @param node_debug Index of node number for which debugging information is output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_RETINO_MAP_METADATA);
     const params = surf_retino_map_params(surface, polar, eccentricity, prefix, node_debug)
@@ -224,5 +224,8 @@ export {
       SurfRetinoMapOutputs,
       SurfRetinoMapParameters,
       surf_retino_map,
+      surf_retino_map_cargs,
+      surf_retino_map_execute,
+      surf_retino_map_outputs,
       surf_retino_map_params,
 };

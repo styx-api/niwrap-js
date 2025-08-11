@@ -12,7 +12,7 @@ const EDDY_QUAD_METADATA: Metadata = {
 
 
 interface EddyQuadParameters {
-    "__STYXTYPE__": "eddy_quad";
+    "@type": "fsl.eddy_quad";
     "eddyBase": string;
     "eddyIndex": InputPathType;
     "eddyParams": InputPathType;
@@ -26,35 +26,35 @@ interface EddyQuadParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "eddy_quad": eddy_quad_cargs,
+        "fsl.eddy_quad": eddy_quad_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "eddy_quad": eddy_quad_outputs,
+        "fsl.eddy_quad": eddy_quad_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,22 @@ interface EddyQuadOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param eddy_base Basename (including path) specified when running EDDY
+ * @param eddy_index File containing indices for all volumes into acquisition parameters
+ * @param eddy_params File containing acquisition parameters
+ * @param mask Binary mask file
+ * @param bvals b-values file
+ * @param bvecs b-vectors file - only used when <eddyBase>.eddy_residuals file is present
+ * @param output_dir Output directory - default = '<eddyBase>.qc'
+ * @param field TOPUP estimated field (in Hz)
+ * @param slspec Text file specifying slice/group acquisition
+ * @param verbose Display debug messages
+ *
+ * @returns Parameter dictionary
+ */
 function eddy_quad_params(
     eddy_base: string,
     eddy_index: InputPathType,
@@ -89,24 +105,8 @@ function eddy_quad_params(
     slspec: InputPathType | null = null,
     verbose: boolean = false,
 ): EddyQuadParameters {
-    /**
-     * Build parameters.
-    
-     * @param eddy_base Basename (including path) specified when running EDDY
-     * @param eddy_index File containing indices for all volumes into acquisition parameters
-     * @param eddy_params File containing acquisition parameters
-     * @param mask Binary mask file
-     * @param bvals b-values file
-     * @param bvecs b-vectors file - only used when <eddyBase>.eddy_residuals file is present
-     * @param output_dir Output directory - default = '<eddyBase>.qc'
-     * @param field TOPUP estimated field (in Hz)
-     * @param slspec Text file specifying slice/group acquisition
-     * @param verbose Display debug messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "eddy_quad" as const,
+        "@type": "fsl.eddy_quad" as const,
         "eddyBase": eddy_base,
         "eddyIndex": eddy_index,
         "eddyParams": eddy_params,
@@ -130,18 +130,18 @@ function eddy_quad_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function eddy_quad_cargs(
     params: EddyQuadParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("eddy_quad");
     cargs.push((params["eddyBase"] ?? null));
@@ -192,18 +192,18 @@ function eddy_quad_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function eddy_quad_outputs(
     params: EddyQuadParameters,
     execution: Execution,
 ): EddyQuadOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: EddyQuadOutputs = {
         root: execution.outputFile("."),
         output_dir_qc: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null)].join('')) : null,
@@ -212,22 +212,22 @@ function eddy_quad_outputs(
 }
 
 
+/**
+ * QUality Assessment for DMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
+ */
 function eddy_quad_execute(
     params: EddyQuadParameters,
     execution: Execution,
 ): EddyQuadOutputs {
-    /**
-     * QUality Assessment for DMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
-     */
     params = execution.params(params)
     const cargs = eddy_quad_cargs(params, execution)
     const ret = eddy_quad_outputs(params, execution)
@@ -236,6 +236,27 @@ function eddy_quad_execute(
 }
 
 
+/**
+ * QUality Assessment for DMRI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param eddy_base Basename (including path) specified when running EDDY
+ * @param eddy_index File containing indices for all volumes into acquisition parameters
+ * @param eddy_params File containing acquisition parameters
+ * @param mask Binary mask file
+ * @param bvals b-values file
+ * @param bvecs b-vectors file - only used when <eddyBase>.eddy_residuals file is present
+ * @param output_dir Output directory - default = '<eddyBase>.qc'
+ * @param field TOPUP estimated field (in Hz)
+ * @param slspec Text file specifying slice/group acquisition
+ * @param verbose Display debug messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
+ */
 function eddy_quad(
     eddy_base: string,
     eddy_index: InputPathType,
@@ -249,27 +270,6 @@ function eddy_quad(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyQuadOutputs {
-    /**
-     * QUality Assessment for DMRI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param eddy_base Basename (including path) specified when running EDDY
-     * @param eddy_index File containing indices for all volumes into acquisition parameters
-     * @param eddy_params File containing acquisition parameters
-     * @param mask Binary mask file
-     * @param bvals b-values file
-     * @param bvecs b-vectors file - only used when <eddyBase>.eddy_residuals file is present
-     * @param output_dir Output directory - default = '<eddyBase>.qc'
-     * @param field TOPUP estimated field (in Hz)
-     * @param slspec Text file specifying slice/group acquisition
-     * @param verbose Display debug messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(EDDY_QUAD_METADATA);
     const params = eddy_quad_params(eddy_base, eddy_index, eddy_params, mask, bvals, bvecs, output_dir, field, slspec, verbose)
@@ -282,5 +282,8 @@ export {
       EddyQuadOutputs,
       EddyQuadParameters,
       eddy_quad,
+      eddy_quad_cargs,
+      eddy_quad_execute,
+      eddy_quad_outputs,
       eddy_quad_params,
 };

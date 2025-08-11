@@ -12,7 +12,7 @@ const MRIS_ANATOMICAL_STATS_METADATA: Metadata = {
 
 
 interface MrisAnatomicalStatsParameters {
-    "__STYXTYPE__": "mris_anatomical_stats";
+    "@type": "freesurfer.mris_anatomical_stats";
     "subjectname": string;
     "hemisphere": string;
     "surfacename"?: string | null | undefined;
@@ -30,35 +30,35 @@ interface MrisAnatomicalStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_anatomical_stats": mris_anatomical_stats_cargs,
+        "freesurfer.mris_anatomical_stats": mris_anatomical_stats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_anatomical_stats": mris_anatomical_stats_outputs,
+        "freesurfer.mris_anatomical_stats": mris_anatomical_stats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,26 @@ interface MrisAnatomicalStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjectname Subject name
+ * @param hemisphere Hemisphere
+ * @param surfacename Surface name
+ * @param thickness_range Only consider thicknesses in the specified range.
+ * @param label_file Limit calculations to specified label
+ * @param thickness_file Use specified file for computing thickness statistics
+ * @param annotation_file Compute properties for each label in the annotation file separately
+ * @param tabular_output Tabular output
+ * @param tablefile Table output to tablefile. Must use -a or -l options to specify input.
+ * @param logfile Write stats to file named log
+ * @param nsmooth Smooth thickness map # of iterations before using it
+ * @param color_table Output annotation file's color table to text file
+ * @param noglobal Do not compute global brain stats
+ * @param th3_computation Compute vertex-wise volume by dividing each obliquely truncated trilateral pyramid into three tetrahedra
+ *
+ * @returns Parameter dictionary
+ */
 function mris_anatomical_stats_params(
     subjectname: string,
     hemisphere: string,
@@ -105,28 +125,8 @@ function mris_anatomical_stats_params(
     noglobal: boolean = false,
     th3_computation: boolean = false,
 ): MrisAnatomicalStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjectname Subject name
-     * @param hemisphere Hemisphere
-     * @param surfacename Surface name
-     * @param thickness_range Only consider thicknesses in the specified range.
-     * @param label_file Limit calculations to specified label
-     * @param thickness_file Use specified file for computing thickness statistics
-     * @param annotation_file Compute properties for each label in the annotation file separately
-     * @param tabular_output Tabular output
-     * @param tablefile Table output to tablefile. Must use -a or -l options to specify input.
-     * @param logfile Write stats to file named log
-     * @param nsmooth Smooth thickness map # of iterations before using it
-     * @param color_table Output annotation file's color table to text file
-     * @param noglobal Do not compute global brain stats
-     * @param th3_computation Compute vertex-wise volume by dividing each obliquely truncated trilateral pyramid into three tetrahedra
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_anatomical_stats" as const,
+        "@type": "freesurfer.mris_anatomical_stats" as const,
         "subjectname": subjectname,
         "hemisphere": hemisphere,
         "tabular_output": tabular_output,
@@ -164,18 +164,18 @@ function mris_anatomical_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_anatomical_stats_cargs(
     params: MrisAnatomicalStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_anatomical_stats");
     cargs.push((params["subjectname"] ?? null));
@@ -244,18 +244,18 @@ function mris_anatomical_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_anatomical_stats_outputs(
     params: MrisAnatomicalStatsParameters,
     execution: Execution,
 ): MrisAnatomicalStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisAnatomicalStatsOutputs = {
         root: execution.outputFile("."),
         output_log_file: ((params["logfile"] ?? null) !== null) ? execution.outputFile([(params["logfile"] ?? null), ".txt"].join('')) : null,
@@ -266,22 +266,22 @@ function mris_anatomical_stats_outputs(
 }
 
 
+/**
+ * This program computes a number of anatomical properties.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
+ */
 function mris_anatomical_stats_execute(
     params: MrisAnatomicalStatsParameters,
     execution: Execution,
 ): MrisAnatomicalStatsOutputs {
-    /**
-     * This program computes a number of anatomical properties.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_anatomical_stats_cargs(params, execution)
     const ret = mris_anatomical_stats_outputs(params, execution)
@@ -290,6 +290,31 @@ function mris_anatomical_stats_execute(
 }
 
 
+/**
+ * This program computes a number of anatomical properties.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjectname Subject name
+ * @param hemisphere Hemisphere
+ * @param surfacename Surface name
+ * @param thickness_range Only consider thicknesses in the specified range.
+ * @param label_file Limit calculations to specified label
+ * @param thickness_file Use specified file for computing thickness statistics
+ * @param annotation_file Compute properties for each label in the annotation file separately
+ * @param tabular_output Tabular output
+ * @param tablefile Table output to tablefile. Must use -a or -l options to specify input.
+ * @param logfile Write stats to file named log
+ * @param nsmooth Smooth thickness map # of iterations before using it
+ * @param color_table Output annotation file's color table to text file
+ * @param noglobal Do not compute global brain stats
+ * @param th3_computation Compute vertex-wise volume by dividing each obliquely truncated trilateral pyramid into three tetrahedra
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
+ */
 function mris_anatomical_stats(
     subjectname: string,
     hemisphere: string,
@@ -307,31 +332,6 @@ function mris_anatomical_stats(
     th3_computation: boolean = false,
     runner: Runner | null = null,
 ): MrisAnatomicalStatsOutputs {
-    /**
-     * This program computes a number of anatomical properties.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjectname Subject name
-     * @param hemisphere Hemisphere
-     * @param surfacename Surface name
-     * @param thickness_range Only consider thicknesses in the specified range.
-     * @param label_file Limit calculations to specified label
-     * @param thickness_file Use specified file for computing thickness statistics
-     * @param annotation_file Compute properties for each label in the annotation file separately
-     * @param tabular_output Tabular output
-     * @param tablefile Table output to tablefile. Must use -a or -l options to specify input.
-     * @param logfile Write stats to file named log
-     * @param nsmooth Smooth thickness map # of iterations before using it
-     * @param color_table Output annotation file's color table to text file
-     * @param noglobal Do not compute global brain stats
-     * @param th3_computation Compute vertex-wise volume by dividing each obliquely truncated trilateral pyramid into three tetrahedra
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ANATOMICAL_STATS_METADATA);
     const params = mris_anatomical_stats_params(subjectname, hemisphere, surfacename, thickness_range, label_file, thickness_file, annotation_file, tabular_output, tablefile, logfile, nsmooth, color_table, noglobal, th3_computation)
@@ -344,5 +344,8 @@ export {
       MrisAnatomicalStatsOutputs,
       MrisAnatomicalStatsParameters,
       mris_anatomical_stats,
+      mris_anatomical_stats_cargs,
+      mris_anatomical_stats_execute,
+      mris_anatomical_stats_outputs,
       mris_anatomical_stats_params,
 };

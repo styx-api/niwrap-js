@@ -12,7 +12,7 @@ const OCT_REGISTER_MOSAIC_METADATA: Metadata = {
 
 
 interface OctRegisterMosaicParameters {
-    "__STYXTYPE__": "oct_register_mosaic";
+    "@type": "freesurfer.oct_register_mosaic";
     "tiles_or_mosaic_list": Array<string>;
     "output_volume": string;
     "downsample"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface OctRegisterMosaicParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "oct_register_mosaic": oct_register_mosaic_cargs,
+        "freesurfer.oct_register_mosaic": oct_register_mosaic_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "oct_register_mosaic": oct_register_mosaic_outputs,
+        "freesurfer.oct_register_mosaic": oct_register_mosaic_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface OctRegisterMosaicOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param tiles_or_mosaic_list OCT tile images to be registered or a file listing the mosaic tiles
+ * @param output_volume Output registered volume
+ * @param downsample Use Gaussian downsampling specified number of times
+ * @param weight_file File with tile weights to use in tile averaging
+ *
+ * @returns Parameter dictionary
+ */
 function oct_register_mosaic_params(
     tiles_or_mosaic_list: Array<string>,
     output_volume: string,
     downsample: number | null = null,
     weight_file: InputPathType | null = null,
 ): OctRegisterMosaicParameters {
-    /**
-     * Build parameters.
-    
-     * @param tiles_or_mosaic_list OCT tile images to be registered or a file listing the mosaic tiles
-     * @param output_volume Output registered volume
-     * @param downsample Use Gaussian downsampling specified number of times
-     * @param weight_file File with tile weights to use in tile averaging
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "oct_register_mosaic" as const,
+        "@type": "freesurfer.oct_register_mosaic" as const,
         "tiles_or_mosaic_list": tiles_or_mosaic_list,
         "output_volume": output_volume,
     };
@@ -102,18 +102,18 @@ function oct_register_mosaic_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function oct_register_mosaic_cargs(
     params: OctRegisterMosaicParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("oct_register_mosaic");
     cargs.push(...(params["tiles_or_mosaic_list"] ?? null));
@@ -134,18 +134,18 @@ function oct_register_mosaic_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function oct_register_mosaic_outputs(
     params: OctRegisterMosaicParameters,
     execution: Execution,
 ): OctRegisterMosaicOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: OctRegisterMosaicOutputs = {
         root: execution.outputFile("."),
         registered_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -154,22 +154,22 @@ function oct_register_mosaic_outputs(
 }
 
 
+/**
+ * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
+ */
 function oct_register_mosaic_execute(
     params: OctRegisterMosaicParameters,
     execution: Execution,
 ): OctRegisterMosaicOutputs {
-    /**
-     * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
-     */
     params = execution.params(params)
     const cargs = oct_register_mosaic_cargs(params, execution)
     const ret = oct_register_mosaic_outputs(params, execution)
@@ -178,6 +178,21 @@ function oct_register_mosaic_execute(
 }
 
 
+/**
+ * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param tiles_or_mosaic_list OCT tile images to be registered or a file listing the mosaic tiles
+ * @param output_volume Output registered volume
+ * @param downsample Use Gaussian downsampling specified number of times
+ * @param weight_file File with tile weights to use in tile averaging
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
+ */
 function oct_register_mosaic(
     tiles_or_mosaic_list: Array<string>,
     output_volume: string,
@@ -185,21 +200,6 @@ function oct_register_mosaic(
     weight_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): OctRegisterMosaicOutputs {
-    /**
-     * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param tiles_or_mosaic_list OCT tile images to be registered or a file listing the mosaic tiles
-     * @param output_volume Output registered volume
-     * @param downsample Use Gaussian downsampling specified number of times
-     * @param weight_file File with tile weights to use in tile averaging
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(OCT_REGISTER_MOSAIC_METADATA);
     const params = oct_register_mosaic_params(tiles_or_mosaic_list, output_volume, downsample, weight_file)
@@ -212,5 +212,8 @@ export {
       OctRegisterMosaicOutputs,
       OctRegisterMosaicParameters,
       oct_register_mosaic,
+      oct_register_mosaic_cargs,
+      oct_register_mosaic_execute,
+      oct_register_mosaic_outputs,
       oct_register_mosaic_params,
 };

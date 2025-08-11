@@ -12,7 +12,7 @@ const MRIS_MAKE_SURFACES_METADATA: Metadata = {
 
 
 interface MrisMakeSurfacesParameters {
-    "__STYXTYPE__": "mris_make_surfaces";
+    "@type": "freesurfer.mris_make_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "white"?: string | null | undefined;
@@ -69,33 +69,33 @@ interface MrisMakeSurfacesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_make_surfaces": mris_make_surfaces_cargs,
+        "freesurfer.mris_make_surfaces": mris_make_surfaces_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -115,6 +115,65 @@ interface MrisMakeSurfacesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Brain hemisphere (r or l)
+ * @param white Output name for white surface (default is 'white'). Set to NOWHITE to generate but not save white surface.
+ * @param pial Output name for pial surface (default is 'pial').
+ * @param whiteonly Only generate white matter surface.
+ * @param nowhite Only generate pial surface.
+ * @param orig_white Specify a white surface to start with.
+ * @param orig_pial Specify a pial surface to start with.
+ * @param q Omit self-intersection and only generate gray/white surface.
+ * @param max_gray_scale Set maximum gray scale value.
+ * @param c Do not create curvature and area files from white matter surface.
+ * @param cortex Set to 0 to turn off creation of cortex label file.
+ * @param w Unused argument
+ * @param first_wm_peak Settle WM surface at first peak in intensity profile instead of highest.
+ * @param a_avgs Average curvature values a number of times (default=10).
+ * @param pa_avgs Average pial curvature values a max of a number of times (default=16).
+ * @param wa_avgs Average white curvature values a max of a number of times (default=4).
+ * @param t1_vol Specify T1 volume (default is brain).
+ * @param w_vol Specify white volume and <hires> option.
+ * @param long Run longitudinal analysis.
+ * @param dura_thresh Set a threshold for the multi-echo mprage dura avoidance.
+ * @param sdir Specify SUBJECTS_DIR.
+ * @param erase_cerebellum Erase cerebellar labeled voxels if aseg is loaded.
+ * @param wm_weight Weighting of WM mean in calculating T2 threshold of disallowed GM values, default=3.
+ * @param nsigma_above # of sigmas above the mean to allow gray matter T2 intensities.
+ * @param nsigma_below # of sigmas below the mean to allow gray matter T2 intensities.
+ * @param t2_min_inside Specify threshold for min T2 value allowed to be interior to the cortical ribbon.
+ * @param t2_max_inside Specify threshold for max T2 value allowed to be interior to the cortical ribbon.
+ * @param t2_outside_min Specify threshold for min T2 value outside of pial surface that will cause surface to deform outwards.
+ * @param t2_outside_max Specify threshold for max T2 value outside of pial surface that will cause surface to deform outwards.
+ * @param min_peak_pct Specify the pct of the histo peak in the local gm histogram to use as threshold for finding the local inside and outside gm thresholds.
+ * @param border_vals_hires Turn on hires options in MRIScomputeBorderValues_new(). May not be helpful.
+ * @param no_unitize Turn off face normal unitization.
+ * @param intensity Set weight of intensity cost.
+ * @param curv Set weight of curvature cost.
+ * @param tspring Set weight of tangential spring cost.
+ * @param nspring Set weight of normal spring cost.
+ * @param repulse Set weight of repulsion force.
+ * @param save_target Save target surface for debugging.
+ * @param save_res Save residual for debugging.
+ * @param v_vertexno Set Gdiag_no to vertex number.
+ * @param diag_vertex Set Gdiag_no to vertex number and turn off writing of cortex label or curvature files.
+ * @param rip Save ripflag as overlay. Specify full path including hemi, suffix, etc.
+ * @param sigma_white Save white surface sigma as overlay. Specify full path including hemi, suffix, etc.
+ * @param sigma_pial Save pial surface sigma as overlay. Specify full path including hemi, suffix, etc.
+ * @param output Append suffix to all outputs to prevent over-writing.
+ * @param min_border_white Minimum border white.
+ * @param max_border_white Maximum border white.
+ * @param min_gray_white_border Minimum gray at white border.
+ * @param max_gray Maximum gray value.
+ * @param max_gray_csf_border Maximum gray at CSF border.
+ * @param min_gray_csf_border Minimum gray at CSF border.
+ * @param max_csf Maximum CSF value.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_make_surfaces_params(
     subject_name: string,
     hemisphere: string,
@@ -170,67 +229,8 @@ function mris_make_surfaces_params(
     min_gray_csf_border: number | null = null,
     max_csf: number | null = null,
 ): MrisMakeSurfacesParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Brain hemisphere (r or l)
-     * @param white Output name for white surface (default is 'white'). Set to NOWHITE to generate but not save white surface.
-     * @param pial Output name for pial surface (default is 'pial').
-     * @param whiteonly Only generate white matter surface.
-     * @param nowhite Only generate pial surface.
-     * @param orig_white Specify a white surface to start with.
-     * @param orig_pial Specify a pial surface to start with.
-     * @param q Omit self-intersection and only generate gray/white surface.
-     * @param max_gray_scale Set maximum gray scale value.
-     * @param c Do not create curvature and area files from white matter surface.
-     * @param cortex Set to 0 to turn off creation of cortex label file.
-     * @param w Unused argument
-     * @param first_wm_peak Settle WM surface at first peak in intensity profile instead of highest.
-     * @param a_avgs Average curvature values a number of times (default=10).
-     * @param pa_avgs Average pial curvature values a max of a number of times (default=16).
-     * @param wa_avgs Average white curvature values a max of a number of times (default=4).
-     * @param t1_vol Specify T1 volume (default is brain).
-     * @param w_vol Specify white volume and <hires> option.
-     * @param long Run longitudinal analysis.
-     * @param dura_thresh Set a threshold for the multi-echo mprage dura avoidance.
-     * @param sdir Specify SUBJECTS_DIR.
-     * @param erase_cerebellum Erase cerebellar labeled voxels if aseg is loaded.
-     * @param wm_weight Weighting of WM mean in calculating T2 threshold of disallowed GM values, default=3.
-     * @param nsigma_above # of sigmas above the mean to allow gray matter T2 intensities.
-     * @param nsigma_below # of sigmas below the mean to allow gray matter T2 intensities.
-     * @param t2_min_inside Specify threshold for min T2 value allowed to be interior to the cortical ribbon.
-     * @param t2_max_inside Specify threshold for max T2 value allowed to be interior to the cortical ribbon.
-     * @param t2_outside_min Specify threshold for min T2 value outside of pial surface that will cause surface to deform outwards.
-     * @param t2_outside_max Specify threshold for max T2 value outside of pial surface that will cause surface to deform outwards.
-     * @param min_peak_pct Specify the pct of the histo peak in the local gm histogram to use as threshold for finding the local inside and outside gm thresholds.
-     * @param border_vals_hires Turn on hires options in MRIScomputeBorderValues_new(). May not be helpful.
-     * @param no_unitize Turn off face normal unitization.
-     * @param intensity Set weight of intensity cost.
-     * @param curv Set weight of curvature cost.
-     * @param tspring Set weight of tangential spring cost.
-     * @param nspring Set weight of normal spring cost.
-     * @param repulse Set weight of repulsion force.
-     * @param save_target Save target surface for debugging.
-     * @param save_res Save residual for debugging.
-     * @param v_vertexno Set Gdiag_no to vertex number.
-     * @param diag_vertex Set Gdiag_no to vertex number and turn off writing of cortex label or curvature files.
-     * @param rip Save ripflag as overlay. Specify full path including hemi, suffix, etc.
-     * @param sigma_white Save white surface sigma as overlay. Specify full path including hemi, suffix, etc.
-     * @param sigma_pial Save pial surface sigma as overlay. Specify full path including hemi, suffix, etc.
-     * @param output Append suffix to all outputs to prevent over-writing.
-     * @param min_border_white Minimum border white.
-     * @param max_border_white Maximum border white.
-     * @param min_gray_white_border Minimum gray at white border.
-     * @param max_gray Maximum gray value.
-     * @param max_gray_csf_border Maximum gray at CSF border.
-     * @param min_gray_csf_border Minimum gray at CSF border.
-     * @param max_csf Maximum CSF value.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_make_surfaces" as const,
+        "@type": "freesurfer.mris_make_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "whiteonly": whiteonly,
@@ -369,18 +369,18 @@ function mris_make_surfaces_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_make_surfaces_cargs(
     params: MrisMakeSurfacesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_make_surfaces");
     cargs.push((params["subject_name"] ?? null));
@@ -662,18 +662,18 @@ function mris_make_surfaces_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_make_surfaces_outputs(
     params: MrisMakeSurfacesParameters,
     execution: Execution,
 ): MrisMakeSurfacesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisMakeSurfacesOutputs = {
         root: execution.outputFile("."),
     };
@@ -681,22 +681,22 @@ function mris_make_surfaces_outputs(
 }
 
 
+/**
+ * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
+ */
 function mris_make_surfaces_execute(
     params: MrisMakeSurfacesParameters,
     execution: Execution,
 ): MrisMakeSurfacesOutputs {
-    /**
-     * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_make_surfaces_cargs(params, execution)
     const ret = mris_make_surfaces_outputs(params, execution)
@@ -705,6 +705,70 @@ function mris_make_surfaces_execute(
 }
 
 
+/**
+ * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject
+ * @param hemisphere Brain hemisphere (r or l)
+ * @param white Output name for white surface (default is 'white'). Set to NOWHITE to generate but not save white surface.
+ * @param pial Output name for pial surface (default is 'pial').
+ * @param whiteonly Only generate white matter surface.
+ * @param nowhite Only generate pial surface.
+ * @param orig_white Specify a white surface to start with.
+ * @param orig_pial Specify a pial surface to start with.
+ * @param q Omit self-intersection and only generate gray/white surface.
+ * @param max_gray_scale Set maximum gray scale value.
+ * @param c Do not create curvature and area files from white matter surface.
+ * @param cortex Set to 0 to turn off creation of cortex label file.
+ * @param w Unused argument
+ * @param first_wm_peak Settle WM surface at first peak in intensity profile instead of highest.
+ * @param a_avgs Average curvature values a number of times (default=10).
+ * @param pa_avgs Average pial curvature values a max of a number of times (default=16).
+ * @param wa_avgs Average white curvature values a max of a number of times (default=4).
+ * @param t1_vol Specify T1 volume (default is brain).
+ * @param w_vol Specify white volume and <hires> option.
+ * @param long Run longitudinal analysis.
+ * @param dura_thresh Set a threshold for the multi-echo mprage dura avoidance.
+ * @param sdir Specify SUBJECTS_DIR.
+ * @param erase_cerebellum Erase cerebellar labeled voxels if aseg is loaded.
+ * @param wm_weight Weighting of WM mean in calculating T2 threshold of disallowed GM values, default=3.
+ * @param nsigma_above # of sigmas above the mean to allow gray matter T2 intensities.
+ * @param nsigma_below # of sigmas below the mean to allow gray matter T2 intensities.
+ * @param t2_min_inside Specify threshold for min T2 value allowed to be interior to the cortical ribbon.
+ * @param t2_max_inside Specify threshold for max T2 value allowed to be interior to the cortical ribbon.
+ * @param t2_outside_min Specify threshold for min T2 value outside of pial surface that will cause surface to deform outwards.
+ * @param t2_outside_max Specify threshold for max T2 value outside of pial surface that will cause surface to deform outwards.
+ * @param min_peak_pct Specify the pct of the histo peak in the local gm histogram to use as threshold for finding the local inside and outside gm thresholds.
+ * @param border_vals_hires Turn on hires options in MRIScomputeBorderValues_new(). May not be helpful.
+ * @param no_unitize Turn off face normal unitization.
+ * @param intensity Set weight of intensity cost.
+ * @param curv Set weight of curvature cost.
+ * @param tspring Set weight of tangential spring cost.
+ * @param nspring Set weight of normal spring cost.
+ * @param repulse Set weight of repulsion force.
+ * @param save_target Save target surface for debugging.
+ * @param save_res Save residual for debugging.
+ * @param v_vertexno Set Gdiag_no to vertex number.
+ * @param diag_vertex Set Gdiag_no to vertex number and turn off writing of cortex label or curvature files.
+ * @param rip Save ripflag as overlay. Specify full path including hemi, suffix, etc.
+ * @param sigma_white Save white surface sigma as overlay. Specify full path including hemi, suffix, etc.
+ * @param sigma_pial Save pial surface sigma as overlay. Specify full path including hemi, suffix, etc.
+ * @param output Append suffix to all outputs to prevent over-writing.
+ * @param min_border_white Minimum border white.
+ * @param max_border_white Maximum border white.
+ * @param min_gray_white_border Minimum gray at white border.
+ * @param max_gray Maximum gray value.
+ * @param max_gray_csf_border Maximum gray at CSF border.
+ * @param min_gray_csf_border Minimum gray at CSF border.
+ * @param max_csf Maximum CSF value.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
+ */
 function mris_make_surfaces(
     subject_name: string,
     hemisphere: string,
@@ -761,70 +825,6 @@ function mris_make_surfaces(
     max_csf: number | null = null,
     runner: Runner | null = null,
 ): MrisMakeSurfacesOutputs {
-    /**
-     * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject
-     * @param hemisphere Brain hemisphere (r or l)
-     * @param white Output name for white surface (default is 'white'). Set to NOWHITE to generate but not save white surface.
-     * @param pial Output name for pial surface (default is 'pial').
-     * @param whiteonly Only generate white matter surface.
-     * @param nowhite Only generate pial surface.
-     * @param orig_white Specify a white surface to start with.
-     * @param orig_pial Specify a pial surface to start with.
-     * @param q Omit self-intersection and only generate gray/white surface.
-     * @param max_gray_scale Set maximum gray scale value.
-     * @param c Do not create curvature and area files from white matter surface.
-     * @param cortex Set to 0 to turn off creation of cortex label file.
-     * @param w Unused argument
-     * @param first_wm_peak Settle WM surface at first peak in intensity profile instead of highest.
-     * @param a_avgs Average curvature values a number of times (default=10).
-     * @param pa_avgs Average pial curvature values a max of a number of times (default=16).
-     * @param wa_avgs Average white curvature values a max of a number of times (default=4).
-     * @param t1_vol Specify T1 volume (default is brain).
-     * @param w_vol Specify white volume and <hires> option.
-     * @param long Run longitudinal analysis.
-     * @param dura_thresh Set a threshold for the multi-echo mprage dura avoidance.
-     * @param sdir Specify SUBJECTS_DIR.
-     * @param erase_cerebellum Erase cerebellar labeled voxels if aseg is loaded.
-     * @param wm_weight Weighting of WM mean in calculating T2 threshold of disallowed GM values, default=3.
-     * @param nsigma_above # of sigmas above the mean to allow gray matter T2 intensities.
-     * @param nsigma_below # of sigmas below the mean to allow gray matter T2 intensities.
-     * @param t2_min_inside Specify threshold for min T2 value allowed to be interior to the cortical ribbon.
-     * @param t2_max_inside Specify threshold for max T2 value allowed to be interior to the cortical ribbon.
-     * @param t2_outside_min Specify threshold for min T2 value outside of pial surface that will cause surface to deform outwards.
-     * @param t2_outside_max Specify threshold for max T2 value outside of pial surface that will cause surface to deform outwards.
-     * @param min_peak_pct Specify the pct of the histo peak in the local gm histogram to use as threshold for finding the local inside and outside gm thresholds.
-     * @param border_vals_hires Turn on hires options in MRIScomputeBorderValues_new(). May not be helpful.
-     * @param no_unitize Turn off face normal unitization.
-     * @param intensity Set weight of intensity cost.
-     * @param curv Set weight of curvature cost.
-     * @param tspring Set weight of tangential spring cost.
-     * @param nspring Set weight of normal spring cost.
-     * @param repulse Set weight of repulsion force.
-     * @param save_target Save target surface for debugging.
-     * @param save_res Save residual for debugging.
-     * @param v_vertexno Set Gdiag_no to vertex number.
-     * @param diag_vertex Set Gdiag_no to vertex number and turn off writing of cortex label or curvature files.
-     * @param rip Save ripflag as overlay. Specify full path including hemi, suffix, etc.
-     * @param sigma_white Save white surface sigma as overlay. Specify full path including hemi, suffix, etc.
-     * @param sigma_pial Save pial surface sigma as overlay. Specify full path including hemi, suffix, etc.
-     * @param output Append suffix to all outputs to prevent over-writing.
-     * @param min_border_white Minimum border white.
-     * @param max_border_white Maximum border white.
-     * @param min_gray_white_border Minimum gray at white border.
-     * @param max_gray Maximum gray value.
-     * @param max_gray_csf_border Maximum gray at CSF border.
-     * @param min_gray_csf_border Minimum gray at CSF border.
-     * @param max_csf Maximum CSF value.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_MAKE_SURFACES_METADATA);
     const params = mris_make_surfaces_params(subject_name, hemisphere, white, pial, whiteonly, nowhite, orig_white, orig_pial, q, max_gray_scale, c, cortex, w, first_wm_peak, a_avgs, pa_avgs, wa_avgs, t1_vol, w_vol, long, dura_thresh, sdir, erase_cerebellum, wm_weight, nsigma_above, nsigma_below, t2_min_inside, t2_max_inside, t2_outside_min, t2_outside_max, min_peak_pct, border_vals_hires, no_unitize, intensity, curv, tspring, nspring, repulse, save_target, save_res, v_vertexno, diag_vertex, rip, sigma_white, sigma_pial, output, min_border_white, max_border_white, min_gray_white_border, max_gray, max_gray_csf_border, min_gray_csf_border, max_csf)
@@ -837,5 +837,8 @@ export {
       MrisMakeSurfacesOutputs,
       MrisMakeSurfacesParameters,
       mris_make_surfaces,
+      mris_make_surfaces_cargs,
+      mris_make_surfaces_execute,
+      mris_make_surfaces_outputs,
       mris_make_surfaces_params,
 };

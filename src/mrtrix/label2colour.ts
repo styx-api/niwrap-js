@@ -12,14 +12,14 @@ const LABEL2COLOUR_METADATA: Metadata = {
 
 
 interface Label2colourConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.label2colour.config";
     "key": string;
     "value": string;
 }
 
 
 interface Label2colourParameters {
-    "__STYXTYPE__": "label2colour";
+    "@type": "mrtrix.label2colour";
     "lut"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,55 +34,55 @@ interface Label2colourParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label2colour": label2colour_cargs,
-        "config": label2colour_config_cargs,
+        "mrtrix.label2colour": label2colour_cargs,
+        "mrtrix.label2colour.config": label2colour_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label2colour": label2colour_outputs,
+        "mrtrix.label2colour": label2colour_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function label2colour_config_params(
     key: string,
     value: string,
 ): Label2colourConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.label2colour.config" as const,
         "key": key,
         "value": value,
     };
@@ -90,18 +90,18 @@ function label2colour_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2colour_config_cargs(
     params: Label2colourConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -127,6 +127,23 @@ interface Label2colourOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param nodes_in the input node parcellation image
+ * @param colour_out the output colour image
+ * @param lut Provide the relevant colour lookup table (if not provided, nodes will be coloured randomly)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function label2colour_params(
     nodes_in: InputPathType,
     colour_out: string,
@@ -140,25 +157,8 @@ function label2colour_params(
     help: boolean = false,
     version: boolean = false,
 ): Label2colourParameters {
-    /**
-     * Build parameters.
-    
-     * @param nodes_in the input node parcellation image
-     * @param colour_out the output colour image
-     * @param lut Provide the relevant colour lookup table (if not provided, nodes will be coloured randomly)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label2colour" as const,
+        "@type": "mrtrix.label2colour" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -181,18 +181,18 @@ function label2colour_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label2colour_cargs(
     params: Label2colourParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("label2colour");
     if ((params["lut"] ?? null) !== null) {
@@ -220,7 +220,7 @@ function label2colour_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -234,18 +234,18 @@ function label2colour_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label2colour_outputs(
     params: Label2colourParameters,
     execution: Execution,
 ): Label2colourOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Label2colourOutputs = {
         root: execution.outputFile("."),
         colour_out: execution.outputFile([(params["colour_out"] ?? null)].join('')),
@@ -254,28 +254,28 @@ function label2colour_outputs(
 }
 
 
+/**
+ * Convert a parcellated image (where values are node indices) into a colour image.
+ *
+ * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
+ */
 function label2colour_execute(
     params: Label2colourParameters,
     execution: Execution,
 ): Label2colourOutputs {
-    /**
-     * Convert a parcellated image (where values are node indices) into a colour image.
-     * 
-     * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
-     */
     params = execution.params(params)
     const cargs = label2colour_cargs(params, execution)
     const ret = label2colour_outputs(params, execution)
@@ -284,6 +284,34 @@ function label2colour_execute(
 }
 
 
+/**
+ * Convert a parcellated image (where values are node indices) into a colour image.
+ *
+ * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param nodes_in the input node parcellation image
+ * @param colour_out the output colour image
+ * @param lut Provide the relevant colour lookup table (if not provided, nodes will be coloured randomly)
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
+ */
 function label2colour(
     nodes_in: InputPathType,
     colour_out: string,
@@ -298,34 +326,6 @@ function label2colour(
     version: boolean = false,
     runner: Runner | null = null,
 ): Label2colourOutputs {
-    /**
-     * Convert a parcellated image (where values are node indices) into a colour image.
-     * 
-     * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param nodes_in the input node parcellation image
-     * @param colour_out the output colour image
-     * @param lut Provide the relevant colour lookup table (if not provided, nodes will be coloured randomly)
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL2COLOUR_METADATA);
     const params = label2colour_params(nodes_in, colour_out, lut, info, quiet, debug, force, nthreads, config, help, version)
@@ -339,6 +339,10 @@ export {
       Label2colourOutputs,
       Label2colourParameters,
       label2colour,
+      label2colour_cargs,
+      label2colour_config_cargs,
       label2colour_config_params,
+      label2colour_execute,
+      label2colour_outputs,
       label2colour_params,
 };

@@ -12,7 +12,7 @@ const V_3D_TSGEN_METADATA: Metadata = {
 
 
 interface V3dTsgenParameters {
-    "__STYXTYPE__": "3dTSgen";
+    "@type": "afni.3dTSgen";
     "input_file": InputPathType;
     "in_tr_flag": boolean;
     "signal_label": string;
@@ -29,33 +29,33 @@ interface V3dTsgenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dTSgen": v_3d_tsgen_cargs,
+        "afni.3dTSgen": v_3d_tsgen_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -75,6 +75,25 @@ interface V3dTsgenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Filename of prototype 3d + time data file
+ * @param signal_label Name of the (non-linear) signal model
+ * @param noise_label Name of the (linear) noise model
+ * @param sigma_value Standard deviation of additive Gaussian noise
+ * @param output_file Filename of output 3d + time data file
+ * @param in_tr_flag Set the TR of the created timeseries to be the TR of the prototype dataset. The default is TR = 1.
+ * @param signal_constr Constraints for kth signal parameter. Format: k c d where c <= gs[k] <= d
+ * @param noise_constr Constraints for kth noise parameter. Format: k c d where c+b[k] <= gn[k] <= d+b[k]
+ * @param voxel_number Screen output for voxel number
+ * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
+ * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
+ * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
+ * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_tsgen_params(
     input_file: InputPathType,
     signal_label: string,
@@ -90,27 +109,8 @@ function v_3d_tsgen_params(
     bucket_config: string | null = null,
     brick_config: string | null = null,
 ): V3dTsgenParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Filename of prototype 3d + time data file
-     * @param signal_label Name of the (non-linear) signal model
-     * @param noise_label Name of the (linear) noise model
-     * @param sigma_value Standard deviation of additive Gaussian noise
-     * @param output_file Filename of output 3d + time data file
-     * @param in_tr_flag Set the TR of the created timeseries to be the TR of the prototype dataset. The default is TR = 1.
-     * @param signal_constr Constraints for kth signal parameter. Format: k c d where c <= gs[k] <= d
-     * @param noise_constr Constraints for kth noise parameter. Format: k c d where c+b[k] <= gn[k] <= d+b[k]
-     * @param voxel_number Screen output for voxel number
-     * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
-     * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
-     * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
-     * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dTSgen" as const,
+        "@type": "afni.3dTSgen" as const,
         "input_file": input_file,
         "in_tr_flag": in_tr_flag,
         "signal_label": signal_label,
@@ -143,18 +143,18 @@ function v_3d_tsgen_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_tsgen_cargs(
     params: V3dTsgenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dTSgen");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -223,18 +223,18 @@ function v_3d_tsgen_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_tsgen_outputs(
     params: V3dTsgenParameters,
     execution: Execution,
 ): V3dTsgenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dTsgenOutputs = {
         root: execution.outputFile("."),
     };
@@ -242,22 +242,22 @@ function v_3d_tsgen_outputs(
 }
 
 
+/**
+ * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
+ */
 function v_3d_tsgen_execute(
     params: V3dTsgenParameters,
     execution: Execution,
 ): V3dTsgenOutputs {
-    /**
-     * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_tsgen_cargs(params, execution)
     const ret = v_3d_tsgen_outputs(params, execution)
@@ -266,6 +266,30 @@ function v_3d_tsgen_execute(
 }
 
 
+/**
+ * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Filename of prototype 3d + time data file
+ * @param signal_label Name of the (non-linear) signal model
+ * @param noise_label Name of the (linear) noise model
+ * @param sigma_value Standard deviation of additive Gaussian noise
+ * @param output_file Filename of output 3d + time data file
+ * @param in_tr_flag Set the TR of the created timeseries to be the TR of the prototype dataset. The default is TR = 1.
+ * @param signal_constr Constraints for kth signal parameter. Format: k c d where c <= gs[k] <= d
+ * @param noise_constr Constraints for kth noise parameter. Format: k c d where c+b[k] <= gn[k] <= d+b[k]
+ * @param voxel_number Screen output for voxel number
+ * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
+ * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
+ * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
+ * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
+ */
 function v_3d_tsgen(
     input_file: InputPathType,
     signal_label: string,
@@ -282,30 +306,6 @@ function v_3d_tsgen(
     brick_config: string | null = null,
     runner: Runner | null = null,
 ): V3dTsgenOutputs {
-    /**
-     * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Filename of prototype 3d + time data file
-     * @param signal_label Name of the (non-linear) signal model
-     * @param noise_label Name of the (linear) noise model
-     * @param sigma_value Standard deviation of additive Gaussian noise
-     * @param output_file Filename of output 3d + time data file
-     * @param in_tr_flag Set the TR of the created timeseries to be the TR of the prototype dataset. The default is TR = 1.
-     * @param signal_constr Constraints for kth signal parameter. Format: k c d where c <= gs[k] <= d
-     * @param noise_constr Constraints for kth noise parameter. Format: k c d where c+b[k] <= gn[k] <= d+b[k]
-     * @param voxel_number Screen output for voxel number
-     * @param signal_coef Write kth signal parameter gs[k]. Output 'fim' is written to prefix filename
-     * @param noise_coef Write kth noise parameter gn[k]. Output 'fim' is written to prefix filename
-     * @param bucket_config Create one AFNI 'bucket' dataset containing n sub-bricks. n=0 creates the default output. Output 'bucket' is written to prefixname
-     * @param brick_config Specify content for sub-brick in the form 'm t k label' where m is the sub-brick number, t is 'scoef' or 'ncoef', k is parameter index, and label is a descriptive label.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_TSGEN_METADATA);
     const params = v_3d_tsgen_params(input_file, signal_label, noise_label, sigma_value, output_file, in_tr_flag, signal_constr, noise_constr, voxel_number, signal_coef, noise_coef, bucket_config, brick_config)
@@ -318,5 +318,8 @@ export {
       V3dTsgenParameters,
       V_3D_TSGEN_METADATA,
       v_3d_tsgen,
+      v_3d_tsgen_cargs,
+      v_3d_tsgen_execute,
+      v_3d_tsgen_outputs,
       v_3d_tsgen_params,
 };

@@ -12,7 +12,7 @@ const GEN_SS_REVIEW_TABLE_PY_METADATA: Metadata = {
 
 
 interface GenSsReviewTablePyParameters {
-    "__STYXTYPE__": "gen_ss_review_table.py";
+    "@type": "afni.gen_ss_review_table.py";
     "infiles": Array<InputPathType>;
     "write_table"?: InputPathType | null | undefined;
     "write_outliers"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface GenSsReviewTablePyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "gen_ss_review_table.py": gen_ss_review_table_py_cargs,
+        "afni.gen_ss_review_table.py": gen_ss_review_table_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "gen_ss_review_table.py": gen_ss_review_table_py_outputs,
+        "afni.gen_ss_review_table.py": gen_ss_review_table_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,26 @@ interface GenSsReviewTablePyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infiles Input ss_review_basic output text files to process
+ * @param write_table Write final table to the given file
+ * @param write_outliers Write outlier table to the given file
+ * @param overwrite Overwrite the output -write_table, if it exists
+ * @param empty_is_outlier Treat empty tests as outliers
+ * @param outlier_sep Use SEP for the outlier table separator
+ * @param separator Use SEP for the label/vals separator (default = ':')
+ * @param showlabs Display counts of all labels found, with parents
+ * @param show_infiles Include input files in reviewtable result
+ * @param show_keepers Show a table of subjects kept rather than dropped
+ * @param report_outliers Report outliers where the comparison holds
+ * @param report_outliers_fill_style How to fill non-outliers in the table
+ * @param show_missing Display all missing keys
+ * @param verbosity Verbosity level
+ *
+ * @returns Parameter dictionary
+ */
 function gen_ss_review_table_py_params(
     infiles: Array<InputPathType>,
     write_table: InputPathType | null = null,
@@ -101,28 +121,8 @@ function gen_ss_review_table_py_params(
     show_missing: boolean = false,
     verbosity: number | null = null,
 ): GenSsReviewTablePyParameters {
-    /**
-     * Build parameters.
-    
-     * @param infiles Input ss_review_basic output text files to process
-     * @param write_table Write final table to the given file
-     * @param write_outliers Write outlier table to the given file
-     * @param overwrite Overwrite the output -write_table, if it exists
-     * @param empty_is_outlier Treat empty tests as outliers
-     * @param outlier_sep Use SEP for the outlier table separator
-     * @param separator Use SEP for the label/vals separator (default = ':')
-     * @param showlabs Display counts of all labels found, with parents
-     * @param show_infiles Include input files in reviewtable result
-     * @param show_keepers Show a table of subjects kept rather than dropped
-     * @param report_outliers Report outliers where the comparison holds
-     * @param report_outliers_fill_style How to fill non-outliers in the table
-     * @param show_missing Display all missing keys
-     * @param verbosity Verbosity level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "gen_ss_review_table.py" as const,
+        "@type": "afni.gen_ss_review_table.py" as const,
         "infiles": infiles,
         "overwrite": overwrite,
         "empty_is_outlier": empty_is_outlier,
@@ -156,18 +156,18 @@ function gen_ss_review_table_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gen_ss_review_table_py_cargs(
     params: GenSsReviewTablePyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("gen_ss_review_table.py");
     cargs.push(...(params["infiles"] ?? null).map(f => execution.inputFile(f)));
@@ -235,18 +235,18 @@ function gen_ss_review_table_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gen_ss_review_table_py_outputs(
     params: GenSsReviewTablePyParameters,
     execution: Execution,
 ): GenSsReviewTablePyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GenSsReviewTablePyOutputs = {
         root: execution.outputFile("."),
         output_table: ((params["write_table"] ?? null) !== null) ? execution.outputFile([path.basename((params["write_table"] ?? null))].join('')) : null,
@@ -256,22 +256,22 @@ function gen_ss_review_table_py_outputs(
 }
 
 
+/**
+ * Generate a table from ss_review_basic output files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
+ */
 function gen_ss_review_table_py_execute(
     params: GenSsReviewTablePyParameters,
     execution: Execution,
 ): GenSsReviewTablePyOutputs {
-    /**
-     * Generate a table from ss_review_basic output files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
-     */
     params = execution.params(params)
     const cargs = gen_ss_review_table_py_cargs(params, execution)
     const ret = gen_ss_review_table_py_outputs(params, execution)
@@ -280,6 +280,31 @@ function gen_ss_review_table_py_execute(
 }
 
 
+/**
+ * Generate a table from ss_review_basic output files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infiles Input ss_review_basic output text files to process
+ * @param write_table Write final table to the given file
+ * @param write_outliers Write outlier table to the given file
+ * @param overwrite Overwrite the output -write_table, if it exists
+ * @param empty_is_outlier Treat empty tests as outliers
+ * @param outlier_sep Use SEP for the outlier table separator
+ * @param separator Use SEP for the label/vals separator (default = ':')
+ * @param showlabs Display counts of all labels found, with parents
+ * @param show_infiles Include input files in reviewtable result
+ * @param show_keepers Show a table of subjects kept rather than dropped
+ * @param report_outliers Report outliers where the comparison holds
+ * @param report_outliers_fill_style How to fill non-outliers in the table
+ * @param show_missing Display all missing keys
+ * @param verbosity Verbosity level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
+ */
 function gen_ss_review_table_py(
     infiles: Array<InputPathType>,
     write_table: InputPathType | null = null,
@@ -297,31 +322,6 @@ function gen_ss_review_table_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): GenSsReviewTablePyOutputs {
-    /**
-     * Generate a table from ss_review_basic output files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infiles Input ss_review_basic output text files to process
-     * @param write_table Write final table to the given file
-     * @param write_outliers Write outlier table to the given file
-     * @param overwrite Overwrite the output -write_table, if it exists
-     * @param empty_is_outlier Treat empty tests as outliers
-     * @param outlier_sep Use SEP for the outlier table separator
-     * @param separator Use SEP for the label/vals separator (default = ':')
-     * @param showlabs Display counts of all labels found, with parents
-     * @param show_infiles Include input files in reviewtable result
-     * @param show_keepers Show a table of subjects kept rather than dropped
-     * @param report_outliers Report outliers where the comparison holds
-     * @param report_outliers_fill_style How to fill non-outliers in the table
-     * @param show_missing Display all missing keys
-     * @param verbosity Verbosity level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GEN_SS_REVIEW_TABLE_PY_METADATA);
     const params = gen_ss_review_table_py_params(infiles, write_table, write_outliers, overwrite, empty_is_outlier, outlier_sep, separator, showlabs, show_infiles, show_keepers, report_outliers, report_outliers_fill_style, show_missing, verbosity)
@@ -334,5 +334,8 @@ export {
       GenSsReviewTablePyOutputs,
       GenSsReviewTablePyParameters,
       gen_ss_review_table_py,
+      gen_ss_review_table_py_cargs,
+      gen_ss_review_table_py_execute,
+      gen_ss_review_table_py_outputs,
       gen_ss_review_table_py_params,
 };

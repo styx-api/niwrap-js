@@ -12,7 +12,7 @@ const FSLSELECTVOLS_METADATA: Metadata = {
 
 
 interface FslselectvolsParameters {
-    "__STYXTYPE__": "fslselectvols";
+    "@type": "fsl.fslselectvols";
     "input_file": InputPathType;
     "output_file": string;
     "vols_list": string;
@@ -22,35 +22,35 @@ interface FslselectvolsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslselectvols": fslselectvols_cargs,
+        "fsl.fslselectvols": fslselectvols_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslselectvols": fslselectvols_outputs,
+        "fsl.fslselectvols": fslselectvols_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface FslselectvolsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input file name (4D image)
+ * @param output_file Output file name (4D image)
+ * @param vols_list List of volumes to extract (comma-separated list or ascii file)
+ * @param output_mean_flag Output mean instead of concatenation
+ * @param output_variance_flag Output variance instead of concatenation
+ * @param help_flag Display help text
+ *
+ * @returns Parameter dictionary
+ */
 function fslselectvols_params(
     input_file: InputPathType,
     output_file: string,
@@ -81,20 +93,8 @@ function fslselectvols_params(
     output_variance_flag: boolean = false,
     help_flag: boolean = false,
 ): FslselectvolsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input file name (4D image)
-     * @param output_file Output file name (4D image)
-     * @param vols_list List of volumes to extract (comma-separated list or ascii file)
-     * @param output_mean_flag Output mean instead of concatenation
-     * @param output_variance_flag Output variance instead of concatenation
-     * @param help_flag Display help text
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslselectvols" as const,
+        "@type": "fsl.fslselectvols" as const,
         "input_file": input_file,
         "output_file": output_file,
         "vols_list": vols_list,
@@ -106,18 +106,18 @@ function fslselectvols_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslselectvols_cargs(
     params: FslselectvolsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslselectvols");
     cargs.push(
@@ -145,18 +145,18 @@ function fslselectvols_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslselectvols_outputs(
     params: FslselectvolsParameters,
     execution: Execution,
 ): FslselectvolsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslselectvolsOutputs = {
         root: execution.outputFile("."),
         output_4d_image: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -165,22 +165,22 @@ function fslselectvols_outputs(
 }
 
 
+/**
+ * Select volumes from a 4D time series and output a subset 4D volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
+ */
 function fslselectvols_execute(
     params: FslselectvolsParameters,
     execution: Execution,
 ): FslselectvolsOutputs {
-    /**
-     * Select volumes from a 4D time series and output a subset 4D volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslselectvols_cargs(params, execution)
     const ret = fslselectvols_outputs(params, execution)
@@ -189,6 +189,23 @@ function fslselectvols_execute(
 }
 
 
+/**
+ * Select volumes from a 4D time series and output a subset 4D volume.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input file name (4D image)
+ * @param output_file Output file name (4D image)
+ * @param vols_list List of volumes to extract (comma-separated list or ascii file)
+ * @param output_mean_flag Output mean instead of concatenation
+ * @param output_variance_flag Output variance instead of concatenation
+ * @param help_flag Display help text
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
+ */
 function fslselectvols(
     input_file: InputPathType,
     output_file: string,
@@ -198,23 +215,6 @@ function fslselectvols(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslselectvolsOutputs {
-    /**
-     * Select volumes from a 4D time series and output a subset 4D volume.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input file name (4D image)
-     * @param output_file Output file name (4D image)
-     * @param vols_list List of volumes to extract (comma-separated list or ascii file)
-     * @param output_mean_flag Output mean instead of concatenation
-     * @param output_variance_flag Output variance instead of concatenation
-     * @param help_flag Display help text
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSELECTVOLS_METADATA);
     const params = fslselectvols_params(input_file, output_file, vols_list, output_mean_flag, output_variance_flag, help_flag)
@@ -227,5 +227,8 @@ export {
       FslselectvolsOutputs,
       FslselectvolsParameters,
       fslselectvols,
+      fslselectvols_cargs,
+      fslselectvols_execute,
+      fslselectvols_outputs,
       fslselectvols_params,
 };

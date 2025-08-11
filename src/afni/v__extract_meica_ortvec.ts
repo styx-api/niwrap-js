@@ -12,7 +12,7 @@ const V__EXTRACT_MEICA_ORTVEC_METADATA: Metadata = {
 
 
 interface VExtractMeicaOrtvecParameters {
-    "__STYXTYPE__": "@extract_meica_ortvec";
+    "@type": "afni.@extract_meica_ortvec";
     "prefix": string;
     "meica_dir"?: string | null | undefined;
     "reject_ignored"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface VExtractMeicaOrtvecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@extract_meica_ortvec": v__extract_meica_ortvec_cargs,
+        "afni.@extract_meica_ortvec": v__extract_meica_ortvec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@extract_meica_ortvec": v__extract_meica_ortvec_outputs,
+        "afni.@extract_meica_ortvec": v__extract_meica_ortvec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VExtractMeicaOrtvecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Name for output 1D ortvec file
+ * @param meica_dir Directory for MEICA files
+ * @param reject_ignored Do we reject ignored components (0=keep, 1=reject), default is 0
+ * @param reject_midk Do we reject midk components (0=keep, 1=reject), default is 1
+ * @param work_dir Sub-directory for work
+ * @param verbosity Set verbosity level
+ *
+ * @returns Parameter dictionary
+ */
 function v__extract_meica_ortvec_params(
     prefix: string,
     meica_dir: string | null = null,
@@ -81,20 +93,8 @@ function v__extract_meica_ortvec_params(
     work_dir: string | null = null,
     verbosity: string | null = null,
 ): VExtractMeicaOrtvecParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Name for output 1D ortvec file
-     * @param meica_dir Directory for MEICA files
-     * @param reject_ignored Do we reject ignored components (0=keep, 1=reject), default is 0
-     * @param reject_midk Do we reject midk components (0=keep, 1=reject), default is 1
-     * @param work_dir Sub-directory for work
-     * @param verbosity Set verbosity level
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@extract_meica_ortvec" as const,
+        "@type": "afni.@extract_meica_ortvec" as const,
         "prefix": prefix,
     };
     if (meica_dir !== null) {
@@ -116,18 +116,18 @@ function v__extract_meica_ortvec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__extract_meica_ortvec_cargs(
     params: VExtractMeicaOrtvecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@extract_meica_ortvec");
     cargs.push(
@@ -168,18 +168,18 @@ function v__extract_meica_ortvec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__extract_meica_ortvec_outputs(
     params: VExtractMeicaOrtvecParameters,
     execution: Execution,
 ): VExtractMeicaOrtvecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VExtractMeicaOrtvecOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["prefix"] ?? null), ".1D"].join('')),
@@ -188,22 +188,22 @@ function v__extract_meica_ortvec_outputs(
 }
 
 
+/**
+ * Project good MEICA components out of bad ones.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
+ */
 function v__extract_meica_ortvec_execute(
     params: VExtractMeicaOrtvecParameters,
     execution: Execution,
 ): VExtractMeicaOrtvecOutputs {
-    /**
-     * Project good MEICA components out of bad ones.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__extract_meica_ortvec_cargs(params, execution)
     const ret = v__extract_meica_ortvec_outputs(params, execution)
@@ -212,6 +212,23 @@ function v__extract_meica_ortvec_execute(
 }
 
 
+/**
+ * Project good MEICA components out of bad ones.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Name for output 1D ortvec file
+ * @param meica_dir Directory for MEICA files
+ * @param reject_ignored Do we reject ignored components (0=keep, 1=reject), default is 0
+ * @param reject_midk Do we reject midk components (0=keep, 1=reject), default is 1
+ * @param work_dir Sub-directory for work
+ * @param verbosity Set verbosity level
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
+ */
 function v__extract_meica_ortvec(
     prefix: string,
     meica_dir: string | null = null,
@@ -221,23 +238,6 @@ function v__extract_meica_ortvec(
     verbosity: string | null = null,
     runner: Runner | null = null,
 ): VExtractMeicaOrtvecOutputs {
-    /**
-     * Project good MEICA components out of bad ones.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Name for output 1D ortvec file
-     * @param meica_dir Directory for MEICA files
-     * @param reject_ignored Do we reject ignored components (0=keep, 1=reject), default is 0
-     * @param reject_midk Do we reject midk components (0=keep, 1=reject), default is 1
-     * @param work_dir Sub-directory for work
-     * @param verbosity Set verbosity level
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__EXTRACT_MEICA_ORTVEC_METADATA);
     const params = v__extract_meica_ortvec_params(prefix, meica_dir, reject_ignored, reject_midk, work_dir, verbosity)
@@ -250,5 +250,8 @@ export {
       VExtractMeicaOrtvecParameters,
       V__EXTRACT_MEICA_ORTVEC_METADATA,
       v__extract_meica_ortvec,
+      v__extract_meica_ortvec_cargs,
+      v__extract_meica_ortvec_execute,
+      v__extract_meica_ortvec_outputs,
       v__extract_meica_ortvec_params,
 };

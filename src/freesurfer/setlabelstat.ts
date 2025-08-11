@@ -12,7 +12,7 @@ const SETLABELSTAT_METADATA: Metadata = {
 
 
 interface SetlabelstatParameters {
-    "__STYXTYPE__": "setlabelstat";
+    "@type": "freesurfer.setlabelstat";
     "inlabelfile": InputPathType;
     "outlabelfile": InputPathType;
     "statval": number;
@@ -20,35 +20,35 @@ interface SetlabelstatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "setlabelstat": setlabelstat_cargs,
+        "freesurfer.setlabelstat": setlabelstat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "setlabelstat": setlabelstat_outputs,
+        "freesurfer.setlabelstat": setlabelstat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface SetlabelstatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inlabelfile Input label file.
+ * @param outlabelfile Output label file.
+ * @param statval Stat value to replace in the label file.
+ * @param help Displays help information.
+ *
+ * @returns Parameter dictionary
+ */
 function setlabelstat_params(
     inlabelfile: InputPathType,
     outlabelfile: InputPathType,
     statval: number,
     help: boolean = false,
 ): SetlabelstatParameters {
-    /**
-     * Build parameters.
-    
-     * @param inlabelfile Input label file.
-     * @param outlabelfile Output label file.
-     * @param statval Stat value to replace in the label file.
-     * @param help Displays help information.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "setlabelstat" as const,
+        "@type": "freesurfer.setlabelstat" as const,
         "inlabelfile": inlabelfile,
         "outlabelfile": outlabelfile,
         "statval": statval,
@@ -98,18 +98,18 @@ function setlabelstat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function setlabelstat_cargs(
     params: SetlabelstatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("setlabelstat");
     cargs.push(
@@ -131,18 +131,18 @@ function setlabelstat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function setlabelstat_outputs(
     params: SetlabelstatParameters,
     execution: Execution,
 ): SetlabelstatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SetlabelstatOutputs = {
         root: execution.outputFile("."),
         output_label_file: execution.outputFile([path.basename((params["outlabelfile"] ?? null))].join('')),
@@ -151,22 +151,22 @@ function setlabelstat_outputs(
 }
 
 
+/**
+ * Replaces the stat values in a label file with the single stat value supplied on the command-line.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
+ */
 function setlabelstat_execute(
     params: SetlabelstatParameters,
     execution: Execution,
 ): SetlabelstatOutputs {
-    /**
-     * Replaces the stat values in a label file with the single stat value supplied on the command-line.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
-     */
     params = execution.params(params)
     const cargs = setlabelstat_cargs(params, execution)
     const ret = setlabelstat_outputs(params, execution)
@@ -175,6 +175,21 @@ function setlabelstat_execute(
 }
 
 
+/**
+ * Replaces the stat values in a label file with the single stat value supplied on the command-line.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inlabelfile Input label file.
+ * @param outlabelfile Output label file.
+ * @param statval Stat value to replace in the label file.
+ * @param help Displays help information.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
+ */
 function setlabelstat(
     inlabelfile: InputPathType,
     outlabelfile: InputPathType,
@@ -182,21 +197,6 @@ function setlabelstat(
     help: boolean = false,
     runner: Runner | null = null,
 ): SetlabelstatOutputs {
-    /**
-     * Replaces the stat values in a label file with the single stat value supplied on the command-line.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inlabelfile Input label file.
-     * @param outlabelfile Output label file.
-     * @param statval Stat value to replace in the label file.
-     * @param help Displays help information.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SETLABELSTAT_METADATA);
     const params = setlabelstat_params(inlabelfile, outlabelfile, statval, help)
@@ -209,5 +209,8 @@ export {
       SetlabelstatOutputs,
       SetlabelstatParameters,
       setlabelstat,
+      setlabelstat_cargs,
+      setlabelstat_execute,
+      setlabelstat_outputs,
       setlabelstat_params,
 };

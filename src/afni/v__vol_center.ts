@@ -12,39 +12,39 @@ const V__VOL_CENTER_METADATA: Metadata = {
 
 
 interface VVolCenterParameters {
-    "__STYXTYPE__": "@VolCenter";
+    "@type": "afni.@VolCenter";
     "dset": InputPathType;
     "orient"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@VolCenter": v__vol_center_cargs,
+        "afni.@VolCenter": v__vol_center_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VVolCenterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dset Input volume dataset
+ * @param orient Output coordinate system orientation (e.g., RAI)
+ *
+ * @returns Parameter dictionary
+ */
 function v__vol_center_params(
     dset: InputPathType,
     orient: string | null = null,
 ): VVolCenterParameters {
-    /**
-     * Build parameters.
-    
-     * @param dset Input volume dataset
-     * @param orient Output coordinate system orientation (e.g., RAI)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@VolCenter" as const,
+        "@type": "afni.@VolCenter" as const,
         "dset": dset,
     };
     if (orient !== null) {
@@ -87,18 +87,18 @@ function v__vol_center_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__vol_center_cargs(
     params: VVolCenterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@VolCenter");
     cargs.push(
@@ -115,18 +115,18 @@ function v__vol_center_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__vol_center_outputs(
     params: VVolCenterParameters,
     execution: Execution,
 ): VVolCenterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VVolCenterOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function v__vol_center_outputs(
 }
 
 
+/**
+ * Tool to return the center of volume for a given dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
+ */
 function v__vol_center_execute(
     params: VVolCenterParameters,
     execution: Execution,
 ): VVolCenterOutputs {
-    /**
-     * Tool to return the center of volume for a given dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__vol_center_cargs(params, execution)
     const ret = v__vol_center_outputs(params, execution)
@@ -158,24 +158,24 @@ function v__vol_center_execute(
 }
 
 
+/**
+ * Tool to return the center of volume for a given dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dset Input volume dataset
+ * @param orient Output coordinate system orientation (e.g., RAI)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
+ */
 function v__vol_center(
     dset: InputPathType,
     orient: string | null = null,
     runner: Runner | null = null,
 ): VVolCenterOutputs {
-    /**
-     * Tool to return the center of volume for a given dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dset Input volume dataset
-     * @param orient Output coordinate system orientation (e.g., RAI)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__VOL_CENTER_METADATA);
     const params = v__vol_center_params(dset, orient)
@@ -188,5 +188,8 @@ export {
       VVolCenterParameters,
       V__VOL_CENTER_METADATA,
       v__vol_center,
+      v__vol_center_cargs,
+      v__vol_center_execute,
+      v__vol_center_outputs,
       v__vol_center_params,
 };

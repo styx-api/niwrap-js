@@ -12,21 +12,21 @@ const LABEL_RESAMPLE_METADATA: Metadata = {
 
 
 interface LabelResampleAreaSurfsParameters {
-    "__STYXTYPE__": "area_surfs";
+    "@type": "workbench.label-resample.area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface LabelResampleAreaMetricsParameters {
-    "__STYXTYPE__": "area_metrics";
+    "@type": "workbench.label-resample.area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
 
 
 interface LabelResampleParameters {
-    "__STYXTYPE__": "label-resample";
+    "@type": "workbench.label-resample";
     "label_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -41,56 +41,56 @@ interface LabelResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "label-resample": label_resample_cargs,
-        "area_surfs": label_resample_area_surfs_cargs,
-        "area_metrics": label_resample_area_metrics_cargs,
+        "workbench.label-resample": label_resample_cargs,
+        "workbench.label-resample.area_surfs": label_resample_area_surfs_cargs,
+        "workbench.label-resample.area_metrics": label_resample_area_metrics_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "label-resample": label_resample_outputs,
+        "workbench.label-resample": label_resample_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a relevant anatomical surface with <current-sphere> mesh
+ * @param new_area a relevant anatomical surface with <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function label_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): LabelResampleAreaSurfsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a relevant anatomical surface with <current-sphere> mesh
-     * @param new_area a relevant anatomical surface with <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_surfs" as const,
+        "@type": "workbench.label-resample.area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -98,18 +98,18 @@ function label_resample_area_surfs_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_resample_area_surfs_cargs(
     params: LabelResampleAreaSurfsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-surfs");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -118,20 +118,20 @@ function label_resample_area_surfs_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param current_area a metric file with vertex areas for <current-sphere> mesh
+ * @param new_area a metric file with vertex areas for <new-sphere> mesh
+ *
+ * @returns Parameter dictionary
+ */
 function label_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
 ): LabelResampleAreaMetricsParameters {
-    /**
-     * Build parameters.
-    
-     * @param current_area a metric file with vertex areas for <current-sphere> mesh
-     * @param new_area a metric file with vertex areas for <new-sphere> mesh
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "area_metrics" as const,
+        "@type": "workbench.label-resample.area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -139,18 +139,18 @@ function label_resample_area_metrics_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_resample_area_metrics_cargs(
     params: LabelResampleAreaMetricsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-area-metrics");
     cargs.push(execution.inputFile((params["current_area"] ?? null)));
@@ -180,6 +180,23 @@ interface LabelResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param label_in the label file to resample
+ * @param current_sphere a sphere surface with the mesh that the label file is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param label_out the output label file
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
+ * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
+ * @param opt_largest use only the label of the vertex with the largest weight
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ *
+ * @returns Parameter dictionary
+ */
 function label_resample_params(
     label_in: InputPathType,
     current_sphere: InputPathType,
@@ -193,25 +210,8 @@ function label_resample_params(
     opt_largest: boolean = false,
     opt_bypass_sphere_check: boolean = false,
 ): LabelResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param label_in the label file to resample
-     * @param current_sphere a sphere surface with the mesh that the label file is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param label_out the output label file
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
-     * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     * @param opt_largest use only the label of the vertex with the largest weight
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "label-resample" as const,
+        "@type": "workbench.label-resample" as const,
         "label_in": label_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -236,18 +236,18 @@ function label_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_resample_cargs(
     params: LabelResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-label-resample");
@@ -257,10 +257,10 @@ function label_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["label_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null).__STYXTYPE__)((params["area_surfs"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null).__STYXTYPE__)((params["area_metrics"] ?? null), execution));
+        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
     }
     if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -284,18 +284,18 @@ function label_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_resample_outputs(
     params: LabelResampleParameters,
     execution: Execution,
 ): LabelResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelResampleOutputs = {
         root: execution.outputFile("."),
         label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
@@ -305,36 +305,36 @@ function label_resample_outputs(
 }
 
 
+/**
+ * Resample a label file to a different mesh.
+ *
+ * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
+ *
+ * The ADAP_BARY_AREA method is recommended for label data, because it should be better at resolving vertices that are near multiple labels, or in case of downsampling.  Midthickness surfaces are recommended for the vertex areas for most data.
+ *
+ * The -largest option results in nearest vertex behavior when used with BARYCENTRIC, as it uses the value of the source vertex that has the largest weight.
+ *
+ * When -largest is not specified, the vertex weights are summed according to which label they correspond to, and the label with the largest sum is used.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
+ */
 function label_resample_execute(
     params: LabelResampleParameters,
     execution: Execution,
 ): LabelResampleOutputs {
-    /**
-     * Resample a label file to a different mesh.
-     * 
-     * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
-     * 
-     * The ADAP_BARY_AREA method is recommended for label data, because it should be better at resolving vertices that are near multiple labels, or in case of downsampling.  Midthickness surfaces are recommended for the vertex areas for most data.
-     * 
-     * The -largest option results in nearest vertex behavior when used with BARYCENTRIC, as it uses the value of the source vertex that has the largest weight.
-     * 
-     * When -largest is not specified, the vertex weights are summed according to which label they correspond to, and the label with the largest sum is used.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_resample_cargs(params, execution)
     const ret = label_resample_outputs(params, execution)
@@ -343,6 +343,42 @@ function label_resample_execute(
 }
 
 
+/**
+ * Resample a label file to a different mesh.
+ *
+ * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
+ *
+ * The ADAP_BARY_AREA method is recommended for label data, because it should be better at resolving vertices that are near multiple labels, or in case of downsampling.  Midthickness surfaces are recommended for the vertex areas for most data.
+ *
+ * The -largest option results in nearest vertex behavior when used with BARYCENTRIC, as it uses the value of the source vertex that has the largest weight.
+ *
+ * When -largest is not specified, the vertex weights are summed according to which label they correspond to, and the label with the largest sum is used.
+ *
+ * The <method> argument must be one of the following:
+ *
+ * ADAP_BARY_AREA
+ * BARYCENTRIC
+ * .
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param label_in the label file to resample
+ * @param current_sphere a sphere surface with the mesh that the label file is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param method the method name
+ * @param label_out the output label file
+ * @param area_surfs specify surfaces to do vertex area correction based on
+ * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
+ * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
+ * @param opt_largest use only the label of the vertex with the largest weight
+ * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
+ */
 function label_resample(
     label_in: InputPathType,
     current_sphere: InputPathType,
@@ -357,42 +393,6 @@ function label_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
-    /**
-     * Resample a label file to a different mesh.
-     * 
-     * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
-     * 
-     * The ADAP_BARY_AREA method is recommended for label data, because it should be better at resolving vertices that are near multiple labels, or in case of downsampling.  Midthickness surfaces are recommended for the vertex areas for most data.
-     * 
-     * The -largest option results in nearest vertex behavior when used with BARYCENTRIC, as it uses the value of the source vertex that has the largest weight.
-     * 
-     * When -largest is not specified, the vertex weights are summed according to which label they correspond to, and the label with the largest sum is used.
-     * 
-     * The <method> argument must be one of the following:
-     * 
-     * ADAP_BARY_AREA
-     * BARYCENTRIC
-     * .
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param label_in the label file to resample
-     * @param current_sphere a sphere surface with the mesh that the label file is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param method the method name
-     * @param label_out the output label file
-     * @param area_surfs specify surfaces to do vertex area correction based on
-     * @param area_metrics specify vertex area metrics to do area correction based on
-     * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
-     * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     * @param opt_largest use only the label of the vertex with the largest weight
-     * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_RESAMPLE_METADATA);
     const params = label_resample_params(label_in, current_sphere, new_sphere, method, label_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
@@ -407,7 +407,12 @@ export {
       LabelResampleOutputs,
       LabelResampleParameters,
       label_resample,
+      label_resample_area_metrics_cargs,
       label_resample_area_metrics_params,
+      label_resample_area_surfs_cargs,
       label_resample_area_surfs_params,
+      label_resample_cargs,
+      label_resample_execute,
+      label_resample_outputs,
       label_resample_params,
 };

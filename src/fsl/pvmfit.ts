@@ -12,7 +12,7 @@ const PVMFIT_METADATA: Metadata = {
 
 
 interface PvmfitParameters {
-    "__STYXTYPE__": "pvmfit";
+    "@type": "fsl.pvmfit";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "bvec_file": InputPathType;
@@ -31,35 +31,35 @@ interface PvmfitParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pvmfit": pvmfit_cargs,
+        "fsl.pvmfit": pvmfit_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pvmfit": pvmfit_outputs,
+        "fsl.pvmfit": pvmfit_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,6 +86,27 @@ interface PvmfitOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param data_file Data file
+ * @param mask_file Mask file
+ * @param bvec_file B vectors file
+ * @param bval_file B values file
+ * @param output_basename Output basename - default='pvm'
+ * @param number_of_fibres Number of fibres to fit - default=1
+ * @param model_type Model type: 1 for Ball-Sticks (single-shell), 2 for Ball-Sticks (multi-shells), 4 for Ball-Binghams
+ * @param fit_all_models Fit all models from 1 up to N fibres and choose the best using BIC
+ * @param constrained_nonlinear Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum
+ * @param constrained_nonlinear_f Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum. Return n fanning angle estimates, using the Hessian of the cost function
+ * @param grid_search Use grid search (on the fanning eigenvalues). Default=off
+ * @param include_noise_floor Include noise floor parameter in the model
+ * @param save_bic Save BIC for certain models
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function pvmfit_params(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -103,29 +124,8 @@ function pvmfit_params(
     verbose: boolean = false,
     help: boolean = false,
 ): PvmfitParameters {
-    /**
-     * Build parameters.
-    
-     * @param data_file Data file
-     * @param mask_file Mask file
-     * @param bvec_file B vectors file
-     * @param bval_file B values file
-     * @param output_basename Output basename - default='pvm'
-     * @param number_of_fibres Number of fibres to fit - default=1
-     * @param model_type Model type: 1 for Ball-Sticks (single-shell), 2 for Ball-Sticks (multi-shells), 4 for Ball-Binghams
-     * @param fit_all_models Fit all models from 1 up to N fibres and choose the best using BIC
-     * @param constrained_nonlinear Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum
-     * @param constrained_nonlinear_f Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum. Return n fanning angle estimates, using the Hessian of the cost function
-     * @param grid_search Use grid search (on the fanning eigenvalues). Default=off
-     * @param include_noise_floor Include noise floor parameter in the model
-     * @param save_bic Save BIC for certain models
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pvmfit" as const,
+        "@type": "fsl.pvmfit" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "bvec_file": bvec_file,
@@ -152,18 +152,18 @@ function pvmfit_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pvmfit_cargs(
     params: PvmfitParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pvmfit");
     cargs.push(
@@ -228,18 +228,18 @@ function pvmfit_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pvmfit_outputs(
     params: PvmfitParameters,
     execution: Execution,
 ): PvmfitOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PvmfitOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output_basename"] ?? null) !== null) ? execution.outputFile([(params["output_basename"] ?? null), ".nii.gz"].join('')) : null,
@@ -249,22 +249,22 @@ function pvmfit_outputs(
 }
 
 
+/**
+ * Fits diffusion models to multishell DWI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
+ */
 function pvmfit_execute(
     params: PvmfitParameters,
     execution: Execution,
 ): PvmfitOutputs {
-    /**
-     * Fits diffusion models to multishell DWI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
-     */
     params = execution.params(params)
     const cargs = pvmfit_cargs(params, execution)
     const ret = pvmfit_outputs(params, execution)
@@ -273,6 +273,32 @@ function pvmfit_execute(
 }
 
 
+/**
+ * Fits diffusion models to multishell DWI data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param data_file Data file
+ * @param mask_file Mask file
+ * @param bvec_file B vectors file
+ * @param bval_file B values file
+ * @param output_basename Output basename - default='pvm'
+ * @param number_of_fibres Number of fibres to fit - default=1
+ * @param model_type Model type: 1 for Ball-Sticks (single-shell), 2 for Ball-Sticks (multi-shells), 4 for Ball-Binghams
+ * @param fit_all_models Fit all models from 1 up to N fibres and choose the best using BIC
+ * @param constrained_nonlinear Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum
+ * @param constrained_nonlinear_f Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum. Return n fanning angle estimates, using the Hessian of the cost function
+ * @param grid_search Use grid search (on the fanning eigenvalues). Default=off
+ * @param include_noise_floor Include noise floor parameter in the model
+ * @param save_bic Save BIC for certain models
+ * @param verbose Switch on diagnostic messages
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
+ */
 function pvmfit(
     data_file: InputPathType,
     mask_file: InputPathType,
@@ -291,32 +317,6 @@ function pvmfit(
     help: boolean = false,
     runner: Runner | null = null,
 ): PvmfitOutputs {
-    /**
-     * Fits diffusion models to multishell DWI data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param data_file Data file
-     * @param mask_file Mask file
-     * @param bvec_file B vectors file
-     * @param bval_file B values file
-     * @param output_basename Output basename - default='pvm'
-     * @param number_of_fibres Number of fibres to fit - default=1
-     * @param model_type Model type: 1 for Ball-Sticks (single-shell), 2 for Ball-Sticks (multi-shells), 4 for Ball-Binghams
-     * @param fit_all_models Fit all models from 1 up to N fibres and choose the best using BIC
-     * @param constrained_nonlinear Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum
-     * @param constrained_nonlinear_f Model1: Apply constrained nonlinear optimization on the diffusivity, volume fractions and their sum. Return n fanning angle estimates, using the Hessian of the cost function
-     * @param grid_search Use grid search (on the fanning eigenvalues). Default=off
-     * @param include_noise_floor Include noise floor parameter in the model
-     * @param save_bic Save BIC for certain models
-     * @param verbose Switch on diagnostic messages
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PVMFIT_METADATA);
     const params = pvmfit_params(data_file, mask_file, bvec_file, bval_file, output_basename, number_of_fibres, model_type, fit_all_models, constrained_nonlinear, constrained_nonlinear_f, grid_search, include_noise_floor, save_bic, verbose, help)
@@ -329,5 +329,8 @@ export {
       PvmfitOutputs,
       PvmfitParameters,
       pvmfit,
+      pvmfit_cargs,
+      pvmfit_execute,
+      pvmfit_outputs,
       pvmfit_params,
 };

@@ -12,7 +12,7 @@ const MRI_ADD_XFORM_TO_HEADER_METADATA: Metadata = {
 
 
 interface MriAddXformToHeaderParameters {
-    "__STYXTYPE__": "mri_add_xform_to_header";
+    "@type": "freesurfer.mri_add_xform_to_header";
     "xfm_file": InputPathType;
     "input_volume": InputPathType;
     "output_volume": string;
@@ -21,35 +21,35 @@ interface MriAddXformToHeaderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_add_xform_to_header": mri_add_xform_to_header_cargs,
+        "freesurfer.mri_add_xform_to_header": mri_add_xform_to_header_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_add_xform_to_header": mri_add_xform_to_header_outputs,
+        "freesurfer.mri_add_xform_to_header": mri_add_xform_to_header_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface MriAddXformToHeaderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param xfm_file Transformation file to be added to the volume header.
+ * @param input_volume Input volume to which the transformation is added.
+ * @param output_volume Output volume with the transformation included.
+ * @param verbose Enable verbose output for more detailed logging.
+ * @param copy_name Copy the name of the xfm file without loading it.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_add_xform_to_header_params(
     xfm_file: InputPathType,
     input_volume: InputPathType,
@@ -79,19 +90,8 @@ function mri_add_xform_to_header_params(
     verbose: boolean = false,
     copy_name: boolean = false,
 ): MriAddXformToHeaderParameters {
-    /**
-     * Build parameters.
-    
-     * @param xfm_file Transformation file to be added to the volume header.
-     * @param input_volume Input volume to which the transformation is added.
-     * @param output_volume Output volume with the transformation included.
-     * @param verbose Enable verbose output for more detailed logging.
-     * @param copy_name Copy the name of the xfm file without loading it.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_add_xform_to_header" as const,
+        "@type": "freesurfer.mri_add_xform_to_header" as const,
         "xfm_file": xfm_file,
         "input_volume": input_volume,
         "output_volume": output_volume,
@@ -102,18 +102,18 @@ function mri_add_xform_to_header_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_add_xform_to_header_cargs(
     params: MriAddXformToHeaderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_add_xform_to_header");
     cargs.push(execution.inputFile((params["xfm_file"] ?? null)));
@@ -129,18 +129,18 @@ function mri_add_xform_to_header_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_add_xform_to_header_outputs(
     params: MriAddXformToHeaderParameters,
     execution: Execution,
 ): MriAddXformToHeaderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriAddXformToHeaderOutputs = {
         root: execution.outputFile("."),
         output_volume_file: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -149,22 +149,22 @@ function mri_add_xform_to_header_outputs(
 }
 
 
+/**
+ * Program to add specified transformation to the volume header.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
+ */
 function mri_add_xform_to_header_execute(
     params: MriAddXformToHeaderParameters,
     execution: Execution,
 ): MriAddXformToHeaderOutputs {
-    /**
-     * Program to add specified transformation to the volume header.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_add_xform_to_header_cargs(params, execution)
     const ret = mri_add_xform_to_header_outputs(params, execution)
@@ -173,6 +173,22 @@ function mri_add_xform_to_header_execute(
 }
 
 
+/**
+ * Program to add specified transformation to the volume header.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param xfm_file Transformation file to be added to the volume header.
+ * @param input_volume Input volume to which the transformation is added.
+ * @param output_volume Output volume with the transformation included.
+ * @param verbose Enable verbose output for more detailed logging.
+ * @param copy_name Copy the name of the xfm file without loading it.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
+ */
 function mri_add_xform_to_header(
     xfm_file: InputPathType,
     input_volume: InputPathType,
@@ -181,22 +197,6 @@ function mri_add_xform_to_header(
     copy_name: boolean = false,
     runner: Runner | null = null,
 ): MriAddXformToHeaderOutputs {
-    /**
-     * Program to add specified transformation to the volume header.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param xfm_file Transformation file to be added to the volume header.
-     * @param input_volume Input volume to which the transformation is added.
-     * @param output_volume Output volume with the transformation included.
-     * @param verbose Enable verbose output for more detailed logging.
-     * @param copy_name Copy the name of the xfm file without loading it.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_ADD_XFORM_TO_HEADER_METADATA);
     const params = mri_add_xform_to_header_params(xfm_file, input_volume, output_volume, verbose, copy_name)
@@ -209,5 +209,8 @@ export {
       MriAddXformToHeaderOutputs,
       MriAddXformToHeaderParameters,
       mri_add_xform_to_header,
+      mri_add_xform_to_header_cargs,
+      mri_add_xform_to_header_execute,
+      mri_add_xform_to_header_outputs,
       mri_add_xform_to_header_params,
 };

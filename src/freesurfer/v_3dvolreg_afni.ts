@@ -12,42 +12,42 @@ const V_3DVOLREG_AFNI_METADATA: Metadata = {
 
 
 interface V3dvolregAfniParameters {
-    "__STYXTYPE__": "3dvolreg.afni";
+    "@type": "freesurfer.3dvolreg.afni";
     "input_file": InputPathType;
     "output_file": string;
     "options"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dvolreg.afni": v_3dvolreg_afni_cargs,
+        "freesurfer.3dvolreg.afni": v_3dvolreg_afni_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dvolreg.afni": v_3dvolreg_afni_outputs,
+        "freesurfer.3dvolreg.afni": v_3dvolreg_afni_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dvolregAfniOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input dataset to be registered
+ * @param output_file Output dataset with applied registration
+ * @param options Options for 3dvolreg (consult AFNI documentation for details)
+ *
+ * @returns Parameter dictionary
+ */
 function v_3dvolreg_afni_params(
     input_file: InputPathType,
     output_file: string,
     options: string | null = null,
 ): V3dvolregAfniParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input dataset to be registered
-     * @param output_file Output dataset with applied registration
-     * @param options Options for 3dvolreg (consult AFNI documentation for details)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dvolreg.afni" as const,
+        "@type": "freesurfer.3dvolreg.afni" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -96,18 +96,18 @@ function v_3dvolreg_afni_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3dvolreg_afni_cargs(
     params: V3dvolregAfniParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dvolreg.afni");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -119,18 +119,18 @@ function v_3dvolreg_afni_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3dvolreg_afni_outputs(
     params: V3dvolregAfniParameters,
     execution: Execution,
 ): V3dvolregAfniOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dvolregAfniOutputs = {
         root: execution.outputFile("."),
         registered_output: execution.outputFile([(params["output_file"] ?? null), ".nii"].join('')),
@@ -139,22 +139,22 @@ function v_3dvolreg_afni_outputs(
 }
 
 
+/**
+ * AFNI program for volume registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dvolregAfniOutputs`).
+ */
 function v_3dvolreg_afni_execute(
     params: V3dvolregAfniParameters,
     execution: Execution,
 ): V3dvolregAfniOutputs {
-    /**
-     * AFNI program for volume registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dvolregAfniOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3dvolreg_afni_cargs(params, execution)
     const ret = v_3dvolreg_afni_outputs(params, execution)
@@ -163,26 +163,26 @@ function v_3dvolreg_afni_execute(
 }
 
 
+/**
+ * AFNI program for volume registration.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input dataset to be registered
+ * @param output_file Output dataset with applied registration
+ * @param options Options for 3dvolreg (consult AFNI documentation for details)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dvolregAfniOutputs`).
+ */
 function v_3dvolreg_afni(
     input_file: InputPathType,
     output_file: string,
     options: string | null = null,
     runner: Runner | null = null,
 ): V3dvolregAfniOutputs {
-    /**
-     * AFNI program for volume registration.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input dataset to be registered
-     * @param output_file Output dataset with applied registration
-     * @param options Options for 3dvolreg (consult AFNI documentation for details)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dvolregAfniOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DVOLREG_AFNI_METADATA);
     const params = v_3dvolreg_afni_params(input_file, output_file, options)
@@ -195,5 +195,8 @@ export {
       V3dvolregAfniParameters,
       V_3DVOLREG_AFNI_METADATA,
       v_3dvolreg_afni,
+      v_3dvolreg_afni_cargs,
+      v_3dvolreg_afni_execute,
+      v_3dvolreg_afni_outputs,
       v_3dvolreg_afni_params,
 };

@@ -12,7 +12,7 @@ const VERTEXVOL_METADATA: Metadata = {
 
 
 interface VertexvolParameters {
-    "__STYXTYPE__": "vertexvol";
+    "@type": "freesurfer.vertexvol";
     "subject": string;
     "left_hemisphere": boolean;
     "right_hemisphere": boolean;
@@ -22,35 +22,35 @@ interface VertexvolParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "vertexvol": vertexvol_cargs,
+        "freesurfer.vertexvol": vertexvol_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "vertexvol": vertexvol_outputs,
+        "freesurfer.vertexvol": vertexvol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VertexvolOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param left_hemisphere Select left hemisphere
+ * @param right_hemisphere Select right hemisphere
+ * @param output_file Output file name, default is ?h.volume
+ * @param use_th3 Use TH3 method for computation
+ * @param no_th3 Don't use TH3 method for computation
+ *
+ * @returns Parameter dictionary
+ */
 function vertexvol_params(
     subject: string,
     left_hemisphere: boolean = false,
@@ -81,20 +93,8 @@ function vertexvol_params(
     use_th3: boolean = false,
     no_th3: boolean = false,
 ): VertexvolParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param left_hemisphere Select left hemisphere
-     * @param right_hemisphere Select right hemisphere
-     * @param output_file Output file name, default is ?h.volume
-     * @param use_th3 Use TH3 method for computation
-     * @param no_th3 Don't use TH3 method for computation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "vertexvol" as const,
+        "@type": "freesurfer.vertexvol" as const,
         "subject": subject,
         "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
@@ -108,18 +108,18 @@ function vertexvol_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function vertexvol_cargs(
     params: VertexvolParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("vertexvol");
     cargs.push(
@@ -148,18 +148,18 @@ function vertexvol_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function vertexvol_outputs(
     params: VertexvolParameters,
     execution: Execution,
 ): VertexvolOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VertexvolOutputs = {
         root: execution.outputFile("."),
         output_volume_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -168,22 +168,22 @@ function vertexvol_outputs(
 }
 
 
+/**
+ * Computes vertex-wise volume (and mid.area).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
+ */
 function vertexvol_execute(
     params: VertexvolParameters,
     execution: Execution,
 ): VertexvolOutputs {
-    /**
-     * Computes vertex-wise volume (and mid.area).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
-     */
     params = execution.params(params)
     const cargs = vertexvol_cargs(params, execution)
     const ret = vertexvol_outputs(params, execution)
@@ -192,6 +192,23 @@ function vertexvol_execute(
 }
 
 
+/**
+ * Computes vertex-wise volume (and mid.area).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param left_hemisphere Select left hemisphere
+ * @param right_hemisphere Select right hemisphere
+ * @param output_file Output file name, default is ?h.volume
+ * @param use_th3 Use TH3 method for computation
+ * @param no_th3 Don't use TH3 method for computation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
+ */
 function vertexvol(
     subject: string,
     left_hemisphere: boolean = false,
@@ -201,23 +218,6 @@ function vertexvol(
     no_th3: boolean = false,
     runner: Runner | null = null,
 ): VertexvolOutputs {
-    /**
-     * Computes vertex-wise volume (and mid.area).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param left_hemisphere Select left hemisphere
-     * @param right_hemisphere Select right hemisphere
-     * @param output_file Output file name, default is ?h.volume
-     * @param use_th3 Use TH3 method for computation
-     * @param no_th3 Don't use TH3 method for computation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VERTEXVOL_METADATA);
     const params = vertexvol_params(subject, left_hemisphere, right_hemisphere, output_file, use_th3, no_th3)
@@ -230,5 +230,8 @@ export {
       VertexvolOutputs,
       VertexvolParameters,
       vertexvol,
+      vertexvol_cargs,
+      vertexvol_execute,
+      vertexvol_outputs,
       vertexvol_params,
 };

@@ -12,40 +12,40 @@ const SURFACE_CLOSEST_VERTEX_METADATA: Metadata = {
 
 
 interface SurfaceClosestVertexParameters {
-    "__STYXTYPE__": "surface-closest-vertex";
+    "@type": "workbench.surface-closest-vertex";
     "surface": InputPathType;
     "coord_list_file": string;
     "vertex_list_out": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "surface-closest-vertex": surface_closest_vertex_cargs,
+        "workbench.surface-closest-vertex": surface_closest_vertex_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface SurfaceClosestVertexOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface the surface to use
+ * @param coord_list_file text file with coordinates
+ * @param vertex_list_out output - the output text file with vertex numbers
+ *
+ * @returns Parameter dictionary
+ */
 function surface_closest_vertex_params(
     surface: InputPathType,
     coord_list_file: string,
     vertex_list_out: string,
 ): SurfaceClosestVertexParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface the surface to use
-     * @param coord_list_file text file with coordinates
-     * @param vertex_list_out output - the output text file with vertex numbers
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "surface-closest-vertex" as const,
+        "@type": "workbench.surface-closest-vertex" as const,
         "surface": surface,
         "coord_list_file": coord_list_file,
         "vertex_list_out": vertex_list_out,
@@ -89,18 +89,18 @@ function surface_closest_vertex_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surface_closest_vertex_cargs(
     params: SurfaceClosestVertexParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-surface-closest-vertex");
@@ -111,18 +111,18 @@ function surface_closest_vertex_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surface_closest_vertex_outputs(
     params: SurfaceClosestVertexParameters,
     execution: Execution,
 ): SurfaceClosestVertexOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfaceClosestVertexOutputs = {
         root: execution.outputFile("."),
     };
@@ -130,27 +130,27 @@ function surface_closest_vertex_outputs(
 }
 
 
+/**
+ * Find closest surface vertex to coordinates.
+ *
+ * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:
+ *
+ * 20 30 25
+ * 30 -20 10.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
+ */
 function surface_closest_vertex_execute(
     params: SurfaceClosestVertexParameters,
     execution: Execution,
 ): SurfaceClosestVertexOutputs {
-    /**
-     * Find closest surface vertex to coordinates.
-     * 
-     * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:
-     * 
-     * 20 30 25
-     * 30 -20 10.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
-     */
     params = execution.params(params)
     const cargs = surface_closest_vertex_cargs(params, execution)
     const ret = surface_closest_vertex_outputs(params, execution)
@@ -159,31 +159,31 @@ function surface_closest_vertex_execute(
 }
 
 
+/**
+ * Find closest surface vertex to coordinates.
+ *
+ * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:
+ *
+ * 20 30 25
+ * 30 -20 10.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param surface the surface to use
+ * @param coord_list_file text file with coordinates
+ * @param vertex_list_out output - the output text file with vertex numbers
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
+ */
 function surface_closest_vertex(
     surface: InputPathType,
     coord_list_file: string,
     vertex_list_out: string,
     runner: Runner | null = null,
 ): SurfaceClosestVertexOutputs {
-    /**
-     * Find closest surface vertex to coordinates.
-     * 
-     * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:
-     * 
-     * 20 30 25
-     * 30 -20 10.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param surface the surface to use
-     * @param coord_list_file text file with coordinates
-     * @param vertex_list_out output - the output text file with vertex numbers
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURFACE_CLOSEST_VERTEX_METADATA);
     const params = surface_closest_vertex_params(surface, coord_list_file, vertex_list_out)
@@ -196,5 +196,8 @@ export {
       SurfaceClosestVertexOutputs,
       SurfaceClosestVertexParameters,
       surface_closest_vertex,
+      surface_closest_vertex_cargs,
+      surface_closest_vertex_execute,
+      surface_closest_vertex_outputs,
       surface_closest_vertex_params,
 };

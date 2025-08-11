@@ -12,7 +12,7 @@ const I_MATH_METADATA: Metadata = {
 
 
 interface IMathParameters {
-    "__STYXTYPE__": "iMath";
+    "@type": "ants.iMath";
     "image_dimension": 2 | 3 | 4;
     "output_image": string;
     "operations": string;
@@ -21,35 +21,35 @@ interface IMathParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "iMath": i_math_cargs,
+        "ants.iMath": i_math_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "iMath": i_math_outputs,
+        "ants.iMath": i_math_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface IMathOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimensionality of the image, either 2, 3, or 4.
+ * @param output_image Path for the output image file.
+ * @param operations Operations to be performed along with parameters, e.g., GetLargestComponent, MC for Closing, etc.
+ * @param image1 First input image file.
+ * @param image2 Second input image file, if required by operation.
+ *
+ * @returns Parameter dictionary
+ */
 function i_math_params(
     image_dimension: 2 | 3 | 4,
     output_image: string,
@@ -79,19 +90,8 @@ function i_math_params(
     image1: InputPathType,
     image2: InputPathType | null = null,
 ): IMathParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimensionality of the image, either 2, 3, or 4.
-     * @param output_image Path for the output image file.
-     * @param operations Operations to be performed along with parameters, e.g., GetLargestComponent, MC for Closing, etc.
-     * @param image1 First input image file.
-     * @param image2 Second input image file, if required by operation.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "iMath" as const,
+        "@type": "ants.iMath" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "operations": operations,
@@ -104,18 +104,18 @@ function i_math_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function i_math_cargs(
     params: IMathParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("iMath");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -129,18 +129,18 @@ function i_math_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function i_math_outputs(
     params: IMathParameters,
     execution: Execution,
 ): IMathOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: IMathOutputs = {
         root: execution.outputFile("."),
         resulting_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -149,22 +149,22 @@ function i_math_outputs(
 }
 
 
+/**
+ * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `IMathOutputs`).
+ */
 function i_math_execute(
     params: IMathParameters,
     execution: Execution,
 ): IMathOutputs {
-    /**
-     * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `IMathOutputs`).
-     */
     params = execution.params(params)
     const cargs = i_math_cargs(params, execution)
     const ret = i_math_outputs(params, execution)
@@ -173,6 +173,22 @@ function i_math_execute(
 }
 
 
+/**
+ * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimensionality of the image, either 2, 3, or 4.
+ * @param output_image Path for the output image file.
+ * @param operations Operations to be performed along with parameters, e.g., GetLargestComponent, MC for Closing, etc.
+ * @param image1 First input image file.
+ * @param image2 Second input image file, if required by operation.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `IMathOutputs`).
+ */
 function i_math(
     image_dimension: 2 | 3 | 4,
     output_image: string,
@@ -181,22 +197,6 @@ function i_math(
     image2: InputPathType | null = null,
     runner: Runner | null = null,
 ): IMathOutputs {
-    /**
-     * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimensionality of the image, either 2, 3, or 4.
-     * @param output_image Path for the output image file.
-     * @param operations Operations to be performed along with parameters, e.g., GetLargestComponent, MC for Closing, etc.
-     * @param image1 First input image file.
-     * @param image2 Second input image file, if required by operation.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `IMathOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(I_MATH_METADATA);
     const params = i_math_params(image_dimension, output_image, operations, image1, image2)
@@ -209,5 +209,8 @@ export {
       IMathParameters,
       I_MATH_METADATA,
       i_math,
+      i_math_cargs,
+      i_math_execute,
+      i_math_outputs,
       i_math_params,
 };

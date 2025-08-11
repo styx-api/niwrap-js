@@ -12,7 +12,7 @@ const MAKE_EXVIVO_FILLED_METADATA: Metadata = {
 
 
 interface MakeExvivoFilledParameters {
-    "__STYXTYPE__": "make_exvivo_filled";
+    "@type": "freesurfer.make_exvivo_filled";
     "subject_name": string;
     "input_samseg": InputPathType;
     "input_intensity_vol": InputPathType;
@@ -20,33 +20,33 @@ interface MakeExvivoFilledParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_exvivo_filled": make_exvivo_filled_cargs,
+        "freesurfer.make_exvivo_filled": make_exvivo_filled_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -66,24 +66,24 @@ interface MakeExvivoFilledOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_name Name of the subject.
+ * @param input_samseg Input SAMSEG (Segmentation Analysis of MRI brain images).
+ * @param input_intensity_vol Input intensity volume.
+ * @param hemi_both Specify hemisphere or both.
+ *
+ * @returns Parameter dictionary
+ */
 function make_exvivo_filled_params(
     subject_name: string,
     input_samseg: InputPathType,
     input_intensity_vol: InputPathType,
     hemi_both: string,
 ): MakeExvivoFilledParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_name Name of the subject.
-     * @param input_samseg Input SAMSEG (Segmentation Analysis of MRI brain images).
-     * @param input_intensity_vol Input intensity volume.
-     * @param hemi_both Specify hemisphere or both.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_exvivo_filled" as const,
+        "@type": "freesurfer.make_exvivo_filled" as const,
         "subject_name": subject_name,
         "input_samseg": input_samseg,
         "input_intensity_vol": input_intensity_vol,
@@ -93,18 +93,18 @@ function make_exvivo_filled_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_exvivo_filled_cargs(
     params: MakeExvivoFilledParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_exvivo_filled");
     cargs.push((params["subject_name"] ?? null));
@@ -115,18 +115,18 @@ function make_exvivo_filled_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_exvivo_filled_outputs(
     params: MakeExvivoFilledParameters,
     execution: Execution,
 ): MakeExvivoFilledOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeExvivoFilledOutputs = {
         root: execution.outputFile("."),
     };
@@ -134,22 +134,22 @@ function make_exvivo_filled_outputs(
 }
 
 
+/**
+ * A command-line tool for generating filled ex vivo brain images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
+ */
 function make_exvivo_filled_execute(
     params: MakeExvivoFilledParameters,
     execution: Execution,
 ): MakeExvivoFilledOutputs {
-    /**
-     * A command-line tool for generating filled ex vivo brain images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_exvivo_filled_cargs(params, execution)
     const ret = make_exvivo_filled_outputs(params, execution)
@@ -158,6 +158,21 @@ function make_exvivo_filled_execute(
 }
 
 
+/**
+ * A command-line tool for generating filled ex vivo brain images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_name Name of the subject.
+ * @param input_samseg Input SAMSEG (Segmentation Analysis of MRI brain images).
+ * @param input_intensity_vol Input intensity volume.
+ * @param hemi_both Specify hemisphere or both.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
+ */
 function make_exvivo_filled(
     subject_name: string,
     input_samseg: InputPathType,
@@ -165,21 +180,6 @@ function make_exvivo_filled(
     hemi_both: string,
     runner: Runner | null = null,
 ): MakeExvivoFilledOutputs {
-    /**
-     * A command-line tool for generating filled ex vivo brain images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_name Name of the subject.
-     * @param input_samseg Input SAMSEG (Segmentation Analysis of MRI brain images).
-     * @param input_intensity_vol Input intensity volume.
-     * @param hemi_both Specify hemisphere or both.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_EXVIVO_FILLED_METADATA);
     const params = make_exvivo_filled_params(subject_name, input_samseg, input_intensity_vol, hemi_both)
@@ -192,5 +192,8 @@ export {
       MakeExvivoFilledOutputs,
       MakeExvivoFilledParameters,
       make_exvivo_filled,
+      make_exvivo_filled_cargs,
+      make_exvivo_filled_execute,
+      make_exvivo_filled_outputs,
       make_exvivo_filled_params,
 };

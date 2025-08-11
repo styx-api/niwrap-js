@@ -12,7 +12,7 @@ const R_PKGS_INSTALL_METADATA: Metadata = {
 
 
 interface RPkgsInstallParameters {
-    "__STYXTYPE__": "rPkgsInstall";
+    "@type": "afni.rPkgsInstall";
     "packages": string;
     "download_site"?: string | null | undefined;
     "check": boolean;
@@ -21,35 +21,35 @@ interface RPkgsInstallParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rPkgsInstall": r_pkgs_install_cargs,
+        "afni.rPkgsInstall": r_pkgs_install_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "rPkgsInstall": r_pkgs_install_outputs,
+        "afni.rPkgsInstall": r_pkgs_install_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface RPkgsInstallOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param packages List of R packages to install, update, or remove. Use 'ALL' to refer to all AFNI-required packages.
+ * @param download_site Specify the package repository website. Default is 'http://cloud.r-project.org'.
+ * @param check Verify whether the specified R packages are installed on the computer without installing/updating/removing them.
+ * @param update Update the specified R packages. If packages are not installed, they will be installed.
+ * @param remove Remove the specified R packages from the system.
+ *
+ * @returns Parameter dictionary
+ */
 function r_pkgs_install_params(
     packages: string,
     download_site: string | null = null,
@@ -79,19 +90,8 @@ function r_pkgs_install_params(
     update: boolean = false,
     remove: boolean = false,
 ): RPkgsInstallParameters {
-    /**
-     * Build parameters.
-    
-     * @param packages List of R packages to install, update, or remove. Use 'ALL' to refer to all AFNI-required packages.
-     * @param download_site Specify the package repository website. Default is 'http://cloud.r-project.org'.
-     * @param check Verify whether the specified R packages are installed on the computer without installing/updating/removing them.
-     * @param update Update the specified R packages. If packages are not installed, they will be installed.
-     * @param remove Remove the specified R packages from the system.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rPkgsInstall" as const,
+        "@type": "afni.rPkgsInstall" as const,
         "packages": packages,
         "check": check,
         "update": update,
@@ -104,18 +104,18 @@ function r_pkgs_install_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function r_pkgs_install_cargs(
     params: RPkgsInstallParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rPkgsInstall");
     cargs.push(
@@ -141,18 +141,18 @@ function r_pkgs_install_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function r_pkgs_install_outputs(
     params: RPkgsInstallParameters,
     execution: Execution,
 ): RPkgsInstallOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RPkgsInstallOutputs = {
         root: execution.outputFile("."),
         output_packages: execution.outputFile([(params["packages"] ?? null)].join('')),
@@ -161,22 +161,22 @@ function r_pkgs_install_outputs(
 }
 
 
+/**
+ * A tool for installing, checking, updating, or removing R packages for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
+ */
 function r_pkgs_install_execute(
     params: RPkgsInstallParameters,
     execution: Execution,
 ): RPkgsInstallOutputs {
-    /**
-     * A tool for installing, checking, updating, or removing R packages for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
-     */
     params = execution.params(params)
     const cargs = r_pkgs_install_cargs(params, execution)
     const ret = r_pkgs_install_outputs(params, execution)
@@ -185,6 +185,22 @@ function r_pkgs_install_execute(
 }
 
 
+/**
+ * A tool for installing, checking, updating, or removing R packages for AFNI.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param packages List of R packages to install, update, or remove. Use 'ALL' to refer to all AFNI-required packages.
+ * @param download_site Specify the package repository website. Default is 'http://cloud.r-project.org'.
+ * @param check Verify whether the specified R packages are installed on the computer without installing/updating/removing them.
+ * @param update Update the specified R packages. If packages are not installed, they will be installed.
+ * @param remove Remove the specified R packages from the system.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
+ */
 function r_pkgs_install(
     packages: string,
     download_site: string | null = null,
@@ -193,22 +209,6 @@ function r_pkgs_install(
     remove: boolean = false,
     runner: Runner | null = null,
 ): RPkgsInstallOutputs {
-    /**
-     * A tool for installing, checking, updating, or removing R packages for AFNI.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param packages List of R packages to install, update, or remove. Use 'ALL' to refer to all AFNI-required packages.
-     * @param download_site Specify the package repository website. Default is 'http://cloud.r-project.org'.
-     * @param check Verify whether the specified R packages are installed on the computer without installing/updating/removing them.
-     * @param update Update the specified R packages. If packages are not installed, they will be installed.
-     * @param remove Remove the specified R packages from the system.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(R_PKGS_INSTALL_METADATA);
     const params = r_pkgs_install_params(packages, download_site, check, update, remove)
@@ -221,5 +221,8 @@ export {
       RPkgsInstallParameters,
       R_PKGS_INSTALL_METADATA,
       r_pkgs_install,
+      r_pkgs_install_cargs,
+      r_pkgs_install_execute,
+      r_pkgs_install_outputs,
       r_pkgs_install_params,
 };

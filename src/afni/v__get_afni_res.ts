@@ -12,39 +12,39 @@ const V__GET_AFNI_RES_METADATA: Metadata = {
 
 
 interface VGetAfniResParameters {
-    "__STYXTYPE__": "@GetAfniRes";
+    "@type": "afni.@GetAfniRes";
     "output_type"?: "-min" | "-max" | "-mean" | null | undefined;
     "input_dataset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@GetAfniRes": v__get_afni_res_cargs,
+        "afni.@GetAfniRes": v__get_afni_res_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface VGetAfniResOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset
+ * @param output_type Output type specifying whether to return the minimum, maximum, or mean resolution
+ *
+ * @returns Parameter dictionary
+ */
 function v__get_afni_res_params(
     input_dataset: InputPathType,
     output_type: "-min" | "-max" | "-mean" | null = null,
 ): VGetAfniResParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset
-     * @param output_type Output type specifying whether to return the minimum, maximum, or mean resolution
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@GetAfniRes" as const,
+        "@type": "afni.@GetAfniRes" as const,
         "input_dataset": input_dataset,
     };
     if (output_type !== null) {
@@ -87,18 +87,18 @@ function v__get_afni_res_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__get_afni_res_cargs(
     params: VGetAfniResParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@GetAfniRes");
     if ((params["output_type"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function v__get_afni_res_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__get_afni_res_outputs(
     params: VGetAfniResParameters,
     execution: Execution,
 ): VGetAfniResOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VGetAfniResOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function v__get_afni_res_outputs(
 }
 
 
+/**
+ * Tool to return the voxel resolution of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
+ */
 function v__get_afni_res_execute(
     params: VGetAfniResParameters,
     execution: Execution,
 ): VGetAfniResOutputs {
-    /**
-     * Tool to return the voxel resolution of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__get_afni_res_cargs(params, execution)
     const ret = v__get_afni_res_outputs(params, execution)
@@ -152,24 +152,24 @@ function v__get_afni_res_execute(
 }
 
 
+/**
+ * Tool to return the voxel resolution of a dataset.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset
+ * @param output_type Output type specifying whether to return the minimum, maximum, or mean resolution
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
+ */
 function v__get_afni_res(
     input_dataset: InputPathType,
     output_type: "-min" | "-max" | "-mean" | null = null,
     runner: Runner | null = null,
 ): VGetAfniResOutputs {
-    /**
-     * Tool to return the voxel resolution of a dataset.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset
-     * @param output_type Output type specifying whether to return the minimum, maximum, or mean resolution
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__GET_AFNI_RES_METADATA);
     const params = v__get_afni_res_params(input_dataset, output_type)
@@ -182,5 +182,8 @@ export {
       VGetAfniResParameters,
       V__GET_AFNI_RES_METADATA,
       v__get_afni_res,
+      v__get_afni_res_cargs,
+      v__get_afni_res_execute,
+      v__get_afni_res_outputs,
       v__get_afni_res_params,
 };

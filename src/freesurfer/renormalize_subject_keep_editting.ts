@@ -12,40 +12,40 @@ const RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA: Metadata = {
 
 
 interface RenormalizeSubjectKeepEdittingParameters {
-    "__STYXTYPE__": "renormalize_subject_keep_editting";
+    "@type": "freesurfer.renormalize_subject_keep_editting";
     "placeholder_input"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "renormalize_subject_keep_editting": renormalize_subject_keep_editting_cargs,
+        "freesurfer.renormalize_subject_keep_editting": renormalize_subject_keep_editting_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "renormalize_subject_keep_editting": renormalize_subject_keep_editting_outputs,
+        "freesurfer.renormalize_subject_keep_editting": renormalize_subject_keep_editting_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,18 +68,18 @@ interface RenormalizeSubjectKeepEdittingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param placeholder_input Placeholder input since tool details are not available.
+ *
+ * @returns Parameter dictionary
+ */
 function renormalize_subject_keep_editting_params(
     placeholder_input: string | null = null,
 ): RenormalizeSubjectKeepEdittingParameters {
-    /**
-     * Build parameters.
-    
-     * @param placeholder_input Placeholder input since tool details are not available.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "renormalize_subject_keep_editting" as const,
+        "@type": "freesurfer.renormalize_subject_keep_editting" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -88,18 +88,18 @@ function renormalize_subject_keep_editting_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function renormalize_subject_keep_editting_cargs(
     params: RenormalizeSubjectKeepEdittingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("renormalize_subject_keep_editting");
     if ((params["placeholder_input"] ?? null) !== null) {
@@ -109,18 +109,18 @@ function renormalize_subject_keep_editting_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function renormalize_subject_keep_editting_outputs(
     params: RenormalizeSubjectKeepEdittingParameters,
     execution: Execution,
 ): RenormalizeSubjectKeepEdittingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RenormalizeSubjectKeepEdittingOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["output.txt"].join('')),
@@ -129,22 +129,22 @@ function renormalize_subject_keep_editting_outputs(
 }
 
 
+/**
+ * A placeholder for the renormalize_subject_keep_editting tool, details not available.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
+ */
 function renormalize_subject_keep_editting_execute(
     params: RenormalizeSubjectKeepEdittingParameters,
     execution: Execution,
 ): RenormalizeSubjectKeepEdittingOutputs {
-    /**
-     * A placeholder for the renormalize_subject_keep_editting tool, details not available.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
-     */
     params = execution.params(params)
     const cargs = renormalize_subject_keep_editting_cargs(params, execution)
     const ret = renormalize_subject_keep_editting_outputs(params, execution)
@@ -153,22 +153,22 @@ function renormalize_subject_keep_editting_execute(
 }
 
 
+/**
+ * A placeholder for the renormalize_subject_keep_editting tool, details not available.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param placeholder_input Placeholder input since tool details are not available.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
+ */
 function renormalize_subject_keep_editting(
     placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): RenormalizeSubjectKeepEdittingOutputs {
-    /**
-     * A placeholder for the renormalize_subject_keep_editting tool, details not available.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param placeholder_input Placeholder input since tool details are not available.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA);
     const params = renormalize_subject_keep_editting_params(placeholder_input)
@@ -181,5 +181,8 @@ export {
       RenormalizeSubjectKeepEdittingOutputs,
       RenormalizeSubjectKeepEdittingParameters,
       renormalize_subject_keep_editting,
+      renormalize_subject_keep_editting_cargs,
+      renormalize_subject_keep_editting_execute,
+      renormalize_subject_keep_editting_outputs,
       renormalize_subject_keep_editting_params,
 };

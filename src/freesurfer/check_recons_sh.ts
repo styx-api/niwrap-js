@@ -12,38 +12,38 @@ const CHECK_RECONS_SH_METADATA: Metadata = {
 
 
 interface CheckReconsShParameters {
-    "__STYXTYPE__": "check_recons.sh";
+    "@type": "freesurfer.check_recons.sh";
     "subject_directory"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "check_recons.sh": check_recons_sh_cargs,
+        "freesurfer.check_recons.sh": check_recons_sh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface CheckReconsShOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_directory Directory where subjects are being processed. If not specified, uses SUBJECTS_DIR.
+ *
+ * @returns Parameter dictionary
+ */
 function check_recons_sh_params(
     subject_directory: string | null = null,
 ): CheckReconsShParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_directory Directory where subjects are being processed. If not specified, uses SUBJECTS_DIR.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "check_recons.sh" as const,
+        "@type": "freesurfer.check_recons.sh" as const,
     };
     if (subject_directory !== null) {
         params["subject_directory"] = subject_directory;
@@ -83,18 +83,18 @@ function check_recons_sh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function check_recons_sh_cargs(
     params: CheckReconsShParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("check_recons.sh");
     if ((params["subject_directory"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function check_recons_sh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function check_recons_sh_outputs(
     params: CheckReconsShParameters,
     execution: Execution,
 ): CheckReconsShOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CheckReconsShOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function check_recons_sh_outputs(
 }
 
 
+/**
+ * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
+ */
 function check_recons_sh_execute(
     params: CheckReconsShParameters,
     execution: Execution,
 ): CheckReconsShOutputs {
-    /**
-     * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
-     */
     params = execution.params(params)
     const cargs = check_recons_sh_cargs(params, execution)
     const ret = check_recons_sh_outputs(params, execution)
@@ -147,22 +147,22 @@ function check_recons_sh_execute(
 }
 
 
+/**
+ * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_directory Directory where subjects are being processed. If not specified, uses SUBJECTS_DIR.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
+ */
 function check_recons_sh(
     subject_directory: string | null = null,
     runner: Runner | null = null,
 ): CheckReconsShOutputs {
-    /**
-     * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_directory Directory where subjects are being processed. If not specified, uses SUBJECTS_DIR.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CHECK_RECONS_SH_METADATA);
     const params = check_recons_sh_params(subject_directory)
@@ -175,5 +175,8 @@ export {
       CheckReconsShOutputs,
       CheckReconsShParameters,
       check_recons_sh,
+      check_recons_sh_cargs,
+      check_recons_sh_execute,
+      check_recons_sh_outputs,
       check_recons_sh_params,
 };

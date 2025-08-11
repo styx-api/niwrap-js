@@ -12,7 +12,7 @@ const MRI_WATERSHED_METADATA: Metadata = {
 
 
 interface MriWatershedParameters {
-    "__STYXTYPE__": "mri_watershed";
+    "@type": "freesurfer.mri_watershed";
     "input_volume": InputPathType;
     "output_volume": string;
     "weight"?: number | null | undefined;
@@ -47,35 +47,35 @@ interface MriWatershedParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_watershed": mri_watershed_cargs,
+        "freesurfer.mri_watershed": mri_watershed_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_watershed": mri_watershed_outputs,
+        "freesurfer.mri_watershed": mri_watershed_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,6 +102,43 @@ interface MriWatershedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume (e.g., T1 volume)
+ * @param output_volume Output volume (e.g., skull stripped brain volume)
+ * @param weight Preweight the input image using atlas information
+ * @param no_wta_flag Don't use the preweighting for the template deformation
+ * @param proba_merging Use the basins merging using atlas information
+ * @param preflooding_height Pre-size the preflooding height (in percent)
+ * @param no_seedpt_flag Don't use seedpoints using atlas information
+ * @param no_ta_flag Don't use template deformation using atlas information
+ * @param copy_flag Just copy input to output, ignore other options
+ * @param atlas_flag Use the atlas information to correct the segmentation
+ * @param surf_name Save the BEM surfaces; use consistent coordinates with tkmedit
+ * @param usesurf_ras_flag Use the surface RAS coordinates for surfaces
+ * @param no_t1_analysis_flag Don't do T1 analysis, useful when running out of memory
+ * @param shrink_surface_flag Shrink the surface
+ * @param expand_surface_flag Expand the surface
+ * @param use_watershed_flag Use only the watershed algorithm
+ * @param t1_volume Specify T1 input volume
+ * @param wat_temp_flag Use watershed algorithm and first template smoothing
+ * @param first_temp_flag Use only the first template smoothing + local matching
+ * @param surf_debug_flag Visualize the surfaces onto the output volume
+ * @param brain_surf_name Save the brain surface
+ * @param shrink_brain_surf Save the brain surface shrank inward by a specified mm
+ * @param seed_point Add a seed point as a 3D coordinate
+ * @param center_brain Specify the center of the brain (voxel coordinates)
+ * @param brain_radius Specify the radius of the brain (voxel units)
+ * @param watershed_threshold Change the threshold in the watershed process
+ * @param no_watershed_analysis_flag Don't use the watershed analysis process
+ * @param label_flag Labelize the output volume into scalp, skull, csf, gray, and white matter
+ * @param manual_params Change parameters csf_max, transition intensity, and GM_intensity
+ * @param xthresh Remove voxels whose intensity exceeds the specified threshold
+ * @param mask_flag Mask a volume with the brain mask
+ *
+ * @returns Parameter dictionary
+ */
 function mri_watershed_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -135,45 +172,8 @@ function mri_watershed_params(
     xthresh: number | null = null,
     mask_flag: boolean = false,
 ): MriWatershedParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume (e.g., T1 volume)
-     * @param output_volume Output volume (e.g., skull stripped brain volume)
-     * @param weight Preweight the input image using atlas information
-     * @param no_wta_flag Don't use the preweighting for the template deformation
-     * @param proba_merging Use the basins merging using atlas information
-     * @param preflooding_height Pre-size the preflooding height (in percent)
-     * @param no_seedpt_flag Don't use seedpoints using atlas information
-     * @param no_ta_flag Don't use template deformation using atlas information
-     * @param copy_flag Just copy input to output, ignore other options
-     * @param atlas_flag Use the atlas information to correct the segmentation
-     * @param surf_name Save the BEM surfaces; use consistent coordinates with tkmedit
-     * @param usesurf_ras_flag Use the surface RAS coordinates for surfaces
-     * @param no_t1_analysis_flag Don't do T1 analysis, useful when running out of memory
-     * @param shrink_surface_flag Shrink the surface
-     * @param expand_surface_flag Expand the surface
-     * @param use_watershed_flag Use only the watershed algorithm
-     * @param t1_volume Specify T1 input volume
-     * @param wat_temp_flag Use watershed algorithm and first template smoothing
-     * @param first_temp_flag Use only the first template smoothing + local matching
-     * @param surf_debug_flag Visualize the surfaces onto the output volume
-     * @param brain_surf_name Save the brain surface
-     * @param shrink_brain_surf Save the brain surface shrank inward by a specified mm
-     * @param seed_point Add a seed point as a 3D coordinate
-     * @param center_brain Specify the center of the brain (voxel coordinates)
-     * @param brain_radius Specify the radius of the brain (voxel units)
-     * @param watershed_threshold Change the threshold in the watershed process
-     * @param no_watershed_analysis_flag Don't use the watershed analysis process
-     * @param label_flag Labelize the output volume into scalp, skull, csf, gray, and white matter
-     * @param manual_params Change parameters csf_max, transition intensity, and GM_intensity
-     * @param xthresh Remove voxels whose intensity exceeds the specified threshold
-     * @param mask_flag Mask a volume with the brain mask
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_watershed" as const,
+        "@type": "freesurfer.mri_watershed" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "no_wta_flag": no_wta_flag,
@@ -236,18 +236,18 @@ function mri_watershed_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_watershed_cargs(
     params: MriWatershedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_watershed");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -382,18 +382,18 @@ function mri_watershed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_watershed_outputs(
     params: MriWatershedParameters,
     execution: Execution,
 ): MriWatershedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriWatershedOutputs = {
         root: execution.outputFile("."),
         output_brain_vol: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -403,22 +403,22 @@ function mri_watershed_outputs(
 }
 
 
+/**
+ * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
+ */
 function mri_watershed_execute(
     params: MriWatershedParameters,
     execution: Execution,
 ): MriWatershedOutputs {
-    /**
-     * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_watershed_cargs(params, execution)
     const ret = mri_watershed_outputs(params, execution)
@@ -427,6 +427,48 @@ function mri_watershed_execute(
 }
 
 
+/**
+ * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume (e.g., T1 volume)
+ * @param output_volume Output volume (e.g., skull stripped brain volume)
+ * @param weight Preweight the input image using atlas information
+ * @param no_wta_flag Don't use the preweighting for the template deformation
+ * @param proba_merging Use the basins merging using atlas information
+ * @param preflooding_height Pre-size the preflooding height (in percent)
+ * @param no_seedpt_flag Don't use seedpoints using atlas information
+ * @param no_ta_flag Don't use template deformation using atlas information
+ * @param copy_flag Just copy input to output, ignore other options
+ * @param atlas_flag Use the atlas information to correct the segmentation
+ * @param surf_name Save the BEM surfaces; use consistent coordinates with tkmedit
+ * @param usesurf_ras_flag Use the surface RAS coordinates for surfaces
+ * @param no_t1_analysis_flag Don't do T1 analysis, useful when running out of memory
+ * @param shrink_surface_flag Shrink the surface
+ * @param expand_surface_flag Expand the surface
+ * @param use_watershed_flag Use only the watershed algorithm
+ * @param t1_volume Specify T1 input volume
+ * @param wat_temp_flag Use watershed algorithm and first template smoothing
+ * @param first_temp_flag Use only the first template smoothing + local matching
+ * @param surf_debug_flag Visualize the surfaces onto the output volume
+ * @param brain_surf_name Save the brain surface
+ * @param shrink_brain_surf Save the brain surface shrank inward by a specified mm
+ * @param seed_point Add a seed point as a 3D coordinate
+ * @param center_brain Specify the center of the brain (voxel coordinates)
+ * @param brain_radius Specify the radius of the brain (voxel units)
+ * @param watershed_threshold Change the threshold in the watershed process
+ * @param no_watershed_analysis_flag Don't use the watershed analysis process
+ * @param label_flag Labelize the output volume into scalp, skull, csf, gray, and white matter
+ * @param manual_params Change parameters csf_max, transition intensity, and GM_intensity
+ * @param xthresh Remove voxels whose intensity exceeds the specified threshold
+ * @param mask_flag Mask a volume with the brain mask
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
+ */
 function mri_watershed(
     input_volume: InputPathType,
     output_volume: string,
@@ -461,48 +503,6 @@ function mri_watershed(
     mask_flag: boolean = false,
     runner: Runner | null = null,
 ): MriWatershedOutputs {
-    /**
-     * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume (e.g., T1 volume)
-     * @param output_volume Output volume (e.g., skull stripped brain volume)
-     * @param weight Preweight the input image using atlas information
-     * @param no_wta_flag Don't use the preweighting for the template deformation
-     * @param proba_merging Use the basins merging using atlas information
-     * @param preflooding_height Pre-size the preflooding height (in percent)
-     * @param no_seedpt_flag Don't use seedpoints using atlas information
-     * @param no_ta_flag Don't use template deformation using atlas information
-     * @param copy_flag Just copy input to output, ignore other options
-     * @param atlas_flag Use the atlas information to correct the segmentation
-     * @param surf_name Save the BEM surfaces; use consistent coordinates with tkmedit
-     * @param usesurf_ras_flag Use the surface RAS coordinates for surfaces
-     * @param no_t1_analysis_flag Don't do T1 analysis, useful when running out of memory
-     * @param shrink_surface_flag Shrink the surface
-     * @param expand_surface_flag Expand the surface
-     * @param use_watershed_flag Use only the watershed algorithm
-     * @param t1_volume Specify T1 input volume
-     * @param wat_temp_flag Use watershed algorithm and first template smoothing
-     * @param first_temp_flag Use only the first template smoothing + local matching
-     * @param surf_debug_flag Visualize the surfaces onto the output volume
-     * @param brain_surf_name Save the brain surface
-     * @param shrink_brain_surf Save the brain surface shrank inward by a specified mm
-     * @param seed_point Add a seed point as a 3D coordinate
-     * @param center_brain Specify the center of the brain (voxel coordinates)
-     * @param brain_radius Specify the radius of the brain (voxel units)
-     * @param watershed_threshold Change the threshold in the watershed process
-     * @param no_watershed_analysis_flag Don't use the watershed analysis process
-     * @param label_flag Labelize the output volume into scalp, skull, csf, gray, and white matter
-     * @param manual_params Change parameters csf_max, transition intensity, and GM_intensity
-     * @param xthresh Remove voxels whose intensity exceeds the specified threshold
-     * @param mask_flag Mask a volume with the brain mask
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_WATERSHED_METADATA);
     const params = mri_watershed_params(input_volume, output_volume, weight, no_wta_flag, proba_merging, preflooding_height, no_seedpt_flag, no_ta_flag, copy_flag, atlas_flag, surf_name, usesurf_ras_flag, no_t1_analysis_flag, shrink_surface_flag, expand_surface_flag, use_watershed_flag, t1_volume, wat_temp_flag, first_temp_flag, surf_debug_flag, brain_surf_name, shrink_brain_surf, seed_point, center_brain, brain_radius, watershed_threshold, no_watershed_analysis_flag, label_flag, manual_params, xthresh, mask_flag)
@@ -515,5 +515,8 @@ export {
       MriWatershedOutputs,
       MriWatershedParameters,
       mri_watershed,
+      mri_watershed_cargs,
+      mri_watershed_execute,
+      mri_watershed_outputs,
       mri_watershed_params,
 };

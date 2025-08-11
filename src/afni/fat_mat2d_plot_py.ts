@@ -12,7 +12,7 @@ const FAT_MAT2D_PLOT_PY_METADATA: Metadata = {
 
 
 interface FatMat2dPlotPyParameters {
-    "__STYXTYPE__": "fat_mat2d_plot.py";
+    "@type": "afni.fat_mat2d_plot.py";
     "input_file": InputPathType;
     "matrices"?: Array<string> | null | undefined;
     "prefix"?: string | null | undefined;
@@ -41,35 +41,35 @@ interface FatMat2dPlotPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_mat2d_plot.py": fat_mat2d_plot_py_cargs,
+        "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_mat2d_plot.py": fat_mat2d_plot_py_outputs,
+        "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -92,6 +92,37 @@ interface FatMat2dPlotPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Name of *.netcc or *.grid file with matrices to be plotted
+ * @param matrices List of matrices to be plotted, identified by their parameter name. If no list is provided, then all matrices in the input file will be plotted.
+ * @param prefix Output basename for image(s). Note that this can include path information, but the name of each matrix and the file extension will be appended to it.
+ * @param file_type Filetype, given as extension (e.g., png, jpg). Available filetypes depend slightly on your OS and setup.
+ * @param dpi Spatial resolution (dots per inch) of output images.
+ * @param min_colorbar Minimum value of the colorbar.
+ * @param max_colorbar Maximum value of the colorbar.
+ * @param fs_xticks Font size of ticks along the x-axis.
+ * @param fs_yticks Font size of ticks along the y-axis.
+ * @param fs_title Font size of the title.
+ * @param fs_cbar Font size of the colorbar.
+ * @param cbar_n_intervals Number of intervals on colorbars for enumeration purposes. This controls how many numbers appear along the colorbar (which would be NI +1).
+ * @param cbar Name of the colorbar to use. The available colormaps can be found online.
+ * @param cbar_width_perc Width of the colorbar as a percentage of the image.
+ * @param no_colorbar Disable the colorbar in the image.
+ * @param figsize_x Width of the created image in inches.
+ * @param figsize_y Height of the created image in inches.
+ * @param hold_image In addition to saving an image file, open the image and keep displaying it until a key is pressed in the terminal.
+ * @param tight_layout Use matplotlib's tight layout functionality in arranging the plot.
+ * @param xticks_off Don't display labels along the x-axis.
+ * @param yticks_off Don't display labels along the y-axis.
+ * @param version Display the version number of the program.
+ * @param date Display the release/editing date of the current version.
+ * @param help Display help in the terminal.
+ * @param help_view Display help in a separate text editor.
+ *
+ * @returns Parameter dictionary
+ */
 function fat_mat2d_plot_py_params(
     input_file: InputPathType,
     matrices: Array<string> | null = null,
@@ -119,39 +150,8 @@ function fat_mat2d_plot_py_params(
     help: boolean = false,
     help_view: boolean = false,
 ): FatMat2dPlotPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Name of *.netcc or *.grid file with matrices to be plotted
-     * @param matrices List of matrices to be plotted, identified by their parameter name. If no list is provided, then all matrices in the input file will be plotted.
-     * @param prefix Output basename for image(s). Note that this can include path information, but the name of each matrix and the file extension will be appended to it.
-     * @param file_type Filetype, given as extension (e.g., png, jpg). Available filetypes depend slightly on your OS and setup.
-     * @param dpi Spatial resolution (dots per inch) of output images.
-     * @param min_colorbar Minimum value of the colorbar.
-     * @param max_colorbar Maximum value of the colorbar.
-     * @param fs_xticks Font size of ticks along the x-axis.
-     * @param fs_yticks Font size of ticks along the y-axis.
-     * @param fs_title Font size of the title.
-     * @param fs_cbar Font size of the colorbar.
-     * @param cbar_n_intervals Number of intervals on colorbars for enumeration purposes. This controls how many numbers appear along the colorbar (which would be NI +1).
-     * @param cbar Name of the colorbar to use. The available colormaps can be found online.
-     * @param cbar_width_perc Width of the colorbar as a percentage of the image.
-     * @param no_colorbar Disable the colorbar in the image.
-     * @param figsize_x Width of the created image in inches.
-     * @param figsize_y Height of the created image in inches.
-     * @param hold_image In addition to saving an image file, open the image and keep displaying it until a key is pressed in the terminal.
-     * @param tight_layout Use matplotlib's tight layout functionality in arranging the plot.
-     * @param xticks_off Don't display labels along the x-axis.
-     * @param yticks_off Don't display labels along the y-axis.
-     * @param version Display the version number of the program.
-     * @param date Display the release/editing date of the current version.
-     * @param help Display help in the terminal.
-     * @param help_view Display help in a separate text editor.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_mat2d_plot.py" as const,
+        "@type": "afni.fat_mat2d_plot.py" as const,
         "input_file": input_file,
         "no_colorbar": no_colorbar,
         "hold_image": hold_image,
@@ -212,18 +212,18 @@ function fat_mat2d_plot_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_mat2d_plot_py_cargs(
     params: FatMat2dPlotPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_mat2d_plot.py");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -303,18 +303,18 @@ function fat_mat2d_plot_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_mat2d_plot_py_outputs(
     params: FatMat2dPlotPyParameters,
     execution: Execution,
 ): FatMat2dPlotPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatMat2dPlotPyOutputs = {
         root: execution.outputFile("."),
         output_files: ((params["prefix"] ?? null) !== null && (params["file_type"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_[MATRIX_NAME].", (params["file_type"] ?? null)].join('')) : null,
@@ -323,22 +323,22 @@ function fat_mat2d_plot_py_outputs(
 }
 
 
+/**
+ * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
+ */
 function fat_mat2d_plot_py_execute(
     params: FatMat2dPlotPyParameters,
     execution: Execution,
 ): FatMat2dPlotPyOutputs {
-    /**
-     * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_mat2d_plot_py_cargs(params, execution)
     const ret = fat_mat2d_plot_py_outputs(params, execution)
@@ -347,6 +347,42 @@ function fat_mat2d_plot_py_execute(
 }
 
 
+/**
+ * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_file Name of *.netcc or *.grid file with matrices to be plotted
+ * @param matrices List of matrices to be plotted, identified by their parameter name. If no list is provided, then all matrices in the input file will be plotted.
+ * @param prefix Output basename for image(s). Note that this can include path information, but the name of each matrix and the file extension will be appended to it.
+ * @param file_type Filetype, given as extension (e.g., png, jpg). Available filetypes depend slightly on your OS and setup.
+ * @param dpi Spatial resolution (dots per inch) of output images.
+ * @param min_colorbar Minimum value of the colorbar.
+ * @param max_colorbar Maximum value of the colorbar.
+ * @param fs_xticks Font size of ticks along the x-axis.
+ * @param fs_yticks Font size of ticks along the y-axis.
+ * @param fs_title Font size of the title.
+ * @param fs_cbar Font size of the colorbar.
+ * @param cbar_n_intervals Number of intervals on colorbars for enumeration purposes. This controls how many numbers appear along the colorbar (which would be NI +1).
+ * @param cbar Name of the colorbar to use. The available colormaps can be found online.
+ * @param cbar_width_perc Width of the colorbar as a percentage of the image.
+ * @param no_colorbar Disable the colorbar in the image.
+ * @param figsize_x Width of the created image in inches.
+ * @param figsize_y Height of the created image in inches.
+ * @param hold_image In addition to saving an image file, open the image and keep displaying it until a key is pressed in the terminal.
+ * @param tight_layout Use matplotlib's tight layout functionality in arranging the plot.
+ * @param xticks_off Don't display labels along the x-axis.
+ * @param yticks_off Don't display labels along the y-axis.
+ * @param version Display the version number of the program.
+ * @param date Display the release/editing date of the current version.
+ * @param help Display help in the terminal.
+ * @param help_view Display help in a separate text editor.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
+ */
 function fat_mat2d_plot_py(
     input_file: InputPathType,
     matrices: Array<string> | null = null,
@@ -375,42 +411,6 @@ function fat_mat2d_plot_py(
     help_view: boolean = false,
     runner: Runner | null = null,
 ): FatMat2dPlotPyOutputs {
-    /**
-     * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_file Name of *.netcc or *.grid file with matrices to be plotted
-     * @param matrices List of matrices to be plotted, identified by their parameter name. If no list is provided, then all matrices in the input file will be plotted.
-     * @param prefix Output basename for image(s). Note that this can include path information, but the name of each matrix and the file extension will be appended to it.
-     * @param file_type Filetype, given as extension (e.g., png, jpg). Available filetypes depend slightly on your OS and setup.
-     * @param dpi Spatial resolution (dots per inch) of output images.
-     * @param min_colorbar Minimum value of the colorbar.
-     * @param max_colorbar Maximum value of the colorbar.
-     * @param fs_xticks Font size of ticks along the x-axis.
-     * @param fs_yticks Font size of ticks along the y-axis.
-     * @param fs_title Font size of the title.
-     * @param fs_cbar Font size of the colorbar.
-     * @param cbar_n_intervals Number of intervals on colorbars for enumeration purposes. This controls how many numbers appear along the colorbar (which would be NI +1).
-     * @param cbar Name of the colorbar to use. The available colormaps can be found online.
-     * @param cbar_width_perc Width of the colorbar as a percentage of the image.
-     * @param no_colorbar Disable the colorbar in the image.
-     * @param figsize_x Width of the created image in inches.
-     * @param figsize_y Height of the created image in inches.
-     * @param hold_image In addition to saving an image file, open the image and keep displaying it until a key is pressed in the terminal.
-     * @param tight_layout Use matplotlib's tight layout functionality in arranging the plot.
-     * @param xticks_off Don't display labels along the x-axis.
-     * @param yticks_off Don't display labels along the y-axis.
-     * @param version Display the version number of the program.
-     * @param date Display the release/editing date of the current version.
-     * @param help Display help in the terminal.
-     * @param help_view Display help in a separate text editor.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_MAT2D_PLOT_PY_METADATA);
     const params = fat_mat2d_plot_py_params(input_file, matrices, prefix, file_type, dpi, min_colorbar, max_colorbar, fs_xticks, fs_yticks, fs_title, fs_cbar, cbar_n_intervals, cbar, cbar_width_perc, no_colorbar, figsize_x, figsize_y, hold_image, tight_layout, xticks_off, yticks_off, version, date, help, help_view)
@@ -423,5 +423,8 @@ export {
       FatMat2dPlotPyOutputs,
       FatMat2dPlotPyParameters,
       fat_mat2d_plot_py,
+      fat_mat2d_plot_py_cargs,
+      fat_mat2d_plot_py_execute,
+      fat_mat2d_plot_py_outputs,
       fat_mat2d_plot_py_params,
 };

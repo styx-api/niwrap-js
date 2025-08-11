@@ -12,7 +12,7 @@ const PASTE_IMAGE_INTO_IMAGE_METADATA: Metadata = {
 
 
 interface PasteImageIntoImageParameters {
-    "__STYXTYPE__": "PasteImageIntoImage";
+    "@type": "ants.PasteImageIntoImage";
     "image_dimension": number;
     "input_canvas_image": InputPathType;
     "input_image": InputPathType;
@@ -24,35 +24,35 @@ interface PasteImageIntoImageParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "PasteImageIntoImage": paste_image_into_image_cargs,
+        "ants.PasteImageIntoImage": paste_image_into_image_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "PasteImageIntoImage": paste_image_into_image_outputs,
+        "ants.PasteImageIntoImage": paste_image_into_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface PasteImageIntoImageOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Specify the dimension of the images.
+ * @param input_canvas_image The canvas image on which the input image will be pasted.
+ * @param input_image The image to be pasted onto the canvas.
+ * @param output_image The resulting image after pasting.
+ * @param start_index The starting index where the input image will be pasted on the canvas.
+ * @param background_label The label value considered as background.
+ * @param paint_over_non_background_voxels Defines behavior when the input image voxel is non-background and the corresponding canvas voxel is background: 0 - leave as is, 1 - replace with input voxel value, 2 - replace with conflict label.
+ * @param conflict_label The label value used for conflicting non-background voxels if 'paintOverNonBackgroundVoxels' is set to 2.
+ *
+ * @returns Parameter dictionary
+ */
 function paste_image_into_image_params(
     image_dimension: number,
     input_canvas_image: InputPathType,
@@ -85,22 +99,8 @@ function paste_image_into_image_params(
     paint_over_non_background_voxels: 0 | 1 | 2 | null = 0,
     conflict_label: number | null = -1,
 ): PasteImageIntoImageParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Specify the dimension of the images.
-     * @param input_canvas_image The canvas image on which the input image will be pasted.
-     * @param input_image The image to be pasted onto the canvas.
-     * @param output_image The resulting image after pasting.
-     * @param start_index The starting index where the input image will be pasted on the canvas.
-     * @param background_label The label value considered as background.
-     * @param paint_over_non_background_voxels Defines behavior when the input image voxel is non-background and the corresponding canvas voxel is background: 0 - leave as is, 1 - replace with input voxel value, 2 - replace with conflict label.
-     * @param conflict_label The label value used for conflicting non-background voxels if 'paintOverNonBackgroundVoxels' is set to 2.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "PasteImageIntoImage" as const,
+        "@type": "ants.PasteImageIntoImage" as const,
         "image_dimension": image_dimension,
         "input_canvas_image": input_canvas_image,
         "input_image": input_image,
@@ -120,18 +120,18 @@ function paste_image_into_image_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function paste_image_into_image_cargs(
     params: PasteImageIntoImageParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("PasteImageIntoImage");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -152,18 +152,18 @@ function paste_image_into_image_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function paste_image_into_image_outputs(
     params: PasteImageIntoImageParameters,
     execution: Execution,
 ): PasteImageIntoImageOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PasteImageIntoImageOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -172,22 +172,22 @@ function paste_image_into_image_outputs(
 }
 
 
+/**
+ * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
+ */
 function paste_image_into_image_execute(
     params: PasteImageIntoImageParameters,
     execution: Execution,
 ): PasteImageIntoImageOutputs {
-    /**
-     * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
-     */
     params = execution.params(params)
     const cargs = paste_image_into_image_cargs(params, execution)
     const ret = paste_image_into_image_outputs(params, execution)
@@ -196,6 +196,25 @@ function paste_image_into_image_execute(
 }
 
 
+/**
+ * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Specify the dimension of the images.
+ * @param input_canvas_image The canvas image on which the input image will be pasted.
+ * @param input_image The image to be pasted onto the canvas.
+ * @param output_image The resulting image after pasting.
+ * @param start_index The starting index where the input image will be pasted on the canvas.
+ * @param background_label The label value considered as background.
+ * @param paint_over_non_background_voxels Defines behavior when the input image voxel is non-background and the corresponding canvas voxel is background: 0 - leave as is, 1 - replace with input voxel value, 2 - replace with conflict label.
+ * @param conflict_label The label value used for conflicting non-background voxels if 'paintOverNonBackgroundVoxels' is set to 2.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
+ */
 function paste_image_into_image(
     image_dimension: number,
     input_canvas_image: InputPathType,
@@ -207,25 +226,6 @@ function paste_image_into_image(
     conflict_label: number | null = -1,
     runner: Runner | null = null,
 ): PasteImageIntoImageOutputs {
-    /**
-     * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Specify the dimension of the images.
-     * @param input_canvas_image The canvas image on which the input image will be pasted.
-     * @param input_image The image to be pasted onto the canvas.
-     * @param output_image The resulting image after pasting.
-     * @param start_index The starting index where the input image will be pasted on the canvas.
-     * @param background_label The label value considered as background.
-     * @param paint_over_non_background_voxels Defines behavior when the input image voxel is non-background and the corresponding canvas voxel is background: 0 - leave as is, 1 - replace with input voxel value, 2 - replace with conflict label.
-     * @param conflict_label The label value used for conflicting non-background voxels if 'paintOverNonBackgroundVoxels' is set to 2.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(PASTE_IMAGE_INTO_IMAGE_METADATA);
     const params = paste_image_into_image_params(image_dimension, input_canvas_image, input_image, output_image, start_index, background_label, paint_over_non_background_voxels, conflict_label)
@@ -238,5 +238,8 @@ export {
       PasteImageIntoImageOutputs,
       PasteImageIntoImageParameters,
       paste_image_into_image,
+      paste_image_into_image_cargs,
+      paste_image_into_image_execute,
+      paste_image_into_image_outputs,
       paste_image_into_image_params,
 };

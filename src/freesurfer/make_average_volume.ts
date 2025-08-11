@@ -12,7 +12,7 @@ const MAKE_AVERAGE_VOLUME_METADATA: Metadata = {
 
 
 interface MakeAverageVolumeParameters {
-    "__STYXTYPE__": "make_average_volume";
+    "@type": "freesurfer.make_average_volume";
     "subjects": Array<string>;
     "fsgd"?: InputPathType | null | undefined;
     "out"?: string | null | undefined;
@@ -31,33 +31,33 @@ interface MakeAverageVolumeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_average_volume": make_average_volume_cargs,
+        "freesurfer.make_average_volume": make_average_volume_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -77,6 +77,27 @@ interface MakeAverageVolumeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subjects to include in the average.
+ * @param fsgd File containing subject list for averaging.
+ * @param out Output average subject name. Default is 'average'.
+ * @param topdir Directory to put data and link to SUBJECTS_DIR.
+ * @param xform Transformation name to use, default is talairach.xfm.
+ * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
+ * @param sd_flag Same as --sdir.
+ * @param force_flag Overwrite existing average subject data.
+ * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
+ * @param no_aseg_flag Do not create 'average' aseg.
+ * @param ctab Embed colortable into segmentations.
+ * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
+ * @param echo_flag Enable command echo for debugging.
+ * @param debug_flag Same as --echo for debugging.
+ * @param nocleanup_flag Do not delete temporary files.
+ *
+ * @returns Parameter dictionary
+ */
 function make_average_volume_params(
     subjects: Array<string>,
     fsgd: InputPathType | null = null,
@@ -94,29 +115,8 @@ function make_average_volume_params(
     debug_flag: boolean = false,
     nocleanup_flag: boolean = false,
 ): MakeAverageVolumeParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subjects to include in the average.
-     * @param fsgd File containing subject list for averaging.
-     * @param out Output average subject name. Default is 'average'.
-     * @param topdir Directory to put data and link to SUBJECTS_DIR.
-     * @param xform Transformation name to use, default is talairach.xfm.
-     * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
-     * @param sd_flag Same as --sdir.
-     * @param force_flag Overwrite existing average subject data.
-     * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
-     * @param no_aseg_flag Do not create 'average' aseg.
-     * @param ctab Embed colortable into segmentations.
-     * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
-     * @param echo_flag Enable command echo for debugging.
-     * @param debug_flag Same as --echo for debugging.
-     * @param nocleanup_flag Do not delete temporary files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_average_volume" as const,
+        "@type": "freesurfer.make_average_volume" as const,
         "subjects": subjects,
         "sd_flag": sd_flag,
         "force_flag": force_flag,
@@ -149,18 +149,18 @@ function make_average_volume_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_average_volume_cargs(
     params: MakeAverageVolumeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_average_volume");
     cargs.push(
@@ -231,18 +231,18 @@ function make_average_volume_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_average_volume_outputs(
     params: MakeAverageVolumeParameters,
     execution: Execution,
 ): MakeAverageVolumeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeAverageVolumeOutputs = {
         root: execution.outputFile("."),
     };
@@ -250,22 +250,22 @@ function make_average_volume_outputs(
 }
 
 
+/**
+ * Creates average volumes from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
+ */
 function make_average_volume_execute(
     params: MakeAverageVolumeParameters,
     execution: Execution,
 ): MakeAverageVolumeOutputs {
-    /**
-     * Creates average volumes from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_average_volume_cargs(params, execution)
     const ret = make_average_volume_outputs(params, execution)
@@ -274,6 +274,32 @@ function make_average_volume_execute(
 }
 
 
+/**
+ * Creates average volumes from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subjects to include in the average.
+ * @param fsgd File containing subject list for averaging.
+ * @param out Output average subject name. Default is 'average'.
+ * @param topdir Directory to put data and link to SUBJECTS_DIR.
+ * @param xform Transformation name to use, default is talairach.xfm.
+ * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
+ * @param sd_flag Same as --sdir.
+ * @param force_flag Overwrite existing average subject data.
+ * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
+ * @param no_aseg_flag Do not create 'average' aseg.
+ * @param ctab Embed colortable into segmentations.
+ * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
+ * @param echo_flag Enable command echo for debugging.
+ * @param debug_flag Same as --echo for debugging.
+ * @param nocleanup_flag Do not delete temporary files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
+ */
 function make_average_volume(
     subjects: Array<string>,
     fsgd: InputPathType | null = null,
@@ -292,32 +318,6 @@ function make_average_volume(
     nocleanup_flag: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageVolumeOutputs {
-    /**
-     * Creates average volumes from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subjects to include in the average.
-     * @param fsgd File containing subject list for averaging.
-     * @param out Output average subject name. Default is 'average'.
-     * @param topdir Directory to put data and link to SUBJECTS_DIR.
-     * @param xform Transformation name to use, default is talairach.xfm.
-     * @param sdir Use specified SUBJECTS_DIR instead of the environment's one.
-     * @param sd_flag Same as --sdir.
-     * @param force_flag Overwrite existing average subject data.
-     * @param keep_all_orig_flag Concatenate all original volumes into mri/orig.all.mgz.
-     * @param no_aseg_flag Do not create 'average' aseg.
-     * @param ctab Embed colortable into segmentations.
-     * @param ctab_default_flag Embed FreeSurferColorLUT.txt into segmentations.
-     * @param echo_flag Enable command echo for debugging.
-     * @param debug_flag Same as --echo for debugging.
-     * @param nocleanup_flag Do not delete temporary files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_AVERAGE_VOLUME_METADATA);
     const params = make_average_volume_params(subjects, fsgd, out, topdir, xform, sdir, sd_flag, force_flag, keep_all_orig_flag, no_aseg_flag, ctab, ctab_default_flag, echo_flag, debug_flag, nocleanup_flag)
@@ -330,5 +330,8 @@ export {
       MakeAverageVolumeOutputs,
       MakeAverageVolumeParameters,
       make_average_volume,
+      make_average_volume_cargs,
+      make_average_volume_execute,
+      make_average_volume_outputs,
       make_average_volume_params,
 };

@@ -12,39 +12,39 @@ const RUN_MRIS_PREPROC_METADATA: Metadata = {
 
 
 interface RunMrisPreprocParameters {
-    "__STYXTYPE__": "run_mris_preproc";
+    "@type": "freesurfer.run_mris_preproc";
     "qdec_table": InputPathType;
     "target_average"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "run_mris_preproc": run_mris_preproc_cargs,
+        "freesurfer.run_mris_preproc": run_mris_preproc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -64,20 +64,20 @@ interface RunMrisPreprocOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qdec_table Text file of subject data used by qdec
+ * @param target_average Specify a target average, default is fsaverage
+ *
+ * @returns Parameter dictionary
+ */
 function run_mris_preproc_params(
     qdec_table: InputPathType,
     target_average: string | null = null,
 ): RunMrisPreprocParameters {
-    /**
-     * Build parameters.
-    
-     * @param qdec_table Text file of subject data used by qdec
-     * @param target_average Specify a target average, default is fsaverage
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "run_mris_preproc" as const,
+        "@type": "freesurfer.run_mris_preproc" as const,
         "qdec_table": qdec_table,
     };
     if (target_average !== null) {
@@ -87,18 +87,18 @@ function run_mris_preproc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function run_mris_preproc_cargs(
     params: RunMrisPreprocParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("run_mris_preproc");
     cargs.push(execution.inputFile((params["qdec_table"] ?? null)));
@@ -109,18 +109,18 @@ function run_mris_preproc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function run_mris_preproc_outputs(
     params: RunMrisPreprocParameters,
     execution: Execution,
 ): RunMrisPreprocOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RunMrisPreprocOutputs = {
         root: execution.outputFile("."),
     };
@@ -128,22 +128,22 @@ function run_mris_preproc_outputs(
 }
 
 
+/**
+ * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
+ */
 function run_mris_preproc_execute(
     params: RunMrisPreprocParameters,
     execution: Execution,
 ): RunMrisPreprocOutputs {
-    /**
-     * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
-     */
     params = execution.params(params)
     const cargs = run_mris_preproc_cargs(params, execution)
     const ret = run_mris_preproc_outputs(params, execution)
@@ -152,24 +152,24 @@ function run_mris_preproc_execute(
 }
 
 
+/**
+ * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qdec_table Text file of subject data used by qdec
+ * @param target_average Specify a target average, default is fsaverage
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
+ */
 function run_mris_preproc(
     qdec_table: InputPathType,
     target_average: string | null = null,
     runner: Runner | null = null,
 ): RunMrisPreprocOutputs {
-    /**
-     * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qdec_table Text file of subject data used by qdec
-     * @param target_average Specify a target average, default is fsaverage
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RUN_MRIS_PREPROC_METADATA);
     const params = run_mris_preproc_params(qdec_table, target_average)
@@ -182,5 +182,8 @@ export {
       RunMrisPreprocOutputs,
       RunMrisPreprocParameters,
       run_mris_preproc,
+      run_mris_preproc_cargs,
+      run_mris_preproc_execute,
+      run_mris_preproc_outputs,
       run_mris_preproc_params,
 };

@@ -12,7 +12,7 @@ const MRIS_ROTATE_METADATA: Metadata = {
 
 
 interface MrisRotateParameters {
-    "__STYXTYPE__": "mris_rotate";
+    "@type": "freesurfer.mris_rotate";
     "input_surface": InputPathType;
     "alpha_deg": number;
     "beta_deg": number;
@@ -23,35 +23,35 @@ interface MrisRotateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_rotate": mris_rotate_cargs,
+        "freesurfer.mris_rotate": mris_rotate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_rotate": mris_rotate_outputs,
+        "freesurfer.mris_rotate": mris_rotate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface MrisRotateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Input surface file to be rotated.
+ * @param alpha_deg Rotation angle in degrees around the X-axis.
+ * @param beta_deg Rotation angle in degrees around the Y-axis.
+ * @param gamma_deg Rotation angle in degrees around the Z-axis.
+ * @param output_surface Output surface file after rotation.
+ * @param regfile Extract angles from registration file, ignores alpha, beta, gamma.
+ * @param invalidate_geometry Invalidate volume geometry in output.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_rotate_params(
     input_surface: InputPathType,
     alpha_deg: number,
@@ -83,21 +96,8 @@ function mris_rotate_params(
     regfile: InputPathType | null = null,
     invalidate_geometry: boolean = false,
 ): MrisRotateParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Input surface file to be rotated.
-     * @param alpha_deg Rotation angle in degrees around the X-axis.
-     * @param beta_deg Rotation angle in degrees around the Y-axis.
-     * @param gamma_deg Rotation angle in degrees around the Z-axis.
-     * @param output_surface Output surface file after rotation.
-     * @param regfile Extract angles from registration file, ignores alpha, beta, gamma.
-     * @param invalidate_geometry Invalidate volume geometry in output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_rotate" as const,
+        "@type": "freesurfer.mris_rotate" as const,
         "input_surface": input_surface,
         "alpha_deg": alpha_deg,
         "beta_deg": beta_deg,
@@ -112,18 +112,18 @@ function mris_rotate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_rotate_cargs(
     params: MrisRotateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_rotate");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -144,18 +144,18 @@ function mris_rotate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_rotate_outputs(
     params: MrisRotateParameters,
     execution: Execution,
 ): MrisRotateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRotateOutputs = {
         root: execution.outputFile("."),
         rotated_surface: execution.outputFile([(params["output_surface"] ?? null)].join('')),
@@ -164,22 +164,22 @@ function mris_rotate_outputs(
 }
 
 
+/**
+ * Rotate a surface given three angles.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
+ */
 function mris_rotate_execute(
     params: MrisRotateParameters,
     execution: Execution,
 ): MrisRotateOutputs {
-    /**
-     * Rotate a surface given three angles.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_rotate_cargs(params, execution)
     const ret = mris_rotate_outputs(params, execution)
@@ -188,6 +188,24 @@ function mris_rotate_execute(
 }
 
 
+/**
+ * Rotate a surface given three angles.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Input surface file to be rotated.
+ * @param alpha_deg Rotation angle in degrees around the X-axis.
+ * @param beta_deg Rotation angle in degrees around the Y-axis.
+ * @param gamma_deg Rotation angle in degrees around the Z-axis.
+ * @param output_surface Output surface file after rotation.
+ * @param regfile Extract angles from registration file, ignores alpha, beta, gamma.
+ * @param invalidate_geometry Invalidate volume geometry in output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
+ */
 function mris_rotate(
     input_surface: InputPathType,
     alpha_deg: number,
@@ -198,24 +216,6 @@ function mris_rotate(
     invalidate_geometry: boolean = false,
     runner: Runner | null = null,
 ): MrisRotateOutputs {
-    /**
-     * Rotate a surface given three angles.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Input surface file to be rotated.
-     * @param alpha_deg Rotation angle in degrees around the X-axis.
-     * @param beta_deg Rotation angle in degrees around the Y-axis.
-     * @param gamma_deg Rotation angle in degrees around the Z-axis.
-     * @param output_surface Output surface file after rotation.
-     * @param regfile Extract angles from registration file, ignores alpha, beta, gamma.
-     * @param invalidate_geometry Invalidate volume geometry in output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_ROTATE_METADATA);
     const params = mris_rotate_params(input_surface, alpha_deg, beta_deg, gamma_deg, output_surface, regfile, invalidate_geometry)
@@ -228,5 +228,8 @@ export {
       MrisRotateOutputs,
       MrisRotateParameters,
       mris_rotate,
+      mris_rotate_cargs,
+      mris_rotate_execute,
+      mris_rotate_outputs,
       mris_rotate_params,
 };

@@ -12,41 +12,41 @@ const V__TO_MNI_AWARP_METADATA: Metadata = {
 
 
 interface VToMniAwarpParameters {
-    "__STYXTYPE__": "@toMNI_Awarp";
+    "@type": "afni.@toMNI_Awarp";
     "directory": string;
     "datasets": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@toMNI_Awarp": v__to_mni_awarp_cargs,
+        "afni.@toMNI_Awarp": v__to_mni_awarp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@toMNI_Awarp": v__to_mni_awarp_outputs,
+        "afni.@toMNI_Awarp": v__to_mni_awarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface VToMniAwarpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param directory Name of the directory to be created where results will be stored.
+ * @param datasets List of datasets to be transformed.
+ *
+ * @returns Parameter dictionary
+ */
 function v__to_mni_awarp_params(
     directory: string,
     datasets: Array<InputPathType>,
 ): VToMniAwarpParameters {
-    /**
-     * Build parameters.
-    
-     * @param directory Name of the directory to be created where results will be stored.
-     * @param datasets List of datasets to be transformed.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@toMNI_Awarp" as const,
+        "@type": "afni.@toMNI_Awarp" as const,
         "directory": directory,
         "datasets": datasets,
     };
@@ -90,18 +90,18 @@ function v__to_mni_awarp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__to_mni_awarp_cargs(
     params: VToMniAwarpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@toMNI_Awarp");
     cargs.push((params["directory"] ?? null));
@@ -110,18 +110,18 @@ function v__to_mni_awarp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__to_mni_awarp_outputs(
     params: VToMniAwarpParameters,
     execution: Execution,
 ): VToMniAwarpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VToMniAwarpOutputs = {
         root: execution.outputFile("."),
         output_datasets: execution.outputFile([(params["directory"] ?? null), "/*"].join('')),
@@ -130,22 +130,22 @@ function v__to_mni_awarp_outputs(
 }
 
 
+/**
+ * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
+ */
 function v__to_mni_awarp_execute(
     params: VToMniAwarpParameters,
     execution: Execution,
 ): VToMniAwarpOutputs {
-    /**
-     * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__to_mni_awarp_cargs(params, execution)
     const ret = v__to_mni_awarp_outputs(params, execution)
@@ -154,24 +154,24 @@ function v__to_mni_awarp_execute(
 }
 
 
+/**
+ * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param directory Name of the directory to be created where results will be stored.
+ * @param datasets List of datasets to be transformed.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
+ */
 function v__to_mni_awarp(
     directory: string,
     datasets: Array<InputPathType>,
     runner: Runner | null = null,
 ): VToMniAwarpOutputs {
-    /**
-     * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param directory Name of the directory to be created where results will be stored.
-     * @param datasets List of datasets to be transformed.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__TO_MNI_AWARP_METADATA);
     const params = v__to_mni_awarp_params(directory, datasets)
@@ -184,5 +184,8 @@ export {
       VToMniAwarpParameters,
       V__TO_MNI_AWARP_METADATA,
       v__to_mni_awarp,
+      v__to_mni_awarp_cargs,
+      v__to_mni_awarp_execute,
+      v__to_mni_awarp_outputs,
       v__to_mni_awarp_params,
 };

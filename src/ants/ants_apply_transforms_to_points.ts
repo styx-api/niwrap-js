@@ -12,18 +12,18 @@ const ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA: Metadata = {
 
 
 interface AntsApplyTransformsToPointsSingleTransformParameters {
-    "__STYXTYPE__": "single_transform";
+    "@type": "ants.antsApplyTransformsToPoints.single_transform";
 }
 
 
 interface AntsApplyTransformsToPointsInverseTransformParameters {
-    "__STYXTYPE__": "inverse_transform";
+    "@type": "ants.antsApplyTransformsToPoints.inverse_transform";
     "transform_file": InputPathType;
 }
 
 
 interface AntsApplyTransformsToPointsParameters {
-    "__STYXTYPE__": "antsApplyTransformsToPoints";
+    "@type": "ants.antsApplyTransformsToPoints";
     "dimensionality"?: 2 | 3 | null | undefined;
     "precision"?: 0 | 1 | null | undefined;
     "forantsr"?: 0 | 1 | null | undefined;
@@ -33,103 +33,103 @@ interface AntsApplyTransformsToPointsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "antsApplyTransformsToPoints": ants_apply_transforms_to_points_cargs,
-        "single_transform": ants_apply_transforms_to_points_single_transform_cargs,
-        "inverse_transform": ants_apply_transforms_to_points_inverse_transform_cargs,
+        "ants.antsApplyTransformsToPoints": ants_apply_transforms_to_points_cargs,
+        "ants.antsApplyTransformsToPoints.single_transform": ants_apply_transforms_to_points_single_transform_cargs,
+        "ants.antsApplyTransformsToPoints.inverse_transform": ants_apply_transforms_to_points_inverse_transform_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "antsApplyTransformsToPoints": ants_apply_transforms_to_points_outputs,
+        "ants.antsApplyTransformsToPoints": ants_apply_transforms_to_points_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_to_points_single_transform_params(
 ): AntsApplyTransformsToPointsSingleTransformParameters {
-    /**
-     * Build parameters.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "single_transform" as const,
+        "@type": "ants.antsApplyTransformsToPoints.single_transform" as const,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_to_points_single_transform_cargs(
     params: AntsApplyTransformsToPointsSingleTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("[TRANSFORM]");
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_to_points_inverse_transform_params(
     transform_file: InputPathType,
 ): AntsApplyTransformsToPointsInverseTransformParameters {
-    /**
-     * Build parameters.
-    
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inverse_transform" as const,
+        "@type": "ants.antsApplyTransformsToPoints.inverse_transform" as const,
         "transform_file": transform_file,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_to_points_inverse_transform_cargs(
     params: AntsApplyTransformsToPointsInverseTransformParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push([execution.inputFile((params["transform_file"] ?? null)), ",1"].join(''));
     return cargs;
@@ -153,6 +153,18 @@ interface AntsApplyTransformsToPointsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input Input CSV file with columns including x,y,z,t headers that define the points in physical space, or a 2D .mha binary image file.
+ * @param output Output the warped points to a CSV file.
+ * @param dimensionality This option forces the points to be treated as a specified-dimensionality.
+ * @param precision Use double precision.
+ * @param forantsr Set true for ANTsR IO.
+ * @param transform Transform file(s) to apply to the input points. Uses an inverse transform if specified as [transformFileName,1].
+ *
+ * @returns Parameter dictionary
+ */
 function ants_apply_transforms_to_points_params(
     input: InputPathType,
     output: string,
@@ -161,20 +173,8 @@ function ants_apply_transforms_to_points_params(
     forantsr: 0 | 1 | null = null,
     transform: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null = null,
 ): AntsApplyTransformsToPointsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input Input CSV file with columns including x,y,z,t headers that define the points in physical space, or a 2D .mha binary image file.
-     * @param output Output the warped points to a CSV file.
-     * @param dimensionality This option forces the points to be treated as a specified-dimensionality.
-     * @param precision Use double precision.
-     * @param forantsr Set true for ANTsR IO.
-     * @param transform Transform file(s) to apply to the input points. Uses an inverse transform if specified as [transformFileName,1].
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "antsApplyTransformsToPoints" as const,
+        "@type": "ants.antsApplyTransformsToPoints" as const,
         "input": input,
         "output": output,
     };
@@ -194,18 +194,18 @@ function ants_apply_transforms_to_points_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function ants_apply_transforms_to_points_cargs(
     params: AntsApplyTransformsToPointsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("antsApplyTransformsToPoints");
     if ((params["dimensionality"] ?? null) !== null) {
@@ -237,25 +237,25 @@ function ants_apply_transforms_to_points_cargs(
     if ((params["transform"] ?? null) !== null) {
         cargs.push(
             "-t",
-            ...dynCargs((params["transform"] ?? null).__STYXTYPE__)((params["transform"] ?? null), execution)
+            ...dynCargs((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution)
         );
     }
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function ants_apply_transforms_to_points_outputs(
     params: AntsApplyTransformsToPointsParameters,
     execution: Execution,
 ): AntsApplyTransformsToPointsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: AntsApplyTransformsToPointsOutputs = {
         root: execution.outputFile("."),
         warped_points: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -264,22 +264,22 @@ function ants_apply_transforms_to_points_outputs(
 }
 
 
+/**
+ * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
+ */
 function ants_apply_transforms_to_points_execute(
     params: AntsApplyTransformsToPointsParameters,
     execution: Execution,
 ): AntsApplyTransformsToPointsOutputs {
-    /**
-     * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
-     */
     params = execution.params(params)
     const cargs = ants_apply_transforms_to_points_cargs(params, execution)
     const ret = ants_apply_transforms_to_points_outputs(params, execution)
@@ -288,6 +288,23 @@ function ants_apply_transforms_to_points_execute(
 }
 
 
+/**
+ * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input Input CSV file with columns including x,y,z,t headers that define the points in physical space, or a 2D .mha binary image file.
+ * @param output Output the warped points to a CSV file.
+ * @param dimensionality This option forces the points to be treated as a specified-dimensionality.
+ * @param precision Use double precision.
+ * @param forantsr Set true for ANTsR IO.
+ * @param transform Transform file(s) to apply to the input points. Uses an inverse transform if specified as [transformFileName,1].
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
+ */
 function ants_apply_transforms_to_points(
     input: InputPathType,
     output: string,
@@ -297,23 +314,6 @@ function ants_apply_transforms_to_points(
     transform: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
-    /**
-     * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input Input CSV file with columns including x,y,z,t headers that define the points in physical space, or a 2D .mha binary image file.
-     * @param output Output the warped points to a CSV file.
-     * @param dimensionality This option forces the points to be treated as a specified-dimensionality.
-     * @param precision Use double precision.
-     * @param forantsr Set true for ANTsR IO.
-     * @param transform Transform file(s) to apply to the input points. Uses an inverse transform if specified as [transformFileName,1].
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA);
     const params = ants_apply_transforms_to_points_params(input, output, dimensionality, precision, forantsr, transform)
@@ -328,7 +328,12 @@ export {
       AntsApplyTransformsToPointsParameters,
       AntsApplyTransformsToPointsSingleTransformParameters,
       ants_apply_transforms_to_points,
+      ants_apply_transforms_to_points_cargs,
+      ants_apply_transforms_to_points_execute,
+      ants_apply_transforms_to_points_inverse_transform_cargs,
       ants_apply_transforms_to_points_inverse_transform_params,
+      ants_apply_transforms_to_points_outputs,
       ants_apply_transforms_to_points_params,
+      ants_apply_transforms_to_points_single_transform_cargs,
       ants_apply_transforms_to_points_single_transform_params,
 };

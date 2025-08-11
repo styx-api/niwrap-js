@@ -12,41 +12,41 @@ const FIRST_ROI_SLICESDIR_METADATA: Metadata = {
 
 
 interface FirstRoiSlicesdirParameters {
-    "__STYXTYPE__": "first_roi_slicesdir";
+    "@type": "fsl.first_roi_slicesdir";
     "input_t1_images": string;
     "input_label_images": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "first_roi_slicesdir": first_roi_slicesdir_cargs,
+        "fsl.first_roi_slicesdir": first_roi_slicesdir_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "first_roi_slicesdir": first_roi_slicesdir_outputs,
+        "fsl.first_roi_slicesdir": first_roi_slicesdir_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,20 +73,20 @@ interface FirstRoiSlicesdirOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_t1_images Input T1-weighted images of the brain (pattern-matched); for example, *_t1.nii.gz
+ * @param input_label_images Input label images corresponding to the T1 images (pattern-matched); for example, *_L_Hipp_first.nii.gz
+ *
+ * @returns Parameter dictionary
+ */
 function first_roi_slicesdir_params(
     input_t1_images: string,
     input_label_images: string,
 ): FirstRoiSlicesdirParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_t1_images Input T1-weighted images of the brain (pattern-matched); for example, *_t1.nii.gz
-     * @param input_label_images Input label images corresponding to the T1 images (pattern-matched); for example, *_L_Hipp_first.nii.gz
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "first_roi_slicesdir" as const,
+        "@type": "fsl.first_roi_slicesdir" as const,
         "input_t1_images": input_t1_images,
         "input_label_images": input_label_images,
     };
@@ -94,18 +94,18 @@ function first_roi_slicesdir_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function first_roi_slicesdir_cargs(
     params: FirstRoiSlicesdirParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("first_roi_slicesdir");
     cargs.push((params["input_t1_images"] ?? null));
@@ -114,18 +114,18 @@ function first_roi_slicesdir_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function first_roi_slicesdir_outputs(
     params: FirstRoiSlicesdirParameters,
     execution: Execution,
 ): FirstRoiSlicesdirOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirstRoiSlicesdirOutputs = {
         root: execution.outputFile("."),
         t1_slicesdir: execution.outputFile([(params["input_t1_images"] ?? null), "_slicesdir"].join('')),
@@ -135,22 +135,22 @@ function first_roi_slicesdir_outputs(
 }
 
 
+/**
+ * A utility for generating slice directories for FIRST-ROI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
+ */
 function first_roi_slicesdir_execute(
     params: FirstRoiSlicesdirParameters,
     execution: Execution,
 ): FirstRoiSlicesdirOutputs {
-    /**
-     * A utility for generating slice directories for FIRST-ROI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
-     */
     params = execution.params(params)
     const cargs = first_roi_slicesdir_cargs(params, execution)
     const ret = first_roi_slicesdir_outputs(params, execution)
@@ -159,24 +159,24 @@ function first_roi_slicesdir_execute(
 }
 
 
+/**
+ * A utility for generating slice directories for FIRST-ROI.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_t1_images Input T1-weighted images of the brain (pattern-matched); for example, *_t1.nii.gz
+ * @param input_label_images Input label images corresponding to the T1 images (pattern-matched); for example, *_L_Hipp_first.nii.gz
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
+ */
 function first_roi_slicesdir(
     input_t1_images: string,
     input_label_images: string,
     runner: Runner | null = null,
 ): FirstRoiSlicesdirOutputs {
-    /**
-     * A utility for generating slice directories for FIRST-ROI.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_t1_images Input T1-weighted images of the brain (pattern-matched); for example, *_t1.nii.gz
-     * @param input_label_images Input label images corresponding to the T1 images (pattern-matched); for example, *_L_Hipp_first.nii.gz
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_ROI_SLICESDIR_METADATA);
     const params = first_roi_slicesdir_params(input_t1_images, input_label_images)
@@ -189,5 +189,8 @@ export {
       FirstRoiSlicesdirOutputs,
       FirstRoiSlicesdirParameters,
       first_roi_slicesdir,
+      first_roi_slicesdir_cargs,
+      first_roi_slicesdir_execute,
+      first_roi_slicesdir_outputs,
       first_roi_slicesdir_params,
 };

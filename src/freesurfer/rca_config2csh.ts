@@ -12,38 +12,38 @@ const RCA_CONFIG2CSH_METADATA: Metadata = {
 
 
 interface RcaConfig2cshParameters {
-    "__STYXTYPE__": "rca-config2csh";
+    "@type": "freesurfer.rca-config2csh";
     "configfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rca-config2csh": rca_config2csh_cargs,
+        "freesurfer.rca-config2csh": rca_config2csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface RcaConfig2cshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param configfile Configuration file to be converted
+ *
+ * @returns Parameter dictionary
+ */
 function rca_config2csh_params(
     configfile: InputPathType,
 ): RcaConfig2cshParameters {
-    /**
-     * Build parameters.
-    
-     * @param configfile Configuration file to be converted
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rca-config2csh" as const,
+        "@type": "freesurfer.rca-config2csh" as const,
         "configfile": configfile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rca_config2csh_cargs(
     params: RcaConfig2cshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rca-config2csh");
     cargs.push(
@@ -103,18 +103,18 @@ function rca_config2csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rca_config2csh_outputs(
     params: RcaConfig2cshParameters,
     execution: Execution,
 ): RcaConfig2cshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcaConfig2cshOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function rca_config2csh_outputs(
 }
 
 
+/**
+ * rca-config2csh is a utility to convert configuration files into C-shell syntax.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
+ */
 function rca_config2csh_execute(
     params: RcaConfig2cshParameters,
     execution: Execution,
 ): RcaConfig2cshOutputs {
-    /**
-     * rca-config2csh is a utility to convert configuration files into C-shell syntax.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
-     */
     params = execution.params(params)
     const cargs = rca_config2csh_cargs(params, execution)
     const ret = rca_config2csh_outputs(params, execution)
@@ -146,22 +146,22 @@ function rca_config2csh_execute(
 }
 
 
+/**
+ * rca-config2csh is a utility to convert configuration files into C-shell syntax.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param configfile Configuration file to be converted
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
+ */
 function rca_config2csh(
     configfile: InputPathType,
     runner: Runner | null = null,
 ): RcaConfig2cshOutputs {
-    /**
-     * rca-config2csh is a utility to convert configuration files into C-shell syntax.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param configfile Configuration file to be converted
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCA_CONFIG2CSH_METADATA);
     const params = rca_config2csh_params(configfile)
@@ -174,5 +174,8 @@ export {
       RcaConfig2cshOutputs,
       RcaConfig2cshParameters,
       rca_config2csh,
+      rca_config2csh_cargs,
+      rca_config2csh_execute,
+      rca_config2csh_outputs,
       rca_config2csh_params,
 };

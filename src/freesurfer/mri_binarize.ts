@@ -12,7 +12,7 @@ const MRI_BINARIZE_METADATA: Metadata = {
 
 
 interface MriBinarizeParameters {
-    "__STYXTYPE__": "mri_binarize";
+    "@type": "freesurfer.mri_binarize";
     "input_volume": InputPathType;
     "output_volume": string;
     "min_threshold"?: number | null | undefined;
@@ -50,35 +50,35 @@ interface MriBinarizeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_binarize": mri_binarize_cargs,
+        "freesurfer.mri_binarize": mri_binarize_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_binarize": mri_binarize_outputs,
+        "freesurfer.mri_binarize": mri_binarize_outputs,
     };
     return outputsFuncs[t];
 }
@@ -101,6 +101,46 @@ interface MriBinarizeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume to be binarized.
+ * @param output_volume Path to output volume.
+ * @param min_threshold Minimum threshold (default is -inf).
+ * @param max_threshold Maximum threshold (default is +inf).
+ * @param pct_threshold Set threshold to capture top P% of voxels.
+ * @param rmin Compute min threshold based on rmin times global mean.
+ * @param rmax Compute max threshold based on rmax times global mean.
+ * @param fdr_threshold Compute min threshold based on FDR.
+ * @param match_values Binarize based on matching values.
+ * @param replace_values Replace voxels with specified values. Format: V1 V2
+ * @param binval Set voxel value within threshold to specified value (default is 1).
+ * @param binval_not Set voxel value outside threshold range to specified value (default is 0).
+ * @param frame Use specific frame of the input. 0-based index.
+ * @param merge_volume Merge with another volume. Must be the same dimensions as input volume.
+ * @param mask_volume Mask input with a specified mask volume.
+ * @param mask_threshold Set threshold for mask volume (default is 0.5).
+ * @param surf_name Create a surface mesh from the binarization.
+ * @param surf_smooth Smooth the surface mesh iteratively, specifying the number of iterations.
+ * @param threads Specify number of threads to use.
+ * @param ctx_wm_flag Set match values for cerebral white matter.
+ * @param all_wm_flag Set match values for all white matter.
+ * @param ventricles_flag Set match values for ventricles and choroid.
+ * @param wm_vcsf_flag Match for WM and ventricular CSF.
+ * @param gm_flag Match for all WM, VCSF and background, then invert.
+ * @param subcort_gm_flag Match for subcortical gray matter.
+ * @param scm_lh_flag Subcortical mass for left hemisphere.
+ * @param scm_rh_flag Subcortical mass for right hemisphere.
+ * @param zero_edges_flag Set edge voxels to zero.
+ * @param zero_slice_edges_flag Set edge slice voxels to zero.
+ * @param dilate_vertex Dilate vertex to a specific target area.
+ * @param remove_islands_flag Remove islands in the mask.
+ * @param fill_holes_flag Remove holes in the mask.
+ * @param noverbose_flag Suppress verbose output.
+ * @param debug_flag Enable debugging output.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_binarize_params(
     input_volume: InputPathType,
     output_volume: string,
@@ -137,48 +177,8 @@ function mri_binarize_params(
     noverbose_flag: boolean = false,
     debug_flag: boolean = false,
 ): MriBinarizeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume to be binarized.
-     * @param output_volume Path to output volume.
-     * @param min_threshold Minimum threshold (default is -inf).
-     * @param max_threshold Maximum threshold (default is +inf).
-     * @param pct_threshold Set threshold to capture top P% of voxels.
-     * @param rmin Compute min threshold based on rmin times global mean.
-     * @param rmax Compute max threshold based on rmax times global mean.
-     * @param fdr_threshold Compute min threshold based on FDR.
-     * @param match_values Binarize based on matching values.
-     * @param replace_values Replace voxels with specified values. Format: V1 V2
-     * @param binval Set voxel value within threshold to specified value (default is 1).
-     * @param binval_not Set voxel value outside threshold range to specified value (default is 0).
-     * @param frame Use specific frame of the input. 0-based index.
-     * @param merge_volume Merge with another volume. Must be the same dimensions as input volume.
-     * @param mask_volume Mask input with a specified mask volume.
-     * @param mask_threshold Set threshold for mask volume (default is 0.5).
-     * @param surf_name Create a surface mesh from the binarization.
-     * @param surf_smooth Smooth the surface mesh iteratively, specifying the number of iterations.
-     * @param threads Specify number of threads to use.
-     * @param ctx_wm_flag Set match values for cerebral white matter.
-     * @param all_wm_flag Set match values for all white matter.
-     * @param ventricles_flag Set match values for ventricles and choroid.
-     * @param wm_vcsf_flag Match for WM and ventricular CSF.
-     * @param gm_flag Match for all WM, VCSF and background, then invert.
-     * @param subcort_gm_flag Match for subcortical gray matter.
-     * @param scm_lh_flag Subcortical mass for left hemisphere.
-     * @param scm_rh_flag Subcortical mass for right hemisphere.
-     * @param zero_edges_flag Set edge voxels to zero.
-     * @param zero_slice_edges_flag Set edge slice voxels to zero.
-     * @param dilate_vertex Dilate vertex to a specific target area.
-     * @param remove_islands_flag Remove islands in the mask.
-     * @param fill_holes_flag Remove holes in the mask.
-     * @param noverbose_flag Suppress verbose output.
-     * @param debug_flag Enable debugging output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_binarize" as const,
+        "@type": "freesurfer.mri_binarize" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "ctx_wm_flag": ctx_wm_flag,
@@ -254,18 +254,18 @@ function mri_binarize_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_binarize_cargs(
     params: MriBinarizeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_binarize");
     cargs.push(
@@ -430,18 +430,18 @@ function mri_binarize_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_binarize_outputs(
     params: MriBinarizeParameters,
     execution: Execution,
 ): MriBinarizeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriBinarizeOutputs = {
         root: execution.outputFile("."),
         out_volume: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -450,22 +450,22 @@ function mri_binarize_outputs(
 }
 
 
+/**
+ * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
+ */
 function mri_binarize_execute(
     params: MriBinarizeParameters,
     execution: Execution,
 ): MriBinarizeOutputs {
-    /**
-     * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_binarize_cargs(params, execution)
     const ret = mri_binarize_outputs(params, execution)
@@ -474,6 +474,51 @@ function mri_binarize_execute(
 }
 
 
+/**
+ * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume to be binarized.
+ * @param output_volume Path to output volume.
+ * @param min_threshold Minimum threshold (default is -inf).
+ * @param max_threshold Maximum threshold (default is +inf).
+ * @param pct_threshold Set threshold to capture top P% of voxels.
+ * @param rmin Compute min threshold based on rmin times global mean.
+ * @param rmax Compute max threshold based on rmax times global mean.
+ * @param fdr_threshold Compute min threshold based on FDR.
+ * @param match_values Binarize based on matching values.
+ * @param replace_values Replace voxels with specified values. Format: V1 V2
+ * @param binval Set voxel value within threshold to specified value (default is 1).
+ * @param binval_not Set voxel value outside threshold range to specified value (default is 0).
+ * @param frame Use specific frame of the input. 0-based index.
+ * @param merge_volume Merge with another volume. Must be the same dimensions as input volume.
+ * @param mask_volume Mask input with a specified mask volume.
+ * @param mask_threshold Set threshold for mask volume (default is 0.5).
+ * @param surf_name Create a surface mesh from the binarization.
+ * @param surf_smooth Smooth the surface mesh iteratively, specifying the number of iterations.
+ * @param threads Specify number of threads to use.
+ * @param ctx_wm_flag Set match values for cerebral white matter.
+ * @param all_wm_flag Set match values for all white matter.
+ * @param ventricles_flag Set match values for ventricles and choroid.
+ * @param wm_vcsf_flag Match for WM and ventricular CSF.
+ * @param gm_flag Match for all WM, VCSF and background, then invert.
+ * @param subcort_gm_flag Match for subcortical gray matter.
+ * @param scm_lh_flag Subcortical mass for left hemisphere.
+ * @param scm_rh_flag Subcortical mass for right hemisphere.
+ * @param zero_edges_flag Set edge voxels to zero.
+ * @param zero_slice_edges_flag Set edge slice voxels to zero.
+ * @param dilate_vertex Dilate vertex to a specific target area.
+ * @param remove_islands_flag Remove islands in the mask.
+ * @param fill_holes_flag Remove holes in the mask.
+ * @param noverbose_flag Suppress verbose output.
+ * @param debug_flag Enable debugging output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
+ */
 function mri_binarize(
     input_volume: InputPathType,
     output_volume: string,
@@ -511,51 +556,6 @@ function mri_binarize(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriBinarizeOutputs {
-    /**
-     * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume to be binarized.
-     * @param output_volume Path to output volume.
-     * @param min_threshold Minimum threshold (default is -inf).
-     * @param max_threshold Maximum threshold (default is +inf).
-     * @param pct_threshold Set threshold to capture top P% of voxels.
-     * @param rmin Compute min threshold based on rmin times global mean.
-     * @param rmax Compute max threshold based on rmax times global mean.
-     * @param fdr_threshold Compute min threshold based on FDR.
-     * @param match_values Binarize based on matching values.
-     * @param replace_values Replace voxels with specified values. Format: V1 V2
-     * @param binval Set voxel value within threshold to specified value (default is 1).
-     * @param binval_not Set voxel value outside threshold range to specified value (default is 0).
-     * @param frame Use specific frame of the input. 0-based index.
-     * @param merge_volume Merge with another volume. Must be the same dimensions as input volume.
-     * @param mask_volume Mask input with a specified mask volume.
-     * @param mask_threshold Set threshold for mask volume (default is 0.5).
-     * @param surf_name Create a surface mesh from the binarization.
-     * @param surf_smooth Smooth the surface mesh iteratively, specifying the number of iterations.
-     * @param threads Specify number of threads to use.
-     * @param ctx_wm_flag Set match values for cerebral white matter.
-     * @param all_wm_flag Set match values for all white matter.
-     * @param ventricles_flag Set match values for ventricles and choroid.
-     * @param wm_vcsf_flag Match for WM and ventricular CSF.
-     * @param gm_flag Match for all WM, VCSF and background, then invert.
-     * @param subcort_gm_flag Match for subcortical gray matter.
-     * @param scm_lh_flag Subcortical mass for left hemisphere.
-     * @param scm_rh_flag Subcortical mass for right hemisphere.
-     * @param zero_edges_flag Set edge voxels to zero.
-     * @param zero_slice_edges_flag Set edge slice voxels to zero.
-     * @param dilate_vertex Dilate vertex to a specific target area.
-     * @param remove_islands_flag Remove islands in the mask.
-     * @param fill_holes_flag Remove holes in the mask.
-     * @param noverbose_flag Suppress verbose output.
-     * @param debug_flag Enable debugging output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_BINARIZE_METADATA);
     const params = mri_binarize_params(input_volume, output_volume, min_threshold, max_threshold, pct_threshold, rmin, rmax, fdr_threshold, match_values, replace_values, binval, binval_not, frame, merge_volume, mask_volume, mask_threshold, surf_name, surf_smooth, threads, ctx_wm_flag, all_wm_flag, ventricles_flag, wm_vcsf_flag, gm_flag, subcort_gm_flag, scm_lh_flag, scm_rh_flag, zero_edges_flag, zero_slice_edges_flag, dilate_vertex, remove_islands_flag, fill_holes_flag, noverbose_flag, debug_flag)
@@ -568,5 +568,8 @@ export {
       MriBinarizeOutputs,
       MriBinarizeParameters,
       mri_binarize,
+      mri_binarize_cargs,
+      mri_binarize_execute,
+      mri_binarize_outputs,
       mri_binarize_params,
 };

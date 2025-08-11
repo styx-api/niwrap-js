@@ -12,38 +12,38 @@ const IMRM_METADATA: Metadata = {
 
 
 interface ImrmParameters {
-    "__STYXTYPE__": "imrm";
+    "@type": "fsl.imrm";
     "images_to_remove": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "imrm": imrm_cargs,
+        "fsl.imrm": imrm_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface ImrmOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param images_to_remove List of image names to remove. Filenames can be basenames or full names.
+ *
+ * @returns Parameter dictionary
+ */
 function imrm_params(
     images_to_remove: Array<string>,
 ): ImrmParameters {
-    /**
-     * Build parameters.
-    
-     * @param images_to_remove List of image names to remove. Filenames can be basenames or full names.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "imrm" as const,
+        "@type": "fsl.imrm" as const,
         "images_to_remove": images_to_remove,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function imrm_cargs(
     params: ImrmParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("imrm");
     cargs.push(...(params["images_to_remove"] ?? null));
@@ -100,18 +100,18 @@ function imrm_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function imrm_outputs(
     params: ImrmParameters,
     execution: Execution,
 ): ImrmOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ImrmOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function imrm_outputs(
 }
 
 
+/**
+ * Remove specified image files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ImrmOutputs`).
+ */
 function imrm_execute(
     params: ImrmParameters,
     execution: Execution,
 ): ImrmOutputs {
-    /**
-     * Remove specified image files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ImrmOutputs`).
-     */
     params = execution.params(params)
     const cargs = imrm_cargs(params, execution)
     const ret = imrm_outputs(params, execution)
@@ -143,22 +143,22 @@ function imrm_execute(
 }
 
 
+/**
+ * Remove specified image files.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param images_to_remove List of image names to remove. Filenames can be basenames or full names.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ImrmOutputs`).
+ */
 function imrm(
     images_to_remove: Array<string>,
     runner: Runner | null = null,
 ): ImrmOutputs {
-    /**
-     * Remove specified image files.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param images_to_remove List of image names to remove. Filenames can be basenames or full names.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ImrmOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(IMRM_METADATA);
     const params = imrm_params(images_to_remove)
@@ -171,5 +171,8 @@ export {
       ImrmOutputs,
       ImrmParameters,
       imrm,
+      imrm_cargs,
+      imrm_execute,
+      imrm_outputs,
       imrm_params,
 };

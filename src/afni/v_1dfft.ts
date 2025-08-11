@@ -12,7 +12,7 @@ const V_1DFFT_METADATA: Metadata = {
 
 
 interface V1dfftParameters {
-    "__STYXTYPE__": "1dfft";
+    "@type": "afni.1dfft";
     "infile": InputPathType;
     "outfile": string;
     "ignore"?: number | null | undefined;
@@ -25,35 +25,35 @@ interface V1dfftParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "1dfft": v_1dfft_cargs,
+        "afni.1dfft": v_1dfft_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "1dfft": v_1dfft_outputs,
+        "afni.1dfft": v_1dfft_outputs,
     };
     return outputsFuncs[t];
 }
@@ -76,6 +76,21 @@ interface V1dfftOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input .1D file containing an ASCII list of numbers arranged in columns.
+ * @param outfile Output file to store the FFT results.
+ * @param ignore Skip the first 'sss' lines in the input file. [default = no skipping]
+ * @param use Use only 'uuu' lines of the input file. [default = use them all]
+ * @param nfft Set FFT length to 'nnn'. [default = length of data (# of lines used)]
+ * @param tocx Save Re and Im parts of transform in 2 columns.
+ * @param fromcx Convert 2 column complex input into 1 column real output. Note: This will not work if the original data FFT length was an odd number.
+ * @param hilbert When -fromcx is used, the inverse FFT will do the Hilbert transform instead.
+ * @param nodetrend Skip the detrending of the input.
+ *
+ * @returns Parameter dictionary
+ */
 function v_1dfft_params(
     infile: InputPathType,
     outfile: string,
@@ -87,23 +102,8 @@ function v_1dfft_params(
     hilbert: boolean = false,
     nodetrend: boolean = false,
 ): V1dfftParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input .1D file containing an ASCII list of numbers arranged in columns.
-     * @param outfile Output file to store the FFT results.
-     * @param ignore Skip the first 'sss' lines in the input file. [default = no skipping]
-     * @param use Use only 'uuu' lines of the input file. [default = use them all]
-     * @param nfft Set FFT length to 'nnn'. [default = length of data (# of lines used)]
-     * @param tocx Save Re and Im parts of transform in 2 columns.
-     * @param fromcx Convert 2 column complex input into 1 column real output. Note: This will not work if the original data FFT length was an odd number.
-     * @param hilbert When -fromcx is used, the inverse FFT will do the Hilbert transform instead.
-     * @param nodetrend Skip the detrending of the input.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "1dfft" as const,
+        "@type": "afni.1dfft" as const,
         "infile": infile,
         "outfile": outfile,
         "tocx": tocx,
@@ -124,18 +124,18 @@ function v_1dfft_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_1dfft_cargs(
     params: V1dfftParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("1dfft");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -174,18 +174,18 @@ function v_1dfft_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_1dfft_outputs(
     params: V1dfftParameters,
     execution: Execution,
 ): V1dfftOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V1dfftOutputs = {
         root: execution.outputFile("."),
         out_fft: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -194,22 +194,22 @@ function v_1dfft_outputs(
 }
 
 
+/**
+ * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
+ */
 function v_1dfft_execute(
     params: V1dfftParameters,
     execution: Execution,
 ): V1dfftOutputs {
-    /**
-     * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_1dfft_cargs(params, execution)
     const ret = v_1dfft_outputs(params, execution)
@@ -218,6 +218,26 @@ function v_1dfft_execute(
 }
 
 
+/**
+ * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param infile Input .1D file containing an ASCII list of numbers arranged in columns.
+ * @param outfile Output file to store the FFT results.
+ * @param ignore Skip the first 'sss' lines in the input file. [default = no skipping]
+ * @param use Use only 'uuu' lines of the input file. [default = use them all]
+ * @param nfft Set FFT length to 'nnn'. [default = length of data (# of lines used)]
+ * @param tocx Save Re and Im parts of transform in 2 columns.
+ * @param fromcx Convert 2 column complex input into 1 column real output. Note: This will not work if the original data FFT length was an odd number.
+ * @param hilbert When -fromcx is used, the inverse FFT will do the Hilbert transform instead.
+ * @param nodetrend Skip the detrending of the input.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
+ */
 function v_1dfft(
     infile: InputPathType,
     outfile: string,
@@ -230,26 +250,6 @@ function v_1dfft(
     nodetrend: boolean = false,
     runner: Runner | null = null,
 ): V1dfftOutputs {
-    /**
-     * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param infile Input .1D file containing an ASCII list of numbers arranged in columns.
-     * @param outfile Output file to store the FFT results.
-     * @param ignore Skip the first 'sss' lines in the input file. [default = no skipping]
-     * @param use Use only 'uuu' lines of the input file. [default = use them all]
-     * @param nfft Set FFT length to 'nnn'. [default = length of data (# of lines used)]
-     * @param tocx Save Re and Im parts of transform in 2 columns.
-     * @param fromcx Convert 2 column complex input into 1 column real output. Note: This will not work if the original data FFT length was an odd number.
-     * @param hilbert When -fromcx is used, the inverse FFT will do the Hilbert transform instead.
-     * @param nodetrend Skip the detrending of the input.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_1DFFT_METADATA);
     const params = v_1dfft_params(infile, outfile, ignore, use, nfft, tocx, fromcx, hilbert, nodetrend)
@@ -262,5 +262,8 @@ export {
       V1dfftParameters,
       V_1DFFT_METADATA,
       v_1dfft,
+      v_1dfft_cargs,
+      v_1dfft_execute,
+      v_1dfft_outputs,
       v_1dfft_params,
 };

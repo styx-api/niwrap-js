@@ -12,7 +12,7 @@ const MRI_SURFCLUSTER_METADATA: Metadata = {
 
 
 interface MriSurfclusterParameters {
-    "__STYXTYPE__": "mri_surfcluster";
+    "@type": "freesurfer.mri_surfcluster";
     "infile": InputPathType;
     "thmin"?: number | null | undefined;
     "sign"?: string | null | undefined;
@@ -57,35 +57,35 @@ interface MriSurfclusterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_surfcluster": mri_surfcluster_cargs,
+        "freesurfer.mri_surfcluster": mri_surfcluster_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_surfcluster": mri_surfcluster_outputs,
+        "freesurfer.mri_surfcluster": mri_surfcluster_outputs,
     };
     return outputsFuncs[t];
 }
@@ -128,6 +128,53 @@ interface MriSurfclusterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Source of surface values
+ * @param thmin Minimum intensity threshold
+ * @param sign Sign of threshold criteria (abs, pos, neg)
+ * @param no_adjust_flag Do not adjust threshold for one-tailed tests
+ * @param fdr Set thmin with False Discovery Rate
+ * @param subject Source surface subject (can be ico)
+ * @param hemi Cortical hemisphere, either lh or rh
+ * @param surf Coordinates from surface (e.g., white)
+ * @param surfpath Full path to surface
+ * @param annot Report annotation for max vertex (e.g., aparc)
+ * @param frame 0-based frame number of the input file
+ * @param csd Load one or more CSD files
+ * @param vwsig Map of corrected voxel-wise significances
+ * @param cwsig Map of cluster-wise significances
+ * @param maxcwpval Save p-value of the largest (max) cluster
+ * @param bonferroni Apply Bonferroni correction across N spaces
+ * @param sig2p_max_flag Convert max from sig to p
+ * @param bonferroni_max Apply Bonferroni correction to maximum
+ * @param csdpdf Compute PDF/CDF of CSD data and save
+ * @param csdpdf_only_flag Only write the CSD PDF file
+ * @param csd_out Write out merged CSD files as one
+ * @param cwpvalthresh Cluster-wise threshold
+ * @param fwhm FWHM in mm^2 for GRF
+ * @param fwhmdat Text file with FWHM in mm^2 for GRF
+ * @param clabel Constrain cluster search to be inside or outside clabel
+ * @param cortex_flag Set clabel to be subject/label/hemi.cortex.label
+ * @param mask Constrain to be within mask
+ * @param mask_inv_flag Constrain cluster search to be outside mask or clabel
+ * @param centroid_flag Report centroid instead of location of maximum stat
+ * @param sum Text file to store cluster summary
+ * @param pointset File that can be read into Freeview with -c
+ * @param maxareafile Write area of largest cluster to this file
+ * @param o Output file with non-clusters set to 0
+ * @param ocn Output file where value is cluster number
+ * @param olab Output clusters as labels
+ * @param oannot Output clusters as an annotation
+ * @param minarea Area threshold for a cluster (mm^2)
+ * @param xfm Talairach transform file
+ * @param no_fixmni_flag Do not fix MNI Talairach coordinates
+ * @param sd FreeSurfer subjects directory
+ * @param thmax Maximum intensity threshold
+ *
+ * @returns Parameter dictionary
+ */
 function mri_surfcluster_params(
     infile: InputPathType,
     thmin: number | null = null,
@@ -171,55 +218,8 @@ function mri_surfcluster_params(
     sd: string | null = null,
     thmax: number | null = null,
 ): MriSurfclusterParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Source of surface values
-     * @param thmin Minimum intensity threshold
-     * @param sign Sign of threshold criteria (abs, pos, neg)
-     * @param no_adjust_flag Do not adjust threshold for one-tailed tests
-     * @param fdr Set thmin with False Discovery Rate
-     * @param subject Source surface subject (can be ico)
-     * @param hemi Cortical hemisphere, either lh or rh
-     * @param surf Coordinates from surface (e.g., white)
-     * @param surfpath Full path to surface
-     * @param annot Report annotation for max vertex (e.g., aparc)
-     * @param frame 0-based frame number of the input file
-     * @param csd Load one or more CSD files
-     * @param vwsig Map of corrected voxel-wise significances
-     * @param cwsig Map of cluster-wise significances
-     * @param maxcwpval Save p-value of the largest (max) cluster
-     * @param bonferroni Apply Bonferroni correction across N spaces
-     * @param sig2p_max_flag Convert max from sig to p
-     * @param bonferroni_max Apply Bonferroni correction to maximum
-     * @param csdpdf Compute PDF/CDF of CSD data and save
-     * @param csdpdf_only_flag Only write the CSD PDF file
-     * @param csd_out Write out merged CSD files as one
-     * @param cwpvalthresh Cluster-wise threshold
-     * @param fwhm FWHM in mm^2 for GRF
-     * @param fwhmdat Text file with FWHM in mm^2 for GRF
-     * @param clabel Constrain cluster search to be inside or outside clabel
-     * @param cortex_flag Set clabel to be subject/label/hemi.cortex.label
-     * @param mask Constrain to be within mask
-     * @param mask_inv_flag Constrain cluster search to be outside mask or clabel
-     * @param centroid_flag Report centroid instead of location of maximum stat
-     * @param sum Text file to store cluster summary
-     * @param pointset File that can be read into Freeview with -c
-     * @param maxareafile Write area of largest cluster to this file
-     * @param o Output file with non-clusters set to 0
-     * @param ocn Output file where value is cluster number
-     * @param olab Output clusters as labels
-     * @param oannot Output clusters as an annotation
-     * @param minarea Area threshold for a cluster (mm^2)
-     * @param xfm Talairach transform file
-     * @param no_fixmni_flag Do not fix MNI Talairach coordinates
-     * @param sd FreeSurfer subjects directory
-     * @param thmax Maximum intensity threshold
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_surfcluster" as const,
+        "@type": "freesurfer.mri_surfcluster" as const,
         "infile": infile,
         "no_adjust_flag": no_adjust_flag,
         "sig2p_max_flag": sig2p_max_flag,
@@ -332,18 +332,18 @@ function mri_surfcluster_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_surfcluster_cargs(
     params: MriSurfclusterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_surfcluster");
     cargs.push(
@@ -573,18 +573,18 @@ function mri_surfcluster_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_surfcluster_outputs(
     params: MriSurfclusterParameters,
     execution: Execution,
 ): MriSurfclusterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSurfclusterOutputs = {
         root: execution.outputFile("."),
         output_surface_file: ((params["o"] ?? null) !== null) ? execution.outputFile([(params["o"] ?? null)].join('')) : null,
@@ -598,22 +598,22 @@ function mri_surfcluster_outputs(
 }
 
 
+/**
+ * A tool for clustering vertices on a cortical surface based on intensity values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
+ */
 function mri_surfcluster_execute(
     params: MriSurfclusterParameters,
     execution: Execution,
 ): MriSurfclusterOutputs {
-    /**
-     * A tool for clustering vertices on a cortical surface based on intensity values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_surfcluster_cargs(params, execution)
     const ret = mri_surfcluster_outputs(params, execution)
@@ -622,6 +622,58 @@ function mri_surfcluster_execute(
 }
 
 
+/**
+ * A tool for clustering vertices on a cortical surface based on intensity values.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Source of surface values
+ * @param thmin Minimum intensity threshold
+ * @param sign Sign of threshold criteria (abs, pos, neg)
+ * @param no_adjust_flag Do not adjust threshold for one-tailed tests
+ * @param fdr Set thmin with False Discovery Rate
+ * @param subject Source surface subject (can be ico)
+ * @param hemi Cortical hemisphere, either lh or rh
+ * @param surf Coordinates from surface (e.g., white)
+ * @param surfpath Full path to surface
+ * @param annot Report annotation for max vertex (e.g., aparc)
+ * @param frame 0-based frame number of the input file
+ * @param csd Load one or more CSD files
+ * @param vwsig Map of corrected voxel-wise significances
+ * @param cwsig Map of cluster-wise significances
+ * @param maxcwpval Save p-value of the largest (max) cluster
+ * @param bonferroni Apply Bonferroni correction across N spaces
+ * @param sig2p_max_flag Convert max from sig to p
+ * @param bonferroni_max Apply Bonferroni correction to maximum
+ * @param csdpdf Compute PDF/CDF of CSD data and save
+ * @param csdpdf_only_flag Only write the CSD PDF file
+ * @param csd_out Write out merged CSD files as one
+ * @param cwpvalthresh Cluster-wise threshold
+ * @param fwhm FWHM in mm^2 for GRF
+ * @param fwhmdat Text file with FWHM in mm^2 for GRF
+ * @param clabel Constrain cluster search to be inside or outside clabel
+ * @param cortex_flag Set clabel to be subject/label/hemi.cortex.label
+ * @param mask Constrain to be within mask
+ * @param mask_inv_flag Constrain cluster search to be outside mask or clabel
+ * @param centroid_flag Report centroid instead of location of maximum stat
+ * @param sum Text file to store cluster summary
+ * @param pointset File that can be read into Freeview with -c
+ * @param maxareafile Write area of largest cluster to this file
+ * @param o Output file with non-clusters set to 0
+ * @param ocn Output file where value is cluster number
+ * @param olab Output clusters as labels
+ * @param oannot Output clusters as an annotation
+ * @param minarea Area threshold for a cluster (mm^2)
+ * @param xfm Talairach transform file
+ * @param no_fixmni_flag Do not fix MNI Talairach coordinates
+ * @param sd FreeSurfer subjects directory
+ * @param thmax Maximum intensity threshold
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
+ */
 function mri_surfcluster(
     infile: InputPathType,
     thmin: number | null = null,
@@ -666,58 +718,6 @@ function mri_surfcluster(
     thmax: number | null = null,
     runner: Runner | null = null,
 ): MriSurfclusterOutputs {
-    /**
-     * A tool for clustering vertices on a cortical surface based on intensity values.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Source of surface values
-     * @param thmin Minimum intensity threshold
-     * @param sign Sign of threshold criteria (abs, pos, neg)
-     * @param no_adjust_flag Do not adjust threshold for one-tailed tests
-     * @param fdr Set thmin with False Discovery Rate
-     * @param subject Source surface subject (can be ico)
-     * @param hemi Cortical hemisphere, either lh or rh
-     * @param surf Coordinates from surface (e.g., white)
-     * @param surfpath Full path to surface
-     * @param annot Report annotation for max vertex (e.g., aparc)
-     * @param frame 0-based frame number of the input file
-     * @param csd Load one or more CSD files
-     * @param vwsig Map of corrected voxel-wise significances
-     * @param cwsig Map of cluster-wise significances
-     * @param maxcwpval Save p-value of the largest (max) cluster
-     * @param bonferroni Apply Bonferroni correction across N spaces
-     * @param sig2p_max_flag Convert max from sig to p
-     * @param bonferroni_max Apply Bonferroni correction to maximum
-     * @param csdpdf Compute PDF/CDF of CSD data and save
-     * @param csdpdf_only_flag Only write the CSD PDF file
-     * @param csd_out Write out merged CSD files as one
-     * @param cwpvalthresh Cluster-wise threshold
-     * @param fwhm FWHM in mm^2 for GRF
-     * @param fwhmdat Text file with FWHM in mm^2 for GRF
-     * @param clabel Constrain cluster search to be inside or outside clabel
-     * @param cortex_flag Set clabel to be subject/label/hemi.cortex.label
-     * @param mask Constrain to be within mask
-     * @param mask_inv_flag Constrain cluster search to be outside mask or clabel
-     * @param centroid_flag Report centroid instead of location of maximum stat
-     * @param sum Text file to store cluster summary
-     * @param pointset File that can be read into Freeview with -c
-     * @param maxareafile Write area of largest cluster to this file
-     * @param o Output file with non-clusters set to 0
-     * @param ocn Output file where value is cluster number
-     * @param olab Output clusters as labels
-     * @param oannot Output clusters as an annotation
-     * @param minarea Area threshold for a cluster (mm^2)
-     * @param xfm Talairach transform file
-     * @param no_fixmni_flag Do not fix MNI Talairach coordinates
-     * @param sd FreeSurfer subjects directory
-     * @param thmax Maximum intensity threshold
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SURFCLUSTER_METADATA);
     const params = mri_surfcluster_params(infile, thmin, sign, no_adjust_flag, fdr, subject, hemi, surf, surfpath, annot, frame, csd, vwsig, cwsig, maxcwpval, bonferroni, sig2p_max_flag, bonferroni_max, csdpdf, csdpdf_only_flag, csd_out, cwpvalthresh, fwhm, fwhmdat, clabel, cortex_flag, mask, mask_inv_flag, centroid_flag, sum, pointset, maxareafile, o, ocn, olab, oannot, minarea, xfm, no_fixmni_flag, sd, thmax)
@@ -730,5 +730,8 @@ export {
       MriSurfclusterOutputs,
       MriSurfclusterParameters,
       mri_surfcluster,
+      mri_surfcluster_cargs,
+      mri_surfcluster_execute,
+      mri_surfcluster_outputs,
       mri_surfcluster_params,
 };

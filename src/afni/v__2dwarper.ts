@@ -12,40 +12,40 @@ const V__2DWARPER_METADATA: Metadata = {
 
 
 interface V2dwarperParameters {
-    "__STYXTYPE__": "@2dwarper";
+    "@type": "afni.@2dwarper";
     "input_dataset": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@2dwarper": v__2dwarper_cargs,
+        "afni.@2dwarper": v__2dwarper_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@2dwarper": v__2dwarper_outputs,
+        "afni.@2dwarper": v__2dwarper_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,36 +68,36 @@ interface V2dwarperOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset (e.g., image to be warped)
+ *
+ * @returns Parameter dictionary
+ */
 function v__2dwarper_params(
     input_dataset: InputPathType,
 ): V2dwarperParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset (e.g., image to be warped)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@2dwarper" as const,
+        "@type": "afni.@2dwarper" as const,
         "input_dataset": input_dataset,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__2dwarper_cargs(
     params: V2dwarperParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@2dwarper");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -105,18 +105,18 @@ function v__2dwarper_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__2dwarper_outputs(
     params: V2dwarperParameters,
     execution: Execution,
 ): V2dwarperOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V2dwarperOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile(["warped_output"].join('')),
@@ -125,22 +125,22 @@ function v__2dwarper_outputs(
 }
 
 
+/**
+ * 2D image warping tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
+ */
 function v__2dwarper_execute(
     params: V2dwarperParameters,
     execution: Execution,
 ): V2dwarperOutputs {
-    /**
-     * 2D image warping tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__2dwarper_cargs(params, execution)
     const ret = v__2dwarper_outputs(params, execution)
@@ -149,22 +149,22 @@ function v__2dwarper_execute(
 }
 
 
+/**
+ * 2D image warping tool.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset (e.g., image to be warped)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
+ */
 function v__2dwarper(
     input_dataset: InputPathType,
     runner: Runner | null = null,
 ): V2dwarperOutputs {
-    /**
-     * 2D image warping tool.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset (e.g., image to be warped)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__2DWARPER_METADATA);
     const params = v__2dwarper_params(input_dataset)
@@ -177,5 +177,8 @@ export {
       V2dwarperParameters,
       V__2DWARPER_METADATA,
       v__2dwarper,
+      v__2dwarper_cargs,
+      v__2dwarper_execute,
+      v__2dwarper_outputs,
       v__2dwarper_params,
 };

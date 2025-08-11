@@ -12,7 +12,7 @@ const SUPER_RESOLUTION_METADATA: Metadata = {
 
 
 interface SuperResolutionParameters {
-    "__STYXTYPE__": "SuperResolution";
+    "@type": "ants.SuperResolution";
     "image_dimension": number;
     "output_image": string;
     "domain_image": InputPathType;
@@ -23,35 +23,35 @@ interface SuperResolutionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SuperResolution": super_resolution_cargs,
+        "ants.SuperResolution": super_resolution_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SuperResolution": super_resolution_outputs,
+        "ants.SuperResolution": super_resolution_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface SuperResolutionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Specifies the dimensionality of the input images (e.g., 2 for 2D images, 3 for 3D images).
+ * @param output_image The file path for the output super-resolved image.
+ * @param domain_image The domain image is used as the template space for the alignment of input images.
+ * @param gradient_sigma The sigma used for calculating the gradient magnitude of input images. If negative, no weighting is applied.
+ * @param mesh_size The size of the mesh used in fitting.
+ * @param number_of_levels The number of resolution levels to process.
+ * @param input_image_files List of paths to input images to be processed for super resolution.
+ *
+ * @returns Parameter dictionary
+ */
 function super_resolution_params(
     image_dimension: number,
     output_image: string,
@@ -83,21 +96,8 @@ function super_resolution_params(
     number_of_levels: number,
     input_image_files: Array<InputPathType>,
 ): SuperResolutionParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Specifies the dimensionality of the input images (e.g., 2 for 2D images, 3 for 3D images).
-     * @param output_image The file path for the output super-resolved image.
-     * @param domain_image The domain image is used as the template space for the alignment of input images.
-     * @param gradient_sigma The sigma used for calculating the gradient magnitude of input images. If negative, no weighting is applied.
-     * @param mesh_size The size of the mesh used in fitting.
-     * @param number_of_levels The number of resolution levels to process.
-     * @param input_image_files List of paths to input images to be processed for super resolution.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SuperResolution" as const,
+        "@type": "ants.SuperResolution" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "domain_image": domain_image,
@@ -110,18 +110,18 @@ function super_resolution_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function super_resolution_cargs(
     params: SuperResolutionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SuperResolution");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -135,18 +135,18 @@ function super_resolution_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function super_resolution_outputs(
     params: SuperResolutionParameters,
     execution: Execution,
 ): SuperResolutionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SuperResolutionOutputs = {
         root: execution.outputFile("."),
         super_resolved_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -155,22 +155,22 @@ function super_resolution_outputs(
 }
 
 
+/**
+ * The SuperResolution tool enhances the spatial resolution of input images. The 'gradientSigma' parameter is used in calculating the gradient magnitude of the input images for weighting the voxel points during fitting. If a negative 'gradient' sigma is specified then no weighting is used.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
+ */
 function super_resolution_execute(
     params: SuperResolutionParameters,
     execution: Execution,
 ): SuperResolutionOutputs {
-    /**
-     * The SuperResolution tool enhances the spatial resolution of input images. The 'gradientSigma' parameter is used in calculating the gradient magnitude of the input images for weighting the voxel points during fitting. If a negative 'gradient' sigma is specified then no weighting is used.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
-     */
     params = execution.params(params)
     const cargs = super_resolution_cargs(params, execution)
     const ret = super_resolution_outputs(params, execution)
@@ -179,6 +179,24 @@ function super_resolution_execute(
 }
 
 
+/**
+ * The SuperResolution tool enhances the spatial resolution of input images. The 'gradientSigma' parameter is used in calculating the gradient magnitude of the input images for weighting the voxel points during fitting. If a negative 'gradient' sigma is specified then no weighting is used.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Specifies the dimensionality of the input images (e.g., 2 for 2D images, 3 for 3D images).
+ * @param output_image The file path for the output super-resolved image.
+ * @param domain_image The domain image is used as the template space for the alignment of input images.
+ * @param gradient_sigma The sigma used for calculating the gradient magnitude of input images. If negative, no weighting is applied.
+ * @param mesh_size The size of the mesh used in fitting.
+ * @param number_of_levels The number of resolution levels to process.
+ * @param input_image_files List of paths to input images to be processed for super resolution.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
+ */
 function super_resolution(
     image_dimension: number,
     output_image: string,
@@ -189,24 +207,6 @@ function super_resolution(
     input_image_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): SuperResolutionOutputs {
-    /**
-     * The SuperResolution tool enhances the spatial resolution of input images. The 'gradientSigma' parameter is used in calculating the gradient magnitude of the input images for weighting the voxel points during fitting. If a negative 'gradient' sigma is specified then no weighting is used.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Specifies the dimensionality of the input images (e.g., 2 for 2D images, 3 for 3D images).
-     * @param output_image The file path for the output super-resolved image.
-     * @param domain_image The domain image is used as the template space for the alignment of input images.
-     * @param gradient_sigma The sigma used for calculating the gradient magnitude of input images. If negative, no weighting is applied.
-     * @param mesh_size The size of the mesh used in fitting.
-     * @param number_of_levels The number of resolution levels to process.
-     * @param input_image_files List of paths to input images to be processed for super resolution.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SUPER_RESOLUTION_METADATA);
     const params = super_resolution_params(image_dimension, output_image, domain_image, gradient_sigma, mesh_size, number_of_levels, input_image_files)
@@ -219,5 +219,8 @@ export {
       SuperResolutionOutputs,
       SuperResolutionParameters,
       super_resolution,
+      super_resolution_cargs,
+      super_resolution_execute,
+      super_resolution_outputs,
       super_resolution_params,
 };

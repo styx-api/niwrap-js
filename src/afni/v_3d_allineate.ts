@@ -12,7 +12,7 @@ const V_3D_ALLINEATE_METADATA: Metadata = {
 
 
 interface V3dAllineateParameters {
-    "__STYXTYPE__": "3dAllineate";
+    "@type": "afni.3dAllineate";
     "source": InputPathType;
     "base"?: InputPathType | null | undefined;
     "prefix": string;
@@ -30,35 +30,35 @@ interface V3dAllineateParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dAllineate": v_3d_allineate_cargs,
+        "afni.3dAllineate": v_3d_allineate_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dAllineate": v_3d_allineate_outputs,
+        "afni.3dAllineate": v_3d_allineate_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,6 +93,26 @@ interface V3dAllineateOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param source Source dataset file
+ * @param prefix Output prefix
+ * @param base Base dataset file
+ * @param param_save Save the warp parameters in ASCII (.1D) format into file
+ * @param param_apply Read warp parameters from file and apply them to the source dataset
+ * @param matrix_save Save the transformation matrix for each sub-brick into file
+ * @param matrix_apply Use the matrices in file to define the spatial transformations to be applied
+ * @param cost Defines the 'cost' function that defines the matching between the source and the base
+ * @param interp Defines interpolation method to use during matching process
+ * @param final Defines the interpolation mode used to create the output dataset
+ * @param nmatch Use at most 'nnn' scattered points to match the datasets
+ * @param nopad Do not use zero-padding on the base image
+ * @param verbose Print out verbose progress reports
+ * @param quiet Don't print out verbose stuff
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_allineate_params(
     source: InputPathType,
     prefix: string,
@@ -109,28 +129,8 @@ function v_3d_allineate_params(
     verbose: boolean = false,
     quiet: boolean = false,
 ): V3dAllineateParameters {
-    /**
-     * Build parameters.
-    
-     * @param source Source dataset file
-     * @param prefix Output prefix
-     * @param base Base dataset file
-     * @param param_save Save the warp parameters in ASCII (.1D) format into file
-     * @param param_apply Read warp parameters from file and apply them to the source dataset
-     * @param matrix_save Save the transformation matrix for each sub-brick into file
-     * @param matrix_apply Use the matrices in file to define the spatial transformations to be applied
-     * @param cost Defines the 'cost' function that defines the matching between the source and the base
-     * @param interp Defines interpolation method to use during matching process
-     * @param final Defines the interpolation mode used to create the output dataset
-     * @param nmatch Use at most 'nnn' scattered points to match the datasets
-     * @param nopad Do not use zero-padding on the base image
-     * @param verbose Print out verbose progress reports
-     * @param quiet Don't print out verbose stuff
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dAllineate" as const,
+        "@type": "afni.3dAllineate" as const,
         "source": source,
         "prefix": prefix,
         "nopad": nopad,
@@ -168,18 +168,18 @@ function v_3d_allineate_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_allineate_cargs(
     params: V3dAllineateParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dAllineate");
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -254,18 +254,18 @@ function v_3d_allineate_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_allineate_outputs(
     params: V3dAllineateParameters,
     execution: Execution,
 ): V3dAllineateOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dAllineateOutputs = {
         root: execution.outputFile("."),
         out_brik: execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')),
@@ -277,22 +277,22 @@ function v_3d_allineate_outputs(
 }
 
 
+/**
+ * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
+ */
 function v_3d_allineate_execute(
     params: V3dAllineateParameters,
     execution: Execution,
 ): V3dAllineateOutputs {
-    /**
-     * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_allineate_cargs(params, execution)
     const ret = v_3d_allineate_outputs(params, execution)
@@ -301,6 +301,31 @@ function v_3d_allineate_execute(
 }
 
 
+/**
+ * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param source Source dataset file
+ * @param prefix Output prefix
+ * @param base Base dataset file
+ * @param param_save Save the warp parameters in ASCII (.1D) format into file
+ * @param param_apply Read warp parameters from file and apply them to the source dataset
+ * @param matrix_save Save the transformation matrix for each sub-brick into file
+ * @param matrix_apply Use the matrices in file to define the spatial transformations to be applied
+ * @param cost Defines the 'cost' function that defines the matching between the source and the base
+ * @param interp Defines interpolation method to use during matching process
+ * @param final Defines the interpolation mode used to create the output dataset
+ * @param nmatch Use at most 'nnn' scattered points to match the datasets
+ * @param nopad Do not use zero-padding on the base image
+ * @param verbose Print out verbose progress reports
+ * @param quiet Don't print out verbose stuff
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
+ */
 function v_3d_allineate(
     source: InputPathType,
     prefix: string,
@@ -318,31 +343,6 @@ function v_3d_allineate(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dAllineateOutputs {
-    /**
-     * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param source Source dataset file
-     * @param prefix Output prefix
-     * @param base Base dataset file
-     * @param param_save Save the warp parameters in ASCII (.1D) format into file
-     * @param param_apply Read warp parameters from file and apply them to the source dataset
-     * @param matrix_save Save the transformation matrix for each sub-brick into file
-     * @param matrix_apply Use the matrices in file to define the spatial transformations to be applied
-     * @param cost Defines the 'cost' function that defines the matching between the source and the base
-     * @param interp Defines interpolation method to use during matching process
-     * @param final Defines the interpolation mode used to create the output dataset
-     * @param nmatch Use at most 'nnn' scattered points to match the datasets
-     * @param nopad Do not use zero-padding on the base image
-     * @param verbose Print out verbose progress reports
-     * @param quiet Don't print out verbose stuff
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_ALLINEATE_METADATA);
     const params = v_3d_allineate_params(source, prefix, base, param_save, param_apply, matrix_save, matrix_apply, cost, interp, final, nmatch, nopad, verbose, quiet)
@@ -355,5 +355,8 @@ export {
       V3dAllineateParameters,
       V_3D_ALLINEATE_METADATA,
       v_3d_allineate,
+      v_3d_allineate_cargs,
+      v_3d_allineate_execute,
+      v_3d_allineate_outputs,
       v_3d_allineate_params,
 };

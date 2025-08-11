@@ -12,40 +12,40 @@ const GLTSYMTEST_METADATA: Metadata = {
 
 
 interface GltsymtestParameters {
-    "__STYXTYPE__": "GLTsymtest";
+    "@type": "afni.GLTsymtest";
     "badonly": boolean;
     "varlist": string;
     "expr": Array<string>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "GLTsymtest": gltsymtest_cargs,
+        "afni.GLTsymtest": gltsymtest_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface GltsymtestOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param varlist A list of allowed variable names in the expression, separated by commas, semicolons, and/or spaces
+ * @param expr GLT symbolic expression(s), enclosed in quotes
+ * @param badonly A flag to only output BAD messages rather than all messages
+ *
+ * @returns Parameter dictionary
+ */
 function gltsymtest_params(
     varlist: string,
     expr: Array<string>,
     badonly: boolean = false,
 ): GltsymtestParameters {
-    /**
-     * Build parameters.
-    
-     * @param varlist A list of allowed variable names in the expression, separated by commas, semicolons, and/or spaces
-     * @param expr GLT symbolic expression(s), enclosed in quotes
-     * @param badonly A flag to only output BAD messages rather than all messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "GLTsymtest" as const,
+        "@type": "afni.GLTsymtest" as const,
         "badonly": badonly,
         "varlist": varlist,
         "expr": expr,
@@ -89,18 +89,18 @@ function gltsymtest_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function gltsymtest_cargs(
     params: GltsymtestParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("GLTsymtest");
     if ((params["badonly"] ?? null)) {
@@ -112,18 +112,18 @@ function gltsymtest_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function gltsymtest_outputs(
     params: GltsymtestParameters,
     execution: Execution,
 ): GltsymtestOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: GltsymtestOutputs = {
         root: execution.outputFile("."),
     };
@@ -131,22 +131,22 @@ function gltsymtest_outputs(
 }
 
 
+/**
+ * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
+ */
 function gltsymtest_execute(
     params: GltsymtestParameters,
     execution: Execution,
 ): GltsymtestOutputs {
-    /**
-     * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
-     */
     params = execution.params(params)
     const cargs = gltsymtest_cargs(params, execution)
     const ret = gltsymtest_outputs(params, execution)
@@ -155,26 +155,26 @@ function gltsymtest_execute(
 }
 
 
+/**
+ * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param varlist A list of allowed variable names in the expression, separated by commas, semicolons, and/or spaces
+ * @param expr GLT symbolic expression(s), enclosed in quotes
+ * @param badonly A flag to only output BAD messages rather than all messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
+ */
 function gltsymtest(
     varlist: string,
     expr: Array<string>,
     badonly: boolean = false,
     runner: Runner | null = null,
 ): GltsymtestOutputs {
-    /**
-     * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param varlist A list of allowed variable names in the expression, separated by commas, semicolons, and/or spaces
-     * @param expr GLT symbolic expression(s), enclosed in quotes
-     * @param badonly A flag to only output BAD messages rather than all messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(GLTSYMTEST_METADATA);
     const params = gltsymtest_params(varlist, expr, badonly)
@@ -187,5 +187,8 @@ export {
       GltsymtestOutputs,
       GltsymtestParameters,
       gltsymtest,
+      gltsymtest_cargs,
+      gltsymtest_execute,
+      gltsymtest_outputs,
       gltsymtest_params,
 };

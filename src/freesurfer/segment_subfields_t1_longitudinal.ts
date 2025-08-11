@@ -12,42 +12,42 @@ const SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA: Metadata = {
 
 
 interface SegmentSubfieldsT1LongitudinalParameters {
-    "__STYXTYPE__": "SegmentSubfieldsT1Longitudinal";
+    "@type": "freesurfer.SegmentSubfieldsT1Longitudinal";
     "subject_id": string;
     "input_image": InputPathType;
     "output_dir": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_cargs,
+        "freesurfer.SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_outputs,
+        "freesurfer.SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface SegmentSubfieldsT1LongitudinalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject_id Subject ID for the longitudinal analysis
+ * @param input_image Input T1-weighted image
+ * @param output_dir Directory to save the output
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subfields_t1_longitudinal_params(
     subject_id: string,
     input_image: InputPathType,
     output_dir: string,
 ): SegmentSubfieldsT1LongitudinalParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject_id Subject ID for the longitudinal analysis
-     * @param input_image Input T1-weighted image
-     * @param output_dir Directory to save the output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SegmentSubfieldsT1Longitudinal" as const,
+        "@type": "freesurfer.SegmentSubfieldsT1Longitudinal" as const,
         "subject_id": subject_id,
         "input_image": input_image,
         "output_dir": output_dir,
@@ -94,18 +94,18 @@ function segment_subfields_t1_longitudinal_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subfields_t1_longitudinal_cargs(
     params: SegmentSubfieldsT1LongitudinalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SegmentSubfieldsT1Longitudinal");
     cargs.push((params["subject_id"] ?? null));
@@ -115,18 +115,18 @@ function segment_subfields_t1_longitudinal_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subfields_t1_longitudinal_outputs(
     params: SegmentSubfieldsT1LongitudinalParameters,
     execution: Execution,
 ): SegmentSubfieldsT1LongitudinalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubfieldsT1LongitudinalOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["output_dir"] ?? null), "/subfields_segmentation.nii.gz"].join('')),
@@ -135,22 +135,22 @@ function segment_subfields_t1_longitudinal_outputs(
 }
 
 
+/**
+ * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
+ */
 function segment_subfields_t1_longitudinal_execute(
     params: SegmentSubfieldsT1LongitudinalParameters,
     execution: Execution,
 ): SegmentSubfieldsT1LongitudinalOutputs {
-    /**
-     * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subfields_t1_longitudinal_cargs(params, execution)
     const ret = segment_subfields_t1_longitudinal_outputs(params, execution)
@@ -159,26 +159,26 @@ function segment_subfields_t1_longitudinal_execute(
 }
 
 
+/**
+ * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject_id Subject ID for the longitudinal analysis
+ * @param input_image Input T1-weighted image
+ * @param output_dir Directory to save the output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
+ */
 function segment_subfields_t1_longitudinal(
     subject_id: string,
     input_image: InputPathType,
     output_dir: string,
     runner: Runner | null = null,
 ): SegmentSubfieldsT1LongitudinalOutputs {
-    /**
-     * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject_id Subject ID for the longitudinal analysis
-     * @param input_image Input T1-weighted image
-     * @param output_dir Directory to save the output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA);
     const params = segment_subfields_t1_longitudinal_params(subject_id, input_image, output_dir)
@@ -191,5 +191,8 @@ export {
       SegmentSubfieldsT1LongitudinalOutputs,
       SegmentSubfieldsT1LongitudinalParameters,
       segment_subfields_t1_longitudinal,
+      segment_subfields_t1_longitudinal_cargs,
+      segment_subfields_t1_longitudinal_execute,
+      segment_subfields_t1_longitudinal_outputs,
       segment_subfields_t1_longitudinal_params,
 };

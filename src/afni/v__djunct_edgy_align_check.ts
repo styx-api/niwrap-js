@@ -12,7 +12,7 @@ const V__DJUNCT_EDGY_ALIGN_CHECK_METADATA: Metadata = {
 
 
 interface VDjunctEdgyAlignCheckParameters {
-    "__STYXTYPE__": "@djunct_edgy_align_check";
+    "@type": "afni.@djunct_edgy_align_check";
     "ULAY": string;
     "OLAY": string;
     "PREFIX": string;
@@ -42,33 +42,33 @@ interface VDjunctEdgyAlignCheckParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@djunct_edgy_align_check": v__djunct_edgy_align_check_cargs,
+        "afni.@djunct_edgy_align_check": v__djunct_edgy_align_check_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -88,6 +88,38 @@ interface VDjunctEdgyAlignCheckOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ulay ULAY dataset
+ * @param olay OLAY dataset
+ * @param prefix Prefix for output files
+ * @param set_dicom_xyz DICOM coordinates {XX YY ZZ}
+ * @param box_focus_slices Dataset to focus slices
+ * @param montgap Gap between slices in montage
+ * @param montcolor Color for montage
+ * @param cbar Color bar for overlay
+ * @param save_ftype File type to save
+ * @param umin_fac Scaling factor for underlay minimum
+ * @param montx Number of slices in X-direction for montage
+ * @param monty Number of slices in Y-direction for montage
+ * @param use_olay_grid Grid interpolation method for overlay
+ * @param label_mode Mode for labeling
+ * @param help_flag Display help message
+ * @param ver_flag Show version
+ * @param echo_flag Echo commands
+ * @param sharpen_ulay_off_flag Disable underlay sharpening
+ * @param mask_olay_edges_flag Mask overlay edges
+ * @param no_cor_flag Exclude coronal plane
+ * @param no_sag_flag Exclude sagittal plane
+ * @param no_axi_flag Exclude axial plane
+ * @param no_clean_flag Disable cleaning temporary files
+ * @param ulay_range Range for underlay {umin umax}
+ * @param ulay_range_nz Range for non-zero underlay {umin umax}
+ * @param ulay_range_am Range for auto-mask underlay {umin umax}
+ *
+ * @returns Parameter dictionary
+ */
 function v__djunct_edgy_align_check_params(
     ulay: string,
     olay: string,
@@ -116,40 +148,8 @@ function v__djunct_edgy_align_check_params(
     ulay_range_nz: Array<number> | null = null,
     ulay_range_am: Array<number> | null = null,
 ): VDjunctEdgyAlignCheckParameters {
-    /**
-     * Build parameters.
-    
-     * @param ulay ULAY dataset
-     * @param olay OLAY dataset
-     * @param prefix Prefix for output files
-     * @param set_dicom_xyz DICOM coordinates {XX YY ZZ}
-     * @param box_focus_slices Dataset to focus slices
-     * @param montgap Gap between slices in montage
-     * @param montcolor Color for montage
-     * @param cbar Color bar for overlay
-     * @param save_ftype File type to save
-     * @param umin_fac Scaling factor for underlay minimum
-     * @param montx Number of slices in X-direction for montage
-     * @param monty Number of slices in Y-direction for montage
-     * @param use_olay_grid Grid interpolation method for overlay
-     * @param label_mode Mode for labeling
-     * @param help_flag Display help message
-     * @param ver_flag Show version
-     * @param echo_flag Echo commands
-     * @param sharpen_ulay_off_flag Disable underlay sharpening
-     * @param mask_olay_edges_flag Mask overlay edges
-     * @param no_cor_flag Exclude coronal plane
-     * @param no_sag_flag Exclude sagittal plane
-     * @param no_axi_flag Exclude axial plane
-     * @param no_clean_flag Disable cleaning temporary files
-     * @param ulay_range Range for underlay {umin umax}
-     * @param ulay_range_nz Range for non-zero underlay {umin umax}
-     * @param ulay_range_am Range for auto-mask underlay {umin umax}
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@djunct_edgy_align_check" as const,
+        "@type": "afni.@djunct_edgy_align_check" as const,
         "ULAY": ulay,
         "OLAY": olay,
         "PREFIX": prefix,
@@ -209,18 +209,18 @@ function v__djunct_edgy_align_check_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__djunct_edgy_align_check_cargs(
     params: VDjunctEdgyAlignCheckParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@djunct_edgy_align_check");
     cargs.push((params["ULAY"] ?? null));
@@ -299,18 +299,18 @@ function v__djunct_edgy_align_check_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__djunct_edgy_align_check_outputs(
     params: VDjunctEdgyAlignCheckParameters,
     execution: Execution,
 ): VDjunctEdgyAlignCheckOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VDjunctEdgyAlignCheckOutputs = {
         root: execution.outputFile("."),
     };
@@ -318,22 +318,22 @@ function v__djunct_edgy_align_check_outputs(
 }
 
 
+/**
+ * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
+ */
 function v__djunct_edgy_align_check_execute(
     params: VDjunctEdgyAlignCheckParameters,
     execution: Execution,
 ): VDjunctEdgyAlignCheckOutputs {
-    /**
-     * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__djunct_edgy_align_check_cargs(params, execution)
     const ret = v__djunct_edgy_align_check_outputs(params, execution)
@@ -342,6 +342,43 @@ function v__djunct_edgy_align_check_execute(
 }
 
 
+/**
+ * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param ulay ULAY dataset
+ * @param olay OLAY dataset
+ * @param prefix Prefix for output files
+ * @param set_dicom_xyz DICOM coordinates {XX YY ZZ}
+ * @param box_focus_slices Dataset to focus slices
+ * @param montgap Gap between slices in montage
+ * @param montcolor Color for montage
+ * @param cbar Color bar for overlay
+ * @param save_ftype File type to save
+ * @param umin_fac Scaling factor for underlay minimum
+ * @param montx Number of slices in X-direction for montage
+ * @param monty Number of slices in Y-direction for montage
+ * @param use_olay_grid Grid interpolation method for overlay
+ * @param label_mode Mode for labeling
+ * @param help_flag Display help message
+ * @param ver_flag Show version
+ * @param echo_flag Echo commands
+ * @param sharpen_ulay_off_flag Disable underlay sharpening
+ * @param mask_olay_edges_flag Mask overlay edges
+ * @param no_cor_flag Exclude coronal plane
+ * @param no_sag_flag Exclude sagittal plane
+ * @param no_axi_flag Exclude axial plane
+ * @param no_clean_flag Disable cleaning temporary files
+ * @param ulay_range Range for underlay {umin umax}
+ * @param ulay_range_nz Range for non-zero underlay {umin umax}
+ * @param ulay_range_am Range for auto-mask underlay {umin umax}
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
+ */
 function v__djunct_edgy_align_check(
     ulay: string,
     olay: string,
@@ -371,43 +408,6 @@ function v__djunct_edgy_align_check(
     ulay_range_am: Array<number> | null = null,
     runner: Runner | null = null,
 ): VDjunctEdgyAlignCheckOutputs {
-    /**
-     * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param ulay ULAY dataset
-     * @param olay OLAY dataset
-     * @param prefix Prefix for output files
-     * @param set_dicom_xyz DICOM coordinates {XX YY ZZ}
-     * @param box_focus_slices Dataset to focus slices
-     * @param montgap Gap between slices in montage
-     * @param montcolor Color for montage
-     * @param cbar Color bar for overlay
-     * @param save_ftype File type to save
-     * @param umin_fac Scaling factor for underlay minimum
-     * @param montx Number of slices in X-direction for montage
-     * @param monty Number of slices in Y-direction for montage
-     * @param use_olay_grid Grid interpolation method for overlay
-     * @param label_mode Mode for labeling
-     * @param help_flag Display help message
-     * @param ver_flag Show version
-     * @param echo_flag Echo commands
-     * @param sharpen_ulay_off_flag Disable underlay sharpening
-     * @param mask_olay_edges_flag Mask overlay edges
-     * @param no_cor_flag Exclude coronal plane
-     * @param no_sag_flag Exclude sagittal plane
-     * @param no_axi_flag Exclude axial plane
-     * @param no_clean_flag Disable cleaning temporary files
-     * @param ulay_range Range for underlay {umin umax}
-     * @param ulay_range_nz Range for non-zero underlay {umin umax}
-     * @param ulay_range_am Range for auto-mask underlay {umin umax}
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__DJUNCT_EDGY_ALIGN_CHECK_METADATA);
     const params = v__djunct_edgy_align_check_params(ulay, olay, prefix, set_dicom_xyz, box_focus_slices, montgap, montcolor, cbar, save_ftype, umin_fac, montx, monty, use_olay_grid, label_mode, help_flag, ver_flag, echo_flag, sharpen_ulay_off_flag, mask_olay_edges_flag, no_cor_flag, no_sag_flag, no_axi_flag, no_clean_flag, ulay_range, ulay_range_nz, ulay_range_am)
@@ -420,5 +420,8 @@ export {
       VDjunctEdgyAlignCheckParameters,
       V__DJUNCT_EDGY_ALIGN_CHECK_METADATA,
       v__djunct_edgy_align_check,
+      v__djunct_edgy_align_check_cargs,
+      v__djunct_edgy_align_check_execute,
+      v__djunct_edgy_align_check_outputs,
       v__djunct_edgy_align_check_params,
 };

@@ -12,7 +12,7 @@ const UN_WARP_EPI_PY_METADATA: Metadata = {
 
 
 interface UnWarpEpiPyParameters {
-    "__STYXTYPE__": "unWarpEPI.py";
+    "@type": "afni.unWarpEPI.py";
     "forward": InputPathType;
     "reverse": InputPathType;
     "anat4warp": InputPathType;
@@ -22,33 +22,33 @@ interface UnWarpEpiPyParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "unWarpEPI.py": un_warp_epi_py_cargs,
+        "afni.unWarpEPI.py": un_warp_epi_py_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -68,6 +68,18 @@ interface UnWarpEpiPyOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param forward Calibration matching data to be corrected
+ * @param reverse Calibration with opposing polarity to data to be corrected
+ * @param anat4warp Reference anatomical dataset
+ * @param data Data to be corrected (same polarity as forward calibration data). Separate with commas if specifying multiple datasets.
+ * @param subj_id ID of subject to be corrected
+ * @param giant_move Set giant_move option for align_epi_anat if final align of anatomy to corrected EPI fails if datasets are far apart in space.
+ *
+ * @returns Parameter dictionary
+ */
 function un_warp_epi_py_params(
     forward: InputPathType,
     reverse: InputPathType,
@@ -76,20 +88,8 @@ function un_warp_epi_py_params(
     subj_id: string,
     giant_move: boolean = false,
 ): UnWarpEpiPyParameters {
-    /**
-     * Build parameters.
-    
-     * @param forward Calibration matching data to be corrected
-     * @param reverse Calibration with opposing polarity to data to be corrected
-     * @param anat4warp Reference anatomical dataset
-     * @param data Data to be corrected (same polarity as forward calibration data). Separate with commas if specifying multiple datasets.
-     * @param subj_id ID of subject to be corrected
-     * @param giant_move Set giant_move option for align_epi_anat if final align of anatomy to corrected EPI fails if datasets are far apart in space.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "unWarpEPI.py" as const,
+        "@type": "afni.unWarpEPI.py" as const,
         "forward": forward,
         "reverse": reverse,
         "anat4warp": anat4warp,
@@ -101,18 +101,18 @@ function un_warp_epi_py_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function un_warp_epi_py_cargs(
     params: UnWarpEpiPyParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("unWarpEPI.py");
     cargs.push(
@@ -142,18 +142,18 @@ function un_warp_epi_py_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function un_warp_epi_py_outputs(
     params: UnWarpEpiPyParameters,
     execution: Execution,
 ): UnWarpEpiPyOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: UnWarpEpiPyOutputs = {
         root: execution.outputFile("."),
     };
@@ -161,22 +161,22 @@ function un_warp_epi_py_outputs(
 }
 
 
+/**
+ * Routine to unwarp EPI data set using another data set with opposite polarity.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
+ */
 function un_warp_epi_py_execute(
     params: UnWarpEpiPyParameters,
     execution: Execution,
 ): UnWarpEpiPyOutputs {
-    /**
-     * Routine to unwarp EPI data set using another data set with opposite polarity.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
-     */
     params = execution.params(params)
     const cargs = un_warp_epi_py_cargs(params, execution)
     const ret = un_warp_epi_py_outputs(params, execution)
@@ -185,6 +185,23 @@ function un_warp_epi_py_execute(
 }
 
 
+/**
+ * Routine to unwarp EPI data set using another data set with opposite polarity.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param forward Calibration matching data to be corrected
+ * @param reverse Calibration with opposing polarity to data to be corrected
+ * @param anat4warp Reference anatomical dataset
+ * @param data Data to be corrected (same polarity as forward calibration data). Separate with commas if specifying multiple datasets.
+ * @param subj_id ID of subject to be corrected
+ * @param giant_move Set giant_move option for align_epi_anat if final align of anatomy to corrected EPI fails if datasets are far apart in space.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
+ */
 function un_warp_epi_py(
     forward: InputPathType,
     reverse: InputPathType,
@@ -194,23 +211,6 @@ function un_warp_epi_py(
     giant_move: boolean = false,
     runner: Runner | null = null,
 ): UnWarpEpiPyOutputs {
-    /**
-     * Routine to unwarp EPI data set using another data set with opposite polarity.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param forward Calibration matching data to be corrected
-     * @param reverse Calibration with opposing polarity to data to be corrected
-     * @param anat4warp Reference anatomical dataset
-     * @param data Data to be corrected (same polarity as forward calibration data). Separate with commas if specifying multiple datasets.
-     * @param subj_id ID of subject to be corrected
-     * @param giant_move Set giant_move option for align_epi_anat if final align of anatomy to corrected EPI fails if datasets are far apart in space.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(UN_WARP_EPI_PY_METADATA);
     const params = un_warp_epi_py_params(forward, reverse, anat4warp, data, subj_id, giant_move)
@@ -223,5 +223,8 @@ export {
       UnWarpEpiPyOutputs,
       UnWarpEpiPyParameters,
       un_warp_epi_py,
+      un_warp_epi_py_cargs,
+      un_warp_epi_py_execute,
+      un_warp_epi_py_outputs,
       un_warp_epi_py_params,
 };

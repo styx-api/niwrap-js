@@ -12,7 +12,7 @@ const SAMSEG2RECON_METADATA: Metadata = {
 
 
 interface Samseg2reconParameters {
-    "__STYXTYPE__": "samseg2recon";
+    "@type": "freesurfer.samseg2recon";
     "subject": string;
     "samseg_dir"?: string | null | undefined;
     "no_cc": boolean;
@@ -28,35 +28,35 @@ interface Samseg2reconParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "samseg2recon": samseg2recon_cargs,
+        "freesurfer.samseg2recon": samseg2recon_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "samseg2recon": samseg2recon_outputs,
+        "freesurfer.samseg2recon": samseg2recon_outputs,
     };
     return outputsFuncs[t];
 }
@@ -87,6 +87,24 @@ interface Samseg2reconOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subject Subject identifier
+ * @param samseg_dir Output directory from samseg or samseg-long. Defaults to subject/mri/samseg if not supplied
+ * @param no_cc Do not do corpus callosum segmentation
+ * @param fill Use samseg to create the filled.mgz used for tessellation
+ * @param normalization2 Seg brain.mgz to norm.mgz
+ * @param uchar Convert to uchar
+ * @param no_keep_exc Do not keep extracerebral segmentations
+ * @param long_tp Process specific time point (TP) number from samsegdir
+ * @param base Process base, will find folder called base in samsegdir
+ * @param mask_file Use provided mask as brainmask instead of computing from seg
+ * @param from_recon_all Indicates execution from recon-all, preventing overwrite of rawavg.mgz and orig.mgz
+ * @param force_update Force update of the subject directory
+ *
+ * @returns Parameter dictionary
+ */
 function samseg2recon_params(
     subject: string,
     samseg_dir: string | null = null,
@@ -101,26 +119,8 @@ function samseg2recon_params(
     from_recon_all: boolean = false,
     force_update: boolean = false,
 ): Samseg2reconParameters {
-    /**
-     * Build parameters.
-    
-     * @param subject Subject identifier
-     * @param samseg_dir Output directory from samseg or samseg-long. Defaults to subject/mri/samseg if not supplied
-     * @param no_cc Do not do corpus callosum segmentation
-     * @param fill Use samseg to create the filled.mgz used for tessellation
-     * @param normalization2 Seg brain.mgz to norm.mgz
-     * @param uchar Convert to uchar
-     * @param no_keep_exc Do not keep extracerebral segmentations
-     * @param long_tp Process specific time point (TP) number from samsegdir
-     * @param base Process base, will find folder called base in samsegdir
-     * @param mask_file Use provided mask as brainmask instead of computing from seg
-     * @param from_recon_all Indicates execution from recon-all, preventing overwrite of rawavg.mgz and orig.mgz
-     * @param force_update Force update of the subject directory
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "samseg2recon" as const,
+        "@type": "freesurfer.samseg2recon" as const,
         "subject": subject,
         "no_cc": no_cc,
         "fill": fill,
@@ -144,18 +144,18 @@ function samseg2recon_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function samseg2recon_cargs(
     params: Samseg2reconParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("samseg2recon");
     cargs.push(
@@ -208,18 +208,18 @@ function samseg2recon_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function samseg2recon_outputs(
     params: Samseg2reconParameters,
     execution: Execution,
 ): Samseg2reconOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Samseg2reconOutputs = {
         root: execution.outputFile("."),
         filled_mgz: execution.outputFile([(params["subject"] ?? null), "/mri/filled.mgz"].join('')),
@@ -230,22 +230,22 @@ function samseg2recon_outputs(
 }
 
 
+/**
+ * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
+ */
 function samseg2recon_execute(
     params: Samseg2reconParameters,
     execution: Execution,
 ): Samseg2reconOutputs {
-    /**
-     * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
-     */
     params = execution.params(params)
     const cargs = samseg2recon_cargs(params, execution)
     const ret = samseg2recon_outputs(params, execution)
@@ -254,6 +254,29 @@ function samseg2recon_execute(
 }
 
 
+/**
+ * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subject Subject identifier
+ * @param samseg_dir Output directory from samseg or samseg-long. Defaults to subject/mri/samseg if not supplied
+ * @param no_cc Do not do corpus callosum segmentation
+ * @param fill Use samseg to create the filled.mgz used for tessellation
+ * @param normalization2 Seg brain.mgz to norm.mgz
+ * @param uchar Convert to uchar
+ * @param no_keep_exc Do not keep extracerebral segmentations
+ * @param long_tp Process specific time point (TP) number from samsegdir
+ * @param base Process base, will find folder called base in samsegdir
+ * @param mask_file Use provided mask as brainmask instead of computing from seg
+ * @param from_recon_all Indicates execution from recon-all, preventing overwrite of rawavg.mgz and orig.mgz
+ * @param force_update Force update of the subject directory
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
+ */
 function samseg2recon(
     subject: string,
     samseg_dir: string | null = null,
@@ -269,29 +292,6 @@ function samseg2recon(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): Samseg2reconOutputs {
-    /**
-     * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subject Subject identifier
-     * @param samseg_dir Output directory from samseg or samseg-long. Defaults to subject/mri/samseg if not supplied
-     * @param no_cc Do not do corpus callosum segmentation
-     * @param fill Use samseg to create the filled.mgz used for tessellation
-     * @param normalization2 Seg brain.mgz to norm.mgz
-     * @param uchar Convert to uchar
-     * @param no_keep_exc Do not keep extracerebral segmentations
-     * @param long_tp Process specific time point (TP) number from samsegdir
-     * @param base Process base, will find folder called base in samsegdir
-     * @param mask_file Use provided mask as brainmask instead of computing from seg
-     * @param from_recon_all Indicates execution from recon-all, preventing overwrite of rawavg.mgz and orig.mgz
-     * @param force_update Force update of the subject directory
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SAMSEG2RECON_METADATA);
     const params = samseg2recon_params(subject, samseg_dir, no_cc, fill, normalization2, uchar, no_keep_exc, long_tp, base, mask_file, from_recon_all, force_update)
@@ -304,5 +304,8 @@ export {
       Samseg2reconOutputs,
       Samseg2reconParameters,
       samseg2recon,
+      samseg2recon_cargs,
+      samseg2recon_execute,
+      samseg2recon_outputs,
       samseg2recon_params,
 };

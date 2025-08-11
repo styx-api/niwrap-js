@@ -12,7 +12,7 @@ const CIFTI_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiCorrelationRoiOverrideParameters {
-    "__STYXTYPE__": "roi_override";
+    "@type": "workbench.cifti-correlation.roi_override";
     "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_right_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
@@ -22,7 +22,7 @@ interface CiftiCorrelationRoiOverrideParameters {
 
 
 interface CiftiCorrelationParameters {
-    "__STYXTYPE__": "cifti-correlation";
+    "@type": "workbench.cifti-correlation";
     "cifti": InputPathType;
     "cifti_out": string;
     "roi_override"?: CiftiCorrelationRoiOverrideParameters | null | undefined;
@@ -34,41 +34,52 @@ interface CiftiCorrelationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-correlation": cifti_correlation_cargs,
-        "roi_override": cifti_correlation_roi_override_cargs,
+        "workbench.cifti-correlation": cifti_correlation_cargs,
+        "workbench.cifti-correlation.roi_override": cifti_correlation_roi_override_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cifti-correlation": cifti_correlation_outputs,
+        "workbench.cifti-correlation": cifti_correlation_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_left_roi_roi_metric use an roi for left hempsphere: the left roi as a metric file
+ * @param opt_right_roi_roi_metric use an roi for right hempsphere: the right roi as a metric file
+ * @param opt_cerebellum_roi_roi_metric use an roi for cerebellum: the cerebellum roi as a metric file
+ * @param opt_vol_roi_roi_vol use an roi for volume: the volume roi file
+ * @param opt_cifti_roi_roi_cifti use a cifti file for combined rois: the cifti roi file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_roi_override_params(
     opt_left_roi_roi_metric: InputPathType | null = null,
     opt_right_roi_roi_metric: InputPathType | null = null,
@@ -76,19 +87,8 @@ function cifti_correlation_roi_override_params(
     opt_vol_roi_roi_vol: InputPathType | null = null,
     opt_cifti_roi_roi_cifti: InputPathType | null = null,
 ): CiftiCorrelationRoiOverrideParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_left_roi_roi_metric use an roi for left hempsphere: the left roi as a metric file
-     * @param opt_right_roi_roi_metric use an roi for right hempsphere: the right roi as a metric file
-     * @param opt_cerebellum_roi_roi_metric use an roi for cerebellum: the cerebellum roi as a metric file
-     * @param opt_vol_roi_roi_vol use an roi for volume: the volume roi file
-     * @param opt_cifti_roi_roi_cifti use a cifti file for combined rois: the cifti roi file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi_override" as const,
+        "@type": "workbench.cifti-correlation.roi_override" as const,
     };
     if (opt_left_roi_roi_metric !== null) {
         params["opt_left_roi_roi_metric"] = opt_left_roi_roi_metric;
@@ -109,18 +109,18 @@ function cifti_correlation_roi_override_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_roi_override_cargs(
     params: CiftiCorrelationRoiOverrideParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi-override");
     if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
@@ -174,6 +174,20 @@ interface CiftiCorrelationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti input cifti file
+ * @param cifti_out output cifti file
+ * @param roi_override perform correlation from a subset of rows to all rows
+ * @param opt_weights_weight_file specify column weights: text file containing one weight per column
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
+ * @param opt_covariance compute covariance instead of correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_correlation_params(
     cifti: InputPathType,
     cifti_out: string,
@@ -184,22 +198,8 @@ function cifti_correlation_params(
     opt_covariance: boolean = false,
     opt_mem_limit_limit_gb: number | null = null,
 ): CiftiCorrelationParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti input cifti file
-     * @param cifti_out output cifti file
-     * @param roi_override perform correlation from a subset of rows to all rows
-     * @param opt_weights_weight_file specify column weights: text file containing one weight per column
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
-     * @param opt_covariance compute covariance instead of correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-correlation" as const,
+        "@type": "workbench.cifti-correlation" as const,
         "cifti": cifti,
         "cifti_out": cifti_out,
         "opt_fisher_z": opt_fisher_z,
@@ -219,25 +219,25 @@ function cifti_correlation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_correlation_cargs(
     params: CiftiCorrelationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-correlation");
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["roi_override"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi_override"] ?? null).__STYXTYPE__)((params["roi_override"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi_override"] ?? null)["@type"])((params["roi_override"] ?? null), execution));
     }
     if ((params["opt_weights_weight_file"] ?? null) !== null) {
         cargs.push(
@@ -264,18 +264,18 @@ function cifti_correlation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_correlation_outputs(
     params: CiftiCorrelationParameters,
     execution: Execution,
 ): CiftiCorrelationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiCorrelationOutputs = {
         root: execution.outputFile("."),
         cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
@@ -284,28 +284,28 @@ function cifti_correlation_outputs(
 }
 
 
+/**
+ * Generate correlation of rows in a cifti file.
+ *
+ * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
+ *
+ * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
+ *
+ * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
+ */
 function cifti_correlation_execute(
     params: CiftiCorrelationParameters,
     execution: Execution,
 ): CiftiCorrelationOutputs {
-    /**
-     * Generate correlation of rows in a cifti file.
-     * 
-     * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
-     * 
-     * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
-     * 
-     * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_correlation_cargs(params, execution)
     const ret = cifti_correlation_outputs(params, execution)
@@ -314,6 +314,31 @@ function cifti_correlation_execute(
 }
 
 
+/**
+ * Generate correlation of rows in a cifti file.
+ *
+ * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
+ *
+ * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
+ *
+ * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti input cifti file
+ * @param cifti_out output cifti file
+ * @param roi_override perform correlation from a subset of rows to all rows
+ * @param opt_weights_weight_file specify column weights: text file containing one weight per column
+ * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
+ * @param opt_covariance compute covariance instead of correlation
+ * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
+ */
 function cifti_correlation(
     cifti: InputPathType,
     cifti_out: string,
@@ -325,31 +350,6 @@ function cifti_correlation(
     opt_mem_limit_limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
-    /**
-     * Generate correlation of rows in a cifti file.
-     * 
-     * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
-     * 
-     * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
-     * 
-     * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti input cifti file
-     * @param cifti_out output cifti file
-     * @param roi_override perform correlation from a subset of rows to all rows
-     * @param opt_weights_weight_file specify column weights: text file containing one weight per column
-     * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
-     * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
-     * @param opt_covariance compute covariance instead of correlation
-     * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_CORRELATION_METADATA);
     const params = cifti_correlation_params(cifti, cifti_out, roi_override, opt_weights_weight_file, opt_fisher_z, opt_no_demean, opt_covariance, opt_mem_limit_limit_gb)
@@ -363,6 +363,10 @@ export {
       CiftiCorrelationParameters,
       CiftiCorrelationRoiOverrideParameters,
       cifti_correlation,
+      cifti_correlation_cargs,
+      cifti_correlation_execute,
+      cifti_correlation_outputs,
       cifti_correlation_params,
+      cifti_correlation_roi_override_cargs,
       cifti_correlation_roi_override_params,
 };

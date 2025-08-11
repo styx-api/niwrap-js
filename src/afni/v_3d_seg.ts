@@ -12,7 +12,7 @@ const V_3D_SEG_METADATA: Metadata = {
 
 
 interface V3dSegParameters {
-    "__STYXTYPE__": "3dSeg";
+    "@type": "afni.3dSeg";
     "anat": InputPathType;
     "mask"?: string | null | undefined;
     "blur_meth"?: string | null | undefined;
@@ -35,35 +35,35 @@ interface V3dSegParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dSeg": v_3d_seg_cargs,
+        "afni.3dSeg": v_3d_seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dSeg": v_3d_seg_outputs,
+        "afni.3dSeg": v_3d_seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -94,6 +94,31 @@ interface V3dSegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param anat Volume to segment
+ * @param mask Mask of the volume to be segmented. Can be a dataset or 'AUTO' to use AFNI's automask function.
+ * @param blur_meth Blurring method for bias field estimation. Options: BFT, BIM, BNN, LSB. Default: BFT
+ * @param bias_fwhm The amount of blurring used when estimating the field bias. Default: 25.0
+ * @param classes String of class labels separated by semicolons. Default: 'CSF; GM; WM'
+ * @param bmrf Weighting factor controlling spatial homogeneity of classifications. Default: 0.0
+ * @param bias_classes Classes that contribute to the estimation of the bias field. Default: 'GM; WM'
+ * @param prefix Prefix for all output volume
+ * @param overwrite Automatically overwrite existing files with the same prefix.
+ * @param debug Set debug level (0, 1, or 2)
+ * @param mixfrac Volume-wide mixing fractions for initialization. Options: '0.1 0.45 0.45', 'UNI', 'AVG152_BRAIN_MASK', 'IGNORE'. Default: UNI
+ * @param mixfloor Set the minimum value for any class's mixing fraction. Default: 0.0001
+ * @param gold Goldstandard segmentation volume for comparison.
+ * @param gold_bias Goldstandard bias volume for comparison.
+ * @param main_n Number of iterations to perform. Default: 5
+ * @param cset Initial classification. Uses 3dkmean's engine if not provided.
+ * @param labeltable Label table containing integer keys and corresponding labels.
+ * @param vox_debug 1D index of voxel to debug or 3D voxel indices.
+ * @param vox_debug_file File in which debug information is output, use '-' for stdout, '+' for stderr.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_seg_params(
     anat: InputPathType,
     mask: string | null = null,
@@ -115,33 +140,8 @@ function v_3d_seg_params(
     vox_debug: string | null = null,
     vox_debug_file: string | null = null,
 ): V3dSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param anat Volume to segment
-     * @param mask Mask of the volume to be segmented. Can be a dataset or 'AUTO' to use AFNI's automask function.
-     * @param blur_meth Blurring method for bias field estimation. Options: BFT, BIM, BNN, LSB. Default: BFT
-     * @param bias_fwhm The amount of blurring used when estimating the field bias. Default: 25.0
-     * @param classes String of class labels separated by semicolons. Default: 'CSF; GM; WM'
-     * @param bmrf Weighting factor controlling spatial homogeneity of classifications. Default: 0.0
-     * @param bias_classes Classes that contribute to the estimation of the bias field. Default: 'GM; WM'
-     * @param prefix Prefix for all output volume
-     * @param overwrite Automatically overwrite existing files with the same prefix.
-     * @param debug Set debug level (0, 1, or 2)
-     * @param mixfrac Volume-wide mixing fractions for initialization. Options: '0.1 0.45 0.45', 'UNI', 'AVG152_BRAIN_MASK', 'IGNORE'. Default: UNI
-     * @param mixfloor Set the minimum value for any class's mixing fraction. Default: 0.0001
-     * @param gold Goldstandard segmentation volume for comparison.
-     * @param gold_bias Goldstandard bias volume for comparison.
-     * @param main_n Number of iterations to perform. Default: 5
-     * @param cset Initial classification. Uses 3dkmean's engine if not provided.
-     * @param labeltable Label table containing integer keys and corresponding labels.
-     * @param vox_debug 1D index of voxel to debug or 3D voxel indices.
-     * @param vox_debug_file File in which debug information is output, use '-' for stdout, '+' for stderr.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dSeg" as const,
+        "@type": "afni.3dSeg" as const,
         "anat": anat,
         "overwrite": overwrite,
     };
@@ -200,18 +200,18 @@ function v_3d_seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_seg_cargs(
     params: V3dSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dSeg");
     cargs.push(
@@ -327,18 +327,18 @@ function v_3d_seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_seg_outputs(
     params: V3dSegParameters,
     execution: Execution,
 ): V3dSegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dSegOutputs = {
         root: execution.outputFile("."),
         segmented_volume: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_Segsy+orig.HEAD"].join('')) : null,
@@ -349,22 +349,22 @@ function v_3d_seg_outputs(
 }
 
 
+/**
+ * Segments brain volumes into tissue classes with optional global and voxelwise priors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
+ */
 function v_3d_seg_execute(
     params: V3dSegParameters,
     execution: Execution,
 ): V3dSegOutputs {
-    /**
-     * Segments brain volumes into tissue classes with optional global and voxelwise priors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_seg_cargs(params, execution)
     const ret = v_3d_seg_outputs(params, execution)
@@ -373,6 +373,36 @@ function v_3d_seg_execute(
 }
 
 
+/**
+ * Segments brain volumes into tissue classes with optional global and voxelwise priors.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param anat Volume to segment
+ * @param mask Mask of the volume to be segmented. Can be a dataset or 'AUTO' to use AFNI's automask function.
+ * @param blur_meth Blurring method for bias field estimation. Options: BFT, BIM, BNN, LSB. Default: BFT
+ * @param bias_fwhm The amount of blurring used when estimating the field bias. Default: 25.0
+ * @param classes String of class labels separated by semicolons. Default: 'CSF; GM; WM'
+ * @param bmrf Weighting factor controlling spatial homogeneity of classifications. Default: 0.0
+ * @param bias_classes Classes that contribute to the estimation of the bias field. Default: 'GM; WM'
+ * @param prefix Prefix for all output volume
+ * @param overwrite Automatically overwrite existing files with the same prefix.
+ * @param debug Set debug level (0, 1, or 2)
+ * @param mixfrac Volume-wide mixing fractions for initialization. Options: '0.1 0.45 0.45', 'UNI', 'AVG152_BRAIN_MASK', 'IGNORE'. Default: UNI
+ * @param mixfloor Set the minimum value for any class's mixing fraction. Default: 0.0001
+ * @param gold Goldstandard segmentation volume for comparison.
+ * @param gold_bias Goldstandard bias volume for comparison.
+ * @param main_n Number of iterations to perform. Default: 5
+ * @param cset Initial classification. Uses 3dkmean's engine if not provided.
+ * @param labeltable Label table containing integer keys and corresponding labels.
+ * @param vox_debug 1D index of voxel to debug or 3D voxel indices.
+ * @param vox_debug_file File in which debug information is output, use '-' for stdout, '+' for stderr.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
+ */
 function v_3d_seg(
     anat: InputPathType,
     mask: string | null = null,
@@ -395,36 +425,6 @@ function v_3d_seg(
     vox_debug_file: string | null = null,
     runner: Runner | null = null,
 ): V3dSegOutputs {
-    /**
-     * Segments brain volumes into tissue classes with optional global and voxelwise priors.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param anat Volume to segment
-     * @param mask Mask of the volume to be segmented. Can be a dataset or 'AUTO' to use AFNI's automask function.
-     * @param blur_meth Blurring method for bias field estimation. Options: BFT, BIM, BNN, LSB. Default: BFT
-     * @param bias_fwhm The amount of blurring used when estimating the field bias. Default: 25.0
-     * @param classes String of class labels separated by semicolons. Default: 'CSF; GM; WM'
-     * @param bmrf Weighting factor controlling spatial homogeneity of classifications. Default: 0.0
-     * @param bias_classes Classes that contribute to the estimation of the bias field. Default: 'GM; WM'
-     * @param prefix Prefix for all output volume
-     * @param overwrite Automatically overwrite existing files with the same prefix.
-     * @param debug Set debug level (0, 1, or 2)
-     * @param mixfrac Volume-wide mixing fractions for initialization. Options: '0.1 0.45 0.45', 'UNI', 'AVG152_BRAIN_MASK', 'IGNORE'. Default: UNI
-     * @param mixfloor Set the minimum value for any class's mixing fraction. Default: 0.0001
-     * @param gold Goldstandard segmentation volume for comparison.
-     * @param gold_bias Goldstandard bias volume for comparison.
-     * @param main_n Number of iterations to perform. Default: 5
-     * @param cset Initial classification. Uses 3dkmean's engine if not provided.
-     * @param labeltable Label table containing integer keys and corresponding labels.
-     * @param vox_debug 1D index of voxel to debug or 3D voxel indices.
-     * @param vox_debug_file File in which debug information is output, use '-' for stdout, '+' for stderr.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_SEG_METADATA);
     const params = v_3d_seg_params(anat, mask, blur_meth, bias_fwhm, classes, bmrf, bias_classes, prefix, overwrite, debug, mixfrac, mixfloor, gold, gold_bias, main_n, cset, labeltable, vox_debug, vox_debug_file)
@@ -437,5 +437,8 @@ export {
       V3dSegParameters,
       V_3D_SEG_METADATA,
       v_3d_seg,
+      v_3d_seg_cargs,
+      v_3d_seg_execute,
+      v_3d_seg_outputs,
       v_3d_seg_params,
 };

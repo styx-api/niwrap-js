@@ -12,7 +12,7 @@ const V_3D_PVMAP_METADATA: Metadata = {
 
 
 interface V3dPvmapParameters {
-    "__STYXTYPE__": "3dPVmap";
+    "@type": "afni.3dPVmap";
     "prefix"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -20,35 +20,35 @@ interface V3dPvmapParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dPVmap": v_3d_pvmap_cargs,
+        "afni.3dPVmap": v_3d_pvmap_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dPVmap": v_3d_pvmap_outputs,
+        "afni.3dPVmap": v_3d_pvmap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -79,24 +79,24 @@ interface V3dPvmapOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inputdataset Input dataset (e.g., fred.nii)
+ * @param prefix Output prefix for generated files
+ * @param mask Mask dataset (e.g., brainmask.nii)
+ * @param automask Automatically generate a mask from the input dataset
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_pvmap_params(
     inputdataset: InputPathType,
     prefix: string | null = null,
     mask: InputPathType | null = null,
     automask: boolean = false,
 ): V3dPvmapParameters {
-    /**
-     * Build parameters.
-    
-     * @param inputdataset Input dataset (e.g., fred.nii)
-     * @param prefix Output prefix for generated files
-     * @param mask Mask dataset (e.g., brainmask.nii)
-     * @param automask Automatically generate a mask from the input dataset
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dPVmap" as const,
+        "@type": "afni.3dPVmap" as const,
         "automask": automask,
         "inputdataset": inputdataset,
     };
@@ -110,18 +110,18 @@ function v_3d_pvmap_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_pvmap_cargs(
     params: V3dPvmapParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dPVmap");
     if ((params["prefix"] ?? null) !== null) {
@@ -144,18 +144,18 @@ function v_3d_pvmap_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_pvmap_outputs(
     params: V3dPvmapParameters,
     execution: Execution,
 ): V3dPvmapOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dPvmapOutputs = {
         root: execution.outputFile("."),
         outbrik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -166,22 +166,22 @@ function v_3d_pvmap_outputs(
 }
 
 
+/**
+ * Computes the first two principal component vectors of a time series dataset, then outputs the R-squared coefficient of each voxel time series with these first two components.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
+ */
 function v_3d_pvmap_execute(
     params: V3dPvmapParameters,
     execution: Execution,
 ): V3dPvmapOutputs {
-    /**
-     * Computes the first two principal component vectors of a time series dataset, then outputs the R-squared coefficient of each voxel time series with these first two components.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_pvmap_cargs(params, execution)
     const ret = v_3d_pvmap_outputs(params, execution)
@@ -190,6 +190,21 @@ function v_3d_pvmap_execute(
 }
 
 
+/**
+ * Computes the first two principal component vectors of a time series dataset, then outputs the R-squared coefficient of each voxel time series with these first two components.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param inputdataset Input dataset (e.g., fred.nii)
+ * @param prefix Output prefix for generated files
+ * @param mask Mask dataset (e.g., brainmask.nii)
+ * @param automask Automatically generate a mask from the input dataset
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
+ */
 function v_3d_pvmap(
     inputdataset: InputPathType,
     prefix: string | null = null,
@@ -197,21 +212,6 @@ function v_3d_pvmap(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dPvmapOutputs {
-    /**
-     * Computes the first two principal component vectors of a time series dataset, then outputs the R-squared coefficient of each voxel time series with these first two components.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param inputdataset Input dataset (e.g., fred.nii)
-     * @param prefix Output prefix for generated files
-     * @param mask Mask dataset (e.g., brainmask.nii)
-     * @param automask Automatically generate a mask from the input dataset
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_PVMAP_METADATA);
     const params = v_3d_pvmap_params(inputdataset, prefix, mask, automask)
@@ -224,5 +224,8 @@ export {
       V3dPvmapParameters,
       V_3D_PVMAP_METADATA,
       v_3d_pvmap,
+      v_3d_pvmap_cargs,
+      v_3d_pvmap_execute,
+      v_3d_pvmap_outputs,
       v_3d_pvmap_params,
 };

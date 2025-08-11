@@ -12,7 +12,7 @@ const MAKE_SYMMETRIC_METADATA: Metadata = {
 
 
 interface MakeSymmetricParameters {
-    "__STYXTYPE__": "make_symmetric";
+    "@type": "freesurfer.make_symmetric";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
@@ -20,35 +20,35 @@ interface MakeSymmetricParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_symmetric": make_symmetric_cargs,
+        "freesurfer.make_symmetric": make_symmetric_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "make_symmetric": make_symmetric_outputs,
+        "freesurfer.make_symmetric": make_symmetric_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface MakeSymmetricOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param hemi The hemisphere to mirror; accepted values are 'lh' for left hemisphere or 'rh' for right hemisphere.
+ * @param input_file Input image in .mgz format.
+ * @param output_file Output image in .mgz format resulting from the symmetric processing.
+ * @param transform_map Transformation map in .lta format mapping the input to the upright space.
+ *
+ * @returns Parameter dictionary
+ */
 function make_symmetric_params(
     hemi: string,
     input_file: InputPathType,
     output_file: string,
     transform_map: string,
 ): MakeSymmetricParameters {
-    /**
-     * Build parameters.
-    
-     * @param hemi The hemisphere to mirror; accepted values are 'lh' for left hemisphere or 'rh' for right hemisphere.
-     * @param input_file Input image in .mgz format.
-     * @param output_file Output image in .mgz format resulting from the symmetric processing.
-     * @param transform_map Transformation map in .lta format mapping the input to the upright space.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_symmetric" as const,
+        "@type": "freesurfer.make_symmetric" as const,
         "hemi": hemi,
         "input_file": input_file,
         "output_file": output_file,
@@ -102,18 +102,18 @@ function make_symmetric_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_symmetric_cargs(
     params: MakeSymmetricParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_symmetric");
     cargs.push((params["hemi"] ?? null));
@@ -124,18 +124,18 @@ function make_symmetric_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_symmetric_outputs(
     params: MakeSymmetricParameters,
     execution: Execution,
 ): MakeSymmetricOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeSymmetricOutputs = {
         root: execution.outputFile("."),
         processed_output: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -145,22 +145,22 @@ function make_symmetric_outputs(
 }
 
 
+/**
+ * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
+ */
 function make_symmetric_execute(
     params: MakeSymmetricParameters,
     execution: Execution,
 ): MakeSymmetricOutputs {
-    /**
-     * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_symmetric_cargs(params, execution)
     const ret = make_symmetric_outputs(params, execution)
@@ -169,6 +169,21 @@ function make_symmetric_execute(
 }
 
 
+/**
+ * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param hemi The hemisphere to mirror; accepted values are 'lh' for left hemisphere or 'rh' for right hemisphere.
+ * @param input_file Input image in .mgz format.
+ * @param output_file Output image in .mgz format resulting from the symmetric processing.
+ * @param transform_map Transformation map in .lta format mapping the input to the upright space.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
+ */
 function make_symmetric(
     hemi: string,
     input_file: InputPathType,
@@ -176,21 +191,6 @@ function make_symmetric(
     transform_map: string,
     runner: Runner | null = null,
 ): MakeSymmetricOutputs {
-    /**
-     * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param hemi The hemisphere to mirror; accepted values are 'lh' for left hemisphere or 'rh' for right hemisphere.
-     * @param input_file Input image in .mgz format.
-     * @param output_file Output image in .mgz format resulting from the symmetric processing.
-     * @param transform_map Transformation map in .lta format mapping the input to the upright space.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_SYMMETRIC_METADATA);
     const params = make_symmetric_params(hemi, input_file, output_file, transform_map)
@@ -203,5 +203,8 @@ export {
       MakeSymmetricOutputs,
       MakeSymmetricParameters,
       make_symmetric,
+      make_symmetric_cargs,
+      make_symmetric_execute,
+      make_symmetric_outputs,
       make_symmetric_params,
 };

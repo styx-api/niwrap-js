@@ -12,38 +12,38 @@ const FIXELCONVERT_METADATA: Metadata = {
 
 
 interface FixelconvertConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelconvert.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelconvertVariousStringParameters {
-    "__STYXTYPE__": "VariousString";
+    "@type": "mrtrix.fixelconvert.VariousString";
     "obj": string;
 }
 
 
 interface FixelconvertVariousFileParameters {
-    "__STYXTYPE__": "VariousFile";
+    "@type": "mrtrix.fixelconvert.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface FixelconvertVariousString1Parameters {
-    "__STYXTYPE__": "VariousString_1";
+    "@type": "mrtrix.fixelconvert.VariousString";
     "obj": string;
 }
 
 
 interface FixelconvertVariousFile1Parameters {
-    "__STYXTYPE__": "VariousFile_1";
+    "@type": "mrtrix.fixelconvert.VariousFile";
     "obj": InputPathType;
 }
 
 
 interface FixelconvertParameters {
-    "__STYXTYPE__": "fixelconvert";
+    "@type": "mrtrix.fixelconvert";
     "name"?: string | null | undefined;
     "nii": boolean;
     "out_size": boolean;
@@ -63,58 +63,58 @@ interface FixelconvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelconvert": fixelconvert_cargs,
-        "config": fixelconvert_config_cargs,
-        "VariousString": fixelconvert_various_string_cargs,
-        "VariousFile": fixelconvert_various_file_cargs,
-        "VariousString_1": fixelconvert_various_string_1_cargs,
-        "VariousFile_1": fixelconvert_various_file_1_cargs,
+        "mrtrix.fixelconvert": fixelconvert_cargs,
+        "mrtrix.fixelconvert.config": fixelconvert_config_cargs,
+        "mrtrix.fixelconvert.VariousString": fixelconvert_various_string_cargs,
+        "mrtrix.fixelconvert.VariousFile": fixelconvert_various_file_cargs,
+        "mrtrix.fixelconvert.VariousString": fixelconvert_various_string_1_cargs,
+        "mrtrix.fixelconvert.VariousFile": fixelconvert_various_file_1_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_config_params(
     key: string,
     value: string,
 ): FixelconvertConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelconvert.config" as const,
         "key": key,
         "value": value,
     };
@@ -122,18 +122,18 @@ function fixelconvert_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_config_cargs(
     params: FixelconvertConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -142,144 +142,144 @@ function fixelconvert_config_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_various_string_params(
     obj: string,
 ): FixelconvertVariousStringParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString" as const,
+        "@type": "mrtrix.fixelconvert.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_various_string_cargs(
     params: FixelconvertVariousStringParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_various_file_params(
     obj: InputPathType,
 ): FixelconvertVariousFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile" as const,
+        "@type": "mrtrix.fixelconvert.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_various_file_cargs(
     params: FixelconvertVariousFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj String object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_various_string_1_params(
     obj: string,
 ): FixelconvertVariousString1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj String object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousString_1" as const,
+        "@type": "mrtrix.fixelconvert.VariousString" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_various_string_1_cargs(
     params: FixelconvertVariousString1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push((params["obj"] ?? null));
     return cargs;
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param obj File object.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_various_file_1_params(
     obj: InputPathType,
 ): FixelconvertVariousFile1Parameters {
-    /**
-     * Build parameters.
-    
-     * @param obj File object.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "VariousFile_1" as const,
+        "@type": "mrtrix.fixelconvert.VariousFile" as const,
         "obj": obj,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_various_file_1_cargs(
     params: FixelconvertVariousFile1Parameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push(execution.inputFile((params["obj"] ?? null)));
     return cargs;
@@ -299,6 +299,28 @@ interface FixelconvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixel_in the input fixel file / directory.
+ * @param fixel_out the output fixel file / directory.
+ * @param name assign a different name to the value field output (Default: value). Do not include the file extension.
+ * @param nii output the index, directions and data file in NIfTI format instead of .mif
+ * @param out_size also output the 'size' field from the old format
+ * @param template specify an existing fixel directory (in the new format) to which the new output should conform
+ * @param value nominate the data file to import to the 'value' field in the old format
+ * @param in_size import data for the 'size' field in the old format
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconvert_params(
     fixel_in: FixelconvertVariousStringParameters | FixelconvertVariousFileParameters,
     fixel_out: FixelconvertVariousString1Parameters | FixelconvertVariousFile1Parameters,
@@ -317,30 +339,8 @@ function fixelconvert_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelconvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixel_in the input fixel file / directory.
-     * @param fixel_out the output fixel file / directory.
-     * @param name assign a different name to the value field output (Default: value). Do not include the file extension.
-     * @param nii output the index, directions and data file in NIfTI format instead of .mif
-     * @param out_size also output the 'size' field from the old format
-     * @param template specify an existing fixel directory (in the new format) to which the new output should conform
-     * @param value nominate the data file to import to the 'value' field in the old format
-     * @param in_size import data for the 'size' field in the old format
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelconvert" as const,
+        "@type": "mrtrix.fixelconvert" as const,
         "nii": nii,
         "out_size": out_size,
         "info": info,
@@ -374,18 +374,18 @@ function fixelconvert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconvert_cargs(
     params: FixelconvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelconvert");
     if ((params["name"] ?? null) !== null) {
@@ -437,7 +437,7 @@ function fixelconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -445,24 +445,24 @@ function fixelconvert_cargs(
     if ((params["version"] ?? null)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["fixel_in"] ?? null).__STYXTYPE__)((params["fixel_in"] ?? null), execution));
-    cargs.push(...dynCargs((params["fixel_out"] ?? null).__STYXTYPE__)((params["fixel_out"] ?? null), execution));
+    cargs.push(...dynCargs((params["fixel_in"] ?? null)["@type"])((params["fixel_in"] ?? null), execution));
+    cargs.push(...dynCargs((params["fixel_out"] ?? null)["@type"])((params["fixel_out"] ?? null), execution));
     return cargs;
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelconvert_outputs(
     params: FixelconvertParameters,
     execution: Execution,
 ): FixelconvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelconvertOutputs = {
         root: execution.outputFile("."),
     };
@@ -470,28 +470,28 @@ function fixelconvert_outputs(
 }
 
 
+/**
+ * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
+ */
 function fixelconvert_execute(
     params: FixelconvertParameters,
     execution: Execution,
 ): FixelconvertOutputs {
-    /**
-     * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelconvert_cargs(params, execution)
     const ret = fixelconvert_outputs(params, execution)
@@ -500,6 +500,39 @@ function fixelconvert_execute(
 }
 
 
+/**
+ * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fixel_in the input fixel file / directory.
+ * @param fixel_out the output fixel file / directory.
+ * @param name assign a different name to the value field output (Default: value). Do not include the file extension.
+ * @param nii output the index, directions and data file in NIfTI format instead of .mif
+ * @param out_size also output the 'size' field from the old format
+ * @param template specify an existing fixel directory (in the new format) to which the new output should conform
+ * @param value nominate the data file to import to the 'value' field in the old format
+ * @param in_size import data for the 'size' field in the old format
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
+ */
 function fixelconvert(
     fixel_in: FixelconvertVariousStringParameters | FixelconvertVariousFileParameters,
     fixel_out: FixelconvertVariousString1Parameters | FixelconvertVariousFile1Parameters,
@@ -519,39 +552,6 @@ function fixelconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelconvertOutputs {
-    /**
-     * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fixel_in the input fixel file / directory.
-     * @param fixel_out the output fixel file / directory.
-     * @param name assign a different name to the value field output (Default: value). Do not include the file extension.
-     * @param nii output the index, directions and data file in NIfTI format instead of .mif
-     * @param out_size also output the 'size' field from the old format
-     * @param template specify an existing fixel directory (in the new format) to which the new output should conform
-     * @param value nominate the data file to import to the 'value' field in the old format
-     * @param in_size import data for the 'size' field in the old format
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELCONVERT_METADATA);
     const params = fixelconvert_params(fixel_in, fixel_out, name, nii, out_size, template, value, in_size, info, quiet, debug, force, nthreads, config, help, version)
@@ -569,10 +569,18 @@ export {
       FixelconvertVariousString1Parameters,
       FixelconvertVariousStringParameters,
       fixelconvert,
+      fixelconvert_cargs,
+      fixelconvert_config_cargs,
       fixelconvert_config_params,
+      fixelconvert_execute,
+      fixelconvert_outputs,
       fixelconvert_params,
+      fixelconvert_various_file_1_cargs,
       fixelconvert_various_file_1_params,
+      fixelconvert_various_file_cargs,
       fixelconvert_various_file_params,
+      fixelconvert_various_string_1_cargs,
       fixelconvert_various_string_1_params,
+      fixelconvert_various_string_cargs,
       fixelconvert_various_string_params,
 };

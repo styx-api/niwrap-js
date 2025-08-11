@@ -12,7 +12,7 @@ const POINTFLIRT_METADATA: Metadata = {
 
 
 interface PointflirtParameters {
-    "__STYXTYPE__": "pointflirt";
+    "@type": "fsl.pointflirt";
     "invol_coords": InputPathType;
     "refvol_coords": InputPathType;
     "out_matrix"?: string | null | undefined;
@@ -23,35 +23,35 @@ interface PointflirtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "pointflirt": pointflirt_cargs,
+        "fsl.pointflirt": pointflirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "pointflirt": pointflirt_outputs,
+        "fsl.pointflirt": pointflirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface PointflirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param invol_coords Filename of input volume coordinates
+ * @param refvol_coords Filename of reference volume coordinates
+ * @param out_matrix Filename of affine matrix output
+ * @param use_vox Use voxel coordinates, not mm, for input
+ * @param vol_input Filename of input volume (needed for --vox option)
+ * @param vol_ref Filename of reference volume (needed for --vox option)
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function pointflirt_params(
     invol_coords: InputPathType,
     refvol_coords: InputPathType,
@@ -83,21 +96,8 @@ function pointflirt_params(
     vol_ref: InputPathType | null = null,
     verbose_flag: boolean = false,
 ): PointflirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param invol_coords Filename of input volume coordinates
-     * @param refvol_coords Filename of reference volume coordinates
-     * @param out_matrix Filename of affine matrix output
-     * @param use_vox Use voxel coordinates, not mm, for input
-     * @param vol_input Filename of input volume (needed for --vox option)
-     * @param vol_ref Filename of reference volume (needed for --vox option)
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "pointflirt" as const,
+        "@type": "fsl.pointflirt" as const,
         "invol_coords": invol_coords,
         "refvol_coords": refvol_coords,
         "use_vox": use_vox,
@@ -116,18 +116,18 @@ function pointflirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function pointflirt_cargs(
     params: PointflirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("pointflirt");
     cargs.push(
@@ -166,18 +166,18 @@ function pointflirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function pointflirt_outputs(
     params: PointflirtParameters,
     execution: Execution,
 ): PointflirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PointflirtOutputs = {
         root: execution.outputFile("."),
         output_matrix_file: ((params["out_matrix"] ?? null) !== null) ? execution.outputFile([(params["out_matrix"] ?? null)].join('')) : null,
@@ -186,22 +186,22 @@ function pointflirt_outputs(
 }
 
 
+/**
+ * A tool to align point coordinates between volumes and compute affine transformation matrices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
+ */
 function pointflirt_execute(
     params: PointflirtParameters,
     execution: Execution,
 ): PointflirtOutputs {
-    /**
-     * A tool to align point coordinates between volumes and compute affine transformation matrices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = pointflirt_cargs(params, execution)
     const ret = pointflirt_outputs(params, execution)
@@ -210,6 +210,24 @@ function pointflirt_execute(
 }
 
 
+/**
+ * A tool to align point coordinates between volumes and compute affine transformation matrices.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param invol_coords Filename of input volume coordinates
+ * @param refvol_coords Filename of reference volume coordinates
+ * @param out_matrix Filename of affine matrix output
+ * @param use_vox Use voxel coordinates, not mm, for input
+ * @param vol_input Filename of input volume (needed for --vox option)
+ * @param vol_ref Filename of reference volume (needed for --vox option)
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
+ */
 function pointflirt(
     invol_coords: InputPathType,
     refvol_coords: InputPathType,
@@ -220,24 +238,6 @@ function pointflirt(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): PointflirtOutputs {
-    /**
-     * A tool to align point coordinates between volumes and compute affine transformation matrices.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param invol_coords Filename of input volume coordinates
-     * @param refvol_coords Filename of reference volume coordinates
-     * @param out_matrix Filename of affine matrix output
-     * @param use_vox Use voxel coordinates, not mm, for input
-     * @param vol_input Filename of input volume (needed for --vox option)
-     * @param vol_ref Filename of reference volume (needed for --vox option)
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POINTFLIRT_METADATA);
     const params = pointflirt_params(invol_coords, refvol_coords, out_matrix, use_vox, vol_input, vol_ref, verbose_flag)
@@ -250,5 +250,8 @@ export {
       PointflirtOutputs,
       PointflirtParameters,
       pointflirt,
+      pointflirt_cargs,
+      pointflirt_execute,
+      pointflirt_outputs,
       pointflirt_params,
 };

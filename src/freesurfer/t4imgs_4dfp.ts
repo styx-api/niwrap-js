@@ -12,7 +12,7 @@ const T4IMGS_4DFP_METADATA: Metadata = {
 
 
 interface T4imgs4dfpParameters {
-    "__STYXTYPE__": "t4imgs_4dfp";
+    "@type": "freesurfer.t4imgs_4dfp";
     "sqrt_normalize": boolean;
     "cubic_spline": boolean;
     "output_nan": boolean;
@@ -29,35 +29,35 @@ interface T4imgs4dfpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "t4imgs_4dfp": t4imgs_4dfp_cargs,
+        "freesurfer.t4imgs_4dfp": t4imgs_4dfp_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "t4imgs_4dfp": t4imgs_4dfp_outputs,
+        "freesurfer.t4imgs_4dfp": t4imgs_4dfp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,6 +80,25 @@ interface T4imgs4dfpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_images Input list of 4dfp images.
+ * @param output_image Output file name for the transformed image.
+ * @param sqrt_normalize Normalize by sqrt(n) rather than n (for z images).
+ * @param cubic_spline Interpolate by 3D cubic spline (default is 3D linear).
+ * @param output_nan Output NaN (default 0.0) for undefined values.
+ * @param convert_t4 Internally convert to_711-2A_t4->to_711-2B_t4.
+ * @param nearest_neighbor Use nearest neighbor interpolation.
+ * @param output_111_space Output in 111 space instead of default 333.0 space.
+ * @param output_222_space Output in 222 space instead of default 333.0 space.
+ * @param output_333n_space Output in 333.n space (y shifted up by n pixels).
+ * @param duplicate_dimensions Duplicate dimensions of specified image.
+ * @param big_endian Output in big endian format.
+ * @param little_endian Output in little endian format.
+ *
+ * @returns Parameter dictionary
+ */
 function t4imgs_4dfp_params(
     input_images: Array<InputPathType>,
     output_image: string,
@@ -95,27 +114,8 @@ function t4imgs_4dfp_params(
     big_endian: boolean = false,
     little_endian: boolean = false,
 ): T4imgs4dfpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_images Input list of 4dfp images.
-     * @param output_image Output file name for the transformed image.
-     * @param sqrt_normalize Normalize by sqrt(n) rather than n (for z images).
-     * @param cubic_spline Interpolate by 3D cubic spline (default is 3D linear).
-     * @param output_nan Output NaN (default 0.0) for undefined values.
-     * @param convert_t4 Internally convert to_711-2A_t4->to_711-2B_t4.
-     * @param nearest_neighbor Use nearest neighbor interpolation.
-     * @param output_111_space Output in 111 space instead of default 333.0 space.
-     * @param output_222_space Output in 222 space instead of default 333.0 space.
-     * @param output_333n_space Output in 333.n space (y shifted up by n pixels).
-     * @param duplicate_dimensions Duplicate dimensions of specified image.
-     * @param big_endian Output in big endian format.
-     * @param little_endian Output in little endian format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "t4imgs_4dfp" as const,
+        "@type": "freesurfer.t4imgs_4dfp" as const,
         "sqrt_normalize": sqrt_normalize,
         "cubic_spline": cubic_spline,
         "output_nan": output_nan,
@@ -138,18 +138,18 @@ function t4imgs_4dfp_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function t4imgs_4dfp_cargs(
     params: T4imgs4dfpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("t4imgs_4dfp");
     if ((params["sqrt_normalize"] ?? null)) {
@@ -197,18 +197,18 @@ function t4imgs_4dfp_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function t4imgs_4dfp_outputs(
     params: T4imgs4dfpParameters,
     execution: Execution,
 ): T4imgs4dfpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: T4imgs4dfpOutputs = {
         root: execution.outputFile("."),
         transformed_image: execution.outputFile([(params["output_image"] ?? null), ".4dfp.img"].join('')),
@@ -217,22 +217,22 @@ function t4imgs_4dfp_outputs(
 }
 
 
+/**
+ * Freesurfer tool for transforming images according to a specified T4 file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
+ */
 function t4imgs_4dfp_execute(
     params: T4imgs4dfpParameters,
     execution: Execution,
 ): T4imgs4dfpOutputs {
-    /**
-     * Freesurfer tool for transforming images according to a specified T4 file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
-     */
     params = execution.params(params)
     const cargs = t4imgs_4dfp_cargs(params, execution)
     const ret = t4imgs_4dfp_outputs(params, execution)
@@ -241,6 +241,30 @@ function t4imgs_4dfp_execute(
 }
 
 
+/**
+ * Freesurfer tool for transforming images according to a specified T4 file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_images Input list of 4dfp images.
+ * @param output_image Output file name for the transformed image.
+ * @param sqrt_normalize Normalize by sqrt(n) rather than n (for z images).
+ * @param cubic_spline Interpolate by 3D cubic spline (default is 3D linear).
+ * @param output_nan Output NaN (default 0.0) for undefined values.
+ * @param convert_t4 Internally convert to_711-2A_t4->to_711-2B_t4.
+ * @param nearest_neighbor Use nearest neighbor interpolation.
+ * @param output_111_space Output in 111 space instead of default 333.0 space.
+ * @param output_222_space Output in 222 space instead of default 333.0 space.
+ * @param output_333n_space Output in 333.n space (y shifted up by n pixels).
+ * @param duplicate_dimensions Duplicate dimensions of specified image.
+ * @param big_endian Output in big endian format.
+ * @param little_endian Output in little endian format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
+ */
 function t4imgs_4dfp(
     input_images: Array<InputPathType>,
     output_image: string,
@@ -257,30 +281,6 @@ function t4imgs_4dfp(
     little_endian: boolean = false,
     runner: Runner | null = null,
 ): T4imgs4dfpOutputs {
-    /**
-     * Freesurfer tool for transforming images according to a specified T4 file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_images Input list of 4dfp images.
-     * @param output_image Output file name for the transformed image.
-     * @param sqrt_normalize Normalize by sqrt(n) rather than n (for z images).
-     * @param cubic_spline Interpolate by 3D cubic spline (default is 3D linear).
-     * @param output_nan Output NaN (default 0.0) for undefined values.
-     * @param convert_t4 Internally convert to_711-2A_t4->to_711-2B_t4.
-     * @param nearest_neighbor Use nearest neighbor interpolation.
-     * @param output_111_space Output in 111 space instead of default 333.0 space.
-     * @param output_222_space Output in 222 space instead of default 333.0 space.
-     * @param output_333n_space Output in 333.n space (y shifted up by n pixels).
-     * @param duplicate_dimensions Duplicate dimensions of specified image.
-     * @param big_endian Output in big endian format.
-     * @param little_endian Output in little endian format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(T4IMGS_4DFP_METADATA);
     const params = t4imgs_4dfp_params(input_images, output_image, sqrt_normalize, cubic_spline, output_nan, convert_t4, nearest_neighbor, output_111_space, output_222_space, output_333n_space, duplicate_dimensions, big_endian, little_endian)
@@ -293,5 +293,8 @@ export {
       T4imgs4dfpOutputs,
       T4imgs4dfpParameters,
       t4imgs_4dfp,
+      t4imgs_4dfp_cargs,
+      t4imgs_4dfp_execute,
+      t4imgs_4dfp_outputs,
       t4imgs_4dfp_params,
 };

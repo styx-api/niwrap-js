@@ -12,7 +12,7 @@ const SURF_QUAL_METADATA: Metadata = {
 
 
 interface SurfQualParameters {
-    "__STYXTYPE__": "SurfQual";
+    "@type": "afni.SurfQual";
     "spec_file": InputPathType;
     "surface_a": Array<InputPathType>;
     "sphere_flag": boolean;
@@ -22,35 +22,35 @@ interface SurfQualParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfQual": surf_qual_cargs,
+        "afni.SurfQual": surf_qual_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfQual": surf_qual_outputs,
+        "afni.SurfQual": surf_qual_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,18 @@ interface SurfQualOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file Spec file containing input surfaces.
+ * @param surface_a Name of input surface A.
+ * @param sphere_flag Indicates that surfaces read are spherical.
+ * @param summary_flag Provide summary of results to stdout.
+ * @param self_intersect_flag Check if surface is self intersecting.
+ * @param output_prefix Prefix of output files. Default is the surface's label.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_qual_params(
     spec_file: InputPathType,
     surface_a: Array<InputPathType>,
@@ -105,20 +117,8 @@ function surf_qual_params(
     self_intersect_flag: boolean = false,
     output_prefix: string | null = null,
 ): SurfQualParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file Spec file containing input surfaces.
-     * @param surface_a Name of input surface A.
-     * @param sphere_flag Indicates that surfaces read are spherical.
-     * @param summary_flag Provide summary of results to stdout.
-     * @param self_intersect_flag Check if surface is self intersecting.
-     * @param output_prefix Prefix of output files. Default is the surface's label.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfQual" as const,
+        "@type": "afni.SurfQual" as const,
         "spec_file": spec_file,
         "surface_a": surface_a,
         "sphere_flag": sphere_flag,
@@ -132,18 +132,18 @@ function surf_qual_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_qual_cargs(
     params: SurfQualParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfQual");
     cargs.push(
@@ -173,18 +173,18 @@ function surf_qual_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_qual_outputs(
     params: SurfQualParameters,
     execution: Execution,
 ): SurfQualOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfQualOutputs = {
         root: execution.outputFile("."),
         dist_output: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_Dist.1D.dset"].join('')) : null,
@@ -199,22 +199,22 @@ function surf_qual_outputs(
 }
 
 
+/**
+ * A program to check the quality of surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
+ */
 function surf_qual_execute(
     params: SurfQualParameters,
     execution: Execution,
 ): SurfQualOutputs {
-    /**
-     * A program to check the quality of surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_qual_cargs(params, execution)
     const ret = surf_qual_outputs(params, execution)
@@ -223,6 +223,23 @@ function surf_qual_execute(
 }
 
 
+/**
+ * A program to check the quality of surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file Spec file containing input surfaces.
+ * @param surface_a Name of input surface A.
+ * @param sphere_flag Indicates that surfaces read are spherical.
+ * @param summary_flag Provide summary of results to stdout.
+ * @param self_intersect_flag Check if surface is self intersecting.
+ * @param output_prefix Prefix of output files. Default is the surface's label.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
+ */
 function surf_qual(
     spec_file: InputPathType,
     surface_a: Array<InputPathType>,
@@ -232,23 +249,6 @@ function surf_qual(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): SurfQualOutputs {
-    /**
-     * A program to check the quality of surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file Spec file containing input surfaces.
-     * @param surface_a Name of input surface A.
-     * @param sphere_flag Indicates that surfaces read are spherical.
-     * @param summary_flag Provide summary of results to stdout.
-     * @param self_intersect_flag Check if surface is self intersecting.
-     * @param output_prefix Prefix of output files. Default is the surface's label.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_QUAL_METADATA);
     const params = surf_qual_params(spec_file, surface_a, sphere_flag, summary_flag, self_intersect_flag, output_prefix)
@@ -261,5 +261,8 @@ export {
       SurfQualOutputs,
       SurfQualParameters,
       surf_qual,
+      surf_qual_cargs,
+      surf_qual_execute,
+      surf_qual_outputs,
       surf_qual_params,
 };

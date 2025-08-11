@@ -12,7 +12,7 @@ const SURF_SMOOTH_METADATA: Metadata = {
 
 
 interface SurfSmoothParameters {
-    "__STYXTYPE__": "SurfSmooth";
+    "@type": "afni.SurfSmooth";
     "surface": string;
     "method": string;
     "input_data"?: InputPathType | null | undefined;
@@ -32,35 +32,35 @@ interface SurfSmoothParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "SurfSmooth": surf_smooth_cargs,
+        "afni.SurfSmooth": surf_smooth_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "SurfSmooth": surf_smooth_outputs,
+        "afni.SurfSmooth": surf_smooth_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,28 @@ interface SurfSmoothOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param surface Option for specifying the surface to smooth or the domain over which DSET is defined.
+ * @param method Name of smoothing method to use. Choose from: HEAT_07, HEAT_05, LM, NN_geom
+ * @param input_data File containing data (in 1D or NIML format). Required for HEAT_05 and HEAT_07 methods.
+ * @param target_fwhm Blur so that the final FWHM of the data is TF mm. Only for HEAT_07 method.
+ * @param fwhm Effective Full Width at Half Maximum for smoothing. Required for HEAT_05 and optional for HEAT_07 methods.
+ * @param number_iterations Number of smoothing iterations (default is 100 for LM and NN_geom, -1 for HEAT methods).
+ * @param output_file Name of output file. Default based on method being used.
+ * @param band_pass_frequency Bandpass frequency for LM method (0 < k < 10).
+ * @param lambda_mu Lambda and Mu parameters for LM method. Sample values are: 0.6307 and -0.6732.
+ * @param interp_weights Set interpolation weights for LM method. Options: Equal, Fujiwara, Desbrun.
+ * @param node_mask Apply operations only to nodes listed in the given mask.
+ * @param surface_output Writes the surface with smoothed coordinates to disk. For LM and NN_geom methods.
+ * @param dbg_node Output debug information for node 'node'.
+ * @param use_neighbors_outside_mask Allow value from a node neighboring node n to contribute to the value at n even if the neighbor is not in the mask.
+ * @param talk_suma Send progress with each iteration to SUMA for real-time visualization.
+ * @param refresh_rate Maximum number of updates to SUMA per second.
+ *
+ * @returns Parameter dictionary
+ */
 function surf_smooth_params(
     surface: string,
     method: string,
@@ -101,30 +123,8 @@ function surf_smooth_params(
     talk_suma: boolean = false,
     refresh_rate: number | null = null,
 ): SurfSmoothParameters {
-    /**
-     * Build parameters.
-    
-     * @param surface Option for specifying the surface to smooth or the domain over which DSET is defined.
-     * @param method Name of smoothing method to use. Choose from: HEAT_07, HEAT_05, LM, NN_geom
-     * @param input_data File containing data (in 1D or NIML format). Required for HEAT_05 and HEAT_07 methods.
-     * @param target_fwhm Blur so that the final FWHM of the data is TF mm. Only for HEAT_07 method.
-     * @param fwhm Effective Full Width at Half Maximum for smoothing. Required for HEAT_05 and optional for HEAT_07 methods.
-     * @param number_iterations Number of smoothing iterations (default is 100 for LM and NN_geom, -1 for HEAT methods).
-     * @param output_file Name of output file. Default based on method being used.
-     * @param band_pass_frequency Bandpass frequency for LM method (0 < k < 10).
-     * @param lambda_mu Lambda and Mu parameters for LM method. Sample values are: 0.6307 and -0.6732.
-     * @param interp_weights Set interpolation weights for LM method. Options: Equal, Fujiwara, Desbrun.
-     * @param node_mask Apply operations only to nodes listed in the given mask.
-     * @param surface_output Writes the surface with smoothed coordinates to disk. For LM and NN_geom methods.
-     * @param dbg_node Output debug information for node 'node'.
-     * @param use_neighbors_outside_mask Allow value from a node neighboring node n to contribute to the value at n even if the neighbor is not in the mask.
-     * @param talk_suma Send progress with each iteration to SUMA for real-time visualization.
-     * @param refresh_rate Maximum number of updates to SUMA per second.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "SurfSmooth" as const,
+        "@type": "afni.SurfSmooth" as const,
         "surface": surface,
         "method": method,
         "use_neighbors_outside_mask": use_neighbors_outside_mask,
@@ -170,18 +170,18 @@ function surf_smooth_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function surf_smooth_cargs(
     params: SurfSmoothParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("SurfSmooth");
     cargs.push(
@@ -274,18 +274,18 @@ function surf_smooth_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function surf_smooth_outputs(
     params: SurfSmoothParameters,
     execution: Execution,
 ): SurfSmoothOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SurfSmoothOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -294,22 +294,22 @@ function surf_smooth_outputs(
 }
 
 
+/**
+ * Tool for smoothing data on surfaces using various methods.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
+ */
 function surf_smooth_execute(
     params: SurfSmoothParameters,
     execution: Execution,
 ): SurfSmoothOutputs {
-    /**
-     * Tool for smoothing data on surfaces using various methods.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
-     */
     params = execution.params(params)
     const cargs = surf_smooth_cargs(params, execution)
     const ret = surf_smooth_outputs(params, execution)
@@ -318,6 +318,33 @@ function surf_smooth_execute(
 }
 
 
+/**
+ * Tool for smoothing data on surfaces using various methods.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param surface Option for specifying the surface to smooth or the domain over which DSET is defined.
+ * @param method Name of smoothing method to use. Choose from: HEAT_07, HEAT_05, LM, NN_geom
+ * @param input_data File containing data (in 1D or NIML format). Required for HEAT_05 and HEAT_07 methods.
+ * @param target_fwhm Blur so that the final FWHM of the data is TF mm. Only for HEAT_07 method.
+ * @param fwhm Effective Full Width at Half Maximum for smoothing. Required for HEAT_05 and optional for HEAT_07 methods.
+ * @param number_iterations Number of smoothing iterations (default is 100 for LM and NN_geom, -1 for HEAT methods).
+ * @param output_file Name of output file. Default based on method being used.
+ * @param band_pass_frequency Bandpass frequency for LM method (0 < k < 10).
+ * @param lambda_mu Lambda and Mu parameters for LM method. Sample values are: 0.6307 and -0.6732.
+ * @param interp_weights Set interpolation weights for LM method. Options: Equal, Fujiwara, Desbrun.
+ * @param node_mask Apply operations only to nodes listed in the given mask.
+ * @param surface_output Writes the surface with smoothed coordinates to disk. For LM and NN_geom methods.
+ * @param dbg_node Output debug information for node 'node'.
+ * @param use_neighbors_outside_mask Allow value from a node neighboring node n to contribute to the value at n even if the neighbor is not in the mask.
+ * @param talk_suma Send progress with each iteration to SUMA for real-time visualization.
+ * @param refresh_rate Maximum number of updates to SUMA per second.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
+ */
 function surf_smooth(
     surface: string,
     method: string,
@@ -337,33 +364,6 @@ function surf_smooth(
     refresh_rate: number | null = null,
     runner: Runner | null = null,
 ): SurfSmoothOutputs {
-    /**
-     * Tool for smoothing data on surfaces using various methods.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param surface Option for specifying the surface to smooth or the domain over which DSET is defined.
-     * @param method Name of smoothing method to use. Choose from: HEAT_07, HEAT_05, LM, NN_geom
-     * @param input_data File containing data (in 1D or NIML format). Required for HEAT_05 and HEAT_07 methods.
-     * @param target_fwhm Blur so that the final FWHM of the data is TF mm. Only for HEAT_07 method.
-     * @param fwhm Effective Full Width at Half Maximum for smoothing. Required for HEAT_05 and optional for HEAT_07 methods.
-     * @param number_iterations Number of smoothing iterations (default is 100 for LM and NN_geom, -1 for HEAT methods).
-     * @param output_file Name of output file. Default based on method being used.
-     * @param band_pass_frequency Bandpass frequency for LM method (0 < k < 10).
-     * @param lambda_mu Lambda and Mu parameters for LM method. Sample values are: 0.6307 and -0.6732.
-     * @param interp_weights Set interpolation weights for LM method. Options: Equal, Fujiwara, Desbrun.
-     * @param node_mask Apply operations only to nodes listed in the given mask.
-     * @param surface_output Writes the surface with smoothed coordinates to disk. For LM and NN_geom methods.
-     * @param dbg_node Output debug information for node 'node'.
-     * @param use_neighbors_outside_mask Allow value from a node neighboring node n to contribute to the value at n even if the neighbor is not in the mask.
-     * @param talk_suma Send progress with each iteration to SUMA for real-time visualization.
-     * @param refresh_rate Maximum number of updates to SUMA per second.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SURF_SMOOTH_METADATA);
     const params = surf_smooth_params(surface, method, input_data, target_fwhm, fwhm, number_iterations, output_file, band_pass_frequency, lambda_mu, interp_weights, node_mask, surface_output, dbg_node, use_neighbors_outside_mask, talk_suma, refresh_rate)
@@ -376,5 +376,8 @@ export {
       SurfSmoothOutputs,
       SurfSmoothParameters,
       surf_smooth,
+      surf_smooth_cargs,
+      surf_smooth_execute,
+      surf_smooth_outputs,
       surf_smooth_params,
 };

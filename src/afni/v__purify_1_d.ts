@@ -12,40 +12,40 @@ const V__PURIFY_1_D_METADATA: Metadata = {
 
 
 interface VPurify1DParameters {
-    "__STYXTYPE__": "@Purify_1D";
+    "@type": "afni.@Purify_1D";
     "sub_brick"?: string | null | undefined;
     "suffix"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Purify_1D": v__purify_1_d_cargs,
+        "afni.@Purify_1D": v__purify_1_d_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -65,22 +65,22 @@ interface VPurify1DOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input 1D dataset files.
+ * @param sub_brick The sub-brick selection mode to output a select number of columns, following AFNI conventions.
+ * @param suffix STRING is attached to the output prefix which is formed from the input names.
+ *
+ * @returns Parameter dictionary
+ */
 function v__purify_1_d_params(
     input_files: Array<InputPathType>,
     sub_brick: string | null = null,
     suffix: string | null = null,
 ): VPurify1DParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input 1D dataset files.
-     * @param sub_brick The sub-brick selection mode to output a select number of columns, following AFNI conventions.
-     * @param suffix STRING is attached to the output prefix which is formed from the input names.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Purify_1D" as const,
+        "@type": "afni.@Purify_1D" as const,
         "input_files": input_files,
     };
     if (sub_brick !== null) {
@@ -93,18 +93,18 @@ function v__purify_1_d_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__purify_1_d_cargs(
     params: VPurify1DParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Purify_1D");
     if ((params["sub_brick"] ?? null) !== null) {
@@ -124,18 +124,18 @@ function v__purify_1_d_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__purify_1_d_outputs(
     params: VPurify1DParameters,
     execution: Execution,
 ): VPurify1DOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VPurify1DOutputs = {
         root: execution.outputFile("."),
     };
@@ -143,22 +143,22 @@ function v__purify_1_d_outputs(
 }
 
 
+/**
+ * Purifies a series of 1D files for faster I/O into matlab.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
+ */
 function v__purify_1_d_execute(
     params: VPurify1DParameters,
     execution: Execution,
 ): VPurify1DOutputs {
-    /**
-     * Purifies a series of 1D files for faster I/O into matlab.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__purify_1_d_cargs(params, execution)
     const ret = v__purify_1_d_outputs(params, execution)
@@ -167,26 +167,26 @@ function v__purify_1_d_execute(
 }
 
 
+/**
+ * Purifies a series of 1D files for faster I/O into matlab.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_files Input 1D dataset files.
+ * @param sub_brick The sub-brick selection mode to output a select number of columns, following AFNI conventions.
+ * @param suffix STRING is attached to the output prefix which is formed from the input names.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
+ */
 function v__purify_1_d(
     input_files: Array<InputPathType>,
     sub_brick: string | null = null,
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VPurify1DOutputs {
-    /**
-     * Purifies a series of 1D files for faster I/O into matlab.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_files Input 1D dataset files.
-     * @param sub_brick The sub-brick selection mode to output a select number of columns, following AFNI conventions.
-     * @param suffix STRING is attached to the output prefix which is formed from the input names.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__PURIFY_1_D_METADATA);
     const params = v__purify_1_d_params(input_files, sub_brick, suffix)
@@ -199,5 +199,8 @@ export {
       VPurify1DParameters,
       V__PURIFY_1_D_METADATA,
       v__purify_1_d,
+      v__purify_1_d_cargs,
+      v__purify_1_d_execute,
+      v__purify_1_d_outputs,
       v__purify_1_d_params,
 };

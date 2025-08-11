@@ -12,7 +12,7 @@ const MAKE_AVERAGE_SUBJECT_METADATA: Metadata = {
 
 
 interface MakeAverageSubjectParameters {
-    "__STYXTYPE__": "make_average_subject";
+    "@type": "freesurfer.make_average_subject";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
     "subject_list_file"?: InputPathType | null | undefined;
@@ -38,33 +38,33 @@ interface MakeAverageSubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "make_average_subject": make_average_subject_cargs,
+        "freesurfer.make_average_subject": make_average_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -84,6 +84,34 @@ interface MakeAverageSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param subjects List of subject names
+ * @param average_subject_name Name of the average subject
+ * @param fsgd_file Get subject list from a FreeSurfer Group Descriptor file
+ * @param subject_list_file Text file containing all subject names
+ * @param sd_out Directory to put output under instead of SUBJECTS_DIR
+ * @param no_link Do not link back to the original SUBJECTS_DIR with --sd-out
+ * @param sdir Use an alternative SUBJECTS_DIR instead of the default one in the environment
+ * @param ico_order Change order of icosahedron
+ * @param transform_file Filename of transform file
+ * @param surface_registration Alternative registration surface name
+ * @param no_surfaces Do not make average surfaces
+ * @param no_volumes Do not make average volumes
+ * @param force Overwrite existing average subject data
+ * @param keep_all_orig Concatenate all original volumes into mri/orig.all.mgz
+ * @param no_symlink Do not use symbolic links with surfaces, copy files instead
+ * @param no_ribbon Do not create ribbon.mgz and aparc+aseg.mgz files
+ * @param no_surf2surf Use old parametric surface mapping method
+ * @param rca_threads Number of threads to pass to recon-all
+ * @param help Show short descriptive help
+ * @param version Show script version info
+ * @param echo Enable command echo for debugging
+ * @param debug Enable debug mode, same as --echo
+ *
+ * @returns Parameter dictionary
+ */
 function make_average_subject_params(
     subjects: Array<string>,
     average_subject_name: string,
@@ -108,36 +136,8 @@ function make_average_subject_params(
     echo: boolean = false,
     debug: boolean = false,
 ): MakeAverageSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param subjects List of subject names
-     * @param average_subject_name Name of the average subject
-     * @param fsgd_file Get subject list from a FreeSurfer Group Descriptor file
-     * @param subject_list_file Text file containing all subject names
-     * @param sd_out Directory to put output under instead of SUBJECTS_DIR
-     * @param no_link Do not link back to the original SUBJECTS_DIR with --sd-out
-     * @param sdir Use an alternative SUBJECTS_DIR instead of the default one in the environment
-     * @param ico_order Change order of icosahedron
-     * @param transform_file Filename of transform file
-     * @param surface_registration Alternative registration surface name
-     * @param no_surfaces Do not make average surfaces
-     * @param no_volumes Do not make average volumes
-     * @param force Overwrite existing average subject data
-     * @param keep_all_orig Concatenate all original volumes into mri/orig.all.mgz
-     * @param no_symlink Do not use symbolic links with surfaces, copy files instead
-     * @param no_ribbon Do not create ribbon.mgz and aparc+aseg.mgz files
-     * @param no_surf2surf Use old parametric surface mapping method
-     * @param rca_threads Number of threads to pass to recon-all
-     * @param help Show short descriptive help
-     * @param version Show script version info
-     * @param echo Enable command echo for debugging
-     * @param debug Enable debug mode, same as --echo
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "make_average_subject" as const,
+        "@type": "freesurfer.make_average_subject" as const,
         "subjects": subjects,
         "average_subject_name": average_subject_name,
         "no_link": no_link,
@@ -181,18 +181,18 @@ function make_average_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function make_average_subject_cargs(
     params: MakeAverageSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("make_average_subject");
     cargs.push(
@@ -291,18 +291,18 @@ function make_average_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function make_average_subject_outputs(
     params: MakeAverageSubjectParameters,
     execution: Execution,
 ): MakeAverageSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MakeAverageSubjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -310,22 +310,22 @@ function make_average_subject_outputs(
 }
 
 
+/**
+ * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
+ */
 function make_average_subject_execute(
     params: MakeAverageSubjectParameters,
     execution: Execution,
 ): MakeAverageSubjectOutputs {
-    /**
-     * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = make_average_subject_cargs(params, execution)
     const ret = make_average_subject_outputs(params, execution)
@@ -334,6 +334,39 @@ function make_average_subject_execute(
 }
 
 
+/**
+ * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param subjects List of subject names
+ * @param average_subject_name Name of the average subject
+ * @param fsgd_file Get subject list from a FreeSurfer Group Descriptor file
+ * @param subject_list_file Text file containing all subject names
+ * @param sd_out Directory to put output under instead of SUBJECTS_DIR
+ * @param no_link Do not link back to the original SUBJECTS_DIR with --sd-out
+ * @param sdir Use an alternative SUBJECTS_DIR instead of the default one in the environment
+ * @param ico_order Change order of icosahedron
+ * @param transform_file Filename of transform file
+ * @param surface_registration Alternative registration surface name
+ * @param no_surfaces Do not make average surfaces
+ * @param no_volumes Do not make average volumes
+ * @param force Overwrite existing average subject data
+ * @param keep_all_orig Concatenate all original volumes into mri/orig.all.mgz
+ * @param no_symlink Do not use symbolic links with surfaces, copy files instead
+ * @param no_ribbon Do not create ribbon.mgz and aparc+aseg.mgz files
+ * @param no_surf2surf Use old parametric surface mapping method
+ * @param rca_threads Number of threads to pass to recon-all
+ * @param help Show short descriptive help
+ * @param version Show script version info
+ * @param echo Enable command echo for debugging
+ * @param debug Enable debug mode, same as --echo
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
+ */
 function make_average_subject(
     subjects: Array<string>,
     average_subject_name: string,
@@ -359,39 +392,6 @@ function make_average_subject(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageSubjectOutputs {
-    /**
-     * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param subjects List of subject names
-     * @param average_subject_name Name of the average subject
-     * @param fsgd_file Get subject list from a FreeSurfer Group Descriptor file
-     * @param subject_list_file Text file containing all subject names
-     * @param sd_out Directory to put output under instead of SUBJECTS_DIR
-     * @param no_link Do not link back to the original SUBJECTS_DIR with --sd-out
-     * @param sdir Use an alternative SUBJECTS_DIR instead of the default one in the environment
-     * @param ico_order Change order of icosahedron
-     * @param transform_file Filename of transform file
-     * @param surface_registration Alternative registration surface name
-     * @param no_surfaces Do not make average surfaces
-     * @param no_volumes Do not make average volumes
-     * @param force Overwrite existing average subject data
-     * @param keep_all_orig Concatenate all original volumes into mri/orig.all.mgz
-     * @param no_symlink Do not use symbolic links with surfaces, copy files instead
-     * @param no_ribbon Do not create ribbon.mgz and aparc+aseg.mgz files
-     * @param no_surf2surf Use old parametric surface mapping method
-     * @param rca_threads Number of threads to pass to recon-all
-     * @param help Show short descriptive help
-     * @param version Show script version info
-     * @param echo Enable command echo for debugging
-     * @param debug Enable debug mode, same as --echo
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MAKE_AVERAGE_SUBJECT_METADATA);
     const params = make_average_subject_params(subjects, average_subject_name, fsgd_file, subject_list_file, sd_out, no_link, sdir, ico_order, transform_file, surface_registration, no_surfaces, no_volumes, force, keep_all_orig, no_symlink, no_ribbon, no_surf2surf, rca_threads, help, version, echo, debug)
@@ -404,5 +404,8 @@ export {
       MakeAverageSubjectOutputs,
       MakeAverageSubjectParameters,
       make_average_subject,
+      make_average_subject_cargs,
+      make_average_subject_execute,
+      make_average_subject_outputs,
       make_average_subject_params,
 };

@@ -12,7 +12,7 @@ const V_3D_KRUSKAL_WALLIS_METADATA: Metadata = {
 
 
 interface V3dKruskalWallisParameters {
-    "__STYXTYPE__": "3dKruskalWallis";
+    "@type": "afni.3dKruskalWallis";
     "levels": number;
     "datasets": Array<string>;
     "workmem"?: number | null | undefined;
@@ -21,35 +21,35 @@ interface V3dKruskalWallisParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dKruskalWallis": v_3d_kruskal_wallis_cargs,
+        "afni.3dKruskalWallis": v_3d_kruskal_wallis_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dKruskalWallis": v_3d_kruskal_wallis_outputs,
+        "afni.3dKruskalWallis": v_3d_kruskal_wallis_outputs,
     };
     return outputsFuncs[t];
 }
@@ -72,6 +72,17 @@ interface V3dKruskalWallisOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param levels Number of treatments
+ * @param datasets Data set for treatment #1 through to treatment #s. Specify sub-brick if more than one present.
+ * @param output Kruskal-Wallis statistics are written to file prefixname
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel Screen output for voxel # num
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_kruskal_wallis_params(
     levels: number,
     datasets: Array<string>,
@@ -79,19 +90,8 @@ function v_3d_kruskal_wallis_params(
     workmem: number | null = null,
     voxel: number | null = null,
 ): V3dKruskalWallisParameters {
-    /**
-     * Build parameters.
-    
-     * @param levels Number of treatments
-     * @param datasets Data set for treatment #1 through to treatment #s. Specify sub-brick if more than one present.
-     * @param output Kruskal-Wallis statistics are written to file prefixname
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel Screen output for voxel # num
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dKruskalWallis" as const,
+        "@type": "afni.3dKruskalWallis" as const,
         "levels": levels,
         "datasets": datasets,
         "output": output,
@@ -106,18 +106,18 @@ function v_3d_kruskal_wallis_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_kruskal_wallis_cargs(
     params: V3dKruskalWallisParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dKruskalWallis");
     cargs.push(
@@ -148,18 +148,18 @@ function v_3d_kruskal_wallis_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_kruskal_wallis_outputs(
     params: V3dKruskalWallisParameters,
     execution: Execution,
 ): V3dKruskalWallisOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dKruskalWallisOutputs = {
         root: execution.outputFile("."),
         outfile_prefix: execution.outputFile([(params["output"] ?? null), "+tlrc"].join('')),
@@ -168,22 +168,22 @@ function v_3d_kruskal_wallis_outputs(
 }
 
 
+/**
+ * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dKruskalWallisOutputs`).
+ */
 function v_3d_kruskal_wallis_execute(
     params: V3dKruskalWallisParameters,
     execution: Execution,
 ): V3dKruskalWallisOutputs {
-    /**
-     * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dKruskalWallisOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_kruskal_wallis_cargs(params, execution)
     const ret = v_3d_kruskal_wallis_outputs(params, execution)
@@ -192,6 +192,22 @@ function v_3d_kruskal_wallis_execute(
 }
 
 
+/**
+ * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param levels Number of treatments
+ * @param datasets Data set for treatment #1 through to treatment #s. Specify sub-brick if more than one present.
+ * @param output Kruskal-Wallis statistics are written to file prefixname
+ * @param workmem Number of megabytes of RAM to use for statistical workspace
+ * @param voxel Screen output for voxel # num
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dKruskalWallisOutputs`).
+ */
 function v_3d_kruskal_wallis(
     levels: number,
     datasets: Array<string>,
@@ -200,22 +216,6 @@ function v_3d_kruskal_wallis(
     voxel: number | null = null,
     runner: Runner | null = null,
 ): V3dKruskalWallisOutputs {
-    /**
-     * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param levels Number of treatments
-     * @param datasets Data set for treatment #1 through to treatment #s. Specify sub-brick if more than one present.
-     * @param output Kruskal-Wallis statistics are written to file prefixname
-     * @param workmem Number of megabytes of RAM to use for statistical workspace
-     * @param voxel Screen output for voxel # num
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dKruskalWallisOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_KRUSKAL_WALLIS_METADATA);
     const params = v_3d_kruskal_wallis_params(levels, datasets, output, workmem, voxel)
@@ -228,5 +228,8 @@ export {
       V3dKruskalWallisParameters,
       V_3D_KRUSKAL_WALLIS_METADATA,
       v_3d_kruskal_wallis,
+      v_3d_kruskal_wallis_cargs,
+      v_3d_kruskal_wallis_execute,
+      v_3d_kruskal_wallis_outputs,
       v_3d_kruskal_wallis_params,
 };

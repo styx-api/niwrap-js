@@ -12,7 +12,7 @@ const TEST_RECON_ALL_CSH_METADATA: Metadata = {
 
 
 interface TestReconAllCshParameters {
-    "__STYXTYPE__": "test_recon-all.csh";
+    "@type": "freesurfer.test_recon-all.csh";
     "reference_subj_source_dir"?: string | null | undefined;
     "reference_subjid"?: string | null | undefined;
     "test_subject_dest_dir"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface TestReconAllCshParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "test_recon-all.csh": test_recon_all_csh_cargs,
+        "freesurfer.test_recon-all.csh": test_recon_all_csh_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "test_recon-all.csh": test_recon_all_csh_outputs,
+        "freesurfer.test_recon-all.csh": test_recon_all_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -105,6 +105,18 @@ interface TestReconAllCshOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param reference_subj_source_dir Directory of the reference subject source.
+ * @param reference_subjid ID of the reference subject.
+ * @param test_subject_dest_dir Directory for the test subject destination.
+ * @param test_subjid ID of the test subject.
+ * @param freesurfer_home Path to the FreeSurfer installation directory.
+ * @param norecon Flag to indicate that recon-all should not be run.
+ *
+ * @returns Parameter dictionary
+ */
 function test_recon_all_csh_params(
     reference_subj_source_dir: string | null = "/space/freesurfer/subjects/test/weekly_test/subjects/x86_64",
     reference_subjid: string | null = "bert",
@@ -113,20 +125,8 @@ function test_recon_all_csh_params(
     freesurfer_home: string | null = "/usr/local/freesurfer/stable",
     norecon: boolean = false,
 ): TestReconAllCshParameters {
-    /**
-     * Build parameters.
-    
-     * @param reference_subj_source_dir Directory of the reference subject source.
-     * @param reference_subjid ID of the reference subject.
-     * @param test_subject_dest_dir Directory for the test subject destination.
-     * @param test_subjid ID of the test subject.
-     * @param freesurfer_home Path to the FreeSurfer installation directory.
-     * @param norecon Flag to indicate that recon-all should not be run.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "test_recon-all.csh" as const,
+        "@type": "freesurfer.test_recon-all.csh" as const,
         "norecon": norecon,
     };
     if (reference_subj_source_dir !== null) {
@@ -148,18 +148,18 @@ function test_recon_all_csh_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function test_recon_all_csh_cargs(
     params: TestReconAllCshParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("test_recon-all.csh");
     if ((params["reference_subj_source_dir"] ?? null) !== null) {
@@ -199,18 +199,18 @@ function test_recon_all_csh_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function test_recon_all_csh_outputs(
     params: TestReconAllCshParameters,
     execution: Execution,
 ): TestReconAllCshOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TestReconAllCshOutputs = {
         root: execution.outputFile("."),
         recon_all_output: execution.outputFile(["recon_all_output.txt"].join('')),
@@ -227,22 +227,22 @@ function test_recon_all_csh_outputs(
 }
 
 
+/**
+ * Script for testing recon-all and other utilities with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
+ */
 function test_recon_all_csh_execute(
     params: TestReconAllCshParameters,
     execution: Execution,
 ): TestReconAllCshOutputs {
-    /**
-     * Script for testing recon-all and other utilities with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
-     */
     params = execution.params(params)
     const cargs = test_recon_all_csh_cargs(params, execution)
     const ret = test_recon_all_csh_outputs(params, execution)
@@ -251,6 +251,23 @@ function test_recon_all_csh_execute(
 }
 
 
+/**
+ * Script for testing recon-all and other utilities with FreeSurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param reference_subj_source_dir Directory of the reference subject source.
+ * @param reference_subjid ID of the reference subject.
+ * @param test_subject_dest_dir Directory for the test subject destination.
+ * @param test_subjid ID of the test subject.
+ * @param freesurfer_home Path to the FreeSurfer installation directory.
+ * @param norecon Flag to indicate that recon-all should not be run.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
+ */
 function test_recon_all_csh(
     reference_subj_source_dir: string | null = "/space/freesurfer/subjects/test/weekly_test/subjects/x86_64",
     reference_subjid: string | null = "bert",
@@ -260,23 +277,6 @@ function test_recon_all_csh(
     norecon: boolean = false,
     runner: Runner | null = null,
 ): TestReconAllCshOutputs {
-    /**
-     * Script for testing recon-all and other utilities with FreeSurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param reference_subj_source_dir Directory of the reference subject source.
-     * @param reference_subjid ID of the reference subject.
-     * @param test_subject_dest_dir Directory for the test subject destination.
-     * @param test_subjid ID of the test subject.
-     * @param freesurfer_home Path to the FreeSurfer installation directory.
-     * @param norecon Flag to indicate that recon-all should not be run.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TEST_RECON_ALL_CSH_METADATA);
     const params = test_recon_all_csh_params(reference_subj_source_dir, reference_subjid, test_subject_dest_dir, test_subjid, freesurfer_home, norecon)
@@ -289,5 +289,8 @@ export {
       TestReconAllCshOutputs,
       TestReconAllCshParameters,
       test_recon_all_csh,
+      test_recon_all_csh_cargs,
+      test_recon_all_csh_execute,
+      test_recon_all_csh_outputs,
       test_recon_all_csh_params,
 };

@@ -12,40 +12,40 @@ const FIXUP_MNI_PATHS_METADATA: Metadata = {
 
 
 interface FixupMniPathsParameters {
-    "__STYXTYPE__": "fixup_mni_paths";
+    "@type": "freesurfer.fixup_mni_paths";
     "verbose": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixup_mni_paths": fixup_mni_paths_cargs,
+        "freesurfer.fixup_mni_paths": fixup_mni_paths_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixup_mni_paths": fixup_mni_paths_outputs,
+        "freesurfer.fixup_mni_paths": fixup_mni_paths_outputs,
     };
     return outputsFuncs[t];
 }
@@ -116,36 +116,36 @@ interface FixupMniPathsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param verbose Provide verbose output during the patch process
+ *
+ * @returns Parameter dictionary
+ */
 function fixup_mni_paths_params(
     verbose: boolean = false,
 ): FixupMniPathsParameters {
-    /**
-     * Build parameters.
-    
-     * @param verbose Provide verbose output during the patch process
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixup_mni_paths" as const,
+        "@type": "freesurfer.fixup_mni_paths" as const,
         "verbose": verbose,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixup_mni_paths_cargs(
     params: FixupMniPathsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixup_mni_paths");
     if ((params["verbose"] ?? null)) {
@@ -155,18 +155,18 @@ function fixup_mni_paths_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixup_mni_paths_outputs(
     params: FixupMniPathsParameters,
     execution: Execution,
 ): FixupMniPathsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixupMniPathsOutputs = {
         root: execution.outputFile("."),
         autocrop_backup: execution.outputFile(["autocrop.old"].join('')),
@@ -187,22 +187,22 @@ function fixup_mni_paths_outputs(
 }
 
 
+/**
+ * A utility for patching MNI tools to ensure correct paths are used.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
+ */
 function fixup_mni_paths_execute(
     params: FixupMniPathsParameters,
     execution: Execution,
 ): FixupMniPathsOutputs {
-    /**
-     * A utility for patching MNI tools to ensure correct paths are used.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixup_mni_paths_cargs(params, execution)
     const ret = fixup_mni_paths_outputs(params, execution)
@@ -211,22 +211,22 @@ function fixup_mni_paths_execute(
 }
 
 
+/**
+ * A utility for patching MNI tools to ensure correct paths are used.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param verbose Provide verbose output during the patch process
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
+ */
 function fixup_mni_paths(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): FixupMniPathsOutputs {
-    /**
-     * A utility for patching MNI tools to ensure correct paths are used.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param verbose Provide verbose output during the patch process
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXUP_MNI_PATHS_METADATA);
     const params = fixup_mni_paths_params(verbose)
@@ -239,5 +239,8 @@ export {
       FixupMniPathsOutputs,
       FixupMniPathsParameters,
       fixup_mni_paths,
+      fixup_mni_paths_cargs,
+      fixup_mni_paths_execute,
+      fixup_mni_paths_outputs,
       fixup_mni_paths_params,
 };

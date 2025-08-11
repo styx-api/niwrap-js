@@ -12,7 +12,7 @@ const LABEL_GEOMETRY_MEASURES_METADATA: Metadata = {
 
 
 interface LabelGeometryMeasuresParameters {
-    "__STYXTYPE__": "LabelGeometryMeasures";
+    "@type": "ants.LabelGeometryMeasures";
     "image_dimension": number;
     "label_image": InputPathType;
     "intensity_image"?: string | null | undefined;
@@ -20,35 +20,35 @@ interface LabelGeometryMeasuresParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "LabelGeometryMeasures": label_geometry_measures_cargs,
+        "ants.LabelGeometryMeasures": label_geometry_measures_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "LabelGeometryMeasures": label_geometry_measures_outputs,
+        "ants.LabelGeometryMeasures": label_geometry_measures_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface LabelGeometryMeasuresOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension The dimensionality of the input images (e.g., 2 for 2D, 3 for 3D).
+ * @param label_image The label image on which geometry measures are computed.
+ * @param intensity_image An optional intensity image for computing intensity-weighted measures. Use "none" or "na" if not provided.
+ * @param csv_file The output file where the geometry measures are written in CSV format.
+ *
+ * @returns Parameter dictionary
+ */
 function label_geometry_measures_params(
     image_dimension: number,
     label_image: InputPathType,
     intensity_image: string | null = null,
     csv_file: InputPathType | null = null,
 ): LabelGeometryMeasuresParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension The dimensionality of the input images (e.g., 2 for 2D, 3 for 3D).
-     * @param label_image The label image on which geometry measures are computed.
-     * @param intensity_image An optional intensity image for computing intensity-weighted measures. Use "none" or "na" if not provided.
-     * @param csv_file The output file where the geometry measures are written in CSV format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "LabelGeometryMeasures" as const,
+        "@type": "ants.LabelGeometryMeasures" as const,
         "image_dimension": image_dimension,
         "label_image": label_image,
     };
@@ -102,18 +102,18 @@ function label_geometry_measures_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function label_geometry_measures_cargs(
     params: LabelGeometryMeasuresParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("LabelGeometryMeasures");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -128,18 +128,18 @@ function label_geometry_measures_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function label_geometry_measures_outputs(
     params: LabelGeometryMeasuresParameters,
     execution: Execution,
 ): LabelGeometryMeasuresOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LabelGeometryMeasuresOutputs = {
         root: execution.outputFile("."),
         output_csv: ((params["csv_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["csv_file"] ?? null))].join('')) : null,
@@ -148,22 +148,22 @@ function label_geometry_measures_outputs(
 }
 
 
+/**
+ * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
+ */
 function label_geometry_measures_execute(
     params: LabelGeometryMeasuresParameters,
     execution: Execution,
 ): LabelGeometryMeasuresOutputs {
-    /**
-     * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
-     */
     params = execution.params(params)
     const cargs = label_geometry_measures_cargs(params, execution)
     const ret = label_geometry_measures_outputs(params, execution)
@@ -172,6 +172,21 @@ function label_geometry_measures_execute(
 }
 
 
+/**
+ * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension The dimensionality of the input images (e.g., 2 for 2D, 3 for 3D).
+ * @param label_image The label image on which geometry measures are computed.
+ * @param intensity_image An optional intensity image for computing intensity-weighted measures. Use "none" or "na" if not provided.
+ * @param csv_file The output file where the geometry measures are written in CSV format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
+ */
 function label_geometry_measures(
     image_dimension: number,
     label_image: InputPathType,
@@ -179,21 +194,6 @@ function label_geometry_measures(
     csv_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelGeometryMeasuresOutputs {
-    /**
-     * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension The dimensionality of the input images (e.g., 2 for 2D, 3 for 3D).
-     * @param label_image The label image on which geometry measures are computed.
-     * @param intensity_image An optional intensity image for computing intensity-weighted measures. Use "none" or "na" if not provided.
-     * @param csv_file The output file where the geometry measures are written in CSV format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LABEL_GEOMETRY_MEASURES_METADATA);
     const params = label_geometry_measures_params(image_dimension, label_image, intensity_image, csv_file)
@@ -206,5 +206,8 @@ export {
       LabelGeometryMeasuresOutputs,
       LabelGeometryMeasuresParameters,
       label_geometry_measures,
+      label_geometry_measures_cargs,
+      label_geometry_measures_execute,
+      label_geometry_measures_outputs,
       label_geometry_measures_params,
 };

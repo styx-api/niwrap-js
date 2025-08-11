@@ -12,7 +12,7 @@ const MRIS_REMOVE_VARIANCE_METADATA: Metadata = {
 
 
 interface MrisRemoveVarianceParameters {
-    "__STYXTYPE__": "mris_remove_variance";
+    "@type": "freesurfer.mris_remove_variance";
     "input_surface_file": InputPathType;
     "curvature_file": InputPathType;
     "curvature_file_to_remove": InputPathType;
@@ -20,35 +20,35 @@ interface MrisRemoveVarianceParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_remove_variance": mris_remove_variance_cargs,
+        "freesurfer.mris_remove_variance": mris_remove_variance_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_remove_variance": mris_remove_variance_outputs,
+        "freesurfer.mris_remove_variance": mris_remove_variance_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MrisRemoveVarianceOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface_file The input surface file.
+ * @param curvature_file The curvature file.
+ * @param curvature_file_to_remove The curvature file to remove from the input curvature.
+ * @param output_curvature_file The output curvature file.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_remove_variance_params(
     input_surface_file: InputPathType,
     curvature_file: InputPathType,
     curvature_file_to_remove: InputPathType,
     output_curvature_file: string,
 ): MrisRemoveVarianceParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface_file The input surface file.
-     * @param curvature_file The curvature file.
-     * @param curvature_file_to_remove The curvature file to remove from the input curvature.
-     * @param output_curvature_file The output curvature file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_remove_variance" as const,
+        "@type": "freesurfer.mris_remove_variance" as const,
         "input_surface_file": input_surface_file,
         "curvature_file": curvature_file,
         "curvature_file_to_remove": curvature_file_to_remove,
@@ -98,18 +98,18 @@ function mris_remove_variance_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_remove_variance_cargs(
     params: MrisRemoveVarianceParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_remove_variance");
     cargs.push(execution.inputFile((params["input_surface_file"] ?? null)));
@@ -120,18 +120,18 @@ function mris_remove_variance_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_remove_variance_outputs(
     params: MrisRemoveVarianceParameters,
     execution: Execution,
 ): MrisRemoveVarianceOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisRemoveVarianceOutputs = {
         root: execution.outputFile("."),
         resulting_curvature_file: execution.outputFile([(params["output_curvature_file"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function mris_remove_variance_outputs(
 }
 
 
+/**
+ * This program removes the linear component of the variance accounted for by one curvature vector from another.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
+ */
 function mris_remove_variance_execute(
     params: MrisRemoveVarianceParameters,
     execution: Execution,
 ): MrisRemoveVarianceOutputs {
-    /**
-     * This program removes the linear component of the variance accounted for by one curvature vector from another.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_remove_variance_cargs(params, execution)
     const ret = mris_remove_variance_outputs(params, execution)
@@ -164,6 +164,21 @@ function mris_remove_variance_execute(
 }
 
 
+/**
+ * This program removes the linear component of the variance accounted for by one curvature vector from another.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface_file The input surface file.
+ * @param curvature_file The curvature file.
+ * @param curvature_file_to_remove The curvature file to remove from the input curvature.
+ * @param output_curvature_file The output curvature file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
+ */
 function mris_remove_variance(
     input_surface_file: InputPathType,
     curvature_file: InputPathType,
@@ -171,21 +186,6 @@ function mris_remove_variance(
     output_curvature_file: string,
     runner: Runner | null = null,
 ): MrisRemoveVarianceOutputs {
-    /**
-     * This program removes the linear component of the variance accounted for by one curvature vector from another.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface_file The input surface file.
-     * @param curvature_file The curvature file.
-     * @param curvature_file_to_remove The curvature file to remove from the input curvature.
-     * @param output_curvature_file The output curvature file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_REMOVE_VARIANCE_METADATA);
     const params = mris_remove_variance_params(input_surface_file, curvature_file, curvature_file_to_remove, output_curvature_file)
@@ -198,5 +198,8 @@ export {
       MrisRemoveVarianceOutputs,
       MrisRemoveVarianceParameters,
       mris_remove_variance,
+      mris_remove_variance_cargs,
+      mris_remove_variance_execute,
+      mris_remove_variance_outputs,
       mris_remove_variance_params,
 };

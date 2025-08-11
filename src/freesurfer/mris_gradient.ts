@@ -12,42 +12,42 @@ const MRIS_GRADIENT_METADATA: Metadata = {
 
 
 interface MrisGradientParameters {
-    "__STYXTYPE__": "mris_gradient";
+    "@type": "freesurfer.mris_gradient";
     "input_surface": InputPathType;
     "input_vector_field": InputPathType;
     "output_gradient_file": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_gradient": mris_gradient_cargs,
+        "freesurfer.mris_gradient": mris_gradient_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_gradient": mris_gradient_outputs,
+        "freesurfer.mris_gradient": mris_gradient_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MrisGradientOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_surface Path to the input surface file.
+ * @param input_vector_field Path to the input vector field file.
+ * @param output_gradient_file Path to the output gradient file ending with .mgz.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_gradient_params(
     input_surface: InputPathType,
     input_vector_field: InputPathType,
     output_gradient_file: string,
 ): MrisGradientParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_surface Path to the input surface file.
-     * @param input_vector_field Path to the input vector field file.
-     * @param output_gradient_file Path to the output gradient file ending with .mgz.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_gradient" as const,
+        "@type": "freesurfer.mris_gradient" as const,
         "input_surface": input_surface,
         "input_vector_field": input_vector_field,
         "output_gradient_file": output_gradient_file,
@@ -94,18 +94,18 @@ function mris_gradient_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_gradient_cargs(
     params: MrisGradientParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_gradient");
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -115,18 +115,18 @@ function mris_gradient_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_gradient_outputs(
     params: MrisGradientParameters,
     execution: Execution,
 ): MrisGradientOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisGradientOutputs = {
         root: execution.outputFile("."),
         output_gradient: execution.outputFile([(params["output_gradient_file"] ?? null)].join('')),
@@ -135,22 +135,22 @@ function mris_gradient_outputs(
 }
 
 
+/**
+ * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
+ */
 function mris_gradient_execute(
     params: MrisGradientParameters,
     execution: Execution,
 ): MrisGradientOutputs {
-    /**
-     * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_gradient_cargs(params, execution)
     const ret = mris_gradient_outputs(params, execution)
@@ -159,26 +159,26 @@ function mris_gradient_execute(
 }
 
 
+/**
+ * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_surface Path to the input surface file.
+ * @param input_vector_field Path to the input vector field file.
+ * @param output_gradient_file Path to the output gradient file ending with .mgz.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
+ */
 function mris_gradient(
     input_surface: InputPathType,
     input_vector_field: InputPathType,
     output_gradient_file: string,
     runner: Runner | null = null,
 ): MrisGradientOutputs {
-    /**
-     * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_surface Path to the input surface file.
-     * @param input_vector_field Path to the input vector field file.
-     * @param output_gradient_file Path to the output gradient file ending with .mgz.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_GRADIENT_METADATA);
     const params = mris_gradient_params(input_surface, input_vector_field, output_gradient_file)
@@ -191,5 +191,8 @@ export {
       MrisGradientOutputs,
       MrisGradientParameters,
       mris_gradient,
+      mris_gradient_cargs,
+      mris_gradient_execute,
+      mris_gradient_outputs,
       mris_gradient_params,
 };

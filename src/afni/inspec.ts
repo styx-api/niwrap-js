@@ -12,7 +12,7 @@ const INSPEC_METADATA: Metadata = {
 
 
 interface InspecParameters {
-    "__STYXTYPE__": "inspec";
+    "@type": "afni.inspec";
     "specfile": InputPathType;
     "newspecname"?: string | null | undefined;
     "detail"?: number | null | undefined;
@@ -23,33 +23,33 @@ interface InspecParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "inspec": inspec_cargs,
+        "afni.inspec": inspec_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface InspecOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param specfile Spec file to be read
+ * @param newspecname Rewrite spec file
+ * @param detail Level of output detail. Default is 1 in general, 0 with -LRmerge. Available levels are 0, 1, 2, and 3.
+ * @param leftspec Merge two spec files in a way that makes sense for viewing in SUMA
+ * @param rightspec Merge two spec files in a way that makes sense for viewing in SUMA
+ * @param state_rm Get rid of state STATE_RM from the specfile
+ * @param help Display help message
+ *
+ * @returns Parameter dictionary
+ */
 function inspec_params(
     specfile: InputPathType,
     newspecname: string | null = null,
@@ -78,21 +91,8 @@ function inspec_params(
     state_rm: string | null = null,
     help: boolean = false,
 ): InspecParameters {
-    /**
-     * Build parameters.
-    
-     * @param specfile Spec file to be read
-     * @param newspecname Rewrite spec file
-     * @param detail Level of output detail. Default is 1 in general, 0 with -LRmerge. Available levels are 0, 1, 2, and 3.
-     * @param leftspec Merge two spec files in a way that makes sense for viewing in SUMA
-     * @param rightspec Merge two spec files in a way that makes sense for viewing in SUMA
-     * @param state_rm Get rid of state STATE_RM from the specfile
-     * @param help Display help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "inspec" as const,
+        "@type": "afni.inspec" as const,
         "specfile": specfile,
         "help": help,
     };
@@ -115,18 +115,18 @@ function inspec_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function inspec_cargs(
     params: InspecParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("inspec");
     cargs.push(
@@ -170,18 +170,18 @@ function inspec_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function inspec_outputs(
     params: InspecParameters,
     execution: Execution,
 ): InspecOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: InspecOutputs = {
         root: execution.outputFile("."),
     };
@@ -189,22 +189,22 @@ function inspec_outputs(
 }
 
 
+/**
+ * Outputs information found from specfile.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `InspecOutputs`).
+ */
 function inspec_execute(
     params: InspecParameters,
     execution: Execution,
 ): InspecOutputs {
-    /**
-     * Outputs information found from specfile.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `InspecOutputs`).
-     */
     params = execution.params(params)
     const cargs = inspec_cargs(params, execution)
     const ret = inspec_outputs(params, execution)
@@ -213,6 +213,24 @@ function inspec_execute(
 }
 
 
+/**
+ * Outputs information found from specfile.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param specfile Spec file to be read
+ * @param newspecname Rewrite spec file
+ * @param detail Level of output detail. Default is 1 in general, 0 with -LRmerge. Available levels are 0, 1, 2, and 3.
+ * @param leftspec Merge two spec files in a way that makes sense for viewing in SUMA
+ * @param rightspec Merge two spec files in a way that makes sense for viewing in SUMA
+ * @param state_rm Get rid of state STATE_RM from the specfile
+ * @param help Display help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `InspecOutputs`).
+ */
 function inspec(
     specfile: InputPathType,
     newspecname: string | null = null,
@@ -223,24 +241,6 @@ function inspec(
     help: boolean = false,
     runner: Runner | null = null,
 ): InspecOutputs {
-    /**
-     * Outputs information found from specfile.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param specfile Spec file to be read
-     * @param newspecname Rewrite spec file
-     * @param detail Level of output detail. Default is 1 in general, 0 with -LRmerge. Available levels are 0, 1, 2, and 3.
-     * @param leftspec Merge two spec files in a way that makes sense for viewing in SUMA
-     * @param rightspec Merge two spec files in a way that makes sense for viewing in SUMA
-     * @param state_rm Get rid of state STATE_RM from the specfile
-     * @param help Display help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `InspecOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(INSPEC_METADATA);
     const params = inspec_params(specfile, newspecname, detail, leftspec, rightspec, state_rm, help)
@@ -253,5 +253,8 @@ export {
       InspecOutputs,
       InspecParameters,
       inspec,
+      inspec_cargs,
+      inspec_execute,
+      inspec_outputs,
       inspec_params,
 };

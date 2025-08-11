@@ -12,42 +12,42 @@ const V_3D_COMPARE_AFFINE_METADATA: Metadata = {
 
 
 interface V3dCompareAffineParameters {
-    "__STYXTYPE__": "3dCompareAffine";
+    "@type": "afni.3dCompareAffine";
     "mask"?: string | null | undefined;
     "dset"?: InputPathType | null | undefined;
     "affine"?: Array<string> | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dCompareAffine": v_3d_compare_affine_cargs,
+        "afni.3dCompareAffine": v_3d_compare_affine_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dCompareAffine": v_3d_compare_affine_outputs,
+        "afni.3dCompareAffine": v_3d_compare_affine_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface V3dCompareAffineOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param mask Dataset containing non-zero voxels used as the region over which to compare the affine transformations.
+ * @param dset Dataset to compute an automask from it and use that mask as the spatial region for comparison.
+ * @param affine Input an affine transformation (file or 'MATRIX'). Multiple '-affine' options can be used to input multiple files.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_compare_affine_params(
     mask: string | null = null,
     dset: InputPathType | null = null,
     affine: Array<string> | null = null,
 ): V3dCompareAffineParameters {
-    /**
-     * Build parameters.
-    
-     * @param mask Dataset containing non-zero voxels used as the region over which to compare the affine transformations.
-     * @param dset Dataset to compute an automask from it and use that mask as the spatial region for comparison.
-     * @param affine Input an affine transformation (file or 'MATRIX'). Multiple '-affine' options can be used to input multiple files.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dCompareAffine" as const,
+        "@type": "afni.3dCompareAffine" as const,
     };
     if (mask !== null) {
         params["mask"] = mask;
@@ -100,18 +100,18 @@ function v_3d_compare_affine_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_compare_affine_cargs(
     params: V3dCompareAffineParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dCompareAffine");
     if ((params["mask"] ?? null) !== null) {
@@ -136,18 +136,18 @@ function v_3d_compare_affine_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_compare_affine_outputs(
     params: V3dCompareAffineParameters,
     execution: Execution,
 ): V3dCompareAffineOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dCompareAffineOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile(["[OUTPUT_PREFIX]_comparison.txt"].join('')),
@@ -156,22 +156,22 @@ function v_3d_compare_affine_outputs(
 }
 
 
+/**
+ * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
+ */
 function v_3d_compare_affine_execute(
     params: V3dCompareAffineParameters,
     execution: Execution,
 ): V3dCompareAffineOutputs {
-    /**
-     * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_compare_affine_cargs(params, execution)
     const ret = v_3d_compare_affine_outputs(params, execution)
@@ -180,26 +180,26 @@ function v_3d_compare_affine_execute(
 }
 
 
+/**
+ * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param mask Dataset containing non-zero voxels used as the region over which to compare the affine transformations.
+ * @param dset Dataset to compute an automask from it and use that mask as the spatial region for comparison.
+ * @param affine Input an affine transformation (file or 'MATRIX'). Multiple '-affine' options can be used to input multiple files.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
+ */
 function v_3d_compare_affine(
     mask: string | null = null,
     dset: InputPathType | null = null,
     affine: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dCompareAffineOutputs {
-    /**
-     * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param mask Dataset containing non-zero voxels used as the region over which to compare the affine transformations.
-     * @param dset Dataset to compute an automask from it and use that mask as the spatial region for comparison.
-     * @param affine Input an affine transformation (file or 'MATRIX'). Multiple '-affine' options can be used to input multiple files.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_COMPARE_AFFINE_METADATA);
     const params = v_3d_compare_affine_params(mask, dset, affine)
@@ -212,5 +212,8 @@ export {
       V3dCompareAffineParameters,
       V_3D_COMPARE_AFFINE_METADATA,
       v_3d_compare_affine,
+      v_3d_compare_affine_cargs,
+      v_3d_compare_affine_execute,
+      v_3d_compare_affine_outputs,
       v_3d_compare_affine_params,
 };

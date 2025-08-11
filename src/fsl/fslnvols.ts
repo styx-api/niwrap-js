@@ -12,38 +12,38 @@ const FSLNVOLS_METADATA: Metadata = {
 
 
 interface FslnvolsParameters {
-    "__STYXTYPE__": "fslnvols";
+    "@type": "fsl.fslnvols";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslnvols": fslnvols_cargs,
+        "fsl.fslnvols": fslnvols_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface FslnvolsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input NIfTI file (e.g., fmri.nii.gz)
+ *
+ * @returns Parameter dictionary
+ */
 function fslnvols_params(
     infile: InputPathType,
 ): FslnvolsParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input NIfTI file (e.g., fmri.nii.gz)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslnvols" as const,
+        "@type": "fsl.fslnvols" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslnvols_cargs(
     params: FslnvolsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslnvols");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -100,18 +100,18 @@ function fslnvols_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslnvols_outputs(
     params: FslnvolsParameters,
     execution: Execution,
 ): FslnvolsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslnvolsOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function fslnvols_outputs(
 }
 
 
+/**
+ * Retrieve the number of volumes in a 4D NIfTI file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
+ */
 function fslnvols_execute(
     params: FslnvolsParameters,
     execution: Execution,
 ): FslnvolsOutputs {
-    /**
-     * Retrieve the number of volumes in a 4D NIfTI file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslnvols_cargs(params, execution)
     const ret = fslnvols_outputs(params, execution)
@@ -143,22 +143,22 @@ function fslnvols_execute(
 }
 
 
+/**
+ * Retrieve the number of volumes in a 4D NIfTI file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param infile Input NIfTI file (e.g., fmri.nii.gz)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
+ */
 function fslnvols(
     infile: InputPathType,
     runner: Runner | null = null,
 ): FslnvolsOutputs {
-    /**
-     * Retrieve the number of volumes in a 4D NIfTI file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param infile Input NIfTI file (e.g., fmri.nii.gz)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLNVOLS_METADATA);
     const params = fslnvols_params(infile)
@@ -171,5 +171,8 @@ export {
       FslnvolsOutputs,
       FslnvolsParameters,
       fslnvols,
+      fslnvols_cargs,
+      fslnvols_execute,
+      fslnvols_outputs,
       fslnvols_params,
 };

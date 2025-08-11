@@ -12,7 +12,7 @@ const MRIS_CALC_METADATA: Metadata = {
 
 
 interface MrisCalcParameters {
-    "__STYXTYPE__": "mris_calc";
+    "@type": "freesurfer.mris_calc";
     "input_file1": InputPathType;
     "action": string;
     "input_file2_or_float"?: InputPathType | null | undefined;
@@ -22,35 +22,35 @@ interface MrisCalcParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_calc": mris_calc_cargs,
+        "freesurfer.mris_calc": mris_calc_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mris_calc": mris_calc_outputs,
+        "freesurfer.mris_calc": mris_calc_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface MrisCalcOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file1 The name of a FreeSurfer curvature overlay (e.g., rh.curv) or volume file (e.g., orig.mgz).
+ * @param action Mathematical action to perform on the input file(s), written as a text string.
+ * @param input_file2_or_float The second input for the calculation. Can be a file (e.g., rh.thickness) or a float number if the file does not exist.
+ * @param output_file Specify the output file name for the result of the calculation.
+ * @param label_file Constrain the calculation to vertices defined in the FreeSurfer label file.
+ * @param verbosity Set the verbosity of the program.
+ *
+ * @returns Parameter dictionary
+ */
 function mris_calc_params(
     input_file1: InputPathType,
     action: string,
@@ -81,20 +93,8 @@ function mris_calc_params(
     label_file: InputPathType | null = null,
     verbosity: string | null = null,
 ): MrisCalcParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file1 The name of a FreeSurfer curvature overlay (e.g., rh.curv) or volume file (e.g., orig.mgz).
-     * @param action Mathematical action to perform on the input file(s), written as a text string.
-     * @param input_file2_or_float The second input for the calculation. Can be a file (e.g., rh.thickness) or a float number if the file does not exist.
-     * @param output_file Specify the output file name for the result of the calculation.
-     * @param label_file Constrain the calculation to vertices defined in the FreeSurfer label file.
-     * @param verbosity Set the verbosity of the program.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_calc" as const,
+        "@type": "freesurfer.mris_calc" as const,
         "input_file1": input_file1,
         "action": action,
     };
@@ -114,18 +114,18 @@ function mris_calc_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_calc_cargs(
     params: MrisCalcParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_calc");
     cargs.push(execution.inputFile((params["input_file1"] ?? null)));
@@ -155,18 +155,18 @@ function mris_calc_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_calc_outputs(
     params: MrisCalcParameters,
     execution: Execution,
 ): MrisCalcOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisCalcOutputs = {
         root: execution.outputFile("."),
         output_curv_file: ((params["output_file"] ?? null) !== null) ? execution.outputFile([(params["output_file"] ?? null)].join('')) : null,
@@ -175,22 +175,22 @@ function mris_calc_outputs(
 }
 
 
+/**
+ * Simple calculator that operates on FreeSurfer curvatures and volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
+ */
 function mris_calc_execute(
     params: MrisCalcParameters,
     execution: Execution,
 ): MrisCalcOutputs {
-    /**
-     * Simple calculator that operates on FreeSurfer curvatures and volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_calc_cargs(params, execution)
     const ret = mris_calc_outputs(params, execution)
@@ -199,6 +199,23 @@ function mris_calc_execute(
 }
 
 
+/**
+ * Simple calculator that operates on FreeSurfer curvatures and volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file1 The name of a FreeSurfer curvature overlay (e.g., rh.curv) or volume file (e.g., orig.mgz).
+ * @param action Mathematical action to perform on the input file(s), written as a text string.
+ * @param input_file2_or_float The second input for the calculation. Can be a file (e.g., rh.thickness) or a float number if the file does not exist.
+ * @param output_file Specify the output file name for the result of the calculation.
+ * @param label_file Constrain the calculation to vertices defined in the FreeSurfer label file.
+ * @param verbosity Set the verbosity of the program.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
+ */
 function mris_calc(
     input_file1: InputPathType,
     action: string,
@@ -208,23 +225,6 @@ function mris_calc(
     verbosity: string | null = null,
     runner: Runner | null = null,
 ): MrisCalcOutputs {
-    /**
-     * Simple calculator that operates on FreeSurfer curvatures and volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file1 The name of a FreeSurfer curvature overlay (e.g., rh.curv) or volume file (e.g., orig.mgz).
-     * @param action Mathematical action to perform on the input file(s), written as a text string.
-     * @param input_file2_or_float The second input for the calculation. Can be a file (e.g., rh.thickness) or a float number if the file does not exist.
-     * @param output_file Specify the output file name for the result of the calculation.
-     * @param label_file Constrain the calculation to vertices defined in the FreeSurfer label file.
-     * @param verbosity Set the verbosity of the program.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_CALC_METADATA);
     const params = mris_calc_params(input_file1, action, input_file2_or_float, output_file, label_file, verbosity)
@@ -237,5 +237,8 @@ export {
       MrisCalcOutputs,
       MrisCalcParameters,
       mris_calc,
+      mris_calc_cargs,
+      mris_calc_execute,
+      mris_calc_outputs,
       mris_calc_params,
 };

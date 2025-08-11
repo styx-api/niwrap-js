@@ -12,42 +12,42 @@ const ORIENT_LAS_METADATA: Metadata = {
 
 
 interface OrientLasParameters {
-    "__STYXTYPE__": "orientLAS";
+    "@type": "freesurfer.orientLAS";
     "input_image": InputPathType;
     "output_image": string;
     "check": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "orientLAS": orient_las_cargs,
+        "freesurfer.orientLAS": orient_las_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "orientLAS": orient_las_outputs,
+        "freesurfer.orientLAS": orient_las_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface OrientLasOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image in NIfTI format
+ * @param output_image Output image in NIfTI format with LAS orientation
+ * @param check Check the match of input and output images using tkregister, and for diffusion data, run dtifit and show tensors with fslview
+ *
+ * @returns Parameter dictionary
+ */
 function orient_las_params(
     input_image: InputPathType,
     output_image: string,
     check: boolean = false,
 ): OrientLasParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image in NIfTI format
-     * @param output_image Output image in NIfTI format with LAS orientation
-     * @param check Check the match of input and output images using tkregister, and for diffusion data, run dtifit and show tensors with fslview
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "orientLAS" as const,
+        "@type": "freesurfer.orientLAS" as const,
         "input_image": input_image,
         "output_image": output_image,
         "check": check,
@@ -94,18 +94,18 @@ function orient_las_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function orient_las_cargs(
     params: OrientLasParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("orientLAS");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -117,18 +117,18 @@ function orient_las_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function orient_las_outputs(
     params: OrientLasParameters,
     execution: Execution,
 ): OrientLasOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: OrientLasOutputs = {
         root: execution.outputFile("."),
         output_las_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -137,22 +137,22 @@ function orient_las_outputs(
 }
 
 
+/**
+ * Convert image to LAS orientation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
+ */
 function orient_las_execute(
     params: OrientLasParameters,
     execution: Execution,
 ): OrientLasOutputs {
-    /**
-     * Convert image to LAS orientation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
-     */
     params = execution.params(params)
     const cargs = orient_las_cargs(params, execution)
     const ret = orient_las_outputs(params, execution)
@@ -161,26 +161,26 @@ function orient_las_execute(
 }
 
 
+/**
+ * Convert image to LAS orientation.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_image Input image in NIfTI format
+ * @param output_image Output image in NIfTI format with LAS orientation
+ * @param check Check the match of input and output images using tkregister, and for diffusion data, run dtifit and show tensors with fslview
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
+ */
 function orient_las(
     input_image: InputPathType,
     output_image: string,
     check: boolean = false,
     runner: Runner | null = null,
 ): OrientLasOutputs {
-    /**
-     * Convert image to LAS orientation.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_image Input image in NIfTI format
-     * @param output_image Output image in NIfTI format with LAS orientation
-     * @param check Check the match of input and output images using tkregister, and for diffusion data, run dtifit and show tensors with fslview
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(ORIENT_LAS_METADATA);
     const params = orient_las_params(input_image, output_image, check)
@@ -193,5 +193,8 @@ export {
       OrientLasOutputs,
       OrientLasParameters,
       orient_las,
+      orient_las_cargs,
+      orient_las_execute,
+      orient_las_outputs,
       orient_las_params,
 };

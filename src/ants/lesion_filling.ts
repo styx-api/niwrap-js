@@ -12,7 +12,7 @@ const LESION_FILLING_METADATA: Metadata = {
 
 
 interface LesionFillingParameters {
-    "__STYXTYPE__": "LesionFilling";
+    "@type": "ants.LesionFilling";
     "image_dimension": number;
     "t1_image": InputPathType;
     "lesion_mask": InputPathType;
@@ -20,35 +20,35 @@ interface LesionFillingParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "LesionFilling": lesion_filling_cargs,
+        "ants.LesionFilling": lesion_filling_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "LesionFilling": lesion_filling_outputs,
+        "ants.LesionFilling": lesion_filling_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface LesionFillingOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimensionality of the image (e.g., 2, 3)
+ * @param t1_image Path to the T1 image file.
+ * @param lesion_mask Path to the lesion mask image file.
+ * @param output_lesion_filled Path for the output file with lesions filled.
+ *
+ * @returns Parameter dictionary
+ */
 function lesion_filling_params(
     image_dimension: number,
     t1_image: InputPathType,
     lesion_mask: InputPathType,
     output_lesion_filled: string,
 ): LesionFillingParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimensionality of the image (e.g., 2, 3)
-     * @param t1_image Path to the T1 image file.
-     * @param lesion_mask Path to the lesion mask image file.
-     * @param output_lesion_filled Path for the output file with lesions filled.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "LesionFilling" as const,
+        "@type": "ants.LesionFilling" as const,
         "image_dimension": image_dimension,
         "t1_image": t1_image,
         "lesion_mask": lesion_mask,
@@ -98,18 +98,18 @@ function lesion_filling_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function lesion_filling_cargs(
     params: LesionFillingParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("LesionFilling");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -120,18 +120,18 @@ function lesion_filling_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function lesion_filling_outputs(
     params: LesionFillingParameters,
     execution: Execution,
 ): LesionFillingOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: LesionFillingOutputs = {
         root: execution.outputFile("."),
         lesion_filled_output: execution.outputFile([(params["output_lesion_filled"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function lesion_filling_outputs(
 }
 
 
+/**
+ * A tool for filling lesions in T1 images using a mask.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
+ */
 function lesion_filling_execute(
     params: LesionFillingParameters,
     execution: Execution,
 ): LesionFillingOutputs {
-    /**
-     * A tool for filling lesions in T1 images using a mask.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
-     */
     params = execution.params(params)
     const cargs = lesion_filling_cargs(params, execution)
     const ret = lesion_filling_outputs(params, execution)
@@ -164,6 +164,21 @@ function lesion_filling_execute(
 }
 
 
+/**
+ * A tool for filling lesions in T1 images using a mask.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimensionality of the image (e.g., 2, 3)
+ * @param t1_image Path to the T1 image file.
+ * @param lesion_mask Path to the lesion mask image file.
+ * @param output_lesion_filled Path for the output file with lesions filled.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
+ */
 function lesion_filling(
     image_dimension: number,
     t1_image: InputPathType,
@@ -171,21 +186,6 @@ function lesion_filling(
     output_lesion_filled: string,
     runner: Runner | null = null,
 ): LesionFillingOutputs {
-    /**
-     * A tool for filling lesions in T1 images using a mask.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimensionality of the image (e.g., 2, 3)
-     * @param t1_image Path to the T1 image file.
-     * @param lesion_mask Path to the lesion mask image file.
-     * @param output_lesion_filled Path for the output file with lesions filled.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(LESION_FILLING_METADATA);
     const params = lesion_filling_params(image_dimension, t1_image, lesion_mask, output_lesion_filled)
@@ -198,5 +198,8 @@ export {
       LesionFillingOutputs,
       LesionFillingParameters,
       lesion_filling,
+      lesion_filling_cargs,
+      lesion_filling_execute,
+      lesion_filling_outputs,
       lesion_filling_params,
 };

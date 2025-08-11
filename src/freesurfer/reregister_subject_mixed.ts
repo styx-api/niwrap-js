@@ -12,42 +12,42 @@ const REREGISTER_SUBJECT_MIXED_METADATA: Metadata = {
 
 
 interface ReregisterSubjectMixedParameters {
-    "__STYXTYPE__": "reregister_subject_mixed";
+    "@type": "freesurfer.reregister_subject_mixed";
     "input_volume": InputPathType;
     "output_directory": string;
     "threads"?: number | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reregister_subject_mixed": reregister_subject_mixed_cargs,
+        "freesurfer.reregister_subject_mixed": reregister_subject_mixed_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "reregister_subject_mixed": reregister_subject_mixed_outputs,
+        "freesurfer.reregister_subject_mixed": reregister_subject_mixed_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,22 +78,22 @@ interface ReregisterSubjectMixedOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume file path
+ * @param output_directory Output directory for transformed control points and intensity normalized files
+ * @param threads Number of threads available to mri_em_register for OpenMP
+ *
+ * @returns Parameter dictionary
+ */
 function reregister_subject_mixed_params(
     input_volume: InputPathType,
     output_directory: string,
     threads: number | null = 1,
 ): ReregisterSubjectMixedParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume file path
-     * @param output_directory Output directory for transformed control points and intensity normalized files
-     * @param threads Number of threads available to mri_em_register for OpenMP
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reregister_subject_mixed" as const,
+        "@type": "freesurfer.reregister_subject_mixed" as const,
         "input_volume": input_volume,
         "output_directory": output_directory,
     };
@@ -104,18 +104,18 @@ function reregister_subject_mixed_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reregister_subject_mixed_cargs(
     params: ReregisterSubjectMixedParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reregister_subject_mixed");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -127,18 +127,18 @@ function reregister_subject_mixed_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reregister_subject_mixed_outputs(
     params: ReregisterSubjectMixedParameters,
     execution: Execution,
 ): ReregisterSubjectMixedOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ReregisterSubjectMixedOutputs = {
         root: execution.outputFile("."),
         control_points: execution.outputFile([(params["output_directory"] ?? null), "/mri/fsamples"].join('')),
@@ -149,22 +149,22 @@ function reregister_subject_mixed_outputs(
 }
 
 
+/**
+ * Tool for re-registering a subject's MRI volumes using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
+ */
 function reregister_subject_mixed_execute(
     params: ReregisterSubjectMixedParameters,
     execution: Execution,
 ): ReregisterSubjectMixedOutputs {
-    /**
-     * Tool for re-registering a subject's MRI volumes using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
-     */
     params = execution.params(params)
     const cargs = reregister_subject_mixed_cargs(params, execution)
     const ret = reregister_subject_mixed_outputs(params, execution)
@@ -173,26 +173,26 @@ function reregister_subject_mixed_execute(
 }
 
 
+/**
+ * Tool for re-registering a subject's MRI volumes using Freesurfer.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume file path
+ * @param output_directory Output directory for transformed control points and intensity normalized files
+ * @param threads Number of threads available to mri_em_register for OpenMP
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
+ */
 function reregister_subject_mixed(
     input_volume: InputPathType,
     output_directory: string,
     threads: number | null = 1,
     runner: Runner | null = null,
 ): ReregisterSubjectMixedOutputs {
-    /**
-     * Tool for re-registering a subject's MRI volumes using Freesurfer.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume file path
-     * @param output_directory Output directory for transformed control points and intensity normalized files
-     * @param threads Number of threads available to mri_em_register for OpenMP
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REREGISTER_SUBJECT_MIXED_METADATA);
     const params = reregister_subject_mixed_params(input_volume, output_directory, threads)
@@ -205,5 +205,8 @@ export {
       ReregisterSubjectMixedOutputs,
       ReregisterSubjectMixedParameters,
       reregister_subject_mixed,
+      reregister_subject_mixed_cargs,
+      reregister_subject_mixed_execute,
+      reregister_subject_mixed_outputs,
       reregister_subject_mixed_params,
 };

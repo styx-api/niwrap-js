@@ -12,38 +12,38 @@ const REG2SUBJECT_METADATA: Metadata = {
 
 
 interface Reg2subjectParameters {
-    "__STYXTYPE__": "reg2subject";
+    "@type": "freesurfer.reg2subject";
     "regfile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "reg2subject": reg2subject_cargs,
+        "freesurfer.reg2subject": reg2subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface Reg2subjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param regfile Input registration file, either in LTA or register.dat format.
+ *
+ * @returns Parameter dictionary
+ */
 function reg2subject_params(
     regfile: InputPathType,
 ): Reg2subjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param regfile Input registration file, either in LTA or register.dat format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "reg2subject" as const,
+        "@type": "freesurfer.reg2subject" as const,
         "regfile": regfile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function reg2subject_cargs(
     params: Reg2subjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("reg2subject");
     cargs.push(
@@ -103,18 +103,18 @@ function reg2subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function reg2subject_outputs(
     params: Reg2subjectParameters,
     execution: Execution,
 ): Reg2subjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: Reg2subjectOutputs = {
         root: execution.outputFile("."),
     };
@@ -122,22 +122,22 @@ function reg2subject_outputs(
 }
 
 
+/**
+ * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
+ */
 function reg2subject_execute(
     params: Reg2subjectParameters,
     execution: Execution,
 ): Reg2subjectOutputs {
-    /**
-     * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = reg2subject_cargs(params, execution)
     const ret = reg2subject_outputs(params, execution)
@@ -146,22 +146,22 @@ function reg2subject_execute(
 }
 
 
+/**
+ * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param regfile Input registration file, either in LTA or register.dat format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
+ */
 function reg2subject(
     regfile: InputPathType,
     runner: Runner | null = null,
 ): Reg2subjectOutputs {
-    /**
-     * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param regfile Input registration file, either in LTA or register.dat format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(REG2SUBJECT_METADATA);
     const params = reg2subject_params(regfile)
@@ -174,5 +174,8 @@ export {
       Reg2subjectOutputs,
       Reg2subjectParameters,
       reg2subject,
+      reg2subject_cargs,
+      reg2subject_execute,
+      reg2subject_outputs,
       reg2subject_params,
 };

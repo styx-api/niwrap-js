@@ -12,7 +12,7 @@ const V_3D_XYZCAT_METADATA: Metadata = {
 
 
 interface V3dXyzcatParameters {
-    "__STYXTYPE__": "3dXYZcat";
+    "@type": "afni.3dXYZcat";
     "direction"?: string | null | undefined;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
@@ -20,35 +20,35 @@ interface V3dXyzcatParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dXYZcat": v_3d_xyzcat_cargs,
+        "afni.3dXYZcat": v_3d_xyzcat_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dXYZcat": v_3d_xyzcat_outputs,
+        "afni.3dXYZcat": v_3d_xyzcat_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,24 +75,24 @@ interface V3dXyzcatOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datasets Input datasets to concatenate.
+ * @param direction Catenate along direction 'Q' (X, Y, Z, or their synonyms I, J, K).
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param verbose Print out some verbositiness as the program proceeds.
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_xyzcat_params(
     datasets: Array<InputPathType>,
     direction: string | null = null,
     prefix: string | null = null,
     verbose: boolean = false,
 ): V3dXyzcatParameters {
-    /**
-     * Build parameters.
-    
-     * @param datasets Input datasets to concatenate.
-     * @param direction Catenate along direction 'Q' (X, Y, Z, or their synonyms I, J, K).
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param verbose Print out some verbositiness as the program proceeds.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dXYZcat" as const,
+        "@type": "afni.3dXYZcat" as const,
         "verbose": verbose,
         "datasets": datasets,
     };
@@ -106,18 +106,18 @@ function v_3d_xyzcat_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_xyzcat_cargs(
     params: V3dXyzcatParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dXYZcat");
     if ((params["direction"] ?? null) !== null) {
@@ -140,18 +140,18 @@ function v_3d_xyzcat_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_xyzcat_outputs(
     params: V3dXyzcatParameters,
     execution: Execution,
 ): V3dXyzcatOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dXyzcatOutputs = {
         root: execution.outputFile("."),
         output_brainfile: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
@@ -161,22 +161,22 @@ function v_3d_xyzcat_outputs(
 }
 
 
+/**
+ * Catenates datasets spatially.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dXyzcatOutputs`).
+ */
 function v_3d_xyzcat_execute(
     params: V3dXyzcatParameters,
     execution: Execution,
 ): V3dXyzcatOutputs {
-    /**
-     * Catenates datasets spatially.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dXyzcatOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_xyzcat_cargs(params, execution)
     const ret = v_3d_xyzcat_outputs(params, execution)
@@ -185,6 +185,21 @@ function v_3d_xyzcat_execute(
 }
 
 
+/**
+ * Catenates datasets spatially.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datasets Input datasets to concatenate.
+ * @param direction Catenate along direction 'Q' (X, Y, Z, or their synonyms I, J, K).
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param verbose Print out some verbositiness as the program proceeds.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dXyzcatOutputs`).
+ */
 function v_3d_xyzcat(
     datasets: Array<InputPathType>,
     direction: string | null = null,
@@ -192,21 +207,6 @@ function v_3d_xyzcat(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dXyzcatOutputs {
-    /**
-     * Catenates datasets spatially.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datasets Input datasets to concatenate.
-     * @param direction Catenate along direction 'Q' (X, Y, Z, or their synonyms I, J, K).
-     * @param prefix Use 'pname' for the output dataset prefix name.
-     * @param verbose Print out some verbositiness as the program proceeds.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dXyzcatOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_XYZCAT_METADATA);
     const params = v_3d_xyzcat_params(datasets, direction, prefix, verbose)
@@ -219,5 +219,8 @@ export {
       V3dXyzcatParameters,
       V_3D_XYZCAT_METADATA,
       v_3d_xyzcat,
+      v_3d_xyzcat_cargs,
+      v_3d_xyzcat_execute,
+      v_3d_xyzcat_outputs,
       v_3d_xyzcat_params,
 };

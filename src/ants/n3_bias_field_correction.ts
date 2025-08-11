@@ -12,7 +12,7 @@ const N3_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
 
 
 interface N3BiasFieldCorrectionParameters {
-    "__STYXTYPE__": "N3BiasFieldCorrection";
+    "@type": "ants.N3BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "mask_image"?: InputPathType | null | undefined;
@@ -27,35 +27,35 @@ interface N3BiasFieldCorrectionParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "N3BiasFieldCorrection": n3_bias_field_correction_cargs,
+        "ants.N3BiasFieldCorrection": n3_bias_field_correction_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "N3BiasFieldCorrection": n3_bias_field_correction_outputs,
+        "ants.N3BiasFieldCorrection": n3_bias_field_correction_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,23 @@ interface N3BiasFieldCorrectionOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image A scalar image is expected as input for bias correction. Since N3 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
+ * @param output The bias-corrected version of the input image and optionally the estimated bias field.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, N3 tries to infer the dimensionality from the input image.
+ * @param mask_image If a mask image is specified, the final bias correction is only performed in the mask region. If a mask image is not specified, the entire image region will be used as the mask region. Note: this differs from the original N3 implementation.
+ * @param rescale_intensities This option rescales the intensity range within the user-specified mask to the original [min, max] range.
+ * @param weight_image The weight image allows the user to perform a relative weighting of specific voxels during the B-spline fitting.
+ * @param shrink_factor Shrink factor to resample the input image. Commonly used values are <= 4.
+ * @param convergence Describes the convergence criteria with default value as [50,0.0].
+ * @param bspline_fitting Describes the parameters for B-Spline fitting. Defaults are [splineDistance,4,3].
+ * @param histogram_sharpening Describes histogram sharpening parameters; defaults are [0.15,0.01,200].
+ * @param verbose Verbose output.
+ *
+ * @returns Parameter dictionary
+ */
 function n3_bias_field_correction_params(
     input_image: InputPathType,
     output: string,
@@ -95,25 +112,8 @@ function n3_bias_field_correction_params(
     histogram_sharpening: string | null = null,
     verbose: 0 | 1 | null = null,
 ): N3BiasFieldCorrectionParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image A scalar image is expected as input for bias correction. Since N3 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
-     * @param output The bias-corrected version of the input image and optionally the estimated bias field.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, N3 tries to infer the dimensionality from the input image.
-     * @param mask_image If a mask image is specified, the final bias correction is only performed in the mask region. If a mask image is not specified, the entire image region will be used as the mask region. Note: this differs from the original N3 implementation.
-     * @param rescale_intensities This option rescales the intensity range within the user-specified mask to the original [min, max] range.
-     * @param weight_image The weight image allows the user to perform a relative weighting of specific voxels during the B-spline fitting.
-     * @param shrink_factor Shrink factor to resample the input image. Commonly used values are <= 4.
-     * @param convergence Describes the convergence criteria with default value as [50,0.0].
-     * @param bspline_fitting Describes the parameters for B-Spline fitting. Defaults are [splineDistance,4,3].
-     * @param histogram_sharpening Describes histogram sharpening parameters; defaults are [0.15,0.01,200].
-     * @param verbose Verbose output.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "N3BiasFieldCorrection" as const,
+        "@type": "ants.N3BiasFieldCorrection" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -148,18 +148,18 @@ function n3_bias_field_correction_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function n3_bias_field_correction_cargs(
     params: N3BiasFieldCorrectionParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("N3BiasFieldCorrection");
     if ((params["image_dimensionality"] ?? null) !== null) {
@@ -228,18 +228,18 @@ function n3_bias_field_correction_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function n3_bias_field_correction_outputs(
     params: N3BiasFieldCorrectionParameters,
     execution: Execution,
 ): N3BiasFieldCorrectionOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: N3BiasFieldCorrectionOutputs = {
         root: execution.outputFile("."),
         corrected_image: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -249,22 +249,22 @@ function n3_bias_field_correction_outputs(
 }
 
 
+/**
+ * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
+ */
 function n3_bias_field_correction_execute(
     params: N3BiasFieldCorrectionParameters,
     execution: Execution,
 ): N3BiasFieldCorrectionOutputs {
-    /**
-     * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
-     */
     params = execution.params(params)
     const cargs = n3_bias_field_correction_cargs(params, execution)
     const ret = n3_bias_field_correction_outputs(params, execution)
@@ -273,6 +273,28 @@ function n3_bias_field_correction_execute(
 }
 
 
+/**
+ * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param input_image A scalar image is expected as input for bias correction. Since N3 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
+ * @param output The bias-corrected version of the input image and optionally the estimated bias field.
+ * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, N3 tries to infer the dimensionality from the input image.
+ * @param mask_image If a mask image is specified, the final bias correction is only performed in the mask region. If a mask image is not specified, the entire image region will be used as the mask region. Note: this differs from the original N3 implementation.
+ * @param rescale_intensities This option rescales the intensity range within the user-specified mask to the original [min, max] range.
+ * @param weight_image The weight image allows the user to perform a relative weighting of specific voxels during the B-spline fitting.
+ * @param shrink_factor Shrink factor to resample the input image. Commonly used values are <= 4.
+ * @param convergence Describes the convergence criteria with default value as [50,0.0].
+ * @param bspline_fitting Describes the parameters for B-Spline fitting. Defaults are [splineDistance,4,3].
+ * @param histogram_sharpening Describes histogram sharpening parameters; defaults are [0.15,0.01,200].
+ * @param verbose Verbose output.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
+ */
 function n3_bias_field_correction(
     input_image: InputPathType,
     output: string,
@@ -287,28 +309,6 @@ function n3_bias_field_correction(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): N3BiasFieldCorrectionOutputs {
-    /**
-     * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param input_image A scalar image is expected as input for bias correction. Since N3 log transforms the intensities, negative values or values close to zero should be processed prior to correction.
-     * @param output The bias-corrected version of the input image and optionally the estimated bias field.
-     * @param image_dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, N3 tries to infer the dimensionality from the input image.
-     * @param mask_image If a mask image is specified, the final bias correction is only performed in the mask region. If a mask image is not specified, the entire image region will be used as the mask region. Note: this differs from the original N3 implementation.
-     * @param rescale_intensities This option rescales the intensity range within the user-specified mask to the original [min, max] range.
-     * @param weight_image The weight image allows the user to perform a relative weighting of specific voxels during the B-spline fitting.
-     * @param shrink_factor Shrink factor to resample the input image. Commonly used values are <= 4.
-     * @param convergence Describes the convergence criteria with default value as [50,0.0].
-     * @param bspline_fitting Describes the parameters for B-Spline fitting. Defaults are [splineDistance,4,3].
-     * @param histogram_sharpening Describes histogram sharpening parameters; defaults are [0.15,0.01,200].
-     * @param verbose Verbose output.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(N3_BIAS_FIELD_CORRECTION_METADATA);
     const params = n3_bias_field_correction_params(input_image, output, image_dimensionality, mask_image, rescale_intensities, weight_image, shrink_factor, convergence, bspline_fitting, histogram_sharpening, verbose)
@@ -321,5 +321,8 @@ export {
       N3BiasFieldCorrectionParameters,
       N3_BIAS_FIELD_CORRECTION_METADATA,
       n3_bias_field_correction,
+      n3_bias_field_correction_cargs,
+      n3_bias_field_correction_execute,
+      n3_bias_field_correction_outputs,
       n3_bias_field_correction_params,
 };

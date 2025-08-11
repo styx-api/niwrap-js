@@ -12,7 +12,7 @@ const CLUSTER_METADATA: Metadata = {
 
 
 interface ClusterParameters {
-    "__STYXTYPE__": "cluster";
+    "@type": "fsl.cluster";
     "connectivity"?: number | null | undefined;
     "cope_file"?: InputPathType | null | undefined;
     "dlh"?: number | null | undefined;
@@ -50,35 +50,35 @@ interface ClusterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cluster": cluster_cargs,
+        "fsl.cluster": cluster_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "cluster": cluster_outputs,
+        "fsl.cluster": cluster_outputs,
     };
     return outputsFuncs[t];
 }
@@ -129,6 +129,46 @@ interface ClusterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param in_file Input volume.
+ * @param out_index_file A boolean or file. Output of cluster index (in size order).
+ * @param out_localmax_txt_file A boolean or file. Local maxima text file.
+ * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
+ * @param out_max_file A boolean or file. Filename for output of max image.
+ * @param out_mean_file A boolean or file. Filename for output of mean image.
+ * @param out_pval_file A boolean or file. Filename for image output of log pvals.
+ * @param out_size_file A boolean or file. Filename for output of size image.
+ * @param out_threshold_file A boolean or file. Thresholded image.
+ * @param threshold Threshold for input volume.
+ * @param connectivity The connectivity of voxels (default 26).
+ * @param cope_file Cope volume.
+ * @param dlh Smoothness estimate = sqrt(det(lambda)).
+ * @param find_min Find minima instead of maxima.
+ * @param fractional Interprets the threshold as a fraction of the robust range.
+ * @param minclustersize Prints out minimum significant cluster size.
+ * @param no_table Suppresses printing of the table info.
+ * @param num_maxima No of local maxima to report.
+ * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
+ * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
+ * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
+ * @param out_max_file_2 A boolean or file. Filename for output of max image.
+ * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
+ * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
+ * @param out_size_file_2 A boolean or file. Filename for output of size image.
+ * @param out_threshold_file_2 A boolean or file. Thresholded image.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
+ * @param pthreshold P-threshold for clusters.
+ * @param std_space_file Filename for standard-space volume.
+ * @param use_mm Use mm, not voxel, coordinates.
+ * @param volume Number of voxels in the mask.
+ * @param warpfield_file File containing warpfield.
+ * @param xfm_file Filename for linear: input->standard-space transform. non-linear: input->highres transform.
+ *
+ * @returns Parameter dictionary
+ */
 function cluster_params(
     in_file: InputPathType,
     out_index_file: string,
@@ -165,48 +205,8 @@ function cluster_params(
     warpfield_file: InputPathType | null = null,
     xfm_file: InputPathType | null = null,
 ): ClusterParameters {
-    /**
-     * Build parameters.
-    
-     * @param in_file Input volume.
-     * @param out_index_file A boolean or file. Output of cluster index (in size order).
-     * @param out_localmax_txt_file A boolean or file. Local maxima text file.
-     * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
-     * @param out_max_file A boolean or file. Filename for output of max image.
-     * @param out_mean_file A boolean or file. Filename for output of mean image.
-     * @param out_pval_file A boolean or file. Filename for image output of log pvals.
-     * @param out_size_file A boolean or file. Filename for output of size image.
-     * @param out_threshold_file A boolean or file. Thresholded image.
-     * @param threshold Threshold for input volume.
-     * @param connectivity The connectivity of voxels (default 26).
-     * @param cope_file Cope volume.
-     * @param dlh Smoothness estimate = sqrt(det(lambda)).
-     * @param find_min Find minima instead of maxima.
-     * @param fractional Interprets the threshold as a fraction of the robust range.
-     * @param minclustersize Prints out minimum significant cluster size.
-     * @param no_table Suppresses printing of the table info.
-     * @param num_maxima No of local maxima to report.
-     * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
-     * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
-     * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
-     * @param out_max_file_2 A boolean or file. Filename for output of max image.
-     * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
-     * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
-     * @param out_size_file_2 A boolean or file. Filename for output of size image.
-     * @param out_threshold_file_2 A boolean or file. Thresholded image.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
-     * @param pthreshold P-threshold for clusters.
-     * @param std_space_file Filename for standard-space volume.
-     * @param use_mm Use mm, not voxel, coordinates.
-     * @param volume Number of voxels in the mask.
-     * @param warpfield_file File containing warpfield.
-     * @param xfm_file Filename for linear: input->standard-space transform. non-linear: input->highres transform.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cluster" as const,
+        "@type": "fsl.cluster" as const,
         "find_min": find_min,
         "fractional": fractional,
         "in_file": in_file,
@@ -284,18 +284,18 @@ function cluster_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cluster_cargs(
     params: ClusterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("cluster");
     if ((params["connectivity"] ?? null) !== null) {
@@ -384,18 +384,18 @@ function cluster_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cluster_outputs(
     params: ClusterParameters,
     execution: Execution,
 ): ClusterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ClusterOutputs = {
         root: execution.outputFile("."),
         index_file: execution.outputFile(["index_file"].join('')),
@@ -411,22 +411,22 @@ function cluster_outputs(
 }
 
 
+/**
+ * Uses FSL cluster to perform clustering on statistical output.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ClusterOutputs`).
+ */
 function cluster_execute(
     params: ClusterParameters,
     execution: Execution,
 ): ClusterOutputs {
-    /**
-     * Uses FSL cluster to perform clustering on statistical output.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ClusterOutputs`).
-     */
     params = execution.params(params)
     const cargs = cluster_cargs(params, execution)
     const ret = cluster_outputs(params, execution)
@@ -435,6 +435,51 @@ function cluster_execute(
 }
 
 
+/**
+ * Uses FSL cluster to perform clustering on statistical output.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param in_file Input volume.
+ * @param out_index_file A boolean or file. Output of cluster index (in size order).
+ * @param out_localmax_txt_file A boolean or file. Local maxima text file.
+ * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
+ * @param out_max_file A boolean or file. Filename for output of max image.
+ * @param out_mean_file A boolean or file. Filename for output of mean image.
+ * @param out_pval_file A boolean or file. Filename for image output of log pvals.
+ * @param out_size_file A boolean or file. Filename for output of size image.
+ * @param out_threshold_file A boolean or file. Thresholded image.
+ * @param threshold Threshold for input volume.
+ * @param connectivity The connectivity of voxels (default 26).
+ * @param cope_file Cope volume.
+ * @param dlh Smoothness estimate = sqrt(det(lambda)).
+ * @param find_min Find minima instead of maxima.
+ * @param fractional Interprets the threshold as a fraction of the robust range.
+ * @param minclustersize Prints out minimum significant cluster size.
+ * @param no_table Suppresses printing of the table info.
+ * @param num_maxima No of local maxima to report.
+ * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
+ * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
+ * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
+ * @param out_max_file_2 A boolean or file. Filename for output of max image.
+ * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
+ * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
+ * @param out_size_file_2 A boolean or file. Filename for output of size image.
+ * @param out_threshold_file_2 A boolean or file. Thresholded image.
+ * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
+ * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
+ * @param pthreshold P-threshold for clusters.
+ * @param std_space_file Filename for standard-space volume.
+ * @param use_mm Use mm, not voxel, coordinates.
+ * @param volume Number of voxels in the mask.
+ * @param warpfield_file File containing warpfield.
+ * @param xfm_file Filename for linear: input->standard-space transform. non-linear: input->highres transform.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ClusterOutputs`).
+ */
 function cluster(
     in_file: InputPathType,
     out_index_file: string,
@@ -472,51 +517,6 @@ function cluster(
     xfm_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): ClusterOutputs {
-    /**
-     * Uses FSL cluster to perform clustering on statistical output.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param in_file Input volume.
-     * @param out_index_file A boolean or file. Output of cluster index (in size order).
-     * @param out_localmax_txt_file A boolean or file. Local maxima text file.
-     * @param out_localmax_vol_file A boolean or file. Output of local maxima volume.
-     * @param out_max_file A boolean or file. Filename for output of max image.
-     * @param out_mean_file A boolean or file. Filename for output of mean image.
-     * @param out_pval_file A boolean or file. Filename for image output of log pvals.
-     * @param out_size_file A boolean or file. Filename for output of size image.
-     * @param out_threshold_file A boolean or file. Thresholded image.
-     * @param threshold Threshold for input volume.
-     * @param connectivity The connectivity of voxels (default 26).
-     * @param cope_file Cope volume.
-     * @param dlh Smoothness estimate = sqrt(det(lambda)).
-     * @param find_min Find minima instead of maxima.
-     * @param fractional Interprets the threshold as a fraction of the robust range.
-     * @param minclustersize Prints out minimum significant cluster size.
-     * @param no_table Suppresses printing of the table info.
-     * @param num_maxima No of local maxima to report.
-     * @param out_index_file_2 A boolean or file. Output of cluster index (in size order).
-     * @param out_localmax_txt_file_2 A boolean or file. Local maxima text file.
-     * @param out_localmax_vol_file_2 A boolean or file. Output of local maxima volume.
-     * @param out_max_file_2 A boolean or file. Filename for output of max image.
-     * @param out_mean_file_2 A boolean or file. Filename for output of mean image.
-     * @param out_pval_file_2 A boolean or file. Filename for image output of log pvals.
-     * @param out_size_file_2 A boolean or file. Filename for output of size image.
-     * @param out_threshold_file_2 A boolean or file. Thresholded image.
-     * @param output_type 'nifti' or 'nifti_pair' or 'nifti_gz' or 'nifti_pair_gz'. Fsl output type.
-     * @param peak_distance Minimum distance between local maxima/minima, in mm (default 0).
-     * @param pthreshold P-threshold for clusters.
-     * @param std_space_file Filename for standard-space volume.
-     * @param use_mm Use mm, not voxel, coordinates.
-     * @param volume Number of voxels in the mask.
-     * @param warpfield_file File containing warpfield.
-     * @param xfm_file Filename for linear: input->standard-space transform. non-linear: input->highres transform.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ClusterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CLUSTER_METADATA);
     const params = cluster_params(in_file, out_index_file, out_localmax_txt_file, out_localmax_vol_file, out_max_file, out_mean_file, out_pval_file, out_size_file, out_threshold_file, threshold, connectivity, cope_file, dlh, find_min, fractional, minclustersize, no_table, num_maxima, out_index_file_2, out_localmax_txt_file_2, out_localmax_vol_file_2, out_max_file_2, out_mean_file_2, out_pval_file_2, out_size_file_2, out_threshold_file_2, output_type, peak_distance, pthreshold, std_space_file, use_mm, volume, warpfield_file, xfm_file)
@@ -529,5 +529,8 @@ export {
       ClusterOutputs,
       ClusterParameters,
       cluster,
+      cluster_cargs,
+      cluster_execute,
+      cluster_outputs,
       cluster_params,
 };

@@ -12,38 +12,38 @@ const MRI_GCAB_TRAIN_METADATA: Metadata = {
 
 
 interface MriGcabTrainParameters {
-    "__STYXTYPE__": "mri_gcab_train";
+    "@type": "freesurfer.mri_gcab_train";
     "removed_info"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_gcab_train": mri_gcab_train_cargs,
+        "freesurfer.mri_gcab_train": mri_gcab_train_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface MriGcabTrainOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_gcab_train_params(
     removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
 ): MriGcabTrainParameters {
-    /**
-     * Build parameters.
-    
-     * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_gcab_train" as const,
+        "@type": "freesurfer.mri_gcab_train" as const,
     };
     if (removed_info !== null) {
         params["removed_info"] = removed_info;
@@ -83,18 +83,18 @@ function mri_gcab_train_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_gcab_train_cargs(
     params: MriGcabTrainParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_gcab_train");
     if ((params["removed_info"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function mri_gcab_train_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_gcab_train_outputs(
     params: MriGcabTrainParameters,
     execution: Execution,
 ): MriGcabTrainOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriGcabTrainOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function mri_gcab_train_outputs(
 }
 
 
+/**
+ * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
+ */
 function mri_gcab_train_execute(
     params: MriGcabTrainParameters,
     execution: Execution,
 ): MriGcabTrainOutputs {
-    /**
-     * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_gcab_train_cargs(params, execution)
     const ret = mri_gcab_train_outputs(params, execution)
@@ -147,22 +147,22 @@ function mri_gcab_train_execute(
 }
 
 
+/**
+ * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
+ */
 function mri_gcab_train(
     removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
     runner: Runner | null = null,
 ): MriGcabTrainOutputs {
-    /**
-     * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param removed_info Command has been removed from the current version of FreeSurfer. For further information, please contact the support mailing list.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_GCAB_TRAIN_METADATA);
     const params = mri_gcab_train_params(removed_info)
@@ -175,5 +175,8 @@ export {
       MriGcabTrainOutputs,
       MriGcabTrainParameters,
       mri_gcab_train,
+      mri_gcab_train_cargs,
+      mri_gcab_train_execute,
+      mri_gcab_train_outputs,
       mri_gcab_train_params,
 };

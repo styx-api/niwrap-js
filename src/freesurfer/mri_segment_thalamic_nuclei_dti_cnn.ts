@@ -12,7 +12,7 @@ const MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA: Metadata = {
 
 
 interface MriSegmentThalamicNucleiDtiCnnParameters {
-    "__STYXTYPE__": "mri_segment_thalamic_nuclei_dti_cnn";
+    "@type": "freesurfer.mri_segment_thalamic_nuclei_dti_cnn";
     "t1_images": InputPathType;
     "aseg"?: InputPathType | null | undefined;
     "fa": InputPathType;
@@ -26,35 +26,35 @@ interface MriSegmentThalamicNucleiDtiCnnParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_cargs,
+        "freesurfer.mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_outputs,
+        "freesurfer.mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,6 +85,22 @@ interface MriSegmentThalamicNucleiDtiCnnOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_images Path to the T1 image(s) or folder containing images. These must be registered to the FAs in physical coordinates.
+ * @param fa Path to the FA image(s) or folder.
+ * @param v1 Path to the V1 image(s) or folder.
+ * @param output Path to the segmentation output(s) or folder.
+ * @param aseg Path to the ASEG segmentation(s) or folder. These must be registered to the FAs in physical coordinates.
+ * @param volume_output CSV file for volumes of all structures and subjects.
+ * @param posteriors_output Path to the posteriors output(s) or folder.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param force_cpu Enforce running with CPU rather than GPU.
+ * @param model Path to an alternative model file.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_segment_thalamic_nuclei_dti_cnn_params(
     t1_images: InputPathType,
     fa: InputPathType,
@@ -97,24 +113,8 @@ function mri_segment_thalamic_nuclei_dti_cnn_params(
     force_cpu: boolean = false,
     model: InputPathType | null = null,
 ): MriSegmentThalamicNucleiDtiCnnParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_images Path to the T1 image(s) or folder containing images. These must be registered to the FAs in physical coordinates.
-     * @param fa Path to the FA image(s) or folder.
-     * @param v1 Path to the V1 image(s) or folder.
-     * @param output Path to the segmentation output(s) or folder.
-     * @param aseg Path to the ASEG segmentation(s) or folder. These must be registered to the FAs in physical coordinates.
-     * @param volume_output CSV file for volumes of all structures and subjects.
-     * @param posteriors_output Path to the posteriors output(s) or folder.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param force_cpu Enforce running with CPU rather than GPU.
-     * @param model Path to an alternative model file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_segment_thalamic_nuclei_dti_cnn" as const,
+        "@type": "freesurfer.mri_segment_thalamic_nuclei_dti_cnn" as const,
         "t1_images": t1_images,
         "fa": fa,
         "v1": v1,
@@ -140,18 +140,18 @@ function mri_segment_thalamic_nuclei_dti_cnn_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_segment_thalamic_nuclei_dti_cnn_cargs(
     params: MriSegmentThalamicNucleiDtiCnnParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_segment_thalamic_nuclei_dti_cnn");
     cargs.push(
@@ -207,18 +207,18 @@ function mri_segment_thalamic_nuclei_dti_cnn_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_segment_thalamic_nuclei_dti_cnn_outputs(
     params: MriSegmentThalamicNucleiDtiCnnParameters,
     execution: Execution,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriSegmentThalamicNucleiDtiCnnOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["output"] ?? null)].join('')),
@@ -229,22 +229,22 @@ function mri_segment_thalamic_nuclei_dti_cnn_outputs(
 }
 
 
+/**
+ * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
+ */
 function mri_segment_thalamic_nuclei_dti_cnn_execute(
     params: MriSegmentThalamicNucleiDtiCnnParameters,
     execution: Execution,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
-    /**
-     * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_segment_thalamic_nuclei_dti_cnn_cargs(params, execution)
     const ret = mri_segment_thalamic_nuclei_dti_cnn_outputs(params, execution)
@@ -253,6 +253,27 @@ function mri_segment_thalamic_nuclei_dti_cnn_execute(
 }
 
 
+/**
+ * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_images Path to the T1 image(s) or folder containing images. These must be registered to the FAs in physical coordinates.
+ * @param fa Path to the FA image(s) or folder.
+ * @param v1 Path to the V1 image(s) or folder.
+ * @param output Path to the segmentation output(s) or folder.
+ * @param aseg Path to the ASEG segmentation(s) or folder. These must be registered to the FAs in physical coordinates.
+ * @param volume_output CSV file for volumes of all structures and subjects.
+ * @param posteriors_output Path to the posteriors output(s) or folder.
+ * @param threads Number of cores to be used. Default is 1.
+ * @param force_cpu Enforce running with CPU rather than GPU.
+ * @param model Path to an alternative model file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
+ */
 function mri_segment_thalamic_nuclei_dti_cnn(
     t1_images: InputPathType,
     fa: InputPathType,
@@ -266,27 +287,6 @@ function mri_segment_thalamic_nuclei_dti_cnn(
     model: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
-    /**
-     * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_images Path to the T1 image(s) or folder containing images. These must be registered to the FAs in physical coordinates.
-     * @param fa Path to the FA image(s) or folder.
-     * @param v1 Path to the V1 image(s) or folder.
-     * @param output Path to the segmentation output(s) or folder.
-     * @param aseg Path to the ASEG segmentation(s) or folder. These must be registered to the FAs in physical coordinates.
-     * @param volume_output CSV file for volumes of all structures and subjects.
-     * @param posteriors_output Path to the posteriors output(s) or folder.
-     * @param threads Number of cores to be used. Default is 1.
-     * @param force_cpu Enforce running with CPU rather than GPU.
-     * @param model Path to an alternative model file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA);
     const params = mri_segment_thalamic_nuclei_dti_cnn_params(t1_images, fa, v1, output, aseg, volume_output, posteriors_output, threads, force_cpu, model)
@@ -299,5 +299,8 @@ export {
       MriSegmentThalamicNucleiDtiCnnOutputs,
       MriSegmentThalamicNucleiDtiCnnParameters,
       mri_segment_thalamic_nuclei_dti_cnn,
+      mri_segment_thalamic_nuclei_dti_cnn_cargs,
+      mri_segment_thalamic_nuclei_dti_cnn_execute,
+      mri_segment_thalamic_nuclei_dti_cnn_outputs,
       mri_segment_thalamic_nuclei_dti_cnn_params,
 };

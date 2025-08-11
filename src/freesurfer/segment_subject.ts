@@ -12,7 +12,7 @@ const SEGMENT_SUBJECT_METADATA: Metadata = {
 
 
 interface SegmentSubjectParameters {
-    "__STYXTYPE__": "segment_subject";
+    "@type": "freesurfer.segment_subject";
     "input_volume": InputPathType;
     "output_xfm": string;
     "log_file"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface SegmentSubjectParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segment_subject": segment_subject_cargs,
+        "freesurfer.segment_subject": segment_subject_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segment_subject": segment_subject_outputs,
+        "freesurfer.segment_subject": segment_subject_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface SegmentSubjectOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input volume
+ * @param output_xfm Output transformation file
+ * @param log_file Log file. Default is outdir/talarach.log
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param version_flag Print version and exit
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_params(
     input_volume: InputPathType,
     output_xfm: string,
@@ -81,20 +93,8 @@ function segment_subject_params(
     debug_flag: boolean = false,
     version_flag: boolean = false,
 ): SegmentSubjectParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input volume
-     * @param output_xfm Output transformation file
-     * @param log_file Log file. Default is outdir/talarach.log
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param version_flag Print version and exit
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segment_subject" as const,
+        "@type": "freesurfer.segment_subject" as const,
         "input_volume": input_volume,
         "output_xfm": output_xfm,
         "help_flag": help_flag,
@@ -108,18 +108,18 @@ function segment_subject_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_cargs(
     params: SegmentSubjectParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segment_subject");
     cargs.push(
@@ -149,18 +149,18 @@ function segment_subject_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_outputs(
     params: SegmentSubjectParameters,
     execution: Execution,
 ): SegmentSubjectOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectOutputs = {
         root: execution.outputFile("."),
         output_xfm_file: execution.outputFile([(params["output_xfm"] ?? null)].join('')),
@@ -169,22 +169,22 @@ function segment_subject_outputs(
 }
 
 
+/**
+ * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
+ */
 function segment_subject_execute(
     params: SegmentSubjectParameters,
     execution: Execution,
 ): SegmentSubjectOutputs {
-    /**
-     * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_cargs(params, execution)
     const ret = segment_subject_outputs(params, execution)
@@ -193,6 +193,23 @@ function segment_subject_execute(
 }
 
 
+/**
+ * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input volume
+ * @param output_xfm Output transformation file
+ * @param log_file Log file. Default is outdir/talarach.log
+ * @param help_flag Print help and exit
+ * @param debug_flag Turn on debugging
+ * @param version_flag Print version and exit
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
+ */
 function segment_subject(
     input_volume: InputPathType,
     output_xfm: string,
@@ -202,23 +219,6 @@ function segment_subject(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): SegmentSubjectOutputs {
-    /**
-     * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input volume
-     * @param output_xfm Output transformation file
-     * @param log_file Log file. Default is outdir/talarach.log
-     * @param help_flag Print help and exit
-     * @param debug_flag Turn on debugging
-     * @param version_flag Print version and exit
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_METADATA);
     const params = segment_subject_params(input_volume, output_xfm, log_file, help_flag, debug_flag, version_flag)
@@ -231,5 +231,8 @@ export {
       SegmentSubjectOutputs,
       SegmentSubjectParameters,
       segment_subject,
+      segment_subject_cargs,
+      segment_subject_execute,
+      segment_subject_outputs,
       segment_subject_params,
 };

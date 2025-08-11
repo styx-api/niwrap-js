@@ -12,38 +12,38 @@ const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
 
 
 interface FiducialsCalibrationParameters {
-    "__STYXTYPE__": "fiducials_calibration";
+    "@type": "freesurfer.fiducials_calibration";
     "qt_plugin_installation"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fiducials_calibration": fiducials_calibration_cargs,
+        "freesurfer.fiducials_calibration": fiducials_calibration_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,18 +63,18 @@ interface FiducialsCalibrationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
+ *
+ * @returns Parameter dictionary
+ */
 function fiducials_calibration_params(
     qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
 ): FiducialsCalibrationParameters {
-    /**
-     * Build parameters.
-    
-     * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fiducials_calibration" as const,
+        "@type": "freesurfer.fiducials_calibration" as const,
     };
     if (qt_plugin_installation !== null) {
         params["qt_plugin_installation"] = qt_plugin_installation;
@@ -83,18 +83,18 @@ function fiducials_calibration_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fiducials_calibration_cargs(
     params: FiducialsCalibrationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fiducials_calibration");
     if ((params["qt_plugin_installation"] ?? null) !== null) {
@@ -104,18 +104,18 @@ function fiducials_calibration_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fiducials_calibration_outputs(
     params: FiducialsCalibrationParameters,
     execution: Execution,
 ): FiducialsCalibrationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FiducialsCalibrationOutputs = {
         root: execution.outputFile("."),
     };
@@ -123,22 +123,22 @@ function fiducials_calibration_outputs(
 }
 
 
+/**
+ * A tool used for calibrating fiducials.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
+ */
 function fiducials_calibration_execute(
     params: FiducialsCalibrationParameters,
     execution: Execution,
 ): FiducialsCalibrationOutputs {
-    /**
-     * A tool used for calibrating fiducials.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
-     */
     params = execution.params(params)
     const cargs = fiducials_calibration_cargs(params, execution)
     const ret = fiducials_calibration_outputs(params, execution)
@@ -147,22 +147,22 @@ function fiducials_calibration_execute(
 }
 
 
+/**
+ * A tool used for calibrating fiducials.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
+ */
 function fiducials_calibration(
     qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
     runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
-    /**
-     * A tool used for calibrating fiducials.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param qt_plugin_installation This application requires a functional Qt installation. If it fails to start, reinstalling the application might fix the problem.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIDUCIALS_CALIBRATION_METADATA);
     const params = fiducials_calibration_params(qt_plugin_installation)
@@ -175,5 +175,8 @@ export {
       FiducialsCalibrationOutputs,
       FiducialsCalibrationParameters,
       fiducials_calibration,
+      fiducials_calibration_cargs,
+      fiducials_calibration_execute,
+      fiducials_calibration_outputs,
       fiducials_calibration_params,
 };

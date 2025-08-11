@@ -12,7 +12,7 @@ const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
 
 
 interface VolumeVectorOperationParameters {
-    "__STYXTYPE__": "volume-vector-operation";
+    "@type": "workbench.volume-vector-operation";
     "vectors_a": InputPathType;
     "vectors_b": InputPathType;
     "operation": string;
@@ -24,35 +24,35 @@ interface VolumeVectorOperationParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-vector-operation": volume_vector_operation_cargs,
+        "workbench.volume-vector-operation": volume_vector_operation_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "volume-vector-operation": volume_vector_operation_outputs,
+        "workbench.volume-vector-operation": volume_vector_operation_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface VolumeVectorOperationOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param vectors_a first vector input file
+ * @param vectors_b second vector input file
+ * @param operation what vector operation to do
+ * @param volume_out the output file
+ * @param opt_normalize_a normalize vectors of first input
+ * @param opt_normalize_b normalize vectors of second input
+ * @param opt_normalize_output normalize output vectors (not valid for dot product)
+ * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ *
+ * @returns Parameter dictionary
+ */
 function volume_vector_operation_params(
     vectors_a: InputPathType,
     vectors_b: InputPathType,
@@ -85,22 +99,8 @@ function volume_vector_operation_params(
     opt_normalize_output: boolean = false,
     opt_magnitude: boolean = false,
 ): VolumeVectorOperationParameters {
-    /**
-     * Build parameters.
-    
-     * @param vectors_a first vector input file
-     * @param vectors_b second vector input file
-     * @param operation what vector operation to do
-     * @param volume_out the output file
-     * @param opt_normalize_a normalize vectors of first input
-     * @param opt_normalize_b normalize vectors of second input
-     * @param opt_normalize_output normalize output vectors (not valid for dot product)
-     * @param opt_magnitude output the magnitude of the result (not valid for dot product)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-vector-operation" as const,
+        "@type": "workbench.volume-vector-operation" as const,
         "vectors_a": vectors_a,
         "vectors_b": vectors_b,
         "operation": operation,
@@ -114,18 +114,18 @@ function volume_vector_operation_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_vector_operation_cargs(
     params: VolumeVectorOperationParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-vector-operation");
@@ -149,18 +149,18 @@ function volume_vector_operation_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_vector_operation_outputs(
     params: VolumeVectorOperationParameters,
     execution: Execution,
 ): VolumeVectorOperationOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeVectorOperationOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
@@ -169,29 +169,29 @@ function volume_vector_operation_outputs(
 }
 
 
+/**
+ * Do a vector operation on volume files.
+ *
+ * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
+ *
+ * DOT
+ * CROSS
+ * ADD
+ * SUBTRACT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
+ */
 function volume_vector_operation_execute(
     params: VolumeVectorOperationParameters,
     execution: Execution,
 ): VolumeVectorOperationOutputs {
-    /**
-     * Do a vector operation on volume files.
-     * 
-     * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
-     * 
-     * DOT
-     * CROSS
-     * ADD
-     * SUBTRACT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_vector_operation_cargs(params, execution)
     const ret = volume_vector_operation_outputs(params, execution)
@@ -200,6 +200,32 @@ function volume_vector_operation_execute(
 }
 
 
+/**
+ * Do a vector operation on volume files.
+ *
+ * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
+ *
+ * DOT
+ * CROSS
+ * ADD
+ * SUBTRACT.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param vectors_a first vector input file
+ * @param vectors_b second vector input file
+ * @param operation what vector operation to do
+ * @param volume_out the output file
+ * @param opt_normalize_a normalize vectors of first input
+ * @param opt_normalize_b normalize vectors of second input
+ * @param opt_normalize_output normalize output vectors (not valid for dot product)
+ * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
+ */
 function volume_vector_operation(
     vectors_a: InputPathType,
     vectors_b: InputPathType,
@@ -211,32 +237,6 @@ function volume_vector_operation(
     opt_magnitude: boolean = false,
     runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
-    /**
-     * Do a vector operation on volume files.
-     * 
-     * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
-     * 
-     * DOT
-     * CROSS
-     * ADD
-     * SUBTRACT.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param vectors_a first vector input file
-     * @param vectors_b second vector input file
-     * @param operation what vector operation to do
-     * @param volume_out the output file
-     * @param opt_normalize_a normalize vectors of first input
-     * @param opt_normalize_b normalize vectors of second input
-     * @param opt_normalize_output normalize output vectors (not valid for dot product)
-     * @param opt_magnitude output the magnitude of the result (not valid for dot product)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_VECTOR_OPERATION_METADATA);
     const params = volume_vector_operation_params(vectors_a, vectors_b, operation, volume_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
@@ -249,5 +249,8 @@ export {
       VolumeVectorOperationOutputs,
       VolumeVectorOperationParameters,
       volume_vector_operation,
+      volume_vector_operation_cargs,
+      volume_vector_operation_execute,
+      volume_vector_operation_outputs,
       volume_vector_operation_params,
 };

@@ -12,7 +12,7 @@ const WHIRLGIF_METADATA: Metadata = {
 
 
 interface WhirlgifParameters {
-    "__STYXTYPE__": "whirlgif";
+    "@type": "fsl.whirlgif";
     "outfile"?: InputPathType | null | undefined;
     "loop_count"?: number | null | undefined;
     "delay_time"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface WhirlgifParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "whirlgif": whirlgif_cargs,
+        "fsl.whirlgif": whirlgif_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "whirlgif": whirlgif_outputs,
+        "fsl.whirlgif": whirlgif_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface WhirlgifOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_files Input image files for the animation
+ * @param outfile Specify the output file
+ * @param loop_count Specify the loop count for the animation
+ * @param delay_time Specify the delay time between frames
+ * @param disp_flag Specify the disposal method for frames
+ * @param list_file Input list file containing names of images to be used for animation
+ *
+ * @returns Parameter dictionary
+ */
 function whirlgif_params(
     input_files: Array<InputPathType>,
     outfile: InputPathType | null = null,
@@ -81,20 +93,8 @@ function whirlgif_params(
     disp_flag: "none" | "back" | "prev" | "not" | null = null,
     list_file: InputPathType | null = null,
 ): WhirlgifParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_files Input image files for the animation
-     * @param outfile Specify the output file
-     * @param loop_count Specify the loop count for the animation
-     * @param delay_time Specify the delay time between frames
-     * @param disp_flag Specify the disposal method for frames
-     * @param list_file Input list file containing names of images to be used for animation
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "whirlgif" as const,
+        "@type": "fsl.whirlgif" as const,
         "input_files": input_files,
     };
     if (outfile !== null) {
@@ -116,18 +116,18 @@ function whirlgif_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function whirlgif_cargs(
     params: WhirlgifParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("whirlgif");
     if ((params["outfile"] ?? null) !== null) {
@@ -165,18 +165,18 @@ function whirlgif_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function whirlgif_outputs(
     params: WhirlgifParameters,
     execution: Execution,
 ): WhirlgifOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: WhirlgifOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
@@ -185,22 +185,22 @@ function whirlgif_outputs(
 }
 
 
+/**
+ * GIF animation tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
+ */
 function whirlgif_execute(
     params: WhirlgifParameters,
     execution: Execution,
 ): WhirlgifOutputs {
-    /**
-     * GIF animation tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
-     */
     params = execution.params(params)
     const cargs = whirlgif_cargs(params, execution)
     const ret = whirlgif_outputs(params, execution)
@@ -209,6 +209,23 @@ function whirlgif_execute(
 }
 
 
+/**
+ * GIF animation tool.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_files Input image files for the animation
+ * @param outfile Specify the output file
+ * @param loop_count Specify the loop count for the animation
+ * @param delay_time Specify the delay time between frames
+ * @param disp_flag Specify the disposal method for frames
+ * @param list_file Input list file containing names of images to be used for animation
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
+ */
 function whirlgif(
     input_files: Array<InputPathType>,
     outfile: InputPathType | null = null,
@@ -218,23 +235,6 @@ function whirlgif(
     list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): WhirlgifOutputs {
-    /**
-     * GIF animation tool.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_files Input image files for the animation
-     * @param outfile Specify the output file
-     * @param loop_count Specify the loop count for the animation
-     * @param delay_time Specify the delay time between frames
-     * @param disp_flag Specify the disposal method for frames
-     * @param list_file Input list file containing names of images to be used for animation
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(WHIRLGIF_METADATA);
     const params = whirlgif_params(input_files, outfile, loop_count, delay_time, disp_flag, list_file)
@@ -247,5 +247,8 @@ export {
       WhirlgifOutputs,
       WhirlgifParameters,
       whirlgif,
+      whirlgif_cargs,
+      whirlgif_execute,
+      whirlgif_outputs,
       whirlgif_params,
 };

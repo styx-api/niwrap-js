@@ -12,7 +12,7 @@ const FSL_RIGID_REGISTER_METADATA: Metadata = {
 
 
 interface FslRigidRegisterParameters {
-    "__STYXTYPE__": "fsl_rigid_register";
+    "@type": "freesurfer.fsl_rigid_register";
     "refvol": InputPathType;
     "inputvol": InputPathType;
     "outputvol": string;
@@ -38,35 +38,35 @@ interface FslRigidRegisterParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsl_rigid_register": fsl_rigid_register_cargs,
+        "freesurfer.fsl_rigid_register": fsl_rigid_register_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsl_rigid_register": fsl_rigid_register_outputs,
+        "freesurfer.fsl_rigid_register": fsl_rigid_register_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,6 +89,34 @@ interface FslRigidRegisterOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param refvol Reference/Target volume.
+ * @param inputvol Input/Moveable volume.
+ * @param outputvol Input resampled to reference.
+ * @param fslmat Specifies explicitly where to store the FSL registration matrix.
+ * @param regmat Get registration matrix in register.dat file format.
+ * @param xfmmat Get registration matrix as MNI xfm file.
+ * @param ltamat Get registration matrix as MGH lta file.
+ * @param noinitgeom Do not initialize matrix based on geometry.
+ * @param applyxfm Apply a transformation file to the input without registration.
+ * @param applyinitxfm Apply initial transformation to the input without registration.
+ * @param initxfm Use this as an initial matrix for registration.
+ * @param maxangle Only search over +/- max angle degrees.
+ * @param interp Interpolation method: trilinear, nearestneighbour, sinc.
+ * @param dof Use degrees of freedom instead of 6.
+ * @param bins Number of bins to use (default 256).
+ * @param cost Objective function: mutualinfo, corratio (default), normcorr, normmi, leastsq.
+ * @param tmpdir Specify temporary directory.
+ * @param nocleanup Do not delete temporary files.
+ * @param cleanup Delete temporary files (default).
+ * @param subject Only puts it in the register.dat file.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fsl_rigid_register_params(
     refvol: InputPathType,
     inputvol: InputPathType,
@@ -113,36 +141,8 @@ function fsl_rigid_register_params(
     version: boolean = false,
     help: boolean = false,
 ): FslRigidRegisterParameters {
-    /**
-     * Build parameters.
-    
-     * @param refvol Reference/Target volume.
-     * @param inputvol Input/Moveable volume.
-     * @param outputvol Input resampled to reference.
-     * @param fslmat Specifies explicitly where to store the FSL registration matrix.
-     * @param regmat Get registration matrix in register.dat file format.
-     * @param xfmmat Get registration matrix as MNI xfm file.
-     * @param ltamat Get registration matrix as MGH lta file.
-     * @param noinitgeom Do not initialize matrix based on geometry.
-     * @param applyxfm Apply a transformation file to the input without registration.
-     * @param applyinitxfm Apply initial transformation to the input without registration.
-     * @param initxfm Use this as an initial matrix for registration.
-     * @param maxangle Only search over +/- max angle degrees.
-     * @param interp Interpolation method: trilinear, nearestneighbour, sinc.
-     * @param dof Use degrees of freedom instead of 6.
-     * @param bins Number of bins to use (default 256).
-     * @param cost Objective function: mutualinfo, corratio (default), normcorr, normmi, leastsq.
-     * @param tmpdir Specify temporary directory.
-     * @param nocleanup Do not delete temporary files.
-     * @param cleanup Delete temporary files (default).
-     * @param subject Only puts it in the register.dat file.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsl_rigid_register" as const,
+        "@type": "freesurfer.fsl_rigid_register" as const,
         "refvol": refvol,
         "inputvol": inputvol,
         "outputvol": outputvol,
@@ -196,18 +196,18 @@ function fsl_rigid_register_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsl_rigid_register_cargs(
     params: FslRigidRegisterParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsl_rigid_register");
     cargs.push(
@@ -322,18 +322,18 @@ function fsl_rigid_register_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsl_rigid_register_outputs(
     params: FslRigidRegisterParameters,
     execution: Execution,
 ): FslRigidRegisterOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslRigidRegisterOutputs = {
         root: execution.outputFile("."),
         fslmat_output: execution.outputFile([(params["outputvol"] ?? null), ".fslmat"].join('')),
@@ -342,22 +342,22 @@ function fsl_rigid_register_outputs(
 }
 
 
+/**
+ * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
+ */
 function fsl_rigid_register_execute(
     params: FslRigidRegisterParameters,
     execution: Execution,
 ): FslRigidRegisterOutputs {
-    /**
-     * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsl_rigid_register_cargs(params, execution)
     const ret = fsl_rigid_register_outputs(params, execution)
@@ -366,6 +366,39 @@ function fsl_rigid_register_execute(
 }
 
 
+/**
+ * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param refvol Reference/Target volume.
+ * @param inputvol Input/Moveable volume.
+ * @param outputvol Input resampled to reference.
+ * @param fslmat Specifies explicitly where to store the FSL registration matrix.
+ * @param regmat Get registration matrix in register.dat file format.
+ * @param xfmmat Get registration matrix as MNI xfm file.
+ * @param ltamat Get registration matrix as MGH lta file.
+ * @param noinitgeom Do not initialize matrix based on geometry.
+ * @param applyxfm Apply a transformation file to the input without registration.
+ * @param applyinitxfm Apply initial transformation to the input without registration.
+ * @param initxfm Use this as an initial matrix for registration.
+ * @param maxangle Only search over +/- max angle degrees.
+ * @param interp Interpolation method: trilinear, nearestneighbour, sinc.
+ * @param dof Use degrees of freedom instead of 6.
+ * @param bins Number of bins to use (default 256).
+ * @param cost Objective function: mutualinfo, corratio (default), normcorr, normmi, leastsq.
+ * @param tmpdir Specify temporary directory.
+ * @param nocleanup Do not delete temporary files.
+ * @param cleanup Delete temporary files (default).
+ * @param subject Only puts it in the register.dat file.
+ * @param version Print version and exit.
+ * @param help Print help and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
+ */
 function fsl_rigid_register(
     refvol: InputPathType,
     inputvol: InputPathType,
@@ -391,39 +424,6 @@ function fsl_rigid_register(
     help: boolean = false,
     runner: Runner | null = null,
 ): FslRigidRegisterOutputs {
-    /**
-     * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param refvol Reference/Target volume.
-     * @param inputvol Input/Moveable volume.
-     * @param outputvol Input resampled to reference.
-     * @param fslmat Specifies explicitly where to store the FSL registration matrix.
-     * @param regmat Get registration matrix in register.dat file format.
-     * @param xfmmat Get registration matrix as MNI xfm file.
-     * @param ltamat Get registration matrix as MGH lta file.
-     * @param noinitgeom Do not initialize matrix based on geometry.
-     * @param applyxfm Apply a transformation file to the input without registration.
-     * @param applyinitxfm Apply initial transformation to the input without registration.
-     * @param initxfm Use this as an initial matrix for registration.
-     * @param maxangle Only search over +/- max angle degrees.
-     * @param interp Interpolation method: trilinear, nearestneighbour, sinc.
-     * @param dof Use degrees of freedom instead of 6.
-     * @param bins Number of bins to use (default 256).
-     * @param cost Objective function: mutualinfo, corratio (default), normcorr, normmi, leastsq.
-     * @param tmpdir Specify temporary directory.
-     * @param nocleanup Do not delete temporary files.
-     * @param cleanup Delete temporary files (default).
-     * @param subject Only puts it in the register.dat file.
-     * @param version Print version and exit.
-     * @param help Print help and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSL_RIGID_REGISTER_METADATA);
     const params = fsl_rigid_register_params(refvol, inputvol, outputvol, fslmat, regmat, xfmmat, ltamat, noinitgeom, applyxfm, applyinitxfm, initxfm, maxangle, interp, dof, bins, cost, tmpdir, nocleanup, cleanup, subject, version, help)
@@ -436,5 +436,8 @@ export {
       FslRigidRegisterOutputs,
       FslRigidRegisterParameters,
       fsl_rigid_register,
+      fsl_rigid_register_cargs,
+      fsl_rigid_register_execute,
+      fsl_rigid_register_outputs,
       fsl_rigid_register_params,
 };

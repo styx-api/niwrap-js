@@ -12,7 +12,7 @@ const VOLUME_CAPTURE_PLANE_METADATA: Metadata = {
 
 
 interface VolumeCapturePlaneParameters {
-    "__STYXTYPE__": "volume-capture-plane";
+    "@type": "workbench.volume-capture-plane";
     "volume": InputPathType;
     "subvolume": string;
     "interp": string;
@@ -33,33 +33,33 @@ interface VolumeCapturePlaneParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "volume-capture-plane": volume_capture_plane_cargs,
+        "workbench.volume-capture-plane": volume_capture_plane_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -79,6 +79,29 @@ interface VolumeCapturePlaneOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param volume the volume file to interpolate from
+ * @param subvolume the name or number of the subvolume to use
+ * @param interp interpolation type
+ * @param h_dim width of output image, in pixels
+ * @param v_dim height of output image, in pixels
+ * @param scale_min value to render as black
+ * @param scale_max value to render as white
+ * @param bottom_left_x x-coordinate of the bottom left of the output image
+ * @param bottom_left_y y-coordinate of the bottom left of the output image
+ * @param bottom_left_z z-coordinate of the bottom left of the output image
+ * @param bottom_right_x x-coordinate of the bottom right of the output image
+ * @param bottom_right_y y-coordinate of the bottom right of the output image
+ * @param bottom_right_z z-coordinate of the bottom right of the output image
+ * @param top_left_x x-coordinate of the top left of the output image
+ * @param top_left_y y-coordinate of the top left of the output image
+ * @param top_left_z z-coordinate of the top left of the output image
+ * @param image output - the output image
+ *
+ * @returns Parameter dictionary
+ */
 function volume_capture_plane_params(
     volume: InputPathType,
     subvolume: string,
@@ -98,31 +121,8 @@ function volume_capture_plane_params(
     top_left_z: number,
     image: string,
 ): VolumeCapturePlaneParameters {
-    /**
-     * Build parameters.
-    
-     * @param volume the volume file to interpolate from
-     * @param subvolume the name or number of the subvolume to use
-     * @param interp interpolation type
-     * @param h_dim width of output image, in pixels
-     * @param v_dim height of output image, in pixels
-     * @param scale_min value to render as black
-     * @param scale_max value to render as white
-     * @param bottom_left_x x-coordinate of the bottom left of the output image
-     * @param bottom_left_y y-coordinate of the bottom left of the output image
-     * @param bottom_left_z z-coordinate of the bottom left of the output image
-     * @param bottom_right_x x-coordinate of the bottom right of the output image
-     * @param bottom_right_y y-coordinate of the bottom right of the output image
-     * @param bottom_right_z z-coordinate of the bottom right of the output image
-     * @param top_left_x x-coordinate of the top left of the output image
-     * @param top_left_y y-coordinate of the top left of the output image
-     * @param top_left_z z-coordinate of the top left of the output image
-     * @param image output - the output image
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "volume-capture-plane" as const,
+        "@type": "workbench.volume-capture-plane" as const,
         "volume": volume,
         "subvolume": subvolume,
         "interp": interp,
@@ -145,18 +145,18 @@ function volume_capture_plane_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function volume_capture_plane_cargs(
     params: VolumeCapturePlaneParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-volume-capture-plane");
@@ -181,18 +181,18 @@ function volume_capture_plane_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function volume_capture_plane_outputs(
     params: VolumeCapturePlaneParameters,
     execution: Execution,
 ): VolumeCapturePlaneOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VolumeCapturePlaneOutputs = {
         root: execution.outputFile("."),
     };
@@ -200,30 +200,30 @@ function volume_capture_plane_outputs(
 }
 
 
+/**
+ * Interpolate image from plane through volume.
+ *
+ * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
+ *
+ * Renders an image of an arbitrary plane through the volume file, with a simple linear grayscale palette.  The parameter <interp> must be one of:
+ *
+ * CUBIC
+ * ENCLOSING_VOXEL
+ * TRILINEAR.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
+ */
 function volume_capture_plane_execute(
     params: VolumeCapturePlaneParameters,
     execution: Execution,
 ): VolumeCapturePlaneOutputs {
-    /**
-     * Interpolate image from plane through volume.
-     * 
-     * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
-     * 
-     * Renders an image of an arbitrary plane through the volume file, with a simple linear grayscale palette.  The parameter <interp> must be one of:
-     * 
-     * CUBIC
-     * ENCLOSING_VOXEL
-     * TRILINEAR.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
-     */
     params = execution.params(params)
     const cargs = volume_capture_plane_cargs(params, execution)
     const ret = volume_capture_plane_outputs(params, execution)
@@ -232,6 +232,42 @@ function volume_capture_plane_execute(
 }
 
 
+/**
+ * Interpolate image from plane through volume.
+ *
+ * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
+ *
+ * Renders an image of an arbitrary plane through the volume file, with a simple linear grayscale palette.  The parameter <interp> must be one of:
+ *
+ * CUBIC
+ * ENCLOSING_VOXEL
+ * TRILINEAR.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param volume the volume file to interpolate from
+ * @param subvolume the name or number of the subvolume to use
+ * @param interp interpolation type
+ * @param h_dim width of output image, in pixels
+ * @param v_dim height of output image, in pixels
+ * @param scale_min value to render as black
+ * @param scale_max value to render as white
+ * @param bottom_left_x x-coordinate of the bottom left of the output image
+ * @param bottom_left_y y-coordinate of the bottom left of the output image
+ * @param bottom_left_z z-coordinate of the bottom left of the output image
+ * @param bottom_right_x x-coordinate of the bottom right of the output image
+ * @param bottom_right_y y-coordinate of the bottom right of the output image
+ * @param bottom_right_z z-coordinate of the bottom right of the output image
+ * @param top_left_x x-coordinate of the top left of the output image
+ * @param top_left_y y-coordinate of the top left of the output image
+ * @param top_left_z z-coordinate of the top left of the output image
+ * @param image output - the output image
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
+ */
 function volume_capture_plane(
     volume: InputPathType,
     subvolume: string,
@@ -252,42 +288,6 @@ function volume_capture_plane(
     image: string,
     runner: Runner | null = null,
 ): VolumeCapturePlaneOutputs {
-    /**
-     * Interpolate image from plane through volume.
-     * 
-     * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
-     * 
-     * Renders an image of an arbitrary plane through the volume file, with a simple linear grayscale palette.  The parameter <interp> must be one of:
-     * 
-     * CUBIC
-     * ENCLOSING_VOXEL
-     * TRILINEAR.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param volume the volume file to interpolate from
-     * @param subvolume the name or number of the subvolume to use
-     * @param interp interpolation type
-     * @param h_dim width of output image, in pixels
-     * @param v_dim height of output image, in pixels
-     * @param scale_min value to render as black
-     * @param scale_max value to render as white
-     * @param bottom_left_x x-coordinate of the bottom left of the output image
-     * @param bottom_left_y y-coordinate of the bottom left of the output image
-     * @param bottom_left_z z-coordinate of the bottom left of the output image
-     * @param bottom_right_x x-coordinate of the bottom right of the output image
-     * @param bottom_right_y y-coordinate of the bottom right of the output image
-     * @param bottom_right_z z-coordinate of the bottom right of the output image
-     * @param top_left_x x-coordinate of the top left of the output image
-     * @param top_left_y y-coordinate of the top left of the output image
-     * @param top_left_z z-coordinate of the top left of the output image
-     * @param image output - the output image
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(VOLUME_CAPTURE_PLANE_METADATA);
     const params = volume_capture_plane_params(volume, subvolume, interp, h_dim, v_dim, scale_min, scale_max, bottom_left_x, bottom_left_y, bottom_left_z, bottom_right_x, bottom_right_y, bottom_right_z, top_left_x, top_left_y, top_left_z, image)
@@ -300,5 +300,8 @@ export {
       VolumeCapturePlaneOutputs,
       VolumeCapturePlaneParameters,
       volume_capture_plane,
+      volume_capture_plane_cargs,
+      volume_capture_plane_execute,
+      volume_capture_plane_outputs,
       volume_capture_plane_params,
 };

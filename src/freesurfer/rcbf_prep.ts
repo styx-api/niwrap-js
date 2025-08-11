@@ -12,7 +12,7 @@ const RCBF_PREP_METADATA: Metadata = {
 
 
 interface RcbfPrepParameters {
-    "__STYXTYPE__": "rcbf-prep";
+    "@type": "freesurfer.rcbf-prep";
     "outdir": string;
     "rcbfvol": InputPathType;
     "subject"?: string | null | undefined;
@@ -22,35 +22,35 @@ interface RcbfPrepParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "rcbf-prep": rcbf_prep_cargs,
+        "freesurfer.rcbf-prep": rcbf_prep_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "rcbf-prep": rcbf_prep_outputs,
+        "freesurfer.rcbf-prep": rcbf_prep_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,18 @@ interface RcbfPrepOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param outdir Output directory where results will be stored.
+ * @param rcbfvol Input rCBF volume to be registered to the FreeSurfer anatomical.
+ * @param subject Subject identifier for FreeSurfer anatomical registration.
+ * @param roitab ROI table specifying which ROIs will be summarized, e.g., FreeSurferColorLUT.txt.
+ * @param register Registration data file instead of a subject.
+ * @param template Template file used instead of rCBF itself.
+ *
+ * @returns Parameter dictionary
+ */
 function rcbf_prep_params(
     outdir: string,
     rcbfvol: InputPathType,
@@ -89,20 +101,8 @@ function rcbf_prep_params(
     register: InputPathType | null = null,
     template: InputPathType | null = null,
 ): RcbfPrepParameters {
-    /**
-     * Build parameters.
-    
-     * @param outdir Output directory where results will be stored.
-     * @param rcbfvol Input rCBF volume to be registered to the FreeSurfer anatomical.
-     * @param subject Subject identifier for FreeSurfer anatomical registration.
-     * @param roitab ROI table specifying which ROIs will be summarized, e.g., FreeSurferColorLUT.txt.
-     * @param register Registration data file instead of a subject.
-     * @param template Template file used instead of rCBF itself.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "rcbf-prep" as const,
+        "@type": "freesurfer.rcbf-prep" as const,
         "outdir": outdir,
         "rcbfvol": rcbfvol,
     };
@@ -122,18 +122,18 @@ function rcbf_prep_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rcbf_prep_cargs(
     params: RcbfPrepParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("rcbf-prep");
     cargs.push(
@@ -172,18 +172,18 @@ function rcbf_prep_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rcbf_prep_outputs(
     params: RcbfPrepParameters,
     execution: Execution,
 ): RcbfPrepOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RcbfPrepOutputs = {
         root: execution.outputFile("."),
         hemisphere_rcbf: execution.outputFile([(params["outdir"] ?? null), "/?h.rcbf.mgh"].join('')),
@@ -194,22 +194,22 @@ function rcbf_prep_outputs(
 }
 
 
+/**
+ * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
+ */
 function rcbf_prep_execute(
     params: RcbfPrepParameters,
     execution: Execution,
 ): RcbfPrepOutputs {
-    /**
-     * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
-     */
     params = execution.params(params)
     const cargs = rcbf_prep_cargs(params, execution)
     const ret = rcbf_prep_outputs(params, execution)
@@ -218,6 +218,23 @@ function rcbf_prep_execute(
 }
 
 
+/**
+ * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param outdir Output directory where results will be stored.
+ * @param rcbfvol Input rCBF volume to be registered to the FreeSurfer anatomical.
+ * @param subject Subject identifier for FreeSurfer anatomical registration.
+ * @param roitab ROI table specifying which ROIs will be summarized, e.g., FreeSurferColorLUT.txt.
+ * @param register Registration data file instead of a subject.
+ * @param template Template file used instead of rCBF itself.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
+ */
 function rcbf_prep(
     outdir: string,
     rcbfvol: InputPathType,
@@ -227,23 +244,6 @@ function rcbf_prep(
     template: InputPathType | null = null,
     runner: Runner | null = null,
 ): RcbfPrepOutputs {
-    /**
-     * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param outdir Output directory where results will be stored.
-     * @param rcbfvol Input rCBF volume to be registered to the FreeSurfer anatomical.
-     * @param subject Subject identifier for FreeSurfer anatomical registration.
-     * @param roitab ROI table specifying which ROIs will be summarized, e.g., FreeSurferColorLUT.txt.
-     * @param register Registration data file instead of a subject.
-     * @param template Template file used instead of rCBF itself.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RCBF_PREP_METADATA);
     const params = rcbf_prep_params(outdir, rcbfvol, subject, roitab, register, template)
@@ -256,5 +256,8 @@ export {
       RcbfPrepOutputs,
       RcbfPrepParameters,
       rcbf_prep,
+      rcbf_prep_cargs,
+      rcbf_prep_execute,
+      rcbf_prep_outputs,
       rcbf_prep_params,
 };

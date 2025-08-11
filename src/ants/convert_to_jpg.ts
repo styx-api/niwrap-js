@@ -12,41 +12,41 @@ const CONVERT_TO_JPG_METADATA: Metadata = {
 
 
 interface ConvertToJpgParameters {
-    "__STYXTYPE__": "ConvertToJpg";
+    "@type": "ants.ConvertToJpg";
     "infile": InputPathType;
     "outfile": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvertToJpg": convert_to_jpg_cargs,
+        "ants.ConvertToJpg": convert_to_jpg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "ConvertToJpg": convert_to_jpg_outputs,
+        "ants.ConvertToJpg": convert_to_jpg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface ConvertToJpgOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile The input file in NIfTI format.
+ * @param outfile The output file in JPG format.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_to_jpg_params(
     infile: InputPathType,
     outfile: string,
 ): ConvertToJpgParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile The input file in NIfTI format.
-     * @param outfile The output file in JPG format.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvertToJpg" as const,
+        "@type": "ants.ConvertToJpg" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -90,18 +90,18 @@ function convert_to_jpg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_to_jpg_cargs(
     params: ConvertToJpgParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvertToJpg");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -110,18 +110,18 @@ function convert_to_jpg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_to_jpg_outputs(
     params: ConvertToJpgParameters,
     execution: Execution,
 ): ConvertToJpgOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertToJpgOutputs = {
         root: execution.outputFile("."),
         output_jpg: execution.outputFile([(params["outfile"] ?? null)].join('')),
@@ -130,22 +130,22 @@ function convert_to_jpg_outputs(
 }
 
 
+/**
+ * A tool to convert NIfTI images to JPG format.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
+ */
 function convert_to_jpg_execute(
     params: ConvertToJpgParameters,
     execution: Execution,
 ): ConvertToJpgOutputs {
-    /**
-     * A tool to convert NIfTI images to JPG format.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_to_jpg_cargs(params, execution)
     const ret = convert_to_jpg_outputs(params, execution)
@@ -154,24 +154,24 @@ function convert_to_jpg_execute(
 }
 
 
+/**
+ * A tool to convert NIfTI images to JPG format.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param infile The input file in NIfTI format.
+ * @param outfile The output file in JPG format.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
+ */
 function convert_to_jpg(
     infile: InputPathType,
     outfile: string,
     runner: Runner | null = null,
 ): ConvertToJpgOutputs {
-    /**
-     * A tool to convert NIfTI images to JPG format.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param infile The input file in NIfTI format.
-     * @param outfile The output file in JPG format.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_TO_JPG_METADATA);
     const params = convert_to_jpg_params(infile, outfile)
@@ -184,5 +184,8 @@ export {
       ConvertToJpgOutputs,
       ConvertToJpgParameters,
       convert_to_jpg,
+      convert_to_jpg_cargs,
+      convert_to_jpg_execute,
+      convert_to_jpg_outputs,
       convert_to_jpg_params,
 };

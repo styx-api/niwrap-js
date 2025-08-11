@@ -12,41 +12,41 @@ const V_3D_MVM_VALIDATOR_METADATA: Metadata = {
 
 
 interface V3dMvmValidatorParameters {
-    "__STYXTYPE__": "3dMVM_validator";
+    "@type": "afni.3dMVM_validator";
     "datatable": InputPathType;
     "shinyfolder"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3dMVM_validator": v_3d_mvm_validator_cargs,
+        "afni.3dMVM_validator": v_3d_mvm_validator_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3dMVM_validator": v_3d_mvm_validator_outputs,
+        "afni.3dMVM_validator": v_3d_mvm_validator_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface V3dMvmValidatorOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param datatable A file containing a data table formatted like the 3dMVM "-dataTable".
+ * @param shinyfolder Use a custom shiny folder (for testing purposes).
+ *
+ * @returns Parameter dictionary
+ */
 function v_3d_mvm_validator_params(
     datatable: InputPathType,
     shinyfolder: string | null = null,
 ): V3dMvmValidatorParameters {
-    /**
-     * Build parameters.
-    
-     * @param datatable A file containing a data table formatted like the 3dMVM "-dataTable".
-     * @param shinyfolder Use a custom shiny folder (for testing purposes).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3dMVM_validator" as const,
+        "@type": "afni.3dMVM_validator" as const,
         "datatable": datatable,
     };
     if (shinyfolder !== null) {
@@ -92,18 +92,18 @@ function v_3d_mvm_validator_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3d_mvm_validator_cargs(
     params: V3dMvmValidatorParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3dMVM_validator");
     cargs.push(execution.inputFile((params["datatable"] ?? null)));
@@ -117,18 +117,18 @@ function v_3d_mvm_validator_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3d_mvm_validator_outputs(
     params: V3dMvmValidatorParameters,
     execution: Execution,
 ): V3dMvmValidatorOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3dMvmValidatorOutputs = {
         root: execution.outputFile("."),
         temp_folder: execution.outputFile(["__*_3dMVM_validator_temp_delete"].join('')),
@@ -137,22 +137,22 @@ function v_3d_mvm_validator_outputs(
 }
 
 
+/**
+ * Launch the 3dMVM model validation shiny app in a web browser.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
+ */
 function v_3d_mvm_validator_execute(
     params: V3dMvmValidatorParameters,
     execution: Execution,
 ): V3dMvmValidatorOutputs {
-    /**
-     * Launch the 3dMVM model validation shiny app in a web browser.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3d_mvm_validator_cargs(params, execution)
     const ret = v_3d_mvm_validator_outputs(params, execution)
@@ -161,24 +161,24 @@ function v_3d_mvm_validator_execute(
 }
 
 
+/**
+ * Launch the 3dMVM model validation shiny app in a web browser.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param datatable A file containing a data table formatted like the 3dMVM "-dataTable".
+ * @param shinyfolder Use a custom shiny folder (for testing purposes).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
+ */
 function v_3d_mvm_validator(
     datatable: InputPathType,
     shinyfolder: string | null = null,
     runner: Runner | null = null,
 ): V3dMvmValidatorOutputs {
-    /**
-     * Launch the 3dMVM model validation shiny app in a web browser.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param datatable A file containing a data table formatted like the 3dMVM "-dataTable".
-     * @param shinyfolder Use a custom shiny folder (for testing purposes).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3D_MVM_VALIDATOR_METADATA);
     const params = v_3d_mvm_validator_params(datatable, shinyfolder)
@@ -191,5 +191,8 @@ export {
       V3dMvmValidatorParameters,
       V_3D_MVM_VALIDATOR_METADATA,
       v_3d_mvm_validator,
+      v_3d_mvm_validator_cargs,
+      v_3d_mvm_validator_execute,
+      v_3d_mvm_validator_outputs,
       v_3d_mvm_validator_params,
 };

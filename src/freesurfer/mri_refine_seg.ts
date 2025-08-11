@@ -12,42 +12,42 @@ const MRI_REFINE_SEG_METADATA: Metadata = {
 
 
 interface MriRefineSegParameters {
-    "__STYXTYPE__": "mri_refine_seg";
+    "@type": "freesurfer.mri_refine_seg";
     "input_segmentation": InputPathType;
     "output_segmentation": string;
     "debug": boolean;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_refine_seg": mri_refine_seg_cargs,
+        "freesurfer.mri_refine_seg": mri_refine_seg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_refine_seg": mri_refine_seg_outputs,
+        "freesurfer.mri_refine_seg": mri_refine_seg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface MriRefineSegOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_segmentation Input segmentation file.
+ * @param output_segmentation Refined segmentation output name.
+ * @param debug Save the original segmentation, a mask of the refined voxels, and a pointset of the refined clusters to the output directory.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_refine_seg_params(
     input_segmentation: InputPathType,
     output_segmentation: string,
     debug: boolean = false,
 ): MriRefineSegParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_segmentation Input segmentation file.
-     * @param output_segmentation Refined segmentation output name.
-     * @param debug Save the original segmentation, a mask of the refined voxels, and a pointset of the refined clusters to the output directory.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_refine_seg" as const,
+        "@type": "freesurfer.mri_refine_seg" as const,
         "input_segmentation": input_segmentation,
         "output_segmentation": output_segmentation,
         "debug": debug,
@@ -94,18 +94,18 @@ function mri_refine_seg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_refine_seg_cargs(
     params: MriRefineSegParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_refine_seg");
     cargs.push(
@@ -123,18 +123,18 @@ function mri_refine_seg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_refine_seg_outputs(
     params: MriRefineSegParameters,
     execution: Execution,
 ): MriRefineSegOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRefineSegOutputs = {
         root: execution.outputFile("."),
         refined_output: execution.outputFile([(params["output_segmentation"] ?? null)].join('')),
@@ -143,22 +143,22 @@ function mri_refine_seg_outputs(
 }
 
 
+/**
+ * Refines a messy segmentation by recoding stray voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
+ */
 function mri_refine_seg_execute(
     params: MriRefineSegParameters,
     execution: Execution,
 ): MriRefineSegOutputs {
-    /**
-     * Refines a messy segmentation by recoding stray voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_refine_seg_cargs(params, execution)
     const ret = mri_refine_seg_outputs(params, execution)
@@ -167,26 +167,26 @@ function mri_refine_seg_execute(
 }
 
 
+/**
+ * Refines a messy segmentation by recoding stray voxels.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_segmentation Input segmentation file.
+ * @param output_segmentation Refined segmentation output name.
+ * @param debug Save the original segmentation, a mask of the refined voxels, and a pointset of the refined clusters to the output directory.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
+ */
 function mri_refine_seg(
     input_segmentation: InputPathType,
     output_segmentation: string,
     debug: boolean = false,
     runner: Runner | null = null,
 ): MriRefineSegOutputs {
-    /**
-     * Refines a messy segmentation by recoding stray voxels.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_segmentation Input segmentation file.
-     * @param output_segmentation Refined segmentation output name.
-     * @param debug Save the original segmentation, a mask of the refined voxels, and a pointset of the refined clusters to the output directory.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_REFINE_SEG_METADATA);
     const params = mri_refine_seg_params(input_segmentation, output_segmentation, debug)
@@ -199,5 +199,8 @@ export {
       MriRefineSegOutputs,
       MriRefineSegParameters,
       mri_refine_seg,
+      mri_refine_seg_cargs,
+      mri_refine_seg_execute,
+      mri_refine_seg_outputs,
       mri_refine_seg_params,
 };

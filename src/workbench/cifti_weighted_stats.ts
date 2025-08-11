@@ -12,7 +12,7 @@ const CIFTI_WEIGHTED_STATS_METADATA: Metadata = {
 
 
 interface CiftiWeightedStatsSpatialWeightsParameters {
-    "__STYXTYPE__": "spatial_weights";
+    "@type": "workbench.cifti-weighted-stats.spatial_weights";
     "opt_left_area_surf_left_surf"?: InputPathType | null | undefined;
     "opt_right_area_surf_right_surf"?: InputPathType | null | undefined;
     "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
@@ -23,20 +23,20 @@ interface CiftiWeightedStatsSpatialWeightsParameters {
 
 
 interface CiftiWeightedStatsRoiParameters {
-    "__STYXTYPE__": "roi";
+    "@type": "workbench.cifti-weighted-stats.roi";
     "roi_cifti": InputPathType;
     "opt_match_maps": boolean;
 }
 
 
 interface CiftiWeightedStatsStdevParameters {
-    "__STYXTYPE__": "stdev";
+    "@type": "workbench.cifti-weighted-stats.stdev";
     "opt_sample": boolean;
 }
 
 
 interface CiftiWeightedStatsParameters {
-    "__STYXTYPE__": "cifti-weighted-stats";
+    "@type": "workbench.cifti-weighted-stats";
     "cifti_in": InputPathType;
     "spatial_weights"?: CiftiWeightedStatsSpatialWeightsParameters | null | undefined;
     "opt_cifti_weights_weight_cifti"?: InputPathType | null | undefined;
@@ -50,42 +50,54 @@ interface CiftiWeightedStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "cifti-weighted-stats": cifti_weighted_stats_cargs,
-        "spatial_weights": cifti_weighted_stats_spatial_weights_cargs,
-        "roi": cifti_weighted_stats_roi_cargs,
-        "stdev": cifti_weighted_stats_stdev_cargs,
+        "workbench.cifti-weighted-stats": cifti_weighted_stats_cargs,
+        "workbench.cifti-weighted-stats.spatial_weights": cifti_weighted_stats_spatial_weights_cargs,
+        "workbench.cifti-weighted-stats.roi": cifti_weighted_stats_roi_cargs,
+        "workbench.cifti-weighted-stats.stdev": cifti_weighted_stats_stdev_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_left_area_surf_left_surf use a surface for left vertex areas: the left surface to use, areas are in mm^2
+ * @param opt_right_area_surf_right_surf use a surface for right vertex areas: the right surface to use, areas are in mm^2
+ * @param opt_cerebellum_area_surf_cerebellum_surf use a surface for cerebellum vertex areas: the cerebellum surface to use, areas are in mm^2
+ * @param opt_left_area_metric_left_metric use a metric file for left vertex areas: metric file containing left vertex areas
+ * @param opt_right_area_metric_right_metric use a metric file for right vertex areas: metric file containing right vertex areas
+ * @param opt_cerebellum_area_metric_cerebellum_metric use a metric file for cerebellum vertex areas: metric file containing cerebellum vertex areas
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_weighted_stats_spatial_weights_params(
     opt_left_area_surf_left_surf: InputPathType | null = null,
     opt_right_area_surf_right_surf: InputPathType | null = null,
@@ -94,20 +106,8 @@ function cifti_weighted_stats_spatial_weights_params(
     opt_right_area_metric_right_metric: InputPathType | null = null,
     opt_cerebellum_area_metric_cerebellum_metric: InputPathType | null = null,
 ): CiftiWeightedStatsSpatialWeightsParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_left_area_surf_left_surf use a surface for left vertex areas: the left surface to use, areas are in mm^2
-     * @param opt_right_area_surf_right_surf use a surface for right vertex areas: the right surface to use, areas are in mm^2
-     * @param opt_cerebellum_area_surf_cerebellum_surf use a surface for cerebellum vertex areas: the cerebellum surface to use, areas are in mm^2
-     * @param opt_left_area_metric_left_metric use a metric file for left vertex areas: metric file containing left vertex areas
-     * @param opt_right_area_metric_right_metric use a metric file for right vertex areas: metric file containing right vertex areas
-     * @param opt_cerebellum_area_metric_cerebellum_metric use a metric file for cerebellum vertex areas: metric file containing cerebellum vertex areas
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "spatial_weights" as const,
+        "@type": "workbench.cifti-weighted-stats.spatial_weights" as const,
     };
     if (opt_left_area_surf_left_surf !== null) {
         params["opt_left_area_surf_left_surf"] = opt_left_area_surf_left_surf;
@@ -131,18 +131,18 @@ function cifti_weighted_stats_spatial_weights_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_weighted_stats_spatial_weights_cargs(
     params: CiftiWeightedStatsSpatialWeightsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-spatial-weights");
     if ((params["opt_left_area_surf_left_surf"] ?? null) !== null) {
@@ -185,20 +185,20 @@ function cifti_weighted_stats_spatial_weights_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_cifti the roi, as a cifti file
+ * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_weighted_stats_roi_params(
     roi_cifti: InputPathType,
     opt_match_maps: boolean = false,
 ): CiftiWeightedStatsRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_cifti the roi, as a cifti file
-     * @param opt_match_maps each column of input uses the corresponding column from the roi file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi" as const,
+        "@type": "workbench.cifti-weighted-stats.roi" as const,
         "roi_cifti": roi_cifti,
         "opt_match_maps": opt_match_maps,
     };
@@ -206,18 +206,18 @@ function cifti_weighted_stats_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_weighted_stats_roi_cargs(
     params: CiftiWeightedStatsRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
@@ -228,36 +228,36 @@ function cifti_weighted_stats_roi_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_sample estimate population stdev from the sample
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_weighted_stats_stdev_params(
     opt_sample: boolean = false,
 ): CiftiWeightedStatsStdevParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_sample estimate population stdev from the sample
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stdev" as const,
+        "@type": "workbench.cifti-weighted-stats.stdev" as const,
         "opt_sample": opt_sample,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_weighted_stats_stdev_cargs(
     params: CiftiWeightedStatsStdevParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-stdev");
     if ((params["opt_sample"] ?? null)) {
@@ -280,6 +280,22 @@ interface CiftiWeightedStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param cifti_in the input cifti
+ * @param spatial_weights use vertex area and voxel volume as weights
+ * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
+ * @param opt_column_column only display output for one column: the column to use (1-based)
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ *
+ * @returns Parameter dictionary
+ */
 function cifti_weighted_stats_params(
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
@@ -292,24 +308,8 @@ function cifti_weighted_stats_params(
     opt_sum: boolean = false,
     opt_show_map_name: boolean = false,
 ): CiftiWeightedStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param cifti_in the input cifti
-     * @param spatial_weights use vertex area and voxel volume as weights
-     * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
-     * @param opt_column_column only display output for one column: the column to use (1-based)
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "cifti-weighted-stats" as const,
+        "@type": "workbench.cifti-weighted-stats" as const,
         "cifti_in": cifti_in,
         "opt_mean": opt_mean,
         "opt_sum": opt_sum,
@@ -337,24 +337,24 @@ function cifti_weighted_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function cifti_weighted_stats_cargs(
     params: CiftiWeightedStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-cifti-weighted-stats");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     if ((params["spatial_weights"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["spatial_weights"] ?? null).__STYXTYPE__)((params["spatial_weights"] ?? null), execution));
+        cargs.push(...dynCargs((params["spatial_weights"] ?? null)["@type"])((params["spatial_weights"] ?? null), execution));
     }
     if ((params["opt_cifti_weights_weight_cifti"] ?? null) !== null) {
         cargs.push(
@@ -369,13 +369,13 @@ function cifti_weighted_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null).__STYXTYPE__)((params["roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
     }
     if ((params["opt_mean"] ?? null)) {
         cargs.push("-mean");
     }
     if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["stdev"] ?? null).__STYXTYPE__)((params["stdev"] ?? null), execution));
+        cargs.push(...dynCargs((params["stdev"] ?? null)["@type"])((params["stdev"] ?? null), execution));
     }
     if ((params["opt_percentile_percent"] ?? null) !== null) {
         cargs.push(
@@ -393,18 +393,18 @@ function cifti_weighted_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function cifti_weighted_stats_outputs(
     params: CiftiWeightedStatsParameters,
     execution: Execution,
 ): CiftiWeightedStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CiftiWeightedStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -412,26 +412,26 @@ function cifti_weighted_stats_outputs(
 }
 
 
+/**
+ * Weighted statistics along cifti columns.
+ *
+ * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
+ */
 function cifti_weighted_stats_execute(
     params: CiftiWeightedStatsParameters,
     execution: Execution,
 ): CiftiWeightedStatsOutputs {
-    /**
-     * Weighted statistics along cifti columns.
-     * 
-     * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = cifti_weighted_stats_cargs(params, execution)
     const ret = cifti_weighted_stats_outputs(params, execution)
@@ -440,6 +440,31 @@ function cifti_weighted_stats_execute(
 }
 
 
+/**
+ * Weighted statistics along cifti columns.
+ *
+ * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param cifti_in the input cifti
+ * @param spatial_weights use vertex area and voxel volume as weights
+ * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
+ * @param opt_column_column only display output for one column: the column to use (1-based)
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
+ */
 function cifti_weighted_stats(
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
@@ -453,31 +478,6 @@ function cifti_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
-    /**
-     * Weighted statistics along cifti columns.
-     * 
-     * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param cifti_in the input cifti
-     * @param spatial_weights use vertex area and voxel volume as weights
-     * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
-     * @param opt_column_column only display output for one column: the column to use (1-based)
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CIFTI_WEIGHTED_STATS_METADATA);
     const params = cifti_weighted_stats_params(cifti_in, spatial_weights, opt_cifti_weights_weight_cifti, opt_column_column, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
@@ -493,8 +493,14 @@ export {
       CiftiWeightedStatsSpatialWeightsParameters,
       CiftiWeightedStatsStdevParameters,
       cifti_weighted_stats,
+      cifti_weighted_stats_cargs,
+      cifti_weighted_stats_execute,
+      cifti_weighted_stats_outputs,
       cifti_weighted_stats_params,
+      cifti_weighted_stats_roi_cargs,
       cifti_weighted_stats_roi_params,
+      cifti_weighted_stats_spatial_weights_cargs,
       cifti_weighted_stats_spatial_weights_params,
+      cifti_weighted_stats_stdev_cargs,
       cifti_weighted_stats_stdev_params,
 };

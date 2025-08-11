@@ -12,7 +12,7 @@ const BORDER_RESAMPLE_METADATA: Metadata = {
 
 
 interface BorderResampleParameters {
-    "__STYXTYPE__": "border-resample";
+    "@type": "workbench.border-resample";
     "border_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -20,35 +20,35 @@ interface BorderResampleParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "border-resample": border_resample_cargs,
+        "workbench.border-resample": border_resample_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "border-resample": border_resample_outputs,
+        "workbench.border-resample": border_resample_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface BorderResampleOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param border_in the border file to resample
+ * @param current_sphere a sphere surface with the mesh that the metric is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param border_out the output border file
+ *
+ * @returns Parameter dictionary
+ */
 function border_resample_params(
     border_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     border_out: string,
 ): BorderResampleParameters {
-    /**
-     * Build parameters.
-    
-     * @param border_in the border file to resample
-     * @param current_sphere a sphere surface with the mesh that the metric is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param border_out the output border file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "border-resample" as const,
+        "@type": "workbench.border-resample" as const,
         "border_in": border_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -98,18 +98,18 @@ function border_resample_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function border_resample_cargs(
     params: BorderResampleParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-border-resample");
@@ -121,18 +121,18 @@ function border_resample_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function border_resample_outputs(
     params: BorderResampleParameters,
     execution: Execution,
 ): BorderResampleOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: BorderResampleOutputs = {
         root: execution.outputFile("."),
         border_out: execution.outputFile([(params["border_out"] ?? null)].join('')),
@@ -141,24 +141,24 @@ function border_resample_outputs(
 }
 
 
+/**
+ * Resample a border file to a different mesh.
+ *
+ * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
+ */
 function border_resample_execute(
     params: BorderResampleParameters,
     execution: Execution,
 ): BorderResampleOutputs {
-    /**
-     * Resample a border file to a different mesh.
-     * 
-     * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
-     */
     params = execution.params(params)
     const cargs = border_resample_cargs(params, execution)
     const ret = border_resample_outputs(params, execution)
@@ -167,6 +167,23 @@ function border_resample_execute(
 }
 
 
+/**
+ * Resample a border file to a different mesh.
+ *
+ * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param border_in the border file to resample
+ * @param current_sphere a sphere surface with the mesh that the metric is currently on
+ * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param border_out the output border file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
+ */
 function border_resample(
     border_in: InputPathType,
     current_sphere: InputPathType,
@@ -174,23 +191,6 @@ function border_resample(
     border_out: string,
     runner: Runner | null = null,
 ): BorderResampleOutputs {
-    /**
-     * Resample a border file to a different mesh.
-     * 
-     * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param border_in the border file to resample
-     * @param current_sphere a sphere surface with the mesh that the metric is currently on
-     * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
-     * @param border_out the output border file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(BORDER_RESAMPLE_METADATA);
     const params = border_resample_params(border_in, current_sphere, new_sphere, border_out)
@@ -203,5 +203,8 @@ export {
       BorderResampleOutputs,
       BorderResampleParameters,
       border_resample,
+      border_resample_cargs,
+      border_resample_execute,
+      border_resample_outputs,
       border_resample_params,
 };

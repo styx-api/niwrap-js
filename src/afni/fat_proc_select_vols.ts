@@ -12,7 +12,7 @@ const FAT_PROC_SELECT_VOLS_METADATA: Metadata = {
 
 
 interface FatProcSelectVolsParameters {
-    "__STYXTYPE__": "fat_proc_select_vols";
+    "@type": "afni.fat_proc_select_vols";
     "dwi_input": InputPathType;
     "img_input": InputPathType;
     "prefix": string;
@@ -24,35 +24,35 @@ interface FatProcSelectVolsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fat_proc_select_vols": fat_proc_select_vols_cargs,
+        "afni.fat_proc_select_vols": fat_proc_select_vols_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fat_proc_select_vols": fat_proc_select_vols_outputs,
+        "afni.fat_proc_select_vols": fat_proc_select_vols_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,6 +75,20 @@ interface FatProcSelectVolsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dwi_input Input DWI dataset
+ * @param img_input 2D image of the DWI dataset
+ * @param prefix Output prefix for files
+ * @param in_bads A single column file of integers representing bad volumes indices (optional)
+ * @param apply_to_vols Apply the created selection of good volumes to the DWI dataset
+ * @param do_movie Output a movie of the newly created dataset. Only 'AGIF' or 'MPEG' arguments can be used.
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run
+ *
+ * @returns Parameter dictionary
+ */
 function fat_proc_select_vols_params(
     dwi_input: InputPathType,
     img_input: InputPathType,
@@ -85,22 +99,8 @@ function fat_proc_select_vols_params(
     workdir: string | null = null,
     no_cmd_out: boolean = false,
 ): FatProcSelectVolsParameters {
-    /**
-     * Build parameters.
-    
-     * @param dwi_input Input DWI dataset
-     * @param img_input 2D image of the DWI dataset
-     * @param prefix Output prefix for files
-     * @param in_bads A single column file of integers representing bad volumes indices (optional)
-     * @param apply_to_vols Apply the created selection of good volumes to the DWI dataset
-     * @param do_movie Output a movie of the newly created dataset. Only 'AGIF' or 'MPEG' arguments can be used.
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fat_proc_select_vols" as const,
+        "@type": "afni.fat_proc_select_vols" as const,
         "dwi_input": dwi_input,
         "img_input": img_input,
         "prefix": prefix,
@@ -120,18 +120,18 @@ function fat_proc_select_vols_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fat_proc_select_vols_cargs(
     params: FatProcSelectVolsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fat_proc_select_vols");
     cargs.push(
@@ -174,18 +174,18 @@ function fat_proc_select_vols_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fat_proc_select_vols_outputs(
     params: FatProcSelectVolsParameters,
     execution: Execution,
 ): FatProcSelectVolsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FatProcSelectVolsOutputs = {
         root: execution.outputFile("."),
         output_selector_string: execution.outputFile([(params["prefix"] ?? null), "_bads.txt"].join('')),
@@ -194,22 +194,22 @@ function fat_proc_select_vols_outputs(
 }
 
 
+/**
+ * Tool for building a selector string for AFNI subbricks and/or 1D text files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
+ */
 function fat_proc_select_vols_execute(
     params: FatProcSelectVolsParameters,
     execution: Execution,
 ): FatProcSelectVolsOutputs {
-    /**
-     * Tool for building a selector string for AFNI subbricks and/or 1D text files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fat_proc_select_vols_cargs(params, execution)
     const ret = fat_proc_select_vols_outputs(params, execution)
@@ -218,6 +218,25 @@ function fat_proc_select_vols_execute(
 }
 
 
+/**
+ * Tool for building a selector string for AFNI subbricks and/or 1D text files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param dwi_input Input DWI dataset
+ * @param img_input 2D image of the DWI dataset
+ * @param prefix Output prefix for files
+ * @param in_bads A single column file of integers representing bad volumes indices (optional)
+ * @param apply_to_vols Apply the created selection of good volumes to the DWI dataset
+ * @param do_movie Output a movie of the newly created dataset. Only 'AGIF' or 'MPEG' arguments can be used.
+ * @param workdir Specify a working directory
+ * @param no_cmd_out Don't save the command line call of this program and the location where it was run
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
+ */
 function fat_proc_select_vols(
     dwi_input: InputPathType,
     img_input: InputPathType,
@@ -229,25 +248,6 @@ function fat_proc_select_vols(
     no_cmd_out: boolean = false,
     runner: Runner | null = null,
 ): FatProcSelectVolsOutputs {
-    /**
-     * Tool for building a selector string for AFNI subbricks and/or 1D text files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param dwi_input Input DWI dataset
-     * @param img_input 2D image of the DWI dataset
-     * @param prefix Output prefix for files
-     * @param in_bads A single column file of integers representing bad volumes indices (optional)
-     * @param apply_to_vols Apply the created selection of good volumes to the DWI dataset
-     * @param do_movie Output a movie of the newly created dataset. Only 'AGIF' or 'MPEG' arguments can be used.
-     * @param workdir Specify a working directory
-     * @param no_cmd_out Don't save the command line call of this program and the location where it was run
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FAT_PROC_SELECT_VOLS_METADATA);
     const params = fat_proc_select_vols_params(dwi_input, img_input, prefix, in_bads, apply_to_vols, do_movie, workdir, no_cmd_out)
@@ -260,5 +260,8 @@ export {
       FatProcSelectVolsOutputs,
       FatProcSelectVolsParameters,
       fat_proc_select_vols,
+      fat_proc_select_vols_cargs,
+      fat_proc_select_vols_execute,
+      fat_proc_select_vols_outputs,
       fat_proc_select_vols_params,
 };

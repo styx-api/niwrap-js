@@ -12,7 +12,7 @@ const MRIS_LABEL_MODE_METADATA: Metadata = {
 
 
 interface MrisLabelModeParameters {
-    "__STYXTYPE__": "mris_label_mode";
+    "@type": "freesurfer.mris_label_mode";
     "input_curv_file": InputPathType;
     "hemi": string;
     "surface": string;
@@ -24,33 +24,33 @@ interface MrisLabelModeParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mris_label_mode": mris_label_mode_cargs,
+        "freesurfer.mris_label_mode": mris_label_mode_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -70,6 +70,20 @@ interface MrisLabelModeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_curv_file Input curvature file
+ * @param hemi Hemisphere
+ * @param surface Surface name
+ * @param subject Subject name(s)
+ * @param output_curv_file Output curvature file
+ * @param summary_statistics Generate summary statistics
+ * @param statistics_cond Condition number for summary statistics
+ * @param output_directory Override the last subject as the output surface
+ *
+ * @returns Parameter dictionary
+ */
 function mris_label_mode_params(
     input_curv_file: InputPathType,
     hemi: string,
@@ -80,22 +94,8 @@ function mris_label_mode_params(
     statistics_cond: string | null = null,
     output_directory: string | null = null,
 ): MrisLabelModeParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_curv_file Input curvature file
-     * @param hemi Hemisphere
-     * @param surface Surface name
-     * @param subject Subject name(s)
-     * @param output_curv_file Output curvature file
-     * @param summary_statistics Generate summary statistics
-     * @param statistics_cond Condition number for summary statistics
-     * @param output_directory Override the last subject as the output surface
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mris_label_mode" as const,
+        "@type": "freesurfer.mris_label_mode" as const,
         "input_curv_file": input_curv_file,
         "hemi": hemi,
         "surface": surface,
@@ -113,18 +113,18 @@ function mris_label_mode_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mris_label_mode_cargs(
     params: MrisLabelModeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mris_label_mode");
     cargs.push(execution.inputFile((params["input_curv_file"] ?? null)));
@@ -148,18 +148,18 @@ function mris_label_mode_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mris_label_mode_outputs(
     params: MrisLabelModeParameters,
     execution: Execution,
 ): MrisLabelModeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrisLabelModeOutputs = {
         root: execution.outputFile("."),
     };
@@ -167,22 +167,22 @@ function mris_label_mode_outputs(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
+ */
 function mris_label_mode_execute(
     params: MrisLabelModeParameters,
     execution: Execution,
 ): MrisLabelModeOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
-     */
     params = execution.params(params)
     const cargs = mris_label_mode_cargs(params, execution)
     const ret = mris_label_mode_outputs(params, execution)
@@ -191,6 +191,25 @@ function mris_label_mode_execute(
 }
 
 
+/**
+ * This program will add a template into an average surface.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_curv_file Input curvature file
+ * @param hemi Hemisphere
+ * @param surface Surface name
+ * @param subject Subject name(s)
+ * @param output_curv_file Output curvature file
+ * @param summary_statistics Generate summary statistics
+ * @param statistics_cond Condition number for summary statistics
+ * @param output_directory Override the last subject as the output surface
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
+ */
 function mris_label_mode(
     input_curv_file: InputPathType,
     hemi: string,
@@ -202,25 +221,6 @@ function mris_label_mode(
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): MrisLabelModeOutputs {
-    /**
-     * This program will add a template into an average surface.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_curv_file Input curvature file
-     * @param hemi Hemisphere
-     * @param surface Surface name
-     * @param subject Subject name(s)
-     * @param output_curv_file Output curvature file
-     * @param summary_statistics Generate summary statistics
-     * @param statistics_cond Condition number for summary statistics
-     * @param output_directory Override the last subject as the output surface
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRIS_LABEL_MODE_METADATA);
     const params = mris_label_mode_params(input_curv_file, hemi, surface, subject, output_curv_file, summary_statistics, statistics_cond, output_directory)
@@ -233,5 +233,8 @@ export {
       MrisLabelModeOutputs,
       MrisLabelModeParameters,
       mris_label_mode,
+      mris_label_mode_cargs,
+      mris_label_mode_execute,
+      mris_label_mode_outputs,
       mris_label_mode_params,
 };

@@ -12,7 +12,7 @@ const CONVERT_TRANSFORM_FILE_METADATA: Metadata = {
 
 
 interface ConvertTransformFileParameters {
-    "__STYXTYPE__": "ConvertTransformFile";
+    "@type": "ants.ConvertTransformFile";
     "dimensions": number;
     "input_transform_file": InputPathType;
     "output_transform_file": string;
@@ -23,33 +23,33 @@ interface ConvertTransformFileParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "ConvertTransformFile": convert_transform_file_cargs,
+        "ants.ConvertTransformFile": convert_transform_file_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -69,6 +69,19 @@ interface ConvertTransformFileOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param dimensions Dimensionality of the transform file.
+ * @param input_transform_file Path to the input transform file.
+ * @param output_transform_file Path for the output transform file.
+ * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
+ * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
+ * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
+ * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
+ *
+ * @returns Parameter dictionary
+ */
 function convert_transform_file_params(
     dimensions: number,
     input_transform_file: InputPathType,
@@ -78,21 +91,8 @@ function convert_transform_file_params(
     ras: boolean = false,
     convert_to_affine_type: boolean = false,
 ): ConvertTransformFileParameters {
-    /**
-     * Build parameters.
-    
-     * @param dimensions Dimensionality of the transform file.
-     * @param input_transform_file Path to the input transform file.
-     * @param output_transform_file Path for the output transform file.
-     * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
-     * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
-     * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
-     * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "ConvertTransformFile" as const,
+        "@type": "ants.ConvertTransformFile" as const,
         "dimensions": dimensions,
         "input_transform_file": input_transform_file,
         "output_transform_file": output_transform_file,
@@ -105,18 +105,18 @@ function convert_transform_file_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function convert_transform_file_cargs(
     params: ConvertTransformFileParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("ConvertTransformFile");
     cargs.push(String((params["dimensions"] ?? null)));
@@ -138,18 +138,18 @@ function convert_transform_file_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function convert_transform_file_outputs(
     params: ConvertTransformFileParameters,
     execution: Execution,
 ): ConvertTransformFileOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: ConvertTransformFileOutputs = {
         root: execution.outputFile("."),
     };
@@ -157,22 +157,22 @@ function convert_transform_file_outputs(
 }
 
 
+/**
+ * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
+ */
 function convert_transform_file_execute(
     params: ConvertTransformFileParameters,
     execution: Execution,
 ): ConvertTransformFileOutputs {
-    /**
-     * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
-     */
     params = execution.params(params)
     const cargs = convert_transform_file_cargs(params, execution)
     const ret = convert_transform_file_outputs(params, execution)
@@ -181,6 +181,24 @@ function convert_transform_file_execute(
 }
 
 
+/**
+ * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param dimensions Dimensionality of the transform file.
+ * @param input_transform_file Path to the input transform file.
+ * @param output_transform_file Path for the output transform file.
+ * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
+ * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
+ * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
+ * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
+ */
 function convert_transform_file(
     dimensions: number,
     input_transform_file: InputPathType,
@@ -191,24 +209,6 @@ function convert_transform_file(
     convert_to_affine_type: boolean = false,
     runner: Runner | null = null,
 ): ConvertTransformFileOutputs {
-    /**
-     * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param dimensions Dimensionality of the transform file.
-     * @param input_transform_file Path to the input transform file.
-     * @param output_transform_file Path for the output transform file.
-     * @param matrix Output only the transform matrix to a text file, one row per line with space-delimited values. Only works for specific transform types.
-     * @param homogeneous_matrix Output an N+1 square homogeneous matrix from the transform matrix and offset. Only works for specific transform types.
-     * @param ras Convert the output into the RAS coordinate system if combined with 'matrix' or 'homogeneousMatrix'.
-     * @param convert_to_affine_type Convert the input transform type to AffineTransform and output again as a binary transform file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CONVERT_TRANSFORM_FILE_METADATA);
     const params = convert_transform_file_params(dimensions, input_transform_file, output_transform_file, matrix, homogeneous_matrix, ras, convert_to_affine_type)
@@ -221,5 +221,8 @@ export {
       ConvertTransformFileOutputs,
       ConvertTransformFileParameters,
       convert_transform_file,
+      convert_transform_file_cargs,
+      convert_transform_file_execute,
+      convert_transform_file_outputs,
       convert_transform_file_params,
 };

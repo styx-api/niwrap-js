@@ -12,7 +12,7 @@ const V__MEASURE_IN2OUT_METADATA: Metadata = {
 
 
 interface VMeasureIn2outParameters {
-    "__STYXTYPE__": "@measure_in2out";
+    "@type": "afni.@measure_in2out";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir": string;
@@ -28,35 +28,35 @@ interface VMeasureIn2outParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@measure_in2out": v__measure_in2out_cargs,
+        "afni.@measure_in2out": v__measure_in2out_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@measure_in2out": v__measure_in2out_outputs,
+        "afni.@measure_in2out": v__measure_in2out_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,6 +107,24 @@ interface VMeasureIn2outOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param maskset Mask dataset for input.
+ * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
+ * @param outdir Output directory. If not specified, in2out_thickdir is used.
+ * @param resample Resample input to mm in millimeters (put a number here). Set this to half a voxel or "auto". No resampling is done by default. Resampling is highly recommended for most 1mm data.
+ * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param maskinoutvals Use v1 for value of mask, v2 and v3 for inside and outside mask values (e.g., '1 -2 -1').
+ * @param keep_temp_files Do not delete the intermediate files (for testing).
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for some models.
+ * @param fs_cort_dir Use FreeSurfer SUMA directory from @SUMA_Make_Spec_FS for processing.
+ *
+ * @returns Parameter dictionary
+ */
 function v__measure_in2out_params(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -121,26 +139,8 @@ function v__measure_in2out_params(
     surfsmooth_method: string | null = null,
     fs_cort_dir: string | null = null,
 ): VMeasureIn2outParameters {
-    /**
-     * Build parameters.
-    
-     * @param maskset Mask dataset for input.
-     * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
-     * @param outdir Output directory. If not specified, in2out_thickdir is used.
-     * @param resample Resample input to mm in millimeters (put a number here). Set this to half a voxel or "auto". No resampling is done by default. Resampling is highly recommended for most 1mm data.
-     * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param maskinoutvals Use v1 for value of mask, v2 and v3 for inside and outside mask values (e.g., '1 -2 -1').
-     * @param keep_temp_files Do not delete the intermediate files (for testing).
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for some models.
-     * @param fs_cort_dir Use FreeSurfer SUMA directory from @SUMA_Make_Spec_FS for processing.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@measure_in2out" as const,
+        "@type": "afni.@measure_in2out" as const,
         "maskset": maskset,
         "surfset": surfset,
         "outdir": outdir,
@@ -174,18 +174,18 @@ function v__measure_in2out_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__measure_in2out_cargs(
     params: VMeasureIn2outParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@measure_in2out");
     cargs.push(
@@ -255,18 +255,18 @@ function v__measure_in2out_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__measure_in2out_outputs(
     params: VMeasureIn2outParameters,
     execution: Execution,
 ): VMeasureIn2outOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VMeasureIn2outOutputs = {
         root: execution.outputFile("."),
         inout_dist: execution.outputFile(["inout_dist.nii.gz"].join('')),
@@ -282,22 +282,22 @@ function v__measure_in2out_outputs(
 }
 
 
+/**
+ * Compute thickness of mask using in2out method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
+ */
 function v__measure_in2out_execute(
     params: VMeasureIn2outParameters,
     execution: Execution,
 ): VMeasureIn2outOutputs {
-    /**
-     * Compute thickness of mask using in2out method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__measure_in2out_cargs(params, execution)
     const ret = v__measure_in2out_outputs(params, execution)
@@ -306,6 +306,29 @@ function v__measure_in2out_execute(
 }
 
 
+/**
+ * Compute thickness of mask using in2out method.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param maskset Mask dataset for input.
+ * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
+ * @param outdir Output directory. If not specified, in2out_thickdir is used.
+ * @param resample Resample input to mm in millimeters (put a number here). Set this to half a voxel or "auto". No resampling is done by default. Resampling is highly recommended for most 1mm data.
+ * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
+ * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
+ * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
+ * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
+ * @param maskinoutvals Use v1 for value of mask, v2 and v3 for inside and outside mask values (e.g., '1 -2 -1').
+ * @param keep_temp_files Do not delete the intermediate files (for testing).
+ * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for some models.
+ * @param fs_cort_dir Use FreeSurfer SUMA directory from @SUMA_Make_Spec_FS for processing.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
+ */
 function v__measure_in2out(
     maskset: InputPathType,
     surfset: InputPathType,
@@ -321,29 +344,6 @@ function v__measure_in2out(
     fs_cort_dir: string | null = null,
     runner: Runner | null = null,
 ): VMeasureIn2outOutputs {
-    /**
-     * Compute thickness of mask using in2out method.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param maskset Mask dataset for input.
-     * @param surfset Surface dataset onto which to map thickness (probably a pial/gray matter surface).
-     * @param outdir Output directory. If not specified, in2out_thickdir is used.
-     * @param resample Resample input to mm in millimeters (put a number here). Set this to half a voxel or "auto". No resampling is done by default. Resampling is highly recommended for most 1mm data.
-     * @param increment Test thickness at increments of sub-voxel distance. Default is 1/4 voxel minimum distance (in-plane).
-     * @param surfsmooth Smooth surface map of thickness by mm millimeters. Default is 6 mm.
-     * @param maxthick Search for maximum thickness value of mm millimeters. Default is 6 mm.
-     * @param depthsearch Map to surface by looking for max along mm millimeter normal vectors. Default is 3 mm.
-     * @param maskinoutvals Use v1 for value of mask, v2 and v3 for inside and outside mask values (e.g., '1 -2 -1').
-     * @param keep_temp_files Do not delete the intermediate files (for testing).
-     * @param surfsmooth_method Heat method used for smoothing surfaces. Default is HEAT_07 but HEAT_05 is also useful for some models.
-     * @param fs_cort_dir Use FreeSurfer SUMA directory from @SUMA_Make_Spec_FS for processing.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__MEASURE_IN2OUT_METADATA);
     const params = v__measure_in2out_params(maskset, surfset, outdir, resample, increment, surfsmooth, maxthick, depthsearch, maskinoutvals, keep_temp_files, surfsmooth_method, fs_cort_dir)
@@ -356,5 +356,8 @@ export {
       VMeasureIn2outParameters,
       V__MEASURE_IN2OUT_METADATA,
       v__measure_in2out,
+      v__measure_in2out_cargs,
+      v__measure_in2out_execute,
+      v__measure_in2out_outputs,
       v__measure_in2out_params,
 };

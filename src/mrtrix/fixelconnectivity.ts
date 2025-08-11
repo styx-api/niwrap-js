@@ -12,14 +12,14 @@ const FIXELCONNECTIVITY_METADATA: Metadata = {
 
 
 interface FixelconnectivityConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.fixelconnectivity.config";
     "key": string;
     "value": string;
 }
 
 
 interface FixelconnectivityParameters {
-    "__STYXTYPE__": "fixelconnectivity";
+    "@type": "mrtrix.fixelconnectivity";
     "threshold"?: number | null | undefined;
     "angle"?: number | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -37,55 +37,55 @@ interface FixelconnectivityParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fixelconnectivity": fixelconnectivity_cargs,
-        "config": fixelconnectivity_config_cargs,
+        "mrtrix.fixelconnectivity": fixelconnectivity_cargs,
+        "mrtrix.fixelconnectivity.config": fixelconnectivity_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fixelconnectivity": fixelconnectivity_outputs,
+        "mrtrix.fixelconnectivity": fixelconnectivity_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconnectivity_config_params(
     key: string,
     value: string,
 ): FixelconnectivityConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.fixelconnectivity.config" as const,
         "key": key,
         "value": value,
     };
@@ -93,18 +93,18 @@ function fixelconnectivity_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconnectivity_config_cargs(
     params: FixelconnectivityConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -130,6 +130,26 @@ interface FixelconnectivityOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param fixel_directory the directory containing the fixels between which connectivity will be quantified
+ * @param tracks the tracks used to determine fixel-fixel connectivity
+ * @param matrix the output fixel-fixel connectivity matrix directory path
+ * @param threshold a threshold to define the required fraction of shared connections to be included in the neighbourhood (default: 0.01)
+ * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
+ * @param mask provide a fixel data file containing a mask of those fixels to be computed; fixels outside the mask will be empty in the output matrix
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function fixelconnectivity_params(
     fixel_directory: InputPathType,
     tracks: InputPathType,
@@ -146,28 +166,8 @@ function fixelconnectivity_params(
     help: boolean = false,
     version: boolean = false,
 ): FixelconnectivityParameters {
-    /**
-     * Build parameters.
-    
-     * @param fixel_directory the directory containing the fixels between which connectivity will be quantified
-     * @param tracks the tracks used to determine fixel-fixel connectivity
-     * @param matrix the output fixel-fixel connectivity matrix directory path
-     * @param threshold a threshold to define the required fraction of shared connections to be included in the neighbourhood (default: 0.01)
-     * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
-     * @param mask provide a fixel data file containing a mask of those fixels to be computed; fixels outside the mask will be empty in the output matrix
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fixelconnectivity" as const,
+        "@type": "mrtrix.fixelconnectivity" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -197,18 +197,18 @@ function fixelconnectivity_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fixelconnectivity_cargs(
     params: FixelconnectivityParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fixelconnectivity");
     if ((params["threshold"] ?? null) !== null) {
@@ -248,7 +248,7 @@ function fixelconnectivity_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -263,18 +263,18 @@ function fixelconnectivity_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fixelconnectivity_outputs(
     params: FixelconnectivityParameters,
     execution: Execution,
 ): FixelconnectivityOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FixelconnectivityOutputs = {
         root: execution.outputFile("."),
         matrix: execution.outputFile([(params["matrix"] ?? null)].join('')),
@@ -283,28 +283,28 @@ function fixelconnectivity_outputs(
 }
 
 
+/**
+ * Generate a fixel-fixel connectivity matrix.
+ *
+ * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
+ */
 function fixelconnectivity_execute(
     params: FixelconnectivityParameters,
     execution: Execution,
 ): FixelconnectivityOutputs {
-    /**
-     * Generate a fixel-fixel connectivity matrix.
-     * 
-     * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
-     */
     params = execution.params(params)
     const cargs = fixelconnectivity_cargs(params, execution)
     const ret = fixelconnectivity_outputs(params, execution)
@@ -313,6 +313,37 @@ function fixelconnectivity_execute(
 }
 
 
+/**
+ * Generate a fixel-fixel connectivity matrix.
+ *
+ * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param fixel_directory the directory containing the fixels between which connectivity will be quantified
+ * @param tracks the tracks used to determine fixel-fixel connectivity
+ * @param matrix the output fixel-fixel connectivity matrix directory path
+ * @param threshold a threshold to define the required fraction of shared connections to be included in the neighbourhood (default: 0.01)
+ * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
+ * @param mask provide a fixel data file containing a mask of those fixels to be computed; fixels outside the mask will be empty in the output matrix
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
+ */
 function fixelconnectivity(
     fixel_directory: InputPathType,
     tracks: InputPathType,
@@ -330,37 +361,6 @@ function fixelconnectivity(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelconnectivityOutputs {
-    /**
-     * Generate a fixel-fixel connectivity matrix.
-     * 
-     * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param fixel_directory the directory containing the fixels between which connectivity will be quantified
-     * @param tracks the tracks used to determine fixel-fixel connectivity
-     * @param matrix the output fixel-fixel connectivity matrix directory path
-     * @param threshold a threshold to define the required fraction of shared connections to be included in the neighbourhood (default: 0.01)
-     * @param angle the max angle threshold for assigning streamline tangents to fixels (Default: 45 degrees)
-     * @param mask provide a fixel data file containing a mask of those fixels to be computed; fixels outside the mask will be empty in the output matrix
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIXELCONNECTIVITY_METADATA);
     const params = fixelconnectivity_params(fixel_directory, tracks, matrix, threshold, angle, mask, info, quiet, debug, force, nthreads, config, help, version)
@@ -374,6 +374,10 @@ export {
       FixelconnectivityOutputs,
       FixelconnectivityParameters,
       fixelconnectivity,
+      fixelconnectivity_cargs,
+      fixelconnectivity_config_cargs,
       fixelconnectivity_config_params,
+      fixelconnectivity_execute,
+      fixelconnectivity_outputs,
       fixelconnectivity_params,
 };

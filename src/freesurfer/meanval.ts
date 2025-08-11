@@ -12,7 +12,7 @@ const MEANVAL_METADATA: Metadata = {
 
 
 interface MeanvalParameters {
-    "__STYXTYPE__": "meanval";
+    "@type": "freesurfer.meanval";
     "input_file": InputPathType;
     "mask_file": InputPathType;
     "output_file": string;
@@ -20,35 +20,35 @@ interface MeanvalParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "meanval": meanval_cargs,
+        "freesurfer.meanval": meanval_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "meanval": meanval_outputs,
+        "freesurfer.meanval": meanval_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface MeanvalOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input volume file
+ * @param mask_file Mask file
+ * @param output_file Output file where mean value will be stored
+ * @param avgwf_flag Flag to calculate the average waveform
+ *
+ * @returns Parameter dictionary
+ */
 function meanval_params(
     input_file: InputPathType,
     mask_file: InputPathType,
     output_file: string,
     avgwf_flag: boolean = false,
 ): MeanvalParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input volume file
-     * @param mask_file Mask file
-     * @param output_file Output file where mean value will be stored
-     * @param avgwf_flag Flag to calculate the average waveform
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "meanval" as const,
+        "@type": "freesurfer.meanval" as const,
         "input_file": input_file,
         "mask_file": mask_file,
         "output_file": output_file,
@@ -98,18 +98,18 @@ function meanval_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function meanval_cargs(
     params: MeanvalParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("meanval");
     cargs.push(
@@ -131,18 +131,18 @@ function meanval_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function meanval_outputs(
     params: MeanvalParameters,
     execution: Execution,
 ): MeanvalOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MeanvalOutputs = {
         root: execution.outputFile("."),
         mean_output_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
@@ -151,22 +151,22 @@ function meanval_outputs(
 }
 
 
+/**
+ * Tool to calculate the mean value of an image within a mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
+ */
 function meanval_execute(
     params: MeanvalParameters,
     execution: Execution,
 ): MeanvalOutputs {
-    /**
-     * Tool to calculate the mean value of an image within a mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
-     */
     params = execution.params(params)
     const cargs = meanval_cargs(params, execution)
     const ret = meanval_outputs(params, execution)
@@ -175,6 +175,21 @@ function meanval_execute(
 }
 
 
+/**
+ * Tool to calculate the mean value of an image within a mask.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_file Input volume file
+ * @param mask_file Mask file
+ * @param output_file Output file where mean value will be stored
+ * @param avgwf_flag Flag to calculate the average waveform
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
+ */
 function meanval(
     input_file: InputPathType,
     mask_file: InputPathType,
@@ -182,21 +197,6 @@ function meanval(
     avgwf_flag: boolean = false,
     runner: Runner | null = null,
 ): MeanvalOutputs {
-    /**
-     * Tool to calculate the mean value of an image within a mask.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_file Input volume file
-     * @param mask_file Mask file
-     * @param output_file Output file where mean value will be stored
-     * @param avgwf_flag Flag to calculate the average waveform
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MEANVAL_METADATA);
     const params = meanval_params(input_file, mask_file, output_file, avgwf_flag)
@@ -209,5 +209,8 @@ export {
       MeanvalOutputs,
       MeanvalParameters,
       meanval,
+      meanval_cargs,
+      meanval_execute,
+      meanval_outputs,
       meanval_params,
 };

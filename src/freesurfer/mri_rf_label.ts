@@ -12,7 +12,7 @@ const MRI_RF_LABEL_METADATA: Metadata = {
 
 
 interface MriRfLabelParameters {
-    "__STYXTYPE__": "mri_rf_label";
+    "@type": "freesurfer.mri_rf_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
     "gcafile": InputPathType;
@@ -56,35 +56,35 @@ interface MriRfLabelParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_rf_label": mri_rf_label_cargs,
+        "freesurfer.mri_rf_label": mri_rf_label_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_rf_label": mri_rf_label_outputs,
+        "freesurfer.mri_rf_label": mri_rf_label_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,6 +107,52 @@ interface MriRfLabelOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volumes Input volume(s)
+ * @param transform_file Transform file
+ * @param gcafile GCA file
+ * @param output_volume Output volume
+ * @param cross_sequence_flag Label a volume acquired with a sequence different than atlas
+ * @param nogibbs_flag Disable gibbs priors
+ * @param wm_path Use WM segmentation from provided file
+ * @param conform_flag Interpolate volume to be isotropic 1mm^3
+ * @param normpd_flag Normalize PD image to GCA means
+ * @param gca_tl Use file to label the thin temporal lobe
+ * @param debug_voxel Debug voxel at specified coordinates
+ * @param debug_node Debug node at specified coordinates
+ * @param debug_label Debug label at specified index
+ * @param tr Set TR in msec
+ * @param te Set TE in msec
+ * @param alpha Set alpha in radians
+ * @param example Use T1 (mri_vol) and segmentation as example
+ * @param pthresh Use p threshold for adaptive renormalization
+ * @param niter Apply max likelihood for n iterations
+ * @param novar_flag Do not use variance in classification
+ * @param regularize Regularize variance to be sigma+nC(noise)
+ * @param nohippo_flag Do not auto-edit hippocampus
+ * @param fwm Use fixed white matter segmentation from wm
+ * @param mri_vol Write most likely MR volume to specified file
+ * @param heq Use histogram equalization from specified volume
+ * @param renorm Renormalize using predicted intensity values
+ * @param flash_flag Use FLASH forward model to predict intensity values
+ * @param flash_params Use FLASH forward model and tissue params from file
+ * @param renormalize Renorm class means iter times after initial label with window of wsize
+ * @param set_input Set input volume
+ * @param histogram_flag Use GCA to histogram normalize input image
+ * @param cond_density_mean Mean filter n times to conditional densities
+ * @param snapshots Write snapshots of gibbs process every n times to filename
+ * @param mask Use mri_vol to mask final labeling
+ * @param expand Expand
+ * @param max_iter Set max iterations
+ * @param filter_mode Filter labeled volume with threshold t mode filter f times
+ * @param longitudinal_vol Longitudinal processing: mri_vol is label from tp1, LTA is registration from tp1 to current data
+ * @param longitudinal_lta Longitudinal LTA registration
+ * @param relabel_unlikely_flag Reclassify voxels using a Gaussian window to recomute priors and likelihoods
+ *
+ * @returns Parameter dictionary
+ */
 function mri_rf_label_params(
     input_volumes: Array<InputPathType>,
     transform_file: InputPathType,
@@ -149,54 +195,8 @@ function mri_rf_label_params(
     longitudinal_lta: InputPathType | null = null,
     relabel_unlikely_flag: Array<number> | null = null,
 ): MriRfLabelParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volumes Input volume(s)
-     * @param transform_file Transform file
-     * @param gcafile GCA file
-     * @param output_volume Output volume
-     * @param cross_sequence_flag Label a volume acquired with a sequence different than atlas
-     * @param nogibbs_flag Disable gibbs priors
-     * @param wm_path Use WM segmentation from provided file
-     * @param conform_flag Interpolate volume to be isotropic 1mm^3
-     * @param normpd_flag Normalize PD image to GCA means
-     * @param gca_tl Use file to label the thin temporal lobe
-     * @param debug_voxel Debug voxel at specified coordinates
-     * @param debug_node Debug node at specified coordinates
-     * @param debug_label Debug label at specified index
-     * @param tr Set TR in msec
-     * @param te Set TE in msec
-     * @param alpha Set alpha in radians
-     * @param example Use T1 (mri_vol) and segmentation as example
-     * @param pthresh Use p threshold for adaptive renormalization
-     * @param niter Apply max likelihood for n iterations
-     * @param novar_flag Do not use variance in classification
-     * @param regularize Regularize variance to be sigma+nC(noise)
-     * @param nohippo_flag Do not auto-edit hippocampus
-     * @param fwm Use fixed white matter segmentation from wm
-     * @param mri_vol Write most likely MR volume to specified file
-     * @param heq Use histogram equalization from specified volume
-     * @param renorm Renormalize using predicted intensity values
-     * @param flash_flag Use FLASH forward model to predict intensity values
-     * @param flash_params Use FLASH forward model and tissue params from file
-     * @param renormalize Renorm class means iter times after initial label with window of wsize
-     * @param set_input Set input volume
-     * @param histogram_flag Use GCA to histogram normalize input image
-     * @param cond_density_mean Mean filter n times to conditional densities
-     * @param snapshots Write snapshots of gibbs process every n times to filename
-     * @param mask Use mri_vol to mask final labeling
-     * @param expand Expand
-     * @param max_iter Set max iterations
-     * @param filter_mode Filter labeled volume with threshold t mode filter f times
-     * @param longitudinal_vol Longitudinal processing: mri_vol is label from tp1, LTA is registration from tp1 to current data
-     * @param longitudinal_lta Longitudinal LTA registration
-     * @param relabel_unlikely_flag Reclassify voxels using a Gaussian window to recomute priors and likelihoods
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_rf_label" as const,
+        "@type": "freesurfer.mri_rf_label" as const,
         "input_volumes": input_volumes,
         "transform_file": transform_file,
         "gcafile": gcafile,
@@ -298,18 +298,18 @@ function mri_rf_label_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_rf_label_cargs(
     params: MriRfLabelParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_rf_label");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
@@ -509,18 +509,18 @@ function mri_rf_label_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_rf_label_outputs(
     params: MriRfLabelParameters,
     execution: Execution,
 ): MriRfLabelOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriRfLabelOutputs = {
         root: execution.outputFile("."),
         outvol: execution.outputFile([(params["output_volume"] ?? null)].join('')),
@@ -529,22 +529,22 @@ function mri_rf_label_outputs(
 }
 
 
+/**
+ * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
+ */
 function mri_rf_label_execute(
     params: MriRfLabelParameters,
     execution: Execution,
 ): MriRfLabelOutputs {
-    /**
-     * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_rf_label_cargs(params, execution)
     const ret = mri_rf_label_outputs(params, execution)
@@ -553,6 +553,57 @@ function mri_rf_label_execute(
 }
 
 
+/**
+ * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volumes Input volume(s)
+ * @param transform_file Transform file
+ * @param gcafile GCA file
+ * @param output_volume Output volume
+ * @param cross_sequence_flag Label a volume acquired with a sequence different than atlas
+ * @param nogibbs_flag Disable gibbs priors
+ * @param wm_path Use WM segmentation from provided file
+ * @param conform_flag Interpolate volume to be isotropic 1mm^3
+ * @param normpd_flag Normalize PD image to GCA means
+ * @param gca_tl Use file to label the thin temporal lobe
+ * @param debug_voxel Debug voxel at specified coordinates
+ * @param debug_node Debug node at specified coordinates
+ * @param debug_label Debug label at specified index
+ * @param tr Set TR in msec
+ * @param te Set TE in msec
+ * @param alpha Set alpha in radians
+ * @param example Use T1 (mri_vol) and segmentation as example
+ * @param pthresh Use p threshold for adaptive renormalization
+ * @param niter Apply max likelihood for n iterations
+ * @param novar_flag Do not use variance in classification
+ * @param regularize Regularize variance to be sigma+nC(noise)
+ * @param nohippo_flag Do not auto-edit hippocampus
+ * @param fwm Use fixed white matter segmentation from wm
+ * @param mri_vol Write most likely MR volume to specified file
+ * @param heq Use histogram equalization from specified volume
+ * @param renorm Renormalize using predicted intensity values
+ * @param flash_flag Use FLASH forward model to predict intensity values
+ * @param flash_params Use FLASH forward model and tissue params from file
+ * @param renormalize Renorm class means iter times after initial label with window of wsize
+ * @param set_input Set input volume
+ * @param histogram_flag Use GCA to histogram normalize input image
+ * @param cond_density_mean Mean filter n times to conditional densities
+ * @param snapshots Write snapshots of gibbs process every n times to filename
+ * @param mask Use mri_vol to mask final labeling
+ * @param expand Expand
+ * @param max_iter Set max iterations
+ * @param filter_mode Filter labeled volume with threshold t mode filter f times
+ * @param longitudinal_vol Longitudinal processing: mri_vol is label from tp1, LTA is registration from tp1 to current data
+ * @param longitudinal_lta Longitudinal LTA registration
+ * @param relabel_unlikely_flag Reclassify voxels using a Gaussian window to recomute priors and likelihoods
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
+ */
 function mri_rf_label(
     input_volumes: Array<InputPathType>,
     transform_file: InputPathType,
@@ -596,57 +647,6 @@ function mri_rf_label(
     relabel_unlikely_flag: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriRfLabelOutputs {
-    /**
-     * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volumes Input volume(s)
-     * @param transform_file Transform file
-     * @param gcafile GCA file
-     * @param output_volume Output volume
-     * @param cross_sequence_flag Label a volume acquired with a sequence different than atlas
-     * @param nogibbs_flag Disable gibbs priors
-     * @param wm_path Use WM segmentation from provided file
-     * @param conform_flag Interpolate volume to be isotropic 1mm^3
-     * @param normpd_flag Normalize PD image to GCA means
-     * @param gca_tl Use file to label the thin temporal lobe
-     * @param debug_voxel Debug voxel at specified coordinates
-     * @param debug_node Debug node at specified coordinates
-     * @param debug_label Debug label at specified index
-     * @param tr Set TR in msec
-     * @param te Set TE in msec
-     * @param alpha Set alpha in radians
-     * @param example Use T1 (mri_vol) and segmentation as example
-     * @param pthresh Use p threshold for adaptive renormalization
-     * @param niter Apply max likelihood for n iterations
-     * @param novar_flag Do not use variance in classification
-     * @param regularize Regularize variance to be sigma+nC(noise)
-     * @param nohippo_flag Do not auto-edit hippocampus
-     * @param fwm Use fixed white matter segmentation from wm
-     * @param mri_vol Write most likely MR volume to specified file
-     * @param heq Use histogram equalization from specified volume
-     * @param renorm Renormalize using predicted intensity values
-     * @param flash_flag Use FLASH forward model to predict intensity values
-     * @param flash_params Use FLASH forward model and tissue params from file
-     * @param renormalize Renorm class means iter times after initial label with window of wsize
-     * @param set_input Set input volume
-     * @param histogram_flag Use GCA to histogram normalize input image
-     * @param cond_density_mean Mean filter n times to conditional densities
-     * @param snapshots Write snapshots of gibbs process every n times to filename
-     * @param mask Use mri_vol to mask final labeling
-     * @param expand Expand
-     * @param max_iter Set max iterations
-     * @param filter_mode Filter labeled volume with threshold t mode filter f times
-     * @param longitudinal_vol Longitudinal processing: mri_vol is label from tp1, LTA is registration from tp1 to current data
-     * @param longitudinal_lta Longitudinal LTA registration
-     * @param relabel_unlikely_flag Reclassify voxels using a Gaussian window to recomute priors and likelihoods
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_RF_LABEL_METADATA);
     const params = mri_rf_label_params(input_volumes, transform_file, gcafile, output_volume, cross_sequence_flag, nogibbs_flag, wm_path, conform_flag, normpd_flag, gca_tl, debug_voxel, debug_node, debug_label, tr, te, alpha, example, pthresh, niter, novar_flag, regularize, nohippo_flag, fwm, mri_vol, heq, renorm, flash_flag, flash_params, renormalize, set_input, histogram_flag, cond_density_mean, snapshots, mask, expand, max_iter, filter_mode, longitudinal_vol, longitudinal_lta, relabel_unlikely_flag)
@@ -659,5 +659,8 @@ export {
       MriRfLabelOutputs,
       MriRfLabelParameters,
       mri_rf_label,
+      mri_rf_label_cargs,
+      mri_rf_label_execute,
+      mri_rf_label_outputs,
       mri_rf_label_params,
 };

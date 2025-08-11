@@ -12,38 +12,38 @@ const CSVPRINT_METADATA: Metadata = {
 
 
 interface CsvprintParameters {
-    "__STYXTYPE__": "csvprint";
+    "@type": "freesurfer.csvprint";
     "infile": InputPathType;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "csvprint": csvprint_cargs,
+        "freesurfer.csvprint": csvprint_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
@@ -63,36 +63,36 @@ interface CsvprintOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param infile Input CSV file to be printed
+ *
+ * @returns Parameter dictionary
+ */
 function csvprint_params(
     infile: InputPathType,
 ): CsvprintParameters {
-    /**
-     * Build parameters.
-    
-     * @param infile Input CSV file to be printed
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "csvprint" as const,
+        "@type": "freesurfer.csvprint" as const,
         "infile": infile,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function csvprint_cargs(
     params: CsvprintParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("csvprint");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -100,18 +100,18 @@ function csvprint_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function csvprint_outputs(
     params: CsvprintParameters,
     execution: Execution,
 ): CsvprintOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: CsvprintOutputs = {
         root: execution.outputFile("."),
     };
@@ -119,22 +119,22 @@ function csvprint_outputs(
 }
 
 
+/**
+ * Command-line tool for printing CSV files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
+ */
 function csvprint_execute(
     params: CsvprintParameters,
     execution: Execution,
 ): CsvprintOutputs {
-    /**
-     * Command-line tool for printing CSV files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
-     */
     params = execution.params(params)
     const cargs = csvprint_cargs(params, execution)
     const ret = csvprint_outputs(params, execution)
@@ -143,22 +143,22 @@ function csvprint_execute(
 }
 
 
+/**
+ * Command-line tool for printing CSV files.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param infile Input CSV file to be printed
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
+ */
 function csvprint(
     infile: InputPathType,
     runner: Runner | null = null,
 ): CsvprintOutputs {
-    /**
-     * Command-line tool for printing CSV files.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param infile Input CSV file to be printed
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(CSVPRINT_METADATA);
     const params = csvprint_params(infile)
@@ -171,5 +171,8 @@ export {
       CsvprintOutputs,
       CsvprintParameters,
       csvprint,
+      csvprint_cargs,
+      csvprint_execute,
+      csvprint_outputs,
       csvprint_params,
 };

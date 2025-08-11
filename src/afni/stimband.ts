@@ -12,7 +12,7 @@ const STIMBAND_METADATA: Metadata = {
 
 
 interface StimbandParameters {
-    "__STYXTYPE__": "stimband";
+    "@type": "afni.stimband";
     "verbose_flag": boolean;
     "matrixfiles": Array<InputPathType>;
     "additional_matrixfiles"?: Array<InputPathType> | null | undefined;
@@ -22,35 +22,35 @@ interface StimbandParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "stimband": stimband_cargs,
+        "afni.stimband": stimband_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "stimband": stimband_outputs,
+        "afni.stimband": stimband_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface StimbandOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param matrixfiles Path to matrix files.
+ * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
+ * @param additional_matrixfiles Another way to read 1 or more matrix files.
+ * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
+ * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
+ * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
+ *
+ * @returns Parameter dictionary
+ */
 function stimband_params(
     matrixfiles: Array<InputPathType>,
     verbose_flag: boolean = false,
@@ -81,20 +93,8 @@ function stimband_params(
     min_bwidth: number | null = null,
     min_pow: number | null = null,
 ): StimbandParameters {
-    /**
-     * Build parameters.
-    
-     * @param matrixfiles Path to matrix files.
-     * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
-     * @param additional_matrixfiles Another way to read 1 or more matrix files.
-     * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
-     * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
-     * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stimband" as const,
+        "@type": "afni.stimband" as const,
         "verbose_flag": verbose_flag,
         "matrixfiles": matrixfiles,
     };
@@ -114,18 +114,18 @@ function stimband_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function stimband_cargs(
     params: StimbandParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("stimband");
     if ((params["verbose_flag"] ?? null)) {
@@ -160,18 +160,18 @@ function stimband_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function stimband_outputs(
     params: StimbandParameters,
     execution: Execution,
 ): StimbandOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: StimbandOutputs = {
         root: execution.outputFile("."),
         output_band: execution.outputFile(["stdout"].join('')),
@@ -180,22 +180,22 @@ function stimband_outputs(
 }
 
 
+/**
+ * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `StimbandOutputs`).
+ */
 function stimband_execute(
     params: StimbandParameters,
     execution: Execution,
 ): StimbandOutputs {
-    /**
-     * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `StimbandOutputs`).
-     */
     params = execution.params(params)
     const cargs = stimband_cargs(params, execution)
     const ret = stimband_outputs(params, execution)
@@ -204,6 +204,23 @@ function stimband_execute(
 }
 
 
+/**
+ * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param matrixfiles Path to matrix files.
+ * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
+ * @param additional_matrixfiles Another way to read 1 or more matrix files.
+ * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
+ * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
+ * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `StimbandOutputs`).
+ */
 function stimband(
     matrixfiles: Array<InputPathType>,
     verbose_flag: boolean = false,
@@ -213,23 +230,6 @@ function stimband(
     min_pow: number | null = null,
     runner: Runner | null = null,
 ): StimbandOutputs {
-    /**
-     * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param matrixfiles Path to matrix files.
-     * @param verbose_flag Print the power band for each individual stimulus column from each matrix.
-     * @param additional_matrixfiles Another way to read 1 or more matrix files.
-     * @param min_freq Set the minimum frequency output for the band. Default value is 0.01.
-     * @param min_bwidth Set the minimum bandwidth output (top frequency minus bottom frequency). Default is 0.03.
-     * @param min_pow Set the minimum power fraction (percentage) to 'ff' instead of the default 90%. Value must be in the range 50..99.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `StimbandOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(STIMBAND_METADATA);
     const params = stimband_params(matrixfiles, verbose_flag, additional_matrixfiles, min_freq, min_bwidth, min_pow)
@@ -242,5 +242,8 @@ export {
       StimbandOutputs,
       StimbandParameters,
       stimband,
+      stimband_cargs,
+      stimband_execute,
+      stimband_outputs,
       stimband_params,
 };

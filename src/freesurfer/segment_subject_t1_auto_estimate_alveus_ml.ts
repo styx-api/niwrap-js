@@ -12,41 +12,41 @@ const SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 
 interface SegmentSubjectT1AutoEstimateAlveusMlParameters {
-    "__STYXTYPE__": "segmentSubjectT1_autoEstimateAlveusML";
+    "@type": "freesurfer.segmentSubjectT1_autoEstimateAlveusML";
     "t1_file": InputPathType;
     "output_folder": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_cargs,
+        "freesurfer.segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_outputs,
+        "freesurfer.segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface SegmentSubjectT1AutoEstimateAlveusMlOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param t1_file Input T1-weighted MRI file to be segmented.
+ * @param output_folder Path to the folder where the outputs will be saved.
+ *
+ * @returns Parameter dictionary
+ */
 function segment_subject_t1_auto_estimate_alveus_ml_params(
     t1_file: InputPathType,
     output_folder: string,
 ): SegmentSubjectT1AutoEstimateAlveusMlParameters {
-    /**
-     * Build parameters.
-    
-     * @param t1_file Input T1-weighted MRI file to be segmented.
-     * @param output_folder Path to the folder where the outputs will be saved.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "segmentSubjectT1_autoEstimateAlveusML" as const,
+        "@type": "freesurfer.segmentSubjectT1_autoEstimateAlveusML" as const,
         "t1_file": t1_file,
         "output_folder": output_folder,
     };
@@ -90,18 +90,18 @@ function segment_subject_t1_auto_estimate_alveus_ml_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function segment_subject_t1_auto_estimate_alveus_ml_cargs(
     params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("segmentSubjectT1_autoEstimateAlveusML");
     cargs.push(execution.inputFile((params["t1_file"] ?? null)));
@@ -110,18 +110,18 @@ function segment_subject_t1_auto_estimate_alveus_ml_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function segment_subject_t1_auto_estimate_alveus_ml_outputs(
     params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: SegmentSubjectT1AutoEstimateAlveusMlOutputs = {
         root: execution.outputFile("."),
         segmentation_output: execution.outputFile([(params["output_folder"] ?? null), "/segmented_output.nii.gz"].join('')),
@@ -130,22 +130,22 @@ function segment_subject_t1_auto_estimate_alveus_ml_outputs(
 }
 
 
+/**
+ * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
+ */
 function segment_subject_t1_auto_estimate_alveus_ml_execute(
     params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
     execution: Execution,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
-    /**
-     * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
-     */
     params = execution.params(params)
     const cargs = segment_subject_t1_auto_estimate_alveus_ml_cargs(params, execution)
     const ret = segment_subject_t1_auto_estimate_alveus_ml_outputs(params, execution)
@@ -154,24 +154,24 @@ function segment_subject_t1_auto_estimate_alveus_ml_execute(
 }
 
 
+/**
+ * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param t1_file Input T1-weighted MRI file to be segmented.
+ * @param output_folder Path to the folder where the outputs will be saved.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
+ */
 function segment_subject_t1_auto_estimate_alveus_ml(
     t1_file: InputPathType,
     output_folder: string,
     runner: Runner | null = null,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
-    /**
-     * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param t1_file Input T1-weighted MRI file to be segmented.
-     * @param output_folder Path to the folder where the outputs will be saved.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     const params = segment_subject_t1_auto_estimate_alveus_ml_params(t1_file, output_folder)
@@ -184,5 +184,8 @@ export {
       SegmentSubjectT1AutoEstimateAlveusMlOutputs,
       SegmentSubjectT1AutoEstimateAlveusMlParameters,
       segment_subject_t1_auto_estimate_alveus_ml,
+      segment_subject_t1_auto_estimate_alveus_ml_cargs,
+      segment_subject_t1_auto_estimate_alveus_ml_execute,
+      segment_subject_t1_auto_estimate_alveus_ml_outputs,
       segment_subject_t1_auto_estimate_alveus_ml_params,
 };

@@ -12,7 +12,7 @@ const FSLSTATS_METADATA: Metadata = {
 
 
 interface FslstatsParameters {
-    "__STYXTYPE__": "fslstats";
+    "@type": "fsl.fslstats";
     "input_file": InputPathType;
     "index_mask"?: InputPathType | null | undefined;
     "lower_threshold"?: number | null | undefined;
@@ -44,35 +44,35 @@ interface FslstatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslstats": fslstats_cargs,
+        "fsl.fslstats": fslstats_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslstats": fslstats_outputs,
+        "fsl.fslstats": fslstats_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,6 +95,40 @@ interface FslstatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_file Input image file (e.g., image.nii.gz)
+ * @param index_mask Generate separate n submasks from indexMask, for indexvalues 1..n where n is the maximum index value in indexMask, and generate statistics for each submask
+ * @param lower_threshold Set lower threshold
+ * @param upper_threshold Set upper threshold
+ * @param robust_intensity_flag Output robust min and max intensity
+ * @param minmax_intensity_flag Output min and max intensity
+ * @param voxels_volume_flag Output voxels and volume
+ * @param nonzero_voxels_volume_flag Output voxels and volume (for nonzero voxels)
+ * @param mean_flag Output mean
+ * @param nonzero_mean_flag Output mean (for nonzero voxels)
+ * @param std_dev_flag Output standard deviation
+ * @param nonzero_std_dev_flag Output standard deviation (for nonzero voxels)
+ * @param smallest_roi_flag Output smallest ROI containing nonzero voxels
+ * @param max_coords_flag Output coordinates of maximum voxel
+ * @param min_coords_flag Output coordinates of minimum voxel
+ * @param cog_mm_flag Output center-of-gravity (cog) in mm coordinates
+ * @param cog_voxel_flag Output center-of-gravity (cog) in voxel coordinates
+ * @param percentile Output nth percentile
+ * @param nonzero_percentile Output nth percentile (for nonzero voxels)
+ * @param absolute_values_flag Use absolute values of all image intensities
+ * @param nan_as_zero_flag Treat NaN or Inf as zero for subsequent stats
+ * @param mask_image Use the specified image for masking - overrides lower and upper thresholds
+ * @param difference_image Take the difference between the base image and the image specified here
+ * @param hist_bins Output a histogram for the thresholded/masked voxels only with specified number of bins
+ * @param hist_bins_min_max Output a histogram for the thresholded/masked voxels only with specified number of bins and histogram limits of min and max
+ * @param timeseries_flag Separate output line for each 3D volume of a 4D timeseries
+ * @param mean_entropy_flag Output mean entropy; mean(-i*ln(i))
+ * @param nonzero_mean_entropy_flag Output mean entropy (of nonzero voxels)
+ *
+ * @returns Parameter dictionary
+ */
 function fslstats_params(
     input_file: InputPathType,
     index_mask: InputPathType | null = null,
@@ -125,42 +159,8 @@ function fslstats_params(
     mean_entropy_flag: boolean = false,
     nonzero_mean_entropy_flag: boolean = false,
 ): FslstatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_file Input image file (e.g., image.nii.gz)
-     * @param index_mask Generate separate n submasks from indexMask, for indexvalues 1..n where n is the maximum index value in indexMask, and generate statistics for each submask
-     * @param lower_threshold Set lower threshold
-     * @param upper_threshold Set upper threshold
-     * @param robust_intensity_flag Output robust min and max intensity
-     * @param minmax_intensity_flag Output min and max intensity
-     * @param voxels_volume_flag Output voxels and volume
-     * @param nonzero_voxels_volume_flag Output voxels and volume (for nonzero voxels)
-     * @param mean_flag Output mean
-     * @param nonzero_mean_flag Output mean (for nonzero voxels)
-     * @param std_dev_flag Output standard deviation
-     * @param nonzero_std_dev_flag Output standard deviation (for nonzero voxels)
-     * @param smallest_roi_flag Output smallest ROI containing nonzero voxels
-     * @param max_coords_flag Output coordinates of maximum voxel
-     * @param min_coords_flag Output coordinates of minimum voxel
-     * @param cog_mm_flag Output center-of-gravity (cog) in mm coordinates
-     * @param cog_voxel_flag Output center-of-gravity (cog) in voxel coordinates
-     * @param percentile Output nth percentile
-     * @param nonzero_percentile Output nth percentile (for nonzero voxels)
-     * @param absolute_values_flag Use absolute values of all image intensities
-     * @param nan_as_zero_flag Treat NaN or Inf as zero for subsequent stats
-     * @param mask_image Use the specified image for masking - overrides lower and upper thresholds
-     * @param difference_image Take the difference between the base image and the image specified here
-     * @param hist_bins Output a histogram for the thresholded/masked voxels only with specified number of bins
-     * @param hist_bins_min_max Output a histogram for the thresholded/masked voxels only with specified number of bins and histogram limits of min and max
-     * @param timeseries_flag Separate output line for each 3D volume of a 4D timeseries
-     * @param mean_entropy_flag Output mean entropy; mean(-i*ln(i))
-     * @param nonzero_mean_entropy_flag Output mean entropy (of nonzero voxels)
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslstats" as const,
+        "@type": "fsl.fslstats" as const,
         "input_file": input_file,
         "robust_intensity_flag": robust_intensity_flag,
         "minmax_intensity_flag": minmax_intensity_flag,
@@ -212,18 +212,18 @@ function fslstats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslstats_cargs(
     params: FslstatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslstats");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -339,18 +339,18 @@ function fslstats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslstats_outputs(
     params: FslstatsParameters,
     execution: Execution,
 ): FslstatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslstatsOutputs = {
         root: execution.outputFile("."),
         output_stats: execution.outputFile([path.basename((params["input_file"] ?? null)), "_stats.txt"].join('')),
@@ -359,22 +359,22 @@ function fslstats_outputs(
 }
 
 
+/**
+ * FSL tool for calculating statistics on image data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
+ */
 function fslstats_execute(
     params: FslstatsParameters,
     execution: Execution,
 ): FslstatsOutputs {
-    /**
-     * FSL tool for calculating statistics on image data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslstats_cargs(params, execution)
     const ret = fslstats_outputs(params, execution)
@@ -383,6 +383,45 @@ function fslstats_execute(
 }
 
 
+/**
+ * FSL tool for calculating statistics on image data.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_file Input image file (e.g., image.nii.gz)
+ * @param index_mask Generate separate n submasks from indexMask, for indexvalues 1..n where n is the maximum index value in indexMask, and generate statistics for each submask
+ * @param lower_threshold Set lower threshold
+ * @param upper_threshold Set upper threshold
+ * @param robust_intensity_flag Output robust min and max intensity
+ * @param minmax_intensity_flag Output min and max intensity
+ * @param voxels_volume_flag Output voxels and volume
+ * @param nonzero_voxels_volume_flag Output voxels and volume (for nonzero voxels)
+ * @param mean_flag Output mean
+ * @param nonzero_mean_flag Output mean (for nonzero voxels)
+ * @param std_dev_flag Output standard deviation
+ * @param nonzero_std_dev_flag Output standard deviation (for nonzero voxels)
+ * @param smallest_roi_flag Output smallest ROI containing nonzero voxels
+ * @param max_coords_flag Output coordinates of maximum voxel
+ * @param min_coords_flag Output coordinates of minimum voxel
+ * @param cog_mm_flag Output center-of-gravity (cog) in mm coordinates
+ * @param cog_voxel_flag Output center-of-gravity (cog) in voxel coordinates
+ * @param percentile Output nth percentile
+ * @param nonzero_percentile Output nth percentile (for nonzero voxels)
+ * @param absolute_values_flag Use absolute values of all image intensities
+ * @param nan_as_zero_flag Treat NaN or Inf as zero for subsequent stats
+ * @param mask_image Use the specified image for masking - overrides lower and upper thresholds
+ * @param difference_image Take the difference between the base image and the image specified here
+ * @param hist_bins Output a histogram for the thresholded/masked voxels only with specified number of bins
+ * @param hist_bins_min_max Output a histogram for the thresholded/masked voxels only with specified number of bins and histogram limits of min and max
+ * @param timeseries_flag Separate output line for each 3D volume of a 4D timeseries
+ * @param mean_entropy_flag Output mean entropy; mean(-i*ln(i))
+ * @param nonzero_mean_entropy_flag Output mean entropy (of nonzero voxels)
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
+ */
 function fslstats(
     input_file: InputPathType,
     index_mask: InputPathType | null = null,
@@ -414,45 +453,6 @@ function fslstats(
     nonzero_mean_entropy_flag: boolean = false,
     runner: Runner | null = null,
 ): FslstatsOutputs {
-    /**
-     * FSL tool for calculating statistics on image data.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_file Input image file (e.g., image.nii.gz)
-     * @param index_mask Generate separate n submasks from indexMask, for indexvalues 1..n where n is the maximum index value in indexMask, and generate statistics for each submask
-     * @param lower_threshold Set lower threshold
-     * @param upper_threshold Set upper threshold
-     * @param robust_intensity_flag Output robust min and max intensity
-     * @param minmax_intensity_flag Output min and max intensity
-     * @param voxels_volume_flag Output voxels and volume
-     * @param nonzero_voxels_volume_flag Output voxels and volume (for nonzero voxels)
-     * @param mean_flag Output mean
-     * @param nonzero_mean_flag Output mean (for nonzero voxels)
-     * @param std_dev_flag Output standard deviation
-     * @param nonzero_std_dev_flag Output standard deviation (for nonzero voxels)
-     * @param smallest_roi_flag Output smallest ROI containing nonzero voxels
-     * @param max_coords_flag Output coordinates of maximum voxel
-     * @param min_coords_flag Output coordinates of minimum voxel
-     * @param cog_mm_flag Output center-of-gravity (cog) in mm coordinates
-     * @param cog_voxel_flag Output center-of-gravity (cog) in voxel coordinates
-     * @param percentile Output nth percentile
-     * @param nonzero_percentile Output nth percentile (for nonzero voxels)
-     * @param absolute_values_flag Use absolute values of all image intensities
-     * @param nan_as_zero_flag Treat NaN or Inf as zero for subsequent stats
-     * @param mask_image Use the specified image for masking - overrides lower and upper thresholds
-     * @param difference_image Take the difference between the base image and the image specified here
-     * @param hist_bins Output a histogram for the thresholded/masked voxels only with specified number of bins
-     * @param hist_bins_min_max Output a histogram for the thresholded/masked voxels only with specified number of bins and histogram limits of min and max
-     * @param timeseries_flag Separate output line for each 3D volume of a 4D timeseries
-     * @param mean_entropy_flag Output mean entropy; mean(-i*ln(i))
-     * @param nonzero_mean_entropy_flag Output mean entropy (of nonzero voxels)
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLSTATS_METADATA);
     const params = fslstats_params(input_file, index_mask, lower_threshold, upper_threshold, robust_intensity_flag, minmax_intensity_flag, voxels_volume_flag, nonzero_voxels_volume_flag, mean_flag, nonzero_mean_flag, std_dev_flag, nonzero_std_dev_flag, smallest_roi_flag, max_coords_flag, min_coords_flag, cog_mm_flag, cog_voxel_flag, percentile, nonzero_percentile, absolute_values_flag, nan_as_zero_flag, mask_image, difference_image, hist_bins, hist_bins_min_max, timeseries_flag, mean_entropy_flag, nonzero_mean_entropy_flag)
@@ -465,5 +465,8 @@ export {
       FslstatsOutputs,
       FslstatsParameters,
       fslstats,
+      fslstats_cargs,
+      fslstats_execute,
+      fslstats_outputs,
       fslstats_params,
 };

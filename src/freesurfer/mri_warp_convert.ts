@@ -12,7 +12,7 @@ const MRI_WARP_CONVERT_METADATA: Metadata = {
 
 
 interface MriWarpConvertParameters {
-    "__STYXTYPE__": "mri_warp_convert";
+    "@type": "freesurfer.mri_warp_convert";
     "inm3z"?: InputPathType | null | undefined;
     "infsl"?: InputPathType | null | undefined;
     "inlps"?: InputPathType | null | undefined;
@@ -30,35 +30,35 @@ interface MriWarpConvertParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mri_warp_convert": mri_warp_convert_cargs,
+        "freesurfer.mri_warp_convert": mri_warp_convert_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "mri_warp_convert": mri_warp_convert_outputs,
+        "freesurfer.mri_warp_convert": mri_warp_convert_outputs,
     };
     return outputsFuncs[t];
 }
@@ -81,6 +81,26 @@ interface MriWarpConvertOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param inm3z Input M3Z warp
+ * @param infsl Input FSL warp
+ * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
+ * @param initk Input ITK LPS-to-LPS displacement field
+ * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
+ * @param invox Input file with displacements in source-voxel space
+ * @param outm3z Output warp (M3Z Freesurfer format)
+ * @param outfsl Output warp (FSL format)
+ * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
+ * @param outitk Output ITK LPS-to-LPS displacement field
+ * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
+ * @param outvox Output file with displacements in source-voxel space
+ * @param insrcgeom Specify source image geometry (moving volume)
+ * @param downsample Downsample output M3Z to spacing of 2.
+ *
+ * @returns Parameter dictionary
+ */
 function mri_warp_convert_params(
     inm3z: InputPathType | null = null,
     infsl: InputPathType | null = null,
@@ -97,28 +117,8 @@ function mri_warp_convert_params(
     insrcgeom: InputPathType | null = null,
     downsample: boolean = false,
 ): MriWarpConvertParameters {
-    /**
-     * Build parameters.
-    
-     * @param inm3z Input M3Z warp
-     * @param infsl Input FSL warp
-     * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
-     * @param initk Input ITK LPS-to-LPS displacement field
-     * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
-     * @param invox Input file with displacements in source-voxel space
-     * @param outm3z Output warp (M3Z Freesurfer format)
-     * @param outfsl Output warp (FSL format)
-     * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
-     * @param outitk Output ITK LPS-to-LPS displacement field
-     * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
-     * @param outvox Output file with displacements in source-voxel space
-     * @param insrcgeom Specify source image geometry (moving volume)
-     * @param downsample Downsample output M3Z to spacing of 2.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mri_warp_convert" as const,
+        "@type": "freesurfer.mri_warp_convert" as const,
         "downsample": downsample,
     };
     if (inm3z !== null) {
@@ -164,18 +164,18 @@ function mri_warp_convert_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mri_warp_convert_cargs(
     params: MriWarpConvertParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mri_warp_convert");
     if ((params["inm3z"] ?? null) !== null) {
@@ -263,18 +263,18 @@ function mri_warp_convert_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mri_warp_convert_outputs(
     params: MriWarpConvertParameters,
     execution: Execution,
 ): MriWarpConvertOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MriWarpConvertOutputs = {
         root: execution.outputFile("."),
         outwarp: ((params["outvox"] ?? null) !== null) ? execution.outputFile([(params["outvox"] ?? null)].join('')) : null,
@@ -283,22 +283,22 @@ function mri_warp_convert_outputs(
 }
 
 
+/**
+ * This program converts non-linear deformation field warp file formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
+ */
 function mri_warp_convert_execute(
     params: MriWarpConvertParameters,
     execution: Execution,
 ): MriWarpConvertOutputs {
-    /**
-     * This program converts non-linear deformation field warp file formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
-     */
     params = execution.params(params)
     const cargs = mri_warp_convert_cargs(params, execution)
     const ret = mri_warp_convert_outputs(params, execution)
@@ -307,6 +307,31 @@ function mri_warp_convert_execute(
 }
 
 
+/**
+ * This program converts non-linear deformation field warp file formats.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param inm3z Input M3Z warp
+ * @param infsl Input FSL warp
+ * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
+ * @param initk Input ITK LPS-to-LPS displacement field
+ * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
+ * @param invox Input file with displacements in source-voxel space
+ * @param outm3z Output warp (M3Z Freesurfer format)
+ * @param outfsl Output warp (FSL format)
+ * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
+ * @param outitk Output ITK LPS-to-LPS displacement field
+ * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
+ * @param outvox Output file with displacements in source-voxel space
+ * @param insrcgeom Specify source image geometry (moving volume)
+ * @param downsample Downsample output M3Z to spacing of 2.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
+ */
 function mri_warp_convert(
     inm3z: InputPathType | null = null,
     infsl: InputPathType | null = null,
@@ -324,31 +349,6 @@ function mri_warp_convert(
     downsample: boolean = false,
     runner: Runner | null = null,
 ): MriWarpConvertOutputs {
-    /**
-     * This program converts non-linear deformation field warp file formats.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param inm3z Input M3Z warp
-     * @param infsl Input FSL warp
-     * @param inlps Input LPS-to-LPS displacement field (e.g. ITK, ANTs)
-     * @param initk Input ITK LPS-to-LPS displacement field
-     * @param inras Input RAS-to-RAS displacement field (e.g. NiftyReg)
-     * @param invox Input file with displacements in source-voxel space
-     * @param outm3z Output warp (M3Z Freesurfer format)
-     * @param outfsl Output warp (FSL format)
-     * @param outlps Output LPS-to-LPS displacement field (e.g. ITK, ANTs)
-     * @param outitk Output ITK LPS-to-LPS displacement field
-     * @param outras Output RAS-to-RAS displacement field (e.g. NiftyReg)
-     * @param outvox Output file with displacements in source-voxel space
-     * @param insrcgeom Specify source image geometry (moving volume)
-     * @param downsample Downsample output M3Z to spacing of 2.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRI_WARP_CONVERT_METADATA);
     const params = mri_warp_convert_params(inm3z, infsl, inlps, initk, inras, invox, outm3z, outfsl, outlps, outitk, outras, outvox, insrcgeom, downsample)
@@ -361,5 +361,8 @@ export {
       MriWarpConvertOutputs,
       MriWarpConvertParameters,
       mri_warp_convert,
+      mri_warp_convert_cargs,
+      mri_warp_convert_execute,
+      mri_warp_convert_outputs,
       mri_warp_convert_params,
 };

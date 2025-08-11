@@ -12,7 +12,7 @@ const V_3DDOT_METADATA: Metadata = {
 
 
 interface V3ddotParameters {
-    "__STYXTYPE__": "3ddot";
+    "@type": "afni.3ddot";
     "input_datasets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
     "mrange"?: Array<number> | null | undefined;
@@ -31,35 +31,35 @@ interface V3ddotParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "3ddot": v_3ddot_cargs,
+        "afni.3ddot": v_3ddot_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "3ddot": v_3ddot_outputs,
+        "afni.3ddot": v_3ddot_outputs,
     };
     return outputsFuncs[t];
 }
@@ -82,6 +82,27 @@ interface V3ddotOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_datasets List of input datasets to be used (e.g. img1+orig, img2+orig)
+ * @param mask Dataset to be used as a mask; only voxels with nonzero values will be averaged
+ * @param mrange Restrict mask values to those between a and b (inclusive) for masking purposes
+ * @param demean Remove the mean from each volume prior to computing the correlation
+ * @param docor Return the correlation coefficient (default)
+ * @param dodot Return the dot product (unscaled)
+ * @param docoef Return the least square fit coefficients {a,b}
+ * @param dosums Return xbar, ybar, variance, covariance, and correlation coefficient
+ * @param doeta2 Return eta-squared (Cohen, NeuroImage 2008)
+ * @param dodice Return the Dice coefficient (the Sorensen-Dice index)
+ * @param show_labels Print sub-brick labels to help identify what is being correlated
+ * @param upper Compute upper triangular matrix
+ * @param full Compute the whole matrix
+ * @param v_1_d Add comment headings for the 1D format
+ * @param niml Write output in NIML 1D format
+ *
+ * @returns Parameter dictionary
+ */
 function v_3ddot_params(
     input_datasets: Array<InputPathType>,
     mask: InputPathType | null = null,
@@ -99,29 +120,8 @@ function v_3ddot_params(
     v_1_d: boolean = false,
     niml: boolean = false,
 ): V3ddotParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_datasets List of input datasets to be used (e.g. img1+orig, img2+orig)
-     * @param mask Dataset to be used as a mask; only voxels with nonzero values will be averaged
-     * @param mrange Restrict mask values to those between a and b (inclusive) for masking purposes
-     * @param demean Remove the mean from each volume prior to computing the correlation
-     * @param docor Return the correlation coefficient (default)
-     * @param dodot Return the dot product (unscaled)
-     * @param docoef Return the least square fit coefficients {a,b}
-     * @param dosums Return xbar, ybar, variance, covariance, and correlation coefficient
-     * @param doeta2 Return eta-squared (Cohen, NeuroImage 2008)
-     * @param dodice Return the Dice coefficient (the Sorensen-Dice index)
-     * @param show_labels Print sub-brick labels to help identify what is being correlated
-     * @param upper Compute upper triangular matrix
-     * @param full Compute the whole matrix
-     * @param v_1_d Add comment headings for the 1D format
-     * @param niml Write output in NIML 1D format
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "3ddot" as const,
+        "@type": "afni.3ddot" as const,
         "input_datasets": input_datasets,
         "demean": demean,
         "docor": docor,
@@ -146,18 +146,18 @@ function v_3ddot_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v_3ddot_cargs(
     params: V3ddotParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("3ddot");
     cargs.push(...(params["input_datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -213,18 +213,18 @@ function v_3ddot_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v_3ddot_outputs(
     params: V3ddotParameters,
     execution: Execution,
 ): V3ddotOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: V3ddotOutputs = {
         root: execution.outputFile("."),
         result: execution.outputFile(["stdout"].join('')),
@@ -233,22 +233,22 @@ function v_3ddot_outputs(
 }
 
 
+/**
+ * Computes correlation coefficients between sub-brick pairs.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
+ */
 function v_3ddot_execute(
     params: V3ddotParameters,
     execution: Execution,
 ): V3ddotOutputs {
-    /**
-     * Computes correlation coefficients between sub-brick pairs.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
-     */
     params = execution.params(params)
     const cargs = v_3ddot_cargs(params, execution)
     const ret = v_3ddot_outputs(params, execution)
@@ -257,6 +257,32 @@ function v_3ddot_execute(
 }
 
 
+/**
+ * Computes correlation coefficients between sub-brick pairs.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_datasets List of input datasets to be used (e.g. img1+orig, img2+orig)
+ * @param mask Dataset to be used as a mask; only voxels with nonzero values will be averaged
+ * @param mrange Restrict mask values to those between a and b (inclusive) for masking purposes
+ * @param demean Remove the mean from each volume prior to computing the correlation
+ * @param docor Return the correlation coefficient (default)
+ * @param dodot Return the dot product (unscaled)
+ * @param docoef Return the least square fit coefficients {a,b}
+ * @param dosums Return xbar, ybar, variance, covariance, and correlation coefficient
+ * @param doeta2 Return eta-squared (Cohen, NeuroImage 2008)
+ * @param dodice Return the Dice coefficient (the Sorensen-Dice index)
+ * @param show_labels Print sub-brick labels to help identify what is being correlated
+ * @param upper Compute upper triangular matrix
+ * @param full Compute the whole matrix
+ * @param v_1_d Add comment headings for the 1D format
+ * @param niml Write output in NIML 1D format
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
+ */
 function v_3ddot(
     input_datasets: Array<InputPathType>,
     mask: InputPathType | null = null,
@@ -275,32 +301,6 @@ function v_3ddot(
     niml: boolean = false,
     runner: Runner | null = null,
 ): V3ddotOutputs {
-    /**
-     * Computes correlation coefficients between sub-brick pairs.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_datasets List of input datasets to be used (e.g. img1+orig, img2+orig)
-     * @param mask Dataset to be used as a mask; only voxels with nonzero values will be averaged
-     * @param mrange Restrict mask values to those between a and b (inclusive) for masking purposes
-     * @param demean Remove the mean from each volume prior to computing the correlation
-     * @param docor Return the correlation coefficient (default)
-     * @param dodot Return the dot product (unscaled)
-     * @param docoef Return the least square fit coefficients {a,b}
-     * @param dosums Return xbar, ybar, variance, covariance, and correlation coefficient
-     * @param doeta2 Return eta-squared (Cohen, NeuroImage 2008)
-     * @param dodice Return the Dice coefficient (the Sorensen-Dice index)
-     * @param show_labels Print sub-brick labels to help identify what is being correlated
-     * @param upper Compute upper triangular matrix
-     * @param full Compute the whole matrix
-     * @param v_1_d Add comment headings for the 1D format
-     * @param niml Write output in NIML 1D format
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V_3DDOT_METADATA);
     const params = v_3ddot_params(input_datasets, mask, mrange, demean, docor, dodot, docoef, dosums, doeta2, dodice, show_labels, upper, full, v_1_d, niml)
@@ -313,5 +313,8 @@ export {
       V3ddotParameters,
       V_3DDOT_METADATA,
       v_3ddot,
+      v_3ddot_cargs,
+      v_3ddot_execute,
+      v_3ddot_outputs,
       v_3ddot_params,
 };

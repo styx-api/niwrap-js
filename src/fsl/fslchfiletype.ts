@@ -12,42 +12,42 @@ const FSLCHFILETYPE_METADATA: Metadata = {
 
 
 interface FslchfiletypeParameters {
-    "__STYXTYPE__": "fslchfiletype";
+    "@type": "fsl.fslchfiletype";
     "filetype": string;
     "filename": InputPathType;
     "filename2"?: string | null | undefined;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fslchfiletype": fslchfiletype_cargs,
+        "fsl.fslchfiletype": fslchfiletype_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fslchfiletype": fslchfiletype_outputs,
+        "fsl.fslchfiletype": fslchfiletype_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,22 +70,22 @@ interface FslchfiletypeOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param filetype The type of the file to convert to. Valid values include: ANALYZE, ANALYZE_GZ, NIFTI, NIFTI_GZ, NIFTI_PAIR, NIFTI_PAIR_GZ, NIFTI2, NIFTI2_GZ, NIFTI2_PAIR, NIFTI2_PAIR_GZ.
+ * @param filename The name of the input image file.
+ * @param filename2 The name of the output image file (optional).
+ *
+ * @returns Parameter dictionary
+ */
 function fslchfiletype_params(
     filetype: string,
     filename: InputPathType,
     filename2: string | null = null,
 ): FslchfiletypeParameters {
-    /**
-     * Build parameters.
-    
-     * @param filetype The type of the file to convert to. Valid values include: ANALYZE, ANALYZE_GZ, NIFTI, NIFTI_GZ, NIFTI_PAIR, NIFTI_PAIR_GZ, NIFTI2, NIFTI2_GZ, NIFTI2_PAIR, NIFTI2_PAIR_GZ.
-     * @param filename The name of the input image file.
-     * @param filename2 The name of the output image file (optional).
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fslchfiletype" as const,
+        "@type": "fsl.fslchfiletype" as const,
         "filetype": filetype,
         "filename": filename,
     };
@@ -96,18 +96,18 @@ function fslchfiletype_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fslchfiletype_cargs(
     params: FslchfiletypeParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fslchfiletype");
     cargs.push((params["filetype"] ?? null));
@@ -119,18 +119,18 @@ function fslchfiletype_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fslchfiletype_outputs(
     params: FslchfiletypeParameters,
     execution: Execution,
 ): FslchfiletypeOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FslchfiletypeOutputs = {
         root: execution.outputFile("."),
         outfile: ((params["filename2"] ?? null) !== null) ? execution.outputFile([(params["filename2"] ?? null)].join('')) : null,
@@ -139,22 +139,22 @@ function fslchfiletype_outputs(
 }
 
 
+/**
+ * Tool to change the file type of an image file or copy it to a new file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
+ */
 function fslchfiletype_execute(
     params: FslchfiletypeParameters,
     execution: Execution,
 ): FslchfiletypeOutputs {
-    /**
-     * Tool to change the file type of an image file or copy it to a new file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
-     */
     params = execution.params(params)
     const cargs = fslchfiletype_cargs(params, execution)
     const ret = fslchfiletype_outputs(params, execution)
@@ -163,26 +163,26 @@ function fslchfiletype_execute(
 }
 
 
+/**
+ * Tool to change the file type of an image file or copy it to a new file.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param filetype The type of the file to convert to. Valid values include: ANALYZE, ANALYZE_GZ, NIFTI, NIFTI_GZ, NIFTI_PAIR, NIFTI_PAIR_GZ, NIFTI2, NIFTI2_GZ, NIFTI2_PAIR, NIFTI2_PAIR_GZ.
+ * @param filename The name of the input image file.
+ * @param filename2 The name of the output image file (optional).
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
+ */
 function fslchfiletype(
     filetype: string,
     filename: InputPathType,
     filename2: string | null = null,
     runner: Runner | null = null,
 ): FslchfiletypeOutputs {
-    /**
-     * Tool to change the file type of an image file or copy it to a new file.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param filetype The type of the file to convert to. Valid values include: ANALYZE, ANALYZE_GZ, NIFTI, NIFTI_GZ, NIFTI_PAIR, NIFTI_PAIR_GZ, NIFTI2, NIFTI2_GZ, NIFTI2_PAIR, NIFTI2_PAIR_GZ.
-     * @param filename The name of the input image file.
-     * @param filename2 The name of the output image file (optional).
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSLCHFILETYPE_METADATA);
     const params = fslchfiletype_params(filetype, filename, filename2)
@@ -195,5 +195,8 @@ export {
       FslchfiletypeOutputs,
       FslchfiletypeParameters,
       fslchfiletype,
+      fslchfiletype_cargs,
+      fslchfiletype_execute,
+      fslchfiletype_outputs,
       fslchfiletype_params,
 };

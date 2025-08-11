@@ -12,7 +12,7 @@ const FIRST_FLIRT_METADATA: Metadata = {
 
 
 interface FirstFlirtParameters {
-    "__STYXTYPE__": "first_flirt";
+    "@type": "fsl.first_flirt";
     "input_image": InputPathType;
     "output_basename": string;
     "already_brain_extracted_flag": boolean;
@@ -24,35 +24,35 @@ interface FirstFlirtParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "first_flirt": first_flirt_cargs,
+        "fsl.first_flirt": first_flirt_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "first_flirt": first_flirt_outputs,
+        "fsl.first_flirt": first_flirt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -83,6 +83,20 @@ interface FirstFlirtOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_image Input image (e.g. subject10rawT1.nii.gz)
+ * @param output_basename Output basename for the results (e.g. subject10rawT1_to_std_sub)
+ * @param already_brain_extracted_flag Input is already brain extracted
+ * @param debug_flag Debug mode: don't delete intermediate files
+ * @param inweight_flag Use a weighting mask on the first registration
+ * @param strucweight_mask Use a specific structure weighting mask (in standard space) for an optional third-stage registration step (e.g. maskimage.nii.gz)
+ * @param cort_flag Use a weighting mask of the whole brain on the first registration for specific models
+ * @param cost_function Specify the cost function to be used by all FLIRT calls
+ *
+ * @returns Parameter dictionary
+ */
 function first_flirt_params(
     input_image: InputPathType,
     output_basename: string,
@@ -93,22 +107,8 @@ function first_flirt_params(
     cort_flag: boolean = false,
     cost_function: string | null = null,
 ): FirstFlirtParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_image Input image (e.g. subject10rawT1.nii.gz)
-     * @param output_basename Output basename for the results (e.g. subject10rawT1_to_std_sub)
-     * @param already_brain_extracted_flag Input is already brain extracted
-     * @param debug_flag Debug mode: don't delete intermediate files
-     * @param inweight_flag Use a weighting mask on the first registration
-     * @param strucweight_mask Use a specific structure weighting mask (in standard space) for an optional third-stage registration step (e.g. maskimage.nii.gz)
-     * @param cort_flag Use a weighting mask of the whole brain on the first registration for specific models
-     * @param cost_function Specify the cost function to be used by all FLIRT calls
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "first_flirt" as const,
+        "@type": "fsl.first_flirt" as const,
         "input_image": input_image,
         "output_basename": output_basename,
         "already_brain_extracted_flag": already_brain_extracted_flag,
@@ -126,18 +126,18 @@ function first_flirt_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function first_flirt_cargs(
     params: FirstFlirtParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("first_flirt");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -170,18 +170,18 @@ function first_flirt_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function first_flirt_outputs(
     params: FirstFlirtParameters,
     execution: Execution,
 ): FirstFlirtOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FirstFlirtOutputs = {
         root: execution.outputFile("."),
         registered_output_image: execution.outputFile([(params["output_basename"] ?? null), "_result.nii.gz"].join('')),
@@ -192,22 +192,22 @@ function first_flirt_outputs(
 }
 
 
+/**
+ * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
+ */
 function first_flirt_execute(
     params: FirstFlirtParameters,
     execution: Execution,
 ): FirstFlirtOutputs {
-    /**
-     * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
-     */
     params = execution.params(params)
     const cargs = first_flirt_cargs(params, execution)
     const ret = first_flirt_outputs(params, execution)
@@ -216,6 +216,25 @@ function first_flirt_execute(
 }
 
 
+/**
+ * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_image Input image (e.g. subject10rawT1.nii.gz)
+ * @param output_basename Output basename for the results (e.g. subject10rawT1_to_std_sub)
+ * @param already_brain_extracted_flag Input is already brain extracted
+ * @param debug_flag Debug mode: don't delete intermediate files
+ * @param inweight_flag Use a weighting mask on the first registration
+ * @param strucweight_mask Use a specific structure weighting mask (in standard space) for an optional third-stage registration step (e.g. maskimage.nii.gz)
+ * @param cort_flag Use a weighting mask of the whole brain on the first registration for specific models
+ * @param cost_function Specify the cost function to be used by all FLIRT calls
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
+ */
 function first_flirt(
     input_image: InputPathType,
     output_basename: string,
@@ -227,25 +246,6 @@ function first_flirt(
     cost_function: string | null = null,
     runner: Runner | null = null,
 ): FirstFlirtOutputs {
-    /**
-     * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_image Input image (e.g. subject10rawT1.nii.gz)
-     * @param output_basename Output basename for the results (e.g. subject10rawT1_to_std_sub)
-     * @param already_brain_extracted_flag Input is already brain extracted
-     * @param debug_flag Debug mode: don't delete intermediate files
-     * @param inweight_flag Use a weighting mask on the first registration
-     * @param strucweight_mask Use a specific structure weighting mask (in standard space) for an optional third-stage registration step (e.g. maskimage.nii.gz)
-     * @param cort_flag Use a weighting mask of the whole brain on the first registration for specific models
-     * @param cost_function Specify the cost function to be used by all FLIRT calls
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FIRST_FLIRT_METADATA);
     const params = first_flirt_params(input_image, output_basename, already_brain_extracted_flag, debug_flag, inweight_flag, strucweight_mask, cort_flag, cost_function)
@@ -258,5 +258,8 @@ export {
       FirstFlirtOutputs,
       FirstFlirtParameters,
       first_flirt,
+      first_flirt_cargs,
+      first_flirt_execute,
+      first_flirt_outputs,
       first_flirt_params,
 };

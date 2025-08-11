@@ -12,7 +12,7 @@ const POSSUM_SUM_METADATA: Metadata = {
 
 
 interface PossumSumParameters {
-    "__STYXTYPE__": "possum_sum";
+    "@type": "fsl.possum_sum";
     "input_signal": InputPathType;
     "output_signal": string;
     "num_processors"?: number | null | undefined;
@@ -20,35 +20,35 @@ interface PossumSumParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "possum_sum": possum_sum_cargs,
+        "fsl.possum_sum": possum_sum_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "possum_sum": possum_sum_outputs,
+        "fsl.possum_sum": possum_sum_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface PossumSumOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_signal Input signal for one processor (possum output matrix)
+ * @param output_signal Output signal: sum of all the processors (possum matrix form)
+ * @param num_processors Number of processors
+ * @param verbose_flag Switch on diagnostic messages
+ *
+ * @returns Parameter dictionary
+ */
 function possum_sum_params(
     input_signal: InputPathType,
     output_signal: string,
     num_processors: number | null = null,
     verbose_flag: boolean = false,
 ): PossumSumParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_signal Input signal for one processor (possum output matrix)
-     * @param output_signal Output signal: sum of all the processors (possum matrix form)
-     * @param num_processors Number of processors
-     * @param verbose_flag Switch on diagnostic messages
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "possum_sum" as const,
+        "@type": "fsl.possum_sum" as const,
         "input_signal": input_signal,
         "output_signal": output_signal,
         "verbose_flag": verbose_flag,
@@ -100,18 +100,18 @@ function possum_sum_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function possum_sum_cargs(
     params: PossumSumParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("possum_sum");
     cargs.push(
@@ -135,18 +135,18 @@ function possum_sum_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function possum_sum_outputs(
     params: PossumSumParameters,
     execution: Execution,
 ): PossumSumOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: PossumSumOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["output_signal"] ?? null)].join('')),
@@ -155,22 +155,22 @@ function possum_sum_outputs(
 }
 
 
+/**
+ * Sum of output signals from multiple possum processors.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
+ */
 function possum_sum_execute(
     params: PossumSumParameters,
     execution: Execution,
 ): PossumSumOutputs {
-    /**
-     * Sum of output signals from multiple possum processors.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
-     */
     params = execution.params(params)
     const cargs = possum_sum_cargs(params, execution)
     const ret = possum_sum_outputs(params, execution)
@@ -179,6 +179,21 @@ function possum_sum_execute(
 }
 
 
+/**
+ * Sum of output signals from multiple possum processors.
+ *
+ * Author: FMRIB Analysis Group, University of Oxford
+ *
+ * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+ *
+ * @param input_signal Input signal for one processor (possum output matrix)
+ * @param output_signal Output signal: sum of all the processors (possum matrix form)
+ * @param num_processors Number of processors
+ * @param verbose_flag Switch on diagnostic messages
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
+ */
 function possum_sum(
     input_signal: InputPathType,
     output_signal: string,
@@ -186,21 +201,6 @@ function possum_sum(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): PossumSumOutputs {
-    /**
-     * Sum of output signals from multiple possum processors.
-     * 
-     * Author: FMRIB Analysis Group, University of Oxford
-     * 
-     * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-    
-     * @param input_signal Input signal for one processor (possum output matrix)
-     * @param output_signal Output signal: sum of all the processors (possum matrix form)
-     * @param num_processors Number of processors
-     * @param verbose_flag Switch on diagnostic messages
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(POSSUM_SUM_METADATA);
     const params = possum_sum_params(input_signal, output_signal, num_processors, verbose_flag)
@@ -213,5 +213,8 @@ export {
       PossumSumOutputs,
       PossumSumParameters,
       possum_sum,
+      possum_sum_cargs,
+      possum_sum_execute,
+      possum_sum_outputs,
       possum_sum_params,
 };

@@ -12,14 +12,14 @@ const DIRGEN_METADATA: Metadata = {
 
 
 interface DirgenConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.dirgen.config";
     "key": string;
     "value": string;
 }
 
 
 interface DirgenParameters {
-    "__STYXTYPE__": "dirgen";
+    "@type": "mrtrix.dirgen";
     "power"?: number | null | undefined;
     "niter"?: number | null | undefined;
     "restarts"?: number | null | undefined;
@@ -38,55 +38,55 @@ interface DirgenParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dirgen": dirgen_cargs,
-        "config": dirgen_config_cargs,
+        "mrtrix.dirgen": dirgen_cargs,
+        "mrtrix.dirgen.config": dirgen_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dirgen": dirgen_outputs,
+        "mrtrix.dirgen": dirgen_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function dirgen_config_params(
     key: string,
     value: string,
 ): DirgenConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.dirgen.config" as const,
         "key": key,
         "value": value,
     };
@@ -94,18 +94,18 @@ function dirgen_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirgen_config_cargs(
     params: DirgenConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -131,6 +131,27 @@ interface DirgenOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param ndir the number of directions to generate.
+ * @param dirs the text file to write the directions to, as [ az el ] pairs.
+ * @param power specify exponent to use for repulsion power law (default: 1). This must be a power of 2 (i.e. 1, 2, 4, 8, 16, ...).
+ * @param niter specify the maximum number of iterations to perform (default: 10000).
+ * @param restarts specify the number of restarts to perform (default: 10).
+ * @param unipolar optimise assuming a unipolar electrostatic repulsion model rather than the bipolar model normally assumed in DWI
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function dirgen_params(
     ndir: number,
     dirs: string,
@@ -148,29 +169,8 @@ function dirgen_params(
     help: boolean = false,
     version: boolean = false,
 ): DirgenParameters {
-    /**
-     * Build parameters.
-    
-     * @param ndir the number of directions to generate.
-     * @param dirs the text file to write the directions to, as [ az el ] pairs.
-     * @param power specify exponent to use for repulsion power law (default: 1). This must be a power of 2 (i.e. 1, 2, 4, 8, 16, ...).
-     * @param niter specify the maximum number of iterations to perform (default: 10000).
-     * @param restarts specify the number of restarts to perform (default: 10).
-     * @param unipolar optimise assuming a unipolar electrostatic repulsion model rather than the bipolar model normally assumed in DWI
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dirgen" as const,
+        "@type": "mrtrix.dirgen" as const,
         "unipolar": unipolar,
         "cartesian": cartesian,
         "info": info,
@@ -201,18 +201,18 @@ function dirgen_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dirgen_cargs(
     params: DirgenParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dirgen");
     if ((params["power"] ?? null) !== null) {
@@ -258,7 +258,7 @@ function dirgen_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -272,18 +272,18 @@ function dirgen_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dirgen_outputs(
     params: DirgenParameters,
     execution: Execution,
 ): DirgenOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DirgenOutputs = {
         root: execution.outputFile("."),
         dirs: execution.outputFile([(params["dirs"] ?? null)].join('')),
@@ -292,30 +292,30 @@ function dirgen_outputs(
 }
 
 
+/**
+ * Generate a set of uniformly distributed directions using a bipolar electrostatic repulsion model.
+ *
+ * Directions are distributed by analogy to an electrostatic repulsion system, with each direction corresponding to a single electrostatic charge (for -unipolar), or a pair of diametrically opposed charges (for the default bipolar case). The energy of the system is determined based on the Coulomb repulsion, which assumes the form 1/r^power, where r is the distance between any pair of charges, and p is the power assumed for the repulsion law (default: 1). The minimum energy state is obtained by gradient descent.
+ *
+ * References:
+ *
+ * Jones, D.; Horsfield, M. & Simmons, A. Optimal strategies for measuring diffusion in anisotropic systems by magnetic resonance imaging. Magnetic Resonance in Medicine, 1999, 42: 515-525
+ *
+ * Papadakis, N. G.; Murrills, C. D.; Hall, L. D.; Huang, C. L.-H. & Adrian Carpenter, T. Minimal gradient encoding for robust estimation of diffusion anisotropy. Magnetic Resonance Imaging, 2000, 18: 671-679.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DirgenOutputs`).
+ */
 function dirgen_execute(
     params: DirgenParameters,
     execution: Execution,
 ): DirgenOutputs {
-    /**
-     * Generate a set of uniformly distributed directions using a bipolar electrostatic repulsion model.
-     * 
-     * Directions are distributed by analogy to an electrostatic repulsion system, with each direction corresponding to a single electrostatic charge (for -unipolar), or a pair of diametrically opposed charges (for the default bipolar case). The energy of the system is determined based on the Coulomb repulsion, which assumes the form 1/r^power, where r is the distance between any pair of charges, and p is the power assumed for the repulsion law (default: 1). The minimum energy state is obtained by gradient descent.
-     * 
-     * References:
-     * 
-     * Jones, D.; Horsfield, M. & Simmons, A. Optimal strategies for measuring diffusion in anisotropic systems by magnetic resonance imaging. Magnetic Resonance in Medicine, 1999, 42: 515-525
-     * 
-     * Papadakis, N. G.; Murrills, C. D.; Hall, L. D.; Huang, C. L.-H. & Adrian Carpenter, T. Minimal gradient encoding for robust estimation of diffusion anisotropy. Magnetic Resonance Imaging, 2000, 18: 671-679.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DirgenOutputs`).
-     */
     params = execution.params(params)
     const cargs = dirgen_cargs(params, execution)
     const ret = dirgen_outputs(params, execution)
@@ -324,6 +324,40 @@ function dirgen_execute(
 }
 
 
+/**
+ * Generate a set of uniformly distributed directions using a bipolar electrostatic repulsion model.
+ *
+ * Directions are distributed by analogy to an electrostatic repulsion system, with each direction corresponding to a single electrostatic charge (for -unipolar), or a pair of diametrically opposed charges (for the default bipolar case). The energy of the system is determined based on the Coulomb repulsion, which assumes the form 1/r^power, where r is the distance between any pair of charges, and p is the power assumed for the repulsion law (default: 1). The minimum energy state is obtained by gradient descent.
+ *
+ * References:
+ *
+ * Jones, D.; Horsfield, M. & Simmons, A. Optimal strategies for measuring diffusion in anisotropic systems by magnetic resonance imaging. Magnetic Resonance in Medicine, 1999, 42: 515-525
+ *
+ * Papadakis, N. G.; Murrills, C. D.; Hall, L. D.; Huang, C. L.-H. & Adrian Carpenter, T. Minimal gradient encoding for robust estimation of diffusion anisotropy. Magnetic Resonance Imaging, 2000, 18: 671-679.
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param ndir the number of directions to generate.
+ * @param dirs the text file to write the directions to, as [ az el ] pairs.
+ * @param power specify exponent to use for repulsion power law (default: 1). This must be a power of 2 (i.e. 1, 2, 4, 8, 16, ...).
+ * @param niter specify the maximum number of iterations to perform (default: 10000).
+ * @param restarts specify the number of restarts to perform (default: 10).
+ * @param unipolar optimise assuming a unipolar electrostatic repulsion model rather than the bipolar model normally assumed in DWI
+ * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DirgenOutputs`).
+ */
 function dirgen(
     ndir: number,
     dirs: string,
@@ -342,40 +376,6 @@ function dirgen(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirgenOutputs {
-    /**
-     * Generate a set of uniformly distributed directions using a bipolar electrostatic repulsion model.
-     * 
-     * Directions are distributed by analogy to an electrostatic repulsion system, with each direction corresponding to a single electrostatic charge (for -unipolar), or a pair of diametrically opposed charges (for the default bipolar case). The energy of the system is determined based on the Coulomb repulsion, which assumes the form 1/r^power, where r is the distance between any pair of charges, and p is the power assumed for the repulsion law (default: 1). The minimum energy state is obtained by gradient descent.
-     * 
-     * References:
-     * 
-     * Jones, D.; Horsfield, M. & Simmons, A. Optimal strategies for measuring diffusion in anisotropic systems by magnetic resonance imaging. Magnetic Resonance in Medicine, 1999, 42: 515-525
-     * 
-     * Papadakis, N. G.; Murrills, C. D.; Hall, L. D.; Huang, C. L.-H. & Adrian Carpenter, T. Minimal gradient encoding for robust estimation of diffusion anisotropy. Magnetic Resonance Imaging, 2000, 18: 671-679.
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param ndir the number of directions to generate.
-     * @param dirs the text file to write the directions to, as [ az el ] pairs.
-     * @param power specify exponent to use for repulsion power law (default: 1). This must be a power of 2 (i.e. 1, 2, 4, 8, 16, ...).
-     * @param niter specify the maximum number of iterations to perform (default: 10000).
-     * @param restarts specify the number of restarts to perform (default: 10).
-     * @param unipolar optimise assuming a unipolar electrostatic repulsion model rather than the bipolar model normally assumed in DWI
-     * @param cartesian Output the directions in Cartesian coordinates [x y z] instead of [az el].
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DirgenOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DIRGEN_METADATA);
     const params = dirgen_params(ndir, dirs, power, niter, restarts, unipolar, cartesian, info, quiet, debug, force, nthreads, config, help, version)
@@ -389,6 +389,10 @@ export {
       DirgenOutputs,
       DirgenParameters,
       dirgen,
+      dirgen_cargs,
+      dirgen_config_cargs,
       dirgen_config_params,
+      dirgen_execute,
+      dirgen_outputs,
       dirgen_params,
 };

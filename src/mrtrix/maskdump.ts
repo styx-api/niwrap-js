@@ -12,14 +12,14 @@ const MASKDUMP_METADATA: Metadata = {
 
 
 interface MaskdumpConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.maskdump.config";
     "key": string;
     "value": string;
 }
 
 
 interface MaskdumpParameters {
-    "__STYXTYPE__": "maskdump";
+    "@type": "mrtrix.maskdump";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -33,55 +33,55 @@ interface MaskdumpParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "maskdump": maskdump_cargs,
-        "config": maskdump_config_cargs,
+        "mrtrix.maskdump": maskdump_cargs,
+        "mrtrix.maskdump.config": maskdump_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "maskdump": maskdump_outputs,
+        "mrtrix.maskdump": maskdump_outputs,
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function maskdump_config_params(
     key: string,
     value: string,
 ): MaskdumpConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.maskdump.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function maskdump_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskdump_config_cargs(
     params: MaskdumpConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -126,6 +126,22 @@ interface MaskdumpOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param output the (optional) output text file.
+ *
+ * @returns Parameter dictionary
+ */
 function maskdump_params(
     input: InputPathType,
     info: boolean = false,
@@ -138,24 +154,8 @@ function maskdump_params(
     version: boolean = false,
     output: string | null = null,
 ): MaskdumpParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param output the (optional) output text file.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "maskdump" as const,
+        "@type": "mrtrix.maskdump" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -177,18 +177,18 @@ function maskdump_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function maskdump_cargs(
     params: MaskdumpParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("maskdump");
     if ((params["info"] ?? null)) {
@@ -210,7 +210,7 @@ function maskdump_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -226,18 +226,18 @@ function maskdump_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function maskdump_outputs(
     params: MaskdumpParameters,
     execution: Execution,
 ): MaskdumpOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MaskdumpOutputs = {
         root: execution.outputFile("."),
         output: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
@@ -246,28 +246,28 @@ function maskdump_outputs(
 }
 
 
+/**
+ * Print out the locations of all non-zero voxels in a mask image.
+ *
+ * If no destination file is specified, the voxel locations will be printed to stdout.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
+ */
 function maskdump_execute(
     params: MaskdumpParameters,
     execution: Execution,
 ): MaskdumpOutputs {
-    /**
-     * Print out the locations of all non-zero voxels in a mask image.
-     * 
-     * If no destination file is specified, the voxel locations will be printed to stdout.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
-     */
     params = execution.params(params)
     const cargs = maskdump_cargs(params, execution)
     const ret = maskdump_outputs(params, execution)
@@ -276,6 +276,33 @@ function maskdump_execute(
 }
 
 
+/**
+ * Print out the locations of all non-zero voxels in a mask image.
+ *
+ * If no destination file is specified, the voxel locations will be printed to stdout.
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image.
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param output the (optional) output text file.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
+ */
 function maskdump(
     input: InputPathType,
     info: boolean = false,
@@ -289,33 +316,6 @@ function maskdump(
     output: string | null = null,
     runner: Runner | null = null,
 ): MaskdumpOutputs {
-    /**
-     * Print out the locations of all non-zero voxels in a mask image.
-     * 
-     * If no destination file is specified, the voxel locations will be printed to stdout.
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image.
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param output the (optional) output text file.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MASKDUMP_METADATA);
     const params = maskdump_params(input, info, quiet, debug, force, nthreads, config, help, version, output)
@@ -329,6 +329,10 @@ export {
       MaskdumpOutputs,
       MaskdumpParameters,
       maskdump,
+      maskdump_cargs,
+      maskdump_config_cargs,
       maskdump_config_params,
+      maskdump_execute,
+      maskdump_outputs,
       maskdump_params,
 };

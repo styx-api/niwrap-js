@@ -12,7 +12,7 @@ const V__FIX_FSSPHERE_METADATA: Metadata = {
 
 
 interface VFixFssphereParameters {
-    "__STYXTYPE__": "@fix_FSsphere";
+    "@type": "afni.@fix_FSsphere";
     "spec_file": InputPathType;
     "sphere_file": InputPathType;
     "num_iterations"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface VFixFssphereParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@fix_FSsphere": v__fix_fssphere_cargs,
+        "afni.@fix_FSsphere": v__fix_fssphere_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@fix_FSsphere": v__fix_fssphere_outputs,
+        "afni.@fix_FSsphere": v__fix_fssphere_outputs,
     };
     return outputsFuncs[t];
 }
@@ -73,6 +73,18 @@ interface VFixFssphereOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param spec_file Spec file
+ * @param sphere_file SPHERE.asc is the sphere to be used
+ * @param num_iterations Number of local smoothing operations. Default is 3000
+ * @param extent_lim Extent, in mm, by which troubled sections are fattened. Default is 6
+ * @param project_first Project to a sphere, before smoothing. Default is 0
+ * @param keep_temp Keep temporary files
+ *
+ * @returns Parameter dictionary
+ */
 function v__fix_fssphere_params(
     spec_file: InputPathType,
     sphere_file: InputPathType,
@@ -81,20 +93,8 @@ function v__fix_fssphere_params(
     project_first: boolean = false,
     keep_temp: boolean = false,
 ): VFixFssphereParameters {
-    /**
-     * Build parameters.
-    
-     * @param spec_file Spec file
-     * @param sphere_file SPHERE.asc is the sphere to be used
-     * @param num_iterations Number of local smoothing operations. Default is 3000
-     * @param extent_lim Extent, in mm, by which troubled sections are fattened. Default is 6
-     * @param project_first Project to a sphere, before smoothing. Default is 0
-     * @param keep_temp Keep temporary files
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@fix_FSsphere" as const,
+        "@type": "afni.@fix_FSsphere" as const,
         "spec_file": spec_file,
         "sphere_file": sphere_file,
         "project_first": project_first,
@@ -110,18 +110,18 @@ function v__fix_fssphere_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__fix_fssphere_cargs(
     params: VFixFssphereParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@fix_FSsphere");
     cargs.push(
@@ -154,18 +154,18 @@ function v__fix_fssphere_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__fix_fssphere_outputs(
     params: VFixFssphereParameters,
     execution: Execution,
 ): VFixFssphereOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VFixFssphereOutputs = {
         root: execution.outputFile("."),
         corrected_surface: execution.outputFile(["[SPHERE]_fxd.asc"].join('')),
@@ -174,22 +174,22 @@ function v__fix_fssphere_outputs(
 }
 
 
+/**
+ * Tool for fixing errors in FreeSurfer spherical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
+ */
 function v__fix_fssphere_execute(
     params: VFixFssphereParameters,
     execution: Execution,
 ): VFixFssphereOutputs {
-    /**
-     * Tool for fixing errors in FreeSurfer spherical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__fix_fssphere_cargs(params, execution)
     const ret = v__fix_fssphere_outputs(params, execution)
@@ -198,6 +198,23 @@ function v__fix_fssphere_execute(
 }
 
 
+/**
+ * Tool for fixing errors in FreeSurfer spherical surfaces.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param spec_file Spec file
+ * @param sphere_file SPHERE.asc is the sphere to be used
+ * @param num_iterations Number of local smoothing operations. Default is 3000
+ * @param extent_lim Extent, in mm, by which troubled sections are fattened. Default is 6
+ * @param project_first Project to a sphere, before smoothing. Default is 0
+ * @param keep_temp Keep temporary files
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
+ */
 function v__fix_fssphere(
     spec_file: InputPathType,
     sphere_file: InputPathType,
@@ -207,23 +224,6 @@ function v__fix_fssphere(
     keep_temp: boolean = false,
     runner: Runner | null = null,
 ): VFixFssphereOutputs {
-    /**
-     * Tool for fixing errors in FreeSurfer spherical surfaces.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param spec_file Spec file
-     * @param sphere_file SPHERE.asc is the sphere to be used
-     * @param num_iterations Number of local smoothing operations. Default is 3000
-     * @param extent_lim Extent, in mm, by which troubled sections are fattened. Default is 6
-     * @param project_first Project to a sphere, before smoothing. Default is 0
-     * @param keep_temp Keep temporary files
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__FIX_FSSPHERE_METADATA);
     const params = v__fix_fssphere_params(spec_file, sphere_file, num_iterations, extent_lim, project_first, keep_temp)
@@ -236,5 +236,8 @@ export {
       VFixFssphereParameters,
       V__FIX_FSSPHERE_METADATA,
       v__fix_fssphere,
+      v__fix_fssphere_cargs,
+      v__fix_fssphere_execute,
+      v__fix_fssphere_outputs,
       v__fix_fssphere_params,
 };

@@ -12,20 +12,20 @@ const METRIC_WEIGHTED_STATS_METADATA: Metadata = {
 
 
 interface MetricWeightedStatsRoiParameters {
-    "__STYXTYPE__": "roi";
+    "@type": "workbench.metric-weighted-stats.roi";
     "roi_metric": InputPathType;
     "opt_match_maps": boolean;
 }
 
 
 interface MetricWeightedStatsStdevParameters {
-    "__STYXTYPE__": "stdev";
+    "@type": "workbench.metric-weighted-stats.stdev";
     "opt_sample": boolean;
 }
 
 
 interface MetricWeightedStatsParameters {
-    "__STYXTYPE__": "metric-weighted-stats";
+    "@type": "workbench.metric-weighted-stats";
     "metric_in": InputPathType;
     "opt_area_surface_area_surface"?: InputPathType | null | undefined;
     "opt_weight_metric_weight_metric"?: InputPathType | null | undefined;
@@ -39,55 +39,55 @@ interface MetricWeightedStatsParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "metric-weighted-stats": metric_weighted_stats_cargs,
-        "roi": metric_weighted_stats_roi_cargs,
-        "stdev": metric_weighted_stats_stdev_cargs,
+        "workbench.metric-weighted-stats": metric_weighted_stats_cargs,
+        "workbench.metric-weighted-stats.roi": metric_weighted_stats_roi_cargs,
+        "workbench.metric-weighted-stats.stdev": metric_weighted_stats_stdev_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param roi_metric the roi, as a metric file
+ * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ *
+ * @returns Parameter dictionary
+ */
 function metric_weighted_stats_roi_params(
     roi_metric: InputPathType,
     opt_match_maps: boolean = false,
 ): MetricWeightedStatsRoiParameters {
-    /**
-     * Build parameters.
-    
-     * @param roi_metric the roi, as a metric file
-     * @param opt_match_maps each column of input uses the corresponding column from the roi file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "roi" as const,
+        "@type": "workbench.metric-weighted-stats.roi" as const,
         "roi_metric": roi_metric,
         "opt_match_maps": opt_match_maps,
     };
@@ -95,18 +95,18 @@ function metric_weighted_stats_roi_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_weighted_stats_roi_cargs(
     params: MetricWeightedStatsRoiParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
@@ -117,36 +117,36 @@ function metric_weighted_stats_roi_cargs(
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param opt_sample estimate population stdev from the sample
+ *
+ * @returns Parameter dictionary
+ */
 function metric_weighted_stats_stdev_params(
     opt_sample: boolean = false,
 ): MetricWeightedStatsStdevParameters {
-    /**
-     * Build parameters.
-    
-     * @param opt_sample estimate population stdev from the sample
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "stdev" as const,
+        "@type": "workbench.metric-weighted-stats.stdev" as const,
         "opt_sample": opt_sample,
     };
     return params;
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_weighted_stats_stdev_cargs(
     params: MetricWeightedStatsStdevParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-stdev");
     if ((params["opt_sample"] ?? null)) {
@@ -169,6 +169,22 @@ interface MetricWeightedStatsOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param metric_in the input metric
+ * @param opt_area_surface_area_surface use vertex areas as weights: the surface to use for vertex areas
+ * @param opt_weight_metric_weight_metric use weights from a metric file: metric file containing the weights
+ * @param opt_column_column only display output for one column: the column number or name
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ *
+ * @returns Parameter dictionary
+ */
 function metric_weighted_stats_params(
     metric_in: InputPathType,
     opt_area_surface_area_surface: InputPathType | null = null,
@@ -181,24 +197,8 @@ function metric_weighted_stats_params(
     opt_sum: boolean = false,
     opt_show_map_name: boolean = false,
 ): MetricWeightedStatsParameters {
-    /**
-     * Build parameters.
-    
-     * @param metric_in the input metric
-     * @param opt_area_surface_area_surface use vertex areas as weights: the surface to use for vertex areas
-     * @param opt_weight_metric_weight_metric use weights from a metric file: metric file containing the weights
-     * @param opt_column_column only display output for one column: the column number or name
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "metric-weighted-stats" as const,
+        "@type": "workbench.metric-weighted-stats" as const,
         "metric_in": metric_in,
         "opt_mean": opt_mean,
         "opt_sum": opt_sum,
@@ -226,18 +226,18 @@ function metric_weighted_stats_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function metric_weighted_stats_cargs(
     params: MetricWeightedStatsParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("wb_command");
     cargs.push("-metric-weighted-stats");
@@ -261,13 +261,13 @@ function metric_weighted_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null).__STYXTYPE__)((params["roi"] ?? null), execution));
+        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
     }
     if ((params["opt_mean"] ?? null)) {
         cargs.push("-mean");
     }
     if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["stdev"] ?? null).__STYXTYPE__)((params["stdev"] ?? null), execution));
+        cargs.push(...dynCargs((params["stdev"] ?? null)["@type"])((params["stdev"] ?? null), execution));
     }
     if ((params["opt_percentile_percent"] ?? null) !== null) {
         cargs.push(
@@ -285,18 +285,18 @@ function metric_weighted_stats_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function metric_weighted_stats_outputs(
     params: MetricWeightedStatsParameters,
     execution: Execution,
 ): MetricWeightedStatsOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MetricWeightedStatsOutputs = {
         root: execution.outputFile("."),
     };
@@ -304,28 +304,28 @@ function metric_weighted_stats_outputs(
 }
 
 
+/**
+ * Weighted spatial statistics on a metric file.
+ *
+ * For each column of the input, a line of text is printed, resulting from the specified operation.  You must specify exactly one of -area-surface or -weight-metric.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum with -area-surface (or -weight-metric with a metric containing similar data) is equivalent to integrating with respect to surface area.  For example, if you want to find the surface area within an roi, do this:
+ *
+ * $ wb_command -metric-weighted-stats roi.func.gii -sum -area-surface midthickness.surf.gii.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
+ */
 function metric_weighted_stats_execute(
     params: MetricWeightedStatsParameters,
     execution: Execution,
 ): MetricWeightedStatsOutputs {
-    /**
-     * Weighted spatial statistics on a metric file.
-     * 
-     * For each column of the input, a line of text is printed, resulting from the specified operation.  You must specify exactly one of -area-surface or -weight-metric.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum with -area-surface (or -weight-metric with a metric containing similar data) is equivalent to integrating with respect to surface area.  For example, if you want to find the surface area within an roi, do this:
-     * 
-     * $ wb_command -metric-weighted-stats roi.func.gii -sum -area-surface midthickness.surf.gii.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
-     */
     params = execution.params(params)
     const cargs = metric_weighted_stats_cargs(params, execution)
     const ret = metric_weighted_stats_outputs(params, execution)
@@ -334,6 +334,33 @@ function metric_weighted_stats_execute(
 }
 
 
+/**
+ * Weighted spatial statistics on a metric file.
+ *
+ * For each column of the input, a line of text is printed, resulting from the specified operation.  You must specify exactly one of -area-surface or -weight-metric.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
+ *
+ * Using -sum with -area-surface (or -weight-metric with a metric containing similar data) is equivalent to integrating with respect to surface area.  For example, if you want to find the surface area within an roi, do this:
+ *
+ * $ wb_command -metric-weighted-stats roi.func.gii -sum -area-surface midthickness.surf.gii.
+ *
+ * Author: Connectome Workbench Developers
+ *
+ * URL: https://github.com/Washington-University/workbench
+ *
+ * @param metric_in the input metric
+ * @param opt_area_surface_area_surface use vertex areas as weights: the surface to use for vertex areas
+ * @param opt_weight_metric_weight_metric use weights from a metric file: metric file containing the weights
+ * @param opt_column_column only display output for one column: the column number or name
+ * @param roi only consider data inside an roi
+ * @param opt_mean compute weighted mean
+ * @param stdev compute weighted standard deviation
+ * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
+ * @param opt_sum compute weighted sum
+ * @param opt_show_map_name print map index and name before each output
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
+ */
 function metric_weighted_stats(
     metric_in: InputPathType,
     opt_area_surface_area_surface: InputPathType | null = null,
@@ -347,33 +374,6 @@ function metric_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricWeightedStatsOutputs {
-    /**
-     * Weighted spatial statistics on a metric file.
-     * 
-     * For each column of the input, a line of text is printed, resulting from the specified operation.  You must specify exactly one of -area-surface or -weight-metric.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
-     * 
-     * Using -sum with -area-surface (or -weight-metric with a metric containing similar data) is equivalent to integrating with respect to surface area.  For example, if you want to find the surface area within an roi, do this:
-     * 
-     * $ wb_command -metric-weighted-stats roi.func.gii -sum -area-surface midthickness.surf.gii.
-     * 
-     * Author: Connectome Workbench Developers
-     * 
-     * URL: https://github.com/Washington-University/workbench
-    
-     * @param metric_in the input metric
-     * @param opt_area_surface_area_surface use vertex areas as weights: the surface to use for vertex areas
-     * @param opt_weight_metric_weight_metric use weights from a metric file: metric file containing the weights
-     * @param opt_column_column only display output for one column: the column number or name
-     * @param roi only consider data inside an roi
-     * @param opt_mean compute weighted mean
-     * @param stdev compute weighted standard deviation
-     * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
-     * @param opt_sum compute weighted sum
-     * @param opt_show_map_name print map index and name before each output
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(METRIC_WEIGHTED_STATS_METADATA);
     const params = metric_weighted_stats_params(metric_in, opt_area_surface_area_surface, opt_weight_metric_weight_metric, opt_column_column, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
@@ -388,7 +388,12 @@ export {
       MetricWeightedStatsRoiParameters,
       MetricWeightedStatsStdevParameters,
       metric_weighted_stats,
+      metric_weighted_stats_cargs,
+      metric_weighted_stats_execute,
+      metric_weighted_stats_outputs,
       metric_weighted_stats_params,
+      metric_weighted_stats_roi_cargs,
       metric_weighted_stats_roi_params,
+      metric_weighted_stats_stdev_cargs,
       metric_weighted_stats_stdev_params,
 };

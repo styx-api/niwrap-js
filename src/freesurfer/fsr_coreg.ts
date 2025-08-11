@@ -12,7 +12,7 @@ const FSR_COREG_METADATA: Metadata = {
 
 
 interface FsrCoregParameters {
-    "__STYXTYPE__": "fsr-coreg";
+    "@type": "freesurfer.fsr-coreg";
     "import_dir": string;
     "reference_mode": string;
     "num_threads"?: number | null | undefined;
@@ -22,35 +22,35 @@ interface FsrCoregParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "fsr-coreg": fsr_coreg_cargs,
+        "freesurfer.fsr-coreg": fsr_coreg_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "fsr-coreg": fsr_coreg_outputs,
+        "freesurfer.fsr-coreg": fsr_coreg_outputs,
     };
     return outputsFuncs[t];
 }
@@ -77,6 +77,18 @@ interface FsrCoregOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param import_dir Data directory created by fsr-import
+ * @param reference_mode Mode to use as a reference (all modes register to this mode)
+ * @param num_threads Number of threads to use
+ * @param force_update Force update of files regardless of time stamp
+ * @param output_dir Set the output directory, default is importdir
+ * @param expert_options Expert options file
+ *
+ * @returns Parameter dictionary
+ */
 function fsr_coreg_params(
     import_dir: string,
     reference_mode: string,
@@ -85,20 +97,8 @@ function fsr_coreg_params(
     output_dir: string | null = null,
     expert_options: InputPathType | null = null,
 ): FsrCoregParameters {
-    /**
-     * Build parameters.
-    
-     * @param import_dir Data directory created by fsr-import
-     * @param reference_mode Mode to use as a reference (all modes register to this mode)
-     * @param num_threads Number of threads to use
-     * @param force_update Force update of files regardless of time stamp
-     * @param output_dir Set the output directory, default is importdir
-     * @param expert_options Expert options file
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "fsr-coreg" as const,
+        "@type": "freesurfer.fsr-coreg" as const,
         "import_dir": import_dir,
         "reference_mode": reference_mode,
         "force_update": force_update,
@@ -116,18 +116,18 @@ function fsr_coreg_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function fsr_coreg_cargs(
     params: FsrCoregParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("fsr-coreg");
     cargs.push(
@@ -163,18 +163,18 @@ function fsr_coreg_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function fsr_coreg_outputs(
     params: FsrCoregParameters,
     execution: Execution,
 ): FsrCoregOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: FsrCoregOutputs = {
         root: execution.outputFile("."),
         aligned_volume: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/mode.mgz"].join('')) : null,
@@ -184,22 +184,22 @@ function fsr_coreg_outputs(
 }
 
 
+/**
+ * Co-registers input data in preparation for FreeSurfer analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
+ */
 function fsr_coreg_execute(
     params: FsrCoregParameters,
     execution: Execution,
 ): FsrCoregOutputs {
-    /**
-     * Co-registers input data in preparation for FreeSurfer analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
-     */
     params = execution.params(params)
     const cargs = fsr_coreg_cargs(params, execution)
     const ret = fsr_coreg_outputs(params, execution)
@@ -208,6 +208,23 @@ function fsr_coreg_execute(
 }
 
 
+/**
+ * Co-registers input data in preparation for FreeSurfer analysis.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param import_dir Data directory created by fsr-import
+ * @param reference_mode Mode to use as a reference (all modes register to this mode)
+ * @param num_threads Number of threads to use
+ * @param force_update Force update of files regardless of time stamp
+ * @param output_dir Set the output directory, default is importdir
+ * @param expert_options Expert options file
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
+ */
 function fsr_coreg(
     import_dir: string,
     reference_mode: string,
@@ -217,23 +234,6 @@ function fsr_coreg(
     expert_options: InputPathType | null = null,
     runner: Runner | null = null,
 ): FsrCoregOutputs {
-    /**
-     * Co-registers input data in preparation for FreeSurfer analysis.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param import_dir Data directory created by fsr-import
-     * @param reference_mode Mode to use as a reference (all modes register to this mode)
-     * @param num_threads Number of threads to use
-     * @param force_update Force update of files regardless of time stamp
-     * @param output_dir Set the output directory, default is importdir
-     * @param expert_options Expert options file
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(FSR_COREG_METADATA);
     const params = fsr_coreg_params(import_dir, reference_mode, num_threads, force_update, output_dir, expert_options)
@@ -246,5 +246,8 @@ export {
       FsrCoregOutputs,
       FsrCoregParameters,
       fsr_coreg,
+      fsr_coreg_cargs,
+      fsr_coreg_execute,
+      fsr_coreg_outputs,
       fsr_coreg_params,
 };

@@ -12,7 +12,7 @@ const V__AFNI_R_PACKAGE_INSTALL_METADATA: Metadata = {
 
 
 interface VAfniRPackageInstallParameters {
-    "__STYXTYPE__": "@afni_R_package_install";
+    "@type": "afni.@afni_R_package_install";
     "afni": boolean;
     "shiny": boolean;
     "bayes_view": boolean;
@@ -23,35 +23,35 @@ interface VAfniRPackageInstallParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@afni_R_package_install": v__afni_r_package_install_cargs,
+        "afni.@afni_R_package_install": v__afni_r_package_install_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@afni_R_package_install": v__afni_r_package_install_outputs,
+        "afni.@afni_R_package_install": v__afni_r_package_install_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VAfniRPackageInstallOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param afni Install AFNI related R packages.
+ * @param shiny Install AFNI related shiny app packages.
+ * @param bayes_view Install R packages for bayes_view.
+ * @param circos Install OmicCircos for FATCAT_matplot.
+ * @param custom_packages Install custom R packages (space-separated list). Must start and end with double quotes.
+ * @param mirror Set the CRAN mirror to a custom URL.
+ * @param help Show help message.
+ *
+ * @returns Parameter dictionary
+ */
 function v__afni_r_package_install_params(
     afni: boolean = false,
     shiny: boolean = false,
@@ -83,21 +96,8 @@ function v__afni_r_package_install_params(
     mirror: string | null = null,
     help: boolean = false,
 ): VAfniRPackageInstallParameters {
-    /**
-     * Build parameters.
-    
-     * @param afni Install AFNI related R packages.
-     * @param shiny Install AFNI related shiny app packages.
-     * @param bayes_view Install R packages for bayes_view.
-     * @param circos Install OmicCircos for FATCAT_matplot.
-     * @param custom_packages Install custom R packages (space-separated list). Must start and end with double quotes.
-     * @param mirror Set the CRAN mirror to a custom URL.
-     * @param help Show help message.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@afni_R_package_install" as const,
+        "@type": "afni.@afni_R_package_install" as const,
         "afni": afni,
         "shiny": shiny,
         "bayes_view": bayes_view,
@@ -114,18 +114,18 @@ function v__afni_r_package_install_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__afni_r_package_install_cargs(
     params: VAfniRPackageInstallParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@afni_R_package_install");
     if ((params["afni"] ?? null)) {
@@ -159,18 +159,18 @@ function v__afni_r_package_install_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__afni_r_package_install_outputs(
     params: VAfniRPackageInstallParameters,
     execution: Execution,
 ): VAfniRPackageInstallOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VAfniRPackageInstallOutputs = {
         root: execution.outputFile("."),
         install_log: execution.outputFile(["R_packages_installed.txt"].join('')),
@@ -179,22 +179,22 @@ function v__afni_r_package_install_outputs(
 }
 
 
+/**
+ * Helper script to install R packages for various afni-ish purposes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
+ */
 function v__afni_r_package_install_execute(
     params: VAfniRPackageInstallParameters,
     execution: Execution,
 ): VAfniRPackageInstallOutputs {
-    /**
-     * Helper script to install R packages for various afni-ish purposes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__afni_r_package_install_cargs(params, execution)
     const ret = v__afni_r_package_install_outputs(params, execution)
@@ -203,6 +203,24 @@ function v__afni_r_package_install_execute(
 }
 
 
+/**
+ * Helper script to install R packages for various afni-ish purposes.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param afni Install AFNI related R packages.
+ * @param shiny Install AFNI related shiny app packages.
+ * @param bayes_view Install R packages for bayes_view.
+ * @param circos Install OmicCircos for FATCAT_matplot.
+ * @param custom_packages Install custom R packages (space-separated list). Must start and end with double quotes.
+ * @param mirror Set the CRAN mirror to a custom URL.
+ * @param help Show help message.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
+ */
 function v__afni_r_package_install(
     afni: boolean = false,
     shiny: boolean = false,
@@ -213,24 +231,6 @@ function v__afni_r_package_install(
     help: boolean = false,
     runner: Runner | null = null,
 ): VAfniRPackageInstallOutputs {
-    /**
-     * Helper script to install R packages for various afni-ish purposes.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param afni Install AFNI related R packages.
-     * @param shiny Install AFNI related shiny app packages.
-     * @param bayes_view Install R packages for bayes_view.
-     * @param circos Install OmicCircos for FATCAT_matplot.
-     * @param custom_packages Install custom R packages (space-separated list). Must start and end with double quotes.
-     * @param mirror Set the CRAN mirror to a custom URL.
-     * @param help Show help message.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__AFNI_R_PACKAGE_INSTALL_METADATA);
     const params = v__afni_r_package_install_params(afni, shiny, bayes_view, circos, custom_packages, mirror, help)
@@ -243,5 +243,8 @@ export {
       VAfniRPackageInstallParameters,
       V__AFNI_R_PACKAGE_INSTALL_METADATA,
       v__afni_r_package_install,
+      v__afni_r_package_install_cargs,
+      v__afni_r_package_install_execute,
+      v__afni_r_package_install_outputs,
       v__afni_r_package_install_params,
 };

@@ -12,7 +12,7 @@ const V__REORDER_METADATA: Metadata = {
 
 
 interface VReorderParameters {
-    "__STYXTYPE__": "@Reorder";
+    "@type": "afni.@Reorder";
     "input_dataset": InputPathType;
     "mapfile": InputPathType;
     "prefix": string;
@@ -23,35 +23,35 @@ interface VReorderParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "@Reorder": v__reorder_cargs,
+        "afni.@Reorder": v__reorder_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "@Reorder": v__reorder_outputs,
+        "afni.@Reorder": v__reorder_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,6 +74,19 @@ interface VReorderOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_dataset Input dataset to reorder (e.g. EPI+tlrc)
+ * @param mapfile TR to event mapping file (e.g. events.txt)
+ * @param prefix Prefix for the output dataset
+ * @param offset Offset mapfile TR indices by OFFSET (in TRs)
+ * @param save_work Do not delete work directory (reorder.work.dir) at the end
+ * @param test Just report sub-bricks, do not create datasets
+ * @param help Show help message
+ *
+ * @returns Parameter dictionary
+ */
 function v__reorder_params(
     input_dataset: InputPathType,
     mapfile: InputPathType,
@@ -83,21 +96,8 @@ function v__reorder_params(
     test: boolean = false,
     help: boolean = false,
 ): VReorderParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_dataset Input dataset to reorder (e.g. EPI+tlrc)
-     * @param mapfile TR to event mapping file (e.g. events.txt)
-     * @param prefix Prefix for the output dataset
-     * @param offset Offset mapfile TR indices by OFFSET (in TRs)
-     * @param save_work Do not delete work directory (reorder.work.dir) at the end
-     * @param test Just report sub-bricks, do not create datasets
-     * @param help Show help message
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "@Reorder" as const,
+        "@type": "afni.@Reorder" as const,
         "input_dataset": input_dataset,
         "mapfile": mapfile,
         "prefix": prefix,
@@ -112,18 +112,18 @@ function v__reorder_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function v__reorder_cargs(
     params: VReorderParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("@Reorder");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -148,18 +148,18 @@ function v__reorder_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function v__reorder_outputs(
     params: VReorderParameters,
     execution: Execution,
 ): VReorderOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: VReorderOutputs = {
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["prefix"] ?? null), "+tlrc"].join('')),
@@ -168,22 +168,22 @@ function v__reorder_outputs(
 }
 
 
+/**
+ * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `VReorderOutputs`).
+ */
 function v__reorder_execute(
     params: VReorderParameters,
     execution: Execution,
 ): VReorderOutputs {
-    /**
-     * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `VReorderOutputs`).
-     */
     params = execution.params(params)
     const cargs = v__reorder_cargs(params, execution)
     const ret = v__reorder_outputs(params, execution)
@@ -192,6 +192,24 @@ function v__reorder_execute(
 }
 
 
+/**
+ * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param input_dataset Input dataset to reorder (e.g. EPI+tlrc)
+ * @param mapfile TR to event mapping file (e.g. events.txt)
+ * @param prefix Prefix for the output dataset
+ * @param offset Offset mapfile TR indices by OFFSET (in TRs)
+ * @param save_work Do not delete work directory (reorder.work.dir) at the end
+ * @param test Just report sub-bricks, do not create datasets
+ * @param help Show help message
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `VReorderOutputs`).
+ */
 function v__reorder(
     input_dataset: InputPathType,
     mapfile: InputPathType,
@@ -202,24 +220,6 @@ function v__reorder(
     help: boolean = false,
     runner: Runner | null = null,
 ): VReorderOutputs {
-    /**
-     * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param input_dataset Input dataset to reorder (e.g. EPI+tlrc)
-     * @param mapfile TR to event mapping file (e.g. events.txt)
-     * @param prefix Prefix for the output dataset
-     * @param offset Offset mapfile TR indices by OFFSET (in TRs)
-     * @param save_work Do not delete work directory (reorder.work.dir) at the end
-     * @param test Just report sub-bricks, do not create datasets
-     * @param help Show help message
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `VReorderOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(V__REORDER_METADATA);
     const params = v__reorder_params(input_dataset, mapfile, prefix, offset, save_work, test, help)
@@ -232,5 +232,8 @@ export {
       VReorderParameters,
       V__REORDER_METADATA,
       v__reorder,
+      v__reorder_cargs,
+      v__reorder_execute,
+      v__reorder_outputs,
       v__reorder_params,
 };

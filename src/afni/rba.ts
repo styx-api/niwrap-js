@@ -12,7 +12,7 @@ const RBA_METADATA: Metadata = {
 
 
 interface RbaParameters {
-    "__STYXTYPE__": "RBA";
+    "@type": "afni.RBA";
     "prefix": string;
     "dataTable": InputPathType;
     "chains"?: number | null | undefined;
@@ -42,35 +42,35 @@ interface RbaParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "RBA": rba_cargs,
+        "afni.RBA": rba_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "RBA": rba_outputs,
+        "afni.RBA": rba_outputs,
     };
     return outputsFuncs[t];
 }
@@ -97,6 +97,38 @@ interface RbaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param prefix Prefix for output file names.
+ * @param data_table Data table in pure text format.
+ * @param chains Specify the number of Markov chains.
+ * @param iterations Specify the number of iterations per Markov chain.
+ * @param model Specify the model formula.
+ * @param eoi Identify effects of interest in the output.
+ * @param wcp Invoke within-chain parallelization.
+ * @param tstat Specify the column name that lists the t-statistic values.
+ * @param stdz Identify quantitative variables (or covariates) to be standardized.
+ * @param c_vars Identify categorical (qualitative) variables (or factors).
+ * @param q_vars Identify quantitative variables (or covariates).
+ * @param dist_roi Specify the distribution for the ROIs.
+ * @param dist_subj Specify the distribution for the subjects.
+ * @param dist_y Specify the distribution for the response variable.
+ * @param ridge_plot Plot the posterior distributions stacked together.
+ * @param roi Specify the column name that is designated as the region variable.
+ * @param subj Specify the column name that is designated as the measuring unit variable (usually subject).
+ * @param scale Specify a multiplier for the Y values.
+ * @param se This option indicates that standard error for the response variable is available as input.
+ * @param pdp Specify the layout of posterior distribution plot.
+ * @param mean Specify the formulation for the mean of the likelihood (sampling distribution).
+ * @param sigma Specify the formulation for the standard deviation (sigma) of the likelihood (sampling distribution).
+ * @param debug This option will enable R to save the parameters in a file for debugging.
+ * @param verbose Specify verbose level.
+ * @param md This option indicates that there are missing data in the input.
+ * @param r2z Perform Fisher transformation on the response variable if it is a correlation coefficient.
+ *
+ * @returns Parameter dictionary
+ */
 function rba_params(
     prefix: string,
     data_table: InputPathType,
@@ -125,40 +157,8 @@ function rba_params(
     md: boolean = false,
     r2z: boolean = false,
 ): RbaParameters {
-    /**
-     * Build parameters.
-    
-     * @param prefix Prefix for output file names.
-     * @param data_table Data table in pure text format.
-     * @param chains Specify the number of Markov chains.
-     * @param iterations Specify the number of iterations per Markov chain.
-     * @param model Specify the model formula.
-     * @param eoi Identify effects of interest in the output.
-     * @param wcp Invoke within-chain parallelization.
-     * @param tstat Specify the column name that lists the t-statistic values.
-     * @param stdz Identify quantitative variables (or covariates) to be standardized.
-     * @param c_vars Identify categorical (qualitative) variables (or factors).
-     * @param q_vars Identify quantitative variables (or covariates).
-     * @param dist_roi Specify the distribution for the ROIs.
-     * @param dist_subj Specify the distribution for the subjects.
-     * @param dist_y Specify the distribution for the response variable.
-     * @param ridge_plot Plot the posterior distributions stacked together.
-     * @param roi Specify the column name that is designated as the region variable.
-     * @param subj Specify the column name that is designated as the measuring unit variable (usually subject).
-     * @param scale Specify a multiplier for the Y values.
-     * @param se This option indicates that standard error for the response variable is available as input.
-     * @param pdp Specify the layout of posterior distribution plot.
-     * @param mean Specify the formulation for the mean of the likelihood (sampling distribution).
-     * @param sigma Specify the formulation for the standard deviation (sigma) of the likelihood (sampling distribution).
-     * @param debug This option will enable R to save the parameters in a file for debugging.
-     * @param verbose Specify verbose level.
-     * @param md This option indicates that there are missing data in the input.
-     * @param r2z Perform Fisher transformation on the response variable if it is a correlation coefficient.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "RBA" as const,
+        "@type": "afni.RBA" as const,
         "prefix": prefix,
         "dataTable": data_table,
         "debug": debug,
@@ -232,18 +232,18 @@ function rba_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function rba_cargs(
     params: RbaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("RBA");
     cargs.push(
@@ -393,18 +393,18 @@ function rba_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function rba_outputs(
     params: RbaParameters,
     execution: Execution,
 ): RbaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: RbaOutputs = {
         root: execution.outputFile("."),
         output_txt: execution.outputFile([(params["prefix"] ?? null), ".txt"].join('')),
@@ -414,22 +414,22 @@ function rba_outputs(
 }
 
 
+/**
+ * Region-Based Analysis Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `RbaOutputs`).
+ */
 function rba_execute(
     params: RbaParameters,
     execution: Execution,
 ): RbaOutputs {
-    /**
-     * Region-Based Analysis Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `RbaOutputs`).
-     */
     params = execution.params(params)
     const cargs = rba_cargs(params, execution)
     const ret = rba_outputs(params, execution)
@@ -438,6 +438,43 @@ function rba_execute(
 }
 
 
+/**
+ * Region-Based Analysis Program through Bayesian Multilevel Modeling.
+ *
+ * Author: AFNI Developers
+ *
+ * URL: https://afni.nimh.nih.gov/
+ *
+ * @param prefix Prefix for output file names.
+ * @param data_table Data table in pure text format.
+ * @param chains Specify the number of Markov chains.
+ * @param iterations Specify the number of iterations per Markov chain.
+ * @param model Specify the model formula.
+ * @param eoi Identify effects of interest in the output.
+ * @param wcp Invoke within-chain parallelization.
+ * @param tstat Specify the column name that lists the t-statistic values.
+ * @param stdz Identify quantitative variables (or covariates) to be standardized.
+ * @param c_vars Identify categorical (qualitative) variables (or factors).
+ * @param q_vars Identify quantitative variables (or covariates).
+ * @param dist_roi Specify the distribution for the ROIs.
+ * @param dist_subj Specify the distribution for the subjects.
+ * @param dist_y Specify the distribution for the response variable.
+ * @param ridge_plot Plot the posterior distributions stacked together.
+ * @param roi Specify the column name that is designated as the region variable.
+ * @param subj Specify the column name that is designated as the measuring unit variable (usually subject).
+ * @param scale Specify a multiplier for the Y values.
+ * @param se This option indicates that standard error for the response variable is available as input.
+ * @param pdp Specify the layout of posterior distribution plot.
+ * @param mean Specify the formulation for the mean of the likelihood (sampling distribution).
+ * @param sigma Specify the formulation for the standard deviation (sigma) of the likelihood (sampling distribution).
+ * @param debug This option will enable R to save the parameters in a file for debugging.
+ * @param verbose Specify verbose level.
+ * @param md This option indicates that there are missing data in the input.
+ * @param r2z Perform Fisher transformation on the response variable if it is a correlation coefficient.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `RbaOutputs`).
+ */
 function rba(
     prefix: string,
     data_table: InputPathType,
@@ -467,43 +504,6 @@ function rba(
     r2z: boolean = false,
     runner: Runner | null = null,
 ): RbaOutputs {
-    /**
-     * Region-Based Analysis Program through Bayesian Multilevel Modeling.
-     * 
-     * Author: AFNI Developers
-     * 
-     * URL: https://afni.nimh.nih.gov/
-    
-     * @param prefix Prefix for output file names.
-     * @param data_table Data table in pure text format.
-     * @param chains Specify the number of Markov chains.
-     * @param iterations Specify the number of iterations per Markov chain.
-     * @param model Specify the model formula.
-     * @param eoi Identify effects of interest in the output.
-     * @param wcp Invoke within-chain parallelization.
-     * @param tstat Specify the column name that lists the t-statistic values.
-     * @param stdz Identify quantitative variables (or covariates) to be standardized.
-     * @param c_vars Identify categorical (qualitative) variables (or factors).
-     * @param q_vars Identify quantitative variables (or covariates).
-     * @param dist_roi Specify the distribution for the ROIs.
-     * @param dist_subj Specify the distribution for the subjects.
-     * @param dist_y Specify the distribution for the response variable.
-     * @param ridge_plot Plot the posterior distributions stacked together.
-     * @param roi Specify the column name that is designated as the region variable.
-     * @param subj Specify the column name that is designated as the measuring unit variable (usually subject).
-     * @param scale Specify a multiplier for the Y values.
-     * @param se This option indicates that standard error for the response variable is available as input.
-     * @param pdp Specify the layout of posterior distribution plot.
-     * @param mean Specify the formulation for the mean of the likelihood (sampling distribution).
-     * @param sigma Specify the formulation for the standard deviation (sigma) of the likelihood (sampling distribution).
-     * @param debug This option will enable R to save the parameters in a file for debugging.
-     * @param verbose Specify verbose level.
-     * @param md This option indicates that there are missing data in the input.
-     * @param r2z Perform Fisher transformation on the response variable if it is a correlation coefficient.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `RbaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(RBA_METADATA);
     const params = rba_params(prefix, data_table, chains, iterations, model, eoi, wcp, tstat, stdz, c_vars, q_vars, dist_roi, dist_subj, dist_y, ridge_plot, roi, subj, scale, se, pdp, mean, sigma, debug, verbose, md, r2z)
@@ -516,5 +516,8 @@ export {
       RbaOutputs,
       RbaParameters,
       rba,
+      rba_cargs,
+      rba_execute,
+      rba_outputs,
       rba_params,
 };

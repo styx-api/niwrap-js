@@ -12,41 +12,41 @@ const DMRI_COLORED_FA_METADATA: Metadata = {
 
 
 interface DmriColoredFaParameters {
-    "__STYXTYPE__": "dmri_coloredFA";
+    "@type": "freesurfer.dmri_coloredFA";
     "input_volume": InputPathType;
     "output_volume": string;
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "dmri_coloredFA": dmri_colored_fa_cargs,
+        "freesurfer.dmri_coloredFA": dmri_colored_fa_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "dmri_coloredFA": dmri_colored_fa_outputs,
+        "freesurfer.dmri_coloredFA": dmri_colored_fa_outputs,
     };
     return outputsFuncs[t];
 }
@@ -69,20 +69,20 @@ interface DmriColoredFaOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input_volume Input diffusion MRI volume.
+ * @param output_volume Output colored FA image.
+ *
+ * @returns Parameter dictionary
+ */
 function dmri_colored_fa_params(
     input_volume: InputPathType,
     output_volume: string = "colored_FA",
 ): DmriColoredFaParameters {
-    /**
-     * Build parameters.
-    
-     * @param input_volume Input diffusion MRI volume.
-     * @param output_volume Output colored FA image.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "dmri_coloredFA" as const,
+        "@type": "freesurfer.dmri_coloredFA" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
     };
@@ -90,18 +90,18 @@ function dmri_colored_fa_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function dmri_colored_fa_cargs(
     params: DmriColoredFaParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("dmri_coloredFA");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
@@ -110,18 +110,18 @@ function dmri_colored_fa_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function dmri_colored_fa_outputs(
     params: DmriColoredFaParameters,
     execution: Execution,
 ): DmriColoredFaOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: DmriColoredFaOutputs = {
         root: execution.outputFile("."),
         output_colored_fa: execution.outputFile([(params["output_volume"] ?? null), ".nii.gz"].join('')),
@@ -130,22 +130,22 @@ function dmri_colored_fa_outputs(
 }
 
 
+/**
+ * Tool for generating colored FA maps from diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
+ */
 function dmri_colored_fa_execute(
     params: DmriColoredFaParameters,
     execution: Execution,
 ): DmriColoredFaOutputs {
-    /**
-     * Tool for generating colored FA maps from diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
-     */
     params = execution.params(params)
     const cargs = dmri_colored_fa_cargs(params, execution)
     const ret = dmri_colored_fa_outputs(params, execution)
@@ -154,24 +154,24 @@ function dmri_colored_fa_execute(
 }
 
 
+/**
+ * Tool for generating colored FA maps from diffusion MRI data.
+ *
+ * Author: FreeSurfer Developers
+ *
+ * URL: https://github.com/freesurfer/freesurfer
+ *
+ * @param input_volume Input diffusion MRI volume.
+ * @param output_volume Output colored FA image.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
+ */
 function dmri_colored_fa(
     input_volume: InputPathType,
     output_volume: string = "colored_FA",
     runner: Runner | null = null,
 ): DmriColoredFaOutputs {
-    /**
-     * Tool for generating colored FA maps from diffusion MRI data.
-     * 
-     * Author: FreeSurfer Developers
-     * 
-     * URL: https://github.com/freesurfer/freesurfer
-    
-     * @param input_volume Input diffusion MRI volume.
-     * @param output_volume Output colored FA image.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(DMRI_COLORED_FA_METADATA);
     const params = dmri_colored_fa_params(input_volume, output_volume)
@@ -184,5 +184,8 @@ export {
       DmriColoredFaOutputs,
       DmriColoredFaParameters,
       dmri_colored_fa,
+      dmri_colored_fa_cargs,
+      dmri_colored_fa_execute,
+      dmri_colored_fa_outputs,
       dmri_colored_fa_params,
 };

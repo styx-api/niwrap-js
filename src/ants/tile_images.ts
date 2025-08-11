@@ -12,7 +12,7 @@ const TILE_IMAGES_METADATA: Metadata = {
 
 
 interface TileImagesParameters {
-    "__STYXTYPE__": "TileImages";
+    "@type": "ants.TileImages";
     "image_dimension": number;
     "output_image": string;
     "layout": string;
@@ -20,35 +20,35 @@ interface TileImagesParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "TileImages": tile_images_cargs,
+        "ants.TileImages": tile_images_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
-        "TileImages": tile_images_outputs,
+        "ants.TileImages": tile_images_outputs,
     };
     return outputsFuncs[t];
 }
@@ -71,24 +71,24 @@ interface TileImagesOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param image_dimension Dimensionality of the output image.
+ * @param output_image The path for the output tiled image.
+ * @param layout Defines the structure of the tiled output image. The layout dictates the number and arrangement of input images in the output image.
+ * @param input_images Input images to be tiled into the output image. The number of input images should match the layout specification.
+ *
+ * @returns Parameter dictionary
+ */
 function tile_images_params(
     image_dimension: number,
     output_image: string,
     layout: string,
     input_images: Array<InputPathType>,
 ): TileImagesParameters {
-    /**
-     * Build parameters.
-    
-     * @param image_dimension Dimensionality of the output image.
-     * @param output_image The path for the output tiled image.
-     * @param layout Defines the structure of the tiled output image. The layout dictates the number and arrangement of input images in the output image.
-     * @param input_images Input images to be tiled into the output image. The number of input images should match the layout specification.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "TileImages" as const,
+        "@type": "ants.TileImages" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "layout": layout,
@@ -98,18 +98,18 @@ function tile_images_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function tile_images_cargs(
     params: TileImagesParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("TileImages");
     cargs.push(String((params["image_dimension"] ?? null)));
@@ -120,18 +120,18 @@ function tile_images_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function tile_images_outputs(
     params: TileImagesParameters,
     execution: Execution,
 ): TileImagesOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: TileImagesOutputs = {
         root: execution.outputFile("."),
         tiled_image: execution.outputFile([(params["output_image"] ?? null)].join('')),
@@ -140,22 +140,22 @@ function tile_images_outputs(
 }
 
 
+/**
+ * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
+ */
 function tile_images_execute(
     params: TileImagesParameters,
     execution: Execution,
 ): TileImagesOutputs {
-    /**
-     * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
-     */
     params = execution.params(params)
     const cargs = tile_images_cargs(params, execution)
     const ret = tile_images_outputs(params, execution)
@@ -164,6 +164,21 @@ function tile_images_execute(
 }
 
 
+/**
+ * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
+ *
+ * Author: ANTs Developers
+ *
+ * URL: https://github.com/ANTsX/ANTs
+ *
+ * @param image_dimension Dimensionality of the output image.
+ * @param output_image The path for the output tiled image.
+ * @param layout Defines the structure of the tiled output image. The layout dictates the number and arrangement of input images in the output image.
+ * @param input_images Input images to be tiled into the output image. The number of input images should match the layout specification.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
+ */
 function tile_images(
     image_dimension: number,
     output_image: string,
@@ -171,21 +186,6 @@ function tile_images(
     input_images: Array<InputPathType>,
     runner: Runner | null = null,
 ): TileImagesOutputs {
-    /**
-     * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
-     * 
-     * Author: ANTs Developers
-     * 
-     * URL: https://github.com/ANTsX/ANTs
-    
-     * @param image_dimension Dimensionality of the output image.
-     * @param output_image The path for the output tiled image.
-     * @param layout Defines the structure of the tiled output image. The layout dictates the number and arrangement of input images in the output image.
-     * @param input_images Input images to be tiled into the output image. The number of input images should match the layout specification.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(TILE_IMAGES_METADATA);
     const params = tile_images_params(image_dimension, output_image, layout, input_images)
@@ -198,5 +198,8 @@ export {
       TileImagesOutputs,
       TileImagesParameters,
       tile_images,
+      tile_images_cargs,
+      tile_images_execute,
+      tile_images_outputs,
       tile_images_params,
 };

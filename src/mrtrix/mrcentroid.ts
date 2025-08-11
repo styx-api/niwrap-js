@@ -12,14 +12,14 @@ const MRCENTROID_METADATA: Metadata = {
 
 
 interface MrcentroidConfigParameters {
-    "__STYXTYPE__": "config";
+    "@type": "mrtrix.mrcentroid.config";
     "key": string;
     "value": string;
 }
 
 
 interface MrcentroidParameters {
-    "__STYXTYPE__": "mrcentroid";
+    "@type": "mrtrix.mrcentroid";
     "mask"?: InputPathType | null | undefined;
     "voxelspace": boolean;
     "info": boolean;
@@ -34,54 +34,54 @@ interface MrcentroidParameters {
 }
 
 
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function dynCargs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build cargs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build cargs function.
-     */
     const cargsFuncs = {
-        "mrcentroid": mrcentroid_cargs,
-        "config": mrcentroid_config_cargs,
+        "mrtrix.mrcentroid": mrcentroid_cargs,
+        "mrtrix.mrcentroid.config": mrcentroid_config_cargs,
     };
     return cargsFuncs[t];
 }
 
 
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
 function dynOutputs(
     t: string,
 ): Function | undefined {
-    /**
-     * Get build outputs function by command type.
-    
-     * @param t Command type
-    
-     * @returns Build outputs function.
-     */
     const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param key temporarily set the value of an MRtrix config file entry.
+ * @param value temporarily set the value of an MRtrix config file entry.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcentroid_config_params(
     key: string,
     value: string,
 ): MrcentroidConfigParameters {
-    /**
-     * Build parameters.
-    
-     * @param key temporarily set the value of an MRtrix config file entry.
-     * @param value temporarily set the value of an MRtrix config file entry.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "config" as const,
+        "@type": "mrtrix.mrcentroid.config" as const,
         "key": key,
         "value": value,
     };
@@ -89,18 +89,18 @@ function mrcentroid_config_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcentroid_config_cargs(
     params: MrcentroidConfigParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("-config");
     cargs.push((params["key"] ?? null));
@@ -122,6 +122,23 @@ interface MrcentroidOutputs {
 }
 
 
+/**
+ * Build parameters.
+ *
+ * @param input the input image
+ * @param mask only include voxels within a mask in the calculation
+ * @param voxelspace report image centre of mass in voxel space rather than scanner space
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ *
+ * @returns Parameter dictionary
+ */
 function mrcentroid_params(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -135,25 +152,8 @@ function mrcentroid_params(
     help: boolean = false,
     version: boolean = false,
 ): MrcentroidParameters {
-    /**
-     * Build parameters.
-    
-     * @param input the input image
-     * @param mask only include voxels within a mask in the calculation
-     * @param voxelspace report image centre of mass in voxel space rather than scanner space
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-    
-     * @returns Parameter dictionary
-     */
     const params = {
-        "__STYXTYPE__": "mrcentroid" as const,
+        "@type": "mrtrix.mrcentroid" as const,
         "voxelspace": voxelspace,
         "info": info,
         "quiet": quiet,
@@ -176,18 +176,18 @@ function mrcentroid_params(
 }
 
 
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
 function mrcentroid_cargs(
     params: MrcentroidParameters,
     execution: Execution,
 ): string[] {
-    /**
-     * Build command-line arguments from parameters.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Command-line arguments.
-     */
     const cargs: string[] = [];
     cargs.push("mrcentroid");
     if ((params["mask"] ?? null) !== null) {
@@ -218,7 +218,7 @@ function mrcentroid_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s.__STYXTYPE__)(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
     }
     if ((params["help"] ?? null)) {
         cargs.push("-help");
@@ -231,18 +231,18 @@ function mrcentroid_cargs(
 }
 
 
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
 function mrcentroid_outputs(
     params: MrcentroidParameters,
     execution: Execution,
 ): MrcentroidOutputs {
-    /**
-     * Build outputs object containing output file paths and possibly stdout/stderr.
-    
-     * @param params The parameters.
-     * @param execution The execution object for resolving input paths.
-    
-     * @returns Outputs object.
-     */
     const ret: MrcentroidOutputs = {
         root: execution.outputFile("."),
     };
@@ -250,28 +250,28 @@ function mrcentroid_outputs(
 }
 
 
+/**
+ * Determine the centre of mass / centre of gravity of an image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param params The parameters.
+ * @param execution The execution object.
+ *
+ * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
+ */
 function mrcentroid_execute(
     params: MrcentroidParameters,
     execution: Execution,
 ): MrcentroidOutputs {
-    /**
-     * Determine the centre of mass / centre of gravity of an image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param params The parameters.
-     * @param execution The execution object.
-    
-     * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
-     */
     params = execution.params(params)
     const cargs = mrcentroid_cargs(params, execution)
     const ret = mrcentroid_outputs(params, execution)
@@ -280,6 +280,34 @@ function mrcentroid_execute(
 }
 
 
+/**
+ * Determine the centre of mass / centre of gravity of an image.
+ *
+ *
+ *
+ * References:
+ *
+ * .
+ *
+ * Author: MRTrix3 Developers
+ *
+ * URL: https://www.mrtrix.org/
+ *
+ * @param input the input image
+ * @param mask only include voxels within a mask in the calculation
+ * @param voxelspace report image centre of mass in voxel space rather than scanner space
+ * @param info display information messages.
+ * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
+ * @param debug display debugging messages.
+ * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
+ * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
+ * @param config temporarily set the value of an MRtrix config file entry.
+ * @param help display this information page and exit.
+ * @param version display version information and exit.
+ * @param runner Command runner
+ *
+ * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
+ */
 function mrcentroid(
     input: InputPathType,
     mask: InputPathType | null = null,
@@ -294,34 +322,6 @@ function mrcentroid(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcentroidOutputs {
-    /**
-     * Determine the centre of mass / centre of gravity of an image.
-     * 
-     * 
-     * 
-     * References:
-     * 
-     * .
-     * 
-     * Author: MRTrix3 Developers
-     * 
-     * URL: https://www.mrtrix.org/
-    
-     * @param input the input image
-     * @param mask only include voxels within a mask in the calculation
-     * @param voxelspace report image centre of mass in voxel space rather than scanner space
-     * @param info display information messages.
-     * @param quiet do not display information messages or progress status; alternatively, this can be achieved by setting the MRTRIX_QUIET environment variable to a non-empty string.
-     * @param debug display debugging messages.
-     * @param force force overwrite of output files (caution: using the same file as input and output might cause unexpected behaviour).
-     * @param nthreads use this number of threads in multi-threaded applications (set to 0 to disable multi-threading).
-     * @param config temporarily set the value of an MRtrix config file entry.
-     * @param help display this information page and exit.
-     * @param version display version information and exit.
-     * @param runner Command runner
-    
-     * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
-     */
     runner = runner || getGlobalRunner();
     const execution = runner.startExecution(MRCENTROID_METADATA);
     const params = mrcentroid_params(input, mask, voxelspace, info, quiet, debug, force, nthreads, config, help, version)
@@ -335,6 +335,10 @@ export {
       MrcentroidOutputs,
       MrcentroidParameters,
       mrcentroid,
+      mrcentroid_cargs,
+      mrcentroid_config_cargs,
       mrcentroid_config_params,
+      mrcentroid_execute,
+      mrcentroid_outputs,
       mrcentroid_params,
 };
